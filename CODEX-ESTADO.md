@@ -1,7 +1,392 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 18:44** · publicado em **18/11/2026 18:45** (UTC-3)
+> Ultima resposta processada: **18/11/2026 18:47** · publicado em **18/11/2026 18:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 18:47 · sessao cec15d9ae23e · CURA-CHEGA-A-FROTA · sonda · origem=Code
+
+```python
+# Executar no Django shell da copia correspondente ao HASH informado.
+# Resultados e execucao: [nao verificado].
+#
+# Fontes:
+# app/ponto/management/commands/processar_cartorio.py:33-65
+# app/ponto/services/cartorio.py:1211-1268, 1409-1418, 1477, 1955
+# app/chamados/models.py:33-44, 2593-2620
+# Molde fornecido: anexo molde_sonda_autopsia.py.
+#
+# O molde fornecido nao atribui FASE_12X36, TIPO_TROCADO ou BORDA.
+# Seu unico conjunto selecionado recebe aqui o nome descritivo
+# ORFA_PERTO_DE_MARCO_VAZIO; nao ha mapeamento verificado dessas classes.
+#
+# A ausencia em out['cods'] nao prova sempre que o dia foi pulado:
+# no ramo sem adesao, o calculo de codigos fica dentro de apply_;
+# no ramo normal, um dia sem grade tambem pode sair sem codigo.
+# Assim, PULARIA abaixo e a convencao pedida para ausencia em cods,
+# com essa ressalva; o contador pulados e exibido para conferencia.
+#
+# As comparacoes de estado detectam mudancas nos campos e modelos
+# observados, inclusive dentro da transacao antes do rollback. Elas nao
+# provam ausencia de toda escrita possivel ou de efeitos externos.
+# A execucao e seus resultados permanecem [nao verificado].
+
+import datetime as dt
+import hashlib
+import json
+from collections import Counter, defaultdict
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db import transaction
+from django.db.models import Max
+from django.utils import timezone
+
+from chamados.models import ChamadoColaborador, PerguntaDisputa
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia
+from escala.utils import grade_espelho_janela
+from ponto.management.commands.detectar_ausencias import Command as Emissor
+from ponto.models import Batida
+from ponto.services import cartorio
+from ponto.turnos import batidas_apuraveis
+
+
+INI = dt.date(2026, 10, 21)
+FIM_COMP = dt.date(2026, 11, 20)
+ALVOS = (868, 934, 1017, 1028)
+AGORA = timezone.localtime(timezone.now())
+HOJE = timezone.localdate(AGORA)
+FIM = min(FIM_COMP, HOJE - dt.timedelta(days=1))
+CORTE = timezone.make_aware(dt.datetime(2026, 11, 18, 8, 19))
+
+erros = 0
+resumo_b = Counter()
+resumo_b_corte = Counter()
+pularia_antes = []
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+def instante(valor):
+    if valor is None:
+        return "None"
+    if timezone.is_aware(valor):
+        return timezone.localtime(valor).isoformat()
+    return valor.isoformat()
+
+
+def registrar_erro(col, data=None):
+    global erros
+    erros += 1
+    print("ERRO col%d data=%s" % (col, data if data else "[nao verificado]"))
+
+
+def faixa_corte(valor):
+    if valor is None:
+        return "SEM_JULGAMENTO"
+    if timezone.is_naive(valor):
+        valor = timezone.make_aware(valor)
+    return "ANTES_08_19" if valor < CORTE else "A_PARTIR_08_19"
+
+
+def digest_linhas(qs):
+    # Os dados nao sao impressos; o hash inclui todos os campos concretos
+    # de Pergunta/Chamado e os campos solicitados de CelulaDia.
+    linhas = list(qs.order_by("pk").values())
+    bruto = json.dumps(
+        linhas, cls=DjangoJSONEncoder, sort_keys=True,
+        ensure_ascii=True, separators=(",", ":"),
+    ).encode("utf-8")
+    return len(linhas), hashlib.sha256(bruto).hexdigest()
+
+
+def estado_observado(c):
+    cels = CelulaDia.objects.filter(colaborador=c).order_by("pk").values_list(
+        "pk", "data", "impressao", "julgada_em", "veredito"
+    )
+    linhas = list(cels)
+    bruto = json.dumps(
+        linhas, cls=DjangoJSONEncoder, sort_keys=True,
+        ensure_ascii=True, separators=(",", ":"),
+    ).encode("utf-8")
+    return {
+        "celulas": (len(linhas), hashlib.sha256(bruto).hexdigest()),
+        "perguntas": digest_linhas(
+            PerguntaDisputa.objects.filter(colaborador=c)
+        ),
+        "chamados": digest_linhas(
+            ChamadoColaborador.objects.filter(colaborador=c)
+        ),
+    }
+
+
+def mostrar_comparacao_escrita(pk, antes, durante, depois):
+    for nome in ("celulas", "perguntas", "chamados"):
+        a = antes[nome]
+        d = durante[nome] if durante is not None else None
+        f = depois[nome] if depois is not None else None
+        print(
+            "col%d VERIFICACAO_%s antes=%s durante=%s depois=%s"
+            % (pk, nome.upper(), a, d, f)
+        )
+        if d is not None and d != a:
+            print("ESCRITA_DETECTADA col%d modelo=%s momento=dentro" % (pk, nome))
+        if f is not None and f != a:
+            print("ESCRITA_DETECTADA col%d modelo=%s momento=depois" % (pk, nome))
+
+
+def parte_a():
+    print("PARTE_A")
+    print(
+        "MAPEAMENTO FASE_12X36=[nao verificado] "
+        "TIPO_TROCADO=[nao verificado] BORDA=[nao verificado] "
+        "classe_do_molde=ORFA_PERTO_DE_MARCO_VAZIO"
+    )
+    if FIM < INI:
+        print("PARTE_A_JANELA_VAZIA")
+        return
+
+    lo = timezone.make_aware(
+        dt.datetime(INI.year, INI.month, INI.day)
+    ) - dt.timedelta(days=1)
+    hi = timezone.make_aware(
+        dt.datetime(FIM.year, FIM.month, FIM.day, 23, 59, 59)
+    ) + dt.timedelta(days=1)
+
+    dias_por_classe = Counter()
+    pessoas_por_classe = defaultdict(set)
+
+    for c in Colaborador.objects.filter(
+        empresa_id__in=[2, 3, 4], situacao="ativo"
+    ).order_by("pk"):
+        try:
+            bs = sorted(
+                batidas_apuraveis(c, lo, hi),
+                key=lambda b: b.timestamp,
+            )
+            g = grade_espelho_janela(c, bs, INI, FIM, agora=AGORA)
+            marcos = [
+                (m.get("tipo"), m.get("hora"))
+                for m in (g.get("marcos") or [])
+            ]
+        except Exception:
+            registrar_erro(c.pk)
+            continue
+
+        for d in (g.get("dias") or []):
+            data = None
+            try:
+                orf = d.get("orfas") or []
+                cels = d.get("celulas") or []
+                if not orf or d.get("tipo_dia") != "trabalho":
+                    continue
+
+                hit = []
+                for h in orf:
+                    hm = int(h[:2]) * 60 + int(h[3:5])
+                    best = None
+                    for i, (tp, mh) in enumerate(marcos):
+                        if (
+                            not mh or len(mh) != 5 or mh[2] != ":"
+                            or not (mh[:2] + mh[3:]).isdigit()
+                        ):
+                            continue
+                        if i >= len(cels) or not (
+                            isinstance(cels[i], dict)
+                            and cels[i].get("missing")
+                        ):
+                            continue
+                        mm = int(mh[:2]) * 60 + int(mh[3:5])
+                        dist = abs(hm - mm)
+                        dist = min(dist, 1440 - dist)
+                        if best is None or dist < best[0]:
+                            best = (dist, tp, mh)
+                    if best is not None and best[0] <= 90:
+                        hit.append(
+                            "%s~%s%s(%dmin)"
+                            % (h, best[1], best[2], best[0])
+                        )
+                if not hit:
+                    continue
+
+                lab = str(d.get("label"))
+                data = dt.date(2026, int(lab[-2:]), int(lab[-5:-3]))
+                regua = []
+                for i, (tp, mh) in enumerate(marcos):
+                    ce = cels[i] if i < len(cels) else None
+                    st = (
+                        "fora" if ce is None else
+                        "VAZIO" if (
+                            isinstance(ce, dict) and ce.get("missing")
+                        ) else "ok"
+                    )
+                    regua.append("%s%s=%s" % (tp, mh, st))
+
+                perto = []
+                for b in bs:
+                    lt = timezone.localtime(b.timestamp)
+                    if data - dt.timedelta(days=1) <= lt.date() <= data + dt.timedelta(days=1):
+                        perto.append(
+                            "%s %s%s"
+                            % (
+                                lt.strftime("%d"),
+                                lt.strftime("%H:%M"),
+                                getattr(b, "tipo", "?"),
+                            )
+                        )
+
+                classe = "ORFA_PERTO_DE_MARCO_VAZIO"
+                dias_por_classe[classe] += 1
+                pessoas_por_classe[classe].add(c.pk)
+                print(
+                    "col%d data=%s classe=%s orfa~marco=%s"
+                    % (c.pk, data, classe, "; ".join(hit))
+                )
+                print("  regua=" + " ".join(regua))
+                print("  batidas_D-1_a_D+1=" + ", ".join(perto))
+            except Exception:
+                registrar_erro(c.pk, data)
+
+    print("TABELA_A classe dias pessoas")
+    classe = "ORFA_PERTO_DE_MARCO_VAZIO"
+    print(
+        "%s %d %d"
+        % (classe, dias_por_classe[classe], len(pessoas_por_classe[classe]))
+    )
+
+
+def parte_b_colab(pk):
+    c = None
+    antes = durante = depois = None
+    cels = []
+    out = cartorio.contadores()
+    sucesso = False
+
+    try:
+        c = Colaborador.objects.get(pk=pk)
+        antes = estado_observado(c)
+        try:
+            with transaction.atomic():
+                try:
+                    # Mesmo universo e ordem do comando.
+                    cels = list(
+                        CelulaDia.objects.filter(
+                            colaborador=c, data__lt=HOJE
+                        ).order_by("data")
+                    )
+                    if cels:
+                        # Mesmo emissor e inicializacao de out do DRY.
+                        # A saida textual do juiz e descartada para evitar
+                        # divulgacao de nomes ou outros dados pessoais.
+                        cartorio.julgar_colab(
+                            c, cels,
+                            hoje=HOJE,
+                            agora=AGORA,
+                            apply_=False,
+                            emissor=Emissor(),
+                            out=out,
+                            prefix="[DRY] ",
+                            write=lambda mensagem: None,
+                            forcar=False,
+                        )
+                    sucesso = True
+                finally:
+                    durante = estado_observado(c)
+                raise ReverterSonda()
+        except ReverterSonda:
+            pass
+    except Exception:
+        # Nao imprimir a excecao: pode conter dados pessoais.
+        registrar_erro(pk)
+    finally:
+        if c is not None and antes is not None:
+            try:
+                depois = estado_observado(c)
+                mostrar_comparacao_escrita(pk, antes, durante, depois)
+            except Exception:
+                registrar_erro(pk)
+
+    if not sucesso:
+        return
+
+    cods = out.get("cods") or {}
+    print(
+        "col%d CONTADOR_PULADOS_TODAS_AS_CELULAS=%d"
+        % (pk, out["pulados"])
+    )
+    for cel in cels:
+        if not (INI <= cel.data <= FIM):
+            continue
+        try:
+            estado = "REJULGARIA" if cel.data in cods else "PULARIA"
+            corte = faixa_corte(cel.julgada_em)
+            resumo_b[estado] += 1
+            resumo_b_corte[(estado, corte)] += 1
+
+            linha = (
+                "col%d data=%s julgada_em=%s estado=%s veredito_gravado=%r"
+                % (
+                    pk, cel.data, instante(cel.julgada_em),
+                    estado, cel.veredito,
+                )
+            )
+            if estado == "REJULGARIA":
+                linha += " cods_novos=%r x veredito_gravado=%r" % (
+                    cods[cel.data], cel.veredito,
+                )
+            print(linha)
+
+            if estado == "PULARIA" and corte == "ANTES_08_19":
+                pularia_antes.append((pk, cel.data, instante(cel.julgada_em)))
+        except Exception:
+            registrar_erro(pk, cel.data)
+
+
+def main():
+    try:
+        print(
+            "HORA_SOMBRA_MAX_BATIDA=%s"
+            % instante(Batida.objects.aggregate(v=Max("timestamp"))["v"])
+        )
+        print("HOJE=%s AGORA=%s FIM_COMP_OBSERVADO=%s" % (HOJE, instante(AGORA), FIM))
+        print(
+            "RESULTADOS=[nao verificado: executar na sombra] "
+            "PULARIA_POR_AUSENCIA_EM_CODS=[nao verificado como pulo real]"
+        )
+
+        parte_a()
+
+        print("PARTE_B")
+        for pk in ALVOS:
+            parte_b_colab(pk)
+
+        print("RESUMO_B_POR_ESTADO")
+        for estado in ("PULARIA", "REJULGARIA"):
+            print("%s=%d" % (estado, resumo_b[estado]))
+
+        print("RESUMO_B_POR_ESTADO_E_JULGAMENTO")
+        for estado in ("PULARIA", "REJULGARIA"):
+            for corte in ("ANTES_08_19", "A_PARTIR_08_19", "SEM_JULGAMENTO"):
+                print(
+                    "%s %s=%d"
+                    % (estado, corte, resumo_b_corte[(estado, corte)])
+                )
+
+        print("PULARIA_JULGADOS_ANTES_08_19")
+        for pk, data, julgada in pularia_antes:
+            print("col%d data=%s julgada_em=%s" % (pk, data, julgada))
+        print(
+            "CAUSA_E_INSUMO_HISTORICO=[nao verificado] "
+            "PULO_REAL_EM_CADA_LINHA=[nao verificado]"
+        )
+    finally:
+        print("ERROS=%d" % erros)
+        print("FIM_SONDA")
+
+
+main()
+```
 
 ## 18/11 18:44 · sessao ebee0648b218 · CURA-CHEGA-A-FROTA · sonda · origem=Code
 
@@ -1402,491 +1787,4 @@ A execução solicitada sobre uma cópia em `$TMPDIR` ficou **incompleta**: `mkt
 | 5 | (e) | nenhum [não verificado] |
 | 6 | (c) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
 
-## 18/11 17:54 · sessao ebd05b3637cc · RAIA-INTERVALO · sonda · origem=Code
-
-A ata fica no campo JSON `CelulaDia.ata`; as chaves são `ata['orfas']` e `ata['lampadas']`. [app/escala/models.py:1778](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1778), [app/ponto/services/cartorio.py:738](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:738)
-
-O vocabulário é `E` para entrada e `S` para saída, tanto para batidas quanto para marcos. [app/ponto/models.py:9](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/models.py:9), [app/escala/models.py:1653](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1653)
-
-A chave é a **hora `HH:MM` de `ata.orfas`, não a identidade da Batida**. A distância usa minutos do dia: `23:55` e `00:05` distam 1.430 minutos, sem circular pela meia-noite. Em empate entre apagadas de tipos diferentes, o tipo esperado e o resultado de `oposto` ficam desconhecidos. O script não foi executado em produção; resultados são [não verificado].
-
-```python
-import datetime as dt
-import io
-import re
-from collections import Counter, defaultdict
-
-from django.core.management import call_command
-from django.db import connection, transaction
-from django.utils import timezone
-
-from colaboradores.models import Colaborador
-from escala.models import CelulaDia, derivar_veredito
-from ponto.models import Batida
-from ponto.turnos import batidas_apuraveis
-
-
-G = {
-    'G1': [(622, d) for d in (
-        '27/10', '29/10', '04/11', '05/11', '12/11', '13/11', '16/11'
-    )],
-    'G2': [(362, '22/10'), (945, '29/10'), (735, '16/11')],
-    'G3': [(583, '12/11'), (829, '11/11'), (369, '12/11')],
-    'G4': [
-        (224, '28/10'), (469, '01/11'), (924, '11/11'),
-        (631, '03/11'), (988, '31/10'), (988, '03/11'),
-        (836, '04/11'), (1000, '03/11'), (1000, '13/11'),
-        (962, '05/11'), (962, '09/11'), (962, '16/11'),
-        (991, '09/11'), (991, '11/11'),
-    ],
-    'G5': [(787, '30/10')],
-}
-
-INI = dt.date(2026, 10, 22)
-FIM = dt.date(2026, 11, 16)
-tz = timezone.get_current_timezone()
-erros = Counter()
-
-# O texto entre o id e a data e o detalhe apos "|" nunca sao impressos.
-DUMP_RE = re.compile(
-    r'^([A-Z][A-Z0-9_]*)\|col([0-9]+) .*? '
-    r'([0-9]{4}-[0-9]{2}-[0-9]{2}) \|'
-)
-AVALIADOS_RE = re.compile(r'^dias-colab avaliados: ([0-9]+)$')
-HORA_RE = re.compile(r'^(?:[01][0-9]|2[0-3]):[0-5][0-9]$')
-
-
-def executar_etapa(etapa, funcao):
-    # O savepoint permite continuar apos erro de banco.
-    # Nunca imprime a mensagem da excecao.
-    try:
-        with transaction.atomic():
-            return True, funcao()
-    except Exception as exc:
-        erros[(etapa, type(exc).__name__)] += 1
-        return False, None
-
-
-def hora_local(valor):
-    if valor is None:
-        return '?'
-    return timezone.localtime(valor, tz).strftime('%d/%m/%Y_%H:%M:%S')
-
-
-def data_caso(dm):
-    dd, mm = dm.split('/')
-    return dt.date(2026, int(mm), int(dd))
-
-
-def carregar_command(empresa):
-    buf = io.StringIO()
-    call_command(
-        'supra_juiz',
-        empresa=empresa,
-        ini=INI.isoformat(),
-        fim=FIM.isoformat(),
-        dump=True,
-        stdout=buf,
-    )
-
-    codigos = defaultdict(list)
-    avaliados = None
-    no_dump = False
-
-    for linha in buf.getvalue().splitlines():
-        if linha == '--- DUMP (HX-DUMP) ---':
-            no_dump = True
-            continue
-
-        if not no_dump:
-            m = AVALIADOS_RE.fullmatch(linha)
-            if m:
-                if avaliados is not None:
-                    raise ValueError('contador_duplicado')
-                avaliados = int(m.group(1))
-            continue
-
-        m = DUMP_RE.match(linha)
-        if not m:
-            # Nao aceitar silenciosamente uma linha de dump em formato novo.
-            raise ValueError('formato_dump')
-        codigo, col_id, iso = m.groups()
-        data = dt.date.fromisoformat(iso)
-        codigos[(int(col_id), data)].append(codigo)
-
-    if not no_dump or avaliados is None:
-        raise ValueError('dump_ou_contador_ausente')
-
-    return codigos, avaliados
-
-
-def tem_batida_na_janela_command(col):
-    inicio = timezone.make_aware(
-        dt.datetime.combine(INI - dt.timedelta(days=1), dt.time.min), tz
-    )
-    fim = timezone.make_aware(
-        dt.datetime.combine(FIM + dt.timedelta(days=3), dt.time.min), tz
-    )
-    return Batida.objects.filter(
-        colaborador=col, timestamp__gte=inicio, timestamp__lt=fim
-    ).exists()
-
-
-def batidas_do_dia(col, data):
-    inicio = timezone.make_aware(dt.datetime.combine(data, dt.time.min), tz)
-    fim = timezone.make_aware(
-        dt.datetime.combine(data + dt.timedelta(days=1), dt.time.min), tz
-    )
-    # A autoridade usa fim inclusivo; excluir a meia-noite seguinte.
-    return [
-        b for b in batidas_apuraveis(col, inicio, fim)
-        if b.timestamp < fim
-    ]
-
-
-def minutos_do_dia(hora):
-    if not isinstance(hora, str) or not HORA_RE.fullmatch(hora):
-        raise ValueError('hora_invalida')
-    return int(hora[:2]) * 60 + int(hora[3:5])
-
-
-def imprimir_medida_sem_marco(grupo, pk, dm, cel, bats):
-    # A chave e a hora HH:MM de ata.orfas, nao a identidade da Batida.
-    # Distancias usam minutos do dia, sem circular pela meia-noite.
-    ata = cel.ata if cel is not None else None
-    if not isinstance(ata, dict) or not ata.get('lampadas'):
-        print('B %s col%d %s ata_ausente' % (grupo, pk, dm))
-        return None
-
-    lampadas = ata['lampadas']
-    orfas = ata.get('orfas')
-    if not isinstance(lampadas, list) or not isinstance(orfas, list):
-        print('B %s col%d %s ata_invalida' % (grupo, pk, dm))
-        return None
-
-    try:
-        horas_orfas = [(h, minutos_do_dia(h)) for h in orfas]
-        apagadas = []
-        for lampada in lampadas:
-            if not isinstance(lampada, dict):
-                raise ValueError('lampada_invalida')
-            if lampada.get('acesa') not in (True, False, None):
-                raise ValueError('estado_lampada_invalido')
-            if lampada.get('acesa') is False:
-                apagadas.append(
-                    (minutos_do_dia(lampada.get('hora')), lampada.get('tipo'))
-                )
-    except (TypeError, ValueError):
-        print('B %s col%d %s ata_invalida' % (grupo, pk, dm))
-        return None
-
-    por_hora = defaultdict(list)
-    for batida in bats:
-        hora = timezone.localtime(batida.timestamp, tz).strftime('%H:%M')
-        por_hora[hora].append(batida)
-
-    origens_validas = {valor for valor, _ in Batida.ORIGEM_CHOICES}
-    total_oposto = 0
-    oposto_desconhecido = False
-    ambiguas = 0
-    sem_batida = 0
-
-    for hora, minuto in horas_orfas:
-        candidatas = por_hora.get(hora, [])
-        if len(candidatas) >= 2:
-            chave = 'ambigua'
-            tipo = origem = '?'
-            ambiguas += 1
-        elif not candidatas:
-            chave = 'sem_batida'
-            tipo = origem = '?'
-            sem_batida += 1
-        else:
-            chave = 'unica'
-            batida = candidatas[0]
-            tipo = batida.tipo if batida.tipo in ('E', 'S') else '?'
-            origem = (
-                batida.origem if batida.origem in origens_validas else '?'
-            )
-
-        if apagadas:
-            distancia = min(abs(minuto - m) for m, _ in apagadas)
-            tipos_proximos = {
-                t for m, t in apagadas if abs(minuto - m) == distancia
-                and t in ('E', 'S')
-            }
-            tipos_invalidos = any(
-                t not in ('E', 'S')
-                for m, t in apagadas if abs(minuto - m) == distancia
-            )
-            esperado = (
-                next(iter(tipos_proximos))
-                if len(tipos_proximos) == 1 and not tipos_invalidos
-                else '?'
-            )
-            dist_txt = str(distancia)
-        else:
-            distancia = None
-            dist_txt = '-'
-            esperado = '-'
-
-        if tipo in ('E', 'S') and esperado in ('E', 'S'):
-            oposto = 'sim' if tipo != esperado else 'nao'
-        else:
-            oposto = '?'
-
-        if distancia is not None and distancia <= 90:
-            if oposto == 'sim':
-                total_oposto += 1
-            elif oposto == '?':
-                oposto_desconhecido = True
-
-        print(
-            'B %s col%d %s orfa=%s tipo=%s origem=%s chave=%s '
-            'apagadas=%d dist_min=%s tipo_esperado=%s oposto=%s'
-            % (
-                grupo, pk, dm, hora, tipo, origem, chave,
-                len(apagadas), dist_txt, esperado, oposto,
-            )
-        )
-
-    return (
-        len(horas_orfas), total_oposto, ambiguas, sem_batida,
-        oposto_desconhecido,
-    )
-
-
-def rodar():
-    resumo = {
-        grupo: Counter({
-            'sim': 0, 'nao': 0, '?': 0,
-            'acusa': 0, 'concorde': 0,
-            'fora_do_command': 0, 'hoje_?': 0,
-            'sem_marco_total': 0,
-            'sem_marco_ate90_oposto': 0,
-            'ambiguas': 0,
-            'sem_batida': 0,
-            'medida_desconhecida': 0,
-            'oposto_desconhecido': 0,
-        })
-        for grupo in G
-    }
-
-    ids = sorted({pk for casos in G.values() for pk, _ in casos})
-    colaboradores = {}
-    for pk in ids:
-        ok, col = executar_etapa(
-            'colaborador', lambda pk=pk: Colaborador.objects.get(pk=pk)
-        )
-        if ok:
-            colaboradores[pk] = col
-
-    empresas = sorted({
-        col.empresa_id for col in colaboradores.values()
-        if col.empresa_id is not None
-    })
-    comandos = {}
-    for empresa in empresas:
-        ok, resultado = executar_etapa(
-            'command', lambda empresa=empresa: carregar_command(empresa)
-        )
-        if ok:
-            comandos[empresa] = resultado
-            print(
-                'COMMAND empresa=%s dias-colab avaliados: %d'
-                % (empresa, resultado[1])
-            )
-        else:
-            print('COMMAND empresa=%s dias-colab avaliados: ?' % empresa)
-
-    elegibilidade = {}
-    for pk, col in colaboradores.items():
-        if col.situacao != 'ativo':
-            elegibilidade[pk] = 'inativo'
-        else:
-            ok, tem = executar_etapa(
-                'janela_command',
-                lambda col=col: tem_batida_na_janela_command(col)
-            )
-            if ok:
-                elegibilidade[pk] = None if tem else 'sem_batida'
-            else:
-                elegibilidade[pk] = '?'
-
-    for grupo, casos in G.items():
-        for pk, dm in casos:
-            data = data_caso(dm)
-            col = colaboradores.get(pk)
-            cel = None
-            grav = julg = ub = None
-            hoje = codigos = motivo_hoje = None
-            ok_cel = ok_bats = False
-            bats = None
-
-            if col is not None:
-                ok_cel, cel = executar_etapa(
-                    'celula',
-                    lambda pk=pk, data=data: CelulaDia.objects.filter(
-                        colaborador_id=pk, data=data
-                    ).first()
-                )
-                if ok_cel and cel is not None:
-                    grav = cel.veredito
-                    julg = cel.julgada_em
-
-                estado = elegibilidade.get(pk, '?')
-                if estado in ('inativo', 'sem_batida'):
-                    hoje = 'fora_do_command'
-                    motivo_hoje = estado
-                elif estado is None and col.empresa_id in comandos:
-                    codigos = comandos[col.empresa_id][0].get((pk, data), [])
-                    if not codigos:
-                        hoje = 'concorde'
-                    else:
-                        ok_ver, hoje = executar_etapa(
-                            'veredito_dump',
-                            lambda codigos=codigos: derivar_veredito(codigos)
-                        )
-                        if not ok_ver:
-                            hoje = None
-
-                ok_bats, bats = executar_etapa(
-                    'batidas_apuraveis',
-                    lambda col=col, data=data: batidas_do_dia(col, data)
-                )
-                if ok_bats and bats:
-                    ub = max(
-                        bats, key=lambda b: (b.timestamp, b.pk)
-                    ).criado_em
-
-            # Ausencia de JULG e ausencia de UB so sao conclusoes se as
-            # respectivas leituras terminaram com sucesso.
-            motivo_velho = None
-            if not ok_cel:
-                velho = '?'
-                motivo_velho = 'leitura_celula'
-            elif julg is None:
-                velho = '?'
-                motivo_velho = 'sem_julgamento'
-            elif not ok_bats:
-                velho = '?'
-                motivo_velho = 'leitura_batidas'
-            elif ub is not None and ub > julg:
-                velho = 'sim'
-            else:
-                velho = '?'
-                motivo_velho = 'ata_sem_carimbo'
-
-            r = resumo[grupo]
-            r[velho] += 1
-            if hoje is None:
-                r['hoje_?'] += 1
-            elif hoje == 'fora_do_command':
-                r['fora_do_command'] += 1
-            elif hoje == 'concorde':
-                r['concorde'] += 1
-            else:
-                r['acusa'] += 1
-
-            cod_txt = '?' if codigos is None else (
-                ','.join(codigos) if codigos else '-'
-            )
-            linha = (
-                'D %s col%d %s GRAV=%s JULG=%s HOJE=%s COD=%s '
-                'UB=%s UA=? VELHO=%s'
-                % (
-                    grupo, pk, dm, grav or '?', hora_local(julg),
-                    hoje or '?', cod_txt, hora_local(ub), velho,
-                )
-            )
-            if motivo_hoje:
-                linha += ' motivo_hoje=%s' % motivo_hoje
-            if motivo_velho:
-                linha += ' motivo_velho=%s' % motivo_velho
-            if hoje == 'concorde':
-                linha += ' RAMO ?'
-            print(linha)
-
-            if not ok_cel:
-                r['medida_desconhecida'] += 1
-                print('B %s col%d %s leitura_celula=?' % (grupo, pk, dm))
-            elif cel is None or not isinstance(cel.ata, dict) or not cel.ata.get('lampadas'):
-                r['medida_desconhecida'] += 1
-                print('B %s col%d %s ata_ausente' % (grupo, pk, dm))
-            elif not ok_bats:
-                r['medida_desconhecida'] += 1
-                print('B %s col%d %s leitura_batidas=?' % (grupo, pk, dm))
-            else:
-                ok_medida, medida = executar_etapa(
-                    'medida_sem_marco',
-                    lambda: imprimir_medida_sem_marco(grupo, pk, dm, cel, bats)
-                )
-                if not ok_medida:
-                    r['medida_desconhecida'] += 1
-                    print('B %s col%d %s medida=?' % (grupo, pk, dm))
-                elif medida is None:
-                    r['medida_desconhecida'] += 1
-                else:
-                    total, oposto, ambiguas, sem_batida, oposto_incerto = medida
-                    r['sem_marco_total'] += total
-                    r['sem_marco_ate90_oposto'] += oposto
-                    r['ambiguas'] += ambiguas
-                    r['sem_batida'] += sem_batida
-                    if oposto_incerto:
-                        r['oposto_desconhecido'] += 1
-
-    for grupo in G:
-        r = resumo[grupo]
-        # Um total so e inteiro quando todos os dias do grupo sao conhecidos.
-        total = (
-            '?' if r['medida_desconhecida']
-            else str(r['sem_marco_total'])
-        )
-        oposto = (
-            '?' if r['medida_desconhecida'] or r['oposto_desconhecido']
-            else str(r['sem_marco_ate90_oposto'])
-        )
-        ambiguas = (
-            '?' if r['medida_desconhecida'] else str(r['ambiguas'])
-        )
-        sem_batida = (
-            '?' if r['medida_desconhecida'] else str(r['sem_batida'])
-        )
-        print(
-            'RESUMO %s VELHO sim=%d nao=%d ?=%d '
-            'HOJE acusa=%d concorde=%d fora_do_command=%d ?=%d '
-            'sem_marco_ate90_oposto=%s sem_marco_total=%s '
-            'ambiguas=%s sem_batida=%s '
-            'medida_dias_desconhecidos=%d'
-            % (
-                grupo, r['sim'], r['nao'], r['?'],
-                r['acusa'], r['concorde'], r['fora_do_command'],
-                r['hoje_?'], oposto, total, ambiguas, sem_batida,
-                r['medida_desconhecida'],
-            )
-        )
-
-
-try:
-    if connection.in_atomic_block:
-        raise RuntimeError('transacao_preexistente')
-    if connection.vendor != 'postgresql':
-        raise RuntimeError('banco_nao_postgresql')
-
-    with transaction.atomic():
-        with connection.cursor() as cursor:
-            cursor.execute('SET TRANSACTION READ ONLY')
-            cursor.execute('SELECT current_schema()')
-            if cursor.fetchone()[0] != 'juliani':
-                raise RuntimeError('schema_ativo_nao_e_juliani')
-        rodar()
-except Exception as exc:
-    erros[('sonda', type(exc).__name__)] += 1
-
-print('ERROS %d' % sum(erros.values()))
-for (etapa, tipo), quantidade in sorted(erros.items()):
-    print('ERROS etapa=%s tipo=%s n=%d' % (etapa, tipo, quantidade))
-print('FIM_SONDA_VELHO')
-```
-
-_7089 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7090 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
