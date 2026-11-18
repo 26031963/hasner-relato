@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=1722170
+PAREI: censo-E4C-F1-B2 | espera Codex
+
+ESPERANDO: codex_pergunta.sh | pid=1745551
 lei: S6-DOBRA -- intermitente que trabalha em feriado recebe (A) horas normais ou (B) em dobro? A cura S6-INTERMITENTE-FERIADO-CURA-A aplica (A) (descricao do MotorIntermitente, motor_calculo_v2.py:3569-3575 'sem feriado-100 automatico'); resposta vem do DP; (B) entra como adicional depois, sem desfazer.
 lei: S6-CENSO-TRAVA (construtor NAO abre, item 1 do aval) -- o calculador v3 decide sozinho a dobra do intermitente em feriado: regras.py:662-664 manda o intermitente ao caminho normal e a REGRA 3 (:779-786, dobra_de_feriado_do_dia) poe a jornada inteira em HE 100 sem excluir o intermitente, gravado em DiaPago versao='oraculo' (fechamento.py:1294). Nenhum leitor paga pelo oraculo (fechamento.py:1247-1249; git grep: 0 outro sitio). A v2 curada pagaria (A) e a v3 paga (B): sao duas respostas a S6-DOBRA. Pergunta: (1) a v3 entra nesta cura (o aval proibe tocar alem do motor :3581/:791-794), ou (2) o oraculo nao pagante nao conta como 'decidir dinheiro' e o construtor abre so na v2? Censo: logs/S6-INTERMITENTE/censo1.r; revaval 0 DEVOLVE (revaval.r). Fila: export.py:341/420 e fechamento.py:933 identificam por tipo_ciclo, a fabrica por tipo_ciclo OU tipo_base (motor:2365).
 S6-INTERMITENTE-FERIADO-CURA-A 23:1x: aval registrado (PROMPTS, BACKLOG); revaval 0 DEVOLVE (FILA: caminho e ponto/calculador/regras.py; RELATO-ARQUIVO.md:733 registra corte 15/10 pela docstring); censo FECHADO e TRAVA o construtor (linha lei: S6-CENSO-TRAVA). logs/S6-INTERMITENTE/.
@@ -7845,6 +7847,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 **PERGUNTA DE LEI -- O DIA DA DEMISSAO E APURAVEL COMO FURO? A LEI ESCRITA NAO RESPONDE (10:0x).** Antes de abrir fatia nova fui atras do bug, que pela LEI-AKITA 6 vem primeiro. **NAO HA bug de universo no codigo de HOJE**, e duas leituras dizem isso: (a) `ponto/services/dia_pago.py:259-263` (O140) da linha a TODO dia de furo ainda que sem uma hora -- `_linha(d)` dentro de `for d in (_furos or ())` --, entao furo SEM linha nao existe no codigo de hoje; (b) o gravado da 09 tem **10.759 das 10.893 linhas com `furo_apurado` NULL**, que no idioma declarado na docstring de `lavrar` e `furos_do_motor=None`, *"nao perguntei"*: a 09 foi lavrada por chamador que ainda nao passava furo. E o CLAMP da borda (defeito 2 do `9632cdbd`) explica no maximo **1 dos 28**, porque 27 dos 28 dias TEM celula (`celula_trabalho_true=28`, `sem_celula=1`). Logo criar a linha que falta e **RELAVRAR a 09**, o PROIBIDO da L-092 -- nao e cura de universo, e por isso nao jumpa a fila como bug provado. O QUE SOBRA E PERGUNTA DE LEI, e eu nao a proponho (L-117): **19 dos 28 dias sao exatamente o dia da demissao, e a celula desse dia diz trabalho=True**. O seu corte de 19/10 `DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA` **nao responde**: ele e literal sobre `data_demissao` **ANTERIOR** a janela (*"sai do universo de derivacao"*), e aqui a demissao cai DENTRO da competencia. Se o dia da demissao e previsto, o furo e real e o dono e CADASTRO/BATIDA; se nao e, o motor chama furo **19 dias que nao existem** -- e ai o furo mente para todo desligado da frota, nao so na 09. A fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a linha esta no BACKLOG (`MOTOR-CHAMA-FURO-DIA-QUE-A-LAVRATURA-DA-09-NAO-COBRE`) e **nada se aplica na 09**.
 
 ## ALARMES DA ESTEIRA
+
+**17/11 23:24:59 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:606bd3bb29 (35 car., na trilha privada)
 
 **17/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 

@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 23:16** · publicado em **17/11/2026 23:20** (UTC-3)
+> Ultima resposta processada: **17/11/2026 23:26** · publicado em **17/11/2026 23:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 23:26 · sessao 7077c8d192be · - · - · origem=Ronald (tmux)
+
+Censo das fixtures enviado ao agente principal, com referências e distinção entre competência simulada, competência exportada criada e situações não verificadas.
 
 ## 17/11 23:16 · sessao 387262c5dc06 · S6-INTERMITENTE-FERIADO-CURA-A · censo · origem=Code
 
@@ -559,10 +563,4 @@ Revisão das linhas X enviada ao agente principal, com os achados e suas referê
 
 Revisei F6, F8, B4 e B8 e enviei ao agente principal as referências de código, os leitores e escritores identificados e as condições que precisam ser preservadas na extração da leitura de dias.
 
-## 17/11 20:50 · sessao 9c64f42feba7 · - · - · origem=Ronald (tmux)
-
-P21: a busca na cópia por `reabrir_orfas_enterradas` e `reabrir_fantasma` encontrou lápides e referências históricas; a catraca restante usa fonte sintética genérica, sem enumerar o comando ou o método ([test_e1_v7_catracas.py:406](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/tests/test_e1_v7_catracas.py:406), [crons.py:835](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/config/crons.py:835), [models.py:3429](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/models.py:3429)).
-
-RED-NOVO-3: a célula A9d pede controle **não ENTREGUE**, enquanto o bloco RED-NOVO-3 pede controle **ENTREGUE**; o primeiro não demonstra o mutante de julgamento antecipado [não verificado]. O caminho passa por `pode_fechar` e pela aprovação do lastro antes de `carimbar`; o C6 retorna falso para dia trancado ([competencia_trancada.py:221](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/services/competencia_trancada.py:221), [materializacao.py:2154](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/services/materializacao.py:2154), [juizes.py:1407](/home/ronald/codex_ws/f54d7d15a6766054181de325eb5dc989ebe3f3d1/app/chamados/juizes.py:1407)). O alcance efetivo do controle pela tranca permanece [não verificado].
-
-_6752 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
