@@ -1,7 +1,411 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 18:18** · publicado em **18/11/2026 18:22** (UTC-3)
+> Ultima resposta processada: **18/11/2026 18:44** · publicado em **18/11/2026 18:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 18:44 · sessao ebee0648b218 · CURA-CHEGA-A-FROTA · sonda · origem=Code
+
+Não consegui fechar a parte **(a)** com uma classificação reproduzível que preserve a identidade da batida órfã: a grade expõe as órfãs como horários, enquanto o tipo gravado pertence à `Batida` ([utils.py:1843](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:1843), [models.py:24](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/models.py:24)). A sonda abaixo é **parcial**: cobre a comparação de impressões de (b), mas não deve ser usada como resposta completa ao pedido.
+
+A igualdade do hash não demonstra, por si só, qual insumo histórico mudou: a função grava um resumo dos insumos, e o DNA anterior disponível é apenas a versão imediatamente anterior ([cartorio.py:471](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:471), [models.py:1714](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1714)). A atribuição dos históricos à cura também fica `[nao verificado]`: o registro não contém um identificador inequívoco dessa execução ([vinculo.py:350](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/colaboradores/services/vinculo.py:350)).
+
+```python
+# SONDA PARCIAL, somente leitura. NAO IMPLEMENTA A PARTE (a).
+# [nao verificado] Execucao na sombra e resultados.
+#
+# O processar_cartorio entrega todas as celulas passadas do colaborador,
+# em ordem de data: app/ponto/management/commands/processar_cartorio.py:61.
+# As duas chamadas de impressao reproduzidas abaixo sao as do corpo do
+# cartorio: app/ponto/services/cartorio.py:1257 e :1398.
+# Nenhuma funcao de julgamento ou escrita e chamada.
+
+import datetime as dt
+import re
+from collections import Counter
+
+from django.db.models import Max
+from django.utils import timezone
+
+from colaboradores.models import Colaborador, HistoricoVinculo
+from escala.models import CelulaDia, EscalaColaborador
+from escala.utils import montar_grade_prevista_periodo
+from ponto.models import Batida
+from ponto.turnos import ausencia_cobre, batidas_apuraveis, dias_encerrados
+from ponto.services import cartorio
+from ponto.services.furos_vetados import motivo_do_veto, vinculo_do_emissor
+from ponto.supra_juiz import _dia_sem_trabalho_pelo_juiz
+from chamados.juizes import fio_vivo
+from core.constants import isento_ponto
+
+INI = dt.date(2026, 10, 21)
+FIM = dt.date(2026, 11, 20)
+ALVOS = (868, 934, 1017, 1028)
+HOJE = dt.date.today()
+AGORA = timezone.now()
+CORTE = timezone.make_aware(dt.datetime(2026, 11, 18, 8, 19))
+
+erros = 0
+resumo = Counter()
+
+
+def erro(contexto, exc):
+    global erros
+    erros += 1
+    # Nao imprime texto da excecao: pode conter nome ou CPF.
+    print("ERRO %s tipo=%s detalhe=[nao verificado; texto omitido]"
+          % (contexto, type(exc).__name__))
+
+
+def instante(x):
+    if x is None:
+        return "None"
+    return timezone.localtime(x).isoformat() if timezone.is_aware(x) else x.isoformat()
+
+
+def preparar(c):
+    # Mesma lista completa passada pelo comando ao julgar_colab.
+    cels = list(CelulaDia.objects.filter(
+        colaborador=c, data__lt=HOJE
+    ).order_by("data"))
+    if not cels:
+        return cels, None
+
+    d0, d1 = cels[0].data, cels[-1].data
+    j_ini = timezone.make_aware(dt.datetime.combine(
+        d0 - dt.timedelta(days=1), dt.time.min))
+    j_fim = timezone.make_aware(dt.datetime.combine(
+        d1 + dt.timedelta(days=3), dt.time.min))
+    bs = list(batidas_apuraveis(
+        c, j_ini, j_fim - dt.timedelta(microseconds=1)))
+    ref = d1 + dt.timedelta(days=1)
+    g = montar_grade_prevista_periodo(
+        c, bs, dias=(d1 - d0).days + 2, ref=ref, agora=AGORA)
+    dias = {
+        ref - dt.timedelta(days=i): dia
+        for i, dia in enumerate(g.get("dias") or [])
+    }
+    primeira = Batida.objects.filter(
+        colaborador=c, retratada_em__isnull=True
+    ).order_by("timestamp").first()
+    adesao = timezone.localdate(primeira.timestamp) if primeira else None
+    chamados = cartorio.chamados_que_falam_de_batida(c) if adesao else {}
+    encerrados = dias_encerrados(
+        c, d0, d1, agora=AGORA,
+        celulas={(c.pk, x.data): x for x in cels}
+    ) if adesao else {}
+    return cels, {
+        "bs": bs,
+        "dias": dias,
+        "marcos": g.get("marcos") or [],
+        "adesao": adesao,
+        "chamados": chamados,
+        "encerrados": encerrados,
+        "isento": isento_ponto(c),
+    }
+
+
+def impressao_atual(c, cel, ctx):
+    data = cel.data
+    dia = ctx["dias"].get(data) or {}
+    cob = ausencia_cobre(c, data, para="cobranca")
+    regra = cartorio.versao_para(data, getattr(c, "empresa", None))
+    parcial = cartorio._cob_parcial_da_impressao(dia)
+
+    if ctx["adesao"] is None:
+        parcial_bool = bool(dia.get("cobertura_parcial"))
+        coberto_inteiro = (
+            dia.get("tipo_dia") in ("ausencia", "falta")
+            and not parcial_bool
+        )
+        ata = cartorio.dispensar_por_ausencia(
+            cartorio.ata_do_dia(dia, ctx["marcos"], dna=cel.dna)
+            if dia else None,
+            cob, dia=dia,
+        )
+        insumo = cartorio.com_insumo_dia_sem_trabalho(
+            dia, trabalha=cel.trabalha, ata=ata)
+        sem_trabalho = (
+            _dia_sem_trabalho_pelo_juiz(insumo)
+            and cartorio.sem_adesao_no_horizonte(
+                data, getattr(c, "empresa", None))
+        )
+        return cartorio.impressao_insumos(
+            [], getattr(cob, "status", None), [], cel.dna,
+            regra=regra, cob_parcial=parcial, isento=ctx["isento"],
+            sem_adesao=not coberto_inteiro and sem_trabalho,
+        )
+
+    lista = ctx["chamados"].get(data.isoformat(), [])
+    bj = [
+        b for b in ctx["bs"]
+        if data - dt.timedelta(days=1)
+        <= timezone.localdate(b.timestamp)
+        <= data + dt.timedelta(days=1)
+    ]
+    vivos = [x for x in lista if x.status_local in cartorio.VIVOS]
+    com_fio = [
+        x for x in vivos if fio_vivo(x.perguntas_que_resolvem.all())
+    ]
+    veto = motivo_do_veto(c, vinculo_do_emissor(c, data), data)
+    em_curso = data < HOJE and not ctx["encerrados"].get(data, False)
+
+    # teto_de_hoje=False, igual ao processar_cartorio ordinario.
+    return cartorio.impressao_insumos(
+        bj, getattr(cob, "status", None), lista, cel.dna,
+        veto=veto,
+        enc=0 if em_curso else None,
+        teto=None,
+        regra=regra,
+        fio=len(com_fio) if vivos else None,
+        cob_parcial=parcial,
+        isento=ctx["isento"],
+    )
+
+
+def contar_historicos():
+    # HistoricoVinculo.criado_em existe, mas a porta nao grava ID da cura.
+    # Portanto isto conta candidatos no dia, NAO "criados por esta cura".
+    qs = HistoricoVinculo.objects.filter(
+        criado_em__date=dt.date(2026, 11, 18),
+        colaborador__empresa_id__in=(2, 3, 4),
+        motivo="correcao",
+        tipo__in=("escala", "ancora"),
+    )
+    print(
+        "HISTORICOS_CANDIDATOS_18_11 linhas=%d pessoas=%d "
+        "dos_quatro=%d atribuicao_a_cura=[nao verificado]"
+        % (
+            qs.count(),
+            qs.values("colaborador_id").distinct().count(),
+            qs.filter(colaborador_id__in=ALVOS)
+              .values("colaborador_id").distinct().count(),
+        )
+    )
+    campos = {f.name for f in EscalaColaborador._meta.fields}
+    if "criado_em" not in campos:
+        print(
+            "ESCALAS_CRIADAS_18_11=[nao verificado: "
+            "EscalaColaborador nao possui criado_em]"
+        )
+    else:
+        print(
+            "ESCALAS_CRIADAS_18_11=[nao verificado: "
+            "data de criacao isolada nao identifica a cura]"
+        )
+
+
+def main():
+    print("HORA_SOMBRA_MAX_BATIDA=%s" % instante(
+        Batida.objects.aggregate(v=Max("timestamp"))["v"]))
+    print("DATE_TODAY=%s AGORA=%s" % (HOJE, instante(AGORA)))
+    print("PARTE_A=[nao verificado: nao implementada nesta sonda]")
+    print(
+        "PULOU significa apenas carimbo anterior ao corte e hash igual; "
+        "efeito causal da cura e insumo historico mudado=[nao verificado]"
+    )
+
+    try:
+        contar_historicos()
+    except Exception as exc:
+        erro("historicos", exc)
+
+    for pk in ALVOS:
+        try:
+            c = Colaborador.objects.get(pk=pk)
+            cels, ctx = preparar(c)
+        except Exception as exc:
+            erro("col%d preparacao" % pk, exc)
+            continue
+
+        if ctx is None:
+            print("col%d SEM_CELULAS_PASSADAS" % pk)
+            continue
+
+        for cel in cels:
+            if not (INI <= cel.data <= FIM and cel.data < HOJE):
+                continue
+            try:
+                atual = impressao_atual(c, cel, ctx)
+                gravada = cel.impressao
+                igual = bool(gravada and gravada == atual)
+                julgada = cel.julgada_em
+
+                if not julgada or not gravada:
+                    estado = "SEM_CARIMBO"
+                elif julgada < CORTE and igual:
+                    estado = "PULOU"
+                elif julgada >= CORTE:
+                    estado = "JULGADA_DEPOIS"
+                    # Julgada depois nao prova que foi a cura que chegou.
+                    if not igual:
+                        estado += "_HASH_DIFERENTE_AGORA"
+                elif not igual:
+                    estado = "HASH_DIFERENTE_NAO_REJULGADO_DESDE_CORTE"
+                else:
+                    estado = "INDETERMINADO"
+
+                resumo[estado] += 1
+                dna = cel.dna or {}
+                print(
+                    "col%d %s julgada_em=%s gravada=%s hoje=%s "
+                    "comparacao=%s estado=%s dna_versao=%r marcos=%r "
+                    "veredito=%r"
+                    % (
+                        pk, cel.data, instante(julgada), gravada, atual,
+                        "igual" if igual else "diferente",
+                        estado, dna.get("dna_versao"), dna.get("marcos"),
+                        cel.veredito,
+                    )
+                )
+                if estado == "PULOU":
+                    print(
+                        "col%d %s insumo_mudou_e_fora_da_impressao="
+                        "[nao verificado: hash nao reconstitui insumos "
+                        "historicos]"
+                        % (pk, cel.data)
+                    )
+            except Exception as exc:
+                erro("col%d %s" % (pk, cel.data), exc)
+
+    print("RESUMO_B")
+    for chave in sorted(resumo):
+        print("%s=%d" % (chave, resumo[chave]))
+    print("ERROS=%d" % erros)
+    print("FIM_SONDA")
+
+
+main()
+```
+
+## 18/11 18:41 · sessao f24ff05adc45 · CURA-CHEGA-A-FROTA · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — PROCEDE nos itens 1 e 2.** A impressão pode ser estendida de forma seletiva, mas a passada automática identificada percorre todas as células passadas da empresa, sem excluir competência exportada; além disso, o rejulgamento alimenta leitores de folha e retenção. A substituição da regeneração pelo item 1 ainda não está demonstrada para o universo do item 2. ([cartorio.py:471](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:471); [processar_cartorio.py:45](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/processar_cartorio.py:45); [export.py:1231](/home/ronald/codex_ws/c8b6d1ec25ac1b921c37558f95021cc99cc2/app/folha/export.py:1231))
+
+## Item 1 — [nome]-NA-IMPRESSÃO
+
+**1. Premissas.**
+
+- **(a) Conferem.** A frase literal está no comentário da disciplina do fio; veto, teto, fio e cobertura parcial acrescentam partes condicionais à lista que forma a impressão. As condições não são idênticas: veto e cobertura parcial usam teste de valor verdadeiro; teto e fio distinguem `None` de zero. ([cartorio.py:486](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:486); [cartorio.py:491](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:491); [cartorio.py:511](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:511); [cartorio.py:528](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:528))
+- **(b) Confere como afirmação do arquivo:** a linha 283 diz que o bump rejulgaria a frota inteira do horizonte. A versão aplicável é escolhida por competência e entra na impressão quando não é `None`. ([cartorio.py:269](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:269); [cartorio.py:283](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:283); [cartorio.py:495](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:495))
+- **(c) A guarda existe e a grade resultante alimenta o julgamento.** `_protegida_da_guarda` preserva a batida a até 90 minutos do próprio marco e a mais de 15 minutos da dona; é chamada tanto no alinhamento por papel quanto no caminho DP. O cartório monta a grade e a usa para formar a ata e classificar o dia. A condição protegida precisa ser caracterizada com cuidado: esses limites são uma **exceção à retirada** pela guarda, não uma definição genérica de toda rajada. ([utils.py:502](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502); [orfa_classe.py:28](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/orfa_classe.py:28); [regua_defesa.py:392](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/regua_defesa.py:392); [utils.py:586](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:586); [utils.py:651](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:651); [cartorio.py:1172](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1172); [cartorio.py:1435](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1435); [cartorio.py:1464](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1464))
+- **(d) O golden existe**, com cinco impressões literais comparadas à saída da função. Ele cobre essas fixtures e argumentos; sua existência não prova, por si só, identidade para todos os dias possíveis. Execução nesta revisão: **[não verificado]**. ([test_o219_versao_da_regra.py:39](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/tests/test_o219_versao_da_regra.py:39); [test_o219_versao_da_regra.py:98](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/tests/test_o219_versao_da_regra.py:98))
+- **(e) Existe pulo**, com qualificações: exige julgamento e veredito, impressão igual e ausência de `forcar`; o ramo normal também exclui o veredito `nunca_bateu` da condição de estar em dia. O ramo sem adesão tem comparação e pulo próprios. ([cartorio.py:1257](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1257); [cartorio.py:1409](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1409))
+- **(f) L-124 não diz simplesmente “competência aberta”.** Ela estabelece horizonte para frente, passado como foto até fato novo e backfill único no fim; também preserva o rejulgamento por fato novo em qualquer competência e a porta para correção provada em exportada. O aval precisa resolver expressamente a relação entre esse alcance e a alteração proposta da impressão. ([LEIS.md:145](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:145))
+
+**2. Colisão com avais vigentes.** Pelo desenho declarado, o arquivo de edição pretendido é o cartório; alteração de `motor_calculo_v2.py` pelo item 1 não foi especificada **[não verificado]**. Mas há colisão **por leitor** com a restrição ESPURIAS-ABRE enquanto ela vigorar: a nova impressão pode provocar lavra de ata e veredito, que a retenção e os leitores de folha usam. O adiamento declarado para depois da simulação evita a colisão temporal **se cumprido**, mas o fim efetivo da simulação e a data do pouso são **[não verificado]**. ([cartorio.py:1851](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1851); [export.py:1201](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:1201))
+
+O item 1 também interfere no objetivo do item 4 de RAIA ao propor outro caminho para fazer chegar a cura, mas a equivalência com a regeneração manual é **[não verificado]**. O texto integral desses avais externos, além das descrições fornecidas na pergunta, é **[não verificado]**.
+
+**3. Condições literais.**
+
+- A impressão atual **não é hash de um dicionário inteiro**: concatena partes ordenadas, inclusive `str(dna_versao)` e `str(marcos)`, depois aplica SHA-256. Preservar o byte exige não acrescentar parte alguma no caso ausente e conservar as entradas e sua ordem; acrescentar chave ou parte vazia não equivale a omiti-la. O golden prova os casos que contém, não toda a frota. ([cartorio.py:480](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:480); [cartorio.py:554](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:554); [test_o219_versao_da_regra.py:98](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/tests/test_o219_versao_da_regra.py:98))
+- A passada identificável é `processar_cartorio --apply`, agendada às **06:27**, por empresa, dependente de `reconciliar_grade`. Ela seleciona células de data anterior a hoje e chama o julgamento mesmo para células já julgadas; com impressão divergente, o pulo não se aplica. O cartório relavra sem regenerar o DNA da célula. A execução real do cron, seu sucesso e os dias concretos alcançados em produção são **[não verificado]**. ([crons.py:616](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/config/crons.py:616); [processar_cartorio.py:49](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/processar_cartorio.py:49); [cartorio.py:943](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:943))
+- “Hoje PULADO” para um dia concreto com a rajada e palavra velha depende do estado gravado e dos demais insumos: **[não verificado]**. O código mostra a possibilidade do pulo, não sua ocorrência nos dias da frota. ([cartorio.py:1398](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1398))
+- Há motor geral de DIFF de frota para fechamento, por colaborador e campo, e há medidor de veredito velho com comparação de export; **um instrumento já pronto que liste cada dia movido por esta condição específica e identifique ausência de rajada: [não verificado]**. O DIFF financeiro agregado por colaborador, sozinho, não satisfaz literalmente essa tabela por dia. ([diff_frota.py:1](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/diff_frota.py:1); [diff_frota.py:45](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/diff_frota.py:45); [celula_veredito_velho.py:1](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/celula_veredito_velho.py:1))
+
+**4. Exportada, dinheiro e `!`.** A competência exportada está fora **por promessa no aval, não por filtro dessa passada**: a consulta do comando filtra empresa e `data__lt=hoje`, sem recorte de competência aberta ou exclusão de exportada. Assim, um marcador novo calculado também em dia exportado pode tornar sua impressão diferente e levá-lo à lavra. ([processar_cartorio.py:45](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/processar_cartorio.py:45); [cartorio.py:1409](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1409))
+
+A relavra pode mudar ata, veredito e protestos, além de emitir ou atualizar cobrança; esses dados chegam à retenção, ao `classificar_export` e a `fora_da_folha`. Portanto há efeito potencial de folha e de entrada/saída do TXT, ainda que a relavra, por si, não prove recálculo ou alteração de valores financeiros gravados. Impacto financeiro e nominal nesta frota: **[não verificado]**. ([cartorio.py:1829](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1829); [cartorio.py:1851](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1851); [export.py:765](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:765); [export.py:1273](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:1273); [fora_da_folha.py:115](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/fora_da_folha.py:115); [celula_veredito_velho.py:44](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/celula_veredito_velho.py:44))
+
+## Item 2 — substituir a regeneração manual
+
+**1. Premissas.** O item depende de o item 1 estar no ar e alcançar os dias pretendidos. A árvore atual demonstra que a relavra usa a grade e pode ser disparada por impressão diferente, mas não demonstra que isso corrija os mesmos dias e os mesmos fatos que a regeneração de células prevista no outro aval. A relavra não regenera o DNA; portanto equivalência entre as duas operações é **[não verificado]**. ([cartorio.py:943](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:943); [cartorio.py:1172](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1172))
+
+**2. Colisão.** O item 2 declara superado o item 4 de RAIA antes da comprovação dessa equivalência; seu texto integral e o universo do backlog são **[não verificado]**. As mesmas restrições temporais e de leitor do item 1 se aplicam ao mecanismo do qual o item 2 depende. ([cartorio.py:1851](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1851); [export.py:1201](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:1201))
+
+**3. Literal.** A condição de parar se o DIFF mover dia sem rajada exige uma comparação **por colaborador-dia**, com predicado de rajada definido e lista de dias movidos. O motor geral encontrado devolve medições financeiras por colaborador; a sonda específica que cumpra essa condição permanece **[não verificado]**. Mesmo DIFF zerado fora da rajada não demonstraria, sozinho, que toda correção dependente de regeneração de DNA foi substituída. ([diff_frota.py:45](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/diff_frota.py:45); [cartorio.py:943](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:943))
+
+**4. Exportada, dinheiro e `!`.** O item 2 não descreve uma escrita adicional, mas sua eficácia depende da relavra do item 1 e herda o risco de alcance a exportadas e de mudança dos leitores de retenção e exportação. Dias efetivamente movidos, dinheiro e impacto de cancelar a regeneração: **[não verificado]**. ([processar_cartorio.py:49](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/processar_cartorio.py:49); [export.py:1273](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:1273))
+
+## Quem escreve e quem lê a impressão
+
+O campo é `CelulaDia.impressao`. A busca nos arquivos Python de aplicação identificou os seguintes usos diretos; usos indiretos, dinâmicos ou fora desse escopo: **[não verificado]**. ([models.py:1741](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/models.py:1741))
+
+- **Calcula e entrega à porta:** `impressao_insumos`; o cartório a chama e envia o resultado a `carimbar` nos ramos sem adesão e normal. ([cartorio.py:471](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:471); [cartorio.py:1257](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1257); [cartorio.py:1314](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1314); [cartorio.py:1398](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1398); [cartorio.py:1874](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1874))
+- **Grava e também lê para idempotência:** `carimbar` compara o valor anterior e atribui o novo. ([celula.py:1181](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1181))
+- **Apaga em um caso específico:** `desfazer_julgamento_da_futura` inclui `impressao` entre os campos zerados para célula futura, respeitando a exceção de veredito administrativo. ([celula.py:1112](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1112); [celula.py:1145](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1145))
+- **Lê para decidir o pulo:** o cartório, nos dois ramos. **Lê para snapshot de reversão:** `celula_veredito_velho`, na opção de aplicação. ([cartorio.py:1260](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1260); [cartorio.py:1409](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:1409); [celula_veredito_velho.py:90](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/celula_veredito_velho.py:90))
+
+**Fecho por item:**
+
+- **Item 1 — PROCEDE:** falta um recorte efetivo que preserve exportadas, uma definição testável da condição protegida e prova do impacto nos leitores de folha. ([processar_cartorio.py:49](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/management/commands/processar_cartorio.py:49); [utils.py:502](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502); [export.py:1273](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:1273))
+- **Item 2 — PROCEDE:** a substituição da regeneração e o DIFF nominal por dia ainda não estão demonstrados; a relavra não regenera DNA. ([cartorio.py:943](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:943); [diff_frota.py:45](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/diff_frota.py:45))
+
+## 18/11 18:40 · sessao 60639badeb09 · CURA-CHEGA-A-FROTA · leitura · origem=Code
+
+**Conclusão:** a premissa técnica do item 1 confere: a grade atual pode entregar um dia diferente ao juiz enquanto a impressão continua igual, pois ela já contém batidas e DNA, mas não contém a decisão da guarda [nome]. A passada comum então pula uma célula já julgada que satisfaça os demais requisitos de idempotência. Há, porém, um limite material para o aval: **a passada existente percorre todas as células passadas e não exclui competência exportada**; a cura precisa respeitar esse recorte também nas passadas por evento. [app/escala/utils.py:581; app/ponto/services/cartorio.py:480; app/ponto/services/cartorio.py:1409; app/ponto/management/commands/processar_cartorio.py:49]
+
+Não foi possível verificar o hash do HEAD por Git: a cópia acessível não é um repositório Git. A identidade da cópia com o hash informado é **[não verificado]**. Nenhum dado de produção foi consultado; a existência e a quantidade de dias afetados são **[não verificado]**.
+
+### A. Onde a guarda mora
+
+- As constantes são `RAIO_DO_MARCO_MIN = 90` e `JANELA_CLUSTER_MIN = 15`. `_protegida_da_guarda(batida, marco, dona)` compara instantes completos em segundos: distância ao próprio marco **≤ 90 minutos** e distância à batida dona **> 15 minutos**. [app/escala/regua_defesa.py:392; app/escala/orfa_classe.py:28; app/escala/utils.py:502]
+- Ela é chamada em dois caminhos de `_match_marcos`: depois do alinhamento por papel e no alinhamento DP. Só interfere quando a batida foi atribuída a um marco, outro marco é o mais próximo dela, e este já está ocupado por uma dona ao menos tão próxima dele. A ordem dos marcos e das batidas e a atribuição feita antes da guarda, portanto, fazem parte do contexto necessário; a comparação não é feita apenas por `HH:MM`. [app/escala/utils.py:573; app/escala/utils.py:587; app/escala/utils.py:595; app/escala/utils.py:639]
+- Sem a proteção, o casador desocupa o marco atribuído e transforma a batida em órfã; com ela, preserva a ocupação. O teste com 11:31 e 12:23 demonstra a ocupação preservada nos dois caminhos; o controle com dona a um minuto demonstra marco `missing` e órfã. [app/escala/utils.py:587; app/escala/utils.py:651; app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:29; app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:59]
+- O cartório carrega batidas apuráveis, monta a grade e entrega o `dia` ao `classificar_dia`; a ata registra lâmpadas, quantidade e horas de órfãs. Assim, preservar uma batida pode mudar marco ocupado, lista de órfãs e, conforme o restante do dia, códigos e palavra lavrada — não necessariamente muda o veredito em todo caso. [app/ponto/services/cartorio.py:1170; app/ponto/services/cartorio.py:730; app/ponto/services/cartorio.py:1464]
+- A classe **não é devolvida pelo casador**: `classificar_orfas` a deriva da grade. Em trabalho, sem marco vazio ela dá `indefinida`; com marco vazio, uma órfã isolada é `geometria` e uma sequência de pelo menos duas é `eco_cluster`. Alterar ocupação e órfãs pode, portanto, alterar também essa classe derivada; não encontrei chamada de produção a `classificar_orfas` no cartório. O juiz do dia lê a lista de órfãs diretamente. [app/escala/orfa_classe.py:53; app/escala/orfa_classe.py:68; app/ponto/supra_juiz.py:522]
+
+### B. Qual insumo precisa entrar
+
+A impressão atual já inclui `pk`, tipo e timestamp das batidas da janela e os marcos do DNA. Para mover o hash de um dia antigo **sem fato novo**, precisa acrescentar uma representação não vazia da **intervenção efetiva da guarda**: o caso em que o cluster-guard retiraria a batida, mas `_protegida_da_guarda` preserva o marco. Recalcular apenas a proximidade de qualquer batida com qualquer marco seria mais amplo que esse caso. [app/ponto/services/cartorio.py:471; app/escala/utils.py:587; app/escala/utils.py:655]
+
+Formas possíveis, todas extraídas do casador que já decide, sem uma segunda regra:
+
+| Forma acrescentada ao hash | Só aparece quando há intervenção? | Dias sem intervenção conservam os bytes? |
+|---|---|---|
+| Lista determinística dos pares **marco e batida preservados**. | Sim, se lista vazia for omitida. | Sim, se nenhuma outra parte da impressão mudar. |
+| Índices determinísticos dos **marcos preservados**. | Sim, se lista vazia for omitida. | Sim, sob a mesma condição. |
+| `cirineu:N`, com quantidade de preservações. | Sim, se zero for omitido. | Sim, sob a mesma condição. |
+
+A lista de pares é a mais informativa; índice ou contagem bastam para fazer o **primeiro** hash antigo divergir quando o marcador aparece, mas sozinhos distinguem menos resultados posteriores. A garantia depende de capturar as intervenções reais dos dois caminhos e de uma serialização estável; isso ainda é desenho, **[não verificado]**. O hash é formado pela junção ordenada das partes, de modo que omitir integralmente a parte nova preserva a entrada antiga. [app/escala/utils.py:587; app/escala/utils.py:651; app/ponto/services/cartorio.py:556]
+
+**Recorte necessário:** o marcador não pode simplesmente ser acrescentado a todas as datas com intervenção. A fila atual alcança exportadas; é preciso garantir a elegibilidade de competência aberta antes que a impressão nova provoque lavra, inclusive no caminho de evento. A forma concreta dessa proteção e sua prova de exportada intacta são **[não verificado]**. [app/ponto/management/commands/processar_cartorio.py:49; app/ponto/services/cartorio.py:2012]
+
+### C. A impressão e a passada hoje
+
+`impressao_insumos` monta SHA-256 das partes separadas por `|`: batidas, status da cobertura, chamados e versão/marcos do DNA; depois acrescenta partes opcionais. Os moldes pedidos são: [app/ponto/services/cartorio.py:471]
+
+- `veto:<motivo>` se `veto` for verdadeiro. [app/ponto/services/cartorio.py:486]
+- `teto:<valor>` se `teto is not None`, inclusive zero. [app/ponto/services/cartorio.py:491]
+- `fio:<valor>` se `fio is not None`, inclusive `fio:0`. [app/ponto/services/cartorio.py:521]
+- `cobparcial:1` para verdadeiro, ou `cobparcial:1:<estado>` para string; o estado pode conter `;disp=<índices>`. [app/ponto/services/cartorio.py:455; app/ponto/services/cartorio.py:532]
+
+O ramo normal compara a impressão calculada com `cel.impressao` e pula se há julgamento e veredito compatível, salvo `forcar`; o ramo nunca-bateu tem sua própria comparação. A gravação passa por `carimbar`, no campo `CelulaDia.impressao`, `CharField` de até 64 caracteres. [app/ponto/services/cartorio.py:1257; app/ponto/services/cartorio.py:1398; app/ponto/portas/celula.py:1181; app/escala/models.py:1741]
+
+O golden O219 fixa cinco hashes — vazio, uma batida, duas com chamado, veto e teto —, exige identidade com `regra=None`, verifica que versões distintas movem o hash, fixa a declaração atual de versões e usa AST para cobrar `regra` nas duas chamadas do corpo. Ele é uma proteção concreta, mas seus cinco exemplos não provam, sozinhos, todos os dias sem intervenção. [app/ponto/tests/test_o219_versao_da_regra.py:39; app/ponto/tests/test_o219_versao_da_regra.py:67; app/ponto/tests/test_o219_versao_da_regra.py:98; app/ponto/tests/test_o219_versao_da_regra.py:224]
+
+O cron declarado é `processar_cartorio --apply`, às **06:27**, por empresa, sem `--forcar`, dependente de `reconciliar_grade`. Sua consulta não tem piso temporal: seleciona todas as células com `data < hoje`, por empresa e colaborador, inclusive já julgadas. **Não há filtro de competência exportada nessa consulta**; o próprio serviço adverte que o comando sem piso pode alcançar exportada. Logo, não se pode afirmar que a passada atual, por si, cumpre “exportada não se toca”. [app/config/crons.py:614; app/ponto/management/commands/processar_cartorio.py:45; app/ponto/management/commands/processar_cartorio.py:59; app/ponto/services/cartorio.py:957]
+
+### D. Outros leitores do campo
+
+Na busca textual dos usos Python do campo `CelulaDia.impressao`, além das comparações de pulo e da atribuição:
+
+- `carimbar` também o compara para decidir se o conjunto do carimbo já está idempotente. [app/ponto/portas/celula.py:1187]
+- `celula_veredito_velho` o inclui no snapshot de reversão do caminho `--aplicar`; o contador de divergência desse comando compara vereditos, não compara impressões. [app/ponto/management/commands/celula_veredito_velho.py:100; app/ponto/management/commands/celula_veredito_velho.py:166]
+- Testes leem ou fixam o campo, por exemplo os de isenção, fio e a catraca que cataloga a coluna como saída. [app/ponto/tests/test_x1_folga_sem_adesao.py:148; app/ponto/tests/test_o261_cobrado_le_o_fio.py:179; app/escala/tests/test_d3_guarda_da_linha_celula.py:54]
+
+Leitores indiretos, acesso dinâmico ou fora dos arquivos pesquisados: **[não verificado]**. Não identifiquei leitura direta desse campo nas buscas dos vigias, telas e tripwire; isso não demonstra que eles sejam imunes aos **efeitos da relavra**. [app/ponto/management/commands/tripwire_celulas.py:235; app/ponto/services/cartorio.py:1851]
+
+### E. Contador do item 4 e julgamento em sombra
+
+Existe um **molde parcial**: `celula_veredito_velho` compara o veredito gravado com o que a porta escreveria ao executar `julgar_colab(apply_=True, forcar=True)` dentro de transação e, no ensaio, pedir rollback. Ele conta mudanças de **veredito**, não todas as diferenças possíveis de ata ou julgamento; seleciona uma competência fornecida e não demonstra por si o recorte “aberta” nem filtra “sem fato novo”. É declarado como ensaio sob demanda, não cron. [app/ponto/management/commands/celula_veredito_velho.py:19; app/ponto/management/commands/celula_veredito_velho.py:74; app/ponto/management/commands/celula_veredito_velho.py:129; app/ponto/management/commands/celula_veredito_velho.py:166; app/config/crons.py:1094]
+
+A função real é **`julgar_colab`**, com `forcar=True`, para atravessar a impressão; `julgar_celula` é sua porta unitária. O `apply_=False` fornece códigos no ramo normal, mas **não equivale ao julgamento completo gravável**: no ramo nunca-bateu, a classificação e a escolha da palavra estão dentro de `if apply_`. Por isso, o ensaio existente usa a porta real de lavra e rollback; não há prova nesta leitura de que rollback reverta efeitos externos eventualmente disparados durante o ensaio. [app/ponto/services/cartorio.py:940; app/ponto/services/cartorio.py:1267; app/ponto/services/cartorio.py:1464; app/ponto/services/cartorio.py:2012; app/ponto/management/commands/celula_veredito_velho.py:118]
+
+### F. Moldes para o RED
+
+- [test_cirineu_nao_desfaz_o_papel.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:28): monta a geometria que a guarda preserva, os dois caminhos e as bordas por segundo.
+- [test_e3_isento_na_impressao.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/tests/test_e3_isento_na_impressao.py:158): cria célula e batidas, carimba, demonstra o pulo, muda o insumo, verifica a nova impressão e usa mutante que remove o insumo.
+- [test_o261_cobrado_le_o_fio.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/tests/test_o261_cobrado_le_o_fio.py:164): exercita passagem equivalente à do cron **sem `forcar`** e verifica que a célula deixa de ser pulada.
+- [test_hx_cartorio_universo.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/tests/test_hx_cartorio_universo.py:34): molde de chamada do comando `processar_cartorio --apply`.
+
+O RED específico deve plantar **impressão e palavra antigas para o mesmo conjunto de fatos**, demonstrar o pulo sem marcador e, com o marcador, a relavra sem `forcar`; o controle sem intervenção deve comparar o hash antigo byte a byte. O recorte exportado e o caminho de evento também precisam de prova própria. Esses testes específicos ainda são **[não verificado]**. [app/ponto/services/cartorio.py:1409; app/ponto/tests/test_o219_versao_da_regra.py:98]
+
+**Arquivos que a cura tocaria — desenho provável:** [app/escala/utils.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502) para expor a intervenção real; [app/ponto/services/cartorio.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:471) para incorporá-la e respeitar o recorte; testes novos ou existentes em `app/escala/tests/` e `app/ponto/tests/`. Arquivos adicionais para o contador e para garantir o recorte de competência: **[não verificado]**.
+
+**Juízes novos: 0**, neste desenho: reutilizam-se o casador e o cartório existentes. [app/escala/utils.py:595; app/ponto/services/cartorio.py:940]
+
+**Perguntas de lei: 0.** A exclusão de exportada é uma condição expressa do aval fornecido; sua implementação e prova permanecem trabalho técnico em aberto **[não verificado]**.
 
 ## 18/11 18:18 · sessao 987d7175aba3 · TIPO-NA-FONTE · leitura · origem=Code
 
@@ -1485,425 +1889,4 @@ for (etapa, tipo), quantidade in sorted(erros.items()):
 print('FIM_SONDA_VELHO')
 ```
 
-## 18/11 17:49 · sessao f3840f73219c · RAIA-INTERVALO · sonda · origem=Code
-
-A ata registra, por marco, `acesa`, `luz` e `tipo_real`, mas a estrutura produzida pelo cartório não registra a identidade da `Batida` casada; `orfas` também contém horas, não IDs. Assim, não é possível identificar com segurança cada batida sem marco sem refazer uma associação por horário. A sonda sinaliza `ata_sem_chave` e mantém os totais correspondentes como desconhecidos quando há batidas apuráveis. [app/ponto/services/cartorio.py:711](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:711), [app/ponto/services/cartorio.py:738](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/services/cartorio.py:738)
-
-A sonda não foi executada e seus resultados em produção são [não verificado]. `UA` permanece desconhecida porque não foi demonstrado um carimbo para toda alteração da ata. [app/ponto/portas/celula.py:1060](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1060), [app/ponto/portas/celula.py:1205](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/ponto/portas/celula.py:1205)
-
-```python
-import datetime as dt
-import io
-import re
-from collections import Counter, defaultdict
-
-from django.core.management import call_command
-from django.db import connection, transaction
-from django.utils import timezone
-
-from colaboradores.models import Colaborador
-from escala.models import CelulaDia, derivar_veredito
-from ponto.models import Batida
-from ponto.turnos import batidas_apuraveis
-
-
-G = {
-    'G1': [(622, d) for d in (
-        '27/10', '29/10', '04/11', '05/11', '12/11', '13/11', '16/11'
-    )],
-    'G2': [(362, '22/10'), (945, '29/10'), (735, '16/11')],
-    'G3': [(583, '12/11'), (829, '11/11'), (369, '12/11')],
-    'G4': [
-        (224, '28/10'), (469, '01/11'), (924, '11/11'),
-        (631, '03/11'), (988, '31/10'), (988, '03/11'),
-        (836, '04/11'), (1000, '03/11'), (1000, '13/11'),
-        (962, '05/11'), (962, '09/11'), (962, '16/11'),
-        (991, '09/11'), (991, '11/11'),
-    ],
-    'G5': [(787, '30/10')],
-}
-
-INI = dt.date(2026, 10, 22)
-FIM = dt.date(2026, 11, 16)
-tz = timezone.get_current_timezone()
-erros = Counter()
-
-# O texto entre o id e a data e o detalhe apos "|" nunca sao impressos.
-DUMP_RE = re.compile(
-    r'^([A-Z][A-Z0-9_]*)\|col([0-9]+) .*? '
-    r'([0-9]{4}-[0-9]{2}-[0-9]{2}) \|'
-)
-AVALIADOS_RE = re.compile(r'^dias-colab avaliados: ([0-9]+)$')
-
-
-def executar_etapa(etapa, funcao):
-    # O savepoint permite continuar apos erro de banco.
-    # Nunca imprime a mensagem da excecao.
-    try:
-        with transaction.atomic():
-            return True, funcao()
-    except Exception as exc:
-        erros[(etapa, type(exc).__name__)] += 1
-        return False, None
-
-
-def hora_local(valor):
-    if valor is None:
-        return '?'
-    return timezone.localtime(valor, tz).strftime('%d/%m/%Y_%H:%M:%S')
-
-
-def data_caso(dm):
-    dd, mm = dm.split('/')
-    return dt.date(2026, int(mm), int(dd))
-
-
-def carregar_command(empresa):
-    buf = io.StringIO()
-    call_command(
-        'supra_juiz',
-        empresa=empresa,
-        ini=INI.isoformat(),
-        fim=FIM.isoformat(),
-        dump=True,
-        stdout=buf,
-    )
-
-    codigos = defaultdict(list)
-    avaliados = None
-    no_dump = False
-
-    for linha in buf.getvalue().splitlines():
-        if linha == '--- DUMP (HX-DUMP) ---':
-            no_dump = True
-            continue
-
-        if not no_dump:
-            m = AVALIADOS_RE.fullmatch(linha)
-            if m:
-                if avaliados is not None:
-                    raise ValueError('contador_duplicado')
-                avaliados = int(m.group(1))
-            continue
-
-        m = DUMP_RE.match(linha)
-        if not m:
-            # Nao aceitar silenciosamente uma linha de dump em formato novo.
-            raise ValueError('formato_dump')
-        codigo, col_id, iso = m.groups()
-        data = dt.date.fromisoformat(iso)
-        codigos[(int(col_id), data)].append(codigo)
-
-    if not no_dump or avaliados is None:
-        raise ValueError('dump_ou_contador_ausente')
-
-    return codigos, avaliados
-
-
-def tem_batida_na_janela_command(col):
-    inicio = timezone.make_aware(
-        dt.datetime.combine(INI - dt.timedelta(days=1), dt.time.min), tz
-    )
-    fim = timezone.make_aware(
-        dt.datetime.combine(FIM + dt.timedelta(days=3), dt.time.min), tz
-    )
-    return Batida.objects.filter(
-        colaborador=col, timestamp__gte=inicio, timestamp__lt=fim
-    ).exists()
-
-
-def batidas_do_dia(col, data):
-    inicio = timezone.make_aware(dt.datetime.combine(data, dt.time.min), tz)
-    fim = timezone.make_aware(
-        dt.datetime.combine(data + dt.timedelta(days=1), dt.time.min), tz
-    )
-    # A autoridade usa fim inclusivo; excluir a meia-noite seguinte.
-    return [
-        b for b in batidas_apuraveis(col, inicio, fim)
-        if b.timestamp < fim
-    ]
-
-
-def imprimir_medida_sem_marco(grupo, pk, dm, bats):
-    if not bats:
-        # Nao ha batida apuravel que possa estar sem marco.
-        return False, False
-
-    # Procurou-se em CelulaDia.ata e no produtor:
-    # app/escala/models.py:1778
-    # app/ponto/portas/celula.py:88-105
-    # app/ponto/services/cartorio.py:599-725 e 730-747
-    #
-    # lampadas[].luz guarda HH:MM, nao a identidade da Batida;
-    # ata.orfas tambem guarda horas. Associar essas horas a objetos
-    # Batida seria refazer a associacao, sobretudo com horas duplicadas.
-    print('B %s col%d %s ata_sem_chave' % (grupo, pk, dm))
-    return None, None
-
-
-def rodar():
-    resumo = {
-        grupo: Counter({
-            'sim': 0, 'nao': 0, '?': 0,
-            'acusa': 0, 'concorde': 0,
-            'fora_do_command': 0, 'hoje_?': 0,
-            'sem_marco_total': 0,
-            'sem_marco_ate90_oposto': 0,
-            'medida_desconhecida': 0,
-        })
-        for grupo in G
-    }
-
-    ids = sorted({pk for casos in G.values() for pk, _ in casos})
-    colaboradores = {}
-    for pk in ids:
-        ok, col = executar_etapa(
-            'colaborador', lambda pk=pk: Colaborador.objects.get(pk=pk)
-        )
-        if ok:
-            colaboradores[pk] = col
-
-    empresas = sorted({
-        col.empresa_id for col in colaboradores.values()
-        if col.empresa_id is not None
-    })
-    comandos = {}
-    for empresa in empresas:
-        ok, resultado = executar_etapa(
-            'command', lambda empresa=empresa: carregar_command(empresa)
-        )
-        if ok:
-            comandos[empresa] = resultado
-            print(
-                'COMMAND empresa=%s dias-colab avaliados: %d'
-                % (empresa, resultado[1])
-            )
-        else:
-            print('COMMAND empresa=%s dias-colab avaliados: ?' % empresa)
-
-    elegibilidade = {}
-    for pk, col in colaboradores.items():
-        if col.situacao != 'ativo':
-            elegibilidade[pk] = 'inativo'
-        else:
-            ok, tem = executar_etapa(
-                'janela_command',
-                lambda col=col: tem_batida_na_janela_command(col)
-            )
-            if ok:
-                elegibilidade[pk] = None if tem else 'sem_batida'
-            else:
-                elegibilidade[pk] = '?'
-
-    for grupo, casos in G.items():
-        for pk, dm in casos:
-            data = data_caso(dm)
-            col = colaboradores.get(pk)
-            grav = julg = ub = None
-            hoje = codigos = motivo_hoje = None
-            ok_cel = ok_bats = False
-            bats = None
-
-            if col is not None:
-                ok_cel, cel = executar_etapa(
-                    'celula',
-                    lambda pk=pk, data=data: CelulaDia.objects.filter(
-                        colaborador_id=pk, data=data
-                    ).first()
-                )
-                if ok_cel and cel is not None:
-                    grav = cel.veredito
-                    julg = cel.julgada_em
-
-                estado = elegibilidade.get(pk, '?')
-                if estado in ('inativo', 'sem_batida'):
-                    hoje = 'fora_do_command'
-                    motivo_hoje = estado
-                elif estado is None and col.empresa_id in comandos:
-                    codigos = comandos[col.empresa_id][0].get((pk, data), [])
-                    if not codigos:
-                        hoje = 'concorde'
-                    else:
-                        ok_ver, hoje = executar_etapa(
-                            'veredito_dump',
-                            lambda codigos=codigos: derivar_veredito(codigos)
-                        )
-                        if not ok_ver:
-                            hoje = None
-
-                ok_bats, bats = executar_etapa(
-                    'batidas_apuraveis',
-                    lambda col=col, data=data: batidas_do_dia(col, data)
-                )
-                if ok_bats and bats:
-                    ub = max(
-                        bats, key=lambda b: (b.timestamp, b.pk)
-                    ).criado_em
-
-            # Ausencia de JULG e ausencia de UB so sao conclusoes se as
-            # respectivas leituras terminaram com sucesso.
-            motivo_velho = None
-            if not ok_cel:
-                velho = '?'
-                motivo_velho = 'leitura_celula'
-            elif julg is None:
-                velho = '?'
-                motivo_velho = 'sem_julgamento'
-            elif not ok_bats:
-                velho = '?'
-                motivo_velho = 'leitura_batidas'
-            elif ub is not None and ub > julg:
-                velho = 'sim'
-            else:
-                velho = '?'
-                motivo_velho = 'ata_sem_carimbo'
-
-            r = resumo[grupo]
-            r[velho] += 1
-            if hoje is None:
-                r['hoje_?'] += 1
-            elif hoje == 'fora_do_command':
-                r['fora_do_command'] += 1
-            elif hoje == 'concorde':
-                r['concorde'] += 1
-            else:
-                r['acusa'] += 1
-
-            cod_txt = '?' if codigos is None else (
-                ','.join(codigos) if codigos else '-'
-            )
-            linha = (
-                'D %s col%d %s GRAV=%s JULG=%s HOJE=%s COD=%s '
-                'UB=%s UA=? VELHO=%s'
-                % (
-                    grupo, pk, dm, grav or '?', hora_local(julg),
-                    hoje or '?', cod_txt, hora_local(ub), velho,
-                )
-            )
-            if motivo_hoje:
-                linha += ' motivo_hoje=%s' % motivo_hoje
-            if motivo_velho:
-                linha += ' motivo_velho=%s' % motivo_velho
-            if hoje == 'concorde':
-                linha += ' RAMO ?'
-            print(linha)
-
-            if ok_bats:
-                total, oposto = imprimir_medida_sem_marco(
-                    grupo, pk, dm, bats
-                )
-                if total is None or oposto is None:
-                    r['medida_desconhecida'] += 1
-                else:
-                    r['sem_marco_total'] += int(total)
-                    r['sem_marco_ate90_oposto'] += int(oposto)
-            else:
-                r['medida_desconhecida'] += 1
-                print('B %s col%d %s leitura_batidas=?' % (grupo, pk, dm))
-
-    for grupo in G:
-        r = resumo[grupo]
-        # Um total so e inteiro quando todos os dias do grupo sao conhecidos.
-        total = (
-            '?' if r['medida_desconhecida']
-            else str(r['sem_marco_total'])
-        )
-        oposto = (
-            '?' if r['medida_desconhecida']
-            else str(r['sem_marco_ate90_oposto'])
-        )
-        print(
-            'RESUMO %s VELHO sim=%d nao=%d ?=%d '
-            'HOJE acusa=%d concorde=%d fora_do_command=%d ?=%d '
-            'sem_marco_ate90_oposto=%s sem_marco_total=%s '
-            'medida_dias_desconhecidos=%d'
-            % (
-                grupo, r['sim'], r['nao'], r['?'],
-                r['acusa'], r['concorde'], r['fora_do_command'],
-                r['hoje_?'], oposto, total, r['medida_desconhecida'],
-            )
-        )
-
-
-try:
-    if connection.in_atomic_block:
-        raise RuntimeError('transacao_preexistente')
-    if connection.vendor != 'postgresql':
-        raise RuntimeError('banco_nao_postgresql')
-
-    with transaction.atomic():
-        with connection.cursor() as cursor:
-            cursor.execute('SET TRANSACTION READ ONLY')
-            cursor.execute('SELECT current_schema()')
-            if cursor.fetchone()[0] != 'juliani':
-                raise RuntimeError('schema_ativo_nao_e_juliani')
-        rodar()
-except Exception as exc:
-    erros[('sonda', type(exc).__name__)] += 1
-
-print('ERROS %d' % sum(erros.values()))
-for (etapa, tipo), quantidade in sorted(erros.items()):
-    print('ERROS etapa=%s tipo=%s n=%d' % (etapa, tipo, quantidade))
-print('FIM_SONDA_VELHO')
-```
-
-## 18/11 17:48 · sessao 5fea559ba4a8 · E4C-F6F7 · construtor · origem=Code
-
-A ligação do contador ao vigia está implementada em [vigiar_fio_morto.py](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/vigiar_fio_morto.py:186): uma chamada por rodada, com o recorte por empresa usado pela irmã ([vigia_fio.py:770](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/vigia_fio.py:770)). O valor vai à linha impressa ([linha 216](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/vigiar_fio_morto.py:216)) e ao censo do carimbo ([linha 262](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/vigiar_fio_morto.py:262)), com esperado zero e sem alarme ([linha 101](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/vigiar_fio_morto.py:101)).
-
-O [teste novo](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:38) cobre ausência e presença da linha, impressão, esperado, alarme, recorte e chamada única. **RED, GREEN e mutantes não foram executados**, pois usam banco; o resultado de cada rodada permanece [não verificado]. O `py_compile` passou com a escrita de bytecode interceptada; Ruff não está disponível [não verificado em outros ambientes]. [nao verificado]
-
-Comando para o Code executar o RED sobre a base com o teste novo e depois o GREEN com a cura: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 manage.py test chamados.tests.test_f7_vigia_validada_sem_linha
-```
-
-Mutantes propostos, cada um aplicado isoladamente a [vigiar_fio_morto.py](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/vigiar_fio_morto.py:186), seguidos pelo mesmo comando acima e pela restauração da alteração; morte [não verificada]: [nao verificado]
-
-- Gravar `validada_projetada_sem_linha=0` no censo: o caso sem linha deve falhar ([teste:38](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:38)). [nao verificado]
-- Remover o filtro `perguntas.filter(...)`: o caso do recorte deve falhar ([teste:55](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:55)). [nao verificado]
-- Chamar o contador duas vezes: a verificação de chamada única deve falhar ([teste:59](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:59)). [nao verificado]
-
-Há uma incompatibilidade previsível para a suíte: o teste existente compara os dicionários completos do carimbo sem a nova chave ([test_o261_vigia_fio.py:835](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_o261_vigia_fio.py:835), [linha 859](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_o261_vigia_fio.py:859)). Não foi alterado por estar fora do escopo literal; falha em execução [não verificado]. [nao verificado]
-
-LEI-AKITA: origem=vigiar_fio_morto.py::handle ([linha 160](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/vigiar_fio_morto.py:160)), testemunha=contador_validada_projetada_sem_linha, que lê DecisaoPergunta.linhas_da_projecao_sem_linha ([backfill:94](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/management/commands/backfill_decisoes_pergunta.py:94)), RED=[teste:38](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_f7_vigia_validada_sem_linha.py:38) [não executado], quem-mais-le=bin/fio_estado.py ([linha 98](/home/ronald/wt-codex-e4c-f6f7-174627/bin/fio_estado.py:98)) e bin/gerar_estado.py ([linha 260](/home/ronald/wt-codex-e4c-f6f7-174627/bin/gerar_estado.py:260)), juizes novos=0, padrao=Single Source of Truth ([GLOSSARIO.md:11](/home/ronald/wt-codex-e4c-f6f7-174627/app/docs/GLOSSARIO.md:11)).
-
-## 18/11 17:47 · sessao 125392a09247 · DECLARADO-X-GRAVADO · censo · origem=Code
-
-1. **Não há `save()` ou `update()` posterior na cauda de `validar_pergunta` que regrave esses campos.** A validação é carimbada antes da materialização; depois da chamada da unidade há uma possível devolução ao admin e, em seguida, a varredura da disputa. Ao voltar da varredura, o código faz `refresh_from_db` de `validada_em` e `materializada_em`, registra logs e retorna. Portanto, nessa cauda, um save posterior não desfaria uma reabertura. `estado` é uma propriedade calculada a partir da sequência de decisões e dos carimbos, não um campo salvo ali. A análise não comprova o efeito de callbacks ou outros caminhos indiretos: **[não verificado]**. [validacao.py:743](app/chamados/services/validacao.py:743), [validacao.py:769](app/chamados/services/validacao.py:769), [validacao.py:786](app/chamados/services/validacao.py:786), [validacao.py:805](app/chamados/services/validacao.py:805), [validacao.py:827](app/chamados/services/validacao.py:827), [models.py:3225](app/chamados/models.py:3225)
-
-2. **`reabrir_para_correcao` aceita pergunta já validada**, desde que esteja no queryset fornecido e não seja linha fora do fato; a própria trilha contempla uma validação anterior. Ela limpa `respondida_em`, `validada_em`, `validada_por` e `resposta_colab`; a porta de lote também limpa `materializada_em`, `materializada_por` e `via_resolucao`. Não grava `estado`, que é calculado. [disputa_emissao.py:1617](app/chamados/services/disputa_emissao.py:1617), [disputa_emissao.py:1639](app/chamados/services/disputa_emissao.py:1639), [disputa_emissao.py:1653](app/chamados/services/disputa_emissao.py:1653), [models.py:3448](app/chamados/models.py:3448), [models.py:3225](app/chamados/models.py:3225)
-
-   Para cada linha elegível da qual retira resposta, validação ou carimbo, grava uma `DecisaoPergunta`: por padrão, ato `reabertura`, com a resposta e os carimbos anteriores, instante, autor e `motivo` truncado a 240 caracteres em **`ato_motivo`**. Uma pergunta já vazia não produz linha. A função não copia esse argumento para `PerguntaDisputa.recusa_motivo`; a porta de recusa faz essa escrita separadamente e passa `ato='recusa'`. [disputa_emissao.py:1618](app/chamados/services/disputa_emissao.py:1618), [disputa_emissao.py:1639](app/chamados/services/disputa_emissao.py:1639), [validacao.py:916](app/chamados/services/validacao.py:916), [validacao.py:920](app/chamados/services/validacao.py:920)
-
-3. **O modal do admin lê o motivo da trilha:** `respostas_anteriores` devolve as decisões com foto, e o modal exibe `ato_motivo` quando preenchido. Ele também pode mostrar `recusa_motivo` em bloco de pendência do admin. [models.py:3793](app/chamados/models.py:3793), [modal_fio.html:204](app/templates/chamados/partials/modal_fio.html:204), [modal_fio.html:222](app/templates/chamados/partials/modal_fio.html:222)
-
-   `consulta_do_app` seleciona e particiona perguntas; a API serializa `motivo` **da pergunta**, mas não inclui `ato_motivo` da reabertura nem `recusa_motivo` no item. Assim, essa representação não entrega o texto passado à reabertura. [pergunta_no_app.py:45](app/chamados/services/pergunta_no_app.py:45), [pergunta_no_app.py:68](app/chamados/services/pergunta_no_app.py:68), [views.py:2549](app/api/views.py:2549)
-
-   A tela web do colaborador pode exibir `recusa_motivo` em condições específicas para uma pergunta apresentada no ramo de encerrada/validada; isso **não demonstra** que exiba `ato_motivo` quando a pergunta volta pendente. Na recusa, o push é genérico; a porta também cria uma nota no chamado com o motivo, mas a visualização dessa nota pelo colaborador neste caso está **[não verificado]**. Quanto ao aplicativo instalado e à entrega efetiva do texto: **[não verificado]**. [ _card_atendimento.html:179](app/templates/chamados/partials/_card_atendimento.html:179), [validacao.py:927](app/chamados/services/validacao.py:927), [validacao.py:943](app/chamados/services/validacao.py:943)
-
-4. `recusar_pergunta` devolve ao colaborador uma resposta recusada, mas retorna `ja_validada` antes da reabertura se `validada_em` estiver preenchido; por isso não atende à resposta já validada. [validacao.py:898](app/chamados/services/validacao.py:898), [validacao.py:925](app/chamados/services/validacao.py:925)
-
-   `devolver_validacao_recusada` aceita o caso de resposta já validada recusada pela materialização, mas devolve **ao admin**, preservando a resposta; exige resposta declarada de tipo `hora`, ausência de materialização e motivo de recusa. Não cobre `data_hora` por esse predicado e não devolve a resposta ao colaborador. [validacao.py:185](app/chamados/services/validacao.py:185), [validacao.py:237](app/chamados/services/validacao.py:237), [validacao.py:262](app/chamados/services/validacao.py:262)
-
-   A porta de baixo nível `reabrir_para_correcao` consegue limpar uma pergunta validada, mas, isoladamente, guarda o motivo na trilha e a API examinada não o fornece ao colaborador; a existência de outra porta completa para os dois ramos está **[não verificado]**. [disputa_emissao.py:1584](app/chamados/services/disputa_emissao.py:1584), [views.py:2549](app/api/views.py:2549)
-
-5. **frase literal: nao escrita** nos cinco arquivos indicados, conforme a busca pedida pelos termos e pela identificação da obra. O texto fornecido relata a exigência de voltar ao colaborador “com a frase”, mas não fornece a frase literal. A formulação exigida pela lei permanece **[não verificado]**. [LEIS.md](app/docs/LEIS.md), [CORTES.json](app/docs/CORTES.json), [CORTES.md](app/docs/CORTES.md), [DOSSIES.md](app/docs/DOSSIES.md), [RELATO-ARQUIVO.md](app/docs/RELATO-ARQUIVO.md)
-
-6. A unidade que processa `hora`, `data_hora` e `escolha` é `_materializar_uma`; os chamadores de produção encontrados são:
-
-   - Validação corrente e par: [validacao.py:642](app/chamados/services/validacao.py:642), [validacao.py:775](app/chamados/services/validacao.py:775).
-   - Irmã do intervalo já validada: [materializacao.py:1724](app/chamados/services/materializacao.py:1724), [materializacao.py:1744](app/chamados/services/materializacao.py:1744).
-   - Varredura da disputa: [materializacao.py:2104](app/chamados/services/materializacao.py:2104), [materializacao.py:2125](app/chamados/services/materializacao.py:2125).
-   - Lote do passivo: [passivo_validado.py:529](app/chamados/services/passivo_validado.py:529), [passivo_validado.py:537](app/chamados/services/passivo_validado.py:537).
-
-   A varredura é chamada também pelo fluxo do admin, pela ação de disputa e pelo comando de backfill: [fio.py:718](app/chamados/services/fio.py:718), [acoes_disputa.py:143](app/chamados/services/acoes_disputa.py:143), [backfill_fio_morto_e4b.py:147](app/chamados/management/commands/backfill_fio_morto_e4b.py:147); além da validação, [validacao.py:786](app/chamados/services/validacao.py:786). A varredura filtra `validada_em` preenchido e confere novamente antes da unidade; a irmã puxada pelo materializador é exigida validada. O estado efetivo de todas as perguntas no lote do passivo está **[não verificado]**. [materializacao.py:2104](app/chamados/services/materializacao.py:2104), [materializacao.py:2123](app/chamados/services/materializacao.py:2123), [materializacao.py:1724](app/chamados/services/materializacao.py:1724)
-
-   Há ainda **outra materialização**, `materializar_pendentes_aprovadas`, chamada pelo signal de fechamento da disputa. Seu filtro não exige `validada_em`; ela consulta o juiz e tenta carimbar perguntas aprovadas, sem fabricar batida. Portanto há caminho de materialização de pendente que pode começar sem validação, mas ele é distinto da unidade dos ramos `hora`/`data_hora`. [signals.py:149](app/chamados/signals.py:149), [signals.py:165](app/chamados/signals.py:165), [materializacao.py:2139](app/chamados/services/materializacao.py:2139), [materializacao.py:2167](app/chamados/services/materializacao.py:2167)
-
-A contagem abaixo considera uma questão de lei: o texto literal da frase exigida. [não verificado]
-
-perguntas de lei: 1
-
-_7086 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7089 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
