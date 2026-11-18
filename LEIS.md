@@ -205,6 +205,9 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 
 ## CORTES que sao ATO, nao lei (declarados para o selo nao os cobrar)
 
+- `F5-DSTL1-RESPOSTAS-1811`
+- `U163-PRECONDICAO-RED-1811`
+- `RESPOSTAS-B2-TETOS-E-TORNEIRA`
 - `ACESSO-NUNCA-EM-LOTE`
 - `ASSINATURA-EC-P256`
 - `AUSENCIAS-DRAWER-E-LOTE`
@@ -370,6 +373,10 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 
 ## CORTES que viraram lei
 
+- `F5-L1-VALE-L130-1811` -> **L-130**
+- `CORTE-RESSUSCITAR-TEM-DONO` -> **L-130**
+- `RESPOSTAS-1711-1050` -> **L-130**
+- `CORTE-F2-RESSUSCITAR-GRAVA-ATO` -> **L-130**
 - `AUTORIZACAO-PREVIA` -> **L-008**
 - `CARTAO-E-ESPELHO` -> **L-037**
 - `EXPORTADO-SEM-FRONTEIRA` -> **L-050**
