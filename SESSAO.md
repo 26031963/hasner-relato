@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 17/11/2026 20:55:15.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (26.6 MB). Acoes na janela: **769**.
+**Medido em 17/11/2026 21:00:45.** Transcript: `3ce7c1f6-2a62-4aaa-80a6-d7dce5f65e8c.jsonl` (26.7 MB). Acoes na janela: **778**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:56:22 | Bash | Point ESPERANDO at v5 runner, verify | `cd /home/ronald/saas-hasner; sed -i 's/^ESPERANDO: rodar_v4.sh \| pid=1374921$/ESPERANDO: rodar_v5.sh \| pid=1379406/' app/docs/RELATO.md; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_uma_vez())" \| cut -c1-200` |
+| 20:56:19 | Bash | Fix R5 setup and launch v5 runner | `cd /home/ronald/wt-cura-de-fase-201904; python3 - <<'E' p='app/escala/tests/test_cura_de_fase_virada_data.py'; s=open(p).read() a=""" EscalaColaborador.objects.filter(pk=novo.pk).update(ativa=False) """ b=""" EscalaColaborador.objects.filter(pk=novo.pk).update(ativa=False) # o guarda 'sem vinculo ativo' (censo_fase_12x36.py:403-407) vem ANTES do NO_OP: outro vinculo ativo o atravessa EscalaColabor ...` |
+| 20:55:46 | Bash | Wait for v4 runner to finish | `cd /home/ronald/saas-hasner; while pgrep -f 'bash logs/CURA-DE-FASE/v1/rodar_v[4]' >/dev/null; do /usr/bin/sleep 5; done; cat logs/CURA-DE-FASE/v1/vered4.txt; git -C /home/ronald/wt-cura-de-fase-201904 diff --stat` |
+| 20:55:39 | Bash | Find active-vinculo guard and NO_OP order | `cd /home/ronald/wt-cura-de-fase-201904/app; /bin/grep -n "sem vinculo ativo\\|ativa=True\\|_ativ" ponto/management/commands/censo_fase_12x36.py \| head; sed -n 398,420p ponto/management/commands/censo_fase_12x36.py` |
+| 20:55:36 | Bash | Read the active vinculo guard | `cd /home/ronald/wt-cura-de-fase-201904/app; sed -n 380,392p ponto/management/commands/censo_fase_12x36.py` |
+| 20:55:29 | Bash | Read R5 failure | `cd /home/ronald/saas-hasner; /bin/grep -B2 -A12 '^FAIL:' logs/CURA-DE-FASE/v1/green4.log \| head -30` |
+| 20:55:26 | Bash | Show cmdline of pid 1374921 | `cat /proc/1374921/cmdline \| tr '\0' ' '; echo; cat /home/ronald/saas-hasner/logs/CURA-DE-FASE/v1/vered4.txt` |
+| 20:55:23 | Bash | Simplify ESPERANDO line and recheck | `cd /home/ronald/saas-hasner; sed -i 's/^ESPERANDO: rodar_v4.sh \| pid=1374921 \| CURA-DE-FASE R5 + mutante com-ativa, vered4.txt$/ESPERANDO: rodar_v4.sh \| pid=1374921/' app/docs/RELATO.md; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_uma_vez())" \| cut -c1-200` |
+| 20:55:19 | Bash | Fix ESPERANDO producer format and recheck | `cd /home/ronald/saas-hasner; python3 - <<'E' p='app/docs/RELATO.md'; s=open(p).read() a='ESPERANDO: rodar_v4.sh (CURA-DE-FASE R5 + mutante com-ativa, logs/CURA-DE-FASE/v1/vered4.txt) \| pid=1374921' assert s.count(a)==1 s=s.replace(a,'ESPERANDO: rodar_v4.sh \| pid=1374921 \| CURA-DE-FASE R5 + mutante com-ativa, vered4.txt'); open(p,'w').write(s) E python3 -c " import sys; sys.path.insert(0,'bin'); ...` |
 | 20:55:14 | Bash | Evaluate hook ESPERANDO reader directly | `cd /home/ronald/saas-hasner; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h print(h._topo()); print(h._esperando_uma_vez()); print(h._relato_parou())" 2>&1 \| cut -c1-400` |
 | 20:55:08 | Bash | Read disjuntor log and B3 in hook | `cd /home/ronald/saas-hasner; tail -4 logs/sessao/disjuntor.log \| cut -c1-300; /bin/grep -n "def _proximo_da_fila" -A30 bin/hook_stop_fila1.py \| /bin/grep -n "b3\\|B3" \| head` |
 | 20:55:06 | Bash | Check runner alive and hook trail | `cd /home/ronald/saas-hasner; kill -0 1374921; echo alive=$?; cat logs/CURA-DE-FASE/v1/vered4.txt; tail -5 logs/sessao/stop_trilha.log 2>/dev/null \|\| ls -t logs/sessao \| head` |
