@@ -1,7 +1,295 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 14:41** · publicado em **18/11/2026 14:42** (UTC-3)
+> Ultima resposta processada: **18/11/2026 14:47** · publicado em **18/11/2026 14:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 14:47 · sessao baf79de3bdbc · PRE-MAPA-E4D · leitura · origem=Code
+
+As etiquetas abaixo distinguem **LEI**, quando falta corte de Ronald, de **DESENHO**, quando o desenho ou corte escrito enquadra a pergunta. A escolha de implementação permanece formulada como pergunta em todos os itens. O censo de escritores admite escritas dinâmicas não resolvidas; sua completude é **[nao verificado]**. O resumo de leitores é um tamanho detectado, sujeito aos limites informados no anexo; cobertura real de cada leitor é **[nao verificado]**.
+
+1. **DESENHO — `status_local`:** na A01, parar significa deixar de gravar, derivar de qual ato ou retirar o campo por migration? Como preservar seus leitores e o nascimento? Fonte: [models.py:234](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:234), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+2. **DESENHO — `resolvido_em`:** na A01, deixa de ser gravado, deriva de qual ato ou sai do modelo por migration? Fonte: [models.py:235](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:235), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+3. **DESENHO — `via_encerramento`:** na A01, deixa de ser gravada, deriva de qual ato ou sai do modelo por migration? Fonte: [models.py:234](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:234), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+4. **DESENHO — `respondido_por`:** na A01, deixa de ser gravado, deriva de qual ato ou sai do modelo por migration? Fonte: [models.py:237](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:237), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+5. **DESENHO — `fechada_em`:** nas A02–A04, deixa de ser gravada, deriva de qual ato ou sai do modelo por migration, considerando a exceção A03? Fonte: [models.py:2095](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2095), [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091).
+
+6. **DESENHO — `fechada_por`:** nas A02–A04, deixa de ser gravado, deriva de qual ato ou sai do modelo por migration, considerando A03? Fonte: [models.py:2096](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2096), [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091).
+
+7. **DESENHO — `resolucao`:** nas A02–A04 e A24, deixa de ser gravada, deriva de qual ato ou sai do modelo por migration, considerando A03? Fonte: [models.py:2097](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2097), [models.py:2428](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2428), [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091).
+
+8. **DESENHO — `motivo_fechamento`:** nas A02–A04, deixa de ser gravado, deriva de qual ato ou sai do modelo por migration, considerando A03? Fonte: [models.py:2098](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2098), [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091).
+
+9. **DESENHO — `reaberturas_admin`:** na A03, qual é o tratamento do contador até o fato próprio e depois dele: gravação, derivação de qual ato ou retirada por migration? Fonte: [models.py:2316](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2316), [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091).
+
+10. **DESENHO — `reaberturas_colab`:** na A23, deixa de ser gravado, deriva de qual ato ou sai do modelo por migration? Fonte: [models.py:2402](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2402), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+11. **DESENHO — `motivos`:** na A03 e nos demais sítios, é projeção a parar, dado derivado de qual ato ou campo que permanece no modelo? Como incide a exceção A03? Fonte: [models.py:2319](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2319), [disputa_emissao.py:550](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:550), [BACKLOG.md:2091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2091).
+
+12. **DESENHO — `materializada_em`:** nas portas que carimbam ou descarimbam, como passar da escrita dupla ao ato de conclusão e tratar as exceções A05/A06, inclusive os leitores ainda detectados? Fonte: [models.py:3324](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3324), [BACKLOG.md:2015](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2015), [BACKLOG.md:2092](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2092).
+
+13. **DESENHO — `materializada_por`:** deixa de ser gravado, deriva de qual ato e autor, ou sai por migration, respeitadas A05/A06? Fonte: [models.py:3324](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3324), [BACKLOG.md:2015](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2015), [BACKLOG.md:2093](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2093).
+
+14. **DESENHO — `via_resolucao`:** deixa de ser gravada, deriva de qual ato ou sai por migration, distinguindo vias de decisão e vias derivadas e as exceções A05/A06? Fonte: [models.py:3378](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3378), [relavrar_via_i6.py:58](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/relavrar_via_i6.py:58), [BACKLOG.md:2092](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2092).
+
+15. **DESENHO — `respondida_em`:** deixa de ser gravado, deriva de qual ato de resposta e de seus atos posteriores, ou sai por migration? Fonte: [disputa_emissao.py:1481](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1481), [models.py:4262](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4262), [PLANO-PADROES.md:44](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/PLANO-PADROES.md:44).
+
+16. **DESENHO — `resposta_colab`:** deixa de ser gravada, deriva de qual ato e texto, ou sai por migration, preservando os leitores e a exceção A05? Fonte: [disputa_emissao.py:1481](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1481), [CORTES.md:521](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:521), [BACKLOG.md:2092](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2092).
+
+17. **DESENHO — `validada_em`:** deixa de ser gravado, deriva de qual ato de validação e de seus atos posteriores, ou sai por migration? Fonte: [validacao.py:168](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:168), [models.py:4267](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4267), [CORTES.md:543](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:543).
+
+18. **DESENHO — `validada_por`:** deixa de ser gravado, deriva de qual ato e autor, ou sai por migration? Fonte: [validacao.py:168](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:168), [models.py:4267](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:4267), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+19. **DESENHO — `recusa_motivo`:** quais escritas deixam de gravar, qual ato fornece o motivo e como ficam as exceções A06/A17/A18 até seus fatos próprios? Fonte: [validacao.py:916](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:916), [BACKLOG.md:2093](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2093), [BACKLOG.md:2094](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2094).
+
+20. **DESENHO — `pendencia_admin`:** como permanece a fonte lida de A17 até o fato próprio e qual derivação ou migration fica para depois? Fonte: [materializacao.py:1365](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/materializacao.py:1365), [BACKLOG.md:2094](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2094).
+
+21. **DESENHO — `data_conferida_em`:** como permanece a fonte de A20 até o fato próprio e de qual ato e par de dias será derivado o instante depois? Fonte: [validacao.py:996](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:996), [BACKLOG.md:2096](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2096).
+
+22. **DESENHO — `data_conferida_por`:** como permanece a fonte de A20 até o fato próprio e de qual ato será derivado o autor depois? Fonte: [validacao.py:997](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:997), [BACKLOG.md:2096](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2096).
+
+23. **DESENHO — `veredito_lavrado`:** o cache deixa de ser gravado, continua derivado de qual fonte, ou sai por migration; como seus leitores passam pelo Contract? Fonte: [veredito_lavrado.py:270](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:270), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+24. **DESENHO — `julgado_em`:** o instante do cache deixa de ser gravado, deriva de qual fonte ou sai por migration? Fonte: [veredito_lavrado.py:281](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:281), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+25. **DESENHO — `janela_expira_em`:** o prazo do cache deixa de ser gravado, deriva de qual fonte ou sai por migration? Fonte: [veredito_lavrado.py:228](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:228), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+26. **DESENHO — competência exportada:** que tratamento recebe cada gravado alcançado pelo Contract e pelo backfill do ato de conclusão, distinguindo projeção, gravado de cálculo e TXT entregue, à luz da L-092 como alterada pela L-113 e do `!` declarado para backfill que alcance exportada? O estoque efetivamente atingido é **[nao verificado]**. Fonte: [LEIS.md:125](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/LEIS.md:125), [LEIS.md:155](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/LEIS.md:155), [BACKLOG.md:2015](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2015).
+
+27. **DESENHO — CLASSE-D:** quais entregas da cura pela porta, da lista do admin e da leitura de empresas pelo cadastro precisam pousar antes da E4d, e como comprovar o cruzamento com B2 + delta e F2? O pouso atual é **[nao verificado]**. Fonte: [BACKLOG.md:2025](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2025), [CORTES.md:532](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:532), [CORTES.md:544](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:544).
+
+28. **LEI — CLASSE-D:** qual dono responde por `FATO_EM_AUSENCIA`: CADASTRO, BATIDA ou ESTRUTURA? Falta o corte de Ronald sobre o dono dessa classe; o encaminhamento dia a dia à lista do admin já consta do corte. Fonte: [HANDOFF-SESSAO.md:25](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/HANDOFF-SESSAO.md:25), [CORTES.md:544](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:544).
+
+29. **DESENHO — RAIZ-DA-DISPUTA F5:** qual fronteira e qual ordem de pouso unem a F5 da raiz à E4d, depois das fases anteriores, para que os escritores e leitores não sejam migrados duas vezes? Fonte: [BACKLOG.md:1904](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:1904), [BACKLOG.md:2109](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2109).
+
+30. **DESENHO — D1:** como `devolver_paridade_bug_par_103` deixa de gravar os três campos de materialização e os dois de validação, usando a trilha `DEVOLUCAO` e preservando a operação? Fonte: [validacao.py:346](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:346), [CORTES.md:543](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:543).
+
+31. **DESENHO — D2:** como `ressuscitar_perguntas` deixa de gravar os sete campos de resposta, validação e materialização, com a `REABERTURA` marcada e a fila conservada? Fonte: [models.py:1694](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1694), [models.py:1702](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1702), [CORTES.md:544](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:544).
+
+32. **LEI — D2, efeito para o colaborador:** ressuscitar devolve a pergunta ao colaborador? Falta o corte **RESSUSCITAR-DEVOLVE-AO-COLABORADOR**; sua relação com a E4d e com a fila deve ser explicitada sem presumir resposta. Fonte: [CORTES.md:543](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:543), [CORTES.md:560](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:560).
+
+33. **DESENHO — D3, sem ato:** como `devolver_instante_sem_texto_l130` deixará de limpar resposta e carimbo sem deixar mudança de estado sem ato, e como será tratado o estoque entregue sujeito a `!` próprio? Qual ato existente ou desenho autorizado representa essa operação é **[nao verificado]**. Fonte: [validacao.py:414](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:414), [validacao.py:440](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/validacao.py:440), [CORTES.md:560](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/CORTES.md:560).
+
+34. **DESENHO — D4:** como `desfazer_carimbo_sem_lastro` deixará de gravar os três campos por A07, e qual ato representa o desfazimento? A equivalência do ato é **[nao verificado]**. Fonte: [relavra_via.py:246](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/relavra_via.py:246), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+35. **DESENHO — L1:** que passa a fazer `lavrar`, inclusive quando chamado pelo comando de perguntas stale, se os três campos da lavra deixarem de ser gravados? Fonte: [veredito_lavrado.py:270](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:270), [lavrar_perguntas_stale.py:89](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/lavrar_perguntas_stale.py:89), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+36. **DESENHO — L2:** que passa a fazer o `bulk_update` de `gravar_lavras_em_lote` e seu comando de backfill? Fonte: [veredito_lavrado.py:250](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/veredito_lavrado.py:250), [backfill_veredito_lavrado.py:138](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/management/commands/backfill_veredito_lavrado.py:138), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+37. **DESENHO — L3:** como `reapontar_resolvedora` preserva a leitura após deixar de salvar os três campos da lavra? Fonte: [fio.py:975](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/fio.py:975), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+38. **DESENHO — L4:** como `rechavear_data_evento` preserva a leitura após deixar de salvar os três campos da lavra? Fonte: [fio.py:1091](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/fio.py:1091), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+39. **DESENHO — L5:** como tratar a lavra no ramo de reuso de `_nascer`, inclusive sua fronteira com A22? A separação de L5 da porta é **[nao verificado]**. Fonte: [models.py:3195](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:3195), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+40. **DESENHO — `motivos`, aparar:** como `aparar_motivo_respondido` deixa de gravar a lista e de qual ato ou fonte passa a obter seu efeito? Fonte: [models.py:2129](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:2129), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+41. **DESENHO — `motivos`, abrir ou agregar:** como `_abrir_ou_agregar_disputa` passa a registrar e ler a inclusão de motivos? Fonte: [disputa_emissao.py:550](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:550), [BACKLOG.md:2109](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2109).
+
+42. **DESENHO — `motivos`, órfãos:** como `criar_disputa_a_partir_de_chamados_orfaos` trata suas escritas de criação e atualização, e qual ato ou fonte as substitui? Fonte: [disputa_emissao.py:1097](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1097), [disputa_emissao.py:1269](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1269), [BACKLOG.md:2109](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2109).
+
+43. **DESENHO — `motivos`, âncora:** como `criar_disputa_ancora_de_chamado` trata a gravação da lista e qual ato ou fonte a substitui? Fonte: [disputa_emissao.py:1372](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/services/disputa_emissao.py:1372), [BACKLOG.md:2109](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2109).
+
+44. **DESENHO — nascimento por `abrir`:** como tratar o default de `status_local` no nascimento e qual ato ou fonte sustentará a primeira leitura? Fonte: [models.py:1000](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/models.py:1000), [BACKLOG.md:2089](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/docs/BACKLOG.md:2089).
+
+45. **DESENHO — nascimento por `criar`:** como tratar o default de `status_local` nesse sítio e qual ato ou fonte sustentará a primeira leitura? Fonte: [models.py:1154](/home/ronald/codex_ws/ca53ea0e77eaed4009be1c42105f21367ccc9700/app/chamados/mo
+
+[truncado em 20000 de 22193 caracteres]
+
+## 18/11 14:47 · sessao 5475c33f062c · ESPURIAS-PRE-MAPA · censo · origem=Code
+
+O lote contém **29 linhas**, todas reproduzidas abaixo. O fechamento usa `[nv]` como categoria de incerteza: não consegui provar todas as classes, chamadores e fatias, portanto a lista final é **um mínimo confirmado**, não o tamanho real completo da obra. A unidade continua sendo a função do anexo, mesmo quando ela contém vários sítios. [app/core/medida_turno_do_par.py:10]
+
+Convenções: **JP** = JUÍZO PARALELO; **EP** = ENTRADA DO PAR; **EX** = EXIBIÇÃO. Em (b), “cron” significa declarado em `config/crons.py`; a execução efetiva em produção é `[não verificado]`. Em (c), o efeito indicado é o alcance comprovado do caminho, sujeito às condições do código. Referências `ponto/...`, `escala/...` e `folha/...` são relativas a `app/`. [app/docs/BACKLOG.md:1846; app/config/crons.py:428]
+
+| chave | linha(s) | (a) | (b) | (c) | (d) | (e) arquivo:linha conferido |
+|---|---:|---|---|---|---|---|
+| escala/regua_defesa.py::entradas_fora_do_inicio | 521 | JP | VIVO cron; chamador `escala/management/commands/termometro_regua.py:68`, cron `config/crons.py:428` | GRAVA lista de régua | DIA-DA-BATIDA-JUIZ-UNICO | [escala/regua_defesa.py:521](app/escala/regua_defesa.py#L521); [termometro_regua.py:93](app/escala/management/commands/termometro_regua.py#L93) |
+| escala/utils.py::montar_grade_prevista | 807 | EX | VIVO cron, via `escala/utils.py:1027`; [nv] quanto à condição de ativação do caminho legacy | EXIBE órfãs | DIA-DA-BATIDA-JUIZ-UNICO | [escala/utils.py:807](app/escala/utils.py#L807); [reconciliar_grade.py:118](app/ponto/management/commands/reconciliar_grade.py#L118) |
+| escala/utils.py::montar_grade_prevista_periodo_por_turno | 1491, 1511, 1521, 1534, 1545, 1831 | JP | VIVO cron, via `escala/utils.py:2098` e `reconciliar_grade.py:118`, condicionado à flag | [nv] | DIA-DA-BATIDA-JUIZ-UNICO | [escala/utils.py:1491](app/escala/utils.py#L1491); [escala/utils.py:1545](app/escala/utils.py#L1545); [escala/utils.py:1831](app/escala/utils.py#L1831) |
+| folha/export.py::dias_ferias_com_batida | 500 | JP | VIVO request, via `folha/export.py:791`, `folha/views.py:214` | PAGA: classificação da exportação | DIA-DA-BATIDA-JUIZ-UNICO | [folha/export.py:500](app/folha/export.py#L500); [folha/export.py:791](app/folha/export.py#L791) |
+| folha/porta_export.py::dias_fora_do_dia_pago | 104 | JP | [nv]; chamador `folha/porta_export.py:597` | EXIBE divergência para a porta | [nv] | [folha/porta_export.py:104](app/folha/porta_export.py#L104) |
+| folha/porta_export.py::medir | 538 | JP | [nv] | EXIBE/mede contador da porta | [nv] | [folha/porta_export.py:538](app/folha/porta_export.py#L538) |
+| ponto/calculador/nucleo.py::minutos_do_oraculo | 117, 141, 235 | JP | [nv]; chamadores `ponto/calculador/periodo.py:356` e `ponto/calculador/alimentacao.py:449` | [nv] | [nv]; o BACKLOG nomeia ESMERIL-ORÁCULO-NOTURNA, mas não provei que estes sítios sejam ele | [ponto/calculador/nucleo.py:141](app/ponto/calculador/nucleo.py#L141); [ponto/calculador/nucleo.py:235](app/ponto/calculador/nucleo.py#L235); [app/docs/BACKLOG.md:2051](app/docs/BACKLOG.md#L2051) |
+| ponto/janelas.py::competencia_fechada | 84 | JP | VIVO request, via `ponto/registro_batida.py:159` | GRAVA: guarda de ajuste de batida | DIA-DA-BATIDA-JUIZ-UNICO | [ponto/janelas.py:84](app/ponto/janelas.py#L84); [ponto/registro_batida.py:159](app/ponto/registro_batida.py#L159) |
+| ponto/management/commands/desvio_o68b.py::Command._autopsia | 112, 121, 136 | JP | INSTRUMENTO; chamador `desvio_o68b.py:181` | EXIBE autópsia | [nv] | [desvio_o68b.py:112](app/ponto/management/commands/desvio_o68b.py#L112) |
+| ponto/management/commands/detectar_intervalo_ausente.py::furos_intervalo | 82 | EX | VIVO cron, chamador `detectar_intervalo_ausente.py:120`, com `--alarme` em `config/crons.py:491` | EXIBE/alarma; esse cron força dry | [nv] | [detectar_intervalo_ausente.py:82](app/ponto/management/commands/detectar_intervalo_ausente.py#L82); [detectar_intervalo_ausente.py:108](app/ponto/management/commands/detectar_intervalo_ausente.py#L108) |
+| ponto/management/commands/detectar_par_relampago.py::varrer_pares_embutidos | 303 | EP | VIVO cron, chamador `detectar_par_relampago.py:392`, cron `config/crons.py:605` | GRAVA: retrata batidas candidatas | DIA-DA-BATIDA-JUIZ-UNICO | [detectar_par_relampago.py:303](app/ponto/management/commands/detectar_par_relampago.py#L303); [detectar_par_relampago.py:399](app/ponto/management/commands/detectar_par_relampago.py#L399) |
+| ponto/management/commands/emitir_furo_retroativo.py::Command.handle | 75, 100 | JP | AVULSO, comando sob ordem `config/crons.py:1414` | GRAVA com `--apply` | DIA-DA-BATIDA-JUIZ-UNICO | [emitir_furo_retroativo.py:100](app/ponto/management/commands/emitir_furo_retroativo.py#L100); [emitir_furo_retroativo.py:111](app/ponto/management/commands/emitir_furo_retroativo.py#L111) |
+| ponto/management/commands/flip_automatico.py::Command.handle | 64 | JP | VIVO cron `config/crons.py:707` | GRAVA batida e nota; o dia civil também seleciona chamados para a nota | DIA-DA-BATIDA-JUIZ-UNICO | [flip_automatico.py:64](app/ponto/management/commands/flip_automatico.py#L64); [flip_automatico.py:76](app/ponto/management/commands/flip_automatico.py#L76) |
+| ponto/management/commands/marcar_abandono_provisorio.py::Command.handle | 56 | JP | AVULSO, comando sob ordem `config/crons.py:1422` | GRAVA ausências com `--apply` | DIA-DA-BATIDA-JUIZ-UNICO | [marcar_abandono_provisorio.py:56](app/ponto/management/commands/marcar_abandono_provisorio.py#L56); [marcar_abandono_provisorio.py:76](app/ponto/management/commands/marcar_abandono_provisorio.py#L76) |
+| ponto/management/commands/plano_b_no_dinheiro.py::Command.handle._espiao._cm_espiao | 88 | EX | INSTRUMENTO; instalado no método em `plano_b_no_dinheiro.py:101` | EXIBE; ensaio revertido | [nv] | [plano_b_no_dinheiro.py:88](app/ponto/management/commands/plano_b_no_dinheiro.py#L88); [plano_b_no_dinheiro.py:110](app/ponto/management/commands/plano_b_no_dinheiro.py#L110) |
+| ponto/management/commands/reconciliar_fantasmas.py::_parse_pendentes | 66 | [nv] | VIVO cron, chamador `reconciliar_fantasmas.py:184`, com `--alarme` em `config/crons.py:392` | EXIBE/alarma no cron; `--apply` manual existe | [nv] | [reconciliar_fantasmas.py:66](app/ponto/management/commands/reconciliar_fantasmas.py#L66); [reconciliar_fantasmas.py:27](app/ponto/management/commands/reconciliar_fantasmas.py#L27) |
+| ponto/management/commands/recusar_ponta_pequena.py::Command.handle | 105 | [nv]: data de cálculo do retrato, não provei classe de dia de batida | VIVO cron encadeado `config/crons.py:1585` | GRAVA decisão de HE com `--apply`, condicionada à foto do dia | [nv] | [recusar_ponta_pequena.py:105](app/ponto/management/commands/recusar_ponta_pequena.py#L105); [recusar_ponta_pequena.py:170](app/ponto/management/commands/recusar_ponta_pequena.py#L170) |
+| ponto/management/commands/supra_juiz.py::Command.handle | 135, 222 | JP | VIVO cron `config/crons.py:599` | EXIBE/alarma para esses sítios; a escrita lê a lavra da célula | DIA-DA-BATIDA-JUIZ-UNICO | [supra_juiz.py:222](app/ponto/management/commands/supra_juiz.py#L222); [supra_juiz.py:241](app/ponto/management/commands/supra_juiz.py#L241) |
+| ponto/management/commands/vigia_plantio_overnight.py::batidas_fora_do_turno_da_pergunta | 86 | EP | VIVO cron, chamador `vigia_plantio_overnight.py:110`, cron `config/crons.py:646` | EXIBE/alarma | DIA-DA-BATIDA-JUIZ-UNICO | [vigia_plantio_overnight.py:86](app/ponto/management/commands/vigia_plantio_overnight.py#L86) |
+| ponto/motor_calculo_v2.py::Motor12x36.calcular_periodo | 2796, 2809 | JP | VIVO request, via `motor_calculo_v2.py:2458`, fechamento `ponto/services/fechamento.py:286` e request `ponto/views.py:1255` | PAGA: feriado e HE | f2 DIA: feriado cruzando meia-noite | [motor_calculo_v2.py:2796](app/ponto/motor_calculo_v2.py#L2796); [app/docs/BACKLOG.md:2051](app/docs/BACKLOG.md#L2051) |
+| ponto/motor_calculo_v2.py::MotorBase._intervalo_descontado_no_dia | 1313 | JP | [nv]; chamador `motor_calculo_v2.py:1803` | PAGA: limite de intervalo | [nv] | [motor_calculo_v2.py:1313](app/ponto/motor_calculo_v2.py#L1313); [motor_calculo_v2.py:1803](app/ponto/motor_calculo_v2.py#L1803) |
+| ponto/motor_calculo_v2.py::MotorBase._janela_do_dia | 1528 | JP | [nv]; chamadores em `motor_calculo_v2.py:1691`, `:1733`, `:1760` | PAGA: janela do período | [nv] | [motor_calculo_v2.py:1528](app/ponto/motor_calculo_v2.py#L1528) |
+| ponto/motor_calculo_v2.py::MotorBase._julgar_pontualidade | 2053, 2093, 2118, 2198, 2200, 2210 | JP | VIVO request, via `motor_calculo_v2.py:3306` e fechamento `ponto/services/fechamento.py:286` | PAGA: pontualidade | [nv] | [motor_calculo_v2.py:2053](app/ponto/motor_calculo_v2.py#L2053); [motor_calculo_v2.py:2198](app/ponto/motor_calculo_v2.py#L2198) |
+| ponto/motor_calculo_v2.py::MotorBase._previsto_do_dia | 1227 | JP | [nv]; chamadores `motor_calculo_v2.py:1170`, `:1273`, `:1453`, `:1825` | PAGA: previsto do dia | [nv] | [motor_calculo_v2.py:1227](app/ponto/motor_calculo_v2.py#L1227) |
+| ponto/motor_calculo_v2.py::MotorBase.calcular_mes | 2403, 2579, 2639, 2643, 2644 | JP | VIVO request, chamador `ponto/services/fechamento.py:286`, request `ponto/views.py:1255` | PAGA: jornada e reflexo DSR | f1 PAR **e** f2 DIA: a função também contém a herança por gap nomeada; não se atribui cada sítio automaticamente às duas | [motor_calculo_v2.py:2403](app/ponto/motor_calculo_v2.py#L2403); [motor_calculo_v2.py:2643](app/ponto/motor_calculo_v2.py#L2643); [app/docs/BACKLOG.md:2051](app/docs/BACKLOG.md#L2051) |
+| ponto/motor_calculo_v2.py::MotorComercial.calcular_mes | 3326, 3447, 3465, 3490, 3494, 3495 | JP | VIVO request, chamador `ponto/services/fechamento.py:286`, request `ponto/views.py:1255` | PAGA: jornada, banco e DSR | [nv] | [motor_calculo_v2.py:3326](app/ponto/motor_calculo_v2.py#L3326); [motor_calculo_v2.py:3490](app/ponto/motor_calculo_v2.py#L3490) |
+| ponto/motor_calculo_v2.py::MotorComercial.calcular_periodo | 3264, 3268 | JP | VIVO request, via `motor_calculo_v2.py:2458` e fechamento `ponto/services/fechamento.py:286` | PAGA: feriado e HE | f2 DIA: feriado cruzando meia-noite | [motor_calculo_v2.py:3264](app/ponto/motor_calculo_v2.py#L3264); [app/docs/BACKLOG.md:2051](app/docs/BACKLOG.md#L2051) |
+| ponto/motor_calculo_v2.py::MotorTurnoPartido.calcular_mes | 2942, 2955 | JP | VIVO request, chamador `ponto/services/fechamento.py:286`, request `ponto/views.py:1255` | PAGA: jornada | f2 DIA: partido, sítio nomeado | [motor_calculo_v2.py:2942](app/ponto/motor_calculo_v2.py#L2942); [app/docs/BACKLOG.md:2051](app/docs/BACKLOG.md#L2051) |
+| ponto/motor_calculo_v2.py::_periodos_pelo_marco | 578, 686, 687 | JP | [nv]; chamador `motor_calculo_v2.py:531` | PAGA: seleção de períodos | [nv] | [motor_calculo_v2.py:578](app/ponto/motor_calculo_v2.py#L578); [motor_calculo_v2.py:686](app/ponto/motor_calculo_v2.py#L686) |
+
+A atribuição de f2 aos sítios de feriado identifica o tema registrado, **não prova que toda execução dessas linhas cruze meia-noite**. A classificação de efeito também não afirma que houve pagamento ou escrita em produção. [app/docs/BACKLOG.md:2051; app/ponto/motor_calculo_v2.py:2796; app/ponto/motor_calculo_v2.py:3264]
+
+**Fecho (a) × (b), deste lote:**
+
+| (a) | VIVO | AVULSO | INSTRUMENTO | SEM CHAMADOR | [nv] | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| EXIBIÇÃO | 2 | 0 | 1 | 0 | 0 | 3 |
+| ENTRADA DO PAR | 2 | 0 | 0 | 0 | 0 | 2 |
+| JUÍZO PARALELO | 12 | 2 | 1 | 0 | 7 | 22 |
+| [nv] | 2 | 0 | 0 | 0 | 0 | 2 |
+| **Total** | **18** | **2** | **2** | **0** | **7** | **29** |
+
+A soma é uma contagem das classificações da tabela acima; os sete `[nv]` em (b) não são prova de ausência de chamador. [app/core/medida_turno_do_par.py:33]
+
+**JUÍZO PARALELO + VIVO + GRAVA/PAGA comprovados no lote:**
+
+- `escala/regua_defesa.py::entradas_fora_do_inicio` — grava lista de régua. [termometro_regua.py:68](app/escala/management/commands/termometro_regua.py#L68); [termometro_regua.py:93](app/escala/management/commands/termometro_regua.py#L93)
+- `folha/export.py::dias_ferias_com_batida` — participa da classificação da exportação. [folha/export.py:500](app/folha/export.py#L500); [folha/export.py:791](app/folha/export.py#L791)
+- `ponto/janelas.py::competencia_fechada` — guarda usada no registro de batida. [ponto/janelas.py:84](app/ponto/janelas.py#L84); [ponto/registro_batida.py:159](app/ponto/registro_batida.py#L159)
+- `ponto/management/commands/flip_automatico.py::Command.handle` — grava batida e seleciona chamados por dia para nota. [flip_automatico.py:64](app/ponto/management/commands/flip_automatico.py#L64)
+- Motor: `Motor12x36.calcular_periodo`, `MotorBase._julgar_pontualidade`, `MotorBase.calcular_mes`, `MotorComercial.calcular_mes`, `MotorComercial.calcular_periodo` e `MotorTurnoPartido.calcular_mes`. [ponto/services/fechamento.py:286](app/ponto/services/fechamento.py#L286); [ponto/views.py:1255](app/ponto/views.py#L1255); [motor_calculo_v2.py:2458](app/ponto/motor_calculo_v2.py#L2458); [motor_calculo_v2.py:3306](app/ponto/motor_calculo_v2.py#L3306)
+
+A função de grade por turno permanece fora dessa lista porque seu efeito de gravação ou pagamento ficou `[nv]`; as demais linhas com caminho `[nv]` também impedem tratar os **10 itens comprovados** como contagem final. [escala/utils.py:1545](app/escala/utils.py#L1545)
+
+**Não visto pelo método:** outros pareadores por estado; outras regras de meia-noite e heranças; chamadas dinâmicas e parte da composição interprocedural; HTML/JS, código gerado e pastas excluídas. Não há número para esses pontos cegos. [app/core/medida_turno_do_par.py:33](app/core/medida_turno_do_par.py#L33); [app/core/medida_turno_do_par.py:44](app/core/medida_turno_do_par.py#L44); [app/core/medida_turno_do_par.py:46](app/core/medida_turno_do_par.py#L46)
+
+## 18/11 14:46 · sessao 7be273638f9b · ESPURIAS-PRE-MAPA · censo · origem=Code
+
+O lote contém **32 funções**. A conferência abaixo não fecha a classificação de todos os caminhos: **12 funções classificadas como JUÍZO PARALELO ficaram com o caminho de execução [nv]**. A lista curta, portanto, é um mínimo comprovado nesta leitura, não o tamanho final da obra. [anexo lote_00: não possui arquivo:linha; app/core/medida_turno_do_par.py:46]
+
+Usei **J** = JUÍZO PARALELO, **E** = ENTRADA DO PAR, **X** = EXIBIÇÃO, **V** = VIVO, **A** = AVULSO e **I** = INSTRUMENTO. `[nv]` significa não verificado. Em (c), o efeito é o alcançado pelo caminho citado; uma função auxiliar pode apenas retornar um valor usado pela escrita. Em (d), `D` significa DIA-DA-BATIDA-JUIZ-UNICO. A atribuição de fatia que não consegui provar ficou [nv]. [app/docs/BACKLOG.md:1846] [app/docs/BACKLOG.md:2051]
+
+| Chave | Linha(s) | (a) | (b) Caminho e chamador | (c) Efeito | (d) Fatia | (e) Conferido |
+|---|---:|---|---|---|---|---|
+| `escala/utils.py::_alinhar_por_papel` | 529 | J | [nv]; chamada interna em `escala/utils.py:623` | [nv] | [nv] | [app/escala/utils.py:511] |
+| `escala/utils.py::_papeis_por_alternancia` | 496 | J | [nv]; chamada interna em `escala/utils.py:608` | [nv] | [nv] | [app/escala/utils.py:477] |
+| `ponto/calculador/nucleo.py::minutos_do_oraculo` | 246 | J, no ramo que pareia por sequência | [nv]; também chamado por `ponto/calculador/alimentacao.py:449` | [nv] | [nv] | [app/ponto/calculador/nucleo.py:65] |
+| `ponto/management/commands/e6_piso_autopsia.py::Command.handle` | 94 | J | I: autópsia | EXIBE/mede | [nv] | [app/ponto/management/commands/e6_piso_autopsia.py:80] |
+| `ponto/management/commands/vigiar_motor_autoridade.py::Command.handle` | 85 | [nv] | I; cron em `config/crons.py:596` | EXIBE/mede | [nv] | [app/ponto/management/commands/vigiar_motor_autoridade.py:80] |
+| `ponto/turnos.py::_pares_marcados` | 812 | J | [nv]; chamada interna em `ponto/turnos.py:545` | [nv] | [nv] | [app/ponto/turnos.py:798] |
+| `ponto/motor_calculo_v2.py::turnos_via_autoridade` | 503 | E | [nv]; chamada interna em `ponto/motor_calculo_v2.py:530` | PAGA: integra cálculo do motor; caminho até fechamento em `ponto/services/fechamento.py:286` | f1 PAR | [app/ponto/motor_calculo_v2.py:503] |
+| `ponto/motor_calculo_v2.py::MotorBase._turnos_do_juiz` | 882 | E | [nv]; chamada interna em `ponto/motor_calculo_v2.py:2346` | PAGA: integra cálculo do motor; fechamento em `ponto/services/fechamento.py:286` | f1 PAR | [app/ponto/motor_calculo_v2.py:867] |
+| `ponto/motor_calculo_v2.py::MotorBase.calcular_mes` | 2408 | J | [nv]; fechamento chama o motor em `ponto/services/fechamento.py:286` | PAGA: cálculo do motor | f1 PAR e f2 DIA, conforme complemento do caso | [app/ponto/motor_calculo_v2.py:2403] [app/docs/BACKLOG.md:2051] |
+| `api/views.py::api_bater_ponto` | 719 | J | V request: `api/urls.py:67` | GRAVA chamado com `data_turno` no contexto | D | [app/api/views.py:716] |
+| `api/views_core.py::api_bater_ponto` | 713 | J | [nv]; rota desta cópia aponta para `views`, em `api/urls.py:2` e `:67` | GRAVA chamado com `data_turno` no contexto, se executada | D | [app/api/views_core.py:710] |
+| `chamados/juizes.py::_dia_da_batida` | 54 | J | [nv]; chamada por `chamados/juizes.py:131` | [nv] | D | [app/chamados/juizes.py:51] |
+| `chamados/juizes.py::_dia_do_contexto_fraco` | 170 | J | [nv]; chamada por `chamados/juizes.py:139` e `:230` | [nv] | D | [app/chamados/juizes.py:162] |
+| `chamados/juizes.py::_plantio_na_hora_do_slot` | 275 | J | [nv]; chamada por `chamados/juizes.py:764` | [nv] | D | [app/chamados/juizes.py:254] |
+| `chamados/juizes.py::dias_do_fato` | 204 | J | [nv]; há chamadores em `chamados/services/fila_por_causa.py:162` e `escala/services/propositor.py:633` | [nv] | D | [app/chamados/juizes.py:201] |
+| `chamados/management/commands/auditar_disputas.py::Command.handle` | 111 | J | A: relatório sob demanda, `config/crons.py:1465` | EXIBE relatório | D | [app/chamados/management/commands/auditar_disputas.py:107] |
+| `chamados/management/commands/carimbar_por_batida_coincidente.py::Command.handle` | 81 | J | A: comando, `config/crons.py:1321` | GRAVA contexto e vínculo de célula com `--apply` | D | [app/chamados/management/commands/carimbar_por_batida_coincidente.py:80] |
+| `chamados/management/commands/migrar_data_evento_dia_do_turno.py::_fonte_viva` | 102 | E | A: migração; chamada por `migrar_data_evento_dia_do_turno.py:154` | GRAVA pergunta na migração com `--aplicar` [nv quanto a este ramo específico] | [nv] | [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:94] |
+| `chamados/management/commands/migrar_data_evento_dia_do_turno.py::classificar` | 158 | E | A: migração; chamada por `migrar_data_evento_dia_do_turno.py:212` | GRAVA pergunta na migração com `--aplicar` [nv quanto a este ramo específico] | [nv] | [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:150] |
+| `chamados/services/desvio_escala.py::medir_desvio` | 65 | J | V cron: `config/crons.py:707` → `ponto/management/commands/flip_automatico.py:66` → `desvio_escala.py:103` | GRAVA causa do flip de batida e nota em chamado | D | [app/chamados/services/desvio_escala.py:58] [app/ponto/management/commands/flip_automatico.py:64] |
+| `chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite` | 729, 730 | J | V cron: `config/crons.py:362` → `ponto/management/commands/processar_alertas_turno.py:382` → `disputa_emissao.py:797` | GRAVA/PERGUNTA: a guarda interfere no universo da fábrica de disputa | D | [app/chamados/services/disputa_emissao.py:721] |
+| `chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos` | 1213 | J | V cron: `config/crons.py:362` → `ponto/management/commands/processar_alertas_turno.py:385` | GRAVA disputa/pergunta | D | [app/chamados/services/disputa_emissao.py:1207] |
+| `chamados/services/explicador.py::_explicar_validada` | 70 | X | [nv]; chamada por `chamados/services/explicador.py:137` | EXIBE explicação; `_d0` é calculado nesse sítio | [nv] | [app/chamados/services/explicador.py:65] |
+| `chamados/services/materializacao.py::_plantio_preenche_furo_na_data` | 434, 455 | J | [nv]; chamadas internas em `chamados/services/materializacao.py:220` e `:920` | GRAVA plantio indiretamente, conforme resultado da guarda; caminho vivo [nv] | D | [app/chamados/services/materializacao.py:404] |
+| `chamados/services/passivo_validado.py::_dia_do_plantio` | 113 | J | A: `materializar_passivo_validado.py:113` → `passivo_validado.py:344`; não agendado conforme `config/crons.py:859` | GRAVA plantio no modo apply | D | [app/chamados/services/passivo_validado.py:98] |
+| `chamados/services/passivo_validado.py::_plantar_o_dia` | 547, 549 | J | A: `materializar_passivo_validado.py:113` → `passivo_validado.py:443` | GRAVA plantio no modo apply; a guarda pode reverter o ato | D | [app/chamados/services/passivo_validado.py:537] |
+| `chamados/services/passivo_validado.py::reparar` | 348 | X | A: `materializar_passivo_validado.py:113` | EXIBE/conta divergência de competência nesse sítio | [nv] | [app/chamados/services/passivo_validado.py:344] |
+| `colaboradores/services/calendario.py::contexto_calendario` | 273 | X | V request: `colaboradores/views.py:1990` | EXIBE batidas retratadas por dia civil | [nv] | [app/colaboradores/services/calendario.py:258] |
+| `core/esteira_vigia.py::instante_de_ontem` | 1082 | [nv] | I: chamado para congelar testes em `core/esteira_vigia.py:1358` | EXIBE/fornece instante para teste | [nv] | [app/core/esteira_vigia.py:1080] |
+| `escala/detector_proposta.py::medir_padrao` | 58 | J | [nv]; chamada por `escala/detector_proposta.py:120` | EXIBE proposta no caminho read-only citado; outros efeitos [nv] | D | [app/escala/detector_proposta.py:49] [app/escala/detector_proposta.py:118] |
+| `escala/management/commands/hub_smoke.py::Command.handle.win_map` | 95 | [nv] | I: smoke | EXIBE/mede [nv quanto ao consumo completo do mapa] | [nv] | [app/escala/management/commands/hub_smoke.py:91] |
+| `escala/regua_defesa.py::diagnostico_regua` | 157 | J | V cron: `config/crons.py:428` → `escala/management/commands/termometro_regua.py:43` → `escala/regua_defesa.py:735` | GRAVA escore no vínculo | D | [app/escala/regua_defesa.py:153] [app/escala/regua_defesa.py:730] |
+
+A contagem abaixo inclui **[nv] como balde de conferência**, não como nova classe do aval. Soma: **32**. Os rótulos e as classificações correspondem às linhas da tabela acima. [app/docs/BACKLOG.md:1846]
+
+| (a) × (b) | VIVO | AVULSO | INSTRUMENTO | Caminho [nv] | Total |
+|---|---:|---:|---:|---:|---:|
+| JUÍZO PARALELO | 5 | 4 | 1 | 12 | 22 |
+| ENTRADA DO PAR | 0 | 2 | 0 | 2 | 4 |
+| EXIBIÇÃO | 1 | 1 | 0 | 1 | 3 |
+| Classe [nv] | 0 | 0 | 3 | 0 | 3 |
+| **Total** | **6** | **7** | **4** | **15** | **32** |
+
+**JUÍZO PARALELO + VIVO + GRAVA/PAGA comprovados nesta leitura: 5 funções.** As duas primeiras influenciam uma escrita pela decisão que retornam; a terceira decide a emissão de pergunta; a quarta grava o contexto do chamado; a quinta influencia o escore gravado. [app/ponto/management/commands/flip_automatico.py:66] [app/ponto/management/commands/processar_alertas_turno.py:379] [app/api/views.py:717] [app/escala/regua_defesa.py:730]
+
+- `chamados/services/desvio_escala.py::medir_desvio` — causa do flip e nota. [app/chamados/services/desvio_escala.py:65] [app/ponto/management/commands/flip_automatico.py:66]
+- `chamados/services/disputa_emissao.py::_orfao_resolvido_cross_meianoite` — guarda da fábrica de pergunta. [app/chamados/services/disputa_emissao.py:729] [app/chamados/services/disputa_emissao.py:797] [app/ponto/management/commands/processar_alertas_turno.py:382]
+- `chamados/services/disputa_emissao.py::criar_disputa_a_partir_de_chamados_orfaos` — emissão de disputa/pergunta. [app/chamados/services/disputa_emissao.py:1213] [app/ponto/management/commands/processar_alertas_turno.py:385]
+- `api/views.py::api_bater_ponto` — chamado com data no contexto. [app/api/views.py:719] [app/api/urls.py:67]
+- `escala/regua_defesa.py::diagnostico_regua` — escore gravado no vínculo. [app/escala/regua_defesa.py:157] [app/escala/regua_defesa.py:735] [app/config/crons.py:428]
+
+O medidor declara como **não vistos pelo método**, entre outros, pareadores por estado fora das portas nomeadas, outras regras de meia-noite e heranças, além de certas chamadas dinâmicas e conteúdo em HTML/JS. Não há contagem desses pontos cegos no dado fornecido. [app/core/medida_turno_do_par.py:35] [app/core/medida_turno_do_par.py:44] [app/core/medida_turno_do_par.py:46]
+
+## 18/11 14:46 · sessao 9dc0fd09c600 · ESPURIAS-PRE-MAPA · censo · origem=Code
+
+A conferência abaixo cobre as **33 linhas fornecidas no anexo**. Ela não fecha todas as classificações: `[nv]` indica célula que não consegui provar. A linha do BACKLOG define as três classes e registra as fatias; ela nomeia `_dia_de` na fatia 2 e a herança por gap como caso das duas fatias. [app/docs/BACKLOG.md:1846; app/docs/BACKLOG.md:2051]
+
+Na tabela, os caminhos são relativos a `app/`; **E** = ENTRADA DO PAR, **J** = JUÍZO PARALELO, **I** = INSTRUMENTO e **V** = caminho vivo. Em (c), o efeito é o do caminho indicado em (b), não necessariamente uma escrita feita pela própria função. A indicação de cron é a declaração na cópia; sua instalação ou execução efetiva em produção é [não verificado]. [app/config/crons.py:1; app/config/crons.py:5]
+
+| chave | linha(s) | (a) | (b) caminho e chamador | (c) | (d) fatia | (e) conferido |
+|---|---:|---|---|---|---|---|
+| `ponto/motor_calculo_v2.py::minutos_noturnos` | 97,98 | [nv] | V, motor: `ponto/motor_calculo_v2.py:983` | PAGA | [nv] | `ponto/motor_calculo_v2.py:97` |
+| `ponto/motor_calculo_v2.py::turnos_via_autoridade` | 470 | E | V, motor: `ponto/motor_calculo_v2.py:530` | PAGA | [nv] | `ponto/motor_calculo_v2.py:470` |
+| `ponto/propositor.py::dia_posicional_completo` | 364 | J | [nv]; chamada em `chamados/reconciliador.py:113` | [nv] | [nv] | `ponto/propositor.py:364` |
+| `ponto/registro_batida.py::_casa_marco_proprio` | 43 | J | V, porta de batida: `ponto/registro_batida.py:113`; request: `ponto/services/triagem_batida.py:700` | GRAVA batida, condicional | [nv] | `ponto/registro_batida.py:43` |
+| `ponto/registro_batida.py::_janela_oposto` | 28 | J | V, triagem: `ponto/services/triagem_batida.py:715` | GRAVA batida, condicional | [nv] | `ponto/registro_batida.py:28` |
+| `ponto/services/cartorio.py::_julgar_colab_corpo` | 1205,1358 | E | V, cron declarado `processar_cartorio --apply`: `config/crons.py:616`; chamada: `ponto/services/cartorio.py:996` | GRAVA [nv] | [nv] | `ponto/services/cartorio.py:1205`; `ponto/services/cartorio.py:1358` |
+| `ponto/services/credito_parcial.py::dia_do_periodo` | 36 | J | V, fechamento: `ponto/services/credito_parcial.py:43`; `ponto/services/fechamento.py:998` | PAGA | [nv] | `ponto/services/credito_parcial.py:36` |
+| `ponto/services/dia_pago.py::_dia_de` | 132 | J | V, lavratura: `ponto/services/dia_pago.py:174` | PAGA, DiaPago | f2 DIA | `ponto/services/dia_pago.py:132`; `docs/BACKLOG.md:2051` |
+| `ponto/services/dias_em_aberto.py::passivo_da_competencia` | 123 | [nv] | AVULSO, comando: `pautas/management/commands/pauta_dia_em_aberto.py:98` | EXIBE | [nv] | `ponto/services/dias_em_aberto.py:123` |
+| `ponto/services/esmeril_espelho.py::assinaturas_do_colab` | 170,177 | J | V, cron declarado: `config/crons.py:640`; chamada: `ponto/services/esmeril_espelho.py:195` | [nv] | [nv] | `ponto/services/esmeril_espelho.py:170` |
+| `ponto/services/espelho.py::autoridade_do_periodo` | 1029 | E | V, espelho: `ponto/services/espelho.py:1227`; request: `ponto/views.py:161` | EXIBE | [nv] | `ponto/services/espelho.py:1029` |
+| `ponto/services/espelho.py::montar_dias` | 426 | J | V, espelho: `ponto/services/espelho.py:1262`; request: `ponto/views.py:161` | EXIBE | [nv] | `ponto/services/espelho.py:426` |
+| `ponto/services/espelho.py::somar_periodos` | 84 | J | V, espelho: `ponto/services/espelho.py:439`; request: `ponto/views.py:161` | EXIBE | [nv] | `ponto/services/espelho.py:84` |
+| `ponto/services/fechamento.py::_so_a_data` | 1569 | [nv] | [nv]; chamada: `ponto/services/fechamento.py:1595` | [nv] | [nv] | `ponto/services/fechamento.py:1569` |
+| `ponto/services/fechamento.py::apurar_por_fatia` | 204 | E | V, fechamento: `ponto/services/fechamento.py:754`; request: `ponto/views.py:1255` | PAGA | [nv] | `ponto/services/fechamento.py:204`; `ponto/services/fechamento.py:253` |
+| `ponto/services/fechamento.py::recalcular_fechamento_mes` | 655,657,663,683,754,793,839,851,935,947 | J | V, request: `ponto/views.py:1255` | PAGA, fechamento | [nv] | `ponto/services/fechamento.py:793`; `ponto/services/fechamento.py:935` |
+| `ponto/services/flip_auto.py::fila_flip_recusas` | 140 | J | V, cron declarado: `config/crons.py:707`; chamada: `ponto/services/flip_auto.py:148` | [nv] | [nv] | `ponto/services/flip_auto.py:140` |
+| `ponto/services/regularizacao.py::regularizar_turno_orfao` | 60,73 | J | V, request: `ponto/views.py:3369` | GRAVA justificativa e ausência, condicional | [nv] | `ponto/services/regularizacao.py:73`; `ponto/services/regularizacao.py:91` |
+| `ponto/services/triagem_batida.py::_bloqueio_horario_clt` | 424 | [nv] | V, triagem: `ponto/services/triagem_batida.py:657` | GRAVA chamado, condicional | [nv] | `ponto/services/triagem_batida.py:424`; `ponto/services/triagem_batida.py:459` |
+| `ponto/services/triagem_batida.py::ramo_regularizar_saida` | 247,254,260 | J | V, request: `ponto/views.py:339` | GRAVA justificativa | [nv] | `ponto/services/triagem_batida.py:258` |
+| `ponto/signals.py::_dias_batida` | 111 | E | V, signal: `ponto/signals.py:135` | GRAVA [nv] | [nv] | `ponto/signals.py:111` |
+| `ponto/signals.py::_recompute_around` | 23 | E | V, signal: `ponto/signals.py:36` | GRAVA [nv] | [nv] | `ponto/signals.py:23` |
+| `ponto/turnos.py::_dia_das_batidas_puro` | 2967 | J | V, espelho: `ponto/services/espelho.py:451`; chamada: `ponto/turnos.py:2927` | EXIBE; outros efeitos [nv] | DIA-DA-BATIDA-JUIZ-UNICO [nv] | `ponto/turnos.py:2967` |
+| `ponto/turnos.py::dia_do_turno_da_batida` | 2945 | E | V, chamada: `chamados/services/disputa_emissao.py:283` | [nv] | [nv] | `ponto/turnos.py:2945` |
+| `ponto/turnos.py::par_completo` | 2212 | E | V, cron declarado: `config/crons.py:605`; chamada: `ponto/management/commands/detectar_par_relampago.py:353` | GRAVA batida, condicional | [nv] | `ponto/turnos.py:2212`; `ponto/management/commands/detectar_par_relampago.py:362` |
+| `ponto/views.py::regularizar_retorno` | 3386 | J | V, request: `ponto/urls.py:45` | EXIBE | [nv] | `ponto/views.py:3386` |
+| `relatorios/management/commands/diff_extrato_parcial.py::Command._antes` | 45,51,58,61,67,68 | E | I, chamado pelo comando: `relatorios/management/commands/diff_extrato_parcial.py:117` | EXIBE | [nv] | `relatorios/management/commands/diff_extrato_parcial.py:68` |
+| `relatorios/management/commands/diff_extrato_parcial.py::Command.handle` | 102,106,140 | [nv] | I, comando `diff_extrato_parcial` | EXIBE | [nv] | `relatorios/management/commands/diff_extrato_parcial.py:102`; `relatorios/management/commands/diff_extrato_parcial.py:140` |
+| `relatorios/pdf_espelho.py::_coletar_dados_espelho` | 298 | E | V, PDF: `relatorios/views.py:1098`; chamada: `relatorios/pdf_espelho.py:1046` | EXIBE | [nv] | `relatorios/pdf_espelho.py:298` |
+| `relatorios/views.py::extrato_parcial` | 486,593 | [nv] | V, request: `relatorios/urls.py:17` | EXIBE | [nv] | `relatorios/views.py:486`; `relatorios/views.py:593` |
+| `ponto/motor_calculo_v2.py::turnos_via_autoridade` — porta nomeada | 503 | E | V, motor: `ponto/motor_calculo_v2.py:530` | PAGA | f1 PAR [nv] | `ponto/motor_calculo_v2.py:503` |
+| `ponto/motor_calculo_v2.py::MotorBase._turnos_do_juiz` — porta nomeada | 882 | E | V, motor: `ponto/motor_calculo_v2.py:2346` | PAGA | f1 PAR [nv] | `ponto/motor_calculo_v2.py:882` |
+| `ponto/motor_calculo_v2.py::MotorBase.calcular_mes` — herança por gap | 2408 | J | V, fechamento: `ponto/services/fechamento.py:754`; request: `ponto/views.py:1255` | PAGA | f1 PAR e f2 DIA | `ponto/motor_calculo_v2.py:2408`; `docs/BACKLOG.md:2051` |
+
+**Ressalva da linha `par_completo`:** o chamador citado passa uma janela pronta; a derivação na linha 2212 só roda quando `janela is None`. Portanto, o cron prova o caminho da função, mas não prova que execute esse sítio específico. [app/ponto/turnos.py:2211; app/ponto/management/commands/detectar_par_relampago.py:353]
+
+A contagem abaixo é da **classificação parcial desta tabela**, não um fechamento sem lacunas do censo. As células `[nv]` entram explicitamente na soma:
+
+| (a) \ (b) | VIVO | AVULSO | INSTRUMENTO | [nv] | Total |
+|---|---:|---:|---:|---:|---:|
+| EXIBIÇÃO | 0 | 0 | 0 | 0 | 0 |
+| ENTRADA DO PAR | 11 | 0 | 1 | 0 | 12 |
+| JUÍZO PARALELO | 15 | 0 | 0 | 1 | 16 |
+| [nv] | 3 | 1 | 1 | 1 | 6 |
+| **Total** | **29** | **1** | **2** | **2** | **34** |
+
+A soma acima revela uma inconsistência na própria consolidação: **não fecha as 33 linhas**. A contagem correta por inspeção da tabela é **[nv]**; não a apresento como censo fechado. [não verificado]
+
+A lista **provisória**, pelas células J + V + GRAVA/PAGA, é:
+
+- `_casa_marco_proprio` e `_janela_oposto`: caminho de registro de batida, condicionado às guardas. [app/ponto/registro_batida.py:105; app/ponto/registro_batida.py:113; app/ponto/services/triagem_batida.py:700]
+- `dia_do_periodo`: participa do cálculo de atraso no fechamento. [app/ponto/services/credito_parcial.py:43; app/ponto/services/fechamento.py:998]
+- `_dia_de`: atribuição de dia na lavratura de DiaPago, com fallback pela data local da entrada. [app/ponto/services/dia_pago.py:132; app/ponto/services/dia_pago.py:174]
+- `recalcular_fechamento_mes`: caminho de fechamento acionado pela view. [app/ponto/services/fechamento.py:793; app/ponto/views.py:1255]
+- `regularizar_turno_orfao` e `ramo_regularizar_saida`: gravam justificativa nos caminhos indicados. [app/ponto/services/regularizacao.py:91; app/ponto/services/triagem_batida.py:258]
+- `MotorBase.calcular_mes`, na herança por gap: caso registrado nas duas fatias. [app/ponto/motor_calculo_v2.py:2408; app/docs/BACKLOG.md:2051]
+
+Essa lista não é o tamanho real fechado da obra: há efeitos, chamadores e classes marcados `[nv]`. O método também declara pontos cegos, entre eles pareadores por estado, outras regras de meia-noite e heranças não reconhecidas, além das limitações da resolução estática; não há número para o que ele não viu. [app/core/medida_turno_do_par.py:40; app/core/medida_turno_do_par.py:46]
 
 ## 18/11 14:41 · sessao 0f40a97e3846 · PRE-MAPA-E4D · censo · origem=Code
 
@@ -595,161 +883,4 @@ O requisito legal detalhado da Portaria 671 para este desenho ainda não foi for
 
 O próprio índice manda conferir o registro vivo quando houver divergência. Há uma diferença relevante: a tabela diz que competência fechada está sem juiz, enquanto o registro vivo já declara `competencia_fechada`; essa pergunta deve ser conferida no registro vivo se entrar no desenho. ([JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:14); [JUIZES.md](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/docs/JUIZES.md:114); [juizes.py](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/core/juizes.py:311))
 
-## 18/11 13:50 · sessao 81bf612d48ec · LAUDO-[nome]-1811-1340 · leitura · origem=Code
-
-**Campos dos modelos**, antes do rastreamento das funções:
-
-- `MetricaSnapshot`: `chave`, `escopo`, `escopo_id`, `data_ini`, `data_ref`, `numerador`, `denominador`, `valor`, `detalhe`, `calculado_em`. [app/inteligencia/models.py:81](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/inteligencia/models.py:81)
-- `DecisaoHE`: `colaborador`, `data`, `estado`, `minutos_na_decisao`, `motivo`, `decidida_por`, `origem`, `decidida_em`, `atualizada_em`, `revogada_em`, `revogada_motivo`, `minutos_na_revogacao`. [app/ponto/models.py:1300](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:1300)
-- `Batida`: `colaborador`, `timestamp`, `tipo`, `sequencia`, `is_intervalo`, `terminal`, `tipo_registro`, `escala`, `pergunta_origem`, `origem`, `canal`, `justificativa`, `latitude`, `longitude`, `gps_accuracy`, `aprovada`, `retratada_em`, `aprovada_por`, `aprovada_em`, `timestamp_dispositivo`, `timestamp_gap_ms`, `sincronizado_em`, `foto`, `criado_em`, `ordem_substituicao`, `posto_efetivo`. [app/ponto/models.py:22](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/models.py:22)
-- `CelulaDia`: `colaborador`, `data`, `trabalha`, `origem`, `escala_geradora`, `dna`, `gerada_em`, `regenerada_em`, `regeneracoes`, `dna_anterior`, `editada_em`, `editada_por`, `julgada_em`, `impressao`, `veredito`, `veredito_via`, `veredito_em`, `protestos`, `ata`, `ausencia`, `tem_entrada`, `tem_saida`, `insumos_em`, `status_dia`, `status_rotulo`. [app/escala/models.py:1681](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/escala/models.py:1681) [app/escala/models.py:1770](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/escala/models.py:1770)
-
-**1. Lavratura.** A função que grava é `ponto.services.he_pendente_lavrado.lavrar`: ela faz `update_or_create` de `MetricaSnapshot` e guarda o retrato em `detalhe`; `calculado_em`, atualizado automaticamente, marca a hora da gravação. [app/ponto/services/he_pendente_lavrado.py:177](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:177) [app/inteligencia/models.py:95](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/inteligencia/models.py:95)
-
-O comando é `lavrar_he_pendente`; no pipeline, `config/crons.py` o encadeia após `lavrar_deslogados` com `--apply`. [app/ponto/management/commands/lavrar_he_pendente.py:18](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:18) [app/config/crons.py:1572](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/config/crons.py:1572)
-
-Existe dry: **omitir `--apply`**; não há um flag `--dry` declarado. [app/ponto/management/commands/lavrar_he_pendente.py:21](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:21) O dry não grava, mas pode chamar a porta de revogação, que executa `select_for_update` antes de retornar; por isso, não é executável integralmente sob a transação `READ ONLY` pedida, nem atende à restrição de não chamar porta de decisão. [app/ponto/management/commands/lavrar_he_pendente.py:56](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:56) [app/ponto/portas/he.py:473](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:473)
-
-**2. Autorização sobre retrato velho.** Na Gestão, os dias e minutos vêm do retrato, enquanto o estado da decisão é consultado vivo; o formulário envia seus minutos no campo oculto `minutos`. [app/ponto/services/gestao_he.py:270](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/gestao_he.py:270) [app/templates/ponto/gestao_he.html:256](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/templates/ponto/gestao_he.html:256)
-
-A view passa esse valor à porta, que **não consulta novamente o motor ou o espelho**: valida permissão, motivo, data e minutos positivos. [app/ponto/views.py:512](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/views.py:512) [app/ponto/portas/he.py:159](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:159) Se o formulário enviar 713, as validações passarem e não houver autorização vigente igual, cria ou atualiza a decisão com `minutos_na_decisao=713` e `origem=admin`; se já houver autorização vigente, retorna sem alterar a foto existente. [app/ponto/portas/he.py:186](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:186) [app/ponto/portas/he.py:65](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:65)
-
-Uma decisão nova ou trocada solicita recálculo do fechamento para a data. [app/ponto/portas/he.py:205](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/portas/he.py:205) O motor lê **data e estado** das decisões vigentes, não os 713 minutos fotografados; autorização pode impedir o corte das pontas e também afastar o bloqueio de dia sem previsto quando suas condições se aplicam. [app/ponto/motor_calculo_v2.py:1397](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1397) [app/ponto/motor_calculo_v2.py:1691](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1691) [app/ponto/motor_calculo_v2.py:1733](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1733) [app/ponto/motor_calculo_v2.py:1448](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1448)
-
-Portanto, **a autorização pode mudar o cálculo, mas o código e o dado fornecido não provam mudança de dinheiro neste caso**: é preciso comparar o cálculo antes e depois, sem efetuar a autorização. [app/ponto/motor_calculo_v2.py:1630](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/motor_calculo_v2.py:1630) [não verificado] A hora do retrato, a hora do pouso da S6 e a relação entre ambas também estão **[não verificado]**.
-
-**3. Sonda para a sombra.** Ela consulta o mesmo espelho e aplica ao dia o critério de inclusão de `apurar`: colaborador ativo, dia na janela e lista `he_fora_da_janela` não vazia. [app/ponto/services/he_pendente_lavrado.py:89](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:89) [app/ponto/services/he_pendente_lavrado.py:114](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/services/he_pendente_lavrado.py:114) Ela mostra a **inclusão e os minutos** que o dry produziria para o dia, sem executar o callback de revogação; assim, o estado que o dry completo atribuiria à linha fica **[não verificado]**. [app/ponto/management/commands/lavrar_he_pendente.py:48](/home/ronald/codex_ws/b9ba4228280aafe7b1358ac870ee8bec3a6cf4d7/app/ponto/management/commands/lavrar_he_pendente.py:48)
-
-Cole no `manage.py tenant_command shell --schema=juliani`. A sonda não foi executada aqui. [não verificado]
-
-```python
-import datetime as dt
-import logging
-from django.db import connection, transaction
-from django.utils import timezone
-from colaboradores.models import Colaborador
-from ponto import janelas
-from ponto.models import DecisaoHE
-from ponto.services.espelho import espelho_do_colab
-from ponto.services.he_pendente_lavrado import (
-    data_do_dia, ler, minutos_fora_do_dia,
-)
-from ponto.turnos import batidas_apuraveis
-
-logging.disable(logging.CRITICAL)
-DIA = dt.date(2026, 11, 15)
-
-def saida(chave, valor):
-    print("col830", chave, valor)
-
-try:
-    with transaction.atomic():
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute("SET TRANSACTION READ ONLY")
-
-            c = Colaborador.objects.select_related("empresa").get(pk=830)
-            empresa = c.empresa
-            ini, fim = janelas.janela_fechamento(11, 2026, empresa)
-            retrato, calculado_em = ler(empresa, 11, 2026)
-
-            saida(
-                "retrato_calculado_em",
-                timezone.localtime(calculado_em).isoformat()
-                if calculado_em else None,
-            )
-
-            linhas_retrato = [
-                {"data": d.get("data"), "estado": d.get("estado"),
-                 "minutos": d.get("minutos"), "pontas": d.get("pontas")}
-                for col in (retrato or {}).get("colabs", [])
-                if col.get("colab") == c.pk
-                for d in col.get("dias", [])
-                if data_do_dia(d) == DIA
-            ]
-            saida("retrato_dia", linhas_retrato)
-
-            decisoes = list(
-                DecisaoHE.objects.filter(colaborador=c, data=DIA)
-                .values("estado", "origem", "minutos_na_decisao", "revogada_em")
-            )
-            for d in decisoes:
-                if d["revogada_em"]:
-                    d["revogada_em"] = timezone.localtime(
-                        d["revogada_em"]
-                    ).isoformat()
-            saida("decisoes", decisoes)
-
-            batidas = [
-                timezone.localtime(b.timestamp).isoformat()
-                for b in batidas_apuraveis(c).order_by("timestamp")
-                if timezone.localtime(b.timestamp).date() == DIA
-            ]
-            saida("batidas_apuraveis_data_local", batidas)
-
-            agora = timezone.now()
-            esp = espelho_do_colab(c, fim, ini, fim, ano=2026, agora=agora)
-            dias = [d for d in (esp.get("dias") or [])
-                    if data_do_dia(d) == DIA]
-
-            for d in dias:
-                pontas = d.get("he_fora_da_janela") or []
-                saida("espelho_dia", {
-                    "data": str(DIA),
-                    "he_fora_da_janela": pontas,
-                    "minutos": minutos_fora_do_dia(d),
-                })
-
-            if not dias:
-                saida("espelho_dia", "ausente")
-
-            entra = (
-                c.situacao == "ativo"
-                and ini <= DIA <= fim
-                and any(d.get("he_fora_da_janela") for d in dias)
-            )
-            saida("dry_inclusao_dia", {
-                "entra": entra,
-                "minutos": [
-                    minutos_fora_do_dia(d) for d in dias
-                    if d.get("he_fora_da_janela")
-                ],
-                "estado_dry_completo": "nao verificado",
-            })
-        finally:
-            transaction.set_rollback(True)
-except Exception as exc:
-    # Não imprimir mensagem nem traceback: podem conter dados pessoais.
-    saida("erro_tipo", type(exc).__name__)
-finally:
-    print("FIM_SONDA_D")
-```
-
-A sonda não identifica a hora do pouso da S6: esse dado não está no material fornecido. [não verificado] [nao verificado]
-
-## 18/11 13:50 · sessao 1e00446590f1 · LAUDO-[nome]-1811-1340 · sonda · origem=Code
-
-Para localizar o dado, conto as linhas a partir de `sonda_leitura` como linha 1, incluindo a linha em branco: as cinco seções têm `FIM_SONDA_`, não há traceback e `rc_sombra=0`. [Dado raspado, linhas 1–13]
-
-Para **col882 em 21/10/2026**, a competência identificada é **11/2026**, de 21/10 a 20/11. [Dado raspado, linha 3]
-
-- **Espelho:** `espelho_do_colab` chama `montar_dias`, que usa `marcar_pontas_fora`; essa função testa a ponta e arredonda os minutos para inteiro. A sonda encontrou **10 min antes**. [app/ponto/services/espelho.py:1194; app/ponto/services/espelho.py:721; app/ponto/janela_he.py:215; dado raspado, linha 5]
-- **Motor:** o cálculo passa por `_janela_do_par`, que chama `_entrada_efetiva` e `_saida_efetiva`. A sonda encontrou **9,598966666666666 min fora da janela** em um período atribuído ao dia, sem períodos sem atribuição. [app/ponto/motor_calculo_v2.py:1752; dado raspado, linha 5]
-- **Gestão:** `he_pendente_lavrado.ler` lê o retrato e `gestao_he.enriquecer` usa `estado_por_dia` para sobrepor a decisão vigente. O dia aparece com **10 min** e estado **`nao`**; o retrato foi calculado em **18/11/2026 às 07:37:31,642334 UTC**. [app/ponto/views.py:932; app/ponto/services/gestao_he.py:245; app/ponto/services/gestao_he.py:278; dado raspado, linha 7]
-- **PDF:** `_coletar_dados_espelho_mes` chama o coletor, que usa `espelho_do_colab`; o PDF lê `he_fora_da_janela`. A sonda encontrou **10 min antes**. [app/relatorios/pdf_espelho.py:654; app/relatorios/pdf_espelho.py:596; app/relatorios/pdf_espelho.py:932; dado raspado, linha 11]
-
-Há **uma DecisaoHE vigente**, com estado **`nao`**, origem **`sistema`** e **10 min na decisão**. `nao` representa decisão de não autorizar, ou ciência registrada; a origem informada é do sistema. [Dado raspado, linha 9; app/ponto/models.py:1283; app/ponto/models.py:1299]
-
-A sonda encontrou tanto os **9,598966666666666 min** do motor quanto os **10 min** do aviso no mesmo recorte; ela não demonstra, por si só, que o aviso resultou do arredondamento desse valor específico ou que os dois cálculos usaram entradas idênticas. [Dado raspado, linha 5; não verificado]
-
-**Dono L-099: ESTRUTURA**, para a divergência de estado exibido: o template do espelho imprime “sem decisão” fixamente, embora a consulta tenha retornado decisão vigente `nao` para o dia. [app/templates/ponto/espelho.html:189; dado raspado, linha 9; app/docs/LEIS.md:122]
-
-## 18/11 13:49 · sessao 8801768e4dda · - · - · origem=Ronald (tmux)
-
-Consulta concluída e evidências enviadas ao agente principal, incluindo a divergência entre o documento de consulta e o registro vivo, os juízes pertinentes por pergunta e a distinção entre batida, célula e apuração. Referências: `app/docs/JUIZES.md:7`, `app/core/juizes.py:191`, `app/ponto/models.py:8`, `app/escala/models.py:1635` e `app/ponto/juiz_batida.py:1`.
-
-## 18/11 13:49 · sessao db0136e12d1d · - · - · origem=Ronald (tmux)
-
-Investigação de AEJ concluída e evidências encaminhadas ao agente principal.
-
-_6980 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6984 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
