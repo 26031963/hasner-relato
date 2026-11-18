@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 12:27:08.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (37.2 MB). Acoes na janela: **990**.
+**Medido em 18/11/2026 12:32:12.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (38.0 MB). Acoes na janela: **995**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:32:06 | Bash | Kill own waiter; read F6F7 verdict | `kill 3367337; sleep 1; ps -p 3367337 >/dev/null && echo vivo \|\| echo morto; pgrep -P 3367337; ls logs/E4C-F6F7/; cat logs/E4C-F6F7/final_c6.rc 2>/dev/null; ps -o pid,cmd -p 3272278 \| tail -1` |
+| 12:31:56 | Bash | Cancel superseded queued comboio job | `date +%H:%M:%S; ssh -o BatchMode=yes pista estado 2>&1 \| head -2; ssh -o BatchMode=yes pista cancela 1118121850_ca4b9ecf 2>&1 \| tail -2; ssh -o BatchMode=yes pista estado 2>&1 \| head -3; ps -o pid,cmd -p 3367337 \| tail -1` |
+| 12:29:49 | Bash | Locate conflict source and raia contents | `date +%H:%M:%S; M=d54160999; P2=raia/e4c-f2-p2-085635; F4=raia/e4c-f4-094500; F67=raia/e4c-f6f7-103452; CI=raia/cirineu-pouso-115210; ES=raia/escala-nao-descreve-085630 for b in $P2 $F4; do T=$(git merge-tree --write-tree $M $b\|head -1); C=$(git commit-tree $T -p $M -p $b -m x); git merge-tree --write-tree --name-only $C $F67 >/dev/null 2>&1; echo "F6F7 sobre main+$b rc=$?"; done git log --onelin ...` |
+| 12:29:19 | Bash | Save aval; measure merge-tree for both comboios | `cat > logs/AVAIS-1515/comboio_das_suites_1811_1235.txt <<'EOF' aval Ronald: COMBOIO-DAS-SUITES-1811 (18/11 12:35) -- UNIDADE: suite inteira. Nenhuma lei nova e nenhum instrumento novo: so a regra RAIAS E POUSO item 4 (POUSO-EM-COMBOIO, SUITE-UMA-VEZ-POR-ARVORE) aplicada as obras que estao em fila de suite agora. A decisao de montar e do Code, pela regra; o que eu peco e a resposta em UMA linha por ...` |
+| 12:29:02 | Bash | Find ESCALA-NAO-DESCREVE raia | `date +%H:%M; printf '%s\n' "$(cat <<'EOF' aval Ronald: COMBOIO-DAS-SUITES-1811 (18/11 12:35) EOF )" >/dev/null; git branch -a \| /bin/grep -iE "escala\|descreve" \| head; git worktree list \| /bin/grep -iE "escala\|descreve\|f4-0945\|cirineu-c4c"` |
 | 12:24:48 | Bash | Check pista state | `ssh -o BatchMode=yes pista estado 2>&1 \| head -3; ls logs/E4C-F6F7/final_c6.rc logs/COMBOIO-1811/final.rc 2>&1; pgrep -f "COMBOIO-1811/espera.sh" \| head -2` |
 | 12:24:46 | Bash | Publish DSTL1 measures; add fila lines | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') k=[i for i,x in enumerate(L) if x.startswith('AVAL-DEVOLVIDO COMPLEMENTO-2 F5 12:10 item 2')]; assert len(k)==1 L.insert(k[0]+1,"MEDIDA DSTL1-PELA-PORTA-DA-HE 12:20 itens 2(ii)/4/5 (sombra, so colN; logs/DSTL1-PORTA-HE/medidas/resumo.md + *.raw; conferi dia_pago.py:548, motor_calculo_v2.py:1440 (o  ...` |
 | 12:24:29 | Bash | Verify guarda 1 location | `/bin/grep -n "minutos_trabalhados *== *0\\|minutos_trabalhados <= 0\\|not .*minutos_trabalhados" ponto/motor_calculo_v2.py \| head -5; sed -n '745,750p' ponto/services/espelho.py` |
