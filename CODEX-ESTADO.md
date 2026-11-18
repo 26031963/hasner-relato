@@ -1,7 +1,590 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 18:47** · publicado em **18/11/2026 18:50** (UTC-3)
+> Ultima resposta processada: **18/11/2026 18:52** · publicado em **18/11/2026 18:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 18:52 · sessao a7c0bb4360d8 · CURA-CHEGA-A-FROTA · sonda · origem=Code
+
+```python
+# Executar no Django shell da copia correspondente ao HASH informado.
+# Execucao, resultados, identidade da base e efeitos externos: [nao verificado].
+#
+# Fontes:
+# app/escala/models.py:871-876, 1635-1636, 1714-1729
+# app/colaboradores/models.py:548-585
+# app/ponto/services/cartorio.py:940-943, 1211-1268, 1409-1418, 1955
+# app/ponto/management/commands/processar_cartorio.py:33-65
+# Anexo v2.py fornecido no pedido: parte_b_colab e main.
+#
+# Ausencia em cods e a convencao PULARIA, nao prova de pulo real:
+# app/ponto/services/cartorio.py:1211-1268, 1409-1418.
+# EscalaColaborador nao declara campo de criacao:
+# app/escala/models.py:871-1398. Portanto, a busca por outras escalas
+# criadas em 18/11 e a inexistencia de um quinto colaborador ficam
+# [nao verificado].
+#
+# O bloqueio de escrita no banco abaixo cobre PostgreSQL e SQLite.
+# Efeitos externos e escritas em outras conexoes: [nao verificado].
+# As comparacoes de estado observam apenas os campos/modelos indicados.
+
+import datetime as dt
+import hashlib
+import json
+from collections import Counter
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.db import connection, transaction
+from django.db.models import Max
+from django.utils import timezone
+
+from chamados.models import ChamadoColaborador, PerguntaDisputa
+from colaboradores.models import Colaborador, HistoricoVinculo
+from escala.models import CelulaDia, EscalaColaborador
+from ponto.management.commands.detectar_ausencias import Command as Emissor
+from ponto.models import Batida
+from ponto.services import cartorio
+
+
+INI = dt.date(2026, 10, 21)
+FIM_COMP = dt.date(2026, 11, 20)
+DIA_CURA = dt.date(2026, 11, 18)
+ALVOS = (868, 934, 1017, 1028)
+PKS_CURA = (1603, 1604, 1605, 1606)
+
+AGORA = timezone.localtime(timezone.now())
+HOJE = timezone.localdate(AGORA)
+FIM = min(FIM_COMP, HOJE - dt.timedelta(days=1))
+CORTE = timezone.make_aware(dt.datetime(2026, 11, 18, 8, 19))
+
+erros = 0
+resumo_b = Counter()
+resumo_b_corte = Counter()
+resumo_b_regeneracao = Counter()
+pularia_antes = []
+
+AUSENTE = object()
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+def instante(valor):
+    if valor is None:
+        return "None"
+    if timezone.is_aware(valor):
+        return timezone.localtime(valor).isoformat()
+    return valor.isoformat()
+
+
+def dia_local(valor):
+    if valor is None:
+        return None
+    if timezone.is_naive(valor):
+        valor = timezone.make_aware(valor)
+    return timezone.localtime(valor).date()
+
+
+def registrar_erro(col=None, data=None):
+    global erros
+    erros += 1
+    identificador = "col%d" % col if col is not None else "GERAL"
+    print(
+        "ERRO %s data=%s"
+        % (identificador, data if data is not None else "[nao verificado]")
+    )
+
+
+def faixa_corte(valor):
+    if valor is None:
+        return "SEM_JULGAMENTO"
+    if timezone.is_naive(valor):
+        valor = timezone.make_aware(valor)
+    return "ANTES_08_19" if valor < CORTE else "A_PARTIR_08_19"
+
+
+def campo_celula(cel, nome):
+    # O campo pode nao existir em outra copia do modelo.
+    try:
+        CelulaDia._meta.get_field(nome)
+    except Exception:
+        return AUSENTE
+    return getattr(cel, nome)
+
+
+def faixa_regeneracao(valor):
+    if valor is AUSENTE:
+        return "CAMPO_AUSENTE"
+    if valor is not None and dia_local(valor) == DIA_CURA:
+        return "REGENERADA_EM_18_11"
+    return "SEM_REGENERACAO_EM_18_11"
+
+
+def digest_linhas(qs):
+    linhas = list(qs.order_by("pk").values())
+    bruto = json.dumps(
+        linhas,
+        cls=DjangoJSONEncoder,
+        sort_keys=True,
+        ensure_ascii=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return len(linhas), hashlib.sha256(bruto).hexdigest()
+
+
+def estado_observado(c):
+    cels = CelulaDia.objects.filter(colaborador=c).order_by("pk").values_list(
+        "pk", "data", "impressao", "julgada_em", "veredito"
+    )
+    linhas = list(cels)
+    bruto = json.dumps(
+        linhas,
+        cls=DjangoJSONEncoder,
+        sort_keys=True,
+        ensure_ascii=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return {
+        "celulas": (len(linhas), hashlib.sha256(bruto).hexdigest()),
+        "perguntas": digest_linhas(
+            PerguntaDisputa.objects.filter(colaborador=c)
+        ),
+        "chamados": digest_linhas(
+            ChamadoColaborador.objects.filter(colaborador=c)
+        ),
+    }
+
+
+def mostrar_comparacao_escrita(pk, antes, durante, depois):
+    for nome in ("celulas", "perguntas", "chamados"):
+        a = antes[nome]
+        d = durante[nome] if durante is not None else None
+        f = depois[nome] if depois is not None else None
+        print(
+            "col%d VERIFICACAO_%s antes=%s durante=%s depois=%s"
+            % (pk, nome.upper(), a, d, f)
+        )
+        if d is not None and d != a:
+            print(
+                "ESCRITA_DETECTADA col%d modelo=%s momento=dentro"
+                % (pk, nome)
+            )
+        if f is not None and f != a:
+            print(
+                "ESCRITA_DETECTADA col%d modelo=%s momento=depois"
+                % (pk, nome)
+            )
+
+
+def campo_criacao_escala():
+    # Inspecao explicita dos possiveis nomes; nenhum existe na copia lida:
+    # app/escala/models.py:871-1398.
+    for nome in ("criado_em", "criada_em", "created_at"):
+        try:
+            campo = EscalaColaborador._meta.get_field(nome)
+        except Exception:
+            continue
+        if campo.get_internal_type() == "DateTimeField":
+            return nome
+    return None
+
+
+def contar_historicos_e_escalas(escalas_cura):
+    print("CONTAGEM_4_X_5 data_local=%s empresas_historico=2,3,4" % DIA_CURA)
+    pessoas = set()
+
+    historicos = HistoricoVinculo.objects.filter(
+        colaborador__empresa_id__in=(2, 3, 4),
+        criado_em__date=DIA_CURA,
+    ).order_by("colaborador_id", "criado_em", "pk")
+
+    total_historicos = 0
+    for h in historicos:
+        total_historicos += 1
+        pessoas.add(h.colaborador_id)
+        print(
+            "HISTORICO col%d pk=%d tipo=%s motivo=%s criado_em=%s"
+            % (
+                h.colaborador_id, h.pk, h.tipo, h.motivo,
+                instante(h.criado_em),
+            )
+        )
+    print("HISTORICOS_TOTAL=%d" % total_historicos)
+
+    campo_criacao = campo_criacao_escala()
+    escalas = {e.pk: e for e in escalas_cura}
+    if campo_criacao is None:
+        print("ESCALAS_OUTRAS_CRIADAS_EM_18_11=[campo ausente]")
+    else:
+        outras = EscalaColaborador.objects.filter(
+            **{campo_criacao + "__date": DIA_CURA}
+        ).order_by("pk")
+        for escala in outras:
+            escalas[escala.pk] = escala
+
+    for escala in sorted(escalas.values(), key=lambda e: e.pk):
+        pessoas.add(escala.colaborador_id)
+        criado = (
+            instante(getattr(escala, campo_criacao))
+            if campo_criacao is not None else "[campo ausente]"
+        )
+        print(
+            "ESCALA col%d pk=%d vigencia_inicio=%s criado_em=%s"
+            % (escala.colaborador_id, escala.pk, escala.data_inicio, criado)
+        )
+    print("ESCALAS_IDENTIFICADAS=%d" % len(escalas))
+    print("COLABS_IDENTIFICADOS=%d" % len(pessoas))
+
+    if len(pessoas) >= 5:
+        print("HA_5O_COLAB=sim")
+    elif campo_criacao is None:
+        print("HA_5O_COLAB=[nao verificado]")
+    else:
+        print("HA_5O_COLAB=nao")
+
+
+def parte_b_colab(pk):
+    c = None
+    antes = durante = depois = None
+    cels = []
+    out = cartorio.contadores()
+    sucesso = False
+
+    try:
+        c = Colaborador.objects.get(pk=pk)
+        antes = estado_observado(c)
+        try:
+            with transaction.atomic():
+                try:
+                    cels = list(
+                        CelulaDia.objects.filter(
+                            colaborador=c, data__lt=HOJE
+                        ).order_by("data")
+                    )
+                    if cels:
+                        cartorio.julgar_colab(
+                            c,
+                            cels,
+                            hoje=HOJE,
+                            agora=AGORA,
+                            apply_=False,
+                            emissor=Emissor(),
+                            out=out,
+                            prefix="[DRY] ",
+                            write=lambda mensagem: None,
+                            forcar=False,
+                        )
+                    sucesso = True
+                finally:
+                    durante = estado_observado(c)
+                raise ReverterSonda()
+        except ReverterSonda:
+            pass
+    except Exception:
+        # A excecao pode conter dados pessoais.
+        registrar_erro(pk)
+    finally:
+        if c is not None and antes is not None:
+            try:
+                depois = estado_observado(c)
+                mostrar_comparacao_escrita(pk, antes, durante, depois)
+            except Exception:
+                registrar_erro(pk)
+
+    if not sucesso:
+        return
+
+    cods = out.get("cods") or {}
+    pulados = out["pulados"]
+    soma = len(cods) + pulados
+    diferenca = soma - len(cels)
+    convencao = (
+        "CONVENCAO_OK"
+        if diferenca == 0
+        else "CONVENCAO_QUEBRADA diferenca=%+d" % diferenca
+    )
+    print(
+        "col%d cels_todas_data_lt_hoje=%d cods=%d pulados=%d soma=%d %s"
+        % (pk, len(cels), len(cods), pulados, soma, convencao)
+    )
+
+    for cel in cels:
+        if not (INI <= cel.data <= FIM):
+            continue
+        try:
+            estado = "REJULGARIA" if cel.data in cods else "PULARIA"
+            corte = faixa_corte(cel.julgada_em)
+            regenerada = campo_celula(cel, "regenerada_em")
+            regeneracoes = campo_celula(cel, "regeneracoes")
+            dna_anterior = campo_celula(cel, "dna_anterior")
+            faixa_reg = faixa_regeneracao(regenerada)
+
+            resumo_b[estado] += 1
+            resumo_b_corte[(estado, corte)] += 1
+            resumo_b_regeneracao[(estado, faixa_reg)] += 1
+
+            regenerada_texto = (
+                "[campo ausente]"
+                if regenerada is AUSENTE else instante(regenerada)
+            )
+            regeneracoes_texto = (
+                "[campo ausente]"
+                if regeneracoes is AUSENTE else str(regeneracoes)
+            )
+            dna_texto = (
+                "[campo ausente]"
+                if dna_anterior is AUSENTE
+                else ("sim" if dna_anterior is not None else "nao")
+            )
+
+            linha = (
+                "col%d data=%s julgada_em=%s estado=%s "
+                "veredito_gravado=%r regenerada_em=%s "
+                "regeneracoes=%s dna_anterior_existe=%s"
+                % (
+                    pk, cel.data, instante(cel.julgada_em), estado,
+                    cel.veredito, regenerada_texto, regeneracoes_texto,
+                    dna_texto,
+                )
+            )
+            if estado == "REJULGARIA":
+                linha += " cods_novos=%r x veredito_gravado=%r" % (
+                    cods[cel.data], cel.veredito,
+                )
+            print(linha)
+
+            if estado == "PULARIA" and corte == "ANTES_08_19":
+                pularia_antes.append(
+                    (pk, cel.data, instante(cel.julgada_em))
+                )
+        except Exception:
+            registrar_erro(pk, cel.data)
+
+
+def parte_b():
+    print("PARTE_B")
+    print(
+        "HORA_SOMBRA=%s"
+        % instante(Batida.objects.aggregate(v=Max("timestamp"))["v"])
+    )
+    print(
+        "HOJE=%s AGORA=%s FIM_COMP_OBSERVADO=%s"
+        % (HOJE, instante(AGORA), FIM)
+    )
+    print(
+        "RESULTADOS=[nao verificado: executar na sombra] "
+        "PULARIA_POR_AUSENCIA_EM_CODS=[nao verificado como pulo real]"
+    )
+
+    escalas_cura = list(
+        EscalaColaborador.objects.filter(pk__in=PKS_CURA).order_by("pk")
+    )
+    print("PRESENCA_DA_CURA=%s" % ("sim" if escalas_cura else "nao"))
+    if not escalas_cura:
+        print("BASE_ANTERIOR_A_CURA")
+        return
+
+    contar_historicos_e_escalas(escalas_cura)
+
+    for pk in ALVOS:
+        parte_b_colab(pk)
+
+    print("RESUMO_B_POR_ESTADO")
+    for estado in ("PULARIA", "REJULGARIA"):
+        print("%s=%d" % (estado, resumo_b[estado]))
+
+    print("RESUMO_B_POR_ESTADO_E_JULGAMENTO")
+    for estado in ("PULARIA", "REJULGARIA"):
+        for corte in ("ANTES_08_19", "A_PARTIR_08_19", "SEM_JULGAMENTO"):
+            print("%s %s=%d" % (estado, corte, resumo_b_corte[(estado, corte)]))
+
+    print("RESUMO_B_POR_ESTADO_E_REGENERACAO")
+    for estado in ("PULARIA", "REJULGARIA"):
+        for faixa in (
+            "REGENERADA_EM_18_11",
+            "SEM_REGENERACAO_EM_18_11",
+            "CAMPO_AUSENTE",
+        ):
+            print(
+                "%s %s=%d"
+                % (estado, faixa, resumo_b_regeneracao[(estado, faixa)])
+            )
+
+    print("PULARIA_JULGADOS_ANTES_08_19")
+    for pk, data, julgada in pularia_antes:
+        print("col%d data=%s julgada_em=%s" % (pk, data, julgada))
+    print(
+        "CAUSA_E_INSUMO_HISTORICO=[nao verificado] "
+        "PULO_REAL_EM_CADA_LINHA=[nao verificado]"
+    )
+
+
+def main():
+    sqlite_query_only_anterior = None
+    try:
+        if connection.in_atomic_block:
+            print("SONDA_NAO_EXECUTADA transacao_preexistente")
+            registrar_erro()
+            return
+
+        if connection.vendor == "sqlite":
+            with connection.cursor() as cursor:
+                cursor.execute("PRAGMA query_only")
+                sqlite_query_only_anterior = cursor.fetchone()[0]
+                cursor.execute("PRAGMA query_only = ON")
+            with transaction.atomic():
+                parte_b()
+        elif connection.vendor == "postgresql":
+            with transaction.atomic():
+                with connection.cursor() as cursor:
+                    cursor.execute("SET TRANSACTION READ ONLY")
+                parte_b()
+        else:
+            print("SONDA_NAO_EXECUTADA bloqueio_de_escrita=[nao verificado]")
+            registrar_erro()
+    except Exception:
+        # Nao imprimir a excecao: pode conter dados pessoais.
+        registrar_erro()
+    finally:
+        if sqlite_query_only_anterior is not None:
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(
+                        "PRAGMA query_only = %d"
+                        % int(sqlite_query_only_anterior)
+                    )
+            except Exception:
+                registrar_erro()
+        print("ERROS=%d" % erros)
+        print("FIM_SONDA")
+
+
+main()
+```
+
+## 18/11 18:52 · sessao c0c28b92827c · CURA-CHEGA-A-FROTA · censo · origem=Code
+
+**Dos 56 dias de 18/11, os 56 já constavam nos 106 de 17/11; nenhum é novo. Sete estão na lista RED dos 37 dias de intervalo/rajada do brief.** A atribuição histórica dos outros 49 dias não pode ser recuperada com certeza: o brief informa os totais, mas não publica os rótulos individuais dessas classes. [não verificado: anexos transcritos na pergunta, sem arquivo e linhas disponíveis na cópia]
+
+A tabela abaixo oferece **uma aplicação deduzida e reproduzível**, não uma reconstrução comprovada dos rótulos históricos. O próprio cabeçalho da parte A marca os mapeamentos de paridade, tipo trocado e borda como não verificados. As referências aos anexos nesta resposta são identificadas por colaborador e data; como não há numeração de linhas dos anexos disponível, **[não verificado] aplica-se a cada afirmação e linha baseada neles**.
+
+### Critério usado
+
+- **Intervalo/rajada — ESTRUTURA:** a lista RED do brief identifica os 37 pares `(col,data)`. A leitura da régua e das batidas mostra a órfã associada ao intervalo ou à saída, próxima de marco vazio; o brief descreve o conflito com o marco vizinho. Para o cruzamento histórico, usei a **lista RED**, não apenas proximidade entre batidas. [não verificado]
+- **Paridade noturna — CADASTRO [deduzido]:** régua noturna atravessando a meia-noite, batidas entre D-1 e D e órfã próxima de marco vazio, com padrão recorrente compatível com deslocamento de dia/fase. Isso é uma hipótese visual: a sonda não demonstra o cadastro nem a fase 12x36. [não verificado]
+- **Horário diferente — CADASTRO [deduzido]:** sequência de batidas sugere jornada deslocada em relação à régua. A diferença observada não comprova qual horário foi cadastrado corretamente. [não verificado]
+- **Tipo trocado — BATIDA [deduzido]:** tipo E/S informado contraria o papel sugerido pela sequência e pelo marco vazio. Uma sequência com tipos repetidos pode ter outras explicações. [não verificado]
+- **Borda [deduzido]:** dados insuficientes ou jornada incompleta impedem atribuição segura às demais classes. [não verificado]
+
+Essas regras não estabelecem uma precedência histórica entre sinais sobrepostos. Por exemplo, **col174 15/11** pode ser lido como horário diferente, e **col300 21/10** pode ser incluído no padrão noturno, embora só haja uma batida visível. Portanto, a distribuição seguinte é uma partição possível, não a única. [não verificado]
+
+| Classe aplicada | Dias | Pessoas | [nao verificado]
+|---|---:|---:|
+| Intervalo/rajada — RED | 7 | 3 |
+| Paridade noturna — deduzida | 42 | 11 |
+| Horário diferente — deduzido | 2 | 2 |
+| Tipo trocado — deduzido | 3 | 3 |
+| Borda — deduzida | 2 | 2 |
+| **Total** | **56** | **21** |
+
+### As 56 linhas
+
+Em todas as linhas, a classe é a aplicação acima; **exceto RED, ela é [deduzido] e a atribuição histórica é [não verificado]**. Os dados de cada motivo vêm da entrada correspondente em `parte_a_1811.out` transcrita na pergunta **[não verificado: sem arquivo:linha]**.
+
+| Col | Data | Classe | Motivo |
+|---|---|---|---|
+| col107 | 25/10 | Horário | A jornada observada começa às 07:01, enquanto a régua começa às 12:50. |
+| col174 | 15/11 | Paridade | A jornada atravessa a meia-noite e a régua noturna está vazia. |
+| col198 | 09/11 | Paridade | Há entrada na véspera e saída às 06:58 junto de S07:00 vazio. |
+| col220 | 11/11 | Tipo | A órfã 06:00 é E junto ao marco S06:00 vazio. |
+| col252 | 17/11 | RED | A volta 13:05E fica órfã junto a E13:38 após 12:50S. |
+| col252 | 13/11 | RED | A volta 12:49E fica órfã junto a E13:38 após 12:35S. |
+| col252 | 11/11 | RED | A volta 12:52E fica órfã junto a E13:38 após 12:39S. |
+| col252 | 10/11 | RED | A volta 12:52E fica órfã junto a E13:38 após 12:39S. |
+| col252 | 09/11 | RED | A volta 12:52E fica órfã junto a E13:38 após 12:38S. |
+| col300 | 21/10 | Borda | Só há 06:00S visível, insuficiente para identificar a jornada. |
+| col366 | 09/11 | Paridade | Entrada na véspera e três órfãs coincidem com marcos noturnos vazios. |
+| col366 | 05/11 | Paridade | Entrada na véspera e três órfãs coincidem com marcos noturnos vazios. |
+| col366 | 03/11 | Paridade | Entrada na véspera e três órfãs coincidem com marcos noturnos vazios. |
+| col366 | 30/10 | Paridade | Entrada na véspera e três órfãs coincidem com marcos noturnos vazios. |
+| col366 | 28/10 | Paridade | Entrada na véspera e três órfãs coincidem com marcos noturnos vazios. |
+| col369 | 12/11 | Tipo | Há duas saídas finais S e a saída de intervalo está órfã. |
+| col444 | 16/11 | RED | A saída 13:55S fica órfã junto a S13:00, seis minutos antes da volta. |
+| col451 | 12/11 | Paridade | A saída 07:02S fica órfã junto a S07:00 após entrada na véspera. |
+| col451 | 10/11 | Paridade | A saída 06:59S fica órfã junto a S07:00 após entrada na véspera. |
+| col489 | 10/11 | Horário | As batidas da véspera sugerem jornada 16:01–00:00 frente à régua exibida. |
+| col566 | 17/11 | Paridade | Entrada às 18:09 na véspera e saída 06:32S acompanham régua noturna vazia. |
+| col566 | 15/11 | Paridade | Entrada às 18:09 na véspera e saída 06:13S acompanham régua noturna vazia. |
+| col587 | 22/10 | Tipo | A sequência 17:58E, 18:57S e 19:03E sugere papéis E/S trocados. |
+| col670 | 14/11 | Borda | A entrada prevista está vazia e só três batidas aparecem no dia. |
+| col859 | 09/11 | Paridade | A saída 07:00S coincide com marco vazio após entrada na véspera. |
+| col868 | 17/11 | Paridade | A jornada atravessa a meia-noite e 06:49S está órfã junto a S07:00. |
+| col868 | 15/11 | Paridade | A jornada atravessa a meia-noite e 07:03S está órfã junto a S07:00. |
+| col868 | 13/11 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 11/11 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 07/11 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 05/11 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 03/11 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 01/11 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 30/10 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 28/10 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 26/10 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 24/10 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col868 | 22/10 | Paridade | Batidas noturnas ficam órfãs junto a marcos vazios após entrada na véspera. |
+| col876 | 07/11 | Paridade | A saída 06:55S fica órfã junto a S07:00 após entrada na véspera. |
+| col934 | 16/11 | Paridade | A saída 11:04S fica órfã após entrada às 22:58 na véspera. |
+| col934 | 14/11 | Paridade | A saída 11:00S fica órfã após entrada às 22:57 na véspera. |
+| col934 | 12/11 | Paridade | A saída 11:00S fica órfã após entrada às 23:01 na véspera. |
+| col934 | 10/11 | Paridade | A saída 11:09S fica órfã após entrada às 22:57 na véspera. |
+| col934 | 08/11 | Paridade | A saída 10:45S fica órfã após entrada às 23:00 na véspera. |
+| col964 | 28/10 | RED | A saída 11:35S fica órfã junto a S11:00, onze minutos antes da volta. |
+| col1017 | 17/11 | Paridade | A saída 05:57S fica órfã junto a S06:00 após entrada na véspera. |
+| col1017 | 15/11 | Paridade | A saída 05:58S fica órfã junto a S06:00 após entrada na véspera. |
+| col1017 | 13/11 | Paridade | A saída 05:59S fica órfã junto a S06:00 após entrada na véspera. |
+| col1017 | 11/11 | Paridade | A saída 05:59S fica órfã junto a S06:00 após entrada na véspera. |
+| col1017 | 09/11 | Paridade | A saída 06:00S fica órfã junto a S06:00 após entrada na véspera. |
+| col1017 | 07/11 | Paridade | A saída 06:00S fica órfã junto a S06:00 após entrada na véspera. |
+| col1017 | 05/11 | Paridade | A saída 05:59S fica órfã junto a S06:00 após entrada na véspera. |
+| col1031 | 17/11 | Paridade | A saída 06:55S fica órfã junto a S07:00 após entrada na véspera. |
+| col1031 | 15/11 | Paridade | Batidas 00:01E e 06:55S ficam órfãs junto a marcos noturnos vazios. |
+| col1031 | 13/11 | Paridade | A saída 06:52S fica órfã junto a S07:00 após entrada na véspera. |
+| col1031 | 11/11 | Paridade | Batidas 00:07E e 06:52S ficam órfãs junto a marcos noturnos vazios. |
+
+### Cruzamento e leitura da cura
+
+Dos **56 repetidos**, sete têm classe histórica identificável pela lista RED: col252 em 09, 10, 11, 13 e 17/11; col444 em 16/11; e col964 em 28/10. Para os outros **49**, a classe histórica individual é **[não verificado]**; a tabela acima apresenta hipóteses. Novos: **0**. [não verificado: anexos transcritos sem arquivo:linha]
+
+Há uma diferença relevante entre o critério descrito no brief e o código da cópia: a função protege quando a batida está a **até 90 minutos do próprio marco e a mais de 15 minutos da dona**; a guarda pode retirá-la quando essa proteção não se aplica, satisfeitas as demais condições. Isso permite retirada quando a distância à dona é até 15 minutos **ou** a distância ao próprio marco supera 90 minutos. Não demonstra, por si só, qual ramo executou em cada uma das sete linhas. [app/escala/utils.py:502](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502), [app/escala/utils.py:587](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:587), [app/escala/utils.py:654](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:654)
+
+As fotografias também mudaram em alguns detalhes: em col252 17/11 aparece a saída final 17:05S na parte A; em col587 22/10 a órfã 20:59 deixa de aparecer. Essas diferenças são observações entre sondas, não erros de leitura comprovados. [não verificado: anexos transcritos sem arquivo:linha]
+
+**rajada hoje: 7 dias** — entendida como sobreviventes da classe RED de 17/11, não como prova de sete rajadas verdadeiras. **erros de leitura: nenhum confirmado; pendentes de verificação estão os rótulos históricos individuais fora da RED e a procedência de cada órfã.** [não verificado]
+
+## 18/11 18:51 · sessao 2cf110dd395d · - · - · origem=Ronald (tmux)
+
+Cruzamento por colaborador e data: **56 já constavam da autópsia e 0 são novos** [não verificado: os anexos raspados não estão disponíveis como arquivos com numeração de linhas].
+
+Dos **37 casos RED** enumerados no brief, **7 permanecem**: col252 em 09, 10, 11, 13 e 17/11; col444 em 16/11; e col964 em 28/10 [não verificado: anexos raspados sem arquivo:linha].
+
+A implementação da cópia protege a batida quando ela está a até 90 minutos do marco próprio **e** a mais de 15 minutos da dona; a guarda atua quando essa proteção é falsa. Assim, a condição implementada permite atuação quando a distância ao marco é maior que 90 minutos **ou** a distância à dona é de até 15 minutos, divergindo do **e** registrado no brief ([utils.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502), [utils.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:589)). As fronteiras são testadas separadamente ([test_cirineu_nao_desfaz_o_papel.py](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:95)).
+
+As diferenças entre saídas incluem novas batidas em D+1, o fechamento de S17:00 de col252 em 17/11 e a ausência da segunda órfã de col587 em 22/10; essas diferenças não demonstram, por si, erro de leitura [não verificado: anexos raspados sem arquivo:linha].
+
+## 18/11 18:51 · sessao 12fbcde747c1 · - · - · origem=Ronald (tmux)
+
+A lista RED do brief contém exatamente 37 pares `(col, data)`. Destes, sete aparecem na amostra de 18/11: col252 em 09, 10, 11, 13 e 17/11; col444 em 16/11; e col964 em 28/10. Os sete envolvem três pessoas. A classificação histórica por linha das demais classes não está explicitada no dado fornecido. [não verificado]
+
+Uma partição possível dos 56 dias é: 42 de paridade noturna, sete estruturais, dois de horário diferente, três de tipo trocado e dois de borda. Essa partição é **deduzida e não única**; em particular, col174 em 15/11, col369 em 12/11 e col489 em 10/11 admitem interpretações concorrentes. [não verificado]
+
+Na cópia, a proteção exige simultaneamente distância de até 90 minutos ao próprio marco e distância maior que 15 minutos à dona; a guarda usa a negação dessa proteção. Assim, a exclusão pode ocorrer com distância maior que 90 minutos **ou** vizinhança de até 15 minutos, enquanto o brief descreve as duas condições combinadas. [app/escala/utils.py:502](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502), [app/escala/utils.py:589](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:589), [app/escala/utils.py:660](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:660); redação do brief fornecido [não verificado].
+
+## 18/11 18:51 · sessao d1a42be044ef · - · - · origem=Ronald (tmux)
+
+O brief identifica os 37 pares da classe estrutural pela lista RED, mas não registra a atribuição individual das outras classes. O código disponível usa outro esquema de classificação de órfãs; portanto, as demais atribuições históricas são inferências, não uma reprodução verificada. ([app/escala/orfa_classe.py:53](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/orfa_classe.py:53); anexo brief.md [não verificado])
+
+A interseção da lista RED com a sonda de 18/11 tem **7 dias**: col252 em 09, 10, 11, 13 e 17/11; col444 em 16/11; e col964 em 28/10. As distâncias entre as batidas do intervalo nesses casos variam de 6 a 15 minutos. (anexos brief.md e parte_a_1811.out [não verificado])
+
+Na cópia, a proteção exige simultaneamente distância ao próprio marco de até 90 minutos e distância à dona vizinha superior a 15 minutos; quando as demais condições da guarda se cumprem, sua negação permite retirar a batida se ela estiver a mais de 90 minutos do próprio marco **ou** a até 15 minutos da dona. Isso difere da conjunção descrita no brief. A execução efetiva da guarda em cada linha e o produtor da órfã permanecem [não verificado]. ([app/escala/utils.py:502](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:502), [app/escala/utils.py:587](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:587), [app/escala/utils.py:654](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/escala/utils.py:654); anexo brief.md [não verificado])
 
 ## 18/11 18:47 · sessao cec15d9ae23e · CURA-CHEGA-A-FROTA · sonda · origem=Code
 
@@ -1576,215 +2159,4 @@ def main():
 main()
 ```
 
-## 18/11 18:04 · sessao fe4e5fa9bae3 · B2B-RETAGUARDA-1811-1810 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — item 2:** a composição indicada não cobre toda pergunta em competência entregue; ela só consulta K6 para metades de intervalo. Além disso, a tela atual não usa o estado de bloqueio para esconder Rejeitar ou Conferir data. Isso precisa ser resolvido antes de executar o corte como proteção geral das três portas ([materializacao.py:804](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:804), [modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316), [modal_fio.html:163](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:163)).
-
-Para a contagem final, **PROCEDE** significa que a pergunta encontrou ao menos uma divergência ou condição que deve voltar para decisão; **NAO PROCEDE** significa que não encontrei essa divergência no material examinado. A contagem é por pergunta, uma vez por item.
-
-A tabela volta 8 e o aval B2B foram recebidos como texto raspado, sem arquivo local verificável nesta cópia; suas linhas de origem são **[nao verificado]**. O diretório fornecido também não contém metadados Git para reconfirmar o HEAD: **[nao verificado]**. As linhas abaixo são as desta cópia de código.
-
-### 1. Premissas, funções e estados
-
-**Item 2 — PROCEDE.** As portas existem, mas a premissa de que a composição indicada barra genericamente perguntas entregues não confere:
-
-- `entrega_que_barra_a_validacao` chama `_k6_que_barra` para a pergunta e eventual irmã ([validacao.py:209](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:209), trecho: `return _k6_que_barra(disputa.colaborador, (perg, irma))`). Porém `k6_consulta_a_pergunta` retorna verdadeiro apenas para `p.motivo in _PAR_DO_INTERVALO`; as demais são puladas ([materializacao.py:804](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:804), [materializacao.py:818](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:818)). Portanto, chamar essa composição não garante bloquear toda pergunta entregue, inclusive o aceite de folga quando seu motivo estiver fora desse conjunto.
-- `recusar_pergunta` verifica motivo, existência, validação, resposta e saída do fato; depois grava `recusa_motivo` e reabre para correção ([validacao.py:885](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:885), [validacao.py:898](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:898), trecho: `perg.save(update_fields=['recusa_motivo'])`, seguido de `reabrir_para_correcao` em [validacao.py:922](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:922)).
-- `conferir_data_do_fato` exige justificativa e divergência ainda não conferida, então grava `data_conferida_em/por` ([validacao.py:983](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:983), trecho: `p.save(update_fields=['data_conferida_em', 'data_conferida_por'])` em [validacao.py:998](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:998)).
-- `validar_pergunta` retorna antecipadamente para `_aceitar_a_folga` antes da consulta comum à composição ([validacao.py:711](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:711), trecho: `return _aceitar_a_folga(perg, autor, request)`; a consulta comum está em [validacao.py:740](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:740)). O aceite já carimba e fecha perguntas no ramo de folga existente, e no outro carimba antes de `declarar_dia` ([validacao.py:511](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:511), [validacao.py:545](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:545)).
-- `admin_encerra` exige motivo e delega ao fecho ([models.py:2106](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2106), trecho: `return self.fechar(... motivo=self.FECHOU_ADMIN_ENCERRA)`). O fecho trata esse motivo e desligamento no mesmo ramo de vivas ([models.py:2080](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2080)).
-- `responder_pergunta_disputa_core` valida e grava a resposta e a decisão; alguns escapes chamam materialização de ausência ([disputa_emissao.py:1439](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1439), [disputa_emissao.py:1527](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1527), [disputa_emissao.py:1560](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1560)). `declarar_hora_colab` pode reapontar a pergunta e depois chamar esse core ([declaracao_texto.py:371](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/declaracao_texto.py:371), [declaracao_texto.py:420](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/declaracao_texto.py:420)).
-
-**Item 4 — NAO PROCEDE** como achado de premissa falsa: o estado existe e pode ser lido, com alcance condicionado. É um **estado derivado de aplicação**, não uma marca de recusa gravada na pergunta: a testemunha chama a mesma composição e devolve `{'estado': _entregue[0], 'detalhe': _entregue[1]}` ([materializacao.py:892](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:892)). Ela só chega a essa derivação para resposta tipo hora, respondida e não materializada, após os atalhos de recusa ([materializacao.py:875](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:875)).
-
-### 2. Colisão com aval ou lei vigente
-
-**Item 2 — NAO PROCEDE**, quanto a colisão direta demonstrada. O registro vigente de 17/11 deixa as seis portas sem obra “**ate corte do Ronald**”; o item 2 fornecido é apresentado como esse corte posterior ([CORTES.md:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:556); texto do novo aval: **[nao verificado]**, pois fornecido no enunciado). O mesmo registro confirma para a tranca: “a disputa FECHA” e a pergunta entregue da cadeia S144 “nao e gravada e conta” ([CORTES.md:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:556)).
-
-A cerca atual é no-op fora de ato cercado: trecho `if estado is None: return` ([fio.py:1402](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/fio.py:1402)). A regra própria sem abrir cerca é compatível com essa distinção. A tabela fornecida registra, contudo, que o alcance de coletor herdado sobre desligamento e cadastro ainda está **a demonstrar**; tratar R4 como provada em todos os contextos seria **[nao verificado]**.
-
-**Item 4 — NAO PROCEDE.** A leitura pedida não altera as portas nem contradiz o registro que as mantém sem obra ([CORTES.md:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/CORTES.md:556)). A L-004 exige parar quando condição literal não fecha ([LEIS.md:62](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:62)).
-
-### 3. Condições literais, ordem e tela
-
-**Item 2 — PROCEDE**, por três condições que não fecham automaticamente:
-
-1. **Cobertura da composição.** A mesma função de validar tem o filtro de motivo descrito na pergunta 1. Acrescentá-la às três portas, sem mudar seu universo, deixa passar perguntas fora de `_PAR_DO_INTERVALO` mesmo que sua competência esteja entregue ([materializacao.py:804](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:804)).
-2. **“Mesmo estado”.** A composição distingue dois fatos: para ausência de dia retorna `BLOQUEADA_SEM_DIA_DO_FATO`; para entregue, `BLOQUEADA_COMPETENCIA_ENTREGUE` ([materializacao.py:821](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:821)). A porta de validar preserva essa distinção: trecho `if barra[0] == BLOQUEADA_SEM_DIA_DO_FATO` ([validacao.py:228](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:228)). O literal “recusam com o MESMO estado bloqueada_competencia_entregue” precisa dizer como tratar o resultado sem dia.
-3. **Testemunha e botões.** Hoje o estado é calculado na leitura, não gravado pelo retorno da porta ([materializacao.py:901](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:901)). No card, a condição do estado esconde Validar, mas o formulário Rejeitar vem depois desse bloco ([\_pergunta_card.html:42](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:42), [\_pergunta_card.html:117](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:117)). No modal, Rejeitar e Corrigir dependem de `not perg.em_disputa_fechada`, enquanto Conferir data depende de divergência, ausência de conferência e permissão; nenhum desses testes consulta o bloqueio de competência ([modal_fio.html:163](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:163), [modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316)). Logo, será necessário definir a testemunha e o alcance por botão, inclusive para casos fora do universo atual dela.
-
-A ordem das escritas também importa: em recusar, a guarda precisa anteceder o `save` **e** a reabertura; em conferir, o `save`; em folga, os carimbos e a declaração, inclusive o ramo de folga já existente ([validacao.py:920](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:920), [validacao.py:996](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:996), [validacao.py:511](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:511), [validacao.py:551](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:551)). No fecho administrativo, as vivas são tratadas antes do `save` da disputa, que aciona S144 ([models.py:2080](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2080), [models.py:2099](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2099), [signals.py:150](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/signals.py:150)).
-
-**Item 4 — NAO PROCEDE** quanto à condição “nenhuma ação disponível” como conclusão geral. A resposta depende da tela e dos demais atributos:
-
-- **Card:** para respondida, não validada e `pode_agir`, mostra resposta e detalhe; o bloqueio esconde Validar, mas o formulário Rejeitar permanece ([\_pergunta_card.html:29](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:29), [\_pergunta_card.html:42](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:42), [\_pergunta_card.html:117](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/_pergunta_card.html:117)).
-- **Modal do fio:** mostra resposta e, nos blocos correspondentes, o detalhe; esconde Validar no estado entregue. Se a disputa não estiver fechada, oferece Rejeitar e, para tipo hora, Corrigir. Se houver divergência não conferida e permissão, oferece Conferir data ([modal_fio.html:217](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:217), [modal_fio.html:274](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:274), [modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316), [modal_fio.html:163](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:163)).
-- **Lista do chamado:** seleciona perguntas vivas de uma disputa aberta; o estado entregue, por si, não é o filtro de inclusão ([acoes_chamado.py:345](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/acoes_chamado.py:345), trecho: `[_p for _p in _todas_perg if _viva(_p)]`).
-- **Pauta DP identificada no código:** o contador coloca `pk` e competência no balde de entregue; o comando monta linhas `pk, colNNN, competencia` ([materializacao.py:342](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/materializacao.py:342), [bug_par_103.py:143](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/management/commands/bug_par_103.py:143)). Uma tela operacional adicional dessa pauta e suas ações são **[nao verificado]**.
-
-Há situações em que o modal retira Rejeitar e Corrigir por disputa fechada; se sobra outra saída utilizável em cada caso concreto é **[nao verificado]**. Após o corte proposto para Rejeitar e Conferir, a existência de saída para todo supervisor também é **[nao verificado]**; a condição de espera do item 4 deve ser avaliada por tela e estado, sem presumir que Corrigir resolve todos os casos ([modal_fio.html:316](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/templates/chamados/partials/modal_fio.html:316)).
-
-### 4. Exportada, dinheiro ou `!` fora do declarado
-
-**Item 2 — NAO PROCEDE** quanto a toque adicional demonstrado. O objeto declarado é precisamente escrita de pergunta em competência entregue **[nao verificado: aval fornecido no enunciado]**. K6 consulta a existência de TXT vigente por empresa e competência ([export.py:556](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/folha/export.py:556)). O aceite de folga hoje declara dia e pede recálculo de fechamento, portanto tem efeito indireto potencial sobre a folha ([validacao.py:551](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:551), [validacao.py:585](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:585)); efeito monetário concreto e impacto de frota são **[nao verificado]**. A lei distingue apply de dinheiro e exige examinar seu alcance ([LEIS.md:67](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:67)). Não há execução ou alteração de dado neste trabalho.
-
-**Item 4 — NAO PROCEDE.** O item solicita leitura; não encontrei nele instrução de aplicar alteração de competência ou dinheiro **[nao verificado: aval fornecido no enunciado]**. Valores, pessoas e quantidades em produção são **[nao verificado]**.
-
-REVISAO item 2: PROCEDE 2 / NAO PROCEDE 2.  
-REVISAO item 4: PROCEDE 0 / NAO PROCEDE 4.
-
-## 18/11 17:59 · sessao b83f2b7c7015 · RESPOSTAS-1811-1800 · verificador · origem=Code
-
-1. **Premissas — PROCEDE parcialmente; a medida não foi verificável.**
-
-   - O padrão está nomeado: [PLANO-PADROES.md:33](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/PLANO-PADROES.md:33) diz “*projection rebuild* / *read model replay* (CQRS)”; [GLOSSARIO.md:24](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/GLOSSARIO.md:24), “CQRS com projecoes reconstruiveis”.
-   - As três entidades têm campos de estado: `status_local` em [models.py:58](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:58), `fechada_em` em [models.py:1894](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1894) e `validada_em` em [models.py:2636](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2636). Há múltiplos caminhos de gravação: criação e transição do chamado em [models.py:1154](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:1154) e [models.py:234](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:234); fechamento e reabertura da disputa em [models.py:2095](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2095) e [models.py:2312](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:2312); carimbo individual e retirada em lote da pergunta em [models.py:3324](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3324) e [models.py:3485](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/models.py:3485). Isso não constitui censo completo de escritores. [não verificado]
-   - `E4D-ATO-DE-CONCLUSAO` consta no [BACKLOG.md:2015](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2015): “choice de ato de conclusao em DecisaoPergunta + escritor unico materializacao.py”. As seis exceções constam em [BACKLOG.md:2095](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2095), [2096](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2096), [2097](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2097), [2098](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2098), [2099](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2099) e [2100](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2100), cada uma com “a projecao segue fonte lida”.
-   - “1588 leituras nao cobertas (1336 fora do dono)” aparece no item 3 raspado, mas `logs/PRE-MAPA-E4D/` não está disponível nesta cópia. **A contagem e sua classificação na fonte: [não verificado].** O anexo foi fornecido no texto da pergunta, sem arquivo:linha verificável. [não verificado]
-
-2. **Colisão com aval vigente — PROCEDE.** O item 3 raspado diz que substitui “SO a clausula ‘E4d CONTRACT’”, mas também diz “O selo 2 do aval de 09/11 passa a ser dois” e mantém “E4c”. O anexo de 09/11 situa o selo 2 em **E4c**: “nenhum leitor le campo abolido”; o novo selo (b) diz “nenhum juiz registrado le coluna projetada”, enquanto tela, filtro e relatório podem lê-la. Há, portanto, alteração expressa de uma condição situada fora da cláusula E4d, apesar da delimitação “SO” e de “NAO muda: E4c”. Os literais dos dois anexos vêm do texto fornecido; seus arquivo:linha são [não verificado].
-
-   O pré-mapa raspado também descreve “E4d = PARAR A PROJECAO” e pede uma matriz do que se grava depois. A mudança de regra torna esse contexto desatualizado; o texto fornecido não esclarece uma retificação do pré-mapa. [não verificado: arquivo:linha dos anexos] A ordem da CLASSE-D antes da E4d continua declarada no item 4 raspado e é compatível com [BACKLOG.md:2027](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2027), “CLASSE-D-NA-FRENTE-DA-E4D”.
-
-3. **Condições que não fecham no literal — PROCEDE.**
-
-   - O item 3 exige “Juiz registrado [...] le o ATO [...] nunca a coluna”, mas conserva as seis exceções “com a projecao como fonte lida ate o fato proprio”. O texto não delimita como o selo (b), “nenhum juiz registrado le coluna projetada”, convive com um juiz que precise de uma dessas fontes excepcionadas. [não verificado: arquivo:linha do anexo] Hoje há leitura concreta de coluna por juiz registrado: [core/juizes.py:291](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/core/juizes.py:291) registra `pergunta_viva`; seu cálculo usa `projecao_temporal_da_pergunta` em [chamados/juizes.py:1404](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1404), que lê `p.validada_em`, `p.respondida_em` e `p.materializada_em` em [chamados/juizes.py:1389](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/juizes.py:1389). Isso prova o estado atual, não que a condição futura seja impossível. [não verificado]
-   - “Coluna reconstruida dos atos == coluna gravada, por linha, frota inteira” não define como reconstruir os estados das seis exceções antes de existir o fato próprio. [não verificado: arquivo:linha do anexo] O [BACKLOG.md:2095](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2095) descreve A03 como “reabrir_admin sem DP proprio da reabertura”; para A20, [BACKLOG.md:2100](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2100) diz “fato proprio para conferencia de data”.
-   - Há chamadas de registro de decisão em vários sítios, por exemplo [validacao.py:173](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/validacao.py:173) e [disputa_emissao.py:1532](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/chamados/services/disputa_emissao.py:1532). Isso exige demonstrar que **cada caminho** chama o único projetor na transação do ato; vários sítios, por si só, não provam impossibilidade. A matriz e a prova transacional futura são [não verificado].
-
-4. **Exportada, dinheiro ou `!` fora do declarado — NAO PROCEDE quanto ao toque autorizado agora.** O item 3 diz “L-092” não muda; o R5/26 diz “o projetor nao regrava linha de competencia entregue sem ! meu”, e o texto proíbe “tocar competencia entregue”. O item 5 condiciona construção a aval próprio. Esses literais são do anexo raspado, sem arquivo:linha verificável. [não verificado] A proteção é relevante também para o ato de conclusão: [BACKLOG.md:2015](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/BACKLOG.md:2015) exige “`!` se alcancar exportada”; [LEIS.md:155](/home/ronald/codex_ws/c8b6d1ec25acb4ea1b921c37558f95021cc99cc2/app/docs/LEIS.md:155) registra a alteração da L-092 pela L-113 e preserva a versão anterior do TXT e a trilha. Impacto futuro sobre dinheiro ou linhas efetivas de produção: [não verificado].
-
-REVISAO item 3: PROCEDE 3 / NAO PROCEDE 1.
-
-## 18/11 17:55 · sessao 987e32e7bb2f · ESCALA-NAO-DESCREVE · censo · origem=Code
-
-**1. BLOQUEIA — classe (a)**
-
-- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “selo/RED sem mordida (os testes de escala/tests/test_escala_nao_descreve.py mordem? quais passariam com a cura removida?)” [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “Os testes R1–R7 exercitam resultados concretos e, por inspeção, removendo suas respectivas curas centrais falhariam”; “mutações e execução dos testes: **[não verificado]**.” [app/escala/tests/test_escala_nao_descreve.py:85](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_escala_nao_descreve.py:85).
-
-**2. FILA, LEI-AKITA — classe (a)**
-
-- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “Qual seria o rotulo honesto de "juizes novos" na linha LEI-AKITA?” [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “O rótulo honesto é `juizes novos=folga_trabalhada_no_6x1, botao_da_proposta (inclui duplicação da classificação cíclica)`, não `0`.” [app/escala/services/cadastro_realidade.py:788](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/services/cadastro_realidade.py:788).
-- Triagem — `logs/ESCALA-NAO-DESCREVE/v2/triagem.md`: “rotulo juizes novos=0: PROCEDENTE -> corrigido no c3 (botao_da_proposta, folga_trabalhada_no_6x1).” [não verificado: linha do anexo].
-
-**3. FILA, segundo juiz cíclico herdado — classe (a)**
-
-- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “Algum deles duplica uma decisao que ja tem autoridade (core/juizes.py, JUIZES.md, a porta `regua_defesa.realocar_vinculo_para_destino`, `colaboradores/services/vinculo.py::julgar_vinculo`, `acao()`, Plano de Folgas)?” [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “O botão decide se o destino é cíclico pela fotografia `proposta.ciclo`, enquanto a porta consulta o `TipoEscala` atual”; nenhum trecho identifica a tupla manual como outro juiz. [app/escala/regua_defesa.py:310](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/regua_defesa.py:310), [não verificado: linha do anexo].
-
-**4. FILA, R5 não chega à porta — classe (a)**
-
-- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “selo/RED sem mordida (os testes de escala/tests/test_escala_nao_descreve.py mordem? quais passariam com a cura removida?)” [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “Os testes R1–R7 exercitam resultados concretos e, por inspeção, removendo suas respectivas curas centrais falhariam”; “mutações e execução dos testes: **[não verificado]**.” [app/escala/tests/test_escala_nao_descreve.py:194](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_escala_nao_descreve.py:194).
-
-**5. FILA, R4 não confere `h.de` — classe (a)**
-
-- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “Trilha: o `!` pede quem, antes/depois, motivo. Onde cada um e gravado (arquivo:linha) e algum fica em branco?”; “os testes de escala/tests/test_escala_nao_descreve.py mordem? quais passariam com a cura removida?” [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “`registrado_por` recebe o usuário, `de` e `para` recebem fotografias textuais”; “Os testes R1–R7 exercitam resultados concretos e, por inspeção, removendo suas respectivas curas centrais falhariam”. [app/colaboradores/services/vinculo.py:182](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/colaboradores/services/vinculo.py:182), [app/escala/tests/test_escala_nao_descreve.py:194](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_escala_nao_descreve.py:194).
-
-**6. FILA, lavra vencida — sem classe compatível**
-
-- Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “lavra velha (sem as chaves novas), lavra de outro dia: o que acontece em cada um?” [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “Lavra antiga sem proposta é recusada; lavra de outro dia é aceita sem teste de idade.” [app/ponto/services/esmeril_espelho.py:369](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/ponto/services/esmeril_espelho.py:369).
-- Triagem: nenhum descarte desse achado no anexo fornecido. [não verificado: linha do anexo].
-
-**7. FILA, literal do aval — classe (e)**
-
-- Pergunta sobre a divergência literal do aval para `ciclo` ou sobre o destino do link para o wizard: nenhum. [não verificado: linha do anexo].
-- Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver2.r`: “`anomalias_da_frota` escreve o mapa sem `ciclo`; `lista` e a view de aplicação o leem”. [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/4536fe1615991f3d4bc4e75cd3b37f346ed997d3/app/ponto/services/esmeril_espelho.py:241).
-
-**8. FILA, rótulo do selo e citação L-042**
-
-- **Rótulo do selo — classe (a).**
-  - Pergunta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`: “O template mudou de `postos` para `linhas`: algum selo de front, contador `data-contador` ou teste que dependia de `data-posto` ou do agrupamento?” [não verificado: linha do anexo].
-  - Resposta — `logs/ESCALA-NAO-DESCREVE/v2/ver1.r`: “O selo antigo de agrupamento só procura o nome do posto e continua passando com o posto como coluna”; nenhum trecho identifica a citação do selo em LEIS.md. [app/escala/tests/test_cadastro_x_realidade.py:53](/home/ronald/codex_ws/106920782c9521af2545f0b31fffeec0398eae56/app/escala/tests/test_cadastro_x_realidade.py:53), [não verificado: linha do anexo].
-- **Citação L-042 — classe (e).**
-  - Pergunta sobre a ausência da citação L-042 no LEI-PROTEGE-SITIO: nenhum. [não verificado: linha do anexo].
-  - Resposta sobre essa ausência: nenhum. [não verificado: linha do anexo].
-
-| Achado | Classe | Arquivo |
-|---|---|---|
-| 1. Mutante R1 sobrevive | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
-| 2. LEI-AKITA | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r`, `triagem.md` |
-| 3. Juiz cíclico herdado | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
-| 4. R5 não chega à porta | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
-| 5. R4 não confere `h.de` | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
-| 6. Lavra vencida | Sem classe compatível | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r`, `triagem.md` |
-| 7. Literal do aval | (e) | `logs/ESCALA-NAO-DESCREVE/v2/ver2.r` |
-| 8. Rótulo do selo | (a) | `logs/ESCALA-NAO-DESCREVE/v2/ver1.q`, `ver1.r` |
-| 8. Citação L-042 | (e) | nenhum |
-
-## 18/11 17:54 · sessao b8ce844dad6a · E4C-F6F7 · construtor · origem=Code
-
-Criei o [teste do caso pela regra](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:16), sem alterar produção. Ele compara os três leitores para V, VR-mantém e VR-não-mantém e verifica duas cargas e ordens de leitura ([teste:68](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:68)). [nao verificado]
-
-Comando e saída do teste sem banco: [nao verificado]
-
-```text
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c13_caso_pela_regra -v
-
-Ran 1 test in 0.109s
-OK
-rc=0
-```
-
-O mutante que troca o `while` de [tarefa_do_dia.py:164](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:164) por `while False:` foi mordido **em memória**: o teste falhou na igualdade VR-mantém == V ([teste:78](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:78)), com `FAILED (failures=1)`, **rc=1**. Para reproduzir: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import unittest
-from pathlib import Path
-from chamados.tests.e4_catracas import FONTES_MUTADAS
-
-caminho = 'chamados/services/tarefa_do_dia.py'
-fonte = Path(caminho).read_text()
-original = 'while k and decisoes[k - 1].ato == D.RESPOSTA and decisoes[k - 1].resposta_mantem_validacao:'
-assert fonte.count(original) == 1
-FONTES_MUTADAS[caminho] = fonte.replace(original, 'while False:')
-suite = unittest.defaultTestLoader.loadTestsFromName( [nao verificado]
-    'chamados.tests.test_e4c_f6f7_c13_caso_pela_regra')
-resultado = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
-raise SystemExit(not resultado.wasSuccessful())
-PY
-```
-
-A execução solicitada sobre uma cópia em `$TMPDIR` ficou **incompleta**: `mktemp` retornou `Read-only file system`, rc=1, antes da cópia. O resultado em memória não substitui essa execução solicitada.
-
-**LEI-AKITA:** origem=n/a (caso pela regra, sem cura); testemunha=tarefa_do_dia/porta_da_tarefa/fio do fora_da_folha; RED=[teste](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c13_caso_pela_regra.py:16); quem-mais-lê=[face por pergunta](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:449); juízes novos=0; padrão=n/a (instrumento). [nao verificado]
-
-## 18/11 17:54 · sessao cc604205c6d5 · E4C-F6F7 · censo · origem=Code
-
-1. **BLOQUEIA — classe (a).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Para cada campo/funcao listado em quem_escreve_le.txt: QUEM ESCREVE e QUEM LE no HEAD; todos supoem o mesmo significado?”
-
-   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “`_pela_decisao` também é chamado dentro da tarefa por dia; a porta publicada é lida, entre outros, por Folha, vigia e beco.” Trecho sobre troca de grupo de retenção ou medida de frota: **nenhum**.
-
-2. **BLOQUEIA — classe (a).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Para cada campo/funcao listado em quem_escreve_le.txt: QUEM ESCREVE e QUEM LE no HEAD”.
-
-   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “o contador pergunta ao mesmo predicado de correspondência do backfill se falta o ato no mesmo instante.” Trecho sobre ausência de chamador de produção: **nenhum**.
-
-3. **FILA — classe (a).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Em _pela_decisao, o laco sobre RESPOSTA com resposta_mantem_validacao: ha sequencia […] em que a escolha do ultimo ato fica errada?”
-
-   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “o laço de resposta que mantém validação não cobre interrupções da sequência.” Trecho sobre `SILENCIO/ABSORCAO/RETRATACAO` e o predicado `_resposta_desfaz_validacao`: **nenhum**.
-
-4. **FILA — classe (a).** Pergunta, `logs/E4C-F6F7/codex_c7/construtor_c10.q` [linha não verificada]: “os selos aceitam `perguntas = []` (ou qualquer reatribuicao/mutacao de `perguntas`) entre a leitura de ['pendentes'] e o uso de `perguntas` na resposta”.
-
-   Resposta, `logs/E4C-F6F7/codex_c7/construtor_c10.r` [linha não verificada]: “A detecção de mutação indireta por aliases ou por funções chamadas com `perguntas` é **[não verificado]**”. Trecho com os quatro mutantes sobreviventes: **nenhum**.
-
-5. **FILA — classe (e).** Pergunta: **nenhum** [não verificado]. Resposta: **nenhum** [não verificado].
-
-6. **FILA — classe (c).** Pergunta, `logs/E4C-F6F7/codex/q1.txt` [linha não verificada]: “Os testes (RED c1 + contador) mordem o defeito, ou passam com ele? Aponte teste sem mordida.”
-
-   Resposta, `logs/E4C-F6F7/codex/r1.txt` [linha não verificada]: “O teste de passivo U4 só verifica o caso cujo conservado é `True`: uma implementação que devolvesse sempre `True` para passivo passaria nesse teste.” Trecho sobre o `ERROR` da fixture `DecisaoImutavel`: **nenhum**.
-
-| Achado | Classe | Arquivo |
-|---|---|---|
-| 1 | (a) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
-| 2 | (a) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
-| 3 | (a) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
-| 4 | (a) | `logs/E4C-F6F7/codex_c7/construtor_c10.q`, `construtor_c10.r` |
-| 5 | (e) | nenhum [não verificado] |
-| 6 | (c) | `logs/E4C-F6F7/codex/q1.txt`, `r1.txt` |
-
-_7090 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7095 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
