@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **17/11/2026 23:26** · publicado em **17/11/2026 23:26** (UTC-3)
+> Ultima resposta processada: **17/11/2026 23:28** · publicado em **17/11/2026 23:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 17/11 23:28 · sessao b3d2225e0b94 · E4C-F1-B2 · censo · origem=Code
+
+O censo confirma a falha do cadastro S06 e uma imprecisão no brief sobre a docstring de R4b. A lista completa de leitores de `data_evento`, a competência dos cenários sem dia e a condição segura para eliminar cada savepoint continuam [não verificado]. O hash do HEAD também está [não verificado]: a cópia não contém metadados Git.
+
+## 1. Escritores, leitores e cerca
+
+**Portas e chamadores.**
+
+- `vigiar_escrita_de_perguntas` é chamada pelo `save` de pergunta existente e por `descarimbar_em_lote`; o `save` de inserção não passa pela vigia. [app/chamados/models.py:3399](app/chamados/models.py:3399), [app/chamados/models.py:3562](app/chamados/models.py:3562).
+- `executar_sob_cerca` é chamada por `retratar_com_motivo`, `reatar_pergunta_orfa` no HIST, `fechar_beco` e `resolver_perguntas_por_chamado_resolvido`. Sem cerca externa, entra no `atomic` **antes** de executar o corpo, mesmo que ele não grave pergunta; se já houver cerca, executa no escopo externo, sem novo savepoint. [app/chamados/reconciliador.py:553](app/chamados/reconciliador.py:553), [app/chamados/reconciliador.py:1701](app/chamados/reconciliador.py:1701), [app/chamados/services/becos.py:66](app/chamados/services/becos.py:66), [app/chamados/services/disputa_emissao.py:1912](app/chamados/services/disputa_emissao.py:1912), [app/chamados/services/fio.py:1433](app/chamados/services/fio.py:1433).
+- Em cada chamador, o corpo pode acabar sem escrita de pergunta: a retratação pode ter a transição recusada; a costura HIST pode ser recusada; o beco pode não fechar; e o resolver pode não encontrar pergunta para carimbar. Há saídas anteriores à cerca para retenção da retratação e para resolver por competência trancada. [app/chamados/reconciliador.py:538](app/chamados/reconciliador.py:538), [app/chamados/reconciliador.py:563](app/chamados/reconciliador.py:563), [app/chamados/reconciliador.py:1690](app/chamados/reconciliador.py:1690), [app/chamados/services/becos.py:55](app/chamados/services/becos.py:55), [app/chamados/services/disputa_emissao.py:1899](app/chamados/services/disputa_emissao.py:1899), [app/chamados/services/disputa_emissao.py:1942](app/chamados/services/disputa_emissao.py:1942).
+- `veto_de_competencia` é chamado pela vigia, por `rechavear_no_reuso`, pelo backfill de decisões e pelo migrador de dia. Retorna `None` se algum dia for `None`; a vigia veta qualquer resultado diferente de `False`. [app/chamados/services/fio.py:1358](app/chamados/services/fio.py:1358), [app/chamados/services/fio.py:1117](app/chamados/services/fio.py:1117), [app/chamados/services/fio.py:1418](app/chamados/services/fio.py:1418), [app/chamados/management/commands/backfill_decisoes_pergunta.py:256](app/chamados/management/commands/backfill_decisoes_pergunta.py:256), [app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:319](app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:319).
+
+**`PerguntaDisputa.data_evento`.**
+
+- A atribuição explícita central é `gravar_dia_do_fato`; o nascimento a chama antes do `save(force_insert=True)`, a costura a usa para datar uma pergunta sem dia, e o rechaveamento a usa antes do `save`. As atribuições de `None` na costura restauram o objeto em memória nos ramos de recusa. [app/chamados/services/fio.py:839](app/chamados/services/fio.py:839), [app/chamados/models.py:3131](app/chamados/models.py:3131), [app/chamados/services/fio.py:916](app/chamados/services/fio.py:916), [app/chamados/services/fio.py:946](app/chamados/services/fio.py:946), [app/chamados/services/fio.py:961](app/chamados/services/fio.py:961), [app/chamados/services/fio.py:976](app/chamados/services/fio.py:976), [app/chamados/services/fio.py:1086](app/chamados/services/fio.py:1086).
+- `descarimbar_em_lote` faz `update` com `**outros` e não proíbe esse campo na assinatura; a existência dessa capacidade não demonstra uma chamada de produção que o altere. O `bulk_update` da lavra lista somente os três campos de lavra. **Censo completo de chamadas indiretas de update/bulk com `data_evento`: [não verificado].** [app/chamados/models.py:3371](app/chamados/models.py:3371), [app/chamados/models.py:3404](app/chamados/models.py:3404), [app/chamados/veredito_lavrado.py:237](app/chamados/veredito_lavrado.py:237), [app/chamados/veredito_lavrado.py:250](app/chamados/veredito_lavrado.py:250).
+- `abrir` recusa dia `None`; `abrir_conversa` grava o dia civil; o emissor pula pergunta de hora sem dia e usa a porta de conversa para os demais casos sem dia. Contudo, o campo é nulo e o `save` genérico de inserção não exige dia: a impossibilidade de **todo** caminho de produção criar uma não-conversa nula é [não verificado]. [app/chamados/models.py:2536](app/chamados/models.py:2536), [app/chamados/models.py:2900](app/chamados/models.py:2900), [app/chamados/models.py:2907](app/chamados/models.py:2907), [app/chamados/models.py:3561](app/chamados/models.py:3561), [app/chamados/services/disputa_emissao.py:430](app/chamados/services/disputa_emissao.py:430).
+- O dado raspado informa zero perguntas não-conversa com dia nulo na sonda indicada; a consulta e seu universo não foram disponibilizados com linha verificável. [não verificado].
+- Para decidir o dia, `_dia_de_turno_da_pergunta` devolve o campo para não-conversa e `None` para conversa; a vigia lê esse valor projetado **e** o dia anteriormente gravado. Outros leitores identificados incluem os julgamentos em `juizes.py`, o fecho, a tranca e a materialização. **Lista completa de leitores: [não verificado].** [app/chamados/juizes.py:338](app/chamados/juizes.py:338), [app/chamados/juizes.py:694](app/chamados/juizes.py:694), [app/chamados/services/fio.py:1403](app/chamados/services/fio.py:1403), [app/chamados/services/fecho_runtime.py:120](app/chamados/services/fecho_runtime.py:120), [app/chamados/services/competencia_trancada.py:141](app/chamados/services/competencia_trancada.py:141), [app/chamados/services/materializacao.py:613](app/chamados/services/materializacao.py:613).
+
+**Retratação e instrumento.**
+
+- `_retratar` delega a `retratar_com_motivo`; é chamada pela entrada pública `retratar` e internamente no reconciliador. `retratar_com_motivo` também é chamada por geofence e pelo comando de fantasmas; ela cerca `_ato_da_retratacao`, onde está a chamada a `transicionar_com_pauta`. [app/chamados/reconciliador.py:517](app/chamados/reconciliador.py:517), [app/chamados/reconciliador.py:588](app/chamados/reconciliador.py:588), [app/chamados/reconciliador.py:1048](app/chamados/reconciliador.py:1048), [app/chamados/reconciliador.py:1509](app/chamados/reconciliador.py:1509), [app/ponto/services/geofence.py:444](app/ponto/services/geofence.py:444), [app/ponto/management/commands/reconciliar_fantasmas.py:281](app/ponto/management/commands/reconciliar_fantasmas.py:281), [app/chamados/reconciliador.py:553](app/chamados/reconciliador.py:553), [app/chamados/reconciliador.py:563](app/chamados/reconciliador.py:563).
+- Em cada sítio, o instrumento procura a chamada `novo` pela função, texto e ordinal, exige ausência de erro e presença da porta; no ensaio de mutantes, substitui `novo` por `original` e exige falha somente no sítio alvo. S06 ainda procura em `_retratar`, embora a chamada esteja em `_ato_da_retratacao`; o mutante cadastrado troca a porta por `ch.reconciliar()`. [app/chamados/tests/e4b_c12_sitios.json:43](app/chamados/tests/e4b_c12_sitios.json:43), [app/chamados/tests/e4b_c12_verificar.py:84](app/chamados/tests/e4b_c12_verificar.py:84), [app/chamados/tests/e4b_c12_verificar.py:95](app/chamados/tests/e4b_c12_verificar.py:95), [app/chamados/tests/e4b_c12_verificar.py:197](app/chamados/tests/e4b_c12_verificar.py:197), [app/chamados/tests/test_e4b_c12_selo.py:22](app/chamados/tests/test_e4b_c12_selo.py:22).
+
+## 2. Os 18 testes [nao verificado]
+
+| Caso | Fixture e dia da pergunta | Competência do cenário |
+|---|---|---|
+| 1–2. `RED_a_reatar_HIST` e `MORDE_fecho_antigo` | `_caso_a` usa `_p`, que grava `data_evento=dia`. [test_e1_fila_v2_2_integracao.py:57](app/chamados/tests/test_e1_fila_v2_2_integracao.py:57), [test_e1_fila_v2_2_integracao.py:87](app/chamados/tests/test_e1_fila_v2_2_integracao.py:87) | **Entregue simulada por mock**, não exportação comprovada na fixture. [test_e1_fila_v2_2_integracao.py:96](app/chamados/tests/test_e1_fila_v2_2_integracao.py:96) |
+| 3. `R4b_viva_com_encerrado` | `_cenario` grava o dia na pergunta. [test_o261_c_viva_sem_chamado_do_dia.py:74](app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:74), [test_o261_c_viva_sem_chamado_do_dia.py:110](app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:110) | **Exportada**: cria exportação para a janela e usa `DIA_EXPORTADO`. [test_o261_c_viva_sem_chamado_do_dia.py:101](app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:101), [test_o261_c_viva_sem_chamado_do_dia.py:312](app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:312) |
+| 4–5. O168, conversa validada e sem conversa | `_disputa` cria a pergunta sem `data_evento`. [test_o168_pai_com_conversa_no_gate.py:42](app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:42), [test_o168_pai_com_conversa_no_gate.py:108](app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:108), [test_o168_pai_com_conversa_no_gate.py:213](app/chamados/tests/test_o168_pai_com_conversa_no_gate.py:213) | Dia gravado indecidível; competência do dia contextual: [não verificado]. [app/chamados/services/fio.py:1403](app/chamados/services/fio.py:1403) |
+| 6–9. PEP, controle S143 e três casos em voo | `_disputa` cria P sem dia; os cenários com irmã também a criam sem dia. [test_pep_reentrada.py:44](app/chamados/tests/test_pep_reentrada.py:44), [test_pep_reentrada.py:230](app/chamados/tests/test_pep_reentrada.py:230), [test_pep_reentrada.py:245](app/chamados/tests/test_pep_reentrada.py:245), [test_pep_reentrada.py:264](app/chamados/tests/test_pep_reentrada.py:264), [test_pep_reentrada.py:278](app/chamados/tests/test_pep_reentrada.py:278), [test_pep_reentrada.py:305](app/chamados/tests/test_pep_reentrada.py:305), [test_pep_reentrada.py:308](app/chamados/tests/test_pep_reentrada.py:308) | Dia gravado indecidível; competência do dia contextual: [não verificado]. [app/chamados/services/fio.py:1403](app/chamados/services/fio.py:1403) |
+| 10. `s128_segue_carimbando_a_nao_respondida` | `_pergunta` não grava dia; o teste associa célula de 20/05/2026, enquanto o contexto usa outra expressão de data. [test_resposta_nao_e_fantasma.py:38](app/chamados/tests/test_resposta_nao_e_fantasma.py:38), [test_resposta_nao_e_fantasma.py:49](app/chamados/tests/test_resposta_nao_e_fantasma.py:49), [test_resposta_nao_e_fantasma.py:102](app/chamados/tests/test_resposta_nao_e_fantasma.py:102) | Dia gravado indecidível; competência da célula e do contexto: [não verificado]. |
+| 11. `test_06_candidato_historico_resolvido` | `_disp_com_pergunta_orfa` não grava dia; o cenário fornece contexto e célula. [test_reconciliar_pergunta_orfa.py:37](app/chamados/tests/test_reconciliar_pergunta_orfa.py:37), [test_reconciliar_pergunta_orfa.py:96](app/chamados/tests/test_reconciliar_pergunta_orfa.py:96) | Dia anteriormente gravado indecidível; competência do dia contextual: [não verificado]. [app/chamados/services/fio.py:1403](app/chamados/services/fio.py:1403) |
+| 12. S06 | Teste estrutural; não monta pergunta. [test_e4b_c12_selo.py:22](app/chamados/tests/test_e4b_c12_selo.py:22) | Não se aplica. |
+| 13. Gate da premissa | `_furo_com_dia_e_celula` monta chamado e célula, sem criar pergunta diretamente. [test_selo_chokepoint_escrita.py:373](app/ponto/tests/test_selo_chokepoint_escrita.py:373), [test_selo_chokepoint_escrita.py:394](app/ponto/tests/test_selo_chokepoint_escrita.py:394) | Competência e eventual pergunta indireta: [não verificado]. |
+| 14. `_gravar_estado_sem_pergunta` | `_chamado`; o cenário não monta pergunta. [test_selo_chokepoint_escrita.py:300](app/ponto/tests/test_selo_chokepoint_escrita.py:300), [test_selo_chokepoint_escrita.py:361](app/ponto/tests/test_selo_chokepoint_escrita.py:361) | Não se aplica à pergunta da fixture. |
+| 15–16. Batida com 1 e 3 furos | `_batida_com_furos_vivos` monta célula e chamados; não cria pergunta diretamente. [test_selo_chokepoint_escrita.py:406](app/ponto/tests/test_selo_chokepoint_escrita.py:406), [test_selo_chokepoint_escrita.py:435](app/ponto/tests/test_selo_chokepoint_escrita.py:435), [test_selo_chokepoint_escrita.py:440](app/ponto/tests/test_selo_chokepoint_escrita.py:440) | Competência e eventuais perguntas indiretas: [não verificado]. |
+| 17–18. Selos do diagrama | Testes estruturais; não montam pergunta. [test_selo_diagrama_do_codigo.py:44](app/core/tests/test_selo_diagrama_do_codigo.py:44), [test_selo_diagrama_do_codigo.py:85](app/core/tests/test_selo_diagrama_do_codigo.py:85) | Não se aplica. A asserção que falhou no caso 18 está [não verificado]. |
+
+## 3. Decisões para o construtor e limites
+
+- **HIST e exportada:** preservar o teste de ordem de travas em cenário que alcance a costura e verificar separadamente o veto de escrita de pergunta entregue. A regra fornecida no aval de 18:45, item 2(ii), trata ato de sistema e dia indecidível; o texto do anexo não tem linha verificável. A cerca atual desfaz o ato externo após veto, inclusive aninhado. [não verificado], [app/chamados/services/fio.py:1425](app/chamados/services/fio.py:1425).
+- **Fixtures sem dia:** escolher um dia que preserve cada cenário e sua célula, e manter cobertura da recusa para dia indecidível. Em particular, não há base para presumir que a célula fixa do caso 10 coincida com o dia do contexto. [app/chamados/services/fio.py:1365](app/chamados/services/fio.py:1365), [test_resposta_nao_e_fantasma.py:38](app/chamados/tests/test_resposta_nao_e_fantasma.py:38), [test_resposta_nao_e_fantasma.py:108](app/chamados/tests/test_resposta_nao_e_fantasma.py:108).
+- **S06:** acompanhar a função onde a chamada está hoje, preservando a verificação da porta e o mutante cadastrado. [app/chamados/tests/e4b_c12_sitios.json:43](app/chamados/tests/e4b_c12_sitios.json:43), [app/chamados/reconciliador.py:563](app/chamados/reconciliador.py:563).
+- **Savepoints e tetos:** C8 exige justificativa escrita ao lado de qualquer teto aumentado e manda retirar em caso de dúvida. A fixture sem pergunta demonstra aquele cenário, mas não demonstra que ausência de pergunta diretamente ligada ao chamado impeça toda escrita por cascata; o resolver documenta alcance de S144 e Defesa 1. A condição segura para eliminar cada cerca e os tetos após a mudança estão **[não verificado]**. [PLANO_PISCADA.md:8](PLANO_PISCADA.md:8), [app/chamados/services/disputa_emissao.py:1907](app/chamados/services/disputa_emissao.py:1907).
+- **Diagrama:** os dois testes são estruturais; o comando usa `retratar_com_motivo`, enquanto o diagrama ainda registra a aresta anterior. O traceback do caso 18 não foi fornecido completo. [app/ponto/management/commands/reconciliar_fantasmas.py:281](app/ponto/management/commands/reconciliar_fantasmas.py:281), [app/docs/ARQUITETURA.mmd:189](app/docs/ARQUITETURA.mmd:189), [não verificado].
+
+**Correção ao brief:** a frase de R4b sobre caracterização e dono da exportada está na docstring **do módulo**, não na docstring do método; o método não tem docstring própria. [test_o261_c_viva_sem_chamado_do_dia.py:28](app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:28), [test_o261_c_viva_sem_chamado_do_dia.py:312](app/chamados/tests/test_o261_c_viva_sem_chamado_do_dia.py:312).
+
+Quanto a perguntas de lei, o relato registra decisões para os indecisos anteriores e para a leitura única de dia; não há evidência suficiente nesta cópia e nos anexos para afirmar que **todas** as decisões futuras do construtor estão cobertas, portanto o total de perguntas de lei é **[não verificado]**. [app/docs/RELATO.md:35](app/docs/RELATO.md:35), [app/docs/RELATO.md:50](app/docs/RELATO.md:50).
+
+## 17/11 23:27 · sessao d719d369df9a · S6-INTERMITENTE-FERIADO-CURA-A · leitura · origem=Code
+
+**A premissa precisa de correção:** `self.feriados = set()` não impede sempre o reconhecimento do feriado. Ao substituir o conjunto, o intermitente faz `eh_feriado` cair no fallback `is_feriado`; se esse fallback reconhecer a data, o bloqueio de dia sem previsto pode zerar o par. Se não reconhecer, o par pode continuar pago. A existência e o efeito da cura dependem do calendário, da janela da empresa, da decisão de HE e da mudança exata proposta. [app/ponto/motor_calculo_v2.py:790-795,956-967,1422-1476,3577-3581]
+
+**1. Comparadores encontrados**
+
+- **`diff_calculador` compara v2 com v3 por colaborador, dia e rubrica**, usando o resultado do motor e `rubricas_por_dia`; ignora rubricas declaradas como não decididas e acusa diferença acima de 0,02 h. Imprime totais e, com `--csv`, grava a lista; `--contra-gravado` acrescenta comparação da soma mensal com `FechamentoMensal`. É instrumento por ato, não cron programado. [app/ponto/management/commands/diff_calculador.py:25-55,245-256,414-424,501-556,655-659; app/config/crons.py:1029-1036]
+  
+  **Limitação relevante:** o lado motor desse comando preenche `horas_trabalhadas`, `horas_extras_50` e `horas_extras_100`, mas não preenche `horas_extras_100_feriado` nem `horas_extras_100_noturna` nesse agrupamento; o `.get(..., 0)` pode, portanto, comparar zero com uma dessas rubricas do calculador mesmo quando o período do motor a contém. No caminho sem `--pares-da-autoridade`, `_rub_do_dia` fica vazio; a cobertura efetiva deve ser conferida na execução. [app/ponto/management/commands/diff_calculador.py:245-262,325-326,414-424,527-542]
+
+- **`e6_oraculo` compara o espelho com minutos de batidas do núcleo**, por dia e colaborador, com tolerância de 10 minutos; não compara as rubricas HE 100 do v2 com as do v3. Imprime contadores e donos e, com `--csv`, grava divergências; a configuração o descreve como execução por ato, não cron. O endereço `ponto/e6_oraculo.py` não existe nesta cópia: a derivação do núcleo está em `ponto/calculador/nucleo.py`, e o comando em `ponto/management/commands/e6_oraculo.py`. [app/ponto/calculador/nucleo.py:2-12; app/ponto/management/commands/e6_oraculo.py:315-365,370-378,407-410,440-452; app/config/crons.py:1046-1057] [não verificado: outro arquivo com esse nome fora da cópia]
+
+- **`selo_leitores_no_mesmo_numero` e `folha/porta_export.py` não fazem a comparação v2 × v3 por rubrica.** A porta compara, entre outras testemunhas, o resultado atual da autoridade com `DiaPago` **motor**, e soma de dias pagos com fechamento. Esses dois contadores são publicados fora de `falhas`; as falhas que compõem o carimbo estão em outra soma. O selo pode ficar vermelho e sair com código 2 por suas próprias falhas; há elo de cron para ele. [app/folha/porta_export.py:26,70-78,101-118,566-589,687-697,1235-1252; app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:323-340; app/config/crons.py:1798-1805]
+
+- **Exportação:** a tela consulta o carimbo da porta e recusa o TXT quando a porta retorna bloqueio. Isso não demonstra bloqueio por uma divergência isolada entre v2 e v3: essa divergência não integra, por si, a soma `falhas` acima. [app/folha/views.py:120-135; app/folha/porta_export.py:687-697,1235-1252]
+
+Não identifiquei, nas buscas da cópia, outro comparador de produção que leia as duas versões gravadas `DiaPago` para o mesmo dia; completude dessa busca e comportamento de portões externos de push/deploy: **[não verificado]**. A gravação `oraculo` é aditiva, a partir da competência 10/2026, e pode ser recusada se faltar dono de campo. [app/ponto/services/fechamento.py:1243-1249,1256-1259,1265-1275,1293-1301; app/ponto/services/dia_pago.py:312-317]
+
+**2. Par de 12 h: não há um resultado único com os dados fornecidos**
+
+Os números abaixo supõem 12 h **efetivas** após janela e intervalos, par pertencente ao dia do feriado e entrada suficiente para o calculador decidir a dobra. [app/ponto/motor_calculo_v2.py:2759-2785,928-934; app/ponto/calculador/regras.py:637-645,779-789]
+
+| Condição no caminho mensal | v2 hoje | v3 alimentado pelo resultado do v2 hoje |
+|---|---|---|
+| Fallback reconhece feriado; empresa está na janela; previsto é zero; HE não autorizada; não há saída pela exceção de folga | `horas_trabalhadas = 0`, `horas_extras_100 = 0`, `horas_extras_100_feriado = 0`; demais campos enumerados pelo bloqueio também zeram | O segmento é colapsado e o dia bloqueado é visitado com zero: trabalhadas e as duas HE 100 ficam **0**, quando decididas |
+| Fallback não reconhece feriado e não ocorre outro recorte/bloqueio | `horas_trabalhadas = 12`; HE de feriado **0** | `horas_trabalhadas = 12`; se calendário recebido reconhecer a data e `feriado_em_dobra=True`, `horas_extras_100 = 12` e `horas_extras_100_feriado = 12` |
+
+[app/ponto/motor_calculo_v2.py:1440-1456,1471-1483,2793-2812,3081-3102; app/ponto/calculador/alimentacao.py:73-83,114-123,458-471,514-523; app/ponto/calculador/regras.py:340-351,740-744,779-790; app/ponto/services/dia_pago.py:173-184]
+
+Se a cura consistir em **preservar o conjunto injetado**, ela pode mudar qual calendário responde: data presente no conjunto passa a ser reconhecida; data ausente de um conjunto injetado deixa de consultar o fallback. Isso, por si só, **não garante receber 12 h**: reconhecer o feriado também pode acionar o bloqueio que zera o par. Os valores após a cura concreta, a CCT, o horário noturno, a pausa, a autorização e os dados reais do dia: **[não verificado]**. [app/ponto/motor_calculo_v2.py:956-967,1422-1476; app/ponto/calculador/regras.py:630-642,793-798]
+
+**3. Um 0 × 0 pode passar a divergente?**
+
+**Sim, é possível por inferência do código**, mas não está demonstrado para um dia de produção nem para uma cura cujo diff não foi fornecido. Exemplo condicionado: hoje o fallback reconhece a data e o bloqueio colapsa o par, levando os dois lados a zero; após preservar um conjunto injetado que **não contém** a data, o motor deixa de reconhecê-la e conserva 12 h, enquanto o contexto da v3 ainda consulta o fallback e, com dobra habilitada, calcula HE 100 de 12 h. Nesse caso, o `diff_calculador`, quando o dia e as rubricas entram no seu universo, pode reportar a divergência; o comando também tem a limitação de preenchimento do lado motor indicada acima. [app/ponto/motor_calculo_v2.py:956-967,1448-1456,1471-1483; app/ponto/calculador/regras.py:287-299,340-351,779-789; app/ponto/management/commands/diff_calculador.py:245-256,527-542]
+
+O código examinado sustenta **relatório/CSV no diff**, não bloqueio automático do TXT por essa comparação. O selo e a porta podem acusar outras inconsistências entre leitores ou entre cálculo atual e lavra antiga, mas o efeito concreto sobre carimbo, push ou deploy para essa cura é **[não verificado]**. [app/ponto/management/commands/diff_calculador.py:550-556,655-659; app/folha/porta_export.py:61-63,687-697; app/folha/views.py:120-135]
+
+## 17/11 23:27 · sessao f3102f8699bc · - · - · origem=Ronald (tmux)
+
+Censo enviado ao agente principal, com os sítios de chamada, as condições de abertura da cerca, os escritores de `data_evento` e os limites da verificação de leitores.
+
+## 17/11 23:26 · sessao cc1627cd96a6 · - · - · origem=Ronald (tmux)
+
+Censo e referências enviados ao agente principal.
 
 ## 17/11 23:26 · sessao 7077c8d192be · - · - · origem=Ronald (tmux)
 
@@ -536,31 +635,4 @@ A diferença é de chave de dia: `turnos_do_colab` devolve turnos pelo `data_tur
 
 **PROCEDE: 10. LINHAS RESPONDIDAS: 29 de 29.**
 
-## 17/11 20:50 · sessao 4c4d1eb2b702 · - · - · origem=Ronald (tmux)
-
-Revisão das linhas X enviada ao agente principal, com os achados e suas referências ao código.
-
-## 17/11 20:50 · sessao 7d6fa333964e · - · - · origem=Ronald (tmux)
-
-- **P1 — PROCEDE:** a presença anterior do `pk` no coletor não identifica a causa da exceção atual. A mesma `ReusoSemRechave` também pode representar colisão, célula ausente ou resolvedora recusada (`fio.py:1081`, `fio.py:1123`, `models.py:3072`).
-- **P11 — PROCEDE:** `_pend` pode coexistir com `ts` válido; pular o save e seguir permite alcançar o trabalho do plantio e a paridade antes de P15 (`materializacao.py:658`, `materializacao.py:683`, `materializacao.py:1353`, `materializacao.py:1373`).
-- **P12–P14 — PROCEDE:** o ponto anterior a `carimbar_identidade` pode contar pergunta fora do fato, embora a porta retorne sem salvar (`models.py:3299`, `materializacao.py:1461`, `materializacao.py:1680`). A seleção do lote não exclui explicitamente essas vias (`materializacao.py:2091`).
-- **P3, P4, P5, P6, P7 e P15 — CONFERE:** os pontos e as saídas examinados correspondem ao código (`models.py:2143`, `encerrar_perguntas_com_fato.py:31`, `competencia_trancada.py:276`, `validacao.py:740`, `validacao.py:781`, `materializacao.py:1968`).
-
-## 17/11 20:50 · sessao ebdd59edf542 · - · - · origem=Ronald (tmux)
-
-- **P17–P20: CONFERE**, nos pontos de escrita e saídas examinados: `curar_perguntas_em_limbo.py:67-69`, `disputa_emissao.py:1625-1649`, `disputa_emissao.py:1663-1678`, `disputa_emissao.py:1692-1700`, `relavra_via.py:235-246` e `models.py:3322-3331`. Em P20, o filtro exclui as vias fora do fato antes do descarimbo: `relavra_via.py:171-184`, `models.py:2623-2627`.
-
-- **P21: CONFERE quanto à remoção na cópia.** A busca textual no código encontrou lápides e comentários, inclusive o teste sintético da forma antiga, mas nenhum chamador ou enumeração ativa do command ou método: `config/crons.py:835-838`, `models.py:3429-3431`, `test_contract_leitores_vitalidade.py:177`, `test_e1_v7_catracas.py:406-411`.
-
-- **B9a: PROCEDE a colisão literal.** A partição atual exclui o grupo inteiro quando um membro é exportado (`backfill_decisoes_pergunta.py:245-250`, `:262-265`), enquanto o aval de 18:45 item 2(ii) exige julgamento da pergunta que seria gravada. A leitura atual também omite dias nulos de grupos mistos (`backfill_decisoes_pergunta.py:355-360`, `:371-375`), ao passo que a porta inclui o dia gravado e veta `None` (`fio.py:1403-1419`).
-
-- **B9b:** a reversão atual desfaz tudo quando encontra competência exportada (`migrar_data_evento_dia_do_turno.py:482-490`, `:500-501`); particionar por grupo não resolve, por si, a colisão literal de B9a.
-
-- **RED-NOVO-3:** o alcance do controle precisa ser demonstrado no teste: a tranca exige `pode_fechar` (`competencia_trancada.py:221-230`) e o S144 tem filtros antes de `carimbar` (`materializacao.py:2154-2167`). O código também considera não viva a pergunta com dia trancado (`juizes.py:1403-1410`); isso não demonstra, sozinho, que o controle seja impossível. [nao verificado]
-
-## 17/11 20:50 · sessao 7d449a341d4c · - · - · origem=Ronald (tmux)
-
-Revisei F6, F8, B4 e B8 e enviei ao agente principal as referências de código, os leitores e escritores identificados e as condições que precisam ser preservadas na extração da leitura de dias.
-
-_6753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6757 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
