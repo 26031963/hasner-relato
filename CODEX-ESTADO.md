@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 08:39** · publicado em **18/11/2026 08:39** (UTC-3)
+> Ultima resposta processada: **18/11/2026 08:40** · publicado em **18/11/2026 08:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 08:40 · sessao 80aca513f560 · BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO · verificador · origem=Code
+
+**Resultado: ainda há achados para corrigir ou aceitar expressamente.** A mudança de alcance cura (a), (b) e a coincidência de mês em (c); a troca continua sem teste de integração pela borda real. Há também risco de deadlock por inversão de travas e uma ambiguidade de significado em snapshots históricos. [app/escala/folgas.py:617; app/ponto/services/vigia_cadastro_futuro.py:30; app/ponto/tests/test_residuo_alem_da_competencia.py:50]
+
+| Pergunta | Resultado | Motivo |
+|---|---|---|
+| 1(a) Foto selecionada por editada | **CONFERE a cura** | A seleção parte de células futuras `origem='gerada'`; editada sozinha não seleciona mês. Há caracterização dentro e fora da janela. [app/ponto/services/cadastro_futuro.py:8; app/escala/folgas.py:620; app/ponto/tests/test_residuo_alem_da_competencia.py:98] |
+| 1(b) Dois intervalos no vigia | **CONFERE a cura do recorte** | Geradas e demais origens usam `data >= ini` e `data > hoje`, sem teto; `fim` devolvido é a maior data encontrada, ou `None`. A ressalva de semântica histórica está na pergunta 4. [app/ponto/services/vigia_cadastro_futuro.py:30] |
+| 1(c1) Coincidência de mês | **CONFERE a cura do teste** | O teste usa mês posterior e o dublê devolve o dia 15 do mês solicitado; a asserção exige exatamente a data distante. [app/ponto/tests/test_cadastro_futuro_sem_banco.py:645] | [nao verificado]
+| 1(c2) Borda real | **PROCEDE parcialmente** | Feriado e encerramento agora atravessam as bordas indicadas; troca ainda chama o serviço diretamente. O teste sem banco exercita `executar_vinculo`, mas com dublês e dia próximo. [app/ponto/tests/test_residuo_alem_da_competencia.py:50; app/ponto/tests/test_residuo_alem_da_competencia.py:79; app/ponto/tests/test_residuo_alem_da_competencia.py:122; app/ponto/tests/test_cadastro_futuro_sem_banco.py:432] |
+| Motivo para descartar teste de troca pela borda | **NÃO CONFERE como cura** | A borda realmente exige `request` e `v`; ela passa `desde=data_inicio` e `substitui_dono=True`. Isso explica o custo do teste, mas argumentos equivalentes numa chamada direta não verificam a construção, o acionamento e a transação da borda real. [app/colaboradores/services/vinculo.py:170; app/colaboradores/services/vinculo.py:333; app/ponto/tests/test_residuo_alem_da_competencia.py:50] |
+| 2. Censo e teto | **CONFERE condicionalmente** | Os 13 caminhos agrupados abaixo chegam ao alcance sem teto de competência, sujeitos às guardas de data, vínculo e origem. A identidade exata da lista original dos “13 eventos” é **[não verificado]**. [app/ponto/services/cadastro_futuro.py:8; app/ponto/services/cadastro_futuro.py:35] |
+| 3. Travas | **PROCEDE risco** | Há ordem inversa entre sincronização de calendário e lavra de foto; a trava da célula também não trava as linhas de foto nem células ainda inexistentes. Ocorrência em produção **[não verificado]**. [app/escala/folgas.py:617; app/escala/folgas.py:180; app/escala/folgas.py:212] |
+| 4. Significados | **NÃO CONFERE integralmente** | A nova medida e a lavra são coerentes quanto ao piso pedido, mas `fim` histórico pode ter o significado anterior, sem versão que o distinga no leitor; consumidores externos **[não verificado]**. [app/ponto/services/vigia_cadastro_futuro.py:24; app/ponto/services/vigia_cadastro_futuro.py:106; app/ponto/services/vigia_cadastro_futuro.py:118] |
+| 5. Classes de reprovação | **PROCEDEM achados** | Há relógio relido dentro da cadeia e campo persistido com dois significados conforme a época da lavra. Um segundo juiz ou derivação paralela nova nesta alteração **[não verificado]**. [app/escala/folgas.py:278; app/escala/folgas.py:401; app/ponto/services/vigia_cadastro_futuro.py:118] |
+
+**Censo dos caminhos.** Em todas as linhas, “sim” significa passagem pelo alcance comum por intermédio de `regenerar_futuras_do_cadastro`, que seleciona geradas existentes após hoje, sem teto de competência; isso não garante escrita quando as demais guardas recusam o dia. [app/ponto/services/cadastro_futuro.py:8; app/ponto/services/cadastro_futuro.py:35]
+
+| Evento ou grupo de eventos | Escritor / encaminhamento | Alcance; teto |
+|---|---|---|
+| 1. Troca de vínculo | [vinculo.py:335](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:335) | Sim; piso `data_inicio`, sem teto. |
+| 2. Encerramento por alteração de vigência | [vinculo.py:842](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:842), [signals.py:54](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/signals.py:54) | Sim; piso `_desde`, sem teto futuro. |
+| 3. Fechamento de vigência em lote | [vinculo.py:652](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:652) | Sim; sem teto. |
+| 4. Reabertura de vigência | [vinculo.py:744](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:744) | Sim; sem teto. |
+| 5. Mudança de âncora | [signals.py:111](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/signals.py:111) | Sim; há piso derivado da competência aberta e início do vínculo, mas não teto futuro. |
+| 6. Trabalha em feriado | [vinculo.py:890](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:890) | Sim; sem teto. |
+| 7. Município do posto | [vinculo.py:953](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:953) | Sim; sem teto. |
+| 8. Alteração do tipo/template | [cadastro_tipo.py:365](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/services/cadastro_tipo.py:365) | Sim; sem teto. |
+| 9. Lançar, alterar ou aplicar folga manual em lote | [folgas.py:332](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:332), [folgas.py:369](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:369), [folgas.py:405](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:405) | Sim, por [folgas.py:297](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:297); lote recusa datas anteriores à competência corrente, sem teto futuro. [app/escala/folgas.py:401] |
+| 10. Reparentar folga | [folgas.py:512](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:512) | Sim; sem teto futuro. |
+| 11. Trocar calendário do vínculo | [vinculo.py:450](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/colaboradores/services/vinculo.py:450), [folgas.py:620](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:620) | Sim; seleciona dias cobertos pelo vínculo, sem teto. |
+| 12. Salvar definição do calendário | [folgas.py:571](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:571), [folgas.py:597](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/escala/folgas.py:597) | Sim; mesma seleção da linha anterior. |
+| 13. Salvar, mover ou excluir feriado | [core/signals.py:28](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/core/signals.py:28), [cadastro_futuro.py:56](/home/ronald/codex_ws/44a37274c7e8420d2894656b929b6991aa092068/app/ponto/services/cadastro_futuro.py:56) | Sim; restrito às datas do evento e à resposta da juíza, sem teto de competência. |
+
+Há ainda chamadas explícitas na correção retroativa e na reversão de snapshot; não há evidência aqui de que a enumeração original as exclua ou conte separadamente. [app/colaboradores/management/commands/corrigir_escala_retroativa.py:242; app/colaboradores/services/vinculo.py:1035; **não verificado**]
+
+**Achados**
+
+1. **PROCEDE — inversão de travas.** A sincronização primeiro faz `select_for_update` nas `CelulaDia` e depois apaga/recria `FolgaDia`; `lavrar_foto_folgas --apply` chama o caminho que escreve a foto e depois pede trava nas células futuras. Com uma folga existente e uma célula comum, transações concorrentes podem esperar uma pela outra. A ocorrência e o comportamento do banco de produção são **[não verificado]**. [app/escala/folgas.py:617; app/escala/folgas.py:180; app/escala/folgas.py:212; app/escala/folgas.py:297; app/escala/management/commands/lavrar_foto_folgas.py:163]
+
+2. **PROCEDE — foto não fica integralmente protegida.** O `select_for_update` seleciona células existentes; ele não seleciona para trava as `FolgaDia` nem células ainda ausentes. O gerador consulta células sem essa trava e pode criar ausentes; o resultado de uma intercalação concreta é **[não verificado]**. Entre sincronização e regeneração cadastral, ambas começam por células; a segunda ordena por data e a primeira herda a ordenação do modelo para o colaborador. [app/escala/folgas.py:620; app/ponto/services/cadastro_futuro.py:35; app/escala/models.py:1830; app/ponto/portas/celula.py:894; app/ponto/portas/celula.py:911]
+
+3. **PROCEDE — campo `fim` com dois significados no tempo.** A lavra atual guarda o detalhe integral; `ultimo_lavrado` devolve o detalhe do snapshot mais recente sem versão semântica. Assim, enquanto um snapshot anterior for o último, sua `fim` pode representar o limite antigo, embora uma lavra nova use a última data medida. A existência desses snapshots em produção é **[não verificado]**. [app/ponto/services/vigia_cadastro_futuro.py:90; app/ponto/services/vigia_cadastro_futuro.py:106; app/ponto/services/vigia_cadastro_futuro.py:118; anexo `v2_delta.patch`, trecho de `medir`]
+
+4. **PROCEDE — relógio relido na cadeia de folgas.** O lote aceita e resolve `hoje`, mas a função de relavra chamada depois lê `timezone.localdate()` novamente. A mesma separação aparece no reparentamento; uma virada de dia entre leituras pode mudar o corte. Ocorrência real **[não verificado]**. [app/escala/folgas.py:278; app/escala/folgas.py:385; app/escala/folgas.py:401; app/escala/folgas.py:418; app/escala/folgas.py:512]
+
+5. **PROCEDE — cobertura de teste incompleta para troca distante.** A chamada direta demonstra o serviço com célula distante, mas não sela a borda real para esse cenário; o teste da borda sem banco usa dublês. [app/ponto/tests/test_residuo_alem_da_competencia.py:50; app/ponto/tests/test_cadastro_futuro_sem_banco.py:432]
+
+Quanto aos leitores: `medir` recebe um `fim` sem efeito e devolve a última data existente medida; `ini` e `data_ini` são o **piso solicitado**, não necessariamente o primeiro dia com célula. O comando usa o mesmo argumento `fim` como teto efetivo do gerador, enquanto o vigia o ignora; `ultimo_lavrado` propaga o detalhe e a API o inclui na resposta. Não foi encontrado leitor interno específico que interprete o novo `fim`; leitores externos e dados efetivamente servidos em produção **[não verificado]**. [app/ponto/services/vigia_cadastro_futuro.py:24; app/ponto/services/vigia_cadastro_futuro.py:35; app/ponto/services/vigia_cadastro_futuro.py:106; app/ponto/management/commands/gerar_celulas.py:329; app/api/views_mensageria.py:647]
+
+A cópia não contém metadados Git para confirmar o hash por `git`; execução de testes e dados de produção **[não verificado]**. Nenhum arquivo foi criado, editado ou apagado. [nao verificado]
 
 ## 18/11 08:39 · sessao 027483e83a49 · - · - · origem=Ronald (tmux)
 
@@ -721,89 +773,4 @@ SOMA 11/2026 COLABS_UNIAO 28 True
 rc_sombra=0
 ```
 
-## 18/11 05:35 · sessao b6b30e7671b2 · R1-REMEDE-1811 · sonda · origem=Code
-
-As seis linhas `SOMA` terminam em `True`. Não aparece `INCOMPLETO` na saída fornecida. [não verificado: o dado fornecido não tem arquivo:linha]
-
-```text
-sonda_leitura: script.py [8f462593598e8306] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-PARTE 2 PARTES 6
-[0] UNIVERSO 10/2026 624
-UNIVERSO_PARTE 10/2026 109
-JANELA 10/2026 2026-09-21 2026-10-20
-[0] UNIVERSO 11/2026 597
-UNIVERSO_PARTE 11/2026 102
-JANELA 11/2026 2026-10-21 2026-11-20
-ESTIMATIVA processados 25 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 50 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 75 universo 211 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 100 universo 211 minutos_total 2.9 ate_40_min True ate_15_min True
-COMPETENCIA 10/2026
-[1] {'dias_comparados': 1268, 'bate_ate_10min': 1227, 'esp_zero_e6_trabalho': 2, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 7, 'diverge_acima_60': 28, 'dia_batida_impar': 63, 'impar_que_BATE': 33, 'impar_que_DIVERGE': 30, 'impar_dentro_da_faixa': 24, 'impar_FORA_da_faixa': 6, 'impar_no_conjunto_do_dia': 30, 'impar_SO_POR_CORTE_do_oraculo': 0, 'dia_sem_linha_no_espelho': 0, 'dia_sem_lavratura_no_espelho': 1563, 'dia_isento_ou_ausencia': 353, 'dia_sem_trabalho_ambos': 24, 'esp_desconta_janela_declarada': 62, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 96.8% de 1268 dias comparados
-[3] ESTRUTURA     5 dia-colab      11.1 h    3 colabs
-[3] CADASTRO      8 dia-colab      20.4 h    6 colabs
-[3] BATIDA       28 dia-colab     136.0 h   18 colabs
-[4] TOTAL divergentes 41
-[5] colabs com divergencia: 23
-erros_no_espelho 0
-PARCIAL|10/2026|ESTRUTURA|dias=5|horas=11.084600277777778|colabs=3
-PARCIAL|10/2026|CADASTRO|dias=8|horas=20.397520712222224|colabs=6
-PARCIAL|10/2026|BATIDA|dias=28|horas=136.0465618775|colabs=18
-PARCIAL_TOTAL|10/2026|dias=41|horas=167.528682867500002|colabs=23
-ESTIMATIVA processados 125 universo 211 minutos_total 2.9 ate_40_min True ate_15_min True
-ESTIMATIVA processados 150 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-ESTIMATIVA processados 175 universo 211 minutos_total 3.1 ate_40_min True ate_15_min True
-ESTIMATIVA processados 200 universo 211 minutos_total 3.0 ate_40_min True ate_15_min True
-COMPETENCIA 11/2026
-[1] {'dias_comparados': 1161, 'bate_ate_10min': 1098, 'esp_zero_e6_trabalho': 3, 'e6_zero_esp_trabalho': 4, 'diverge_10_60': 3, 'diverge_acima_60': 53, 'dia_batida_impar': 85, 'impar_que_BATE': 31, 'impar_que_DIVERGE': 54, 'impar_dentro_da_faixa': 49, 'impar_FORA_da_faixa': 5, 'impar_no_conjunto_do_dia': 53, 'impar_SO_POR_CORTE_do_oraculo': 1, 'dia_sem_linha_no_espelho': 204, 'dia_sem_lavratura_no_espelho': 1492, 'dia_isento_ou_ausencia': 220, 'dia_sem_trabalho_ambos': 27, 'esp_desconta_janela_declarada': 58, 'esp_lido_pelo_pago_h': 0}
-[2] BATE (ate 10 min): 94.6% de 1161 dias comparados
-[3] ESTRUTURA     3 dia-colab      12.1 h    3 colabs
-[3] CADASTRO     16 dia-colab      52.5 h    7 colabs
-[3] BATIDA       44 dia-colab     212.9 h   22 colabs
-[4] TOTAL divergentes 63
-[5] colabs com divergencia: 29
-erros_no_espelho 0
-PARCIAL|11/2026|ESTRUTURA|dias=3|horas=12.1|colabs=3
-PARCIAL|11/2026|CADASTRO|dias=16|horas=52.48679821444445|colabs=7
-PARCIAL|11/2026|BATIDA|dias=44|horas=212.917450995|colabs=22
-PARCIAL_TOTAL|11/2026|dias=63|horas=277.50424920944445|colabs=29
-TEMPO_SEGUNDOS 179.9
-TRATADA_LOCAL app/escala/alimentacao.py:279 GeneratorExit 277290
-TRATADA_LOCAL app/escala/models.py:1282 GeneratorExit 53
-TRATADA_LOCAL app/escala/services/fase_12x36.py:114 GeneratorExit 1589
-TRATADA_LOCAL app/escala/services/leitor_celula.py:25 ValueError 6877
-TRATADA_LOCAL app/escala/services/leitor_celula.py:81 GeneratorExit 61
-TRATADA_LOCAL app/escala/utils.py:1500 GeneratorExit 4
-TRATADA_LOCAL app/escala/utils.py:1687 GeneratorExit 8
-TRATADA_LOCAL app/escala/utils.py:1991 GeneratorExit 6800
-TRATADA_LOCAL app/escala/utils.py:2033 GeneratorExit 2
-TRATADA_LOCAL app/escala/utils.py:452 GeneratorExit 6
-TRATADA_LOCAL app/escala/utils.py:524 GeneratorExit 4975
-TRATADA_LOCAL app/escala/utils.py:525 GeneratorExit 4975
-TRATADA_LOCAL app/escala/utils.py:888 GeneratorExit 617
-TRATADA_LOCAL app/folha/causas.py:58 GeneratorExit 187
-TRATADA_LOCAL app/ponto/juiz_batida.py:75 ValueError 503275
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:1131 GeneratorExit 665
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:2604 GeneratorExit 3196
-TRATADA_LOCAL app/ponto/motor_calculo_v2.py:677 GeneratorExit 224
-TRATADA_LOCAL app/ponto/services/dia_pago.py:892 GeneratorExit 13694
-TRATADA_LOCAL app/ponto/services/espelho.py:473 GeneratorExit 117
-TRATADA_LOCAL app/ponto/services/espelho.py:657 GeneratorExit 4084
-TRATADA_LOCAL app/ponto/services/fechamento.py:1044 GeneratorExit 200
-TRATADA_LOCAL app/ponto/services/fechamento.py:1045 _GradeSemCelula 2
-TRATADA_LOCAL app/ponto/turnos.py:1295 GeneratorExit 26995
-TRATADA_LOCAL app/ponto/turnos.py:1656 GeneratorExit 6185
-TRATADA_LOCAL app/ponto/turnos.py:1699 GeneratorExit 41986
-TRATADA_LOCAL app/ponto/turnos.py:679 GeneratorExit 20189
-SOMA 10/2026 41   <- tem de ser igual a soma das classes (41) True
-SOMA 10/2026 HORAS 167.528682867500002 True
-SOMA 10/2026 COLABS_UNIAO 23 True
-SOMA 11/2026 63   <- tem de ser igual a soma das classes (63) True
-SOMA 11/2026 HORAS 277.50424920944445 True
-SOMA 11/2026 COLABS_UNIAO 29 True
-rc_sombra=0
-```
-
-_6789 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_6790 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
