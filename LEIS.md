@@ -205,6 +205,12 @@ Estavam no indice como vigentes e alguma clausula nao tem efeito. Gerada do ESTA
 
 ## CORTES que sao ATO, nao lei (declarados para o selo nao os cobrar)
 
+- `RESPOSTAS-1711-1005`
+- `RESPOSTAS-1811-1535`
+- `RESPOSTAS-1811-1600`
+- `RESPOSTAS-1811-1610`
+- `COMPLEMENTO-1-RESPOSTAS-1811-1610`
+- `COMPLEMENTO-1-RESPOSTAS-1811-1600`
 - `RESPOSTAS-1711-1950`
 - `F5-DSTL1-RESPOSTAS-1811`
 - `U163-PRECONDICAO-RED-1811`
