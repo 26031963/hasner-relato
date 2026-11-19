@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 22:54:03.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (107.7 MB). Acoes na janela: **2363**.
+**Medido em 18/11/2026 22:59:48.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (107.7 MB). Acoes na janela: **2349**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -2359,17 +2359,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 11:03:04 | Bash | Find tela job hash and state | `cat logs/ORDEM-1811/tela/pista_jobs.txt logs/ORDEM-1811/tela/pista.id 2>/dev/null; ls logs/ORDEM-1811/tela/construtor; /bin/grep -n 'ESPURIA-TELA' app/docs/BACKLOG.md \| cut -c1-500 \| head -3` |
 | 11:03:01 | Bash | Check whether tela failures also appear in other suites | `for t in test_MORDE_quando_a_FOLHA_cobre_o_pendente_e_IGNORADO test_nao_perguntado_intencional_preserva_o_juiz_da_oferta test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit test_M8_carga_inteira_nao_engole_relogio; do echo "== $t"; /bin/grep -lE "^(FAIL\|ERROR): $t" logs/ORDEM-1811/*/*.log logs/ORDEM-1811/*/*/*.log logs/ESPURIAS-ABRE/*/*.log logs/BUG-CADASTRO-FUTURO/*/*.log logs/E ...` |
 | 11:02:55 | Bash | Read tela and DST-L2 final verdicts | `cat logs/ORDEM-1811/tela/final.rc; echo ---; cat logs/ORDEM-1811/dst-l2/final.rc` |
-| 10:58:00 | Bash | Record fleet results in achadoA.r and top line | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='logs/CONFRONTO-PILOTO/achadoA.r' s=open(p,encoding='utf-8').read() old=[l for l in s.split('\n') if l.startswith('## FROTA competencia 11')][0] new="""## FROTA competencia 11 (item 4): FEITA -- achadoA_frota_s0de1.py pelo envelope na sombra, 590 colabs, rc_sombra=0, 510 s Desvio: rodada pelo envelope direto (saida agregada, sem dado pessoal), sem ...` |
-| 10:57:53 | Bash | Locate FROTA section and top line | `cd /home/ronald/saas-hasner/logs/CONFRONTO-PILOTO && /bin/grep -n -i 'frota' achadoA.r \| head; /bin/grep -n 'lei: SONDA-DIA-IMPAR-1811 (' /home/ronald/saas-hasner/app/docs/RELATO.md \| head -2` |
-| 10:57:48 | Bash | Read fleet probe summary | `cat /tmp/claude-1001/-home-ronald-saas-hasner/d5e4e6e7-ea6c-4683-97a2-a6477ae90088/tasks/bs3r8j9i2.output \| cut -c1-400` |
-| 10:57:31 | Bash | Write INTERVALO top line and update BACKLOG | `cd /home/ronald/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') L.insert(4,"lei: COMPLEMENTO-1 SONDA-DIA-IMPAR-1811 INTERVALO (logs/CONFRONTO-PILOTO/intervalo.r + intervalo.out, sombra HOJE=18/11, rc_sombra=0, numeros conferidos no bruto): A C003 22/10 = 0 min tirados de intervalo (juiz fonte 'escala sem intervalo', cadastrado 60 'duracao decla ...` |
-| 10:57:22 | Bash | Spot-check agent numbers against raw probe output | `cd /home/ronald/saas-hasner/logs/CONFRONTO-PILOTO && /bin/grep -n -E '3320\|567\|461\|1882\|1438\|487\|2058\|39641\|rc_sombra\|HOJE' intervalo.out \| head -20` |
-| 10:56:12 | Bash | Check RESIDUO suite progress | `wc -c logs/BUG-CADASTRO-FUTURO/residuo/pouso_suite.log; tail -c 300 logs/BUG-CADASTRO-FUTURO/residuo/pouso_suite.log; echo; date +%H:%M` |
-| 10:56:09 | Bash | Walk process ancestors to find the rc writer | `P=$(ps -o ppid= -p 3033608 \| tr -d ' '); for i in 1 2 3 4; do P=$(ps -o ppid= -p $P \| tr -d ' '); echo "$P: $(tr '\0' ' ' < /proc/$P/cmdline \| cut -c1-400)"; done` |
-| 10:56:06 | Bash | Check grandparent for rc redirection | `P=$(ps -o ppid= -p 3033608 \| tr -d ' '); PP=$(ps -o ppid= -p $P \| tr -d ' '); tr '\0' ' ' < /proc/$PP/cmdline \| cut -c1-600` |
-| 10:56:04 | Bash | Find where the RESIDUO suite writes its output and rc | `P=$(ps -o ppid= -p 3033608 \| tr -d ' '); tr '\0' ' ' < /proc/$P/cmdline \| cut -c1-600; echo; ls -l /proc/3033608/fd/1 /proc/3033608/fd/2` |
-| 10:56:01 | Bash | Confirm RESIDUO suite rc path matches the P2 race script | `tr '\0' ' ' < /proc/3033608/cmdline; echo; /bin/grep -n 'pouso_suite' logs/ORDEM-1811/p2/corrida.sh` |
-| 10:55:58 | Bash | Check running jobs and memory | `ps -p 3033608,3056138,3102810,3079111 -o pid,etime,cmd --no-headers \| cut -c1-120; ls logs/BUG-CADASTRO-FUTURO/residuo/ \| tail -5; tail -3 logs/ORDEM-1811/p2/corrida.log; free -m \| sed -n 2p` |
-| 10:55:54 | Bash | Check whether the jz1 failure was already diagnosed | `cat logs/ORDEM-1811/dst-l2/cancelamentos.txt; ls -la logs/dst-l2-jz1/; /bin/grep -n -i 'jz1' app/docs/RELATO.md \| head -8` |
-| 10:55:50 | Bash | Read rest of third failure and other logs mentioning it | `sed -n 7024,7045p logs/ORDEM-1811/dst-l2/pista_suite.log; ls -la logs/ORDEM-1811/dst-l2/ \| head -20; /bin/grep -rl 'test_grade_retrata_pela_unidade_atomica' logs/ --include=*.log 2>/dev/null \| head` |
-| 10:55:46 | Bash | Read DST-L2 and tela verdicts and the third failure | `cat logs/ORDEM-1811/tela/final.rc 2>/dev/null; echo ---; cat logs/ORDEM-1811/dst-l2/final.rc 2>/dev/null; echo ---; /bin/grep -l test_grade_retrata_pela_unidade_atomica logs/ORDEM-1811/*/*.log logs/BUG-CADASTRO-FUTURO/residuo/*.log 2>/dev/null \| head; /bin/grep -n -A25 'FAIL: test_grade_retrata_pela_unidade_atomica' logs/ORDEM-1811/dst-l2/*.log 2>/dev/null \| head -40` |
