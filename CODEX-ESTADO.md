@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 00:35** · publicado em **19/11/2026 00:39** (UTC-3)
+> Ultima resposta processada: **19/11/2026 00:45** · publicado em **19/11/2026 00:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 00:45 · sessao f260e7597d8a · - · - · origem=Ronald (tmux)
+
+As declarações diretas da classe e das outras entidades foram enviadas ao agente principal, com os respectivos números de linha. Também enviei as atribuições diretas encontradas em código de produção; a cobertura completa dessas atribuições por AST permanece [não verificado].
+
+## 19/11 00:42 · sessao 39074cf4870a · ESPINHA-NOITE · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 2:** a cópia não tem o contrato `atos_pergunta.leitura` / `LeituraDosAtos` que o aval manda usar. O contrato existente é diferente, e o caso SILÊNCIO exige mudança de comportamento que a leitura de R/V, sozinha, não expressa. A migração precisa ter seu alvo e seus testes reconferidos nesta ponta. ([models.py:19](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:19), [models.py:4295](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4295), [tarefa_do_dia.py:182](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:182))
+
+**Item 3:** a premissa de `marcos_do_lote` e o selo inverso têm sítio; a ordem F9 → F5 → F3 está registrada. Não encontrei, entre as fontes disponíveis, outro proibido vigente que impeça especificamente esse selo. A composição git e o estado real da fila permanecem **[não verificado]**. ([veredito_lavrado.py:151](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:151), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018))
+
+Nesta revisão, **PROCEDE** significa que o achado apontado exige devolução ou correção do aval; **NÃO PROCEDE** significa que a objeção examinada não foi demonstrada. Os anexos fornecidos no pedido não existem como arquivos verificáveis nesta cópia; suas afirmações sobre produção são identificadas como **[não verificado]**. A árvore não contém `.git`, portanto hash, ancestralidade e merge-tree também estão **[não verificado]**.
+
+## 1. Premissas na cópia
+
+### Item 2
+
+1. **PROCEDE — autoridade e tipo nomeados não existem como descritos.** O código define `LeituraDoAto` como `'validada_em respondida_em resposta_colab'` e implementa `DecisaoPergunta.leitura`, que devolve `LeituraDoAto(validada, respondida, resposta)`. Não é o tipo de oito campos descrito no brief: não traz `ultima_decisao`, materialização nem autor da validação. A leitura efetiva combina atos reais com projeção sem linha correspondente e preserva validação em respostas marcadas para isso. ([models.py:19](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:19), [models.py:4281](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4281), [models.py:4295](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4295))
+
+2. **PROCEDE — o mapa de leitores e o RED da partição envelheceram.** A partição já chama `not _pergunta_respondida(p)`; esse juiz ainda lê `p.respondida_em` e `p.resposta_colab` da projeção. Também passaram pelo juiz, entre outros, `becos`, a guarda de regularização e o agrupamento do fio: não se deve aplicar literalmente o inventário antigo de acessos crus a esses sítios. Continuam leituras diretas, por exemplo, no fio, no explicador, na declaração, no histórico e em SQL no reconciliador. ([pergunta_no_app.py:80](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/pergunta_no_app.py:80), [juizes.py:1544](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1544), [becos.py:25](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/becos.py:25), [fio.py:708](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:708), [fio.py:188](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:188), [declaracao_texto.py:228](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:228), [reconciliador.py:671](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:671))
+
+3. **PROCEDE — as linhas e a solução do caso SILÊNCIO precisam ser refeitas.** Nesta cópia, `:330` cria o chamado e `:334` abre o patch; a igualdade está em `:338`: `self.assertEqual(self._fila(p), antes, ...)`. O caso SILÊNCIO espera `silencio_decidido` em `:343–344`, e `_pela_decisao` atualmente devolve `'silencio_decidido', []`. Como `DecisaoPergunta.leitura` devolve só R/V e texto, trocar a fonte da partição por essa leitura não identifica, por si, SILÊNCIO nem cria a ação do admin pedida pelo aval. ([test_f1nova_b1_juiz_respondida.py:328](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:328), [test_f1nova_b1_juiz_respondida.py:338](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:338), [tarefa_do_dia.py:182](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:182), [models.py:4326](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4326))
+
+4. **NÃO PROCEDE — objeção de que C em SQL teria de sair.** Há filtros `materializada_em__isnull=True` no universo absolvível e nas órfãs, lado a lado com o filtro de validação; a face SQL de validação existente se chama `q_validada_pelo_ato`. Manter o filtro C é compatível com o literal do item 2. ([reconciliador.py:671](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:671), [reconciliador.py:1092](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:1092), [models.py:3539](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3539))
+
+5. **PROCEDE — a medida das 213 não está fechada.** O dado fornecido declara literalmente `CLASSE_ULT silencio 213` e “Não medido: quantas caem em `passivo`” **[não verificado]**. A cópia mostra que a tarefa calcula `passivo` por linhas de projeção sem correspondência, cortadas por `agora`; isso não permite inferir a quantidade das 213 sem os dados e a medição. ([tarefa_do_dia.py:425](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:425))
+
+### Item 3
+
+6. **NÃO PROCEDE — objeção à premissa de que há um sítio sem leitura de `DecisaoPergunta`.** O corpo de `marcos_do_lote` consulta `Batida`, `CelulaDia` e `PerguntaDisputa` e termina em `return marcos`; as duas pontas da pergunta leem `materializada_em` e `respondida_em`. Não há consulta a `DecisaoPergunta` nesse corpo. `carimbar_resposta_pela_trilha` mora em `services/disputa_emissao.py`, onde grava resposta e ato, fora do escopo do selo proposto. ([veredito_lavrado.py:151](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:151), [veredito_lavrado.py:197](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:197), [disputa_emissao.py:1692](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1692))
+
+## 2. Colisão com aval ou proibido vigente
+
+### Item 2
+
+7. **PROCEDE — há outro proibido do construtor que a exceção nominal não cobre.** O wrapper proíbe expressamente `models` de qualquer app, `migrations`, `bin/` e arquivos fora de `app/`; o aviso diz que tocar esses caminhos descarta a volta. Como o juiz `pergunta_respondida` é compartilhado e continua lendo projeção, uma solução que exija modificar `models.py`, uma migration ou `bin/` não caberia no construtor Codex autorizado sem resolver essa restrição. **Não está demonstrado que modificar esses arquivos seja inevitável**: o censo e o desenho devem demonstrar uma solução permitida ou devolver o impedimento. ([bin/codex_pergunta.sh:121](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/bin/codex_pergunta.sh:121), [bin/codex_pergunta.sh:346](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/bin/codex_pergunta.sh:346), [juizes.py:1544](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1544))
+
+8. **NÃO PROCEDE — colisão demonstrada com a ordem de pouso da simulação.** O BACKLOG registra F5 na espinha e F3 depois de F9 e F5; o registro posterior diz que F6F7 pousa depois da simulação. O aval fornecido também condiciona o pouso da F5 ao fim da simulação e aos pousos de F6F7 e F9. O texto integral de `SANDUICHE-DO-20` e o estado vigente fora desta cópia estão **[não verificado]**; não é possível certificar ausência de colisão com um texto que não foi fornecido nem localizado. ([BACKLOG.md:2325](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2325), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018), [PROMPTS.md:2572](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/PROMPTS.md:2572))
+
+### Item 3
+
+9. **NÃO PROCEDE — colisão demonstrada do selo com a fila registrada.** O BACKLOG diz literalmente “Construir SO o selo com mutante, vaga 1 depois de F9 e F5”; o item 3 reproduz essa ordem. A exceção nominal ao `RETOMA-POS-CLEAR` consta do dado fornecido **[não verificado]**; o texto integral de `SANDUICHE-DO-20` e eventual outro proibido específico do selo estão **[não verificado]**. ([BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018))
+
+## 3. Condições literais e mutantes
+
+### Item 2
+
+10. **PROCEDE — “só leitores, nenhuma escrita nova” precisa ser delimitado quanto ao efeito.** A guarda em `aplicar_declaracao` decide se chama `responder_pergunta_disputa_core`; depois chama `validar_pergunta`. Alterar o valor da leitura pode alterar **quando portas de escrita existentes são acionadas**, embora não seja necessário criar um escritor novo. A condição fecha se “nenhuma escrita nova” proíbe novos caminhos de escrita, mas não se significar ausência de mudança em escritas efetivas; o aval precisa registrar qual sentido governa e o censo precisa examinar esse efeito. ([declaracao_texto.py:688](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:688))
+
+11. **NÃO PROCEDE — objeção de que o mutante da conservação não teria o que morder.** A leitura real acrescenta `linhas_da_projecao_sem_linha`; o teste da F2 documenta e cobre resposta só na projeção. Uma partição migrada que ignore essa conservação pode ser distinguida pelo controle proposto, desde que o teste exercite a partição e prove a morte do mutante. A morte efetiva está **[não verificado]**. ([models.py:4308](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4308), [test_e4c_f2_leitura_do_ato.py:172](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_e4c_f2_leitura_do_ato.py:172))
+
+### Item 3
+
+12. **NÃO PROCEDE — objeção de que o selo inverso não tem sítio.** O corpo delimitado de `marcos_do_lote` fornece o alvo, e o mutante pode introduzir ali uma leitura de `DecisaoPergunta` para demonstrar que o selo a detecta. O selo e sua mordida ainda não estão construídos **[não verificado]**. ([veredito_lavrado.py:151](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:151), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018))
+
+13. **NÃO PROCEDE — contradição necessária em “mesma ponta”.** O literal é executável como F3 sobre a ponta resultante da entrega da F5, preservando a sequência exigida pelo BACKLOG. Se “mesma ponta” exigir o **mesmo hash anterior** à construção da F5, a interpretação muda; o hash e a composição efetiva estão **[não verificado]**. ([BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018))
+
+## 4. Arquivos e áreas protegidas
+
+### Item 2
+
+O conjunto **candidato**, ainda sujeito ao censo exigido pelo próprio aval, é:
+
+- [fio.py:188](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:188), [reconciliador.py:671](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:671), [explicador.py:102](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/explicador.py:102), [declaracao_texto.py:228](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:228), [vigia_fio.py:738](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/vigia_fio.py:738), [raiox.py:135](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/raiox.py:135), [pergunta_no_app.py:80](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/pergunta_no_app.py:80), [becos.py:25](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/becos.py:25), [historico.py:96](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/historico.py:96) e [vigia_carimbo.py:98](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/vigia_carimbo.py:98).
+- [tarefa_do_dia.py:142](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:142) é candidato pela mudança explícita de SILÊNCIO; testes e selo também precisam mudar. A lista final de arquivos e de leitores externos está **[não verificado]** até o censo.
+
+14. **NÃO PROCEDE — toque direto demonstrado nos arquivos de motor, folha, export, DiaPago, escala ou vínculo.** Os candidatos acima estão em `chamados`, mas isso **não prova ausência de efeito indireto**: a guarda de declaração pode acionar portas existentes, como no achado 10. A lei proíbe ao construtor competência exportada e item que pede `!`; o alcance efetivo em exportadas e dinheiro permanece **[não verificado]** até o censo e as medidas requeridas. ([declaracao_texto.py:688](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:688), [LEIS.md:147](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/LEIS.md:147))
+
+### Item 3
+
+15. **NÃO PROCEDE — toque de produto demonstrado pelo selo proposto.** O escopo registrado é “SO o selo com mutante” e o leitor “nao muda”. O arquivo exato do teste ainda é **[não verificado]**; se colocado em `app/chamados/tests/`, o sítio protegido continua sendo inspecionado sem alterar o leitor. ([BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018), [veredito_lavrado.py:151](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:151))
+
+REVISAO item 2: PROCEDE 6 / NAO PROCEDE 4.
+
+REVISAO item 3: PROCEDE 0 / NAO PROCEDE 5.
 
 ## 19/11 00:35 · sessao 3eee19a55d53 · CADEIA-20-PASSO1 · sonda · origem=Code
 
@@ -2590,154 +2665,4 @@ A tabela aponta escritores relevantes para os caminhos examinados; um censo exau
 
 **Sem FILA identificada no teste examinado:** a classe congela o tempo em `AGORA`, e `T1`/`T2` são instantes fixos; os imports do arquivo têm uso visível. O auditor consulta relógio, inclusive para `_hoje`, sob esse congelamento quando chamado por esses testes. Relógios e imports em toda a árvore estão **[não verificado]**. ([teste:2](/home/ronald/codex_ws/8d3b99d8828274c7c8177faea872740deb29b3b1/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:2), [teste:17](/home/ronald/codex_ws/8d3b99d8828274c7c8177faea872740deb29b3b1/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:17), [teste:59](/home/ronald/codex_ws/8d3b99d8828274c7c8177faea872740deb29b3b1/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:59), [auditor:1606](/home/ronald/codex_ws/8d3b99d8828274c7c8177faea872740deb29b3b1/app/chamados/management/commands/auditar_invariantes_chamados.py:1606))
 
-## 18/11 22:36 · sessao 57f4dfc992d1 · E4C-F9 · construtor · origem=Code
-
-Atualizei [test_e4c_f9_comandos_leem_o_ato.py](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:70) com controles validados pelo ato, execução integral do auditor para M2–M5 e cenário `--apply` para M6. O cenário `--apply` de M7 usa a pergunta divergente e um controle validado ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:193)). [nao verificado]
-
-**Entrega incompleta:** não executei os testes Django nem os mutantes, pois a instrução proíbe acesso a banco. Portanto, as mortes e a ausência de testes vermelhos no código atual são **[não verificado]**; também não há log RED Django. A análise sintática com `python3` passou; Ruff não está instalado **[não verificado: lint]**. Os patches abaixo são propostas para a sessão executar, não mutações aplicadas. [nao verificado]
-
-Para cada mutante, aplicar seu patch isoladamente com `patch -p1` a partir de `/home/ronald/wt-codex-e4c-f9-223418` e rodar o comando indicado no ambiente autorizado. Os comandos abaixo assumem, **[não verificado]**, que `python` e as configurações Django de teste estão disponíveis: [nao verificado]
-
-```bash
-cd /home/ronald/wt-codex-e4c-f9-223418/app
-export PYTHONDONTWRITEBYTECODE=1
-export DJANGO_SETTINGS_MODULE=config.settings_test
-```
-
-**M1** — deve morrer `test_M1_rotulo_e_controle` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:93)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/auditar_invariantes_chamados.py
-+++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
-@@ -206,1 +206,1 @@
--            degraus['validada_em' if DecisaoPergunta.leitura(_p).validada_em is not None
-+            degraus['validada_em' if _p.validada_em is not None
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M1_rotulo_e_controle
-```
-
-**M2** — deve morrer `test_M2_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:164)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/auditar_invariantes_chamados.py
-+++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
-@@ -1586,1 +1586,1 @@
--        _i21_cru = list(PD.objects.filter(q_respondida_com_texto(), PD.q_nao_validada_pelo_ato(),
-+        _i21_cru = list(PD.objects.filter(q_respondida_com_texto(),
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M2_auditor_inteiro
-```
-
-**M3** — deve morrer `test_M3_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:167)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/auditar_invariantes_chamados.py
-+++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
-@@ -1617,1 +1617,1 @@
--            PD.objects.filter(_q_nao_resp(), PD.q_nao_validada_pelo_ato(), materializada_em__isnull=True,
-+            PD.objects.filter(_q_nao_resp(), materializada_em__isnull=True,
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M3_auditor_inteiro
-```
-
-**M4** — deve morrer `test_M4_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:170)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/auditar_invariantes_chamados.py
-+++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
-@@ -1781,1 +1781,1 @@
--            [p.pk for p in PD.objects.filter(PD.q_nao_validada_pelo_ato(), disputa__fechada_em__isnull=False,
-+            [p.pk for p in PD.objects.filter(disputa__fechada_em__isnull=False,
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M4_auditor_inteiro
-```
-
-**M5** — deve morrer `test_M5_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:173)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/auditar_invariantes_chamados.py
-+++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
-@@ -1794,1 +1794,1 @@
--        for p in (PD.objects.filter(PD.q_nao_validada_pelo_ato(), data_evento__isnull=False, motivo__in=_mlei,
-+        for p in (PD.objects.filter(data_evento__isnull=False, motivo__in=_mlei,
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M5_auditor_inteiro
-```
-
-**M6** — devem morrer os testes dry e `--apply` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:107)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/encerrar_perguntas_com_fato.py
-+++ b/app/chamados/management/commands/encerrar_perguntas_com_fato.py
-@@ -33,1 +33,1 @@
--              .filter(PerguntaDisputa.q_nao_validada_pelo_ato(), materializada_em__isnull=False)
-+              .filter(materializada_em__isnull=False)
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M6_dry_run_universo_e_controle chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M6_apply_carimba_apenas_nao_validada
-```
-
-**M7** — deve morrer `test_M7_divergencia_escolha_nao_valida` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:193)) **[não verificado]**. [nao verificado]
-
-```diff
---- a/app/chamados/management/commands/validar_classe_a.py
-+++ b/app/chamados/management/commands/validar_classe_a.py
-@@ -63,3 +63,0 @@
--            if DecisaoPergunta.leitura(q).resposta_colab != q.resposta_colab:
--                cls['divergente ato x projecao'] += 1
--                continue
-```
-
-```bash
-python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M7_divergencia_escolha_nao_valida
-```
-
-## 18/11 22:33 · sessao 88b1c8259ae5 · E4C-F9 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO**
-
-**Item 1 — PROCEDE (devolver).** A cura precisa especificar os critérios por sítio: nem todos têm um filtro de validação, e M7 exige um tratamento diferente.
-
-1. **Premissas.** Conferem a ausência de pergunta validada em M6 e o teste isolado do predicado em M2–M5. M1 também não tem controle validado. Já a afirmação de que M6 é o único cujo comando grava com `--apply` não fecha: M7 também oferece `--apply` e chama `validar_pergunta`. [teste:70](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:70), [teste:85](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:85), [teste:96](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:96), [validar_classe_a.py:32](app/chamados/management/commands/validar_classe_a.py:32), [validar_classe_a.py:100](app/chamados/management/commands/validar_classe_a.py:100).
-
-   Os sete sítios são:
-
-   | Sítio | Leitura ou filtro |
-   |---|---|
-   | M1 | Ramo que rotula conforme validação lida do ato, não filtro ORM: [auditor:206](app/chamados/management/commands/auditar_invariantes_chamados.py:206). |
-   | M2 | I21, `q_nao_validada_pelo_ato()`: [auditor:1586](app/chamados/management/commands/auditar_invariantes_chamados.py:1586). |
-   | M3 | C2, mesmo predicado: [auditor:1617](app/chamados/management/commands/auditar_invariantes_chamados.py:1617). |
-   | M4 | F2, mesmo predicado: [auditor:1781](app/chamados/management/commands/auditar_invariantes_chamados.py:1781). |
-   | M5 | F3, mesmo predicado: [auditor:1794](app/chamados/management/commands/auditar_invariantes_chamados.py:1794). |
-   | M6 | Seleção de materializadas não validadas: [encerrar:33](app/chamados/management/commands/encerrar_perguntas_com_fato.py:33). |
-   | M7 | Guarda de divergência de **resposta** entre ato e projeção; há outra leitura para impressão: [validar_classe_a.py:63](app/chamados/management/commands/validar_classe_a.py:63), [validar_classe_a.py:83](app/chamados/management/commands/validar_classe_a.py:83). |
-
-2. **Colisão com o aval vigente.** Não há mudança de F9=(A) nem autorização para tocar os comandos além do RED no texto fornecido; a execução só respeita esse limite se eventuais alterações dos comandos ficarem dentro do que o RED exigir. A existência e o teor independente do aval vigente na cópia são **[não verificado]**; a regra foi fornecida no anexo `aval.txt`, sem numeração de linhas.
-
-3. **Literal.** M1 é um ramo de classificação, e M7 é uma guarda de divergência de resposta: “sem o filtro do sítio” não identifica uma mutação uniforme para os sete. Remover a guarda de M7 é uma mutação definível e, por inspeção, os testes que exigem o contador de divergência devem fazê-la morrer; sua execução é **[não verificado]**. Trocar a leitura da impressão pela projeção é outra mutação: a guarda anterior já exige igualdade para os itens impressos, e o selo estrutural conta a leitura crua. [auditor:206](app/chamados/management/commands/auditar_invariantes_chamados.py:206), [validar_classe_a.py:62](app/chamados/management/commands/validar_classe_a.py:62), [teste:105](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:105), [teste:194](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:194).
-
-   M2–M5 pertencem ao mesmo auditor, que pode ser executado inteiro em modo de leitura por padrão, mas não declara flag `--dry` nem `--apply`; `--html` escreve arquivo e não deve ser usado sob a regra desta revisão. [auditor:1](app/chamados/management/commands/auditar_invariantes_chamados.py:1), [auditor:552](app/chamados/management/commands/auditar_invariantes_chamados.py:552), [auditor:1869](app/chamados/management/commands/auditar_invariantes_chamados.py:1869).
-
-4. **Exportada, dinheiro ou `!`.** O item descreve testes e mutantes; não declara alteração de exportação ou dinheiro. Se uma implementação concreta tocaria esses domínios ou algum `!` fora do declarado é **[não verificado]**; não há delta proposto para examinar. Os comandos de M6 e M7 têm caminhos de escrita quando aplicados, por isso testes precisam respeitar o escopo autorizado. [encerrar:54](app/chamados/management/commands/encerrar_perguntas_com_fato.py:54), [validar_classe_a.py:88](app/chamados/management/commands/validar_classe_a.py:88).
-
-**Item 2 — NAO PROCEDE.** A exigência de guardar o RED Django em arquivo é compreensível e, no texto fornecido, não apresenta por si só colisão com F9=(A) ou com o limite dos comandos.
-
-1. **Premissas.** O anexo `veredito_opus.md` fornecido afirma que o RED da c3 ficou declarado sem log Django. A existência e o conteúdo de um log independente são **[não verificado]**; o anexo fornecido não tem linhas para citar.
-2. **Colisão.** Guardar a saída de um RED não exige, por si só, mudar F9=(A). Alterações dos três comandos continuariam limitadas ao que o RED exigir, conforme `aval.txt` fornecido; confirmação independente do aval vigente é **[não verificado]**.
-3. **Literal.** “RED com log Django guardado em arquivo” é executável em princípio, mas o comando, a falha observada e o conteúdo do futuro log são **[não verificado]**.
-4. **Exportada, dinheiro ou `!`.** O item declara um artefato de log, sem declarar alteração nesses domínios; efeitos de uma execução concreta são **[não verificado]**.
-
-A revisão foi somente por leitura. Nenhum teste ou mutante foi executado, nenhum arquivo foi criado, e a correspondência da cópia ao hash informado é **[não verificado]**. [nao verificado]
-
-_7190 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7192 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
