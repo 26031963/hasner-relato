@@ -1,7 +1,123 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 14:56** · publicado em **19/11/2026 14:58** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:08** · publicado em **19/11/2026 15:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:08 · sessao b4d0bb13a00e · REPLAY-PORTA-EXPORT-SOL62 · verificador · origem=Code
+
+**Reprovado na cópia.** O POST dispara o comando em segundo plano e o carimbo ganhou uma chave por competência. A obra ainda permite duas medições consecutivas do mesmo pedido, permite que uma tentativa sobrescreva o estado de outra e pode publicar `SELO VERDE` com um carimbo vermelho da própria rodada. A virada do dia também pode dar data de hoje a uma medição iniciada ontem. `app/folha/porta_export.py:774`, `app/folha/porta_export.py:990`, `app/folha/porta_export.py:1138`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:128`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:150`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:236`.
+
+Os seis arquivos conferem com os hashes de conteúdo do diff. Revisei a cópia em leitura e executei apenas duas verificações em memória, do scanner AST e da agregação com resultados simulados. Hash do commit completo, suíte com banco, dados e execução em produção [nao verificado]. [nao verificado]
+
+### 1. Quem escreve e quem lê
+
+| Campo ou linha | Escritor e leitor encontrados na cópia |
+|---|---|
+| `porta_export_leitores:AAAA-MM` | `lavrar` escreve. O comando chama `lavrar` e `estado_da_porta` lê. Ambos usam `chave_do_carimbo`. O campo existente comporta 60 caracteres. Em testes, `_carimbo` escreve diretamente, `lavrar_verde_para_teste` delega a `lavrar` e o teste R4 consulta a linha diretamente. `app/folha/porta_export.py:775`, `app/folha/porta_export.py:875`, `app/folha/porta_export.py:917`, `app/folha/porta_export.py:1078`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:135`, `app/inteligencia/models.py:87`, `app/folha/tests/test_porta_do_export.py:40`, `app/folha/tests/test_porta_sem_beco.py:177`. |
+| `porta_export_pedido:AAAA-MM` | `pedir` cria, `assumir` cria ou atualiza, `_linha_do_pedido` lê. Ambos os snapshots usam `escopo='empresa'`, `escopo_id=empresa.pk` e `data_ref` na identidade. Os escritores também preenchem `data_ini` com o dia civil. A porta consulta `data_ref` e não usa `data_ini`. `app/folha/porta_export.py:776`, `app/folha/porta_export.py:923`, `app/folha/porta_export.py:977`, `app/folha/porta_export.py:1009`, `app/folha/porta_export.py:1029`, `app/folha/porta_export.py:1078`, `app/inteligencia/models.py:103`. |
+| `detalhe['estado']` do pedido | `pedir` grava `PEDIDO`, `assumir` grava `EM_CURSO` e `_mudar_estado` grava as demais transições chamadas por `pedir`, `encerrar` e `vigiar`. `disparar` pede `FALHOU` via `encerrar` quando recebe `OSError`. Leem o estado `pedir`, `vigiar`, `estado_da_porta` e o filtro da própria atualização condicional. `vigiar` lê `pedido_em` e `_campos_do_texto` lê `motivo`. `app/folha/porta_export.py:988`, `app/folha/porta_export.py:990`, `app/folha/porta_export.py:1005`, `app/folha/porta_export.py:1017`, `app/folha/porta_export.py:1032`, `app/folha/porta_export.py:1040`, `app/folha/porta_export.py:1050`, `app/folha/porta_export.py:1057`, `app/folha/porta_export.py:1080`, `app/folha/porta_export.py:1097`, `app/folha/porta_export.py:1141`. |
+| `valor` | No carimbo, `lavrar` grava o total de falhas ou `-1` quando a medição não produz esse total. `estado_da_porta` decide com ele e `conferir` o exibe na divergência. No pedido, `pedir` e `assumir` gravam `NULL`. A decisão da porta usa o estado do pedido. `app/folha/porta_export.py:777`, `app/folha/porta_export.py:862`, `app/folha/porta_export.py:1011`, `app/folha/porta_export.py:1031`, `app/folha/porta_export.py:1080`. |
+| `calculado_em` | O modelo atualiza o instante nos salvamentos via `auto_now`. `_mudar_estado` o grava explicitamente no `QuerySet.update`. A porta decide a validade pelo dia em `data_ref` e o prazo pelo `pedido_em`. `app/inteligencia/models.py:96`, `app/folha/porta_export.py:991`, `app/folha/porta_export.py:1057`, `app/folha/porta_export.py:1078`. |
+
+Não encontrei leitor ativo da chave antiga nem segundo escritor do carimbo fora das fixtures. A chave antiga aparece como prefixo e em documentação histórica. A API genérica `serie` aceita chave explícita, sem chamada para essas chaves na cópia. O escritor genérico exige registro, e os registros encontrados são de outras métricas. `app/folha/porta_export.py:18`, `app/folha/porta_export.py:920`, `app/docs/RELATO-ARQUIVO.md:42296`, `app/docs/PENDENTES_RONALD.json:2342`, `app/inteligencia/metricas.py:39`, `app/inteligencia/metricas.py:62`, `app/inteligencia/calculadores.py:9`, `app/inteligencia/calculadores.py:302`.
+
+### 2. Quando `conferir` libera
+
+- **Para os valores produzidos por `medir`, o retorno vazio exige um snapshot com zero, filtrado por empresa, competência e dia civil da consulta.** Ausência, `NULL`, negativo e positivo barram. A competência vem da chave, e a leitura deixou de confrontar `detalhe.mes/ano`. Um `NaN` que chegasse ao leitor escaparia dos dois testes de sinal e cairia em `PRONTA`. Linha desse tipo na cópia de dados ou em produção [nao verificado]. `app/folha/porta_export.py:762`, `app/folha/porta_export.py:813`, `app/folha/porta_export.py:1078`, `app/folha/porta_export.py:1081`.
+- **Na virada do dia, um carimbo com a data certa pode representar uma medição de ontem.** `medir` fixa o instante na entrada. `lavrar` consulta o dia de novo no fim. O pedido pode ficar em D, o carimbo em D+1 e a porta liberar em D+1. A leitura também consulta o relógio separadamente para pedido e carimbo. `app/folha/porta_export.py:318`, `app/folha/porta_export.py:338`, `app/folha/porta_export.py:774`, `app/folha/porta_export.py:978`, `app/folha/porta_export.py:1028`, `app/folha/porta_export.py:1077`.
+- **Um verde anterior do mesmo dia pode liberar com uma nova medição em curso.** Basta o cron assumir depois da leitura do pedido e antes da decisão sobre o carimbo. A consulta à trava só acontece se a cópia lida do pedido disser `PEDIDO` ou `EM_CURSO`. Um verde anterior também prevalece sobre `FALHOU` já persistido. `app/folha/porta_export.py:1051`, `app/folha/porta_export.py:1077`, `app/folha/porta_export.py:1081`.
+
+### 3. Request e concorrência
+
+- **O request não chama `medir` nem `lavrar` para a porta.** Ele consulta, registra o pedido e usa `Popen` para o mesmo `tenant_command`, com schema, empresa, mês e ano. O recálculo que a view faz depois da liberação pertence à montagem do TXT. O diff altera a chamada da porta, e a montagem segue pelo mesmo `montar_linhas_export`. `app/folha/views.py:130`, `app/folha/views.py:209`, `app/folha/views.py:267`, `app/folha/porta_export.py:1108`, `app/folha/porta_export.py:1129`, `app/folha/porta_export.py:1138`.
+- **Duas chamadas completas de `medir` para o mesmo alvo ficam mutuamente excluídas** se os processos usam o mesmo banco, o mesmo schema e preservam suas sessões PostgreSQL. O comando que perde a trava pula o alvo. Isso vale entre `saas_ui` e `saas_core` sob essas condições. Banco e sessões efetivos dos containers em produção [nao verificado]. `app/folha/porta_export.py:934`, `app/folha/porta_export.py:952`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:122`, `app/config/settings/saas.py:83`.
+- **A trava não deduplica execuções consecutivas.** O cron pode concluir enquanto o filho do clique ainda sobe. Quando o filho consegue a trava, `assumir` sobrescreve `CONCLUIDO` e mede de novo. Dois cliques também podem repetir se o segundo guardou uma leitura de `SEM_MEDICAO` e só chama `pedir` após a conclusão do primeiro. Em paralelo, alvos de empresas diferentes podem repetir a mesma varredura `cartao_x_txt_divergentes`, que percorre todas as ativas da competência sob travas de empresa diferentes. `app/folha/porta_export.py:1017`, `app/folha/porta_export.py:1029`, `app/folha/porta_export.py:1108`, `app/folha/porta_export.py:667`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:122`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51`.
+
+### 4. Estados, vigia e chave da trava
+
+- **Processo morto é tratado na próxima leitura.** `EM_CURSO` sem trava vira `FALHOU`. `PEDIDO` sem trava vira `FALHOU` após 300 s. Se a sessão continua segurando a trava e o job fica pendurado, a porta do dia segue em `EM_CONFERENCIA` sem prazo. Linhas antigas podem ficar com estado ativo persistido porque a vigia só consulta o dia corrente. `app/folha/porta_export.py:900`, `app/folha/porta_export.py:978`, `app/folha/porta_export.py:1051`, `app/folha/porta_export.py:1060`, `app/folha/porta_export.py:1077`.
+- **Uma tentativa pode encerrar outra.** Exemplo concreto: o clique cria `PEDIDO`, o cron assume a linha, o `Popen` falha e o clique grava `FALHOU` sobre o `EM_CURSO` do cron. O cron pode lavrar e depois falhar ao gravar `CONCLUIDO`. O filtro testa só `pk` e estado, e o comando ignora o retorno. Pelo mesmo motivo, um vigia atrasado pode marcar como morta uma tentativa nova que voltou ao mesmo estado. Quando a atualização perde, o vigia devolve o objeto antigo sem releitura. `app/folha/porta_export.py:990`, `app/folha/porta_export.py:1037`, `app/folha/porta_export.py:1051`, `app/folha/porta_export.py:1141`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:135`.
+- **O motivo de `FALHOU` pode sumir antes da resposta.** Sem carimbo, o POST vê `FALHA`, repede e limpa `detalhe` antes de montar a mensagem. Com carimbo verde ou divergente, o carimbo prevalece sobre o pedido falho. `app/folha/porta_export.py:1017`, `app/folha/porta_export.py:1081`, `app/folha/porta_export.py:1108`.
+- **`pg_locks` está certo na faixa nominal.** Filtra o banco corrente, `advisory`, `granted`, `classid` com máscara sem sinal, `objid=k2` e `objsubid=2`. A codificação perde o século: 11/2000 e 11/2100 colidem para a mesma empresa, e ambos os anos passam no POST. Schemas distintos também colidem por CRC32. Verifiquei em memória `t_972a1e33e0984073` e `t_53b380036f90f404`, ambos com `334301602`. Empresas distintas têm `k2` distinto na faixa nominal, mas `pk=214749` em 11/2026 já excede `int4`. O código também não converte `k2` para sem sinal se uma entrada fora da faixa nominal o tornar negativo. `app/folha/porta_export.py:928`, `app/folha/porta_export.py:937`, `app/folha/porta_export.py:952`, `app/folha/porta_export.py:969`, `app/core/sanitiza.py:30`, `app/config/settings/base.py:104`.
+
+### 5. Juízes, relógio e selo de tela
+
+- **Não encontrei duplicação de juiz registrado nem inversão de ordem de trava no diff.** O rollout delega ao `_K8` e a medição consulta `classificar_export`, `_K1/_K2`. O comando toma a trava antes de `assumir`, e a transação local de `pedir` termina antes do disparo. A corrida identificada é entre a consulta de vida e a atualização do pedido. A derivação paralela de competência está no default preexistente da tela, que usa mês civil e já consta como pendência no registro. `app/core/juizes.py:329`, `app/core/juizes.py:345`, `app/core/juizes.py:824`, `app/ponto/services/gestao_he.py:427`, `app/folha/porta_export.py:469`, `app/folha/porta_export.py:1008`, `app/folha/porta_export.py:1051`, `app/folha/views.py:90`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:122`.
+- **Há releitura de relógio fora da borda.** Além da virada entre `medir` e `lavrar`, o rollout consulta o dia por empresa. `data_ref` é dia civil e `calculado_em` é instante. O campo genérico `valor` já tem mais de uma unidade: percentual no armazém genérico e contagem de falhas ou sentinela no carimbo. O total do carimbo combina falhas próprias com falhas de toda a competência. `app/inteligencia/models.py:90`, `app/inteligencia/metricas.py:55`, `app/folha/porta_export.py:762`, `app/folha/porta_export.py:774`, `app/folha/porta_export.py:777`, `app/ponto/services/gestao_he.py:427`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:48`.
+- **O selo AST morde literais e não cobre o fluxo de dados até o template.** Em memória, o scanner varreu 494 arquivos, encontrou zero ocorrências no recorte, detectou um literal proibido e deixou passar a mesma mensagem montada por concatenação. Ele exclui templates, JS e commands. Há caminho concreto para valores dinâmicos: a razão social cadastrada e o texto de exceções entram na recusa, que chega ao template via `messages` ou ao cliente via `HX-Trigger`. A instrução fixa antiga saiu. Ocorrência desses valores em produção [nao verificado]. `app/folha/tests/test_porta_sem_beco.py:354`, `app/folha/tests/test_porta_sem_beco.py:370`, `app/folha/tests/test_porta_sem_beco.py:384`, `app/folha/tests/test_porta_sem_beco.py:413`, `app/colaboradores/views.py:509`, `app/colaboradores/views.py:540`, `app/folha/porta_export.py:908`, `app/folha/porta_export.py:1097`, `app/folha/porta_export.py:1141`, `app/folha/views.py:135`, `app/core/respostas.py:63`, `app/templates/folha/exportar.html:10`.
+
+### 6. Alvos, soma e `SystemExit`
+
+- **Os alvos válidos delimitam a lavra.** `--rollout` pega as ativas em rollout na competência corrente de cada uma. `--empresa N` com ID positivo pega apenas a ativa indicada. **`--empresa 0` é aceito e tratado como opção ausente**, deixando a execução explícita por mês e ano carimbar todas as ativas. O subcontador de cartão percorre todas as ativas mesmo numa lavra restrita. O cron diário consta como fora do pipeline na cópia. Cron instalado ou executado em produção [nao verificado]. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:35`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:44`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:52`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:135`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51`, `app/config/crons.py:769`, `app/config/crons.py:887`.
+- **A soma por competência está certa se as releituras do mesmo mês e ano concordam. O veredito pode inverter se discordam.** O último valor substitui o anterior. Em memória, com duas empresas em 10/2026 retornando `1` e `0`, uma terceira em 11/2026 retornando `0` e todas as falhas próprias em zero, o comando simulou lavras `1, 0, 0` e publicou `SELO VERDE`. A identidade por empresa passa nos três casos. Os testes de soma usam competência fixa e valores repetidos iguais, e o teste de rollout mede um único alvo com `medir` simulado. Com alvos compartilhados e total zero, o comando imprime `SEM VEREDITO` e retorna normalmente. `app/folha/porta_export.py:318`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:149`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:188`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:226`, `app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:136`, `app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:166`, `app/folha/tests/test_porta_sem_beco.py:226`.
+- **O efeito de `SystemExit` depende do ponto da saída.** Exceção comum de `medir` grava `FALHOU` antes de sair. `SystemExit` dentro de `medir`, ou exceção na lavra, deixa `EM_CURSO` até a vigia após a liberação da trava. Saída antes de assumir deixa `PEDIDO` até o prazo, como no POST direto para empresa inativa. Se `cartao_x_txt=None`, o comando grava carimbo `-1` e `CONCLUIDO` antes de sair vermelho. Nesse caso o motivo se perde: `medir` devolve `erro_cartao_x_txt`, `lavrar` omite o campo e a mensagem tenta lê-lo. As validações posteriores também podem sair em vermelho depois de o carimbo já ter sido gravado. `app/folha/views.py:120`, `app/folha/porta_export.py:737`, `app/folha/porta_export.py:777`, `app/folha/porta_export.py:799`, `app/folha/porta_export.py:956`, `app/folha/porta_export.py:1053`, `app/folha/porta_export.py:1097`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:61`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:129`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:137`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:189`.
+
+## 19/11 15:07 · sessao d5fdbc36d494 · - · - · origem=Ronald (tmux)
+
+- **Carimbo.** `lavrar` é o escritor de produção. Grava chave por competência, empresa, dia local, valor e detalhe. O comando chama `lavrar` após `medir`. `estado_da_porta` consulta pela mesma função de chave, empresa e dia, e lê `valor`. `conferir` lê detalhes e valor da divergência. O único escritor direto adicional é uma fixture. A chave antiga aparece como prefixo e em documentos históricos, sem consulta executável encontrada. `app/folha/porta_export.py:18,768–799,812–863,917–920,1077–1090`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:128–136`; `app/folha/tests/test_porta_do_export.py:33–42`; `app/docs/RELATO-ARQUIVO.md:42296`; `app/docs/PENDENTES_RONALD.json:2342`.
+
+- **Pedido.** `pedir` cria `PEDIDO`, `assumir` grava `EM_CURSO`, e `_mudar_estado` atualiza estado/timestamps por PK e estado anterior. O reset, o encerramento pelo comando, o vigia e a falha de `Popen` passam por essa transição. `_linha_do_pedido` consulta chave, empresa e dia. `pedir`, `vigiar` e `estado_da_porta` leem o estado. O prazo usa `pedido_em`, a mensagem usa o motivo, e `valor` do pedido nasce e permanece `NULL`. `calculado_em` usa `auto_now` nas gravações por modelo e atualização explícita no CAS, sem leitor decisório nessas famílias. `app/folha/porta_export.py:975–1063,1077–1099,1140–1144`; `app/inteligencia/models.py:87–105`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:128–136`.
+
+- **Liberação.** O retorno vazio só passa por `PRONTA`. No fluxo normal, ela exige snapshot com a chave, empresa e dia consultados, de valor zero. A guarda já não cruza a competência do JSON. Uma linha anômala com `NaN` cairia no `else`, mas o caminho normal produz inteiros ou `-1`, e a existência de linha anômala é [não verificado]. Uma medição iniciada antes da meia-noite pode publicar carimbo do dia seguinte, pois `medir` fixa seu instante no início e `lavrar` lê a data novamente. `FALHOU` também fica oculto por um verde anterior. `app/folha/porta_export.py:318,337–338,664–691,762–777,812–814,1077–1090`.
+
+- **Corridas.** O lock exclui `medir` simultâneo do mesmo alvo na mesma base/schema, mas jobs de empresas distintas repetem simultaneamente a testemunha global da mesma competência. O vigia pode marcar um sucessor `FALHOU` entre leitura da trava e CAS. Um `Popen` que falha pode fazer o mesmo a um cron já em curso na linha compartilhada. Um filho atrasado pode medir novamente depois que o cron libera a trava. `app/folha/porta_export.py:664–670,940–972,981–994,1023–1062,1140–1144`; `app/relatorios/management/commands/cartao_x_txt_divergentes.py:20–24,51–75`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:121–136`.
+
+- **Escopo e veredito.** `--empresa 0` ignora o filtro e alcança todas as ativas. `DA_COMPETENCIA` registra a última leitura por mês/ano. Uma leitura positiva seguida por zero na mesma competência pode publicar selo verde com carimbo vermelho já lavrado para a primeira empresa. `cartao_x_txt=None` carimba `-1` e encerra como `CONCLUIDO` antes de sair vermelho. O detalhe do carimbo omite `erro_cartao_x_txt`, embora a mensagem o tente ler. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:32–55,128–151,188–193,226–237`; `app/folha/porta_export.py:671–675,737,779–799,1094–1099`.
+
+- **Selo.** O scanner AST lido em memória encontrou zero ocorrências em 494 arquivos do seu recorte. Morde literal proibido e deixa passar concatenação com `+` e dados interpolados. Razão social cadastrada e motivos de exceção podem carregar o texto até a resposta. A cópia cadastra o comando em `FORA_DE_PIPELINE`, sem cron diário ali. `app/folha/tests/test_porta_sem_beco.py:354–418`; `app/colaboradores/views.py:504–509,535–552`; `app/folha/porta_export.py:910–913,1094–1099`; `app/folha/views.py:130–135`; `app/core/respostas.py:63–71`; `app/templates/folha/exportar.html:10`; `app/config/crons.py:769,887–897`. Execução da suíte, do subprocesso real e comportamento em produção [não verificado].
+
+## 19/11 15:07 · sessao aae1bfb4e6c5 · - · - · origem=Ronald (tmux)
+
+**Q5.** O rollout delega ao juiz registrado `janela_atual` e a decisão da porta fica concentrada em `estado_da_porta`. A seleção inicial da tela ainda deriva a competência pelo mês civil de `timezone.now()`, pendência já registrada na cópia. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:44–49`, `app/ponto/services/gestao_he.py:424–429`, `app/core/juizes.py:345,824–825`, `app/folha/porta_export.py:812–815`, `app/folha/views.py:88–97`.
+
+- **Virada do dia.** `assumir` grava o dia inicial, `medir` fixa seu instante e `lavrar` consulta a data novamente quando termina. Medição iniciada em D, encerrada após meia-noite, pode liberar D+1 com âncora de D e pedido na partição de D. O leitor também consulta separadamente o dia do pedido e do carimbo. `app/folha/porta_export.py:21–23,313–338,774–777,975–978,1023–1034,1077–1090`.
+- **Selo AST.** Em execução isolada somente em memória, o scanner varreu 494 arquivos da cópia, obteve zero ocorrências, pegou o literal e deixou passar a concatenação `'Ro' + 'de: ' + 'docker' + ' exec saas_core'`. Ele examina constantes contíguas de `.py` nos apps enumerados. A razão social entra por POST e pode carregar esses termos ao texto da porta, que chega ao template por Django messages. Motivos brutos de exceção também são interpolados. `app/folha/tests/test_porta_sem_beco.py:354–418`, `app/colaboradores/views.py:504–512,535–552`, `app/folha/porta_export.py:815–816,911–913,1094–1099,1140–1144`, `app/folha/views.py:130–135`, `app/core/respostas.py:63–71`, `app/templates/folha/exportar.html:10`.
+- **Semântica.** O modelo documenta `valor` como percentual. O carimbo guarda contagem e sentinela `-1`, comportamento preexistente, e o pedido guarda `NULL`. `calculado_em` do pedido passa a indicar transição de estado. `app/inteligencia/models.py:81–96`, `app/folha/porta_export.py:775–779,987–991,1008–1011,1029–1033`.
+- **Travas.** O command pega a advisory antes da linha do pedido. O POST encerra seu `atomic` local antes de disparar. O vigia faz leitura de `pg_locks` e CAS em operações separadas, com janela de corrida. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:121–136`, `app/folha/porta_export.py:1008–1013,1051–1055,1108–1113`.
+
+**Q6.** O command carimba apenas alvos com argumentos válidos, porém `--empresa 0` é aceito e cai no caminho de todas as ativas. A medição global de cartão × TXT varre todas as ativas da competência, inclusive fora do rollout, e pode repetir essa submedição em outro processo trancado por empresa diferente. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:32–55,121–136`, `app/folha/porta_export.py:664–670`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51–75`.
+
+- **Veredito pode dar verde falso.** As competências distintas somam, mas dentro da mesma competência a última medição substitui as anteriores. Em sonda simulada do `handle`, empresas A/B em 11/2026 retornaram 1/0 e C em 12/2026 retornou 0. As chamadas simuladas de lavra foram 1/0/0 e a saída final foi `SELO VERDE`. Em execução real, o contador varre dados vivos a cada empresa. O teste de agregação fixa uma competência e o teste de rollout mocka `medir` para uma empresa. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:121–151,224–237`, `app/folha/porta_export.py:313–318,664–670`, `app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:128–139,163–225`, `app/folha/tests/test_porta_sem_beco.py:217–232`.
+- **`SystemExit` e motivo.** Exceção comum em `medir` grava `FALHOU`; `SystemExit` interno ou falha na lavra deixam `EM_CURSO` até a vigia. Empresa desativada entre clique e execução deixa `PEDIDO` até o prazo. `cartao_x_txt=None` grava `-1` e `CONCLUIDO` antes de encerrar vermelho. O erro de cartão calculado fica fora da lavra e a interface pode exibir motivo genérico. Validações posteriores também podem imprimir vermelho depois de carimbo persistido. `app/folha/views.py:109–120`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:52–65,129–139,165–193`, `app/folha/porta_export.py:671–675,737,775–799,954–959,1043–1062,1094–1099`.
+- A cópia lista o selo em `FORA_DE_PIPELINE`. Instalação e execução em produção [não verificado]. `app/config/crons.py:769,887–897`.
+
+## 19/11 15:07 · sessao 0cdddb10b871 · - · - · origem=Ronald (tmux)
+
+**Q3.** O POST confere a porta e dispara o mesmo command via `Popen`, com schema, empresa e competência. `medir` e `lavrar` são chamados pelo command, sob a trava, antes de liberar a sessão. Sessões distintas que usam o mesmo banco e a mesma chave válida não medem simultaneamente enquanto a sessão proprietária mantém a trava. Configuração efetiva das duas cascas em produção [não verificado]. `app/folha/views.py:130–150`, `app/folha/porta_export.py:940–960,1108–1141`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:121–136`, `app/config/settings/saas.py:76–93`.
+
+- Há duplicação sequencial. O cron pode consumir e concluir o `PEDIDO` enquanto o filho do clique inicia, e o filho, ao entrar depois, sobrescreve `CONCLUIDO` e mede novamente. Dois cliques com leitura inicial defasada também podem repetir, pois `pedir` aceita `CONCLUIDO` sem reconferir o carimbo. `app/folha/porta_export.py:997–1034,1108–1113`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:121–136`.
+- Dois alvos de empresas diferentes podem executar simultaneamente a testemunha global `cartao_x_txt_divergentes`, que varre todas as empresas ativas da competência. As chamadas completas de `medir` continuam separadas pelo alvo. `app/folha/porta_export.py:665–670,928–937`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:20–24,51–70`.
+
+**Q4.** O vigia usa banco atual, `granted`, `classid` sem sinal, `objid` e `objsubid=2`, coerentes com os dois `int4` na faixa nominal. Há colisão de 2000 com 2100 para o mesmo mês e empresa, ambas datas aceitas pelo POST. Há colisão de CRC32 entre os schemas `t_972a1e33e0984073` e `t_53b380036f90f404` pelo algoritmo local, verificada em memória. Empresa 214749 em 11/2026 produz `2147492611`, fora de `int4`. Instâncias reais [não verificado]. `app/folha/porta_export.py:928–937,963–972`, `app/core/sanitiza.py:8,30–35`, `app/config/settings/base.py:104`.
+
+- Sem trava viva, a próxima leitura transforma `EM_CURSO` em `FALHOU` ou expira `PEDIDO` após 300 s. Com sessão viva e medição travada, inexiste prazo para sair da conferência. Um `PEDIDO` do dia seguinte também pode enxergar a mesma trava de ontem, porque a data está na linha e ausente da chave advisory. `app/folha/porta_export.py:900,937,975–978,1043–1063,1077–1082`.
+- O CAS aceita apenas `pk` e estado. Um vigia atrasado pode reprovar um `PEDIDO` novo que reutilizou o mesmo `pk`. Se o CAS falha, o retorno continua usando a instância anterior e pode exibir conferência temporariamente. `app/folha/porta_export.py:981–994,1017–1019,1043–1063`.
+- Se o cron assume enquanto o clique ainda tenta iniciar, a falha de `Popen` pode gravar `FALHOU` por cima do cron vivo. O cron pode lavrar, mas sua transição para `CONCLUIDO` exige estado ativo e seu retorno é ignorado. `app/folha/porta_export.py:1023–1040,1140–1145`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:128–136`.
+- `FALHOU` perde a precedência para carimbo existente, inclusive verde. Sem carimbo, o POST pode consumir a própria falha detectada e apagar o motivo ao repedir antes de renderizar. `app/folha/porta_export.py:1017–1019,1080–1099,1108–1113`.
+
+**Relógio e cron.** `medir` congela um instante de início, `assumir` data o pedido e `lavrar` relê o dia ao terminar. Uma rodada cruzando a meia-noite pode dar carimbo de hoje a uma medida de ontem. A leitura do pedido e do carimbo também recebe o dia de duas chamadas separadas. O diário consta fora do pipeline na cópia. `app/folha/porta_export.py:318,338,774–777,975–978,1028–1033,1077–1079`, `app/config/crons.py:769,887–897`.
+
+**Q6 complementar.** `--empresa 0` é ignorado e leva às empresas ativas porque o recorte testa a veracidade do inteiro. Empresa inativa pode gerar `PEDIDO` pelo POST, mas o command sai antes de assumir e o vigia só o expira depois. `app/folha/views.py:109–120`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:32–65`, `app/folha/porta_export.py:1056–1063`. A soma deduplica cada competência pelo último valor. Se o contador global de A vale 1 e o de B, da mesma competência, vale 0, o selo pode publicar VERDE com carimbo vermelho para A. A identidade verificada por empresa não valida igualdade entre leituras globais. `app/folha/porta_export.py:318,665–673,762–764`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:135,148–151,188–193,226–237`.
+
+Os seis blobs locais correspondem aos identificadores pós-diff de `diff_A.patch`. HEAD e execução dos testes [não verificado]. [nao verificado]
+
+## 19/11 15:06 · sessao aea9697bb03f · DST-L2-JZ1-C7 · verificador · origem=Code
+
+1. **As premissas conferem na cópia.** `retratar_com_motivo` entra no `atomic`, toma `trava_na_ordem` quando há `colaborador_id` e relê só `justificativa_relacionada` com `ch.refresh_from_db(fields=['justificativa_relacionada'])`. A retenção e o ato recebem a instância com o ponteiro relido. A correspondência da cópia com o hash informado está [nao verificado]. [app/chamados/reconciliador.py:537] [app/chamados/reconciliador.py:544] [app/chamados/reconciliador.py:557]
+
+   O teste `test_iii_b_fora_do_ato_PONTEIRO_gravado_D3_rejeita` carrega `ch`, grava o ponteiro para J3 sem atualizar a instância e chama a unidade com `aprovando=False`. Ele exige `(True, None)`, chamado `resolvido` e J3 `rejeitada`. O ramo de retenção por justificativa alheia só roda em `_APROVANDO`. No ato, o D3 inclui o ID do ponteiro na consulta de pendentes e grava a rejeição. A execução do teste está [nao verificado]. [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:177] [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:192] [app/chamados/reconciliador.py:453] [app/chamados/reconciliador.py:583] [app/ponto/services/justificativa.py:280] [app/ponto/services/justificativa.py:351] [nao verificado]
+
+2. **O item 5 resolve a colisão apontada na volta 1.** O aval de construção diz em B1 “reler do BANCO o ponteiro do chamado” e em B2(iii) “fora de _APROVANDO nada muda (a rejeicao pelo D3 segue sendo a regra)”. O aval 1510 diz “B1 PREVALECE” e determina que a frase passa a ler-se “a REGRA nao muda”. Isso autoriza a mudança de resultado que motivou o `BLOQUEIA` da volta 1 e que o próprio teste iii-b declara. A localização dos trechos dos anexos em arquivo está [nao verificado]. [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:17] [nao verificado]
+
+3. **A contagem dos pares fecha. A contagem dos desfechos fica indefinida.** O primeiro universo é enumerável pelo `status_local` em `VIVOS` (`aberto`, `em_analise`, `registrado`) e pela FK gravada apontando para uma justificativa com `status='pendente'`. Cada par pode ser listado pelos dois PKs. O total e a lista da frota estão [nao verificado]. [app/chamados/catalogo/motor.py:24] [app/chamados/models.py:75] [app/ponto/services/justificativa.py:283]
+
+   A unidade real do desfecho completo é uma só, `retratar_com_motivo`. Ela executa retenção, transição, D3 e cerca. `retencao_da_retratacao` decide a retenção, `pendentes_do_vinculo` define as candidatas do D3 e `reconciliaria()` consulta a decisão de fechamento. Cada função cobre uma parte do desfecho. [app/chamados/reconciliador.py:439] [app/chamados/reconciliador.py:528] [app/chamados/reconciliador.py:557] [app/chamados/reconciliador.py:576] [app/ponto/services/justificativa.py:262] [app/chamados/models.py:670]
+
+   O item 5 deixa em aberto qual ponteiro a instância velha teria, se a sonda roda dentro ou fora de `_APROVANDO` e se “desfecho” significa o retorno da unidade, o estado do chamado, o da justificativa ou a combinação deles. No iii-b, por exemplo, a rejeição muda enquanto o chamado resolve. Rodar o código atual com duas instâncias diferentes também não reproduz a leitura antiga, porque ambas recebem o ponteiro do banco. Sem definir essa comparação, o par gravado identifica um candidato à medição, sem dizer se ele mudaria de desfecho. [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:18] [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:177] [app/chamados/reconciliador.py:453] [app/chamados/reconciliador.py:557]
+
+4. **O fluxo inspecionado não abre exceção à cerca nem contém escrita direta de dinheiro.** A cerca veta a escrita de pergunta de competência entregue e desfaz o ato no savepoint. O D3 grava `status` e `descricao` da justificativa e pode acionar o cartório pelo `post_save`. A exigência de `!` para alterar o `FechamentoMensal` exportado está na L-092. Efeitos indiretos sobre competência exportada ou valores na frota estão [nao verificado]. [app/chamados/reconciliador.py:562] [app/chamados/services/fio.py:1424] [app/chamados/services/fio.py:1448] [app/ponto/services/justificativa.py:351] [app/ponto/signals.py:161] [CLAUDE.md:411]
+
+**PROCEDE (o item 5 não define a referência de comparação nem o desfecho a contar na sonda).** [app/chamados/reconciliador.py:453] [app/chamados/reconciliador.py:557] [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:192]
 
 ## 19/11 14:56 · sessao c9af4452ff4a · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -708,263 +824,4 @@ def main():
 
 main()
 
-## 19/11 13:59 · sessao 57d2e9a9fdd8 · ESPELHO-HE-ROTULO · leitura · origem=Code
-
-A lista é exibida diretamente no espelho e no cartão PDF com texto fixo sobre decisão; esses dois pontos **não consultam o estado vigente para escolher esse texto**. Ela também é copiada para o retrato como `pontas` e transformada em `he_pendente` no portão de exportação, onde há leitores que consultam o estado vigente. [app/templates/ponto/espelho.html:189; app/relatorios/pdf_espelho.py:932; app/ponto/services/he_pendente_lavrado.py:148; app/folha/porta_export.py:184; app/folha/porta_export.py:681]
-
-A consulta de `estado_por_dia` usa `DecisaoHE.objects.vigentes()`. Quando indico “sim”, a consulta ocorre antes da decisão ou apresentação descrita; isso não significa que ela filtre a lista original. [app/ponto/services/gestao_he.py:63; app/ponto/services/gestao_he.py:86]
-
-| Leitor | Classe | O que faz e consulta de decisão |
-|---|---|---|
-| [espelho.html:189](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/templates/ponto/espelho.html:189) | **EXIBE** | Para cada ponta, mostra minutos e o rótulo fixo “sem decisão”; o tooltip usa hora, sentido e marco. **Não consulta** a decisão vigente para esse rótulo. [app/templates/ponto/espelho.html:189] |
-| [pdf_espelho.py:932](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/relatorios/pdf_espelho.py:932) | **EXIBE** | Acrescenta às observações minutos e, conforme o sentido, o marco ou a descrição de dia sem jornada prevista; a frase diz “não conta” ou “não conta sem decisão”. **Não consulta** a decisão vigente para escolher essa frase. [app/relatorios/pdf_espelho.py:932; app/relatorios/pdf_espelho.py:937] |
-| [he_pendente_lavrado.py:68](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/he_pendente_lavrado.py:68) | **CONTA** | Soma os minutos de todas as pontas do dia. A função **não consulta** decisão; seus chamadores usam o total para o retrato e o portão. [app/ponto/services/he_pendente_lavrado.py:55; app/ponto/services/he_pendente_lavrado.py:137; app/folha/porta_export.py:194] |
-| [he_pendente_lavrado.py:132](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/he_pendente_lavrado.py:132) | **DECIDE / CONTA** | `apurar` seleciona dias com lista não vazia, conta dias e pendências e copia os campos para `pontas` no retrato. **Não consulta diretamente**: recebe um mapa opcional de decisões, cujo padrão é vazio; o comando de lavratura carrega `vigentes()` e fornece esse mapa. [app/ponto/services/he_pendente_lavrado.py:89; app/ponto/services/he_pendente_lavrado.py:132; app/ponto/services/he_pendente_lavrado.py:148; app/ponto/management/commands/lavrar_he_pendente.py:48; app/ponto/management/commands/lavrar_he_pendente.py:62] |
-| [porta_export.py:184](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/folha/porta_export.py:184) | **DECIDE / CONTA** | Filtra os dias pela competência e transforma cada ponta em uma entrada de `he_pendente`, incluindo minutos da ponta e do dia. **Não consulta antes da coleta**; depois, `medir` consulta `estado_por_dia` para selecionar dias acima do limite e sem decisão, que podem contar como falhas e travar o TXT se a trava estiver ligada. [app/folha/porta_export.py:181; app/folha/porta_export.py:191; app/folha/porta_export.py:225; app/folha/porta_export.py:681] |
-| [porta_export.py:858](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/folha/porta_export.py:858) | **EXIBE / CONTA** | Na mensagem de recusa do TXT, usa `he_pendente` para mostrar colaboradores, dias e minutos dos dias que travam. **Sim**, recebe os dias selecionados com o estado consultado na medição e guardado no resultado; não faz nova consulta ao montar a mensagem. [app/folha/porta_export.py:681; app/folha/porta_export.py:745; app/folha/porta_export.py:858] |
-| [gestao_he.py:129](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/gestao_he.py:129) | **CONTA / EXIBE** | Lê o alias `pontas`, soma minutos antes e depois e escolhe o sentido dominante para a tira; `_padrao_em_palavras` conta sentidos para a frase de padrão. **Sim**, no fluxo de `enriquecer`, `estado_por_dia` é consultado antes dessas derivações. [app/ponto/services/gestao_he.py:127; app/ponto/services/gestao_he.py:137; app/ponto/services/gestao_he.py:205; app/ponto/services/gestao_he.py:250; app/ponto/services/gestao_he.py:303] |
-| [gestao_he.html:105](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/templates/ponto/gestao_he.html:105) e [gestao_he.html:307](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/templates/ponto/gestao_he.html:307) | **EXIBE** | Mostra a tira e a tabela de apoio com sentido, hora, marco, minutos e estado de cada dia. **Sim**, a view entrega o retrato por `enriquecer`, que sobrepõe o estado vivo antes da renderização. [app/templates/ponto/gestao_he.html:105; app/templates/ponto/gestao_he.html:307; app/ponto/views.py:945; app/ponto/services/gestao_he.py:250; app/ponto/services/gestao_he.py:278] |
-| [views.py:841](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/views.py:841) | **EXIBE / CONTA** | O PDF da Gestão de HE mostra dias, quantidade sem decisão e minutos fora derivados do retrato. **Sim**, chama `enriquecer`, que consulta `estado_por_dia`, antes de montar a tabela. [app/ponto/views.py:804; app/ponto/views.py:807; app/ponto/views.py:841; app/ponto/services/gestao_he.py:250] |
-| [gestao_he.py:401](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/gestao_he.py:401) | **DECIDE** | `itens_sem_decisao` seleciona, do retrato enriquecido, dias e minutos para os atos, conforme ausência de decisão e o critério de limite. **Sim**, indiretamente por `enriquecer`. [app/ponto/services/gestao_he.py:401; app/ponto/services/gestao_he.py:250] |
-| [gestao_he.py:466](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/gestao_he.py:466) | **CONTA** | Conta, no retrato, os dias sem decisão para o contador da Central. **Sim**, consulta `estado_por_dia` antes de contar. [app/ponto/services/gestao_he.py:466; app/ponto/services/gestao_he.py:475] |
-| [recusar_ponta_pequena.py:120](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/recusar_ponta_pequena.py:120) | **DECIDE / CONTA** | Lê dias e minutos derivados do retrato, exclui dias já decididos e encaminha candidatos à porta de recusa de ponta pequena. **Sim**, consulta `DecisaoHE.objects.vigentes()` antes de percorrer os dias. [app/ponto/management/commands/recusar_ponta_pequena.py:120; app/ponto/management/commands/recusar_ponta_pequena.py:133; app/ponto/management/commands/recusar_ponta_pequena.py:156; app/ponto/management/commands/recusar_ponta_pequena.py:170] |
-
-A distinção sobre o espelho e seu PDF é limitada ao **rótulo**: o resultado do motor que alimenta a montagem pode, ele próprio, consultar decisões vigentes; isso não é uma consulta de estado usada por esses dois leitores para escolher a frase exibida. [app/ponto/services/espelho.py:1241; app/ponto/motor_calculo_v2.py:1417; app/templates/ponto/espelho.html:189; app/relatorios/pdf_espelho.py:932]
-
-**Escritores da lista no montador:**
-
-- [espelho.py:735](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:735): inicializa `_he_pendencias` vazia. [app/ponto/services/espelho.py:735]
-- [espelho.py:741](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:741): atribui o retorno de `_marcar_pontas`. [app/ponto/services/espelho.py:741]
-- [espelho.py:754](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:754): concatena as pontas traduzidas do relato do motor. [app/ponto/services/espelho.py:754]
-- [espelho.py:760](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:760): concatena entradas de dias sem jornada prevista. [app/ponto/services/espelho.py:760]
-- [espelho.py:790](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:790): coloca a lista na chave `he_fora_da_janela` do dia. [app/ponto/services/espelho.py:790]
-
-## 19/11 13:59 · sessao 73ff15d4b022 · - · - · origem=Ronald (tmux)
-
-A montagem e os escritores identificados foram comunicados ao agente principal, com as distinções entre a consulta de decisões antes da lavratura e a consulta antes da decisão de travar o export. [app/ponto/services/espelho.py:735](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:735), [app/ponto/management/commands/lavrar_he_pendente.py:48](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/lavrar_he_pendente.py:48), [app/folha/porta_export.py:680](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/folha/porta_export.py:680)
-
-## 19/11 13:59 · sessao 7dea0595464f · DST-L2-JZ1-C7 · verificador · origem=Code
-
-**Resultado: BLOQUEIA.** O diff implementa a decisão de retenção depois da trava, mas o refresh também muda o comportamento fora de `_APROVANDO` quando o ponteiro no banco difere da instância. Isso contraria a leitura literal de B2(iii), que diz “fora de `_APROVANDO` nada muda”; o próprio teste novo documenta e exige essa mudança. Uma autorização para essa diferença está [não verificado]. ([teste C7:17](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:17), [teste C7:177](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:177))
-
-A cópia disponível contém o código e o teste do diff, mas não contém `.git`; portanto, não pude verificar o HEAD nem reconstruir o diff com Git. Os anexos foram fornecidos no pedido sem numeração própria de linhas; onde dependo deles, identifico o anexo e marco a localização em arquivo como [não verificado]. [nao verificado]
-
-1. **B1 — PROCEDE-MENOR.** A implementação entra no `atomic`, chama `trava_na_ordem`, faz refresh somente de `justificativa_relacionada`, consulta o juiz existente e, havendo retenção, chama `registrar_retencao` e retorna `(False, 'retencao')` antes da cerca. A trava é condicional à existência de `colaborador_id`. ([reconciliador.py:536](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:536), [reconciliador.py:544](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:544))
-
-   A leitura anterior ao `atomic` **saiu**; não há duas consultas. O literal diz que ela “pode ficar”, e não que deve ficar; sua remoção, isoladamente, não contradiz essa frase. O teste anterior também cobra uma única consulta da regra na unidade. A consequência de remover a saída cedo é que um chamado já retido passa a entrar na transação e a tomar a ordem global antes de retornar; isso exige a análise do item 5. ([reconciliador.py:552](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:552), [teste c3:436](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:436); literal B1 no anexo [não verificado])
-
-   O diff fornecido altera somente o reconciliador e acrescenta o teste; não altera código de criador [não verificado quanto à completude do diff fornecido]. [nao verificado]
-
-2. **B2 — PROCEDE-MENOR.** Os testes chamam `retratar_com_motivo` real; nos casos de aprovação, marcam o contexto com `no_ato_de_aprovar`, sem passar pela porta completa de aprovação do DP. A costura chama a trava real e injeta uma vez em torno dela; nos testes de uma conexão, as alterações são feitas **depois** da trava real, na mesma transação. Isso força a ordem de execução, mas não demonstra que outro criador consiga commitar depois da trava. ([teste C7:71](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:71), [teste C7:104](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:104))
-
-   - **(i) Morde por análise:** J3 com origem nasce depois da trava real; exige retenção, chamado aberto, J3 pendente e uma trilha. No código velho, a consulta anterior já teria passado e D3 alcançaria J3 por origem. Para o velho passar, seria necessário que a criação ocorresse antes da consulta antiga ou que a decisão fosse novamente tomada após a costura. ([teste C7:116](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:116), [justificativa.py:279](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:279))
-   - **(ii) Morde por análise:** atualiza o ponteiro no banco e mantém a instância antiga; exige retenção e preservação de um título alterado na memória. O código velho precisaria receber a instância já atualizada ou reler o ponteiro para passar. O `update` direto é costura de teste, não a porta produtiva de escrita. ([teste C7:135](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:135), [vinculos.py:81](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/services/vinculos.py:81))
-   - **(iii) É controle, não RED:** pelo vínculo de origem, exige resolução e rejeição por D3. O código velho também pode satisfazê-lo; ele demonstra a regra no cenário montado, não ausência de qualquer mudança fora de `_APROVANDO`. O teste adicional iii-b confirma a mudança descrita no item 3. ([teste C7:160](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:160), [teste C7:177](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:177))
-   - **(iv) Morde por análise:** duas instâncias velhas passam pela unidade, com o ponteiro alterado na primeira chamada; exige duas recusas e uma linha. O código velho precisaria enxergar J3 nas duas leituras antigas para atender essas asserções. A deduplicação existente compara o último detalhe gravado. ([teste C7:198](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:198), [reconciliador.py:490](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:490))
-   - **Duas conexões: morde por análise.** A thread R para **antes** da trava real; a outra conexão cria J3 e a libera por `Event`. No código velho, a leitura cedo já ocorreu antes da pausa; para passar, J3 teria de existir antes daquela leitura ou haver nova decisão depois. No código novo não existe leitura cedo, apesar da descrição do teste. O teste chama a unidade real, mas cria a justificativa diretamente com o cartório silenciado, não pela API, tela ou cron completos. ([teste C7:230](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:230), [teste C7:41](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:41))
-
-   RED executado antes da alteração, resultado verde e logs dos três mutantes: **[não verificado]**. Comentários que afirmam morte dos mutantes não são a evidência de execução. ([teste C7:24](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:24))
-
-3. **Fora de `_APROVANDO` — BLOQUEIA.** No cenário de iii-b, J3 é pendente, não tem `chamado_origem=ch`, e o banco passa a apontar para ela enquanto `ch` em memória ainda tem ponteiro vazio. Antes, D3 usava o ponteiro velho e não alcançava J3: o chamado resolvia e J3 permanecia pendente. Depois, o refresh põe o ponteiro gravado na instância; D3 alcança e rejeita J3, enquanto o chamado resolve. Isso é uma mudança observável, embora a regra D3 continue sendo usada. ([teste C7:177](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:177), [justificativa.py:279](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:279), [justificativa.py:337](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:337))
-
-   O texto de B2(iii) combina “nada muda” com “a rejeição pelo D3 segue sendo a regra”. O diff satisfaz a segunda frase no caso testado, mas não a primeira em seu sentido literal. É necessário devolver essa divergência para decisão; autorização para ela [não verificado].
-
-4. **Escritores, leitores e significado — PROCEDE-MENOR.**
-
-   - **Ponteiro `justificativa_relacionada`:** a porta `apontar_justificativa` grava sob a regra “primeiro vale”; a tela de justificativa e o cron mostrado a chamam. D3 e a retenção leem o ponteiro da instância; outros leitores incluem a transição humana e a premissa regularizada. ([vinculos.py:81](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/services/vinculos.py:81), [ponto/views.py:1648](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/views.py:1648), [processar_alertas_turno.py:426](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/management/commands/processar_alertas_turno.py:426), [justificativa.py:280](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:280), [models.py:142](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/models.py:142), [models.py:1325](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/models.py:1325))
-   - **`Justificativa.chamado_origem`:** a tela o preenche em justificativa existente ou criada; o cron o fornece na criação automática. O vínculo é lido por D3 e também pela rotina que trata o chamado de origem após aprovação. ([ponto/views.py:1634](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/views.py:1634), [processar_alertas_turno.py:392](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/management/commands/processar_alertas_turno.py:392), [justificativa.py:33](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:33), [justificativa.py:279](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:279))
-   - **Significados:** não são FKs inversas garantidas. Uma representa a justificativa apontada pelo chamado; a outra, o chamado que originou a justificativa. D3 deliberadamente usa a união e aceita inclusive ponteiro para justificativa com outra origem. Assim, são duas relações usadas como evidência de vínculo para D3, não dois campos necessariamente equivalentes. ([models.py:75](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/models.py:75), [ponto/models.py:173](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/models.py:173), [justificativa.py:267](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:267), [justificativa.py:298](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:298))
-   - **Status e trilha:** o ato pede a transição do chamado para `resolvido` e chama o escritor de rejeição das justificativas; esse escritor grava `status='rejeitada'`. A retenção lê e grava a trilha por `registrar_retencao`, que consulta a última linha e chama `evento`; o teste também lê `valor_depois`. A deduplicação da justificativa alheia compara o ID pendente, embora a linha também armazene `em_aprovacao`: uma mudança apenas de `em_aprovacao` não gera outra linha por essa comparação. ([reconciliador.py:572](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:572), [justificativa.py:347](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:347), [reconciliador.py:465](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:465), [teste C7:49](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:49))
-
-   **Depois do retorno:** geofence lê `pk` e `colaborador_id`, mas também devolve `perdeu`, que contém a própria instância `ch`; portanto, o ponteiro atualizado pode ser observado por quem consumir esse retorno. O comando de fantasmas passa `c` ao resolver e à nota e lê identificadores; os dois laços do reconciliador usam o resultado e, em erro, o `pk`. Não identifiquei nesses trechos leitura direta posterior do ponteiro; efeitos em todos os consumidores indiretos de `perdeu` e do resolver estão [não verificado]. ([geofence.py:437](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/geofence.py:437), [geofence.py:443](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/geofence.py:443), [reconciliar_fantasmas.py:281](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/management/commands/reconciliar_fantasmas.py:281), [reconciliador.py:1054](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:1054), [reconciliador.py:1515](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:1515))
-
-5. **Classes de reprovação — BLOQUEIA pela mudança do item 3; ordem e selos pendentes de evidência.**
-
-   - **Juiz duplicado, segundo escritor, derivação paralela e relógio fora da borda:** nas linhas produtivas adicionadas, o diff chama o juiz e o escritor existentes, sem nova derivação ou leitura de relógio. Isso é uma inspeção do diff fornecido, não um censo de toda a aplicação. ([reconciliador.py:557](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:557))
-   - **RED e selo:** há casos que mordem por análise no item 2, mas vermelho anterior, verde e três mutantes mortos em disco estão [não verificado]. O controle iii não é, por si, um RED. ([teste C7:160](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:160))
-   - **Ordem de trava:** agora até uma retenção que antes sairia cedo toma, quando há colaborador, a ordem `Colaborador → Disputa → Chamado`, podendo esperar ali; não está demonstrado que a espera seja inofensiva em todos os caminhos. A aprovação do DP chama `travar_origem_antes` antes de travar a justificativa, portanto esse caminho já chega com a ordem global tomada para o universo selecionado. Os caminhos diretos de geofence e fantasmas chamam a unidade sem uma trava anterior visível nos trechos examinados; os caminhos públicos via `retratar`, inclusive comandos e sinais, precisam ser avaliados no contexto transacional de cada chamador. Ausência de inversão ou deadlock em **todos** eles: [não verificado]. ([reconciliador.py:544](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:544), [models.py:2816](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/models.py:2816), [justificativa.py:126](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:126), [justificativa.py:138](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:138), [geofence.py:443](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/geofence.py:443), [reconciliar_fantasmas.py:281](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/management/commands/reconciliar_fantasmas.py:281), [reconciliador.py:594](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:594))
-   - **Pré-requisito e pouso:** o brief anexado afirma etapa A fechada e liberação de ordem; os arquivos e evidências dessa etapa, a posição na fila, suite, opus e pouso/deploy estão [não verificado]. [nao verificado]
-   - **Campo com dois significados:** as FKs têm significados distintos, mas D3 explicitamente as reúne para esta pergunta. O problema demonstrado pelo diff é a mudança de qual valor do ponteiro D3 observa, inclusive fora da aprovação. ([justificativa.py:267](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/ponto/services/justificativa.py:267))
-
-6. **Proibidos — PROCEDE-MENOR.** No diff fornecido, não há alteração dos arquivos proibidos, da ordem interna de `trava_na_ordem`, de criador, nem introdução de juiz ou fallback. O refresh novo é de um campo; o refresh da instância inteira na recusa da cerca já aparece como contexto, sem adição no diff. A realização de suite antes do verificador, uso das vagas, deploy e demais condições operacionais estão [não verificado]. ([reconciliador.py:557](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:557), [reconciliador.py:563](/home/ronald/codex_ws/8ccab728f2a9b9d9130541ea853a6f66d9028fe3/app/chamados/reconciliador.py:563); diff e literal nos anexos [não verificado quanto à completude])
-
-## 19/11 13:59 · sessao 8ab032f9d007 · ESPELHO-HE-ROTULO · sonda · origem=Code
-
-# app/ponto/services/espelho.py:1210 — assinatura; retorno em app/ponto/services/espelho.py:1310
-# app/ponto/services/gestao_he.py:63 — assinatura; mapa de decisões vigentes em app/ponto/services/gestao_he.py:86
-# app/ponto/services/espelho.py:790 — lista; campo em minutos somado conforme app/ponto/services/he_pendente_lavrado.py:68
-
-from collections import defaultdict
-from datetime import date, datetime
-from zoneinfo import ZoneInfo
-import re
-import sys
-
-from django.db import connection
-
-from colaboradores.models import Colaborador
-from ponto.services.espelho import espelho_do_colab
-from ponto.services.gestao_he import estado_por_dia
-from ponto.services.he_pendente_lavrado import data_do_dia, minutos_fora_do_dia
-
-
-INI = date(2026, 10, 21)
-FIM = date(2026, 11, 20)
-
-# Instante fixo no fim do periodo solicitado; nao representa a hora da execucao.
-AGORA = datetime(2026, 11, 20, 23, 59, 59, tzinfo=ZoneInfo("America/Sao_Paulo"))
-
-SEM_DECISAO = "sem_decisao"
-CLASSES_INICIAIS = (SEM_DECISAO, "autorizado", "nao")
-
-
-def somente_leitura(execute, sql, params, many, context):
-    texto = sql.strip()
-    if texto.endswith(";"):
-        texto = texto[:-1].rstrip()
-    if ";" in texto or not re.match(r"^(SELECT|SET|SHOW)\b", texto, re.IGNORECASE):
-        raise RuntimeError("SQL bloqueado pela guarda de leitura")
-    return execute(sql, params, many, context)
-
-
-def relatar_erro(pk, exc):
-    # A mensagem da excecao pode conter dados pessoais; publica-se a classe.
-    nome = type(exc).__name__
-    if not re.fullmatch(r"[A-Za-z_][A-Za-z_0-9]*", nome):
-        nome = "Exception"
-    print(f"ERRO colab_pk={pk} excecao={nome} mensagem=[redigida]")
-
-
-def executar():
-    if getattr(connection, "schema_name", None) != "juliani":
-        print("ERROS=1 schema_invalido=1 NAO_CONCLUIDO")
-        return 1
-
-    classes = defaultdict(lambda: {"dias": 0, "colabs": set(), "minutos": 0, "amostra": []})
-    for estado in CLASSES_INICIAIS:
-        classes[estado]
-
-    universo_dias = 0
-    universo_colabs = set()
-    universo_minutos = 0
-    erros = 0
-
-    try:
-        ids = list(
-            Colaborador.objects.filter(empresa_id__in=(2, 3, 4))
-            .order_by("pk")
-            .values_list("pk", flat=True)
-        )
-    except Exception as exc:
-        relatar_erro(0, exc)
-        print("ERROS=1 NAO_CONCLUIDO")
-        return 1
-
-    for pk in ids:
-        try:
-            colab = Colaborador.objects.get(pk=pk)
-            espelho = espelho_do_colab(
-                colab, FIM, INI, FIM, ano=2026, agora=AGORA
-            )
-            decisoes = estado_por_dia([pk], INI, FIM)
-            linhas = []
-            datas_vistas = set()
-
-            for dia in espelho["dias"]:
-                data = data_do_dia(dia)
-                if data is None:
-                    raise ValueError("Data de dia ilegivel")
-                if not INI <= data <= FIM:
-                    continue
-                if data in datas_vistas:
-                    raise ValueError("Dia duplicado no espelho")
-                datas_vistas.add(data)
-                if not dia["he_fora_da_janela"]:
-                    continue
-
-                chave = (pk, data.isoformat())
-                bruto = decisoes[chave] if chave in decisoes else SEM_DECISAO
-                # Um estado fora deste formato nao e impresso para evitar dados pessoais.
-                if not isinstance(bruto, str) or not re.fullmatch(r"[a-z_]{1,32}", bruto):
-                    raise ValueError("Estado bruto nao imprimivel")
-                minutos = minutos_fora_do_dia(dia)
-                linhas.append((data, minutos, bruto))
-
-            # Consolida apenas depois que todo o colaborador foi processado.
-            for data, minutos, bruto in linhas:
-                grupo = classes[bruto]
-                grupo["dias"] += 1
-                grupo["colabs"].add(pk)
-                grupo["minutos"] += minutos
-                if len(grupo["amostra"]) < 10:
-                    grupo["amostra"].append((pk, data.isoformat(), minutos, bruto))
-                universo_dias += 1
-                universo_colabs.add(pk)
-                universo_minutos += minutos
-        except Exception as exc:
-            erros += 1
-            relatar_erro(pk, exc)
-
-    ordem = list(CLASSES_INICIAIS) + sorted(set(classes) - set(CLASSES_INICIAIS))
-    contador_dias = 0
-    contador_colabs = set()
-    contador_minutos = 0
-
-    for estado in ordem:
-        grupo = classes[estado]
-        contador_dias += grupo["dias"]
-        contador_colabs.update(grupo["colabs"])
-        contador_minutos += grupo["minutos"]
-        print(
-            f"CLASSE={estado} dia_colab={grupo['dias']} "
-            f"colabs_distintos={len(grupo['colabs'])} minutos={grupo['minutos']}"
-        )
-        for pk, data, minutos, bruto in grupo["amostra"]:
-            print(
-                f"AMOSTRA classe={estado} colab_pk={pk} data={data} "
-                f"minutos={minutos} estado_bruto={bruto}"
-            )
-
-    print(
-        f"UNIVERSO dia_colab={universo_dias} "
-        f"colabs_distintos={len(universo_colabs)} minutos={universo_minutos}"
-    )
-    print(
-        f"CONTADOR dia_colab={contador_dias} "
-        f"colabs_distintos={len(contador_colabs)} minutos={contador_minutos}"
-    )
-    print(f"ERROS={erros}")
-    if erros:
-        print("NAO_CONCLUIDO")
-        return 1
-    if (
-        contador_dias != universo_dias
-        or contador_colabs != universo_colabs
-        or contador_minutos != universo_minutos
-    ):
-        print("NAO_CONCLUIDO divergencia=1")
-        return 1
-    return 0
-
-
-try:
-    with connection.execute_wrapper(somente_leitura):
-        codigo = executar()
-except Exception as exc:
-    relatar_erro(0, exc)
-    print("ERROS=1 NAO_CONCLUIDO")
-    codigo = 1
-
-if codigo:
-    sys.exit(codigo)
-
-## 19/11 13:59 · sessao 4cef408e07d9 · - · - · origem=Ronald (tmux)
-
-Leitores de apresentação identificados:
-
-- [espelho.html:189](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/templates/ponto/espelho.html:189) — **EXIBE** cada ponta com minutos e o rótulo fixo “sem decisão”; o tooltip usa hora, sentido e marco. A view entrega os dias de `espelho_do_colab` ao template sem consultar o estado da decisão para esse rótulo ([views.py:160](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/views.py:160), [views.py:196](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/views.py:196)).
-- [pdf_espelho.py:932](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/relatorios/pdf_espelho.py:932) — **EXIBE** nas observações os minutos e, conforme o sentido, a frase de dia sem jornada ou o sentido e marco. O PDF obtém os dias de `espelho_do_colab` ([pdf_espelho.py:596](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/relatorios/pdf_espelho.py:596)); não consulta `DecisaoHE` ou `estado_por_dia` para formular essa frase [não verificado].
-
-Há uma consulta indireta relevante: o motor consulta `DecisaoHE.objects.vigentes()` ([motor_calculo_v2.py:1397](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/motor_calculo_v2.py:1397)) e, para dia sem previsto, deixa de publicar a ponta quando o dia está autorizado ([motor_calculo_v2.py:1451](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/motor_calculo_v2.py:1451)); o montador traduz esse relato para a lista ([espelho.py:760](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:760)). Isso não é uma consulta do estado pelo template ou pelo texto do PDF para escolher o rótulo ([espelho.html:189](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/templates/ponto/espelho.html:189), [pdf_espelho.py:932](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/relatorios/pdf_espelho.py:932)).
-
-_7382 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7387 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
