@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 03:34:11.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (21.7 MB). Acoes na janela: **688**.
+**Medido em 19/11/2026 03:39:17.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (22.5 MB). Acoes na janela: **693**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:35:21 | Bash | Wait for DST-L2 pista job and save verdict | `while kill -0 1658957 2>/dev/null; do /usr/bin/sleep 30; done; cd /home/ronald/saas-hasner; timeout 60 ssh -o BatchMode=yes pista log 1119032433_5e79a6e2 400 > logs/dst-l2-jz1/c4/suite_pista.log 2>&1; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/dst-l2-jz1/c4/suite_pista.log \| tail -1; /bin/grep '^Ran' logs/dst-l2-jz1/c4/suite_pista.log \| tail -1; timeout 30 ssh pista estado \| /bin/grep 1119032433` |
+| 03:35:14 | Bash | Find DST-L2 pista job status | `timeout 30 ssh -o BatchMode=yes pista estado 2>&1 \| /bin/grep -E '1119032433\|rodando\|fila' \| head` |
+| 03:35:09 | Bash | Check pista job and waiter state | `cd /home/ronald/saas-hasner; ps -p 1658957 -o pid,etime,comm 2>&1 \| tail -1; timeout 30 ssh -o BatchMode=yes pista estado 2>&1 \| tail -5` |
+| 03:35:05 | Bash | Record ESCALA nocturnal measure in veredito, RELATO and BACKLOG | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7; cat >> $D/opus_delta/veredito.md <<'EOF' ## MEDIDA PRE-POUSO (condicao "propostas nao ciclicas com turno cruzando a meia-noite") -- sessao 19/11 03:4x Sonda Codex volta 3 (logs/ESCALA-NAO-DESCREVE/c7/noturno/r3.txt), rodada na sombra contra a arvore 2fd98211a (SOMBRA_ARVORE=~/wt-escala-c7-021338/app, log noturno/sombra_run.log), universo  ...` |
+| 03:34:52 | Bash | Read sombra probe result | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; wc -l $D/sombra_run.log; /bin/grep -E 'CONTADOR=\|FIM_SONDA\|ERRO\|TOTAL\|CICLICAS\|CONFIANCA\|EMPRESA\|^col' $D/sombra_run.log \| head -60; tail -5 $D/sombra_run.log` |
 | 03:30:04 | Bash | Run nocturnal probe in sombra against c7 tree | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; SOMBRA_ARVORE=/home/ronald/wt-escala-c7-021338/app bin/sombra.sh --rodar logs/sombra/escala_c7_noturno.py escala_c7_noturno > $D/sombra_run.log 2>&1; echo rc=$? >> $D/sombra_run.log; tail -3 $D/sombra_run.log` |
 | 03:30:01 | Bash | Extract script and check sombra availability | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; python3 - <<'EOF' s=open('logs/ESCALA-NAO-DESCREVE/c7/noturno/r3.txt').read() a=s.index('```python\n')+10; b=s.index('\n```',a) open('logs/sombra/escala_c7_noturno.py','w').write(s[a:b]+'\n') EOF python3 -m py_compile logs/sombra/escala_c7_noturno.py && echo compila; cat bin/sombra_em_uso 2>/dev/null; ls logs/crons_em_curso 2>/dev ...` |
 | 03:29:56 | Bash | Verify turno shape and ciclos_dos_destinos signature | `cd /home/ronald/saas-hasner; git show 2fd98211a:app/ponto/turnos.py \| sed -n 312,326p; git show 2fd98211a:app/escala/services/cadastro_realidade.py \| sed -n 805,830p` |
