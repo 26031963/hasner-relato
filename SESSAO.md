@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 17:54:21.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (8.5 MB). Acoes na janela: **267**.
+**Medido em 19/11/2026 17:59:38.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (8.5 MB). Acoes na janela: **272**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:59:13 | Bash | Fix hour label | `cd /home/ronald/saas-hasner; sed -i '4s/SUITE v2n VERDE 18:0x/SUITE v2n VERDE 17:5x/' app/docs/RELATO.md; grep -c "VERDE 17:5x" app/docs/RELATO.md` |
+| 17:59:11 | Bash | Record v2n green suite in RELATO | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('CADEIA-20-PASSO-1 v2n (17:3x)')) L[i]=L[i]+' -- SUITE v2n VERDE 18:0x: Ran 17069, OK (skipped=42, expected failures=41), rc=0 sobre 7efb46e8e (copia limpa); opus final lancado (verificador, brief logs/CADEIA-20-PASSO-1/v2n/opus/brief.md)' ...` |
+| 17:59:04 | Agent | Opus final CADEIA-20-PASSO-1 | `Leitura FINAL (opus) da obra CADEIA-20-PASSO-1 antes do pouso. Leia o brief inteiro em /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v2n/opus/brief.md e siga-o; ele aponta o diff, os logs de RED, frota na sombra, suite inteira verde (logs/CADEIA-20-PASSO-1/v2n/suite/run.log: Ran 17069, OK, rc=0) e o pre-verificador Codex com a triagem. Somente leitura: nao edite nada, nao rode suite nem comando  ...` |
+| 17:58:57 | Bash | Confirm certified copy unchanged | `cd /home/ronald/wt-codex-cadeia-20-passo-1-112113; git rev-parse HEAD; git status --short \| head; cat /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v2n/opus/brief.md \| head -3 \| cut -c1-200` |
+| 17:58:53 | Bash | Read CADEIA v2n suite verdict | `cd /home/ronald/saas-hasner; L=logs/CADEIA-20-PASSO-1/v2n/suite/run.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep "^Ran " $L \| tail -1; grep "^rc=" $L \| tail -1; grep -E "^(FAIL\|ERROR):" $L \| head` |
 | 17:48:35 | Bash | Check CADEIA suite still running | `kill -0 3502520 && echo vivo; wc -l /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v2n/suite/run.log` |
 | 17:48:33 | Bash | Write triage and AVAL-DEVOLVIDO line | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/F5/v3/revisao_1735; cat > $R/triagem.md <<'EOF' # TRIAGEM revisao_1735 (aval RESPOSTAS-F5-CONSTROI-1911-1735) -- Codex verificador rc=0, 17:5x Amostra conferida no arquivo:linha (6/6 procedem): folha/previa.py:139-146 (juiz chamado em folha); 0815 PROIBIDO "tocar ... folha"; test_f1nova_b2_leitores.py:87-97 (assert_called_once_with(DecisaoPergunta ...` |
 | 17:47:56 | Bash | Verify folha prohibition and K40 get in loop | `cd /home/ronald/saas-hasner; grep -o "[^.]*folha[^.]*\." logs/AVAIS-1515/e4c_f5_constroi_1911_0815.txt \| head -3; cd /home/ronald/wt-f5c-170736/app; sed -n 448,467p chamados/management/commands/migrar_data_evento_dia_do_turno.py` |
