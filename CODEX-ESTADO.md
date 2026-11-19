@@ -1,7 +1,124 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:08** · publicado em **19/11/2026 15:09** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:13** · publicado em **19/11/2026 15:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:13 · sessao 8de25d40b48b · REPLAY-PORTA-EXPORT-SOL62 · verificador · origem=Code
+
+**VEREDITO DA VOLTA 2 — NÃO CONFERE.** A conclusão e o carimbo já são gravados juntos e protegidos pelo UUID da tentativa. Ainda assim, a leitura pode liberar com o verde da tentativa anterior enquanto a sucessora está `EM_CURSO` ou já está `FALHOU`. A recusa crítica também pode faltar depois de uma transição terminal persistida. (`app/folha/porta_export.py:1056–1061`, `app/folha/porta_export.py:1160–1175`, `app/folha/porta_export.py:1238–1258`.)
+
+A revisão foi estática, em modo somente leitura. Hash e histórico Git da cópia, execução dos testes, dados de banco, cron instalado e logs de produção [nao verificado]. [nao verificado]
+
+## 1. Escritores e leitores
+
+Pedido e carimbo são duas linhas de `MetricaSnapshot`. Cada uma tem chave própria com a competência, `escopo_id` da empresa e `data_ref` do dia civil. A unicidade cobre esse conjunto. (`app/folha/porta_export.py:779–784`, `app/folha/porta_export.py:933–941`, `app/folha/porta_export.py:1072–1079`, `app/inteligencia/models.py:87–105`.)
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| Pedido `estado` | `pedir` cria, `assumir` cria ou substitui no cron, `_mudar_estado` faz as transições chamadas por `pedir`, `assumir`, `concluir` e `_falhar`. (`app/folha/porta_export.py:1030–1042`, `app/folha/porta_export.py:1056–1090`, `app/folha/porta_export.py:1111–1126`, `app/folha/porta_export.py:1162–1182`.) | `pedir`, `assumir`, os filtros de `_mudar_estado` e `concluir`, `vigiar`, `vigiar_abertos` e `estado_da_porta`. (`app/folha/porta_export.py:1034–1036`, `app/folha/porta_export.py:1085–1090`, `app/folha/porta_export.py:1114–1120`, `app/folha/porta_export.py:1163–1165`, `app/folha/porta_export.py:1192–1219`, `app/folha/porta_export.py:1241–1249`.) |
+| Pedido `tentativa` | `pedir` e `assumir` sem UUID geram uma identidade nova. `assumir` com UUID preserva a do pedido. (`app/folha/porta_export.py:1010–1017`, `app/folha/porta_export.py:1072–1090`, `app/folha/porta_export.py:1111–1126`.) | `disparar` passa o UUID ao command. `assumir` o usa para adotar, `_ficha` e `concluir` o usam para condicionar a escrita, `_recusa` o inclui no objeto e `estado_da_porta` o compara ao carimbo. (`app/folha/porta_export.py:1015–1037`, `app/folha/porta_export.py:1045–1058`, `app/folha/porta_export.py:1111–1117`, `app/folha/porta_export.py:1160–1171`, `app/folha/porta_export.py:1247–1249`, `app/folha/porta_export.py:1292–1296`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:139–146`.) |
+| Pedido `pid`, `backend_pid` | `assumir` grava `os.getpid()` e `pg_backend_pid()`. `disparar` grava `Popen.pid` na auditoria do lançamento. Durante `PEDIDO`, a linha ainda está sem os dois PIDs. (`app/folha/porta_export.py:1072–1079`, `app/folha/porta_export.py:1108–1126`, `app/folha/porta_export.py:1303–1315`.) | `vigiar` usa `backend_pid` em `medicao_viva`. Leitor operacional do `pid` do SO [nao verificado]. Os campos distinguem processo do SO e sessão do PostgreSQL. (`app/folha/porta_export.py:898–904`, `app/folha/porta_export.py:988–1001`, `app/folha/porta_export.py:1192–1196`.) |
+| Pedido `resultado`, `n`, `motivo` | `concluir` grava os três via `_mudar_estado`. `_falhar`, chamado por `encerrar` e `vigiar`, grava `resultado='falhou'` e `motivo`. (`app/folha/porta_export.py:1056–1061`, `app/folha/porta_export.py:1130–1147`, `app/folha/porta_export.py:1160–1205`.) | O command e a emissão consomem o retorno de `concluir` ou o motivo recebido por `_falhar`. A porta lê `estado`, UUID e `carimbo.valor`. Leitor operacional dos três campos **persistidos** [nao verificado]. (`app/folha/porta_export.py:1056–1061`, `app/folha/porta_export.py:1170–1175`, `app/folha/porta_export.py:1241–1258`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:154–165`.) |
+| Pedido `*_em` | `pedir` grava `pedido_em`, `assumir` no cron grava `em_curso_em`, `_mudar_estado` grava `<estado>_em` e atualiza `calculado_em`. O modelo também preenche `calculado_em` ao salvar. (`app/folha/porta_export.py:1030–1039`, `app/folha/porta_export.py:1072–1079`, `app/folha/porta_export.py:1121–1126`, `app/inteligencia/models.py:90–96`.) | `vigiar` lê `pedido_em` para o prazo. Leitores operacionais de `em_curso_em`, `concluido_em`, `falhou_em` e `calculado_em` para esse job [nao verificado]. (`app/folha/porta_export.py:1192–1219`.) |
+| Carimbo `tentativa`, `erro_cartao_x_txt`, `valor` | `lavrar` grava os três. `valor` recebe `falhas` bruto ou `-1` se ausente. (`app/folha/porta_export.py:737`, `app/folha/porta_export.py:762–764`, `app/folha/porta_export.py:768–790`.) | `estado_da_porta` lê UUID e valor. `conferir` lê valor e listas. O teste lê `erro_cartao_x_txt` do carimbo. `resultado_de` lê esse erro do retorno de `medir`. Leitor operacional do erro já lavrado [nao verificado]. (`app/folha/porta_export.py:825–872`, `app/folha/porta_export.py:1136–1139`, `app/folha/porta_export.py:1247–1258`, `app/folha/tests/test_porta_sem_beco_item2.py:128–134`.) |
+
+No caminho de produção localizado, a escrita dessas duas chaves fica em `pedir`, `assumir`, `_mudar_estado` e `lavrar`. Há escritas diretas em fixtures de teste. O escritor genérico de métricas exige chave registrada e a série genérica exige chave explícita. Uso dessas interfaces com as chaves da porta [nao verificado]. (`app/folha/porta_export.py:779–790`, `app/folha/porta_export.py:1030–1042`, `app/folha/porta_export.py:1072–1090`, `app/folha/porta_export.py:1121–1126`, `app/folha/tests/test_porta_do_export.py:33–42`, `app/folha/tests/test_porta_sem_beco_item2.py:49–52`, `app/inteligencia/metricas.py:36–67`.)
+
+## 2. Quando a porta libera
+
+- **Leitura estável.** Um `FALHOU` lido prevalece sobre verde antigo. Um `CONCLUIDO` com UUID diferente recusa. Já um carimbo zero sem pedido libera, e um par legado `CONCLUIDO` + carimbo zero sem UUID dos dois lados passa pela igualdade `None == None`. A presença dessas linhas em produção é [nao verificado]. (`app/folha/porta_export.py:875–887`, `app/folha/porta_export.py:1235–1258`.)
+- **Corrida no caminho normal.** A conferência lê A como `CONCLUIDO`. O cron instala B, que entra em curso ou falha por exceção sem tocar no verde de A. A segunda consulta ainda encontra o carimbo de A, que combina com o pedido antigo em memória. `conferir` pode devolver `''` com B vigente. (`app/folha/porta_export.py:1118–1126`, `app/folha/porta_export.py:1178–1182`, `app/folha/porta_export.py:1238–1258`, `app/folha/porta_export.py:820–824`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:147–154`.)
+- **Virada do dia.** O job do clique adota o `data_ref` do pedido e `concluir` usa a mesma data no carimbo. Mas `estado_da_porta` consulta `_hoje()` separadamente para pedido e carimbo. Se a primeira consulta cair antes da meia-noite e vier sem pedido, a segunda pode aceitar o verde do novo dia sem ler o pedido desse dia. `pedir` também relê o dia no `IntegrityError`. Além disso, `medir` fixa seu próprio instante e dia. Um job iniciado às 00h pode medir com a referência do dia novo e carimbar no dia do pedido, que é o anterior. (`app/folha/porta_export.py:21–23`, `app/folha/porta_export.py:313–338`, `app/folha/porta_export.py:469–476`, `app/folha/porta_export.py:1004–1007`, `app/folha/porta_export.py:1072–1089`, `app/folha/porta_export.py:1111–1117`, `app/folha/porta_export.py:1163–1171`, `app/folha/porta_export.py:1238–1249`.)
+- **Escrita atrasada.** Nos caminhos normais, `encerrar` usa UPDATE condicionado ao estado e ao UUID. `concluir` trava a linha e exige `EM_CURSO` com o UUID original antes de lavrar. A tentativa atrasada que ainda carrega seu UUID perde para a sucessora. A corrida demonstrada acima está na leitura. (`app/folha/porta_export.py:1030–1042`, `app/folha/porta_export.py:1056–1061`, `app/folha/porta_export.py:1160–1182`.)
+
+## 3. Pedido preso, perda de falha e R7
+
+- **A checagem de sessão existe.** `pg_locks` exige trava `advisory` concedida no banco atual, as duas chaves, `objsubid=2` e o `backend_pid` gravado. Um PID reutilizado só produz falso vivo se a sessão nova também segurar a mesma trava. Falta uma identidade de nascimento da sessão. Já um worker vivo que perde a sessão pode ser declarado morto, e um processo travado que retém a sessão pode ficar `EM_CURSO` sem prazo. Em `PEDIDO`, um filho vivo que demore mais de 300 s para assumir pode ser declarado falho pelo prazo. Ocorrências em produção [nao verificado]. (`app/folha/porta_export.py:913–915`, `app/folha/porta_export.py:965–1001`, `app/folha/porta_export.py:1108–1126`, `app/folha/porta_export.py:1185–1206`.)
+- **O cron ainda pode apagar o desfecho da tentativa.** `assumir` chama o vigia e em seguida faz `update_or_create` incondicional. Se o `PEDIDO` ainda estiver no prazo, ou se um clique criá-lo entre a leitura e o upsert, o cron pode substituir o UUID sem dar resultado à tentativa substituída. O filho atrasado perde a adoção. Se o vigia já gravou `FALHOU`, o upsert substitui o resultado no registro diário. O re-pedido também limpa o detalhe anterior. (`app/folha/porta_export.py:1085–1090`, `app/folha/porta_export.py:1111–1126`, `app/folha/porta_export.py:1198–1206`.)
+- **Legado pode ficar aberto.** Para uma linha antiga com chave `tentativa` ausente, `_ficha` monta `None` e o UPDATE usa igualdade no JSON. O filtro por JSON `null` não seleciona a chave ausente no PostgreSQL. Isso pode bloquear a transição do vigia e o re-pedido pela tela. A ocorrência na base e o SQL executado [nao verificado]. (`app/folha/porta_export.py:1015–1017`, `app/folha/porta_export.py:1034–1042`, `app/folha/porta_export.py:1056–1058`, `app/folha/porta_export.py:1085–1090`.)
+- **R7 tem observador sem tela, condicionado à execução da corrente.** O command varre todos os abertos do schema, inclusive de dias anteriores, antes de escolher os alvos. A corrente diária espera o marcador de `lavrar_cxr_do_motor`, pode sair sem executar o elo e chama o schema `juliani`. Uma morte após a varredura aguarda a próxima observação. A instalação e a regularidade dessa execução [nao verificado]. (`app/folha/porta_export.py:1209–1221`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59–70`, `app/config/crons.py:616`, `app/config/crons.py:1793–1805`, `bin/encadeado.sh:78–104`.)
+
+## 4. Recusa crítica e ESTADO
+
+- **Pode haver zero.** Na corrida normal entre vigia, `encerrar` e `concluir`, só a transição terminal vencedora emite `porta_export`. A emissão vem depois do UPDATE ou do bloco atômico. Se houver morte ou falha nesse intervalo, o terminal já persistido fica fora da varredura de abertos e pode ficar sem linha. (`app/folha/porta_export.py:1034–1061`, `app/folha/porta_export.py:1162–1175`, `app/folha/porta_export.py:1215–1219`.)
+- **Pode haver duas ou mais linhas físicas.** Um `DIVERGENTE` emite uma linha `porta_export`. Cada POST barrado pela mesma divergência emite também `folha:gerar_txt`, porque a view chama o envelope sem `recusas=()`. Dois POSTs dão três linhas críticas no total. O contador do export seleciona só `porta_export`. (`app/folha/porta_export.py:1045–1053`, `app/folha/porta_export.py:1172–1175`, `app/folha/porta_export.py:1271–1276`, `app/folha/views.py:130–135`, `app/folha/urls.py:4–14`, `app/core/respostas.py:41–56`, `app/core/recusa_critica.py:58–85`, `app/core/recusa_critica.py:113–139`.)
+- **O ESTADO usa o leitor único.** Publica `porta do export falhou ou divergiu hoje: N`, esperado zero. Distingue arquivo principal ausente de zero, mas ignora rotados quando o principal falta. Se o principal existir e a leitura der `OSError`, o leitor pode produzir zero. Conta linhas, sem deduplicar UUID. (`bin/gerar_estado.py:265–270`, `bin/recusa_estado.py:24–34`, `bin/recusa_estado.py:60–77`, `app/core/recusa_critica.py:95–139`.)
+- **O dia contado é o da emissão**, pelo prefixo `asctime`. O `dia=` no corpo é o dia da tentativa. Uma morte de ontem observada hoje conta hoje, se o dia local do host que gera o ESTADO coincidir com o do logger. O host usa `date.today()` e a aplicação declara `America/Sao_Paulo`. Alinhamento efetivo dos fusos e do arquivo em produção [nao verificado]. (`app/folha/porta_export.py:1045–1053`, `app/core/recusa_critica.py:46–50`, `app/core/recusa_critica.py:113–121`, `bin/recusa_estado.py:60–68`, `app/config/settings/saas.py:119–123`, `app/config/settings/saas.py:160–166`, `app/config/settings/base.py:92–95`.)
+
+## 5. R8 e código de saída
+
+**Sim para os dois casos pedidos**, se a persistência funcionar. `Exception` de `medir` e retorno classificado como `falhou` deixam a empresa em `FALHOU`, passam à seguinte e dão `SystemExit(2)` ao fim. Falhas na própria trava, em `assumir`, `encerrar`, `concluir` ou no processamento da saída ainda podem abortar a rodada. Uma falha descoberta só na varredura inicial fica fora de `falharam`, de modo que uma rodada com sucessoras verdes pode sair verde. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59–70`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:128–165`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:190–211`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:251–267`.)
+
+O `cartao_x_txt` continua global por competência. B chega a medir, mas uma divergência global, ou uma exceção que reaparece na varredura global ao passar por A, pode impedir B de ficar verde. Isso preserva o critério do anexo para “outra passa”. (`app/folha/porta_export.py:664–675`, `app/folha/porta_export.py:753–764`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:20–24`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51–75`.)
+
+## 6. Classes de reprovação e selos
+
+- **Derivação paralela e liberação antes do pré-requisito.** `resultado_de` classifica o retorno e o pedido guarda essa classificação. `lavrar` grava o escalar bruto, e a porta interpreta seu sinal. Por exemplo, um retorno inconsistente com `falhas=0` pode gravar `FALHOU` com `carimbo.valor=0`. O pedido estável barra, mas a prova persistida fica contraditória e o caminho sem pedido aceita o escalar sozinho. A leitura dupla do dia e a corrida da seção 2 são falhas adicionais dessa costura. (`app/folha/porta_export.py:779–790`, `app/folha/porta_export.py:1130–1147`, `app/folha/porta_export.py:1162–1175`, `app/folha/porta_export.py:1238–1258`.)
+- **Juiz registrado, escritor e ordem de trava.** `medir` consulta `classificar_export`, o juiz registrado. `resultado_de` valida a forma e a decomposição do retorno da medição. Não localizei duplicação de juiz registrado nem segundo escritor de produção do carimbo no caminho auditado. A ordem visível é trava de sessão, linha do pedido e carimbo. A view dispara o job fora do request e só segue para montar o TXT quando a porta devolve vazio. (`app/core/juizes.py:319–353`, `app/folha/porta_export.py:328`, `app/folha/porta_export.py:469–476`, `app/folha/porta_export.py:1162–1171`, `app/folha/porta_export.py:1265–1276`, `app/folha/porta_export.py:1292–1304`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:129–154`, `app/folha/views.py:124–146`.)
+- **(a), (b) e R7.** Os testes exercitam a consulta da trava com PID gravado diferente, o `encerrar` atrasado, o bloqueio do verde velho em leitura estável, a persistência de divergência e falha e a varredura de uma linha de ontem. O teste de `concluir` atrasado deixa a sucessora já `CONCLUIDO`, então passa mesmo se cair só o filtro do UUID. O teste da meia-noite simula `Popen` e `medir`, cobre o vínculo pedido–carimbo e deixa de fora o relógio da medição e as duas consultas da porta. (`app/folha/tests/test_porta_sem_beco_item2.py:42–146`, `app/folha/tests/test_porta_sem_beco_item2.py:249–268`.)
+- **(c), (d) e R8.** Os textos literais e a lista são cobrados em `conferir`. O teste chamado “clique repetido” também só chama `conferir`, portanto deixa passar a emissão extra do POST. O teste de ausência de arquivo sempre cria o arquivo, e o shell testa ausência só para o contador de Resolver Dia. R8 exercita a orquestração com `medir` simulado e exige `SystemExit` sem conferir `.code`. O teste de agregação do command simula também a persistência e a trava. (`app/folha/tests/test_porta_sem_beco_item2.py:53–57`, `app/folha/tests/test_porta_sem_beco_item2.py:158–247`, `app/folha/tests/test_porta_sem_beco_item2.py:273–289`, `bin/tests/test_recusa_estado.sh:24–47`, `app/relatorios/tests/test_selo_leitores_no_mesmo_numero.py:121–144`.)
+
+## 7. O que segue aberto do `rev2.r`
+
+- **(a) e R7, parcialmente.** UUID e CAS protegem o fechamento atrasado. Seguem a substituição incondicional pelo cron, o tratamento do legado e a diferença entre conferir a sessão e conferir o PID do processo. O observador sem tela existe na corrente declarada, sujeito ao gatilho. (`app/folha/porta_export.py:1015–1042`, `app/folha/porta_export.py:1108–1126`, `app/folha/porta_export.py:1160–1206`, `app/config/crons.py:1793–1805`, `bin/encadeado.sh:81–104`.)
+- **(b), parcialmente.** Resultado por tentativa e vínculo do carimbo foram gravados. Seguem abertos o verde velho sob corrida, a aceitação sem UUID e a coerência do dia na borda da leitura. (`app/folha/porta_export.py:1162–1175`, `app/folha/porta_export.py:1238–1258`.)
+- **(c), literal presente.** `conferir` devolve o texto de `FALHA` e mantém lista e frase de suporte em `DIVERGENTE`. No POST que encontra um `FALHOU` anterior, `abrir_a_porta` tenta reabrir antes de compor a resposta. Se a nova tentativa estiver pendente, o usuário recebe `EM_CONFERENCIA`. (`app/folha/porta_export.py:820–827`, `app/folha/porta_export.py:825–872`, `app/folha/porta_export.py:922–929`, `app/folha/porta_export.py:1271–1276`, `app/folha/views.py:130–135`.)
+- **(d), parcialmente.** `erro_cartao_x_txt` e a linha do ESTADO entraram. Seguem abertas a garantia de uma linha por tentativa e a trilha terminal com ator, antes e depois. `_recusa` passa `request=None`, o emissor grava `usuario=-` e os eventos de auditoria visíveis dizem respeito ao disparo. **R8 fecha nos dois ramos de medição revisados**, com o critério global preservado. (`app/folha/porta_export.py:779–790`, `app/folha/porta_export.py:1045–1061`, `app/folha/porta_export.py:1172–1175`, `app/folha/porta_export.py:1305–1315`, `app/core/recusa_critica.py:70–85`, `bin/gerar_estado.py:267–270`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:147–165`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:251–259`.)
+
+## 19/11 15:12 · sessao 0a0ff128eecb · - · - · origem=Ronald (tmux)
+
+**R8 fecha para a exceção de `medir` e para o resultado `falhou`.** O comando registra a falha da empresa, segue para a próxima e sai com código 2 se alguma medição da rodada falhou ou divergiu. `vigiar_abertos` roda antes e suas falhas observadas ficam fora desse RC. Exceções na trava, persistência, conclusão e validação da forma da saída ainda podem abortar a rodada. O cartão/TXT mantém a competência inteira, portanto um erro recorrente nessa dependência comum pode invalidar as medições de A e B. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:63–66`, `:129–165`, `:190–211`, `:251–265`; `app/folha/porta_export.py:664–675`, `:753–764`; `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51–75`.)
+
+**Nenhuma duplicação dos juízes registrados apareceu nos caminhos alterados.** `medir` consulta `classificar_export` para o universo do TXT. `resultado_de` classifica a execução pelo dado já medido. Há, porém, uma decisão operacional em paralelo ao resultado persistido: `concluir` grava o resultado no pedido e o total bruto em `carimbo.valor`, enquanto a porta lê o sinal de `valor`. O fixture com `falhas=5` e decomposição `0+4` produz pedido FALHOU e carimbo positivo 5. O teste verifica somente FALHA na porta. (`app/core/juizes.py:319–343`; `app/folha/porta_export.py:328`, `:469–471`, `:779–784`, `:1130–1147`, `:1160–1175`, `:1238–1257`; `app/folha/tests/test_porta_sem_beco_item2.py:183–190`.)
+
+**A prova de mesma tentativa tem brechas.** A porta admite verde sem pedido ou sem UUID nos dois registros, e as duas consultas permitem ler A concluída, B assumir ou falhar, e ainda retornar o verde de A. O dia é lido entre consultas. Pedido e carimbo passam a compartilhar `data_ref`, mas a medição real obtém seu próprio instante civil. A ordem normal das travas é advisory → linha do pedido → carimbo. (`app/folha/porta_export.py:21–23`, `:318`, `:338`, `:1004–1007`, `:1111–1126`, `:1162–1171`, `:1235–1257`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:129–154`.)
+
+**Os testes mordem partes da costura.** R7 usa `pg_locks` com PID inexistente injetado. A proteção contra conclusão atrasada é chamada com a sucessora já CONCLUIDO, situação em que filtrar só EM_CURSO basta. Os testes de estado cobrem divergência e falha, mas deixam `resultado=zero, n=0` sem asserção direta. A virada exerce POST, argv e vínculo de linhas com `Popen` e `medir` mockados. R8 exercita o laço real com dados de `medir` simulados e exige `SystemExit` sem conferir código 2. (`app/folha/tests/test_porta_sem_beco_item2.py:42–66`, `:69–93`, `:96–146`, `:158–190`, `:249–268`.)
+
+**A cobertura de recusa tem dois vazios.** O caso chamado “clique repetido” chama `conferir` diretamente e deixa a reemissão pelo envelope fora do teste. `assertLogs` não prova gravação no arquivo nem janela entre commit e emissão. O teste Python chamado “ausência não é zero” sempre cria o arquivo e o teste shell verifica ausência apenas para o leitor antigo. (`app/folha/tests/test_porta_sem_beco_item2.py:214–247`, `:273–289`; `bin/tests/test_recusa_estado.sh:27–47`; `app/folha/views.py:130–135`; `app/core/respostas.py:41–56`.)
+
+**Pendências do rev2.r.** A atomicidade/completude da recusa e a trilha de ator/antes/depois continuam abertas. `_recusa` roda depois da gravação e passa `None` ao registrador, cujo usuário sai `-`. A trilha com ator existe no disparo, sem antes/depois de estado terminal. O POST de uma falha anterior pede nova tentativa antes de obter o texto, então pode mostrar EM_CONFERENCIA em vez do literal de FALHOU. R7 sem tela existe como chamada do cron, condicionada ao gatilho e instalada em produção [nao verificado]. O cron da cópia invoca `--schema=juliani`. (`app/folha/porta_export.py:1045–1061`, `:1162–1175`, `:1271–1276`, `:1305–1314`; `app/core/recusa_critica.py:70–86`; `app/config/crons.py:1793–1805`; `bin/encadeado.sh:78–104`.)
+
+Execução dos testes, dados/rotinas de produção e identidade Git da cópia [nao verificado]. [nao verificado]
+
+## 19/11 15:12 · sessao 38cdd601d0f4 · - · - · origem=Ronald (tmux)
+
+**Item 2 ainda aberto.** O caso estável com `FALHOU` bloqueia carimbo antigo e as transições normais de uma execução atrasada conferem estado e UUID. A leitura da porta, porém, admite verde com pedido ausente ou desconhecido, e dois identificadores legados ausentes passam na comparação `None == None`. As duas consultas também permitem observar o pedido concluído de A antes de B assumir e devolver o verde de A depois de B entrar em curso ou falhar por exceção. `app/folha/porta_export.py:820–824`, `app/folha/porta_export.py:1034–1042`, `app/folha/porta_export.py:1160–1174`, `app/folha/porta_export.py:1238–1258`.
+
+**Censo dos campos.**
+
+| Campo | Escrita e leitura |
+|---|---|
+| `estado` | `pedir` e `assumir` criam, `_mudar_estado` atualiza e condiciona o UPDATE. `pedir`, `assumir`, `concluir`, `vigiar`, `vigiar_abertos` e `estado_da_porta` leem. `app/folha/porta_export.py:1030–1039`, `app/folha/porta_export.py:1072–1090`, `app/folha/porta_export.py:1112–1126`, `app/folha/porta_export.py:1162–1171`, `app/folha/porta_export.py:1192–1219`, `app/folha/porta_export.py:1241–1258`. |
+| `tentativa` do pedido | `pedir` e `assumir` sem token geram UUID; `disparar` leva ao filho; `assumir`, `_ficha`/CAS, `concluir`, `_recusa` e o leitor da porta usam. `app/folha/porta_export.py:1010–1017`, `app/folha/porta_export.py:1034–1037`, `app/folha/porta_export.py:1049–1053`, `app/folha/porta_export.py:1072–1126`, `app/folha/porta_export.py:1160–1171`, `app/folha/porta_export.py:1247–1249`, `app/folha/porta_export.py:1293–1296`. |
+| `pid`, `backend_pid` | `assumir` grava `os.getpid()` e `pg_backend_pid()` em campos distintos. O vigia consulta apenas o segundo. PID de `Popen` sai na auditoria e no retorno; `abrir_a_porta` descarta esse retorno e não há uso operacional localizado do `pid` gravado. Identidade dos campos também testada. `app/folha/porta_export.py:1108–1126`, `app/folha/porta_export.py:1193–1196`, `app/folha/porta_export.py:1273–1276`, `app/folha/porta_export.py:1303–1315`, `app/folha/tests/test_porta_sem_beco_item2.py:49–66`. |
+| `resultado`, `n`, `motivo` | `_falhar` grava resultado e motivo, sem `n`; `concluir` grava os três, a partir de `resultado_de`. O comando usa o retorno vivo e `_recusa` recebe o motivo como argumento. Leitura persistida desses campos identificada em testes; a porta usa `estado`, UUID e `carimbo.valor`. `app/folha/porta_export.py:1045–1061`, `app/folha/porta_export.py:1130–1175`, `app/folha/porta_export.py:1241–1258`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:154–165`, `app/folha/tests/test_porta_sem_beco_item2.py:53–56`, `app/folha/tests/test_porta_sem_beco_item2.py:114–134`. |
+| `*_em`, `data_ref` | `pedir` cria `pedido_em`; `_mudar_estado` grava `pedido_em`, `em_curso_em`, `concluido_em` ou `falhou_em` conforme a transição e atualiza `calculado_em`, que também usa `auto_now`. `assumir` direto grava `em_curso_em`; o único `*_em` do JSON com leitura operacional localizada é `pedido_em` em `vigiar`. `data_ref` é dia civil da linha e não o instante; `concluir` transmite `data_ref` a `lavrar`. `app/folha/porta_export.py:779–782`, `app/folha/porta_export.py:1004–1007`, `app/folha/porta_export.py:1030–1039`, `app/folha/porta_export.py:1072–1090`, `app/folha/porta_export.py:1121–1126`, `app/folha/porta_export.py:1168`, `app/folha/porta_export.py:1200–1205`, `app/inteligencia/models.py:90–105`. |
+| Carimbo `tentativa`, `erro_cartao_x_txt`, `valor` | `lavrar` é o escritor localizado para essas chaves no fluxo, `medir` é fonte do erro e de `falhas`. `estado_da_porta` lê UUID e valor e `conferir` lê valor e listas. O erro persistido é conferido no teste; em produção o motivo vem de `resultado_de` sobre o retorno vivo. `app/folha/porta_export.py:664–675`, `app/folha/porta_export.py:737`, `app/folha/porta_export.py:762–790`, `app/folha/porta_export.py:825–872`, `app/folha/porta_export.py:1136–1139`, `app/folha/porta_export.py:1247–1257`, `app/folha/tests/test_porta_sem_beco_item2.py:128–134`. |
+
+Escritas diretas fora das quatro funções aparecem em fixtures (`app/folha/tests/test_porta_do_export.py:34–42`, `app/folha/tests/test_porta_sem_beco_item2.py:49–52`). O escritor genérico só opera chaves previamente registradas e o leitor genérico exige chave explícita. Nenhum consumidor operacional externo desses campos foi localizado. `app/inteligencia/metricas.py:36–67`, `app/folha/porta_export.py:779–790`, `app/folha/porta_export.py:1034–1039`, `app/folha/porta_export.py:1076–1079`, `app/folha/porta_export.py:1121–1126`.
+
+**R7 e relógio.** O cron chama a varredura de abertos de todo dia no schema antes de medir. Seu elo depende de marcador do gatilho e roda `juliani`; a execução real da cadeia é [nao verificado]. Consulta de vida usa banco, trava advisory concedida, `classid`, `objid`, `objsubid=2` e PID de backend. Perda da sessão com processo ainda vivo dá falso morto; reuso do PID com a mesma trava dá falso vivo, pois não se compara a geração da sessão. Um processo travado que retém a sessão continua vivo indefinidamente. Um filho com boot superior a 300 s pode ser dado como morto ainda vivo. `app/folha/porta_export.py:988–1001`, `app/folha/porta_export.py:1192–1221`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59–70`, `app/config/crons.py:1793–1805`, `bin/encadeado.sh:78–104`.
+
+O cron pode descartar uma tentativa `PEDIDO` ainda dentro do prazo, inclusive se o filho já morreu e se o pedido foi inserido entre sua consulta e a gravação incondicional. O filho antigo depois não adota a sucessora. Em registros pré-D com chave JSON ausente, `_ficha` fornece `None`, mas o lookup JSON exato de `None` distingue nulo JSON de chave faltante; a transição e o re-pedido podem perder o CAS até o cron sobrescrever, se o par estiver no recorte. `app/folha/porta_export.py:1015–1017`, `app/folha/porta_export.py:1034–1042`, `app/folha/porta_export.py:1085–1090`, `app/folha/porta_export.py:1111–1126`, `app/folha/porta_export.py:1198–1205`, `app/inteligencia/models.py:95`.
+
+Pedido e carimbo novos compartilham `data_ref`, mas `medir` obtém seu próprio dia pelo instante do ato. Um job de clique adotado após meia-noite mede com o dia novo e carimba no dia do pedido. A leitura também faz duas amostras de `_hoje()` e o tratamento de colisão de `pedir` consulta `_hoje()` novamente. `app/folha/porta_export.py:318`, `app/folha/porta_export.py:338`, `app/folha/porta_export.py:1004–1007`, `app/folha/porta_export.py:1072–1089`, `app/folha/porta_export.py:1111–1117`, `app/folha/porta_export.py:1168`, `app/folha/porta_export.py:1238–1240`.
+
+**(d) adicional.** A transição e o log deixam intervalo em que o processo pode morrer após persistir e antes de escrever. POSTs de recusa passam por `resposta_acao` sem `recusas=()`, portanto dois re-cliques sobre DIVERGENTE somam duas linhas de `folha:gerar_txt` à única linha pretendida de `porta_export`, embora o contador filtre apenas `porta_export`. A emissão de término usa `request=None`, com usuário `-` e sem antes/depois; `observ.evento` cobre disparo. `app/folha/porta_export.py:1045–1061`, `app/folha/porta_export.py:1162–1174`, `app/folha/porta_export.py:1271–1276`, `app/folha/porta_export.py:1305–1314`, `app/folha/views.py:130–135`, `app/core/respostas.py:41–56`, `app/core/recusa_critica.py:58–61`, `app/core/recusa_critica.py:70–85`, `app/core/recusa_critica.py:116–121`, `app/core/recusa_critica.py:133–139`.
+
+**Mordida.** O caso atrasado de `encerrar` enfrenta sucessora em `EM_CURSO`. O de `concluir` só chama a velha depois que a sucessora já terminou, de modo que retirar o filtro de UUID ainda deixaria o estado barrar a escrita. O suposto re-clique chama `conferir` diretamente; a virada testa UUID e `data_ref`, mocka `medir` e não atravessa a virada entre as consultas da porta. Os testes não foram executados, [nao verificado]. `app/folha/tests/test_porta_sem_beco_item2.py:71–93`, `app/folha/tests/test_porta_sem_beco_item2.py:214–224`, `app/folha/tests/test_porta_sem_beco_item2.py:249–268`.
+
+## 19/11 15:11 · sessao aee7668d7ffc · - · - · origem=Ronald (tmux)
+
+**Item (d) parcialmente aberto.** Uma disputa normal entre vigia, `encerrar` e `concluir` elege um emissor para `porta_export`, pelo estado e pela tentativa. Há janela para **zero linhas** entre a gravação terminal e `_recusa`. Depois dela a tentativa já não entra na varredura. Um `PEDIDO` ainda dentro do prazo também pode ser substituído pelo cron sem terminar nem emitir. (`app/folha/porta_export.py:1030–1061`, `:1118–1126`, `:1162–1182`, `:1215–1219`.)
+
+Há **duas ou mais linhas críticas** no log geral quando o primeiro POST ou re-cliques são barrados. A view omite `recusas=()`, então o envelope emite por POST como `folha:gerar_txt`, além da ocorrência da tentativa em `porta_export`. O ESTADO conta apenas esta última rota. A ocorrência da tentativa leva empresa, competência, UUID e motivo, mas `usuario=-` e sem antes/depois, ainda que o clique entregue ator ao evento separado de disparo. (`app/folha/views.py:130–135`, `app/folha/urls.py:4–14`, `app/core/respostas.py:41–56`, `app/core/recusa_critica.py:58–85`, `:113–123`, `app/folha/porta_export.py:1045–1058`, `:1305–1314`.)
+
+O ESTADO integra o leitor único, com esperado zero e ramo `sem arquivo` quando falta o arquivo principal. O leitor conta linhas sem deduplicar UUID, com a data do prefixo da emissão, enquanto o `dia=` do corpo é a data da tentativa. O host usa `datetime.date.today()` e o logger usa `%(asctime)s`; o fuso efetivo comum em produção é [nao verificado]. Sem o principal os rotacionados ficam fora do cálculo, e um `OSError` na leitura pode resultar em zero. (`bin/gerar_estado.py:265–270`, `:337–339`, `bin/recusa_estado.py:24–34`, `:60–77`, `app/core/recusa_critica.py:95–123`, `:133–139`, `app/config/settings/saas.py:119–123`, `:160–166`, `app/config/settings/base.py:92–95`.)
+
+**Selo de (d).** O teste com nome de clique repetido chama `conferir` em sequência e filtra pela rota interna. O teste Python de ausência sempre cria o arquivo e conta duas linhas sintéticas de mesmo objeto. O shell cobre filtro, ocorrência no dia e formatação vermelha, exercita ausência apenas para Resolver dia. Corrida, falha após commit, POST repetido e ausência/zero do export ficam sem prova nesses selos. (`app/folha/tests/test_porta_sem_beco_item2.py:29–30`, `:214–247`, `:273–289`, `bin/tests/test_recusa_estado.sh:29–47`.) Execução e produção [nao verificado].
+
+**R7.** O vigia do comando percorre os abertos do schema, inclusive históricos, antes de escolher alvos, sem tela. O caminho diário é o elo depois de `lavrar_cxr_do_motor`, condicionado ao marcador de término do antecessor e ao teto de espera, e o runner declara `--schema=juliani`. Morte após a varredura espera nova observação. Instalação e execução efetivas [nao verificado]. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59–67`, `app/folha/porta_export.py:1209–1219`, `app/config/crons.py:616`, `:1793–1805`, `bin/encadeado.sh:81–104`.)
 
 ## 19/11 15:08 · sessao b4d0bb13a00e · REPLAY-PORTA-EXPORT-SOL62 · verificador · origem=Code
 
@@ -389,439 +506,4 @@ Itens auditados, sem execução de testes nem acesso a banco/log: [nao verificad
 - Os escritores citados zeram ou copiam texto: `app/chamados/models.py:1575`, `app/chamados/models.py:1702-1703`, `app/chamados/services/disputa_emissao.py:1481`, `app/chamados/services/disputa_emissao.py:1617`, `app/chamados/services/disputa_emissao.py:1682-1686`, `app/chamados/services/validacao.py:440`. Exclusividade global de todos os escritores e ausência absoluta de transformação por caminho indireto [não verificado].
 - “Triagem com motivo” não obriga mudar comparação nem criar regra de caixa; implementação futura e impacto fora do declarado [não verificado].
 
-## 19/11 14:33 · sessao cb05fce58f6e · - · - · origem=Ronald (tmux)
-
-**3b — PROCEDE, por condição de RED que não fecha literalmente.**
-
-1. A carga integral confere: `contar()` seleciona todas as perguntas por padrão, aplica `prefetch_related('decisoes')` e percorre o queryset diretamente, sem iterador/lote (`app/chamados/services/vigia_texto_resposta.py:8-18`). A chamada fica dentro de `tranca_em_lote` (`app/chamados/management/commands/vigiar_fio_morto.py:186-195`), e há elo configurado na corrente cron (`app/config/crons.py:1737`). As **51.563 linhas são [não verificado]**: aparecem somente como declaração no comentário (`app/chamados/services/vigia_texto_resposta.py:3`).
-2. Mudar a forma da carga preservando a comparação não colide, por si, com a lei registrada: ela estabelece texto da projeção, ato como testemunha (`app/chamados/services/vigia_texto_resposta.py:1-4`; `app/docs/RELATO.md:20`).
-3. “RED de contagem igual antes e depois” mistura conservação com falha anterior: o código atual já retorna `(divergentes, universo)` e os testes existentes já exigem esses totais para conjuntos com/sem divergência, recorte e múltiplos atos (`app/chamados/services/vigia_texto_resposta.py:16-18`; `app/chamados/tests/test_e4c_f5_contador_texto.py:26-38`). A igualdade numérica, isolada, não demonstra o defeito de carga nem uma falha anterior; o teste de custo existente cobra quantidade de consultas, não pico de memória/execução em lotes (`app/chamados/tests/test_e4c_f5_contador_texto.py:67-80`). Não há RED novo executado nesta revisão [não verificado].
-4. O corpo de `contar` só consulta e conta; não contém escrita em domínio/dinheiro/escala/vínculo nem acesso ao motor (`app/chamados/services/vigia_texto_resposta.py:8-18`). Ausência de efeitos globais de toda execução em produção [não verificado].
-
-**3c — PROCEDE, por colisão da alternativa “leitor no ESTADO” com o pouso único.** [nao verificado]
-
-1. A chave é escrita fora de `censo/esperado` (`app/chamados/management/commands/vigiar_fio_morto.py:269-287`). Busca textual integral encontrou somente esse escritor e o assert de teste (`app/chamados/tests/test_e4c_f5_contador_texto.py:65`); o leitor ESTADO compara apenas as chaves de `esperado` contra `censo` e não lê o universo textual (`bin/fio_estado.py:121-126`, `:143-162`). Portanto, zero divergências com universo textual zero não produz alerta por esse universo; isso é independente das outras condições de validade do carimbo (`bin/fio_estado.py:74-95`, `:125-141`, `:191-197`). **A referência `bin/fio_estado.py:66-67` do laudo não comprova o alegado: contém `TETO_H`, não o contador.**
-2. A frase vigente é: **“INSTRUMENTO (`bin/`, selo de host, portao do push) nao pousa com PRODUTO: pouso proprio, depois”** (`CLAUDE.md:327-328`; também `app/docs/LEIS.md:131`). O próprio leitor declara que pousa como instrumento em commit próprio depois do produto (`bin/fio_estado.py:4-7`). Assim, exigir esse leitor dentro da MESMA obra, antes do opus final e sob UM pouso, não fecha sem exceção declarada; o 1435 diz “Nenhuma lei nova” e preserva o 0815 integralmente (anexo raspado; inexistência de arquivo local do aval [não verificado]).
-3. A alternativa “sai no mesmo commit” tem fundamento apenas analógico na L-111: o literal da lei trata **função** sem chamador de produção, não qualquer chave informativa (`app/docs/LEIS.md:137`; `CLAUDE.md:191`). A chave aqui é um dado gravado e o total continua sendo impresso na saída (`app/chamados/management/commands/vigiar_fio_morto.py:228-229`, `:287`). Não afirmar que L-111 manda literalmente apagar este campo.
-4. Apagar essa chave não equivale, no código apresentado, a apagar arquivo usado por produção; modificar o leitor host é instrumento (`app/chamados/management/commands/vigiar_fio_morto.py:287`; `bin/fio_estado.py:6-7`). O `!` exige apagar/voltar ao HEAD **arquivo** de produção, mexer no gravado exportado, dado de escala/vínculo ou motor (`CLAUDE.md:265-268`). Efeito futuro não declarado [não verificado].
-
-**Evidências extras importantes para sua consolidação:**
-
-- O aval **RESPOSTAS-1911-1000** não veio como anexo literal, mas a cópia registra seu conteúdo: **“F5 migra so R/V”** (`app/docs/PROMPTS.md:2615`), **“TEXTO da projecao … instante segue do ato”** (`app/docs/RELATO.md:20`). A unificação do texto no ato foi adiada para a E4D, quando morrer a projeção (`app/docs/BACKLOG.md:2021`). Isso importa especialmente para 3a: a escolha de autoridade não é livre nem resolvida somente por exigir “mesma autoridade”.
-- O contador de divergência já tem leitor genérico pelo `esperado` (`app/chamados/management/commands/vigiar_fio_morto.py:108`, `:277`; `bin/fio_estado.py:125-126`, `:191-194`); a lacuna é especificamente seu **universo**, não ausência completa de leitor do contador.
-- A linha de fila local exige contador com leitor ESTADO e `>0 = PERGUNTA no topo` e o atribui ao RESPOSTAS-1911-1000 item 1 (`app/docs/BACKLOG.md:2026`); não demonstra que universo zero já seja tratado.
-
-## 19/11 14:08 · sessao 01b1b0d2b971 · CADEIA-20-PASSO-1 · construtor · origem=Code
-
-Implementei as alterações de P1 a P5 na cópia. A execução dos testes e a morte dos mutantes permanecem **[não verificado]**; não rodei a suíte nem acessei banco. A análise sintática dos sete arquivos alterados passou com `ast.parse`. [escala/tests/test_cadeia20_mutantes.py:1] [nao verificado]
-
-**Inventário**
-
-- P1 e P5: a medida conta células desalinhadas por quantidade ou ordem de horas e entradas sem razão e sem falha nomeada. O booleano também exige zero células desalinhadas. [cartorio.py:1001](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/services/cartorio.py:1001)
-- P2: removi `data_turno` e `fuso` da assinatura. Antes e depois, os chamadores encontrados são [cartorio.py:991](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/services/cartorio.py:991), [test_cadeia20_coletor.py:15](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_coletor.py:15) e [test_razao_da_sobra.py:29](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:29); a assinatura está em [orfa_classe.py:30](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:30).
-- P3: o teste captura a primeira lavra de cada braço, com objetos recarregados e rollback; compara `SELECT` por causa das gravações dependentes da diferença de estado. [test_cadeia20_lavra.py:207](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_lavra.py:207) [nao verificado]
-- P4: acrescentei os casos de sobra noturna e saída cruzada, com a resposta esperada nos docstrings. Sua passagem e a necessidade eventual de cura adicional estão **[não verificado]**. [test_cadeia20_costura.py:110](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_costura.py:110)
-- REDs de P1 e P5: [test_cadeia20_lavra.py:149](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_lavra.py:149). Mutantes novos m15 a m19: [test_cadeia20_mutantes.py:61](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_mutantes.py:61).
-
-Para a sessão executar os REDs e o teto, com a configuração Django e banco de teste próprios da sessão **[não verificado]**: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_lavra.LavraDasSobrasTest.test_RED_medida_compensacao_e_ordem_por_celula
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_lavra.LavraDasSobrasTest.test_RED_medida_sem_razao_sem_falha
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_lavra.TetoConsultaLavraTest.test_mesmo_acrescimo_em_n_e_2n_dias
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_costura.CosturaTest.test_RED_sobra_depois_da_meia_noite_no_dia_do_turno
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_costura.CosturaTest.test_RED_saida_cruzada_remove_mesma_ocorrencia
-```
-
-Comandos individuais dos mutantes novos **[não verificado]**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 CADEIA20_MUTANTE=m15_instante_saida_cruzada_nao_removido python3 manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
-PYTHONDONTWRITEBYTECODE=1 CADEIA20_MUTANTE=m16_ignora_desalinhamento python3 manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
-PYTHONDONTWRITEBYTECODE=1 CADEIA20_MUTANTE=m17_ignora_falta_de_falha python3 manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
-PYTHONDONTWRITEBYTECODE=1 CADEIA20_MUTANTE=m18_ignora_hora python3 manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
-PYTHONDONTWRITEBYTECODE=1 CADEIA20_MUTANTE=m19_ignora_desalinhamento_no_booleano python3 manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
-```
-
-## 19/11 14:08 · sessao 35d98b4515e0 · E4C-F5 · censo · origem=Code
-
-O censo abaixo classifica os **cinco achados numerados**. O item “Casefold” não entra na contagem porque não está numerado; ele foi explicitamente tratado em `verif4/r.txt`, item 2 [linha do anexo não verificada].
-
-Os anexos foram fornecidos no texto da pergunta, sem numeração de linhas, e não foram localizados como arquivos na cópia. Por isso, identifico cada trecho pelo caminho e pelo item do anexo; a **linha física de cada citação dos anexos está [não verificada]**. A cópia examinada também não contém o contador nem o teste novo mencionados no opus, de modo que sua correspondência com a versão final permanece [não verificada]. [nao verificado]
-
-Para distinguir **(a)** de **(d)**, uso **(a)** quando uma resposta viu parte do tema, mas não identificou o achado completo; uso **(d)** quando a pergunta cobria a lacuna específica e nenhuma resposta ou triagem fornecida a identificou.
-
-1. **BLOQUEIA — classe (a), falha do Codex.** A pergunta de verificação incluía pré-requisito e pouso; a resposta deixou esses pontos sem verificação, embora a revisão anterior tivesse registrado as exigências das três voltas e das provas. O dado fornecido não mostra uma triagem que tenha descartado esse achado específico [não verificado]. [nao verificado]
-
-   - Pergunta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif2/q.txt`, item 6: “pouso antes do pre-requisito”; “Alguma presente no diff ou nos escritores/leitores dos campos que ele toca, mesmo fora do diff?”
-   - Resposta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif2/r.txt`, item 6: “Pré-requisitos e pouso real também são **[não verificado]**.”
-   - Evidência de que o Codex já havia visto as condições, `logs/ESPINHA-BRIEFS/F5/c3/etapaA2/r.txt`, §7: “três voltas verdes na ordem 1/2/3”, “medidas (a), (b) e (c) no relato” e “smoke do app — badge e pendentes — nas duas cascas”.
-
-   A ausência das medidas e do smoke no RELATO é uma conclusão do opus fornecido; sua conferência independente no RELATO está [não verificado].
-
-2. **Três combinações de fonte — classe (a), falha do Codex.** O verificador viu a diferença entre a API e o leitor alterado, mas não identificou na resposta a combinação de três fontes descrita no achado. A medição do impacto em produção está [não verificado].
-
-   - Pergunta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/q.txt`, item 2: “QUEM ESCREVE e QUEM LE cada campo/valor que o diff le ou grava”; “todos supoem o MESMO significado?”
-   - Resposta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/r.txt`, item 1: “a API ainda expõe `respondida_em` da projeção no JSON; o botão de correção, porém, consulta o leitor alterado.”
-   - Limite literal da resposta, no item 2 do mesmo arquivo: “A enumeração exaustiva de **todos** os escritores e leitores fora desse escopo, e a uniformidade de seus fusos e significados, permanecem **[não verificado]**.”
-
-   A triagem de `verif1` tratou de outra divisão de fontes, na tag, e a considerou procedente: “tag combina fontes”; “a tag SAI da volta 1 e entra na volta 2” (`logs/ESPINHA-BRIEFS/F5/v1/verif1/triagem.txt`, item 1). Ela não é um descarte do achado das três combinações [não verificado].
-
-3. **Carga integral do contador em memória — classe (e), não perguntado.** As perguntas de custo citadas exigiam verificar consultas e N+1; não pediam o volume mantido em memória nem uso de `iterator`. Tempo e memória em produção estão [não verificado].
-
-   - Pergunta literal mais próxima, `logs/ESPINHA-BRIEFS/F5/v1/verif3/q.txt`, item 5: “Custo: cada chamador real dos leitores tocados traz `decisoes` prefetchado? Consulta por linha (N+1) em algum caminho de tela/lote?”
-   - Resposta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/r.txt`, item 5: “Cobrança, fio, histórico e contador carregam `decisoes` em lote” e “custo total e outros N+1 das telas ou da frota são **[não verificado]**.”
-   - Quanto à ausência de pergunta sobre memória em todas as perguntas fornecidas: [não verificado] por linha física dos anexos.
-
-4. **Universo sem leitor e zero sobre universo vazio — classe (e), não perguntado.** Foi pedida a publicação do universo e quem lia o contador de divergência; os trechos citados não pediam quem lia a chave de universo nem o comportamento do ESTADO para universo vazio.
-
-   - Pergunta literal, `logs/ESPINHA-BRIEFS/F5/v1/q3.txt`, item 1: “`reg['divergencia_texto_resposta_universo'] >= 1`.”
-   - Pergunta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/q.txt`, item 3: “Quem le o contador (ESTADO) e o que acontece com valor > 0?”
-   - Resposta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/r.txt`, item 2: “o vigia grava o resultado em `censo` e zero em `esperado`; o leitor do ESTADO compara as duas entradas genericamente.”
-   - O achado específico sobre não haver leitor do universo e sobre universo vazio não aparece nesses trechos de resposta; sua ausência nas demais respostas fornecidas está [não verificado] por linha física dos anexos.
-
-5. **Selo limitado à variável `p` e caso ausente — classe (d), modo comum.** A pergunta pedia mutantes plausíveis de cada sítio e a resposta apontou outro mutante, do contador. O dado de perguntas, respostas e triagens fornecido não identifica a limitação do selo a `p` nem o caso específico descrito pelo opus [não verificado] por linha física dos anexos.
-
-   - Pergunta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/q.txt`, item 4: “Ha mutante plausivel de cada sitio tocado que nenhum teste morde?”
-   - Resposta literal, `logs/ESPINHA-BRIEFS/F5/v1/verif3/r.txt`, item 4: “**Mutante plausível sem mordida demonstrada:** comparar os textos após `strip()` no contador”.
-   - Pergunta anterior sobre a forma do selo, `logs/ESPINHA-BRIEFS/F5/v1/verif1/q.txt`, item 5: “Apelido (`getattr(p, campo)` com campo variavel, `p.__dict__`, `values()`) escapa?”
-   - Resposta literal correspondente, `logs/ESPINHA-BRIEFS/F5/v1/verif1/r.txt`, item 5: “Ele detecta atributos diretos do argumento e certas strings literais em chamadas; portanto `getattr(p, campo)` com nome variável, `p.__dict__` e `values()` com campo variável escapam dessa inspeção.”
-
-| Achado | Classe |
-|---|---|
-| 1. Escopo do aval e pouso | (a) Codex | [nao verificado]
-| 2. Três combinações de fonte | (a) Codex |
-| 3. Memória do contador | (e) Não perguntado |
-| 4. Leitura do universo vazio | (e) Não perguntado |
-| 5. Selo e caso ausente | (d) Modo comum |
-
-**Contagem:** (a) 2; (b) 0; (c) 0; (d) 1; (e) 2. Essa contagem é sobre os cinco achados numerados do anexo `opus_final.r`; numeração física do anexo [não verificada].
-
-## 19/11 14:07 · sessao f279c43dcb2d · CADEIA-20-PASSO-1 · sonda · origem=Code
-
-# app/ponto/management/commands/processar_cartorio.py:33
-# app/ponto/services/cartorio.py:959
-# app/ponto/services/cartorio.py:2002
-# app/ponto/services/cartorio.py::medir_razoes_sobras [nao verificado]
-# app/ponto/services/cxr_na_lista.py:152
-# app/ponto/services/espelho.py:51
-# app/ponto/services/espelho.py:1210
-# app/chamados/reconciliador.py:465
-# app/core/observ.py:94
-# app/core/models.py:285
-# app/chamados/models.py:33
-# app/escala/models.py:1635
-
-import contextlib
-import copy
-import hashlib
-import inspect
-import io
-import json
-from datetime import date, datetime
-from zoneinfo import ZoneInfo
-
-from django.db import transaction
-from django.utils import timezone
-from freezegun import freeze_time
-
-from colaboradores.models import Colaborador
-from core.models import LogAuditoria
-from escala.models import CelulaDia
-from ponto.management.commands.detectar_ausencias import Command as Emissor
-from ponto.services import cartorio
-from ponto.services.cxr_na_lista import ultimo_lavrado
-from ponto.services.espelho import espelho_do_colab
-import chamados.models as modelos_chamados
-
-
-INI = date(2026, 10, 21)
-FIM = date(2026, 11, 20)
-HOJE = FIM
-FUSO = ZoneInfo("America/Sao_Paulo")
-AGORA = datetime(2026, 11, 20, 23, 59, tzinfo=FUSO)
-CAMPOS = (
-    "minutos_trabalhados",
-    "minutos_atraso",
-    "minutos_saida_antecipada",
-    "minutos_intrajornada_indenizada",
-    "minutos_extra",
-    "minutos_noturnos_legais",
-)
-ACOES_RETENCAO = (
-    "retratacao_retida_irma_orfa",
-    "retratacao_retida_competencia_entregue",
-    "retratacao_retida_justificativa_alheia",
-)
-
-
-class DesfazerSonda(Exception):
-    pass
-
-
-def json_canonico(valor):
-    return json.dumps(
-        valor, sort_keys=True, ensure_ascii=True, separators=(",", ":"), default=str
-    )
-
-
-def fotografia(queryset):
-    return {
-        linha["pk"]: json_canonico(linha)
-        for linha in queryset.order_by().values("pk", *[
-            campo.attname for campo in queryset.model._meta.concrete_fields
-            if not campo.primary_key
-        ])
-    }
-
-
-def variacao(antes, depois):
-    return {
-        "antes": len(antes),
-        "depois": len(depois),
-        "criados": len(depois.keys() - antes.keys()),
-        "alterados": sum(
-            antes[pk] != depois[pk] for pk in antes.keys() & depois.keys()
-        ),
-        "excluidos": len(antes.keys() - depois.keys()),
-    }
-
-
-def somar_medida(total, medida):
-    for chave, valor in medida.items():
-        if chave == "contador_igual_universo":
-            total[chave] = total.get(chave, True) and valor
-        elif isinstance(valor, dict):
-            destino = total.setdefault(chave, {})
-            for subchave, numero in valor.items():
-                destino[subchave] = destino.get(subchave, 0) + numero
-        else:
-            total[chave] = total.get(chave, 0) + valor
-
-
-def main():
-    linhas = []
-    erros = []
-    desfeito = False
-    concluiu_transacao = False
-    primeira_celula = None
-    estado_original = None
-
-    modelo_chamado = getattr(modelos_chamados, "Chamado", None)
-    if modelo_chamado is None:
-        modelo_chamado = modelos_chamados.ChamadoColaborador
-
-    with freeze_time(AGORA), timezone.override(FUSO):
-        try:
-            with transaction.atomic():
-                universo = CelulaDia.objects.filter(
-                    colaborador__empresa_id__in=(2, 3, 4),
-                    data__gte=INI,
-                    data__lte=FIM,
-                )
-                ids = list(
-                    universo.order_by()
-                    .values_list("colaborador_id", flat=True)
-                    .distinct()
-                    .order_by("colaborador_id")
-                )
-                quantidade_celulas = universo.count()
-                primeira_celula = universo.order_by("pk").values_list(
-                    "pk", flat=True
-                ).first()
-                if primeira_celula is not None:
-                    estado_original = fotografia(
-                        CelulaDia.objects.filter(pk=primeira_celula)
-                    )
-
-                chamados_antes = fotografia(modelo_chamado.objects.all())
-                retencoes = LogAuditoria.objects.filter(
-                    acao__in=ACOES_RETENCAO, modelo="ChamadoColaborador"
-                )
-                retencoes_antes = fotografia(retencoes)
-
-                lavra = ultimo_lavrado() if ids else None
-                aceita_lavra = (
-                    "lavra" in inspect.signature(cartorio.julgar_colab).parameters
-                )
-                medir = getattr(cartorio, "medir_razoes_sobras", None)
-                medida_total = {}
-                totais = {campo: 0 for campo in CAMPOS}
-                totais.update(periodos=0, celulas=0, orfas=0)
-                atas_primeira = {}
-                ids_concluidos = []
-
-                def relavrar(colab, celulas):
-                    kwargs = dict(
-                        hoje=HOJE,
-                        agora=AGORA,
-                        apply_=True,
-                        emissor=Emissor(),
-                        out=cartorio.contadores(),
-                        prefix="",
-                        write=lambda mensagem: None,
-                        forcar=True,
-                    )
-                    if aceita_lavra:
-                        kwargs["lavra"] = lavra
-                    cartorio.julgar_colab(colab, celulas, **kwargs)
-
-                for cid in ids:
-                    try:
-                        with transaction.atomic(), contextlib.redirect_stdout(io.StringIO()):
-                            colab = Colaborador.objects.get(pk=cid)
-                            celulas_passadas = list(
-                                CelulaDia.objects.filter(
-                                    colaborador=colab,
-                                    data__gte=INI,
-                                    data__lte=FIM,
-                                    data__lt=HOJE,
-                                ).order_by("data", "pk")
-                            )
-                            if celulas_passadas:
-                                relavrar(colab, celulas_passadas)
-
-                            celulas = list(
-                                CelulaDia.objects.filter(
-                                    colaborador=colab, data__gte=INI, data__lte=FIM
-                                ).order_by("data", "pk")
-                            )
-                            espelho = espelho_do_colab(
-                                colab, HOJE, INI, FIM, agora=AGORA
-                            )
-                            resultado = espelho["resultado"]
-                            periodos = list(resultado.periodos or []) + list(
-                                resultado.periodos_ft or []
-                            )
-                            periodos = [
-                                p for p in periodos
-                                if INI <= timezone.localtime(p.entrada).date() <= FIM
-                            ]
-                            dinheiro = {
-                                campo: sum(getattr(p, campo) or 0 for p in periodos)
-                                for campo in CAMPOS
-                            }
-                            dinheiro["periodos"] = len(periodos)
-                            orfas = []
-                            atas = {}
-                            for celula in celulas:
-                                ata = celula.ata or {}
-                                lista = ata.get("orfas") or []
-                                if not isinstance(lista, list):
-                                    raise TypeError("orfas")
-                                orfas.append([celula.pk, lista, len(lista)])
-                                atas[celula.pk] = copy.deepcopy(celula.ata)
-
-                            medida = medir(celulas) if medir is not None else None
-
-                        dinheiro["orfas_sha1"] = hashlib.sha1(
-                            json_canonico(orfas).encode("utf-8")
-                        ).hexdigest()
-                        linhas.append("DF {} {}".format(cid, json_canonico(dinheiro)))
-                        for campo in CAMPOS:
-                            totais[campo] += dinheiro[campo]
-                        totais["periodos"] += dinheiro["periodos"]
-                        totais["celulas"] += len(orfas)
-                        totais["orfas"] += sum(item[2] for item in orfas)
-                        atas_primeira.update(atas)
-                        ids_concluidos.append(cid)
-                        if medida is not None:
-                            somar_medida(medida_total, medida)
-                    except Exception as exc:
-                        erros.append((cid, type(exc).__name__))
-
-                mudaram = 0
-                for cid in ids_concluidos:
-                    try:
-                        with transaction.atomic(), contextlib.redirect_stdout(io.StringIO()):
-                            colab = Colaborador.objects.get(pk=cid)
-                            celulas_passadas = list(
-                                CelulaDia.objects.filter(
-                                    colaborador=colab,
-                                    data__gte=INI,
-                                    data__lte=FIM,
-                                    data__lt=HOJE,
-                                ).order_by("data", "pk")
-                            )
-                            if celulas_passadas:
-                                relavrar(colab, celulas_passadas)
-                            atuais = list(
-                                CelulaDia.objects.filter(
-                                    colaborador=colab, data__gte=INI, data__lte=FIM
-                                ).values_list("pk", "ata")
-                            )
-                            mudancas_colab = sum(
-                                pk not in atas_primeira or atas_primeira[pk] != ata
-                                for pk, ata in atuais
-                            )
-                            pks_atuais = {pk for pk, _ in atuais}
-                            pks_primeira = {
-                                pk for pk, _ in CelulaDia.objects.filter(
-                                    colaborador=colab, data__gte=INI, data__lte=FIM
-                                ).values_list("pk", "ata")
-                                if pk in atas_primeira
-                            }
-                            mudancas_colab += len(pks_primeira - pks_atuais)
-                        mudaram += mudancas_colab
-                    except Exception as exc:
-                        erros.append((cid, type(exc).__name__))
-
-                chamados_depois = fotografia(modelo_chamado.objects.all())
-                retencoes_depois = fotografia(retencoes)
-
-                linhas.append("TOTAL " + json_canonico(totais))
-                if medir is None:
-                    linhas.append("MEDIDA ausente")
-                else:
-                    if not ids_concluidos:
-                        medida_total = medir([])
-                    linhas.append("MEDIDA " + json_canonico(medida_total))
-                linhas.append(
-                    "IDEMP celulas_que_mudaram_na_2a={}".format(mudaram)
-                )
-                linhas.append(
-                    "RETENCAO antes={} depois={}".format(
-                        json_canonico({
-                            "chamados": len(chamados_antes),
-                            "retencoes": len(retencoes_antes),
-                        }),
-                        json_canonico({
-                            "chamados": variacao(chamados_antes, chamados_depois),
-                            "retencoes": variacao(retencoes_antes, retencoes_depois),
-                        }),
-                    )
-                )
-                linhas.append(
-                    "UNIVERSO colabs={} celulas={}".format(
-                        len(ids), quantidade_celulas
-                    )
-                )
-                concluiu_transacao = True
-                raise DesfazerSonda()
-        except DesfazerSonda:
-            pass
-        except Exception as exc:
-            erros.append((0, type(exc).__name__))
-
-        if primeira_celula is not None and estado_original is not None:
-            try:
-                desfeito = (
-                    fotografia(CelulaDia.objects.filter(pk=primeira_celula))
-                    == estado_original
-                )
-            except Exception as exc:
-                erros.append((0, type(exc).__name__))
-
-    for linha in linhas:
-        print(linha)
-    for cid, classe in erros:
-        print("ERRO {} {}".format(cid, classe))
-    print("ERROS={}".format(len(erros)))
-    print("DESFEITO={}".format(desfeito))
-    if erros or not concluiu_transacao or not desfeito:
-        print("NAO_CONCLUIDO")
-
-
-main()
-
-_7387 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7391 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
