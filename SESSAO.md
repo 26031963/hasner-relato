@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 18/11/2026 21:45:34.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (104.0 MB). Acoes na janela: **2489**.
+**Medido em 18/11/2026 21:51:19.** Transcript: `d5e4e6e7-ea6c-4683-97a2-a6477ae90088.jsonl` (104.0 MB). Acoes na janela: **2490**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:49:14 | Bash | Keep waiting for ESCALA suite | `cd /home/ronald/saas-hasner; timeout 590 tail --pid=839031 -f /dev/null; date +%H:%M; cat logs/ESCALA-NAO-DESCREVE/c5/suite.rc 2>/dev/null; /bin/grep -E '^(OK\|FAILED)($\| \()' logs/ESCALA-NAO-DESCREVE/c5/suite.log \| tail -1; /bin/grep -E "^(FAIL\|ERROR):" logs/ESCALA-NAO-DESCREVE/c5/suite.log` |
 | 21:39:21 | Bash | Make diff and wait for ESCALA suite | `cd /home/ronald/saas-hasner; R=/home/ronald/wt-escala-nao-descreve-085630; O=logs/ESCALA-NAO-DESCREVE/opus_final_2; mkdir -p $O; git -C $R diff dd489c627bb0a8d5f8782945c7e240e6621c98ed a179c141e > $O/diff_obra.txt; git -C $R diff --stat dd489c627 a179c141e \| tail -1; timeout 590 tail --pid=839031 -f /dev/null; cat logs/ESCALA-NAO-DESCREVE/c5/suite.rc 2>/dev/null; /bin/grep -E '^(OK\|FAILED)($\| \ ...` |
 | 21:39:16 | Bash | Read previous ESCALA opus brief | `cd /home/ronald/saas-hasner; head -40 logs/ESCALA-NAO-DESCREVE/opus_final/brief.md; ls logs/ESCALA-NAO-DESCREVE/opus_final/volta_c4` |
 | 21:39:13 | Bash | List ESCALA opus inputs and commits | `cd /home/ronald/saas-hasner; ls logs/ESCALA-NAO-DESCREVE/opus_final/ logs/ESCALA-NAO-DESCREVE/c5/; git -C /home/ronald/wt-escala-nao-descreve-085630 log --oneline main..HEAD \| head -12` |
