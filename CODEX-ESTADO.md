@@ -1,7 +1,403 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 12:55** · publicado em **19/11/2026 12:57** (UTC-3)
+> Ultima resposta processada: **19/11/2026 12:59** · publicado em **19/11/2026 13:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 12:59 · sessao 8d9301ad0fee · CADEIA-20 · verificador · origem=Code
+
+1. **PREMISSAS: NÃO PROCEDE.**
+
+   - **(a)** A nota da célula diz literalmente “PARCIAL até a O168, a O169 e o LASTRO”; ela não menciona os passos 1 e 2 ([contratos_estruturais.py:262](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/core/contratos_estruturais.py:262), [linha 270](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/core/contratos_estruturais.py:270)). O registro de chegada diz “O168, LASTRO; O169 já pousada” ([CORTES.md:469](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/CORTES.md:469)). A exigência de `CSF_RETRATADO` medido em zero consta do anexo `condicao.md`, mas a medição em produção é **[não verificado]**.
+   - **(b)** Há contradição direta: o anexo `brief.md`, em “Números”, afirma “intersecção por ARQUIVO ... com o passo 1 ... **0**” e, no item anterior, inclui `escala/utils.py` e `cartorio.py` no auto-merge. Os dois também constam da lista `os41.txt` fornecida e da definição do passo 1 na pergunta. Portanto, pela definição pedida, há **pelo menos dois arquivos em comum**, não zero. Os anexos foram fornecidos no texto, sem arquivos nem linhas verificáveis nesta cópia: **[não verificado: arquivo:linha dos anexos]**.
+   - **(c)** A ausência do passo 2 na nota da célula não prova que ele não seja pré-requisito do passo 3. A ordem registrada diz “**um passo só abre com o anterior NO AR**” e enumera passo 2 antes do 3 ([BACKLOG.md:1960](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1960)). A inexistência de dependência de código é **[não verificado]**.
+
+2. **COLISÃO COM A ORDEM REGISTRADA: PROCEDE.** O registro de 18/11 identifica a cadeia ([PROMPTS.md:2577](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/PROMPTS.md:2577)); o SANDUÍCHE enumera “CADEIA p2 ... CADEIA p3” ([PROMPTS.md:2587](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/PROMPTS.md:2587)). O BACKLOG explicita a obrigatoriedade do anterior no ar e ainda registra “construtor DEPOIS do acessor” para LASTRO ([BACKLOG.md:1960](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1960), [linha 1965](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1965)).
+
+   O item 5 fornecido diz que o passo 3 “passa NA FRENTE do passo 2”, de modo que altera expressamente essa ordem. Se isso também revoga a trava específica “DEPOIS do acessor”, e o estado vigente dos avais além do material disponível: **[não verificado]**. O texto integral dos avais apontados pelos caminhos em `PROMPTS.md` não está disponível nesta cópia: **[não verificado]**.
+
+3. **CONDIÇÃO QUE NÃO FECHA NO LITERAL: PROCEDE.** A execução paralela “ao lado do passo 1” é justificada no item 5 por “0 arquivo em comum”, premissa contradita pelos dois arquivos acima. A condição da B2b diz “se cruzar arquivo, a espinha pousa primeiro”; a interseção efetiva com a F0 é **[não verificado]**. Cópia nova do HEAD, quatro conflitos e seus motivos, resultado do verificador, suite posterior, opus e pouso próprio são condições expressas no item 5 fornecido; seu cumprimento é futuro ou não demonstrado: **[não verificado]**. O diretório recebido não contém `.git`, portanto o hash do HEAD e o `merge-tree` alegados não puderam ser conferidos: **[não verificado]**. [nao verificado]
+
+4. **TOQUE FORA DO DECLARADO: NÃO PROCEDE como conclusão provada; [não verificado].** O brief fornecido declara “`export.py` só na prontidão sem snapshot” e “DIFF de frota (comp 11) obrigatório no pouso”; o BACKLOG também declara que os 41 incluem `folha/export.py` e `dia_pago.py`, com DIFF de frota ([BACKLOG.md:1960](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1960)). O código desta cópia usa `grade_do_fechamento` na prontidão ([export.py:1092](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/folha/export.py:1092)); sem o diff da cópia LASTRO, não se comprova que esse seja o único trecho alterado nem que `motivos_retencao_celula` esteja intocado: **[não verificado]**.
+
+   Nos 41, os seguintes **arquivos da cópia disponível têm referências identificáveis** a dinheiro, folha, exportada ou fechamento; isto é um inventário de arquivos, não prova de quais linhas a mudança LASTRO altera:
+
+   - Produção: [calendario.py:299](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/services/calendario.py:299) “DINHEIRO DO DIA”; [leitor_celula.py:2](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/services/leitor_celula.py:2) `grade_do_fechamento`; [utils.py:37](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/utils.py:37) “PAREAMENTO -- dinheiro”; [export.py:4](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/folha/export.py:4) `FechamentoMensal`; [ausencias.py:9](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/catalogo/ausencias.py:9) “efeito ... na folha”; [ausencia.py:146](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/ausencia.py:146) `FechamentoMensal`; [cartorio.py:235](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/cartorio.py:235) “FechamentoMensal da 09 (exportada)”; [dia_decidido.py:12](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/dia_decidido.py:12) “para a folha”; [dia_do_colab.py:52](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/dia_do_colab.py:52) “definição que a folha usa”; [dia_pago.py:405](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/dia_pago.py:405) `retratar_exportada`; [espelho.py:93](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/espelho.py:93) `FechamentoMensal`; [fechamento.py:448](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/fechamento.py:448) `recalcular_fechamento_mes`; [status_dia.py:12](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/status_dia.py:12) `DiaPago`; [pdf_espelho.py:835](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/relatorios/pdf_espelho.py:835) `DiaPago.horas_trabalhadas`.
+   - Testes: [test_calendario_ausencia_pela_autoridade.py:4](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:4) “falta para a folha”; [test_medida_turno_do_par.py:186](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/core/tests/test_medida_turno_do_par.py:186) `folha/export.py`; [test_a2_precedencia.py:541](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/tests/test_a2_precedencia.py:541) “folha”; [test_e3_status_lavrado.py:291](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/tests/test_e3_status_lavrado.py:291) `FechamentoMensal` e `ExportacaoDominio`; [test_o219_versao_da_regra.py:181](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/tests/test_o219_versao_da_regra.py:181) `LeitorPuroSemRelogioESemExportada`.
+
+   Os três JSONs e seis testes `test_lastro_*` da lista fornecida não estão nesta cópia; seus sítios são **[não verificado]**. Impacto efetivo em exportada, dinheiro ou necessidade de `!`: **[não verificado]**. [nao verificado]
+
+**REVISAO: PROCEDE (devolver)** — a premissa de zero arquivos comuns é contradita por `escala/utils.py` e `ponto/services/cartorio.py`; há também ordem anterior explícita que segura o passo 3 ([BACKLOG.md:1960](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1960), [linha 1965](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1965)); a lista e o auto-merge dos anexos fornecidos têm referência de arquivo:linha **[não verificado]**.
+
+## 19/11 12:59 · sessao c7df8e725a1a · CADEIA-20 · sonda · origem=Code
+
+A leitura literal é o **contador de retratações efetivamente aceitas pelo `--executar`**, não um contador restrito a chamados com conversa: o comando primeiro preserva os barrados por `pode_executar_csf`, depois chama `retratar` e incrementa `CSF_RETRATADO` somente quando a porta retorna verdadeiro. O dry-run conta outro indicador, `CSF_RETRATAVEL_DRY`, e não testa se a porta de retratação aceitaria o ato. A O168 exige o contador medido em zero antes da retirada do `--executar`. [app/ponto/management/commands/supra_juiz.py:260](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/supra_juiz.py:260), [app/ponto/management/commands/supra_juiz.py:279](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/supra_juiz.py:279), [app/docs/BACKLOG.md:1544](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:1544).
+
+A frase também pode motivar duas perguntas distintas:
+
+- **Histórico:** a implementação atual grava ocorrência com texto que identifica o supra em `FollowupChamado.conteudo`; `tipo='retratado'` é passado à porta da nota. Isso permite procurar essa assinatura, mas não demonstra, por si só, que havia resposta sem veredito **no instante da retratação**, nem que a assinatura cobre todas as versões históricas. Portanto, o histórico de “retratados pelo supra com conversa naquele instante” fica **[não verificado]**. [app/ponto/supra_juiz.py:122](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/supra_juiz.py:122), [app/chamados/reconciliador.py:583](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/chamados/reconciliador.py:583), [app/chamados/models.py:1805](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/chamados/models.py:1805).
+- **Hoje:** executar o comando real na sombra e reverter a transação mede o que ele fez *nesse ensaio*, inclusive o contador literal e as recusas da guarda. A guarda pergunta por respostas sem veredito nas perguntas do pai e nas que resolvem o chamado; “conversa” aqui tem esse significado específico. O cron de `--executar` usa a competência corrente por empresa. [app/ponto/supra_juiz.py:561](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/supra_juiz.py:561), [app/config/crons.py:599](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/config/crons.py:599), [app/ponto/management/commands/supra_juiz.py:85](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/supra_juiz.py:85).
+
+**Nenhum resultado de produção foi fornecido:** os valores permanecem **[não verificado]**. A sonda abaixo não foi executada. Ela declara o universo efetivo do comando, que exclui colaboradores sem batida na janela ampliada, e conta separadamente as ocorrências históricas com a assinatura conhecida. A igualdade de contadores é verificada; qualquer falha invalida a medida. [app/ponto/management/commands/supra_juiz.py:102](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/supra_juiz.py:102), [app/ponto/management/commands/supra_juiz.py:110](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/supra_juiz.py:110), [app/ponto/management/commands/supra_juiz.py:205](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/management/commands/supra_juiz.py:205).
+
+A sonda deve ser entregue à sessão para `bin/sombra.sh --rodar`; não criei arquivo. O próprio invólucro usa o tenant `juliani` e os settings da sombra. A prova de rollback abaixo verifica uma escrita sentinela e as linhas observadas, enquanto a transação reverte o conjunto das escritas no banco. [bin/sombra.sh:182](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/bin/sombra.sh:182), [bin/sombra.sh:483](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/bin/sombra.sh:483).
+
+```python
+import contextlib
+import io
+import logging
+import os
+import re
+import sys
+import traceback
+from collections import Counter
+from unittest.mock import patch
+
+from django.conf import settings
+from django.core.management import call_command
+from django.db import connection, transaction
+from django.utils import timezone
+
+from chamados.catalogo.modulos import data_do_chamado
+from chamados.models import ChamadoColaborador, FollowupChamado
+from ponto.janelas import janela_atual
+from ponto.management.commands.e6_oraculo import InsumosDoDono
+import chamados.reconciliador as reconciliador
+import ponto.supra_juiz as supra
+
+
+EMPRESAS = (2, 3, 4)
+ASSINATURA = "Cobranca retratada pelo supra-juiz (ultima instancia)."
+DONOS = {"ESTRUTURA", "CADASTRO", "BATIDA"}
+ERROS = 0
+
+
+class DesfazerEnsaio(Exception):
+    pass
+
+
+def erro():
+    """Traceback sem valores de exceção, argumentos ou linhas de código."""
+    global ERROS
+    ERROS += 1
+    _, exc, tb = sys.exc_info()
+    print("Traceback (mais recente por ultimo):")
+    for frame in traceback.extract_tb(tb):
+        print("  arquivo=%s linha=%s funcao=%s" % (
+            os.path.basename(frame.filename), frame.lineno, frame.name
+        ))
+    print("  excecao=%s" % type(exc).__name__)
+
+
+def exigir(condicao):
+    if not condicao:
+        raise RuntimeError("verificacao falhou")
+
+
+def data_chamado(ch):
+    valor = data_do_chamado(ch.modulo_origem, ch.contexto_json)
+    if valor is None:
+        return None
+    if hasattr(valor, "date") and not hasattr(valor, "day"):
+        valor = valor.date()
+    if isinstance(valor, str):
+        from datetime import date
+        return date.fromisoformat(valor[:10])
+    return valor
+
+
+def dono_do_caso(ch, dia, cache):
+    if dia is None:
+        return "[nao verificado]"
+    try:
+        # O carregador chama o juiz real e, quando necessário, o motor.
+        # A janela da competência é obtida pela autoridade existente.
+        chave = (ch.colaborador_id, dia.year, dia.month)
+        if chave not in cache:
+            # Usa a janela do próprio cron quando cobre o dia; para outras
+            # datas históricas, não inventa uma competência.
+            ini, fim = janela_atual(timezone.localdate(), ch.colaborador.empresa_id)
+            if not ini <= dia <= fim:
+                cache[chave] = None
+            else:
+                agora = timezone.now()
+                cache[chave] = InsumosDoDono(
+                    ch.colaborador, ini, fim, timezone.localdate(), agora=agora
+                )
+        insumos = cache[chave]
+        if insumos is None:
+            return "[nao verificado]"
+        dono = insumos.dono(dia)
+        return dono if dono in DONOS else "[nao verificado]"
+    except Exception:
+        erro()
+        return "[nao verificado]"
+
+
+def linha_caso(rotulo, empresa, ch, cache):
+    try:
+        dia = data_chamado(ch)
+        dono = dono_do_caso(ch, dia, cache)
+        print(
+            "%s empresa=%s chamado=%s colab=%s data=%s dono=%s"
+            % (
+                rotulo, empresa, ch.pk, ch.colaborador_id,
+                dia.isoformat() if dia else "[nao verificado]", dono,
+            )
+        )
+    except Exception:
+        erro()
+        print(
+            "%s empresa=%s chamado=%s colab=%s data=[nao verificado] "
+            "dono=[nao verificado]"
+            % (rotulo, empresa, ch.pk, ch.colaborador_id)
+        )
+
+
+def placar_do_comando(texto):
+    linhas = texto.splitlines()
+    avaliados = None
+    placar = {}
+    no_placar = False
+    for linha in linhas:
+        m = re.fullmatch(r"dias-colab avaliados: (\d+)", linha.strip())
+        if m:
+            exigir(avaliados is None)
+            avaliados = int(m.group(1))
+        if linha.strip() == "--- PLACAR POR CONTRADICAO ---":
+            no_placar = True
+            continue
+        if no_placar and linha.startswith("---"):
+            no_placar = False
+        if no_placar:
+            m = re.fullmatch(r"\s*([A-Z0-9_]+)\s+(\d+)\s*", linha)
+            exigir(m is not None)
+            exigir(m.group(1) not in placar)
+            placar[m.group(1)] = int(m.group(2))
+    exigir(avaliados is not None)
+    exigir("--- PLACAR POR CONTRADICAO ---" in texto)
+    return avaliados, placar
+
+
+def validar_ambiente():
+    exigir(os.environ.get("DJANGO_SETTINGS_MODULE") == "config.settings.sombra")
+    exigir(getattr(settings, "HASNER_SOMBRA", False))
+    exigir(connection.settings_dict["NAME"] == "sombra")
+    exigir(connection.settings_dict["HOST"] == "sombra_db")
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco, schema = cursor.fetchone()
+    exigir(banco == "sombra" and schema == "juliani")
+    exigir(not connection.in_atomic_block)
+    exigir(connection.get_autocommit())
+
+
+def historico_assinatura(empresa):
+    # Universo: ocorrências de sistema com a assinatura conhecida, em toda
+    # a história disponível da empresa. Conta ocorrências e chamados distintos.
+    # Não afirma existência de conversa no momento histórico.
+    qs = FollowupChamado.objects.filter(
+        chamado__colaborador__empresa_id=empresa,
+        autor_tipo="sistema",
+        conteudo__contains=ASSINATURA,
+    ).select_related("chamado__colaborador").order_by("pk")
+
+    universo = qs.count()
+    percorridos = 0
+    chamados = {}
+    cache = {}
+    for nota in qs.iterator():
+        percorridos += 1
+        chamados[nota.chamado_id] = nota.chamado
+
+    exigir(percorridos == universo)
+    print(
+        "HISTORICO empresa=%s universo_ocorrencias=%s contador=%s "
+        "chamados_distintos=%s conversa_no_instante=[nao verificado] "
+        "cobertura_assinaturas_antigas=[nao verificado]"
+        % (empresa, universo, percorridos, len(chamados))
+    )
+    for pk in sorted(chamados):
+        linha_caso("HISTORICO_ASSINATURA", empresa, chamados[pk], cache)
+
+
+def ensaio(empresa):
+    visitas = []
+    retratados = []
+    recusados = []
+    capturado = io.StringIO()
+    real_guarda = supra.pode_executar_csf
+    real_retratar = reconciliador.retratar
+    instantaneos = {}
+    sentinela = "sonda_cadeia20_rollback"
+
+    def guarda_observada(ch):
+        resultado = real_guarda(ch)
+        visitas.append((ch.pk, bool(resultado)))
+        return resultado
+
+    def retratar_observado(ch, *args, **kwargs):
+        # Guarda status e IDs de followups antes da escrita para conferência
+        # depois do rollback. A função real permanece responsável pelo ato.
+        if ch.pk not in instantaneos:
+            instantaneos[ch.pk] = (
+                ChamadoColaborador.objects.values_list(
+                    "status_local", flat=True
+                ).get(pk=ch.pk),
+                tuple(FollowupChamado.objects.filter(
+                    chamado_id=ch.pk
+                ).order_by("pk").values_list("pk", flat=True)),
+            )
+        resultado = real_retratar(ch, *args, **kwargs)
+        (retratados if resultado else recusados).append(ch.pk)
+        return resultado
+
+    try:
+        with transaction.atomic():
+            # PostgreSQL reverte também a criação desta tabela temporária.
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT to_regclass('pg_temp.%s')" % sentinela)
+                exigir(cursor.fetchone()[0] is None)
+                cursor.execute(
+                    "CREATE TEMP TABLE %s (valor integer) ON COMMIT DROP" [nao verificado]
+                    % sentinela
+                )
+                cursor.execute("INSERT INTO %s VALUES (1)" % sentinela)
+                cursor.execute("SELECT count(*) FROM %s" % sentinela)
+                exigir(cursor.fetchone()[0] == 1)
+
+            # A saída nominal do comando fica exclusivamente em memória.
+            # As funções observadas continuam executando suas implementações.
+            with patch.object(supra, "pode_executar_csf", guarda_observada), \
+                 patch.object(reconciliador, "retratar", retratar_observado), \
+                 contextlib.redirect_stdout(capturado), \
+                 contextlib.redirect_stderr(capturado):
+                call_command(
+                    "supra_juiz", empresa=empresa, executar=True,
+                    top=0, stdout=capturado, stderr=capturado,
+                )
+
+            avaliados, placar = placar_do_comando(capturado.getvalue())
+            preservados = [pk for pk, permitido in visitas if not permitido]
+            permitidos = [pk for pk, permitido in visitas if permitido]
+
+            exigir(len(preservados) == placar.get(
+                "CSF_COM_CONVERSA_PRESERVADO", 0
+            ))
+            exigir(len(retratados) == placar.get("CSF_RETRATADO", 0))
+            exigir(len(recusados) == placar.get(
+                "CSF_RETRATACAO_RECUSADA", 0
+            ))
+            exigir(len(visitas) == len(preservados) + len(permitidos))
+
+            # Todos os permitidos devem terminar em retratação, recusa,
+            # órfã de regeneração ou trava T6.1.
+            exigir(len(permitidos) == (
+                len(retratados) + len(recusados)
+                + placar.get("COBRANCA_ORFA_REGENERACAO", 0)
+                + placar.get("CSF_RETRATAVEL_TRAVADO_T6_1", 0)
+            ))
+
+            print(
+                "ENSAIO empresa=%s dias_colab_avaliados=%s "
+                "universo_guardas=%s contador_guardas=%s "
+                "CSF_RETRATADO=%s CSF_COM_CONVERSA_PRESERVADO=%s "
+                "CSF_RETRATACAO_RECUSADA=%s "
+                "COBRANCA_ORFA_REGENERACAO=%s "
+                "CSF_RETRATAVEL_TRAVADO_T6_1=%s "
+                "CSF_SEM_LAVRA=%s CSF_LAVRA_SEM_CODIGO=%s"
+                % (
+                    empresa, avaliados, len(visitas),
+                    len(preservados) + len(permitidos),
+                    len(retratados), len(preservados), len(recusados),
+                    placar.get("COBRANCA_ORFA_REGENERACAO", 0),
+                    placar.get("CSF_RETRATAVEL_TRAVADO_T6_1", 0),
+                    placar.get("CSF_SEM_LAVRA", 0),
+                    placar.get("CSF_LAVRA_SEM_CODIGO", 0),
+                )
+            )
+
+            # A classificação do dono também ocorre dentro do atomic.
+            cache = {}
+            categorias = (
+                ("CSF_RETRATADO", retratados),
+                ("CSF_COM_CONVERSA_PRESERVADO", preservados),
+                ("CSF_RETRATACAO_RECUSADA", recusados),
+            )
+            for rotulo, pks in categorias:
+                for pk in pks:
+                    ch = ChamadoColaborador.objects.select_related(
+                        "colaborador"
+                    ).get(pk=pk)
+                    linha_caso(rotulo, empresa, ch, cache)
+
+            raise DesfazerEnsaio()
+
+    except DesfazerEnsaio:
+        pass
+
+    # Verifica a reversão da sentinela e das linhas dos chamados que
+    # chegaram à porta real de retratação.
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT to_regclass('pg_temp.%s')" % sentinela)
+        exigir(cursor.fetchone()[0] is None)
+
+    conferidos = 0
+    for pk, (status, followups) in instantaneos.items():
+        exigir(
+            ChamadoColaborador.objects.values_list(
+                "status_local", flat=True
+            ).get(pk=pk) == status
+        )
+        exigir(
+            tuple(FollowupChamado.objects.filter(
+                chamado_id=pk
+            ).order_by("pk").values_list("pk", flat=True)) == followups
+        )
+        conferidos += 1
+    exigir(conferidos == len(instantaneos))
+    print(
+        "ROLLBACK empresa=%s sentinela_revertida=1 "
+        "universo_chamados=%s contador_conferidos=%s"
+        % (empresa, len(instantaneos), conferidos)
+    )
+
+
+def main():
+    global ERROS
+    try:
+        validar_ambiente()
+    except Exception:
+        erro()
+        print("MEDIDA_INVALIDA ERROS=%s" % ERROS)
+        return
+
+    # Evita que mensagens de logging do comando exponham dados pessoais.
+    nivel_anterior = logging.root.manager.disable
+    logging.disable(logging.CRITICAL)
+    try:
+        for empresa in EMPRESAS:
+            try:
+                historico_assinatura(empresa)
+            except Exception:
+                erro()
+                print("HISTORICO_INVALIDO empresa=%s" % empresa)
+
+            try:
+                ini, fim = janela_atual(timezone.localdate(), empresa)
+                print("JANELA empresa=%s ini=%s fim=%s" % (empresa, ini, fim))
+                ensaio(empresa)
+            except Exception:
+                erro()
+                print("ENSAIO_INVALIDO empresa=%s" % empresa)
+    finally:
+        logging.disable(nivel_anterior)
+
+    print("ERROS=%s" % ERROS)
+    print("MEDIDA=%s" % ("VALIDA" if ERROS == 0 else "INVALIDA"))
+
+
+main()
+```
 
 ## 19/11 12:55 · sessao 0972cf0af452 · CADEIA-20-PASSO-1 · construtor · origem=Code
 
@@ -1052,203 +1448,4 @@ O selo nomeado em `teste=` é `JuizChamadoContratoTest`: confere existência das
 
 **perguntas de lei: 0** identificadas nesta leitura do passo 4. [não verificado para os passos 2 e 3]
 
-## 19/11 12:02 · sessao 689240b7551f · CADEIA-20-PASSO-1 · construtor · origem=Code
-
-A cura está em [orfa_classe.py:31](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:31): `razao_da_sobra` consulta `_carimbada_como_miolo`, que reconhece os três carimbos ([turnos.py:932](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:932)). Escolhi import local para evitar dependência no carregamento entre os módulos; `ponto.turnos` também importa `escala.orfa_classe` localmente ([turnos.py:1581](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1581)). Os papéis de entrada, saída e aberto continuam lidos dos campos do `Turno` ([orfa_classe.py:65](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:65)).
-
-A fixture agora explicita os três atributos ([teste:13](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:13)). O novo caso usa somente `_intra_ata=True` ([teste:112](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:112)): [nao verificado]
-
-- **RED → verde:** antes da cura, retornou `PERIODO_ADICIONAL` e falhou; depois, passou. No executor isolado, os 13 testes passaram. [nao verificado]
-- **Mutante:** substituir a chamada por `getattr(b, 'is_intervalo', False)` fez o novo caso falhar com `PERIODO_ADICIONAL`; mutante morto.
-- A execução Django real e a certificação pela suíte permanecem **[não verificado]**: nesta cópia, `python` não está disponível e `python3` não encontra `django.core`. [nao verificado]
-
-Para reproduzir os resultados isolados, execute o bloco abaixo no diretório `app`. Ele usa o teste da cópia e extrai a função de autoridade do arquivo real; a mutação ocorre somente em memória. [nao verificado]
-
-```bash
-verificar() {
-  PYTHONDONTWRITEBYTECODE=1 MUTANTE="$1" python3 - <<'PY'
-import ast, collections, os, sys, types, unittest
-
-source = open('ponto/turnos.py').read()
-node = next(n for n in ast.parse(source).body
-            if isinstance(n, ast.FunctionDef) and n.name == '_carimbada_como_miolo')
-ponto = types.ModuleType('ponto.turnos')
-exec(compile(ast.Module(body=[node], type_ignores=[]), 'ponto/turnos.py', 'exec'), ponto.__dict__)
-ponto.Turno = collections.namedtuple(
-    'Turno', 'data_turno entrada saida batidas aberto cross_meianoite')
-sys.modules['ponto.turnos'] = ponto
-
-django = types.ModuleType('django')
-django.__path__ = []
-test = types.ModuleType('django.test')
-test.SimpleTestCase = unittest.TestCase
-sys.modules.update({'django': django, 'django.test': test})
-
-if os.environ['MUTANTE'] == '1':
-    source = open('escala/orfa_classe.py').read()
-    old = '_carimbada_como_miolo(b) for b, _ in encontrados'
-    assert source.count(old) == 1
-    source = source.replace(old, "getattr(b, 'is_intervalo', False) for b, _ in encontrados")
-    module = types.ModuleType('escala.orfa_classe')
-    exec(compile(source, 'escala/orfa_classe.py', 'exec'), module.__dict__)
-    sys.modules['escala.orfa_classe'] = module
-    nome = 'escala.tests.test_razao_da_sobra.RazaoDaSobraTest.test_carimbo_intra_ata_no_turno'
-else:
-    nome = 'escala.tests.test_razao_da_sobra'
-
-suite = unittest.defaultTestLoader.loadTestsFromName(nome) [nao verificado]
-sys.exit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
-PY
-}
-verificar 0  # verde: 13 testes [nao verificado]
-verificar 1  # mutante: falha esperada no novo caso
-```
-
-Com Django disponível, o comando do teste real é: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_razao_da_sobra --noinput
-```
-
-## 19/11 12:01 · sessao 848b07639c50 · ESCALA-NAO-DESCREVE · sonda · origem=Code
-
-**Resultado:** a sonda informa 19 casos `nenhuma`, 9 `nova==cadastro` e 2 `velha==cadastro`; no corte A3, informa 15 chaves com mais de um bloco, em 9 colaboradores. A saída informa `ERROS=0` e `CONTADOS=34 (esperado 34)`. [não verificado: saída fornecida no pedido, sem arquivo e linhas locais]
-
-Os valores abaixo são transcrições do envelope fornecido, não uma nova leitura da sombra. Como o envelope não tem arquivo:linha disponível na cópia, suas afirmações estão marcadas `[não verificado]`. O diretório também não tem metadados Git disponíveis para confirmar o hash do HEAD. [não verificado]
-
-## 1. As 30 linhas A1
-
-Em **cadastro**, **velha** e **nova**, a notação é `pk: entrada–saída / início–fim do intervalo (cruza)`. `—` significa sem intervalo; `∅`, sem proposta. Em **civil** e **núcleo**, a notação é `entrada/saída; marcos; dias`. As classes comparam os marcos informados, não a igualdade dos PKs. [não verificado: linhas A1 fornecidas]
-
-| Vínculo:colab | Cadastro | Velha | Nova | Civil | Núcleo | Classe |
-|---|---|---|---|---|---|---|
-| 1140:85 | 483: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 378: 21:00–07:00/— (1) | 06:57/06:57; 1; 24 | 20:50/06:57; 2; 12 | nenhuma |
-| 821:110 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:55/07:00; 1; 25 | 18:55/07:00; 4; 11 | nenhuma |
-| 829:111 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:55/07:00; 1; 44 | 18:55/07:00; 4; 22 | nenhuma |
-| 832:121 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:59/07:01; 1; 60 | 19:00/07:01; 4; 26 | nenhuma |
-| 1027:134 | 179: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 06:58/06:58; 1; 44 | 18:55/06:58; 2; 22 | nova==cadastro |
-| 187:219 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 19:04/07:04; 1; 60 | 19:04/07:03; 4; 28 | nenhuma |
-| 219:253 | 378: 21:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 06:55/06:55; 1; 60 | 18:56/06:55; 2; 30 | nenhuma |
-| 238:272 | 235: 18:00–06:00/01:00–02:00 (1) | 182: 18:00–06:00/— (1) | 235: 18:00–06:00/01:00–02:00 (1) | 17:52/05:55; 1; 34 | 17:52/05:55; 4; 16 | nova==cadastro |
-| 247:282 | 172: 19:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:59/07:00; 3; 58 | 18:59/07:00; 4; 30 | velha==cadastro |
-| 255:290 | 179: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:00/07:00; 1; 57 | 19:00/07:00; 2; 28 | nova==cadastro |
-| 1576:340 | 172: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 209: 18:30–06:30/— (1) | 06:30/06:30; 1; 45 | 18:33/06:30; 2; 21 | nenhuma |
-| 302:344 | 186: 19:00–07:00/23:00–00:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:43/06:59; 1; 28 | 18:43/06:59; 4; 14 | nenhuma |
-| 1336:416 | 196: 19:00–07:00/03:00–04:00 (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:00/07:00; 1; 42 | 18:55/06:56; 2; 19 | nenhuma |
-| 1334:418 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 19:00/07:00; 3; 45 | 19:00/07:00; 4; 22 | nenhuma |
-| 401:467 | 183: 19:00–07:00/00:00–01:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:51/06:51; 3; 51 | 18:51/06:51; 4; 24 | nenhuma |
-| 425:496 | 179: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:00/07:00; 1; 52 | 18:58/07:00; 2; 23 | nova==cadastro |
-| 1150:502 | 278: 10:00–18:20/14:00–15:00 (0) | 197: 07:00–19:00/14:00–15:00 (0) | 204: 10:20–19:29/14:40–15:40 (0) | 06:59/19:00; 4; 50 | 09:54/19:00; 4; 46 | nenhuma |
-| 1164:511 | 186: 19:00–07:00/23:00–00:00 (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:01/07:01; 1; 57 | 18:58/07:01; 2; 27 | nenhuma |
-| 950:612 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:50/06:50; 1; 34 | 18:50/06:50; 4; 15 | nenhuma |
-| 994:841 | 380: 19:00–07:00/01:00–02:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:56/06:54; 1; 58 | 18:56/06:54; 4; 29 | nova==cadastro |
-| 1006:854 | 34: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 06:51/06:51; 1; 60 | 18:55/06:51; 2; 30 | nova==cadastro |
-| 1337:877 | 203: 10:00–22:00/14:00–15:00 (0) | 193: 10:30–22:30/15:30–16:30 (0) | 185: 10:00–22:00/13:00–14:00 (0) | 10:56/22:09; 4; 28 | 09:59/22:09; 4; 25 | nenhuma |
-| 1478:888 | 172: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:05/07:05; 1; 58 | 19:01/07:05; 2; 28 | nova==cadastro |
-| 1388:898 | 253: 12:30–00:30/19:00–20:00 (1) | 314: 00:00–00:00/— (1) | 253: 12:30–00:30/19:00–20:00 (1) | 00:30/00:30; 3; 45 | 12:28/00:30; 4; 22 | nova==cadastro |
-| 1594:900 | 35: 07:00–19:00/— (0) | 212: 07:00–16:00/— (0) | 365: 07:00–15:50/12:00–13:00 (0) | 06:55/15:54; 1; 39 | 06:54/15:54; 4; 28 | nenhuma |
-| 1181:926 | 496: 11:00–20:00/16:00–17:00 (0) | 541: 11:00–20:00/15:30–17:00 (0) | 291: 08:00–20:00/12:00–13:00 (0) | 11:00/20:00; 4; 43 | 08:00/20:00; 4; 30 | nenhuma |
-| 1592:932 | 35: 07:00–19:00/— (0) | 274: 10:00–22:00/— (0) | 177: 07:00–19:00/— (0) | 10:00/22:00; 2; 30 | 06:52/18:54; 2; 18 | nova==cadastro |
-| 1186:935 | 172: 19:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:50/06:50; 3; 58 | 18:50/06:50; 4; 29 | velha==cadastro |
-| 1511:993 | 178: 07:00–19:00/12:00–13:00 (0) | 197: 07:00–19:00/14:00–15:00 (0) | 177: 07:00–19:00/— (0) | 07:00/19:00; 4; 18 | 07:00/19:00; 2; 14 | nenhuma |
-| 1123:915 | 279: 14:40–23:00/18:00–19:00 (0) | 449: 12:00–20:20/16:00–17:00 (0) | ∅; cruza — | 11:48/20:24; 4; 19 | 11:48/17:27; 4; 16 | nenhuma |
-
-**CLASSES:** `nenhuma=19 nova==cadastro=9 velha==cadastro=2`. [não verificado: linha CLASSES fornecida]
-
-### Por que a proposta muda
-
-O detector civil agrupa batidas pela data local e toma, para cada dia, a primeira e a última; calcula separadamente as modas dessas bordas e do número de batidas. O núcleo, no ramo sequencial, corta blocos por gaps e vão, atribui cada bloco à data da primeira batida e acumula suas horas nessa chave. Isso permite que madrugada e noite sejam separadas no civil e reunidas no núcleo. [app/escala/detector_proposta.py:53](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:53), [app/ponto/calculador/nucleo.py:186](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:186)
-
-O casamento exige entrada e saída a até 30 minutos do template e escolhe a menor soma das distâncias. Para intervalo, testa apenas se `marcos_moda >= 4` e se o template **tem** os dois marcos de intervalo; não compara seus horários com batidas ou cadastro. O código tampouco usa `cruza` nesse casamento. [app/escala/detector_proposta.py:34](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:34), [app/escala/detector_proposta.py:99](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:99)
-
-- **Entrada muda de madrugada para noite:** 1140:85, 1027:134, 219:253, 255:290, 1576:340, 1336:416, 425:496, 1164:511 e 1006:854 e 1478:888 passam de entrada civil próxima da saída para entrada de bloco noturna; 1388:898 também muda a entrada e a moda de marcos. A troca observada acompanha essa diferença de chave e de bordas. [não verificado: linhas A1 fornecidas; mecanismo em [detector_proposta.py:60](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:60) e [nucleo.py:236](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:236)]
-- **Mesmas bordas aproximadas, intervalo muda:** 821:110, 829:111, 832:121, 187:219, 238:272, 247:282, 302:344, 1334:418, 401:467, 950:612, 994:841, 1594:900 e 1186:935 têm moda civil de 1 ou 3 e nuclear de 4; 1511:993 faz o inverso, de 4 para 2. Isso muda o filtro de presença de intervalo. O horário específico do intervalo escolhido continua dependendo do catálogo e da ordem em empate, não de comparação dos marcos internos. [não verificado: linhas A1 fornecidas; regra em [detector_proposta.py:105](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:105)]
-- **Bordas modais diferentes com mesma categoria de marcos:** em 1150:502, 1337:877, 1181:926 e 1592:932 a entrada medida muda e, com ela, o candidato mais próximo. O envelope não contém as batidas completas nem todos os candidatos para atribuir a diferença modal a um evento individual. [não verificado: linhas A1 fornecidas; regra em [detector_proposta.py:113](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:113)]
-- **1123:915:** a saída modal muda de 20:24 para 17:27; a referência informa proposta nova `NONE` e confiança insuficiente. Com 16 dias, o limite de cinco dias não explica a ausência; o código também retorna insuficiente quando nenhum template casa as bordas e a categoria de intervalo. O catálogo completo não foi fornecido para verificar os candidatos individualmente. [não verificado: A1 e referência fornecidos; regra em [detector_proposta.py:125](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:125)]
-
-## 2. A2: batidas e medições por dia
-
-Datas são de novembro de 2026. Em cada linha, **núcleo** mostra `chave: horas; ímpar`; `∅` reproduz `horas=None`. A chave impressa é a data da linha mesmo quando não há horas nessa chave. As tabelas reproduzem somente as linhas A2 fornecidas, sem inventar dias ausentes. [não verificado: linhas A2 fornecidas]
-
-**845:146** — cadastro pk 383, `00:00–23:59/—`, cruza 0; velha pk 39; `nbatidas=6`. [não verificado]
-
-| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
-|---|---|---|---|
-| 09 | 06:30 | 06:30/06:30; 1 | 09: ∅; falso |
-| 10 | 21:29 | 21:29/21:29; 1 | 10: 21:29, 06:31; falso |
-| 11 | 06:31 | 06:31/06:31; 1 | 11: ∅; falso |
-| 16 | 21:31 | 21:31/21:31; 1 | 16: 21:31, 06:35; falso |
-| 17 | 06:35 | 06:35/06:35; 1 | 17: ∅; falso |
-
-O civil vê uma batida em cada data exibida, portanto primeira e última coincidem. O núcleo reúne as duas noites exibidas com suas saídas da manhã seguinte. Nenhuma dessas bordas reproduz o cadastro `00:00–23:59`; a referência de outra janela informa nova pk 500 e E/S nuclear modal `21:29/06:30`. A sexta batida contada no cabeçalho não aparece nas linhas A2 transcritas. [não verificado: A2 e sonda34d_ref.out fornecidos; agrupamento em [detector_proposta.py:60](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:60) e [nucleo.py:236](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:236)]
-
-**1547:220** — cadastro pk 591, `22:00–06:00/02:00–03:00`, cruza 1; velha pk 252; `nbatidas=24`. [não verificado]
-
-| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
-|---|---|---|---|
-| 10 | 21:54 | 21:54/21:54; 1 | 10: 21:54, 03:35, 04:31, 06:00; falso |
-| 11 | 03:35, 04:31, 06:00 | 03:35/06:00; 3 | 11: ∅; falso |
-| 12 | 21:59 | 21:59/21:59; 1 | 12: 21:59, 04:01, 05:00, 06:00; falso |
-| 13 | 04:01, 05:00, 06:00, 22:00 | 04:01/22:00; 4 | 13: 22:00, 02:00, 03:02, 06:00; falso |
-| 14 | 02:00, 03:02, 06:00, 21:58 | 02:00/21:58; 4 | 14: 21:58, 02:02, 03:00, 06:00; falso |
-| 15 | 02:02, 03:00, 06:00, 21:57 | 02:02/21:57; 4 | 15: 21:57, 02:09, 03:00, 06:00; falso |
-| 16 | 02:09, 03:00, 06:00 | 02:09/06:00; 3 | 16: ∅; falso |
-| 17 | 21:54 | 21:54/21:54; 1 | 17: 21:54, 02:00, 03:00, 06:01; falso |
-| 18 | 02:00, 03:00, 06:01 | 02:00/06:01; 3 | 18: ∅; falso |
-
-Nesses dias, o civil separa ou mistura bordas de jornadas em datas civis; o núcleo mostra jornadas noturnas próximas ao cadastro, embora alguns intervalos exibidos sejam diferentes. A referência de janela mais ampla informa, porém, nova e velha pk 252 e E/S nuclear modal `15:00/23:00`, divergente do cadastro. **A2 não mostra por que essa moda da janela completa prevalece.** [não verificado: A2 e sonda34d_ref.out fornecidos; regras em [detector_proposta.py:70](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:70) e [nucleo.py:236](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:236)]
-
-**1597:489** — cadastro pk 172, `19:00–07:00/—`, cruza 1; velha pk 252; `nbatidas=23`. [não verificado]
-
-| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
-|---|---|---|---|
-| 09 | 16:01, 20:00, 21:00 | 16:01/21:00; 3 | 09: 16:01, 20:00, 21:00, 00:00; falso |
-| 10 | 00:00 | 00:00/00:00; 1 | 10: ∅; falso |
-| 11 | 19:00, 23:00 | 19:00/23:00; 2 | 11: 19:00, 23:00, 00:00, 07:00; falso |
-| 12 | 00:00, 07:00 | 00:00/07:00; 2 | 12: ∅; falso |
-| 13 | 19:00, 23:00 | 19:00/23:00; 2 | 13: 19:00, 23:00, 00:00, 07:00; falso |
-| 14 | 00:00, 07:00 | 00:00/07:00; 2 | 14: ∅; falso |
-| 15 | 19:00, 23:00 | 19:00/23:00; 2 | 15: 19:00, 23:00, 00:00, 07:00; falso |
-| 16 | 00:00, 07:00 | 00:00/07:00; 2 | 16: ∅; falso |
-| 18 | 19:00, 23:00 | 19:00/23:00; 2 | 18: 19:00, 23:00, 00:00; verdadeiro |
-
-O civil divide as jornadas de 19:00–07:00 entre datas. O núcleo as reúne, mas as linhas completas exibidas têm quatro marcos, enquanto o cadastro não tem intervalo; a última é ímpar. A referência da janela mais ampla informa nova e velha pk 252 e moda nuclear `15:00/23:00`; os dez dias exibidos não explicam a prevalência dessa moda. [não verificado: A2 e sonda34d_ref.out fornecidos; regra de intervalo em [detector_proposta.py:105](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:105)]
-
-**1604:934** — cadastro pk 590, `23:00–11:00/05:00–06:00`, cruza 1; velha pk 177; `nbatidas=10`. [não verificado]
-
-| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
-|---|---|---|---|
-| 09 | 22:57 | 22:57/22:57; 1 | 09: 22:57, 11:09; falso |
-| 10 | 11:09 | 11:09/11:09; 1 | 10: ∅; falso |
-| 11 | 23:01 | 23:01/23:01; 1 | 11: 23:01, 11:00; falso |
-| 12 | 11:00 | 11:00/11:00; 1 | 12: ∅; falso |
-| 13 | 22:57 | 22:57/22:57; 1 | 13: 22:57, 11:00; falso |
-| 14 | 11:00 | 11:00/11:00; 1 | 14: ∅; falso |
-| 15 | 22:58 | 22:58/22:58; 1 | 15: 22:58, 11:04; falso |
-| 16 | 11:04 | 11:04/11:04; 1 | 16: ∅; falso |
-| 17 | 23:27 | 23:27/23:27; 1 | 17: 23:27, 11:40; falso |
-| 18 | 11:40 | 11:40/11:40; 1 | 18: ∅; falso |
-
-O civil vê uma batida por data; o núcleo reúne cada entrada com a saída da manhã seguinte, mas nessas jornadas mostra dois marcos, sem os dois marcos de intervalo do cadastro. A referência da janela mais ampla informa nova pk 197 e E/S nuclear modal `07:01/19:00`; os dez dias exibidos não explicam essa moda. [não verificado: A2 e sonda34d_ref.out fornecidos; regras em [detector_proposta.py:70](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:70) e [detector_proposta.py:105](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:105)]
-
-## 3. A3: contagem de chaves multibloco
-
-O corte referenciado da autópsia deduplica batidas a menos de dez minutos e separa blocos por gap; essa contagem replicada não deve ser confundida automaticamente com o corte atual do núcleo, que não faz esse dedup e também tem limite de vão. [app/ponto/management/commands/e6_piso_autopsia.py:65](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/management/commands/e6_piso_autopsia.py:65), [app/ponto/calculador/nucleo.py:45](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:45), [app/ponto/calculador/nucleo.py:215](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:215)
-
-| Colab pk | Chaves | Chaves com >1 bloco |
-|---|---:|---:|
-| 109 | 27 | 1 |
-| 328 | 34 | 1 |
-| 451 | 54 | 1 |
-| 466 | 30 | 2 |
-| 467 | 25 | 1 |
-| 638 | 23 | 1 |
-| 877 | 28 | 1 |
-| 911 | 40 | 4 |
-| 932 | 29 | 3 |
-
-**A3_TOTAL:** `universo_colabs=233 chaves=7524 chaves_multibloco=15 colabs_com_multibloco=9`. [não verificado: A3 fornecido]
-
-**Controle da sonda principal:** `ERROS=0 UNIVERSO=233 CONTADOS=34 (esperado 34)`. **Controle do anexo de referência:** `ERROS=0 UNIVERSO=233 CONTADOS=233`. [não verificado: envelopes fornecidos]
-
-_7349 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7351 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
