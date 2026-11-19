@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 16:55:48.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (4.7 MB). Acoes na janela: **152**.
+**Medido em 19/11/2026 17:01:02.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (4.8 MB). Acoes na janela: **155**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:00:12 | Bash | Queue row and RELATO line | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' s=open(p).read().split('\n') assert not any(x.startswith('\| CADEIA20-V2M-ACHADOS ') for x in s) i=next(k for k,x in enumerate(s) if x.startswith('\| FERIADO-NASCER-ACHADOS-V1 ')) s.insert(i+1,'\| CADEIA20-V2M-ACHADOS \| fila (verificador Codex v2m, logs/CADEIA-20-PASSO-1/v2m/verif/triagem.txt; anteriores ao delta) \| (a) carto ...` |
+| 17:00:06 | Bash | Record triage of CADEIA verificador | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-codex-cadeia-20-passo-1-112113; sed -n 60,75p $W/app/escala/tests/test_cadeia20_lavra.py; cat > logs/CADEIA-20-PASSO-1/v2m/verif/triagem.txt <<'EOF' TRIAGEM verificador Codex volta 2m (r.txt), 0 procedentes: - item 5/7 "asserção residual sobre self.out e inócua" (test_cadeia20_lavra.py:67-72): DESCARTADO para a volta (nao engana: o selo que morde para ...` |
+| 16:59:55 | Bash | Read CADEIA verificador answer | `cd /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v2m/verif; cat rc; wc -c r.txt; cat r.txt` |
 | 16:55:46 | Bash | Fix ESPERANDO pid and test hook | `cd /home/ronald/saas-hasner; sed -i '1s/^ESPERANDO: .*/ESPERANDO: suite.sh \| pid=3402735/' app/docs/RELATO.md; head -1 app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| head -3 \| cut -c1-200` |
 | 16:55:44 | Bash | Check suite pids cmdline | `for p in 3402730 3402735; do echo $p; tr '\0' ' ' < /proc/$p/cmdline \| cut -c1-150; echo; done; pgrep -af "bin/suite.sh" \| cut -c1-120` |
 | 16:55:41 | Bash | Read pid proof | `cd /home/ronald/saas-hasner; grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py \| head -35` |
