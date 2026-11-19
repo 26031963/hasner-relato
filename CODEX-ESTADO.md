@@ -1,7 +1,52 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 21:30** · publicado em **18/11/2026 21:34** (UTC-3)
+> Ultima resposta processada: **18/11/2026 21:38** · publicado em **18/11/2026 21:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 21:38 · sessao 238ae9d67693 · E4C-F6F7 · construtor · origem=Code
+
+A correção foi aplicada somente em [test_e4c_f6f7_c14_lei3_pela_leitura.py](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:48). O diff é: [nao verificado]
+
+```diff
+- decisoes=N(all=lambda: ds))
++ decisoes=N(all=lambda ds=ds: ds))
+
+- setattr(vista, 'respondida_em', instante)
++ vista.respondida_em = instante
+
+- def funcao_mutada(arquivo, nome, *args, **kw):
++ def funcao_mutada(arquivo, nome, *args, antigo=antigo, novo=novo, **kw):
+
+- decisoes=N(all=lambda: ds))
++ decisoes=N(all=lambda ds=ds: ds))
+```
+
+Sobre cada B023:
+
+- **`ds`, linha 48:** a leitura é feita na linha 49, dentro da mesma iteração. O fechamento tardio não mudava o caso testado. [arquivo:linhas 44–49](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:44)
+- **`antigo` e `novo`, linha 179:** a função mutada é usada pelo teste chamado na linha 182, dentro da mesma iteração. O fechamento tardio não mudava o mutante testado. [arquivo:linhas 174–182](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:174) [nao verificado]
+- **`ds`, linha 221:** a leitura é feita na linha 222, dentro da mesma iteração. O fechamento tardio não mudava o caso testado. [arquivo:linhas 216–225](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:216)
+
+A verificação do Ruff ficou **não verificada**: o executável não está no PATH e `python3 -m ruff` também informou que o módulo não está instalado. Saída do comando solicitado, tentado antes da edição:
+
+```text
+$ PYTHONDONTWRITEBYTECODE=1 ruff check --config ruff.toml --no-cache chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py
+/bin/bash: line 1: ruff: command not found
+```
+
+Não foi possível executar o RED nem os mutantes do lint pelo mesmo motivo. [não verificado] A suíte e o banco não foram executados, conforme solicitado. [nao verificado]
+
+## 18/11 21:37 · sessao 954a693d4c56 · ESCALA-NAO-DESCREVE · verificador · origem=Code
+
+1. **OK — a chamada nova chega à guarda da linha 313.** O teste chama diretamente `realocar_vinculo_para_destino` com o PK de `t12`, criado como `12x36`; a função extrai o ID, busca o template e avalia sua inclusão em `CICLICOS`, que contém `12x36`. [app/escala/tests/test_escala_nao_descreve.py:131](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:131), [app/escala/tests/test_escala_nao_descreve.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:320), [app/escala/models.py:386](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/models.py:386), [app/escala/regua_defesa.py:307](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:307). Os únicos retornos anteriores são “Sem destino sugerido.” e “Template sugerido nao existe mais.”; nenhum contém `ciclico`. [app/escala/regua_defesa.py:308](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:308). Após a guarda, a função monta o POST interno, chama o juiz, trata exceção e `no_op`, e então chama o executor; esse trecho não é alcançado no caso cíclico atual. [app/escala/regua_defesa.py:313](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:313).
+
+2. **OK — para esta chamada e estes dados, a mensagem que satisfaz a asserção é a da guarda:** `Destino ENDL-12 e ciclico: informe o Inicio do turno no wizard de escalas (nao se infere fase).` [app/escala/tests/test_escala_nao_descreve.py:131](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:131), [app/escala/regua_defesa.py:314](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:314). A regra de fase do juiz produziria outra mensagem, sem `ciclico`, e só seria chamada depois dessa guarda; a mensagem da view contém `ciclica`, mas esta chamada direta não passa pela view. [app/colaboradores/services/vinculo.py:126](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:126), [app/escala/views.py:498](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/views.py:498). Em geral, a função interpola código ou descrição nas mensagens e devolve texto de exceções; portanto, a substring isolada não identificaria necessariamente a origem para dados arbitrários. [app/escala/regua_defesa.py:314](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:314), [app/escala/regua_defesa.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:320).
+
+3. **OK, com limite — o controle prova uma gravação observável nesse cenário.** `x` começa em 5x2 desde setembro; o teste exige sucesso, uma linha ativa de `x` em 6x1 com início em `HOJE` e aumento de um no total do histórico. Assim, a existência exigida não é a linha inicial da fixture. [app/escala/tests/test_escala_nao_descreve.py:127](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:127), [app/escala/tests/test_escala_nao_descreve.py:133](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:133), [app/escala/tests/test_escala_nao_descreve.py:326](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:326). A classe congela o relógio e passa `HOJE` explicitamente; o juiz e o executor ainda leem o relógio internamente, mas essas leituras ficam sob o congelamento neste teste. [app/escala/tests/test_escala_nao_descreve.py:30](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:30), [app/escala/tests/test_escala_nao_descreve.py:116](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:116), [app/colaboradores/services/vinculo.py:71](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:71), [app/colaboradores/services/vinculo.py:194](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:194). O caso troca tanto o colaborador quanto o destino e não verifica células: ele não isola qual diferença explica o resultado, nem prova regeneração de células. [app/escala/tests/test_escala_nao_descreve.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:320).
+
+4. **FILA — as contagens demonstram menos que uma comparação das linhas.** O próprio teste lê as contagens globais antes e depois da recusa e, no controle, filtra `EscalaColaborador` por colaborador, tipo, início e ativa; lê apenas o total global de `HistoricoVinculo`. [app/escala/tests/test_escala_nao_descreve.py:319](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:319). No caminho de sucesso, o executor fecha vínculos anteriores por `fechar_vigencia`, que escreve `ativa` e `data_fim`, e cria a nova linha com os campos filtrados pelo teste. [app/colaboradores/services/vinculo.py:211](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:211), [app/colaboradores/services/vinculo.py:641](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:641), [app/colaboradores/services/vinculo.py:287](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:287). O executor chama `registrar_mudanca`, que cria a linha de histórico; a tela de colaboradores lê esse histórico por colaborador. [app/colaboradores/services/vinculo.py:349](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:349), [app/colaboradores/services/historico_vinculo.py:7](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/historico_vinculo.py:7), [app/colaboradores/views.py:317](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/views.py:317). Contagem igual na recusa não excluiria edição de linha existente; o `+1` global tampouco identifica, sozinho, o conteúdo ou colaborador da linha criada. [app/escala/tests/test_escala_nao_descreve.py:324](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:324).
+
+5. **FILA — há mordida na guarda, com limites de contrato.** O anexo informa que o mutante `mut_sem_recusa_ciclico` falhou nesse teste, mas não mostra a alteração do mutante nem a asserção que falhou; esses detalhes ficam **[não verificado]**. O teste fixa a recusa observável da porta para `12x36`, sem exigir que o julgamento more especificamente na linha 313; o juiz de fase em `vinculo.py` usa outra condição e outra mensagem, e o predicado da lista continua separado. [app/escala/tests/test_escala_nao_descreve.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:320), [app/colaboradores/services/vinculo.py:128](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:128), [app/escala/services/cadastro_realidade.py:849](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/services/cadastro_realidade.py:849). A outra consulta a `CICLICOS` na régua pertence ao diagnóstico, fora dessa chamada direta. [app/escala/regua_defesa.py:198](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:198), [app/escala/regua_defesa.py:291](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:291). O congelamento impede que este teste exercite uma virada de dia entre as leituras internas do relógio. [app/escala/tests/test_escala_nao_descreve.py:116](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:116), [app/colaboradores/services/vinculo.py:189](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:189). Quanto ao significado de `motivo`, o argumento textual vai para `confirm_txt` e depois `obs`, enquanto `HistoricoVinculo.motivo` recebe a categoria `mudanca` ou `correcao`; o caso novo só conta linhas e não verifica esses valores. [app/escala/regua_defesa.py:301](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:301), [app/colaboradores/services/vinculo.py:354](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:354).
 
 ## 18/11 21:30 · sessao 7732a47fe90e · ESCALA-NAO-DESCREVE · construtor · origem=Code
 
@@ -1514,155 +1559,4 @@ LEI-AKITA: origem=`chamados/services/tarefa_do_dia.py::_pela_decisao`, testemunh
 
 A sombra fornecida reporta zero perguntas com validação antes de silêncio nas 51.212 examinadas e zero candidatas `V→S` para a segunda medição; são resultados dos anexos raspados, sem acesso independente ao banco ou aos programas da sonda **[não verificado]**. Não executei a suíte nem os mutantes; seus resultados de execução **[não verificado]**. [nao verificado]
 
-## 18/11 20:21 · sessao 4fb0642f9619 · E4C-F9 · construtor · origem=Code
-
-Implementei os três ajustes na cópia. A certificação pela suite e pelo opus final permanece pendente. [não verificado] [nao verificado]
-
-- **B1:** a guarda conta respostas divergentes e as exclui antes da classificação e da lista usada pelo `--apply`. O novo teste usa escolha com projeção `Sim`, ato `Nao`, classificador real e um controle concordante. ([comando](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/validar_classe_a.py:62), [teste](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:122)) [nao verificado]
-- **B2:** o selo conta ocorrências por arquivo, função, campo e exceção; examina também strings nas formas solicitadas. O teste injeta cada forma em memória para ambos os campos e acrescenta ocorrências dentro de I18 e I20. ([selo](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:141), [mutações em memória](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:202)) [nao verificado]
-- **B3:** acrescentei somente os comentários de classe nos dois sítios FICA. ([backfill](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/backfill_decisoes_pergunta.py:56), [limbo](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/curar_perguntas_em_limbo.py:46))
-
-**RED/GREEN e mutantes.** O RED funcional foi preparado antes da guarda, mas a tentativa local parou na importação: o Python disponível não encontrou Django. Portanto, RED e GREEN funcionais são **[não verificado]**. Sem banco, executei isoladamente os dois testes do selo: passaram; os mutantes do selo abaixo produziram respectivamente 20 e 2 falhas de subtestes, sem erros. ([teste funcional](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:122), [teste do selo](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:202)) [nao verificado]
-
-Para a pista, use `--only "chamados.tests.test_e4c_f9_comandos_leem_o_ato"` para GREEN e, separadamente, cada mutante:
-
-1. **Guarda B1:** em [validar_classe_a.py](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/validar_classe_a.py:63), remova as três linhas do `if` até o `continue`. O teste `test_M7_divergencia_escolha_nao_valida` deve falhar. Resultado na pista **[não verificado]**. [nao verificado]
-2. **Strings B2:** em [teste do selo](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:156), substitua `elif isinstance(node, ast.Constant) and isinstance(node.value, str):` por `elif False:`. O teste de mutações deve falhar para as formas em string. [nao verificado]
-3. **Contagem B2:** no [mesmo selo](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:185), substitua `contagens[chave] = contagens.get(chave, 0) + 1` por `contagens[chave] = 1`. O teste deve falhar para a ocorrência extra em cada `add`. [nao verificado]
-
-**Escritores e leitores nos sítios tocados.** A resposta é escrita pela porta de resposta; validação é escrita pela porta de validação, e há limpeza desses campos em devolução e reabertura. O comando de classe A lê o ato na seleção e na guarda, compara a projeção e chama o classificador que ainda lê a projeção; a escrita sob `--apply` continua na porta de validação. O backfill lê a projeção para identificar linhas ausentes, e o comando de limbo lê `resposta_colab` da projeção. ([resposta](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/disputa_emissao.py:1480), [validação](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/validacao.py:167), [devolução](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/validacao.py:273), [reabertura](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/services/disputa_emissao.py:1617), [classificador](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/juizes.py:2034), [backfill](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/backfill_decisoes_pergunta.py:57), [limbo](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/curar_perguntas_em_limbo.py:47))
-
-**LEI-AKITA:** origem=[validar_classe_a.py](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/validar_classe_a.py:63); testemunha=[DecisaoPergunta.leitura](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/models.py:4295); RED=[test_e4c_f9_comandos_leem_o_ato](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:122); quem-mais-le, no alcance desta composição: [sem_veredito_entre](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/models.py:2003), [classificador](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/juizes.py:2034), chamado também por [API](/home/ronald/wt-codex-e4c-f9-191111/app/api/views_mensageria.py:545) e [tags](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/templatetags/chamados_tags.py:171) / [tags](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/templatetags/chamados_tags.py:198); I21 e C2 combinam validação pelo ato com faces de resposta existentes ([I21](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1586), [C2](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/management/commands/auditar_invariantes_chamados.py:1617)); juízes novos=0; padrão=projeção reconstruível. O censo de todos os leitores do repositório é **[não verificado]**.
-
-## 18/11 20:21 · sessao 9d3adcfafcd1 · E4C-F6F7 · sonda · origem=Code
-
-`SILENCIO` pode ser uma linha de `DecisaoPergunta`: ela é registrada no fechamento da disputa em [models.py:2083](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:2083), no fechamento do fio do dia em [veredito_celula.py:190](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/ponto/services/veredito_celula.py:190) e no backfill em [backfill_decisoes_pergunta.py:349](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/management/commands/backfill_decisoes_pergunta.py:349).
-
-**Há também carimbo sem linha `SILENCIO`**: `fechar_por_admin` grava a via `admin_decidiu` por `carimbar_identidade`, sem registrar o ato por si só ([models.py:3246](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:3246), [models.py:3364](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:3364)). No aceite de folga, há chamadas a essa porta após o carimbo de validação, sem registro explícito de `SILENCIO` para a própria pergunta ([validacao.py:519](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/validacao.py:519), [validacao.py:551](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/validacao.py:551)). O backfill também identifica projeções `admin_decidiu` sem linha de silêncio ou validação ([backfill_decisoes_pergunta.py:120](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/management/commands/backfill_decisoes_pergunta.py:120)). A quantidade dessas situações em produção é **[não verificado]**.
-
-A sonda abaixo usa as constantes `ATOS` e o predicado `es_da_ressuscitacao` do modelo ([models.py:4152](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:4152), [models.py:4221](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:4221)). A contagem por ato inclui **todas** as linhas; as sequências usam o teto `agora`, como a sonda fornecida pelo usuário **[não verificado: anexo fornecido na conversa]**. O resultado da nova sonda é **[não verificado: script não executado]**.
-
-```python
-from collections import Counter
-from django.db import connection
-from django.utils import timezone
-from chamados.models import DecisaoPergunta as D, PerguntaDisputa
-
-def antivac():
-    erros = Counter()
-    atos = Counter()
-    bigramas = Counter()
-    totais = Counter()
-    completo = False
-
-    def erro(etapa, exc):
-        erros[etapa] += 1
-        # Não imprime a mensagem da exceção: ela pode conter dados pessoais.
-        print("ERRO", "etapa=%s" % etapa, "tipo=%s" % type(exc).__name__)
-
-    try:
-        if getattr(connection, "schema_name", None) != "juliani":
-            raise RuntimeError("schema diferente de juliani")
-
-        agora = timezone.now()
-        conhecidos = {valor for valor, _ in D.ATOS}
-        universo = PerguntaDisputa.objects.count()
-        print("SCHEMA juliani")
-        print("AGORA", agora.isoformat())
-        print("UNIVERSO", universo)
-
-        pergunta_atual = None
-        sequencia = []
-
-        def fechar_sequencia(seq):
-            if not seq:
-                return
-            totais["perguntas_com_sequencia"] += 1
-            viu_validacao = False
-            tem_silencio = False
-            validacao_antes = False
-            for ato, mantem in seq:
-                if ato == D.SILENCIO:
-                    tem_silencio = True
-                    if viu_validacao:
-                        validacao_antes = True
-                if ato == D.VALIDACAO:
-                    viu_validacao = True
-
-            totais["algum_silencio"] += int(tem_silencio)
-            totais["validacao_antes_silencio"] += int(validacao_antes)
-            for esquerda, direita in zip(seq, seq[1:]):
-                bigramas[(esquerda[0], direita[0])] += 1
-
-            k = len(seq)
-            while k and seq[k - 1][0] == D.RESPOSTA and seq[k - 1][1]:
-                k -= 1
-            totais["silencio_ultimo_nao_R_mantem"] += int(
-                k > 0 and seq[k - 1][0] == D.SILENCIO
-            )
-
-        linhas = (
-            D.objects.only(
-                "pk", "pergunta_id", "ato", "ato_em",
-                "da_ressuscitacao", "resposta_mantem_validacao",
-            )
-            .order_by("pergunta_id", "ato_em", "pk")
-            .iterator(chunk_size=2000)
-        )
-        for d in linhas:
-            atos[d.ato] += 1
-            if d.ato_em > agora or D.es_da_ressuscitacao(d):
-                continue
-            if pergunta_atual != d.pergunta_id:
-                fechar_sequencia(sequencia)
-                pergunta_atual = d.pergunta_id
-                sequencia = []
-            sequencia.append((d.ato, d.resposta_mantem_validacao))
-
-        fechar_sequencia(sequencia)
-        completo = True
-
-        print("ATOS_TODAS_AS_LINHAS")
-        for valor, _ in D.ATOS:
-            print("ato=%s quantidade=%s" % (valor, atos[valor]))
-        print("ATOS_FORA_DAS_CONSTANTES", sum(
-            n for ato, n in atos.items() if ato not in conhecidos
-        ))
-
-        print("PERGUNTAS_ATE_AGORA_SEM_RESSUSCITACAO")
-        for chave in (
-            "perguntas_com_sequencia",
-            "algum_silencio",
-            "validacao_antes_silencio",
-            "silencio_ultimo_nao_R_mantem",
-        ):
-            print("%s=%s" % (chave, totais[chave]))
-
-        print("TOP_10_BIGRAMAS_ATE_AGORA_SEM_RESSUSCITACAO")
-        # Não imprime valores desconhecidos, que poderiam conter dados pessoais.
-        seguros = Counter({
-            par: n for par, n in bigramas.items()
-            if par[0] in conhecidos and par[1] in conhecidos
-        })
-        for (a, b), n in sorted(
-            seguros.items(), key=lambda item: (-item[1], item[0])
-        )[:10]:
-            print("ato_i=%s ato_i+1=%s quantidade=%s" % (a, b, n))
-        print("BIGRAMAS_COM_ATO_DESCONHECIDO", sum(
-            n for (a, b), n in bigramas.items()
-            if a not in conhecidos or b not in conhecidos
-        ))
-
-    except Exception as exc:
-        erro("execucao", exc)
-    finally:
-        print("COMPLETO", completo)
-        print("ERROS", sum(erros.values()), "POR_ETAPA", dict(erros))
-        print("FIM_ANTIVAC")
-
-antivac()
-```
-
-A validação anterior é histórica: outro ato entre ela e o silêncio não a invalida para essa contagem. A retirada de respostas que mantêm validação vale apenas para encontrar o último ato não-`R(mantem)`; os bigramas conservam essas respostas, conforme a distinção de `resposta_mantem_validacao` no modelo ([models.py:4189](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:4189)). O script sinaliza valores de ato desconhecidos sem imprimi-los; se existirem, o top 10 exibido cobre apenas pares de constantes conhecidas **[não verificado: script proposto]**.
-
-_7161 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7163 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
