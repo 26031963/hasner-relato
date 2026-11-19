@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 01:28** · publicado em **19/11/2026 01:31** (UTC-3)
+> Ultima resposta processada: **19/11/2026 01:35** · publicado em **19/11/2026 01:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 01:35 · sessao 97f3c0098f5b · ESPURIA-TELA · verificador · origem=Code
+
+1. **NÃO BLOQUEIA.** Os quatro valores novos batem com os sítios B1 medidos nesta árvore:
+
+   | Função | Linha do `def` | Sítio B1 / novo valor |
+   |---|---:|---:|
+   | `autoridade_do_periodo` | [987](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:987) | [1045](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:1045) |
+   | `montar_dias` | [379](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:379) | [440](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:440) |
+   | `_dia_das_batidas_puro` | [2961](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/turnos.py:2961) | [2971](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/turnos.py:2971) |
+   | `dia_do_turno_da_batida` | [2943](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/turnos.py:2943) | [2949](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/turnos.py:2949) |
+
+   Para B1, o medidor registra `n.lineno` da **chamada AST** `.date()`, `localdate` ou `data_local` cujo operando recebe marca lexical; não registra a linha do `def` ou do decorador ([medida_turno_do_par.py:197](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/medida_turno_do_par.py:197), [medida_turno_do_par.py:217](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/medida_turno_do_par.py:217)). Os quatro valores constam no registro da cópia ([test_medida_turno_do_par.py:324](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:324), [test_medida_turno_do_par.py:336](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:336)).
+
+2. **NÃO BLOQUEIA — zero divergências.** Executei `censo('app')` em memória, sem bytecode, e comparei as duas tabelas inteiras com `LINHAS_REGISTRADAS`, usando a mesma chave `(chave, sitio ou criterio)` e as mesmas listas de linhas usadas pelo teste: **9/9 pareadores e 85/85 derivações**, sem chave ausente, extra ou com linha diferente ([test_medida_turno_do_par.py:558](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:558), [medida_turno_do_par.py:448](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/medida_turno_do_par.py:448)). O resultado vale para o universo e os critérios do medidor, que têm limitações declaradas ([medida_turno_do_par.py:32](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/medida_turno_do_par.py:32)).
+
+3. **NÃO BLOQUEIA, quanto ao diff fornecido.** O anexo transcrito mostra alteração somente nas quatro listas do arquivo de teste; nessa transcrição, não há alteração de `.py` fora de `app/*/tests/`. Ele atualiza a fotografia das linhas esperadas, preservando a comparação por igualdade e as demais catracas de número e identidade ([test_medida_turno_do_par.py:504](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:504), [test_medida_turno_do_par.py:542](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:542), [test_medida_turno_do_par.py:558](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:558)). A correspondência do anexo com o diff Git entre os hashes **[não verificado]**: a cópia disponibilizada não contém repositório Git.
+
+4. **NÃO BLOQUEIA.** `LINHAS_REGISTRADAS` é definido como literal no teste e lido pela asserção de igualdade; o medidor não o consulta ([test_medida_turno_do_par.py:9](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:9), [test_medida_turno_do_par.py:247](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:247), [test_medida_turno_do_par.py:558](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:558)). O resultado de `censo()` é construído pelo medidor a partir das fontes ([medida_turno_do_par.py:336](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/medida_turno_do_par.py:336), [medida_turno_do_par.py:448](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/medida_turno_do_par.py:448)); é consumido pela suite na catraca ([test_medida_turno_do_par.py:499](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_medida_turno_do_par.py:499)) e pelo leitor do ESTADO, que o formata e publica via `gerar_estado.py` ([turno_do_par_estado.py:28](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/bin/turno_do_par_estado.py:28), [turno_do_par_estado.py:54](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/bin/turno_do_par_estado.py:54), [gerar_estado.py:307](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/bin/gerar_estado.py:307)).
 
 ## 19/11 01:28 · sessao 9886687ca8aa · E4C-F5 · censo · origem=Code
 
@@ -3263,83 +3282,4 @@ A sobreposição da sonda identifica coincidência de categorias no mesmo colabo
 
 perguntas de lei: 3
 
-## 19/11 00:46 · sessao 7f1b82d865ae · QUEIMA-B2-disputa · censo · origem=Code
-
-O modelo correspondente à Disputa é `DisputaSupervisao`. Das 25 colunas, **7 são campos dele**; as outras 18 pertencem a outros modelos. A classificação abaixo foi obtida por AST das declarações em [models.py](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1847).
-
-**O censo de leitores e escritores está incompleto** [não verificado]. Confirmei os pontos internos de escrita abaixo, mas não rastreei todas as ocorrências de produção, testes, migrations e templates; portanto, não apresento totais de ocorrências nem `FIM_CENSO_disputa` [não verificado]. [nao verificado]
-
-### Colunas de `DisputaSupervisao`
-
-| Coluna | Declaração |
-|---|---|
-| `motivos` | [models.py:1878](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1878) |
-| `fechada_em` | [models.py:1894](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1894) |
-| `reaberturas_colab` | [models.py:1895](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1895) |
-| `reaberturas_admin` | [models.py:1899](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1899) |
-| `fechada_por` | [models.py:1903](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1903) |
-| `resolucao` | [models.py:1910](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1910) |
-| `motivo_fechamento` | [models.py:1930](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:1930) |
-
-### Fora deste censo
-
-| Modelo | Colunas e declarações |
-|---|---|
-| `ChamadoColaborador` | `status_local` [models.py:58](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:58); `via_encerramento` [linha 60](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:60); `respondido_por` [linha 64](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:64); `resolvido_em` [linha 66](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:66). |
-| `PerguntaDisputa` | `resposta_colab` [linha 2634](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2634); `respondida_em` [linha 2635](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2635); `validada_em` [linha 2636](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2636); `data_conferida_em` [linha 2645](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2645); `data_conferida_por` [linha 2646](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2646); `pendencia_admin` [linha 2743](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2743); `recusa_motivo` [linha 2747](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2747); `via_resolucao` [linha 2748](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2748); `veredito_lavrado` [linha 2772](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2772); `julgado_em` [linha 2777](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2777); `janela_expira_em` [linha 2783](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2783); `validada_por` [linha 3631](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:3631); `materializada_em` [linha 3647](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:3647); `materializada_por` [linha 3651](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:3651). |
-
-`materializada_em` e `materializada_por` também são campos de `RegularizacaoExterna`: [models.py:4377](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:4377) e [linha 4378](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:4378).
-
-### Pontos de escrita confirmados em produção — levantamento parcial
-
-| Coluna | Atribuições e persistência encontradas no próprio modelo |
-|---|---|
-| `fechada_em` | Atribuições em [linha 2095](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2095), [linha 2312](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2312) e [linha 2336](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2336); respectivos `save` em [2099](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2099), [2324](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2324) e [2340](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2340). |
-| `fechada_por` | Atribuições em [2096](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2096), [2313](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2313) e [2337](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2337); `save` em [2099](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2099), [2324](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2324) e [2340](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2340). |
-| `resolucao` | Atribuições em [2097](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2097), [2314](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2314), [2338](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2338) e [2428](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2428); `save` em [2099](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2099), [2324](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2324), [2340](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2340) e [2429](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2429). |
-| `motivo_fechamento` | Atribuições em [2098](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2098), [2315](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2315) e [2339](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2339); `save` em [2099](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2099), [2324](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2324) e [2340](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2340). |
-| `reaberturas_admin` | Atribuição em [2316](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2316), incluída em `campos` em [2317](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2317) e no `save` em [2324](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2324). |
-| `reaberturas_colab` | Atribuição em [2402](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2402) e `save` em [2403](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2403). |
-| `motivos` | Atribuições em [2129](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2129), [2226](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2226) e [2322](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2322); `save` em [2131](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2131), [2228](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2228) e [2324](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2324). |
-
-Um leitor de `fechada_em` que exige acompanhar fluxo é o `Q` atribuído a `q_disp`: ele é construído em [models.py:2860](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2860) e aplicado ao queryset de `DisputaSupervisao` em [linha 2862](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2862). A lista completa de leitores, receptores ambíguos e ocorrências em testes e migrations permanece [não verificado].
-
-### Script efetivamente usado
-
-Este foi o código AST executado para classificar **declarações**, não o script completo de censo solicitado. Ele usa o diretório corrente, não recebe `<raiz>`, e não conta leitores ou escritores [não verificado].
-
-```python
-import ast
-
-p = 'app/chamados/models.py'
-t = ast.parse(open(p, encoding='utf-8').read())
-cols = (
-    'status_local resolvido_em via_encerramento respondido_por '
-    'fechada_em fechada_por resolucao motivo_fechamento '
-    'reaberturas_admin reaberturas_colab motivos materializada_em '
-    'materializada_por via_resolucao respondida_em resposta_colab '
-    'validada_em validada_por recusa_motivo pendencia_admin '
-    'data_conferida_em data_conferida_por veredito_lavrado '
-    'julgado_em janela_expira_em'
-).split()
-
-for n in t.body:
-    if isinstance(n, ast.ClassDef):
-        for x in n.body:
-            if isinstance(x, (ast.Assign, ast.AnnAssign)):
-                targets = x.targets if isinstance(x, ast.Assign) else [x.target]
-                for a in targets:
-                    if (
-                        isinstance(a, ast.Name)
-                        and a.id in cols
-                        and isinstance(x.value, ast.Call)
-                        and isinstance(x.value.func, ast.Attribute)
-                        and isinstance(x.value.func.value, ast.Name)
-                        and x.value.func.value.id == 'models'
-                    ):
-                        print(a.id, n.name, x.lineno)
-```
-
-O alcance dessa AST ficou limitado a atribuições diretas com chamada `models.<campo>` no corpo de classes de `models.py`; ela não percorreu os demais arquivos, templates, SQL cru, fluxo de querysets ou nomes calculados [não verificado]. Não houve acesso a banco ou logs de produção [não verificado].
-
-_7221 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7222 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
