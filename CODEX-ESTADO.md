@@ -1,7 +1,176 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 22:31** · publicado em **18/11/2026 22:31** (UTC-3)
+> Ultima resposta processada: **18/11/2026 22:36** · publicado em **18/11/2026 22:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 22:36 · sessao 57f4dfc992d1 · E4C-F9 · construtor · origem=Code
+
+Atualizei [test_e4c_f9_comandos_leem_o_ato.py](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:70) com controles validados pelo ato, execução integral do auditor para M2–M5 e cenário `--apply` para M6. O cenário `--apply` de M7 usa a pergunta divergente e um controle validado ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:193)). [nao verificado]
+
+**Entrega incompleta:** não executei os testes Django nem os mutantes, pois a instrução proíbe acesso a banco. Portanto, as mortes e a ausência de testes vermelhos no código atual são **[não verificado]**; também não há log RED Django. A análise sintática com `python3` passou; Ruff não está instalado **[não verificado: lint]**. Os patches abaixo são propostas para a sessão executar, não mutações aplicadas. [nao verificado]
+
+Para cada mutante, aplicar seu patch isoladamente com `patch -p1` a partir de `/home/ronald/wt-codex-e4c-f9-223418` e rodar o comando indicado no ambiente autorizado. Os comandos abaixo assumem, **[não verificado]**, que `python` e as configurações Django de teste estão disponíveis: [nao verificado]
+
+```bash
+cd /home/ronald/wt-codex-e4c-f9-223418/app
+export PYTHONDONTWRITEBYTECODE=1
+export DJANGO_SETTINGS_MODULE=config.settings_test
+```
+
+**M1** — deve morrer `test_M1_rotulo_e_controle` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:93)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/auditar_invariantes_chamados.py
++++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
+@@ -206,1 +206,1 @@
+-            degraus['validada_em' if DecisaoPergunta.leitura(_p).validada_em is not None
++            degraus['validada_em' if _p.validada_em is not None
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M1_rotulo_e_controle
+```
+
+**M2** — deve morrer `test_M2_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:164)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/auditar_invariantes_chamados.py
++++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
+@@ -1586,1 +1586,1 @@
+-        _i21_cru = list(PD.objects.filter(q_respondida_com_texto(), PD.q_nao_validada_pelo_ato(),
++        _i21_cru = list(PD.objects.filter(q_respondida_com_texto(),
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M2_auditor_inteiro
+```
+
+**M3** — deve morrer `test_M3_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:167)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/auditar_invariantes_chamados.py
++++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
+@@ -1617,1 +1617,1 @@
+-            PD.objects.filter(_q_nao_resp(), PD.q_nao_validada_pelo_ato(), materializada_em__isnull=True,
++            PD.objects.filter(_q_nao_resp(), materializada_em__isnull=True,
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M3_auditor_inteiro
+```
+
+**M4** — deve morrer `test_M4_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:170)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/auditar_invariantes_chamados.py
++++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
+@@ -1781,1 +1781,1 @@
+-            [p.pk for p in PD.objects.filter(PD.q_nao_validada_pelo_ato(), disputa__fechada_em__isnull=False,
++            [p.pk for p in PD.objects.filter(disputa__fechada_em__isnull=False,
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M4_auditor_inteiro
+```
+
+**M5** — deve morrer `test_M5_auditor_inteiro` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:173)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/auditar_invariantes_chamados.py
++++ b/app/chamados/management/commands/auditar_invariantes_chamados.py
+@@ -1794,1 +1794,1 @@
+-        for p in (PD.objects.filter(PD.q_nao_validada_pelo_ato(), data_evento__isnull=False, motivo__in=_mlei,
++        for p in (PD.objects.filter(data_evento__isnull=False, motivo__in=_mlei,
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M5_auditor_inteiro
+```
+
+**M6** — devem morrer os testes dry e `--apply` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:107)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/encerrar_perguntas_com_fato.py
++++ b/app/chamados/management/commands/encerrar_perguntas_com_fato.py
+@@ -33,1 +33,1 @@
+-              .filter(PerguntaDisputa.q_nao_validada_pelo_ato(), materializada_em__isnull=False)
++              .filter(materializada_em__isnull=False)
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M6_dry_run_universo_e_controle chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M6_apply_carimba_apenas_nao_validada
+```
+
+**M7** — deve morrer `test_M7_divergencia_escolha_nao_valida` ([teste](/home/ronald/wt-codex-e4c-f9-223418/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:193)) **[não verificado]**. [nao verificado]
+
+```diff
+--- a/app/chamados/management/commands/validar_classe_a.py
++++ b/app/chamados/management/commands/validar_classe_a.py
+@@ -63,3 +63,0 @@
+-            if DecisaoPergunta.leitura(q).resposta_colab != q.resposta_colab:
+-                cls['divergente ato x projecao'] += 1
+-                continue
+```
+
+```bash
+python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLeemAtoTest.test_M7_divergencia_escolha_nao_valida
+```
+
+## 18/11 22:33 · sessao 88b1c8259ae5 · E4C-F9 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO**
+
+**Item 1 — PROCEDE (devolver).** A cura precisa especificar os critérios por sítio: nem todos têm um filtro de validação, e M7 exige um tratamento diferente.
+
+1. **Premissas.** Conferem a ausência de pergunta validada em M6 e o teste isolado do predicado em M2–M5. M1 também não tem controle validado. Já a afirmação de que M6 é o único cujo comando grava com `--apply` não fecha: M7 também oferece `--apply` e chama `validar_pergunta`. [teste:70](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:70), [teste:85](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:85), [teste:96](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:96), [validar_classe_a.py:32](app/chamados/management/commands/validar_classe_a.py:32), [validar_classe_a.py:100](app/chamados/management/commands/validar_classe_a.py:100).
+
+   Os sete sítios são:
+
+   | Sítio | Leitura ou filtro |
+   |---|---|
+   | M1 | Ramo que rotula conforme validação lida do ato, não filtro ORM: [auditor:206](app/chamados/management/commands/auditar_invariantes_chamados.py:206). |
+   | M2 | I21, `q_nao_validada_pelo_ato()`: [auditor:1586](app/chamados/management/commands/auditar_invariantes_chamados.py:1586). |
+   | M3 | C2, mesmo predicado: [auditor:1617](app/chamados/management/commands/auditar_invariantes_chamados.py:1617). |
+   | M4 | F2, mesmo predicado: [auditor:1781](app/chamados/management/commands/auditar_invariantes_chamados.py:1781). |
+   | M5 | F3, mesmo predicado: [auditor:1794](app/chamados/management/commands/auditar_invariantes_chamados.py:1794). |
+   | M6 | Seleção de materializadas não validadas: [encerrar:33](app/chamados/management/commands/encerrar_perguntas_com_fato.py:33). |
+   | M7 | Guarda de divergência de **resposta** entre ato e projeção; há outra leitura para impressão: [validar_classe_a.py:63](app/chamados/management/commands/validar_classe_a.py:63), [validar_classe_a.py:83](app/chamados/management/commands/validar_classe_a.py:83). |
+
+2. **Colisão com o aval vigente.** Não há mudança de F9=(A) nem autorização para tocar os comandos além do RED no texto fornecido; a execução só respeita esse limite se eventuais alterações dos comandos ficarem dentro do que o RED exigir. A existência e o teor independente do aval vigente na cópia são **[não verificado]**; a regra foi fornecida no anexo `aval.txt`, sem numeração de linhas.
+
+3. **Literal.** M1 é um ramo de classificação, e M7 é uma guarda de divergência de resposta: “sem o filtro do sítio” não identifica uma mutação uniforme para os sete. Remover a guarda de M7 é uma mutação definível e, por inspeção, os testes que exigem o contador de divergência devem fazê-la morrer; sua execução é **[não verificado]**. Trocar a leitura da impressão pela projeção é outra mutação: a guarda anterior já exige igualdade para os itens impressos, e o selo estrutural conta a leitura crua. [auditor:206](app/chamados/management/commands/auditar_invariantes_chamados.py:206), [validar_classe_a.py:62](app/chamados/management/commands/validar_classe_a.py:62), [teste:105](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:105), [teste:194](app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:194).
+
+   M2–M5 pertencem ao mesmo auditor, que pode ser executado inteiro em modo de leitura por padrão, mas não declara flag `--dry` nem `--apply`; `--html` escreve arquivo e não deve ser usado sob a regra desta revisão. [auditor:1](app/chamados/management/commands/auditar_invariantes_chamados.py:1), [auditor:552](app/chamados/management/commands/auditar_invariantes_chamados.py:552), [auditor:1869](app/chamados/management/commands/auditar_invariantes_chamados.py:1869).
+
+4. **Exportada, dinheiro ou `!`.** O item descreve testes e mutantes; não declara alteração de exportação ou dinheiro. Se uma implementação concreta tocaria esses domínios ou algum `!` fora do declarado é **[não verificado]**; não há delta proposto para examinar. Os comandos de M6 e M7 têm caminhos de escrita quando aplicados, por isso testes precisam respeitar o escopo autorizado. [encerrar:54](app/chamados/management/commands/encerrar_perguntas_com_fato.py:54), [validar_classe_a.py:88](app/chamados/management/commands/validar_classe_a.py:88).
+
+**Item 2 — NAO PROCEDE.** A exigência de guardar o RED Django em arquivo é compreensível e, no texto fornecido, não apresenta por si só colisão com F9=(A) ou com o limite dos comandos.
+
+1. **Premissas.** O anexo `veredito_opus.md` fornecido afirma que o RED da c3 ficou declarado sem log Django. A existência e o conteúdo de um log independente são **[não verificado]**; o anexo fornecido não tem linhas para citar.
+2. **Colisão.** Guardar a saída de um RED não exige, por si só, mudar F9=(A). Alterações dos três comandos continuariam limitadas ao que o RED exigir, conforme `aval.txt` fornecido; confirmação independente do aval vigente é **[não verificado]**.
+3. **Literal.** “RED com log Django guardado em arquivo” é executável em princípio, mas o comando, a falha observada e o conteúdo do futuro log são **[não verificado]**.
+4. **Exportada, dinheiro ou `!`.** O item declara um artefato de log, sem declarar alteração nesses domínios; efeitos de uma execução concreta são **[não verificado]**.
+
+A revisão foi somente por leitura. Nenhum teste ou mutante foi executado, nenhum arquivo foi criado, e a correspondência da cópia ao hash informado é **[não verificado]**. [nao verificado]
+
+## 18/11 22:33 · sessao 49baaaf366a7 · - · - · origem=Ronald (tmux)
+
+- A premissa de que M6 é o único comando que grava com `--apply` é falsa: M7 também aceita a opção e chama a porta de validação ([validar_classe_a.py:32](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:32), [validar_classe_a.py:100](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:100), [validacao.py:661](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:661)).
+- O auditor de M2–M5 declara leitura sem escrita em dados e não oferece `--dry` nem `--apply`; `--html` escreve um arquivo. A execução sem `--html` é o modo de leitura existente ([auditar_invariantes_chamados.py:1](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1), [auditar_invariantes_chamados.py:552](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:552), [auditar_invariantes_chamados.py:1858](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1858)).
+- O teste do selo monta mutações da fonte em memória; isso não comprova a existência ou ausência do log Django histórico ([test_e4c_f9_comandos_leem_o_ato.py:207](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:207)). Log histórico: [não verificado].
+- A decisão F9=(A), o limite de alterações e o conteúdo dos anexos não foram localizados como arquivos na cópia; como informação fornecida no enunciado, sua vigência independente é [não verificado].
+- Uma alteração futura pode ser avaliada quanto a exportada, dinheiro e `!` somente com o delta concreto: [não verificado]. A porta de validação menciona a proteção da competência exportada ([validacao.py:688](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:688)).
+
+## 18/11 22:33 · sessao b1328dde7609 · - · - · origem=Ronald (tmux)
+
+- O sítio M7 é a guarda de divergência entre ato e projeção em [validar_classe_a.py:62](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:62); a leitura usada na impressão é outra operação, em [validar_classe_a.py:80](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:80).
+- Na lista real, uma pergunta com validação vigente é excluída antes de chegar à guarda M7, em [models.py:2003](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/models.py:2003); o teste atual substitui essa lista por um mock em [test_e4c_f9_comandos_leem_o_ato.py:110](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:110).
+- Remover a guarda é um mutante definível; por inspeção, os testes atuais exigem o contador que ela incrementa e falhariam sem ela, em [test_e4c_f9_comandos_leem_o_ato.py:118](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:118) e [test_e4c_f9_comandos_leem_o_ato.py:136](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:136). Execução do mutante: [não verificado].
+- `validar_classe_a` também aceita `--apply` e chama a porta de validação, em [validar_classe_a.py:32](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:32) e [validar_classe_a.py:100](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:100); a porta pode salvar a validação e registrar o ato em [validacao.py:161](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:161) e [validacao.py:729](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:729).
+
+## 18/11 22:33 · sessao c6f25b7ba7ed · - · - · origem=Ronald (tmux)
+
+Inspeção concluída e comunicada ao agente principal, com os sete sítios, os testes existentes e as condições literais de dry e mutação. [nao verificado]
 
 ## 18/11 22:31 · sessao 6ebd0212ed71 · ESCALA-NAO-DESCREVE · verificador · origem=Code
 
@@ -1346,81 +1515,4 @@ Os quatro mutantes falharam pelos motivos esperados em execução local, em mem�
 
 **Não procede** que o teste garanta sempre a causa correta: o `assertRaises(AssertionError)` aceita qualquer `AssertionError` emitido durante a chamada inteira, inclusive de outro assert ([teste:181](/home/ronald/codex_ws/0dc6512a858bccb518a415d7e00c8fe669d945b0/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:181)). `ImportError` e `SyntaxError` não satisfazem esse contexto; a fonte mutada é compilada em memória ([e4_apoio.py:8](/home/ronald/codex_ws/0dc6512a858bccb518a415d7e00c8fe669d945b0/app/chamados/tests/e4_apoio.py:8)).
 
-## 18/11 20:45 · sessao be0b0c59d597 · - · - · origem=Ronald (tmux)
-
-Verificação do selo e do fluxo dos valores enviada ao agente principal, incluindo a limitação de detecção de `object.__setattr__` em [test_e3_porta_A_escritor_do_par.py:140](/home/ronald/codex_ws/0dc6512a858bccb518a415d7e00c8fe669d945b0/app/chamados/tests/test_e3_porta_A_escritor_do_par.py:140).
-
-## 18/11 20:45 · sessao 07e237c42604 · - · - · origem=Ronald (tmux)
-
-A vista preserva os valores usados pela implementação atual de `DecisaoPergunta.leitura`, com as diferenças de objeto e de tipo informadas ao agente principal. A equivalência foi verificada por inspeção de [models.py](/home/ronald/codex_ws/0dc6512a858bccb518a415d7e00c8fe669d945b0/app/chamados/models.py:4251) e [tarefa_do_dia.py](/home/ronald/codex_ws/0dc6512a858bccb518a415d7e00c8fe669d945b0/app/chamados/services/tarefa_do_dia.py:390).
-
-## 18/11 20:44 · sessao 6f6dae60755f · E4C-F6F7 · construtor · origem=Code
-
-A cura está no diff local: `_fatos_das_perguntas` entrega a `DecisaoPergunta.leitura` uma vista somente de leitura. Ela delega os atributos à pergunta, oculta os dois carimbos posteriores a `agora` e fornece as decisões já cortadas; a igualdade permanece no horizonte ([tarefa_do_dia.py:398](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:398), [tarefa_do_dia.py:402](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:402)).
-
-A verificação pedida de `models.py` confirma que `leitura` lê `p.decisoes.all()` e passa a pergunta ao auxiliar; o auxiliar lê os atributos da projeção e constrói linhas em variáveis locais, sem escrever na pergunta ([models.py:4308](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/models.py:4308), [models.py:4251](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/models.py:4251)).
-
-O teste de horizonte bloqueia escrita dos carimbos mesmo em cópia e verifica que o original segue intacto ([teste:118](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:118), [teste:138](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:138)). Na base c15, ele ficou **RED para ambos os carimbos**; com a cura, o módulo passou com 7 testes. Outros 13 testes relacionados sem banco passaram. O corpo do selo do par passou em execução sem Django, com substitutos de infraestrutura; nele, o mutante que reinsere `setattr(p, 'respondida_em', None)` foi detectado. O selo cobre essa forma de escrita, mas declara `obj.__dict__` fora de alcance ([selo:23](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e3_porta_A_escritor_do_par.py:23)). [nao verificado]
-
-Os quatro mutantes — fronteira `>=`, ausência do corte dos carimbos, inclusão de decisão futura e retorno da escrita — são executados pelo mesmo comando ([teste:161](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:161)): [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c14_lei3_pela_leitura.HorizonteProjecao.test_mutantes_da_vista_morrem
-```
-
-Para reproduzir o módulo completo e consultar o diff:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest chamados.tests.test_e4c_f6f7_c14_lei3_pela_leitura
-git diff -- chamados/services/tarefa_do_dia.py chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py
-```
-
-**LEI-AKITA:** padrão = juiz único; a vista apenas adapta os fatos ao horizonte e conserva `DecisaoPergunta.leitura` como autoridade da leitura ([tarefa_do_dia.py:427](/home/ronald/wt-codex-e4c-f6f7-174627/app/chamados/services/tarefa_do_dia.py:427)). Suite Django e certificação pela pista: **[não verificado]**. [nao verificado]
-
-## 18/11 20:40 · sessao 9255151745e5 · E4C-F9 · verificador · origem=Code
-
-1. **PROCEDE, para as formas literais descritas.** O selo conta `getattr`, `setattr` e `hasattr` quando o nome do campo é uma string literal no segundo argumento posicional; também conta chaves literais de um dicionário expandido com `**` diretamente em qualquer chamada, incluindo sufixos `__lookup` ([selo, linhas 156–174](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:156)). Há mutantes para as três funções, para `getattr` com e sem valor padrão, para chave simples em outra chamada e para lookup em `filter`, com ambos os campos; eles exigem contagem diferente da base ([selo, linhas 207–226](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:207)). Executei a lógica desses 34 mutantes em memória: **34/34 alteraram a contagem**. [não verificado: execução da suíte Django completa]
-
-2. **NÃO PROCEDE que o delta cause falso positivo nos três comandos atuais ou deixe de contar alguma forma anterior.** Reconstituindo c2 a partir do patch fornecido e executando ambas as versões em memória sobre os arquivos atuais, as contagens foram iguais: duas ocorrências no auditor, nenhuma em `encerrar_perguntas_com_fato` e uma em `validar_classe_a`; são exatamente as três permitidas ([selo, linhas 194–205](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:194); [auditor, I18](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1084); [auditor, I20](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1116); [validador, guarda](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:63)). A alteração acrescenta condições à condição anterior, sem retirar as anteriores ([selo, linhas 166–174](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:166)). Em código futuro, contudo, a detecção é sintática: uma chamada ou objeto sem relação com a coluna pode ser contado se usar esses literais ([selo, linhas 146–174](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:146)).
-
-3. **PROCEDE: restam formas não vistas.** Confirmei em memória que o selo retorna contagem vazia para `nome = 'validada_em'; getattr(q, nome)`, `values(*['validada_em'])`, `CAMPO = 'validada_em'; only(CAMPO)` e `q.__dict__['validada_em']`. A análise exige formatos específicos de nós e não resolve variáveis ou listas expandidas ([selo, linhas 148–174](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:148)). Uma referência ao nome em `Meta` via constante também fica fora desses padrões ([selo, linhas 156–174](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:156)).
-
-   Nos três comandos atuais, **não encontrei uso dessas formas para os dois campos**; as ocorrências literais relevantes encontradas são as exceções citadas e acessos através de `DecisaoPergunta.leitura` ([auditor](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:206); [validador](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:63)). Nomes construídos dinamicamente ou recebidos de fora desses arquivos: **[não verificado]**.
-
-## 18/11 20:38 · sessao dea090c8635b · E4C-F9 · construtor · origem=Code
-
-O diff está em [test_e4c_f9_comandos_leem_o_ato.py](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:141); a base da cópia é `c939f3bfefb7d2844c4eb0ae9a22c7388efa4696`. Os comandos de produção não foram alterados (`git status --short`).
-
-- `getattr`, com ou sem default, `setattr` e `hasattr`: reconhecimento em [linha 168](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:168); mutantes em [linha 216](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:216).
-- Chaves de dict literal expandido em qualquer chamada, com campo ou campo e lookup: reconhecimento em [linha 162](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:162); mutantes em [linha 218](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:218).
-- String com lookup nas chamadas já reconhecidas: normalização em [linha 172](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:172); mutante adicional em [linha 220](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:220). Essa forma já era reconhecida antes do diff.
-
-O RED isolado mostrou que as seis primeiras formas novas escapavam antes da cura; após a alteração, os dois métodos do selo passaram isolados, incluindo os mutantes para ambos os campos e as contagens dos comandos reais. A execução pelo Django ficou impedida: `python3` não encontrou `django.core`. Certificação pela suíte Code e pelo opus: **[não verificado]**. [nao verificado]
-
-O comando abaixo executa **todos os mutantes**, cada um como subteste, e o selo sobre os comandos reais, sem Django nem banco:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import ast
-import unittest
-from pathlib import Path
-
-p = Path('chamados/tests/test_e4c_f9_comandos_leem_o_ato.py')
-tree = ast.parse(p.read_text())
-selected = [n for n in tree.body
-            if isinstance(n, (ast.FunctionDef, ast.ClassDef))
-            and n.name in ('leituras_cruas', 'SeloProjecaoTest')]
-ns = {'ast': ast, 'SimpleTestCase': unittest.TestCase,
-      'COMANDOS': Path('chamados/management/commands')}
-exec(compile(ast.Module(body=selected, type_ignores=[]), str(p), 'exec'), ns)
-suite = unittest.defaultTestLoader.loadTestsFromTestCase(ns['SeloProjecaoTest']) [nao verificado]
-result = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
-raise SystemExit(not result.wasSuccessful())
-PY
-```
-
-Para inspecionar o diff: `git diff -- chamados/tests/test_e4c_f9_comandos_leem_o_ato.py`.
-
-LEI-AKITA: origem=[leituras_cruas:141](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:141); RED e mutantes=[teste:207](/home/ronald/wt-codex-e4c-f9-191111/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:207); padrao=n/a (instrumento). [nao verificado]
-
-_7167 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7172 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
