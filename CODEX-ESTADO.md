@@ -1,7 +1,128 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 16:59** · publicado em **19/11/2026 17:01** (UTC-3)
+> Ultima resposta processada: **19/11/2026 17:01** · publicado em **19/11/2026 17:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 17:01 · sessao a72a5442f87c · E4C-F5-CONSTROI · leitura · origem=Code
+
+## 1. Classes dos carregadores
+
+Os IDs são os da seção **K** da matriz. Os caminhos abaixo partem de `app/`, exceto `CLAUDE.md` e `bin/`. Conferi os sítios na cópia. A identidade Git da cópia com `e673e0efe` e `refs/heads/e4c-f5-volta2` está [nao verificado].
+
+Em L, contei o ponto comum quando ele pode alimentar o conjunto que o carregador entrega. Quando um prefetch externo já reúne perguntas de vários chamados, o ponto contado é a consulta externa. Essa distinção separa `fio_vivo` das cargas do supra-juiz e da emissão retroativa. `chamados/juizes.py:1517`, `ponto/management/commands/supra_juiz.py:192`, `ponto/management/commands/emitir_furo_retroativo.py:83`.
+
+| ID K | Arquivo:linha | Classe | Função comum | Por quê |
+|---:|---|:---:|---|---|
+| 1 | `chamados/services/tarefa_do_dia.py:530` | L | `CargaDaTarefa.__init__` | A mesma coleção alimenta partição, slots e C6. `:540`, `:621`, `:625`, `:632`. |
+| 2 | `chamados/juizes.py:1668` | L | `alimentar_portas` | Julga e distribui as mesmas instâncias para M1 e Vigia. `chamados/juizes.py:1672`, `escala/services/cadastro_realidade.py:502`, `chamados/services/vigia_fio.py:566`. |
+| 3 | `chamados/services/relavra_via.py:236` | R | — | Releitura por PK após a trava de cada candidata O261. `:215`, `:230`, `:242`. |
+| 4 | `chamados/juizes.py:1514` | L | `perguntas_vivas_de` | O corpo carrega a coleção usada pelo próprio C6 e pelos leitores de vivas da disputa. `chamados/services/fio.py:712`, `chamados/views_cobrar.py:170`, `:178`. |
+| 5 | `chamados/management/commands/auditar_invariantes_chamados.py:1586` | M | — | Universo da contraprova I21a. `:178`, `:1592`. |
+| 6 | `chamados/management/commands/auditar_invariantes_chamados.py:590` | M | — | Consulta I2. `:596`, `:597`. |
+| 7 | `chamados/management/commands/auditar_invariantes_chamados.py:1642` | M | — | F1 adianta as perguntas dos chamados. `:1645`, `:1667`, `:1671`. |
+| 8 | `chamados/services/fio.py:2078` | M | — | Sementes do universo de grupo usado pelo backfill e pelo censo de colisões. `chamados/services/fio.py:2144`, `chamados/management/commands/backfill_decisoes_pergunta.py:253`. |
+| 9 | `chamados/reconciliador.py:1548` | Q | — | Consulta do reate, materializada pelo reconciliador. `:1569`, `:1572`. |
+| 10 | `chamados/reconciliador.py:1095` | Q | — | Consulta de órfãs abertas usada no julgamento e na varredura. `:1130`, `:1182`, `:1239`. |
+| 11 | `chamados/services/becos.py:85` | Q | — | O evento adianta a relação da disputa que entrega a `classificar(d)`. `:25`, `:30`, `:86`, `:87`. |
+| 12 | `chamados/management/commands/backfill_fio_morto_e4b.py:89` | M | — | Plano do dia. `:90`. |
+| 13 | `chamados/management/commands/backfill_fio_morto_e4b.py:134` | M | — | Releitura dos alvos para execução do dia. `:135`. |
+| 14 | `chamados/management/commands/backfill_fio_morto_e4b.py:166` | M | — | Varredura da classe de exportadas. `:153`, `:171`. |
+| 15 | `chamados/models.py:357` | L | `ChamadoColaborador._ancoradas` | A lista canônica abastece o gate, a relavra e S143. `chamados/models.py:341`, `:343`, `:380`, `chamados/services/disputa_emissao.py:1983`. |
+| 16 | `chamados/services/disputa_emissao.py:1949` | Q | — | Consulta própria das pendentes em S128. `:1998`, `:2009`, `:2023`. |
+| 17 | `chamados/services/fio.py:1962` | Q | — | Sementes consultadas pelo universo do fato na abertura e no reuso. `:1952`, `:1977`, `:2000`. |
+| 18 | `chamados/services/fio.py:1594` | Q | — | O fecho e a costura consultam vizinhos por chave. `:1847`, `:1934`, `:2088`. |
+| 19 | `chamados/services/materializacao.py:2117` | R | — | Releitura por PK após a seleção e a trava de cada item a materializar. `:2104`, `:2111`, `:2125`. |
+| 20 | `chamados/services/validacao.py:677` | R | — | A porta valida uma pergunta por ID, também quando invocada pelo lote. `:661`, `:682`, `:1078`. |
+| 21 | `chamados/services/materializacao.py:324` | M | — | Universo U163 do contador consumido pelo comando BUG-PAR-103. `:328`, `:342`, `chamados/management/commands/bug_par_103.py:81`. |
+| 22 | `chamados/services/materializacao.py:284` | R | — | Busca pontual da irmã complementar da pergunta corrente. `:281`, `:290`, `:341`. |
+| 23 | `folha/previa.py:64` | Q | — | Agrupa por pessoa e dia. `_material` lê resposta antes de usar `fio_vivo`. `:67`, `:142`, `:144`. |
+| 24 | `ponto/services/cartorio.py:146` | Q | — | Prefetch externo para o dia, usado também na guarda de resposta e no dedup. `:147`, `:1418`, `:1693`, `:1713`. |
+| 25 | `chamados/services/declaracao_texto.py:475` | Q | — | Consulta por marco na projeção de tela, quando o mapa do lote está ausente. `:470`, `:477`, `:479`. |
+| 26 | `chamados/services/declaracao_texto.py:588` | Q | — | Consulta conjunta de vários fatos, antes da separação em listas por fato. `:584`, `:591`. |
+| 27 | `chamados/services/declaracao_texto.py:635` | Q | — | Consulta própria das propostas, com memo por fato. `:631`, `:634`. |
+| 28 | `chamados/management/commands/backfill_decisoes_pergunta.py:531` | M | — | Consulta do DRY, seguida da canônica e do plano. `:533`, `:537`. |
+| 29 | `chamados/juizes.py:1768` | Q | — | Consulta da seleção de corrigíveis, antes de produzir os IDs. `:1509`, `:1770`. |
+| 30 | `chamados/juizes.py:1775` | Q | — | Consulta própria da fila de respondidas a validar. `:1773`, `:1778`. |
+| 31 | `chamados/juizes.py:2438` | Q | — | Consulta do chamado para extrair dias com perguntas vivas. `:2433`, `:2441`. |
+| 32 | `chamados/juizes.py:2493` | L | `fio_vivo` | Entrega a lista inteira da disputa ao ponto comum. `:2494`. |
+| 33 | `chamados/management/commands/auditar_invariantes_chamados.py:1723` | M | — | Universo F1t, reutilizado na contraprova. `:1726`, `:1731`. |
+| 34 | `chamados/management/commands/auditar_invariantes_chamados.py:537` | M | — | Consulta I6 de pares. `:543`. |
+| 35 | `chamados/management/commands/auditar_invariantes_chamados.py:860` | M | — | Consulta I8. `:863`. |
+| 36 | `chamados/management/commands/auditar_invariantes_chamados.py:896` | M | — | Consulta I8b. `:899`. |
+| 37 | `chamados/management/commands/auditar_invariantes_chamados.py:1781` | M | — | Consulta F2 da auditoria. `:1785`. |
+| 38 | `chamados/management/commands/auditar_invariantes_chamados.py:1794` | M | — | Consulta F3 da auditoria. `:1798`. |
+| 39 | `chamados/management/commands/disparar_perguntas_competencia.py:107` | M | — | Consulta do contador de fio mudo, também executado em alarme. `:109`, `:111`, `config/crons.py:1539`. |
+| 40 | `chamados/management/commands/migrar_data_evento_dia_do_turno.py:466` | M | — | A medição da migração relê os PKs do conjunto em laço. `:448`, `:464`, `:467`. |
+| 41 | `chamados/models.py:1542` | Q | — | Universo próprio da ressuscitação. C6 julga uma cópia da instância com os campos projetados pela porta. `:1560`, `:1572`, `:1576`. |
+| 42 | `chamados/models.py:2057` | Q | — | Segunda lista de `fechar`, após a guarda de veredito da disputa. `:2048`, `:2058`. |
+| 43 | `chamados/reconciliador.py:698` | Q | — | Consulta de absolvíveis, usada pelo reconciliador acionado também pelo sinal da batida. `chamados/reconciliador.py:631`, `:708`, `ponto/signals.py:215`. |
+| 44 | `chamados/services/acoes_chamado.py:351` | Q | — | Lista própria do detalhe de chamado. `:352`, `:358`. |
+| 45 | `chamados/services/competencia_trancada.py:119` | Q | — | Consulta por competência, alcançada também pela medição da API. `chamados/services/competencia_trancada.py:144`, `:347`, `api/views_mensageria.py:1567`. |
+| 46 | `chamados/services/competencia_trancada.py:165` | Q | — | Outra consulta, por chamado, no laço da mesma medição. `:160`, `:167`. |
+| 47 | `chamados/services/disputa_emissao.py:2078` | Q | — | Lista própria das disputas candidatas no resolver sem credor. `:2072`, `:2082`, `:2091`. |
+| 48 | `chamados/services/fio.py:2295` | Q | — | Consulta das perguntas do destino sob a trava da migração do fio. `:2288`, `:2296`. |
+| 49 | `chamados/services/fio.py:2299` | Q | — | Consulta distinta das perguntas da origem. `:2301`. |
+| 50 | `chamados/services/pergunta_no_app.py:184` | Q | — | Consulta própria de `_marco_ja_perguntado`. `:185`. |
+| 51 | `chamados/services/vigia_fio.py:711` | M | — | Diagnóstico de vivas em disputa fechada. `:717`, `:718`, `chamados/management/commands/vigiar_fio_morto.py:189`. |
+| 52 | `chamados/services/vigia_fio.py:770` | M | — | Diagnóstico de carimbos sem lastro. `:776`, `:777`, `:814`. |
+| 53 | `chamados/views.py:1412` | Q | — | Lista da requisição de reabertura da disputa. `:1413`. |
+| 54 | `colaboradores/services/calendario.py:504` | Q | — | Consulta do contexto do calendário. `:507`. |
+| 55 | `ponto/services/dia_do_colab.py:64` | Q | — | Consulta própria do dia do colaborador. `:71`. |
+| 56 | `chamados/management/commands/estoque_l130_instante_sem_texto.py:37` | M | — | Foto inicial do estoque. `:41`, `:42`. |
+| 57 | `chamados/management/commands/estoque_l130_instante_sem_texto.py:97` | M | — | Releitura do conjunto elegível sob trava. `:91`, `:99`. |
+| 58 | `chamados/services/validacao.py:431` | R | — | Releitura por ID dentro da porta de devolução L-130. `:408`, `:428`, `:432`. |
+| 59 | `chamados/management/commands/arquivar_competencia_encerrada.py:158` | M | — | Relação avaliada pelo comando de arquivamento. `:123`, `:148`. |
+| 60 | `chamados/services/vigia_fio.py:570` | M | — | Segunda carga do censo de alcance, para o estado de todas as perguntas. `:560`, `:567`, `chamados/management/commands/vigiar_fio_morto.py:188`. |
+| 61 | `chamados/services/explicador.py:160` | Q | — | Consulta do explicador quando a coleção opcional está ausente. `:162`, `:171`. |
+| 62 | `api/foto_recebida.py:81` | L | `fio_vivo` | Entrega diretamente a coleção filtrada pelo motivo. `api/foto_recebida.py:80`, `chamados/juizes.py:1526`. |
+| 63 | `chamados/management/commands/encerrar_perguntas_com_fato.py:84` | L | `fio_vivo` | Entrega a coleção da disputa à guarda comum. `:82`, `:85`. |
+| 64 | `chamados/services/limbo_folgas.py:203` | L | `fio_vivo` | Entrega a consulta do dia e do colaborador inteira à guarda comum. `:204`, `:205`. |
+| 65 | `ponto/management/commands/supra_juiz.py:192` | Q | — | O cron adianta perguntas de vários chamados antes de chamar `fio_vivo` por chamado. `:190`, `:215`, `config/crons.py:599`. |
+| 66 | `ponto/management/commands/emitir_furo_retroativo.py:83` | M | — | Passe retroativo sob ordem, com prefetch externo e uma chamada de `fio_vivo` por chamado. `:98`, `config/crons.py:1414`. |
+| 67 | `ponto/management/commands/reconciliar_grade.py:461` | L | `fio_vivo` | Entrega a consulta de respondidas do chamado inteira à guarda comum. `:456`, `:462`. |
+| 68 | `chamados/services/disputa_emissao.py:1429` | L | `fio_vivo` | Depois dos guardas, entrega a consulta daquele motivo e dia à guarda comum. `:1430`, `:1436`. |
+| 69 | `chamados/management/commands/fechar_becos_disputa.py:32` | M | — | O comando adianta as perguntas do conjunto de disputas antes de chamar `classificar(d)`. `:33`, `:36`, `:39`, `chamados/services/becos.py:30`. |
+| **SOBRA** | `chamados/management/commands/dedup_perguntas_fato.py:75` | — | — | A expressão da linha 9 da matriz recebe uma lista criada aqui e lê resposta em `:76`. K8 aponta para outra consulta, `chamados/services/fio.py:2078`. Esta sobra fica fora dos 69 IDs e acrescentaria um ponto M se incluída. |
+
+## 2. Pontos de toque
+
+| Classe | Carregadores K | Pontos |
+|---|---:|---:|
+| L | 10 | 5 |
+| Q | 29 | 29 consultas |
+| R | 5 | 0 — uma leitura por item, por natureza |
+| M | 25 | 25 consultas |
+| **Total** | **69** | **59** |
+
+Os cinco pontos L são `CargaDaTarefa.__init__` → **1** (`chamados/services/tarefa_do_dia.py:530`), `alimentar_portas` → **1** (`chamados/juizes.py:1668`), `perguntas_vivas_de` → **1** (`chamados/juizes.py:1514`), `_ancoradas` → **1** (`chamados/models.py:357`) e `fio_vivo` → **6** (`chamados/juizes.py:1517`, `:1526`). `perguntas_do_app` já adianta `decisoes`. A partição da tarefa recebe instâncias da carga K1, e K50 é outra consulta. `chamados/services/pergunta_no_app.py:52`, `:57`, `:80`, `:184`, `chamados/services/tarefa_do_dia.py:621`.
+
+Os 59 são pontos para alimentar os **69 K**, com os IDs da tabela como base da soma. O compositor, o ajuste do teto avulso O261, as mudanças de harness e a sobra têm endereços próprios. `chamados/models.py:4295`, `chamados/services/relavra_via.py:236`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:205`, `chamados/tests/test_e4c_f5_volta2_juizes.py:144`, `chamados/management/commands/dedup_perguntas_fato.py:75`.
+
+## 3. As três perguntas
+
+**(i) Sim.** `DecisaoPergunta.leitura` já usa a relação pré-carregada. Com os escalares necessários carregados, custa **0 SELECTs de decisões** com prefetch e **1 por chamada** para instância com PK e sem prefetch. Sem PK, usa o passivo em memória. O corpo ordena atos reais e passivo por instante, ordem e PK, aplica os atos que limpam resposta ou validação e devolve `LeituraDoAto`. `chamados/models.py:4251`, `:4268`, `:4295`, `:4308`, `:4326`.
+
+A composição usada pelo C6 está em `projecao_temporal_da_pergunta`. Ela lê **instantes de resposta e validação do ato**, **texto corrente** de `p.resposta_colab` e **materialização e via** da pergunta. Depois aplica o corte por `agora`. `pergunta_respondida(ORM)` combina o instante do ato com texto corrente. A property `respondida` chama o juiz com `LeituraDoAto`, cujo texto vem hoje do ato. O fio faz a composição mista localmente. Assim, o mesmo compositor pode alimentar uma chamada avulsa com uma leitura, preservando o horizonte e a fonte de texto de cada contrato. Adotar texto corrente também na property é a mudança de resultado demonstrada pela fixture só-no-ato da volta recusada. `chamados/juizes.py:1382`, `:1391`, `:1396`, `:1407`, `:1559`, `:1564`, `chamados/models.py:3791`, `:4319`, `chamados/services/fio.py:189`, `:192`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:491`, `:502`.
+
+**(ii) Não, para os 55.** O parâmetro `carga` já encaminha relógio, tranca e testemunhas nos chamadores que o fornecem. O cálculo chama a projeção em `:1411` sem repassar dados de decisão. Na tarefa, a carga de vida recebe a coleção, mas a partição, o preparo de slots e o cálculo usam as instâncias originais. Há um mapa por PK de leituras no horizonte, usado pela tarefa, montado sobre uma sequência recortada. Para usar `carga` como veículo geral faltam alimentar as decisões na coleção ou fornecer uma leitura por instância/PK com o horizonte e os campos exigidos, ligá-la também ao preparo do slot e à partição, e propagar a carga pelos demais percursos. O mapa recortado da tarefa e a leitura que o C6 faz antes de cortar a tupla têm operações temporais diferentes no código. `chamados/juizes.py:866`, `:887`, `:893`, `:898`, `:1411`, `:1416`, `:1526`, `:1672`, `chamados/services/carga_pergunta_viva.py:69`, `:117`, `chamados/services/tarefa_do_dia.py:390`, `:398`, `:427`, `:542`, `:621`, `:628`, `:632`.
+
+**(iii) Um manager padrão com `prefetch_related('decisoes')`** alcançaria as consultas de instâncias via `objects` e as relações reversas que usem esse manager, inclusive a tarefa, portas, ancoradas e relações de disputa. Alcançaria também buscas avulsas que hoje carregam uma pergunta, como API, web, validar, recusar e O261. Nelas, o SELECT de decisões passa para a carga de uma instância. Leitores por `values_list` e faces `Exists` continuam produzindo escalares; instâncias prontas ou oriundas de outra via dependem da carga que as produziu. App e fio já declaram prefetch, e o fio usa um `Prefetch` com queryset próprio. O efeito da sobreposição e a cobertura exata das relações reversas estão [nao verificado]. `chamados/services/tarefa_do_dia.py:530`, `chamados/juizes.py:1668`, `chamados/models.py:357`, `:2057`, `:3552`, `api/views.py:2631`, `chamados/views.py:1239`, `chamados/services/validacao.py:677`, `:894`, `chamados/services/relavra_via.py:236`, `chamados/services/raiox.py:135`, `chamados/services/pergunta_no_app.py:57`, `chamados/services/fio.py:268`.
+
+Quem materializa perguntas sem usar o ato passa a pagar, para um queryset não vazio, **um SELECT de prefetch por avaliação**, mais transferência, instanciação e memória das decisões retornadas. Com iteração em blocos, a carga pode ocorrer por bloco. A consulta de perguntas que apenas identifica a disputa ilustra o custo. `_ancoradas()` tem um selo de **exatamente 1 consulta** e um caso com resultado não vazio, portanto o prefetch padrão acrescentaria uma consulta ao cenário desse selo. No O261, prefetch simples ainda custa uma leitura de decisões por candidata. Os demais deltas de rota estão [nao verificado]. `chamados/services/fio.py:134`, `chamados/services/vigia_fio.py:717`, `chamados/models.py:357`, `:4308`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:537`, `:545`, `chamados/services/relavra_via.py:215`, `:236`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:204`, `:205`.
+
+## 4. Tamanho do pouso [nao verificado]
+
+As duas contas abaixo usam os mesmos sítios de carga e incluem a composição da property e do fio examinada na volta 3. A sobra do dedup aparece na lista de arquivos, fora da contagem K. O ajuste de tamanho do bloco do vigia de texto no diff recusado é outro trabalho: a cópia já adianta `decisoes` nessa consulta. `chamados/models.py:3791`, `chamados/services/fio.py:189`, `chamados/management/commands/dedup_perguntas_fato.py:75`, `chamados/services/vigia_texto_resposta.py:11`, `:16`.
+
+| Pouso único | Fatias com a suíte como condição de passagem | [nao verificado]
+|---|---|
+| União dos arquivos A, B e C listados abaixo. Dos 69 K, **64** recebem alimentação em lote e **5** continuam por item. Verificar em conjunto o compositor, os selos abaixo e os testes da property e do fio. `chamados/models.py:3791`, `:4308`, `chamados/services/fio.py:189`, `:192`. | **A → B → C.** A trata as falhas observadas antes de separar o restante por percurso. Restam **59 → 30 → 5** carregadores K por item, dos quais **54 → 25 → 0** são de lote. Verde em cada fatia [nao verificado]. `chamados/tests/test_e4c_f5_volta2_juizes.py:144`, `:169`, `chamados/tests/test_e2_tarefa_do_dia.py:938`, `escala/tests/test_f3_beco1_folga_na_lista.py:402`, `ponto/tests/test_selo_chokepoint_escrita.py:293`. |
+
+**A — Composição, harness da volta e cargas dos orçamentos vermelhos.** K **1, 2, 9, 10, 15, 16, 17, 18, 24 e 43**. Arquivos de produção: `chamados/juizes.py:1391`, `chamados/models.py:357`, `:3791`, `chamados/reconciliador.py:698`, `:1095`, `:1548`, `chamados/services/disputa_emissao.py:1949`, `chamados/services/fio.py:189`, `:1594`, `:1962`, `chamados/services/relavra_via.py:236`, `chamados/services/tarefa_do_dia.py:530`, `ponto/services/cartorio.py:146`. Arquivos de harness do desenho com delegação `pergunta_respondida(self)`: `chamados/tests/test_e4c_f5_volta2_juizes.py:144`, `:169`, `chamados/tests/test_f1nova_b2_leitores.py:97`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:502`, `chamados/tests/e4c_f5_volta2_mutantes.py:34`, `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:223`, `:236`. O O261 precisa recuperar **1** consulta unitária segundo a sonda raspada. Para essa conta, incorporar a leitura das decisões na própria releitura pós-trava mantém o trabalho por candidata. A viabilidade e o total dessa implementação estão [nao verificado]. O resultado dos quatro caminhos da batida e a contribuição de cada carga também estão [nao verificado]. `chamados/services/relavra_via.py:219`, `:230`, `:236`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:204`, `:205`, `ponto/signals.py:215`, `ponto/tests/test_selo_chokepoint_escrita.py:293`.
+
+**B — Restante de L e Q.** **29** K. Arquivos: `chamados/juizes.py:1514`, `:1517`, `:1768`, `:1775`, `:2438`, `chamados/models.py:1542`, `:2057`, `chamados/views.py:1412`, `chamados/services/acoes_chamado.py:351`, `chamados/services/becos.py:85`, `chamados/services/competencia_trancada.py:119`, `:165`, `chamados/services/declaracao_texto.py:475`, `:588`, `:635`, `chamados/services/disputa_emissao.py:2078`, `chamados/services/explicador.py:160`, `chamados/services
+
+[truncado em 20000 de 29482 caracteres]
 
 ## 19/11 16:59 · sessao e4321ca493be · CADEIA-20-PASSO-1 · verificador · origem=Code
 
@@ -1197,16 +1318,4 @@ Pedido e carimbo novos compartilham `data_ref`, mas `medir` obtém seu próprio 
 
 **Mordida.** O caso atrasado de `encerrar` enfrenta sucessora em `EM_CURSO`. O de `concluir` só chama a velha depois que a sucessora já terminou, de modo que retirar o filtro de UUID ainda deixaria o estado barrar a escrita. O suposto re-clique chama `conferir` diretamente; a virada testa UUID e `data_ref`, mocka `medir` e não atravessa a virada entre as consultas da porta. Os testes não foram executados, [nao verificado]. `app/folha/tests/test_porta_sem_beco_item2.py:71–93`, `app/folha/tests/test_porta_sem_beco_item2.py:214–224`, `app/folha/tests/test_porta_sem_beco_item2.py:249–268`.
 
-## 19/11 15:11 · sessao aee7668d7ffc · - · - · origem=Ronald (tmux)
-
-**Item (d) parcialmente aberto.** Uma disputa normal entre vigia, `encerrar` e `concluir` elege um emissor para `porta_export`, pelo estado e pela tentativa. Há janela para **zero linhas** entre a gravação terminal e `_recusa`. Depois dela a tentativa já não entra na varredura. Um `PEDIDO` ainda dentro do prazo também pode ser substituído pelo cron sem terminar nem emitir. (`app/folha/porta_export.py:1030–1061`, `:1118–1126`, `:1162–1182`, `:1215–1219`.)
-
-Há **duas ou mais linhas críticas** no log geral quando o primeiro POST ou re-cliques são barrados. A view omite `recusas=()`, então o envelope emite por POST como `folha:gerar_txt`, além da ocorrência da tentativa em `porta_export`. O ESTADO conta apenas esta última rota. A ocorrência da tentativa leva empresa, competência, UUID e motivo, mas `usuario=-` e sem antes/depois, ainda que o clique entregue ator ao evento separado de disparo. (`app/folha/views.py:130–135`, `app/folha/urls.py:4–14`, `app/core/respostas.py:41–56`, `app/core/recusa_critica.py:58–85`, `:113–123`, `app/folha/porta_export.py:1045–1058`, `:1305–1314`.)
-
-O ESTADO integra o leitor único, com esperado zero e ramo `sem arquivo` quando falta o arquivo principal. O leitor conta linhas sem deduplicar UUID, com a data do prefixo da emissão, enquanto o `dia=` do corpo é a data da tentativa. O host usa `datetime.date.today()` e o logger usa `%(asctime)s`; o fuso efetivo comum em produção é [nao verificado]. Sem o principal os rotacionados ficam fora do cálculo, e um `OSError` na leitura pode resultar em zero. (`bin/gerar_estado.py:265–270`, `:337–339`, `bin/recusa_estado.py:24–34`, `:60–77`, `app/core/recusa_critica.py:95–123`, `:133–139`, `app/config/settings/saas.py:119–123`, `:160–166`, `app/config/settings/base.py:92–95`.)
-
-**Selo de (d).** O teste com nome de clique repetido chama `conferir` em sequência e filtra pela rota interna. O teste Python de ausência sempre cria o arquivo e conta duas linhas sintéticas de mesmo objeto. O shell cobre filtro, ocorrência no dia e formatação vermelha, exercita ausência apenas para Resolver dia. Corrida, falha após commit, POST repetido e ausência/zero do export ficam sem prova nesses selos. (`app/folha/tests/test_porta_sem_beco_item2.py:29–30`, `:214–247`, `:273–289`, `bin/tests/test_recusa_estado.sh:29–47`.) Execução e produção [nao verificado].
-
-**R7.** O vigia do comando percorre os abertos do schema, inclusive históricos, antes de escolher alvos, sem tela. O caminho diário é o elo depois de `lavrar_cxr_do_motor`, condicionado ao marcador de término do antecessor e ao teto de espera, e o runner declara `--schema=juliani`. Morte após a varredura espera nova observação. Instalação e execução efetivas [nao verificado]. (`app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:59–67`, `app/folha/porta_export.py:1209–1219`, `app/config/crons.py:616`, `:1793–1805`, `bin/encadeado.sh:81–104`.)
-
-_7407 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7408 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
