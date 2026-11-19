@@ -1,7 +1,477 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 23:35** · publicado em **18/11/2026 23:38** (UTC-3)
+> Ultima resposta processada: **19/11/2026 00:28** · publicado em **19/11/2026 00:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 00:28 · sessao 255a6e96c464 · DST-L2-JZ1 · censo · origem=Code
+
+```python
+#!/usr/bin/env python3
+# Uso: python3 -B inventario.py /caminho/da/raiz
+# SOMENTE LEITURA. O resultado e um inventario sintatico conservador:
+# AMBIGUO exige revisao; chamadas dinamicas e fluxo entre funcoes nao sao resolvidos.
+import ast
+import os
+import re
+import sys
+
+sys.dont_write_bytecode = True
+
+if len(sys.argv) != 2:
+    sys.stderr.write("Uso: python3 -B inventario.py RAIZ\n")
+    sys.exit(2)
+
+raiz = os.path.abspath(sys.argv[1])
+app = os.path.join(raiz, "app")
+templates = os.path.join(app, "templates")
+
+if not os.path.isdir(app):
+    sys.stderr.write("ERRO: argv[1] deve conter app/\n")
+    sys.exit(2)
+
+campos = {
+    "status": "Justificativa.status",
+    "chamado_origem": "Justificativa.chamado_origem",
+    "chamado_origem_id": "Justificativa.chamado_origem",
+    "justificativas_geradas": "Justificativa.chamado_origem",
+    "justificativa_relacionada": "ChamadoColaborador.justificativa_relacionada",
+    "justificativa_relacionada_id": "ChamadoColaborador.justificativa_relacionada",
+    "apontar_justificativa": "ChamadoColaborador.justificativa_relacionada",
+}
+estados = {"pendente", "rejeitada", "aprovada"}
+nomes = sorted(campos, key=len, reverse=True)
+padrao = re.compile(
+    r"(?<![A-Za-z0-9_])(" + "|".join(re.escape(x) for x in nomes) +
+    r")(?:__[A-Za-z0-9_]+)*(?![A-Za-z0-9_])"
+)
+padrao_estado = re.compile(
+    r"(?<![A-Za-z0-9_])(pendente|rejeitada|aprovada)(?![A-Za-z0-9_])"
+)
+sql_rx = re.compile(
+    r"\b(select|insert|update|delete|with|join|where|from|returning)\b",
+    re.I,
+)
+metodos = {
+    "filter", "exclude", "get", "create", "get_or_create",
+    "update", "update_or_create", "values", "values_list", "only",
+}
+registros = set()
+fechos = []
+falhas = []
+
+def classe(caminho):
+    partes = caminho.replace("\\", "/").lower().split("/")
+    nome = partes[-1]
+    if "migrations" in partes:
+        return "migration"
+    if (
+        "tests" in partes or "test" in partes
+        or nome.startswith("test_") or nome.endswith("_test.py")
+    ):
+        return "teste" [nao verificado]
+    return "prod"
+
+def trecho(linhas, numero):
+    if numero < 1 or numero > len(linhas):
+        return ""
+    return re.sub(r"\s+", " ", linhas[numero - 1].strip())[:60]
+
+def limpar(valor):
+    return str(valor).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+def operacoes_metodo(nome):
+    if nome in ("create", "update"):
+        return ("ESCREVE",)
+    if nome in ("get_or_create", "update_or_create"):
+        return ("LE", "ESCREVE")
+    return ("LE",)
+
+def nome_chamada(no):
+    if not isinstance(no, ast.Call):
+        return ""
+    if isinstance(no.func, ast.Name):
+        return no.func.id
+    if isinstance(no.func, ast.Attribute):
+        return no.func.attr
+    return ""
+
+def texto_no(no):
+    try:
+        return ast.unparse(no)
+    except Exception:
+        return ""
+
+def nome_campo(texto):
+    m = padrao.search(texto)
+    return m.group(1) if m else None
+
+def indicio_justificativa(texto):
+    return bool(re.search(r"justificativa|\bjust\b|\bjustif\b", texto, re.I))
+
+def detectar_status(no, pais):
+    # Valor do mesmo enunciado ou receptor sugestivo. Outros casos sao ambiguos.
+    atual = no
+    while atual in pais and not isinstance(
+        atual, (ast.stmt, ast.comprehension, ast.Lambda)
+    ):
+        atual = pais[atual]
+    texto = texto_no(atual)
+    return bool(padrao_estado.search(texto) or indicio_justificativa(texto))
+
+def emitir(arquivo, linhas, numero, qualname, nome, op, forma, categoria,
+           ambiguo=False):
+    campo = campos[nome]
+    if ambiguo:
+        campo += " [AMBIGUO]"
+    registros.add((
+        arquivo, numero, qualname or "<modulo>", campo, op,
+        forma, categoria, trecho(linhas, numero)
+    ))
+
+def visitar_python(caminho):
+    relativo = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    categoria = classe(relativo)
+    try:
+        with open(caminho, "rb") as f:
+            fonte = f.read()
+        arvore = ast.parse(fonte, filename=relativo)
+        linhas = fonte.decode(
+            # tokenize nao esta entre os imports autorizados.
+            "utf-8-sig"
+        ).splitlines()
+    except (OSError, SyntaxError, UnicodeError) as erro:
+        falhas.append((relativo, str(erro)))
+        return
+
+    pais = {}
+    escopos = {}
+    for pai in ast.walk(arvore):
+        for filho in ast.iter_child_nodes(pai):
+            pais[filho] = pai
+
+    def indexar(no, pilha):
+        if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            pilha = pilha + [no.name]
+        escopos[no] = ".".join(pilha) or "<modulo>"
+        for filho in ast.iter_child_nodes(no):
+            indexar(filho, pilha)
+
+    indexar(arvore, [])
+
+    def registrar(no, nome, operacoes, forma, numero=None):
+        if nome not in campos:
+            return
+        amb = nome == "status" and not detectar_status(no, pais)
+        for op in operacoes:
+            emitir(
+                relativo, linhas, numero or getattr(no, "lineno", 1),
+                escopos.get(no, "<modulo>"), nome, op, forma, categoria, amb
+            )
+
+    def contexto_string(no):
+        atual = no
+        while atual in pais:
+            pai = pais[atual]
+            if isinstance(pai, ast.Call):
+                chamada = nome_chamada(pai)
+                if chamada in ("getattr", "setattr"):
+                    return (
+                        ("ESCREVE",) if chamada == "setattr" else ("LE",),
+                        chamada + " com string",
+                    )
+                if chamada in ("Q", "F"):
+                    return ("LE",), chamada + "()"
+                if chamada in ("raw", "execute", "executemany"):
+                    return ("LE", "ESCREVE"), "SQL raw [AMBIGUO]"
+                if chamada in ("values", "values_list", "only"):
+                    return ("LE",), chamada
+                if chamada in metodos:
+                    return operacoes_metodo(chamada), "string em " + chamada
+                if chamada == "save":
+                    return ("ESCREVE",), "update_fields"
+            if isinstance(pai, ast.keyword):
+                if pai.arg in ("defaults", "create_defaults"):
+                    return ("ESCREVE",), "defaults"
+                if pai.arg == "update_fields":
+                    return ("ESCREVE",), "update_fields"
+            if isinstance(pai, ast.stmt):
+                break
+            atual = pai
+        return ("LE", "ESCREVE"), "string [AMBIGUO]"
+
+    for no in ast.walk(arvore):
+        if isinstance(no, ast.Attribute) and no.attr in campos:
+            ops = ("ESCREVE",) if isinstance(no.ctx, (ast.Store, ast.Del)) else ("LE",)
+            if no.attr == "apontar_justificativa":
+                ops = ("LE", "ESCREVE")
+            registrar(no, no.attr, ops, "atributo")
+
+        elif isinstance(no, ast.Name) and no.id in campos:
+            # Inclui declaracoes de modelo e nomes locais; sua identidade pode
+            # exigir revisao. O nome sozinho nao prova o modelo.
+            ops = ("ESCREVE",) if isinstance(no.ctx, (ast.Store, ast.Del)) else ("LE",)
+            registrar(no, no.id, ops, "nome [AMBIGUO]")
+
+        elif isinstance(no, ast.keyword) and no.arg:
+            nome = nome_campo(no.arg)
+            if not nome:
+                continue
+            pai = pais.get(no)
+            chamada = nome_chamada(pai)
+            if chamada in ("Q", "F"):
+                ops, forma = ("LE",), chamada + "()"
+            elif chamada in metodos:
+                ops, forma = operacoes_metodo(chamada), "kwarg de " + chamada
+            else:
+                ops, forma = ("LE", "ESCREVE"), "kwarg [AMBIGUO]"
+            registrar(no, nome, ops, forma, getattr(pai, "lineno", 1))
+
+        elif isinstance(no, ast.Constant) and isinstance(no.value, str):
+            valor = no.value
+            achados = list(padrao.finditer(valor))
+            if not achados:
+                continue
+            ops, forma = contexto_string(no)
+            if sql_rx.search(valor):
+                ops, forma = ("LE", "ESCREVE"), "SQL raw [AMBIGUO]"
+            for achado in achados:
+                nome = achado.group(1)
+                linha = no.lineno + valor[:achado.start()].count("\n")
+                if "__" in achado.group(0) and forma == "string [AMBIGUO]":
+                    forma_atual = "string 'campo__...' [AMBIGUO]"
+                else:
+                    forma_atual = forma
+                registrar(no, nome, ops, forma_atual, linha)
+
+    # Secao 2: leitura DIRETA de _protesta na menor instrucao que contem
+    # a chamada. Nao infere dependencia atraves de listas, saidas ou funcoes.
+    if relativo == "app/ponto/services/cartorio.py":
+        for no in ast.walk(arvore):
+            if not isinstance(no, ast.Call) or nome_chamada(no) != "transicionar_com_pauta":
+                continue
+            if len(no.args) < 2 or not (
+                isinstance(no.args[1], ast.Constant)
+                and no.args[1].value == "resolvido"
+            ):
+                continue
+            ato = next((k.value for k in no.keywords if k.arg == "ato"), None)
+            if not (
+                no.args and isinstance(ato, ast.Attribute)
+                and ato.attr == "reconciliar"
+                and ast.dump(ato.value, include_attributes=False)
+                == ast.dump(no.args[0], include_attributes=False)
+            ):
+                continue
+            instrucao = no
+            while instrucao in pais and not isinstance(instrucao, ast.stmt):
+                instrucao = pais[instrucao]
+            le = any(
+                isinstance(x, ast.Name) and x.id == "_protesta"
+                and isinstance(x.ctx, ast.Load)
+                for x in ast.walk(instrucao)
+            )
+            fechos.append((relativo, no.lineno, "sim" if le else "nao"))
+
+def visitar_template(caminho):
+    relativo = os.path.relpath(caminho, raiz).replace(os.sep, "/")
+    try:
+        with open(caminho, "r", encoding="utf-8-sig") as f:
+            linhas = f.read().splitlines()
+    except (OSError, UnicodeError) as erro:
+        falhas.append((relativo, str(erro)))
+        return
+    for numero, linha in enumerate(linhas, 1):
+        for achado in padrao.finditer(linha):
+            nome = achado.group(1)
+            amb = nome == "status" and not (
+                padrao_estado.search(linha) or indicio_justificativa(linha)
+            )
+            emitir(
+                relativo, linhas, numero, "<template>", nome, "LE",
+                "regex template", "template", amb
+            )
+
+for diretorio, dirs, arquivos in os.walk(app):
+    dirs.sort()
+    for arquivo in sorted(arquivos):
+        if arquivo.endswith(".py"):
+            visitar_python(os.path.join(diretorio, arquivo))
+
+if os.path.isdir(templates):
+    for diretorio, dirs, arquivos in os.walk(templates):
+        dirs.sort()
+        for arquivo in sorted(arquivos):
+            if arquivo.endswith(".html"):
+                visitar_template(os.path.join(diretorio, arquivo))
+else:
+    falhas.append(("app/templates", "diretorio ausente"))
+
+print("arquivo\tlinha\tfuncao\tcampo\toperacao\tforma\tclasse\ttrecho")
+contagens = {}
+for registro in sorted(registros):
+    print("\t".join(limpar(x) for x in registro))
+    _, _, _, campo, op, _, categoria, _ = registro
+    chave = (campo, op, categoria)
+    contagens[chave] = contagens.get(chave, 0) + 1
+
+print("SECAO_2\tCARTORIO_FECHO\tle_protesta=leitura_direta_na_instrucao")
+for arquivo, linha, le in sorted(fechos):
+    print("CARTORIO_FECHO\t%s\t%d\tle_protesta=%s" % (arquivo, linha, le))
+
+print("CONTAGENS\tcampo\toperacao\tclasse\tquantidade")
+for (campo, op, categoria), quantidade in sorted(contagens.items()):
+    print("CONTAGEM\t%s\t%s\t%s\t%d" % (campo, op, categoria, quantidade))
+
+if falhas:
+    for arquivo, erro in falhas:
+        sys.stderr.write("ERRO\t%s\t%s\n" % (limpar(arquivo), limpar(erro)))
+    sys.stderr.write("INVENTARIO_INCOMPLETO\n")
+    sys.exit(1)
+
+print("FIM_INVENTARIO")
+```
+
+`le_protesta` indica leitura **direta na instrução**; dependências indiretas não são resolvidas pelo script. A exaustividade semântica do inventário, inclusive acessos dinâmicos e fluxo entre funções, é [não verificado].
+
+- [cartorio.py:1011](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1011): leitura direta não.
+- [cartorio.py:1546](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1546): leitura direta não.
+- [cartorio.py:1559](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1559): leitura direta não.
+- [cartorio.py:1580](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1580): leitura direta não.
+- [cartorio.py:1659](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1659): leitura direta não.
+- [cartorio.py:1674](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1674): leitura direta não.
+
+## 19/11 00:25 · sessao ae9e1c795542 · DST-L2-JZ1 · censo · origem=Code
+
+**perguntas de lei: 2**
+
+1. “O fixture do selo JZ1 passa a criar a justificativa com `chamado_origem`, como os três escritores de produção? Sim/não.” Esta pergunta já está expressamente aberta no aval fornecido. [não verificado: o aval foi fornecido no texto da solicitação]
+
+2. Quando o ponteiro do chamado encerrado aponta para uma pendente cuja `chamado_origem` é **outro** chamado, ela deve ser rejeitada por D3 ou preservada por D4? D3 manda rejeitar a do ponteiro; D4 declara que o reuso com origem alheia permanece pendente. O código atual rejeita a pendente do ponteiro sem conferir sua origem. [reconciliador.py:573](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:573)
+
+**O censo abaixo é parcial, não fechado.** Varri com `rg` a cópia, incluindo pesquisas por nomes dos campos, valores de estado e referências a `Justificativa`, além de leitura dirigida dos caminhos encontrados. A revisão dos usos indiretos, SQL/raw, bulk, testes, migrações, relatórios e exports não foi concluída; portanto não posso afirmar que a lista contém todo sítio. Não usei AST e não há script AST a devolver. O diretório não contém metadados Git acessíveis; o HEAD informado não pôde ser verificado com `git rev-parse`. [não verificado] [nao verificado]
+
+Não houve acesso a banco ou logs. O texto fornecido não traz contagem D4; o número de hoje é **[não verificado]**. Nenhum arquivo foi criado ou alterado.
+
+### Divergências que mudam o desenho
+
+- **D1:** o Fix A atual rejeita somente a justificativa do **ponteiro**, se estiver pendente. Ele não procura linhas por `chamado_origem`; portanto não demonstra a rejeição por ambas as testemunhas que D3 propõe. Ele acrescenta à `descricao` o texto `[Auto-rejeitada: premissa do chamado retratada pelo reconciliador.]` e salva apenas `status` e `descricao`. [reconciliador.py:563](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:563)
+- **D2:** há ponto de sucesso nos dois percursos. No imediato, `_porm` contém os chamados cuja transição retornou verdadeiro; no adiado, `_fech` tem a mesma propriedade após E2. [cartorio.py:1540](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1540), [cartorio.py:1006](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1006)
+- **D3:** a multiplicidade por origem e a união deduplicada com o ponteiro são desenho novo, não comportamento demonstrado pelo Fix A atual. A tensão com D4a está na segunda pergunta de lei. [ponto/models.py:173](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:173), [reconciliador.py:573](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:573)
+- **D4:** o estado persistido disponível nos campos examinados não identifica exclusivamente o fecho por não-protesto. `reconciliar` grava via `sistema`, também usada por outras reconciliações. A sonda abaixo mede um **superconjunto**, não o contador exato pedido. [models.py:642](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:642), [motor.py:86](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/catalogo/motor.py:86)
+- **D5:** os dois sítios chamam `reconciliar` pela porta de transição; não chamam ali o corpo S128 que resolve perguntas e anexa ocorrência. Não se deve atribuir esses efeitos ao fecho cru. [cartorio.py:1011](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1011), [cartorio.py:1546](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1546), [reconciliador.py:580](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:580)
+
+A retenção S128 de irmã respondida e não validada é uma guarda distinta dos gates do fecho cru. Não está demonstrado que a presença da irmã, sozinha, faça o gate cru recusar; o resultado de R4 precisa ser demonstrado no caso concreto, e a rejeição projetada só pode ocorrer após sucesso. [reconciliador.py:538](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:538), [models.py:664](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:664)
+
+### Inventário parcial dos três campos
+
+A unidade de `status` é **uma justificativa**; seus estados declarados são `pendente`, `aprovada` e `rejeitada`, com nascimento padrão pendente. A origem é uma FK opcional e não única; o ponteiro é uma FK opcional no chamado, para uma justificativa formal. [ponto/models.py:130](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:130), [ponto/models.py:159](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:159), [ponto/models.py:173](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/models.py:173), [chamados/models.py:69](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:69)
+
+| Campo e sítio | Operação e significado no momento |
+|---|---|
+| `status`: [api/views.py:1989](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/api/views.py:1989), [ponto/views.py:1624](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1624), [processar_alertas_turno.py:394](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/management/commands/processar_alertas_turno.py:394) | **LÊ/ESCREVE:** encontra ou cria pendente durante os três fluxos de produção. |
+| `status`: [triagem_batida.py:258](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/triagem_batida.py:258), [regularizacao.py:91](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/regularizacao.py:91) | **ESCREVE:** fluxos de triagem e regularização podem estabelecer novamente `pendente` em linha reutilizada; o estado anterior exige atenção no caso concreto. |
+| `status`: [justificativa.py:205](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:205), [ponto/views.py:1797](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1797) | **ESCREVE:** aprovação individual ou em lote pelo DP. |
+| `status`: [reconciliador.py:573](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:573), [triagem_batida.py:605](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/triagem_batida.py:605), [entrada_sincronizada.py:38](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/entrada_sincronizada.py:38) | **LÊ/ESCREVE:** rejeição automática da pendente apontada no contexto da retratação ou da batida. |
+| `status`: [justificativa.py:277](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:277), [ponto/views.py:1877](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1877) | **LÊ/ESCREVE:** rejeição pelo DP, individual ou em lote. |
+| `status`: [ponto/views.py:1712](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1712), [ponto/views.py:1739](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1739), [alertar_justificativas_sla.py:19](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/management/commands/alertar_justificativas_sla.py:19) | **LÊ:** seleção da fila, contadores e alerta de SLA usam o estado atual; a seleção do alerta restringe a pendentes. |
+| `status`: [chamados/models.py:136](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:136), [chamados/models.py:1313](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:1313) | **LÊ:** gate humano e premissa regularizada consultam o estado da justificativa apontada. O gate também menciona literais que não constam das três choices do modelo. |
+| `chamado_origem`: [api/views.py:1989](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/api/views.py:1989), [ponto/views.py:1624](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1624), [processar_alertas_turno.py:394](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/management/commands/processar_alertas_turno.py:394) | **LÊ/ESCREVE:** API e tela criam ou preenchem origem vazia; o cron informa origem nos defaults de criação, sem presumir que a troca ao reutilizar uma linha. |
+| `chamado_origem`: [chamados/utils.py:2](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/utils.py:2), [justificativa.py:33](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:33), [painel_justificativa.html:128](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/templates/ponto/partials/painel_justificativa.html:128) | **LÊ:** followup, tratamento da aprovação e apresentação da origem. |
+| Ponteiro: [vinculos.py:81](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/services/vinculos.py:81) | **LÊ/ESCREVE:** `apontar_justificativa` preserva o primeiro apontamento; chamados pelos fluxos da [API:2009](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/api/views.py:2009), [tela:1651](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1651) e [cron:426](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/management/commands/processar_alertas_turno.py:426). |
+| Ponteiro: [reconciliador.py:453](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:453), [reconciliador.py:573](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:573), [models.py:136](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:136), [models.py:1313](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:1313) | **LÊ:** retenção de justificativa alheia, Fix A, gate humano e premissa aprovada. A unidade aqui é a justificativa escolhida pelo chamado, não todas as que o têm como origem. |
+| Ponteiro: [triagem_batida.py:605](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/triagem_batida.py:605), [entrada_sincronizada.py:38](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/entrada_sincronizada.py:38) | **LÊ:** caminhos de batida examinam a justificativa apontada antes de rejeitá-la. |
+
+Outros leitores de pendente encontrados incluem [chamados/views.py:596](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/views.py:596), [core/views.py:205](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/core/views.py:205), [situacional.py:126](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/colaboradores/services/situacional.py:126) e [utils_turno_orfao.py:53](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/utils_turno_orfao.py:53). Leitores de aprovada encontrados incluem [escala/utils.py:1197](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/escala/utils.py:1197), [efeito_ausencia.py:41](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/efeito_ausencia.py:41) e [fechamento.py:661](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/fechamento.py:661). A classificação função por função e a exaustividade continuam **[não verificado]**.
+
+### Cartório: seleção, sucesso e recusa
+
+`_protesta` pergunta ao juiz do dia sem trabalho e ao leitor de marcos acesos, usando a célula e a ata **deste julgamento**. É lido para `_protestam`, para a lâmpada `cobrado` e para `_nao_protestam`. [cartorio.py:1462](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1462), [cartorio.py:1509](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1509), [cartorio.py:1540](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1540)
+
+Se qualquer não-protestante tiver fio, o lote inteiro de não-protestantes é adiado; após E2, o filtro de `_fech` conserva os sucessos. Sem adiamento, o filtro de `_porm` conserva os sucessos imediatos. Há ainda fechos crus por marcos inexistentes, por códigos do dia e por outros caminhos; não são automaticamente equivalentes aos dois sítios de D2. [cartorio.py:1540](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1540), [cartorio.py:1008](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1008), [cartorio.py:1557](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1557), [cartorio.py:1572](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1572), [cartorio.py:1650](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1650)
+
+A porta `transicionar_com_pauta`, quando recebe `ato`, devolve o resultado do ato nas linhas [160 e 169](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/services/fecho_runtime.py:160). `reconciliar` devolve **False** na [linha 654](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:654), grava na linha 655 e devolve **True** na [linha 656](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:656). A decisão recusa pelo motor na [linha 676](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:676), premissa na [684](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:684), conversa do pai na [688](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:688) e pergunta viva na [693](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:693); entrega a decisão permitida na [697](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:697). A lista de retornos internos de todos os subgates não foi fechada. [não verificado]
+
+### Efeito visível de `pendente → rejeitada`
+
+A API do colaborador retorna as últimas justificativas com estado, descrição e motivo; a tela de atendimento mostra o estado, a descrição truncada e o motivo separado. Assim, o texto do Fix A pode aparecer como parte da descrição, não necessariamente no campo de motivo de rejeição. [api/views.py:2095](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/api/views.py:2095), [meu_atendimento.html:89](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/templates/chamados/meu_atendimento.html:89)
+
+No DP, a fila aceita filtro por estado e o painel mostra descrição e motivo separadamente; as ações do painel são condicionadas à pendência. A mudança retira a linha das consultas e contadores restritos a pendentes e da seleção futura do alerta de SLA. O contador “hoje” usa `atualizado_em`; o `save(update_fields=['status', 'descricao'])` do Fix A não inclui esse campo, de modo que não se deve presumir incremento naquele contador no instante da rejeição. [ponto/views.py:1702](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1702), [painel_justificativa.html:29](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/templates/ponto/partials/painel_justificativa.html:29), [ponto/views.py:1739](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/views.py:1739), [alertar_justificativas_sla.py:19](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/management/commands/alertar_justificativas_sla.py:19), [reconciliador.py:579](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:579)
+
+O painel de fechamento também apresenta estado; há apresentação no dashboard para justificativa ligada a batida. A rejeição humana tem caminho explícito de notificação, mas o bloco Fix A citado não chama esse caminho: notificação equivalente pelo Fix A **[não verificado]**. Cobertura de todos os relatórios e exports **[não verificado]**. [painel_fechamento.html:69](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/templates/ponto/partials/painel_fechamento.html:69), [dashboard2.html:248](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/templates/core/dashboard2.html:248), [justificativa.py:277](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/justificativa.py:277)
+
+### Sonda D4 — superconjunto, não medição exata
+
+O escritor grava `status_local`, `resolvido_em` e `via_encerramento`; para `RECONCILIAR`, a via é `sistema`. Essa marca não distingue não-protesto de outros encerramentos pelo mesmo evento. Não encontrei, nos campos examinados, marcador persistido exclusivo do não-protesto; a linha `_w` do cartório, isoladamente, não demonstra uma coluna consultável por ORM. [models.py:228](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:228), [models.py:655](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/models.py:655), [motor.py:95](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/catalogo/motor.py:95), [cartorio.py:1551](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/ponto/services/cartorio.py:1551)
+
+Abaixo, cada unidade é um **par `(justificativa, chamado)`**, deduplicado para as duas testemunhas. `d4a` significa ponteiro com origem preenchida para outro chamado; `d4b` compara criação com `resolvido_em`. Uma mesma justificativa ligada a dois chamados pode integrar dois pares. O script conta apenas candidatos atualmente `resolvido/sistema`, portanto também pode **omitir** um caso cujo estado ou via tenha mudado depois; não é limite superior garantido do histórico. Ele não foi executado nem validado contra banco. [não verificado]
+
+```python
+# Executar no ambiente Django da copia, a partir de app/.
+# Saida: apenas contagens, identificadores colN e marcadores de termino.
+import os
+import sys
+
+sys.dont_write_bytecode = True
+os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.sombra"
+
+erros = 0
+
+try:
+    import django
+    django.setup()
+
+    from django.conf import settings
+    from django.db import connection, transaction
+    from django_tenants.utils import schema_context
+
+    from chamados.catalogo.furo_modulos import FURO_MODULES
+    from chamados.models import ChamadoColaborador
+
+    cfg = connection.settings_dict
+    if (
+        settings.SETTINGS_MODULE != "config.settings.sombra"
+        or cfg.get("NAME") != "sombra"
+        or cfg.get("HOST") != "sombra_db"
+        or str(cfg.get("PORT")) != "5432"
+    ):
+        raise RuntimeError("guarda_sombra")
+
+    # Cada chave e (pk justificativa, pk chamado); os PKs nao sao impressos.
+    pares = {}
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION READ ONLY")
+            cursor.execute("SELECT current_database()")
+            if cursor.fetchone()[0] != "sombra":
+                raise RuntimeError("banco_incorreto")
+
+        with schema_context("juliani"):
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT current_schema()")
+                if cursor.fetchone()[0] != "juliani":
+                    raise RuntimeError("schema_incorreto")
+
+            chamados = ChamadoColaborador.objects.filter(
+                modulo_origem__in=FURO_MODULES,
+                status_local="resolvido",
+                v
+
+[truncado em 20000 de 23598 caracteres]
+
+## 19/11 00:23 · sessao 454253e1f855 · - · - · origem=Ronald (tmux)
+
+Enviei ao agente principal os sítios do ponteiro, das telas, da API, dos contadores e do SLA, incluindo os usos em testes e a distinção entre o Fix A e a rejeição humana. [nao verificado]
+
+Há uma tensão literal entre D3 e D4 quando o ponteiro aponta para uma justificativa cuja origem é outro chamado: D3 inclui a apontada, enquanto D4 manda preservar a pendente reutilizada; o Fix A atual rejeita a apontada sem consultar a origem. [reconciliador.py:573](/home/ronald/codex_ws/dfb866cf8afcca2c40590bbbb2a896592cf7f061/app/chamados/reconciliador.py:573)
+
+## 19/11 00:23 · sessao 70251811ffac · - · - · origem=Ronald (tmux)
+
+Censo parcial comunicado ao agente principal, com sítios de escrita, leitura e apresentação. A exaustividade de usos indiretos, SQL, testes e arquivos fora do recorte pesquisado permanece **[não verificado]**. [nao verificado]
+
+## 19/11 00:23 · sessao bfe2ddb1c8ef · - · - · origem=Ronald (tmux)
+
+Resultados enviados ao agente principal, incluindo os retornos dos gates, os demais fechos crus, a ausência de um discriminador persistido para não-protesto e a tensão entre D3 e D4a.
 
 ## 18/11 23:35 · sessao a973dccb431c · AUDITORIA-ESPURIAS · sonda · origem=Code
 
@@ -1817,71 +2287,4 @@ A revisão foi somente por leitura. Nenhum teste ou mutante foi executado, nenhu
 - Remover a guarda é um mutante definível; por inspeção, os testes atuais exigem o contador que ela incrementa e falhariam sem ela, em [test_e4c_f9_comandos_leem_o_ato.py:118](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:118) e [test_e4c_f9_comandos_leem_o_ato.py:136](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:136). Execução do mutante: [não verificado].
 - `validar_classe_a` também aceita `--apply` e chama a porta de validação, em [validar_classe_a.py:32](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:32) e [validar_classe_a.py:100](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:100); a porta pode salvar a validação e registrar o ato em [validacao.py:161](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:161) e [validacao.py:729](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:729).
 
-## 18/11 22:33 · sessao c6f25b7ba7ed · - · - · origem=Ronald (tmux)
-
-Inspeção concluída e comunicada ao agente principal, com os sete sítios, os testes existentes e as condições literais de dry e mutação. [nao verificado]
-
-## 18/11 22:31 · sessao 6ebd0212ed71 · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-**Veredito: FILA para corrigir a caracterização dos predicados; nenhum BLOQUEIA comprovado na linha da parte 2(b).** A árvore disponível não contém metadados Git: HEAD, commit vazio e igualdade com `a179c141e` ficam **[não verificado]**. A execução da suíte e o conteúdo do RED também ficam **[não verificado]**.
-
-1. **Linha LEI-AKITA — FILA, por precisão em `juizes novos=0`.**
-
-   - **`origem`: confere.** `resumo_da_carga` existe e monta a frase e seus componentes; `lista` publica seu resultado em `carga_resumo` ([cadastro_realidade.py:788](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:788), [cadastro_realidade.py:1067](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1067)).
-   - **`testemunha`: confere.** A lista monta `carga` e `carga_desde` a partir de `orfas` e `orfas_desde` da lavra; o esmeril escreve esses mapas a partir da medida e do início da janela ([cadastro_realidade.py:969](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:969), [cadastro_realidade.py:981](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:981), [esmeril_espelho.py:236](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/ponto/services/esmeril_espelho.py:236)).
-   - **`quem-mais-le`: confere para leitores de produção encontrados por busca textual.** São o template e `pdf_bytes`; testes também leem a chave ([cadastro_x_realidade.html:17](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/templates/escala/cadastro_x_realidade.html:17), [cadastro_realidade.py:1184](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1184), [test_escala_nao_descreve.py:252](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/tests/test_escala_nao_descreve.py:252)). Leitores indiretos ou dinâmicos não identificáveis por essa busca: **[não verificado]**.
-   - **`RED`: o log e seus três erros são [não verificado].** Existem três testes nomeados `test_MORDE_R2b...`; qual deles o log cobriu é **[não verificado]** ([test_escala_nao_descreve.py:246](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/tests/test_escala_nao_descreve.py:246), [test_escala_nao_descreve.py:258](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/tests/test_escala_nao_descreve.py:258), [test_escala_nao_descreve.py:265](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/tests/test_escala_nao_descreve.py:265)).
-
-2. **`juizes novos=0` — FILA para corrigir “predicados locais de tela”.** `botao_da_proposta` também é consultado no POST e pode impedir a escrita; depois disso a view chama a porta do vínculo ([views.py:475](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/views.py:475), [views.py:498](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/views.py:498), [views.py:502](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/views.py:502)). Há sobreposição concreta: o predicado e a porta recusam destino cíclico ([cadastro_realidade.py:849](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:849), [regua_defesa.py:313](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/regua_defesa.py:313)). Não identifiquei, nessa comparação, outro juiz **registrado** respondendo à mesma pergunta completa; o registro distingue a pergunta sobre substituir proposta da guarda da porta ([juizes.py:1375](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/core/juizes.py:1375)). `folga_trabalhada_no_6x1` é chamado pela ação e pelo predicado do botão, chegando assim também ao POST ([cadastro_realidade.py:718](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:718), [cadastro_realidade.py:845](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:845), [views.py:498](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/views.py:498)).
-
-3. **`padrao=fonte unica` — nada.** O termo existe como alias de *Single Source of Truth* no glossário; o código produz uma frase em `resumo_da_carga` e tela e PDF leem essa frase ([GLOSSARIO.md:11](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/docs/GLOSSARIO.md:11), [cadastro_realidade.py:801](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:801), [cadastro_x_realidade.html:17](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/templates/escala/cadastro_x_realidade.html:17), [cadastro_realidade.py:1184](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1184)). É uma descrição compatível com a realização de 2(b); não há evidência aqui de que outro padrão seja necessário.
-
-4. **Escritores e leitores — nada, com escopo desta carga.**
-
-   - **`carga_resumo`:** `lista` escreve; template e PDF leem; testes também leem ([cadastro_realidade.py:1067](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1067), [cadastro_x_realidade.html:17](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/templates/escala/cadastro_x_realidade.html:17), [cadastro_realidade.py:1184](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1184), [test_escala_nao_descreve.py:252](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/tests/test_escala_nao_descreve.py:252)).
-   - **`carga` e `carga_desde`:** `lista` escreve nas linhas; `resumo_da_carga` lê ambas e a ordenação lê `carga`; o template também lê `carga` ([cadastro_realidade.py:981](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:981), [cadastro_realidade.py:796](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:796), [cadastro_realidade.py:1056](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1056), [cadastro_x_realidade.html:29](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/templates/escala/cadastro_x_realidade.html:29)). A apresentação textual por linha é montada como `carga_texto`, lida pela tela e pelo PDF ([cadastro_realidade.py:984](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:984), [cadastro_realidade.py:1197](/home/ronald/codex_ws/a365646fc4bb03683d0378b366a45592189eb4fe/app/escala/services/cadastro_realidade.py:1197)).
-
-## 18/11 22:09 · sessao 9280fcbf61a8 · E4C-F6F7 · verificador · origem=Code
-
-1. **nada — comportamento exercitado preservado no laço mostrado.** Em cada iteração não ignorada, `outras_ds` recebe uma lista nova, `p.decisoes.all()` devolve essa mesma lista e `LeituraReal.leitura(p)` a consome antes da próxima atribuição a `outras_ds` ([teste:230](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:230), [models.py:4308](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/models.py:4308)). A diferença é que a lambda nova guarda a referência à lista no argumento padrão; a anterior consultava a variável quando chamada. Assim, uma chamada tardia da lambda antiga poderia devolver outra lista, mas essa chamada tardia não aparece no trecho ([teste:232](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:232); versão anterior: anexo `delta.diff`, [não verificado] na cópia).
-
-2. **FILA — resultado do Ruff não verificado.** Não identifiquei outra closure em laço que capture tardiamente variável desse laço: as lambdas em [teste:48](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:48) e [teste:221](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:221) fixam `ds` por argumento padrão; a função em [teste:177](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:177) faz o mesmo com `antigo` e `novo`. Não identifiquei outra acusação provável de B, F ou E9 na inspeção [não verificado por Ruff]. A configuração seleciona F, E9 e B, exceto B905 e B007 ([ruff.toml:4](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/ruff.toml:4)); o Ruff não estava disponível para execução [não verificado].
-
-3. **nada — fluxo identificado.** `sequencia(*outros)` produz a lista atribuída a `outras_ds` ([teste:26](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:26), [teste:232](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:232)). A linha seguinte cria `N(all=...)` e o atribui a `p.decisoes`; a lambda devolve a lista ([teste:233](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:233)). `LeituraReal.leitura(p)` lê `p.decisoes.all()` ([teste:234](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:234), [models.py:4308](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/models.py:4308)). O próprio teste também passa `outras_ds` às duas funções comparadas ([teste:235](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:235)).
-
-4. **nada — no delta fornecido**, somente a lambda mudou; não há mudança de asserção, caso ou tolerância no diff anexado [não verificado independentemente]. A cópia atual contém a asserção e os casos mostrados em [teste:225](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:225) e [teste:236](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:236). A cópia não está em um repositório Git acessível; HEAD e comparação com `f0ddfbe4c` permanecem [não verificado].
-
-## 18/11 22:07 · sessao 360a48b03fa9 · E4C-F6F7 · construtor · origem=Code
-
-A correção vincula `outras_ds` no argumento default da lambda, em [test_e4c_f6f7_c14_lei3_pela_leitura.py:233](/home/ronald/wt-codex-e4c-f6f7-220647/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:233):
-
-```diff
--                    p.decisoes = N(all=lambda: outras_ds)
-+                    p.decisoes = N(all=lambda outras_ds=outras_ds: outras_ds)
-```
-
-- Li o arquivo inteiro. Não identifiquei outra closure dentro de laço que capture variável do laço sem vinculá-la; as demais ocorrências relevantes já usam argumentos default em [linha 49](/home/ronald/wt-codex-e4c-f6f7-220647/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:49), [linha 174](/home/ronald/wt-codex-e4c-f6f7-220647/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:174) e [linha 221](/home/ronald/wt-codex-e4c-f6f7-220647/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:221).
-- A closure da linha 233 é consumida na mesma iteração: a chamada seguinte a `LeituraReal.leitura(p)` está na [linha 234](/home/ronald/wt-codex-e4c-f6f7-220647/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:234), e `leitura` chama `p.decisoes.all()` em [models.py:4308](/home/ronald/wt-codex-e4c-f6f7-220647/app/chamados/models.py:4308).
-- Não rodei suíte nem banco. O executável `ruff` não estava disponível no PATH; os comandos abaixo estão **[não verificados]**. O mutante é a própria linha original, que deve produzir B023: [nao verificado]
-
-```bash
-git show f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c:app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py | ruff check --no-cache --isolated --select B023 --stdin-filename chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py -
-```
-
-Para verificar a correção:
-
-```bash
-ruff check --no-cache --isolated --select B023 chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py
-```
-
-## 18/11 22:05 · sessao 9432ef28a8ce · E4C-F6F7 · verificador · origem=Code
-
-1. **OK — preservação das trocas, por leitura.** As duas lambdas continuam devolvendo a sequência da iteração, e a função mutada continua usando o par daquela iteração nas chamadas feitas pelo teste. A atribuição direta e o antigo `setattr` acionam o mesmo `VistaNoHorizonte.__setattr__`, que sempre levanta `AttributeError`; os slots também existem, mas não são o motivo dessa exceção. O `assertRaises` continua verificando o mesmo comportamento. [teste:48](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:48) [teste:146](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:146) [vista:403](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/services/tarefa_do_dia.py:403)
-
-2. **OK — os quatro usos apontados como B023 são consumidos na mesma iteração.** Nas duas lambdas, `leitura(p)` chama `p.decisoes.all()` antes da próxima iteração; na função mutada, tanto `antigo` quanto `novo` são usados durante a chamada do teste dentro do `patch`. Não identifiquei vacuidade causada pela captura tardia nesses casos. A morte efetiva de cada mutante em execução é **[não verificado]**. [teste:44](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:44) [teste:174](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:174) [teste:216](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:216) [models.py:4308](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/models.py:4308)
-
-3. **FILA — zero avisos do Ruff não está demonstrado.** A configuração seleciona `F`, `E9` e `B`, exceto `B905` e `B007`. Há outra lambda em laço que captura `outras_ds`; ela também é consumida na mesma iteração, mas se o Ruff da casa a sinaliza é **[não verificado]**. Não identifiquei outro aviso concreto por leitura; a execução do Ruff é **[não verificado]**. [ruff.toml:4](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/ruff.toml:4) [teste:226](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:226)
-
-4. **FILA — alcance completo do delta [não verificado].** O anexo fornecido mostra alterações somente no arquivo de teste e não mostra mudança de asserção, caso ou tolerância; a comparação independente dos commits e a confirmação de que o anexo é o delta completo são **[não verificado]**. O arquivo atual conserva os casos e as asserções examinados. [teste:35](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:35) [teste:145](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:145) [teste:206](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:206)
-
-_7183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7188 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
