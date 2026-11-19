@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 19:39:02.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (19.5 MB). Acoes na janela: **541**.
+**Medido em 19/11/2026 19:44:18.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (19.6 MB). Acoes na janela: **546**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:44:16 | Bash | Build revision annexes | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/F5/vA/revisao_1945; P=logs/ESPINHA-BRIEFS/F5/vA/prova; mkdir -p $R; (cd /home/ronald/wt-codex-e4c-f5-constroi-184647 && git diff HEAD; for f in $(git ls-files --others --exclude-standard); do echo "=== NOVO $f"; cat $f; done) > $R/diff_A1.txt; ls logs/AVAIS-1515/ \| grep -i "1710\\|1735\\|1830"; wc -c $R/diff_A1.txt $P/a1_por_modulo.txt $P/mods_qu ...` |
+| 19:44:12 | Bash | See wrapper output of previous revision | `cd /home/ronald/saas-hasner; cat logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/wrapper.out \| head -5; cat logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/r.txt.id` |
+| 19:44:09 | Bash | Inspect previous aval revision call | `cd /home/ronald/saas-hasner; ls logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/; cat logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/*.sh 2>/dev/null; head -c 1500 logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/q.txt; git cat-file -t 18bf86f01; cd /home/ronald/wt-codex-e4c-f5-constroi-184647 && git status --porcelain \| head -20` |
+| 19:44:02 | Bash | Register aval in AVAIS, PROMPTS, RELATO and BACKLOG | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner/ee91c054-fa2c-4df6-b27f-67d95e7cfe5e/scratchpad; A=logs/AVAIS-1515/resposta_f5_duble_1911_1945.txt cat > $A <<'EOF' aval Ronald: RESPOSTA-F5-DUBLE-1911-1945 (19/11 19:45) -- unidade: dubles de teste de DecisaoPergunta/pergunta nos harnesses que recompilam o C6; nenhuma lei nova. Responde a PERGUNTA DE DESENHO E4C-F5-CONSTROI  ...` |
+| 19:43:45 | Bash | Inspect aval storage, PROMPTS and BACKLOG format | `cd /home/ronald/saas-hasner; ls logs/AVAIS-1515/ \| tail -5; tail -3 app/docs/PROMPTS.md \| cut -c1-300; grep -n "E4C-F5" app/docs/BACKLOG.md \| head -5 \| cut -c1-300` |
 | 19:35:22 | Bash | Wait for copy sombra run (FIM2) | `cd /home/ronald/saas-hasner; D=logs/CADEIA-20-PASSO-1/v3/medidas; until [ -e $D/FIM2 ]; do /usr/bin/sleep 30; done; cat $D/estado.txt` |
 | 19:35:20 | Bash | Update RELATO line with sonda numbers | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read().split('\n') assert t[2].startswith('CADEIA-20-PASSO-1 v3 (') t[2]=t[2].replace('sonda Codex de leitura em voo (logs/CADEIA-20-PASSO-1/v3/sonda_sem_ata/).','sonda Codex de leitura PROD 19:34 rc=0 (logs/CADEIA-20-PASSO-1/v3/sonda_sem_ata/r.txt): 29858 dias com batida <= ontem desde 21/08; ATA_NULA 0, ATA_SEM_CHAV ...` |
 | 19:35:08 | Bash | Read sonda result | `cd /home/ronald/saas-hasner; D=logs/CADEIA-20-PASSO-1/v3/sonda_sem_ata; cat $D/fim; cat $D/r.txt \| cut -c1-600 \| head -40` |
