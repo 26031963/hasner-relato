@@ -1,7 +1,258 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 23:32** · publicado em **18/11/2026 23:33** (UTC-3)
+> Ultima resposta processada: **18/11/2026 23:35** · publicado em **18/11/2026 23:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 23:35 · sessao a973dccb431c · AUDITORIA-ESPURIAS · sonda · origem=Code
+
+`_GradeSemCelula` nasce quando todos os dias dentro do vínculo têm `tipo_dia='sem_celula'` e é tratada pelo `except Exception`, que preenche os campos da grade com `None` ([app/ponto/services/fechamento.py:1043](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1043), [app/ponto/services/fechamento.py:1087](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1087)).
+
+A montagem das linhas pode ser chamada em leitura; a view completa também aprova fechamentos e registra a exportação ([app/folha/export.py:690](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:690), [app/folha/views.py:248](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/views.py:248), [app/folha/views.py:298](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/views.py:298)). O resultado de S6 na sombra é **[nao verificado]**: a saída fornecida parou antes de imprimi-lo [nao verificado].
+
+A sonda abaixo imprime os fechamentos de todas as empresas antes de qualquer export. Também consulta o fechamento gravado e o TXT vigente; a atribuição no TXT usa o código Domínio atual e informa ambiguidade ou impossibilidade de atribuição, sem expor o código ([app/folha/export.py:224](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:224), [app/folha/export.py:557](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:557)). Se a leitura calculada registrar ou propagar falha, ela sinaliza erro e preserva as respostas já impressas; os marcadores de sucesso só aparecem se S6 terminar sem falha [nao verificado].
+
+```python
+import logging
+import os
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import connection, transaction
+
+from colaboradores.models import Colaborador, Empresa
+from folha.export import (
+    classificar_export,
+    competencia_entregue,
+    montar_linhas_export,
+    partes_da_linha,
+)
+from ponto.models import FechamentoMensal
+from ponto.services.fechamento import (
+    recalcular_fechamento_mes,
+    universo_da_competencia,
+)
+
+MES = 11
+ANO = 2026
+COL = 950
+ONDE = "inicio"
+
+
+class FalhaRegistrada(BaseException):
+    pass
+
+
+def erro_registrado(self, *args, **kwargs):
+    # BaseException atravessa os except Exception da funcao chamada.
+    # Nunca imprime a mensagem de log, que pode conter dados pessoais.
+    raise FalhaRegistrada()
+
+
+def sim_nao(valor):
+    return "sim" if valor else "nao"
+
+
+def guarda_sombra():
+    if (
+        os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra"
+        or not getattr(settings, "HASNER_SOMBRA", False)
+        or connection.settings_dict.get("NAME") != "sombra"
+        or connection.settings_dict.get("HOST") != "sombra_db"
+        or getattr(connection, "schema_name", None) != "juliani"
+    ):
+        raise RuntimeError("configuracao_sombra")
+
+
+def exportacao_gravada(empresa, colab):
+    # O juiz retorna apenas a exportacao vigente e nao invalidada.
+    registro = competencia_entregue(empresa.pk, MES, ANO, registro=True)
+    if registro is None:
+        return "sem_exportacao_vigente"
+
+    codigo = (colab.codigo_dominio or "").strip()
+    if not codigo or not codigo.isdigit() or len(codigo) > 10:
+        return "atribuicao_nao_verificada_codigo_atual"
+
+    matricula = codigo.zfill(10)
+    # A comparacao respeita a mesma normalizacao usada na montagem.
+    candidatos = 0
+    for outro_codigo in Colaborador.objects.filter(
+        empresa_id=empresa.pk
+    ).values_list("codigo_dominio", flat=True):
+        if (outro_codigo or "").strip().zfill(10) == matricula:
+            candidatos += 1
+    if candidatos != 1:
+        return "atribuicao_nao_verificada_codigo_ambiguo"
+
+    if not registro.conteudo:
+        return "conteudo_indisponivel"
+
+    encontrou = False
+    for linha in registro.conteudo.splitlines():
+        if not linha:
+            continue
+        partes = partes_da_linha(linha)
+        if partes is None:
+            return "conteudo_nao_interpretado"
+        if partes["reg"] == "10":
+            if partes["competencia"] != f"{ANO}{MES:02d}":
+                return "competencia_no_conteudo_inconsistente"
+            if partes["matricula"] == matricula:
+                encontrou = True
+
+    return "sim_por_codigo_atual" if encontrou else "nao_por_codigo_atual"
+
+
+def s6():
+    global ONDE
+
+    ONDE = "guarda_sombra"
+    guarda_sombra()
+
+    with transaction.atomic():
+        ONDE = "transacao_sombra"
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+            )
+            cursor.execute(
+                "SELECT current_database(), current_user, current_schema()"
+            )
+            banco, usuario, schema = cursor.fetchone()
+        if (banco, usuario, schema) != ("sombra", "leitor", "juliani"):
+            raise RuntimeError("conexao_sombra")
+
+        ONDE = "universo"
+        colab = Colaborador.objects.get(pk=COL)
+        empresas = list(Empresa.objects.order_by("pk"))
+        if not empresas:
+            raise RuntimeError("sem_empresas")
+        if not any(e.pk == colab.empresa_id for e in empresas):
+            raise RuntimeError("empresa_do_colaborador_ausente")
+
+        # Todas as respostas de fechamento saem antes de tentar qualquer export.
+        for empresa in empresas:
+            no_universo = universo_da_competencia(
+                MES, ANO, empresa.pk
+            ).filter(pk=COL).exists()
+            gravado = FechamentoMensal.objects.filter(
+                colaborador_id=COL,
+                colaborador__empresa_id=empresa.pk,
+                mes=MES,
+                ano=ANO,
+            ).exists()
+            print(
+                f"S6 emp={empresa.pk} col{COL} "
+                f"fechamento={sim_nao(no_universo)} "
+                f"filtro=app/ponto/services/fechamento.py:439"
+            )
+            print(
+                f"S6 emp={empresa.pk} col{COL} "
+                f"fechamento_gravado={sim_nao(gravado)} "
+                f"filtro=app/folha/export.py:785"
+            )
+
+        # Leitura do TXT efetivamente gravado, independente do recalculo.
+        ONDE = "exportacao_gravada"
+        for empresa in empresas:
+            if empresa.pk != colab.empresa_id:
+                resultado = "atribuicao_nao_verificada_empresa_atual"
+            else:
+                resultado = exportacao_gravada(empresa, colab)
+            print(
+                f"S6 emp={empresa.pk} col{COL} "
+                f"export_gravado={resultado} "
+                f"filtro=app/folha/export.py:588,"
+                f"app/folha/export.py:246"
+            )
+
+        ONDE = "export_lido"
+        encontrou_export = False
+        for empresa in empresas:
+            # Falhas registradas ou propagadas abortam a secao. Excecoes
+            # tratadas sem registro seguem o fluxo normal da funcao.
+            with (
+                patch.object(logging.Logger, "exception", erro_registrado),
+                patch.object(logging.Logger, "error", erro_registrado),
+            ):
+                lidos = recalcular_fechamento_mes(
+                    MES,
+                    ANO,
+                    empresa_id=empresa.pk,
+                    somente_leitura=True,
+                    lavrar_dias_pagos=False,
+                    retornar_objeto=True,
+                )
+                fechamentos = list(lidos.values())
+                itens = classificar_export(
+                    empresa, MES, ANO, fechamentos=fechamentos
+                )
+                linhas_todas, _ = montar_linhas_export(
+                    empresa, MES, ANO,
+                    itens=itens, fechamentos=fechamentos,
+                )
+                alvo = [
+                    f for f in fechamentos if f.colaborador_id == COL
+                ]
+                linhas_alvo, _ = montar_linhas_export(
+                    empresa, MES, ANO, itens=itens, fechamentos=alvo
+                )
+
+            if len(alvo) > 1 or len(linhas_alvo) > len(linhas_todas):
+                raise RuntimeError("atribuicao_de_linhas")
+
+            item_alvo = [
+                i for i in itens if i["colaborador_id"] == COL
+            ]
+            if len(item_alvo) > 1:
+                raise RuntimeError("classificacao_duplicada")
+
+            if not item_alvo:
+                motivo = "sem_fechamento_lido"
+            else:
+                item = item_alvo[0]
+                # Apenas valores internos controlados; nao imprimir detalhe.
+                classificacao = item["status"]
+                motivo_codigo = item["motivo"]
+                status = alvo[0].status if alvo else "ausente"
+                for valor in (classificacao, motivo_codigo, status):
+                    if not isinstance(valor, str) or not all(
+                        c.isascii() and (c.isalnum() or c == "_")
+                        for c in valor
+                    ):
+                        raise ValueError("token_de_saida")
+                motivo = (
+                    f"classificacao:{classificacao},"
+                    f"motivo:{motivo_codigo},"
+                    f"status_fechamento:{status},"
+                    f"linhas:{len(linhas_alvo)}"
+                )
+
+            sai = bool(linhas_alvo)
+            encontrou_export = encontrou_export or sai
+            print(
+                f"S6 emp={empresa.pk} col{COL} "
+                f"export_lido={sim_nao(sai)} "
+                f"filtro=app/folha/export.py:716 "
+                f"motivo={motivo}"
+            )
+
+        print(
+            f"S6 col{COL} export_lido_alguma_empresa="
+            f"{sim_nao(encontrou_export)}"
+        )
+
+
+try:
+    s6()
+except FalhaRegistrada:
+    print(f"ERRO S6 {ONDE}: falha_registrada")
+except Exception as exc:
+    print(f"ERRO S6 {ONDE}: {type(exc).__name__}")
+else:
+    print("ERROS_S6=0")
+    print("FIM_SONDA_DUAS_PONTAS_A4")
+```
 
 ## 18/11 23:32 · sessao 5f78fdef0b58 · AUDITORIA-ESPURIAS · sonda · origem=Code
 
@@ -1633,37 +1884,4 @@ ruff check --no-cache --isolated --select B023 chamados/tests/test_e4c_f6f7_c14_
 
 4. **FILA — alcance completo do delta [não verificado].** O anexo fornecido mostra alterações somente no arquivo de teste e não mostra mudança de asserção, caso ou tolerância; a comparação independente dos commits e a confirmação de que o anexo é o delta completo são **[não verificado]**. O arquivo atual conserva os casos e as asserções examinados. [teste:35](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:35) [teste:145](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:145) [teste:206](/home/ronald/codex_ws/f0ddfbe4c3c46c5232fdc75fe7663d7f4fbc0f8c/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:206)
 
-## 18/11 21:38 · sessao 238ae9d67693 · E4C-F6F7 · construtor · origem=Code
-
-A correção foi aplicada somente em [test_e4c_f6f7_c14_lei3_pela_leitura.py](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:48). O diff é: [nao verificado]
-
-```diff
-- decisoes=N(all=lambda: ds))
-+ decisoes=N(all=lambda ds=ds: ds))
-
-- setattr(vista, 'respondida_em', instante)
-+ vista.respondida_em = instante
-
-- def funcao_mutada(arquivo, nome, *args, **kw):
-+ def funcao_mutada(arquivo, nome, *args, antigo=antigo, novo=novo, **kw):
-
-- decisoes=N(all=lambda: ds))
-+ decisoes=N(all=lambda ds=ds: ds))
-```
-
-Sobre cada B023:
-
-- **`ds`, linha 48:** a leitura é feita na linha 49, dentro da mesma iteração. O fechamento tardio não mudava o caso testado. [arquivo:linhas 44–49](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:44)
-- **`antigo` e `novo`, linha 179:** a função mutada é usada pelo teste chamado na linha 182, dentro da mesma iteração. O fechamento tardio não mudava o mutante testado. [arquivo:linhas 174–182](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:174) [nao verificado]
-- **`ds`, linha 221:** a leitura é feita na linha 222, dentro da mesma iteração. O fechamento tardio não mudava o caso testado. [arquivo:linhas 216–225](/home/ronald/wt-codex-e4c-f6f7-213751/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:216)
-
-A verificação do Ruff ficou **não verificada**: o executável não está no PATH e `python3 -m ruff` também informou que o módulo não está instalado. Saída do comando solicitado, tentado antes da edição:
-
-```text
-$ PYTHONDONTWRITEBYTECODE=1 ruff check --config ruff.toml --no-cache chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py
-/bin/bash: line 1: ruff: command not found
-```
-
-Não foi possível executar o RED nem os mutantes do lint pelo mesmo motivo. [não verificado] A suíte e o banco não foram executados, conforme solicitado. [nao verificado]
-
-_7182 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7183 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
