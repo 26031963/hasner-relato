@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 09:43:15.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (38.1 MB). Acoes na janela: **1181**.
+**Medido em 19/11/2026 09:48:35.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (38.2 MB). Acoes na janela: **1183**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:47:12 | Bash | Wait for comboio suite | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'while kill -0 2251155 2>/dev/null; do /usr/bin/sleep 20; done'; ssh pista estado \| grep c1506; kill -0 2252804 2>/dev/null && echo codex-vivo` |
+| 09:47:09 | Bash | Record DST opus verdict, desenho question, fila row | `cd /home/ronald/saas-hasner; cat > logs/dst-l2-jz1/c5/opus_final.txt <<'EOF' OPUS FINAL DST-L2-JZ1 c5 (19/11 09:4x, agente verificador, arvore aeca43bb6): VEREDITO APROVA. 0 bloqueia, 3 fila: 1 (fila) entrada_sincronizada.py:38-43 e triagem_batida.py:604-612 fecham chamado pelo sistema e rejeitam a pendente do ponteiro em linha, fora da porta justificativa.py (sem chamado_origem/_APROVANDO/FOR UPD ...` |
 | 09:36:59 | Bash | Wait for comboio suite waiter | `cd /home/ronald/saas-hasner; timeout 590 bash -c 'while kill -0 2251155 2>/dev/null; do /usr/bin/sleep 20; done'; ssh pista estado \| grep c1506` |
 | 09:36:57 | Bash | Fix ESPERANDO pid to real waiter | `cd /home/ronald/saas-hasner; sed -i 's/^ESPERANDO: ssh pista espera comboio-f \| pid=2251152$/ESPERANDO: ssh pista espera comboio-f \| pid=2251155/' app/docs/RELATO.md; sed -n 3p app/docs/RELATO.md` |
 | 09:36:52 | Bash | Check why pista waiter died | `cd /home/ronald/saas-hasner; cat logs/comboio-1911-f.espera \| tail -5; ssh pista estado \| grep c1506; pgrep -af "pista espera" \| head` |
