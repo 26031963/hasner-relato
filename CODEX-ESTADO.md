@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 21:27** · publicado em **18/11/2026 21:28** (UTC-3)
+> Ultima resposta processada: **18/11/2026 21:30** · publicado em **18/11/2026 21:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 21:30 · sessao 7732a47fe90e · ESCALA-NAO-DESCREVE · construtor · origem=Code
+
+Acrescentei um teste que chama a porta diretamente com destino 12x36, verifica a mensagem e as contagens, e usa uma realocação para 6x1 como controle ([teste:311](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:311)). A data é fixa ([teste:33](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:33)). [nao verificado]
+
+O teste e o mutante **não foram executados**, conforme solicitado. `git diff --check` passou [não verificado por certificação]. [nao verificado]
+
+Comando do teste: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_escala_nao_descreve.ListaPorCargaTest.test_MORDE_R5_porta_recusa_ciclico_e_realoca_nao_ciclico
+```
+
+O mutante remove, em memória, a recusa de [regua_defesa.py:313](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/regua_defesa.py:313), sem editar produção:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python - <<'PY'
+import inspect
+import os
+import sys
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.saas')
+import django
+django.setup()
+
+import escala.regua_defesa as regua
+fonte = inspect.getsource(regua.realocar_vinculo_para_destino)
+linhas = fonte.splitlines(keepends=True)
+indices = [i for i, linha in enumerate(linhas)
+           if "if te.tipo_ciclo in getattr(te, 'CICLICOS'" in linha]
+assert len(indices) == 1
+i = indices[0]
+assert "return False" in linhas[i + 1] and "ciclico" in linhas[i + 1]
+del linhas[i:i + 2]
+exec(compile(''.join(linhas), regua.__file__, 'exec'), regua.__dict__)
+
+from django.core.management import execute_from_command_line
+execute_from_command_line([
+    sys.argv[0], 'test',
+    'escala.tests.test_escala_nao_descreve.ListaPorCargaTest.'
+    'test_MORDE_R5_porta_recusa_ciclico_e_realoca_nao_ciclico',
+])
+PY
+```
+
+A reprovação esperada é `AssertionError` na busca por `'ciclico'` ([teste:323](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:323)): sem a recusa da porta, o juiz inferior retorna outra mensagem para a ausência de início do turno ([vinculo.py:128](/home/ronald/wt-codex-escala-nao-descreve-212957/app/colaboradores/services/vinculo.py:128)). **Resultado e classe exata da reprovação: [não verificado].** [nao verificado]
+
+LEI-AKITA: origem=n/a (selo; porta inalterada); testemunha=`realocar_vinculo_para_destino` ([regua_defesa.py:291](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/regua_defesa.py:291)); RED=`test_MORDE_R5_porta_recusa_ciclico_e_realoca_nao_ciclico` ([teste:311](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:311), mordida [não verificada]); quem-mais-le=[views.py:471](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/views.py:471), [views.py:502](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/views.py:502), [regua_defesa.py:332](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/regua_defesa.py:332), [test_termometro_camada3.py:100](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_termometro_camada3.py:100), [test_termometro_camada3.py:105](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_termometro_camada3.py:105); juizes novos=0 ([diff do teste](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:311)); padrao=n/a (instrumento). [nao verificado]
 
 ## 18/11 21:27 · sessao 429e0eff8383 · RAIA-ESPURIAS · leitura · origem=Code
 
@@ -1617,231 +1665,4 @@ antivac()
 
 A validação anterior é histórica: outro ato entre ela e o silêncio não a invalida para essa contagem. A retirada de respostas que mantêm validação vale apenas para encontrar o último ato não-`R(mantem)`; os bigramas conservam essas respostas, conforme a distinção de `resposta_mantem_validacao` no modelo ([models.py:4189](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:4189)). O script sinaliza valores de ato desconhecidos sem imprimi-los; se existirem, o top 10 exibido cobre apenas pares de constantes conhecidas **[não verificado: script proposto]**.
 
-## 18/11 20:18 · sessao a31e6ebb15f5 · E4C-F6F7 · sonda · origem=Code
-
-A sequência considerada abaixo usa os atos reais até o instante da sonda, na ordem `ato_em, pk`, e exclui o ato compensador de ressuscitação como faz a carga da tarefa. O padrão exige `VALIDACAO` imediatamente seguida de `SILENCIO`, antes da cauda de respostas que mantêm a validação. [app/chamados/services/tarefa_do_dia.py:393](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/tarefa_do_dia.py:393)
-
-Em B, a lavra `'nao'` é o campo `veredito_lavrado` com valor `'nao'` e vigente segundo `esta_stale`; a carga usa `marcos_do_lote` para essa verificação. [app/chamados/services/tarefa_do_dia.py:410](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/tarefa_do_dia.py:410)
-
-Funções do sistema chamadas diretamente pelo script:
-
-- `DecisaoPergunta.es_da_ressuscitacao`: [app/chamados/models.py:4220](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:4220).
-- `DecisaoPergunta.leitura`: [app/chamados/models.py:4294](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/models.py:4294).
-- `marcos_do_lote` e `esta_stale`: [app/chamados/veredito_lavrado.py:151](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/veredito_lavrado.py:151), [app/chamados/veredito_lavrado.py:213](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/veredito_lavrado.py:213).
-- `tarefa_do_dia`: [app/chamados/services/tarefa_do_dia.py:800](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/tarefa_do_dia.py:800). Sua razão pode estar no dia ou em instâncias associadas à pergunta; o script distingue pergunta não exposta. [app/chamados/services/tarefa_do_dia.py:217](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/tarefa_do_dia.py:217), [app/chamados/services/tarefa_do_dia.py:341](/home/ronald/codex_ws/146323e2509a7be94e0861402b207c442694cd65/app/chamados/services/tarefa_do_dia.py:341)
-
-Os números de produção e a execução do script estão **[não verificado]**. `colN` é um apelido criado apenas na execução, compartilhado entre as duas listas; empresa é identificada por PK. A competência é rotulada pelo mês em que termina o intervalo de 21 a 20.
-
-```python
-from collections import Counter
-from django.db import connection
-from django.utils import timezone
-
-from chamados.models import DecisaoPergunta as D, PerguntaDisputa
-from chamados.services.tarefa_do_dia import tarefa_do_dia
-from chamados.veredito_lavrado import esta_stale, marcos_do_lote
-
-
-def sonda():
-    erros = Counter()
-    totais = Counter()
-    razoes_a = Counter()
-    grupos_b = Counter()
-    linhas_a = []
-    linhas_b = []
-    apelidos = {}
-
-    def erro(pk, etapa, exc):
-        erros[etapa] += 1
-        print("ERRO", "pk=%s" % pk, "etapa=%s" % etapa,
-              "tipo=%s" % type(exc).__name__)
-
-    def col_n(colaborador_id):
-        if colaborador_id not in apelidos:
-            apelidos[colaborador_id] = "col%s" % (len(apelidos) + 1)
-        return apelidos[colaborador_id]
-
-    def competencia_21_20(data):
-        if data is None:
-            return "data_evento_nula"
-        ano, mes = data.year, data.month
-        if data.day >= 21:
-            if mes == 12:
-                ano, mes = ano + 1, 1
-            else:
-                mes += 1
-        return "%04d-%02d" % (ano, mes)
-
-    try:
-        if getattr(connection, "schema_name", None) != "juliani":
-            raise RuntimeError("schema diferente de juliani")
-
-        agora = timezone.now()
-        universo = PerguntaDisputa.objects.count()
-        print("SCHEMA juliani")
-        print("AGORA", agora.isoformat())
-        print("UNIVERSO", universo)
-
-        perguntas = (
-            PerguntaDisputa.objects.select_related(
-                "colaborador",
-                "disputa__colaborador__empresa",
-                "disputa__chamado",
-                "celula",
-                "chamado_destino",
-            )
-            .prefetch_related("decisoes")
-            .order_by("pk")
-        )
-
-        for p in perguntas.iterator(chunk_size=500):
-            totais["examinadas"] += 1
-            try:
-                decisoes = [
-                    d for d in p.decisoes.all()
-                    if d.ato_em <= agora and not D.es_da_ressuscitacao(d)
-                ]
-                # A ordenação explícita coincide com a carga da tarefa.
-                decisoes.sort(key=lambda d: (d.ato_em, d.pk))
-
-                k = len(decisoes)
-                while (
-                    k > 0
-                    and decisoes[k - 1].ato == D.RESPOSTA
-                    and decisoes[k - 1].resposta_mantem_validacao
-                ):
-                    k -= 1
-
-                padrao_vs = (
-                    k >= 2
-                    and decisoes[k - 2].ato == D.VALIDACAO
-                    and decisoes[k - 1].ato == D.SILENCIO
-                )
-                if not padrao_vs:
-                    continue
-
-                tem_cauda = k < len(decisoes)
-                if tem_cauda:
-                    totais["A_padrao"] += 1
-                totais["B_candidatas_VS"] += 1
-            except Exception as exc:
-                erro(p.pk, "sequencia", exc)
-                continue
-
-            # A leitura é independente da chamada à tarefa e da lavra:
-            # uma falha em uma delas não esconde os demais resultados.
-            validada = None
-            try:
-                validada = D.leitura(p).validada_em is not None
-                if tem_cauda and validada:
-                    totais["A_leitura_validada"] += 1
-            except Exception as exc:
-                erro(p.pk, "leitura", exc)
-
-            if tem_cauda:
-                try:
-                    if p.data_evento is None:
-                        raise ValueError("data_evento nula")
-                    tarefa = tarefa_do_dia(p.colaborador, p.data_evento, agora)
-                    razao_dia = tarefa["razao"]
-                    razoes_pergunta = tuple(sorted(
-                        linha["razao"]
-                        for linha in tarefa["instancias"]
-                        if linha.get("pergunta_id") == p.pk
-                    ))
-                    if not razoes_pergunta:
-                        razoes_pergunta = ("pergunta_nao_exposta",)
-                    chave = (razao_dia, razoes_pergunta)
-                    razoes_a[chave] += 1
-                    if len(linhas_a) < 30:
-                        linhas_a.append(
-                            (p.pk, col_n(p.colaborador_id), p.data_evento,
-                             razao_dia, razoes_pergunta)
-                        )
-                except Exception as exc:
-                    erro(p.pk, "tarefa_do_dia", exc)
-                    razoes_a[("ERRO", ())] += 1
-                    if len(linhas_a) < 30:
-                        linhas_a.append(
-                            (p.pk, col_n(p.colaborador_id), p.data_evento,
-                             "ERRO", ())
-                        )
-
-            # B exige validação vigente pela leitura e lavra 'nao' vigente.
-            # Com leitura desconhecida, registra a falha e não classifica B.
-            if validada is True:
-                try:
-                    if p.veredito_lavrado != "nao":
-                        continue
-                    marcos = marcos_do_lote([p.colaborador_id], ate=agora)
-                    if esta_stale(p, marcos, agora):
-                        continue
-
-                    competencia = competencia_21_20(p.data_evento)
-                    empresa_pk = p.disputa.colaborador.empresa_id
-                    grupos_b[(competencia, empresa_pk)] += 1
-                    totais["B_lavra_nao_vigente"] += 1
-                    if len(linhas_b) < 30:
-                        linhas_b.append(
-                            (p.pk, col_n(p.colaborador_id), p.data_evento,
-                             competencia, empresa_pk)
-                        )
-                except Exception as exc:
-                    erro(p.pk, "lavra_B", exc)
-
-        print("A_POR_RAZAO")
-        for (razao_dia, razoes_pergunta), quantidade in sorted(
-            razoes_a.items(), key=lambda item: repr(item[0])
-        ):
-            print(
-                "razao_dia=%s" % (razao_dia or "<vazia>"),
-                "razoes_pergunta=%s" % (",".join(razoes_pergunta) or "<nenhuma>"),
-                "quantidade=%s" % quantidade,
-            )
-
-        print("A_LISTA_ATE_30")
-        for pk, col, data, razao_dia, razoes_pergunta in linhas_a:
-            print(
-                "pk=%s" % pk, col, "data_evento=%s" % data,
-                "razao_dia=%s" % (razao_dia or "<vazia>"),
-                "razoes_pergunta=%s" % (",".join(razoes_pergunta) or "<nenhuma>"),
-            )
-
-        print("B_POR_COMPETENCIA_EMPRESA_PK")
-        for (competencia, empresa_pk), quantidade in sorted(
-            grupos_b.items(), key=lambda item: (item[0][0], str(item[0][1]))
-        ):
-            print(
-                "competencia=%s" % competencia,
-                "empresa_pk=%s" % empresa_pk,
-                "quantidade=%s" % quantidade,
-            )
-
-        print("B_LISTA_ATE_30")
-        for pk, col, data, competencia, empresa_pk in linhas_b:
-            print(
-                "pk=%s" % pk, col, "data_evento=%s" % data,
-                "competencia=%s" % competencia, "empresa_pk=%s" % empresa_pk,
-            )
-
-    except Exception as exc:
-        erro("GLOBAL", "execucao", exc)
-    finally:
-        print(
-            "TOTAIS",
-            "universo=%s" % locals().get("universo", "ERRO"),
-            "examinadas=%s" % totais["examinadas"],
-            "A_padrao=%s" % totais["A_padrao"],
-            "A_leitura_validada=%s" % totais["A_leitura_validada"],
-            "B_candidatas_VS=%s" % totais["B_candidatas_VS"],
-            "B_lavra_nao_vigente=%s" % totais["B_lavra_nao_vigente"],
-            "erros=%s" % sum(erros.values()),
-            "erros_por_etapa=%s" % dict(erros),
-        )
-        print("FIM_SONDA_LEI3")
-
-
-sonda()
-```
-
-_7160 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7161 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
