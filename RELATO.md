@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: espera_pista.sh | pid=1644923
+ESPERANDO: ssh | pid=1658957
 
 RESPONDIDA por CENSO APROVADO DST-L2-JZ1 01:37 -- era: PAREI: censo-DST-L2-JZ1 | espera Codex
 PERGUNTA DE DESENHO: DST-L2-JZ1 [RESPONDIDA por RESPOSTA-DESENHO-DST-L2-JZ1-C2-1911-0205 02:05: (1) lote com UMA consulta, teto +1 nas 2 chaves com fecho; (2)(b) estreita: ocorrencia pela porta do Fix A so quando rejeitou; REVISAO-DO-AVAL Codex AVAL-DEVOLVIDO (1),(3) lei 1 -> triado: D3xR7 DECIDIDO PELO AVAL 02:05 R7 + reconciliador.py:439-457 | contestavel; construtor c3 opus vaga 2 rodando] c2 TETOS -- `rejeitar_justificativas_do_chamado` (D3) faz 1 SELECT ponto_justificativa por chamado fechado (0 linhas, 0 UPDATE no cenario); app/ponto/tests/test_selo_chokepoint_escrita.py: 'furo vivo, 1 chamado fecha' 224 -> 225, '3 chamados fecham' 288 -> 291, as outras 10 chaves iguais (logs/dst-l2-jz1/c2/tetos_antes.txt x tetos_depois.txt, SQL em tetos_antes_bruto.log x green.log). Opcoes: (a) teto sobe +1 por chamado fechado, por corte; (b) outro desenho (ex.: a consulta so roda quando ha pendente ligada -- exige um 2o leitor do mesmo predicado, contra D3). Teto NAO mexido (R7). Obra PARADA; vaga 2 livre.

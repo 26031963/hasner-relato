@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 03:18:46.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (20.3 MB). Acoes na janela: **642**.
+**Medido em 19/11/2026 03:23:54.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (21.2 MB). Acoes na janela: **650**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:23:53 | Bash | Check pista job, waiter, RELATO top, F3 status | `cd /home/ronald/saas-hasner; ssh pista estado 2>&1 \| tail -5; ps -p 1644923 -o pid,etime,cmd; sed -n 1,12p app/docs/RELATO.md \| cut -c1-250; ls logs/E4C-F3-LAVRA-FOTO/ ; date '+%H:%M'` |
+| 03:23:42 | Bash | Check whether julgamento runs inside atomic | `cd /home/ronald/wt-dst-l2-jz1-013610/app; sed -n 958,1000p ponto/services/cartorio.py \| /bin/grep -n 'atomic\\|transaction\\|em_julgamento' ; sed -n 2047,2100p ponto/services/cartorio.py \| /bin/grep -n 'atomic\\|transaction'; /bin/grep -rn 'julgar_colab(\\|julgar_celula(' --include=*.py . \| /bin/grep -v tests \| head -20; sed -n 150,175p chamados/services/fecho_runtime.py` |
+| 03:23:28 | Bash | Check host seals for fio_estado | `cd /home/ronald/saas-hasner; ls bin/tests \| /bin/grep -i 'fio_estado\\|estado' \| head; /bin/grep -ln 'fio_estado' bin/tests/*.sh \| head` |
+| 03:23:09 | Bash | Read houve_fato_novo and its reader | `cd /home/ronald/wt-dst-l2-jz1-013610/app; sed -n 370,412p ponto/services/cartorio.py; sed -n 1375,1400p chamados/models.py; sed -n 130,160p ponto/tests/test_dst_l2_jz1_c3_lote_portao.py` |
+| 03:23:01 | Bash | Check transaction context of cartorio fecho | `cd /home/ronald/wt-dst-l2-jz1-013610/app; /bin/grep -n 'atomic' ponto/services/cartorio.py \| head -20; sed -n 1020,1045p ponto/services/cartorio.py; /bin/grep -n 'def julgar_celula\\|def _julgar_colab_corpo\\|def julgar_colab\\|def julgar' ponto/services/cartorio.py` |
+| 03:22:55 | Bash | Read aval 02:05 and the lote writer | `cd /home/ronald/saas-hasner; cat logs/AVAIS-1515/resposta_desenho_dst_l2_jz1_c2_1911_0205.txt; W=/home/ronald/wt-dst-l2-jz1-013610/app; sed -n 255,340p $W/ponto/services/justificativa.py` |
+| 03:22:44 | Bash | Read DST-L2 Codex verifier answer | `cd /home/ronald/saas-hasner; cat logs/dst-l2-jz1/c4/verif/r.txt` |
+| 03:22:42 | Bash | Check Codex jobs progress | `cd /home/ronald/saas-hasner; date +%H:%M; for r in logs/ESCALA-NAO-DESCREVE/c7/noturno/r.txt logs/dst-l2-jz1/c4/verif/r.txt; do echo "== $r"; ls -la $r 2>/dev/null; tail -3 ${r%r.txt}wrapper.out; done; pgrep -af codex_pergunta.sh \| /bin/grep -v pgrep \| wc -l` |
 | 03:15:22 | Bash | Start pista waiter and update RELATO | `cd /home/ronald/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner/8b8d87c5-d111-4931-9b60-72a70772f0de/scratchpad; setsid nohup bash $S/espera_pista.sh 1119031514_5e79a6e2 > logs/dst-l2-jz1/c4/espera_pista.out 2>&1 < /dev/null & sleep 2; P=$(pgrep -f 'espera_pista.sh 1119031514' \| head -1); echo pid=$P; sed -i "3s/^ESPERANDO: .*/ESPERANDO: espera_pista.sh \| pid=$P/" app/docs/RELATO.md pyt ...` |
 | 03:15:12 | Bash | Submit DST-L2 c4 full suite to pista 2 | `cd /home/ronald/saas-hasner; timeout 60 ssh -o BatchMode=yes pista pede 5e79a6e25 2>&1 \| tail -3` |
 | 03:15:09 | Bash | Locate pista submit tooling | `cd /home/ronald/saas-hasner; ls bin \| /bin/grep -i pista; /bin/grep -n 'pista' app/docs/RELATO.md \| /bin/grep -i 'pede\\|bin/' \| head -5 \| cut -c1-300` |
