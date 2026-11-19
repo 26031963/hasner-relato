@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 08:11** · publicado em **19/11/2026 08:13** (UTC-3)
+> Ultima resposta processada: **19/11/2026 08:18** · publicado em **19/11/2026 08:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 08:18 · sessao 4ac148fa63de · TREM-DE-POUSO-1911 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO:** há defeitos demonstrados nas perguntas 1, 2 e 3. O principal é que o aval manda pousar os vagões 1 e 2 separadamente, mas as árvores intermediárias não são a árvore final certificada; além disso, não há veredito de opus final aprovado da ESPURIA-TELA entre os anexos fornecidos. A pergunta 4 permanece parcialmente [não verificado]. (`aval_literal.txt`, trechos “VAGAO 1” e “PROIBIDO”; `comboio_c_merges.txt`; `relato_trechos.txt:249`.)
+
+A cópia disponibilizada contém os arquivos, mas não contém objetos Git acessíveis: `git` informou “not a git repository”. Assim, o diff de cada vagão contra `3f666ad84`, o `HEAD` do main atual e a comparação byte a byte com as cópias estão **[não verificado]**. O `diffstat_producao.txt` é uma lista conjunta de 22 arquivos, com caminhos abreviados em algumas entradas; ele não atribui os arquivos a cada vagão. (`diffstat_producao.txt`; [não verificado].)
+
+### Vagão 1 — F6F7
+
+1. **PROCEDE.** A suite citada é de `84786d946`: `Ran 16932`, `rc=0`. Existe opus final 4 aprovado, mas sobre `a555d027b`; as linhas completas da LEI-AKITA “já aprovadas” não estão demonstradas no veredito fornecido. O primeiro merge do comboio tem árvore `232923…`, diferente da árvore final `9dbdb9…`: o deploy individual do primeiro vagão não pousaria a árvore final certificada. (`comboio_c_espera.out`; `veredito_f6f7_opus4.md`, cabeçalho e “Não verificado”; `comboio_c_merges.txt`.)
+
+2. **NÃO PROCEDE**, quanto à cláusula de esperar a simulação: o aval literal diz expressamente que a substitui nos avais nomeados. Outra colisão vigente para este vagão está [não verificado]. (`aval_literal.txt`, primeiro parágrafo; `relato_trechos.txt:89`.)
+
+3. **PROCEDE.** O literal exige deploy individual e proíbe pousar árvore diferente da certificada, embora a árvore após o primeiro merge seja diferente da final do comboio. Também exige `cmp` arquivo a arquivo contra “a cópia” sem identificar, para esse passo, quais arquivos e qual cópia intermediária servem de referência; o resultado concreto de qualquer `cmp` está [não verificado]. (`aval_literal.txt`, trechos “VAGAO 1” e “PROIBIDO”; `comboio_c_merges.txt`.) [nao verificado]
+
+4. **NÃO PROCEDE quanto a um toque fora do declarado demonstrado; alcance completo [não verificado].** O relato registra acesso **pelo leitor** à retenção, ainda que não por mudança de arquivo em `folha/`; isso não prova alteração de gravado exportado. A medição anterior cita quatro ocorrências do argumento já existente `exportada=`. A lista exata de produção deste vagão contra `3f666ad84` está [não verificado]. (`relato_trechos.txt:63`, `:166`, `:201`, `:206`; [tarefa_do_dia.py:35](/home/ronald/codex_ws/84786d946bace55e7f61e044239ac0fa199b8a86/app/chamados/services/tarefa_do_dia.py:35).)
+
+### Vagão 2 — ESPURIA-TELA c10
+
+1. **PROCEDE.** Não existe, entre os anexos fornecidos, veredito de opus final **APROVADO** para este vagão. O relato diz que a suite e o opus final ainda seriam feitos sobre a árvore de pouso; a suite verde do comboio não substitui, por si, esse veredito. A árvore intermediária após este merge também difere da árvore final certificada. (`relato_trechos.txt:249`; `comboio_c_espera.out`; `comboio_c_merges.txt`.) [nao verificado]
+
+2. **NÃO PROCEDE quanto à colisão demonstrada.** A substituição da espera da simulação é expressa no novo aval; os anexos fornecidos não demonstram outra colisão específica para este vagão. Eventual conteúdo não transcrito dos avais anteriores está [não verificado]. (`aval_literal.txt`, primeiro parágrafo; `relato_trechos.txt:249`.)
+
+3. **PROCEDE.** O segundo deploy individual tem o mesmo conflito literal: a árvore `caf200…` não é a árvore final certificada `9dbdb9…`, apesar da proibição de pousar árvore diferente da certificada. A referência e o resultado do `cmp` por arquivo estão [não verificado]. (`aval_literal.txt`, trechos “VAGAO 2” e “PROIBIDO”; `comboio_c_merges.txt`.) [nao verificado]
+
+4. **NÃO PROCEDE quanto a um toque fora do declarado demonstrado; alcance completo [não verificado].** A medição da ponta anterior registra mudanças em `ponto/turnos.py`, `ponto/services/espelho.py` e `escala/folgas.py`, e nenhuma ocorrência nas categorias pesquisadas de `folha/`, export, retenção ou `DiaPago`. Ela não é o diff exato de c10 contra a base. A lista completa de produção deste vagão está [não verificado]. (`relato_trechos.txt:39`, `:63`.)
+
+### Vagão 3 — F9
+
+1. **NÃO PROCEDE quanto à suite e à existência de opus aprovado.** A suite do comboio corresponde a `84786d946`, e há opus final 2 aprovado para F9 em `ac955a260`. As linhas completas da LEI-AKITA por obra, ditas já aprovadas, estão [não verificado] no material fornecido. (`comboio_c_espera.out`; `veredito_f9_opus2.md`, cabeçalho; `aval_literal.txt`, trecho “LEI-AKITA”.)
+
+2. **NÃO PROCEDE**, quanto à espera da simulação e à ordem: o novo aval substitui expressamente a espera e preserva F6F7 antes de F9. Outra colisão vigente específica está [não verificado]. (`aval_literal.txt`, primeiro parágrafo e trecho “VAGAO 1”; `relato_trechos.txt:97`.)
+
+3. **NÃO PROCEDE quanto a um defeito adicional demonstrado.** O terceiro merge produz a árvore final certificada; a conformidade efetiva dos arquivos, do `cmp` e da linha LEI-AKITA do commit de pouso permanece [não verificado]. (`comboio_c_merges.txt`; `aval_literal.txt`, trecho “VAGAO 1”.) [nao verificado]
+
+4. **NÃO PROCEDE quanto a um toque fora do declarado demonstrado; alcance completo [não verificado].** O relato da medição anterior não encontrou alterações nas categorias pesquisadas para F9; o próprio veredito limita a afirmação de “intocados” ao delta `d3e9544fd..ac955a260`, não ao diff inteiro contra o main. A lista exata de produção do vagão contra `3f666ad84` está [não verificado]. (`relato_trechos.txt:63`; `veredito_f9_opus2.md`, primeiro parágrafo.)
+
+### Vagão 4 — ESCALA c7
+
+1. **NÃO PROCEDE quanto à existência de opus.** Há opus final 3 aprovado para a obra e opus final **do delta** aprovado para c7; o segundo não é licença de pouso e traz condições. Sua suite própria é `Ran 16952`, `rc=0`, distinta da suite do comboio C. (`relato_trechos.txt:100`; `veredito_escala_c7_delta.md`, cabeçalho e itens 3, 4 e 6.) [nao verificado]
+
+2. **PROCEDE.** O complemento citado no relato exige smoke de clique **antes** do pouso da ESCALA, enquanto o novo aval coloca os smokes de clique dele ao fim do vagão 4. A substituição expressa no novo aval trata da cláusula de simulação; não menciona revogação desse requisito de smoke anterior. (`relato_trechos.txt:274`; `aval_literal.txt`, primeiro parágrafo e trecho “SMOKE”.) [nao verificado]
+
+3. **PROCEDE.** O veredito do delta exige a linha LEI-AKITA específica do instrumento e citar **L-042 no commit**; o aval resume as condições a linha por obra, correção da premissa e anotação de `col898`, sem mencionar a citação de L-042. A premissa “nada é escrito” consta de fato na cópia; o veredito afirma que ficou falsa na árvore c7. A medida de `col898` foi anotada no próprio veredito, mas a correção do texto e o conteúdo do futuro commit estão [não verificado]. (`veredito_escala_c7_delta.md`, itens 3, 5 e 6 e “MEDIDA PRE-POUSO”; [detector_proposta.py:25](/home/ronald/codex_ws/84786d946bace55e7f61e044239ac0fa199b8a86/app/escala/detector_proposta.py:25); [test_contract_no_batida_date.py:25](/home/ronald/codex_ws/84786d946bace55e7f61e044239ac0fa199b8a86/app/ponto/tests/test_contract_no_batida_date.py:25).)
+
+4. **NÃO PROCEDE quanto ao delta c7 demonstrado; obra inteira [não verificado].** O veredito diz que o diff `68d17aa7d..2fd98211a` toca só teste. Isso não identifica todos os arquivos de produção da ESCALA contra `3f666ad84`, nem prova o alcance integral da obra em dinheiro, exportados ou `!`. (`veredito_escala_c7_delta.md`, item 1; [não verificado].)
+
+### Vagão 5 — E4C-F3
+
+1. **NÃO PROCEDE quanto à existência de opus aprovado.** O relato registra opus final aprovado para `88f67e29f`, com a LEI-AKITA do pouso entre os itens a refazer. A certificação do comboio D é uma condição futura no aval; sua existência e resultado estão [não verificado]. (`relato_trechos.txt:25`; `aval_literal.txt`, trecho “VAGAO 5”.)
+
+2. **NÃO PROCEDE quanto à colisão demonstrada.** O novo aval substitui expressamente a espera da simulação; outra colisão vigente específica de F3 está [não verificado]. (`aval_literal.txt`, primeiro parágrafo; `relato_trechos.txt:25`.)
+
+3. **PROCEDE.** A formulação geral de LEI-AKITA por obra remete a “linhas já aprovadas nos opus finais”, mas o relato do opus de F3 registra especificamente **“LEI-AKITA do pouso a refazer”**. O texto e a aprovação de uma linha refeita estão [não verificado]. (`aval_literal.txt`, trecho “LEI-AKITA”; `relato_trechos.txt:25`.) [nao verificado]
+
+4. **NÃO PROCEDE quanto a um toque fora do declarado demonstrado; alcance completo [não verificado].** O despacho de construção de F3 autorizava escrever só o teste, e o corte deixa `carimbar_resposta_pela_trilha` fora da fatia; isso não substitui o diff exato solicitado contra `3f666ad84`. A lista de arquivos de produção desse diff e eventuais efeitos em gravado exportado, dinheiro ou `!` estão [não verificado]. (`relato_trechos.txt:43`, `:227`.)
 
 ## 19/11 08:11 · sessao d110a5090543 · - · - · origem=Ronald (tmux)
 
@@ -1024,291 +1080,4 @@ Achados enviados ao agente principal, com rotas, serviços, permissões, filtros
 - **Tarefa do dia:** `tarefa_do_dia` é um serviço que recebe colaborador, dia do turno e instante; não comprovei uma rota de tela correspondente. [app/chamados/services/tarefa_do_dia.py:738] A equivalência com “Meu Atendimento” é [não verificado]; essa rota chama `montar_chamados_fio` e pode registrar auditoria no GET. [app/chamados/urls.py:16] [app/chamados/views.py:566] [app/chamados/views.py:583]
 - **Consulta do app:** `/api/me/` chama `api_me`, exige autenticação e usa `request.user.colaborador`. [app/config/urls.py:37] [app/api/urls.py:64] [app/api/views.py:282] Entre os serviços chamados estão `turno_aberto_de`, `proximo_tipo_de` e `projecao_do_app`. [app/api/views.py:306] [app/api/views.py:308] [app/api/views.py:315] A resposta trata de um colaborador e contém seu nome, por isso não deve ser impressa pela sonda. [app/api/views.py:336]
 
-## 19/11 02:18 · sessao e37c8a1bfe88 · ESPELHO-VERDADE · sonda · origem=Code
-
-A lista nominal por PK e os totais **não estão no dado raspado**; são **[não verificado]**. O anexo contém o molde e uma referência a outra sonda, mas não contém a saída desta apuração. O script abaixo é entregue como texto e não foi executado. [não verificado]
-
-**A) Caminho até o dono**
-
-- O comando percorre empresas ativas e colaboradores com `FechamentoMensal` na competência pedida; `--so-txt` é um filtro opcional, que a sonda abaixo não aplica. A janela é calculada por empresa. [app/ponto/management/commands/e6_oraculo.py:303](app/ponto/management/commands/e6_oraculo.py#L303)
-- Para cada colaborador, obtém o espelho e constrói `InsumosDoDono`. Percorre os dias da janela e exclui os sem linha no espelho, isentos ou com ausência, sem minutos lavrados, com zero em ambos e aqueles cuja diferença é a janela declarada. Os minutos do espelho vêm primeiro de `minutos_realizados`, depois de `pago_h`; se ambos faltam, não há comparação. [app/ponto/management/commands/e6_oraculo.py:314](app/ponto/management/commands/e6_oraculo.py#L314), [app/ponto/management/commands/e6_oraculo.py:263](app/ponto/management/commands/e6_oraculo.py#L263)
-- Entre os dias comparados, só os com diferença absoluta **maior que 10 minutos** chegam a `_ins.dono(dia)`. Assim, “universo avaliado por dono” abaixo significa dias divergentes que chegaram ao juiz, não todos os dias comparados. [app/ponto/management/commands/e6_oraculo.py:362](app/ponto/management/commands/e6_oraculo.py#L362)
-- `horas_do_dia` vem de `minutos_do_oraculo` sobre timestamps locais de `batidas_apuraveis`, numa janela de 12 horas antes do início até 14 horas depois do dia seguinte ao fim; `dono()` passa as horas atribuídas à data. `em_cadastro_x_realidade` é a pertinência da data ao conjunto extraído de `dias_cadastro_x_realidade` do resultado do espelho. [app/ponto/management/commands/e6_oraculo.py:149](app/ponto/management/commands/e6_oraculo.py#L149), [app/ponto/management/commands/e6_oraculo.py:162](app/ponto/management/commands/e6_oraculo.py#L162), [app/ponto/management/commands/e6_oraculo.py:182](app/ponto/management/commands/e6_oraculo.py#L182)
-- As três flags de cadastro vêm de `cadastro_do_dia_carregado`: ele consulta o vínculo do dia e, quando não existe, também a célula e a data de demissão; com vínculo, consulta `defeito_folga_nao_definida`. [app/ponto/supra_juiz.py:179](app/ponto/supra_juiz.py#L179), [app/ponto/supra_juiz.py:194](app/ponto/supra_juiz.py#L194)
-- `batida_fora_de_turno` usa `realizado_do_dia` e exige turno aberto com entrada solta presente entre as batidas apuráveis; os turnos são carregados para a janela ampliada em um dia de cada lado. `fase_deslocada` vem da pertinência da data aos dias retornados por `dias_de_fase_as_of`. [app/ponto/management/commands/e6_oraculo.py:156](app/ponto/management/commands/e6_oraculo.py#L156), [app/ponto/management/commands/e6_oraculo.py:174](app/ponto/management/commands/e6_oraculo.py#L174), [app/ponto/management/commands/e6_oraculo.py:198](app/ponto/management/commands/e6_oraculo.py#L198)
-- Há **uma única cláusula executável que devolve ESTRUTURA**: o lado falso do retorno condicional em [app/ponto/management/commands/e6_oraculo.py:110](app/ponto/management/commands/e6_oraculo.py#L110). Para alcançá-la, nenhum dos retornos anteriores de cadastro, batida ou fase pode ter ocorrido, e `em_cadastro_x_realidade` deve ser falso. [app/ponto/management/commands/e6_oraculo.py:98](app/ponto/management/commands/e6_oraculo.py#L98)
-
-**B) Sonda**
-
-O juiz devolve só o dono. A sonda registra, com `sys.settrace`, a linha de retorno efetivamente executada pela função real; para `ESTRUTURA`, exige a linha 110 verificada nesta cópia e falha se o código mudou. Não reconstrói as condições do juiz. [app/ponto/management/commands/e6_oraculo.py:98](app/ponto/management/commands/e6_oraculo.py#L98)
-
-Para cada empresa, usa a janela que contém a data do ato como corrente e exige que ela não esteja trancada. Define “última fechada” como a competência anterior mais recente com tranca viva; a autoridade do código define fechada como trancada e usa `reaberto_em` para identificar a tranca viva. Se faltar uma dessas condições, a sonda falha e não apresenta contagens parciais. [app/ponto/janelas.py:60](app/ponto/janelas.py#L60), [app/ponto/services/fechamento.py:1464](app/ponto/services/fechamento.py#L1464)
-
-Executar no mesmo envelope Django de leitura do anexo, com a árvore montada em leitura e o processo limitado ao cpuset de teste; a sonda também verifica sua afinidade. A fonte de recursos declara por padrão CPUs 4–7 para teste. [bin/sombra.sh:182](bin/sombra.sh#L182), [bin/recursos.sh:37](bin/recursos.sh#L37)
-
-```python
-# Sonda como texto: executar no envelope Django da sombra, tenant juliani.
-# Executar Python com -B e processo no cpuset de teste. [nao verificado]
-# Não imprime nome nem CPF. Nenhum arquivo é criado por este código.
-
-import sys
-sys.dont_write_bytecode = True
-
-import collections
-import datetime
-import os
-
-from django.conf import settings
-from django.db import connection, transaction
-from django.utils import timezone
-
-from colaboradores.models import Empresa, Colaborador
-from ponto.models import FechamentoMensal, PeriodoFechado
-from ponto import janelas
-from ponto.services.espelho import espelho_do_colab
-from ponto.services.fechamento import competencia_trancada
-from ponto.management.commands import e6_oraculo as e6
-
-
-DONOS = ("ESTRUTURA", "CADASTRO", "BATIDA")
-ARQUIVO_JUIZ = "app/ponto/management/commands/e6_oraculo.py"
-LINHA_ESTRUTURA = 110
-
-
-def guarda_sombra():
-    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
-        raise RuntimeError("settings")
-
-    # TESTE_CPUSET pode ser fornecido pelo envelope a partir de recursos.sh.
-    especificacao = os.environ.get("TESTE_CPUSET", "4-7")
-    permitidas = set()
-    for parte in especificacao.split(","):
-        limites = parte.strip().split("-")
-        if len(limites) == 1:
-            permitidas.add(int(limites[0]))
-        elif len(limites) == 2:
-            inicio, fim = map(int, limites)
-            if inicio > fim:
-                raise RuntimeError("cpuset_invalido")
-            permitidas.update(range(inicio, fim + 1))
-        else:
-            raise RuntimeError("cpuset_invalido")
-    afinidade = os.sched_getaffinity(0)
-    if not afinidade or not afinidade.issubset(permitidas):
-        raise RuntimeError("cpuset")
-
-    banco = settings.DATABASES["default"]
-    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
-        raise RuntimeError("configuracao")
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY"
-        )
-        cursor.execute("SELECT current_database(), current_schema()")
-        banco_real, schema_real = cursor.fetchone()
-    if banco_real != "sombra" or schema_real != "juliani":
-        raise RuntimeError("conexao")
-
-
-def dono_e_linha(insumos, dia):
-    # Observa o retorno da função real chamada por InsumosDoDono.dono().
-    if sys.gettrace() is not None:
-        raise RuntimeError("trace_preexistente")
-
-    retornos = []
-
-    def observar(frame, evento, argumento):
-        if frame.f_code is e6.dono_da_divergencia.__code__:
-            if evento == "return":
-                retornos.append((frame.f_lineno, argumento))
-            return observar
-        return observar
-
-    try:
-        sys.settrace(observar)
-        dono = insumos.dono(dia)
-    finally:
-        sys.settrace(None)
-
-    # Com o espelho já fornecido, dono() deve chamar o juiz uma vez.
-    if len(retornos) != 1 or retornos[0][1] != dono:
-        raise RuntimeError("retorno_do_juiz")
-    if dono not in DONOS:
-        raise RuntimeError("dono_desconhecido")
-
-    linha = retornos[0][0]
-    if dono == "ESTRUTURA" and linha != LINHA_ESTRUTURA:
-        raise RuntimeError("clausula_mudou")
-    return dono, linha
-
-
-def main():
-    etapa = "GUARDA"
-    try:
-        linhas = []
-        contagem_donos = collections.Counter()
-        por_clausula = collections.Counter()
-        por_empresa = collections.Counter()
-        universo = 0
-
-        with transaction.atomic():
-            guarda_sombra()
-            agora = timezone.now()
-            hoje = timezone.localtime(agora).date()
-
-            etapa = "COMPETENCIAS"
-            empresas = list(Empresa.objects.filter(ativa=True).order_by("pk"))
-
-            for empresa in empresas:
-                ini_atual, fim_atual = janelas.janela_atual(hoje, empresa)
-                atual = (fim_atual.year, fim_atual.month)
-
-                if competencia_trancada(empresa.pk, atual[1], atual[0]):
-                    raise RuntimeError("corrente_trancada")
-
-                # A ordem ano/mês identifica a competência mais recente,
-                # anterior à corrente, cuja tranca não foi reaberta.
-                trancas = PeriodoFechado.objects.filter(
-                    empresa=empresa, reaberto_em__isnull=True
-                ).order_by("-ano", "-mes")
-                fechada = next(
-                    (
-                        (p.ano, p.mes)
-                        for p in trancas
-                        if (p.ano, p.mes) < atual
-                    ),
-                    None,
-                )
-                if fechada is None:
-                    raise RuntimeError("sem_fechada_anterior")
-
-                for tipo, (ano, mes) in (
-                    ("corrente", atual),
-                    ("ultima_fechada", fechada),
-                ):
-                    etapa = "JANELA"
-                    ini, fim = janelas.janela_fechamento(mes, ano, empresa)
-                    competencia = "%04d-%02d" % (ano, mes)
-                    linhas.append(
-                        "ESCOPO empresa=%s tipo=%s competencia=%s inicio=%s fim=%s"
-                        % (empresa.pk, tipo, competencia, ini, fim)
-                    )
-
-                    ids = FechamentoMensal.objects.filter(
-                        mes=mes, ano=ano, colaborador__empresa=empresa
-                    ).values_list("colaborador_id", flat=True)
-
-                    colaboradores = Colaborador.objects.filter(
-                        pk__in=ids
-                    ).order_by("pk")
-
-                    for colab in colaboradores:
-                        etapa = "ESPELHO"
-                        espelho = espelho_do_colab(
-                            colab, hoje, ini, fim, agora=agora
-                        )
-                        dias_espelho = {
-                            str(item.get("data"))[:10]: item
-                            for item in (espelho.get("dias") or [])
-                        }
-
-                        etapa = "INSUMOS"
-                        insumos = e6.InsumosDoDono(
-                            colab, ini, fim, hoje,
-                            espelho=espelho, agora=agora
-                        )
-                        minutos = insumos.oraculo.minutos
-
-                        dia = ini
-                        while dia <= fim:
-                            chave = str(dia)
-                            registro = dias_espelho.get(chave)
-
-                            if registro is not None:
-                                if not (
-                                    registro.get("isencao")
-                                    or registro.get("ausencia") is not None
-                                ):
-                                    m_esp, _ = e6.minutos_do_espelho(registro)
-                                    if m_esp is not None:
-                                        m_e6 = minutos.get(chave, 0.0)
-                                        if not (m_esp == 0 and m_e6 == 0):
-                                            diferenca = m_e6 - m_esp
-                                            if not e6.diferenca_e_a_janela_declarada(
-                                                diferenca, registro
-                                            ):
-                                                if abs(diferenca) > 10:
-                                                    etapa = "DONO"
-                                                    dono, linha = dono_e_linha(
-                                                        insumos, dia
-                                                    )
-                                                    universo += 1
-                                                    contagem_donos[dono] += 1
-
-                                                    if dono == "ESTRUTURA":
-                                                        clausula = "%s:%d" % (
-                                                            ARQUIVO_JUIZ, linha
-                                                        )
-                                                        por_clausula[clausula] += 1
-                                                        por_empresa[empresa.pk] += 1
-                                                        linhas.append(
-                                                            "ESTRUTURA %s colab_pk=%s "
-                                                            "empresa=%s dia=%s clausula=%s"
-                                                            % (
-                                                                competencia,
-                                                                colab.pk,
-                                                                empresa.pk,
-                                                                chave,
-                                                                clausula,
-                                                            )
-                                                        )
-                            dia += datetime.timedelta(days=1)
-
-            etapa = "CONFERENCIA"
-            contador = sum(contagem_donos[dono] for dono in DONOS)
-            if contador != universo:
-                raise RuntimeError("soma_donos")
-
-            for clausula, quantidade in sorted(por_clausula.items()):
-                linhas.append(
-                    "RESUMO_CLAUSULA clausula=%s total=%d"
-                    % (clausula, quantidade)
-                )
-            for empresa in empresas:
-                linhas.append(
-                    "RESUMO_EMPRESA empresa=%s estrutura=%d"
-                    % (empresa.pk, por_empresa[empresa.pk])
-                )
-            for dono in DONOS:
-                linhas.append(
-                    "RESUMO_DONO dono=%s total=%d"
-                    % (dono, contagem_donos[dono])
-                )
-            linhas.append(
-                "CONFERENCIA contador=%d universo_avaliado=%d "
-                "contador==universo=%s"
-                % (contador, universo, "s" if contador == universo else "n")
-            )
-
-        for linha in linhas:
-            print(linha)
-        print("ERROS=0")
-        print("FIM_SONDA_EV_V1")
-        return 0
-
-    except Exception:
-        print("ERRO etapa=%s" % etapa)
-        print("ERROS=1")
-        print("FIM_SONDA_EV_V1")
-        return 1
-
-
-sys.exit(main())
-```
-
-A execução, a disponibilidade das duas competências para cada empresa e a saída sem efeitos indiretos das funções chamadas permanecem **[não verificado]**. A transação `READ ONLY` faz a execução falhar caso uma dessas funções tente escrever no banco; os demais efeitos indiretos não foram comprovados. [não verificado]
-
-perguntas de lei: 0
-
-_7275 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7276 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
