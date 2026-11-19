@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 20:26:24.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (23.3 MB). Acoes na janela: **651**.
+**Medido em 19/11/2026 20:31:38.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (24.2 MB). Acoes na janela: **662**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:29:43 | Bash | Wait for compl and per-day sonda | `cd /home/ronald/saas-hasner; until [ -e logs/CADEIA-20-PASSO-1/v3/medidas/FIM4 ]; do /usr/bin/sleep 60; done; cat logs/CADEIA-20-PASSO-1/v3/medidas/estado.txt \| tail -8` |
+| 20:29:42 | Bash | Update ESPERANDO line | `cd /home/ronald/saas-hasner; sed -i '1s/.*/ESPERANDO: rodar_dia.sh \| pid=3837912/' app/docs/RELATO.md; head -1 app/docs/RELATO.md` |
+| 20:29:38 | Bash | Record Codex causes in RELATO | `cd /home/ronald/saas-hasner; ps -o pid,cmd -p 3837904,3837912; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read().split('\n') i=[k for k,l in enumerate(t) if l.startswith('DESPACHO CADEIA-20-PASSO-1 medidas v3')][0] t[i]+=(' \| CAUSA Codex 20:27 (v3/desvio/r.txt, conferida leitor_celula.py:193-223, pdf_espelho.py:595-602, cartorio.py:962): ' '(1) 2026-09: o PDF trocou a FONTE (pai remontav ...` |
+| 20:29:25 | Bash | Write per-day sonda and chain after compl | `cd /home/ronald/saas-hasner; D=logs/CADEIA-20-PASSO-1/v3/medidas; python3 - <<'EOF' import re D='logs/CADEIA-20-PASSO-1/v3/medidas' s=open(D+'/cartao_diff.txt').read() pares=sorted({(int(a),b) for a,b in re.findall(r'colab=(\d+) comp=(\S+)',s)}) print(len(pares)) open(D+'/pares_diff.txt','w').write(repr(pares)) EOF cat > logs/sombra/cadeia20_v3_dia.py <<'EOF' # CADEIA-20-PASSO-1 volta 3 -- CAUSA p ...` |
+| 20:29:02 | Bash | Locate previsto computation | `cd /home/ronald/wt-codex-cadeia-20-passo-1-112113/app; sed -n 365,385p relatorios/pdf_espelho.py; sed -n 455,470p relatorios/pdf_espelho.py; grep -n "def minutos_previstos_do_dia\\|def previstas_do_periodo\\|def _folha_manda" -r relatorios ponto escala \| head` |
+| 20:28:58 | Bash | Inspect cartao_diff format | `cd /home/ronald/saas-hasner; D=logs/CADEIA-20-PASSO-1/v3/medidas; grep -E '^CARTAO' $D/cartao_diff.txt \| head -3; head -5 $D/cartao_diff.txt; awk '{print $2,$3}' $D/cartao_diff.txt \| sort -u \| head -100 \| tr '\n' ';' \| cut -c1-1500` |
+| 20:28:48 | Bash | Read compl sonda | `cd /home/ronald/saas-hasner; head -40 logs/sombra/cadeia20_v3_compl.py; grep -n "def \\|print" logs/sombra/cadeia20_v3_compl.py \| head -40` |
+| 20:28:46 | Bash | Inspect compl run | `cd /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v3/medidas; cat rodar_compl.sh; cat estado.txt \| tail -5; ls -la; tail -3 compl_main.porta` |
+| 20:28:20 | Bash | Read CADEIA avais | `cd /home/ronald/saas-hasner/logs/AVAIS-1515; cat cadeia_20_volta_3_e_horizonte_1911_1815.txt; echo =====; cat cadeia_20_b3_lei_1911_1836.txt` |
+| 20:28:18 | Bash | Confirm Codex citations in copy | `cd /home/ronald/wt-codex-cadeia-20-passo-1-112113/app; sed -n 190,225p escala/services/leitor_celula.py; echo ----; sed -n 585,612p relatorios/pdf_espelho.py; echo ----; sed -n 955,975p ponto/services/cartorio.py; ls /home/ronald/saas-hasner/logs/AVAIS-1515/ \| grep -i cadeia` |
+| 20:28:10 | Bash | Read CADEIA Codex answer and compl status | `cd /home/ronald/saas-hasner; cat logs/CADEIA-20-PASSO-1/v3/desvio/fim; cat logs/CADEIA-20-PASSO-1/v3/desvio/r.txt; ls logs/CADEIA-20-PASSO-1/v3/medidas/; ps -p 3676885 -o pid,etime,cmd` |
 | 20:24:59 | Bash | Add devolutions to RELATO top | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; t=open(p).read().split('\n') assert t[1].startswith('AVAL-DEVOLVIDO RESPOSTA-F5-DEVOLVIDO-1945-2005 item 4(ii) c12') t[1]+=(' \| MAIS 3 (20:2x, helper verde na copia cda246732, so estes restam alem dos tetos A2; causa Codex duble/r_red8.txt, conferida): ' '(A) ancora test_e4b_classe_e_memoria.py:51 rouba_respondida_do_hx procur ...` |
 | 20:24:51 | Bash | RELATO top lines | `cd /home/ronald/saas-hasner; head -3 app/docs/RELATO.md \| cut -c1-900` |
 | 20:24:49 | Bash | Confirm Codex citations | `cd /home/ronald/wt-codex-e4c-f5-constroi-184647/app; sed -n 159,165p chamados/tests/test_e4c_f5_volta2_juizes.py; sed -n 316,322p chamados/services/fio.py; sed -n 49,52p chamados/tests/test_e4b_classe_e_memoria.py` |
