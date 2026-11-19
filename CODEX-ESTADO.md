@@ -1,7 +1,162 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 18:40** · publicado em **19/11/2026 18:41** (UTC-3)
+> Ultima resposta processada: **19/11/2026 19:03** · publicado em **19/11/2026 19:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 19:03 · sessao 93bc4756bb32 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**A1 implementada.** O censo AST mediu **41 chamadas na base e 41 na A1**. Das 36 identidades pendentes na base, 12 passaram a receber leitura composta. Restam **24**, descontada a exceção nominal do placar. A leitura estática dos dois juízes encontrou zero violações de pureza. Compilação em memória e `git diff --check` concluídos. Resultado da suíte, banco e mutantes ORM [nao verificado]. `chamados/tests/test_e4c_f5_selo_chamada.py:20`, `chamados/tests/test_e4c_f5_selo_chamada.py:191`, `chamados/services/raiox.py:147`.
+
+## Arquivos tocados
+
+- Produção: `chamados/juizes.py:1383`, `chamados/reconciliador.py:367`, `chamados/services/disputa_emissao.py:1854`, `chamados/services/fio.py:189`, `chamados/services/pergunta_no_app.py:87`, `ponto/services/cartorio.py:1690`.
+- Testes novos: [test_e4c_f5_selo_chamada.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_chamada.py:20) e [test_e4c_f5_voltaA_sitios.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaA_sitios.py:32). [nao verificado]
+- Adaptações: `chamados/tests/test_e4c_f5_volta2_juizes.py:37`, `chamados/tests/e4c_f5_volta2_mutantes.py:33`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:523`, `chamados/tests/test_f1nova_b2_leitores.py:87`.
+
+Os juízes recebem os atributos do objeto e mantêm nome e assinatura. O corte temporal usa a constante `VIAS_FORA_DO_FATO` já definida no módulo de origem, sem consultar a classe. O comentário em cada juiz registra a leitura transitória da coluna pelos chamadores B/C que ainda entregam ORM. `chamados/juizes.py:13`, `chamados/juizes.py:1383`, `chamados/juizes.py:1549`, `chamados/models.py:2588`.
+
+## Sítios antes e depois
+
+`P` = `projecao_temporal_da_pergunta`. `R` = `pergunta_respondida`. `composta` = `DecisaoPergunta.composta`.
+
+| Sítio | Antes na base `18bf86f01` | Depois na A1 |
+|---|---|---|
+| `_slot_esperado` | `P(p, agora)` · `chamados/juizes.py:351` | `P(composta(p), agora)` · `chamados/juizes.py:351` |
+| `_pergunta_viva_calc`, corte temporal | `P(p, agora)` · `chamados/juizes.py:1411` | Uma chamada `_lido = composta(p)`, seguida de `P(_lido, agora)` · `chamados/juizes.py:1408–1409` |
+| `_pergunta_viva_calc`, degrau da resposta | `R(SimpleNamespace(...))` · `chamados/juizes.py:1430` | `R(_lido._replace(respondida_em=respondida, resposta_colab=resposta))`, com os dois valores recortados da mesma leitura · `chamados/juizes.py:1428` |
+| `lavrar_sem_turno_aberto` | `R(p)` · `chamados/reconciliador.py:366` | `R(composta(p))` · `chamados/reconciliador.py:367` |
+| `veredito_orfa` | `R(p)` · `chamados/reconciliador.py:1133` | `R(composta(p))` · `chamados/reconciliador.py:1135` |
+| `reabrir_credor_de_pergunta_viva` | `R(p)` · `chamados/services/disputa_emissao.py:1853` | `R(composta(p))` · `chamados/services/disputa_emissao.py:1854` |
+| `_resolver_perguntas_por_chamado_resolvido` | `R(p)` · `chamados/services/disputa_emissao.py:2023` | `R(composta(p))` · `chamados/services/disputa_emissao.py:2025` |
+| `processar_post_fio` | `R(_p)` · `chamados/services/fio.py:712` | `R(composta(_p))` · `chamados/services/fio.py:711` |
+| `canonica_do_grupo` | `R(p)` · `chamados/services/fio.py:1287` | `R(composta(p))` · `chamados/services/fio.py:1287` |
+| `merito_perdedor` | `R(p)` · `chamados/services/fio.py:1300` | `R(composta(p))` · `chamados/services/fio.py:1300` |
+| `particao_do_app` | `R(p)` via apelido · `chamados/services/pergunta_no_app.py:86` | `R(composta(p))` via apelido · `chamados/services/pergunta_no_app.py:87` |
+| `_julgar_colab_corpo._tem_resposta_do_colab` | `R(q)` · `ponto/services/cartorio.py:1689` | `R(composta(q))` · `ponto/services/cartorio.py:1690` |
+| `espera_o_texto_do_colaborador` | `leitura(p)` seguida de `_replace(resposta_colab=p.resposta_colab)` · `chamados/services/fio.py:189–192` | `composta(p)` alimenta o mesmo teste de instante e o mesmo `respondida_sem_texto` · `chamados/services/fio.py:189–190` |
+
+A partição e o fio já usavam as fontes corretas na base. Os dois casos de divergência são **GUARDAS**. A fixture grava pela porta de resposta automática e usa `update()` somente para simular o **PASSIVO**. O RED de delegação do fio exige uma chamada ao compositor, portanto a composição manual da base falha nessa asserção. `chamados/services/pergunta_no_app.py:86` na base, `chamados/juizes.py:1559` na base, `chamados/services/fio.py:189` na base, `chamados/tests/test_e4c_f5_voltaA_sitios.py:33`, `chamados/tests/test_e4c_f5_voltaA_sitios.py:65`.
+
+A tabela F2 já veio da base com `False` para sem veredito, CSF, irmãs, estado e property, e `True` para `resposta_display` e `q_vivas`, com motivo por leitor. A prova reforçada mostra coluna com `(None, None)` e leitura temporal com validação e resposta nos instantes exatos `(T2, T1)`. `chamados/tests/test_e4c_f2_leitura_do_ato.py:500`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:523`.
+
+## Selo de chamada — 24 identidades
+
+O ordinal conta as chamadas aos dois juízes em ordem de fonte dentro da função. A catraca compara as identidades encontradas com o conjunto declarado. A exceção é `creditos_perguntas`, `R#1`, pela tupla de `values_list`. `chamados/tests/test_e4c_f5_selo_chamada.py:20`, `chamados/tests/test_e4c_f5_selo_chamada.py:169`, `chamados/services/raiox.py:135`, `chamados/services/raiox.py:147`.
+
+| Arquivo e linha | Função | Juiz e ordinal |
+|---|---|---|
+| `api/views.py:2596` | `api_disputa_perguntas` | R#1 |
+| `api/views.py:2640` | `api_disputa_responder` | R#1 |
+| `chamados/management/commands/auditar_invariantes_chamados.py:178` | `_contraprova_i21a` | R#1 |
+| `chamados/management/commands/auditar_invariantes_chamados.py:597` | `Command.handle` | R#1 |
+| `chamados/management/commands/auditar_invariantes_chamados.py:1671` | `Command.handle` | R#2 |
+| `chamados/management/commands/dedup_perguntas_fato.py:76` | `Command.handle` | R#1 |
+| `chamados/services/acoes_disputa.py:134` | `acao_regularizar_disputa` | R#1 |
+| `chamados/services/becos.py:31` | `classificar` | R#1 |
+| `chamados/services/declaracao_texto.py:418` | `declarar_hora_colab` | R#1 |
+| `chamados/services/declaracao_texto.py:688` | `aplicar_declaracao` | R#1 |
+| `chamados/services/materializacao.py:192` | `par_do_intervalo` | R#1 |
+| `chamados/services/materializacao.py:259` | `paridade_absolvida_bug_par_103` | R#1 |
+| `chamados/services/materializacao.py:290` | `_situacao_da_irma` | R#1 |
+| `chamados/services/materializacao.py:885` | `estado_aplicacao_pergunta` | R#1 |
+| `chamados/services/materializacao.py:1300` | `_recusa_sem_anuencia` | R#1 |
+| `chamados/services/validacao.py:682` | `validar_pergunta` | R#1 |
+| `chamados/services/validacao.py:902` | `recusar_pergunta` | R#1 |
+| `chamados/services/vigia_fio.py:636` | `censo_alcance` | R#1 |
+| `chamados/views_cobrar.py:170` | `validar_inline` | R#1 |
+| `chamados/views_cobrar.py:178` | `validar_inline` | R#2 |
+| `chamados/views.py:1275` | `responder_pergunta_disputa` | R#1 |
+| `colaboradores/services/ficha.py:172` | `ficha_do_colab` | R#1 |
+| `escala/services/cadastro_realidade.py:502` | `beco_em_lote` | P#1 |
+| `folha/previa.py:142` | `_material` | R#1 |
+
+## Comandos para o Code
+
+Os labels abaixo cobrem os selos, os dois casos de divergência, o RED de delegação e as adaptações A1. A execução segue [nao verificado]. `chamados/tests/test_e4c_f5_selo_chamada.py:203`, `chamados/tests/test_e4c_f5_voltaA_sitios.py:45`, `chamados/tests/test_e4c_f5_volta2_juizes.py:37`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:517`, `chamados/tests/test_f1nova_b2_leitores.py:87`.
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+teste() { [nao verificado]
+  python3 manage.py test "$@"
+}
+
+selo=chamados.tests.test_e4c_f5_selo_chamada
+sitios=chamados.tests.test_e4c_f5_voltaA_sitios.SitiosVoltaATest
+v2=chamados.tests.test_e4c_f5_volta2_juizes.JuizesVolta2Test
+f2=chamados.tests.test_e4c_f2_leitura_do_ato.FonteMigradaPorLeitorTest
+
+teste "$selo" "$sitios" \ [nao verificado]
+  "$v2.test_red_1_resposta_no_ato_instante_e_texto_corrente" \
+  "$v2.test_red_2_reabertura_no_ato_vence_carimbo_projetado" \
+  "$v2.test_red_3_validacao_no_ato_sem_carimbo_projetado" \
+  "$v2.test_red_5_agora_corta_instante_do_ato_e_texto_corrente" \
+  "$v2.test_red_6_respondida_instante_do_ato_texto_da_projecao" \
+  "$f2.test_resposta_so_no_ato_cada_leitor_le_o_ato" \
+  "$f2.test_validacao_so_no_ato_q_vivas_e_estado_leem_o_ato" \
+  "$f2.test_instante_e_o_do_ato_nao_o_da_coluna" \
+  chamados.tests.test_f1nova_b2_leitores.ClasseC_PropertyEEstadoTest.test_property_DELEGA_ao_juiz_nao_o_copia
+```
+
+| Mutante | Caso que deve morder |
+|---|---|
+| `a1_app_coluna` | `test_GUARDA_particao_do_app_instante_do_ato_texto_da_projecao` perde a ida ao histórico com instante só no ato. `chamados/tests/test_e4c_f5_voltaA_sitios.py:45` |
+| `a1_app_texto_do_ato` | A mesma guarda perde a pendência com texto só na trilha. `chamados/tests/test_e4c_f5_voltaA_sitios.py:45` |
+| `a1_fio_coluna` | `test_GUARDA_fio_instante_do_ato_texto_da_projecao` volta a esperar texto apesar do instante no ato e do texto corrente. `chamados/tests/test_e4c_f5_voltaA_sitios.py:55` |
+| `a1_fio_texto_do_ato` | A mesma guarda deixa de esperar quando a projeção está vazia. `chamados/tests/test_e4c_f5_voltaA_sitios.py:55` |
+| `a1_fio_composicao_local` | `test_MORDE_fio_composicao_local` falha na asserção de chamada única ao compositor. `chamados/tests/test_e4c_f5_voltaA_sitios.py:65` |
+| Chamada crua adicional, apelido e atributo | Os casos sintéticos exigem a identidade nova e o ordinal correspondente. `chamados/tests/test_e4c_f5_selo_chamada.py:209`, `chamados/tests/test_e4c_f5_selo_chamada.py:220` |
+| `_replace` com texto do ORM ou instante de outra leitura | O caso sintético exige a detecção das duas chamadas. `chamados/tests/test_e4c_f5_selo_chamada.py:232` |
+| Retirada da composição em cada uma das 12 chamadas A1 | Um subteste por identidade exige que a chamada volte a cair na catraca. `chamados/tests/test_e4c_f5_selo_chamada.py:264` |
+| `isinstance`, import de modelo, `.objects` e consulta | O selo de pureza assinala cada instrução sintética. `chamados/tests/test_e4c_f5_selo_chamada.py:289` |
+| Fio com parâmetro renomeado e ORM entregue pelo nome `leitura` | O selo legado acusa que `respondida_sem_texto` recebeu a pergunta inteira. `chamados/tests/e4c_f5_volta2_mutantes.py:33`, `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:220` |
+
+Os cinco seletores ORM devem produzir falha na asserção indicada. Os casos AST e o mutante legado fazem a contraprova em memória e devem passar ao detectar a violação. Execução [nao verificado]. `chamados/tests/cortes_f2_f9_apoio.py:84`, `chamados/tests/test_e4c_f5_selo_chamada.py:209`, `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:220`.
+
+```bash
+app="$sitios.test_GUARDA_particao_do_app_instante_do_ato_texto_da_projecao"
+fio="$sitios.test_GUARDA_fio_instante_do_ato_texto_da_projecao"
+CORTES_F2_MUTANTE=a1_app_coluna teste "$app" [nao verificado]
+CORTES_F2_MUTANTE=a1_app_texto_do_ato teste "$app" [nao verificado]
+CORTES_F2_MUTANTE=a1_fio_coluna teste "$fio" [nao verificado]
+CORTES_F2_MUTANTE=a1_fio_texto_do_ato teste "$fio" [nao verificado]
+CORTES_F2_MUTANTE=a1_fio_composicao_local teste "$sitios.test_MORDE_fio_composicao_local" [nao verificado]
+
+teste "$selo.SeloChamadaTest.test_MORDE_chamada_crua_nova" [nao verificado]
+teste "$selo.SeloChamadaTest.test_MORDE_apelido_e_chamada_por_atributo" [nao verificado]
+teste "$selo.SeloChamadaTest.test_MORDE_replace_fora_da_projecao_do_mesmo_objeto" [nao verificado]
+teste "$selo.SeloChamadaTest.test_MORDE_retirar_compositor_de_cada_chamada_da_A1" [nao verificado]
+teste "$selo.SeloPurezaTest.test_MORDE_tipo_modelo_e_consulta" [nao verificado]
+teste chamados.tests.test_e4c_f5_volta1_leem_o_ato.SeloTest.test_MORDE_parametro_renomeado_e_pergunta_inteira [nao verificado]
+```
+
+## Pergunta da sessão — testes congelados [nao verificado]
+
+Previsões por leitura do código. Resultado de execução [nao verificado].
+
+| Arquivo e linha | Quebra prevista |
+|---|---|
+| `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:236`, `:243`, `:247` | O teste de renomeação ainda procura `.leitura(...)` no fio. Com `.composta(...)`, `anterior` fica sem valor. O caso de `:223` usa o mutante cuja âncora foi atualizada. `chamados/tests/e4c_f5_volta2_mutantes.py:33` |
+| `chamados/tests/test_e4c_f5_volta2_juizes.py:122`, `:145`, `:170` | Os dois REDs 8 ainda nascem com texto sem instante e podem parar na porta antes da captura. Superado isso, `:141` ainda exige `SimpleNamespace` no C6. `chamados/models.py:3689`, `chamados/models.py:3721`, `chamados/juizes.py:1428` |
+| `chamados/tests/test_pergunta_viva.py:8`, `:17` | Os dublês reais do C6 são `SimpleNamespace` sem `pk`. A leitura chamada pelo compositor acessa `p.pk`. `chamados/models.py:4318`, `chamados/juizes.py:1408` |
+| `chamados/tests/test_e3_c8b_sem_banco.py:355`, `:383`, `:410`, `:430`, `chamados/tests/test_e3_c8c_sem_banco.py:136`, `chamados/tests/test_e3_pos_suite_sem_banco.py:66`, `:85`, `:99`, `:109`, `:113` | Os casos do C6 e do slot usam dublês sem a relação ou sem `composta` no módulo simulado. A chamada temporal direta de C8c também alcança o ramo que precisa de `VIAS_FORA_DO_FATO`, que o harness injeta só na classe simulada. `chamados/tests/e3_c8b_apoio.py:83`, `chamados/tests/e3_c8b_apoio.py:194`, `chamados/tests/test_e3_tarefa_admin_sem_banco.py:86` |
+| `chamados/tests/test_e3_tarefa_admin_sem_banco.py:200`, `:206`, `chamados/tests/test_e3_degrau_dono_e_porta.py:271`, `:319`, `:346` | O C6 e a partição reais recebem `N(...)` sem relação `decisoes`. `chamados/models.py:4318`, `chamados/services/pergunta_no_app.py:87` |
+| `chamados/tests/test_e4b_classe_e_memoria.py:303`, `:334`, `:374`, `:386` e derivados `test_e4b_c11_memoria.py:37`, `test_e4b_c4_tranca_memoria.py:27`, `test_e4b_c4v14_memoria.py:46`, `test_e4b_c4v7_memoria.py:86`, `test_e4b_c6_memoria.py:16`, todos em `chamados/tests/` | O módulo simulado fornece `DecisaoPergunta=NS()` sem `composta`. O namespace da projeção real também fornece a constante de identidade só na classe simulada. Os casos de sentinela e mutantes que executam esses mesmos caminhos podem parar antes da asserção. `chamados/tests/test_e4b_classe_e_memoria.py:254`, `chamados/tests/test_e4b_classe_e_memoria.py:1039` |
+| `chamados/tests/test_e2_tarefa_do_dia.py:938`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:204`, `escala/tests/test_f3_beco1_folga_na_lista.py:402`, `ponto/tests/test_selo_chokepoint_escrita.py:435`, `:440`, `:470`, `:475` | Tetos em risco com leituras individuais em cargas ainda sem `decisoes`. O delta da A1 permanece [nao verificado]. `chamados/services/tarefa_do_dia.py:530`, `chamados/services/relavra_via.py:236`, `chamados/models.py:4318`, `ponto/services/cartorio.py:146` |
+
+## Escritores e leitores dos campos
+
+| Campo | Quem escreve | Quem lê e significado |
+|---|---|---|
+| `validada_em` | Validação do admin grava coluna e ato. Devolução, resposta humana subsequente e reabertura podem retirar a validação. Há carimbo por absorção na porta do modelo. `chamados/services/validacao.py:161`, `:273`, `:279`, `chamados/services/disputa_emissao.py:1494`, `:1532`, `:1617`, `:1639`, `chamados/models.py:3340` | O compositor entrega a validação vigente ao juiz temporal e ao C6. `estado`, sem veredito e a face SQL também leem a validação vigente. O significado é o mesmo, com divergência possível entre ato e coluna. `chamados/models.py:2011`, `:3244`, `:3548`, `:4330`, `:4345`, `chamados/juizes.py:1391`, `:1410` |
+| `respondida_em` | Resposta humana, automática e carimbo pela trilha gravam o instante. Reabertura e recusa limpam a resposta vigente. Há carimbo projetado na porta do modelo. `chamados/services/disputa_emissao.py:1528`, `:1532`, `:1617`, `:1639`, `:1683`, `:1686`, `:1705`, `:1708`, `chamados/models.py:3337` | A1 julga o instante vigente via compositor. `_slot_esperado` também mantém sua comparação com a coluna e os chamadores transitórios entregam a coluna. O campo representa o instante da resposta, mas essas leituras podem divergir sobre a vigência. `chamados/models.py:4328`, `:4334`, `:4346`, `chamados/juizes.py:353`, `:1395`, `:1557`, `chamados/services/fio.py:190` |
+| `resposta_colab` | Respostas humana e automática escrevem o texto corrente, e reabertura/recusa limpam a coluna. A trilha guarda o texto que cada ato registrou. `chamados/services/disputa_emissao.py:1481`, `:1532`, `:1617`, `:1639`, `:1682`, `:1686` | Compositor, juízes e fio usam o texto corrente. `resposta_display` usa o texto da sequência e o placar usa a projeção SQL. Há significados distintos quando ato e projeção divergem. `chamados/models.py:3825`, `:4346`, `chamados/juizes.py:1392`, `:1558`, `chamados/services/fio.py:190`, `chamados/services/raiox.py:135` |
+| `materializada_em` | As portas `carimbar` e `carimbar_identidade` gravam o carimbo. `descarimbar` e sua porta em lote o retiram. `chamados/models.py:3302`, `:3334`, `:3387`, `:3413`, `:3496` | Compositor, projeção temporal e C6 leem o mesmo carimbo projetado. A projeção temporal o recorta por `agora` e o C6 interpreta seu efeito junto da via. `chamados/models.py:4347`, `chamados/juizes.py:1393`, `:1399`, `:1421` |
+| `via_resolucao` | As portas de carimbo e descarimbo gravam ou limpam a via. `encerrar_por_fato_no_espelho` pode trocar apenas a via. `chamados/models.py:3306`, `:3387`, `:3413`, `:3496`, `:3505` | Compositor, projeção temporal, C6 e mérito do fio leem o motivo projetado. O significado do campo é compartilhado. O corte conserva as vias de identidade fora do fato mesmo quando o carimbo fica depois do horizonte. `chamados/models.py:2588`, `:4347`, `chamados/juizes.py:1399`, `:1421`, `chamados/services/fio.py:1299` |
+| `decisoes` | A FK define a relação. `DecisaoPergunta.registrar` insere as linhas e invalida o cache da instância recebida. `chamados/models.py:4176`, `:4350`, `:4360`, `:4366` | `leitura` consome a sequência ordenada, com o passivo, e `composta` usa os instantes vigentes daí. O significado compartilhado é trilha de atos. A regra de vigência pertence a `leitura`. `chamados/models.py:4318`, `:4322`, `:4327`, `:4345` |
+
+O anexo 1735 item 7-iv informa `MUDAM=0 em 51.563` para a property, com referência a `medir_1710/r.txt`. Valor de produção [nao verificado].
+
+LEI-AKITA origem=`chamados/juizes.py:1383` e `chamados/juizes.py:1549` + `chamados/models.py:4339`, testemunha=`chamados/tests/test_e4c_f5_selo_chamada.py:203`, RED=`chamados/tests/test_e4c_f5_voltaA_sitios.py:65`, padrão=juiz único puro + fonte única (compositor) + fitness function.
 
 ## 19/11 18:40 · sessao 29cd68d25a8d · E4C-F5-CONSTROI · sonda · origem=Code
 
@@ -1387,14 +1542,4 @@ Encontrei 38 pontos de chamada em produção para `pergunta_respondida` e três 
 | `chamados/juizes.py:1411` `_pergunta_viva_calc` | ORM repassado, uma por execução do C6, chamado por muitos laços. | Misto, com prefetch no fio e no app e sem na tarefa e em `alimentar_portas`. `chamados/juizes.py:886-898,1668-1673`, `chamados/services/fio.py:262-275`, `chamados/services/pergunta_no_app.py:52-65`, `chamados/services/tarefa_do_dia.py:530-534,625-632` |
 | `escala/services/cadastro_realidade.py:502` `beco_em_lote` | ORM em `all` dentro do laço de dias, avaliado quando a pergunta não tem âncora. | Reutiliza instâncias de `alimentar_portas` sem prefetch. `escala/services/cadastro_realidade.py:459-474,497-502`, `chamados/juizes.py:1668-1673` |
 
-## 19/11 15:28 · sessao 9128998275dc · - · - · origem=Ronald (tmux)
-
-Os quatro testes medem a gravação síncrona da entrada das 07h. Nos cenários `fecha`, a saída das 19h já foi registrada fora da captura e o teste confirma o fechamento dos 1 ou 3 chamados. Nos cenários `fica`, a saída segue apagada e o teste exige pelo menos um chamado vivo. O anexo informa respectivamente 237/230, 301/294, 147/145 e 222/219. A captura é convertida em contagem antes da asserção, então a contribuição efetiva de cada ramo para esses totais é [nao verificado]. `ponto/tests/test_selo_chokepoint_escrita.py:406–478`, `:287–298`.
-
-- Caminho comum. `registrar_batida` cria a batida, o `post_save` julga o dia e a véspera, e o cartório calcula o fio vivo de cada chamado vivo. O prefetch leva `perguntas_que_resolvem`, sem `decisoes`. Para cada pergunta alcançada, `fio_vivo` chama `pergunta_viva`, que no cálculo chama `projecao_temporal_da_pergunta`. No ramo de fio morto, o cartório também chama `pergunta_respondida` diretamente para verificar a resposta do colaborador. `ponto/registro_batida.py:176`, `ponto/signals.py:85–93`, `:108–112`, `:131–135`, `ponto/services/cartorio.py:146–147`, `:1016`, `:1418`, `:1684–1714`, `:2088`, `chamados/juizes.py:893–898`, `:1411`, `:1526`.
-- Cenários `fecha`. O fechamento por marco chama `transicionar_com_pauta(..., ato=x.reconciliar)` imediatamente, ou após lavrar e executar E2 quando houver fio vivo. E2 consulta ORM sem `decisoes` e chama C6. O gate do fechamento também percorre as ancoradas ORM sem `decisoes` e chama C6. O `save` do fechamento aciona S143, que consulta as duas cargas sem `decisoes` e tem chamadas diretas de `pergunta_respondida`, além de C6. `ponto/services/cartorio.py:1569–1581`, `:1019–1049`, `chamados/reconciliador.py:698–708`, `chamados/models.py:302`, `:355–380`, `:393–395`, `:422–431`, `:654–667`, `:695–701`, `chamados/signals.py:97–117`, `chamados/services/disputa_emissao.py:1853`, `:1949–1953`, `:1983–1990`, `:1998–2023`.
-- Cenários `fica`. A saída apagada mantém o chamado no cálculo do fio e pode alcançar a guarda de resposta ou a fábrica após o julgamento. Se houver candidatas a descarimbo, a fábrica chama a porta que recarrega cada pergunta sem `decisoes` e consulta C6. A presença dessas candidatas na execução anexada é [nao verificado]. Depois do cartório, o receiver do reconciliador executa E2, o reatamento e a retratação de premissas mortas. `ponto/tests/test_selo_chokepoint_escrita.py:445–478`, `ponto/services/cartorio.py:1071–1073`, `:1493–1496`, `:1684–1697`, `chamados/services/fabrica_da_celula.py:207–219`, `chamados/services/relavra_via.py:236–242`, `ponto/signals.py:206–215`, `chamados/reconciliador.py:1480–1489`.
-
-A consulta que a volta 2 pode acrescentar nesses ramos é `p.decisoes.all()` em cada chamada da leitura com ORM persistido e sem prefetch. O passivo E4b recebe `ja` calculado em memória e não entra no ramo SQL. O memo do C6 pode evitar uma nova leitura quando a mesma instância chega com a mesma chave. `chamados/juizes.py:894–905`, `:1389–1391`, `:1559–1561`, `chamados/models.py:4251–4257`, `:4308–4313`.
-
-_7415 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7416 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
