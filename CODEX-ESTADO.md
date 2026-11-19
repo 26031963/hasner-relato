@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 12:51** · publicado em **19/11/2026 12:52** (UTC-3)
+> Ultima resposta processada: **19/11/2026 12:55** · publicado em **19/11/2026 12:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 12:55 · sessao 0972cf0af452 · CADEIA-20-PASSO-1 · construtor · origem=Code
+
+Implementei a sincronização dos instantes com as órfãs, a ligação por ocorrência no cartório, os dois testes RED, os mutantes m13 e m14 e o ajuste da medição de consultas. A execução dos testes e dos mutantes está **[não verificada]**; foi verificada apenas a sintaxe dos cinco arquivos alterados. [nao verificado]
+
+A causa exata do `-14 != -28` também permanece **[não verificada]**. A medição anterior reutilizava o colaborador e executava primeiro o caminho sem lavra; o código possui caches de instância e de processo que podem sobreviver ao rollback. A nova medição usa colaborador novo e aquece os dois caminhos antes das capturas, mantendo a igualdade dos acréscimos e o limite de uma chamada a CXR. A relação específica desses caches com os `-14` e `-28` não foi demonstrada. ([test_cadeia20_lavra.py:205](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_lavra.py:205), [colaboradores/models.py:455](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/colaboradores/models.py:455), [ausencias.py:257](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/catalogo/ausencias.py:257))
+
+**Inventário**
+
+- A grade ordena os pares `(hora, instante)` juntos e, na reconciliação, remove ambos pelo índice do instante identificado. Se houver mais de um par com o mesmo instante exato, a borda não é reconciliada: o transporte não distingue qual ocorrência pertence a ela. Esse caso fica sem adivinhação e sua ocorrência em produção é **[não verificada]**. ([utils.py:1867](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1867), [utils.py:2043](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:2043), [utils.py:2084](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:2084))
+- No cartório, a k-ésima ocorrência recebe o k-ésimo instante da mesma hora; contagens divergentes geram `BATIDA_AMBIGUA`. ([cartorio.py:975](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/services/cartorio.py:975))
+- O RED de duas batidas reais no mesmo minuto está em [test_cadeia20_costura.py:66](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_costura.py:66); o RED da reconciliação está em [test_cadeia20_costura.py:81](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_costura.py:81).
+- No catálogo, `m13_ambigua_por_hora` deve ser morto por `test_RED_duas_sobras_mesmo_minuto`, e `m14_instante_nao_removido` por `test_RED_reconciliacao_retira_instante_da_sobra`. Resultado de ambos: **[não verificado]**. ([test_cadeia20_mutantes.py:52](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_mutantes.py:52))
+
+**Censo das alterações de órfãs na grade**
+
+- Inicialização e montagem: listas vazias no intermitente e na folga; lista do turno e instantes nascidos do mesmo coletor, com acréscimos pareados nas duas pontas e nos excedentes internos. ([utils.py:1589](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1589), [utils.py:1724](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1724), [utils.py:1746](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1746), [utils.py:1758](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1758), [utils.py:1834](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1834))
+- Conservação acrescenta hora e instante nos dois ramos; a ordenação posterior opera sobre os pares. ([utils.py:1859](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1859), [utils.py:1863](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1863), [utils.py:1867](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1867))
+- Folga, falta, ausência integral e justificativa limpam a lista inteira; a grade limpa os instantes correspondentes após os overlays. ([utils.py:1174](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1174), [utils.py:1239](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1239), [utils.py:1274](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1274), [utils.py:1279](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1279), [utils.py:1884](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1884))
+- A reconciliação remove a ocorrência identificada; o recorte posterior da grade também limpa os instantes dos dias cujas órfãs apaga. ([utils.py:2084](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:2084), [utils.py:979](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:979), [utils.py:983](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:983))
+- Ficaram fora os demais itens do laudo, por estarem fora do escopo solicitado. A identificação de ocorrências com instante exatamente igual permanece limitada como descrito acima. ([utils.py:2046](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:2046))
+
+Comandos para a sessão executar, **não executados aqui**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_cadeia20_costura.CosturaTest.test_RED_duas_sobras_mesmo_minuto
+PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_cadeia20_costura.CosturaTest.test_RED_reconciliacao_retira_instante_da_sobra
+PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_cadeia20_lavra.TetoConsultaLavraTest.test_mesmo_acrescimo_em_n_e_2n_dias
+CADEIA20_MUTANTE=m13_ambigua_por_hora PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
+CADEIA20_MUTANTE=m14_instante_nao_removido PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_cadeia20_mutantes.MutantesTest.test_mutantes_mordem_no_assert_pretendido
+```
 
 ## 19/11 12:51 · sessao 93aecad35d67 · CADEIA-20-PASSO-1 · verificador · origem=Code
 
@@ -1220,51 +1251,4 @@ O corte referenciado da autópsia deduplica batidas a menos de dez minutos e sep
 
 **Controle da sonda principal:** `ERROS=0 UNIVERSO=233 CONTADOS=34 (esperado 34)`. **Controle do anexo de referência:** `ERROS=0 UNIVERSO=233 CONTADOS=233`. [não verificado: envelopes fornecidos]
 
-## 19/11 11:58 · sessao ddd2b81beddc · CADEIA-20-PASSO-1 · construtor · origem=Code
-
-A volta 1 está implementada, **com uma limitação de evidência**: os casos usam fixtures sintéticas construídas a partir das respostas da regra. O cadastro literal dos casos nominais e a identificação de um colaborador real para substituir col950 não estão no dado fornecido **[não verificado]** ([test_razao_da_sobra.py:1](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:1)).
-
-**Aval devolvido, por item:**
-
-1. As interfaces verificadas na cópia incluem `Turno.data_turno` e o carimbo de pausa ([turnos.py:43](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:43), [turnos.py:1371](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1371)).
-2. A implementação segue a precedência fornecida quando há uma batida identificável; ausência, ambiguidade e falta de papel têm resultados explícitos ([orfa_classe.py:49](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:49)). Colisão com outros avais vigentes **[não verificado]**.
-3. A troca do caso de dia sem trabalho por um colaborador real não pôde ser comprovada com o dado disponível **[não verificado]**.
-4. O diff contém o juiz e seus testes; efeitos em dinheiro e certificação pela suíte **[não verificado]**. [nao verificado]
-
-Arquivos alterados:
-
-- [orfa_classe.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:23): juiz puro, com fuso e pausas avulsas fornecidos pelo chamador. A junção usa `data_turno`; a saída preserva cada ocorrência da sobra.
-- [test_razao_da_sobra.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:29): casos pela regra, marca, meia-noite, cobertura, idempotência e precedência.
-- `escala/tests/test_orfa_classe.py`: removido junto com `classificar_orfas`, pois seus casos sustentavam somente o classificador antigo. Permanecem `_runs_de_rajada` e `JANELA_CLUSTER_MIN`; a constante tem consumidores existentes ([utils.py:504](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:504), [turnos.py:1581](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1581)).
-
-| Caso fornecido ou fixture | Razão pela regra | Teste | [nao verificado]
-|---|---|---|
-| 15/11 11:25 e 16:59, dia sem trabalho; colaborador real **[não verificado]** | `TRABALHO_EM_DIA_SEM_TRABALHO` | [linha 31](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:31) |
-| col836, 06/11 08:25 e 08:38 | `BATIDA_REPETIDA` | [linha 37](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:37) |
-| col203, 21/10 12:35; col204, 17/11 14:44 | `INTERVALO_FORA_DA_ESCALA` | [linha 44](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:44) |
-| col174, 15/11 05:30 e 06:33 | `PERIODO_ADICIONAL` | [linha 51](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:51) |
-| col174, 11/11 18:59; col220, 11/11 06:00 | `TURNO_ABERTO` | [linha 57](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:57) |
-| col174, 12/11 07:01; col300, 21/10 06:00 | `SAIDA_SEM_ENTRADA` | [linha 65](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:65) |
-
-As identidades e respostas nominais da tabela vêm do texto fornecido; os cadastros e batidas reais permanecem **[não verificado]**. O caso de meia-noite foi exercitado com a batida civil em 24/10 atribuída ao turno de 23/10 ([teste:76](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:76)). [nao verificado]
-
-O RED anterior à implementação falhou por ausência de `razao_da_sobra`. Depois, 12 testes passaram num executor isolado com substitutos em memória para `SimpleTestCase` e `Turno`; os seis mutantes abaixo foram mortos nesse mesmo executor. A execução Django real e a suíte certificadora ficam **[não verificado]**. Com Django disponível, o comando é: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_razao_da_sobra --noinput
-```
-
-Execute cada `sed` isoladamente, rode o comando de teste acima e restaure a linha antes do próximo mutante: [nao verificado]
-
-| Mutante — comando `sed` | Caso que deve falhar |
-|---|---|
-| `sed -i "s/razao = 'TRABALHO_EM_DIA_SEM_TRABALHO'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_dia_sem_trabalho_duas_sobras` |
-| `sed -i "s/razao = 'BATIDA_REPETIDA'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_rajada_col836` |
-| `sed -i "s/razao = 'INTERVALO_FORA_DA_ESCALA'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_pausas_nominais` |
-| `sed -i "s/razao = 'PERIODO_ADICIONAL'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_periodos_col174` |
-| `sed -i "s/razao = 'TURNO_ABERTO'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_turnos_abertos` |
-| `sed -i "s/razao = 'SAIDA_SEM_ENTRADA'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_saidas_sem_entrada` |
-
-Na investigação executei uma vez `python3` sem `PYTHONDONTWRITEBYTECODE=1`, contrariando a instrução; se isso criou bytecode está **[não verificado]**. As execuções dos testes e mutantes usaram a variável. [nao verificado]
-
-_7348 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7349 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
