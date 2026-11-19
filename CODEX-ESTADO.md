@@ -1,7 +1,243 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 02:25** · publicado em **19/11/2026 02:27** (UTC-3)
+> Ultima resposta processada: **19/11/2026 03:12** · publicado em **19/11/2026 03:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 03:12 · sessao da34ab3038c3 · ESCALA-NAO-DESCREVE · sonda · origem=Code
+
+A medição pedida **não pode ser concluída com a janela exata a partir da lavra descrita pelo código**: a geração aceita um `hoje` fornecido pelo chamador, mas a proposta guardada não registra esse valor nem os limites da janela. `lavrado_em` registra o relógio ao fim da geração; usá-lo como `hoje` exigiria uma hipótese. [app/ponto/services/esmeril_espelho.py:215](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:215), [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:241), [app/ponto/services/esmeril_espelho.py:246](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:246), [app/ponto/services/esmeril_espelho.py:253](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:253).
+
+**A. Código**
+
+1. **Gravação e leitura.** `lavrar` chama `gravar_lavra(d)` e também escreve um espelho JSON; o banco é a autoridade. O caminho padrão do arquivo é `logs/esmeril_espelho.json`. [app/ponto/services/esmeril_espelho.py:28](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:28), [app/ponto/services/esmeril_espelho.py:321](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:321).
+
+   Trechos literais da gravação:
+
+   ```python
+   CHAVE_LAVRA = 'esmeril_espelho'
+   ```
+
+   ```python
+   MetricaSnapshot.objects.update_or_create(
+       chave=CHAVE_LAVRA, escopo='frota', escopo_id=None, data_ref=hoje,
+       ...
+       'valor': None, 'detalhe': d or {}})
+   ```
+
+   O campo é `MetricaSnapshot.detalhe`, um `JSONField`; `ler_lavra()` busca o snapshot mais recente por `data_ref` e, na sombra, verifica o marcador antes de devolvê-lo. [app/inteligencia/models.py:81](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/inteligencia/models.py:81), [app/inteligencia/models.py:95](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/inteligencia/models.py:95), [app/ponto/services/esmeril_espelho.py:291](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:291), [app/ponto/services/esmeril_espelho.py:359](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:359).
+
+   Trecho literal do mapa, com chave igual ao PK do colaborador convertido em string:
+
+   ```python
+   proposta[str(c.pk)] = {'tipo_escala_id': p['tipo_escala_id'], 'codigo': p['codigo'],
+                          'confianca': r['confianca']}
+   ```
+
+   O mapa é incluído no retrato sob a chave `proposta`; só recebe resultados com proposta, para colaboradores com assinatura. [app/ponto/services/esmeril_espelho.py:239](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:239), [app/ponto/services/esmeril_espelho.py:253](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:253).
+
+2. **Dia usado pelo detector.** Ele consulta `batidas_apuraveis` e agrupa cada batida pela data civil local do seu próprio instante:
+
+   ```python
+   for b in batidas_apuraveis(colab, de, ate):
+       lt = _tz.localtime(b.timestamp)
+       por_dia[lt.date()].append(lt)
+   ```
+
+   Assim, uma batida após meia-noite cai no dia civil seguinte, não necessariamente no dia do turno; o próprio módulo declara a possibilidade de inflar `dias` e deslocar a entrada modal. [app/escala/detector_proposta.py:18](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/detector_proposta.py:18), [app/escala/detector_proposta.py:49](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/detector_proposta.py:49).
+
+3. **Cíclica e não cíclica.** A lavra não guarda o ciclo. A tela consulta o `tipo_ciclo` **atual** do `TipoEscala` pelo ID da proposta. Sua constante é literalmente:
+
+   ```python
+   CICLICOS = ('12x36', '24x48')
+   ```
+
+   O predicado retorna `'ciclico'` para esses dois valores e `'aplicar'` para os demais que passem pelas outras condições; um template apagado não entra no mapa. A classificação histórica no momento da lavra é [não verificado]. [app/escala/models.py:386](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/models.py:386), [app/escala/services/cadastro_realidade.py:819](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:819), [app/escala/services/cadastro_realidade.py:830](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:830).
+
+4. **Confiança e botão.** O campo é `confianca`. Para proposta existente, o detector atribui `alta` ou `media`; `insuficiente` acompanha `proposta: None`. [app/escala/detector_proposta.py:118](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/detector_proposta.py:118).
+
+   Trechos literais:
+
+   ```python
+   if n >= MIN_DIAS_ALTA and coerente and estavel:
+       conf, pq = 'alta', ...
+   ...
+       conf, pq = 'media', '; '.join(_faltas)
+   ```
+
+   O predicado do botão não consulta `confianca`; a view a lê para compor o motivo passado à porta de gravação:
+
+   ```python
+   if botao_da_proposta(v, proposta, sig, ciclos_dos_destinos({'p': proposta})) != 'aplicar':
+   ```
+
+   ```python
+   motivo='proposta do esmeril (lavra de %s): %s, confianca %s' % (
+       lavra.get('lavrado_em') or '?', proposta.get('codigo') or '?', proposta.get('confianca') or '?'),
+   ```
+
+   [app/escala/services/cadastro_realidade.py:830](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:830), [app/escala/views.py:493](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/views.py:493).
+
+**B. Sonda parcial, não executada**
+
+A sonda abaixo lê o universo da lavra pela função real, classifica pelo ciclo atual e conta confiança e empresa. Para cada proposta não cíclica, registra erro: sem os limites comprovados não chama o pareador para produzir uma contagem que poderia pertencer a outra janela. Portanto, **não entrega a lista de expostos nem um resultado noturno utilizável quando houver propostas não cíclicas**. O dado raspado fornecido não informa o conteúdo da lavra nem os limites efetivos: [não verificado]. A ausência de lavra no banco resulta em `UNIVERSO=0` com motivo, conforme `ler_lavra()`; falha da guarda ou do marcador resulta em erro. [app/ponto/services/esmeril_espelho.py:359](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:359).
+
+```python
+import collections
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection, transaction
+
+from colaboradores.models import Colaborador
+from escala.models import TipoEscala
+from escala.services.cadastro_realidade import ciclos_dos_destinos
+from ponto.services.esmeril_espelho import ler_lavra
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def main():
+    universo = 0
+    expostos = 0
+    erros = 0
+    etapa = "GUARDA_OU_LAVRA"
+    classes = collections.Counter()
+    confiancas = collections.Counter()
+    empresas = collections.Counter()
+    linhas = []
+
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+            lavra = ler_lavra()
+
+            if lavra is None:
+                linhas.append("MOTIVO=SEM_LAVRA_VALIDA_NO_BANCO")
+            else:
+                etapa = "MAPA_PROPOSTA"
+                if "proposta" not in lavra:
+                    linhas.append("MOTIVO=CAMPO_PROPOSTA_AUSENTE_NA_LAVRA")
+                else:
+                    propostas = lavra["proposta"]
+                    if not isinstance(propostas, dict):
+                        raise ValueError("mapa_proposta")
+                    universo = len(propostas)
+
+                    etapa = "CICLOS_ATUAIS"
+                    # Uma proposta malformada não deve impedir os demais casos.
+                    validas = {
+                        chave: p
+                        for chave, p in propostas.items()
+                        if isinstance(p, dict)
+                    }
+                    ciclos = ciclos_dos_destinos(validas)
+
+                    for chave, proposta in propostas.items():
+                        cid = None
+                        try:
+                            # Savepoint permite seguir após erro de consulta por caso.
+                            with transaction.atomic():
+                                if not isinstance(chave, str):
+                                    raise ValueError("chave")
+                                cid = int(chave)
+                                if cid <= 0 or str(cid) != chave:
+                                    raise ValueError("chave")
+                                if not isinstance(proposta, dict):
+                                    raise ValueError("proposta")
+
+                                tipo_id = proposta.get("tipo_escala_id")
+                                if tipo_id not in ciclos:
+                                    raise ValueError("tipo_ausente")
+                                ciclo = ciclos[tipo_id]
+                                if not isinstance(ciclo, str):
+                                    raise ValueError("ciclo")
+
+                                colab = Colaborador.objects.only(
+                                    "id", "empresa_id"
+                                ).get(pk=cid)
+                                empresa = colab.empresa_id
+                                if empresa is None:
+                                    raise ValueError("empresa_ausente")
+
+                                conf = proposta.get("confianca")
+                                if conf not in ("alta", "media", "baixa",
+                                               "insuficiente"):
+                                    raise ValueError("confianca")
+
+                                classe = (
+                                    "ciclica"
+                                    if ciclo in TipoEscala.CICLICOS
+                                    else "nao_ciclica"
+                                )
+
+                            classes[classe] += 1
+                            confiancas[conf] += 1
+                            empresas[empresa] += 1
+
+                            if classe == "nao_ciclica":
+                                erros += 1
+                                linhas.append(
+                                    "ERRO col%d empresa=%s "
+                                    "motivo=JANELA_DO_DETECTOR_NAO_COMPROVADA"
+                                    % (cid, empresa)
+                                )
+                        except Exception:
+                            erros += 1
+                            if cid is not None and cid > 0:
+                                linhas.append(
+                                    "ERRO col%d motivo=CASO_NAO_MEDIDO" % cid
+                                )
+                            else:
+                                linhas.append("ERRO motivo=CHAVE_INVALIDA")
+
+                    linhas.append(
+                        "CLASSIFICADAS ciclicas=%d nao_ciclicas=%d"
+                        % (classes["ciclica"], classes["nao_ciclica"])
+                    )
+                    for conf, total in sorted(confiancas.items()):
+                        linhas.append(
+                            "CONFIANCA %s=%d" % (conf, total)
+                        )
+                    for empresa, total in sorted(
+                        empresas.items(), key=lambda item: str(item[0])
+                    ):
+                        linhas.append(
+                            "EMPRESA %s propostas=%d" % (empresa, total)
+                        )
+                    linhas.append(
+                        "EXPOSTOS=NAO_MEDIDO "
+                        "motivo=JANELA_DO_DETECTOR_NAO_COMPROVADA"
+                    )
+    except Exception:
+        erros += 1
+        linhas.append("ERRO etapa=" + etapa)
+
+    for linha in linhas:
+        print(linha)
+    print("CONTADOR=%d UNIVERSO=%d ERROS=%d" % (expostos, universo, erros))
+    print("FIM_SONDA_NOTURNO")
+    return 0 if erros == 0 else 1
+
+
+sys.exit(main())
+```
+
+Para obter o número solicitado é preciso comprovar, por evidência externa à proposta guardada, qual foi o `hoje` passado à geração daquela lavra; a identificação desse valor é [não verificado]. [app/ponto/services/esmeril_espelho.py:215](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:215), [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:241).
+
+perguntas de lei: 1
 
 ## 19/11 02:25 · sessao 71601a41dd9b · ESCALA-NAO-DESCREVE · verificador · origem=Code
 
@@ -1483,63 +1719,4 @@ totais por classe: i 5; ii 4; iii 0; iv 4; v 15; vi 12.
 
 perguntas de lei: 0
 
-## 19/11 01:52 · sessao 59e12cf1219f · E4C-F5 · censo · origem=Code
-
-| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
-|---|---|---|---|---|---|
-| chamados/services/materializacao.py:199 | par_do_intervalo | validada_em | PerguntaDisputa | i | `irma_validada and q.validada_em is None` |
-| chamados/services/materializacao.py:201 | par_do_intervalo | validada_em | PerguntaDisputa | i | `q.validada_em is None` |
-| chamados/services/materializacao.py:261 | paridade_absolvida_bug_par_103 | materializada_em | PerguntaDisputa | ii | `p.materializada_em is not None` |
-| chamados/services/materializacao.py:261 | paridade_absolvida_bug_par_103 | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao == PerguntaDisputa.VIA_PARIDADE_RECUSADA` |
-| chamados/services/materializacao.py:262 | paridade_absolvida_bug_par_103 | materializada_em | PerguntaDisputa | ii | `p.materializada_em < _corte` |
-| chamados/services/materializacao.py:289 | _situacao_da_irma | materializada_em | PerguntaDisputa | v | `q.materializada_em is None` |
-| chamados/services/materializacao.py:292 | _situacao_da_irma | via_resolucao | PerguntaDisputa | v | `'via:%s' % q.via_resolucao` |
-| chamados/services/materializacao.py:329 | respostas_intervalo_recusadas_paridade | materializada_em | PerguntaDisputa | iii | `p.materializada_em is not None` |
-| chamados/services/materializacao.py:558 | _tipo_pelo_marco | resposta_colab | PerguntaDisputa | ii | `_min(p.resposta_colab)` |
-| chamados/services/materializacao.py:586 | _tipo_pelo_marco | resposta_colab | PerguntaDisputa | v | `resposta=p.resposta_colab` |
-| chamados/services/materializacao.py:637 | _ts_tipo_do_plantio | resposta_colab | PerguntaDisputa | ii | `(p.resposta_colab or '').strip()` |
-| chamados/services/materializacao.py:683 | _ts_tipo_do_plantio | resposta_colab | PerguntaDisputa | v | `(p.resposta_colab or '').strip()` |
-| chamados/services/materializacao.py:690 | _ts_tipo_do_plantio | resposta_colab | PerguntaDisputa | ii | `_hora_fonte = p.resposta_colab` |
-| chamados/services/materializacao.py:730 | _declarado_da_metade | resposta_colab | PerguntaDisputa | iii | `(p.resposta_colab or '').strip().split(':')` |
-| chamados/services/materializacao.py:745 | divergencia_declarado_x_gravado | resposta_colab | PerguntaDisputa | v | `repr((p.resposta_colab or '').strip())` |
-| chamados/services/materializacao.py:782 | espera_na_escrita | resposta_colab | PerguntaDisputa | iii | `not (p.resposta_colab or '').strip()` |
-| chamados/services/materializacao.py:875 | estado_aplicacao_pergunta | materializada_em | PerguntaDisputa | v | `if p.materializada_em and` |
-| chamados/services/materializacao.py:875 | estado_aplicacao_pergunta | via_resolucao | PerguntaDisputa | v | `getattr(p, 'via_resolucao', '')` |
-| chamados/services/materializacao.py:881 | estado_aplicacao_pergunta | via_resolucao | PerguntaDisputa | v | `_VIAS_DE_RECUSA[p.via_resolucao]` |
-| chamados/services/materializacao.py:887 | estado_aplicacao_pergunta | materializada_em | PerguntaDisputa | v | `if p.materializada_em:` |
-| chamados/services/materializacao.py:966 | _declarar_ausencia_de_pergunta | resposta_colab | PerguntaDisputa | ii | `resp = (p.resposta_colab or '').strip()` |
-| chamados/services/materializacao.py:1031 | _materializar_ausencia_de_resposta | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
-| chamados/services/materializacao.py:1063 | _materializar_ausencia_de_resposta | resposta_colab | PerguntaDisputa | iv | `ato_texto=q.resposta_colab or ''` |
-| chamados/services/materializacao.py:1123 | perguntas_absorvidas_por | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
-| chamados/services/materializacao.py:1124 | perguntas_absorvidas_por | via_resolucao | PerguntaDisputa | vi | `via_resolucao__in=` |
-| chamados/services/materializacao.py:1125 | perguntas_absorvidas_por | materializada_em | PerguntaDisputa | vi | `values_list('disputa_id', 'materializada_em')` |
-| chamados/services/materializacao.py:1125 | perguntas_absorvidas_por | resposta_colab | PerguntaDisputa | vi | `filter(resposta_colab__in=escapes)` |
-| chamados/services/materializacao.py:1130 | perguntas_absorvidas_por | materializada_em | PerguntaDisputa | vi | `Q(disputa_id=_disp, materializada_em=_inst)` |
-| chamados/services/materializacao.py:1166 | devolver_absorvidas_da_ausencia_rejeitada | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': p.resposta_colab` |
-| chamados/services/materializacao.py:1166 | devolver_absorvidas_da_ausencia_rejeitada | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': p.via_resolucao` |
-| chamados/services/materializacao.py:1167 | devolver_absorvidas_da_ausencia_rejeitada | respondida_em | PerguntaDisputa | iv | `p.respondida_em and p.respondida_em.isoformat()` |
-| chamados/services/materializacao.py:1168 | devolver_absorvidas_da_ausencia_rejeitada | validada_em | PerguntaDisputa | iv | `p.validada_em and p.validada_em.isoformat()` |
-| chamados/services/materializacao.py:1169 | devolver_absorvidas_da_ausencia_rejeitada | materializada_em | PerguntaDisputa | iv | `p.materializada_em and p.materializada_em.isoformat()` |
-| chamados/services/materializacao.py:1385 | _materializar_resposta_hora | resposta_colab | PerguntaDisputa | v | `p.resposta_colab` |
-| chamados/services/materializacao.py:1567 | _materializar_resposta_hora | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': p.resposta_colab` |
-| chamados/services/materializacao.py:1593 | _materializar_resposta_data_hora | resposta_colab | PerguntaDisputa | ii | `raw = (p.resposta_colab or '').strip()` |
-| chamados/services/materializacao.py:1602 | _materializar_resposta_data_hora | resposta_colab | PerguntaDisputa | v | `data_hora invalida ({p.resposta_colab})` |
-| chamados/services/materializacao.py:1654 | _materializar_resposta_data_hora | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': p.resposta_colab` |
-| chamados/services/materializacao.py:1693 | _carimbar_recusa | materializada_em | PerguntaDisputa | ii | `p.materializada_em is None and codigo == 'COLISAO'` |
-| chamados/services/materializacao.py:2106 | materializar_perguntas_validadas_da_disputa | validada_em | PerguntaDisputa | vi | `validada_em__isnull=False` |
-| chamados/services/materializacao.py:2107 | materializar_perguntas_validadas_da_disputa | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
-| chamados/services/materializacao.py:2120 | materializar_perguntas_validadas_da_disputa | materializada_em | PerguntaDisputa | ii | `p.materializada_em is not None` |
-| chamados/services/materializacao.py:2123 | materializar_perguntas_validadas_da_disputa | validada_em | PerguntaDisputa | i | `p.validada_em is None` |
-| chamados/services/materializacao.py:2168 | materializar_pendentes_aprovadas | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
-
-linhas: 44 de 44
-
-Totais por classe: i 3; ii 10; iii 3; iv 8; v 11; vi 9.
-
-- :199 — chamadores em `chamados/services/validacao.py:632` e `chamados/services/materializacao.py:923,1732`; **sim**, condiciona a gravação do par quando `irma_validada=True` (`chamados/services/materializacao.py:178,182-183,199`).
-- :201 — mesmos chamadores (`chamados/services/validacao.py:632`; `chamados/services/materializacao.py:923,1732`); **sim**, aciona o exame de plausibilidade que pode impedir o par (`chamados/services/materializacao.py:201-206`).
-- :2123 — chamadores em `chamados/services/validacao.py:786`, `chamados/services/fio.py:718` e `chamados/services/acoes_disputa.py:143`; **sim**, impede chamar a materialização quando a pergunta relida está sem validação (`chamados/services/materializacao.py:2115-2125`).
-
-perguntas de lei: 0
-
-_7263 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7264 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
