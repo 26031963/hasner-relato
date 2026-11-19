@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 01:56** · publicado em **19/11/2026 01:56** (UTC-3)
+> Ultima resposta processada: **19/11/2026 02:00** · publicado em **19/11/2026 02:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 02:00 · sessao 3f83936ddcb6 · E4C-F3-LAVRA-FOTO · construtor · origem=Code
+
+Acrescentei a testemunha de comportamento e de SQL em [test_f3_lavra_foto_sem_decisao.py](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:271). A camada AST e seus testes permanecem intactos; a docstring registra o resíduo de cobertura ([arquivo:1](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:1)). [nao verificado]
+
+A base é `django.test.TestCase`, seguindo a criação ORM de empresa, praça, posto, colaborador, disputa e pergunta do [teste vizinho](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_pergunta_respondida_e_marco_aceso.py:29). O horizonte fixo UTC no ano 9998 fica além dos timestamps produzidos pelo relógio durante uma execução ordinária; o marco da pergunta e o instante do ato também são fixos ([fixture:271](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:271)). [nao verificado]
+
+Os testes novos são: [nao verificado]
+
+- `test_corte_decisao_posterior_nao_move_marcos`: compara antes e depois da inserção para os dois horizontes ([arquivo:298](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:298)).
+- `test_sql_marcos_nao_le_decisao`: verifica a ausência da tabela da decisão e a presença da tabela da pergunta no SQL capturado ([arquivo:312](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:312)).
+- `test_MORDE_captura_detecta_leitura_real_de_decisao`: controla o instrumento com uma consulta avaliada ([arquivo:324](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:324)).
+
+Comando para a sessão executar a classe, inclusive após aplicar cada mutante do verificador:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test chamados.tests.test_f3_lavra_foto_sem_decisao.LavraFotoComBancoTest
+```
+
+A execução dos testes e a mordida nos mutantes são **[não verificado]**. Não executei testes, conforme solicitado; a sessão aplica os mutantes no arquivo real. [nao verificado]
+
+## 19/11 02:00 · sessao acd426f3b1aa · CHECK-DE-TELA · sonda · origem=Code
+
+Não consegui produzir uma sonda confiável para as cinco telas. A referência **não foi medida**, e não tenho confirmação de que a cópia corresponda ao hash informado: o diretório disponível não contém metadados Git verificáveis. [não verificado]
+
+O impedimento concreto é que o envelope `--sombra` usa a role `leitor`, sem permissão de escrita. Uma transação com rollback não concede essa permissão: um GET que tente escrever pode falhar ou seguir outro caminho de erro, portanto não se pode tratar sua duração como a medição normal da tela. [bin/sonda_leitura.sh:4](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:4) [bin/sonda_leitura.sh:11](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:11)
+
+O rastreio parcial encontrou:
+
+- **Espelho:** `/ponto/espelho/` chama `espelho_ponto`, que chama `espelho_do_colab`. A rota de PDF avulso encontrada exige staff e gera o PDF por POST; não comprovei que seja a tela do colaborador pedida. Escritas indiretas do GET: [não verificado]. [app/config/urls.py:29](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/config/urls.py:29) [app/ponto/urls.py:10](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/urls.py:10) [app/ponto/views.py:160](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/views.py:160) [app/relatorios/views.py:1050](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/relatorios/views.py:1050)
+- **Tarefa do dia:** existe o serviço `tarefa_do_dia(colab, dia_do_turno, agora)`, mas não comprovei a rota de tela nem o universo que ela mostra. Escritas indiretas: [não verificado]. [app/chamados/services/tarefa_do_dia.py:738](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/services/tarefa_do_dia.py:738)
+- **Fila do admin:** `/chamados/` chama `painel_gestao`, que chama `montar_contexto_painel` e, na página completa, `pendentes_na_central`. Escritas indiretas do GET: [não verificado]. [app/config/urls.py:28](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/config/urls.py:28) [app/chamados/urls.py:9](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/urls.py:9) [app/chamados/views.py:721](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/views.py:721) [app/chamados/views.py:759](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/views.py:759)
+- **Placar:** `/chamados/placar/` chama `placar_json`; conforme filtro e disponibilidade do resultado lavrado, lê `PlacarNavbar` ou chama `montar_contexto_painel`. O próprio código documenta escrita condicional ao relavrar perguntas desatualizadas; o estado da sombra atual é [não verificado]. [app/chamados/urls.py:24](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/urls.py:24) [app/chamados/views.py:781](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/views.py:781) [app/chamados/views.py:840](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/views.py:840)
+- **Consulta do app:** `/api/me/` chama `api_me`, que consulta, entre outros leitores, `turno_aberto_de` e `projecao_do_app`. Que seja a consulta pedida na abertura e que seus leitores indiretos escrevam ou não: [não verificado]. [app/api/urls.py:64](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/api/urls.py:64) [app/api/views.py:284](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/api/views.py:284) [app/api/views.py:306](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/api/views.py:306) [app/api/views.py:315](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/api/views.py:315)
+
+Também há um GET de atendimento do colaborador que pode registrar auditoria, mas não comprovei que ele seja a tela “tarefa do dia” solicitada. [app/chamados/views.py:559](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/views.py:559) [app/chamados/views.py:583](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/views.py:583)
+
+Ficaram pendentes o script, a verificação completa das escritas e os universos para as duas cargas. Não tenho resultados TSV a apresentar. [não verificado]
+
+perguntas de lei: 0
 
 ## 19/11 01:56 · sessao 40d3f8bb6fa7 · E4C-F5 · censo · origem=Code
 
@@ -1078,12 +1118,4 @@ Os demais sítios do lote, seus receptores, classes e chamadores permanecem **[n
 
 perguntas de lei: [não verificado]
 
-## 19/11 01:45 · sessao 778b831b7b28 · - · - · origem=Ronald (tmux)
-
-A análise das ocorrências de `materializacao.py`, incluindo as classificações, os trechos e os chamadores comprovados, foi enviada ao agente responsável pela consolidação. A leitura da cópia foi apenas em memória; não houve escrita em arquivos. [não verificado]
-
-## 19/11 01:45 · sessao 3b84bf5df64f · - · - · origem=Ronald (tmux)
-
-Classificação do subconjunto de comandos, migração e serviços enviada ao agente principal: **35 linhas**, todas com receptor `PerguntaDisputa`; classes **(ii) 9, (iv) 3, (v) 2 e (vi) 21**. As evidências e os trechos foram enviados junto à classificação. ([backfill_decisoes_pergunta.py:44](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/backfill_decisoes_pergunta.py:44), [encerrar_perguntas_com_fato.py:27](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/encerrar_perguntas_com_fato.py:27), [relavrar_via_i6.py:44](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/relavrar_via_i6.py:44), [0053_pergunta_unica_por_familia.py:31](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/migrations/0053_pergunta_unica_por_familia.py:31), [reconciliar_fantasmas.py:210](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/management/commands/reconciliar_fantasmas.py:210), [flip_auto.py:116](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/services/flip_auto.py:116))
-
-_7249 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7251 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
