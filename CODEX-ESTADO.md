@@ -1,7 +1,475 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 00:28** · publicado em **19/11/2026 00:28** (UTC-3)
+> Ultima resposta processada: **19/11/2026 00:35** · publicado em **19/11/2026 00:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 00:35 · sessao 3eee19a55d53 · CADEIA-20-PASSO1 · sonda · origem=Code
+
+A origem das **453 sobras** permanece sem subdivisão: `_marca_intra_duracao` marca `_intra_dur` tanto no par S→E dentro de `intra_max_s` quanto no caso S,S; o laço de `parear_turnos` também usa esse mesmo atributo para absorção pelo marco de intervalo e outros caminhos. Os carimbos `_papel_ata` e `_intra_ata` identificam contribuição da ata, mas não registram qual dos caminhos escreveu primeiro `_intra_dur`. Assim, eles não distinguem as duas origens pedidas. [app/ponto/turnos.py:385](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:385), [app/ponto/turnos.py:476](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:476), [app/ponto/turnos.py:1310](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1310), [app/ponto/turnos.py:1356](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1356), [app/ponto/turnos.py:1408](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1408), [app/ponto/turnos.py:1466](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1466). O total de 453 é o informado em `pronto.md` fornecido no pedido. [não verificado]
+
+Para a direção inversa, a sonda lê as lâmpadas casadas por `periodos_do_dia`, que devolve o instante da luz e trata a virada de dia; exige uma única batida apurável naquele minuto e uma única associação ao turno, e conta apenas a entrada ou saída sem contraparte. Dias são dias de ata por colaborador; batidas são contadas uma vez por empresa. Ambiguidades e atas sem alinhamento são informadas separadamente. [app/ponto/juiz_batida.py:86](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/juiz_batida.py:86), [app/ponto/juiz_batida.py:149](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/juiz_batida.py:149), [app/ponto/turnos.py:43](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:43), [app/ponto/turnos.py:2868](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:2868). A contagem inversa e a execução da sonda permanecem **[não verificado]**.
+
+```python
+# Executar pelo envelope de leitura da sombra, no tenant juliani.
+# Não cria, altera ou apaga arquivos. Não imprime nome nem CPF.
+# Dias da inversa: (colaborador, data da célula da ata).
+# Batidas da inversa: PK distinta por empresa, mesmo se duas atas a reivindicarem.
+
+import collections
+import datetime
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from escala.models import CelulaDia
+from ponto.juiz_batida import periodos_do_dia
+from ponto.turnos import batidas_apuraveis, turnos_do_colab
+
+
+INI = datetime.date(2026, 10, 21)
+FIM = datetime.date(2026, 11, 20)
+UM_DIA = datetime.timedelta(days=1)
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def minuto_local(instante):
+    if timezone.is_aware(instante):
+        instante = timezone.localtime(instante).replace(tzinfo=None)
+    return instante.replace(second=0, microsecond=0)
+
+
+def indice_turnos(turnos):
+    por_pk = collections.defaultdict(list)
+    for turno in turnos:
+        for batida in turno.batidas:
+            por_pk[batida.pk].append((turno, batida))
+    return por_pk
+
+
+def situacao_pareador(registros):
+    # Mesma precedência da sonda2; não altera as classes já medidas.
+    if len(registros) != 1:
+        return "NAO_MEDIDA_MULTIPLOS_OU_SEM_TURNO"
+    turno, batida = registros[0]
+    if getattr(batida, "_intra_dur", False):
+        return "NAO_MEDIDA_ORIGEM_PAUSA"
+    if turno.entrada is not None and turno.saida is not None:
+        return "PAR_FECHADO"
+    if turno.entrada is not None and turno.saida is None:
+        if batida.pk == turno.entrada.pk:
+            return "TURNO_ABERTO"
+        return "NAO_MEDIDA_BATIDA_INTERNA_TURNO_ABERTO"
+    if turno.entrada is None and turno.saida is not None:
+        if batida.pk == turno.saida.pk:
+            return "SAIDA_SEM_ENTRADA"
+        return "NAO_MEDIDA_BATIDA_INTERNA_SEM_ENTRADA"
+    return "FORA_DA_ESCALA_SEM_ENQUADRAMENTO"
+
+
+def hora_valida(hora):
+    if not isinstance(hora, str) or len(hora) != 5 or hora[2] != ":":
+        return False
+    try:
+        return datetime.datetime.strptime(hora, "%H:%M").strftime("%H:%M") == hora
+    except ValueError:
+        return False
+
+
+def main():
+    classe_erro = "GUARDA_SOMBRA"
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+
+            classe_erro = "CELULAS"
+            celulas = list(
+                CelulaDia.objects.filter(data__gte=INI, data__lte=FIM)
+                .select_related("colaborador", "colaborador__empresa")
+                .order_by("colaborador_id", "data")
+            )
+            por_pessoa = collections.defaultdict(list)
+            for celula in celulas:
+                por_pessoa[celula.colaborador_id].append(celula)
+
+            pausa_total = 0
+            empresas = set()
+            inversa_dias = collections.defaultdict(set)
+            inversa_batidas = collections.defaultdict(set)
+            exemplos = {}
+            nao_medida = collections.Counter()
+
+            for cid, cels in sorted(por_pessoa.items()):
+                colab = cels[0].colaborador
+                emp = colab.empresa_id
+                empresas.add(emp)
+
+                classe_erro = "BATIDAS"
+                # A primeira janela reproduz a sonda2 para o total de pausas.
+                lo = timezone.make_aware(
+                    datetime.datetime.combine(INI, datetime.time.min)
+                )
+                hi = timezone.make_aware(
+                    datetime.datetime.combine(FIM + UM_DIA, datetime.time.min)
+                )
+                batidas = list(batidas_apuraveis(colab, lo, hi))
+                por_minuto_sonda2 = collections.defaultdict(list)
+                for batida in batidas:
+                    local = timezone.localtime(batida.timestamp)
+                    if INI <= local.date() <= FIM:
+                        por_minuto_sonda2[
+                            (local.date(), local.strftime("%H:%M"))
+                        ].append(batida)
+
+                # A luz de uma ata pode cair fora da data civil da célula.
+                lo_pad = timezone.make_aware(
+                    datetime.datetime.combine(INI - UM_DIA, datetime.time.min)
+                )
+                hi_pad = timezone.make_aware(
+                    datetime.datetime.combine(
+                        FIM + 2 * UM_DIA, datetime.time.min
+                    )
+                )
+                batidas_pad = list(batidas_apuraveis(colab, lo_pad, hi_pad))
+                por_minuto = collections.defaultdict(list)
+                for batida in batidas_pad:
+                    por_minuto[minuto_local(batida.timestamp)].append(batida)
+
+                classe_erro = "TURNOS"
+                turnos = turnos_do_colab(
+                    colab, INI - UM_DIA, FIM + UM_DIA
+                )
+                por_pk = indice_turnos(turnos)
+
+                for cel in cels:
+                    classe_erro = "ATA"
+                    if not isinstance(cel.ata, dict):
+                        nao_medida[(emp, "ATA_AUSENTE")] += 1
+                        continue
+
+                    orfas = cel.ata.get("orfas")
+                    if orfas is not None and not isinstance(orfas, list):
+                        raise RuntimeError("orfas_formato")
+                    if orfas is not None:
+                        for hora in orfas:
+                            if not hora_valida(hora):
+                                raise RuntimeError("hora_orfa")
+                            candidatos = por_minuto_sonda2.get(
+                                (cel.data, hora), []
+                            )
+                            if len(candidatos) == 1:
+                                situacao = situacao_pareador(
+                                    por_pk.get(candidatos[0].pk, [])
+                                )
+                                if situacao == "NAO_MEDIDA_ORIGEM_PAUSA":
+                                    pausa_total += 1
+
+                    classe_erro = "INVERSA_ATA"
+                    # tipo_escala=None não interfere na construção dos papéis;
+                    # o cadastro de intervalo não é objeto desta medida.
+                    resultado = periodos_do_dia(cel, None)
+                    if resultado.get("desalinhado"):
+                        nao_medida[(emp, "ATA_DESALINHADA")] += 1
+                        continue
+
+                    papeis = resultado.get("papeis")
+                    if not isinstance(papeis, list):
+                        raise RuntimeError("papeis_formato")
+                    if orfas is None:
+                        nao_medida[(emp, "LISTA_ORFAS_AUSENTE")] += 1
+                        continue
+
+                    for papel in papeis:
+                        if not isinstance(papel, dict):
+                            raise RuntimeError("papel_formato")
+                        if papel.get("acesa") is not True:
+                            continue
+                        instante = papel.get("instante_luz")
+                        if instante is None:
+                            nao_medida[(emp, "LUZ_SEM_INSTANTE")] += 1
+                            continue
+                        if not isinstance(instante, datetime.datetime):
+                            raise RuntimeError("instante_formato")
+                        minuto = minuto_local(instante)
+                        candidatos = por_minuto.get(minuto, [])
+                        if len(candidatos) != 1:
+                            motivo = (
+                                "LUZ_SEM_BATIDA"
+                                if not candidatos
+                                else "MINUTO_AMBIGUO"
+                            )
+                            nao_medida[(emp, motivo)] += 1
+                            continue
+
+                        # A ata registra sobras em HH:MM, sem identidade.
+                        # Se coincidem, não se afirma qual batida ela casou.
+                        if minuto.strftime("%H:%M") in orfas:
+                            nao_medida[(emp, "LUZ_TAMBEM_EM_ORFAS")] += 1
+                            continue
+
+                        batida = candidatos[0]
+                        registros = por_pk.get(batida.pk, [])
+                        if len(registros) != 1:
+                            nao_medida[
+                                (emp, "MULTIPLOS_OU_SEM_TURNO")
+                            ] += 1
+                            continue
+
+                        turno, batida_turno = registros[0]
+                        entrada_orfa = (
+                            turno.entrada is not None
+                            and turno.saida is None
+                            and batida_turno.pk == turno.entrada.pk
+                        )
+                        saida_orfa = (
+                            turno.entrada is None
+                            and turno.saida is not None
+                            and batida_turno.pk == turno.saida.pk
+                        )
+                        if not (entrada_orfa or saida_orfa):
+                            continue
+
+                        inversa_dias[emp].add((cid, cel.data))
+                        inversa_batidas[emp].add(batida.pk)
+                        exemplo = (cid, minuto.date(), minuto.strftime("%H:%M"))
+                        if emp not in exemplos or exemplo < exemplos[emp]:
+                            exemplos[emp] = exemplo
+
+            classe_erro = "SAIDA"
+            linhas = [
+                "A NAO_MEDIDA_ORIGEM_PAUSA sobras=%d" % pausa_total,
+                "A REFERENCIA_SONDA2 sobras=453 confere=%s"
+                % ("s" if pausa_total == 453 else "n"),
+            ]
+            for emp in sorted(empresas, key=lambda valor: str(valor)):
+                linhas.append(
+                    "B_INVERSA emp=%s dias=%d batidas=%d"
+                    % (emp, len(inversa_dias[emp]), len(inversa_batidas[emp]))
+                )
+                if emp in exemplos:
+                    cid, dia, hora = exemplos[emp]
+                    linhas.append(
+                        "B_INVERSA_EXEMPLO emp=%s col%d %s %s"
+                        % (emp, cid, dia.strftime("%d/%m"), hora)
+                    )
+                else:
+                    linhas.append(
+                        "B_INVERSA_EXEMPLO emp=%s nenhum" % emp
+                    )
+            for (emp, motivo), total in sorted(
+                nao_medida.items(), key=lambda item: (str(item[0][0]), item[0][1])
+            ):
+                linhas.append(
+                    "B_INVERSA_NAO_MEDIDA emp=%s motivo=%s ocorrencias=%d"
+                    % (emp, motivo, total)
+                )
+
+        for linha in linhas:
+            print(linha)
+        print("ERROS=0")
+        print("FIM_SONDA_PASSO1_V3")
+        return 0
+
+    except Exception:
+        print("ERRO " + classe_erro)
+        print("ERROS=1")
+        print("FIM_SONDA_PASSO1_V3")
+        return 1
+
+
+sys.exit(main())
+```
+
+## 19/11 00:34 · sessao e6d8cd33e14a · AUDITORIA-ESPURIAS · sonda · origem=Code
+
+`item["motivo"]` é criado por `classificar_export` com valor inicial `None`; ele pode permanecer assim ou receber um destes códigos fixos: `rescisao_modulo_proprio`, `sem_codigo_dominio`, `ferias_com_batida`, `cadastro_zero`, `furo_espelho` ou `nao_homologado`. Não é texto livre; os detalhes descritivos ficam em outro campo. [app/folha/export.py:837](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:837), [app/folha/export.py:866](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:866), [app/folha/export.py:960](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:960), [app/folha/export.py:968](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:968)
+
+A saída fornecida não identifica qual dos três valores foi recusado. [não verificado] Na sonda abaixo, `len=0` para um valor que não seja string significa que não há caracteres de string a examinar; `chars_fora` é o conjunto vazio nesse caso. [não verificado]
+
+```python
+import logging
+import os
+import unicodedata
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import connection, transaction
+
+from colaboradores.models import Colaborador, Empresa
+from folha.export import classificar_export, montar_linhas_export
+from ponto.services.fechamento import recalcular_fechamento_mes
+
+MES = 11
+ANO = 2026
+COL = 950
+ONDE = "inicio"
+
+
+class FalhaRegistrada(BaseException):
+    pass
+
+
+def erro_registrado(self, *args, **kwargs):
+    raise FalhaRegistrada()
+
+
+def sim_nao(valor):
+    return "sim" if valor else "nao"
+
+
+def guarda_sombra():
+    if (
+        os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra"
+        or not getattr(settings, "HASNER_SOMBRA", False)
+        or connection.settings_dict.get("NAME") != "sombra"
+        or connection.settings_dict.get("HOST") != "sombra_db"
+        or getattr(connection, "schema_name", None) != "juliani"
+    ):
+        raise RuntimeError("configuracao_sombra")
+
+
+def campo_seguro(campo, valor):
+    if isinstance(valor, str):
+        fora = [
+            c for c in valor
+            if not (c.isascii() and (c.isalnum() or c == "_"))
+        ]
+        if not fora:
+            return f"{campo}={valor}"
+        categorias = "{" + ",".join(
+            sorted({unicodedata.category(c) for c in fora})
+        ) + "}"
+        return (
+            f"{campo}=RECUSADO classe=str len={len(valor)} "
+            f"chars_fora={categorias}"
+        )
+
+    return (
+        f"{campo}=RECUSADO classe={type(valor).__name__} "
+        "len=0 chars_fora={}"
+    )
+
+
+def s6():
+    global ONDE
+
+    ONDE = "guarda_sombra"
+    guarda_sombra()
+
+    with transaction.atomic():
+        ONDE = "transacao_sombra"
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+            )
+            cursor.execute(
+                "SELECT current_database(), current_user, current_schema()"
+            )
+            banco, usuario, schema = cursor.fetchone()
+        if (banco, usuario, schema) != ("sombra", "leitor", "juliani"):
+            raise RuntimeError("conexao_sombra")
+
+        ONDE = "universo"
+        colab = Colaborador.objects.get(pk=COL)
+        empresas = list(Empresa.objects.order_by("pk"))
+        if not empresas:
+            raise RuntimeError("sem_empresas")
+        if not any(e.pk == colab.empresa_id for e in empresas):
+            raise RuntimeError("empresa_do_colaborador_ausente")
+
+        ONDE = "export_lido"
+        encontrou_export = False
+        for empresa in empresas:
+            with (
+                patch.object(logging.Logger, "exception", erro_registrado),
+                patch.object(logging.Logger, "error", erro_registrado),
+            ):
+                lidos = recalcular_fechamento_mes(
+                    MES,
+                    ANO,
+                    empresa_id=empresa.pk,
+                    somente_leitura=True,
+                    lavrar_dias_pagos=False,
+                    retornar_objeto=True,
+                )
+                fechamentos = list(lidos.values())
+                itens = classificar_export(
+                    empresa, MES, ANO, fechamentos=fechamentos
+                )
+                linhas_todas, _ = montar_linhas_export(
+                    empresa, MES, ANO,
+                    itens=itens, fechamentos=fechamentos,
+                )
+                alvo = [
+                    f for f in fechamentos if f.colaborador_id == COL
+                ]
+                linhas_alvo, _ = montar_linhas_export(
+                    empresa, MES, ANO, itens=itens, fechamentos=alvo
+                )
+
+            if len(alvo) > 1 or len(linhas_alvo) > len(linhas_todas):
+                raise RuntimeError("atribuicao_de_linhas")
+
+            item_alvo = [
+                i for i in itens if i["colaborador_id"] == COL
+            ]
+            if len(item_alvo) > 1:
+                raise RuntimeError("classificacao_duplicada")
+
+            if not item_alvo:
+                detalhes = "motivo=sem_fechamento_lido"
+            else:
+                item = item_alvo[0]
+                status = alvo[0].status if alvo else "ausente"
+                detalhes = " ".join(
+                    (
+                        campo_seguro("classificacao", item["status"]),
+                        campo_seguro("motivo", item["motivo"]),
+                        campo_seguro("status_fechamento", status),
+                        f"linhas={len(linhas_alvo)}",
+                    )
+                )
+
+            sai = bool(linhas_alvo)
+            encontrou_export = encontrou_export or sai
+            print(
+                f"S6 emp={empresa.pk} col{COL} "
+                f"export_lido={sim_nao(sai)} "
+                f"filtro=app/folha/export.py:716 "
+                f"{detalhes}"
+            )
+
+        print(
+            f"S6 col{COL} export_lido_alguma_empresa="
+            f"{sim_nao(encontrou_export)}"
+        )
+
+
+try:
+    s6()
+except FalhaRegistrada:
+    print(f"ERRO S6 {ONDE}: falha_registrada")
+except Exception as exc:
+    print(f"ERRO S6 {ONDE}: {type(exc).__name__}")
+else:
+    print("ERROS_S6=0")
+    print("FIM_SONDA_DUAS_PONTAS_A5")
+```
 
 ## 19/11 00:28 · sessao 255a6e96c464 · DST-L2-JZ1 · censo · origem=Code
 
@@ -2272,19 +2740,4 @@ python manage.py test chamados.tests.test_e4c_f9_comandos_leem_o_ato.ComandosLee
 
 A revisão foi somente por leitura. Nenhum teste ou mutante foi executado, nenhum arquivo foi criado, e a correspondência da cópia ao hash informado é **[não verificado]**. [nao verificado]
 
-## 18/11 22:33 · sessao 49baaaf366a7 · - · - · origem=Ronald (tmux)
-
-- A premissa de que M6 é o único comando que grava com `--apply` é falsa: M7 também aceita a opção e chama a porta de validação ([validar_classe_a.py:32](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:32), [validar_classe_a.py:100](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:100), [validacao.py:661](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:661)).
-- O auditor de M2–M5 declara leitura sem escrita em dados e não oferece `--dry` nem `--apply`; `--html` escreve um arquivo. A execução sem `--html` é o modo de leitura existente ([auditar_invariantes_chamados.py:1](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1), [auditar_invariantes_chamados.py:552](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:552), [auditar_invariantes_chamados.py:1858](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1858)).
-- O teste do selo monta mutações da fonte em memória; isso não comprova a existência ou ausência do log Django histórico ([test_e4c_f9_comandos_leem_o_ato.py:207](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:207)). Log histórico: [não verificado].
-- A decisão F9=(A), o limite de alterações e o conteúdo dos anexos não foram localizados como arquivos na cópia; como informação fornecida no enunciado, sua vigência independente é [não verificado].
-- Uma alteração futura pode ser avaliada quanto a exportada, dinheiro e `!` somente com o delta concreto: [não verificado]. A porta de validação menciona a proteção da competência exportada ([validacao.py:688](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:688)).
-
-## 18/11 22:33 · sessao b1328dde7609 · - · - · origem=Ronald (tmux)
-
-- O sítio M7 é a guarda de divergência entre ato e projeção em [validar_classe_a.py:62](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:62); a leitura usada na impressão é outra operação, em [validar_classe_a.py:80](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:80).
-- Na lista real, uma pergunta com validação vigente é excluída antes de chegar à guarda M7, em [models.py:2003](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/models.py:2003); o teste atual substitui essa lista por um mock em [test_e4c_f9_comandos_leem_o_ato.py:110](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:110).
-- Remover a guarda é um mutante definível; por inspeção, os testes atuais exigem o contador que ela incrementa e falhariam sem ela, em [test_e4c_f9_comandos_leem_o_ato.py:118](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:118) e [test_e4c_f9_comandos_leem_o_ato.py:136](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:136). Execução do mutante: [não verificado].
-- `validar_classe_a` também aceita `--apply` e chama a porta de validação, em [validar_classe_a.py:32](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:32) e [validar_classe_a.py:100](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:100); a porta pode salvar a validação e registrar o ato em [validacao.py:161](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:161) e [validacao.py:729](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/services/validacao.py:729).
-
-_7188 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7190 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
