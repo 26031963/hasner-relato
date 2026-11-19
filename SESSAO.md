@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 18:09:59.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (9.4 MB). Acoes na janela: **279**.
+**Medido em 19/11/2026 18:15:09.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (9.4 MB). Acoes na janela: **282**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:15:08 | Bash | Orient on CADEIA logs and docs | `cd /home/ronald/saas-hasner; ls logs/CADEIA-20-PASSO-1/ logs/CADEIA-20-PASSO-1/v2n; ls logs/CADEIA-20/passo1 \| head -30; tail -3 app/docs/PROMPTS.md \| cut -c1-250; grep -n "CADEIA-20-PASSO-1" app/docs/BACKLOG.md \| cut -c1-300` |
+| 18:14:57 | Bash | Check B3 accepted laws, L-124, corte literal | `cd /home/ronald/saas-hasner; grep -n "^B3_LEIS" -A4 bin/disjuntor.py; grep -n "L-124" app/docs/LEIS.md \| head -3 \| cut -c1-400; ls logs/QUEIMA-1911/B1/corte_razao_da_sobra.txt && cat logs/QUEIMA-1911/B1/corte_razao_da_sobra.txt` |
+| 18:14:51 | Bash | Read B3 memories and the release recognizer | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory; cat b3-so-libera-com-aval-explicito.md b3-nunca-escrevo-desenho.md; cd /home/ronald/saas-hasner; grep -n "def linhas_libera_b3" -A40 bin/disjuntor.py \| head -60` |
 | 18:05:18 | Bash | Write desenho question and PAREI at RELATO top | `cd /home/ronald/saas-hasner; H=$(date +%H:%M \| cut -c1-4)x; python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO: suite.sh \| pid=3502520') L[0]='! PAREI: tres-obras-do-dia-esperam-o-ronald \| espera Ronald -- CADEIA-20-PASSO-1 parada por B3 (pergunta de desenho abaixo); E4C-F5-CONSTROI espera o AVAL-DEVOLVIDO 1735;  ...` |
 | 18:05:09 | Bash | Write desenho question and PAREI at RELATO top | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO: suite.sh \| pid=3502520') L[0]='! PAREI: tres-obras-do-dia-esperam-o-ronald \| espera Ronald -- CADEIA-20-PASSO-1 parada por B3 (pergunta de desenho abaixo); E4C-F5-CONSTROI espera o AVAL-DEVOLVIDO 1735; FERIADO-POR-POSTO espera A5 + sombra_c2b=0. Nenhu ...` |
 | 18:04:55 | Bash | Read the live order item | `cd /home/ronald/saas-hasner; grep -n "ORDEM-VIVA-1511-NOITE" app/docs/BACKLOG.md \| head -3 \| cut -c1-1200` |
