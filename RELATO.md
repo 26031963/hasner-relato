@@ -1,4 +1,4 @@
-ESPERANDO: sombra.sh medidas CADEIA v3 | pid=3663607
+ESPERANDO: sombra.sh medidas CADEIA v3 + complemento (dinheiro e tela) | pid=3676885
 E4C-F5 MEDIR 1(e) (18:4x, logs/ESPINHA-BRIEFS/F5/opus_models/medir_1e/r.txt, rc=0): :2004/:3235 ato x projecao em 51563 perguntas, PERCORRIDAS=51563 ERROS=0, MUDA_RESPONDIDA=0 MUDA_ESTADO=0 MUDA_SEM_VEREDITO=0 DISPLAY_DIF=0 CRU_DIF=0 -> ZERO, SEGUE (item 1(e) do 1735); volta A espera a vaga do construtor (CADEIA v3 em medida)
 DESPACHO E4C-F5-CONSTROI volta A (18:5x): A1 (juizes puros, _pergunta_viva_calc, 12 diretos da A, fio:192 pelo compositor, selo de chamada por IDENTIDADE base AST 41 -> esperado 24, selo de pureza, RED ato x projecao, adaptacoes ii/iii/iv/vi) -> Codex construtor pid=3674740 | A2 (lotes K, REDs 3x6, mutantes tira-lote, adaptacoes i/v/vii) -> Codex depois da A1 | REDs/GREEN/suite -> sessao | final -> opus. Linha de base do selo REMEDIDA por AST com apelido: 41 (a de 19 era subcontada).
 DESPACHO CADEIA-20-PASSO-1 medidas v3 (18:4x): sonda MAIN x COPIA -> sombra.sh pela sessao (motivo: ESCREVE na sombra, atomic+raise; fora do alcance do Codex).
