@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 22:07** · publicado em **18/11/2026 22:08** (UTC-3)
+> Ultima resposta processada: **18/11/2026 22:09** · publicado em **18/11/2026 22:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 22:09 · sessao 9280fcbf61a8 · E4C-F6F7 · verificador · origem=Code
+
+1. **nada — comportamento exercitado preservado no laço mostrado.** Em cada iteração não ignorada, `outras_ds` recebe uma lista nova, `p.decisoes.all()` devolve essa mesma lista e `LeituraReal.leitura(p)` a consome antes da próxima atribuição a `outras_ds` ([teste:230](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:230), [models.py:4308](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/models.py:4308)). A diferença é que a lambda nova guarda a referência à lista no argumento padrão; a anterior consultava a variável quando chamada. Assim, uma chamada tardia da lambda antiga poderia devolver outra lista, mas essa chamada tardia não aparece no trecho ([teste:232](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:232); versão anterior: anexo `delta.diff`, [não verificado] na cópia).
+
+2. **FILA — resultado do Ruff não verificado.** Não identifiquei outra closure em laço que capture tardiamente variável desse laço: as lambdas em [teste:48](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:48) e [teste:221](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:221) fixam `ds` por argumento padrão; a função em [teste:177](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:177) faz o mesmo com `antigo` e `novo`. Não identifiquei outra acusação provável de B, F ou E9 na inspeção [não verificado por Ruff]. A configuração seleciona F, E9 e B, exceto B905 e B007 ([ruff.toml:4](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/ruff.toml:4)); o Ruff não estava disponível para execução [não verificado].
+
+3. **nada — fluxo identificado.** `sequencia(*outros)` produz a lista atribuída a `outras_ds` ([teste:26](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:26), [teste:232](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:232)). A linha seguinte cria `N(all=...)` e o atribui a `p.decisoes`; a lambda devolve a lista ([teste:233](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:233)). `LeituraReal.leitura(p)` lê `p.decisoes.all()` ([teste:234](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:234), [models.py:4308](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/models.py:4308)). O próprio teste também passa `outras_ds` às duas funções comparadas ([teste:235](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:235)).
+
+4. **nada — no delta fornecido**, somente a lambda mudou; não há mudança de asserção, caso ou tolerância no diff anexado [não verificado independentemente]. A cópia atual contém a asserção e os casos mostrados em [teste:225](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:225) e [teste:236](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:236). A cópia não está em um repositório Git acessível; HEAD e comparação com `f0ddfbe4c` permanecem [não verificado].
 
 ## 18/11 22:07 · sessao 360a48b03fa9 · E4C-F6F7 · construtor · origem=Code
 
@@ -1429,51 +1439,4 @@ LEI-AKITA: origem=[leituras_cruas:141](/home/ronald/wt-codex-e4c-f9-191111/app/c
 
 Os testes não foram executados [não verificado]. A identidade da cópia pelo hash informado também está **[não verificado]**: o diretório disponível não é um repositório Git [não verificado]. [nao verificado]
 
-## 18/11 20:34 · sessao 4d39f1c0a7d7 · E4C-F6F7 · verificador · origem=Code
-
-**Resultado: os três achados da triagem estão corrigidos no código do delta, com uma ressalva de execução dos testes novos:** as três classes acrescentadas depois de `unittest.main()` são descobertas por `python -m unittest`, mas não quando o arquivo é executado diretamente. Os seis testes do módulo c14 passaram pela primeira forma; a catraca geral dos mutantes E3 não pôde ser importada neste ambiente por falta de `django.test`. [test_e4c_f6f7_c14_lei3_pela_leitura.py:101; test_e3_mutantes_alvo.py:9; execução local, não registrada em arquivo] [nao verificado]
-
-1. **Fechamento dos achados e chamadores**
-
-   - **PROCEDE — default silencioso fechado.** `leitura` e `leituras` são argumentos nomeados obrigatórios; os dois pontos de `_tarefa_pura` indexam o mapa, de modo que uma chave ausente falha em vez de produzir leitura vazia. O teste cobre ausência dos argumentos e mapa incompleto. [tarefa_do_dia.py:142; tarefa_do_dia.py:196; tarefa_do_dia.py:279; tarefa_do_dia.py:340; test_e4c_f6f7_c14_lei3_pela_leitura.py:151] [nao verificado]
-   - **PROCEDE — projeção futura cortada para a leitura.** A cópia recebe `None` nos dois carimbos posteriores a `agora`, antes de `DecisaoPergunta.leitura`; há teste para futuro e igualdade nos dois campos. [tarefa_do_dia.py:405; test_e4c_f6f7_c14_lei3_pela_leitura.py:134] [nao verificado]
-   - **PROCEDE — alvo velho corrigido.** A string do mutante inclui a nova chamada nomeada e corresponde a uma ocorrência na cópia; a catraca exige exatamente uma ocorrência. A execução completa dessa catraca está **[não verificado]**, pois sua importação falhou por falta de `django.test`. [e3_v8_mutantes.py:76; tarefa_do_dia.py:279; test_e3_mutantes_alvo.py:14; execução local, não registrada em arquivo]
-   - **NÃO PROCEDE — chamador omitido encontrado.** A busca textual no repositório não revelou chamada de produção ou fixture à função real sem o novo argumento: produção passa pelas chamadas em `279`, `340`, `458` e `659–663`; os testes que omitem argumento o fazem para verificar `TypeError`. A busca não prova ausência de chamada construída dinamicamente sem o nome literal. [tarefa_do_dia.py:279; tarefa_do_dia.py:340; tarefa_do_dia.py:458; tarefa_do_dia.py:659; test_e4c_f6f7_c14_lei3_pela_leitura.py:151; busca textual, não registrada em arquivo] [nao verificado]
-
-2. **Alcance do corte**
-
-   **PROCEDE — o original fica intacto quanto aos dois carimbos nesse trecho.** O código faz `copy(p)`, altera atributos da cópia e passa essa cópia exclusivamente à leitura; o teste verifica os dois valores originais após as chamadas. A cópia é superficial, portanto isso não é prova geral de isolamento de todos os objetos relacionados. [tarefa_do_dia.py:403; test_e4c_f6f7_c14_lei3_pela_leitura.py:137] [nao verificado]
-
-   Depois da leitura, os originais `_ps` ainda alimentam `linhas_da_projecao_sem_linha`, `esta_stale`, a seleção de âncoras e chamados; a carga também conserva as perguntas originais em `_perg` e as passa à tarefa. A leitura resultante pode, porém, mudar a razão e as ações publicadas: o efeito observável do corte não se limita ao valor interno da leitura. A face por pergunta chega à API; a carga alimenta, entre outros, fora da folha, retrato e vigia. [tarefa_do_dia.py:417; tarefa_do_dia.py:422; tarefa_do_dia.py:432; tarefa_do_dia.py:521; tarefa_do_dia.py:659; tarefa_do_dia.py:163; api/views.py:2544; folha/fora_da_folha.py:62; folha/retrato_folha.py:1212; chamados/services/vigia_fio.py:357]
-
-   **PROCEDE — mesma fronteira temporal e mesmo `agora`:** o corte descarta `instante > agora`, conservando igualdade; o passivo conserva `ato_em <= agora`. Os predicados completos têm entradas diferentes: o passivo primeiro exige projeção sem linha correspondente, enquanto o novo corte atua diretamente sobre os dois campos da cópia. [tarefa_do_dia.py:407; tarefa_do_dia.py:417; models.py:4251]
-
-3. **Exceção no contrato de vitalidade**
-
-   - **NÃO PROCEDE — allowlist anterior zero para serviços.** Já havia entradas para funções de serviços, inclusive `validacao.py`, `relavra_via.py` e `raiox.py`. [test_contract_leitores_vitalidade.py:19; test_contract_leitores_vitalidade.py:40; test_contract_leitores_vitalidade.py:52]
-   - **PROCEDE para os caminhos de produção examinados — a razão descreve a origem do valor.** A carga preenche o mapa com `DecisaoPergunta.leitura`, que retorna `LeituraDoAto`; `_pela_decisao` recebe esse resultado. A assinatura, por si só, não impõe o tipo, e fixtures passam objetos sintéticos. [tarefa_do_dia.py:413; tarefa_do_dia.py:458; tarefa_do_dia.py:528; models.py:4326; test_e3_tarefa_admin_sem_banco.py:126]
-   - **PROCEDE — há alternativa sem essa entrada.** O contrato AST reconhece o nome do atributo e a forma sintática, sem distinguir a origem do objeto. Uma alteração explícita do contrato para reconhecer a leitura do ato permitiria preservar a verificação de carimbo cru sem isentar toda `_pela_decisao`; essa alternativa é uma proposta, não uma alteração aplicada nem validada. [test_contract_leitores_vitalidade.py:299; test_contract_leitores_vitalidade.py:333; test_contract_leitores_vitalidade.py:346] [nao verificado]
-
-4. **Fixtures**
-
-   **NÃO PROCEDE — não identifiquei assert removido, caso retirado ou tolerância ampliada no delta fornecido.** As alterações acrescentam principalmente mapas de leituras sintéticas, campos e um stub de `leitura`; os asserts mostrados permanecem. Isso não demonstra equivalência geral de cobertura: por exemplo, a fixture V8 fornece `validada_em=None` para todas as perguntas, sem reproduzir a leitura real. [e3_v8_apoio.py:126; test_e3_r3_c7_sem_banco.py:179; test_e3_r3_c7_sem_banco.py:195; test_e3_c8b_sem_banco.py:246]
-
-5. **Mutantes do aval**
-
-   **PROCEDE no conjunto dos quatro casos enumerados; fora dele, [não verificado].** Cada mutante é exigido como diferente do resultado correto no caso designado, e igual à função original nos outros três casos enumerados. Assim, a exclusividade demonstrada é apenas sobre essa matriz, não sobre todas as sequências possíveis. [test_e4c_f6f7_c14_lei3_pela_leitura.py:173; test_e4c_f6f7_c14_lei3_pela_leitura.py:192]
-
-   **PROCEDE — sobrevivência faz o teste falhar**, desde que o teste seja executado: `assertNotEqual` falha se o mutante devolver o resultado esperado; `subTest` registra a falha no resultado do `unittest`, sem `try/except` que a suprima. O teste passou na execução por descoberta de módulo. Há a ressalva já indicada: execução direta do arquivo chega a `unittest.main()` antes da definição de `MutantesDoAval`, `HorizonteProjecao` e `LeituraObrigatoria`. [test_e4c_f6f7_c14_lei3_pela_leitura.py:101; test_e4c_f6f7_c14_lei3_pela_leitura.py:104; test_e4c_f6f7_c14_lei3_pela_leitura.py:166; test_e4c_f6f7_c14_lei3_pela_leitura.py:183; execução local, não registrada em arquivo] [nao verificado]
-
-6. **Escritores e leitores dos valores relevantes**
-
-   | Campo ou valor | Escrita e leitura verificadas |
-   |---|---|
-   | `respondida_em` e `resposta_colab` | A resposta humana escreve os dois e registra ato de resposta; resposta automática e carimbo pela trilha também os escrevem. A leitura usa a projeção para compor linhas passivas e devolve resposta vigente. [disputa_emissao.py:1481; disputa_emissao.py:1532; disputa_emissao.py:1682; disputa_emissao.py:1705; models.py:4259; models.py:4312] |
-   | `validada_em` | A validação escreve o carimbo e o ato; devolução e resposta humana podem limpá-lo; o modelo também pode carimbá-lo. O corte escreve apenas `None` na cópia e a leitura usa o campo na composição da sequência. [validacao.py:161; validacao.py:269; disputa_emissao.py:1484; models.py:3325; tarefa_do_dia.py:407; models.py:4265] |
-   | `ato`, `ato_em`, `resposta_mantem_validacao` | Escritores registram atos pela porta `registrar`; resposta humana grava `False`, automática e trilha gravam `True`, assim como a linha passiva de resposta. A carga filtra `ato_em`, a leitura reconstrói a vigência e `_pela_decisao` percorre a cauda. [models.py:4328; disputa_emissao.py:1532; disputa_emissao.py:1685; disputa_emissao.py:1707; models.py:4260; tarefa_do_dia.py:390; models.py:4308; tarefa_do_dia.py:158] |
-   | `leituras[p.pk]`, `leitura.validada_em` | `_fatos_das_perguntas` constrói o mapa; a carga o guarda e o entrega a `_tarefa_pura`; `_pela_decisao` usa a validação vigente para selecionar o ato decisório. A face por pergunta usa o mesmo mapa. [tarefa_do_dia.py:404; tarefa_do_dia.py:528; tarefa_do_dia.py:659; tarefa_do_dia.py:163; tarefa_do_dia.py:458] |
-   | `passivo`, `lavra`, `efeitos`, `fila` | `_fatos_das_perguntas` constrói esses insumos; `_pela_decisao` os lê para escolher razão, ações e porta. A lavra vem de `veredito_lavrado` sujeito a `esta_stale`; efeitos vêm de batidas; fila vem de `qs_na_fila`. [tarefa_do_dia.py:414; tarefa_do_dia.py:420; tarefa_do_dia.py:424; tarefa_do_dia.py:439; tarefa_do_dia.py:152] |
-
-A lista acima identifica os escritores e leitores necessários para avaliar este delta; uma enumeração exaustiva de todos os consumidores e de todos os caminhos de escrita desses campos no repositório é **[não verificado]**. Não há resultado de produção nem execução da suíte inteira nos dados fornecidos: **[não verificado]**. [nao verificado]
-
-_7165 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7166 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
