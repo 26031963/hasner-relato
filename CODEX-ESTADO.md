@@ -1,7 +1,687 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 10:26** · publicado em **19/11/2026 10:26** (UTC-3)
+> Ultima resposta processada: **19/11/2026 10:31** · publicado em **19/11/2026 10:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 10:31 · sessao 4643c4b2b1cc · ESPELHO-VERDADE · leitura · origem=Code
+
+O ponto central é que `InsumosDoDono` chama o oráculo **sem `pares`**. Assim, as `horas_do_dia` entregues ao juiz são as batidas agrupadas pela data da **primeira batida de cada turno formado pelo próprio oráculo**; não são uma lista agrupada necessariamente pelo dia de calendário de cada batida nem pelo dia da jornada vindo dos pares do motor ([e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149), [nucleo.py:186](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:186), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)).
+
+**Referência do censo.** O diretório fornecido não contém metadados Git acessíveis: `git rev-parse HEAD` retornou “not a git repository”. Portanto, a identidade entre os arquivos lidos e o HEAD/hash informado é **[não verificado]**. A busca por chamadas textuais em arquivos Python encontrou os quatro sítios de aplicação abaixo; chamadas dinâmicas ou fora dos arquivos pesquisados permanecem **[não verificado]**.
+
+### 1. Chamadas na aplicação
+
+| Sítio | `pares` e origem de `ts` | Chave de dia |
+|---|---|---|
+| [e6_oraculo.py:153](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:153), `InsumosDoDono.__init__` | **Não passa `pares`**. `ts` vem dos timestamps de `batidas_apuraveis`, convertidos para a timezone corrente, entre `ini − 12h` e `fim + 1 dia + 14h`; a consulta usa limites inclusivos e exclui retratadas ([e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149), [turnos.py:2892](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:2892)). | No ramo por sequência, `str(tu[0].date())`, para cada turno construído após os cortes ([nucleo.py:215](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:215), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)). |
+| [diff_calculador.py:414](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:414) | **Passa `pares=_pares`**. No padrão, `_pares=None`; com `--pares-da-autoridade`, recebe `_ins['pares']` de `insumos_do_calculador(c, aut.resultado, ...)`. `ts` vem de consulta direta a `Batida`, sem retratadas, ordenada, convertida para horário local; o limite superior é exclusivo ([diff_calculador.py:270](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:270), [diff_calculador.py:287](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:287), [diff_calculador.py:312](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:312), [diff_calculador.py:325](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:325)). | Com `None`, a primeira data do turno por sequência. Com os pares da porta, o terceiro elemento é o dia obtido de `resultado.dia_da_jornada[id(p)]`; períodos sem esse dia são pulados ([alimentacao.py:73](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:73), [alimentacao.py:133](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:133), [nucleo.py:134](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:134)). |
+| [alimentacao.py:449](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:449), `rubricas_por_dia` | **Passa `pares`**, convertendo `insumos['pares']` em lista; `ts` é a lista do parâmetro `batidas_locais`, ou lista vazia se ausente. No DIFF, recebe o `ts` descrito acima; no fechamento, recebe os timestamps locais de `batidas`, carregadas por `batidas_apuraveis` ([alimentacao.py:353](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:353), [diff_calculador.py:417](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:417), [fechamento.py:633](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/fechamento.py:633), [fechamento.py:1271](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/fechamento.py:1271)). | Para os insumos montados por `insumos_do_calculador`, os segmentos levam o dia do mapa `dia_da_jornada`; o núcleo usa esse terceiro elemento ([alimentacao.py:305](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:305), [alimentacao.py:73](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:73), [nucleo.py:141](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:141)). |
+| [periodo.py:356](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:356), `periodo_do_dia` | **Passa `pares`** de `segmentos_do_par(entrada, saida, intervalos, dia)` e passa `ts=()`, vazio. Se entrada ou saída for `None`, retorna antes dessa chamada ([periodo.py:291](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:291), [periodo.py:353](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:353)). | Cada segmento recebe o `dia` passado à função; no caminho de `reler`, ele vem do mapa `resultado.dia_da_jornada`, por objeto de período ([periodo.py:596](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:596), [periodo.py:611](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:611), [periodo.py:744](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:744)). |
+
+Nos dois ramos, `brutas` é uma contagem separada por `str(t.date())` de cada instante de `ts`. No ramo com pares, as demais saídas usam o terceiro elemento do par quando presente; se ausente ou `None`, usam `str(entrada.date())` ([nucleo.py:117](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:117), [nucleo.py:134](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:134), [nucleo.py:235](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:235)).
+
+**Testes:** também há chamadas diretas com dados de teste nos arquivos [test_calculador_regras.py:165](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_calculador_regras.py:165), [test_e6_oraculo_julga_impar.py:44](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_oraculo_julga_impar.py:44), [test_e6_oraculo_le_a_retratacao.py:34](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_oraculo_le_a_retratacao.py:34) e [test_e6_turno_nao_cresce_sem_fim.py:72](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_turno_nao_cresce_sem_fim.py:72). Elas exercitam sequência e, em alguns casos, pares de teste; a mesma regra de chave do núcleo se aplica ([test_calculador_regras.py:171](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_calculador_regras.py:171), [test_e6_turno_nao_cresce_sem_fim.py:160](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_turno_nao_cresce_sem_fim.py:160), [nucleo.py:141](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:141), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)). Este parágrafo agrupa os testes por arquivo, não enumera cada chamada individual.
+
+### 2. Caminho de `horas_do_dia` até o dono
+
+1. `InsumosDoDono.__init__` consulta `batidas_apuraveis`, transforma os timestamps em horário local, chama `minutos_do_oraculo(ts)` e guarda `self.oraculo.horas` em `self.horas` ([e6_oraculo.py:128](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:128), [e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149)).
+2. `minutos_do_oraculo` ordena `ts`, forma turnos pelos cortes de sequência e, para cada turno, acrescenta **todas as suas batidas formatadas como `HH:MM`** à lista sob `str(tu[0].date())` ([nucleo.py:109](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:109), [nucleo.py:186](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:186), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)).
+3. `InsumosDoDono.dono(data)` faz `k = str(data)` e passa `self.horas.get(k, [])` como primeiro argumento de `dono_da_divergencia`: se não houver lista para a chave, passa `[]`. Pode chamar primeiro com CXR falso e, se necessário, chamar novamente com o resultado de `cxr()`; o argumento de horas é o mesmo ([e6_oraculo.py:182](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:182)).
+4. O juiz usa a **paridade do comprimento** dessa lista no ramo de BATIDA, depois das guardas de cadastro e de `batida_fora_de_turno`; não interpreta os valores `HH:MM` nessa condição ([e6_oraculo.py:98](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:98)). No próprio comando, o objeto é criado com o espelho já obtido e `dono` é chamado com a data convertida da chave do dia ([e6_oraculo.py:328](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:328), [e6_oraculo.py:378](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:378)).
+
+### 3. Limites da leitura
+
+- **HEAD/hash:** correspondência com `f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33` **[não verificado]**; o Git não estava disponível nesse diretório.
+- **Execução e dados reais:** não executei testes nem consultei banco; resultados por colaborador, frequência de chaves divergentes e impacto na classificação **[não verificado]**. [nao verificado]
+- **Cobertura do censo:** os quatro sítios da tabela são as chamadas textuais de aplicação encontradas em Python; resolução dinâmica, código externo e o censo individualizado de cada chamada de teste **[não verificado]**. [nao verificado]
+- **Demais insumos do dono:** o caminho acima acompanha `horas_do_dia`; não é uma auditoria completa da produção de `cadastro`, fase, CXR ou `batida_fora_de_turno`, embora esses insumos participem da chamada ([e6_oraculo.py:185](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:185)).
+
+## 19/11 10:31 · sessao 1d64acfa6833 · DST-L2-JZ1 · verificador · origem=Code
+
+**Veredito: BLOQUEIA**, por dois pontos que permanecem na c6: a retenção pode ser decidida com uma fotografia e a rejeição com outra; e o selo ainda aceita uma chamada cujo resultado não participa da decisão, permitindo uma derivação paralela. A triagem registra a janela como fila, mas não demonstra que ela deixou de contrariar a proteção pretendida. ([reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:581](app/chamados/reconciliador.py:581), [justificativa.py:337](app/ponto/services/justificativa.py:337), [teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90))
+
+### 1. Achados da volta 1
+
+- **Janela entre retenção e rejeição: não curado; a justificativa da triagem procede apenas quanto ao comportamento anterior.** Antes da c6, a rejeição já abrangia justificativas pendentes por origem; a extração mantém esse universo. Mas agora a c6 promete reter o chamado quando houver justificativa alheia pendente no ato de aprovar: a consulta da retenção ocorre antes do `atomic`, e a rejeição consulta de novo com trava e sem portão. Uma justificativa que passe a integrar o vínculo entre essas leituras pode ser rejeitada apesar da proteção. A ocorrência, o isolamento e a frequência em produção são **[não verificado]**. ([justificativa.py:267](app/ponto/services/justificativa.py:267), [reconciliador.py:445](app/chamados/reconciliador.py:445), [reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:549](app/chamados/reconciliador.py:549), [reconciliador.py:581](app/chamados/reconciliador.py:581), [justificativa.py:337](app/ponto/services/justificativa.py:337))
+- **Texto “aponta”: curado para novas gravações.** A frase agora admite ponteiro ou origem, conforme o vínculo que a consulta aceita. Registros históricos já gravados não são reescritos por essa mudança. ([reconciliador.py:458](app/chamados/reconciliador.py:458), [reconciliador.py:492](app/chamados/reconciliador.py:492))
+- **Selo sem mordida: parcialmente curado, ainda não curado.** As quatro amostras declaradas são reconhecidas pela lógica do verificador, mas ela continua sem garantir uso efetivo do resultado. A execução dos testes é **[não verificado]**. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90), [teste C6:122](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:122))
+- **Documentação de 37 pares: curada como descrição da alegação.** A docstring distingue 37 pares em uma foto e 46 = 46 em outra. As fotos, os hashes e a comparação de produção são **[não verificado]**. ([teste C6:4](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:4))
+
+### 2. Mordida do selo
+
+As quatro variantes do teste recebem ao menos uma violação: ausência de chamada aproveitada, atributo proibido, importação do modelo ou keyword do vínculo. Os dois sítios vivos têm chamada em expressão usada e não contêm os padrões proibidos, portanto passam pela análise estática apresentada; a execução é **[não verificado]**. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90), [teste C6:117](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:117), [teste C6:122](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:122), [reconciliador.py:457](app/chamados/reconciliador.py:457), [justificativa.py:337](app/ponto/services/justificativa.py:337))
+
+Ainda escapa, por exemplo, `x = pendentes_do_vinculo(chs)` seguido de uma decisão independente que nunca usa `x`. O selo considera a atribuição suficiente; uma consulta paralela também pode esconder o vínculo em `filter(**d)` e usar um alias do modelo importado fora da função. Assim, ele não prova o contrato de um só predicado. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90), [teste C6:95](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:95))
+
+### 3. Trilha de retenção
+
+`registrar_retencao` monta a descrição e os campos `justificativa_pendente` e `em_aprovacao`; `core.observ.evento` grava a descrição em `LogAuditoria.descricao` e os campos em `valor_depois`. Antes de gravar, o próprio registrador lê o último `valor_depois` e compara apenas `justificativa_pendente`. ([reconciliador.py:465](app/chamados/reconciliador.py:465), [reconciliador.py:490](app/chamados/reconciliador.py:490), [core/observ.py:133](app/core/observ.py:133))
+
+A tela de auditoria exibe a descrição, e sua busca filtra texto por `descricao__icontains`. Não encontrei leitor de código que exija literalmente a palavra antiga para essa ação; buscas humanas salvas, integrações externas e leitores dinâmicos são **[não verificado]**. Uma busca textual por “aponta” naturalmente não encontrará as novas descrições. ([core/views.py:701](app/core/views.py:701), [core/views.py:713](app/core/views.py:713), [log_auditoria.html:73](app/templates/core/log_auditoria.html:73))
+
+Há uma limitação adicional da trilha: se a justificativa alheia for a mesma e `em_aprovacao` mudar, a comparação considera o evento repetido e não grava o novo ID. Portanto, o campo gravado descreve o ato da linha existente, não necessariamente a última tentativa. ([reconciliador.py:491](app/chamados/reconciliador.py:491), [reconciliador.py:494](app/chamados/reconciliador.py:494))
+
+### 4. Significado dos campos lidos ou gravados
+
+- **`Justificativa.status`:** o modelo inicia em `pendente`; a consulta seleciona esse estado, e a rejeição grava `rejeitada`. Os leitores e escritores citados na volta 1 tratam esses valores como estado da justificativa; não identifiquei segundo significado nos trechos examinados. Outros acessos indiretos são **[não verificado]**. ([models.py:159](app/ponto/models.py:159), [justificativa.py:283](app/ponto/services/justificativa.py:283), [justificativa.py:351](app/ponto/services/justificativa.py:351))
+- **`chamado_origem` e `justificativa_relacionada_id`:** são relações distintas: a origem identifica o chamado que gerou a justificativa; o ponteiro identifica a justificativa que responde ao chamado. A consulta deliberadamente aceita **qualquer uma** das duas, sem atribuir a ambas o mesmo sentido. A preferência pelo ponteiro no detalhe também é explícita. ([models.py:173](app/ponto/models.py:173), [vinculos.py:81](app/chamados/services/vinculos.py:81), [justificativa.py:279](app/ponto/services/justificativa.py:279), [reconciliador.py:458](app/chamados/reconciliador.py:458))
+- **`_APROVANDO` / `em_aprovacao`:** o contexto carrega o ID da justificativa cujo ato está em curso; o predicado a exclui e a trilha grava esse mesmo ID, sujeito à deduplicação acima. ([reconciliador.py:426](app/chamados/reconciliador.py:426), [reconciliador.py:430](app/chamados/reconciliador.py:430), [justificativa.py:286](app/ponto/services/justificativa.py:286), [reconciliador.py:491](app/chamados/reconciliador.py:491))
+- **`justificativa_pendente`:** é o ID escolhido de uma justificativa alheia pendente ligada por ponteiro ou origem; o texto novo preserva esse significado. A chave sozinha não informa qual relação existia. ([reconciliador.py:445](app/chamados/reconciliador.py:445), [reconciliador.py:458](app/chamados/reconciliador.py:458), [reconciliador.py:491](app/chamados/reconciliador.py:491))
+- **`Justificativa.descricao`:** a rejeição acrescenta uma anotação ao texto existente, sem substituir seu conteúdo. O diff também preserva a escolha de não atualizar `atualizado_em`; o próprio contrato documenta que leitores desse timestamp têm consequências distintas. ([justificativa.py:300](app/ponto/services/justificativa.py:300), [justificativa.py:351](app/ponto/services/justificativa.py:351))
+
+A concordância de **todos** os consumidores, inclusive externos e dinâmicos, é **[não verificado]**.
+
+### 5. Classes de reprovação
+
+- **Segundo juiz / derivação paralela:** não identifiquei outro predicado nos dois sítios alterados: ambos chamam `pendentes_do_vinculo`. O selo, porém, não impediria toda futura duplicação. A classificação de outros contadores como duplicação proibida é **[não verificado]**. ([reconciliador.py:457](app/chamados/reconciliador.py:457), [justificativa.py:337](app/ponto/services/justificativa.py:337), [justificativa.py:359](app/ponto/services/justificativa.py:359), [teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90))
+- **Segundo escritor fora da porta:** existem escritores diretos preexistentes em entrada sincronizada e triagem; o diff fornecido não os introduz. Sua admissibilidade pela lei aplicável é **[não verificado]**. ([entrada_sincronizada.py:38](app/ponto/services/entrada_sincronizada.py:38), [triagem_batida.py:605](app/ponto/services/triagem_batida.py:605))
+- **Relógio fora da borda:** não identificado nos trechos novos de produção examinados; alcance transitivo completo **[não verificado]**. ([reconciliador.py:453](app/chamados/reconciliador.py:453), [justificativa.py:262](app/ponto/services/justificativa.py:262))
+- **Selo sem mordida completa:** presente, pela variante de resultado atribuído e ignorado. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90))
+- **Ordem de trava:** a extração preserva a consulta travada da rejeição, mas a retenção anterior continua fora da transação e sujeita à janela descrita. O efeito das travas e do isolamento em produção é **[não verificado]**. ([justificativa.py:283](app/ponto/services/justificativa.py:283), [justificativa.py:337](app/ponto/services/justificativa.py:337), [reconciliador.py:544](app/chamados/reconciliador.py:544))
+- **Campo com dois significados:** a afirmação incorreta de que toda justificativa alheia era apontada foi corrigida no texto novo. Não identifiquei novo duplo significado nos campos examinados; a deduplicação de `em_aprovacao` limita o que se pode inferir da última linha. ([reconciliador.py:491](app/chamados/reconciliador.py:491))
+
+Não executei testes nem consultei banco ou logs; resultados de execução e estado de produção são **[não verificado]**. [nao verificado]
+
+## 19/11 10:31 · sessao c09fa2cce16b · ESPELHO-VERDADE · sonda · origem=Code
+
+O dado fornecido não contém as batidas nem os resultados necessários para preencher a tabela: as 14 linhas e as contagens só serão conhecidas após a execução. [não verificado]
+
+Há uma distinção relevante para a coluna **b**: o script entrega ao pareador exatamente o universo e o recorte usados por `InsumosDoDono`. Essa chamada isolada não reproduz toda a alimentação do caminho do sistema: `turnos_do_colab` segmenta a janela e fornece marcos, papéis da ata e outros insumos. Portanto, a coluna **b** responde à comparação sobre as mesmas batidas do oráculo; ela **não certifica que o motor formou aqueles mesmos pares**. [e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149) [turnos.py:1923](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1923) [turnos.py:1977](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1977)
+
+Outro limite da solicitação: **a sonda abaixo é entregue somente como texto**. A porta `bin/sonda_leitura.sh --sombra` também cria ou reescreve arquivos e administra credenciais e permissões; executá-la não satisfaria uma proibição absoluta de criar, editar ou apagar qualquer arquivo. [sonda_leitura.sh:115](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/bin/sonda_leitura.sh:115) [sonda_leitura.sh:153](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/bin/sonda_leitura.sh:153) [sonda_leitura.sh:216](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/bin/sonda_leitura.sh:216)
+
+```python
+# Sonda EV v3, item 2.
+# Executar no envelope Django da sombra, tenant juliani.
+# Somente IDs, datas, horas, resultados e classes de excecao.
+import sys
+sys.dont_write_bytecode = True
+
+import logging
+
+# Mesma guarda contra handlers de arquivo do anexo v2.
+for _logger in [logging.getLogger()] + [
+    x for x in logging.Logger.manager.loggerDict.values()
+    if isinstance(x, logging.Logger)
+]:
+    for _handler in list(_logger.handlers):
+        if isinstance(_handler, logging.FileHandler):
+            _logger.removeHandler(_handler)
+
+import datetime as dt
+import json
+import os
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador, Empresa
+from ponto import janelas
+from ponto.management.commands import e6_oraculo as e6
+from ponto.services.espelho import espelho_do_colab
+from ponto.supra_juiz import cadastro_do_dia_carregado
+from ponto.turnos import batidas_apuraveis, parear_turnos
+
+
+# Competencia 2026-11 e empresa conforme o anexo v2.
+DADOS = (
+    (2, 200, "2026-10-29"),
+    (2, 200, "2026-11-02"),
+    (2, 218, "2026-11-14"),
+    (2, 296, "2026-11-02"),
+    (2, 382, "2026-11-10"),
+    (2, 516, "2026-10-23"),
+    (2, 727, "2026-11-10"),
+    (2, 841, "2026-11-16"),
+    (3, 110, "2026-11-12"),
+    (3, 113, "2026-10-30"),
+    (3, 113, "2026-11-01"),
+    (4, 37,  "2026-11-14"),
+    (3, 112, "2026-10-21"),
+    (3, 112, "2026-10-22"),
+)
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+
+    especificacao = os.environ.get("TESTE_CPUSET", "4-7")
+    permitidas = set()
+    for parte in especificacao.split(","):
+        limites = parte.strip().split("-")
+        if len(limites) == 1:
+            permitidas.add(int(limites[0]))
+        elif len(limites) == 2:
+            inicio, fim = map(int, limites)
+            if inicio > fim:
+                raise RuntimeError("cpuset_invalido")
+            permitidas.update(range(inicio, fim + 1))
+        else:
+            raise RuntimeError("cpuset_invalido")
+
+    afinidade = os.sched_getaffinity(0)
+    if not afinidade or not afinidade.issubset(permitidas):
+        raise RuntimeError("cpuset")
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY"
+        )
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def instante_local(valor):
+    if valor is None:
+        return None
+    if timezone.is_naive(valor):
+        raise ValueError("timestamp_sem_timezone")
+    return timezone.localtime(valor).isoformat()
+
+
+def json_seguro(valor):
+    return json.dumps(valor, ensure_ascii=True, separators=(",", ":"))
+
+
+def preparar(empresa_id, pk, hoje, agora):
+    empresa = Empresa.objects.get(pk=empresa_id)
+    colab = Colaborador.objects.get(pk=pk, empresa_id=empresa_id)
+    ini, fim = janelas.janela_fechamento(11, 2026, empresa)
+
+    espelho = espelho_do_colab(colab, hoje, ini, fim, agora=agora)
+    registros = {
+        str(item.get("data"))[:10]: item
+        for item in (espelho.get("dias") or [])
+    }
+    insumos = e6.InsumosDoDono(
+        colab, ini, fim, hoje, espelho=espelho, agora=agora
+    )
+
+    # Exatamente os limites inclusivos usados em InsumosDoDono.
+    tzc = timezone.get_current_timezone()
+    lo = timezone.make_aware(
+        dt.datetime.combine(ini, dt.time()) - dt.timedelta(hours=12), tzc
+    )
+    hi = timezone.make_aware(
+        dt.datetime.combine(fim + dt.timedelta(days=1), dt.time())
+        + dt.timedelta(hours=14),
+        tzc,
+    )
+    batidas = list(batidas_apuraveis(colab, lo, hi))
+    instantes = [timezone.localtime(b.timestamp) for b in batidas]
+
+    # Confere que a segunda leitura produz as mesmas horas do oraculo.
+    releitura = e6.minutos_do_oraculo(instantes)
+    if dict(releitura.horas) != dict(insumos.oraculo.horas):
+        raise RuntimeError("releitura_oraculo_diferente")
+
+    # Chamada direta sobre as mesmas batidas, sem alimentacao de ata ou marcos.
+    turnos = parear_turnos(batidas)
+
+    # O proprio nucleo transforma os pares em horas por dia_da_jornada.
+    # Ele ignora pares sem entrada; eles continuam visiveis em "pares".
+    pares_nucleo = [
+        (
+            timezone.localtime(t.entrada.timestamp) if t.entrada else None,
+            timezone.localtime(t.saida.timestamp) if t.saida else None,
+            t.data_turno,
+        )
+        for t in turnos
+    ]
+    horas_pares = e6.minutos_do_oraculo(
+        instantes, pares=pares_nucleo
+    ).horas
+
+    return colab, ini, fim, registros, insumos, turnos, horas_pares
+
+
+def medir(colab, dia, registro, insumos, turnos, horas_pares):
+    chave = str(dia)
+    horas_a = list(insumos.oraculo.horas.get(chave, []))
+    horas_b = list(horas_pares.get(chave, []))
+
+    pares = [
+        {
+            "entrada": instante_local(t.entrada.timestamp) if t.entrada else None,
+            "saida": instante_local(t.saida.timestamp) if t.saida else None,
+            "dia_da_jornada": str(t.data_turno) if t.data_turno else None,
+        }
+        for t in turnos
+        if t.data_turno == dia
+    ]
+
+    # Mesmos outros insumos que InsumosDoDono.dono; somente horas mudam.
+    kw = dict(
+        batida_fora_de_turno=e6.batida_fora_de_turno(
+            colab, dia, insumos.turnos()
+        ),
+        fase_deslocada=chave in insumos.fase(),
+        **cadastro_do_dia_carregado(colab.pk, dia),
+    )
+    cxr = chave in insumos.cxr()
+    dono_a = e6.dono_da_divergencia(horas_a, cxr, **kw)
+    dono_b = e6.dono_da_divergencia(horas_b, cxr, **kw)
+
+    # Verifica a chamada direta contra a montagem oficial dos insumos.
+    if dono_a != insumos.dono(dia):
+        raise RuntimeError("dono_original_diferente")
+
+    # Campo produzido pelo caminho de realizado do espelho.
+    minutos_realizados = (
+        None if registro is None else registro.get("minutos_realizados")
+    )
+    # Leitor do E6, inclusive o fallback para pago_h.
+    minutos_e6, fonte_e6 = e6.minutos_do_espelho(registro)
+
+    return {
+        "horas_oraculo": horas_a,
+        "pares": pares,
+        "horas_derivadas_pares": horas_b,
+        "dono_oraculo": dono_a,
+        "dono_pares": dono_b,
+        "mudou": dono_a != dono_b,
+        "minutos_realizados_espelho": minutos_realizados,
+        "minutos_leitor_e6": minutos_e6,
+        "fonte_leitor_e6": fonte_e6,
+    }
+
+
+def main():
+    casos = [(empresa, pk, dt.date.fromisoformat(dia))
+             for empresa, pk, dia in DADOS]
+    if len(casos) != 14 or len(set(casos)) != 14:
+        print("ERRO etapa=UNIVERSO tipo=RuntimeError")
+        print("CONTADOR=0 UNIVERSO=14 CONFERE=n")
+        print("ERROS=1")
+        return 1
+
+    contador = 0
+    erros = 0
+    mudou = 0
+    nao_mudou = 0
+    etapa = "GUARDA"
+
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+            agora = timezone.now()
+            hoje = timezone.localtime(agora).date()
+            cache = {}
+
+            for empresa_id, pk, dia in casos:
+                contador += 1
+                try:
+                    # Savepoint: erro de banco em um caso nao invalida os demais.
+                    with transaction.atomic():
+                        chave = (empresa_id, pk)
+                        if chave not in cache:
+                            preparado = preparar(empresa_id, pk, hoje, agora)
+                        else:
+                            preparado = cache[chave]
+
+                        colab, ini, fim, registros, insumos, turnos, horas_b = preparado
+                        if not ini <= dia <= fim:
+                            raise RuntimeError("dia_fora_da_janela")
+                        resultado = medir(
+                            colab, dia, registros.get(str(dia)),
+                            insumos, turnos, horas_b,
+                        )
+
+                    # Nao guardar uma carga cujo savepoint falhou.
+                    cache[chave] = preparado
+                    if resultado["mudou"]:
+                        mudou += 1
+                    else:
+                        nao_mudou += 1
+                    print(
+                        "CASO colab_pk=%d data=%s resultado=%s"
+                        % (pk, dia, json_seguro(resultado))
+                    )
+                except Exception as exc:
+                    erros += 1
+                    # Mensagens de excecao podem conter dados pessoais.
+                    print(
+                        "CASO colab_pk=%d data=%s ERRO tipo=%s"
+                        % (pk, dia, type(exc).__name__)
+                    )
+
+            confere = (
+                contador == 14
+                and mudou + nao_mudou + erros == contador
+            )
+            print(
+                "CONTAGEM dono_muda=%d dono_nao_muda=%d "
+                "casos_com_erro=%d"
+                % (mudou, nao_mudou, erros)
+            )
+            print(
+                "CONTADOR=%d UNIVERSO=14 CONFERE=%s"
+                % (contador, "s" if confere else "n")
+            )
+            if not confere:
+                erros += 1
+
+    except Exception as exc:
+        erros += 1
+        print("ERRO etapa=%s tipo=%s" % (etapa, type(exc).__name__))
+        print(
+            "CONTAGEM dono_muda=%d dono_nao_muda=%d casos_com_erro=%d"
+            % (mudou, nao_mudou, contador - mudou - nao_mudou)
+        )
+        print("CONTADOR=%d UNIVERSO=14 CONFERE=n" % contador)
+
+    print("ERROS=%d" % erros)
+    print("FIM_SONDA_EV_V3")
+    return 1 if erros else 0
+
+
+sys.exit(main())
+```
+
+As colunas chamam ou leem estas autoridades:
+
+- **Horas do oráculo:** `InsumosDoDono.oraculo.horas`, produzido por `minutos_do_oraculo` com `batidas_apuraveis` no intervalo de início menos 12 horas até o fim mais um dia e 14 horas, com limites inclusivos. [e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149) [turnos.py:2872](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:2872)
+- **Pares e dia:** `parear_turnos`, sem argumentos de marcos ou ata; `dia_da_jornada` é o campo `data_turno` devolvido. Para obter `horas_derivadas_pares`, a sonda chama o ramo `pares` de `minutos_do_oraculo`; esse ramo ignora uma saída órfã sem entrada, embora ela permaneça visível em `pares`. [turnos.py:43](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:43) [turnos.py:1192](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1192) [nucleo.py:119](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:119)
+- **Donos:** duas chamadas reais a `dono_da_divergencia`, alterando apenas a lista de horas; a primeira ainda é conferida contra `InsumosDoDono.dono`. Os demais insumos seguem a montagem dessa função. [e6_oraculo.py:53](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:53) [e6_oraculo.py:182](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:182)
+- **Espelho:** `minutos_realizados_espelho` lê o campo produzido pelo caminho `_realizado_do_dia_tela` do próprio espelho. Separadamente, `minutos_leitor_e6` chama `minutos_do_espelho`, que pode recorrer a `pago_h`; a fonte acompanha o valor. [espelho.py:267](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:267) [espelho.py:689](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:689) [espelho.py:797](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:797) [e6_oraculo.py:242](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:242)
+
+A execução, as 14 linhas, as contagens e eventuais exceções permanecem **[não verificado]**. A comparação também não prova a causa de uma divergência nem reproduz o pareamento contextual completo do motor. [turnos.py:1977](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1977)
+
+## 19/11 10:29 · sessao 800c94e98edf · ESPELHO-VERDADE · leitura · origem=Code
+
+**Não é possível responder “sim” ou “não” para nenhum dos sete dias com os anexos fornecidos.** Falta, para cada um, o dado que mostre se há sobra da ata a classificar e se ela pertence ao balde pausa. [não verificado]
+
+O critério disponível no brief é a **sobra**: ele descreve a pausa como uma razão pretendida para a instância de batida processada, sujeita à precedência de dia sem trabalho e de rajada; o carimbo de intervalo, por si só, não liga a hora da ata à instância. O brief diz ainda que essas razões são propostas, não retornos demonstrados do código atual. [não verificado — anexo `brief_cadeia20.md`, seções 1 e 2]
+
+| Colaborador / data | No universo do censo, balde pausa? | Razão para o dia trazida pelo brief |
+|---|---|---|
+| 252 / 2026-11-09 | Não consta [não verificado] | Não consta [não verificado] |
+| 252 / 2026-11-10 | Não consta [não verificado] | Não consta [não verificado] |
+| 252 / 2026-11-11 | Não consta [não verificado] | Não consta [não verificado] |
+| 252 / 2026-11-13 | Não consta [não verificado] | Não consta [não verificado] |
+| 252 / 2026-11-17 | Não consta [não verificado] | Não consta [não verificado] |
+| 884 / 2026-11-08 | Não consta [não verificado] | Não consta [não verificado] |
+| 114 / 2026-11-08 | Não consta [não verificado] | Não consta [não verificado] |
+
+A ausência desses dias na lista da `sonda4` não prova que estejam fora do censo de razões: aquela lista é de sobras **sem batida viva no mesmo minuto do dia civil da célula**, segundo a hipótese descrita no brief, e não uma lista de todas as sobras. [não verificado — anexos `brief_cadeia20.md`, seção 4, e `sondas_cadeia20.txt`]
+
+## 19/11 10:28 · sessao 5da7167e2d20 · CADEIA-20-PASSO-1 · leitura · origem=Code
+
+**A existência da batida perguntada permanece [não verificado].** O anexo traz a sonda anterior, mas não traz o resultado desta medição. A condição da premissa existe: quando `_iv` é verdadeiro, a batida só entra em `cur["batidas"]` se `cur` não for `None`; em seguida o laço continua. [app/ponto/turnos.py:1371] [não verificado]
+
+No lote `processar_cartorio`, o cartório entrega a `julgar_colab` todas as células passadas do colaborador, ordenadas por data; o corpo usa a primeira e a última como `d0` e `d1`. Ele carrega `batidas_apuraveis` de `d0 − 1 dia`, inclusive, até `d1 + 3 dias`, exclusivo, e chama `montar_grade_prevista_periodo` com `ref=d1+1` e `dias=(d1-d0)+2`. [app/ponto/management/commands/processar_cartorio.py:59] [app/ponto/services/cartorio.py:1156] [app/ponto/services/cartorio.py:1185] [app/ponto/services/cartorio.py:1201]
+
+Na grade por turno, `_ini_al = ref − dias`, portanto `d0 − 1`, e o limite final é `ref = d1 + 1`. A grade chama `turnos_do_colab` primeiro com as atas gravadas e depois com as atas desta montagem em memória; esta segunda resposta é usada no realizado e na reconciliação anterior à lavra. O wrapper aplica seu próprio *pad*, segmenta por vínculo e chama `parear_turnos`; ele não usa simplesmente a lista `bs` passada à grade. A ata lavrada recebe as horas de `dia["orfas"]`. [app/escala/utils.py:1317] [app/escala/utils.py:1590] [app/escala/utils.py:1891] [app/escala/utils.py:1909] [app/ponto/turnos.py:1850] [app/ponto/turnos.py:1867] [app/ponto/turnos.py:1977] [app/ponto/services/cartorio.py:749] [app/ponto/services/cartorio.py:1898]
+
+A sonda abaixo intercepta **a segunda chamada real** de `turnos_do_colab` dentro da grade, sem reconstruir o pareamento. Para evitar chamar uma batida de sem papel quando ela pertence a um turno aberto ou a um turno com apenas uma borda, `em_par` conta qualquer batida presente em `Turno.batidas`; é, portanto, um critério conservador, mais amplo que as bordas de um par fechado. `em_par` e `em_sobra_da_ata` podem se sobrepor. [app/ponto/turnos.py:312] [app/ponto/turnos.py:1495]
+
+O texto foi preparado para o envelope Django do anexo e **não foi executado nem testado**. [não verificado]
+
+```python
+from collections import Counter
+from datetime import datetime, time, timedelta
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Empresa
+from escala import utils as escala_utils
+from escala.models import CelulaDia
+from ponto.janelas import janela_fechamento
+import ponto.turnos as turnos
+
+
+cont = Counter()
+erros = 0
+linhas_emitidas = 0
+tz = timezone.get_current_timezone()
+
+
+def inicio_local(dia):
+    return timezone.make_aware(datetime.combine(dia, time.min), tz)
+
+
+def horas_da_ata(cel):
+    ata = cel.ata
+    if not isinstance(ata, dict) or "orfas" not in ata:
+        raise ValueError("ata sem lista de orfas")
+
+    horas = ata["orfas"]
+    if not isinstance(horas, list):
+        raise ValueError("lista de orfas invalida")
+
+    for hora in horas:
+        if not isinstance(hora, str) or len(hora) != 5:
+            raise ValueError("hora invalida")
+        if datetime.strptime(hora, "%H:%M").strftime("%H:%M") != hora:
+            raise ValueError("hora invalida")
+
+    return set(horas)
+
+
+def medir_colaborador(emp, colab, cels, ini, fim, agora):
+    # Mesmo lote de celulas passadas de processar_cartorio.
+    d0, d1 = cels[0].data, cels[-1].data
+    alvos = [
+        cel for cel in cels
+        if ini <= cel.data <= fim and cel.veredito_em is not None
+    ]
+    if not alvos:
+        return Counter(), []
+
+    # Exclui a celula inteira da medicao se sua ata nao permite
+    # responder se o minuto consta na lista de orfas.
+    atas = {}
+    locais = Counter()
+    validas = []
+    for cel in alvos:
+        try:
+            atas[cel.pk] = horas_da_ata(cel)
+            validas.append(cel)
+        except (TypeError, ValueError):
+            locais["celulas_ata_indeterminada"] += 1
+
+    if not validas:
+        return locais, []
+
+    j_ini = inicio_local(d0 - timedelta(days=1))
+    j_fim = inicio_local(d1 + timedelta(days=3))
+    bs = list(
+        turnos.batidas_apuraveis(
+            colab, j_ini, j_fim - timedelta(microseconds=1)
+        )
+    )
+    ref = d1 + timedelta(days=1)
+    dias = (d1 - d0).days + 2
+    ini_turnos = ref - timedelta(days=dias)
+
+    chamadas = []
+    original = turnos.turnos_do_colab
+
+    def capturar(*args, **kwargs):
+        resultado = original(*args, **kwargs)
+        chamadas.append((args, kwargs, resultado))
+        return resultado
+
+    # A propria grade executa as chamadas com seus insumos e atas.
+    with patch.object(turnos, "turnos_do_colab", side_effect=capturar):
+        escala_utils.montar_grade_prevista_periodo(
+            colab, bs, dias=dias, ref=ref, agora=agora
+        )
+
+    # Falha fechada se o caminho da grade mudar.
+    if len(chamadas) != 2:
+        raise ValueError("numero inesperado de chamadas")
+    args, kwargs, resultado = chamadas[1]
+    if (
+        len(args) != 3
+        or args[0].pk != colab.pk
+        or args[1] != ini_turnos
+        or args[2] != ref
+        or "celulas" not in kwargs
+    ):
+        raise ValueError("chamada inesperada")
+
+    pks_em_turno = {
+        batida.pk
+        for turno in resultado
+        for batida in turno.batidas
+    }
+
+    # As batidas medidas sao as apuraveis no dia civil de cada celula
+    # lavrada; a carga multi-dia do pareador foi feita pela propria grade.
+    por_data = {cel.data: cel for cel in validas}
+    batidas = turnos.batidas_apuraveis(
+        colab,
+        inicio_local(min(por_data)),
+        inicio_local(max(por_data) + timedelta(days=1))
+        - timedelta(microseconds=1),
+    )
+
+    exemplos = []
+    locais["celulas_medidas"] += len(validas)
+    for batida in batidas:
+        local = timezone.localtime(batida.timestamp, tz)
+        cel = por_data.get(local.date())
+        if cel is None:
+            continue
+
+        hora = local.strftime("%H:%M")
+        em_par = batida.pk in pks_em_turno
+        em_sobra = hora in atas[cel.pk]
+
+        locais["batidas_no_universo"] += 1
+        locais["em_par"] += int(em_par)
+        locais["em_sobra_da_ata"] += int(em_sobra)
+        if not em_par and not em_sobra:
+            locais["sem_papel"] += 1
+            if len(exemplos) < 20:
+                exemplos.append(
+                    (
+                        emp.pk,
+                        cel.pk,
+                        colab.pk,
+                        cel.data,
+                        hora,
+                        batida.pk,
+                    )
+                )
+
+    return locais, exemplos
+
+
+def sonda():
+    global erros, linhas_emitidas
+
+    agora = timezone.now()
+    hoje = timezone.localtime(agora, tz).date()
+
+    for emp in Empresa.objects.all().order_by("pk").iterator():
+        try:
+            with transaction.atomic():
+                ini, fim = janela_fechamento(11, 2026, emp)
+                ids = list(
+                    CelulaDia.objects.filter(
+                        colaborador__empresa_id=emp.pk,
+                        data__gte=ini,
+                        data__lte=fim,
+                        data__lt=hoje,
+                        veredito_em__isnull=False,
+                    )
+                    .order_by()
+                    .values_list("colaborador_id", flat=True)
+                    .distinct()
+                )
+        except Exception:
+            erros += 1
+            print("ERRO emp_pk=%s" % emp.pk)
+            continue
+
+        for col_pk in ids:
+            try:
+                # O savepoint permite continuar apos erro de banco,
+                # sem invalidar a transacao externa de leitura.
+                with transaction.atomic():
+                    cels = list(
+                        CelulaDia.objects.filter(
+                            colaborador_id=col_pk,
+                            data__lt=hoje,
+                        )
+                        .select_related("colaborador")
+                        .order_by("data", "pk")
+                    )
+                    if not cels:
+                        raise ValueError("sem celulas")
+
+                    colab = cels[0].colaborador
+                    locais, exemplos = medir_colaborador(
+                        emp, colab, cels, ini, fim, agora
+                    )
+
+                cont.update(locais)
+                for exemplo in exemplos:
+                    if linhas_emitidas >= 20:
+                        break
+                    print(
+                        "SEM_PAPEL emp_pk=%s cel_pk=%s col_pk=%s "
+                        "data=%s hora=%s batida_pk=%s" % exemplo
+                    )
+                    linhas_emitidas += 1
+            except Exception:
+                erros += 1
+                print("ERRO emp_pk=%s col_pk=%s" % (emp.pk, col_pk))
+
+
+try:
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION READ ONLY")
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
+            cursor.execute("SELECT current_database(), current_schema()")
+            banco, schema = cursor.fetchone()
+
+        if banco != "sombra" or schema != "juliani":
+            raise RuntimeError("banco ou schema incorreto")
+        if not getattr(settings, "GRADE_POR_TURNO", False):
+            raise RuntimeError("grade por turno desativada")
+
+        sonda()
+except Exception:
+    erros += 1
+    print("ERRO execucao")
+finally:
+    for chave in (
+        "celulas_medidas",
+        "celulas_ata_indeterminada",
+        "batidas_no_universo",
+        "em_par",
+        "em_sobra_da_ata",
+        "sem_papel",
+    ):
+        print("%s=%s" % (chave, cont[chave]))
+    print("ERROS=%s" % erros)
+    print("FIM_ETAPA_A")
+```
+
+O que a sonda não cobre:
+
+- Ela compara **o pareamento calculado agora** com a **ata atualmente gravada**. Não prova qual foi o pareamento no instante da lavra: batidas, atas, escalas ou a janela do julgamento podem ter mudado desde então. O código também admite julgamento de célula isolada e uma segunda passada com subconjunto de células; a sonda adota a janela do lote atual. [app/ponto/services/cartorio.py:1049] [app/ponto/services/cartorio.py:2059] [app/ponto/management/commands/processar_cartorio.py:59]
+- Uma ata sem lista `orfas` válida é contada como indeterminada e excluída da medição. A comparação por `HH:MM` não identifica individualmente duas batidas no mesmo minuto. [app/ponto/services/cartorio.py:764]
+- O resultado `sem_papel` significa ausência dos **dois papéis medidos**. Ele não verifica se a batida aparece em uma lâmpada da ata ou participa de outro consumidor; tampouco demonstra, sozinho, ausência de todo papel no sistema. A ata também contém `lampadas`. [app/ponto/services/cartorio.py:754] [app/ponto/services/cartorio.py:757]
+- Células futuras, sem `veredito_em`, sem célula no dia civil da batida, e colaboradores ou empresas com erro ficam fora do resultado; `ERROS` e `celulas_ata_indeterminada` precisam ser considerados ao interpretá-lo. [não verificado]
+
+perguntas de lei: 0
 
 ## 19/11 10:26 · sessao b77dcde34fb5 · DST-L2-JZ1-C6 · verificador · origem=Code
 
@@ -1276,119 +1956,4 @@ Para pergunta viva, capturar apenas exceções externas é insuficiente: há fal
 
 Perguntas de lei: **0**.
 
-## 19/11 09:06 · sessao 74532414e01d · E4C-F5-CONSTROI · construtor · origem=Code
-
-**lei:** `DecisaoPergunta.leitura(p).resposta_colab` não é garantidamente o texto corrente de `p.resposta_colab`. A leitura reconstrói o texto a partir dos atos e só acrescenta a projeção como passivo quando não encontra ato correspondente pelo instante; ela não compara os textos. ([chamados/models.py:4260](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4260), [chamados/models.py:4308](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4308))
-
-No caso `RESPOSTA 'a' → REABERTURA → RESPOSTA 'b'`, com a projeção coerente, a leitura retorna `'b'`; com apenas `RESPOSTA 'a' → REABERTURA`, retorna texto vazio, e o fio espera texto. A recusa também limpa a resposta reconstruída. ([chamados/models.py:4277](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4277), [chamados/models.py:4317](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4317), [chamados/services/fio.py:189](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/fio.py:189))
-
-Mas, se após essa sequência o ato de resposta em T3 guarda `'b'` e a pergunta corrente guarda `respondida_em=T3, resposta_colab='c'`, a leitura retorna **`'b'`**, enquanto o texto corrente é **`'c'`**: o ato já corresponde pelo instante e impede a inclusão do texto corrente como passivo. ([chamados/models.py:4260](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4260), [chamados/models.py:4309](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4309))
-
-Parei conforme a condição do item 2: não fiz a cura, alterações ou testes. A ocorrência desse caso em produção é **[não verificado]**. [nao verificado]
-
-## 19/11 08:55 · sessao 2fe06408ebda · E4C-F5-CONSTROI · verificador · origem=Code
-
-**Parecer: BLOQUEIA nos seis itens.** O bloqueio principal é que a tag passa a decidir se existe texto pela testemunha, mas o juiz chamado em seguida classifica o texto cru da projeção; assim, uma mesma exibição pode combinar respostas diferentes (`diff_v1.patch`, hunk de `chamados_tags.py`; `app/chamados/juizes.py:1938`, `app/chamados/juizes.py:2041`). O bloqueio de custo é um caminho real de lista sem `prefetch('decisoes')` (`app/chamados/services/acoes_chamado.py:350`; `app/templates/chamados/detalhe_local.html:309`; `app/chamados/models.py:4308`).
-
-A cópia disponível não contém `.git`: o hash informado para ela não pôde ser confirmado por Git [não verificado]. As referências ao diff e ao teste novo abaixo são ao **anexo fornecido**, pois esses arquivos não estão aplicados na cópia [não verificado]. Não executei os testes; os resultados RED/GREEN e mutantes são os do resumo fornecido [não verificado]. [nao verificado]
-
-1. **BLOQUEIA — testemunha e leituras cruas.**
-
-   - No diff, `espera_o_texto_do_colaborador` consulta `DecisaoPergunta.leitura` e entrega seu resultado a `respondida_sem_texto` (`diff_v1.patch`, hunk de `fio.py:185`). O juiz acessa somente `respondida_em` e `resposta_colab`, ambos presentes em `LeituraDoAto`: não há `AttributeError` por campo faltante nem default silencioso nessa chamada (`app/chamados/juizes.py:1531`; `app/chamados/models.py:19`).
-   - Em `historico`, manter `p.materializada_em` cru está correto segundo o brief fornecido, que deixa materialização na projeção; esse campo não existe em `LeituraDoAto` (`diff_v1.patch`, hunk de `historico.py:94`; `app/chamados/models.py:19`; brief fornecido [não verificado]). O histórico usa a leitura para resposta e validação, inclusive no rótulo da materialização (`diff_v1.patch`, hunk de `historico.py:102`).
-   - A tag **não satisfaz a afirmação “nada mais vem da projeção crua”**: depois do teste de texto pela leitura, chama `classificar_resposta_validacao(perg)`, que lê `perg.resposta_colab` diretamente para escolha e, para hora, via `delta_da_resposta` (`diff_v1.patch`, hunk de `chamados_tags.py:163`; `app/chamados/juizes.py:2034`; `app/chamados/juizes.py:1928`). O teste da tag substitui o classificador por mock, portanto não demonstra a coerência do resultado real (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:58`).
-   - Há ainda campos crus nos próprios cartões: validação e instante em `_pergunta_card.html`, e texto/instante no cartão do colaborador (`app/templates/chamados/partials/_pergunta_card.html:20`; `app/templates/chamados/partials/_pergunta_card.html:32`; `app/templates/chamados/partials/_card_atendimento.html:143`). Esses templates não são alterados pelo diff fornecido [não verificado].
-
-2. **BLOQUEIA — semântica e autoria dos campos.**
-
-   Os campos são da mesma *espécie*: `respondida_em` e `validada_em` são instantes `DateTimeField`, não dias; `resposta_colab` é texto (`app/chamados/models.py:2634`). A leitura preserva os instantes dos atos, sem conversão explícita de fuso, e ordena por instante; comportamento de apresentação de fuso em cada tela [não verificado] (`app/chamados/models.py:4308`; `app/chamados/models.py:4317`).
-
-   Eles **não são garantidamente os mesmos valores da projeção**: a leitura reconstrói a sequência, limpa resposta e validação em recusa/reabertura e acrescenta projeção sem linha correspondente como passivo (`app/chamados/models.py:4238`; `app/chamados/models.py:4277`; `app/chamados/models.py:4295`; `app/chamados/models.py:4317`). Sem ato e com carimbo de resposta, o passivo recupera o texto cru; texto cru sem carimbo não cria resposta sintética, logo a leitura pode devolvê-lo vazio (`app/chamados/models.py:4251`; `app/chamados/models.py:4260`). O teste fornecido também constrói deliberadamente divergências entre ato e projeção (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:40`).
-
-   - **`respondida_em` e `resposta_colab`:** a porta humana grava ambos e registra `RESPOSTA` com o mesmo instante e texto; resposta automática também os grava, preservando validação; reabertura os zera (`app/chamados/services/disputa_emissao.py:1481`; `app/chamados/services/disputa_emissao.py:1527`; `app/chamados/services/disputa_emissao.py:1662`; `app/chamados/services/disputa_emissao.py:1617`). A leitura os devolve ao fio, à tag e ao histórico no diff; o classificador da tag também lê o texto cru (`diff_v1.patch`, hunks de `fio.py`, `chamados_tags.py` e `historico.py`; `app/chamados/juizes.py:2041`).
-   - **`validada_em`:** `_carimbar_validacao` grava o carimbo e registra `VALIDACAO`; resposta humana nova e devolução podem limpá-lo (`app/chamados/services/validacao.py:161`; `app/chamados/services/disputa_emissao.py:1484`; `app/chamados/services/validacao.py:273`). A leitura o entrega ao histórico no diff (`diff_v1.patch`, hunk de `historico.py:102`).
-   - **`materializada_em`:** `_escrever_carimbo` atribui o campo; a porta de reabertura em lote também o limpa (`app/chamados/models.py:3293`; `app/chamados/services/disputa_emissao.py:1608`). O histórico proposto continua lendo-o da projeção (`diff_v1.patch`, hunk de `historico.py:102`).
-   - **Campos da sequência:** `registrar` grava as linhas; `leitura` consome `ato`, `ato_em`, `pk`, `ato_texto` e `resposta_mantem_validacao`, além do passivo da projeção (`app/chamados/models.py:4329`; `app/chamados/models.py:4308`; `app/chamados/models.py:4280`).
-
-   O corte fornecido de F8 diz que leitores e silêncio seguem usando o texto corrente da pergunta e que o texto do último ato é histórico (`app/docs/CORTES.md:550`). O diff usa texto da testemunha no histórico e no primeiro teste da tag, enquanto o classificador usa texto corrente: a compatibilidade dessa combinação com o corte, diante de divergência, fica **não demonstrada** (`diff_v1.patch`, hunks de `historico.py` e `chamados_tags.py`; `app/chamados/juizes.py:2041`).
-
-3. **BLOQUEIA — custo e chamadores.**
-
-   Para pergunta persistida, `leitura` executa `p.decisoes.all()`; sem prefetch, cada chamada avalia a relação, e chamadas repetidas na mesma instância sem cache de prefetch podem repetir a consulta (`app/chamados/models.py:4304`; `app/chamados/models.py:4308`).
-
-   - **Fio:** chamada direta em `montar_chamados_fio` e indireta por `aguarda_o_colaborador`; as perguntas desse caminho já chegam com `Prefetch('decisoes')` (`app/chamados/services/fio.py:258`; `app/chamados/services/fio.py:360`; `app/chamados/services/fio.py:387`).
-   - **Cobrança:** `_calados` chama diretamente; o diff acrescenta o prefetch ao queryset (`app/chamados/services/cobranca.py:236`; `diff_v1.patch`, hunk de `cobranca.py:235`). Caso real de custo coberto por teste [não verificado].
-   - **Relatório:** `classificar` chama `aguarda_o_colaborador`, que chama a função por pergunta; o diff faz prefetch nas perguntas dentro de `classificar` e também em `coletar` (`app/chamados/relatorios_disputa.py:11`; `app/chamados/relatorios_disputa.py:23`; `app/chamados/services/fio.py:164`; `diff_v1.patch`, hunks de `relatorios_disputa.py`). Caso real de custo coberto por teste [não verificado].
-   - **Tag no modal:** recebe as perguntas de `montar_chamados_fio`, com prefetch (`app/templates/chamados/partials/modal_fio.html:274`; `app/chamados/views.py:889`; `app/chamados/services/fio.py:258`).
-   - **Tag na lista de detalhe:** `montar_contexto_detalhe` carrega as perguntas sem prefetch e as passa ao template, que inclui o cartão por pergunta; a nova chamada da tag acrescenta consulta por pergunta que alcançar esse trecho. Já havia outros custos por pergunta nesse caminho; a chamada acrescentada é o N+1 desta alteração (`app/chamados/services/acoes_chamado.py:350`; `app/templates/chamados/detalhe_local.html:307`; `app/templates/chamados/partials/_pergunta_card.html:42`; `app/chamados/models.py:4308`).
-   - **Tag no fragmento HTMX:** o queryset busca uma pergunta sem prefetch; há consulta adicional, mas esse caminho renderiza um único cartão, não uma lista (`app/chamados/views.py:397`; `app/chamados/views.py:404`).
-   - **Histórico:** o diff acrescenta prefetch ao queryset próprio (`diff_v1.patch`, hunk de `historico.py:94`).
-
-   `test_lote_1_e_n` cria ele próprio o queryset com prefetch e chama as funções diretamente; não testa o carregamento de nenhum desses chamadores reais. O resumo fornecido informa que passa tanto no RED quanto no GREEN [não verificado] (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:100`).
-
-4. **BLOQUEIA — classes de reprovação.**
-
-   Há **fonte de resposta dividida** na tag: a testemunha abre o caminho e o juiz classifica a projeção crua (`diff_v1.patch`, hunk de `chamados_tags.py:163`; `app/chamados/juizes.py:2034`). Há também **teste de custo sem mordida no chamador real** (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:100`; `app/chamados/services/acoes_chamado.py:350`).
-
-   O diff fornecido não introduz definição de juiz, escritor ou leitura de relógio [não verificado]. O predicado de espera continua delegando a `respondida_sem_texto`; o juiz registrado de pergunta respondida é `pergunta_respondida` (`diff_v1.patch`, hunk de `fio.py:185`; `app/chamados/juizes.py:1531`; `app/core/juizes.py:306`). Não identifiquei no diff um novo campo com dois significados [não verificado]; a divergência demonstrada é entre **duas fontes para o texto**, não uma prova de que um campo novo tenha dois significados (`app/chamados/juizes.py:2041`; `app/chamados/models.py:4318`).
-
-5. **BLOQUEIA — selo AST.**
-
-   O selo fornecido inspeciona apenas as funções `espera_o_texto_do_colaborador` e `leitura_da_resposta`; não varre `historico`, `cobranca` nem `relatorios_disputa` (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:113`). Também não percorre o corpo do classificador chamado pela tag (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:118`; `app/chamados/juizes.py:2034`).
-
-   Ele detecta atributos diretos do argumento e certas strings literais em chamadas; portanto `getattr(p, campo)` com nome variável, `p.__dict__` e `values()` com campo variável escapam dessa inspeção. Literais diretamente presentes em argumentos ou coleções verificadas podem ser detectados (`diff_v1.patch`, `test_e4c_f5_volta1_leem_o_ato.py:120`).
-
-6. **BLOQUEIA — LEI-AKITA.**
-
-   O brief fornecido declara testemunha única, zero juízes novos, um juiz por pergunta, prefetch nos caminhos em lista e selo AST com cobertura de formas indiretas [não verificado]. O diff usa a testemunha nos trechos migrados e não apresenta definição de juiz novo [não verificado], mas a tag combina testemunha e projeção no resultado, a lista de detalhe fica sem prefetch e o selo não cobre todas as formas declaradas (`diff_v1.patch`, hunks de `chamados_tags.py` e teste; `app/chamados/juizes.py:2041`; `app/chamados/services/acoes_chamado.py:350`).
-
-   Assim, **a ausência de juiz novo está sustentada pelo diff fornecido, mas a realização integral do padrão declarado e das demais cláusulas não está** [não verificado].
-
-**BLOQUEIA: 6 — itens 1, 2, 3, 4, 5 e 6.**
-
-## 19/11 08:54 · sessao cfc0c8b9842d · ESPELHO-VERDADE · sonda · origem=Code
-
-Não consigo entregar a sonda B como especificada sem inventar um segundo valor para as rubricas: a comparação que gerou os 90 casos fornece dois lados para **minutos de trabalho**, mas o veredito E6 não fornece valores equivalentes de extra, noturno ou falta. [e6_oraculo.py:328](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:328) [nucleo.py:28](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/nucleo.py:28)
-
-**A) Leitura do código**
-
-- `horas_do_dia` no argumento de `dono_da_divergencia` é a **lista de batidas** atribuídas ao dia, usada para verificar paridade; não é o total de horas do motor. `InsumosDoDono` obtém essas batidas apuráveis e chama `minutos_do_oraculo`. [e6_oraculo.py:98](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:98) [e6_oraculo.py:149](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:149)
-- A divergência é `oraculo.minutos[dia] − minutos_do_espelho(registro)`. O primeiro soma pares fechados de batidas; o segundo usa `minutos_realizados` quando existe e, senão, `pago_h × 60`. A comparação descarta, entre outros casos, a diferença explicada pela janela declarada e diferenças de até 10 minutos. [nucleo.py:42](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/nucleo.py:42) [e6_oraculo.py:263](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:263) [e6_oraculo.py:340](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:340)
-- `InsumosDoDono.dono(dia)` chama o juiz real com cadastro, batidas, fase e cadastro-versus-realidade. `ESTRUTURA` na linha 110 é o retorno residual, não uma causa diagnosticada. A reconfirmação do dono, isoladamente, também não prova que o dia continue passando pelo filtro de divergência da V1. [e6_oraculo.py:98](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:98) [e6_oraculo.py:182](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:182) [e6_oraculo.py:340](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:340)
-- Para medidas adicionais, `linhas_do_periodo` lê `DiaPago` por versão e `rubricas_do_dia` apresenta rubricas lavradas; `horas_falta` existe no modelo. O E6, porém, não fornece a contraparte dessas rubricas. `Veredito.pausas` mede pausas entre pares e não deve ser apresentado como equivalente automático à intrajornada indenizada. [dia_pago.py:833](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/services/dia_pago.py:833) [dia_pago.py:901](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/services/dia_pago.py:901) [models.py:336](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:336) [nucleo.py:37](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/nucleo.py:37)
-
-Para as particularidades, as autoridades e campos identificados são:
-
-- **Escala e cruzamento previsto:** `vinculo_do_dia_carregado`, `marcos_turno` e `turno_cruza_meia_noite`. [alimentacao.py:289](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/alimentacao.py:289) [servico_jornada.py:69](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/servico_jornada.py:69) [servico_jornada.py:104](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/servico_jornada.py:104)
-- **Feriado, ausências e folga lançada:** `fatos_do_dia` devolve os fatos e o dia previsto; a classificação específica de folga trabalhada tem regra em `status_da_lavra`. [precedencia.py:242](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/precedencia.py:242) [precedencia.py:402](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/precedencia.py:402) [status_dia.py:143](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/status_dia.py:143)
-- **Batidas e órfãs:** `pergunta_origem` identifica plantio vinculado, mas `NULL` também pode ser plantio anterior; `origem` e `retratada_em` são campos distintos. `periodos_do_dia` lê `orfas` e intervalo da ata. [models.py:30](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:30) [models.py:64](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:64) [juiz_batida.py:149](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/juiz_batida.py:149)
-- **Pergunta viva:** `pergunta_viva` é o juiz. Em uma falha interna ele pode registrar o erro e devolver `False`; uma sonda que apenas capture exceções externas pode, portanto, tratar uma falha como resposta negativa. O registro usa logging, que precisa ser compatível com a proibição de criar ou alterar arquivos. [juizes.py:866](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/chamados/juizes.py:866) [juizes.py:1488](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/chamados/juizes.py:1488) [observ.py:73](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/core/observ.py:73)
-- **Célula:** `origem`, `escala_geradora`, `dna`, `regenerada_em` e `regeneracoes` são campos de `CelulaDia`. [models.py:1681](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1681) [models.py:1718](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1718)
-
-**B) Sonda:** não entreguei um script que afirme satisfazer a especificação. Faltam a definição da segunda testemunha para cada rubrica e a verificação de que ela existe para cada dia; a execução, as classes, suas contagens e `ERROS=0` permanecem **[não verificado]**. A cópia também não contém `.git`, portanto o HEAD informado não pôde ser confirmado por Git **[não verificado]**.
-
-**C) Perguntas para a sessão, sem atribuir cura como fato:**
-
-- Casos de escala ou turno poderiam corresponder a **ESCALA-NAO-DESCREVE** ou **MOTOR-LE-O-TURNO**? [não verificado]
-- Cruzamento de meia-noite ou órfã poderia corresponder a **DIA-DA-BATIDA-JUIZ-UNICO**? [não verificado]
-- Pergunta viva poderia corresponder a **DST-L1**, **DST-L2** ou **E4C-F5**? [não verificado]
-- As demais classes corresponderiam à **“razao da sobra”** ou ficariam **sem obra**? [não verificado]
-
-Para completar B, qual par de fontes deve responder por extra, noturno, falta e intervalo: as versões lavradas `motor` e `oraculo` de `DiaPago`, quando ambas existirem, ou outra comparação? A existência dessas duas lavraturas nos 90 casos está **[não verificado]**. [calculador/__init__.py:7](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/__init__.py:7) [dia_pago.py:833](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/services/dia_pago.py:833)
-
-Perguntas de lei: **0**.
-
-## 19/11 08:53 · sessao 236c471f76c4 · - · - · origem=Ronald (tmux)
-
-- O vínculo do dia pode ser obtido por `vinculo_do_dia_carregado`; ele alimenta a juíza que respeita a escala geradora da célula e sua vigência ([app/escala/alimentacao.py:228](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/alimentacao.py:228), [app/escala/alimentacao.py:289](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/alimentacao.py:289)). O ciclo fica em `tipo_escala.tipo_ciclo` ([app/escala/models.py:117](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:117)).
-- `marcos_turno` obtém os marcos previstos; `turno_cruza_meia_noite` decide a virada a partir de início e fim ([app/escala/servico_jornada.py:69](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/servico_jornada.py:69), [app/escala/servico_jornada.py:104](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/servico_jornada.py:104)).
-- `fatos_do_dia` é de leitura e expõe previsão, ausências, feriado e folga lançada ([app/ponto/precedencia.py:242](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/precedencia.py:242), [app/ponto/precedencia.py:402](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/precedencia.py:402)). `status_da_lavra` tem a decisão de folga trabalhada, dados seus insumos ([app/ponto/status_dia.py:113](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/status_dia.py:113), [app/ponto/status_dia.py:143](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/status_dia.py:143)).
-- `periodos_do_dia` devolve intervalo, órfãs e desalinhamento a partir da célula; declara-se de leitura ([app/ponto/juiz_batida.py:149](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/juiz_batida.py:149)). A célula registra origem, escala geradora e regenerações ([app/escala/models.py:1681](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1681), [app/escala/models.py:1718](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1718)).
-- `Batida.pergunta_origem` identifica plantio vinculado; valor nulo também pode ser plantio anterior ao registro desse vínculo, portanto não prova ausência de plantio ([app/ponto/models.py:30](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:30)). `retratada_em` marca a retratação ([app/ponto/models.py:64](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:64)).
-- `pergunta_viva` é o juiz da pergunta ([app/chamados/juizes.py:866](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/chamados/juizes.py:866)). Sua apuração captura uma exceção e retorna `False`, registrando-a em log ([app/chamados/juizes.py:1492](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/chamados/juizes.py:1492), [app/core/observ.py:73](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/core/observ.py:73)); o envelope precisa detectar esse erro e garantir que o logging não escreva arquivo. [não verificado]
-
-## 19/11 08:53 · sessao 2653f21ede6c · - · - · origem=Ronald (tmux)
-
-A comparação E6 e as limitações das rubricas foram enviadas ao agente principal com referências de arquivo e linha. [não verificado]
-
-_7305 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7310 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
