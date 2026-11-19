@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: f5_v3_prova.sh | pid=2437740
+DST-L2-JZ1 c6 v4 11:2x: pista 1119104156_c5a74ace rc=0, Ran 17025 OK (skipped=42, expected failures=41) na arvore c5a74ace3; opus final (verificador) aberto com diff_c6v4.patch + verif3/triagem + janela/matriz -> logs/dst-l2-jz1/c6/opus/opus_final.txt
+ESCALA-NAO-DESCREVE C8 COMPLEMENTO-1 11:2x: sonda34d na sombra (fonte da amostra = nucleo.minutos_do_oraculo sem pares, sem gravar) + Codex leitura q7 (5 perguntas); censo r6: frase "entrada real ~HH:MM em N% de N dias" = escala/regua_defesa.py:216 (assinatura C7, janela 30d, agrupamento proprio), proposta = esmeril_espelho.py:241 (janela 60d, dia civil): duas medidas
 PUSH (aval RESPOSTAS-C8-E-PUSH-1911-1110 item 7) 11:0x: 75 a frente; CAUSA medida = nenhuma tentativa desde 18/11 19:51 (logs/push_1811_cura_chega.out: pre-push OK, d6da98509..cd692834d); empurra pela regua quando a trava sair da F5 (prova_v3 no VM) e da c6 v4 (pista)
 ESCALA-NAO-DESCREVE C8 11:0x: 5 decisoes do aval 1110 no brief (logs/ESCALA-NAO-DESCREVE/c8/brief.md secao 6b); censo item 6 Codex papel censo rodando (q6.txt -> r6.txt); construtor NAO abre antes do censo fechado
 ESPINHA E4C-F5 volta 3 11:0x: 71905e5e6 caso positivo do contador pelo vigia real (Codex construtor rc=0, logs/ESPINHA-BRIEFS/F5/v1/r3.txt); prova_v3 rodando no VM: GREEN chamados + 6 mutantes de prefetch/cru re-rodados no HEAD novo + M_censo_zero + M_fora_do_esperado

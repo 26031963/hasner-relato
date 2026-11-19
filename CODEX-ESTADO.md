@@ -1,7 +1,138 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 11:03** · publicado em **19/11/2026 11:05** (UTC-3)
+> Ultima resposta processada: **19/11/2026 11:08** · publicado em **19/11/2026 11:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 11:08 · sessao df35418f7377 · ESCALA-NAO-DESCREVE · censo · origem=Code
+
+O caminho de **Cadastro x realidade usa a lavra do `MetricaSnapshot`** para a coluna “Destino sugerido”; `botao_da_proposta` não chama o detector. A ausência da chave estruturada `proposta` numa lavra não implica ausência da frase `destino`: a tela lê as duas chaves separadamente. Isso torna compatível, no código, uma frase visível com a falta do botão baseado na proposta estruturada. [cadastro_realidade.py:960](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:960), [cadastro_realidade.py:982](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:982), [cadastro_x_realidade.html:32](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:32).
+
+**Limite do censo:** não consegui provar exaustividade para referências calculadas dinamicamente, fluxo arbitrário de dicionários ou a frase exata pedida. Abaixo estão os sítios identificados e o script efetivamente executado; ele é uma busca estática de candidatos, não uma prova de ausência de toda referência dinâmica. Também **NAO ACHEI** confirmação do hash da cópia: `git rev-parse HEAD` respondeu que o diretório não é um repositório Git.
+
+## (a) Chamadores e leitores encontrados
+
+**Produção.**
+
+- `medir_padrao`: chamada por `propor_escala` em [detector_proposta.py:124](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:124).
+- `_casa_template`: chamada por `propor_escala` em [detector_proposta.py:130](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:130).
+- `propor_escala`: quatro chamadas encontradas, todas com import local: `coletar` em [proposta_pdf.py:43](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/proposta_pdf.py:43); `handle` em [propor_escala_limbo.py:22](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/management/commands/propor_escala_limbo.py:22); `propostas_do_vinculo` em [escala_auto.py:117](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/escala_auto.py:117); e `anomalias_da_frota` em [esmeril_espelho.py:215](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:215).
+
+**Testes.** As chamadas diretas encontradas estão em [test_detector_proposta.py:64](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_detector_proposta.py:64), :82, :94, :105, :119, :130, :157 e :180. Os testes substituem a função por caminho textual em [test_escala_nao_descreve.py:83](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_escala_nao_descreve.py:83) e :110; há inspeção textual em [test_detector_proposta.py:189](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_detector_proposta.py:189) e referências de contrato em [test_medida_turno_do_par.py:180](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/core/tests/test_medida_turno_do_par.py:180) e :277.
+
+**Alias, `getattr`, templates e JS.** NAO ACHEI chamada adicional por esses mecanismos na busca textual `rg -n 'medir_padrao|propor_escala|_casa_template' --glob '*.{py,html,js}' app` e na busca AST abaixo. Isso não exclui nome construído em tempo de execução. O template lê dados derivados, como `x.destino` e `x.proposta.codigo`, em [cadastro_x_realidade.html:32](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:32).
+
+### Chaves e leitores identificados
+
+Na tabela, **D** = [detector_proposta.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:53), **PDF** = [proposta_pdf.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/proposta_pdf.py:53), **CLI** = [propor_escala_limbo.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/management/commands/propor_escala_limbo.py:22), **Auto** = [escala_auto.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/escala_auto.py:117), **Esmeril** = [esmeril_espelho.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:241) e **Teste** = [test_detector_proposta.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_detector_proposta.py:64). Os números nas células são linhas desses arquivos.
+
+| Chave | Nascimento | Leitores identificados |
+|---|---|---|
+| `padrao` | D:127, 132, 157 | PDF:77,121; CLI:41; Auto:122,124; Teste:65–67,83,95,106,159,161 | [nao verificado]
+| `proposta` | D:127,132,158 | PDF:75,130–131; CLI:39,50–53; Auto:121; Esmeril:243–244,261–263; Teste:69–70,85,97,108,120,158,160 | [nao verificado]
+| `confianca` | D:127,132,157 | PDF:76; CLI:38,53,57; Auto:122; Esmeril:247,264; Teste:68,84,96,107 | [nao verificado]
+| `porque` | D:128,133,157 | PDF:138; CLI:54,57; Auto:124; Esmeril:262; Teste:68–69,84,98,121 | [nao verificado]
+| `padrao.dias` | D:67,87 | D:125; PDF:77,124; CLI:47; Auto:122,124; Teste:95,106,159,161 | [nao verificado]
+| `padrao.marcos_moda` | D:67,88 | D:105,136,145,153; PDF:124; CLI:47; Teste:65,83 | [nao verificado]
+| `padrao.marcos_freq` | D:89 | D:137,145,153. Não nasce no retorno sem dados de D:67–69; o ramo de poucos dias retorna antes da leitura em D:125–129 |
+| `padrao.entrada` | D:67,90 | D:102,104,135; PDF:125; CLI:47; Teste:66 | [nao verificado]
+| `padrao.saida` | D:67,91 | D:102,104,135; PDF:125; CLI:47; Teste:67 | [nao verificado]
+| `padrao.duracao_h` | D:68,92 | PDF:126; CLI:48 |
+| `padrao.dispersao_entrada_min` | D:68,93 | D:141,146,155; PDF:127; CLI:48 |
+| `padrao.dows` | D:68,94 | PDF:128; CLI:49 |
+| `padrao.padrao_dias` | D:69,95 | PDF:128; CLI:49 |
+| `proposta.tipo_escala_id` | D:158 | Auto:122,125; Esmeril:246; a cópia lavrada é lida em [cadastro_realidade.py:824](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:824), :843–849 e [regua_defesa.py:307](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:307) |
+| `proposta.codigo` | D:158 | PDF:130; CLI:52; Auto:123; Esmeril:246,264; Teste:70,85; cópia lavrada em [cadastro_x_realidade.html:32](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:32) e [views.py:505](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/views.py:505) |
+| `proposta.descricao` | D:159 | Auto:123; Esmeril:264 |
+| `proposta.ciclo` | D:159 | PDF:131; CLI:53 |
+| `proposta.horario` | D:160 | PDF:130; CLI:52; Auto:123; Esmeril:264 |
+
+Os testes da lavra estruturada e do botão também leem as **cópias** das chaves, por exemplo em [test_escala_nao_descreve.py:98](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_escala_nao_descreve.py:98) e :155–165. A tabela registra os leitores identificados, não prova todos os possíveis leitores indiretos.
+
+### Script AST executado
+
+Foi executado via `python3 -B` com o texto abaixo na entrada padrão; não foi criado arquivo. Ele percorre os `.py`, identifica imports locais e apelidos dos três nomes, chamadas e strings com esses nomes; para chaves, imprime acessos literais nos arquivos previamente identificados. A busca de templates e JS foi complementar, por `rg`.
+
+```python
+import ast, pathlib
+
+names = {'medir_padrao', 'propor_escala', '_casa_template'}
+keys = {
+    'padrao', 'proposta', 'confianca', 'porque', 'dias',
+    'marcos_moda', 'marcos_freq', 'entrada', 'saida',
+    'duracao_h', 'dispersao_entrada_min', 'dows', 'padrao_dias',
+    'tipo_escala_id', 'codigo', 'descricao', 'ciclo', 'horario',
+}
+key_files = {
+    'app/escala/detector_proposta.py',
+    'app/escala/proposta_pdf.py',
+    'app/escala/management/commands/propor_escala_limbo.py',
+    'app/escala/services/escala_auto.py',
+    'app/ponto/services/esmeril_espelho.py',
+    'app/escala/tests/test_detector_proposta.py',
+}
+
+for path in pathlib.Path('.').rglob('*.py'):
+    try:
+        tree = ast.parse(path.read_bytes(), filename=str(path))
+    except (SyntaxError, UnicodeError, OSError) as e:
+        print('ERRO', path, e)
+        continue
+
+    aliases = set(names)
+    for n in ast.walk(tree):
+        if isinstance(n, ast.ImportFrom) and n.module == 'escala.detector_proposta':
+            for a in n.names:
+                if a.name in names:
+                    aliases.add(a.asname or a.name)
+                    print(f'{path}:{n.lineno}: import {a.name} as {a.asname or a.name}')
+
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Call):
+            f = n.func
+            if (isinstance(f, ast.Name) and f.id in aliases
+                    or isinstance(f, ast.Attribute) and f.attr in names):
+                print(f'{path}:{n.lineno}: chamada {ast.unparse(f)}')
+        if (isinstance(n, ast.Constant) and isinstance(n.value, str)
+                and any(x in n.value for x in names)):
+            print(f'{path}:{n.lineno}: string {n.value[:100]!r}')
+
+    if str(path) in key_files:
+        for n in ast.walk(tree):
+            if (isinstance(n, ast.Subscript) and isinstance(n.ctx, ast.Load)
+                    and isinstance(n.slice, ast.Constant)
+                    and n.slice.value in keys):
+                print(f'{path}:{n.lineno}: chave {ast.unparse(n)}')
+            if (isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
+                    and n.func.attr == 'get' and n.args
+                    and isinstance(n.args[0], ast.Constant)
+                    and n.args[0].value in keys):
+                print(f'{path}:{n.lineno}: get {ast.unparse(n)}')
+```
+
+## (b) Tela e frase
+
+1. A rota chama `cadastro_x_realidade`; a view chama `lista` e renderiza o template: [urls.py:14](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/urls.py:14), [views.py:512](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/views.py:512).
+2. `lista` chama `ler_lavra`, lê `destino` e `proposta`, coloca ambos na linha e consulta o botão: [cadastro_realidade.py:960](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:960), :966–972 e :982–987. `ler_lavra` seleciona o snapshot `esmeril_espelho` e devolve `detalhe`: [esmeril_espelho.py:359](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:359).
+3. Na produção da lavra, `anomalias_da_frota` chama o detector para pessoas com assinatura, transforma o retorno em frase com `_destino` e guarda separadamente a proposta estruturada: [esmeril_espelho.py:233](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:233), :241–247 e :259–264. `lavrar` chama o produtor e grava o resultado no snapshot: [esmeril_espelho.py:321](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:321), :342–355.
+4. O template mostra `x.destino`; o botão depende de `x.botao_proposta`: [cadastro_x_realidade.html:24](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:24), :32. O POST relê a lavra antes de aplicar: [views.py:493](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/views.py:493).
+
+**Frase pedida:** NAO ACHEI o formato literal “entradas próximas … % de … dias” na cópia com `rg -n -i 'entradas|pr[oó]ximas' app --glob '*.py' --glob '*.html' --glob '*.js'` nem com a busca por `entrada real` e `% de dias` em `app/escala`, `app/templates/escala` e `app/ponto/services`.
+
+Há, contudo, uma frase **parecida** na assinatura C7: `diagnostico_regua` produz `real = 'E~HH:MM (N% de N dias)'` em [regua_defesa.py:167](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:167); o diagnóstico é copiado para a lavra do termômetro em [regua_na_lista.py:29](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/regua_na_lista.py:29), :42–64, e `_termometro` o formata como detalhe C7 em [cadastro_realidade.py:315](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:315). Não consegui provar que essa seja a frase observada para col451.
+
+Para essa frase semelhante e a coluna de destino, são **medidas distintas**:
+
+- A régua usa, por padrão, `ref - 30 dias` até `ref`, com possível reavaliação de 14 dias: [regua_defesa.py:100](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:100), :118–129 e :181–192. O Esmeril chama o detector de `hoje - 60 dias` até ontem: [esmeril_espelho.py:241](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:241).
+- A régua desloca para a véspera batidas anteriores ao início declarado menos duas horas e exige ao menos duas por grupo: [regua_defesa.py:151](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:151). O detector agrupa por data civil local: [detector_proposta.py:57](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:57).
+- Ambos consultam `batidas_apuraveis`, mas cada um deriva seu agrupamento; a régua declara que não usa o turno pareado, e o detector documenta a circularidade com o cadastro: [regua_defesa.py:118](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:118), [detector_proposta.py:15](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:15).
+
+## (c) Encaixe das decisões e leitores afetados
+
+1. **Amostra com turno fechado:** encaixa na alimentação e agregação de `medir_padrao`, hoje em [detector_proposta.py:55](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:55). O juiz devolve `entrada`, `saida`, `batidas` e `aberto` em [turnos.py:43](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:43); `turnos_do_colab` e sua dependência de escalas/células estão em [turnos.py:1850](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1850) e :1892–1920. Leitores afetados: as chaves de `padrao` e os quatro consumidores de `propor_escala` da tabela.
+2. **Turno iniciado na janela conta inteiro:** encaixa na mesma fronteira de amostragem em [detector_proposta.py:57](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:57); a porta de turnos já declara janela por `data_turno` e carga com margem em [turnos.py:1847](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1847). Leitores afetados: os mesmos consumidores da amostra.
+3. **Menos de 80% no mesmo eixo implica abstenção:** encaixa antes do retorno de proposta em [detector_proposta.py:130](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:130). O `0.8` atual mede **frequência do número de marcos**, e sua falha hoje produz confiança média, em [detector_proposta.py:137](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:137) e :147–157. Além dos leitores da tabela, o PDF classifica qualquer ausência de proposta com dias suficientes como “sem template” em [proposta_pdf.py:74](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/proposta_pdf.py:74), :99–105.
+4. **Desempate por `tipo_ciclo` × `padrao_dias`:** encaixa na escolha do melhor candidato em [detector_proposta.py:105](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:105), :107–119; `padrao_dias` nasce em :79–95. Mudam os leitores de `proposta` e seus campos listados acima.
+5. **Excluir `hora_inicio == hora_fim`:** encaixa no filtro de candidatos em [detector_proposta.py:107](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:107). Mudam os mesmos leitores de `proposta`, inclusive frase e botão derivados da lavra em [esmeril_espelho.py:241](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:241) e [cadastro_realidade.py:971](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:971).
 
 ## 19/11 11:03 · sessao 0fc23b4a7ea9 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1814,8 +1945,4 @@ def sonda():
 
 Script e referências enviados ao agente principal, com a ressalva de que a ata conserva apenas `HH:MM` e não identifica a data civil da sobra em turnos que atravessam meia-noite ([cartorio.py:764](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/cartorio.py:764); [utils.py:641](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/utils.py:641)). O universo resultante e a execução do script permanecem [não verificado].
 
-## 19/11 10:16 · sessao 8b94c50458ba · - · - · origem=Ronald (tmux)
-
-O censo solicitado de 49 leitores não ficou comprovado: a cópia registra um instrumento de censo anterior e sua remoção, mas não apresenta ali a lista nominativa ([app/docs/RELATO.md:10239](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/docs/RELATO.md:10239)). A lista parcial e as classificações verificadas foram enviadas ao agente principal.
-
-_7320 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7321 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
