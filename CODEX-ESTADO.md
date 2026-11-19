@@ -1,7 +1,604 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 01:51** · publicado em **19/11/2026 01:51** (UTC-3)
+> Ultima resposta processada: **19/11/2026 01:56** · publicado em **19/11/2026 01:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 01:56 · sessao 40d3f8bb6fa7 · E4C-F5 · censo · origem=Code
+
+| arquivo:linha | função | campo | receptor | tipo | classe | trecho literal curto |
+|---|---|---|---|---|---|---|
+| chamados/management/commands/estoque_l130_instante_sem_texto.py:60 | handle | validada_em | PerguntaDisputa | rótulo/metadado sem efeito | ii | `'validada_em': None` |
+| chamados/models.py:3031 | _nascer | respondida_em | PerguntaDisputa | leitura | ii | `campos.get('respondida_em')` |
+| chamados/models.py:3032 | _nascer | resposta_colab | PerguntaDisputa | leitura | ii | `campos.get('resposta_colab')` |
+| chamados/models.py:3324 | carimbar | materializada_em, materializada_por, via_resolucao | PerguntaDisputa | escrita | ii | `campos = ['materializada_em', …]` |
+| chamados/models.py:3329 | carimbar | respondida_em | PerguntaDisputa | escrita | ii | `campos.append('respondida_em')` |
+| chamados/models.py:3333 | carimbar | validada_em, validada_por | PerguntaDisputa | escrita | ii | `campos += ['validada_em', 'validada_por']` |
+| chamados/models.py:3382 | carimbar_identidade | via_resolucao, materializada_em, materializada_por | PerguntaDisputa | escrita | ii | `campos = ['via_resolucao', …]` |
+| chamados/models.py:3406 | descarimbar | via_resolucao, materializada_em, materializada_por | PerguntaDisputa | escrita | ii | `campos = ['via_resolucao', …]` |
+| chamados/models.py:3417 | escopo da classe | respondida_em, resposta_colab, validada_em, materializada_em, via_resolucao, data_evento | PerguntaDisputa | leitura | iii | `CAMPOS_QUE_ACORDAM` |
+| chamados/models.py:3454 | descarimbar_em_lote | materializada_em, materializada_por, materializada_por_id, via_resolucao | PerguntaDisputa | leitura | ii | `set(outros) & {...}` |
+| chamados/models.py:3459 | descarimbar_em_lote | respondida_em, resposta_colab | PerguntaDisputa | leitura | ii | `& set(outros)` |
+| chamados/models.py:3464 | descarimbar_em_lote | respondida_em, resposta_colab | PerguntaDisputa | leitura | ii | `outros['respondida_em']` |
+| chamados/models.py:3465 | descarimbar_em_lote | respondida_em | PerguntaDisputa | leitura | ii | `'respondida_em' in _par` |
+| chamados/models.py:3469 | descarimbar_em_lote | respondida_em | PerguntaDisputa | leitura | ii | `outros['respondida_em']` |
+| chamados/models.py:3472 | descarimbar_em_lote | resposta_colab | PerguntaDisputa | leitura | ii | `outros['resposta_colab']` |
+| chamados/models.py:3557 | q_validada_pelo_ato | validada_em | PerguntaDisputa | leitura | vi | `OuterRef('validada_em')` |
+| chamados/models.py:3558 | q_validada_pelo_ato | validada_em | PerguntaDisputa | leitura | vi | `ato_em__gt=OuterRef('validada_em')` |
+| chamados/models.py:3690 | escopo da classe | respondida_em, resposta_colab | PerguntaDisputa | leitura | ii | `_PAR_DA_RESPOSTA` |
+| chamados/services/disputa_emissao.py:1483 | responder_pergunta_disputa_core | resposta_colab, respondida_em | PerguntaDisputa | escrita | ii | `_campos = ['resposta_colab', 'respondida_em']` |
+| chamados/services/disputa_emissao.py:1496 | responder_pergunta_disputa_core | validada_em, validada_por | PerguntaDisputa | escrita | ii | `_campos += ['validada_em', 'validada_por']` |
+| chamados/services/disputa_emissao.py:1545 | responder_pergunta_disputa_core | validada_em, validada_por | PerguntaDisputa | rótulo/metadado sem efeito | v | `antes={'validada_em': …}` |
+| chamados/services/disputa_emissao.py:1546 | responder_pergunta_disputa_core | validada_em, validada_por | PerguntaDisputa | rótulo/metadado sem efeito | v | `depois={'validada_em': None, …}` |
+| chamados/services/disputa_emissao.py:1685 | responder_automaticamente | resposta_colab, respondida_em | PerguntaDisputa | escrita | ii | `p.save(update_fields=[…])` |
+| chamados/services/disputa_emissao.py:1707 | carimbar_resposta_pela_trilha | respondida_em | PerguntaDisputa | escrita | ii | `update_fields=['respondida_em']` |
+| chamados/services/disputa_emissao.py:1713 | carimbar_resposta_pela_trilha | respondida_em | PerguntaDisputa | rótulo/metadado sem efeito | v | `depois={'respondida_em': …}` |
+| chamados/services/disputa_emissao.py:2094 | _resolver_perguntas_por_chamado_resolvido | materializada_em, via_resolucao | PerguntaDisputa | rótulo/metadado sem efeito | v | `_antes = {'materializada_em': None, …}` |
+| chamados/services/foto_e4b.py:180 | nascimentos | materializada_em, respondida_em, validada_em | PerguntaDisputa | leitura | iii | `a[c] is not None and d[c] is None` |
+| chamados/services/historico.py:99 | _eventos_dos_chamados | respondida_em | PerguntaDisputa | leitura | v | `('respondida_em', 'pergunta_respondida', …)` |
+| chamados/services/historico.py:101 | _eventos_dos_chamados | validada_em | PerguntaDisputa | leitura | v | `('validada_em', 'pergunta_validada', …)` |
+| chamados/services/historico.py:103 | _eventos_dos_chamados | materializada_em | PerguntaDisputa | leitura | v | `('materializada_em', 'pergunta_materializada', …)` |
+| chamados/services/materializacao.py:1689 | _carimbar_recusa | materializada_em, via_resolucao, recusa_motivo | PerguntaDisputa | leitura | ii | `p.refresh_from_db(fields=[…])` |
+| chamados/services/painel.py:67 | marcador_do_placar | respondida_em, materializada_em, validada_em | PerguntaDisputa | leitura | vi | `Max('respondida_em')` |
+| chamados/services/passivo_validado.py:64 | escopo do módulo | materializada_em, materializada_por_id, via_resolucao | PerguntaDisputa | leitura | ii | `CAMPOS_REVERSAO = (…)` |
+| chamados/services/passivo_validado.py:66 | escopo do módulo | respondida_em, validada_em, validada_por_id, recusa_motivo | PerguntaDisputa | leitura | ii | `'respondida_em', 'validada_em'` |
+| chamados/services/passivo_validado.py:535 | _plantar_o_dia | materializada_em, via_resolucao, materializada_por | PerguntaDisputa | leitura | ii | `p.refresh_from_db(fields=[…])` |
+| chamados/services/regularizacao_ext.py:201 | materializar_regularizacao_externa | status, materializada_em, materializada_por | outro modelo: RegularizacaoExterna | escrita | — | `reg.save(update_fields=[…])` |
+| chamados/services/relavra_via.py:252 | desfazer_carimbo_sem_lastro | materializada_em, via_resolucao | PerguntaDisputa | rótulo/metadado sem efeito | v | `depois={'materializada_em': None, …}` |
+| chamados/services/tarefa_do_dia.py:418 | VistaNoHorizonte.__getattr__ | respondida_em, validada_em | PerguntaDisputa | leitura | iii | `valor > self._agora` |
+| chamados/services/validacao.py:171 | _carimbar_validacao | validada_em, validada_por | PerguntaDisputa | escrita | ii | `perg.save(update_fields=[…])` |
+| chamados/services/validacao.py:262 | devolver_validacao_recusada | validada_em, validada_por, materializada_em, recusa_motivo | PerguntaDisputa | leitura | i | `perg.refresh_from_db(fields=[…])` |
+| chamados/services/validacao.py:263 | devolver_validacao_recusada | resposta_colab, tipo_resposta | PerguntaDisputa | leitura | ii | `'resposta_colab', 'tipo_resposta'` |
+| chamados/services/validacao.py:276 | devolver_validacao_recusada | validada_em, validada_por | PerguntaDisputa | escrita | ii | `update_fields=['validada_em', 'validada_por']` |
+| chamados/services/validacao.py:300 | devolver_validacao_recusada | validada_em, validada_por_id | PerguntaDisputa | rótulo/metadado sem efeito | v | `antes={'validada_em': …}` |
+| chamados/services/validacao.py:302 | devolver_validacao_recusada | validada_em, validada_por_id, recusa_motivo | PerguntaDisputa | rótulo/metadado sem efeito | v | `depois={'validada_em': None, …}` |
+| chamados/services/validacao.py:351 | devolver_paridade_bug_par_103 | validada_em, validada_por | PerguntaDisputa | escrita | ii | `update_fields=campos + […]` |
+| chamados/services/validacao.py:363 | devolver_paridade_bug_par_103 | materializada_em, via_resolucao, materializada_por_id | PerguntaDisputa | rótulo/metadado sem efeito | v | `depois={'materializada_em': None, …}` |
+| chamados/services/validacao.py:364 | devolver_paridade_bug_par_103 | validada_em, validada_por_id, recusa_motivo | PerguntaDisputa | rótulo/metadado sem efeito | v | `'validada_em': None` |
+| chamados/services/validacao.py:453 | devolver_instante_sem_texto_l130 | respondida_em, resposta_colab, via_resolucao | PerguntaDisputa | rótulo/metadado sem efeito | v | `depois={'respondida_em': None, …}` |
+| chamados/services/validacao.py:576 | _aceitar_a_folga | validada_em, validada_por | PerguntaDisputa | leitura | ii | `perg.refresh_from_db(fields=[…])` |
+| chamados/services/validacao.py:789 | validar_pergunta | validada_em, materializada_em | PerguntaDisputa | leitura | v | `perg.refresh_from_db(fields=[…])` |
+| chamados/services/validacao.py:932 | recusar_pergunta | resposta_colab | PerguntaDisputa | leitura | v | `antes['resposta_colab']` |
+| chamados/services/validacao.py:937 | recusar_pergunta | respondida_em, resposta_colab | PerguntaDisputa | rótulo/metadado sem efeito | v | `'respondida_em': None, 'resposta_colab': ''` |
+| chamados/services/verbos.py:344 | placar_aceite | respondida_em | PerguntaDisputa | leitura | v | `pg['respondida_em'] > cob_por_colab[cid]` |
+| chamados/services/verbos.py:347 | placar_aceite | respondida_em | PerguntaDisputa | leitura | v | `_tz.localtime(pg['respondida_em'])` |
+| chamados/veredito_lavrado.py:204 | marcos_do_lote | materializada_em | PerguntaDisputa | leitura | iv | `annotate(m=Max('materializada_em'))` |
+| chamados/veredito_lavrado.py:208 | marcos_do_lote | respondida_em | PerguntaDisputa | leitura | iv | `annotate(m=Max('respondida_em'))` |
+
+linhas: 56 de 56
+
+Totais por classe: i: 1; ii: 28; iii: 3; iv: 2; v: 18; vi: 3. Outro modelo: 1.
+
+- **i — chamados/services/validacao.py:262:** `validar_pergunta` chama `devolver_validacao_recusada` em chamados/services/validacao.py:781. Sim: a leitura de `validada_em` participa da decisão de quando a própria porta escreve, pela condição em chamados/services/validacao.py:270 e pelo `save` em chamados/services/validacao.py:276.
+
+perguntas de lei: 0
+
+## 19/11 01:55 · sessao d86cb0ea8a17 · E4D · sonda · origem=Code
+
+A limpeza L130 grava a ação `l130_instante_sem_texto_devolvida` para `PerguntaDisputa` e preserva, quando necessário, a resposta anterior como `RESPOSTA`; ela não grava `REABERTURA` nem `DEVOLUCAO`. A escolha entre as três opções de D3 permanece **[nao verificado]**. [app/chamados/services/validacao.py:414](app/chamados/services/validacao.py#L414), [app/chamados/services/validacao.py:436](app/chamados/services/validacao.py#L436), [app/chamados/services/validacao.py:449](app/chamados/services/validacao.py#L449).
+
+**A — Escrita e leitura**
+
+As três opções ainda exigem definir seus escritores: o código atual da L130 não escreve nenhum dos três atos propostos, e os sítios de backfill de um ato ainda não definido são **[nao verificado]**. A porta comum atual para inserir decisões é `DecisaoPergunta.registrar`; além da L130, os backfills existentes a usam para registrar linhas da projeção, e um deles também registra `SILENCIO`. [app/chamados/models.py:4329](app/chamados/models.py#L4329), [app/chamados/management/commands/backfill_fio_morto_e4b.py:141](app/chamados/management/commands/backfill_fio_morto_e4b.py#L141), [app/chamados/management/commands/backfill_decisoes_pergunta.py:324](app/chamados/management/commands/backfill_decisoes_pergunta.py#L324).
+
+| Opção | Comportamento comprovado dos leitores atuais |
+|---|---|
+| **1. Novo valor de `ato`** | `DecisaoPergunta.leitura` o ignora: só `RESPOSTA` e `VALIDACAO` atribuem valores, e os conjuntos de limpeza não incluem um novo valor. A resposta anterior continuaria na leitura. `respostas_anteriores` também o ignora. A tarefa do dia, se ele for o último ato considerado, retorna `ato_desconhecido:<ato>` e nenhuma ação. [app/chamados/models.py:4277](app/chamados/models.py#L4277), [app/chamados/models.py:4317](app/chamados/models.py#L4317), [app/chamados/models.py:3800](app/chamados/models.py#L3800), [app/chamados/services/tarefa_do_dia.py:158](app/chamados/services/tarefa_do_dia.py#L158), [app/chamados/services/tarefa_do_dia.py:187](app/chamados/services/tarefa_do_dia.py#L187). |
+| **2. Valor existente com marca** | A leitura atual decide pelo valor de `ato`, sem consultar uma marca L130; portanto, o efeito é o do valor escolhido. A tarefa do dia só conhece a exclusão especial da marca `da_ressuscitacao`, que está restrita a `REABERTURA`; não há comportamento comprovado para uma nova marca L130. [app/chamados/models.py:4317](app/chamados/models.py#L4317), [app/chamados/models.py:4208](app/chamados/models.py#L4208), [app/chamados/services/tarefa_do_dia.py:421](app/chamados/services/tarefa_do_dia.py#L421). |
+| **3. Saneamento separado** | O escritor, o formato, a ordem em relação às decisões e o consumo pelo projetor são **[nao verificado]**. O leitor atual só monta sua sequência com `p.decisoes` e o passivo da projeção; um registro separado que não entre nessa sequência não muda essa leitura hoje. [app/chamados/models.py:4308](app/chamados/models.py#L4308). |
+
+Na opção 2, os efeitos dos valores existentes na leitura dos três campos são estes: [app/chamados/models.py:4272](app/chamados/models.py#L4272), [app/chamados/models.py:4317](app/chamados/models.py#L4317).
+
+| Valor candidato | Efeito atual e consequência para a limpeza |
+|---|---|
+| `REABERTURA` ou `RECUSA` | Limpam resposta **e validação** na leitura; a tarefa do dia os classifica como `devolvida_ao_colaborador`, com ação de responder. A tela de respostas anteriores inclui a linha de foto. A porta normal de reabertura também zera `validada_em` e `validada_por`, além do par e carimbo; a elegibilidade L130 exige `validada_em` e `materializada_em` nulos. O efeito de todos os demais campos e efeitos colaterais de chamar essa porta em vez da limpeza L130 é **[nao verificado]**. [app/chamados/models.py:4277](app/chamados/models.py#L4277), [app/chamados/services/tarefa_do_dia.py:163](app/chamados/services/tarefa_do_dia.py#L163), [app/chamados/models.py:3806](app/chamados/models.py#L3806), [app/chamados/services/disputa_emissao.py:1617](app/chamados/services/disputa_emissao.py#L1617), [app/chamados/services/validacao.py:392](app/chamados/services/validacao.py#L392). |
+| `DEVOLUCAO` | Limpa a validação, mas **não** a resposta, na leitura; como último ato, a tarefa do dia pede validação pelo admin. Uma `DEVOLUCAO` com motivo específico `BUG-PAR-103` também é reconhecida pelo leitor desse selo. [app/chamados/models.py:4277](app/chamados/models.py#L4277), [app/chamados/services/tarefa_do_dia.py:165](app/chamados/services/tarefa_do_dia.py#L165), [app/chamados/services/materializacao.py:267](app/chamados/services/materializacao.py#L267). |
+| `RESPOSTA` | Instala instante e texto; pode limpar validação conforme `resposta_mantem_validacao`. A tarefa distingue texto vazio de texto preenchido. Não representa, por si, a retirada da resposta. [app/chamados/models.py:4280](app/chamados/models.py#L4280), [app/chamados/models.py:4318](app/chamados/models.py#L4318), [app/chamados/services/tarefa_do_dia.py:159](app/chamados/services/tarefa_do_dia.py#L159). |
+| `VALIDACAO` | Instala validação; a tarefa avalia a lavra e o efeito. Não representa a retirada da resposta. [app/chamados/models.py:4320](app/chamados/models.py#L4320), [app/chamados/services/tarefa_do_dia.py:167](app/chamados/services/tarefa_do_dia.py#L167). |
+| `SILENCIO`, `RETRATACAO`, `ABSORCAO` | Não alteram os três campos da leitura. A tarefa atribui significado próprio a silêncio e absorção e trata retratação em outro ponto; `ABSORCAO` exige as duas ligações previstas na restrição do modelo. [app/chamados/models.py:4276](app/chamados/models.py#L4276), [app/chamados/services/tarefa_do_dia.py:176](app/chamados/services/tarefa_do_dia.py#L176), [app/chamados/services/tarefa_do_dia.py:260](app/chamados/services/tarefa_do_dia.py#L260), [app/chamados/models.py:4204](app/chamados/models.py#L4204). |
+
+A face SQL da validação usa os mesmos conjuntos de limpeza e precisaria refletir uma mudança que alterasse a validação; as telas e propriedades que chamam `leitura` recebem o resultado dela. O inventário **exaustivo** dos demais leitores, selos e comandos de auditoria, bem como seu comportamento individual, permanece **[nao verificado]**. [app/chamados/models.py:3539](app/chamados/models.py#L3539), [app/chamados/models.py:3551](app/chamados/models.py#L3551), [app/chamados/models.py:4299](app/chamados/models.py#L4299).
+
+**B — Choice e contagem**
+
+O choice atual contém oito valores: `resposta`, `validacao`, `devolucao`, `recusa`, `reabertura`, `silencio`, `retratacao` e `absorcao`. [app/chamados/models.py:4152](app/chamados/models.py#L4152).
+
+O número **total** de leitores com match exaustivo é **[nao verificado]**. Um ponto comprovado que precisa ser revisto para um novo ato é `_pela_decisao`: ele possui ramos para os valores que trata e devolve `ato_desconhecido` para o restante; `RETRATACAO` também é tratada antes, no chamador. Isso não prova que seja o único ponto a migrar. [app/chamados/services/tarefa_do_dia.py:142](app/chamados/services/tarefa_do_dia.py#L142), [app/chamados/services/tarefa_do_dia.py:187](app/chamados/services/tarefa_do_dia.py#L187), [app/chamados/services/tarefa_do_dia.py:259](app/chamados/services/tarefa_do_dia.py#L259).
+
+**C — Sonda de frota**
+
+A sonda abaixo conta perguntas distintas encontradas pelo log, por empresa atual; separa explicitamente pergunta ausente e competência sem dia. Para divergência, exige que a resposta vigente reconstruída seja uma linha `RESPOSTA` anterior ou simultânea ao último log L130 da pergunta **e** que o par reconstruído divirja do par atual da coluna. Isso mede o estado atual; não prova a divergência imediatamente após uma limpeza se houve alterações posteriores. A ordem de atos usada por `leitura` é `(ato_em, pk)`, com passivo adicional da projeção. [app/core/models.py:295](app/core/models.py#L295), [app/chamados/services/validacao.py:449](app/chamados/services/validacao.py#L449), [app/chamados/models.py:4295](app/chamados/models.py#L4295).
+
+O juiz é `materializacao.competencia_do_fato`, o mesmo chamado pela elegibilidade L130; ele compõe a janela do dia do fato com `folha.export.competencia_entregue` e devolve `None` sem dia. Os resultados de produção são **[nao verificado]**: a sonda não foi executada. [app/chamados/services/validacao.py:400](app/chamados/services/validacao.py#L400), [app/chamados/services/materializacao.py:788](app/chamados/services/materializacao.py#L788).
+
+```python
+import collections
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection, transaction
+
+from chamados.models import DecisaoPergunta, PerguntaDisputa
+from chamados.services.materializacao import competencia_do_fato
+from core.models import LogAuditoria
+
+
+ACAO = "l130_instante_sem_texto_devolvida"
+MODELO = "PerguntaDisputa"
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def main():
+    etapa = "GUARDA_SOMBRA"
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+
+            etapa = "LOGS"
+            logs = list(
+                LogAuditoria.objects.filter(acao=ACAO, modelo=MODELO)
+                .order_by("objeto_id", "criado_em", "pk")
+                .values_list("objeto_id", "criado_em", "pk")
+            )
+            ultimo_log = {}
+            for pergunta_id, criado_em, log_id in logs:
+                if pergunta_id is None:
+                    raise RuntimeError("log_sem_objeto")
+                ultimo_log[pergunta_id] = (criado_em, log_id)
+
+            etapa = "PERGUNTAS"
+            perguntas = list(
+                PerguntaDisputa.objects.filter(pk__in=ultimo_log)
+                .select_related("disputa__colaborador__empresa")
+                .prefetch_related("decisoes")
+                .order_by("pk")
+            )
+            por_pk = {p.pk: p for p in perguntas}
+            ausentes = set(ultimo_log) - set(por_pk)
+
+            universo = collections.Counter()
+            divergencia = collections.Counter()
+            competencia = collections.Counter()
+            exemplos = collections.defaultdict(list)
+
+            etapa = "CLASSIFICACAO"
+            for p in perguntas:
+                colab = p.disputa.colaborador
+                emp = colab.empresa_id
+                universo[emp] += 1
+
+                momento_log = ultimo_log[p.pk][0]
+                leitura = DecisaoPergunta.leitura(p)
+                resposta_real_anterior = any(
+                    d.ato == DecisaoPergunta.RESPOSTA
+                    and d.ato_em == leitura.respondida_em
+                    and d.ato_em <= momento_log
+                    for d in p.decisoes.all()
+                )
+                par_lido = (leitura.respondida_em, leitura.resposta_colab or "")
+                par_coluna = (p.respondida_em, p.resposta_colab or "")
+                diverge = resposta_real_anterior and par_lido != par_coluna
+                divergencia[(emp, "sim" if diverge else "nao")] += 1
+
+                k6 = competencia_do_fato(p, colab.empresa)
+                estado = (
+                    "sem_dia" if k6 is None
+                    else "entregue" if k6[2]
+                    else "nao_entregue"
+                )
+                competencia[(emp, estado)] += 1
+                exemplos[(emp, "sim" if diverge else "nao", estado)].append(
+                    (p.pk, colab.pk)
+                )
+
+            etapa = "SAIDA"
+            linhas = [
+                "LOGS registros=%d perguntas_distintas=%d"
+                % (len(logs), len(ultimo_log)),
+                "PERGUNTAS_AUSENTES=%d" % len(ausentes),
+            ]
+            for pk in sorted(ausentes):
+                linhas.append("AUSENTE pergunta_pk=%d" % pk)
+
+            total_universo = 0
+            total_div = 0
+            total_comp = 0
+            for emp in sorted(universo, key=str):
+                n = universo[emp]
+                nd = sum(divergencia[(emp, x)] for x in ("sim", "nao"))
+                nc = sum(
+                    competencia[(emp, x)]
+                    for x in ("entregue", "nao_entregue", "sem_dia")
+                )
+                total_universo += n
+                total_div += nd
+                total_comp += nc
+
+                linhas.append(
+                    "EMPRESA pk=%s limpas=%d divergentes=%d "
+                    "nao_divergentes=%d entregues=%d nao_entregues=%d sem_dia=%d"
+                    % (
+                        emp, n,
+                        divergencia[(emp, "sim")],
+                        divergencia[(emp, "nao")],
+                        competencia[(emp, "entregue")],
+                        competencia[(emp, "nao_entregue")],
+                        competencia[(emp, "sem_dia")],
+                    )
+                )
+                linhas.append(
+                    "CONFERENCIA emp=%s divergencia_contador=%d "
+                    "competencia_contador=%d universo=%d contador==universo=%s"
+                    % (emp, nd, nc, n, "s" if nd == n and nc == n else "n")
+                )
+                if nd != n or nc != n:
+                    raise RuntimeError("soma_empresa")
+
+            for (emp, div, estado), pares in sorted(
+                exemplos.items(), key=lambda item: tuple(map(str, item[0]))
+            ):
+                for pergunta_pk, colab_pk in pares[:2]:
+                    linhas.append(
+                        "EXEMPLO emp=%s divergente=%s competencia=%s "
+                        "pergunta_pk=%d col%d"
+                        % (emp, div, estado, pergunta_pk, colab_pk)
+                    )
+
+            total_com_ausentes = total_universo + len(ausentes)
+            confere = (
+                total_div == total_universo
+                and total_comp == total_universo
+                and total_com_ausentes == len(ultimo_log)
+            )
+            linhas.append(
+                "CONFERENCIA_TOTAL divergencia_contador=%d "
+                "competencia_contador=%d universo_existente=%d ausentes=%d "
+                "universo_logs=%d contador==universo=%s"
+                % (
+                    total_div, total_comp, total_universo, len(ausentes),
+                    len(ultimo_log), "s" if confere else "n",
+                )
+            )
+            if not confere:
+                raise RuntimeError("soma_total")
+
+        for linha in linhas:
+            print(linha)
+        print("ERROS=0")
+        print("FIM_SONDA_D3_L130")
+        return 0
+    except Exception:
+        print("ERRO " + etapa)
+        print("ERROS=1")
+        print("FIM_SONDA_D3_L130")
+        return 1
+
+
+sys.exit(main())
+```
+
+perguntas de lei: 2
+
+1. Qual representação adotar para a limpeza reconstruível: **(1)** novo ato compensador, **(2)** ato existente com marca explícita, ou **(3)** saneamento separado consumido pelo projetor? A decisão atual é **[nao verificado]**. [app/chamados/services/validacao.py:414](app/chamados/services/validacao.py#L414).
+2. Como tratar a reconstrução do histórico e o estoque em competência entregue: **(a)** reconstruir automaticamente, **(b)** tratar por procedimento específico, ou **(c)** outra regra? A decisão atual é **[nao verificado]**. [app/chamados/services/validacao.py:381](app/chamados/services/validacao.py#L381).
+
+## 19/11 01:54 · sessao 69c8d1976b61 · E4C-F3-LAVRA-FOTO · verificador · origem=Code
+
+**BLOQUEIA:** o selo ainda permite leituras de `DecisaoPergunta` dentro de funções alcançadas no próprio módulo. O fecho segue somente chamadas cujo alvo é um nome que coincide diretamente com uma função de topo; não resolve aliases, chamadas por atributo nem métodos de classes. [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
+
+Executei o detector isolado sobre a fonte e contramutações **em memória**: os exemplos de escape abaixo retornaram `[]`, salvo onde indicado. A execução das consultas e da suíte Django é **[não verificado]**. O detector sobre a fonte atual também retornou `[]`. [teste:41](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:41)
+
+### Cura dos itens da volta 1
+
+| Item | Resultado |
+|---|---|
+| **Helper transitivo** | **Parcial.** M7 prova a chamada direta por nome, inclusive em dois níveis; alias de função e método de classe no mesmo módulo escapam. [detector:60](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:60), [M7:217](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:217) |
+| **Reexportação** | **Parcial.** M8 importa um símbolo ainda chamado `DecisaoPergunta`; o registro só reconhece esse nome original. Uma reexportação já chamada `D` escapa. [detector:68](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:68), [M8:227](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:227) |
+| **`getattr`/`get_model` e nomes montados** | **Parcial.** M9 morde `getattr` chamado diretamente com expressão não constante; um alias de `getattr` com o nome montado escapa. [detector:97](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:97), [M9:233](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:233) |
+| **Prefetch, string, `**dict` e segundo relacionamento** | **Parcial.** M10 e M11 mordem os literais `decisoes` e `absorcoes_feitas__isnull`; um caminho montado por concatenação escapa. Os dois nomes vêm dos relacionamentos declarados no modelo. [detector:88](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:88), [M10–M11:239](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:239), [modelo:4166](app/chamados/models.py:4166), [modelo:4176](app/chamados/models.py:4176) |
+| **Caminho ORM indireto e SQL bruto** | **Parcial.** M12 morde o nome literal da tabela; SQL montado em partes escapa. M11 demonstra um caminho ORM literal, não todos os caminhos montados. [detector:92](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:92), [M12:249](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:249) |
+
+Contramutações concretas, inseridas em `marcos_do_lote`, salvo a definição do helper. Elas retornaram `[]` no detector isolado; a validade e execução das consultas contra um banco são **[não verificado]**. [produção:151](app/chamados/veredito_lavrado.py:151), [teste:109](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:109)
+
+```python
+# Helper definido no mesmo módulo; as duas últimas linhas vão em marcos_do_lote.
+def _leitor(): return __import__('chamados.models', fromlist=['DecisaoPergunta']).DecisaoPergunta.objects.all()
+leitura = _leitor
+leitura()
+```
+
+A forma acima também contém acesso dinâmico no helper não visitado. Uma versão com import direto no helper igualmente retornou `[]`; é essa que demonstra a falha do fecho, independentemente do acesso dinâmico. [teste:60](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:60)
+
+```python
+from chamados.tests.test_e4c_f2_leitura_do_ato import D
+D.objects.all()
+```
+
+`D` é uma reexportação existente de `DecisaoPergunta`. [origem:19](app/chamados/tests/test_e4c_f2_leitura_do_ato.py:19)
+
+```python
+import chamados.models as cm
+g = getattr
+g(cm, 'Decisao' + 'Pergunta').objects.all()
+```
+
+```python
+from chamados.models import PerguntaDisputa as PD
+list(PD.objects.filter(**{'absorcoes_' + 'feitas__isnull': False}))
+```
+
+```python
+from django.db import connection
+c = connection.cursor()
+c.execute('SELECT * FROM chamados_' + 'decisao' + 'pergunta')
+```
+
+O último exemplo escapa porque `execute` sobre a variável `c` não corresponde ao formato especial `cursor().execute`, e nenhuma das constantes contém o nome completo procurado. [teste:92](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:92)
+
+### Formas adicionais de alcance
+
+- **Alias de helper ou lambda que o chama: escapa e cabe no contrato do módulo.** O helper pode ser uma função de topo de `veredito_lavrado.py`; `leitura = _leitor; leitura()` não faz o detector entrar nela. Uma lambda que invoque `_leitor()` diretamente é percorrida por `ast.walk` e essa chamada direta é seguida; o escape demonstrado é o alias da função. [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
+- **Método de classe definida no próprio módulo: escapa e cabe no contrato.** Uma classe `Leitor` com método `ler` que importe e consulte `DecisaoPergunta`, seguida de `Leitor().ler()` no alvo, retornou `[]`: métodos de classe não entram no mapa de funções de topo. [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
+- **Método de instância de modelo em outro módulo: escapa.** Após importar `PerguntaDisputa` como `PD`, `list(PD.objects.first().respostas_anteriores())` retornou `[]`; o método existente percorre `self.decisoes.all()`. Se uma chamada a esse método deve ser proibida por este contrato limitado ao fecho *do módulo* é **pergunta de lei**. A execução com uma pergunta existente é **[não verificado]**. [modelo:3793](app/chamados/models.py:3793), [teste:62](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:62)
+- **Helper em outro módulo: escapa quanto ao corpo.** O detector monta o fecho apenas com funções do AST da fonte recebida; ampliar a obrigação para o corpo importado é a mesma pergunta de lei sobre fronteira de módulo. [teste:43](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:43), [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
+- **Atributo encadeado com nome literal: não escapou no exemplo `f(cm).DecisaoPergunta.objects.all()`.** O detector reconhece o atributo pelo segmento `DecisaoPergunta`, mesmo com base encadeada. Isso não prova cobertura de atributos cujo nome seja construído dinamicamente. [teste:117](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:117)
+
+### Falso positivo e classes de reprovação
+
+Não encontrei falso positivo no trecho atual: o detector isolado retornou lista vazia para a fonte atual. Isso não prova ausência de falsos positivos em futuras alterações; por exemplo, ele trata nomes de atributos e strings que coincidam com segmentos protegidos sem verificar o tipo do objeto ou se a string é caminho ORM. [teste:92](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:92), [teste:117](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:117)
+
+- **Selo sem mordida:** há mordida demonstrada pela lógica e pelos mutantes declarados, mas ainda é **parcial**; os escapes internos acima constituem um único achado bloqueante consolidado. A execução da suíte M1–M12 é **[não verificado]**. [teste:217](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:217)
+- **Fonte única:** os `related_name` são lidos por AST diretamente de `models.py`, em vez de serem copiados como conjunto fixo no detector. Há, porém, o literal adicional `decisoes` no teste de controle e segmentos fixos para o nome do modelo; o extrator só contempla as formas sintáticas indicadas no código. [teste:16](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:16), [teste:89](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:89), [teste:212](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:212)
+- **Campo com dois significados:** não há campo de produção novo no diff fornecido; existência dessa classe no restante do sistema é **[não verificado]**. [teste:1](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:1)
+- **Alvo ausente:** o detector exige exatamente uma função de topo com o nome solicitado, e há teste para ausência. [teste:44](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:44), [teste:151](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:151)
+
+A identidade Git da cópia com o hash informado é **[não verificado]**: o diretório consultado não tem metadados Git. A correspondência do diff completo com a base também é **[não verificado]**.
+
+BLOQUEIA: 1  
+perguntas de lei: 1
+
+## 19/11 01:52 · sessao 5f05c9931c97 · E4C-F5 · censo · origem=Code
+
+| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
+|---|---|---|---|---|---|
+| chamados/services/painel.py:270 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `qs.filter(validada_em__gte=_hoje_ini)` |
+| chamados/services/painel.py:271 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `validada_em__gte=_agora_inf` |
+| chamados/services/painel.py:272 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `validada_em__gte=_agora_inf` |
+| chamados/services/painel.py:273 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `validada_em__gte=_agora_inf` |
+| chamados/services/passivo_validado.py:141 | _balde_da_recusa | via_resolucao | PerguntaDisputa | v | `p.via_resolucao != antes_via` |
+| chamados/services/passivo_validado.py:142 | _balde_da_recusa | via_resolucao | PerguntaDisputa | v | `return 'via:%s' % p.via_resolucao` |
+| chamados/services/passivo_validado.py:530 | _plantar_o_dia | via_resolucao | PerguntaDisputa | iv | `antes_via = [], [], p.via_resolucao` |
+| chamados/services/passivo_validado.py:534 | _plantar_o_dia | materializada_em | PerguntaDisputa | ii | `_sem_carimbo_antes = p.materializada_em is None` |
+| chamados/services/passivo_validado.py:536 | _plantar_o_dia | materializada_em | PerguntaDisputa | ii | `_sem_carimbo_antes and p.materializada_em is not None` |
+| chamados/services/raiox.py:135 | creditos_perguntas | materializada_em | PerguntaDisputa | vi | `_vivas.exclude(materializada_em__isnull=False` |
+| chamados/services/raiox.py:138 | creditos_perguntas | respondida_em | PerguntaDisputa | vi | `'respondida_em', 'resposta_colab'` |
+| chamados/services/raiox.py:138 | creditos_perguntas | resposta_colab | PerguntaDisputa | vi | `'respondida_em', 'resposta_colab'` |
+| chamados/services/raiox.py:147 | creditos_perguntas | respondida_em | indeterminado: argumento de `SimpleNamespace`, alimentado por tupla | — | `respondida_em=p[3]` |
+| chamados/services/raiox.py:147 | creditos_perguntas | resposta_colab | indeterminado: argumento de `SimpleNamespace`, alimentado por tupla | — | `resposta_colab=p[4]` |
+| chamados/services/raiox.py:182 | pergunta_sem_acao_possivel | materializada_em | PerguntaDisputa | iii | `if p.materializada_em is None` |
+| chamados/services/regularizacao_ext.py:220 | retomar_regularizacoes_confirmadas | materializada_em | outro modelo: RegularizacaoExterna | — | `status='confirmada', materializada_em__isnull=True` |
+| chamados/services/relavra_via.py:118 | relavrar | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao not in VIAS_DERIVADAS` |
+| chamados/services/relavra_via.py:121 | relavrar | via_resolucao | PerguntaDisputa | ii | `nova == p.via_resolucao` |
+| chamados/services/relavra_via.py:123 | relavrar | via_resolucao | PerguntaDisputa | iv | `antes = {'via_resolucao': p.via_resolucao` |
+| chamados/services/relavra_via.py:155 | relavrar_dia | via_resolucao | PerguntaDisputa | vi | `via_resolucao__in=VIAS_DERIVADAS` |
+| chamados/services/relavra_via.py:181 | q_carimbo_desfazivel | materializada_em | PerguntaDisputa | vi | `Q(materializada_em__isnull=False)` |
+| chamados/services/relavra_via.py:181 | q_carimbo_desfazivel | via_resolucao | PerguntaDisputa | vi | `~Q(via_resolucao__in=PerguntaDisputa.VIAS_DE_IDENTIDADE)` |
+| chamados/services/relavra_via.py:244 | desfazer_carimbo_sem_lastro | materializada_em | PerguntaDisputa | iv | `antes = {'materializada_em': str(p.materializada_em)` |
+| chamados/services/relavra_via.py:245 | desfazer_carimbo_sem_lastro | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': p.via_resolucao` |
+| chamados/services/tarefa_do_dia.py:163 | _pela_decisao | validada_em | DecisaoPergunta/ato: LeituraDoAto | — | `leitura.validada_em is not None` |
+| chamados/services/tarefa_do_dia.py:262 | _tarefa_pura | via_resolucao | PerguntaDisputa | iii | `p.via_resolucao in PerguntaDisputa.VIAS_FORA_DO_FATO` |
+| chamados/services/tarefa_do_dia.py:263 | _tarefa_pura | via_resolucao | PerguntaDisputa | iii | `p.via_resolucao == PerguntaDisputa.VIA_MOTIVO_RETRATADO` |
+| chamados/services/validacao.py:173 | _carimbar_validacao | validada_em | PerguntaDisputa | iv | `ato_em=perg.validada_em` |
+| chamados/services/validacao.py:175 | _carimbar_validacao | resposta_colab | PerguntaDisputa | iv | `ato_texto=perg.resposta_colab or ''` |
+| chamados/services/validacao.py:181 | _foto_da_validacao | validada_em | PerguntaDisputa | iv | `return (perg.validada_em, perg.validada_por_id` |
+| chamados/services/validacao.py:264 | devolver_validacao_recusada | materializada_em | PerguntaDisputa | ii | `perg.materializada_em is not None` |
+| chamados/services/validacao.py:269 | devolver_validacao_recusada | validada_em | PerguntaDisputa | ii | `if perg.validada_em is not None` |
+| chamados/services/validacao.py:281 | devolver_validacao_recusada | resposta_colab | PerguntaDisputa | iv | `ato_texto=perg.resposta_colab or ''` |
+| chamados/services/validacao.py:341 | devolver_paridade_bug_par_103 | materializada_em | PerguntaDisputa | iv | `antes = {'materializada_em': str(perg.materializada_em)` |
+| chamados/services/validacao.py:341 | devolver_paridade_bug_par_103 | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': perg.via_resolucao` |
+| chamados/services/validacao.py:343 | devolver_paridade_bug_par_103 | validada_em | PerguntaDisputa | iv | `'validada_em': perg.validada_em and str(perg.validada_em)` |
+| chamados/services/validacao.py:356 | devolver_paridade_bug_par_103 | resposta_colab | PerguntaDisputa | iv | `ato_texto=perg.resposta_colab or ''` |
+| chamados/services/validacao.py:392 | impedimento_estoque_l130 | validada_em | PerguntaDisputa | ii | `if perg.validada_em is not None` |
+| chamados/services/validacao.py:394 | impedimento_estoque_l130 | materializada_em | PerguntaDisputa | ii | `if perg.materializada_em is not None` |
+| chamados/services/validacao.py:434 | devolver_instante_sem_texto_l130 | respondida_em | PerguntaDisputa | iv | `antes = {'respondida_em': str(perg.respondida_em)` |
+| chamados/services/validacao.py:434 | devolver_instante_sem_texto_l130 | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': perg.resposta_colab` |
+| chamados/services/validacao.py:435 | devolver_instante_sem_texto_l130 | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': perg.via_resolucao` |
+| chamados/services/validacao.py:440 | devolver_instante_sem_texto_l130 | respondida_em | PerguntaDisputa | ii | `descarimbar_em_lote(alvo, respondida_em=None` — argumento de escrita |
+| chamados/services/validacao.py:440 | devolver_instante_sem_texto_l130 | resposta_colab | PerguntaDisputa | ii | `resposta_colab=''` — argumento de escrita |
+| chamados/services/validacao.py:467 | _e_aceite_de_folga | resposta_colab | PerguntaDisputa | ii | `(perg.resposta_colab or '').strip() == RESPOSTA_DE_FOLGA` |
+
+linhas: 45 de 45
+
+Totais por classe: i **0**; ii **11**; iii **3**; iv **15**; v **2**; vi **10**. Quatro linhas não recebem classe: uma leitura de `LeituraDoAto`, uma de outro modelo e dois argumentos de `SimpleNamespace`.
+
+perguntas de lei: 0
+
+## 19/11 01:52 · sessao 153b592be7b0 · E4C-F5 · censo · origem=Code
+
+| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
+|---|---|---|---|---|---|
+| app/chamados/services/validacao.py:640 | _validar_o_par | validada_em | PerguntaDisputa | i | `if q.validada_em is None` |
+| app/chamados/services/validacao.py:643 | _validar_o_par | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
+| app/chamados/services/validacao.py:685 | validar_pergunta | validada_em | PerguntaDisputa | i | `if perg.validada_em` |
+| app/chamados/services/validacao.py:769 | validar_pergunta | materializada_em | PerguntaDisputa | ii | `if perg.materializada_em is None` |
+| app/chamados/services/validacao.py:805 | validar_pergunta | materializada_em | PerguntaDisputa | v | `erros and perg.materializada_em is None` |
+| app/chamados/services/validacao.py:898 | recusar_pergunta | validada_em | PerguntaDisputa | i | `if perg.validada_em` |
+| app/chamados/services/validacao.py:912 | recusar_pergunta | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': perg.resposta_colab` |
+| app/chamados/services/validacao.py:913 | recusar_pergunta | respondida_em | PerguntaDisputa | iv | `'respondida_em': perg.respondida_em.isoformat()` |
+| app/chamados/services/validacao.py:1064 | validar_lote_classe_a | validada_em | PerguntaDisputa | i | `if perg.validada_em` |
+| app/chamados/services/validacao.py:1085 | validar_lote_classe_a | validada_em | PerguntaDisputa | v | `validadas += 1` |
+| app/chamados/services/validacao.py:1183 | classe_do_lote | resposta_colab | PerguntaDisputa | ii | `resp = _sem_acento(...)` |
+| app/chamados/services/validacao.py:1185 | classe_do_lote | resposta_colab | PerguntaDisputa | v | `'resp': perg.resposta_colab` |
+| app/chamados/services/validacao.py:1187 | classe_do_lote | resposta_colab | PerguntaDisputa | v | `'resp': perg.resposta_colab` |
+| app/chamados/services/validacao.py:1192 | classe_do_lote | resposta_colab | PerguntaDisputa | v | `'resp': perg.resposta_colab` |
+| app/chamados/services/validacao.py:1193 | classe_do_lote | resposta_colab | PerguntaDisputa | v | `'resp': perg.resposta_colab` |
+| app/chamados/services/validacao.py:1194 | classe_do_lote | resposta_colab | PerguntaDisputa | ii | `not _hora_legivel(perg.resposta_colab)` |
+| app/chamados/services/validacao.py:1195 | classe_do_lote | resposta_colab | PerguntaDisputa | v | `'resp': perg.resposta_colab` |
+| app/chamados/services/validacao.py:1198 | classe_do_lote | resposta_colab | PerguntaDisputa | v | `'resp': perg.resposta_colab` |
+| app/chamados/services/validacao.py:1256 | fila_validar_classificada | respondida_em | PerguntaDisputa | v | `'idade_dias': (agora - p.respondida_em).days` |
+| app/chamados/services/verbos.py:264 | placar_equipe | validada_em | PerguntaDisputa | vi | `validada_em__gte=d7` |
+| app/chamados/services/verbos.py:270 | placar_equipe | validada_em | PerguntaDisputa | v | `if pq.validada_em >= hoje_ini` |
+| app/chamados/services/verbos.py:337 | placar_aceite | respondida_em | PerguntaDisputa | vi | `respondida_em__gte=d7` |
+| app/chamados/services/verbos.py:338 | placar_aceite | respondida_em | PerguntaDisputa | vi | `.values('disputa__colaborador_id', 'respondida_em')` |
+| app/chamados/services/vigia_carimbo.py:98 | classificar | validada_em | PerguntaDisputa | vi | `validada_em__isnull=False` |
+| app/chamados/services/vigia_fio.py:747 | respondida_sem_resposta | respondida_em | PerguntaDisputa | vi | `respondida_em__gte=desde` |
+| app/chamados/services/vigia_fio.py:750 | respondida_sem_resposta | resposta_colab | PerguntaDisputa | vi | `values_list('resposta_colab', flat=True)` |
+| app/chamados/templatetags/chamados_tags.py:139 | aplicacao_da_resposta | resposta_colab | PerguntaDisputa | v | `(perg.resposta_colab or '').strip()` |
+| app/chamados/templatetags/chamados_tags.py:166 | leitura_da_resposta | resposta_colab | PerguntaDisputa | i | `if not (getattr(perg, 'resposta_colab', '') or '').strip()` |
+| app/chamados/veredito_lavrado.py:203 | marcos_do_lote | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
+| app/chamados/veredito_lavrado.py:207 | marcos_do_lote | respondida_em | PerguntaDisputa | vi | `respondida_em__isnull=False` |
+| app/chamados/views_cobrar.py:293 | proposta_lote | resposta_colab | PerguntaDisputa | v | `'resposta': x['pergunta'].resposta_colab` |
+| app/ponto/management/commands/reconciliar_fantasmas.py:213 | handle | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
+| app/ponto/services/cartorio.py:1651 | _julgar_colab_corpo | via_resolucao | PerguntaDisputa | ii | `all(p.via_resolucao == _PD.VIA_DUPLICATA ...` |
+| app/ponto/services/dia_do_colab.py:70 | dia_do_colab | resposta_colab | PerguntaDisputa | v | `'resposta_do_colab': p.resposta_colab or None` |
+| app/ponto/services/flip_auto.py:129 | fila_flip_recusas | via_resolucao | PerguntaDisputa | vi | `via_resolucao=PerguntaDisputa.VIA_PARIDADE_RECUSADA` |
+| app/ponto/services/flip_auto.py:130 | fila_flip_recusas | validada_em | PerguntaDisputa | vi | `validada_em__gte=corte` |
+| app/ponto/services/procedencia_batida.py:74 | procedencia | materializada_em | PerguntaDisputa | v | `p.validada_em or p.materializada_em` |
+| app/ponto/services/procedencia_batida.py:74 | procedencia | validada_em | PerguntaDisputa | v | `p.validada_em or p.materializada_em` |
+| app/ponto/services/veredito_celula.py:196 | fechar_o_fio_do_dia | materializada_em | PerguntaDisputa | iv | `ato_em=p.materializada_em` |
+| app/ponto/services/veredito_celula.py:197 | fechar_o_fio_do_dia | resposta_colab | PerguntaDisputa | iv | `ato_texto=p.resposta_colab or ''` |
+
+linhas: 40 de 40  
+totais por classe: i 5; ii 4; iii 0; iv 4; v 15; vi 12.
+
+- **validacao.py:640** — chamada por `validar_pergunta` em app/chamados/services/validacao.py:771; **sim**, condiciona `_carimbar_validacao` em app/chamados/services/validacao.py:640.
+- **validacao.py:685** — chamada, por exemplo, em app/chamados/services/acoes_disputa.py:19; **sim**, a saída impede o carimbo posterior em app/chamados/services/validacao.py:743.
+- **validacao.py:898** — chamada em app/chamados/services/acoes_disputa.py:82; **sim**, a saída impede a reabertura em app/chamados/services/validacao.py:925.
+- **validacao.py:1064** — chamada em app/chamados/views_cobrar.py:263 e :383; **sim**, impede a chamada da ação de validação em app/chamados/services/validacao.py:1078.
+- **chamados_tags.py:166** — chamada em app/templates/chamados/partials/_pergunta_card.html:43 e app/templates/chamados/partials/modal_fio.html:274; decide quando uma porta escreve: **não verificado**.
+
+perguntas de lei: 0
+
+## 19/11 01:52 · sessao 59e12cf1219f · E4C-F5 · censo · origem=Code
+
+| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
+|---|---|---|---|---|---|
+| chamados/services/materializacao.py:199 | par_do_intervalo | validada_em | PerguntaDisputa | i | `irma_validada and q.validada_em is None` |
+| chamados/services/materializacao.py:201 | par_do_intervalo | validada_em | PerguntaDisputa | i | `q.validada_em is None` |
+| chamados/services/materializacao.py:261 | paridade_absolvida_bug_par_103 | materializada_em | PerguntaDisputa | ii | `p.materializada_em is not None` |
+| chamados/services/materializacao.py:261 | paridade_absolvida_bug_par_103 | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao == PerguntaDisputa.VIA_PARIDADE_RECUSADA` |
+| chamados/services/materializacao.py:262 | paridade_absolvida_bug_par_103 | materializada_em | PerguntaDisputa | ii | `p.materializada_em < _corte` |
+| chamados/services/materializacao.py:289 | _situacao_da_irma | materializada_em | PerguntaDisputa | v | `q.materializada_em is None` |
+| chamados/services/materializacao.py:292 | _situacao_da_irma | via_resolucao | PerguntaDisputa | v | `'via:%s' % q.via_resolucao` |
+| chamados/services/materializacao.py:329 | respostas_intervalo_recusadas_paridade | materializada_em | PerguntaDisputa | iii | `p.materializada_em is not None` |
+| chamados/services/materializacao.py:558 | _tipo_pelo_marco | resposta_colab | PerguntaDisputa | ii | `_min(p.resposta_colab)` |
+| chamados/services/materializacao.py:586 | _tipo_pelo_marco | resposta_colab | PerguntaDisputa | v | `resposta=p.resposta_colab` |
+| chamados/services/materializacao.py:637 | _ts_tipo_do_plantio | resposta_colab | PerguntaDisputa | ii | `(p.resposta_colab or '').strip()` |
+| chamados/services/materializacao.py:683 | _ts_tipo_do_plantio | resposta_colab | PerguntaDisputa | v | `(p.resposta_colab or '').strip()` |
+| chamados/services/materializacao.py:690 | _ts_tipo_do_plantio | resposta_colab | PerguntaDisputa | ii | `_hora_fonte = p.resposta_colab` |
+| chamados/services/materializacao.py:730 | _declarado_da_metade | resposta_colab | PerguntaDisputa | iii | `(p.resposta_colab or '').strip().split(':')` |
+| chamados/services/materializacao.py:745 | divergencia_declarado_x_gravado | resposta_colab | PerguntaDisputa | v | `repr((p.resposta_colab or '').strip())` |
+| chamados/services/materializacao.py:782 | espera_na_escrita | resposta_colab | PerguntaDisputa | iii | `not (p.resposta_colab or '').strip()` |
+| chamados/services/materializacao.py:875 | estado_aplicacao_pergunta | materializada_em | PerguntaDisputa | v | `if p.materializada_em and` |
+| chamados/services/materializacao.py:875 | estado_aplicacao_pergunta | via_resolucao | PerguntaDisputa | v | `getattr(p, 'via_resolucao', '')` |
+| chamados/services/materializacao.py:881 | estado_aplicacao_pergunta | via_resolucao | PerguntaDisputa | v | `_VIAS_DE_RECUSA[p.via_resolucao]` |
+| chamados/services/materializacao.py:887 | estado_aplicacao_pergunta | materializada_em | PerguntaDisputa | v | `if p.materializada_em:` |
+| chamados/services/materializacao.py:966 | _declarar_ausencia_de_pergunta | resposta_colab | PerguntaDisputa | ii | `resp = (p.resposta_colab or '').strip()` |
+| chamados/services/materializacao.py:1031 | _materializar_ausencia_de_resposta | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
+| chamados/services/materializacao.py:1063 | _materializar_ausencia_de_resposta | resposta_colab | PerguntaDisputa | iv | `ato_texto=q.resposta_colab or ''` |
+| chamados/services/materializacao.py:1123 | perguntas_absorvidas_por | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
+| chamados/services/materializacao.py:1124 | perguntas_absorvidas_por | via_resolucao | PerguntaDisputa | vi | `via_resolucao__in=` |
+| chamados/services/materializacao.py:1125 | perguntas_absorvidas_por | materializada_em | PerguntaDisputa | vi | `values_list('disputa_id', 'materializada_em')` |
+| chamados/services/materializacao.py:1125 | perguntas_absorvidas_por | resposta_colab | PerguntaDisputa | vi | `filter(resposta_colab__in=escapes)` |
+| chamados/services/materializacao.py:1130 | perguntas_absorvidas_por | materializada_em | PerguntaDisputa | vi | `Q(disputa_id=_disp, materializada_em=_inst)` |
+| chamados/services/materializacao.py:1166 | devolver_absorvidas_da_ausencia_rejeitada | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': p.resposta_colab` |
+| chamados/services/materializacao.py:1166 | devolver_absorvidas_da_ausencia_rejeitada | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': p.via_resolucao` |
+| chamados/services/materializacao.py:1167 | devolver_absorvidas_da_ausencia_rejeitada | respondida_em | PerguntaDisputa | iv | `p.respondida_em and p.respondida_em.isoformat()` |
+| chamados/services/materializacao.py:1168 | devolver_absorvidas_da_ausencia_rejeitada | validada_em | PerguntaDisputa | iv | `p.validada_em and p.validada_em.isoformat()` |
+| chamados/services/materializacao.py:1169 | devolver_absorvidas_da_ausencia_rejeitada | materializada_em | PerguntaDisputa | iv | `p.materializada_em and p.materializada_em.isoformat()` |
+| chamados/services/materializacao.py:1385 | _materializar_resposta_hora | resposta_colab | PerguntaDisputa | v | `p.resposta_colab` |
+| chamados/services/materializacao.py:1567 | _materializar_resposta_hora | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': p.resposta_colab` |
+| chamados/services/materializacao.py:1593 | _materializar_resposta_data_hora | resposta_colab | PerguntaDisputa | ii | `raw = (p.resposta_colab or '').strip()` |
+| chamados/services/materializacao.py:1602 | _materializar_resposta_data_hora | resposta_colab | PerguntaDisputa | v | `data_hora invalida ({p.resposta_colab})` |
+| chamados/services/materializacao.py:1654 | _materializar_resposta_data_hora | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': p.resposta_colab` |
+| chamados/services/materializacao.py:1693 | _carimbar_recusa | materializada_em | PerguntaDisputa | ii | `p.materializada_em is None and codigo == 'COLISAO'` |
+| chamados/services/materializacao.py:2106 | materializar_perguntas_validadas_da_disputa | validada_em | PerguntaDisputa | vi | `validada_em__isnull=False` |
+| chamados/services/materializacao.py:2107 | materializar_perguntas_validadas_da_disputa | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
+| chamados/services/materializacao.py:2120 | materializar_perguntas_validadas_da_disputa | materializada_em | PerguntaDisputa | ii | `p.materializada_em is not None` |
+| chamados/services/materializacao.py:2123 | materializar_perguntas_validadas_da_disputa | validada_em | PerguntaDisputa | i | `p.validada_em is None` |
+| chamados/services/materializacao.py:2168 | materializar_pendentes_aprovadas | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
+
+linhas: 44 de 44
+
+Totais por classe: i 3; ii 10; iii 3; iv 8; v 11; vi 9.
+
+- :199 — chamadores em `chamados/services/validacao.py:632` e `chamados/services/materializacao.py:923,1732`; **sim**, condiciona a gravação do par quando `irma_validada=True` (`chamados/services/materializacao.py:178,182-183,199`).
+- :201 — mesmos chamadores (`chamados/services/validacao.py:632`; `chamados/services/materializacao.py:923,1732`); **sim**, aciona o exame de plausibilidade que pode impedir o par (`chamados/services/materializacao.py:201-206`).
+- :2123 — chamadores em `chamados/services/validacao.py:786`, `chamados/services/fio.py:718` e `chamados/services/acoes_disputa.py:143`; **sim**, impede chamar a materialização quando a pergunta relida está sem validação (`chamados/services/materializacao.py:2115-2125`).
+
+perguntas de lei: 0
+
+## 19/11 01:52 · sessao 9fb8bed83aa9 · E4C-F5 · censo · origem=Code
+
+| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
+|---|---|---|---|---|---|
+| chamados/services/disputa_emissao.py:1617 | reabrir_para_correcao | respondida_em | indeterminado: chave de `dict`, sem receptor | — | `respondida_em=None` |
+| chamados/services/disputa_emissao.py:1617 | reabrir_para_correcao | resposta_colab | indeterminado: chave de `dict`, sem receptor | — | `resposta_colab=''` |
+| chamados/services/disputa_emissao.py:1617 | reabrir_para_correcao | validada_em | indeterminado: chave de `dict`, sem receptor | — | `validada_em=None` |
+| chamados/services/disputa_emissao.py:1643 | reabrir_para_correcao | respondida_em | PerguntaDisputa | vi | `qs.values_list(... 'respondida_em'` |
+| chamados/services/disputa_emissao.py:1643 | reabrir_para_correcao | resposta_colab | PerguntaDisputa | vi | `qs.values_list('pk', 'resposta_colab'` |
+| chamados/services/disputa_emissao.py:1644 | reabrir_para_correcao | validada_em | PerguntaDisputa | vi | `'validada_em', 'validada_por_id'` |
+| chamados/services/disputa_emissao.py:1645 | reabrir_para_correcao | materializada_em | PerguntaDisputa | vi | `'materializada_em', 'via_resolucao'` |
+| chamados/services/disputa_emissao.py:1645 | reabrir_para_correcao | via_resolucao | PerguntaDisputa | vi | `'materializada_em', 'via_resolucao'` |
+| chamados/services/disputa_emissao.py:1671 | responder_automaticamente | resposta_colab | PerguntaDisputa | ii | `if (p.resposta_colab or '').strip()` |
+| chamados/services/disputa_emissao.py:1701 | carimbar_resposta_pela_trilha | respondida_em | PerguntaDisputa | ii | `if p.respondida_em is not None` |
+| chamados/services/disputa_emissao.py:1701 | carimbar_resposta_pela_trilha | resposta_colab | PerguntaDisputa | ii | `not (p.resposta_colab or '').strip()` |
+| chamados/services/disputa_emissao.py:1709 | carimbar_resposta_pela_trilha | resposta_colab | PerguntaDisputa | iv | `ato_texto=p.resposta_colab` |
+| chamados/services/disputa_emissao.py:1871 | reabrir_credor_de_pergunta_viva | respondida_em | PerguntaDisputa | ii | `q.respondida_em is None` |
+| chamados/services/disputa_emissao.py:1871 | reabrir_credor_de_pergunta_viva | resposta_colab | PerguntaDisputa | ii | `not texto_vazio(q.resposta_colab)` |
+| chamados/services/disputa_emissao.py:1951 | _resolver_perguntas_por_chamado_resolvido | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
+| chamados/services/disputa_emissao.py:2083 | _resolver_perguntas_por_chamado_resolvido | materializada_em | PerguntaDisputa | i | `q.materializada_em is None` |
+| chamados/services/disputa_emissao.py:2083 | _resolver_perguntas_por_chamado_resolvido | validada_em | PerguntaDisputa | i | `q.validada_em is None` |
+| chamados/services/disputa_emissao.py:2093 | _resolver_perguntas_por_chamado_resolvido | via_resolucao | PerguntaDisputa | iv | `_via_antes = q.via_resolucao` |
+| chamados/services/disputa_emissao.py:2095 | _resolver_perguntas_por_chamado_resolvido | respondida_em | PerguntaDisputa | iv | `q.respondida_em.isoformat()` |
+| chamados/services/disputa_emissao.py:2100 | _resolver_perguntas_por_chamado_resolvido | resposta_colab | PerguntaDisputa | v | `_tem_resp = bool((q.resposta_colab or '').strip())` |
+| chamados/services/disputa_emissao.py:2108 | _resolver_perguntas_por_chamado_resolvido | via_resolucao | PerguntaDisputa | iv | `q.via_resolucao, 'com resposta` |
+| chamados/services/disputa_emissao.py:2111 | _resolver_perguntas_por_chamado_resolvido | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': q.via_resolucao` |
+| chamados/services/disputa_emissao.py:2112 | _resolver_perguntas_por_chamado_resolvido | respondida_em | PerguntaDisputa | iv | `'respondida_em': q.respondida_em.isoformat()` |
+| chamados/services/explicador.py:55 | _explicar_validada | resposta_colab | PerguntaDisputa | v | `% (p.resposta_colab,)` |
+| chamados/services/explicador.py:102 | explicar_pergunta | resposta_colab | PerguntaDisputa | v | `acao='Validar ou recusar a resposta` |
+| chamados/services/explicador.py:103 | explicar_pergunta | resposta_colab | PerguntaDisputa | v | `motivo='colaborador respondeu %s'` |
+| chamados/services/explicador.py:118 | explicar_pergunta | via_resolucao | PerguntaDisputa | v | `p.get_via_resolucao_display() if p.via_resolucao` |
+| chamados/services/fabrica_da_celula.py:149 | motivos_a_perguntar | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao=PerguntaDisputa.VIA_DUPLICATA)` |
+| chamados/services/fabrica_da_celula.py:171 | perguntar | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
+| chamados/services/fio.py:188 | espera_o_texto_do_colaborador | respondida_em | PerguntaDisputa | i | `p.respondida_em is None or respondida_sem_texto(p)` |
+| chamados/services/fio.py:378 | montar_chamados_fio | resposta_colab | PerguntaDisputa | v | `(_p.resposta_colab or '').strip()` |
+| chamados/services/fio.py:1149 | reuso_sem_rechave | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/fio.py:1216 | sem_dia_na_saida | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/fio.py:1295 | merito_perdedor | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao == PerguntaDisputa.VIA_ADMIN_DECIDIU` |
+| chamados/services/fio.py:1493 | retratar_duplicata | via_resolucao | PerguntaDisputa | ii | `if p.via_resolucao == PerguntaDisputa.VIA_DUPLICATA` |
+| chamados/services/fio.py:1576 | _no_fato | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/fio.py:1709 | recusa_par_ilegal | respondida_em | indeterminado: atributo de `SimpleNamespace`, sem modelo | — | `SimpleNamespace(respondida_em=respondida_em` |
+| chamados/services/fio.py:1709 | recusa_par_ilegal | resposta_colab | indeterminado: atributo de `SimpleNamespace`, sem modelo | — | `resposta_colab=resposta_colab)` |
+| chamados/services/fio.py:2017 | fecho_cruza_dias | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/fio.py:2053 | perguntas_sobre_batida_retratada | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/fio.py:2075 | universo_do_grupo | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/fio.py:2120 | grupos_de_colisao | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
+| chamados/services/historico.py:109 | _eventos_dos_chamados | resposta_colab | PerguntaDisputa | v | `resp = (p.resposta_colab or '')[:14]` |
+| chamados/services/materializacao.py:148 | metade_irma_do_intervalo | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
+
+linhas: 44 de 44
+
+Totais por classe: i: 3; ii: 7; iii: 0; iv: 6; v: 7; vi: 16. Sem classe: 5.
+
+- **disputa_emissao.py:2083 — materializada_em:** chamada pelo wrapper em chamados/services/disputa_emissao.py:1919; **sim**, seleciona candidatas antes de `q.carimbar` (chamados/services/disputa_emissao.py:2083, chamados/services/disputa_emissao.py:2103).
+- **disputa_emissao.py:2083 — validada_em:** chamada pelo mesmo wrapper em chamados/services/disputa_emissao.py:1919; **sim**, seleciona candidatas antes de `q.carimbar` (chamados/services/disputa_emissao.py:2083, chamados/services/disputa_emissao.py:2103).
+- **fio.py:188 — respondida_em:** chamada em chamados/services/fio.py:175, chamados/services/fio.py:360 e chamados/services/cobranca.py:241; **não foi verificada** decisão de quando uma porta existente escreve nesses usos.
+
+perguntas de lei: 0
 
 ## 19/11 01:51 · sessao 9e6c148debe0 · E4C-F5 · censo · origem=Code
 
@@ -489,684 +1086,4 @@ A análise das ocorrências de `materializacao.py`, incluindo as classificaçõe
 
 Classificação do subconjunto de comandos, migração e serviços enviada ao agente principal: **35 linhas**, todas com receptor `PerguntaDisputa`; classes **(ii) 9, (iv) 3, (v) 2 e (vi) 21**. As evidências e os trechos foram enviados junto à classificação. ([backfill_decisoes_pergunta.py:44](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/backfill_decisoes_pergunta.py:44), [encerrar_perguntas_com_fato.py:27](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/encerrar_perguntas_com_fato.py:27), [relavrar_via_i6.py:44](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/relavrar_via_i6.py:44), [0053_pergunta_unica_por_familia.py:31](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/migrations/0053_pergunta_unica_por_familia.py:31), [reconciliar_fantasmas.py:210](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/management/commands/reconciliar_fantasmas.py:210), [flip_auto.py:116](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/services/flip_auto.py:116))
 
-## 19/11 01:45 · sessao 85eb35a46c3f · - · - · origem=Ronald (tmux)
-
-Resultados e ressalvas enviados ao agente principal, com referências ao código e aos chamadores.
-
-## 19/11 01:45 · sessao c61a08d6dac7 · E4C-F3-LAVRA-FOTO · verificador · origem=Code
-
-**BLOQUEIA — o selo morde os mutantes declarados, mas não garante a ausência de leituras de `DecisaoPergunta`.** A busca percorre apenas o AST do corpo de `marcos_do_lote` e reconhece um conjunto específico de nomes, atributos, palavras-chave e strings; ela não acompanha chamadas nem resolve todas as formas de acesso ao modelo. [app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:14](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:14)
-
-**1. Mordida e lacunas**
-
-Os testes M1–M4 apresentam construções que o detector reconhece: nome ou import direto, apelido direto, atributo `DecisaoPergunta` e string literal contendo esse nome. M5, M6, função aninhada e lookup `decisoes__...` também têm padrões reconhecidos. Isso é uma conclusão por inspeção; execução dos testes e logs RED/controle: **[não verificado]**. [app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:88](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:88)
-
-As formas abaixo escapam. A lista descreve classes de acesso, não uma enumeração finita de todos os programas Python possíveis. Em cada linha, a cobertura indicada é trabalho necessário, não uma proteção existente verificada.
-
-| Forma que escaparia | Alcançável no corpo atual? | Quem cobriria |
-|---|---|---|
-| Chamar helper do módulo ou importado que faz a leitura; o detector não entra no corpo do helper. | Não há chamada a helper próprio com essa leitura no corpo visível; comportamento interno de bibliotecas chamadas: **[não verificado]**. | Selo com análise transitiva dos chamados ou contrato separado que vigie o helper. [teste:39](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:39), [produção:151](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/veredito_lavrado.py:151) |
-| Importar no módulo outro símbolo que já represente o modelo, por exemplo reexportação `from outro_modulo import DP`, e usar `DP.objects`; só o import direto de `chamados.models` registra apelido. O conjunto `modulos` é preenchido, mas não é consultado. | Esse import e uso não aparecem hoje no corpo ou imports mostrados. | Resolução de símbolos e reexportações. [teste:24](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:24), [produção:88](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/veredito_lavrado.py:88) |
-| `getattr` ou `get_model` com nome montado, por exemplo `'Decisao' + 'Pergunta'`; aliases obtidos por atribuição ou acesso dinâmico também podem escapar. | Não há essa construção no corpo atual. | Análise de fluxo e avaliação conservadora de strings; acesso dinâmico arbitrário exige política explícita. [teste:46](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:46), [produção:151](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/veredito_lavrado.py:151) |
-| `prefetch_related('decisoes')`, lookup passado como string ou via `**dict`, e consultas pelo outro relacionamento `absorcoes_feitas`. A string `decisoes` não contém `DecisaoPergunta`, e esse segundo relacionamento não consta nos atributos procurados. | Nenhuma dessas construções aparece no corpo atual. | Detector de caminhos ORM em strings e argumentos dinâmicos, considerando os relacionamentos reais do modelo. [teste:52](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:52), [modelo:4176](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/models.py:4176) |
-| `Subquery`/`OuterRef` ou consulta sobre outro modelo que alcance a tabela por caminho de relacionamento em string; SQL bruto ou abstração que consulte a tabela também pode escapar. | Não aparecem essas construções no corpo atual. A execução interna do ORM: **[não verificado]**. | Análise dos caminhos ORM e SQL, ou restrição verificável às formas permitidas de consulta. [produção:177](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/veredito_lavrado.py:177), [teste:59](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:59) |
-
-`select_related('decisoes')` não é, por si, um exemplo comprovado de leitura válida desse relacionamento reverso de múltiplas linhas; `prefetch_related('decisoes')` é a forma relevante aqui. Validação em execução: **[não verificado]**. [modelo:4166](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/models.py:4166)
-
-**2. Valores assumidos pelo selo**
-
-- **NÃO BLOQUEIA — relacionamento:** `decisoes` confere: é o `related_name` de `DecisaoPergunta.pergunta`, FK para `PerguntaDisputa`. O modelo também declara `absorcoes_feitas` para outra FK à pergunta, não vigiada pelo selo. [app/chamados/models.py:4166](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/models.py:4166), [app/chamados/models.py:4176](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/models.py:4176)
-- **NÃO BLOQUEIA — escrita e leitura:** o modelo declara `registrar` como porta de escrita; há chamada concreta no backfill e leitura concreta por `self.decisoes.all()` em `PerguntaDisputa`. Censo exaustivo de todos os escritores e leitores: **[não verificado]**. [app/chamados/models.py:4141](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/models.py:4141), [backfill_decisoes_pergunta.py:351](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/management/commands/backfill_decisoes_pergunta.py:351), [app/chamados/models.py:3801](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/models.py:3801)
-- **NÃO BLOQUEIA — nome e caminho:** o teste forma o caminho para `chamados/veredito_lavrado.py` e procura exatamente uma função de topo chamada `marcos_do_lote`; ambos conferem nesta cópia. O nome e o caminho são declarações de código, não valores escritos em banco. [teste:8](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:8), [teste:17](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:17), [produção:151](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/veredito_lavrado.py:151)
-
-**3. Classes de reprovação**
-
-- **BLOQUEIA — selo/RED com mordida parcial:** os mutantes exercitam padrões que o detector reconhece, mas as leituras indiretas e por caminhos ORM acima permanecem sem cobertura demonstrada. É o mesmo bloqueio contado na seção 1. [teste:46](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:46)
-- **NÃO BLOQUEIA — demais classes na obra apresentada:** o diff fornecido contém apenas um arquivo de teste; nele não identifiquei novo juiz de domínio, escritor de produção, leitura de relógio, derivação paralela ou campo de produção com dois significados. A ausência dessas classes no restante do sistema é **[não verificada]**. [teste:1](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:1)
-
-**4. Dependências e falsos verdes**
-
-- **NÃO BLOQUEIA — relógio, banco e ordem:** por inspeção, os testes leem o arquivo, fazem parse e analisam strings em memória; não invocam `marcos_do_lote`, banco nem relógio. Cada mutante parte de `self.fonte`, sem depender de alteração feita por teste anterior. Execução da suíte: **[não verificado]**. [teste:75](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:75)
-- **NÃO BLOQUEIA — vacuidade e âncoras nesta cópia:** erro de parse levanta exceção; função ausente ou duplicada também. As três âncoras ocorrem uma vez, e a âncora de corpo está dentro do alvo. A lista vazia pode, contudo, ser falso verde para as formas de leitura que o detector não reconhece, já contadas no bloqueio. [teste:16](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:16), [teste:70](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:70), [produção:160](/home/ronald/codex_ws/141757fc8bd7b8b1008458478683d71a0cc5787c/app/chamados/veredito_lavrado.py:160)
-
-A cópia acessível não possui metadados Git no diretório consultado; identidade do HEAD com o hash informado: **[não verificado]**.
-
-BLOQUEIA: 1  
-perguntas de lei: 0
-
-## 19/11 01:44 · sessao 0f3fd24bbc1d · CADEIA-20 · sonda · origem=Code
-
-**1. Marcador da pausa.** A informação que distingue os caminhos existe nas condições do pareador; o resultado comum `_intra_dur=True` não registra qual delas foi satisfeita.
-
-- No caminho **S→E**, a próxima batida é lida como `tn` e o intervalo em segundos como `gap`: `tn = (getattr(nx, 'tipo', '') or '').upper()[:1]` e `gap = (nx.timestamp - b.timestamp).total_seconds()` ([turnos.py:433](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:433)). A distinção existe na condição `tn == 'E' and 0 <= gap <= intra_max_s` ([turnos.py:453](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:453)); a origem deixa de ser distinguível pelo marcador quando ambas as pontas recebem `b._intra_dur = True` e `nx._intra_dur = True` ([turnos.py:456](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:456)). Há outro caminho S→E sem bordas, com condição de S posterior e o mesmo marcador ([turnos.py:407](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:407)), além do caminho com marcos em [turnos.py:1468](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1468).
-- No caminho **S,S**, a informação existe em `if tn == 'S' and (ds is None or ds > 90):` ([turnos.py:476](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:476)). Ao encontrar a S posterior próxima da borda, a primeira recebe o mesmo `b._intra_dur = True` ([turnos.py:484](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:484)).
-- O laço também usa esse atributo para papel vindo da ata e para absorção por marco: `b._intra_dur = True` ([turnos.py:1316](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1316), [turnos.py:1364](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1364)). O consumo reúne as origens em `_iv = getattr(b, "is_intervalo", False) or getattr(b, "_intra_dur", False)` ([turnos.py:1326](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1326)).
-
-A batida gravada tem `tipo` e `is_intervalo` ([models.py:23](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/models.py:23)); a célula grava `ata` em JSON ([models.py:1774](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/models.py:1774)). O período do motor expõe `intervalos_do_motor`, isto é, intervalos já julgados, e o adaptador os entrega como pares de instantes ([motor_calculo_v2.py:239](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/motor_calculo_v2.py:239), [adaptador_motor.py:13](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/adaptador_motor.py:13)). **Não foi verificado um campo gravado que registre qual daqueles dois ramos do pareador produziu `_intra_dur`**; os tipos e dados da ata podem conter fatos relacionados, mas não provam por si o caminho executado. [não verificado]
-
-**2. ATA_DESALINHADA.** No anexo `sonda3.py`, o ramo é literalmente `if resultado.get("desalinhado"):` seguido de `nao_medida[(emp, "ATA_DESALINHADA")] += 1` e `continue`; o número da linha do anexo está [não verificado]. A condição vem de `periodos_do_dia(cel, None)` e conta uma ocorrência por célula cuja ata é um `dict` e cujo resultado tem `desalinhado` verdadeiro. [não verificado: linha do anexo]
-
-O motor retorna esse valor em quatro causas exclusivas pela precedência do código: sem marcos esperados após a tentativa posicional; sem lâmpadas, se há marcos; quantidade diferente, se ambos existem; ou discordância de horário de um marco, após passar pelas guardas anteriores ([juiz_batida.py:190](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/juiz_batida.py:190), [juiz_batida.py:195](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/juiz_batida.py:195), [juiz_batida.py:227](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/juiz_batida.py:227)). Os contadores por causa e exemplos ainda são [não verificado].
-
-A sonda abaixo usa o mesmo recorte e guarda do anexo, classifica pelo `porque` devolvido pelo próprio motor e compara a soma por causa com o universo contado diretamente pelo ramo. Cada exemplo é uma célula; a hora é a primeira batida apurável **na data local da célula**, quando existir. A ausência de batida é explicitada. A execução e seus resultados são [não verificado].
-
-```python
-# Executar pelo mesmo envelope de leitura da sombra, tenant juliani.
-# Não cria, altera ou apaga arquivos. Não imprime nome nem CPF.
-
-import collections
-import datetime
-import os
-import sys
-
-from django.conf import settings
-from django.db import connection, transaction
-from django.utils import timezone
-
-from escala.models import CelulaDia
-from ponto.juiz_batida import periodos_do_dia
-from ponto.turnos import batidas_apuraveis
-
-
-INI = datetime.date(2026, 10, 21)
-FIM = datetime.date(2026, 11, 20)
-UM_DIA = datetime.timedelta(days=1)
-
-CAUSAS = (
-    "SEM_MARCOS",
-    "SEM_LAMPADAS",
-    "QUANTIDADE_DIFERENTE",
-    "HORARIO_DIVERGENTE",
-)
-
-
-def guarda_sombra():
-    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
-        raise RuntimeError("settings")
-    banco = settings.DATABASES["default"]
-    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
-        raise RuntimeError("configuracao")
-    with connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION READ ONLY")
-        cursor.execute("SELECT current_database(), current_schema()")
-        banco_real, schema_real = cursor.fetchone()
-    if banco_real != "sombra" or schema_real != "juliani":
-        raise RuntimeError("conexao")
-
-
-def hora_valida(hora):
-    if not isinstance(hora, str) or len(hora) != 5 or hora[2] != ":":
-        return False
-    try:
-        return datetime.datetime.strptime(hora, "%H:%M").strftime("%H:%M") == hora
-    except ValueError:
-        return False
-
-
-def causa_do_resultado(resultado):
-    porque = resultado.get("porque")
-    if porque == "sem marcos no dna":
-        return "SEM_MARCOS"
-    if porque == "sem lampadas na ata":
-        return "SEM_LAMPADAS"
-    if isinstance(porque, str) and porque.startswith("ata com "):
-        return "QUANTIDADE_DIFERENTE"
-    if isinstance(porque, str) and porque.startswith("marco "):
-        return "HORARIO_DIVERGENTE"
-    raise RuntimeError("causa_desconhecida")
-
-
-def main():
-    etapa = "GUARDA_SOMBRA"
-    try:
-        with transaction.atomic():
-            guarda_sombra()
-
-            etapa = "CELULAS"
-            celulas = list(
-                CelulaDia.objects.filter(data__gte=INI, data__lte=FIM)
-                .select_related("colaborador", "colaborador__empresa")
-                .order_by("colaborador_id", "data")
-            )
-            por_pessoa = collections.defaultdict(list)
-            empresas = set()
-            for cel in celulas:
-                por_pessoa[cel.colaborador_id].append(cel)
-                empresas.add(cel.colaborador.empresa_id)
-
-            universo = collections.Counter()
-            contagem = collections.Counter()
-            # Primeiro guarda exemplos com hora; depois completa com células
-            # sem batida no dia, se necessário.
-            com_hora = collections.defaultdict(list)
-            sem_hora = collections.defaultdict(list)
-
-            for cid, cels in sorted(por_pessoa.items()):
-                colab = cels[0].colaborador
-                emp = colab.empresa_id
-                classificadas = []
-
-                for cel in cels:
-                    etapa = "ATA"
-                    if not isinstance(cel.ata, dict):
-                        continue
-
-                    orfas = cel.ata.get("orfas")
-                    if orfas is not None and not isinstance(orfas, list):
-                        raise RuntimeError("orfas_formato")
-                    if orfas is not None:
-                        for hora in orfas:
-                            if not hora_valida(hora):
-                                raise RuntimeError("hora_orfa")
-
-                    etapa = "INVERSA_ATA"
-                    resultado = periodos_do_dia(cel, None)
-                    if not resultado.get("desalinhado"):
-                        continue
-
-                    # Mesmo ponto de contagem da sonda3, antes da partição.
-                    universo[emp] += 1
-                    causa = causa_do_resultado(resultado)
-                    contagem[(emp, causa)] += 1
-                    classificadas.append((cel.data, causa))
-
-                if not classificadas:
-                    continue
-
-                # Só procura horas enquanto ainda faltam exemplos com hora
-                # para alguma causa desta pessoa.
-                precisa_hora = any(
-                    len(com_hora[causa]) < 2
-                    for _, causa in classificadas
-                )
-                por_dia = collections.defaultdict(list)
-                if precisa_hora:
-                    etapa = "BATIDAS_EXEMPLOS"
-                    lo = timezone.make_aware(
-                        datetime.datetime.combine(INI, datetime.time.min)
-                    )
-                    hi = timezone.make_aware(
-                        datetime.datetime.combine(FIM + UM_DIA, datetime.time.min)
-                    )
-                    for batida in batidas_apuraveis(colab, lo, hi):
-                        local = timezone.localtime(batida.timestamp)
-                        if INI <= local.date() <= FIM:
-                            por_dia[local.date()].append(local)
-
-                for dia, causa in classificadas:
-                    if len(com_hora[causa]) >= 2:
-                        continue
-                    instantes = por_dia.get(dia, [])
-                    if instantes:
-                        hora = min(instantes).strftime("%H:%M")
-                        com_hora[causa].append((cid, dia, hora))
-                    elif len(sem_hora[causa]) < 2:
-                        sem_hora[causa].append((cid, dia, None))
-
-            etapa = "SAIDA"
-            linhas = []
-            soma_geral = 0
-            universo_geral = 0
-
-            for emp in sorted(empresas, key=lambda valor: str(valor)):
-                soma = sum(contagem[(emp, causa)] for causa in CAUSAS)
-                total = universo[emp]
-                soma_geral += soma
-                universo_geral += total
-                for causa in CAUSAS:
-                    linhas.append(
-                        "CAUSA emp=%s causa=%s ocorrencias=%d"
-                        % (emp, causa, contagem[(emp, causa)])
-                    )
-                linhas.append(
-                    "CONFERENCIA emp=%s contador=%d universo=%d contador==universo=%s"
-                    % (emp, soma, total, "s" if soma == total else "n")
-                )
-                if soma != total:
-                    raise RuntimeError("soma_empresa")
-
-            linhas.append(
-                "CONFERENCIA_TOTAL contador=%d universo=%d contador==universo=%s"
-                % (
-                    soma_geral,
-                    universo_geral,
-                    "s" if soma_geral == universo_geral else "n",
-                )
-            )
-            if soma_geral != universo_geral:
-                raise RuntimeError("soma_total")
-
-            # Referência da saída fornecida; pode divergir se a sombra mudou.
-            linhas.append(
-                "REFERENCIA_SONDA3 universo=6454 atual=%d confere=%s"
-                % (universo_geral, "s" if universo_geral == 6454 else "n")
-            )
-
-            for causa in CAUSAS:
-                exemplos = (com_hora[causa] + sem_hora[causa])[:2]
-                for numero, (cid, dia, hora) in enumerate(exemplos, 1):
-                    linhas.append(
-                        "EXEMPLO causa=%s numero=%d col%d dia_celula=%s hora_local=%s"
-                        % (
-                            causa,
-                            numero,
-                            cid,
-                            dia.strftime("%d/%m/%Y"),
-                            hora if hora is not None else "sem_batida_no_dia",
-                        )
-                    )
-                for numero in range(len(exemplos) + 1, 3):
-                    linhas.append(
-                        "EXEMPLO causa=%s numero=%d indisponivel"
-                        % (causa, numero)
-                    )
-
-        for linha in linhas:
-            print(linha)
-        print("ERROS=0")
-        print("FIM_SONDA_PASSO2")
-        return 0
-
-    except Exception:
-        print("ERRO " + etapa)
-        print("ERROS=1")
-        print("FIM_SONDA_PASSO2")
-        return 1
-
-
-sys.exit(main())
-```
-
-perguntas de lei: 0
-
-## 19/11 01:44 · sessao 7975ea5f169d · QUEIMA-B4 · sonda · origem=Code
-
-**A. Código e limite da identificação**
-
-O caminho histórico de entrada das 14 continua **[não verificado]**. A classe atual informada para elas é `b_conversa`; isso, por si só, não identifica a porta que atuou no passado. [não verificado: saída histórica independente não fornecida; app/chamados/services/validacao.py:1067]
-
-Na cópia, as portas abaixo compartilham o materializador. A assinatura permite reconhecer **compatibilidade com um ramo**, mas não distinguir todas as portas que o chamaram:
-
-| Caminho | Assinatura e trilha gravada |
-|---|---|
-| Resposta `hora`: `_materializar_resposta_hora` | Ao criar: `origem='disputa_s84_retro'`, `aprovada=True`, `aprovada_por=request_user`, `aprovada_em=now()`; depois vincula `pergunta_origem` e tenta log `materializar_batida`, com `batida_pk` e `pergunta_pk`. Não informa justificativa à criação. [app/chamados/services/materializacao.py:1487] [app/chamados/services/materializacao.py:1542] |
-| Resposta `data_hora`: `_materializar_resposta_data_hora` | `origem='disputa_ancora'`, tipo `E`, `sequencia=1`, justificativa sobre âncora, `aprovada=True`, `aprovada_por=request_user`, `aprovada_em=now()`; tenta log `materializar_ancora`, com `batida_pk` e `pergunta_pk`. Esse trecho não atribui `pergunta_origem`. [app/chamados/services/materializacao.py:1604] [app/chamados/services/materializacao.py:1637] |
-| Validação individual e par | A validação grava `validada_em`, `validada_por` e decisão `ato='validacao'`; para hora, chama `_materializar_uma` ou o caminho do par, e depois a fila da disputa. A assinatura da batida é a do ramo acima; não há, nesses campos, marca exclusiva de validação individual. [app/chamados/services/validacao.py:161] [app/chamados/services/validacao.py:769] |
-| Lote da tela/chat | Reclassifica cada pergunta e chama `acao_validar_pergunta` para classe A. Compartilha a trilha da validação; uma assinatura exclusiva do lote **[não verificado]**. [app/chamados/services/validacao.py:1027] [app/chamados/services/validacao.py:1067] |
-| Comando `validar_classe_a` | Seleciona pela classificação usada pelo comando e chama `validar_pergunta(q.pk, autor, disputa=d)`. Compartilha a trilha de validação; assinatura exclusiva do comando **[não verificado]**. [app/chamados/management/commands/validar_classe_a.py:60] [app/chamados/management/commands/validar_classe_a.py:97] |
-| Regularização da disputa, inclusive pelo fio | Ambas chamam `materializar_perguntas_validadas_da_disputa` com o usuário da requisição; a primeira registra também `regularizar_disputa_granular` na disputa. Compartilham a assinatura do ramo materializado. [app/chamados/services/acoes_disputa.py:121] [app/chamados/services/acoes_disputa.py:143] [app/chamados/services/fio.py:711] |
-| Passivo validado e comando `materializar_passivo_validado` | O reparo chama `_materializar_uma` com `user`; o comando chama `reparar` com o autor. Compartilha a assinatura do ramo materializado; marca individual exclusiva de criação pelo reparo **[não verificado]**. [app/chamados/services/passivo_validado.py:529] [app/chamados/services/materializacao.py:1846] [app/chamados/management/commands/materializar_passivo_validado.py:113] |
-| `backfill_fio_morto_e4b` | No ato `materializar`, chama a mesma fila da disputa com `user`; no ato separado `registrar_decisao`, registra linhas de projeção. Uma linha de decisão, portanto, não prova sozinha qual porta criou a batida. [app/chamados/management/commands/backfill_fio_morto_e4b.py:138] [app/chamados/management/commands/backfill_fio_morto_e4b.py:144] |
-| Relavra de via e carimbo de pendentes aprovadas | `relavrar` altera `via_resolucao` e registra `relavra_via_i6`; `materializar_pendentes_aprovadas` carimba perguntas aprovadas e declara que não fabrica batida. São modificadores de trilha, não uma assinatura de criação de batida nesses trechos. [app/chamados/services/relavra_via.py:106] [app/chamados/services/relavra_via.py:125] [app/chamados/services/materializacao.py:2139] |
-
-Trechos literais decisivos:
-
-- Criação de hora: `disputa.colaborador, ts, _tipo, 'disputa_s84_retro'` e `aprovada_por=request_user`. [app/chamados/services/materializacao.py:1488]
-- Criação de âncora: `disputa.colaborador, ts, 'E', 'disputa_ancora'`. [app/chamados/services/materializacao.py:1605]
-- Reuso: `if mesma is not None: return mesma, None`; o materializador pode depois fazer `anotar(... {'pergunta_origem': p} ...)`. Assim, vínculo e log não provam, isoladamente, que aquele toque criou a linha. [app/ponto/registro_batida.py:137] [app/chamados/services/materializacao.py:1542]
-- Carimbo: `p.carimbar(PerguntaDisputa.VIA_DECLARACAO if _tem_resp_via else _via_sem_decl, request_user, ...)`; a relavra pode alterar a via depois. [app/chamados/services/materializacao.py:1981] [app/chamados/services/relavra_via.py:125]
-- Auditoria da materialização: `evento(acao, 'Batida', batida_pk, ... depois=valor_depois, ator=request_user)`; o próprio auxiliar declara que falha do log não derruba a materialização. [app/chamados/services/materializacao.py:1223]
-
-A busca acima localizou as portas explicitadas; a exaustividade de **todos** os possíveis curadores e chamadores históricos permanece **[não verificado]**. O modelo de `Batida` expõe aprovador, justificativa e criação, mas não um campo de criador no trecho do modelo. [app/ponto/models.py:8] [app/ponto/models.py:56] [app/ponto/models.py:63] [app/ponto/models.py:79]
-
-**B. Sonda proposta — não executada [não verificado].**
-
-A sonda abaixo retorna assinaturas **compatíveis**, sem atribuir uma porta específica. Para evitar imprimir nomes ou CPF que possam estar em texto livre, ela mostra presença e SHA-256 de justificativa e motivos, em vez do texto. Isso limita a inspeção literal desses campos. A busca de auditoria inclui referências numéricas em descrição e JSON: são **candidatas**, pois um número isolado pode coincidir com outro identificador; também não prova ausência de referências escritas sem o número. [app/core/models.py:295] [app/core/models.py:299] [não verificado]
-
-```python
-# Executar dentro do Django pelo envelope de leitura, no tenant juliani.
-# Não chama materializadores, validadores ou escritores.
-# Não imprime nomes, CPF, textos livres, respostas ou conteúdo dos logs.
-
-import hashlib
-import os
-import re
-
-from django.conf import settings
-from django.db import connection, transaction
-from django.db.models import Q, TextField
-from django.db.models.functions import Cast
-from django.utils import timezone
-
-from core.models import LogAuditoria
-from ponto.models import Batida
-
-
-CASOS = (
-    (40, 139931), (60, 152873), (200, 146569),
-    (263, 146777), (301, 151816), (444, 140817),
-    (446, 144666), (549, 151894), (727, 140816),
-    (881, 154095), (899, 151735), (909, 149856),
-    (996, 153862), (996, 153847),
-)
-ERROS = 0
-
-
-def guarda_sombra():
-    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
-        raise RuntimeError("SETTINGS")
-    banco = settings.DATABASES["default"]
-    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
-        raise RuntimeError("CONFIGURACAO")
-    with connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION READ ONLY")
-        cursor.execute("SELECT current_database(), current_schema()")
-        banco_real, schema_real = cursor.fetchone()
-    if banco_real != "sombra" or schema_real != "juliani":
-        raise RuntimeError("CONEXAO")
-
-
-def local(valor):
-    if valor is None:
-        return None
-    if not timezone.is_aware(valor):
-        raise ValueError("INSTANTE_SEM_FUSO")
-    return timezone.localtime(valor).isoformat()
-
-
-def usuario(pk):
-    return None if pk is None else "u%d" % pk
-
-
-def texto_protegido(valor):
-    if valor is None:
-        return None
-    valor = str(valor)
-    return {
-        "vazio": not bool(valor),
-        "sha256": hashlib.sha256(valor.encode("utf-8")).hexdigest(),
-    }
-
-
-def codigo(valor):
-    # Os campos de código devem conter identificadores, não texto livre.
-    # Valor inesperado é protegido para evitar exposição acidental.
-    if valor is None:
-        return None
-    valor = str(valor)
-    if re.fullmatch(r"[a-z0-9_]{1,64}", valor):
-        return valor
-    return {"valor_protegido": texto_protegido(valor)}
-
-
-def campo_texto(obj, nome):
-    if not any(f.name == nome for f in obj._meta.concrete_fields):
-        return "CAMPO_INEXISTENTE"
-    return texto_protegido(getattr(obj, nome))
-
-
-def logs_candidatos(batida_pk, pergunta_pk):
-    # Busca referência numérica em texto/JSON e referência estruturada.
-    # As referências numéricas são candidatas, não identificação inequívoca.
-    filtro = Q(modelo="Batida", objeto_id=batida_pk)
-    numeros = [batida_pk]
-    if pergunta_pk is not None:
-        filtro |= Q(modelo="PerguntaDisputa", objeto_id=pergunta_pk)
-        numeros.append(pergunta_pk)
-
-    for numero in numeros:
-        padrao = r"(^|[^0-9])%d([^0-9]|$)" % numero
-        filtro |= (
-            Q(descricao__regex=padrao)
-            | Q(antes_texto__regex=padrao)
-            | Q(depois_texto__regex=padrao)
-        )
-
-    return (
-        LogAuditoria.objects.annotate(
-            antes_texto=Cast("valor_antes", output_field=TextField()),
-            depois_texto=Cast("valor_depois", output_field=TextField()),
-        )
-        .filter(filtro)
-        .order_by("criado_em", "pk")
-    )
-
-
-def medir(cid, pk):
-    b = Batida.objects.select_related("pergunta_origem").get(
-        pk=pk, colaborador_id=cid
-    )
-    p = b.pergunta_origem
-
-    print(
-        "BATIDA",
-        {
-            "colaborador": "col%d" % cid,
-            "pk": b.pk,
-            "instante_local": local(b.timestamp),
-            "tipo": codigo(b.tipo),
-            "origem": codigo(b.origem),
-            "aprovada": b.aprovada,
-            "aprovada_por": usuario(b.aprovada_por_id),
-            "aprovada_em_local": local(b.aprovada_em),
-            "justificativa": campo_texto(b, "justificativa"),
-            "pergunta_origem_id": b.pergunta_origem_id,
-            "retratada_em_local": local(b.retratada_em),
-            "criado_em_local": local(b.criado_em),
-            "criador": "CAMPO_INEXISTENTE",
-        },
-    )
-
-    pergunta_pk = None
-    if p is None:
-        print("PERGUNTA", {"batida_pk": pk, "pergunta_origem": None})
-    else:
-        pergunta_pk = p.pk
-        print(
-            "PERGUNTA",
-            {
-                "batida_pk": pk,
-                "pk": p.pk,
-                "motivo": campo_texto(p, "motivo"),
-                "recusa_motivo": campo_texto(p, "recusa_motivo"),
-                "tipo_resposta": codigo(p.tipo_resposta),
-                "via_resolucao": codigo(p.via_resolucao),
-                "respondida_em_local": local(p.respondida_em),
-                "validada_em_local": local(p.validada_em),
-                "validada_por": usuario(p.validada_por_id),
-                "materializada_em_local": local(p.materializada_em),
-                "materializada_por": usuario(p.materializada_por_id),
-            },
-        )
-        decisoes = []
-        for d in p.decisoes.order_by("ato_em", "pk"):
-            decisoes.append(
-                {
-                    "pk": d.pk,
-                    "ato": codigo(d.ato),
-                    "ato_em_local": local(d.ato_em),
-                    "autor": usuario(d.ato_por_id),
-                    "ato_motivo": campo_texto(d, "ato_motivo"),
-                }
-            )
-        print("DECISOES", {"pergunta_pk": p.pk, "sequencia": decisoes})
-
-    logs = []
-    for linha in logs_candidatos(pk, pergunta_pk):
-        referencia_direta = (
-            (linha.modelo == "Batida" and linha.objeto_id == pk)
-            or (
-                pergunta_pk is not None
-                and linha.modelo == "PerguntaDisputa"
-                and linha.objeto_id == pergunta_pk
-            )
-        )
-        logs.append(
-            {
-                "pk": linha.pk,
-                "acao": codigo(linha.acao),
-                "quando_local": local(linha.criado_em),
-                "usuario": usuario(linha.usuario_id),
-                "referencia": (
-                    "OBJETO_DIRETO" if referencia_direta
-                    else "NUMERO_EM_TEXTO_OU_JSON_CANDIDATO"
-                ),
-            }
-        )
-    print("LOGS_CANDIDATOS", {"batida_pk": pk, "linhas": logs})
-
-    # Compatibilidade com o ramo escritor atual, não prova de autoria:
-    # a porta pode devolver uma batida preexistente e o vínculo pode mudar.
-    if b.origem == "disputa_s84_retro":
-        assinatura = "COMPATIVEL_RAMO_HORA_ORIGEM"
-    elif b.origem == "disputa_ancora" and b.tipo == "E":
-        assinatura = "COMPATIVEL_RAMO_DATA_HORA_ORIGEM_E"
-    else:
-        assinatura = "SEM_CASA"
-    print(
-        "ASSINATURA",
-        {
-            "batida_pk": pk,
-            "resultado": assinatura,
-            "porta_especifica": "NAO_VERIFICADA",
-            "criacao_pelo_ato": "NAO_VERIFICADA",
-        },
-    )
-
-
-def main():
-    global ERROS
-    try:
-        with transaction.atomic():
-            guarda_sombra()
-            for cid, pk in CASOS:
-                try:
-                    # O savepoint permite continuar após erro de SQL.
-                    with transaction.atomic():
-                        medir(cid, pk)
-                except Exception as exc:
-                    ERROS += 1
-                    print(
-                        "ERRO_CASO",
-                        "col%d" % cid,
-                        "batida_pk=%d" % pk,
-                        type(exc).__name__,
-                    )
-    except Exception as exc:
-        ERROS += 1
-        print("ERRO_GUARDA_OU_TRANSACAO", type(exc).__name__)
-
-    print("ERROS=%d" % ERROS)
-    print("FIM_SONDA_B4V3")
-
-
-main()
-```
-
-`ERROS=0` indicaria apenas que a sonda terminou sem exceções capturadas; não converteria candidatos de log em prova nem identificaria uma porta específica compartilhada. [não verificado: sonda não executada]
-
-perguntas de lei: 0
-
-## 19/11 01:43 · sessao 5fd4cbef7389 · E4C-F5 · censo · origem=Code
-
-O censo **não está fechado**: não classifiquei as 415 linhas do TSV por receptor e finalidade. Por isso, os totais por classe, a lista final exaustiva da classe (i) e o número de perguntas de lei permanecem **[não verificado]**. Abaixo estão os sítios e os limites que consegui conferir diretamente na cópia.
-
-O diretório recebido não contém metadados Git; portanto, a identidade da cópia pelo hash `5bad81419` está **[não verificado]**. Não criei, alterei ou apaguei arquivos.
-
-### Classificações comprovadas e candidatos à migração
-
-`LeituraDoAto` tem exatamente os campos `validada_em`, `respondida_em` e `resposta_colab`; não oferece `materializada_em` nem `via_resolucao`. O código declara: `LeituraDoAto = namedtuple('LeituraDoAto', 'validada_em respondida_em resposta_colab')`. ([models.py:17](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:17))
-
-| Sítio do TSV | Classificação verificada e consequência |
-|---|---|
-| [declaracao_texto.py:228](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:228), `_resposta_validada` | **PerguntaDisputa, classe (i):** `return perg.validada_em is not None`. A leitura correspondente é `leitura.validada_em`. Chamam-na, entre outros, `declarar_hora_colab` e `aplicar_declaracao`; a guarda pode impedir que essas portas avancem até a escrita. ([declaracao_texto.py:379](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:379), [declaracao_texto.py:669](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:669)) |
-| [juizes.py:1552](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1552), `pergunta_respondida` | **Receptor polimórfico:** o literal é `p.respondida_em is not None and not texto_vazio(p.resposta_colab)`. A função aceita tanto a projeção quanto `LeituraDoAto`; a migração deve ser examinada nos chamadores, pois o próprio modelo declara que o juiz lê a leitura. `aplicar_declaracao` usa o resultado para decidir se chama o escritor de resposta. ([models.py:17](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:17), [declaracao_texto.py:688](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:688)) |
-| [fio.py:188](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:188), `espera_o_texto_do_colaborador` | **PerguntaDisputa, classe (i):** `p.respondida_em is None or respondida_sem_texto(p)`. Para julgar pelo ato, o instante e o par usado pelo predicado precisam vir da mesma `LeituraDoAto`. Chamadores comprovados incluem `_calados` e `montar_chamados_fio`; efeito desses resultados sobre o momento de uma escrita **[não verificado]**. ([cobranca.py:241](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/cobranca.py:241), [fio.py:360](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:360)) |
-| [validacao.py:685](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:685), `validar_pergunta` | **PerguntaDisputa, classe (i):** `if perg.validada_em:` decide o retorno `ja_validada`; o campo correspondente é `leitura.validada_em`. A própria função é uma porta de validação; seus chamadores completos e o efeito concreto da troca sobre as escritas **[não verificado]**. |
-| [materializacao.py:199](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:199), `par_do_intervalo` | **PerguntaDisputa, candidato classe (i):** `if irma_validada and q.validada_em is None`; a linha 201 também testa `q.validada_em`. O campo correspondente é `leitura.validada_em`. Um chamador comprovado é `_validar_o_par`, que pode carimbar e materializar; a classificação final dos dois testes e seus demais chamadores está **[não verificado]**. ([validacao.py:632](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:632)) |
-| [vigia_fio.py:747](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/vigia_fio.py:747), `respondida_sem_resposta` | **PerguntaDisputa, classe (iii):** a finalidade declarada é ler “os dois campos que a porta escreve” e “não julga a pergunta”; a query filtra `respondida_em` e lê `resposta_colab`. ([vigia_fio.py:738](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/vigia_fio.py:738)) |
-| [veredito_lavrado.py:203](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:203), `marcos_do_lote` | **PerguntaDisputa, classe (iv):** lê marcos `materializada_em` e `respondida_em`; o comentário os identifica como “escritores da PROPRIA pergunta” usados para o veredito. ([veredito_lavrado.py:197](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:197)) |
-| [painel.py:270](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/painel.py:270), `_jan_val` | **PerguntaDisputa, classe (v):** conta atividade humana de validação por janela, usando o carimbo projetado. ([painel.py:256](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/painel.py:256)) |
-| [raiox.py:138](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/raiox.py:138), `creditos_perguntas` | **PerguntaDisputa, classe (vi), com julgamento posterior:** a consulta em lote extrai o par e depois chama `pergunta_respondida` sobre um `SimpleNamespace`. A fonte do par para esse julgamento precisa de desenho em lote; a substituição direta por uma propriedade em cada linha não está demonstrada. ([raiox.py:135](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/raiox.py:135), [raiox.py:147](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/raiox.py:147)) |
-
-A guarda de declaração mostra por que uma mudança de leitura pode mudar **quando uma porta existente escreve**: `if not _pergunta_respondida(perg)` antecede `responder_pergunta_disputa_core(...)`; depois a função chama `validar_pergunta(...)`. ([declaracao_texto.py:688](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:688))
-
-Não tratei `projecao_temporal_da_pergunta` como substituição mecânica: ela declara ler valores do C6 “no instante”, corta carimbos posteriores a `agora` e também transporta materialização e via, que não estão na leitura de três campos. Sua classificação e o desenho temporal de migração ficam **[não verificado]**. ([juizes.py:1382](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1382))
-
-Os demais receptores homônimos, as demais linhas e os totais das seis classes: **[não verificado]**.
-
-### Silêncio ressuscitado → dono admin
-
-O corte fornecido determina admin na lista para a **ressuscitada** cujo silêncio decidido hoje a deixa sem dono, com dia do fato em competência aberta; para competência entregue pelo K6, determina lista textual do DP. Essa redação vem do anexo `respostas_1711_1120.txt` fornecido no pedido; sua existência como arquivo nesta cópia está **[não verificado]**. A cópia registra o corte anterior em [CORTES.md:545](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/CORTES.md:545).
-
-O caminho atual tem três obstáculos concretos:
-
-1. `_pela_decisao` retorna literalmente `return 'silencio_decidido', []`. ([tarefa_do_dia.py:182](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:182))
-2. A carga retira a reabertura marcada como ressuscitação **antes** de escolher a última decisão. Logo, mudar indistintamente o ramo `SILENCIO` alcançaria também silêncios para os quais a ressuscitação não foi demonstrada; como transportar essa distinção ao ponto escolhido é parte do desenho. ([tarefa_do_dia.py:390](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:390))
-3. `_portas_da_tarefa` inclui `silencio_decidido` em `perguntas_encerradas` e aceita como ações administrativas alcançáveis `DECIDIR_AUSENCIA`, `resolver_dia` ou `VALIDAR` nas condições de porta/âncora ali expressas. ([tarefa_do_dia.py:739](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:739), [tarefa_do_dia.py:746](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:746))
-
-**Encaixes para examinar, sem escolher:**
-
-- **Ação `resolver_dia` no caso identificado.** É um nome de ação administrativa já reconhecido pela composição, e a própria composição já o cria quando a autoridade do calendário oferece essa porta. A disponibilidade dessa porta para cada silêncio ressuscitado e sua adequação para levar a pergunta à lista estão **[não verificado]**. Seria necessário distinguir o caso ressuscitado e ajustar o tratamento de encerrada conforme a rota escolhida. ([tarefa_do_dia.py:746](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:746), [tarefa_do_dia.py:776](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:776))
-- **Ação ligada à âncora da pergunta, reconhecida pela composição.** `VALIDAR` já existe e tem verificação de âncora, mas a porta de validação recusa pergunta sem resposta: `estado: 'sem_resposta'`. Portanto, sua adequação ao silêncio ressuscitado **[não verificado]**; não basta rotular a ação como `VALIDAR`. O botão `cobrar` existe, mas o código o exclui dos verbos residuais que dão dono. ([tarefa_do_dia.py:746](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:746), [validacao.py:681](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:681), [tarefa_do_dia.py:757](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:757), [views_cobrar.py:44](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/views_cobrar.py:44))
-- **Composição de dono a partir de um verbo residual existente.** A composição já deriva `admin` de verbos residuais, e publica o nome do verbo; porém a existência de um verbo residual apropriado para cada caso e de uma porta que cumpra a lista determinada pelo corte está **[não verificado]**. Retirar apenas `silencio_decidido` da tupla de encerradas não cria, por si, uma ação nem prova o dono. ([tarefa_do_dia.py:757](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:757), [tarefa_do_dia.py:790](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:790))
-
-Para qualquer encaixe, já existe carga em lote que consulta `competencia_entregue` sobre a empresa e a janela do dia. Porém o filtro `exportada` atual é explicitamente limitado a **novas exposições administrativas daquela obra**, preservando tarefas E2; não prova sozinho que bloqueará o novo caminho de silêncio. ([tarefa_do_dia.py:207](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:207), [tarefa_do_dia.py:558](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:558), [tarefa_do_dia.py:273](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:273))
-
-O teste existente compara a tarefa antes e depois da ressuscitação para os dois casos. O caso sem decisão deve conservar sua expectativa; o caso com silêncio precisa passar a verificar o resultado exigido para competência aberta, incluindo dono e lista, e o recorte de competência entregue precisa de prova própria. O fixture e a asserção atuais estão em [test_f1nova_b1_juiz_respondida.py:328](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:328).
-
-**`chamados/models.py` por desenho:** para os três encaixes acima, a necessidade de alterar o arquivo permanece **[não verificado]**. A leitura já existe e a composição examinada fica em `tarefa_do_dia.py`, mas ainda falta demonstrar como a marca de ressuscitação chega ao encaixe e como todos os consumidores do censo são atendidos. ([models.py:4295](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4295), [tarefa_do_dia.py:390](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:390))
-
-Não executei testes. A classificação completa, a lista final de sítios e a análise de todas as leis exigem continuação da leitura; não há base para declarar ausência de perguntas de lei. [nao verificado]
-
-perguntas de lei: [não verificado]
-
-## 19/11 01:42 · sessao daadceabae56 · QUEIMA-B6 · leitura · origem=Code
-
-**Não consigo recuperar quais eram as três perguntas anunciadas em `r.txt`: a matriz termina com a contagem, mas não as enumera.** Também não provei que o número correto seja zero. [não verificado]
-
-A releitura encontrou três conflitos possíveis que **já têm resposta**. Eles não podem ser apresentados como as três perguntas originais, pois essa identificação não está no anexo. [não verificado]
-
-1. **Admin `trabalhou` versus fato do cartório.** O código responde à precedência na célula: `if cel.veredito_via == 'admin':` impede que a lavra do cartório substitua o veredito administrativo. [app/ponto/portas/celula.py:1060] A L-007 trata de escritor único por estado e trilha; não é necessário supor uma escolha nova para essa precedência. [app/docs/LEIS.md:71]
-
-   A sonda não mede colisões entre esses dois escritores: conta o **estado atual** da célula, não as tentativas anteriores de escrita. O predicado necessário seria: mesmo colaborador e data, decisão administrativa vigente e tentativa posterior do cartório com veredito diferente, incluindo tentativas que não alteraram a célula. A disponibilidade de trilha suficiente para medi-lo é [não verificado]. [app/ponto/portas/celula.py:1060]
-
-2. **Trabalho versus ausência ou justificativa.** O corte já responde que a justificativa cobre seu tipo e período e que, havendo trabalho, paga-se o realizado mais o abonado do período; para ausência parcial, há regras específicas sobre a batida dentro do período e a falta de horário declarado. [app/docs/CORTES.md:411] [app/docs/CORTES.md:418] A L-089 trata do efeito da ausência em dia previsto de trabalho. [app/docs/LEIS.md:121]
-
-   A sonda mede uma sobreposição mais ampla, sem demonstrar valores de realizado ou abono nem se os períodos coincidem. As linhas literais fornecidas são:
-
-   ```text
-   PAR|empresa=2|categoria1=CELULA_cartorio_fato_em_ausencia|categoria2=DIAPAGO_motor_TRABALHO|dias=48
-   PAR|empresa=3|categoria1=CELULA_cartorio_fato_em_ausencia|categoria2=DIAPAGO_motor_TRABALHO|dias=16
-   PAR|empresa=4|categoria1=CELULA_cartorio_fato_em_ausencia|categoria2=DIAPAGO_motor_TRABALHO|dias=4
-   ```
-
-   Linha numerada de `sonda.out`: [não verificado]. O predicado para medir a aplicação financeira da regra seria: mesmo colaborador e data, ausência ou justificativa aprovada com seu período, trabalho realizado e `DiaPago` da versão motor, comparando os minutos realizados e abonados com os respectivos períodos. [não medido]
-
-3. **Folga trabalhada versus hora trabalhada sem escala certa.** O código já explicita que, sem escala certa, a hora entra em `horas_trabalhadas` sem o adicional de 100%; com escala certa, a folga é encaminhada à rubrica própria, com separação para feriado. [app/ponto/services/fechamento.py:925] [app/ponto/services/fechamento.py:936] [app/ponto/services/fechamento.py:965] A L-086 chega perto ao tratar da dobra em domingo e feriado, com ressalva sobre o texto de feriado indicada na própria lei. [app/docs/LEIS.md:118]
-
-   A sonda conta rubrica positiva de folga, mas não mede a alternativa sem escala certa nem o impacto de uma mudança de regra. [não verificado] Linhas literais:
-
-   ```text
-   CENSO|empresa=2|categoria=DIAPAGO_motor_FOLGA|atuais=186|vigentes_HE=0|revogados=NA|dias_sobrepostos=184
-   CENSO|empresa=3|categoria=DIAPAGO_motor_FOLGA|atuais=35|vigentes_HE=0|revogados=NA|dias_sobrepostos=35
-   CENSO|empresa=4|categoria=DIAPAGO_motor_FOLGA|atuais=2|vigentes_HE=0|revogados=NA|dias_sobrepostos=2
-   ```
-
-   Linha numerada de `sonda.out`: [não verificado]. O predicado para medir o outro ramo seria: períodos de `resultado.periodos_ft` cujo julgamento de `escala_certa_no_dia` seja falso, por empresa e dia de jornada, comparados à lavratura correspondente em `DiaPago`; para medir dinheiro alterado, seria necessário comparar as rubricas antes e depois de uma regra definida. [app/ponto/services/fechamento.py:933] [app/ponto/services/fechamento.py:967]
-
-A sobreposição entre categorias da sonda, por si só, não estabelece pagamento duplicado nem responde quantos dias mudariam sob uma opção de regra. [não verificado] Sem a enumeração anterior ou três lacunas demonstradas na releitura, atribuir um número corrigido seria uma hipótese. [não verificado]
-
-perguntas de lei: [não verificado]
-
-## 19/11 01:41 · sessao 2d8feb0d356d · E4C-F3-LAVRA-FOTO · construtor · origem=Code
-
-Criado [test_f3_lavra_foto_sem_decisao.py](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:1). Os testes não foram executados, conforme solicitado; os resultados são [não verificado]. [nao verificado]
-
-Os mutantes usam a âncora `    ids = list(colaborador_ids)\n`, exceto M6, que também usa `import datetime\n` para inserir o apelido no módulo. As inserções verificam que cada âncora ocorre uma única vez ([arquivo:9](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:9), [arquivo:70](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:70)).
-
-Para executar cada mutante individualmente, a partir de `app/`:
-
-```bash
-T=chamados.tests.test_f3_lavra_foto_sem_decisao.LavraFotoSemDecisaoTest
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m1_import_direto"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m2_import_apelidado"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m3_modulo_apelidado"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m4_get_model"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m5_related_manager"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m6_apelido_no_modulo"
-```
-
-O arquivo também contém os métodos `test_fonte_real_sem_leitura`, `test_alvo_ausente_falha`, `test_controle_leitura_na_vizinha_nao_conta`, `test_MORDE_funcao_aninhada`, `test_MORDE_lookup_relacionado` e `test_MORDE_get_model_string_unica` ([arquivo:81](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:81)). O controle usa a âncora `def esta_stale(p, marcos, agora):\n`; os três mutantes adicionais usam a âncora do corpo ([arquivo:122](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:122)).
-
-_7242 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7249 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
