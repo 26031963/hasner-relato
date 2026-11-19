@@ -1,7 +1,367 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:31** · publicado em **19/11/2026 15:36** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:41** · publicado em **19/11/2026 15:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:41 · sessao 8a71eb7ff630 · CADEIA-20-PASSO-1 · verificador · origem=Code
+
+**BLOQUEIA.** O teste de consultas pode passar com uma consulta por sobra no caminho que carrega a CXR sem fotografia fornecida. A lavra ainda recebe um parâmetro sem uso, e a regra de rajada perde a distância real entre duas sobras da mesma célula em lados opostos da meia-noite. `app/escala/tests/test_cadeia20_lavra.py:230–263`, `app/ponto/services/cartorio.py:959–998`, `app/ponto/services/cartorio.py:1066–1072`, `app/escala/orfa_classe.py:8–22`, `app/escala/orfa_classe.py:49–66`
+
+Conferi os arquivos da cópia fornecida e executei em memória apenas as funções puras citadas abaixo. A identidade Git do diretório, a execução da suíte Django e o resultado dos mutantes nesta volta ficam **[nao verificado]**. [nao verificado]
+
+## 1. P1–P5 da triagem
+
+| Item | Veredito | Correção, mordida e limite |
+|---|---|---|
+| **P1 · Contagem por célula** | **NÃO BLOQUEIA** | Compara quantidade e hora por posição em cada célula com `razoes_orfas`. O booleano exige também zero células desalinhadas. O RED tem duas sobras e duas entradas no agregado, distribuídas como `2/0` entre duas células que deveriam ter `1/1`. Voltar à soma global falha. Retirar a comparação de horas também falha, pelo caso `10:00` → `11:00`. Comparar horas ordenadas ainda passaria pelos casos mostrados, que não incluem uma permutação pura. Atas sem a chave seguem contadas à parte. `app/ponto/services/cartorio.py:1006–1031`, `app/escala/tests/test_cadeia20_lavra.py:134–161`, `app/escala/tests/test_cadeia20_mutantes.py:63–71` |
+| **P2 · Parâmetros mortos** | **BLOQUEIA pelo resíduo** | `data_turno` e `fuso` saíram da assinatura e dos chamadores. Restaurar só a assinatura antiga quebra as chamadas atuais. Restaurar assinatura e chamadas juntas deixa os testes funcionais passarem com os parâmetros mortos de volta. A assinatura de produção de `_lavrar_razoes_sobras` ainda recebe `out` e o corpo inteiro dispensa esse argumento. O auxiliar de teste `julgar` também reteve `dia` sem uso. `app/escala/orfa_classe.py:30–36`, `app/ponto/services/cartorio.py:959–998`, `app/escala/tests/test_cadeia20_coletor.py:12–14`, `app/escala/tests/test_razao_da_sobra.py:25–29`, `CLAUDE.md:178` |
+| **P3 · Primeira lavra** | **BLOQUEIA pelo alcance do teto** | O teste recarrega colaborador e células, retira `razoes_orfas` da memória e do banco e captura a primeira chamada de cada braço sob rollback. Isso corrige a medição da segunda passada aquecida. A preparação preserva os demais efeitos da lavra disparada pelo sinal. O teste compara dois acréscimos e admite zero chamadas a CXR. Uma lavra que virasse no-op continuaria satisfazendo esse teste isolado. A costura exige a gravação em outro teste. `app/escala/tests/test_cadeia20_lavra.py:227–263`, `app/escala/tests/test_cadeia20_costura.py:37–54` |
+| **P4 · Atribuição e reconciliação na virada** | **NÃO BLOQUEIA nos dois casos pedidos** | A sobra `01:30` tem de aparecer na grade e na ata de `DATA`, com o instante de `DEPOIS`, razão de intervalo e falha nula. Transferi-la exclusivamente ao dia civil falha. Na saída cruzada, tirar `07:58` do dia civil e deixar o seu instante falha na asserção que o m15 mira. Esse segundo RED ainda passaria se a reconciliação apagasse todos os pares e todas as sobras daquele dia, pois só exige ausência de `07:58` e alinhamento do restante. O primeiro RED também admite uma cópia extra no dia civil. `app/escala/tests/test_cadeia20_costura.py:117–151`, `app/escala/utils.py:2043–2052`, `app/escala/utils.py:2084–2086`, `app/escala/tests/test_cadeia20_mutantes.py:61–62` |
+| **P5 · Entrada sem razão nem falha** | **NÃO BLOQUEIA para as entradas produzidas pela lavra** | O contador próprio sobe quando `razao is None` e `falha` é falsa. O RED morde `None` e `''`, e o m17 retira o incremento. A medida aceita qualquer valor verdadeiro como falha. Conferi em memória que `' '` entra em `falhas` e deixa o contador em zero. A lavra emite um conjunto fechado de rótulos. `app/ponto/services/cartorio.py:1019–1032`, `app/ponto/services/cartorio.py:994–998`, `app/escala/orfa_classe.py:3–5`, `app/escala/orfa_classe.py:56–82`, `app/escala/tests/test_cadeia20_lavra.py:163–168`, `app/escala/tests/test_cadeia20_mutantes.py:72–74` |
+
+## 2. Quem escreve e quem lê — NÃO BLOQUEIA
+
+No censo da cópia, os leitores identificados do retorno são os testes abaixo. O executor de mutantes substitui a função importada pelo teste. Os dois testes homônimos fora da cadeia medem rubricas e períodos. Um leitor externo da sonda fica **[nao verificado]**. `app/escala/tests/test_cadeia20_lavra.py:141–168`, `app/escala/tests/test_cadeia20_costura.py:52–58`, `app/escala/tests/test_cadeia20_mutantes.py:117–119`, `app/ponto/tests/test_o280_bateria_da_lei.py:2874–2880`, `app/ponto/tests/test_o280_bateria_da_lei.py:5463–5472`
+
+| Chave | Escritor | Leitores e significado |
+|---|---|---|
+| `celulas_desalinhadas` | `app/ponto/services/cartorio.py:1003–1005`, `app/ponto/services/cartorio.py:1015–1018` | O próprio booleano lê o total. Os testes conferem zero, duas células compensadas e uma célula sem órfã com entrada excedente. `app/ponto/services/cartorio.py:1029–1031`, `app/escala/tests/test_cadeia20_lavra.py:141–161` |
+| `sem_razao_sem_falha` | `app/ponto/services/cartorio.py:1003–1005`, `app/ponto/services/cartorio.py:1019–1026` | Os testes leem zero no caso nominal e um para `None` e `''`. A costura compara o dicionário inteiro entre lavras. `app/escala/tests/test_cadeia20_lavra.py:141–145`, `app/escala/tests/test_cadeia20_lavra.py:163–168`, `app/escala/tests/test_cadeia20_costura.py:52–58` |
+| `contador_igual_universo` | `app/ponto/services/cartorio.py:1029–1031` | Os leitores exercitam a soma global **e** a guarda por célula. A chave pode ser verdadeira com atas legadas sem `razoes_orfas` ou com `sem_razao_sem_falha` positivo. Nenhuma das duas condições é exigida pelo booleano. `app/ponto/services/cartorio.py:1010–1031`, `app/escala/tests/test_cadeia20_lavra.py:134–158`, `app/escala/tests/test_cadeia20_costura.py:52–58` |
+| `falhas` | `app/ponto/services/cartorio.py:1020–1026` | O delta conta as falhas verdadeiras entre as entradas sem razão. O teste compara o mapa inteiro, e a costura o inclui na igualdade da medida. `app/escala/tests/test_cadeia20_lavra.py:134–145`, `app/escala/tests/test_cadeia20_costura.py:52–58` |
+
+`razao_da_sobra` perdeu dois parâmetros e ganhou zero. O chamador de produção passa `(hora, instante)`, turnos, o resultado de `dia_sem_trabalho`, pausas e a marca CXR. O classificador consome os cinco. As chamadas diretas de teste estão no coletor e no auxiliar `julgar`, e o mutante substitui a função no módulo. A data da célula indexa os insumos e a CXR. O instante identifica a batida, inclusive em outra data civil. Não encontrei leitor da assinatura que troque essas duas referências. `app/ponto/services/cartorio.py:974–993`, `app/escala/orfa_classe.py:30–81`, `app/escala/tests/test_cadeia20_coletor.py:7–14`, `app/escala/tests/test_razao_da_sobra.py:25–29`, `app/escala/tests/test_cadeia20_mutantes.py:115–116`
+
+## 3. Teto e meia-noite — BLOQUEIA pelo teto
+
+- **Consultas.** Um `SELECT` adicional em cada célula exercitada faz o acréscimo crescer de 2 para 4, mantido o restante do caminho. A brecha demonstrável é `lavra=None`: o teste sempre passa o dicionário devolvido por `ultimo_lavrado()`, inclusive quando não há medida. Uma regressão que voltasse a buscar esse snapshot a cada sobra somente quando `lavra=None` passaria pelo teste. `julgar_celula` expõe justamente esse caminho por padrão. O código atual memoíza a carga. A captura ainda conta só SQL que começa por `SELECT`. `app/escala/tests/test_cadeia20_lavra.py:230–263`, `app/ponto/services/cxr_na_lista.py:152–162`, `app/ponto/services/cartorio.py:1066–1072`, `app/ponto/services/cartorio.py:2144–2149`, `app/ponto/services/cartorio.py:2173–2175`
+- **Meia-noite.** O caso com três flags prova a atribuição positiva ao turno de `DATA`. A grade encadeia os marcos, inclui as flags internas por instante e põe o excedente dos dois slots `I` em `orfas` e `instantes` do mesmo dia de montagem. O teste recarrega a célula de `DATA` e exige encontrar ali a razão da sobra `01:30`. Ele deixa em aberto a ausência de duplicata em `DEPOIS` e não testa qual data foi usada para a marca CXR. `app/escala/utils.py:1410–1411`, `app/escala/utils.py:1640–1641`, `app/escala/utils.py:1662–1666`, `app/escala/utils.py:1720–1727`, `app/escala/utils.py:1752–1759`, `app/escala/utils.py:1783–1785`, `app/escala/tests/test_cadeia20_costura.py:27–35`, `app/escala/tests/test_cadeia20_costura.py:117–132`
+
+## 4. Classes de reprovação — BLOQUEIA
+
+- **Segundo juiz registrado e segundo escritor.** A lavra pergunta ao juiz de dia sem trabalho e usa o resultado do pareador e da grade. A reconciliação consome o par e remove a ocorrência pelo mesmo índice. Os dois ramos acrescentam a lista em memória e persistem pela mesma porta de célula, com `lavrar_veredito` seguido de `carimbar`. Não encontrei duplicação dessas autoridades ou outra escrita de `razoes_orfas` em produção. `app/core/juizes.py:215–224`, `app/chamados/juizes.py:445–460`, `app/ponto/services/cartorio.py:974–998`, `app/escala/utils.py:1935–1936`, `app/escala/utils.py:2043–2052`, `app/escala/utils.py:2084–2086`, `app/ponto/services/cartorio.py:1404–1429`, `app/ponto/services/cartorio.py:1982–2007`, `app/ponto/portas/celula.py:1181–1202`
+- **Derivação paralela e campo com dois usos.** A proximidade de órfãs por minutos de `HH:MM` é calculada no classificador e também no serviço de cluster, que exige ainda lâmpada apagada. Na razão nova, `hora` serve de rótulo e de base para distância, mesmo com o instante disponível. Conferi em memória que `23:55` e `00:05` formam dois grupos unitários. Se forem as duas sobras ligadas na mesma ata, a regra deixa de atribuir `BATIDA_REPETIDA` a batidas separadas por dez minutos. O RED noturno tem só uma sobra-alvo e pode passar com esse defeito. `app/escala/orfa_classe.py:8–22`, `app/escala/orfa_classe.py:49–68`, `app/ponto/services/cluster_espurio.py:25–36`, `app/escala/tests/test_cadeia20_costura.py:117–132`
+- **Relógio e testes.** A razão nova não chama relógio. No caminho avulso já existe `localdate()` independente de `agora`, além de `now()` na guarda de hoje. No corpo do cartório, o gate de afastamento chama sem data e chega a `date.today()`. São leituras fora do instante fornecido ao ato, nos caminhos que cercam a lavra. Os REDs ORM de costura e consultas congelam o relógio e passam `agora` fixo. `app/escala/orfa_classe.py:30–82`, `app/ponto/services/cartorio.py:2144–2175`, `app/ponto/services/cartorio.py:1461–1465`, `app/ponto/services/afastado_avisa.py:20`, `app/ponto/services/afastado_avisa.py:38–43`, `app/ponto/turnos.py:2741–2748`, `app/escala/tests/test_cadeia20_costura.py:20–34`, `app/escala/tests/test_cadeia20_lavra.py:226–254`
+- **Ordem de trava.** A carga nova da CXR faz leitura simples. A persistência segue pelo `atomic` da porta, que salva a célula antes de emitir o evento. Não identifiquei nova aquisição explícita de trava nesse trajeto. O teto sem mordida para `lavra=None` permanece o achado do item 3. `app/ponto/services/cxr_na_lista.py:152–162`, `app/ponto/services/cartorio.py:1066–1072`, `app/ponto/services/cartorio.py:1985–2007`, `app/ponto/portas/celula.py:957–965`
+
+## 5. Segunda relavra — NÃO BLOQUEIA por atribuição das 19 ao diff
+
+O dado fornecido registra **19 células em cada árvore**. A identidade das células, as chaves que mudaram, os instantes dos atos e os snapshots escolhidos estão **[nao verificado]**.
+
+- **Relógio e CXR.** `razoes_orfas` e `falha` são calculadas a partir dos insumos recebidos. A marca `escala_nao_descreve` lê o snapshot mais recente quando o chamador não fixa `lavra`, e pode mudar quando muda a publicação. O comando fixa um snapshot por execução. Se “insumos” inclui o campo persistido `insumos_em`, ele recebe explicitamente `agora` quando `carimbar` grava. `app/escala/orfa_classe.py:38–82`, `app/ponto/services/cartorio.py:988–998`, `app/ponto/services/cartorio.py:1066–1072`, `app/ponto/services/cxr_na_lista.py:152–162`, `app/ponto/services/cxr_na_lista.py:174–185`, `app/ponto/management/commands/processar_cartorio.py:59–67`, `app/ponto/portas/celula.py:1189–1201`
+- **Ordem.** A lista gravada segue a ordem das sobras, e a grade ordena os pares antes de projetar as horas. Se houver mais de um turno candidato com o mesmo `pk` de batida, o classificador usa o primeiro turno encontrado. O coletor percorre segmentos por data e ordena os turnos por `data_turno`. A seleção de snapshot tem ordenação por `data_ref` e `calculado_em`, sem terceiro desempate. A ocorrência desses empates na amostra está **[nao verificado]**. `app/escala/utils.py:1867–1871`, `app/escala/orfa_classe.py:38–47`, `app/escala/orfa_classe.py:55–81`, `app/ponto/turnos.py:1961–1977`, `app/ponto/turnos.py:1997–2006`, `app/ponto/services/cxr_na_lista.py:152–156`
+- **Estado criado pela primeira relavra.** Há dependência indireta concreta. A pré-passagem da grade entrega ao pareador células carregadas do banco com a ata anterior. Para o ramo com intervalo cadastrado, o turno obtido pode alimentar `_match_marcos`. Na passagem final, o pareador recebe lâmpadas e órfãs da montagem atual dentro da janela e a ata do banco no pad. Os turnos e instantes daí saem para a razão e a falha da próxima lavra. A lista anterior de `razoes_orfas` não é usada como entrada desse cálculo. Isso demonstra o caminho pelo qual uma escrita anterior pode afetar a próxima, com a ligação às 19 células **[nao verificado]**. `app/escala/utils.py:1327–1332`, `app/escala/utils.py:1598–1618`, `app/escala/utils.py:1723–1727`, `app/escala/utils.py:1917–1936`, `app/escala/utils.py:2117–2118`, `app/ponto/turnos.py:1940–1944`, `app/ponto/services/cartorio.py:959–998`
+
+## 19/11 15:39 · sessao 94fb24c17692 · CADEIA-20-PASSO-1 · sonda · origem=Code
+
+```python
+# Base: cadeia20_v2_dinheiro.py, anexo fornecido na conversa.
+# As 19 células, as chaves alteradas e o rollback em execução estão [nao verificado].
+#
+# Na cópia, --sombra usa a role leitor com grants de SELECT
+# (bin/sonda_leitura.sh:94, :128, :178, :236). A relavra com apply_=True
+# chama a porta de gravação (app/ponto/services/cartorio.py:2006,
+# app/ponto/portas/celula.py:963). O envelope da cópia impede essa gravação.
+
+import contextlib
+import hashlib
+import inspect
+import io
+import json
+import logging
+import sys
+from datetime import date, datetime
+from zoneinfo import ZoneInfo
+
+from django.db import transaction
+from django.utils import timezone
+from freezegun import freeze_time
+
+from colaboradores.models import Colaborador
+from escala.models import CelulaDia
+from ponto.management.commands.detectar_ausencias import Command as Emissor
+from ponto.models import Ausencia
+from ponto.precedencia import PRECEDENCIA, ROTULOS
+from ponto.services import cartorio
+from ponto.services.cxr_na_lista import ultimo_lavrado
+
+
+INI = date(2026, 10, 21)
+INI_LAVRA = date(2026, 10, 14)
+FIM = date(2026, 11, 20)
+HOJE = FIM
+FUSO = ZoneInfo("America/Sao_Paulo")
+AGORA = datetime(2026, 11, 20, 23, 59, tzinfo=FUSO)
+AUSENTE = object()
+
+# Vocabulário da ata e da precedência.
+# app/ponto/services/cartorio.py:757, :786, :965, :2133
+# app/ponto/precedencia.py:46, :66, :391
+# app/ponto/turnos.py:2650
+# app/ponto/models.py:661
+CHAVES_CONHECIDAS = {
+    (): {
+        "tipo_dia", "lampadas", "minutos_previstos", "minutos_realizados",
+        "sem_ancora", "n_orfas", "orfas", "n_missing", "n_celulas",
+        "cobertura_parcial", "periodo_parcial", "razoes_orfas", "precedencia",
+    },
+    ("precedencia",): {
+        "tipo_do_dia", "faixa", "rotulo", "suprimidos", "era_dia_previsto", "texto",
+    },
+}
+TEXTOS_SEGUROS = {
+    ("tipo_dia",): {"trabalho", "folga", "ausencia", "falta"},
+    ("periodo_parcial",): {"sem_periodo", "dentro", "fora", "nao_sei"},
+    ("precedencia", "tipo_do_dia"): set(PRECEDENCIA) | {
+        codigo for codigo, _ in Ausencia.TIPO_CHOICES
+    },
+    ("precedencia", "faixa"): set(PRECEDENCIA),
+    ("precedencia", "rotulo"): set(ROTULOS.values()) | {"Sem dados"},
+}
+CAMPOS_NUMERICOS = {
+    ("minutos_previstos",), ("minutos_realizados",),
+    ("n_orfas",), ("n_missing",), ("n_celulas",),
+}
+ORIGENS = {codigo for codigo, _ in CelulaDia.ORIGEM_CHOICES}
+
+
+class DesfazerSonda(Exception):
+    pass
+
+
+def json_canonico(valor):
+    return json.dumps(
+        valor, sort_keys=True, ensure_ascii=True, separators=(",", ":"), default=str
+    )
+
+
+def selo_celulas(queryset):
+    campos = [campo.attname for campo in CelulaDia._meta.concrete_fields]
+    selo = hashlib.sha256()
+    for linha in queryset.order_by("pk").values_list(*campos).iterator():
+        selo.update(json_canonico(linha).encode("ascii"))
+        selo.update(b"\n")
+    return selo.digest()
+
+
+def fotografia(queryset):
+    return {
+        pk: (cid, dia, trabalha, origem, ata)
+        for pk, cid, dia, trabalha, origem, ata in queryset.order_by().values_list(
+            "pk", "colaborador_id", "data", "trabalha", "origem", "ata"
+        ).iterator()
+    }
+
+
+def tipo(valor):
+    return "ausente" if valor is AUSENTE else type(valor).__name__
+
+
+def escalar_publicavel(caminho, valor):
+    if valor is AUSENTE:
+        return "<ausente>"
+    if valor is None or type(valor) is bool:
+        return json_canonico(valor)
+    if type(valor) in (int, float) and caminho in CAMPOS_NUMERICOS:
+        return json_canonico(valor)
+    if isinstance(valor, str) and len(valor) <= 40:
+        if valor == "" or valor in TEXTOS_SEGUROS.get(caminho, ()):
+            return json_canonico(valor)
+    return "<omitido>"
+
+
+def detalhe(rotulo, caminho, antes, depois):
+    texto = f"{rotulo}:{tipo(antes)}->{tipo(depois)}"
+    if isinstance(antes, list) or isinstance(depois, list):
+        tamanho1 = len(antes) if isinstance(antes, list) else "-"
+        tamanho2 = len(depois) if isinstance(depois, list) else "-"
+        texto += f" len={tamanho1}->{tamanho2}"
+    if any(type(valor) in (str, int, float, bool) for valor in (antes, depois)):
+        valor1 = escalar_publicavel(caminho, antes)
+        valor2 = escalar_publicavel(caminho, depois)
+        texto += f" valor={valor1}->{valor2}"
+    return texto
+
+
+def chaves_diferentes(antes, depois, prefixo, aliases):
+    esquerda = antes if isinstance(antes, dict) else {}
+    direita = depois if isinstance(depois, dict) else {}
+    mudancas = []
+    for chave in sorted(esquerda.keys() | direita.keys()):
+        valor1 = esquerda.get(chave, AUSENTE)
+        valor2 = direita.get(chave, AUSENTE)
+        if valor1 == valor2:
+            continue
+        caminho = prefixo + (chave,)
+        if chave in CHAVES_CONHECIDAS.get(prefixo, ()):
+            rotulo = chave
+        else:
+            rotulo = aliases.setdefault(caminho, f"<chave#{len(aliases) + 1}>")
+        mudancas.append((rotulo, caminho, valor1, valor2))
+    return sorted(mudancas, key=lambda mudanca: mudanca[0])
+
+
+def linhas_idemp(primeira, segunda):
+    linhas = []
+    aliases = {}
+
+    # Igualdade da ata conforme o anexo. Chaves desconhecidas recebem aliases
+    # por execução, e valores escalares fora do vocabulário ficam ocultos.
+    for pk in sorted(primeira.keys() | segunda.keys()):
+        linha1 = primeira.get(pk)
+        linha2 = segunda.get(pk)
+        ata1 = linha1[-1] if linha1 is not None else AUSENTE
+        ata2 = linha2[-1] if linha2 is not None else AUSENTE
+        if ata1 == ata2:
+            continue
+
+        # trabalha admite None (app/escala/models.py:1686).
+        cid, dia, trabalha, origem, _ = linha2 if linha2 is not None else linha1
+        origem = origem if origem in ORIGENS else "<omitida>"
+        mudancas = chaves_diferentes(ata1, ata2, (), aliases)
+        chaves = [rotulo for rotulo, _, _, _ in mudancas]
+        partes = [
+            f"IDEMPDIFF colab_pk={cid} cel_pk={pk} data={dia.isoformat()}"
+            f" trabalha={trabalha} origem={origem} chaves={json_canonico(chaves)}"
+        ]
+        if not (isinstance(ata1, dict) and isinstance(ata2, dict)):
+            partes.append(detalhe("ata", (), ata1, ata2))
+
+        for rotulo, caminho, valor1, valor2 in mudancas:
+            partes.append(detalhe(rotulo, caminho, valor1, valor2))
+            for sub, caminho_sub, sub1, sub2 in chaves_diferentes(
+                valor1, valor2, caminho, aliases
+            ):
+                partes.append(detalhe(f"{rotulo}.{sub}", caminho_sub, sub1, sub2))
+        linhas.append(" ".join(partes))
+
+    return linhas
+
+
+def relavrar_rodada(ids, lavra, aceita_lavra, etapa, erros):
+    concluidos = []
+    for cid in ids:
+        try:
+            with transaction.atomic():
+                colab = Colaborador.objects.get(pk=cid)
+                celulas = list(
+                    CelulaDia.objects.filter(
+                        colaborador=colab, data__gte=INI_LAVRA, data__lt=HOJE
+                    ).order_by("data", "pk")
+                )
+                if celulas:
+                    kwargs = dict(
+                        hoje=HOJE,
+                        agora=AGORA,
+                        apply_=True,
+                        emissor=Emissor(),
+                        out=cartorio.contadores(),
+                        prefix="",
+                        write=lambda mensagem: None,
+                        forcar=True,
+                    )
+                    if aceita_lavra:
+                        kwargs["lavra"] = lavra
+                    cartorio.julgar_colab(colab, celulas, **kwargs)
+            concluidos.append(cid)
+        except Exception as exc:
+            erros.append((etapa, cid, type(exc).__name__))
+    return concluidos
+
+
+def main():
+    erros = []
+    linhas = []
+    agora_1a = agora_2a = None
+    desfeito = False
+    sentinela = DesfazerSonda()
+    nivel_anterior = logging.root.manager.disable
+
+    # Os handlers podem apontar para streams já abertos
+    # (app/config/settings/saas.py:131, :155). A saída da sonda usa só
+    # os campos filtrados acima e as classes das exceções interceptadas.
+    try:
+        logging.disable(sys.maxsize)
+        with (
+            freeze_time(AGORA),
+            timezone.override(FUSO),
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()),
+        ):
+            try:
+                if not transaction.get_autocommit():
+                    raise RuntimeError("A sonda precisa do atomic externo.")
+
+                with transaction.atomic():
+                    recorte = CelulaDia.objects.filter(
+                        colaborador__empresa_id__in=(2, 3, 4),
+                        data__gte=INI_LAVRA,
+                        data__lte=FIM,
+                    )
+                    universo = recorte.filter(data__gte=INI)
+                    ids = list(
+                        universo.order_by()
+                        .values_list("colaborador_id", flat=True)
+                        .distinct()
+                        .order_by("colaborador_id")
+                    )
+                    estado_original = selo_celulas(recorte)
+                    lavra = ultimo_lavrado() if ids else None
+                    aceita_lavra = (
+                        "lavra" in inspect.signature(cartorio.julgar_colab).parameters
+                    )
+
+                    # A sonda mantém as chamadas de relavra e omite as medições
+                    # do espelho e das razões (app/ponto/services/espelho.py:1243,
+                    # app/ponto/services/cartorio.py:1002, :1035).
+                    agora_1a = timezone.localtime()
+                    concluidos = relavrar_rodada(ids, lavra, aceita_lavra, "1a", erros)
+                    primeira = fotografia(universo)
+
+                    agora_2a = timezone.localtime()
+                    relavrar_rodada(concluidos, lavra, aceita_lavra, "2a", erros)
+                    segunda = fotografia(universo)
+
+                    linhas = linhas_idemp(primeira, segunda)
+                    raise sentinela
+            except Exception as exc:
+                if exc is sentinela:
+                    # DESFEITO exige a saída pelo sentinela e a restauração
+                    # de todas as colunas das células no recorte de lavra.
+                    # Efeitos externos à transação [nao verificado].
+                    try:
+                        desfeito = (
+                            transaction.get_autocommit()
+                            and selo_celulas(recorte) == estado_original
+                        )
+                    except Exception as erro:
+                        erros.append(("verificar_desfeito", 0, type(erro).__name__))
+                else:
+                    erros.append(("sonda", 0, type(exc).__name__))
+    finally:
+        logging.disable(nivel_anterior)
+
+    for linha in linhas:
+        print(linha)
+    print(f"IDEMP celulas_que_mudaram_na_2a={len(linhas)}")
+    for etapa, cid, classe in erros:
+        print(f"ERRO etapa={etapa} colab_pk={cid} tipo={classe}")
+    print(f"ERROS={len(erros)}")
+    print(f"AGORA_1a={agora_1a.isoformat() if agora_1a is not None else None}")
+    print(f"AGORA_2a={agora_2a.isoformat() if agora_2a is not None else None}")
+    print(f"DESFEITO={desfeito}")
+    if erros or not desfeito:
+        print("NAO_CONCLUIDO")
+
+
+main()
+```
+
+**Relógio.** O encerramento do turno compara o fim previsto com `agora`. A sonda congela o relógio e passa o mesmo instante às duas rodadas. [app/ponto/services/cartorio.py:1266](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/services/cartorio.py:1266) · [app/ponto/turnos.py:2134](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/turnos.py:2134)
+
+**Chamado criado na 1ª.** Um chamado gravado na 1ª rodada pode entrar na lista que a 2ª relê e alterar as contagens de chamados e cobranças usadas na classificação. [app/chamados/models.py:1030](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/chamados/models.py:1030) · [app/ponto/services/cartorio.py:1432](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/services/cartorio.py:1432) · [app/ponto/services/cartorio.py:1584](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/services/cartorio.py:1584)
+
+**Ordem.** As pontas da lista de células definem a janela. Dentro dela, batidas com o mesmo `timestamp` podem chegar em outra ordem à grade, pois a consulta não desempata por PK. A ocorrência desses empates nas 19 células está [nao verificado]. [app/ponto/services/cartorio.py:1243](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/services/cartorio.py:1243) · [app/ponto/services/cartorio.py:1287](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/services/cartorio.py:1287) · [app/ponto/turnos.py:2903](/home/ronald/codex_ws/d1de46305d7d393fe3349113ad5391e1d9302f7c/app/ponto/turnos.py:2903)
 
 ## 19/11 15:31 · sessao 4302f071431b · E4C-F5 · leitura · origem=Code
 
@@ -578,51 +938,4 @@ Banco e suíte não executados. RED/GREEN, custo real e morte dos mutantes: [nã
 
 4. **BLOQUEIA pela lacuna de RED do item 2.** O RED tem mordida para o `strip()` bilateral e deixa passar, por inspeção, normalizações que quebram a comparação literal. Os dois hunks se limitam ao caso de teste do contador e ao tipo de retorno do mock de créditos. Neles não aparece segundo juiz, segundo escritor fora da porta, relógio fora da borda, derivação paralela, alteração de ordem de trava ou campo com dois significados. [test_e4c_f5_contador_texto.py:40](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_contador_texto.py:40), [test_e4c_f5_volta1_leem_o_ato.py:146](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:146)
 
-## 19/11 14:49 · sessao a66bbb7c88ef · CADEIA-20-PASSO-1 · leitura · origem=Code
-
-1. **Quem cria as colunas e acomoda a batida**
-
-O caminho começa em `TipoEscala.save()`: sem par completo de intervalo, inclusive em `horarios_por_dia`, ele define `intervalo_modo='duracao'`. `_intervalo_livre()` verifica esse modo — não verifica diretamente a ausência de horários. ([models.py:790](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/models.py:790), [models.py:243](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/models.py:243))
-
-Dentro de `montar_grade_prevista_periodo_por_turno`, a sequência é:
-
-- `_intervalo_livre()` ativa `_tem_dur`; o builder insere **dois slots** `('I', '·S')` e `('I', '·E')` na régua. ([utils.py:1392](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1392), [utils.py:1411](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1411))
-- Sem `_hii/_hfi`, recolhe as batidas `is_intervalo=True`, ainda não consumidas, entre os instantes inicial e final do turno; com seus horários, fabrica marcos internos alternando `S/E`. **Esse ramo não exige um par completo de batidas.** ([utils.py:1662](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1662), [utils.py:1720](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1720))
-- Chama `_match_marcos(..., turno=None, derivar=False)`, que usa `_alinhar`; depois carimba as células internas com `papel='I'`, `intervalo=True` e ocupa os slots disponíveis. Isso explica uma única `S 01:30` ocupar o primeiro `I`. ([utils.py:1724](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1724), [utils.py:646](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:646), [utils.py:1749](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1749))
-
-Existe ainda um segundo caminho: uma flag **não consumida** pode ocupar um slot `I` vazio na conservação final; essa passagem procura a linha pela **data civil da batida**. ([utils.py:1843](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1843))
-
-**Commit de introdução: [não verificado].** A cópia não contém histórico Git utilizável; `git log` e `git blame` retornaram “not a git repository”. O comentário “28/06” documenta uma atribuição da regra, mas não comprova seu commit. ([models.py:776](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/models.py:776))
-
-2. **Diurno 08–17 com `S 12:00 is_intervalo=True`**
-
-**Vai para a coluna `I`, pelo mesmo caminho**, sob as mesmas condições de cadastro e dia de trabalho. `12:00` está entre as pontas, entra em `_fdt`, gera o marco interno e recebe `papel='I'`; não há teste de “diurno versus noturno” nessa decisão. ([utils.py:1662](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1662), [utils.py:1720](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1720), [utils.py:1752](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1752))
-
-A meia-noite muda os **instantes absolutos**: `encadear_marcos` acrescenta um dia quando o próximo horário não supera o anterior. Assim, `01:30 de d+1` fica dentro de `[22:00 de d, 06:00 de d+1]`; o predicado de inclusão continua igual. ([utils.py:344](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:344), [utils.py:1666](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1666))
-
-3. **Quando uma flag vira órfã**
-
-Há três caminhos relevantes:
-
-- O matcher deixa a batida sem marco e a marca como consumida; a conservação final então a ignora, mesmo havendo `I` vazio. ([utils.py:678](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:678), [utils.py:1845](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1845))
-- Uma célula interna casada excede a quantidade de slots `I`. ([utils.py:1753](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1753))
-- Uma flag chega não consumida à conservação final, mas sua linha civil não tem slot `I` livre. ([utils.py:1850](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1850))
-
-**Caso mínimo mantendo as duas pontas, sem depender de empates: três batidas** — `E d 22:00`, `S d+1 06:00`, `S d+1 06:30 is_intervalo=True`. A última sobrevive ao dedupe de dez minutos, fica fora do turno previsto — portanto não fabrica marco interno —, mas dentro do envelope do matcher, que vai até `07:30` com `tol_min=90`. Como as pontas já estão ocupadas exatamente, `06:30` sobra e fica consumida. ([utils.py:1355](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1355), [utils.py:1666](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1666), [utils.py:638](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:638), [utils.py:678](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:678))
-
-**Se a sobra precisa estar dentro de 22–06**, um caso por saturação é: `E22`, `S00:30(flag)`, `E01:00(flag)`, `S01:30(flag)`, `S06`. As três internas geram três marcos; somente duas cabem nos slots `I`, então `01:30` vira órfã. São cinco batidas para esse mecanismo, preservando as pontas. ([utils.py:1411](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1411), [utils.py:1721](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1721), [utils.py:1758](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1758))
-
-Nos dois exemplos, a sobra produzida dentro do processamento do turno é guardada no **dia da entrada `d`**, conservando o instante em `d+1`. ([utils.py:1727](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1727), [utils.py:1784](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1784))
-
-4. **Quem consome essa decisão**
-
-- **Cartório:** chama a grade e transforma o dia em ata. A ressalva decisiva é que, quando existem marcos reconhecidos no DNA, `lampadas_do_dia` percorre **as chaves do DNA**; o `I` sintético não vira automaticamente lâmpada. A ata copia a lista de órfãs resultante. ([cartorio.py:1287](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/services/cartorio.py:1287), [cartorio.py:660](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/services/cartorio.py:660), [cartorio.py:675](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/services/cartorio.py:675), [cartorio.py:764](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/services/cartorio.py:764))
-- **Espelho:** normalmente lê a célula lavrada, reconstruindo as células pelas lâmpadas da ata. Também possui caminho pelo builder; o adaptador apresenta suas células e órfãs. ([espelho.py:533](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/services/espelho.py:533), [leitor_celula.py:114](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/services/leitor_celula.py:114), [espelho.py:503](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/services/espelho.py:503), [utils.py:1131](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/escala/utils.py:1131))
-- **Motor:** recebe, quando há células alimentadas, o mapa de papéis derivado da ata e o passa ao pareador. O papel `Xi` exige duas luzes de pausa; não decorre simplesmente de uma célula bruta com `papel='I'`. ([motor_calculo_v2.py:494](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/motor_calculo_v2.py:494), [turnos.py:1567](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/turnos.py:1567), [turnos.py:1827](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/turnos.py:1827))
-- **`detectar_ausencias`:** consulta a entrada pela autoridade de turnos, o veto pela célula e, para fechar chamado existente, as lâmpadas dos marcos cobrados. São leituras indiretas; esses caminhos não consultam o `papel='I'` bruto da grade. ([detectar_ausencias.py:336](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/management/commands/detectar_ausencias.py:336), [detectar_ausencias.py:631](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/management/commands/detectar_ausencias.py:631), [detectar_ausencias.py:404](/home/ronald/codex_ws/e632496263f023f8b63c0247ac3ebbeaa0245bd1/app/ponto/management/commands/detectar_ausencias.py:404))
-
-## 19/11 14:49 · sessao f9c895e56fad · - · - · origem=Ronald (tmux)
-
-ok
-
-_7398 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7400 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
