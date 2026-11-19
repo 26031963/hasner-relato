@@ -1,7 +1,40 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 02:20** · publicado em **19/11/2026 02:22** (UTC-3)
+> Ultima resposta processada: **19/11/2026 02:25** · publicado em **19/11/2026 02:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 02:25 · sessao 71601a41dd9b · ESCALA-NAO-DESCREVE · verificador · origem=Code
+
+**Não considero a árvore pronta para o opus final.** Há dois bloqueios identificáveis pela leitura: a proposta passa a ser guardada apesar da L-042, e a nova ação permite aplicar uma proposta calculada por dia civil mesmo no contraexemplo noturno que o próprio detector declara problemático. [app/docs/LEIS.md:89] [app/ponto/services/esmeril_espelho.py:241] [app/escala/detector_proposta.py:18] [app/escala/views.py:502]
+
+1. **Quem escreve e quem lê.**
+
+   - `ata.orfas` é lido de cada `CelulaDia`; `assinaturas_do_colab` soma seus comprimentos em `medida['orfas']`. `anomalias_da_frota` escreve os mapas `orfas` e `orfas_desde`, este último com o início da janela usada na medição. `lavrar` entrega o resultado a `gravar_lavra`, que grava o snapshot; `ler_lavra` lê esse snapshot. [app/ponto/services/esmeril_espelho.py:99] [app/ponto/services/esmeril_espelho.py:130] [app/ponto/services/esmeril_espelho.py:233] [app/ponto/services/esmeril_espelho.py:321] [app/ponto/services/esmeril_espelho.py:342] [app/ponto/services/esmeril_espelho.py:359]
+
+   - `lista` lê esses mapas e escreve `carga`, `carga_desde` e `carga_texto` nas linhas; `resumo_da_carga` lê as linhas e produz a frase e os totais. Tela e PDF leem `linhas` e `carga_resumo`; os leitores anteriores ainda podem ler `postos`. A carga é contagem de órfãs, e a data é o início da janela, não a data da primeira órfã. [app/escala/services/cadastro_realidade.py:784] [app/escala/services/cadastro_realidade.py:969] [app/escala/services/cadastro_realidade.py:981] [app/escala/services/cadastro_realidade.py:1053] [app/templates/escala/cadastro_x_realidade.html:17] [app/escala/services/cadastro_realidade.py:1183] [app/escala/services/cadastro_realidade.py:1149]
+
+   - `propor_escala` produz a proposta e a confiança; `anomalias_da_frota` grava tanto a frase `destino` quanto `proposta` estruturada. `lista` e `aplicar_proposta_da_lista` leem a proposta da lavra. O ciclo é relido de `TipoEscala` por `ciclos_dos_destinos`; `_vinculos` lê o vínculo de hoje usando as autoridades de cobertura e vínculo do dia registradas em `JUIZES.md`. [app/escala/detector_proposta.py:118] [app/ponto/services/esmeril_espelho.py:241] [app/escala/services/cadastro_realidade.py:753] [app/escala/services/cadastro_realidade.py:819] [app/escala/views.py:493] [app/docs/JUIZES.md:142]
+
+   - `botao_da_proposta` lê vínculo, assinatura, proposta e ciclos; a tela lê seu resultado, e a view o consulta novamente antes do POST. A view passa destino, `hoje` e `motivo` a `realocar_vinculo_para_destino`, que chama `julgar_vinculo` e `executar_vinculo`; `confirm_txt` chega à observação do histórico pela porta de vínculo. [app/escala/services/cadastro_realidade.py:830] [app/templates/escala/cadastro_x_realidade.html:32] [app/escala/views.py:496] [app/escala/regua_defesa.py:315] [app/colaboradores/services/vinculo.py:146] [app/colaboradores/services/vinculo.py:355]
+
+2. **Catraca: bate.** Comparei em memória o literal `LINHAS_REGISTRADAS` com os itens de `censo('app')`, usando exatamente a chave e as linhas cobradas pelo teste: 9 identidades de pareadores e 85 de derivações, sem divergências. O medidor registra a linha AST da chamada reconhecida, não a linha da definição. Em particular, `entradas_fora_do_inicio/B1` é `[524]` e `assinaturas_do_colab/B1` é `[179, 186]`. Isso verifica a catraca estática, não a semântica da jornada. [app/core/tests/test_medida_turno_do_par.py:558] [app/core/medida_turno_do_par.py:197] [app/escala/regua_defesa.py:524] [app/ponto/services/esmeril_espelho.py:179] [app/ponto/services/esmeril_espelho.py:186] [nao verificado]
+
+3. **Delta da catraca contra cada pai:** nos dois diffs fornecidos, somente `app/core/tests/test_medida_turno_do_par.py` muda; nenhum `.py` de produção muda **nesse delta**. A cópia não contém `.git`, portanto a comparação dos pais foi feita pelos anexos fornecidos. [app/core/tests/test_medida_turno_do_par.py:247] [não verificado]
+
+4. **Classes de reprovação.**
+
+   - **BLOQUEIA 1 — proposta guardada:** a L-042 diz que a proposta é recalculada e não guardada; a obra passa a gravar `proposta` estruturada na lavra e a ação posterior a lê. O teste novo exige essa gravação, portanto não é apenas comentário ou intenção. [app/docs/LEIS.md:89] [app/ponto/services/esmeril_espelho.py:243] [app/escala/views.py:493] [app/escala/tests/test_escala_nao_descreve.py:100] [nao verificado]
+
+   - A decisão de destino cíclico aparece tanto no predicado do botão quanto na porta de realocação. É duplicação de guarda observável; não identifiquei em `JUIZES.md` um juiz registrado para essa pergunta que permita classificá-la, por si só, como segundo juiz registrado. [app/escala/services/cadastro_realidade.py:849] [app/escala/regua_defesa.py:313] [app/docs/JUIZES.md:142]
+
+   - A escrita do vínculo encontrada passa por `julgar_vinculo` e `executar_vinculo`; a nova view lê `hoje` e o passa adiante, embora a função de realocação conserve leitura própria para seus outros chamadores. Segundo escritor fora da porta, relógio novo fora da borda, derivação paralela de fonte única ou selo sem mordida: **presença não demonstrada nesta verificação**. [app/escala/views.py:496] [app/escala/regua_defesa.py:315] [app/escala/regua_defesa.py:319] [não verificado]
+
+5. **Contraexemplo de integração — BLOQUEIA 2.** Considere seis turnos noturnos consecutivos de 21h a 5h. O detector já existente agrupa por data civil: as saídas de madrugada e entradas da noite podem formar dias com primeira batida às 5h e última às 21h. Se houver template não cíclico compatível com esses horários, ele pode ser proposto com confiança média; a nova ação aceita proposta não cíclica sem exigir confiança alta e pode gravar esse template a partir de hoje. O próprio detector documenta que o agrupamento civil desloca a entrada modal no noturno e afirma que nada é escrito a partir dele; a ação introduzida pela obra altera essa consequência. É um contraexemplo deduzido do código, não uma ocorrência de produção observada. [app/escala/detector_proposta.py:18] [app/escala/detector_proposta.py:49] [app/escala/detector_proposta.py:95] [app/escala/detector_proposta.py:139] [app/escala/services/cadastro_realidade.py:830] [app/escala/views.py:502]
+
+Execução dos testes Django e ocorrência dos casos em produção: [não verificado]. [nao verificado]
+
+BLOQUEIA: 2  
+perguntas de lei: 0
 
 ## 19/11 02:20 · sessao 2836601fc984 · CHECK-DE-TELA · sonda · origem=Code
 
@@ -1509,63 +1542,4 @@ Totais por classe: i 3; ii 10; iii 3; iv 8; v 11; vi 9.
 
 perguntas de lei: 0
 
-## 19/11 01:52 · sessao 9fb8bed83aa9 · E4C-F5 · censo · origem=Code
-
-| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
-|---|---|---|---|---|---|
-| chamados/services/disputa_emissao.py:1617 | reabrir_para_correcao | respondida_em | indeterminado: chave de `dict`, sem receptor | — | `respondida_em=None` |
-| chamados/services/disputa_emissao.py:1617 | reabrir_para_correcao | resposta_colab | indeterminado: chave de `dict`, sem receptor | — | `resposta_colab=''` |
-| chamados/services/disputa_emissao.py:1617 | reabrir_para_correcao | validada_em | indeterminado: chave de `dict`, sem receptor | — | `validada_em=None` |
-| chamados/services/disputa_emissao.py:1643 | reabrir_para_correcao | respondida_em | PerguntaDisputa | vi | `qs.values_list(... 'respondida_em'` |
-| chamados/services/disputa_emissao.py:1643 | reabrir_para_correcao | resposta_colab | PerguntaDisputa | vi | `qs.values_list('pk', 'resposta_colab'` |
-| chamados/services/disputa_emissao.py:1644 | reabrir_para_correcao | validada_em | PerguntaDisputa | vi | `'validada_em', 'validada_por_id'` |
-| chamados/services/disputa_emissao.py:1645 | reabrir_para_correcao | materializada_em | PerguntaDisputa | vi | `'materializada_em', 'via_resolucao'` |
-| chamados/services/disputa_emissao.py:1645 | reabrir_para_correcao | via_resolucao | PerguntaDisputa | vi | `'materializada_em', 'via_resolucao'` |
-| chamados/services/disputa_emissao.py:1671 | responder_automaticamente | resposta_colab | PerguntaDisputa | ii | `if (p.resposta_colab or '').strip()` |
-| chamados/services/disputa_emissao.py:1701 | carimbar_resposta_pela_trilha | respondida_em | PerguntaDisputa | ii | `if p.respondida_em is not None` |
-| chamados/services/disputa_emissao.py:1701 | carimbar_resposta_pela_trilha | resposta_colab | PerguntaDisputa | ii | `not (p.resposta_colab or '').strip()` |
-| chamados/services/disputa_emissao.py:1709 | carimbar_resposta_pela_trilha | resposta_colab | PerguntaDisputa | iv | `ato_texto=p.resposta_colab` |
-| chamados/services/disputa_emissao.py:1871 | reabrir_credor_de_pergunta_viva | respondida_em | PerguntaDisputa | ii | `q.respondida_em is None` |
-| chamados/services/disputa_emissao.py:1871 | reabrir_credor_de_pergunta_viva | resposta_colab | PerguntaDisputa | ii | `not texto_vazio(q.resposta_colab)` |
-| chamados/services/disputa_emissao.py:1951 | _resolver_perguntas_por_chamado_resolvido | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
-| chamados/services/disputa_emissao.py:2083 | _resolver_perguntas_por_chamado_resolvido | materializada_em | PerguntaDisputa | i | `q.materializada_em is None` |
-| chamados/services/disputa_emissao.py:2083 | _resolver_perguntas_por_chamado_resolvido | validada_em | PerguntaDisputa | i | `q.validada_em is None` |
-| chamados/services/disputa_emissao.py:2093 | _resolver_perguntas_por_chamado_resolvido | via_resolucao | PerguntaDisputa | iv | `_via_antes = q.via_resolucao` |
-| chamados/services/disputa_emissao.py:2095 | _resolver_perguntas_por_chamado_resolvido | respondida_em | PerguntaDisputa | iv | `q.respondida_em.isoformat()` |
-| chamados/services/disputa_emissao.py:2100 | _resolver_perguntas_por_chamado_resolvido | resposta_colab | PerguntaDisputa | v | `_tem_resp = bool((q.resposta_colab or '').strip())` |
-| chamados/services/disputa_emissao.py:2108 | _resolver_perguntas_por_chamado_resolvido | via_resolucao | PerguntaDisputa | iv | `q.via_resolucao, 'com resposta` |
-| chamados/services/disputa_emissao.py:2111 | _resolver_perguntas_por_chamado_resolvido | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': q.via_resolucao` |
-| chamados/services/disputa_emissao.py:2112 | _resolver_perguntas_por_chamado_resolvido | respondida_em | PerguntaDisputa | iv | `'respondida_em': q.respondida_em.isoformat()` |
-| chamados/services/explicador.py:55 | _explicar_validada | resposta_colab | PerguntaDisputa | v | `% (p.resposta_colab,)` |
-| chamados/services/explicador.py:102 | explicar_pergunta | resposta_colab | PerguntaDisputa | v | `acao='Validar ou recusar a resposta` |
-| chamados/services/explicador.py:103 | explicar_pergunta | resposta_colab | PerguntaDisputa | v | `motivo='colaborador respondeu %s'` |
-| chamados/services/explicador.py:118 | explicar_pergunta | via_resolucao | PerguntaDisputa | v | `p.get_via_resolucao_display() if p.via_resolucao` |
-| chamados/services/fabrica_da_celula.py:149 | motivos_a_perguntar | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao=PerguntaDisputa.VIA_DUPLICATA)` |
-| chamados/services/fabrica_da_celula.py:171 | perguntar | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
-| chamados/services/fio.py:188 | espera_o_texto_do_colaborador | respondida_em | PerguntaDisputa | i | `p.respondida_em is None or respondida_sem_texto(p)` |
-| chamados/services/fio.py:378 | montar_chamados_fio | resposta_colab | PerguntaDisputa | v | `(_p.resposta_colab or '').strip()` |
-| chamados/services/fio.py:1149 | reuso_sem_rechave | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/fio.py:1216 | sem_dia_na_saida | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/fio.py:1295 | merito_perdedor | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao == PerguntaDisputa.VIA_ADMIN_DECIDIU` |
-| chamados/services/fio.py:1493 | retratar_duplicata | via_resolucao | PerguntaDisputa | ii | `if p.via_resolucao == PerguntaDisputa.VIA_DUPLICATA` |
-| chamados/services/fio.py:1576 | _no_fato | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/fio.py:1709 | recusa_par_ilegal | respondida_em | indeterminado: atributo de `SimpleNamespace`, sem modelo | — | `SimpleNamespace(respondida_em=respondida_em` |
-| chamados/services/fio.py:1709 | recusa_par_ilegal | resposta_colab | indeterminado: atributo de `SimpleNamespace`, sem modelo | — | `resposta_colab=resposta_colab)` |
-| chamados/services/fio.py:2017 | fecho_cruza_dias | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/fio.py:2053 | perguntas_sobre_batida_retratada | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/fio.py:2075 | universo_do_grupo | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/fio.py:2120 | grupos_de_colisao | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao__in=PerguntaDisputa.VIAS_FORA_DO_FATO)` |
-| chamados/services/historico.py:109 | _eventos_dos_chamados | resposta_colab | PerguntaDisputa | v | `resp = (p.resposta_colab or '')[:14]` |
-| chamados/services/materializacao.py:148 | metade_irma_do_intervalo | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
-
-linhas: 44 de 44
-
-Totais por classe: i: 3; ii: 7; iii: 0; iv: 6; v: 7; vi: 16. Sem classe: 5.
-
-- **disputa_emissao.py:2083 — materializada_em:** chamada pelo wrapper em chamados/services/disputa_emissao.py:1919; **sim**, seleciona candidatas antes de `q.carimbar` (chamados/services/disputa_emissao.py:2083, chamados/services/disputa_emissao.py:2103).
-- **disputa_emissao.py:2083 — validada_em:** chamada pelo mesmo wrapper em chamados/services/disputa_emissao.py:1919; **sim**, seleciona candidatas antes de `q.carimbar` (chamados/services/disputa_emissao.py:2083, chamados/services/disputa_emissao.py:2103).
-- **fio.py:188 — respondida_em:** chamada em chamados/services/fio.py:175, chamados/services/fio.py:360 e chamados/services/cobranca.py:241; **não foi verificada** decisão de quando uma porta existente escreve nesses usos.
-
-perguntas de lei: 0
-
-_7262 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7263 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
