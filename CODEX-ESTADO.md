@@ -1,7 +1,67 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:41** · publicado em **19/11/2026 15:41** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:43** · publicado em **19/11/2026 15:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:43 · sessao bfb920870efb · DESAFIO-DECISAOHE-SOL62 · leitura · origem=Code
+
+# DESAFIO-DECISAOHE-SOL62
+
+Snapshot fixado em `ba4cb6c3c33403eecacbefeeef01b64c5b441a83`. [Commit no repositório 26031963/hasner-ponto](https://github.com/26031963/hasner-ponto/commit/ba4cb6c3c33403eecacbefeeef01b64c5b441a83)
+
+## P1 — Acessos à tabela
+
+| Arquivo:linha | Leitura ou escrita | Entrada |
+|---|---|---|
+| `app/ponto/management/commands/lavrar_he_pendente.py:48` | Leitura | `objects.vigentes().filter()`, iterado para montar o mapa de decisões |
+| `app/ponto/management/commands/recusar_ponta_pequena.py:120` | Leitura | `objects.vigentes().filter()`, iterado para montar o conjunto de dias decididos |
+| `app/ponto/motor_calculo_v2.py:1417` | Leitura | `_DHE.objects.vigentes().filter().only()`, iterado para montar o mapa do motor |
+| `app/ponto/portas/he.py:148` | Leitura | `objects.vigentes().filter(pk=...).exists()` em `_vigente` |
+| `app/ponto/portas/he.py:195` | Leitura | `objects.select_for_update().filter().first()` em `decidir_he` |
+| `app/ponto/portas/he.py:346` | Leitura | `objects.select_for_update().filter().first()` em `recusar_ponta_pequena` |
+| `app/ponto/portas/he.py:473` | Leitura | `objects.select_for_update().filter().first()` em `revogar_recusa_do_sistema` |
+| `app/ponto/portas/he.py:583` | Leitura | `objects.select_for_update().filter().first()` em `autorizar_em_lote` |
+| `app/ponto/services/gestao_he.py:87` | Leitura | `objects.vigentes().filter().values()` em `estado_por_dia` |
+| `app/ponto/services/gestao_he.py:105` | Leitura | `objects.vigentes().filter().values().annotate()` em `_decisoes` |
+| `app/ponto/portas/he.py:66` | Escrita | `objects.create()` em `_gravar` |
+| `app/ponto/portas/he.py:84` | Escrita | `save(update_fields=...)` da instância em `_gravar` |
+| `app/ponto/portas/he.py:403` | Escrita | `save(update_fields=...)` da instância em `_marcar_revogada` |
+| `app/ponto/models.py:1311` | Escrita implícita condicional | `on_delete=SET_NULL` em `decidida_por` na exclusão de `auth.User`. O snapshot habilita o admin em `app/config/settings/saas.py:26` e `app/config/urls.py:24`. Execução em produção [nao verificado]. |
+
+**Totais dos 13 sítios explícitos da tabela acima** — 6 leituras por `objects.vigentes()`, 4 por `objects.select_for_update()`, 1 escrita por `objects.create()` e 2 por `save()`. Há 1 caminho implícito condicional por `SET_NULL`. A varredura encontrou 0 acessos explícitos por outro manager, `related_name`, SQL cru ou `get_model`. Os reversos estão declarados em `app/ponto/models.py:1301` e `app/ponto/models.py:1311`. O `.delete()` de `app/ponto/management/commands/recusar_ponta_pequena.py:219` é texto de reversão.
+
+## P2 — Autoridade de vigência
+
+`DecisaoHEQuerySet.vigentes()` é a autoridade única. O predicado é `revogada_em IS NULL`, implementado por `self.filter(revogada_em__isnull=True)`. `objects` expõe o método e permite ler todas as linhas quando ele não é chamado. `app/ponto/models.py:1260`, `app/ponto/models.py:1265`, `app/ponto/models.py:1267`, `app/ponto/models.py:1348`.
+
+## P3 — Leitores indiretos e seus chamadores
+
+1. `estado_por_dia` entrega o estado por colaborador e dia (`app/ponto/services/gestao_he.py:63`). Chamadores em `app/ponto/services/gestao_he.py:250`, `app/ponto/services/gestao_he.py:475` e `app/folha/porta_export.py:686`.
+2. `_decisoes` agrega dias e minutos por estado (`app/ponto/services/gestao_he.py:92`). Só `enriquecer` o chama (`app/ponto/services/gestao_he.py:249`). `enriquecer` é definido em `app/ponto/services/gestao_he.py:216` e chamado em `app/ponto/services/gestao_he.py:402`, `app/ponto/views.py:807` e `app/ponto/views.py:945`. `_tira` e `_calendario` repassam o estado para a grade (`app/ponto/services/gestao_he.py:114`, `app/ponto/services/gestao_he.py:162`), chamados apenas pelo próprio `enriquecer` (`app/ponto/services/gestao_he.py:303`, `app/ponto/services/gestao_he.py:304`, `app/ponto/services/gestao_he.py:346`, `app/ponto/services/gestao_he.py:347`).
+3. `itens_sem_decisao` entrega os dias pendentes (`app/ponto/services/gestao_he.py:370`) a `app/ponto/views.py:594` e `app/ponto/views.py:668`. `pendentes_na_central` entrega a contagem (`app/ponto/services/gestao_he.py:432`) a `app/chamados/views.py:762` e `app/relatorios/views.py:43`.
+4. `_vigente` entrega a linha vigente ou `None` (`app/ponto/portas/he.py:130`). Chamadores em `app/ponto/portas/he.py:196`, `app/ponto/portas/he.py:347`, `app/ponto/portas/he.py:481` e `app/ponto/portas/he.py:589`.
+5. `decidir_he` também devolve o estado no resultado do ato (`app/ponto/portas/he.py:159`, `app/ponto/portas/he.py:203`, `app/ponto/portas/he.py:231`). Chamadores em `app/ponto/views.py:532`, `app/ponto/portas/he.py:265` e `app/ponto/portas/he.py:595`. `recusar_ponta_pequena` devolve `ja_decidido` (`app/ponto/portas/he.py:297`, `app/ponto/portas/he.py:358`) ao comando em `app/ponto/management/commands/recusar_ponta_pequena.py:170`.
+6. `_carregar_decisoes_he` alimenta o mapa do motor (`app/ponto/motor_calculo_v2.py:1397`) para o bloqueio de dia sem previsto e para `_janela_do_dia` (`app/ponto/motor_calculo_v2.py:1455`, `app/ponto/motor_calculo_v2.py:1641`). `_janela_do_dia` entrega `autorizado` (`app/ponto/motor_calculo_v2.py:1490`, `app/ponto/motor_calculo_v2.py:1653`) aos leitores em `app/ponto/motor_calculo_v2.py:1691`, `app/ponto/motor_calculo_v2.py:1733` e `app/ponto/motor_calculo_v2.py:1760`.
+7. `apurar` inclui o estado no retrato (`app/ponto/services/he_pendente_lavrado.py:71`, `app/ponto/services/he_pendente_lavrado.py:149`) para `app/ponto/management/commands/lavrar_he_pendente.py:62`. `ler` devolve o retrato gravado (`app/ponto/services/he_pendente_lavrado.py:193`) a `app/ponto/management/commands/recusar_ponta_pequena.py:98`, `app/ponto/services/gestao_he.py:401`, `app/ponto/services/gestao_he.py:466`, `app/ponto/views.py:804` e `app/ponto/views.py:934`.
+8. `dias_acima_do_limite_sem_decisao` entrega a lista a `medir` (`app/folha/porta_export.py:199`, `app/folha/porta_export.py:684`). `medir` é chamado por `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:187`. `estado_da_porta` entrega o carimbo a `conferir` e `abrir_a_porta` (`app/folha/porta_export.py:1334`, `app/folha/porta_export.py:820`, `app/folha/porta_export.py:1382`). `conferir` devolve a mensagem a `abrir_a_porta`, que a entrega à view de exportação (`app/folha/porta_export.py:811`, `app/folha/porta_export.py:1376`, `app/folha/porta_export.py:1387`, `app/folha/views.py:131`).
+
+## P4 — Estado exibido sem consultar a autoridade
+
+- **Sim.** O espelho escreve “sem decisão” para cada ponta exibida. Para as pontas da grade, `montar_dias` produz a lista pela diferença entre batida e marco, e o rótulo sai fixo no template. Uma ponta com decisão `nao` pode receber esse rótulo. `app/ponto/janela_he.py:199`, `app/ponto/janela_he.py:228`, `app/ponto/services/espelho.py:727`, `app/ponto/services/espelho.py:776`, `app/templates/ponto/espelho.html:189`, `app/ponto/models.py:1283`.
+- O PDF do espelho e o calendário também exibem o efeito “não conta” para pontas marcadas pela grade. `app/relatorios/pdf_espelho.py:932`, `app/relatorios/pdf_espelho.py:941`, `app/colaboradores/services/calendario.py:421`, `app/templates/colaboradores/partials/_calendario_grade.html:127`, `app/templates/core/_relogio_riscado.html:15`.
+- O selo de exportação rotula a lista bruta `he_pendente` como “ponta de HE sem decisão”. A consulta de vigência alimenta a lista distinta de dias que travam o TXT. A mensagem do clique usa essa segunda lista do carimbo, com a vigência apurada na medição. `app/folha/porta_export.py:495`, `app/folha/porta_export.py:684`, `app/folha/porta_export.py:745`, `app/folha/porta_export.py:806`, `app/folha/porta_export.py:866`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:124`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:268`.
+- A tela de auditoria exibe o histórico de decisão e revogação a partir das descrições de `LogAuditoria`. `app/ponto/portas/he.py:94`, `app/ponto/portas/he.py:409`, `app/core/views.py:705`, `app/templates/core/log_auditoria.html:73`.
+- Busquei os usos do modelo, dos reversos, de `vigentes`, dos mapas e retratos, e dos rótulos “sem decisão”, “com ciência” e “autorizado” em Python e templates. A tela e o PDF de Gestão de HE consultam a autoridade por `enriquecer`, e os atalhos de pendências por `pendentes_na_central`. `app/ponto/views.py:807`, `app/ponto/views.py:945`, `app/ponto/services/gestao_he.py:249`, `app/ponto/services/gestao_he.py:475`, `app/chamados/views.py:762`, `app/relatorios/views.py:43`.
+
+## P5 — Revogada lida como vigente
+
+- **Sim, por concorrência no lavrador.** Uma execução carrega uma recusa vigente no mapa. Outra a revoga antes de `apurar` processar o dia. A primeira recebe `revogada=False` com motivo `ja revogada`, conserva o objeto antigo e pode gravar `estado='nao'` no retrato. `app/ponto/management/commands/lavrar_he_pendente.py:48`, `app/ponto/management/commands/lavrar_he_pendente.py:59`, `app/ponto/management/commands/lavrar_he_pendente.py:71`, `app/ponto/portas/he.py:481`, `app/ponto/portas/he.py:500`, `app/ponto/services/he_pendente_lavrado.py:143`, `app/ponto/services/he_pendente_lavrado.py:189`.
+- O mesmo intervalo entre consulta e uso permite ao comando de ponta pequena contar o dia como “já decidido”, ou à Gestão de HE contabilizá-lo como “com ciência” no agregado enquanto o mapa por dia já o mostra “sem decisão”. `app/ponto/management/commands/recusar_ponta_pequena.py:120`, `app/ponto/management/commands/recusar_ponta_pequena.py:141`, `app/ponto/management/commands/recusar_ponta_pequena.py:189`, `app/ponto/services/gestao_he.py:249`, `app/ponto/services/gestao_he.py:278`, `app/ponto/services/gestao_he.py:315`, `app/templates/ponto/gestao_he.html:125`.
+- **Também pelo carimbo do TXT.** Na medição, uma recusa vigente tira o dia da lista de bloqueio. Se ela for revogada depois de um carimbo verde, o clique ainda pode aceitar esse carimbo no mesmo dia sem reler a decisão. `app/folha/porta_export.py:232`, `app/folha/porta_export.py:686`, `app/folha/porta_export.py:806`, `app/folha/porta_export.py:1350`, `app/folha/porta_export.py:1368`, `app/folha/porta_export.py:1382`, `app/folha/views.py:131`.
+
+**Tempo e arquivos abertos** — cerca de 5 minutos, 1.077 arquivos de texto abertos na varredura, incluindo 773 Python e 267 HTML. Métricas da execução [nao verificado] no snapshot.
+
+**[nao verificado]** — ocorrência em produção dos cenários de P5, SQL efetivamente emitido pelo Django ao excluir um usuário e acessos por operadores ou ferramentas externas a `app/`.
 
 ## 19/11 15:41 · sessao 8a71eb7ff630 · CADEIA-20-PASSO-1 · verificador · origem=Code
 
@@ -928,14 +988,4 @@ LEI-AKITA: padrao=Parallel Change / Expand-Contract; [registro completo](/home/r
 
 Banco e suíte não executados. RED/GREEN, custo real e morte dos mutantes: [não verificado]. [nao verificado]
 
-## 19/11 14:54 · sessao 6499ab8fd055 · REPLAY-F5-SOL · verificador · origem=Code
-
-1. **NÃO BLOQUEIA.** O bloqueio específico do `strip()` bilateral está fechado. Os dois logs fornecidos mostram no topo o mesmo diff, aplicando `strip()` aos dois lados da comparação. Na base `71905e5e6`, `M_strip_velho` passa os 3 testes (`rc=0`). Em `6978b3234`, `M_strip_novo` roda 4 testes e tem uma única falha (`rc=1`). A falha é na asserção da primeira diferença de espaço, que recebe `(0, 1)` quando exige `(1, 1)`. A fixture chegou à chamada do contador. Os hashes dos conteúdos locais conferem com o diff fornecido. Os HEADs, as execuções e o verde da árvore nova sem mutante ficam **[nao verificado]** de forma independente. [vigia_texto_resposta.py:16](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/services/vigia_texto_resposta.py:16), [test_e4c_f5_contador_texto.py:43](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_contador_texto.py:43)
-
-2. **BLOQUEIA a prova de comparação literal.** O caso novo chama diretamente o mesmo `contar()` que o vigia usa. Grava `ato` na decisão e exige uma divergência ao trocar somente a projeção para `ato ` e depois para ` ato`. Pela leitura dos casos, `casefold()` bilateral sobreviveria e esconderia `ato` × `ATO`. É plausível hoje porque o contador compara dois textos armazenados e a porta humana preserva a caixa. Pelo mesmo desenho da fixture, `strip()` aplicado só ao lado da leitura também sobreviveria, pois o texto do ato já vem sem espaços nas pontas. A execução desses dois mutantes e a ocorrência dessas divergências em produção ficam **[nao verificado]**. `None` × `''` já é tratado como equivalente nos caminhos atuais, com campos não anuláveis e conversão para `''` no contador e na leitura. [test_e4c_f5_contador_texto.py:21](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_contador_texto.py:21), [test_e4c_f5_contador_texto.py:40](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_contador_texto.py:40), [vigiar_fio_morto.py:194](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/management/commands/vigiar_fio_morto.py:194), [disputa_emissao.py:1446](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/services/disputa_emissao.py:1446), [models.py:2634](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/models.py:2634), [models.py:4170](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/models.py:4170), [models.py:4310](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/models.py:4310)
-
-3. **NÃO BLOQUEIA.** Os conjuntos vazios respeitam o tipo devolvido por `creditos_perguntas` e eliminam o `TypeError` específico nos testes de pertinência `ch.id in _resp` e `ch.id in _viva`. Isso permite chegar a `desenlace` no caminho padrão do fio, com os mocks do teste e `com_explicacao=False`. A asserção continua exigindo o mesmo total de consultas com uma e cinco perguntas e um mínimo de chamadas a `leitura` em cada cenário. O total absoluto pode subir porque o caminho agora alcança `_orf(ch)`, que pode consultar o banco. O teste descarta o retorno e, portanto, uma nova exceção capturada no bloco ainda poderia passar despercebida. O verde do teste de custo e os totais antes e depois ficam **[nao verificado]**, pois as execuções fornecidas cobrem o módulo do contador. [raiox.py:149](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/services/raiox.py:149), [fio.py:195](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/services/fio.py:195), [fio.py:454](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/services/fio.py:454), [disputa_emissao.py:776](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/services/disputa_emissao.py:776), [test_e4c_f5_volta1_leem_o_ato.py:88](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:88), [test_e4c_f5_volta1_leem_o_ato.py:139](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:139)
-
-4. **BLOQUEIA pela lacuna de RED do item 2.** O RED tem mordida para o `strip()` bilateral e deixa passar, por inspeção, normalizações que quebram a comparação literal. Os dois hunks se limitam ao caso de teste do contador e ao tipo de retorno do mock de créditos. Neles não aparece segundo juiz, segundo escritor fora da porta, relógio fora da borda, derivação paralela, alteração de ordem de trava ou campo com dois significados. [test_e4c_f5_contador_texto.py:40](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_contador_texto.py:40), [test_e4c_f5_volta1_leem_o_ato.py:146](/home/ronald/codex_ws/6978b323441b9f7d1231eb19b7fcf4b415434386/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:146)
-
-_7400 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7401 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
