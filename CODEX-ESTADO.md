@@ -1,7 +1,43 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 02:03** · publicado em **19/11/2026 02:06** (UTC-3)
+> Ultima resposta processada: **19/11/2026 02:09** · publicado em **19/11/2026 02:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 02:09 · sessao 0e79919b9af3 · E4C-F3-LAVRA-FOTO · verificador · origem=Code
+
+**NAO BLOQUEIA — a camada SQL fecha os cinco caminhos exercitados pelos mutantes no contexto da fixture**, somando-se à AST que já existia. Isso não prova a ausência de toda leitura possível de `DecisaoPergunta`: a garantia dinâmica só vale para as execuções capturadas, e a própria docstring declara o resíduo dos ramos não executados que a AST não reconhece. [teste:3](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:3), [teste:312](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:312)
+
+1. **Mutantes e escapes da v2 — NAO BLOQUEIA.** O anexo `mutantes_c3.txt` registra duas falhas de `test_sql_marcos_nao_le_decisao` para cada mutante, uma com `ate` futuro e outra com `None`; não traz os detalhes das asserções. A captura testa a presença do nome da tabela de decisões no SQL. [mutantes_c3.txt:1–20, dado fornecido], [teste:316](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:316)
+
+   | Mutante | Caminho efetivamente inserido |
+   |---|---|
+   | V1 | Alias de `getattr`, nome montado e consulta avaliada com `list`: corresponde ao escape dinâmico da v2. [mk.py:6, dado fornecido] |
+   | V2 | Cursor em variável e nome da tabela montado: corresponde ao escape de SQL bruto da v2. [mk.py:7, dado fornecido] |
+   | V3 | Itera perguntas da fixture e chama `respostas_anteriores()`, que percorre `self.decisoes.all()`: corresponde ao método de modelo apontado na v2. [mk.py:8, dado fornecido], [modelo:3793](app/chamados/models.py:3793) |
+   | V4 | Chama por alias um helper de topo que avalia consulta a decisões: corresponde ao escape do fecho. [mk.py:9, dado fornecido], [mk.py:13, dado fornecido] |
+   | V5 | Chama método de classe local que avalia consulta a decisões: corresponde ao outro escape do fecho. [mk.py:10, dado fornecido], [mk.py:14, dado fornecido] |
+
+   As **cinco mutações não são todos os exemplos da v2**: a reexportação já chamada `D` e o lookup ORM montado não têm mutante específico neste anexo. A captura deve detectar SQL com a tabela nas execuções alcançadas, mas a execução dessas duas formas está **[nao verificado]**. [verif_v2.r, dado fornecido], [teste:320](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:320)
+
+2. **Alcance da fixture e resíduo — NAO BLOQUEIA.** As duas consultas de `PerguntaDisputa` são construídas para ambos os valores de `ate`; a pergunta tem `respondida_em` definido antes das chamadas. O teste exige que alguma consulta mencione a tabela, mas não distingue individualmente as duas consultas nem prova seus resultados. [produção:201](app/chamados/veredito_lavrado.py:201), [teste:288](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:288), [teste:318](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:318)
+
+   Ficam sem exercício demonstrado, por exemplo, uma pergunta com `materializada_em` preenchido, um marco posterior ao `ate` e entradas ou condições alternativas que desviem a execução. A docstring nomeia com honestidade a classe do resíduo — ramo não executado **e** não reconhecido pela AST — sem enumerar cada cenário. [modelo:3647](app/chamados/models.py:3647), [produção:163](app/chamados/veredito_lavrado.py:163), [teste:6](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:6)
+
+3. **CORTE — NAO BLOQUEIA, com limite de evidência.** O teste grava uma decisão em 3/1/2020, posterior ao `respondida_em` fixado em 2/1/2020, e compara os dicionários antes e depois para os dois horizontes. Assim, morde uma implementação que faça essa decisão aumentar o máximo observado nessa fixture. Ele não afirma que o valor anterior seja exatamente `MARCO`; outro marco maior poderia mascarar a mudança. A mordida de um mutante específico que acrescente `Max(ato_em)` está **[nao verificado]**. [teste:272](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:272), [teste:298](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:298), [produção:169](app/chamados/veredito_lavrado.py:169)
+
+4. **Relógio, fixture, subtest e Ruff — NAO BLOQUEIA.** `MARCO`, `ATO` e o horizonte são datetimes fixos e conscientes de UTC; `respondida_em` e `ato_em` não são `auto_now_add`. Os campos `Batida.criado_em` e `CelulaDia.gerada_em`, que também podem contribuir ao máximo, são `auto_now_add`; a ausência de efeitos indiretos que criem registros deles na preparação está **[nao verificado]**. [teste:272](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:272), [modelo:2635](app/chamados/models.py:2635), [modelo:4168](app/chamados/models.py:4168), [batida:79](app/ponto/models.py:79), [célula:1702](app/escala/models.py:1702)
+
+   A atualização direta na fixture cria uma projeção com instante e texto vazio, contornando a guarda do `save`; isso é relevante para interpretar a fixture, embora a consulta de marcos leia o instante. `setUpTestData` prepara essa linha para os testes; os `subTest` registram as falhas por horizonte, como mostra o anexo dos mutantes. Aprovação da suíte sem mutação e resultado do Ruff estão **[nao verificado]**; a configuração seleciona `F`, `E9` e `B`. [teste:287](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:287), [modelo:3679](app/chamados/models.py:3679), [mutantes_c3.txt:1–20, dado fornecido], [ruff.toml:4](app/ruff.toml:4)
+
+5. **Escritores e leitores — NAO BLOQUEIA.**
+
+   - `PerguntaDisputa.respondida_em`: o teste escreve por `update`; em produção, a resposta humana e a automática atribuem e salvam o instante, a trilha também o escreve, e a reabertura pode zerá-lo. `marcos_do_lote` filtra e agrega esse campo; `DecisaoPergunta.linhas_da_projecao_sem_linha` também o lê para formar linhas de projeção. Esta lista identifica caminhos comprovados, não um censo exaustivo. [teste:291](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:291), [resposta humana:1527](app/chamados/services/disputa_emissao.py:1527), [automática:1683](app/chamados/services/disputa_emissao.py:1683), [trilha:1705](app/chamados/services/disputa_emissao.py:1705), [reabertura:1617](app/chamados/services/disputa_emissao.py:1617), [leitor:206](app/chamados/veredito_lavrado.py:206), [projeção:4251](app/chamados/models.py:4251)
+   - `DecisaoPergunta.ato_em`: o teste fornece o instante no `create`; em produção, portas como a resposta humana e a automática fornecem o instante a `registrar`, que cria as linhas. `DecisaoPergunta.leitura` usa o campo para ordenar a sequência. A implementação atual de `marcos_do_lote` não o lê diretamente. [teste:307](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:307), [resposta humana:1532](app/chamados/services/disputa_emissao.py:1532), [automática:1686](app/chamados/services/disputa_emissao.py:1686), [registrar:4329](app/chamados/models.py:4329), [leitura:4308](app/chamados/models.py:4308), [marcos:151](app/chamados/veredito_lavrado.py:151)
+
+A identidade Git da cópia e a correspondência completa do diff com a base são **[nao verificado]**: a consulta local informou ausência de repositório Git. O diff fornecido declara apenas a criação do teste, mas não substitui essa verificação. [diff.txt:1, dado fornecido] [nao verificado]
+
+BLOQUEIA: 0  
+perguntas de lei: 0
 
 ## 19/11 02:03 · sessao 2ee7e747fa4d · DST-L2-JZ1 · verificador · origem=Code
 
@@ -1067,69 +1103,4 @@ Há uma questão de lei apontada pelo próprio código sobre a trilha de **texto
 
 perguntas de lei: [não verificado]
 
-## 19/11 01:47 · sessao 50ddc07b8c74 · E4C-F5 · censo · origem=Code
-
-O censo do lote **não está fechado**. Consegui consolidar com segurança as 39 ocorrências abaixo; as demais ocorrências, os totais do lote inteiro e a igualdade entre contador e universo permanecem **[não verificado]**. Os caminhos são relativos a `app/`. O texto da coluna final reproduz um fragmento da própria linha citada.
-
-Nas 35 primeiras linhas, o receptor é `PerguntaDisputa`, inclusive o modelo histórico da migração. As classes são: **ii** conservação do passivo ou porta; **iv** fotografia da lavra; **v** exibição; **vi** face SQL. ([backfill_decisoes_pergunta.py:44](app/chamados/management/commands/backfill_decisoes_pergunta.py:44), [encerrar_perguntas_com_fato.py:27](app/chamados/management/commands/encerrar_perguntas_com_fato.py:27), [relavrar_via_i6.py:44](app/chamados/management/commands/relavrar_via_i6.py:44), [0053_pergunta_unica_por_familia.py:37](app/chamados/migrations/0053_pergunta_unica_por_familia.py:37), [reconciliar_fantasmas.py:210](app/ponto/management/commands/reconciliar_fantasmas.py:210), [flip_auto.py:125](app/ponto/services/flip_auto.py:125))
-
-| Arquivo:linha | Função | Campo | Receptor | Classe | Trecho literal |
-|---|---|---|---|---|---|
-| chamados/management/commands/backfill_decisoes_pergunta.py:57 | linhas_a_criar | respondida_em | PerguntaDisputa | vi | `Q(respondida_em__isnull=False)` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:57 | linhas_a_criar | validada_em | PerguntaDisputa | vi | `Q(validada_em__isnull=False)` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:61 | linhas_a_criar | respondida_em | PerguntaDisputa | vi | `.only(... 'respondida_em'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:61 | linhas_a_criar | validada_em | PerguntaDisputa | vi | `'validada_em'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:62 | linhas_a_criar | resposta_colab | PerguntaDisputa | vi | `'resposta_colab'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:105 | contador_validada_projetada_sem_linha | respondida_em | PerguntaDisputa | vi | `qs.only(... 'respondida_em'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:105 | contador_validada_projetada_sem_linha | resposta_colab | PerguntaDisputa | vi | `'resposta_colab'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:105 | contador_validada_projetada_sem_linha | validada_em | PerguntaDisputa | vi | `'validada_em'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:128 | admin_decidiu_sem_ato | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:128 | admin_decidiu_sem_ato | via_resolucao | PerguntaDisputa | vi | `via_resolucao=PerguntaDisputa.VIA_ADMIN_DECIDIU` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:129 | admin_decidiu_sem_ato | validada_em | PerguntaDisputa | vi | `validada_em__isnull=True` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:341 | aplicar | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao != PerguntaDisputa.VIA_ADMIN_DECIDIU` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:352 | aplicar | materializada_em | PerguntaDisputa | ii | `ato_em=p.materializada_em` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:353 | aplicar | resposta_colab | PerguntaDisputa | ii | `ato_texto=p.resposta_colab or ''` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:357 | aplicar | via_resolucao | PerguntaDisputa | iv | `via_antes = {p.pk: p.via_resolucao` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:425 | _diff_do_grupo | via_resolucao | PerguntaDisputa | vi | `values_list('pk', 'via_resolucao')` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:531 | handle | respondida_em | PerguntaDisputa | vi | `.only(... 'respondida_em'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:531 | handle | resposta_colab | PerguntaDisputa | vi | `.only(... 'resposta_colab'` |
-| chamados/management/commands/backfill_decisoes_pergunta.py:531 | handle | via_resolucao | PerguntaDisputa | vi | `'via_resolucao'` |
-| chamados/management/commands/encerrar_perguntas_com_fato.py:33 | handle | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=False` |
-| chamados/management/commands/encerrar_perguntas_com_fato.py:34 | handle | via_resolucao | PerguntaDisputa | vi | `.exclude(via_resolucao=...)` |
-| chamados/management/commands/encerrar_perguntas_com_fato.py:43 | handle | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao in SEM_HISTORIA` |
-| chamados/management/commands/encerrar_perguntas_com_fato.py:50 | handle | via_resolucao | PerguntaDisputa | v | `Counter(p.via_resolucao` |
-| chamados/management/commands/encerrar_perguntas_com_fato.py:67 | handle | via_resolucao | PerguntaDisputa | iv | `antes = p.via_resolucao or ''` |
-| chamados/management/commands/encerrar_perguntas_com_fato.py:77 | handle | via_resolucao | PerguntaDisputa | iv | `depois={'via_resolucao': p.via_resolucao}` |
-| chamados/management/commands/relavrar_via_i6.py:58 | planejar | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao not in VIAS_DERIVADAS` |
-| chamados/management/commands/relavrar_via_i6.py:59 | planejar | via_resolucao | PerguntaDisputa | ii | `_fora(p.via_resolucao` |
-| chamados/management/commands/relavrar_via_i6.py:62 | planejar | via_resolucao | PerguntaDisputa | ii | `_fora(p.via_resolucao, 'excluido por ordem')` |
-| chamados/management/commands/relavrar_via_i6.py:66 | planejar | via_resolucao | PerguntaDisputa | ii | `_fora(p.via_resolucao, 'sem destino: nao julgavel')` |
-| chamados/management/commands/relavrar_via_i6.py:68 | planejar | via_resolucao | PerguntaDisputa | ii | `nova != p.via_resolucao` |
-| chamados/management/commands/relavrar_via_i6.py:88 | handle | via_resolucao | PerguntaDisputa | v | `pares[(p.via_resolucao, nova)]` |
-| chamados/migrations/0053_pergunta_unica_por_familia.py:32 | _no_fato | via_resolucao | PerguntaDisputa histórico | vi | `Q(via_resolucao__in=VIAS_FORA_DO_FATO)` |
-| ponto/management/commands/reconciliar_fantasmas.py:213 | handle | materializada_em | PerguntaDisputa | vi | `materializada_em__isnull=True` |
-| ponto/services/flip_auto.py:129 | fila_flip_recusas | via_resolucao | PerguntaDisputa | vi | `via_resolucao=PerguntaDisputa.VIA_PARIDADE_RECUSADA` |
-| ponto/services/flip_auto.py:130 | fila_flip_recusas | validada_em | PerguntaDisputa | vi | `validada_em__gte=corte` |
-
-Também confirmei estas quatro ocorrências da **classe i**, cujo julgamento de validação pede atenção à `LeituraDoAto`. ([models.py:17](app/chamados/models.py:17), [declaracao_texto.py:217](app/chamados/services/declaracao_texto.py:217), [materializacao.py:194](app/chamados/services/materializacao.py:194), [materializacao.py:2117](app/chamados/services/materializacao.py:2117))
-
-| Arquivo:linha | Função | Campo | Receptor | Classe | Trecho literal |
-|---|---|---|---|---|---|
-| chamados/services/declaracao_texto.py:228 | _resposta_validada | validada_em | PerguntaDisputa | i | `perg.validada_em is not None` |
-| chamados/services/materializacao.py:199 | par_do_intervalo | validada_em | PerguntaDisputa | i | `irma_validada and q.validada_em is None` |
-| chamados/services/materializacao.py:201 | par_do_intervalo | validada_em | PerguntaDisputa | i | `q.validada_em is None` |
-| chamados/services/materializacao.py:2123 | materializar_perguntas_validadas_da_disputa | validada_em | PerguntaDisputa | i | `p.validada_em is None` |
-
-Para essas quatro ocorrências, os chamadores de produção identificados a um nível são:
-
-- `_resposta_validada`: `declaracao_texto.py:286`, `:379` e `:669`. Nas duas portas de declaração, o resultado participa de uma guarda que pode impedir o avanço até a escrita. ([declaracao_texto.py:286](app/chamados/services/declaracao_texto.py:286), [declaracao_texto.py:379](app/chamados/services/declaracao_texto.py:379), [declaracao_texto.py:669](app/chamados/services/declaracao_texto.py:669))
-- `par_do_intervalo`: `validacao.py:632`, `materializacao.py:923` e `materializacao.py:1732`. Nos caminhos de validação do par e de gravação da irmã, o resultado pode impedir a carimbagem ou a materialização; o efeito da chamada em `:923` sobre o momento de uma escrita é **[não verificado]**. ([validacao.py:632](app/chamados/services/validacao.py:632), [materializacao.py:923](app/chamados/services/materializacao.py:923), [materializacao.py:1732](app/chamados/services/materializacao.py:1732))
-- `materializar_perguntas_validadas_da_disputa`: `fio.py:718`, `acoes_disputa.py:143`, `validacao.py:786` e `backfill_fio_morto_e4b.py:147`. O teste da linha 2123 pode impedir a chamada seguinte a `_materializar_uma`. ([fio.py:718](app/chamados/services/fio.py:718), [acoes_disputa.py:143](app/chamados/services/acoes_disputa.py:143), [validacao.py:786](app/chamados/services/validacao.py:786), [backfill_fio_morto_e4b.py:147](app/chamados/management/commands/backfill_fio_morto_e4b.py:147), [materializacao.py:2123](app/chamados/services/materializacao.py:2123))
-
-**Contagem apenas das linhas apresentadas:** 39 receptores `PerguntaDisputa`, dos quais um é o modelo histórico; classe i = 4, ii = 9, iii = 0, iv = 3, v = 2 e vi = 21. Soma = 39. Isso **não é o contador do universo do lote**, que permanece **[não verificado]**.
-
-Há pelo menos uma ocorrência adicional que não deve ser contada como leitura direta de `PerguntaDisputa`: em `tarefa_do_dia.py:163`, o receptor é `leitura.validada_em`, já proveniente do ato. A classificação e a contagem de todas as demais ocorrências ainda precisam ser consolidadas. ([tarefa_do_dia.py:159](app/chamados/services/tarefa_do_dia.py:159))
-
-perguntas de lei: **[não verificado]** — a revisão incompleta do lote e das leis não permite determinar N nem apresentar opções exaustivas.
-
-_7252 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7253 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
