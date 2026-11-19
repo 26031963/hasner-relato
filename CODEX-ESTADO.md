@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:29** · publicado em **19/11/2026 15:30** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:31** · publicado em **19/11/2026 15:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:31 · sessao 4302f071431b · E4C-F5 · leitura · origem=Code
+
+A consulta por pergunta vem de `list(p.decisoes.all())` quando a instância ORM chega sem `decisoes` pré-carregado. O cálculo do passivo E4b dentro de `DecisaoPergunta.leitura` recebe `ja` e usa as linhas que essa leitura já trouxe. O anexo permite confrontar os totais dos sete testes com esses caminhos. A atribuição de cada SQL capturado a um ponto de chamada fica **[nao verificado]**. [chamados/models.py:4254](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/models.py:4254) [chamados/models.py:4308](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/models.py:4308)
+
+Os caminhos abaixo são relativos a `app/`. Os dois `isinstance` estão nas linhas indicadas na cópia. A confirmação do hash por metadados Git ficou [nao verificado]. `chamados/juizes.py:1389,1559`.
+
+## 1. Chamadores
+
+### Produção — `projecao_temporal_da_pergunta`
+
+| Chamador | Objeto e laço | Origem de `decisoes` |
+|---|---|---|
+| `_slot_esperado` | `p` recebido. Uma chamada por execução com `agora`, inclusive quando `agora` vem da carga. A montagem dos slots chama o auxiliar em laço. O caminho de materialização de fato também pode chamá-lo. `chamados/juizes.py:345–355,756`, `chamados/services/carga_pergunta_viva.py:117–119`. | Depende da origem do ORM. A carga da tarefa passa instâncias sem prefetch. Fio e consulta do app têm prefetch nos seus universos. `chamados/services/tarefa_do_dia.py:530–536,625`, `chamados/services/fio.py:262–269`, `chamados/services/pergunta_no_app.py:52–65`. |
+| `_pergunta_viva_calc` | `p` recebido, normalmente ORM em produção. Uma chamada por cálculo do C6, inclusive quando o C6 é usado em laço. O memo avulso de `pergunta_viva` pode evitar o cálculo. `chamados/juizes.py:886–898,1411,1526`. | Misto. Fio, app e cobrança têm prefetch. A tarefa, `alimentar_portas` e a releitura de `desfazer_carimbo_sem_lastro` chegam sem ele. `chamados/services/fio.py:262–275`, `chamados/services/pergunta_no_app.py:52–65`, `chamados/services/cobranca.py:236–242`, `chamados/services/tarefa_do_dia.py:530–536,627–632`, `chamados/juizes.py:1668–1673`, `chamados/services/relavra_via.py:236–242`. |
+| `beco_em_lote`, verificação M1 | ORM de `alim['vivas']`, em laço de dias e `all` sobre as perguntas de cada dia. Só chama a projeção para `a is None`. `escala/services/cadastro_realidade.py:459–474,497–502`. | Sem prefetch no queryset de `alimentar_portas`. `chamados/juizes.py:1668–1673`. |
+
+### Produção — `pergunta_respondida`
+
+| Chamador | Objeto e laço | Origem de `decisoes` |
+|---|---|---|
+| `_pergunta_viva_calc` | `SimpleNamespace` com instante e texto já projetados. Uma chamada por execução que chega ao degrau da resposta. `chamados/juizes.py:1411–1430`. | Não se aplica ao objeto passado. |
+| `DisputaSupervisao.sem_veredito_entre` | `LeituraDoAto`, em compreensão sobre várias perguntas. `chamados/models.py:1999–2007`. | `prefetch_related_objects(..., 'decisoes')` sobre as instâncias ORM com PK antes de montar as leituras. `chamados/models.py:1998–2004`. |
+| `PerguntaDisputa.estado` e `PerguntaDisputa.respondida` | `LeituraDoAto`, uma pergunta por acesso. `estado` tem dois locais de chamada em ramos distintos. `chamados/models.py:3233–3244,3785–3791`. | Herdado de `self`. A leitura é feita antes de passar o objeto ao juiz. `chamados/models.py:3235,3791,4308`. |
+| `raiox.creditos_perguntas` | `SimpleNamespace` montado de duas posições de um `values_list`, em laço. `chamados/services/raiox.py:135–147`. | Não se aplica ao objeto passado. |
+| Web `responder_pergunta_disputa` e API `api_disputa_responder` | ORM avulso em cada porta. `chamados/views.py:1274–1275`, `api/views.py:2639–2640`. | Sem prefetch nas buscas da pergunta. `chamados/views.py:1239`, `api/views.py:2631–2634`. |
+| API `api_disputa_perguntas` | ORM em compreensão sobre o histórico de `consulta_do_app`. `api/views.py:2553,2584–2596`. | Sim, via `perguntas_do_app`. `chamados/services/pergunta_no_app.py:52–77`. |
+| `ficha_do_colab` | ORM em compreensão sobre as perguntas. `colaboradores/services/ficha.py:166–172`. | Sim, via `perguntas_do_app`. `chamados/services/pergunta_no_app.py:52–65`. |
+| `particao_do_app` | ORM em `for p in vivas`. `chamados/services/pergunta_no_app.py:80–90`. | Sim via `consulta_do_app`. Sem prefetch via `_ler_vida` da tarefa, que passa suas próprias instâncias. `chamados/services/pergunta_no_app.py:52–77`, `chamados/services/tarefa_do_dia.py:530–536,620–621`. |
+| `processar_post_fio`, `acao_regularizar_disputa` e `validar_inline` | ORM em `any` ou compreensão sobre `_vivas_de(d)`. `validar_inline` tem duas compreensões. `chamados/services/fio.py:710–712`, `chamados/services/acoes_disputa.py:132–134`, `chamados/views_cobrar.py:169–178`. | Sem prefetch de decisões em `disputa.perguntas.order_by('pk')`. `chamados/juizes.py:1512–1514`. |
+| `becos.classificar` | ORM em compreensão sobre `d.perguntas.all()`. `chamados/services/becos.py:25–34`. | A entrada por evento carrega `perguntas`, apenas. `chamados/services/becos.py:79–87`. |
+| `canonica_do_grupo` e `merito_perdedor` | ORM em compreensão sobre o grupo ou as perdedoras. `chamados/services/fio.py:1278–1300`. | Herdado da coleção recebida. As cargas do fato, da retratação e do comando de dedup citadas aqui chegam sem prefetch de decisões. `chamados/services/fio.py:1952–1963,1999–2001,2073–2088,2319–2326`, `chamados/management/commands/dedup_perguntas_fato.py:74–82`. |
+| `declarar_hora_colab` e `aplicar_declaracao` | ORM avulso. A porta reutiliza a candidata do fato ou recebe `perg` de `PerguntaDisputa.abrir`. `chamados/services/declaracao_texto.py:364–378,418,663–668,688`. | Sem prefetch nessas origens. `chamados/services/declaracao_texto.py:250–255`, `chamados/services/fio.py:1952–1963`, `chamados/models.py:3223`. |
+| `reabrir_credor_de_pergunta_viva` | ORM avulso dentro da função. O resolver S143 chama a função em laço de ancoradas. `chamados/services/disputa_emissao.py:1853,1983–1990`. | Sem prefetch de decisões em `_ancoradas()`. O lote de backfill também carrega suas perguntas sem ele. `chamados/models.py:355–359`, `chamados/management/commands/backfill_fio_morto_e4b.py:86–90,133–135,175`. |
+| `_resolver_perguntas_por_chamado_resolvido` | ORM em laço do S128. `chamados/services/disputa_emissao.py:1998–2023`. | Sem prefetch de decisões na carga de pendentes. `chamados/services/disputa_emissao.py:1949–1953`. |
+| `validar_pergunta` e `recusar_pergunta` | ORM avulso em cada porta. `chamados/services/validacao.py:682,902`. | Sem prefetch nas releituras. `chamados/services/validacao.py:677,894–895`. |
+| `par_do_intervalo` | ORM recebido, uma pergunta por chamada. Pode vir da tela, da validação ou do laço de materialização. `chamados/services/materializacao.py:175–192,923,1732,2104–2125`, `chamados/services/validacao.py:632`. | Misto. A tela pode usar a instância pré-carregada pelo fio. A validação e o laço de materialização usam instâncias sem prefetch. `chamados/services/fio.py:262–269,379–381`, `chamados/services/validacao.py:677`, `chamados/services/materializacao.py:2104–2125`. |
+| `paridade_absolvida_bug_par_103` | ORM recebido, uma por chamada. Usado no laço do contador e na porta avulsa. `chamados/services/materializacao.py:250–262,328–330`, `chamados/services/validacao.py:333–334`. | Sem prefetch nessas cargas. `chamados/services/materializacao.py:324–325`, `chamados/services/validacao.py:333–334`. |
+| `_situacao_da_irma` | ORM recém-buscado para a irmã, uma por chamada dentro do laço do contador. `chamados/services/materializacao.py:281–291,328–342`. | Sem prefetch na busca da irmã. `chamados/services/materializacao.py:284–285`. |
+| `estado_aplicacao_pergunta` | ORM recebido. Uma por chamada, inclusive no laço do fio e no do contador. `chamados/services/materializacao.py:865–885,328–342`, `chamados/services/fio.py:360,379–381`. | Misto. Sim nas instâncias do fio. Sem prefetch nas do contador. `chamados/services/fio.py:262–269`, `chamados/services/materializacao.py:324–325`. |
+| `_recusa_sem_anuencia` | ORM recebido, uma pergunta por chamada. As portas de materialização a chamam dentro do processamento por pergunta. `chamados/services/materializacao.py:1282–1300,1355,1590,1674,2104–2125`. | O laço da disputa relê a pergunta sem prefetch de decisões. `chamados/services/materializacao.py:2104–2125`. |
+| `lavrar_sem_turno_aberto` e `veredito_orfa` | ORM recebido, uma por chamada. Há laços externos de reconciliação e de órfãs. `chamados/reconciliador.py:366,1130,1182–1183,1238–1240,1350–1351,1568–1574,1667`. | As cargas desses lotes chegam sem prefetch. `chamados/reconciliador.py:1094–1101,1547–1554`. |
+| `vigia_fio.censo_alcance` | ORM em `any` dentro do laço por dia, sobre `alim['vivas']`. `chamados/services/vigia_fio.py:560–566,595–597,636`. | Sem prefetch em `alimentar_portas`. `chamados/juizes.py:1668–1673`. |
+| Comando `dedup_perguntas_fato` | ORM em compreensão por grupo. `chamados/management/commands/dedup_perguntas_fato.py:74–77`. | Sem prefetch na carga do grupo. `chamados/management/commands/dedup_perguntas_fato.py:74–75`. |
+| Comando `auditar_invariantes_chamados`, I21a, I2 e F1 | ORM em duas compreensões e no `any` sobre as perguntas do chamado, respectivamente. `chamados/management/commands/auditar_invariantes_chamados.py:178,597,1671`. | Sem prefetch de decisões nos três. F1 pré-carrega `perguntas_que_resolvem`. `chamados/management/commands/auditar_invariantes_chamados.py:590–597,1585–1598,1642–1645,1666–1671`. |
+| `folha.previa._material` | ORM em `any`, chamado no laço por dia e lâmpada. `folha/previa.py:77–95,139–145`. | Sem prefetch na carga que agrupa as perguntas por dia. `folha/previa.py:63–67`. |
+| Cartório, `_tem_resposta_do_colab` | ORM em `any`, no laço de chamados do dia e no dedup. `ponto/services/cartorio.py:1684–1697,1709–1714`. | A carga pré-carrega `perguntas_que_resolvem`, sem o nível de decisões. `ponto/services/cartorio.py:146–147`. |
+
+### Testes — pontos próprios de chamada e entradas recompiladas [nao verificado]
+
+| Chamador | Juiz, objeto, laço e prefetch |
+|---|---|
+| `test_e4c_f5_volta2_juizes` RED 1–6 | Projeção com ORM em `:41,49,56,64,72,74,82–85,88` e respondida com ORM em `:65,75,97,99,101,104`. São perguntas avulsas sem prefetch, criadas pela fixture ou atualizadas e recarregadas. O `for` de `:66–72` varia `agora` na mesma pergunta. `chamados/tests/test_e4c_f5_volta2_juizes.py:32–104`, `chamados/tests/cortes_f2_f9_apoio.py:58–64`. |
+| `test_e4c_f5_volta2_juizes` RED 7 | Ambos recebem `SimpleNamespace` em laço de casos. Sem queryset. O teste troca `D.leitura` por um mock que levanta se for chamado. `chamados/tests/test_e4c_f5_volta2_juizes.py:106–116`. |
+| `test_e4c_f5_volta2_juizes` RED 8 | `medir_calc` passa ORM com `.prefetch_related('decisoes')` ao C6 em laço e verifica que `pergunta_respondida` recebe `SimpleNamespace`. `medir_fio` observa as instâncias ORM do fio e exige o cache em todas as chamadas observadas a `leitura`. Os dois erros do anexo correspondem à fixture inicial que tenta gravar texto sem instante antes de inserir o ato. `chamados/tests/test_e4c_f5_volta2_juizes.py:127–149,151–180`, `chamados/models.py:3680,3712`, `chamados/services/fio.py:1718–1721`. |
+| `test_f1nova_b1_juiz_respondida` | Respondida recebe `SimpleNamespace` em laço de pares em `:41`, ORM de `.all()` sem prefetch em compreensão em `:79`, e ORM avulso recarregado sem prefetch em `:279`. `chamados/tests/test_f1nova_b1_juiz_respondida.py:28–41,74–81,270–279`. |
+| `test_f1nova_b2_leitores` | Respondida recebe ORM de fixtures em laço em `:84` e ORM de `.all()` sem prefetch em compreensão em `:145`. O teste de delegação em `:93–97` observa `LeituraDoAto` entregue pela property ao mock. `chamados/tests/test_f1nova_b2_leitores.py:75–97,136–145`. |
+| `test_e4c_f2_leitura_do_ato` | Respondida recebe `D.leitura(q)`, um `LeituraDoAto` avulso. `q` vem de `.get()` sem prefetch. `chamados/tests/test_e4c_f2_leitura_do_ato.py:416–425`. |
+| `test_e3_c8c_sem_banco`, foto temporal | Alias `projecao`, obtido do ambiente AST. Recebe a mesma pergunta `N` em três horizontes, sem queryset. `chamados/tests/test_e3_c8c_sem_banco.py:124–140`, `chamados/tests/e3_c8b_apoio.py:194–198`. |
+| `test_e4b_classe_e_memoria` | O callback de irmãs chama `self.pergunta_respondida(self.p)` uma vez por execução. O alias `projetar` recebe o mesmo `Objeto` em chamadas avulsas e num laço de vias. A relação é `Linhas` em memória. `chamados/tests/test_e4b_classe_e_memoria.py:282–287,311–328,377–392`. |
+| Bug Par, Degrau Dono e Porta, C8c posição | `juiz_respondida()` instala o corpo real sob o nome importado pela produção. Bug Par passa `NS` avulso pela guarda de anuência. Degrau e C8c passam `N` pelo laço de `particao_do_app`. Sem prefetch ORM. `chamados/tests/e4_apoio.py:19–23`, `chamados/tests/test_bug_par_sem_banco.py:164–195`, `chamados/services/materializacao.py:1299–1300,1355`, `chamados/tests/test_e3_degrau_dono_e_porta.py:290–346`, `chamados/tests/test_e3_c8c_sem_banco.py:41–64`, `chamados/services/pergunta_no_app.py:83–86`. |
+| C11 sem banco, C8b, pós-suite e tarefa admin | Os harnesses instalam os corpos reais para os pontos de produção da tabela. C11 passa `N` no laço M1. C8b, pós-suite e tarefa admin passam `N` pelos caminhos de slot, C6 ou partição. Sem prefetch ORM. `chamados/tests/test_e3_r3_c5_sem_banco.py:153–194`, `chamados/tests/test_e3_r3_c6_sem_banco.py:278–313`, `chamados/tests/e3_c8b_apoio.py:83–120,150–198`, `chamados/tests/test_e3_pos_suite_sem_banco.py:53–109`, `chamados/tests/test_e3_tarefa_admin_sem_banco.py:159–206`. |
+| Outros harnesses que instalam a projeção | `app_com_relogios` passa `N` pelo filtro de vivas, com uma classe falsa `Perguntas` e um `Query` de memória. Os cenários `e3_volta7_apoio` e Degrau instalam a projeção para M1. No caso sintético de Degrau, a porta do app exclui o dia antes do laço M1. `chamados/tests/e3_v8_apoio.py:168–199`, `chamados/tests/e3_volta7_apoio.py:51–74`, `chamados/tests/test_e3_degrau_dono_e_porta.py:492–520`, `escala/services/cadastro_realidade.py:469–474,502`. |
+
+## 2. Consultas por pergunta
+
+Contagem por chamada, com os campos usados já carregados e após a avaliação do queryset de origem. `leitura` usa `p.decisoes.all()`, e o passivo lê também campos escalares de `p`. `chamados/models.py:4251–4269,4292,4304–4313`.
+
+| Chamada | Consultas |
+|---|---|
+| `DecisaoPergunta.leitura(p)` com `decisoes` pré-carregado | **0 por pergunta**. Usa o cache da relação. A consulta do prefetch é da carga do lote. `chamados/models.py:4304–4313`, `chamados/services/fio.py:262–269`. |
+| `DecisaoPergunta.leitura(p)` com PK e sem prefetch | **1 por chamada**, para materializar `p.decisoes.all()`, mesmo se a sequência estiver vazia. Uma nova chamada sem cache de prefetch volta à relação. `chamados/models.py:4308–4313`. |
+| `DecisaoPergunta.leitura(p)` sem PK | **0**. Começa com `reais=[]` e calcula o passivo em memória. `chamados/models.py:4308–4313`. |
+| `linhas_da_projecao_sem_linha([p], ja)` com `ja` em memória, inclusive vazio | **0**, com ou sem prefetch. Só constrói e compara chaves de ato e instante. É a forma usada por `leitura`. `chamados/models.py:4251–4270,4309–4313`. |
+| `linhas_da_projecao_sem_linha(perguntas)` com `ja=None` | **0** se nenhuma pergunta tem carimbo projetado de resposta ou validação. Havendo alguma, **1 consulta para o lote inteiro**, inclusive se for uma única pergunta. Esse ramo monta `cls.objects.filter(...).values_list(...)` diretamente. `chamados/models.py:4251–4257`. |
+
+## 3. Os sete testes de orçamento [nao verificado]
+
+Nos quatro selos da batida, o percurso comum é `registrar_batida` → `post_save` → `cartorio.julgar_celula` → `julgar_colab` → `_julgar_colab_corpo` → `fio_vivo` → C6 → projeção temporal. O cartório carrega `perguntas_que_resolvem` sem `decisoes`. Se o chamado chega à guarda de resposta do cartório, `_tem_resposta_do_colab` também passa essas instâncias ao juiz de respondida. A fonte de SQL nesses juízes é a relação sem cache. `ponto/registro_batida.py:176`, `ponto/signals.py:85–93,131–135`, `ponto/services/cartorio.py:146–147,1016,1418,1684–1714,2088`, `chamados/juizes.py:898,1391,1411,1526,1561`, `chamados/models.py:4308–4313`.
+
+| Teste | Total do anexo e caminho de produção | [nao verificado]
+|---|---|
+| `test_registrar_batida_com_1_furo_vivo_que_ela_fecha` | **237 / teto 230 (+7)**. A entrada das 07h fecha o último marco, após a saída das 19h preparada fora da captura. Além do percurso comum, o fechamento passa por `transicionar_com_pauta` → `reconciliar`. Havendo fio vivo no lote adiado, roda E2 antes do fecho. Ao gravar a transição, S143 pode voltar aos dois juízes sobre ancoradas ou pendentes sem decisões pré-carregadas. `ponto/tests/test_selo_chokepoint_escrita.py:406–438`, `ponto/services/cartorio.py:1019–1049,1569–1581`, `chamados/services/fecho_runtime.py:165`, `chamados/models.py:302,355–359`, `chamados/signals.py:97–117`, `chamados/services/disputa_emissao.py:1853,1919,1949–1953,1983–2023`. |
+| `test_registrar_batida_com_3_furos_vivos_que_ela_fecha` | **301 / teto 294 (+7)**. Mesmo helper com três chamados e assert de três fechos. Os laços do fecho e do resolver também recebem perguntas sem prefetch de decisões. `ponto/tests/test_selo_chokepoint_escrita.py:416–433,440–443`, `ponto/services/cartorio.py:1026–1049,1569–1581`, `chamados/services/disputa_emissao.py:1949–1953,1983–2023`, `chamados/models.py:355–359,4308`. |
+| `test_registrar_batida_com_1_furo_vivo_que_fica` | **147 / teto 145 (+2)**. A entrada das 07h deixa apagado o marco de saída que o chamado cobra. O percurso comum julga o fio nas perguntas do chamado. A guarda de respondida é alcançável se houver perguntas e o fio estiver morto. As duas leituras usam ORM sem prefetch de decisões nesse percurso. `ponto/tests/test_selo_chokepoint_escrita.py:445–473`, `ponto/services/cartorio.py:146–147,1418,1684–1697`, `chamados/models.py:4308`. |
+| `test_registrar_batida_com_3_furos_vivos_que_ficam` | **222 / teto 219 (+3)**. Mesmo helper com três chamados e assert de pelo menos um vivo. O laço de vivos usa o mesmo percurso, e o dedup pode chamar de novo a guarda de respondida para irmãos. `ponto/tests/test_selo_chokepoint_escrita.py:445–468,475–478`, `ponto/services/cartorio.py:146–147,1418,1684–1714`, `chamados/models.py:4308`. |
+| `test_lote_tem_queries_constantes` | **36 vs. 30 (+6)**, três perguntas contra uma. `carga.tarefa` chama `_ler_vida` sobre o ORM sem prefetch. O cenário insere resposta e validação na sequência e deixa o texto projetado vazio. A partição lê a relação e encaminha a pergunta da disputa aberta como pendente. A carga de vida lê de novo na preparação de `_slot_esperado`, e o C6 lê mais uma vez antes de sair pela validação vigente. **Três leituras de `decisoes` por pergunta adicional** explicam o diferencial pela leitura do código. O passivo separado de `_fatos_das_perguntas` trabalha por lote e só consulta com carimbo projetado. `chamados/tests/test_e2_tarefa_do_dia.py:111–122,913–938`, `chamados/models.py:4251–4257,4337–4347`, `chamados/services/tarefa_do_dia.py:425–432,530–542,620–632,665`, `chamados/services/pergunta_no_app.py:83–90`, `chamados/services/carga_pergunta_viva.py:117–119`, `chamados/juizes.py:345–351,1411–1413,1559–1564`. |
+| `test_custo_por_candidata_e_CONSTANTE` | **9 / teto 8 (+1)**. A captura chama `desfazer_carimbo_sem_lastro` diretamente, com PKs. A porta relê cada candidata sem prefetch e chama C6, que para na validação vigente. A fixture grava `validada_em` na projeção. O SELECT adicional identificado é `decisoes.all()`. A validação do passivo entra em memória pelo `ja` da leitura. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:75–82,187–205`, `chamados/services/relavra_via.py:215–243`, `chamados/juizes.py:893–898,1389–1392,1411–1413`, `chamados/models.py:4254–4269,4308–4313`. |
+| `test_MORDE_F5_queries_nao_crescem_com_os_dias` | **61 vs. 49 (+12)**, cinco dias contra um. `_folga_nao_definida_sem_porta` → `beco_em_lote` passa (1) por `alimentar_portas` → C6, (2) pela
+
+[truncado em 20000 de 27425 caracteres]
 
 ## 19/11 15:29 · sessao 1911406c1480 · - · - · origem=Ronald (tmux)
 
@@ -534,18 +625,4 @@ Nos dois exemplos, a sobra produzida dentro do processamento do turno é guardad
 
 ok
 
-## 19/11 14:48 · sessao 989197c67577 · - · - · origem=Ronald (tmux)
-
-Para Q3, **“5 batidas é o mínimo” só vale para excesso de slots internos, mantendo as duas pontas e evitando colisões de instantes**. Há casos menores. (app/escala/utils.py:1664; app/escala/utils.py:1735; app/escala/utils.py:1753)
-
-- **Excesso interno, caso claro:** `E22(d), S01(flag,d+1), E02(flag,d+1), S03(flag,d+1), S06(d+1)`. Os três flags fabricam três marcos internos; os dois primeiros ocupam `I`, `03:00` excede os dois slots e vira órfã do dia `d`, com instante em `d+1`. Pontas reais impedem a reconciliação posterior. (app/escala/utils.py:1720; app/escala/utils.py:1752; app/escala/utils.py:1758; app/escala/utils.py:1784; app/escala/utils.py:2039)
-
-- **Menor, preservando pontas, mas fora do intervalo estrito do turno:** `E22(d), S06:00(d+1), S06:30(flag,d+1)`. O dedupe mantém a última S porque são 30 minutos de diferença; `06:30` não fabrica marco porque está fora de `[22,06]`, mas entra no envelope até `07:30`; o matcher a declara órfã e consumida. A conservação final pula batidas consumidas, mesmo com slots `I` livres. Portanto ela fica órfã em `d`. (app/escala/utils.py:1355; app/escala/utils.py:1666; app/escala/utils.py:641; app/escala/utils.py:678; app/escala/utils.py:680; app/escala/utils.py:1845; app/escala/utils.py:1784)
-
-- **Colisão interna, mantendo pontas:** `E22, S01(flag), E01(sem flag), S06`, com as duas batidas de `01:00` no mesmo instante e nessa ordem na entrada. Tipos diferentes sobrevivem ao dedupe; existe só um marco sintético `01:00`. No empate, o DP atribui o marco à segunda batida e deixa o flag órfão. São quatro batidas. (app/escala/utils.py:1344; app/escala/utils.py:1355; app/escala/utils.py:229; app/escala/utils.py:237; app/escala/utils.py:1664; app/escala/utils.py:1721; app/escala/utils.py:678)
-
-- **Sem exigir pontas reais**, apenas `S01(flag), E01(sem flag)` no mesmo instante e nessa ordem já deixa o flag órfão no matcher; o cluster remove sua atribuição distante à ponta, e `consumed` impede resgate posterior. Não recomendo chamar esse caso de mínimo universal sem delimitar as premissas. (app/escala/utils.py:646; app/escala/utils.py:659; app/escala/utils.py:663; app/escala/utils.py:665; app/escala/utils.py:680; app/escala/utils.py:1845)
-
-Simulei `_alinhar` e `_match_marcos` extraídos por AST em memória, com stubs de construção das células e da guarda usando os valores atuais `90`/`15`; confirmei os resultados locais acima. Execução integral do builder/Django: **[não verificado]**. (app/escala/regua_defesa.py:395; app/escala/orfa_classe.py:3)
-
-_7397 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7398 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
