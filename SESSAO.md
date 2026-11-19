@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 18:04:49.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (9.3 MB). Acoes na janela: **275**.
+**Medido em 19/11/2026 18:09:59.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (9.4 MB). Acoes na janela: **279**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:05:18 | Bash | Write desenho question and PAREI at RELATO top | `cd /home/ronald/saas-hasner; H=$(date +%H:%M \| cut -c1-4)x; python3 - "$H" <<'EOF' import sys H=sys.argv[1] p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO: suite.sh \| pid=3502520') L[0]='! PAREI: tres-obras-do-dia-esperam-o-ronald \| espera Ronald -- CADEIA-20-PASSO-1 parada por B3 (pergunta de desenho abaixo); E4C-F5-CONSTROI espera o AVAL-DEVOLVIDO 1735;  ...` |
+| 18:05:09 | Bash | Write desenho question and PAREI at RELATO top | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO: suite.sh \| pid=3502520') L[0]='! PAREI: tres-obras-do-dia-esperam-o-ronald \| espera Ronald -- CADEIA-20-PASSO-1 parada por B3 (pergunta de desenho abaixo); E4C-F5-CONSTROI espera o AVAL-DEVOLVIDO 1735; FERIADO-POR-POSTO espera A5 + sombra_c2b=0. Nenhu ...` |
+| 18:04:55 | Bash | Read the live order item | `cd /home/ronald/saas-hasner; grep -n "ORDEM-VIVA-1511-NOITE" app/docs/BACKLOG.md \| head -3 \| cut -c1-1200` |
+| 18:04:51 | Bash | List open BACKLOG items | `cd /home/ronald/saas-hasner; grep -n "^\| " app/docs/BACKLOG.md \| grep -iv "FECHADA\\|POUSAD\\|NO AR\\|CANCELAD" \| head -15 \| cut -c1-230` |
 | 18:04:47 | Bash | Check B3 disjuntor and LEI-AKITA lines in commits | `cd /home/ronald/saas-hasner; tail -5 logs/sessao/disjuntor.log \| cut -c1-200; W=/home/ronald/wt-codex-cadeia-20-passo-1-112113; git -C $W log --format='%h %s' eb1e49c1e..HEAD \| wc -l; for c in $(git -C $W rev-list eb1e49c1e..HEAD); do git -C $W log -1 --format=%B $c \| grep -q '^LEI-AKITA:' && echo "$c sim" \|\| echo "$c nao"; done \| sort -k2 \| uniq -c -f1` |
 | 18:04:36 | Bash | Inspect disjuntor state for CADEIA | `cd /home/ronald/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| head -20; grep -o '"CADEIA[^"]*"[^}]*' logs/sessao/disjuntor_estado.json 2>/dev/null \| head -5 \| cut -c1-300` |
 | 18:04:30 | Bash | Verify opus findings 1-3 | `cd /home/ronald/saas-hasner; sed -n 4p logs/AVAIS-1515/cadeia_20_passo_1_constroi_1911_1010.txt \| cut -c1-1500; echo; echo ==; sed -n 14p logs/CADEIA-20-PASSO-1/brief.md \| cut -c1-600; echo ==; W=/home/ronald/wt-codex-cadeia-20-passo-1-112113; git -C $W grep -n "razoes_orfas\\|medir_razoes_sobras" -- app ':!app/*/tests/*' \| cut -c1-140; git -C $W grep -c "razao_da_sobra" -- app/core/juizes.py;  ...` |
