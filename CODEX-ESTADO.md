@@ -1,7 +1,56 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:43** · publicado em **19/11/2026 15:47** (UTC-3)
+> Ultima resposta processada: **19/11/2026 16:02** · publicado em **19/11/2026 16:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 16:02 · sessao fda626687629 · CADEIA-20-PASSO-1 · leitura · origem=Code
+
+# CADEIA-20-PASSO-1
+
+**A primeira hipótese que eu testaria é o rejulgamento interno com uma janela menor.** O Cartório remonta a grade para as células enfileiradas em `rejulgar`. Uma régua diferente consegue produzir exatamente `[] / 0 / 0` → `N lâmpadas apagadas / N / N`, com as demais chaves iguais. A pré-passagem também lê atas anteriores, mas as 19 atas vazias, por si sós, não fornecem papéis ao pareador. Qual caminho ocorreu na execução [nao verificado]. `app/ponto/services/cartorio.py:1045`, `:1160`, `:1202`, `:657`, `:735`, `app/ponto/turnos.py:1631`.
+
+O anexo registra 19 diferenças de ata, `ERROS=0`, relógios iguais e `DESFEITO=True`. Na cópia, `julgar_colab` não recebe `lavra`. A sonda anexada verifica a assinatura antes de passar esse argumento, então, com esta assinatura, `ultimo_lavrado()` é consultado pela sonda e seu retorno fica fora da chamada. A identidade da árvore executada com o hash informado e a configuração efetiva de `GRADE_POR_TURNO` [nao verificado]. `diag_main.txt:22`, `:23`, `:24`, `:25`, `:26`, `app/ponto/services/cartorio.py:959`, `app/ponto/services/cxr_na_lista.py:152`, `app/config/settings/base.py:165`.
+
+## 1. Caminho e escritores
+
+- **`ata_do_dia` produz as três chaves.** Recebe `dia['celulas']`, `orfas`, `minutos_realizados`, a régua da grade e `cel.dna`. `lampadas_do_dia` lê `dna['marcos']`. Se pelo menos uma hora do DNA aparece na régua, percorre **todos** os marcos do DNA e procura a coluna pela dupla `(tipo, hora)`. Fora desse ramo, só gera lâmpadas para colunas que são `dict`. Assim, sem interseção de horas e com colunas todas `None`, sai `[] / 0 / 0`. Com marcos reconhecidos e todos apagados, sai `N / N / N` para tamanho da lista, `n_celulas` e `n_missing`. `n_celulas` é sempre `len(lamp)`. Com lista não vazia, `n_missing` conta `acesa is False`. `app/ponto/services/cartorio.py:633`, `:657`, `:675`, `:699`, `:735`, `:749`, `:765`, `:781`.
+- **Dois passos pós-processam a ata.** `dispensar_por_ausencia` lê cobertura aprovada integral ou `dia['justificado']`, altera as lâmpadas existentes e reconta `n_missing`. `_ata_ate_o_teto` lê os marcos pendentes, troca `False` por `None` nos atingidos e reescreve `lampadas` e `n_missing`. Nenhum dos dois aumenta a lista. A chamada descrita deixa `teto_de_hoje` no padrão `False`. `app/ponto/services/cartorio.py:819`, `:831`, `:926`, `:959`, `:1390`.
+- **A escrita persistente passa pela porta da célula.** O ramo `nunca_bateu` produz a ata em `:1280` e entrega em `:1321`. O ramo normal produz uma ata em memória para as decisões do ato em `:1465` e produz a que entrega à porta em `:1899`. `lavrar_veredito` atribui a ata e `carimbar` a inclui no `save`. `carimbar_precedencia` copia as três chaves existentes e escreve `precedencia`. A grade também escreve `lampadas` numa **cópia em memória** para consultar os turnos, sem os dois contadores. `app/ponto/services/cartorio.py:1280`, `:1321`, `:1465`, `:1899`, `app/ponto/portas/celula.py:1053`, `:1064`, `:1090`, `:1199`, `:1212`, `app/escala/utils.py:1891`.
+
+## 2. Estado escrito e relido
+
+**O caminho de realimentação existe.** A grade carrega do banco as células da janela com margem, inclusive vizinhas. A pré-passagem entrega essas células a `turnos_do_colab`. `periodos_do_dia` lê as lâmpadas da ata e o DNA. `papel_por_minuto_da_ata` aproveita luzes atribuídas de dias que passam por suas guardas e entrega o mapa a `parear_turnos`. A grade usa o turno da pré-passagem quando há exatamente um turno fechado na data e o dia tem intervalo declarado. Isso pode mudar o alinhamento e o consumo de batidas. A consulta posterior para o realizado usa atas recém-montadas em memória dentro da janela e conserva as do banco na margem. O cache de ata do julgamento é limpo ao sair de `julgar_colab`. `app/escala/utils.py:1315`, `:1590`, `:1599`, `:1712`, `:1891`, `app/escala/alimentacao.py:73`, `app/ponto/juiz_batida.py:157`, `app/ponto/turnos.py:1631`, `:1682`, `:1944`, `:1997`, `app/ponto/services/cartorio.py:1150`.
+
+**Esse caminho não fecha a causa das 19 células.** Uma lista vazia e uma lista toda apagada igualmente não fornecem luzes ao mapa daquele dia. Para uma sequência fixa, tanto o alinhamento por papel quanto o alinhamento por custo devolvem um `dict` por marco, inclusive `{'missing': True}`. É a projeção na régua que pode deixar todos os slots em `None`. Uma ata de outro dia pode mudar os papéis das batidas, mas o anexo não traz as atas **anteriores à primeira chamada**, os papéis nem a régua de cada montagem. A ata ou o estado específico que mudou a decisão [nao verificado]. `app/ponto/turnos.py:1631`, `app/escala/utils.py:623`, `:666`, `:1715`.
+
+**Há uma segunda cadeia que explica a assinatura completa.** Um fechamento ou mudança no fio pode enfileirar uma célula em `rejulgar`. O corpo interno recebe só a lista enfileirada e deriva dela as pontas da janela. Se perder o vínculo de outra data que fornecia à régua a única hora em comum com o DNA congelado, e nenhuma coluna do dia sobreviver à projeção, a última escrita da primeira chamada pode ser `[] / 0 / 0`. Na segunda chamada, o chamado já encerrado pode ficar fora de `vivos`, o recorte interno pode deixar de ocorrer e a régua da janela inteira volta a produzir `N / N / N`. Exercitei em memória o produtor da ata com essa mudança de régua e reproduzi as três chaves para `N=2` e `N=4`. Rejulgamento, fechamento e troca de régua nesses três colaboradores [nao verificado]. `app/ponto/services/cartorio.py:1045`, `:1160`, `:1202`, `:1413`, `:1594`, `:1698`, `:1740`, `:657`, `:735`, `app/escala/utils.py:1324`, `:1364`, `:1715`.
+
+## 3. Cadastro e sonda que separa as hipóteses
+
+O anexo mostra `trabalha=True` e `origem=gerada` nas linhas alteradas. Os dias 05, 07, 09 e 11 do 769 são compatíveis com uma fase 12×36, que usa `delta % 2 == 0` quando há âncora e a regra segue pelo ramo aritmético. Com célula existente, a grade usa `cel.trabalha`. Dois ou quatro itens são compatíveis com duas pontas ou duas pontas mais uma pausa. Virada de meia-noite e ausência total de batidas são hipóteses distintas. Todas as lâmpadas apagadas demonstram ausência de batida **atribuída a esses marcos**, e a ata guarda órfãs separadamente. O ciclo, a fase, a virada e o motivo de o desvio atingir só esses três [nao verificado]. `diag_main.txt:3`, `:18`, `:21`, `app/escala/models.py:1094`, `:1289`, `:1659`, `app/escala/utils.py:330`, `app/ponto/services/cartorio.py:699`, `:754`.
+
+A sonda teria de imprimir, para os dias afetados, seus vizinhos e dias comparáveis sem diferença:
+
+- **Cada entrada no corpo e cada escrita**, com rodada externa, chamada inicial ou interna, motivo de `rejulgar`, `d0/d1/ref`, datas na fila, status dos chamados antes/depois e resultado da ata por escrita. Isso mostra se a primeira fotografia já é resultado de uma sobrescrita interna. `app/ponto/services/cartorio.py:1016`, `:1045`, `:1114`, `:1160`, `:1899`.
+- **O desenho e a projeção do dia**, com `GRADE_POR_TURNO`, geradora e vínculo efetivo, vigência, ciclo, âncora, folga lançada, `trabalha` inclusive nos dias pares do 769, `dna.marcos`, pausas, régua de cada corpo, `_casa` e slots `None`/`missing`/casados antes e depois dos overlays. Isso separa alternância de cadastro, régua incompatível e supressão pela grade. `app/escala/alimentacao.py:269`, `app/escala/utils.py:1364`, `:1610`, `:1715`, `:1854`, `:2095`, `app/ponto/services/cartorio.py:657`.
+- **Os fatos usados no pareamento**, com batidas apuráveis anonimizadas por instante e tipo, atas do dia e da margem antes da primeira escrita, papéis por minuto, `data_turno`, `aberto`, `cross_meianoite`, órfãs e cobertura/justificativa nas duas montagens. Isso separa dia sem batida, saída da véspera, mudança de papel e efeito de cobertura. `app/ponto/services/cartorio.py:1199`, `app/escala/utils.py:1198`, `:1208`, `:1590`, `:1980`, `app/ponto/turnos.py:1631`.
+
+## 4. Sítio da cura
+
+- **Se a sonda confirmar a troca de régua**, o sítio é `julgar_colab` → `_julgar_colab_corpo`. O conjunto de células a regravar pode continuar restrito, com a montagem da grade alimentada pela janela original do ato. Se a régua original também perder marcos válidos do DNA, o sítio desse segundo defeito é a construção e projeção da régua em `montar_grade_prevista_periodo_por_turno`. `app/ponto/services/cartorio.py:1045`, `:1160`, `:1204`, `app/escala/utils.py:1364`, `:1618`, `:1715`.
+- **Se a sonda confirmar dependência do papel da ata anterior**, o sítio é a **alimentação da pré-passagem** em `escala/utils.py:1592`. A montagem pode fornecer ao pareador papéis obtidos dos insumos da própria montagem, com política explícita para a margem. Já existe nessa função o modelo de passar cópias de células com ata montada em memória. O pareador recebe o mapa como argumento. Há, portanto, sítio de correção fora de `parear_turnos` e de `motor_calculo_v2.py`. Qual intervenção resolve o caso medido [nao verificado]. `app/escala/utils.py:1590`, `:1891`, `app/ponto/turnos.py:1192`, `:1997`.
+
+## 5. Leitores de produção e efeito de gravar `N` já na primeira chamada
+
+| Leitor | Efeito para a transição observada |
+|---|---|
+| **Leitor da célula, espelho e relatórios de furos** | `n_ok_lavrado` passa de `None` para `0`, e a grade passa de zero slots para `N` marcos com `missing=True`. A diferença `n_celulas - n_missing` permanece zero, então ela sozinha não cria fato para o recorte de vínculo. Espelho e relatórios passam a ter marcos para exibir e contar quando o dia satisfaz seus filtros. `app/escala/services/leitor_celula.py:85`, `:114`, `:175`, `:385`, `:413`, `app/ponto/services/espelho.py:533`, `app/relatorios/furos.py:136`, `app/escala/services/furos_diarios.py:43`. |
+| **Worklist, prévia, placar e pauta** | A worklist pode passar de “sem lâmpada” para gap em dia de trabalho. Prévia e pauta passam a ter horas a listar. O placar `sem_furo` passa a reconhecer a data se a precedência a classificar como trabalho. O relatório da frota pode nomear os marcos faltantes. `app/ponto/worklist.py:18`, `app/folha/previa.py:77`, `app/folha/services/sem_furo.py:20`, `app/pautas/services.py:432`, `app/relatorios/dia_da_frota.py:20`. |
+| **Chamados, reconciliação e materialização** | `lastro` passa a localizar os marcos e pode dizer que um marco nomeado está apagado. O juiz de furo pode passar a responder `True`, conforme suas guardas. O reconciliador pode nomear faltantes sem solicitar nova lavra por lista vazia. A materialização ganha slots previstos. O filtro SQL de provisoriedade procura `pendente=True`. `app/ponto/services/lastro.py:89`, `:113`, `:128`, `:170`, `app/chamados/juizes.py:497`, `:969`, `:1358`, `app/chamados/reconciliador.py:747`, `app/chamados/services/materializacao.py:439`, `app/chamados/models.py:3604`. |
+| **Turnos, motor e exceção de retenção por pausa** | Uma ata alinhada ao DNA pode ficar legível com as pontas em aberto. Todas apagadas continuam sem fornecer papéis de batida, sem entregar par ao motor e sem satisfazer a exceção de furo só da pausa. O diagnóstico de cadastro que exige entrada e saída continua a descartar o dia. Efeito efetivo em veredito, retenção ou dinheiro [nao verificado]. `app/ponto/juiz_batida.py:195`, `:258`, `app/ponto/turnos.py:1636`, `app/ponto/motor_calculo_v2.py:616`, `app/folha/export.py:1150`, `app/escala/services/cadastro_realidade.py:238`. |
+| **Diagnósticos e vigias** | Dia do colaborador e diagnóstico de escala passam a mostrar marcos apagados. Vigia de entrada pode incluir o dia em `nada_acendeu`. Presença em feriado pode ganhar um dia previsto sem presença. Cluster passa a ter o requisito de lâmpada apagada, ainda condicionado às órfãs. O vigia do pareador ganha marcos para confrontar quando tem turno fechado. Esmeril e cartão consultam luz acesa e crédito de isenção, respectivamente. `app/ponto/services/dia_do_colab.py:30`, `app/ponto/services/diagnostico_escala.py:154`, `app/ponto/services/vigia_entrada.py:45`, `:80`, `:123`, `app/colaboradores/services/feriado_do_posto.py:97`, `:115`, `app/ponto/services/cluster_espurio.py:29`, `app/ponto/services/vigia_pareador_celula.py:101`, `app/ponto/services/esmeril_espelho.py:136`, `app/relatorios/cartao_pela_celula.py:289`. |
+
+As rotinas operacionais também consultam a lista em `detectar_intervalo_ausente`, `ausencias_sem_efeito_na_celula`, `curar_residuo_bug115` e `tripwire_celulas`. O contador de folgas do `tripwire` lê `n_celulas` sob um filtro que exclui `trabalha=True`. O detector de intervalo exige pontas acesas. O Cartório relê `lampadas` para detectar marco recém-vencido e derivar `tem_entrada` e `tem_saida`. `app/ponto/management/commands/detectar_intervalo_ausente.py:64`, `app/ponto/management/commands/ausencias_sem_efeito_na_celula.py:61`, `app/ponto/management/commands/curar_residuo_bug115.py:45`, `:148`, `app/ponto/management/commands/tripwire_celulas.py:264`, `:338`, `:344`, `app/ponto/services/cartorio.py:469`, `:853`.
 
 ## 19/11 15:43 · sessao bfb920870efb · DESAFIO-DECISAOHE-SOL62 · leitura · origem=Code
 
@@ -976,16 +1025,4 @@ Os seis blobs locais correspondem aos identificadores pós-diff de `diff_A.patch
 
 **PROCEDE (o item 5 não define a referência de comparação nem o desfecho a contar na sonda).** [app/chamados/reconciliador.py:453] [app/chamados/reconciliador.py:557] [app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:192]
 
-## 19/11 14:56 · sessao c9af4452ff4a · E4C-F5-CONSTROI · construtor · origem=Code
-
-Cura entregue: instantes do ato e texto da projeção nos dois juízes ([juizes.py:1389](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/juizes.py:1389), [juizes.py:1559](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/juizes.py:1559)).
-
-- [Diff completo](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/docs/E4C-F5-VOLTA2.diff:1).
-- [REDs e comandos individuais](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/docs/E4C-F5-VOLTA2.md:29).
-- [Mutantes ancorados e qual RED derruba cada um](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/docs/E4C-F5-VOLTA2.md:68).
-
-LEI-AKITA: padrao=Parallel Change / Expand-Contract; [registro completo](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/docs/E4C-F5-VOLTA2.md:22).
-
-Banco e suíte não executados. RED/GREEN, custo real e morte dos mutantes: [não verificado]. [nao verificado]
-
-_7401 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7402 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
