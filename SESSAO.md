@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 01:26:02.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (7.2 MB). Acoes na janela: **216**.
+**Medido em 19/11/2026 01:31:10.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (7.3 MB). Acoes na janela: **219**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:28:57 | Bash | Read item 3 revision | `cd /home/ronald/saas-hasner; sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' logs/DESTRAVA-NOITE-1911-0115/rev_item3/r.txt` |
+| 01:28:47 | Bash | Read item 2 and 4 revisions | `cd /home/ronald/saas-hasner; D=logs/DESTRAVA-NOITE-1911-0115; sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' $D/rev_item2/r.txt; echo =========; sed 's#/home/ronald/codex_ws/[0-9a-f]*/##g' $D/rev_item4/r.txt` |
+| 01:28:41 | Bash | Read revision verdicts | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8b8d87c5-d111-4931-9b60-72a70772f0de/tasks/bmptuuoa7.output; D=logs/DESTRAVA-NOITE-1911-0115; for i in 2 3 4; do echo "=== item $i"; /bin/grep -nE 'REVISAO item\|PROCEDE' $D/rev_item$i/r.txt \| tail -12 \| cut -c1-300; done` |
 | 01:25:06 | Bash | Confirm ESPERANDO line still valid | `cd /home/ronald/saas-hasner; sed -n 3p app/docs/RELATO.md; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h print(h._esperando_com_prova())"` |
 | 01:24:58 | Bash | See regexes and a conforming brief example | `cd /home/ronald/saas-hasner; /bin/grep -nE '^_(CENSO_TIT\|TIT\|ROTULO\|PERGUNTAS\|ITEM\|REF\|CORTADA\|BRIEF)_RE\|^OBRA_CENSO_ID' bin/disjuntor.py \| cut -c1-200; ls logs/DST-L2-JZ1 2>&1 \| head; cat logs/ESCALA-NAO-DESCREVE/brief.md \| /bin/grep -n -A30 '^## CENSO' \| head -50` |
 | 01:24:56 | Bash | Read censo_do_brief rule | `cd /home/ronald/saas-hasner; sed -n 1547,1632p bin/disjuntor.py` |
