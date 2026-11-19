@@ -1,6 +1,8 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: f5_v3_prova.sh | pid=2437740
+ESPERANDO: codex_pergunta.sh F5 verif3 | pid=2473077
+UI-TRABALHA-EM-FERIADO CANCELADA por CANCELA-UI-TRABALHA-EM-FERIADO-1911-1130: aberto = nada (o aval 11:25 nao chegou a sessao: 0 copia, raia, brief, censo, Codex, vaga ou pista; 0 .py/template/url tocado), descartado = nada; BACKLOG O10 COMPLEMENTO (3 pecas) + TRABALHA-EM-FERIADO-SEM-TELA (fila 2), PROMPTS
+DST-L2-JZ1 c6 v4 NO AR 11:5x: commit c5ea4e5d7 (pais f8f9bb34e c5a74ace3), deploy --sem-migrate rc=0, 3 cascas HUP, 3 rotas provadas, importerror_500=0 (logs/dst-l2-jz1/c6/deploy_1911.out). Proximo da obra: c7 janela; CADEIA-20 ETAPA B destrava (pre-req COMBOIO-F + c6 no ar)
 DST-L2-JZ1 c6 v4 POUSO 11:4x: opus final APROVA 0 bloqueia 6 fila (logs/dst-l2-jz1/c6/opus/opus_final.txt; fila -> BACKLOG C6-OPUS-1..6); merge --no-ff write-tree 5401e5da == c5a74ace3^{tree}; deploy --sem-migrate no mesmo ato
 DST-L2-JZ1 c6 v4 11:2x: pista 1119104156_c5a74ace rc=0, Ran 17025 OK (skipped=42, expected failures=41) na arvore c5a74ace3; opus final (verificador) aberto com diff_c6v4.patch + verif3/triagem + janela/matriz -> logs/dst-l2-jz1/c6/opus/opus_final.txt
 ESCALA-NAO-DESCREVE C8 COMPLEMENTO-1 11:2x: sonda34d na sombra (fonte da amostra = nucleo.minutos_do_oraculo sem pares, sem gravar) + Codex leitura q7 (5 perguntas); censo r6: frase "entrada real ~HH:MM em N% de N dias" = escala/regua_defesa.py:216 (assinatura C7, janela 30d, agrupamento proprio), proposta = esmeril_espelho.py:241 (janela 60d, dia civil): duas medidas
