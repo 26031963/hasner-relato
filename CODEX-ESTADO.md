@@ -1,7 +1,67 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 02:00** · publicado em **19/11/2026 02:01** (UTC-3)
+> Ultima resposta processada: **19/11/2026 02:03** · publicado em **19/11/2026 02:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 02:03 · sessao 2ee7e747fa4d · DST-L2-JZ1 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO: (1) e (3).** Há uma incompatibilidade literal entre D3 “intacto” e a retenção exigida por R7; além disso, o teto exato depende de medir o desenho conjunto, inclusive a leitura da retenção. O item (2) contém uma exceção nominal a D5 e usa uma porta existente. ([justificativa.py:266](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:266), [reconciliador.py:439](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/reconciliador.py:439), [nota.py:75](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/services/nota.py:75); anexos fornecidos sem linhas: [não verificado])
+
+Os anexos foram fornecidos no texto, sem numeração de linhas; suas afirmações são identificadas abaixo pelo nome e marcadas **[não verificado]** quando não confirmadas pela cópia.
+
+### (1) Tetos — PROCEDE
+
+1. **Premissas.** A função atual consulta por chamado: `Q(chamado_origem_id=ch.pk)`, somado ao ponteiro, e executa o filtro de pendentes; os dois fechos a chamam em laço após as transições bem-sucedidas. ([justificativa.py:262](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:262), [cartorio.py:1016](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/cartorio.py:1016), [cartorio.py:1555](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/cartorio.py:1555))
+
+   As 12 chaves e seus tetos atuais são:
+
+   | Chave | Teto |
+   |---|---:|
+   | `registrar_batida (sem pergunta)` | 24 |
+   | `registrar_batida (3 perguntas)` | 62 |
+   | `_gravar_estado (sem pergunta)` | 30 |
+   | `_gravar_estado (3 perguntas, CRUZANDO)` | 77 |
+   | `reconciliar (gate da premissa, FECHA com dia e celula)` | 62 |
+   | `reconciliar (gate da premissa, RECUSA com dia e celula)` | 14 |
+   | `registrar_batida (furo vivo, 1 chamado fecha)` | **224** |
+   | `registrar_batida (furo vivo, 3 chamados fecham)` | **288** |
+   | `registrar_batida (furo vivo, 1 chamado FICA)` | 145 |
+   | `registrar_batida (furo vivo, 3 chamados FICAM)` | 219 |
+   | `registrar_batida (orfa de intervalo vetada)` | 31 |
+   | `_gravar_estado (3 perguntas, NAO cruza)` | 10 |
+
+   As duas em negrito são as chaves de fecho de FURO que o aval altera; a chave do gate `reconciliar (... FECHA ...)` também nomeia fecho e permanece entre as outras dez. ([test_selo_chokepoint_escrita.py:73](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_selo_chokepoint_escrita.py:73), [test_selo_chokepoint_escrita.py:134](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_selo_chokepoint_escrita.py:134), [test_selo_chokepoint_escrita.py:196](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_selo_chokepoint_escrita.py:196), [test_selo_chokepoint_escrita.py:210](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_selo_chokepoint_escrita.py:210))
+
+2. **Aval vigente.** O novo aval corta expressamente a proibição anterior de mexer nesses dois tetos e troca a interface por chamado por lote. Porém, declara D3 intacto; a ressalva de R7 entra em conflito com essa declaração no caso descrito no item (3). (Anexos `aval.txt` e `brief_c2.md`: [não verificado]; [justificativa.py:266](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:266))
+
+3. **Literal.** O selo conta todas as queries capturadas, não apenas `SELECT`, e compara o total ao teto. A ocorrência do item (2) cria `FollowupChamado` e, portanto, sua escrita conta se ocorrer dentro da captura. Nos cenários citados na pergunta de desenho, o dado fornecido relata zero justificativas e zero `UPDATE`; assim, pela condição do novo aval, também não haveria ocorrência por rejeição nesses cenários. O `+1` final **não está demonstrado**: R7 também exige consultar a retenção existente, e o custo do desenho conjunto não foi medido nos dados fornecidos. Qualquer delta diferente do corte exige a pergunta de desenho com SQL, como o próprio aval determina. ([test_selo_chokepoint_escrita.py:287](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_selo_chokepoint_escrita.py:287), [test_selo_chokepoint_escrita.py:428](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_selo_chokepoint_escrita.py:428), [nota.py:102](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/services/nota.py:102); `PERGUNTA-DE-DESENHO.txt` e `aval.txt`: [não verificado])
+
+4. **Exportada, dinheiro ou `!`.** O desenho de lote declara mudar a busca e os tetos; alcance efetivo sobre exportada, dinheiro ou `!`: **[não verificado]**. A função atual grava a justificativa, inclusive `atualizado_em`, e o aval exige censo de dinheiro antes da conclusão. ([justificativa.py:281](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:281); `aval.txt`: [não verificado])
+
+### (2) Selo JZ1 × D5 — NÃO PROCEDE
+
+1. **Premissas.** O Fix A chama `_nota.anexar_ocorrencia`; a porta usa `autor_tipo='sistema'` por padrão e cria um `FollowupChamado`. O selo exige ao menos um followup de sistema e seu fixture já cria a justificativa com `chamado_origem`. ([reconciliador.py:572](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/reconciliador.py:572), [nota.py:75](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/services/nota.py:75), [nota.py:102](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/services/nota.py:102), [test_jz1_autoridade_unica.py:41](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_jz1_autoridade_unica.py:41), [test_jz1_autoridade_unica.py:60](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_jz1_autoridade_unica.py:60))
+
+2. **Aval vigente.** D5 proibia followup novo no fecho; o novo aval declara uma exceção nominal quando houve rejeição. A exceção altera D5 nesse ponto e preserva o veto a followup sem rejeição e a S128 no fecho. (`brief_c2.md` e `aval.txt`: [não verificado])
+
+3. **Literal.** A porta existente é suficiente para criar o tipo de registro que o selo conta; a passagem do teste com a implementação proposta continua **[não verificado]**. A ocorrência tem custo SQL, mas sua condição impede que seja criada nos cenários de teto descritos como sem rejeições. ([nota.py:75](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/services/nota.py:75), [test_jz1_autoridade_unica.py:60](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_jz1_autoridade_unica.py:60); `PERGUNTA-DE-DESENHO.txt` e `aval.txt`: [não verificado])
+
+4. **Exportada, dinheiro ou `!`.** A escrita adicional declarada é uma ocorrência no chamado; efeito fora desse escopo, inclusive sobre exportada, dinheiro ou `!`: **[não verificado]**. ([nota.py:78](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/services/nota.py:78))
+
+### (3) R7, R8 e R9 — PROCEDE
+
+1. **Premissas.** A retenção existente consulta irmãs respondidas sem consumo e, durante `_APROVANDO`, retém quando o ponteiro aponta outra justificativa pendente. A função nova atual não consulta essa retenção. O cartório lê `atualizado_em` da justificativa nas linhas **391–392**, não na 387, que inicia a consulta de ausência. Existe o gerador de ESTADO e existe a função do contador D4; na busca da cópia, só foram encontrados a definição do contador e referências no teste, não um leitor no gerador. ([reconciliador.py:439](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/reconciliador.py:439), [justificativa.py:262](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:262), [cartorio.py:387](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/cartorio.py:387), [cartorio.py:391](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/cartorio.py:391), [gerar_estado.py:178](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/bin/gerar_estado.py:178), [justificativa.py:289](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:289), [test_dst_l2_jz1_rejeita_justificativa.py:346](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/tests/test_dst_l2_jz1_rejeita_justificativa.py:346))
+
+2. **Aval vigente.** R7 manda não rejeitar quando a retenção responde reter. No caso de `_APROVANDO` com ponteiro para outra pendente, isso contraria o literal de D3, segundo o qual a pendente apontada é rejeitada, e o item (1) diz que D3 permanece intacto. É necessária uma decisão explícita sobre essa sobreposição. ([reconciliador.py:445](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/reconciliador.py:445), [justificativa.py:266](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:266); `aval.txt`: [não verificado])
+
+3. **Literal.** R8 exige prova da segunda rodada sem alteração; a leitura de `atualizado_em` demonstra a razão para testá-la, não demonstra que o ciclo já está fechado. R9 exige um leitor efetivo para o contador; ele ainda não foi encontrado na cópia. R7 deve usar o mesmo predicado e seu custo precisa entrar na medição do item (1). ([cartorio.py:391](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/cartorio.py:391), [justificativa.py:289](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:289); `aval.txt`: [não verificado])
+
+4. **Exportada, dinheiro ou `!`.** Efeito dos novos testes e do leitor pretendido sobre exportada, dinheiro ou `!`: **[não verificado]**. O contador atual é uma leitura que devolve a quantidade de pares; a rejeição atual grava a justificativa. ([justificativa.py:281](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:281), [justificativa.py:301](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:301))
+
+**Pergunta de lei:** quando `_APROVANDO` faz a retenção responder `justificativa_alheia`, a pendente apontada fica preservada por R7, como exceção a D3, ou é rejeitada por D3? ([reconciliador.py:452](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/chamados/reconciliador.py:452), [justificativa.py:266](/home/ronald/codex_ws/e9f7edf83a74f7f8e96a87fd9c1f44e5690e4bcf/app/ponto/services/justificativa.py:266); `aval.txt`: [não verificado])
+
+AVAL-DEVOLVIDO: (1), (3)  
+perguntas de lei: 1
 
 ## 19/11 02:00 · sessao 3f83936ddcb6 · E4C-F3-LAVRA-FOTO · construtor · origem=Code
 
@@ -1072,50 +1132,4 @@ Há pelo menos uma ocorrência adicional que não deve ser contada como leitura 
 
 perguntas de lei: **[não verificado]** — a revisão incompleta do lote e das leis não permite determinar N nem apresentar opções exaustivas.
 
-## 19/11 01:46 · sessao 33d88961b2b8 · E4C-F5 · censo · origem=Code
-
-**O censo do lote 3 permanece incompleto.** Conferi os sítios abaixo, mas não classifiquei todas as linhas do anexo nem fechei o contador do universo. Os totais por receptor, por classe e a igualdade contador == universo permanecem **[não verificado]**.
-
-| Arquivo:linha | Função | Campo | Receptor | Classe | Trecho literal curto |
-|---|---|---|---|---|---|
-| [auditar_invariantes_chamados.py:203](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:203) | `_contraprova_f1t` | `via_resolucao` | PerguntaDisputa | (iii) | `not (_p.via_resolucao or '').strip()` |
-| [auditar_invariantes_chamados.py:206](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:206) | `_contraprova_f1t` | `validada_em` | DecisaoPergunta/ato: `LeituraDoAto` | não se aplica | `DecisaoPergunta.leitura(_p).validada_em` |
-| [auditar_invariantes_chamados.py:207](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:207) | `_contraprova_f1t` | `via_resolucao` | PerguntaDisputa | (iii) | `_p.via_resolucao in _IDENT` |
-| [auditar_invariantes_chamados.py:472](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:472) | `universo_i6` | `materializada_em` | PerguntaDisputa | (vi) | `.values_list('pk', 'materializada_em')` |
-| [auditar_invariantes_chamados.py:1115](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1115) | `handle` | `respondida_em` | PerguntaDisputa | (iii) | `filter(respondida_em__isnull=True)` |
-| [auditar_invariantes_chamados.py:1116](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1116) | `handle` | `resposta_colab` | PerguntaDisputa | (iii) | `exclude(resposta_colab='')` |
-| [estoque_l130_instante_sem_texto.py:58](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:58) | `handle` | `respondida_em` | PerguntaDisputa | (iv) | `str(p.respondida_em)` |
-| [estoque_l130_instante_sem_texto.py:58](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:58) | `handle` | `resposta_colab` | PerguntaDisputa | (iv) | `'resposta_colab': p.resposta_colab` |
-| [estoque_l130_instante_sem_texto.py:59](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:59) | `handle` | `via_resolucao` | PerguntaDisputa | (iv) | `'via_resolucao': p.via_resolucao` |
-| [competencia_trancada.py:276](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/competencia_trancada.py:276) | `reabrir` | `via_resolucao` | PerguntaDisputa | (vi) | `PerguntaDisputa.objects.filter(..., via_resolucao=VIA` |
-| [disputa_emissao.py:1481](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1481) | `responder_pergunta_disputa_core` | `resposta_colab` | PerguntaDisputa | (ii) | `p.resposta_colab = resposta` |
-| [disputa_emissao.py:1482](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1482) | `responder_pergunta_disputa_core` | `respondida_em` | PerguntaDisputa | (ii) | `p.respondida_em = _agora` |
-| [disputa_emissao.py:1484](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1484) | `responder_pergunta_disputa_core` | `validada_em` | PerguntaDisputa | (ii) | `_validada_antes = (p.validada_em, ...)` |
-| [disputa_emissao.py:1485](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1485) | `responder_pergunta_disputa_core` | `validada_em` | PerguntaDisputa | (ii) | `if p.validada_em is not None` |
-| [disputa_emissao.py:1494](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1494) | `responder_pergunta_disputa_core` | `validada_em` | PerguntaDisputa | (ii) | `p.validada_em = None` |
-| [disputa_emissao.py:1528](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1528) | `responder_pergunta_disputa_core` | `respondida_em` | PerguntaDisputa | (ii) | `p.respondida_em = _agora` |
-| [validacao.py:392](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:392) | `impedimento_estoque_l130` | `validada_em` | PerguntaDisputa | (i) | `if perg.validada_em is not None` |
-| [validacao.py:640](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:640) | `_validar_o_par` | `validada_em` | PerguntaDisputa | (i) | `if q.validada_em is None` |
-| [validacao.py:685](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:685) | `validar_pergunta` | `validada_em` | PerguntaDisputa | (i) | `if perg.validada_em` |
-| [validacao.py:898](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:898) | `recusar_pergunta` | `validada_em` | PerguntaDisputa | (i) | `if perg.validada_em` |
-| [validacao.py:1064](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:1064) | `validar_lote_classe_a` | `validada_em` | PerguntaDisputa | (i) | `if perg.validada_em` |
-| [verbos.py:264](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/verbos.py:264) | `placar_equipe` | `validada_em` | PerguntaDisputa | (vi) | `validada_em__gte=d7` |
-| [verbos.py:270](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/verbos.py:270) | `placar_equipe` | `validada_em` | PerguntaDisputa | (v) | `if pq.validada_em >= hoje_ini` |
-| [procedencia_batida.py:74](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/services/procedencia_batida.py:74) | `procedencia` | `materializada_em` | PerguntaDisputa | (v) | `p.validada_em or p.materializada_em` |
-| [procedencia_batida.py:74](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/services/procedencia_batida.py:74) | `procedencia` | `validada_em` | PerguntaDisputa | (v) | `p.validada_em or p.materializada_em` |
-
-A classificação (iii) nas linhas 1115–1116 segue a finalidade declarada de medir meio-estado da própria projeção. A fotografia das linhas 58–59 integra o arquivo de reversão do comando. ([auditar_invariantes_chamados.py:1113](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/auditar_invariantes_chamados.py:1113), [estoque_l130_instante_sem_texto.py:26](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:26))
-
-Dos sítios **(i) acima**, os vínculos de chamada e escrita que consegui conferir são:
-
-- `impedimento_estoque_l130`: chamada por `devolver_instante_sem_texto_l130`; um impedimento faz a porta retornar antes de limpar os campos. O comando de estoque também a chama para selecionar e reconferir elegíveis antes de executar a devolução. ([validacao.py:432](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:432), [validacao.py:440](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:440), [estoque_l130_instante_sem_texto.py:42](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:42), [estoque_l130_instante_sem_texto.py:99](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:99))
-- `_validar_o_par`: chamada por `validar_pergunta`; a guarda decide se chama `_carimbar_validacao(q, autor)`. ([validacao.py:771](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:771), [validacao.py:640](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:640))
-- `validar_pergunta`: chamadas comprovadas incluem `acoes_disputa` e `aplicar_declaracao`; a guarda retorna `ja_validada` antes das escritas posteriores da porta. Lista completa de chamadores: **[não verificado]**. ([acoes_disputa.py:19](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/acoes_disputa.py:19), [declaracao_texto.py:697](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:697), [validacao.py:685](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:685))
-- `recusar_pergunta`: chamada por `acoes_disputa`; a guarda retorna `ja_validada` antes de salvar o motivo e chamar a porta de reabertura. ([acoes_disputa.py:82](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/acoes_disputa.py:82), [validacao.py:898](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:898), [validacao.py:920](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:920))
-- `validar_lote_classe_a`: chamada por `views_cobrar`; a guarda pula a pergunta já validada antes de chamar a ação de validação. ([views_cobrar.py:263](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/views_cobrar.py:263), [views_cobrar.py:383](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/views_cobrar.py:383), [validacao.py:1064](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:1064), [validacao.py:1078](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:1078))
-
-Os demais sítios do lote, seus receptores, classes e chamadores permanecem **[não verificado]**. Também não concluí o confronto com `LEIS.md` e `CORTES.md`, necessário para enumerar perguntas de lei e opções.
-
-perguntas de lei: [não verificado]
-
-_7251 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7252 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
