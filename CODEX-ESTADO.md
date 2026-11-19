@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 11:53** · publicado em **19/11/2026 11:54** (UTC-3)
+> Ultima resposta processada: **19/11/2026 11:58** · publicado em **19/11/2026 11:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 11:58 · sessao ddd2b81beddc · CADEIA-20-PASSO-1 · construtor · origem=Code
+
+A volta 1 está implementada, **com uma limitação de evidência**: os casos usam fixtures sintéticas construídas a partir das respostas da regra. O cadastro literal dos casos nominais e a identificação de um colaborador real para substituir col950 não estão no dado fornecido **[não verificado]** ([test_razao_da_sobra.py:1](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:1)).
+
+**Aval devolvido, por item:**
+
+1. As interfaces verificadas na cópia incluem `Turno.data_turno` e o carimbo de pausa ([turnos.py:43](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:43), [turnos.py:1371](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1371)).
+2. A implementação segue a precedência fornecida quando há uma batida identificável; ausência, ambiguidade e falta de papel têm resultados explícitos ([orfa_classe.py:49](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:49)). Colisão com outros avais vigentes **[não verificado]**.
+3. A troca do caso de dia sem trabalho por um colaborador real não pôde ser comprovada com o dado disponível **[não verificado]**.
+4. O diff contém o juiz e seus testes; efeitos em dinheiro e certificação pela suíte **[não verificado]**. [nao verificado]
+
+Arquivos alterados:
+
+- [orfa_classe.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:23): juiz puro, com fuso e pausas avulsas fornecidos pelo chamador. A junção usa `data_turno`; a saída preserva cada ocorrência da sobra.
+- [test_razao_da_sobra.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:29): casos pela regra, marca, meia-noite, cobertura, idempotência e precedência.
+- `escala/tests/test_orfa_classe.py`: removido junto com `classificar_orfas`, pois seus casos sustentavam somente o classificador antigo. Permanecem `_runs_de_rajada` e `JANELA_CLUSTER_MIN`; a constante tem consumidores existentes ([utils.py:504](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:504), [turnos.py:1581](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1581)).
+
+| Caso fornecido ou fixture | Razão pela regra | Teste | [nao verificado]
+|---|---|---|
+| 15/11 11:25 e 16:59, dia sem trabalho; colaborador real **[não verificado]** | `TRABALHO_EM_DIA_SEM_TRABALHO` | [linha 31](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:31) |
+| col836, 06/11 08:25 e 08:38 | `BATIDA_REPETIDA` | [linha 37](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:37) |
+| col203, 21/10 12:35; col204, 17/11 14:44 | `INTERVALO_FORA_DA_ESCALA` | [linha 44](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:44) |
+| col174, 15/11 05:30 e 06:33 | `PERIODO_ADICIONAL` | [linha 51](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:51) |
+| col174, 11/11 18:59; col220, 11/11 06:00 | `TURNO_ABERTO` | [linha 57](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:57) |
+| col174, 12/11 07:01; col300, 21/10 06:00 | `SAIDA_SEM_ENTRADA` | [linha 65](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:65) |
+
+As identidades e respostas nominais da tabela vêm do texto fornecido; os cadastros e batidas reais permanecem **[não verificado]**. O caso de meia-noite foi exercitado com a batida civil em 24/10 atribuída ao turno de 23/10 ([teste:76](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:76)). [nao verificado]
+
+O RED anterior à implementação falhou por ausência de `razao_da_sobra`. Depois, 12 testes passaram num executor isolado com substitutos em memória para `SimpleTestCase` e `Turno`; os seis mutantes abaixo foram mortos nesse mesmo executor. A execução Django real e a suíte certificadora ficam **[não verificado]**. Com Django disponível, o comando é: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_razao_da_sobra --noinput
+```
+
+Execute cada `sed` isoladamente, rode o comando de teste acima e restaure a linha antes do próximo mutante: [nao verificado]
+
+| Mutante — comando `sed` | Caso que deve falhar |
+|---|---|
+| `sed -i "s/razao = 'TRABALHO_EM_DIA_SEM_TRABALHO'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_dia_sem_trabalho_duas_sobras` |
+| `sed -i "s/razao = 'BATIDA_REPETIDA'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_rajada_col836` |
+| `sed -i "s/razao = 'INTERVALO_FORA_DA_ESCALA'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_pausas_nominais` |
+| `sed -i "s/razao = 'PERIODO_ADICIONAL'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_periodos_col174` |
+| `sed -i "s/razao = 'TURNO_ABERTO'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_turnos_abertos` |
+| `sed -i "s/razao = 'SAIDA_SEM_ENTRADA'/razao = 'MUTANTE'/" escala/orfa_classe.py` | `test_saidas_sem_entrada` |
+
+Na investigação executei uma vez `python3` sem `PYTHONDONTWRITEBYTECODE=1`, contrariando a instrução; se isso criou bytecode está **[não verificado]**. As execuções dos testes e mutantes usaram a variável. [nao verificado]
 
 ## 19/11 11:53 · sessao 27d4574d0081 · DST-L2-JZ1-C7 · censo · origem=Code
 
@@ -1401,50 +1448,4 @@ Nos dois ramos, `brutas` é uma contagem separada por `str(t.date())` de cada in
 - **Cobertura do censo:** os quatro sítios da tabela são as chamadas textuais de aplicação encontradas em Python; resolução dinâmica, código externo e o censo individualizado de cada chamada de teste **[não verificado]**. [nao verificado]
 - **Demais insumos do dono:** o caminho acima acompanha `horas_do_dia`; não é uma auditoria completa da produção de `cadastro`, fase, CXR ou `batida_fora_de_turno`, embora esses insumos participem da chamada ([e6_oraculo.py:185](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:185)).
 
-## 19/11 10:31 · sessao 1d64acfa6833 · DST-L2-JZ1 · verificador · origem=Code
-
-**Veredito: BLOQUEIA**, por dois pontos que permanecem na c6: a retenção pode ser decidida com uma fotografia e a rejeição com outra; e o selo ainda aceita uma chamada cujo resultado não participa da decisão, permitindo uma derivação paralela. A triagem registra a janela como fila, mas não demonstra que ela deixou de contrariar a proteção pretendida. ([reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:581](app/chamados/reconciliador.py:581), [justificativa.py:337](app/ponto/services/justificativa.py:337), [teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90))
-
-### 1. Achados da volta 1
-
-- **Janela entre retenção e rejeição: não curado; a justificativa da triagem procede apenas quanto ao comportamento anterior.** Antes da c6, a rejeição já abrangia justificativas pendentes por origem; a extração mantém esse universo. Mas agora a c6 promete reter o chamado quando houver justificativa alheia pendente no ato de aprovar: a consulta da retenção ocorre antes do `atomic`, e a rejeição consulta de novo com trava e sem portão. Uma justificativa que passe a integrar o vínculo entre essas leituras pode ser rejeitada apesar da proteção. A ocorrência, o isolamento e a frequência em produção são **[não verificado]**. ([justificativa.py:267](app/ponto/services/justificativa.py:267), [reconciliador.py:445](app/chamados/reconciliador.py:445), [reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:549](app/chamados/reconciliador.py:549), [reconciliador.py:581](app/chamados/reconciliador.py:581), [justificativa.py:337](app/ponto/services/justificativa.py:337))
-- **Texto “aponta”: curado para novas gravações.** A frase agora admite ponteiro ou origem, conforme o vínculo que a consulta aceita. Registros históricos já gravados não são reescritos por essa mudança. ([reconciliador.py:458](app/chamados/reconciliador.py:458), [reconciliador.py:492](app/chamados/reconciliador.py:492))
-- **Selo sem mordida: parcialmente curado, ainda não curado.** As quatro amostras declaradas são reconhecidas pela lógica do verificador, mas ela continua sem garantir uso efetivo do resultado. A execução dos testes é **[não verificado]**. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90), [teste C6:122](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:122))
-- **Documentação de 37 pares: curada como descrição da alegação.** A docstring distingue 37 pares em uma foto e 46 = 46 em outra. As fotos, os hashes e a comparação de produção são **[não verificado]**. ([teste C6:4](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:4))
-
-### 2. Mordida do selo
-
-As quatro variantes do teste recebem ao menos uma violação: ausência de chamada aproveitada, atributo proibido, importação do modelo ou keyword do vínculo. Os dois sítios vivos têm chamada em expressão usada e não contêm os padrões proibidos, portanto passam pela análise estática apresentada; a execução é **[não verificado]**. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90), [teste C6:117](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:117), [teste C6:122](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:122), [reconciliador.py:457](app/chamados/reconciliador.py:457), [justificativa.py:337](app/ponto/services/justificativa.py:337))
-
-Ainda escapa, por exemplo, `x = pendentes_do_vinculo(chs)` seguido de uma decisão independente que nunca usa `x`. O selo considera a atribuição suficiente; uma consulta paralela também pode esconder o vínculo em `filter(**d)` e usar um alias do modelo importado fora da função. Assim, ele não prova o contrato de um só predicado. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90), [teste C6:95](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:95))
-
-### 3. Trilha de retenção
-
-`registrar_retencao` monta a descrição e os campos `justificativa_pendente` e `em_aprovacao`; `core.observ.evento` grava a descrição em `LogAuditoria.descricao` e os campos em `valor_depois`. Antes de gravar, o próprio registrador lê o último `valor_depois` e compara apenas `justificativa_pendente`. ([reconciliador.py:465](app/chamados/reconciliador.py:465), [reconciliador.py:490](app/chamados/reconciliador.py:490), [core/observ.py:133](app/core/observ.py:133))
-
-A tela de auditoria exibe a descrição, e sua busca filtra texto por `descricao__icontains`. Não encontrei leitor de código que exija literalmente a palavra antiga para essa ação; buscas humanas salvas, integrações externas e leitores dinâmicos são **[não verificado]**. Uma busca textual por “aponta” naturalmente não encontrará as novas descrições. ([core/views.py:701](app/core/views.py:701), [core/views.py:713](app/core/views.py:713), [log_auditoria.html:73](app/templates/core/log_auditoria.html:73))
-
-Há uma limitação adicional da trilha: se a justificativa alheia for a mesma e `em_aprovacao` mudar, a comparação considera o evento repetido e não grava o novo ID. Portanto, o campo gravado descreve o ato da linha existente, não necessariamente a última tentativa. ([reconciliador.py:491](app/chamados/reconciliador.py:491), [reconciliador.py:494](app/chamados/reconciliador.py:494))
-
-### 4. Significado dos campos lidos ou gravados
-
-- **`Justificativa.status`:** o modelo inicia em `pendente`; a consulta seleciona esse estado, e a rejeição grava `rejeitada`. Os leitores e escritores citados na volta 1 tratam esses valores como estado da justificativa; não identifiquei segundo significado nos trechos examinados. Outros acessos indiretos são **[não verificado]**. ([models.py:159](app/ponto/models.py:159), [justificativa.py:283](app/ponto/services/justificativa.py:283), [justificativa.py:351](app/ponto/services/justificativa.py:351))
-- **`chamado_origem` e `justificativa_relacionada_id`:** são relações distintas: a origem identifica o chamado que gerou a justificativa; o ponteiro identifica a justificativa que responde ao chamado. A consulta deliberadamente aceita **qualquer uma** das duas, sem atribuir a ambas o mesmo sentido. A preferência pelo ponteiro no detalhe também é explícita. ([models.py:173](app/ponto/models.py:173), [vinculos.py:81](app/chamados/services/vinculos.py:81), [justificativa.py:279](app/ponto/services/justificativa.py:279), [reconciliador.py:458](app/chamados/reconciliador.py:458))
-- **`_APROVANDO` / `em_aprovacao`:** o contexto carrega o ID da justificativa cujo ato está em curso; o predicado a exclui e a trilha grava esse mesmo ID, sujeito à deduplicação acima. ([reconciliador.py:426](app/chamados/reconciliador.py:426), [reconciliador.py:430](app/chamados/reconciliador.py:430), [justificativa.py:286](app/ponto/services/justificativa.py:286), [reconciliador.py:491](app/chamados/reconciliador.py:491))
-- **`justificativa_pendente`:** é o ID escolhido de uma justificativa alheia pendente ligada por ponteiro ou origem; o texto novo preserva esse significado. A chave sozinha não informa qual relação existia. ([reconciliador.py:445](app/chamados/reconciliador.py:445), [reconciliador.py:458](app/chamados/reconciliador.py:458), [reconciliador.py:491](app/chamados/reconciliador.py:491))
-- **`Justificativa.descricao`:** a rejeição acrescenta uma anotação ao texto existente, sem substituir seu conteúdo. O diff também preserva a escolha de não atualizar `atualizado_em`; o próprio contrato documenta que leitores desse timestamp têm consequências distintas. ([justificativa.py:300](app/ponto/services/justificativa.py:300), [justificativa.py:351](app/ponto/services/justificativa.py:351))
-
-A concordância de **todos** os consumidores, inclusive externos e dinâmicos, é **[não verificado]**.
-
-### 5. Classes de reprovação
-
-- **Segundo juiz / derivação paralela:** não identifiquei outro predicado nos dois sítios alterados: ambos chamam `pendentes_do_vinculo`. O selo, porém, não impediria toda futura duplicação. A classificação de outros contadores como duplicação proibida é **[não verificado]**. ([reconciliador.py:457](app/chamados/reconciliador.py:457), [justificativa.py:337](app/ponto/services/justificativa.py:337), [justificativa.py:359](app/ponto/services/justificativa.py:359), [teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90))
-- **Segundo escritor fora da porta:** existem escritores diretos preexistentes em entrada sincronizada e triagem; o diff fornecido não os introduz. Sua admissibilidade pela lei aplicável é **[não verificado]**. ([entrada_sincronizada.py:38](app/ponto/services/entrada_sincronizada.py:38), [triagem_batida.py:605](app/ponto/services/triagem_batida.py:605))
-- **Relógio fora da borda:** não identificado nos trechos novos de produção examinados; alcance transitivo completo **[não verificado]**. ([reconciliador.py:453](app/chamados/reconciliador.py:453), [justificativa.py:262](app/ponto/services/justificativa.py:262))
-- **Selo sem mordida completa:** presente, pela variante de resultado atribuído e ignorado. ([teste C6:90](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:90))
-- **Ordem de trava:** a extração preserva a consulta travada da rejeição, mas a retenção anterior continua fora da transação e sujeita à janela descrita. O efeito das travas e do isolamento em produção é **[não verificado]**. ([justificativa.py:283](app/ponto/services/justificativa.py:283), [justificativa.py:337](app/ponto/services/justificativa.py:337), [reconciliador.py:544](app/chamados/reconciliador.py:544))
-- **Campo com dois significados:** a afirmação incorreta de que toda justificativa alheia era apontada foi corrigida no texto novo. Não identifiquei novo duplo significado nos campos examinados; a deduplicação de `em_aprovacao` limita o que se pode inferir da última linha. ([reconciliador.py:491](app/chamados/reconciliador.py:491))
-
-Não executei testes nem consultei banco ou logs; resultados de execução e estado de produção são **[não verificado]**. [nao verificado]
-
-_7328 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7329 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
