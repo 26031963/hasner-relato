@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 20:07** · publicado em **19/11/2026 20:10** (UTC-3)
+> Ultima resposta processada: **19/11/2026 20:17** · publicado em **19/11/2026 20:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 20:17 · sessao 1ba02fda85b9 · E4C-F5-CONSTROI · construtor · origem=Code
+
+Implementei o helper único e os dois selos em `chamados/tests/`. A conferência estática mediu **9 módulos migrados com a mesma contagem de asserts do MAIN `eb1e49c1e`**. As expressões dos asserts e os nomes dos testes também conferem com o HEAD da cópia. Banco e suíte [nao verificado]. [Tabela e regra de contagem](chamados/tests/test_e4c_f5_duble_conforme.py:14)
+
+### Arquivos tocados e montagem
+
+| Módulo | Antes → depois | MAIN → cópia |
+|---|---|---:|
+| `e3_v8_apoio.py` | `N` para a pergunta e módulo sem `DecisaoPergunta` no HEAD :169/:199 → fábrica em :170 e classe do helper em :199. | [0 → 0](chamados/tests/e3_v8_apoio.py:170) |
+| `test_e1_v10.py` | `_ln` devolvia `SimpleNamespace` no HEAD :120 → fábrica com os campos e a relação vazia para o compositor real. | [31 → 31](chamados/tests/test_e1_v10.py:121) |
+| `test_e3_c8b_sem_banco.py` | O ambiente vinha direto do apoio, cujo mapa não instalava `chamados.models` → o contexto instala a classe do helper durante o ensaio. [Apoio original](chamados/tests/e3_c8b_apoio.py:150) | [86 → 86](chamados/tests/test_e3_c8b_sem_banco.py:29) |
+| `test_e3_degrau_dono_e_porta.py` | Perguntas `N` e import do modelo real nos três casos do HEAD :263/:291/:343 → fábrica e classe do helper nos contextos da partição. [Consulta](chamados/tests/test_e3_degrau_dono_e_porta.py:263) [Carga](chamados/tests/test_e3_degrau_dono_e_porta.py:289) | [134 → 134](chamados/tests/test_e3_degrau_dono_e_porta.py:334) |
+| `test_e3_pos_suite_sem_banco.py` | Ambiente direto do apoio no HEAD :15 e pergunta `N` no HEAD :53 → contexto compartilhado com C8b e fábrica no S1. [Contexto](chamados/tests/test_e3_pos_suite_sem_banco.py:17) | [29 → 29](chamados/tests/test_e3_pos_suite_sem_banco.py:54) |
+| `test_e3_tarefa_admin_sem_banco.py` | Modelo `N` de literais e perguntas `N` no HEAD :86/:111/:200 → classe do helper, fábrica em `forma_b` e ambos na testemunha C6. [Modelo](chamados/tests/test_e3_tarefa_admin_sem_banco.py:85) [Forma B](chamados/tests/test_e3_tarefa_admin_sem_banco.py:112) | [7 → 7](chamados/tests/test_e3_tarefa_admin_sem_banco.py:184) |
+| `test_e4b_c4v7_memoria.py` | A foto usava `DecisaoPergunta=modelo()` no HEAD :358 → classe compartilhada com o gerenciador vazio instalado no contexto da foto. O comando usa a montagem de `AlcanceTest`. [Foto](chamados/tests/test_e4b_c4v7_memoria.py:381) [Comando](chamados/tests/test_e4b_c4v7_memoria.py:86) | [65 → 65](chamados/tests/test_e4b_c4v7_memoria.py:358) |
+| `test_e4b_classe_e_memoria.py` | `Objeto` montado à mão e `DecisaoPergunta=NS()` no HEAD :282/:334 → fábrica preservando `Objeto` e `Linhas`, com a classe do helper no módulo falso. [Pergunta](chamados/tests/test_e4b_classe_e_memoria.py:283) | [122 → 122](chamados/tests/test_e4b_classe_e_memoria.py:333) |
+| `test_pergunta_viva.py` | `_p` devolvia `NS` sem `pk` no HEAD :13 → fábrica com `pk=None` e relação vazia, passando pelo compositor real. [Leitura real](chamados/models.py:4330) | [12 → 12](chamados/tests/test_pergunta_viva.py:9) |
+
+Os dois arquivos novos são [duble_pergunta.py](chamados/tests/duble_pergunta.py:1) e [test_e4c_f5_duble_conforme.py](chamados/tests/test_e4c_f5_duble_conforme.py:1). O helper importa só a biblioteca padrão e lê os cinco valores da própria pergunta. Verifiquei o import normal, o retorno, `_replace` e `decisoes.all()` sem Django. A classe também fornece `RESPOSTA`, `VALIDACAO`, `DEVOLUCAO`, `RECUSA`, `REABERTURA`, `SILENCIO` e `ABSORCAO` para os ramos de `_pela_decisao`. O gerenciador `objects` é fornecido pela fixture da foto, que executa `.filter()`. [Helper](chamados/tests/duble_pergunta.py:3) [Ramos da tarefa](chamados/services/tarefa_do_dia.py:150) [Leitura da foto](chamados/services/foto_e4b.py:280)
+
+`test_e3_c8c_sem_banco` recebe o helper por `forma_b` e `tarefa_em_memoria`. O R11 de `test_e3_portas_tarefa` recebe a montagem de `e3_v8_apoio`. C11, C4 tranca, C4v14 e C6 recebem a montagem compartilhada de `AlcanceTest`. [C8c](chamados/tests/test_e3_c8c_sem_banco.py:41) [R11](chamados/tests/test_e3_portas_tarefa.py:631) [C11](chamados/tests/test_e4b_c11_memoria.py:36) [C4](chamados/tests/test_e4b_c4_tranca_memoria.py:26) [C4v14](chamados/tests/test_e4b_c4v14_memoria.py:33) [C6](chamados/tests/test_e4b_c6_memoria.py:15)
+
+### Casos especiais e previsão
+
+- **`test_mutante_sem_patch_no_pai_cai_na_sentinela`**. A falta de `.composta` interrompia a porta antes da chamada que dispara `SENTINELA modulo real`. A montagem compartilhada corrige esse ponto. Prevejo que o mutante volte a atingir a sentinela [nao verificado]. [Caso](chamados/tests/test_e4b_classe_e_memoria.py:255) [Leitura anterior à chamada](chamados/services/disputa_emissao.py:1854) [Sentinela](chamados/tests/test_e4b_classe_e_memoria.py:224)
+- **`test_mutantes_mordem_no_assert_pretendido`**. Prevejo vermelho em série. Medi **zero ocorrências** da âncora de `rouba_respondida_do_hx`, que ainda procura `pergunta_respondida(p)`. O código usa `pergunta_respondida(DecisaoPergunta.composta(p))`, e o teste exige uma ocorrência antes de aplicar o mutante. A hipótese para o `PicklingError` é o transporte do subteste falho, que referencia um caso com mocks. O traceback original está [nao verificado]. [Âncora](chamados/tests/test_e4b_classe_e_memoria.py:51) [Checagem](chamados/tests/test_e4b_classe_e_memoria.py:1038) [Mocks](chamados/tests/test_e4b_classe_e_memoria.py:288) [Transporte](core/tests/test_contract_tblib_no_paralelo.py:4)
+- **`test_RED_callbacks_conhecidos_fora_do_alcance_recusam_com_nome`**. A fase de planejamento passa pela montagem corrigida antes de executar os callbacks. O `PicklingError` é compatível com o transporte de um subteste que retém a conexão e sua fila com `Mock`. A falha original e a cor após a cura ficam [nao verificado]. [Planejamento](chamados/management/commands/backfill_fio_morto_e4b.py:82) [Conexão](chamados/tests/test_e4b_c4v7_memoria.py:38) [Subteste](chamados/tests/test_e4b_c4v7_memoria.py:240)
+- **Tetos A2 fora do escopo**. A sonda registra E2 `36 × 30`, F3 `56 × 48` e O261 `9 > 8`. Os asserts da cópia ainda exigem igualdade em E2 e F3 e teto de `8` no O261. A previsão continua vermelha pelos dados fornecidos, sem remedição [nao verificado]. [E2](chamados/tests/test_e2_tarefa_do_dia.py:938) [F3](escala/tests/test_f3_beco1_folga_na_lista.py:402) [O261](chamados/tests/test_o261_julgamento_desfaz_carimbo.py:205)
+
+### Comandos para o Code
+
+Selos de conformidade, contagem e um comando por mutante. Os três REDs passam quando a comparação rejeita o mutante em memória. [Conformidade](chamados/tests/test_e4c_f5_duble_conforme.py:38) [Mutantes](chamados/tests/test_e4c_f5_duble_conforme.py:51)
+
+```bash
+s=chamados.tests.test_e4c_f5_duble_conforme.DublePerguntaConformeTest
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_duble_conforme_ao_modelo" "$s.test_contagem_dos_asserts_igual_ao_main"
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_RED_mutante_sem_um_campo"
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_RED_mutante_com_assinatura_diferente"
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_RED_fonte_com_um_assert_a_menos"
+```
+
+Harnesses da lista, agrupados por classe onde há vários casos. `PerguntaVivaOrdemTest` seleciona os 11 casos. [Pergunta viva](chamados/tests/test_pergunta_viva.py:15) [C8b](chamados/tests/test_e3_c8b_sem_banco.py:210) [E4b](chamados/tests/test_e4b_classe_e_memoria.py:212)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 \
+  chamados.tests.test_e1_v10.PlanoParticionaTest.test_RED_merito_sob_canonica_sem_episodio \
+  chamados.tests.test_e3_c8b_sem_banco.AlimentacaoC6 \
+  chamados.tests.test_e3_c8c_sem_banco.C8cSemBanco.test_RED_posicao_ausente_e_alimentada \
+  chamados.tests.test_e3_degrau_dono_e_porta.ConsultaECarga \
+  chamados.tests.test_e3_portas_tarefa.MatrizV8Test.test_v8_R11_um_instante_ate_o_app \
+  chamados.tests.test_e3_pos_suite_sem_banco.PosSuiteSemBanco \
+  chamados.tests.test_e3_tarefa_admin_sem_banco.LimitesDaConstrucao.test_C6_com_relacoes_e_tranca_carregadas_ainda_desce_por_pergunta \
+  chamados.tests.test_e4b_c11_memoria.DiaC11Test.test_RED_conversa_e_sem_dia_nao_sao_rotuladas_exportadas \
+  chamados.tests.test_e4b_c11_memoria.RelogioC11Test.test_RED_apply_ignora_recorte_argv_mas_DRY_conserva \
+  chamados.tests.test_e4b_c4_tranca_memoria.TrancaMemoriaTest.test_RED_S143_retira_avulso_com_memo_do_ato_sem_aquecer_cargas \
+  chamados.tests.test_e4b_c4v14_memoria.C7TrancaMemoriaTest \
+  chamados.tests.test_e4b_c4v7_memoria.C4v7MemoriaTest \
+  chamados.tests.test_e4b_c6_memoria.C6MemoriaTest \
+  chamados.tests.test_e4b_classe_e_memoria.AlcanceTest \
+  chamados.tests.test_pergunta_viva.PerguntaVivaOrdemTest
+```
+
+LEI-AKITA: origem=chamados/models.py:24 e :4351, testemunha=chamados/tests/test_e4c_f5_duble_conforme.py:38, RED=chamados/tests/test_e4c_f5_duble_conforme.py:51/:57/:72, padrao=Architecture Conformance Test (docs/GLOSSARIO.md:15).
 
 ## 19/11 20:07 · sessao 2cf1fbf9028e · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1120,53 +1184,4 @@ Snapshot fixado em `ba4cb6c3c33403eecacbefeeef01b64c5b441a83`. [Commit no reposi
 
 **[nao verificado]** — ocorrência em produção dos cenários de P5, SQL efetivamente emitido pelo Django ao excluir um usuário e acessos por operadores ou ferramentas externas a `app/`.
 
-## 19/11 15:41 · sessao 8a71eb7ff630 · CADEIA-20-PASSO-1 · verificador · origem=Code
-
-**BLOQUEIA.** O teste de consultas pode passar com uma consulta por sobra no caminho que carrega a CXR sem fotografia fornecida. A lavra ainda recebe um parâmetro sem uso, e a regra de rajada perde a distância real entre duas sobras da mesma célula em lados opostos da meia-noite. `app/escala/tests/test_cadeia20_lavra.py:230–263`, `app/ponto/services/cartorio.py:959–998`, `app/ponto/services/cartorio.py:1066–1072`, `app/escala/orfa_classe.py:8–22`, `app/escala/orfa_classe.py:49–66`
-
-Conferi os arquivos da cópia fornecida e executei em memória apenas as funções puras citadas abaixo. A identidade Git do diretório, a execução da suíte Django e o resultado dos mutantes nesta volta ficam **[nao verificado]**. [nao verificado]
-
-## 1. P1–P5 da triagem
-
-| Item | Veredito | Correção, mordida e limite |
-|---|---|---|
-| **P1 · Contagem por célula** | **NÃO BLOQUEIA** | Compara quantidade e hora por posição em cada célula com `razoes_orfas`. O booleano exige também zero células desalinhadas. O RED tem duas sobras e duas entradas no agregado, distribuídas como `2/0` entre duas células que deveriam ter `1/1`. Voltar à soma global falha. Retirar a comparação de horas também falha, pelo caso `10:00` → `11:00`. Comparar horas ordenadas ainda passaria pelos casos mostrados, que não incluem uma permutação pura. Atas sem a chave seguem contadas à parte. `app/ponto/services/cartorio.py:1006–1031`, `app/escala/tests/test_cadeia20_lavra.py:134–161`, `app/escala/tests/test_cadeia20_mutantes.py:63–71` |
-| **P2 · Parâmetros mortos** | **BLOQUEIA pelo resíduo** | `data_turno` e `fuso` saíram da assinatura e dos chamadores. Restaurar só a assinatura antiga quebra as chamadas atuais. Restaurar assinatura e chamadas juntas deixa os testes funcionais passarem com os parâmetros mortos de volta. A assinatura de produção de `_lavrar_razoes_sobras` ainda recebe `out` e o corpo inteiro dispensa esse argumento. O auxiliar de teste `julgar` também reteve `dia` sem uso. `app/escala/orfa_classe.py:30–36`, `app/ponto/services/cartorio.py:959–998`, `app/escala/tests/test_cadeia20_coletor.py:12–14`, `app/escala/tests/test_razao_da_sobra.py:25–29`, `CLAUDE.md:178` |
-| **P3 · Primeira lavra** | **BLOQUEIA pelo alcance do teto** | O teste recarrega colaborador e células, retira `razoes_orfas` da memória e do banco e captura a primeira chamada de cada braço sob rollback. Isso corrige a medição da segunda passada aquecida. A preparação preserva os demais efeitos da lavra disparada pelo sinal. O teste compara dois acréscimos e admite zero chamadas a CXR. Uma lavra que virasse no-op continuaria satisfazendo esse teste isolado. A costura exige a gravação em outro teste. `app/escala/tests/test_cadeia20_lavra.py:227–263`, `app/escala/tests/test_cadeia20_costura.py:37–54` |
-| **P4 · Atribuição e reconciliação na virada** | **NÃO BLOQUEIA nos dois casos pedidos** | A sobra `01:30` tem de aparecer na grade e na ata de `DATA`, com o instante de `DEPOIS`, razão de intervalo e falha nula. Transferi-la exclusivamente ao dia civil falha. Na saída cruzada, tirar `07:58` do dia civil e deixar o seu instante falha na asserção que o m15 mira. Esse segundo RED ainda passaria se a reconciliação apagasse todos os pares e todas as sobras daquele dia, pois só exige ausência de `07:58` e alinhamento do restante. O primeiro RED também admite uma cópia extra no dia civil. `app/escala/tests/test_cadeia20_costura.py:117–151`, `app/escala/utils.py:2043–2052`, `app/escala/utils.py:2084–2086`, `app/escala/tests/test_cadeia20_mutantes.py:61–62` |
-| **P5 · Entrada sem razão nem falha** | **NÃO BLOQUEIA para as entradas produzidas pela lavra** | O contador próprio sobe quando `razao is None` e `falha` é falsa. O RED morde `None` e `''`, e o m17 retira o incremento. A medida aceita qualquer valor verdadeiro como falha. Conferi em memória que `' '` entra em `falhas` e deixa o contador em zero. A lavra emite um conjunto fechado de rótulos. `app/ponto/services/cartorio.py:1019–1032`, `app/ponto/services/cartorio.py:994–998`, `app/escala/orfa_classe.py:3–5`, `app/escala/orfa_classe.py:56–82`, `app/escala/tests/test_cadeia20_lavra.py:163–168`, `app/escala/tests/test_cadeia20_mutantes.py:72–74` |
-
-## 2. Quem escreve e quem lê — NÃO BLOQUEIA
-
-No censo da cópia, os leitores identificados do retorno são os testes abaixo. O executor de mutantes substitui a função importada pelo teste. Os dois testes homônimos fora da cadeia medem rubricas e períodos. Um leitor externo da sonda fica **[nao verificado]**. `app/escala/tests/test_cadeia20_lavra.py:141–168`, `app/escala/tests/test_cadeia20_costura.py:52–58`, `app/escala/tests/test_cadeia20_mutantes.py:117–119`, `app/ponto/tests/test_o280_bateria_da_lei.py:2874–2880`, `app/ponto/tests/test_o280_bateria_da_lei.py:5463–5472`
-
-| Chave | Escritor | Leitores e significado |
-|---|---|---|
-| `celulas_desalinhadas` | `app/ponto/services/cartorio.py:1003–1005`, `app/ponto/services/cartorio.py:1015–1018` | O próprio booleano lê o total. Os testes conferem zero, duas células compensadas e uma célula sem órfã com entrada excedente. `app/ponto/services/cartorio.py:1029–1031`, `app/escala/tests/test_cadeia20_lavra.py:141–161` |
-| `sem_razao_sem_falha` | `app/ponto/services/cartorio.py:1003–1005`, `app/ponto/services/cartorio.py:1019–1026` | Os testes leem zero no caso nominal e um para `None` e `''`. A costura compara o dicionário inteiro entre lavras. `app/escala/tests/test_cadeia20_lavra.py:141–145`, `app/escala/tests/test_cadeia20_lavra.py:163–168`, `app/escala/tests/test_cadeia20_costura.py:52–58` |
-| `contador_igual_universo` | `app/ponto/services/cartorio.py:1029–1031` | Os leitores exercitam a soma global **e** a guarda por célula. A chave pode ser verdadeira com atas legadas sem `razoes_orfas` ou com `sem_razao_sem_falha` positivo. Nenhuma das duas condições é exigida pelo booleano. `app/ponto/services/cartorio.py:1010–1031`, `app/escala/tests/test_cadeia20_lavra.py:134–158`, `app/escala/tests/test_cadeia20_costura.py:52–58` |
-| `falhas` | `app/ponto/services/cartorio.py:1020–1026` | O delta conta as falhas verdadeiras entre as entradas sem razão. O teste compara o mapa inteiro, e a costura o inclui na igualdade da medida. `app/escala/tests/test_cadeia20_lavra.py:134–145`, `app/escala/tests/test_cadeia20_costura.py:52–58` |
-
-`razao_da_sobra` perdeu dois parâmetros e ganhou zero. O chamador de produção passa `(hora, instante)`, turnos, o resultado de `dia_sem_trabalho`, pausas e a marca CXR. O classificador consome os cinco. As chamadas diretas de teste estão no coletor e no auxiliar `julgar`, e o mutante substitui a função no módulo. A data da célula indexa os insumos e a CXR. O instante identifica a batida, inclusive em outra data civil. Não encontrei leitor da assinatura que troque essas duas referências. `app/ponto/services/cartorio.py:974–993`, `app/escala/orfa_classe.py:30–81`, `app/escala/tests/test_cadeia20_coletor.py:7–14`, `app/escala/tests/test_razao_da_sobra.py:25–29`, `app/escala/tests/test_cadeia20_mutantes.py:115–116`
-
-## 3. Teto e meia-noite — BLOQUEIA pelo teto
-
-- **Consultas.** Um `SELECT` adicional em cada célula exercitada faz o acréscimo crescer de 2 para 4, mantido o restante do caminho. A brecha demonstrável é `lavra=None`: o teste sempre passa o dicionário devolvido por `ultimo_lavrado()`, inclusive quando não há medida. Uma regressão que voltasse a buscar esse snapshot a cada sobra somente quando `lavra=None` passaria pelo teste. `julgar_celula` expõe justamente esse caminho por padrão. O código atual memoíza a carga. A captura ainda conta só SQL que começa por `SELECT`. `app/escala/tests/test_cadeia20_lavra.py:230–263`, `app/ponto/services/cxr_na_lista.py:152–162`, `app/ponto/services/cartorio.py:1066–1072`, `app/ponto/services/cartorio.py:2144–2149`, `app/ponto/services/cartorio.py:2173–2175`
-- **Meia-noite.** O caso com três flags prova a atribuição positiva ao turno de `DATA`. A grade encadeia os marcos, inclui as flags internas por instante e põe o excedente dos dois slots `I` em `orfas` e `instantes` do mesmo dia de montagem. O teste recarrega a célula de `DATA` e exige encontrar ali a razão da sobra `01:30`. Ele deixa em aberto a ausência de duplicata em `DEPOIS` e não testa qual data foi usada para a marca CXR. `app/escala/utils.py:1410–1411`, `app/escala/utils.py:1640–1641`, `app/escala/utils.py:1662–1666`, `app/escala/utils.py:1720–1727`, `app/escala/utils.py:1752–1759`, `app/escala/utils.py:1783–1785`, `app/escala/tests/test_cadeia20_costura.py:27–35`, `app/escala/tests/test_cadeia20_costura.py:117–132`
-
-## 4. Classes de reprovação — BLOQUEIA
-
-- **Segundo juiz registrado e segundo escritor.** A lavra pergunta ao juiz de dia sem trabalho e usa o resultado do pareador e da grade. A reconciliação consome o par e remove a ocorrência pelo mesmo índice. Os dois ramos acrescentam a lista em memória e persistem pela mesma porta de célula, com `lavrar_veredito` seguido de `carimbar`. Não encontrei duplicação dessas autoridades ou outra escrita de `razoes_orfas` em produção. `app/core/juizes.py:215–224`, `app/chamados/juizes.py:445–460`, `app/ponto/services/cartorio.py:974–998`, `app/escala/utils.py:1935–1936`, `app/escala/utils.py:2043–2052`, `app/escala/utils.py:2084–2086`, `app/ponto/services/cartorio.py:1404–1429`, `app/ponto/services/cartorio.py:1982–2007`, `app/ponto/portas/celula.py:1181–1202`
-- **Derivação paralela e campo com dois usos.** A proximidade de órfãs por minutos de `HH:MM` é calculada no classificador e também no serviço de cluster, que exige ainda lâmpada apagada. Na razão nova, `hora` serve de rótulo e de base para distância, mesmo com o instante disponível. Conferi em memória que `23:55` e `00:05` formam dois grupos unitários. Se forem as duas sobras ligadas na mesma ata, a regra deixa de atribuir `BATIDA_REPETIDA` a batidas separadas por dez minutos. O RED noturno tem só uma sobra-alvo e pode passar com esse defeito. `app/escala/orfa_classe.py:8–22`, `app/escala/orfa_classe.py:49–68`, `app/ponto/services/cluster_espurio.py:25–36`, `app/escala/tests/test_cadeia20_costura.py:117–132`
-- **Relógio e testes.** A razão nova não chama relógio. No caminho avulso já existe `localdate()` independente de `agora`, além de `now()` na guarda de hoje. No corpo do cartório, o gate de afastamento chama sem data e chega a `date.today()`. São leituras fora do instante fornecido ao ato, nos caminhos que cercam a lavra. Os REDs ORM de costura e consultas congelam o relógio e passam `agora` fixo. `app/escala/orfa_classe.py:30–82`, `app/ponto/services/cartorio.py:2144–2175`, `app/ponto/services/cartorio.py:1461–1465`, `app/ponto/services/afastado_avisa.py:20`, `app/ponto/services/afastado_avisa.py:38–43`, `app/ponto/turnos.py:2741–2748`, `app/escala/tests/test_cadeia20_costura.py:20–34`, `app/escala/tests/test_cadeia20_lavra.py:226–254`
-- **Ordem de trava.** A carga nova da CXR faz leitura simples. A persistência segue pelo `atomic` da porta, que salva a célula antes de emitir o evento. Não identifiquei nova aquisição explícita de trava nesse trajeto. O teto sem mordida para `lavra=None` permanece o achado do item 3. `app/ponto/services/cxr_na_lista.py:152–162`, `app/ponto/services/cartorio.py:1066–1072`, `app/ponto/services/cartorio.py:1985–2007`, `app/ponto/portas/celula.py:957–965`
-
-## 5. Segunda relavra — NÃO BLOQUEIA por atribuição das 19 ao diff
-
-O dado fornecido registra **19 células em cada árvore**. A identidade das células, as chaves que mudaram, os instantes dos atos e os snapshots escolhidos estão **[nao verificado]**.
-
-- **Relógio e CXR.** `razoes_orfas` e `falha` são calculadas a partir dos insumos recebidos. A marca `escala_nao_descreve` lê o snapshot mais recente quando o chamador não fixa `lavra`, e pode mudar quando muda a publicação. O comando fixa um snapshot por execução. Se “insumos” inclui o campo persistido `insumos_em`, ele recebe explicitamente `agora` quando `carimbar` grava. `app/escala/orfa_classe.py:38–82`, `app/ponto/services/cartorio.py:988–998`, `app/ponto/services/cartorio.py:1066–1072`, `app/ponto/services/cxr_na_lista.py:152–162`, `app/ponto/services/cxr_na_lista.py:174–185`, `app/ponto/management/commands/processar_cartorio.py:59–67`, `app/ponto/portas/celula.py:1189–1201`
-- **Ordem.** A lista gravada segue a ordem das sobras, e a grade ordena os pares antes de projetar as horas. Se houver mais de um turno candidato com o mesmo `pk` de batida, o classificador usa o primeiro turno encontrado. O coletor percorre segmentos por data e ordena os turnos por `data_turno`. A seleção de snapshot tem ordenação por `data_ref` e `calculado_em`, sem terceiro desempate. A ocorrência desses empates na amostra está **[nao verificado]**. `app/escala/utils.py:1867–1871`, `app/escala/orfa_classe.py:38–47`, `app/escala/orfa_classe.py:55–81`, `app/ponto/turnos.py:1961–1977`, `app/ponto/turnos.py:1997–2006`, `app/ponto/services/cxr_na_lista.py:152–156`
-- **Estado criado pela primeira relavra.** Há dependência indireta concreta. A pré-passagem da grade entrega ao pareador células carregadas do banco com a ata anterior. Para o ramo com intervalo cadastrado, o turno obtido pode alimentar `_match_marcos`. Na passagem final, o pareador recebe lâmpadas e órfãs da montagem atual dentro da janela e a ata do banco no pad. Os turnos e instantes daí saem para a razão e a falha da próxima lavra. A lista anterior de `razoes_orfas` não é usada como entrada desse cálculo. Isso demonstra o caminho pelo qual uma escrita anterior pode afetar a próxima, com a ligação às 19 células **[nao verificado]**. `app/escala/utils.py:1327–1332`, `app/escala/utils.py:1598–1618`, `app/escala/utils.py:1723–1727`, `app/escala/utils.py:1917–1936`, `app/escala/utils.py:2117–2118`, `app/ponto/turnos.py:1940–1944`, `app/ponto/services/cartorio.py:959–998`
-
-_7419 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7420 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
