@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 19:44:18.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (19.6 MB). Acoes na janela: **546**.
+**Medido em 19/11/2026 19:49:34.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (19.6 MB). Acoes na janela: **548**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:44:56 | Bash | Wait for Codex aval revision | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/F5/vA/revisao_1945; until [ -e $R/fim ]; do /usr/bin/sleep 20; done; cat $R/fim` |
+| 19:44:32 | Bash | Launch Codex aval revision | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/F5/vA/revisao_1945; P=logs/ESPINHA-BRIEFS/F5/vA/prova; A=logs/AVAIS-1515 cat > $R/q.txt <<'EOF' REVISAO-DO-AVAL (CODEX_PAPEL=verificador, obra E4C-F5-CONSTROI) do aval anexo RESPOSTA-F5-DUBLE-1911-1945, ANTES de executar. Arvore = copia do commit 18bf86f01 (compositor DecisaoPergunta.composta/LeituraComposta em chamados/models.py). O diff A1 (sem  ...` |
 | 19:44:16 | Bash | Build revision annexes | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/F5/vA/revisao_1945; P=logs/ESPINHA-BRIEFS/F5/vA/prova; mkdir -p $R; (cd /home/ronald/wt-codex-e4c-f5-constroi-184647 && git diff HEAD; for f in $(git ls-files --others --exclude-standard); do echo "=== NOVO $f"; cat $f; done) > $R/diff_A1.txt; ls logs/AVAIS-1515/ \| grep -i "1710\\|1735\\|1830"; wc -c $R/diff_A1.txt $P/a1_por_modulo.txt $P/mods_qu ...` |
 | 19:44:12 | Bash | See wrapper output of previous revision | `cd /home/ronald/saas-hasner; cat logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/wrapper.out \| head -5; cat logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/r.txt.id` |
 | 19:44:09 | Bash | Inspect previous aval revision call | `cd /home/ronald/saas-hasner; ls logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/; cat logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/*.sh 2>/dev/null; head -c 1500 logs/ESPINHA-BRIEFS/F5/v3/revisao_1830/q.txt; git cat-file -t 18bf86f01; cd /home/ronald/wt-codex-e4c-f5-constroi-184647 && git status --porcelain \| head -20` |
