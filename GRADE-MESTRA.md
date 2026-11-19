@@ -927,7 +927,7 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 |---|---|---|---|---|---|---|---|
 | BO-0611-05-DESLIGADO-FERIAS | LATERAL-ESTRUTURA | Define o efeito financeiro do ponto em férias ou desligamento. | - | duas decisões de lei do DP | +..+..... | REGISTRADA | BACKLOG:1932 |
 | CARIMBO-SEM-VIGENCIA | ESPINHA-E | Faz mudanças de vigência provocarem novo julgamento do dia. | - | Medir vínculos editados após o carimbo | +........ | REGISTRADA | BACKLOG:1509 |
-| CARTORIO-PROTESTA-1A-CLAUSULA | ESPINHA-E | Define o alcance da regra de dia sem trabalho no cartório. | - | corte do predicado | ......... | PARADA (pergunta antes da migração) | BACKLOG:925 |
+| CARTORIO-PROTESTA-1A-CLAUSULA | ESPINHA-E | Define o alcance da regra de dia sem trabalho no cartório. | - | corte DST-L2-1800 | ......... | FECHADA (DST-L2: _protesta pergunta ao juiz) | BACKLOG:925 |
 | CHAVE-DE-ENTRADA-INCOMPLETA | ESPINHA-E | Inclui no julgamento entradas que possam envelhecer a célula. | - | caso medido de célula velha | .+....... | REGISTRADA | BACKLOG:1066 |
 | CONTRATO-20-E2-QUAL-ATO | ESPINHA-E | Evita cobrar ausência quando feriado ou folga já explica o dia. | - | O-OUTBOX | ++....... | REGISTRADA | app/docs/BACKLOG.md:1073 |
 | CONTROLE-SEM-PLANTIO-SEPARA-AS-DUAS-METADES | INSTRUMENTO | Separa o efeito do horário registrado e da relavratura. | - | O317-APPLY-MOVE-MAIS-QUE-A-HORA | ++....... | REGISTRADA | BACKLOG:1628 |
