@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 01:35** · publicado em **19/11/2026 01:36** (UTC-3)
+> Ultima resposta processada: **19/11/2026 01:41** · publicado em **19/11/2026 01:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 01:41 · sessao 2d8feb0d356d · E4C-F3-LAVRA-FOTO · construtor · origem=Code
+
+Criado [test_f3_lavra_foto_sem_decisao.py](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:1). Os testes não foram executados, conforme solicitado; os resultados são [não verificado]. [nao verificado]
+
+Os mutantes usam a âncora `    ids = list(colaborador_ids)\n`, exceto M6, que também usa `import datetime\n` para inserir o apelido no módulo. As inserções verificam que cada âncora ocorre uma única vez ([arquivo:9](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:9), [arquivo:70](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:70)).
+
+Para executar cada mutante individualmente, a partir de `app/`:
+
+```bash
+T=chamados.tests.test_f3_lavra_foto_sem_decisao.LavraFotoSemDecisaoTest
+PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m1_import_direto"
+PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m2_import_apelidado"
+PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m3_modulo_apelidado"
+PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m4_get_model"
+PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m5_related_manager"
+PYTHONDONTWRITEBYTECODE=1 python manage.py test "$T.test_MORDE_m6_apelido_no_modulo"
+```
+
+O arquivo também contém os métodos `test_fonte_real_sem_leitura`, `test_alvo_ausente_falha`, `test_controle_leitura_na_vizinha_nao_conta`, `test_MORDE_funcao_aninhada`, `test_MORDE_lookup_relacionado` e `test_MORDE_get_model_string_unica` ([arquivo:81](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:81)). O controle usa a âncora `def esta_stale(p, marcos, agora):\n`; os três mutantes adicionais usam a âncora do corpo ([arquivo:122](/home/ronald/wt-codex-e4c-f3-lavra-foto-013922/app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:122)).
 
 ## 19/11 01:35 · sessao 97f3c0098f5b · ESPURIA-TELA · verificador · origem=Code
 
@@ -3127,159 +3147,4 @@ A sonda não foi executada contra a frota; sua execução e seus resultados são
 
 perguntas de lei: 2
 
-## 19/11 00:46 · sessao 8c1810bfebbb · QUEIMA-B6 · censo · origem=Code
-
-O código guarda vários sinais diferentes de trabalho no mesmo dia: decisão administrativa, fato julgado pelo cartório, decisão sobre HE e rubricas apuradas. Eles podem coexistir e não têm o mesmo alcance; a matriz e a sonda preservam essa distinção. [app/escala/models.py:1748] [app/ponto/models.py:315] [app/ponto/models.py:1271]
-
-**Limite do censo:** não verifiquei exaustivamente todos os escritores históricos, todos os consumidores de folha ou todos os estados indiretos. A sonda abaixo mede os estados persistidos identificados, com critérios explícitos; ela não estabelece o universo jurídico completo de trabalho reconhecido. [não verificado]
-
-| Escritor, estado e chamadores | Efeitos: dinheiro, troca e apresentação | Revogação e o que desfaz |
-|---|---|---|
-| **Resolver dia — admin.** `veredito_celula` aceita `trabalhou` mediante suas verificações e chama `CelulaDia.lavrar_veredito`, gravando `veredito='trabalhou'` e `veredito_via='admin'`; a view chama o serviço por dia. [app/ponto/services/veredito_celula.py:211] [app/ponto/services/veredito_celula.py:228] [app/ponto/services/veredito_celula.py:351] [app/ponto/views.py:3466] | Pode inverter marcações, criar batidas manuais aprovadas, recalcular turnos e fechar o fio do dia; a decisão é lida pelo calendário e pelo app. Seu efeito financeiro depende da apuração posterior. [app/ponto/services/veredito_celula.py:313] [app/ponto/services/veredito_celula.py:330] [app/ponto/services/veredito_celula.py:346] [app/colaboradores/services/calendario.py:443] [app/api/views.py:1412] | Outra decisão administrativa pode sobrescrever o veredito; o cartório não prevalece sobre a decisão admin. O desfazimento das batidas criadas ou invertidas não foi demonstrado. [app/ponto/portas/celula.py:1032] [app/ponto/portas/celula.py:1060] [app/ponto/portas/celula.py:1092] [não verificado] |
-| **Cartório — fato em célula.** `processar_cartorio` chama a mesma porta com `via='cartorio'`; `fato_sem_previsao` e `fato_em_ausencia` registram os fatos descritos no modelo. [app/ponto/services/cartorio.py:1854] [app/escala/models.py:1751] | `fato_sem_previsao` participa da classificação visual como folga trabalhada; `fato_em_ausencia` acusa uma contradição que pode reter a folha. O valor do dia reside em `DiaPago`, não no status. [app/ponto/status_dia.py:157] [app/escala/models.py:1754] [app/escala/models.py:1767] [app/ponto/status_dia.py:12] | Novo julgamento pode substituir o veredito do cartório; decisão admin prevalece. Não há histórico de revogação desses valores demonstrado neste censo. [app/ponto/services/cartorio.py:1854] [app/ponto/portas/celula.py:1060] [não verificado] |
-| **HE — decisão admin.** `decidir_he` chama `_gravar` para `DecisaoHE.estado='autorizado'` ou `'nao'`; há chamadas pela tela e por portas de lote. A chave é colaborador e data. [app/ponto/portas/he.py:159] [app/ponto/portas/he.py:195] [app/ponto/portas/he.py:206] [app/ponto/views.py:532] [app/ponto/portas/he.py:265] [app/ponto/portas/he.py:595] [app/ponto/models.py:1353] | A autorização permite contar a parcela fora da janela no cálculo; `nao` registra recusa e não significa que o dia inteiro não foi trabalhado. A porta admin agenda recálculo; a gestão lê as decisões vigentes. [app/ponto/motor_calculo_v2.py:1397] [app/ponto/motor_calculo_v2.py:1694] [app/ponto/models.py:1283] [app/ponto/portas/he.py:211] [app/ponto/services/gestao_he.py:87] | Uma nova decisão admin substitui o estado pela mesma porta e pode mudar o resultado ao recalcular. A revogação formal examinada não se aplica à decisão de origem admin. [app/ponto/portas/he.py:195] [app/ponto/portas/he.py:206] [app/ponto/portas/he.py:229] [app/ponto/portas/he.py:478] |
-| **HE — recusa automática.** `recusar_ponta_pequena` chama `_gravar` com `estado='nao'` e `origem='sistema'`; há chamador em comando de gestão. É decisão sobre HE, não reconhecimento positivo de trabalho. [app/ponto/portas/he.py:297] [app/ponto/portas/he.py:369] [app/ponto/management/commands/recusar_ponta_pequena.py:170] | Registra a recusa da ponta pequena; a pendência e os leitores de gestão consultam a vigência. [app/ponto/portas/he.py:313] [app/ponto/services/he_pendente_lavrado.py:71] [app/ponto/services/gestao_he.py:87] | `revogar_recusa_do_sistema` chama `_marcar_revogada` quando a premissa deixa de valer; preenche `revogada_em`, motivo e minutos, e `vigentes()` deixa de retornar a linha. A pendência volta, sem autorizar HE por si. [app/ponto/portas/he.py:375] [app/ponto/portas/he.py:421] [app/ponto/portas/he.py:494] [app/ponto/models.py:1265] [app/ponto/portas/he.py:434] |
-| **DiaPago — lavratura motor e oráculo.** `lavrar` escreve linhas por dia e uma linha de ajuste, substituindo as linhas da competência e versão; o fechamento chama a lavratura. Uma linha pode conter abono, previsão ou zeros, de modo que sua existência isolada não prova trabalho. [app/ponto/services/dia_pago.py:135] [app/ponto/services/dia_pago.py:345] [app/ponto/services/dia_pago.py:357] [app/ponto/services/dia_pago.py:359] [app/ponto/services/fechamento.py:1191] [app/ponto/services/fechamento.py:1265] [app/ponto/models.py:340] | Guarda horas trabalhadas, extras, noturnas, folga trabalhada e outras rubricas; calendário, espelho e app leem o dinheiro lavrado. O export de folga trabalhada usa o fechamento e a rubrica 200. [app/ponto/models.py:325] [app/colaboradores/services/calendario.py:303] [app/ponto/services/espelho.py:809] [app/api/views.py:1445] [app/folha/export.py:439] | A relavratura apaga e recria as linhas da competência/versão; não encontrei campo de revogação histórica equivalente ao de `DecisaoHE`. O resultado anterior não é recuperável apenas da linha substituída. [app/ponto/services/dia_pago.py:359] [app/ponto/models.py:315] [não verificado] |
-| **DiaPago — retrato de competência exportada.** `retratar_exportada` é outra porta de escrita: cria ou atualiza campos de grade e ajuste; é chamada pelo comando e pela porta de regeneração. [app/ponto/services/dia_pago.py:410] [app/ponto/services/dia_pago.py:466] [app/ponto/services/dia_pago.py:538] [app/ponto/management/commands/lavrar_dias_pagos.py:123] [app/ponto/portas/regen_exportada.py:193] | O retrato pode criar linha sem lavratura de rubricas; por isso, essa linha não deve ser contada automaticamente como trabalho. [app/ponto/services/dia_pago.py:472] | A substituição pela lavratura e a identificação histórica do escritor de cada valor após reescritas não foram estabelecidas para todos os casos. [app/ponto/services/dia_pago.py:359] [não verificado] |
-| **Folga trabalhada — derivação da apuração.** O fechamento classifica períodos de folga conforme escala e feriado; `lavrar` recebe esses períodos e escreve as rubricas correspondentes em `DiaPago`. [app/ponto/services/fechamento.py:925] [app/ponto/services/fechamento.py:944] [app/ponto/services/dia_pago.py:223] | Com escala certa, pode alimentar `horas_folga_trabalhada`; sem escala certa, o fechamento encaminha para horas trabalhadas. A exportação usa `folga_trabalhada_diurna`, rubrica 200; a tela também deriva um status de folga trabalhada. [app/ponto/services/fechamento.py:965] [app/ponto/services/fechamento.py:967] [app/folha/export.py:439] [app/ponto/status_dia.py:139] | Uma nova apuração pode alterar a classificação e relavrar o dinheiro; não identifiquei uma marca própria de revogação da classificação derivada. [app/ponto/services/dia_pago.py:135] [app/ponto/services/dia_pago.py:359] [não verificado] |
-
-**Leitores da ausência**
-
-| Leitor | Consequência da ausência |
-|---|---|
-| Motor de ponto | Para dia obrigatório sem data de trabalho nem justificativa, considera falta e horas de falta; há reflexos no cálculo de DSR. [app/ponto/motor_calculo_v2.py:2571] [app/ponto/motor_calculo_v2.py:2595] |
-| Status do dia e calendário | Dia encerrado sem certificação suficiente pode aparecer como `sem_certidao`; isso não afirma que a pessoa não trabalhou. [app/ponto/status_dia.py:45] [app/ponto/status_dia.py:291] |
-| `DiaPago` e seus consumidores | A soma distingue `sem_lavratura` de `sem_apuracao`; calendário, espelho e export também tratam a falta de lavra. [app/ponto/services/dia_pago.py:752] [app/ponto/services/dia_pago.py:797] [app/colaboradores/services/calendario.py:310] [app/ponto/services/espelho.py:395] [app/folha/porta_export.py:259] |
-| HE pendente | A ausência de decisão **vigente** permite que a pendência seja examinada como tal; uma linha revogada não é vigente. [app/ponto/services/he_pendente_lavrado.py:71] [app/ponto/services/he_pendente_lavrado.py:136] [app/ponto/models.py:1265] |
-| Cobrança de marcos | O veredito `trabalhou` está entre os que vetam cobrança; sua ausência, isoladamente, não prova que a cobrança será emitida, pois há outras condições. [app/ponto/marcos.py:119] [app/ponto/marcos.py:154] |
-| `veredito_do_dia` | O retorno `TRABALHOU` também pode ser o padrão quando nada se sabe; esse rótulo isolado não serve como prova positiva. [app/ponto/services/dia_decidido.py:337] [app/ponto/services/dia_decidido.py:409] |
-
-A sonda seguinte conta **linhas atuais**, por empresa e categoria, e sobreposição por chave `(colaborador, data)` entre categorias positivas. `REVOGADOS=NA` significa que o estado não dispõe, nesta medição, de histórico de revogação consultável; não significa zero. Os contadores de `DiaPago` são *proxies* de rubricas positivas, separados por versão, e não distinguem todos os autores históricos da linha. A sonda não imprime colaboradores nem nomes; portanto, não expõe identificadores de colaborador além da forma `colN` solicitada. [app/ponto/models.py:315] [app/ponto/services/dia_pago.py:359] [não verificado]
-
-O Python é somente leitura e foi preparado para o shell Django do envelope; **não foi executado**. O próprio `bin/sonda_leitura.sh --sombra` cria arquivos temporários, reescreve credencial/trilha e executa operações de configuração de role e grants, portanto não o executei sob a regra de não escrever. [bin/sonda_leitura.sh:115] [bin/sonda_leitura.sh:126] [bin/sonda_leitura.sh:140] [bin/sonda_leitura.sh:153] [bin/sonda_leitura.sh:216] [bin/sonda_leitura.sh:245]
-
-```python
-# Executar no shell Django do envelope de leitura, no schema desejado.
-# Contagens sao linhas; sobreposicao e por colaborador + data.
-# Nenhum nome, matricula ou identificador de colaborador e impresso.
-
-from collections import Counter, defaultdict
-
-erros = 0
-contagens = Counter()
-chaves = defaultdict(set)
-categorias = set()
-
-def registrar(empresa, categoria, estado, colaborador, data, positiva):
-    empresa = str(empresa) if empresa is not None else "SEM_EMPRESA"
-    categorias.add((empresa, categoria))
-    contagens[(empresa, categoria, estado)] += 1
-    if positiva and data is not None:
-        chaves[(empresa, colaborador, data)].add(categoria)
-
-try:
-    from ponto.models import DecisaoHE, DiaPago
-    from escala.models import CelulaDia
-
-    try:
-        campos = (
-            "colaborador__empresa_id", "colaborador_id", "data",
-            "origem", "estado", "revogada_em",
-        )
-        for empresa, col, dia, origem, estado, revogada in (
-            DecisaoHE.objects.values_list(*campos).iterator(chunk_size=2000)
-        ):
-            categoria = "HE_%s_%s" % (origem, estado)
-            situacao = "REVOGADO" if revogada is not None else "VIGENTE"
-            registrar(
-                empresa, categoria, situacao, col, dia,
-                positiva=(revogada is None and estado == "autorizado"),
-            )
-    except Exception as exc:
-        erros += 1
-        print("ERRO|fonte=DecisaoHE|tipo=%s" % type(exc).__name__)
-
-    try:
-        qs = CelulaDia.objects.filter(
-            veredito__in=("trabalhou", "fato_sem_previsao", "fato_em_ausencia")
-        ).values_list(
-            "colaborador__empresa_id", "colaborador_id", "data",
-            "veredito_via", "veredito",
-        )
-        for empresa, col, dia, via, veredito in qs.iterator(chunk_size=2000):
-            categoria = "CELULA_%s_%s" % (via, veredito)
-            registrar(empresa, categoria, "ATUAL", col, dia, positiva=True)
-    except Exception as exc:
-        erros += 1
-        print("ERRO|fonte=CelulaDia|tipo=%s" % type(exc).__name__)
-
-    try:
-        qs = DiaPago.objects.filter(tipo="dia", data__isnull=False).values_list(
-            "colaborador__empresa_id", "colaborador_id", "data", "versao",
-            "horas_trabalhadas", "horas_folga_trabalhada",
-            "minutos_realizados",
-        )
-        for empresa, col, dia, versao, horas, folga, minutos in qs.iterator(
-            chunk_size=2000
-        ):
-            # Cada linha pode entrar nas duas categorias; ambas sao proxies.
-            if (horas or 0) > 0 or (minutos or 0) > 0:
-                registrar(
-                    empresa, "DIAPAGO_%s_TRABALHO" % versao, "ATUAL",
-                    col, dia, positiva=True,
-                )
-            if (folga or 0) > 0:
-                registrar(
-                    empresa, "DIAPAGO_%s_FOLGA" % versao, "ATUAL",
-                    col, dia, positiva=True,
-                )
-    except Exception as exc:
-        erros += 1
-        print("ERRO|fonte=DiaPago|tipo=%s" % type(exc).__name__)
-
-    sobreposicoes = Counter()
-    pares = Counter()
-    for (empresa, _col, _dia), fontes in chaves.items():
-        if len(fontes) > 1:
-            for fonte in fontes:
-                sobreposicoes[(empresa, fonte)] += 1
-            fontes = sorted(fontes)
-            for i, primeira in enumerate(fontes):
-                for segunda in fontes[i + 1:]:
-                    pares[(empresa, primeira, segunda)] += 1
-
-    for empresa, categoria in sorted(categorias):
-        atual = contagens[(empresa, categoria, "ATUAL")]
-        vigente = contagens[(empresa, categoria, "VIGENTE")]
-        revogado = (
-            str(contagens[(empresa, categoria, "REVOGADO")])
-            if categoria.startswith("HE_") else "NA"
-        )
-        print(
-            "CENSO|empresa=%s|categoria=%s|atuais=%d|vigentes_HE=%d"
-            "|revogados=%s|dias_sobrepostos=%d"
-            % (
-                empresa, categoria, atual, vigente, revogado,
-                sobreposicoes[(empresa, categoria)],
-            )
-        )
-
-    for (empresa, primeira, segunda), quantidade in sorted(pares.items()):
-        print(
-            "PAR|empresa=%s|categoria1=%s|categoria2=%s|dias=%d"
-            % (empresa, primeira, segunda, quantidade)
-        )
-
-except Exception as exc:
-    erros += 1
-    print("ERRO|fonte=inicializacao|tipo=%s" % type(exc).__name__)
-finally:
-    print("ERROS=%d" % erros)
-    print("FIM_SONDA_B6")
-```
-
-A sobreposição da sonda identifica coincidência de categorias no mesmo colaborador e dia; ela **não** prova pagamento duplicado nem independência dos eventos, pois uma lavratura pode derivar de outra decisão. [app/ponto/portas/he.py:211] [app/ponto/services/dia_pago.py:135]
-
-perguntas de lei: 3
-
-_7222 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7223 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
