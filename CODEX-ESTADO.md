@@ -1,7 +1,73 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 14:35** · publicado em **19/11/2026 14:38** (UTC-3)
+> Ultima resposta processada: **19/11/2026 14:48** · publicado em **19/11/2026 14:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 14:48 · sessao 989197c67577 · - · - · origem=Ronald (tmux)
+
+Para Q3, **“5 batidas é o mínimo” só vale para excesso de slots internos, mantendo as duas pontas e evitando colisões de instantes**. Há casos menores. (app/escala/utils.py:1664; app/escala/utils.py:1735; app/escala/utils.py:1753)
+
+- **Excesso interno, caso claro:** `E22(d), S01(flag,d+1), E02(flag,d+1), S03(flag,d+1), S06(d+1)`. Os três flags fabricam três marcos internos; os dois primeiros ocupam `I`, `03:00` excede os dois slots e vira órfã do dia `d`, com instante em `d+1`. Pontas reais impedem a reconciliação posterior. (app/escala/utils.py:1720; app/escala/utils.py:1752; app/escala/utils.py:1758; app/escala/utils.py:1784; app/escala/utils.py:2039)
+
+- **Menor, preservando pontas, mas fora do intervalo estrito do turno:** `E22(d), S06:00(d+1), S06:30(flag,d+1)`. O dedupe mantém a última S porque são 30 minutos de diferença; `06:30` não fabrica marco porque está fora de `[22,06]`, mas entra no envelope até `07:30`; o matcher a declara órfã e consumida. A conservação final pula batidas consumidas, mesmo com slots `I` livres. Portanto ela fica órfã em `d`. (app/escala/utils.py:1355; app/escala/utils.py:1666; app/escala/utils.py:641; app/escala/utils.py:678; app/escala/utils.py:680; app/escala/utils.py:1845; app/escala/utils.py:1784)
+
+- **Colisão interna, mantendo pontas:** `E22, S01(flag), E01(sem flag), S06`, com as duas batidas de `01:00` no mesmo instante e nessa ordem na entrada. Tipos diferentes sobrevivem ao dedupe; existe só um marco sintético `01:00`. No empate, o DP atribui o marco à segunda batida e deixa o flag órfão. São quatro batidas. (app/escala/utils.py:1344; app/escala/utils.py:1355; app/escala/utils.py:229; app/escala/utils.py:237; app/escala/utils.py:1664; app/escala/utils.py:1721; app/escala/utils.py:678)
+
+- **Sem exigir pontas reais**, apenas `S01(flag), E01(sem flag)` no mesmo instante e nessa ordem já deixa o flag órfão no matcher; o cluster remove sua atribuição distante à ponta, e `consumed` impede resgate posterior. Não recomendo chamar esse caso de mínimo universal sem delimitar as premissas. (app/escala/utils.py:646; app/escala/utils.py:659; app/escala/utils.py:663; app/escala/utils.py:665; app/escala/utils.py:680; app/escala/utils.py:1845)
+
+Simulei `_alinhar` e `_match_marcos` extraídos por AST em memória, com stubs de construção das células e da guarda usando os valores atuais `90`/`15`; confirmei os resultados locais acima. Execução integral do builder/Django: **[não verificado]**. (app/escala/regua_defesa.py:395; app/escala/orfa_classe.py:3)
+
+## 19/11 14:46 · sessao ae4ce0df198f · - · - · origem=Ronald (tmux)
+
+Para a pergunta 4, os leitores não consomem todos diretamente o dicionário `papel='I'`:
+
+- **Cartório:** monta a grade em `app/ponto/services/cartorio.py:1287`, conta células preenchidas mais órfãs em `app/ponto/services/cartorio.py:1537` e gera a ata em `app/ponto/services/cartorio.py:1549`. A ata copia `orfas` em `app/ponto/services/cartorio.py:764`.
+- **Ressalva decisiva:** quando há DNA com marcos reconhecidos, as lâmpadas vêm somente das chaves declaradas do DNA (`app/ponto/services/cartorio.py:639`, `app/ponto/services/cartorio.py:660`, `app/ponto/services/cartorio.py:675`). Assim, uma coluna I sintética não se torna automaticamente lâmpada de intervalo; somente o ramo alternativo percorre todas as células (`app/ponto/services/cartorio.py:735`).
+- **Espelho:** normalmente lê a célula lavrada, por `grade_da_celula` (`app/ponto/services/espelho.py:533`); o leitor reconstrói as células a partir das lâmpadas (`app/escala/services/leitor_celula.py:114`, `app/escala/services/leitor_celula.py:129`). O builder é caminho de degradação (`app/ponto/services/espelho.py:503`, `app/ponto/services/espelho.py:574`) e chega à montagem da grade em `app/escala/utils.py:2384`. A apresentação recebe realizado e órfãs em `app/ponto/services/espelho.py:703`, preservados pelo adaptador em `app/escala/utils.py:1128`, `app/escala/utils.py:1131`.
+- **Motor:** recebe o papel derivado da ata quando há células alimentadas (`app/ponto/motor_calculo_v2.py:494`, `app/ponto/motor_calculo_v2.py:500`) e passa esse mapa ao pareador (`app/ponto/motor_calculo_v2.py:503`). Não lê diretamente o `papel='I'` da grade; o mapa distingue `X` e `Xi`, e `Xi` exige pelo menos duas luzes de pausa (`app/ponto/turnos.py:1567`, `app/ponto/turnos.py:1827`).
+- **detectar_ausencias:** consulta a entrada pela autoridade de turnos (`app/ponto/management/commands/detectar_ausencias.py:336`), cujo pareador recebe o papel da ata (`app/ponto/turnos.py:1997`). Antes da emissão, consulta o veto da célula (`app/ponto/management/commands/detectar_ausencias.py:631`), que lê `trabalha` e `veredito` (`app/ponto/marcos.py:155`). Para fechar chamado, consulta as lâmpadas dos marcos cobrados (`app/ponto/management/commands/detectar_ausencias.py:404`, `app/ponto/services/lastro.py:193`, `app/ponto/services/lastro.py:175`).
+
+Não há, no dado fornecido, comprovação de impacto financeiro nem de comportamento adicional em produção. [não verificado]
+
+## 19/11 14:46 · sessao 6f8405a34ae5 · - · - · origem=Ronald (tmux)
+
+O commit inicial permanece **[não verificado]**: `git log`, `git blame` e `git status` falham com `fatal: not a git repository`; esta cópia não contém `.git`. Não há como fornecer o `log -S`/blame solicitado apenas com a árvore disponível. **[não verificado]** [nao verificado]
+
+A cadeia atual que explica o comportamento é:
+
+- `TipoEscala.save()` deriva `intervalo_modo='duracao'` na ausência de par completo no escalar e em `horarios_por_dia`: `app/escala/models.py:790–794`. `_intervalo_livre()` retorna exatamente esse modo: `app/escala/models.py:243–250`.
+- O builder marca `_tem_dur=True` ao encontrar `_intervalo_livre()` e cria dois slots `('I', '·S')`, `('I', '·E')`: `app/escala/utils.py:1392–1411`.
+- Sem `_hii` e `_hfi`, recolhe batidas não consumidas com `is_intervalo=True` dentro dos instantes absolutos do turno: `app/escala/utils.py:1662–1666`; fabrica marcos internos alternando `S/E`: `app/escala/utils.py:1720–1722`.
+- Após o matcher, transforma as células internas fora da régua em `papel='I'`, `intervalo=True` e ocupa os slots; excedentes tornam-se órfãs: `app/escala/utils.py:1749–1759`.
+- Conservação final também tenta inserir flag não consumida em slot I vazio, mas usa a **data civil da batida**; sem slot livre, torna-a órfã: `app/escala/utils.py:1847–1861`.
+
+Há um teste que documenta explicitamente o contrato de absorção: “sem hii/hfi” + flag deve aparecer na grade e não virar órfã, com `E19/S02(flag)/E03(flag)/S07`: `app/escala/tests/test_split_adeilton.py:81–106`.
+
+Comentários atribuem a regra de derivar duração a “28/06”, mas isso não comprova introdução em commit: `app/escala/models.py:776–780`. O documento cita `5f915ff4`, de 15/10, para um refinamento posterior do ramo **sem flag** — exclusão de sobras próximas das pontas — portanto não responde à origem dos slots e da absorção por flag: `app/docs/TICKETS.md:136`.
+
+## 19/11 14:43 · sessao 85d51754a8da · REPLAY-F5-SOL · verificador · origem=Code
+
+Referências aos anexos usam a numeração do texto fornecido, começando na primeira linha de cada anexo.
+
+1. **NÃO BLOQUEIA — fechado o bloqueio específico do `strip()`.** Os dois logs mostram a mesma mutação aplicada: comparação após `strip()` nos dois lados. O velho passa três testes, `rc=0`; o novo falha entre quatro testes, `rc=1`. (`runs_v4.txt:30`, `runs_v4.txt:62`, `runs_v4.txt:76`, `runs_v4.txt:87`) [nao verificado]
+
+   A falha nova é a assertiva de negócio: recebeu `(0, 1)` quando esperava `(1, 1)`, depois de trocar a projeção para `'ato '`. A fixture chegou à comparação; não foi erro de montagem. O segundo cenário, `' ato'`, existe, mas esse log não chega até ele porque a primeira assertiva interrompe o teste. (`runs_v4.txt:39`, `runs_v4.txt:43`, `app/chamados/tests/test_e4c_f5_contador_texto.py:45`, `app/chamados/tests/test_e4c_f5_contador_texto.py:47`)
+
+2. **BLOQUEIA — permanece uma lacuna na prova de comparação literal.** O caso novo exige que espaço inicial e final sejam significativos para o contador vivo, cuja comparação continua direta. Ele não prova sensibilidade a todas as outras diferenças textuais. (`app/chamados/tests/test_e4c_f5_contador_texto.py:40`, `app/chamados/services/vigia_texto_resposta.py:16`)
+
+   **Mutante plausível:** aplicar `casefold()` aos dois operandos. Por leitura, sobreviveria aos casos desse módulo: preserva as diferenças de espaço e mantém `'ato'` diferente de `'projecao'`; nenhum cenário confronta `'ato'` com `'ATO'`. É plausível como normalização indevida, pois os campos aceitam texto sem restrição de caixa. Sobrevivência executada desse mutante: **[não verificado]**. (`app/chamados/tests/test_e4c_f5_contador_texto.py:23`, `app/chamados/tests/test_e4c_f5_contador_texto.py:31`, `app/chamados/tests/test_e4c_f5_contador_texto.py:45`, `app/chamados/models.py:2634`, `app/chamados/models.py:4170`)
+
+   Já “ignorar `None` versus `''`” não oferece contraexemplo plausível nesse caminho atual: o contador já normaliza a projeção com `or ''`, e `leitura()` produz texto vazio para ausência, normalizando também o texto dos atos. (`app/chamados/services/vigia_texto_resposta.py:16`, `app/chamados/models.py:4263`, `app/chamados/models.py:4310`, `app/chamados/models.py:4316`, `app/chamados/models.py:4325`)
+
+3. **NÃO BLOQUEIA — a troca corrige a causa tipada identificável.** O consumidor faz `ch.id in _resp` e `ch.id in _viva`; inteiros provocam `TypeError`, conjuntos permitem essas operações e correspondem ao contrato real de retorno. (`app/chamados/services/fio.py:441`, `app/chamados/services/fio.py:454`, `app/chamados/services/raiox.py:149`, `app/chamados/services/raiox.py:158`, `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:146`)
+
+   Isso permite avançar pelo trecho antes interrompido, mas **não certifica o fio inteiro**: permanecem quatro patches, `com_explicacao` fica no padrão falso e o teste não exige desenlace válido nem ausência de exceção capturada. Os logs desta volta executam somente o módulo do contador; execução corrigida do teste de custo: **[não verificado]**. (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:143`, `app/chamados/services/fio.py:195`, `app/chamados/services/fio.py:340`, `app/chamados/services/fio.py:459`, `runs_v4.txt:7`, `runs_v4.txt:16`)
+
+   A métrica permanece “mesmo número de consultas com uma e cinco perguntas”, acompanhada da quantidade mínima de chamadas a `leitura()`. O número absoluto pode mudar: agora pode alcançar `_orf(ch)`, cujo caminho contém consulta `.exists()`, antes interrompido pelo pertencimento em inteiro. Totais efetivos antes/depois: **[não verificado]**. (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:88`, `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:147`, `app/chamados/services/fio.py:456`, `app/chamados/services/disputa_emissao.py:776`, `app/chamados/services/disputa_emissao.py:810`)
+
+4. **BLOQUEIA — apenas pela cobertura residual de RED descrita no item 2.** O novo RED tem mordida demonstrada contra `strip()`, mas deixa descoberta a normalização por caixa; não cabe concluir fidelidade literal geral. (`runs_v4.txt:39`, `app/chamados/tests/test_e4c_f5_contador_texto.py:40`)
+
+   No delta fornecido, não aparece segundo juiz, segundo escritor fora da porta, relógio fora da borda, derivação paralela, nova ordem de trava ou campo com dois significados: as alterações se limitam ao novo teste e ao retorno da fixture de créditos. Essa conclusão fica restrita ao delta. (`diff_v4.patch:1`, `diff_v4.patch:22`) [nao verificado]
 
 ## 19/11 14:35 · sessao 2d4833eae486 · E4C-F5 · verificador · origem=Code
 
@@ -963,407 +1029,4 @@ Depois do laço, dois passos ainda podem fechar uma aberta: com a saída órfã 
 
 No caminho examinado, não há consulta a `eh_dia_trabalho`, à fase `data_ancora_colaborador` ou a folgas/feriados para decidir o pareamento; isso não elimina o efeito indireto da célula já materializada, de sua geradora, DNA e ata. A afirmação é limitada à cadeia descrita acima. [app/ponto/turnos.py:1923](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/turnos.py:1923) [app/ponto/turnos.py:1192](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/turnos.py:1192) [app/ponto/juiz_batida.py:149](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/juiz_batida.py:149)
 
-## 19/11 13:53 · sessao 4787df3b5471 · ESCALA-NAO-DESCREVE · sonda · origem=Code
-
-```python
-"""C8 sonda34f: terceira fonte = turnos fechados do juiz; somente leitura."""
-import datetime
-import re
-from collections import Counter
-
-from django.db import connection
-from django.utils import timezone
-
-import escala.detector_proposta as DP
-from colaboradores.models import Colaborador
-from escala.alimentacao import q_vinculo_cobre_a_data, vinculo_do_dia
-from escala.models import EscalaColaborador, TipoEscala
-from escala.servico_jornada import turno_cruza_meia_noite
-from ponto.calculador.nucleo import minutos_do_oraculo
-from ponto.services.esmeril_espelho import anomalias_da_frota
-from ponto.turnos import batidas_apuraveis, turnos_do_colab
-
-ALVOS = [
-    85, 110, 111, 121, 134, 219, 253, 272, 282, 290,
-    340, 344, 416, 418, 467, 496, 502, 511, 612, 841,
-    854, 877, 888, 898, 900, 926, 932, 935, 993, 915,
-    146, 220, 489, 934,
-]
-
-ERROS = 0
-CONTADOS = {"34": 0, "233": 0}
-UNIVERSO = None
-ORIGINAL = DP.medir_padrao
-
-
-def erro(etapa, exc, cid=None):
-    global ERROS
-    ERROS += 1
-    tb = exc.__traceback__
-    while tb is not None and tb.tb_next is not None:
-        tb = tb.tb_next
-    print(
-        "ERRO etapa=%s colab_pk=%s tipo=%s linha=%s"
-        % (
-            etapa,
-            cid if isinstance(cid, int) else "?",
-            re.sub(r"[^A-Za-z0-9_]", "", type(exc).__name__),
-            tb.tb_lineno if tb else "?",
-        )
-    )
-
-
-def somente_select(execute, sql, params, many, context):
-    if not sql.lstrip().upper().startswith("SELECT "):
-        raise RuntimeError("SQL_NAO_SELECT_BLOQUEADO")
-    return execute(sql, params, many, context)
-
-
-def agregar(por_dia):
-    """Mesmo agregador da 34e: moda de E/S e marcos; mediana da dispersao."""
-    dias = sorted(por_dia)
-    if not dias:
-        return {
-            "dias": 0,
-            "marcos_moda": None,
-            "entrada": None,
-            "saida": None,
-            "duracao_h": None,
-            "dispersao_entrada_min": None,
-            "dows": {},
-            "padrao_dias": "sem dados",
-        }
-
-    marcos = Counter(len(por_dia[d]) for d in dias)
-    ent = Counter(por_dia[d][0].strftime("%H:%M") for d in dias)
-    sai = Counter(por_dia[d][-1].strftime("%H:%M") for d in dias)
-    ent_modal = ent.most_common(1)[0][0]
-    em = DP._min_de(ent_modal)
-    disp = sorted(
-        DP._dist(DP._min_de(por_dia[d][0].strftime("%H:%M")), em)
-        for d in dias
-    )
-    dur = [
-        (por_dia[d][-1] - por_dia[d][0]).total_seconds() / 3600.0
-        for d in dias
-        if len(por_dia[d]) > 1
-    ]
-    gaps = Counter((dias[i + 1] - dias[i]).days for i in range(len(dias) - 1))
-    if (
-        gaps
-        and gaps.most_common(1)[0][0] == 2
-        and gaps.most_common(1)[0][1] >= len(dias) * 0.6
-    ):
-        padrao = "alternado"
-    elif len(dias) >= 5:
-        padrao = "semanal"
-    else:
-        padrao = "indefinido"
-    return {
-        "dias": len(dias),
-        "marcos_moda": marcos.most_common(1)[0][0],
-        "marcos_freq": marcos.most_common(1)[0][1],
-        "entrada": ent_modal,
-        "saida": sai.most_common(1)[0][0],
-        "duracao_h": round(sum(dur) / len(dur), 1) if dur else None,
-        "dispersao_entrada_min": disp[len(disp) // 2] if disp else None,
-        "dows": dict(sorted(Counter(d.weekday() for d in dias).items())),
-        "padrao_dias": padrao,
-    }
-
-
-def medir_pelo_nucleo(colab, ini, fim):
-    de = timezone.make_aware(
-        datetime.datetime.combine(ini, datetime.time.min)
-    ) - datetime.timedelta(hours=12)
-    ate = timezone.make_aware(
-        datetime.datetime.combine(fim, datetime.time.max)
-    ) + datetime.timedelta(hours=14)
-    ts = [timezone.localtime(b.timestamp) for b in batidas_apuraveis(colab, de, ate)]
-    v = minutos_do_oraculo(ts)
-    chaves = sorted(k for k in v.horas if ini.isoformat() <= k <= fim.isoformat())
-    dias_k = [k for k in chaves if k not in v.impares]
-    dias = [datetime.date.fromisoformat(k) for k in dias_k]
-    if not dias:
-        return {
-            "dias": 0,
-            "marcos_moda": None,
-            "entrada": None,
-            "saida": None,
-            "duracao_h": None,
-            "dispersao_entrada_min": None,
-            "dows": {},
-            "padrao_dias": "sem dados",
-        }
-    h = {k: v.horas[k] for k in dias_k}
-    marcos = Counter(len(h[k]) for k in dias_k)
-    ent = Counter(h[k][0] for k in dias_k)
-    sai = Counter(h[k][-1] for k in dias_k)
-    ent_modal = ent.most_common(1)[0][0]
-    em = DP._min_de(ent_modal)
-    disp = sorted(DP._dist(DP._min_de(h[k][0]), em) for k in dias_k)
-    dur = [v.envelope[k] / 60.0 for k in dias_k if len(h[k]) > 1]
-    gaps = Counter((dias[i + 1] - dias[i]).days for i in range(len(dias) - 1))
-    if (
-        gaps
-        and gaps.most_common(1)[0][0] == 2
-        and gaps.most_common(1)[0][1] >= len(dias) * 0.6
-    ):
-        padrao = "alternado"
-    elif len(dias) >= 5:
-        padrao = "semanal"
-    else:
-        padrao = "indefinido"
-    return {
-        "dias": len(dias),
-        "marcos_moda": marcos.most_common(1)[0][0],
-        "marcos_freq": marcos.most_common(1)[0][1],
-        "entrada": ent_modal,
-        "saida": sai.most_common(1)[0][0],
-        "duracao_h": round(sum(dur) / len(dur), 1) if dur else None,
-        "dispersao_entrada_min": disp[len(disp) // 2] if disp else None,
-        "dows": dict(sorted(Counter(d.weekday() for d in dias).items())),
-        "padrao_dias": padrao,
-    }
-
-
-def medir_pelo_juiz(colab, ini, fim):
-    # Uma observacao por data_turno: une turnos fechados da mesma data,
-    # deduplicando batidas pelo pk e preservando a ordem temporal.
-    por_dia = {}
-    for turno in turnos_do_colab(colab, ini, fim):
-        if turno.aberto is not False:
-            continue
-        if turno.data_turno is None or not ini <= turno.data_turno <= fim:
-            continue
-        if turno.entrada is None or turno.saida is None:
-            continue
-        dia = por_dia.setdefault(turno.data_turno, {})
-        for batida in turno.batidas:
-            if batida.pk is None:
-                raise ValueError("BATIDA_SEM_PK")
-            dia[batida.pk] = timezone.localtime(batida.timestamp)
-    por_dia = {
-        d: sorted(batidas.values())
-        for d, batidas in por_dia.items()
-        if batidas
-    }
-    return agregar(por_dia)
-
-
-def proposta_com(medidor, colab, ini, fim):
-    DP.medir_padrao = medidor
-    try:
-        return DP.propor_escala(colab, ini, fim)
-    finally:
-        DP.medir_padrao = ORIGINAL
-
-
-def tipo_da_proposta(resultado):
-    proposta = resultado["proposta"]
-    if proposta is None:
-        return None
-    return TipoEscala.objects.get(pk=proposta["tipo_escala_id"])
-
-
-def vinc(cid, hoje):
-    candidatos = list(
-        EscalaColaborador.objects.filter(
-            q_vinculo_cobre_a_data(hoje), colaborador_id=cid
-        )
-        .select_related("tipo_escala")
-        .order_by("pk")
-    )
-    ec = vinculo_do_dia(cid, hoje, candidatos)
-    if ec is None:
-        raise ValueError("SEM_VINCULO")
-    return ec
-
-
-def marcos(te, dia):
-    hi, hf, ii, iff = te.marcos_do_dia(dia)
-    f = lambda t: t.strftime("%H:%M") if t else "-"
-    return "%s-%s/%s-%s" % (f(hi), f(hf), f(ii), f(iff))
-
-
-def cruza(te, dia):
-    hi, hf, _, _ = te.marcos_do_dia(dia)
-    if hi is None or hf is None:
-        raise ValueError("MARCOS_AUSENTES")
-    return int(turno_cruza_meia_noite(hi, hf))
-
-
-def igual(a, b, dia):
-    return (
-        a is not None
-        and b is not None
-        and (a.pk == b.pk or marcos(a, dia) == marcos(b, dia))
-    )
-
-
-def descrever(te, dia):
-    if te is None:
-        return "pk=NONE marcos=NONE cruza=-"
-    return "pk=%d marcos=%s cruza=%d" % (te.pk, marcos(te, dia), cruza(te, dia))
-
-
-def medida(m):
-    return "%s/%s marcos=%s dias=%s" % (
-        m["entrada"], m["saida"], m["marcos_moda"], m["dias"]
-    )
-
-
-def analisar(cid, hoje, ini, fim, velhas):
-    ec = vinc(cid, hoje)
-    colab = Colaborador.objects.get(pk=cid)
-    cad = ec.tipo_escala
-    velha = TipoEscala.objects.get(pk=velhas[cid]["tipo_escala_id"])
-    civil = ORIGINAL(colab, ini, fim)
-    rn = proposta_com(medir_pelo_nucleo, colab, ini, fim)
-    rj = proposta_com(medir_pelo_juiz, colab, ini, fim)
-    nova = tipo_da_proposta(rn)
-    juiz = tipo_da_proposta(rj)
-
-    if igual(juiz, cad, hoje):
-        classe = "juiz==cadastro"
-    elif igual(juiz, nova, hoje):
-        classe = "juiz==nova"
-    elif igual(juiz, velha, hoje):
-        classe = "juiz==velha"
-    else:
-        classe = "nenhuma"
-
-    return ec, cad, velha, nova, juiz, civil, rn["padrao"], rj["padrao"], classe
-
-
-def imprimir_linha(grupo, cid, dados, hoje):
-    ec, cad, velha, nova, juiz, civil, nucleo, med_juiz, classe = dados
-    print(
-        "%s vinculo_pk=%d colab_pk=%d cadastro{%s} velha{%s} nova{%s} "
-        "juiz{%s} civil{%s} nucleo{%s} juiz_medida{%s} classe=%s"
-        % (
-            grupo, ec.pk, cid,
-            descrever(cad, hoje), descrever(velha, hoje),
-            descrever(nova, hoje), descrever(juiz, hoje),
-            medida(civil), medida(nucleo), medida(med_juiz), classe,
-        )
-    )
-
-
-def executar():
-    global UNIVERSO
-    if getattr(connection, "schema_name", None) != "juliani":
-        raise RuntimeError("SCHEMA_NAO_E_JULIANI")
-    hoje = timezone.localtime(timezone.now()).date()
-    ini = hoje - datetime.timedelta(days=60)
-    fim = hoje - datetime.timedelta(days=1)
-    print("HOJE=%s INI=%s FIM=%s" % (hoje, ini, fim))
-
-    DP.medir_padrao = ORIGINAL
-    det = anomalias_da_frota(hoje)
-    velhas = {int(k): p for k, p in det["proposta"].items()}
-    UNIVERSO = len(velhas)
-    print("UNIVERSO_PROPOSTAS_VELHAS=%d" % UNIVERSO)
-    if UNIVERSO != 233:
-        erro("universo", ValueError("UNIVERSO_DIFERENTE_DE_233"))
-    if len(ALVOS) != 34 or len(set(ALVOS)) != 34:
-        erro("alvos", ValueError("ALVOS_DIFERENTES_DE_34"))
-
-    # Cada matriz cruza dois indicadores independentes de igualdade ao cadastro.
-    pares = (("velha", "nova"), ("velha", "juiz"), ("nova", "juiz"))
-    matrizes = {par: Counter() for par in pares}
-    classes = Counter()
-
-    for grupo, ids in (("34", ALVOS), ("233", sorted(velhas))):
-        print("== GRUPO=%s" % grupo)
-        for cid in ids:
-            try:
-                dados = analisar(cid, hoje, ini, fim, velhas)
-                imprimir_linha(grupo, cid, dados, hoje)
-                if grupo == "233":
-                    _, cad, velha, nova, juiz, _, _, _, classe = dados
-                    tipos = {"velha": velha, "nova": nova, "juiz": juiz}
-                    classes[classe] += 1
-                    for a, b in pares:
-                        if tipos[a] is None or tipos[b] is None:
-                            matrizes[(a, b)]["sem_proposta"] += 1
-                        else:
-                            chave = (int(igual(tipos[a], cad, hoje)),
-                                     int(igual(tipos[b], cad, hoje)))
-                            matrizes[(a, b)][chave] += 1
-                CONTADOS[grupo] += 1
-            except Exception as exc:
-                DP.medir_padrao = ORIGINAL
-                erro("grupo_" + grupo, exc, cid)
-
-    print("CLASSES_233 %s" % " ".join(
-        "%s=%d" % (k, classes[k])
-        for k in ("juiz==cadastro", "juiz==nova", "juiz==velha", "nenhuma")
-    ))
-    for a, b in pares:
-        c = matrizes[(a, b)]
-        print(
-            "2X2_233 %s_x_cadastro %s_x_cadastro "
-            "sim_sim=%d sim_nao=%d nao_sim=%d nao_nao=%d sem_proposta=%d"
-            % (a, b, c[(1, 1)], c[(1, 0)], c[(0, 1)], c[(0, 0)],
-               c["sem_proposta"])
-        )
-
-    if CONTADOS["34"] != 34:
-        erro("contados_34", ValueError("CONTAGEM_DIFERENTE_DE_34"))
-    if CONTADOS["233"] != 233:
-        erro("contados_233", ValueError("CONTAGEM_DIFERENTE_DE_233"))
-
-
-try:
-    with connection.execute_wrapper(somente_select):
-        executar()
-except Exception as exc:
-    erro("execucao", exc)
-finally:
-    DP.medir_padrao = ORIGINAL
-    print(
-        "CONTADOS_34=%d CONTADOS_34==34=%s "
-        "CONTADOS_233=%d CONTADOS_233==233=%s UNIVERSO=%s ERROS=%d"
-        % (
-            CONTADOS["34"], CONTADOS["34"] == 34,
-            CONTADOS["233"], CONTADOS["233"] == 233,
-            UNIVERSO, ERROS,
-        )
-    )
-
-if ERROS:
-    raise SystemExit(1)
-```
-
-A janela e os 34 alvos seguem o anexo `sonda34e.py`; linhas do anexo [não verificado].
-O universo vem de `anomalias_da_frota()['proposta']`, como na 34e; [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/esmeril_espelho.py:241).
-A fonte nova agrupa batidas de turnos fechados por `data_turno`; empate de moda segue `Counter.most_common`, como o agregador em [app/escala/detector_proposta.py:70](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/detector_proposta.py:70).
-A proposta usa tolerância de 30 minutos; a classe compara PK ou marcos exatamente, como na 34e; [app/escala/detector_proposta.py:34](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/detector_proposta.py:34), linhas do anexo [não verificado].
-A chamada usada é `turnos_do_colab(colab, ini, fim)`, com `celulas=None` por padrão: [app/ponto/turnos.py:1850](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/turnos.py:1850).
-
-## 19/11 13:52 · sessao dfea873bfe81 · - · - · origem=Ronald (tmux)
-
-- **Regra `!`:** [CLAUDE.md:265](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/CLAUDE.md:265) inclui dado de escala ou vínculo, inclusive retroativo, e o gravado de competência exportada. A chave proposta para propagação é campo de `EscalaColaborador` ([models.py:871](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/models.py:871), [models.py:896](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/models.py:896)); se o ato futuro do admin se enquadra na exigência de `!`, **não decido**.
-
-- **Contador:** o molde existente usa vínculo que cobre a data, colaborador ativo, chave verdadeira e ciclos 5x2/6x1 ([models.py:919](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/escala/models.py:919)). O predicado da sonda anexada usa `CICLOS_FERIADO_VIRA_FOLGA` e não explicita filtro de colaborador ativo [anexo fornecido; não verificado em arquivo].
-
-- **Sugestões:** `sugestoes()` chama `presenca_em_feriado()` a cada execução e exclui postos já marcados ([feriado_do_posto.py:74](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/services/feriado_do_posto.py:74), [feriado_do_posto.py:136](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/services/feriado_do_posto.py:136)). A proposta de sugestão “lida, nunca recalculada” requer esclarecer a fonte do resultado armazenado [não verificado].
-
-- **Tela:** `form_posto` exige `editar_postos` ([views.py:732](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/views.py:732)); seu dicionário de dados não inclui a marca ([views.py:851](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/views.py:851)).
-
-- **Motor:** a dobra consulta `feriado_em_dobra` e `eh_feriado(dia)` ([motor_calculo_v2.py:914](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/motor_calculo_v2.py:914)); o padrão deriva do ciclo ([motor_calculo_v2.py:3693](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/motor_calculo_v2.py:3693)). Um ramo escreve minutos HE 100 quando a função retorna verdadeiro ([motor_calculo_v2.py:2809](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/motor_calculo_v2.py:2809)); o efeito nos totais dos J é [não verificado].
-
-- **Precedência:** `SO_EM_DIA_DE_JORNADA` contém somente `falta` ([precedencia.py:498](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/precedencia.py:498)); o veto consulta `eh_dia_trabalho` ([precedencia.py:536](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/precedencia.py:536)).
-
-- **DIA-CONVOCADO:** consta como complemento futuro, com ato individual por `editar_dia` ([BACKLOG.md:2280](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/BACKLOG.md:2280)); consta registrado sem construção ([RELATO.md:11](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/docs/RELATO.md:11)). Os literais `CANCELA-UI-TRABALHA-EM-FERIADO-1130` e `FILA-PARALELA-1150` não foram localizados na busca da cópia; vigência fora do anexo [não verificado].
-
-## 19/11 13:52 · sessao c318157a9add · - · - · origem=Ronald (tmux)
-
-A porta de vínculo é idempotente para o mesmo valor, mas não garante uma linha de trilha por vínculo alterado. A regeneração preserva células editadas e barra dias lavrados; ela também pode acionar escritores de fechamento e de `DiaPago`. Os detalhes e as referências foram enviados ao agente principal. ([vinculo.py:869](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/colaboradores/services/vinculo.py:869), [celula.py:284](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/portas/celula.py:284), [fechamento.py:1199](/home/ronald/codex_ws/688696dbb32b7859fb38a141c54d5a6f456056b3/app/ponto/services/fechamento.py:1199))
-
-## 19/11 13:52 · sessao ecce8e4875e4 · - · - · origem=Ronald (tmux)
-
-Verificação das premissas enviada ao agente principal, com referências de arquivo e linha.
-
-_7374 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7378 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
