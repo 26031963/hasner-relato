@@ -1,6 +1,11 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=2423825
+ESPERANDO: f5_v3_prova.sh | pid=2437740
+PUSH (aval RESPOSTAS-C8-E-PUSH-1911-1110 item 7) 11:0x: 75 a frente; CAUSA medida = nenhuma tentativa desde 18/11 19:51 (logs/push_1811_cura_chega.out: pre-push OK, d6da98509..cd692834d); empurra pela regua quando a trava sair da F5 (prova_v3 no VM) e da c6 v4 (pista)
+ESCALA-NAO-DESCREVE C8 11:0x: 5 decisoes do aval 1110 no brief (logs/ESCALA-NAO-DESCREVE/c8/brief.md secao 6b); censo item 6 Codex papel censo rodando (q6.txt -> r6.txt); construtor NAO abre antes do censo fechado
+ESPINHA E4C-F5 volta 3 11:0x: 71905e5e6 caso positivo do contador pelo vigia real (Codex construtor rc=0, logs/ESPINHA-BRIEFS/F5/v1/r3.txt); prova_v3 rodando no VM: GREEN chamados + 6 mutantes de prefetch/cru re-rodados no HEAD novo + M_censo_zero + M_fora_do_esperado
+ESPINHA E4C-F5 verif2 TRIADO 11:0x: BLOQUEIA 3,4,5,6 -> item 3 DECIDIDO PELA LEI 4a + 7b PARADA 3/4 (PERGUNTA no topo e conduta da sessao, nao maquina; contestavel, anexo ao opus) | item 4 procede parcial (mutantes de prefetch de prova_1c2 eram de c6a63196d: re-rodar no HEAD da volta 3) | item 5 PROCEDE (caso positivo pelo call_command + 2 mutantes) -> volta 3 construtor Codex pid 2434925 (logs/ESPINHA-BRIEFS/F5/v1/q3.txt, verif2/triagem.txt)
+DIA-CONVOCADO-PELO-ADMIN-REGISTRA-1911-1100 REGISTRADO 11:0x: COMPLEMENTO em O10-TROCA-DE-PLANTAO-ENTRA (fila 2) + ponteiros nas 2 INTERMITENTE; PROMPTS.md; nada construido
 DST-L2-JZ1 c6 v4 MUTANTE M_so_ponteiro 11:2x: retencao olhando so o ponteiro -> FAILED (failures=2) Ran 6: C6_RED e C6_unidade_ve_J3_so_pela_origem (logs/dst-l2-jz1/c6/v4_mutante/M_so_ponteiro.log); falta pista 1119104156_c5a74ace e opus do delta
 ESPINHA E4C-F5 v2b GREEN VERDE 11:1x: chamados Ran 5325 OK (skipped=2, expected failures=14) rc=0 (prova_v2b/GREEN.log); M_fio_texto FAILED 1 no test_fio_TEXTO_da_projecao (morde); verificador Codex do diff inteiro 3308f7599..b7ccc61ce aberto (verif2/)
 CADEIA-20 PASSO 1 ETAPA A FECHADA 11:5x: logs/CADEIA-20/passo1/brief.md, perguntas de lei: 0 | sem_papel=0/25664 batidas, ERROS=0 | as sobras "sem batida" (47 nesta foto) = 47/47 vivas no dia civil seguinte (turno que cruza a meia-noite; ata guarda HH:MM, celula = dia do turno): nao e lavra velha nem ESTRUTURA, sem PERGUNTA DE DESENHO; o contador da ETAPA B casa pelo dia do turno | ETAPA B espera vaga 2 (depois do pouso da c6 v4) | INCOMPLETO: cadastro literal dos casos nominais; col950 e colab de teste

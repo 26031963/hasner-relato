@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 10:58** · publicado em **19/11/2026 11:00** (UTC-3)
+> Ultima resposta processada: **19/11/2026 11:03** · publicado em **19/11/2026 11:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 11:03 · sessao 0fc23b4a7ea9 · E4C-F5-CONSTROI · construtor · origem=Code
+
+O teste solicitado foi acrescentado em [test_e4c_f5_contador_texto.py:40](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:40). `git diff --check` passou. Conforme solicitado, não executei o teste nem os mutantes; a mordida permanece **[não verificado]**. [nao verificado]
+
+Comando do caso positivo, para o certificador executar com banco de teste configurado ([ci.py:6](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/config/settings/ci.py:6)): [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_vigia_carimba_divergencia_de_texto --settings=config.settings.ci -v 2
+```
+
+Os comandos seguintes aplicam cada mutante diretamente ao arquivo de produção. Devem ser executados **separadamente em cópias descartáveis**, seguidos do comando de teste acima. [nao verificado]
+
+**M_censo_zero** — espera-se falha na asserção do censo em [test_e4c_f5_contador_texto.py:52](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:52) **[não verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+p = Path('chamados/management/commands/vigiar_fio_morto.py')
+s = p.read_text()
+antes = '                              divergencia_texto_resposta=texto_divergente,'
+depois = '                              divergencia_texto_resposta=0,'
+assert s.count(antes) == 1
+p.write_text(s.replace(antes, depois, 1))
+PY
+```
+
+**M_fora_do_esperado** — espera-se `KeyError` na consulta ao esperado em [test_e4c_f5_contador_texto.py:53](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:53) **[não verificado]**:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+p = Path('chamados/management/commands/vigiar_fio_morto.py')
+s = p.read_text()
+antes = '                           desligados_retidos=0, ferias_ausencia_sem_agendamento=0, ferias_dia_sem_ausencia=0,\n                           divergencia_texto_resposta=0)'
+depois = '                           desligados_retidos=0, ferias_ausencia_sem_agendamento=0, ferias_dia_sem_ausencia=0)'
+assert s.count(antes) == 1
+p.write_text(s.replace(antes, depois, 1))
+PY
+```
+
+Diff obtido por `git diff -- chamados/tests/test_e4c_f5_contador_texto.py`:
+
+```diff
+diff --git a/app/chamados/tests/test_e4c_f5_contador_texto.py b/app/chamados/tests/test_e4c_f5_contador_texto.py
+index 0fdf23aa0..d0011c621 100644
+--- a/app/chamados/tests/test_e4c_f5_contador_texto.py
++++ b/app/chamados/tests/test_e4c_f5_contador_texto.py
+@@ -1,8 +1,15 @@
+ """Contador de texto: divergencia real, universo por pergunta e custo em lote."""
++import io
++import json
++import os
++import tempfile
+ from unittest.mock import patch
+ 
++from django.core.management import call_command
+ from django.db import connection
++from django.test import override_settings
+ from django.test.utils import CaptureQueriesContext
++from freezegun import freeze_time
+ 
+ from chamados.models import DecisaoPergunta as D, PerguntaDisputa
+ from chamados.services.vigia_texto_resposta import contar
+@@ -30,6 +37,23 @@ class ContadorTextoTest(BaseCortes):
+             D.registrar([dict(pergunta=outro, ato=D.RESPOSTA, ato_em=RESPOSTA_EM, ato_texto='ato')])
+         self.assertEqual(contar(), (1, 3), 'dois atos na mesma pergunta: ainda UMA pergunta no universo')
+ 
++    @freeze_time('2026-11-13 12:00:00')
++    def test_vigia_carimba_divergencia_de_texto(self):
++        p = self.pergunta()
++        self.responder(p)
++        PerguntaDisputa.objects.filter(pk=p.pk).update(resposta_colab='projecao')
++        out = io.StringIO()
++        with tempfile.TemporaryDirectory() as pasta:
++            carimbo = os.path.join(pasta, 'fio_morto.json')
++            with override_settings(VIGIA_FIO_CARIMBO=carimbo):
++                call_command('vigiar_fio_morto', stdout=out)
++            with open(carimbo, encoding='utf-8') as arquivo:
++                reg = json.load(arquivo)
++        self.assertEqual(reg['censo']['divergencia_texto_resposta'], 1)
++        self.assertEqual(reg['esperado']['divergencia_texto_resposta'], 0)
++        self.assertIn('VFM|DIVERGENCIA_TEXTO_RESPOSTA=1 (esperado 0)', out.getvalue())
++        self.assertGreaterEqual(reg['divergencia_texto_resposta_universo'], 1)
++
+     def medir(self, minimo):
+         contar()  # aquece a primeira chamada fora da medida
+         with patch.object(D, 'leitura', wraps=D.leitura) as leitor:
+```
+
+LEI-AKITA: padrao=uma pergunta com divergência real, comando real e conferência do carimbo e stdout; certificação e mordida dos mutantes **[não verificado]**.
 
 ## 19/11 10:58 · sessao f9b2b6327f63 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1727,8 +1818,4 @@ Script e referências enviados ao agente principal, com a ressalva de que a ata 
 
 O censo solicitado de 49 leitores não ficou comprovado: a cópia registra um instrumento de censo anterior e sua remoção, mas não apresenta ali a lista nominativa ([app/docs/RELATO.md:10239](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/docs/RELATO.md:10239)). A lista parcial e as classificações verificadas foram enviadas ao agente principal.
 
-## 19/11 10:16 · sessao 6354fae5edb3 · - · - · origem=Ronald (tmux)
-
-Investigação da matriz e referências enviadas ao agente principal.
-
-_7319 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7320 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
