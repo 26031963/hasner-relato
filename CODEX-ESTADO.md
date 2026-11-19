@@ -1,7 +1,206 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 11:58** · publicado em **19/11/2026 11:59** (UTC-3)
+> Ultima resposta processada: **19/11/2026 12:02** · publicado em **19/11/2026 12:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 12:02 · sessao 689240b7551f · CADEIA-20-PASSO-1 · construtor · origem=Code
+
+A cura está em [orfa_classe.py:31](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:31): `razao_da_sobra` consulta `_carimbada_como_miolo`, que reconhece os três carimbos ([turnos.py:932](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:932)). Escolhi import local para evitar dependência no carregamento entre os módulos; `ponto.turnos` também importa `escala.orfa_classe` localmente ([turnos.py:1581](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1581)). Os papéis de entrada, saída e aberto continuam lidos dos campos do `Turno` ([orfa_classe.py:65](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:65)).
+
+A fixture agora explicita os três atributos ([teste:13](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:13)). O novo caso usa somente `_intra_ata=True` ([teste:112](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_razao_da_sobra.py:112)): [nao verificado]
+
+- **RED → verde:** antes da cura, retornou `PERIODO_ADICIONAL` e falhou; depois, passou. No executor isolado, os 13 testes passaram. [nao verificado]
+- **Mutante:** substituir a chamada por `getattr(b, 'is_intervalo', False)` fez o novo caso falhar com `PERIODO_ADICIONAL`; mutante morto.
+- A execução Django real e a certificação pela suíte permanecem **[não verificado]**: nesta cópia, `python` não está disponível e `python3` não encontra `django.core`. [nao verificado]
+
+Para reproduzir os resultados isolados, execute o bloco abaixo no diretório `app`. Ele usa o teste da cópia e extrai a função de autoridade do arquivo real; a mutação ocorre somente em memória. [nao verificado]
+
+```bash
+verificar() {
+  PYTHONDONTWRITEBYTECODE=1 MUTANTE="$1" python3 - <<'PY'
+import ast, collections, os, sys, types, unittest
+
+source = open('ponto/turnos.py').read()
+node = next(n for n in ast.parse(source).body
+            if isinstance(n, ast.FunctionDef) and n.name == '_carimbada_como_miolo')
+ponto = types.ModuleType('ponto.turnos')
+exec(compile(ast.Module(body=[node], type_ignores=[]), 'ponto/turnos.py', 'exec'), ponto.__dict__)
+ponto.Turno = collections.namedtuple(
+    'Turno', 'data_turno entrada saida batidas aberto cross_meianoite')
+sys.modules['ponto.turnos'] = ponto
+
+django = types.ModuleType('django')
+django.__path__ = []
+test = types.ModuleType('django.test')
+test.SimpleTestCase = unittest.TestCase
+sys.modules.update({'django': django, 'django.test': test})
+
+if os.environ['MUTANTE'] == '1':
+    source = open('escala/orfa_classe.py').read()
+    old = '_carimbada_como_miolo(b) for b, _ in encontrados'
+    assert source.count(old) == 1
+    source = source.replace(old, "getattr(b, 'is_intervalo', False) for b, _ in encontrados")
+    module = types.ModuleType('escala.orfa_classe')
+    exec(compile(source, 'escala/orfa_classe.py', 'exec'), module.__dict__)
+    sys.modules['escala.orfa_classe'] = module
+    nome = 'escala.tests.test_razao_da_sobra.RazaoDaSobraTest.test_carimbo_intra_ata_no_turno'
+else:
+    nome = 'escala.tests.test_razao_da_sobra'
+
+suite = unittest.defaultTestLoader.loadTestsFromName(nome) [nao verificado]
+sys.exit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
+PY
+}
+verificar 0  # verde: 13 testes [nao verificado]
+verificar 1  # mutante: falha esperada no novo caso
+```
+
+Com Django disponível, o comando do teste real é: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_razao_da_sobra --noinput
+```
+
+## 19/11 12:01 · sessao 848b07639c50 · ESCALA-NAO-DESCREVE · sonda · origem=Code
+
+**Resultado:** a sonda informa 19 casos `nenhuma`, 9 `nova==cadastro` e 2 `velha==cadastro`; no corte A3, informa 15 chaves com mais de um bloco, em 9 colaboradores. A saída informa `ERROS=0` e `CONTADOS=34 (esperado 34)`. [não verificado: saída fornecida no pedido, sem arquivo e linhas locais]
+
+Os valores abaixo são transcrições do envelope fornecido, não uma nova leitura da sombra. Como o envelope não tem arquivo:linha disponível na cópia, suas afirmações estão marcadas `[não verificado]`. O diretório também não tem metadados Git disponíveis para confirmar o hash do HEAD. [não verificado]
+
+## 1. As 30 linhas A1
+
+Em **cadastro**, **velha** e **nova**, a notação é `pk: entrada–saída / início–fim do intervalo (cruza)`. `—` significa sem intervalo; `∅`, sem proposta. Em **civil** e **núcleo**, a notação é `entrada/saída; marcos; dias`. As classes comparam os marcos informados, não a igualdade dos PKs. [não verificado: linhas A1 fornecidas]
+
+| Vínculo:colab | Cadastro | Velha | Nova | Civil | Núcleo | Classe |
+|---|---|---|---|---|---|---|
+| 1140:85 | 483: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 378: 21:00–07:00/— (1) | 06:57/06:57; 1; 24 | 20:50/06:57; 2; 12 | nenhuma |
+| 821:110 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:55/07:00; 1; 25 | 18:55/07:00; 4; 11 | nenhuma |
+| 829:111 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:55/07:00; 1; 44 | 18:55/07:00; 4; 22 | nenhuma |
+| 832:121 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:59/07:01; 1; 60 | 19:00/07:01; 4; 26 | nenhuma |
+| 1027:134 | 179: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 06:58/06:58; 1; 44 | 18:55/06:58; 2; 22 | nova==cadastro |
+| 187:219 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 19:04/07:04; 1; 60 | 19:04/07:03; 4; 28 | nenhuma |
+| 219:253 | 378: 21:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 06:55/06:55; 1; 60 | 18:56/06:55; 2; 30 | nenhuma |
+| 238:272 | 235: 18:00–06:00/01:00–02:00 (1) | 182: 18:00–06:00/— (1) | 235: 18:00–06:00/01:00–02:00 (1) | 17:52/05:55; 1; 34 | 17:52/05:55; 4; 16 | nova==cadastro |
+| 247:282 | 172: 19:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:59/07:00; 3; 58 | 18:59/07:00; 4; 30 | velha==cadastro |
+| 255:290 | 179: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:00/07:00; 1; 57 | 19:00/07:00; 2; 28 | nova==cadastro |
+| 1576:340 | 172: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 209: 18:30–06:30/— (1) | 06:30/06:30; 1; 45 | 18:33/06:30; 2; 21 | nenhuma |
+| 302:344 | 186: 19:00–07:00/23:00–00:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:43/06:59; 1; 28 | 18:43/06:59; 4; 14 | nenhuma |
+| 1336:416 | 196: 19:00–07:00/03:00–04:00 (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:00/07:00; 1; 42 | 18:55/06:56; 2; 19 | nenhuma |
+| 1334:418 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 19:00/07:00; 3; 45 | 19:00/07:00; 4; 22 | nenhuma |
+| 401:467 | 183: 19:00–07:00/00:00–01:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:51/06:51; 3; 51 | 18:51/06:51; 4; 24 | nenhuma |
+| 425:496 | 179: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:00/07:00; 1; 52 | 18:58/07:00; 2; 23 | nova==cadastro |
+| 1150:502 | 278: 10:00–18:20/14:00–15:00 (0) | 197: 07:00–19:00/14:00–15:00 (0) | 204: 10:20–19:29/14:40–15:40 (0) | 06:59/19:00; 4; 50 | 09:54/19:00; 4; 46 | nenhuma |
+| 1164:511 | 186: 19:00–07:00/23:00–00:00 (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:01/07:01; 1; 57 | 18:58/07:01; 2; 27 | nenhuma |
+| 950:612 | 180: 19:00–07:00/02:00–03:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:50/06:50; 1; 34 | 18:50/06:50; 4; 15 | nenhuma |
+| 994:841 | 380: 19:00–07:00/01:00–02:00 (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:56/06:54; 1; 58 | 18:56/06:54; 4; 29 | nova==cadastro |
+| 1006:854 | 34: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 06:51/06:51; 1; 60 | 18:55/06:51; 2; 30 | nova==cadastro |
+| 1337:877 | 203: 10:00–22:00/14:00–15:00 (0) | 193: 10:30–22:30/15:30–16:30 (0) | 185: 10:00–22:00/13:00–14:00 (0) | 10:56/22:09; 4; 28 | 09:59/22:09; 4; 25 | nenhuma |
+| 1478:888 | 172: 19:00–07:00/— (1) | 39: 07:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 07:05/07:05; 1; 58 | 19:01/07:05; 2; 28 | nova==cadastro |
+| 1388:898 | 253: 12:30–00:30/19:00–20:00 (1) | 314: 00:00–00:00/— (1) | 253: 12:30–00:30/19:00–20:00 (1) | 00:30/00:30; 3; 45 | 12:28/00:30; 4; 22 | nova==cadastro |
+| 1594:900 | 35: 07:00–19:00/— (0) | 212: 07:00–16:00/— (0) | 365: 07:00–15:50/12:00–13:00 (0) | 06:55/15:54; 1; 39 | 06:54/15:54; 4; 28 | nenhuma |
+| 1181:926 | 496: 11:00–20:00/16:00–17:00 (0) | 541: 11:00–20:00/15:30–17:00 (0) | 291: 08:00–20:00/12:00–13:00 (0) | 11:00/20:00; 4; 43 | 08:00/20:00; 4; 30 | nenhuma |
+| 1592:932 | 35: 07:00–19:00/— (0) | 274: 10:00–22:00/— (0) | 177: 07:00–19:00/— (0) | 10:00/22:00; 2; 30 | 06:52/18:54; 2; 18 | nova==cadastro |
+| 1186:935 | 172: 19:00–07:00/— (1) | 172: 19:00–07:00/— (1) | 380: 19:00–07:00/01:00–02:00 (1) | 18:50/06:50; 3; 58 | 18:50/06:50; 4; 29 | velha==cadastro |
+| 1511:993 | 178: 07:00–19:00/12:00–13:00 (0) | 197: 07:00–19:00/14:00–15:00 (0) | 177: 07:00–19:00/— (0) | 07:00/19:00; 4; 18 | 07:00/19:00; 2; 14 | nenhuma |
+| 1123:915 | 279: 14:40–23:00/18:00–19:00 (0) | 449: 12:00–20:20/16:00–17:00 (0) | ∅; cruza — | 11:48/20:24; 4; 19 | 11:48/17:27; 4; 16 | nenhuma |
+
+**CLASSES:** `nenhuma=19 nova==cadastro=9 velha==cadastro=2`. [não verificado: linha CLASSES fornecida]
+
+### Por que a proposta muda
+
+O detector civil agrupa batidas pela data local e toma, para cada dia, a primeira e a última; calcula separadamente as modas dessas bordas e do número de batidas. O núcleo, no ramo sequencial, corta blocos por gaps e vão, atribui cada bloco à data da primeira batida e acumula suas horas nessa chave. Isso permite que madrugada e noite sejam separadas no civil e reunidas no núcleo. [app/escala/detector_proposta.py:53](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:53), [app/ponto/calculador/nucleo.py:186](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:186)
+
+O casamento exige entrada e saída a até 30 minutos do template e escolhe a menor soma das distâncias. Para intervalo, testa apenas se `marcos_moda >= 4` e se o template **tem** os dois marcos de intervalo; não compara seus horários com batidas ou cadastro. O código tampouco usa `cruza` nesse casamento. [app/escala/detector_proposta.py:34](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:34), [app/escala/detector_proposta.py:99](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:99)
+
+- **Entrada muda de madrugada para noite:** 1140:85, 1027:134, 219:253, 255:290, 1576:340, 1336:416, 425:496, 1164:511 e 1006:854 e 1478:888 passam de entrada civil próxima da saída para entrada de bloco noturna; 1388:898 também muda a entrada e a moda de marcos. A troca observada acompanha essa diferença de chave e de bordas. [não verificado: linhas A1 fornecidas; mecanismo em [detector_proposta.py:60](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:60) e [nucleo.py:236](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:236)]
+- **Mesmas bordas aproximadas, intervalo muda:** 821:110, 829:111, 832:121, 187:219, 238:272, 247:282, 302:344, 1334:418, 401:467, 950:612, 994:841, 1594:900 e 1186:935 têm moda civil de 1 ou 3 e nuclear de 4; 1511:993 faz o inverso, de 4 para 2. Isso muda o filtro de presença de intervalo. O horário específico do intervalo escolhido continua dependendo do catálogo e da ordem em empate, não de comparação dos marcos internos. [não verificado: linhas A1 fornecidas; regra em [detector_proposta.py:105](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:105)]
+- **Bordas modais diferentes com mesma categoria de marcos:** em 1150:502, 1337:877, 1181:926 e 1592:932 a entrada medida muda e, com ela, o candidato mais próximo. O envelope não contém as batidas completas nem todos os candidatos para atribuir a diferença modal a um evento individual. [não verificado: linhas A1 fornecidas; regra em [detector_proposta.py:113](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:113)]
+- **1123:915:** a saída modal muda de 20:24 para 17:27; a referência informa proposta nova `NONE` e confiança insuficiente. Com 16 dias, o limite de cinco dias não explica a ausência; o código também retorna insuficiente quando nenhum template casa as bordas e a categoria de intervalo. O catálogo completo não foi fornecido para verificar os candidatos individualmente. [não verificado: A1 e referência fornecidos; regra em [detector_proposta.py:125](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:125)]
+
+## 2. A2: batidas e medições por dia
+
+Datas são de novembro de 2026. Em cada linha, **núcleo** mostra `chave: horas; ímpar`; `∅` reproduz `horas=None`. A chave impressa é a data da linha mesmo quando não há horas nessa chave. As tabelas reproduzem somente as linhas A2 fornecidas, sem inventar dias ausentes. [não verificado: linhas A2 fornecidas]
+
+**845:146** — cadastro pk 383, `00:00–23:59/—`, cruza 0; velha pk 39; `nbatidas=6`. [não verificado]
+
+| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
+|---|---|---|---|
+| 09 | 06:30 | 06:30/06:30; 1 | 09: ∅; falso |
+| 10 | 21:29 | 21:29/21:29; 1 | 10: 21:29, 06:31; falso |
+| 11 | 06:31 | 06:31/06:31; 1 | 11: ∅; falso |
+| 16 | 21:31 | 21:31/21:31; 1 | 16: 21:31, 06:35; falso |
+| 17 | 06:35 | 06:35/06:35; 1 | 17: ∅; falso |
+
+O civil vê uma batida em cada data exibida, portanto primeira e última coincidem. O núcleo reúne as duas noites exibidas com suas saídas da manhã seguinte. Nenhuma dessas bordas reproduz o cadastro `00:00–23:59`; a referência de outra janela informa nova pk 500 e E/S nuclear modal `21:29/06:30`. A sexta batida contada no cabeçalho não aparece nas linhas A2 transcritas. [não verificado: A2 e sonda34d_ref.out fornecidos; agrupamento em [detector_proposta.py:60](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:60) e [nucleo.py:236](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:236)]
+
+**1547:220** — cadastro pk 591, `22:00–06:00/02:00–03:00`, cruza 1; velha pk 252; `nbatidas=24`. [não verificado]
+
+| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
+|---|---|---|---|
+| 10 | 21:54 | 21:54/21:54; 1 | 10: 21:54, 03:35, 04:31, 06:00; falso |
+| 11 | 03:35, 04:31, 06:00 | 03:35/06:00; 3 | 11: ∅; falso |
+| 12 | 21:59 | 21:59/21:59; 1 | 12: 21:59, 04:01, 05:00, 06:00; falso |
+| 13 | 04:01, 05:00, 06:00, 22:00 | 04:01/22:00; 4 | 13: 22:00, 02:00, 03:02, 06:00; falso |
+| 14 | 02:00, 03:02, 06:00, 21:58 | 02:00/21:58; 4 | 14: 21:58, 02:02, 03:00, 06:00; falso |
+| 15 | 02:02, 03:00, 06:00, 21:57 | 02:02/21:57; 4 | 15: 21:57, 02:09, 03:00, 06:00; falso |
+| 16 | 02:09, 03:00, 06:00 | 02:09/06:00; 3 | 16: ∅; falso |
+| 17 | 21:54 | 21:54/21:54; 1 | 17: 21:54, 02:00, 03:00, 06:01; falso |
+| 18 | 02:00, 03:00, 06:01 | 02:00/06:01; 3 | 18: ∅; falso |
+
+Nesses dias, o civil separa ou mistura bordas de jornadas em datas civis; o núcleo mostra jornadas noturnas próximas ao cadastro, embora alguns intervalos exibidos sejam diferentes. A referência de janela mais ampla informa, porém, nova e velha pk 252 e E/S nuclear modal `15:00/23:00`, divergente do cadastro. **A2 não mostra por que essa moda da janela completa prevalece.** [não verificado: A2 e sonda34d_ref.out fornecidos; regras em [detector_proposta.py:70](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:70) e [nucleo.py:236](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:236)]
+
+**1597:489** — cadastro pk 172, `19:00–07:00/—`, cruza 1; velha pk 252; `nbatidas=23`. [não verificado]
+
+| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
+|---|---|---|---|
+| 09 | 16:01, 20:00, 21:00 | 16:01/21:00; 3 | 09: 16:01, 20:00, 21:00, 00:00; falso |
+| 10 | 00:00 | 00:00/00:00; 1 | 10: ∅; falso |
+| 11 | 19:00, 23:00 | 19:00/23:00; 2 | 11: 19:00, 23:00, 00:00, 07:00; falso |
+| 12 | 00:00, 07:00 | 00:00/07:00; 2 | 12: ∅; falso |
+| 13 | 19:00, 23:00 | 19:00/23:00; 2 | 13: 19:00, 23:00, 00:00, 07:00; falso |
+| 14 | 00:00, 07:00 | 00:00/07:00; 2 | 14: ∅; falso |
+| 15 | 19:00, 23:00 | 19:00/23:00; 2 | 15: 19:00, 23:00, 00:00, 07:00; falso |
+| 16 | 00:00, 07:00 | 00:00/07:00; 2 | 16: ∅; falso |
+| 18 | 19:00, 23:00 | 19:00/23:00; 2 | 18: 19:00, 23:00, 00:00; verdadeiro |
+
+O civil divide as jornadas de 19:00–07:00 entre datas. O núcleo as reúne, mas as linhas completas exibidas têm quatro marcos, enquanto o cadastro não tem intervalo; a última é ímpar. A referência da janela mais ampla informa nova e velha pk 252 e moda nuclear `15:00/23:00`; os dez dias exibidos não explicam a prevalência dessa moda. [não verificado: A2 e sonda34d_ref.out fornecidos; regra de intervalo em [detector_proposta.py:105](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:105)]
+
+**1604:934** — cadastro pk 590, `23:00–11:00/05:00–06:00`, cruza 1; velha pk 177; `nbatidas=10`. [não verificado]
+
+| Dia | Batidas locais | Civil E/S; n | Núcleo: chave, horas; ímpar |
+|---|---|---|---|
+| 09 | 22:57 | 22:57/22:57; 1 | 09: 22:57, 11:09; falso |
+| 10 | 11:09 | 11:09/11:09; 1 | 10: ∅; falso |
+| 11 | 23:01 | 23:01/23:01; 1 | 11: 23:01, 11:00; falso |
+| 12 | 11:00 | 11:00/11:00; 1 | 12: ∅; falso |
+| 13 | 22:57 | 22:57/22:57; 1 | 13: 22:57, 11:00; falso |
+| 14 | 11:00 | 11:00/11:00; 1 | 14: ∅; falso |
+| 15 | 22:58 | 22:58/22:58; 1 | 15: 22:58, 11:04; falso |
+| 16 | 11:04 | 11:04/11:04; 1 | 16: ∅; falso |
+| 17 | 23:27 | 23:27/23:27; 1 | 17: 23:27, 11:40; falso |
+| 18 | 11:40 | 11:40/11:40; 1 | 18: ∅; falso |
+
+O civil vê uma batida por data; o núcleo reúne cada entrada com a saída da manhã seguinte, mas nessas jornadas mostra dois marcos, sem os dois marcos de intervalo do cadastro. A referência da janela mais ampla informa nova pk 197 e E/S nuclear modal `07:01/19:00`; os dez dias exibidos não explicam essa moda. [não verificado: A2 e sonda34d_ref.out fornecidos; regras em [detector_proposta.py:70](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:70) e [detector_proposta.py:105](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/escala/detector_proposta.py:105)]
+
+## 3. A3: contagem de chaves multibloco
+
+O corte referenciado da autópsia deduplica batidas a menos de dez minutos e separa blocos por gap; essa contagem replicada não deve ser confundida automaticamente com o corte atual do núcleo, que não faz esse dedup e também tem limite de vão. [app/ponto/management/commands/e6_piso_autopsia.py:65](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/management/commands/e6_piso_autopsia.py:65), [app/ponto/calculador/nucleo.py:45](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:45), [app/ponto/calculador/nucleo.py:215](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/calculador/nucleo.py:215)
+
+| Colab pk | Chaves | Chaves com >1 bloco |
+|---|---:|---:|
+| 109 | 27 | 1 |
+| 328 | 34 | 1 |
+| 451 | 54 | 1 |
+| 466 | 30 | 2 |
+| 467 | 25 | 1 |
+| 638 | 23 | 1 |
+| 877 | 28 | 1 |
+| 911 | 40 | 4 |
+| 932 | 29 | 3 |
+
+**A3_TOTAL:** `universo_colabs=233 chaves=7524 chaves_multibloco=15 colabs_com_multibloco=9`. [não verificado: A3 fornecido]
+
+**Controle da sonda principal:** `ERROS=0 UNIVERSO=233 CONTADOS=34 (esperado 34)`. **Controle do anexo de referência:** `ERROS=0 UNIVERSO=233 CONTADOS=233`. [não verificado: envelopes fornecidos]
 
 ## 19/11 11:58 · sessao ddd2b81beddc · CADEIA-20-PASSO-1 · construtor · origem=Code
 
@@ -1409,43 +1608,4 @@ Cálculos dos seis casos, condições de catálogo, textos de confiança e refer
 
 A investigação do item 2 foi enviada ao agente principal, com as autoridades, os casos de turno aberto e batida solta, as derivações em `app/escala/` e os contratos localizados.
 
-## 19/11 10:38 · sessao c10d22884f27 · - · - · origem=Ronald (tmux)
-
-Enviei ao agente principal o inventário dos chamadores e leitores identificados, o fluxo até a lavra e a lista, as colisões verificadas e o script AST executado em leitura.
-
-A contagem total por classe permanece **[não verificado]**: o script executado inventaria imports, mas não resolve reexports, fluxo interprocedural nem templates; além disso, alguns chamadores apenas repassam ou descartam o retorno e não cabem claramente nas três classes solicitadas.
-
-## 19/11 10:31 · sessao 4643c4b2b1cc · ESPELHO-VERDADE · leitura · origem=Code
-
-O ponto central é que `InsumosDoDono` chama o oráculo **sem `pares`**. Assim, as `horas_do_dia` entregues ao juiz são as batidas agrupadas pela data da **primeira batida de cada turno formado pelo próprio oráculo**; não são uma lista agrupada necessariamente pelo dia de calendário de cada batida nem pelo dia da jornada vindo dos pares do motor ([e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149), [nucleo.py:186](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:186), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)).
-
-**Referência do censo.** O diretório fornecido não contém metadados Git acessíveis: `git rev-parse HEAD` retornou “not a git repository”. Portanto, a identidade entre os arquivos lidos e o HEAD/hash informado é **[não verificado]**. A busca por chamadas textuais em arquivos Python encontrou os quatro sítios de aplicação abaixo; chamadas dinâmicas ou fora dos arquivos pesquisados permanecem **[não verificado]**.
-
-### 1. Chamadas na aplicação
-
-| Sítio | `pares` e origem de `ts` | Chave de dia |
-|---|---|---|
-| [e6_oraculo.py:153](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:153), `InsumosDoDono.__init__` | **Não passa `pares`**. `ts` vem dos timestamps de `batidas_apuraveis`, convertidos para a timezone corrente, entre `ini − 12h` e `fim + 1 dia + 14h`; a consulta usa limites inclusivos e exclui retratadas ([e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149), [turnos.py:2892](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:2892)). | No ramo por sequência, `str(tu[0].date())`, para cada turno construído após os cortes ([nucleo.py:215](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:215), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)). |
-| [diff_calculador.py:414](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:414) | **Passa `pares=_pares`**. No padrão, `_pares=None`; com `--pares-da-autoridade`, recebe `_ins['pares']` de `insumos_do_calculador(c, aut.resultado, ...)`. `ts` vem de consulta direta a `Batida`, sem retratadas, ordenada, convertida para horário local; o limite superior é exclusivo ([diff_calculador.py:270](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:270), [diff_calculador.py:287](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:287), [diff_calculador.py:312](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:312), [diff_calculador.py:325](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:325)). | Com `None`, a primeira data do turno por sequência. Com os pares da porta, o terceiro elemento é o dia obtido de `resultado.dia_da_jornada[id(p)]`; períodos sem esse dia são pulados ([alimentacao.py:73](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:73), [alimentacao.py:133](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:133), [nucleo.py:134](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:134)). |
-| [alimentacao.py:449](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:449), `rubricas_por_dia` | **Passa `pares`**, convertendo `insumos['pares']` em lista; `ts` é a lista do parâmetro `batidas_locais`, ou lista vazia se ausente. No DIFF, recebe o `ts` descrito acima; no fechamento, recebe os timestamps locais de `batidas`, carregadas por `batidas_apuraveis` ([alimentacao.py:353](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:353), [diff_calculador.py:417](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/diff_calculador.py:417), [fechamento.py:633](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/fechamento.py:633), [fechamento.py:1271](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/fechamento.py:1271)). | Para os insumos montados por `insumos_do_calculador`, os segmentos levam o dia do mapa `dia_da_jornada`; o núcleo usa esse terceiro elemento ([alimentacao.py:305](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:305), [alimentacao.py:73](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/alimentacao.py:73), [nucleo.py:141](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:141)). |
-| [periodo.py:356](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:356), `periodo_do_dia` | **Passa `pares`** de `segmentos_do_par(entrada, saida, intervalos, dia)` e passa `ts=()`, vazio. Se entrada ou saída for `None`, retorna antes dessa chamada ([periodo.py:291](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:291), [periodo.py:353](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:353)). | Cada segmento recebe o `dia` passado à função; no caminho de `reler`, ele vem do mapa `resultado.dia_da_jornada`, por objeto de período ([periodo.py:596](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:596), [periodo.py:611](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:611), [periodo.py:744](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/periodo.py:744)). |
-
-Nos dois ramos, `brutas` é uma contagem separada por `str(t.date())` de cada instante de `ts`. No ramo com pares, as demais saídas usam o terceiro elemento do par quando presente; se ausente ou `None`, usam `str(entrada.date())` ([nucleo.py:117](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:117), [nucleo.py:134](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:134), [nucleo.py:235](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:235)).
-
-**Testes:** também há chamadas diretas com dados de teste nos arquivos [test_calculador_regras.py:165](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_calculador_regras.py:165), [test_e6_oraculo_julga_impar.py:44](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_oraculo_julga_impar.py:44), [test_e6_oraculo_le_a_retratacao.py:34](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_oraculo_le_a_retratacao.py:34) e [test_e6_turno_nao_cresce_sem_fim.py:72](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_turno_nao_cresce_sem_fim.py:72). Elas exercitam sequência e, em alguns casos, pares de teste; a mesma regra de chave do núcleo se aplica ([test_calculador_regras.py:171](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_calculador_regras.py:171), [test_e6_turno_nao_cresce_sem_fim.py:160](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/tests/test_e6_turno_nao_cresce_sem_fim.py:160), [nucleo.py:141](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:141), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)). Este parágrafo agrupa os testes por arquivo, não enumera cada chamada individual.
-
-### 2. Caminho de `horas_do_dia` até o dono
-
-1. `InsumosDoDono.__init__` consulta `batidas_apuraveis`, transforma os timestamps em horário local, chama `minutos_do_oraculo(ts)` e guarda `self.oraculo.horas` em `self.horas` ([e6_oraculo.py:128](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:128), [e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149)).
-2. `minutos_do_oraculo` ordena `ts`, forma turnos pelos cortes de sequência e, para cada turno, acrescenta **todas as suas batidas formatadas como `HH:MM`** à lista sob `str(tu[0].date())` ([nucleo.py:109](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:109), [nucleo.py:186](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:186), [nucleo.py:236](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:236)).
-3. `InsumosDoDono.dono(data)` faz `k = str(data)` e passa `self.horas.get(k, [])` como primeiro argumento de `dono_da_divergencia`: se não houver lista para a chave, passa `[]`. Pode chamar primeiro com CXR falso e, se necessário, chamar novamente com o resultado de `cxr()`; o argumento de horas é o mesmo ([e6_oraculo.py:182](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:182)).
-4. O juiz usa a **paridade do comprimento** dessa lista no ramo de BATIDA, depois das guardas de cadastro e de `batida_fora_de_turno`; não interpreta os valores `HH:MM` nessa condição ([e6_oraculo.py:98](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:98)). No próprio comando, o objeto é criado com o espelho já obtido e `dono` é chamado com a data convertida da chave do dia ([e6_oraculo.py:328](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:328), [e6_oraculo.py:378](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:378)).
-
-### 3. Limites da leitura
-
-- **HEAD/hash:** correspondência com `f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33` **[não verificado]**; o Git não estava disponível nesse diretório.
-- **Execução e dados reais:** não executei testes nem consultei banco; resultados por colaborador, frequência de chaves divergentes e impacto na classificação **[não verificado]**. [nao verificado]
-- **Cobertura do censo:** os quatro sítios da tabela são as chamadas textuais de aplicação encontradas em Python; resolução dinâmica, código externo e o censo individualizado de cada chamada de teste **[não verificado]**. [nao verificado]
-- **Demais insumos do dono:** o caminho acima acompanha `horas_do_dia`; não é uma auditoria completa da produção de `cadastro`, fase, CXR ou `batida_fora_de_turno`, embora esses insumos participem da chamada ([e6_oraculo.py:185](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:185)).
-
-_7329 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7331 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
