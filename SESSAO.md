@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 17:43:37.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (8.4 MB). Acoes na janela: **262**.
+**Medido em 19/11/2026 17:49:00.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (8.5 MB). Acoes na janela: **267**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:48:35 | Bash | Check CADEIA suite still running | `kill -0 3502520 && echo vivo; wc -l /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v2n/suite/run.log` |
+| 17:48:33 | Bash | Write triage and AVAL-DEVOLVIDO line | `cd /home/ronald/saas-hasner; R=logs/ESPINHA-BRIEFS/F5/v3/revisao_1735; cat > $R/triagem.md <<'EOF' # TRIAGEM revisao_1735 (aval RESPOSTAS-F5-CONSTROI-1911-1735) -- Codex verificador rc=0, 17:5x Amostra conferida no arquivo:linha (6/6 procedem): folha/previa.py:139-146 (juiz chamado em folha); 0815 PROIBIDO "tocar ... folha"; test_f1nova_b2_leitores.py:87-97 (assert_called_once_with(DecisaoPergunta ...` |
+| 17:47:56 | Bash | Verify folha prohibition and K40 get in loop | `cd /home/ronald/saas-hasner; grep -o "[^.]*folha[^.]*\." logs/AVAIS-1515/e4c_f5_constroi_1911_0815.txt \| head -3; cd /home/ronald/wt-f5c-170736/app; sed -n 448,467p chamados/management/commands/migrar_data_evento_dia_do_turno.py` |
+| 17:47:51 | Bash | Verify sample of Codex claims | `cd /home/ronald/wt-f5c-170736/app; echo "== folha/previa 139-146"; sed -n 139,146p folha/previa.py; echo "== 0815 item 3"; sed -n 3p /home/ronald/saas-hasner/logs/AVAIS-1515/e4c_f5_constroi_1911_0815.txt \| cut -c1-600; echo; echo "== b2_leitores 85-97"; sed -n 85,97p chamados/tests/test_f1nova_b2_leitores.py; echo "== f2 490-509"; sed -n 490,509p chamados/tests/test_e4c_f2_leitura_do_ato.py; echo ...` |
+| 17:47:44 | Bash | Read Codex review result | `cd /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/v3/revisao_1735; tail -3 wrapper.out; wc -c r.txt; cat r.txt` |
 | 17:42:22 | Bash | Wait for Codex verificador to finish | `while kill -0 3543868 2>/dev/null; do /usr/bin/sleep 20; done; tail -3 /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/v3/revisao_1735/wrapper.out` |
 | 17:42:19 | Bash | Record DESPACHO line in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO:') i=next(k for k,l in enumerate(L) if l.startswith('AVAL-DEVOLVIDO E4C-F5-CONSTROI-A-1911-1710')) L[i]=L[i]+' -- RESPONDIDA por RESPOSTAS-F5-CONSTROI-1911-1735 (17:35)' L.insert(1,'DESPACHO RESPOSTAS-F5-CONSTROI-1911-1735 (17:4x): REVISAO-DO-AVAL itens 1,6,7 -> Code ...` |
 | 17:42:13 | Bash | Read the two juizes and _pergunta_viva_calc | `cd /home/ronald/wt-f5c-170736/app; sed -n 1375,1440p chamados/juizes.py; echo -----; sed -n 1545,1570p chamados/juizes.py` |
