@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 00:56** · publicado em **19/11/2026 01:00** (UTC-3)
+> Ultima resposta processada: **19/11/2026 01:26** · publicado em **19/11/2026 01:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 01:26 · sessao ea68c280ade9 · ESCALA-NAO-DESCREVE · verificador · origem=Code
+
+1. **PROCEDE, com ressalvas.** Os dois diffs fornecidos mostram alterações apenas em valores de `LINHAS_REGISTRADAS` no arquivo em conflito; não mostram mudança de lógica nesse arquivo. O diff da ESCALA registra `entradas_fora_do_inicio` de `[521]` para `[524]` e `assinaturas_do_colab` de `[170, 177]` para `[179, 186]`. Ambos correspondem a arquivos da lista de produção fornecida. Os anexos foram fornecidos no enunciado sem numeração de linhas; sua independência e completude em relação aos commits são **[não verificado]**. [nao verificado]
+
+   O **MEDIDOR** é `core.medida_turno_do_par.censo(raiz)`: sua entrada recebe a pasta `app/`, lê os fontes e chama `censo_fontes` ([medida_turno_do_par.py:448](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/medida_turno_do_par.py:448)); o teste usa `cls.c = m.censo(_app())` e compara as linhas por igualdade ([test_medida_turno_do_par.py:502](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/tests/test_medida_turno_do_par.py:502), [test_medida_turno_do_par.py:558](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/tests/test_medida_turno_do_par.py:558)). Para obter o registro medido, executar dentro do `app/` da árvore desejada:
+
+   ```bash
+   PYTHONDONTWRITEBYTECODE=1 python3 -B -c "from core import medida_turno_do_par as m; from pprint import pprint; c=m.censo('.'); pprint({k:{(i['chave'], i.get('sitio', i['criterio'])): i['linhas'] for i in c[k]['itens']} for k in ('pareadores','derivacoes_de_dia')}, sort_dicts=False)"
+   ```
+
+   Rodei o medidor **na cópia disponível**, não numa árvore mergeada. Além de `autoridade_do_periodo` `[1029] → [1045]`, ele encontrou outras três divergências preexistentes na catraca: [nao verificado]
+
+   | Item B1 | Registrado | Medido |
+   |---|---:|---:|
+   | `espelho.py::montar_dias` | `[426]` | `[440]` |
+   | `turnos.py::_dia_das_batidas_puro` | `[2967]` | `[2971]` |
+   | `turnos.py::dia_do_turno_da_batida` | `[2945]` | `[2949]` |
+
+   Os registros estão em [test_medida_turno_do_par.py:324](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/tests/test_medida_turno_do_par.py:324) e [test_medida_turno_do_par.py:336](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/tests/test_medida_turno_do_par.py:336); as ocorrências reais estão em [espelho.py:1045](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/ponto/services/espelho.py:1045), [espelho.py:440](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/ponto/services/espelho.py:440), [turnos.py:2971](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/ponto/turnos.py:2971) e [turnos.py:2949](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/ponto/turnos.py:2949). A atribuição de cada deslocamento à ESPURIA-TELA por diff de commits é **[não verificado]**.
+
+2. **NÃO PROCEDE a afirmação de colisão demonstrada com aval ou lei.** Os cortes vigentes da ESCALA tratam de botão, folga e ordenação ([CORTES.md:551](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/docs/CORTES.md:551)); o BACKLOG registra a obra e “pouso so depois de 19/11” ([BACKLOG.md:2341](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/docs/BACKLOG.md:2341)). A L-126 exige, entre outras condições, opus final e preserva proibições ao construtor ([LEIS.md:147](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/docs/LEIS.md:147)). O item 4 fornecido prevê opus final e restringe a resolução a não mudar `.py` de produção; não identifiquei colisão literal nesses pontos. Conformidade do **delta futuro** e condições efetivas de pouso: **[não verificado]**.
+
+3. **NÃO PROCEDE que as condições sejam impossíveis no literal; PROCEDE a ressalva de escopo.** O item 4 fornecido exige “numeros da catraca saem do MEDIDOR rodado na arvore mergeada, nunca digitados” e “nenhum .py de producao muda” [anexo `aval.txt`, numeração de linha não fornecida]. Essas condições são compatíveis com atualizar o arquivo de teste a partir da medição da árvore mergeada ([test_medida_turno_do_par.py:17](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/tests/test_medida_turno_do_par.py:17)).
+
+   Contudo, **resolver só os trechos conflitantes não basta para tornar a catraca verde na cópia medida**: há quatro registros já defasados, inclusive `[1029] → [1045]`, listados acima. Se persistirem na árvore mergeada, o medidor exigirá também esses quatro ajustes ([test_medida_turno_do_par.py:558](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/core/tests/test_medida_turno_do_par.py:558)). O texto “sobre a ponta” e “numeros ... na arvore mergeada” sustenta incluí-los na **atualização mecânica da catraca do item 4**; se a intenção era reservar os registros herdados à outra obra, o aval fornecido não o esclarece **[não verificado]**. Os valores finais após o merge também são **[não verificado]**.
+
+4. **NÃO PROCEDE que o delta de resolução declarado toque, por si, competência exportada, dinheiro, motor, folha, export, DiaPago, dados de escala, vínculo ou `!` fora do declarado.** O item 4 fornecido limita o trabalho ao conflito do teste e diz “nenhum .py de producao muda” [anexo `aval.txt`, numeração de linha não fornecida]. Isso **não certifica a raia ESCALA inteira**: a lista fornecida inclui arquivos de produção, e seu conteúdo e efeitos no delta completo entre commits não foram disponibilizados **[não verificado]**. A L-126 mantém as proibições pertinentes ao construtor ([LEIS.md:147](/home/ronald/codex_ws/477a78ea597ee461d1c94621a2c610c603e6fd34/app/docs/LEIS.md:147)).
+
+A cópia disponível não tem metadados Git acessíveis; portanto, hash, merge-base, conflito efetivo e árvore mergeada não puderam ser verificados independentemente **[não verificado]**. Não executei a suite nem alterei arquivos. [nao verificado]
+
+**REVISAO item 4: PROCEDE 1 / NAO PROCEDE 3.**
 
 ## 19/11 00:56 · sessao 8e6cc7d6cd1a · QUEIMA-B3 · censo · origem=Code
 
@@ -3259,8 +3291,4 @@ As migrations escrevem `status_local` em [0038_a3_registrado_backfill.py:10](/ho
 
 A busca não estabelece ausência de escritores por argumentos dinâmicos ou SQL montado dinamicamente [não verificado].
 
-## 19/11 00:45 · sessao 3c6553f22e9f · - · - · origem=Ronald (tmux)
-
-Os achados e referências de F6 e F7 foram enviados ao agente principal. A identidade de X15 permanece **[não verificado]**, pois a tabela citada no brief não está disponível na cópia.
-
-_7217 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7218 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
