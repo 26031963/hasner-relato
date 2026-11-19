@@ -1,7 +1,89 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 18:26** · publicado em **19/11/2026 18:30** (UTC-3)
+> Ultima resposta processada: **19/11/2026 18:40** · publicado em **19/11/2026 18:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 18:40 · sessao 29cd68d25a8d · E4C-F5-CONSTROI · sonda · origem=Code
+
+Não executei novamente a sonda. A porta cria um arquivo temporário e grava na trilha, e a tarefa proíbe alterações em arquivos. (`bin/sonda_leitura.sh:216`, `bin/sonda_leitura.sh:217`, `bin/sonda_leitura.sh:248`, `bin/sonda_leitura.sh:249`)
+
+**Saída literal raspada fornecida** [nao verificado]
+
+```text
+sonda_leitura: sonda.py [e54f137c79492f08] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/wt-f5c-170736/app (copia), banco segue sombra como leitor
+
+BANCO=sombra
+UNIVERSO=51563 PERCORRIDAS=51563 ERROS=0
+MUDA_RESPONDIDA=0 AMOSTRA=[]
+MUDA_ESTADO=0 AMOSTRA=[]
+MUDA_SEM_VEREDITO=0 AMOSTRA=[]
+DISPLAY_DIF=0 CRU_DIF=0 PKS_DISPLAY=[]
+VEREDITO=VALIDO MUDAM=0 DISPLAY_DIF=0
+FIM_SONDA_1E
+```
+
+- `VEREDITO=VALIDO`. Sim, `ERROS=0` e `UNIVERSO==PERCORRIDAS` (`51563==51563`). [nao verificado]
+- Todos os `MUDA_*` são `0`, com `AMOSTRA=[]` nos três campos. [nao verificado]
+- `DISPLAY_DIF=0`, `CRU_DIF=0` e `PKS_DISPLAY=[]`. [nao verificado]
+
+## 19/11 18:38 · sessao 7c56dccf9316 · CADEIA-20-PASSO-1 · construtor · origem=Code
+
+**CADEIA-20-PASSO-1 · Volta 3 implementada na cópia.** A v5 começa na competência `2026-10`. O cartório usa o caminho normal de impressão e `_em_dia`. A projeção entrega hora e razão ou estado, e o `--apply` imprime o contador da empresa. `ponto/services/cartorio.py:161`, `:1334`, `:1552`, `escala/services/leitor_celula.py:193`, `ponto/management/commands/processar_cartorio.py:75`.
+
+Conferi a sintaxe, os alvos dos mutantes e o censo estático. Os corpos de `versao_para`, `impressao_insumos` e `_regra_do_dia` conferem com a base. Suite, execução dos REDs e mutantes, smoke e medidas de produção ficam **[nao verificado]** para Code e Opus. `ponto/services/cartorio.py:280`, `:493`, `:1334`, `escala/tests/test_cadeia20_volta3_mutantes.py:116`.
+
+A fixture antiga de espúrias do PDF monta escala e batidas em `relatorios/tests/test_cartao_marca_espuria.py:21`. A marcação agora vem da ata projetada. O resultado dessa fixture fica **[nao verificado]**. `relatorios/pdf_espelho.py:595`.
+
+### Comandos para a sessão
+
+Os REDs cobrem a relavra da 10 e a impressão da 09, os três estados do aval, a conferência por ocorrência e a entrada de um leitor cru. `escala/tests/test_cadeia20_volta3.py:42`, `:73`, `:142`, `:160`, `:166`, `:172`, `escala/tests/test_cadeia20_selo_orfas.py:224`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  escala.tests.test_cadeia20_volta3 \
+  escala.tests.test_cadeia20_selo_orfas \
+  ponto.tests.test_o219_versao_da_regra \
+  ponto.tests.test_e3_isento_na_impressao
+```
+
+Cada chamada abaixo executa um mutante. O harness exige que o RED passe com o código original e falhe na asserção indicada após a troca em memória. `escala/tests/test_cadeia20_volta3_mutantes.py:67`, `:116`.
+
+```bash
+mutante() {
+  CADEIA20_V3_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    escala.tests.test_cadeia20_volta3_mutantes
+}
+mutante sem_v5
+mutante v5_na_09
+mutante estado_antigo_apagado
+mutante estado_do_horizonte_errado
+mutante falha_apagada
+mutante rotulo_trocado
+mutante espelho_descarta_sobras
+mutante calendario_so_hora
+mutante card_so_hora
+mutante pdf_so_hora
+mutante contador_perde_chave
+mutante contador_ignora_ordem
+mutante apply_omite_contador
+mutante catraca_aceita_leitor
+```
+
+### Inventário
+
+| Item | Mudança e localização |
+|---|---|
+| V3-1 | Declaração da v5 em `ponto/services/cartorio.py:161`. Ajustei os testes existentes que fixavam o teto ou o valor vivo da competência 10 em `ponto/tests/test_o219_versao_da_regra.py:79` e `ponto/tests/test_e3_isento_na_impressao.py:93`. |
+| V3-2 | Mapa de rótulos em `escala/orfa_classe.py:6`. Projeção por ocorrência e entrega por dia em `escala/services/leitor_celula.py:193`, `:454`. |
+| V3-3 | O serviço usa a projeção sobre as células já carregadas e entrega `orfas_grade` em `ponto/services/espelho.py:152`, `:704`, `:862`. O adaptador preserva o contrato dos demais chamadores em `escala/utils.py:1099`. Calendário e card em `templates/ponto/espelho.html:151`, `:165`, `:249`. Coleta, marcação, texto e legenda do PDF em `relatorios/pdf_espelho.py:478`, `:595`, `:874`, `:1013`. |
+| V3-4 | Contador com número e PKs em `ponto/services/cartorio.py:1038`. Saída ao fim do `--apply` em `ponto/management/commands/processar_cartorio.py:75`. |
+| V3-5 e V3-6 | Catraca e injeção de leitor cru em `escala/tests/test_cadeia20_selo_orfas.py:11`, `:220`, `:224`. REDs e mutantes em `escala/tests/test_cadeia20_volta3.py:42`, `:142` e `escala/tests/test_cadeia20_volta3_mutantes.py:67`. |
+
+**Linha de base do selo — 5 Python, 0 HTML.** Os sítios contados são `colaboradores/services/calendario.py:410`, `escala/utils.py:1131`, `ponto/juiz_batida.py:161`, `ponto/services/cluster_espurio.py:31` e `relatorios/cartao_pela_celula.py:288`. Tetos em `escala/tests/test_cadeia20_selo_orfas.py:11`.
+
+- **`ata['razoes_orfas']`** é escrita por `_lavrar_razoes_sobras` em `ponto/services/cartorio.py:968`, `:1001`, pelos dois ramos em `:1434`, `:2015`. Leem a chave a projeção, `medir_razoes_sobras` e o contador do horizonte. `escala/services/leitor_celula.py:202`, `ponto/services/cartorio.py:1013`, `:1049`.
+- **`REGRA_VERSOES`** é declarada em `ponto/services/cartorio.py:161`. Leem a tupla a validação no módulo e `versao_para`. O cartório, a projeção e o contador consultam `versao_para`. `ponto/services/cartorio.py:269`, `:293`, `:1047`, `:1334`, `escala/services/leitor_celula.py:219`.
 
 ## 19/11 18:26 · sessao 42a726cd1503 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1315,80 +1397,4 @@ Os quatro testes medem a gravação síncrona da entrada das 07h. Nos cenários 
 
 A consulta que a volta 2 pode acrescentar nesses ramos é `p.decisoes.all()` em cada chamada da leitura com ORM persistido e sem prefetch. O passivo E4b recebe `ja` calculado em memória e não entra no ramo SQL. O memo do C6 pode evitar uma nova leitura quando a mesma instância chega com a mesma chave. `chamados/juizes.py:894–905`, `:1389–1391`, `:1559–1561`, `chamados/models.py:4251–4257`, `:4308–4313`.
 
-## 19/11 15:28 · sessao 304fee693a3b · - · - · origem=Ronald (tmux)
-
-`funcao()` recompila apenas o corpo extraído por AST e usa o dicionário de globais fornecido pelo harness. Os dois juízes resolvem `PerguntaDisputa` antes de importar `DecisaoPergunta`. Um nome ausente gera `NameError`. Uma instância `SimpleNamespace` no segundo argumento de `isinstance` gera `TypeError`. Em ambos os casos, a execução para antes da leitura do ato. [e4_apoio.py:8](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/tests/e4_apoio.py:8) [juizes.py:1389](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/juizes.py:1389) [juizes.py:1559](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/juizes.py:1559)
-
-| Família | Dublê e origem da falha |
-|---|---|
-| Bug Par, Degrau Dono e Porta, C8c posição | `juiz_respondida()` fornece apenas `texto_vazio` aos globais AST. Bug Par e os dois casos de Degrau injetam o juiz extraído e passam perguntas `NS/N`. C8c posição também usa `tarefa_em_memoria`, que instala módulos falsos com `PerguntaDisputa=N(constantes)` e `DecisaoPergunta=N(literais)`. O patch em `sys.modules` não popula os globais da função AST. `chamados/tests/e4_apoio.py:19`, `test_bug_par_sem_banco.py:164-195`, `test_e3_degrau_dono_e_porta.py:290-346`, `test_e3_c8c_sem_banco.py:41-64`, `test_e3_c8b_sem_banco.py:14-23`, `test_e3_tarefa_admin_sem_banco.py:71-86`. |
-| C8b, C8c foto, pós-suite | `ambiente_c6` põe nos globais dos dois juízes `PerguntaDisputa=N(**literais(...))`, com constantes e métodos de vias, e trabalha com perguntas `N`. O próprio contexto troca `chamados.juizes`. Quando `tarefa_em_memoria` coexiste, ela fornece o módulo falso de modelos acima. `chamados/tests/e3_c8b_apoio.py:83-90,109-120,150-179,194-198`, `test_e3_c8c_sem_banco.py:124-140`, `test_e3_pos_suite_sem_banco.py:53-109`. |
-| C11 C5/C6 | O módulo falso de modelos tem apenas `ChamadoColaborador=N(objects=Consulta(...))`. A projeção AST recebe separadamente `PerguntaDisputa=N(VIAS_FORA_DO_FATO=())`. O C11 passa perguntas `N` do lote de vivas à projeção. `chamados/tests/test_e3_r3_c5_sem_banco.py:153-194`, `test_e3_r3_c6_sem_banco.py:278-313`, `escala/services/cadastro_realidade.py:502`. |
-| Tarefa admin | Injeta nos globais AST `PerguntaDisputa=N(VIAS_QUE_VENCEM_A_RESPOSTA=(), vias_que_encerram_por_identidade=...)` e passa pergunta `N`. O patch de módulos desse teste não substitui `chamados.models`. `chamados/tests/test_e3_tarefa_admin_sem_banco.py:159-166,183-206`. |
-| E4b memória | Perguntas `Objeto`, relação `decisoes=Linhas()`. Módulo falso `NS(PerguntaDisputa=self.PD, ChamadoColaborador=self.CC, DecisaoPergunta=NS(), DisputaSupervisao=NS(...))`. Os juízes recompilados têm outro `NS` nos seus globais, com constantes e métodos de vias. C11, C4 tranca, C4v14, C4v7 e C6 reutilizam o harness. C4v14 injeta as classes reais só na função AST `sem_veredito_entre`, preservando os globais dos juízes herdados. `chamados/tests/test_e4b_classe_e_memoria.py:151-161,282-313,318-335`, `test_e4b_c11_memoria.py:37,79`, `test_e4b_c4_tranca_memoria.py:27`, `test_e4b_c4v14_memoria.py:32-53`, `test_e4b_c4v7_memoria.py:85-89`, `test_e4b_c6_memoria.py:15-17`. |
-
-O caso C8b do slot aparece como `FAIL` porque a carga guarda o `TypeError` de `_slot_esperado` em `slots[p.pk]` e o teste compara o valor com `(ts, 'S')`. [carga_pergunta_viva.py:117](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/services/carga_pergunta_viva.py:117) [juizes.py:345](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/juizes.py:345) [test_e3_c8b_sem_banco.py:406](/home/ronald/codex_ws/e673e0efe1135d60e844387527d53042d651a34d/app/chamados/tests/test_e3_c8b_sem_banco.py:406)
-
-## 19/11 15:23 · sessao db53e16adcc8 · DST-L2-JZ1 · sonda · origem=Code
-
-### 1. Filtro e significado de `pendente`
-
-**Sim, para o status literal `pendente`.** O filtro exige `status_local` em `('aberto', 'em_analise', 'registrado')`, a chave estrangeira `justificativa_relacionada` preenchida e `status='pendente'` na justificativa apontada por essa chave. (`pares.py:8–11`, anexo; `app/chamados/models.py:58,75–79`; `app/chamados/catalogo/motor.py:24`; `app/ponto/models.py:159`.)
-
-`pendente` é a única opção do modelo com significado de pendência. As outras opções declaradas são `aprovada` e `rejeitada`. A regra de fechamento de chamado também trata `aguardando_dp` e `aguardando_colab` como pendência, embora esses valores estejam fora das opções declaradas de `Justificativa.status`. Se estivessem gravados, ficariam fora da sonda. A presença desses valores no banco é [nao verificado]. (`app/ponto/models.py:130–134,159`; `app/chamados/models.py:141–147`; `pares.py:9–10`, anexo.)
-
-A análise usa os arquivos da cópia. A correspondência com o HEAD `688696dbb32b7859fb38a141c54d5a6f456056b3` é [nao verificado], pois a cópia está sem metadados Git.
-
-### 2. Total e pares
-
-**37 pares.** `CONTADOR=37 UNIVERSO=37 IGUAL=True ERROS=0`. O script chama `qs.count()` sobre o mesmo `qs` depois de materializá-lo com `list(qs)`. (`pares.py:12–13,20–22`, anexo; saída anexada:6–43, numerada a partir de `=== SOMBRA`.)
-
-Transcrição literal da saída anexada:6–42 (`pares.py:20–21`, anexo).
-
-```text
-PAR chamado=38675 justificativa=3643
-PAR chamado=38693 justificativa=3649
-PAR chamado=38707 justificativa=3652
-PAR chamado=38868 justificativa=3665
-PAR chamado=38894 justificativa=3672
-PAR chamado=38905 justificativa=3675
-PAR chamado=38906 justificativa=3676
-PAR chamado=38907 justificativa=3677
-PAR chamado=38947 justificativa=3679
-PAR chamado=39041 justificativa=3682
-PAR chamado=39044 justificativa=3685
-PAR chamado=39045 justificativa=3686
-PAR chamado=39065 justificativa=3692
-PAR chamado=39067 justificativa=3694
-PAR chamado=39068 justificativa=3695
-PAR chamado=39077 justificativa=3696
-PAR chamado=39078 justificativa=3697
-PAR chamado=39085 justificativa=3699
-PAR chamado=39219 justificativa=3709
-PAR chamado=39221 justificativa=3710
-PAR chamado=39245 justificativa=3712
-PAR chamado=39254 justificativa=3713
-PAR chamado=39255 justificativa=3714
-PAR chamado=39398 justificativa=3717
-PAR chamado=39408 justificativa=3718
-PAR chamado=39552 justificativa=3723
-PAR chamado=39565 justificativa=3727
-PAR chamado=39566 justificativa=3728
-PAR chamado=39579 justificativa=3731
-PAR chamado=39583 justificativa=3733
-PAR chamado=39679 justificativa=3735
-PAR chamado=39718 justificativa=3736
-PAR chamado=39754 justificativa=3742
-PAR chamado=39755 justificativa=3743
-PAR chamado=39759 justificativa=3744
-PAR chamado=39760 justificativa=3745
-PAR chamado=39764 justificativa=3748
-```
-
-### 3. Sinais de falha ou schema errado
-
-A saída não indica falha de leitura nem universo vazio. Ela registra `ERROS=0`, `rc_sombra=0`, 184 chamados vivos com ponteiro e 37 pares após o filtro de status da justificativa. (`pares.py:8–19,22`, anexo; saída anexada:5–44.)
-
-A saída não indica schema errado. O script solicita `schema_context('juliani')`, mas a saída não imprime o schema efetivo da conexão. O schema efetivamente consultado é [nao verificado]. (`pares.py:6,17–22`, anexo.)
-
-_7413 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7415 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
