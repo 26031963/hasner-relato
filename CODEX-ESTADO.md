@@ -1,7 +1,187 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 08:55** · publicado em **19/11/2026 08:55** (UTC-3)
+> Ultima resposta processada: **19/11/2026 09:09** · publicado em **19/11/2026 09:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 09:09 · sessao 30737462c82c · E4C-F5-CONSTROI · sonda · origem=Code
+
+A sonda usa a leitura real e o juiz da cópia ([models.py:4295](app/chamados/models.py:4295), [juizes.py:866](app/chamados/juizes.py:866)). Os resultados na sombra são [não verificado].
+
+```python
+import collections
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection, transaction
+
+from chamados.juizes import pergunta_viva
+from chamados.models import DecisaoPergunta, PerguntaDisputa
+
+
+CLASSES = (
+    "LEITURA_VAZIA_PROJECAO_TEXTO",
+    "LEITURA_TEXTO_PROJECAO_VAZIA",
+    "AMBOS_TEXTO_DIFERENTE",
+)
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def main():
+    etapa = "GUARDA_SOMBRA"
+    erros = 0
+    universo = 0
+    iguais = 0
+    casos_com_erro = 0
+    contagem = collections.Counter()
+    vivas = collections.Counter()
+    exemplos = collections.defaultdict(list)
+
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+
+            etapa = "PERGUNTAS"
+            perguntas = (
+                PerguntaDisputa.objects.all()
+                .order_by("pk")
+                .prefetch_related("decisoes")
+                .iterator(chunk_size=500)
+            )
+
+            for p in perguntas:
+                universo += 1
+                try:
+                    leitura = DecisaoPergunta.leitura(p).resposta_colab
+                    projecao = p.resposta_colab or ""
+
+                    if leitura == projecao:
+                        iguais += 1
+                        continue
+
+                    if not leitura and projecao:
+                        classe = CLASSES[0]
+                    elif leitura and not projecao:
+                        classe = CLASSES[1]
+                    elif leitura and projecao:
+                        classe = CLASSES[2]
+                    else:
+                        raise RuntimeError("diferenca_nao_classificada")
+
+                    viva = pergunta_viva(p)
+                    contagem[classe] += 1
+                    if viva:
+                        vivas[classe] += 1
+                    if len(exemplos[classe]) < 3:
+                        exemplos[classe].append(p.pk)
+
+                except Exception:
+                    casos_com_erro += 1
+                    erros = 1
+                    print("ERRO_CASO pergunta_pk=%s" % p.pk)
+
+            etapa = "SAIDA"
+            soma = iguais + casos_com_erro + sum(
+                contagem[classe] for classe in CLASSES
+            )
+            if soma != universo:
+                erros = 1
+
+            linhas = ["UNIVERSO perguntas_lidas=%d" % universo]
+            linhas.append("IGUAIS contagem=%d" % iguais)
+            linhas.append("CASOS_COM_ERRO contagem=%d" % casos_com_erro)
+
+            for classe in CLASSES:
+                linhas.append(
+                    "CLASSE classe=%s contagem=%d pergunta_viva=%d"
+                    % (classe, contagem[classe], vivas[classe])
+                )
+                for numero in range(1, 4):
+                    if numero <= len(exemplos[classe]):
+                        linhas.append(
+                            "EXEMPLO classe=%s numero=%d pergunta_pk=%s"
+                            % (classe, numero, exemplos[classe][numero - 1])
+                        )
+                    else:
+                        linhas.append(
+                            "EXEMPLO classe=%s numero=%d indisponivel"
+                            % (classe, numero)
+                        )
+
+            linhas.append(
+                "CONFERENCIA soma=%d universo=%d soma==universo=%s"
+                % (soma, universo, "s" if soma == universo else "n")
+            )
+
+        for linha in linhas:
+            print(linha)
+
+    except Exception:
+        print("ERRO " + etapa)
+        erros = 1
+
+    print("ERROS=%d" % erros)
+    print("FIM_SONDA_F5_TEXTO")
+    return erros
+
+
+sys.exit(main())
+```
+
+Perguntas de lei: N.
+
+## 19/11 09:09 · sessao cd1b747b2dd1 · ESPELHO-VERDADE · sonda · origem=Code
+
+**Não consegui completar a sonda B com segurança nesta volta.** O bloqueio do meu trabalho é montar e conferir a extração dos pares exatos e a classificação de local sem apresentar uma associação ambígua como fato. Não vou entregar um script parcial como se satisfizesse a especificação. A execução na sombra, as classes e suas contagens permanecem **[não verificado]**.
+
+**A) Leitura do código**
+
+A V1 compara, em minutos, `insumos.oraculo.minutos[dia]` com `minutos_do_espelho(registro)`, usando a diferença com sinal **oráculo − espelho**. O lado espelho vem de `minutos_realizados`, quando presente, ou de `pago_h × 60`; o filtro exclui, entre outros, dias sem registro, isentos ou com ausência, a diferença explicada pela janela declarada e diferenças absolutas de até 10 minutos. [e6_oraculo.py:263](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:263) [e6_oraculo.py:328](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:328) [e6_oraculo.py:336](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:336) [e6_oraculo.py:365](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:365)
+
+`horas_do_dia`, passado ao juiz do dono, é a lista de batidas do oráculo, usada na verificação de paridade; não é o total do motor. `InsumosDoDono.dono(dia)` chama o juiz com os demais insumos, e o retorno residual `ESTRUTURA` não nomeia uma causa. A chamada ao dono e a reaplicação do filtro são, portanto, verificações separadas. [e6_oraculo.py:106](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:106) [e6_oraculo.py:110](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:110) [e6_oraculo.py:182](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/management/commands/e6_oraculo.py:182)
+
+Para **onde** comparar, o núcleo soma os pares fechados, mas `oraculo.horas` guarda horários formatados em `HH:MM`, concatenados por dia: essa saída, sozinha, não preserva as datas, os segundos e as fronteiras entre turnos necessárias para reconstruir com segurança todos os pares. Os períodos do resultado do motor expõem entrada, saída, pontas efetivas e intervalos. Eles são contexto geométrico relevante; o campo efetivamente escolhido como lado espelho deve continuar identificado separadamente. [nucleo.py:236](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/nucleo.py:236) [nucleo.py:245](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/nucleo.py:245) [motor_calculo_v2.py:208](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/motor_calculo_v2.py:208) [motor_calculo_v2.py:239](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/motor_calculo_v2.py:239) [espelho.py:779](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/services/espelho.py:779)
+
+Para as rubricas, a decisão da sessão permite imprimir extra, noturno e falta como **`so_motor:`**, sem afirmar divergência entre duas testemunhas. `rubricas_do_dia` lê as rubricas lavradas; `horas_falta` está no `DiaPago`. A pausa do oráculo é o intervalo entre pares fechados, não uma segunda medida automática de intrajornada indenizada. [dia_pago.py:901](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/services/dia_pago.py:901) [models.py:325](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:325) [nucleo.py:248](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/calculador/nucleo.py:248)
+
+As fontes para particularidades são `vinculo_do_dia_carregado`, `marcos_turno` e `turno_cruza_meia_noite` para escala e cruzamento; `fatos_do_dia` para feriado, ausências e folga lançada; `status_da_lavra` para o status de folga trabalhada; `periodos_do_dia` para órfãs na ata; os campos da batida para origem e retratação; e os campos da célula para edição e regeneração. `pergunta_origem` nula não prova ausência de plantio anterior. [alimentacao.py:289](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/alimentacao.py:289) [servico_jornada.py:69](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/servico_jornada.py:69) [servico_jornada.py:104](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/servico_jornada.py:104) [precedencia.py:242](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/precedencia.py:242) [status_dia.py:143](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/status_dia.py:143) [juiz_batida.py:149](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/juiz_batida.py:149) [models.py:30](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:30) [models.py:1690](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1690) [models.py:1718](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1718)
+
+Para pergunta viva, capturar apenas exceções externas é insuficiente: há falhas internas registradas por `registrar_engolido`, inclusive um ramo que devolve `False`. O contador `engolidos()` oferece uma testemunha em memória para detectar incremento durante a chamada; a sonda ainda precisa impedir que os handlers de logging escrevam arquivos. [juizes.py:1479](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/chamados/juizes.py:1479) [juizes.py:1488](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/chamados/juizes.py:1488) [observ.py:60](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/core/observ.py:60) [observ.py:73](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/core/observ.py:73)
+
+**B) Pendente.** O universo informado é 90, sendo 33 de 2026-11 e 57 de 2026-08; a reconfirmação desses casos na sombra e `ERROS=0` estão **[não verificado]**.
+
+**C) Perguntas para a sessão**, sem atribuição de cura como fato:
+
+- Para diferenças localizadas em **ENTRADA, SAIDA, INTERVALO, PAR_SO_ORACULO ou PAR_SO_MOTOR**, a obra seria **DIA-DA-BATIDA-JUIZ-UNICO**, a **“razao da sobra”** ou **sem obra**, conforme o caso? **[não verificado]**
+- Para **CRUZA_MEIA_NOITE** e particularidades de escala ou turno, caberia **ESCALA-NAO-DESCREVE**, **MOTOR-LE-O-TURNO** ou **DIA-DA-BATIDA-JUIZ-UNICO**? **[não verificado]**
+- Para **BATIDA_PLANTADA, BATIDA_RETRATADA** e **ORFA_NO_DIA**, caberia **DIA-DA-BATIDA-JUIZ-UNICO** ou **sem obra**? **[não verificado]**
+- Para **PERGUNTA_VIVA**, caberia **DST-L1, DST-L2, E4C-F5** ou **sem obra**? **[não verificado]**
+- Para **FERIADO_TRABALHADO, FOLGA_TRABALHADA, AUSENCIA_NO_DIA, CELULA_REGENERADA, CELULA_EDITADA** e **OUTROS**, caberia a **“razao da sobra”** ou **sem obra**? **[não verificado]**
+
+Perguntas de lei: **0**.
+
+## 19/11 09:06 · sessao 74532414e01d · E4C-F5-CONSTROI · construtor · origem=Code
+
+**lei:** `DecisaoPergunta.leitura(p).resposta_colab` não é garantidamente o texto corrente de `p.resposta_colab`. A leitura reconstrói o texto a partir dos atos e só acrescenta a projeção como passivo quando não encontra ato correspondente pelo instante; ela não compara os textos. ([chamados/models.py:4260](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4260), [chamados/models.py:4308](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4308))
+
+No caso `RESPOSTA 'a' → REABERTURA → RESPOSTA 'b'`, com a projeção coerente, a leitura retorna `'b'`; com apenas `RESPOSTA 'a' → REABERTURA`, retorna texto vazio, e o fio espera texto. A recusa também limpa a resposta reconstruída. ([chamados/models.py:4277](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4277), [chamados/models.py:4317](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4317), [chamados/services/fio.py:189](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/fio.py:189))
+
+Mas, se após essa sequência o ato de resposta em T3 guarda `'b'` e a pergunta corrente guarda `respondida_em=T3, resposta_colab='c'`, a leitura retorna **`'b'`**, enquanto o texto corrente é **`'c'`**: o ato já corresponde pelo instante e impede a inclusão do texto corrente como passivo. ([chamados/models.py:4260](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4260), [chamados/models.py:4309](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4309))
+
+Parei conforme a condição do item 2: não fiz a cura, alterações ou testes. A ocorrência desse caso em produção é **[não verificado]**. [nao verificado]
 
 ## 19/11 08:55 · sessao 2fe06408ebda · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -476,61 +656,4 @@ Evidências da volta 3 e das guardas foram enviadas ao agente principal, incluin
 
 Enviado ao agente principal o levantamento da testemunha, da conservação do passivo, dos dois juízes e do corte temporal, com referências à base e casos discriminantes. Também sinalizei que `pergunta_respondida` recebe tanto `LeituraDoAto` quanto objetos temporais sintéticos, e que o corte da projeção atual não prova, por si só, o resultado de um replay histórico.
 
-## 19/11 08:09 · sessao af39d0380fdf · E4C-F5 · verificador · origem=Code
-
-**ETAPA A — AVAL-DEVOLVIDO: não**, para a revisão e correção do brief. As divergências abaixo precisam constar do C3. A etapa não foi executada nem o C3 foi criado, pois esta revisão foi autorizada somente para leitura. A identidade da cópia com o hash informado não pôde ser comprovada por Git: a cópia não contém `.git` [não verificado].
-
-**ETAPA B — AVAL-DEVOLVIDO: sim**, neste momento. O literal exige antes C3 fechado, matriz completa, zero perguntas de lei e aprovação do censo pelo wrapper; esses resultados não estão no dado fornecido [não verificado]. Além disso, a cobertura das três voltas e o alcance das portas de escrita precisam ser demonstrados antes da construção.
-
-## 1. Premissas na cópia
-
-**a) Testemunha: confere.** `DecisaoPergunta.leitura` retorna `LeituraDoAto`, com os três campos `validada_em`, `respondida_em` e `resposta_colab` ([models.py:19](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:19), [models.py:4295](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4295), [models.py:4326](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4326)).
-
-**b) As 15 entradas listadas no §2 existem nas posições citadas.** Todas contêm os campos indicados; a última é um `refresh_from_db` que nomeia os campos, e as condições que os usam aparecem nas linhas seguintes ([validacao.py:262](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:262), [validacao.py:264](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:264)).
-
-- Juízes: [juizes.py:1389](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1389) e [juizes.py:1552](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1552).
-- Serviços: [acoes_disputa.py:349](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/acoes_disputa.py:349), [declaracao_texto.py:228](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:228), [disputa_emissao.py:2083](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:2083) e [fio.py:188](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:188).
-- Materialização: [materializacao.py:199](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:199), [materializacao.py:201](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:201) e [materializacao.py:2123](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2123).
-- Validação: [validacao.py:640](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:640), [validacao.py:685](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:685), [validacao.py:898](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:898), [validacao.py:1064](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:1064) e [validacao.py:262](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:262).
-- Template: [chamados_tags.py:166](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/templatetags/chamados_tags.py:166).
-
-**c) `leituras`: a premissa literal da assinatura não confere.** A função pública `tarefa_do_dia` aceita `carga`, não `leituras` ([tarefa_do_dia.py:825](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:825)). O kwarg `leituras` existe na função interna `_tarefa_pura`; a carga monta um mapa por pergunta e o repassa ([tarefa_do_dia.py:196](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:196), [tarefa_do_dia.py:425](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:425), [tarefa_do_dia.py:677](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/tarefa_do_dia.py:677)). Isso não demonstra, por si só, o teto de consultas de cada sítio a migrar [não verificado].
-
-**d) Juízes e passivo: existem, com ressalva.** Os dois juízes existem e hoje leem a projeção ([juizes.py:1382](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1382), [juizes.py:1544](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1544)). `DecisaoPergunta.leitura` incorpora o passivo por `linhas_da_projecao_sem_linha` ([models.py:4238](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4238), [models.py:4308](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4308)). A conservação não é identidade literal para qualquer projeção: texto sem `respondida_em` não entra como resposta e `None` é normalizado para texto vazio; texto sem carimbo é classificado como estado ilegal ([models.py:4251](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4251), [models.py:4260](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4260), [juizes.py:1537](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1537)). O corte temporal do primeiro juiz também precisa ser preservado ([juizes.py:1391](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1391)).
-
-**e) Teste: arquivo existe, referência à expectativa não confere literalmente.** As linhas 330 e 334 criam o chamado e aplicam um *mock* de relógio; não são a expectativa do dono. O caso SILÊNCIO espera `silencio_decidido` e compara a tarefa antes e depois, sem um `assert` explícito de dono admin nessas linhas ([test_f1nova_b1_juiz_respondida.py:328](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:328), [test_f1nova_b1_juiz_respondida.py:338](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:338), [test_f1nova_b1_juiz_respondida.py:343](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/tests/test_f1nova_b1_juiz_respondida.py:343)).
-
-## 2. Colisão com aval e vínculos
-
-Pelos textos raspados, o novo literal conserva as proibições centrais do item 2 da ESPINHA: escrita nova, alteração de motor, folha, exportação, DiaPago, escala ou vínculo, e pouso antes das condições indicadas. A alteração da testemunha corrige uma premissa do texto anterior; sua equivalência com todos os cortes anteriores é **[não verificado]**. [nao verificado]
-
-A proibição de tocar vínculo é compatível, em texto, com as regras existentes de `vinculos.py`: primeiro apontamento prevalece e a porta não apaga vínculo com `None` ([vinculos.py:11](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/vinculos.py:11), [vinculos.py:24](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/vinculos.py:24)). Efeitos indiretos de todas as portas sobre vínculos são **[não verificado]**.
-
-**MANHA-1911-0810: colisão [não verificado].** Seu conteúdo não consta do dado raspado apresentado nem foi localizado na cópia examinada.
-
-## 3. Condições que não fecham ou exigem prova
-
-- **19 linhas versus 15 sítios:** o §2 fornecido lista 15 posições, mas duas são linhas distintas da mesma função `par_do_intervalo` ([materializacao.py:199](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:199), [materializacao.py:201](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:201)). A correspondência das 19 linhas do censo com esses 15 sítios é **[não verificado]**. Além disso, o RED-5 do histórico é mantido pelo literal, embora o histórico esteja fora da lista de 15 posições; a matriz precisa explicitar seu tratamento ([historico.py:96](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/historico.py:96)).
-- **Voltas 1/2/3:** a partição completa dos 15 sítios, sem sobra, é **[não verificado]**. `par_do_intervalo`, por exemplo, é compartilhada entre leitor de tela, validação e guarda de plantio; sua classificação não decorre apenas do nome da função ([materializacao.py:181](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:181)).
-- **Conta:** 40 + 213 = **253**, não 353. O literal raspado estabelece 253; a existência, composição, eventual sobreposição e abrangência real dessas classes em produção são **[não verificado]**.
-- **`models.py`:** a testemunha e o passivo já existem nesse arquivo, mas que algum dos 15 sítios *precise* alterá-lo é **[não verificado]** ([models.py:4238](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4238), [models.py:4295](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:4295)). O wrapper da cópia contém restrição para escrita em `models.py` ([codex_pergunta.sh:346](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/bin/codex_pergunta.sh:346)).
-
-## 4. Exportada, dinheiro e efeitos de escrita
-
-**Há alcance sobre escrita existente, expressamente relevante para a volta 3.** A condição em `materializacao.py:2123` determina se chama `_materializar_uma`; essa porta pode criar batida ou ausência conforme o tipo e chama a porta de registro de batida ([materializacao.py:2123](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2123), [materializacao.py:2069](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2069), [materializacao.py:1487](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1487)). A guarda de devolução de validação também pode limpar campos e registrar ato ([validacao.py:262](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:262), [validacao.py:269](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:269)).
-
-A materialização contém uma guarda para competência entregue antes da escrita ([materializacao.py:1866](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1866)). Que **todas** as portas da volta 3 preservem os casos entregues ou exportados, que não haja efeito sobre célula ou dinheiro fora do declarado e que nenhuma classe adicional mude são **[não verificado]**. A medição exigida pelo literal continua necessária; o dado raspado não traz seus resultados.
-
-**perguntas de lei: 0 identificadas nesta revisão.** As pendências acima são de premissa, escopo e evidência; não há, no material disponível, base suficiente para afirmar que exigem uma nova decisão de lei [não verificado].
-
-## 19/11 08:08 · sessao 7e4d5d4d8b08 · - · - · origem=Ronald (tmux)
-
-As 15 entradas listadas no §2 existem nas linhas indicadas e contêm os campos citados: [juizes.py:1389](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1389), [juizes.py:1552](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/juizes.py:1552), [acoes_disputa.py:349](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/acoes_disputa.py:349), [declaracao_texto.py:228](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:228), [disputa_emissao.py:2083](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:2083), [fio.py:188](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:188), [materializacao.py:199](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:199), [materializacao.py:201](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:201), [materializacao.py:2123](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2123), [validacao.py:640](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:640), [validacao.py:685](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:685), [validacao.py:898](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:898), [validacao.py:1064](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:1064), [chamados_tags.py:166](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/templatetags/chamados_tags.py:166) e [validacao.py:262](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:262). As entradas de `par_do_intervalo` são duas linhas da mesma função; em `validacao.py:262`, a operação é um `refresh_from_db`, seguido de guardas nas linhas 264–269. [materializacao.py:175](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:175), [validacao.py:262](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/validacao.py:262)
-
-A porta de materialização pode criar batida: [materializacao.py:1487](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1487), [registro_batida.py:176](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/registro_batida.py:176). O `post_save` pode acionar julgamento e escrita da ata da célula, sujeito aos guardas da função: [signals.py:85](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/signals.py:85), [signals.py:131](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/signals.py:131), [cartorio.py:2012](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/services/cartorio.py:2012), [cartorio.py:1987](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/ponto/services/cartorio.py:1987).
-
-## 19/11 08:08 · sessao da3a0e5d0a29 · - · - · origem=Ronald (tmux)
-
-Análise enviada ao agente principal, com referências às assinaturas, à carga em lote, às regras de vínculos e à restrição do wrapper. A colisão com MANHA-1911-0810 permanece **[não verificado]**, pois seu conteúdo não foi localizado.
-
-_7289 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7292 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
