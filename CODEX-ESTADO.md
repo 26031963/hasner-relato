@@ -1,7 +1,1211 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 23:27** · publicado em **18/11/2026 23:27** (UTC-3)
+> Ultima resposta processada: **18/11/2026 23:32** · publicado em **18/11/2026 23:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 23:32 · sessao 5f78fdef0b58 · AUDITORIA-ESPURIAS · sonda · origem=Code
+
+A sonda abaixo **não foi executada**; os resultados de S4, a existência do fechamento gravado e a entrada de col950 no fechamento ou em linhas do export permanecem **[não verificado]**.
+
+- `InsumosDoDono.dono` chama `dono_da_divergencia` com os insumos do cadastro, dos turnos e da fase; quando necessário, `cxr()` obtém a lista do motor por `espelho_do_colab`. A célula é lida por `celulas_do_periodo`. O juiz devolve o dono, mas não um texto de motivo; a sonda identifica a própria chamada como fonte do motivo. [app/ponto/management/commands/e6_oraculo.py:113](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:113), [app/ponto/management/commands/e6_oraculo.py:162](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:162), [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:182), [app/escala/alimentacao.py:54](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/alimentacao.py:54).
+- `universo_da_competencia` é o universo usado pelo recálculo; seu filtro considera situação, demissão e empresa. [app/ponto/services/fechamento.py:382](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:382), [app/ponto/services/fechamento.py:439](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:439), [app/ponto/services/fechamento.py:554](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:554).
+- Para o TXT, a view chama o recálculo com `somente_leitura=True`, passa os objetos a `classificar_export` e depois a `montar_linhas_export`. A montagem filtra classificação e status e só produz linhas para eventos ou faltas aplicáveis; pertencer a `entra_set` sozinho não prova que há linha. [app/folha/views.py:209](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/views.py:209), [app/folha/views.py:267](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/views.py:267), [app/folha/export.py:714](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:714).
+- O recálculo em leitura usa o fechamento gravado como semente se existir e, caso contrário, constrói um objeto em memória; o ramo normal usa `get_or_create`, `save` e `update`. A sonda pede leitura, desliga a lavratura e não chama a view que aprova e registra o ato. O recálculo contém capturas internas de exceção: o rastreador abaixo interrompe a seção quando uma exceção chega ao corpo dessa função, inclusive antes de ela prosseguir após uma captura. Escritas transitivas fora desse corpo permanecem **[não verificado]**. [app/ponto/services/fechamento.py:890](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:890), [app/ponto/services/fechamento.py:1081](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1081), [app/ponto/services/fechamento.py:1128](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1128), [app/ponto/services/fechamento.py:1191](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1191), [app/ponto/services/fechamento.py:1303](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1303), [app/folha/views.py:248](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/views.py:248).
+
+```python
+DELE = [  # (colN, data_turno, pk_entrada, pk_saida, criterio) -- lista do auditor, prod 18/11 22:36
+    (32, '2026-11-01', 144660, 144661, 'AMBAS_PLANTADAS'),
+    (39, '2026-10-25', 139515, 139514, 'AMBAS_PLANTADAS'),
+    (67, '2026-10-21', 139860, 139861, 'AMBAS_PLANTADAS'),
+    (113, '2026-10-30', 147496, 147498, 'AMBAS_PLANTADAS'),
+    (113, '2026-11-01', 147499, 147564, 'AMBAS_PLANTADAS'),
+    (169, '2026-11-06', 156359, 156360, 'AMBAS_PLANTADAS'),
+    (237, '2026-11-10', 156297, 156298, 'AMBAS_PLANTADAS'),
+    (301, '2026-11-03', 152805, 152808, 'AMBAS_PLANTADAS'),
+    (301, '2026-11-04', 152818, 152821, 'AMBAS_PLANTADAS'),
+    (301, '2026-11-10', 152813, 152816, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-22', 139857, 139858, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-24', 139855, 139856, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-26', 139853, 139854, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-28', 139852, 145044, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-30', 145042, 145043, 'AMBAS_PLANTADAS'),
+    (389, '2026-11-01', 145040, 145041, 'AMBAS_PLANTADAS'),
+    (438, '2026-11-10', 152836, 152838, 'AMBAS_PLANTADAS'),
+    (438, '2026-11-14', 156366, 156368, 'AMBAS_PLANTADAS'),
+    (439, '2026-11-03', 152841, 152842, 'AMBAS_PLANTADAS'),
+    (450, '2026-11-06', 151812, 151813, 'AMBAS_PLANTADAS'),
+    (451, '2026-10-29', 144646, 149862, 'AMBAS_PLANTADAS'),
+    (451, '2026-10-31', 144647, 149863, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-02', 147492, 149867, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-04', 147493, 149866, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-06', 149864, 149865, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-08', 151818, 151819, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-14', 156369, 156370, 'AMBAS_PLANTADAS'),
+    (455, '2026-11-09', 151829, 152845, 'AMBAS_PLANTADAS'),
+    (549, '2026-11-01', 144651, 144653, 'AMBAS_PLANTADAS'),
+    (569, '2026-10-23', 137919, 137923, 'AMBAS_PLANTADAS'),
+    (569, '2026-10-30', 144648, 144649, 'AMBAS_PLANTADAS'),
+    (634, '2026-10-28', 140812, 151821, 'AMBAS_PLANTADAS'),
+    (707, '2026-10-27', 152916, 151794, 'AMBAS_PLANTADAS'),
+    (709, '2026-10-22', 140875, 140878, 'AMBAS_PLANTADAS'),
+    (709, '2026-10-23', 140871, 140874, 'AMBAS_PLANTADAS'),
+    (709, '2026-10-28', 140865, 140868, 'AMBAS_PLANTADAS'),
+    (712, '2026-10-22', 137782, 137790, 'AMBAS_PLANTADAS'),
+    (769, '2026-10-30', 144635, 144636, 'AMBAS_PLANTADAS'),
+    (833, '2026-11-04', 153868, 153869, 'AMBAS_PLANTADAS'),
+    (873, '2026-10-26', 140604, 140607, 'AMBAS_PLANTADAS'),
+    (873, '2026-10-28', 140608, 140611, 'AMBAS_PLANTADAS'),
+    (876, '2026-10-23', 137824, 139590, 'AMBAS_PLANTADAS'),
+    (876, '2026-10-24', 139584, 139587, 'AMBAS_PLANTADAS'),
+    (922, '2026-11-14', 157410, 157411, 'AMBAS_PLANTADAS'),
+    (947, '2026-11-10', 151782, 151839, 'AMBAS_PLANTADAS'),
+    (948, '2026-11-07', 151803, 151804, 'AMBAS_PLANTADAS'),
+    (950, '2026-10-26', 147526, 147525, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-03', 156111, 156107, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-04', 155167, 155169, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-05', 154092, 155165, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-06', 156099, 156103, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-09', 156110, 156106, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-11', 156321, 156324, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-12', 156102, 156113, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-13', 155172, 155170, 'AMBAS_PLANTADAS'),
+    (957, '2026-11-06', 151805, 151807, 'AMBAS_PLANTADAS'),
+    (968, '2026-11-14', 158539, 158537, 'AMBAS_PLANTADAS'),
+    (993, '2026-10-28', 144948, 144949, 'AMBAS_PLANTADAS'),
+    (993, '2026-10-30', 144941, 144944, 'AMBAS_PLANTADAS'),
+    (993, '2026-11-01', 144937, 144940, 'AMBAS_PLANTADAS'),
+    (993, '2026-11-05', 151892, 151893, 'AMBAS_PLANTADAS'),
+    (993, '2026-11-07', 151890, 151891, 'AMBAS_PLANTADAS'),
+    (995, '2026-10-24', 137855, 137854, 'AMBAS_PLANTADAS'),
+    (1002, '2026-10-26', 151835, 151836, 'AMBAS_PLANTADAS'),
+    (1013, '2026-11-01', 151799, 151800, 'AMBAS_PLANTADAS'),
+    (1013, '2026-11-03', 151801, 151802, 'AMBAS_PLANTADAS'),
+    (1024, '2026-11-04', 146933, 146935, 'AMBAS_PLANTADAS'),
+    (1039, '2026-11-09', 156442, 156443, 'AMBAS_PLANTADAS'),
+    (1039, '2026-11-11', 156444, 156445, 'AMBAS_PLANTADAS'),
+    (1040, '2026-11-12', 156336, 156335, 'AMBAS_PLANTADAS'),
+    (399, '2026-11-09', 150884, 150341, 'ORIGEM_MISTA'),
+    (502, '2026-10-28', 139463, 141682, 'ORIGEM_MISTA'),
+    (516, '2026-10-23', 144710, 135016, 'ORIGEM_MISTA'),
+    (995, '2026-11-03', 151977, 145341, 'ORIGEM_MISTA'),
+    (995, '2026-11-07', 148485, 148964, 'ORIGEM_MISTA'),
+]
+FOLGA_COMPLETA = {  # colN -> (data_turno_estrito, [datas de turno real completo em folga]) -- coluna datas_turnos_reais_folga
+    (237, '2026-11-10'): ['2026-11-07'],
+    (301, '2026-11-03'): ['2026-10-22', '2026-10-29'],
+    (301, '2026-11-04'): ['2026-10-22', '2026-10-29'],
+    (301, '2026-11-10'): ['2026-10-29', '2026-11-05'],
+    (451, '2026-10-29'): ['2026-10-16', '2026-10-18', '2026-10-20', '2026-10-24', '2026-10-26', '2026-10-28'],
+    (451, '2026-10-31'): ['2026-10-18', '2026-10-20', '2026-10-24', '2026-10-26', '2026-10-28'],
+    (451, '2026-11-02'): ['2026-10-20', '2026-10-24', '2026-10-26', '2026-10-28', '2026-11-01'],
+    (451, '2026-11-04'): ['2026-10-24', '2026-10-26', '2026-10-28', '2026-11-01', '2026-11-03'],
+    (451, '2026-11-06'): ['2026-10-24', '2026-10-26', '2026-10-28', '2026-11-01', '2026-11-03', '2026-11-05'],
+    (451, '2026-11-08'): ['2026-10-26', '2026-10-28', '2026-11-01', '2026-11-03', '2026-11-05', '2026-11-07'],
+    (451, '2026-11-14'): ['2026-11-01', '2026-11-03', '2026-11-05', '2026-11-07', '2026-11-09', '2026-11-11', '2026-11-13'],
+    (634, '2026-10-28'): ['2026-10-27'],
+    (922, '2026-11-14'): ['2026-10-31'],
+    (968, '2026-11-14'): ['2026-11-02', '2026-11-03', '2026-11-05', '2026-11-10', '2026-11-12'],
+}
+
+import collections
+import datetime
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection
+from django.utils import timezone
+
+from colaboradores.models import Colaborador, Empresa
+from escala.alimentacao import celulas_do_periodo
+from folha.export import classificar_export, montar_linhas_export
+from ponto.management.commands.e6_oraculo import InsumosDoDono
+from ponto.models import FechamentoMensal
+from ponto.services.fechamento import (
+    recalcular_fechamento_mes,
+    universo_da_competencia,
+)
+
+MES = 11
+ANO = 2026
+
+
+class FalhaInterna(BaseException):
+    def __init__(self, tipo):
+        self.tipo = tipo
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    if settings.DATABASES["default"]["NAME"] != "sombra":
+        raise RuntimeError("banco_configurado")
+    if settings.DATABASES["default"]["HOST"] != "sombra_db":
+        raise RuntimeError("host_configurado")
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SELECT current_database(), current_user, current_schema()"
+        )
+        banco, usuario, schema = cursor.fetchone()
+    if (banco, usuario, schema) != ("sombra", "leitor", "juliani"):
+        raise RuntimeError("conexao")
+
+
+def executar_secao(secao, funcao):
+    onde = "guarda_sombra"
+    try:
+        guarda_sombra()
+        onde = funcao.__name__
+        funcao()
+    except FalhaInterna as exc:
+        print(f"ERRO {secao} {onde}: {exc.tipo}")
+        return False
+    except Exception as exc:
+        print(f"ERRO {secao} {onde}: {type(exc).__name__}")
+        return False
+    print(f"ERROS_{secao}=0")
+    return True
+
+
+def s4():
+    pares = sorted({
+        (col_id, datetime.date.fromisoformat(dia))
+        for (col_id, _turno), dias in FOLGA_COMPLETA.items()
+        for dia in dias
+    })
+    agora = timezone.now()
+    hoje = timezone.localtime(agora).date()
+    por_colab = collections.defaultdict(list)
+    for col_id, dia in pares:
+        por_colab[col_id].append(dia)
+
+    contagem = collections.Counter()
+    linhas = []
+    for col_id, dias in sorted(por_colab.items()):
+        colab = Colaborador.objects.get(pk=col_id)
+        inicio, fim = min(dias), max(dias)
+        celulas = celulas_do_periodo([col_id], inicio, fim)
+        insumos = InsumosDoDono(
+            colab, inicio, fim, hoje, agora=agora
+        )
+        for dia in dias:
+            celula = celulas.get((col_id, dia))
+            dono = insumos.dono(dia)
+            if dono is None:
+                raise RuntimeError("dono_sem_resposta")
+            trabalha = (
+                "None" if celula is None or celula.trabalha is None
+                else "T" if celula.trabalha else "F"
+            )
+            origem = "None" if celula is None else celula.origem
+            linhas.append(
+                f"S4 col{col_id} {dia.isoformat()} "
+                f"trabalha_celula={trabalha} origem_celula={origem} "
+                f"dono={dono} motivo=juiz_dono_da_divergencia"
+            )
+            contagem[dono] += 1
+
+    for linha in linhas:
+        print(linha)
+    resumo = ",".join(
+        f"{dono}:{quantidade}" for dono, quantidade in sorted(contagem.items())
+    )
+    print(f"S4_TOTAL dias={len(pares)} por_dono={resumo}")
+
+
+def recalcular_sem_engolir_excecao(empresa_id):
+    # A funcao real captura Exception em seu proprio corpo. A interrupcao
+    # deriva de BaseException para atravessar essas capturas e abortar S6.
+    codigo = recalcular_fechamento_mes.__code__
+    anterior = sys.gettrace()
+
+    def rastrear(frame, evento, argumento):
+        if frame.f_code is codigo and evento == "exception":
+            tipo, _valor, _traceback = argumento
+            raise FalhaInterna(tipo.__name__)
+        return rastrear
+
+    try:
+        sys.settrace(rastrear)
+        return recalcular_fechamento_mes(
+            MES,
+            ANO,
+            empresa_id=empresa_id,
+            somente_leitura=True,
+            lavrar_dias_pagos=False,
+            retornar_objeto=True,
+        )
+    finally:
+        sys.settrace(anterior)
+
+
+def s6():
+    colab = Colaborador.objects.get(pk=950)
+    empresas = list(Empresa.objects.order_by("pk"))
+    if not empresas:
+        raise RuntimeError("sem_empresas")
+
+    linhas_saida = []
+    encontrou_export = False
+    encontrou_empresa = False
+
+    for empresa in empresas:
+        universo = universo_da_competencia(MES, ANO, empresa.pk)
+        no_fechamento = universo.filter(pk=950).exists()
+        if empresa.pk == colab.empresa_id:
+            encontrou_empresa = True
+        linhas_saida.append(
+            f"S6 emp={empresa.pk} col950 "
+            f"fechamento={'sim' if no_fechamento else 'nao'} "
+            f"filtro=app/ponto/services/fechamento.py:439 "
+            f"motivo=empresa_id:{colab.empresa_id},"
+            f"situacao:{colab.situacao},"
+            f"data_demissao:{colab.data_demissao}"
+        )
+
+        gravado = FechamentoMensal.objects.filter(
+            colaborador_id=950,
+            colaborador__empresa_id=empresa.pk,
+            mes=MES,
+            ano=ANO,
+        ).first()
+        linhas_saida.append(
+            f"S6 emp={empresa.pk} col950 "
+            f"fechamento_gravado={'sim' if gravado is not None else 'nao'}"
+        )
+
+        lidos = recalcular_sem_engolir_excecao(empresa.pk)
+        fechamentos = list(lidos.values())
+        itens = classificar_export(
+            empresa, MES, ANO, fechamentos=fechamentos
+        )
+        # Executa a montagem completa da view para a empresa.
+        linhas_todas, _entra = montar_linhas_export(
+            empresa, MES, ANO, itens=itens, fechamentos=fechamentos
+        )
+        # A mesma montagem, com os mesmos itens e apenas o objeto de col950,
+        # atribui as linhas sem expor matricula, nomes ou conteudo do TXT.
+        alvo = [f for f in fechamentos if f.colaborador_id == 950]
+        linhas_alvo, _ = montar_linhas_export(
+            empresa, MES, ANO, itens=itens, fechamentos=alvo
+        )
+        if len(linhas_alvo) > len(linhas_todas):
+            raise RuntimeError("atribuicao_de_linhas")
+
+        item = next(
+            (i for i in itens if i["colaborador_id"] == 950), None
+        )
+        if item is None:
+            motivo = "sem_fechamento_lido"
+        else:
+            status_fechamento = alvo[0].status if alvo else "ausente"
+            motivo = (
+                f"classificacao:{item['status']},"
+                f"motivo:{item['motivo']},"
+                f"status_fechamento:{status_fechamento},"
+                f"linhas:{len(linhas_alvo)}"
+            )
+        sai = bool(linhas_alvo)
+        encontrou_export = encontrou_export or sai
+        linhas_saida.append(
+            f"S6 emp={empresa.pk} col950 export={'sim' if sai else 'nao'} "
+            f"filtro=app/folha/export.py:716 "
+            f"motivo={motivo}"
+        )
+
+    if not encontrou_empresa:
+        raise RuntimeError("empresa_do_colaborador_ausente")
+
+    for linha in linhas_saida:
+        print(linha)
+    print(
+        f"S6 col950 export_alguma_empresa="
+        f"{'sim' if encontrou_export else 'nao'}"
+    )
+
+
+ok_s4 = executar_secao("S4", s4)
+ok_s6 = executar_secao("S6", s6)
+if ok_s4 and ok_s6:
+    print("FIM_SONDA_DUAS_PONTAS_A3")
+```
+
+## 18/11 23:32 · sessao 2408491228a7 · AUDITORIA-ESPURIAS · sonda · origem=Code
+
+O universo de S3 será enumerado pelos colaboradores das empresas 2, 3 e 4 que tenham alguma batida na janela local de 21/10 a 20/11; para cada um, a sonda chamará `turnos_do_colab` e usará os pares de entrada e saída que ele devolver. A enumeração considera também batidas retratadas, para não excluir um colaborador antes de chamar o pareador; o pareador exclui as retratadas. [app/colaboradores/models.py:321](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/colaboradores/models.py:321), [app/ponto/turnos.py:1850](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1850), [app/ponto/turnos.py:1872](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1872).
+
+O pareador é a autoridade do par; `batidas_apuraveis` fornece o conjunto sem retratação. Cada ponta aponta para sua pergunta por `Batida.pergunta_origem`; a sonda chama `pergunta_respondida` e verifica `validada_em`, o campo de validação da pergunta. Para o tipo, usa o literal `hora` solicitado no critério. [app/ponto/turnos.py:1](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1), [app/ponto/turnos.py:2868](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:2868), [app/ponto/models.py:40](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/models.py:40), [app/chamados/juizes.py:1544](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/juizes.py:1544), [app/chamados/models.py:2631](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:2631).
+
+Uma batida `app` pode receber `pergunta_origem` quando a materialização reaproveita uma batida; esse vínculo não prova, sozinho, que a batida foi criada pela declaração. Por isso S5 usa `origem` para classificar `app` como `REAL` e `disputa_s84_retro` como `DECLARADA`, deixando outras origens como `INDEFINIDA`. A causa concreta do par col995 em 07/11 continua **[não verificado]** até a leitura das duas PKs; as duas origens `app`, informadas no anexo, não satisfazem o critério estrito. [app/chamados/services/materializacao.py:1537](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/services/materializacao.py:1537), [app/ponto/models.py:13](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/models.py:13).
+
+A guarda confere settings, host, banco conectado, role e schema; a sonda não chama o materializador nem portas de gravação. Não há modo `somente_leitura` nas funções chamadas de S3. A sonda não foi executada, portanto seus resultados e eventuais erros permanecem **[não verificado]**. [app/config/settings/sombra.py:29](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/config/settings/sombra.py:29), [bin/sonda_leitura.sh:13](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:13), [bin/sonda_leitura.sh:239](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:239).
+
+```python
+DELE = [  # (colN, data_turno, pk_entrada, pk_saida, criterio) -- lista do auditor, prod 18/11 22:36
+    (32, '2026-11-01', 144660, 144661, 'AMBAS_PLANTADAS'),
+    (39, '2026-10-25', 139515, 139514, 'AMBAS_PLANTADAS'),
+    (67, '2026-10-21', 139860, 139861, 'AMBAS_PLANTADAS'),
+    (113, '2026-10-30', 147496, 147498, 'AMBAS_PLANTADAS'),
+    (113, '2026-11-01', 147499, 147564, 'AMBAS_PLANTADAS'),
+    (169, '2026-11-06', 156359, 156360, 'AMBAS_PLANTADAS'),
+    (237, '2026-11-10', 156297, 156298, 'AMBAS_PLANTADAS'),
+    (301, '2026-11-03', 152805, 152808, 'AMBAS_PLANTADAS'),
+    (301, '2026-11-04', 152818, 152821, 'AMBAS_PLANTADAS'),
+    (301, '2026-11-10', 152813, 152816, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-22', 139857, 139858, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-24', 139855, 139856, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-26', 139853, 139854, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-28', 139852, 145044, 'AMBAS_PLANTADAS'),
+    (389, '2026-10-30', 145042, 145043, 'AMBAS_PLANTADAS'),
+    (389, '2026-11-01', 145040, 145041, 'AMBAS_PLANTADAS'),
+    (438, '2026-11-10', 152836, 152838, 'AMBAS_PLANTADAS'),
+    (438, '2026-11-14', 156366, 156368, 'AMBAS_PLANTADAS'),
+    (439, '2026-11-03', 152841, 152842, 'AMBAS_PLANTADAS'),
+    (450, '2026-11-06', 151812, 151813, 'AMBAS_PLANTADAS'),
+    (451, '2026-10-29', 144646, 149862, 'AMBAS_PLANTADAS'),
+    (451, '2026-10-31', 144647, 149863, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-02', 147492, 149867, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-04', 147493, 149866, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-06', 149864, 149865, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-08', 151818, 151819, 'AMBAS_PLANTADAS'),
+    (451, '2026-11-14', 156369, 156370, 'AMBAS_PLANTADAS'),
+    (455, '2026-11-09', 151829, 152845, 'AMBAS_PLANTADAS'),
+    (549, '2026-11-01', 144651, 144653, 'AMBAS_PLANTADAS'),
+    (569, '2026-10-23', 137919, 137923, 'AMBAS_PLANTADAS'),
+    (569, '2026-10-30', 144648, 144649, 'AMBAS_PLANTADAS'),
+    (634, '2026-10-28', 140812, 151821, 'AMBAS_PLANTADAS'),
+    (707, '2026-10-27', 152916, 151794, 'AMBAS_PLANTADAS'),
+    (709, '2026-10-22', 140875, 140878, 'AMBAS_PLANTADAS'),
+    (709, '2026-10-23', 140871, 140874, 'AMBAS_PLANTADAS'),
+    (709, '2026-10-28', 140865, 140868, 'AMBAS_PLANTADAS'),
+    (712, '2026-10-22', 137782, 137790, 'AMBAS_PLANTADAS'),
+    (769, '2026-10-30', 144635, 144636, 'AMBAS_PLANTADAS'),
+    (833, '2026-11-04', 153868, 153869, 'AMBAS_PLANTADAS'),
+    (873, '2026-10-26', 140604, 140607, 'AMBAS_PLANTADAS'),
+    (873, '2026-10-28', 140608, 140611, 'AMBAS_PLANTADAS'),
+    (876, '2026-10-23', 137824, 139590, 'AMBAS_PLANTADAS'),
+    (876, '2026-10-24', 139584, 139587, 'AMBAS_PLANTADAS'),
+    (922, '2026-11-14', 157410, 157411, 'AMBAS_PLANTADAS'),
+    (947, '2026-11-10', 151782, 151839, 'AMBAS_PLANTADAS'),
+    (948, '2026-11-07', 151803, 151804, 'AMBAS_PLANTADAS'),
+    (950, '2026-10-26', 147526, 147525, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-03', 156111, 156107, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-04', 155167, 155169, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-05', 154092, 155165, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-06', 156099, 156103, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-09', 156110, 156106, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-11', 156321, 156324, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-12', 156102, 156113, 'AMBAS_PLANTADAS'),
+    (950, '2026-11-13', 155172, 155170, 'AMBAS_PLANTADAS'),
+    (957, '2026-11-06', 151805, 151807, 'AMBAS_PLANTADAS'),
+    (968, '2026-11-14', 158539, 158537, 'AMBAS_PLANTADAS'),
+    (993, '2026-10-28', 144948, 144949, 'AMBAS_PLANTADAS'),
+    (993, '2026-10-30', 144941, 144944, 'AMBAS_PLANTADAS'),
+    (993, '2026-11-01', 144937, 144940, 'AMBAS_PLANTADAS'),
+    (993, '2026-11-05', 151892, 151893, 'AMBAS_PLANTADAS'),
+    (993, '2026-11-07', 151890, 151891, 'AMBAS_PLANTADAS'),
+    (995, '2026-10-24', 137855, 137854, 'AMBAS_PLANTADAS'),
+    (1002, '2026-10-26', 151835, 151836, 'AMBAS_PLANTADAS'),
+    (1013, '2026-11-01', 151799, 151800, 'AMBAS_PLANTADAS'),
+    (1013, '2026-11-03', 151801, 151802, 'AMBAS_PLANTADAS'),
+    (1024, '2026-11-04', 146933, 146935, 'AMBAS_PLANTADAS'),
+    (1039, '2026-11-09', 156442, 156443, 'AMBAS_PLANTADAS'),
+    (1039, '2026-11-11', 156444, 156445, 'AMBAS_PLANTADAS'),
+    (1040, '2026-11-12', 156336, 156335, 'AMBAS_PLANTADAS'),
+    (399, '2026-11-09', 150884, 150341, 'ORIGEM_MISTA'),
+    (502, '2026-10-28', 139463, 141682, 'ORIGEM_MISTA'),
+    (516, '2026-10-23', 144710, 135016, 'ORIGEM_MISTA'),
+    (995, '2026-11-03', 151977, 145341, 'ORIGEM_MISTA'),
+    (995, '2026-11-07', 148485, 148964, 'ORIGEM_MISTA'),
+]
+FOLGA_COMPLETA = {  # colN -> (data_turno_estrito, [datas de turno real completo em folga]) -- coluna datas_turnos_reais_folga
+    (237, '2026-11-10'): ['2026-11-07'],
+    (301, '2026-11-03'): ['2026-10-22', '2026-10-29'],
+    (301, '2026-11-04'): ['2026-10-22', '2026-10-29'],
+    (301, '2026-11-10'): ['2026-10-29', '2026-11-05'],
+    (451, '2026-10-29'): ['2026-10-16', '2026-10-18', '2026-10-20', '2026-10-24', '2026-10-26', '2026-10-28'],
+    (451, '2026-10-31'): ['2026-10-18', '2026-10-20', '2026-10-24', '2026-10-26', '2026-10-28'],
+    (451, '2026-11-02'): ['2026-10-20', '2026-10-24', '2026-10-26', '2026-10-28', '2026-11-01'],
+    (451, '2026-11-04'): ['2026-10-24', '2026-10-26', '2026-10-28', '2026-11-01', '2026-11-03'],
+    (451, '2026-11-06'): ['2026-10-24', '2026-10-26', '2026-10-28', '2026-11-01', '2026-11-03', '2026-11-05'],
+    (451, '2026-11-08'): ['2026-10-26', '2026-10-28', '2026-11-01', '2026-11-03', '2026-11-05', '2026-11-07'],
+    (451, '2026-11-14'): ['2026-11-01', '2026-11-03', '2026-11-05', '2026-11-07', '2026-11-09', '2026-11-11', '2026-11-13'],
+    (634, '2026-10-28'): ['2026-10-27'],
+    (922, '2026-11-14'): ['2026-10-31'],
+    (968, '2026-11-14'): ['2026-11-02', '2026-11-03', '2026-11-05', '2026-11-10', '2026-11-12'],
+}
+
+import os
+from datetime import date, datetime, time, timedelta
+
+from django.conf import settings
+from django.db import connection
+from django.utils import timezone
+
+from chamados.juizes import pergunta_respondida
+from colaboradores.models import Colaborador
+from ponto.models import Batida
+from ponto.turnos import batidas_apuraveis, turnos_do_colab
+
+
+INI = date(2026, 10, 21)
+FIM = date(2026, 11, 20)
+EMPRESAS = (2, 3, 4)
+ORIGEM_DECLARADA = "disputa_s84_retro"
+ONDE = "guarda"
+
+
+def guarda():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    cfg = settings.DATABASES["default"]
+    if cfg["NAME"] != "sombra" or cfg["HOST"] != "sombra_db":
+        raise RuntimeError("configuracao_banco")
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT current_database(), current_user, current_schema()")
+        banco, usuario, schema = cursor.fetchone()
+    if (banco, usuario, schema) != ("sombra", "leitor", "juliani"):
+        raise RuntimeError("conexao")
+
+
+def instante_local(dia):
+    return timezone.make_aware(
+        datetime.combine(dia, time.min), timezone.get_current_timezone()
+    )
+
+
+def local(valor):
+    return timezone.localtime(valor).isoformat() if valor is not None else "None"
+
+
+def pergunta_elegivel(b):
+    if b.pergunta_origem_id is None:
+        return False
+    p = b.pergunta_origem
+    return (
+        p.tipo_resposta == "hora"
+        and pergunta_respondida(p)
+        and p.validada_em is not None
+    )
+
+
+def s3():
+    global ONDE
+    ONDE = "literal"
+    externo = {}
+    for col, dia, entrada, saida, criterio in DELE:
+        chave = (entrada, saida)
+        if chave in externo:
+            raise ValueError("par_duplicado")
+        externo[chave] = (col, dia, criterio)
+
+    ONDE = "universo"
+    inicio_ts = instante_local(INI)
+    fim_exclusivo = instante_local(FIM + timedelta(days=1))
+    ids = (
+        Batida.objects.filter(
+            colaborador__empresa_id__in=EMPRESAS,
+            timestamp__gte=inicio_ts,
+            timestamp__lt=fim_exclusivo,
+        )
+        .values_list("colaborador_id", flat=True)
+        .distinct()
+    )
+    colaboradores = list(
+        Colaborador.objects.filter(pk__in=ids).order_by("pk")
+    )
+
+    ONDE = "pareamento"
+    nosso = {}
+    pares_todos = set()
+    por_ponta = {}
+    por_empresa = {emp: [0, 0] for emp in EMPRESAS}
+
+    for colab in colaboradores:
+        apuraveis = set(
+            batidas_apuraveis(colab).values_list("pk", flat=True)
+        )
+        for turno in turnos_do_colab(colab, INI, FIM):
+            e, s = turno.entrada, turno.saida
+            if e is None or s is None:
+                continue
+            chave = (e.pk, s.pk)
+            pares_todos.add(chave)
+            por_ponta.setdefault(e.pk, set()).add(chave)
+            por_ponta.setdefault(s.pk, set()).add(chave)
+            if e.pk not in apuraveis or s.pk not in apuraveis:
+                raise ValueError("pareador_incluiu_retratada")
+            if not (pergunta_elegivel(e) and pergunta_elegivel(s)):
+                continue
+            if chave in nosso:
+                raise ValueError("par_nosso_duplicado")
+            estrito = (
+                e.origem == ORIGEM_DECLARADA
+                and s.origem == ORIGEM_DECLARADA
+            )
+            nosso[chave] = (
+                colab.pk, turno.data_turno.isoformat(), colab.empresa_id, estrito
+            )
+            por_empresa[colab.empresa_id][0] += 1
+            por_empresa[colab.empresa_id][1] += int(estrito)
+
+    ONDE = "reconciliacao"
+    chaves_dele = set(externo)
+    chaves_nossas = set(nosso)
+    ambos = chaves_dele & chaves_nossas
+    so_dele = chaves_dele - chaves_nossas
+    so_nosso = chaves_nossas - chaves_dele
+    estritos = [v for v in nosso.values() if v[3]]
+
+    print(
+        "S3_TOTAL "
+        f"nosso_amplo={len(nosso)}/{len({v[0] for v in nosso.values()})} "
+        f"nosso_estrito={len(estritos)}/{len({v[0] for v in estritos})} "
+        f"nos_dois={len(ambos)} so_dele={len(so_dele)} "
+        f"so_nosso={len(so_nosso)}"
+    )
+    for emp in EMPRESAS:
+        amplo, estrito = por_empresa[emp]
+        print(f"S3_EMP emp={emp} amplo={amplo} estrito={estrito}")
+
+    todos_pks = {pk for par in chaves_dele | chaves_nossas for pk in par}
+    batidas = {
+        b.pk: b
+        for b in Batida.objects.filter(pk__in=todos_pks)
+        .select_related("colaborador", "pergunta_origem")
+    }
+    corte = timezone.make_aware(
+        datetime(2026, 11, 18, 4, 0), timezone.get_current_timezone()
+    )
+
+    def causa(lado, par):
+        bs = [batidas.get(pk) for pk in par]
+        if lado == "dele" and any(b is None for b in bs):
+            return "HORA_DA_EXTRACAO"
+        if any(
+            b is not None and b.colaborador.empresa_id not in EMPRESAS
+            for b in bs
+        ):
+            return "EMPRESA"
+        if any(
+            outro != par
+            for pk in par
+            for outro in por_ponta.get(pk, ())
+        ):
+            return "PAREAMENTO"
+        # Uma origem mista, por si só, não explica diferença entre conjuntos
+        # amplos. Só informa a diferença entre critérios amplo e estrito.
+        # Carimbo posterior é evidência temporal apenas para o lado do
+        # auditor: ele está em produção e não integrava o dump das 04:00.
+        if lado == "dele":
+            for b in bs:
+                if b is None:
+                    continue
+                p = b.pergunta_origem if b.pergunta_origem_id else None
+                carimbos = [b.criado_em]
+                if p is not None:
+                    carimbos.extend([p.respondida_em, p.validada_em])
+                if any(x is not None and x > corte for x in carimbos):
+                    return "HORA_DA_EXTRACAO"
+        return "SEM_CAUSA"
+
+    sem_causa = 0
+    for lado, pares in (("dele", so_dele), ("nosso", so_nosso)):
+        for par in sorted(pares):
+            if lado == "dele":
+                col, dia, _ = externo[par]
+            else:
+                col, dia, _, _ = nosso[par]
+            c = causa(lado, par)
+            sem_causa += int(c == "SEM_CAUSA")
+            print(
+                f"S3_DIF lado={lado} col{col} {dia} "
+                f"{par[0]} {par[1]} causa={c}"
+            )
+    print(f"S3_SEM_CAUSA={sem_causa}")
+
+
+def s5():
+    global ONDE
+    ONDE = "literal"
+    mistos = [linha for linha in DELE if linha[4] == "ORIGEM_MISTA"]
+    if len(mistos) != 5:
+        raise ValueError("quantidade_mistos")
+    pks = [pk for _, _, e, s, _ in mistos for pk in (e, s)]
+    if len(set(pks)) != len(pks):
+        raise ValueError("pk_mista_duplicada")
+
+    ONDE = "batidas"
+    batidas = {
+        b.pk: b
+        for b in Batida.objects.filter(pk__in=pks)
+    }
+    if set(batidas) != set(pks):
+        raise LookupError("pk_ausente_na_sombra")
+
+    linhas = []
+    for col, dia, entrada, saida, _ in mistos:
+        for ponta, pk in (("E", entrada), ("S", saida)):
+            b = batidas[pk]
+            if b.colaborador_id != col:
+                raise ValueError("colaborador_divergente")
+            if b.origem == "app":
+                classe = "REAL"
+            elif b.origem == ORIGEM_DECLARADA:
+                classe = "DECLARADA"
+            else:
+                classe = "INDEFINIDA"
+            linhas.append(
+                f"S5 col{col} {dia} pk={pk} ponta={ponta} "
+                f"origem={b.origem} pergunta_origem={b.pergunta_origem_id} "
+                f"retratada={'s' if b.retratada_em is not None else 'n'} "
+                f"criado_em={local(b.criado_em)} "
+                f"real_ou_declarada={classe} por=origem"
+            )
+    for linha in linhas:
+        print(linha)
+
+
+def executar(secao, funcao):
+    global ONDE
+    ONDE = "guarda"
+    try:
+        guarda()
+        funcao()
+    except Exception as exc:
+        print(f"ERRO {secao} {ONDE}: {type(exc).__name__}")
+        return False
+    print(f"ERROS_{secao}=0")
+    return True
+
+
+ok_s3 = executar("S3", s3)
+ok_s5 = executar("S5", s5)
+if ok_s3 and ok_s5:
+    print("FIM_SONDA_DUAS_PONTAS_A2")
+```
+
+## 18/11 23:30 · sessao fd58a4018d8e · CADEIA-20-PASSO1 · sonda · origem=Code
+
+Não há dados de produção no material fornecido para imprimir as contagens: A, B, o caso col81 e C continuam **[não verificado]**. A sonda abaixo mede o que consegue ler e deixa em classe explícita a pausa cuja origem não é distinguível pelo carimbo preservado. [app/ponto/turnos.py:415; app/ponto/turnos.py:486; app/ponto/turnos.py:1317; app/ponto/turnos.py:1370]
+
+As funções e campos usados são:
+
+- `classificar_orfas` recebe um dia com `orfas` em `HH:MM`; a ata gravada está em `CelulaDia.ata`, e a grade conserva órfãs nesse formato. A sonda lê a ata soberana e chama o classificador existente sem usar sua classificação de procedência como razão da sobra. [app/escala/orfa_classe.py:53; app/escala/models.py:1778; app/escala/utils.py:1827]
+- `batidas_apuraveis` fornece as batidas não retratadas. `turnos_do_colab` alimenta e chama `parear_turnos` com marcos e papel da ata; o retorno contém entrada, saída e batidas do turno. [app/ponto/turnos.py:2868; app/ponto/turnos.py:1850; app/ponto/turnos.py:1978; app/ponto/turnos.py:43]
+- O envelope de 90 minutos está em `parear_turnos`: o pareador compara também a proximidade da borda e carimba a batida absorvida em `_intra_dur`. Esse mesmo carimbo também é usado por outras decisões, inclusive papel da ata e outras regras; portanto, sua presença isolada não prova que a sobra pertence a uma das duas pausas autorizadas. A sonda conta esses casos como `NAO_MEDIDA_ORIGEM_PAUSA` em vez de reaplicar o envelope ou presumir a origem. [app/ponto/turnos.py:1353; app/ponto/turnos.py:1370; app/ponto/turnos.py:1313; app/ponto/turnos.py:1413; app/ponto/turnos.py:1477]
+- `autoridade_do_periodo` devolve o `ResultadoMes` produzido pelo motor para a janela pedida; a sonda lê `dias_cadastro_x_realidade` desse resultado. O caminho mostrado calcula em memória; não identifiquei escrita explícita nele, mas não pude verificar exaustivamente todos os efeitos transitivos de suas chamadas **[não verificado]**. Por isso, a transação é declarada `READ ONLY` no banco antes de chamar qualquer função de domínio. [app/ponto/services/espelho.py:970; app/ponto/services/espelho.py:1179; app/ponto/motor_calculo_v2.py:2719]
+- `ler_lavra` lê o snapshot mais recente do esmeril e verifica o marcador da sombra; `lavrar` e `gravar_lavra` escrevem e não são chamados. A saída C abaixo responde à presença em `por_colab` **da lavra especificada no pedido**, com os códigos de assinatura como motivo. [app/ponto/services/esmeril_espelho.py:334; app/ponto/services/esmeril_espelho.py:296; app/ponto/services/esmeril_espelho.py:317; app/ponto/services/esmeril_espelho.py:227]
+
+Há uma limitação em B: a sonda compara as órfãs da ata com sua presença nos turnos e conta como divergência quando o pareador as incluiu em turno fechado. A direção inversa — uma marca casada pela ata e deixada sem par pelo pareador — não é agregada, pois a identidade da lâmpada no minuto e a semântica de todas as formas de ata não estão demonstradas aqui **[não verificado]**. O script declara essa limitação na saída; seus totais B são, portanto, parciais **[não verificado]**.
+
+```python
+# Executar pelo envelope de leitura da sombra, no tenant juliani.
+# Não cria, altera nem apaga arquivos. Não imprime nome ou CPF.
+
+import collections
+import datetime
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from escala.models import CelulaDia
+from escala.orfa_classe import classificar_orfas
+from ponto.services.esmeril_espelho import ler_lavra
+from ponto.services.espelho import autoridade_do_periodo
+from ponto.turnos import batidas_apuraveis, turnos_do_colab
+
+
+INI = datetime.date(2026, 10, 21)
+FIM = datetime.date(2026, 11, 20)
+UM_DIA = datetime.timedelta(days=1)
+
+
+def instante_local(b):
+    return timezone.localtime(b.timestamp)
+
+
+def chave_minuto(b):
+    local = instante_local(b)
+    return local.date(), local.strftime("%H:%M")
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def indice_turnos(turnos):
+    por_pk = collections.defaultdict(list)
+    for turno in turnos:
+        for batida in turno.batidas:
+            por_pk[batida.pk].append((turno, batida))
+    return por_pk
+
+
+def situacao_pareador(registros):
+    if len(registros) != 1:
+        return "NAO_MEDIDA_MULTIPLOS_OU_SEM_TURNO"
+    turno, batida = registros[0]
+    if getattr(batida, "_intra_dur", False):
+        return "NAO_MEDIDA_ORIGEM_PAUSA"
+    if turno.entrada is not None and turno.saida is not None:
+        return "PAR_FECHADO"
+    if turno.entrada is not None and turno.saida is None:
+        if batida.pk == turno.entrada.pk:
+            return "TURNO_ABERTO"
+        return "NAO_MEDIDA_BATIDA_INTERNA_TURNO_ABERTO"
+    if turno.entrada is None and turno.saida is not None:
+        if batida.pk == turno.saida.pk:
+            return "SAIDA_SEM_ENTRADA"
+        return "NAO_MEDIDA_BATIDA_INTERNA_SEM_ENTRADA"
+    return "FORA_DA_ESCALA_SEM_ENQUADRAMENTO"
+
+
+def main():
+    onde = "guarda_sombra"
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+
+            onde = "lavra"
+            lavra = ler_lavra()
+            if lavra is None:
+                raise RuntimeError("lavra_ausente")
+            por_colab = lavra.get("por_colab")
+            if not isinstance(por_colab, dict):
+                raise RuntimeError("lavra_formato")
+            for cid in (87, 975):
+                assinaturas = por_colab.get(str(cid))
+                if assinaturas is None:
+                    print("C col%d na_lista=n motivo=ausente_da_lavra_esmeril" % cid)
+                else:
+                    if not isinstance(assinaturas, dict):
+                        raise RuntimeError("assinaturas_formato")
+                    codigos = ",".join(sorted(assinaturas)) or "sem_assinaturas"
+                    print("C col%d na_lista=s motivo=%s" % (cid, codigos))
+
+            onde = "celulas"
+            celulas = list(
+                CelulaDia.objects.filter(data__gte=INI, data__lte=FIM)
+                .select_related("colaborador", "colaborador__empresa")
+                .order_by("colaborador_id", "data")
+            )
+            por_pessoa = collections.defaultdict(list)
+            for celula in celulas:
+                por_pessoa[celula.colaborador_id].append(celula)
+
+            a_contagem = collections.Counter()
+            a_dias = collections.defaultdict(set)
+            b_dias = collections.defaultdict(set)
+            b_sobras = collections.Counter()
+            casos = []
+            col81 = []
+            sem_batida = ambiguo = 0
+
+            for cid, cels in sorted(por_pessoa.items()):
+                colab = cels[0].colaborador
+                emp = colab.empresa_id
+                onde = "col%d_batidas" % cid
+                lo = timezone.make_aware(datetime.datetime.combine(INI, datetime.time.min))
+                hi = timezone.make_aware(
+                    datetime.datetime.combine(FIM + UM_DIA, datetime.time.min)
+                )
+                batidas = list(batidas_apuraveis(colab, lo, hi))
+                por_minuto = collections.defaultdict(list)
+                for b in batidas:
+                    local = instante_local(b)
+                    if INI <= local.date() <= FIM:
+                        por_minuto[chave_minuto(b)].append(b)
+
+                onde = "col%d_turnos" % cid
+                turnos = turnos_do_colab(colab, INI - UM_DIA, FIM + UM_DIA)
+                por_pk = indice_turnos(turnos)
+
+                onde = "col%d_motor" % cid
+                resultado = autoridade_do_periodo(colab, INI, FIM).resultado
+                publicados = getattr(resultado, "dias_cadastro_x_realidade", None) [nao verificado]
+                if publicados is None: [nao verificado]
+                    dias_cadastro = None
+                else:
+                    dias_cadastro = set()
+                    for item in publicados: [nao verificado]
+                        if not isinstance(item, dict) or item.get("dia") is None:
+                            raise RuntimeError("dia_cadastro_invalido")
+                        dias_cadastro.add(str(item["dia"])[:10])
+
+                for cel in cels:
+                    onde = "col%d_ata_%s" % (cid, cel.data.isoformat())
+                    if not isinstance(cel.ata, dict):
+                        # Sem ata não existe lista soberana de sobras para contar.
+                        continue
+                    orfas = cel.ata.get("orfas")
+                    if orfas is None:
+                        continue
+                    if not isinstance(orfas, list):
+                        raise RuntimeError("orfas_formato")
+
+                    # A chamada conserva a fonte existente; não usa o rótulo
+                    # de procedência para decidir a razão da sobra.
+                    classificar_orfas({"orfas": orfas})
+
+                    for hora in orfas:
+                        if (
+                            not isinstance(hora, str)
+                            or len(hora) != 5
+                            or hora[2] != ":"
+                        ):
+                            raise RuntimeError("hora_formato")
+                        candidatos = por_minuto.get((cel.data, hora), [])
+                        if not candidatos:
+                            classe = "MINUTO_SEM_BATIDA"
+                            sem_batida += 1
+                            situacao = "SEM_BATIDA"
+                        elif len(candidatos) >= 2:
+                            classe = "MINUTO_AMBIGUO"
+                            ambiguo += 1
+                            situacao = "AMBIGUO"
+                        else:
+                            b = candidatos[0]
+                            situacao = situacao_pareador(por_pk.get(b.pk, []))
+                            if situacao == "PAR_FECHADO":
+                                if dias_cadastro is None:
+                                    classe = "CADASTRO_OU_ADICIONAL_NAO_LIDO"
+                                elif cel.data.isoformat() in dias_cadastro:
+                                    classe = "PERIODO_FORA_ESCALA_CADASTRO"
+                                else:
+                                    classe = "JORNADA_ADICIONAL"
+                                b_dias[emp].add((cid, cel.data))
+                                b_sobras[emp] += 1
+                                casos.append(
+                                    (cid, cel.data, hora, situacao, "ORFA")
+                                )
+                            else:
+                                classe = situacao
+
+                        a_contagem[(emp, classe)] += 1
+                        a_dias[(emp, classe)].add((cid, cel.data))
+                        if cid == 81 and cel.data == datetime.date(2026, 11, 1):
+                            col81.append((hora, situacao, "ORFA"))
+
+            onde = "saida"
+            for (emp, classe), n in sorted(a_contagem.items()):
+                print(
+                    "A emp=%s classe=%s sobras=%d dias=%d"
+                    % (emp, classe, n, len(a_dias[(emp, classe)]))
+                )
+            total = sum(a_contagem.values())
+            sem_enquadramento = sum(
+                n for (emp, classe), n in a_contagem.items()
+                if classe == "FORA_DA_ESCALA_SEM_ENQUADRAMENTO"
+            )
+            print(
+                "A_TOTAL sobras=%d sem_enquadramento=%d"
+                % (total, sem_enquadramento)
+            )
+            print("A_MINUTO sem_batida=%d ambiguo=%d" % (sem_batida, ambiguo))
+
+            for emp in sorted(b_dias):
+                print(
+                    "B emp=%s dias=%d sobras=%d"
+                    % (emp, len(b_dias[emp]), b_sobras[emp])
+                )
+            print("B_LIMITACAO direcao_inversa=NAO_MEDIDA")
+            for cid, dia, hora, pareador, ata in casos[:20]:
+                print(
+                    "B_CASO col%d %s %s pareador=%s ata=%s"
+                    % (cid, dia.isoformat(), hora, pareador, ata)
+                )
+            if col81:
+                for hora, pareador, ata in col81:
+                    print(
+                        "B_COL81 col81 2026-11-01 %s pareador=%s ata=%s"
+                        % (hora, pareador, ata)
+                    )
+            else:
+                print(
+                    "B_COL81 col81 2026-11-01 "
+                    "pareador=NAO_VERIFICADO ata=SEM_ORFA_IDENTIFICADA"
+                )
+
+        return 0
+    except Exception:
+        print("ERRO " + onde)
+        return 1
+    finally:
+        print("FIM_SONDA_PASSO1")
+
+
+sys.exit(main())
+```
+
+A sonda não foi executada contra a sombra e sua execução integral permanece **[não verificado]**. Também não demonstrou a classificação `PAUSA` para os casos em que `_intra_dur` mistura origens, nem a direção inversa de B; esses pontos ainda exigem uma interface que exponha a decisão correspondente ou uma instrução adicional de leitura **[não verificado]**.
+
+## 18/11 23:30 · sessao 5af7ad33f2c3 · E4C-F6F7 · verificador · origem=Code
+
+**Resultado desta volta: OK para a morte comportamental dos três mutantes exibidos; aprovação final da obra [não verificado].** Os tracebacks mostram uma falha de `test_sequencias` para cada mutante, além de falhas de âncora que não devem ser contadas como mordidas. A correspondência dos patches com os mutantes definidos no teste é verificável; o texto original que nomeia os casos (ii)–(iv) não foi fornecido. [anexo_logs.txt, trechos `test_sequencias`: numeração das linhas do anexo não fornecida; não verificado] [nao verificado]
+
+1. **Patches — OK quanto à correspondência com os mutantes do teste; correspondência literal com o aval original [não verificado].** [nao verificado]
+
+   - **(ii):** troca `while` por `if` em [tarefa_do_dia.py:161](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/services/tarefa_do_dia.py:161); corresponde ao mutante do caso `validação → resposta(true) → resposta(true)` em [teste:207](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:207).
+   - **(iii):** substitui a guarda `leitura.validada_em is not None` por `True` em [tarefa_do_dia.py:163](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/services/tarefa_do_dia.py:163); corresponde ao mutante do caso `silêncio → resposta(true)` em [teste:209](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:209).
+   - **(iv):** remove o teste de `resposta_mantem_validacao` do laço e amplia a guarda, alterando [tarefa_do_dia.py:161](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/services/tarefa_do_dia.py:161) e [tarefa_do_dia.py:163](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/services/tarefa_do_dia.py:163); corresponde ao mutante composto do caso `validação → resposta(false)` em [teste:211](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:211).
+
+   O complemento fornecido exige um “MUTANTE proprio que morre, com log”, mas não especifica nele próprio as transformações; o aval original referido não está no dado. [aval_complemento1.txt: linha não fornecida; não verificado]
+
+2. **Logs — OK para morte por comportamento nos três.** Em todos, o traceback chega ao `assertEqual` de resultado e ações em [teste:52](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:52), seguido de `AssertionError: Tuples differ` no trecho correspondente de `anexo_logs.txt`. A numeração das linhas dos logs não foi fornecida. [não verificado]
+
+   - **(ii):** em `test_sequencias`, obteve `aguarda_validacao` e esperava `validada_sem_efeito` no caso de duas respostas que mantêm. As duas falhas de `test_cada_mutante_morde_seu_caso` são `fonte.count` em [teste:218](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:218), não provas adicionais de comportamento. [anexo_logs.txt, bloco ii: linha não fornecida; não verificado]
+   - **(iii):** em `test_sequencias`, obteve `silencio_decidido` e esperava `aguarda_validacao`. Também há falha comportamental em [teste:149](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:149); as duas falhas de `test_cada_mutante...` e a de `test_mutante_adjacencia_morre` são de âncora, respectivamente em [teste:218](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:218) e [teste:90](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:90). [anexo_logs.txt, bloco iii: linha não fornecida; não verificado]
+   - **(iv):** em `test_sequencias`, obteve `validada_sem_efeito` e esperava `aguarda_validacao`. As três falhas de `test_cada_mutante...` são de âncora em [teste:218](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:218). [anexo_logs.txt, bloco iv: linha não fornecida; não verificado]
+
+   Os blocos exibidos não dependem de erro de importação ou fixture para essas três mortes: cada um mostra a comparação de comportamento executada. A pista anexada descreve aplicar cada mutação, salvar o diff, rodar o módulo e restaurar o arquivo; a execução e a identidade da cópia são evidência relatada pelos anexos, não verificáveis independentemente nesta árvore. [anexo_patches.txt e anexo_logs.txt: linhas não fornecidas; não verificado]
+
+3. **(i) — OK quanto ao critério; evidência RED direta [não verificada].** As duas falhas de âncora de `MUT_ADJ.log` reduzem a contagem de falhas comportamentais atribuíveis àquele log, mas o complemento mantém para (i) a exigência de **RED na ponta atual**; não exige usar essas duas falhas de âncora para prová-lo. O opus 3 relata RED correto em `c14/red.log:86` e também nas sequências com retração e absorção em `:118` e `:150`; o próprio `red.log` não foi fornecido para conferência direta. [aval_complemento1.txt e veredito_opus3.md, itens 2–3: linhas dos anexos não fornecidas; não verificado]
+
+4. **Mutante composto e ausência de mordida isolada — FILA pelo literal fornecido.** O mutante de (iv) altera duas condições, como mostra [teste:211](/home/ronald/codex_ws/a555d027babd2d7318e7f86025e346eb6f91c354/app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:211). O literal do complemento é: **“para (ii), (iii) e (iv) a prova e MUTANTE proprio que morre, com log”** e manda conferir “que cada um de (ii)-(iv) tem mutante morto com log”; não diz, no trecho fornecido, que o mutante deva ser simples ou que cada condição tenha mutante isolado. A sobrevivência do mutante que tira *somente* `mantem` foi relatada como não rodada; continua [não verificado]. [aval_complemento1.txt e veredito_opus3.md, item 5: linhas não fornecidas; não verificado]
+
+5. **Cobertura restante — FILA / [não verificado].** Os novos logs exercitam somente o módulo indicado e não substituem a conferência da árvore, do diff completo, da suite c18 ou dos demais itens do opus 2. O complemento proíbe tocar `.py`, pede a mesma árvore e diz que a c18 vale; esta cópia não tem metadados Git disponíveis para confirmar o hash ou comparar o diff, e o resultado da c18 não foi fornecido. Assim, **não há base aqui para declarar esses requisitos cumpridos nem para identificar uma violação concreta**. [anexo_patches.txt, pista `--only`; aval_complemento1.txt; veredito_opus3.md, seção “Nao verificado”: linhas dos anexos não fornecidas; não verificado] [nao verificado]
+
+## 18/11 23:29 · sessao e42f51f189c2 · AUDITORIA-ESPURIAS · sonda · origem=Code
+
+A função real é [cadastro_realidade.py:854](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/escala/services/cadastro_realidade.py:854): `lista()` combina assinaturas de cadastro e de outras lavras com a lavra do esmeril, e devolve as linhas efetivamente exibidas; ela pode devolver `None` quando não há assinaturas ([cadastro_realidade.py:960](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/escala/services/cadastro_realidade.py:960), [cadastro_realidade.py:1030](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/escala/services/cadastro_realidade.py:1030)). Ela é descrita como leitura; contudo, a própria lista pode consultar o juiz em tempo de execução para resolver donos divergentes ([cadastro_realidade.py:7](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/escala/services/cadastro_realidade.py:7), [cadastro_realidade.py:1080](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/escala/services/cadastro_realidade.py:1080)).
+
+`ler_lavra()` lê o snapshot mais recente por `data_ref`, chave `esmeril_espelho`, no banco; na sombra, verifica o marcador da cópia de produção ([esmeril_espelho.py:291](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/ponto/services/esmeril_espelho.py:291), [esmeril_espelho.py:359](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/ponto/services/esmeril_espelho.py:359)). `anomalias_da_frota()` calcula o retrato em leitura; quem grava é `lavrar()` ([esmeril_espelho.py:215](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/ponto/services/esmeril_espelho.py:215), [esmeril_espelho.py:321](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/ponto/services/esmeril_espelho.py:321)). A autoridade da lavra mora no snapshot do banco; o host também produz `logs/sombra/lavra_prod.json` ao copiá-la para a sombra ([esmeril_espelho.py:359](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/app/ponto/services/esmeril_espelho.py:359), [sombra.sh:136](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/bin/sombra.sh:136)).
+
+A presença dos seis colaboradores e os totais são **[não verificado]**: o dado fornecido não contém a lavra nem a saída da lista. O script abaixo não foi executado. O envelope indicado monta a árvore pela variável `SONDA_ARVORE`, mas ele próprio cria arquivos temporários e acrescenta uma trilha no host; por isso sua execução não seria compatível com a regra desta sessão de não criar nem alterar arquivos ([sonda_leitura.sh:216](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/bin/sonda_leitura.sh:216), [sonda_leitura.sh:226](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/bin/sonda_leitura.sh:226), [sonda_leitura.sh:245](/home/ronald/codex_ws/68d17aa7d9433a60e334e896b7c4535f1095b64c/bin/sonda_leitura.sh:245)).
+
+```python
+import datetime
+import logging
+import os
+import re
+import sys
+from unittest.mock import patch
+
+ONDE = "inicio"
+
+
+def falhar(onde):
+    print("ERRO %s" % onde)
+    raise SystemExit(1)
+
+
+def instante(valor):
+    if not isinstance(valor, str):
+        raise ValueError("instante")
+    datetime.datetime.fromisoformat(valor)
+    return valor
+
+
+def numero(valor):
+    if isinstance(valor, bool) or not isinstance(valor, (int, float)):
+        raise ValueError("numero")
+    return str(valor)
+
+
+def erro_registrado(self, *args, **kwargs):
+    # A lista captura algumas excecoes e as registra: transforma essas falhas
+    # em erro da sonda, sem imprimir mensagens que possam conter dados pessoais.
+    raise RuntimeError("falha capturada pela lista")
+
+
+try:
+    ONDE = "imports"
+    from django.conf import settings
+    from django.db import connection, transaction
+    from ponto.services.esmeril_espelho import ler_lavra
+    from escala.services.cadastro_realidade import lista
+
+    ONDE = "guarda_sombra"
+    if (
+        os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra"
+        or not getattr(settings, "HASNER_SOMBRA", False)
+        or connection.settings_dict.get("NAME") != "sombra"
+        or connection.settings_dict.get("HOST") != "sombra_db"
+        or getattr(connection, "schema_name", None) != "juliani"
+    ):
+        falhar(ONDE)
+
+    saida = []
+    with transaction.atomic():
+        ONDE = "transacao"
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
+            )
+            cursor.execute("SELECT current_database(), current_schema()")
+            banco, schema = cursor.fetchone()
+            if (banco, schema) != ("sombra", "juliani"):
+                falhar("guarda_banco_schema")
+
+        ONDE = "ler_lavra"
+        lavra = ler_lavra()
+
+        if lavra is None:
+            saida.append("B_SEM_LAVRA")
+        else:
+            ONDE = "validar_lavra"
+            if not isinstance(lavra, dict):
+                raise ValueError("lavra")
+            lavrado_em = instante(lavra["lavrado_em"])
+
+            ONDE = "lista"
+            # A lista chama ler_lavra() de novo dentro da mesma transacao,
+            # portanto enxerga o mesmo snapshot do banco.
+            with patch.object(logging.Logger, "exception", erro_registrado):
+                dados = lista(empresas=None)
+
+            ONDE = "validar_lista"
+            if dados is None:
+                linhas = []
+                universo = lavra["universo"]
+                listados = 0
+            else:
+                if dados.get("lavrado_em") != lavrado_em:
+                    raise ValueError("lavra divergente")
+                linhas = dados["linhas"]
+                universo = dados["universo"]
+                listados = dados["colabs_listados"]
+                if listados != len(linhas):
+                    raise ValueError("total divergente")
+
+            if (
+                isinstance(universo, bool)
+                or not isinstance(universo, int)
+                or universo < 0
+                or isinstance(listados, bool)
+                or not isinstance(listados, int)
+                or listados < 0
+            ):
+                raise ValueError("contadores")
+
+            por_colab = {}
+            for linha in linhas:
+                cid = linha["colab_id"]
+                if isinstance(cid, bool) or not isinstance(cid, int):
+                    raise ValueError("colab_id")
+                if cid in por_colab:
+                    raise ValueError("colaborador duplicado")
+                por_colab[cid] = linha
+
+            ONDE = "formatar"
+            for cid in (237, 301, 451, 634, 922, 968):
+                linha = por_colab.get(cid)
+                if linha is None:
+                    saida.append(
+                        "B col%d na_lista=n linha=- lavrado_em=%s"
+                        % (cid, lavrado_em)
+                    )
+                    continue
+
+                assinaturas = []
+                for assinatura in linha["assinaturas"]:
+                    codigo = assinatura["codigo"]
+                    if not isinstance(codigo, str) or not re.fullmatch(
+                        r"[AC][0-9]+", codigo
+                    ):
+                        raise ValueError("codigo")
+                    ocorrencias = assinatura.get("ocorrencias")
+                    item = codigo
+                    if ocorrencias is not None:
+                        if (
+                            isinstance(ocorrencias, bool)
+                            or not isinstance(ocorrencias, int)
+                            or ocorrencias < 0
+                        ):
+                            raise ValueError("ocorrencias")
+                        item += ":%d" % ocorrencias
+                    data = assinatura.get("data")
+                    if data is not None:
+                        data = str(data)
+                        datetime.date.fromisoformat(data)
+                        item += "@" + data
+                    assinaturas.append(item)
+
+                if not assinaturas:
+                    raise ValueError("linha sem assinatura")
+
+                carga = linha.get("carga")
+                carga_texto = "sem_medida" if carga is None else numero(carga)
+
+                proposta = linha.get("proposta")
+                proposta_texto = "-"
+                if proposta is not None:
+                    if not isinstance(proposta, dict):
+                        raise ValueError("proposta")
+                    tipo_id = proposta["tipo_escala_id"]
+                    if (
+                        isinstance(tipo_id, bool)
+                        or not isinstance(tipo_id, int)
+                        or tipo_id <= 0
+                    ):
+                        raise ValueError("tipo_escala_id")
+                    proposta_texto = "tipo_escala_id:%d" % tipo_id
+                    confianca = proposta.get("confianca")
+                    if confianca is not None:
+                        # Apenas um token seguro; nunca imprime texto livre.
+                        confianca = str(confianca)
+                        if not re.fullmatch(r"[A-Za-z0-9_.-]{1,40}", confianca):
+                            raise ValueError("confianca")
+                        proposta_texto += ",confianca:" + confianca
+
+                saida.append(
+                    "B col%d na_lista=s linha=%s carga=%s proposta=%s "
+                    "lavrado_em=%s"
+                    % (
+                        cid,
+                        "/".join(assinaturas),
+                        carga_texto,
+                        proposta_texto,
+                        lavrado_em,
+                    )
+                )
+
+            saida.append(
+                "B_LAVRA lavrado_em=%s universo=%d listados=%d"
+                % (lavrado_em, universo, listados)
+            )
+
+    for texto in saida:
+        print(texto)
+    print("ERROS_B=0")
+    print("FIM_SONDA_DUAS_PONTAS_B")
+
+except SystemExit:
+    raise
+except Exception:
+    falhar(ONDE)
+```
+
+## 18/11 23:29 · sessao 098413d357d3 · AUDITORIA-ESPURIAS · sonda · origem=Code
+
+Não consigo entregar a sonda completa com segurança: **não verifiquei todas as chamadas transitivas nem montei e conferi o literal dos 75 pares**. Entregá-la como pronta poderia produzir causas ou donos sem a prova exigida. S3 a S6, incluindo os resultados para col950, permanecem **[não verificado]**.
+
+As autoridades que consegui identificar na cópia são:
+
+- `turnos_do_colab`: devolve os turnos pelo pareador, com `entrada` e `saida`; cada ponta é uma `Batida`, ligada à pergunta por `pergunta_origem`. [app/ponto/turnos.py:43](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:43), [app/ponto/turnos.py:1850](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1850), [app/ponto/models.py:40](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/models.py:40).
+- `batidas_apuraveis`: fornece o universo sem batidas retratadas; `pergunta_respondida` é o juiz de resposta com instante e texto. [app/ponto/turnos.py:2868](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:2868), [app/chamados/juizes.py:1544](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/juizes.py:1544).
+- `InsumosDoDono.dono` monta os insumos e chama `dono_da_divergencia`; quando precisa da lista do motor, pode obter o resultado via `espelho_do_colab`. A verificação completa de ausência de escrita nesse caminho ficou pendente. [app/ponto/management/commands/e6_oraculo.py:113](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:113), [app/ponto/management/commands/e6_oraculo.py:162](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:162), [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:182).
+- `universo_da_competencia` é o filtro do fechamento. Para o TXT, a view calcula fechamentos em modo de leitura e passa os objetos a `classificar_export`; `montar_linhas_export` aplica também o filtro de status. A resposta de col950 depende dos dados da sombra. [app/ponto/services/fechamento.py:428](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:428), [app/folha/views.py:209](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/views.py:209), [app/folha/export.py:714](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/folha/export.py:714).
+
+O par de col995 em 07/11 está no grupo misto porque o critério estrito exige **ambas** as origens `disputa_s84_retro`, enquanto o anexo informa `app` nas duas pontas **[não verificado]**. O código permite vincular uma pergunta a uma batida reaproveitada pela materialização; isso explica a possibilidade, mas não comprova que tenha sido o caminho concreto dessas duas PKs. [app/chamados/services/materializacao.py:1542](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/services/materializacao.py:1542).
+
+Também não executei o envelope: ele cria uma cópia temporária da sonda e acrescenta uma trilha em arquivo, operações incompatíveis com a regra desta sessão de não criar nem alterar arquivos. O código de fechamento tem um modo `somente_leitura=True`, mas sua execução normal contém `save` e `update`; nenhuma dessas chamadas foi executada aqui. [bin/sonda_leitura.sh:216](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:216), [bin/sonda_leitura.sh:245](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:245), [app/ponto/services/fechamento.py:1128](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/services/fechamento.py:1128).
+
+Não houve execução da sonda nem emissão de `ERROS_*=0` ou `FIM_SONDA_DUAS_PONTAS` **[não verificado]**.
 
 ## 18/11 23:27 · sessao c3985e8d6861 · DST-L2-JZ1 · leitura · origem=Code
 
@@ -462,1135 +1666,4 @@ $ PYTHONDONTWRITEBYTECODE=1 ruff check --config ruff.toml --no-cache chamados/te
 
 Não foi possível executar o RED nem os mutantes do lint pelo mesmo motivo. [não verificado] A suíte e o banco não foram executados, conforme solicitado. [nao verificado]
 
-## 18/11 21:37 · sessao 954a693d4c56 · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-1. **OK — a chamada nova chega à guarda da linha 313.** O teste chama diretamente `realocar_vinculo_para_destino` com o PK de `t12`, criado como `12x36`; a função extrai o ID, busca o template e avalia sua inclusão em `CICLICOS`, que contém `12x36`. [app/escala/tests/test_escala_nao_descreve.py:131](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:131), [app/escala/tests/test_escala_nao_descreve.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:320), [app/escala/models.py:386](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/models.py:386), [app/escala/regua_defesa.py:307](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:307). Os únicos retornos anteriores são “Sem destino sugerido.” e “Template sugerido nao existe mais.”; nenhum contém `ciclico`. [app/escala/regua_defesa.py:308](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:308). Após a guarda, a função monta o POST interno, chama o juiz, trata exceção e `no_op`, e então chama o executor; esse trecho não é alcançado no caso cíclico atual. [app/escala/regua_defesa.py:313](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:313).
-
-2. **OK — para esta chamada e estes dados, a mensagem que satisfaz a asserção é a da guarda:** `Destino ENDL-12 e ciclico: informe o Inicio do turno no wizard de escalas (nao se infere fase).` [app/escala/tests/test_escala_nao_descreve.py:131](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:131), [app/escala/regua_defesa.py:314](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:314). A regra de fase do juiz produziria outra mensagem, sem `ciclico`, e só seria chamada depois dessa guarda; a mensagem da view contém `ciclica`, mas esta chamada direta não passa pela view. [app/colaboradores/services/vinculo.py:126](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:126), [app/escala/views.py:498](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/views.py:498). Em geral, a função interpola código ou descrição nas mensagens e devolve texto de exceções; portanto, a substring isolada não identificaria necessariamente a origem para dados arbitrários. [app/escala/regua_defesa.py:314](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:314), [app/escala/regua_defesa.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:320).
-
-3. **OK, com limite — o controle prova uma gravação observável nesse cenário.** `x` começa em 5x2 desde setembro; o teste exige sucesso, uma linha ativa de `x` em 6x1 com início em `HOJE` e aumento de um no total do histórico. Assim, a existência exigida não é a linha inicial da fixture. [app/escala/tests/test_escala_nao_descreve.py:127](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:127), [app/escala/tests/test_escala_nao_descreve.py:133](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:133), [app/escala/tests/test_escala_nao_descreve.py:326](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:326). A classe congela o relógio e passa `HOJE` explicitamente; o juiz e o executor ainda leem o relógio internamente, mas essas leituras ficam sob o congelamento neste teste. [app/escala/tests/test_escala_nao_descreve.py:30](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:30), [app/escala/tests/test_escala_nao_descreve.py:116](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:116), [app/colaboradores/services/vinculo.py:71](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:71), [app/colaboradores/services/vinculo.py:194](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:194). O caso troca tanto o colaborador quanto o destino e não verifica células: ele não isola qual diferença explica o resultado, nem prova regeneração de células. [app/escala/tests/test_escala_nao_descreve.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:320).
-
-4. **FILA — as contagens demonstram menos que uma comparação das linhas.** O próprio teste lê as contagens globais antes e depois da recusa e, no controle, filtra `EscalaColaborador` por colaborador, tipo, início e ativa; lê apenas o total global de `HistoricoVinculo`. [app/escala/tests/test_escala_nao_descreve.py:319](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:319). No caminho de sucesso, o executor fecha vínculos anteriores por `fechar_vigencia`, que escreve `ativa` e `data_fim`, e cria a nova linha com os campos filtrados pelo teste. [app/colaboradores/services/vinculo.py:211](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:211), [app/colaboradores/services/vinculo.py:641](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:641), [app/colaboradores/services/vinculo.py:287](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:287). O executor chama `registrar_mudanca`, que cria a linha de histórico; a tela de colaboradores lê esse histórico por colaborador. [app/colaboradores/services/vinculo.py:349](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:349), [app/colaboradores/services/historico_vinculo.py:7](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/historico_vinculo.py:7), [app/colaboradores/views.py:317](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/views.py:317). Contagem igual na recusa não excluiria edição de linha existente; o `+1` global tampouco identifica, sozinho, o conteúdo ou colaborador da linha criada. [app/escala/tests/test_escala_nao_descreve.py:324](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:324).
-
-5. **FILA — há mordida na guarda, com limites de contrato.** O anexo informa que o mutante `mut_sem_recusa_ciclico` falhou nesse teste, mas não mostra a alteração do mutante nem a asserção que falhou; esses detalhes ficam **[não verificado]**. O teste fixa a recusa observável da porta para `12x36`, sem exigir que o julgamento more especificamente na linha 313; o juiz de fase em `vinculo.py` usa outra condição e outra mensagem, e o predicado da lista continua separado. [app/escala/tests/test_escala_nao_descreve.py:320](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:320), [app/colaboradores/services/vinculo.py:128](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:128), [app/escala/services/cadastro_realidade.py:849](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/services/cadastro_realidade.py:849). A outra consulta a `CICLICOS` na régua pertence ao diagnóstico, fora dessa chamada direta. [app/escala/regua_defesa.py:198](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:198), [app/escala/regua_defesa.py:291](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:291). O congelamento impede que este teste exercite uma virada de dia entre as leituras internas do relógio. [app/escala/tests/test_escala_nao_descreve.py:116](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/tests/test_escala_nao_descreve.py:116), [app/colaboradores/services/vinculo.py:189](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:189). Quanto ao significado de `motivo`, o argumento textual vai para `confirm_txt` e depois `obs`, enquanto `HistoricoVinculo.motivo` recebe a categoria `mudanca` ou `correcao`; o caso novo só conta linhas e não verifica esses valores. [app/escala/regua_defesa.py:301](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/escala/regua_defesa.py:301), [app/colaboradores/services/vinculo.py:354](/home/ronald/codex_ws/a179c141e841f3303668dbd545eaa42237cc27a9/app/colaboradores/services/vinculo.py:354).
-
-## 18/11 21:30 · sessao 7732a47fe90e · ESCALA-NAO-DESCREVE · construtor · origem=Code
-
-Acrescentei um teste que chama a porta diretamente com destino 12x36, verifica a mensagem e as contagens, e usa uma realocação para 6x1 como controle ([teste:311](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:311)). A data é fixa ([teste:33](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:33)). [nao verificado]
-
-O teste e o mutante **não foram executados**, conforme solicitado. `git diff --check` passou [não verificado por certificação]. [nao verificado]
-
-Comando do teste: [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python manage.py test escala.tests.test_escala_nao_descreve.ListaPorCargaTest.test_MORDE_R5_porta_recusa_ciclico_e_realoca_nao_ciclico
-```
-
-O mutante remove, em memória, a recusa de [regua_defesa.py:313](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/regua_defesa.py:313), sem editar produção:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python - <<'PY'
-import inspect
-import os
-import sys
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.saas')
-import django
-django.setup()
-
-import escala.regua_defesa as regua
-fonte = inspect.getsource(regua.realocar_vinculo_para_destino)
-linhas = fonte.splitlines(keepends=True)
-indices = [i for i, linha in enumerate(linhas)
-           if "if te.tipo_ciclo in getattr(te, 'CICLICOS'" in linha]
-assert len(indices) == 1
-i = indices[0]
-assert "return False" in linhas[i + 1] and "ciclico" in linhas[i + 1]
-del linhas[i:i + 2]
-exec(compile(''.join(linhas), regua.__file__, 'exec'), regua.__dict__)
-
-from django.core.management import execute_from_command_line
-execute_from_command_line([
-    sys.argv[0], 'test',
-    'escala.tests.test_escala_nao_descreve.ListaPorCargaTest.'
-    'test_MORDE_R5_porta_recusa_ciclico_e_realoca_nao_ciclico',
-])
-PY
-```
-
-A reprovação esperada é `AssertionError` na busca por `'ciclico'` ([teste:323](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:323)): sem a recusa da porta, o juiz inferior retorna outra mensagem para a ausência de início do turno ([vinculo.py:128](/home/ronald/wt-codex-escala-nao-descreve-212957/app/colaboradores/services/vinculo.py:128)). **Resultado e classe exata da reprovação: [não verificado].** [nao verificado]
-
-LEI-AKITA: origem=n/a (selo; porta inalterada); testemunha=`realocar_vinculo_para_destino` ([regua_defesa.py:291](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/regua_defesa.py:291)); RED=`test_MORDE_R5_porta_recusa_ciclico_e_realoca_nao_ciclico` ([teste:311](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:311), mordida [não verificada]); quem-mais-le=[views.py:471](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/views.py:471), [views.py:502](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/views.py:502), [regua_defesa.py:332](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/regua_defesa.py:332), [test_termometro_camada3.py:100](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_termometro_camada3.py:100), [test_termometro_camada3.py:105](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_termometro_camada3.py:105); juizes novos=0 ([diff do teste](/home/ronald/wt-codex-escala-nao-descreve-212957/app/escala/tests/test_escala_nao_descreve.py:311)); padrao=n/a (instrumento). [nao verificado]
-
-## 18/11 21:27 · sessao 429e0eff8383 · RAIA-ESPURIAS · leitura · origem=Code
-
-A interface de `logs/espuria/envelope.sh` não está disponível na cópia consultada; a execução do script por esse envelope está [não verificado]. A sonda abaixo pressupõe um ambiente Django configurado e inicializa o Django caso necessário [não verificado]. A função de batidas filtra marcas não retratadas ([app/ponto/turnos.py](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:2868)); a grade e a classificação seguem as funções da cópia ([app/escala/utils.py](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/utils.py:2334), [app/escala/orfa_classe.py](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/orfa_classe.py:53)). Efeitos indiretos de todas as funções chamadas estão [não verificado].
-
-`DIAS` conta pares colaborador-dia com órfãs encontrados na grade, como no anexo fornecido [não verificado]. A sonda não foi executada [não verificado].
-
-```python
-import collections
-import datetime as dt
-import re
-
-ERROS = 0
-TOTAL_ORFAS = 0
-TOTAL_DIAS = 0
-POR_CLASSE = collections.Counter()
-
-
-def erro(col, etapa, exc):
-    global ERROS
-    ERROS += 1
-    print(f"ERRO;{col};{etapa};{type(exc).__name__}", flush=True)
-
-
-def executar():
-    global TOTAL_ORFAS, TOTAL_DIAS
-
-    try:
-        import django
-        from django.apps import apps
-
-        if not apps.ready:
-            django.setup()
-
-        from django.db import connection
-
-        if connection.settings_dict.get("NAME") != "sombra":
-            print("NAO_FEITO;guarda_banco", flush=True)
-            return
-
-        from django.utils import timezone
-        from colaboradores.models import Colaborador
-        from ponto.turnos import batidas_apuraveis
-        from escala.utils import grade_espelho_janela
-        from escala.orfa_classe import classificar_orfas
-    except Exception as exc:
-        erro("col?", "inicializacao", exc)
-        print("NAO_FEITO;inicializacao", flush=True)
-        return
-
-    try:
-        agora = timezone.now()
-        ini = dt.date(2026, 10, 21)
-        fim = dt.date(2026, 11, 18)
-        lo = (
-            timezone.make_aware(dt.datetime.combine(ini, dt.time.min))
-            - dt.timedelta(days=1)
-        )
-        hi = (
-            timezone.make_aware(dt.datetime.combine(fim, dt.time.max))
-            + dt.timedelta(days=1)
-        )
-        colaboradores = iter(
-            Colaborador.objects.select_related("empresa", "posto")
-            .filter(empresa_id__in=[1, 2, 3, 4])
-            .order_by("pk")
-            .iterator()
-        )
-    except Exception as exc:
-        erro("col?", "preparacao", exc)
-        print("NAO_FEITO;preparacao", flush=True)
-        return
-
-    while True:
-        try:
-            c = next(colaboradores)
-        except StopIteration:
-            break
-        except Exception as exc:
-            erro("col?", "iteracao_colaboradores", exc)
-            print("NAO_FEITO;iteracao_colaboradores_restante", flush=True)
-            break
-
-        col = f"col{c.pk}"
-
-        try:
-            bs = list(batidas_apuraveis(c, lo, hi))
-        except Exception as exc:
-            erro(col, "batidas_apuraveis", exc)
-            continue
-
-        try:
-            grade = grade_espelho_janela(c, bs, ini, fim, agora=agora)
-            dias = grade.get("dias") or []
-        except Exception as exc:
-            erro(col, "grade_espelho_janela", exc)
-            continue
-
-        for d in dias:
-            try:
-                match = re.search(r"(\d{2})/(\d{2})", d.get("label", ""))
-                if not match:
-                    continue
-                dia = dt.date(2026, int(match.group(2)), int(match.group(1)))
-                horas = d.get("orfas") or []
-                if not horas:
-                    continue
-                TOTAL_DIAS += 1
-            except Exception as exc:
-                erro(col, "dia_grade", exc)
-                continue
-
-            try:
-                classes = classificar_orfas(d)
-            except Exception as exc:
-                erro(col, "classificar_orfas", exc)
-                continue
-
-            for hora in horas:
-                try:
-                    classe = classes.get(hora, "indefinida")
-                    print(
-                        f"VIVA;{col};{c.empresa_id};{dia.isoformat()};"
-                        f"{hora};{classe}",
-                        flush=True,
-                    )
-                    TOTAL_ORFAS += 1
-                    POR_CLASSE[classe] += 1
-                except Exception as exc:
-                    erro(col, "emitir_orfa", exc)
-
-
-try:
-    executar()
-except Exception as exc:
-    erro("col?", "execucao", exc)
-    print("NAO_FEITO;execucao_restante", flush=True)
-finally:
-    print(f"TOTAL_ORFAS={TOTAL_ORFAS}", flush=True)
-    print(f"DIAS={TOTAL_DIAS}", flush=True)
-    for classe, quantidade in sorted(POR_CLASSE.items()):
-        print(f"CLASSE;{classe};{quantidade}", flush=True)
-    print(f"ERROS={ERROS}", flush=True)
-    print("FIM_FERNANDO_SV", flush=True)
-```
-
-## 18/11 21:25 · sessao e28abb7896fc · RAIA-ESPURIAS · leitura · origem=Code
-
-O script abaixo preserva as regras e os agregados do anexo e acrescenta a emissão `NOSSA`; a comparação com `s1_v4_bruto.out`, a execução pelo envelope e `ERROS=0` permanecem **[não verificado]**, pois não há acesso ao ambiente de produção. O anexo `s1_v4.py` e o envelope não foram encontrados como arquivos nesta cópia **[não verificado]**.
-
-As linhas acrescentadas estão marcadas com `# ACRESCENTADA`; seus números físicos são **[não verificado]**. A última linha de saída foi alterada para `FIM_FERNANDO_SN`. Quando uma falha impede obter a empresa ou consultar todos os minutos, o campo correspondente recebe `NAO_FEITO`.
-
-```python
-# ITEM 1 — AUDITORIA-ESPURIAS — medida, nao juiz.
-# Universo: CelulaDia de empresas 2, 3 e 4, 2026-10-21 a 2026-11-20.
-# Fonte das ocorrencias: CelulaDia.ata; porta da classificacao: grade_da_celula.
-# Casamento: Batida viva do mesmo colab no minuto exato da data da celula.
-# Exclusoes anteriores as classes: sem_hora; nao_mensuravel (a) e (b).
-# F: tipo_dia == folga; le grade_da_celula.
-# T6: trabalho e grade demonstra ausencia de marcos; le grade_da_celula.
-# T1: trabalho e algum marco missing a <=90 min; le grade_da_celula e Batida.
-# T2: trabalho, ha marco missing e todos estao a >90 min; le grade_da_celula e Batida.
-# T5: outra Batida viva do mesmo tipo a <=10 min; le Batida.
-# T4: entre as restantes, pares de orfas E seguidas da S seguinte, em ordem;
-#     le grade_da_celula e Batida.
-# T3: restante com instante e tipo decidiveis; le grade_da_celula e Batida.
-# T5 auxiliar: outra Batida viva de qualquer tipo a <=5 min; le Batida.
-# Diagnostico adicional: turnos_do_colab; nao decide as classes acima.
-# Precedencia: F, T6, T1, T2, T5, T4, T3.
-# Dias e pessoas sao conjuntos por classe e podem aparecer em varias classes.
-
-from collections import Counter, defaultdict
-from datetime import date, datetime, time, timedelta
-import re
-
-from django.db import DatabaseError
-from django.utils import timezone
-
-from colaboradores.models import Colaborador
-from escala.models import CelulaDia
-from escala.services.leitor_celula import grade_da_celula
-from ponto.models import Batida
-from ponto.turnos import turnos_do_colab
-
-INI = date(2026, 10, 21)
-FIM = date(2026, 11, 20)
-EMPRESAS = (2, 3, 4)
-CLASSES = ("F", "T6", "T1", "T2", "T5", "T4", "T3",
-           "nao_mensuravel_a", "nao_mensuravel_b",
-           "sem_hora", "NAO_CLASSIFICADA")
-
-erros = 0
-totais = Counter()
-dias = defaultdict(set)
-pessoas = defaultdict(set)
-verdes = Counter()
-motivos = Counter()
-t5_aux = Counter()
-total_ata = 0
-turnos_encontrados = 0
-universo_completo = True
-
-
-def campos(modelo):
-    print("CAMPOS", modelo._meta.label,
-          " ".join(f.name for f in modelo._meta.get_fields()
-                   if getattr(f, "concrete", False)))
-
-
-def registrar(classe, cid, dia, verde, motivo=None): [nao verificado]
-    totais[classe] += 1
-    dias[classe].add((cid, dia))
-    pessoas[classe].add(cid)
-    if verde is True: [nao verificado]
-        verdes[classe] += 1
-    elif verde is None: [nao verificado]
-        verdes[classe + "_verde_indeterminado"] += 1
-    if motivo:
-        motivos[(classe, motivo)] += 1
-
-
-def falha(etapa, exc, cid=None):
-    global erros
-    erros += 1
-    # Nao imprimir mensagem da excecao: pode conter nome ou outro dado pessoal.
-    print("ERRO", "etapa=" + etapa, "tipo=" + type(exc).__name__,
-          "col=" + ("col" + str(cid) if cid is not None else "universo"))
-
-
-def perm_negada(exc):
-    atual = exc
-    while atual is not None:
-        if getattr(atual, "pgcode", None) == "42501":
-            return True
-        if getattr(atual, "sqlstate", None) == "42501":
-            return True
-        atual = getattr(atual, "__cause__", None)
-    return False
-
-
-def hhmm(valor):
-    if not isinstance(valor, str) or not re.fullmatch(r"\d{2}:\d{2}", valor):
-        return None
-    h, m = map(int, valor.split(":"))
-    if h > 23 or m > 59:
-        return None
-    return time(h, m)
-
-
-def local_minuto(ts):
-    return timezone.localtime(ts).replace(second=0, microsecond=0)
-
-
-def instante(dia, hora):
-    return timezone.make_aware(datetime.combine(dia, hora),
-                               timezone.get_current_timezone())
-
-
-def emitir_nossa(cid, empresa_id, cel, valor, classe, motivo, por_minuto):  # ACRESCENTADA
-    hora = hhmm(valor)  # ACRESCENTADA
-    if hora is None:  # ACRESCENTADA
-        pks = ""  # ACRESCENTADA
-    elif por_minuto is None:  # ACRESCENTADA
-        pks = "NAO_FEITO"  # ACRESCENTADA
-    else:  # ACRESCENTADA
-        batidas_minuto = por_minuto.get(instante(cel.data, hora), [])  # ACRESCENTADA
-        pks = ",".join(str(b.pk) + ":" + str(b.tipo) for b in batidas_minuto)  # ACRESCENTADA
-    print("NOSSA", "col" + str(cid), empresa_id, cel.data.isoformat(),  # ACRESCENTADA
-          valor if hora is not None else "", classe,  # ACRESCENTADA
-          (motivo or "") if classe == "NAO_CLASSIFICADA" else "", pks, sep=";")  # ACRESCENTADA
-
-
-def ocorrencias_da_ata(ata):
-    # O cartorio normalmente grava ambos; divergencia e conservada e avisada.
-    if not isinstance(ata, dict):
-        raise ValueError("ata nao e objeto")
-    lista = ata.get("orfas") or []
-    if not isinstance(lista, list):
-        raise ValueError("ata.orfas nao e lista")
-    lista = [str(x) if x else "?" for x in lista]
-    n = ata.get("n_orfas")
-    n = len(lista) if n is None else int(n)
-    if n < 0:
-        raise ValueError("n_orfas negativo")
-    if lista and len(lista) != n:
-        print("ATA_CONTAGEM_DIVERGENTE",
-              "lista=" + str(len(lista)), "n_orfas=" + str(n))
-    # A lista lavrada e a fonte quando existe, como em _orfas_da_ata.
-    return lista if lista else ["?"] * n
-
-
-def virada(cel, dia_grade):
-    # True/False so quando ha os dois extremos; None significa nao sei.
-    pares = {}
-    for marco in dia_grade.get("marcos") or []:
-        if isinstance(marco, dict) and marco.get("tipo") in ("E", "S"):
-            h = hhmm(marco.get("hora"))
-            if h is not None:
-                pares.setdefault(marco["tipo"], []).append(h)
-    if pares.get("E") and pares.get("S"):
-        return pares["S"][-1] <= pares["E"][0]
-    dna = cel.dna if isinstance(cel.dna, dict) else {}
-    marcos = dna.get("marcos") or {}
-    if isinstance(marcos, dict):
-        hi, hf = hhmm(marcos.get("hi")), hhmm(marcos.get("hf"))
-        if hi is not None and hf is not None:
-            return hf <= hi
-    return None
-
-
-def verde_do_dia(d):
-    if d.get("tipo_dia") != "trabalho":
-        return False
-    celulas = d.get("celulas")
-    if not isinstance(celulas, list):
-        return None
-    if not celulas:
-        return None
-    if any(not isinstance(c, dict) or "missing" not in c for c in celulas):
-        return None
-    return not any(c["missing"] for c in celulas)
-
-
-def distancias_missing(d, data_celula, ts_orfa):
-    # A ordem dos marcos permite datar marcos apos a virada.
-    celulas = d.get("celulas")
-    if not isinstance(celulas, list):
-        return None, "celulas da grade ausentes"
-    if any(not isinstance(c, dict) or "missing" not in c for c in celulas):
-        return None, "estado missing desconhecido"
-    if not any(c["missing"] for c in celulas):
-        return [], None
-    resultado = []
-    dia_marco = data_celula
-    anterior = None
-    for c in celulas:
-        h = hhmm(c.get("hora_prevista"))
-        if h is None:
-            if c["missing"]:
-                return None, "marco missing sem hora prevista"
-            # Sem hora de um marco intermediario, a virada posterior e incerta.
-            return None, "marco sem hora impede datar os missing"
-        if anterior is not None and h < anterior:
-            dia_marco += timedelta(days=1)
-        anterior = h
-        if c["missing"]:
-            resultado.append(abs((instante(dia_marco, h) - ts_orfa)
-                                 .total_seconds()) / 60)
-    return resultado, None
-
-
-def tem_outra(batida, batidas, minutos, mesmo_tipo):
-    for outra in batidas:
-        if outra.pk == batida.pk:
-            continue
-        if mesmo_tipo and outra.tipo != batida.tipo:
-            continue
-        if abs((outra.timestamp - batida.timestamp).total_seconds()) <= minutos * 60:
-            return True
-    return False
-
-
-for modelo in (Colaborador, CelulaDia, Batida):
-    campos(modelo)
-
-print("UNIVERSO", INI.isoformat(), FIM.isoformat(), "empresas=2,3,4")
-print("REFERENCIA_17_11=1267")
-print("DIA_VERDE_REFERENCIA=83_dias/50_pessoas/105_orfas [nao verificado]")
-
-try:
-    ids = list(
-        CelulaDia.objects.filter(
-            data__range=(INI, FIM),
-            colaborador__empresa_id__in=EMPRESAS,
-        ).values_list("colaborador_id", flat=True).distinct().order_by("colaborador_id")
-    )
-except Exception as exc:
-    falha("listar_colaboradores_da_celula", exc)
-    ids = []
-    universo_completo = False
-
-for cid in ids:
-    etiqueta = "col" + str(cid)
-    etapa = "carregar_celulas"
-    cels = None
-    ocorrencias = []
-    colab = None  # ACRESCENTADA
-    minutos_completos = None  # ACRESCENTADA
-    try:
-        cels = list(CelulaDia.objects.filter(
-            colaborador_id=cid, data__range=(INI, FIM)
-        ).order_by("data", "pk"))
-        for cel in cels:
-            for valor in ocorrencias_da_ata(cel.ata or {}):
-                ocorrencias.append((cel, valor))
-        total_ata += len(ocorrencias)
-        if not ocorrencias:
-            continue
-
-        etapa = "carregar_colaborador"
-        colab = Colaborador.objects.get(pk=cid)
-
-        etapa = "grade_da_celula(colab, INI, FIM)"
-        grade = grade_da_celula(colab, INI, FIM)
-        por_data = {d["data"]: d for d in grade["dias"]}
-
-        etapa = "turnos_do_colab(colab, INI, FIM)"
-        turnos = turnos_do_colab(colab, INI, FIM)
-        turnos_encontrados += len(turnos)
-
-        etapa = "consultar_Batida_viva"
-        # Margem cobre T5 nas bordas e casamento no dia seguinte.
-        batidas = list(Batida.objects.filter(
-            colaborador_id=cid,
-            retratada_em__isnull=True,
-            timestamp__date__gte=INI - timedelta(days=1),
-            timestamp__date__lte=FIM + timedelta(days=1),
-        ).order_by("timestamp", "pk"))
-        por_minuto = defaultdict(list)
-        for b in batidas:
-            por_minuto[local_minuto(b.timestamp)].append(b)
-        minutos_completos = por_minuto  # ACRESCENTADA
-
-        # Primeiro decide exclusoes e classes anteriores a T4.
-        registros = []
-        for cel, valor in ocorrencias:
-            d = por_data.get(cel.data)
-            r = {"cel": cel, "valor": valor, "classe": None,
-                 "motivo": None, "batida": None, "verde": None} [nao verificado]
-            registros.append(r)
-            if d is None:
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "dia ausente da grade"
-                continue
-            r["verde"] = verde_do_dia(d) [nao verificado]
-            hora = hhmm(valor)
-            if valor == "?":
-                r["classe"] = "sem_hora"
-                continue
-            if hora is None:
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "hora da ata invalida"
-                continue
-
-            alvo = instante(cel.data, hora)
-            hoje = por_minuto.get(alvo, [])
-            amanha = por_minuto.get(alvo + timedelta(days=1), [])
-            atravessa = virada(cel, d)
-
-            # (b) tem prioridade quando o proprio minuto da celula e multiplo.
-            if len(hoje) > 1:
-                r["classe"], r["motivo"] = "nao_mensuravel_b", "multiplas batidas no minuto da celula"
-                continue
-            if hoje and amanha:
-                if atravessa is True:
-                    r["classe"], r["motivo"] = "nao_mensuravel_a", "virada e batidas nos dois dias"
-                    continue
-                if atravessa is None:
-                    r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "virada desconhecida com batidas nos dois dias"
-                    continue
-            if not hoje:
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "sem batida viva no minuto da data da celula"
-                continue
-
-            b = hoje[0]
-            r["batida"] = b
-            r["instante"] = local_minuto(b.timestamp)
-            if b.tipo not in ("E", "S"):
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "tipo da batida desconhecido"
-                continue
-
-            if tem_outra(b, batidas, 5, False):
-                t5_aux["5min_qualquer_tipo"] += 1
-            if tem_outra(b, batidas, 10, True):
-                t5_aux["10min_mesmo_tipo"] += 1
-
-            tipo = d.get("tipo_dia")
-            if tipo == "folga":
-                r["classe"] = "F"
-                continue
-            if tipo != "trabalho":
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "tipo_dia=" + str(tipo)
-                continue
-
-            celdia = d.get("celulas")
-            marcos = d.get("marcos")
-            if not isinstance(celdia, list) or not isinstance(marcos, list):
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "marcos ou celulas ausentes"
-                continue
-            if not marcos:
-                if not celdia:
-                    r["classe"] = "T6"
-                else:
-                    r["classe"], r["motivo"] = "NAO_CLASSIFICADA", "ata agregada nao identifica marcos"
-                continue
-
-            dist, motivo = distancias_missing(d, cel.data, alvo)
-            if dist is None:
-                r["classe"], r["motivo"] = "NAO_CLASSIFICADA", motivo
-            elif dist:
-                r["classe"] = "T1" if min(dist) <= 90 else "T2"
-            elif tem_outra(b, batidas, 10, True):
-                r["classe"] = "T5"
-
-        # T4: pareia E com a S seguinte entre ocorrencias ainda elegiveis.
-        # Se uma ocorrencia nao decidida pode interferir, nao forcar T4/T3.
-        por_dia = defaultdict(list)
-        for r in registros:
-            por_dia[r["cel"].data].append(r)
-        for data_celula, itens in por_dia.items():
-            pendentes = [r for r in itens if r["classe"] is None]
-            incerto = any(
-                r["classe"] in ("NAO_CLASSIFICADA", "nao_mensuravel_a",
-                                 "nao_mensuravel_b", "sem_hora")
-                for r in itens
-            )
-            if incerto:
-                for r in pendentes:
-                    r["classe"] = "NAO_CLASSIFICADA"
-                    r["motivo"] = "outra orfa incerta pode interferir no pareamento T4"
-                continue
-            pendentes.sort(key=lambda r: (r["instante"], r["batida"].pk))
-            entrada = None
-            for r in pendentes:
-                if r["batida"].tipo == "E":
-                    if entrada is not None:
-                        entrada["classe"] = "T3"
-                    entrada = r
-                elif entrada is not None:
-                    entrada["classe"] = r["classe"] = "T4"
-                    entrada = None
-                else:
-                    r["classe"] = "T3"
-            if entrada is not None:
-                entrada["classe"] = "T3"
-
-        for r in registros:
-            registrar(r["classe"], cid, r["cel"].data,
-                      r["verde"], r["motivo"]) [nao verificado]
-            emitir_nossa(cid, colab.empresa_id, r["cel"], r["valor"],  # ACRESCENTADA
-                         r["classe"], r["motivo"], minutos_completos)  # ACRESCENTADA
-
-    except Exception as exc:
-        falha(etapa, exc, cid)
-        if perm_negada(exc):
-            print("PERMISSAO_DE_ESCRITA_NEGADA",
-                  "chamada=" + etapa, "col=" + etiqueta,
-                  "acao=parar_este_colab")
-        # Se a ata ja foi contada, preserva todas as suas ocorrencias.
-        if ocorrencias:
-            for cel, valor in ocorrencias:
-                registrar("NAO_CLASSIFICADA", cid, cel.data, None,
-                          "erro na etapa " + etapa)
-                emitir_nossa(cid, colab.empresa_id if colab is not None else "NAO_FEITO",  # ACRESCENTADA
-                             cel, valor, "NAO_CLASSIFICADA",  # ACRESCENTADA
-                             "erro na etapa " + etapa, minutos_completos)  # ACRESCENTADA
-        else:
-            universo_completo = False
-
-print("TURNOS_REAIS_RETORNADOS", turnos_encontrados)
-print("T5_AUX_5MIN_QUALQUER_TIPO", t5_aux["5min_qualquer_tipo"])
-print("T5_AUX_10MIN_MESMO_TIPO", t5_aux["10min_mesmo_tipo"])
-print("T5_AUX_ESCOPO=orfas_casadas_com_tipo_valido_antes_da_precedencia")
-
-for classe in CLASSES:
-    print("CLASSE", classe,
-          "dias=" + str(len(dias[classe])),
-          "pessoas=" + str(len(pessoas[classe])),
-          "orfas=" + str(totais[classe]),
-          "dia_verde_orfas=" + str(verdes[classe]),
-          "verde_indeterminado=" + str(verdes[classe + "_verde_indeterminado"]))
-
-for (classe, motivo), n in sorted(motivos.items()):
-    print("MOTIVO", classe, "orfas=" + str(n), motivo)
-
-soma = sum(totais.values())
-print("TOTAL_ORFAS_ATA", total_ata,
-      "universo_completo=" + str(universo_completo))
-print("SOMA_CLASSES_E_EXCLUSOES", soma)
-print("SOMA_CONFERE", soma == total_ata and universo_completo)
-if universo_completo:
-    print("DIFERENCA_PARA_1267", total_ata - 1267)
-else:
-    print("DIFERENCA_PARA_1267 [nao verificado]: universo incompleto")
-print("ERROS=" + str(erros))
-print("FIM_FERNANDO_SN")
-```
-
-## 18/11 21:22 · sessao 2197ad35232a · RAIA-ESPURIAS · leitura · origem=Code
-
-A sonda abaixo está **não executada**; seus resultados e `ERROS=N` permanecem [não verificado]. Ela conserva as ocorrências duplicadas dos dois literais e usa a janela local `dia..dia+1` para as candidatas físicas. O leitor fornece a lâmpada lavrada, mas não sua PK; a PK emitida em `OCUPADO_PK` resulta do critério de unicidade solicitado. ([leitor_celula.py:114](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/services/leitor_celula.py:114), [turnos.py:2868](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:2868))
-
-```python
-import json
-from collections import Counter
-from datetime import date, datetime, time, timedelta
-
-from django.db import connection
-from django.utils import timezone
-
-from colaboradores.models import Colaborador
-from escala.models import CelulaDia
-from escala.services.leitor_celula import grade_da_celula
-from ponto.management.commands.e6_oraculo import InsumosDoDono
-from ponto.services.cxr_na_lista import cxr_lavrado
-from ponto.turnos import batidas_apuraveis, turnos_do_colab
-
-
-# Projecao literal: colaborador_id;dia_turno;hora_orfa;marco_proximo;papel_marco.
-# A duplicata de col451 em 31/10 e intencional.
-ATE5 = """\
-col63;2026-10-31;19:05;19:00;S
-col67;2026-11-14;23:59;00:00;S
-col67;2026-11-10;00:01;00:00;S
-col81;2026-11-11;00:05;00:00;S
-col118;2026-11-13;12:05;12:00;S
-col121;2026-10-30;02:04;02:00;S
-col211;2026-11-16;21:00;21:00;S
-col211;2026-10-29;21:00;21:00;S
-col211;2026-10-25;02:55;03:00;S
-col220;2026-11-13;06:00;06:00;S
-col220;2026-11-11;06:00;06:00;S
-col278;2026-11-09;11:58;12:00;S
-col281;2026-11-09;06:58;07:00;S
-col282;2026-11-02;07:03;07:00;S
-col300;2026-10-21;06:00;06:00;S
-col366;2026-11-09;02:00;02:00;S
-col366;2026-11-09;03:00;03:00;E
-col366;2026-11-09;07:00;07:00;S
-col366;2026-11-05;02:00;02:00;S
-col366;2026-11-05;03:00;03:00;E
-col366;2026-11-05;07:00;07:00;S
-col366;2026-11-03;02:00;02:00;S
-col366;2026-11-03;03:00;03:00;E
-col366;2026-11-03;07:00;07:00;S
-col366;2026-10-30;02:00;02:00;S
-col366;2026-10-30;03:00;03:00;E
-col366;2026-10-30;07:00;07:00;S
-col366;2026-10-28;02:00;02:00;S
-col366;2026-10-28;03:00;03:00;E
-col366;2026-10-28;07:00;07:00;S
-col407;2026-10-23;07:00;07:00;S
-col444;2026-11-16;13:55;14:00;E
-col451;2026-11-14;07:01;07:00;S
-col451;2026-11-12;07:02;07:00;S
-col451;2026-11-10;06:59;07:00;S
-col451;2026-11-06;07:02;07:00;S
-col451;2026-11-04;06:59;07:00;S
-col451;2026-11-02;06:59;07:00;S
-col451;2026-10-31;07:01;07:00;S
-col451;2026-10-31;07:01;07:00;S
-col451;2026-10-29;06:58;07:00;S
-col451;2026-10-25;06:58;07:00;S
-col451;2026-10-21;06:55;07:00;S
-col489;2026-11-10;00:00;00:00;S
-col491;2026-10-26;02:02;02:00;S
-col491;2026-10-26;03:02;03:00;E
-col552;2026-11-04;19:02;19:00;S
-col587;2026-10-22;19:03;19:00;S
-col627;2026-10-22;02:00;02:00;S
-col627;2026-10-22;03:00;03:00;E
-col627;2026-10-22;07:00;07:00;S
-col673;2026-10-21;06:57;07:00;S
-col843;2026-11-08;03:00;03:00;S
-col843;2026-11-08;04:03;04:00;E
-col843;2026-11-08;07:01;07:00;S
-col859;2026-11-09;07:00;07:00;S
-col876;2026-11-07;06:55;07:00;S
-col881;2026-11-13;12:00;12:00;S
-col909;2026-11-07;12:00;12:00;S
-col913;2026-10-26;01:00;01:00;S
-col913;2026-10-26;02:00;02:00;E
-col913;2026-10-26;07:01;07:00;S
-col922;2026-11-01;07:00;07:00;S
-col947;2026-10-31;13:00;13:00;E
-col1002;2026-11-09;18:59;19:00;S
-col1010;2026-11-05;05:59;06:00;S
-col1031;2026-11-17;06:55;07:00;S
-col1031;2026-11-15;00:01;00:00;E
-col1031;2026-11-15;06:55;07:00;S
-"""
-
-# Projecao literal: colaborador_id;dia_turno;hora_orfa.
-NOMINAIS = """\
-col673;2026-10-21;06:57
-col82;2026-10-21;07:01
-col82;2026-10-22;06:56
-col82;2026-10-23;06:58
-col82;2026-10-24;06:58
-col82;2026-10-25;06:50
-col89;2026-10-25;06:55
-col107;2026-10-25;07:01
-col107;2026-10-25;15:38
-col129;2026-10-25;17:30
-col155;2026-10-25;17:28
-col214;2026-10-29;21:13
-col214;2026-10-30;13:54
-col82;2026-10-30;06:56
-col214;2026-11-01;06:59
-col107;2026-11-01;07:54
-col107;2026-11-01;09:02
-col129;2026-11-01;17:30
-col155;2026-11-01;17:29
-col129;2026-11-02;17:31
-col214;2026-11-04;14:08
-col89;2026-11-08;06:55
-col129;2026-11-08;17:30
-col214;2026-11-15;07:00
-col82;2026-11-15;09:55
-col82;2026-11-15;14:05
-col82;2026-11-15;15:00
-col82;2026-11-15;18:22
-col89;2026-11-15;06:55
-col107;2026-11-15;07:05
-col107;2026-11-15;09:15
-col129;2026-11-15;17:30
-col155;2026-11-15;17:29
-col107;2026-11-17;10:42
-"""
-
-INI = date(2026, 10, 21)
-FIM = date(2026, 11, 20)
-ERROS = Counter()
-parados = set()
-colabs = {}
-grades = {}
-fisicas = {}
-
-
-def emitir(*campos):
-    # Os campos de saida sao produzidos pela propria sonda; nunca imprime
-    # mensagem de excecao, nome, CPF ou matricula.
-    print(";".join(str(x) for x in campos))
-
-
-def erro(col, etapa, exc):
-    ERROS[(etapa, type(exc).__name__)] += 1
-    emitir("ERRO", col, etapa, type(exc).__name__)
-    atual = exc
-    vistos = set()
-    while atual is not None and id(atual) not in vistos:
-        vistos.add(id(atual))
-        codigo = getattr(atual, "sqlstate", None) or getattr(atual, "pgcode", None)
-        if codigo in ("42501", "25006") or isinstance(atual, PermissionError):
-            parados.add(col)
-            break
-        atual = getattr(atual, "__cause__", None) or getattr(atual, "__context__", None)
-
-
-def obter_colab(col):
-    if col not in colabs:
-        if not col.startswith("col") or not col[3:].isdigit():
-            raise ValueError("identificador invalido")
-        colabs[col] = Colaborador.objects.get(pk=int(col[3:]))
-    return colabs[col]
-
-
-def obter_dia(col, dia):
-    chave = (col, dia)
-    if chave not in grades:
-        colaborador = obter_colab(col)
-        cels = list(CelulaDia.objects.filter(colaborador=colaborador, data=dia))
-        if len(cels) > 1:
-            raise ValueError("celulas duplicadas")
-        grade = grade_da_celula(colaborador, dia, dia)
-        dias = [d for d in grade["dias"] if d["data"] == dia]
-        if len(dias) != 1:
-            raise ValueError("dia ausente ou duplicado na grade")
-        grades[chave] = (cels[0] if cels else None, dias[0])
-    return grades[chave]
-
-
-def instante(dia):
-    return timezone.make_aware(
-        datetime.combine(dia, time.min), timezone.get_current_timezone()
-    )
-
-
-def obter_batidas(col, dia):
-    chave = (col, dia)
-    if chave not in fisicas:
-        lo = instante(dia)
-        hi = instante(dia + timedelta(days=2))
-        # A porta usa fim inclusivo; o filtro final exclui a meia-noite
-        # posterior ao segundo dia.
-        qs = batidas_apuraveis(obter_colab(col), lo, hi)
-        fisicas[chave] = sorted(
-            (b for b in qs if b.timestamp < hi),
-            key=lambda b: (b.timestamp, b.pk),
-        )
-    return fisicas[chave]
-
-
-def minuto(valor):
-    if not isinstance(valor, str) or len(valor) != 5 or valor[2] != ":":
-        return None
-    try:
-        h, m = int(valor[:2]), int(valor[3:])
-    except ValueError:
-        return None
-    if not (0 <= h < 24 and 0 <= m < 60):
-        return None
-    return 60 * h + m
-
-
-def distancia(a, b):
-    # Menor distancia circular entre horarios; o sinal indica orfa - marco.
-    return (a - b + 720) % 1440 - 720
-
-
-def retrato(b):
-    local = timezone.localtime(b.timestamp)
-    return "{}:{}:{}".format(b.pk, b.tipo, local.strftime("%H:%M:%S"))
-
-
-def no_minuto(batidas, hhmm, tipo=None):
-    return [
-        b for b in batidas
-        if timezone.localtime(b.timestamp).strftime("%H:%M") == hhmm
-        and (tipo is None or b.tipo == tipo)
-    ]
-
-
-def lampada_crua(cel, indice):
-    # Somente campos da lampada pertinentes a pergunta. A ata pode conter
-    # outros dados; nao serializar a ata inteira.
-    if cel is None or not isinstance(cel.ata, dict):
-        return "None"
-    lampadas = cel.ata.get("lampadas")
-    if not isinstance(lampadas, list) or indice >= len(lampadas):
-        return "None"
-    item = lampadas[indice]
-    if not isinstance(item, dict):
-        return "None"
-    chaves = ("tipo", "hora", "luz", "tipo_real", "acesa", "dispensada", "isencao")
-    seguro = {k: item.get(k) for k in chaves if k in item}
-    return json.dumps(seguro, ensure_ascii=True, separators=(",", ":"))
-
-
-def secao_c():
-    linhas_ate5 = [x.split(";") for x in ATE5.strip().splitlines()]
-    linhas_nominais = [x.split(";") for x in NOMINAIS.strip().splitlines()]
-    if len(linhas_ate5) != 69 or len(linhas_nominais) != 34:
-        raise ValueError("contagem dos literais incorreta")
-
-    for linha in linhas_ate5 + linhas_nominais:
-        col, data_txt, orfa = linha[:3]
-        if col in parados:
-            emitir("NAO_FEITO", col, data_txt, orfa, "permissao_negada")
-            continue
-
-        try:
-            dia = date.fromisoformat(data_txt)
-            bs = obter_batidas(col, dia)
-            candidatas_orfa = no_minuto(bs, orfa)
-            emitir(
-                "ORFA_FISICA", col, data_txt, orfa,
-                ",".join(retrato(b) for b in candidatas_orfa),
-            )
-        except Exception as exc:
-            erro(col, "ORFA_FISICA", exc)
-            emitir("ORFA_FISICA", col, data_txt, orfa, "NAO_FEITO")
-            emitir(
-                "MARCO", col, data_txt, orfa, "", "", "NAO_DETERMINAVEL",
-                "", "", "", "", "None",
-            )
-            continue
-
-        try:
-            cel, d = obter_dia(col, dia)
-            alvo = minuto(orfa)
-            celulas = d.get("celulas") or []
-            opcoes = []
-            for indice, luz in enumerate(celulas):
-                if not isinstance(luz, dict):
-                    continue
-                previsto = minuto(luz.get("hora_prevista"))
-                if previsto is not None and alvo is not None:
-                    opcoes.append((abs(distancia(alvo, previsto)), indice, luz))
-
-            marco_hh = papel = pk = tipo = dist = candidatos = ""
-            crua = "None"
-            estado = "NAO_DETERMINAVEL"
-
-            if opcoes:
-                menor = min(x[0] for x in opcoes)
-                proximas = [x for x in opcoes if x[0] == menor]
-                # Empate entre marcos nao autoriza escolher um ocupante.
-                if len(proximas) == 1:
-                    _, indice, luz = proximas[0]
-                    marco_hh = luz.get("hora_prevista") or ""
-                    papel = luz.get("papel") or luz.get("tipo") or ""
-                    dist = distancia(alvo, minuto(marco_hh))
-                    crua = lampada_crua(cel, indice)
-
-                    if (
-                        cel is not None
-                        and orfa in (d.get("orfas") or [])
-                        and not luz.get("dispensada")
-                        and not luz.get("isencao")
-                    ):
-                        acesa = luz.get("acesa_lavrada")
-                        if acesa is False:
-                            estado = "VAZIO"
-                        elif acesa is True:
-                            hora_real = luz.get("hora")
-                            tipo_real = luz.get("tipo_real")
-                            if minuto(hora_real) is not None and tipo_real in ("E", "S"):
-                                matches = no_minuto(bs, hora_real, tipo_real)
-                                candidatos = ",".join(retrato(b) for b in matches)
-                                if len(matches) == 1:
-                                    estado = "OCUPADO_PK"
-                                    pk = matches[0].pk
-                                    tipo = matches[0].tipo
-                                else:
-                                    estado = "OCUPADO_SEM_PK"
-
-            emitir(
-                "MARCO", col, data_txt, orfa, marco_hh, papel, estado,
-                pk, tipo, dist, candidatos, crua,
-            )
-        except Exception as exc:
-            erro(col, "MARCO", exc)
-            emitir(
-                "MARCO", col, data_txt, orfa, "", "", "NAO_DETERMINAVEL",
-                "", "", "", "", "None",
-            )
-
-
-def secao_d():
-    pedidos = {
-        "col673": ("2026-10-21", "2026-10-22"),
-        "col129": ("2026-10-25", "2026-11-01", "2026-11-02",
-                   "2026-11-08", "2026-11-15"),
-        "col155": ("2026-10-25", "2026-11-01", "2026-11-02",
-                   "2026-11-15"),
-        "col82": ("2026-11-15",),
-        "col107": ("2026-11-15",),
-        "col89": ("2026-11-15",),
-        "col214": ("2026-11-15",),
-    }
-    try:
-        ler_cxr = cxr_lavrado()
-    except Exception as exc:
-        erro("GLOBAL", "cxr_lavrado", exc)
-        for col, datas in pedidos.items():
-            for data_txt in datas:
-                emitir("DONO", col, data_txt, "NAO_FEITO", "NAO_FEITO")
-        return
-
-    agora = timezone.now()
-    hoje = timezone.localtime(agora).date()
-    for col, datas in pedidos.items():
-        if col in parados:
-            for data_txt in datas:
-                emitir("DONO", col, data_txt, "NAO_FEITO", "NAO_FEITO")
-            continue
-        try:
-            colaborador = obter_colab(col)
-            cxr = ler_cxr(colaborador.pk, INI)
-            ins = InsumosDoDono(
-                colaborador, INI, FIM, hoje, agora=agora,
-                sem_motor=True, cxr=cxr,
-            )
-        except Exception as exc:
-            erro(col, "InsumosDoDono", exc)
-            for data_txt in datas:
-                emitir("DONO", col, data_txt, "NAO_FEITO", "NAO_FEITO")
-            continue
-
-        for data_txt in datas:
-            if col in parados:
-                emitir("DONO", col, data_txt, "NAO_FEITO", "NAO_FEITO")
-                continue
-            try:
-                dia = date.fromisoformat(data_txt)
-                _, d = obter_dia(col, dia)
-                dono = ins.dono(dia)
-                emitir("DONO", col, data_txt, dono, d.get("tipo_dia"))
-            except Exception as exc:
-                erro(col, "dono", exc)
-                emitir("DONO", col, data_txt, "NAO_FEITO", "NAO_FEITO")
-
-
-def secao_e():
-    col = "col214"
-    pk_alvo = 155565
-    if col in parados:
-        emitir("TURNO214", "NAO_FEITO", "permissao_negada")
-        emitir("PAR214", pk_alvo, "NAO_FEITO")
-        return
-
-    try:
-        colaborador = obter_colab(col)
-        dia = date(2026, 11, 15)
-        alvos = [b for b in no_minuto(obter_batidas(col, dia), "07:00")
-                 if b.pk == pk_alvo
-                 and timezone.localtime(b.timestamp).date() == dia]
-        turnos = turnos_do_colab(
-            colaborador, date(2026, 11, 14), date(2026, 11, 16)
-        )
-        for t in turnos:
-            emitir(
-                "TURNO214", t.data_turno,
-                t.entrada.pk if t.entrada is not None else "None",
-                t.saida.pk if t.saida is not None else "None",
-                ",".join(str(b.pk) for b in t.batidas),
-                t.aberto, t.cross_meianoite,
-            )
-
-        ocorrencias = []
-        for t in turnos:
-            e = t.entrada.pk if t.entrada is not None else None
-            s = t.saida.pk if t.saida is not None else None
-            if pk_alvo == e or pk_alvo == s:
-                ocorrencias.append((e, s))
-
-        if len(alvos) != 1 or len(ocorrencias) != 1:
-            emitir("PAR214", pk_alvo, "NAO_DETERMINAVEL")
-        else:
-            e, s = ocorrencias[0]
-            outro = s if e == pk_alvo else e
-            emitir(
-                "PAR214", pk_alvo,
-                "pareada_com={}".format(outro) if outro is not None else "SOZINHA",
-            )
-    except Exception as exc:
-        erro(col, "turnos_do_colab", exc)
-        emitir("TURNO214", "NAO_FEITO", "erro")
-        emitir("PAR214", pk_alvo, "NAO_FEITO")
-
-
-try:
-    if connection.settings_dict.get("NAME") != "sombra":
-        raise RuntimeError("banco nao e sombra")
-    for nome, funcao in (("C", secao_c), ("D", secao_d), ("E", secao_e)):
-        try:
-            funcao()
-        except Exception as exc:
-            erro("GLOBAL", "secao_" + nome, exc)
-            emitir(nome, "NAO_FEITO", type(exc).__name__)
-except Exception as exc:
-    erro("GLOBAL", "guarda_sombra", exc)
-    for nome in ("C", "D", "E"):
-        emitir(nome, "NAO_FEITO", "guarda_sombra")
-finally:
-    print("ERROS={}".format(sum(ERROS.values())))
-    print("FIM_FERNANDO_S54")
-```
-
-**C — o que não prova:** a PK encontrada pela coincidência de minuto e tipo não demonstra qual batida o casador efetivamente usou; empate entre marcos também fica indeterminado. O literal não demonstra que a ata da sombra ainda contém a mesma órfã; isso depende da execução. ([leitor_celula.py:114](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/services/leitor_celula.py:114), [não verificado])
-
-**D — o que não prova:** `None` é uma resposta possível quando a lavra necessária não cobre o caso e o motor está desligado; não equivale a um dono identificado. Os valores específicos permanecem [não verificado]. ([e6_oraculo.py:182](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:182))
-
-**E — o que não prova:** o resultado descreve os turnos devolvidos pela porta na janela pedida, não estabelece o estado atual da produção. O par de `155565` permanece [não verificado]. ([turnos.py:1850](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1850))
-
-O envelope indicado não foi encontrado na cópia; a garantia de não escrever em `logs/` do host permanece [não verificado]. O script direto citado pelo pedido escreve arquivos temporários e mantém trilha, de modo que essa garantia depende do envelope. ([sonda_leitura.sh:52](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:52), [sonda_leitura.sh:217](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:217), [não verificado])
-
-## 18/11 21:19 · sessao 572fd5abab45 · RAIA-ESPURIAS · leitura · origem=Code
-
-Não concluí a montagem e a revisão da sonda única. As duas faltas apontadas na volta 1 foram respondidas pelo material desta volta; não seria correto repeti-las como bloqueios. As contagens de referência e os quatro estados de MARCO estão no dado fornecido. [não verificado]
-
-Não vou apresentar um script parcial como se cumprisse o contrato. Em particular, ainda falta integrar e conferir a transcrição completa de `s1_v4`, os dois literais de casos, o tratamento de todas as lâmpadas e a emissão de erros sem expor dados pessoais. A execução na sombra e o resultado `ERROS=N` permanecem [não verificado].
-
-O que consegui confirmar na cópia para orientar a conclusão:
-
-- **NOSSA:** a porta `grade_da_celula` lê as células e devolve os dias com órfãs da ata; isso não estabelece, sem rodar a sonda, a igualdade das contagens com a referência fornecida. ([leitor_celula.py:350](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/services/leitor_celula.py:350), [leitor_celula.py:418](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/services/leitor_celula.py:418))
-- **VIVA:** `grade_espelho_janela` é a porta de recálculo e `classificar_orfas` é a porta de classificação; uma execução na sombra não prova o resultado da extração de produção. ([utils.py:2334](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/utils.py:2334), [orfa_classe.py:53](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/orfa_classe.py:53))
-- **MARCO:** o leitor transporta `acesa_lavrada`, hora, tipo real, dispensa e isenção, mas não uma PK de ocupante. A regra de candidato único fornecida permite emitir a PK segundo o critério pedido; não prova por si só a decisão interna do casador. ([leitor_celula.py:114](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/escala/services/leitor_celula.py:114))
-- **DONO:** `InsumosDoDono.dono` pode retornar `None` com `sem_motor=True`; esse valor deve ser mantido. O resultado para cada caso continua [não verificado]. ([e6_oraculo.py:182](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/management/commands/e6_oraculo.py:182))
-- **col214:** `turnos_do_colab` chama `parear_turnos` e retorna turnos com entrada, saída e batidas; o par da batida indicada continua [não verificado] sem a execução. ([turnos.py:43](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:43), [turnos.py:1850](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1850), [turnos.py:1997](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/ponto/turnos.py:1997))
-
-Também não verifiquei o `envelope.sh` na cópia. O `bin/sonda_leitura.sh` diretamente cria ou reescreve arquivos em `logs/` e acrescenta uma trilha; portanto, a exigência de não escrever em `logs/` do host depende do envelope mencionado no contrato. ([sonda_leitura.sh:115](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:115), [sonda_leitura.sh:248](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/bin/sonda_leitura.sh:248), [não verificado])
-
-_7176 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7182 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
