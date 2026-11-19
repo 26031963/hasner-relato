@@ -1,7 +1,232 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 12:19** · publicado em **19/11/2026 12:20** (UTC-3)
+> Ultima resposta processada: **19/11/2026 12:25** · publicado em **19/11/2026 12:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 12:25 · sessao 38b21ec9d394 · CADEIA-20-PASSO-1 · construtor · origem=Code
+
+**A volta 2 permanece incompleta e não certificada.** A implementação e os testes foram escritos, mas o ambiente disponível não tem `django.core`, então não foi possível executar os REDs de lavra nem o teste de teto de consultas [não verificado]. A relavra e as medidas de sombra também não foram executadas [não verificado]. [nao verificado]
+
+A grade agora transporta os turnos e as pausas avulsas por segmento ([utils.py:1909](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1909), [utils.py:2084](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:2084)). A lavra seleciona as pausas do segmento que contém o dia atribuído pela grade, grava `razoes_orfas` ao lado de `orfas` e conta sobras sem razão; na grade legada, não grava a chave de razões ([cartorio.py:959](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/services/cartorio.py:959)). A lavra de CXR é carregada uma vez por chamada quando não é fornecida ([cartorio.py:1019](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/services/cartorio.py:1019)).
+
+Os testes novos cobrem as seis razões no encaixe, idempotência da função de lavra, lista vazia, legado, marca desconhecida, seleção do segmento dono e teto para duas janelas ([test_cadeia20_lavra.py:32](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_lavra.py:32), [test_cadeia20_lavra.py:82](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_lavra.py:82)). **Esses testes não foram executados**, nem foi demonstrado que ficam vermelhos na base anterior [não verificado]. O comando tentou executá-los, mas falhou na importação do Django: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_lavra escala.tests.test_cadeia20_coletor escala.tests.test_razao_da_sobra --settings=config.settings.base --noinput
+```
+
+Executei isoladamente os seis mutantes das razões do **juiz existente**, com substituições em memória e dependências mínimas: cada teste indicado no executor matou seu mutante ([cadeia20_mutantes.py:26](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/cadeia20_mutantes.py:26)). Isso não valida mutantes do transporte ou da lavra recém-alterados [não verificado]. Para reproduzir todos ou um ramo: [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/cadeia20_mutantes.py
+PYTHONDONTWRITEBYTECODE=1 python3 escala/tests/cadeia20_mutantes.py NOME_DA_RAZAO
+```
+
+Inventário desta volta: [utils.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1909), [cartorio.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/services/cartorio.py:959), [test_cadeia20_lavra.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_lavra.py:1) e [cadeia20_mutantes.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/cadeia20_mutantes.py:1). A sintaxe desses arquivos e `git diff --check` passaram; não houve commit [não verificado por certificador]. [nao verificado]
+
+## 19/11 12:23 · sessao 9cc17ec5e76e · E4D · censo · origem=Code
+
+**Perguntas de lei: 0**, conforme o aval V2 fornecido, que declara aplicar leis existentes e fornece inclusive a frase para o caso de se exigir corte literal para o novo ato [não verificado]. A condição que não fecha hoje é técnica: a porta limpa a projeção, mas a leitura da sequência não reconhece um ato de saneamento; também não achei uma função de replay que grave novamente a projeção a partir do log de atos. [validacao.py:428](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:428), [models.py:4295](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4295).
+
+O aval V2 fornecido substitui integralmente o brief anterior: determina um ato genérico de saneamento com a lei em campo, criado na D3 antes da limpeza das duas elegíveis; as 109 entregues, 8.709 validadas e 804 materializadas ficam intactas [não verificado]. As contagens, os dois PKs e a ausência de limpezas são **dados da sonda fornecida**, não medições que eu tenha repetido [não verificado]. O código contém a lista fechada `(38251, 38252)`. [validacao.py:378](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:378).
+
+### 1. Censo dos leitores de tipo
+
+O script abaixo faz uma **varredura AST de candidatos**, não uma prova automática de tipos Python: ele procura atributos, nomes de constantes, palavras-chave ORM, subscritos, `getattr`, `match` e literais de tipos em todo `app/`, inclusive quando a classe foi importada com apelido. Ele pode trazer falsos positivos de outros modelos e não consegue provar a origem de valores propagados dinamicamente entre funções; por isso a atribuição e as consequências da tabela foram examinadas no código. O script é entregue como texto; não foi criado arquivo nem executado [não verificado].
+
+```python
+#!/usr/bin/env python3
+"""Candidatos AST a leitores/escritores do tipo de DecisaoPergunta.
+
+Executar da raiz da copia. Somente abre arquivos para leitura e escreve stdout.
+Saida ampla de proposito: exige revisao humana da origem de cada valor.
+"""
+import ast
+from pathlib import Path
+
+RAIZ = Path("app")
+EXCLUIR = {"tests", "migrations", "__pycache__"}
+CAMPOS = {"ato", "ato__in"}
+CONSTANTES = {
+    "RESPOSTA", "VALIDACAO", "DEVOLUCAO", "RECUSA", "REABERTURA",
+    "SILENCIO", "RETRATACAO", "ABSORCAO", "ATOS", "ATOS_COM_FOTO",
+    "_LIMPAM_VALIDACAO", "_LIMPAM_RESPOSTA",
+}
+LITERAIS = {
+    "resposta", "validacao", "devolucao", "recusa", "reabertura",
+    "silencio", "retratacao", "absorcao",
+}
+
+
+def partes(no):
+    if isinstance(no, ast.Name):
+        return no.id
+    if isinstance(no, ast.Attribute):
+        return partes(no.value) + "." + no.attr
+    return ""
+
+
+class Censo(ast.NodeVisitor):
+    def __init__(self, caminho):
+        self.caminho = caminho
+        self.escopo = []
+        self.achados = set()
+
+    def registrar(self, no, motivo):
+        self.achados.add((
+            no.lineno,
+            ".".join(self.escopo) or "<modulo>",
+            motivo,
+            ast.unparse(no).replace("\n", " "),
+        ))
+
+    def visit_ClassDef(self, no):
+        self.escopo.append(no.name)
+        self.generic_visit(no)
+        self.escopo.pop()
+
+    def visit_FunctionDef(self, no):
+        self.escopo.append(no.name)
+        self.generic_visit(no)
+        self.escopo.pop()
+
+    visit_AsyncFunctionDef = visit_FunctionDef
+
+    def visit_ImportFrom(self, no):
+        for alias in no.names:
+            if alias.name == "DecisaoPergunta":
+                self.registrar(no, "import da classe / apelido")
+        self.generic_visit(no)
+
+    def visit_Attribute(self, no):
+        if no.attr == "ato" or no.attr in CONSTANTES:
+            self.registrar(no, "atributo ato ou constante")
+        self.generic_visit(no)
+
+    def visit_Name(self, no):
+        if no.id in CONSTANTES:
+            self.registrar(no, "nome de constante")
+        self.generic_visit(no)
+
+    def visit_keyword(self, no):
+        if no.arg in CAMPOS:
+            self.registrar(no.value, "keyword ORM ou construtor: " + no.arg)
+        self.generic_visit(no)
+
+    def visit_Subscript(self, no):
+        if isinstance(no.slice, ast.Constant) and no.slice.value == "ato":
+            self.registrar(no, "subscrito ato")
+        self.generic_visit(no)
+
+    def visit_Call(self, no):
+        if (partes(no.func) == "getattr" and len(no.args) >= 2
+                and isinstance(no.args[1], ast.Constant)
+                and no.args[1].value == "ato"):
+            self.registrar(no, "getattr ato")
+        self.generic_visit(no)
+
+    def visit_Match(self, no):
+        self.registrar(no, "match: revisar sujeito e padroes")
+        self.generic_visit(no)
+
+    def visit_Constant(self, no):
+        if isinstance(no.value, str) and no.value in LITERAIS | CAMPOS:
+            self.registrar(no, "literal: revisar contexto")
+        self.generic_visit(no)
+
+
+for caminho in sorted(RAIZ.rglob("*.py")):
+    if any(parte in EXCLUIR for parte in caminho.parts):
+        continue
+    try:
+        fonte = caminho.read_text(encoding="utf-8")
+        arvore = ast.parse(fonte, filename=str(caminho))
+    except (OSError, UnicodeError, SyntaxError) as exc:
+        print(f"ERRO {caminho}: {exc}")
+        continue
+    visitante = Censo(caminho)
+    visitante.visit(arvore)
+    for linha, escopo, motivo, expressao in sorted(visitante.achados):
+        print(f"{caminho}:{linha}\t{escopo}\t{motivo}\t{expressao}")
+```
+
+Na coluna “conhecer”, **sim** significa que o comportamento exigido depende de tratamento; **ignorar** significa que não deve atribuir ao saneamento o significado dos tipos que seleciona. A decisão de desenho sobre o novo ato vem do aval fornecido [não verificado].
+
+| Local e função | Leitura e comportamento atual se chegar o tipo novo | Conhecer? |
+|---|---|---|
+| [models.py:1692](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:1692), `ressuscitar_perguntas` | Procura a linha `VALIDACAO` correspondente ao instante vigente para recuperar o autor; o novo tipo não casa. | Ignorar nessa busca. |
+| [models.py:3551](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:3551), `q_validada_pelo_ato` | Alias `D`; seleciona `VALIDACAO` e atos que a limpam. O novo tipo não é considerado limpador nem validação. | Ignorar **para os casos elegíveis desta limpeza**, que já não têm validação; efeito para outros saneamentos genéricos [não verificado]. |
+| [models.py:3802](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:3802), `respostas_anteriores` | Trata `RESPOSTA` e `ATOS_COM_FOTO`; o novo tipo passa sem alterar `vigente` nem a lista. | Precisa ser avaliado como efeito de limpeza: deixar `vigente` anterior pode alterar quais respostas posteriores aparecem no histórico. A apresentação desejada não está especificada [não verificado]. |
+| [models.py:4203](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4203), `DecisaoPergunta.Meta` | Restrições distinguem absorção, foto, marca de ressuscitação e resposta que mantém validação. Para outro tipo, exigem respectivamente vínculos de absorção e foto nulos e as duas marcas falsas. | Conhecer no desenho do esquema: um campo de lei deve ser definido; não se pode reutilizar os campos protegidos com valores proibidos. |
+| [models.py:4221](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4221), `es_da_ressuscitacao` | Só reconhece `REABERTURA` marcada; saneamento retorna falso. | Ignorar como ressuscitação. |
+| [models.py:4255](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4255), `linhas_da_projecao_sem_linha` | Busca correspondências somente de resposta e validação; o novo ato não impede a fotografia dessas linhas. | Ignorar como correspondência de resposta/validação. A ordem da fotografia antes de limpar continua relevante. |
+| [models.py:4292](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4292), `_resposta_desfaz_validacao` | Só uma `RESPOSTA` com a marca falsa satisfaz o predicado; saneamento retorna falso. | Ignorar como resposta. |
+| [models.py:4309](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4309), `leitura` | Monta sequência real mais passivo da projeção; só resposta, validação e os conjuntos de limpeza mudam os três valores. O novo ato passa sem efeito, deixando a resposta anterior vigente na leitura. | **Sim:** para L-130, precisa interpretar o ato como par zerado. Essa função lê, mas não grava a projeção. |
+| [tarefa_do_dia.py:142](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/tarefa_do_dia.py:142), `_pela_decisao` | Alias de import `D`. Se saneamento for o último ato recebido, cai em `ato_desconhecido:<tipo>, None`, não em `devolvida_ao_colaborador`. | **Deve ignorá-lo na escolha da decisão para a fila**, conforme o aval; hoje não o ignora. O resultado exato após filtragem depende dos atos anteriores. |
+| [tarefa_do_dia.py:262](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/tarefa_do_dia.py:262), `_tarefa_pura` | Se o último ato for literalmente `retratacao`, exclui a pergunta; saneamento posterior faz esse teste ser falso. | Precisa que a sequência fornecida respeite a decisão de ignorar saneamento na fila; caso contrário pode encobrir uma retratação anterior. |
+| [tarefa_do_dia.py:390](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/tarefa_do_dia.py:390), carga dos fatos | Remove apenas ressuscitação marcada e identifica `RETRATACAO` posterior ao horizonte. O saneamento entra na lista quando está no horizonte; depois dele não conta como retratação. | **Conhecer para excluí-lo da sequência usada pela fila**, preservando a leitura apropriada da sequência para os demais fins. |
+| [backfill_decisoes_pergunta.py:63](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/backfill_decisoes_pergunta.py:63), `linhas_a_criar` | Dicionário indexado pelos tipos gerados por `linhas_da_projecao_sem_linha`, resposta e validação; não indexa diretamente todos os atos reais. | Ignorar enquanto aquela função continuar gerando apenas esses dois tipos; se passar a gerar outro, a chave não declarada pode falhar. |
+| [backfill_decisoes_pergunta.py:109](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/backfill_decisoes_pergunta.py:109), `contador_validada_projetada_sem_linha` | Conta somente dicionários de validação gerados pela fotografia. | Ignorar como validação. |
+| [backfill_decisoes_pergunta.py:121](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/backfill_decisoes_pergunta.py:121) e [linha 342](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/backfill_decisoes_pergunta.py:342), `admin_decidiu_sem_ato` e `aplicar` | Consultam especificamente existência de `SILENCIO` ou `VALIDACAO`; saneamento sozinho não satisfaz o filtro. | Ignorar como esses atos; consequência operacional em outros estados de backfill [não verificada]. |
+
+O catálogo atual tem oito tipos, `choices=ATOS`, e não tem campo de lei declarado; `choices` e as restrições existentes precisam ser considerados na implementação, sem presumir que já representem o novo ato. [models.py:4152](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4152).
+
+**Limite do censo:** a tabela cobre os pontos identificados pela leitura e buscas textuais de `ato`, constantes e usos de `DecisaoPergunta`; o script AST acima não foi executado, portanto não posso afirmar que sua saída foi reconciliada integralmente com a tabela [não verificado].
+
+### 2. Escritores de `DecisaoPergunta`
+
+O ponto central observado é `registrar`, que faz `bulk_create` dentro de `transaction.atomic()`; o `save` do modelo permite inserção sem PK e recusa atualização de linha existente. [models.py:4227](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4227), [models.py:4329](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4329).
+
+Chamadas de produção encontradas à porta de escrita:
+
+- Modelo: [models.py:1654](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:1654), [1700](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:1700), [2087](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:2087), [2219](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:2219) e [3211](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:3211).
+- Validação: [validacao.py:173](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:173), [279](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:279), [354](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:354) e [439](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:439).
+- Emissão e respostas: [disputa_emissao.py:1532](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/disputa_emissao.py:1532), [1639](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/disputa_emissao.py:1639), [1686](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/disputa_emissao.py:1686) e [1708](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/disputa_emissao.py:1708).
+- Outros: [materializacao.py:1061](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/materializacao.py:1061), [veredito_celula.py:195](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/ponto/services/veredito_celula.py:195), [backfill_fio_morto_e4b.py:141](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/backfill_fio_morto_e4b.py:141) e [backfill_decisoes_pergunta.py:351](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/backfill_decisoes_pergunta.py:351).
+
+Não encontrei outra chamada direta de `.objects.create` ou `bulk_create` para essa classe na busca textual; escritas indiretas ou dinâmicas não são descartadas por essa busca [não verificado].
+
+### 3. Porta e comando atuais
+
+`devolver_instante_sem_texto_l130` trava e relê a pergunta dentro de um `atomic`, consulta `impedimento_estoque_l130`, fotografa eventual resposta/validação sem linha e chama `registrar` para essas linhas. Depois zera `respondida_em` e `resposta_colab` pela porta de lote; essa porta também grava `materializada_em=None`, `materializada_por=None` e `via_resolucao=''`. A elegibilidade já recusa uma pergunta com `materializada_em` ou `validada_em` preenchido. [validacao.py:381](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:381), [validacao.py:428](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:428), [models.py:3484](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:3484).
+
+A porta registra o evento `l130_instante_sem_texto_devolvida`, com antes/depois do par e da via, ator e IP; `evento` escreve `LogAuditoria`, e retorno `None` causa exceção dentro do atomic. Hoje a linha de decisão ali é apenas a fotografia eventualmente faltante, não um ato de limpeza. [validacao.py:434](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:434), [validacao.py:449](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:449), [observ.py:94](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/core/observ.py:94).
+
+O lugar concreto para o ato compensador é a chamada a `DecisaoPergunta.registrar` **depois da fotografia e dentro do atomic da porta**, junto da mudança da pergunta e antes de concluir a transação; `registrar` tem atomic próprio aninhado. A ordem e o instante do novo ato precisam preservar o replay ordenado por `(ato_em, pk)`. [validacao.py:436](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:436), [models.py:4308](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4308), [models.py:4337](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4337).
+
+O comando é DRY por padrão. Com `--apply`, exige autor staff e conjunto elegível exatamente igual à lista, grava antes um JSON de reversão e envolve **as duas chamadas** em atomic externo, com travas e releitura; divergência ou contagem incompleta desfaz as escritas do banco. O arquivo de reversão é criado antes desse atomic e, portanto, não é revertido por rollback do banco. [estoque_l130_instante_sem_texto.py:35](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:35), [linha 54](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:54), [linha 57](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:57), [linha 69](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/management/commands/estoque_l130_instante_sem_texto.py:69).
+
+### 4. Replay
+
+Não achei função de produção que **reconstitua e grave** a projeção de `PerguntaDisputa` apenas a partir do log de atos [não verificado]. A função mais próxima, `DecisaoPergunta.leitura`, calcula valores em memória e ainda incorpora o passivo da própria projeção; ela não é, portanto, um replay puro do log. Hoje ela ignora um tipo novo e conserva o efeito da resposta anterior. [models.py:4295](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4295), [models.py:4317](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/models.py:4317).
+
+Logo, o caso “replay reproduz pendente” precisa de uma função de replay/projetor identificada ou construída na obra e de tratamento do novo ato; atribuí-lo hoje a uma função existente que grave a projeção seria [não verificado]. O aval fornecido determina replay do log sem saneamento embutido e reprodução das entregues como estão [não verificado].
+
+### 5. Casos RED pela regra
+
+| Caso | Função real a exercitar e resultado exigido |
+|---|---|
+| Limpar uma vez | `devolver_instante_sem_texto_l130`: elegível retorna `True`, par fica `(None, '')`, evento de auditoria existe e deve existir o novo ato com lei L-130. A última parte ainda não existe hoje. [validacao.py:408](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:408) |
+| Limpar duas vezes | A mesma porta: segunda chamada retorna `None`, pois `impedimento_estoque_l130` deixa de reconhecer instante sem texto; exigir uma única linha do **novo ato** e uma única linha do evento de limpeza, distinguindo-as da possível fotografia `RESPOSTA`. [validacao.py:390](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:390), [validacao.py:432](/home/ronald/codex_ws/ff5c27a90996d1b7e2b4a9c18c8829e0e6d797ba/app/chamados/services/validacao.py:432) |
+| Replay reproduz pendente | Exercitar o futuro projetor/replay real após resposta antiga e saneamento; exigir par zerado. Hoje `DecisaoPergunta.leitura` é a função real disponível para testar leitura, mas não grava projeção e ignora o novo ti
+
+[truncado em 20000 de 22339 caracteres]
+
+## 19/11 12:21 · sessao ca4b76e89fd7 · CADEIA-20-PASSO-1 · construtor · origem=Code
+
+**A volta 2 não está concluída.** A razão ainda não é gravada na ata; faltam o transporte pela grade, a leitura da lavra em `julgar_colab`, os REDs i–vi completos, o teto de consultas e os mutantes por razão. Não houve certificação nem medidas de sombra [não verificado].
+
+O encaixe iniciado passa o coletor opcional pela casca e pelo corpo de turnos, com cópias de pausas por segmento ([turnos.py:1850](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1850), [turnos.py:1997](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1997)). A marca desconhecida agora preserva `None` ([orfa_classe.py:76](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:76)). Acrescentei testes para esses dois pontos, mas o teste do coletor ainda não prova a seleção da cópia pelo dia dono ([test_cadeia20_coletor.py:12](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_coletor.py:12)). [nao verificado]
+
+A implementação restante precisa conservar o instante da sobra também nos caminhos em que a grade guarda apenas a hora, inclusive no alinhamento de marcos ([utils.py:673](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:673), [utils.py:1733](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/utils.py:1733)). Não concluí esse transporte.
+
+A sintaxe dos três arquivos passou na análise com `ast.parse`; `git diff --check` também passou [não verificado por certificador]. O comando Django abaixo não executou os testes: `python3` disponível não tem Django instalado. Nenhum mutante foi executado. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test escala.tests.test_cadeia20_coletor escala.tests.test_razao_da_sobra --settings=config.settings.base --noinput
+```
+
+Arquivos tocados: [orfa_classe.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/orfa_classe.py:76), [turnos.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/ponto/turnos.py:1850) e [test_cadeia20_coletor.py](/home/ronald/wt-codex-cadeia-20-passo-1-112113/app/escala/tests/test_cadeia20_coletor.py:12). Não fiz commit, conforme a proibição expressa no pedido. Perguntas de lei: **[não verificado]**. [nao verificado]
 
 ## 19/11 12:19 · sessao 8d62a2ce206d · CADEIA-20-PASSO-1 · construtor · origem=Code
 
@@ -1144,266 +1369,4 @@ Uma troca que reutilize a **mesma consulta de batidas**, converta os instantes l
 
 Na **Cadastro x Realidade**, a view chama `lista`, que lê `proposta` da lavra e passa o valor ao botão; esse caminho não recalcula a proposta no clique de leitura da tela. A lavra chama `anomalias_da_frota`, que chama o detector para colaboradores com assinatura. O detector também roda em outros caminhos: coleta do PDF de propostas, comando de limbo e `escala_auto`. [app/escala/views.py:512] [app/escala/services/cadastro_realidade.py:960] [app/ponto/services/esmeril_espelho.py:239] [app/ponto/services/esmeril_espelho.py:321] [app/escala/proposta_pdf.py:43] [app/escala/management/commands/propor_escala_limbo.py:35] [app/escala/services/escala_auto.py:117]
 
-## 19/11 11:08 · sessao df35418f7377 · ESCALA-NAO-DESCREVE · censo · origem=Code
-
-O caminho de **Cadastro x realidade usa a lavra do `MetricaSnapshot`** para a coluna “Destino sugerido”; `botao_da_proposta` não chama o detector. A ausência da chave estruturada `proposta` numa lavra não implica ausência da frase `destino`: a tela lê as duas chaves separadamente. Isso torna compatível, no código, uma frase visível com a falta do botão baseado na proposta estruturada. [cadastro_realidade.py:960](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:960), [cadastro_realidade.py:982](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:982), [cadastro_x_realidade.html:32](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:32).
-
-**Limite do censo:** não consegui provar exaustividade para referências calculadas dinamicamente, fluxo arbitrário de dicionários ou a frase exata pedida. Abaixo estão os sítios identificados e o script efetivamente executado; ele é uma busca estática de candidatos, não uma prova de ausência de toda referência dinâmica. Também **NAO ACHEI** confirmação do hash da cópia: `git rev-parse HEAD` respondeu que o diretório não é um repositório Git.
-
-## (a) Chamadores e leitores encontrados
-
-**Produção.**
-
-- `medir_padrao`: chamada por `propor_escala` em [detector_proposta.py:124](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:124).
-- `_casa_template`: chamada por `propor_escala` em [detector_proposta.py:130](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:130).
-- `propor_escala`: quatro chamadas encontradas, todas com import local: `coletar` em [proposta_pdf.py:43](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/proposta_pdf.py:43); `handle` em [propor_escala_limbo.py:22](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/management/commands/propor_escala_limbo.py:22); `propostas_do_vinculo` em [escala_auto.py:117](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/escala_auto.py:117); e `anomalias_da_frota` em [esmeril_espelho.py:215](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:215).
-
-**Testes.** As chamadas diretas encontradas estão em [test_detector_proposta.py:64](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_detector_proposta.py:64), :82, :94, :105, :119, :130, :157 e :180. Os testes substituem a função por caminho textual em [test_escala_nao_descreve.py:83](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_escala_nao_descreve.py:83) e :110; há inspeção textual em [test_detector_proposta.py:189](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_detector_proposta.py:189) e referências de contrato em [test_medida_turno_do_par.py:180](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/core/tests/test_medida_turno_do_par.py:180) e :277.
-
-**Alias, `getattr`, templates e JS.** NAO ACHEI chamada adicional por esses mecanismos na busca textual `rg -n 'medir_padrao|propor_escala|_casa_template' --glob '*.{py,html,js}' app` e na busca AST abaixo. Isso não exclui nome construído em tempo de execução. O template lê dados derivados, como `x.destino` e `x.proposta.codigo`, em [cadastro_x_realidade.html:32](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:32).
-
-### Chaves e leitores identificados
-
-Na tabela, **D** = [detector_proposta.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:53), **PDF** = [proposta_pdf.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/proposta_pdf.py:53), **CLI** = [propor_escala_limbo.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/management/commands/propor_escala_limbo.py:22), **Auto** = [escala_auto.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/escala_auto.py:117), **Esmeril** = [esmeril_espelho.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:241) e **Teste** = [test_detector_proposta.py](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_detector_proposta.py:64). Os números nas células são linhas desses arquivos.
-
-| Chave | Nascimento | Leitores identificados |
-|---|---|---|
-| `padrao` | D:127, 132, 157 | PDF:77,121; CLI:41; Auto:122,124; Teste:65–67,83,95,106,159,161 | [nao verificado]
-| `proposta` | D:127,132,158 | PDF:75,130–131; CLI:39,50–53; Auto:121; Esmeril:243–244,261–263; Teste:69–70,85,97,108,120,158,160 | [nao verificado]
-| `confianca` | D:127,132,157 | PDF:76; CLI:38,53,57; Auto:122; Esmeril:247,264; Teste:68,84,96,107 | [nao verificado]
-| `porque` | D:128,133,157 | PDF:138; CLI:54,57; Auto:124; Esmeril:262; Teste:68–69,84,98,121 | [nao verificado]
-| `padrao.dias` | D:67,87 | D:125; PDF:77,124; CLI:47; Auto:122,124; Teste:95,106,159,161 | [nao verificado]
-| `padrao.marcos_moda` | D:67,88 | D:105,136,145,153; PDF:124; CLI:47; Teste:65,83 | [nao verificado]
-| `padrao.marcos_freq` | D:89 | D:137,145,153. Não nasce no retorno sem dados de D:67–69; o ramo de poucos dias retorna antes da leitura em D:125–129 |
-| `padrao.entrada` | D:67,90 | D:102,104,135; PDF:125; CLI:47; Teste:66 | [nao verificado]
-| `padrao.saida` | D:67,91 | D:102,104,135; PDF:125; CLI:47; Teste:67 | [nao verificado]
-| `padrao.duracao_h` | D:68,92 | PDF:126; CLI:48 |
-| `padrao.dispersao_entrada_min` | D:68,93 | D:141,146,155; PDF:127; CLI:48 |
-| `padrao.dows` | D:68,94 | PDF:128; CLI:49 |
-| `padrao.padrao_dias` | D:69,95 | PDF:128; CLI:49 |
-| `proposta.tipo_escala_id` | D:158 | Auto:122,125; Esmeril:246; a cópia lavrada é lida em [cadastro_realidade.py:824](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:824), :843–849 e [regua_defesa.py:307](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:307) |
-| `proposta.codigo` | D:158 | PDF:130; CLI:52; Auto:123; Esmeril:246,264; Teste:70,85; cópia lavrada em [cadastro_x_realidade.html:32](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:32) e [views.py:505](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/views.py:505) |
-| `proposta.descricao` | D:159 | Auto:123; Esmeril:264 |
-| `proposta.ciclo` | D:159 | PDF:131; CLI:53 |
-| `proposta.horario` | D:160 | PDF:130; CLI:52; Auto:123; Esmeril:264 |
-
-Os testes da lavra estruturada e do botão também leem as **cópias** das chaves, por exemplo em [test_escala_nao_descreve.py:98](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/tests/test_escala_nao_descreve.py:98) e :155–165. A tabela registra os leitores identificados, não prova todos os possíveis leitores indiretos.
-
-### Script AST executado
-
-Foi executado via `python3 -B` com o texto abaixo na entrada padrão; não foi criado arquivo. Ele percorre os `.py`, identifica imports locais e apelidos dos três nomes, chamadas e strings com esses nomes; para chaves, imprime acessos literais nos arquivos previamente identificados. A busca de templates e JS foi complementar, por `rg`.
-
-```python
-import ast, pathlib
-
-names = {'medir_padrao', 'propor_escala', '_casa_template'}
-keys = {
-    'padrao', 'proposta', 'confianca', 'porque', 'dias',
-    'marcos_moda', 'marcos_freq', 'entrada', 'saida',
-    'duracao_h', 'dispersao_entrada_min', 'dows', 'padrao_dias',
-    'tipo_escala_id', 'codigo', 'descricao', 'ciclo', 'horario',
-}
-key_files = {
-    'app/escala/detector_proposta.py',
-    'app/escala/proposta_pdf.py',
-    'app/escala/management/commands/propor_escala_limbo.py',
-    'app/escala/services/escala_auto.py',
-    'app/ponto/services/esmeril_espelho.py',
-    'app/escala/tests/test_detector_proposta.py',
-}
-
-for path in pathlib.Path('.').rglob('*.py'):
-    try:
-        tree = ast.parse(path.read_bytes(), filename=str(path))
-    except (SyntaxError, UnicodeError, OSError) as e:
-        print('ERRO', path, e)
-        continue
-
-    aliases = set(names)
-    for n in ast.walk(tree):
-        if isinstance(n, ast.ImportFrom) and n.module == 'escala.detector_proposta':
-            for a in n.names:
-                if a.name in names:
-                    aliases.add(a.asname or a.name)
-                    print(f'{path}:{n.lineno}: import {a.name} as {a.asname or a.name}')
-
-    for n in ast.walk(tree):
-        if isinstance(n, ast.Call):
-            f = n.func
-            if (isinstance(f, ast.Name) and f.id in aliases
-                    or isinstance(f, ast.Attribute) and f.attr in names):
-                print(f'{path}:{n.lineno}: chamada {ast.unparse(f)}')
-        if (isinstance(n, ast.Constant) and isinstance(n.value, str)
-                and any(x in n.value for x in names)):
-            print(f'{path}:{n.lineno}: string {n.value[:100]!r}')
-
-    if str(path) in key_files:
-        for n in ast.walk(tree):
-            if (isinstance(n, ast.Subscript) and isinstance(n.ctx, ast.Load)
-                    and isinstance(n.slice, ast.Constant)
-                    and n.slice.value in keys):
-                print(f'{path}:{n.lineno}: chave {ast.unparse(n)}')
-            if (isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute)
-                    and n.func.attr == 'get' and n.args
-                    and isinstance(n.args[0], ast.Constant)
-                    and n.args[0].value in keys):
-                print(f'{path}:{n.lineno}: get {ast.unparse(n)}')
-```
-
-## (b) Tela e frase
-
-1. A rota chama `cadastro_x_realidade`; a view chama `lista` e renderiza o template: [urls.py:14](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/urls.py:14), [views.py:512](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/views.py:512).
-2. `lista` chama `ler_lavra`, lê `destino` e `proposta`, coloca ambos na linha e consulta o botão: [cadastro_realidade.py:960](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:960), :966–972 e :982–987. `ler_lavra` seleciona o snapshot `esmeril_espelho` e devolve `detalhe`: [esmeril_espelho.py:359](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:359).
-3. Na produção da lavra, `anomalias_da_frota` chama o detector para pessoas com assinatura, transforma o retorno em frase com `_destino` e guarda separadamente a proposta estruturada: [esmeril_espelho.py:233](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:233), :241–247 e :259–264. `lavrar` chama o produtor e grava o resultado no snapshot: [esmeril_espelho.py:321](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:321), :342–355.
-4. O template mostra `x.destino`; o botão depende de `x.botao_proposta`: [cadastro_x_realidade.html:24](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/templates/escala/cadastro_x_realidade.html:24), :32. O POST relê a lavra antes de aplicar: [views.py:493](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/views.py:493).
-
-**Frase pedida:** NAO ACHEI o formato literal “entradas próximas … % de … dias” na cópia com `rg -n -i 'entradas|pr[oó]ximas' app --glob '*.py' --glob '*.html' --glob '*.js'` nem com a busca por `entrada real` e `% de dias` em `app/escala`, `app/templates/escala` e `app/ponto/services`.
-
-Há, contudo, uma frase **parecida** na assinatura C7: `diagnostico_regua` produz `real = 'E~HH:MM (N% de N dias)'` em [regua_defesa.py:167](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:167); o diagnóstico é copiado para a lavra do termômetro em [regua_na_lista.py:29](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/regua_na_lista.py:29), :42–64, e `_termometro` o formata como detalhe C7 em [cadastro_realidade.py:315](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:315). Não consegui provar que essa seja a frase observada para col451.
-
-Para essa frase semelhante e a coluna de destino, são **medidas distintas**:
-
-- A régua usa, por padrão, `ref - 30 dias` até `ref`, com possível reavaliação de 14 dias: [regua_defesa.py:100](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:100), :118–129 e :181–192. O Esmeril chama o detector de `hoje - 60 dias` até ontem: [esmeril_espelho.py:241](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:241).
-- A régua desloca para a véspera batidas anteriores ao início declarado menos duas horas e exige ao menos duas por grupo: [regua_defesa.py:151](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:151). O detector agrupa por data civil local: [detector_proposta.py:57](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:57).
-- Ambos consultam `batidas_apuraveis`, mas cada um deriva seu agrupamento; a régua declara que não usa o turno pareado, e o detector documenta a circularidade com o cadastro: [regua_defesa.py:118](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/regua_defesa.py:118), [detector_proposta.py:15](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:15).
-
-## (c) Encaixe das decisões e leitores afetados
-
-1. **Amostra com turno fechado:** encaixa na alimentação e agregação de `medir_padrao`, hoje em [detector_proposta.py:55](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:55). O juiz devolve `entrada`, `saida`, `batidas` e `aberto` em [turnos.py:43](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:43); `turnos_do_colab` e sua dependência de escalas/células estão em [turnos.py:1850](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1850) e :1892–1920. Leitores afetados: as chaves de `padrao` e os quatro consumidores de `propor_escala` da tabela.
-2. **Turno iniciado na janela conta inteiro:** encaixa na mesma fronteira de amostragem em [detector_proposta.py:57](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:57); a porta de turnos já declara janela por `data_turno` e carga com margem em [turnos.py:1847](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1847). Leitores afetados: os mesmos consumidores da amostra.
-3. **Menos de 80% no mesmo eixo implica abstenção:** encaixa antes do retorno de proposta em [detector_proposta.py:130](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:130). O `0.8` atual mede **frequência do número de marcos**, e sua falha hoje produz confiança média, em [detector_proposta.py:137](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:137) e :147–157. Além dos leitores da tabela, o PDF classifica qualquer ausência de proposta com dias suficientes como “sem template” em [proposta_pdf.py:74](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/proposta_pdf.py:74), :99–105.
-4. **Desempate por `tipo_ciclo` × `padrao_dias`:** encaixa na escolha do melhor candidato em [detector_proposta.py:105](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:105), :107–119; `padrao_dias` nasce em :79–95. Mudam os leitores de `proposta` e seus campos listados acima.
-5. **Excluir `hora_inicio == hora_fim`:** encaixa no filtro de candidatos em [detector_proposta.py:107](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/detector_proposta.py:107). Mudam os mesmos leitores de `proposta`, inclusive frase e botão derivados da lavra em [esmeril_espelho.py:241](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/esmeril_espelho.py:241) e [cadastro_realidade.py:971](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/services/cadastro_realidade.py:971).
-
-## 19/11 11:03 · sessao 0fc23b4a7ea9 · E4C-F5-CONSTROI · construtor · origem=Code
-
-O teste solicitado foi acrescentado em [test_e4c_f5_contador_texto.py:40](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:40). `git diff --check` passou. Conforme solicitado, não executei o teste nem os mutantes; a mordida permanece **[não verificado]**. [nao verificado]
-
-Comando do caso positivo, para o certificador executar com banco de teste configurado ([ci.py:6](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/config/settings/ci.py:6)): [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_vigia_carimba_divergencia_de_texto --settings=config.settings.ci -v 2
-```
-
-Os comandos seguintes aplicam cada mutante diretamente ao arquivo de produção. Devem ser executados **separadamente em cópias descartáveis**, seguidos do comando de teste acima. [nao verificado]
-
-**M_censo_zero** — espera-se falha na asserção do censo em [test_e4c_f5_contador_texto.py:52](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:52) **[não verificado]**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-from pathlib import Path
-p = Path('chamados/management/commands/vigiar_fio_morto.py')
-s = p.read_text()
-antes = '                              divergencia_texto_resposta=texto_divergente,'
-depois = '                              divergencia_texto_resposta=0,'
-assert s.count(antes) == 1
-p.write_text(s.replace(antes, depois, 1))
-PY
-```
-
-**M_fora_do_esperado** — espera-se `KeyError` na consulta ao esperado em [test_e4c_f5_contador_texto.py:53](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:53) **[não verificado]**:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-from pathlib import Path
-p = Path('chamados/management/commands/vigiar_fio_morto.py')
-s = p.read_text()
-antes = '                           desligados_retidos=0, ferias_ausencia_sem_agendamento=0, ferias_dia_sem_ausencia=0,\n                           divergencia_texto_resposta=0)'
-depois = '                           desligados_retidos=0, ferias_ausencia_sem_agendamento=0, ferias_dia_sem_ausencia=0)'
-assert s.count(antes) == 1
-p.write_text(s.replace(antes, depois, 1))
-PY
-```
-
-Diff obtido por `git diff -- chamados/tests/test_e4c_f5_contador_texto.py`:
-
-```diff
-diff --git a/app/chamados/tests/test_e4c_f5_contador_texto.py b/app/chamados/tests/test_e4c_f5_contador_texto.py
-index 0fdf23aa0..d0011c621 100644
---- a/app/chamados/tests/test_e4c_f5_contador_texto.py
-+++ b/app/chamados/tests/test_e4c_f5_contador_texto.py
-@@ -1,8 +1,15 @@
- """Contador de texto: divergencia real, universo por pergunta e custo em lote."""
-+import io
-+import json
-+import os
-+import tempfile
- from unittest.mock import patch
- 
-+from django.core.management import call_command
- from django.db import connection
-+from django.test import override_settings
- from django.test.utils import CaptureQueriesContext
-+from freezegun import freeze_time
- 
- from chamados.models import DecisaoPergunta as D, PerguntaDisputa
- from chamados.services.vigia_texto_resposta import contar
-@@ -30,6 +37,23 @@ class ContadorTextoTest(BaseCortes):
-             D.registrar([dict(pergunta=outro, ato=D.RESPOSTA, ato_em=RESPOSTA_EM, ato_texto='ato')])
-         self.assertEqual(contar(), (1, 3), 'dois atos na mesma pergunta: ainda UMA pergunta no universo')
- 
-+    @freeze_time('2026-11-13 12:00:00')
-+    def test_vigia_carimba_divergencia_de_texto(self):
-+        p = self.pergunta()
-+        self.responder(p)
-+        PerguntaDisputa.objects.filter(pk=p.pk).update(resposta_colab='projecao')
-+        out = io.StringIO()
-+        with tempfile.TemporaryDirectory() as pasta:
-+            carimbo = os.path.join(pasta, 'fio_morto.json')
-+            with override_settings(VIGIA_FIO_CARIMBO=carimbo):
-+                call_command('vigiar_fio_morto', stdout=out)
-+            with open(carimbo, encoding='utf-8') as arquivo:
-+                reg = json.load(arquivo)
-+        self.assertEqual(reg['censo']['divergencia_texto_resposta'], 1)
-+        self.assertEqual(reg['esperado']['divergencia_texto_resposta'], 0)
-+        self.assertIn('VFM|DIVERGENCIA_TEXTO_RESPOSTA=1 (esperado 0)', out.getvalue())
-+        self.assertGreaterEqual(reg['divergencia_texto_resposta_universo'], 1)
-+
-     def medir(self, minimo):
-         contar()  # aquece a primeira chamada fora da medida
-         with patch.object(D, 'leitura', wraps=D.leitura) as leitor:
-```
-
-LEI-AKITA: padrao=uma pergunta com divergência real, comando real e conferência do carimbo e stdout; certificação e mordida dos mutantes **[não verificado]**.
-
-## 19/11 10:58 · sessao f9b2b6327f63 · E4C-F5-CONSTROI · verificador · origem=Code
-
-**BLOQUEIA para a volta 2b.** O contador chega ao ESTADO como “fora do esperado”, mas o código examinado não o promove a **PERGUNTA no topo**. Também faltam provas de mordida para o caminho positivo completo e para a retirada dos prefetches dos leitores. [bin/fio_estado.py:121](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/bin/fio_estado.py:121), [bin/gerar_estado.py:312](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/bin/gerar_estado.py:312), [app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:88](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:88)
-
-A cópia contém os arquivos examinados, mas o diretório disponibilizado não é um repositório Git; portanto, a identidade do HEAD, a base e a integridade do diff em relação à árvore são **[não verificado]**. O resumo de runs foi fornecido pelo enunciado; os logs completos dos mutantes e o dado de produção não foram conferidos independentemente **[não verificado]**.
-
-1. **NÃO BLOQUEIA — lei B nos sítios do diff.** `espera_o_texto_do_colaborador` pega o instante da leitura e substitui nela o texto pelo da **mesma pergunta** na projeção. Se a leitura estiver pendente, espera mesmo com texto corrente; se tiver instante e o texto corrente estiver vazio após trim, também espera. [app/chamados/services/fio.py:178](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/fio.py:178), [app/chamados/juizes.py:1526](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/juizes.py:1526)
-
-   O histórico combina os instantes vigentes da leitura com o texto corrente da mesma pergunta: não emite evento de resposta ou validação cujo instante esteja vazio; para os demais, mostra o texto corrente, truncado, ou “sem resposta”. Materialização continua com instante da projeção. Assim, instante e texto podem representar **momentos diferentes**, embora não perguntas diferentes nesse laço. Isso corresponde à separação declarada no anexo de resposta B, que não está disponível como arquivo com linha **[não verificado]**. [app/chamados/services/historico.py:96](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/historico.py:96)
-
-2. **NÃO BLOQUEIA — com limites na verificação dos escritores.** O mapa relevante é:
-
-   - `respondida_em` e `resposta_colab`: a resposta humana grava ambos e registra o ato; a resposta automática também grava ambos, enquanto a cura pela trilha carimba o instante de texto já existente. A resposta humana limpa validação anterior. [app/chamados/services/disputa_emissao.py:1474](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/disputa_emissao.py:1474), [app/chamados/services/disputa_emissao.py:1671](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/disputa_emissao.py:1671), [app/chamados/services/disputa_emissao.py:1692](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/disputa_emissao.py:1692)
-   - `validada_em`: `_carimbar_validacao` grava o instante e o ato com o mesmo valor; devolução pode limpá-lo e registrar outro ato. `carimbar` também pode preencher resposta e validação na projeção. [app/chamados/services/validacao.py:161](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/validacao.py:161), [app/chamados/services/validacao.py:262](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/validacao.py:262), [app/chamados/models.py:3299](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:3299)
-   - `materializada_em`: a porta do modelo atribui o carimbo; o histórico o lê diretamente. [app/chamados/models.py:3269](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:3269), [app/chamados/services/historico.py:104](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/historico.py:104)
-   - `decisoes` é escrita por `registrar`; `leitura` ordena atos por instante e PK, acrescenta passivo da projeção sem linha correspondente e aplica reabertura, recusa e devolução. Portanto, “leitura” não significa somente linhas físicas de atos. [app/chamados/models.py:4238](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:4238), [app/chamados/models.py:4295](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:4295), [app/chamados/models.py:4329](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:4329)
-   - `divergencia_texto_resposta` é calculada pelo contador, escrita em `censo` no carimbo com esperado zero e lida genericamente pelo ESTADO. [app/chamados/services/vigia_texto_resposta.py:8](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/vigia_texto_resposta.py:8), [app/chamados/management/commands/vigiar_fio_morto.py:260](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/management/commands/vigiar_fio_morto.py:260), [bin/fio_estado.py:121](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/bin/fio_estado.py:121)
-
-   Os campos de resposta, validação e materialização são `DateTimeField`; o carimbo do vigia publica instante com offset e dia local separadamente. A uniformidade de fuso e significado em **todos** os escritores e leitores fora do diff permanece **[não verificado]**. [app/chamados/models.py:2634](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:2634), [app/chamados/models.py:3647](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:3647), [app/chamados/management/commands/vigiar_fio_morto.py:255](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/management/commands/vigiar_fio_morto.py:255)
-
-3. **BLOQUEIA — saída exigida para divergência positiva.** O contador percorre cada pergunta do queryset recebido, inclui o passivo pela leitura e soma uma divergência por pergunta; no vigia, o universo é toda a frota ou o recorte de empresas. O teste cobre divergência, passivo, recorte e dois atos na mesma pergunta. O `0 em 51.563` de produção consta somente do dado fornecido **[não verificado]**. [app/chamados/services/vigia_texto_resposta.py:8](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/vigia_texto_resposta.py:8), [app/chamados/management/commands/vigiar_fio_morto.py:191](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/management/commands/vigiar_fio_morto.py:191), [app/chamados/tests/test_e4c_f5_contador_texto.py:19](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4c_f5_contador_texto.py:19)
-
-   A comparação de textos é um predicado novo de divergência para o vigia, expressamente solicitado pelo anexo de resposta; não é chamada ao juiz registrado de pergunta respondida, que julga instante mais texto não vazio. A autorização literal do anexo não tem arquivo:linha disponível **[não verificado]**. [app/chamados/services/vigia_texto_resposta.py:16](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/vigia_texto_resposta.py:16), [app/chamados/juizes.py:1544](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/juizes.py:1544)
-
-   **Falha concreta:** com valor positivo, o leitor inclui a chave em “FORA DO ESPERADO” dentro da seção Fio morto; sua manchete continua sendo a de alcance. O gerador coloca essa seção abaixo de Fábrica, Raias e Obras interrompidas. Não há, nesse caminho, promoção a **PERGUNTA no topo**, como exige o texto fornecido. [bin/fio_estado.py:165](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/bin/fio_estado.py:165), [bin/fio_estado.py:191](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/bin/fio_estado.py:191), [bin/gerar_estado.py:312](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/bin/gerar_estado.py:312)
-
-4. **BLOQUEIA — prova de custo incompleta.** Os caminhos identificados carregam decisões em lote: cobrança, montagem do fio, histórico e contador; `coletar` carrega `perguntas__decisoes`, e `classificar` tem prefetch de contingência para suas perguntas. Não identifiquei N+1 novo nesses caminhos com o código atual. [app/chamados/services/cobranca.py:236](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/cobranca.py:236), [app/chamados/services/fio.py:262](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/fio.py:262), [app/chamados/services/historico.py:96](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/historico.py:96), [app/chamados/relatorios_disputa.py:11](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/relatorios_disputa.py:11)
-
-   Os testes comparam uma e várias perguntas e exigem chamadas à leitura; o de `coletar` cria várias disputas, necessário para expor uma consulta de contingência por disputa. Contudo, o dado fornecido só relata mutante de custo para o **contador**; a mordida à retirada de cada prefetch dos demais chamadores não está demonstrada **[não verificado]**. No fio, a contagem global de chamadas a `leitura` tampouco identifica, por si só, qual consumidor as produziu. [app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:88](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:88), [app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:121](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:121)
-
-5. **BLOQUEIA — selo positivo de ponta a ponta ausente.** Os testes novos exercitam os leitores reais para divergência de instante, reabertura, texto da projeção e histórico; o contador tem caso positivo próprio. O resumo fornecido relata morte dos mutantes correspondentes, mas os logs completos e o conteúdo exato das mutações são **[não verificado]**. [app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:42](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:42), [app/chamados/tests/test_e4c_f5_contador_texto.py:19](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4c_f5_contador_texto.py:19)
-
-   O teste vizinho de memória usa `(0, 0)` como mock: preserva sua prova específica sobre C5, mas não prova o novo contador. O teste O261 chama o contador real e conserva suas comparações anteriores, porém não demonstra publicação de divergência **positiva** nem sua chegada como PERGUNTA no topo. Assim, a igualdade com zero pode passar sem testar o caso que deve alarmar. [app/chamados/tests/test_e4a2_c5_memoria.py:118](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_e4a2_c5_memoria.py:118), [app/chamados/tests/test_o261_vigia_fio.py:825](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/tests/test_o261_vigia_fio.py:825)
-
-6. **BLOQUEIA — selo sem mordida suficiente**, pelos itens 4 e 5. O diff mistura intencionalmente duas fontes para estado e texto, e a leitura incorpora passivo; essas diferenças de significado são explícitas, mas a uniformidade de todos os escritores externos não foi esgotada **[não verificado]**. A resposta humana relê o relógio após a trava no caminho examinado; não concluo uma auditoria completa de relógios e ordem de trava de todos os escritores externos **[não verificado]**. Pré-requisitos e pouso real também são **[não verificado]**. [app/chamados/models.py:4295](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/models.py:4295), [app/chamados/services/disputa_emissao.py:1517](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/disputa_emissao.py:1517)
-
-7. **NÃO BLOQUEIA — escopo do diff fornecido.** Os leitores alterados preservam o texto da projeção; o diff acrescenta prefetch, contador e publicação no carimbo, sem alteração apresentada em motor, folha, export, DiaPago, escala ou vínculo. Há escrita da **nova chave no carimbo existente**, autorizada pelo contador descrito no anexo; não identifiquei nova escrita de campos da pergunta no diff. A completude do diff frente ao Git permanece **[não verificado]**. [app/chamados/services/fio.py:188](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/fio.py:188), [app/chamados/services/historico.py:96](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/services/historico.py:96), [app/chamados/management/commands/vigiar_fio_morto.py:255](/home/ronald/codex_ws/b7ccc61ce4a22ad893c70352b9ec637df83a9ae4/app/chamados/management/commands/vigiar_fio_morto.py:255)
-
-BLOQUEIA: 4 -- itens 3, 4, 5 e 6
-
-_7338 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7341 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
