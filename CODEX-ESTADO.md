@@ -1,7 +1,66 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 22:47** · publicado em **18/11/2026 22:48** (UTC-3)
+> Ultima resposta processada: **18/11/2026 23:21** · publicado em **18/11/2026 23:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 23:21 · sessao b014772ae95d · CADEIA-20-PASSO1 · sonda · origem=Code
+
+**Não consigo entregar uma sonda que produza as medidas A e B com as restrições dadas sem inventar uma regra ou atribuir identidade que a fonte não preserva.** O script abaixo é uma **sonda de bloqueio**, não a medição pedida: verifica a conexão e aborta antes de emitir contagens. [app/escala/utils.py:631; app/escala/utils.py:673; app/ponto/turnos.py:1606]
+
+Os pontos que impedem a medição são:
+
+- A grade produz as órfãs como `HH:MM`, e `classificar_orfas(dia)` recebe essa lista e devolve um dicionário por hora; ela não devolve o instante ou a identidade da batida. O próprio leitor da ata reconhece que duas batidas no mesmo minuto não são individualmente endereçáveis. Isso impede garantir a comparação sobre a **mesma sobra por instante** em todos os casos. [app/escala/utils.py:631; app/escala/utils.py:673; app/escala/orfa_classe.py:53; app/ponto/turnos.py:1606]
+- Não identifiquei nesta cópia uma função existente que devolva, para cada par fechado, a decisão geral “fora dos marcos” exigida por A. A regra L-084 existente em `_match_marcos` responde a uma pergunta específica de cadastro e não demonstra essa classificação geral; `dias_cadastro_x_realidade` é a lista publicada pelo motor, a ser lida. [app/escala/utils.py:610; app/ponto/motor_calculo_v2.py:289; app/ponto/motor_calculo_v2.py:2719; não verificado]
+- A referência `turnos.py:1761–1765` está dentro de `papel_por_minuto_da_ata`, não identifica uma função pública chamada `PAR_DE_PAUSA_DEDUZIDO`; e `TETO_PAUSA_SEGUNDOS` vale **três horas** nesta cópia. O aval fornecido também menciona 90 minutos; não está demonstrado como resolver essa diferença para a classe PAUSA sem acrescentar interpretação. [app/ponto/turnos.py:382; app/ponto/turnos.py:1565; app/ponto/turnos.py:1761; não verificado]
+
+Para a sonda completa, as fontes reais a integrar seriam `montar_grade_prevista_periodo` e `classificar_orfas` para a grade e suas órfãs; `batidas_apuraveis` e `parear_turnos` para o universo e os turnos; `CelulaDia.ata` para a ata gravada; e `ler_lavra` para o snapshot mais recente. `ler_lavra` lê o banco; `lavrar` e `gravar_lavra` escrevem e não devem ser chamadas. A sonda de bloqueio não chama nenhuma dessas funções, pois não pode concluir a medida pedida. [app/escala/utils.py:2095; app/escala/orfa_classe.py:53; app/ponto/turnos.py:1192; app/ponto/turnos.py:2868; app/escala/models.py:1774; app/ponto/services/esmeril_espelho.py:296; app/ponto/services/esmeril_espelho.py:317; app/ponto/services/esmeril_espelho.py:334]
+
+A conexão real, as contagens, o caso col81 e a presença de col87 e col975 na lavra permanecem **[não verificado]**. O envelope previsto executa o Python no tenant `juliani` com `config.settings.sombra` e uma role de leitura; a configuração fixa o banco `sombra` e o host `sombra_db`. [bin/sonda_leitura.sh:225; bin/sonda_leitura.sh:235; app/config/settings/sombra.py:29; app/config/settings/sombra.py:47]
+
+```python
+# Sonda de bloqueio: não produz A, B ou C.
+# Executar somente pelo envelope de leitura da sombra.
+
+import os
+import sys
+
+from django.conf import settings
+from django.db import connection
+
+
+def main():
+    onde = "guarda_sombra"
+
+    try:
+        if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+            raise RuntimeError("settings")
+
+        banco = settings.DATABASES["default"]
+        if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+            raise RuntimeError("configuracao_do_banco")
+
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT current_database(), current_schema()")
+            banco_real, schema_real = cursor.fetchone()
+
+        if banco_real != "sombra" or schema_real != "juliani":
+            raise RuntimeError("conexao_ou_schema")
+
+        # A identidade por instante das órfãs e o juiz geral de par fora
+        # dos marcos não foram demonstrados nas interfaces examinadas.
+        # Não emitir contagens nem inferir uma resposta.
+        onde = "medicao_sem_autoridade_demonstrada"
+        raise RuntimeError("sonda_incompleta")
+
+    except Exception:
+        print("ERRO " + onde)
+        return 1
+    finally:
+        print("FIM_SONDA_PASSO1")
+
+
+sys.exit(main())
+```
 
 ## 18/11 22:47 · sessao a5c9a5d9b30f · E4C-F9 · verificador · origem=Code
 
@@ -1491,61 +1550,4 @@ O que as portas verificadas permitem medir e seus limites:
 
 Para fechar a entrega sem aproximar, falta permitir um estado explícito **NÃO DETERMINÁVEL** em MARCO, com candidatos identificados como candidatos, e fornecer as contagens por classe da rodada `s1_v4` de referência. A execução e seus `ERROS=N` continuam [não verificado].
 
-## 18/11 21:16 · sessao 03c313a57f5f · E4C-F9 · censo · origem=Code
-
-A auditoria das perguntas e triagens mostra duas distinções necessárias para a contagem: a falta de controle em M6 estava dentro do tema pedido, mas não foi apontada; e o limite de formas indiretas do selo foi apontado e mantido em fila. Este último não cabe literalmente em nenhuma das classes propostas: a classe **(b)** exige descarte pela triagem, e a triagem o encaminhou ao opus. [anexos `construtor_c1.q`, `q.txt` da volta 1 e `triagem.txt` da volta 3: sem linhas numeradas; **não verificado como arquivo:linha**]
-
-Os anexos foram fornecidos no texto da solicitação e não têm numeração de linhas. Abaixo os identifico pelo nome e item; **suas referências exatas em arquivo:linha são [não verificado]**. As referências ao código são da cópia examinada.
-
-**Auditoria de quem perguntou e de quem triou**
-
-- O brief c1 pediu, para cada M, divergência entre projeção e atos, controle sem divergência e o mutante que o caso mataria. A pergunta ao verificador da volta 1 também pediu exame de “selo/RED sem mordida”, mas seu mutante explícito era o retorno de **M2** à coluna, não a remoção do predicado de M6. [anexos `construtor_c1.q`, parágrafos RED e selo, e `q.txt` da volta 1, itens 3–4: **não verificado como arquivo:linha**]
-- O brief c1 pediu `ALLOW-iii` no backfill e no limbo e, ao mesmo tempo, proibiu editar arquivos fora dos três comandos e testes. A triagem da volta 1 reconheceu o conflito como erro do brief; c2 autorizou somente comentários nos dois arquivos e repetiu as classes `ALLOW-iii / ALLOW-C`. [anexos `construtor_c1.q`, FICA e PROIBIDO; `triagem_ver1.txt`, B3; `construtor_c2.q`, B3: **não verificado como arquivo:linha**] [nao verificado]
-- A triagem da volta 1 considerou procedente a mistura em M7 e escolheu a guarda restritiva; a da volta 2 aceitou o fechamento de B1 e B3; a da volta 3 preservou em **FILA** as formas indiretas não vistas pelo selo. [anexos `triagem_ver1.txt`, B1; `triagem.txt` da volta 2, item 1; `triagem.txt` da volta 3, item 3: **não verificado como arquivo:linha**]
-
-**1. M6: mutante sem predicado sobrevive — classe (a).**  
-**Pergunta:** “para cada M, um caso onde PROJECAO e SEQUENCIA divergem”; “Controle”; “Diga o mutante de cada M” e, ao verificador, “selo/RED sem mordida”. O mutante pedido no brief era voltar ao filtro da coluna; a remoção completa do predicado não foi especificada. [anexos `construtor_c1.q`, RED, e `q.txt` da volta 1, item 4: **não verificado como arquivo:linha**]
-
-**Resposta:** o construtor disse “inclui controles” e propôs para M6 o mutante que troca a face pelo filtro da coluna; o verificador disse que “o teste novo cobre o universo em dry-run”. **Não apontaram** a ausência de pergunta validada que deveria sair nem o mutante sem predicado sobrevivente. Na cópia, M6 cria a divergente e uma controle e espera contagem 2; M2–M5 também criam uma pergunta validada e verificam sua exclusão. [anexos `construtor_c1.r` e `r.txt` da volta 1, item 2: **não verificado como arquivo:linha**; código: [teste M6](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:96), [controle M2–M5](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:73)]
-
-A sobrevivência relatada pelo opus é resultado do anexo; não há execução independente nesta auditoria. [anexo `veredito.md`, achado 1: **não verificado como arquivo:linha**]
-
-**2. M1: falta controle positivo — classe (a).**  
-**Pergunta:** o mesmo brief pediu controle e mutante para **cada M**; a pergunta da volta 1 incluiu “selo/RED sem mordida”. [anexos `construtor_c1.q`, RED, e `q.txt` da volta 1, item 4: **não verificado como arquivo:linha**]
-
-**Resposta:** o construtor identificou `test_M1_rotulo_e_controle` como caso que deveria matar o mutante de retorno à coluna, mas **não apontou** a falta do controle positivo nem o ramo que sempre retorna `None`. O teste na cópia verifica apenas que as duas saídas **não** contêm `validada_em 1`. [anexo `construtor_c1.r`, tabela de mutantes: **não verificado como arquivo:linha**; [teste M1](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:85)]
-
-**3. Comentários ALLOW incorretos ou incompletos — classe (a), para o defeito específico final.**  
-**Pergunta:** c1 determinou `ALLOW-iii` para o backfill e os três sítios do limbo; c2 pediu comentários “como no brief c1”; o verificador da volta 2 foi perguntado se os achados da triagem estavam fechados e como o selo tratava comentários. [anexos `construtor_c1.q`, FICA; `construtor_c2.q`, B3; `q.txt` da volta 2, itens 1 e 3: **não verificado como arquivo:linha**]
-
-**Resposta:** na volta 1, o verificador **viu a falta de comentários** e a triagem a considerou procedente; depois, o construtor disse ter acrescentado comentários e o verificador da volta 2 disse “B3 — PROCEDE o acréscimo dos dois comentários”. Ele também viu que o selo F9 não lê esses comentários. **Não apontou** que o backfill estava rotulado `ALLOW-C` contra o pedido `ALLOW-iii`, nem a cobertura por sítio descrita pelo opus. A triagem da volta 2 marcou B3 “comentarios: OK”. [anexos `r.txt` da volta 1, FICA; `triagem_ver1.txt`, B3; `construtor_c2.r`, B3; `r.txt` da volta 2, itens 1 e 3; `triagem.txt` da volta 2, item 1: **não verificado como arquivo:linha**; [comentário do backfill](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/backfill_decisoes_pergunta.py:56), [outro sítio do backfill](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/backfill_decisoes_pergunta.py:104), [comentário do limbo](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/curar_perguntas_em_limbo.py:46)]
-
-Não classifico o defeito específico como **(b)**: a triagem aceitou como fechado B3, mas os textos não mostram que ela tenha identificado e descartado o rótulo errado ou a falta de cobertura por sítio. [anexo `triagem.txt` da volta 2, item 1: **não verificado como arquivo:linha**]
-
-**4. RED de c3 sem log Django — classe (c), alcance de execução.**  
-**Pergunta:** c3 pediu mutantes para cada forma nova que fizessem o selo falhar; a volta 3 perguntou se cada forma tinha mutante que fazia o selo falhar. **Não pediu explicitamente um log Django do RED.** [anexos `construtor_c3.q` e `q.txt` da volta 3, item 1: **não verificado como arquivo:linha**]
-
-**Resposta:** o construtor declarou: “O RED isolado mostrou” as formas escapando antes da cura e informou que a execução pelo Django ficou impedida; o verificador relatou 34/34 mutantes em memória e marcou a suíte Django completa como não verificada. Assim, **viram e declararam o limite de execução**, mas o dado não contém o log Django de RED apontado pelo opus. [anexos `construtor_c3.r`, parágrafo RED, e `r.txt` da volta 3, item 1: **não verificado como arquivo:linha**] [nao verificado]
-
-**5. Formas indiretas escapam ao selo — sem classe aplicável literalmente.**  
-**Pergunta:** a volta 3 perguntou expressamente se restavam formas como “variavel com o nome do campo, values(*lista), Meta/only via constante de modulo” e se os comandos as usavam. [anexo `q.txt` da volta 3, item 3: **não verificado como arquivo:linha**]
-
-**Resposta:** o verificador **viu** variável, lista expandida, constante e `__dict__` fora dos padrões, e relatou não encontrar essas formas nos três comandos atuais. A triagem registrou “**FILA, anexo ao opus**”; o próprio opus concordou com ela. Portanto, não é (b): houve encaminhamento em fila, não descarte. Tampouco é (a), (c), (d) ou (e). [anexos `r.txt` da volta 3, item 3; `triagem.txt` da volta 3, item 3; `veredito.md`, achado 5: **não verificado como arquivo:linha**; [padrões reconhecidos pelo selo](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:145)]
-
-**6. Guarda M7 e mutante equivalente da impressão — classe (b) para a mistura aceita; componente do mutante: (e).**  
-**Pergunta:** a volta 1 pediu divergência entre leitores e derivação paralela; c2 determinou expressamente a guarda restritiva e pediu o mutante que **retira a guarda**. A volta 2 perguntou se B1 estava fechado. **Não foi perguntado** se o mutante da impressão era equivalente dentro da classe A ou se morria apenas pelo selo. [anexos `q.txt` da volta 1, itens 4–5; `construtor_c2.q`, B1; `q.txt` da volta 2, item 1: **não verificado como arquivo:linha**]
-
-**Resposta e triagem:** o verificador da volta 1 **viu a mistura** entre leitura pelo ato e classificação pela projeção; a triagem reconheceu B1 e determinou a guarda como “cura ... mais RESTRITIVA”; o verificador da volta 2 considerou fechada a guarda solicitada. Para essa parte, **(b)** representa a aceitação explícita da composição pela triagem, embora ela a tenha tratado como cura, não simplesmente ignorado o achado. A equivalência do mutante da impressão **não foi vista nem especificamente perguntada: (e)**. [anexos `r.txt` da volta 1, item 5; `triagem_ver1.txt`, B1; `r.txt` da volta 2, item 1: **não verificado como arquivo:linha**; [guarda](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:63), [impressão](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:81)]
-
-| Achado | Classe para o censo |
-|---|---|
-| 1 — M6 sem controle que exclui | **(a)** |
-| 2 — M1 sem controle positivo | **(a)** |
-| 3 — ALLOW errado / cobertura por sítio | **(a)** |
-| 4 — RED c3 sem log Django | **(c)** |
-| 5 — formas indiretas | **Sem classe aplicável:** visto e mantido em fila |
-| 6 — guarda M7 / mutante da impressão | **(b)** para a guarda; **(e)** para o mutante |
-
-Contando **achados**, com o 6 atribuído a **(b)** pela decisão de triagem sobre a guarda: **(a) 3; (b) 1; (c) 1; (d) 0; (e) 0; sem classe aplicável 1**. O componente não perguntado do achado 6 está registrado separadamente acima e não é contado uma segunda vez. Os achados 1–3 também são casos em que nenhum dos textos de resposta anexados apontou o defeito específico; foram atribuídos a **(a)** porque o tema estava presente na pergunta. [anexos citados nos achados 1–6: **não verificado como arquivo:linha**]
-
-_7174 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7175 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
