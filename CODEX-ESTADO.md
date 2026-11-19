@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:19** · publicado em **19/11/2026 15:20** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:23** · publicado em **19/11/2026 15:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:23 · sessao db53e16adcc8 · DST-L2-JZ1 · sonda · origem=Code
+
+### 1. Filtro e significado de `pendente`
+
+**Sim, para o status literal `pendente`.** O filtro exige `status_local` em `('aberto', 'em_analise', 'registrado')`, a chave estrangeira `justificativa_relacionada` preenchida e `status='pendente'` na justificativa apontada por essa chave. (`pares.py:8–11`, anexo; `app/chamados/models.py:58,75–79`; `app/chamados/catalogo/motor.py:24`; `app/ponto/models.py:159`.)
+
+`pendente` é a única opção do modelo com significado de pendência. As outras opções declaradas são `aprovada` e `rejeitada`. A regra de fechamento de chamado também trata `aguardando_dp` e `aguardando_colab` como pendência, embora esses valores estejam fora das opções declaradas de `Justificativa.status`. Se estivessem gravados, ficariam fora da sonda. A presença desses valores no banco é [nao verificado]. (`app/ponto/models.py:130–134,159`; `app/chamados/models.py:141–147`; `pares.py:9–10`, anexo.)
+
+A análise usa os arquivos da cópia. A correspondência com o HEAD `688696dbb32b7859fb38a141c54d5a6f456056b3` é [nao verificado], pois a cópia está sem metadados Git.
+
+### 2. Total e pares
+
+**37 pares.** `CONTADOR=37 UNIVERSO=37 IGUAL=True ERROS=0`. O script chama `qs.count()` sobre o mesmo `qs` depois de materializá-lo com `list(qs)`. (`pares.py:12–13,20–22`, anexo; saída anexada:6–43, numerada a partir de `=== SOMBRA`.)
+
+Transcrição literal da saída anexada:6–42 (`pares.py:20–21`, anexo).
+
+```text
+PAR chamado=38675 justificativa=3643
+PAR chamado=38693 justificativa=3649
+PAR chamado=38707 justificativa=3652
+PAR chamado=38868 justificativa=3665
+PAR chamado=38894 justificativa=3672
+PAR chamado=38905 justificativa=3675
+PAR chamado=38906 justificativa=3676
+PAR chamado=38907 justificativa=3677
+PAR chamado=38947 justificativa=3679
+PAR chamado=39041 justificativa=3682
+PAR chamado=39044 justificativa=3685
+PAR chamado=39045 justificativa=3686
+PAR chamado=39065 justificativa=3692
+PAR chamado=39067 justificativa=3694
+PAR chamado=39068 justificativa=3695
+PAR chamado=39077 justificativa=3696
+PAR chamado=39078 justificativa=3697
+PAR chamado=39085 justificativa=3699
+PAR chamado=39219 justificativa=3709
+PAR chamado=39221 justificativa=3710
+PAR chamado=39245 justificativa=3712
+PAR chamado=39254 justificativa=3713
+PAR chamado=39255 justificativa=3714
+PAR chamado=39398 justificativa=3717
+PAR chamado=39408 justificativa=3718
+PAR chamado=39552 justificativa=3723
+PAR chamado=39565 justificativa=3727
+PAR chamado=39566 justificativa=3728
+PAR chamado=39579 justificativa=3731
+PAR chamado=39583 justificativa=3733
+PAR chamado=39679 justificativa=3735
+PAR chamado=39718 justificativa=3736
+PAR chamado=39754 justificativa=3742
+PAR chamado=39755 justificativa=3743
+PAR chamado=39759 justificativa=3744
+PAR chamado=39760 justificativa=3745
+PAR chamado=39764 justificativa=3748
+```
+
+### 3. Sinais de falha ou schema errado
+
+A saída não indica falha de leitura nem universo vazio. Ela registra `ERROS=0`, `rc_sombra=0`, 184 chamados vivos com ponteiro e 37 pares após o filtro de status da justificativa. (`pares.py:8–19,22`, anexo; saída anexada:5–44.)
+
+A saída não indica schema errado. O script solicita `schema_context('juliani')`, mas a saída não imprime o schema efetivo da conexão. O schema efetivamente consultado é [nao verificado]. (`pares.py:6,17–22`, anexo.)
 
 ## 19/11 15:19 · sessao 36b247af5b6e · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -470,80 +532,4 @@ Referências aos anexos usam a numeração do texto fornecido, começando na pri
 
    No delta fornecido, não aparece segundo juiz, segundo escritor fora da porta, relógio fora da borda, derivação paralela, nova ordem de trava ou campo com dois significados: as alterações se limitam ao novo teste e ao retorno da fixture de créditos. Essa conclusão fica restrita ao delta. (`diff_v4.patch:1`, `diff_v4.patch:22`) [nao verificado]
 
-## 19/11 14:35 · sessao 2d4833eae486 · E4C-F5 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO nos itens 1, 3a, 3b e 3c**, pelos motivos abaixo. “PROCEDE” significa procedência da objeção ao item. As evidências centrais são o corte posterior sobre texto, a prova de contagem já existente e a separação entre produto e instrumento. (`app/docs/RELATO.md:32`; `app/chamados/tests/test_e4c_f5_contador_texto.py:26-38`; `CLAUDE.md:327-328`.)
-
-Os anexos raspados são a referência fornecida para esta revisão; sua correspondência com arquivos integrais locais, a identidade Git da cópia e os resultados dos logs citados ficam **[não verificado]**. As conclusões sobre código são por inspeção; execução de REDs e mutantes **[não verificado]**.
-
-**1 — PROCEDE: “0815 INTEIRO como está” desconsidera uma decisão posterior registrada.**
-
-1. **Premissas:** conferem as três combinações: app passa a pergunta projetada ao juiz, que lê R/T do argumento; a property passa a leitura do ato; o fio combina instante do ato com texto projetado. (`app/chamados/services/pergunta_no_app.py:83-86`; `app/chamados/juizes.py:1552`; `app/chamados/models.py:3791`; `app/chamados/services/fio.py:189-192`.)
-2. **Colisão:** a cópia registra **RESPOSTAS-1911-1000, item 1(B)**: “texto segue da projecao; F5 migra so R/V”. Isso altera a migração de texto prevista no 0815/brief fornecidos; reafirmar aquele desenho integralmente deixa duas instruções incompatíveis. (`app/docs/RELATO.md:20,32`; `app/docs/PROMPTS.md:2615`.)
-3. **Literal:** concluir as três voltas em um pouso atende à exigência do 0815 fornecido; o defeito é preservar “como está” um desenho cuja regra de texto foi posteriormente modificada. A própria ordem sofreu transferência documentada da tag para a volta 2. (`app/docs/RELATO.md:32,36-37`.)
-4. **Competência/dinheiro/`!`:** a volta 3 alcança escrita e recálculo financeiro por portas existentes; isso já está declarado no 0815 fornecido. Não há prova de movimento proibido efetivo **[não verificado]**. A guarda encontrada não demonstra proteção universal: K6 seleciona metades de intervalo e pula os demais tipos. (`app/chamados/services/validacao.py:743,753-755`; `app/chamados/services/materializacao.py:804-820`; `CLAUDE.md:265-268`.)
-
-**2 — NÃO PROCEDE: a certificação precisa acompanhar a árvore final.**
-
-1. **Premissas:** `Ran 17040 OK`, o conteúdo do merge e a árvore certificada por `suite_m` são **[não verificado]**.
-2. **Colisão:** tratar a suíte anterior como sinal é compatível com “A arvore que a suite certificou e a que POUSA”; a certificação não acompanha alterações posteriores de Python. (`CLAUDE.md:320-324`.) [nao verificado]
-3. **Literal:** pedir suíte e opus sobre as três voltas não reduz o PRONTO fornecido. A execução e a ordem efetivamente observadas permanecem **[não verificado]**. [nao verificado]
-4. **Competência/dinheiro/`!`:** a exigência trata de certificação; não autoriza qualquer exceção às fronteiras de produção. (`CLAUDE.md:265-268,320-328`.)
-
-**3a — PROCEDE: autoridade e prazo não fecham com as instruções preservadas.**
-
-1. **Premissas:** as três fontes conferem, inclusive a mistura explícita do fio. (`app/chamados/services/pergunta_no_app.py:86`; `app/chamados/juizes.py:1552`; `app/chamados/models.py:3791`; `app/chamados/services/fio.py:192`.)
-2. **Colisão:** “mesma autoridade” não determina qual leitura prevalece diante do corte **RESPOSTAS-1911-1000 item 1(B)**. Interpretá-la como R/T integralmente do ato contraria “F5 migra so R/V” e o teste que exige texto projetado no fio. (`app/docs/RELATO.md:32`; `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:58-65`.)
-3. **Literal:** mudar somente os dois juízes da volta 2 não unifica os três sítios: o fio chama `respondida_sem_texto` com uma leitura híbrida; a property já entrega R/T da leitura do ato. Portanto, “ao fim da volta 2”, junto da manutenção integral daquela divisão de voltas, exige alterações adicionais fora dos dois juízes. O encaixe dessas alterações não está definido no literal fornecido **[não verificado]**. (`app/chamados/services/fio.py:187-192`; `app/chamados/models.py:3791`; `app/chamados/juizes.py:1389,1552`.)
-4. **Competência/dinheiro/`!`:** o juiz temporal alimenta vitalidade, e o juiz de resposta também recebe objetos já projetados. Seus efeitos não se limitam aos três exemplos. Movimento real de entregue/exportada **[não verificado]**; não há autorização para tocar seu gravado. (`app/chamados/juizes.py:1404,1423`; `CLAUDE.md:265-268`.)
-
-**3b — PROCEDE: a carga confere; igualdade de contagem não evidencia o RED pedido.**
-
-1. **Premissas:** `contar()` seleciona todas as perguntas por padrão, aplica prefetch e percorre o queryset sem iterador/lote. O vigia chama essa função dentro de `tranca_em_lote`. **51.563 é [não verificado]**, embora conste do comentário. (`app/chamados/services/vigia_texto_resposta.py:3,8-18`; `app/chamados/management/commands/vigiar_fio_morto.py:186-195`.)
-2. **Colisão:** preservar os resultados enquanto se altera a carga é compatível com o contrato existente de comparação entre ato e texto corrente. (`app/chamados/services/vigia_texto_resposta.py:1-4,16-18`.)
-3. **Literal:** “RED de contagem igual antes e depois”, isoladamente, não demonstra a falha de carregamento: a implementação atual já satisfaz testes de contagens, recortes e múltiplos atos. O teste de custo existente mede consultas, não carregamento integral em memória. (`app/chamados/tests/test_e4c_f5_contador_texto.py:26-38,67-80`.)
-4. **Competência/dinheiro/`!`:** o corpo dessa função consulta, compara e conta; não contém escrita desses domínios nem chamada ao motor. (`app/chamados/services/vigia_texto_resposta.py:8-18`.)
-
-**3c — PROCEDE: a alternativa “leitor no ESTADO” colide com o pouso único.** [nao verificado]
-
-1. **Premissas:** o universo é gravado em chave própria, fora de `censo/esperado`; o ESTADO compara esses dois mapas e não considera essa chave. O teste lê o universo. Assim, zero nesse universo não gera, por esse campo, alerta próprio de cegueira. (`app/chamados/management/commands/vigiar_fio_morto.py:275-287`; `bin/fio_estado.py:121-126,191-197`; `app/chamados/tests/test_e4c_f5_contador_texto.py:65`.)
-2. **Colisão:** a frase vigente é **“INSTRUMENTO (…) nao pousa com PRODUTO: pouso proprio, depois”**. O próprio leitor do ESTADO declara esse enquadramento. Prender sua alteração à mesma obra e ao único pouso da F5 conflita com essa regra. (`CLAUDE.md:327-328`; `bin/fio_estado.py:4-7`.)
-3. **Literal:** a alternativa de retirada não apresenta essa colisão de pouso. Contudo, a L-111 citada trata literalmente de função sem chamador de produção; sua aplicação a uma chave de dados não é literal. (`app/docs/LEIS.md:137`; `app/chamados/management/commands/vigiar_fio_morto.py:287`.)
-4. **Competência/dinheiro/`!`:** retirar a chave não equivale a apagar um arquivo usado por produção. Não há exigência automática de `!` por essa retirada; apagar o arquivo inteiro seria outra ação. (`CLAUDE.md:265-268`; `app/chamados/management/commands/vigiar_fio_morto.py:287`.)
-
-**3d — NÃO PROCEDE: o reforço pedido corresponde à fragilidade encontrada.**
-
-1. **Premissas:** o selo **já usa AST**, mas reconhece atributos e chamadas pelo identificador literal `p`. Nesta cópia, seu trecho relevante está em **153–178**, e não integralmente em 146–176. (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:146-178`.)
-2. **Colisão:** eliminar a dependência do nome da variável preserva a finalidade do selo. Seu limite vigente é R/V; T está expressamente excluído pela lei B. (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:154-167`.)
-3. **Literal:** a condição de apelido é pertinente: as comparações com `'p'` deixam esse reconhecimento escapar. A sobrevivência de mutante executado é **[não verificado]**. Além disso, `respondida_sem_texto(p)` não tem argumentos posteriores para a inspeção feita pelo selo. (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:165-178`.)
-4. **Competência/dinheiro/`!`:** o sítio declarado é código de teste, sem escrita de produção nesse trecho. (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:153-178`.)
-
-**3e — NÃO PROCEDE: a triagem não determina mudança de regra.**
-
-1. **Premissas:** a comparação do contador é literal; há teste para espaços. Os dois `.lower()` citados atuam em leituras para classificação. A afirmação global de que nenhum escritor indireto transforma caixa permanece **[não verificado]**. (`app/chamados/services/vigia_texto_resposta.py:16`; `app/chamados/tests/test_e4c_f5_contador_texto.py:40-48`; `app/chamados/juizes.py:2041-2047`; `app/chamados/services/validacao.py:1181-1193`.)
-2. **Colisão:** triagem motivada não contraria o contrato literal existente. (`app/chamados/services/vigia_texto_resposta.py:16`.)
-3. **Literal:** o teste desse módulo não contém o confronto `'Ato'`/`'ato'`; resultado do mutante correspondente **[não verificado]**. (`app/chamados/tests/test_e4c_f5_contador_texto.py:20-80`.)
-4. **Competência/dinheiro/`!`:** a exigência fornecida é documental; qualquer alteração futura de regra permanece **[não verificado]** e sujeita ao escopo literal. (`CLAUDE.md:265-268`.)
-
-**4 — NÃO PROCEDE: a exigência de prova é compatível com o portão.**
-
-1. **Premissas:** fechamento do PRONTO, medidas e smoke da árvore inteira são **[não verificado]**.
-2. **Colisão:** a linha exigida reproduz o PRONTO do 0815 fornecido; não demonstra redução dele. A regra local também exige passagem de etapa com a porta anterior provada no RELATO. (`CLAUDE.md:282-285`.)
-3. **Literal:** “item sem prova = não pede suíte” é uma condição verificável; não equivale a afirmar que a condição já esteja cumprida **[não verificado]**. [nao verificado]
-4. **Competência/dinheiro/`!`:** publicar o registro não autoriza movimentos adicionais; permanecem as restrições de competência, dados e motor. (`CLAUDE.md:265-268,285-287`.)
-
-**5 — NÃO PROCEDE como objeção demonstrada; a remissão ao item d tem alcance limitado.**
-
-1. **Premissas:** vagas atuais, estado de FERIADO/C7/B2b e texto integral do aval 1335 são **[não verificado]**.
-2. **Colisão:** prioridade de fila 1 encontra respaldo local. O PRE-APROVADO **d** exige agente esperando job próprio, job destacado e necessidade da vaga por obra de fila 1. (`CLAUDE.md:288-294`.)
-3. **Literal:** esse d não constitui autorização geral para cancelar qualquer suíte ou opus ativo. A ocorrência concreta de uma ação incompatível é **[não verificado]**. (`CLAUDE.md:289-294`.) [nao verificado]
-4. **Competência/dinheiro/`!`:** prioridade e liberação de vaga não suspendem as ações reservadas ao `!`. (`CLAUDE.md:265-268,294-295`.)
-
-**6 — NÃO PROCEDE: preservar trabalho na cópia não é pousar parcialmente.**
-
-1. **Premissas:** os commits efetivamente existentes e a linha de encerramento do dia são **[não verificado]**. [nao verificado]
-2. **Colisão:** o requisito fornecido de commit por volta e ausência de pouso parcial mantém a separação entre construir na cópia e integrar/publicar. (`CLAUDE.md:309-313,325-328`.) [nao verificado]
-3. **Literal:** o encerramento do dia não prova PRONTO nem substitui certificação da árvore final; a suíte certifica a árvore que pousa. (`CLAUDE.md:320-324`.) [nao verificado]
-4. **Competência/dinheiro/`!`:** commit na cópia não autoriza alterar gravado exportado, dados de escala/vínculo, motor ou apagar arquivo de produção. (`CLAUDE.md:265-268`.) [nao verificado]
-
-_7393 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7394 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
