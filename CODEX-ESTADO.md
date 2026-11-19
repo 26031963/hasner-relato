@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **18/11/2026 20:46** · publicado em **18/11/2026 20:47** (UTC-3)
+> Ultima resposta processada: **18/11/2026 21:16** · publicado em **18/11/2026 21:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 18/11 21:16 · sessao 03c313a57f5f · E4C-F9 · censo · origem=Code
+
+A auditoria das perguntas e triagens mostra duas distinções necessárias para a contagem: a falta de controle em M6 estava dentro do tema pedido, mas não foi apontada; e o limite de formas indiretas do selo foi apontado e mantido em fila. Este último não cabe literalmente em nenhuma das classes propostas: a classe **(b)** exige descarte pela triagem, e a triagem o encaminhou ao opus. [anexos `construtor_c1.q`, `q.txt` da volta 1 e `triagem.txt` da volta 3: sem linhas numeradas; **não verificado como arquivo:linha**]
+
+Os anexos foram fornecidos no texto da solicitação e não têm numeração de linhas. Abaixo os identifico pelo nome e item; **suas referências exatas em arquivo:linha são [não verificado]**. As referências ao código são da cópia examinada.
+
+**Auditoria de quem perguntou e de quem triou**
+
+- O brief c1 pediu, para cada M, divergência entre projeção e atos, controle sem divergência e o mutante que o caso mataria. A pergunta ao verificador da volta 1 também pediu exame de “selo/RED sem mordida”, mas seu mutante explícito era o retorno de **M2** à coluna, não a remoção do predicado de M6. [anexos `construtor_c1.q`, parágrafos RED e selo, e `q.txt` da volta 1, itens 3–4: **não verificado como arquivo:linha**]
+- O brief c1 pediu `ALLOW-iii` no backfill e no limbo e, ao mesmo tempo, proibiu editar arquivos fora dos três comandos e testes. A triagem da volta 1 reconheceu o conflito como erro do brief; c2 autorizou somente comentários nos dois arquivos e repetiu as classes `ALLOW-iii / ALLOW-C`. [anexos `construtor_c1.q`, FICA e PROIBIDO; `triagem_ver1.txt`, B3; `construtor_c2.q`, B3: **não verificado como arquivo:linha**] [nao verificado]
+- A triagem da volta 1 considerou procedente a mistura em M7 e escolheu a guarda restritiva; a da volta 2 aceitou o fechamento de B1 e B3; a da volta 3 preservou em **FILA** as formas indiretas não vistas pelo selo. [anexos `triagem_ver1.txt`, B1; `triagem.txt` da volta 2, item 1; `triagem.txt` da volta 3, item 3: **não verificado como arquivo:linha**]
+
+**1. M6: mutante sem predicado sobrevive — classe (a).**  
+**Pergunta:** “para cada M, um caso onde PROJECAO e SEQUENCIA divergem”; “Controle”; “Diga o mutante de cada M” e, ao verificador, “selo/RED sem mordida”. O mutante pedido no brief era voltar ao filtro da coluna; a remoção completa do predicado não foi especificada. [anexos `construtor_c1.q`, RED, e `q.txt` da volta 1, item 4: **não verificado como arquivo:linha**]
+
+**Resposta:** o construtor disse “inclui controles” e propôs para M6 o mutante que troca a face pelo filtro da coluna; o verificador disse que “o teste novo cobre o universo em dry-run”. **Não apontaram** a ausência de pergunta validada que deveria sair nem o mutante sem predicado sobrevivente. Na cópia, M6 cria a divergente e uma controle e espera contagem 2; M2–M5 também criam uma pergunta validada e verificam sua exclusão. [anexos `construtor_c1.r` e `r.txt` da volta 1, item 2: **não verificado como arquivo:linha**; código: [teste M6](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:96), [controle M2–M5](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:73)]
+
+A sobrevivência relatada pelo opus é resultado do anexo; não há execução independente nesta auditoria. [anexo `veredito.md`, achado 1: **não verificado como arquivo:linha**]
+
+**2. M1: falta controle positivo — classe (a).**  
+**Pergunta:** o mesmo brief pediu controle e mutante para **cada M**; a pergunta da volta 1 incluiu “selo/RED sem mordida”. [anexos `construtor_c1.q`, RED, e `q.txt` da volta 1, item 4: **não verificado como arquivo:linha**]
+
+**Resposta:** o construtor identificou `test_M1_rotulo_e_controle` como caso que deveria matar o mutante de retorno à coluna, mas **não apontou** a falta do controle positivo nem o ramo que sempre retorna `None`. O teste na cópia verifica apenas que as duas saídas **não** contêm `validada_em 1`. [anexo `construtor_c1.r`, tabela de mutantes: **não verificado como arquivo:linha**; [teste M1](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:85)]
+
+**3. Comentários ALLOW incorretos ou incompletos — classe (a), para o defeito específico final.**  
+**Pergunta:** c1 determinou `ALLOW-iii` para o backfill e os três sítios do limbo; c2 pediu comentários “como no brief c1”; o verificador da volta 2 foi perguntado se os achados da triagem estavam fechados e como o selo tratava comentários. [anexos `construtor_c1.q`, FICA; `construtor_c2.q`, B3; `q.txt` da volta 2, itens 1 e 3: **não verificado como arquivo:linha**]
+
+**Resposta:** na volta 1, o verificador **viu a falta de comentários** e a triagem a considerou procedente; depois, o construtor disse ter acrescentado comentários e o verificador da volta 2 disse “B3 — PROCEDE o acréscimo dos dois comentários”. Ele também viu que o selo F9 não lê esses comentários. **Não apontou** que o backfill estava rotulado `ALLOW-C` contra o pedido `ALLOW-iii`, nem a cobertura por sítio descrita pelo opus. A triagem da volta 2 marcou B3 “comentarios: OK”. [anexos `r.txt` da volta 1, FICA; `triagem_ver1.txt`, B3; `construtor_c2.r`, B3; `r.txt` da volta 2, itens 1 e 3; `triagem.txt` da volta 2, item 1: **não verificado como arquivo:linha**; [comentário do backfill](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/backfill_decisoes_pergunta.py:56), [outro sítio do backfill](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/backfill_decisoes_pergunta.py:104), [comentário do limbo](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/curar_perguntas_em_limbo.py:46)]
+
+Não classifico o defeito específico como **(b)**: a triagem aceitou como fechado B3, mas os textos não mostram que ela tenha identificado e descartado o rótulo errado ou a falta de cobertura por sítio. [anexo `triagem.txt` da volta 2, item 1: **não verificado como arquivo:linha**]
+
+**4. RED de c3 sem log Django — classe (c), alcance de execução.**  
+**Pergunta:** c3 pediu mutantes para cada forma nova que fizessem o selo falhar; a volta 3 perguntou se cada forma tinha mutante que fazia o selo falhar. **Não pediu explicitamente um log Django do RED.** [anexos `construtor_c3.q` e `q.txt` da volta 3, item 1: **não verificado como arquivo:linha**]
+
+**Resposta:** o construtor declarou: “O RED isolado mostrou” as formas escapando antes da cura e informou que a execução pelo Django ficou impedida; o verificador relatou 34/34 mutantes em memória e marcou a suíte Django completa como não verificada. Assim, **viram e declararam o limite de execução**, mas o dado não contém o log Django de RED apontado pelo opus. [anexos `construtor_c3.r`, parágrafo RED, e `r.txt` da volta 3, item 1: **não verificado como arquivo:linha**] [nao verificado]
+
+**5. Formas indiretas escapam ao selo — sem classe aplicável literalmente.**  
+**Pergunta:** a volta 3 perguntou expressamente se restavam formas como “variavel com o nome do campo, values(*lista), Meta/only via constante de modulo” e se os comandos as usavam. [anexo `q.txt` da volta 3, item 3: **não verificado como arquivo:linha**]
+
+**Resposta:** o verificador **viu** variável, lista expandida, constante e `__dict__` fora dos padrões, e relatou não encontrar essas formas nos três comandos atuais. A triagem registrou “**FILA, anexo ao opus**”; o próprio opus concordou com ela. Portanto, não é (b): houve encaminhamento em fila, não descarte. Tampouco é (a), (c), (d) ou (e). [anexos `r.txt` da volta 3, item 3; `triagem.txt` da volta 3, item 3; `veredito.md`, achado 5: **não verificado como arquivo:linha**; [padrões reconhecidos pelo selo](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:145)]
+
+**6. Guarda M7 e mutante equivalente da impressão — classe (b) para a mistura aceita; componente do mutante: (e).**  
+**Pergunta:** a volta 1 pediu divergência entre leitores e derivação paralela; c2 determinou expressamente a guarda restritiva e pediu o mutante que **retira a guarda**. A volta 2 perguntou se B1 estava fechado. **Não foi perguntado** se o mutante da impressão era equivalente dentro da classe A ou se morria apenas pelo selo. [anexos `q.txt` da volta 1, itens 4–5; `construtor_c2.q`, B1; `q.txt` da volta 2, item 1: **não verificado como arquivo:linha**]
+
+**Resposta e triagem:** o verificador da volta 1 **viu a mistura** entre leitura pelo ato e classificação pela projeção; a triagem reconheceu B1 e determinou a guarda como “cura ... mais RESTRITIVA”; o verificador da volta 2 considerou fechada a guarda solicitada. Para essa parte, **(b)** representa a aceitação explícita da composição pela triagem, embora ela a tenha tratado como cura, não simplesmente ignorado o achado. A equivalência do mutante da impressão **não foi vista nem especificamente perguntada: (e)**. [anexos `r.txt` da volta 1, item 5; `triagem_ver1.txt`, B1; `r.txt` da volta 2, item 1: **não verificado como arquivo:linha**; [guarda](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:63), [impressão](/home/ronald/codex_ws/d3e9544fd122a0a43b87d0afa8ef074ab0e160ad/app/chamados/management/commands/validar_classe_a.py:81)]
+
+| Achado | Classe para o censo |
+|---|---|
+| 1 — M6 sem controle que exclui | **(a)** |
+| 2 — M1 sem controle positivo | **(a)** |
+| 3 — ALLOW errado / cobertura por sítio | **(a)** |
+| 4 — RED c3 sem log Django | **(c)** |
+| 5 — formas indiretas | **Sem classe aplicável:** visto e mantido em fila |
+| 6 — guarda M7 / mutante da impressão | **(b)** para a guarda; **(e)** para o mutante |
+
+Contando **achados**, com o 6 atribuído a **(b)** pela decisão de triagem sobre a guarda: **(a) 3; (b) 1; (c) 1; (d) 0; (e) 0; sem classe aplicável 1**. O componente não perguntado do achado 6 está registrado separadamente acima e não é contado uma segunda vez. Os achados 1–3 também são casos em que nenhum dos textos de resposta anexados apontou o defeito específico; foram atribuídos a **(a)** porque o tema estava presente na pergunta. [anexos citados nos achados 1–6: **não verificado como arquivo:linha**]
 
 ## 18/11 20:46 · sessao 153092d6b9cc · E4C-F6F7 · verificador · origem=Code
 
@@ -1254,59 +1311,4 @@ Em qualquer classe, uma linha com `NAO_CLASSIFICADA` em `cas` deve entrar també
 
 A tabela por classe, as listas completas e a linha `SOMA_CONFERE` permanecem **[não verificado]**; não seria correto preencher esses resultados sem a contagem. Para concluir com conferência reproduzível, é necessário disponibilizar o anexo como arquivo legível nesta sessão; a leitura pode continuar sem criar, editar ou apagar arquivos.
 
-## 18/11 20:09 · sessao b9482d524e1f · CADEIA-DO-CONTRATO-20 · censo · origem=Code
-
-**Censo: 34 necessários, 0 superados e 7 não decididos.** Para os 32 arquivos que o anexo `os9.txt` deixa fora da lista, aplico a premissa dada: a mudança da cópia ainda não está no HEAD. Para dois dos nove, o código da cópia identifica a alteração e o diff do main mostra mudança em outro ponto. Para os sete restantes, o trecho exato da mudança da cópia ou sua necessidade após a integração fica [não verificado].
-
-**Convenções:** N = necessário; ND = não decidido; B = referência ao mesmo arquivo na tabela B2b, conforme `r.txt`; F5 = relação observável com DST/turno, sem afirmar cruzamento com os logs F5, que não foram anexados. A interseção por arquivo com a espinha é zero, conforme `os41.txt` e a medição informada. O diff foi fornecido no corpo da pergunta sem numeração própria; suas referências abaixo usam arquivo e cabeçalho `@@` do trecho.
-
-1. [calendario.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/colaboradores/services/calendario.py:499) — **ND**: cópia lê fatos e recusas; main altera relógio e oferta em `main_nos_41.diff`, `@@ -114,26 +114,55 @@` e `@@ -458,6 +487,7 @@`; diff exato da cópia [não verificado]. B não; F5: arquivo trata turno [calendario.py:214].
-2. [test_calendario_ausencia_pela_autoridade.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/colaboradores/tests/test_calendario_ausencia_pela_autoridade.py:52) — **N**: teste de recusa de tipo sem faixa; B não; F5 [não verificado].
-3. [test_medida_turno_do_par.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/core/tests/test_medida_turno_do_par.py:247) — **ND**: conflito nos registros de linhas; a resposta final depende da medição na árvore integrada [não verificado]. B não; F5: mede turno.
-4. [leitor_celula.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/escala/services/leitor_celula.py:433) — **N**: transporta campos da ausência lavrada; B não; F5 [não verificado].
-5. [semana_do_posto.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/escala/services/semana_do_posto.py:178) — **N**: leitura de faixa e propagação de recusa; B não; F5 [não verificado].
-6. [utils.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/escala/utils.py:1205) — **N**: LASTRO lê o rótulo pela precedência; o main altera proteção de marcos em `main_nos_41.diff`, `@@ -499,6 +499,15 @@`, sem a mesma alteração de rótulo. B não; F5: arquivo trata turno [utils.py:1292].
-7. [situacao.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ferias/situacao.py:89) — **ND**: cópia trata `TipoSemFaixa`; main expõe saldo negativo em `main_nos_41.diff`, `@@ -293,8 +294,12 @@`; diff exato da cópia [não verificado]. B não; F5 [não verificado].
-8. [export.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/folha/export.py:1175) — **ND**: toca diretamente exportação e a função `motivos_retencao_celula`; main altera essa função em `main_nos_41.diff`, `@@ -1192,16 +1192,49 @@`; trecho alterado pela cópia [não verificado]. B sim: `competencia_entregue`, X2/X3 de `r.txt`; F5: arquivo trata turno [export.py:1179].
-9. [semanal.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/pautas/semanal.py:63) — **N**: rótulo do contador de tipos sem faixa; B não; F5 [não verificado].
-10. [ausencias.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/catalogo/ausencias.py:1) — **N**: catálogo de ausências; alteração específica [não verificado]. B não; F5 [não verificado].
-11. [processar_cartorio.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/management/commands/processar_cartorio.py:72) — **N**: trata `TipoSemFaixa`; B não; F5 [não verificado].
-12. [precedencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/precedencia.py:96) — **N**: recusa tipo sem faixa; B não; F5 [não verificado].
-13. [ausencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/ausencia.py:1306) — **ND**: conflito de conteúdo; cópia consulta `faixa_de`, main altera portas de férias e projeção em `main_nos_41.diff`, `@@ -63,6 +64,137 @@`; a região exata conflitada [não verificado]. B não; F5: arquivo trata parcial que atravessa meia-noite [ausencia.py:882].
-14. [cartorio.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/cartorio.py:773) — **N**: LASTRO transporta campos de cobertura; main troca o predicado de resposta em `main_nos_41.diff`, `@@ -1638,7 +1638,8 @@`. B sim: entrada da ressuscitação, A8 de `r.txt`; F5 [não verificado].
-15. [dia_decidido.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/dia_decidido.py:340) — **ND**: cópia recebe fatos da precedência; main acrescenta mapa de apresentação em `main_nos_41.diff`, `@@ -70,6 +70,20 @@`; diff exato da cópia [não verificado]. B não; F5: arquivo trata turno [dia_decidido.py:281].
-16. [dia_do_colab.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/dia_do_colab.py:12) — **N**: obtém fatos e recusa por dia; B não; F5 [não verificado].
-17. [dia_pago.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/dia_pago.py:389) — **N**: toca diretamente dia pago; LASTRO preserva predicado legado. B não; F5: arquivo trata turno [dia_pago.py:847].
-18. [espelho.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/espelho.py:649) — **N**: trata `TipoSemFaixa`; B não; F5 [não verificado].
-19. [fechamento.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/fechamento.py:1081) — **N**: trata `TipoSemFaixa` no fechamento; B não; F5 [não verificado].
-20. [vigia_ausencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/services/vigia_ausencia.py:157) — **N**: detecta tipos ativos sem faixa; B não; F5 [não verificado].
-21. [status_dia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/status_dia.py:248) — **N**: recebe recusas por colaborador e data; B não; F5 [não verificado].
-22. [lastro_c3_fontes.json](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/lastro_c3_fontes.json:1) — **N**: fixture de fontes; B não; F5 [não verificado].
-23. [lastro_c6_recortes.json](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/lastro_c6_recortes.json:1) — **N**: fixture de recortes; B não; F5 [não verificado].
-24. [lastro_c9_recortes.json](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/lastro_c9_recortes.json:1) — **N**: fixture de recortes; B não; F5 [não verificado].
-25. [test_a2_precedencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_a2_precedencia.py:294) — **ND**: cópia testa faixa e precedência; main adapta fixtures de férias em `main_nos_41.diff`, `@@ -81,7 +81,15 @@`; diff exato da cópia [não verificado]. B não; F5 [não verificado].
-26. [test_a6_vigia_familia_ausencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_a6_vigia_familia_ausencia.py:128) — **N**: testa contador de tipos sem faixa; B não; F5 [não verificado].
-27. [test_cobparc_marco_no_periodo.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_cobparc_marco_no_periodo.py:60) — **N**: testa rótulo do dia coberto; B não; F5 [não verificado].
-28. [test_e3_isento_na_impressao.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_e3_isento_na_impressao.py:104) — **N**: verifica regra sem aumento de versão; B não; F5 [não verificado].
-29. [test_e3_status_lavrado.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_e3_status_lavrado.py:123) — **N**: testa classificação por faixa e tipo de dia; B não; F5 [não verificado].
-30. [test_lastro_c10_sem_banco.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_lastro_c10_sem_banco.py:20) — **N**: variantes de teste c10; B não; F5 [não verificado].
-31. [test_lastro_c11_sem_banco.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_lastro_c11_sem_banco.py:22) — **N**: testes c11; B não; F5 [não verificado].
-32. [test_lastro_c12_sem_banco.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_lastro_c12_sem_banco.py:22) — **N**: variantes e mutantes c12; B não; F5 [não verificado].
-33. [test_lastro_c5_sem_banco.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_lastro_c5_sem_banco.py:33) — **N**: suporte aos testes c5; B não; F5 [não verificado].
-34. [test_lastro_c7_sem_banco.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_lastro_c7_sem_banco.py:19) — **N**: suporte aos testes c7; B não; F5 [não verificado].
-35. [test_lastro_faixa_sem_default.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_lastro_faixa_sem_default.py:11) — **N**: testes de faixa explícita; B não; F5 [não verificado].
-36. [test_o219_versao_da_regra.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_o219_versao_da_regra.py:79) — **N**: registra preservação de versão e fotos anteriores; B não; F5 [não verificado].
-37. [test_porta_ausencia_ferias.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_porta_ausencia_ferias.py:24) — **N**: testa a porta ausência/férias; B não; F5 [não verificado].
-38. [test_smoke_clique_tipo_ausencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/tests/test_smoke_clique_tipo_ausencia.py:90) — **N**: smoke da interação com tipo de ausência; B não; F5 [não verificado].
-39. [views_tipos_ausencia.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/ponto/views_tipos_ausencia.py:28) — **N**: views do cadastro de tipo de ausência; B não; F5 [não verificado].
-40. [pdf_espelho.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/relatorios/pdf_espelho.py:471) — **N**: LASTRO lê espelho antes de consumir órfãs para receber recusa por dia; B não; F5 [não verificado].
-41. [test_rotulo_ausencia_pdf.py](/home/ronald/codex_ws/f3ebd821b71369c9e790c8352b57b00c8a33c1de/app/relatorios/tests/test_rotulo_ausencia_pdf.py:64) — **N**: testa recusa e rótulo no PDF; B não; F5 [não verificado].
-
-Os dois conflitos de conteúdo constam de `mergetree.txt`:
-
-- **`test_medida_turno_do_par.py` — texto**, nos registros de linhas: a cópia documenta deslocamentos LASTRO preservando identidades [test_medida_turno_do_par.py:247]; o main atualiza contagens e referências para a sua árvore em `main_nos_41.diff`, `@@ -1,7 +1,7 @@` e `@@ -244,7 +244,7 @@`. Os números finais após integração exigem medição [não verificado].
-- **`ausencia.py` — natureza [não verificado]**: a cópia valida faixa [ausencia.py:1306]; o main acrescenta guarda de férias derivadas e invalidação de projeções em `main_nos_41.diff`, `@@ -63,6 +64,137 @@`. `mergetree.txt` informa o arquivo, mas não fornece os marcadores nem os trechos exatos do conflito; não há base para classificá-lo como apenas texto ou como conflito de regra.
-
-**Fecho:** necessários **34**; superados **0**; não decididos **7**. Toque direto em `folha/export.py` ou `ponto/services/dia_pago.py`: **2**, listados nos itens 8 e 17; alcance da alteração da cópia na função de retenção `motivos_retencao_celula` **[não verificado]**. Conflitos **2**: um de texto e um de natureza **[não verificado]**. Cruzam espinha por arquivo **0**, conforme medição informada; cruzam B2b por referência de arquivo **2**: `folha/export.py` e `ponto/services/cartorio.py`, conforme `r.txt`. Perguntas de lei: **[não verificado]**.
-
-_7154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7155 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
