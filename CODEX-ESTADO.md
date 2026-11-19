@@ -1,7 +1,81 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 08:42** · publicado em **19/11/2026 08:44** (UTC-3)
+> Ultima resposta processada: **19/11/2026 08:48** · publicado em **19/11/2026 08:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 08:48 · sessao 72c9b0ff375a · ESPURIA-TELA-C11-1911-0845 · censo · origem=Code
+
+O caso pedido é reproduzível **pela leitura do código**: com `dia.folga=True` e o veredito visual `feriado`, o espelho pode mostrar o chip **Folga** junto do ícone **Feriado**. A ocorrência em produção e a renderização efetiva não foram verificadas. [espelho.html:171](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:171), [espelho.py:353](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:353), [precedencia.py:46](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/precedencia.py:46).
+
+O censo abaixo reúne os sítios identificados; **não consegui demonstrar que esgota todos os leitores de apresentação da árvore**. Os totais, portanto, são dos sítios relacionados, não um total comprovado da aplicação. [não verificado]
+
+`Divergência` significa o par específico **chip Folga + ícone Feriado**, não qualquer diferença entre fatos ou estados. `Disponível` distingue a classe visual pronta dos fatos da precedência: `classe_dia` só representa folga/feriado e pode ser `None` para outros vereditos. [dia_decidido.py:206](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/dia_decidido.py:206).
+
+| Sítio | Mostra; fonte e escritor | Precedência e disponibilidade; divergência | Classe |
+|---|---|---|---|
+| [espelho.html:171](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:171) | Chip **Folga**; `dia.folga`, escrito de `grade.tipo_dia == 'folga'` em [espelho.py:693](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:693). A grade também pode vir da célula ou do builder [espelho.py:540](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:540), [escala/utils.py:762](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/escala/utils.py:762). | **Não** lê a classe; ela já está no mesmo `dia`, sem consulta nova. **Sim**, se a grade disser folga e o veredito disser feriado. [espelho.py:345](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:345). | **MIGRA-NESTA-VOLTA**: mesmo dia do espelho. |
+| [espelho.html:191](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:191) | Chip com tipo e ícone de ausência; `dia.ausencia` vem da cobertura para **cobrança**, inclusive pendentes; ícone do catálogo. [espelho.py:593](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:593), [espelho.py:859](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:859). | Não lê `classe_dia`; ela e o veredito já estão no dia. **Não** produz o par específico sem ausência; sobreposição e semântica de pendente exigem exame próprio: a cobertura de folha difere da de cobrança. [espelho.py:598](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:598). | **MIGRA-NESTA-VOLTA**, como leitor de rótulo no mesmo dia; equivalência funcional para pendentes **[não verificado]**. |
+| [pdf_espelho.py:870](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:870) | Estrela no dia de feriado; `dia.feriado` é presença no conjunto de feriados do colaborador. [espelho.py:874](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:874), [espelho.py:1044](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:1044). | Não lê classe: ela é removida antes do desenho; `veredito_dia` e `palavra_dia` permanecem. **Não** aparece o par chip/ícone; a estrela marca também feriado trabalhado, pergunta mais ampla que a classe vencedora. [pdf_espelho.py:916](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:916), [espelho.py:354](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:354). | **FILA — outra pergunta**: fato de calendário, inclusive dia trabalhado. |
+| [pdf_espelho.py:923](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:923) | Palavra de folga, feriado, ausência ou pendência; `palavra_dia`, escrita por `do_dia`. [espelho.py:341](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:341). | **Sim**, lê tradução do veredito alimentado pela precedência, com cobertura, decisão e pendente; não equivale sempre a `classe_dia`. **Não** tem o chip da grade. Classe removida, veredito disponível sem consulta. [dia_decidido.py:451](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/dia_decidido.py:451), [pdf_espelho.py:636](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:636). | **FILA — já lê a precedência**, preservando a pergunta da palavra do documento. |
+| [\_calendario_grade.html:97](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/_calendario_grade.html:97) | Ícone e rótulo curto de ausência; cobertura para cobrança e catálogo. [calendario.py:513](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:513), [calendario.py:700](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:700). | Não lê classe; fatos A2 e veredito já existem na montagem, sem nova consulta, embora `classe_dia` não seja publicada. O par específico **não** é exibido neste ramo; sobreposições de ausência **[não verificado]**. [calendario.py:539](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:539), [calendario.py:748](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:748). | **FILA — outra unidade**, calendário e cobertura de cobrança. |
+| [\_calendario_grade.html:109](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/_calendario_grade.html:109) | Ícone **Feriado** independente; `dia.feriado` vem do conjunto de feriados. [calendario.py:346](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:346), [calendario.py:785](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:785). | Não lê classe; A2 já está na montagem. **Não** é o par do espelho, mas o marcador pode coexistir com outro estado ou ausência porque é independente. [\_calendario_grade.html:97](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/_calendario_grade.html:97). | **FILA — outra unidade e outra pergunta**: marca de calendário. |
+| [espelho.html:151](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:151), [\_calendario_grade.html:106](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/_calendario_grade.html:106) | Faixa semanal e calendário exibem `status`/`status_rotulo`, inclusive folga; vêm do D4. [espelho.py:167](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:167), [calendario.py:695](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/services/calendario.py:695). | Não leem `classe_dia`; A2 alimenta o calendário e a classe existe no dia do espelho. **Não** são o chip em questão; eventual combinação de estados depende do D4 **[não verificado]**. | **FILA — outra pergunta**: status da jornada. |
+| [agenda_modal.html:112](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/agenda_modal.html:112) | **Folga** para agenda sem blocos ou `eh_trab=False`; a view consulta `AgendaDia` e escala por dia. [views.py:2263](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/views.py:2263). | Sem classe/A2 no contexto identificado; custo adicional exato **[não verificado]**. **Não** mostra o par do espelho; pode chamar de folga uma data de feriado porque apresenta a agenda/escala. | **FILA — outra unidade**: agenda. |
+| [painel_vinculo.html:234](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/painel_vinculo.html:234) | **Folga** ou trabalho na projeção da agenda/escala; também lista datas do calendário de folgas. [painel_vinculo.html:203](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/colaboradores/partials/painel_vinculo.html:203), [views.py:304](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/colaboradores/views.py:304). | Classe/A2 no contexto e custo **[não verificado]**. O par do espelho **não** aparece; pode haver folga projetada em feriado. | **FILA — outra unidade**: configuração e projeção da escala. |
+| [minha_escala.html:84](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/escala/minha_escala.html:84) | **Folga** nos próximos 14 dias; `trabalho` vem de `eh_dia_trabalho`. [escala/views.py:40](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/escala/views.py:40). | Não identifiquei classe/A2 no contexto; custo adicional **[não verificado]**. O par do espelho **não** aparece; a classificação de escala pode coincidir com feriado. | **FILA — outra unidade**: projeção de escala. |
+| [api/views.py:252](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:252) | `/api/me/` fornece `trabalha_hoje` e `ancora_ausente` a partir da escala. [api/views.py:368](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:368). | Não fornece classe/A2 nesse bloco; custo adicional e o texto efetivamente desenhado pelo cliente **[não verificado]**. A possibilidade de interpretar `False` como folga em feriado existe no contrato; o par visual **[não verificado]**. | **FILA — outra pergunta**: escala de hoje. |
+| [api/views.py:918](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:918) | `/api/escala/v2/` fornece `trabalho` para 14 dias, por `eh_dia_trabalho`. | Não fornece classe/A2 no bloco identificado; o código chama a escala dentro do laço, mas o número de consultas adicionais **[não verificado]**. Exibição no cliente e par visual **[não verificado]**. | **FILA — outra unidade**: escala futura. |
+| [api/views.py:1392](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:1392), [api/views.py:1610](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:1610) | `/api/espelho/v2/` transporta veredito, palavra e cor do espelho, com e sem batidas. | **Sim**, a palavra vem de `do_dia` e da precedência; `_esp` já contém `classe_dia`, mas o payload mostrado não a transporta. Ler o já montado custa zero consulta; desenho no cliente e par visual **[não verificado]**. [api/views.py:1378](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:1378). | **FILA — já lê a precedência**; exibição do cliente não localizada **[não verificado]**. |
+| [tarefa_do_dia.py:210](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/chamados/services/tarefa_do_dia.py:210), [modal_fio.html:577](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/chamados/partials/modal_fio.html:577) | A tarefa lê `tipo_dia` para encaminhamento; o modal oferece a ação **Aceitar folga**. | Não identifiquei ali rótulo de classe do dia nem classe pronta; custo adicional **[não verificado]**. O botão é ação, e o par do espelho **não** foi identificado. | **FILA — não é exibição do tipo do dia** nos sítios citados. |
+
+**Totais dos 14 sítios agrupados acima:** `MIGRA-NESTA-VOLTA = 2`; `FILA = 12`. A classificação do chip de ausência é de escopo de exibição; não estabelece que a classe de folga/feriado substitua o tratamento de pendentes. A contagem global de leitores permanece **[não verificado]**.
+
+A precedência declara quatro consultas **por dia** no caminho antigo e cinco para a janela no carregamento descrito; os parâmetros já carregados podem alterar o custo efetivo. No espelho, os fatos são carregados por janela e a classe é escrita no dict antes do template. [precedencia.py:259](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/precedencia.py:259), [espelho.py:658](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:658).
+
+O selo de desempenho existente registra teto **17** para a rota `ponto/espelho` e **55** para o calendário, na fixture do próprio teste; isso não comprova o custo da tela de um colaborador selecionado ou o custo em produção. O comentário do selo do calendário diz que uma consulta nova por dia custaria pelo menos 14 na fixture. [test_selo_performance.py:150](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_selo_performance.py:150), [test_selo_performance.py:247](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_selo_performance.py:247), [test_selo_performance.py:413](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/tests/test_selo_performance.py:413).
+
+O selo visual existente testa os dois ícones nas duas cascas, mas o fixture parte de `folga=False`; os casos citados não confrontam esse chip com feriado-em-folga. A execução e a mutação do selo **[não verificado]**. [test_espelho_decidiu_icone.py:119](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/tests/test_espelho_decidiu_icone.py:119), [test_espelho_decidiu_icone.py:198](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/tests/test_espelho_decidiu_icone.py:198).
+
+Quanto a JavaScript próprio, a busca realizada não encontrou rotulador de folga/feriado em `app/static` fora de código de terceiros; cobertura integral de todos os clientes e das rotas `/api/ponto` **[não verificado]**. O endpoint antigo de espelho retorna 410 e aponta para v2. [api/views.py:829](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/api/views.py:829).
+
+**Postmortem — anexos fornecidos:** no **c9**, classifico **(a), tema geral presente, não achado**: a pergunta G incluía “derivação paralela de fonte única”, mas não perguntava explicitamente se chip e ícone liam a mesma fonte; a resposta r1 não comprovou auditoria conclusiva de todos os fluxos. No **c10**, classifico **(e), não perguntado**: as quatro perguntas tratavam do medidor, linhas registradas, diff e leitores de `censo()`. Os anexos foram fornecidos no enunciado sem linhas físicas, portanto a localização arquivo:linha desses trechos é **[não verificado]**.
+
+`perguntas de lei: 0` — conforme o aval transcrito, que declara “nenhuma lei nova” e “juízes novos=0”; localização física do anexo **[não verificado]**.
+
+## 19/11 08:46 · sessao 5e19e34d290f · ESPURIA-TELA-C11-1911-0845 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO no topo: itens 2, 3 e 4**, nos pontos especificados abaixo. As premissas de código do item 1 procedem. A revisão é somente sobre a cópia e os anexos fornecidos; a identidade Git da cópia e o estado vivo não puderam ser verificados porque a cópia não contém `.git`. [não verificado]
+
+**1. Premissas — PROCEDE.**
+
+- O chip “Folga” lê `dia.folga` em [espelho.html:171](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:171); o ícone recebe `dia.classe_dia` em [espelho.html:193](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:193).
+- **Quem escreve e lê `folga`:** `montar_dias` obtém `_folga` de `tipo_dia` da grade em [espelho.py:688](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:688) e grava o campo em [espelho.py:778](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:778). A fonte normal da grade é a célula; para o trecho anterior e em degradação existe o builder de escala, conforme [espelho.py:511](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:511) e [espelho.py:503](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:503). No template, `folga` também participa da condição que faz o card existir, além de produzir o chip: [espelho.html:165](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:165).
+- **Quem escreve e lê `classe_dia`:** `aplicar_palavra_do_dia` escreve a classe a partir do veredito em [espelho.py:329](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:329); a tela a lê no ícone em [espelho.html:193](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:193). Os fatos vêm de `fatos_do_periodo` em [espelho.py:660](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:660), passam pelo veredito em [dia_decidido.py:397](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/dia_decidido.py:397) e pela tradução em [dia_decidido.py:206](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/dia_decidido.py:206). Cobertura ou decisão rejeitada podem anteceder o exame do tipo do fato; não se deve reduzir todo veredito à precedência feriado/folga: [dia_decidido.py:397](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/dia_decidido.py:397).
+- O fixture comum fixa `folga=False` em [test_espelho_decidiu_icone.py:119](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/tests/test_espelho_decidiu_icone.py:119), e o teste de classe o reaproveita mesmo para o caso `FOLGA`, em [test_espelho_decidiu_icone.py:185](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/tests/test_espelho_decidiu_icone.py:185).
+- A precedência já existe: [precedencia.py:46](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/precedencia.py:46) ordena feriado antes de folga, e [precedencia.py:379](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/precedencia.py:379) monta e ordena os fatos. O lookup anexo também a registra em [JUIZES.md:127](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/docs/JUIZES.md:127). Há a ressalva expressa de feriado apenas no pagamento em [precedencia.py:369](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/precedencia.py:369).
+
+**2. Colisão com aval vigente — PROCEDE como ponto a devolver para o pouso.** [nao verificado]
+
+O complemento fornecido determina que a ESPURIA reprovada sai do trem e que, para a c10 pousar por aquela via, o conteúdo final deve coincidir arquivo a arquivo com o comboio C; o trem também proíbe pousar árvore diferente da certificada. A c11 exige nova alteração, suite sobre o main do momento e opus final. Assim, **não está resolvido no literal qual certificação e qual `cmp` autorizam o pouso da c11**: comparar uma c11 alterada com a C antiga pode conflitar com a exigência de igualdade; certificar uma nova árvore não revoga por si só a cláusula específica de igualdade com C. A mudança de estado efetiva do main e da certificação é [não verificado]. Fonte: anexos fornecidos `complemento1_trem_1911_0825.txt`, `trem_de_pouso_1911_0815.txt` e `espuria_tela_c11_1911_0845.txt`, sem numeração de linhas. [nao verificado]
+
+Devolver a compatibilização explícita: árvore resultante a certificar, referência do `cmp` e tratamento da igualdade com C. O `PROIBIDO` do trem continua relevante ao pouso; a suite e o opus pedidos na c11 não bastam, no texto fornecido, para demonstrar a revogação daquela igualdade. [não verificado] [nao verificado]
+
+**3. Condições literais — PROCEDE como pontos incompletos, com duas premissas que fecham.**
+
+- **Duas cascas fecham:** a segunda é `base_app.html`; o seletor a escolhe para modo app em [context_processors.py:194](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/context_processors.py:194), e o mesmo template usa `base_tpl` em [espelho.html:1](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:1). O teste existente renderiza ambas em [test_espelho_decidiu_icone.py:183](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/tests/test_espelho_decidiu_icone.py:183); isso não prova que o novo RED já exista ou tenha passado. [não verificado]
+- **Exemplo por PK e feriado na comp. 11:** a existência no cadastro e o colaborador correspondente são [não verificado]. Para medir depois, o cadastro é `Feriado`, com data e abrangência em [models.py:5](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/models.py:5); a consulta por intervalo está em [feriados.py:27](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/feriados.py:27), e a aplicação ao colaborador considera o lugar do vínculo do dia em [feriados.py:135](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/core/feriados.py:135). Também seria necessário cruzar a folga da grade e o veredito efetivo. [espelho.py:688](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/ponto/services/espelho.py:688)
+- **“Vaga do instrumento/tela”:** a casa documenta ordem de vagas incluindo instrumento e teto de construtores em [CLAUDE.md:290](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/CLAUDE.md:290), e há referência histórica a agente de tela em [RELATO.md:496](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/docs/RELATO.md:496). Uma vaga única formal chamada **“instrumento/tela”**, sua disponibilidade agora e o rearme do B3 são [não verificado]. O código reserva o rearme a Ronald em [disjuntor.py:228](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/bin/disjuntor.py:228).
+- **Referência visual:** não localizei `referencia_1911.md` na cópia pesquisada; sua existência fora dela e a presença da medida do espelho são [não verificado]. Devolver a referência e a medida concreta antes de considerar satisfeito o CHECK-DE-TELA. [não verificado]
+
+**4. Exportada, dinheiro ou `!` fora do declarado — PROCEDE como risco documental a delimitar; mudança de dinheiro ou gravado não demonstrada.**
+
+O chip atual é renderização do template [espelho.html:171](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/templates/ponto/espelho.html:171). O cartão/PDF, porém, é documento: ele imprime `palavra_dia` em [pdf_espelho.py:916](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:916), e o PDF auditável de espelho gera registro com hash em [pdf_espelho.py:1074](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:1074) e [models.py:14](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/models.py:14). O cartão aplica a porta com `limpar=True`, removendo `classe_dia`, em [pdf_espelho.py:636](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:636).
+
+Os totais do cartão, quando o período é a competência, leem a mesma fonte que escreve o TXT, conforme [pdf_espelho.py:624](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/relatorios/pdf_espelho.py:624); há também uma porta do export que confere divergências entre leitores em [porta_export.py:1](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/app/folha/porta_export.py:1). Isso demonstra relação com a folha e sua validação, mas **não demonstra que o rótulo do chip alimente o TXT, que o PDF alimente a assinatura, ou que a alteração proposta mova dinheiro**. [não verificado]
+
+A lista de `!` inclui tocar o gravado de competência exportada e regra de negócio fora do pedido em [CLAUDE.md:265](/home/ronald/codex_ws/aca3771430418cb34f356b83a9080387d6c9dfe3/CLAUDE.md:265). Não encontrei nela uma regra que classifique automaticamente como `!` toda mudança de exibição posterior à assinatura; a existência, mecanismo e conteúdo de um espelho efetivamente assinado são [não verificado]. **Alterar um documento já assinado ou seu registro seria materialmente distinto de mudar a tela de uma leitura futura**; o aval deve delimitar esse alcance antes de migrar leitores documentais. [não verificado]
+
+`AVAL-DEVOLVIDO: 2 — compatibilizar certificação e cmp da c11 com a igualdade exigida pelo complemento do trem; 3 — identificar vaga, referência e medida do espelho, e demonstrar o exemplo por PK na comp. 11; 4 — delimitar o alcance sobre documentos e assinaturas existentes e esclarecer qualquer migração documental que toque gravado ou regra fora do pedido.`
 
 ## 19/11 08:42 · sessao 952ae32577d4 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -552,274 +626,4 @@ Universo, contagens e ocorrência efetiva dos caminhos de log: [não verificado]
 
 perguntas de lei: 0
 
-## 19/11 03:17 · sessao c55e102a4eb1 · DST-L2-JZ1 · verificador · origem=Code
-
-**Veredito: BLOQUEIA.** Há uma corrida que pode sobrescrever uma decisão do DP, uma janela em que o fecho fica sem seus efeitos associados e uma mudança de significado de “fato novo” que o R8 não cobre. A exclusão de `_APROVANDO` também altera o universo literal de D3 e precisa de decisão de lei. [app/ponto/services/justificativa.py:304](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:304), [app/ponto/services/cartorio.py:1030](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:1030), [app/chamados/models.py:1389](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/models.py:1389).
-
-**Achados**
-
-1. **BLOQUEIA — decisão concorrente pode ser sobrescrita.** Trecho: `filter(..., status='pendente')`, seguido de `list(_qs...)` e depois `j.save(update_fields=['status', ...])`, sem trava da justificativa nem condição de status no update. Entre a leitura e o save automático, o DP pode aprovar a mesma linha; o save automático pode então gravar `rejeitada` sobre a aprovação. A porta do DP usa `atomic`, trava os chamados na ordem e faz `select_for_update()` da justificativa; o escritor novo não compartilha essa proteção. A execução efetiva dessa corrida em banco está [não verificado]. [app/ponto/services/justificativa.py:304](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:304), [app/ponto/services/justificativa.py:319](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:319), [app/ponto/services/justificativa.py:140](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:140), [app/ponto/services/justificativa.py:364](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:364).
-
-2. **BLOQUEIA — fecho, rejeição e ocorrência não formam necessariamente uma transação.** Trecho: `_fech = [... transicionar_com_pauta(...)]` e, só depois, `rejeitar_justificativas_dos_chamados(...)` e `_ocorrencia_da_rejeicao_no_fecho(...)`; o mesmo ocorre em `_porm`. O `atomic` da porta de transição termina ao retornar, antes dos dois novos efeitos. Quando não houver transação externa, uma falha posterior pode deixar chamado fechado com justificativa pendente, ou justificativa rejeitada sem ocorrência D5. O reconciliador, em contraste, envolve seu ato na transação de S128. Quais entradas reais fornecem uma transação externa em todos os casos estão [não verificado]. [app/ponto/services/cartorio.py:1030](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:1030), [app/ponto/services/cartorio.py:1570](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:1570), [app/chamados/services/fecho_runtime.py:161](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/services/fecho_runtime.py:161), [app/chamados/reconciliador.py:543](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/reconciliador.py:543).
-
-3. **BLOQUEIA — a rejeição automática passa a ser fato novo para outro chamado do mesmo dia.** Trecho: o novo save inclui `atualizado_em`, e `houve_fato_novo` aceita qualquer justificativa do colaborador e dia com esse carimbo em `(desde, ate]`. Se um irmão foi encerrado via admin antes dessa rejeição e os demais fatos não satisfaziam o predicado, sua `recusa_da_reabertura` deixa de retornar `admin_sem_fato_novo`; outras guardas ainda podem recusar a reabertura. O teste R8 verifica o chamado encerrado pelo sistema e só imprime `fato`, sem afirmar seu valor nem criar o irmão administrativo. Portanto não prova a ausência desse efeito. [app/ponto/services/justificativa.py:322](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:322), [app/ponto/services/cartorio.py:393](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:393), [app/ponto/services/cartorio.py:405](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:405), [app/chamados/models.py:1389](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/models.py:1389), [app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:146](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:146).
-
-4. **BLOQUEIA — pergunta de lei: `_APROVANDO` foi excluída de D3 mesmo com portão aberto.** Trecho: `_qs.exclude(pk=_APROVANDO.get())` ocorre **antes** do `if portao_de_retencao`, de modo que vale também no reconciliador, que chama com `False`. Se o ponteiro é a própria J em aprovação, o predicado de retenção não responde `justificativa_alheia`; ainda assim a J pendente apontada é excluída. Isso contraria o universo literal de D3 fornecido no enunciado; não é consequência da condição R7, que fala de retenção respondendo reter. O teste C4 demonstra a razão prática pretendida — evitar rejeição transitória e ocorrência falsa —, mas a autorização dessa exceção ao universo de D3 está **[não verificado]**. Pergunta: a exclusão deve valer nos dois caminhos, inclusive no reconciliador? [app/ponto/services/justificativa.py:303](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:303), [app/chamados/reconciliador.py:452](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/reconciliador.py:452), [app/chamados/reconciliador.py:574](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/reconciliador.py:574), [app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:343](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:343).
-
-5. **BLOQUEIA — R9 não sela o leitor até o ESTADO.** Trecho: o teste verifica a chave no carimbo e a saída do comando, mas não executa `fio_estado.linha` nem o gerador do ESTADO. Apagar ou quebrar o leitor final pode deixar esse teste verde. O leitor existe no código: compara genericamente as chaves do carimbo e mostra apenas as fora do esperado; o gerador o chama. Os logs RED/verde, mutantes por sítio e medições antes/depois exigidos no dado fornecido estão **[não verificado]**; a árvore examinada não é um repositório Git, portanto o hash e o diff também não foram confirmados independentemente. [app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:273](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:273), [bin/fio_estado.py:121](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/bin/fio_estado.py:121), [bin/fio_estado.py:191](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/bin/fio_estado.py:191), [bin/gerar_estado.py:260](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/bin/gerar_estado.py:260).
-
-**Campos e efeitos comprovados**
-
-| Campo ou dado | Quem escreve e quem lê, nos caminhos examinados |
-|---|---|
-| `Justificativa.status` | A função nova grava `rejeitada`; aprovação e rejeição do DP também escrevem status. O próprio lote e D4 filtram `pendente`; API e painel leem o estado. Há outros escritores de rejeição existentes: sua conformidade com a porta aplicável está [não verificado]. [justificativa.py:304](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:304), [justificativa.py:205](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:205), [justificativa.py:374](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:374), [api/views.py:2105](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/api/views.py:2105), [ponto/views.py:1739](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/views.py:1739). |
-| `descricao` | O colaborador a fornece pela API; a rejeição automática acrescenta motivo ao mesmo texto; a API devolve o campo ao colaborador. Assim, descrição de entrada e anotação do sistema compartilham o campo. [api/views.py:1994](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/api/views.py:1994), [justificativa.py:323](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:323), [api/views.py:2107](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/api/views.py:2107). |
-| `atualizado_em` | `auto_now`, incluído explicitamente no save novo; o painel usa a **data** para decisões “hoje” e `houve_fato_novo` usa o **instante** como mudança de insumo. A configuração usa `USE_TZ=True` e fuso `America/Sao_Paulo`. [ponto/models.py:179](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/models.py:179), [justificativa.py:324](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:324), [ponto/views.py:1741](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/views.py:1741), [cartorio.py:405](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:405), [base.py:93](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/config/settings/base.py:93). |
-| Ponteiro e `chamado_origem` | `apontar_justificativa` escreve o ponteiro; a API pode escrever a origem ao criar ou completar a justificativa. O lote lê a união das duas relações; D4 também lê ambas. Outros escritores e leitores completos estão [não verificado]. [vinculos.py:81](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/services/vinculos.py:81), [api/views.py:1989](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/api/views.py:1989), [justificativa.py:294](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:294), [justificativa.py:342](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:342). |
-| `criado_em` e `resolvido_em` | O primeiro nasce com `auto_now_add`; a transição terminal carimba o segundo e a reabertura o limpa. D4 compara **instantes**, com `criado_em > resolvido_em` estrito: igualdade não conta. Sua unidade é **pares justificativa × chamado**, deduplicados entre ponteiro e origem, não necessariamente justificativas distintas. [ponto/models.py:179](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/models.py:179), [chamados/models.py:243](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/models.py:243), [justificativa.py:330](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:330). |
-| Ocorrência D5 | O cartório chama `anexar_ocorrencia` após rejeição, passando conteúdo, tipo e IDs; a porta grava `FollowupChamado` e deriva chave por chamado, tipo, referência e autor. O teste lê ocorrências por conteúdo. Outros consumidores do follow-up estão [não verificado]. [cartorio.py:47](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:47), [nota.py:62](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/services/nota.py:62), [nota.py:88](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/services/nota.py:88), [test_dst_l2_jz1_c3_lote_portao.py:43](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:43). |
-| Chave nova do vigia | O vigia chama D4, grava o valor no `censo` e zero em `esperado`; `fio_estado` compara os dois e só exibe a chave quando divergem. O cálculo é de frota, inclusive quando o comando imprime em recorte de empresa; o carimbo é escrito apenas para frota. [vigiar_fio_morto.py:103](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/management/commands/vigiar_fio_morto.py:103), [vigiar_fio_morto.py:190](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/management/commands/vigiar_fio_morto.py:190), [vigiar_fio_morto.py:243](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/chamados/management/commands/vigiar_fio_morto.py:243), [bin/fio_estado.py:124](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/bin/fio_estado.py:124). |
-
-**Dinheiro e restante do checklist.** A alteração nova grava status, descrição, carimbo e ocorrência; não encontrei, nesses trechos, escrita direta em motor, folha, espelho, `DiaPago` ou export. Isso não prova ausência de efeito indireto: fechamento lê justificativas **aprovadas**, e a corrida do achado 1 pode alterar esse conjunto. Impacto efetivo em dinheiro ou export está [não verificado]. [justificativa.py:319](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/justificativa.py:319), [fechamento.py:660](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/fechamento.py:660).
-
-O `post_save` sai por `em_julgamento` dentro do cartório; fora dele chama `julgar_celula`. Os testes declaram os dois cenários, mas sua execução e a morte dos mutantes estão [não verificado]. Não demonstrei segundo juiz registrado, relógio novo fora da borda ou pouso realizado; esses pontos permanecem [não verificado]. [ponto/signals.py:85](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/signals.py:85), [ponto/signals.py:161](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/signals.py:161), [cartorio.py:992](/home/ronald/codex_ws/5e79a6e25205ed30e339cff3168ccec3b4c82946/app/ponto/services/cartorio.py:992).
-
-BLOQUEIA: 5 | FILA: 0 | perguntas de lei: 1
-
-## 19/11 03:12 · sessao da34ab3038c3 · ESCALA-NAO-DESCREVE · sonda · origem=Code
-
-A medição pedida **não pode ser concluída com a janela exata a partir da lavra descrita pelo código**: a geração aceita um `hoje` fornecido pelo chamador, mas a proposta guardada não registra esse valor nem os limites da janela. `lavrado_em` registra o relógio ao fim da geração; usá-lo como `hoje` exigiria uma hipótese. [app/ponto/services/esmeril_espelho.py:215](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:215), [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:241), [app/ponto/services/esmeril_espelho.py:246](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:246), [app/ponto/services/esmeril_espelho.py:253](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:253).
-
-**A. Código**
-
-1. **Gravação e leitura.** `lavrar` chama `gravar_lavra(d)` e também escreve um espelho JSON; o banco é a autoridade. O caminho padrão do arquivo é `logs/esmeril_espelho.json`. [app/ponto/services/esmeril_espelho.py:28](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:28), [app/ponto/services/esmeril_espelho.py:321](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:321).
-
-   Trechos literais da gravação:
-
-   ```python
-   CHAVE_LAVRA = 'esmeril_espelho'
-   ```
-
-   ```python
-   MetricaSnapshot.objects.update_or_create(
-       chave=CHAVE_LAVRA, escopo='frota', escopo_id=None, data_ref=hoje,
-       ...
-       'valor': None, 'detalhe': d or {}})
-   ```
-
-   O campo é `MetricaSnapshot.detalhe`, um `JSONField`; `ler_lavra()` busca o snapshot mais recente por `data_ref` e, na sombra, verifica o marcador antes de devolvê-lo. [app/inteligencia/models.py:81](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/inteligencia/models.py:81), [app/inteligencia/models.py:95](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/inteligencia/models.py:95), [app/ponto/services/esmeril_espelho.py:291](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:291), [app/ponto/services/esmeril_espelho.py:359](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:359).
-
-   Trecho literal do mapa, com chave igual ao PK do colaborador convertido em string:
-
-   ```python
-   proposta[str(c.pk)] = {'tipo_escala_id': p['tipo_escala_id'], 'codigo': p['codigo'],
-                          'confianca': r['confianca']}
-   ```
-
-   O mapa é incluído no retrato sob a chave `proposta`; só recebe resultados com proposta, para colaboradores com assinatura. [app/ponto/services/esmeril_espelho.py:239](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:239), [app/ponto/services/esmeril_espelho.py:253](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:253).
-
-2. **Dia usado pelo detector.** Ele consulta `batidas_apuraveis` e agrupa cada batida pela data civil local do seu próprio instante:
-
-   ```python
-   for b in batidas_apuraveis(colab, de, ate):
-       lt = _tz.localtime(b.timestamp)
-       por_dia[lt.date()].append(lt)
-   ```
-
-   Assim, uma batida após meia-noite cai no dia civil seguinte, não necessariamente no dia do turno; o próprio módulo declara a possibilidade de inflar `dias` e deslocar a entrada modal. [app/escala/detector_proposta.py:18](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/detector_proposta.py:18), [app/escala/detector_proposta.py:49](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/detector_proposta.py:49).
-
-3. **Cíclica e não cíclica.** A lavra não guarda o ciclo. A tela consulta o `tipo_ciclo` **atual** do `TipoEscala` pelo ID da proposta. Sua constante é literalmente:
-
-   ```python
-   CICLICOS = ('12x36', '24x48')
-   ```
-
-   O predicado retorna `'ciclico'` para esses dois valores e `'aplicar'` para os demais que passem pelas outras condições; um template apagado não entra no mapa. A classificação histórica no momento da lavra é [não verificado]. [app/escala/models.py:386](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/models.py:386), [app/escala/services/cadastro_realidade.py:819](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:819), [app/escala/services/cadastro_realidade.py:830](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:830).
-
-4. **Confiança e botão.** O campo é `confianca`. Para proposta existente, o detector atribui `alta` ou `media`; `insuficiente` acompanha `proposta: None`. [app/escala/detector_proposta.py:118](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/detector_proposta.py:118).
-
-   Trechos literais:
-
-   ```python
-   if n >= MIN_DIAS_ALTA and coerente and estavel:
-       conf, pq = 'alta', ...
-   ...
-       conf, pq = 'media', '; '.join(_faltas)
-   ```
-
-   O predicado do botão não consulta `confianca`; a view a lê para compor o motivo passado à porta de gravação:
-
-   ```python
-   if botao_da_proposta(v, proposta, sig, ciclos_dos_destinos({'p': proposta})) != 'aplicar':
-   ```
-
-   ```python
-   motivo='proposta do esmeril (lavra de %s): %s, confianca %s' % (
-       lavra.get('lavrado_em') or '?', proposta.get('codigo') or '?', proposta.get('confianca') or '?'),
-   ```
-
-   [app/escala/services/cadastro_realidade.py:830](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:830), [app/escala/views.py:493](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/views.py:493).
-
-**B. Sonda parcial, não executada**
-
-A sonda abaixo lê o universo da lavra pela função real, classifica pelo ciclo atual e conta confiança e empresa. Para cada proposta não cíclica, registra erro: sem os limites comprovados não chama o pareador para produzir uma contagem que poderia pertencer a outra janela. Portanto, **não entrega a lista de expostos nem um resultado noturno utilizável quando houver propostas não cíclicas**. O dado raspado fornecido não informa o conteúdo da lavra nem os limites efetivos: [não verificado]. A ausência de lavra no banco resulta em `UNIVERSO=0` com motivo, conforme `ler_lavra()`; falha da guarda ou do marcador resulta em erro. [app/ponto/services/esmeril_espelho.py:359](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:359).
-
-```python
-import collections
-import os
-import sys
-
-from django.conf import settings
-from django.db import connection, transaction
-
-from colaboradores.models import Colaborador
-from escala.models import TipoEscala
-from escala.services.cadastro_realidade import ciclos_dos_destinos
-from ponto.services.esmeril_espelho import ler_lavra
-
-
-def guarda_sombra():
-    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
-        raise RuntimeError("settings")
-    banco = settings.DATABASES["default"]
-    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
-        raise RuntimeError("configuracao")
-    with connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION READ ONLY")
-        cursor.execute("SELECT current_database(), current_schema()")
-        banco_real, schema_real = cursor.fetchone()
-    if banco_real != "sombra" or schema_real != "juliani":
-        raise RuntimeError("conexao")
-
-
-def main():
-    universo = 0
-    expostos = 0
-    erros = 0
-    etapa = "GUARDA_OU_LAVRA"
-    classes = collections.Counter()
-    confiancas = collections.Counter()
-    empresas = collections.Counter()
-    linhas = []
-
-    try:
-        with transaction.atomic():
-            guarda_sombra()
-            lavra = ler_lavra()
-
-            if lavra is None:
-                linhas.append("MOTIVO=SEM_LAVRA_VALIDA_NO_BANCO")
-            else:
-                etapa = "MAPA_PROPOSTA"
-                if "proposta" not in lavra:
-                    linhas.append("MOTIVO=CAMPO_PROPOSTA_AUSENTE_NA_LAVRA")
-                else:
-                    propostas = lavra["proposta"]
-                    if not isinstance(propostas, dict):
-                        raise ValueError("mapa_proposta")
-                    universo = len(propostas)
-
-                    etapa = "CICLOS_ATUAIS"
-                    # Uma proposta malformada não deve impedir os demais casos.
-                    validas = {
-                        chave: p
-                        for chave, p in propostas.items()
-                        if isinstance(p, dict)
-                    }
-                    ciclos = ciclos_dos_destinos(validas)
-
-                    for chave, proposta in propostas.items():
-                        cid = None
-                        try:
-                            # Savepoint permite seguir após erro de consulta por caso.
-                            with transaction.atomic():
-                                if not isinstance(chave, str):
-                                    raise ValueError("chave")
-                                cid = int(chave)
-                                if cid <= 0 or str(cid) != chave:
-                                    raise ValueError("chave")
-                                if not isinstance(proposta, dict):
-                                    raise ValueError("proposta")
-
-                                tipo_id = proposta.get("tipo_escala_id")
-                                if tipo_id not in ciclos:
-                                    raise ValueError("tipo_ausente")
-                                ciclo = ciclos[tipo_id]
-                                if not isinstance(ciclo, str):
-                                    raise ValueError("ciclo")
-
-                                colab = Colaborador.objects.only(
-                                    "id", "empresa_id"
-                                ).get(pk=cid)
-                                empresa = colab.empresa_id
-                                if empresa is None:
-                                    raise ValueError("empresa_ausente")
-
-                                conf = proposta.get("confianca")
-                                if conf not in ("alta", "media", "baixa",
-                                               "insuficiente"):
-                                    raise ValueError("confianca")
-
-                                classe = (
-                                    "ciclica"
-                                    if ciclo in TipoEscala.CICLICOS
-                                    else "nao_ciclica"
-                                )
-
-                            classes[classe] += 1
-                            confiancas[conf] += 1
-                            empresas[empresa] += 1
-
-                            if classe == "nao_ciclica":
-                                erros += 1
-                                linhas.append(
-                                    "ERRO col%d empresa=%s "
-                                    "motivo=JANELA_DO_DETECTOR_NAO_COMPROVADA"
-                                    % (cid, empresa)
-                                )
-                        except Exception:
-                            erros += 1
-                            if cid is not None and cid > 0:
-                                linhas.append(
-                                    "ERRO col%d motivo=CASO_NAO_MEDIDO" % cid
-                                )
-                            else:
-                                linhas.append("ERRO motivo=CHAVE_INVALIDA")
-
-                    linhas.append(
-                        "CLASSIFICADAS ciclicas=%d nao_ciclicas=%d"
-                        % (classes["ciclica"], classes["nao_ciclica"])
-                    )
-                    for conf, total in sorted(confiancas.items()):
-                        linhas.append(
-                            "CONFIANCA %s=%d" % (conf, total)
-                        )
-                    for empresa, total in sorted(
-                        empresas.items(), key=lambda item: str(item[0])
-                    ):
-                        linhas.append(
-                            "EMPRESA %s propostas=%d" % (empresa, total)
-                        )
-                    linhas.append(
-                        "EXPOSTOS=NAO_MEDIDO "
-                        "motivo=JANELA_DO_DETECTOR_NAO_COMPROVADA"
-                    )
-    except Exception:
-        erros += 1
-        linhas.append("ERRO etapa=" + etapa)
-
-    for linha in linhas:
-        print(linha)
-    print("CONTADOR=%d UNIVERSO=%d ERROS=%d" % (expostos, universo, erros))
-    print("FIM_SONDA_NOTURNO")
-    return 0 if erros == 0 else 1
-
-
-sys.exit(main())
-```
-
-Para obter o número solicitado é preciso comprovar, por evidência externa à proposta guardada, qual foi o `hoje` passado à geração daquela lavra; a identificação desse valor é [não verificado]. [app/ponto/services/esmeril_espelho.py:215](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:215), [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:241).
-
-perguntas de lei: 1
-
-_7283 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7285 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
