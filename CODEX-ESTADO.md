@@ -1,7 +1,34 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 18:21** · publicado em **19/11/2026 18:25** (UTC-3)
+> Ultima resposta processada: **19/11/2026 18:26** · publicado em **19/11/2026 18:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 18:26 · sessao 42a726cd1503 · E4C-F5-CONSTROI · verificador · origem=Code
+
+### 1c-1 — SEGUE
+
+O ORM cru continua aceito pelo corpo puro. `pergunta_respondida` lê as colunas `p.respondida_em` e `p.resposta_colab`. A projeção temporal lê também `p.validada_em`, `p.materializada_em` e `p.via_resolucao`, e o C6 usa o par já recortado por `agora`. A cópia atual lê os **instantes** pelo ato no ramo ORM. A equivalência com o `main` de hoje fica [nao verificado]. `app/chamados/juizes.py:1389`, `app/chamados/juizes.py:1430`, `app/chamados/juizes.py:1559`, `app/chamados/models.py:2634`, `app/chamados/models.py:2748`, `app/chamados/models.py:3647`.
+
+- **Erro versus valor.** Nenhum chamador ORM examinado exige o `isinstance` para ter os atributos que o juiz puro acessa. A regressão possível é de valor. Os REDs atuais mostram ato e coluna divergindo para resposta, reabertura e validação. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:37`, `app/chamados/tests/test_e4c_f5_volta2_juizes.py:93`.
+- **Harnesses.** Sim, o teste de tipo é a causa registrada. Reproduzi em memória o `NameError` quando o harness omite `PerguntaDisputa` e o `TypeError` quando injeta um `SimpleNamespace` no lugar da classe. Ambos passam desse ponto com o ramo removido. O verde das 11 famílias com o compositor ligado na A fica [nao verificado]. `app/docs/RELATO.md:11`, `app/chamados/tests/e4_apoio.py:19`, `app/chamados/tests/e3_c8b_apoio.py:83`.
+- **Aval e alcance.** A passagem intermediária com leitura de coluna está declarada. A certificação única após C é compatível com o pouso único registrado para o 0815 e com o selo final do 1735. A prévia recebe o efeito de leitura tanto no juiz de resposta quanto em `fio_vivo`. Escrita em exportada, dinheiro ou `!` fora do declarado não foi identificada nesses caminhos. O cotejo integral com 1710 e 0815 e a prova da competência 11 ficam [nao verificado]. `respostas_f5_constroi_2_1911_1830.txt:3`, `respostas_f5_constroi_2_1911_1830.txt:4`, `respostas_f5_constroi_1911_1735.txt:3`, `app/docs/RELATO.md:45`, `app/folha/previa.py:139`.
+
+### 7-iv — PROCEDE (TÉCNICO)
+
+A tabela fecha em **cinco `False` e dois `True`**. A condição que não fecha é a prova atribuída a `:505–509`. Ali `estado` e `q_vivas` distinguem a validação do ato, mas a exclusão por `sem_veredito_entre` já ocorre pelo texto vazio. Nenhuma das três asserções distingue a fonte do instante da resposta. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:490`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:505`, `app/chamados/models.py:2004`, `app/chamados/models.py:3235`, `app/chamados/models.py:3613`.
+
+| Leitor | Esperado | Caminho na fixture |
+|---|---|---|
+| `sem_veredito_entre` | `False` | O instante do ato chega ao juiz com texto corrente vazio. O juiz rejeita o par. `app/chamados/models.py:2004`, `app/chamados/juizes.py:1564` |
+| CSF | `False` | Consulta pai e destino pelo mesmo `sem_veredito_entre`, com `ignorar_tranca=True`. `app/ponto/supra_juiz.py:573` |
+| Irmãs | `False` | Aplica `sem_veredito_entre` ao universo de crédito, também com `ignorar_tranca=True`. `app/chamados/juizes.py:2127` |
+| `estado` | `False` | Sem validação, sem materialização e com o par rejeitado, o rótulo é `PENDENTE`. O teste compara com `RESPONDIDA`. `app/chamados/models.py:3235`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:327` |
+| Property `respondida` | `False` | Delega ao juiz, que rejeita o texto corrente vazio sob o contrato novo. `app/chamados/models.py:3786`, `app/chamados/juizes.py:1564` |
+| `resposta_display` | `True` | Lê `07:13` do ato e o devolve na fixture de texto com opções vazias. `app/chamados/models.py:3815`, `app/chamados/models.py:3834`, `app/chamados/tests/cortes_f2_f9_apoio.py:62` |
+| `q_vivas` | `True` | Passa pela ausência de validação e entra pelo ramo largo da célula `furo`, que acusa. `app/chamados/models.py:3611`, `app/escala/models.py:1767`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:360` |
+
+- **Literal da sonda.** A sonda existente compara os textos brutos. A property pode converter IDs e valores em nomes ou rótulos. Comparar sua saída com a coluna bruta pode acionar o `PAREI` mesmo com ato e projeção alinhados. A contagem pedida fica [nao verificado]. `app/chamados/services/vigia_texto_resposta.py:16`, `app/chamados/models.py:3815`, `app/chamados/models.py:3834`, `respostas_f5_constroi_2_1911_1830.txt:6`.
+- **Aval e alcance.** A tabela é compatível com o contrato do 1735 e com o corte posterior ao 0815 registrado no RELATO. O item altera expectativas de leitura e mantém o display fora da F5. Não identifiquei escrita em exportada, dinheiro ou `!` fora do declarado. O cotejo integral com 1710 e 0815 fica [nao verificado]. `respostas_f5_constroi_1911_1735.txt:9`, `respostas_f5_constroi_2_1911_1830.txt:6`, `app/docs/RELATO.md:34`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:500`.
 
 ## 19/11 18:21 · sessao 5976fa43d10f · CADEIA-20-PASSO-1 · verificador · origem=Code
 
@@ -1364,57 +1391,4 @@ A saída não indica falha de leitura nem universo vazio. Ela registra `ERROS=0`
 
 A saída não indica schema errado. O script solicita `schema_context('juliani')`, mas a saída não imprime o schema efetivo da conexão. O schema efetivamente consultado é [nao verificado]. (`pares.py:6,17–22`, anexo.)
 
-## 19/11 15:19 · sessao 36b247af5b6e · E4C-F5-CONSTROI · construtor · origem=Code
-
-A volta 3 usa `projecao_temporal_da_pergunta` como fonte comum. `DecisaoPergunta.leitura` fornece os instantes de resposta e validação, e `PerguntaDisputa.resposta_colab` fornece o texto corrente. [chamados/juizes.py:1389](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/juizes.py:1389)
-
-| Sítio | Antes na base informada | Depois e caso |
-|---|---|---|
-| App | `chamados/services/pergunta_no_app.py:86` já passava a `PerguntaDisputa` ao juiz com a leitura correta. | A chamada segue na linha 86 e o juiz passa pela fonte comum em `chamados/juizes.py:1561`. **Guarda** em `chamados/tests/test_e4c_f5_volta3_sitios.py:25`. |
-| Property `respondida` | `chamados/models.py:3791` passava `DecisaoPergunta.leitura(self)` ao juiz, que recebia o texto do ato. | Passa `self` ao juiz em `chamados/models.py:3791`. O **RED** espera `False` com texto corrente em branco e texto preenchido no ato. `chamados/tests/test_e4c_f5_volta3_sitios.py:31`. |
-| Fio | `chamados/services/fio.py:192` já usava os valores corretos, combinados localmente com `_replace`. | Lê a fonte comum e conserva o predicado de espera: ausência de carimbo ou `respondida_sem_texto`. O caso guarda os resultados e exige a chamada à fonte comum, que faltava na base. `chamados/services/fio.py:189`, `chamados/juizes.py:1538`, `chamados/tests/test_e4c_f5_volta3_sitios.py:37`. |
-
-O contador usa `iterator` com prefetch de `decisoes` e lote de **500**, tamanho adotado nesta volta. O RED reduz o lote a dois, exige **2 consultas para 2 perguntas** e **4 para 6**, e confere os resultados `(1, 2)` e `(1, 6)`. A guarda de divergência e universo também está no arquivo. [Implementação](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/services/vigia_texto_resposta.py:7) · [RED](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/tests/test_e4c_f5_contador_texto.py:79) · [Guarda](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/tests/test_e4c_f5_contador_texto.py:27)
-
-**Arquivos tocados**
-
-- Produção — `chamados/juizes.py:1559`, `chamados/models.py:3786`, `chamados/services/fio.py:187`, `chamados/services/vigia_texto_resposta.py:7`.
-- Casos e mutantes — `chamados/tests/test_e4c_f5_volta3_sitios.py:12`, `chamados/tests/test_e4c_f5_contador_texto.py:73`, `chamados/tests/e4c_f5_volta3_mutantes.py:37`.
-- Selos anteriores — `chamados/tests/test_e4c_f2_leitura_do_ato.py:500` ajusta a expectativa da property com texto só no ato. `chamados/tests/e4c_f5_volta2_mutantes.py:32` e `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:229` adaptam o selo do fio à nova forma da chamada.
-
-**Comandos para o Code**
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci --noinput \
-  chamados.tests.test_e4c_f5_volta3_sitios.SitiosVolta3Test.test_guarda_particao_do_app \
-  chamados.tests.test_e4c_f5_volta3_sitios.SitiosVolta3Test.test_red_property_respondida \
-  chamados.tests.test_e4c_f5_volta3_sitios.SitiosVolta3Test.test_red_fio_le_fonte_unica \
-  chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_red_custo_cresce_por_lote \
-  chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_divergencia_e_universo
-
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci --noinput \
-  chamados.tests.test_e4c_f5_volta1_leem_o_ato.SeloTest \
-  chamados.tests.test_e4c_f2_leitura_do_ato.FonteMigradaPorLeitorTest.test_resposta_so_no_ato_cada_leitor_le_o_ato
-```
-
-| Mutante | Caso e falha esperada |
-|---|---|
-| **m1** — property volta a passar a leitura do ato | `test_red_property_respondida` falha no texto corrente em branco. `chamados/tests/test_e4c_f5_volta3_sitios.py:35` |
-| **m2** — fio lê diretamente o texto do ato | `test_red_fio_le_fonte_unica` falha ao esperar o texto corrente. `chamados/tests/test_e4c_f5_volta3_sitios.py:43` |
-| **m3** — vigia sem `iterator` | `test_red_custo_cresce_por_lote` espera diferença 2 e recebe 0. `chamados/tests/test_e4c_f5_contador_texto.py:89` |
-| **m4** — vigia com `iterator` sem prefetch | `test_red_custo_cresce_por_lote` espera diferença 2 e recebe 4, pelo padrão `1 + K`. `chamados/tests/test_e4c_f5_contador_texto.py:89` |
-| **fio-base** — recompõe os valores como na base | `test_red_fio_le_fonte_unica` chega à asserção de chamadas à fonte comum com a lista vazia. `chamados/tests/test_e4c_f5_volta3_sitios.py:44` |
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m1
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m2
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m3
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m4
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes fio-base
-```
-
-Compilei os arquivos em memória e conferi as âncoras e os labels do [executor de mutantes](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/tests/e4c_f5_volta3_mutantes.py:37). Execução dos testes, consultas medidas e mortes dos mutantes [nao verificado]. [nao verificado]
-
-LEI-AKITA: origem=chamados/services/pergunta_no_app.py:86 + chamados/models.py:3791 + chamados/services/fio.py:189, testemunha=chamados/juizes.py:1389, RED=chamados/tests/test_e4c_f5_volta3_sitios.py:25 + chamados/tests/test_e4c_f5_contador_texto.py:79, padrao=juiz unico
-
-_7412 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7413 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
