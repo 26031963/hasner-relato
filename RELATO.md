@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=2342624
+ESPERANDO: codex_pergunta.sh | pid=2380780
+PERGUNTA DE DESENHO ESPELHO-VERDADE-V3 (sem cura; aval ESPELHO-VERDADE-V3-MECANISMO-1911-1030): o dono do dia muda em 1 de 14 dia-colab quando as horas_do_dia saem dos pares de parear_turnos (dia_da_jornada) em vez do oraculo por sequencia -- col841 2026-11-16: oraculo [] (InsumosDoDono, chave = data da 1a batida do turno do oraculo, e6_oraculo.py:149-153 + nucleo.py:236) -> ESTRUTURA; pares [06:51 aberto @16/11] -> BATIDA. Nos 11 outros do grupo A, oraculo [] E pares [] no dia, espelho com 103..418 min (o dia tem minutos sem batida do dia em nenhuma das duas chaves); grupo C (112) nao muda. Pergunta: qual chave de dia as horas_do_dia do juiz devem usar -- a do oraculo por sequencia ou a do dia_da_jornada do pareador? sonda logs/ESPELHO-VERDADE/v3_1911/sonda_v3.out ERROS=0 14/14 | contestavel
 SMOKE DELE (COMBOIO-1911-F NO AR 10:1x commit f8f9bb34e): (1) ESPURIA-TELA c11 -- espelho, comp 11, colab pk=27, dia 15/11: o chip diz "Feriado" (antes "Folga") e o icone do dia e o do feriado, nas DUAS cascas (web e app). AVISO: folga com pedido pendente ou recusado agora fica SEM o chip "Folga" (o veredito da autoridade vence o tipo do dia; C11-OPUS-2 na fila). (2) DST-L2-JZ1 c5 -- recusar uma justificativa pendente pelo DP: ela sai recusada com quem/quando e a outra pendente do mesmo dia continua.
 RESPONDIDA por RESPOSTAS-1911-1020 item 1 (unificar = mesma autoridade, nao juiz novo; prova universo 37 pares D4 identico + RED J3; c6 SEGUE) -- era: AVAL-DEVOLVIDO DST-L2-JZ1-C6 item 3 (RESPOSTAS-1911-1000 item 2; Codex verificador logs/dst-l2-jz1/c6/rev_aval/r.txt 10:08): "uma funcao so" x "juizes novos = 0" nao fecha no literal -- o predicado D3
 COMBOIO-1911-F NO AR 10:1x: merge f8f9bb34e (p2 c1506fdda), write-tree 99ce65bb == certificada, cmp dos 29 arquivos de codigo OK, docs = vivo + delta da raia; deploy --sem-migrate rc=0 (logs/deploy_comboio_f.log, 3 cascas provadas, importerror_500=0). c11 opus APROVA 0 bloqueia 5 fila (C11-OPUS-1..5 no BACKLOG); DST c5 opus APROVA 3 fila. Impacto c11: 1434/56362 dias mudam de chip; causa dos 75/358 NAO medida (C11-OPUS-1). POSTMORTEM c9=(a) c10=(e) (aval ESPURIA-TELA-C11-1911-0845). Medida Codex: c11 2 voltas verificador (v1 bloqueio triado procede pela lei; v2 0), opus reprovou depois do Codex aprovar: 0.
@@ -10529,3 +10530,28 @@ ESTADO 17:3x PRE-DESENHO-F1-D1-J1 MEDIDA (so medida, nao condicao; envelope de l
 
 ## CURA-DE-FASE MEDIR (17/11 20:2x)
 - `_ev(c, x['virada'])` (censo_fase_12x36.py:413) nasceu em cffce2eb4 (30/09 14:15, `git log -S`); reversoes de --curar em app/logs: 29/09 14:47 e 14:48 (ANTES de :413) e 17/11 20:11 (a que caiu) -> nenhuma corrida de --curar passou por :413 antes desta; logs/censo_fase_12x36.log: 0 linhas "desde"/"curar".
+
+## ESPELHO-VERDADE V3 MECANISMO (aval ESPELHO-VERDADE-V3-MECANISMO-1911-1030) -- 19/11 10:39
+LEI-AKITA: origem=n/a, testemunha=e6_oraculo.dono_da_divergencia + parear_turnos (funcoes reais), RED=n/a, quem-mais-le=item 1, juizes novos=0, padrao=n/a (medida)
+DESPACHO ESPELHO-VERDADE-V3: 1,3 -> Codex leitura | 2 -> Codex sonda (script) + envelope --sombra pela sessao. Arquivos logs/ESPELHO-VERDADE/v3_1911/{q1,r1,q2,r2,sonda_v3.py,sonda_v3.out,q3,r3}.txt
+ITEM 1 (r1, amostra conferida e6_oraculo.py:149-153, nucleo.py:236): 4 chamadores de minutos_do_oraculo -- InsumosDoDono.__init__ (e6_oraculo.py:153) SEM pares, ts = batidas_apuraveis [ini-12h, fim+1d+14h] localtime, chave = str(tu[0].date()) do turno por SEQUENCIA do oraculo; diff_calculador.py:414 (pares so com --pares-da-autoridade); alimentacao.py:449 e periodo.py:356 COM pares (chave = dia_da_jornada). horas_do_dia ao juiz = self.horas.get(str(data), []) (e6_oraculo.py:182); o juiz le so a PARIDADE do len.
+ITEM 2 (sonda_v3.out, sombra, ERROS=0, CONTADOR=14 UNIVERSO=14): (a) oraculo | (b) pares@dia_da_jornada | (c) dono a -> dono b | (d) min espelho
+| colab/dia | (a) | (b) | (c) | (d) |
+|---|---|---|---|---|
+| 200/10-29 | [] | - | ESTRUTURA=ESTRUTURA | 180 |
+| 200/11-02 | [] | - | ESTRUTURA=ESTRUTURA | 180 |
+| 218/11-14 | [] | - | ESTRUTURA=ESTRUTURA | 103 |
+| 296/11-02 | [] | - | ESTRUTURA=ESTRUTURA | 345 |
+| 382/11-10 | [] | - | ESTRUTURA=ESTRUTURA | 418 |
+| 516/10-23 | [] | saida orfa 07:01 | ESTRUTURA=ESTRUTURA | 361 |
+| 727/11-10 | [] | - | ESTRUTURA=ESTRUTURA | 307 |
+| 841/11-16 | [] | 06:51 aberto | **ESTRUTURA -> BATIDA** | 178 |
+| 110/11-12 | [] | - | ESTRUTURA=ESTRUTURA | 241 |
+| 113/10-30 | [] | - | ESTRUTURA=ESTRUTURA | 242 |
+| 113/11-01 | [] | - | ESTRUTURA=ESTRUTURA | 241 |
+| 37/11-14 | [] | - | ESTRUTURA=ESTRUTURA | 241 |
+| 112/10-21 | 17:03,07:01 | 06:57>17:03 | ESTRUTURA=ESTRUTURA | 546 |
+| 112/10-22 | 17:02,06:56 | 07:01>17:02 | ESTRUTURA=ESTRUTURA | 541 |
+CONTAGEM: dono muda 1 / nao muda 13. Limite declarado (r2): (b) e parear_turnos SEM marcos/ata sobre o MESMO universo do oraculo -- nao certifica os pares do motor.
+ITEM 3 (r3): os 7 dia-colab de intervalo (252 x5, 884/11-08, 114/11-08): NAO CONSTA no universo do censo da CADEIA-20 nem razao_da_sobra no brief -- os anexos nao trazem a lista por dia; a sonda4 so lista sobras sem batida viva no minuto. Sim/nao por dia = INCOMPLETO (precisa da lista de sobras por dia do passo 1, nao gerada).
+INCOMPLETO: item 3 sim/nao por dia.
