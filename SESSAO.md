@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 14:32:58.** Transcript: `26616314-3448-48a0-ae6b-29e6ea74d2e5.jsonl` (27.9 MB). Acoes na janela: **710**.
+**Medido em 19/11/2026 14:38:07.** Transcript: `26616314-3448-48a0-ae6b-29e6ea74d2e5.jsonl` (28.0 MB). Acoes na janela: **713**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:33:01 | TaskStop |  | `-` |
+| 14:33:00 | ToolSearch |  | `-` |
+| 14:32:58 | Bash | Wait diagnostic job in background | `cd /home/ronald/saas-hasner; ssh pista espera 1119142626_fdaeb995 >/dev/null 2>&1; ssh pista log 1119142626_fdaeb995 100000 > logs/CADEIA-20-PASSO-1/v2l/diag.log 2>&1; echo fim` |
 | 14:32:54 | Bash | Return copy to its branch | `cd /home/ronald/wt-codex-cadeia-20-passo-1-112113; git branch --points-at e632496263f023f8b63c0247ac3ebbeaa0245bd1 \| cat; b=$(git branch --points-at e632496263f023f8b63c0247ac3ebbeaa0245bd1 --format='%(refname:short)' \| grep -v HEAD \| head -1); [ -n "$b" ] && git checkout -q "$b" && git status -sb \| head -3` |
 | 14:32:49 | Bash | Teto test: strip razoes_orfas before both branches | `cd /home/ronald/wt-codex-cadeia-20-passo-1-112113; git checkout -q e632496263f023f8b63c0247ac3ebbeaa0245bd1 2>&1; git log --oneline -1; python3 - <<'EOF' p='app/escala/tests/test_cadeia20_lavra.py'; s=open(p).read() old=""" self.assertEqual(len(cels), n) """ new=""" self.assertEqual(len(cels), n) # O sinal do cartorio ja lavrou na batida; os dois bracos partem de atas sem razoes. for c in cels: if ...` |
 | 14:32:39 | Bash | Correct pid; see pista running jobs | `cd /home/ronald/saas-hasner; sed -i '3s/pid=2973702/pid=2973707/' app/docs/RELATO.md; ssh pista estado 2>&1 \| grep -v " fim " \| head` |
