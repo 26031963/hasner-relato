@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 08:39** · publicado em **19/11/2026 08:39** (UTC-3)
+> Ultima resposta processada: **19/11/2026 08:42** · publicado em **19/11/2026 08:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 08:42 · sessao 952ae32577d4 · E4C-F5-CONSTROI · construtor · origem=Code
+
+A implementação está na cópia, mas **a volta ainda não está comprovada**: não executei banco, suíte, REDs ou mutantes, conforme solicitado. A comparação de consultas 1 × N nos caminhos reais e o retrato do teto do modal permanecem [não verificados]. O teste de lote preparado exercita os dois leitores sobre um queryset pré-carregado, mas não mede a renderização real do fio e do modal ([teste:97](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:97)). [nao verificado]
+
+Alterações:
+
+- [fio.py:178](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/services/fio.py:178): lê o ato e entrega `LeituraDoAto` ao juiz existente `respondida_sem_texto`. O objeto fornece os dois campos que o juiz já aceita, preservando seu predicado ([juizes.py:1531](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/juizes.py:1531)).
+- [chamados_tags.py:145](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/templatetags/chamados_tags.py:145): o atalho para resposta vazia usa o texto da leitura.
+- [historico.py:96](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/services/historico.py:96): resposta, validação e texto vêm da leitura; materialização permanece na projeção. O teste existente de histórico verifica presença de eventos, mas não confronta ato e projeção ([test_historico.py:124](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/tests/test_historico.py:124)); acrescentei esse confronto com materialização projetada ([teste:83](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:83)). [nao verificado]
+- [cobranca.py:236](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/services/cobranca.py:236) e [relatorios_disputa.py:11](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/relatorios_disputa.py:11): pré-carregam decisões nos outros caminhos em lista encontrados. O queryset do fio já as pré-carregava ([fio.py:260](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/services/fio.py:260)).
+- [teste novo:1](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:1): contém confrontos nos dois sentidos, controle, passivo sem ato, histórico, comparação de consultas e selo AST com antivacuidade. Sua execução e capacidade de matar os mutantes estão [não verificadas]. [nao verificado]
+
+No caminho de resposta, `responder_pergunta_disputa_core` escreve texto e instante ([disputa_emissao.py:1439](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/services/disputa_emissao.py:1439), [disputa_emissao.py:1481](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/services/disputa_emissao.py:1481)); a sequência é escrita por `DecisaoPergunta.registrar` ([models.py:4329](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/models.py:4329)). Os leitores alterados são fio, filtro e histórico nos links acima; a testemunha incorpora o passivo da projeção ([models.py:4295](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/models.py:4295)).
+
+Comando GREEN para a cópia, a ser executado pelo certificador:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-083923 --only "chamados.tests.test_e4c_f5_volta1_leem_o_ato chamados.tests.test_historico chamados.tests.test_selo_teto_modal"
+```
+
+Para o RED, o mesmo comando precisa ser executado com o teste novo presente e os leitores de produção na base `3308f759…`; esse retrato não foi executado [não verificado]. O teto declarado atual é **2837**, mas não há medida antes/depois nesta volta ([test_selo_teto_modal.py:184](/home/ronald/wt-codex-e4c-f5-constroi-083923/app/chamados/tests/test_selo_teto_modal.py:184)).
+
+Os mutantes preparados substituem a leitura pela própria projeção durante cada caso. Os comandos abaixo são para um ambiente de teste já configurado; `suite.sh` não repassa automaticamente essa variável ao container ([suite.sh:319](/home/ronald/wt-codex-e4c-f5-constroi-083923/bin/suite.sh:319)). Morte de todos: [não verificada]. [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 E4C_F5_MUTANTE=fio python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_fio_ato_responde_e_projecao_pendente
+PYTHONDONTWRITEBYTECODE=1 E4C_F5_MUTANTE=tag python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_tag_ato_tem_texto_e_projecao_vazia
+PYTHONDONTWRITEBYTECODE=1 E4C_F5_MUTANTE=historico python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_red_5_historico_resposta_validacao_texto_e_materializacao
+```
+
+A sintaxe dos arquivos alterados foi verificada por AST e `git diff --check` não apontou erros de whitespace [não verificado por suíte]. As medidas de sombra e CHECK-DE-TELA permanecem [não verificadas]. [nao verificado]
+
+LEI-AKITA: origem=S-fio e S-tag, testemunha=DecisaoPergunta.leitura, RED=chamados/tests/test_e4c_f5_volta1_leem_o_ato.py, quem-mais-le=classes_v5b.tsv (447) [não verificado], juizes novos=0, padrao=um juiz por pergunta.
 
 ## 19/11 08:39 · sessao 841e89919e0c · - · - · origem=Ronald (tmux)
 
@@ -788,37 +822,4 @@ Para obter o número solicitado é preciso comprovar, por evidência externa à 
 
 perguntas de lei: 1
 
-## 19/11 02:25 · sessao 71601a41dd9b · ESCALA-NAO-DESCREVE · verificador · origem=Code
-
-**Não considero a árvore pronta para o opus final.** Há dois bloqueios identificáveis pela leitura: a proposta passa a ser guardada apesar da L-042, e a nova ação permite aplicar uma proposta calculada por dia civil mesmo no contraexemplo noturno que o próprio detector declara problemático. [app/docs/LEIS.md:89] [app/ponto/services/esmeril_espelho.py:241] [app/escala/detector_proposta.py:18] [app/escala/views.py:502]
-
-1. **Quem escreve e quem lê.**
-
-   - `ata.orfas` é lido de cada `CelulaDia`; `assinaturas_do_colab` soma seus comprimentos em `medida['orfas']`. `anomalias_da_frota` escreve os mapas `orfas` e `orfas_desde`, este último com o início da janela usada na medição. `lavrar` entrega o resultado a `gravar_lavra`, que grava o snapshot; `ler_lavra` lê esse snapshot. [app/ponto/services/esmeril_espelho.py:99] [app/ponto/services/esmeril_espelho.py:130] [app/ponto/services/esmeril_espelho.py:233] [app/ponto/services/esmeril_espelho.py:321] [app/ponto/services/esmeril_espelho.py:342] [app/ponto/services/esmeril_espelho.py:359]
-
-   - `lista` lê esses mapas e escreve `carga`, `carga_desde` e `carga_texto` nas linhas; `resumo_da_carga` lê as linhas e produz a frase e os totais. Tela e PDF leem `linhas` e `carga_resumo`; os leitores anteriores ainda podem ler `postos`. A carga é contagem de órfãs, e a data é o início da janela, não a data da primeira órfã. [app/escala/services/cadastro_realidade.py:784] [app/escala/services/cadastro_realidade.py:969] [app/escala/services/cadastro_realidade.py:981] [app/escala/services/cadastro_realidade.py:1053] [app/templates/escala/cadastro_x_realidade.html:17] [app/escala/services/cadastro_realidade.py:1183] [app/escala/services/cadastro_realidade.py:1149]
-
-   - `propor_escala` produz a proposta e a confiança; `anomalias_da_frota` grava tanto a frase `destino` quanto `proposta` estruturada. `lista` e `aplicar_proposta_da_lista` leem a proposta da lavra. O ciclo é relido de `TipoEscala` por `ciclos_dos_destinos`; `_vinculos` lê o vínculo de hoje usando as autoridades de cobertura e vínculo do dia registradas em `JUIZES.md`. [app/escala/detector_proposta.py:118] [app/ponto/services/esmeril_espelho.py:241] [app/escala/services/cadastro_realidade.py:753] [app/escala/services/cadastro_realidade.py:819] [app/escala/views.py:493] [app/docs/JUIZES.md:142]
-
-   - `botao_da_proposta` lê vínculo, assinatura, proposta e ciclos; a tela lê seu resultado, e a view o consulta novamente antes do POST. A view passa destino, `hoje` e `motivo` a `realocar_vinculo_para_destino`, que chama `julgar_vinculo` e `executar_vinculo`; `confirm_txt` chega à observação do histórico pela porta de vínculo. [app/escala/services/cadastro_realidade.py:830] [app/templates/escala/cadastro_x_realidade.html:32] [app/escala/views.py:496] [app/escala/regua_defesa.py:315] [app/colaboradores/services/vinculo.py:146] [app/colaboradores/services/vinculo.py:355]
-
-2. **Catraca: bate.** Comparei em memória o literal `LINHAS_REGISTRADAS` com os itens de `censo('app')`, usando exatamente a chave e as linhas cobradas pelo teste: 9 identidades de pareadores e 85 de derivações, sem divergências. O medidor registra a linha AST da chamada reconhecida, não a linha da definição. Em particular, `entradas_fora_do_inicio/B1` é `[524]` e `assinaturas_do_colab/B1` é `[179, 186]`. Isso verifica a catraca estática, não a semântica da jornada. [app/core/tests/test_medida_turno_do_par.py:558] [app/core/medida_turno_do_par.py:197] [app/escala/regua_defesa.py:524] [app/ponto/services/esmeril_espelho.py:179] [app/ponto/services/esmeril_espelho.py:186] [nao verificado]
-
-3. **Delta da catraca contra cada pai:** nos dois diffs fornecidos, somente `app/core/tests/test_medida_turno_do_par.py` muda; nenhum `.py` de produção muda **nesse delta**. A cópia não contém `.git`, portanto a comparação dos pais foi feita pelos anexos fornecidos. [app/core/tests/test_medida_turno_do_par.py:247] [não verificado]
-
-4. **Classes de reprovação.**
-
-   - **BLOQUEIA 1 — proposta guardada:** a L-042 diz que a proposta é recalculada e não guardada; a obra passa a gravar `proposta` estruturada na lavra e a ação posterior a lê. O teste novo exige essa gravação, portanto não é apenas comentário ou intenção. [app/docs/LEIS.md:89] [app/ponto/services/esmeril_espelho.py:243] [app/escala/views.py:493] [app/escala/tests/test_escala_nao_descreve.py:100] [nao verificado]
-
-   - A decisão de destino cíclico aparece tanto no predicado do botão quanto na porta de realocação. É duplicação de guarda observável; não identifiquei em `JUIZES.md` um juiz registrado para essa pergunta que permita classificá-la, por si só, como segundo juiz registrado. [app/escala/services/cadastro_realidade.py:849] [app/escala/regua_defesa.py:313] [app/docs/JUIZES.md:142]
-
-   - A escrita do vínculo encontrada passa por `julgar_vinculo` e `executar_vinculo`; a nova view lê `hoje` e o passa adiante, embora a função de realocação conserve leitura própria para seus outros chamadores. Segundo escritor fora da porta, relógio novo fora da borda, derivação paralela de fonte única ou selo sem mordida: **presença não demonstrada nesta verificação**. [app/escala/views.py:496] [app/escala/regua_defesa.py:315] [app/escala/regua_defesa.py:319] [não verificado]
-
-5. **Contraexemplo de integração — BLOQUEIA 2.** Considere seis turnos noturnos consecutivos de 21h a 5h. O detector já existente agrupa por data civil: as saídas de madrugada e entradas da noite podem formar dias com primeira batida às 5h e última às 21h. Se houver template não cíclico compatível com esses horários, ele pode ser proposto com confiança média; a nova ação aceita proposta não cíclica sem exigir confiança alta e pode gravar esse template a partir de hoje. O próprio detector documenta que o agrupamento civil desloca a entrada modal no noturno e afirma que nada é escrito a partir dele; a ação introduzida pela obra altera essa consequência. É um contraexemplo deduzido do código, não uma ocorrência de produção observada. [app/escala/detector_proposta.py:18] [app/escala/detector_proposta.py:49] [app/escala/detector_proposta.py:95] [app/escala/detector_proposta.py:139] [app/escala/services/cadastro_realidade.py:830] [app/escala/views.py:502]
-
-Execução dos testes Django e ocorrência dos casos em produção: [não verificado]. [nao verificado]
-
-BLOQUEIA: 2  
-perguntas de lei: 0
-
-_7282 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7283 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
