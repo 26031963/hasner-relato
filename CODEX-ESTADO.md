@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 10:40** · publicado em **19/11/2026 10:43** (UTC-3)
+> Ultima resposta processada: **19/11/2026 10:48** · publicado em **19/11/2026 10:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 10:48 · sessao b95331667c03 · ESPELHO-VERDADE · leitura · origem=Code
+
+**O campo `minutos_realizados` da linha do espelho é calculado a partir de turnos pedidos novamente por `turnos_do_colab` para a janela visual inteira.** Ele não é copiado do resultado do motor nem do campo de minutos da ata. A sonda informa 11 valores positivos com `horas_oraculo=[]` e sem par completo na lista que ela mostrou, mas não fornece o código da própria sonda, as janelas exatas nem os turnos carregados pela chamada interna do espelho. Portanto, **o par e a causa específica de cada um dos 11 resultados permanecem [não verificado]**. A observação dos valores vem do anexo fornecido, sem arquivo e linhas verificáveis na cópia: [não verificado].
+
+### 1. De onde vem o dia creditado
+
+1. `espelho_do_colab` determina `vis_ini` e chama `autoridade_do_periodo(colaborador, vis_ini, hoje)`; depois chama `montar_dias` com esse mesmo intervalo visual. [app/ponto/services/espelho.py:1241](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:1241), [app/ponto/services/espelho.py:1278](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:1278).
+2. `montar_dias` pede `turnos_do_colab(colaborador, data_ini, data_fim_mes)` uma vez, percorre cada data da janela e passa essa data e os turnos carregados a `_realizado_do_dia_tela`. A chave `data` da linha recebe a data do laço. [app/ponto/services/espelho.py:623](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:623), [app/ponto/services/espelho.py:667](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:667), [app/ponto/services/espelho.py:778](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:778).
+3. `realizado_do_dia` encaminha os turnos a `realizado_dos_turnos`, que seleciona **`t.data_turno == data`**. Portanto, o crédito vai à linha cuja data coincide com o `data_turno` atribuído pelo pareador. [app/ponto/turnos.py:774](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:774), [app/ponto/turnos.py:719](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:719).
+4. Ao formar um `Turno`, `_mk` chama `_data_do_turno`: a referência inicial é a data local do `timestamp` da entrada ou, se não houver entrada, da saída. Conforme os marcos da véspera, a travessia de meia-noite e o envelope da jornada, pode atribuir a véspera. [app/ponto/turnos.py:285](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:285), [app/ponto/turnos.py:312](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:312).
+
+O motor também é chamado nessa montagem, mas por uma trilha paralela: recebe batidas e células e calcula por fatias de vínculo, ou diretamente se não houver escalas; seu resultado é passado a `montar_dias`. Isso não altera a origem do campo `minutos_realizados` descrita acima. [app/ponto/services/espelho.py:1035](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:1035), [app/ponto/services/espelho.py:1147](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:1147), [app/ponto/services/espelho.py:1178](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:1178).
+
+### 2. De onde vêm as pontas que viram minutos
+
+`turnos_do_colab` carrega batidas não retratadas na janela com dois dias de margem antes e um depois; carrega células, vínculos e DNA; divide a janela em segmentos por vínculo do dia; e chama `parear_turnos` com cópias das batidas do segmento, marcos de intervalo e de borda, marcos por dia, papéis vindos da ata e provedor da última batida. Retém os turnos cujo `data_turno` pertence ao segmento. [app/ponto/turnos.py:1834](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1834), [app/ponto/turnos.py:1867](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1867), [app/ponto/turnos.py:1940](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1940), [app/ponto/turnos.py:1961](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1961), [app/ponto/turnos.py:1977](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1977).
+
+No cálculo usual, a entrada é `t.entrada`; o fim é `t.saida` ou, em turno aberto, uma saída anterior que feche par dentro das batidas do turno. Sem entrada, `_fim_fechado` não devolve fim. O cálculo trunca as pontas ao minuto, subtrai pausas reconhecidas ou, quando aplicável, a sobreposição com o intervalo declarado, e soma os líquidos. [app/ponto/turnos.py:609](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:609), [app/ponto/turnos.py:733](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:733).
+
+Existe uma **exceção posicional** antes desse laço: se as guardas de `_borda_posicional` forem satisfeitas, o cálculo usa a entrada do único turno com fim fechado e a última batida dos turnos daquele dia, descontando um único vão interior elegível. Entre as guardas estão: um único turno com fim fechado, ausência de pausas marcadas, pelo menos quatro batidas e exatamente um vão interior elegível. A última batida pode pertencer a outro turno devolvido pelo pareador. A condição ter ocorrido em qualquer um dos 11 casos é [não verificado]. [app/ponto/turnos.py:638](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:638), [app/ponto/turnos.py:673](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:673), [app/ponto/turnos.py:725](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:725).
+
+### 3. Onde muda a autoridade ou a janela
+
+Para o campo do espelho, **não há um ponto em que a lista interna de `parear_turnos` seja simplesmente descartada**: `turnos_do_colab` devolve seus turnos, e `realizado_dos_turnos` os lê. Há, porém, a exceção posicional acima, que escolhe uma ponta entre as batidas de mais de um turno do dia. [app/ponto/turnos.py:1997](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1997), [app/ponto/turnos.py:719](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:719).
+
+O oráculo tem outra derivação: o carregador E6 busca timestamps apuráveis entre `ini - 12h` e `fim + 1 dia + 14h` e chama `minutos_do_oraculo(ts)` **sem `pares`**. Nesse ramo, a função ordena os instantes, aplica cortes próprios e chaveia as horas pela data civil do primeiro instante de cada sequência. [app/ponto/management/commands/e6_oraculo.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:149), [app/ponto/calculador/nucleo.py:109](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:109), [app/ponto/calculador/nucleo.py:215](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:215), [app/ponto/calculador/nucleo.py:235](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:235).
+
+O carregador E6 também tem uma chamada separada de `turnos_do_colab(c, ini-1 dia, fim+1 dia)`, mas **não é possível afirmar que essa foi a chamada da sonda nem quais `ini` e `fim` ela usou**: o código `sonda_v3.py` não foi fornecido no anexo e sua implementação não foi encontrada na cópia [não verificado]. [app/ponto/management/commands/e6_oraculo.py:156](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:156).
+
+No motor há uma substituição concreta em outra trilha: `_periodos_via_autoridade` converte os turnos pareados e passa o resultado a `_periodos_pelo_marco` em [app/ponto/motor_calculo_v2.py:530](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:530). Esse caminho pode substituir períodos pela leitura da ata; retorna o trio original, por exemplo, para turno partido ou sem células alimentadas. Essa substituição **não é a atribuição do campo `minutos_realizados` da linha**. [app/ponto/motor_calculo_v2.py:534](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:534), [app/ponto/motor_calculo_v2.py:558](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:558), [app/ponto/services/espelho.py:797](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:797).
+
+### 4. Caminhos existentes e os 11 casos
+
+| Caminho | Condição e efeito |
+|---|---|
+| **Realizado da linha** | Sempre chama `_realizado_do_dia_tela` para a data iterada; dentro dele há o ramo posicional e o ramo usual descritos acima. [app/ponto/services/espelho.py:688](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:688), [app/ponto/turnos.py:725](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:725). |
+| **Grade visual por célula ou builder** | A célula é lida a partir de `max(data_ini, apur_ini)`; o trecho anterior usa builder, e `AtaAgregadaSemMarcos` faz o período cair no builder. A grade preenche `realizado_grade`, enquanto o número vem de `_real_dia.minutos`. [app/ponto/services/espelho.py:532](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:532), [app/ponto/services/espelho.py:542](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:542), [app/ponto/services/espelho.py:551](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:551), [app/ponto/services/espelho.py:786](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:786). |
+| **Motor: pareador e ata** | O motor passa os turnos ao adaptador e depois pode usar a ata para períodos; as guardas de cobertura ficam em `_periodos_pelo_marco`. [app/ponto/motor_calculo_v2.py:530](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:530), [app/ponto/motor_calculo_v2.py:549](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:549). |
+| **Fallback de data civil no motor** | Se o mapa do juiz não contém a entrada do período, o motor usa a data local da entrada; em um caminho também existe herança do dia anterior para período subsequente com intervalo de até seis horas. Essas regras são do motor, não da seleção de `t.data_turno` para o relógio da linha. [app/ponto/motor_calculo_v2.py:2400](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:2400), [app/ponto/motor_calculo_v2.py:2940](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:2940). |
+
+Para os 11, o **campo informado** segue o primeiro caminho pela atribuição em `montar_dias`; qual dos ramos interno usual ou posicional ocorreu em cada caso, quais turnos ele recebeu e qual caminho desenhou a grade são [não verificado]. [app/ponto/services/espelho.py:689](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:689), [app/ponto/services/espelho.py:797](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:797).
+
+### 5. Escritores, leitores e significado dos campos
+
+| Campo ou insumo | Escrita e leitura verificadas | Significado relevante |
+|---|---|---|
+| `Batida.timestamp`, `tipo`, `colaborador` | `registro_batida` cria a batida com esses campos; `turnos_do_colab` busca por colaborador e data do timestamp; o pareador ordena por timestamp e usa tipo e alimentação. [app/ponto/registro_batida.py:170](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/registro_batida.py:170), [app/ponto/turnos.py:1867](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1867), [app/ponto/turnos.py:1192](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1192). | `timestamp` é instante; sua data local é referência para o juiz, mas pode resultar em `data_turno` da véspera. O `tipo` gravado pode ser superado pelo papel da ata quando esta responde. [app/ponto/turnos.py:285](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:285), [app/ponto/turnos.py:1201](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1201). |
+| `retratada_em` | A porta de retratação escreve o instante; a porta de desfazer pode limpar o campo. Tanto a consulta do espelho quanto `batidas_apuraveis` excluem retratadas. [app/ponto/registro_batida.py:294](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/registro_batida.py:294), [app/ponto/services/retratar_humano.py:207](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/retratar_humano.py:207), [app/ponto/turnos.py:1868](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1868), [app/ponto/turnos.py:2892](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:2892). | É filtro do universo, não dia da jornada. [app/ponto/turnos.py:2872](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:2872). |
+| `CelulaDia.data`, `escala_geradora`, `dna.marcos` | A porta de célula cria e pode regenerar esses dados; `vinculo_do_dia` lê a geradora e sua vigência; `marcos_dna_periodo` lê os marcos congelados. [app/ponto/portas/celula.py:289](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/portas/celula.py:289), [app/ponto/portas/celula.py:305](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/portas/celula.py:305), [app/escala/alimentacao.py:269](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/alimentacao.py:269), [app/escala/utils.py:96](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/utils.py:96). | A data identifica a célula do dia; seus marcos alimentam a geometria e a pausa. A escolha do vínculo pode retornar `None` se a geradora estiver fora da vigência; sem geradora, há fallback para vínculo que cobre a data. [app/escala/alimentacao.py:279](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/alimentacao.py:279), [app/escala/models.py:1135](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/models.py:1135). |
+| `CelulaDia.ata`: lâmpadas, luzes e órfãs | O cartório monta a ata a partir da grade e a entrega à porta de lavra; `periodos_do_dia` lê ata e DNA, e `papel_por_minuto_da_ata` transforma a resposta em papéis para o pareador, sujeitos às guardas de correspondência. [app/ponto/services/cartorio.py:749](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/cartorio.py:749), [app/ponto/services/cartorio.py:1898](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/cartorio.py:1898), [app/ponto/portas/celula.py:1091](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/portas/celula.py:1091), [app/ponto/juiz_batida.py:149](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/juiz_batida.py:149), [app/ponto/turnos.py:1631](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:1631). | A luz tem precisão de hora e minuto; o leitor reconstrói instantes ancorados na data da célula e na ordem dos marcos. O motor procura a batida correspondente para recuperar o timestamp com segundos. [app/ponto/juiz_batida.py:206](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/juiz_batida.py:206), [app/ponto/motor_calculo_v2.py:580](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/motor_calculo_v2.py:580). |
+| `Turno.data_turno` e `minutos_realizados` da linha | `_mk` constrói o `Turno` em memória; `realizado_dos_turnos` lê `data_turno`; `montar_dias` escreve no dicionário da linha o resultado calculado; o leitor E6 prefere esse campo quando não é `None`. [app/ponto/turnos.py:312](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:312), [app/ponto/turnos.py:719](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:719), [app/ponto/services/espelho.py:797](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:797), [app/ponto/management/commands/e6_oraculo.py:263](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/management/commands/e6_oraculo.py:263). | `data_turno` é dia atribuído à jornada, não necessariamente data civil do instante. A ata também possui uma chave chamada `minutos_realizados`, escrita pelo cartório, mas ela não é a fonte direta desse campo da linha. [app/ponto/turnos.py:285](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:285), [app/ponto/services/cartorio.py:757](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/cartorio.py:757), [app/ponto/services/espelho.py:797](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/espelho.py:797). |
+
+A diferença de significado verificável é, portanto, principalmente **instante da batida → data civil local → dia atribuído ao turno**: o oráculo sem pares agrupa pela data civil do início de sua sequência, enquanto o espelho seleciona o `data_turno` produzido pelo juiz. Isso demonstra uma diferença de regra capaz de mudar a linha, mas **não demonstra que ela explica qualquer um dos 11 casos** [não verificado]. [app/ponto/calculador/nucleo.py:235](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/calculador/nucleo.py:235), [app/ponto/turnos.py:285](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:285), [app/ponto/turnos.py:719](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/turnos.py:719).
+
+A lista acima identifica escritores e leitores encontrados para os campos decisivos; **exaustividade de todos os escritores indiretos e históricos** [não verificado].
 
 ## 19/11 10:40 · sessao f15884b7e099 · ESCALA-NAO-DESCREVE · leitura · origem=Code
 
@@ -1628,73 +1684,4 @@ O hash informado não pôde ser confirmado por Git: esta cópia não se apresent
 
 4. **CONFERE quanto ao escopo declarado**, com efeito de produção **[não verificado]**. O objeto declarado é a retenção e o vínculo da justificativa com o chamado; o caminho atual de retratação passa por uma cerca que pode recusar escritas em competência entregue: [reconciliador.py:538](/home/ronald/codex_ws/c1506fddad441510164a066974525efb904c23ae/app/chamados/reconciliador.py:538). Não há diff da c6 para demonstrar seus efeitos indiretos em exportada, dinheiro, escala ou vínculo **[não verificado]**. Se a implementação tocar o gravado de exportada, dados de escala ou vínculo, ou regra fora do pedido, a regra vigente exige `!`: [CLAUDE.md:265](/home/ronald/codex_ws/c1506fddad441510164a066974525efb904c23ae/CLAUDE.md:265).
 
-## 19/11 09:38 · sessao 9ce3c4a07f09 · E4C-F5-CONSTROI · construtor · origem=Code
-
-A volta foi preparada na cópia: a tag voltou ao conteúdo de `3308f7599`, as duas linhas que leem texto permanecem como na base e receberam o comentário pedido. O teste de histórico agora verifica os carimbos sem afirmar qual texto deve prevalecer. ([fio.py:190](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/fio.py:190), [historico.py:110](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/historico.py:110), [teste:64](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:64))
-
-Os testes de custo chamam as cinco funções reais, com uma e cinco perguntas, sem prefetch montado pelo teste. O selo inclui fio e histórico; no histórico, permite `p.materializada_em` e detecta a leitura crua indireta por `getattr`. ([teste:76](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:76), [teste:141](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:141)) [nao verificado]
-
-**Verificação:** análise sintática dos três arquivos Python alterados e `git diff --check 3308f7599 -- .` passaram. Banco, suíte, RED, GREEN e mutantes não foram executados; resultados esperados **[não verificado]**.
-
-Diff final, a partir de `app/`:
-
-```bash
-git diff 3308f7599 -- .
-```
-
-Para RED, use uma cópia independente em `3308f7599`, copie para ela `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py` desta entrega e execute, em `app/`:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_fio_ato_responde_e_projecao_pendente \
-  chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_red_5_historico_resposta_validacao_e_materializacao \
-  chamados.tests.test_e4c_f5_volta1_leem_o_ato.SeloTest
-```
-
-GREEN na cópia entregue:
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato
-```
-
-Mutantes em memória; cada comando deve falhar na asserção de negócio correspondente **[não verificado]**:
-
-```bash
-E4C_F5_MUTANTE=fio PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_fio_ato_responde_e_projecao_pendente
-
-E4C_F5_MUTANTE=historico PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_red_5_historico_resposta_validacao_e_materializacao
-```
-
-Para os mutantes textuais abaixo, aplique **um por vez em cópia descartável**, a partir de `app/`, e restaure o arquivo antes do próximo. Cada teste indicado deve falhar **[não verificado]**: [nao verificado]
-
-```bash
-# cobranca
-sed -i "s/^[[:space:]]*\\.prefetch_related('decisoes'))/          )/" chamados/services/cobranca.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_custo_cobranca
-
-# classificar
-sed -i "/^[[:space:]]*prefetch_related_objects(perguntas, 'decisoes')/d" chamados/relatorios_disputa.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_custo_classificar
-
-# coletar
-sed -i "s/, 'perguntas__decisoes'//" chamados/relatorios_disputa.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_custo_coletar
-
-# historico: custo
-sed -i "s/\\.prefetch_related('decisoes')//" chamados/services/historico.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_custo_historico
-
-# fio: custo
-sed -i "/                'chamado_destino__celula').prefetch_related(/,/                'validada_original_por', 'ato_por'))).order_by('id'):/c\\                'chamado_destino__celula').order_by('id'):" chamados/services/fio.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.LeitoresTest.test_custo_fio
-
-# historico: leitura crua, mordida pelo selo
-sed -i 's/getattr(leitura, campo)/getattr(p, campo)/' chamados/services/historico.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_volta1_leem_o_ato.SeloTest
-```
-
-LEI-AKITA: `origem=chamados/services/{fio,historico,cobranca}.py + chamados/relatorios_disputa.py; testemunha=DecisaoPergunta.leitura; quem-mais-le=tag e acoes_chamado.py:350 (volta 2); juizes novos=0; padrao=projecao reconstruivel / CQRS`. O termo consta em [PLANO-PADROES.md:57](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/docs/PLANO-PADROES.md:57).
-
-_7316 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7317 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
