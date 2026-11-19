@@ -1,7 +1,989 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 00:50** · publicado em **19/11/2026 00:49** (UTC-3)
+> Ultima resposta processada: **19/11/2026 00:54** · publicado em **19/11/2026 00:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 00:54 · sessao 87eee57fdaea · QUEIMA-B2-chamado · censo · origem=Code
+
+O script abaixo produz um inventário **sintático e conservador**; sua execução e seus totais estão [não verificado]. Os quatro campos selecionados correspondem às declarações em [app/chamados/models.py:58](/home/ronald/codex_ws/3f666ad84f2ac80044b91d79cbb73a0db67ea3ca/app/chamados/models.py:58). O formato segue o molde fornecido no enunciado [não verificado].
+
+```python
+#!/usr/bin/env python3
+# Uso: python3 -B script.py RAIZ
+# Somente leitura; RAIZ deve conter app/.
+import ast
+import collections
+import os
+import re
+import sys
+import tokenize
+
+sys.dont_write_bytecode = True
+
+if len(sys.argv) != 2:
+    sys.stderr.write("Uso: python3 -B script.py RAIZ\n")
+    sys.exit(2)
+
+RAIZ = os.path.abspath(sys.argv[1])
+APP = os.path.join(RAIZ, "app")
+if not os.path.isdir(APP):
+    sys.stderr.write("ERRO: RAIZ deve conter app/\n")
+    sys.exit(2)
+
+CAMPOS = (
+    "status_local",
+    "via_encerramento",
+    "respondido_por",
+    "resolvido_em",
+)
+ALIAS = {campo: campo for campo in CAMPOS}
+ALIAS["respondido_por_id"] = "respondido_por"
+
+PADRAO = re.compile(
+    r"(?<![A-Za-z0-9_])(?:"
+    + "|".join(re.escape(c) for c in sorted(ALIAS, key=len, reverse=True))
+    + r")(?![A-Za-z0-9_])"
+)
+SQL = re.compile(
+    r"\b(select|insert|update|delete|with|returning|where|from|join)\b",
+    re.I,
+)
+TAGS = re.compile(r"{{.*?}}|{%.*?%}", re.S)
+ATRIBUTO_TEMPLATE = re.compile(
+    r"\.\s*("
+    + "|".join(re.escape(c) for c in sorted(ALIAS, key=len, reverse=True))
+    + r")(?![A-Za-z0-9_])"
+)
+
+LEITURAS = {
+    "filter", "exclude", "get", "values", "values_list", "order_by",
+    "annotate", "alias", "only", "defer", "distinct", "earliest", "latest",
+}
+CADEIA = LEITURAS | {
+    "all", "none", "select_for_update", "select_related", "prefetch_related",
+    "using", "reverse", "iterator", "first", "last", "create",
+    "get_or_create", "update_or_create", "update", "bulk_create", "bulk_update",
+}
+ESCOPOS = (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef,
+           ast.Lambda)
+FUNCOES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)
+REGISTROS = set()
+FALHAS = []
+ARVORES = []
+MODELOS = {"ChamadoColaborador"}
+
+
+def limpar(valor):
+    return str(valor).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
+def categoria(relativo):
+    partes = relativo.lower().replace("\\", "/").split("/")
+    nome = partes[-1]
+    if "migrations" in partes:
+        return "migration"
+    if ("tests" in partes or "test" in partes or nome.startswith("test_")
+            or nome.endswith("_test.py")):
+        return "teste" [nao verificado]
+    return "prod"
+
+
+def chamada(no):
+    if not isinstance(no, ast.Call):
+        return ""
+    if isinstance(no.func, ast.Name):
+        return no.func.id
+    if isinstance(no.func, ast.Attribute):
+        return no.func.attr
+    return ""
+
+
+def ocorrencias(texto):
+    for achado in PADRAO.finditer(texto):
+        yield ALIAS[achado.group()], achado.start()
+
+
+def campo_caminho(texto):
+    """Retorna os campos presentes em segmentos Django, inclusive lookups."""
+    if not isinstance(texto, str):
+        return []
+    partes = texto.lstrip("-").split("__")
+    return [(ALIAS[p], i) for i, p in enumerate(partes) if p in ALIAS]
+
+
+def nome_base(no):
+    if isinstance(no, ast.Name):
+        return no.id
+    if isinstance(no, ast.Attribute):
+        return no.attr
+    return ""
+
+
+def emitir(arquivo, linha, funcao, campo, papel, escopo, receptor, motivo, forma):
+    REGISTROS.add((
+        arquivo, int(linha), funcao or "<modulo>", campo, papel, escopo,
+        receptor, motivo, forma,
+    ))
+
+
+def filhos_sem_escopos(no):
+    pilha = list(ast.iter_child_nodes(no))
+    while pilha:
+        atual = pilha.pop()
+        yield atual
+        if not isinstance(atual, ESCOPOS):
+            pilha.extend(ast.iter_child_nodes(atual))
+
+
+# Examina a cópia inteira, incluindo testes e templates fora de app/. [nao verificado]
+# Diretórios de metadados e caches são ignorados.
+IGNORAR_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules"}
+TEMPLATES = []
+for diretorio, dirs, arquivos in os.walk(RAIZ, followlinks=False):
+    dirs[:] = sorted(d for d in dirs if d not in IGNORAR_DIRS)
+    for nome in sorted(arquivos):
+        caminho = os.path.join(diretorio, nome)
+        relativo = os.path.relpath(caminho, RAIZ).replace(os.sep, "/")
+        if nome.endswith((".html", ".htm", ".django", ".jinja", ".jinja2")):
+            TEMPLATES.append((relativo, caminho))
+        if not nome.endswith(".py"):
+            continue
+        try:
+            with tokenize.open(caminho) as arquivo:
+                fonte = arquivo.read()
+            arvore = ast.parse(fonte, filename=relativo)
+        except (OSError, SyntaxError, UnicodeError, LookupError) as erro:
+            FALHAS.append((relativo, str(erro)))
+            continue
+        ARVORES.append((relativo, arvore))
+        for no in ast.walk(arvore):
+            if (isinstance(no, ast.ClassDef)
+                    and any(nome_base(base) == "Model" for base in no.bases)):
+                MODELOS.add(no.name)
+
+
+for relativo, arvore in ARVORES:
+    escopo_arquivo = categoria(relativo)
+    pais = {}
+    ambientes = {}
+    nomes_escopo = {}
+    classes = {}
+
+    for pai in ast.walk(arvore):
+        for filho in ast.iter_child_nodes(pai):
+            pais[filho] = pai
+
+    def indexar(no, pilha, classe, ambiente):
+        if isinstance(no, ast.ClassDef):
+            pilha = pilha + [no.name]
+            classe = no.name if no.name in MODELOS else None
+            ambiente = no
+        elif isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            pilha = pilha + [no.name]
+            ambiente = no
+        elif isinstance(no, ast.Lambda):
+            pilha = pilha + ["<lambda>"]
+            ambiente = no
+        ambientes[no] = ambiente
+        nomes_escopo[no] = ".".join(pilha) or "<modulo>"
+        classes[no] = classe
+        for filho in ast.iter_child_nodes(no):
+            indexar(filho, pilha, classe, ambiente)
+
+    indexar(arvore, [], None, arvore)
+
+    atribuicoes = collections.defaultdict(lambda: collections.defaultdict(list))
+    anotacoes = collections.defaultdict(lambda: collections.defaultdict(list))
+    acrescentados = collections.defaultdict(lambda: collections.defaultdict(list))
+
+    for ambiente in [n for n in ast.walk(arvore) if isinstance(n, ESCOPOS)]:
+        if isinstance(ambiente, FUNCOES):
+            args = ambiente.args
+            todos = list(args.posonlyargs) + list(args.args) + list(args.kwonlyargs)
+            if args.vararg:
+                todos.append(args.vararg)
+            if args.kwarg:
+                todos.append(args.kwarg)
+            for arg in todos:
+                if arg.annotation is not None:
+                    anotacoes[ambiente][arg.arg].append(arg.annotation)
+
+        for no in filhos_sem_escopos(ambiente):
+            if ambientes.get(no) is not ambiente:
+                continue
+            if isinstance(no, ast.Assign):
+                for alvo in no.targets:
+                    if isinstance(alvo, ast.Name):
+                        atribuicoes[ambiente][alvo.id].append(no.value)
+            elif isinstance(no, ast.AnnAssign) and isinstance(no.target, ast.Name):
+                anotacoes[ambiente][no.target.id].append(no.annotation)
+                if no.value is not None:
+                    atribuicoes[ambiente][no.target.id].append(no.value)
+            elif isinstance(no, (ast.For, ast.AsyncFor)) and isinstance(no.target, ast.Name):
+                atribuicoes[ambiente][no.target.id].append(no.iter)
+            elif (isinstance(no, ast.Call) and isinstance(no.func, ast.Attribute)
+                  and isinstance(no.func.value, ast.Name)
+                  and no.func.attr in ("append", "extend") and no.args):
+                acrescentados[ambiente][no.func.value.id].append(no.args[0])
+
+    def modelo_anotacao(no):
+        # Somente uma anotação direta de modelo é tratada como prova.
+        if isinstance(no, ast.Name) and no.id in MODELOS:
+            return no.id
+        if isinstance(no, ast.Attribute) and no.attr in MODELOS:
+            return no.attr
+        if isinstance(no, ast.Constant) and isinstance(no.value, str):
+            partes = no.value.split(".")
+            if partes[-1] in MODELOS and all(p.isidentifier() for p in partes):
+                return partes[-1]
+        return None
+
+    def inferir(no, contexto, visitados=None):
+        if no is None:
+            return None
+        if visitados is None:
+            visitados = set()
+        ambiente = ambientes.get(contexto, arvore)
+        if isinstance(no, ast.Name):
+            if no.id == "self" and classes.get(contexto):
+                return classes[contexto]
+            if no.id in MODELOS:
+                if no.id not in atribuicoes[ambiente]:
+                    return no.id
+                return None
+            chave = (id(ambiente), no.id)
+            if chave in visitados:
+                return None
+            visitados = visitados | {chave}
+            anns = anotacoes[ambiente].get(no.id, [])
+            vals = atribuicoes[ambiente].get(no.id, [])
+            resultados = [modelo_anotacao(x) for x in anns]
+            resultados += [inferir(x, x, visitados) for x in vals]
+            if resultados and None not in resultados and len(set(resultados)) == 1:
+                return resultados[0]
+            return None
+        if isinstance(no, ast.Attribute):
+            if no.attr in MODELOS and isinstance(no.value, ast.Name):
+                return no.attr
+            if no.attr in ("objects", "_default_manager", "_base_manager"):
+                return inferir(no.value, contexto, visitados)
+            return None
+        if isinstance(no, ast.Subscript):
+            return inferir(no.value, contexto, visitados)
+        if isinstance(no, ast.Call):
+            if chamada(no) == "type" and len(no.args) == 1:
+                return inferir(no.args[0], contexto, visitados)
+            if (chamada(no) == "get_model" and no.args
+                    and isinstance(no.args[-1], ast.Constant)
+                    and isinstance(no.args[-1].value, str)):
+                nome = no.args[-1].value.split(".")[-1]
+                return nome if nome in MODELOS else None
+            if isinstance(no.func, ast.Name) and no.func.id in MODELOS:
+                return inferir(no.func, contexto, visitados)
+            if isinstance(no.func, ast.Attribute):
+                if no.func.attr in MODELOS:
+                    return inferir(no.func, contexto, visitados)
+                if no.func.attr in CADEIA:
+                    return inferir(no.func.value, contexto, visitados)
+        return None
+
+    def receptor(no, contexto, caminho=None):
+        if caminho and any(pos > 0 for _, pos in campo_caminho(caminho)):
+            return "AMBIGUO", "caminho de relacao nao resolvido"
+        modelo = inferir(no, contexto)
+        if modelo:
+            return "RECEPTOR=" + modelo, "inferencia sintatica"
+        return "AMBIGUO", "receptor nao resolvido"
+
+    def receptor_chamada(call, contexto, caminho=None):
+        if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute):
+            return receptor(call.func.value, contexto, caminho)
+        return "AMBIGUO", "chamada sem receptor de modelo"
+
+    def registrar(no, campo, papeis, forma, rec=None, motivo=None, linha=None):
+        if rec is None:
+            rec, motivo = "AMBIGUO", "receptor nao resolvido"
+        for papel in papeis:
+            emitir(
+                relativo, linha or getattr(no, "lineno", 1),
+                nomes_escopo.get(no, "<modulo>"), campo, papel,
+                escopo_arquivo, rec, motivo or "", forma,
+            )
+
+    def chamada_externa(no):
+        atual = no
+        while atual in pais:
+            atual = pais[atual]
+            if isinstance(atual, ast.Call) and chamada(atual) in CADEIA:
+                return atual
+            if isinstance(atual, (ast.stmt, ast.Lambda)):
+                break
+        return None
+
+    def literais_resolvidos(no, contexto, visitados=None):
+        """Reúne literais visíveis; não afirma que o fluxo os executa."""
+        if visitados is None:
+            visitados = set()
+        if isinstance(no, ast.Constant) and isinstance(no.value, str):
+            yield no
+        elif isinstance(no, (ast.List, ast.Tuple, ast.Set)):
+            for item in no.elts:
+                yield from literais_resolvidos(item, contexto, visitados)
+        elif isinstance(no, ast.Dict):
+            for chave in no.keys:
+                if chave is not None:
+                    yield from literais_resolvidos(chave, contexto, visitados)
+        elif isinstance(no, ast.Name):
+            ambiente = ambientes.get(contexto, arvore)
+            chave = (id(ambiente), no.id)
+            if chave in visitados:
+                return
+            visitados = visitados | {chave}
+            for valor in (atribuicoes[ambiente].get(no.id, [])
+                          + acrescentados[ambiente].get(no.id, [])):
+                yield from literais_resolvidos(valor, valor, visitados)
+        elif isinstance(no, ast.BinOp) and isinstance(no.op, ast.Add):
+            yield from literais_resolvidos(no.left, contexto, visitados)
+            yield from literais_resolvidos(no.right, contexto, visitados)
+
+    def registrar_lista(call, valor, forma):
+        rec, motivo = receptor_chamada(call, call)
+        for literal in literais_resolvidos(valor, call):
+            for campo, _ in campo_caminho(literal.value):
+                registrar(call, campo, ("ESCRITA",), forma, rec, motivo)
+
+    def classificar_string(no):
+        valor = no.value
+        atual = no
+        palavra = None
+        chave_dicionario = False
+        while atual in pais:
+            anterior = atual
+            atual = pais[atual]
+            if isinstance(atual, ast.Dict) and anterior in atual.keys:
+                chave_dicionario = True
+            if isinstance(atual, ast.keyword) and palavra is None:
+                palavra = atual.arg
+            if isinstance(atual, ast.Call):
+                nome = chamada(atual)
+                if nome in ("getattr", "setattr") and len(atual.args) >= 2:
+                    if atual.args[1] is no:
+                        rec, motivo = receptor(atual.args[0], no)
+                        papel = "LEITURA" if nome == "getattr" else "ESCRITA"
+                        return (papel,), nome, rec, motivo
+                if nome in ("F", "OuterRef"):
+                    externo = chamada_externa(atual)
+                    rec, motivo = receptor_chamada(externo, no, valor)
+                    return ("LEITURA",), nome, rec, motivo
+                if nome in ("raw", "execute", "executemany") and SQL.search(valor):
+                    return (("LEITURA", "ESCRITA"), "SQL cru",
+                            "AMBIGUO", "SQL nao interpretado")
+                if nome == "save" and palavra == "update_fields":
+                    rec, motivo = receptor_chamada(atual, no)
+                    return ("ESCRITA",), "save(update_fields)", rec, motivo
+                if nome == "bulk_update":
+                    rec, motivo = receptor_chamada(atual, no)
+                    return ("ESCRITA",), "bulk_update(fields)", rec, motivo
+                if nome == "bulk_create" and palavra in ("update_fields", "unique_fields"):
+                    rec, motivo = receptor_chamada(atual, no)
+                    papeis = ("ESCRITA",) if palavra == "update_fields" else ("LEITURA",)
+                    return papeis, "bulk_create(" + palavra + ")", rec, motivo
+                if chave_dicionario and nome in ("create", "update"):
+                    rec, motivo = receptor_chamada(atual, no, valor)
+                    return ("ESCRITA",), nome + " dicionario", rec, motivo
+                if chave_dicionario and nome in ("get_or_create", "update_or_create"):
+                    rec, motivo = receptor_chamada(atual, no, valor)
+                    if palavra in ("defaults", "create_defaults"):
+                        return ("ESCRITA",), nome + " defaults", rec, motivo
+                    return ("LEITURA", "ESCRITA"), nome + " dicionario", rec, motivo
+                if nome in LEITURAS and campo_caminho(valor):
+                    rec, motivo = receptor_chamada(atual, no, valor)
+                    return ("LEITURA",), nome, rec, motivo
+                if nome == "Q" and campo_caminho(valor):
+                    externo = chamada_externa(atual)
+                    rec, motivo = receptor_chamada(externo, no, valor)
+                    return ("LEITURA",), "Q", rec, motivo
+            if isinstance(atual, (ast.stmt, ast.Lambda)):
+                break
+        if SQL.search(valor):
+            return (("LEITURA", "ESCRITA"), "possivel SQL",
+                    "AMBIGUO", "string SQL nao interpretada")
+        return (("LEITURA", "ESCRITA"), "string fora de contexto reconhecido",
+                "AMBIGUO", "uso da string nao resolvido")
+
+    for no in ast.walk(arvore):
+        if isinstance(no, ast.Call):
+            nome = chamada(no)
+            if nome == "save":
+                for kw in no.keywords:
+                    if kw.arg == "update_fields":
+                        registrar_lista(no, kw.value, "save(update_fields) resolvido")
+            elif nome == "bulk_update":
+                if len(no.args) >= 2:
+                    registrar_lista(no, no.args[1], "bulk_update(fields) resolvido")
+                for kw in no.keywords:
+                    if kw.arg == "fields":
+                        registrar_lista(no, kw.value, "bulk_update(fields) resolvido")
+            elif nome == "bulk_create":
+                for kw in no.keywords:
+                    if kw.arg == "update_fields":
+                        registrar_lista(no, kw.value, "bulk_create(update_fields) resolvido")
+            elif nome in ("create", "update", "get_or_create", "update_or_create"):
+                for kw in no.keywords:
+                    if kw.arg is None or kw.arg in ("defaults", "create_defaults"):
+                        rec, motivo = receptor_chamada(no, no)
+                        for literal in literais_resolvidos(kw.value, no):
+                            for campo, pos in campo_caminho(literal.value):
+                                r, m = (rec, motivo) if pos == 0 else (
+                                    "AMBIGUO", "caminho de relacao nao resolvido"
+                                )
+                                papeis = ("ESCRITA",)
+                                if kw.arg is None and nome in (
+                                        "get_or_create", "update_or_create"):
+                                    papeis = ("LEITURA", "ESCRITA")
+                                registrar(no, campo, papeis,
+                                          nome + " argumentos resolvidos", r, m)
+
+        if isinstance(no, ast.Attribute) and no.attr in ALIAS:
+            campo = ALIAS[no.attr]
+            rec, motivo = receptor(no.value, no)
+            if isinstance(no.ctx, ast.Store):
+                papeis = ("ESCRITA",)
+                if isinstance(pais.get(no), ast.AugAssign):
+                    papeis = ("LEITURA", "ESCRITA")
+            elif isinstance(no.ctx, ast.Del):
+                papeis = ("ESCRITA",)
+            else:
+                papeis = ("LEITURA",)
+            registrar(no, campo, papeis, "atributo", rec, motivo)
+
+        elif isinstance(no, ast.keyword) and no.arg:
+            campos = campo_caminho(no.arg)
+            if not campos:
+                continue
+            call = pais.get(no)
+            nome = chamada(call)
+            for campo, _ in campos:
+                if nome in ("Q", "When"):
+                    externo = chamada_externa(call)
+                    rec, motivo = receptor_chamada(externo, no, no.arg)
+                    papeis = ("LEITURA",)
+                elif nome in ("create", "update"):
+                    rec, motivo = receptor_chamada(call, no, no.arg)
+                    papeis = (
+
+[truncado em 20000 de 23752 caracteres]
+
+## 19/11 00:54 · sessao 13f739a36bbe · QUEIMA-B2-pergunta · censo · origem=Code
+
+```python
+#!/usr/bin/env python3
+# Uso: python3 -B script.py RAIZ
+# RAIZ deve conter app/. O programa apenas le arquivos.
+import ast
+import collections
+import os
+import re
+import sys
+import tokenize
+
+sys.dont_write_bytecode = True
+
+if len(sys.argv) != 2:
+    sys.stderr.write("Uso: python3 -B script.py RAIZ\n")
+    sys.exit(2)
+
+RAIZ = os.path.abspath(sys.argv[1])
+APP = os.path.join(RAIZ, "app")
+if not os.path.isdir(APP):
+    sys.stderr.write("ERRO: RAIZ deve conter app/\n")
+    sys.exit(2)
+
+CAMPOS = (
+    "resposta_colab", "respondida_em", "validada_em", "validada_por",
+    "data_conferida_em", "data_conferida_por", "pendencia_admin",
+    "recusa_motivo", "via_resolucao", "veredito_lavrado", "julgado_em",
+    "janela_expira_em", "materializada_em", "materializada_por",
+)
+ALIASES = {campo: campo for campo in CAMPOS}
+for campo in ("validada_por", "data_conferida_por", "materializada_por"):
+    ALIASES[campo + "_id"] = campo
+
+PADRAO = re.compile(
+    r"(?<![A-Za-z0-9_])(?:"
+    + "|".join(re.escape(c) for c in sorted(ALIASES, key=len, reverse=True))
+    + r")(?![A-Za-z0-9_])"
+)
+SQL = re.compile(
+    r"\b(select|insert|update|delete|with|returning|where|from|join)\b",
+    re.I,
+)
+TAGS = re.compile(r"{{.*?}}|{%.*?%}", re.S)
+LEITURAS = {
+    "filter", "exclude", "get", "values", "values_list", "order_by",
+    "annotate", "alias", "only", "defer", "distinct", "earliest", "latest",
+}
+QUERYSET = LEITURAS | {
+    "all", "none", "select_for_update", "select_related",
+    "prefetch_related", "using", "reverse", "iterator", "first", "last",
+    "create", "update", "get_or_create", "update_or_create",
+    "bulk_create", "bulk_update",
+}
+ESCOPOS = (
+    ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda
+)
+REGISTROS = set()
+FALHAS = []
+ARVORES = []
+MODELOS = {"PerguntaDisputa", "RegularizacaoExterna"}
+
+
+def limpar(valor):
+    return str(valor).replace("\t", " ").replace("\r", " ").replace("\n", " ")
+
+
+def categoria(relativo):
+    partes = relativo.lower().replace("\\", "/").split("/")
+    nome = partes[-1]
+    if "migrations" in partes:
+        return "migration"
+    if ("tests" in partes or "test" in partes
+            or nome.startswith("test_") or nome.endswith("_test.py")):
+        return "teste" [nao verificado]
+    return "prod"
+
+
+def nome_chamada(no):
+    if not isinstance(no, ast.Call):
+        return ""
+    if isinstance(no.func, ast.Name):
+        return no.func.id
+    if isinstance(no.func, ast.Attribute):
+        return no.func.attr
+    return ""
+
+
+def nome_base(no):
+    if isinstance(no, ast.Name):
+        return no.id
+    if isinstance(no, ast.Attribute):
+        return no.attr
+    return ""
+
+
+def campo_caminho(texto):
+    """Aceita um campo ou caminho ORM literal, com lookups e ordenacao."""
+    if not isinstance(texto, str):
+        return []
+    partes = texto.lstrip("-").split("__")
+    return [(ALIASES[p], i) for i, p in enumerate(partes) if p in ALIASES]
+
+
+def achados(texto):
+    if isinstance(texto, str):
+        for m in PADRAO.finditer(texto):
+            yield ALIASES[m.group()], m.start()
+
+
+def emitir(arquivo, linha, funcao, campo, papel, escopo, rec, motivo, forma):
+    REGISTROS.add((
+        arquivo, int(linha), funcao or "<modulo>", campo, papel, escopo,
+        rec, motivo, forma,
+    ))
+
+
+# Primeiro passe: fontes Python e nomes de modelos declarados.
+for diretorio, dirs, arquivos in os.walk(APP):
+    dirs.sort()
+    for nome in sorted(arquivos):
+        if not nome.endswith(".py"):
+            continue
+        caminho = os.path.join(diretorio, nome)
+        relativo = os.path.relpath(caminho, RAIZ).replace(os.sep, "/")
+        try:
+            with tokenize.open(caminho) as arquivo:
+                fonte = arquivo.read()
+            arvore = ast.parse(fonte, filename=relativo)
+        except (OSError, SyntaxError, UnicodeError, LookupError) as erro:
+            FALHAS.append((relativo, str(erro)))
+            continue
+        ARVORES.append((relativo, arvore))
+        for no in ast.walk(arvore):
+            if isinstance(no, ast.ClassDef):
+                if any(nome_base(base) == "Model" for base in no.bases):
+                    MODELOS.add(no.name)
+
+
+for relativo, arvore in ARVORES:
+    escopo_arquivo = categoria(relativo)
+    pais = {}
+    ambientes = {}
+    funcoes = {}
+    classes = {}
+
+    def indexar(no, ambiente, pilha, classe):
+        if isinstance(no, ast.ClassDef):
+            ambiente = no
+            pilha = pilha + [no.name]
+            classe = no.name if no.name in MODELOS else None
+        elif isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            ambiente = no
+            pilha = pilha + [no.name]
+        elif isinstance(no, ast.Lambda):
+            ambiente = no
+            pilha = pilha + ["<lambda>"]
+        ambientes[no] = ambiente
+        funcoes[no] = ".".join(pilha) or "<modulo>"
+        classes[no] = classe
+        for filho in ast.iter_child_nodes(no):
+            pais[filho] = no
+            indexar(filho, ambiente, pilha, classe)
+
+    indexar(arvore, arvore, [], None)
+
+    atribuicoes = collections.defaultdict(lambda: collections.defaultdict(list))
+    anotacoes = collections.defaultdict(lambda: collections.defaultdict(list))
+
+    for no in ast.walk(arvore):
+        ambiente = ambientes[no]
+        if isinstance(no, (ast.FunctionDef, ast.AsyncFunctionDef, ast.Lambda)):
+            args = no.args
+            todos = list(args.posonlyargs) + list(args.args) + list(args.kwonlyargs)
+            if args.vararg:
+                todos.append(args.vararg)
+            if args.kwarg:
+                todos.append(args.kwarg)
+            for arg in todos:
+                if arg.annotation is not None:
+                    anotacoes[no][arg.arg].append(arg.annotation)
+        if isinstance(no, ast.Assign):
+            for alvo in no.targets:
+                if isinstance(alvo, ast.Name):
+                    atribuicoes[ambiente][alvo.id].append(no.value)
+        elif isinstance(no, ast.AnnAssign) and isinstance(no.target, ast.Name):
+            anotacoes[ambiente][no.target.id].append(no.annotation)
+            if no.value is not None:
+                atribuicoes[ambiente][no.target.id].append(no.value)
+        elif isinstance(no, (ast.For, ast.AsyncFor)):
+            if isinstance(no.target, ast.Name):
+                atribuicoes[ambiente][no.target.id].append(no.iter)
+        elif isinstance(no, ast.comprehension) and isinstance(no.target, ast.Name):
+            atribuicoes[ambiente][no.target.id].append(no.iter)
+
+    def modelo_anotacao(no):
+        if isinstance(no, ast.Constant) and isinstance(no.value, str):
+            nomes = set(re.findall(r"[A-Za-z_]\w*", no.value))
+        else:
+            nomes = {
+                x.id if isinstance(x, ast.Name) else x.attr
+                for x in ast.walk(no)
+                if isinstance(x, (ast.Name, ast.Attribute))
+            }
+        encontrados = nomes & MODELOS
+        return next(iter(encontrados)) if len(encontrados) == 1 else None
+
+    def inferir(no, contexto, visitados=None):
+        """Inferencia local; nao executa codigo nem resolve relacoes Django."""
+        if no is None:
+            return None
+        visitados = set() if visitados is None else visitados
+        ambiente = ambientes.get(contexto, arvore)
+        if isinstance(no, ast.Name):
+            if no.id == "self" and classes.get(contexto):
+                return classes[contexto]
+            if no.id == "cls" and classes.get(contexto):
+                if isinstance(ambiente, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    if any(nome_base(d) == "classmethod" for d in ambiente.decorator_list):
+                        return classes[contexto]
+            if no.id in MODELOS and no.id not in atribuicoes[ambiente]:
+                return no.id
+            chave = (id(ambiente), no.id)
+            if chave in visitados:
+                return None
+            visitados = visitados | {chave}
+            resultados = [
+                modelo_anotacao(x) for x in anotacoes[ambiente].get(no.id, [])
+            ]
+            resultados += [
+                inferir(x, x, visitados)
+                for x in atribuicoes[ambiente].get(no.id, [])
+            ]
+            if resultados and None not in resultados and len(set(resultados)) == 1:
+                return resultados[0]
+            return None
+        if isinstance(no, ast.Attribute):
+            if no.attr in MODELOS and isinstance(no.value, ast.Name):
+                return no.attr
+            if no.attr in ("objects", "_default_manager", "_base_manager"):
+                return inferir(no.value, contexto, visitados)
+            return None
+        if isinstance(no, ast.Subscript):
+            return inferir(no.value, contexto, visitados)
+        if isinstance(no, ast.Call):
+            if isinstance(no.func, ast.Name) and no.func.id in MODELOS:
+                return inferir(no.func, contexto, visitados)
+            if isinstance(no.func, ast.Attribute):
+                if no.func.attr in MODELOS:
+                    return inferir(no.func, contexto, visitados)
+                if no.func.attr in QUERYSET:
+                    return inferir(no.func.value, contexto, visitados)
+        return None
+
+    def receptor(no, contexto, caminho=None):
+        if caminho:
+            if any(posicao > 0 for _, posicao in campo_caminho(caminho)):
+                return "AMBIGUO", "caminho de relacao nao resolvido"
+        modelo = inferir(no, contexto)
+        if modelo:
+            return "RECEPTOR=" + modelo, "inferencia sintatica local"
+        return "AMBIGUO", "receptor nao resolvido"
+
+    def receptor_call(call, contexto, caminho=None):
+        if isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute):
+            return receptor(call.func.value, contexto, caminho)
+        return "AMBIGUO", "chamada sem receptor resolvido"
+
+    def registrar(no, campo, papeis, forma, rec, motivo, linha=None):
+        for papel in papeis:
+            emitir(
+                relativo, linha or getattr(no, "lineno", 1),
+                funcoes.get(no, "<modulo>"), campo, papel, escopo_arquivo,
+                rec, motivo, forma,
+            )
+
+    def literais(no, contexto, visitados=None):
+        """Segue apenas nomes com uma unica atribuicao local."""
+        visitados = set() if visitados is None else visitados
+        if isinstance(no, ast.Constant) and isinstance(no.value, str):
+            yield no.value, no
+        elif isinstance(no, (ast.List, ast.Tuple, ast.Set)):
+            for item in no.elts:
+                yield from literais(item, contexto, visitados)
+        elif isinstance(no, ast.Name):
+            ambiente = ambientes.get(contexto, arvore)
+            chave = (id(ambiente), no.id)
+            valores = atribuicoes[ambiente].get(no.id, [])
+            if chave not in visitados and len(valores) == 1:
+                yield from literais(valores[0], contexto, visitados | {chave})
+
+    def pares_dict(no, contexto, visitados=None):
+        """Extrai chaves literais, inclusive de **dicionario local simples."""
+        visitados = set() if visitados is None else visitados
+        if isinstance(no, ast.Dict):
+            for chave, valor in zip(no.keys, no.values):
+                if chave is None:
+                    yield from pares_dict(valor, contexto, visitados)
+                elif isinstance(chave, ast.Constant) and isinstance(chave.value, str):
+                    yield chave.value, chave
+        elif isinstance(no, ast.Name):
+            ambiente = ambientes.get(contexto, arvore)
+            chave = (id(ambiente), no.id)
+            valores = atribuicoes[ambiente].get(no.id, [])
+            if chave not in visitados and len(valores) == 1:
+                yield from pares_dict(valores[0], contexto, visitados | {chave})
+
+    def registrar_caminho(no, texto, papeis, forma, rec_no, contexto):
+        for campo, _ in campo_caminho(texto):
+            rec, motivo = receptor(rec_no, contexto, texto)
+            registrar(no, campo, papeis, forma, rec, motivo)
+
+    def chamada_orm_externa(no):
+        atual = no
+        while atual in pais:
+            atual = pais[atual]
+            if isinstance(atual, ast.Call) and isinstance(atual.func, ast.Attribute):
+                if nome_chamada(atual) in QUERYSET:
+                    return atual
+            if isinstance(atual, (ast.stmt, ast.Lambda)):
+                break
+        return None
+
+    for no in ast.walk(arvore):
+        if isinstance(no, ast.Attribute) and no.attr in ALIASES:
+            rec, motivo = receptor(no.value, no)
+            if isinstance(no.ctx, ast.Store):
+                papeis = ("ESCRITA",)
+                if isinstance(pais.get(no), ast.AugAssign):
+                    papeis = ("LEITURA", "ESCRITA")
+            elif isinstance(no.ctx, ast.Del):
+                papeis = ("ESCRITA",)
+            else:
+                papeis = ("LEITURA",)
+            registrar(no, ALIASES[no.attr], papeis, "atributo", rec, motivo)
+
+        if not isinstance(no, ast.Call):
+            continue
+
+        nome = nome_chamada(no)
+        rec_no = no.func.value if isinstance(no.func, ast.Attribute) else None
+
+        if nome in ("getattr", "setattr") and len(no.args) >= 2:
+            papel = "LEITURA" if nome == "getattr" else "ESCRITA"
+            for texto, origem in literais(no.args[1], no):
+                for campo, pos in campo_caminho(texto):
+                    rec, motivo = receptor(no.args[0], no, texto)
+                    registrar(no, campo, (papel,), nome, rec, motivo)
+
+        if nome in LEITURAS:
+            for arg in no.args:
+                for texto, origem in literais(arg, no):
+                    registrar_caminho(
+                        no, texto, ("LEITURA",), nome + " argumento",
+                        rec_no, no,
+                    )
+
+        if nome in ("F", "Q"):
+            externo = chamada_orm_externa(no)
+            externo_rec = (
+                externo.func.value
+                if externo is not None and isinstance(externo.func, ast.Attribute)
+                else None
+            )
+            if nome == "F":
+                for arg in no.args:
+                    for texto, origem in literais(arg, no):
+                        registrar_caminho(
+                            no, texto, ("LEITURA",), "F",
+                            externo_rec, no,
+                        )
+            for kw in no.keywords:
+                if kw.arg:
+                    registrar_caminho(
+                        no, kw.arg, ("LEITURA",), nome + " kwarg",
+                        externo_rec, no,
+                    )
+
+        if nome in ("save", "bulk_update", "bulk_create"):
+            argumentos_campos = []
+            if nome == "save":
+                argumentos_campos += [
+                    kw.value for kw in no.keywords if kw.arg == "update_fields"
+                ]
+            elif nome == "bulk_update":
+                if len(no.args) >= 2:
+                    argumentos_campos.append(no.args[1])
+                argumentos_campos += [
+                    kw.value for kw in no.keywords if kw.arg == "fields"
+                ]
+            else:
+                argumentos_campos += [
+                    kw.value for kw in no.keywords
+                    if kw.arg in ("update_fields", "unique_fields")
+                ]
+            for argumento in argumentos_campos:
+                for texto, origem in literais(argumento, no):
+                    papel = (
+                        "LEITURA"
+                        if nome == "bulk_create" and any(
+                            kw.arg == "unique_fields" and kw.value is argumento
+                            for kw in no.keywords
+                        )
+                        else "ESCRITA"
+                    )
+                    registrar_caminho(
+                        no, texto, (papel,), nome + " campos", rec_no, no,
+                    )
+
+        for kw in no.keywords:
+            if kw.arg is None:
+                if nome in ("update", "create", "get_or_create", "update_or_create"):
+                    for texto, origem in pares_dict(kw.value, no):
+                        papeis = (
+                            ("ESCRITA",) if nome in ("update", "create")
+                            else ("LEITURA", "ESCRITA")
+                        )
+                        registrar_caminho(
+                            no, texto, papeis, nome + " **dict", rec_no, no,
+                        )
+                continue
+
+            if nome in ("get_or_create", "update_or_create") and kw.arg in (
+                "defaults", "create_defaults"
+            ):
+                for texto, origem in pares_dict(kw.value, no):
+                    registrar_caminho(
+                        no, texto, ("ESCRITA",), nome + " " + kw.arg,
+                        rec_no, no,
+                    )
+                continue
+
+            if nome in ("Q", "F"):
+                continue
+            if nome in ("create", "update"):
+                papeis = ("ESCRITA",)
+            elif nome in ("get_or_create", "update_or_create"):
+                papeis = ("LEITURA", "ESCRITA")
+            elif nome in LEITURAS:
+                papeis = ("LEITURA",)
+            elif nome in MODELOS:
+                papeis = ("ESCRITA",)
+                rec_no = no.func
+            else:
+                continue
+            registrar_caminho(no, kw.arg, papeis, nome + " kwarg", rec_no, no)
+
+        # Um bulk_create sem lista explicita de campos pode inserir todas as
+        # colunas. A evidencia sintatica isolada nao prova quais valores foram
+        # enviados, portanto essas possibilidades permanecem ambiguas.
+        if nome == "bulk_create":
+            for campo in CAMPOS:
+                registrar(
+                    no, campo, ("ESCRITA",), "bulk_create insercao possivel",
+                    "AMBIGUO", "campos inseridos nao resolvidos",
+                )
+
+    # Varredura conservadora de todas as strings, inclusive SQL, migrations,
+    # nomes guardados em variaveis e contextos nao classificados acima.
+    for no in ast.walk(arvore):
+        if not isinstance(no, ast.Constant) or not isinstance(no.value, str):
+            continue
+        forma = "possivel SQL" if SQL.search(no.value) else "string literal"
+        motivo = (
+            "SQL nao interpretado" if forma == "possivel SQL"
+            else "uso da string nao resolvido"
+        )
+        for campo, inicio in achados(no.value):
+            linha = no.lineno + no.value[:inicio].count("\n")
+            registrar(
+                no, campo, ("LEITURA", "ESCRITA"), forma,
+                "AMBIGUO", motivo, linha,
+            )
+
+
+# Templates: toda ocorrencia nas expressoes de tags e inventariada.
+for diretorio, dirs, arquivos in os.walk(APP):
+    dirs.sort()
+    for nome in sorted(arquivos):
+        if not nome.endswith((".html", ".htm", ".django", ".jinja", ".jinja2")):
+            continue
+        caminho = os.path.join(diretorio, nome)
+        relativo = os.path.relpath(caminho, RAIZ).replace(os.sep, "/")
+        try:
+            with open(caminho, encoding="utf-8-sig") as arquivo:
+                texto = arquivo.read()
+        except (OSError, UnicodeError) as erro:
+            FALHAS.append((relativo, str(erro)))
+            continue
+        for tag in TAGS.finditer(texto):
+            for campo, inicio in achados(tag.group()):
+                linha = texto.count("\n", 0, tag.start() + inicio) + 1
+                emitir(
+                    relativo, linha, "<template>", campo, "LEITURA",
+                    "template", "AMBIGUO",
+                    "tipo e contexto da expressao nao resolvidos",
+                    "expressao de template",
+                )
+
+
+print("arquivo\tlinha\tfuncao\tcampo\tpapel\tescopo\treceptor\tmotivo\tforma")
+contagens = collections.Counter()
+escritores = collections.defaultdict(set)
+ambiguos = collections.Counter()
+
+for registro in sorted(REGISTROS):
+    print("\t".join(limpar(item
+
+[truncado em 20000 de 21787 caracteres]
 
 ## 19/11 00:50 · sessao b9b3bde26b6e · QUEIMA-B1 · sonda · origem=Code
 
@@ -2186,12 +3168,4 @@ Enviei ao agente principal os sítios encontrados para reaponte e materializaç�
 
 A correspondência dos códigos B4, B2b, P11–P15 e demais códigos com esses sítios permanece **[não verificado]**: o anexo fornecido lista os códigos, mas não traz o mapa da tabela.
 
-## 19/11 00:45 · sessao 356e9cdff1c8 · - · - · origem=Ronald (tmux)
-
-Mapeamento enviado ao agente principal, com referências para decisões de HE, resolução do dia, efeitos e limites dos caminhos de revogação.
-
-## 19/11 00:45 · sessao e618ff0ee413 · - · - · origem=Ronald (tmux)
-
-O mapeamento de `DiaPago` e folga trabalhada, com referências de escritores, efeitos, leitores e limitações de revogação, foi enviado ao agente responsável pela consolidação. [app/ponto/services/dia_pago.py:135] [app/ponto/services/fechamento.py:925] [app/ponto/status_dia.py:139]
-
-_7214 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7216 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
