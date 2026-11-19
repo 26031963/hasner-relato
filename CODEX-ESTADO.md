@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 03:17** · publicado em **19/11/2026 03:18** (UTC-3)
+> Ultima resposta processada: **19/11/2026 03:28** · publicado em **19/11/2026 03:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 03:28 · sessao d379f5ba58d0 · ESCALA-NAO-DESCREVE · sonda · origem=Code
+
+Não posso entregar a sonda que chama `anomalias_da_frota`: há um caminho que pode escrever em arquivo de log, e a instrução foi não usar a função se ela escrever qualquer coisa.
+
+A função chama `assinaturas_do_colab`, que pode chamar `get_motor_cct`; se a leitura do parâmetro falhar, `get_motor_cct` registra uma exceção. Na configuração herdada pela sombra, o logger raiz envia erros ao handler de arquivo `/app/logs/errors.log`. A transação `READ ONLY` do molde protege o banco, mas não impede essa escrita em arquivo. [app/ponto/services/esmeril_espelho.py:235](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:235), [app/ponto/services/esmeril_espelho.py:170](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:170), [app/core/regua_cct.py:442](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/core/regua_cct.py:442), [app/config/settings/sombra.py:27](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/config/settings/sombra.py:27), [app/config/settings/saas.py:136](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/config/settings/saas.py:136), [app/config/settings/saas.py:183](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/config/settings/saas.py:183).
+
+Também há escrita de warning no caso de empate entre aplicações de CCT vigentes; se esse caso ocorre no dado da sombra é [não verificado]. [app/core/regua_cct.py:265](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/core/regua_cct.py:265), [app/core/regua_cct.py:366](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/core/regua_cct.py:366).
+
+A janela solicitada confere: o detector recebe `hoje - 60 dias` até `hoje - 1 dia`. A porta `turnos_do_colab` retorna turnos por `data_turno` na janela, mas seu código consulta `Batida` diretamente com `retratada_em__isnull=True`; ela não chama `batidas_apuraveis` nessa carga. [app/ponto/services/esmeril_espelho.py:241](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:241), [app/ponto/turnos.py:1850](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/turnos.py:1850), [app/ponto/turnos.py:1867](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/turnos.py:1867).
+
+Universo, contagens e ocorrência efetiva dos caminhos de log: [não verificado].
+
+perguntas de lei: 0
 
 ## 19/11 03:17 · sessao c55e102a4eb1 · DST-L2-JZ1 · verificador · origem=Code
 
@@ -1641,60 +1655,4 @@ A identidade Git da cópia com o hash informado é **[não verificado]**: o dire
 BLOQUEIA: 1  
 perguntas de lei: 1
 
-## 19/11 01:52 · sessao 5f05c9931c97 · E4C-F5 · censo · origem=Code
-
-| arquivo:linha | função | campo | receptor | classe | trecho literal curto |
-|---|---|---|---|---|---|
-| chamados/services/painel.py:270 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `qs.filter(validada_em__gte=_hoje_ini)` |
-| chamados/services/painel.py:271 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `validada_em__gte=_agora_inf` |
-| chamados/services/painel.py:272 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `validada_em__gte=_agora_inf` |
-| chamados/services/painel.py:273 | montar_contexto_painel._jan_val | validada_em | PerguntaDisputa | vi | `validada_em__gte=_agora_inf` |
-| chamados/services/passivo_validado.py:141 | _balde_da_recusa | via_resolucao | PerguntaDisputa | v | `p.via_resolucao != antes_via` |
-| chamados/services/passivo_validado.py:142 | _balde_da_recusa | via_resolucao | PerguntaDisputa | v | `return 'via:%s' % p.via_resolucao` |
-| chamados/services/passivo_validado.py:530 | _plantar_o_dia | via_resolucao | PerguntaDisputa | iv | `antes_via = [], [], p.via_resolucao` |
-| chamados/services/passivo_validado.py:534 | _plantar_o_dia | materializada_em | PerguntaDisputa | ii | `_sem_carimbo_antes = p.materializada_em is None` |
-| chamados/services/passivo_validado.py:536 | _plantar_o_dia | materializada_em | PerguntaDisputa | ii | `_sem_carimbo_antes and p.materializada_em is not None` |
-| chamados/services/raiox.py:135 | creditos_perguntas | materializada_em | PerguntaDisputa | vi | `_vivas.exclude(materializada_em__isnull=False` |
-| chamados/services/raiox.py:138 | creditos_perguntas | respondida_em | PerguntaDisputa | vi | `'respondida_em', 'resposta_colab'` |
-| chamados/services/raiox.py:138 | creditos_perguntas | resposta_colab | PerguntaDisputa | vi | `'respondida_em', 'resposta_colab'` |
-| chamados/services/raiox.py:147 | creditos_perguntas | respondida_em | indeterminado: argumento de `SimpleNamespace`, alimentado por tupla | — | `respondida_em=p[3]` |
-| chamados/services/raiox.py:147 | creditos_perguntas | resposta_colab | indeterminado: argumento de `SimpleNamespace`, alimentado por tupla | — | `resposta_colab=p[4]` |
-| chamados/services/raiox.py:182 | pergunta_sem_acao_possivel | materializada_em | PerguntaDisputa | iii | `if p.materializada_em is None` |
-| chamados/services/regularizacao_ext.py:220 | retomar_regularizacoes_confirmadas | materializada_em | outro modelo: RegularizacaoExterna | — | `status='confirmada', materializada_em__isnull=True` |
-| chamados/services/relavra_via.py:118 | relavrar | via_resolucao | PerguntaDisputa | ii | `p.via_resolucao not in VIAS_DERIVADAS` |
-| chamados/services/relavra_via.py:121 | relavrar | via_resolucao | PerguntaDisputa | ii | `nova == p.via_resolucao` |
-| chamados/services/relavra_via.py:123 | relavrar | via_resolucao | PerguntaDisputa | iv | `antes = {'via_resolucao': p.via_resolucao` |
-| chamados/services/relavra_via.py:155 | relavrar_dia | via_resolucao | PerguntaDisputa | vi | `via_resolucao__in=VIAS_DERIVADAS` |
-| chamados/services/relavra_via.py:181 | q_carimbo_desfazivel | materializada_em | PerguntaDisputa | vi | `Q(materializada_em__isnull=False)` |
-| chamados/services/relavra_via.py:181 | q_carimbo_desfazivel | via_resolucao | PerguntaDisputa | vi | `~Q(via_resolucao__in=PerguntaDisputa.VIAS_DE_IDENTIDADE)` |
-| chamados/services/relavra_via.py:244 | desfazer_carimbo_sem_lastro | materializada_em | PerguntaDisputa | iv | `antes = {'materializada_em': str(p.materializada_em)` |
-| chamados/services/relavra_via.py:245 | desfazer_carimbo_sem_lastro | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': p.via_resolucao` |
-| chamados/services/tarefa_do_dia.py:163 | _pela_decisao | validada_em | DecisaoPergunta/ato: LeituraDoAto | — | `leitura.validada_em is not None` |
-| chamados/services/tarefa_do_dia.py:262 | _tarefa_pura | via_resolucao | PerguntaDisputa | iii | `p.via_resolucao in PerguntaDisputa.VIAS_FORA_DO_FATO` |
-| chamados/services/tarefa_do_dia.py:263 | _tarefa_pura | via_resolucao | PerguntaDisputa | iii | `p.via_resolucao == PerguntaDisputa.VIA_MOTIVO_RETRATADO` |
-| chamados/services/validacao.py:173 | _carimbar_validacao | validada_em | PerguntaDisputa | iv | `ato_em=perg.validada_em` |
-| chamados/services/validacao.py:175 | _carimbar_validacao | resposta_colab | PerguntaDisputa | iv | `ato_texto=perg.resposta_colab or ''` |
-| chamados/services/validacao.py:181 | _foto_da_validacao | validada_em | PerguntaDisputa | iv | `return (perg.validada_em, perg.validada_por_id` |
-| chamados/services/validacao.py:264 | devolver_validacao_recusada | materializada_em | PerguntaDisputa | ii | `perg.materializada_em is not None` |
-| chamados/services/validacao.py:269 | devolver_validacao_recusada | validada_em | PerguntaDisputa | ii | `if perg.validada_em is not None` |
-| chamados/services/validacao.py:281 | devolver_validacao_recusada | resposta_colab | PerguntaDisputa | iv | `ato_texto=perg.resposta_colab or ''` |
-| chamados/services/validacao.py:341 | devolver_paridade_bug_par_103 | materializada_em | PerguntaDisputa | iv | `antes = {'materializada_em': str(perg.materializada_em)` |
-| chamados/services/validacao.py:341 | devolver_paridade_bug_par_103 | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': perg.via_resolucao` |
-| chamados/services/validacao.py:343 | devolver_paridade_bug_par_103 | validada_em | PerguntaDisputa | iv | `'validada_em': perg.validada_em and str(perg.validada_em)` |
-| chamados/services/validacao.py:356 | devolver_paridade_bug_par_103 | resposta_colab | PerguntaDisputa | iv | `ato_texto=perg.resposta_colab or ''` |
-| chamados/services/validacao.py:392 | impedimento_estoque_l130 | validada_em | PerguntaDisputa | ii | `if perg.validada_em is not None` |
-| chamados/services/validacao.py:394 | impedimento_estoque_l130 | materializada_em | PerguntaDisputa | ii | `if perg.materializada_em is not None` |
-| chamados/services/validacao.py:434 | devolver_instante_sem_texto_l130 | respondida_em | PerguntaDisputa | iv | `antes = {'respondida_em': str(perg.respondida_em)` |
-| chamados/services/validacao.py:434 | devolver_instante_sem_texto_l130 | resposta_colab | PerguntaDisputa | iv | `'resposta_colab': perg.resposta_colab` |
-| chamados/services/validacao.py:435 | devolver_instante_sem_texto_l130 | via_resolucao | PerguntaDisputa | iv | `'via_resolucao': perg.via_resolucao` |
-| chamados/services/validacao.py:440 | devolver_instante_sem_texto_l130 | respondida_em | PerguntaDisputa | ii | `descarimbar_em_lote(alvo, respondida_em=None` — argumento de escrita |
-| chamados/services/validacao.py:440 | devolver_instante_sem_texto_l130 | resposta_colab | PerguntaDisputa | ii | `resposta_colab=''` — argumento de escrita |
-| chamados/services/validacao.py:467 | _e_aceite_de_folga | resposta_colab | PerguntaDisputa | ii | `(perg.resposta_colab or '').strip() == RESPOSTA_DE_FOLGA` |
-
-linhas: 45 de 45
-
-Totais por classe: i **0**; ii **11**; iii **3**; iv **15**; v **2**; vi **10**. Quatro linhas não recebem classe: uma leitura de `LeituraDoAto`, uma de outro modelo e dois argumentos de `SimpleNamespace`.
-
-perguntas de lei: 0
-
-_7265 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
