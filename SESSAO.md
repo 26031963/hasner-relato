@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 17:59:38.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (8.5 MB). Acoes na janela: **272**.
+**Medido em 19/11/2026 18:04:49.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (9.3 MB). Acoes na janela: **275**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:04:47 | Bash | Check B3 disjuntor and LEI-AKITA lines in commits | `cd /home/ronald/saas-hasner; tail -5 logs/sessao/disjuntor.log \| cut -c1-200; W=/home/ronald/wt-codex-cadeia-20-passo-1-112113; git -C $W log --format='%h %s' eb1e49c1e..HEAD \| wc -l; for c in $(git -C $W rev-list eb1e49c1e..HEAD); do git -C $W log -1 --format=%B $c \| grep -q '^LEI-AKITA:' && echo "$c sim" \|\| echo "$c nao"; done \| sort -k2 \| uniq -c -f1` |
+| 18:04:36 | Bash | Inspect disjuntor state for CADEIA | `cd /home/ronald/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| head -20; grep -o '"CADEIA[^"]*"[^}]*' logs/sessao/disjuntor_estado.json 2>/dev/null \| head -5 \| cut -c1-300` |
+| 18:04:30 | Bash | Verify opus findings 1-3 | `cd /home/ronald/saas-hasner; sed -n 4p logs/AVAIS-1515/cadeia_20_passo_1_constroi_1911_1010.txt \| cut -c1-1500; echo; echo ==; sed -n 14p logs/CADEIA-20-PASSO-1/brief.md \| cut -c1-600; echo ==; W=/home/ronald/wt-codex-cadeia-20-passo-1-112113; git -C $W grep -n "razoes_orfas\\|medir_razoes_sobras" -- app ':!app/*/tests/*' \| cut -c1-140; git -C $W grep -c "razao_da_sobra" -- app/core/juizes.py;  ...` |
 | 17:59:13 | Bash | Fix hour label | `cd /home/ronald/saas-hasner; sed -i '4s/SUITE v2n VERDE 18:0x/SUITE v2n VERDE 17:5x/' app/docs/RELATO.md; grep -c "VERDE 17:5x" app/docs/RELATO.md` |
 | 17:59:11 | Bash | Record v2n green suite in RELATO | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('CADEIA-20-PASSO-1 v2n (17:3x)')) L[i]=L[i]+' -- SUITE v2n VERDE 18:0x: Ran 17069, OK (skipped=42, expected failures=41), rc=0 sobre 7efb46e8e (copia limpa); opus final lancado (verificador, brief logs/CADEIA-20-PASSO-1/v2n/opus/brief.md)' ...` |
 | 17:59:04 | Agent | Opus final CADEIA-20-PASSO-1 | `Leitura FINAL (opus) da obra CADEIA-20-PASSO-1 antes do pouso. Leia o brief inteiro em /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v2n/opus/brief.md e siga-o; ele aponta o diff, os logs de RED, frota na sombra, suite inteira verde (logs/CADEIA-20-PASSO-1/v2n/suite/run.log: Ran 17069, OK, rc=0) e o pre-verificador Codex com a triagem. Somente leitura: nao edite nada, nao rode suite nem comando  ...` |
