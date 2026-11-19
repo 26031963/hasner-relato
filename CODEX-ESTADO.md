@@ -1,7 +1,598 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 09:09** · publicado em **19/11/2026 09:11** (UTC-3)
+> Ultima resposta processada: **19/11/2026 09:14** · publicado em **19/11/2026 09:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 09:14 · sessao 17c06159cb79 · ESPURIA-TELA-C11 · construtor · origem=Code
+
+Implementei a alteração no template e preparei os testes, mas **RED, GREEN e mutantes permanecem sem veredito**: a tentativa local parou antes dos testes porque o Python disponível não tem Django (`ModuleNotFoundError: No module named 'django.core'`, em [manage.py:11](/home/ronald/wt-codex-espuria-tela-c11-091200/app/manage.py:11)). [nao verificado]
+
+Arquivos alterados:
+
+- [test_espelho_decidiu_icone.py:185](/home/ronald/wt-codex-espuria-tela-c11-091200/app/ponto/tests/test_espelho_decidiu_icone.py:185): fixture com `folga=True` e casos para chip e card nas duas cascas, incluindo conteúdo que deve manter o card.
+- [espelho.html:165](/home/ronald/wt-codex-espuria-tela-c11-091200/app/templates/ponto/espelho.html:165): o card passa a considerar `dia.classe_dia`; o chip imprime `dia.classe_dia.title` em [espelho.html:171](/home/ronald/wt-codex-espuria-tela-c11-091200/app/templates/ponto/espelho.html:171).
+
+Diff de produção:
+
+```diff
+-  {% if dia.batidas or dia.turnos or dia.previsto or dia.previsto_canon or dia.folga or dia.ausencia %}
++  {% if dia.batidas or dia.turnos or dia.previsto or dia.previsto_canon or dia.classe_dia or dia.ausencia %}
+...
+-        {% if dia.folga %}<span ...>Folga</span>{% endif %}
++        {% if dia.classe_dia %}<span ...>{{ dia.classe_dia.title }}</span>{% endif %}
+```
+
+O diff completo está disponível com `git diff -- app/ponto/tests/test_espelho_decidiu_icone.py app/templates/ponto/espelho.html`, executado na raiz da cópia. A sintaxe Python foi analisada com `ast.parse` e `git diff --check` passou. O brief físico não estava no caminho indicado; usei o brief integral fornecido no enunciado. [não verificado]
+
+Para a sessão executar o RED, use uma **cópia descartável** contendo o teste alterado e o template da base. Na raiz dessa cópia: [nao verificado]
+
+```bash
+git show 9195f5124367e55f3c594a86d383d406f3258b20:app/templates/ponto/espelho.html > app/templates/ponto/espelho.html
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir "$PWD" --only "ponto.tests.test_espelho_decidiu_icone"
+```
+
+A falha esperada é a divergência do chip em feriado-em-folga e a existência indevida do card sem classe ou conteúdo; **essas falhas não foram observadas**. [não verificado]
+
+Para GREEN, restaure nessa cópia o template alterado desta entrega e execute:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir "$PWD" --only "ponto.tests.test_espelho_decidiu_icone ponto.tests.test_contract_espelho_sem_emoji ponto.tests.test_palavra_parcial_e_pendente"
+```
+
+Para cada mutante, parta de outra cópia descartável com o GREEN aplicado. Execute o bloco correspondente na raiz da cópia e depois o comando de teste: [nao verificado]
+
+```bash
+# M1: chip volta a ler dia.folga
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+p = Path('app/templates/ponto/espelho.html')
+s = p.read_text()
+a = '{% if dia.classe_dia %}<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#64748b;font-weight:600;">{{ dia.classe_dia.title }}</span>{% endif %}'
+b = '{% if dia.folga %}<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#64748b;font-weight:600;">Folga</span>{% endif %}'
+assert s.count(a) == 1
+p.write_text(s.replace(a, b))
+PY
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir "$PWD" --only "ponto.tests.test_espelho_decidiu_icone"
+```
+
+```bash
+# M2: card volta a ler dia.folga
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+from pathlib import Path
+p = Path('app/templates/ponto/espelho.html')
+s = p.read_text()
+a = 'dia.previsto_canon or dia.classe_dia or dia.ausencia'
+b = 'dia.previsto_canon or dia.folga or dia.ausencia'
+assert s.count(a) == 1
+p.write_text(s.replace(a, b))
+PY
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir "$PWD" --only "ponto.tests.test_espelho_decidiu_icone"
+```
+
+Os mutantes não foram executados e suas mortes não foram demonstradas. Também não rodei os testes vizinhos, CHECK-DE-TELA ou suite. [não verificado] [nao verificado]
+
+Perguntas de lei: **0**, conforme o brief fornecido. [não verificado]
+
+## 19/11 09:12 · sessao 93e5bc7468ff · ESPELHO-VERDADE · sonda · origem=Code
+
+O contador de `engolidos()` independe dos handlers: `registrar_engolido` incrementa o total antes de chamar o logger. [app/core/observ.py:60](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/core/observ.py:60) [app/core/observ.py:73](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/core/observ.py:73)
+
+A execução, as classes, as reconfirmações e `ERROS` permanecem **[não verificado]**: o dado raspado fornece o universo, mas não os resultados dessa sonda. O bloco abaixo é para o envelope Django da sombra; não foi executado aqui. **[não verificado]**
+
+Limites dos predicados: `BATIDA_PLANTADA` identifica apenas `pergunta_origem` preenchida; batidas são examinadas pelo dia civil local, perguntas por `data_evento`, e `FOLGA_TRABALHADA` pelo status **lavrado** da célula. Esses recortes não provam ausência de casos fora deles. [app/ponto/models.py:30](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/models.py:30) [app/ponto/services/dia_do_colab.py:64](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/ponto/services/dia_do_colab.py:64) [app/escala/models.py:1816](/home/ronald/codex_ws/3308f759942527fa084b6137304860d24c6f414d/app/escala/models.py:1816)
+
+```python
+# Sonda EV V2: executar no envelope Django da sombra, tenant juliani.
+# Python -B; nenhum nome ou CPF é impresso.
+#
+# Precedência: PERGUNTA_VIVA, BATIDA_RETRATADA, BATIDA_PLANTADA,
+# ORFA_NO_DIA, AUSENCIA_NO_DIA, FERIADO_TRABALHADO,
+# FOLGA_TRABALHADA, CELULA_REGENERADA, CELULA_EDITADA,
+# CRUZA_MEIA_NOITE, OUTROS.
+#
+# As classes descrevem particularidades observadas, não causas provadas.
+# Não se associa par do oráculo a período do motor.
+
+import sys
+sys.dont_write_bytecode = True
+
+import logging
+
+# Remove handlers de arquivo já instalados, inclusive em loggers nomeados.
+# Não usa logging.disable: registrar_engolido continua contando.
+for _logger in [logging.getLogger()] + [
+    x for x in logging.Logger.manager.loggerDict.values()
+    if isinstance(x, logging.Logger)
+]:
+    for _handler in list(_logger.handlers):
+        if isinstance(_handler, logging.FileHandler):
+            _logger.removeHandler(_handler)
+
+import collections
+import datetime
+import json
+import os
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador, Empresa
+from chamados.juizes import pergunta_viva
+from chamados.models import PerguntaDisputa
+from core.observ import engolidos
+from escala.alimentacao import vinculo_do_dia_carregado
+from escala.models import CelulaDia
+from escala.servico_jornada import marcos_turno, turno_cruza_meia_noite
+from ponto import janelas
+from ponto.juiz_batida import periodos_do_dia
+from ponto.management.commands import e6_oraculo as e6
+from ponto.models import Batida
+from ponto.precedencia import fatos_do_dia
+from ponto.services.espelho import espelho_do_colab
+
+
+# Cada linha: competência empresa colab_pk dias.
+# Dias abreviados usam o mês indicado em cada grupo.
+DADOS = """
+2026-11 1 950 2026-11-11
+2026-11 2 200 2026-10-29 2026-11-02
+2026-11 2 218 2026-11-14
+2026-11 2 220 2026-11-10
+2026-11 2 252 2026-11-09 2026-11-10 2026-11-11 2026-11-13 2026-11-17
+2026-11 2 296 2026-11-02
+2026-11 2 334 2026-11-16
+2026-11 2 382 2026-11-10
+2026-11 2 516 2026-10-23
+2026-11 2 727 2026-11-10
+2026-11 2 841 2026-11-16
+2026-11 2 874 2026-10-22
+2026-11 2 884 2026-11-08
+2026-11 2 922 2026-11-01 2026-11-04
+2026-11 2 989 2026-10-23
+2026-11 3 110 2026-11-12
+2026-11 3 112 2026-10-21 2026-10-22
+2026-11 3 113 2026-10-30 2026-11-01
+2026-11 3 114 2026-11-08 2026-11-15
+2026-11 3 130 2026-10-29
+2026-11 3 909 2026-11-11
+2026-11 3 996 2026-10-28 2026-11-10
+2026-11 4 37 2026-11-14
+2026-08 2 189 2026-07-22
+2026-08 2 200 2026-07-22
+2026-08 2 231 2026-08-06
+2026-08 2 241 2026-08-20
+2026-08 2 252 2026-07-21 2026-07-23 2026-07-24 2026-07-27 2026-07-28 2026-07-31 2026-08-03 2026-08-04 2026-08-05 2026-08-06 2026-08-10 2026-08-11 2026-08-12 2026-08-13 2026-08-14 2026-08-17 2026-08-18 2026-08-19
+2026-08 2 282 2026-08-01
+2026-08 2 334 2026-08-05
+2026-08 2 435 2026-07-27
+2026-08 2 441 2026-07-25 2026-08-08
+2026-08 2 444 2026-08-04 2026-08-05
+2026-08 2 451 2026-08-05
+2026-08 2 457 2026-08-02 2026-08-04
+2026-08 2 468 2026-07-23 2026-07-24 2026-07-25 2026-08-07
+2026-08 2 516 2026-07-23 2026-08-02
+2026-08 2 532 2026-07-22
+2026-08 2 599 2026-08-15
+2026-08 2 707 2026-07-26 2026-08-01
+2026-08 2 736 2026-07-23
+2026-08 2 820 2026-08-16 2026-08-18
+2026-08 2 832 2026-07-25
+2026-08 2 838 2026-07-21
+2026-08 2 865 2026-07-30 2026-08-02
+2026-08 3 110 2026-08-12 2026-08-17
+2026-08 3 152 2026-08-06
+2026-08 3 154 2026-07-28
+2026-08 3 169 2026-08-02
+2026-08 4 37 2026-08-10
+2026-08 4 48 2026-07-26
+2026-08 4 857 2026-07-25
+"""
+
+COMPETENCIAS = ("2026-11", "2026-08")
+CLASSES = (
+    "PERGUNTA_VIVA",
+    "BATIDA_RETRATADA",
+    "BATIDA_PLANTADA",
+    "ORFA_NO_DIA",
+    "AUSENCIA_NO_DIA",
+    "FERIADO_TRABALHADO",
+    "FOLGA_TRABALHADA",
+    "CELULA_REGENERADA",
+    "CELULA_EDITADA",
+    "CRUZA_MEIA_NOITE",
+    "OUTROS",
+)
+
+
+def universo():
+    casos = []
+    for linha in DADOS.splitlines():
+        partes = linha.split()
+        if not partes:
+            continue
+        comp, empresa, pk, *datas = partes
+        for data in datas:
+            casos.append(
+                (comp, int(empresa), int(pk), datetime.date.fromisoformat(data))
+            )
+    if len(casos) != 90 or len(set(casos)) != 90:
+        raise RuntimeError("universo_nao_e_90_unicos")
+    cont = collections.Counter(c[0] for c in casos)
+    if cont != {"2026-11": 33, "2026-08": 57}:
+        raise RuntimeError("universo_por_competencia")
+    return casos
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+
+    especificacao = os.environ.get("TESTE_CPUSET", "4-7")
+    permitidas = set()
+    for parte in especificacao.split(","):
+        limites = parte.strip().split("-")
+        if len(limites) == 1:
+            permitidas.add(int(limites[0]))
+        elif len(limites) == 2:
+            inicio, fim = map(int, limites)
+            if inicio > fim:
+                raise RuntimeError("cpuset_invalido")
+            permitidas.update(range(inicio, fim + 1))
+        else:
+            raise RuntimeError("cpuset_invalido")
+    afinidade = os.sched_getaffinity(0)
+    if not afinidade or not afinidade.issubset(permitidas):
+        raise RuntimeError("cpuset")
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY"
+        )
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def divergencia_v1(registro, m_oraculo):
+    # Mesmo filtro do anexo sonda_v1.py; None significa não comparável.
+    if registro is None:
+        return False, None, None, "sem_registro"
+    if registro.get("isencao"):
+        return False, None, None, "isencao"
+    if registro.get("ausencia") is not None:
+        return False, None, None, "ausencia"
+    m_espelho, fonte = e6.minutos_do_espelho(registro)
+    if m_espelho is None:
+        return False, None, fonte, "sem_minutos"
+    diff = m_oraculo - m_espelho
+    if m_espelho == 0 and m_oraculo == 0:
+        return False, diff, fonte, "ambos_zero"
+    if e6.diferenca_e_a_janela_declarada(diff, registro):
+        return False, diff, fonte, "janela_declarada"
+    if abs(diff) <= 10:
+        return False, diff, fonte, "ate_10_min"
+    return True, diff, fonte, "diverge"
+
+
+def eixo(diff):
+    if diff is None:
+        return "indisponivel", "indisponivel"
+    sinal = "positivo" if diff > 0 else "negativo" if diff < 0 else "zero"
+    magnitude = abs(diff)
+    if magnitude <= 10:
+        faixa = "ate_10"
+    elif magnitude <= 30:
+        faixa = "11-30"
+    elif magnitude <= 120:
+        faixa = "31-120"
+    else:
+        faixa = ">120"
+    return sinal, faixa
+
+
+def instante_local(valor):
+    if valor is None:
+        return None
+    if timezone.is_aware(valor):
+        valor = timezone.localtime(valor)
+    return valor.isoformat()
+
+
+def como_json(valor):
+    return json.dumps(valor, ensure_ascii=True, separators=(",", ":"), default=str)
+
+
+def medir_caso(colab, dia, registro, insumos, agora):
+    chave = str(dia)
+    m_oraculo = insumos.oraculo.minutos.get(chave, 0.0)
+    passou, diff, fonte, motivo_filtro = divergencia_v1(registro, m_oraculo) [nao verificado]
+    dono = insumos.dono(dia)
+
+    cel = CelulaDia.objects.filter(colaborador=colab, data=dia).first()
+    ec = vinculo_do_dia_carregado(colab.pk, dia)
+    tipo = ec.tipo_escala if ec is not None else None
+    marcos = marcos_turno(tipo, dia, ec=ec) if tipo is not None else []
+    cruza = (
+        turno_cruza_meia_noite(
+            timezone.localtime(marcos[0][1]).time(),
+            timezone.localtime(marcos[-1][1]).time(),
+        )
+        if marcos else False
+    )
+
+    fatos = fatos_do_dia(colab, dia)
+    fatos_crus = fatos["fatos"]
+    status_lavrado = cel.status_dia if cel is not None else None
+    orfas = periodos_do_dia(cel, tipo).get("orfas", []) if cel else None
+
+    inicio = timezone.make_aware(datetime.datetime.combine(dia, datetime.time.min))
+    fim = timezone.make_aware(
+        datetime.datetime.combine(dia + datetime.timedelta(days=1), datetime.time.min)
+    )
+    batidas = list(
+        Batida.objects.filter(
+            colaborador=colab, timestamp__gte=inicio, timestamp__lt=fim
+        ).order_by("timestamp", "pk")
+    )
+    batidas_contexto = [
+        {
+            "hora_local": instante_local(b.timestamp),
+            "origem": b.origem,
+            "pergunta_origem": b.pergunta_origem_id,
+            "retratada": b.retratada_em is not None,
+        }
+        for b in batidas
+    ]
+
+    perguntas = PerguntaDisputa.objects.filter(
+        disputa__colaborador=colab, data_evento=dia
+    ).select_related("disputa__chamado").order_by("pk")
+    vivas = []
+    for pergunta in perguntas:
+        antes = engolidos()["total"]
+        try:
+            viva = pergunta_viva(pergunta, hoje=timezone.localtime(agora).date(), agora=agora)
+        finally:
+            depois = engolidos()["total"]
+        if depois > antes:
+            raise RuntimeError("pergunta_viva_engoliu_excecao")
+        if viva:
+            vivas.append(pergunta.pk)
+
+    turnos = [] if registro is None else [
+        {
+            "entrada": instante_local(p.entrada),
+            "saida": instante_local(p.saida),
+        }
+        for p in (registro.get("turnos") or [])
+    ]
+    dia_pago = None if registro is None else registro.get("dia_pago")
+    so_motor = {
+        "rubricas": None if registro is None else registro.get("rubricas"),
+        "horas_falta": None if dia_pago is None else dia_pago.horas_falta,
+    }
+    m_espelho = (
+        None if registro is None else e6.minutos_do_espelho(registro)[0]
+    )
+
+    flags = {
+        "pergunta_viva": bool(vivas),
+        "batida_retratada": any(b.retratada_em is not None for b in batidas),
+        "batida_plantada": any(b.pergunta_origem_id is not None for b in batidas),
+        "orfa_no_dia": bool(orfas),
+        "ausencia_no_dia": bool(fatos_crus.get("ausencias")),
+        "feriado_trabalhado": bool(fatos_crus.get("feriado")) and bool(turnos),
+        "folga_trabalhada": status_lavrado == "folga_trabalhada",
+        "celula_regenerada": bool(
+            cel and (cel.regenerada_em is not None or cel.regeneracoes > 0)
+        ),
+        "celula_editada": bool(cel and cel.origem == "editada"),
+        "cruza_meia_noite": cruza,
+    }
+    testes = ( [nao verificado]
+        ("PERGUNTA_VIVA", flags["pergunta_viva"]),
+        ("BATIDA_RETRATADA", flags["batida_retratada"]),
+        ("BATIDA_PLANTADA", flags["batida_plantada"]),
+        ("ORFA_NO_DIA", flags["orfa_no_dia"]),
+        ("AUSENCIA_NO_DIA", flags["ausencia_no_dia"]),
+        ("FERIADO_TRABALHADO", flags["feriado_trabalhado"]),
+        ("FOLGA_TRABALHADA", flags["folga_trabalhada"]),
+        ("CELULA_REGENERADA", flags["celula_regenerada"]),
+        ("CELULA_EDITADA", flags["celula_editada"]),
+        ("CRUZA_MEIA_NOITE", flags["cruza_meia_noite"]),
+    )
+
+    # Sem célula, órfãs e estado da célula não foram observados:
+    # não converter ausência de evidência em classe OUTROS.
+    classe = next((nome for nome, sim in testes if sim), None) [nao verificado]
+    if classe is None:
+        if cel is None:
+            raise RuntimeError("sem_celula_predicados_indisponiveis")
+        classe = "OUTROS"
+
+    sinal, faixa = eixo(diff)
+    contexto = {
+        "oraculo_horas": insumos.oraculo.horas.get(chave, []),
+        "periodos_motor": turnos,
+        "so_motor": so_motor,
+        "escala_tipo_ciclo": None if tipo is None else tipo.tipo_ciclo,
+        "marcos_turno": [
+            [papel, instante_local(instante)] for papel, instante in marcos
+        ],
+        "fatos": fatos_crus,
+        "status_lavrado": status_lavrado,
+        "orfas_ata": orfas,
+        "batidas_dia_civil": batidas_contexto,
+        "perguntas_vivas": vivas,
+        "celula": None if cel is None else {
+            "origem": cel.origem,
+            "regenerada_em": instante_local(cel.regenerada_em),
+            "regeneracoes": cel.regeneracoes,
+        },
+        "flags": flags,
+    }
+    return {
+        "dono": dono,
+        "filtro": passou, [nao verificado]
+        "motivo_filtro": motivo_filtro,
+        "oraculo_min": m_oraculo,
+        "espelho_min": m_espelho,
+        "fonte_espelho": fonte,
+        "diff": diff,
+        "sinal": sinal,
+        "faixa": faixa,
+        "classe": classe,
+        "contexto": contexto,
+    }
+
+
+def main():
+    erros = 0
+    tentados = collections.Counter()
+    classificados = collections.Counter()
+    exemplos = collections.defaultdict(list)
+    reconf = collections.Counter()
+    etapa = "UNIVERSO"
+
+    try:
+        casos = universo()
+        with transaction.atomic():
+            etapa = "GUARDA"
+            guarda_sombra()
+            agora = timezone.now()
+            hoje = timezone.localtime(agora).date()
+            cache = {}
+
+            for comp, empresa_id, pk, dia in casos:
+                tentados[comp] += 1
+                etapa = "CASO"
+                try:
+                    chave_cache = (comp, empresa_id, pk)
+                    if chave_cache not in cache:
+                        empresa = Empresa.objects.get(pk=empresa_id)
+                        colab = Colaborador.objects.get(
+                            pk=pk, empresa_id=empresa_id
+                        )
+                        ano, mes = map(int, comp.split("-"))
+                        ini, fim = janelas.janela_fechamento(mes, ano, empresa)
+                        espelho = espelho_do_colab(
+                            colab, hoje, ini, fim, agora=agora
+                        )
+                        registros = {
+                            str(item.get("data"))[:10]: item
+                            for item in (espelho.get("dias") or [])
+                        }
+                        insumos = e6.InsumosDoDono(
+                            colab, ini, fim, hoje, espelho=espelho, agora=agora
+                        )
+                        cache[chave_cache] = (colab, ini, fim, registros, insumos)
+
+                    colab, ini, fim, registros, insumos = cache[chave_cache]
+                    if not ini <= dia <= fim:
+                        raise RuntimeError("dia_fora_da_janela")
+                    registro = registros.get(str(dia))
+                    resultado = medir_caso(colab, dia, registro, insumos, agora)
+
+                    reconf[(comp, "dono_estrutura" if resultado["dono"] == "ESTRUTURA"
+                            else "dono_mudou")] += 1
+                    reconf[(comp, "filtro_diverge" if resultado["filtro"]
+                            else "filtro_nao_diverge")] += 1
+                    classe = resultado["classe"]
+                    classificados[(comp, classe)] += 1
+                    if len(exemplos[(comp, classe)]) < 2:
+                        exemplos[(comp, classe)].append("%s/%s" % (pk, dia))
+
+                    print(
+                        "CASO %s colab_pk=%s empresa=%s dia=%s "
+                        "| dono=%s filtro_v1=%s motivo_filtro=%s "
+                        "| minutos_oraculo=%s minutos_espelho=%s fonte=%s "
+                        "diff_oraculo_menos_espelho=%s sinal=%s faixa=%s "
+                        "| contexto=%s | classe=%s"
+                        % (
+                            comp, pk, empresa_id, dia,
+                            resultado["dono"], resultado["filtro"],
+                            resultado["motivo_filtro"],
+                            resultado["oraculo_min"], resultado["espelho_min"],
+                            resultado["fonte_espelho"], resultado["diff"],
+                            resultado["sinal"], resultado["faixa"],
+                            como_json(resultado["contexto"]), classe,
+                        )
+                    )
+                except Exception as exc:
+                    erros = 1
+                    reconf[(comp, "erro")] += 1
+                    # Não imprimir mensagem de exceção: pode conter dados pessoais.
+                    print(
+                        "CASO %s colab_pk=%s empresa=%s dia=%s "
+                        "| ERRO tipo=%s | classe=NAO_CLASSIFICADO"
+                        % (comp, pk, empresa_id, dia, type(exc).__name__)
+                    )
+
+            for comp in COMPETENCIAS:
+                for classe in CLASSES:
+                    print(
+                        "RESUMO competencia=%s classe=%s contagem=%d exemplos=%s"
+                        % (
+                            comp, classe, classificados[(comp, classe)],
+                            ",".join(exemplos[(comp, classe)]) or "-",
+                        )
+                    )
+                print(
+                    "RECONFIRMACAO competencia=%s dono_estrutura=%d "
+                    "dono_mudou=%d filtro_diverge=%d filtro_nao_diverge=%d "
+                    "erro=%d"
+                    % (
+                        comp, reconf[(comp, "dono_estrutura")],
+                        reconf[(comp, "dono_mudou")],
+                        reconf[(comp, "filtro_diverge")],
+                        reconf[(comp, "filtro_nao_diverge")],
+                        reconf[(comp, "erro")],
+                    )
+                )
+
+            total = sum(tentados.values())
+            classificados_total = sum(classificados.values())
+            confere = (
+                total == 90
+                and tentados["2026-11"] == 33
+                and tentados["2026-08"] == 57
+                and classificados_total + sum(
+                    reconf[(c, "erro")] for c in COMPETENCIAS
+                ) == 90
+            )
+            print(
+                "CONFERENCIA tentados=%d novembro=%d agosto=%d "
+                "classificados=%d erros_caso=%d 90=33+57=%s"
+                % (
+                    total, tentados["2026-11"], tentados["2026-08"],
+                    classificados_total,
+                    sum(reconf[(c, "erro")] for c in COMPETENCIAS),
+                    "s" if confere else "n",
+                )
+            )
+            if not confere:
+                erros = 1
+
+    except Exception as exc:
+        erros = 1
+        print("ERRO etapa=%s tipo=%s" % (etapa, type(exc).__name__))
+
+    print("ERROS=%d" % erros)
+    print("FIM_SONDA_EV_V2")
+    return erros
+
+
+sys.exit(main())
+```
+
+Quanto à cura, a sessão pode verificar se `CRUZA_MEIA_NOITE` se relaciona a **ESCALA-NAO-DESCREVE**, **MOTOR-LE-O-TURNO** ou **DIA-DA-BATIDA-JUIZ-UNICO**; se as classes de batida e órfã se relacionam a *
+
+[truncado em 20000 de 20235 caracteres]
 
 ## 19/11 09:09 · sessao 30737462c82c · E4C-F5-CONSTROI · sonda · origem=Code
 
@@ -648,12 +1239,4 @@ A cópia disponibilizada contém os arquivos, mas não contém objetos Git acess
 
 Investigação dos leitores e seus chamadores enviada ao agente principal, com referências à base e ressalvas sobre as guardas e a carga em lote.
 
-## 19/11 08:11 · sessao de53552e4dba · - · - · origem=Ronald (tmux)
-
-Evidências da volta 3 e das guardas foram enviadas ao agente principal, incluindo a limitação do K6 às metades de intervalo e o filtro SQL anterior à releitura de `validada_em` ([materializacao.py:804](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:804), [materializacao.py:2104](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2104)).
-
-## 19/11 08:11 · sessao 96fb0bcc2955 · - · - · origem=Ronald (tmux)
-
-Enviado ao agente principal o levantamento da testemunha, da conservação do passivo, dos dois juízes e do corte temporal, com referências à base e casos discriminantes. Também sinalizei que `pergunta_respondida` recebe tanto `LeituraDoAto` quanto objetos temporais sintéticos, e que o corte da projeção atual não prova, por si só, o resultado de um replay histórico.
-
-_7292 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7294 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
