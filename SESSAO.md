@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 16:35:17.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (3.3 MB). Acoes na janela: **89**.
+**Medido em 19/11/2026 16:40:28.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (3.4 MB). Acoes na janela: **99**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:38:27 | Bash | List killed mutants | `cd /home/ronald/saas-hasner; grep -o "MORTO m[0-9]*" logs/CADEIA-20-PASSO-1/v2m/run.log \| sort -V \| tr '\n' ' '` |
+| 16:38:25 | Bash | Count killed mutants, sombra progress | `cd /home/ronald/saas-hasner; grep -c "^MORTO" logs/CADEIA-20-PASSO-1/v2m/run.log; grep "^VIVO\\|SOBREVIV" logs/CADEIA-20-PASSO-1/v2m/run.log \| head -3; ls -la --time-style=+%H:%M logs/cadeia20_copia_2m.out 2>&1` |
+| 16:38:21 | Bash | Read CADEIA pista verdict | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8b8d87c5-d111-4931-9b60-72a70772f0de/tasks/bgbvutd1h.output; grep -E "^(FAIL\|ERROR):" logs/CADEIA-20-PASSO-1/v2m/run.log \| head; grep -n "m21" logs/CADEIA-20-PASSO-1/v2m/run.log \| head -3; head -5 logs/CADEIA-20-PASSO-1/v2m/run.log` |
+| 16:38:09 | Bash | RED rerun, apply patch, GREEN on feriado module | `cd /home/ronald/saas-hasner; D=logs/FERIADO-POR-POSTO/item4; T=colaboradores.tests.test_feriado_por_posto; W=/home/ronald/wt-feriado-posto-135549; bash bin/suite.sh --dir $W --only $T.A3CopiadoresNascemPelaMarca --espera 3600 > $D/red2.log 2>&1; echo "rc=$?" >> $D/red2.log; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^(FAIL\|ERROR):' $D/red2.log; python3 /tmp/claude-1001/-home-ronald-saas-hasner/ee91c0 ...` |
+| 16:38:04 | Bash | Check patch target path | `cd /home/ronald/saas-hasner; grep -n "wt-feriado\\|RAIA\\|W =" /tmp/claude-1001/-home-ronald-saas-hasner/ee91c054-fa2c-4df6-b27f-67d95e7cfe5e/scratchpad/patch_item4.py \| head -5` |
+| 16:38:00 | Bash | Fix fixture reuse | `cd /home/ronald/wt-feriado-posto-135549/app; python3 - <<'EOF' p='colaboradores/tests/test_feriado_por_posto.py' s=open(p).read() a=""" return TipoEscala.objects.create( codigo='FPP-5X2B', descricao='5x2 09-18', tipo_ciclo='5x2', tipo_base='comercial', hora_inicio=datetime.time(9), hora_fim=datetime.time(18), folga_dia_semana='5,6')""" b=""" te = TipoEscala.objects.filter(codigo='FPP-5X2B').first( ...` |
+| 16:37:56 | Bash | View _te5b fixture | `cd /home/ronald/wt-feriado-posto-135549/app; sed -n 432,440p colaboradores/tests/test_feriado_por_posto.py` |
+| 16:37:53 | Bash | Show error traceback | `cd /home/ronald/saas-hasner; n=$(grep -n "^ERROR: test_A3_ajustar_admin" logs/FERIADO-POR-POSTO/item4/red.log \| tail -1 \| cut -d: -f1); sed -n "$n,$((n+40))p" logs/FERIADO-POR-POSTO/item4/red.log` |
+| 16:37:51 | Bash | Traceback of admin test error | `cd /home/ronald/saas-hasner; awk '/^ERROR: test_A3_ajustar_admin/,/^(FAIL\|ERROR\|---.*\n=)/' logs/FERIADO-POR-POSTO/item4/red.log \| head -40` |
+| 16:37:48 | Bash | Read FERIADO item 4 RED result | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8b8d87c5-d111-4931-9b60-72a70772f0de/tasks/b50a23pqp.output; grep -E "^(FAIL\|ERROR):\|AssertionError" logs/FERIADO-POR-POSTO/item4/red.log \| head -10` |
 | 16:32:53 | Bash | Confirm push producer alive | `ps -p 3282514 -o pid,etime,cmd \| tail -1 \| cut -c1-120` |
 | 16:32:51 | Bash | Insert MATRIZ-F5-A top line in RELATO | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read().split('\n') linha="MATRIZ-F5-A FECHADA: 96 chamadores, 88 em laco, 69 carregadores a tocar, perguntas de lei: 0, logs/ESPINHA-BRIEFS/F5/v3/matriz.md (Codex censo rc=0 sobre e673e0efe; amostra da sessao 5/5 arquivo:linha batem; harness 12 familias / 112 ocorrencias; RED so descrito; 0 construtor, 0 t ...` |
 | 16:32:46 | Bash | Fix newline, view RELATO top | `cd /home/ronald/saas-hasner; echo >> logs/ESPINHA-BRIEFS/F5/v3/matriz.md; sed -n 1,3p app/docs/RELATO.md \| cut -c1-150` |

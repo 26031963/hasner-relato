@@ -1,4 +1,4 @@
-ESPERANDO: push.sh | pid=3282514
+ESPERANDO: sombra.sh | pid=3359444
 PRONTO PARA CLEAR 16:08 -- marco: POUSO C7 1c4e50fce no ar (deploy rc=0, smoke prod ok), 0 agente em voo, handoff gerado; CADEIA-20-PASSO-1 segue na copia (estado na linha abaixo)
 MATRIZ-F5-A FECHADA: 96 chamadores, 88 em laco, 69 carregadores a tocar, perguntas de lei: 0, logs/ESPINHA-BRIEFS/F5/v3/matriz.md (Codex censo rc=0 sobre e673e0efe; amostra da sessao 5/5 arquivo:linha batem; harness 12 familias / 112 ocorrencias; RED so descrito; 0 construtor, 0 teto, 0 harness tocado)
 DESPACHO E4C-F5-DESENHO-A-E-MATRIZ-1911-1620 (16:2x): etapa 1 MATRIZ-F5-A -> Codex censo (base e673e0efe, logs/ESPINHA-BRIEFS/F5/v3/matriz/{q,r}.txt, anexos r.txt/baldes/brief_c3/obras_vizinhas) | etapa 2 linha MATRIZ-F5-A FECHADA -> sessao | construtor: nenhum (PROIBIDO pelo aval)
