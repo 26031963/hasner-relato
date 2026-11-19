@@ -1,7 +1,22 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 19:03** · publicado em **19/11/2026 19:07** (UTC-3)
+> Ultima resposta processada: **19/11/2026 19:34** · publicado em **19/11/2026 19:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 19:34 · sessao 9d7185de4140 · CADEIA-20-PASSO-1 · sonda · origem=Code
+
+```text
+sonda_leitura: sonda.py [09aa035aee18a63b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+HOJE 2026-11-19 ONTEM 2026-11-18 DIAS_COM_BATIDA 29858 CELULAS 51970
+SEM_CELULA TOTAL 36 [(('2026-09', 2), 34), (('2026-11', 2), 2)]
+ATA_NULA TOTAL 0 []
+ATA_SEM_CHAVE_ORFAS TOTAL 0 []
+FIM_SONDA
+```
+
+ERRO ou traceback no bloco fornecido? Não. `FIM_SONDA` apareceu? Sim, na última linha (`DADO RASPADO:1–7`).  
+Reexecução [nao verificado]. A porta cria arquivos e grava log (`bin/codex_pergunta.sh:307–309`).
 
 ## 19/11 19:03 · sessao 93bc4756bb32 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1498,48 +1513,4 @@ Nos quatro selos da batida, o percurso comum é `registrar_batida` → `post_sav
 
 [truncado em 20000 de 27425 caracteres]
 
-## 19/11 15:29 · sessao 1911406c1480 · - · - · origem=Ronald (tmux)
-
-Encontrei 38 pontos de chamada em produção para `pergunta_respondida` e três para `projecao_temporal_da_pergunta`. As tabelas usam caminhos relativos a `app/`.
-
-### `pergunta_respondida`
-
-| Chamada | Objeto e laço | Origem das decisões |
-|---|---|---|
-| `chamados/juizes.py:1430` | `SimpleNamespace` com o par temporal, uma chamada por C6. | O par vem da projeção do próprio C6. `chamados/juizes.py:1410-1411,1428-1430` |
-| `chamados/models.py:2006` | `LeituraDoAto`, em laço. | `prefetch_related_objects(..., 'decisoes')` antes do laço. `chamados/models.py:1998-2006` |
-| `chamados/models.py:3241,3244` | `LeituraDoAto`, uma chamada por acesso a `estado`, em ramos alternativos. | Origem variável. API recebe ORM com decisões carregadas pelo app. `chamados/models.py:3233-3244`, `api/views.py:2553,2566-2568`, `chamados/services/pergunta_no_app.py:52-65` |
-| `chamados/models.py:3791` | `LeituraDoAto`, uma por acesso à propriedade `respondida`. | Herda a carga da instância. A leitura é feita antes de entrar no juiz. `chamados/models.py:3786-3791` |
-| `chamados/services/raiox.py:147` | `SimpleNamespace` de duas colunas de `values_list`, em laço. | Sem relação de decisões no argumento. `chamados/services/raiox.py:135-147` |
-| `chamados/views.py:1275`, `api/views.py:2640` | ORM avulso. | Sem prefetch nas buscas. `chamados/views.py:1239`, `api/views.py:2631-2634` |
-| `api/views.py:2596`, `colaboradores/services/ficha.py:172` | ORM em laço, histórico da consulta e lista viva, respectivamente. | Com prefetch do app. `api/views.py:2553,2585-2596`, `colaboradores/services/ficha.py:166-172`, `chamados/services/pergunta_no_app.py:52-77` |
-| `chamados/services/fio.py:712`, `chamados/services/acoes_disputa.py:134`, `chamados/views_cobrar.py:170,178` | ORM em laço. | `_vivas_de(d)` usa `d.perguntas.order_by('pk')` sem prefetch de decisões. `chamados/juizes.py:1512-1514` |
-| `chamados/services/fio.py:1287,1300` | ORM em laços do grupo e das perdedoras. | O argumento é uma coleção. Os caminhos de eleição e dedup examinados carregam o ORM sem decisões. `chamados/services/fio.py:1335-1345,1962-1963,1999-2001,2073-2088,2319-2326`, `chamados/management/commands/dedup_perguntas_fato.py:74-77` |
-| `chamados/services/becos.py:31` | ORM em laço da disputa. | Evento e comando prefetcham `perguntas`. `chamados/services/becos.py:30,85-87`, `chamados/management/commands/fechar_becos_disputa.py:32-39` |
-| `chamados/services/disputa_emissao.py:1853` | ORM avulso no corpo, alcançado por laços S143 e backfill. | Sem prefetch nos seletores. `chamados/services/disputa_emissao.py:1983-1990`, `chamados/models.py:355-359`, `chamados/management/commands/backfill_fio_morto_e4b.py:89-90,134-135,166-175` |
-| `chamados/services/disputa_emissao.py:2023` | ORM em laço S128. | Sem prefetch. `chamados/services/disputa_emissao.py:1949-1953,1998-2023` |
-| `chamados/services/declaracao_texto.py:418,688` | ORM avulso, candidata reutilizável ou pergunta aberta pela porta. | Universo do fato sem prefetch. `chamados/services/declaracao_texto.py:251-255,373-378,663-668`, `chamados/services/fio.py:1962-1963` |
-| `chamados/services/pergunta_no_app.py:86` | ORM em laço de partição. | Sim na consulta do app. A carga da tarefa fornece outras instâncias, sem prefetch da relação, mesmo com leituras mantidas em mapa. `chamados/services/pergunta_no_app.py:52-77`, `chamados/services/tarefa_do_dia.py:530-542,621` |
-| `chamados/services/validacao.py:682,902` | ORM avulso. | Sem prefetch no `get`. `chamados/services/validacao.py:677,894-895` |
-| `chamados/services/materializacao.py:192` | ORM avulso no par do intervalo, inclusive dentro dos laços da tela e da materialização. | Com prefetch no percurso do fio, sem na validação e na materialização. `chamados/services/fio.py:262-269,360-381`, `chamados/services/materializacao.py:923,1732,2104-2125`, `chamados/services/validacao.py:632,677` |
-| `chamados/services/materializacao.py:259` | ORM avulso no predicado BUG-PAR-103, usado também pelo laço do contador. | Sem prefetch no contador ou na porta. `chamados/services/materializacao.py:324-330`, `chamados/services/validacao.py:333-334` |
-| `chamados/services/materializacao.py:290` | ORM avulso da irmã, chamado no laço do contador. | `first()` sem prefetch. `chamados/services/materializacao.py:284-290,328-342` |
-| `chamados/services/materializacao.py:885` | ORM avulso no estado da aplicação, chamado em laços do contador e do fio. | Misto. Contador sem prefetch, fio com. `chamados/services/materializacao.py:324-342`, `chamados/services/fio.py:262-269,360-381` |
-| `chamados/services/materializacao.py:1300` | ORM por pergunta nos três ramos de materialização. | A porta de validação relê a pergunta sem prefetch no laço. `chamados/services/materializacao.py:1355,1590,1674,2104-2125` |
-| `chamados/services/vigia_fio.py:636` | ORM em laço por dia e pergunta. | `alim['vivas']` de `alimentar_portas`, sem prefetch. `chamados/services/vigia_fio.py:559-570,595-597`, `chamados/juizes.py:1668-1673` |
-| `chamados/management/commands/dedup_perguntas_fato.py:76` | ORM em laço dentro dos grupos. | Sem prefetch no seletor dos membros. `chamados/management/commands/dedup_perguntas_fato.py:74-77` |
-| `folha/previa.py:142` | ORM em `any`, chamado no laço de dias e lâmpadas. | Sem prefetch. `folha/previa.py:64-67,77-95` |
-| `chamados/reconciliador.py:366` | ORM avulso no corpo, chamado no laço da reata e na emissão. | Queryset da reata sem prefetch, emissão pode passar instância recém-criada. `chamados/reconciliador.py:1547-1554,1568-1574,1667`, `chamados/services/disputa_emissao.py:452-473` |
-| `chamados/reconciliador.py:1130` | ORM avulso no corpo do veredito, chamado nos laços de órfãs. | Sem prefetch. `chamados/reconciliador.py:1094-1101,1182-1183,1238-1240,1350-1351` |
-| `ponto/services/cartorio.py:1689` | ORM em `any` dentro dos laços de chamados e dedup. | Só prefetch da relação `perguntas_que_resolvem`. `ponto/services/cartorio.py:146-147,1690-1696,1709-1714` |
-| `chamados/management/commands/auditar_invariantes_chamados.py:178,597,1671` | ORM em laços I21, I2 e F1, respectivamente. | I21 e I2 sem prefetch. F1 só prefetch da relação `perguntas_que_resolvem`. `chamados/management/commands/auditar_invariantes_chamados.py:590-597,1585-1598,1642-1645,1666-1671` |
-
-### `projecao_temporal_da_pergunta`
-
-| Chamada | Objeto e laço | Origem |
-|---|---|---|
-| `chamados/juizes.py:351` `_slot_esperado` | ORM repassado, uma por chamada quando há `agora`. O pré-cálculo percorre todas as perguntas e a testemunha também pode chegar a esse ponto. | Carga da tarefa sem prefetch. Herda a origem nos outros leitores. `chamados/services/carga_pergunta_viva.py:117-123`, `chamados/services/tarefa_do_dia.py:530-534,625`, `chamados/juizes.py:348-351,756-757` |
-| `chamados/juizes.py:1411` `_pergunta_viva_calc` | ORM repassado, uma por execução do C6, chamado por muitos laços. | Misto, com prefetch no fio e no app e sem na tarefa e em `alimentar_portas`. `chamados/juizes.py:886-898,1668-1673`, `chamados/services/fio.py:262-275`, `chamados/services/pergunta_no_app.py:52-65`, `chamados/services/tarefa_do_dia.py:530-534,625-632` |
-| `escala/services/cadastro_realidade.py:502` `beco_em_lote` | ORM em `all` dentro do laço de dias, avaliado quando a pergunta não tem âncora. | Reutiliza instâncias de `alimentar_portas` sem prefetch. `escala/services/cadastro_realidade.py:459-474,497-502`, `chamados/juizes.py:1668-1673` |
-
-_7416 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7417 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
