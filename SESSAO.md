@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 03:29:01.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (21.7 MB). Acoes na janela: **684**.
+**Medido em 19/11/2026 03:34:11.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (21.7 MB). Acoes na janela: **688**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:30:04 | Bash | Run nocturnal probe in sombra against c7 tree | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; SOMBRA_ARVORE=/home/ronald/wt-escala-c7-021338/app bin/sombra.sh --rodar logs/sombra/escala_c7_noturno.py escala_c7_noturno > $D/sombra_run.log 2>&1; echo rc=$? >> $D/sombra_run.log; tail -3 $D/sombra_run.log` |
+| 03:30:01 | Bash | Extract script and check sombra availability | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; python3 - <<'EOF' s=open('logs/ESCALA-NAO-DESCREVE/c7/noturno/r3.txt').read() a=s.index('```python\n')+10; b=s.index('\n```',a) open('logs/sombra/escala_c7_noturno.py','w').write(s[a:b]+'\n') EOF python3 -m py_compile logs/sombra/escala_c7_noturno.py && echo compila; cat bin/sombra_em_uso 2>/dev/null; ls logs/crons_em_curso 2>/dev ...` |
+| 03:29:56 | Bash | Verify turno shape and ciclos_dos_destinos signature | `cd /home/ronald/saas-hasner; git show 2fd98211a:app/ponto/turnos.py \| sed -n 312,326p; git show 2fd98211a:app/escala/services/cadastro_realidade.py \| sed -n 805,830p` |
+| 03:29:52 | Bash | Read Codex volta 3 answer | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; tail -1 $D/wrapper3.out; wc -c $D/r3.txt; cat $D/r3.txt` |
 | 03:28:50 | Bash | Wait for Codex volta 3 | `cd /home/ronald/saas-hasner; while ! /bin/grep -q 'rc=' logs/ESCALA-NAO-DESCREVE/c7/noturno/wrapper3.out 2>/dev/null; do /usr/bin/sleep 30; done; tail -1 logs/ESCALA-NAO-DESCREVE/c7/noturno/wrapper3.out` |
 | 03:28:43 | Bash | Send volta 3 to Codex with envelope mount facts | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; sed -n 182,195p bin/sombra.sh > $D/sombra_container.txt; cp $D/r2.txt $D/r2_volta2.txt; cat > $D/q3.txt <<'EOF' PAPEL sonda, volta 3 (obra ESCALA-NAO-DESCREVE, medida PRE-POUSO), so leitura, arvore 2fd98211a. Anexos: molde_envelope.py, sombra_container.txt (trecho de bin/sombra.sh, a funcao `container` que executa o script) e a su ...` |
 | 03:28:30 | Bash | Read Codex volta 2 answer (prose parts) | `cd /home/ronald/saas-hasner; D=logs/ESCALA-NAO-DESCREVE/c7/noturno; tail -2 $D/wrapper2.out; wc -c $D/r2.txt; sed -n '1,/```python/p' $D/r2.txt \| head -60; sed -n '/^```$/,$p' $D/r2.txt \| tail -15` |

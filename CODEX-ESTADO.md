@@ -1,7 +1,160 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 03:28** · publicado em **19/11/2026 03:29** (UTC-3)
+> Ultima resposta processada: **19/11/2026 03:29** · publicado em **19/11/2026 03:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 03:29 · sessao f04606e63662 · ESCALA-NAO-DESCREVE · sonda · origem=Code
+
+A escrita em `/app/logs/errors.log` fica no `tmpfs` do container e morre com ele: a árvore é montada em `/app` como somente leitura, `/app/logs` recebe um `tmpfs` próprio e o container usa `--rm`. Portanto, essa escrita não chega ao arquivo do host pelo caminho mostrado e não impede a sonda pelo critério corrigido. [bin/sombra.sh:182](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/bin/sombra.sh:182), [bin/sombra.sh:189](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/bin/sombra.sh:189), [app/config/settings/saas.py:136](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/config/settings/saas.py:136).
+
+A sonda abaixo usa `proposta` da função real como universo, consulta o ciclo atual pela função da tela e mede turnos pela porta solicitada. Uma proposta cujo tipo não aparece no mapa de ciclos é contada como erro, sem presumir que seja não cíclica. [app/ponto/services/esmeril_espelho.py:215](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/services/esmeril_espelho.py:215), [app/escala/services/cadastro_realidade.py:819](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/escala/services/cadastro_realidade.py:819), [app/ponto/turnos.py:1850](/home/ronald/codex_ws/2fd98211a55bdcd21e22331f6257b4e2979a3372/app/ponto/turnos.py:1850).
+
+```python
+import collections
+import datetime
+import os
+import sys
+
+HOJE = datetime.date(2026, 11, 19)
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador
+from escala.models import TipoEscala
+from escala.services.cadastro_realidade import ciclos_dos_destinos
+from ponto.services.esmeril_espelho import anomalias_da_frota
+from ponto.turnos import turnos_do_colab
+
+
+INI = HOJE - datetime.timedelta(days=60)
+FIM = HOJE - datetime.timedelta(days=1)
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if banco.get("NAME") != "sombra" or banco.get("HOST") != "sombra_db":
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        banco_real, schema_real = cursor.fetchone()
+    if banco_real != "sombra" or schema_real != "juliani":
+        raise RuntimeError("conexao")
+
+
+def main():
+    universo = None
+    erros = 0
+    contador = 0
+    ciclicas = 0
+    nao_ciclicas = 0
+    por_confianca = collections.Counter()
+    por_empresa = collections.Counter()
+    linhas_casos = []
+    erros_casos = []
+    etapa = "GUARDA_SOMBRA"
+
+    try:
+        with transaction.atomic():
+            guarda_sombra()
+
+            etapa = "UNIVERSO"
+            proposta = anomalias_da_frota(HOJE)["proposta"]
+            universo = len(proposta)
+
+            etapa = "CICLOS"
+            ciclos = ciclos_dos_destinos(proposta)
+
+            etapa = "CASOS"
+            for cid, p in sorted(
+                proposta.items(), key=lambda item: int(item[0])
+            ):
+                try:
+                    # O savepoint permite continuar após erro de banco no caso.
+                    with transaction.atomic():
+                        colab = Colaborador.objects.get(pk=int(cid))
+                        empresa = colab.empresa_id
+                        tipo_id = p["tipo_escala_id"]
+                        codigo = p["codigo"]
+                        confianca = p["confianca"]
+
+                        if tipo_id not in ciclos:
+                            raise RuntimeError("ciclo_ausente")
+
+                        ciclica = ciclos[tipo_id] in TipoEscala.CICLICOS
+                        n_turnos = n_cruzam = n_abertos = 0
+
+                        if not ciclica:
+                            turnos = list(turnos_do_colab(colab, INI, FIM))
+                            n_turnos = len(turnos)
+                            for turno in turnos:
+                                if turno.saida is None:
+                                    n_abertos += 1
+                                if turno.entrada is not None and turno.saida is not None:
+                                    entrada = timezone.localtime(
+                                        turno.entrada.timestamp
+                                    )
+                                    saida = timezone.localtime(
+                                        turno.saida.timestamp
+                                    )
+                                    if entrada.date() != saida.date():
+                                        n_cruzam += 1
+
+                    por_confianca[str(confianca)] += 1
+                    por_empresa[str(empresa)] += 1
+                    if ciclica:
+                        ciclicas += 1
+                    else:
+                        nao_ciclicas += 1
+                        if n_cruzam > 0:
+                            contador += 1
+                            linhas_casos.append(
+                                "col%d empresa=%s codigo=%s confianca=%s "
+                                "n_turnos=%d n_cruzam=%d n_abertos=%d"
+                                % (
+                                    int(cid), empresa, codigo, confianca,
+                                    n_turnos, n_cruzam, n_abertos,
+                                )
+                            )
+                except Exception:
+                    erros += 1
+                    erros_casos.append("ERRO_CASO col%d" % int(cid))
+
+        print("TOTAL=%d" % universo)
+        print("CICLICAS=%d NAO_CICLICAS=%d" % (ciclicas, nao_ciclicas))
+        for confianca, total in sorted(por_confianca.items()):
+            print("CONFIANCA=%s TOTAL=%d" % (confianca, total))
+        for empresa, total in sorted(por_empresa.items()):
+            print("EMPRESA=%s TOTAL=%d" % (empresa, total))
+        for linha in linhas_casos:
+            print(linha)
+        for linha in erros_casos:
+            print(linha)
+        print("CONTADOR=%d UNIVERSO=%d ERROS=%d" % (contador, universo, erros))
+        print("FIM_SONDA_NOTURNO")
+        return 0 if erros == 0 else 1
+
+    except Exception:
+        erros += 1
+        print("ERRO_FATAL etapa=%s" % etapa)
+        print(
+            "CONTADOR=%d UNIVERSO=%s ERROS=%d"
+            % (contador, universo if universo is not None else "NAO_VERIFICADO", erros)
+        )
+        print("FIM_SONDA_NOTURNO")
+        return 1
+
+
+sys.exit(main())
+```
+
+As contagens por ciclo, confiança e empresa incluem os casos processados com sucesso; um erro de caso aparece separado e pode tornar essas contagens parciais. Os resultados e a execução da sonda são [não verificado].
+
+perguntas de lei: 0
 
 ## 19/11 03:28 · sessao d379f5ba58d0 · ESCALA-NAO-DESCREVE · sonda · origem=Code
 
@@ -1580,79 +1733,4 @@ perguntas de lei: 2
 1. Qual representação adotar para a limpeza reconstruível: **(1)** novo ato compensador, **(2)** ato existente com marca explícita, ou **(3)** saneamento separado consumido pelo projetor? A decisão atual é **[nao verificado]**. [app/chamados/services/validacao.py:414](app/chamados/services/validacao.py#L414).
 2. Como tratar a reconstrução do histórico e o estoque em competência entregue: **(a)** reconstruir automaticamente, **(b)** tratar por procedimento específico, ou **(c)** outra regra? A decisão atual é **[nao verificado]**. [app/chamados/services/validacao.py:381](app/chamados/services/validacao.py#L381).
 
-## 19/11 01:54 · sessao 69c8d1976b61 · E4C-F3-LAVRA-FOTO · verificador · origem=Code
-
-**BLOQUEIA:** o selo ainda permite leituras de `DecisaoPergunta` dentro de funções alcançadas no próprio módulo. O fecho segue somente chamadas cujo alvo é um nome que coincide diretamente com uma função de topo; não resolve aliases, chamadas por atributo nem métodos de classes. [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
-
-Executei o detector isolado sobre a fonte e contramutações **em memória**: os exemplos de escape abaixo retornaram `[]`, salvo onde indicado. A execução das consultas e da suíte Django é **[não verificado]**. O detector sobre a fonte atual também retornou `[]`. [teste:41](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:41)
-
-### Cura dos itens da volta 1
-
-| Item | Resultado |
-|---|---|
-| **Helper transitivo** | **Parcial.** M7 prova a chamada direta por nome, inclusive em dois níveis; alias de função e método de classe no mesmo módulo escapam. [detector:60](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:60), [M7:217](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:217) |
-| **Reexportação** | **Parcial.** M8 importa um símbolo ainda chamado `DecisaoPergunta`; o registro só reconhece esse nome original. Uma reexportação já chamada `D` escapa. [detector:68](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:68), [M8:227](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:227) |
-| **`getattr`/`get_model` e nomes montados** | **Parcial.** M9 morde `getattr` chamado diretamente com expressão não constante; um alias de `getattr` com o nome montado escapa. [detector:97](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:97), [M9:233](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:233) |
-| **Prefetch, string, `**dict` e segundo relacionamento** | **Parcial.** M10 e M11 mordem os literais `decisoes` e `absorcoes_feitas__isnull`; um caminho montado por concatenação escapa. Os dois nomes vêm dos relacionamentos declarados no modelo. [detector:88](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:88), [M10–M11:239](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:239), [modelo:4166](app/chamados/models.py:4166), [modelo:4176](app/chamados/models.py:4176) |
-| **Caminho ORM indireto e SQL bruto** | **Parcial.** M12 morde o nome literal da tabela; SQL montado em partes escapa. M11 demonstra um caminho ORM literal, não todos os caminhos montados. [detector:92](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:92), [M12:249](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:249) |
-
-Contramutações concretas, inseridas em `marcos_do_lote`, salvo a definição do helper. Elas retornaram `[]` no detector isolado; a validade e execução das consultas contra um banco são **[não verificado]**. [produção:151](app/chamados/veredito_lavrado.py:151), [teste:109](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:109)
-
-```python
-# Helper definido no mesmo módulo; as duas últimas linhas vão em marcos_do_lote.
-def _leitor(): return __import__('chamados.models', fromlist=['DecisaoPergunta']).DecisaoPergunta.objects.all()
-leitura = _leitor
-leitura()
-```
-
-A forma acima também contém acesso dinâmico no helper não visitado. Uma versão com import direto no helper igualmente retornou `[]`; é essa que demonstra a falha do fecho, independentemente do acesso dinâmico. [teste:60](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:60)
-
-```python
-from chamados.tests.test_e4c_f2_leitura_do_ato import D
-D.objects.all()
-```
-
-`D` é uma reexportação existente de `DecisaoPergunta`. [origem:19](app/chamados/tests/test_e4c_f2_leitura_do_ato.py:19)
-
-```python
-import chamados.models as cm
-g = getattr
-g(cm, 'Decisao' + 'Pergunta').objects.all()
-```
-
-```python
-from chamados.models import PerguntaDisputa as PD
-list(PD.objects.filter(**{'absorcoes_' + 'feitas__isnull': False}))
-```
-
-```python
-from django.db import connection
-c = connection.cursor()
-c.execute('SELECT * FROM chamados_' + 'decisao' + 'pergunta')
-```
-
-O último exemplo escapa porque `execute` sobre a variável `c` não corresponde ao formato especial `cursor().execute`, e nenhuma das constantes contém o nome completo procurado. [teste:92](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:92)
-
-### Formas adicionais de alcance
-
-- **Alias de helper ou lambda que o chama: escapa e cabe no contrato do módulo.** O helper pode ser uma função de topo de `veredito_lavrado.py`; `leitura = _leitor; leitura()` não faz o detector entrar nela. Uma lambda que invoque `_leitor()` diretamente é percorrida por `ast.walk` e essa chamada direta é seguida; o escape demonstrado é o alias da função. [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
-- **Método de classe definida no próprio módulo: escapa e cabe no contrato.** Uma classe `Leitor` com método `ler` que importe e consulte `DecisaoPergunta`, seguida de `Leitor().ler()` no alvo, retornou `[]`: métodos de classe não entram no mapa de funções de topo. [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
-- **Método de instância de modelo em outro módulo: escapa.** Após importar `PerguntaDisputa` como `PD`, `list(PD.objects.first().respostas_anteriores())` retornou `[]`; o método existente percorre `self.decisoes.all()`. Se uma chamada a esse método deve ser proibida por este contrato limitado ao fecho *do módulo* é **pergunta de lei**. A execução com uma pergunta existente é **[não verificado]**. [modelo:3793](app/chamados/models.py:3793), [teste:62](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:62)
-- **Helper em outro módulo: escapa quanto ao corpo.** O detector monta o fecho apenas com funções do AST da fonte recebida; ampliar a obrigação para o corpo importado é a mesma pergunta de lei sobre fronteira de módulo. [teste:43](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:43), [teste:49](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:49)
-- **Atributo encadeado com nome literal: não escapou no exemplo `f(cm).DecisaoPergunta.objects.all()`.** O detector reconhece o atributo pelo segmento `DecisaoPergunta`, mesmo com base encadeada. Isso não prova cobertura de atributos cujo nome seja construído dinamicamente. [teste:117](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:117)
-
-### Falso positivo e classes de reprovação
-
-Não encontrei falso positivo no trecho atual: o detector isolado retornou lista vazia para a fonte atual. Isso não prova ausência de falsos positivos em futuras alterações; por exemplo, ele trata nomes de atributos e strings que coincidam com segmentos protegidos sem verificar o tipo do objeto ou se a string é caminho ORM. [teste:92](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:92), [teste:117](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:117)
-
-- **Selo sem mordida:** há mordida demonstrada pela lógica e pelos mutantes declarados, mas ainda é **parcial**; os escapes internos acima constituem um único achado bloqueante consolidado. A execução da suíte M1–M12 é **[não verificado]**. [teste:217](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:217)
-- **Fonte única:** os `related_name` são lidos por AST diretamente de `models.py`, em vez de serem copiados como conjunto fixo no detector. Há, porém, o literal adicional `decisoes` no teste de controle e segmentos fixos para o nome do modelo; o extrator só contempla as formas sintáticas indicadas no código. [teste:16](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:16), [teste:89](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:89), [teste:212](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:212)
-- **Campo com dois significados:** não há campo de produção novo no diff fornecido; existência dessa classe no restante do sistema é **[não verificado]**. [teste:1](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:1)
-- **Alvo ausente:** o detector exige exatamente uma função de topo com o nome solicitado, e há teste para ausência. [teste:44](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:44), [teste:151](app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:151)
-
-A identidade Git da cópia com o hash informado é **[não verificado]**: o diretório consultado não tem metadados Git. A correspondência do diff completo com a base também é **[não verificado]**.
-
-BLOQUEIA: 1  
-perguntas de lei: 1
-
-_7266 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7267 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
