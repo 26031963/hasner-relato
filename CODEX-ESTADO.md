@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 00:54** · publicado em **19/11/2026 00:55** (UTC-3)
+> Ultima resposta processada: **19/11/2026 00:56** · publicado em **19/11/2026 01:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 00:56 · sessao 8e6cc7d6cd1a · QUEIMA-B3 · censo · origem=Code
+
+**O censo avançou, mas ainda não está pronto para abrir todas as fatias.** A cópia permite localizar os sítios listados e identificar mudanças relevantes, mas não permite verificar o hash informado por Git, os pousos em produção, os casos literais da tabela única nem o efeito concreto da futura F5 da espinha em cada leitor. O levantamento de leitores e escritores abaixo é **parcial**, não um censo exaustivo. [não verificado]
+
+A correção mais relevante em relação à volta 1 é que **A5 mudou de premissa**, não apenas de linha: o laço agora usa `q_nao_validada_pelo_ato()`, enquanto o anexo antigo descrevia `validada_em__isnull=True`. E a F3 da espinha, conforme o corte registrado, **não altera `marcos_do_lote` nem passa a ler a trilha**: constrói um selo bitemporal com mutante. [models.py:315](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:315), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+**Critério dos sítios:** `CONFERE` significa que a operação indicada no anexo foi encontrada na linha indicada; `MUDOU` significa linha ou trecho diferente. A classificação não afirma que todos os efeitos e condições da tabela única foram reconferidos. Os anexos fornecem a atribuição dos códigos; onde não fornecem a tradução, ela fica [não verificado].
+
+**Condições comuns.** A ordem fornecida é F0 → F1 → F2 → F3 → F4 → F5 → F6 → F7; a B2b espera F6F7, F9, F5 e F3 da espinha. O backlog também registra a espera, mas o estado real dos pousos está [não verificado]. Antes de cada abertura, é necessário reconferir as linhas no HEAD do dia. Cada fatia tem pouso e suíte próprios, teto de dez arquivos; F4 vai sozinha e F5 admite até dois pousos. [BACKLOG.md:826](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:826); demais condições: anexo `BRIEF-FATIAS.md` fornecido.
+
+A matriz fornecida deriva **39 de 45** retirando P21, X1 duplicado de A9c, P14 duplicado de P13, B9a/B9b e B8; ela própria qualifica a derivação como contestável. B8 continua explicitamente no brief de F5: a dedução para a contagem **não o retira por si só da fatia**. A abrangência efetiva exigida para B8 deve ser reconferida na tabela única [não verificado].
+
+### F0 — instrumentos desligados
+
+- **Sítios:** o brief nomeia instrumentos F6, F8, F9/F9b e F4, sem mapeá-los a sítios concretos existentes; identidade e contratos futuros [não verificado]. A cerca atual tem `ContextVar` com `default=None` e a guarda retorna sem consultar fora de contexto; seu estado contém `vetadas`, `memo` e `empresa`, sem identificador de sítio. [fio.py:1381](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1381), [fio.py:1402](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1402), [fio.py:1445](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1445).
+- **Campos e dependências:** a guarda lê `conversa`, `data_evento`, colaborador e empresa, inclusive dia gravado e proposto; leitores e escritores completos dos futuros instrumentos [não verificado]. [fio.py:1408](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1408).
+- **RED candidato:** coletor desligado preserva retorno, escrita e exceção observáveis, inclusive fora da cerca. Casos literais e resultado [não verificado].
+- **Após F5/F3 da espinha:** a F3 registrada mantém `marcos_do_lote`; o que a F5 mudará nos leitores concretos destes instrumentos futuros [não verificado]. [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+### F1 — carimbo no fecho
+
+| Sítio | Conferência nesta cópia |
+|---|---|
+| X1 / A9c | **MUDOU:** mesmo laço S144, `p.carimbar` agora em [materializacao.py:2180](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2180). X1=A9c conforme matriz fornecida. |
+| A9d | **CONFERE:** fecho por competência trancada em [competencia_trancada.py:229](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/competencia_trancada.py:229). |
+| B1a / B1b | **CONFERE:** carimbo e fecho em [reconciliador.py:639](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:639) e [reconciliador.py:656](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:656). |
+| B2a | **CONFERE:** carimbo e fecho em [reconciliador.py:407](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:407) e [reconciliador.py:414](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:414). |
+| B3a / B3b | **CONFERE:** encerramento e fecho em [reconciliador.py:1192](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:1192) e [reconciliador.py:1216](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:1216). |
+| X13 | **MUDOU:** fecho em [materializacao.py:2043](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2043). |
+| X14 | **CONFERE:** fecho em [disputa_emissao.py:1298](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1298). |
+
+- **Campos:** `carimbar` escreve `materializada_em`, `materializada_por`, `via_resolucao` e, conforme o argumento e texto, resposta e validação; pode relavrar. Um leitor de produção desses marcos é `marcos_do_lote`. O fecho escreve também os campos da disputa e, em certos motivos, registra SILÊNCIO. Censo completo dos demais escritores e leitores [não verificado]. [models.py:3299](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3299), [models.py:2080](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:2080), [veredito_lavrado.py:201](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:201).
+- **Dependência e RED:** depois de F0. Para A9d, candidato: disputa fecha, pergunta entregue que S144 tentaria carimbar permanece preservada e é contada. `RED-NOVO-2/3` são exigidos pelo brief, mas seus casos literais estão [não verificado]. [CORTES.md:556](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/CORTES.md:556).
+- **Após F5/F3 da espinha:** os marcos atuais seguem lendo os timestamps da projeção; a F3 prevista sela o comportamento bitemporal, sem adicionar leitura de `DecisaoPergunta`. Mudanças concretas nos leitores da F5 [não verificado]. [veredito_lavrado.py:201](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:201), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+### F2 — relavra
+
+| Sítio | Conferência nesta cópia |
+|---|---|
+| A4 | **MUDOU:** `reconciliar` em [models.py:654](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:654), decisão e gate em [models.py:676](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:676). |
+| A5 | **MUDOU:** laço usa face SQL da validação pelo ato, em [models.py:315](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:315). |
+| A6 / A7 | **MUDOU:** entradas em [models.py:1742](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:1742) e [models.py:1759](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:1759). |
+| B5 / B6 | **CONFERE:** `lavrar` salva em [veredito_lavrado.py:275](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:275); lote usa `bulk_update` em [veredito_lavrado.py:250](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:250). |
+| B7 | **CONFERE:** save de relavra em [relavra_via.py:127](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/relavra_via.py:127). |
+
+- **Campos:** `lavrar` lê o julgamento e `data_evento`, escreve `veredito_lavrado`, `julgado_em` e `janela_expira_em`; B7 também escreve `via_resolucao`. `esta_stale` e `marcos_do_lote` são leitores relevantes. B6 não passa pela guarda de `save`; inserção e migration histórica também são exceções apontadas pela matriz, sem pretensão de exaustividade. [veredito_lavrado.py:213](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:213), [veredito_lavrado.py:250](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:250), [veredito_lavrado.py:270](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/veredito_lavrado.py:270), [relavra_via.py:127](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/relavra_via.py:127), [models.py:3209](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3209), [models.py:3674](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3674).
+- **Dependência e RED:** depois de F1. Candidato: lote com entregue e aberta, preservando a primeira e relavrando a segunda; incluir B6 e a seleção pelo ato de A5. A equivalência ao `RED-NOVO-1` literal [não verificado].
+- **Após F5/F3 da espinha:** a F3 mantém os marcos atuais e sela a foto bitemporal; a F5 pode alterar leitores de resposta, mas o diff e seus pontos exatos [não verificado]. [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+### F3 — reaponte da B2b
+
+| Sítio | Conferência nesta cópia |
+|---|---|
+| B4 | **CONFERE:** atribuição e save em [fio.py:974](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:974). |
+| B2b / B2d | **CONFERE:** chamadas em [reconciliador.py:998](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:998) e [reconciliador.py:1712](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/reconciliador.py:1712). |
+| X6 / X7 | **MUDOU:** carimbo de duplicata em [fio.py:1502](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1502); reaponte da migração em [fio.py:2338](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:2338). |
+| X8 | **MUDOU:** gate reaponta em [models.py:449](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:449). |
+| X9 / X10 | **CONFERE:** chamadas em [limbo_folgas.py:245](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/limbo_folgas.py:245) e [limbo_folgas.py:283](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/limbo_folgas.py:283). |
+| X12 | **CONFERE:** chamada do comando em [reatar_beco_folga_ao_limbo.py:135](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/management/commands/reatar_beco_folga_ao_limbo.py:135). |
+
+- **Campos:** B4 escreve `chamado_destino` e a lavra, podendo datar a pergunta; X6 carimba identidade de duplicata e motivo. A guarda distingue conversa e lê dia anterior e proposto. Chamadores adicionais de produção incluem declaração humana: portanto, identificar o ator apenas pela porta B4 seria insuficiente. Censo completo dos leitores [não verificado]. [fio.py:955](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:955), [fio.py:974](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:974), [declaracao_texto.py:371](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/declaracao_texto.py:371), [fio.py:1408](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1408).
+- **Dependência e RED:** depois de F2. Candidatos: dia anterior entregue versus dia novo aberto, e vice-versa; conversa; chamada humana e de sistema; duplicata preservada quando reaponte é recusado. Casos literais da tabela [não verificado].
+- **Após F5/F3 da espinha:** o selo F3 protege a leitura bitemporal existente da lavra; o conjunto de leitores alterados pela F5 para cada chamador [não verificado]. [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+### F4 — laço de materialização
+
+| Sítio | Conferência nesta cópia |
+|---|---|
+| P11 / P12 | **MUDOU:** save de pendência em [materializacao.py:1366](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1366); carimbo de paridade em [materializacao.py:1474](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1474). |
+| P13 / P14 | **MUDOU:** ramos da mesma função em [materializacao.py:1699](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1699) e [materializacao.py:1703](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1703); P14=P13 na dedução da matriz fornecida. |
+| P15 | **MUDOU:** carimbo em [materializacao.py:1981](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1981). |
+
+- **Campos:** P11 escreve `pendencia_admin` e `recusa_motivo`; P13/P14 escrevem identidade ou motivo da recusa; P15 carimba materialização e pode escrever resposta/validação pela porta comum. O laço lê resposta, validação e materialização e relê sob trava. Outros escritores e leitores por campo [não verificado]. [materializacao.py:1366](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1366), [materializacao.py:1683](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1683), [materializacao.py:2100](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:2100).
+- **Dependência e RED:** depois de F3 da B2b e em pouso isolado. Candidato: uma pergunta retida e outra aplicável no mesmo laço; verificar resultado individual, fecho e o `finally` que tenta registrar recusa. Efeito exato da segunda exceção [não verificado]. [materializacao.py:1993](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/materializacao.py:1993).
+- **Após F5/F3 da espinha:** a lei de resposta exige instante **e** texto também para materialização; a migração concreta dos leitores pela F5 e seu diff para este laço [não verificado]. A F3 mantém os marcos existentes. [LEIS.md:151](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/LEIS.md:151), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+### F5 — comandos e avulsos da B2b
+
+| Sítio | Conferência nesta cópia |
+|---|---|
+| A8 | **MUDOU:** ressuscitação relê sob trava e grava compensação; o lote guarda `alvo_lido`, mas escreve só os IDs relidos. [models.py:1627](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:1627), [models.py:1700](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:1700). |
+| P1 | **MUDOU:** save de reuso em [models.py:3198](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3198). |
+| B8 | **CONFERE:** save em [fio.py:1092](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1092). |
+| P3 | **MUDOU:** carimbo e fecho em [models.py:2224](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:2224) e [models.py:2235](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:2235). |
+| P4 / P5 | **MUDOU:** portas em [models.py:3489](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3489) e [models.py:3530](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:3530); correspondência completa dos chamadores e tratamento de exceção [não verificado]. |
+| P17 | **MUDOU:** lote e células em [disputa_emissao.py:1656](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1656). |
+| P18 / P19 | **MUDOU:** saves em [disputa_emissao.py:1685](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1685) e [disputa_emissao.py:1707](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1707). |
+| P20 | **CONFERE:** descarimbo em [relavra_via.py:246](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/relavra_via.py:246). |
+
+- **Campos:** A8 e P17 limpam carimbo e estados de resposta/validação e registram decisões; P18 escreve `resposta_colab` e `respondida_em`; P19 escreve o instante apoiado no texto e registra ato; B8 escreve dia, célula e lavra. Os leitores e escritores completos de cada campo [não verificado]. [models.py:1700](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:1700), [disputa_emissao.py:1640](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1640), [disputa_emissao.py:1680](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/disputa_emissao.py:1680), [fio.py:1092](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1092).
+- **Dependência e RED:** depois de F4; divisão em até dois pousos ainda [não verificado]. Candidatos: A8 com conjunto alterado entre leitura e trava, inclusive relido vazio; P17 com entregue e aberta sem trilha mentirosa; P18/P19 preservando o par legal; P4 com falha por item. Casos literais da tabela [não verificado].
+- **Após F5/F3 da espinha:** A8 **já** lê `DecisaoPergunta.leitura` para a compensação nesta cópia; não atribuir essa leitura ao futuro pouso F5. O que cada outro sítio passará a ler pela F5 [não verificado]; F3 mantém os marcos. [models.py:1688](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/models.py:1688), [BACKLOG.md:2018](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/BACKLOG.md:2018).
+
+### F6 — callback depois da cerca
+
+- **X15 — MUDOU:** a evidência disponível identifica o problema como reset da cerca e callback, mas o anexo bruto não traduz X15 em função e linha. O reset atual ocorre no `finally` **depois** da saída do `atomic` interno; há callbacks `on_commit` em signals. A identidade do callback específico X15 permanece [não verificado]. [fio.py:1447](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1447), [fio.py:1459](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1459), [signals.py:240](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/signals.py:240), [RELATO.md:326](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/docs/RELATO.md:326).
+- **Campos:** estado transitório `vetadas`, `memo`, `empresa`; campos da pergunta efetivamente tocados pelo callback X15 e respectivos leitores/escritores [não verificado]. [fio.py:1445](/home/ronald/codex_ws/5bad81419976b0257182e8fd9598005dae16b4ad/app/chamados/services/fio.py:1445).
+- **Dependência e RED:** depois de F5 da B2b. Candidato: callback executado no commit observa cerca já encerrada, sem herdar veto/memo do ato anterior; cobrir também transação externa e aninhamento. Caso literal [não verificado]. [fio.py:1431
+
+[truncado em 20000 de 24084 caracteres]
 
 ## 19/11 00:54 · sessao 87eee57fdaea · QUEIMA-B2-chamado · censo · origem=Code
 
@@ -3162,10 +3263,4 @@ A busca não estabelece ausência de escritores por argumentos dinâmicos ou SQL
 
 Os achados e referências de F6 e F7 foram enviados ao agente principal. A identidade de X15 permanece **[não verificado]**, pois a tabela citada no brief não está disponível na cópia.
 
-## 19/11 00:45 · sessao a60a035dfc31 · - · - · origem=Ronald (tmux)
-
-Enviei ao agente principal os sítios encontrados para reaponte e materialização, seus chamadores de produção e exemplos de testes, além das limitações causadas pela ausência da tabela única. [nao verificado]
-
-A correspondência dos códigos B4, B2b, P11–P15 e demais códigos com esses sítios permanece **[não verificado]**: o anexo fornecido lista os códigos, mas não traz o mapa da tabela.
-
-_7216 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7217 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
