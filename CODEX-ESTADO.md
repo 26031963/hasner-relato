@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 15:13** · publicado em **19/11/2026 15:14** (UTC-3)
+> Ultima resposta processada: **19/11/2026 15:19** · publicado em **19/11/2026 15:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 15:19 · sessao 36b247af5b6e · E4C-F5-CONSTROI · construtor · origem=Code
+
+A volta 3 usa `projecao_temporal_da_pergunta` como fonte comum. `DecisaoPergunta.leitura` fornece os instantes de resposta e validação, e `PerguntaDisputa.resposta_colab` fornece o texto corrente. [chamados/juizes.py:1389](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/juizes.py:1389)
+
+| Sítio | Antes na base informada | Depois e caso |
+|---|---|---|
+| App | `chamados/services/pergunta_no_app.py:86` já passava a `PerguntaDisputa` ao juiz com a leitura correta. | A chamada segue na linha 86 e o juiz passa pela fonte comum em `chamados/juizes.py:1561`. **Guarda** em `chamados/tests/test_e4c_f5_volta3_sitios.py:25`. |
+| Property `respondida` | `chamados/models.py:3791` passava `DecisaoPergunta.leitura(self)` ao juiz, que recebia o texto do ato. | Passa `self` ao juiz em `chamados/models.py:3791`. O **RED** espera `False` com texto corrente em branco e texto preenchido no ato. `chamados/tests/test_e4c_f5_volta3_sitios.py:31`. |
+| Fio | `chamados/services/fio.py:192` já usava os valores corretos, combinados localmente com `_replace`. | Lê a fonte comum e conserva o predicado de espera: ausência de carimbo ou `respondida_sem_texto`. O caso guarda os resultados e exige a chamada à fonte comum, que faltava na base. `chamados/services/fio.py:189`, `chamados/juizes.py:1538`, `chamados/tests/test_e4c_f5_volta3_sitios.py:37`. |
+
+O contador usa `iterator` com prefetch de `decisoes` e lote de **500**, tamanho adotado nesta volta. O RED reduz o lote a dois, exige **2 consultas para 2 perguntas** e **4 para 6**, e confere os resultados `(1, 2)` e `(1, 6)`. A guarda de divergência e universo também está no arquivo. [Implementação](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/services/vigia_texto_resposta.py:7) · [RED](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/tests/test_e4c_f5_contador_texto.py:79) · [Guarda](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/tests/test_e4c_f5_contador_texto.py:27)
+
+**Arquivos tocados**
+
+- Produção — `chamados/juizes.py:1559`, `chamados/models.py:3786`, `chamados/services/fio.py:187`, `chamados/services/vigia_texto_resposta.py:7`.
+- Casos e mutantes — `chamados/tests/test_e4c_f5_volta3_sitios.py:12`, `chamados/tests/test_e4c_f5_contador_texto.py:73`, `chamados/tests/e4c_f5_volta3_mutantes.py:37`.
+- Selos anteriores — `chamados/tests/test_e4c_f2_leitura_do_ato.py:500` ajusta a expectativa da property com texto só no ato. `chamados/tests/e4c_f5_volta2_mutantes.py:32` e `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:229` adaptam o selo do fio à nova forma da chamada.
+
+**Comandos para o Code**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci --noinput \
+  chamados.tests.test_e4c_f5_volta3_sitios.SitiosVolta3Test.test_guarda_particao_do_app \
+  chamados.tests.test_e4c_f5_volta3_sitios.SitiosVolta3Test.test_red_property_respondida \
+  chamados.tests.test_e4c_f5_volta3_sitios.SitiosVolta3Test.test_red_fio_le_fonte_unica \
+  chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_red_custo_cresce_por_lote \
+  chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_divergencia_e_universo
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci --noinput \
+  chamados.tests.test_e4c_f5_volta1_leem_o_ato.SeloTest \
+  chamados.tests.test_e4c_f2_leitura_do_ato.FonteMigradaPorLeitorTest.test_resposta_so_no_ato_cada_leitor_le_o_ato
+```
+
+| Mutante | Caso e falha esperada |
+|---|---|
+| **m1** — property volta a passar a leitura do ato | `test_red_property_respondida` falha no texto corrente em branco. `chamados/tests/test_e4c_f5_volta3_sitios.py:35` |
+| **m2** — fio lê diretamente o texto do ato | `test_red_fio_le_fonte_unica` falha ao esperar o texto corrente. `chamados/tests/test_e4c_f5_volta3_sitios.py:43` |
+| **m3** — vigia sem `iterator` | `test_red_custo_cresce_por_lote` espera diferença 2 e recebe 0. `chamados/tests/test_e4c_f5_contador_texto.py:89` |
+| **m4** — vigia com `iterator` sem prefetch | `test_red_custo_cresce_por_lote` espera diferença 2 e recebe 4, pelo padrão `1 + K`. `chamados/tests/test_e4c_f5_contador_texto.py:89` |
+| **fio-base** — recompõe os valores como na base | `test_red_fio_le_fonte_unica` chega à asserção de chamadas à fonte comum com a lista vazia. `chamados/tests/test_e4c_f5_volta3_sitios.py:44` |
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m1
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m2
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m3
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes m4
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e4c_f5_volta3_mutantes fio-base
+```
+
+Compilei os arquivos em memória e conferi as âncoras e os labels do [executor de mutantes](/home/ronald/wt-codex-e4c-f5-constroi-144636/app/chamados/tests/e4c_f5_volta3_mutantes.py:37). Execução dos testes, consultas medidas e mortes dos mutantes [nao verificado]. [nao verificado]
+
+LEI-AKITA: origem=chamados/services/pergunta_no_app.py:86 + chamados/models.py:3791 + chamados/services/fio.py:189, testemunha=chamados/juizes.py:1389, RED=chamados/tests/test_e4c_f5_volta3_sitios.py:25 + chamados/tests/test_e4c_f5_contador_texto.py:79, padrao=juiz unico
+
+## 19/11 15:18 · sessao 803c24189c48 · REPLAY-PORTA-EXPORT-SOL62 · verificador · origem=Code
+
+**Volta 3 — reprova no R8 e na fidelidade da trilha.** F fecha a liberação por carimbo órfão e por `None == None`. A exceção em `assumir` ainda sai sem persistir a falha, e `encerrar` pode registrar um estado anterior diferente daquele que o CAS venceu. [app/folha/porta_export.py:1252](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/folha/porta_export.py:1252) · [app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140) · [app/folha/porta_export.py:1064](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/folha/porta_export.py:1064)
+
+Revisão estática, em somente leitura, sobre a cópia e o diff fornecido. Identidade Git da cópia, execução da suíte, estado do banco e linhas efetivamente emitidas em produção [nao verificado]. [nao verificado]
+
+### 1. Quem escreve e quem lê
+
+| Campo | Escritores | Leitores |
+|---|---|---|
+| Pedido `detalhe.tentativa` | `pedir` cria ou renova o UUID. `assumir` cria outro UUID para cron/manual ou adota o existente para o job com `--tentativa`. | `_ficha` leva a identidade aos CAS, `assumir` a usa na adoção, `disparar` a põe no argv, `concluir` a usa na trava da linha e na lavra, `_recusa` a põe no objeto e `estado_da_porta` compara o par. `app/folha/porta_export.py:1020,1058,1083,1099,1121,1131,1170,1260,1304` |
+| Pedido `detalhe.ator` | `pedir` grava `ator.pk` na criação e na renovação. O POST passa `request.user`. A adoção preserva o campo por cópia do detalhe. Uma tentativa nova de cron/manual nasce sem esse campo. | `_recusa` lê o campo para `ator=`. `app/folha/views.py:130` · `app/folha/porta_export.py:1035,1055,1082,1099,1124,1134,1284` |
+| Carimbo `detalhe.tentativa` | `lavrar` grava. O único chamador de produção encontrado é `concluir`. `lavrar_verde_para_teste`, inclusive no teste de relatórios, passa por `assumir` e `concluir`. | `estado_da_porta` lê para decidir. Há leituras de verificação nos testes. `app/folha/porta_export.py:768,784,887,1178,1260` · `app/relatorios/tests/test_cauda_trilha_do_cartao.py:109` · `app/folha/tests/test_porta_sem_beco_item2.py:90,266` |
+| Motivo | `_falhar` persiste até 500 caracteres no pedido. `concluir` persiste o motivo de `resultado_de`. `_recusa` emite o motivo com a trilha e, para divergência, monta a frase com `n` quando o motivo persistido está vazio. | `ler_linha` extrai o texto. O contador do ESTADO conta por data da linha e porta. A tela de `FALHA` usa mensagem fixa e a de divergência lê os detalhes do carimbo. `app/folha/porta_export.py:823,871,933,1050,1064,1140,1179` · `app/core/recusa_critica.py:46,89,108,133` · `bin/recusa_estado.py:60` · `bin/gerar_estado.py:269` |
+
+**Há escritores fora de `concluir` nos testes.** `PortaDoExportTest._carimbo` grava diretamente o pedido e o carimbo com `'fixture'`. Dois testes de `VoltaDoisTest` chamam `lavrar` diretamente para fabricar as entradas rejeitadas. Na cópia, o leitor que decide a liberação é `estado_da_porta`, via `conferir` e a view. [app/folha/tests/test_porta_do_export.py:33](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/folha/tests/test_porta_do_export.py:33) · [app/folha/tests/test_porta_sem_beco_item2.py:302](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/folha/tests/test_porta_sem_beco_item2.py:302) · [app/folha/porta_export.py:820](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/folha/porta_export.py:820) · [app/folha/views.py:130](/home/ronald/codex_ws/0ae4f009b9aa83326ff1bd921eee7badfec7caa5/app/folha/views.py:130)
+
+### 2. Quando pode devolver `PRONTA`
+
+- **Para o par lido**, `PRONTA` exige pedido `CONCLUIDO`, tentativa não vazia e igualdade com a tentativa do carimbo. Há uma corrida de atualidade. A leitura pode obter o pedido concluído de A, o cron instalar B `EM_CURSO` na mesma linha, e a segunda consulta ainda encontrar o carimbo de A. O par lido é coerente e a resposta pode ser `PRONTA` com B já vigente. `app/folha/porta_export.py:1128,1172,1248,1260`
+- **Cron sem clique, rollout e manual têm caminho para `PRONTA`.** `assumir` cria o pedido quando falta `--tentativa`, e `concluir` grava o par. O rollout escolhe as empresas ativas em rollout e a competência corrente de cada uma. Um carimbo legado sem par exige nova medição. Não encontrei bloqueio permanente introduzido por F nesses caminhos. `app/config/crons.py:1803` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:43,140,155` · `app/ponto/services/gestao_he.py:424` · `app/folha/porta_export.py:1128,1172,1258,1282`
+
+### 3. R8 e atomicidade
+
+- **`assumir` levantou.** O `except` escreve em stdout, inclui a empresa em `falharam` e segue, se a saída da trava funcionar. Antes de existir linha, sobra zero pedido e zero recusa `porta_export`. Se havia um `PEDIDO` do clique e a adoção falhou antes do CAS, ele fica `PEDIDO` até ser assumido ou até uma passagem do vigia após o prazo de 300 s. Nesse último caso, o motivo é o do prazo, sem a exceção original. Um verde anterior pode continuar válido se a exceção ocorreu antes de substituir o pedido. O resumo que diz que cada empresa `FALHOU` com seu motivo também cobre esse ramo. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:140,260` · `app/folha/porta_export.py:918,986,1118,1208,1248`
+- **`concluir` levantou antes ou dentro do `atomic`.** Se a exceção sai do bloco transacional, a nova gravação do carimbo e a transição são revertidas juntas. Com a mesma tentativa ainda `EM_CURSO`, `encerrar` pode vencer o CAS, persistir o motivo, emitir uma recusa e seguir para B. Se o próprio `encerrar` ou a saída da trava levantar, o laço pode abortar antes de B. `app/folha/porta_export.py:984,1064,1170,1188` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:129,155`
+- **`concluir` também pode levantar depois do `atomic`.** Se `_recusa` levantar, o par já foi gravado pelo bloco. `encerrar` aceita apenas `PEDIDO` ou `EM_CURSO`, então não corrige uma tentativa já terminal nem repõe a emissão. É possível ficar com o par terminal completo e sem linha, se a exceção ocorrer antes da emissão. A afirmação do comentário do comando de que qualquer exceção em `concluir` deixa tudo desfeito é ampla demais. `app/folha/porta_export.py:1172,1182,1188` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:152`
+
+### 4. Fidelidade da linha de recusa
+
+- **`concluir` tem antes/depois sustentados pela linha travada.** Seleciona `EM_CURSO` da mesma tentativa e grava `FALHOU` ou `CONCLUIDO`. Em `vigiar`, cada CAS de falha aceita um único estado, o mesmo que o vigia leu. Já `encerrar` aceita dois. Uma cópia lida como `PEDIDO` pode sobreviver à adoção da mesma tentativa, vencer o CAS quando o banco já está `EM_CURSO` e emitir `antes=pedido`. A ficha compara o UUID e o filtro aceita ambos os estados. `app/folha/porta_export.py:1039,1064,1121,1172,1188,1202,1214`
+- **`ator=` é o PK no fluxo do clique.** O registrador recebe `request=None`, então essa linha tem `usuario=-`. A origem tem uma brecha independente. O comando aceita `--tentativa` com `--origem` manual ou cron, e a adoção sobrescreve `origem` enquanto preserva o ator do clique. A linha pode atribuir ao pedido a origem do executor. Os POSTs barrados também emitem a recusa genérica da rota, que pode incluir o username no campo `usuario`. O contador `porta_export` filtra essa outra linha pelo nome da porta. `app/folha/porta_export.py:1055,1082,1124,1304` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:39` · `app/folha/views.py:132` · `app/core/respostas.py:54` · `app/core/recusa_critica.py:77,119`
+
+### 5. O que os testes novos provam [nao verificado]
+
+- As duas classes têm `freeze_time`. Os casos do carimbo órfão e do `None == None` exercitam a porta real. O primeiro fabrica o órfão também sem UUID, deixando sem caso explícito o órfão com UUID. O teste do helper prova o par final, e uma implementação com gravação direta do mesmo par também passaria. `app/folha/tests/test_porta_sem_beco_item2.py:292,302,310,320,387`
+- **M9 morde.** Exige sucessora `EM_CURSO`, nenhum carimbo e nenhuma recusa da conclusão atrasada. **M12 tem um mutante sobrevivente isoladamente.** Se `_falhar` trocar `if venceu` por `if not venceu`, o vencedor fica calado e o perdedor emite a única linha com o mesmo antes/depois/origem. O teste não exige o motivo `banco caiu`, que identifica o vencedor. `app/folha/tests/test_porta_sem_beco_item2.py:328,346` · `app/folha/porta_export.py:1064`
+- O teste do relógio morde uma segunda leitura **usada para consultar o outro dia**. Uma leitura adicional cujo retorno seja descartado passa. O reclique exige um `Popen` e uma linha `porta_export`; as recusas genéricas dos POSTs ficam fora do filtro. `app/folha/tests/test_porta_sem_beco_item2.py:29,361,371`
+- **`R8ConcluirTest` morde o isolamento do comando para a exceção injetada.** A usa um mock que levanta antes de executar `concluir`, B usa a implementação real. As asserções cobram o motivo de A e `PRONTA` em B. Rollback da lavra, falha após o `atomic`, quantidade de recusas e exceção em `assumir` ficam sem cobertura nesse teste. O shell alterado cobre arquivo ausente e a contagem com linhas sintéticas. `app/folha/tests/test_porta_sem_beco_item2.py:396` · `bin/tests/test_recusa_estado.sh:28,38,48`
+
+### 6. Classes da triagem
+
+- **Presentes.** Segundo escritor na fixture, selos com as lacunas acima e campo com dois significados em `origem`, que serve de origem do pedido e da execução. O relógio foi unificado dentro de `estado_da_porta`. Ainda há uma releitura preexistente no `IntegrityError` de `pedir`, além de `abrir_a_porta` decidir e depois chamar `conferir` em outra leitura. Se a primeira vê `PRONTA` antes da virada e a segunda vê `SEM_MEDICAO` depois dela, esse POST recusa sem disparar. `app/folha/tests/test_porta_do_export.py:42` · `app/folha/tests/test_porta_sem_beco_item2.py:346,396` · `app/folha/porta_export.py:1091,1124,1248,1282`
+- **Sem segundo juiz de abertura, derivação paralela nova ou inversão de trava encontrados.** `conferir` delega a decisão. `resultado_de` e `lavrar` recebem o mesmo `r`; a escrita do resultado e do carimbo ocorre no mesmo `atomic`. O comando pega a trava de sessão antes de `concluir` pegar a linha do pedido e lavrar o carimbo. `vigiar` consulta `pg_locks` sem disputar a advisory lock. `app/folha/porta_export.py:820,993,1140,1170,1248` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:129`
+- **Demais descartes conferidos no código.** O log vem depois da transição. A prova de vida exige PID de sessão, mesma chave e trava concedida. O retorno do comando é agregado. Os dois contadores usam a mesma regra de data da linha e o mesmo leitor de arquivo, que pula `OSError`. O limite de tempo é de `PEDIDO`; `EM_CURSO` com trava viva permanece em conferência. `app/folha/porta_export.py:1001,1064,1182,1202` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:257` · `app/core/recusa_critica.py:95,108,126` · `bin/recusa_estado.py:37,60`
 
 ## 19/11 15:13 · sessao 8de25d40b48b · REPLAY-PORTA-EXPORT-SOL62 · verificador · origem=Code
 
@@ -447,63 +546,4 @@ Os anexos raspados são a referência fornecida para esta revisão; sua correspo
 3. **Literal:** o encerramento do dia não prova PRONTO nem substitui certificação da árvore final; a suíte certifica a árvore que pousa. (`CLAUDE.md:320-324`.) [nao verificado]
 4. **Competência/dinheiro/`!`:** commit na cópia não autoriza alterar gravado exportado, dados de escala/vínculo, motor ou apagar arquivo de produção. (`CLAUDE.md:265-268`.) [nao verificado]
 
-## 19/11 14:34 · sessao aae86a382a75 · - · - · origem=Ronald (tmux)
-
-**Competência/dinheiro/`!`:**
-
-- O item 1 inclui portas que podem mover dinheiro por efeito: `validar_pergunta` carimba e chama recalculo por evento (`app/chamados/services/validacao.py:743`, `:753`); o evento chama `recalcular_fechamento_mes` (`app/ponto/services/fechamento.py:1809`) e agenda por `on_commit` (`:1824`). Isso já está declarado nas medidas e restrições do 0815 fornecido; movimento real de produção **[não verificado]**.
-- A presença de K6 não prova cerca universal de entregue/exportada: a composição usa `_k6_que_barra` (`app/chamados/services/validacao.py:225`), que consulta só metades de intervalo (`app/chamados/services/materializacao.py:804`, `:808`) e pula as outras (`:819`). Com `somente_entregue=True`, o restante retorna sem barreira (`:841`). Casos concretos que mudariam **[não verificado]**.
-- A correção escreve resposta antes de chamar validação (`app/chamados/services/acoes_disputa.py:375`, `:383`); a recusa grava motivo e reabre a resposta (`app/chamados/services/validacao.py:922`, `:925`); a devolução limpa V/VP e registra ato (`:273`, `:276`, `:279`). Não presumir que a guarda da validação cobre cada chamada direta.
-- `!` exige tocar gravado exportado, dado de escala/vínculo, apagar/voltar arquivo usado em produção, regra fora do pedido, atalho ou `motor_calculo_v2.py` (`CLAUDE.md:265`). O aval 1435 não determina esses atos fora do escopo; execução futura **[não verificado]**.
-- Retirar contador/campo não equivale a apagar arquivo de produção: a exigência literal é apagar/voltar **arquivo** (`CLAUDE.md:266`).
-
-**3c: colisão documental confirmada.**
-
-O leitor do ESTADO é instrumento declarado no próprio arquivo: `bin/fio_estado.py:4` a `:7` diz que o produto pousou antes e que esse leitor pousa “em commit proprio, depois do produto”. A regra vigente exige instrumento separado de produto (`CLAUDE.md:327`, `app/docs/LEIS.md:131`). Portanto, a alternativa “ganha leitor no ESTADO”, presa à F5 inteira em um pouso, tem colisão literal; não é automaticamente item de `!` (`CLAUDE.md:265`).
-
-**Aval adicional citado pelo laudo:**
-
-Há registro local de RESPOSTAS-1911-1000 item 1(B): texto segue da projeção, F5 migra somente R/V e nasce contador de divergência (`app/docs/RELATO.md:32`, `app/docs/PROMPTS.md:2615`). O RELATO registra explicitamente instante do ato e texto da projeção (`app/docs/RELATO.md:20`). “Uma fonte” não pode ser interpretada automaticamente como migrar T para ato; o literal integral desse aval **[não verificado]**.
-
-**5: vagas.**
-
-PRE-APROVADO(d) exige job destacado **e** obra de fila 1 precisando da vaga (`CLAUDE.md:292`); ordem geral é fila 1, negócio, instrumento (`:291`). O 1335 citado e o estado atual de B2b/FERIADO/C7 **[não verificado]**.
-
-## 19/11 14:34 · sessao 9e8384c60c96 · - · - · origem=Ronald (tmux)
-
-Itens auditados, sem execução de testes nem acesso a banco/log: [nao verificado]
-
-**1 — PROCEDE quanto à compatibilidade literal, com premissa técnica confirmada.**
-
-- As três combinações existem: app passa a pergunta crua ao juiz (`app/chamados/services/pergunta_no_app.py:83-86`), cujo corpo lê R/T do argumento (`app/chamados/juizes.py:1552`); property passa `DecisaoPergunta.leitura(self)` (`app/chamados/models.py:3791`); fio combina R da leitura com T da projeção (`app/chamados/services/fio.py:189-192`).
-- Há aval posterior ao 0815 registrado na cópia: **RESPOSTAS-1911-1000 item 1(B)** determina “texto segue da projecao; F5 migra so R/V” (`app/docs/RELATO.md:32`); a linha explicativa registra devolução do texto à projeção e manutenção do instante no ato (`app/docs/RELATO.md:20`). Assim, reafirmar 0815 “INTEIRO como está”, sem tratar esse corte posterior, deixa conflito documental relevante (`app/docs/RELATO.md:20`, `app/docs/RELATO.md:32`).
-- A cópia documenta tag retirada da volta 1 e transferida à volta 2, embora a divisão original a tenha colocado na volta 1 (`app/docs/RELATO.md:36-37`). A tag ainda lê texto cru em `app/chamados/templatetags/chamados_tags.py:166`.
-- Hash real, conteúdo dos commits e pouso: [não verificado]. A árvore não contém `.git` na raiz; não há confirmação Git independente [não verificado]. [nao verificado]
-- Alcance financeiro/exportado deste item depende da continuação ainda não realizada [não verificado].
-
-**3a — PROCEDE por conflito de autoridade não resolvido no literal.**
-
-- A premissa das três combinações confere nos mesmos endereços acima (`app/chamados/services/pergunta_no_app.py:86`, `app/chamados/models.py:3791`, `app/chamados/services/fio.py:192`).
-- “Mesma autoridade” não define literalmente qual par deve prevalecer diante do corte B: texto da projeção é exigência registrada do **RESPOSTAS-1911-1000 item 1(B)** (`app/docs/RELATO.md:20`, `app/docs/RELATO.md:32`), enquanto a testemunha `leitura` devolve R/T da sequência com passivo (`app/chamados/models.py:4295-4326`).
-- Migrar o fio para R/T do ato contraria também a expectativa atual explícita do teste “Lei B”, que exige continuar esperando quando ato tem texto e projeção tem texto vazio (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:58-65`).
-- A condição “fim da volta 2” não exige necessariamente antecipar portas da volta 3: os três sítios citados são partição, property e espera (`app/chamados/services/pergunta_no_app.py:80-90`, `app/chamados/models.py:3785-3791`, `app/chamados/services/fio.py:178-192`). Contudo, a ordem exata dos reparos ainda não foi implementada [não verificado].
-- L-130 exige um juiz para todas as finalidades, mas não resolve sozinho a contradição específica entre ato e texto corrente (`app/docs/LEIS.md:151`).
-
-**3d — NÃO PROCEDE como objeção à exigência do item; a premissa da fragilidade confere.**
-
-- O selo já usa AST; seu intervalo real nesta cópia é **153–178**, enquanto 146–150 pertence ao teste de custo do fio (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:146-160`).
-- Ele restringe reconhecimento ao identificador literal `p`, tanto em atributos quanto no primeiro argumento de chamadas (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:165-167`). Logo, um apelido escapa a essas condições por inspeção estática dessas linhas (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:165-178`).
-- `respondida_sem_texto(p)` não contém argumento posterior a inspecionar e o selo não percorre o corpo do predicado chamado (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:168-178`); o predicado efetivamente lê R/T crus do argumento (`app/chamados/juizes.py:1531-1534`).
-- O caso existente com R projetada ausente mantém T projetado preenchido; não é o caso R=None/T='' mencionado no laudo (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:42-49`).
-- O item pede reforço do selo e mutante; resultado de mutante executado [não verificado]. Não há colisão documental demonstrada por esse reforço [não verificado].
-- Atenção ao limite já estabelecido: selo atual varre apenas R/V e exclui T expressamente por lei B (`app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:156`).
-
-**3e — NÃO PROCEDE como objeção à triagem pedida; a comparação literal confere.**
-
-- O contador compara texto por `!=`, sem normalização (`app/chamados/services/vigia_texto_resposta.py:16`).
-- Há teste para diferenças apenas de espaços, mas nenhum caso `'Ato'`/`'ato'` nesse módulo de testes (`app/chamados/tests/test_e4c_f5_contador_texto.py:20-80`).
-- Os dois `.lower()` citados pelo laudo são leituras para classificação, usando variável local `resp`, sem gravar os campos nesses trechos (`app/chamados/juizes.py:2041-2047`, `app/chamados/services/validacao.py:1181-1193`).
-- Os escritores citados zeram ou copiam texto: `app/chamados/models.py:1575`, `app/chamados/models.py:1702-1703`, `app/chamados/services/disputa_emissao.py:1481`, `app/chamados/services/disputa_emissao.py:1617`, `app/chamados/services/disputa_emissao.py:1682-1686`, `app/chamados/services/validacao.py:440`. Exclusividade global de todos os escritores e ausência absoluta de transformação por caminho indireto [não verificado].
-- “Triagem com motivo” não obriga mudar comparação nem criar regra de caixa; implementação futura e impacto fora do declarado [não verificado].
-
-_7391 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7393 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
