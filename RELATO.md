@@ -1,6 +1,7 @@
 # RELATO — esteira saas-hasner
 
 ESPERANDO: f5_v3_prova.sh | pid=2437740
+DST-L2-JZ1 c6 v4 POUSO 11:4x: opus final APROVA 0 bloqueia 6 fila (logs/dst-l2-jz1/c6/opus/opus_final.txt; fila -> BACKLOG C6-OPUS-1..6); merge --no-ff write-tree 5401e5da == c5a74ace3^{tree}; deploy --sem-migrate no mesmo ato
 DST-L2-JZ1 c6 v4 11:2x: pista 1119104156_c5a74ace rc=0, Ran 17025 OK (skipped=42, expected failures=41) na arvore c5a74ace3; opus final (verificador) aberto com diff_c6v4.patch + verif3/triagem + janela/matriz -> logs/dst-l2-jz1/c6/opus/opus_final.txt
 ESCALA-NAO-DESCREVE C8 COMPLEMENTO-1 11:2x: sonda34d na sombra (fonte da amostra = nucleo.minutos_do_oraculo sem pares, sem gravar) + Codex leitura q7 (5 perguntas); censo r6: frase "entrada real ~HH:MM em N% de N dias" = escala/regua_defesa.py:216 (assinatura C7, janela 30d, agrupamento proprio), proposta = esmeril_espelho.py:241 (janela 60d, dia civil): duas medidas
 PUSH (aval RESPOSTAS-C8-E-PUSH-1911-1110 item 7) 11:0x: 75 a frente; CAUSA medida = nenhuma tentativa desde 18/11 19:51 (logs/push_1811_cura_chega.out: pre-push OK, d6da98509..cd692834d); empurra pela regua quando a trava sair da F5 (prova_v3 no VM) e da c6 v4 (pista)

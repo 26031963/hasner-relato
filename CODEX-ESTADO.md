@@ -1,7 +1,69 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 11:08** · publicado em **19/11/2026 11:11** (UTC-3)
+> Ultima resposta processada: **19/11/2026 11:12** · publicado em **19/11/2026 11:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 11:12 · sessao a30249330466 · ESCALA-NAO-DESCREVE · leitura · origem=Code
+
+**Resultado principal:** o núcleo pode produzir uma amostra por data da primeira batida de cada bloco, mas essa chave não garante um turno por dia nem um turno fechado. Blocos distintos que começam no mesmo dia são concatenados em `horas[k]`, enquanto `impares` registra se **algum bloco** dessa chave teve contagem ímpar. [app/ponto/calculador/nucleo.py:215] [app/ponto/calculador/nucleo.py:236]
+
+A análise abaixo usa o ramo sem `pares` e sem `envelopes`. A cópia não possui metadados Git acessíveis no diretório informado; que seja o HEAD do hash declarado é **[não verificado]**.
+
+## 1. Casos do brief e cinco vínculos
+
+Para ler a tabela: `D` é a data local da primeira batida do bloco e `k = str(D)`. “Entrada, saída, marcos” significa o que sairia **se o detector passasse a consumir essa lista** como primeira, última e comprimento; o detector atual continua agrupando por data civil. [app/ponto/calculador/nucleo.py:236] [app/escala/detector_proposta.py:59]
+
+| Caso do brief | Resultado do núcleo e leitura hipotética |
+|---|---|
+| **(a) 12x36, 19→07** | Para um turno isolado com exatamente `D 19:00` e `D+1 07:00`: `horas[k]=['19:00','07:00']`, `k ∉ impares`; entrada `19:00`, saída `07:00`, 2 marcos. Datas, bordas da janela e eventuais outras batidas da amostra: **[não verificado]**. [app/ponto/calculador/nucleo.py:215] [app/ponto/calculador/nucleo.py:236] |
+| **(b) mesmo horário, 4 batidas** | **Condicional:** se as quatro forem `19:00, I1, I2, 07:00`, em ordem, e nenhum corte ocorrer, `horas[k]=['19:00', I1, I2, '07:00']`, `k ∉ impares`; entrada `19:00`, saída `07:00`, 4 marcos. Faltam horários e datas de `I1` e `I2`; um gap de pelo menos 8 h após quantidade par pode separar o bloco. Resultado exato: **[não verificado]**. [app/ponto/calculador/nucleo.py:186] |
+| **(c) diurno 07→19** | Para um turno isolado com somente as duas pontas: `horas[k]=['07:00','19:00']`, `k ∉ impares`; entrada `07:00`, saída `19:00`, 2 marcos. O brief não informa se há batidas intermediárias, datas ou outras batidas: resultado da amostra completa **[não verificado]**. [app/ponto/calculador/nucleo.py:236] |
+| **(d) 6x1, 22→06** | Para um turno isolado com somente as pontas: `horas[k]=['22:00','06:00']`, `k ∉ impares`; entrada `22:00`, saída `06:00`, 2 marcos. O gap de exatamente 8 h com uma batida na mão não dispara a condição de paridade. Intermediárias, datas e composição da janela: **[não verificado]**. [app/ponto/calculador/nucleo.py:215] |
+| **(e) aberto / solta** | Faltam instantes, datas e tipos das batidas. Para uma única batida isolada `H`, o núcleo devolve `horas[k]=[H]`, `k ∈ impares`, e a leitura hipotética seria `H→H`, 1 marco. Com outras batidas próximas, pode juntá-las; não é possível reproduzir os 11,4 h apenas pelo dado fornecido. **[não verificado]**. [app/ponto/calculador/nucleo.py:186] [app/ponto/calculador/nucleo.py:236] |
+| **(f) troca de regime** | Faltam a sequência, as datas, a quantidade de batidas e o momento da troca. Portanto `horas`, `impares`, pontas e marcos por chave são **[não verificado]**; `07→19` no brief é o resultado agregado informado para o detector atual, não a sequência necessária para executar o núcleo. [app/escala/detector_proposta.py:70] |
+
+Para **845:146, 1547:220, 1485:451, 1597:489 e 1604:934**, o dado raspado informa classificações de cadastro e proposta, mas não fornece as batidas individuais, datas ou limites efetivos da amostra. Assim, os retornos por chave dos cinco são **[não verificado]**. Os exemplos da tabela não devem ser atribuídos a esses vínculos. O núcleo depende dos instantes efetivamente recebidos e os ordena antes de cortar. [app/ponto/calculador/nucleo.py:45] [app/ponto/calculador/nucleo.py:109]
+
+## 2. Outro corte sem consultar escala
+
+- **`parear_turnos`**, chamado sem alimentar marcos, mapa de dias ou papéis, recebe objetos com `timestamp` e `tipo`, ordena e usa `E`/`S`; não consulta banco por si. No modo sem bordas, pode reconhecer `S→E` como pausa por duração quando há `S` posterior como prova de continuação. Uma `E` com outra aberta pode deixar a anterior aberta; uma `S` sem entrada pode virar órfã. Ele devolve objetos `Turno`, com `aberto`, e não um conjunto de paridade como o núcleo. Sem bordas da véspera, a data é a data local da referência; com alimentação, pode atribuir à véspera. O fechamento sem jornada declarada usa envelope de 26 h nesse caminho, em vez do teto geral de vão de 14 h do núcleo. [app/ponto/turnos.py:1192] [app/ponto/turnos.py:385] [app/ponto/turnos.py:248] [app/ponto/turnos.py:312] [app/ponto/turnos.py:1417] [app/ponto/turnos.py:1430]
+
+- **`Command.handle` de `e6_piso_autopsia`** contém outro corte sequencial embutido, não uma função reutilizável separada: antes remove batidas a menos de 10 minutos; corta por gap ≥8 h com contagem par ou gap >14 h, sem o teto adicional de vão total do núcleo. A chave é a data da primeira batida; turno ímpar marca a data e é inteiramente excluído da soma, enquanto o núcleo soma seus pares fechados. O comando completo também consulta espelho e previsto; o trecho de corte citado não lê escala para decidir o corte. [app/ponto/management/commands/e6_piso_autopsia.py:65] [app/ponto/management/commands/e6_piso_autopsia.py:75] [app/ponto/management/commands/e6_piso_autopsia.py:89]
+
+Exaustividade de outras implementações ou trechos de corte na casa: **[não verificado]**. O registro de censo do próprio repositório identifica também outras funções de pareamento, mas isso, por si só, não demonstra que cortem turno sem insumo de escala. [app/core/tests/test_medida_turno_do_par.py:151]
+
+## 3. Padrões que expõem o corte
+
+Os exemplos são sequências **ilustrativas**, não batidas atribuídas aos cinco vínculos. A coluna “detector com a fonte trocada” significa primeira e última posição e tamanho de `horas[k]`; isso não é o comportamento atual de agrupamento civil. [app/escala/detector_proposta.py:59] [app/escala/detector_proposta.py:70]
+
+| Padrão | Sequência e retorno do núcleo | Detector com a fonte trocada |
+|---|---|---|
+| **Dois turnos iniciados em D** | `D 00:00, 02:00; D 10:00, 12:00`: o gap de 8 h corta após duas batidas, mas ambos os blocos têm a mesma chave. `horas[k]=['00:00','02:00','10:00','12:00']`; `k ∉ impares`; `envelope[k]=240` min, soma dos dois vãos. [app/ponto/calculador/nucleo.py:215] [app/ponto/calculador/nucleo.py:236] | `00:00→12:00`, **4 marcos**: os blocos não aparecem separados. [app/ponto/calculador/nucleo.py:238] |
+| **Intervalo de 8 h ou mais** | `D 07:00, 09:00, 17:00, 18:00`: o gap de 8 h após duas batidas corta; como os dois blocos começam em D, `horas[k]=['07:00','09:00','17:00','18:00']`, sem `k` em `impares`; `envelope[k]=180` min. O corte exige contagem par para o limiar de 8 h. [app/ponto/calculador/nucleo.py:215] | `07:00→18:00`, **4 marcos**, apesar de o núcleo ter separado os blocos. [app/ponto/calculador/nucleo.py:236] |
+| **Dobra** | `D 07:00, D+1 07:00`, apenas duas pontas: o gap e o vão são 24 h, então surgem dois blocos unitários, chaves `D` e `D+1`; cada lista é `['07:00']` e ambas as chaves estão em `impares`. [app/ponto/calculador/nucleo.py:215] [app/ponto/calculador/nucleo.py:243] | Em cada chave, `07:00→07:00`, **1 marco**. Uma dobra com batidas intermediárias pode produzir outra partição; depende dos instantes. **[não verificado]**. [app/ponto/calculador/nucleo.py:186] |
+| **Mais de 14 h** | O exemplo documentado `D 06:52, D 21:34` é cortado em dois blocos unitários; como ambos começam em D, `horas[k]=['06:52','21:34']`, `k ∈ impares`, `envelope[k]=0` e `k ∈ cortes`. [app/ponto/calculador/nucleo.py:15] [app/ponto/calculador/nucleo.py:215] | `06:52→21:34`, **2 marcos**: a concatenação esconde a divisão se o consumidor só olhar a lista. [app/ponto/calculador/nucleo.py:236] |
+| **Batida esquecida** | Na sequência documentada `D 07:00, 12:00, 17:00; D+1 06:00, 17:00`, o vão até `D+1 06:00` excede 14 h: `horas[D]=['07:00','12:00','17:00']`, `D ∈ impares` e `D ∈ cortes`; `horas[D+1]=['06:00','17:00']`, sem essa chave em `impares`. [app/ponto/calculador/nucleo.py:192] [app/ponto/calculador/nucleo.py:215] | Para D, `07:00→17:00`, **3 marcos**; para D+1, `06:00→17:00`, **2 marcos**. A posição da batida esquecida muda o resultado. [app/ponto/calculador/nucleo.py:236] |
+
+Mesmo quando a lista concatenada tem comprimento par, `impares` pode conter a chave por causa de blocos ímpares individuais, como no exemplo de 14 h 42. [app/ponto/calculador/nucleo.py:236]
+
+## 4. Importação, independência e tripwire
+
+Um leitor de `escala/` importar `ponto.calculador.nucleo` **não cria, pelo código examinado, um ciclo direto de imports**: o módulo do núcleo importa biblioteca padrão e não importa `escala`; `e6_oraculo` já importa a mesma função e chama `minutos_do_oraculo(ts)` sem envelopes. Um novo leitor, isoladamente, não altera essa chamada nem a função. Ciclos indiretos introduzidos por uma implementação ainda não escrita: **[não verificado]**. [app/ponto/calculador/nucleo.py:22] [app/ponto/management/commands/e6_oraculo.py:42] [app/ponto/management/commands/e6_oraculo.py:149]
+
+A independência relevante para essa chamada é que ela continua sem alimentar envelopes de escala. Há teste comportamental que exige o corte nesse modo, e um teste AST que procura derivação aritmética duplicada no núcleo e no comando. **Não localizei, na busca feita, um selo que congele todos os importadores do núcleo ou proíba por AST qualquer leitura de escala dentro dele; exaustividade dessa busca é [não verificado].** O teste citado de unicidade aritmética não é uma lista de importadores. [app/ponto/tests/test_calculador_regras.py:259] [app/ponto/tests/test_e6_oraculo_julga_impar.py:110] [nao verificado]
+
+O tripwire de data verifica padrões AST de `.date()` associados a `timestamp` e tem allowlist para o detector. Se a alteração remover a última ocorrência detectada no detector, o teste de entrada obsoleta exigirá retirar essa entrada da allowlist; isso depende do código final. O visitante também tem limites sintáticos: uma chave derivada dentro do núcleo a partir de `t.date()` não é, por esse fato, prova de correção semântica do dia do turno. [app/ponto/tests/test_contract_no_batida_date.py:18] [app/ponto/tests/test_contract_no_batida_date.py:186] [app/ponto/tests/test_contract_no_batida_date.py:239] [app/ponto/calculador/nucleo.py:236] [nao verificado]
+
+## 5. Consultas e local de execução
+
+**Hoje, por chamada de `propor_escala`:**
+
+- **1 consulta de batidas** ao consumir o queryset de `batidas_apuraveis` em `medir_padrao`. [app/escala/detector_proposta.py:53] [app/ponto/turnos.py:2891]
+- **Mais 1 consulta de templates** quando há pelo menos 5 dias e se chega ao laço de `_casa_template`; com menos de 5 dias, retorna antes. Portanto, **1 ou 2 consultas**, sem somar consultas dos chamadores para obter colaborador ou vínculo. [app/escala/detector_proposta.py:99] [app/escala/detector_proposta.py:122]
+
+Uma troca que reutilize a **mesma consulta de batidas**, converta os instantes locais e chame o núcleo em memória acrescentaria **0 consultas pelo núcleo**: nesse ramo a função ordena e opera sobre os dados recebidos. O total continuaria **1 ou 2**, condicionado à implementação e à mesma carga; buscar bordas adicionais ou outros insumos tem custo **[não verificado]** até existir implementação. [app/ponto/calculador/nucleo.py:109] [app/ponto/calculador/nucleo.py:157]
+
+Na **Cadastro x Realidade**, a view chama `lista`, que lê `proposta` da lavra e passa o valor ao botão; esse caminho não recalcula a proposta no clique de leitura da tela. A lavra chama `anomalias_da_frota`, que chama o detector para colaboradores com assinatura. O detector também roda em outros caminhos: coleta do PDF de propostas, comando de limbo e `escala_auto`. [app/escala/views.py:512] [app/escala/services/cadastro_realidade.py:960] [app/ponto/services/esmeril_espelho.py:239] [app/ponto/services/esmeril_espelho.py:321] [app/escala/proposta_pdf.py:43] [app/escala/management/commands/propor_escala_limbo.py:35] [app/escala/services/escala_auto.py:117]
 
 ## 19/11 11:08 · sessao df35418f7377 · ESCALA-NAO-DESCREVE · censo · origem=Code
 
@@ -1941,8 +2003,4 @@ def sonda():
 
 [truncado em 20000 de 23403 caracteres]
 
-## 19/11 10:17 · sessao 1678d57c124c · - · - · origem=Ronald (tmux)
-
-Script e referências enviados ao agente principal, com a ressalva de que a ata conserva apenas `HH:MM` e não identifica a data civil da sobra em turnos que atravessam meia-noite ([cartorio.py:764](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/ponto/services/cartorio.py:764); [utils.py:641](/home/ronald/codex_ws/f8f9bb34eaf0a632a8fbaf38d40ef538dda46e33/app/escala/utils.py:641)). O universo resultante e a execução do script permanecem [não verificado].
-
-_7321 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7322 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
