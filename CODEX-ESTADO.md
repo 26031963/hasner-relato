@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 08:18** · publicado em **19/11/2026 08:18** (UTC-3)
+> Ultima resposta processada: **19/11/2026 08:22** · publicado em **19/11/2026 08:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 08:22 · sessao fd85da5b6faf · DST-L2-JZ1 · verificador · origem=Code
+
+**BLOQUEIA** — o novo rótulo não corresponde às medidas citadas na própria causa: ele soma novamente o `+1` de c3, embora o ponto de partida declarado para c5 já o inclua ([teste:196](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:196), [teste:210](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:210)).
+
+1. No `delta.diff` fornecido, a única mudança são os comentários das duas linhas de teto; os números permanecem **230 e 294**, respectivamente ([teste:196](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:196), [teste:210](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:210)).
+
+2. **O rótulo é contraditório.** Em cada linha, ele diz `+3 = +1 c3 +2 c5`, mas a mesma causa diz que c3 já está no medido de partida: **228**, seguido de **228→230**, e **292**, seguido de **292→294**. Assim, sobre os pontos de partida citados, o acréscimo até o teto é `+2`, não `+3` ([teste:196](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:196), [teste:210](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:210)). A existência de uma base anterior com os valores 227 e 291 e a perda no merge **[não verificado]**.
+
+3. Quanto aos itens descartados, **NÃO PROCEDE** abaixo significa que o motivo apresentado não fica comprovado integralmente pelo material disponível, e não necessariamente que sua conclusão seja falsa:
+
+   - **Lote do DP — NÃO PROCEDE integralmente.** A leitura sem trava e o `save()` completo conferem; a rejeição automática grava `status` e `descricao`, sustentando a possibilidade de sobrescrita da descrição por uma instância lida antes ([views.py:1875](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/views.py:1875), [justificativa.py:332](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/services/justificativa.py:332)). Que seja anterior e esteja fora do diff histórico citado **[não verificado]**; o delta fornecido cobre somente a volta 2.
+
+   - **`atualizado_em` — NÃO PROCEDE integralmente.** O código confirma que a auto-rejeição salva apenas `status` e `descricao`; o comentário relata o custo e o aval ([justificativa.py:270](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/services/justificativa.py:270), [justificativa.py:332](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/services/justificativa.py:332)). O texto literal do aval e a aceitação independente do custo **[não verificado]**.
+
+   - **Ordem de trava na regularização — NÃO PROCEDE integralmente.** A cópia mostra o `save` da justificativa dentro do `atomic`, o limite documentado e o `select_for_update` do lote ([regularizacao.py:89](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/services/regularizacao.py:89), [justificativa.py:101](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/services/justificativa.py:101), [justificativa.py:314](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/services/justificativa.py:314)). A afirmação histórica de que a inversão já existia antes de c5 **[não verificado]**.
+
+   - **Testes `C5_UM_ATO` — NÃO PROCEDE como resposta ao achado.** Os dois testes instalam a função que lança exceção, capturam `RuntimeError` e verificam o estado, mas não afirmam que a função injetada foi chamada ([teste:125](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:125), [teste:281](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:281)). O resultado alegado dos mutantes **[não verificado]**; mesmo confirmado, não acrescentaria essa afirmação explícita aos testes.
+
+   - **Teto versus proibição de editar o selo — NÃO PROCEDE integralmente.** O delta fornecido altera somente os comentários dessas duas linhas, e o comentário da cópia atribui ao aval a instrução de subir o teto com a causa ao lado ([teste:196](/home/ronald/codex_ws/4f5a390a4cbc1c29e7ee24a3ef0532798e434ec0/app/ponto/tests/test_selo_chokepoint_escrita.py:196)). O texto completo do aval, sua relação com a proibição e a autorização para a edição **[não verificado]**.
+
+## 19/11 08:19 · sessao 0599a373aa54 · DST-L2-JZ1 · verificador · origem=Code
+
+**Parecer: BLOQUEIA.** Há duas divergências concretas: os tetos sobem 3 quando a causa registra delta medido de 2, e existe caminho que grava/trava `Justificativa` antes de alcançar travas de `Chamado`. Também há um segundo escritor de decisão em lote fora da porta travada, capaz de concorrer com a auto-rejeição. [app/ponto/tests/test_selo_chokepoint_escrita.py:196] [app/ponto/tests/test_selo_chokepoint_escrita.py:210] [app/ponto/services/regularizacao.py:89] [app/ponto/signals.py:161] [app/ponto/views.py:1875]
+
+A identidade Git da cópia **[não verificado]**: o diretório disponibilizado não é um repositório Git; a comparação do delta usa o anexo fornecido e o código disponível. Execução de testes, mutantes, medições SQL e dados de produção **[não verificado]**. [nao verificado]
+
+1. **Literal do item 1 — BLOQUEIA.** Os dois blocos envolvem fecho, rejeição e ocorrência em `atomic`; o lote usa `select_for_update`; a rejeição salva somente `status` e `descricao`; e a exclusão de `_APROVANDO` antecede o ramo do portão. O R8 contém a exigência de `False`. [app/ponto/services/cartorio.py:1033] [app/ponto/services/cartorio.py:1580] [app/ponto/services/justificativa.py:313] [app/ponto/services/justificativa.py:332] [app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:182]
+
+   O delta fornecido altera os tetos **227→230 e 291→294**, isto é, **+3 em cada**, embora as causas ao lado afirmem medição **228→230 e 292→294**, isto é, **+2**. Portanto o aumento em relação ao teto anterior não é exatamente o delta declarado. A medição independente e o SQL das chaves sem fecho são **[não verificado]**. [app/ponto/tests/test_selo_chokepoint_escrita.py:196] [app/ponto/tests/test_selo_chokepoint_escrita.py:210]
+
+2. **Escritores, leitores e significado — BLOQUEIA.**
+
+   - `Justificativa.status` é escrito pela auto-rejeição, pelas decisões individuais do DP e pelas decisões em lote; o fechamento consulta justificativas aprovadas, enquanto a fila e o lote distinguem pendentes de decididas. A rejeição humana grava também autor, instante e motivo próprio; a automática acrescenta o motivo à `descricao`. Logo `rejeitada` abrange decisões de naturezas diferentes. [app/ponto/services/justificativa.py:332] [app/ponto/services/justificativa.py:205] [app/ponto/services/justificativa.py:383] [app/ponto/views.py:1797] [app/ponto/views.py:1877] [app/ponto/services/justificativa.py:209]
+   - `descricao` é alterada pela auto-rejeição e pela regularização; a própria auto-rejeição lê o texto anterior e lhe acrescenta a causa. Leitores completos da descrição **[não verificado]**. [app/ponto/services/justificativa.py:332] [app/ponto/services/regularizacao.py:102]
+   - `atualizado_em` é `auto_now`, mas a auto-rejeição o exclui do `update_fields`; regularização o inclui explicitamente e os saves completos do DP também o atualizam. `houve_fato_novo` o lê como indício de fato do dia; o card do DP o lê junto com `status` como data de decisão; o admin expõe os campos do modelo. Assim, o campo não significa mais necessariamente “última alteração da linha”. [app/ponto/models.py:179] [app/ponto/services/justificativa.py:334] [app/ponto/services/regularizacao.py:106] [app/ponto/services/justificativa.py:383] [app/ponto/services/cartorio.py:406] [app/ponto/views.py:1741] [app/ponto/admin.py:18]
+   - O card **não conta a auto-rejeição pela data em que ela ocorreu**, salvo se o carimbo anterior já cair em hoje: nesse caso pode contar uma rejeitada cujo carimbo representa outra alteração. Essa consequência mais precisa decorre do filtro, e o custo de não avançar o carimbo foi aceito no aval fornecido. [app/ponto/views.py:1741] [app/ponto/services/justificativa.py:334]
+   - O fecho chama `reconciliar`, que passa pela escrita central de `status_local`; os gates e consumidores de chamados usam o estado do chamado. A ocorrência D5 é escrita pela porta de nota, com tipo e referência às justificativas; o reconciliador usa ocorrência `retratado`. Censo completo de leitores de ocorrência **[não verificado]**. [app/chamados/models.py:654] [app/chamados/models.py:207] [app/ponto/services/cartorio.py:48] [app/chamados/services/nota.py:75] [app/chamados/reconciliador.py:577]
+   - Há concorrência fora da porta individual: `rejeitar_lote_justificativas` lê a pendente sem trava e depois executa `save()` completo; uma instância lida antes da auto-rejeição pode sobrescrever campos depois dela. A existência desse caminho é anterior ao delta, mas a trava nova não o torna seguro. [app/ponto/views.py:1875] [app/ponto/services/justificativa.py:314]
+
+3. **Ordem de trava — BLOQUEIA.** No reconciliador, a transação chama `trava_na_ordem` antes da cerca e da rejeição; no DP individual, `travar_origem_antes` precede a trava da justificativa. A ordem global interna inclui **Colaborador → Disputa → Chamado → Pergunta**, não apenas as três entidades resumidas na pergunta. [app/chamados/reconciliador.py:542] [app/chamados/reconciliador.py:563] [app/ponto/services/justificativa.py:138] [app/chamados/models.py:2816]
+
+   Há caminho inverso: a regularização atualiza a justificativa dentro de `atomic`; seu `post_save` chama o cartório, que pode chegar ao fecho e às travas de chamado enquanto a transação ainda mantém a trava da justificativa. O próprio código documenta limite de ordem para regularização e outros caminhos. A ocorrência efetiva de deadlock em produção **[não verificado]**. [app/ponto/services/regularizacao.py:88] [app/ponto/signals.py:161] [app/ponto/signals.py:85] [app/ponto/services/cartorio.py:1580] [app/ponto/services/justificativa.py:101]
+
+4. **Falha e efeitos da transação — NÃO BLOQUEIA no escopo demonstrado.** `julgar_celula` não captura a falha de `julgar_colab`; seu `try` posterior é apenas para precedência. Quando acionado pelo signal, porém, `_julgar_dias` envolve o julgamento em `engolir`, que registra e suprime a exceção; isso já existia. [app/ponto/services/cartorio.py:2087] [app/ponto/signals.py:85] [app/core/observ.py:85]
+
+   Antes, o fecho podia concluir sua transação própria antes da falha posterior na rejeição ou ocorrência; agora, a exceção desfaz o bloco inteiro, inclusive fechos e efeitos de banco executados dentro dele. No `_fech`, a primeira lavra e o E2 ocorrem antes do novo bloco; a batida que acionou o signal também não foi colocada dentro desse novo `atomic`. Uma transação externa pode ter escopo maior, portanto não se pode generalizar a persistência de toda batida ou efeito para todos os chamadores. [app/chamados/services/fecho_runtime.py:161] [app/ponto/services/cartorio.py:1016] [app/ponto/services/cartorio.py:1026] [app/ponto/services/cartorio.py:1033] [app/ponto/registro_batida.py:176] [app/ponto/services/justificativa.py:138]
+
+5. **Classes de reprovação e testes — BLOQUEIA.** O segundo escritor concorrente e a inversão de ordem descritos nos itens 2 e 3 são achados concretos. `atualizado_em` também tem dois usos que deixam de acompanhar toda alteração da linha; a mudança específica foi aceita no aval fornecido, mas seus leitores não compartilham uma interpretação de “última alteração”. [app/ponto/views.py:1875] [app/ponto/services/regularizacao.py:102] [app/ponto/views.py:1741] [app/ponto/services/cartorio.py:406] [nao verificado]
+
+   Não identifiquei no delta um novo juiz ou derivação paralela; o relógio de `houve_fato_novo`, quando `ate` não é fornecido, continua lendo `now()` dentro da função. Ausência de outras violações dessas classes **[não verificado]**. [app/ponto/services/cartorio.py:376]
+
+   O teste `LEI_APROVANDO` sem portão exerce diretamente a exclusão e, pela lógica, falharia se ela fosse movida exclusivamente para o ramo com portão; a morte executada do mutante é **[não verificado]**. Os dois testes `C5_UM_ATO` verificam estado após injeção de falha, mas não afirmam que a função injetada foi chamada; no caminho da batida, o signal ainda pode engolir exceções. Assim, o código dos testes sozinho não prova que os mutantes de remoção dos `atomic` foram mortos em disco. [app/ponto/tests/test_dst_l2_jz1_rejeita_justificativa.py:321] [app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:125] [app/ponto/tests/test_dst_l2_jz1_c3_lote_portao.py:281] [app/ponto/signals.py:85] [nao verificado]
+
+6. **Edição do selo — NÃO BLOQUEIA quanto ao conteúdo adicional perguntado; conflito literal no aval.** No delta fornecido, as alterações de `test_selo_chokepoint_escrita.py` são as duas linhas de teto e suas justificativas; não há outra edição desse arquivo no anexo. Entretanto, o aval fornecido simultaneamente manda subir os tetos e proíbe editar o selo além do fixture já cortado: tomada isoladamente, essa proibição também alcança as linhas de teto. A autorização específica para subir teto e a proibição geral precisam ser lidas juntas; a resolução formal dessa tensão é **[não verificado]**. [app/ponto/tests/test_selo_chokepoint_escrita.py:196] [app/ponto/tests/test_selo_chokepoint_escrita.py:210]
 
 ## 19/11 08:18 · sessao 4ac148fa63de · TREM-DE-POUSO-1911 · verificador · origem=Code
 
@@ -1071,13 +1126,4 @@ Execução da suíte, logs de RED e resultados em banco: **[não verificado]**. 
 BLOQUEIA: 2  
 perguntas de lei: 1
 
-## 19/11 02:18 · sessao 3ac06bef2621 · - · - · origem=Ronald (tmux)
-
-Achados enviados ao agente principal, com rotas, serviços, permissões, filtros e limites de verificação dos universos. [app/chamados/views.py:719] [app/chamados/views.py:770] [app/chamados/services/painel.py:198]
-
-## 19/11 02:18 · sessao bfe32ac9cfed · - · - · origem=Ronald (tmux)
-
-- **Tarefa do dia:** `tarefa_do_dia` é um serviço que recebe colaborador, dia do turno e instante; não comprovei uma rota de tela correspondente. [app/chamados/services/tarefa_do_dia.py:738] A equivalência com “Meu Atendimento” é [não verificado]; essa rota chama `montar_chamados_fio` e pode registrar auditoria no GET. [app/chamados/urls.py:16] [app/chamados/views.py:566] [app/chamados/views.py:583]
-- **Consulta do app:** `/api/me/` chama `api_me`, exige autenticação e usa `request.user.colaborador`. [app/config/urls.py:37] [app/api/urls.py:64] [app/api/views.py:282] Entre os serviços chamados estão `turno_aberto_de`, `proximo_tipo_de` e `projecao_do_app`. [app/api/views.py:306] [app/api/views.py:308] [app/api/views.py:315] A resposta trata de um colaborador e contém seu nome, por isso não deve ser impressa pela sonda. [app/api/views.py:336]
-
-_7276 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7278 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
