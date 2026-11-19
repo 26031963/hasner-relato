@@ -1,6 +1,6 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex_pergunta.sh | pid=2634888
+ESPERANDO: push.sh | pid=2526893
 
 PAREI: e4d-d3-estoque-l130=2 RESPONDIDA por RESPOSTA-LEI-E4D-D3-V2-1911-1230 (12:30): ato compensador de SANEAMENTO generico (lei no campo) nasce na D3; as 2 elegiveis limpam na obra depois do ato; 109 entregues reproduzidas como estao. Brief D3: censo Codex logs/PRE-MAPA-E4D/d3_1230/ em curso.
 E4D D3 BRIEF FECHADO 12:3x (logs/PRE-MAPA-E4D/d3_1230/brief_d3.md): perguntas de lei 0; corte literal p/ tipo de ato novo NAO exigido (grep LEIS/CORTES/PLANO-PADROES/GLOSSARIO; L-117 so lei, L-123 so padrao); censo AST do Codex rodado na copia do HEAD (292 brutas): CONHECER leitura/respostas_anteriores/Meta, IGNORAR _pela_decisao/_tarefa_pura/_fatos (hoje cai em ato_desconhecido, tarefa_do_dia.py:193); 6 casos RED; replay = projetor da E4d. Construtor: vaga 1 apos F5 (E4d antes da C7).
