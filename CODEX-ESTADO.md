@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 11:21** · publicado em **19/11/2026 11:22** (UTC-3)
+> Ultima resposta processada: **19/11/2026 11:25** · publicado em **19/11/2026 11:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 11:25 · sessao 6f71d61fc4a3 · DIA-CONVOCADO-PELO-ADMIN · leitura · origem=Code
+
+**PERGUNTA DE DESENHO DIA-CONVOCADO — J ainda não fechado.** Na hipótese de célula editada para `trabalha=True`, feriado reconhecido, vínculo weekday com chave `False` e sem ausência de precedência superior, `fatos_do_dia` registra o dia como previsto, mas mantém a faixa `feriado`; o emissor de ausência pode então devolver `VETO_FERIADO` antes de consultar o veto da célula. Há guardas anteriores ao veto de feriado, portanto o retorno efetivo do emissor para col945 permanece **[não verificado]**. ([precedencia.py:347](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:347), [precedencia.py:376](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:376), [detectar_ausencias.py:599](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/management/commands/detectar_ausencias.py:599), [detectar_ausencias.py:616](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/management/commands/detectar_ausencias.py:616))
+
+**INCOMPLETO:** não fechei o censo AST, o script do censo, a sonda executável como texto, as colunas de espelho e DiaPago para os 18 estados, nem o levantamento completo das telas. Não há resultado de sonda para relatar. O diretório disponível não apresentou metadados Git para confirmar o HEAD solicitado; **HEAD [não verificado]**. Nenhum arquivo foi criado, alterado ou apagado; não executei banco nem suíte. **[não verificado por auditoria externa]** [nao verificado]
+
+### Matriz parcial
+
+A matriz abaixo considera feriado reconhecido pelo vínculo, célula existente com `trabalha` booleano, ausência de férias/afastamento/atestado e de outra folga lançada que altere a precedência. `G` é célula gerada; `E✓` e `E✗` são células editadas para `True` e `False`. Para `G` no weekday com chave `True` e no 12x36, o resultado depende de o ciclo prever trabalho naquela data. ([precedencia.py:336](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:336), [precedencia.py:357](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:357), [models.py:1365](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/escala/models.py:1365))
+
+Nas células da coluna **Fatos**, `F/F/F` significa `(feriado, era_dia_previsto=False, feriado_so_no_pagamento=False)`; `F/T/F` significa `(feriado, True, False)`; `T/T/T` significa `(trabalho, True, True)`. O resultado não depende da batida nesse trecho. ([precedencia.py:376](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:376), [precedencia.py:379](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:379), [precedencia.py:402](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:402))
+
+| Ciclo e chave | Célula | Batida | Fatos | Emissor | Espelho | Motor / DiaPago |
+|---|---|---|---|---|---|---|
+| Weekday False | G | Sim | F/F/F | Não sei: guardas e contexto | Não sei | Não sei |
+| Weekday False | G | Não | F/F/F | Veto por feriado, se passar guardas anteriores | Não sei | Não sei |
+| Weekday False | E✓ | Sim | F/T/F | Não sei: guardas e contexto | Não sei | Não sei |
+| Weekday False | E✓ | Não | F/T/F | Veto por feriado, se passar guardas anteriores | Não sei | Não sei |
+| Weekday False | E✗ | Sim | F/F/F | Não sei: guardas e contexto | Não sei | Não sei |
+| Weekday False | E✗ | Não | F/F/F | Veto por feriado, se passar guardas anteriores | Não sei | Não sei |
+| Weekday True | G | Sim | T/T/T ou F/F/F, conforme célula | Não sei | Não sei | Não sei |
+| Weekday True | G | Não | T/T/T ou F/F/F, conforme célula | Não sei | Não sei | Não sei |
+| Weekday True | E✓ | Sim | T/T/T | Não sei | Não sei | Não sei |
+| Weekday True | E✓ | Não | T/T/T | Não sei | Não sei | Não sei |
+| Weekday True | E✗ | Sim | F/F/F | Não sei | Não sei | Não sei |
+| Weekday True | E✗ | Não | F/F/F | Veto por feriado, se passar guardas anteriores | Não sei | Não sei |
+| 12x36 | G | Sim | T/T/T ou F/F/F, conforme célula | Não sei | Não sei | Não sei |
+| 12x36 | G | Não | T/T/T ou F/F/F, conforme célula | Não sei | Não sei | Não sei |
+| 12x36 | E✓ | Sim | T/T/T | Não sei | Não sei | Não sei |
+| 12x36 | E✓ | Não | T/T/T | Não sei | Não sei | Não sei |
+| 12x36 | E✗ | Sim | F/F/F | Não sei | Não sei | Não sei |
+| 12x36 | E✗ | Não | F/F/F | Veto por feriado, se passar guardas anteriores | Não sei | Não sei |
+
+As células “não sei” não representam resultado negativo: faltou rastrear o caminho completo ou faltam dados como jornada, guardas, ata e lavra. O emissor examinado é `Command._abrir_chamado`; a faixa `feriado` produz o veto citado, mas existem verificações anteriores e posteriores. ([detectar_ausencias.py:571](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/management/commands/detectar_ausencias.py:571), [detectar_ausencias.py:599](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/management/commands/detectar_ausencias.py:599))
+
+O motor configura 12x36 entre os ciclos de feriado simples e, no trecho de cálculo examinado, atribui minutos de HE 100 de feriado quando há duração positiva e `_feriado_dobra_no_dia` retorna verdadeiro. Isso não basta, por si só, para preencher todas as rubricas da matriz: o fechamento ainda separa períodos conforme escala certa e `feriado_vira_folga`, e `DiaPago` recebe essa partição. ([motor_calculo_v2.py:3623](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/motor_calculo_v2.py:3623), [motor_calculo_v2.py:2809](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/motor_calculo_v2.py:2809), [fechamento.py:933](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/services/fechamento.py:933), [dia_pago.py:241](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/services/dia_pago.py:241))
+
+### Leitores e lei: achados parciais
+
+| Sítio | Papel observado | Célula ou vínculo | Caso editado `True`, chave `False` |
+|---|---|---|---|
+| [models.py:1369](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/escala/models.py:1369), `eh_dia_trabalho_calculado` | Decide o cálculo gerador | Vínculo/ciclo; este trecho não lê a célula | Se a base for `True`, retorna `False` pelo feriado. |
+| [models.py:1373](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/escala/models.py:1373), `feriado_vira_folga` | Decide o predicado | Chave, ciclo e lugar do vínculo; não lê a célula | Retorna `True`, pressuposto feriado reconhecido. |
+| [precedencia.py:347](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:347), `fatos_do_periodo` | Decide precedência | Lê célula **e** predicado do vínculo | `previsto=True`, mas faixa `feriado`, nas hipóteses da matriz. `fatos_do_dia` delega ao período ([precedencia.py:242](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/precedencia.py:242)). |
+| [alimentacao.py:514](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/calculador/alimentacao.py:514) | Alimenta cálculo | Passa informação da célula e o predicado do vínculo | Passa `folga_e_feriado=True`, se o feriado estiver no conjunto alimentado. |
+| [fechamento.py:944](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/services/fechamento.py:944) | Decide partição de rubrica | Consulta o vínculo do dia para períodos de folga trabalhada já selecionados | Classifica esses períodos como feriado quando o predicado é verdadeiro; alcance no caso concreto **[não verificado]**. |
+| [models.py:920](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/escala/models.py:920), `vinculos_5x2_6x1_trabalha_feriado` | Decide universo de contador | Filtro pela chave do vínculo | O vínculo com chave `False` fica fora desse filtro. |
+| [vinculo.py:890](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/colaboradores/services/vinculo.py:890), `marcar_trabalha_em_feriado` | Lê e grava a chave | Vínculo | Compara o valor atual ao desejado; não responde diretamente ao dia editado. |
+| [sincronizar_feriado_admin.py:48](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/colaboradores/management/commands/sincronizar_feriado_admin.py:48) | Compara e exibe; pode chamar a porta de gravação | Vínculo | Depende do valor desejado pelo comando. |
+
+Esta tabela **não é o censo fechado**: faltam a análise AST de apelidos e strings, todos os sítios de cópia/gravação, a contagem separada de testes e migrations e a classificação completa. Logo, **K e J = [não verificado]**. A divergência da precedência e o veto condicional do emissor estão demonstrados acima; não os transformei em uma contagem de leitores. [nao verificado]
+
+A lei escrita localizada é: “**A GRADE e fonte unica de previsto**” e “**EC.eh_dia_trabalho e EC.marcos_do_dia LEEM a celula**”, com fallback aritmético/template. ([CLAUDE.md:148](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/CLAUDE.md:148), [CLAUDE.md:155](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/CLAUDE.md:155))
+
+Para pagamento, a própria L-086 informa que sua cláusula original sobre feriado foi parcialmente revogada: feriado previsto dobra conforme `feriado_em_dobra` do ciclo, e 12x36 não dobra por essa regra. A L-023 trata da relação entre foto e ciclo, incluindo folga avulsa; seu texto não resolve sozinho a divergência observada na emissão. ([LEIS.md:118](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/docs/LEIS.md:118), [LEIS.md:74](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/docs/LEIS.md:74))
+
+### Sonda: limites já identificados
+
+Não entrego um script como se estivesse pronto: ainda falta conferir a obtenção segura do colaborador pelo apelido raspado, os argumentos de início exigidos pelo emissor, o formato das rubricas do espelho e a busca do segundo ramo. Tudo isso é **[não verificado]**.
+
+Para quem completar a sonda, `editar_dia` pode devolver `barrada` ou `sem_vinculo`, além de `editada` e `igual`; a sonda precisa verificar esse retorno antes de interpretar o “depois”. ([celula.py:572](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/portas/celula.py:572), [celula.py:606](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/portas/celula.py:606))
+
+Com `raise` saindo do `atomic` externo, as alterações transacionais feitas dentro dele, inclusive célula e trilha, são revertidas; callbacks `on_commit` não executam. Em particular, não rodam a rejunção e a reavaliação da falta espúria agendadas no rabo, nem o recálculo por evento agendado para o commit. O julgamento síncrono anterior pode ser chamado dentro da transação; seus efeitos transacionais também são revertidos. Efeitos externos eventualmente disparados por caminhos síncronos: **[não verificado]**. ([celula.py:460](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/portas/celula.py:460), [celula.py:528](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/portas/celula.py:528), [fechamento.py:1798](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/services/fechamento.py:1798))
+
+### Tela: achado parcial
+
+A tela de lançamento de ausência usa a view [lancar_ausencia](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/views.py:2476) e o [template correspondente](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/templates/ponto/lancar_ausencia.html:12). A view recebe um `colaborador`, uma data e duração cujo padrão é um dia; essa constatação não fecha o levantamento de outras telas ou de lote por posto e data. ([views.py:2483](/home/ronald/codex_ws/c5ea4e5d75dd4b2e50304d3f765810b9acc70a97/app/ponto/views.py:2483))
+
+View e template específicos de folga avulsa e troca de plantão, e existência de ato em lote por posto × data: **[não verificado]**.
+
+perguntas de lei: [não verificado]
 
 ## 19/11 11:21 · sessao 3978636e78d4 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1801,60 +1873,4 @@ No cartório, a ordem é inversa: consulta travada do lote e, para cada chamado 
 
 Para esse caso específico, o detalhe também coincide com a trilha anterior, pois o predicado antigo olhava o ponteiro pendente alheio. A afirmação do teste de que “a trilha de antes não muda” não vale para o novo caso somente por origem: antes não havia essa retenção; agora há e a descrição pode afirmar incorretamente que há ponteiro. ([teste C6:71](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:71), [teste C6:108](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:108), [reconciliador.py:491](app/chamados/reconciliador.py:491))
 
-## 19/11 10:23 · sessao 46fa5858d7a2 · E4C-F5-CONSTROI · construtor · origem=Code
-
-O contador está implementado em [vigia_texto_resposta.py](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/vigia_texto_resposta.py:7), com integração ao carimbo existente em [vigiar_fio_morto.py](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/management/commands/vigiar_fio_morto.py:194). O diff solicitado, incluindo a volta 1c, está em [E4C-F5-diff-final.patch](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/E4C-F5-diff-final.patch).
-
-A entrega tem duas ressalvas:
-
-- O leitor atual do ESTADO mostra o contador fora do esperado na seção do fio morto, mas a **PERGUNTA no topo** depende do patch externo abaixo ([fio_estado.py:191](/home/ronald/wt-codex-e4c-f5-constroi-090617/bin/fio_estado.py:191), [gerar_estado.py:261](/home/ronald/wt-codex-e4c-f5-constroi-090617/bin/gerar_estado.py:261)).
-- Conforme a instrução de mudar somente os comentários, não alterei os leitores de texto. O código atual passa `leitura` para `respondida_sem_texto` e usa `leitura.resposta_colab` no histórico, apesar do comentário solicitado dizer projeção ([fio.py:190](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/fio.py:190), [historico.py:110](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/historico.py:110)).
-
-O teste cobre igualdade, divergência após `update`, universo por pergunta com RESPOSTA e custo de uma versus várias perguntas ([teste:19](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:19), [teste:40](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:40)). A sintaxe dos cinco arquivos alterados foi analisada e `git diff --check` passou; banco e suíte não foram executados. Resultado dos testes e mutantes: **[não verificado]**. [nao verificado]
-
-Comandos para execução posterior em banco de teste isolado, a partir de `app/`: [nao verificado]
-
-```bash
-# GREEN
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_contador_texto --settings=config.settings.ci --noinput
-
-# RED / mutante: compara a leitura consigo mesma; test_divergencia_e_universo deve falhar
-sed -i 's/!= p\.resposta_colab/!= DecisaoPergunta.leitura(p).resposta_colab/' chamados/services/vigia_texto_resposta.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_divergencia_e_universo --settings=config.settings.ci --noinput
-sed -i 's/!= DecisaoPergunta\.leitura(p)\.resposta_colab/!= p.resposta_colab/' chamados/services/vigia_texto_resposta.py
-
-# Mutante N+1: test_custo_uma_e_varias_perguntas deve falhar
-sed -i "s/\.prefetch_related('decisoes')//" chamados/services/vigia_texto_resposta.py
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_contador_texto.ContadorTextoTest.test_custo_uma_e_varias_perguntas --settings=config.settings.ci --noinput
-sed -i "s/perguntas.filter(Exists(respostas))$/perguntas.filter(Exists(respostas)).prefetch_related('decisoes')/" chamados/services/vigia_texto_resposta.py
-```
-
-Patch proposto para `bin/gerar_estado.py`, **não aplicado** por estar fora de `app/`. Ele usa a comparação já feita pelo leitor do carimbo, sem criar outro limiar ([fio_estado.py:145](/home/ronald/wt-codex-e4c-f5-constroi-090617/bin/fio_estado.py:145)):
-
-```diff
-@@
--    fio_txt = _linha_fio(_ler_fio(raiz))
-+    _fio = _ler_fio(raiz)
-+    fio_txt = _linha_fio(_fio)
-+    _texto_fora = _fio.get('fora_do_esperado', {}).get('divergencia_texto_resposta')
-+    pergunta_texto = (
-+        '**PERGUNTA E4C-F5-CONTADOR-TEXTO:** divergencia ato x projecao: %s '
-+        '(esperado %s; fonte: carimbo do vigia).\n\n'
-+        % (_texto_fora['medido'], _texto_fora['esperado'])
-+        if _texto_fora else ''
-+    )
-@@
- **Medido em %s.**
- 
-+%s\
- | | |
-@@
--""" % (agora, head or '(sem head)', origem or '(sem origin/main)', ahead or '?',
-+""" % (agora, pergunta_texto, head or '(sem head)', origem or '(sem origin/main)', ahead or '?',
-```
-
-Esse patch externo também está **[não verificado]**.
-
-**LEI-AKITA:** origem=[PerguntaDisputa.resposta_colab e universo com ato RESPOSTA](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/services/vigia_texto_resposta.py:11); testemunha=DecisaoPergunta.leitura ([models.py:4295](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/models.py:4295)); RED=projeção alterada, divergência 1 ([teste:24](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/tests/test_e4c_f5_contador_texto.py:24)); quem-mais-le=vigiar_fio_morto e ESTADO pelo carimbo ([vigia:268](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/chamados/management/commands/vigiar_fio_morto.py:268), [leitor:144](/home/ronald/wt-codex-e4c-f5-constroi-090617/bin/fio_estado.py:144)); juizes novos=0; padrao=lampada ([GLOSSARIO:13](/home/ronald/wt-codex-e4c-f5-constroi-090617/app/docs/GLOSSARIO.md:13)). [nao verificado]
-
-_7323 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7324 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
