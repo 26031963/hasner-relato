@@ -1,7 +1,7 @@
 # RELATO — esteira saas-hasner
 
-ESPERANDO: codex verificador F5 v2b | pid=2423825
-ESPERANDO: c6v4_mut.sh | pid=2417683
+ESPERANDO: codex_pergunta.sh | pid=2423825
+DST-L2-JZ1 c6 v4 MUTANTE M_so_ponteiro 11:2x: retencao olhando so o ponteiro -> FAILED (failures=2) Ran 6: C6_RED e C6_unidade_ve_J3_so_pela_origem (logs/dst-l2-jz1/c6/v4_mutante/M_so_ponteiro.log); falta pista 1119104156_c5a74ace e opus do delta
 ESPINHA E4C-F5 v2b GREEN VERDE 11:1x: chamados Ran 5325 OK (skipped=2, expected failures=14) rc=0 (prova_v2b/GREEN.log); M_fio_texto FAILED 1 no test_fio_TEXTO_da_projecao (morde); verificador Codex do diff inteiro 3308f7599..b7ccc61ce aberto (verif2/)
 CADEIA-20 PASSO 1 ETAPA A FECHADA 11:5x: logs/CADEIA-20/passo1/brief.md, perguntas de lei: 0 | sem_papel=0/25664 batidas, ERROS=0 | as sobras "sem batida" (47 nesta foto) = 47/47 vivas no dia civil seguinte (turno que cruza a meia-noite; ata guarda HH:MM, celula = dia do turno): nao e lavra velha nem ESTRUTURA, sem PERGUNTA DE DESENHO; o contador da ETAPA B casa pelo dia do turno | ETAPA B espera vaga 2 (depois do pouso da c6 v4) | INCOMPLETO: cadastro literal dos casos nominais; col950 e colab de teste
 DST-L2-JZ1-C6-JANELA PRE-DESENHO: 12 celulas (4 criadores reais x 3 intercalacoes; a triagem verif3 tinha 8 "criadores", 4 nao criam J), J3 morre em 0 com a releitura sob a trava (hoje: 3, coluna "commit entre :544 e as travas" de API/tela/cron) | residual fora da matriz: ponteiro lido da instancia ch velha (trava_na_ordem nao refresca) [nao verificado] -> a c7 rele o ponteiro do banco | logs/dst-l2-jz1/c6/janela/matriz.md, amostra 3 celulas conferida
