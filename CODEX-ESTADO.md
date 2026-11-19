@@ -1,7 +1,164 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 11:25** · publicado em **19/11/2026 11:28** (UTC-3)
+> Ultima resposta processada: **19/11/2026 11:28** · publicado em **19/11/2026 11:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 11:28 · sessao 2bf3a546f9a7 · DIA-CONVOCADO-PELO-ADMIN · leitura · origem=Code
+
+**PERGUNTA DE DESENHO DIA-CONVOCADO — J [não verificado].** No caso focal, a célula diz trabalho previsto, mas a palavra do espelho pode ser “Feriado” e o emissor pode vetar a cobrança pela faixa de feriado. O número de leitores que contradizem a célula permanece **[não verificado]**: o censo e a sonda abaixo não estão fechados. ([CLAUDE.md:148](app/../CLAUDE.md:148), [dia_decidido.py:405](app/ponto/services/dia_decidido.py:405), [detectar_ausencias.py:599](app/ponto/management/commands/detectar_ausencias.py:599))
+
+**Entrega incompleta.** Fechei a leitura principal do caso focal e entrego um script AST para conferência, mas não completei a sonda executável nem provei a inexistência de todas as telas e atos em lote. Resultados de produção e da sombra: **[não verificado]**.
+
+## A. Script do censo AST
+
+O script abaixo é texto para ser executado **na raiz `app/`**. Conta sítios sintáticos de leitura de atributos, `getattr` literal, campos literais ou keywords dos métodos ORM pedidos e usos de nomes importados com apelido; separa `tests` e `migrations`. Uma linha corresponde a uma ocorrência sintática, não necessariamente a um leitor funcional distinto. A resolução de apelidos é estática e por arquivo: sombreamento de nomes, nomes construídos dinamicamente, chamadas indiretas e outros métodos ORM exigem revisão manual **[não verificado]**.
+
+```python
+import ast
+from collections import Counter
+from pathlib import Path
+
+ALVOS = {"trabalha_em_feriado", "feriado_vira_folga"}
+ORM = {"filter", "exclude", "values", "values_list", "update"}
+
+
+def campo(s):
+    if not isinstance(s, str):
+        return None
+    partes = s.split("__")
+    return next((p for p in partes if p in ALVOS), None)
+
+
+class Censo(ast.NodeVisitor):
+    def __init__(self, caminho):
+        self.caminho = caminho
+        self.pilha = []
+        self.aliases = {}
+        self.sitios = []
+
+    def emitir(self, no, forma):
+        funcao = ".".join(self.pilha) or "<modulo>"
+        self.sitios.append((self.caminho, no.lineno, funcao, forma))
+
+    def visit_ClassDef(self, no):
+        self.pilha.append(no.name)
+        self.generic_visit(no)
+        self.pilha.pop()
+
+    def visit_FunctionDef(self, no):
+        self.pilha.append(no.name)
+        self.generic_visit(no)
+        self.pilha.pop()
+
+    visit_AsyncFunctionDef = visit_FunctionDef
+
+    def visit_ImportFrom(self, no):
+        for a in no.names:
+            if a.name in ALVOS:
+                nome_local = a.asname or a.name
+                self.aliases[nome_local] = a.name
+                self.emitir(no, f"import:{a.name}:as:{nome_local}")
+
+    def visit_Name(self, no):
+        if isinstance(no.ctx, ast.Load) and no.id in self.aliases:
+            self.emitir(no, f"nome-importado:{self.aliases[no.id]}:{no.id}")
+
+    def visit_Attribute(self, no):
+        if no.attr in ALVOS and isinstance(no.ctx, ast.Load):
+            self.emitir(no, f"atributo:{no.attr}")
+        self.generic_visit(no)
+
+    def visit_Call(self, no):
+        if (
+            isinstance(no.func, ast.Name)
+            and no.func.id == "getattr"
+            and len(no.args) >= 2
+            and isinstance(no.args[1], ast.Constant)
+            and no.args[1].value in ALVOS
+        ):
+            self.emitir(no, f"getattr:{no.args[1].value}")
+
+        if isinstance(no.func, ast.Attribute) and no.func.attr in ORM:
+            metodo = no.func.attr
+            for arg in no.args:
+                if isinstance(arg, ast.Constant):
+                    alvo = campo(arg.value)
+                    if alvo:
+                        self.emitir(arg, f"orm:{metodo}:string:{arg.value}")
+            for kw in no.keywords:
+                alvo = campo(kw.arg)
+                if alvo:
+                    self.emitir(kw.value, f"orm:{metodo}:keyword:{kw.arg}")
+        self.generic_visit(no)
+
+
+totais = Counter()
+arquivos = Counter()
+erros = 0
+
+for caminho in sorted(Path(".").rglob("*.py")):
+    partes = caminho.parts
+    grupo = (
+        "migrations" if "migrations" in partes
+        else "tests" if "tests" in partes or caminho.name.startswith("test_")
+        else "app"
+    )
+    try:
+        arvore = ast.parse(caminho.read_bytes(), filename=str(caminho))
+    except (OSError, SyntaxError, UnicodeError) as exc:
+        erros += 1
+        print(f"{caminho}:0 <modulo> ERRO:{type(exc).__name__}")
+        continue
+
+    visita = Censo(caminho.as_posix())
+    visita.visit(arvore)
+    for arquivo, linha, funcao, forma in sorted(visita.sitios):
+        print(f"{arquivo}:{linha} {funcao} {forma} [{grupo}]")
+        totais[grupo] += 1
+    if visita.sitios:
+        arquivos[grupo] += 1
+
+for grupo in ("app", "tests", "migrations"):
+    print(f"TOTAL {grupo} sitios={totais[grupo]} arquivos={arquivos[grupo]}")
+print(f"ERROS={erros}")
+```
+
+**Limitação relevante:** o script não resolve `Q(**dicionario)` nem campos obtidos por variáveis, e não identifica usos de um nome importado quando há reatribuição ou sombreamento com precisão de escopo. Por isso, seus totais ainda não provam “todo leitor” nem classificam cada sítio como decide/exibe/grava. **Censo fechado e totais: [não verificado].**
+
+## B. Linha focal
+
+Hipóteses: ciclo weekday, chave `False`, célula editada `trabalha=True`, feriado reconhecido e sem ausência. A sessão já confirmou o resultado da precedência; não o refaço. **Valor concreto de col945: [não verificado].**
+
+| Autoridade | Resposta pelo código | Célula ou chave; contradição |
+|---|---|---|
+| **Espelho — palavra do dia** | Com os fatos focais e sem decisão ou pedido de ausência que substitua a palavra, `veredito_do_dia` devolve `FERIADO`; `do_dia` fornece a palavra e `aplicar_palavra_do_dia` a põe na linha. O espelho completo também possui um `status_rotulo` separado, que pode vir de lavra ou do relógio; seu valor concreto é **[não verificado]**. ([dia_decidido.py:397](app/ponto/services/dia_decidido.py:397), [dia_decidido.py:481](app/ponto/services/dia_decidido.py:481), [espelho.py:329](app/ponto/services/espelho.py:329), [status_dia.py:270](app/ponto/status_dia.py:270)) | A palavra recebe fatos que combinam célula e predicado do vínculo; **sim**, diz “Feriado” no sentido de contradição definido no pedido. A resposta real da tela depende também dos demais insumos. ([espelho.py:332](app/ponto/services/espelho.py:332), [precedencia.py:347](app/ponto/precedencia.py:347)) |
+| **Motor — previsto** | No caminho do fechamento, o cursor inclui a data quando `esc.eh_dia_trabalho` é verdadeiro e ela não está suprimida. Para a célula focal, sem supressão, isso aponta para data prevista; a alimentação concreta e eventual supressão de col945 são **[não verificado]**. ([fechamento.py:724](app/ponto/services/fechamento.py:724), [CLAUDE.md:155](app/../CLAUDE.md:155)) | Lê a célula por `eh_dia_trabalho`; **não**, quanto ao previsto, nas hipóteses indicadas. ([escala/models.py:1069](app/escala/models.py:1069)) |
+| **Motor — dobra** | `_feriado_dobra_no_dia` devolve `feriado_em_dobra and eh_feriado(dia)`, sem perguntar se a data é prevista. O padrão do ciclo exclui `12x36` da dobra; uma régua pode fornecer o valor explicitamente. Com duração positiva e dobra ativa, o trecho citado atribui a duração a `minutos_extra_100_feriado`. Sem batida, valor concreto e rubrica apurada de col945 são **[não verificado]**. ([motor_calculo_v2.py:914](app/ponto/motor_calculo_v2.py:914), [motor_calculo_v2.py:2809](app/ponto/motor_calculo_v2.py:2809), [motor_calculo_v2.py:3623](app/ponto/motor_calculo_v2.py:3623), [motor_calculo_v2.py:3694](app/ponto/motor_calculo_v2.py:3694)) | O predicado da dobra lê configuração do motor e feriado, não a célula; **não sei** se há contradição com a célula: ele responde pagamento, e a L-086 vigente admite dobra de feriado previsto conforme o ciclo. ([LEIS.md:118](app/docs/LEIS.md:118)) |
+| **Fechamento** | Só examina a partição depois de obter `resultado.periodos_ft` e filtrar escala certa. Para cada período remanescente, se o vínculo do dia diz `feriado_vira_folga`, promove as horas para HE 100 de feriado e as retira de `horas_folga_trabalhada`. Se o período focal entra em `_ft_certa`: **[não verificado]**; sem período trabalhado, não há horas desse período a promover. ([fechamento.py:933](app/ponto/services/fechamento.py:933)) | Nesse teste lê o predicado do vínculo, não `CelulaDia.trabalha`; **não sei** se contradiz o caso focal, pois não foi demonstrado que um período focal chega a esse ramo. ([fechamento.py:944](app/ponto/services/fechamento.py:944)) |
+| **DiaPago** | Para períodos normais, acumula as rubricas do período; para `ft_feriado`, acumula minutos em `horas_extras_100` e `horas_extras_100_feriado`. A partição é fornecida pelo fechamento; valores lavrados concretos são **[não verificado]**. ([dia_pago.py:175](app/ponto/services/dia_pago.py:175), [dia_pago.py:241](app/ponto/services/dia_pago.py:241)) | Nesse ramo lê listas e minutos já partilhados, não consulta diretamente célula ou chave; **não sei** se contradiz a célula, pois depende do período e da partição recebidos. ([dia_pago.py:234](app/ponto/services/dia_pago.py:234)) |
+
+O texto da casa declara “A GRADE e fonte unica de previsto” e que `EC.eh_dia_trabalho` lê a célula; a L-020 chama a célula soberana, e a L-086 registra a revogação parcial da antiga cláusula sobre feriado previsto. Esses textos distinguem previsto de pagamento, mas não encontrei neles uma linha que resolva expressamente o veto de cobrança para **célula editada `True` em feriado com chave `False`**. ([CLAUDE.md:148](app/../CLAUDE.md:148), [LEIS.md:71](app/docs/LEIS.md:71), [LEIS.md:118](app/docs/LEIS.md:118))
+
+## C. Sonda
+
+**Não entrego a sonda como pronta:** ainda faltam a montagem e a verificação do contador de frota, do espelho e do tratamento de erros em conjunto. Portanto `ERROS`, `UNIVERSO` e `CONTADOS` são **[não verificado]**.
+
+O modelo correto para descobrir o colaborador é `escala.models.EscalaColaborador`: a linha com `pk=1255` tem a FK `colaborador`, cujo identificador Django é `colaborador_id`; o valor efetivo do PK é **[não verificado]**. Para o vínculo que responde por um dia, o carregador real é `vinculo_do_dia_carregado(colaborador_id, data)`. ([escala/models.py:871](app/escala/models.py:871), [escala/alimentacao.py:289](app/escala/alimentacao.py:289))
+
+O emissor encontrado é `Command._abrir_chamado(self, colab, ec, data_ref, dt_inicio, agora, marcos_faltantes=None)`. **Ele grava** por `ChamadoColaborador.abrir`; também pode chamar `push_supervisao` para ciclos não flexíveis. Assim, `atomic` com rollback desfaz escritas transacionais, mas não demonstra por si só reversão de efeito externo de push. No caso focal 6x1, o código classifica o ciclo como flexível e não chama esse push específico; outros efeitos externos síncronos permanecem **[não verificado]**. ([detectar_ausencias.py:571](app/ponto/management/commands/detectar_ausencias.py:571), [detectar_ausencias.py:586](app/ponto/management/commands/detectar_ausencias.py:586), [detectar_ausencias.py:694](app/ponto/management/commands/detectar_ausencias.py:694), [detectar_ausencias.py:775](app/ponto/management/commands/detectar_ausencias.py:775))
+
+`editar_dia` pode devolver `editada`, `igual`, `barrada` ou `sem_vinculo`; um resultado diferente de `editada` precisa ser contado antes de interpretar o depois. O código agenda trabalho posterior ao commit; a extensão completa de efeitos externos síncronos do caminho é **[não verificado]**. ([celula.py:572](app/ponto/portas/celula.py:572), [celula.py:586](app/ponto/portas/celula.py:586), [celula.py:590](app/ponto/portas/celula.py:590))
+
+## D. Tela
+
+- **Ausência para um dia:** `lancar_ausencia` recebe colaborador, tipo e data; a duração padrão é um dia. O formulário correspondente seleciona um colaborador e uma data. ([views.py:2476](app/ponto/views.py:2476), [lancar_ausencia.html:12](app/templates/ponto/lancar_ausencia.html:12), [lancar_ausencia.html:37](app/templates/ponto/lancar_ausencia.html:37))
+- **Folga:** há `folga_compensatoria` no catálogo de ausência e na lista de tipos de duração da tela; isso prova esse tipo de lançamento, mas não identifica conclusivamente toda tela de **folga avulsa**. ([ausencias.py:100](app/ponto/catalogo/ausencias.py:100), [lancar_ausencia.html:95](app/templates/ponto/lancar_ausencia.html:95))
+- **Troca de plantão:** há a porta `trocar_plantao`, que exige as duas cartas; view e template específicos **[não verificado]**. ([celula.py:670](app/ponto/portas/celula.py:670))
+- **Lote por posto × data:** **[não verificado]**. O formulário de ausência examinado é individual; a busca por `folga.avulsa|troca.de.plant[aã]o|trocar_plantao|folga_avulsa` não basta para provar inexistência de outro ato em lote. ([lancar_ausencia.html:14](app/templates/ponto/lancar_ausencia.html:14), [views.py:2483](app/ponto/views.py:2483))
+
+**perguntas de lei: [não verificado]**
+
+- Candidata: qual regra escrita decide a cobrança quando a célula foi editada para trabalho num feriado em que o vínculo folga? Procurei a regra de previsto em [CLAUDE.md:148](app/../CLAUDE.md:148), a soberania da célula em [LEIS.md:71](app/docs/LEIS.md:71), a foto em [LEIS.md:74](app/docs/LEIS.md:74), e a regra de pagamento em [LEIS.md:118](app/docs/LEIS.md:118); não localizei nesses trechos resposta expressa para esse conflito. A busca exaustiva em `CORTES.md` permanece **[não verificado]**.
 
 ## 19/11 11:25 · sessao 6f71d61fc4a3 · DIA-CONVOCADO-PELO-ADMIN · leitura · origem=Code
 
@@ -1799,78 +1956,4 @@ O que a sonda não cobre:
 
 perguntas de lei: 0
 
-## 19/11 10:26 · sessao b77dcde34fb5 · DST-L2-JZ1-C6 · verificador · origem=Code
-
-# BLOQUEIA
-
-Há dois bloqueios identificados no código: a nova retenção pode decidir com uma consulta sem trava e a rejeição consultar novamente depois, com resultado diferente; e a trilha continua afirmando que o chamado **aponta** para a justificativa mesmo quando a retenção a encontrou apenas por `chamado_origem`. O selo AST também não impede todas as formas de duplicar o predicado. ([reconciliador.py:458](app/chamados/reconciliador.py:458), [reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:581](app/chamados/reconciliador.py:581), [reconciliador.py:491](app/chamados/reconciliador.py:491), [teste C6:94](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:94))
-
-O hash informado, os resultados dos logs e a comparação de produção não puderam ser verificados independentemente: a cópia não contém metadados Git acessíveis e os logs não foram fornecidos como arquivos. O dado raspado **relata** 129 testes verdes, três falhas no mutante e 46 pares iguais na foto D4; a prova exigida no aval menciona 37 pares, de modo que a correspondência entre os universos de 37 e 46 pares fica **[não verificado]**. A documentação do teste ainda diz 37 pares. ([teste C6:4](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:4))
-
-## 1. Escritores e leitores
-
-O censo abaixo cobre os acessos encontrados em código de aplicação; completude para acessos dinâmicos, SQL indireto e todos os templates é **[não verificado]**.
-
-- **`Justificativa.status` — escritores:** default `pendente` no modelo; criação pendente pela API, formulário e cron; aprovação e rejeição nas portas individuais, materialização e lotes; rejeição automática no D3, entrada sincronizada e triagem; regularização pode restaurar `pendente`. Os dois escritores automáticos externos ao D3 são preexistentes. ([models.py:159](app/ponto/models.py:159), [api/views.py:2011](app/api/views.py:2011), [ponto/views.py:1638](app/ponto/views.py:1638), [processar_alertas_turno.py:394](app/ponto/management/commands/processar_alertas_turno.py:394), [justificativa.py:205](app/ponto/services/justificativa.py:205), [justificativa.py:351](app/ponto/services/justificativa.py:351), [justificativa.py:403](app/ponto/services/justificativa.py:403), [justificativa.py:503](app/ponto/services/justificativa.py:503), [ponto/views.py:1799](app/ponto/views.py:1799), [ponto/views.py:1878](app/ponto/views.py:1878), [entrada_sincronizada.py:38](app/ponto/services/entrada_sincronizada.py:38), [triagem_batida.py:605](app/ponto/services/triagem_batida.py:605), [regularizacao.py:91](app/ponto/services/regularizacao.py:91))
-
-- **`Justificativa.status` — leitores encontrados:** predicado e portas de decisão; API e fila; contadores de ponto, chamados e core; cálculo de cobertura, fechamento e escala; cron de SLA; templates de atendimento, fila e painel. ([justificativa.py:33](app/ponto/services/justificativa.py:33), [justificativa.py:142](app/ponto/services/justificativa.py:142), [justificativa.py:283](app/ponto/services/justificativa.py:283), [api/views.py:2117](app/api/views.py:2117), [ponto/views.py:1713](app/ponto/views.py:1713), [ponto/views.py:1739](app/ponto/views.py:1739), [chamados/views.py:599](app/chamados/views.py:599), [core/views.py:205](app/core/views.py:205), [efeito_ausencia.py:41](app/ponto/services/efeito_ausencia.py:41), [fechamento.py:661](app/ponto/services/fechamento.py:661), [escala/utils.py:1208](app/escala/utils.py:1208), [alertar_justificativas_sla.py:19](app/ponto/management/commands/alertar_justificativas_sla.py:19), [meu_atendimento.html:89](app/templates/chamados/meu_atendimento.html:89), [fila_justificativas.html:112](app/templates/ponto/fila_justificativas.html:112), [painel_justificativa.html:47](app/templates/ponto/partials/painel_justificativa.html:47))
-
-- **`Justificativa.chamado_origem` — escritores:** API e formulário, tanto na criação quanto no preenchimento de origem vazia; cron na criação; exclusão do chamado pode limpar a FK por `SET_NULL`. ([api/views.py:2007](app/api/views.py:2007), [api/views.py:2011](app/api/views.py:2011), [ponto/views.py:1634](app/ponto/views.py:1634), [ponto/views.py:1638](app/ponto/views.py:1638), [processar_alertas_turno.py:394](app/ponto/management/commands/processar_alertas_turno.py:394), [models.py:173](app/ponto/models.py:173))
-
-- **`Justificativa.chamado_origem` — leitores encontrados:** encerramento e pré-trava da aprovação, predicado e mapeamento de donos, contador de pares, utilitário de chamado, painel e template. ([justificativa.py:33](app/ponto/services/justificativa.py:33), [justificativa.py:110](app/ponto/services/justificativa.py:110), [justificativa.py:279](app/ponto/services/justificativa.py:279), [justificativa.py:288](app/ponto/services/justificativa.py:288), [justificativa.py:376](app/ponto/services/justificativa.py:376), [chamados/utils.py:7](app/chamados/utils.py:7), [ponto/views.py:1686](app/ponto/views.py:1686), [painel_justificativa.html:128](app/templates/ponto/partials/painel_justificativa.html:128))
-
-- **`ChamadoColaborador.justificativa_relacionada` — escritor encontrado:** porta `apontar_justificativa`; a FK também tem comportamento de exclusão definido no modelo. Chamadores incluem formulário, API e cron. ([vinculos.py:81](app/chamados/services/vinculos.py:81), [chamados/models.py:75](app/chamados/models.py:75), [ponto/views.py:1648](app/ponto/views.py:1648), [api/views.py:2019](app/api/views.py:2019), [processar_alertas_turno.py:409](app/ponto/management/commands/processar_alertas_turno.py:409))
-
-- **Ponteiro — leitores encontrados:** guarda da própria porta, gates de chamado, predicado, escolha do detalhe, contador de pares e os dois escritores automáticos externos. ([vinculos.py:84](app/chamados/services/vinculos.py:84), [chamados/models.py:142](app/chamados/models.py:142), [chamados/models.py:1325](app/chamados/models.py:1325), [justificativa.py:280](app/ponto/services/justificativa.py:280), [justificativa.py:373](app/ponto/services/justificativa.py:373), [reconciliador.py:460](app/chamados/reconciliador.py:460), [entrada_sincronizada.py:38](app/ponto/services/entrada_sincronizada.py:38), [triagem_batida.py:605](app/ponto/services/triagem_batida.py:605))
-
-- **`_APROVANDO`:** criado com default `None`; `no_ato_de_aprovar` faz `set` e `reset`; os blocos de aprovação individual, lote e materialização entram nesse contexto. Leem-no a retenção, o predicado e o registro da trilha. ([reconciliador.py:426](app/chamados/reconciliador.py:426), [reconciliador.py:430](app/chamados/reconciliador.py:430), [justificativa.py:140](app/ponto/services/justificativa.py:140), [ponto/views.py:1795](app/ponto/views.py:1795), [justificativa.py:462](app/ponto/services/justificativa.py:462), [reconciliador.py:453](app/chamados/reconciliador.py:453), [justificativa.py:286](app/ponto/services/justificativa.py:286), [reconciliador.py:491](app/chamados/reconciliador.py:491))
-
-- **Funções do diff:** `pendentes_do_vinculo` é lida pela retenção e pela rejeição; a retenção é chamada pelo fechamento protegido, pela retratação, pelo portão da rejeição e pelo comando de reconciliação; a rejeição é chamada pela retratação e pelos dois lotes do cartório. ([justificativa.py:262](app/ponto/services/justificativa.py:262), [reconciliador.py:458](app/chamados/reconciliador.py:458), [justificativa.py:337](app/ponto/services/justificativa.py:337), [reconciliador.py:509](app/chamados/reconciliador.py:509), [reconciliador.py:544](app/chamados/reconciliador.py:544), [justificativa.py:346](app/ponto/services/justificativa.py:346), [reconciliar_chamados.py:79](app/chamados/management/commands/reconciliar_chamados.py:79), [reconciliador.py:581](app/chamados/reconciliador.py:581), [cartorio.py:1038](app/ponto/services/cartorio.py:1038), [cartorio.py:1585](app/ponto/services/cartorio.py:1585))
-
-## 2. Equivalência do predicado
-
-**Sim, para a mesma lista e a mesma fotografia dos dados**, a seleção extraída corresponde ao trecho anterior fornecido no diff: origem nos chamados **ou** PK apontada, somente `pendente`, excluindo `_APROVANDO`, sem duplicatas e ordenada por PK. Ambos removem `None` e retornam vazio sem consulta para lote vazio. A diferença de interface é que a função nova retorna um dicionário de justificativas para seus chamados; a rejeição antiga construía essa associação depois da consulta. ([justificativa.py:273](app/ponto/services/justificativa.py:273), [justificativa.py:279](app/ponto/services/justificativa.py:279), [justificativa.py:288](app/ponto/services/justificativa.py:288), [justificativa.py:327](app/ponto/services/justificativa.py:327))
-
-A rejeição usa `travar=True`; a retenção usa o padrão `False`. Portanto, igualdade lógica de predicado não garante igualdade de resultado em momentos distintos. ([justificativa.py:284](app/ponto/services/justificativa.py:284), [justificativa.py:337](app/ponto/services/justificativa.py:337), [reconciliador.py:458](app/chamados/reconciliador.py:458))
-
-## 3. Alcance da retenção
-
-Fora do ato, a nova cláusula `justificativa_alheia` não é executada; a retenção por irmã órfã continua podendo atuar. Dentro do ato, a justificativa cuja PK está em `_APROVANDO` é excluída da consulta e, sob esse contexto corretamente estabelecido, não aparece como alheia. ([reconciliador.py:449](app/chamados/reconciliador.py:449), [reconciliador.py:453](app/chamados/reconciliador.py:453), [justificativa.py:286](app/ponto/services/justificativa.py:286))
-
-## 4. Trava e leituras
-
-Na rejeição, a mudança de `select_for_update().filter(...)` para `filter(...).select_for_update()` mantém a consulta preguiçosa: a avaliação continua ocorrendo na ordenação por PK antes do portão e das gravações. Não identifiquei mudança de ordem ou momento da trava **nesse trecho**; comportamento efetivo do banco em produção é **[não verificado]**. ([justificativa.py:283](app/ponto/services/justificativa.py:283), [justificativa.py:288](app/ponto/services/justificativa.py:288), [justificativa.py:337](app/ponto/services/justificativa.py:337), [justificativa.py:343](app/ponto/services/justificativa.py:343))
-
-A retenção nova lê status e origem, que outros caminhos escrevem; o próprio ato de aprovação grava o status, e outros caminhos podem criar ou alterar a origem. Na retratação, a primeira retenção ocorre antes da transação e da trava explícita daquele caminho. ([reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:549](app/chamados/reconciliador.py:549), [reconciliador.py:558](app/chamados/reconciliador.py:558), [justificativa.py:205](app/ponto/services/justificativa.py:205), [api/views.py:2007](app/api/views.py:2007))
-
-## 5. Segunda consulta e consequência
-
-**Sim.** Na retratação durante uma aprovação, a retenção consulta sem trava; se não retiver, o código transiciona o chamado e a rejeição consulta novamente com trava, mesmo com `portao_de_retencao=False`. Se uma justificativa alheia pendente passar a integrar o vínculo entre as duas consultas, a primeira pode não vê-la e a segunda pode selecioná-la e rejeitá-la sem repetir a retenção. Isso é uma sequência possível pelo código; sua ocorrência, isolamento e frequência em produção são **[não verificado]**. ([reconciliador.py:544](app/chamados/reconciliador.py:544), [reconciliador.py:573](app/chamados/reconciliador.py:573), [reconciliador.py:581](app/chamados/reconciliador.py:581), [justificativa.py:337](app/ponto/services/justificativa.py:337), [justificativa.py:343](app/ponto/services/justificativa.py:343), [justificativa.py:351](app/ponto/services/justificativa.py:351))
-
-No cartório, a ordem é inversa: consulta travada do lote e, para cada chamado candidato, outra consulta sem trava pela retenção. A seleção inicial não inclui linhas que passem a satisfazer o predicado depois dela; o efeito exato de concorrência depende das travas e do isolamento efetivos **[não verificado]**. ([justificativa.py:337](app/ponto/services/justificativa.py:337), [justificativa.py:345](app/ponto/services/justificativa.py:345), [reconciliador.py:458](app/chamados/reconciliador.py:458))
-
-## 6. Classes de reprovação
-
-- **Segundo juiz que duplica juiz registrado: ausente no delta examinado.** A função extraída é usada pelas duas portas; não encontrei registro de novo juiz para esse predicado na busca do registro vivo. Isso não prova ausência de toda derivação fora do censo **[não verificado]**. ([justificativa.py:262](app/ponto/services/justificativa.py:262), [justificativa.py:337](app/ponto/services/justificativa.py:337), [reconciliador.py:458](app/chamados/reconciliador.py:458), [core/juizes.py:316](app/core/juizes.py:316))
-
-- **Segundo escritor fora da porta: presente no código preexistente.** Entrada sincronizada e triagem rejeitam diretamente a justificativa apontada; o lote de rejeição também escreve diretamente. A existência desses sítios não demonstra, por si só, que o diff os introduziu. ([entrada_sincronizada.py:38](app/ponto/services/entrada_sincronizada.py:38), [triagem_batida.py:605](app/ponto/services/triagem_batida.py:605), [ponto/views.py:1875](app/ponto/views.py:1875))
-
-- **Relógio lido fora da borda: ausente nos trechos novos de produção examinados.** Comportamento de todos os caminhos transitivos **[não verificado]**. ([justificativa.py:262](app/ponto/services/justificativa.py:262), [reconciliador.py:453](app/chamados/reconciliador.py:453))
-
-- **Derivação paralela de fonte única: ausente entre os dois leitores alterados**, que chamam a mesma função. Há, contudo, outra consulta de pares para contador com condições adicionais e finalidade própria; classificá-la como duplicação proibida exige a lei aplicável a esse contador **[não verificado]**. ([reconciliador.py:458](app/chamados/reconciliador.py:458), [justificativa.py:337](app/ponto/services/justificativa.py:337), [justificativa.py:373](app/ponto/services/justificativa.py:373))
-
-- **Selo sem mordida completa: presente.** O teste principal exige uma chamada com o nome da função e proíbe algumas keywords e a forma direta `ch.justificativa_relacionada.status`. Uma chamada sem usar seu resultado, ou uma variante que leia o ponteiro por variável intermediária e derive o status fora da função, pode escapar dessas verificações. O teste do predicado antigo apenas confirma que encontra uma forma AST num texto artificial; ele não executa o selo principal contra todas as variantes. O RED funcional cobre o cenário J1/J3, mas a execução relatada no anexo é **[não verificado]**. ([teste C6:94](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:94), [teste C6:108](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:108), [teste C6:31](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:31))
-
-- **Ordem de trava: sem mudança identificada na extração da rejeição; janela presente na retenção anterior à trava**, descrita nos itens 4 e 5. ([justificativa.py:283](app/ponto/services/justificativa.py:283), [reconciliador.py:544](app/chamados/reconciliador.py:544))
-
-- **Pouso antes do pré-requisito: [não verificado].** O aval fornecido exige o pouso do COMBOIO-1911-F antes da construção; o dado fornecido não comprova a ordem real dos pousos. [nao verificado]
-
-- **ESMERIL-SEMÂNTICA: presente.** `justificativa_pendente` agora pode identificar justificativa ligada só pela origem, enquanto a descrição da mesma trilha afirma que o chamado “aponta” para ela. A chave conserva o sentido de justificativa pendente; a frase atribui um vínculo de ponteiro que pode não existir. ([reconciliador.py:458](app/chamados/reconciliador.py:458), [reconciliador.py:491](app/chamados/reconciliador.py:491))
-
-## 7. Teste do ponteiro [nao verificado]
-
-**Sim, o teste é coerente para o caso que constrói:** J3 tem menor PK, mas J2 é o ponteiro pendente e alheio; o resultado esperado é J2. O código escolhe o ponteiro se ele estiver entre as alheias; caso contrário, escolhe a primeira da consulta ordenada por PK. ([teste C6:70](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:70), [reconciliador.py:458](app/chamados/reconciliador.py:458), [justificativa.py:288](app/ponto/services/justificativa.py:288))
-
-Para esse caso específico, o detalhe também coincide com a trilha anterior, pois o predicado antigo olhava o ponteiro pendente alheio. A afirmação do teste de que “a trilha de antes não muda” não vale para o novo caso somente por origem: antes não havia essa retenção; agora há e a descrição pode afirmar incorretamente que há ponteiro. ([teste C6:71](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:71), [teste C6:108](app/ponto/tests/test_dst_l2_jz1_c6_retencao_origem.py:108), [reconciliador.py:491](app/chamados/reconciliador.py:491))
-
-_7324 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7325 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
