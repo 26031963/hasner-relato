@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 13:03:01.** Transcript: `26616314-3448-48a0-ae6b-29e6ea74d2e5.jsonl` (17.6 MB). Acoes na janela: **438**.
+**Medido em 19/11/2026 13:08:28.** Transcript: `26616314-3448-48a0-ae6b-29e6ea74d2e5.jsonl` (17.7 MB). Acoes na janela: **443**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:08:15 | Bash | Send F5 merge sha to pista 2 | `cd /home/ronald/saas-hasner; f=$(git rev-parse 9fa5ad533); git update-ref refs/pista/$f $f; ssh pista pede $f 2>&1 \| tail -3; /usr/bin/sleep 15; ssh pista estado 2>&1 \| tail -2` |
+| 13:08:13 | Bash | Read pista usage memory | `cd /home/ronald/saas-hasner; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/pista-pede-sha-completo.md; grep -rn "refs/pista" bin/*.sh app/docs/INFRA.md 2>/dev/null \| head -5` |
+| 13:08:07 | Bash | Save avals literal; check pista 2 state | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/b2b_f0_constroi_e_pista_escolhe_1911_1315.txt <<'EOF' aval Ronald: E4C-F1-B2B-F0-CONSTROI-1911-1315 (19/11 13:15) -- UNIDADE instrumento da cerca de competencia (4), sitios da tabela volta 8. Nenhuma lei nova; nenhum sitio redecidido. CONSTRUIR a fatia F0 da B2b (ESPINHA). FONTE: logs/E4C/f1nova/b2/cerca/v7/tabela_unica.md (volta 8) + logs/E4C-F1- ...` |
+| 13:07:41 | Bash | Inspect F0 dir and pista tooling | `cd /home/ronald/saas-hasner; ls logs/E4C-F1-B2b/F0/; sed -i 's/ESPINHA E4C-F5 13:3x:/ESPINHA E4C-F5 13:0x:/; ' app/docs/RELATO.md; sed -i 's/corrigido 19\/11 13:3x/corrigido 19\/11 13:0x/' logs/CADEIA-20/passo3/brief.md; grep -n "PISTA\\|pista" bin/suite.sh \| head; ls bin \| grep -i pista` |
+| 13:07:37 | Bash | Orient on aval files and Codex state | `cd /home/ronald/saas-hasner; date +%H:%M; ls logs/AVAIS-1515/ \| tail -5; ls logs/E4C-F1-B2b/ logs/E4C-F1-B2b/F0/ 2>&1 \| head; ls logs/E4C/f1nova/b2/cerca/v7/ \| head; pgrep -fa codex_pergunta.sh \| cut -c1-120` |
 | 13:02:51 | Bash | Fix brief line, check suites | `cd /home/ronald/saas-hasner; sed -i '9s#.*#- Interseccao por ARQUIVO com F5 (10 arq.): 0. Com o passo 1: **2** (escala/utils.py, ponto/services/cartorio.py) -- o "0" anterior media contra 3 arquivos do passo 1, o diff da wt 57715c7e7 tem 13; corrigido 19/11 13:3x pela REVISAO-DO-AVAL (revisao_1300/r.txt).#' logs/CADEIA-20/passo3/brief.md; sed -n 9p logs/CADEIA-20/passo3/brief.md; tail -c 120 logs/ ...` |
 | 13:02:47 | Bash | Locate wrong intersection line in passo3 brief | `cd /home/ronald/saas-hasner; grep -n -i "intersec\\|0 e 0" logs/CADEIA-20/passo3/brief.md \| head` |
 | 13:02:43 | Bash | RELATO line for F5 merge | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='/home/ronald/saas-hasner/app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('CADEIA-20 2j 13:1x')][0] L.insert(i+1,'ESPINHA E4C-F5 13:3x: merge-tree main x 04a1206b5 = CONFLITO (vigiar_fio_morto.py::ESPERADO_DO_CARIMBO, DST c3 5e79a6e25 x F5, uma chave de cada lado) -> a suite_v4c certifica arvore que NAO  ...` |
