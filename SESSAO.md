@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 03:54:25.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (22.9 MB). Acoes na janela: **726**.
+**Medido em 19/11/2026 03:59:31.** Transcript: `8b8d87c5-d111-4931-9b60-72a70772f0de.jsonl` (22.9 MB). Acoes na janela: **727**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:54:27 | Bash | Replace stale ESPERANDO with honest PAREI line | `cd /home/ronald/saas-hasner; date '+%H:%M'; L='PAREI: modo-noite-sem-obra-andavel (03:5x) \| espera Ronald -- PARADO e desde: DST-L2-JZ1 desenho+lei 03:3x; E4d D3 lei 02:15; HOOK-B3 lei 02:2x; RAIZ-DA-DISPUTA F1 lei (2); F5 aval proprio; F3, ESPURIA-TELA c10 e ESCALA c7 opus APROVADO esperam pouso pos-simulacao; nada pousado, 0 !, 0 apply'; python3 - "$L" <<'EOF' import sys p='app/docs/RELATO.md'; ...` |
 | 03:54:14 | Bash | Read hook log tail and RELATO top | `cd /home/ronald/saas-hasner; tail -4 logs/hook_stop_fila1.log \| cut -c1-250; sed -n 1,5p app/docs/RELATO.md \| cut -c1-100` |
 | 03:54:11 | Bash | Find hook release paths | `cd /home/ronald/saas-hasner; /bin/grep -nE 'TETO\|teto\|return$\|sys.exit\(0\)' bin/hook_stop_fila1.py \| sed -n 1,40p \| cut -c1-160; ls -t logs/ \| /bin/grep -iE 'stop\|hook\|teto' \| head` |
 | 03:54:09 | Bash | Inspect hook output and ESPERANDO proof | `cd /home/ronald/saas-hasner; echo '{}' \| python3 bin/hook_stop_fila1.py; echo "rc=$?"; python3 -c " import sys; sys.path.insert(0,'bin'); import hook_stop_fila1 as h; print(h._esperando_com_prova())"; tail -3 logs/pisos.log 2>/dev/null \| cut -c1-200` |
