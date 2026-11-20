@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 05:14:12.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (15.9 MB). Acoes na janela: **350**.
+**Medido em 20/11/2026 05:19:25.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (15.9 MB). Acoes na janela: **354**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:14:52 | Bash | Wait for the shadow database to free, then run the fleet probe | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; until [ -f logs/CADEIA-20-PASSO-1/v3/medida_d/roda.fim ]; do /usr/bin/sleep 20; done; rm -f $D/roda.fim; bash $D/roda.sh; date +%H:%M; cat $D/roda.fim; tail -2 $D/roda.out \| cut -c1-200; wc -l logs/f5_vd2_frota.out; /bin/grep -vE "PKS?=[0-9]" logs/f5_vd2_frota.out \| cut -c1-240 \| head -130; tail -2 logs/f5_vd2_frota.out \| cut -c1 ...` |
+| 05:14:48 | Bash | Check why the second probe run exited | `cd /home/ronald/saas-hasner; cat logs/ESPINHA-BRIEFS/F5/vD2/sonda/roda.out \| cut -c1-300; date +%H:%M; kill -0 527896 && echo VIVA; /bin/grep -n "TIMEOUT" bin/sombra_trava.sh \| head -4 \| cut -c1-160` |
+| 05:14:44 | Bash | Find which mount point still fails | `cd /home/ronald/saas-hasner; head -1 logs/f5_vd2_frota.out \| cut -c225-560; C=/home/ronald/wt-f5-vD-mut-035246; ls -ld $C/app/logs $C/app/media; ls -la /home/ronald/wt-cadeia-medida-d-025832/app/ \| /bin/grep -E "logs\|media\|static"; /bin/grep -n "tmpfs\\|:ro\\|read-only" bin/sombra.sh \| head -12 \| cut -c1-220; ls logs/CADEIA-20-PASSO-1/v3/medida_d/*.fim` |
+| 05:14:39 | Bash | Read the fleet probe counts | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8b8d87c5-d111-4931-9b60-72a70772f0de/tasks/b290bohiq.output \| cut -c1-230 \| head -140` |
 | 04:45:16 | Bash | Wait for the relaunched fleet probe | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; until [ -f $D/roda.fim ]; do /usr/bin/sleep 20; done; date +%H:%M; cat $D/roda.fim; wc -l logs/f5_vd2_frota.out; /bin/grep -vE "PKS?=[0-9]" logs/f5_vd2_frota.out \| cut -c1-240 \| head -130; tail -2 logs/f5_vd2_frota.out \| cut -c1-200` |
 | 04:44:27 | Bash | Recreate the mount points and relaunch the probe | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; C=/home/ronald/wt-f5-vD-mut-035246; mkdir -p $C/app/logs $C/app/media; rm -f $D/roda.fim; setsid nohup bash /home/ronald/saas-hasner/$D/roda.sh >/dev/null 2>&1 & sleep 45; tail -2 $D/roda.out \| cut -c1-200; ls logs/CADEIA-20-PASSO-1/v3/medida_d/*.fim` |
 | 04:44:23 | Bash | See which mount point is missing in the measuring copy | `cd /home/ronald/saas-hasner; head -1 logs/f5_vd2_frota.out \| cut -c230-700; C=$(ls -d /home/ronald/wt-f5-vD-mut-* \| tail -1); ls -d $C/app/logs $C/app/media $C/app/staticfiles 2>&1; ls /home/ronald/wt-cadeia-medida-d-025832/app \| tr '\n' ' '` |
