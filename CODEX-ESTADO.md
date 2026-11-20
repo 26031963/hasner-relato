@@ -1,7 +1,182 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 23:39** · publicado em **19/11/2026 23:41** (UTC-3)
+> Ultima resposta processada: **19/11/2026 23:42** · publicado em **19/11/2026 23:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 23:42 · sessao 9535a0a5c084 · E4C-F5-CONSTROI · construtor · origem=Code
+
+## E4C-F5-CONSTROI · Volta B
+
+Implementei os **14 chamadores** e os **27 carregadores** da B. K41 e K42 já estavam em lote na base. A varredura AST mediu a catraca de chamadas em **24 → 10**, com zero chamadas cruas fora da lista restante e da permissão nominal do placar. O mutante do GET do app voltou a acusar `api/views.py:2597`. `chamados/tests/test_e4c_f5_selo_chamada.py:21`, `:35`, `:194`, `chamados/models.py:1555`, `:2077`.
+
+A verificação local ficou em compilação em memória, `git diff --check` e análise AST. **RED na base, verde na B, crescimento dos mutantes de lote, paridade da prévia de novembro e os quatro números do chokepoint estão [nao verificado].** `chamados/tests/test_e4c_f5_voltaB_lotes.py:40`, `chamados/tests/test_e4c_f5_voltaB_sitios.py:64`, `ponto/tests/test_selo_chokepoint_escrita.py:435`.
+
+## Chamadores diretos
+
+As linhas indicam **base → B**. Em cada linha, o juiz passa de uma instância ORM para `DecisaoPergunta.composta(...)`. A projeção temporal de M1 conserva o argumento `agora`. Na recusa, a leitura recebe um nome e também fornece o instante à foto de auditoria, de modo que a foto funcione quando a coluna está vazia. `chamados/services/validacao.py:902`, `:913`, `escala/services/cadastro_realidade.py:502`.
+
+| Sítio | Base → B | Carga |
+|---|---|---|
+| `api_disputa_perguntas` | `api/views.py:2596 → :2597` | App com lote já na base, `chamados/services/pergunta_no_app.py:57` |
+| `api_disputa_responder` | `api/views.py:2640 → :2641` | Avulsa, `api/views.py:2632` |
+| `acao_regularizar_disputa` | `chamados/services/acoes_disputa.py:134 → :134` | K4 |
+| `classificar` | `chamados/services/becos.py:31 → :32` | K11 no evento, K69 no comando da C |
+| `declarar_hora_colab` | `chamados/services/declaracao_texto.py:418 → :418` | Reuso via K17 ou abertura, `:251`, `:377` |
+| `aplicar_declaracao` | `chamados/services/declaracao_texto.py:688 → :688` | Reuso via K17 ou abertura, `:663`, `:667` |
+| `validar_pergunta` | `chamados/services/validacao.py:682 → :682` | K20, avulsa |
+| `recusar_pergunta` | `chamados/services/validacao.py:902 → :903` | Avulsa, `:894` |
+| `validar_inline`, pendentes | `chamados/views_cobrar.py:170 → :170` | K4 |
+| `validar_inline`, aguardando | `chamados/views_cobrar.py:178 → :178` | K4 |
+| `responder_pergunta_disputa` | `chamados/views.py:1275 → :1275` | Avulsa, `:1239` |
+| `ficha_do_colab` | `colaboradores/services/ficha.py:172 → :173` | App com lote já na base, `chamados/services/pergunta_no_app.py:57` |
+| `beco_em_lote` | `escala/services/cadastro_realidade.py:502 → :502` | K2, coberto na A, `chamados/juizes.py:1665` |
+| `_material` | `folha/previa.py:142 → :143` | K23. O import local entrou junto da expressão autorizada em `:142` |
+
+## Carregadores e arquivos tocados
+
+Cada linha abaixo troca a carga anterior pela mesma consulta com `prefetch_related('decisoes')`, salvo as duas relações externas indicadas e os dois sítios já cobertos pelo Opus. Em `fio_vivo`, a redução `any` continua recebendo a coleção do chamador. A B adiantou as decisões nas cinco origens autorizadas K32, K62, K63, K64 e K67, mais K68, e documentou a responsabilidade da origem. `chamados/juizes.py:1516`, `:1524`, `:1526`.
+
+| K | Sítio da carga na B | O que passou a vir em lote | [nao verificado]
+|---:|---|---|
+| 4 | `chamados/juizes.py:1512` | Vivas da disputa, na ordem de PK |
+| 11 | `chamados/services/becos.py:87` | `perguntas` → `perguntas__decisoes` no evento |
+| 23 | `folha/previa.py:64`, `:66` | Perguntas da prévia agrupadas por colaborador e dia |
+| 25 | `chamados/services/declaracao_texto.py:475` | `do_fato` da projeção avulsa por marco |
+| 26 | `chamados/services/declaracao_texto.py:588`, `:589` | `linhas_dos_fatos` do lote |
+| 27 | `chamados/services/declaracao_texto.py:635` | `do_fato` das propostas, com o memo por fato |
+| 29 | `chamados/juizes.py:1765` | Seleção de corrigíveis antes de formar os IDs |
+| 30 | `chamados/juizes.py:1773` | Fila de respondidas a validar |
+| 31 | `chamados/juizes.py:2435`, `:2437` | Perguntas usadas para extrair os dias vivos |
+| 32 | `chamados/juizes.py:2490` | Perguntas da disputa aberta que pode travar o chamado |
+| 41 | `chamados/models.py:1555` | Ressuscitação, lote já presente na base |
+| 42 | `chamados/models.py:2077` | Segunda carga de `DisputaSupervisao.fechar`, lote já presente na base |
+| 44 | `chamados/services/acoes_chamado.py:352` | Perguntas do detalhe do chamado |
+| 45 | `chamados/services/competencia_trancada.py:119`, `:121` | Perguntas da competência |
+| 46 | `chamados/services/competencia_trancada.py:165`, `:166` | Perguntas do chamado percorrido na medição |
+| 47 | `chamados/services/disputa_emissao.py:2080` | Perguntas da disputa candidata no ramo sem credor |
+| 48 | `chamados/services/fio.py:2296` | Perguntas do destino sob a trava |
+| 49 | `chamados/services/fio.py:2300` | Perguntas da origem sob a trava, na ordem de PK |
+| 50 | `chamados/services/pergunta_no_app.py:186` | Fatos de `_marco_ja_perguntado` |
+| 53 | `chamados/views.py:1412` | Perguntas sem resposta da reabertura |
+| 54 | `colaboradores/services/calendario.py:504`, `:505` | Respondidas na janela do calendário |
+| 55 | `ponto/services/dia_do_colab.py:64`, `:65` | Perguntas do dia do colaborador |
+| 61 | `chamados/services/explicador.py:160`, `:161` | Perguntas da disputa quando a coleção opcional está ausente |
+| 62 | `api/foto_recebida.py:81` | Perguntas de foto, depois da validação |
+| 63 | `chamados/management/commands/encerrar_perguntas_com_fato.py:84` | Perguntas da disputa, depois dos carimbos |
+| 64 | `chamados/services/limbo_folgas.py:203`, `:205` | Perguntas do dia usadas pela guarda do filho |
+| 65 | `ponto/management/commands/supra_juiz.py:192`, `:215` | `perguntas_que_resolvem` → `perguntas_que_resolvem__decisoes`, para a coleção de todos os chamados daquela consulta |
+| 67 | `ponto/management/commands/reconciliar_grade.py:461` | Respondidas usadas na guarda de relavra |
+| 68 | `chamados/services/disputa_emissao.py:1429`, `:1436` | Perguntas do motivo e dia entregues ao dedup |
+
+**Contagem por item.** Restam **30 K**. Destes, **24** são cargas da C e **6** são classe R. No predesenho, a decomposição dos mesmos 30 era **25 + 5**. O aval 1830, item 6b-1, reclassificou K40, que relê `.get(pk=pk)` dentro do laço. As outras R são K3, releitura sob trava da candidata, K19, execução por pergunta, K20 e K58, portas por ID, e K22, busca da irmã de uma pergunta. A sobra do dedup fica fora dos 69. `chamados/management/commands/migrar_data_evento_dia_do_turno.py:464`, `:466`, `chamados/services/relavra_via.py:230`, `:236`, `chamados/services/materializacao.py:284`, `:2117`, `chamados/services/validacao.py:431`, `:677`, `chamados/management/commands/dedup_perguntas_fato.py:75`.
+
+Os **24 arquivos de produção tocados** são os das duas tabelas, exceto `chamados/models.py`. Os **sete arquivos de teste tocados** são os três novos abaixo, o selo de chamada e os três harnesses da seção de adaptações. `chamados/tests/test_e4c_f5_selo_chamada.py:21`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:24`, `chamados/tests/test_e4c_f5_voltaB_sitios.py:25`, `chamados/tests/e4c_f5_voltaB_mutantes.py:11`.
+
+## Catraca da C
+
+| Arquivo | Chamadas restantes |
+|---|---|
+| `chamados/management/commands/auditar_invariantes_chamados.py` | `:178` `_contraprova_i21a`, `:597` I2, `:1671` F1 |
+| `chamados/management/commands/dedup_perguntas_fato.py` | `:76` `Command.handle` |
+| `chamados/services/materializacao.py` | `:192` `par_do_intervalo`, `:259` `paridade_absolvida_bug_par_103`, `:290` `_situacao_da_irma`, `:885` `estado_aplicacao_pergunta`, `:1300` `_recusa_sem_anuencia` |
+| `chamados/services/vigia_fio.py` | `:636` `censo_alcance` |
+
+A permissão nominal do placar permanece em `chamados/services/raiox.py:147`, que recebe a tupla montada pelo `values_list` de `:135`. `chamados/tests/test_e4c_f5_selo_chamada.py:35`.
+
+## REDs e mutantes
+
+O RED 3 × 6 compara apenas SELECTs cujo primeiro `FROM` é `chamados_decisaopergunta`. O teste exige os PKs de todas as perguntas julgadas em ambas as medidas. No K47, a medição inclui o carimbo e o fecho reais e desfaz a savepoint para manter as três primeiras perguntas na rodada de seis. `chamados/tests/test_e4c_f5_opus_models.py:25`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:40`, `:178`.
+
+Os REDs de divergência cobrem os 14 sítios da primeira tabela. O GET usa o instante do ato para compor `respondidas`. O POST do app e o PWA verificam o estado anterior entregue ao escritor. A validação vê a reabertura do ato, a recusa cobre o carimbo ausente na projeção, e o M1 exerce a projeção temporal. A **GUARDA** das portas usa texto vazio na projeção. Esse caso já era recusado na base porque o juiz puro lia o texto vazio do ORM. `chamados/tests/test_e4c_f5_voltaB_sitios.py:64`, `:76`, `:92`, `:104`, `:110`, `:123`, `:135`, `:147`, `:157`, `:169`, `:196`, `:205`, `:219`, `:229`, `:243`, `chamados/juizes.py:1556`.
+
+Comandos para o Code, a partir de `app/`. As classes e métodos estão nos dois arquivos novos e no selo. `chamados/tests/test_e4c_f5_voltaB_lotes.py:24`, `chamados/tests/test_e4c_f5_voltaB_sitios.py:25`, `:38`, `:234`, `chamados/tests/test_e4c_f5_selo_chamada.py:194`.
+
+```bash
+lotes=chamados.tests.test_e4c_f5_voltaB_lotes.CarregadoresVoltaBTest
+sitios=chamados.tests.test_e4c_f5_voltaB_sitios
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$lotes" "$sitios" \
+  chamados.tests.test_e4c_f5_selo_chamada \
+  chamados.tests.test_disputa_s127 \
+  chamados.tests.test_e3_r3_c5_sem_banco \
+  chamados.tests.test_e3_r3_c6_sem_banco
+```
+
+Cada comando abaixo ativa um único mutante. Para os 14 carregadores, a mordida esperada é `Q(6) > Q(3)` na asserção de igualdade. Para `api_p_cru`, a mordida é `api/views.py:2597` na catraca. A transformação AST da chamada crua foi conferida estaticamente. O resultado dos casos ORM está [nao verificado]. `chamados/tests/e4c_f5_voltaB_mutantes.py:11`, `:31`, `:63`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:51`, `chamados/tests/test_e4c_f5_voltaB_sitios.py:26`.
+
+```bash
+mut_lote() {
+  F5_VOLTA_B_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 \
+    python3 manage.py test "$lotes.$2"
+}
+```
+
+| Mutante | Caso que deve cair e comando |
+|---|---|
+| K4 | `mut_lote k4 test_RED_k4_vivas_da_disputa` |
+| K11 | `mut_lote k11 test_RED_k11_beco_do_evento` |
+| K23 | `mut_lote k23 test_RED_k23_previa` |
+| K26 | `mut_lote k26 test_RED_k26_declaracao_por_fato_em_lote` |
+| K29 | `mut_lote k29 test_RED_k29_respostas_corrigiveis` |
+| K30 | `mut_lote k30 test_RED_k30_fila_a_validar` |
+| K31 | `mut_lote k31 test_RED_k31_dias_das_perguntas_vivas` |
+| K32 | `mut_lote k32 test_RED_k32_disputa_viva_do_chamado` |
+| K45 | `mut_lote k45 test_RED_k45_perguntas_da_competencia` |
+| K46 | `mut_lote k46 test_RED_k46_perguntas_do_chamado_na_competencia` |
+| K47 | `mut_lote k47 test_RED_k47_escolhas_sem_credor` |
+| K54 | `mut_lote k54 test_RED_k54_calendario` |
+| K55 | `mut_lote k55 test_RED_k55_dia_do_colab` |
+| K68 | `mut_lote k68 test_RED_k68_dedup_da_emissao` |
+| `api_p_cru` | `F5_VOLTA_B_MUTANTE=api_p_cru PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$sitios.SeloMutanteVoltaBTest.test_MORDE_get_do_app_com_pergunta_crua"` |
+
+## Adaptações e tetos
+
+| Arquivo | Classe | Antes → depois | Asserts |
+|---|---|---|---:|
+| `chamados/tests/test_e3_r3_c5_sem_banco.py:180` | ii | Stub sem `DecisaoPergunta` → compositor do helper existente, `chamados/tests/duble_pergunta.py:12` | 34 → 34 |
+| `chamados/tests/test_e3_r3_c6_sem_banco.py:299` | ii | Stub sem `DecisaoPergunta` → mesmo helper | 52 → 52 |
+| `chamados/tests/test_disputa_s127.py:23` | v | `.all()` devolvia `list` → `Linhas`, subclasse de lista com `prefetch_related` identidade, `chamados/tests/test_e4b_classe_e_memoria.py:165`, `:193` | 8 → 8 |
+| `chamados/tests/test_e4c_f5_selo_chamada.py:21` | Catraca solicitada | 24 identidades → 10 | 12 → 12 |
+
+**Chokepoint.** Nenhum sítio da B altera uma chamada a `registrar_batida`. Há alcance indireto pelo fecho S143 até K47, pela eventual reabertura do credor até K48/K49 e pelo repasse do emissor até K68. K11 entra pelo `on_commit` da pergunta. Em K47, uma disputa pode carregar o lote e depois sair pela guarda de destino vivo ou de lista sem abertas. O efeito nos quatro cenários é [nao verificado]. `ponto/registro_batida.py:170`, `ponto/signals.py:215`, `chamados/signals.py:117`, `:240`, `chamados/services/disputa_emissao.py:1878`, `:2080`, `:2086`, `chamados/models.py:1481`, `ponto/services/cartorio.py:1877`, `ponto/management/commands/detectar_ausencias.py:803`, `chamados/services/disputa_emissao.py:846`.
+
+**Quebra fora das classes.** Os quatro casos do chokepoint já têm o excesso informado no aval de passagem, **236/146/300/221** contra **230/145/294/219**. A contribuição da B e outras quebras estão [nao verificado]. `ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`, `:228`, `:235`, `:435`, `:440`, `:470`, `:475`.
+
+**Tetos a remedir para eventual queda.** O modal prod-like tem teto **2837** e alcança K27 nas propostas e K61 no fallback do explicador. A queda depende de quantas perguntas passam por essas cargas na fixture. O teto pareado S143/S128 é recalculado no próprio teste. A direção líquida e os valores estão [nao verificado]. Nenhum teto foi editado. `chamados/tests/test_selo_teto_modal.py:88`, `:184`, `chamados/services/fio.py:330`, `:351`, `chamados/tests/test_e4b_c4_orm.py:499`, `:507`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  ponto.tests.test_selo_chokepoint_escrita.SeloChokepointEscritaTest.test_registrar_batida_com_1_furo_vivo_que_ela_fecha \
+  ponto.tests.test_selo_chokepoint_escrita.SeloChokepointEscritaTest.test_registrar_batida_com_3_furos_vivos_que_ela_fecha \
+  ponto.tests.test_selo_chokepoint_escrita.SeloChokepointEscritaTest.test_registrar_batida_com_1_furo_vivo_que_fica \
+  ponto.tests.test_selo_chokepoint_escrita.SeloChokepointEscritaTest.test_registrar_batida_com_3_furos_vivos_que_ficam \
+  chamados.tests.test_selo_teto_modal \
+  chamados.tests.test_e4b_c4_orm \
+  api.tests.test_f2_teto_consultas_app \
+  chamados.tests.test_e2_tarefa_do_dia \
+  escala.tests.test_f3_beco1_folga_na_lista
+```
+
+## Campos e releituras
+
+| Campo | Quem escreve | Quem lê e qual significado |
+|---|---|---|
+| `validada_em` | Validação e devolução em `chamados/services/validacao.py:168`, `:173`, `:273`, `:279`, `:349`, `:354`. Nova resposta limpa a assinatura em `chamados/services/disputa_emissao.py:1494`. Carimbo e ressuscitação atualizam a projeção em `chamados/models.py:3352`, `:1721`. | C6 e temporal recebem validação vigente da sequência, com passivo incorporado por `leitura`, `chamados/models.py:4317`, `:4358`, `chamados/juizes.py:1408`, `escala/services/cadastro_realidade.py:502`. Guardas de projeção continuam lendo o carimbo gravado em `chamados/services/validacao.py:685`, `:897`, `chamados/services/declaracao_texto.py:228`, `chamados/services/disputa_emissao.py:2084`. Podem divergir. |
+| `respondida_em` | Resposta humana, automática e trilha em `chamados/services/disputa_emissao.py:1528`, `:1532`, `:1683`, `:1686`, `:1705`, `:1708`. Reabertura e recusa limpam o par em `:1615`, `:1640`, `:1656`. Carimbo e ressuscitação também atualizam a projeção em `chamados/models.py:3349`, `:1722`. | Juízes da B usam o instante vigente do ato. A recusa usa esse instante na foto de auditoria. O payload do GET, a face SQL e a foto gravada pelo escritor de reabertura continuam lendo a coluna projetada. `chamados/models.py:4339`, `:4358`, `chamados/services/validacao.py:914`, `api/views.py:2583`, `chamados/juizes.py:1587`, `chamados/services/disputa_emissao.py:1640`. |
+| `resposta_colab` | Escritores humano e automático em `chamados/services/disputa_emissao.py:1481`, `:1682`. Reabertura e ressuscitação limpam a projeção em `:1615`, `:1656`, `chamados/models.py:1722`. | Toda chamada convertida usa o texto corrente da projeção. `resposta_display` conserva sua leitura própria de exibição. `chamados/models.py:4359`, `:3837`, `api/views.py:2581`, `chamados/services/declaracao_texto.py:418`. |
+| `materializada_em` | `_escrever_carimbo` abastece as portas de carimbo, identidade e descarimbo. A porta de lote limpa a projeção. `chamados/models.py:3314`, `:3346`, `:3401`, `:3424`, `:3508`. | Compositor e guardas escalares leem o carimbo projetado. O juiz temporal aplica o corte de `agora`. O carimbo é o estado registrado, e C6 julga a vitalidade pelo conjunto dos insumos. `chamados/models.py:4359`, `chamados/juizes.py:1394`, `:1400`, `:1474`, `chamados/services/disputa_emissao.py:2084`. |
+| `via_resolucao` | Mesmas portas do carimbo e a troca pela via de fato no espelho em `chamados/models.py:3318`, `:3508`, `:3517`. | A origem é a mesma coluna projetada. No corte temporal, vias fora do fato conservam a identidade. `chamados/models.py:4359`, `chamados/juizes.py:1400`, `chamados/services/disputa_emissao.py:2095`. |
+| `decisoes` | `DecisaoPergunta.registrar` insere pela FK e invalida `decisoes` na instância recebida por `pergunta=`. Escrita por `pergunta_id=` exige instância fresca para uma leitura posterior. `chamados/models.py:4188`, `:4362`, `:4373`, `chamados/services/disputa_emissao.py:1639`. | Os K adiantam a relação. `DecisaoPergunta.leitura` consome a sequência e incorpora o passivo antes de `composta` entregar os campos aos juízes. `chamados/models.py:4317`, `:4329`, `:4351`. |
+
+**Depois de escrever, no mesmo request**
+
+- **Validar.** A guarda usa a leitura anterior. A validação registra com `pergunta=perg`. Há releitura integral depois da unidade do par e releitura escalar de `validada_em` e `materializada_em` após materializar a disputa. A releitura escalar dispensa prefetch novo. `chamados/services/validacao.py:173`, `:646`, `:655`, `:682`, `:743`, `:786`, `:789`.
+- **Recusar.** A foto usa a leitura anterior. A reabertura grava por queryset, e a porta usa a foto e os campos da trilha depois do ato. O RED relê a instância inteira antes de compor novamente, pois a instância do teste havia carregado a sequência anterior. `chamados/services/validacao.py:902`, `:913`, `:925`, `:933`, `chamados/tests/test_e4c_f5_voltaB_sitios.py:110`.
+- **Responder via API e PWA.** As duas guardas são anteriores. O escritor grava na mesma instância e invalida o cache dessa instância. A releitura de exibição do escritor, quando há chamado, acessa a sequência atual. O retorno da API usa o instante atualizado em memória e o PWA retorna a confirmação. `api/views.py:2641`, `:2648`, `:2657`, `chamados/views.py:1275`, `:1278`, `:1282`, `chamados/services/disputa_emissao.py:1528`, `:1532`, `:1569`, `chamados/models.py:4373`.
+- **Declarar e aplicar.** `declarar_hora_colab` pode reler integralmente depois da costura, antes de julgar a resposta. Depois da resposta, anexa a nota e devolve o PK. `aplicar_declaracao` passa o PK à validação, que faz um `get()` novo. Assim, a validação posterior lê a sequência atual pela própria instância. `chamados/services/declaracao_texto.py:373`, `:418`, `:420`, `:424`, `:688`, `:694`, `:697`, `chamados/services/validacao.py:677`.
+- **Validar inline e regularizar.** As listas de `validar_inline` classificam antes das escritas e o laço passa cada PK à porta. A regularização delega ao materializador e usa o retorno dele. A releitura do beco após o resolver passa por `refresh_from_db()` antes do juiz de fecho, descartando a carga reversa anterior. `chamados/views_cobrar.py:170`, `:178`, `:200`, `:209`, `chamados/services/acoes_disputa.py:134`, `:142`, `chamados/services/becos.py:58`, `:59`.
+
+LEI-AKITA — padrao=juiz unico puro + fonte unica (compositor) + fitness function. `chamados/juizes.py:1387`, `:1556`, `chamados/models.py:4351`, `chamados/tests/test_e4c_f5_selo_chamada.py:194`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:40`.
 
 ## 19/11 23:39 · sessao 7f9b70778ff8 · CENSO-DAS-COPIAS-1911-2330 · leitura · origem=Code
 
@@ -1088,47 +1263,4 @@ A execução dos testes ORM e a comparação dos campos gravados por esse teste 
 | **Selo sem mordida** | O cálculo em memória distingue `m21` na asserção de janela. A asserção residual sobre `self.out` é inócua. O selo que detecta a reintrodução de um parâmetro sem uso é `ParametrosLidosTest`. `app/escala/tests/test_cadeia20_mutantes.py:80–83`, `app/escala/tests/test_cadeia20_lavra.py:67–72`, `:277–305`, `:351–356` |
 | **Campo com dois significados** | `d1` é data de célula, `ref` é a borda da grade e `agora` é o instante do ato. Na ata, a chave ausente indica falta de lavra e `[]` registra ausência de sobras com insumos disponíveis. `hora` guarda o rótulo `HH:MM` e pode repetir. A ligação por instante fica nos insumos, e `razao` e `falha` são campos distintos. Uma sobra atribuída a um turno e uma sobra residual sem turno podem cair em datas diferentes pelas regras da grade. `app/ponto/services/cartorio.py:963–998`, `:1007–1018`, `:1249`, `:1291–1293`, `app/escala/orfa_classe.py:50–76`, `app/escala/utils.py:1778–1785`, `:1841–1871` |
 
-## 19/11 16:56 · sessao d7e1cea86af2 · FERIADO-POR-POSTO · verificador · origem=Code
-
-**Item 4, volta 2.** Os dois caminhos que criam vínculo tentam gravar uma linha quando a chave nasce diferente da herdada. A gravação é *best effort*: se o insert da auditoria falhar, o vínculo pode ficar gravado sem a linha. [vinculo.py:1093](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1093) [observ.py:124](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/observ.py:124)
-
-### 1. Criação e reabertura
-
-- **Ajuste e desfazer com renascimento** passam por `_nasce_pela_marca` imediatamente após seus respectivos `create`. O ajuste compara com a chave de `ec`. O desfazer compara com a de `antigo`. Chaves iguais deixam zero linhas. [vinculo.py:1098](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1098) [vinculo.py:1114](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1114) [vinculo.py:1138](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1138)
-- **Desfazer com `volta == novo.data_inicio`** pode recusar se houver célula editada. Se prosseguir, apaga o novo, atualiza apenas `data_fim=None` e `ativa=True` no PK antigo e o relê. Esse ramo pula o helper, preserva a chave gravada no antigo e pode reabrir um vínculo divergente da marca atual. [vinculo.py:1128](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1128) [feriado_do_posto.py:218](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/feriado_do_posto.py:218)
-
-### 2. Formato e leitores
-
-- **Mesmo formato** nos cinco campos pedidos. `acao='editar'`, `modelo='EscalaColaborador'`, `objeto_id` igual ao PK do vínculo alvo e os dois JSONs com `trabalha_em_feriado` booleano. No nascimento, `valor_antes` vem do vínculo de origem. Na porta, vem do próprio vínculo editado. A descrição do nascimento identifica o posto e o copiador. [vinculo.py:894](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:894) [vinculo.py:1098](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1098)
-- **Filtro pela chave.** O uso literal localizado é `_trilha_da_chave`, nos testes. Ele aceita as duas origens. Os testes R1 contam por PK de fixture. A4 compara marca e chave dos vínculos vigentes, e o plano calcula `propagar` pela chave atual. A porta retorna `len(plano['propagar'])`. Esses três números independem da nova linha. [test_feriado_por_posto.py:117](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:117) [test_feriado_por_posto.py:150](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:150) [feriado_do_posto.py:213](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/feriado_do_posto.py:213) [feriado_do_posto.py:263](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/feriado_do_posto.py:263) [feriado_do_posto.py:306](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/feriado_do_posto.py:306)
-- **Filtro amplo.** A tela de auditoria exibe e conta a linha quando os filtros incluem `editar` e `EscalaColaborador`. Os testes de correção retroativa e de régua também consultam esse par por PK. O leitor com risco concreto é `vigencia_sem_trilha`: ele aceita qualquer linha desse modelo pelo PK do vínculo **ou pelo ID do colaborador**, sem exigir campos de vigência ou autor. A nova linha pode, portanto, ocultar uma vigência sem trilha própria, inclusive por colisão de IDs. Ocorrência em produção [nao verificado]. [core/views.py:698](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/views.py:698) [test_contract_porta_2ato.py:190](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_contract_porta_2ato.py:190) [test_termometro_grava_com_trilha.py:19](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/tests/test_termometro_grava_com_trilha.py:19) [vigencia_sem_trilha.py:43](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/services/vigencia_sem_trilha.py:43)
-
-### 3. Usuário, IP e selo
-
-- No comando `manage.py`, fora de requisição, ficam `usuario=NULL`, `ip=NULL` e `ator='sistema:ajustar_escalas_auto'`. Fora de `manage.py` e sem requisição, `ator` também pode ficar nulo. Se houver requisição no contexto do middleware, `registrar_log(None, ...)` ainda pode herdar o usuário autenticado e o IP, com prioridade para `X-Forwarded-For`. [auditoria.py:17](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/auditoria.py:17) [observ.py:22](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/observ.py:22) [observ.py:108](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/observ.py:108)
-- O modelo aceita os nulos. O teste A3 exige uma linha e os JSONs. O selo E5 aceita autoria de sistema sem IP. Já R1 e o selo da edição humana do vínculo exigem `usuario_id`. Assim, no caminho CLI, o carimbo de sistema satisfaz o padrão E5. A exigência literal de usuário da L-007, se aplicada ao nascimento, fica sem preenchimento. [core/models.py:295](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/models.py:295) [test_feriado_por_posto.py:139](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:139) [test_feriado_por_posto.py:524](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:524) [test_trilha_com_contexto.py:75](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/tests/test_trilha_com_contexto.py:75) [test_trilha_do_vinculo.py:93](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_trilha_do_vinculo.py:93) [LEIS.md:65](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/docs/LEIS.md:65)
-
-### 4. Os quatro testes mordem [nao verificado]
-
-| Caso | Mutante que derruba o teste | [nao verificado]
-|---|---|
-| FECHA nos dois | Tratar a marca por valor-verdade faz `False` cair na herança de `True`. Falha no ajuste. Se a regressão estiver só no desfazer, falha na segunda asserção. [test_feriado_por_posto.py:480](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:480) |
-| Ciclo fora e desfazer sem marca | Ignorar o predicado aplica OPERA ao destino `12x36`. Forçar `True` no desfazer sem marca quebra a cópia. Auditar toda cópia quebra a asserção de zero linhas. [test_feriado_por_posto.py:490](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:490) |
-| Marca mudou antes de desfazer | Ler a marca antiga pelo objeto do ajuste (`novo.posto`) devolve `True` em vez do `False` lido após `antigo.refresh_from_db()`. [test_feriado_por_posto.py:505](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:505) |
-| Chave diferente deixa trilha | Desligar o log deixa zero linhas. Trocar o payload quebra a comparação de `False → True`. [test_feriado_por_posto.py:518](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:518) |
-
-Executei os quatro corpos em memória com ORM e callbacks simulados. Sobreviveram dois mutantes relevantes: retirar só a trilha do **desfazer** e forçar `False` quando falta marca, pois a fixture sem marca já herda `False`. Suíte Django com banco [nao verificado]. [test_feriado_por_posto.py:490](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:490) [test_feriado_por_posto.py:505](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:505) [test_feriado_por_posto.py:518](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_feriado_por_posto.py:518)
-
-### 5. Transação e linha órfã
-
-- **Pelo executor**, `create` e auditoria estão no mesmo `atomic` externo. Se o `create` levantar, o helper nem começa. Se uma exceção posterior escapar do `atomic`, ambos voltam. Se falhar apenas o insert do log, o savepoint da auditoria volta e a falha é absorvida. Os copiadores chamados diretamente dependem de transação do chamador para unir fechamento, criação e trilha. [escala_auto_executor.py:101](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/services/escala_auto_executor.py:101) [escala_auto_executor.py:144](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/services/escala_auto_executor.py:144) [vinculo.py:1108](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1108) [observ.py:85](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/observ.py:85) [observ.py:124](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/observ.py:124)
-- **O desfazer posterior pode deixar uma linha apontando para PK apagado.** O ramo de reabertura apaga `novo`, e `LogAuditoria.objeto_id` é inteiro, sem FK que acompanhe a remoção. [vinculo.py:1128](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1128) [core/models.py:295](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/core/models.py:295)
-
-### 6. Outras classes
-
-- **Segundo escritor.** O selo R8 passou na varredura da escrita da **marca do posto**. Para a **chave do vínculo**, `sincronizar_feriado_admin --apply` usa a porta canônica, mas fornece uma decisão só por cargo. Pode voltar a gravar `True` num vigilante de posto FECHA. O trecho retroativo é outro nascimento que copia a chave diretamente. [test_selo_marca_do_posto_um_escritor.py:123](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:123) [sincronizar_feriado_admin.py:42](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/management/commands/sincronizar_feriado_admin.py:42) [vinculo.py:976](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:976)
-- **Relógio fora da borda.** O executor passa `hoje` ao copiador e à regeneração explícita. O `post_save` acionado pelo `create` lê outro `timezone.localdate()` para recomputar turnos. No lote CLI, o dry e cada aplicação também podem obter datas separadamente. [escala_auto_executor.py:98](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/services/escala_auto_executor.py:98) [ponto/signals.py:53](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/ponto/signals.py:53) [ajustar_escalas_auto.py:56](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/management/commands/ajustar_escalas_auto.py:56) [ajustar_escalas_auto.py:93](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/management/commands/ajustar_escalas_auto.py:93) [escala_auto.py:76](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/services/escala_auto.py:76)
-- **Derivação paralela.** Os copiadores compartilham `chave_ao_nascer`. A criação normal usa `padrao_trabalha_em_feriado`, que aceita a marca declarada sem testar cargo ou ciclo. Assim, um `12x36` num posto FECHA pode nascer `False` pela criação normal e herdar `True` pelo copiador. [feriado_do_posto.py:174](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/feriado_do_posto.py:174) [vinculo.py:287](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:287) [escala/models.py:905](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/models.py:905)
-- **Campo com dois significados.** `valor_antes` agora representa tanto o estado anterior do próprio `objeto_id` quanto a chave herdada de outro PK. A distinção fica na descrição. `objeto_id` é corretamente o vínculo nas duas escritas novas. A interpretação histórica como ID da pessoa continua no leitor de vigência. [vinculo.py:899](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:899) [vinculo.py:1100](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/colaboradores/services/vinculo.py:1100) [vigencia_sem_trilha.py:43](/home/ronald/codex_ws/21f3dbcea8fb28934ca70beef5712b48ca90d5fc/app/escala/services/vigencia_sem_trilha.py:43)
-
-_7425 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7426 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
