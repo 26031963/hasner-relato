@@ -1,7 +1,166 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 01:35** · publicado em **20/11/2026 01:35** (UTC-3)
+> Ultima resposta processada: **20/11/2026 01:40** · publicado em **20/11/2026 01:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 01:40 · sessao fab078a7cd14 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**C2 entregue para E1, E2, F1 e F2.** O censo estático bate com o registro atualizado, e a âncora de F1 rejeita o mutante que deixa a chamada apenas em comentário. Banco e testes ficaram para o Code. [Registro F2](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/core/tests/test_medida_turno_do_par.py:271) · [Âncora F1](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_contract_dedup_status.py:142) [nao verificado]
+
+### Arquivos tocados e usos dos avais
+
+A última coluna conta instruções `assert` e chamadas `self.assert*`, nessa ordem, por AST contra `9d386d1b1`.
+
+| Arquivo | Classe | Antes → depois | Asserções |
+|---|---|---|---|
+| [chamados/tests/e3_v8_apoio.py:77](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e3_v8_apoio.py:77) | ii, E1 | O módulo falso de `leitores()` passa a exportar `DecisaoPergunta` do helper único `chamados.tests.duble_pergunta`, já usado em B3 por `e3_volta7_apoio.py:111`. | `0/0 → 0/0` |
+| [chamados/tests/e3_volta7_apoio.py:33](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e3_volta7_apoio.py:33) | v, E2 | `Query` ganha `prefetch_related` como identidade. A subclasse V8 passa a herdar a mesma implementação em `e3_v8_apoio.py:26`. | `0/0 → 0/0` |
+| [chamados/tests/test_contract_dedup_status.py:142](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_contract_dedup_status.py:142) | i, F1 | A âncora textual da chamada sem argumentos passa a exigir a atribuição `_pend = self.respostas_sem_veredito(perguntas=perguntas)` no AST do corpo de `fechar`. | `0/12 → 0/12` |
+| [core/tests/test_medida_turno_do_par.py:271](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/core/tests/test_medida_turno_do_par.py:271) | i, F2 | `434 → 437`, mesma linha que filtra a célula por `loc.date()`. `chamados/services/materializacao.py:437`. | `0/86 → 0/86` |
+| [core/tests/test_medida_turno_do_par.py:271](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/core/tests/test_medida_turno_do_par.py:271) | i, F2 | `455 → 458`, mesma linha que calcula `(loc.date() - cel.data).days`. `chamados/services/materializacao.py:458`. | Mesmo módulo |
+
+As duas ocorrências de F2 têm conteúdo idêntico ao de `d9319a215`. São as únicas diferenças encontradas pelo censo de linhas congeladas em `core/tests/test_medida_turno_do_par.py:558`.
+
+### F3 · atribuição e parada
+
+A atribuição estática aponta **B, `d0210a400`**. Os dois `SELECT` candidatos são sobre `chamados_decisaopergunta`, ambos no `prefetch_related('decisoes')` de `perguntas_corrigiveis`. A fixture abre o modal de um colaborador com dois cartões, pai e destino, ligados à mesma disputa. Cada cartão chama o filtro de Reabrir, que monta um queryset novo para a mesma disputa. Isso dá um `SELECT` de decisões por cartão. `core/tests/test_selo_performance.py:298`, `:377` · `chamados/services/fio.py:275`, `:287` · `templates/chamados/partials/modal_fio.html:396` · `chamados/templatetags/chamados_tags.py:222` · `chamados/juizes.py:1765`.
+
+Os leitores que C acrescentou ao estado de aplicação do cartão recebem as instâncias do lote de decisões do fio. D alterou `fechar`, enquanto o GET medido renderiza o modal. `chamados/services/materializacao.py:193`, `:889`, `:927` · `chamados/services/fio.py:260`, `:378` · `chamados/models.py:2071` · `chamados/views.py:951`.
+
+**PAREI em F3.** O candidato é um prefetch em lote repetido pelo render. A condição do aval era uma leitura avulsa a incorporar ao lote. O anexo informa **92 / teto 90**. A sonda abaixo deve isolar o delta esperado **92 → 90** ao restaurar em memória somente o corpo anterior a B. SQL efetivamente emitido e total da sonda **[nao verificado]**. `chamados/juizes.py:1765` · `core/tests/test_selo_performance.py:143`, `:333`.
+
+### Varredura de C e D
+
+| Família | Resultado da inspeção |
+|---|---|
+| Vigia | Os dois dublês faltantes estão em E1/E2. Os leitores de vivas em fechadas e carimbos por dono têm cobertura ORM em `chamados/tests/test_e4c_f5_voltaC_lotes.py:154`, `:167`. |
+| Materialização | O contador já usa `_Recorte(Linhas)`, com prefetch identidade. A elegibilidade e a anuência já recebem o compositor do helper. A fixture do estado de aplicação já fornece o que o compositor real lê. `chamados/tests/test_bug_par_c2_sem_banco.py:32`, `:78` · `chamados/tests/test_e4b_classe_e_memoria.py:193` · `chamados/tests/test_bug_par_sem_banco.py:182` · `chamados/tests/test_estado_aplicacao.py:38`. |
+| Auditoria, dedup e universo do fato | O dublê do piso I6 substitui `_i6_pares` inteiro. Os corpos alterados têm cobertura ORM nos selos de C. O harness sem banco do backfill de decisões chama o contador de validação sem linha. `chamados/tests/test_selo_lapide_legado.py:85` · `chamados/tests/test_e4c_f5_voltaC_lotes.py:89`, `:119`, `:141`, `:230` · `chamados/tests/test_e4c_f5_voltaC_sitios.py:65` · `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:50`. |
+| Backfill do fio, disparo, estoque e retroativo | `Linhas` já fornece `filter`, `select_related` e `prefetch_related` para o backfill. A matriz do disparo já fornece `prefetch_related` pelo `Mock`. Estoque e emissão retroativa exercitam os caminhos alterados por ORM. `chamados/tests/test_e4b_classe_e_memoria.py:165`, `:650` · `chamados/tests/test_e4a2_matriz_memoria.py:124` · `chamados/tests/test_f1nova_b2_leitores.py:249` · `chamados/tests/test_e4c_f5_voltaC_lotes.py:198`. |
+| Arquivamento, becos e porta D | Os caminhos de execução encontrados usam ORM. O consumidor estrutural de D com âncora deslocada foi F1. `chamados/tests/test_c7_red_minimos.py:283` · `chamados/tests/test_e4c_f5_voltaC_lotes.py:218` · `chamados/tests/test_e4c_f5_opus_models.py:149` · `chamados/tests/test_contract_dedup_status.py:135`. |
+
+### Comandos para o Code
+
+Os quatro labels cobrem E1, E2, F1 e F2. A segunda chamada inclui os dois selos do modal, com `test_selo_teto_modal` em `chamados.tests`. Execução **[nao verificado]**. `chamados/tests/test_e3_portas_tarefa.py:505` · `chamados/tests/test_e3_degrau_dono_e_porta.py:388` · `chamados/tests/test_contract_dedup_status.py:135` · `core/tests/test_medida_turno_do_par.py:558` · `core/tests/test_selo_performance.py:377` · `chamados/tests/test_selo_teto_modal.py:37`.
+
+```bash
+e1=chamados.tests.test_e3_portas_tarefa.MatrizV8Test
+e2=chamados.tests.test_e3_degrau_dono_e_porta.LeitoresPortaApp
+f1=chamados.tests.test_contract_dedup_status.ContratoDedupDistingueStatusTest.test_porta_humana_de_disputa_presta_contas
+f2=core.tests.test_medida_turno_do_par.CatracaTurnoDoParTest.test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit
+f3=core.tests.test_selo_performance.SeloPerformanceTest.test_chamados_modal
+
+PYTHONDONTWRITEBYTECODE=1 python -B manage.py test --settings=config.settings.ci "$e1" "$e2" "$f1" "$f2"
+PYTHONDONTWRITEBYTECODE=1 python -B manage.py test --settings=config.settings.ci "$f3" chamados.tests.test_selo_teto_modal
+```
+
+Os mutantes abaixo são em memória. E1 deve reproduzir o `ImportError`, E2 o `AttributeError`, F1 deve falhar com a chamada só em comentário, e F2 deve falhar ao restaurar cada coordenada antiga isoladamente. Resultados dos mutantes **[nao verificado]**. `chamados/services/vigia_fio.py:504`, `:571` · `chamados/tests/test_contract_dedup_status.py:142` · `core/tests/test_medida_turno_do_par.py:558`.
+
+```bash
+c2() {
+  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
+    python -B - "$@" <<'PY'
+import inspect
+import subprocess
+import sys
+import traceback
+from contextlib import ExitStack
+from types import SimpleNamespace
+from unittest.mock import patch
+
+import django
+django.setup()
+
+from django.conf import settings
+from django.test.utils import get_runner
+
+modo, label = sys.argv[1:]
+with ExitStack() as escopo:
+    if modo == 'e1':
+        from chamados.tests import e3_v8_apoio as apoio
+        modulo = apoio.modulo
+
+        def sem_compositor(nome, **campos):
+            if nome == 'chamados.models' and 'ChamadoColaborador' in campos:
+                campos.pop('DecisaoPergunta')
+            return modulo(nome, **campos)
+
+        escopo.enter_context(patch.object(apoio, 'modulo', sem_compositor))
+    elif modo == 'e2':
+        from chamados.tests.e3_volta7_apoio import Query
+        escopo.callback(setattr, Query, 'prefetch_related', Query.prefetch_related)
+        del Query.prefetch_related
+    elif modo == 'f1':
+        from chamados.models import DisputaSupervisao
+        from chamados.tests import test_contract_dedup_status as contrato
+
+        def fonte_com_comentario(fn):
+            fonte = inspect.getsource(fn)
+            if fn is DisputaSupervisao.fechar:
+                chamada = '_pend = self.respostas_sem_veredito(perguntas=perguntas)'
+                return fonte.replace(chamada, '# ' + chamada + '\n        _pend = []', 1)
+            return fonte
+
+        escopo.enter_context(patch.object(
+            contrato, 'inspect', SimpleNamespace(getsource=fonte_com_comentario)))
+    elif modo in ('f2-437', 'f2-458'):
+        from core.tests import test_medida_turno_do_par as catraca
+        chave = ('chamados/services/materializacao.py::_plantio_preenche_furo_na_data', 'B1')
+        linhas = [434, 458] if modo == 'f2-437' else [437, 455]
+        escopo.enter_context(patch.dict(
+            catraca.LINHAS_REGISTRADAS['derivacoes_de_dia'], {chave: linhas}))
+    elif modo in ('f3', 'f3-sem-b'):
+        from chamados import juizes
+        from chamados.tests.e4_apoio import funcao
+        from core.tests.test_selo_performance import SeloPerformanceTest
+        from django.db import connection
+
+        if modo == 'f3-sem-b':
+            fonte = subprocess.check_output(
+                ['git', 'show', 'd0210a400^:app/chamados/juizes.py'], text=True)
+            anterior = funcao('chamados/juizes.py', 'perguntas_corrigiveis',
+                              vars(juizes).copy(), fonte=fonte)
+            escopo.enter_context(patch.object(juizes, 'perguntas_corrigiveis', anterior))
+
+        medir = SeloPerformanceTest._medir_rota
+
+        def medir_com_sql(self, nome, url):
+            consultas = []
+
+            def registrar(execute, sql, params, many, context):
+                pilha = ()
+                if sql.lstrip().upper().startswith('SELECT') and 'chamados_decisaopergunta' in sql:
+                    pilha = tuple(f for f in traceback.extract_stack() if 'chamados/' in f.filename)
+                consultas.append((sql, params, pilha))
+                return execute(sql, params, many, context)
+
+            with connection.execute_wrapper(registrar):
+                total, ms = medir(self, nome, url)
+            print(f'{nome} · {total} consultas')
+            for sql, params, pilha in consultas[-total:]:
+                if pilha:
+                    print(sql, params)
+                    print(' <- '.join(f'{f.filename}:{f.lineno}' for f in reversed(pilha[-5:])))
+            return total, ms
+
+        escopo.enter_context(patch.object(SeloPerformanceTest, '_medir_rota', medir_com_sql))
+    else:
+        raise SystemExit(f'Modo desconhecido: {modo}')
+
+    raise SystemExit(bool(get_runner(settings)(verbosity=2, parallel=1).run_tests([label])))
+PY
+}
+
+c2 e1 "$e1.test_v8_R1_colab_alcancavel_e_leitores"
+c2 e2 "$e2.test_vigia_conta_app_sem_KeyError_e_publica_no_log"
+c2 f1 "$f1"
+c2 f2-437 "$f2"
+c2 f2-458 "$f2"
+c2 f3 "$f3"
+c2 f3-sem-b "$f3"
+```
+
+**LEI-AKITA** — origem em `vigia_fio.py:504`, `:571`, `models.py:2072` e `materializacao.py:437`, `:458` · testemunhas no dublê único `duble_pergunta.py:12`, na chamada viva de `fechar` e no censo de `core/tests/test_medida_turno_do_par.py:558` · RED e mutantes entregues para o Code **[nao verificado]** · F3 parado pelo escopo literal `docs/LEIS.md:62` · juízes novos **0**, conforme os quatro arquivos da tabela.
 
 ## 20/11 01:35 · sessao fbf1984f8eb2 · CADEIA-20-PASSO-1 · leitura · origem=Code
 
@@ -1270,68 +1429,4 @@ O traceback de `red8_falhas.txt` mostra a falha em `calc.call_count >= quantidad
 
 Das 42 âncoras, só `rouba_respondida_do_hx` tem zero ocorrências. A busca literal ainda procura `pergunta_respondida(p) or not pergunta_viva(p, hoje=hoje)`. O sítio atual é `if pergunta_respondida(DecisaoPergunta.composta(p)) or not pergunta_viva(p, hoje=hoje):  # L-130: o juiz`. As outras 41 âncoras têm uma ocorrência cada, inclusive `pula_c6` e `perde_hoje_c6`, que procuram trechos dessa mesma linha. O `0 != 1` ocorre na checagem da âncora, antes de aplicar o mutante. O `PicklingError` vem depois, ao reportar o subteste, conforme `mutantes_mordem.txt`. [test_e4b_classe_e_memoria.py:26](/home/ronald/codex_ws/cda2467322d281242af0ca00ea5d2771f94a759a/app/chamados/tests/test_e4b_classe_e_memoria.py:26) · [âncora:51](/home/ronald/codex_ws/cda2467322d281242af0ca00ea5d2771f94a759a/app/chamados/tests/test_e4b_classe_e_memoria.py:51) · [contagem:1040](/home/ronald/codex_ws/cda2467322d281242af0ca00ea5d2771f94a759a/app/chamados/tests/test_e4b_classe_e_memoria.py:1040) · [disputa_emissao.py:1854](/home/ronald/codex_ws/cda2467322d281242af0ca00ea5d2771f94a759a/app/chamados/services/disputa_emissao.py:1854)
 
-## 19/11 20:17 · sessao 1ba02fda85b9 · E4C-F5-CONSTROI · construtor · origem=Code
-
-Implementei o helper único e os dois selos em `chamados/tests/`. A conferência estática mediu **9 módulos migrados com a mesma contagem de asserts do MAIN `eb1e49c1e`**. As expressões dos asserts e os nomes dos testes também conferem com o HEAD da cópia. Banco e suíte [nao verificado]. [Tabela e regra de contagem](chamados/tests/test_e4c_f5_duble_conforme.py:14)
-
-### Arquivos tocados e montagem
-
-| Módulo | Antes → depois | MAIN → cópia |
-|---|---|---:|
-| `e3_v8_apoio.py` | `N` para a pergunta e módulo sem `DecisaoPergunta` no HEAD :169/:199 → fábrica em :170 e classe do helper em :199. | [0 → 0](chamados/tests/e3_v8_apoio.py:170) |
-| `test_e1_v10.py` | `_ln` devolvia `SimpleNamespace` no HEAD :120 → fábrica com os campos e a relação vazia para o compositor real. | [31 → 31](chamados/tests/test_e1_v10.py:121) |
-| `test_e3_c8b_sem_banco.py` | O ambiente vinha direto do apoio, cujo mapa não instalava `chamados.models` → o contexto instala a classe do helper durante o ensaio. [Apoio original](chamados/tests/e3_c8b_apoio.py:150) | [86 → 86](chamados/tests/test_e3_c8b_sem_banco.py:29) |
-| `test_e3_degrau_dono_e_porta.py` | Perguntas `N` e import do modelo real nos três casos do HEAD :263/:291/:343 → fábrica e classe do helper nos contextos da partição. [Consulta](chamados/tests/test_e3_degrau_dono_e_porta.py:263) [Carga](chamados/tests/test_e3_degrau_dono_e_porta.py:289) | [134 → 134](chamados/tests/test_e3_degrau_dono_e_porta.py:334) |
-| `test_e3_pos_suite_sem_banco.py` | Ambiente direto do apoio no HEAD :15 e pergunta `N` no HEAD :53 → contexto compartilhado com C8b e fábrica no S1. [Contexto](chamados/tests/test_e3_pos_suite_sem_banco.py:17) | [29 → 29](chamados/tests/test_e3_pos_suite_sem_banco.py:54) |
-| `test_e3_tarefa_admin_sem_banco.py` | Modelo `N` de literais e perguntas `N` no HEAD :86/:111/:200 → classe do helper, fábrica em `forma_b` e ambos na testemunha C6. [Modelo](chamados/tests/test_e3_tarefa_admin_sem_banco.py:85) [Forma B](chamados/tests/test_e3_tarefa_admin_sem_banco.py:112) | [7 → 7](chamados/tests/test_e3_tarefa_admin_sem_banco.py:184) |
-| `test_e4b_c4v7_memoria.py` | A foto usava `DecisaoPergunta=modelo()` no HEAD :358 → classe compartilhada com o gerenciador vazio instalado no contexto da foto. O comando usa a montagem de `AlcanceTest`. [Foto](chamados/tests/test_e4b_c4v7_memoria.py:381) [Comando](chamados/tests/test_e4b_c4v7_memoria.py:86) | [65 → 65](chamados/tests/test_e4b_c4v7_memoria.py:358) |
-| `test_e4b_classe_e_memoria.py` | `Objeto` montado à mão e `DecisaoPergunta=NS()` no HEAD :282/:334 → fábrica preservando `Objeto` e `Linhas`, com a classe do helper no módulo falso. [Pergunta](chamados/tests/test_e4b_classe_e_memoria.py:283) | [122 → 122](chamados/tests/test_e4b_classe_e_memoria.py:333) |
-| `test_pergunta_viva.py` | `_p` devolvia `NS` sem `pk` no HEAD :13 → fábrica com `pk=None` e relação vazia, passando pelo compositor real. [Leitura real](chamados/models.py:4330) | [12 → 12](chamados/tests/test_pergunta_viva.py:9) |
-
-Os dois arquivos novos são [duble_pergunta.py](chamados/tests/duble_pergunta.py:1) e [test_e4c_f5_duble_conforme.py](chamados/tests/test_e4c_f5_duble_conforme.py:1). O helper importa só a biblioteca padrão e lê os cinco valores da própria pergunta. Verifiquei o import normal, o retorno, `_replace` e `decisoes.all()` sem Django. A classe também fornece `RESPOSTA`, `VALIDACAO`, `DEVOLUCAO`, `RECUSA`, `REABERTURA`, `SILENCIO` e `ABSORCAO` para os ramos de `_pela_decisao`. O gerenciador `objects` é fornecido pela fixture da foto, que executa `.filter()`. [Helper](chamados/tests/duble_pergunta.py:3) [Ramos da tarefa](chamados/services/tarefa_do_dia.py:150) [Leitura da foto](chamados/services/foto_e4b.py:280)
-
-`test_e3_c8c_sem_banco` recebe o helper por `forma_b` e `tarefa_em_memoria`. O R11 de `test_e3_portas_tarefa` recebe a montagem de `e3_v8_apoio`. C11, C4 tranca, C4v14 e C6 recebem a montagem compartilhada de `AlcanceTest`. [C8c](chamados/tests/test_e3_c8c_sem_banco.py:41) [R11](chamados/tests/test_e3_portas_tarefa.py:631) [C11](chamados/tests/test_e4b_c11_memoria.py:36) [C4](chamados/tests/test_e4b_c4_tranca_memoria.py:26) [C4v14](chamados/tests/test_e4b_c4v14_memoria.py:33) [C6](chamados/tests/test_e4b_c6_memoria.py:15)
-
-### Casos especiais e previsão
-
-- **`test_mutante_sem_patch_no_pai_cai_na_sentinela`**. A falta de `.composta` interrompia a porta antes da chamada que dispara `SENTINELA modulo real`. A montagem compartilhada corrige esse ponto. Prevejo que o mutante volte a atingir a sentinela [nao verificado]. [Caso](chamados/tests/test_e4b_classe_e_memoria.py:255) [Leitura anterior à chamada](chamados/services/disputa_emissao.py:1854) [Sentinela](chamados/tests/test_e4b_classe_e_memoria.py:224)
-- **`test_mutantes_mordem_no_assert_pretendido`**. Prevejo vermelho em série. Medi **zero ocorrências** da âncora de `rouba_respondida_do_hx`, que ainda procura `pergunta_respondida(p)`. O código usa `pergunta_respondida(DecisaoPergunta.composta(p))`, e o teste exige uma ocorrência antes de aplicar o mutante. A hipótese para o `PicklingError` é o transporte do subteste falho, que referencia um caso com mocks. O traceback original está [nao verificado]. [Âncora](chamados/tests/test_e4b_classe_e_memoria.py:51) [Checagem](chamados/tests/test_e4b_classe_e_memoria.py:1038) [Mocks](chamados/tests/test_e4b_classe_e_memoria.py:288) [Transporte](core/tests/test_contract_tblib_no_paralelo.py:4)
-- **`test_RED_callbacks_conhecidos_fora_do_alcance_recusam_com_nome`**. A fase de planejamento passa pela montagem corrigida antes de executar os callbacks. O `PicklingError` é compatível com o transporte de um subteste que retém a conexão e sua fila com `Mock`. A falha original e a cor após a cura ficam [nao verificado]. [Planejamento](chamados/management/commands/backfill_fio_morto_e4b.py:82) [Conexão](chamados/tests/test_e4b_c4v7_memoria.py:38) [Subteste](chamados/tests/test_e4b_c4v7_memoria.py:240)
-- **Tetos A2 fora do escopo**. A sonda registra E2 `36 × 30`, F3 `56 × 48` e O261 `9 > 8`. Os asserts da cópia ainda exigem igualdade em E2 e F3 e teto de `8` no O261. A previsão continua vermelha pelos dados fornecidos, sem remedição [nao verificado]. [E2](chamados/tests/test_e2_tarefa_do_dia.py:938) [F3](escala/tests/test_f3_beco1_folga_na_lista.py:402) [O261](chamados/tests/test_o261_julgamento_desfaz_carimbo.py:205)
-
-### Comandos para o Code
-
-Selos de conformidade, contagem e um comando por mutante. Os três REDs passam quando a comparação rejeita o mutante em memória. [Conformidade](chamados/tests/test_e4c_f5_duble_conforme.py:38) [Mutantes](chamados/tests/test_e4c_f5_duble_conforme.py:51)
-
-```bash
-s=chamados.tests.test_e4c_f5_duble_conforme.DublePerguntaConformeTest
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_duble_conforme_ao_modelo" "$s.test_contagem_dos_asserts_igual_ao_main"
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_RED_mutante_sem_um_campo"
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_RED_mutante_com_assinatura_diferente"
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 "$s.test_RED_fonte_com_um_assert_a_menos"
-```
-
-Harnesses da lista, agrupados por classe onde há vários casos. `PerguntaVivaOrdemTest` seleciona os 11 casos. [Pergunta viva](chamados/tests/test_pergunta_viva.py:15) [C8b](chamados/tests/test_e3_c8b_sem_banco.py:210) [E4b](chamados/tests/test_e4b_classe_e_memoria.py:212)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --parallel 1 \
-  chamados.tests.test_e1_v10.PlanoParticionaTest.test_RED_merito_sob_canonica_sem_episodio \
-  chamados.tests.test_e3_c8b_sem_banco.AlimentacaoC6 \
-  chamados.tests.test_e3_c8c_sem_banco.C8cSemBanco.test_RED_posicao_ausente_e_alimentada \
-  chamados.tests.test_e3_degrau_dono_e_porta.ConsultaECarga \
-  chamados.tests.test_e3_portas_tarefa.MatrizV8Test.test_v8_R11_um_instante_ate_o_app \
-  chamados.tests.test_e3_pos_suite_sem_banco.PosSuiteSemBanco \
-  chamados.tests.test_e3_tarefa_admin_sem_banco.LimitesDaConstrucao.test_C6_com_relacoes_e_tranca_carregadas_ainda_desce_por_pergunta \
-  chamados.tests.test_e4b_c11_memoria.DiaC11Test.test_RED_conversa_e_sem_dia_nao_sao_rotuladas_exportadas \
-  chamados.tests.test_e4b_c11_memoria.RelogioC11Test.test_RED_apply_ignora_recorte_argv_mas_DRY_conserva \
-  chamados.tests.test_e4b_c4_tranca_memoria.TrancaMemoriaTest.test_RED_S143_retira_avulso_com_memo_do_ato_sem_aquecer_cargas \
-  chamados.tests.test_e4b_c4v14_memoria.C7TrancaMemoriaTest \
-  chamados.tests.test_e4b_c4v7_memoria.C4v7MemoriaTest \
-  chamados.tests.test_e4b_c6_memoria.C6MemoriaTest \
-  chamados.tests.test_e4b_classe_e_memoria.AlcanceTest \
-  chamados.tests.test_pergunta_viva.PerguntaVivaOrdemTest
-```
-
-LEI-AKITA: origem=chamados/models.py:24 e :4351, testemunha=chamados/tests/test_e4c_f5_duble_conforme.py:38, RED=chamados/tests/test_e4c_f5_duble_conforme.py:51/:57/:72, padrao=Architecture Conformance Test (docs/GLOSSARIO.md:15).
-
-_7439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7440 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
