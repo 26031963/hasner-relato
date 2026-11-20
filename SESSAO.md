@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 09:51:22.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (2.6 MB). Acoes na janela: **51**.
+**Medido em 20/11/2026 09:56:29.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (3.2 MB). Acoes na janela: **52**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:56:23 | Read |  | `/home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/vE/rev_a1a2/r.txt` |
 | 09:51:20 | Bash | Publish the RELATO through the house publisher | `bin/relato.sh > logs/relato_pub_$(date +%H%M).out 2>&1; echo "rc=$?"; tail -4 logs/relato_pub_*.out \| tail -5 \| cut -c1-200` |
 | 09:51:17 | Bash | Read the header of the RELATO publisher | `sed -n 1,22p bin/relato.sh \| cut -c1-160` |
 | 09:51:13 | Bash | Write the AVAL-DEVOLVIDO lines and item 2 proof at the RELATO top | `H=$(date '+%H:%M') && S1=$(sha256sum logs/ESPINHA-BRIEFS/F5/vE/rev_aval/r.txt \| cut -c1-12) && S2=$(sha256sum logs/TRAVAS-SEM-MEMORIA/rev_c_0945/r.txt \| cut -c1-12) && python3 - "$H" "$S1" "$S2" <<'EOF' import sys h,s1,s2=sys.argv[1:] p='app/docs/RELATO.md'; L=open(p).read().split('\n') j=[k for k,l in enumerate(L[:16]) if l.startswith('RETOMA-2011-0945 registrado')]; assert len(j)==1 a=(f"AVAL- ...` |
