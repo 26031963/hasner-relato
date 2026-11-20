@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 04:42:55.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (15.8 MB). Acoes na janela: **346**.
+**Medido em 20/11/2026 04:48:08.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (15.9 MB). Acoes na janela: **350**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:45:16 | Bash | Wait for the relaunched fleet probe | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; until [ -f $D/roda.fim ]; do /usr/bin/sleep 20; done; date +%H:%M; cat $D/roda.fim; wc -l logs/f5_vd2_frota.out; /bin/grep -vE "PKS?=[0-9]" logs/f5_vd2_frota.out \| cut -c1-240 \| head -130; tail -2 logs/f5_vd2_frota.out \| cut -c1-200` |
+| 04:44:27 | Bash | Recreate the mount points and relaunch the probe | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; C=/home/ronald/wt-f5-vD-mut-035246; mkdir -p $C/app/logs $C/app/media; rm -f $D/roda.fim; setsid nohup bash /home/ronald/saas-hasner/$D/roda.sh >/dev/null 2>&1 & sleep 45; tail -2 $D/roda.out \| cut -c1-200; ls logs/CADEIA-20-PASSO-1/v3/medida_d/*.fim` |
+| 04:44:23 | Bash | See which mount point is missing in the measuring copy | `cd /home/ronald/saas-hasner; head -1 logs/f5_vd2_frota.out \| cut -c230-700; C=$(ls -d /home/ronald/wt-f5-vD-mut-* \| tail -1); ls -d $C/app/logs $C/app/media $C/app/staticfiles 2>&1; ls /home/ronald/wt-cadeia-medida-d-025832/app \| tr '\n' ' '` |
+| 04:44:19 | Bash | Read the fleet probe counts | `cd /home/ronald/saas-hasner; date +%H:%M; cat /tmp/claude-1001/-home-ronald-saas-hasner/8b8d87c5-d111-4931-9b60-72a70772f0de/tasks/bqv24yz9q.output \| cut -c1-240 \| head -150` |
 | 04:15:35 | Bash | Wait for the fleet probe and print its counts | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; until [ -f $D/roda.fim ]; do /usr/bin/sleep 20; done; cat $D/roda.fim; wc -l logs/f5_vd2_frota.out; /bin/grep -vE "PK=\|PKS=" logs/f5_vd2_frota.out \| cut -c1-260 \| head -120; /bin/grep -c "" logs/f5_vd2_frota.out; tail -3 logs/f5_vd2_frota.out \| cut -c1-200` |
 | 04:15:27 | Bash | Queue the read-only fleet probe on the shadow database behind its lock | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vD2/sonda; C=$(ls -d /home/ronald/wt-f5-vD-mut-* \| tail -1); git -C $C status --porcelain \| head -3; git -C $C rev-parse --short HEAD; cp $D/sonda_v2.py logs/sombra/f5_vd2_frota.py cat > $D/roda.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner SOMBRA_ARVORE=$C/app bin/sombra.sh --rodar f5_vd2_frota.py f5_vd2_frota > $D/roda.out 2>&1 echo "rc= ...` |
 | 04:15:21 | Bash | Find where the shadow runner looks for the script | `cd /home/ronald/saas-hasner; /bin/grep -n "\-\-rodar" -A14 bin/sombra.sh \| /bin/grep -n "SCRIPT\\|\.py\\|logs/\\|cp \\|schema" \| head -14 \| cut -c1-200; ls /home/ronald/wt-cadeia-medida-d-025832/app/*.py 2>/dev/null \| head -3; ls logs/cadeia20_v3_medida_d_cruza.py scripts/cadeia20* app/cadeia20* 2>/dev/null` |
