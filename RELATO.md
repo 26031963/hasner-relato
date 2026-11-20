@@ -1,4 +1,4 @@
-ESPERANDO: roda.sh | pid=2326647
+ESPERANDO: preopus.sh | pid=2358267
 
 E4C-F5 VOLTA 3 c4 NA COPIA c8eb8eddf (16:1x): catraca test_medida_turno_do_par re-registrada em 9cf793bad (3 deslocamentos de linha, Ran 35 OK). VERIFICADOR do delta c3 (Codex rc=0, logs/ESPINHA-BRIEFS/F5/vE/volta3/verif_c3/r.txt) TRIADO em verif_c3/triagem.txt: PROCEDENTES 3 (arquivo de mutantes com nome de teste e 0 caso reprovaria test_selo_nao_nasce_vazio.sh -> apagado, tabela unica; controle C6 prova que o stub foi chamado; dedup prova a 2a tentativa) / DESCARTADOS 7 com motivo, ANEXOS ao opus (dedup fora do fecho serializado, exists fora do savepoint, cerca E4B, objeto_id int, A2 caracterizacao, mordida so da trilha, verbo fora de ACOES). Producao intocada desde c08017000. INCOMPLETO: re-rodada recorte+9 mutantes+catraca em voo (c3/c4.fim); A/B e instante_3formas na frota (sombra ocupada pela CADEIA); suite inteira; opus final (obra ja passou de 3 voltas Codex: sobe ao opus, PRE-VERIFICADOR 5d).
 
