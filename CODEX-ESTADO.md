@@ -1,7 +1,630 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 18:35** · publicado em **20/11/2026 18:36** (UTC-3)
+> Ultima resposta processada: **20/11/2026 18:40** · publicado em **20/11/2026 18:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 18:40 · sessao 23943dbef309 · E4C-F5-CONSTROI · leitura · origem=Code
+
+A sonda usa `competencia_do_fato(pergunta, empresa)` para selecionar o dia entregue pelo K6. Para responder, chama a própria view `api_disputa_responder` com o usuário vinculado à pergunta. A view verifica o vínculo e a vitalidade e chama a entrada que veta a absorção vigente. `app/chamados/services/materializacao.py:792–805` · `app/folha/export.py:556–594` · `app/api/urls.py:93` · `app/api/views.py:2607–2655` · `app/chamados/models.py:4593–4596` · `app/chamados/services/disputa_emissao.py:1485–1490`
+
+O teto escolhido é **oito perguntas por escape, até 16 tentativas**. O censo conta todas as perguntas com `ATESTADO` ou `FALTA_DIA` oferecido em competência entregue. O ensaio prioriza perguntas sem carimbo e dias mais recentes. Uma pergunta que oferece os dois escapes pode ser exercitada duas vezes, cada vez a partir da mesma fotografia inicial. O teto limita as remontagens do TXT da empresa. Com `universo=0`, sai apenas o resumo `SEM_CANDIDATAS`, sem linhas de diferenças. Universo e resultados efetivos **[nao verificado]**. `app/chamados/services/materializacao.py:1125–1131` · `app/chamados/services/disputa_emissao.py:1449–1466` · `app/folha/export.py:654–679,711–746`
+
+Corpo para `tenant_command shell --schema=juliani --settings=config.settings.sombra`. A sonda foi entregue em texto. Execução e identidade Git da cópia **[nao verificado]**. `bin/sonda_leitura.sh:232–241` · `app/config/settings/sombra.py:27–60`
+
+```python
+# E4C-F5 · SHA informado c8eb8eddf898116f0dc3d7f936f194020a809e36
+
+import hashlib
+import io
+import json
+import logging
+import socket
+import sys
+from collections import Counter, defaultdict
+from contextlib import ExitStack, closing, redirect_stderr, redirect_stdout
+from unittest.mock import patch
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.storage import FileSystemStorage
+from django.db import connection, transaction
+from django.db.models import F, Q, TextField
+from django.db.models.functions import Cast
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework.test import APIRequestFactory, force_authenticate
+
+from api.views import api_disputa_responder
+from chamados.models import PerguntaDisputa
+from chamados.services import disputa_emissao, materializacao as M
+from colaboradores.mixins import tem_acao
+from core import observ
+from folha.export import competencia_entregue, txt_vigente_x_gravado
+from folha.models import ExportacaoDominio
+from ponto.models import Ausencia, Batida, FechamentoMensal
+from ponto.services import ausencia as A
+
+
+TETO = 8
+ESCAPES = tuple(sorted(M.ESCAPES_QUE_VIRAM_AUSENCIA))
+
+# app/api/views.py:2615–2655 e app/chamados/services/disputa_emissao.py:1446–1490
+RECUSAS = {
+    (404, "Colaborador nao encontrado."): "sem_vinculo",
+    (404, "Pergunta nao encontrada ou ja regularizada."): "nao_encontrada_ou_nao_viva",
+    (400, "Resposta obrigatoria."): "resposta_vazia",
+    (400, "Selecione/preencha uma resposta."): "resposta_vazia",
+    (400, "Opcao invalida."): "opcao_invalida",
+    (400, "Hora deve ser HH:MM."): "hora_invalida",
+    (400, "A pergunta já foi resolvida pela ausência declarada."): "absorcao_vigente",
+}
+REVERSOES = {"par_ato_coluna_divergente", "sem_grupo_recuperavel"}
+MOTIVOS_IRMAS = REVERSOES | {
+    "fora_da_releitura", "resposta_posterior_a_passagem", "ja_carimbada",
+    PerguntaDisputa.RECUSA_FORA_DO_FATO, PerguntaDisputa.RECUSA_C6,
+    PerguntaDisputa.RECUSA_PAR_ATO_COLUNA,
+}
+
+
+class Descartar(io.TextIOBase):
+    def write(self, texto):
+        return len(texto)
+
+
+class GuardaSombra(RuntimeError):
+    pass
+
+
+class SemUsuarioAtivo(RuntimeError):
+    pass
+
+
+class SemDecisorDP(RuntimeError):
+    pass
+
+
+class EvidenciaInesperada(RuntimeError):
+    pass
+
+
+class RedeBloqueada(OSError):
+    pass
+
+
+class EscritaEmArquivoBloqueada(OSError):
+    pass
+
+
+def sha(valor):
+    texto = json.dumps(valor, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    return hashlib.sha256(texto.encode("ascii")).hexdigest()
+
+
+def assinatura(campos):
+    por_campo = {nome: sha(valor) for nome, valor in campos.items()}
+    return sha(por_campo), por_campo
+
+
+def fotografar_linhas(qs):
+    campos = [f for f in qs.model._meta.concrete_fields if not f.primary_key]
+    nomes = [f.name for f in campos]
+    # Cast no PostgreSQL preserva a precisão dos timestamps e distingue
+    # NULL SQL de um valor JSON null.
+    colunas = [Cast(F(f.attname), TextField()) for f in campos]
+    return {
+        pk: assinatura(dict(zip(nomes, valores)))
+        for pk, *valores in qs.order_by("pk").values_list("pk", *colunas)
+    }
+
+
+def foto(colab, dia, mes, ano):
+    empresa = colab.empresa
+    vigente = competencia_entregue(empresa.pk, mes, ano, registro=True)
+    txt = txt_vigente_x_gravado(empresa, mes, ano)
+    criterio_dia = (
+        Q(data=dia)
+        | Q(data__lte=dia, data_fim__gte=dia)
+        | Q(data__lte=dia, data_fim__isnull=True, tipo__in=Ausencia.TIPOS_EM_ABERTO)
+    )
+    return {
+        "FechamentoMensal": fotografar_linhas(FechamentoMensal.objects.filter(
+            colaborador_id=colab.pk, mes=mes, ano=ano,
+        )),
+        "Batida": fotografar_linhas(Batida.objects.filter(
+            colaborador_id=colab.pk, timestamp__date=dia,
+        )),
+        "Ausencia": fotografar_linhas(Ausencia.objects.filter(
+            criterio_dia, colaborador_id=colab.pk,
+        )),
+        "ExportacaoDominio": fotografar_linhas(ExportacaoDominio.objects.filter(
+            pk=vigente.pk if vigente is not None else None,
+        )),
+        "TXT_do_gravado": {empresa.pk: assinatura({
+            "hash_hoje": txt["hash_hoje"], "linhas_hoje": txt["linhas_hoje"],
+        })},
+    }
+
+
+def diferencas(antes, depois):
+    resultado = {}
+    for modelo, a in antes.items():
+        b = depois[modelo]
+        novas = sorted(b.keys() - a.keys())
+        removidas = sorted(a.keys() - b.keys())
+        mudadas = [
+            {"pk": pk, "campos": sorted(
+                nome for nome in a[pk][1] if a[pk][1][nome] != b[pk][1][nome]
+            )}
+            for pk in sorted(a.keys() & b.keys()) if a[pk][0] != b[pk][0]
+        ]
+        resultado[modelo] = {
+            "novas": {"n": len(novas), "pks": novas},
+            "mudadas": {"n": len(mudadas), "linhas": mudadas},
+            "removidas": {"n": len(removidas), "pks": removidas},
+        }
+    return resultado
+
+
+def censo():
+    por_escape = dict.fromkeys(ESCAPES, 0)
+    selecionadas = {escape: [] for escape in ESCAPES}
+    universo = sem_dia = 0
+    memo = {}
+    qs = (
+        PerguntaDisputa.objects.filter(tipo_resposta__in=("hora", "escolha"))
+        .select_related("disputa__colaborador__empresa")
+        .only("tipo_resposta", "opcoes", "data_evento",
+              "disputa__colaborador__empresa__dia_inicio_competencia")
+        .order_by(F("materializada_em").asc(nulls_first=True), "-data_evento", "pk")
+    )
+    with closing(qs.iterator(chunk_size=2000)) as perguntas:
+        for p in perguntas:
+            opcoes = p.opcoes or []
+            valores = [o.get("valor") if isinstance(o, dict) else o for o in opcoes]
+            oferecidos = [e for e in ESCAPES if e in valores]
+            if not oferecidos:
+                continue
+            empresa = p.disputa.colaborador.empresa
+            chave = (empresa.pk, p.data_evento)
+            if chave not in memo:
+                memo[chave] = M.competencia_do_fato(p, empresa)
+            comp = memo[chave]
+            if comp is None:
+                sem_dia += 1
+                continue
+            mes, ano, entregue = comp
+            if not entregue:
+                continue
+            universo += 1
+            for escape in oferecidos:
+                por_escape[escape] += 1
+                if len(selecionadas[escape]) < TETO:
+                    selecionadas[escape].append((p.pk, escape, mes, ano))
+    casos = [caso for escape in ESCAPES for caso in selecionadas[escape]]
+    return universo, sem_dia, por_escape, casos
+
+
+def tipos_de_falha(falhas):
+    contagem = Counter(x for x in falhas if isinstance(x, str))
+    excecoes = {id(x): x for x in falhas if isinstance(x, BaseException)}
+    contagem.update(type(x).__name__ for x in excecoes.values())
+    return dict(contagem)
+
+
+def medir_fatia(r, nome, acao, falhas):
+    inicio = len(falhas)
+    try:
+        dados = acao()
+        if transaction.get_rollback():
+            falhas.append("TransacaoMarcadaParaRollback")
+    except Exception as erro:
+        falhas.append(erro)
+    erros = tipos_de_falha(falhas[inicio:])
+    del falhas[inicio:]
+    r[nome] = (
+        {"status": "INCONCLUSIVO", "excecoes_por_tipo": erros}
+        if erros else {"status": "CONCLUSIVO", **dados}
+    )
+
+
+def decisor_dp():
+    usuarios = get_user_model().objects.filter(is_active=True).order_by("-is_superuser", "pk")
+    with closing(usuarios.iterator(chunk_size=200)) as ativos:
+        for usuario in ativos:
+            if tem_acao(usuario, "editar_ausencias"):
+                return usuario
+    raise SemDecisorDP()
+
+
+def medir_caso(caso, falhas):
+    pk, escape, mes, ano = caso
+    r = {
+        "registro": "caso", "pergunta_pk": pk, "escape": escape,
+        "tentou_porta": 0, "tentou_rejeicao": 0,
+        "passagem": {"status": "NAO_EXERCITADA"},
+        "rejeicao": {"status": "NAO_EXERCITADA"},
+    }
+    ausencias = []
+    recusas_irmas = defaultdict(set)
+    criar_real, evento_real = A.criar_ausencia, observ.evento
+
+    def criar_observada(**kw):
+        chamada_da_passagem = (
+            sys._getframe(1).f_code is M._materializar_ausencia_de_resposta.__code__
+        )
+        ausencia = criar_real(**kw)
+        if chamada_da_passagem:
+            ausencias.append(ausencia.pk)
+        return ausencia
+
+    def evento_observado(acao, modelo, objeto_id, **kw):
+        if acao == M.ACAO_IRMA_VIVA_NA_AUSENCIA and modelo == "PerguntaDisputa":
+            dados = kw.get("depois") or {}
+            if dados.get("escape_pk") == pk:
+                motivo = dados.get("motivo")
+                if motivo in MOTIVOS_IRMAS:
+                    recusas_irmas[motivo].add(objeto_id)
+                    if motivo in REVERSOES:
+                        falhas.append("_Reprovada")
+                else:
+                    falhas.append("MotivoDeRecusaInesperado")
+        return evento_real(acao, modelo, objeto_id, **kw)
+
+    def passagem():
+        nonlocal colab, dia, depois
+        p = PerguntaDisputa.objects.select_related(
+            "disputa__colaborador__empresa", "disputa__colaborador__usuario",
+        ).get(pk=pk)
+        colab, dia = p.disputa.colaborador, p.data_evento
+        usuario = colab.usuario
+        if usuario is None or not usuario.is_active:
+            raise SemUsuarioAtivo()
+        r.update(colaborador_pk=colab.pk, empresa_pk=colab.empresa_id)
+        antes = foto(colab, dia, mes, ano)
+        req = APIRequestFactory().post(
+            reverse("api:disputa_responder", kwargs={"pk": pk}),
+            {"resposta": escape},
+            format="json",
+        )
+        force_authenticate(req, user=usuario)
+        with patch.object(A, "criar_ausencia", criar_observada), \
+                patch.object(observ, "evento", evento_observado):
+            r["tentou_porta"] = 1
+            resposta = api_disputa_responder(req, pk=pk)
+
+        if resposta.status_code == 200 and resposta.data.get("status") == "ok":
+            r["porta"] = "ACEITA"
+            if len(ausencias) != 1 or ausencias[0] is None:
+                raise EvidenciaInesperada()
+            r["ausencia_pk"] = ausencias[0]
+        else:
+            motivo = RECUSAS.get((resposta.status_code, resposta.data.get("erro")))
+            if motivo is None:
+                raise EvidenciaInesperada()
+            r.update(porta="RECUSADA", motivo_recusa=motivo)
+
+        depois = foto(colab, dia, mes, ano)
+        return {"diferencas": diferencas(antes, depois)}
+
+    def rejeicao():
+        ausencia = Ausencia.objects.get(pk=r["ausencia_pk"])
+        dp = decisor_dp()
+        r["tentou_rejeicao"] = 1
+        A.decidir(ausencia, "rejeitada", por=dp, decisor=dp, aprovada_em=timezone.now())
+        ausencia.refresh_from_db()
+        if ausencia.status != "rejeitada":
+            raise EvidenciaInesperada()
+        # Corpo real do primeiro ramo do callback de ponto/signals.py:254–262.
+        devolvidas = M.devolver_absorvidas_da_ausencia_rejeitada(ausencia)
+        return {
+            "perguntas_devolvidas": devolvidas,
+            "diferencas": diferencas(depois, foto(colab, dia, mes, ano)),
+        }
+
+    colab = dia = depois = None
+    try:
+        with transaction.atomic():
+            try:
+                medir_fatia(r, "passagem", passagem, falhas)
+                if r["passagem"]["status"] == "CONCLUSIVO" and r.get("porta") == "ACEITA":
+                    medir_fatia(r, "rejeicao", rejeicao, falhas)
+            finally:
+                transaction.set_rollback(True)
+    except Exception as erro:
+        r["passagem"] = {"status": "INCONCLUSIVO"}
+        r["rejeicao"] = {"status": "INCONCLUSIVO"}
+        r["savepoint"] = {"excecoes_por_tipo": tipos_de_falha([erro])}
+
+    r["recusas_de_irmas"] = {
+        motivo: {"n": len(pks), "pks": sorted(pks)}
+        for motivo, pks in sorted(recusas_irmas.items())
+    }
+    r["status"] = (
+        "INCONCLUSIVO"
+        if any(r[f]["status"] == "INCONCLUSIVO" for f in ("passagem", "rejeicao"))
+        else r["porta"]
+    )
+    return r
+
+
+def principal():
+    saida = sys.stdout
+    universo = None
+    falhas = []
+
+    def observar_log(_logger, registro):
+        erro = registro.exc_info[1] if registro.exc_info else None
+        if erro is not None:
+            falhas.append(erro)
+        elif registro.levelno >= logging.ERROR:
+            falhas.append("ErroRegistradoSemTipo")
+
+    def bloquear(tipo):
+        def chamada(*args, **kw):
+            erro = tipo()
+            falhas.append(erro)
+            raise erro
+        return chamada
+
+    try:
+        with ExitStack() as pilha:
+            pilha.enter_context(redirect_stdout(Descartar()))
+            pilha.enter_context(redirect_stderr(Descartar()))
+            pilha.enter_context(patch.object(logging.Logger, "handle", observar_log))
+            pilha.enter_context(timezone.override(settings.TIME_ZONE))
+            if not (
+                settings.SETTINGS_MODULE == "config.settings.sombra"
+                and getattr(settings, "HASNER_SOMBRA", False) is True
+                and set(settings.DATABASES) == {"default"}
+                and connection.vendor == "postgresql"
+                and connection.settings_dict["NAME"] == "sombra"
+                and connection.settings_dict["HOST"] == "sombra_db"
+                and getattr(connection, "schema_name", None) == "juliani"
+                and not connection.in_atomic_block
+                and connection.get_autocommit()
+            ):
+                raise GuardaSombra()
+
+            # get_autocommit() já abriu a conexão do banco.
+            pilha.enter_context(disputa_emissao.push_disputa_silenciado()) [nao verificado]
+            bloquear_rede = bloquear(RedeBloqueada)
+            pilha.enter_context(patch.object(socket, "getaddrinfo", bloquear_rede))
+            for metodo in ("connect", "connect_ex", "sendto", "sendmsg"):
+                if hasattr(socket.socket, metodo):
+                    pilha.enter_context(patch.object(socket.socket, metodo, bloquear_rede))
+            for metodo in ("_save", "delete"):
+                pilha.enter_context(patch.object(
+                    FileSystemStorage, metodo, bloquear(EscritaEmArquivoBloqueada),
+                ))
+
+            with transaction.atomic():
+                try:
+                    with connection.cursor() as cursor:
+                        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ WRITE")
+                        cursor.execute("SELECT pg_catalog.current_database(), pg_catalog.current_schema()")
+                        if cursor.fetchone() != ("sombra", "juliani"):
+                            raise GuardaSombra()
+                    universo, sem_dia, por_escape, casos = censo()
+                    if falhas:
+                        raise EvidenciaInesperada()
+                    linhas = [medir_caso(caso, falhas) for caso in casos]
+                    if falhas:
+                        raise EvidenciaInesperada()
+                finally:
+                    transaction.set_rollback(True)
+
+        erros = Counter()
+        for r in linhas:
+            for etapa in ("passagem", "rejeicao", "savepoint"):
+                erros.update(r.get(etapa, {}).get("excecoes_por_tipo", {}))
+        recusas = Counter(r["motivo_recusa"] for r in linhas if r.get("porta") == "RECUSADA")
+        inconclusivos = sum(r["status"] == "INCONCLUSIVO" for r in linhas)
+        passagens = sum(
+            r.get("porta") == "ACEITA" and r["passagem"]["status"] == "CONCLUSIVO"
+            for r in linhas
+        )
+        if universo == 0:
+            status = "SEM_CANDIDATAS"
+        elif inconclusivos:
+            status = "INCONCLUSIVO"
+        elif passagens == 0:
+            status = "SEM_PASSAGEM_ACEITA"
+        else:
+            status = "CONCLUSIVO"
+        resumo = {
+            "registro": "resumo", "status": status, "universo": universo,
+            "candidatas_por_escape": por_escape, "com_escape_sem_dia": sem_dia,
+            "planejadas": len(casos),
+            "tentativas": sum(r["tentou_porta"] for r in linhas),
+            "exercitadas": len({r["pergunta_pk"] for r in linhas if r["tentou_porta"]}),
+            "recusadas": len({r["pergunta_pk"] for r in linhas if r.get("porta") == "RECUSADA"}),
+            "tentativas_recusadas_por_motivo": dict(recusas),
+            "passagens_conclusivas": passagens,
+            "rejeicoes_tentadas": sum(r["tentou_rejeicao"] for r in linhas),
+            "rejeicoes_conclusivas": sum(r["rejeicao"]["status"] == "CONCLUSIVO" for r in linhas),
+            "casos_inconclusivos": inconclusivos, "excecoes_por_tipo": dict(erros),
+        }
+    except Exception as erro:
+        linhas = []
+        resumo = {
+            "registro": "resumo", "status": "INCONCLUSIVO", "universo": universo,
+            "excecoes_por_tipo": tipos_de_falha([*falhas, erro]),
+        }
+
+    for linha in [resumo, *linhas]:
+        print(json.dumps(linha, ensure_ascii=True, sort_keys=True), file=saida, flush=True)
+    return int(resumo["status"] == "INCONCLUSIVO")
+
+
+raise SystemExit(principal())
+```
+
+### Leitura das duas fatias e limites
+
+- **Fotos.** Passagem compara antes e depois da view. Rejeição compara o pós-resposta com o resultado de `decidir` seguido do corpo real de `devolver_absorvidas_da_ausencia_rejeitada`. O decisor é o primeiro usuário ativo com a ação exigida pela view do DP, priorizando superusuários. A rejeição exercita uma única ausência, inclusive uma já aprovada se a passagem a reutilizar. A rejeição pela tela tem recorte próprio de ausências abertas e percorre as irmãs de documento. `app/ponto/views.py:2828–2852` · `app/colaboradores/mixins.py:322–331` · `app/ponto/services/ausencia.py:436–443,914–923,1057–1125` · `app/chamados/services/materializacao.py:1187–1222`
+- **Chave e valor.** O pareamento usa PK e os hashes ficam em memória. As fotos cobrem todos os campos concretos do fechamento do colaborador na competência, as batidas do dia civil, as ausências cujo intervalo inclui o dia em qualquer estado e o registro vigente pelo K6. “Nova” e “removida” significam entrada e saída da foto. Uma troca de vigente, por exemplo, aparece com o PK antigo removido e o novo incluído. `TXT_do_gravado` é a remontagem da empresa com o gerador da casa, identificada pelo PK da empresa. Uma mudança ali pode vir das datas de falta mesmo com o registro entregue intacto. `app/ponto/models.py:22–42,398–485,826–841` · `app/ponto/turnos.py:2550–2571` · `app/folha/models.py:75–102` · `app/folha/export.py:588–594,654–679,725–746`
+- **`on_commit`.** O rollback descarta a fila. A chamada explícita
+
+[truncado em 20000 de 22555 caracteres]
+
+## 20/11 18:39 · sessao 519e39149137 · E4C-F5-CONSTROI · leitura · origem=Code
+
+**E4C-F5-CONSTROI · cópia `c8eb8eddf`**
+
+A auditoria cobre as 29 faltas de publicação, incluindo a parte de publicação do 06. O 78 está marcado apenas como `FALTA-CODIGO` e fica fora da contagem. Os estados abaixo usam os dois anexos vivos. As tabelas seguintes usam o código da cópia e indicam onde falta o histórico. `faltas.txt:3–32`
+
+## Estado da publicação
+
+| Nº | O que o aval pede que esteja publicado | O que os anexos mostram | Estado | [nao verificado]
+|---|---|---|---|
+| 01 | Matriz nominal dos 15 sítios conciliada com censo, selo e PRONTO. `faltas.txt:3` | «matriz 15 sitios» e «CENSO fechado pelo wrapper» em `relato_a.txt:1410`. «Sao 11 das 15 linhas da matriz» em `relato_a.txt:694`. Falta a matriz nominal com o vínculo de cada sítio ao censo, ao selo e ao PRONTO. | PUBLICADO EM PARTE | [nao verificado]
+| 06 | Mapa dos 15 no RELATO, com a cobertura da catraca. O literal do 0815 citado no relato é «varrendo tambem string em getattr/update_fields/refresh_from_db». `faltas.txt:4` · `relato_a.txt:3` | A linha mais recente descreve a inspeção e registra «13 funcoes em 8 arquivos, 0 acusacoes», mas termina em «MUDOU DE CLA». O mapa ainda aparecia como pendência em `relato_a.txt:74`. O corte da linha mais recente impede fechar a situação da publicação. `relato_a.txt:3` | CORTADO |
+| 19 | Saída do grep do compositor e das três delegações. `faltas.txt:5` | «PUBLICAR NO RELATO: 19 grep do compositor» em `relato_a.txt:74`. A fonte e os três consumidores são citados, mas a saída do grep está [nao verificado] nos recortes. `relato_a.txt:1227,1275,1287` | AUSENTE |
+| 32 | Triagem motivada de `casefold` para anexar ao Opus final. `faltas.txt:6` | «casefold sobrevivente = plausivel, nao executado -> anexo ao opus» em `relato_a.txt:1346`. «Terra NAO BLOQUEIA, Sol BLOQUEIA» em `relato_a.txt:1281` e «Sol 6.2 BLOQUEIA» em `relato_a.txt:1284`. Falta a decisão final motivada diante dos pareceres divergentes e a triagem anexada. | PUBLICADO EM PARTE | [nao verificado]
+| 33 | Linha «PRONTO E4C-F5 item a item» e lista atual de faltas no topo. `faltas.txt:7` | «INCOMPLETO: […] linha do PRONTO» em `relato_a.txt:5,11,13`. A leitura posterior traz «113 itens […] 30 FALTA», detalha dois itens e termina em «MUDOU DE CLA». O corte impede ver se a linha atual completa a lista e traz o literal pedido. `relato_a.txt:3` | CORTADO |
+| 35 | Mapa dos 69 K com classes, carregadores e pontos de toque. `faltas.txt:8` | «69 carregadores a tocar» e «L/Q/R/M = 10/29/5/25» em `relato_a.txt:1245,1239`. Falta a correspondência nominal K → classe → carregador → ponto de toque. | PUBLICADO EM PARTE | [nao verificado]
+| 36 | Declaração dos seis R e vínculo nominal dos cinco além de K40. `faltas.txt:9` | «K40 virou R no 1830» em `relato_a.txt:695` e cinco R no agregado «L/Q/R/M = 10/29/5/25» em `relato_a.txt:1239`. Faltam a declaração conjunta dos seis e os cinco vínculos nominais. | PUBLICADO EM PARTE | [nao verificado]
+| 40 | Tabela B com 29 cobertos, 27 editados na B, K41/K42 e 5 L + 3 Q. `faltas.txt:10` | «K41/K42 sao da B» e «VOLTA B (29 x 27)» aparecem na devolução do aval. «lotes 24->27» se refere aos asserts da B2. Faltam a conciliação nominal dos 29 e dos 27, os carregadores K41/K42 e os nomes dos 5 L + 3 Q. `relato_a.txt:1236,1203` | PUBLICADO EM PARTE | [nao verificado]
+| 41 | Tabela C com manutenção nominal, as três M e a sobra. `faltas.txt:11` | «25 K + sobra dedup» e «manutencao: auditar x3, dedup, materializacao x5, vigia_fio = 10». Faltam o vínculo nominal dos 25 K e a identificação das três M. `relato_a.txt:1196,1213` | PUBLICADO EM PARTE | [nao verificado]
+| 45 | Tabela consolidada da remedição e da atribuição SQL dos selos. `faltas.txt:12` | «230->234, 145->146, 294->298, 219->221» e «ESCRITOR = 0» na remedição C4. O detalhe «A […] B […] C […] D […] E […] F […] G» é da comparação anterior. Falta a atribuição nominal final por cenário na tabela consolidada. `relato_a.txt:700,1206` | PUBLICADO EM PARTE | [nao verificado]
+| 49 | Mapa das 11 famílias e diff por exceção autorizada. `faltas.txt:13` | «harness 12 familias / 112 ocorrencias», «tocar harness das 11 familias» e «duble helper unico […] nos 9 modulos». Há usos de exceções em prosa. Faltam a partição nominal das 11 e o diff completo vinculado a cada autorização. `relato_a.txt:1245,1221,1211–1216` | PUBLICADO EM PARTE | [nao verificado]
+| 51 | Identificação da 12ª família e dos dois RED-8. `faltas.txt:14` | «restam […] red_8 2» e «calc.call_count>=N -> consultas […] <=1». Faltam a identificação expressa da 12ª família e a publicação dos dois nomes vinculados a ela. `relato_a.txt:1219,1216,1245` | PUBLICADO EM PARTE | [nao verificado]
+| 55 | Conciliação histórica dos 41 diretos e 55 indiretos por volta. `faltas.txt:15` | «41 -> esperado 24», «24 -> 10 -> 0» e «os 55 indiretos trocam em _pergunta_viva_calc na A». Falta a conciliação nominal das identidades e dos marcos por volta. `relato_a.txt:1224,1213,1221` | PUBLICADO EM PARTE | [nao verificado]
+| 68 | Inventário das adaptações, com antes/depois e aval por uso. `faltas.txt:16` | «USOS DA CLASSE» com deltas pontuais e «33 arquivos de teste EXISTENTES modificados (271+/142-)» numa medição intermediária. Falta o inventário integral da cópia final com o antes/depois e o aval de cada uso. `relato_a.txt:1211–1212,1216,690` | PUBLICADO EM PARTE | [nao verificado]
+| 70 | Fila E4D do raio-X. `faltas.txt:17` | «placar chamados/services/raiox.py:135 (values_list da coluna, face SQL) le a projecao, fora da F5» em `backlog_vivo.txt:2047`. «raiox registrado na E4D-PROJECAO-UM-ESCRITOR» em `relato_a.txt:1233`. | PUBLICADO |
+| 72 | Fila E4D de `resposta_display`. `faltas.txt:18` | «resposta_display […] fica FORA da F5 (medida 20/11: literal 16, like-for-like 0)» em `backlog_vivo.txt:2047`. «resposta_display registrada na E4D-PROJECAO-UM-ESCRITOR» em `relato_a.txt:690`. | PUBLICADO | [nao verificado]
+| 80 | Registro dos esperados substituídos em K47 e na D. `faltas.txt:20` | «esperado antigo dos 18 testes citado no corpo do commit» e «zero DEVOLUCAO em A) se INVERTE». Falta o registro nominal dos esperados antigos e novos de K47 e dos REDs da D. `relato_a.txt:190,669` | PUBLICADO EM PARTE | [nao verificado]
+| 85 | Fila E4D da opção B de pureza e dos nove harnesses. `faltas.txt:21` | «VIAS_FORA_DO_FATO vira constante de modulo […] 9 harnesses que injetam a classe falsa mudam; a isencao nominal com tripwire […] sai junto». `backlog_vivo.txt:2048` | PUBLICADO | [nao verificado]
+| 93 | Fila E4D da corrida entre irmãs, grupo via ABSORÇÃO, âncora fora e descarte das recusadas. `faltas.txt:22` | «recusa entre irmas da ausencia + leitor do grupo para a linha ABSORCAO» e «ancora fora, dependente sem reentrada CONTADA […] o unico chamador de producao descarta as recusadas». `backlog_vivo.txt:2055–2056` · `relato_a.txt:80` | PUBLICADO | [nao verificado]
+| 94 | Fila E4D do empate automático e das três janelas de elegibilidade. `faltas.txt:23` | «responder_automaticamente em empate; elegibilidade antes da trava em validar, recusar, corrigir». `backlog_vivo.txt:2055` | PUBLICADO | [nao verificado]
+| 95 | Fila E4D de validação física e backfill. `faltas.txt:24` | «todo escritor que carimba validar grava a linha VALIDACAO fisica, junto do backfill das validadas sem linha». `backlog_vivo.txt:1978` | PUBLICADO | [nao verificado]
+| 101 | Declarar a redução de S1, registrar a fatia e encaminhar as quatro perguntas. `faltas.txt:25` | «1 retirado por aval (S1)» no topo, «o SILENCIO dono admin SAI da F5 e vira a fatia E4C-F5-SILENCIO-ADMIN» e «As quatro perguntas […] vao ao caderno de cortes». O BACKLOG confirma «4 perguntas NO CADERNO 12:5x». `relato_a.txt:3,181,81` · `backlog_vivo.txt:1966` | PUBLICADO | [nao verificado]
+| 102 | Censo DECIDE/EXIBE e `N_DECIDE` no topo. `faltas.txt:26` | «N_DECIDE = 42, N_EXIBE = 1», «3 dos 42 sao DECIDE POR DUVIDA» e «Mais 2 EXIBE por leitura direta». A remissão declara «ver a PERGUNTA DE DESENHO F5-INSTANTE no topo». Os totais e a ressalva estão antes do corte. `relato_a.txt:56,64` | PUBLICADO | [nao verificado]
+| 103 | Literal do limite de `validada_em` na linha do PRONTO. `faltas.txt:27` | «a linha do PRONTO declara o limite 'guarda SO validada_em; instante, autor e texto fora'» e «A/B mede SO presenca de validada_em». Falta o literal na própria linha do PRONTO. `relato_a.txt:55,73,13` | PUBLICADO EM PARTE | [nao verificado]
+| 105 | Entrada `E4C-F5-INSTANTE` com dependência, insumos, saída e A/B em `ALARMA_SEMPRE` na fatia. `faltas.txt:28` | «vaga apos o pouso da F5, antes da E4d; entrada 42 consumidores […], 3 formas da Q0, achado 2a do verif2, 16.886 e 71; saida comparador ato x coluna, contador 0, selo; ato_x_coluna_a/_b em ALARMA_SEMPRE». `backlog_vivo.txt:2053` · `relato_a.txt:55` | PUBLICADO | [nao verificado]
+| 110 | Entrada E4D dos escritores H4 fora da trava e respectivo anexo ao Opus. `faltas.txt:29` | «escritor de fantasma […] e encerrar_por_fato_no_espelho gravam carimbo/via fora da trava do dono» e «vai anexo ao opus». A entrada está publicada. Falta o anexo efetivamente entregue ao Opus. `backlog_vivo.txt:2057` · `relato_a.txt:44,51` | PUBLICADO EM PARTE | [nao verificado]
+| 111 | Literal de S144 na linha do PRONTO. `faltas.txt:30` | «PRONTO do sitio = RED afirma a recusa, o motivo na trilha e o PK encontravel pelo contador do par». A decisão e a prova estão registradas. Falta o literal na própria linha do PRONTO. `relato_a.txt:52,19,17` | PUBLICADO EM PARTE | [nao verificado]
+| 112 | Dois seletores, seus mutantes e literal do plantio na linha do PRONTO. `faltas.txt:31` | «os seletores (reconciliador.py:678-681 e :1100-1103) exigem validada_em nula», «A2 celula e orfa sem filtro de coluna, plantio motivo c6» e «RED so pelo passivo». Falta reunir os seletores, os mutantes e o literal aprovado do plantio na linha do PRONTO. A redação literal do aval está [nao verificado]. `relato_a.txt:23,17` | PUBLICADO EM PARTE | [nao verificado]
+| 113 | Fila da reprodução pela tela do controle H4. `faltas.txt:32` | «item 1 como linha de fila (F5-H4-CAMINHO-PELA-TELA)» e «o caminho inteiro pela tela ainda nao foi reproduzido». O RELATO dá nome e escopo à fila. Falta ver a entrada no BACKLOG indicada pelo item, que está [nao verificado] no recorte fornecido. `relato_a.txt:44,50` | PUBLICADO EM PARTE | [nao verificado]
+
+## 01 e 06 · Matriz dos 15 sítios e cobertura da catraca
+
+A reconstrução cruza o registro da catraca com os dois juízes puros e com o RED-5 histórico, acrescentado à matriz inicial. `par_do_intervalo` ocupa dois sítios e `validar_lote_classe_a` ocupa um sítio com duas guardas. Os IDs e a ordem do `brief_c3` estão [nao verificado]. `app/chamados/tests/test_e4c_f5_selo_catraca.py:11–26` · `app/chamados/tests/e4c_f5_voltaD_mutantes.py:20–37` · `relato_a.txt:1297,1410`
+
+| Sítio | Leitura na cópia | Selo ou prova vinculável |
+|---|---|---|
+| `espera_o_texto_do_colaborador` | Instante pela composta, texto corrente em `respondida_sem_texto`. `app/chamados/services/fio.py:178–190` | Catraca. RED em `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:55–65`. |
+| `leitura_da_resposta` | Guarda de texto corrente e delegação a `classificar_resposta_validacao`. `app/chamados/templatetags/chamados_tags.py:145,166–171` | Catraca. Passagem da tag registrada em `relato_a.txt:1409–1410`. |
+| `projecao_temporal_da_pergunta` | Juiz recebe a leitura e aplica o horizonte. `app/chamados/juizes.py:1383,1391–1409` | Selo de chamada. RED em `app/chamados/tests/test_e4c_f5_volta2_juizes.py:77–92`. |
+| `pergunta_respondida` | Juiz de instante e texto sobre o objeto recebido. `app/chamados/juizes.py:1551–1560` | Selo de chamada. RED em `app/chamados/tests/test_e4c_f5_volta2_juizes.py:94–105`. |
+| `acao_corrigir_resposta` | Guarda de validação pela composta. `app/chamados/services/acoes_disputa.py:349` | Catraca. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:84`. |
+| `_resposta_validada` | Guarda comum às duas declarações, pela composta. `app/chamados/services/declaracao_texto.py:217–229` | Catraca. REDs em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:103,122`. |
+| `_resolver_perguntas_por_chamado_resolvido`, S143 sem credor | Validação pela composta após carga de decisões. `app/chamados/services/disputa_emissao.py:2107–2112` | Catraca. REDs em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:142,155`. |
+| `par_do_intervalo`, irmã exigida validada | Primeiro ramo consulta a composta da irmã. `app/chamados/services/materializacao.py:200–202` | Catraca no corpo comum. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:228`. |
+| `par_do_intervalo`, irmã implausível | Segundo ramo consulta a mesma composta. `app/chamados/services/materializacao.py:203–208` | Catraca no corpo comum. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:238`. |
+| `materializar_perguntas_validadas_da_disputa` | Seleção inicial SQL e guarda composta sob trava. `app/chamados/services/materializacao.py:2142–2163` | Catraca. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:248`. |
+| `_validar_o_par` | Guarda composta da outra metade. `app/chamados/services/validacao.py:656–657` | Catraca. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:272`. |
+| `validar_pergunta` | Instante, texto e validação pela composta. `app/chamados/services/validacao.py:698–704` | Catraca. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:300`. |
+| `recusar_pergunta` | Guarda pela composta e coluna na foto. `app/chamados/services/validacao.py:915–923,930–932` | Catraca. RED em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:312`. |
+| `validar_lote_classe_a` | Guardas compostas na entrada e na releitura. `app/chamados/services/validacao.py:1074–1084,1102–1105` | Catraca. REDs em `app/chamados/tests/test_e4c_f5_voltaD_portas.py:324,350`. |
+| `devolver_validacao_recusada` | Guarda por ato ou coluna e escrita da própria coluna. `app/chamados/services/validacao.py:269–293` | Catraca. REDs em `app/chamados/tests/test_e4c_f5_item1_devolucao_ato_ou_coluna.py:69,91,114`. |
+
+| Conciliação | Evidência |
+|---|---|
+| Registro atual | 13 funções em oito arquivos. Inclui `_eventos_dos_chamados`, o RED-5 adicional à matriz inicial. `app/chamados/tests/test_e4c_f5_selo_catraca.py:15–26` · `app/chamados/services/historico.py:96–111` · `relato_a.txt:1297,1410` |
+| Juízes puros | O selo de chamada confere a origem composta pelo chamador. `app/chamados/tests/test_e4c_f5_selo_catraca.py:12–14` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–149,188–193` |
+| Strings na catraca | O visitante trata `getattr` e `refresh_from_db(fields=...)`. `update_fields` aparece no exemplo que passa. O visitante não inspeciona nominalmente esse argumento. `app/chamados/tests/test_e4c_f5_selo_catraca.py:174–197,360–369` |
+| Censo e PRONTO históricos | A matriz original é citada como `logs/ESPINHA-BRIEFS/F5/brief_c3.md`. O vínculo à numeração original está [nao verificado]. `relato_a.txt:74,694,1410` |
+
+## 19 e 32 · Compositor, delegações e `casefold`
+
+| Trecho do código | Ocorrência |
+|---|---|
+| Compositor | `def composta(cls, p)` → `lido = cls.leitura(p)` → `return LeituraComposta(lido.validada_em, lido.respondida_em, p.resposta_colab, p.materializada_em, p.via_resolucao)`. `app/chamados/models.py:4382–4390` |
+| Pergunta no app | `_pergunta_respondida(DecisaoPergunta.composta(p))`. `app/chamados/services/pergunta_no_app.py:83–88` |
+| Property `respondida` | `return pergunta_respondida(DecisaoPergunta.composta(self))`. `app/chamados/models.py:3837–3844` |
+| Fio | `leitura = DecisaoPergunta.composta(p)` → `respondida_sem_texto(leitura)`. `app/chamados/services/fio.py:187–190` |
+| Outros dois sítios do modelo enumerados com a property no teste do Opus | `sem_veredito_entre` e `estado` também passam a composta ao juiz. `app/chamados/tests/test_e4c_f5_opus_models.py:1–6,75–89` · `app/chamados/models.py:2022–2026,3256–3268` |
+
+Para a triagem do 32, a comparação atual é literal. O caso `Ato` × `ato` exige uma divergência e acusa uma normalização que iguale esse par. Os casos com espaço variam o texto da projeção. O ponto exato do mutante histórico `casefold` e o resultado dele nesta cópia estão [nao verificado]. `app/chamados/services/vigia_texto_resposta.py:19–25` · `app/chamados/tests/test_e4c_f5_contador_texto.py:21–24,40–53` · `relato_a.txt:1281,1284,1346`
+
+## 35, 36, 40 e 41 · Mapa dos K e cobertura das voltas
+
+Há 33 K com carregador identificável pelos testes da cópia e mais K40 pelo cruzamento com o RELATO. A coluna **Volta** indica a fonte que vincula o K à volta. As classes L/Q/R/M por K estão [nao verificado], salvo o vínculo de K40 a R. `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9–18` · `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–26` · `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–22` · `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:239–264` · `relato_a.txt:695,1232,1236,1239`
+
+| K | Volta ou classe | Carregador e ponto de toque | Vínculo nominal |
+|---|---|---|---|
+| K1 | A | `_carga_da_tarefa_cls`. `app/chamados/services/tarefa_do_dia.py:533–545` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:10` |
+| K2 | A | `alimentar_portas`. `app/chamados/juizes.py:1664–1669` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:11` |
+| K9 | A | `reconciliar_perguntas_orfas_colab`. `app/chamados/reconciliador.py:1575` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:12` |
+| K10 | A | `_orfas_abertas`. `app/chamados/reconciliador.py:1100–1103` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:13` |
+| K16 | A | Resolução por chamado, ramo S128. `app/chamados/services/disputa_emissao.py:1978–1982` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:14,37–39` |
+| K17 | A | `universo_do_fato`. `app/chamados/services/fio.py:1963–1964` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:15` |
+| K18 | A | `_vizinhos_do_fato`. `app/chamados/services/fio.py:1595–1597` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:16` |
+| K24 | A | `chamados_que_falam_de_batida`. `app/ponto/services/cartorio.py:145–146` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:17` |
+| K43 | A | `perguntas_absolvidas_pela_celula`. `app/chamados/reconciliador.py:702–703` | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:18` |
+| K4 | B | `perguntas_vivas_de`. `app/chamados/juizes.py:1512` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:54–60` |
+| K11 | B | `fechar_beco_da_disputa`. `app/chamados/services/becos.py:86–87` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:62–69` |
+| K23 | B | `montar_previa`. `app/folha/previa.py:64–66` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:71–95` |
+| K26 | B | `insumos_em_regularizacao`. `app/chamados/services/declaracao_texto.py:589–590` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:97–115` |
+| K29 | B | `perguntas_corrigiveis`. `app/chamados/juizes.py:1765` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:117–129` |
+| K30 | B | `perguntas_respondidas_a_validar`. `app/chamados/juizes.py:1772–1773` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:131–137` |
+| K31 | B | `_dias_das_perguntas_vivas`. `app/chamados/juizes.py:2435–2437` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:139–146` |
+| K32 | B | `disputa_viva_do_chamado`. `app/chamados/juizes.py:2490` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:148–155` |
+| K41/K42 | B | Carregadores e pontos de toque [nao verificado]. | `relato_a.txt:1236` |
+| K45 | B | `medir`, perguntas da competência. `app/chamados/services/competencia_trancada.py:119–121` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:165–177` |
+| K46 | B | `medir`, perguntas do chamado. `app/chamados/services/competencia_trancada.py:165–166` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:179–195` |
+| K47 | B | Resolução sem credor. `app/chamados/services/disputa_emissao.py:2107–2112` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197–222` |
+| K54 | B | `contexto_calendario`. `app/colaboradores/services/calendario.py:504–505` | `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:224–233` |
+| K55 | B | `dia_do_colab`. `app/ponto/services/dia_do_colab.py:64–65` | `app/chamados/t
+
+[truncado em 20000 de 39123 caracteres]
+
+## 20/11 18:38 · sessao a70008157aa2 · E4C-F5-CONSTROI · leitura · origem=Code
+
+Usei os vereditos do `inventario_logs.txt` para classificar as execuções e as linhas numeradas do `relato_b.txt` para ligar cada rodada ao hash e ao escopo. Quando um item pede várias provas, o estado cobre a execução identificada na linha. As partes sem prova estão marcadas como `[nao verificado]`. As horas dos logs são as de modificação no inventário. A cópia está sem metadados Git, então a comparação direta entre hashes ficou `[nao verificado]`.
+
+Os caminhos iniciados por `./` são relativos a `logs/ESPINHA-BRIEFS/F5`.
+
+| Nº | Execução pedida | Evidência | Hash da execução | Estado |
+|---:|---|---|---|---|
+| 07 | Passagens A → B → C por hash, com a exceção do chokepoint na A. `bin/volta_intermediaria.sh:2–9` | A `./vA/volta/vi1.log` (19/11 22:56), `Ran 5582 tests in 851.720s`, `FAILED (failures=5, errors=7, expected failures=21)`. O aval aceitou a passagem da A com a exceção. B `./vB/volta.log` (20/11 00:18), `FAILED (failures=4, errors=4, expected failures=12)` e `./vB3/volta.log` (00:51), `FAILED (failures=4, expected failures=12)`. C3 `./vC3/volta.log` (02:16), `FAILED (failures=4, skipped=1, expected failures=10)`. C5 `./vC5/volta.log` (02:52), `Ran 6748 tests in 622.974s`, `OK (skipped=1, expected failures=10)`, `rc=0 tempo_s=896 fim=02:52`. `relato_b.txt:697,704,1196,1203,1210–1211` | A aceita em `ec7134368`. B inicial `d0210a400`. C3 `aa3bdd88c`. C5 `a3c23d10b`. SHA exato de `vi1` e B3 `[nao verificado]`. `relato_b.txt:697,704,1196,1203,1206,1210–1211` | **RODOU EM ARVORE ANTERIOR.** Houve alterações posteriores em `models.py` e `materializacao.py`. A passagem verde da B está `[nao verificado]`. `relato_b.txt:17,62` |
+| 08 | Ordem dos commits, RED na base de cada cura e pureza no primeiro commit da A. `app/chamados/tests/test_e4c_f5_selo_chamada.py:271–285` | B `./vB/base_novos.log` → `./vB/B_novos.log` (19/11 23:57), `Ran 30 tests in 3.088s`, `FAILED (failures=28)` → `Ran 30 tests in 3.135s`, `OK`. C2 `./vC2/base_alvo.log` (20/11 01:47) → `./vC2/c2_verde.log` (01:48), `FAILED (failures=2, errors=15)` → `OK`. C3 `./vC3/base_red.log` (01:58) → `./vC3/c3_verde.log` (01:59), `FAILED (failures=3)` → `OK`. A1 tem commit declarado e ensaio separado `./vA/prova/puro_mods.log` (19/11 19:21), `FAILED (failures=15, errors=3)`. `relato_b.txt:705–706,1203,1219,1221` | A1 `0db6afc73`, com ensaio `PURO-SO` sobre `18bf86f01` + diff. B `ec7134368` → `d0210a400`. C2 `9d386d1b1` → `0e3b701a6`. C3 `0e3b701a6` + teste → `aa3bdd88c`. `relato_b.txt:705–706,1203,1219,1221` | **RODOU EM ARVORE ANTERIOR.** A pureza no próprio primeiro commit da A e a sequência completa de REDs `[nao verificado]`. Houve mudanças posteriores em `models.py` e `materializacao.py`. `relato_b.txt:17,62,1219,1221` |
+| 09 | Verificador e triagem de cada delta A/B/C, incluindo a volta 3/c3. `app/docs/RELATO.md:94–95,131,134` | `./vE/volta3/verif_c3/triagem.txt` (20/11 16:11), `TRIAGEM verif_c3 (delta 05cb513bb..c08017000; resposta r.txt rc=0)` e `PROCEDENTES (curados em c8eb8eddf, so testes):`. O RELATO dá 3 procedentes e 7 descartados. Para C4+C5, declara `BLOQUEIA=5 NAO_BLOQUEIA=1`. Os `r.rc` isolados de B e C trazem `rc=0`. `relato_b.txt:7,697,1196` | `c08017000` para c3, curas em `c8eb8eddf`. Delta C4+C5 até `a3c23d10b`. `relato_b.txt:7,17,697,700` | **RODOU EM ARVORE ANTERIOR.** A triagem c3 registra mudanças posteriores em testes. Os laudos e as triagens completos de A/B/C `[nao verificado]`. `relato_b.txt:7,697` |
+| 10 | 33 tira-lote A/B/C, incluindo K16 e K47. `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9–21`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–27`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23` | `./vPRONTO/medidas_da_sessao.txt` (20/11 02:54), `33 de 33 MORDE pela medida; k16 9 != 15; k47 8 != 14 (vC5/mutantes_c6.txt); Ran 76 OK`. `./vC5/green_c6.log` (02:53), `Ran 76 tests in 10.461s`, `OK`. O recorte de `./vC5/mutantes_c6.txt` (02:53) mostra `MORDE` para K17, K18, K24 e K43. Saída nominal íntegra `[nao verificado]`. `relato_b.txt:697` | C6 `8938552e1`. `relato_b.txt:697` | **RODOU EM ARVORE ANTERIOR.** Depois, `test_e4c_f5_voltaA_lotes.py` ganhou dois casos C11 e K47 ganhou a asserção de equivalência pela porta. `relato_b.txt:190,690` |
+| 11 | Sombra antes × depois dos dois juízes, por volta, classe e passivo sem ato. `app/chamados/juizes.py:1383–1403,1551–1560` | A sonda anterior separou 213 casos de SILÊNCIO e deixou o subtotal de passivo em aberto. Outro recorte de 40 usou um contrafactual em memória. O comparativo pela F5 real, por volta, está `[nao verificado]`. `relato_b.txt:1649,1660,1757` | `[nao verificado]` para a comparação pedida. | **SEM EVIDENCIA.** |
+| 12 | Sombra das decisões de validar, recusar e materializar pelas portas reais. `app/chamados/services/validacao.py:677–704,875–923`, `app/chamados/services/materializacao.py:1318–1336,2106–2162` | O RELATO ainda aponta a sombra por porta como lacuna. Saída comparativa `[nao verificado]`. `relato_b.txt:695` | `[nao verificado]` | **SEM EVIDENCIA.** |
+| 13 | Lista ou zero de decisões alteradas em entregue/exportada. `app/chamados/services/validacao.py:225–231,692,757–759`, `app/chamados/services/materializacao.py:815–847,1900–1904` | O RELATO inclui entregue/dinheiro nas medidas pedidas. `./vE/volta3/medida_seis/medida.log` (20/11 18:28) tem cabeçalho no inventário. O resultado do recorte está `[nao verificado]`. `relato_b.txt:5` | `c8eb8eddf` consta no `arvore.txt` da rodada, às 18:28. Hash de um resultado do item `[nao verificado]`. | **SEM EVIDENCIA.** |
+| 14 | CHECK-DE-TELA das quatro superfícies, com resultado, consultas e escritas contra a referência. `app/ponto/urls.py:10`, `app/chamados/views.py:721`, `app/chamados/services/tarefa_do_dia.py:825–830`, `app/api/urls.py:92` | Referência e rodadas de outras obras declaradas. A rodada da F5 estava prevista para quando sua árvore fosse ao Opus. Resultado da F5 `[nao verificado]`. `relato_b.txt:1440,1445` | Referência `3f666ad84`. Hash da rodada F5 `[nao verificado]`. `relato_b.txt:1440` | **DEPENDE DE ETAPA FUTURA** — Opus, etapa indicada para o comparativo de tela. `relato_b.txt:1440` |
+| 15 | Verificador de escopo inteiro, com matriz, predesenho, avais e `0 BLOQUEIA`. `r_vPRONTO5.txt:17` | `./vPRONTO/medidas_da_sessao.txt` (20/11 02:54), `verificador Codex escopo inteiro (aa3bdd88c) BLOQUEIA=9; delta C4+C5 BLOQUEIA=5; triagens escritas`. A triagem c3 foi de delta. Laudo integral com zero bloqueios nesta árvore `[nao verificado]`. `relato_b.txt:7,700,704` | `aa3bdd88c` no escopo inteiro. `relato_b.txt:700,704` | **RODOU EM ARVORE ANTERIOR.** Veredito de 9 bloqueios. Depois houve mudanças no selo do chokepoint, no vigia de texto e em `models.py`. `relato_b.txt:62,700` |
+| 16 | Suíte inteira pré-Opus, com recibo da Pista 2 e precedência da guarda verde e do PRONTO. `r_vPRONTO5.txt:18` | `./vE/volta3/c3/preopus.fim` (20/11 16:54), `rc=0 Ran 17268 tests in 2303.169s OK (skipped=42, expected failures=41) c8eb8eddf 16:54`. Recorte da guarda registrado às 16:15 e lançamento às 16:16. Recibo da Pista 2 `[nao verificado]`. Às 16:54 o RELATO ainda dava a linha do PRONTO como incompleta. `relato_b.txt:9,11` | `c8eb8eddf`. `relato_b.txt:11` | **RODOU NA ARVORE FINAL.** O veredito cobre a suíte. `relato_b.txt:11` |
+| 17 | Opus final único no hash da pré-Opus, com triagens e isenção de pureza. `r_vPRONTO5.txt:19` | O Opus final aparece pendente depois da suíte e parado às 18:28. O Opus anterior sobre a volta 1 foi reprovado por escopo. `relato_b.txt:3,11,1297` | Alvo `c8eb8eddf`. Hash de execução final `[nao verificado]`. `relato_b.txt:3,11` | **DEPENDE DE ETAPA FUTURA** — Opus final. `relato_b.txt:3` |
+| 20 | Mordidas de `a1_app_coluna` e `a1_app_texto_do_ato`. `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:45–53` | Veredito nominal `[nao verificado]`. O log `api_p_cru` documenta outro seletor, `test_MORDE_get_do_app_com_pergunta_crua`. `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:34–36` | `[nao verificado]` | **SEM EVIDENCIA.** |
+| 21 | RED da property com texto só no ato e projeção carimbada após reabertura. `app/chamados/tests/test_e4c_f5_opus_models.py:37–54,87–89` | `./opus_models/red.log` (19/11 18:33), `Ran 54 tests in 1.121s`, `FAILED (failures=8, errors=2)`, `rc=1`. É o RED agregado da etapa de `models.py`. A falha nominal da property `[nao verificado]`. `relato_b.txt:1227` | RED na árvore só com o compositor, SHA `[nao verificado]`. Cura `18bf86f01`. `relato_b.txt:1227` | **RODOU EM ARVORE ANTERIOR**, no recorte agregado. `models.py` mudou depois. O delta na property `[nao verificado]`. `relato_b.txt:62,1227` |
+| 22 | Mordidas de `a1_fio_coluna`, `a1_fio_texto_do_ato` e `a1_fio_composicao_local`. `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:55–71` | Vereditos dos três seletores `[nao verificado]`. A mordida anterior `M_fio_texto` é registrada para `test_fio_TEXTO_da_projecao`. `relato_b.txt:1386` | `[nao verificado]` para os três seletores. | **SEM EVIDENCIA.** |
+| 23 | RED na base de `sem_veredito_entre` com texto e instante divergentes. `app/chamados/tests/test_e4c_f5_opus_models.py:76–81` | `./opus_models/red.log` (19/11 18:33), `Ran 54 tests in 1.121s`, `FAILED (failures=8, errors=2)`, `rc=1`. Falha nominal desse caso `[nao verificado]`. `relato_b.txt:1227` | RED na árvore só com o compositor, SHA `[nao verificado]`. Cura `18bf86f01`. `relato_b.txt:1227` | **RODOU EM ARVORE ANTERIOR**, no recorte agregado. O próprio leitor foi alterado depois para reaproveitar as instâncias do fecho. `app/ponto/tests/test_selo_chokepoint_escrita.py:203–204` |
+| 24 | RED na base de `estado` que exige `PENDENTE`. `app/chamados/tests/test_e4c_f5_opus_models.py:83–85` | `./opus_models/red.log` (19/11 18:33), `Ran 54 tests in 1.121s`, `FAILED (failures=8, errors=2)`, `rc=1`. Falha nominal desse caso `[nao verificado]`. `relato_b.txt:1227` | RED na árvore só com o compositor, SHA `[nao verificado]`. Cura `18bf86f01`. `relato_b.txt:1227` | **RODOU EM ARVORE ANTERIOR**, no recorte agregado. `models.py` mudou depois. O delta em `estado` `[nao verificado]`. `relato_b.txt:62,1227` |
+| 27 | Comparar a contagem do vigia antes × depois com a mesma fixture e os quatro pares. `app/chamados/tests/test_e4c_f5_contador_texto.py:26–38` | O RELATO aponta que o teste de contagem já passava antes do loteamento. Saídas comparáveis da mesma fixture nas duas árvores `[nao verificado]`. `relato_b.txt:1288` | `[nao verificado]` | **SEM EVIDENCIA.** |
+| 28 | RED nominal na base para cinco perguntas, lote dois e três SELECTs de decisões. `app/chamados/tests/test_e4c_f5_contador_texto.py:87–95` | `./vFINAL/red_c5.log` (20/11 02:35), `Ran 27 tests in 3.199s`, `FAILED (failures=1, errors=1)`. A C5 alterou o loteamento. A saída que atribua uma falha a esse teste `[nao verificado]`. `relato_b.txt:700` | C5 `a3c23d10b`. SHA do RED nominal `[nao verificado]`. `relato_b.txt:700` | **SEM EVIDENCIA** do RED nominal. |
+| 39 | REDs 3 × 6 e verde da passagem A, incluindo O261 por candidata. `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:44–240` | `./vA/quatro/run12_base_k16.log` (19/11 22:33), `FAILED (failures=1)`. `./vA/quatro/run12_copia_k16.log` e `run12_mut_k16.log` (22:34), ambos `OK`. A bateria posterior `./vA/quatro/run14.log` (22:36) traz `Ran 286 tests in 41.221s`, `OK`. O RELATO declara as nove mordidas na rodada posterior a esse `OK` do mutante K16 isolado. `relato_b.txt:1212,1214,1217` | Ensaio verde sobre `acdcd556d` + diff. SHA de cada RED de base `[nao verificado]`. `relato_b.txt:1212,1217` | **RODOU EM ARVORE ANTERIOR.** O módulo A ganhou depois os dois casos C11. Saída nominal de todos os REDs de base `[nao verificado]`. `relato_b.txt:690,1212` |
+| 43 | Preservar os tetos existentes E2 e C11, com diff. `app/chamados/tests/test_e2_tarefa_do_dia.py:913–938`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:378–402` | `./vA/quatro/run6.log` (19/11 21:50), `Ran 286 tests in 21.808s`, `FAILED (failures=2, errors=34)`. O RELATO declara os tetos direcionados verdes nessa rodada. `./vPRONTO/c11_green.log` (20/11 03:11), `Ran 64 tests in 13.456s`, `OK`. O RELATO registra o teto C11 de 1 × 5 intacto. Diff dos dois tetos até a final `[nao verificado]`. `relato_b.txt:690,1214` | A2 sobre `acdcd556d` + diff. C7 `f62a39996`. `relato_b.txt:690,1212,1214,1217` | **RODOU EM ARVORE ANTERIOR.** Mudanças posteriores nos arquivos dos dois tetos `[nao verificado]`. |
+| 44 | Remedição nominal O261, teto 9 e um SELECT de decisões por candidata. `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–207`, `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:188–204` | `./vA/quatro/run6.log` (19/11 21:50), `Ran 286 tests in 21.808s`, `FAILED (failures=2, errors=34)`. O RELATO declara especificamente `o261 9/candidata` verde na A2. Saída nominal do SELECT por candidata `[nao verificado]`. `relato_b.txt:1214` | A2 sobre `acdcd556d` + diff. `relato_b.txt:1212,1217` | **RODOU EM ARVORE ANTERIOR.** `models.py` mudou depois. O delta no comando O261 e no teste dedicado `[nao verificado]`. `relato_b.txt:62` |
+| 47 | Remedição dos quatro casos do chokepoint, 1 e 3 furos × fecha e fica. `app/ponto/tests/test_selo_chokepoint_escrita.py:467–475,502–510` | `./chokepoint_final/wt-f5-chkf-copia-021731.log` (20/11 02:27), `Ran 6 tests in 2.173s`, `FAILED (failures=4)`. `./chokepoint_final/selo_c4.log` (02:29), `Ran 14 tests in 4.064s`, `OK`. Tetos medidos `234/146/298/221`, registrados na C4. `relato_b.txt:700,704` | Medida `eb1e49c1e` × `aa3bdd88c`. Selo C4 `3c351fee4`. `relato_b.txt:700,704` | **RODOU EM ARVORE ANTERIOR.** Depois mudaram `models.py` e caminhos de disputa e materialização. Remedição nominal na final `[nao verificado]`. `relato_b.txt:17,38,62` |
+| 48 | Captura de SQL por verbo e sítio, incluindo contagem de novos escritores. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–205,220–229,248–252,260–266` | MAIN `./chokepoint_final/wt-f5-chkf-main-021731.log` (20/11 02:27), `Ran 6 tests in 2.151s`, `OK`. Cópia `./chokepoint_final/wt-f5-chkf-copia-021731.log` (02:27), `Ran 6 tests in 2.173s`, `FAILED (failures=4)`. A atribuição registrada dá só SELECTs e zero `INSERT`, `UPDATE`, `DELETE` ou `SAVEPOINT` adicionais naquela comparação. `relato_b.txt:700,704,1206`, `app/ponto/tests/test_selo_chokepoint_escrita.py:196–205` | Primeira atribuição `eb1e49c1e` × `ec7134368`. Remedição `eb1e49c1e` × `aa3bdd88c`, incorporada na C4 `3c351fee4`. `relato_b.txt:700,704,1206` | **RODOU EM ARVORE ANTERIOR.** A captura por SQL em `c8eb8eddf` `[nao verificado]`. Houve mudanças nos caminhos exercitados, incluindo `models.py` e `disputa_emissao.py`. `relato_b.txt:38,62` |
+| 50 | Placar nominal verde das onze famílias de harness. `app/chamados/tests/test_pergunta_viva.py:16–76`, `app/chamados/tests/test_e4c_f5_duble_conforme.py:51–87` | Há ensaios de dublês e um recorte A com alguns módulos nomeados. O placar das onze famílias `[nao verificado]`. `relato_b.txt:1211–1212,1219` | `[nao verificado]` para o placar pedido. | **SEM EVIDENCIA.** |
+| 52 | Comparar `respondida` nos dois sentidos. `app/chamados/models.py:3838–3844` | 51.563 percorridas, zero erros, zero `True→False` e zero `False→True`, na sombra anterior. `relato_b.txt:689,1237` | `eb1e49c1e` × `a3c23d10b` na rodada Q2. SHA da primeira medição às 17:3x `[nao verificado]`. `relato_b.txt:689,1237` | **SO DECLARADO NO RELATO SEM LOG NO INVENTARIO.** `models.py` mudou depois. Resultado dessa medida na final `[nao verificado]`. `relato_b.txt:62,689` |
+| 53 | Comparar a decisão de `sem_veredito_entre` na frota. `app/chamados/models.py:2002–2027` | `PERCORRIDAS=51563 ERROS=0`, `MUDA_SEM_VEREDITO=0`, sonda 1(e) das 18:4x. `relato_b.txt:1223` | SHA da sonda `[nao verificado]`. `18bf86f01` é o commit Opus citado no contexto. `relato_b.txt:1223,1227` | **SO DECLARADO NO RELATO SEM LOG NO INVENTARIO.** Há alteração posterior no percurso do leitor. `app/ponto/tests/test_selo_chokepoint_escrita.py:203–204` |
+| 54 | Comparar os rótulos de `estado` na frota. `app/chamados/models.py:3249–3268` | `PERCORRIDAS=51563 ERROS=0`, `MUDA_ESTADO=0`, na mesma sonda 1(e). `relato_b.txt:1223` | SHA da sonda `[nao verificado]`. `relato_b.txt:1223` | **SO DECLARADO NO RELATO SEM LOG NO INVENTARIO.** Mudanças no trecho exato e remedição final `[nao verificado]`. |
+| 57 | Série da catraca de chamadas por identidade na base Opus e em A/B/C. `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–160,188–193` | O RELATO declara base 19 e recontagem AST com apelido de 41. A sequência `24 → 10 → 0` está descrita como esperada. `./vE/volta3/c3/catraca_c4.log` (20/11 16:15), `Ran 35 tests in 42.556s`, `OK`, é da catraca `test_medida_turno_do_par`. O placar por volta do selo de chamadas `[nao verificado]`. `relato_b.txt:7,9,1213,1224,1227` | `18bf86f01` no registro Opus. `c8eb8eddf` na catraca dos 35. Hashes do selo por rodada A/B/C `[nao verificado]`. `relato_b.txt:7,9,1227` | **SO DECLARADO NO RELATO SEM LOG NO INVENTARIO**, quanto à linha de base da série pedida. `relato_b.txt:1224,1227` |
+| 58 | Commit Opus próprio de `models.py` anterior à A, seis REDs na base e mapa K41/K42. `app/chamados/tests/test_e4c_f5_opus_models.py:57–167` | `./opus_models/red.log` (19/11 18:33), `Ran 54 tests in 1.121s`, `FAILED (failures=8, errors=2)`, `rc=1`. `./opus_models/green.log` (18:34), `Ran 54 tests in 1.152s`, `FAILED (errors=2)`, `rc=1`. O RELATO atribui os dois erros da cura às fixtures RED-8. Mapa K41/K42 e placar nominal dos seis REDs `[nao verificado]`. `relato_b.txt:1219,1227,1233,1236` | `18bf86f01` antes da A1 `0db6afc73`. SHA da base só com compositor `[nao verificado]`. `relato_b.txt:1219,1227` | **RODOU EM ARVORE ANTERIOR.** A rodada da cura teve dois erros. `models.py` mudou depois. `relato_b.txt:62,1227` |
+| 59 | Diff de `folha/` contra a base, demonstrando o limite de dois sítios. `app/folha/previa.py:64–67,139–146` | O RELATO declara diff restrito à carga e ao argumento do juiz em `previa.py`. A saída do diff `[nao verificado]`. `relato_b.txt:690` | `eb1e49c1e` × `f62a39996`. `relato_b.txt:690` | **SO DECLARADO NO RELATO SEM LOG NO INVENTARIO.** Mudanças posteriores em `app/folha/` `[nao verificado]`. |
+| 60 | Prévia da competência 11, MAIN × cópia, por colaborador e dia. `app/folha/previa.py:28,64–67,135–146` | `./vPRONTO/medidas_da_sessao.txt` (20/11 02:54), `4 empresas, 450 colaboradores, 5861 linhas colab x dia, diferenca 0 nas duas datas de referencia (hoje=28/11 e hoje=20/11), ERROS=0`. `relato_b.txt:689` | MAIN `eb1e49c1e` × C5 `a3c23d10b`. `relato_b.txt:689` | **RODOU EM ARVORE ANTERIOR.** `models.py`, consumido pela prévia, mudou depois. Delta em `previa.py` e remedição final `[nao verificado]`. `relato_b.txt:62`, `app/folha/previa.py:139–146` |
+| 73 | Remedir `resposta_display`, com a comparação literal e os dois zeros aceitos. `app/chamados/models.py:3865–3891` | Medida anterior declarada às 02:48, com 16 diferenças literais em 51.563, zero com o mesmo formatador e zero para texto do ato × coluna. `relato_b.txt:656` | SHA dessa rodada de display `[nao verificado]`. `relato_b.txt:656` | **SO DECLARADO NO RELATO SEM LOG NO INVENTARIO.** Aplicabilidade a `c8eb8eddf` `[nao verificado]`. |
+| 74 | Certificação na VM e pouso único integral. `r_vPRONTO5.txt:76`, `bin/suite.sh:23–29,236–257` | Há recibo da pré-Opus. Certificação de pouso e pouso final `[nao verificado]`. `relato_b.txt:3,11,674` | `c8eb8eddf` na pré-Opus. Hash certificado para pouso `[nao verificado]`. `relato_b.txt:11` | **DEPENDE DE ETAPA FUTURA** — certificação na VM e pouso, após Opus final. `relato_b.txt:3,674` |
+| 75 | Smoke após pouso, GET com colaborador de teste, badge e pendentes nas duas cascas, cinco minutos e zero traceback. `r_vPRONTO5.txt:77`, `app/api/views.py:2536–2556` | Saída do smoke `[nao verificado]`. | `[nao verificado]` | **DEPENDE DE ETAPA FUTURA** — pouso e smoke de leitura do app. `r_vPRONTO5.txt:77` |
+| 76 | Abertura humana do modal após pouso, com registro no RELATO. `r_vPRONTO5.txt:78`, `app/chamados/views.py:869–880` | Registro da abertura na F5 `[nao verificad
+
+[truncado em 20000 de 34102 caracteres]
 
 ## 20/11 18:35 · sessao 4dd232d65b45 · - · - · origem=Ronald (tmux)
 
@@ -1051,76 +1674,4 @@ teste_h4 h4_declaracao_colab_ignora_validacao test_controle_declaracoes_barram_v
 
 7. **FILA — Verificação pendente.** Identidade Git da cópia e mensagem literal do commit [nao verificado]. A cópia contém os sítios H4 em `app/chamados/models.py:4400–4422,4591–4594` e `app/chamados/services/disputa_emissao.py:1489–1490,1587–1594`. Suite, mutantes, casos de duas conexões, reprodução da sequência de correção e incidência por empresa e competência [nao verificado]. A versão local do teste T2 em `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:433–480` já espera `carimbar=False` e `RECUSA_PAR_ATO_COLUNA`, ao contrário da leitura antiga do rascunho.
 
-## 20/11 15:08 · sessao 9814393f14d6 · - · - · origem=Ronald (tmux)
-
-1. **CORRIGE — Classe contrato de leitura.** `DecisaoPergunta.composta` declara fonte única para ler `decisoes` ao julgar a pergunta. H4 consulta o mesmo histórico diretamente em outro método da classe, com semântica adicional e ordem por PK. O selo B4.6 só lê funções de topo e o selo de vitalidade exclui `models.py` inteiro. Uma comparação nova de carimbo dentro do método passa fora dos dois. [app/chamados/models.py:4382](/home/ronald/codex_ws/c9a67ed52fe381d169b11d6c1f3f1edac92f6fa0/app/chamados/models.py:4382) · `app/chamados/models.py:4412–4423` · `app/chamados/tests/test_contract_deus_objeto.py:19–28` · `app/chamados/tests/test_contract_leitores_vitalidade.py:317–349`.
-
-2. **CORRIGE — Classe vigência e concorrência.** A fábrica pode, em disputa aberta, chamar o descarimbo quando a célula passa a acusar. Esse escritor conserva `ABSORCAO`, limpa os três campos e grava auditoria, sem `REABERTURA` ou `RECUSA`. A regra da escolha (3) tomada literalmente veta e a implementação libera. Lida como regra de ordenação dos atos, a escolha é compatível com o requisito de carimbo atual no rascunho. `app/chamados/services/fabrica_da_celula.py:148–156,206–209` · `app/chamados/juizes.py:1455–1462` · `app/chamados/services/relavra_via.py:171–184,219–252` · `app/chamados/models.py:3451–3461,4412–4414` · `respostas_2011_1450.txt:8`. Separadamente, `relavrar` grava via sem a trava do dono, e seu comando só envolve o laço em `atomic`. `PerguntaDisputa.save` também não adquire a trava. Alcance de `relavrar` sobre uma absorção concreta [nao verificado]. `app/chamados/services/relavra_via.py:117–128` · `app/chamados/management/commands/relavrar_via_i6.py:55–69,100–102` · `app/chamados/models.py:3719–3735`.
-
-3. **FILA — Classe censo da porta.** `core/portas.py` descreve Q2 como web e API e enumera cinco sítios incluindo S128. O selo vivo enumera três sítios de escrita e inclui a resposta automática. A H4 acrescenta um adaptador sem novo sítio de escrita, e o comentário deixa de documentar justamente a separação entre quatro chamadas com veto e a exceção direta. `app/core/portas.py:258–272` · `app/chamados/tests/test_porta_resposta_pergunta.py:65–76,100–134` · `app/chamados/services/disputa_emissao.py:1587–1594`.
-
-4. **FILA — Classe alcance e efeitos do chamador.** O censo textual encontrou Web com veto e `resposta_acao(False)` para toast 204 ou redirect com mensagem, API com veto e auditoria/JSON 400, declaração de colaborador com veto e JSON 400 `resposta_invalida`, aplicação administrativa com veto na ausência de resposta completa e retorno `resposta_invalida` com PK, e correção administrativa direta sem veto, com `resp('erro',...)` e sem validação no erro. A declaração pode retornar `ja_declarada`, ou o apply seguir à validação com resposta completa, sem chamar o escritor. Em uma declaração que agrega motivo antes do veto, a saída normal conserva o `save` da disputa. `app/chamados/views.py:1089–1100,1276–1282` · `app/core/respostas.py:47–71` · `app/api/views.py:2652–2664` · `app/chamados/services/declaracao_texto.py:318–319,350–365,419–428,656–664,689–699` · `app/chamados/services/disputa_emissao.py:548–550,578–580,641–645` · `app/chamados/services/acoes_disputa.py:359–388`. Nenhum caminho de produção adicional por alias/patch/getattr foi localizado, além do reexport e adaptador. `app/chamados/models.py:4586–4594` · `app/chamados/services/disputa_emissao.py:1587–1594` · `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:88,146`.
-
-5. **FILA — Classe selo do padrão.** A descrição fornecida de Single Writer Principle corresponde a manter o veto no mesmo escritor que salva o par e registra a resposta pelas quatro entradas, sem duplicar essa escrita no adaptador. A tarefa do dia escolhe por `ato_em` e lê status da ausência. O grupo de devolução procura uma âncora pelo carimbo e pode incluir legado sem ato. Nenhuma dessas autoridades responde à conjunção H4. A trava de juiz novo só fiscaliza autoridades registradas. O texto literal da mensagem de commit e o resultado dos selos [nao verificado]. `app/docs/GLOSSARIO.md:9–15` · `app/chamados/services/disputa_emissao.py:1478–1492,1532–1537,1587–1594` · `app/chamados/services/tarefa_do_dia.py:158–192,387–401` · `app/chamados/services/materializacao.py:1131–1164` · `app/core/juizes.py:290,303,305` · `bin/tests/test_juiz_novo_tem_corte.sh:27–45`.
-
-## 20/11 15:07 · sessao 2c6381917956 · - · - · origem=Ronald (tmux)
-
-1. **CORRIGE · ordem de inserção.** Trocar `.order_by('pk')` por `.order_by('-ato_em', 'pk')` preservaria os resultados esperados dos dois testes de ordenação. Em ambos, PK crescente coincide com instante decrescente. Uma `ABSORCAO` T1 seguida por `RECUSA` T2 com carimbo de pé distingue as ordens. A reabertura real do controle limpa o carimbo antes da leitura. `app/chamados/models.py:4417` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:201–210,273–296` · [nao verificado] em execução.
-
-2. **CORRIGE · foto e efeitos.** Um `save(update_fields=['recusa_motivo'])` ao retornar o veto pode alterar o campo sem mudar a foto dos dois REDs. A foto guarda IDs de trilhas e notas, não seus conteúdos. O filtro de eventos da irmã muda usa `celula_id=None`, enquanto o emissor pode resolver a célula por colaborador e dia. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:113–126,138–173` · `app/chamados/models.py:3468–3470,3485–3496` · `app/chamados/signals.py:230–259`.
-
-3. **CORRIGE · porta e ordem de chamadas.** O teste “sem validar” aceita uma chamada indevida a `validar_pergunta`, que devolve `sem_resposta` sem registrar `VALIDACAO`. O teste “antes do core” aceita que a declaração chame primeiro o escritor, receba o veto H4 e ainda retorne `validada_sem_registro`. O RED de validação coexistente usa `_carimbar_validacao`, que salta a porta pública. O controle da correção administrativa já termina com validação e absorção juntas, mas suas tentativas H4 são anteriores à correção. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:251–261,393–445` · `app/chamados/services/validacao.py:161–175,677–701` · `app/chamados/services/declaracao_texto.py:380–421,689–699`.
-
-4. **FILA · fidelidade da janela.** Os testes congelam T0 e avançam explicitamente, mas a interposição mede a ordem em uma transação de `TestCase`. O wrapper chama o método real e a passagem real, sem uma segunda conexão bloqueada. Nas declarações, `calado()` mantém a ata montada pela fixture ao suprimir o cartório acionado pelos saves. O teste de ato posterior escreve diretamente por `registrar`, produzindo o estado sintético que as portas reais descarimbam. `app/chamados/tests/cortes_f2_f9_apoio.py:37–44` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:63–108,281–298,359–402` · `app/ponto/services/cartorio.py:120–129` · `app/ponto/signals.py:85–93` · `app/chamados/services/disputa_emissao.py:1664–1685`.
-
-5. **FILA · aferição pela sessão.** A matriz de mutações dos 17 métodos foi enviada à raiz. PRONTO tem representação estática para os REDs, controles mutantes, inverso, quatro entradas, correção e foto. Ficam [nao verificado] o green da suíte e dos selos, a falha dos REDs na asserção esperada com o mutante, a ordem real em duas conexões, os callbacks normais após commit, a passagem via middleware e rotas, e a frequência em produção por empresa e competência. O teste anterior de devolução T2 já espera `False` e `RECUSA_PAR_ATO_COLUNA` na cópia. Identidade Git [nao verificado]. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:175–445` · `app/chamados/tests/e4c_f5_volta3_mutantes.py:80–99` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:433–471`.
-
-## 20/11 14:58 · sessao a64acae05b1e · E4C-F5-CONSTROI · construtor · origem=Code
-
-Entreguei [test_e4c_f5_h4_resposta_apos_absorcao.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:1), o único arquivo novo. Validei a sintaxe do arquivo e do escritor com o mutante aplicado em memória. A execução dos testes e a mordida dos mutantes ficam **[nao verificado]** para o Code e o opus final. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:35–48`
-
-**Conflito encontrado na cópia.** O teste existente `test_nenhuma_funcao_de_modulo_nova` aceita apenas `_motor_humana` na lista de permissões. A nova função de módulo `responder_pergunta_disputa_core` entra em `extras` e contraria `assertEqual(extras, [])`. É um conflito estrutural demonstrável por leitura. `app/chamados/tests/test_contract_deus_objeto.py:13–28` · `app/chamados/models.py:4594–4600`
-
-**Devolução T2.** O teste atual espera que `carimbar` devolva `False` com `RECUSA_PAR_ATO_COLUNA`. Exige a preservação da resposta original, da foto da lavra e dos eventos, com `DEVOLUCAO` em T2 e sem `ABSORCAO`. A H4 fica fora desse percurso. A resposta de arranjo chama o serviço direto e a tentativa de carimbo é da passagem. A expectativa `carimbar=True` mencionada no aval descreve uma versão anterior do teste. `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:80–104,433–480` · `app/chamados/services/materializacao.py:1072–1090`
-
-### Casos do arquivo novo
-
-| Teste | O que a asserção exige | [nao verificado]
-|---|---|
-| `test_RED_h4_irma_com_luz_recusa_e_preserva_foto` | Passagem real antes da trava da resposta, erro H4 e preservação da foto, incluindo atos, auditoria, notas e arquivo do destino. `:113–178` |
-| `test_RED_h4_irma_muda_recusa_e_preserva_foto` | Mesma prova para a irmã muda, que entra viva e perde vitalidade com a passagem. `:138–183` |
-| `test_controle_mutante_aceita_irma_com_luz` | Guarda antecipada aceita, grava `RESPOSTA`, gera auditoria e nota e resgata o destino. `:165–187` |
-| `test_controle_mutante_aceita_irma_muda` | Os mesmos efeitos de aceite com a guarda antecipada na irmã muda. `:165–191` |
-| `test_controle_reabertura_antes_da_trava_libera_o_mesmo_pk` | Reabertura real interposta encerra a absorção e permite responder ao mesmo PK. `:193–211` |
-| `test_RED_carimbo_de_declaracao_sem_absorcao_aceita` | Carimbo sem ato no próprio PK aceita, mesmo com absorção de outra irmã no mesmo instante. `:213–223` |
-| `test_controle_validacao_sozinha_antes_da_trava_aceita` | Aceita após validação isolada, limpa a assinatura vigente e conserva o ato histórico. `:225–249` |
-| `test_RED_validacao_vigente_com_absorcao_confirmada_recusa` | Veta com validação e absorção no mesmo PK, preservando a validação. `:251–261` |
-| `test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa` | `RECUSA` com `ato_em` maior e PK menor deixa a absorção vigente. `:263–279` |
-| `test_RED_ato_inserido_depois_encerra_vigencia_com_carimbo_de_pe` | `REABERTURA` e `RECUSA` com PK maior liberam a resposta mesmo com data anterior e carimbo preservado. O arranjo mantém o carimbo e insere só o ato para isolar a ordem por PK. `:281–298` |
-| `test_RED_rejeicao_com_outra_ausencia_cobrindo_o_dia_ainda_recusa` | Rejeição real deixa o veto vigente quando outra ausência cobre o dia e a absorção permanece. `:300–317` |
-| `test_RED_web_recusa_pelo_toast_depois_da_guarda_de_entrada` | Na janela, toast HTMX `204` com erro H4. Em sequência, recusa de entrada pelo C6. `:323–343` · `app/chamados/views.py:1237–1246,1278–1282` |
-| `test_RED_api_recusa_pelo_400_depois_da_guarda_de_entrada` | Na janela, `400` com erro H4 e auditoria de recusa. Em sequência, `404` pelo C6. `:330–357` · `app/api/views.py:2634–2656` |
-| `test_RED_declaracao_colab_recusa_pelo_json_400` | Passagem na primeira trava da declaração, JSON `400` com `resposta_invalida` e ausência de nota de sucesso. `:359–391` |
-| `test_RED_aplicar_declaracao_recusa_com_pk_e_sem_validar` | `resposta_invalida` com o PK absorvido, sem ato de resposta ou validação. `:393–402` |
-| `test_controle_declaracoes_barram_validacao_vigente_antes_do_core` | Nas duas declarações, a guarda de validação composta devolve `validada_sem_registro` antes do core. `:404–418` · `app/chamados/services/declaracao_texto.py:380–423,670–697` |
-| `test_controle_correcao_admin_preserva_servico_direto_e_acao` | O serviço direto aceita com absorção vigente. A ação administrativa registra a correção, valida e devolve seu envelope de sucesso. `:420–445` |
-
-### Comandos para a sessão de testes [nao verificado]
-
-O mutante reutiliza `aplicar` da Volta 3 com registro temporário no próprio teste. Antecipa a leitura e a decisão do veto, preservando o `refresh_from_db()` do escritor. Os dois comandos com seletor devem falhar na asserção do retorno, com `(True, None)` no lugar da recusa H4. A execução normal inclui os dois controles que esperam esse aceite. `app/chamados/tests/e4c_f5_volta3_mutantes.py:80–99` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:35–48,163–191`
-
-```bash
-ALVO=chamados.tests.test_e4c_f5_h4_resposta_apos_absorcao.RespostaAposAbsorcaoTest
-
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$ALVO" --noinput
-
-PYTHONDONTWRITEBYTECODE=1 F5_VOLTA3_MUTANTE=h4_guarda_antecipada \
-  python3 manage.py test "$ALVO.test_RED_h4_irma_com_luz_recusa_e_preserva_foto" --noinput
-
-PYTHONDONTWRITEBYTECODE=1 F5_VOLTA3_MUTANTE=h4_guarda_antecipada \
-  python3 manage.py test "$ALVO.test_RED_h4_irma_muda_recusa_e_preserva_foto" --noinput
-```
-
-**[nao verificado]** Resultado da suíte, concorrência em duas conexões, frequência por empresa e competência, casos em competência exportada e impacto financeiro. A intercalação escrita usa a técnica determinística da A1(b). `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:79–93` · `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:62–77`
-
-_7585 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7588 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
