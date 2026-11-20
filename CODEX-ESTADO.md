@@ -1,7 +1,131 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 10:28** · publicado em **20/11/2026 10:32** (UTC-3)
+> Ultima resposta processada: **20/11/2026 10:40** · publicado em **20/11/2026 10:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 10:40 · sessao ed36d8be0c4c · GRADE-ATUALIZA-PELO-GIT · censo · origem=Code
+
+### Q4
+
+SILENCIO-VENCIDO-VOLTA	QUARENTENA-DO-COLAB	29/10 00:19	Reaplicar a SPEC na cópia conjunta e pousar com a QUARENTENA. O transplante da E3 ficou como SPEC.	PODE VIRAR COMPLEMENTO de QUARENTENA-DO-COLAB	estado_l119.md:3; app/docs/BACKLOG.md:888; app/docs/RELATO.md:2081; app/docs/RELATO.md:2083
+QUARENTENA-DO-COLAB	OPUS-REPROVOU	29/10 00:19	Resolver 16 versus 15 janelas de isenção, reaplicar a SPEC no HEAD, rodar o RED e medir o DIFF de frota. O pré-requisito da E3 pousou.	SEGUE	estado_l119.md:5; app/docs/BACKLOG.md:2775; app/docs/RELATO.md:2029; app/docs/RELATO.md:417; f8ee770a5
+PADRAO-DE-CIMA	PDC-DESENHO	31/10 22:01	Fechar como o harness prova por que o mutante morreu. A volta 10 ficou guardada sem verificador nem opus.	SEGUE	estado_l119.md:7; app/docs/BACKLOG.md:942; app/docs/RELATO.md:3683
+COBPARC-FILA-RELOGIO	ESTACIONADA-POR-AVAL	02/11 10:49	Retomar na vaga, aplicar o padrão Clock Injection já registrado e concluir mutantes da v4, suíte e opus.	SEGUE	estado_l119.md:9; app/docs/BACKLOG.md:967; app/docs/RELATO.md:1771; app/docs/RELATO.md:2634; app/docs/RELATO.md:4046
+V3-RETOMA-PERIODOS-DA-CELULA	P5-MOTOR	31/10 22:03	Decidir o que vale quando a célula não guarda o período e concluir P4. P5b pousou isolada.	SEGUE	estado_l119.md:13; app/docs/BACKLOG.md:1087; app/docs/RELATO.md:9754; app/docs/RELATO.md:9841
+V3-RETOMA-FILA	POUSO-DA-V3	31/10 13:01	Confirmar o pouso da V3 exigida pela fila, sem prova [nao verificado]. Depois, certificar o diff_calculador, refazer o DIFF e resolver a CCT pelo dia. O instrumento tem pouso próprio.	PODE VIRAR COMPLEMENTO de V3-RETOMA	estado_l119.md:15; app/docs/BACKLOG.md:1099; app/docs/RELATO.md:3795; app/docs/RELATO.md:3799; app/docs/GRADE-MESTRA.md:1797
+SUITE-POR-IMPACTO	PRONTO-5	04/11 22:44	Obter o ! do PRONTO-5, resolver a base do replay cujo mapa deu sete falhas, fazer o rebase e obter o corte separado do gate por classe.	SEGUE	estado_l119.md:17; app/docs/BACKLOG.md:1159; app/docs/RELATO.md:417; app/docs/RELATO.md:3473
+CODEX-CONTEXTO-DA-CASA	CONSTRUTORES-EM-VOO	30/10 18:10	Conferir a entrega dos briefs dos construtores com `PERGUNTA:`. A conferência ainda está sem prova [nao verificado]. Depois, certificar o pouso.	SEGUE	estado_l119.md:19; app/docs/BACKLOG.md:1161; app/docs/GRADE-MESTRA.md:1781; app/docs/RELATO.md:4046
+O275	FORMA-A-X-FORMA-B	15/10 19:46	Ronald escolhe se o flag alcança os plantões ou fica nos ciclos de padrão semanal. DIFF A × B por vínculo sem prova [nao verificado].	SEGUE	estado_l119.md:21; app/docs/BACKLOG.md:1682; app/docs/RELATO-ARQUIVO.md:746; app/docs/RELATO.md:417
+LASTRO-DEGRAU-2	CENSO-DE-LEITORES	29/10 13:02	Curar no construtor da grade a dependência da janela e refazer o casamento pelo juiz do par. O censo atribui `lastro.py:274` ao grupo 1.	PODE VIRAR COMPLEMENTO de JUIZ-DO-PAR-GRUPO-1	estado_l119.md:23; app/docs/BACKLOG.md:917; app/docs/BACKLOG.md:1881; app/docs/RELATO.md:4573
+V3-E1	MOTIVO-NAO-SEI	31/10 00:29	Fechar C06/C16/24x48, com C06/C16 encaminhados ao DP/contador, e revalidar a bateria. O último ensaio citado registra 14 falhas de status em 11 casos.	SEGUE	estado_l119.md:25; app/docs/BACKLOG.md:2340; app/docs/RELATO.md:1745; app/docs/RELATO.md:3893; app/docs/RELATO.md:3899
+O10-C	SOLO-LISTA-DO-ADMIN	06/11 17:02	Entregar a lista do admin com a porta de UI que chama a troca existente. O apply da 09 tem ! próprio após o DRY por colaborador.	PODE VIRAR COMPLEMENTO de O10-TROCA-DE-PLANTAO-ENTRA	estado_l119.md:27; app/docs/BACKLOG.md:2341; app/docs/BACKLOG.md:2290; app/docs/RELATO.md:3176; app/docs/RELATO.md:3181
+OTIMIZA-1	SUITE-POR-IMPACTO	04/11 22:44	Esperar o pouso de SUITE-POR-IMPACTO. O brief está pronto. Restam rebase, replay, suíte, verificador e pouso próprio do contador.	SEGUE	estado_l119.md:29; app/docs/BACKLOG.md:2342; app/docs/RELATO.md:1818; app/docs/RELATO.md:417; app/docs/RELATO.md:3483
+
+### Q5
+
+O275	corte	“O FLAG NOVO DA O275 PODE SER LIGADO NUM TIPO DE PLANTAO (`12x36`/`24x48`), OU O PLANTAO RESPONDE SO PELA PRECEDENCIA QUE JA EXISTE?”	app/docs/RELATO-ARQUIVO.md:746
+O10-D-PERMUTA-RECIPROCA	corte	“(a) DNA carrega marcos do cedente ou (b) d1=d2 fora da porta” — demais literais dos cortes e do ! de escala: sem prova [nao verificado]	app/docs/RELATO.md:887; app/docs/RELATO.md:885; app/docs/RELATO.md:886
+O14	smoke	“SMOKE de olho no app de um noturno 12x36 (ex.: col174 ou col788) depois do deploy.”	app/docs/PENDENTES_RONALD.json:1587; app/docs/BACKLOG.md:1414
+O-JANELA-HE	smoke	sem prova [nao verificado] — o pedido está registrado como roteiro de 13 passos	app/docs/BACKLOG.md:1255; app/docs/RELATO-ARQUIVO.md:28550–28573; app/docs/RELATO.md:1037
+O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL	corte	“esta PERGUNTA ja foi materializada de fato (clique morto)?”	app/docs/BACKLOG.md:1002; app/docs/GRADE-MESTRA.md:47
+O176	corte	“o que o pacote declara tocar (`declarados()`) ja esta na arvore?”	app/docs/BACKLOG.md:1553
+O94	!	“o gravado de 09 passa a nao pagar essas 283 h (e elas viram cobranca a resolver com o DP/supervisao), ou ficam como estao ate a cobranca ser respondida?”	app/docs/PENDENTES_RONALD.json:369; app/docs/BACKLOG.md:1495
+HIGIENE-DE-CONTEXTO	!	“pode QUEBRAR o paragrafo em dois -- regra num, historia no outro -- sem mudar uma palavra”	app/docs/RELATO-ARQUIVO.md:27488–27489; app/docs/BACKLOG.md:1388
+O148-EDITAR	corte	“calendario com uso edita por versao com vigencia, nunca no lugar”	app/docs/BACKLOG.md:819; app/docs/GRADE-MESTRA.md:1526
+DIA-CONVOCADO-PELO-ADMIN	!	sem prova [nao verificado]	app/docs/BACKLOG.md:2290; app/docs/RELATO.md:114; app/docs/RELATO.md:115
+ESCALA-NAO-DESCREVE C8	!	sem prova [nao verificado]	app/docs/RELATO.md:74; app/docs/RELATO.md:122
+FRAC5-MINIMO-5	corte	sem prova [nao verificado] — a pergunta anterior já recebeu a opção (b)	app/docs/BACKLOG.md:788; app/docs/CORTES.md:484
+JUIZ-DE-DONO-DO-DIA	corte	sem prova [nao verificado]	app/docs/GRADE-MESTRA.md:59; app/docs/BACKLOG.md:1201
+LAUDO-col33-0310	corte	sem prova [nao verificado]	app/docs/GRADE-MESTRA.md:263; app/docs/BACKLOG.md:1844
+BO-ROTULO-REABRIR-SO-NO-DETALHE	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:2337
+FAIXA-NO-CADASTRO	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:2334
+DISPUTA-FECHADA-SEM-RESOLUCAO	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:1222
+VIGENCIA-SOBREPOSTA-COL515	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:1223
+O62	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:1469; app/docs/GRADE-MESTRA.md:892
+O310-RAIOX	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:1727; app/docs/GRADE-MESTRA.md:516
+O34	corte	sem prova [nao verificado]	app/docs/BACKLOG.md:1436; app/docs/GRADE-MESTRA.md:1238
+O37	!	sem prova [nao verificado]	app/docs/BACKLOG.md:1439; app/docs/GRADE-MESTRA.md:881
+O296	!	sem prova [nao verificado]	app/docs/BACKLOG.md:1704; app/docs/GRADE-MESTRA.md:410
+REJULGAR-61-COBPARC	!	sem prova [nao verificado]	app/docs/BACKLOG.md:906; app/docs/GRADE-MESTRA.md:657
+RESIDUO-PREMIG-NO-BIND-MOUNT	!	sem prova [nao verificado]	app/docs/BACKLOG.md:1761; app/docs/GRADE-MESTRA.md:421
+JANELA-DO-NOTURNO-CRAVADA	!	sem prova [nao verificado]	app/docs/BACKLOG.md:1769; app/docs/GRADE-MESTRA.md:247
+PROTEGE-VAZIA-EM-55-LEIS	!	sem prova [nao verificado]	app/docs/BACKLOG.md:1755; app/docs/RELATO-ARQUIVO.md:299
+
+quase
+
+APP-DESENHA-A-PALAVRA-DO-DIA	!	Implementação da leitura no app nativo, release e smoke de clique.	app/docs/PENDENTES_RONALD.json:209; app/docs/PENDENTES_RONALD.json:214
+BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR	smoke	O complemento REENVIO-SILENCIOSO ainda precisa de construção. O comportamento do app no reenvio ficou [nao verificado].	app/docs/PENDENTES_RONALD.json:3064; app/docs/RELATO.md:1017; app/docs/BACKLOG.md:1212
+SUITE-POR-IMPACTO	!	Base do replay, rebase e corte separado do gate por classe.	app/docs/RELATO.md:417; app/docs/BACKLOG.md:1159
+OTIMIZA-1	!	Pouso de SUITE-POR-IMPACTO, replay, suíte e verificador.	app/docs/RELATO.md:417; app/docs/BACKLOG.md:2342
+V3-RETOMA-PERIODOS-DA-CELULA	corte	P4 ainda está incompleta.	app/docs/BACKLOG.md:1087; app/docs/GRADE-MESTRA.md:1798
+V3-E1	corte	DP/contador para C06/C16 e bateria de status ainda vermelha no último ensaio registrado.	app/docs/RELATO.md:3893; app/docs/RELATO.md:3899
+V3-RETOMA	!	Certificação da V3.	app/docs/BACKLOG.md:1086; app/docs/GRADE-MESTRA.md:1030
+O280	!	Bateria, esmeril e condição de exportação da 10.	app/docs/GRADE-MESTRA.md:1002; app/docs/BACKLOG.md:1687
+O10-C	!	Lista do admin, porta de UI e DRY para o apply da 09.	app/docs/RELATO.md:3176; app/docs/RELATO.md:3181
+O28	!	DIFF da competência aberta por medir antes do !.	app/docs/RELATO.md:1033; app/docs/BACKLOG.md:1430
+O147	!	Medição da diferença em dinheiro antes do ato em exportada.	app/docs/BACKLOG.md:1523
+O304	!	Universo depende da reâncora. Falta RED antes da escolha e medida de frota.	app/docs/BACKLOG.md:1712
+O325	!	Contador com esperado ou piso declarado e escritor pela porta ainda são entregas da obra.	app/docs/BACKLOG.md:1782
+PAR-CONFIRMADO-PELO-SUPERVISOR	corte	MOTOR-LE-O-TURNO e pré-desenho com número de frota.	app/docs/BACKLOG.md:744; app/docs/RELATO.md:1228
+RAIZ-DA-DISPUTA	corte	F4 ainda parcial e E4D na F5.	app/docs/RELATO.md:328; app/docs/BACKLOG.md:2147; app/docs/GRADE-MESTRA.md:110
+ABONO-LE-O-CATALOGO	corte	COMPETENCIA-PAGA-UM-JUIZ para a 10 e condição própria para a 09.	app/docs/RELATO.md:1302; app/docs/RELATO.md:1327
+BACKFILL-UNICO	corte	Depende do último horizonte.	app/docs/GRADE-MESTRA.md:52; app/docs/CORTES.md:461
+ISENTO-PONTO-JUIZ-REGISTRADO	corte	Comparação do predicado e do universo.	app/docs/GRADE-MESTRA.md:53
+VINCULO-LINHA-DO-TEMPO	!	Censo dos leitores, tripwire e constraint.	app/docs/GRADE-MESTRA.md:60; app/docs/BACKLOG.md:1248
+PLACAR-ESTRUTURAL	!	Lote do R6.	app/docs/GRADE-MESTRA.md:62; app/docs/BACKLOG.md:1294
+RETIFICACAO-DA-10-8069-PRIMEIRO	corte	Decisão do admin sobre HE e a fatia 8069 na frente da 243.	app/docs/GRADE-MESTRA.md:95; app/docs/BACKLOG.md:1788
+PISTA-CERTIFICA-POUSO	!	Digest da imagem, teto e cancelamento, paridade de digest e hash, e rota no `suite.sh`.	app/docs/RELATO.md:863; app/docs/GRADE-MESTRA.md:482
+TRIAGEM-OFFLINE-SEM-CAMERA	smoke	O smoke anterior reprovou. O RED da nova classe foi evidenciado e falta a cura do SW.	app/docs/BACKLOG.md:2208; app/docs/RELATO.md:2151
+O74	smoke	Entrega de tela ainda registrada como livre para construir e publicar.	app/docs/BACKLOG.md:1483; app/docs/GRADE-MESTRA.md:507
+O161	smoke	Entrega da UI e selo de tela.	app/docs/BACKLOG.md:1537
+O274	smoke	Cura do alvo no drawer e RED nas duas cascas.	app/docs/BACKLOG.md:1681
+O256	smoke	Porta do PDF e complemento de dono da O261.	app/docs/GRADE-MESTRA.md:493
+
+A cópia veio sem metadados Git. A associação independente da árvore local ao hash informado fica [nao verificado].
+
+## 20/11 10:38 · sessao 2eeb4aab9381 · FERIADO-POR-POSTO · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — item 1.** A porta real pode enviar Web Push e FCM antes do commit. O rollback também não repõe IDs consumidos, e a prova por cinco contagens deixa passar alterações de conteúdo. Há ainda uma escrita síncrona em `FechamentoMensal` fora da guarda da célula. `app/ponto/management/commands/detectar_ausencias.py:775-807`, `app/chamados/services/disputa_emissao.py:1303-1305,1809-1817`, `app/config/settings/saas.py:83-93`, `app/config/settings/base.py:104`, `app/ponto/services/fechamento.py:1607-1613`.
+
+Revisão estática da cópia entregue. Confirmação independente do hash, execução dos REDs e estado em produção [nao verificado].
+
+### P1 — Premissas sobre o código
+
+- **A porta existe.** `aplicar_marca(posto, novo, *, autor, motivo, hoje)` exige motivo, calcula o plano e, se a marca mudou, grava `Posto.opera_em_feriado` e a trilha antes/depois. Em FECHA, tenta retratar os chamados vivos cujo dia do fato pertence ao posto e é feriado. A nota nasce quando o reconciliador aceita. Depois, propaga `EscalaColaborador.trabalha_em_feriado` aos vínculos vigentes divergentes de ciclos elegíveis, excluído o cargo administrativo. A propagação audita a chave e regenera células passadas e futuras. `app/colaboradores/services/feriado_do_posto.py:174-210,248-310`, `app/colaboradores/services/estrutura.py:83-88`, `app/colaboradores/services/vinculo.py:894-922`.
+- **`previa_da_marca` está ausente na cópia.** O módulo tem `plano_da_marca`, `aplicar_marca` e `reaplicar_marca`. A menção a “prévia” na docstring do plano antecipa a função proposta. `app/colaboradores/services/feriado_do_posto.py:228-233,263-318`, `proposta_tela_a5.md:8-12`.
+- **O dry-run atual só imprime o plano.** Com posto e ato explícitos, lê `hoje` na borda, imprime a marca antes/depois, os totais e até dez exemplos de chamados e vínculos, então retorna. A chamada a `aplicar_marca` fica no ramo `--apply`, após validar o motivo. Sem posto, o comando mostra sugestões. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:39-66,77-113`, `app/colaboradores/tests/test_feriado_por_posto.py:386-418`.
+
+### P2 — Avais, leis e selos
+
+- **Reusar a porta respeita o escritor único e os tripwires**, desde que a prévia chame `aplicar_marca` e preserve os gates. O selo exige que `marcar_opera_em_feriado` tenha `aplicar_marca` como único chamador. O tripwire de chamado continua recusando encerramento com pergunta viva ancorada. O selo de relógio cobra congelamento nos testes. Passar `hoje` está previsto, mas o caminho síncrono também lê o relógio no cartório e no signal de escala. `app/docs/LEIS.md:65,71,150`, `app/colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:119-131`, `app/chamados/models.py:214-233`, `app/core/tests/test_selo_teste_sem_relogio.py:1-12,66-84`, `app/ponto/portas/celula.py:460-472`, `app/ponto/signals.py:53-74`.
+- **Vedação geral a savepoint ou `atomic` aninhado** [nao verificado]. A árvore os usa expressamente na própria porta, na auditoria e na cerca B2. O corte de teto B2 é específico aos caminhos e deltas que nomeia. `CLAUDE.md:193-206` admite sonda da função real com a escrita interceptada e descreve o ensaio em banco lateral com `atomic` e exceção. Isso sustenta o ensaio, com os efeitos externos interceptados. O bloqueio desta revisão vem da exigência de zero efeito e da proteção de 10/2026, preservadas nos avais. `app/colaboradores/services/feriado_do_posto.py:288-308`, `app/core/observ.py:124-138`, `app/chamados/services/fio.py:1431-1459`, `app/docs/CORTES.md:529,558`, `feriado_a5_respostas_2011_1035.txt:3,6-7`, `feriado_respostas_1911_1530.txt:7-9`.
+
+### P3 — O que escapa e o que a prova cobre
+
+**(a) Efeitos fora do rollback**
+
+- **Web Push, FCM e rede.** Regenerar chama o cartório síncrono, que pode emitir cobrança. O emissor chama `push_supervisao` diretamente quando o ramo permite e pode abrir disputa com `notificar=True` por padrão. Essa disputa envia Web Push ao colaborador e chama `messaging.send` para FCM, inclusive o canal iOS, dentro da execução da porta. O rollback não recolhe a entrega nem a chamada de rede. Envio efetivo nos 14 postos, e-mail e outras chamadas HTTP nesse percurso [nao verificado]. A sombra apaga endereços de entrega e usa backend de e-mail dummy, então silêncio nela não exercita a saída real. `app/ponto/portas/celula.py:460-472`, `app/ponto/services/cartorio.py:1838-1841,1876-1879,2059-2090`, `app/ponto/management/commands/detectar_ausencias.py:775-807`, `app/chamados/services/disputa_emissao.py:1041,1303-1305,1789-1821`, `app/chamados/push_utils.py:38-54,89-111`, `app/chamados/fcm_utils.py:55-94`, `bin/sombra.sh:39-40`, `app/config/settings/sombra.py:53-60`.
+- **Log, arquivo e memória.** O emissor escreve em `stderr` em ramos de falha ou recusa. O cartório, os receivers e a auditoria best-effort podem registrar logs síncronos. A configuração SaaS encaminha logs para arquivo e console, e `registrar_engolido` incrementa um contador do processo. Também ficam fora do rollback o preenchimento do cache do catálogo de ausências, a inicialização do cliente Firebase a partir do arquivo de credencial e as alterações em instâncias Python, inclusive o `posto` recebido e o cache de decisões da pergunta. Um arquivo de negócio gravado diretamente pela porta [nao verificado]. `app/ponto/management/commands/detectar_ausencias.py:775-807`, `app/ponto/portas/celula.py:471-500`, `app/ponto/signals.py:53-74`, `app/core/observ.py:57-91`, `app/config/settings/saas.py:131-142,155-183`, `app/escala/utils.py:1196-1198`, `app/ponto/catalogo/ausencias.py:267-281,357-358`, `app/chamados/fcm_utils.py:8-17`, `app/colaboradores/services/estrutura.py:83-88`, `app/chamados/models.py:4329-4347`.
+- **Sequências PostgreSQL.** Um `INSERT` com ID automático pode consumir sequência mesmo quando a linha volta no rollback. A marca já pode fazer isso com o `INSERT` da auditoria, e há outros pontos de inserção, como célula, evento e nota. Igualdade de linhas deixa esse avanço invisível. Valores efetivos das sequências [nao verificado]. `app/config/settings/saas.py:83-93`, `app/config/settings/base.py:104`, `app/core/observ.py:133-138`, `app/ponto/portas/celula.py:289-296,945-954`, `app/chamados/services/nota.py:102-109`.
+- **`on_commit`.** Sim, o Django fixado na árvore em `5.2.14` descarta callbacks associados ao savepoint de um `atomic` desfeito, inclusive os registrados em `atomic` internos liberados antes do rollback externo. A árvore documenta essa semântica e o detalhe de que `transaction.savepoint()` manual não registra o ID em `savepoint_ids`. Um `atomic` externo em autocommit faz rollback da transação inteira. A exceção precisa sair do bloco. Registros alcançáveis são geofence do posto, recálculo de dinheiro, rejunção e falta espúria, retomada de regularização externa, fecho de beco, silêncio de isento, reconciliação do pai e a sentinela sem efeito da trava do colaborador. `app/requirements.txt:13`, `app/chamados/services/trava_do_colaborador.py:9-15,37-47`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:332-345`, `app/docs/CONDUTAS.md:73-81`, `app/ponto/signals.py:291-307`, `app/ponto/services/fechamento.py:1798-1824`, `app/ponto/portas/celula.py:528-540`, `app/chamados/signals.py:122-146,229-240,284-308,351-371`.
+
+**(b) Tabelas omitidas.** No caminho síncrono, há `Posto`, `EscalaColaborador`, `FollowupChamado`, `FechamentoMensal` e `TurnoMaterializado`. Conforme o ramo, também há `DisputaSupervisao`, `DecisaoPergunta`, `Justificativa`, `Pauta`, `ContadorPauta`, `auth_user` se faltar o usuário `sistema`, `PushSubscription` se o endpoint expirar e `Colaborador` se o FCM rejeitar o token. O receiver de folgas também pode escrever `FolgaDia` se detectar diferença de vigência entre a instância e o banco. Entre as escritas adiadas que um rollback correto descarta estão `DiaPago` no recálculo e `Batida`, `RegularizacaoExterna` e `RegularizacaoItemBatida` na retomada. `app/colaboradores/services/estrutura.py:83-88`, `app/colaboradores/services/vinculo.py:894-902`, `app/chamados/services/nota.py:102-109`, `app/escala/signals.py:18-28,137-151,185-204`, `app/ponto/services/fechamento.py:1191-1202,1607-1613`, `app/ponto/nucleo.py:40-82`, `app/colaboradores/signals.py:49-82`, `app/chamados/models.py:2217-2228,4329-4346`, `app/chamados/services/disputa_emissao.py:1137-1146`, `app/ponto/services/justificativa.py:337-355`, `app/chamados/services/fecho_runtime.py:128-141`, `app/pautas/services.py:180-188,344-368`, `app/core/utils.py:6-18`, `app/chamados/push_utils.py:49-54`, `app/chamados/fcm_utils.py:89-94`, `app/colaboradores/fcm.py:55-67`, `app/escala/folgas.py:513-541`, `app/ponto/services/dia_pago.py:359-360`, `app/chamados/services/regularizacao_ext.py:71-83,140-201`.
+
+**(c) Contagem igual é insuficiente.** Um `UPDATE` que escapou em `CelulaDia.trabalha`, `status_local` ou `previsto_em` mantém o total de linhas. A prova precisa comparar chaves e valores relidos depois do rollback e morder um mutante que deixe escapar um `UPDATE`. A prova externa precisa morder um envio síncrono, além de verificar que os callbacks descartados continuam sem executar após o commit externo. Também há um limite no rótulo da proposta. A presença de uma batida apurável prova a presença de marcação elegível, e um turno pode continuar em aberto. Os 9/18 são os totais relatados pela proposta. A equivalência com pagamento apurado [nao verificado]. `app/ponto/portas/celula.py:289-311`, `app/chamados/models.py:234-252,286-302`, `app/ponto/services/fechamento.py:1607-1613`, `app/chamados/services/trava_do_colaborador.py:9-15`, `app/ponto/turnos.py:2872-2899`, `app/ponto/nucleo.py:47-55`, `proposta_tela_a5.md:3-12`.
+
+### P4 — Exportada, dinheiro e alcance
+
+- **A guarda da regeneração existe e a prévia a herdaria.** A porta pula o dia lavrado sem `apesar_da_lavra`. A autoridade é `competencia_fechada_para_celula`, que consulta TXT vigente ou holerite do próprio colaborador em lote publicado. O corte de 10/2026 paga fora do sistema e o caso `v1355` de 12/10 constam do dado fornecido. Se a guarda barrar o dia, o diff de `CelulaDia` sozinho não o destacará como “competência paga”, como pede a proposta. Para corte 21, em 21/11 a janela anterior passa a 11/2026. O zero remedido [nao verificado]. `app/ponto/portas/celula.py:218-221,284-288,395-400`, `app/ponto/management/commands/gerar_celulas.py:178-189`, `app/folha/export.py:597-628`, `app/ponto/janelas.py:24-33,36-51,66-72`, `app/docs/CORTES.md:529`, `feriado_respostas_1911_1530.txt:7`, `proposta_tela_a5.md:27-28`.
+- **A guarda cobre a regeneração de célula.** O signal do vínculo limpa `previsto_em` e atualiza `atualizado_em` em todos os fechamentos materializados do colaborador, sem recorte de competência ou de exportação. A retratação direta em FECHA também tem alcance próprio pelo dia do chamado, e seu signal pode rejulgar e carimbar célula fora da guarda da regeneração. A cerca S143 protege escritas de pergunta dentro do ato cercado e consulta competência entregue por TXT. Ela não cobre o `UPDATE` de fechamento. Assim, sair de outubro pela janela não demonstra que 10/2026 fica intacta no apply. Alcance efetivo em outubro [nao verificado]. `app/escala/signals.py:137-151`, `app/ponto/services/fechamento.py:1607-1613`, `app/colaboradores/services/feriado_do_posto.py:248-264,296-305`, `app/chamados/signals.py:189-218`, `app/ponto/services/cartorio.py:1920-1923,2059-2102`, `app/chamados/services/disputa_emissao.py:1911-1924`, `app/chamados/services/fio.py:1358-1368,1389-1404`.
+- **Escala e vínculo são tocados diretamente.** A porta grava a chave e regenera o passado desde o início da janela anterior, respeitada a data inicial do vínculo, além das futuras já geradas. O recálculo monetário fica no `on_commit`. O pareador pode ler constantes do motor durante a execução síncrona. A proposta não pede alteração do motor, e o aval de origem a proíbe. As saídas de arquivo e rede alcançáveis são as de P3. A lista de arquivos de um patch futuro [nao verificado]. `app/colaboradores/services/vinculo.py:894-922`, `app/ponto/services/cadastro_futuro.py:43-59`, `app/ponto/services/fechamento.py:1798-1824`, `app/ponto/turnos.py:1435-1445,1688-1699`, `feriado_respostas_1911_1530.txt:9`, `feriado_a5_respostas_2011_1035.txt:3-7`.
+
+`ITEM 1: PROCEDE -- Web Push/FCM, logs, memória e sequências escapam do rollback. Cinco contagens não provam integridade, e a guarda da célula não cobre a invalidação de FechamentoMensal.` `app/chamados/services/disputa_emissao.py:1809-1821`, `app/core/observ.py:73-91,133-138`, `app/config/settings/base.py:104`, `app/ponto/services/fechamento.py:1607-1613`.
+
+**ITEM 2 — SEGUE.** Batidas cruas, regra e rótulo fecham com o complemento e com L-025/L-095. A afirmação “passa a pagar” tem o limite de prova indicado em P3. `feriado_a5_respostas_2011_1035.txt:4`, `app/docs/LEIS.md:76,113`, `CLAUDE.md:395-399`.
+
+**ITEM 3 — SEGUE condicionado ao item 1.** Tela na fila 2, após o comando. O `!` é autorização operacional. O comando atual exige `--apply` e motivo, com `--por` para autoria. `feriado_a5_respostas_2011_1035.txt:5,7`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:27-37,105-113`.
+
+**ITEM 4 — SEGUE como ordem.** Pre-opus tem porta canônica, e o pouso segue condicionado a 21/11 ou depois e a `sombra_c2b = 0` no próprio dia. Disponibilidade da F5, suite, opus e remedição [nao verificado]. `CLAUDE.md:95-103`, `feriado_a5_respostas_2011_1035.txt:1,6-8`, `feriado_respostas_1911_1530.txt:7`. [nao verificado]
 
 ## 20/11 10:28 · sessao 9cb397456650 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1308,216 +1432,4 @@ Os REDs 3×6 de S143, tela e entrada do lote passam por seis perguntas e cobram 
 
 **Achado adicional nos itens 1, 2 e 6.** Uma irmã com ato validado e coluna nula agora pode ser plantada. `_validar_o_par` pula a nova linha de validação, mas o plantio real chama `carimbar(..., resposta='validar')`, que preenche a coluna nula com o instante e autor do plantio. A leitura sintetiza esse carimbo sem linha, que pode sobrepor o instante real da validação anterior. Os REDs de par e materialização substituem a unidade pelo carimbo de identidade, que não toca a validação. `app/chamados/services/materializacao.py:200-205,1738-1750,1981-1992`, `app/chamados/services/validacao.py:633-644`, `app/chamados/models.py:3344-3377,4290-4294,4333-4351`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:244-275,284-291`.
 
-## 20/11 03:51 · sessao aef07fb5f215 · E4C-F5-CONSTROI · construtor · origem=Code
-
-A volta D2 alterou só os três arquivos de teste abaixo. Na C8, `test_producao_sem_leituras_cruas` retornou **`[]`** na conferência AST, sem banco nem runner Django. [test_e4c_f5_selo_catraca.py:298](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:298) [nao verificado]
-
-- **`test_e4c_f5_selo_catraca.py`** — Os dois juízes puros saíram de `FUNCOES`. O selo vizinho verifica a composta no chamador. A regra do escritor aceita a leitura `Load` e o `refresh_from_db` quando há `Store` do mesmo campo, no mesmo receptor e na mesma função. Os sintéticos confirmaram que outro receptor, outro campo e leitura sem escrita continuam acusados. As cinco mutações AST abaixo foram rejeitadas por asserção. [Universo](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:12) [Selo de chamada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_chamada.py:183) [Regra](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:265) [Sintéticos](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:314)
-- **`test_e4c_f5_voltaD_portas.py`** — `_cenario()` usa `nullcontext()` quando chamado sem mutante. `test_devolucao_e_o_escritor_da_coluna` espera `None` e zero `DEVOLUCAO` para ato validado com coluna nula. Para ato sem V com coluna preenchida, espera coluna limpa, `True` e uma `DEVOLUCAO`. A execução com banco fica [nao verificado]. [_cenario](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:24) [Teste](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:383) [Guarda e gravação](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:270) [Retornos](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:295) [nao verificado]
-- **`bug_par_mutantes.py`** — Só mudaram as duas strings de `retry_reativa`. A âncora usa `if leitura.validada_em:`, ocorre uma vez em `validar_pergunta` e a substituição por `if False:` passou no parse. A rejeição do mutante pelo teste com banco fica [nao verificado]. [Mutante](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/bug_par_mutantes.py:68) [Guarda atual](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:687) [nao verificado]
-
-**Comandos AST a partir de `app/`**. O bloco chama diretamente as asserções do selo e aplica os mutantes em memória. [SeloCatracaTest](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:297)
-
-```bash
-catraca_d2() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$1" <<'PY'
-from pathlib import Path
-from sys import argv
-from unittest import TestCase
-
-p = Path('chamados/tests/test_e4c_f5_selo_catraca.py').resolve()
-fonte = p.read_text(encoding='utf-8').replace('from django.test import SimpleTestCase\n', '', 1)
-
-def carregar(src):
-    ns = {'__file__': str(p), 'SimpleTestCase': TestCase}
-    exec(compile(src, str(p), 'exec'), ns)
-    return ns['SeloCatracaTest']()
-
-chave = 'escritas.get(ast.dump(receptor), frozenset())'
-escritor = 'test_PASSA_leitura_e_refresh_do_proprio_campo'
-producao = 'test_producao_sem_leituras_cruas'
-mutantes = {
-    'ignorar_receptor': (chave, 'set().union(*escritas.values())',
-                         'test_MORDE_escrita_em_outro_receptor'),
-    'ignorar_campo': (chave, 'CAMPOS if ast.dump(receptor) in escritas else frozenset()',
-                      'test_MORDE_escrita_em_outro_campo'),
-    'remover_regra': ('if escritas:', 'if False:', escritor),
-    'remover_regra_refresh': (
-        'campos.difference(self.campos_do_escritor.get(id(no), ()))', 'campos', escritor),
-    'reincluir_juizes': (
-        'FUNCOES = {',
-        "FUNCOES = {\n    'chamados/juizes.py': ('projecao_temporal_da_pergunta', 'pergunta_respondida'),",
-        producao),
-}
-modo = argv[1]
-if modo == 'controle':
-    teste = carregar(fonte) [nao verificado]
-    for nome in sorted(n for n in dir(teste) if n.startswith('test_')): [nao verificado]
-        getattr(teste, nome)() [nao verificado]
-        print(nome, '[]' if nome == producao else 'OK')
-else:
-    antes, depois, alvo = mutantes[modo]
-    assert fonte.count(antes) == 1, modo
-    teste = carregar(fonte.replace(antes, depois, 1)) [nao verificado]
-    try:
-        getattr(teste, alvo)() [nao verificado]
-    except AssertionError:
-        print(modo, 'rejeitado por', alvo)
-    else:
-        raise AssertionError(f'{modo}: sobreviveu')
-PY
-}
-
-catraca_d2 controle
-catraca_d2 ignorar_receptor
-catraca_d2 ignorar_campo
-catraca_d2 remover_regra
-catraca_d2 remover_regra_refresh
-catraca_d2 reincluir_juizes
-```
-
-**Comandos para o Code**. Controle da volta D e mutante `retry_reativa` [nao verificado]. [PortasVoltaDTest](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:22) [Runner de mutantes](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/bug_par_mutantes.py:189)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
-  chamados.tests.test_e4c_f5_voltaD_portas
-
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.bug_par_mutantes \
-  --django --mutante retry_reativa
-```
-
-O mutante da devolução troca em memória a guarda da coluna pela composta. O teste isolado deve falhar por asserção [nao verificado]. [Guarda](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:270) [Teste](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:383) [nao verificado]
-
-```bash
-DJANGO_SETTINGS_MODULE=config.settings.ci PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-from inspect import getsource
-from unittest.mock import patch
-
-import django
-django.setup()
-
-from django.core.management import call_command
-from chamados.services import validacao
-
-original = validacao.devolver_validacao_recusada
-fonte = getsource(original)
-antes = '    if perg.validada_em is not None:'
-depois = (
-    '    from chamados.models import DecisaoPergunta\n'
-    '    if DecisaoPergunta.composta(perg).validada_em is not None:'
-)
-assert fonte.count(antes) == 1
-ns = vars(validacao).copy()
-exec(compile(fonte.replace(antes, depois, 1), original.__code__.co_filename, 'exec'), ns)
-with patch.object(validacao, original.__name__, ns[original.__name__]):
-    call_command(
-        'test',
-        'chamados.tests.test_e4c_f5_voltaD_portas.PortasVoltaDTest.test_devolucao_e_o_escritor_da_coluna',
-        interactive=False,
-    )
-PY
-```
-
-**`git status --short` esperado e observado em `app/`**
-
-```text
- M chamados/tests/bug_par_mutantes.py
- M chamados/tests/test_e4c_f5_selo_catraca.py
- M chamados/tests/test_e4c_f5_voltaD_portas.py
-```
-
-## 20/11 03:44 · sessao 642381ebabdc · E4C-F5-CONSTROI · construtor · origem=Code
-
-**Volta D parcial.** Migrei 11 das 13 menções. Preservei o `refresh` e a guarda de `devolver_validacao_recusada` pelo bloqueio do item 5. A catraca nova acusa esses dois pontos e três leituras nos dois juízes estruturais. (`chamados/services/validacao.py:262–280`, `chamados/juizes.py:1391`, `chamados/juizes.py:1560`, `chamados/tests/test_e4c_f5_selo_catraca.py:269`)
-
-Compilei em memória os oito arquivos e os 14 mutantes, conferi as âncoras e executei isoladamente os casos sintéticos do selo. REDs de banco, mortes dos mutantes, tetos e impacto em produção ficam **[nao verificado]**. (`chamados/tests/e4c_f5_voltaD_mutantes.py:13`, `chamados/tests/test_e4c_f5_selo_catraca.py:285–322`)
-
-### Sítios
-
-Os caminhos da tabela são relativos a `chamados/`. As linhas à esquerda são da base. Os custos são de leitura das decisões por inspeção, com **0 quando há prefetch e 1 quando a composta precisa ler a relação**. A medição fica **[nao verificado]**. (`chamados/models.py:4321–4334`, `chamados/models.py:4354–4362`)
-
-| Antes → depois | Consultas adicionais | RED em `tests/test_e4c_f5_voltaD_portas.py` | Mutante |
-|---|---|---|---|
-| `services/acoes_disputa.py:349 → :349` · corrigir usa a composta da pergunta | +1 no `.get()` avulso | `:70` | `corrigir` |
-| `services/declaracao_texto.py:228 → :229` · guarda compartilhada usa a composta | +0 com a candidata ou testemunha prefetched. +1 após releitura integral ou se `abrir` devolver instância sem prefetch | `:88`, `:109`, `:165`, `:182` | `declaracao` |
-| `services/disputa_emissao.py:2085 → :2085` · seleção S143 usa a composta | +0, prefetch existente em `:2080` | `:136`, `:150` | `fecho`, `fecho_sem_lote` |
-| `services/materializacao.py:200 → :201` · plantio exige V da irmã | +1 por irmã encontrada, compartilhada com a guarda seguinte | `:220` | `irma_plantio` |
-| `services/materializacao.py:202 → :203` · implausibilidade usa V da mesma irmã | +0 depois da composta em `:200` | `:230` | `irma_implausivel` |
-| `services/materializacao.py:2128 → :2130` · usa a composta da instância relida sob trava | +1 por candidata que chega à guarda após o `.get()` de `:2124` | `:244` | `materializar` |
-| `services/validacao.py:262 → :262` · refresh parcial preservado | +0 | Diagnóstico em `:370` | — |
-| `services/validacao.py:269 → :270` · guarda de devolução preservada | +0 | Diagnóstico em `:382` | — |
-| `services/validacao.py:640 → :641` · carimbo do par usa a composta da irmã | +1 por par aceito, pois a irmã chega sem prefetch | `:271` | `validar_par` |
-| `services/validacao.py:685 → :687` · reutiliza `leitura` de `:683` | +0 | `:295` | `validar` |
-| `services/validacao.py:898 → :901` · antecipa e reutiliza `antes_do_ato` | +0 quando o fluxo já chegava à composta. +1 quando a coluna preenchida antes encerrava a chamada sem consultá-la | `:307` | `recusar` |
-| `services/validacao.py:1065 → :1067` · guarda de entrada usa a composta | +1 por lote com perguntas encontradas, +0 por item | `:319`, `:332` | `lote_entrada`, `lote_entrada_sem_prefetch` |
-| `services/validacao.py:1086 → :1089` · classificação usa a composta após refresh integral | +1 por item que chamou a ação | `:344` | `lote_releitura` |
-
-### Releituras, lotes e devolução
-
-- **Refresh.** Para o Django pinado, `refresh_from_db(fields=[...])` preserva o prefetch de `decisoes` quando a relação fica fora de `fields`. `refresh_from_db()` integral descarta o prefetch. O diagnóstico exercita as duas formas com um ato posterior à carga. A confirmação no Django da sessão fica **[nao verificado]**. A materialização recebe outra instância pelo `.get()` depois da trava. O descarte explícito de `registrar` alcança a instância passada ao escritor. (`requirements.txt:13`, `chamados/tests/test_e4c_f5_voltaD_portas.py:370–380`, `chamados/services/materializacao.py:2122–2132`, `chamados/models.py:4381–4387`)
-- **Declaração em laço.** `_porta_recusaria_por_carimbo` chama `_resposta_validada`. `projecao_por_marco` itera por marco. O fio e a API o chamam por cartão, usando `insumos_em_regularizacao`, que carrega `decisoes` em lote. Sem `por_fato`, a projeção já carrega por marco. `propostas_do_chamado` itera por follow-up e carrega uma vez por fato distinto. Os REDs cobram um SELECT de decisões em 3 e 6 fatos da tela e em 3 e 6 propostas do mesmo fato. O RED do S143 cobra o mesmo com 3 e 6 perguntas. (`chamados/services/declaracao_texto.py:280–287`, `:470–480`, `:585–592`, `:626–639`, `chamados/services/fio.py:415–425`, `api/views.py:1088–1094`, `chamados/tests/test_e4c_f5_voltaD_portas.py:150–206`)
-- **Origem da irmã.** Plantio, tela e validação entram por `par_do_intervalo`. A própria função busca a irmã em `metade_irma_do_intervalo`, num queryset sem prefetch, por disputa, motivo complementar e dia. O plantio passa `irma_validada=True`. A validação recebe de volta essa mesma instância. (`chamados/services/materializacao.py:139–150`, `:195–203`, `:925–930`, `:1737–1740`, `chamados/services/validacao.py:632–643`)
-- **Bloqueio da devolução.** Com ato validado e coluna nula, a troca gravaria `DEVOLUCAO`; a foto ainda poderia ficar igual e o retorno ser `None`. Com ato sem V e coluna preenchida, a troca deixaria `validada_em` e o autor residuais, onde hoje a porta os limpa. Isso piora a projeção. A fila do materializador e o vigia selecionam pela coluna preenchida, e os recortes de absolvíveis e órfãs do reconciliador exigem coluna nula. Por isso preservei `:262` e `:270`, sem acrescentar descarte de cache a essa porta. (`chamados/services/validacao.py:262–304`, `chamados/services/materializacao.py:2111–2115`, `chamados/services/vigia_carimbo.py:97–105`, `chamados/reconciliador.py:678–682`, `:1096–1103`)
-- **Batida.** O fecho alcança S143 pelo `post_save` do chamado. A guarda alterada nesse caminho usa `_todas`, já prefetched. Os quatro tetos da cópia são **234 / 298** para um e três furos que fecham e **146 / 221** para um e três que ficam. O delta executado fica **[nao verificado]**. (`ponto/signals.py:131–135`, `chamados/models.py:308`, `chamados/signals.py:93–117`, `chamados/services/disputa_emissao.py:2080–2085`, `ponto/tests/test_selo_chokepoint_escrita.py:206`, `:230`, `:253`, `:267`)
-
-### Selo e testes existentes [nao verificado]
-
-- A varredura literal ficou vermelha na devolução e nos parâmetros estruturais de `projecao_temporal_da_pergunta` e `pergunta_respondida`. A regra local exige ancestralidade de `.composta()` ou `.leitura()` dentro do corpo. Os juízes recebem a leitura dos chamadores, e o placar entrega a estrutura da face SQL ao segundo juiz. Mantive o universo pedido e o selo anterior. (`chamados/tests/test_e4c_f5_selo_catraca.py:14–28`, `:269–279`, `chamados/juizes.py:1391`, `:1408–1409`, `:1560`, `chamados/services/raiox.py:135–147`, `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:210–251`)
-- **K47** espera carimbo justamente para ato validado com projeção sem V. A expectativa de carimbo conflita com a guarda nova. O mutante existente **`retry_reativa`** também precisa de nova âncora, pois busca literalmente `if perg.validada_em:` em `validar_pergunta`. As duas pendências estão nos arquivos existentes. (`chamados/tests/test_e4c_f5_voltaB_lotes.py:197–216`, `chamados/tests/bug_par_mutantes.py:68–71`, `chamados/services/validacao.py:683–689`)
-
-### Comandos para a sessão
-
-Labels dos REDs, da catraca e dos quatro tetos. A catraca de produção acusa os pontos acima. (`chamados/tests/test_e4c_f5_voltaD_portas.py:23`, `chamados/tests/test_e4c_f5_selo_catraca.py:268–279`, `ponto/tests/test_selo_chokepoint_escrita.py:467–509`)
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-
-python3 manage.py test chamados.tests.test_e4c_f5_voltaD_portas
-python3 manage.py test chamados.tests.test_e4c_f5_selo_catraca
-
-teto=ponto.tests.test_selo_chokepoint_escrita.SeloChokepointEscritaTest
-python3 manage.py test \
-  "$teto.test_registrar_batida_com_1_furo_vivo_que_ela_fecha" \
-  "$teto.test_registrar_batida_com_3_furos_vivos_que_ela_fecha" \
-  "$teto.test_registrar_batida_com_1_furo_vivo_que_fica" \
-  "$teto.test_registrar_batida_com_3_furos_vivos_que_ficam"
-```
-
-Cada comando abaixo ativa um mutante e executa o teste que deve falhar na asserção de negócio ou de custo. (`chamados/tests/e4c_f5_voltaD_mutantes.py:13–69`, `chamados/tests/test_e4c_f5_voltaD_portas.py:70–368`)
-
-```bash
-m() {
-  F5_VOLTA_D_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    "chamados.tests.test_e4c_f5_voltaD_portas.PortasVoltaDTest.test_RED_$2"
-}
-
-m corrigir corrigir
-m declaracao declaracao
-m fecho fecho
-m irma_plantio irma_plantio
-m irma_implausivel irma_implausivel
-m materializar materializar_ato_mudou_sob_trava
-m validar_par validar_par
-m validar validar
-m recusar recusar
-m lote_entrada lote_entrada
-m lote_releitura lote_rele_ato_escrito_em_outra_instancia
-m fecho_sem_lote fecho_3x6
-m tela_sem_lote tela_3x6
-m lote_entrada_sem_prefetch lote_entrada_3x6
-```
-
-`git status --porcelain` observado, com os caminhos relativos à raiz Git.
-
-```text
- M app/chamados/services/acoes_disputa.py
- M app/chamados/services/declaracao_texto.py
- M app/chamados/services/disputa_emissao.py
- M app/chamados/services/materializacao.py
- M app/chamados/services/validacao.py
-?? app/chamados/tests/e4c_f5_voltaD_mutantes.py
-?? app/chamados/tests/test_e4c_f5_selo_catraca.py
-?? app/chamados/tests/test_e4c_f5_voltaD_portas.py
-```
-
-_7485 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7487 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
