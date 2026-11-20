@@ -1,7 +1,131 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 03:16** · publicado em **20/11/2026 03:19** (UTC-3)
+> Ultima resposta processada: **20/11/2026 03:28** · publicado em **20/11/2026 03:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 03:28 · sessao 16df42e2324f · E4C-F5-CONSTROI · censo · origem=Code
+
+**34 menções. Em produção, 0 leituras decisórias de instância ORM com aval literal e 13 com NENHUM.** As 13 estão nas guardas e no `refresh_from_db` discriminados abaixo. O `refresh_from_db` de `validacao.py:262` conta como menção própria porque carrega a coluna usada na decisão de `validacao.py:269`. A identidade Git da cópia e qualquer comparação com `eb1e49c1e` ficam [nao verificado].
+
+## Censo por menção
+
+Os caminhos de código partem de `app/chamados/`. As linhas de `brief_c3.md` referem-se ao anexo fornecido. **V** = `validada_em`, **R** = `respondida_em`, **T** = `resposta_colab`. A coluna da matriz reproduz o que o brief pedia. O aval de **19/11 15:10, itens 1–2** determina que T permaneça na projeção e que os instantes venham do ato, conforme a composição em `models.py:4360–4362`. **NENHUM** na coluna de teste significa que procurei um assert em que a divergência alterasse o resultado **da menção recenseada**. [nao verificado]
+
+| Arquivo:linha e menção | Objeto e origem | O que o valor faz | O que a matriz mandava ler | Aval literal para ORM decisório | Assert com divergência |
+|---|---|---|---|---|---|
+| `juizes.py:1391` `p.validada_em` | Parâmetro estrutural de `:1383`; composta nos chamadores de produção (`:351–352`, `:1408–1409`, `../escala/services/cadastro_realidade.py:498–499`). Há ORM em teste de passivo (`tests/test_e4c_f5_volta2_juizes.py:60–64`). | Decide o corte de V no horizonte e o V retornado (`:1395–1396`, `:1403`); V também encerra o ramo do C6 (`:1410–1411`). | V/R/T da leitura, com horizonte; materialização e via da projeção (`brief_c3.md:33`). | —¹ | `tests/test_e4c_f5_volta2_juizes.py:56`, `:85` |
+| `juizes.py:1391` `p.respondida_em` | Mesmo parâmetro estrutural, com composta em produção (`:1383`, `:351–352`, `:1408–1409`, `../escala/services/cadastro_realidade.py:498–499`) e ORM em teste de passivo (`tests/test_e4c_f5_volta2_juizes.py:60–64`). | Decide se corta R e T e quais valores retorna (`:1397–1398`, `:1403`). | V/R/T da leitura, com horizonte; materialização e via da projeção (`brief_c3.md:33`). | —¹ | `tests/test_e4c_f5_volta2_juizes.py:41`, `:49`, `:84` |
+| `juizes.py:1560` `p.respondida_em` | Parâmetro estrutural de `:1551`; composta, por exemplo, em `:1428` e `models.py:3816`; `SimpleNamespace` de tupla SQL em `services/raiox.py:137–147`; ORM em teste de passivo (`tests/test_e4c_f5_volta2_juizes.py:60–65`). | Decide o retorno booleano junto com T (`:1560`). | R/T da leitura do ato quando o argumento for uma pergunta (`brief_c3.md:34`). | —¹ | `tests/test_e4c_f5_volta2_juizes.py:98`, `:105` |
+| `services/acoes_disputa.py:349` `perg.validada_em` | ORM, `PerguntaDisputa.objects.select_related(...).get(...)` (`:345–346`). | Decide se retorna «já validada» antes de corrigir (`:349–350`, `:374–376`). | V da leitura (`brief_c3.md:35`). | NENHUM | NENHUM |
+| `services/declaracao_texto.py:228` `perg.validada_em` | ORM, parámetro de `:217`; as portas passam a candidata do universo ORM ou a pergunta de `PerguntaDisputa.abrir` (`:250–255`, `:364–379`, `:663–669`; `services/fio.py:1960–1964`). | Decide o retorno da guarda usada pelas duas portas e pelo leitor de tela (`:228`, `:286`, `:379`, `:669`). | V da leitura (`brief_c3.md:36`). | NENHUM | NENHUM |
+| `services/disputa_emissao.py:2097` chave `'respondida_em'` | Outro, chave do dict `_antes` (`:2095–2097`). | Só foto anterior do evento (`:2107–2112`). | V da leitura e materialização da projeção na seleção; a matriz descreve essa seleção (`brief_c3.md:37`). | — | NENHUM |
+| `services/disputa_emissao.py:2097` `q.respondida_em`, condição do ternário | ORM, `q` de `_abertas`, vinda de `_d.perguntas.all()` (`:2080`, `:2084–2089`). | Escolhe entre data serializada e `None` na foto anterior (`:2097`, `:2112`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
+| `services/disputa_emissao.py:2085` `q.validada_em` | ORM, `q` da lista de `_d.perguntas.all().prefetch_related('decisoes')` (`:2080`, `:2084–2085`). | Decide entrada em `_abertas`, que alimenta o laço do carimbo (`:2084–2089`, `:2105`). | V da leitura; materialização da projeção (`brief_c3.md:37`). | NENHUM | NENHUM. O assert K47 espera que as perguntas da fixture sejam carimbadas (`tests/test_e4c_f5_voltaB_lotes.py:202–213`). |
+| `services/disputa_emissao.py:2114` chave `'respondida_em'` | Outro, chave do dict `depois` (`:2113–2115`). | Só foto posterior ao carimbo (`:2105–2108`, `:2113–2115`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
+| `services/disputa_emissao.py:2097` `q.respondida_em`, receptor de `.isoformat()` | ORM, `q` de `_abertas` (`:2080`, `:2084–2089`). | Só serializa a data da foto anterior (`:2097`, `:2112`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
+| `services/disputa_emissao.py:2114` `q.respondida_em`, condição do ternário | ORM, o mesmo `q` após `q.carimbar(...)` (`:2089`, `:2105`, `:2114`). | Escolhe entre data serializada e `None` na foto posterior (`:2113–2115`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
+| `services/disputa_emissao.py:2114` `q.respondida_em`, receptor de `.isoformat()` | ORM, o mesmo `q` após `q.carimbar(...)` (`:2089`, `:2105`, `:2114`). | Só serializa a data da foto posterior (`:2113–2115`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
+| `services/fio.py:190` `leitura.respondida_em` | Composta, `leitura = DecisaoPergunta.composta(p)` (`:189`; `models.py:4360–4362`). | Decide o retorno «espera texto», com curto-circuito antes de `respondida_sem_texto` (`:190`). | R/T da leitura, preservando o predicado (`brief_c3.md:38`). | — | `tests/test_e4c_f5_volta1_leem_o_ato.py:50`, `:57` |
+| `services/materializacao.py:202` `q.validada_em` | ORM, irmã devolvida por `metade_irma_do_intervalo` (`:195`, `:146–150`). | Decide se consulta implausibilidade e pode retornar impedimento (`:202–207`). | V da leitura da irmã (`brief_c3.md:40`). | NENHUM | NENHUM. O RED em `tests/test_e4c_f5_voltaC_sitios.py:97` exercita o outro campo, R da própria metade (`services/materializacao.py:193–197`). |
+| `services/materializacao.py:200` `q.validada_em` | ORM, irmã devolvida por `metade_irma_do_intervalo` (`:195`, `:146–150`). | Com `irma_validada=True`, decide se retorna impedimento por falta de validação da irmã (`:200–201`). | V da leitura da irmã (`brief_c3.md:39`). | NENHUM | NENHUM |
+| `services/materializacao.py:2128` `p.validada_em` | ORM, `PerguntaDisputa.objects.get(pk=p.pk)` após a trava (`:2120–2122`). | Decide se pula `_materializar_uma` (`:2128–2130`). | V da leitura após a trava; materialização da projeção (`brief_c3.md:41`). | NENHUM | NENHUM |
+| `services/validacao.py:640` `q.validada_em` | ORM, irmã devolvida por `par_do_intervalo` (`:632`; `services/materializacao.py:146–150`, `:195`, `:237`). | Decide se carimba a validação da irmã antes de materializar (`:639–643`). | V da leitura da irmã (`brief_c3.md:42`). | NENHUM | NENHUM |
+| `services/validacao.py:685` `perg.validada_em` | ORM, `PerguntaDisputa.objects.get(**filtro)` (`:673–677`). | Decide o retorno `ja_validada` antes do carimbo (`:685–687`, `:743`). | V da leitura; materialização da projeção (`brief_c3.md:43`). | NENHUM | NENHUM. O assert em `tests/test_e4c_f5_voltaB_sitios.py:108` sai por `sem_resposta`, na guarda anterior (`services/validacao.py:682–684`). |
+| `services/validacao.py:789` `'validada_em'` em `refresh_from_db` | ORM, a mesma `perg` do `.get` (`:677`, `:789`). | Recarrega V. O restante do corpo usa `materializada_em` e os resultados da porta (`:790–837`). | V da leitura na guarda de entrada; materialização da projeção (`brief_c3.md:43`). | — | NENHUM |
+| `services/validacao.py:898` `perg.validada_em` | ORM, `PerguntaDisputa.objects.select_related(...).get(...)` (`:894–895`). | Decide o retorno `ja_validada` antes de gravar motivo e reabrir (`:898–900`, `:921–927`). | V da leitura; motivo da recusa na projeção (`brief_c3.md:44`). | NENHUM | NENHUM |
+| `services/validacao.py:914` chave `'respondida_em'` | Outro, chave do dict `antes` (`:913–915`). | Só foto anterior do evento (`:935–938`). | V da leitura na guarda; motivo da recusa na projeção (`brief_c3.md:44`). | — | NENHUM |
+| `services/validacao.py:914` `perg.respondida_em`, condição do ternário | ORM, `perg` do `.get` (`:894–895`). | Escolhe entre data serializada e `None` na foto anterior (`:913–915`, `:935–938`). | V da leitura na guarda (`brief_c3.md:44`). | — | NENHUM. `tests/test_e4c_f5_voltaB_sitios.py:136–138` verifica a foto da coluna. |
+| `services/validacao.py:938` chave `'respondida_em'` | Outro, chave do dict `depois`, com `None` literal (`:935–940`). | Só foto posterior do evento (`:935–940`). | V da leitura na guarda (`brief_c3.md:44`). | — | NENHUM |
+| `services/validacao.py:914` `perg.respondida_em`, receptor de `.isoformat()` | ORM, `perg` do `.get` (`:894–895`). | Só serializa a data da foto anterior (`:913–915`, `:935–938`). | V da leitura na guarda (`brief_c3.md:44`). | — | NENHUM. `tests/test_e4c_f5_voltaB_sitios.py:136–138` verifica a foto da coluna. |
+| `services/validacao.py:1065` `perg.validada_em` | ORM, `achadas.get(ref)` sobre o mapa de `PerguntaDisputa.objects.filter(...)` (`:1057–1061`). | Decide rejeitar o item antes de chamar a ação de validação (`:1065–1067`, `:1079`). | V da leitura na guarda de entrada do lote (`brief_c3.md:45`). | NENHUM | NENHUM |
+| `services/validacao.py:1086` `perg.validada_em` | ORM, a instância do mapa relida após a ação (`:1057–1061`, `:1079–1086`). | Decide os contadores e as listas devolvidos pelo lote (`:1086–1096`). | A matriz descreve V da leitura para a guarda de entrada (`brief_c3.md:45`). | NENHUM | NENHUM |
+| `services/validacao.py:269` `perg.validada_em` | ORM, parâmetro de `:237`, vindo do `.get` do chamador e relido por `refresh_from_db` (`:677`, `:781`, `:262–263`). | Decide se limpa V/autor e registra `DEVOLUCAO` (`:269–282`). | V da leitura após o refresh; materialização, motivo e autor na projeção (`brief_c3.md:47`). | NENHUM | NENHUM |
+| `services/validacao.py:273` `perg.validada_em` (`Store`) | ORM, a instância recebida e relida (`:237`, `:262–263`, `:781`). | Escreve `None` no próprio campo após a decisão (`:269–276`). | V decisória pela leitura; a linha da matriz descreve a guarda (`brief_c3.md:47`). | — | NENHUM |
+| `services/validacao.py:262` `'validada_em'` em `refresh_from_db` | ORM, parâmetro `perg` recebido de `validar_pergunta` (`:237`, `:677`, `:781`). | Lê a coluna que alimenta a decisão de limpar V e registrar a devolução (`:262–279`); também alimenta a foto (`:181`, `:268`). | V decisória pela leitura após refresh; materialização, motivo e autor na projeção (`brief_c3.md:47`). | NENHUM | NENHUM |
+| `services/validacao.py:300` chave `'validada_em'` | Outro, chave do dict `antes`; o valor vem de `foto0` (`:268`, `:300`; `_foto_da_validacao` em `:178–182`). | Só serializa a foto anterior para o evento, depois da comparação de fotos (`:294–301`). | V decisória pela leitura na guarda (`brief_c3.md:47`). | — | NENHUM |
+| `services/validacao.py:302` chave `'validada_em'` | Outro, chave do dict `depois`, com `None` literal (`:297–304`). | Só foto posterior do evento (`:302–304`). | V decisória pela leitura na guarda (`brief_c3.md:47`). | — | NENHUM |
+| `services/validacao.py:276` `'validada_em'` em `update_fields` | ORM, a instância que recebeu `None` em `:273`. | Seleciona o próprio campo a persistir no `save` (`:273–276`). | V decisória pela leitura na guarda (`brief_c3.md:47`). | — | NENHUM |
+| `services/historico.py:100` `'respondida_em'` | Outro, `LeituraDoAto` de `DecisaoPergunta.leitura(p)`. A string vira `campo` no `getattr` (`:96–106`; `models.py:4351`). | R decide se o evento de resposta entra no histórico devolvido e fornece sua data (`:106–108`, `:114–117`). | RED-5 fora das 15 linhas: R/V/T da leitura e materialização da projeção (`brief_c3.md:49`). | — | `tests/test_e4c_f5_volta1_leem_o_ato.py:83` |
+| `services/historico.py:102` `'validada_em'` | Outro, `LeituraDoAto` de `DecisaoPergunta.leitura(p)`. A string vira `campo` no `getattr` (`:96–106`; `models.py:4351`). | V decide se o evento de validação entra no histórico devolvido e fornece sua data (`:106–108`, `:114–117`). | RED-5 fora das 15 linhas: R/V/T da leitura e materialização da projeção (`brief_c3.md:49`). | — | `tests/test_e4c_f5_volta1_leem_o_ato.py:84` |
+
+¹ Para os dois juízes, o aval **19/11 18:30, item 1c-1** diz literalmente: “ENTRE VOLTAS, chamador ainda nao convertido entrega a instancia ORM e o juiz le a COLUNA, como o main de hoje: estado TRANSITORIO declarado.” Na varredura de chamadas de produção, `RESTAM` está vazio e a única chamada reconhecida sem composta é a do `raiox`, que entrega `SimpleNamespace` de `values_list` (`tests/test_e4c_f5_selo_chamada.py:20–26`, `:124–158`, `:183–187`; `services/raiox.py:135–147`). Para esse caso, o aval **19/11 17:35, item 1(d)** diz literalmente: “allowlist nominal com motivo so para quem entrega tupla de values_list (raiox.py:147).”
+
+## Universo e alcance de `SeloTest`
+
+`SeloTest` abre exatamente duas funções de topo: `services/fio.py:178` (`espera_o_texto_do_colaborador`) e `services/historico.py:69` (`_eventos_dos_chamados`). Exige uma definição de cada e zero violações. Os únicos campos buscados são R e V. O teste auxiliar renomeia o parâmetro do fio e o alvo do histórico; o mutante passa a pergunta inteira a `respondida_sem_texto`. (`tests/test_e4c_f5_volta1_leem_o_ato.py:154–157`, `:210–251`; `tests/e4c_f5_volta2_mutantes.py:18–37`.)
+
+- **Atributo.** Captura `apelido.validada_em` ou `apelido.respondida_em` se o receptor for um `ast.Name` rastreado, inclusive em atribuição ao campo. O rastreio parte do primeiro parâmetro do fio, dos alvos de iteração de coleções cuja raiz remonta a `PerguntaDisputa`, do primeiro argumento nominal de uma chamada `.leitura(...)` e de atribuições simples entre nomes. Passam receptores como `obj.pergunta.validada_em`, `perguntas[0].validada_em` e apelidos introduzidos por atribuição anotada ou desempacotamento. `.composta(...)` por si só não é ponto de partida do rastreio. (`tests/test_e4c_f5_volta1_leem_o_ato.py:159–191`.)
+- **`getattr` com apelido.** Captura `apelido = p; getattr(apelido, 'validada_em')` se `p` for rastreado. A regra de string literal vale também para `ler = getattr; ler(apelido, 'validada_em')`, pois inspeciona os argumentos posicionais após o primeiro. Para `getattr(apelido, campo)`, busca constantes em qualquer lista ou tupla dentro da função, sem vincular `campo` à coleção. Passam nomes de campo construídos dinamicamente quando nenhuma constante procurada aparece nessas listas ou tuplas, bem como a chamada por apelido da função com `campo` variável quando o literal só existe fora dos argumentos. Também passa um receptor que o rastreio não reconhece. (`tests/test_e4c_f5_volta1_leem_o_ato.py:173–179`, `:192–207`.)
+- **`update_fields=`.** `apelido.save(update_fields=['validada_em'])` passa. O receptor do método não conta como primeiro argumento posicional e o selo não percorre os keywords da chamada. A forma `PerguntaDisputa.save(apelido, update_fields=['validada_em'])` também passa, mesmo com `apelido` rastreado. (`tests/test_e4c_f5_volta1_leem_o_ato.py:192–207`; ocorrência em `services/validacao.py:276`.)
+- **`refresh_from_db(fields=...)`.** `apelido.refresh_from_db(fields=['validada_em'])` passa pela mesma regra. Os dois `refresh_from_db` recenseados estão em `validacao.py`, fora dos dois corpos que o selo abre. (`tests/test_e4c_f5_volta1_leem_o_ato.py:192–218`; `services/validacao.py:262`, `:789`.)
+
+## Contagens e sítios ausentes
+
+| Contagem | Total |
+|---|---:|
+| Menções do `censo_crus.txt`, incluindo repetições e histórico | **34** |
+| ORM que decide em produção, com aval literal | **0** |
+| ORM que decide em produção, com NENHUM | **13** |
+
+As 13 são `acoes_disputa.py:349`, `declaracao_texto.py:228`, `disputa_emissao.py:2085`, `materializacao.py:200`, `:202`, `:2128` e `validacao.py:262`, `:269`, `:640`, `:685`, `:898`, `:1065`, `:1086`, todos em `services/`.
+
+- **Único dos 15 com zero menções:** `leitura_da_resposta`. O sítio do inventário tem `getattr(perg, 'resposta_colab', '')`; o censo procurou R e V. A definição aparece no anexo com zero ocorrências (`quinze.txt:15`; `brief_c3.md:46`; `templatetags/chamados_tags.py:145–178`, em especial `:166`).
+- **Citados à parte no inventário:** `particao_do_app` e o leitor de `becos` constam da nota após os 15. Na cópia, ambos passam `DecisaoPergunta.composta(p)` ao juiz sem mencionar R ou V nesses corpos. O estado deles na base de comparação fica [nao verificado]. (`quinze.txt:19`; `services/pergunta_no_app.py:80–92`; `services/becos.py:25–35`.)
+
+## 20/11 03:27 · sessao f1c8765cc2b0 · E4C-F5-CONSTROI · leitura · origem=Code
+
+A cópia já carrega a marca `da_ressuscitacao`. O ponto em que a tarefa deixa de saber que houve ressuscitação é o `continue` em `_fatos_das_perguntas`. A decisão que sobra pode ser `SILENCIO`, que hoje produz `('silencio_decidido', [])`. A cópia está no diretório indicado, mas a confirmação independente do hash ficou [nao verificado]. A leitura foi estática, sem executar testes ou consultar banco e logs. `app/chamados/models.py:1714`, `app/chamados/services/tarefa_do_dia.py:182`, `app/chamados/services/tarefa_do_dia.py:393`
+
+## 1. Da carga ao dono publicado [nao verificado]
+
+1. **`tarefa_do_dia` → `carga_da_tarefa` → `CargaDaTarefa.tarefa`.** A entrada exige `agora`, abre uma carga de um dia se necessário e devolve o dicionário da tarefa. O construtor carrega perguntas do fato (`conversa=False`) por colaborador e `data_evento`, agrupa por `(colaborador_id, data_evento)` e traz a sequência integral de decisões, ordenada por `ato_em, pk`. **Sim, a distinção já chega à carga**. A ressuscitação grava uma `REABERTURA` compensadora com `da_ressuscitacao=True`, e o predicado existente é `DecisaoPergunta.es_da_ressuscitacao(d)`. O último ato **gravado** pode, portanto, ser a reabertura enquanto o último ato **lido pela tarefa** continua sendo o silêncio. `app/chamados/services/tarefa_do_dia.py:520`, `app/chamados/services/tarefa_do_dia.py:532`, `app/chamados/services/tarefa_do_dia.py:825`, `app/chamados/models.py:1693`, `app/chamados/models.py:1713`, `app/chamados/models.py:4246`
+
+2. **`_fatos_das_perguntas` → fatos em lote.** Recebe a sequência integral, reconhece a marca e pula a linha antes de testar `ato_em <= agora`. Devolve `dec`, `leituras`, `retratada_depois`, `passivo`, `lavra`, `efeitos`, `fila` e `ancoras_terminais`. A marca fica no prefetch original, mas não sai nesse dicionário. A `VistaNoHorizonte` entrega à leitura do ato a sequência já filtrada. `LeituraDoAto` tem três campos e a `LeituraComposta` existente na cópia tem cinco. Nenhuma das duas informa último ato ou ressuscitação. A leitura composta do ORM, usada pelo C6, pode sentir o efeito da compensadora na resposta e na validação. Esse efeito não identifica a origem do ato para a tarefa. `app/chamados/services/tarefa_do_dia.py:374`, `app/chamados/services/tarefa_do_dia.py:393`, `app/chamados/services/tarefa_do_dia.py:405`, `app/chamados/services/tarefa_do_dia.py:457`, `app/chamados/models.py:19`, `app/chamados/models.py:24`, `app/chamados/models.py:4333`, `app/chamados/models.py:4354`, `app/chamados/juizes.py:1406`
+
+3. **`_ler_vida` e `_tarefa_pura` → dia e instâncias.** `_ler_vida` preenche `viva_c6` nas candidatas à exposição administrativa e os IDs pendentes no app. No caminho ordinário, `_tarefa_pura` passa pelas guardas do dia e do marco, retira perguntas fora da identidade do fato e escolhe a última pergunta aplicável à posição. `_pela_decisao` devolve `(razão, ações)`. O passivo tem precedência e devolve `('passivo_sem_linha', None)`. A escolha do ato também pode recuar sobre respostas que preservam validação. Quando o ato escolhido é `SILENCIO`, a instância ordinária recebe o ID da pergunta, `silencio_decidido` e `[]`. No caminho de `expor_admin`, `[]` não preenche a instância com a pergunta. `app/chamados/services/tarefa_do_dia.py:154`, `app/chamados/services/tarefa_do_dia.py:158`, `app/chamados/services/tarefa_do_dia.py:182`, `app/chamados/services/tarefa_do_dia.py:214`, `app/chamados/services/tarefa_do_dia.py:260`, `app/chamados/services/tarefa_do_dia.py:273`, `app/chamados/services/tarefa_do_dia.py:338`, `app/chamados/services/tarefa_do_dia.py:350`, `app/chamados/services/tarefa_do_dia.py:625`
+
+4. **`_portas_da_tarefa` → dono do dia.** Junta ações das instâncias com as portas e os verbos do painel. `silencio_decidido` exclui a instância do conjunto de portas atribuídas à pergunta. A âncora ainda pode contribuir pela fila do chamado. A precedência é `colab`, `admin`, `chamado`, `sistema`. Se o silêncio for o único resultado e não houver porta residual nem oferta de Resolver dia, sai `fio='nada'`, `rota=None`, `fila=()` e `acao=None`. Com desconhecimento, sai `fio='nao_sei'`. `porta_da_tarefa` devolve o envelope público quando há rota ou desconhecimento. O silêncio sem ação da **instância** é compatível com outro dono no **dia**. `app/chamados/services/tarefa_do_dia.py:683`, `app/chamados/services/tarefa_do_dia.py:702`, `app/chamados/services/tarefa_do_dia.py:734`, `app/chamados/services/tarefa_do_dia.py:744`, `app/chamados/services/tarefa_do_dia.py:748`, `app/chamados/services/tarefa_do_dia.py:762`, `app/chamados/services/tarefa_do_dia.py:781`, `app/chamados/services/tarefa_do_dia.py:805`, `app/chamados/services/tarefa_do_dia.py:809`
+
+## 2. Entregue e aberta
+
+| Pergunta | Autoridade na cópia | Uso pela tarefa hoje |
+|---|---|---|
+| **A competência do dia foi entregue?** | `_K8` → `ponto.janelas.janela_atual(dia, empresa)` dá a janela que contém o fato. `_K6` → `folha.export.competencia_entregue(empresa, mes, ano)` verifica o TXT vigente e sem invalidação. Mês e ano vêm do fim da janela. `vigia_fio.competencia_do_dia_entregue` já compõe os dois e devolve `None` se faltar dia. `app/core/juizes.py:342`, `app/ponto/janelas.py:60`, `app/folha/export.py:556`, `app/folha/export.py:591`, `app/chamados/services/vigia_fio.py:789` | **Sim**, em `_ler_exportadas`, por lote. `_ler_vida` chama para os pares candidatos às extensões administrativas existentes. Um dia de trabalho com todas as perguntas encaixadas na grade pode pular essa seleção. O resultado guarda `expor_admin` e o caso `fato_em_ausencia`, sem governar o `SILENCIO` ordinário. `app/chamados/services/tarefa_do_dia.py:273`, `app/chamados/services/tarefa_do_dia.py:363`, `app/chamados/services/tarefa_do_dia.py:563`, `app/chamados/services/tarefa_do_dia.py:589`, `app/chamados/services/tarefa_do_dia.py:616` |
+| **A competência do dia está aberta?** | O registro traz respostas distintas para **tranca**, **entrega**, **janela** e **permissão de escrita**. `_K4` é `competencia_trancada`, `_K7` é `periodo_trancado`, `_C20` é `dia_da_pergunta_trancado` e considera o toque posterior do admin. `_F6` é `competencia_fechada` por colaborador, que olha `FechamentoMensal`. `_K9` inclui holerite e tem o recorte da célula. Um registro de juiz cuja pergunta seja literalmente “a competência do dia do fato está aberta?” ficou [nao verificado]. `app/core/juizes.py:175`, `app/core/juizes.py:183`, `app/core/juizes.py:303`, `app/core/juizes.py:314`, `app/core/juizes.py:331`, `app/core/juizes.py:342`, `app/core/juizes.py:352`, `app/ponto/janelas.py:75`, `app/chamados/juizes.py:1009` | A tarefa consulta **C20** em lote por `dias_trancados`, que usa K8 e K7. Um dia trancado sem toque sai cedo com `competencia_trancada`. O `False` de C20 também pode significar que houve toque em competência ainda trancada. A lista C11 usa outro recorte, `competencias_a_lavrar`, com a corrente e a anterior enquanto a anterior não estiver entregue. O vigia também usa `aberta` como rótulo de medida para o complemento de K6, inclusive quando não tem data. Esses usos não definem por si o alcance de “aberta” na F5. `app/chamados/services/tarefa_do_dia.py:227`, `app/chamados/services/tarefa_do_dia.py:550`, `app/chamados/juizes.py:1067`, `app/chamados/juizes.py:1076`, `app/escala/services/cadastro_realidade.py:536`, `app/ponto/services/he_pendente_lavrado.py:209`, `app/chamados/services/vigia_fio.py:767` |
+
+## 3. Ações e portas de ADMIN
+
+| Ação conhecida | Porta, executor e tela | Serve para a silenciada ressuscitada? |
+|---|---|---|
+| **`VALIDAR`** (`'validar'`) | `_pela_decisao` emite para resposta com texto ou `DEVOLUCAO`. A composição aceita âncora na fila ou âncora não terminal. Gestor com permissão contextual age no modal do fio, pelo POST `validar_pergunta`, que chega a `acoes_disputa.acao_validar_pergunta` e `validacao.validar_pergunta`. Há também o cartão de pergunta e a validação inline da Central. A tarefa emite `VALIDAR` ainda para `celula_acusa_sem_pergunta_viva`, sem âncora própria de pergunta. `app/chamados/services/tarefa_do_dia.py:165`, `app/chamados/services/tarefa_do_dia.py:369`, `app/chamados/services/tarefa_do_dia.py:751`, `app/chamados/services/fio.py:607`, `app/chamados/services/fio.py:634`, `app/templates/chamados/partials/modal_fio.html:306`, `app/templates/chamados/partials/_pergunta_card.html:103`, `app/templates/chamados/partials/_lista_chamados.html:82` | **Não como ação da ressuscitada sem resposta.** A ressuscitação limpa o par, a porta devolve `sem_resposta` e o formulário do modal fica no ramo de pergunta respondida. `app/chamados/models.py:1721`, `app/chamados/services/validacao.py:681`, `app/templates/chamados/partials/modal_fio.html:217` |
+| **`DECIDIR_AUSENCIA`** (`'decidir_ausencia'`) | Sai de absorção pendente ou ausência a decidir no dia. O ID da ausência leva ao painel de ausência. DP com `editar_ausencias` usa Aprovar ou Rejeitar. A composição aceita essa ação direta sem chamado na fila. `app/chamados/services/tarefa_do_dia.py:184`, `app/chamados/services/tarefa_do_dia.py:315`, `app/chamados/services/tarefa_do_dia.py:751`, `app/folha/retrato_folha.py:1015`, `app/ponto/views.py:2745`, `app/ponto/views.py:2829`, `app/templates/ponto/partials/painel_ausencia.html:323`, `app/templates/ponto/partials/painel_ausencia.html:344` | **Só para uma ausência real, pelo caminho que já existe.** O ramo `SILENCIO` não fornece ausência para aprovar ou rejeitar. O link requer esse ID. `app/chamados/services/tarefa_do_dia.py:182`, `app/chamados/services/tarefa_do_dia.py:192`, `app/folha/retrato_folha.py:1044` |
+| **`'resolver_dia'`** | A composição cria a ação se faltou rota e o calendário a ofereceu. Publica `porta_acao` e o dia do turno. Quem tem `regularizar_batida` usa Resolver dia no calendário, pelo POST `veredito_celula`. `app/chamados/services/tarefa_do_dia.py:702`, `app/chamados/services/tarefa_do_dia.py:781`, `app/chamados/services/tarefa_do_dia.py:819`, `app/templates/colaboradores/partials/_calendario_grade.html:131`, `app/ponto/views.py:3466` | **Condicional.** Existe ação sobre o dia quando a tela a oferece. A oferta depende do estado do dia e a ação executa um veredito do dia. A marca da ressuscitação não torna essa porta disponível por si. `app/colaboradores/services/calendario.py:97`, `app/chamados/services/tarefa_do_dia.py:702`, `app/ponto/views.py:3493` |
+| **`'validar'` e `'decidir'` residuais** | São verbos do **chamado**, carregados do painel. `validar` já traduz para admin. `decidir` conserva a rota do chamado durante a seleção e pode sair como admin se o fio publicado for apenas residual. Ambas as portas abrem o modal. O gestor executa o ato que aquele chamado realmente oferece e para o qual tem permissão. `app/chamados/catalogo/natureza.py:41`, `app/chamados/catalogo/natureza.py:57`, `app/chamados/juizes.py:1602`, `app/chamados/juizes.py:1694`, `app/chamados/services/tarefa_do_dia.py:793`, `app/folha/retrato_folha.py:1015`, `app/chamados/utils.py:68` | `validar` tem a mesma limitação de resposta. `decidir` pode dar acesso quando já há chamado na fila e uma ação real no fio. O verbo não é um POST genérico, nem prova que haja meio de resolver aquela pergunta. A regularização do fio, por exemplo, recusa disputa com pergunta sem resposta. `app/chamados/services/tarefa_do_dia.py:739`, `app/chamados/services/tarefa_do_dia.py:762`, `app/chamados/services/validacao.py:681`, `app/chamados/services/acoes_disputa.py:121` |
+
+**`Cobrar` é o botão reutilizável indicado pelo corte.** O modal já o mostra para disputa aberta com pergunta sem resposta. `cobrar_chamado` exige POST, `gerir_chamados` e permissão de área. Envia push e, se entregue, anexa a ocorrência existente, com limite de uma cobrança por colaborador e dia. O POST não resolve a pergunta nem muda o dono. Hoje o verbo residual `cobrar` é excluído do cálculo do dono, e não existe uma ação explícita `cobrar` de `ADMIN` na composição. Reusar o botão exige publicar o encaminhamento administrativo em leitura, sem confundi-lo com o verbo da fila. `app/docs/PROMPTS.md:2472`, `app/templates/chamados/partials/modal_fio.html:354`, `app/templates/chamados/partials/modal_fio.html:363`, `app/templates/chamados/partials/modal_fio.html:378`, `app/chamados/views_cobrar.py:24`, `app/chamados/views_cobrar.py:34`, `app/chamados/services/tarefa_do_dia.py:751`, `app/chamados/services/tarefa_do_dia.py:762`
+
+## 4. As listas na árvore
+
+- **Central de Chamados.** É a lista operacional de DP/gestor, acessível a staff e aos grupos de gestor. `painel_gestao` chama `montar_contexto_painel` e renderiza `painel_gestao.html`, `_lista_resumo.html` ou `_lista_chamados.html`. A lista traz chamados, agrupados por colaborador no resumo ou em linhas no detalhe. A fila e o balão do admin vêm dos status e dos verbos do painel. Uma instância `silencio_decidido` não vira linha própria. Seu chamado pode aparecer pelas regras atuais do painel. Publicar `fio='admin'` na tarefa, sozinho, não alimenta a Central. `app/chamados/views.py:24`, `app/chamados/views.py:35`, `app/chamados/views.py:721`, `app/chamados/views.py:767`, `app/chamados/services/painel.py:300`, `app/chamados/services/painel.py:335`, `app/chamados/services/verbos.py:20`, `app/templates/chamados/painel_gestao.html:239`
+- **Cadastro x Realidade.** A árvore também chama essa tela de “lista do admin” no contexto do C11. `cadastro_x_realidade` chama `lista` para as empresas visíveis e serve HTML ou PDF a quem tem `ver_escala`. O C11 traz o beco específico de folga não definida, com pergunta viva e sem envelope de porta. Uma silenciada pode participar desse universo se cumprir os filtros, mas a razão `silencio_decidido` não é o critério de inclusão nem uma linha própria. O corte da ressuscitação não identifica essa tela pelo nome. `app/escala/views.py:514`, `app/escala/services/cadastro_realidade.py:405`, `app/escala/services/cadastro_realidade.py:459`, `app/escala/services/cadastro_realidade.py:536`, `app/escala/services/cadastro_realidade.py:860`, `app/docs/CORTES.md:545`
+- **Lista textual da ressuscitação.** O corte a descreve **por PK e `colNNN`, junto das demais listas de competência paga, sem escrita**. Um gerador, template ou canal já ligado a essa lista específica ficou [nao verificado]. A **Pauta DP** que existe no sistema é outra implementação: `pautas.views.aba` serve registros de `Pauta` por destinatário, e a aba DP de `_copiloto.html` renderiza `p.texto`. O comando `pauta_folga_nao_definida_exportada` é um precedente de K6 mais saída textual em `--dry`, com filtro próprio de C11. Fora de `--dry`, grava pautas. Assim, uma instância `silencio_decidido` não é publicada automaticamente como texto para o DP por esses caminhos. `app/docs/CORTES.md:545`, `app/pautas/views.py:29`, `app/pautas/services.py:304`, `app/templates/core/_copiloto.html:65`, `app/templates/core/_copiloto.html:359`, `app/templates/core/_copiloto.html:405`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:92`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:119`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:130`
+
+## 5. Quem lê a razão ou o resultado que ela produz
+
+| Leitor | Efeito de uma ação de ADMIN na ressuscitada em aberta |
+|---|---|
+| **`_portas_da_tarefa`**, leitor literal de `perguntas_encerradas` | A tupla só exclui do ramo de âncora **pela pergunta**. Uma ação com porta inteira que esteja na fila já pode entrar em `portas_acoes`. Uma razão nova pode mudar `porta_fila` para `porta_pergunta` quando o acesso depende daquela âncora externa. Remover `silencio_decidido` da tupla inteira mudaria também o silêncio comum. `app/chamados/services/tarefa_do_dia.py:734`, `app/chamados/services/tarefa_do_dia.py:744`, `app/chamados/services/tarefa_do_dia.py:777` |
+| **API do app, F6**, por `exigencia_das_perguntas` e `aguarda_admin_pela_tarefa` | Se a mudança estiver na face compartilhada, um item servido pela API passa a ter `aguarda_admin=True` ao receber ação `de='admin'`. Se entrar só na composição do dia, a API continua com a saída por pergunta anterior. A partição pendentes/histórico tem sua própria entrada de C6 e leitura da resposta, anterior a esse campo. `app/chamados/services/tarefa_do_dia.py:461`, `app/chamados/services/tarefa_do_dia.py:482`, `app/api/views.py:2553`, `app/api/views.py:2566`, `app/api/views.py:2584`, `app/chamados/services/pergunta_no_app.py:68`, `app/chamados/services/pergunta_no_app.py:80` |
+| **Folha e retrato**, por `fora_da_folha` e `o_que_segura` | Entre os dias que já retêm, pode mudar fio, ação, link e agrupamento da pessoa. O universo de retidos é carregado antes da tarefa. Para uma ação publicada como `'cobrar'`, o mapa atual da Folha não tem entrada própria e pode cair no link legado de admin, “Validar no fio”. `app/folha/fora_da_folha.py:94`, `app/folha/fora_da_folha.py:200`, `app/folha/fora_da_folha.py:215`, `app/folha/fora_da_folha.py:275`, `app/folha/retrato_folha.py:989`, `app/folha/retrato_folha.py:1015`, `app/folha/retrato_folha.py:1066` |
+| **Vigia, furo, C11 e pauta de discordantes** | `vigia_fio` passa a contar a rota e o admin quando publicados. `furo_sem_canal` tira do conjunto sem canal quando chega rota. `beco_em_lote` retira do C11 quando chega envelope. `dias_sem_fio` deixa de selecionar o dia quando o fio deixa de ser `nada`. Todos dependem de o dia já estar no respectivo universo. O comparador `diff_e3_sombra` também vê o delta de porta. `app/chamados/services/vigia_fio.py:359`, `app/chamados/services/vigia_fio.py:594`, `app/chamados/services/furo_sem_canal.py:96`, `app/escala/services/cadastro_realidade.py:469`, `app/ponto/services/pautas_dos_discordantes.py:85`, `app/chamados/management/commands/diff_e3_sombra.py:41` |
+| **`backfill_fio_morto_e4b.ato_do_dia`** | Lê razões e ações genericamente. Uma ação humana sem `porta` pode mudar o diagnóstico para `sem_porta_de_sistema`, quando não houver ato de sistema. Uma ação de ADMIN com porta inteira não entra na lista de atos de sistema por esse trecho. `app/chamados/management/commands/backfill_fio_morto_e4b.py:82`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:98`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:110` |
+| **Testes, golden e mutante** | O teste F1/B1 de SILENCIO é o que contradiz diretamente a mudança pedida. E2, C14 e F6 U4 exercitam silêncio sem a compensadora. A matriz E3 Q12 e o teste de âncora externa exercitam o roteamento de encerradas. O mutante `encerrada_rota_pergunta` substitui a tupla inteira por `()`. O golden F2 de exportada tem silêncio vazio antes e depois. São controles para uma mudança limitada à ressuscitada em aberta. `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:328`, `app/chamados/tests/test_e2_tarefa_do_dia.py:285`, `app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:34`, `app/api/tests/test_f6_u4_aguarda_admin_pela_tarefa.py:59`, `app/chamados/tests/test_e3_portas_tarefa.py:733`, `app/chamados/tests/test_e3_portas_v6_sem_banco.py:98`, `app/chamados/tests/e3_portas_v6_mutantes.py:67`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:39`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:114` |
+
+## 6. Asserts existentes, no literal
+
+- **F1/B1, igualdade antes/depois da instância.** `_fila` compara a razão e os trios `(acao, de, porta)` daquela pergunta. O assert é `self.assertEqual(self._fila(p), antes, 'a ressuscitacao mudou a tarefa_do_dia da pergunta')`. Os dois casos chamam `self._ressuscita_e_compara(False, 'aguarda_resposta')` e `self._ressuscita_e_compara(True, 'silencio_decidido')`. O helper afirma a razão inicial por `self.assertEqual(antes[0], razao_esperada, 'fixture fora da classe medida em prod')`. O teste de SILENCIO verifica a igualdade, sem um `[]` literal próprio. `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:320`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:333`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:338`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:
+
+[truncado em 20000 de 29406 caracteres]
 
 ## 20/11 03:16 · sessao 27fa3c0f94d6 · E4C-F5-CONSTROI · censo · origem=Code
 
@@ -1572,220 +1696,4 @@ Entradas de teste: `O=LATERAL-TESTE`, `C=wt-a`, `D=wt-b`, `H/J` = HEADs reais da
 
 [truncado em 20000 de 26763 caracteres]
 
-## 20/11 01:57 · sessao 2ab758cbcfcd · E4C-F5-CONSTROI · construtor · origem=Code
-
-### 1. Por que o filtro rodava duas vezes
-
-O GET renderiza o modal uma vez. A fixture tem dois cartões distintos, o chamado pai da disputa e o chamado destino das perguntas. O pai recebe a disputa pelo mapa de chamados e o destino recebe **a mesma instância Python** pelo mapa de perguntas. Os dois mapas vêm dos mesmos objetos de `todas_disputas`. O template percorre os cartões e pede a contagem uma vez para cada botão. `chamados/views.py:927`, `chamados/views.py:956`, `core/tests/test_selo_performance.py:306`, `chamados/services/fio.py:222`, `chamados/services/fio.py:255`, `chamados/services/fio.py:280`, `chamados/services/fio.py:287`, `templates/chamados/partials/modal_fio.html:68`, `templates/chamados/partials/modal_fio.html:396`.
-
-### 2. Quem produz e quem consome o conjunto
-
-| Sítio | Uso |
-|---|---|
-| `chamados/juizes.py:1762` | Seleciona as respostas com texto da disputa, carrega as decisões em lote, julga as candidatas e devolve um queryset por PK. A lista de PKs é interna ao juiz. |
-| `chamados/views.py:1415` | A view do botão testa `.exists()`, passa o queryset ao escritor e usa o número atualizado no retorno da ação. `chamados/views.py:1454`. |
-| `chamados/services/acoes_disputa.py:92` | A ação `reabrir_disputa` do POST do fio testa `.exists()` e passa o queryset ao mesmo escritor. `chamados/services/fio.py:690`, `chamados/services/acoes_disputa.py:99`. |
-| `chamados/models.py:2404` | `reabrir_por_colab` testa `.exists()` e passa o queryset ao escritor dentro da transação que incrementa o contador. As entradas HTML e REST delegam a esse método. `chamados/models.py:2414`, `chamados/views.py:1329`, `api/views.py:2712`. |
-| `chamados/services/disputa_emissao.py:1617` | `reabrir_para_correcao` lê o queryset para guardar a foto das respostas na trilha e usa `descarimbar_em_lote` para escrever. Devolve a quantidade atualizada. `chamados/services/disputa_emissao.py:1633`, `chamados/services/disputa_emissao.py:1656`. |
-| `chamados/templatetags/chamados_tags.py:208` | A tag usa `.count()`. Modal e `detalhe_local.html` usam esse número no botão e na confirmação. A lista `perguntas_disputa` do detalhe vem de `pergunta_viva`, em uma leitura separada. `templates/chamados/partials/modal_fio.html:396`, `templates/chamados/detalhe_local.html:21`, `chamados/services/acoes_chamado.py:345`. |
-
-A reabertura administrativa de disputa fechada chama `reabrir_admin` e abre uma pergunta nova pela porta de conversa. `chamados/services/acoes_disputa.py:239`, `chamados/services/acoes_disputa.py:259`.
-
-### 3. Universo carregado pelo fio
-
-Para a disputa **aberta da fixture**, o fio já carrega todas as perguntas da disputa com `decisoes`, antes de separá-las por cartão. Para uma **fechada**, aplica `q_vivas()` no SQL e depois `pergunta_viva` em Python. Uma resposta com texto, validada e ainda sem carimbo de materialização, exemplifica a diferença. A validação a exclui da carga da fechada, enquanto `pergunta_sem_lastro_ou_viva` a admite pelo carimbo ausente. `chamados/services/fio.py:251`, `chamados/services/fio.py:260`, `chamados/services/fio.py:270`, `chamados/models.py:3636`, `chamados/juizes.py:1410`, `chamados/juizes.py:1503`, `chamados/juizes.py:1762`.
-
-### Cura e arquivos tocados
-
-- **`chamados/templatetags/chamados_tags.py:231`** guarda só o inteiro devolvido pela leitura existente, por PK da disputa, no `RenderContext`. A primeira leitura de cada disputa chama o juiz com o prefetch intacto. `chamados/templatetags/chamados_tags.py:222`, `chamados/juizes.py:1765`.
-- **`templates/chamados/partials/modal_fio.html:396`** usa essa tag para o botão e a confirmação, tanto no GET quanto na resposta renderizada após a ação. `chamados/views.py:927`, `chamados/views.py:1393`.
-- **`chamados/tests/test_e4c_f5_voltaC3_reabrir.py:89`** cobra uma chamada e dois botões com N=3. Os outros casos associam N=1 e N=2 aos respectivos cartões e verificam N=0 em um novo GET após o POST real. `chamados/tests/test_e4c_f5_voltaC3_reabrir.py:95`, `chamados/tests/test_e4c_f5_voltaC3_reabrir.py:103`.
-
-Ficou de fora alimentar o juiz com a carga do fio, pois isso ampliaria seu contrato e exigiria tratar o universo parcial das fechadas. `chamados/services/fio.py:251`, `chamados/juizes.py:1762`.
-
-**Selo esperado no segundo GET: 92 → 89 consultas [nao verificado].** A previsão subtrai os três SQLs da segunda leitura do mesmo conjunto no anexo `medida_f3.txt`. O teto segue em 90. `core/tests/test_selo_performance.py:143`, `core/tests/test_selo_performance.py:377`.
-
-### Comandos para o Code
-
-Os dois arquivos Python e as quatro mutações compilaram em memória. Banco e suíte ficaram para a certificação. A compilação do template ficou bloqueada pela ausência de `django.template` no interpretador local, e o Ruff estava indisponível. Execução do RED, dos mutantes e do selo [nao verificado]. `chamados/tests/test_e4c_f5_voltaC3_reabrir.py:20`, `templates/chamados/partials/modal_fio.html:396`.
-
-```bash
-C3=chamados.tests.test_e4c_f5_voltaC3_reabrir.ReabrirNoModalTest
-rodar() { PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci --noinput "$@"; }
-
-rodar "$C3" \
-  core.tests.test_selo_performance.SeloPerformanceTest.test_chamados_modal \
-  chamados.tests.test_e4c_f5_voltaB_lotes.CarregadoresVoltaBTest.test_RED_k29_respostas_corrigiveis \
-  chamados.tests.test_ui_resposta_diz_o_que_e.AsDuasCascasDeCartaoTest
-
-F5_VOLTA_C3_MUTANTE=sem_memo rodar "$C3.test_RED_dois_cartoes_consultam_o_juiz_uma_vez"
-F5_VOLTA_C3_MUTANTE=chave_unica rodar "$C3.test_MORDE_cada_disputa_mostra_sua_contagem"
-F5_VOLTA_C3_MUTANTE=entre_renders rodar "$C3.test_MORDE_novo_render_depois_de_reabrir"
-F5_VOLTA_C3_MUTANTE=zero rodar "$C3.test_RED_dois_cartoes_consultam_o_juiz_uma_vez"
-
-ruff check --no-cache chamados/templatetags/chamados_tags.py \
-  chamados/tests/test_e4c_f5_voltaC3_reabrir.py
-```
-
-**LEI-AKITA** origem=`chamados/juizes.py:1762`, testemunha=`chamados/templatetags/chamados_tags.py:231` e `templates/chamados/partials/modal_fio.html:396`, RED=`chamados/tests/test_e4c_f5_voltaC3_reabrir.py:89`, quem-mais-le=`chamados/views.py:1415`, `chamados/services/acoes_disputa.py:99`, `chamados/models.py:2414` e `templates/chamados/detalhe_local.html:21`, juizes novos=0, padrao=Identity Map (`docs/GLOSSARIO.md:30`).
-
-## 20/11 01:40 · sessao fab078a7cd14 · E4C-F5-CONSTROI · construtor · origem=Code
-
-**C2 entregue para E1, E2, F1 e F2.** O censo estático bate com o registro atualizado, e a âncora de F1 rejeita o mutante que deixa a chamada apenas em comentário. Banco e testes ficaram para o Code. [Registro F2](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/core/tests/test_medida_turno_do_par.py:271) · [Âncora F1](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_contract_dedup_status.py:142) [nao verificado]
-
-### Arquivos tocados e usos dos avais
-
-A última coluna conta instruções `assert` e chamadas `self.assert*`, nessa ordem, por AST contra `9d386d1b1`.
-
-| Arquivo | Classe | Antes → depois | Asserções |
-|---|---|---|---|
-| [chamados/tests/e3_v8_apoio.py:77](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e3_v8_apoio.py:77) | ii, E1 | O módulo falso de `leitores()` passa a exportar `DecisaoPergunta` do helper único `chamados.tests.duble_pergunta`, já usado em B3 por `e3_volta7_apoio.py:111`. | `0/0 → 0/0` |
-| [chamados/tests/e3_volta7_apoio.py:33](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e3_volta7_apoio.py:33) | v, E2 | `Query` ganha `prefetch_related` como identidade. A subclasse V8 passa a herdar a mesma implementação em `e3_v8_apoio.py:26`. | `0/0 → 0/0` |
-| [chamados/tests/test_contract_dedup_status.py:142](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_contract_dedup_status.py:142) | i, F1 | A âncora textual da chamada sem argumentos passa a exigir a atribuição `_pend = self.respostas_sem_veredito(perguntas=perguntas)` no AST do corpo de `fechar`. | `0/12 → 0/12` |
-| [core/tests/test_medida_turno_do_par.py:271](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/core/tests/test_medida_turno_do_par.py:271) | i, F2 | `434 → 437`, mesma linha que filtra a célula por `loc.date()`. `chamados/services/materializacao.py:437`. | `0/86 → 0/86` |
-| [core/tests/test_medida_turno_do_par.py:271](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/core/tests/test_medida_turno_do_par.py:271) | i, F2 | `455 → 458`, mesma linha que calcula `(loc.date() - cel.data).days`. `chamados/services/materializacao.py:458`. | Mesmo módulo |
-
-As duas ocorrências de F2 têm conteúdo idêntico ao de `d9319a215`. São as únicas diferenças encontradas pelo censo de linhas congeladas em `core/tests/test_medida_turno_do_par.py:558`.
-
-### F3 · atribuição e parada
-
-A atribuição estática aponta **B, `d0210a400`**. Os dois `SELECT` candidatos são sobre `chamados_decisaopergunta`, ambos no `prefetch_related('decisoes')` de `perguntas_corrigiveis`. A fixture abre o modal de um colaborador com dois cartões, pai e destino, ligados à mesma disputa. Cada cartão chama o filtro de Reabrir, que monta um queryset novo para a mesma disputa. Isso dá um `SELECT` de decisões por cartão. `core/tests/test_selo_performance.py:298`, `:377` · `chamados/services/fio.py:275`, `:287` · `templates/chamados/partials/modal_fio.html:396` · `chamados/templatetags/chamados_tags.py:222` · `chamados/juizes.py:1765`.
-
-Os leitores que C acrescentou ao estado de aplicação do cartão recebem as instâncias do lote de decisões do fio. D alterou `fechar`, enquanto o GET medido renderiza o modal. `chamados/services/materializacao.py:193`, `:889`, `:927` · `chamados/services/fio.py:260`, `:378` · `chamados/models.py:2071` · `chamados/views.py:951`.
-
-**PAREI em F3.** O candidato é um prefetch em lote repetido pelo render. A condição do aval era uma leitura avulsa a incorporar ao lote. O anexo informa **92 / teto 90**. A sonda abaixo deve isolar o delta esperado **92 → 90** ao restaurar em memória somente o corpo anterior a B. SQL efetivamente emitido e total da sonda **[nao verificado]**. `chamados/juizes.py:1765` · `core/tests/test_selo_performance.py:143`, `:333`.
-
-### Varredura de C e D
-
-| Família | Resultado da inspeção |
-|---|---|
-| Vigia | Os dois dublês faltantes estão em E1/E2. Os leitores de vivas em fechadas e carimbos por dono têm cobertura ORM em `chamados/tests/test_e4c_f5_voltaC_lotes.py:154`, `:167`. |
-| Materialização | O contador já usa `_Recorte(Linhas)`, com prefetch identidade. A elegibilidade e a anuência já recebem o compositor do helper. A fixture do estado de aplicação já fornece o que o compositor real lê. `chamados/tests/test_bug_par_c2_sem_banco.py:32`, `:78` · `chamados/tests/test_e4b_classe_e_memoria.py:193` · `chamados/tests/test_bug_par_sem_banco.py:182` · `chamados/tests/test_estado_aplicacao.py:38`. |
-| Auditoria, dedup e universo do fato | O dublê do piso I6 substitui `_i6_pares` inteiro. Os corpos alterados têm cobertura ORM nos selos de C. O harness sem banco do backfill de decisões chama o contador de validação sem linha. `chamados/tests/test_selo_lapide_legado.py:85` · `chamados/tests/test_e4c_f5_voltaC_lotes.py:89`, `:119`, `:141`, `:230` · `chamados/tests/test_e4c_f5_voltaC_sitios.py:65` · `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:50`. |
-| Backfill do fio, disparo, estoque e retroativo | `Linhas` já fornece `filter`, `select_related` e `prefetch_related` para o backfill. A matriz do disparo já fornece `prefetch_related` pelo `Mock`. Estoque e emissão retroativa exercitam os caminhos alterados por ORM. `chamados/tests/test_e4b_classe_e_memoria.py:165`, `:650` · `chamados/tests/test_e4a2_matriz_memoria.py:124` · `chamados/tests/test_f1nova_b2_leitores.py:249` · `chamados/tests/test_e4c_f5_voltaC_lotes.py:198`. |
-| Arquivamento, becos e porta D | Os caminhos de execução encontrados usam ORM. O consumidor estrutural de D com âncora deslocada foi F1. `chamados/tests/test_c7_red_minimos.py:283` · `chamados/tests/test_e4c_f5_voltaC_lotes.py:218` · `chamados/tests/test_e4c_f5_opus_models.py:149` · `chamados/tests/test_contract_dedup_status.py:135`. |
-
-### Comandos para o Code
-
-Os quatro labels cobrem E1, E2, F1 e F2. A segunda chamada inclui os dois selos do modal, com `test_selo_teto_modal` em `chamados.tests`. Execução **[nao verificado]**. `chamados/tests/test_e3_portas_tarefa.py:505` · `chamados/tests/test_e3_degrau_dono_e_porta.py:388` · `chamados/tests/test_contract_dedup_status.py:135` · `core/tests/test_medida_turno_do_par.py:558` · `core/tests/test_selo_performance.py:377` · `chamados/tests/test_selo_teto_modal.py:37`.
-
-```bash
-e1=chamados.tests.test_e3_portas_tarefa.MatrizV8Test
-e2=chamados.tests.test_e3_degrau_dono_e_porta.LeitoresPortaApp
-f1=chamados.tests.test_contract_dedup_status.ContratoDedupDistingueStatusTest.test_porta_humana_de_disputa_presta_contas
-f2=core.tests.test_medida_turno_do_par.CatracaTurnoDoParTest.test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit
-f3=core.tests.test_selo_performance.SeloPerformanceTest.test_chamados_modal
-
-PYTHONDONTWRITEBYTECODE=1 python -B manage.py test --settings=config.settings.ci "$e1" "$e2" "$f1" "$f2"
-PYTHONDONTWRITEBYTECODE=1 python -B manage.py test --settings=config.settings.ci "$f3" chamados.tests.test_selo_teto_modal
-```
-
-Os mutantes abaixo são em memória. E1 deve reproduzir o `ImportError`, E2 o `AttributeError`, F1 deve falhar com a chamada só em comentário, e F2 deve falhar ao restaurar cada coordenada antiga isoladamente. Resultados dos mutantes **[nao verificado]**. `chamados/services/vigia_fio.py:504`, `:571` · `chamados/tests/test_contract_dedup_status.py:142` · `core/tests/test_medida_turno_do_par.py:558`.
-
-```bash
-c2() {
-  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
-    python -B - "$@" <<'PY'
-import inspect
-import subprocess
-import sys
-import traceback
-from contextlib import ExitStack
-from types import SimpleNamespace
-from unittest.mock import patch
-
-import django
-django.setup()
-
-from django.conf import settings
-from django.test.utils import get_runner
-
-modo, label = sys.argv[1:]
-with ExitStack() as escopo:
-    if modo == 'e1':
-        from chamados.tests import e3_v8_apoio as apoio
-        modulo = apoio.modulo
-
-        def sem_compositor(nome, **campos):
-            if nome == 'chamados.models' and 'ChamadoColaborador' in campos:
-                campos.pop('DecisaoPergunta')
-            return modulo(nome, **campos)
-
-        escopo.enter_context(patch.object(apoio, 'modulo', sem_compositor))
-    elif modo == 'e2':
-        from chamados.tests.e3_volta7_apoio import Query
-        escopo.callback(setattr, Query, 'prefetch_related', Query.prefetch_related)
-        del Query.prefetch_related
-    elif modo == 'f1':
-        from chamados.models import DisputaSupervisao
-        from chamados.tests import test_contract_dedup_status as contrato
-
-        def fonte_com_comentario(fn):
-            fonte = inspect.getsource(fn)
-            if fn is DisputaSupervisao.fechar:
-                chamada = '_pend = self.respostas_sem_veredito(perguntas=perguntas)'
-                return fonte.replace(chamada, '# ' + chamada + '\n        _pend = []', 1)
-            return fonte
-
-        escopo.enter_context(patch.object(
-            contrato, 'inspect', SimpleNamespace(getsource=fonte_com_comentario)))
-    elif modo in ('f2-437', 'f2-458'):
-        from core.tests import test_medida_turno_do_par as catraca
-        chave = ('chamados/services/materializacao.py::_plantio_preenche_furo_na_data', 'B1')
-        linhas = [434, 458] if modo == 'f2-437' else [437, 455]
-        escopo.enter_context(patch.dict(
-            catraca.LINHAS_REGISTRADAS['derivacoes_de_dia'], {chave: linhas}))
-    elif modo in ('f3', 'f3-sem-b'):
-        from chamados import juizes
-        from chamados.tests.e4_apoio import funcao
-        from core.tests.test_selo_performance import SeloPerformanceTest
-        from django.db import connection
-
-        if modo == 'f3-sem-b':
-            fonte = subprocess.check_output(
-                ['git', 'show', 'd0210a400^:app/chamados/juizes.py'], text=True)
-            anterior = funcao('chamados/juizes.py', 'perguntas_corrigiveis',
-                              vars(juizes).copy(), fonte=fonte)
-            escopo.enter_context(patch.object(juizes, 'perguntas_corrigiveis', anterior))
-
-        medir = SeloPerformanceTest._medir_rota
-
-        def medir_com_sql(self, nome, url):
-            consultas = []
-
-            def registrar(execute, sql, params, many, context):
-                pilha = ()
-                if sql.lstrip().upper().startswith('SELECT') and 'chamados_decisaopergunta' in sql:
-                    pilha = tuple(f for f in traceback.extract_stack() if 'chamados/' in f.filename)
-                consultas.append((sql, params, pilha))
-                return execute(sql, params, many, context)
-
-            with connection.execute_wrapper(registrar):
-                total, ms = medir(self, nome, url)
-            print(f'{nome} · {total} consultas')
-            for sql, params, pilha in consultas[-total:]:
-                if pilha:
-                    print(sql, params)
-                    print(' <- '.join(f'{f.filename}:{f.lineno}' for f in reversed(pilha[-5:])))
-            return total, ms
-
-        escopo.enter_context(patch.object(SeloPerformanceTest, '_medir_rota', medir_com_sql))
-    else:
-        raise SystemExit(f'Modo desconhecido: {modo}')
-
-    raise SystemExit(bool(get_runner(settings)(verbosity=2, parallel=1).run_tests([label])))
-PY
-}
-
-c2 e1 "$e1.test_v8_R1_colab_alcancavel_e_leitores"
-c2 e2 "$e2.test_vigia_conta_app_sem_KeyError_e_publica_no_log"
-c2 f1 "$f1"
-c2 f2-437 "$f2"
-c2 f2-458 "$f2"
-c2 f3 "$f3"
-c2 f3-sem-b "$f3"
-```
-
-**LEI-AKITA** — origem em `vigia_fio.py:504`, `:571`, `models.py:2072` e `materializacao.py:437`, `:458` · testemunhas no dublê único `duble_pergunta.py:12`, na chamada viva de `fechar` e no censo de `core/tests/test_medida_turno_do_par.py:558` · RED e mutantes entregues para o Code **[nao verificado]** · F3 parado pelo escopo literal `docs/LEIS.md:62` · juízes novos **0**, conforme os quatro arquivos da tabela.
-
-_7459 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7461 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
