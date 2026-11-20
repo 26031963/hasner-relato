@@ -1,7 +1,503 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 04:04** · publicado em **20/11/2026 04:06** (UTC-3)
+> Ultima resposta processada: **20/11/2026 04:15** · publicado em **20/11/2026 04:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 04:15 · sessao 0e2ebed515d6 · E4C-F5-CONSTROI · sonda · origem=Code
+
+```python
+from collections import Counter, defaultdict
+from functools import lru_cache
+from itertools import product
+from logging import disable, root
+from types import SimpleNamespace
+from unittest.mock import patch
+
+
+# E4C-F5-CONSTROI, árvore solicitada 76ce6695c4142ca0577285407fe0068f618a3c89.
+# Identidade Git da cópia e execução na sombra [nao verificado].
+PAGINA = 2000
+FALHOU = object()
+SIM_NAO = {True: "sim", False: "nao"}
+CLASSES = {(True, False): "A", (False, True): "B"}
+FAIXAS = ("sim", "nao", "sem-dia", "NAO-MEDIDO")
+
+MODELS = "app/chamados/models.py"
+JUIZES = "app/chamados/juizes.py"
+ACOES = "app/chamados/services/acoes_disputa.py"
+DECL = "app/chamados/services/declaracao_texto.py"
+EMISSAO = "app/chamados/services/disputa_emissao.py"
+MAT = "app/chamados/services/materializacao.py"
+VAL = "app/chamados/services/validacao.py"
+VIGIA = "app/chamados/services/vigia_carimbo.py"
+PASSIVO = "app/chamados/services/passivo_validado.py"
+REC = "app/chamados/reconciliador.py"
+K6 = "app/chamados/services/vigia_fio.py:789 app/folha/export.py:556"
+
+GUARDAS = {
+    "corrigir": f"{ACOES}:349",
+    "declarar": f"{DECL}:229",
+    "fecho_sem_credor": f"{EMISSAO}:2085",
+    "par_exige_validada": f"{MAT}:201",
+    "par_implausivel_padrao": f"{MAT}:203",
+    "par_implausivel_plantio": f"{MAT}:203",
+    "materializador_releitura": f"{MAT}:2130",
+    "validar_irma": f"{VAL}:641",
+    "validar": f"{VAL}:687",
+    "recusar": f"{VAL}:901",
+    "lote_entrada": f"{VAL}:1067",
+    "lote_retorno": f"{VAL}:1089",
+    "devolver_coluna_atual": f"{VAL}:270",
+}
+PORTAS_M4 = {
+    "corrigir": f"{ACOES}:338 {ACOES}:349 {EMISSAO}:1455",
+    "recusar": f"{VAL}:888 {VAL}:901 {VAL}:905 {MODELS}:3413",
+    "declarar": f"{DECL}:229 {DECL}:322 {DECL}:362 {DECL}:651",
+    "aplicar_declaracao": f"{DECL}:229 {DECL}:596 {DECL}:651 {DECL}:670",
+}
+FILAS = {
+    "materializador": f"copiado {MAT}:2111",
+    "vigia_carimbo": f"copiado {VIGIA}:97",
+    "reparo_passivo": f"copiado {PASSIVO}:327 {VIGIA}:97",
+    "absolviveis": f"importado {REC}:671",
+    "orfas": f"importado {REC}:1539",
+}
+
+erros = Counter()
+amostras_erro = defaultdict(list)
+m1 = Counter()
+pks_m1 = defaultdict(list)
+m2 = Counter()
+m3 = Counter()
+m3_combinacoes = Counter()
+m4 = defaultdict(list)
+m4_materializadas = defaultdict(list)
+m5 = Counter()
+m5_c6 = Counter()
+m5_materializador_precedidas = Counter()
+m6 = Counter()
+rotulos_motivo = {}
+universo = None
+lidas = 0
+concluida = False
+
+
+def falha(medida, pks, exc):
+    tipo = type(exc).__name__
+    for pk in pks:
+        erros[medida] += 1
+        if len(amostras_erro[medida]) < 5:
+            amostras_erro[medida].append((pk, tipo))
+
+
+def analisar(transaction):
+    global universo, lidas, concluida
+
+    from django.contrib.auth.models import User
+    from django.db.models import Exists, OuterRef
+    from django.utils import timezone
+
+    from chamados import juizes as j
+    from chamados.catalogo.modulos import CALADOS_POR_ISENCAO
+    from chamados.catalogo.motor import ENCERRADOS, VIA_COMPETENCIA_TRANCADA, VIVOS
+    from chamados.models import (
+        ChamadoColaborador,
+        DecisaoPergunta as D,
+        DisputaSupervisao,
+        FollowupChamado,
+        PerguntaDisputa as P,
+    )
+    from chamados.reconciliador import perguntas_orfas_reatavies, qs_perguntas_absolviveis
+    from chamados.services import declaracao_texto as decl
+    from chamados.services import materializacao as mat
+    from chamados.services import validacao as val
+    from chamados.services.fio import universo_do_fato
+    from folha import export
+    from folha.models import ExportacaoDominio, anotar_vigencia
+    from ponto.janelas import janela_atual
+
+    def medir(medida, pks, leitura, *, sql=True):
+        try:
+            if sql:
+                with transaction.atomic():
+                    return leitura()
+            return leitura()
+        except Exception as exc:
+            falha(medida, pks, exc)
+            return FALHOU
+
+    @lru_cache(maxsize=1)
+    def usuario_sistema_leitura():
+        # Consumidor em juizes.py:1228. Substitui só a busca do usuário.
+        return User.objects.only("pk").get(username="sistema")
+
+    def propagar_engolido(_logger, _operacao, exc, **_contexto):
+        # core/observ.py:73 e chamados/juizes.py:1484, :1497.
+        raise exc
+
+    agora = timezone.now()
+    hoje = timezone.localdate(agora) if timezone.is_aware(agora) else agora.date()
+    tipos = {valor for valor, _ in P._meta.get_field("tipo_resposta").flatchoices}
+    atos = {valor for valor, _ in D.ATOS}
+    motivos_fixos = {
+        "": "vazio",
+        D.MOTIVO_PROJECAO_SEM_LINHA: "projecao_sem_linha",
+        "resposta automatica (fato entregue por outro caminho)": "resposta_automatica",
+        "backfill E1 v5: admin_decidiu sem ato (E2 B1)": "backfill_admin_decidiu",
+    }
+
+    def ultimo_ato(p):
+        # models.py:4191, :4225, :4329. Última linha física, inclusive empate por pk.
+        linhas = list(p.decisoes.all())
+        if not linhas:
+            return ("sem-linha", "sem-linha", "sem-linha", "sem-linha")
+        d = linhas[-1]
+        instante = timezone.localtime(d.ato_em) if timezone.is_aware(d.ato_em) else d.ato_em
+        data = instante.date()
+        motivo = motivos_fixos.get(d.ato_motivo)
+        if motivo is None:
+            motivo = rotulos_motivo.setdefault(
+                d.ato_motivo, f"motivo_reservado_{len(rotulos_motivo) + 1}"
+            )
+        faixa = "hoje" if data == hoje else "anterior" if data < hoje else "futuro"
+        return (data.strftime("%Y-%m"), d.ato if d.ato in atos else "fora-catalogo", motivo, faixa)
+
+    def marcar5(guarda, classe, resultado):
+        if resultado is not FALHOU:
+            m5[guarda, classe, resultado] += 1
+
+    perguntas = P.objects.select_related(
+        "celula", "chamado_destino__celula", "disputa__chamado__celula",
+        "disputa__colaborador__empresa",
+    ).prefetch_related("decisoes")
+
+    # Materializador: mesmo Q e mesmos predicados da relação disputa.perguntas.
+    prontas = P.objects.filter(
+        j.q_respondida_com_texto() | j.q_respondida_sem_texto(),
+        validada_em__isnull=False,
+        materializada_em__isnull=True,
+    )
+    # Vigia sem recorte de empresa/célula. O reparo consome este mesmo universo.
+    vigia = P.objects.filter(
+        validada_em__isnull=False, tipo_resposta__in=("hora", "data_hora")
+    )
+
+    def selecao_m3(pks):
+        colab = OuterRef("disputa__colaborador_id")
+        pk = OuterRef("pk")
+        return list(
+            P.objects.filter(pk__in=pks).annotate(
+                s_mat=Exists(prontas.filter(pk=pk)),
+                s_vigia=Exists(vigia.filter(pk=pk)),
+                s_abs=Exists(qs_perguntas_absolviveis(colab).filter(pk=pk)),
+                s_orfa=Exists(perguntas_orfas_reatavies(colab).filter(pk=pk)),
+            ).values_list("s_mat", "s_vigia", "s_abs", "s_orfa")
+        )
+
+    exportacoes_por_chave = {}
+    k6_real = export.competencia_entregue
+
+    def juiz_k6(empresa_id, mes, ano, registro=False, *, exportacoes=None):
+        chave = (getattr(empresa_id, "pk", empresa_id), int(mes), int(ano))
+        if exportacoes is None:
+            exportacoes = exportacoes_por_chave.get(chave)
+        return k6_real(*chave, registro=registro, exportacoes=exportacoes)
+
+    def carregar_k6(chaves):
+        # Alimentação em lote do argumento público de folha/export.py:582.
+        chaves = set(chaves).difference(exportacoes_por_chave)
+        if not chaves:
+            return
+        registros = anotar_vigencia(list(ExportacaoDominio.objects.filter(
+            empresa_id__in={e for e, _, _ in chaves if e is not None},
+            mes__in={m for _, m, _ in chaves},
+            ano__in={a for _, _, a in chaves},
+        ).only("pk", "empresa_id", "mes", "ano", "invalidada_em", "gerado_em")))
+        grupos = {chave: [] for chave in chaves}
+        for r in registros:
+            chave = (r.empresa_id, r.mes, r.ano)
+            if chave in grupos:
+                grupos[chave].append(r)
+        for chave, grupo in grupos.items():
+            exportacoes_por_chave[chave] = grupo
+
+    def chave_dia(p, dia):
+        if dia is None:
+            return None
+        empresa = p.disputa.colaborador.empresa
+        fim = janela_atual(dia, empresa)[1]
+        return (getattr(empresa, "pk", None), fim.month, fim.year)
+
+    def faixas_k6(divergentes):
+        chaves = {}
+        for p, _, _ in divergentes:
+            chaves[p.pk] = medir(
+                "M2_M4_K6", (p.pk,), lambda: chave_dia(p, j._dia_de_turno_da_pergunta(p)),
+                sql=False,
+            )
+        indexadas = [p.pk for p, _, _ in divergentes if isinstance(chaves[p.pk], tuple)]
+        carga = medir(
+            "M2_M4_K6", indexadas,
+            lambda: carregar_k6(chaves[pk] for pk in indexadas),
+        )
+        resultado = {}
+        for p, _, _ in divergentes:
+            chave = chaves[p.pk]
+            if chave is None:
+                resultado[p.pk] = "sem-dia"
+            elif chave is FALHOU or (carga is FALHOU and chave not in exportacoes_por_chave):
+                resultado[p.pk] = "NAO-MEDIDO"
+            else:
+                entregue = medir("M2_M4_K6", (p.pk,), lambda: juiz_k6(*chave), sql=False)
+                resultado[p.pk] = "NAO-MEDIDO" if entregue is FALHOU else SIM_NAO[entregue]
+        return resultado
+
+    def carregar_irmas(alvos):
+        # Cópia em lote do SQL de metade_irma_do_intervalo, materializacao.py:139.
+        chaves = {(p.disputa_id, p.data_evento) for p in alvos}
+        base = perguntas.filter(
+            disputa_id__in={d for d, _ in chaves},
+            data_evento__in={dia for _, dia in chaves},
+            tipo_resposta="hora", motivo__in=tuple(mat._PAR_DO_INTERVALO),
+        )
+        candidatas = set(base.filter(
+            j.q_respondida_com_texto(), materializada_em__isnull=True
+        ).values_list("pk", flat=True))
+        grupos = defaultdict(list)
+        for p in base.order_by("pk").iterator(chunk_size=PAGINA):
+            if (p.disputa_id, p.data_evento) in chaves:
+                grupos[p.disputa_id, p.data_evento, p.motivo].append(p)
+        return chaves, grupos, candidatas
+
+    def validar_antes_da_escrita(p, leitura, *, confirmar):
+        # validacao.py:682–745. Retornos desta função são rótulos da sonda.
+        if not j.pergunta_respondida(leitura) or leitura.validada_em is not None:
+            return "retorna"
+        if val._resposta_de_hora(p) and mat.espera_declarado_x_gravado(p):
+            return "retorna"
+        if j.motivo_implausivel_validacao(p) and not confirmar:
+            return "retorna"
+        if val._e_aceite_de_folga(p):
+            return "porta_folga"
+        if val.entrega_que_barra_a_validacao(p, val.irma_da_validacao(p)):
+            return "retorna"
+        return "carimba"
+
+    def prefixo_plantio(p, leitura):
+        # materializacao.py:1872, :1893, :1920, :1931, :1306, :1366, :1380, :1396.
+        if (val.entrega_que_barra_a_validacao(p)
+                or mat._data_em_disputa(p) or mat.espera_na_escrita(p.disputa, p)
+                or not j.pergunta_respondida(leitura)):
+            return False
+        ts, tipo = mat._ts_tipo_do_plantio(p.disputa, p, [])
+        if ts is None:
+            return False
+        colab = p.disputa.colaborador
+        return (
+            j._batida_existente_na_janela(colab, ts, tipo) is None
+            and mat._vizinha_mesmo_tipo(colab, ts, tipo) is not None
+            and not mat._plantio_preenche_furo_na_data(colab, ts, pergunta=p)
+        )
+
+    guardas_par = (
+        "par_exige_validada", "par_implausivel_padrao",
+        "par_implausivel_plantio", "validar_irma",
+    )
+
+    def medir_pares(divergentes, carga_irmas, irma):
+        if carga_irmas is FALHOU:
+            return
+        _, grupos, _ = carga_irmas
+        for q, classe, leitura in divergentes:
+            oposto = mat._PAR_DO_INTERVALO.get(q.motivo)
+            primarias = grupos.get((q.disputa_id, q.data_evento, oposto), ())
+
+            def prefixos():
+                # materializacao.py:189–203. O alvo da guarda é q, não p.
+                return [
+                    (p, lido)
+                    for p in primarias
+                    if (lido := D.composta(p)) is not None
+                    and j.pergunta_respondida(lido)
+                    and (alvo := irma(p.disputa, p)) is not None
+                    and alvo.pk == q.pk
+                    and not alvo.pendencia_admin
+                ]
+
+            ps = medir("M5_PAR_PREFIXO", (q.pk,), prefixos, sql=False)
+            if ps is FALHOU:
+                continue
+            marcar5("par_implausivel_padrao", classe, bool(ps))
+            plantio = medir(
+                "M5_PAR_PLANTIO", (q.pk,),
+                lambda: any(prefixo_plantio(p, lido) for p, lido in ps),
+            )
+            marcar5("par_exige_validada", classe, plantio)
+            marcar5(
+                "par_implausivel_plantio", classe,
+                FALHOU if plantio is FALHOU else plantio and leitura.validada_em is not None,
+            )
+
+            def chega_validar_irma():
+                # validacao.py:633, :699, :742, :745–773. Foto anterior ao recálculo.
+                for p, lido in ps:
+                    if p.materializada_em is not None or not val._resposta_de_hora(p):
+                        continue
+                    if validar_antes_da_escrita(p, lido, confirmar=True) != "carimba":
+                        continue
+                    alvo, _, _ = mat.par_do_intervalo(p.disputa, p)
+                    if alvo is not None and alvo.pk == q.pk:
+                        return True
+                return False
+
+            marcar5("validar_irma", classe, medir("M5_VALIDAR_IRMA", (q.pk,), chega_validar_irma))
+
+    def candidatas_sem_credor(divergentes):
+        # disputa_emissao.py:1946, :2071–2085. Disparador da foto = chamado
+        # resolvido/fechado do mesmo colaborador, com via admitida pelo prefixo.
+        pks = [p.pk for p, _, _ in divergentes]
+        outros = P.objects.filter(
+            disputa_id=OuterRef("disputa_id"), chamado_destino__status_local__in=VIVOS,
+        )
+        disparadores = ChamadoColaborador.objects.filter(
+            colaborador_id=OuterRef("disputa__colaborador_id"), status_local__in=ENCERRADOS,
+        ).exclude(via_encerramento=VIA_COMPETENCIA_TRANCADA)
+        return set(P.objects.filter(
+            pk__in=pks, disputa__fechada_em__isnull=True, materializada_em__isnull=True,
+        ).exclude(
+            disputa__chamado__status_local__in=VIVOS,
+        ).filter(~Exists(outros), Exists(disparadores)).values_list("pk", flat=True))
+
+    def medir_c6(alvos):
+        # A vitalidade vem depois de :2085. Mede o próximo veto separadamente.
+        ps = [p for p, _, _ in alvos]
+        with j.tranca_da_consulta(ps):
+            for p, classe, _ in alvos:
+                viva = medir("M5_C6", (p.pk,), lambda: j.pergunta_viva(p))
+                if viva is not FALHOU:
+                    m5_c6[classe, viva] += 1
+
+    @lru_cache(maxsize=4096)
+    def faltantes(colab, dia):
+        return decl._marcos_faltantes(colab, dia.isoformat())
+
+    @lru_cache(maxsize=4096)
+    def alvo_declaracao(colab_pk, motivo, dia):
+        return decl._segura_da_lista(universo_do_fato(colab_pk, motivo, dia))
+
+    def ancoras(p):
+        return {
+            ch.pk: ch
+            for ch in (p.chamado_destino, p.disputa.chamado)
+            if ch is not None and ch.colaborador_id == p.disputa.colaborador_id
+            and (ch.modulo_origem or "") in CALADOS_POR_ISENCAO
+        }
+
+    def insumos_declaracao(bs):
+        ids = {pk for p in bs for pk in ancoras(p)}
+        horas = defaultdict(list)
+        for ch_pk, texto in FollowupChamado.objects.filter(
+            chamado_id__in=ids, autor_tipo="colaborador",
+        ).order_by().values_list("chamado_id", "conteudo").iterator(chunk_size=PAGINA):
+            hora = decl.extrair_hora(texto)
+            if hora:
+                horas[ch_pk].append(hora)
+        abertas = {}
+        for colab_pk, d_pk in DisputaSupervisao.objects.filter(
+            colaborador_id__in={p.disputa.colaborador_id for p in bs},
+            fechada_em__isnull=True,
+        ).values_list("colaborador_id", "pk"):
+            abertas.setdefault(colab_pk, d_pk)
+        return horas, abertas
+
+    def prefixo_declaracao(p, fontes, *, aplicar):
+        # declaracao_texto.py:322–380, :605–637, :651–670.
+        horas, abertas = fontes
+        colab = p.disputa.colaborador
+        for ch in ancoras(p).values():
+            dia_ch = j.dia_do_fato(ch)
+            if dia_ch is None:
+                continue
+            estado, lista = faltantes(colab, dia_ch)
+            if estado == decl.ESTADO_SEM_CELULA:
+                continue
+            entradas = horas[ch.pk] if aplicar else [marco[3] for marco in lista]
+            for hora in entradas:
+                casado = decl._casar_hora(lista, hora)
+                if casado is None:
+                    continue
+                dia, pos, tipo, _ = casado
+                motivo = decl._MOTIVO_POR_MARCO[pos, tipo]
+                if motivo != p.motivo:
+                    continue
+                alvo = alvo_declaracao(colab.pk, motivo, dia)
+                if alvo is None or alvo.pk != p.pk:
+                    continue
+                if p.disputa_id == abertas.get(colab.pk) and j.pergunta_sem_lastro_ou_viva(p):
+                    return True
+                if j.resolvedora_valida(ch, p, dia_do_fato=dia)[0]:
+                    return True
+        return False
+
+    def medir_portas(p, classe, leitura, faixa, fontes):
+        # POST unitário com argumentos válidos para corrigir/recusar.
+        for guarda in ("corrigir", "recusar", "lote_entrada"):
+            marcar5(guarda, classe, True)
+        respondeu = j.pergunta_respondida(leitura)
+        marcar5("validar", classe, respondeu)
+        marcar5(
+            "devolver_coluna_atual", classe,
+            val._resposta_de_hora(p) and p.materializada_em is None
+            and bool((p.recusa_motivo or "").strip()),
+        )
+
+        # Guarda de declaração isolada, chamada real.
+        validada_declaracao = medir(
+            "M4_M5_DECLARAR_GUARDA", (p.pk,), lambda: decl._resposta_validada(p), sql=False,
+        )
+        if validada_declaracao is not FALHOU:
+            marcar5("declarar", classe, validada_declaracao != (p.validada_em is not None))
+
+        def retorno_lote():
+            # Lote unitário sem confirmação de implausibilidade. A guarda anterior
+            # usa o ato real. Uma recusa anterior à escrita conserva a foto.
+            if leitura.validada_em is not None or val.classe_do_lote(p)[0] != val.LOTE_A:
+                return False
+            etapa = validar_antes_da_escrita(p, leitura, confirmar=False)
+            return True if etapa == "retorna" else None
+
+        marcar5("lote_retorno", classe, medir("M5_LOTE_RETORNO", (p.pk,), retorno_lote))
+        if classe != "B":
+            return
+
+        if p.materializada_em is not None:
+            m4_materializadas[faixa].append(p.pk)
+        for porta, prefixo in (
+            ("corrigir", p.disputa.aberta and p.tipo_resposta == "hora"),
+            ("recusar", respondeu and not p.fora_do_fato()),
+        ):
+            m4[porta, faixa, "GUARDA_LIBERA"].append(p.pk)
+            if prefixo:
+                m4[porta, faixa, "PREFIXO_PASSA"].append(p.pk)
+
+        for porta in ("declarar", "aplicar_declaracao"):
+            if validada_declaracao is FALHOU or validada_declaracao:
+                continue
+            m4[porta, faixa, "GUARDA_LIBERA"].append(p.pk)
+            if fontes is FALHOU:
+                continue
+            prefixo = medir(
+                f"M4_{porta}", (p.pk,),
+                lambda: prefixo_declaracao(p, fontes, aplicar=(porta == "aplicar_declaracao")),
+            )
+            if prefixo is True:
+                m4[porta, faixa, "PREFIXO_PASSA"].append(p.pk)
+
+    def medir_pagina(pagina):
+        divergentes = []
+
+
+[truncado em 20000 de 32963 caracteres]
 
 ## 20/11 04:04 · sessao 16fb3fee2234 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1231,14 +1727,4 @@ As somas dão `+4, +4, +1, +2` na ordem do selo. O aval aceita a atribuição fo
 
 [truncado em 20000 de 27709 caracteres]
 
-## 20/11 02:47 · sessao 987528a4fa0c · - · - · origem=Ronald (tmux)
-
-Conferi por AST as 33 chaves A/B/C. Todas atingem funções existentes e têm a cardinalidade esperada. K16 elimina duas âncoras, incluindo a segunda, que tem seletor próprio K47. K47 elimina somente a segunda. O RED K16 exige todos os PKs julgados e igualdade de consultas entre 3 e 6, mas a fixture dá às perguntas um destino vivo, então `_todas` passa pelo `continue` antes do C6. A mordida de K16 não isola as duas remoções. A fixture específica de K47 usa perguntas sem destino no ramo sem credor. `app/chamados/tests/e4c_f5_voltaA_mutantes.py:14,21,39,44` · `app/chamados/tests/e4c_f5_voltaB_mutantes.py:23,98,100,104` · `app/chamados/services/disputa_emissao.py:1955,2080,2083,2093` · `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:21,28,110,130` · `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197,216`
-
-O RED do memo morde a remoção do `pop('_pv_memo', None)` com o ato registrado na mesma instância e o mesmo horizonte. Fora desse recorte, uma segunda instância com o mesmo PK ou uma linha recebida somente com `pergunta_id` conserva o memo. A ressuscitação usa essa forma por ID. `app/chamados/tests/test_e4c_f5_voltaFINAL.py:14,22` · `app/chamados/juizes.py:895,898` · `app/chamados/models.py:1714,4373,4381,4387`
-
-O RED do contador morde `for p in universo` por prever 1 consulta de decisões em vez de 3. Morde retirar o prefetch sozinho por prever 5 consultas em vez de 3. Passa com `for p in list(universo.iterator(chunk_size=lote))`, mantendo toda a frota na memória e as mesmas três consultas. A fixture alinhada também aceita o leitor produzir zero divergências após descartar o resultado da leitura, embora o teste preexistente morda esse erro. `app/chamados/services/vigia_texto_resposta.py:19,23` · `app/chamados/models.py:4333` · `app/chamados/tests/test_e4c_f5_contador_texto.py:26,38,87,95`
-
-O selo cobra contagem total e callbacks, de modo que um SELECT redundante no caminho ultrapassa o teto se o cenário já está no teto. Pode passar com a troca de um SELECT por uma escrita de custo igual sem novo callback. No cenário 3 FICAM, `vivos >= 1` aceita dois fechamentos. Os cenários que fecham verificam todos os estados finais, mas só consultam esses estados depois da batida medida. Runs e contagens efetivas [nao verificado]. `app/ponto/tests/test_selo_chokepoint_escrita.py:319,330,448,475,488,510`
-
-_7471 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7472 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
