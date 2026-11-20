@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 15:58** · publicado em **20/11/2026 16:02** (UTC-3)
+> Ultima resposta processada: **20/11/2026 16:09** · publicado em **20/11/2026 16:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 16:09 · sessao 37ffb83e1278 · E4C-F5-CONSTROI · verificador · origem=Code
+
+**Veredito: a trilha de S144 tem um RED que distingue o diff da base, mas há um bloqueio na régua.** O arquivo de mutantes tem nome de teste e zero casos. Quando rastreado, ele reprova o selo de host antes da suíte. A promessa de uma linha por PK também é mais forte que a garantia do código fora do fecho serializado. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:186–194`, `app/chamados/tests/test_e4c_f5_volta3_fecho_mutantes.py:1–33`, `bin/tests/test_selo_nao_nasce_vazio.sh:37–45`, `bin/regua.sh:138–144`, `app/chamados/services/materializacao.py:2222–2228`.
+
+Conferi os quatro blobs da cópia pelos hashes do `delta.diff` e reconstruí em memória o blob anterior de `materializacao.py`. O resultado bate com `80b5edec2`. A cópia não tem metadados Git para confirmar o HEAD `c080170007ddd25bfb64c7220cf84489a35d9a8a` [nao verificado]. Os resultados abaixo são de leitura estática. Execução de testes e mutantes, banco e logs de produção [nao verificado].
+
+## 1. Escritores e leitores
+
+| Campo ou valor | Escritor | Leitor |
+|---|---|---|
+| `recusa_do_carimbo = None` | Default de classe e reset por instância em `app/chamados/models.py:3322,3353`. | A passagem de ausência captura o valor sem filtrar previamente. Os espiões de teste também capturam o valor e o teste A2 exige `None` no sucesso. `app/chamados/services/materializacao.py:1073–1078`, `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:85–89,213–217`. |
+| `fora_do_fato` | `app/chamados/models.py:3319,3356–3358`. | A passagem de ausência lê o motivo e o põe no JSON da trilha. Os demais leitores de produção encontrados comparam com `par_ato_coluna`. `app/chamados/services/materializacao.py:1074–1078,1098–1104,2017,2222`, `app/chamados/services/passivo_validado.py:144–147`. |
+| `c6` | Porta real em `app/chamados/models.py:3320,3380–3383`. O stub escreve esse valor em `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:209–211`. | A ausência dá descrição própria a `c6`. Plantio, passivo e S144 distinguem o par por igualdade. `app/chamados/services/materializacao.py:1074–1078,2017–2022,2222–2228`, `app/chamados/services/passivo_validado.py:144–147`. |
+| `par_ato_coluna` | `app/chamados/models.py:3321,3390–3393`. | Ausência, plantio, passivo e S144 nos sítios acima. Leitores de teste do atributo em `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:455`, `app/chamados/tests/test_e4c_f5_volta3_ausencia.py:223`, `app/chamados/tests/test_e4c_f5_guarda_par_s143.py:59`, `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:73` e `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:88`. |
+| `acao='par_recusado_no_fecho'`, `modelo='PerguntaDisputa'`, `objeto_id=p.pk` | S144 fornece os três valores. `evento` faz o `objects.create`. `app/chamados/services/materializacao.py:1122,2226`, `app/core/observ.py:133–138`. | A deduplicação e o RED filtram pelos três. A auditoria os exibe. A foto E4B lê por modelo e PK, sem restringir ação. `app/chamados/services/materializacao.py:2222–2223`, `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:186–194`, `app/templates/core/log_auditoria.html:55–73`, `app/chamados/services/foto_e4b.py:310–323`. |
+| `depois={'motivo': ..., 'via_tentada': 'juiz_aprovou'}` | `depois=` vira `LogAuditoria.valor_depois`, um `JSONField`. `app/chamados/services/materializacao.py:2226–2228`, `app/chamados/models.py:2682`, `app/core/observ.py:134–137`, `app/core/models.py:301`. | O RED confere o JSON inteiro junto com `usuario_id`. A foto E4B copia todos os campos concretos. A tabela da auditoria exibe a descrição e omite o JSON. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:186–190`, `app/chamados/services/foto_e4b.py:247–252,322–323`, `app/templates/core/log_auditoria.html:55–74`. |
+| Retorno de `carimbar` | A porta devolve `bool`. `app/chamados/models.py:3358,3383,3393,3405`. | Os sete sítios de produção estão no item 5. Os espiões de S144 e do reconciliador leem e devolvem o resultado real. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:64–76`, `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:82–91`. |
+
+**Quem passa a ver a linha.** A tela de auditoria lista a ação livre no resultado geral ou filtrado por modelo. `?acao=par_recusado_no_fecho` funciona pelo filtro exato do GET. O seletor de ações lê `LogAuditoria.ACOES`, que omite o verbo novo, e o `create()` aceita verbos fora dos `choices`. O atalho em Relatórios leva à mesma tela. `app/core/views.py:697–738`, `app/core/models.py:285–301`, `app/templates/core/log_auditoria.html:23–33,60–73`, `app/templates/relatorios/index.html:234–241`.
+
+A foto E4B inclui a linha quando a pergunta está no recorte. O agregador `escritas_por_cron` também a incluiria se rodasse com o `ator` e a janela correspondentes. Um chamador ativo desse agregador [nao verificado]. Os leitores do C6 e da costura filtram seus próprios verbos, o histórico filtra ações de estado de chamados, e o contador do par lê `PerguntaDisputa` e suas decisões. `app/chamados/services/foto_e4b.py:310–323`, `app/chamados/services/vigia_loop.py:71–99`, `app/chamados/juizes.py:285–296`, `app/chamados/services/carga_pergunta_viva.py:110–112`, `app/chamados/models.py:3203–3211`, `app/chamados/services/historico.py:86–95`, `app/chamados/services/vigia_ato_x_coluna.py:8–24`. Outro leitor específico do verbo novo ou validador contra `choices` [nao verificado].
+
+## 2. Vida de `recusa_do_carimbo`
+
+Há um default na classe. A chamada escreve na **instância**, em memória, e zera o atributo logo após os imports, antes de qualquer guarda. Uma instância reutilizada começa a nova chamada com `None`. Todos os `False` da porta real atribuem um motivo antes de retornar. `app/chamados/models.py:3317–3322,3351–3360,3375–3405`.
+
+| Retorno | Valor na saída |
+|---|---|
+| `False` em `app/chamados/models.py:3358` | `fora_do_fato` |
+| `False` em `app/chamados/models.py:3383` | `c6`, após desfazer o carimbo em memória |
+| `False` em `app/chamados/models.py:3393` | `par_ato_coluna`, após desfazer o carimbo em memória |
+| `True` em `app/chamados/models.py:3405` | `None`, após salvar |
+
+Um `False` sem atribuição, **depois do reset**, deixaria `None` e o ramo novo não gravaria. O `False` antecipado de `encerrar_fantasma` pode sair sem chamar `carimbar`, mas S144 chama `carimbar` diretamente. `app/chamados/models.py:3351–3358,3552–3560`, `app/chamados/services/materializacao.py:2220–2228`.
+
+## 3. Transação, travas, duplicata e falhas
+
+- **Fecho canônico.** `DisputaSupervisao.fechar()` salva dentro de `atomic`, sob a ordem Colaborador → Disputas → Chamados. Essa chamada não passa `perguntas=`, portanto não toma um `SELECT FOR UPDATE` explícito sobre a pergunta nesse ponto. S144 é síncrono no `post_save` e herda a transação e as travas do chamador. O serviço já selecionava as pendentes por leitura simples. O diff acrescenta `exists()` e a inserção com o `atomic` interno de `evento`. `app/chamados/models.py:2089–2097,2118–2126,2874–2904`, `app/chamados/signals.py:149–167`, `app/chamados/services/materializacao.py:2200–2229`, `app/core/observ.py:124–138`, `delta.diff`, hunks de `materializacao.py`.
+- **Dois escritores concorrentes do mesmo PK.** Dois fechos canônicos do mesmo dono se serializam e, em `READ COMMITTED`, o segundo `exists()` pode ver a linha já confirmada pelo primeiro. Fora dessa serialização, dois `exists()` podem ler vazio e os dois `INSERT`s podem confirmar. A ação não tem unicidade com modelo e PK. Isso cabe em chamadas diretas concorrentes e em dois `save()` em autocommit cujos receivers se sobreponham após os respectivos updates. Um `save()` dentro de transação que ainda detenha a linha da mesma disputa também fornece serialização pelo update. Ocorrência em produção e isolamento efetivo [nao verificado]. `app/chamados/models.py:2089–2122,2874–2886`, `app/chamados/signals.py:149–167`, `app/chamados/services/materializacao.py:2207–2228`, `app/core/models.py:309–316`, `app/core/observ.py:133–138`.
+- **Rollback e erro.** Se a transação externa desfizer, a linha some junto. Uma falha comum no `create()` volta pelo savepoint de `evento`, que registra a falha e devolve `None`. O laço segue, e o save da disputa e os carimbos anteriores ainda podem confirmar. Se uma exceção escapar de `evento`, por exemplo na própria emissão do log de erro, o receiver captura `Exception` e o laço para. O receiver não desfaz os carimbos anteriores por si. O `exists()` fica fora desse savepoint, então uma falha SQL ali que aborte a transação externa pode levar junto o save da disputa e os carimbos ainda sem commit. Em autocommit, escritas anteriores já confirmadas permanecem. `app/core/observ.py:73–91,103–139`, `app/chamados/signals.py:157–167`, `app/chamados/models.py:2089–2126,3719–3735`, `app/chamados/services/materializacao.py:2220–2229`.
+
+## 4. Chamadores, usuário e tipo do ID
+
+- **Produção.** A chamada direta é do receiver S144, com `instance.fechada_por`, em qualquer update de disputa com `fechada_em` preenchido, exceto `raw`. `fechar()` exige usuário, mas a FK admite `NULL` e usa `SET_NULL`. O serviço aceita `None` e busca ou cria `User(username='sistema')`. `app/chamados/signals.py:149–165`, `app/chamados/models.py:1922–1928,2066–2067,2118–2122`, `app/chamados/services/materializacao.py:2177,2203–2205`, `app/core/utils.py:6–18`.
+- **Testes.** Chamadas diretas em `app/chamados/tests/test_porta_desfecho_pergunta.py:226,244,248,263,292` com `self.user`, `outro` ou `None`, em `app/chamados/tests/test_pep_reentrada.py:354` e `app/chamados/tests/test_o261e_f2_porta_carimbo.py:693` com `self.user`, e no controle novo com `self.admin`. Pelo receiver, o RED novo usa `fechar(self.admin)` e repete o save, o teste de desfecho salva com `self.user` e a blindagem salva sem preencher `fechada_por`. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:167–169,192–194,213–215`, `app/chamados/tests/test_porta_desfecho_pergunta.py:268–282`, `app/chamados/tests/test_s144_blindagem.py:28–34`.
+- **Ator e ID.** `evento` aceita `ator=None`, pode aproveitar o usuário autenticado do request e, fora dele, preencher o ator de processo. `usuario` é anulável. O PK de pergunta é `BigAutoField` e `objeto_id` é `IntegerField`. Aceita o inteiro enquanto couber na coluna de 32 bits do PostgreSQL. O domínio inteiro de `p.pk` é maior. Faixa dos PKs da frota [nao verificado]. `app/core/observ.py:94–118`, `app/core/models.py:295–306`, `app/chamados/migrations/0014_perguntadisputa.py:17–20`, `app/config/settings/saas.py:83–91`.
+
+## 5. Mesmo fato em outras trilhas e tratamento do `False`
+
+`par_recusado_no_fecho` significa que **a tentativa de carimbar pela via `juiz_aprovou` durante o S144 foi recusada pelo par**. A ausência já registra a mesma classe de recusa da porta como `irma_viva_na_ausencia`, com `motivo='par_ato_coluna'`, em outra tentativa. A validação também pode registrar o erro de plantio do mesmo par em `val_perg_nao_gravou`, na descrição. `par_ato_coluna_divergente` da ausência é a reprovação posterior de um carimbo aceito, em outro ponto do fluxo. Um segundo escritor do fato específico de S144 [nao verificado]. `app/chamados/services/materializacao.py:1072–1104,1118–1122,2015–2027,2220–2228`, `app/chamados/services/validacao.py:786–804,821–830`, `app/core/auditoria.py:17–25`.
+
+| Chamador de produção | O que faz no `False` |
+|---|---|
+| S144 | Omite o PK de `feitas`. Só o motivo do par passa pelo `exists()` e pela trilha nova. `app/chamados/services/materializacao.py:2220–2229`. |
+| Passagem de ausência | Guarda motivo, anota a recusa e escreve `irma_viva_na_ausencia`. `app/chamados/services/materializacao.py:1072–1078,1094–1104`. |
+| Plantio | Levanta `_Reprovada`, desfaz o plantio daquele bloco e registra o erro. O `finally` leva o motivo à pergunta e, se houver destino, pode anexar nota no fio. O passivo categoriza o erro pelo mesmo atributo. `app/chamados/services/materializacao.py:2013–2040,1717–1741`, `app/chamados/services/passivo_validado.py:131–148,532–548`. |
+| Reconciliador, sem turno aberto | Devolve `False` antes de tentar fechar a disputa. Sem trilha dessa recusa nesse ramo. `app/chamados/reconciliador.py:400–417`. |
+| Reconciliador, célula absolveu | Pula a pergunta, sem soma, fecho por ela ou trilha da recusa. `app/chamados/reconciliador.py:635–653`. |
+| Fantasma pela lâmpada | `encerrar_fantasma` propaga o resultado. O chamador pula a pergunta antes da trilha de sucesso. `app/chamados/models.py:3552–3560`, `app/chamados/reconciliador.py:1188–1211`. |
+| Resolver/S143 e fecho sem credor | Ambos dão `continue`. O segundo só escreve `fecho_sem_credor` após sucesso. `app/chamados/services/disputa_emissao.py:2052–2062,2111–2142`. |
+
+## 6. As três provas do PRONTO
+
+As previsões de falha abaixo comparam o código da base com o teste atual. `delta.diff`, hunks de S144 e do teste. [nao verificado]
+
+| Parte | Asserção | Falharia com a produção anterior? |
+|---|---|---|
+| Recusa | O espião exige a tentativa pela via alvo com `(False, True)`, retorno `False` e `RECUSA_PAR_ATO_COLUNA`. Após `refresh`, exige ausência de carimbo e lavra intacta. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:64–81,167–176`. | **Não.** A porta já recusava na base. `app/chamados/models.py:3384–3393`, `delta.diff`, hunk de S144. |
+| Motivo na trilha | Filtra ação, modelo e PK e exige exatamente a tupla com autor, motivo e via. O segundo save deve deixar a contagem em um. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:186–194`. | **Sim.** A lista viria vazia. Avaliada isoladamente, a contagem também seria zero. `delta.diff`, hunk de S144. |
+| PK encontrável pelo contador | Inclui só aquele PK e exige `(A, B, universo) == (0, 1, 1)`, depois o exclui e exige `B == 0`. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:197–201`. | **Não.** A divergência da fixture já existe e o contador já a lê. O teste localiza a contribuição por filtragem. O retorno do contador contém totais. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:56–61`, `app/chamados/services/vigia_ato_x_coluna.py:8–24`. |
+
+É a **mesma função**, com o mesmo `lote` padrão e querysets diferentes. O teste recorta pelo PK e pelo seu complemento. `vigiar_fio_morto` passa a frota ou o recorte por empresa. O cron publica A, B e universo no stdout e grava A e B no JSON de frota. O ESTADO mostra `FORA DO ESPERADO` quando divergem de zero. A e B ficam fora das chaves que disparam `SystemExit(2)`, mesmo com `--alarme-passivo`. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:14–15,197–201`, `app/chamados/management/commands/vigiar_fio_morto.py:79,85–110,194–199,210–211,233–234,263–303`, `app/config/crons.py:1737–1739`, `bin/fio_estado.py:122–126,191–194`, `bin/gerar_estado.py:253–261`.
+
+O anexo exige a linha “S144 inalcancavel com A=0 e B=0 na frota; o contador do par alarma”. A medida de frota e a publicação dessa linha [nao verificado]. `respostas_2011_1545.txt:4`, ITEM 3.
+
+## 7. Mordida, controles e testes existentes [nao verificado]
+
+| Teste | O que distingue | [nao verificado]
+|---|---|
+| RED S144 existente | Ganha trilha, motivo, autor, deduplicação sequencial e contribuição a B. Remover a trilha ou trocar o motivo derruba `:188`. Remover a deduplicação derruba `:194` se o receiver tentar de novo. Ignorar B derruba `:200`. A recusa original e o contador passam isoladamente sem o ramo novo. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:158–201`. |
+| Controle C6 novo | Passa sem a cura e acusa o mutante que trilha toda recusa, desde que a chamada chegue ao stub. O patch reproduz `False` e `RECUSA_C6`. Ele dispensa o julgamento real, a aplicação e reversão em memória, e o teste não exige que o stub tenha sido chamado. Há um teste anterior com recusa real do C6, mas ele só verifica o retorno e o carimbo ausente. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:203–215`, `app/chamados/models.py:3363–3383,3407–3414`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:687–696`. |
+| RED C1 existente | Ganha a continuação pelo mesmo PK após a reabertura. Exige retorno `1`, carimbo pela célula, par limpo e só a `REABERTURA`. Acusa o mutante sem avanço. A continuação não depende da trilha de S144. `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:112–145`, `app/chamados/reconciliador.py:635–668`. |
+| Dois A2 novos | Intercalam validação por outra instância depois da seleção ou do veredito da órfã. Exigem que a porta receba e devolva a instância com coluna nula, carimbe, e que o banco mantenha a validação. Mordem uma releitura nesse intervalo. Exercitam comportamento já presente na base e independem da cura S144. `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:169–229,236–238,262–264`, `app/chamados/reconciliador.py:635–646,1188–1203`. |
+| Dois A2 existentes | O helper ganhou `validar_apos_selecao=False`. Os chamadores antigos preservam fixture e asserções. A fixture de turno encerrado da órfã foi extraída para um helper e mantém as batidas e a via. Os nomes dos testes existentes foram preservados. `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:200–234,250–264`, `delta.diff`, hunks do reconciliador. |
+
+Os casos novos de S144 usam `freeze_time(AGORA)` no `setUp`, e os A2 têm `@freeze_time(AGORA)` na classe. O relógio que `_carimbar_validacao` lê nesses casos fica sob esse congelamento. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:28–32`, `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:31–47,169–177`, `app/chamados/services/validacao.py:161–175`.
+
+## 8. Arquivo de mutantes
+
+É uma **CLI de mutação em memória**. Executado como `__main__`, registra seis substituições e chama o helper. O helper aplica uma mutação, roda os labels que recebeu e restaura o código. A descoberta do Django pode importar o módulo pelo nome `test_*.py`, mas recolhe zero casos dele e não entra no bloco `__main__`. A seleção `--volta` ainda o inclui como label de arquivo tocado. Conferi estaticamente uma ocorrência de cada âncora e zero `def test`. Execução dos mutantes [nao verificado]. `app/chamados/tests/test_e4c_f5_volta3_fecho_mutantes.py:1–33`, `app/chamados/tests/e4c_f5_volta3_mutantes.py:80–112`, `app/core/runner_quarentena.py:72–86`, `bin/vizinhos_da_volta.py:33–45,92–94`.
+
+**O selo de host cobra o arquivo.** `test_selo_nao_nasce_vazio.sh` enumera os `test_*.py` rastreados e reprova os que não declaram um caso. A régua chama esse selo antes do Django. O censo de `test_contract_*.py` usa outro glob, e o selo do par exclui `tests/` da sua varredura de produção. `bin/tests/test_selo_nao_nasce_vazio.sh:24–45`, `bin/regua.sh:134–145`, `app/core/tests/test_o20_contrato_julga_codigo.py:158–164`, `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:443–465`.
+
+## 9. Escopo, corte e dinheiro
+
+O delta de produção cria o verbo e o payload da trilha. Reusa a porta, o juiz do lastro, o comparador e o escritor de auditoria. Não cria juiz, contador, selo de produção, trava, porta, lista de elegibilidade ou ato de reparo, nem muda a ordem de trava. O 1545 diz “a porta recusa (par_ato_coluna) e NAO nasce porta para avancar PK em estado ilegal” e proíbe “trava nova; porta nova; ampliar o escopo da F5”. O 1400 item 1 exige “ACAO EXISTENTE e demonstravel” e “Sem ato de reparo, trava nem lista nova”. `app/chamados/services/materializacao.py:1120–1122,2207–2229`, `app/chamados/models.py:3384–3393,4393–4399`, `app/core/observ.py:94–138`, `respostas_2011_1545.txt:4,13`, `respostas_2011_1400.txt:3`.
+
+O ramo novo escreve só auditoria, sem alteração direta em `folha/`, competência, exportação, batida ou insumo de cálculo. **Há alcance indireto na cerca E4B.** O backfill pode fechar disputa pela materialização, fotografa a auditoria e atribui à linha nova o alcance da pergunta. Se a linha entrar no delta de um dia e seu alcance for indeterminado, fora da competência-alvo ou entregue, a cerca pode motivar o rollback do dia. Ocorrência e impacto monetário [nao verificado]. `app/chamados/services/materializacao.py:2080,2165–2166,2222–2228`, `app/chamados/services/foto_e4b.py:145–163,310–333`, `app/chamados/mana
+
+[truncado em 20000 de 24212 caracteres]
 
 ## 20/11 15:58 · sessao 8455103f6a11 · CADEIA-20-PASSO-1 · leitura · origem=Code
 
@@ -847,20 +948,4 @@ m tirar_guarda "$a5" "$a4" "$f" "$plantio" \
 
 LEI-AKITA: origem=chamados/models.py::PerguntaDisputa.carimbar, testemunha=DecisaoPergunta.composta x coluna, RED=o teste direto do selo + um por chamador, quem-mais-le=S143, plantio, absorcao e as filas por coluna, juizes novos=0, padrao=Single Writer Principle [nao verificado]
 
-## 20/11 14:20 · sessao 4ce9057c680a · - · - · origem=Ronald (tmux)
-
-Implementei o balde `recusa:PAR_ATO_COLUNA` no passivo, preservando a precedência da via. [`passivo_validado.py:131`]( /home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/passivo_validado.py:131)
-
-Os dois REDs do passivo cobrem instância antiga com banco limpo e divergência persistida. Ambos verificam a recusa, a reversão da batida e a validação pela mesa no mesmo PK. O RED de S144 cobre divergência persistida e o controle cobre a releitura após uma devolução anterior à trava. [`test_e4c_f5_guarda_plantio_s144.py:143`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:143)
-
-`SEM_PORTA materializacao.py:2204 persistido` — pergunta pendente, muda e morta pelo C6, sem carimbo, com coluna antiga e ato devolvido. A disputa fecha sem chamado pai ou destino. Nova resposta exige C6 vivo, validação exige resposta e chamado, recusa e correção exigem resposta e disputa aberta, e devolução exige o recorte de hora e recusa escrita. `views.py:1238–1246`, `validacao.py:698–701`, `fio.py:641–687`, `juizes.py:1762–1767`, `validacao.py:269–274`.
-
-`INALCANCAVEL materializacao.py:2204 instância velha no caminho Disputa.fechar` — S144 consulta a pergunta após a trava e o save da disputa. `models.py:2090–2097`, `models.py:2118–2122`, `signals.py:149–165`, `materializacao.py:2191–2192` na base.
-
-Recorte para a sessão. Os três REDs verificam o motivo da porta, portanto devem falhar com `tirar_guarda`. Os dois do passivo também verificam o texto e a chave usados pelos mutantes `plantio_motivo_c6` e `passivo_balde_generico`. Execução [nao verificado].
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python manage.py test chamados.tests.test_e4c_f5_guarda_plantio_s144
-```
-
-_7574 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7575 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
