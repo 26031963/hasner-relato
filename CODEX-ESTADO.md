@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 00:17** · publicado em **20/11/2026 00:19** (UTC-3)
+> Ultima resposta processada: **20/11/2026 00:22** · publicado em **20/11/2026 00:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 00:22 · sessao 8aca83b0e978 · TRAVAS-SEM-MEMORIA · verificador · origem=Code
+
+# AVAL-DEVOLVIDO — TRAVAS-SEM-MEMORIA-2011-0020
+
+## 1. PREMISSAS — PROCEDE
+
+- **(a) Hooks do Code.** Na cópia, `.claude/settings.json` da raiz aponta para `/home/ronald/saas-hasner/bin/`. `Stop` chama `hook_stop_fila1.py`. `PreToolUse` chama `disjuntor.py pretool`, que recebe o JSON no stdin e lê o comando Bash em `tool_input.command`. O `tool_input.prompt` que ele lê pertence à ferramenta `Agent`. O evento previsto por T2 para o texto colado pelo usuário é `UserPromptSubmit`, sem registro nessa configuração. `PreCompact` manual/auto chama `handoff_sessao.sh`. `SessionStart` compact/clear imprime o handoff e chama `marco_de_clear.py`. A `statusLine` chama `statusline_cota.py`. O RELATO registra uma sessão anterior em `app/` em que a configuração da raiz ficou inerte e só disparou o Stop de `~/.claude/settings.json`. Configuração efetivamente carregada hoje na VM **[nao verificado]**. `.claude/settings.json:2–77`, `bin/disjuntor.py:1837–1843,1864–1867,1912–1923`, `bin/hook_stop_fila1.py:1339–1345`, `app/docs/RELATO.md:3341`.
+- **(b) “`bin/suite.sh` (pista 2)” não fecha.** O script da cópia roda Docker local sob `bin/trava_teste.sh`. A **PISTA-2** documentada é o executor remoto no servidor do GLPI, com fila própria e entrada `ssh pista pede` para uma árvore commitada. A escolha de rota dentro de `bin/suite.sh` aparece como obra separada, com opção A registrada para `--volta` e pre-opus de lateral. Estado atual do executor remoto **[nao verificado]**. `bin/suite.sh:316–325`, `app/docs/BACKLOG.md:2191,2193–2195`, `app/docs/RELATO.md:65`.
+- **(c) “Por cópia em obra” precisa de universo definido.** `bin/relato.sh` já gera `ESTADO.md` por `bin/gerar_estado.py`, passa pela raspagem e publica. O encaixe de `copia=<nome>@<HEAD12>` é a seção **Raias**, que já usa `bin/raias_estado.py`. Esse medidor cruza `git worktree list --porcelain` e declarações `.agente`, inclui as declaradas, as à frente de `main` e as sujas, exclui a principal e as worktrees do harness, e agrupa as só sujas. Uma declaração pode aparecer sem caminho no disco. `wt-codex-*` é a convenção do construtor Codex. O BACKLOG registra a ordem da fila. O medidor é a fonte existente para as raias do ESTADO, mas a equivalência entre esse universo e **todas** as cópias em obra fica **[nao verificado]**. `bin/relato.sh:34–38,114–117,145–147`, `bin/gerar_estado.py:211–229,329,378–380`, `bin/raias_estado.py:13–27,73–135`, `bin/codex_pergunta.sh:217–232`, `bin/hook_stop_fila1.py:1394–1403`.
+- **(d) “Suite completa rodada na VM (fora do `bin/suite.sh`)” abrange chamadas legítimas.** A régua inteira e o pre-push rodam fora de `suite.sh` por exceção expressa do §3 e pegam a trava diretamente. Ambos entram no alcance literal de T1, embora o hook de ferramenta só veja a chamada externa e a negativa efetiva dependa da implementação. A volta intermediária chama `suite.sh --volta`, com ruff e selo do disjuntor. Ela fica livre enquanto a seleção for um recorte efetivo. A guarda atual considera inteira a seleção vazia ou a que cobre todos os módulos de teste reconhecidos, mesmo quando os módulos são nomeados em `--only`. Uma inteira com `--dir … --motivo "pre-opus OBRA"` é válida hoje e cairia na segunda recusa de T1 se faltasse `PRONTO`. Se o argumento for literalmente `--motivo "pre-opus"`, já sai `rc 2` por faltar a obra. `CLAUDE.md:95–106`, `bin/regua.sh:47–51,165–169`, `bin/pre-push.sh:142–145,184–198`, `bin/volta_intermediaria.sh:18–33`, `bin/suite.sh:215–263`.
+- **(e) “A linha ‘PRONTO item a item’ dessa obra” não tem formato demonstrado.** O RELATO traz prosa com formas como `CADEIA-20 PASSO 1 PRONTO (…)`, `PRONTO lista de repasse (…)` e `PRONTO (a) E3-NA-PROXIMA-VAGA …`. Alguns exemplos identificam a obra, mas o ID ocupa posições diferentes. Um formato canônico que permita ao hook casar a obra inteira, a volta e a prova exigida está **[nao verificado]**. `app/docs/RELATO.md:254,775,1753`, `CLAUDE.md:439–442`.
+
+## 2. COLISÃO COM AVAL OU REGRA VIGENTE — PROCEDE
+
+- **T1 — “SUITE CHEIA SO PELA PISTA 2” e “só lança se o RELATO tem […] PRONTO”.** A primeira frase conflita com as portas próprias da régua e do pre-push e, se “pista 2” for o executor remoto, com a destinação vigente de pouso e pre-opus da espinha à VM. A regra `TRAVA-MENOS-FILA-COM-SELO` já exige `pre-opus <OBRA>` ou `pouso <OBRA>` para a inteira em `suite.sh`, com `rc 2` na recusa. O novo `PRONTO` também precisa preservar a saída após mais de três voltas Codex, pois a regra manda subir ao opus e exige a inteira verde antes dele. O RELATO registra a retirada de uma guarda anterior que fechava essa saída. `CLAUDE.md:95–106,372–381`, `bin/suite.sh:236–263`, `app/docs/RELATO.md:65,1010,1209`, `app/docs/BACKLOG.md:2089`.
+- **T2 — “devolve […] e não executa”.** Recusar apenas o aval inválido é compatível com seguir a fila. Se “devolve” encerrar o turno enquanto houver outro item que possa andar, colide com PARADA. O `PAREI` do Stop exige `!` no item em curso e considera os demais itens andáveis. A regra também prevê `ESPERANDO` com prova. A semântica da recusa de T2 no cliente fica **[nao verificado]**. `CLAUDE.md:262–275,296–298`, `bin/hook_stop_fila1.py:1232–1245,1260–1276,1381–1403`.
+- **CODEX, contrato e pouso.** Preservar o wrapper, o despacho e as `#G` é compatível com o aval. A configuração e o código do instrumento cabem à sessão, com verificação pelo Codex. “REGISTRAR […] + CONSTRUIR” continua sujeito às cinco linhas no RELATO **antes** do código — quem chama, quem espera, falha/limite, medida e quem desliga — e ao envio único ao Codex. O contrato desta obra está **[nao verificado]**. O instrumento tem pouso próprio, conforme RAIAS item 5. `CLAUDE.md:325–329,344–358,394`, `app/docs/PISTA.md:169–176`, `bin/codex_pergunta.sh:122–135,241–254`.
+- **Retenção.** A regra manda arquivar conteúdo com mais de três dias no mesmo commit. Uma linha `PRONTO` arquivada pode desaparecer do RELATO vivo antes da suite. T1 não define como a prova continua válida depois dessa transferência. `CLAUDE.md:439–442`, `bin/relato.sh:114–131`.
+
+## 3. CONDIÇÃO QUE NÃO FECHA NO LITERAL — PROCEDE
+
+- **“Suite completa rodada na VM (fora do `bin/suite.sh`)”.** T1, como hook do Code, alcançaria o lançamento avulso que o Code envia à ferramenta Bash e que o hook consiga classificar como inteiro. O evento vê o comando externo. Em `git push`, por exemplo, o pre-push roda como hook filho do Git. Na pista remota, a entrada documentada recebe SHA e opções, sem `--motivo` ou ID explícito da obra para casar com o `PRONTO`. Cobertura de toda a VM ou da pista pelo hook local **[nao verificado]**. `bin/disjuntor.py:1794–1798,1837–1843`, `bin/hooks.sh:10–11,61–65`, `bin/trava_teste.sh:35–42`, `app/docs/BACKLOG.md:2191`.
+- **“Todo aval colado que diga CONSTRUIR” e “ou `copia=nova`”.** O anexo não define como reconhecer uma ordem efetiva de construção em meio a citações, proibições ou itens só de registro. Também falta a regra que associa cada item à sua cópia quando há várias, que distingue uma abertura real de um `copia=nova` escrito no texto, e que fixa o marco para reconhecer avais anteriores ao pouso. O RELATO já registra uma obra com duas cópias descendentes. Para instrumento sem worktree nomeada, falta definir que cópia e HEAD o aval deve citar. A regra vigente já exige preparar a mudança em cópia do HEAD e aplicar no commit. `app/docs/RELATO.md:1513`, `CLAUDE.md:37–40,309–313,436–438`, `.claude/settings.json:2–73`.
+- **“`<HEAD 12>`” comparado com “`git rev-parse` da cópia”.** Igualdade textual entre 12 caracteres e o hash completo recusa um HEAD atual. O aval precisa fixar a normalização e a identidade da cópia. O wrapper já distingue o hash completo usado na guarda do prefixo de 12 usado na trilha, e confere a limpeza da cópia separadamente. Um HEAD igual, por si, deixa alterações locais fora da conferência. `bin/codex_pergunta.sh:79,252–259,304–308,409–415`, `bin/raias_estado.py:100–102`.
+- **“Smoke dos 6 casos no ar” e “teste das duas travas na suite”.** O anexo enumera três resultados de T1 e quatro de T2, além da publicação no ESTADO, mas não identifica quais resultados compõem os seis casos nem onde os hooks devem estar ativos para a prova. Se o `PRONTO` exigido para o pre-opus da própria obra já incluir o smoke da configuração ativa, “pouso sem smoke” deixa a ordem de ativação e certificação indefinida. Hoje os selos de host são chamados pela régua, enquanto `suite.sh` executa o runner Django. O RELATO registra um precedente de hook validado com selos de host e configuração ativa, sem deploy do produto. Resultados dos quatro casos pré-cura e smoke na VM **[nao verificado]**. `bin/regua.sh:134–145`, `bin/suite.sh:316–325`, `app/docs/RELATO.md:3341,4356`.
+
+## 4. EXPORTADA, DINHEIRO, MOTOR V2 OU `!` FORA DO DECLARADO — NAO PROCEDE
+
+O escopo declarado é hook do Code e publicação do ESTADO. O anexo não pede alteração do gravado de exportada, apply de dinheiro, mudança em `ponto/motor_calculo_v2.py`, atalho ou outro ato da PARADA item 2. Configuração do Code **é tocada** para registrar o hook de prompt. A vedação de CODEX se aplica ao Codex, inclusive no papel construtor. Há precedente de configuração feita como instrumento, e também de instalação negada à sessão pelo classificador. O `PreToolUse` atual protege contra remover o próprio disjuntor. Permissão efetiva e carregamento da configuração nesta VM **[nao verificado]**. `CLAUDE.md:141–142,265–268,344–355,406–417`, `.claude/settings.json:62–73`, `bin/codex_pergunta.sh:122–135`, `bin/disjuntor.py:218–245`, `app/docs/RELATO.md:4356,4411`.
+
+A posição nas vagas do `ABRE-AS-LATERAIS-1911-2340` e a lista atual de cópias na VM ficam **[nao verificado]**.
+
+**BLOQUEIA=3 NAO_BLOQUEIA=1**
 
 ## 20/11 00:17 · sessao ce1b950b7668 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1136,116 +1170,4 @@ VEREDITO=VALIDO MUDAM=0
 
 MUDAM=0
 
-## 19/11 17:13 · sessao 8411d995dfcb · E4C-F5-CONSTROI · verificador · origem=Code
-
-# AVAL-DEVOLVIDO — E4C-F5-CONSTROI-A-1911-1710
-
-Revisei os arquivos da cópia em modo somente leitura. O caminho da cópia leva o hash informado e o wrapper usa esse formato para cópias de `git archive`. A identidade Git, a ref `e4c-f5-volta2` e o rebase sobre o main do dia estão [nao verificado]. Os números de execução abaixo são os do anexo raspado. `bin/codex_pergunta.sh:304–320`.
-
-Em cada item, **1** é a premissa na cópia, **2** é o confronto com os avais, **3** é a condição literal e **4** é o alcance sobre exportada, dinheiro e `!`. `e4c_f5_constroi_a_1911_1710.txt:2`.
-
-### FORMA — PROCEDE
-
-1. A sequência A → B → C corresponde à seção 4 do predesenho. A cópia contém código e testes da volta anterior. O estado Git declarado está [nao verificado]. `e4c_f5_constroi_a_1911_1710.txt:3`, `chamados/tests/test_e4c_f5_volta2_juizes.py:1–3`.
-2. Uma obra, uma cópia e um pouso integral respeitam 1435 e 1510. A certificação deve valer para a árvore que pousa. `e4c_f5_segue_as_tres_voltas_1911_1435.txt:5–6`, `respostas_f5_e_c7_1911_1510.txt:8`, `docs/PISTA.md:29–38`.
-3. A suite anterior como condição para abrir a próxima volta fecha. A antecipação de K41 e K42 é um problema do despacho e da divisão A/B. `e4c_f5_constroi_a_1911_1710.txt:3–6`. [nao verificado]
-4. A forma autoriza encadeamento e integração de código. As operações que exigem `!` continuam sujeitas à regra própria. `e4c_f5_constroi_a_1911_1710.txt:3`, `CLAUDE.md:265–268`.
-
-### DESENHO — DEVOLVE
-
-1. `projecao_temporal_da_pergunta`, usada pelo C6, testa `isinstance(p, PerguntaDisputa)`, importa `DecisaoPergunta` no ramo ORM, lê os instantes do ato e usa texto, materialização e via da instância. Ainda consulta `PerguntaDisputa.VIAS_FORA_DO_FATO` no corte temporal. `pergunta_respondida` faz o mesmo teste e import, lê o instante do ato no ORM e exige texto não vazio após `strip`. Nos objetos já compostos, ambos leem os atributos recebidos. `chamados/juizes.py:12–15`, `:1382–1411`, `:1533–1535`, `:1551–1564`.
-2. O par aprovado por 1510 item 2 e 1620 é **instante e validação do ato, texto da projeção**. Hoje o fio monta esse par com `_replace`, a property entrega `LeituraDoAto` com o texto do ato, e `particao_do_app` passa ORM ao juiz, que faz a composição de forma implícita. `respostas_f5_e_c7_1911_1510.txt:2–3`, `e4c_f5_desenho_a_e_matriz_1911_1620.txt:2`, `chamados/services/fio.py:187–192`, `chamados/models.py:3791`, `:4319`, `chamados/services/pergunta_no_app.py:83–86`.
-3. A conta **0/1** é de SELECTs da relação `decisoes`, com os escalares necessários já carregados. Sem PK, a leitura usa o passivo em memória. K28 usa `only()` e deixa `validada_em` e `validada_por_id` diferidos. O aval também precisa dizer como a fonte única alcança `sem_veredito_entre` e `estado`, que passam texto do ato ao juiz, e o placar, que passa instante da coluna por `values_list`. A pureza do juiz, sozinha, deixa essas entradas como estão. `chamados/models.py:4251–4268`, `:4295–4326`, `:2004–2006`, `:3235–3244`, `chamados/management/commands/backfill_decisoes_pergunta.py:531–533`, `chamados/services/raiox.py:135–147`.
-4. Unificar a entrada de `sem_veredito_entre` alcança a guarda de fechamento, o CSF e a Pauta do DP. O efeito na frota dessas rotas está [nao verificado]. `chamados/models.py:2004–2015`, `ponto/supra_juiz.py:561–588`, `chamados/services/competencia_trancada.py:123–139`.
-
-### DESPACHO — DEVOLVE
-
-1. Entre os 69 K, há **três** em `chamados/models.py`: K15 em `:357`, K41 em `:1542` e K42 em `:2057`. `:3791` é um quarto sítio nominal, a property, fora da lista K. O wrapper proíbe o arquivo inteiro e inventaria o diff contra o hash recebido. `chamados/models.py:357`, `:1542`, `:2057`, `:3785–3791`, `bin/codex_pergunta.sh:121–129`, `:154–186`, `:432–442`.
-2. Opus pode construir a parte nominal e o Codex pode partir de seu commit na mesma worktree. O hash de entrada do wrapper precisa ser o do commit do Opus, com `HEAD` limpo. O `rc 75` tem o desvio declarado para Opus. O `rc 3` é a recusa do inventário. `e4c_f5_constroi_a_1911_1710.txt:5`, `:15`, `CLAUDE.md:353–362`, `bin/codex_pergunta.sh:254–258`, `:432–459`.
-3. O despacho põe K41 e K42 antes de A, embora sejam de B. Também deixa sem responsável as alterações em `models.py:2004` e `:3235` se a fonte única abranger os leitores do desenho. Declare o commit preparatório, o RED que o antecede e quem toca cada sítio do arquivo proibido. `e4c_f5_constroi_a_1911_1710.txt:3–8`, `chamados/models.py:1542`, `:2004–2006`, `:2057`, `:3235–3244`.
-4. O despacho nominal cobre os sítios indicados em `models.py`. Motor v2, porta de célula e registro de juízes têm proibições próprias no wrapper. `e4c_f5_constroi_a_1911_1710.txt:5`, `bin/codex_pergunta.sh:121–129`.
-
-### VOLTA A — DEVOLVE
-
-1. A lista bate com o predesenho. São **3 L** (1, 2, 15) e **7 Q** (9, 10, 16, 17, 18, 24, 43). A fixture dos dois REDs 8 é da própria **E4C-F5, volta 2**. Ela grava texto sem instante antes de registrar o ato e cai na guarda de `save` antes das medições. `e4c_f5_constroi_a_1911_1710.txt:6`, `chamados/services/tarefa_do_dia.py:530`, `chamados/juizes.py:1668`, `chamados/models.py:357`, `chamados/tests/test_e4c_f5_volta2_juizes.py:1–3`, `:118–125`, `:143–149`, `:167–180`, `chamados/models.py:3680`, `:3712`, `chamados/services/fio.py:1718–1721`.
-2. O 1510 exige RED em cada um dos três sítios, com divergência entre ato e projeção. A também passa a dividir `chamados/reconciliador.py` com C7, em funções distintas. A exceção nominal do 1335 item 2 é para **C7 × F0**. A ordem ou exceção correspondente para **C7 × F5** ficou sem registro no novo aval. `respostas_f5_e_c7_1911_1510.txt:3`, `e4c_f5_segue_as_tres_voltas_1911_1435.txt:8`, `respostas_aos_devolvidos_1911_1335.txt:3`, `chamados/reconciliador.py:528`, `:698`, `:1095`, `:1548`.
-3. Reescrever só a fixture dos REDs 8 deixa testes que chamam os juízes com ORM cru e exigem a leitura do ato. A precisa distinguir a adaptação dos chamadores, necessária quando os juízes se tornam puros, da carga em lote que B e C completam. `chamados/tests/test_e4c_f5_volta2_juizes.py:37–57`, `:77–104`, `chamados/juizes.py:1389–1396`, `:1559–1564`, `e4c_f5_constroi_a_1911_1710.txt:3–6`.
-4. K24 é o cruzamento declarado com a CADEIA-20 em `cartorio.py`. A carga alimenta uma guarda de resposta que pode impedir uma transição de chamado. O alcance autorizado ali é a alimentação em lote. O diff integral da CADEIA-20 está [nao verificado]. `e4c_f5_constroi_a_1911_1710.txt:7`, `:11`, `ponto/services/cartorio.py:146–147`, `:1684–1713`.
-
-### VOLTA B — DEVOLVE
-
-1. A conta do predesenho fecha: **(10 L + 29 Q) − (3 L + 7 Q) = 29**, com **7 L e 22 Q** em B. Os IDs são **4, 11, 23, 25–27, 29–32, 41–42, 44–50, 53–55, 61–65, 67–68**. `perguntas_vivas_de` cobre K4 e `fio_vivo` reúne seis K de L. `e4c_f5_constroi_a_1911_1710.txt:6`, `chamados/juizes.py:1512–1526`, `:2493–2494`, `chamados/models.py:1542`, `:2057`.
-2. Carga em lote preservando rota e partição cabe no 1620. `e4c_f5_desenho_a_e_matriz_1911_1620.txt:2–3`, `chamados/juizes.py:1512–1526`.
-3. **29** é a cobertura de B. **27** é o número de K ainda por editar em B se K41 e K42 forem concluídos no commit anterior a A. O aval precisa fixar qual dessas duas etapas termina cada K. `e4c_f5_constroi_a_1911_1710.txt:3`, `:5–6`, `chamados/models.py:1542`, `:2057`.
-4. K23 lê a prévia de folha. K45 e K46 leem competência trancada, inclusive o caminho que monta a Pauta. A autorização declarada é para a carga de decisões. Qualquer mudança de resultado nesses caminhos está [nao verificado]. `folha/previa.py:28–39`, `:64–67`, `:139–146`, `chamados/services/competencia_trancada.py:119–144`, `:165–167`, `CLAUDE.md:401–417`.
-
-### VOLTA C — PROCEDE
-
-1. São **25 M**: **5–8, 12–14, 21, 28, 33–40, 51–52, 56–57, 59–60, 66, 69**. A sobra é a lista independente de `dedup_perguntas_fato.py:75`. Os cinco R são **3, 19, 20, 22 e 58**, respectivamente releitura O261, releitura da materialização, validação por ID, busca da irmã e devolução L-130 por ID. `e4c_f5_constroi_a_1911_1710.txt:6`, `chamados/management/commands/dedup_perguntas_fato.py:74–76`, `chamados/services/fio.py:2078`, `chamados/services/relavra_via.py:230–242`, `chamados/services/materializacao.py:284`, `:2117`, `chamados/services/validacao.py:431`, `:677`.
-2. A sobra foi autorizada nominalmente em C. A divergência fica no limite escrito no item EXCEÇÃO. `e4c_f5_constroi_a_1911_1710.txt:6–7`.
-3. A cobertura soma **10 + 29 + 25 = 64 K em lote**, mais **5 R = 69 K**. A sobra fica fora dos 69. A classe R preserva a leitura por item, inclusive no O261, cujo selo de custo continua obrigatório. `e4c_f5_constroi_a_1911_1710.txt:6`, `:9`, `:14`, `chamados/management/commands/dedup_perguntas_fato.py:75`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:203–205`.
-4. K14 percorre exportadas para diagnóstico com `executar=False`. O dedup tem um ramo `--apply` separado. A carga em lote é o escopo autorizado para os dois. `chamados/management/commands/backfill_fio_morto_e4b.py:153–176`, `chamados/management/commands/dedup_perguntas_fato.py:74–103`, `e4c_f5_constroi_a_1911_1710.txt:6–7`, `:13`.
-
-### EXCEÇÃO 1435 — DEVOLVE
-
-1. Os **59 pontos** do predesenho são **5 comuns para 10 L + 29 Q + 25 M**. Os cinco R contribuem zero pontos. `chamados/services/tarefa_do_dia.py:530`, `chamados/juizes.py:1514`, `:1517–1526`, `:1668`, `chamados/models.py:357`, `e4c_f5_constroi_a_1911_1710.txt:6–7`.
-2. O 1435 veda mudanças de rota ou partição fora das letras. O 1620 limita a exceção à carga de decisões. A cláusula do 1710 mantém o mesmo limite material. `e4c_f5_segue_as_tres_voltas_1911_1435.txt:16`, `e4c_f5_desenho_a_e_matriz_1911_1620.txt:3`, `e4c_f5_constroi_a_1911_1710.txt:7`.
-3. O literal **“só para os 59”** deixa de fora a sobra que C e PRONTO mandam carregar. Escreva **59 + a sobra nominal**. São **60 pontos de carga** contando a lista do dedup. `e4c_f5_constroi_a_1911_1710.txt:6–7`, `:14`, `chamados/management/commands/dedup_perguntas_fato.py:74–76`.
-4. A exceção é para leitura em lote. As cercas de exportada, a rota e a partição continuam valendo. `e4c_f5_constroi_a_1911_1710.txt:7`, `:13`, `CLAUDE.md:265–268`, `:411–417`.
-
-### RED — DEVOLVE
-
-1. Os testes existem e medem hoje: [nao verificado]
-   - **Tarefa** — igualdade do total ao construir e usar a carga, **1 × 3 perguntas**, variando também dias e colaboradores. O anexo relata **30 → 36**. `chamados/tests/test_e2_tarefa_do_dia.py:913–938`.
-   - **O261** — a porta real com **1 × 3 PKs**, `Q(3) = 3 × Q(1)` e `Q(1) ≤ 8`. O anexo relata **9 > 8**. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–205`.
-   - **C11** — igualdade do total com **1 × 5 dias**, cache do catálogo frio e cardinalidade conferida. O anexo relata **49 → 61**. `escala/tests/test_f3_beco1_folga_na_lista.py:378–402`.
-   - **Batida real** — tetos **230/294** para 1/3 chamados que fecham e **145/219** para 1/3 que ficam. `_cobrar` também sela `on_commit`. O anexo relata **237/301** e **147/222**, respectivamente. `ponto/tests/test_selo_chokepoint_escrita.py:196`, `:210`, `:228`, `:235`, `:251–254`, `:287–298`, `:428–478`.
-2. A igualdade 3 × 6 para os carregadores em lote atende ao 1620. O caso que morde cada um dos três leitores continua sendo exigência própria do 1510. `e4c_f5_desenho_a_e_matriz_1911_1620.txt:6`, `respostas_f5_e_c7_1911_1510.txt:3`.
-3. **Igualdade bruta 3 × 6 no O261 contradiz a classe R.** A porta abre transação, trava e relê por candidata. O total deve ser comparado por candidata, `Q(3)/3 = Q(6)/6 ≤ 8`. A igualdade absoluta cabe na contagem de consultas adicionais à relação de decisões, se a implementação a separar. Dos testes nomeados, tarefa e C11 exercitam K1/K2 de A e O261 exercita K3 de R. Faltam os carregadores e os mutantes designados para B e C. `chamados/services/relavra_via.py:215–242`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:200–205`, `chamados/services/tarefa_do_dia.py:530`, `escala/services/cadastro_realidade.py:460–466`, `e4c_f5_constroi_a_1911_1710.txt:6–9`.
-4. Os testes da batida e do O261 exercitam portas escritoras com fixtures. As linhas citadas sustentam a medição de SQL, e a equivalência de exportada ou dinheiro está [nao verificado]. `ponto/tests/test_selo_chokepoint_escrita.py:416–433`, `:456–468`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–205`.
-
-### SELOS DE TETO — PROCEDE
-
-1. `_ancoradas()` tem selo de **exatamente uma consulta**, com resultado não vazio e verificação da subquery. O261 tem o limite de **8 por candidata**. `chamados/tests/test_e4c_f2_leitura_do_ato.py:534–551`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:203–205`.
-2. O 1620 deixou os tetos intactos naquela etapa. O 1710 delimita a mudança ao custo constante por lote, com motivo e tabela, e conserva os quatro valores da batida e o teto O261. `e4c_f5_desenho_a_e_matriz_1911_1620.txt:3`, `:7`, `e4c_f5_constroi_a_1911_1710.txt:8–9`, `:14`.
-3. O limite fecha como gate. Com **9 > 8** no dado raspado, falta recuperar uma consulta unitária ou registrar a pergunta de desenho. A viabilidade e os valores após a construção estão [nao verificado]. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:205`, `chamados/services/relavra_via.py:230–242`, `e4c_f5_constroi_a_1911_1710.txt:9`.
-4. Medir e registrar SQL por lote cabe no escopo. Os selos atravessam transições reais nos testes, e seus resultados futuros estão [nao verificado]. `ponto/tests/test_selo_chokepoint_escrita.py:428–433`, `:464–468`.
-
-### MEDIR — PROCEDE
-
-1. A property atual julga o texto do ato. A fixture com resposta só no ato e projeção vazia demonstra a troca de `True` para `False` ao usar o texto da projeção com o mesmo instante. `chamados/models.py:3785–3791`, `chamados/juizes.py:1533–1535`, `:1564`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:331–348`, `:490–503`.
-2. A medida aplica a fonte do 1510 item 2. O critério de pouso do 1510 item 5 trata de C7, outro objeto. `respostas_f5_e_c7_1911_1510.txt:3`, `:6`, `e4c_f5_constroi_a_1911_1710.txt:10`. [nao verificado]
-3. Conte mudanças no **booleano** da property. O contador existente mede desigualdade **literal** de texto, incluindo espaço e caixa. O total e os PKs da medida pedida estão [nao verificado]. `chamados/services/vigia_texto_resposta.py:8–18`, `chamados/tests/test_e4c_f5_contador_texto.py:40–53`, `e4c_f5_constroi_a_1911_1710.txt:10`.
-4. A sonda declarada lê na sombra e publica só PKs. A property também entra numa porta escritora de declaração de horário, o que torna relevante o gate de pouso para divergência. `bin/sonda_leitura.sh:4–5`, `chamados/services/declaracao_texto.py:418–420`, `chamados/services/disputa_emissao.py:1439–1443`, `e4c_f5_constroi_a_1911_1710.txt:10`.
-
-### SUITES — PROCEDE
-
-1. O código distingue `--volta`, que seleciona obra, vizinhos e selos globais, de suite inteira com motivo `pre-opus` ou `pouso`. `bin/volta_intermediaria.sh:3–9`, `bin/suite.sh:216–223`, `:236–258`.
-2. Pelo 1335 item 3, **A/B/C rodam como voltas intermediárias na pista 2**. **Pre-opus da espinha e certificação de pouso ficam na VM pela trava**. Isso é compatível com o 1710. `respostas_aos_devolvidos_1911_1335.txt:4`, `:7`, `e4c_f5_constroi_a_1911_1710.txt:11`, `bin/suite.sh:308–312`.
-3. O rebase deve anteceder a certificação da árvore que pousa. O estado do passo 1, o resultado do rebase e as suites verdes estão [nao verificado]. `e4c_f5_constroi_a_1911_1710.txt:3`, `:11`, `docs/PISTA.md:29–38`.
-4. O cruzamento declarado é `cartorio.py`. A regra de suite preserva o escopo de cada obra e a parada por conflito na mesma função. `ponto/services/cartorio.py:146–147`, `e4c_f5_constroi_a_1911_1710.txt:3`, `:11`, `:13`.
-
-### VERIFICADOR — PROCEDE
-
-1. A revisão final pelo escopo inteiro coincide com a regra de verificar o diff e os escritores e leitores atingidos. `CLAUDE.md:366–380`.
-2. O verificador final complementa as verificações por volta herdadas do 1435 e a linha de evidência pré-suite. `e4c_f5_segue_as_tres_voltas_1911_1435.txt:5`, `:13`, `e4c_f5_constroi_a_1911_1710.txt:12`. [nao verificado]
-3. Matriz, predesenho e aval dão o escopo. A linha publicada deve distinguir provas da construção, exigidas antes da suite, dos resultados da própria suite, do Opus e do pouso, que chegam depois. `e4c_f5_segue_as_tres_voltas_1911_1435.txt:13`, `e4c_f5_constroi_a_1911_1710.txt:12–14`, `CLAUDE.md:372–380`. [nao verificado]
-4. A verificação cobre os leitores de risco e o cruzamento do cartório. A aprovação do pouso segue o rito da árvore inteira. `ponto/services/cartorio.py:1684–1713`, `CLAUDE.md:377–381`.
-
-### PROIBIDO — DEVOLVE
-
-1. O veto ao manager padrão tem base no selo de `_ancoradas()`. O problema concreto do veto geral aos harnesses é que o mutante de `fio.py` procura literalmente a composição `_replace` que o aval manda retirar. `chamados/models.py:343–359`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:543–551`, `chamados/tests/e4c_f5_volta2_mutantes.py:32–38`, `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:220–227`.
-2. Preservar o texto da projeção, o pouso integral e a ausência de juiz novo respeita o 1510. O 1620 proíbe tocar harness para passar. O 1435 continua exigindo que o mutante com apelido morda. `respostas_f5_e_c7_1911_1510.txt:2–3`, `:8`, `e4c_f5_desenho_a_e_matriz_1911_1620.txt:7`, `e4c_f5_segue_as_tres_voltas_1911_1435.txt:11`, `:16–17`. [nao verificado]
-3. Especifique quais adaptações de teste preservam a prova. As 12 famílias da matriz incluem os próprios orçamentos que o novo RED manda mudar. Além disso, o selo anterior da property exige `True` para resposta só no ato, resultado que o novo contrato muda. A exceção da fixture dos REDs 8 só resolve a criação ilegal. `chamados/tests/test_e2_tarefa_do_dia.py:913–938`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–205`, `escala/tests/test_f3_beco1_folga_na_lista.py:395–402`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:490–503`, `e4c_f5_constroi_a_1911_1710.txt:6`, `:8`, `:13–14`.
-4. O escopo declarado autoriza leitura em lote e composição da pergunta. Motor v2, alteração de escala ou vínculo e gravado de competência exportada continuam sujeitos a `!`. Ler vínculo no C11 e ler perguntas de exportadas na auditoria são caminhos já presentes. `CLAUDE.md:265–268`, `escala/services/cadastro_realidade.py:490–503`, `chamados/management/commands/backfill_fio_morto_e4b.py:153–176`.
-
-### PRONTO — DEVOLVE
-
-1. A conta **64 + 5 = 69**, com a sobra separada, fecha. As duas superfícies do smoke existem. O app tem GET autenticado. A abertura do modal da Central faz `UPDATE` nas notas ainda não lidas antes de renderizar, inclusive por GET. `e4c_f5_constroi_a_1911_1710.txt:14`, `api/urls.py:92`, `api/views.py:2536–2554`, `chamados/urls.py:39`, `chamados/views.py:868–880`, `:951–956`, `chamados/services/nota.py:126–133`.
-2. O 1435 preserva o PRONTO do 0815 e acrescenta 3a–3e. Faça a lista nova cumulativa. Na cópia, o vigia ainda itera o queryset inteiro após o prefetch, sem `iterator(chunk_size=...)` exigido pelo 1510 item 3. A retirada de `divergencia_texto_resposta_universo` está coberta por teste. A triagem de `casefold` e as provas das medidas herdadas do 0815 estão [nao verificado]. `e4c_f5_segue_as_tres_voltas_1911_1435.txt:5`, `:8–13`, `:16–17`, `respostas_f5_e_c7_1911_1510.txt:4–5`, `chamados/services/vigia_texto_resposta.py:8–18`, `chamados/tests/test_e4c_f5_contador_texto.py:55–70`.
-3. O checklist precisa incorporar a métrica unitária do O261, os REDs de B/C, as adaptações de testes autorizadas e o ambiente ou a conta do smoke do modal. O verde das 11 famílias, a medida da property, as suites, Opus, pouso e smoke estão [nao verificado]. `e4c_f5_constroi_a_1911_1710.txt:8–14`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:203–205`, `chamados/tests/e4c_f5_volta2_mutantes.py:34–37`, `chamados/views.py:877–880`.
-4. A escrita do smoke é no carimbo de leitura de `FollowupChamado`. Dinheiro, escala, vínculo e gravado exportado seguem sujeitos à regra de `!`. O efeito de ponta a ponta da árvore futura nesses dados está [nao veri
-
-[truncado em 20000 de 20123 caracteres]
-
-_7428 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7429 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
