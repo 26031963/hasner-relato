@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 05:50:45.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (18.1 MB). Acoes na janela: **391**.
+**Medido em 20/11/2026 05:55:59.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (18.1 MB). Acoes na janela: **392**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:55:57 | Bash | Regenerate the session handoff after the clear trigger | `cd /home/ronald/saas-hasner; bin/handoff_sessao.sh 2>&1 \| tail -1; head -1 app/docs/RELATO.md \| cut -c1-60` |
 | 05:46:18 | Bash | Register the approval, mark the three answered lines, write the resume line and clear marker, publish, generate the handoff | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 -I - "$H" <<'PY' import sys h=sys.argv[1]; AV='F5-ATO-X-COLUNA-INVARIANTE-2011-0545' p='app/docs/PROMPTS.md'; s=open(p).read() if AV not in s: s=s.rstrip('\n')+'\n\| 20/11 05:45 \| %s \| registrado %s: logs/AVAIS-1515/f5_ato_x_coluna_invariante_2011_0545.txt (sha256-12 b0da1bd83e7d); responde ATO-X-COLUNA (opcao 1, invariante), PAREI POUSO dis ...` |
 | 05:45:56 | Bash | Save the approval text verbatim from the session transcript to the approvals folder | `cd /home/ronald/saas-hasner; T=/home/ronald/.claude/projects/-home-ronald-saas-hasner/dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl; A=logs/AVAIS-1515/f5_ato_x_coluna_invariante_2011_0545.txt python3 -I - "$T" "$A" <<'PY' import sys,json,re t,a=sys.argv[1:3]; achou=None for l in open(t,errors='replace'): if 'F5-ATO-X-COLUNA-INVARIANTE-2011-0545' not in l: continue try: o=json.loads(l) except Exceptio ...` |
 | 05:45:43 | Bash | Check the prompt log format, the clear marker the hook expects, and the build copy's head | `cd /home/ronald/saas-hasner; date +%H:%M; tail -3 app/docs/PROMPTS.md \| cut -c1-400; sed -n 1,3p app/docs/RELATO.md \| cut -c1-120; /bin/grep -n 'CLEAR' bin/hook_stop_fila1.py \| head -12 \| cut -c1-200; git -C /home/ronald/wt-codex-e4c-f5-constroi-184647 rev-parse --short HEAD; git -C /home/ronald/wt-codex-e4c-f5-constroi-184647 status --porcelain \| head -3` |
