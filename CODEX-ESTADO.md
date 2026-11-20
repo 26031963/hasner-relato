@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 14:55** · publicado em **20/11/2026 14:57** (UTC-3)
+> Ultima resposta processada: **20/11/2026 14:58** · publicado em **20/11/2026 15:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 14:58 · sessao a64acae05b1e · E4C-F5-CONSTROI · construtor · origem=Code
+
+Entreguei [test_e4c_f5_h4_resposta_apos_absorcao.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:1), o único arquivo novo. Validei a sintaxe do arquivo e do escritor com o mutante aplicado em memória. A execução dos testes e a mordida dos mutantes ficam **[nao verificado]** para o Code e o opus final. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:35–48`
+
+**Conflito encontrado na cópia.** O teste existente `test_nenhuma_funcao_de_modulo_nova` aceita apenas `_motor_humana` na lista de permissões. A nova função de módulo `responder_pergunta_disputa_core` entra em `extras` e contraria `assertEqual(extras, [])`. É um conflito estrutural demonstrável por leitura. `app/chamados/tests/test_contract_deus_objeto.py:13–28` · `app/chamados/models.py:4594–4600`
+
+**Devolução T2.** O teste atual espera que `carimbar` devolva `False` com `RECUSA_PAR_ATO_COLUNA`. Exige a preservação da resposta original, da foto da lavra e dos eventos, com `DEVOLUCAO` em T2 e sem `ABSORCAO`. A H4 fica fora desse percurso. A resposta de arranjo chama o serviço direto e a tentativa de carimbo é da passagem. A expectativa `carimbar=True` mencionada no aval descreve uma versão anterior do teste. `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:80–104,433–480` · `app/chamados/services/materializacao.py:1072–1090`
+
+### Casos do arquivo novo
+
+| Teste | O que a asserção exige | [nao verificado]
+|---|---|
+| `test_RED_h4_irma_com_luz_recusa_e_preserva_foto` | Passagem real antes da trava da resposta, erro H4 e preservação da foto, incluindo atos, auditoria, notas e arquivo do destino. `:113–178` |
+| `test_RED_h4_irma_muda_recusa_e_preserva_foto` | Mesma prova para a irmã muda, que entra viva e perde vitalidade com a passagem. `:138–183` |
+| `test_controle_mutante_aceita_irma_com_luz` | Guarda antecipada aceita, grava `RESPOSTA`, gera auditoria e nota e resgata o destino. `:165–187` |
+| `test_controle_mutante_aceita_irma_muda` | Os mesmos efeitos de aceite com a guarda antecipada na irmã muda. `:165–191` |
+| `test_controle_reabertura_antes_da_trava_libera_o_mesmo_pk` | Reabertura real interposta encerra a absorção e permite responder ao mesmo PK. `:193–211` |
+| `test_RED_carimbo_de_declaracao_sem_absorcao_aceita` | Carimbo sem ato no próprio PK aceita, mesmo com absorção de outra irmã no mesmo instante. `:213–223` |
+| `test_controle_validacao_sozinha_antes_da_trava_aceita` | Aceita após validação isolada, limpa a assinatura vigente e conserva o ato histórico. `:225–249` |
+| `test_RED_validacao_vigente_com_absorcao_confirmada_recusa` | Veta com validação e absorção no mesmo PK, preservando a validação. `:251–261` |
+| `test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa` | `RECUSA` com `ato_em` maior e PK menor deixa a absorção vigente. `:263–279` |
+| `test_RED_ato_inserido_depois_encerra_vigencia_com_carimbo_de_pe` | `REABERTURA` e `RECUSA` com PK maior liberam a resposta mesmo com data anterior e carimbo preservado. O arranjo mantém o carimbo e insere só o ato para isolar a ordem por PK. `:281–298` |
+| `test_RED_rejeicao_com_outra_ausencia_cobrindo_o_dia_ainda_recusa` | Rejeição real deixa o veto vigente quando outra ausência cobre o dia e a absorção permanece. `:300–317` |
+| `test_RED_web_recusa_pelo_toast_depois_da_guarda_de_entrada` | Na janela, toast HTMX `204` com erro H4. Em sequência, recusa de entrada pelo C6. `:323–343` · `app/chamados/views.py:1237–1246,1278–1282` |
+| `test_RED_api_recusa_pelo_400_depois_da_guarda_de_entrada` | Na janela, `400` com erro H4 e auditoria de recusa. Em sequência, `404` pelo C6. `:330–357` · `app/api/views.py:2634–2656` |
+| `test_RED_declaracao_colab_recusa_pelo_json_400` | Passagem na primeira trava da declaração, JSON `400` com `resposta_invalida` e ausência de nota de sucesso. `:359–391` |
+| `test_RED_aplicar_declaracao_recusa_com_pk_e_sem_validar` | `resposta_invalida` com o PK absorvido, sem ato de resposta ou validação. `:393–402` |
+| `test_controle_declaracoes_barram_validacao_vigente_antes_do_core` | Nas duas declarações, a guarda de validação composta devolve `validada_sem_registro` antes do core. `:404–418` · `app/chamados/services/declaracao_texto.py:380–423,670–697` |
+| `test_controle_correcao_admin_preserva_servico_direto_e_acao` | O serviço direto aceita com absorção vigente. A ação administrativa registra a correção, valida e devolve seu envelope de sucesso. `:420–445` |
+
+### Comandos para a sessão de testes [nao verificado]
+
+O mutante reutiliza `aplicar` da Volta 3 com registro temporário no próprio teste. Antecipa a leitura e a decisão do veto, preservando o `refresh_from_db()` do escritor. Os dois comandos com seletor devem falhar na asserção do retorno, com `(True, None)` no lugar da recusa H4. A execução normal inclui os dois controles que esperam esse aceite. `app/chamados/tests/e4c_f5_volta3_mutantes.py:80–99` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:35–48,163–191`
+
+```bash
+ALVO=chamados.tests.test_e4c_f5_h4_resposta_apos_absorcao.RespostaAposAbsorcaoTest
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$ALVO" --noinput
+
+PYTHONDONTWRITEBYTECODE=1 F5_VOLTA3_MUTANTE=h4_guarda_antecipada \
+  python3 manage.py test "$ALVO.test_RED_h4_irma_com_luz_recusa_e_preserva_foto" --noinput
+
+PYTHONDONTWRITEBYTECODE=1 F5_VOLTA3_MUTANTE=h4_guarda_antecipada \
+  python3 manage.py test "$ALVO.test_RED_h4_irma_muda_recusa_e_preserva_foto" --noinput
+```
+
+**[nao verificado]** Resultado da suíte, concorrência em duas conexões, frequência por empresa e competência, casos em competência exportada e impacto financeiro. A intercalação escrita usa a técnica determinística da A1(b). `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:79–93` · `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:62–77`
 
 ## 20/11 14:55 · sessao da30402d1bbe · E4C-F5-CONSTROI · leitura · origem=Code
 
@@ -1012,24 +1060,4 @@ Para o instante do ato, confirmei três cadeias de exibição ou auditoria:
 
 A serialização de `app/api/views.py:2581` entrega o campo na rota do APK. O uso exato do campo pelo APK ficou [nao verificado], portanto indiquei DECIDE pela regra de dúvida. A seleção do subconjunto `respondidas` ocorre em `app/api/views.py:2590`.
 
-## 20/11 14:08 · sessao 36e82553f207 · - · - · origem=Ronald (tmux)
-
-N_DECIDE = 5
-N_EXIBE = 3
-
-Contagem por sítio distinto que lê o instante do ato. As 39 chamadas ao juiz `pergunta_respondida` e as quatro chamadas à projeção temporal foram rastreadas e encaminhadas ao agente principal. [app/chamados/juizes.py:1391] [app/chamados/juizes.py:1560]
-
-| Classe | Função e sítio | Uso |
-|---|---|---|
-| DECIDE | `projecao_temporal_da_pergunta` [app/chamados/juizes.py:1391] | Corta pelo horizonte. A tupla alimenta a decisão sobre slot, vitalidade, absorção e o critério M1. [app/chamados/juizes.py:351] [app/chamados/juizes.py:353] [app/chamados/juizes.py:1409] [app/chamados/juizes.py:1428] [app/chamados/services/materializacao.py:1057] [app/chamados/services/materializacao.py:1060] [app/escala/services/cadastro_realidade.py:499] [app/escala/services/cadastro_realidade.py:500] |
-| DECIDE | `respondida_sem_texto` [app/chamados/juizes.py:1541] | Recebe a composta por `espera_o_texto_do_colaborador`. [app/chamados/services/fio.py:189] [app/chamados/services/fio.py:190] |
-| DECIDE | `pergunta_respondida` [app/chamados/juizes.py:1560] | Testa presença do instante com o texto, inclusive via alias, propriedade, tupla e `_replace`. [app/chamados/models.py:2024] [app/chamados/models.py:2026] [app/chamados/models.py:3816] [app/chamados/juizes.py:1428] [app/api/views.py:2590] |
-| DECIDE | `espera_o_texto_do_colaborador` [app/chamados/services/fio.py:190] | Testa diretamente a ausência do instante antes de chamar o predicado de integridade. [app/chamados/services/fio.py:189] [app/chamados/services/fio.py:190] |
-| DECIDE | `api_disputa_perguntas._item` [app/api/views.py:2581] | Serializa a composta recebida por parâmetro para o APK. Classificação conservadora. O uso efetivo do campo pelo APK está [nao verificado]. [app/api/views.py:2542] [app/api/views.py:2587] [app/api/views.py:2601] |
-| EXIBE | `_eventos_dos_chamados` [app/chamados/services/historico.py:100] [app/chamados/services/historico.py:106] | Usa `getattr` para datar a linha do tempo exibida pela mensageria. [app/chamados/services/historico.py:114] [app/api/views_mensageria.py:2177] [app/api/views_mensageria.py:2199] |
-| EXIBE | `ChamadoColaborador.ressuscitar_perguntas` [app/chamados/models.py:1715] | Preserva a data anterior na foto da reabertura, exibida no modal. [app/chamados/models.py:3818] [app/templates/chamados/partials/modal_fio.html:212] |
-| EXIBE | `_materializar_ausencia_de_resposta` [app/chamados/services/materializacao.py:1091] | Registra o instante como detalhe da auditoria da tentativa. [app/chamados/services/materializacao.py:1087] [app/core/observ.py:134] [app/core/observ.py:136] |
-
-`composta` copia o instante de `leitura`, ponto de repasse que antecede os usos acima. `_pela_decisao` recebe `LeituraDoAto` e consulta apenas `validada_em`. [app/chamados/models.py:4360] [app/chamados/models.py:4361] [app/chamados/services/tarefa_do_dia.py:429] [app/chamados/services/tarefa_do_dia.py:163]
-
-_7565 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7566 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
