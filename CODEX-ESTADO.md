@@ -1,7 +1,62 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 15:31** · publicado em **20/11/2026 15:33** (UTC-3)
+> Ultima resposta processada: **20/11/2026 15:54** · publicado em **20/11/2026 15:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 15:54 · sessao 15e2a787a150 · E4C-F5-CONSTROI · construtor · origem=Code
+
+## 1. S144
+
+Na base, `disputa.fechar()` persistia `disputa_fechada` para a disputa. O S144 descartava o `False` do carimbo, e `par_ato_coluna` ficava apenas na instância. [models.py:2122](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:2122), [models.py:3384](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3384), [signals.py:164](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/signals.py:164)
+
+O ramo `False` agora grava o motivo no PK da pergunta com `core.observ.evento` e a ação existente `irma_viva_na_ausencia`. O campo `via_tentada='juiz_aprovou'` distingue o S144 da passagem da ausência. O RED mantém as asserções de recusa e ausência de carimbo, exige a trilha persistida e verifica `A=0, B=1` no recorte do PK e `B=0` ao excluí-lo. O aval 1545, item 3, dispensa a porta posterior para esse caso. [materializacao.py:1098](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:1098), [materializacao.py:2216](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:2216), [test_e4c_f5_guarda_plantio_s144.py:157](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:157)
+
+**Contradição com o aval 1545, item 3.** S144 é inalcançável para a recusa do par com `A=0` e `B=0` na mesma foto da frota. O contador publica o desvio, mas `vigiar_fio_morto --alarme` exclui A e B dos conjuntos que disparam o alarme. A frota efetiva está **[nao verificado]**. [models.py:3384](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3384), [vigia_ato_x_coluna.py:16](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/vigia_ato_x_coluna.py:16), [vigiar_fio_morto.py:87](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/management/commands/vigiar_fio_morto.py:87), [vigiar_fio_morto.py:210](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/management/commands/vigiar_fio_morto.py:210)
+
+## 2. Sítios excluídos antes da guarda
+
+- **INALCANCAVEL `reconciliador.py:646`.** O seletor exige `validada_em IS NULL`. O laço conserva a instância selecionada, e o carimbo usa `resposta=None`. O controle existente afirma a exclusão do PK com B persistido. O novo controle intercala uma validação real do mesmo PK, em outra instância, entre a seleção e a trava do absolvedor. [reconciliador.py:635](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:635), [reconciliador.py:681](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:681), [models.py:3365](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3365), [test_e4c_f5_guarda_reconciliador.py:231](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:231)
+- **INALCANCAVEL `models.py:3560`.** `_orfas_abertas` exige coluna nula. O veredito exclui resposta completa e exige pergunta viva. `encerrar_fantasma` repassa a mesma instância com `resposta=None`. O novo controle intercala resposta e validação reais após o veredito, na mesma conexão, e exige que a instância entregue à porta ainda tenha coluna nula. O controle existente continua afirmando a exclusão do PK com B persistido. [reconciliador.py:1100](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:1100), [reconciliador.py:1136](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:1136), [reconciliador.py:1188](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:1188), [models.py:3560](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3560), [test_e4c_f5_guarda_reconciliador.py:259](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:259)
+
+## 3. Plantio
+
+O passivo é o único gatilho demonstrado para a recusa do par no plantio. Ele carrega a coluna antes da trava e só recarrega os campos do carimbo. Os REDs existentes exigem batida desfeita, pergunta sem carimbo e validação posterior na mesa sobre o mesmo PK. Ficou sem RED fora do passivo por falta de um caminho real demonstrado. [passivo_validado.py:382](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/passivo_validado.py:382), [passivo_validado.py:532](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/passivo_validado.py:532), [test_e4c_f5_guarda_plantio_s144.py:82](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:82)
+
+Os outros chamadores são:
+
+- **Validação individual e validação do par.** A validação grava coluna e linha `VALIDACAO` antes de chamar a unidade. [validacao.py:168](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:168), [validacao.py:655](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:655), [validacao.py:760](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:760), [validacao.py:786](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:786)
+- **Irmã de intervalo.** A chamada recursiva exige validação composta da irmã. [materializacao.py:200](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:200), [materializacao.py:1763](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:1763)
+- **Laço da disputa.** Recebe regularização da mesa, do fio, do backfill e a cauda da validação. Relê sob trava e pula o PK sem validação composta. [acoes_disputa.py:143](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/acoes_disputa.py:143), [fio.py:722](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/fio.py:722), [backfill_fio_morto_e4b.py:156](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/management/commands/backfill_fio_morto_e4b.py:156), [validacao.py:803](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:803), [materializacao.py:2150](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:2150)
+
+## 4. E1
+
+O RED agora chama o absolvedor real depois de confirmar a recusa por `VIA_SEM_TURNO_ABERTO` e a recusa da segunda reabertura. Exige que o mesmo PK receba `VIA_CELULA_ABSOLVEU`, com a validação limpa e a linha de `REABERTURA` preservada. A releitura do absolvedor encontra a coluna nula e a célula `concorde`. O avanço em banco está **[nao verificado]**. [test_e4c_f5_guarda_reconciliador.py:112](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:112), [test_e4c_f5_guarda_reconciliador.py:140](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:140), [reconciliador.py:678](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:678)
+
+## Comandos para o Code
+
+Cada mutante altera uma linha em memória. Verifiquei a sintaxe, as âncoras e a diferença de uma linha dos sete mutantes. Execução Django, mordida dos REDs e certificação **[nao verificado]**. [test_e4c_f5_volta3_fecho_mutantes.py:5](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_volta3_fecho_mutantes.py:5), [e4c_f5_volta3_mutantes.py:45](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_volta3_mutantes.py:45), [e4c_f5_volta3_mutantes.py:69](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_volta3_mutantes.py:69)
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
+plantio=chamados.tests.test_e4c_f5_guarda_plantio_s144
+reconciliador=chamados.tests.test_e4c_f5_guarda_reconciliador
+s144="$plantio.GuardaPlantioS144Test"
+a2="$reconciliador.GuardaReconciliadorTest"
+red_s144="$s144.test_RED_s144_b_persistido_fecha_disputa_sem_salvar_carimbo"
+
+mutar() {
+    python3 -m chamados.tests.test_e4c_f5_volta3_fecho_mutantes "$@"
+}
+
+python3 manage.py test "$plantio" "$reconciliador"
+mutar s144_sem_trilha "$red_s144"
+mutar s144_motivo_c6 "$red_s144"
+mutar contador_ignora_b "$red_s144"
+mutar a2_celula_sem_filtro_de_coluna "$a2.test_A2_evento_celula_absolveu_usa_foto_anterior_a_validacao"
+mutar a2_orfa_sem_filtro_de_coluna "$a2.test_A2_evento_orfa_usa_foto_anterior_a_validacao"
+mutar plantio_motivo_c6 "$s144.test_RED_passivo_foto_velha_recusa_par_e_mesa_valida_mesmo_pk"
+mutar e1_sem_avanco "$a2.test_RED_c1_prefetch_le_reabertura_apos_select_e_preserva_banco_limpo"
+```
 
 ## 20/11 15:31 · sessao d296c67d3c78 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -881,23 +936,4 @@ Os desenhos usam a evidência do item 1. A condição de escrita é nova. A leit
 
 [truncado em 20000 de 22224 caracteres]
 
-## 20/11 14:19 · sessao e9dc6eb0e8f1 · - · - · origem=Ronald (tmux)
-
-A1 e A2 estão em [test_e4c_f5_guarda_reconciliador.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:108). A execução de Django e dos mutantes fica com a sessão [nao verificado].
-
-| Sítio e origem | Teste e caminho posterior | [nao verificado]
-|---|---|
-| `reconciliador.py:408`, instância velha e banco limpo | `test_RED_c1_prefetch_le_reabertura_apos_select_e_preserva_banco_limpo`. Interpõe a reabertura real entre o SELECT e o prefetch. A nova tentativa de reabrir retorna `sem_resposta_para_corrigir`. `test_e4c_f5_guarda_reconciliador.py:108–135` |
-| `reconciliador.py:408`, par persistido | `test_RED_c1_par_persistido_recusa_e_questionario_reabre_o_mesmo_pk`. O titular reabre o questionário e limpa resposta e validação no mesmo PK. `test_e4c_f5_guarda_reconciliador.py:137–157` |
-| `reconciliador.py:646`, ambas as origens | `INALCANCAVEL`. `test_A2_evento_celula_absolveu_entrega_coluna_nula_e_resposta_none` e `test_A2_AST_seleciona_celula_absolvida_com_coluna_nula`. `reconciliador.py:646,678–681`, `test_e4c_f5_guarda_reconciliador.py:184,219` |
-| `models.py:3560`, ambas as origens | `INALCANCAVEL`. `test_A2_evento_orfa_entrega_coluna_nula_e_resposta_none` e `test_A2_AST_seleciona_orfa_com_coluna_nula`. `reconciliador.py:1096–1103`, `models.py:3552–3560`, `test_e4c_f5_guarda_reconciliador.py:187,222` |
-
-`SEM_PORTA reconciliador.py:408 (a):` pergunta de texto, muda, sem validação, carimbo ou destino, C6 morto pela célula `concorde`. Disputa aberta, uma reabertura e nenhum chamado pai ou destino. Nova resposta exige C6 vivo. Mesa e recusa exigem chamado listante e resposta completa. Reabertura exige resposta nas colunas e a correção direta exige chamado e tipo hora. Devolução exige declaração de hora com motivo de recusa, carimbo de paridade ou participação no grupo carimbado de absorção, conforme a porta. `test_e4c_f5_guarda_reconciliador.py:94–106,130–135`, `views.py:483–536,1238–1246`, `juizes.py:1458–1474,1583–1588,1762–1767`, `models.py:2414–2417`, `services/acoes_disputa.py:349–355`, `services/validacao.py:191–200,269–274,348–351,698–704,915–923`, `services/materializacao.py:1149–1152`.
-
-Remover a guarda deixa o C6 aceitar o carimbo nos dois REDs do C1. Ambos exigem `False`, a causa `RECUSA_PAR_ATO_COLUNA` e a foto preservada. Remover o filtro de `validada_em` de cada seletor derruba o AST correspondente e permite que o candidato divergente alcance o gatilho coberto pelo teste de integração. `models.py:3375–3405`, `test_e4c_f5_guarda_reconciliador.py:94–106,159–181,205–222`. [nao verificado]
-
-```sh
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_guarda_reconciliador
-```
-
-_7572 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7573 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
