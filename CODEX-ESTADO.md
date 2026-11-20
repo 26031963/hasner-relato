@@ -1,7 +1,108 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 09:54** · publicado em **20/11/2026 09:56** (UTC-3)
+> Ultima resposta processada: **20/11/2026 10:04** · publicado em **20/11/2026 10:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 10:04 · sessao 4d66f93abba8 · TRAVAS-SEM-MEMORIA · leitura · origem=Code
+
+Auditoria estática da cópia e dos anexos fornecidos, sem executar suites nem publicar. O hash da cópia, a revisão em `logs/TRAVAS-SEM-MEMORIA/rev_c_0945/r.txt:66–77`, a publicação das cinco linhas e o envio único ao Codex ficam [nao verificado]. A regra exige publicação e envio antes da construção. `CLAUDE.md:394`, `app/docs/PISTA.md:169–176`, `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:30,44`.
+
+### 1. Quem chama
+
+- **O que se sustenta.** A volta intermediária roda ruff e selo e então chama `suite.sh --volta` para um **recorte**. Se a seleção efetiva cobrir a descoberta inteira e vier sem motivo canônico, sai `rc 2`. O settings da cópia tem um `PreToolUse` genérico. O disjuntor pode liberar cedo o Bash da sessão principal e, na chamada Codex, extrai papel, obra e anexos. O registro novo para PRONTO e ficha é proposta. `bin/volta_intermediaria.sh:18–34`, `bin/suite.sh:162–180,215–263`, `.claude/settings.json:62–73`, `bin/disjuntor.py:1448–1463,1837–1863`, `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:47,58`.
+- **O que falta.** A linha omite o executor que M3 manda reconferir obra e SHA imediatamente antes de criar a ref e pedir o job. Falta comprovar qual comando chega ao registro carregado na sessão da raiz e que a ficha conferida é a mesma versão lida pelo wrapper. A cópia documenta sessão aberta em `app/` com hooks da raiz inertes. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:26,45–47,58`, `bin/codex_pergunta.sh:323–335`, `app/docs/RELATO.md:3341`.
+- **Sobra do recorte.** M1 ainda instala **dois** registros. M5 ainda começa com “T2 faz” e termina com “O hook lê o mesmo medidor na hora do envio”. A leitura no recebimento do aval pertence ao recorte retirado. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:44,49–54,63`, `retoma_2011_0945.txt:20–21`.
+
+### 2. Quem espera
+
+- **O que se sustenta.** PISTA-2 documenta `ssh pista espera <id>` com o rc da suite. O RELATO registra resultados com `Ran` e rc, mas a revisão anterior registra que faltava demonstrar essa saída pelo próprio `espera`. Na VM, `suite.sh` aguarda a trava e devolve o rc do processo. No ESTADO, a espera já é síncrona: `relato.sh` aguarda o gerador, que chama o medidor, e aguarda a raspagem antes do commit. `app/docs/BACKLOG.md:2191`, `app/docs/RELATO.md:65,1497,1529`, `bin/suite.sh:316–325,336–372`, `bin/relato.sh:37–38,114–147`, `bin/gerar_estado.py:211–224`.
+- **O que falta.** Faltam a prova de `Ran`, veredito e rc para o mesmo ID pelo caminho de espera da pista e a prova de que a recusa da ficha chega antes de qualquer entrada no wrapper. O RELATO também pode ficar retido enquanto o ESTADO segue. A leitura pelo chat da versão publicada do rascunho fica [nao verificado]. `app/docs/RELATO.md:65`, `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:58–59,82,91`, `bin/relato.sh:44–73,114–119`.
+- **Sobra do recorte.** A resposta de T2 “no evento de entrada” saiu da linha revisada. O smoke do V4 ainda exige os dois eventos e A1/A2/A3/A8. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:64,90,94`, `retoma_2011_0945.txt:21`.
+
+### 3. Falha e limite
+
+- **O que se sustenta.** Na cópia, `suite.sh` barra inteira sem motivo canônico e executa pela trava da VM. O wrapper abre e raspa anexos. As duas recusas literais são propostas de M3 e M9a. No medidor, `_git` devolve vazio em erro ou timeout tratado. Uma declaração sem caminho ganha branch `(sem worktree no disco)`. A base ainda carece de `rev-parse HEAD` por cópia e da saída `raia=<nome> SEM WORKTREE`. `bin/suite.sh:236–263,316–325`, `bin/codex_pergunta.sh:57–68,99–100,323–335`, `bin/raias_estado.py:42–48,96–106,125–154`, `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:47,49,58`.
+- **O que falta.** `--espera` limita a aquisição da trava da VM. A fila remota documentada roda um job por vez, e seu teto e cancelamento constam como pendentes. Falta delimitar o fim da espera remota, provar o ESTADO publicado quando um caminho existe mas o HEAD falha, e identificar a resposta ao “ponto (1) devolvido acima”. O anexo dá a exceção imediata só à F5, mantém o pouso na VM e submete o escopo mais amplo de TRAVAS à revisão. A resposta ao ponto (1) fica [nao verificado]. `bin/trava_teste.sh:14–19,22–42`, `app/docs/BACKLOG.md:2191,2194`, `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:81`, `retoma_2011_0945.txt:5,20–21`.
+- **Sobra do recorte.** A recusa do **aval** da linha original e as condições de M6–M8 saíram. A linha revisada ainda precisa ser lida com a distinção do anexo: `SEM WORKTREE` é saída do ESTADO em M5. A devolução do aval por HEAD indisponível era M7/A6. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:49–54,65,78`, `retoma_2011_0945.txt:21`.
+
+### 4. Medida
+
+- **O que se sustenta.** E1/E2 especificam três tokens de cópia e uma declaração sem worktree, depois a mudança de um único token ao avançar um HEAD. FD1–FD6 especificam três recusas com zero chegadas e três entradas com uma chegada. São resultados esperados. Execução, latência e publicação ficam [nao verificado]. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:81–83,110–112`.
+- **O que falta.** Falta vincular por caso a porta, o SHA, o veredito, as chamadas efetivas e a linha de recusa ou publicação. Na ficha, faltam as referências dos itens contados e as recolagens efetivas do Ronald, ambas previstas em M9b. No ESTADO, falta a base de comparação do tempo adicional e a prova de igualdade dos **tokens** antes e depois da raspagem na mesma geração. O raspador pode alterar texto e a publicação ainda depende de commit e push. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:59,66,81–83,107,110–112`, `bin/raspar_publico.py:23–41`, `bin/relato.sh:114–147`.
+- **Sobra do recorte.** A linha revisada conserva E1/E2, que ficam. No V4 ainda aparecem a repetição de A10 em RED e SELO, os mutantes de T2, A1–A14, o marco de ativação e as recolagens de A11–A14 no PRONTO. São referências ao trecho retirado. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:78–90,108–110,114`, `retoma_2011_0945.txt:21`.
+
+### 5. Quem desliga
+
+- **O que se sustenta.** Restaurar o settings local pode retirar o registro Bash proposto e, com ele, a recusa da ficha prevista nesse registro. A cópia tem precedente de reversão em duas partes, settings local e commit. Para a rota, “retira a seleção” deixa uma lacuna: M2 manda recusar pre-opus sem `PISTA_LATERAL`, e M3 prevê guarda também no executor. Tirar a chave e o hook pode deixar a guarda do executor ativa. O `SUITE_PISTA=0` do RELATO pertence a outro contrato, registrado como ainda sem construção. `.gitignore:66`, `app/docs/RELATO.md:81,4356`, `app/docs/BACKLOG.md:2195`, `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:45–47,58`.
+- **O que falta.** Faltam a identificação do settings anterior e do commit a reverter, a condição de saída da rota no executor e a prova pós-desligamento. Para M5, “o ESTADO seguinte” depende de nova geração, raspagem e push bem-sucedidos. Falta provar a retirada dos tokens na publicação e esclarecer o efeito da reversão sobre `listar` e o JSON, que usam o mesmo módulo. `app/docs/PISTA.md:171–175`, `bin/relato.sh:37–38,114–147`, `bin/raia_agente.sh:80–81`, `bin/raias_estado.py:163–175`.
+- **Sobra do recorte.** A linha revisada usa um registro. A restauração de **dois** permanece no contrato original, e a instalação de dois permanece no roteiro manual e no PRONTO da ficha. `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:67,92–94,110`, `retoma_2011_0945.txt:21`.
+
+### Quem mais chama, espera ou lê o medidor
+
+**Sim.** O leitor direto no caminho de publicação é `gerar_estado.py`, que importa `ler`, `linha` e `linha_sujas`. Acima dele, o `hasner-relato.timer` aciona o serviço `oneshot`, que chama `relato.sh`. O `listar`, já nomeado na linha 1, também espera a chamada síncrona ao medidor. `bin/gerar_estado.py:211–224`, `bin/hasner-relato.timer:1–8`, `bin/hasner-relato.service:9–15`, `bin/relato.sh:37–38`, `bin/raia_agente.sh:80–81`.
+
+Há também a **CLI direta**, em JSON ou `--linhas`, com uso direto registrado no RELATO-ARQUIVO, e o **selo de host**, que importa `ler` e `linha` na fixture e é aguardado pela régua. O raspador lê o ESTADO gerado. Leitura direta do medidor por HAIKU ou pelo placar, carga do timer no host e outros consumidores externos ficam [nao verificado]. `bin/raias_estado.py:163–179`, `app/docs/RELATO-ARQUIVO.md:39288`, `bin/tests/test_raia_declarada_no_estado.sh:43–78`, `bin/regua.sh:134–145`, `bin/relato.sh:114–119`, `bin/raspar_publico.py:23–31`, `bin/gerar_estado.py:211–216`.
+
+## 20/11 10:03 · sessao 9814ae4a94d5 · E4C-F5-CONSTROI · construtor · origem=Code
+
+Diff aplicado na cópia sobre `652d3d0de`. Os únicos arquivos alterados são [disputa_emissao.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1483) e o novo [test_e4c_f5_a1_leitura_sob_trava.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:22). Conferi a sintaxe e o escopo do diff por inspeção estática. RED, verde, mutantes e contagem SQL em execução ficam **[nao verificado]**.
+
+## Cura e SQL
+
+- **A — `app/chamados/services/disputa_emissao.py::reabrir_para_correcao`.** A única mudança foi mover `_agora` para depois de `exigir_colaboradores_travados`. `_linhas` e `_donos` continuam alimentando a aquisição da mesma trava. **Zero SQL adicional** pelo diff. `app/chamados/services/disputa_emissao.py:1628–1644`.
+- **B — `app/chamados/services/disputa_emissao.py::responder_pergunta_disputa_core`.** O `refresh_from_db` parcial roda na própria `p`, depois de `_exigir` e antes de qualquer atribuição. A foto, `_validada_antes` e `_campos` usam a releitura. Os retornos antecipados e o uso de `ja_respondida` foram preservados. A auditoria pós-`atomic` recebe a validação relida e a API lê `respondida_em` da mesma instância. O dublê aceita `refresh_from_db(**kw)`. `app/chamados/services/disputa_emissao.py:1439–1553` · `app/api/views.py:2645–2664` · `app/chamados/tests/test_e4_expand.py:69–73`.
+- **SQL de B por inspeção.** Um `SELECT` adicional de pergunta. O `SELECT` existente de decisões passa a rodar também quando a carga velha estava sem os dois carimbos e a releitura encontra algum. No RED B, a resposta anterior já faz essa consulta rodar na base. Quando a releitura revela uma validação derrubada, também passa a ocorrer o `INSERT` da auditoria existente, com seu `atomic`. `app/chamados/services/disputa_emissao.py:1483–1489,1534–1545` · `app/chamados/models.py:4276–4282` · `app/core/observ.py:133–138` · `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:56–60`.
+
+| Campo relido em B | Uso |
+|---|---|
+| `resposta_colab` | Texto da resposta ou validação anterior na foto do passivo. `app/chamados/models.py:4285–4294` |
+| `respondida_em` | Decide se há resposta a fotografar e fornece o instante usado para achar a linha correspondente. `app/chamados/models.py:4276–4289` |
+| `validada_em` | Decide se há validação a fotografar e se o par deve ser limpo. Também alimenta o antes da auditoria. `app/chamados/models.py:4290–4294` · `app/chamados/services/disputa_emissao.py:1489,1499–1510,1534–1545` |
+| `validada_por_id` | Autor da validação na foto e no antes da auditoria. `app/chamados/models.py:4292–4294` · `app/chamados/services/disputa_emissao.py:1489,1544` |
+| `materializada_em` | Decide se existe carimbo a reabrir. `app/chamados/models.py:3538–3552` |
+| `via_resolucao` | Decide se a via permite descarimbar. O autor do carimbo é atribuído pelo descarimbo, que lê a via para proteger a linha fora do fato. `app/chamados/models.py:3317–3321,3413–3433,3550–3552` |
+| `data_evento` | Incluí o dia porque o ramo de escape o grava em `recusa_motivo` e o dia pode ser regravado pelo rechaveamento. `app/chamados/services/disputa_emissao.py:1514–1527` · `app/chamados/services/fio.py:843–854` |
+
+O refresh parcial preserva prefetches, como documenta o teste vizinho. A cura remove a entrada `decisoes` antes da foto e chama `linhas_da_projecao_sem_linha([p])` com `ja=None`. Quando há carimbo, esse caminho consulta `DecisaoPergunta.objects` diretamente. `app/chamados/tests/test_e4c_f5_voltaD_portas.py:371–381` · `app/chamados/services/disputa_emissao.py:1483–1488` · `app/chamados/models.py:4274–4282`.
+
+## REDs e mutantes
+
+Os dois REDs interceptam uma chamada à trava. Antes da delegação, outra instância ORM passa pela porta real `_carimbar_validacao`, que grava coluna e `VALIDACAO` com o mesmo instante. O relógio controlado avança antes de a porta em teste continuar. `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:16–46,56–71` · `app/chamados/services/validacao.py:161–175`.
+
+- **A.** Na base, a asserção da **composta nula** deve falhar. A coluna já foi limpa, mas `REABERTURA(t1)` vem antes de `VALIDACAO(t2)` na redução. **Mutante A:** mover a linha `_agora = timezone.now()` para a primeira linha do `atomic`, antes de `_linhas`. O RED A deve matar o mutante na mesma asserção. `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:48–54` · `app/chamados/models.py:4333–4351` · `app/chamados/services/disputa_emissao.py:1628–1640`.
+- **B.** Na base, a asserção da **coluna nula** deve falhar. A `RESPOSTA(False)` posterior já limpa a composta, mas `_campos` omite o par validado entre a carga e a trava. O teste também exige uma única `VALIDACAO` original, a resposta posterior e a auditoria com o antes e o depois. **Mutante B:** inserir `_validada_na_carga = p.validada_em is not None` imediatamente antes do refresh e trocar a inclusão do par por `_campos += ['validada_em', 'validada_por'] if _validada_na_carga else []`. O RED B deve matar o mutante na asserção da coluna. `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:73–88` · `app/chamados/services/disputa_emissao.py:1482–1489,1498–1510,1528–1545`.
+
+## Leitores do novo `ato_em`
+
+Em A, o instante pode mudar a ordem e o resultado de `leitura` e `composta`, o rótulo de `estado` e a face SQL `q_validada_pelo_ato`. Também pode mudar quais atos entram no horizonte de `tarefa_do_dia`, qual ato a tarefa toma como último, e quais atos a sonda de ressuscitação vê depois do seu corte. O histórico usa a ordem dos atos e o modal exibe o horário da reabertura ou recusa. `app/chamados/models.py:1591–1595,3249–3268,3563–3585,3818–3834,4225,4333–4362` · `app/chamados/services/tarefa_do_dia.py:142–169,387–429` · `app/templates/chamados/partials/modal_fio.html:205–212`.
+
+Em B, `respondida_em` e o `ato_em` da resposta continuam compartilhando o relógio sob a trava. A diferença possível para a leitura do ato e o histórico vem da foto do passivo relida. Para a auditoria, vem da validação anterior agora capturada. `app/chamados/services/disputa_emissao.py:1483–1497,1528–1545` · `app/chamados/models.py:3818–3834,4276–4295,4333–4351`.
+
+## Comandos para o Code
+
+Na cópia de ensaio da base, usar apenas o módulo novo sobre `652d3d0de` e rodar os dois comandos individuais. Para cada mutante, usar o comando individual correspondente sobre a cura com aquele patch. Os mutantes foram descritos acima. `app/chamados/tests/test_e4c_f5_a1_leitura_sob_trava.py:32,56`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput \
+  chamados.tests.test_e4c_f5_a1_leitura_sob_trava.LeituraSobTravaTest.test_RED_A_reabertura_posterior_a_validacao_limpa_coluna_e_composta
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput \
+  chamados.tests.test_e4c_f5_a1_leitura_sob_trava.LeituraSobTravaTest.test_RED_B_resposta_posterior_a_validacao_limpa_coluna_e_preserva_trilha
+```
+
+Na cópia corrigida, rodar o módulo novo e os sete vizinhos com o runner de ensaio. `app/config/settings/ci.py:6–18,38–41`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput \
+  chamados.tests.test_e4c_f5_a1_leitura_sob_trava \
+  chamados.tests.test_e4_expand \
+  chamados.tests.test_e4_expand_orm \
+  chamados.tests.test_porta_resposta_pergunta \
+  chamados.tests.test_f2_ressuscitar_tarefa_igual \
+  chamados.tests.test_e4c_f5_voltaB_sitios \
+  chamados.tests.test_e4c_f5_selo_catraca \
+  chamados.tests.test_e4c_f5_selo_chamada
+```
 
 ## 20/11 09:54 · sessao 0dc5f411bdcf · CADEIA-20-PASSO-1 · leitura · origem=Code
 
@@ -1642,81 +1743,4 @@ M4 pode usar `exigencia_das_perguntas([p.pk], agora)[p.pk][0]`, que chama `_pela
 - `materializar_perguntas_validadas_da_disputa` enfileira pela união de `q_respondida_com_texto` e `q_respondida_sem_texto`, carimbo de validação presente e materialização nula. Dentro do laço, relê e testa materialização antes da guarda de validação. A foto inicial permite contar a fila. Uma iteração anterior pode alterar o alcance efetivo de `:2128`. [app/chamados/services/materializacao.py:2108](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/services/materializacao.py:2108)
 - Para M4, `exigencia_das_perguntas([p], agora)` chama `_pela_decisao` com a carga oficial. A carga retira a reabertura marcada da sequência entregue ao leitor e usa o horizonte de `agora`. A seleção do último ato bruto para o censo pode usar a ordem do modelo `(ato_em, pk)` no prefetch. [app/chamados/models.py:4224](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/models.py:4224) [app/chamados/services/tarefa_do_dia.py:387](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/services/tarefa_do_dia.py:387) [app/chamados/services/tarefa_do_dia.py:461](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/services/tarefa_do_dia.py:461)
 
-## 20/11 03:38 · sessao 5fffde06046a · - · - · origem=Ronald (tmux)
-
-- **M2** usa `DisputaSupervisao.aberta` e `PerguntaDisputa.materializada_em`. O dia do fato vem de `_dia_de_turno_da_pergunta(p)`, que devolve `None` para conversa ou data ausente. [models.py:1979](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/models.py:1979), [models.py:3671](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/models.py:3671), [juizes.py:337](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/juizes.py:337)
-- **K6** chama `competencia_do_dia_entregue(dia, empresa, memo=None)`, que calcula a janela da empresa e invoca `competencia_entregue(empresa_id, mes, ano, registro=False, *, exportacoes=None)`. Preserve o retorno `None` como sem dia do fato. [vigia_fio.py:789](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/services/vigia_fio.py:789), [export.py:556](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/folha/export.py:556)
-- **C20** chama `dia_da_pergunta_trancado(p)`. O caminho sob tranca ativa pode invocar `get_user_sistema`, implementado com `get_or_create`. Durante a sonda, a substituição localizada desse acesso por `User.objects.only('pk').get(username='sistema')` mantém a leitura e propaga a ausência para `ERROS`. [juizes.py:979](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/juizes.py:979), [juizes.py:1228](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/juizes.py:1228), [utils.py:18](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/core/utils.py:18)
-- **M4** seleciona a última decisão real no horizonte, na ordem `ato_em, pk`. `DecisaoPergunta.es_da_ressuscitacao` verifica o ato e a marca. `exigencia_das_perguntas([p.pk], agora)[p.pk][0]` chama `_pela_decisao` com a carga oficial, que retira o ato compensador da sequência e preserva as regras de passivo e horizonte. [models.py:4225](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/models.py:4225), [models.py:4246](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/models.py:4246), [tarefa_do_dia.py:393](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/services/tarefa_do_dia.py:393), [tarefa_do_dia.py:461](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/services/tarefa_do_dia.py:461)
-- O C6 captura exceções e registra contexto por `registrar_engolido` antes de retornar uma resposta. Interceptar esse ponto durante a sonda permite informar tipo e PK sem expor o conteúdo bruto. [juizes.py:1484](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/chamados/juizes.py:1484), [observ.py:73](/home/ronald/codex_ws/f62a39996b3c6e41aa866a08e8d6c51ff17f05af/app/core/observ.py:73)
-
-## 20/11 03:28 · sessao 16df42e2324f · E4C-F5-CONSTROI · censo · origem=Code
-
-**34 menções. Em produção, 0 leituras decisórias de instância ORM com aval literal e 13 com NENHUM.** As 13 estão nas guardas e no `refresh_from_db` discriminados abaixo. O `refresh_from_db` de `validacao.py:262` conta como menção própria porque carrega a coluna usada na decisão de `validacao.py:269`. A identidade Git da cópia e qualquer comparação com `eb1e49c1e` ficam [nao verificado].
-
-## Censo por menção
-
-Os caminhos de código partem de `app/chamados/`. As linhas de `brief_c3.md` referem-se ao anexo fornecido. **V** = `validada_em`, **R** = `respondida_em`, **T** = `resposta_colab`. A coluna da matriz reproduz o que o brief pedia. O aval de **19/11 15:10, itens 1–2** determina que T permaneça na projeção e que os instantes venham do ato, conforme a composição em `models.py:4360–4362`. **NENHUM** na coluna de teste significa que procurei um assert em que a divergência alterasse o resultado **da menção recenseada**. [nao verificado]
-
-| Arquivo:linha e menção | Objeto e origem | O que o valor faz | O que a matriz mandava ler | Aval literal para ORM decisório | Assert com divergência |
-|---|---|---|---|---|---|
-| `juizes.py:1391` `p.validada_em` | Parâmetro estrutural de `:1383`; composta nos chamadores de produção (`:351–352`, `:1408–1409`, `../escala/services/cadastro_realidade.py:498–499`). Há ORM em teste de passivo (`tests/test_e4c_f5_volta2_juizes.py:60–64`). | Decide o corte de V no horizonte e o V retornado (`:1395–1396`, `:1403`); V também encerra o ramo do C6 (`:1410–1411`). | V/R/T da leitura, com horizonte; materialização e via da projeção (`brief_c3.md:33`). | —¹ | `tests/test_e4c_f5_volta2_juizes.py:56`, `:85` |
-| `juizes.py:1391` `p.respondida_em` | Mesmo parâmetro estrutural, com composta em produção (`:1383`, `:351–352`, `:1408–1409`, `../escala/services/cadastro_realidade.py:498–499`) e ORM em teste de passivo (`tests/test_e4c_f5_volta2_juizes.py:60–64`). | Decide se corta R e T e quais valores retorna (`:1397–1398`, `:1403`). | V/R/T da leitura, com horizonte; materialização e via da projeção (`brief_c3.md:33`). | —¹ | `tests/test_e4c_f5_volta2_juizes.py:41`, `:49`, `:84` |
-| `juizes.py:1560` `p.respondida_em` | Parâmetro estrutural de `:1551`; composta, por exemplo, em `:1428` e `models.py:3816`; `SimpleNamespace` de tupla SQL em `services/raiox.py:137–147`; ORM em teste de passivo (`tests/test_e4c_f5_volta2_juizes.py:60–65`). | Decide o retorno booleano junto com T (`:1560`). | R/T da leitura do ato quando o argumento for uma pergunta (`brief_c3.md:34`). | —¹ | `tests/test_e4c_f5_volta2_juizes.py:98`, `:105` |
-| `services/acoes_disputa.py:349` `perg.validada_em` | ORM, `PerguntaDisputa.objects.select_related(...).get(...)` (`:345–346`). | Decide se retorna «já validada» antes de corrigir (`:349–350`, `:374–376`). | V da leitura (`brief_c3.md:35`). | NENHUM | NENHUM |
-| `services/declaracao_texto.py:228` `perg.validada_em` | ORM, parámetro de `:217`; as portas passam a candidata do universo ORM ou a pergunta de `PerguntaDisputa.abrir` (`:250–255`, `:364–379`, `:663–669`; `services/fio.py:1960–1964`). | Decide o retorno da guarda usada pelas duas portas e pelo leitor de tela (`:228`, `:286`, `:379`, `:669`). | V da leitura (`brief_c3.md:36`). | NENHUM | NENHUM |
-| `services/disputa_emissao.py:2097` chave `'respondida_em'` | Outro, chave do dict `_antes` (`:2095–2097`). | Só foto anterior do evento (`:2107–2112`). | V da leitura e materialização da projeção na seleção; a matriz descreve essa seleção (`brief_c3.md:37`). | — | NENHUM |
-| `services/disputa_emissao.py:2097` `q.respondida_em`, condição do ternário | ORM, `q` de `_abertas`, vinda de `_d.perguntas.all()` (`:2080`, `:2084–2089`). | Escolhe entre data serializada e `None` na foto anterior (`:2097`, `:2112`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
-| `services/disputa_emissao.py:2085` `q.validada_em` | ORM, `q` da lista de `_d.perguntas.all().prefetch_related('decisoes')` (`:2080`, `:2084–2085`). | Decide entrada em `_abertas`, que alimenta o laço do carimbo (`:2084–2089`, `:2105`). | V da leitura; materialização da projeção (`brief_c3.md:37`). | NENHUM | NENHUM. O assert K47 espera que as perguntas da fixture sejam carimbadas (`tests/test_e4c_f5_voltaB_lotes.py:202–213`). |
-| `services/disputa_emissao.py:2114` chave `'respondida_em'` | Outro, chave do dict `depois` (`:2113–2115`). | Só foto posterior ao carimbo (`:2105–2108`, `:2113–2115`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
-| `services/disputa_emissao.py:2097` `q.respondida_em`, receptor de `.isoformat()` | ORM, `q` de `_abertas` (`:2080`, `:2084–2089`). | Só serializa a data da foto anterior (`:2097`, `:2112`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
-| `services/disputa_emissao.py:2114` `q.respondida_em`, condição do ternário | ORM, o mesmo `q` após `q.carimbar(...)` (`:2089`, `:2105`, `:2114`). | Escolhe entre data serializada e `None` na foto posterior (`:2113–2115`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
-| `services/disputa_emissao.py:2114` `q.respondida_em`, receptor de `.isoformat()` | ORM, o mesmo `q` após `q.carimbar(...)` (`:2089`, `:2105`, `:2114`). | Só serializa a data da foto posterior (`:2113–2115`). | V da leitura e materialização da projeção na seleção (`brief_c3.md:37`). | — | NENHUM |
-| `services/fio.py:190` `leitura.respondida_em` | Composta, `leitura = DecisaoPergunta.composta(p)` (`:189`; `models.py:4360–4362`). | Decide o retorno «espera texto», com curto-circuito antes de `respondida_sem_texto` (`:190`). | R/T da leitura, preservando o predicado (`brief_c3.md:38`). | — | `tests/test_e4c_f5_volta1_leem_o_ato.py:50`, `:57` |
-| `services/materializacao.py:202` `q.validada_em` | ORM, irmã devolvida por `metade_irma_do_intervalo` (`:195`, `:146–150`). | Decide se consulta implausibilidade e pode retornar impedimento (`:202–207`). | V da leitura da irmã (`brief_c3.md:40`). | NENHUM | NENHUM. O RED em `tests/test_e4c_f5_voltaC_sitios.py:97` exercita o outro campo, R da própria metade (`services/materializacao.py:193–197`). |
-| `services/materializacao.py:200` `q.validada_em` | ORM, irmã devolvida por `metade_irma_do_intervalo` (`:195`, `:146–150`). | Com `irma_validada=True`, decide se retorna impedimento por falta de validação da irmã (`:200–201`). | V da leitura da irmã (`brief_c3.md:39`). | NENHUM | NENHUM |
-| `services/materializacao.py:2128` `p.validada_em` | ORM, `PerguntaDisputa.objects.get(pk=p.pk)` após a trava (`:2120–2122`). | Decide se pula `_materializar_uma` (`:2128–2130`). | V da leitura após a trava; materialização da projeção (`brief_c3.md:41`). | NENHUM | NENHUM |
-| `services/validacao.py:640` `q.validada_em` | ORM, irmã devolvida por `par_do_intervalo` (`:632`; `services/materializacao.py:146–150`, `:195`, `:237`). | Decide se carimba a validação da irmã antes de materializar (`:639–643`). | V da leitura da irmã (`brief_c3.md:42`). | NENHUM | NENHUM |
-| `services/validacao.py:685` `perg.validada_em` | ORM, `PerguntaDisputa.objects.get(**filtro)` (`:673–677`). | Decide o retorno `ja_validada` antes do carimbo (`:685–687`, `:743`). | V da leitura; materialização da projeção (`brief_c3.md:43`). | NENHUM | NENHUM. O assert em `tests/test_e4c_f5_voltaB_sitios.py:108` sai por `sem_resposta`, na guarda anterior (`services/validacao.py:682–684`). |
-| `services/validacao.py:789` `'validada_em'` em `refresh_from_db` | ORM, a mesma `perg` do `.get` (`:677`, `:789`). | Recarrega V. O restante do corpo usa `materializada_em` e os resultados da porta (`:790–837`). | V da leitura na guarda de entrada; materialização da projeção (`brief_c3.md:43`). | — | NENHUM |
-| `services/validacao.py:898` `perg.validada_em` | ORM, `PerguntaDisputa.objects.select_related(...).get(...)` (`:894–895`). | Decide o retorno `ja_validada` antes de gravar motivo e reabrir (`:898–900`, `:921–927`). | V da leitura; motivo da recusa na projeção (`brief_c3.md:44`). | NENHUM | NENHUM |
-| `services/validacao.py:914` chave `'respondida_em'` | Outro, chave do dict `antes` (`:913–915`). | Só foto anterior do evento (`:935–938`). | V da leitura na guarda; motivo da recusa na projeção (`brief_c3.md:44`). | — | NENHUM |
-| `services/validacao.py:914` `perg.respondida_em`, condição do ternário | ORM, `perg` do `.get` (`:894–895`). | Escolhe entre data serializada e `None` na foto anterior (`:913–915`, `:935–938`). | V da leitura na guarda (`brief_c3.md:44`). | — | NENHUM. `tests/test_e4c_f5_voltaB_sitios.py:136–138` verifica a foto da coluna. |
-| `services/validacao.py:938` chave `'respondida_em'` | Outro, chave do dict `depois`, com `None` literal (`:935–940`). | Só foto posterior do evento (`:935–940`). | V da leitura na guarda (`brief_c3.md:44`). | — | NENHUM |
-| `services/validacao.py:914` `perg.respondida_em`, receptor de `.isoformat()` | ORM, `perg` do `.get` (`:894–895`). | Só serializa a data da foto anterior (`:913–915`, `:935–938`). | V da leitura na guarda (`brief_c3.md:44`). | — | NENHUM. `tests/test_e4c_f5_voltaB_sitios.py:136–138` verifica a foto da coluna. |
-| `services/validacao.py:1065` `perg.validada_em` | ORM, `achadas.get(ref)` sobre o mapa de `PerguntaDisputa.objects.filter(...)` (`:1057–1061`). | Decide rejeitar o item antes de chamar a ação de validação (`:1065–1067`, `:1079`). | V da leitura na guarda de entrada do lote (`brief_c3.md:45`). | NENHUM | NENHUM |
-| `services/validacao.py:1086` `perg.validada_em` | ORM, a instância do mapa relida após a ação (`:1057–1061`, `:1079–1086`). | Decide os contadores e as listas devolvidos pelo lote (`:1086–1096`). | A matriz descreve V da leitura para a guarda de entrada (`brief_c3.md:45`). | NENHUM | NENHUM |
-| `services/validacao.py:269` `perg.validada_em` | ORM, parâmetro de `:237`, vindo do `.get` do chamador e relido por `refresh_from_db` (`:677`, `:781`, `:262–263`). | Decide se limpa V/autor e registra `DEVOLUCAO` (`:269–282`). | V da leitura após o refresh; materialização, motivo e autor na projeção (`brief_c3.md:47`). | NENHUM | NENHUM |
-| `services/validacao.py:273` `perg.validada_em` (`Store`) | ORM, a instância recebida e relida (`:237`, `:262–263`, `:781`). | Escreve `None` no próprio campo após a decisão (`:269–276`). | V decisória pela leitura; a linha da matriz descreve a guarda (`brief_c3.md:47`). | — | NENHUM |
-| `services/validacao.py:262` `'validada_em'` em `refresh_from_db` | ORM, parâmetro `perg` recebido de `validar_pergunta` (`:237`, `:677`, `:781`). | Lê a coluna que alimenta a decisão de limpar V e registrar a devolução (`:262–279`); também alimenta a foto (`:181`, `:268`). | V decisória pela leitura após refresh; materialização, motivo e autor na projeção (`brief_c3.md:47`). | NENHUM | NENHUM |
-| `services/validacao.py:300` chave `'validada_em'` | Outro, chave do dict `antes`; o valor vem de `foto0` (`:268`, `:300`; `_foto_da_validacao` em `:178–182`). | Só serializa a foto anterior para o evento, depois da comparação de fotos (`:294–301`). | V decisória pela leitura na guarda (`brief_c3.md:47`). | — | NENHUM |
-| `services/validacao.py:302` chave `'validada_em'` | Outro, chave do dict `depois`, com `None` literal (`:297–304`). | Só foto posterior do evento (`:302–304`). | V decisória pela leitura na guarda (`brief_c3.md:47`). | — | NENHUM |
-| `services/validacao.py:276` `'validada_em'` em `update_fields` | ORM, a instância que recebeu `None` em `:273`. | Seleciona o próprio campo a persistir no `save` (`:273–276`). | V decisória pela leitura na guarda (`brief_c3.md:47`). | — | NENHUM |
-| `services/historico.py:100` `'respondida_em'` | Outro, `LeituraDoAto` de `DecisaoPergunta.leitura(p)`. A string vira `campo` no `getattr` (`:96–106`; `models.py:4351`). | R decide se o evento de resposta entra no histórico devolvido e fornece sua data (`:106–108`, `:114–117`). | RED-5 fora das 15 linhas: R/V/T da leitura e materialização da projeção (`brief_c3.md:49`). | — | `tests/test_e4c_f5_volta1_leem_o_ato.py:83` |
-| `services/historico.py:102` `'validada_em'` | Outro, `LeituraDoAto` de `DecisaoPergunta.leitura(p)`. A string vira `campo` no `getattr` (`:96–106`; `models.py:4351`). | V decide se o evento de validação entra no histórico devolvido e fornece sua data (`:106–108`, `:114–117`). | RED-5 fora das 15 linhas: R/V/T da leitura e materialização da projeção (`brief_c3.md:49`). | — | `tests/test_e4c_f5_volta1_leem_o_ato.py:84` |
-
-¹ Para os dois juízes, o aval **19/11 18:30, item 1c-1** diz literalmente: “ENTRE VOLTAS, chamador ainda nao convertido entrega a instancia ORM e o juiz le a COLUNA, como o main de hoje: estado TRANSITORIO declarado.” Na varredura de chamadas de produção, `RESTAM` está vazio e a única chamada reconhecida sem composta é a do `raiox`, que entrega `SimpleNamespace` de `values_list` (`tests/test_e4c_f5_selo_chamada.py:20–26`, `:124–158`, `:183–187`; `services/raiox.py:135–147`). Para esse caso, o aval **19/11 17:35, item 1(d)** diz literalmente: “allowlist nominal com motivo so para quem entrega tupla de values_list (raiox.py:147).”
-
-## Universo e alcance de `SeloTest`
-
-`SeloTest` abre exatamente duas funções de topo: `services/fio.py:178` (`espera_o_texto_do_colaborador`) e `services/historico.py:69` (`_eventos_dos_chamados`). Exige uma definição de cada e zero violações. Os únicos campos buscados são R e V. O teste auxiliar renomeia o parâmetro do fio e o alvo do histórico; o mutante passa a pergunta inteira a `respondida_sem_texto`. (`tests/test_e4c_f5_volta1_leem_o_ato.py:154–157`, `:210–251`; `tests/e4c_f5_volta2_mutantes.py:18–37`.)
-
-- **Atributo.** Captura `apelido.validada_em` ou `apelido.respondida_em` se o receptor for um `ast.Name` rastreado, inclusive em atribuição ao campo. O rastreio parte do primeiro parâmetro do fio, dos alvos de iteração de coleções cuja raiz remonta a `PerguntaDisputa`, do primeiro argumento nominal de uma chamada `.leitura(...)` e de atribuições simples entre nomes. Passam receptores como `obj.pergunta.validada_em`, `perguntas[0].validada_em` e apelidos introduzidos por atribuição anotada ou desempacotamento. `.composta(...)` por si só não é ponto de partida do rastreio. (`tests/test_e4c_f5_volta1_leem_o_ato.py:159–191`.)
-- **`getattr` com apelido.** Captura `apelido = p; getattr(apelido, 'validada_em')` se `p` for rastreado. A regra de string literal vale também para `ler = getattr; ler(apelido, 'validada_em')`, pois inspeciona os argumentos posicionais após o primeiro. Para `getattr(apelido, campo)`, busca constantes em qualquer lista ou tupla dentro da função, sem vincular `campo` à coleção. Passam nomes de campo construídos dinamicamente quando nenhuma constante procurada aparece nessas listas ou tuplas, bem como a chamada por apelido da função com `campo` variável quando o literal só existe fora dos argumentos. Também passa um receptor que o rastreio não reconhece. (`tests/test_e4c_f5_volta1_leem_o_ato.py:173–179`, `:192–207`.)
-- **`update_fields=`.** `apelido.save(update_fields=['validada_em'])` passa. O receptor do método não conta como primeiro argumento posicional e o selo não percorre os keywords da chamada. A forma `PerguntaDisputa.save(apelido, update_fields=['validada_em'])` também passa, mesmo com `apelido` rastreado. (`tests/test_e4c_f5_volta1_leem_o_ato.py:192–207`; ocorrência em `services/validacao.py:276`.)
-- **`refresh_from_db(fields=...)`.** `apelido.refresh_from_db(fields=['validada_em'])` passa pela mesma regra. Os dois `refresh_from_db` recenseados estão em `validacao.py`, fora dos dois corpos que o selo abre. (`tests/test_e4c_f5_volta1_leem_o_ato.py:192–218`; `services/validacao.py:262`, `:789`.)
-
-## Contagens e sítios ausentes
-
-| Contagem | Total |
-|---|---:|
-| Menções do `censo_crus.txt`, incluindo repetições e histórico | **34** |
-| ORM que decide em produção, com aval literal | **0** |
-| ORM que decide em produção, com NENHUM | **13** |
-
-As 13 são `acoes_disputa.py:349`, `declaracao_texto.py:228`, `disputa_emissao.py:2085`, `materializacao.py:200`, `:202`, `:2128` e `validacao.py:262`, `:269`, `:640`, `:685`, `:898`, `:1065`, `:1086`, todos em `services/`.
-
-- **Único dos 15 com zero menções:** `leitura_da_resposta`. O sítio do inventário tem `getattr(perg, 'resposta_colab', '')`; o censo procurou R e V. A definição aparece no anexo com zero ocorrências (`quinze.txt:15`; `brief_c3.md:46`; `templatetags/chamados_tags.py:145–178`, em especial `:166`).
-- **Citados à parte no inventário:** `particao_do_app` e o leitor de `becos` constam da nota após os 15. Na cópia, ambos passam `DecisaoPergunta.composta(p)` ao juiz sem mencionar R ou V nesses corpos. O estado deles na base de comparação fica [nao verificado]. (`quinze.txt:19`; `services/pergunta_no_app.py:80–92`; `services/becos.py:25–35`.)
-
-_7480 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7482 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
