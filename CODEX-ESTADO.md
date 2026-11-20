@@ -1,7 +1,689 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 18:52** · publicado em **20/11/2026 18:54** (UTC-3)
+> Ultima resposta processada: **20/11/2026 18:55** · publicado em **20/11/2026 19:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 18:55 · sessao 51a596ddf1e6 · E4C-F5-CONSTROI · leitura · origem=Code
+
+### `app/chamados/tests/test_main_dois_casos.py`
+
+```python
+import json
+from contextlib import contextmanager
+from datetime import timedelta
+from unittest.mock import patch
+
+from django.contrib.auth.models import User
+from django.db import transaction
+from django.test import TransactionTestCase
+from freezegun import freeze_time
+
+from chamados.models import DecisaoPergunta as D
+from chamados.models import DisputaSupervisao, PerguntaDisputa as P, _OPCOES_ESCAPE_FALTA
+from chamados.services import disputa_emissao as E
+from chamados.services import materializacao as M
+from chamados.services import validacao
+from chamados.tests import cortes_f2_f9_apoio as apoio
+from core.models import LogAuditoria
+from escala.models import CelulaDia
+from ponto.models import Ausencia
+from ponto.services.ausencia import decidir
+from ponto.services.cartorio import calado
+
+# apoio_a1c_c8eb.py.txt:24–28 e app/chamados/tests/cortes_f2_f9_apoio.py:30
+T1 = apoio.AGORA
+T0 = T1 - timedelta(seconds=2)
+T2 = T1 + timedelta(seconds=1)
+T3 = T1 + timedelta(seconds=2)
+DIA = T1.date()
+
+
+@contextmanager
+def medida(cenario):
+    fatos = dict(
+        apos_passagem=None,
+        antes=None,
+        depois=None,
+        retorno_retirada=None,
+        retornos_devolucao=[],
+        nao_devolvidas=None,
+        sem_contagem_na_trilha=None,
+    )
+    try:
+        yield fatos
+    except Exception as erro:
+        fatos["tipo_excecao"] = type(erro).__name__
+        raise
+    finally:
+        print(
+            f"MEDIDA: {cenario} | "
+            + json.dumps(fatos, default=lambda valor: valor.isoformat()),
+            flush=True,
+        )
+
+
+class MainDoisCasosTest(TransactionTestCase):
+    def _preparar(self):
+        # apoio_a1c_c8eb.py.txt:32–39 e app/chamados/tests/cortes_f2_f9_apoio.py:39–44
+        self.relogio = self.enterContext(freeze_time(T0))
+        self.enterContext(calado())
+        apoio.BaseCortes.setUpTestData.__func__(type(self))
+        self.usuario = User.objects.create_user(username="col01")
+        self.colab.usuario = self.usuario
+        self.colab.save(update_fields=["usuario"])
+        self.disputa = DisputaSupervisao.objects.create(colaborador=self.colab, contexto={})
+
+    def _escape(self, tipo="escolha"):
+        # apoio_a1c_c8eb.py.txt:41–47
+        p, criada = P.abrir_conversa(
+            disputa=self.disputa, motivo="saida_sem_entrada", pergunta="Por que faltou?",
+            tipo_resposta=tipo, opcoes=list(_OPCOES_ESCAPE_FALTA),
+        )
+        if not criada or p.data_evento != DIA:
+            self.fail("CENARIO NAO MONTAVEL: o escape não nasceu no dia da ausência.")
+        return p
+
+    def _irma_muda(self):
+        # apoio_a1c_c8eb.py.txt:73–78
+        p, criada = P.abrir_conversa(
+            disputa=self.disputa, motivo="intervalo_saida",
+            pergunta="A que horas saiu para o intervalo?", tipo_resposta="hora",
+        )
+        if not criada or p.data_evento != DIA:
+            self.fail("CENARIO NAO MONTAVEL: a irmã muda não nasceu no dia da ausência.")
+        return p
+
+    def _irma_com_luz(self):
+        # apoio_a1c_c8eb.py.txt:49–63
+        celula = CelulaDia.objects.create(
+            colaborador=self.colab, data=DIA, trabalha=True, origem="gerada",
+            dna={"marcos": {"hf": "19:00"}},
+        )
+        celula.lavrar_veredito(
+            via="cartorio", veredito="concorde", agora=T0,
+            ata={"lampadas": [{"tipo": "S", "hora": "19:00", "acesa": True, "luz": "19:00"}]},
+        )
+        p, criada = P.abrir(
+            disputa=self.disputa, motivo="orfao_14h", data_evento=DIA,
+            pergunta="A que horas saiu?", tipo_resposta="hora",
+        )
+        if not criada or p.celula_id != celula.pk:
+            self.fail("CENARIO NAO MONTAVEL: a irmã de hora não nasceu vinculada à célula.")
+        return p
+
+    def _responder(self, p, texto):
+        # apoio_a1c_c8eb.py.txt:80–83
+        p.refresh_from_db()
+        ok, erro = E.responder_pergunta_disputa_core(
+            p, texto, self.usuario, ja_respondida=p.respondida_em is not None,
+        )
+        if not ok:
+            self.fail(f"CENARIO NAO MONTAVEL: a porta de resposta recusou {texto!r} ({erro}).")
+
+    @staticmethod
+    def _trilha(p):
+        # apoio_a1c_c8eb.py.txt:138–140 e app/chamados/services/materializacao.py:1067–1071
+        return LogAuditoria.objects.filter(
+            acao=M.ACAO_IRMA_VIVA_NA_AUSENCIA, modelo="PerguntaDisputa", objeto_id=p.pk,
+        )
+
+    def _foto_grupo(self, ausencia):
+        ausencia.refresh_from_db()
+        perguntas = {}
+        contadas = {}
+        qs = P.objects.filter(disputa_id=self.disputa.pk).order_by("pk").prefetch_related("decisoes")
+        for p in qs:
+            leitura = D.leitura(p)
+            perguntas[p.pk] = dict(
+                tipo=p.tipo_resposta,
+                estado=p.estado,
+                via_resolucao=p.via_resolucao,
+                materializada_em=p.materializada_em,
+                resposta_composta=leitura.resposta_colab,
+                respondida_composta_em=leitura.respondida_em,
+                validada_composta_em=leitura.validada_em,
+                atos=[
+                    dict(pk=ato.pk, ato=ato.ato, instante=ato.ato_em)
+                    for ato in p.decisoes.all()
+                ],
+            )
+            contadas[p.pk] = self._trilha(p).filter(valor_depois__ausencia_pk=ausencia.pk).count()
+        return dict(
+            ausencia_pk=ausencia.pk,
+            status_ausencia=ausencia.status,
+            perguntas_absorvidas_por=[p.pk for p in M.perguntas_absorvidas_por(ausencia)],
+            perguntas=perguntas,
+            contadas_na_trilha=contadas,
+        )
+
+    @staticmethod
+    def _novas_reaberturas(antes, depois):
+        atos_antes = {
+            ato["pk"] for p in antes["perguntas"].values() for ato in p["atos"]
+        }
+        return {
+            pk for pk, p in depois["perguntas"].items()
+            if p["estado"] == P.PENDENTE and any(
+                ato["ato"] == D.REABERTURA and ato["pk"] not in atos_antes
+                for ato in p["atos"]
+            )
+        }
+
+    def _medir_rejeicao(self, fatos, escape, irma, *, retirar=False):
+        self.relogio.move_to(T1)
+        self._responder(escape, "ATESTADO")
+        try:
+            ausencia = Ausencia.objects.get(colaborador=self.colab, data=DIA, tipo="atestado")
+        except Ausencia.DoesNotExist:
+            self.fail("CENARIO NAO MONTAVEL: a passagem não criou o atestado do dia.")
+
+        montado = fatos["apos_passagem"] = self._foto_grupo(ausencia)
+        if retirar:
+            self.relogio.move_to(T2)
+            fatos["retorno_retirada"] = E.reabrir_para_correcao(
+                P.objects.filter(pk=escape.pk), por=self.admin, motivo="Retirada da âncora",
+            )
+        antes = fatos["antes"] = self._foto_grupo(ausencia)
+
+        devolver_real = M.devolver_absorvidas_da_ausencia_rejeitada
+        chamadas = fatos["retornos_devolucao"]
+
+        def observar_devolucao(a):
+            chamada = dict(ausencia_pk=a.pk, status=a.status)
+            chamadas.append(chamada)
+            chamada["retorno"] = devolver_real(a)
+            return chamada["retorno"]
+
+        self.relogio.move_to(T3)
+        # app/ponto/signals.py:259–279
+        with patch.object(M, "devolver_absorvidas_da_ausencia_rejeitada", new=observar_devolucao):
+            rejeitada = decidir(ausencia, "rejeitada", por=self.admin, motivo="Teste de rejeição") [nao verificado]
+        fatos["retorno_decidir"] = dict(pk=rejeitada.pk, status=rejeitada.status)
+        depois = fatos["depois"] = self._foto_grupo(ausencia)
+
+        reabertas_antes = self._novas_reaberturas(montado, antes)
+        reabertas_na_rejeicao = self._novas_reaberturas(antes, depois)
+        candidatas = {pk for pk, p in antes["perguntas"].items() if p["tipo"] == "hora"}
+        nao_devolvidas = candidatas - reabertas_antes - reabertas_na_rejeicao
+        contadas = {pk for pk, n in depois["contadas_na_trilha"].items() if n}
+        fatos.update(
+            reabertas_antes=sorted(reabertas_antes),
+            reabertas_na_rejeicao=sorted(reabertas_na_rejeicao),
+            nao_devolvidas=sorted(nao_devolvidas),
+            sem_contagem_na_trilha=sorted(nao_devolvidas - contadas),
+        )
+
+        self.assertEqual(depois["status_ausencia"], "rejeitada", "[M1] A ausência ficou rejeitada.")
+        self.assertTrue(
+            any(c["ausencia_pk"] == ausencia.pk and c["status"] == "rejeitada"
+                and "retorno" in c for c in chamadas),
+            "[M2] O callback real foi chamado com esta ausência rejeitada e retornou.",
+        )
+        vias_esperadas = {irma.pk: P.VIA_AUSENCIA_DIA}
+        if retirar:
+            vias_esperadas = {irma.pk: P.VIA_DECLARACAO, escape.pk: P.VIA_AUSENCIA_DIA}
+        fotos = montado["perguntas"]
+        campos = ("tipo", "estado", "via_resolucao", "materializada_em")
+        observado = {"perguntas": {
+            pk: tuple(fotos[pk][campo] for campo in campos) for pk in vias_esperadas
+        }}
+        esperado = {"perguntas": {
+            pk: ("hora", P.RESOLVIDA, via, T1) for pk, via in vias_esperadas.items()
+        }}
+        if retirar:
+            observado["grupo"] = sorted(montado["perguntas_absorvidas_por"])
+            esperado["grupo"] = sorted([escape.pk, irma.pk])
+            observado["retorno_retirada"] = fatos["retorno_retirada"]
+            esperado["retorno_retirada"] = 1
+        else:
+            observado["escape_tipo"] = fotos[escape.pk]["tipo"]
+            esperado["escape_tipo"] = "escolha"
+        self.assertEqual(observado, esperado, "[M3] A montagem divergiu da foto do anexo.")
+        self.assertEqual(
+            fatos["sem_contagem_na_trilha"], [],
+            "[R] Há perguntas de hora sem reabertura e sem linha de trilha desta ausência.",
+        )
+
+    def test_escolha_sem_ancora_e_atestado_rejeitado(self):
+        with medida("grupo escolha sem âncora") as fatos:
+            self._preparar()
+            escape = self._escape()
+            irma = self._irma_muda()
+            self._medir_rejeicao(fatos, escape, irma)
+
+    def test_ancora_retirada_e_atestado_rejeitado(self):
+        with medida("grupo âncora retirada após formação") as fatos:
+            self._preparar()
+            irma = self._irma_com_luz()
+            ancora = self._escape("hora")
+            self._responder(irma, "19:02")
+            with transaction.atomic():
+                P.trava_do_colaborador(self.colab.pk)
+                irma.refresh_from_db()
+                validacao._carimbar_validacao(irma, self.admin)
+            self._medir_rejeicao(fatos, ancora, irma, retirar=True)
+```
+
+Label para rodar a partir de `app/` na cópia descartável. (`app/manage.py:18`, `app/config/settings/ci.py:6`)
+
+```bash
+python3 manage.py test chamados.tests.test_main_dois_casos --settings=config.settings.ci
+```
+
+O `[M3]` usa a foto `apos_passagem`. No cenário sem âncora, `ausencia_dia` é a via esperada da irmã muda. No cenário ancorado, é a via esperada da própria pergunta de hora que recebe `ATESTADO`. A irmã com luz tem `declaracao` na foto do anexo. (`medida_dos_dois_em_c8eb.txt:1–2`, `app/chamados/models.py:2655`, `app/chamados/models.py:2683`)
+
+### Nome ausente → substituto
+
+| Nome procurado | Substituto e referência |
+|---|---|
+| `chamados.tests.test_e4c_f5_a1c_passagem_da_ausencia` e `PassagemDaAusenciaTest` | Fixtures locais com `BaseCortes.setUpTestData` do MAIN. Import procurado em `app/chamados/tests/`. (`medida_c8eb.py.txt:20`, `apoio_a1c_c8eb.py.txt:31–39`, `app/chamados/tests/cortes_f2_f9_apoio.py:37–44`) |
+| `a1c.T0`, `a1c.T1`, `a1c.T2`, `a1c.T3`, `a1c.DIA` | Constantes locais derivadas de `apoio.AGORA`, com os deslocamentos do anexo. (`apoio_a1c_c8eb.py.txt:24–28`, `app/chamados/tests/cortes_f2_f9_apoio.py:30`) |
+| `PassagemDaAusenciaTest._escape`, `._irma_muda`, `._irma_da_celula`, `._irma_com_luz` | `_escape` e `_irma_muda` locais. `_irma_com_luz` local incorpora a fixture da célula com luz acesa. (`apoio_a1c_c8eb.py.txt:41–63`, `apoio_a1c_c8eb.py.txt:73–78`, `app/chamados/models.py:2963`, `app/chamados/models.py:2981`, `app/escala/models.py:1819`) |
+| `PassagemDaAusenciaTest._responder`, `._passagem`, `._ausencia` | `_responder` local, avanço para `T1` com resposta `ATESTADO` e consulta direta do atestado pela mesma chave. (`apoio_a1c_c8eb.py.txt:80–104`, `apoio_a1c_c8eb.py.txt:135–136`, `app/chamados/services/disputa_emissao.py:1439`, `app/chamados/services/disputa_emissao.py:1560–1563`, `app/ponto/models.py:660`) |
+| `PassagemDaAusenciaTest._trilha` | `_trilha` local sobre o mesmo `LogAuditoria`, filtrando ação, modelo, PK e `valor_depois__ausencia_pk`. O PK é passado como inteiro, conforme o campo `objeto_id`. (`apoio_a1c_c8eb.py.txt:138–140`, `app/chamados/services/materializacao.py:1067–1071`, `app/chamados/services/materializacao.py:1089`, `app/core/models.py:296–301`) |
+| `DecisaoPergunta.composta` | `DecisaoPergunta.leitura` para os três campos compostos da foto. (`apoio_a1c_c8eb.py.txt:120`, `app/chamados/models.py:4295–4326`) |
+| `chamados.services.vigia_ato_x_coluna.contar` | Sem substituto para o placar A/B do anexo. O módulo foi procurado em `app/chamados/services/`. A medida pedida lê `PerguntaDisputa.estado`, os atos persistidos e a trilha da ausência. (`medida_c8eb.py.txt:18`, `app/chamados/models.py:3226`, `app/chamados/models.py:4166–4168`, `app/chamados/services/materializacao.py:1067–1071`) |
+
+### Passos sem caminho de produção localizado
+
+- Nenhum nos dois cenários. As referências para passagem, assinatura da irmã, retirada administrativa, rejeição e callback são `app/chamados/services/disputa_emissao.py:1560–1563`, `app/chamados/services/validacao.py:161–175`, `app/chamados/services/disputa_emissao.py:1584`, `app/ponto/services/ausencia.py:1057–1088` e `app/ponto/signals.py:259–279`.
+- Montagem e resultados em execução no MAIN [nao verificado].
+
+## 20/11 18:54 · sessao 04615e8207bf · E4C-F5-CONSTROI · sonda · origem=Code
+
+```python
+"""
+Sonda para bin/sonda_leitura.sh em produção, sem --sombra. O envelope
+executa o Python no shell Django, schema juliani, com a role leitor e
+a árvore montada em leitura. bin/sonda_leitura.sh:93, :140, :153, :235, :239.
+
+Autoridades do funil
+
+- Pergunta de hora: PerguntaDisputa.tipo_resposta e a entrada 'hora' do
+  catálogo. É o recorte do próprio leitor da devolução.
+  app/chamados/models.py:2629; app/chamados/catalogo/respostas.py:20;
+  app/chamados/services/materializacao.py:1121.
+- Resolvida neste funil: materializada_em preenchido, o carimbo que o leitor
+  da devolução exige. O rótulo PerguntaDisputa.estado também consulta a
+  validação da sequência e, conforme o caso, o C6. A sonda informa
+  separadamente quantas desse recorte têm o rótulo confirmado pelas faces
+  SQL e quantas ficam indeterminadas sem rodar o motor.
+  app/chamados/services/materializacao.py:1121;
+  app/chamados/models.py:3226, :3539, :3569; app/chamados/juizes.py:1470.
+- Via: via_resolucao e as constantes VIA_AUSENCIA_DIA e VIA_DECLARACAO.
+  app/chamados/models.py:2655, :2683, :2748.
+- Ato e ausência ligada: DecisaoPergunta.ABSORCAO e o FK absorcao_ausencia
+  da linha selecionada. A ordem da sequência é (ato_em, pk).
+  app/chamados/models.py:4152, :4166, :4178, :4199, :4202.
+- REJEITADA: Ausencia.status == 'rejeitada'.
+  app/ponto/models.py:704, :809; app/chamados/services/materializacao.py:1154.
+- Outra ausência: efeito 'cobranca', no colaborador e no dia da ausência
+  ligada, como na guarda da devolução. A carga chama _pelo_efeito e
+  _q_cobertura da árvore. O próprio efeito exclui a rejeitada.
+  app/chamados/services/materializacao.py:1146, :1161;
+  app/ponto/turnos.py:2523, :2768, :2773;
+  app/chamados/services/carga_pergunta_viva.py:99.
+- Competência: data_evento e empresa do colaborador da pergunta.
+  _competencia chama janela_atual e usa o mês e ano do fim da janela.
+  Entregue é o resultado de competencia_entregue com as exportações já
+  anotadas por anotar_vigencia. Sem data_evento, o K6 fica sem consulta.
+  app/chamados/models.py:2610, :2620;
+  app/chamados/services/materializacao.py:788;
+  app/chamados/services/passivo_validado.py:86; app/ponto/janelas.py:36, :60;
+  app/folha/export.py:556; app/folha/models.py:192, :203.
+
+LACUNA DE AUTORIDADE — ABSORÇÃO VIGENTE
+
+A árvore tem um escritor do carimbo, escritores que o retiram ou trocam
+a via e um leitor da decisão efetiva da tarefa. Um juiz único que defina
+“ABSORÇÃO vigente” para esta contagem [nao verificado]. A sonda publica
+as três leituras abaixo, cada uma com o funil completo.
+
+- carimbo_do_ato: ABSORCAO cujo ato_em coincide com materializada_em na
+  via atual. Se há várias linhas no mesmo instante, a sonda usa a última
+  pela ordem do modelo. O escritor grava o mesmo instante no carimbo e
+  no ato. Descarimbar tira instante e via. Retratar pode trocar só a via.
+  app/chamados/services/materializacao.py:1047, :1059;
+  app/chamados/models.py:2217, :3399, :3485, :4199.
+- sequencia_sem_desfazimento: última ABSORCAO após o último ato que
+  registra a retirada do carimbo ou a troca da via por retratação.
+  REABERTURA e RECUSA vêm de ATOS_COM_FOTO, usado pelo escritor que
+  descarimba. A REABERTURA compensadora também tira o carimbo.
+  app/chamados/models.py:4164, :1694, :2217;
+  app/chamados/services/disputa_emissao.py:1627, :1639, :1656.
+- ato_lido_na_tarefa: ABSORCAO que _pela_decisao lê como efetiva.
+  O leitor pode conservar o ato diante de respostas que preservam a
+  validação, ignora a reabertura compensadora e distingue o passivo sem
+  linha. Quando lê ABSORCAO, ela é a última ABSORCAO da sequência visível.
+  app/chamados/services/tarefa_do_dia.py:142, :154, :158, :184, :390, :425;
+  app/chamados/models.py:4220, :4237, :4295.
+"""
+
+import json
+
+
+LEITURAS = (
+    "carimbo_do_ato",
+    "sequencia_sem_desfazimento",
+    "ato_lido_na_tarefa",
+)
+DEGRAUS = (
+    "perguntas_de_hora",
+    "resolvidas",
+    "nas_duas_vias",
+    "com_ato_absorcao",
+    "com_absorcao_vigente",
+    "com_ausencia_ligada",
+    "ligada_rejeitada",
+    "sem_outra_ausencia_cobrindo_o_dia",
+)
+REJEITADA = "rejeitada"  # app/ponto/models.py:704, :809.
+
+
+def ler_absorcoes(alvo, agora):
+    # app/chamados/models.py:4199; app/chamados/services/tarefa_do_dia.py:390.
+    linhas = (
+        D.objects.filter(pergunta_id__in=alvo.order_by().values("pk"))
+        .select_related("pergunta__disputa", "absorcao_ausencia")
+        .only(
+            "pk", "pergunta", "ato", "ato_em", "ato_texto",
+            "da_ressuscitacao", "resposta_mantem_validacao",
+            "absorcao_ausencia", "absorcao_ausencia__status",
+            "absorcao_ausencia__colaborador", "absorcao_ausencia__data",
+            "pergunta__disputa", "pergunta__disputa__chamado",
+            "pergunta__chamado_destino", "pergunta__materializada_em",
+            "pergunta__respondida_em", "pergunta__validada_em",
+            "pergunta__validada_por", "pergunta__resposta_colab",
+        )
+        .order_by("pergunta_id", *D._meta.ordering)
+        .iterator(chunk_size=5000)
+    )
+    desfazem = (*D.ATOS_COM_FOTO, D.RETRATACAO)
+    leituras_absorcao = {
+        "absorvida_aprovada", "absorcao_rejeitada",
+        "absorcao_aguarda_documento", "absorcao_pendente",
+    }  # app/chamados/services/tarefa_do_dia.py:184.
+
+    por_pergunta = {}
+    for pk, grupo in groupby(linhas, key=attrgetter("pergunta_id")):
+        atos = list(grupo)
+        if not any(d.ato == D.ABSORCAO for d in atos):
+            continue
+        p = atos[0].pergunta
+        carimbo = sequencia = ultima_visivel = None
+        visiveis = []
+        for d in atos:
+            visivel = d.ato_em <= agora and not D.es_da_ressuscitacao(d)
+            if visivel:
+                visiveis.append(d)
+            if d.ato in desfazem:
+                sequencia = None
+            elif d.ato == D.ABSORCAO:
+                sequencia = d
+                if d.ato_em == p.materializada_em:
+                    carimbo = d
+                if visivel:
+                    ultima_visivel = d
+
+        tarefa = None
+        if ultima_visivel is not None:
+            # O passivo usa as linhas reais; a leitura usa a vista cortada.
+            # app/chamados/services/tarefa_do_dia.py:402, :425, :431.
+            ja = {(pk, d.ato, d.ato_em) for d in atos
+                  if d.ato in (D.RESPOSTA, D.VALIDACAO)}
+            passivo = (pk,) if any(
+                linha["ato_em"] <= agora
+                for linha in D.linhas_da_projecao_sem_linha([p], ja)
+            ) else ()
+            vista = SimpleNamespace(
+                pk=pk, resposta_colab=p.resposta_colab,
+                respondida_em=(
+                    p.respondida_em
+                    if p.respondida_em is not None and p.respondida_em <= agora
+                    else None
+                ),
+                validada_em=(
+                    p.validada_em
+                    if p.validada_em is not None and p.validada_em <= agora
+                    else None
+                ),
+                validada_por_id=p.validada_por_id,
+                decisoes=SimpleNamespace(all=lambda: visiveis),
+            )
+            # Só se usa a classificação do ato. Fila, lavra e efeitos não
+            # decidem o ramo ABSORCAO. app/chamados/services/tarefa_do_dia.py:152, :173, :184.
+            razao, _ = _pela_decisao(
+                p, visiveis, {}, frozenset(), passivo,
+                leitura=D.leitura(vista),
+            )
+            if razao in leituras_absorcao:
+                tarefa = ultima_visivel
+
+        por_pergunta[pk] = dict(zip(LEITURAS, (carimbo, sequencia, tarefa)))
+    return por_pergunta
+
+
+def ler_cobertura(absorcoes):
+    pares = {
+        (ausencia.colaborador_id, ausencia.data)
+        for leituras in absorcoes.values()
+        for ato in leituras.values()
+        if ato is not None
+        for ausencia in (ato.absorcao_ausencia,)
+        if ausencia is not None and ausencia.status == REJEITADA
+    }
+    if not pares:
+        return set()
+    dias = [dia for _, dia in pares]
+    # O mesmo recorte SQL é aplicado em memória para cada par distinto. [nao verificado]
+    # app/ponto/turnos.py:2523, :2773;
+    # app/chamados/services/carga_pergunta_viva.py:10, :99.
+    qs = _pelo_efeito(
+        Ausencia.objects.filter(colaborador_id__in={cid for cid, _ in pares}),
+        "cobranca",
+    ).filter(_q_cobertura(min(dias), max(dias))).only(
+        "colaborador", "data", "data_fim", "tipo",
+    ).order_by("colaborador_id")
+    por_colaborador = {
+        cid: LinhasLidas(grupo)
+        for cid, grupo in groupby(
+            qs.iterator(chunk_size=5000), key=attrgetter("colaborador_id"),
+        )
+    }
+    return {
+        (cid, dia) for cid, dia in pares
+        if cid in por_colaborador
+        and por_colaborador[cid].filter(_q_cobertura(dia, dia)).exists()
+    }
+
+
+def ler_entregues(chaves):
+    # app/chamados/services/tarefa_do_dia.py:558;
+    # app/folha/models.py:203; app/folha/export.py:580.
+    if not chaves:
+        return {}
+    registros = list(ExportacaoDominio.objects.filter(
+        empresa_id__in={e for e, _, _ in chaves},
+        mes__in={m for _, m, _ in chaves},
+        ano__in={a for _, _, a in chaves},
+    ).only("pk", "empresa", "mes", "ano", "invalidada_em").order_by())
+    por_chave = defaultdict(list)
+    for registro in anotar_vigencia(registros):
+        por_chave[registro.empresa_id, registro.mes, registro.ano].append(registro)
+    return {
+        chave: competencia_entregue(*chave, exportacoes=por_chave[chave])
+        for chave in chaves
+    }
+
+
+def nivel_com_absorcao(ato, cobertos):
+    if ato is None:
+        return 4
+    ausencia = ato.absorcao_ausencia
+    if ausencia is None:
+        return 5
+    if ausencia.status != REJEITADA:
+        return 6
+    if (ausencia.colaborador_id, ausencia.data) in cobertos:
+        return 7
+    return 8
+
+
+def novo_funil():
+    return {leitura: Counter(dict.fromkeys(DEGRAUS, 0)) for leitura in LEITURAS}
+
+
+def medir():
+    vias = (P.VIA_AUSENCIA_DIA, P.VIA_DECLARACAO)
+    # app/chamados/catalogo/respostas.py:20;
+    # app/chamados/services/materializacao.py:1121.
+    base = P.objects.filter(tipo_resposta="hora")
+    alvo = base.filter(materializada_em__isnull=False, via_resolucao__in=vias)
+    agora = timezone.now()
+    absorcoes = ler_absorcoes(alvo, agora)
+    cobertos = ler_cobertura(absorcoes)
+
+    # q_vivas é um superconjunto por contrato. Estar fora dele, ou ter
+    # validação pelo ato, basta para confirmar RESOLVIDA com carimbo.
+    # app/chamados/models.py:3235, :3539, :3580.
+    perguntas = base.annotate(
+        estado_confirmado=Case(
+            When(
+                Q(materializada_em__isnull=False)
+                & (P.q_validada_pelo_ato() | ~P.q_vivas()),
+                then=Value(True),
+            ),
+            default=Value(False),
+            output_field=BooleanField(),
+        ),
+    ).order_by("pk").values_list(
+        "pk", "colaborador__empresa_id",
+        "colaborador__empresa__dia_inicio_competencia",
+        "data_evento", "materializada_em", "via_resolucao", "estado_confirmado",
+    ).iterator(chunk_size=5000)
+
+    total = novo_funil()
+    empresas = defaultdict(novo_funil)
+    competencias = defaultdict(novo_funil)
+    finais = {leitura: defaultdict(list) for leitura in LEITURAS}
+    for pk, empresa, corte, dia, carimbo, via, confirmado in perguntas:
+        mes = ano = None
+        if dia is not None:
+            mes, ano = _competencia(
+                dia, SimpleNamespace(dia_inicio_competencia=corte),
+            )
+        chave = (empresa, mes, ano)
+        destinos = (total, empresas[empresa], competencias[chave])
+        nivel_base = 1
+        if carimbo is not None:
+            nivel_base = 3 if via in vias else 2
+        atos = absorcoes.get(pk) if nivel_base == 3 else None
+
+        for leitura in LEITURAS:
+            nivel = nivel_base if atos is None else nivel_com_absorcao(
+                atos[leitura], cobertos,
+            )
+            for destino in destinos:
+                contagem = destino[leitura]
+                contagem.update(DEGRAUS[:nivel])
+                if nivel >= 2:
+                    faixa = "confirmadas" if confirmado else "indeterminadas"
+                    contagem["rotulo_resolvida_" + faixa] += 1
+                    if nivel == len(DEGRAUS):
+                        contagem["rotulo_resolvida_no_final_" + faixa] += 1
+            if nivel == len(DEGRAUS):
+                finais[leitura][chave].append(pk)
+
+    entregues = ler_entregues({c for c in competencias if c[1] is not None})
+    saida = []
+    for empresa in sorted(empresas):
+        saida.append({
+            "tipo": "empresa", "empresa_pk": empresa, "funis": empresas[empresa],
+        })
+    for chave in sorted(competencias, key=lambda c: (c[0], c[2] or 0, c[1] or 0)):
+        empresa, mes, ano = chave
+        saida.append({
+            "tipo": "competencia",
+            "empresa_pk": empresa,
+            "competencia": f"{ano:04d}-{mes:02d}" if mes is not None else None,
+            "entregue": entregues.get(chave),
+            "funis": competencias[chave],
+        })
+    for leitura, grupos in finais.items():
+        pks = {True: [], False: [], None: []}
+        for chave, lista in grupos.items():
+            pks[entregues.get(chave)].extend(lista)
+        saida.append({
+            "tipo": "casos_finais", "leitura": leitura,
+            "pergunta_pks_entregue": sorted(pks[True]),
+            "pergunta_pks_nao_entregue": sorted(pks[False]),
+            "pergunta_pks_sem_competencia": sorted(pks[None]),
+        })
+    saida.append({"tipo": "total", "status": "OK", "funis": total})
+    return saida
+
+
+try:
+    from collections import Counter, defaultdict
+    from itertools import groupby
+    from operator import attrgetter
+    from types import SimpleNamespace
+
+    from django.db import connection, transaction
+    from django.db.models import BooleanField, Case, Q, Value, When
+    from django.utils import timezone
+
+    from chamados.models import DecisaoPergunta as D, PerguntaDisputa as P
+    from chamados.services.carga_pergunta_viva import LinhasLidas
+    from chamados.services.passivo_validado import _competencia
+    from chamados.services.tarefa_do_dia import _pela_decisao
+    from folha.export import competencia_entregue
+    from folha.models import ExportacaoDominio, anotar_vigencia
+    from ponto.models import Ausencia
+    from ponto.turnos import _pelo_efeito, _q_cobertura
+
+    # Até 5 SELECTs de dados: decisões e perguntas (1 cada), cobertura
+    # (0 ou 1), exportações (0 ou 1), anotação da vigência (0 ou 1).
+    # Mais um SET TRANSACTION e o controle da transação. A contagem é de
+    # consultas lógicas da sonda, à parte do bootstrap e das operações
+    # de cursor do backend. app/folha/models.py:203; bin/sonda_leitura.sh:235.
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+        linhas_json = [
+            json.dumps(linha, ensure_ascii=True, allow_nan=False)
+            for linha in medir()
+        ]
+    for linha_json in linhas_json:
+        print(linha_json, flush=True)
+except BaseException as exc:
+    print(json.dumps({
+        "tipo": "total",
+        "status": "INCONCLUSIVO",
+        "tipo_excecao": type(exc).__name__,
+    }, ensure_ascii=True), flush=True)
+    raise SystemExit(1) from None
+
+
+# O que a sonda não mede
+#
+# - O estado RESOLVIDA exato nos casos indeterminados e a materialização de
+#   fato. Essas respostas podem exigir o C6 e a apuração de testemunhas.
+#   Os campos rotulo_resolvida_* mostram o limite inferior e a parcela
+#   indeterminada do recorte. Campo de contagem ausente nessa família vale
+#   zero. app/chamados/models.py:3226; app/chamados/juizes.py:666, :1470.
+# - Ligações inferidas do legado sem ato. O carimbo legado pode aparecer
+#   até o degrau das vias. A reconstrução pelo escape, carimbo e batida
+#   pertence a outro leitor. app/chamados/services/materializacao.py:1101, :1121.
+# - Entrega quando falta o dia do fato. Nessa saída, competência e entregue
+#   são null. K6 mede TXT vigente para a tripla da empresa.
+#   app/chamados/services/materializacao.py:794; app/folha/export.py:556.
+# - Execução e contagens de produção [nao verificado]. O anexo é um molde
+#   de script e não contém resultados desta contagem [nao verificado].
+#   O JSONL e o tratamento de exceções são do Python. O envelope emite
+#   mensagens próprias e provisiona credencial, permissões e trilha.
+#   bin/sonda_leitura.sh:126, :140, :153, :216, :221, :239, :248.
+```
 
 ## 20/11 18:52 · sessao 8c14b0a44809 · E4C-F5-CONSTROI · censo · origem=Code
 
@@ -1535,134 +2217,4 @@ mutar plantio_motivo_c6 "$s144.test_RED_passivo_foto_velha_recusa_par_e_mesa_val
 mutar e1_sem_avanco "$a2.test_RED_c1_prefetch_le_reabertura_apos_select_e_preserva_banco_limpo"
 ```
 
-## 20/11 15:31 · sessao d296c67d3c78 · E4C-F5-CONSTROI · verificador · origem=Code
-
-1. **BLOQUEIA · Dois testes existentes foram editados fora do recorte do aval H4.** As duas edições preservam as asserções. `medir_fio` perde apenas o alias local `as calc`, que não era lido. O `patch` com `wraps`, a contagem de consultas e as verificações de leitura e prefetch continuam. Em `voltaD`, `p=p, ato_validado=ato_validado` fixa os valores da iteração que já eram usados quando o mock rodava dentro dela. Continuam as verificações do PK carregado, do par, da contagem de materializações e do carimbo. O motivo do bloqueio é o escopo da edição. O aval anexado delimita os testes da H4, e autorização adicional para esses dois ajustes está **[nao verificado]**. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:154–186` · `app/chamados/tests/test_e4c_f5_voltaD_portas.py:248–270`
-
-2. **FILA · O reexport entrega o mesmo adaptador a todos os consumidores encontrados.** No lado anterior do diff, o segundo import já sobrescrevia o nome trazido por B4.4. Agora há uma única atribuição pública, `responder_pergunta_disputa_core_da_entrada as responder_pergunta_disputa_core`. O adaptador chama o escritor com `veta_absorcao_vigente=True`. A correção administrativa continua importando o serviço direto, cujo default é `False`. Nenhum dos consumidores abaixo troca de função por causa deste delta. `app/chamados/models.py:4588–4596` · `app/chamados/services/disputa_emissao.py:1439,1587–1594` · `app/chamados/services/acoes_disputa.py:374–384`
-
-   - **Produção.** Web/PWA, API, declaração do colaborador e aplicação administrativa da declaração recebem o adaptador. `app/chamados/views.py:1276–1278` · `app/api/views.py:2652–2653` · `app/chamados/services/declaracao_texto.py:318–319,421–423,693–697`
-   - **Testes que importam o nome.** H4, `test_escape_outro_motivo`, `test_c4_resgate`, `test_reresposta_invalida_validacao`, `test_perguntas_dia_inteiro` e os dois métodos de `test_porta_arquivo_silencio` recebem o adaptador. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:19,139–140` · `app/chamados/tests/test_escape_outro_motivo.py:5–12` · `app/chamados/tests/test_c4_resgate.py:13–14` · `app/chamados/tests/test_reresposta_invalida_validacao.py:21–23` · `app/chamados/tests/test_perguntas_dia_inteiro.py:32–34` · `app/chamados/tests/test_porta_arquivo_silencio.py:212–223,237–248`
-   - **Mocks e apelidos.** Os dois `patch.object(models, ..., wraps=...)` de `voltaB` envolvem o adaptador e interceptam os imports locais da API e do Web. O censo textual e por AST encontrou esses dois patches, sem outro import do símbolo por apelido ou `patch('chamados.models.responder_pergunta_disputa_core')` literal. Nome montado dinamicamente ou acesso durante importação parcial **[nao verificado]**. `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:12–15,82–95,141–150` · `app/chamados/models.py:4588–4596`
-
-3. **CORRIGE · A foto cobre mais efeitos do escritor e ainda deixa escritas observáveis de fora.** `_janela_h4` compara a foto pós-passagem com a foto após o veto e exige lista vazia de callbacks novos no intervalo capturado. O caminho exercitado responde `19:02` no mesmo PK. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:32–34,176–195,219–253`
-
-   | O que o aceite escreve ou agenda | O que a foto enxerga |
-   |---|---|
-   | `PerguntaDisputa.resposta_colab` e `respondida_em`. Quando cabível, limpa `validada_em` e `validada_por`, limpa o trio `materializada_em`/`materializada_por`/`via_resolucao` das vias sem lastro, ou grava `recusa_motivo` nos escapes de contestação. | **Sim**, todos os campos e os valores compostos de resposta e validação. A foto também passou a registrar os três campos da lavra, que o mutante escreve. `app/chamados/services/disputa_emissao.py:1499–1532` · `app/chamados/models.py:3566–3580` · `app/chamados/veredito_lavrado.py:254–281` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:184–190` |
-   | `DecisaoPergunta.RESPOSTA`, com instante, autor, texto e `resposta_mantem_validacao=False`. Promove também eventuais linhas de `RESPOSTA` e `VALIDACAO` do passivo da projeção. | **Sim**, linhas completas do PK da irmã, incluindo a `ABSORCAO` anterior. `app/chamados/services/disputa_emissao.py:1491–1493,1532–1537` · `app/chamados/models.py:4313–4323,4436–4452` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:190` |
-   | `LogAuditoria` de `resp_pergunta_gravada` e, quando cai uma assinatura, `validacao_desfeita_por_resposta`. `FollowupChamado` de resposta no chamado-pai da disputa, com deduplicação por chave. | **Sim**, linhas completas da auditoria daquela pergunta e das notas daquele pai. `app/chamados/services/disputa_emissao.py:1538–1560,1568–1581` · `app/chamados/services/nota.py:87–109` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:173–174,191–193` |
-   | `EventoCelula` síncrono pelo `post_save` da pergunta e pela inserção dos atos. | **Sim**, para a célula escolhida por FK ou por colaborador e dia. A muda tem célula por essa segunda busca e o teste exige aumento dos eventos durante a passagem. Eventos de outras células e alterações na própria `CelulaDia` ficam fora. `app/chamados/signals.py:252–259` · `app/chamados/models.py:3472–3497,4451–4452` · `app/ponto/portas/celula.py:945–954` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:180–183,216–238` |
-   | Resgate em `ChamadoColaborador`: limpa os três campos do silêncio, carimba `resgatado_em`, atualiza `atualizado_em` e grava auditoria `resgatar_por_resposta`. O alvo pode ser o destino ou o pai. | **Parcial**. A foto lê os quatro campos de arquivo do destino montado. Ficam fora `atualizado_em`, o log cujo modelo é `ChamadoColaborador` e o estado do pai quando ele é o alvo do resgate. Uma escrita isolada em `atualizado_em` deixaria a foto igual. `app/chamados/services/materializacao.py:1238–1250` · `app/chamados/services/arquivo.py:130–138,199–212` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:173–174,179–194` |
-   | `on_commit(_fechar)` do `post_save` da pergunta. A aquisição inicial da trava também pode registrar `_TravaDoColaborador`, um callback sem efeito ao executar. | **Parcial**. A captura começa depois da passagem, que já tomou a trava do mesmo dono. O teste distingue um novo callback registrado após esse ponto e o controle aceito exige algum callback. A identidade e a execução dos callbacks, o sentinela inicial e os efeitos do fechamento pós-commit ficam fora. `app/chamados/signals.py:229–240` · `app/chamados/services/becos.py:80–94` · `app/chamados/services/trava_do_colaborador.py:19–47` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:227–253` |
-   | Em `FALTA_DIA` ou `ATESTADO`, a resposta pode criar, reaproveitar ou reabrir `Ausencia`. A passagem carimba irmãs, insere `ABSORCAO`, audita tentativas recusadas e pode fechar destinos e disputa. A ausência pode acordar a projeção e agenda seu consumidor. O fechamento da disputa pode produzir nota no pai, carimbos adicionais e agendar a retomada de regularizações. | **Fora do aceite de `19:02`**. A foto só alcançaria efeitos que caíssem no PK, na célula, nas notas do pai ou no intervalo de callbacks já observados. Linhas de ausência, demais irmãs, estado dos chamados e da disputa, auditorias desses objetos e efeitos posteriores ao commit ficam fora. `app/chamados/services/disputa_emissao.py:1563–1566` · `app/chamados/services/materializacao.py:1027–1115,1125–1128` · `app/ponto/services/ausencia.py:433–443,559–562,581–599` · `app/ponto/signals.py:250–279` · `app/chamados/signals.py:19–46,122–165` |
-
-   A foto também exclui o envelope. Web e API registram recusas fora do core, e as declarações podem agregar motivo, abrir ou reapontar antes de chamar o escritor. Uma saída normal com erro H4 pode conservar essas escritas anteriores. `app/chamados/views.py:1276–1282` · `app/core/respostas.py:54–56` · `app/api/views.py:2652–2658` · `app/chamados/services/disputa_emissao.py:544–580,620–644` · `app/chamados/services/declaracao_texto.py:350–379,419–423,656–669,693–699`
-
-4. **CORRIGE · Os 11 mutantes têm uma asserção que os distingue por leitura.** As 11 substituições e a antecipação têm âncora única e compilam isoladamente. Execução Django e resultado dos REDs **[nao verificado]**. Nas referências da tabela, **H4** é `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py`.
-
-   | Mutação | Onde a diferença aparece |
-   |---|---|
-   | `h4_veto_grava_recusa` | Nos dois REDs da janela, o retorno continua igual e a foto acusa `recusa_motivo`. O `save` também agenda o callback de beco. H4:39–42,184–189,251–263 · `app/chamados/signals.py:229–240` |
-   | `h4_veto_relavra` | Nos dois REDs, a lavra grava `julgado_em=T2`, além de recalcular veredito e janela. A foto compara o trio. H4:43–46,188–189,222–253 · `app/chamados/veredito_lavrado.py:254–281` |
-   | `h4_veto_acorda_celula` | Nos dois REDs, acrescenta `EventoCelula`. Na muda a FK segue nula, mas a célula existe por colaborador e dia. H4:47–50,180–192,216–253 · `app/chamados/models.py:3479–3497` |
-   | `h4_veto_agenda_callback` | Nos dois REDs, a foto de tabelas pode ficar igual. A lista de callbacks contém o `lambda` e diverge de `[]`. H4:51–53,239–263 |
-   | `h4_resposta_sem_resgate` | Nos dois **controles de aceite** com guarda antecipada, o destino fica arquivado. Os REDs de recusa, sob essa mutação isolada, passam por preservar o arquivo. H4:54–56,245–271 · `app/chamados/services/materializacao.py:1238–1250` |
-   | `h4_ordena_por_instante` | O posterior inserido com data T0 ainda passa. O posterior inserido **e datado** em T2 vem primeiro em `-ato_em`; a `ABSORCAO` T1 vem por último e rearma o veto. A asserção de aceite falha para `RECUSA` e `REABERTURA`. H4:57,382–419 · `app/chamados/models.py:4417–4425` |
-   | `h4_ordena_pk_descendente` | Nos dois casos de ato posterior, a ordem invertida põe a `ABSORCAO` por último e rearma o veto. H4:58,382–419 · `app/chamados/models.py:4417–4425` |
-   | `h4_ignora_instante_do_carimbo` | No carimbo novo T2, a `ABSORCAO` antiga T1 volta a confirmar o veto. A asserção exige aceite em T3. H4:59–62,421–437 · `app/chamados/models.py:4414–4425` |
-   | `h4_resposta_mantem_validacao` | No controle da validação isolada, as colunas continuam limpas, mas a composta conserva a assinatura. A asserção da composta distingue. H4:63–66,326–349 · `app/chamados/services/disputa_emissao.py:1503–1514,1535–1537` · `app/chamados/models.py:4333–4345,4370–4379` |
-   | `h4_veto_so_sem_validacao` | Na coexistência de validação e absorção, o mutante aceita `19:03` e a asserção exige `(False, ERRO_H4)`. H4:67–70,351–362 · `app/chamados/services/disputa_emissao.py:1485–1490` |
-   | `h4_declaracao_colab_ignora_validacao` | Com `19:03` distinto da resposta gravada, a declaração cai no escritor, que devolve o veto H4. O estado muda de `validada_sem_registro` para `resposta_invalida`. `retorno.get('pergunta_id')` permite que a divergência apareça na asserção, sem `KeyError`. H4:71–73,543–558 · `app/chamados/services/declaracao_texto.py:414–423` |
-   | Guarda antecipada | As duas instâncias anteriores à passagem ainda estão sem carimbo. A decisão antecipada deixa seguir, desliga o veto tardio e conserva o `refresh_from_db()`. Os dois REDs falham no retorno e os dois controles exigem a escrita aceita. O controle de reabertura distingue a ordem inversa, mas o método executa só a versão normal. H4:98–111,219–271,273–291 · `app/chamados/services/disputa_emissao.py:1478–1490` |
-
-   O seletor dos 11 mutantes é lido **dentro** dos testes. O executor antigo `e4c_f5_volta3_mutantes.py` resolve o nome na sua própria tabela antes de rodar a suíte. Passar um nome H4 como argumento desse executor falha antes da asserção. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:35–38,77–111` · `app/chamados/tests/e4c_f5_volta3_mutantes.py:80–112`
-
-5. **CORRIGE · Há asserções de controle que passam sem H4 e dois limites de prova nas declarações.** O carimbo de declaração sem ato e a validação isolada exigem apenas o aceite e seus efeitos. Os controles de aceite com a guarda antecipada também não provam o veto tardio. Já os dois métodos novos, de ato datado depois e de carimbo em outro instante, têm um veto basal **antes** de preparar o caso de aceite. A asserção final de aceite sozinha passaria sem H4, mas os métodos completos falhariam no veto basal. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:265–271,293–303,326–349,382–437`
-
-   - `test_RED_aplicar_declaracao_recusa_com_pk_e_sem_validar` prova o envelope e a ausência de linha `VALIDACAO`. Uma chamada indevida à validação antes de devolver o mesmo erro ainda passa, pois a porta devolve `sem_resposta` antes de gravar. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:532–541` · `app/chamados/services/declaracao_texto.py:689–699` · `app/chamados/services/validacao.py:697–701`
-   - `test_controle_declaracoes_barram_validacao_vigente_antes_do_core` distingue o mutante cadastrado, mas o retorno e a contagem de atos ficariam iguais se o core fosse chamado, vetasse, e o chamador ainda devolvesse `validada_sem_registro`. A asserção não observa a ausência da chamada. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:543–558` · `app/chamados/services/declaracao_texto.py:380–423,670–699`
-
-6. **CORRIGE · Os arranjos usam as portas de escrita, com sequências de fixture que ainda não demonstram alcance em produção.** A resposta ao escape, a passagem e o registro de `ABSORCAO` são reais. O delta remove os três usos diretos de `_carimbar_validacao` e a inserção direta de `RECUSA`/`REABERTURA` por `D.registrar` no teste H4. As demais escritas cruas de montagem são usuário/vínculo, criação e associação da disputa ao pai e criação de células. A pergunta é aberta pelas portas reutilizadas de A1(c). `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:114–133,158–171,206–218,305–324,382–404,498–517,543–547` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:41–83` · `app/chamados/services/materializacao.py:1055–1090`
-
-   - **Validação sem plantio.** O helper dá a `admin_decidiu` o papel de carimbo temporário para pular o plantio, valida pela porta pública e limpa o carimbo com `descarimbar`. As portas de baixo nível permitem a sequência. O descarimbo de produção por falta de lastro exclui vias de identidade, entre elas `admin_decidiu`. Há prova da regra sobre a foto construída, e alcance dessa sequência por um fluxo normal **[nao verificado]**. Isso não demonstra que toda coexistência de validação e absorção seja inalcançável. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:305–324,351–362` · `app/chamados/services/validacao.py:760–803` · `app/chamados/models.py:2720,3416–3439,3451–3461` · `app/chamados/services/relavra_via.py:171–184,236–248`
-   - **Ato posterior com carimbo de pé.** `reabrir_para_correcao` grava o ato e limpa o carimbo. O teste then o repõe com o relógio antigo T1. No subcaso `RECUSA`, chama o escritor de baixo nível: a recusa pública sairia em `ja_pendente` para a irmã muda. Nas portas lidas, a passagem e o fechamento/plantio usam o relógio do ato e não demonstram essa reposição retrodatada. O estado é construível pela porta do modelo. Um fluxo de produção que entregue exatamente essa sequência está **[nao verificado]**. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:382–419` · `app/chamados/services/disputa_emissao.py:1642–1685,2054–2059` · `app/chamados/services/validacao.py:915–944` · `app/chamados/services/materializacao.py:1036–1038,1072–1090,2004–2013`
-   - **Carimbo novo na mesma via.** O teste recarimba diretamente pelo modelo em T2 um PK que já tem `ABSORCAO` T1. `carimbar` permite sobrescrever o trio se suas guardas permitirem. A passagem pula a irmã já carimbada, e o plantio seleciona as sem carimbo. Um chamador de produção que reproduza esse recarimbo específico está **[nao verificado]**. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:421–437` · `app/chamados/models.py:3353–3405` · `app/chamados/services/materializacao.py:1036–1038,1068–1073,2103–2112`
-
-7. **CORRIGE · Volta 1, achados 3 e 7.** O **3** segue aberto. O descarimbo sem lastro preserva a linha histórica, mas a falta do carimbo atual faz `absorcao_vigente` devolver `False` sem `REABERTURA` nem `RECUSA`. Isso mantém a tensão entre a exigência de confirmação atual e o “só” da escolha 3. A docstring reconhece a fragilidade do carimbo, porém inclui a retratação pela célula entre os escritores sem a trava. Esse caminho **toma** a trava antes de gravar e usa a instância selecionada antes dela, sem releitura. O escritor de `fantasma` continua com o `save` fora dessa trava. Intercalação e incidência em produção **[nao verificado]**. `app/chamados/models.py:3451–3461,3552–3560,4405–4425` · `app/chamados/services/relavra_via.py:219–252` · `app/chamados/reconciliador.py:635–646,696–724,1188–1209`
-
-   O **7** fecha as omissões de `recusa_motivo`, lavra, conteúdo de notas/logs/eventos, fallback da célula muda e registro de callbacks após a passagem. Continuam os limites da foto do achado 3 desta volta e a interposição no mesmo `TestCase`, com `calado()` e callback sem execução. O teste T2 de A1(c) já exige `False` e `RECUSA_PAR_ATO_COLUNA`. Cenário com duas conexões e sinais normais **[nao verificado]**. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:126–156,176–253` · `app/chamados/tests/cortes_f2_f9_apoio.py:37–44` · `app/ponto/services/cartorio.py:119–129` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:458–471`
-
-8. **CORRIGE · Volta 1, achados 8 e 9, e classes de reprovação no delta.** O **8** fecha os contraexemplos de ordenação temporal descendente e de igualdade de instantes por leitura, com as asserções e os limites dos achados 4 e 5. O **9** fecha o binding duplicado e documenta as quatro entradas e a exceção administrativa. Continua a divergência do comentário Q2, que diz “CINCO sítios”, frente ao selo vivo que conta três e inclui `responder_automaticamente`. A exclusividade escrita em `composta` continua ao lado da consulta H4. B4.6 só conta funções de módulo, o selo de vitalidade pula `models.py` e o selo de escrita mede escritas, portanto esses selos não certificam a fronteira de leitura H4. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:382–437` · `app/chamados/models.py:4382–4390,4401–4425,4588–4596` · `app/core/portas.py:258–275` · `app/chamados/tests/test_porta_resposta_pergunta.py:65–76,100–134` · `app/chamados/tests/test_contract_deus_objeto.py:19–28` · `app/chamados/tests/test_contract_leitores_vitalidade.py:317–349`
-
-   Na classe **campo com dois significados**, o delta não introduz um segundo significado persistido em produção. As vias `declaracao` e `ausencia_dia` já têm outras origens, e H4 continua exigindo a linha vinculada no mesmo instante. O uso de `admin_decidiu` como artifício é da fixture. Na classe **relógio fora da borda**, o teste usa `freeze_time(T0)`, `move_to` e instantes explícitos onde monta os casos. O relógio da resposta segue depois da trava, da releitura e do veto. Na classe **teste existente fora do aval**, vale o bloqueio do achado 1. `app/chamados/models.py:2683,4409–4425` · `app/chamados/services/materializacao.py:1991–2013` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:126–129,305–324,382–437` · `app/chamados/services/disputa_emissao.py:1478–1501`
-
-9. **FILA · Limite da verificação.** Os cinco blobs alterados conferem com os prefixos do diff anexado. A associação da cópia inteira ao commit `c2601465ff019b02b2785d27fb4237463be9c58f` está **[nao verificado]**, pois a cópia não tem `.git`. A revisão foi somente leitura. Suíte, mutantes em Django, frequência em produção por empresa e competência e casos em competência exportada **[nao verificado]**. `app/chamados/models.py:4403,4588` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:38` · `app/chamados/tests/test_e4c_f5_volta2_juizes.py:154` · `app/chamados/tests/test_e4c_f5_voltaD_portas.py:248` · `app/co
-
-[truncado em 20000 de 20017 caracteres]
-
-## 20/11 15:23 · sessao 9da86883cc2d · E4C-F5-CONSTROI · construtor · origem=Code
-
-Editei somente [test_e4c_f5_h4_resposta_apos_absorcao.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:176). Conferi a sintaxe e a aplicação e restauração dos 11 mutantes novos em memória. A leitura isolada de `absorcao_vigente` distinguiu os três mutantes de ordem e instante. Suíte Django e falhas nas asserções de negócio ficam para certificação pelo Code e pelo Opus final. [Mutantes](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:38) · [nao verificado] [nao verificado]
-
-**Foto e portas**
-
-- A foto passou a ler `recusa_motivo` da pergunta e os três campos da lavra por `foto_da_lavra`. Para eventos, busca a célula pela FK e depois por colaborador e dia, na mesma ordem da produção. A irmã muda ganha uma célula após nascer, conserva a FK nula depois da passagem e precisa mostrar eventos novos na foto. Auditoria, eventos e notas são comparados pelo conteúdo das linhas. [Foto](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:176) · [Motivo](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:2770) · [Lavra](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/veredito_lavrado.py:279) · [Busca da célula](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3479) [nao verificado]
-- A captura real de `on_commit` começa depois da foto da passagem. Os dois vetos esperam zero callbacks novos, e os dois controles que aceitam exigem que a captura encontre callbacks. [Janela H4](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:227) · [Captura usada pela suíte](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e2_celula_regenerada_reavalia.py:227) · [Callback do `post_save`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/signals.py:229) [nao verificado]
-- Substituí as três chamadas a `_carimbar_validacao` por `validar_pergunta`. O arranjo usa um carimbo administrativo temporário para a porta pular o plantio, depois chama `descarimbar` e exige assinatura vigente, disputa aberta e ausência de batida plantada. Substituí `registrar` por `reabrir_para_correcao` com o ato de cada subcaso e repus o carimbo T1 pela porta `carimbar`. A recusa administrativa devolve `ja_pendente` para a muda, e a porta de devolução limpa o carimbo. O caso D chega ao estado pela própria porta `carimbar`, com a mesma via em T2. [Arranjo da validação](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:305) · [Plantio na validação](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:783) · [Recusa da muda](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:919) · [Devolução](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1664) · [Casos C e D](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:382)
-
-**Testes novos e alterados** [nao verificado]
-
-| Teste | Mutação de uma linha e asserção esperada | [nao verificado]
-|---|---|
-| [Janela com luz](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:255) e [janela muda](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:260) | Inserir antes do mesmo retorno do veto uma gravação de motivo, uma relavra, uma emissão de evento ou um `on_commit`. As três primeiras quebram a foto e a quarta quebra a lista vazia de callbacks. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1490) |
-| [Controles de aceite com luz](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:265) e [muda](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:269) | Desligar o ramo do resgate deixa o destino arquivado depois do aceite com a guarda antecipada. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:1240) |
-| [Validação isolada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:326) | Gravar `resposta_mantem_validacao=True` mantém a assinatura na composta depois da resposta. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1537) |
-| [Validação com absorção](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:351) | Exigir validação vazia para vetar causa aceite onde se espera o erro H4. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1489) |
-| [Ordem existente, ato posterior datado T0](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:409) | `order_by('-pk')` faz o leitor vetar nos subcasos de `RECUSA` e `REABERTURA`. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4417) |
-| [C novo, ato posterior datado T2](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:415) | `order_by('-ato_em', 'pk')` lê primeiro `RECUSA` ou `REABERTURA` de T2 e acaba vetando pela `ABSORCAO` de T1. Os dois subcasos esperam aceite. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4417) |
-| [D novo, carimbo T2 e absorção T1](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:421) | Retirar a igualdade de instantes causa veto com a única `ABSORCAO` histórica do mesmo PK. O teste espera aceite. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4421) | [nao verificado]
-| [Declarações com validação vigente](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:543) | Desligar a guarda da declaração do colaborador faz a chamada chegar ao veto H4 e retornar `resposta_invalida`; o teste espera `validada_sem_registro` com o PK. [Linha mutada](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/declaracao_texto.py:380) | [nao verificado]
-
-**Comandos para o Code**, a partir de `app/`. O seletor aplica um mutante por execução. O mutante já existente de guarda antecipada deve derrubar os dois REDs no retorno H4 e preservar o aceite nos dois controles. [Seletor e mutantes](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:38) · [nao verificado]
-
-```bash
-h4=chamados.tests.test_e4c_f5_h4_resposta_apos_absorcao.RespostaAposAbsorcaoTest
-luz=test_RED_h4_irma_com_luz_recusa_e_preserva_foto
-muda=test_RED_h4_irma_muda_recusa_e_preserva_foto
-controle_luz=test_controle_mutante_aceita_irma_com_luz
-controle_muda=test_controle_mutante_aceita_irma_muda
-
-teste_h4() {
-    local mutante="$1"
-    shift
-    local -a casos=()
-    local caso
-    for caso in "$@"; do
-        casos+=("$h4.$caso")
-    done
-    PYTHONDONTWRITEBYTECODE=1 F5_VOLTA3_MUTANTE="$mutante" python3 manage.py test "${casos[@]}"
-}
-
-PYTHONDONTWRITEBYTECODE=1 F5_VOLTA3_MUTANTE= python3 manage.py test "$h4"
-teste_h4 h4_guarda_antecipada "$luz" "$muda" "$controle_luz" "$controle_muda"
-teste_h4 h4_veto_grava_recusa "$luz" "$muda"
-teste_h4 h4_veto_relavra "$luz" "$muda"
-teste_h4 h4_veto_acorda_celula "$luz" "$muda"
-teste_h4 h4_veto_agenda_callback "$luz" "$muda"
-teste_h4 h4_resposta_sem_resgate "$controle_luz" "$controle_muda"
-teste_h4 h4_resposta_mantem_validacao test_controle_validacao_sozinha_antes_da_trava_aceita
-teste_h4 h4_veto_so_sem_validacao test_RED_validacao_vigente_com_absorcao_confirmada_recusa
-teste_h4 h4_ordena_pk_descendente test_RED_ato_inserido_depois_encerra_vigencia_com_carimbo_de_pe
-teste_h4 h4_ordena_por_instante test_RED_ato_inserido_e_datado_depois_encerra_vigencia_com_carimbo_de_pe
-teste_h4 h4_ignora_instante_do_carimbo test_RED_novo_carimbo_da_mesma_via_sem_absorcao_no_instante_aceita
-teste_h4 h4_declaracao_colab_ignora_validacao test_controle_declaracoes_barram_validacao_vigente_antes_do_core
-```
-
-**Produção e aval**
-
-- **Compatibilidade sequencial, escolha (1).** Por leitura, uma irmã muda absorvida, em disputa aberta, com marco esperado às 19h, pode receber correção administrativa para 07h. A resposta fica gravada com o carimbo da absorção, e a validação recusa a hora implausível. Sem luz concordante, o C6 deixa passar um POST posterior, que agora recebe o veto H4. A mudança ocorre em sequência, fora da janela autorizada. O controle existente cobre a correção seguida de validação bem-sucedida. [Correção](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/acoes_disputa.py:374) · [Recusa da validação](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:720) · [C6](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/juizes.py:1428) · [Veto H4](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1489) · [Controle existente](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:560) · [nao verificado]
-- **Alcance da escolha (3).** Para C e D apliquei as duas condições do aval aprovado. `RECUSA` e `REABERTURA` encerram por ordem de inserção, e a confirmação exige correspondência com o carimbo atual. Se o carimbo for removido pela porta que limpa os três campos, o leitor perde a confirmação mesmo com a `ABSORCAO` histórica e sem ato posterior. Esse é o limite da leitura literal de “vigência termina só”. [Descarimbo](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3451) · [Leitor H4](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4402) [nao verificado]
-- A reprodução do POST sequencial e o ensaio em duas conexões com o consumidor do outbox ficaram fora de A–E. O segundo exigiria intercalar o carimbo `fantasma` entre a releitura da pergunta e a consulta das decisões. Ambos ficam como achados de leitura. [Fronteira do veto](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1478) · [Escrita do consumidor](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/reconciliador.py:1188) · [nao verificado]
-
-_7590 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7592 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
