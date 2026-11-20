@@ -1,7 +1,208 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 10:40** · publicado em **20/11/2026 10:42** (UTC-3)
+> Ultima resposta processada: **20/11/2026 10:45** · publicado em **20/11/2026 10:48** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 10:45 · sessao d6f223219c45 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**E4C-F5-CONSTROI · E-ITEM1-DEVOLUCAO**
+
+### Item 1
+
+- `devolver_validacao_recusada` descarta só o prefetch de `decisoes` depois do refresh parcial. A coluna preenchida basta para entrar na guarda. Com a coluna nula, a guarda e a foto inicial compartilham a leitura fresca de `DecisaoPergunta.composta`. No caminho comum, a guarda acrescenta zero `SELECT`s e a foto posterior acrescenta um `SELECT` de decisões. [validacao.py:269](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:269) · [models.py:4329](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4329)
+- Em **A**, a devolução grava `DEVOLUCAO` pela porta existente, mantém a coluna nula e, com a foto padrão, emite `validacao_devolvida` com o instante da validação no antes e `None` no depois. Retorna `True`. Em **B**, a coluna preenchida aciona a mesma escrita. Nasce uma `DEVOLUCAO`, como na guarda anterior, e a composta segue sem validação vigente. [validacao.py:283](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:283) · [validacao.py:309](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:309) · [models.py:4342](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4342)
+- A catraca aceitou a guarda na execução em memória com **zero entradas novas de allowlist**. Na Volta D, inverti a expectativa de A para `True` e **uma** `DEVOLUCAO`. O caso comum cobre uma devolução, um evento e retorno `None` na repetição. [test_e4c_f5_selo_catraca.py:298](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:298) · [test_e4c_f5_voltaD_portas.py:390](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:390) · [teste novo:137](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item1_devolucao_ato_ou_coluna.py:137) [nao verificado]
+
+### Chamadores da foto e de `antes=`
+
+| Chamador | Efeito |
+|---|---|
+| `devolver_validacao_recusada` | A foto inicial usa `antes=` quando fornecido. A foto padrão passa a ver o ato em A. A foto final relê a composta após gravar `DEVOLUCAO`. [validacao.py:283](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:283) · [validacao.py:297](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:297) |
+| `validar_pergunta` | Tira a foto antes do carimbo e a passa em `antes=`. A guarda anterior já barra A, e a foto preserva o carimbo em B. O resultado da comparação nos estados concordantes permanece igual. A foto pré-carimbo com coluna nula faz um `SELECT` adicional de decisões nesse chamador. [validacao.py:698](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:698) · [validacao.py:732](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:732) · [validacao.py:798](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:798) |
+| `test_devolver_le_a_disputa_do_banco_e_reabre` | Passa em `antes=` a foto tirada antes do carimbo e do fechamento em outra instância. A expectativa de reabrir a disputa permanece. [test_pvmuda_carimbo_em_voo.py:140](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_pvmuda_carimbo_em_voo.py:140) |
+| `test_A11_devolucao_conserva_resposta_e_2x_um_ato` | O teste instrumentado passou a executar a foto real com uma composta dublada. Passou localmente com as mesmas asserções. [test_e4_expand.py:144](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4_expand.py:144) | [nao verificado]
+
+### REDs e mutantes
+
+| RED | Mutante | Primeira asserção que deve falhar no ORM |
+|---|---|---|
+| A | `item1_so_coluna` | Espera uma `DEVOLUCAO` e recebe zero. [Linha 83](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item1_devolucao_ato_ou_coluna.py:83) |
+| A, trilha | `item1_foto_so_coluna` | A linha é gravada, mas o retorno é `None` e o evento não sai. [Linha 86](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item1_devolucao_ato_ou_coluna.py:86) |
+| B | `item1_so_ato` | A coluna conserva o instante anterior. [Linha 108](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item1_devolucao_ato_ou_coluna.py:108) |
+| PREFETCH | `item1_prefetch_velho` | Espera uma `DEVOLUCAO` e recebe zero. [Linha 126](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item1_devolucao_ato_ou_coluna.py:126) |
+
+Comandos para o Code, usando o seletor em memória do repositório. [cortes_f2_f9_apoio.py:78](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/cortes_f2_f9_apoio.py:78)
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
+item1=chamados.tests.test_e4c_f5_item1_devolucao_ato_ou_coluna
+caso="$item1.DevolucaoAtoOuColunaTest"
+
+python3 manage.py test "$item1" chamados.tests.test_e4c_f5_selo_catraca \
+  chamados.tests.test_e4c_f5_voltaD_portas.PortasVoltaDTest.test_devolucao_e_o_escritor_da_coluna
+
+CORTES_F2_MUTANTE=item1_so_coluna python3 manage.py test "$caso.test_RED_A_devolve_ato_e_deixa_trilha"
+CORTES_F2_MUTANTE=item1_foto_so_coluna python3 manage.py test "$caso.test_RED_A_devolve_ato_e_deixa_trilha"
+CORTES_F2_MUTANTE=item1_so_ato python3 manage.py test "$caso.test_RED_B_limpa_coluna_mesmo_sem_validacao_vigente"
+CORTES_F2_MUTANTE=item1_prefetch_velho python3 manage.py test "$caso.test_RED_PREFETCH_enxerga_validacao_posterior_a_carga"
+
+python3 manage.py test chamados.tests.test_e4c_f5_item4_medida_relogio_comum
+```
+
+### Item 4 e limites
+
+**Espero vermelho na linha 72.** A medição interpõe a porta humana em T2, relê a irmã na entrada de `carimbar` após a trava existente e mantém T1. Escolhi uma ata `concorde`, com marco aceso às 19:00 e resposta às 19:02. O C6 dá a pergunta por encerrada no ramo de concordância com o marco, e `carimbar` persiste a coluna em T1. A `RESPOSTA(False)` de T2 vence a validação sintética na composta. A simulação em memória reproduziu B. A execução ORM está **[nao verificado]**. [medida:39](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item4_medida_relogio_comum.py:39) · [asserção:72](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item4_medida_relogio_comum.py:72) · [juizes.py:1428](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/juizes.py:1428) · [models.py:3354](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3354) · [models.py:4333](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4333)
+
+A releitura do item 4 ficou só no teste, conforme o escopo de medição. O laço produtivo, a ordem de trava e o relógio comum ficaram intactos. A devolução usa o ato existente, sem ato de reparo. [medida:47](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_item4_medida_relogio_comum.py:47) · [materializacao.py:1033](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py:1033) · [validacao.py:289](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:289) [nao verificado]
+
+Sem banco, conferi sintaxe, catraca e os quatro mutantes em memória. A execução do módulo instrumentado `test_e4_expand` também mostrou dois erros de dublê, A13 e A14, que reproduzi na base e deixei fora da volta. Suite ORM, remedição A/B e efeitos em produção **[nao verificado]**. [test_e4_expand.py:197](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4_expand.py:197) · [test_e4_expand.py:212](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4_expand.py:212) [nao verificado]
+
+## 20/11 10:44 · sessao a023ef37a09b · GRADE-ATUALIZA-PELO-GIT · censo · origem=Code
+
+### Q1
+
+id	linha na GRADE-MESTRA.md	estado na grade	estado provado	prova
+BUG-ENC-CELULAS-FORMA	app/docs/GRADE-MESTRA.md:50, app/docs/GRADE-MESTRA.md:1820	INTERROMPIDA no balde, EM VOO no rodapé	POUSOU	7825fec5b, app/docs/RELATO.md:1164
+FIO-E0-V4-E1-ENTRADAS	app/docs/GRADE-MESTRA.md:106	PARADA	POUSOU	app/docs/BACKLOG.md:2098, fechamento registrado em 15/11 com o núcleo e a fila no ar desde 08–09/11
+FIO-E0-V4-E3-LEITORES	app/docs/GRADE-MESTRA.md:121	EM VOO	POUSOU	90f3fa66b, app/docs/RELATO.md:1505, app/docs/RELATO.md:1524 registra o lote LU à parte como E3-RESTO-R3
+FERIADO-ESCALA	app/docs/GRADE-MESTRA.md:140	EM VOO (escopo anterior superado)	SUPERADA por FERIADO-USA-A-LEI-DE-1609	app/docs/BACKLOG.md:729
+REABRIR-NAO-DESTROI	app/docs/GRADE-MESTRA.md:189	REGISTRADA (no ar desde 25/10, falta smoke)	POUSOU	app/docs/BACKLOG.md:1215, app/docs/RELATO.md:1037 registra o fechamento em 16/11
+BO-HE-RECUSAR-LOTE-500	app/docs/GRADE-MESTRA.md:255	REGISTRADA (publicada, smoke pendente)	POUSOU	app/docs/BACKLOG.md:1785, app/docs/RELATO.md:1037 registra o fechamento em 16/11
+[nome]-NAO-DESFAZ-O-PAPEL	app/docs/GRADE-MESTRA.md:272	REGISTRADA	POUSOU	94bb5c8f4, app/docs/RELATO.md:4000, app/docs/RELATO.md:4007
+ESCALA-NAO-DESCREVE	app/docs/GRADE-MESTRA.md:273	REGISTRADA	POUSOU	433e2e57e, app/docs/RELATO.md:152, app/docs/RELATO.md:160. Escopo do pouso C7, com C8 registrada à parte em app/docs/BACKLOG.md:2377
+HJ-090	app/docs/GRADE-MESTRA.md:281	EM VOO	POUSOU	149d43e86, app/docs/RELATO.md:1727
+ESPURIA-TELA (+ESPELHO-DECIDIU-ICONE)	app/docs/GRADE-MESTRA.md:522	REGISTRADA	POUSOU	f8f9bb34e, app/docs/RELATO.md:143, app/docs/RELATO.md:145. A fila C11 tem registro próprio em app/docs/BACKLOG.md:2038
+CONTRATO-DE-ENTRADA-DO-FIO	app/docs/GRADE-MESTRA.md:710	BRIEF PRONTO, sob FIO-E0-V4-E1-ENTRADAS	POUSOU	77dfa94fa, app/docs/RELATO.md:1383
+DESLIGAMENTO-NAO-CARIMBA-RESPONDIDA	app/docs/GRADE-MESTRA.md:868	REGISTRADA (superada em 13/11, sucessora definida)	SUPERADA por DESLIGAR-LIQUIDA-TUDO	app/docs/BACKLOG.md:1200
+DESLIGAR-LIQUIDA-TUDO	app/docs/GRADE-MESTRA.md:869	REGISTRADA (censo entregue), sob O54	COMPLEMENTO de O50-DESLIGAR-ENCERRA-TUDO	app/docs/BACKLOG.md:732, app/docs/BACKLOG.md:1453
+O50-CELULA-APOS-DESLIGAMENTO	app/docs/GRADE-MESTRA.md:885	REGISTRADA, sob O54	COMPLEMENTO de O50-DESLIGAR-ENCERRA-TUDO	app/docs/BACKLOG.md:1453, app/docs/BACKLOG.md:1454
+O50-COMPLEMENTO-LAUDO-1311	app/docs/GRADE-MESTRA.md:886	REGISTRADA (absorvida pela variante da O50), sob O54	COMPLEMENTO de O50-DESLIGAR-ENCERRA-TUDO	app/docs/BACKLOG.md:1453, app/docs/BACKLOG.md:1456
+PARIDADE-ABSOLVIDAS-168	app/docs/GRADE-MESTRA.md:1053	EM VOO (103 incorporadas ao BUG-PAR)	COMPLEMENTO de BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS	app/docs/BACKLOG.md:736, app/docs/RELATO.md:1886, 520d7b557. A incorporação cobre as 103 nomeadas
+O59	app/docs/GRADE-MESTRA.md:1580	REGISTRADA (absorvida em 13/11 pela UI-RESCISAO)	COMPLEMENTO de UI-RESCISAO	app/docs/BACKLOG.md:1465
+MAPA-20-DERIVADO	app/docs/GRADE-MESTRA.md:1648	REGISTRADA (substituída hoje), em OBSOLETAS	SUPERADA por GRADE-MESTRA	app/docs/BACKLOG.md:2218
+FATO-DE-AUSENCIA-ACORDA-A-PROJECAO / LOTE7	app/docs/GRADE-MESTRA.md:1786	PARADA — c6 anunciada	POUSOU	42fd467a0, app/docs/RELATO.md:1072
+BUG-PAR-DO-INTERVALO-EM-DOIS-ATOS	app/docs/GRADE-MESTRA.md:1801	PARADA — leis do predesenho. A linha em app/docs/GRADE-MESTRA.md:1045 já diz FECHADA	POUSOU	520d7b557, app/docs/RELATO.md:940, app/docs/RELATO.md:388
+E4C-F2	app/docs/GRADE-MESTRA.md:1810	PARADA — matriz e leis	POUSOU	9ac856f74 (P1) e 8ae23ad62 (P2), app/docs/RELATO.md:707, app/docs/RELATO.md:676, app/docs/RELATO.md:4029
+E3-RESTO-R3	app/docs/GRADE-MESTRA.md:1821	EM VOO — c17 retida	POUSOU	f8ee770a5, app/docs/BACKLOG.md:770
+E4C-F1-NOVA-JUIZ-RESPONDIDA	app/docs/GRADE-MESTRA.md:1822	EM VOO — B1 no anexo	POUSOU	3adf703e3, app/docs/RELATO.md:1082, app/docs/RELATO.md:4045 limita a entrega dessa linha à B1
+HE-REVOGADA-NA-PORTA	app/docs/GRADE-MESTRA.md:1824	EM VOO — pre-opus	POUSOU	271ecba2e, app/docs/RELATO.md:1167
+SITUACAO-DESLIGADO / LOTE 3 desligado	app/docs/GRADE-MESTRA.md:1825	EM VOO — c6 na fila	POUSOU	be4a6219e, app/docs/RELATO.md:1092
+E4C-F3	app/docs/GRADE-MESTRA.md:1826	PARADA — matriz entregue	POUSOU	433e2e57e, app/docs/RELATO.md:160
+E4C-F4	app/docs/GRADE-MESTRA.md:1827	PARADA — duas leis abertas	POUSOU	b9ba42282, app/docs/RELATO.md:4027
+E4C-F6	app/docs/GRADE-MESTRA.md:1829	PARADA — lei residual	POUSOU	154d30455, app/docs/RELATO.md:169
+E4C-F7	app/docs/GRADE-MESTRA.md:1830	PARADA — matriz entregue	POUSOU	154d30455, app/docs/RELATO.md:169
+E4C-F9	app/docs/GRADE-MESTRA.md:1832	PARADA — matriz entregue	POUSOU	3308f7599, app/docs/RELATO.md:168
+
+Sem prova de mudança terminal no recorte
+
+E4C-F5	app/docs/GRADE-MESTRA.md:1828	app/docs/RELATO.md:11 registra a parada em desenho. Pouso [nao verificado].
+E4C-F8	app/docs/GRADE-MESTRA.md:1831	app/docs/BACKLOG.md:2034 registra a fatia aberta. Pouso [nao verificado].
+FRAC5 / FRAC5-MINIMO-5	app/docs/GRADE-MESTRA.md:282, app/docs/GRADE-MESTRA.md:1785	O pouso de 14/11 entregou o texto. A cura do mínimo de cinco dias ficou guardada, sem aval de pouso. app/docs/BACKLOG.md:786, app/docs/BACKLOG.md:788, app/docs/RELATO.md:1608.
+DIA-SEM-TRABALHO-PORTA	app/docs/GRADE-MESTRA.md:271	Os pousos provam DST-L2-JZ1 e suas voltas. A L1 tem entrega própria ainda em desenho. app/docs/RELATO.md:124, app/docs/RELATO.md:145, app/docs/BACKLOG.md:1975, app/docs/BACKLOG.md:1976.
+BO-0611-05	app/docs/GRADE-MESTRA.md:285	Há pouso anterior ao recorte e confirmação posterior de que estava no ar. Baixa do smoke no recorte [nao verificado]. app/docs/RELATO.md:10485, app/docs/RELATO.md:10499, app/docs/RELATO.md:1188.
+HJ-092	app/docs/GRADE-MESTRA.md:141	Fechamento da triagem como BATIDA e encaminhamento ao admin. Pouso [nao verificado]. app/docs/BACKLOG.md:796.
+PROVA-DOMINIO	app/docs/GRADE-MESTRA.md:356	O corte que encerrou a obra é de 28/09. Mudança desde 13/11 [nao verificado]. app/docs/BACKLOG.md:1238.
+PRE-MAPA-E4D e ESPURIAS-PRE-MAPA	app/docs/GRADE-MESTRA.md:108, app/docs/GRADE-MESTRA.md:109	O anexo prova leitura e registro fechados em aaa4daf76. Pouso [nao verificado]. app/docs/BACKLOG.md:2126, app/docs/BACKLOG.md:2127.
+FEITA na perspectiva de 17/11	app/docs/GRADE-MESTRA.md:132	Fora das linhas comprovadas acima e da O168, já marcada NO AR em app/docs/GRADE-MESTRA.md:119, mudança terminal no recorte [nao verificado].
+SUPERADA na perspectiva de 17/11	app/docs/GRADE-MESTRA.md:133	C5-LISTA-DE-FROTA, JUIZ-DO-PAR-DUAS-ENTRADAS, O177 e PASSADO-SEM-MARCOS-SEM-TETO ficam com o estado anterior. Mudança terminal datada no recorte [nao verificado]. app/docs/BACKLOG.md:1651, app/docs/BACKLOG.md:2087, app/docs/BACKLOG.md:1554, app/docs/BACKLOG.md:1843.
+DOSSIES-DAS-CELULAS e O117	app/docs/GRADE-MESTRA.md:77, app/docs/GRADE-MESTRA.md:69	A própria perspectiva registra SEM PROVA. app/docs/GRADE-MESTRA.md:134.
+
+Amostra conferida	10/10	As cinco fatias nas linhas 1826, 1827, 1829, 1830 e 1832, mais BUG-ENC, FERIADO-ESCALA, [nome], ESCALA e HJ-090, têm a prova indicada em cada linha de Q1.
+
+### Q2
+
+pouso (hash data assunto)	obra/id que o commit nomeia	por que não há linha própria [nao verificado]
+1c4e50fce 19/11 16:07 POUSO DST-L2-JZ1 C7: retratar_com_motivo pergunta a retencao UMA vez, dentro da trava, com o ponteiro relido do banco	DST-L2-JZ1 C7	id ausente. ID no BACKLOG: DST-L2-JZ1-C7. app/docs/BACKLOG.md:2036
+c5ea4e5d7 19/11 11:18 POUSO DST-L2-JZ1 c6 v4: retencao justificativa_alheia le o vinculo do D3 (ponteiro OU origem) pela porta pendentes_do_vinculo	DST-L2-JZ1 c6 v4	id ausente. ID no BACKLOG: DST-L2-JZ1-C6. app/docs/BACKLOG.md:2035, app/docs/RELATO.md:124
+f8f9bb34e 19/11 10:11 TREM-DE-POUSO COMBOIO-1911-F: pousa ESPURIA-TELA c11 (b81bd0b48) e DST-L2-JZ1 c5 (aeca43bb6) pela arvore c1506fdda	DST-L2-JZ1 c5	id ausente. A grade tem DIA-SEM-TRABALHO-PORTA e seu complemento FOLGA-TRABALHADA-RESOLVE. app/docs/GRADE-MESTRA.md:271, app/docs/GRADE-MESTRA.md:1323, app/docs/BACKLOG.md:2026, app/docs/RELATO.md:145
+eeadcfc61 18/11 17:16 B4-OLHA-O-RESET: na faixa 75-85 o Agent novo so e negado com mais de 3 h ate o reset semanal	B4-OLHA-O-RESET	id ausente. app/docs/RELATO.md:376
+d54160999 18/11 11:15 BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO POUSO: merge da raia (5c950aab1) -- cadastro alcanca celula gerada depois do fim da competencia	BUG-CADASTRO-NAO-ALCANCA-O-FUTURO-RESIDUO	id ausente. app/docs/BACKLOG.md:2786
+dd489c627 18/11 07:40 S6-INTERMITENTE-FERIADO-CURA-A POUSO: merge da raia (cfc392c64) -- intermitente em feriado paga as horas do par (A)	S6-INTERMITENTE-FERIADO-CURA-A	id ausente. app/docs/BACKLOG.md:2067, app/docs/TICKETS.md:1327
+4eb10f99f 18/11 07:21 E4C-F1-B2a POUSO: merge da raia (c26d0941f) -- B2 pela metade, B2b falta 39 sitios	E4C-F1-B2a	id ausente. A linha da F1 no rodapé é da B1. app/docs/GRADE-MESTRA.md:1822, app/docs/BACKLOG.md:825, app/docs/RELATO.md:571
+4307c01e6 17/11 23:17 PORTA-ESTADO-NA-TELA v7 POUSO: merge da raia (6fe59075c)	PORTA-ESTADO-NA-TELA	nome diferente: PORTA-TELA-ESTADO-NO-PREVIEW no BACKLOG, sem linha na grade. app/docs/BACKLOG.md:2066, app/docs/RELATO.md:603
+28802cbcf 17/11 21:34 CURA-DE-FASE-QUEBRA-NA-VIRADA POUSO: merge da raia (aa052ec5a)	CURA-DE-FASE-QUEBRA-NA-VIRADA	nome diferente: CURA-DE-FASE no BACKLOG, sem linha na grade. app/docs/BACKLOG.md:2401, app/docs/RELATO.md:617
+d7a2b7cac 17/11 21:27 PORTA-INSTRUMENTO POUSO: merge da raia do instrumento (37a4baa9e)	PORTA-INSTRUMENTO	nome diferente: PORTA-INSTRUMENTO-POUSO no BACKLOG, sem linha na grade. app/docs/BACKLOG.md:2079, app/docs/RELATO.md:622
+ba4cb6c3c 17/11 19:46 PORTA-DO-EXPORT-SEM-BECO v5 POUSO: merge da raia porta-export-raia-v5 (54e2dd60b)	PORTA-DO-EXPORT-SEM-BECO	id ausente. app/docs/BACKLOG.md:2065, app/docs/RELATO.md:651
+6ce96a55e 16/11 23:41 Marco AUSENCIA-EFEITO-PELO-ESTADO POUSO: lista de ausencias le o veredito do nucleo (rejeitada = sem efeito), chips facetados por uma consulta agrupada	AUSENCIA-EFEITO-PELO-ESTADO	id ausente. app/docs/BACKLOG.md:835, app/docs/RELATO.md:921
+343565cf6 16/11 20:59 Marco UI-VINCULO-MOSTRA-O-CALENDARIO compl. 3+4 POUSO: titulo das folgas e padrao na caixa vazia	UI-VINCULO-MOSTRA-O-CALENDARIO compl. 3+4	só como complemento no registro do pouso da obra-mãe, também ausente da grade. app/docs/RELATO.md:948, app/docs/RELATO.md:1005
+e38d3001c 16/11 20:25 Marco UI-EDITOR-CAL-REPETIR-CONFIRMA POUSO: Repetir sobre grade preenchida pergunta antes de substituir	UI-EDITOR-CAL-REPETIR-CONFIRMA	id ausente. O RELATO dá baixa própria à obra. app/docs/BACKLOG.md:837, app/docs/RELATO.md:950
+71e9576bf 16/11 17:04 Marco UI-EDITOR-CALENDARIO-TRES-GRADES POUSO: editor do calendario mostra as grades de 31, 30 e 28	UI-EDITOR-CALENDARIO-TRES-GRADES	id ausente. app/docs/BACKLOG.md:820, app/docs/RELATO.md:979
+7849ee7d2 16/11 14:56 UI-VINCULO-MOSTRA-O-CALENDARIO POUSO: merge da copia wt-ui-vinculo-cal-131857 @513f508e4	UI-VINCULO-MOSTRA-O-CALENDARIO	id ausente. app/docs/BACKLOG.md:844, app/docs/RELATO.md:1024
+fac43f42a 15/11 19:36 TELA-DIZ-O-QUE-O-SERVIDOR-DISSE POUSO: a tela cheia da batida diz o status da resposta 200 (merge de 9be27edd7)	TELA-DIZ-O-QUE-O-SERVIDOR-DISSE	id ausente. app/docs/BACKLOG.md:2157, app/docs/RELATO.md:1212
+151b0666a 15/11 13:20 UI-CAMERA-ALTERNATIVA POUSO: o quadro da camera do sistema se pinta da selfie guardada -- aviso sai, previa entra (merge de 93b532e5a)	UI-CAMERA-ALTERNATIVA	id ausente. app/docs/BACKLOG.md:2010, app/docs/RELATO.md:1342
+77dfa94fa 15/11 09:36 CONTRATO-DE-ENTRADA-DO-FIO POUSO: o carimbo da disputa diz o instante do fato; o upload de foto resolve so a pergunta do episodio exato (merge de da4cd1744)	CONTRATO-DE-ENTRADA-DO-FIO	só como complemento de FIO-E0-V4-E1-ENTRADAS. app/docs/GRADE-MESTRA.md:705, app/docs/GRADE-MESTRA.md:710
+b6d268dfd 15/11 09:36 BATIDA-DEDUP-RETRATADA POUSO: o dedup das 3 cascas pergunta a porta (merge de e1dc7b80c)	BATIDA-DEDUP-RETRATADA	id ausente. app/docs/BACKLOG.md:2216, app/docs/RELATO.md:1383
+4b75cba10 14/11 23:01 MAPAS-PUBLICA (instrumento): bin/relato.sh publica os 14 mapas em MAPA-DOS-RIOS/ pela mesma raspagem	MAPAS-PUBLICA	id ausente. Push e publicação do instrumento registrados. app/docs/RELATO.md:1503, app/docs/RELATO.md:1511
+14b61c124 14/11 16:12 FRAC5-TEXTO POUSO: agendar.html:10 diz a regra do juiz (ate 3 fracoes, uma >= 14 dias)	FRAC5-TEXTO	id ausente. FRAC5 na grade descreve a cura do mínimo de cinco dias. app/docs/GRADE-MESTRA.md:282, app/docs/BACKLOG.md:760, app/docs/RELATO.md:1608
+80617f8b8 14/11 15:53 HOOKMSG POUSO (instrumento): hook commit-msg em toda copia julga a linha LEI-AKITA no ato do commit	HOOKMSG	nome diferente: HOOK-DE-MENSAGEM-EM-TODA-COPIA no BACKLOG, sem linha na grade. app/docs/BACKLOG.md:778, app/docs/RELATO.md:1617
+8376da7aa 14/11 13:54 POUSO HJ-091 (POUSA-HOJE + REJEITADA-GANHA-A-ORIGEM): ferias ganham a origem (FK agendamento_ferias), backfill vincula a rejeitada do DP pela janela (copia wt-hj091-origem-122335 @97adbec35)	HJ-091	id ausente. HJ-091 aparece no campo resolve da HJ-090. Este é o pouso final registrado após o revert. app/docs/GRADE-MESTRA.md:281, app/docs/RELATO.md:1633, a1fddccfa, 2faa678a6
+8dbe7db20 14/11 13:33 POUSO RMDIR-COM-GUARDA (instrumento): rm/rmdir em bin/ so com guarda ${VAR:?}, selo test_rm_com_guarda (copia @9790ac797)	RMDIR-COM-GUARDA	id ausente. app/docs/BACKLOG.md:764, app/docs/BACKLOG.md:766
+ac431c506 14/11 12:38 POUSO JANELA-NAO-SEGURA-POUSO (instrumento): janela_auth barra so 23:20-06:00, qualquer dia (copia wt-janela-faixa-113831 @0e7784705)	JANELA-NAO-SEGURA-POUSO	id ausente. app/docs/BACKLOG.md:756, app/docs/BACKLOG.md:784
+2b0f888d5 14/11 12:17 POUSO [nome]-ANDAM-JUNTO (instrumento): placar_grade le fecha BO e portao da GRADE-MESTRA (copia wt-grade-fechabo-102627 @830146e72)	[nome]-ANDAM-JUNTO item 1	id ausente. A grade documenta o efeito no cabeçalho. app/docs/GRADE-MESTRA.md:8, app/docs/BACKLOG.md:782, app/docs/BACKLOG.md:783
+9990a5d2f 14/11 11:46 POUSO CAL09 ([nome]-ANDAM-JUNTO 3a): dia so com SAIDA desenha a marcacao na grade do calendario (copia wt-ui-cal09-102258 @3dbe6a768)	CAL09	id ausente. app/docs/BACKLOG.md:785, app/docs/RELATO.md:1648
+ea99f0236 13/11 07:3x c5e NO AR, registro do RELATO	BUG-CADASTRO-NAO-ALCANCA-O-FUTURO / BUG-CADASTRO-C5E	id ausente. Assunto literal do git [nao verificado]. O RELATO nomeia o pouso, e o BACKLOG identifica a obra. app/docs/RELATO.md:1863, app/docs/RELATO.md:1945, app/docs/BACKLOG.md:2785
+
+2dedaaae0 e 4b86e3dac aparecem com “pouso proprio” no assunto. O RELATO identifica 2dedaaae0 como cópia e dá o pouso do instrumento a d7a2b7cac. app/docs/RELATO.md:651, app/docs/RELATO.md:622.
+
+### Q3
+
+A base é o placar de 468 linhas lidas pelo escritor, com 467 faltantes. A linha CADEIA-DO-CONTRATO-20 tem uma 11ª coluna e fica fora dessa base. O rodapé também fica fora pelo seu cabeçalho. Por isso os cinco pousos de F3, F4, F6, F7 e F9 corrigem Q1 e retiram zero dos 467. app/docs/GRADE-MESTRA.md:15, app/docs/GRADE-MESTRA.md:22, app/docs/GRADE-MESTRA.md:124, app/docs/GRADE-MESTRA.md:1778, app/docs/GRADE-MESTRA.md:1826, app/docs/GRADE-MESTRA.md:1832, bin/placar_grade.py:80, bin/placar_grade.py:93.
+
+Na projeção, mantive as 468 linhas no total, baixei de “faltam” as 10 linhas do placar com prova em Q1 e acrescentei os 27 IDs próprios de Q2 como pousados. Os dois registros de complemento em Q2 ficam sob as respectivas mães. Usei o balde da frente descrita nas provas para os novos IDs, inclusive UI para FRAC5-TEXTO e lateral para CURA-DE-FASE. Esses baldes são decisões deste censo. app/docs/GRADE-MESTRA.md:5, app/docs/GRADE-MESTRA.md:548, app/docs/RELATO.md:1608, app/docs/RELATO.md:617.
+
+balde	obras	faltam	em voo	pronta esperando vaga	espera corte ou ! do Ronald	espera outra obra	só registrada
+ESPINHA-E	78	75	0	0	17	13	45
+20/20	5	3	0	0	0	1	2
+LATERAL-ESTRUTURA	168	152	0	1	20	28	103
+INSTRUMENTO	187	180	0	0	12	36	132
+UI	51	41	0	0	5	11	25
+CEREJA	1	1	0	0	0	1	0
+?	5	5	0	0	1	0	4
+TOTAL	495	457	0	1	55	90	311
+
+Em voo	Execução ainda em curso na última evidência aplicável à linha contada. O fechamento do HEAD registra zero agentes em voo. app/docs/RELATO.md:1.
+Pronta esperando vaga	Entrega ou brief pronto com a vaga como próximo portão. A linha contada é O101, com o selo esperando pista. app/docs/GRADE-MESTRA.md:202, app/docs/BACKLOG.md:1371.
+Espera corte ou ! do Ronald	A linha ou a fonte nomeia decisão, autorização, aval ou smoke do Ronald ainda pendente como portão. Exemplos conferíveis em app/docs/GRADE-MESTRA.md:59, app/docs/GRADE-MESTRA.md:233, app/docs/RELATO.md:2542.
+Espera outra obra	A linha ou a fonte nomeia uma entrega anterior, colisão ou ordem entre obras ainda aplicável. Exemplos em app/docs/GRADE-MESTRA.md:309, app/docs/BACKLOG.md:2082, app/docs/RELATO.md:4044.
+Só registrada	Classe residual do censo. Inclui investigação, desenho, medição, trabalho próprio ou dependência sem obra identificada. Exemplos em app/docs/GRADE-MESTRA.md:46, app/docs/GRADE-MESTRA.md:48, app/docs/GRADE-MESTRA.md:73.
+
+Para conferir os 55 portões do Ronald, os números abaixo são linhas de app/docs/GRADE-MESTRA.md, na ordem dos baldes do placar. app/docs/GRADE-MESTRA.md:15, app/docs/GRADE-MESTRA.md:21.
+
+ESPINHA-E	39, 45, 47, 52, 53, 59, 60, 62, 69, 70, 75, 82, 94, 95, 105, 110, 111. Para RAIZ, app/docs/RELATO.md:328.
+LATERAL-ESTRUTURA	188, 190, 193, 195, 203, 205, 206, 208, 214, 218, 233, 247, 256, 257, 263, 274, 282, 285, 286, 287. Para as últimas quatro, app/docs/BACKLOG.md:788, app/docs/RELATO.md:2542, app/docs/RELATO.md:363, app/docs/RELATO.md:370.
+INSTRUMENTO	343, 367, 374, 377, 388, 405, 410, 420, 421, 462, 481, 482. Para PRONTO-5 e PISTA, app/docs/RELATO.md:417, app/docs/BACKLOG.md:2193, app/docs/BACKLOG.md:2194.
+UI	496, 498, 499, 516, 526. Para AVISO-DO-DONO e O223, app/docs/BACKLOG.md:1285, app/docs/BACKLOG.md:1319.
+?	545.
+
+id	espera qual
+PERGUNTA-SEM-SELO	FECHAR2. app/docs/GRADE-MESTRA.md:37
+JUIZ-DO-PAR-DUAS-ENTRADAS	MOTOR-PASSA-O-TURNO-A-VOLTA, na fatia de par do MOTOR-LE-O-TURNO. app/docs/GRADE-MESTRA.md:38, app/docs/BACKLOG.md:2087
+CXR-TELA-LE-O-MOTOR	ATA-X-TURNO-PAUSA e CXR-PRONTO5-DEFINICAO. app/docs/GRADE-MESTRA.md:41
+PROGRAMA-CELULA-E-O-DIA	Entregas restantes de E1–E4. app/docs/GRADE-MESTRA.md:44
+EXPIRACAO-DA-ABERTA-COPIA-ANTIGA	ORFAS. app/docs/GRADE-MESTRA.md:57
+O-DIA-PAGO	S5b. app/docs/GRADE-MESTRA.md:61, app/docs/RELATO.md:784
+L111-ORFAOS-DO-MOTOR	O275 e O277. app/docs/GRADE-MESTRA.md:63
+O221	O218. app/docs/GRADE-MESTRA.md:67, app/docs/BACKLOG.md:1335
+O129	O127. app/docs/GRADE-MESTRA.md:68
+CHAMADO-EM-RAIA	O123. app/docs/GRADE-MESTRA.md:76
+R1-ESTRUTURA-91	E4 e E5. app/docs/GRADE-MESTRA.md:102
+TIPO-NA-FONTE	FERIADO, pelo portão escrito na grade. app/docs/GRADE-MESTRA.md:104, app/docs/RELATO.md:1188
+FIO-E0-V4-E4-ESCRITORES	Resíduos de E4B, E4C e E4D. app/docs/GRADE-MESTRA.md:107, app/docs/RELATO.md:1188
+E3-ENTRADA-ORFA-SEM-TURNO	DIA-SEM-TRABALHO-PORTA L1. app/docs/GRADE-MESTRA.md:123, app/docs/BACKLOG.md:1976
+LANCAR-AUSENCIA-AFASTA-DESLIGADO	ESPELHO-VERDADE. app/docs/GRADE-MESTRA.md:142
+PILHA-DA-BATIDA-RECALCULO-INLINE	O-OUTBOX. app/docs/GRADE-MESTRA.md:143
+O-BITEMPORAL-2	Fecho dos contratos estruturais 20/20. app/docs/GRADE-MESTRA.md:144, app/docs/GRADE-MESTRA.md:124
+IA-DOMINIO-POR-FERRAMENTA	Fecho dos contratos estruturais 20/20. app/docs/GRADE-MESTRA.md:145, app/docs/GRADE-MESTRA.md:124
+REJULGAR-COMP10-4-REVERTIDOS	SOMBRA-X-PROD-COL988-124639. app/docs/GRADE-MESTRA.md:146
+SILENCIO-VENCIDO-VOLTA	QUARENTENA-DO-COLAB. app/docs/GRADE-MESTRA.md:153, app/docs/BACKLOG.md:888
+FILA-POR-CAUSA-AS-OF	E4C-F5, com a B1 da F1 já no ar. app/docs/GRADE-MESTRA.md:164, app/docs/RELATO.md:1082, app/docs/RELATO.md:11
+ISENTO-FLAG-ATEMPORAL	E3-ISENTO-INSUMOS. app/docs/GRADE-MESTRA.md:167
+COL309-SETEMBRO	COL309-09-RECALCULO-DEPOIS-DO-ADMIN. app/docs/GRADE-MESTRA.md:178, app/docs/GRADE-MESTRA.md:1313
+GRADE-DEPENDE-DA-JANELA	LASTRO. app/docs/GRADE-MESTRA.md:184
+O-HAIKU-INVESTIGA	O-DIA-PAGO S4 e VINCULO-LINHA-DO-TEMPO, conforme a linha. app/docs/GRADE-MESTRA.md:192
+O-GEO-DECISAO	Fecho do ESPELHO-VERDADE. O complemento também espera O198. app/docs/GRADE-MESTRA.md:196, app/docs/BACKLOG.m
+
+[truncado em 20000 de 25119 caracteres]
 
 ## 20/11 10:40 · sessao ed36d8be0c4c · GRADE-ATUALIZA-PELO-GIT · censo · origem=Code
 
@@ -1410,26 +1611,4 @@ Na chamada direta, com recusa registrada, resposta de hora e M nulo, A pode reab
 
 8. **BLOQUEIA.** Para uma metade de intervalo de competência entregue com ato sem validação e coluna preenchida, a correção antes retornava `info`. Agora grava nova resposta e seu ato antes de `validar_pergunta` encontrar K6. A recusa também passa a gravar `RECUSA` e apagar resposta e carimbos, e o guardião de escrita só consulta K6 dentro de ato cercado. A ocorrência e a contagem em produção são [nao verificado]. [Correção](app/chamados/services/acoes_disputa.py:349), [escrita da resposta](app/chamados/services/disputa_emissao.py:1517), [K6](app/chamados/services/validacao.py:742), [recusa](app/chamados/services/validacao.py:900), [limpeza](app/chamados/models.py:3509), [cerca](app/chamados/services/fio.py:1394).
 
-## 20/11 04:00 · sessao 9f7c87b58659 · - · - · origem=Ronald (tmux)
-
-**6. BLOQUEIA.** Os 14 mutantes têm testes associados. Verifiquei em memória que cada âncora tem uma ocorrência e que as 14 substituições compilam. As mortes na suíte são [nao verificado]. Os REDs de corrigir, declarar, aplicar, fechar, validar, recusar e lote combinam retorno e estado persistido. Os dois REDs da irmã demonstram a decisão da guarda por tupla e motivo. O RED do materializador injeta a divergência depois da seleção SQL e substitui o plantio. O do fecho substitui C6 e `pode_fechar`. O da devolução consagra a leitura por coluna, sem mutante e sem percorrer `validar_pergunta`. `app/chamados/tests/e4c_f5_voltaD_mutantes.py:13–65`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:71–149`, `:207–331`, `:345–392`.
-
-A catraca deixa passar `ler = getattr; if ler(perg, "validada_em"): plantar(perg)` e uma chamada a um auxiliar de módulo que leia a coluna. Também considera `Outro.composta(perg).validada_em` autorizada pelo nome do método. Verifiquei em memória que `if perg.validada_em: plantar(perg)` seguido por uma atribuição independente a `perg.validada_em` passa. O critério de escritor cobre o corpo inteiro e confere o receptor, sem verificar se a decisão é de limpeza. No código real a isenção já cobre a condição que decide gravar um ato `DEVOLUCAO`. `app/chamados/tests/test_e4c_f5_selo_catraca.py:37–39`, `:70–79`, `:94–105`, `:265–280`, `:298–307`, `app/chamados/services/validacao.py:270–283`.
-
-**7. BLOQUEIA.** O delta usa o compositor e os juízes existentes e conserva as portas e leituras de relógio. A mudança amplia a dependência de fotos anteriores à trava em validar, corrigir e recusar. A coluna e o ato continuam decidindo a mesma validação em etapas diferentes da materialização. A alteração do harness é textual em `retry_reativa`, com o mesmo alvo, a mesma mutação `if False` e o mesmo teste. Não há remoção de asserção ou alteração de esperado existente no delta anexado. `app/chamados/models.py:4354–4375`, `app/chamados/services/validacao.py:683–689`, `:731–745`, `:900–929`, `app/chamados/services/acoes_disputa.py:345–349`, `:374–387`, `app/chamados/services/materializacao.py:2111–2133`, `app/chamados/tests/bug_par_mutantes.py:68–71`. A história de cada commit é [nao verificado].
-
-**8. BLOQUEIA.** Com ato sem validação e carimbo antigo preenchido, a correção de uma metade de intervalo entregue passa pela guarda nova, grava resposta e limpa o carimbo, e só depois recebe a recusa K6 em `validar_pergunta`. A ação não desfaz a correção quando a validação recusa. A recusa pela supervisão também passa a escrever nesse estado e reabre a pergunta sem cerca de competência no caminho direto. As cascas HTTP verificam o gestor, a disputa aberta e a âncora do chamado. O volume de casos entregues é [nao verificado]. `app/chamados/views.py:505–536`, `app/chamados/services/acoes_disputa.py:345–349`, `:374–387`, `app/chamados/services/disputa_emissao.py:1480–1534`, `:1617–1658`, `app/chamados/services/validacao.py:737–745`, `:900–929`, `app/chamados/services/materializacao.py:808–830`, `app/chamados/services/fio.py:1394–1409`. A matriz também manda migrar a guarda de devolução. A entrega conserva a coluna nessa guarda e o teste fixa esse comportamento. `app/chamados/services/validacao.py:262–283`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:383–392`.
-
-**Custo para o item 5.** Os 3×6 de fecho e tela usam perguntas distintas e cobram o `SELECT` de decisões por lote. O do lote cobre apenas refs barradas na entrada, portanto não alcança o `SELECT` por item aceito após o refresh. O de propostas aumenta notas de um único fato, portanto cobre memoização desse fato, com o custo por fato distinto de fora. O novo C11 confere PKs julgados, PKs devolvidos e consultas iguais e não nulas, com mutantes distintos para os dois prefetches. `app/chamados/tests/test_e4c_f5_voltaD_portas.py:151–205`, `:333–343`, `app/chamados/services/validacao.py:1081–1097`, `app/chamados/services/declaracao_texto.py:625–639`, `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:24–40`, `:219–240`, `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9–11`, `:24–54`.
-
-## 20/11 03:59 · sessao 114cf4388c80 · - · - · origem=Ronald (tmux)
-
-**5. BLOQUEIA.** O S84 acrescenta uma consulta à sequência por pergunta ainda não materializada, depois da trava e do `get` individual. O lote classe A acrescenta uma consulta após cada ação encaminhada, porque o `refresh_from_db()` integral descarta o prefetch. O par acrescenta consulta da irmã recuperada em nova instância, inclusive quando chamado por lista, e `_validar_o_par` volta a consultar a mesma irmã. `app/chamados/services/materializacao.py:139-150,195-205,328-346,2118-2132`, `app/chamados/services/validacao.py:633-642,1059-1069,1081-1094`, `app/chamados/services/explicador.py:131-134,159-172`, `app/chamados/models.py:4328-4333`.
-
-A BATIDA alcança S143 via cartório, reconciliador e `post_save` de chamado. A guarda nova usa o prefetch que já existia, com um lote por disputa, e altera quais perguntas entram no caminho de carimbo. O selo anterior registra uma leitura avulsa no reconciliador no cenário de três chamados que ficam. Os quatro tetos anotados são 234, 298, 146 e 221. O run desta árvore é [nao verificado]. `app/ponto/registro_batida.py:170-180`, `app/ponto/signals.py:131-135,206-215`, `app/ponto/services/cartorio.py:1580,1598,1619`, `app/chamados/reconciliador.py:573-587,1486-1519`, `app/chamados/signals.py:91-117`, `app/chamados/services/disputa_emissao.py:2074-2115`, `app/ponto/tests/test_selo_chokepoint_escrita.py:196-206,220-230,248-253,260-267`.
-
-Os REDs 3×6 de S143, tela e entrada do lote passam por seis perguntas e cobram `[1,1]` contra mutantes que removem o prefetch. S143 usa uma disputa e a entrada manda todos os itens direto para `Ja validada`, sem medir as consultas de pós-ação. Propostas cresce de três para seis followups sobre um único fato, então protege o memo por fato. Os dois REDs novos do C11 cobram os PKs julgados e devolvidos, igualdade e presença de SELECT, com remoção dirigida de K1 ou K2. A unidade da métrica é o SELECT cujo primeiro `FROM` é a tabela de decisões. `app/chamados/tests/test_e4c_f5_voltaD_portas.py:151-205,333-343`, `app/chamados/tests/e4c_f5_voltaD_mutantes.py:40-47`, `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:23-40,219-240`, `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9-11,24-53,57-70`, `app/chamados/tests/test_e4c_f5_opus_models.py:22-32`.
-
-**Achado adicional nos itens 1, 2 e 6.** Uma irmã com ato validado e coluna nula agora pode ser plantada. `_validar_o_par` pula a nova linha de validação, mas o plantio real chama `carimbar(..., resposta='validar')`, que preenche a coluna nula com o instante e autor do plantio. A leitura sintetiza esse carimbo sem linha, que pode sobrepor o instante real da validação anterior. Os REDs de par e materialização substituem a unidade pelo carimbo de identidade, que não toca a validação. `app/chamados/services/materializacao.py:200-205,1738-1750,1981-1992`, `app/chamados/services/validacao.py:633-644`, `app/chamados/models.py:3344-3377,4290-4294,4333-4351`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:244-275,284-291`.
-
-_7487 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7489 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

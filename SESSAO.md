@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 10:42:53.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (11.8 MB). Acoes na janela: **202**.
+**Medido em 20/11/2026 10:48:06.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (11.8 MB). Acoes na janela: **204**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 10:43:43 | Bash | Invert the neighbouring seal's assertion and rerun it | `cd ~/wt-travas-m5-095844 && python3 -I - <<'EOF' p='bin/tests/test_suite_motivo.sh'; s=open(p).read() a=''' [ "$(_roda "$a" --motivo 'pre-opus FIO-E0-V4-E3')" = "0 sim" ] \|\| { echo " pre-opus com obra NAO chegou na trava"; ok=1; }''' assert s.count(a)==1 s=s.replace(a,''' # M2 PARA TODA PRE-OPUS (aval RESPOSTAS-F5-TRAVAS-2011-1025 item 6): a inteira pre-opus SEM a chave PISTA_LATERAL nao # chega ...` |
+| 10:43:37 | Bash | Find the pre-opus cases in the neighbouring seal | `cd ~/wt-travas-m5-095844 && /bin/grep -n 'pre-opus' bin/tests/test_suite_motivo.sh \| cut -c1-260` |
 | 10:39:08 | Bash | Run the neighbouring suite seals and list other callers of full pre-opus | `cd ~/wt-travas-m5-095844 && for t in test_suite_motivo test_suite_sh; do { bash bin/tests/$t.sh; echo "rc=$?"; } 2>&1 \| tail -4 \| cut -c1-300; done; git grep -n 'pre-opus' -- bin ':!bin/tests' ':!bin/suite.sh' \| cut -c1-200 \| head -20` |
 | 10:39:00 | Bash | Read what M9 and M9b ask and the state of the instrument copy | `/bin/grep -n '^- M9\\|^- M1\b\\|^- M3\\|^- M5' logs/AVAIS-1515/rascunho_TRAVAS-SEM-MEMORIA-V4.txt \| cut -c1-700; ls logs/TRAVAS-SEM-MEMORIA/ logs/TRAVAS-SEM-MEMORIA/m5 \| head -30; cd ~/wt-travas-m5-095844 && git diff --stat && ruff check bin/hook_pista_pronto.py bin/pronto_item_a_item.py bin/raias_estado.py 2>&1 \| tail -3` |
 | 10:38:54 | Bash | Rewrite the backlog cell within the size limit | `python3 -I - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| FERIADO-A5-PREVIA \|')]; assert len(i)==1 c=L[i[0]].split('\|'); assert len(c)==4, len(c) n='nas esperas da F5 (aval FERIADO-A5-RESPOSTAS-2011-1035): previa_da_marca sobre a porta real. PARADA 20/11: AVAL-DEVOLVIDO item 1, push sai dentro da porta antes do commit (disputa_emi ...` |
