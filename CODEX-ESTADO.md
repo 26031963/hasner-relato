@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 11:17** · publicado em **20/11/2026 11:19** (UTC-3)
+> Ultima resposta processada: **20/11/2026 11:24** · publicado em **20/11/2026 11:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 11:24 · sessao 0014d54c272b · CODEX-FECHA-A-VOLTA-V1-RASCUNHO · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 20/11 11:20 · sessao fd2a82382307 · E4C-F5-CONSTROI · construtor · origem=Code
+
+## Achados
+
+1. **`PerguntaDisputa.carimbar` pode produzir B** — coluna preenchida, composta sem validação. Se `quando` antecede uma `RESPOSTA` que desfaz validação, a leitura aplica a validação sintética e depois a apaga. A absorção abre essa janela ao capturar `agora` e carregar as perguntas antes da trava, passando o instante anterior para `carimbar`. O C6 pode aceitar o carimbo pela concordância com o marco. [chamados/models.py:3344](chamados/models.py#L3344) · `chamados/models.py:3355`, `:4339–4348` · `chamados/services/materializacao.py:1033–1036`, `:1060–1064` · `chamados/juizes.py:1428–1440`
+2. **`reabrir_para_correcao` pode preservar A preexistente** — composta validada, coluna vazia. Se só existe a `VALIDACAO` física e a projeção já está sem texto, resposta, validação e materialização, o filtro exclui a pergunta da compensação. O lote grava a coluna nula e a validação física segue vigente. [chamados/services/disputa_emissao.py:1636](chamados/services/disputa_emissao.py#L1636) · `chamados/services/disputa_emissao.py:1650–1653` · `chamados/models.py:4342–4348`
+
+Os dois caminhos têm REDs dedicados e ficaram sem cura de produção nesta volta. [chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:512](</home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:512>) · `chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:532`
+
+## Censo
+
+HEAD lido por `git rev-parse HEAD`: `8f84213791cde624afb4c4d1c2d496c730fae0df`. Os caminhos abaixo são relativos a `app/`. A varredura encontrou nove sítios de atribuição ou envio ao lote e cinco `save` associados. `composta` usa a validação de `leitura`, que ordena atos por instante, dá às linhas sintéticas a última posição no empate e aplica os atos que desfazem a validação. `chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:31`, `:452` · `chamados/models.py:4333–4351`, `:4354–4362`
+
+| Escrita | Função | Efeito | Evidência na mesma função ou transação |
+|---|---|---|---|
+| `chamados/services/validacao.py:168`, save `:171` | `_carimbar_validacao` | PREENCHE | `registrar` grava `VALIDACAO` com o instante da coluna no mesmo `atomic`. `chamados/services/validacao.py:170–175` |
+| `chamados/services/validacao.py:287`, save `:290` | `devolver_validacao_recusada` | LIMPA | A guarda entra se coluna ou composta estiver validada. O `atomic` salva a coluna nula e registra `DEVOLUCAO`, que apaga a validação vigente. Cobre A e B separadamente. `chamados/services/validacao.py:277–296` · `chamados/models.py:4302` |
+| `chamados/services/validacao.py:365`, save `:367` | `devolver_paridade_bug_par_103` | LIMPA | Sob a trava, salva a coluna nula e registra `DEVOLUCAO` com a foto anterior no mesmo `atomic`. `chamados/services/validacao.py:347–348`, `:361–374` |
+| `chamados/services/disputa_emissao.py:1506`, save `:1526` | `responder_pergunta_disputa_core` | LIMPA | Depois da trava, a `RESPOSTA` recebe o instante da resposta e `resposta_mantem_validacao=False`. O registro e o `save` ficam no mesmo `atomic`. `chamados/services/disputa_emissao.py:1478–1493`, `:1526–1531` · `chamados/models.py:4317` |
+| `chamados/services/disputa_emissao.py:1614`, lote `:1653` | `reabrir_para_correcao` | LIMPA | Registra `REABERTURA` ou `RECUSA` antes do lote, no mesmo `atomic`, para as linhas que passam no filtro da foto. A isolado fica de fora conforme o achado 2. `chamados/services/disputa_emissao.py:1624–1626`, `:1636–1653` · `chamados/models.py:4189`, `:4302` |
+| `chamados/models.py:1582` | `ChamadoColaborador._universo_da_ressuscitacao` | LIMPA em cópia | A sonda limpa a cópia e troca seu cache pela sequência posterior ao instante simulado da reabertura. O C6 recebe essa cópia. `chamados/models.py:1558`, `:1569`, `:1581–1595` |
+| `chamados/models.py:1721` | `ChamadoColaborador.ressuscitar_perguntas` | LIMPA | `registrar` preserva a foto e grava a `REABERTURA` compensadora no universo relido sob trava. `descarimbar_em_lote` encaminha os campos ao `update` no mesmo `atomic`. `chamados/models.py:1646–1651`, `:1669–1674`, `:1702–1722`, `:3508–3511` |
+| `chamados/models.py:3355`, save `:3372` | `PerguntaDisputa.carimbar` | PREENCHE | A validação sintética vem da coluna quando falta linha física correspondente. A equivalência fecha quando o carimbo prevalece na sequência. Um ato posterior pode produzir B conforme o achado 1. `chamados/models.py:3354–3377`, `:4290–4294`, `:4333–4348` |
+| `chamados/models.py:3384` | `PerguntaDisputa._desfazer_em_memoria` | RESTAURA em memória | Repõe o valor que `carimbar` capturou antes da tentativa. Os caminhos de recusa ou exceção chamam essa restauração. `chamados/models.py:3346–3347`, `:3358–3365`, `:3373–3386` |
+
+## Arquivos e verificação
+
+- [test_e4c_f5_selo_par_ato_coluna.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:452) — `SimpleTestCase` com descoberta por AST, resolução de aliases e regras por classe. O censo só alimenta a anti-vacuidade. O selo segue um nível para um auxiliar local que chame `registrar`, confere a foto de `carimbar` usada por `_desfazer_em_memoria` e confere o repasse do lote ao `update`. Os escritores persistentes do censo chamam `registrar` diretamente quando gravam o ato. `chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:31`, `:260`, `:318`, `:452`, `:499`
+- [e4c_f5_voltaE_mutantes.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:6) — três patches de fonte em memória, cada um com `assert fonte.count(antes) == 1`. A checagem estática confirmou um diagnóstico por mutante no teste `test_escritores_fecham_o_par`. `limpa_sem_ato` acusa `ressuscitar_perguntas`; `preenche_e_desfaz` acusa `_carimbar_validacao`; `escritor_novo` acusa `_limpar_por_fora`. `chamados/tests/e4c_f5_voltaE_mutantes.py:6–38` · `chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:452–462`
+
+## Comandos para o Code
+
+O primeiro comando é o **GREEN esperado da varredura AST na base**. O segundo executa o módulo inteiro, com os dois REDs dos achados esperados no HEAD. Os três últimos isolam os mutantes no teste AST. `chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:452`, `:512`, `:532` · `chamados/tests/e4c_f5_voltaE_mutantes.py:5`
+
+```bash
+selo_e=chamados.tests.test_e4c_f5_selo_par_ato_coluna
+teste_ast="$selo_e.SeloParAtoColunaTest.test_escritores_fecham_o_par"
+
+env -u F5_VOLTA_E_MUTANTE PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_ast" --settings=config.settings.ci
+env -u F5_VOLTA_E_MUTANTE PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$selo_e" --settings=config.settings.ci
+
+F5_VOLTA_E_MUTANTE=limpa_sem_ato PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_ast" --settings=config.settings.ci
+F5_VOLTA_E_MUTANTE=preenche_e_desfaz PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_ast" --settings=config.settings.ci
+F5_VOLTA_E_MUTANTE=escritor_novo PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$teste_ast" --settings=config.settings.ci
+```
+
+**[nao verificado]** Execução pelo runner Django, suíte, banco e ocorrência dos dois caminhos em produção. A checagem local executou somente a varredura AST, os patches em memória e trechos isolados do leitor e do filtro de reabertura. `chamados/models.py:4320–4362` · `chamados/services/disputa_emissao.py:1636–1651`
 
 ## 20/11 11:17 · sessao e099536c8d72 · CODEX-FECHA-A-VOLTA-V1-RASCUNHO · leitura · origem=Code
 
@@ -871,183 +923,4 @@ PAREI RASCUNHO — só CADEIA-20-PASSO-1. A medida D põe três perdas de fio de
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 20/11 09:50 · sessao eb15a60504c1 · TRAVAS-SEM-MEMORIA · verificador · origem=Code
-
-**PROCEDE · TÉCNICO.** M1–M5 e M9–M9b podem ser construídos sem a validação de avais de T2. O recorte ainda precisa fechar a contagem de registros, as referências a A10, o selo e o smoke. **PROCEDE · LEI/DINHEIRO/!** A pre-opus da espinha precisa ter a exceção nominal conciliada com a opção A vigente. O pouso continua certificado na VM. `complemento.txt:3` · `rascunho_TRAVAS-SEM-MEMORIA-V4.txt:44–59,87–112` · `app/docs/RELATO.md:65` · `app/docs/BACKLOG.md:2191,2194–2195`
-
-`V4` nas referências abaixo é `rascunho_TRAVAS-SEM-MEMORIA-V4.txt`. A numeração dos anexos começa no primeiro literal após o cabeçalho de cada anexo. `V4:40`
-
-## 1. As premissas conferem?
-
-| Veredito | Conferência |
-|---|---|
-| **SEGUE — F9** | Está em **`V4:39`**, sob `FONTE`. O literal é **“0 devoluções por divergência demonstráveis, lista confirmada vazia, total real [nao verificado]”**. A data de 19/11 vem de `V4:38`. O BACKLOG de `TRAVAS-T2-AVAL-LE-A-COPIA` deve carregar esse qualificador. `complemento.txt:3` · `V4:38–40` |
-| **SEGUE — limite da medida** | Os seis candidatos são identificados por título ou resumo. Faltam a primeira linha recebida, os alvos e prefixos colados, a hora do evento e os HEADs naquele instante. As 41 entradas fora do `main` são exposição no histórico. O total de devoluções e os avanços efetivos por volta ficam **[nao verificado]**. `V4:37–40,52` |
-| **SEGUE — suite e Git** | A suite resolve `--volta` antes de julgar a seleção efetiva. Inteira sem motivo canônico sai `rc 2`. A volta roda ruff e selo e chama a suite. Régua e pre-push têm portas próprias, e o hook Git repassa argv e stdin. `bin/suite.sh:156–180,215–263,316–325` · `bin/volta_intermediaria.sh:18–47` · `bin/regua.sh:84–101,134–169` · `bin/hooks.sh:58–65` · `bin/pre-push.sh:27–74,159–200` |
-| **SEGUE — ESTADO e ficha** | O medidor hoje cruza declarações e worktrees, devolve as só sujas por nome e ainda carece de HEAD por cópia. O wrapper recebe, confere e raspa anexos. O `PreToolUse` da cópia extrai papel, obra e anexos. O settings da cópia carece de `UserPromptSubmit`. `bin/raias_estado.py:51–135` · `bin/gerar_estado.py:211–224` · `bin/codex_pergunta.sh:57–68,99–100,323–335` · `bin/disjuntor.py:1448–1463,1837–1863` · `.claude/settings.json:2–73` |
-| **SEGUE — prova disponível** | A interface da pista e exemplos de execução estão documentados. `HEAD = main = eb1e49c1e`, SHA do original aprovado, disponibilidade atual da pista, carga dos hooks na sessão viva e resultados dos testes propostos ficam **[nao verificado]**. `app/docs/BACKLOG.md:2191` · `app/docs/RELATO.md:201,1497,1529` · `V4:30,90–91` · `complemento.txt:1–3` |
-
-## 2. Colide com aval vigente?
-
-- **PROCEDE · LEI/DINHEIRO/! — espinha.** A opção A deixa a pre-opus da espinha na VM. O C1 de `PISTA-VOLTOU-1711` retirou justamente a ampliação da espinha e remeteu a rota à `PISTA-CERTIFICA-POUSO`. M2 traz a exceção nominal aprovada para **“nem a suite que o opus recebe”**. Falta explicitar que ela também substitui a rota da opção A **só para a pre-opus da espinha admitida por M2–M4**, e dizer como essa exceção se aplica à condição das três peças. Isso alcança L1b e o job real do PRONTO 2. `complemento.txt:1–3` · `V4:45,75,107,118` · `app/docs/PROMPTS.md:2459,2462` · `app/docs/RELATO.md:65` · `app/docs/BACKLOG.md:2191,2194–2195`
-- **SEGUE — ficha e piloto.** O V4 registra expressamente a troca de forma e autoria do desenho e a inclusão da recusa mecânica. O complemento aprova o desenho A no registro Bash. O rito de `APROVA RASCUNHO`, a condição para virar padrão e as guardas do wrapper seguem pelos avais citados na transcrição. Os literais originais fora dela ficam **[nao verificado]**. `complemento.txt:1–3` · `V4:5–11,26–28,57–59,100,123–125` · `bin/codex_pergunta.sh:241–259`
-- **SEGUE — §7b e executor.** A sessão constrói em cópia nas esperas da F5, o Codex verifica o diff e o instrumento tem pouso próprio. O contrato vem antes do código. O PRONTO registra pendências após mais de três voltas e a inteira verde continua sendo a prova antes do opus. `complemento.txt:3` · `V4:44,48,73,106–107` · `CLAUDE.md:309–319,325–331,369–394` [nao verificado]
-- **SEGUE — parada.** `PAREI RASCUNHO` registra a recusa da obra e deixa a fila andável seguir. Deve preservar a janela útil do topo e o `ESPERANDO` comprovado. O Stop já tem suas próprias condições para devolver o turno. `V4:58,82,91` · `CLAUDE.md:262–275` · `bin/hook_stop_fila1.py:413–524,1248–1277,1381–1404`
-
-## 3. O que não fecha no literal?
-
-| Veredito | Condição a fechar |
-|---|---|
-| **PROCEDE · TÉCNICO — rota sem chave** | M2 manda recusar inteira pre-opus sem `PISTA_LATERAL`. Falta delimitar quais pedidos entram nessa porta, incluindo o comando canônico sem `--dir`, e como distinguir uma recusa de admissão da contingência VM após admissão. V2 deve medir **`testes_rc=2` e `rc=1` da volta**, pois o agregador converte o vermelho. `V4:45–48,74–76` · `CLAUDE.md:95–106` · `bin/suite.sh:129–150,255–263` · `bin/volta_intermediaria.sh:31–47` |
-| **PROCEDE · TÉCNICO — identidade e retorno da pista** | Fixar qual RELATO operacional fornece o marcador do SHA. Exigir o marcador dentro do próprio commit que ele nomeia cria autorreferência. Na execução, vincular seleção, PRONTO, ref e job ao SHA conferido e definir o tratamento das opções sem equivalente remoto documentado, como `--parallel auto`, flags extras e `--seco`. O job real deve provar `Ran`, veredito e rc, com o limite da espera explicitado. `V4:45–48,63–66,73–76,107` · `bin/suite.sh:134–146,197–213,265–270` · `app/docs/BACKLOG.md:2191` · `app/docs/RELATO.md:65,81` |
-| **PROCEDE · TÉCNICO — união de M5** | O dicionário atual por basename pode colapsar duas worktrees de mesmo nome. M5 promete um token por cópia resolvida. Definir identidade e representação de nomes no ESTADO, e cobrir declaração com caminho cujo HEAD falha. E1 cobre declaração sem worktree. `V4:49–50,81` · `bin/raias_estado.py:42–48,73–109,125–135` |
-| **PROCEDE · TÉCNICO — prova da ficha** | Fechar como o hook e o wrapper recebem os mesmos bytes da ficha. O leitor atual de `--anexo` termina no espaço, enquanto o wrapper recebe o argumento inteiro. Fixar a raiz de resolução da referência, o commit de `main` observado e a identidade do `r.txt` com seu `.id` ou registro. FD1–FD6 ainda deixam sem prova troca de conteúdo, `.id` incompatível, cabeçalho incorreto e as duas formas adicionais de `DECISAO`. `V4:26,57–58,82–83` · `bin/disjuntor.py:855–903,1448–1463` · `bin/codex_pergunta.sh:57–68,323–335,464–469` |
-
-## 4. Toca exportada, dinheiro ou `!`?
-
-- **SEGUE — alcance declarado.** O recorte descreve roteamento de testes, metadados Git, ficha e documentação. As portas de exportada, dinheiro, escala, vínculo e regra de negócio permanecem fora. A pista recebe árvore commitada e SHA/opções de teste. O smoke usa destino e dados de fixture pela publicação raspada. Efeito em produção **[nao verificado]**. `V4:44–59,90–100,144` · `app/docs/BACKLOG.md:2191` · `bin/relato.sh:30–38,114–147` · `CLAUDE.md:265–268,401–417`
-- **PROCEDE · LEI/DINHEIRO/! — limite do desvio.** V3 pode provar a contingência **já registrada** para recorte lateral, com uma linha de causa. Estendê-la à espinha ou usá-la para passar por recusa de PRONTO, chave inválida, vermelho de teste ou selo exigido extrapola o literal. O pré-voo da inteira e a certificação do pouso continuam devidos. `V4:45–48,74–77,98,107` · `app/docs/RELATO.md:65,81,1010,1748` · `CLAUDE.md:265–268,320–328,372–381`
-
-## a. Dependências dos itens retirados
-
-| Veredito | Dependência e ajuste |
-|---|---|
-| **PROCEDE · TÉCNICO — M1 e instalação** | Dois registros viram **um registro Bash novo**, compartilhado por T1 e ficha. Ajustar M1, contrato 1 e 5, prova de carga, PRONTO 5, mão do Ronald 1/3 a 3/3 e desligamento. Sai a comprovação de M8 na sessão de trabalho. O `PreToolUse` preexistente está configurado com matcher vazio e é parte das guardas vigentes. `V4:44,47,58,63,67,88–94,110,125,132,141` · `.claude/settings.json:62–72` |
-| **SEGUE — M2–M4** | PRONTO por obra/SHA, executor, recorte e contingência da pista não dependem de M6–M8 nem da alternativa T2. O problema de literal da rota continua o das perguntas 2 e 3. `V4:45–48,73–77,107` · `bin/suite.sh:156–180,215–263` |
-| **PROCEDE · TÉCNICO — M5** | Ficam medidor, HEAD completo, publicação HEAD12 e `SEM WORKTREE`. Sai a frase “o hook lê o mesmo medidor na hora do envio”, cujo consumidor era T2. Saem a sintaxe de alvos/prefixos, leitura recente, delta, devolução e marco de M6–M8; E1/E2 são independentes. `V4:49–54,78–81,108,130–131,135,142–143` · `bin/gerar_estado.py:211–224` |
-| **PROCEDE · TÉCNICO — M9/M9a** | O desenho A usa M3. O desenho B dependia do registro de T2 para declarar custo de zero registros adicionais. A10 sai do RED, selo da ficha e PRONTO 5. A obrigação de deixar passar leitura, sonda e despacho continua e precisa ser provada diretamente no Bash da ficha. `V4:26–28,57–58,79,82,89,98–100,110,137,151` · `bin/disjuntor.py:1837–1863` |
-| **SEGUE — M9b** | Depende do rito de publicação e SHA de M1. Devoluções por origem e recolagens efetivas são medidas da ficha, independentes de F9 e M6b. A descrição do desenho B fica como comparação histórica, com o custo referido à base que incluía T2. `V4:20,26–28,39,44,52,59,112` |
-| **PROCEDE · TÉCNICO — referências restantes** | Remover `U` da fixture, A1–A14, referências cruzadas e os bloqueios dados como respondidos por recado, corte, delta e recolagem de T2. Na `LEI-AKITA`, substituir `P1–E2` pela enumeração dos grupos sobreviventes. F8/F9 continuam como fonte do registro no BACKLOG. `V4:38–39,71–83,114,127–143,151` · `complemento.txt:3` |
-
-## b. PRONTO e smoke depois do complemento
-
-| Item | Veredito e redação resultante |
-|---|---|
-| **PRONTO 1** | **PROCEDE · TÉCNICO — muda.** Cinco linhas do contrato recortado no RELATO, um envio ao Codex, diff e configuração local conferidos pela sessão e pelo verificador. Medir **um** registro Bash novo. `V4:44,63–67,106` · `CLAUDE.md:369–394` |
-| **PRONTO 2** | **SEGUE — fica**, sujeito à resolução da espinha. P1–P5, V1–V3, L1a–L1d, L2–L4, R1 e G1–G2 com contagens por porta. Job real de pre-opus da espinha com id, SHA, `Ran`, veredito e rc, zero jobs sem PRONTO, registro de suspensão em divergência e pouso certificado na VM. `V4:73–77,107` · `app/docs/BACKLOG.md:2191` |
-| **PRONTO 3** | **SEGUE — muda para “M5: E1 e E2”.** E1 prova três tokens e uma declaração `SEM WORKTREE` no gerado e no publicado. E2 prova a troca só do token da cópia que avançou. Saem A1–A14, topo de devolução, continuidade e marco de T2, prova de delta e contagens de recolagem da validação. `complemento.txt:3` · `V4:78–81,108` · `bin/relato.sh:37–38,114–147` |
-| **PRONTO 4** | **PROCEDE · TÉCNICO — muda.** Ficam RED na base pelo motivo da regra, controle íntegro verde e smoke com sessão, digest, até 10 min e encerramento. Pela leitura literal de “do PRONTO 4 [...] saem os mutantes”, saem os sete: retirar T1/P1, retirar T2/A2, aceitar qualquer SHA/P2, ignorar segunda cópia/A4, omitir HEAD/E1, aceitar qualquer descendente/A12 e ignorar idade/A13. Se o corte era só dos mutantes **de T2**, os três sobreviventes são P1, P2 e E1. Sem eles, os casos funcionais ficam e perde-se a prova por mutação dessas três costuras. `complemento.txt:3` · `V4:87–90,109` | [nao verificado]
-| **PRONTO 5** | **PROCEDE · TÉCNICO — muda.** FD1–FD6, três recusas literais com zero chegadas, três entradas com uma chegada e próximo andável registrado após cada recusa. Conferir um registro novo. Sai A10. Sem uma passagem direta pela porta do (d), fica sem prova que leitura, sonda e despacho comuns chegam às guardas atuais. `V4:79,82–83,89,110` · `bin/codex_pergunta.sh:241–259` |
-| **PRONTO 6** | **SEGUE — fica.** RED, controle e mutante próprio da ficha, com FD1 e FD3 vermelhos. No mesmo smoke, uma recusa e uma entrada com contagem, sessão e digest. Esse mutante está no PRONTO 6. `complemento.txt:3` · `V4:89,91,111` |
-| **PRONTO 7** | **SEGUE — fica.** Dois ou três desenhos medidos, um redigido inteiro, uma linha por ID/SHA com origens, referências e recolagens efetivas. Se o chat escolher outro desenho, registrar pedido e novo SHA. `V4:59,112` |
-| **Smoke pré-pouso** | **PROCEDE · TÉCNICO — muda.** Ronald abre na raiz candidata pelo comando e teto de V4. Com SSH, runners, nomes e destino de publicação da fixture, provar carga do Bash por P1/P3 e FD1/FD2, V1, E1 e continuidade após a recusa da ficha. Registrar sessão, digest, tempo e encerramento. Saem `UserPromptSubmit`, A1/A2/A3/A8 e a prova de ativação M8. Evento ausente ou timeout segura o pouso. O job real fica no PRONTO 2. `V4:90–94,107,111` · `.claude/settings.json:3–73` · `bin/relato.sh:23–38` |
-| **Instalação manual** | **PROCEDE · TÉCNICO — muda.** Se houver negativa, as três etapas usam o trecho de **um** registro, backup, JSON válido, digest e prova do Bash na raiz candidata. Na instalação de trabalho, provar a carga desse Bash. Sai o marco M8. Os comandos efetivos da descartável precisam apontar para a fixture, pois o settings entregue tem caminhos absolutos da árvore de trabalho. `V4:92–94` · `.claude/settings.json:9,20,29,40–57,68` · `app/docs/RELATO.md:3341,4356,4411` |
-
-## c. Arquivos e selos
-
-- **SEGUE — código e configuração.** M2–M4 tocam `bin/suite.sh`, a integração de `bin/volta_intermediaria.sh` e o verificador comum do registro Bash e do executor. M9a usa esse mesmo registro em `.claude/settings.json`. O V4 cita `bin/disjuntor.py` como molde e leitor atual, sem fechar se o verificador novo mora ali ou em arquivo próprio. O wrapper é consumidor e alvo de regressão. `V4:44–48,58,87–89` · `bin/disjuntor.py:1448–1463,1796–1798,1837–1863` · `bin/codex_pergunta.sh:323–335` · `.gitignore:66`
-- **SEGUE — medidor e docs.** M5 muda `bin/raias_estado.py` e a apresentação consumida por `bin/gerar_estado.py`. `bin/raia_agente.sh listar` também lê o compositor e `bin/relato.sh` publica o resultado. M1/M4/M9* escrevem evidências em `app/docs/RELATO.md`, M3 lê também `app/docs/RELATO-ARQUIVO.md` e o complemento manda registrar o item em `app/docs/BACKLOG.md`. Esses são caminhos sob `app/` de documentação operacional. O escopo descrito não pede edição de código Django. `complemento.txt:3` · `V4:44,47–49,57–59,98–100` · `bin/raia_agente.sh:80–81` · `bin/gerar_estado.py:211–224` · `bin/relato.sh:114–130`
-- **PROCEDE · TÉCNICO — selos de host.** O selo novo `bin/tests/test_travas_sem_memoria.sh` entra pelo glob da régua. A expectativa nova é rota remota admitida e tokens no ESTADO. Os selos antigos continuam cobrando motivo e seleção efetiva, trava no ramo VM, montagem, escritor único e guardas do wrapper. `test_suite_motivo.sh` tem âncoras textuais e `test_suite_sh.sh` tem regex do comando canônico. Se forem atingidas pelo diff, adaptar a fixture ou a âncora com a mesma prova. `.git/hooks`, `bin/hooks.sh`, `bin/pre-push.sh` e `bin/regua.sh` são caminhos de regressão em R1/G1/G2. `V4:77,87–89,107` · `bin/regua.sh:134–145` · `bin/tests/test_suite_motivo.sh:14–42,159–215` · `bin/tests/test_suite_sh.sh:22–69` · `bin/tests/test_raia_declarada_no_estado.sh:29–41,57–84` · `bin/hooks.sh:58–65`
-
-## d. Contrato de cinco linhas
-
-**PROCEDE · TÉCNICO.** O V4 traz as cinco rubricas. O texto recortado ainda precisa explicitar a espera, a medida e o desligamento da publicação de M5, além de remover as referências ao registro retirado. `V4:44,49,63–67,81` · `CLAUDE.md:394`
-
-| Linha | Como fica |
-|---|---|
-| **Quem chama** | Sessão/raia chama suite ou volta pelo Bash da raiz. A sessão entrega a ficha no mesmo registro Bash. `relato.sh` chama o gerador, que lê o medidor. `V4:45–49,58,63` · `bin/relato.sh:37–38` · `bin/gerar_estado.py:215–224` |
-| **Quem espera** | A sessão espera o job em shell de fundo e recebe a decisão da ficha antes do wrapper. O chat lê o rascunho no RELATO. O publicador espera o gerador e a raspagem antes de publicar. `V4:64` · `bin/relato.sh:37–38,114–147` |
-| **Falha/limite** | Recusa restrita ao pedido ou à ficha. Pista só com commit admitido, contingência no alcance vigente e suspensão por divergência. M5 publica `SEM WORKTREE` para declaração sem HEAD resolvido. Fixar o limite do job e da espera da pista. `V4:45–49,58,65,90` · `app/docs/BACKLOG.md:2191` |
-| **Medida** | Porta, obra, SHA, rc/veredito, chamadas SSH/VM, id e tempo do job. Na ficha, chegadas ao wrapper, devoluções por origem e recolagens. No ESTADO, E1/E2 com HEADs de referência e comparação do gerado com o publicado na mesma geração. `V4:59,66,73–83,108,112` | [nao verificado]
-| **Quem desliga** | Ronald restaura a configuração anterior ao registro Bash novo, retira a seleção da rota e registra no RELATO. Falta nomear a reversão da saída de M5 pelo pouso próprio do instrumento. `V4:49,67` · `CLAUDE.md:325–328,394` | [nao verificado]
-
-## e. Ordem em esperas da F5
-
-| Passo | Veredito, RED e selo |
-|---|---|
-| **1. Fechar M1 e a fixture** | **PROCEDE · TÉCNICO.** Fechar o texto recortado e a exceção da espinha, publicar o contrato e enviar uma vez. Capturar o RED de P1, E1 e FD1 na base com fixture íntegra. O selo despacha o evento pelo settings candidato e conta os efeitos. `complemento.txt:3` · `V4:44,63–73,81–89` · `CLAUDE.md:28–29,394` |
-| **2. M5** | **SEGUE.** RED E1/E2 com Git real, HEAD conhecido e publicação de fixture. Selo no medidor e na publicação raspada, incluindo as só sujas e o leitor `raia_agente.sh listar`. Isolar também o provedor de nomes, pois `DEST_RELATO` sozinho troca só o destino. `V4:49,81,87,108` · `bin/relato.sh:23–38,114–119` · `bin/relato_nomes.sh:8–23` · `bin/raia_agente.sh:80–81` |
-| **3. M2–M4 em duas esperas** | **SEGUE.** Primeiro V1–V3, L2–L4 e R1/G1/G2 para rota e regressões. Depois P1–P5 e L1a–L1d para PRONTO e executor. Selo com SSH e runners falsos, seleção efetiva, chamada via settings e chamada direta ao executor. A prova do job real entra após resolver a exceção da espinha. `V4:45–48,73–77,87–88,107` · `bin/suite.sh:162–180,215–263` |
-| **4. M9/M9a, depois M9b** | **SEGUE.** RED FD1–FD6 pelo mesmo registro Bash com contagem das chegadas. Selo com controle íntegro, mutante da ficha e passagem direta das chamadas comuns. Para M9b, a prova é um rascunho de fixture conferido contra o rito de publicação, SHA, origens e recolagens. `V4:57–59,82–89,110–112` |
-| **5. Integração e pouso próprio** | **SEGUE.** Rodar o selo completo com as regressões de host, conferir diff com o verificador e executar o smoke recortado. Fechar PRONTO 2 com a prova real e certificar o pouso na VM. Distribuir os passos pelas esperas comprovadas da F5. Duração e disponibilidade dessas janelas **[nao verificado]**. `complemento.txt:3` · `V4:87–94,106–112` · `bin/regua.sh:134–145` · `CLAUDE.md:316–328,372–381` |
-
-## 20/11 09:49 · sessao 06588a80f15d · E4C-F5-CONSTROI · verificador · origem=Code
-
-**AVAL-DEVOLVIDO no item 1.** O mesmo `atomic` pode produzir A ou B. A frota raspada registrou A=0 e B=0 em 51.953 perguntas. A ocorrência em produção e a remedição na árvore final estão [nao verificado]. `f5_vd2_frota.out:3–8` `app/chamados/services/disputa_emissao.py:1480–1534,1629–1658` `app/chamados/services/materializacao.py:1033–1069`
-
-**Item 2 mantém o PAREI POUSO** até a prova nominal das 16. **Item 3 SEGUE** com a isenção restrita ao sítio e o tripwire. `f5_ato_x_coluna_invariante_2011_0545.txt:12,14` `app/chamados/tests/test_e4c_f5_selo_chamada.py:161–179,265–279`
-
-## Item 1 — Ato × coluna
-
-| Pergunta | Veredito | Motivo |
-|---|---|---|
-| **1. Premissas** | **PROCEDE · TÉCNICO** | As 11 guardas ficam no ato e a fila do materializador ainda seleciona pela coluna. O censo confirma uma sequência para A e duas para B. A equivalência prometida falha mesmo com as escritas bem-sucedidas. `f5_vd2_frota.out:51–78` `app/chamados/services/materializacao.py:2111–2132` `app/chamados/services/disputa_emissao.py:1483–1534,1629–1658` `app/chamados/services/materializacao.py:1033–1069` |
-| **2. Avais vigentes** | **PROCEDE · LEI/DINHEIRO/!** | O 0815 exclui mover casos em entregue/exportada pelas portas da volta de escrita e o 1710 proíbe tocar entregue. B libera escritas de pergunta sem veto geral de entrega. A classe vii é exceção expressa ao 2050 para os testes descritos. O 0110 só aceita delta de leitura medido e atribuído. `e4c_f5_constroi_1911_0815.txt:3` `e4c_f5_constroi_a_1911_1710.txt:12` `f5_classe_nao_caso_1911_2050.txt:3–6` `f5_chokepoint_teto_medido_2011_0110.txt:2–5` `f5_ato_x_coluna_invariante_2011_0545.txt:6` `app/chamados/services/fio.py:1394–1409` |
-| **3. Condição literal** | **PROCEDE · TÉCNICO** | O censo e o selo propostos verificam a presença de um par no `atomic`. Falta exigir coerência da ordem dos atos e cobrir o caminho inverso, em que o ato desfaz a validação e o `UPDATE` omite a coluna. `f5_ato_x_coluna_invariante_2011_0545.txt:5–10` `app/chamados/services/disputa_emissao.py:1483–1534,1629–1658` |
-| **4. Exportada, dinheiro ou `!`** | **PROCEDE · LEI/DINHEIRO/!** | Há caminho de escrita da pergunta antes da guarda K6 da validação. A validação que passa pode chegar a batida e ao recálculo do gravado. POST efetivo, diferença em folha e valor pago estão [nao verificado]. `app/chamados/services/acoes_disputa.py:349–385` `app/chamados/services/validacao.py:737–757` `app/chamados/services/materializacao.py:1493–1503` `app/ponto/services/fechamento.py:1798–1824` |
-
-**P1a — PROCEDE · TÉCNICO.** Há **sete pontos ORM de produção** que persistem a coluna, com **oito sítios** se os dois chamadores do `UPDATE` comum forem contados separadamente. A relação do aval sobra com duas atribuições em memória e falta o `force_insert`. A correspondência abaixo usa as âncoras de main fornecidas pelo aval. O checkout independente de main está [nao verificado]. `f5_ato_x_coluna_invariante_2011_0545.txt:5` `app/chamados/models.py:1569–1589,1719–1722,3229–3234,3372–3386,3508–3511`
-
-| Forma | Escritores na cópia |
-|---|---|
-| `save(update_fields=...)` | `_carimbar_validacao`, `devolver_validacao_recusada`, `devolver_paridade_bug_par_103`, `responder_pergunta_disputa_core` no ramo que inclui a coluna e `PerguntaDisputa.carimbar` no ramo `resposta='validar'` com texto e coluna nula. `app/chamados/services/validacao.py:168–175,270–283,350–358` `app/chamados/services/disputa_emissao.py:1483–1496,1527–1534` `app/chamados/models.py:3350–3372` |
-| `QuerySet.update` em lote | `descarimbar_em_lote` recebe `validada_em=None` de `ressuscitar_perguntas` e `reabrir_para_correcao`. A chamada L-130 usa o mesmo helper com campos de resposta. `app/chamados/models.py:1719–1722,3508–3511` `app/chamados/services/disputa_emissao.py:1617,1656` `app/chamados/services/validacao.py:429–446` |
-| `force_insert` e outros `bulk` | `_nascer` insere a coluna, nula por padrão, e registra a linha correspondente se receber validação em `**campos`. O `bulk_update` localizado limita-se à lavra. O `bulk_create` localizado insere `DecisaoPergunta`. `app/chamados/models.py:2659,3229–3234,4290–4295,4373–4375` `app/chamados/veredito_lavrado.py:237–250` |
-| Sobras | `models.py:1573` e `:3360` da lista de main correspondem, pelo censo da cópia, à sondagem em cópia e à restauração em memória. `app/chamados/models.py:1569–1589,3373–3386` |
-
-**P1b — PROCEDE · TÉCNICO, PAREI expresso.** Em B, com resposta de hora, motivo de recusa e `materializada_em` nula, a guarda pelo ato pula o bloco que limpa a coluna e grava `DEVOLUCAO`. O caminho pode seguir para a reabertura da disputa. O teste atual mostra que a guarda pela coluna limpa B. `matriz_c3.txt:13` `app/chamados/services/validacao.py:262–295` `app/chamados/tests/test_e4c_f5_voltaD_portas.py:383–392`
-
-**P3a — PROCEDE · TÉCNICO.** **Não.** “Para CADA escritor da coluna validada_em” alcança a função como sítio, mas a pergunta “se o ato é gravado ou desfeito na MESMA transação” só percorre coluna → ato. No ramo com instância antiga, `RESPOSTA(False)` é gravada e `validada_em` fica fora de `_campos`. `f5_ato_x_coluna_invariante_2011_0545.txt:5,7` `app/chamados/services/disputa_emissao.py:1483–1496,1517–1534`
-
-**P3b — PROCEDE · TÉCNICO.** `ABSORCAO` satisfaz a leitura literal de **qualquer ato** no mesmo `atomic`. O par de **validação** fica sem linha `VALIDACAO` real. A composta lê a validação sintética no instante da coluna. Uma `RECUSA` posterior vence essa linha e a composta devolve validação nula. `f5_ato_x_coluna_invariante_2011_0545.txt:5` `app/chamados/services/materializacao.py:1060–1069` `app/chamados/models.py:4290–4303,4333–4362`
-
-**P3c — PROCEDE · TÉCNICO.** “Todos sim = segue” aceita a reabertura porque o par existe. A resposta sem coluna fica fora das duas frases como **caminho**. A absorção passa como “sim” se qualquer ato valer e cai em “algum não” se o aval exigir a `VALIDACAO` correspondente. Essa distinção precisa estar no literal. `f5_ato_x_coluna_invariante_2011_0545.txt:5,7,9` `app/chamados/services/disputa_emissao.py:1483–1534,1629–1658` `app/chamados/services/materializacao.py:1060–1069`
-
-| Sequência | Menor cura da corrida |
-|---|---|
-| **A · Reabertura** | Colher `ato_em` depois da trava, junto da foto que já é lida depois dela. Basta mover o relógio. `app/chamados/services/disputa_emissao.py:1629–1656` |
-| **B · Resposta** | Reler a pergunta sob a trava existente antes de colher a foto do passivo e montar `update_fields`. Limpar a assinatura no mesmo `save` quando a releitura trouxer a coluna preenchida. `app/chamados/services/disputa_emissao.py:1476–1499,1517–1534` |
-| **B · Absorção** | Reler a irmã e sua elegibilidade sob a trava e usar o instante daí para carimbo e `ABSORCAO`. Na sequência descrita, a recusa já limpou o texto e a coluna, e `carimbar` só preenche a validação com texto. `app/chamados/services/materializacao.py:1033–1069` `app/chamados/services/disputa_emissao.py:1617,1656` `app/chamados/models.py:3350–3357` |
-
-Essas três curas de concorrência cabem nos escritores atuais e dispensam ato de reparo, backfill, campo novo, volta da guarda à coluna e migração da fila. A eventual decisão de fazer a absorção gravar **validação real nova** pede autorização sobre o significado do ato. A redução vigente preserva a validação em `ABSORCAO`. `f5_ato_x_coluna_invariante_2011_0545.txt:5,9` `app/chamados/models.py:4297–4303,4342–4351` `app/chamados/services/materializacao.py:1060–1069`
-
-**P3d — SEGUE para as curas locais.** Reabertura reaproveita a foto existente. Resposta e absorção acrescentam leitura se fizerem `SELECT` novo. O selo está em `app/ponto/tests/`, cobre batida, `_gravar_estado` e seus desdobramentos, e não exercita essas duas portas nos cenários medidos. Alterar `carimbar` genericamente alcançaria o resolvedor S143. Delta e suite estão [nao verificado]. `app/ponto/tests/test_selo_chokepoint_escrita.py:319–329,356–403,438–510` `app/chamados/services/disputa_emissao.py:2025–2033` `app/chamados/signals.py:107–119`
-
-**P3d · harness — SEGUE.** As curas locais podem ser verificadas com ORM real. A opção B da pureza é que mexeria com harnesses que injetam `PerguntaDisputa`, como os de `test_e3_degrau_dono_e_porta.py:510–511` e `test_e3_r3_c6_sem_banco.py:290–291`. Um refresh só de campos pode conservar o prefetch velho de `decisoes`. `resposta_f5_duble_1911_1945.txt:2–7` `f5_classe_nao_caso_1911_2050.txt:3–5` `app/chamados/tests/test_e4c_f5_selo_chamada.py:165–170` `app/chamados/tests/test_e4c_f5_voltaD_portas.py:371–381`
-
-**P3e — PROCEDE · TÉCNICO.** Hoje **(a)** só pode ser testado como RED para as três intercalações. Use duas conexões, barreira no trecho anterior à trava, portas reais e releitura nova após os dois commits. Afirme a equivalência e o desfecho esperado do ato. K47 e os REDs atuais fabricam divergência com `update` direto. `app/chamados/tests/test_dst_l2_jz1_c7_retencao_sob_trava.py:220–254` `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197–216` `app/chamados/tests/test_e4c_f5_voltaD_portas.py:33–60`
-
-Para **(b)**, reintroduza cada janela como mutante e exija que o teste falhe. Para o mutante que suprime `VALIDACAO`, confira também a linha real, pois o fallback sintético pode deixar a equivalência verde. A âncora de `retry_reativa` confere estaticamente. Execução do mutante e A/B finais estão [nao verificado]. `app/chamados/models.py:4290–4295,4333–4351` `app/chamados/tests/bug_par_mutantes.py:68–71` `app/chamados/services/validacao.py:683–689` `f5_ato_x_coluna_invariante_2011_0545.txt:6–10`
-
-**P4a — PROCEDE · LEI/DINHEIRO/!.** Passar a guarda em B tem efeitos diferentes por porta. As condições abaixo continuam necessárias. A sonda não executou os POSTs reais. `app/chamados/services/acoes_disputa.py:338–385` `app/chamados/services/validacao.py:888–929` `app/chamados/services/declaracao_texto.py:336–350,651–670` `f5_vd2_frota.out:91–92`
-
-| Em B | O que pode acontecer e qual guarda existe |
-|---|---|
-| **Corrigir e recusar** | Corrigir pode gravar nota e `RESPOSTA(False)` antes de chamar `validar_pergunta`. Recusar ainda exige resposta vigente e pergunta dentro do fato, depois grava motivo e `RECUSA` e limpa os campos. Nessas escritas iniciais, a cerca de entrega só age dentro de ato cercado. Assim podem tocar a pergunta em entregue se os demais requisitos passarem. `app/chamados/services/acoes_disputa.py:349–385` `app/chamados/services/validacao.py:900–929` `app/chamados/models.py:3497–3511,3697–3707` `app/chamados/services/fio.py:1394–1409` |
-| **Declarar e aplicar declaração** | Com marco faltante e pergunta elegível, declarar grava resposta e aguarda validação. Aplicar pode gravar resposta antes de chamar a validação. O prefixo confere marco e proposta, sem veto geral de entrega à escrita da resposta. `app/chamados/services/declaracao_texto.py:332–350,365–428,617–637,651–699` `app/chamados/services/disputa_emissao.py:1517–1534` |
-| **Validar, lote e irmã** | B pode liberar carimbo individual, entrada do lote e carimbo da irmã. O retorno do lote só contabiliza. K6 veta **metades de intervalo** pelo dia do fato antes do carimbo e é conferido de novo no fluxo de hora. Fora desse alcance, F6 veta **criar batida institucional** se o `FechamentoMensal` estiver aprovado/exportado. São guardas distintas. `app/chamados/services/validacao.py:641–644,683–694,737–757,779–785,1067–1098` `app/chamados/services/materializacao.py:808–832,1872–1876` `app/ponto/registro_batida.py:147–161` `app/ponto/janelas.py:75–89` |
-| **Fecho e materializador** | B pode habilitar o carimbo sem credor, sujeito ao C6 e à cerca de entrega do resolvedor. A releitura do materializador barra B e o plantio que exige irmã validada também a barra. No outro ramo do par, B faz voltar a checagem de implausibilidade. `app/chamados/services/disputa_emissao.py:1913–1925,2080–2106` `app/chamados/services/materializacao.py:175–208,2123–2133` |
-
-**Efeito em dinheiro.** Corrigir, aplicar ou validar podem chegar ao plantio e ao recálculo de `FechamentoMensal` e `DiaPago`. O recalculador tem guarda temporária específica da 09 e registra recálculo de exportadas fora dela. Valor efetivamente alterado, alteração de TXT entregue e ocorrência em produção estão [nao verificado]. `app/chamados/services/validacao.py:745–757` `app/chamados/services/materializacao.py:1493–1503` `app/ponto/services/fechamento.py:19–43,539–547,1160–1196,1798–1824`
-
-**P4b — SEGUE.** `vigiar_fio_morto` já percorre o universo de perguntas, chama o contador de texto e publica o carimbo. É o encaixe mais direto. `vigiar_carimbo_sem_registro` já é encadeado, mas seu censo próprio recorta perguntas de hora validadas. `auditar_invariantes_chamados` também roda e já tem contadores da família. `app/config/crons.py:542,1737–1739,1775–1777` `app/chamados/management/commands/vigiar_fio_morto.py:186–196,268–291` `app/chamados/management/commands/vigiar_carimbo_sem_registro.py:42–71` `app/chamados/management/commands/auditar_invariantes_chamados.py:1085–1094`
-
-O contador A/B pode ler `composta` e a coluna em lote, com dono ESTRUTURA e **juízes novos = 0**. O contador F7 já existente mede falta de linha física, uma condição diferente. Se o encaixe em `handle` introduzir um novo global, o harness em memória que recompila esse método precisa receber o dublê correspondente. `app/chamados/services/vigia_texto_resposta.py:11–20` `app/chamados/management/commands/backfill_decisoes_pergunta.py:95–118` `app/chamados/tests/test_e4a2_c5_memoria.py:118–143` `app/core/juizes.py:190`
-
-**P4c — PROCEDE · LEI.** “Escritor único” existe nos dois documentos. O desenho do 0545 conserva vários escritores da coluna e pede pareamento transacional e um selo de contrato. Isso realiza uma *fitness function* sobre o invariante. A projeção com um escritor está na E4D. A L-123 exige que o `padrao=` descreva o que a cura realiza. `app/docs/GLOSSARIO.md:12` `app/docs/PLANO-PADROES.md:54–67` `app/docs/BACKLOG.md:2023` `f5_ato_x_coluna_invariante_2011_0545.txt:3–10,21`
-
-## Item 2 — Display
-
-| Pergunta | Veredito | Motivo |
-|---|---|---|
-| **1. Premissas** | **SEGUE** | O anexo 4 dá 16 diferenças literais e zero nas duas comparações indicadas. A property da cópia lê o texto do ato e formata posto, escala e opções. `f5_property_display_copia.out:3–9` `app/chamados/models.py:3836–3863` |
-| **2. Avais vigentes** | **SEGUE** | O 0545 dá uma exceção nominal à condição de pouso do 1830. A prova pedida é de leitura e cabe com a implementação atual de `resposta_display`. `respostas_f5_constroi_2_1911_1830.txt:6,11` `f5_ato_x_coluna_invariante_2011_0545.txt:12` `app/chamados/models.py:3836–3863` |
-| **3. Condição literal** | **PROCEDE · TÉCNICO para liberar o pouso** | As duas contagens zero comparam ato e coluna na sonda. Falta a comparação da saída exibida em main × cópia para cada um dos 16 PKs. Resultado [nao verificado]. `f5_property_display_copia.out:7–9` `f5_ato_x_coluna_invariante_2011_0545.txt:12` | [nao verificado]
-| **4. Exportada, dinheiro ou `!`** | **SEGUE** | A prova solicitada percorre caminhos de leitura de texto. `app/chamados/models.py:3836–3863` `app/api/views.py:2566–2582` `app/templates/chamados/partials/modal_fio.html:217–221` |
-
-**P3f — PROCEDE · TÉCNICO para a prova nominal.** Na cópia, `_pergunta_card.html` chama `perg.resposta_display`. Meu Atendimento usa a property com fallback para `resposta_colab`. `api_chamados_v2` e `api_disputa_perguntas` entregam ambos os campos. O modal do fio imprime `perg.resposta_colab` diretamente e usa `leitura_da_resposta` para o diagnóstico de horário. `app/templates/chamados/partials/_pergunta_card.html:29–43` `app/templates/chamados/partials/_card_atendimento.html:105–106,141–143,185–186,394` `app/api/views.py:1148–1165,2538,2566–2581` `app/templates/chamados/partials/modal_fio.html:217–221,274–287` `app/chamados/templatetags/chamados_tags.py:145–176`
-
-Para main, o 1830 documenta que `resposta_display` lê o ato. Os chamadores naquele checkout, o campo que o cliente nativo efetivamente renderiza e a igualdade das saídas para os 16 estão [nao verificado]. `respostas_f5_constroi_2_1911_1830.txt:6` `f5_ato_x_coluna_invariante_2011_0545.txt:12`
-
-## Item 3 — Pureza
-
-| Pergunta | Veredito | Motivo |
-|---|---|---|
-| **1. Premissas** | **SEGUE** | A referência está em `projecao_temporal_da_pergunta`, linha **1401** da cópia. O aval informa main `:1398`. Identidade textual com main [nao verificado]. `app/chamados/juizes.py:1383–1403` `f5_ato_x_coluna_invariante_2011_0545.txt:14` |
-| **2. Avais vigentes** | **SEGUE** | A exceção nominal do 0545 acomoda a referência à tupla dentro da regra de pureza do 1710. A opção B fica na fila E4D, preservando o escopo de adaptação do 1945. `e4c_f5_constroi_a_1911_1710.txt:4` `resposta_f5_duble_1911_1945.txt:2–7` `f5_ato_x_coluna_invariante_2011_0545.txt:14` |
-| **3. Condição literal** | **SEGUE** | O tripwire é implementável no selo atual. Hoje ele isenta o atributo por forma AST dentro das funções examinadas. A trava pela linha exata ainda falta. `app/chamados/tests/test_e4c_f5_selo_chamada.py:161–179,265–279` |
-| **4. Exportada, dinheiro ou `!`** | **SEGUE** | A isenção proposta atua na verificação estática de uma referência a uma tupla de vias. `app/chamados/models.py:2603,2724` `app/chamados/juizes.py:1399–1403` `app/chamados/tests/test_e4c_f5_selo_chamada.py:265–279` |
-
-**P3g — SEGUE.** O selo é `SeloPurezaTest.test_os_dois_juizes_leem_o_objeto_recebido`, por `_impurezas`. Restrinja a isenção a **uma ocorrência** no `if` de `projecao_temporal_da_pergunta` e confira a linha-fonte literal pelo `lineno` do nó. Uma mudança na linha retira a isenção. Outra referência ao modelo continua passando pela regra normal do selo, inclusive dentro do mesmo arquivo. `app/chamados/juizes.py:1383,1401` `app/chamados/tests/test_e4c_f5_selo_chamada.py:161–179,265–279`
-
-_7496 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7498 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
