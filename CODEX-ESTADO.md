@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **19/11/2026 20:27** · publicado em **19/11/2026 20:31** (UTC-3)
+> Ultima resposta processada: **19/11/2026 21:12** · publicado em **19/11/2026 21:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 19/11 21:12 · sessao 6d7b3f3fd0af · E4C-F5-CONSTROI · construtor · origem=Code
+
+A A2 acrescenta lote a **nove carregadores**. O K15 já vinha em lote, e o O261 conserva a releitura por candidata sob trava. Os dois testes de igualdade de consultas permaneceram intactos. A sintaxe dos dez arquivos e dos nove mutantes foi conferida por AST, e a contagem de `assert` e `self.assert*` ficou igual à base em todos os módulos existentes tocados. Banco, suíte e morte dos mutantes ficam para o Code e o Opus final [nao verificado]. `chamados/models.py:364`, `chamados/services/relavra_via.py:230`, `chamados/tests/test_e2_tarefa_do_dia.py:938`, `escala/tests/test_f3_beco1_folga_na_lista.py:402`.
+
+### Carregadores e arquivos tocados
+
+| K | Base | A2 |
+|---|---|---|
+| 1 | Mapa temporal em lote, instâncias sem lote. `chamados/services/tarefa_do_dia.py:390`, `:530` | `Prefetch` nas instâncias, com a junção de `absorcao_ausencia` reaproveitada no mapa temporal. `chamados/services/tarefa_do_dia.py:537`, `:545` |
+| 2 | Sem lote. `chamados/juizes.py:1662` | `alimentar_portas` entrega as instâncias com decisões. `chamados/juizes.py:1663` |
+| 9 | Sem lote. `chamados/reconciliador.py:1574` | Prefetch na consulta que materializa as reatáveis. `chamados/reconciliador.py:1575` |
+| 10 | Sem lote. `chamados/reconciliador.py:1102` | Prefetch nas órfãs abertas. As duas varreduras com `iterator` passam blocos explícitos de 2.000. `chamados/reconciliador.py:1103`, `:1245`, `:1356` |
+| 15 | Já em lote. `chamados/models.py:366` | Mesmo carregador. O selo mede **2 consultas com 1 e com 5 ancoradas**, conferindo os PKs e a forma do SQL. `chamados/tests/test_e4c_f2_leitura_do_ato.py:578`, `:584`, `:589` |
+| 16 | Sem lote. `chamados/services/disputa_emissao.py:1955` | Prefetch nas pendentes do S128. `chamados/services/disputa_emissao.py:1955` |
+| 17 | Sem lote. `chamados/services/fio.py:1964` | Prefetch nas sementes do universo do fato. `chamados/services/fio.py:1964` |
+| 18 | Sem lote. `chamados/services/fio.py:1597` | Prefetch nos vizinhos do fato. `chamados/services/fio.py:1597` |
+| 24 | Prefetch só de `perguntas_que_resolvem`. `ponto/services/cartorio.py:147` | Prefetch de `perguntas_que_resolvem__decisoes`. `ponto/services/cartorio.py:146` |
+| 43 | Sem lote. `chamados/reconciliador.py:702` | Prefetch na consulta que materializa as absolvíveis. `chamados/reconciliador.py:703` |
+
+Além dos seis módulos de produção da tabela e do selo de ancoradas, foram tocados `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187`, `chamados/tests/test_e4c_f5_voltaA_lotes.py:22` e `chamados/tests/e4c_f5_voltaA_mutantes.py:9`. O selo O261 compara `6 × Q(3) == 3 × Q(6)` e limita a **9 consultas por candidata**. O caso novo mede separadamente o SELECT de decisões por candidata e confere os PKs julgados. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:203`, `chamados/tests/test_e4c_f5_voltaA_lotes.py:162`.
+
+### Origem das consultas extras
+
+- **Tarefa, 36 × 30.** A fixture acrescenta duas perguntas. A leitura do código aponta três SELECTs avulsos por pergunta no percurso medido: partição do app, preparação do slot e entrada do C6. Os três chegam a `DecisaoPergunta.leitura` pelas instâncias de K1. O mapa temporal já usava lote, mas guardava as leituras separadamente. Agora a mesma carga abastece o mapa e o cache das instâncias. A atribuição dos seis SELECTs é por código e pelo total raspado, sem captura individual [nao verificado]. `chamados/tests/test_e2_tarefa_do_dia.py:921`, `:932`, `chamados/services/pergunta_no_app.py:88`, `chamados/services/carga_pergunta_viva.py:119`, `chamados/juizes.py:351`, `:1408`, `chamados/models.py:4330`, `chamados/services/tarefa_do_dia.py:537`, `:545`.
+- **C11, 56 × 48.** A fixture acrescenta quatro dias com uma pergunta respondida por dia. Cada dia passa pelo C6 com a instância de K2 e pela partição com outra instância, de K1. O `all` de M1 ainda recebe o ORM e lê seus atributos diretamente. Os dois lotes cobrem as duas origens. A atribuição dos oito SELECTs é por código e pelo total raspado, sem captura individual [nao verificado]. `escala/tests/test_f3_beco1_folga_na_lista.py:104`, `:395`, `escala/services/cadastro_realidade.py:460`, `:466`, `:472`, `:502`, `chamados/juizes.py:1391`, `:1663`, `:1667`, `chamados/services/tarefa_do_dia.py:537`, `:626`.
+
+### Testes e mutantes [nao verificado]
+
+O RED compara apenas SELECTs cuja tabela principal é `chamados_decisaopergunta` e exige igualdade exata entre os PKs da fixture e os recebidos pelo compositor. No cartório, a validação de todas as perguntas força o `any` a percorrer a coleção inteira. `chamados/tests/test_e4c_f5_opus_models.py:25`, `chamados/tests/test_e4c_f5_voltaA_lotes.py:22`, `:28`, `:137`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_voltaA_lotes \
+  chamados.tests.test_e2_tarefa_do_dia.SeloDeterminismoERelogio.test_lote_tem_queries_constantes \
+  escala.tests.test_f3_beco1_folga_na_lista.F3Beco1NaListaTest.test_MORDE_F5_queries_nao_crescem_com_os_dias \
+  chamados.tests.test_o261_julgamento_desfaz_carimbo.JulgamentoDesfazCarimboSemLastroTest.test_custo_por_candidata_e_CONSTANTE \
+  chamados.tests.test_e4c_f2_leitura_do_ato.AncoradasCustoTest \
+  chamados.tests.test_e4c_f5_volta2_juizes.JuizesVolta2Test.test_red_8_custo_montar_chamados_fio_uma_e_cinco
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados escala.tests.test_f3_beco1_folga_na_lista \
+  ponto.tests.test_selo_chokepoint_escrita
+```
+
+Cada invocação abaixo retira um único lote em memória. A morte esperada é a desigualdade entre 3 e 6 em `chamados/tests/test_e4c_f5_voltaA_lotes.py:37` [nao verificado]. `chamados/tests/e4c_f5_voltaA_mutantes.py:22`, `:51`.
+
+```bash
+muta() {
+  F5_VOLTA_A_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    "chamados.tests.test_e4c_f5_voltaA_lotes.$2"
+}
+muta k1  TarefaEmLoteTest.test_RED_k1_tarefa
+muta k2  CarregadoresEmLoteTest.test_RED_k2_portas
+muta k9  CarregadoresEmLoteTest.test_RED_k9_reataveis
+muta k10 CarregadoresEmLoteTest.test_RED_k10_orfas_abertas
+muta k16 CarregadoresEmLoteTest.test_RED_k16_pendentes_s128
+muta k17 CarregadoresEmLoteTest.test_RED_k17_fio_universo_do_fato
+muta k18 CarregadoresEmLoteTest.test_RED_k18_fio_vizinhos
+muta k24 CarregadoresEmLoteTest.test_RED_k24_cartorio
+muta k43 CarregadoresEmLoteTest.test_RED_k43_absolviveis
+```
+
+| Mutante | Caso que deve morrer |
+|---|---|
+| K1, K2 | Tarefa `chamados/tests/test_e4c_f5_voltaA_lotes.py:42` e portas `:85`, respectivamente |
+| K9, K10 | Reatáveis `chamados/tests/test_e4c_f5_voltaA_lotes.py:94` e órfãs abertas `:103`, respectivamente |
+| K16 | Pendentes S128. `chamados/tests/test_e4c_f5_voltaA_lotes.py:110` |
+| K17, K18 | Universo `chamados/tests/test_e4c_f5_voltaA_lotes.py:121` e vizinhos `:129`, respectivamente |
+| K24, K43 | Cartório `chamados/tests/test_e4c_f5_voltaA_lotes.py:137` e absolvíveis `:151`, respectivamente |
+
+As contraprovas da A1 para `isinstance`, argumento ORM cru no C6 e composição manual do fio já estão nestes casos. `chamados/tests/test_e4c_f5_selo_chamada.py:269`, `:298`, `chamados/tests/test_e4c_f5_voltaA_sitios.py:65`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_selo_chamada.SeloPurezaTest.test_MORDE_tipo_modelo_e_consulta \
+  chamados.tests.test_e4c_f5_selo_chamada.SeloChamadaTest.test_MORDE_retirar_compositor_de_cada_chamada_da_A1
+
+CORTES_F2_MUTANTE=a1_fio_composicao_local PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_voltaA_sitios.SitiosVoltaATest.test_MORDE_fio_composicao_local
+```
+
+### Quebras previstas fora da lista
+
+O K16 chama `prefetch_related` sobre a consulta real. O harness do S128 recompila o corpo com `Linhas`, que implementa `select_related` e carece de `prefetch_related`. Prevejo `AttributeError` nos casos que passam por `AlcanceTest.resolver`, inclusive o coletor de mutantes e os consumidores em memória abaixo. Esses testes ficaram intactos [nao verificado]. `chamados/services/disputa_emissao.py:1955`, `chamados/tests/test_e4b_classe_e_memoria.py:165`, `:190`, `:294`, `:371`.
+
+- `chamados/tests/test_e4b_classe_e_memoria.py:213`, `:255`, `:395`, `:408`, `:416`, `:422`, `:436`, `:441`, `:448`, `:465`, `:484`, `:501`, `:527`, `:533`, `:539`, `:545`, `:551`, `:558`, `:567`, `:573`, `:586`, `:952`, `:1003`, `:1033`.
+- `chamados/tests/test_e4b_c4_tranca_memoria.py:59`, `chamados/tests/test_e4b_c4v14_memoria.py:110` e `chamados/tests/test_e4b_c6_memoria.py:87`, `:120`.
+
+### Quem escreve e quem lê
+
+| Campo ou cache | Escrita, leitura e significado |
+|---|---|
+| `decisoes` | A FK declara a sequência da pergunta. Resposta, validação, devolução e reabertura usam `registrar`, que grava as linhas. `leitura` consome `p.decisoes.all()` e o compositor mantém instante e validação do ato e texto da projeção. K1 entrega a sequência integral também ao mapa temporal, cujo recorte continua em `agora`. `chamados/models.py:4188`, `:4330`, `:4357`, `:4372`, `chamados/services/disputa_emissao.py:1532`, `:1639`, `chamados/services/validacao.py:173`, `:279`, `chamados/services/tarefa_do_dia.py:393`, `:545` |
+| `_prefetched_objects_cache['decisoes']` | O ORM popula o cache de cada instância carregada. O gerenciador reverso o serve a `leitura` e ao mapa de K1. `registrar` invalida a chave na instância recebida como `pergunta`. Nessas cargas a chave guarda a sequência integral. A cópia da ressuscitação tem um cache próprio, com o recorte de simulação já existente. `chamados/models.py:1585`, `:1594`, `:4326`, `:4375`, `chamados/services/tarefa_do_dia.py:537`, `:545` |
+
+**LEI-AKITA** origem=`chamados/models.py:4317`, `:4351` · testemunha=`chamados/tests/test_e4c_f5_voltaA_lotes.py:22` · RED=3 × 6 por lote e por candidata no O261 · juízes novos=0 · padrão=juiz único puro + fonte única (compositor) + fitness function.
 
 ## 19/11 20:27 · sessao 0e74903303d8 · CADEIA-20-PASSO-1 · leitura · origem=Code
 
@@ -1061,68 +1158,4 @@ A cópia contém os dois testes de tipo nas linhas indicadas. A identidade Git d
 
 [truncado em 20000 de 79484 caracteres]
 
-## 19/11 16:24 · sessao 7eb7360ac6bd · FERIADO-POR-POSTO · verificador · origem=Code
-
-# REVISAO-DO-AVAL — FERIADO-RESPOSTAS-1911-1530
-
-Revisei a cópia fornecida em modo somente leitura e usei os anexos colados como evidência de produção. A cópia não tem metadados Git para confirmar de forma independente o HEAD `ff763e67bf1c5570eb88bf892b6788d2e500f89b` [nao verificado].
-
-## 1 — R7 · NAO CONFERE
-
-1. **Premissas.** No ANTES, os seis dias-vínculo que mudaram têm HE 100 de feriado igual a zero. **Cinco têm pagamento total zero**. O sexto, v1287 em 02/11, já tem 8,08 h trabalhadas, 1 h de intra e total 9,08. A sombra mostra os resultados, mas não registra o previsto, a decisão de HE, a vigência da janela de HE nem a resposta de escala certa por dia. A causa individual do zero fica [nao verificado]. O bloqueio L-097 zera o par de folga ou feriado se a janela de HE da empresa vale no dia, o previsto é zero e falta autorização. Para par classificado como folga, há exceção sem escala certa. O oráculo recebe o par colapsado e a lista de dias bloqueados do motor. `sombra_r7.out:16–37`, `ponto/motor_calculo_v2.py:1372–1395,1422–1488,2455–2461`, `ponto/calculador/alimentacao.py:449–471`.
-
-   A dobra ordinária usa o feriado do **início da jornada**, minutos efetivamente trabalhados e `feriado_em_dobra`. A fábrica deriva o booleano de `tipo_ciclo`, com 12x36 simples por padrão e dobra no 12x36 quando há cláusula CCT aplicável. O oráculo lê o booleano do motor e reutiliza o mesmo predicado. Para folga trabalhada, há ainda a classificação de HE 100 de feriado pelo fechamento e pelo oráculo, condicionada à escala certa e a `feriado_vira_folga`. `ponto/motor_calculo_v2.py:914–934,2809–2813,3092–3103,3623–3635,3693–3704`, `core/regua_cct.py:473–479`, `ponto/calculador/nucleo.py:344–351`, `ponto/calculador/regras.py:287–299,343–351,664–695,776–789`, `ponto/services/fechamento.py:928–955`.
-
-2. **Colisão.** O 1530 substitui a premissa e o critério de parada do R7 do 1400, preservando a validação pela regra da L-110 e a lista C1 do 1410. A referência a L-086 precisa apontar para o corte que corrigiu sua cláusula de feriado. A previsão de trabalho não é condição da dobra do feriado. `aval.txt:5`, `feriado_constroi_e_c8_mede_1911_1400.txt:20`, `feriado_complemento_1911_1410.txt:2`, `docs/LEIS.md:118,136`, `ponto/motor_calculo_v2.py:914–934`.
-
-3. **Literal.** São **11 dias-vínculo, de 7 vínculos, em 22 linhas**. Seis dias mudam e cinco ficam iguais, cada um medido em motor e oráculo. `PAROU=12` conta as duas versões dos seis. Os cinco dias iguais são v1303 em 02/11, v1358 em 02 e 15/11 e v1425 em 02 e 15/11. Os três vínculos constam entre os **não propagados**, e seus dias não mudam de folga para trabalho na C2. O filtro permite identificar os sítios de decisão, vigência e ciclo weekday, posto, exclusão administrativa e divergência da chave. A regeneração também preserva célula editada ou lavrada e só vira trabalho onde a escala-base prevê trabalho. Qual condição explica cada caso, e quais eram ciclo, cargo, marca, origem da célula e `feriado_em_dobra` efetivos, ficam [nao verificado]. `sombra_r7.out:4–13,16–37,45`, `sombra_c2b_resumo.out:46–65`, `colaboradores/services/feriado_do_posto.py:174–189,242–244`, `escala/models.py:1365–1395`, `ponto/portas/celula.py:284–297`.
-
-4. **Alcance.** O dinheiro de novembro mudou na sombra, inclusive em quatro `FechamentoMensal`, e o ensaio registra rollback. No v1287, a rubrica `horas_extras_100_feriado` vai de 0 a **7,77 h**, enquanto a coluna `dobra` imprime 15,54. O alcance sobre outubro pago aparece separadamente na C2. `sombra_r7.out:16–17,38–46`, `sombra_c2b_resumo.out:66–72`.
-
-## 2 — Prévia A5 · NAO CONFERE NO LITERAL DA MEDIÇÃO
-
-1. **Premissas.** Hoje o comando mostra marca antes/depois, chamados vivos e alvo de retratação, total de vínculos a propagar e até dez chaves antes/depois. O plano não contém dias de pagamento nem dias previstos sem batida. A lista e o formulário de postos da cópia não têm A5. `colaboradores/management/commands/marcar_feriado_do_posto.py:82–113`, `colaboradores/services/feriado_do_posto.py:207–244`, `colaboradores/views.py:699–739,851–890`, `templates/colaboradores/partials/_postos_tabela.html:1–11`.
-
-2. **Colisão.** Acrescentar os dois lados à proposta é compatível com A5 e C3 se continuar cobrindo todo o intervalo da porta, com motivo e proposta aprovada antes do HTML. Os dois lados descritos no 1530 cobrem efeitos de OPERA. A5 do 1400 também prevê FECHA, cuja ação pode remover jornada e retratar cobrança. A prévia só fecha com o texto anterior se conservar os dias que mudam nesse sentido também. A ação por posto é a do 1300 item 3. A caixa por vínculo cancelada às 11:30 é outra ação. `aval.txt:6`, `feriado_constroi_e_c8_mede_1911_1400.txt:12`, `feriado_complemento_1911_1410.txt:4`, `ordem_e_respostas_1911_1300.txt:4`, `cancela_ui_trabalha_em_feriado_1911_1130.txt:2–5`, `colaboradores/services/feriado_do_posto.py:238–244,263–287`.
-
-3. **Literal.** Os 19 são o universo declarado da C2. O R7 cobre seu recorte com batida, 11 dias de sete vínculos. O 1400 explicita **J=11** para reaplicar marca vigente. O 1300 menciona **11 + 8**. O código do A4 separa `opera_chave_false` e `fecha_chave_true`, e a C2 separa propagados e não propagados, com 11 e oito. Dos 11 propagados na C2, quatro tiveram `marca_muda=True`, portanto essa lista não identifica os J do 1400. A definição e a lista de K no brief ficam [nao verificado]. A C2 mostra 14 viradas na competência atual e uma na anterior, sem presença por dia ou partição J/K. Os totais de (a) e (b) nos 19, por grupo e por passado/futuro, ficam [nao verificado]. `feriado_constroi_e_c8_mede_1911_1400.txt:9,11`, `ordem_e_respostas_1911_1300.txt:4`, `colaboradores/services/feriado_do_posto.py:192–204`, `sombra_r7.out:4–5`, `sombra_c2b_resumo.out:4,24–37,46–66`.
-
-4. **Alcance.** O dry-run atual é leitura. Confirmar pela porta escreve a chave e pode repercutir no dinheiro. O intervalo real inclui o passado desde o maior entre início do vínculo e início da janela anterior, até hoje, e as células futuras geradas já existentes que o suplemento alcança. Dia futuro previsto sem batida é previsão de cobrança. O julgamento de falta considera encerramento e cobertura. `colaboradores/management/commands/marcar_feriado_do_posto.py:89–113`, `colaboradores/services/vinculo.py:894–922`, `ponto/services/cadastro_futuro.py:19–25,43–59`, `ponto/portas/celula.py:464–472,483–496`, `ponto/services/cartorio.py:1296–1326`.
-
-## 3 — Competência anterior paga · NAO CONFERE COMO SUFICIÊNCIA DE POUSO [nao verificado]
-
-1. **Premissas.** `competencia_fechada_para_celula` é a autoridade K9 para a guarda da célula. Considera TXT vigente ou holerite **da pessoa em lote publicado**. A porta passa por `_competencias_exportadas`, que enumera candidatas e consulta K9. Para corte 21, em **21/11/2026** a anterior passa a ser **21/10–20/11, competência 11/2026**. A função usa o corte da empresa. O cadastro COMPETENCIA-PAGA não está integrado nesta cópia. O RELATO registra a c6 parada e o BACKLOG separa deploy do cadastro da 10 na tela. Estado atual do deploy em produção [nao verificado]. `folha/export.py:597–628`, `core/juizes.py:345–352`, `ponto/portas/celula.py:218–221,284–288`, `ponto/management/commands/gerar_celulas.py:155–188`, `ponto/janelas.py:10–33,36–72`, `docs/RELATO.md:1165,1182`, `docs/BACKLOG.md:2073`.
-
-2. **Colisão.** Manter K9 e recusar a candidata (a) é compatível com C2 e com o corte. O corte declara **10/2026 das empresas 2, 3 e 4 paga fora do sistema**. K9 nesta cópia responde a outra pergunta e devolveu aberta para v1355. A comparação da sombra com o corte é condição de pouso, sem precisar criar consulta paralela em produção. `aval.txt:7`, `feriado_complemento_1911_1410.txt:3`, `docs/CORTES.json:1874–1879`, `folha/export.py:617–628`, `sombra_c2b_resumo.out:10,52`.
-
-3. **Literal.** A sombra imprime as fontes de K9. A chamada exata dentro do script da sonda fica [nao verificado]. Com corte 21, a virada de calendário retira 12/10 do intervalo. Publicar o lote do holerite de outubro do col309 faria K9 barrar aquele dia. **COMPETENCIA-PAGA no ar, por si só, não fecha (iii)**. O cadastro da 10 tem de estar efetivo e a guarda tem de alcançar a competência paga só por cadastro, inclusive na enumeração de candidatas. Além disso, **zero virada de folga/trabalho não prova zero alteração de dinheiro**. A regeneração também aciona recálculo por célula criada ou DNA alterado com `trabalha` igual. Continua faltando a prova de FM e DiaPago exigida pelo 1410 C2. `sombra_c2b_resumo.out:5–23,47–71`, `ponto/janelas.py:24–33,66–72`, `folha/export.py:617–628`, `ponto/management/commands/gerar_celulas.py:170–188`, `docs/BACKLOG.md:2073`, `ponto/portas/celula.py:289–318,390–394,483–496`, `feriado_complemento_1911_1410.txt:3`.
-
-4. **Alcance.** Em 19/11 há **1 dia em competência paga pelo corte**, v1355, col309, empresa 2, 12/10. Mudaram os hashes sem carimbo de FM e DiaPago. O FM ganhou **7 h de HE 100 de feriado e 7 h trabalhadas**. A sombra registra rollback. A condição de pouso zero está insatisfeita na evidência fornecida. `docs/CORTES.json:1874–1879`, `sombra_c2b_resumo.out:10,52,66–72`.
-
-## 4 — Copiadores A3 · NAO CONFERE
-
-1. **Premissas.** Na cópia, o ajuste começa em `:1093` e cria com o mesmo posto e a chave de `ec` em `:1098–1101`. O desfazer começa em `:1104`. `:1113` recusa remover vínculo gerador de célula editada. O ramo que cria copia posto, template e chave do antigo em `:1119–1122`. O terceiro sítio começa em `:976`, `criar_trecho_retroativo`, e cria trecho inativo com o mesmo posto e a chave copiada. `colaboradores/services/vinculo.py:976–983,1093–1122`.
-
-2. **Colisão.** O 1400 A3 mandava manter a cópia quando o posto não muda. Os dois sítios mantêm o posto e o 1530 manda mudar o critério de nascimento da chave. É uma alteração literal de A3. O 1300 item 3 autoriza a propagação pela marca quando ela é aplicada ao posto. O 1410 C6 trata do ato do admin na tela. Aqui a atribuição proposta grava **dado de vínculo no `create`**. O caminho normal do ajuste via `--apply` exige `!`; o ramo `--desfazer` chama o executor antes dessa validação e não pede `!`. A 7b item 2 inclui dado de vínculo no texto do `!`. A extensão da decisão de C6 a esses atos é a questão a devolver. `aval.txt:8`, `feriado_constroi_e_c8_mede_1911_1400.txt:10`, `feriado_complemento_1911_1410.txt:6–7`, `ordem_e_respostas_1911_1300.txt:4`, `../CLAUDE.md:265–268`, `escala/management/commands/ajustar_escalas_auto.py:29–48`, `escala/services/escala_auto_executor.py:87–113,118–151`.
-
-3. **Literal.** A função comum é `vinculos_que_seguem_a_marca(*, hoje, posto=None)`. Ela consulta **vínculos já gravados**, weekday, vigentes em `hoje` e fora do cargo administrativo. O plano compara com `novo`; A4 lê `posto.opera_em_feriado` e compara separadamente. Os dois copiadores têm acesso ao posto, cargo e template de destino, mas essa função não aceita o candidato a nascer nem devolve o valor da chave. A4 só enxerga o novo na vigência. O RED do ajuste cabe no serviço com um `tipo_derivado` fornecido. O executor normal deriva horários, intervalo ou folga e preserva `tipo_ciclo`, portanto uma **troca de ciclo** para weekday não ocorre por esse caminho. O RED do desfazer é alcançável quando `hoje >= inicio`, ainda dentro do prazo e com o par de vínculos válido. Antes disso, `volta == inicio`, o novo é apagado e o antigo reabre com a chave existente. `colaboradores/services/feriado_do_posto.py:174–204,242–244`, `escala/alimentacao.py:219–225`, `colaboradores/services/vinculo.py:1093–1122`, `escala/services/escala_auto_executor.py:61–84,127–148`, `escala/services/cadastro_tipo.py:431–446`.
-
-4. **Alcance.** Ajuste e desfazer regeneram explicitamente desde `inicio` ou `volta`. Dias tocados chegam a `recalcular_por_evento` no commit, que pode regravar **FechamentoMensal e DiaPago**. Fechar o vínculo também regenera futuras, nesse trecho com `recalculo=False`. Cada `create` dispara ainda a invalidação de `previsto_em` e `atualizado_em` do FM **sem filtro de competência ou lavra**, além do caminho condicional de reparentar folgas e rejulgar. No desfazer que apaga o novo, o FK `SET_NULL` pode alterar a geradora de célula sem passar pela guarda K9. Ocorrências em exportada nesses atos [nao verificado]. `escala/services/escala_auto_executor.py:101–108,143–148`, `colaboradores/services/vinculo.py:652–664,1110–1122`, `escala/signals.py:137–150,185–204`, `escala/folgas.py:513–525,529–541,283–299`, `escala/models.py:1690–1695`, `ponto/portas/celula.py:483–496`, `ponto/services/fechamento.py:1143–1144,1160–1168,1191–1207,1277–1296,1607–1613,1798–1824`.
-
-## PROIBIDO · CONFERE COMO LIMITE
-
-1. **Premissas.** O comando ainda tem `--apply`, que chama a porta e escreve. A proibição de executá-lo em produção é de escopo do aval. `aval.txt:9`, `colaboradores/management/commands/marcar_feriado_do_posto.py:101–116`.
-2. **Colisão.** A proibição preserva os limites de 1400, 1410 C6 e CANCELA-UI-1130, inclusive motor em leitura e ausência da caixa no vínculo. `aval.txt:9`, `feriado_constroi_e_c8_mede_1911_1400.txt:23–24`, `feriado_complemento_1911_1410.txt:7–8`, `cancela_ui_trabalha_em_feriado_1911_1130.txt:4–5`, `../CLAUDE.md:265–268`.
-3. **Literal.** O zero é condição de pouso. O valor fornecido é um. Os avais mantêm a precedência da fila 1. `aval.txt:7,9`, `sombra_c2b_resumo.out:66`, `feriado_constroi_e_c8_mede_1911_1400.txt:24`, `feriado_complemento_1911_1410.txt:8`. [nao verificado]
-4. **Alcance.** A guarda protege a regeneração ordinária da célula. A invalidação de FM por `save` do vínculo passa por outro caminho, inclusive no `save` da propagação A1. A integridade de todo o gravado da exportada não decorre só de K9. `ponto/portas/celula.py:218–221,284–288`, `colaboradores/services/vinculo.py:894–898`, `escala/signals.py:137–150`, `ponto/services/fechamento.py:1607–1613`.
-
-## PRONTO · NAO CONFERE
-
-1. **Premissas.** Faltam na evidência os motivos individuais dos cinco dias iguais, os totais A5 e a prova de zero no pouso. A proposta respondida, a execução dos REDs dos copiadores, os verdes e o smoke ficam [nao verificado]. `aval.txt:10`, `sombra_r7.out:16–37`, `sombra_c2b_resumo.out:46–72`, `feriado_constroi_e_c8_mede_1911_1400.txt:25`. [nao verificado]
-2. **Colisão.** PRONTO acumula 1400 e 1410. Continuam valendo a prova de C2 em FM e DiaPago, o R5 de exportada intacta com hash e a aprovação prévia da proposta da tela. `aval.txt:10`, `feriado_constroi_e_c8_mede_1911_1400.txt:12,18,25`, `feriado_complemento_1911_1410.txt:3–4`.
-3. **Literal.** O R5 da cópia compara `trabalha`, DNA, uma rubrica do FM e PKs de DiaPago. Isso não cobre o hash integral pedido. O selo AST verifica escritor e chamador da **marca**, e o teste A4 verifica a função comum e a convergência. A prova específica do mutante «propagação desligada → A4 > 0 e R1 vermelho» fica [nao verificado]. `colaboradores/tests/test_feriado_por_posto.py:303–325,359–377`, `colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:119–162`, `feriado_constroi_e_c8_mede_1911_1400.txt:18,21–22`.
-4. **Alcance.** As duas sombras registram erros internos de lavratura do oráculo apesar de `ON_COMMIT erros=0`. A exceção é capturada dentro do fechamento. Isso preserva a evidência da mudança de outubro, mas o contador externo não certifica todas as lavraturas. `sombra_r7.out:14–15`, `sombra_c2b_resumo.out:38–45,66–71`, `ponto/services/fechamento.py:1297–1301`.
-
-PROCEDE: 1, 2, 3, 4, PRONTO
-
-_7422 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7423 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
