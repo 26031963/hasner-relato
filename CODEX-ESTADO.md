@@ -1,7 +1,109 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 14:20** · publicado em **20/11/2026 14:22** (UTC-3)
+> Ultima resposta processada: **20/11/2026 14:26** · publicado em **20/11/2026 14:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 14:26 · sessao eb93f9221b49 · E4C-F5-CONSTROI · construtor · origem=Code
+
+A cura ficou na cópia `23e80acde0372b2c61e243f311e7d9d96c49e35d`. Conferi a sintaxe dos nove arquivos, as âncoras dos mutantes e o literal do S14. A execução dos REDs, dos mutantes e da suite fica com a sessão [nao verificado]. O diff está sem commit, conforme a proibição expressa da obra [nao verificado por arquivo:linha].
+
+## Cura e decisões
+
+- `_materializar_ausencia_de_resposta` registra `q.recusa_do_carimbo`, `fora_da_releitura` ou `ja_carimbada` na ação `irma_viva_na_ausencia`. Mantive a comparação após `True` usando `DecisaoPergunta.par_ato_coluna(q)`. O RED do par `(True, False)` cobre a irmã com validação no ato e sem texto, caso em que a porta mantém a coluna vazia. `chamados/services/materializacao.py:1059–1099`, `chamados/models.py:3366–3393`, `chamados/tests/test_e4c_f5_volta3_ausencia.py:192`.
+- A passagem termina as tentativas das irmãs antes de chamar o S14. Se qualquer irmã do destino entrou em `recusadas`, o destino fica fora da chamada. O literal cadastrado e o único descarte autorizado foram preservados. Há REDs para luz sem batida e para um destino compartilhado entre uma irmã aceita e uma recusada. `chamados/services/materializacao.py:1100–1108`, `chamados/tests/e4b_c12_sitios.json:107–112`, `chamados/tests/test_selo_reconciliar_le_o_retorno.py:128–135`, `chamados/tests/test_e4c_f5_volta3_ausencia.py:100,126`.
+- `_materializar_uma` usa a mensagem própria da recusa do par. `_balde_da_recusa` usa `recusa:PAR_ATO_COLUNA` e preserva a precedência da via e a tradução dos demais erros. `chamados/services/materializacao.py:2010–2037`, `chamados/services/passivo_validado.py:131–148`.
+- B2 exercita uma nova resposta `FALTA_DIA` na âncora original e exige a absorção do mesmo PK dependente. B3 cobre a irmã assinada por ato real e ainda sem carimbo. B4 exige `ausencia_aprovada` no marco apagado e o PK da dependente na trilha. No ramo `ausencia_aprovada`, a tarefa publica `pergunta_id=None`; se B4 exigir o PK **nesse campo da tarefa**, a exigência segue aberta no leitor fora da escrita autorizada. `chamados/tests/test_e4c_f5_volta3_ausencia.py:46–98,175–190`, `chamados/services/tarefa_do_dia.py:290–324`.
+
+## Sítio, origem e caminho posterior
+
+Os nomes abaixo identificam os testes. O avanço descrito é o que cada teste executa e exige. Resultados em Django [nao verificado]. [nao verificado]
+
+| Sítio da base | Origem | RED e caminho no mesmo PK |
+|---|---|---|
+| `reconciliador.py:408` | Instância velha, banco limpo | `test_RED_c1_prefetch_le_reabertura_apos_select_e_preserva_banco_limpo`. Batida real, com reabertura entre SELECT e prefetch. `SEM_PORTA` abaixo. `chamados/tests/test_e4c_f5_guarda_reconciliador.py:108–135` |
+| `reconciliador.py:408` | Par persistido | `test_RED_c1_par_persistido_recusa_e_questionario_reabre_o_mesmo_pk`. Batida real, seguida de reabertura do questionário pelo titular. `chamados/tests/test_e4c_f5_guarda_reconciliador.py:137–157` |
+| `disputa_emissao.py:2043` | Par persistido | `test_RED_destino_recusa_b_persistido_e_a_mesa_recusa_o_mesmo_pk`. Save do chamado, seguido de POST de recusa pelo destino. `chamados/tests/test_e4c_f5_guarda_par_s143.py:90–117` |
+| `disputa_emissao.py:2117` | Par persistido | `test_RED_sem_credor_recusa_b_persistido_e_titular_reabre_o_mesmo_pk`. Save de outro chamado, seguido de reabertura do questionário pelo titular. `chamados/tests/test_e4c_f5_guarda_par_s143.py:119–136` |
+| `materializacao.py:1067` | Banco limpo por `DEVOLUCAO` T2, tentativa com relógio T1 | `test_RED_devolucao_t2_desfaz_carimbo_aceito_pelo_c6`. Resposta de escape, seguida de recusa da resposta da irmã pela porta existente. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:429–476` |
+| `materializacao.py:1067` | Par persistido | `test_RED_absorcao_recusa_coluna_persistida_e_a_mesa_recusa_mesmo_pk`. Resposta de escape, seguida de recusa da irmã pela porta existente. `chamados/tests/test_e4c_f5_volta3_ausencia.py:204–248` |
+| `materializacao.py:2004` | Instância velha, banco limpo | `test_RED_passivo_foto_velha_recusa_par_e_mesa_valida_mesmo_pk`. Passivo com devolução entre classificação e trava, seguido de POST da mesa. `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:79–147` |
+| `materializacao.py:2004` | Par persistido | `test_RED_passivo_b_persistido_recusa_par_e_mesa_valida_mesmo_pk`. Passivo, seguido de POST da mesa que valida e planta pelo mesmo PK. `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:125–153` |
+| `materializacao.py:2204` | Par persistido | `test_RED_s144_b_persistido_fecha_disputa_sem_salvar_carimbo`. `Disputa.fechar()` aciona S144. `SEM_PORTA` abaixo. `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:155–181` |
+
+`SEM_PORTA reconciliador.py:408 (a):` pergunta de texto, muda, sem validação, carimbo ou destino. C6 morto pela célula `concorde`. Disputa aberta, uma reabertura e nenhum chamado pai ou destino. Nova resposta exige C6 vivo. Mesa e recusa exigem chamado listante e resposta completa. Reabrir exige resposta nas colunas. A correção direta exige chamado e tipo hora. Devolução exige, conforme a porta, declaração de hora e recusa escrita, carimbo de paridade ou inclusão no grupo carimbado de absorção. `chamados/tests/test_e4c_f5_guarda_reconciliador.py:94–106,130–135`, `chamados/views.py:483–536,1238–1246`, `chamados/models.py:2414–2417`, `chamados/services/acoes_disputa.py:349–355`, `chamados/services/validacao.py:191–200,269–274,348–373,698–704,915–923`, `chamados/services/materializacao.py:1149–1159`.
+
+`SEM_PORTA materializacao.py:2204 (b):` pergunta `PENDENTE`, muda, C6 morto, coluna antiga e ato devolvido, sem carimbo ou lavra nova. Disputa fechada sem chamado pai ou destino. Nova resposta exige C6 vivo. Mesa exige resposta e chamado. Recusa e correção exigem resposta elegível e disputa aberta. Reabrir administrativamente exige chamado. As devoluções exigem declaração de hora e motivo escrito, carimbo anterior de paridade ou participação no grupo carimbado de absorção. `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:155–181`, `chamados/views.py:1238–1246`, `chamados/services/fio.py:634–688`, `chamados/services/acoes_disputa.py:239–269`, `chamados/services/validacao.py:191–200,269–274,348–373,698–704,915–923`, `chamados/services/materializacao.py:1149–1159`.
+
+- `INALCANCAVEL reconciliador.py:646 (a)/(b)` e `INALCANCAVEL models.py:3532 (a)/(b)` no anexo, hoje `models.py:3560`. Ambos os seletores entregam coluna nula e os gatilhos passam `resposta=None`. Os testes `test_A2_evento_*` acionam o consumidor e `test_A2_AST_*` verificam os filtros. `chamados/reconciliador.py:646,678–681,1096–1103`, `chamados/models.py:3552–3560`, `chamados/tests/test_e4c_f5_guarda_reconciliador.py:159–222`.
+- `INALCANCAVEL disputa_emissao.py:2043 (a)` e `:2117 (a)` para o fio de mesmo dono. A trava de C antecede as duas cargas e é compartilhada com os escritores de limpeza. O laço direto admite por SQL uma FK cruzada preexistente, barrada pela costura atual. Existência desse passivo [nao verificado]. `chamados/services/disputa_emissao.py:1924–1932,1963–1998,2083–2097,1478–1532,1627–1669`, `chamados/services/validacao.py:746–800,938–944`, `chamados/models.py:3047–3050`.
+- `INALCANCAVEL materializacao.py:1067 (a)` para **instância ou prefetch velho**. A releitura ocorre sob C. O RED T2 cobre a variante que chega de fato com banco limpo, pela validação sintética no relógio T1. `chamados/services/materializacao.py:1036–1077`.
+- `INALCANCAVEL materializacao.py:2204 (a)` pelos fluxos de fechamento e repasse lidos. O receiver consulta a pergunta após a trava, sem prefetch de decisões. O controle `test_s144_rele_pergunta_limpa_entre_prefetch_do_fecho_e_trava` interpõe uma devolução real antes da trava. No laço normal do plantio, B fresco é pulado e a validação individual grava `VALIDACAO` sob a trava. `chamados/services/materializacao.py:2150–2158,2200–2213`, `chamados/models.py:2090–2097,2118–2122`, `chamados/services/disputa_emissao.py:1017–1026,1073,1098`, `chamados/services/validacao.py:161–175,752–800`, `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:183–208`.
+
+**A3.** O escritor identificado entre o prefetch e o primeiro carimbo é `ressuscitar_perguntas`, alcançado pela reabertura do credor e pelo cartório síncrono. A seleção e a releitura desse escritor exigem materialização já existente, enquanto a carga do primeiro laço exige materialização nula. A segunda carga vem depois das reaberturas. Nenhuma releitura adicional foi aplicada ao S143. Outra escrita interveniente de limpeza do mesmo PK [nao verificado]. `chamados/services/disputa_emissao.py:1963–1967,1996–2009,2060–2097`, `chamados/models.py:1507–1517,1549–1555,1669–1671,1713–1722`, `chamados/signals.py:189–218`, `ponto/services/cartorio.py:1690–1721`.
+
+## Conflitos para a sessão
+
+O teste indicado no brief mantém a asserção `[destino_recusada.pk, destino_aceita.pk]`. A cura B1 exclui `destino_recusada`. Aplicar B1 ao conjunto já retornado como `recusadas` também atinge os controles de irmã rechaveada, irmã já carimbada e ausência simulada como `None`, que exigem `s14.assert_called_once()`. O controle de rechaveamento ainda exige motivo nulo, em conflito separado com A4. As quatro expectativas permanecem no arquivo. `chamados/services/materializacao.py:1059–1067,1091–1108`, `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:355–356,385–390,410–412,418–427`.
+
+A asserção do selo direto A5 permanece na forma original. S1, H4, `respondida_em`, a recuperação por `perguntas_absorvidas_por` e a linha documental E4D ficaram fora deste diff. H4 tem revisão prévia no aval 1400 item 2 e a linha E4D cabe no commit documental do marco, conforme os anexos. `chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:515–532`, `chamados/services/disputa_emissao.py:1478–1532,1556–1561`, `chamados/services/materializacao.py:1136–1165`. Incidência em produção, medições em duas conexões e certificação [nao verificado].
+
+## Recorte e mutantes para a sessão
+
+Os comandos recortam os REDs novos, o teste A4 alterado, os selos S14 e A5, K47 e a Volta D. O módulo inteiro de A1(c) contém as expectativas em conflito listadas acima. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:340–476`.
+
+```sh
+t=chamados.tests
+a=$t.test_e4c_f5_volta3_ausencia.AusenciaVolta3Test
+s=$t.test_e4c_f5_volta3_selos.SelosVolta3Test
+r=$t.test_e4c_f5_guarda_reconciliador.GuardaReconciliadorTest
+p=$t.test_e4c_f5_guarda_plantio_s144.GuardaPlantioS144Test
+f=$t.test_e4c_f5_guarda_par_s143.GuardaParS143Test
+d=$t.test_e4c_f5_voltaD_portas.PortasVoltaDTest
+k=$t.test_e4c_f5_voltaB_lotes.CarregadoresVoltaBTest.test_RED_k47_escolhas_sem_credor
+a4=$t.test_e4c_f5_a1c_passagem_da_ausencia.PassagemDaAusenciaTest.test_RED_devolucao_t2_desfaz_carimbo_aceito_pelo_c6
+a5=$t.test_e4c_f5_selo_par_ato_coluna.SeloParAtoColunaTest.test_carimbo_sintetico_preserva_equivalencia_com_resposta_mais_recente
+
+PYTHONDONTWRITEBYTECODE=1 python manage.py test \
+  "$a" "$s" "$p" "$f" "$a4" "$a5" "$k" "$d" \
+  "$t.test_e4c_f5_guarda_reconciliador" \
+  "$t.test_e4b_c12_selo" "$t.test_selo_reconciliar_le_o_retorno"
+```
+
+Cada comando abaixo indica o teste que deve matar o mutante. `tirar_guarda` exige `False` e o motivo próprio nos nove REDs de chamadores, além da equivalência no selo direto. O aplicador troca código em memória. Execução das mutações [nao verificado]. `chamados/tests/e4c_f5_volta3_mutantes.py:15–119`, `chamados/tests/test_e4c_f5_volta3_selos.py:33–70`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:197–222`, `chamados/tests/test_e4c_f5_voltaD_portas.py:45–67,312–323,388–395`.
+
+```sh
+m() { PYTHONDONTWRITEBYTECODE=1 python -m chamados.tests.e4c_f5_volta3_mutantes "$@"; }
+
+m s14_fecha_recusada "$a.test_RED_luz_sem_batida_preserva_resposta_t2_e_destino_aberto" \
+  "$a.test_RED_destino_comum_nao_fecha_quando_a_segunda_irma_recusa"
+m m20_s14_perde_literal "$s.test_RED_s14_conserva_literal_do_cadastro_c12"
+m a1c_sem_releitura "$a.test_RED_luz_sem_batida_preserva_resposta_t2_e_destino_aberto"
+m a1c_ignora_ancora "$a.test_RED_ancora_decidida_reabre_o_caminho_da_dependente"
+m absorcao_sem_comparador "$a.test_RED_coluna_nula_e_ato_validado_sem_texto_desfaz_a_absorcao"
+m absorcao_motivo_c6 "$a4"
+m absorcao_fora_da_releitura_motivo_nulo "$a.test_trilha_identifica_a_irma_que_saiu_da_releitura"
+m absorcao_ja_carimbada_motivo_nulo "$a.test_trilha_identifica_a_irma_ja_carimbada"
+
+plantio=$p.test_RED_passivo_foto_velha_recusa_par_e_mesa_valida_mesmo_pk
+m plantio_motivo_c6 "$plantio"
+m passivo_balde_generico "$plantio"
+m a2_celula_sem_filtro_de_coluna "$r.test_A2_evento_celula_absolveu_entrega_coluna_nula_e_resposta_none"
+m a2_orfa_sem_filtro_de_coluna "$r.test_A2_evento_orfa_entrega_coluna_nula_e_resposta_none"
+
+m v_ato_sem_coluna "$k" "$d.test_RED_recusar" "$s.test_RED_validacao_iniciada_pelo_ato_tambem_grava_a_coluna"
+m r_resposta_mantem_ato "$d.test_RED_recusar"
+m d_devolucao_mantem_coluna "$d.test_devolucao_e_o_escritor_da_coluna"
+F5_VOLTA_B_MUTANTE=k47 PYTHONDONTWRITEBYTECODE=1 python manage.py test "$k"
+
+m tirar_guarda "$a5" "$a4" "$f" "$plantio" \
+  "$p.test_RED_passivo_b_persistido_recusa_par_e_mesa_valida_mesmo_pk" \
+  "$p.test_RED_s144_b_persistido_fecha_disputa_sem_salvar_carimbo" \
+  "$a.test_RED_absorcao_recusa_coluna_persistida_e_a_mesa_recusa_mesmo_pk" \
+  "$r.test_RED_c1_prefetch_le_reabertura_apos_select_e_preserva_banco_limpo" \
+  "$r.test_RED_c1_par_persistido_recusa_e_questionario_reabre_o_mesmo_pk"
+```
+
+LEI-AKITA: origem=chamados/models.py::PerguntaDisputa.carimbar, testemunha=DecisaoPergunta.composta x coluna, RED=o teste direto do selo + um por chamador, quem-mais-le=S143, plantio, absorcao e as filas por coluna, juizes novos=0, padrao=Single Writer Principle [nao verificado]
 
 ## 20/11 14:20 · sessao 4ce9057c680a · - · - · origem=Ronald (tmux)
 
@@ -1282,84 +1384,4 @@ A eleição escrita com desempate pelo menor PK escolhe o **chamado de destino**
 
 Para o corte 1, há uma via de evento já existente: o consumidor da célula reavalia a premissa do chamado vivo e, quando ela morreu, usa a porta de reconciliação, que registra a retratação com o motivo. `app/chamados/reconciliador.py:1419` · `app/chamados/reconciliador.py:1504` · `app/chamados/reconciliador.py:572`
 
-## 20/11 13:47 · sessao 91b553865c4d · E4C-F5-CONSTROI · leitura · origem=Code
-
-| Item | Estado | Prova nesta cópia ou evidência pendente |
-|---|---|---|
-| 01. Matriz e censo de entrada | FALTA | O RELATO registra **15 sítios**, amostra de **9**, **0** perguntas de lei e aprovação do wrapper numa base anterior. A matriz nominal para recontar os 15 e cruzá-los com o selo e o PRONTO está [nao verificado]. `app/docs/RELATO.md:158`, `bin/codex_pergunta.sh:241–247`. |
-| 02. Testemunha da leitura | DEMONSTRADO | `DecisaoPergunta.leitura` devolve `LeituraDoAto` com **3 campos**. A composição usa outro tipo, com **5 campos**. `app/chamados/models.py:19–25,4351–4362`. |
-| 03. Conservação do passivo sem ato | DEMONSTRADO | A leitura incorpora as linhas sintéticas da projeção. O teste fixa o julgamento dos dois juízes e os cortes temporais do passivo. `app/chamados/models.py:4274–4295,4333–4351`, `app/chamados/tests/test_e4c_f5_volta2_juizes.py:59–75`. |
-| 04. RED-5 do histórico | DEMONSTRADO | O caso cobre resposta, validação e materialização. `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:75–103`, `app/chamados/services/historico.py:97–106`. |
-| 05. SILÊNCIO e dono admin | RETIRADO-POR-AVAL | S1 inteiro transferido para `E4C-F5-SILENCIO-ADMIN` pelo 1255, item 3. `avais_posteriores.txt:129–131`. |
-| 06. Catraca de leitores crus | FALTA | A varredura AST atual acha **13 funções em 8 arquivos, 0 acusações**. Cobre `getattr` e `refresh_from_db`. `update_fields` aparece como controle de escrita permitida. A cobertura nominal dos 15 sítios e a inspeção pedida para `update_fields` estão [nao verificado]. `app/chamados/tests/test_e4c_f5_selo_catraca.py:11–26,174–197,291–307,360–369`. |
-| 07. Três passagens | SO-POR-EXECUCAO | Faltam os logs A/B/C em ordem e por hash, com a passagem excepcional da A pelo chokepoint. `avais_posteriores.txt:3,10–12`, `bin/volta_intermediaria.sh:7–14` [nao verificado]. |
-| 08. Ordem, commits e RED antes da cura | SO-POR-EXECUCAO | Faltam o histórico por volta, o RED na base de cada cura e a prova de que a pureza entrou no primeiro commit da A. `app/docs/RELATO.md:27–28`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:271–285` [nao verificado]. |
-| 09. Verificador do delta por volta | SO-POR-EXECUCAO | Faltam laudos e triagens por delta de A/B/C. A referência encontrada no RELATO é de uma sequência anterior. `app/docs/RELATO.md:95,131,134` [nao verificado]. |
-| 10. Mutantes tira-lote mortos | SO-POR-EXECUCAO | Recontados **33 seletores**, **9 A + 14 B + 10 C**. A lista anterior registra 33/33 e mordidas K16 e K47 naquela rodada. Faltam as saídas nominais da cópia atual. `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9–21`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–27`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23`, `lista_76.txt:12` [nao verificado]. |
-| 11. Sombra dos juízes e do passivo | SO-POR-EXECUCAO | Falta antes × depois pela função real, por volta e classe, incluindo passivo sem ato. **40 + 213 = 253** é a referência do aval. O RELATO anterior distingue as 213 divergências de SILÊNCIO de mudança efetiva no par do juiz. `app/chamados/juizes.py:1383,1551`, `app/docs/RELATO.md:393–397` [nao verificado]. |
-| 12. Sombra das decisões por porta | SO-POR-EXECUCAO | Faltam contagens antes × depois para validar, recusar e materializar. `app/chamados/services/validacao.py:677–704,875–920`, `app/chamados/services/materializacao.py:1304–1330,2092–2117` [nao verificado]. |
-| 13. Entregues e exportadas | SO-POR-EXECUCAO | Falta lista ou zero de mudanças nas portas da F5 para esse recorte. As guardas estão na árvore. `app/chamados/services/validacao.py:225–231,692`, `app/chamados/services/materializacao.py:815–847` [nao verificado]. |
-| 14. CHECK-DE-TELA | SO-POR-EXECUCAO | Recontadas **4 superfícies**. Falta o comparativo com a referência, incluindo consultas e escritas, para espelho, Central, tarefa pelo serviço e API do app. `app/ponto/urls.py:10`, `app/chamados/views.py:721`, `app/chamados/services/tarefa_do_dia.py:825`, `app/api/urls.py:92`, `app/docs/RELATO.md:188` [nao verificado]. |
-| 15. Verificador inteiro, zero bloqueios | SO-POR-EXECUCAO | Falta laudo final de escopo inteiro com matriz, predesenho, avais e **0 BLOQUEIA**. O zero localizado no RELATO pertence a uma verificação anterior. `app/docs/RELATO.md:94`, `avais_posteriores.txt:169` [nao verificado]. |
-| 16. Suite inteira pré-Opus | SO-POR-EXECUCAO | Falta suite inteira verde na **Pista 2**, vinculada à árvore final, após a volta intermediária da guarda verde e a publicação do PRONTO. `avais_posteriores.txt:168`, `app/docs/BACKLOG.md:2191`, `bin/suite.sh:23–29,236–257` [nao verificado]. |
-| 17. Opus final único | SO-POR-EXECUCAO | Falta o laudo único sobre a mesma árvore da pré-Opus, com as triagens e a isenção de pureza anexadas. `avais_posteriores.txt:31,168`, `app/docs/RELATO.md:45,94` [nao verificado]. |
-| 18. Compositor nos três sítios | DEMONSTRADO | **1** compositor tipado, usado nos **3** alvos, partição do app, property e fio. Instantes vêm da leitura e texto vem da projeção. `app/chamados/models.py:24–25,3810–3816,4354–4362`, `app/chamados/services/pergunta_no_app.py:80–92`, `app/chamados/services/fio.py:187–190`. |
-| 19. Grep publicado | FALTA | Falta a saída publicada no RELATO que identifica o compositor e as delegações. `app/chamados/models.py:4354–4362`, `app/docs/RELATO.md:34–35` [nao verificado]. |
-| 20. RED da partição do app | SO-POR-EXECUCAO | Caso de divergência e **2 mutantes** definidos. Faltam o verde nominal e as duas mordidas do caso de `particao_do_app`. `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:32–53` [nao verificado]. |
-| 21. RED da property | SO-POR-EXECUCAO | Falta log nominal do caso de texto só no ato e reabertura com projeção ainda carimbada. `app/chamados/tests/test_e4c_f5_opus_models.py:37–54,87–89` [nao verificado]. |
-| 22. RED do fio | SO-POR-EXECUCAO | Faltam o verde nominal e as **3** mordidas de fonte ou composição local. `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:55–71` [nao verificado]. |
-| 23. RED de `sem_veredito_entre` | SO-POR-EXECUCAO | Falta log RED/GREEN do caso de texto e instante divergentes. `app/chamados/models.py:2022–2027`, `app/chamados/tests/test_e4c_f5_opus_models.py:76–81` [nao verificado]. |
-| 24. RED de `estado` | SO-POR-EXECUCAO | Falta log RED/GREEN do caso que espera `PENDENTE` nas divergências. `app/chamados/models.py:3249–3268`, `app/chamados/tests/test_e4c_f5_opus_models.py:83–85` [nao verificado]. |
-| 25. Consumidores por consequência | DEMONSTRADO | **3** caminhos chegam ao leitor comum, fechamento, CSF e Pauta. A ausência de edição própria no histórico está [nao verificado]. `app/chamados/models.py:1982–2002,2029–2035`, `app/ponto/supra_juiz.py:573–574`, `app/chamados/services/competencia_trancada.py:124–126`. |
-| 26. Vigia de texto em lotes | DEMONSTRADO | `iterator(chunk_size=lote)` com prefetch das decisões e padrão de **2.000** por lote. O tamanho da frota é dado de sombra. `app/chamados/services/vigia_texto_resposta.py:8–25`. |
-| 27. Contagem preservada no vigia | SO-POR-EXECUCAO | **4** resultados fixados, `(0,2)`, `(1,2)`, `(1,1)`, `(1,3)`. Falta rodar o comparativo antes × depois com a mesma fixture. `app/chamados/tests/test_e4c_f5_contador_texto.py:26–38` [nao verificado]. |
-| 28. RED de consultas do vigia | SO-POR-EXECUCAO | O teste exige **3 SELECTs** de decisões para **5** perguntas em lotes de **2**. Falta a saída nominal do RED/GREEN. `app/chamados/tests/test_e4c_f5_contador_texto.py:87–95` [nao verificado]. |
-| 29. Remoção da chave sem leitor | DEMONSTRADO | O carimbo mantém `divergencia_texto_resposta` e o teste cobra a ausência da chave `_universo`. A identidade do commit de remoção está [nao verificado]. `app/chamados/management/commands/vigiar_fio_morto.py:264–284`, `app/chamados/tests/test_e4c_f5_contador_texto.py:56–70`. |
-| 30. Decisão técnica publicada | DEMONSTRADO | A linha registra a remoção e o motivo. `app/docs/RELATO.md:37`. |
-| 31. Selo AST por identidade | DEMONSTRADO | O selo segue parâmetro, aliases e alvo de iteração. Há **2 testes** dedicados à renomeação. `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:164–185,220–251`, `app/chamados/tests/e4c_f5_volta2_mutantes.py:11–38`. |
-| 32. Triagem de `casefold` | FALTA | Há teste de divergência só de caixa e registro de triagem anterior. Falta a linha motivada para o anexo do Opus final. `app/chamados/tests/test_e4c_f5_contador_texto.py:50–53`, `app/docs/RELATO.md:29,32,94` [nao verificado]. |
-| 33. PRONTO publicado | FALTA | Falta no RELATO a lista atual completa, item a item, com as provas e o que falta. `app/docs/RELATO.md:27–38,158`, `avais_posteriores.txt:166` [nao verificado]. |
-| 34. Pureza AST dos dois juízes | DEMONSTRADO | **2** juízes com zero acusações no analisador e **1** comparação nominal isenta no temporal. O selo contém **5** variantes que alteram forma AST, localização ou quantidade da isenção. Identidade textual com a base [nao verificado]. `app/chamados/juizes.py:1383–1403,1551–1560`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:163–185,271–304`. |
-| 35. Censo dos carregadores e mapa K | FALTA | Varredura AST de prefetch explícito de decisões em produção achou **77 chamadas em 66 escopos e 39 arquivos**, sendo **75** de queryset e **2** via helper. Há **33 K distintos** identificáveis nos testes, incluindo K13. Falta vincular os **69 K** ao desenho vigente de **63 não-R + 6 R**, **58 pontos + sobra**. `app/chamados/models.py:2020–2021`, `app/chamados/relatorios_disputa.py:14`, `app/chamados/services/materializacao.py:1044`, `app/chamados/services/disputa_emissao.py:1647`, `app/chamados/services/validacao.py:1075`, `app/chamados/services/vigia_ato_x_coluna.py:12`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:239–263` [nao verificado]. |
-| 36. Seis R declarados | FALTA | Os **6** rótulos avalizados são K3, K19, K20, K22, K40 e K58. K40 tem vínculo nominal verificável. Falta o brief com os demais vínculos e as declarações por sítio. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:199–207` [nao verificado]. |
-| 37. K40 por item | DEMONSTRADO | `get(pk=pk)` e julgamento por item em `_descarimbados`. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467`. |
-| 38. Sobra por grupo | DEMONSTRADO | **1** sobra, a deduplicação. Há prefetch por grupo, caso 3 × 6 e seletor de mutação. `app/chamados/management/commands/dedup_perguntas_fato.py:75–76`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:230–237`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:22`. |
-| 39. REDs 3 × 6 da A | SO-POR-EXECUCAO | **11** métodos de igualdade para **9 K distintos**, incluindo os dois novos do C11. O O261 tem caso unitário separado. Falta o verde nominal. O fio está coberto no formato 1 × 5. `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:23–204,207–240`, `app/chamados/tests/test_e4c_f5_volta2_juizes.py:154–186` [nao verificado]. |
-| 40. REDs e mutantes da B | FALTA | **15 métodos, 14 K e 14 mutantes**, com K46 em dois métodos. Falta a tabela da volta e o vínculo nominal aos **29 K** cobertos, aos **27** editados na B e aos **5 L + 3 Q** exigidos. `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:40–251`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–27` [nao verificado]. |
-| 41. REDs e mutantes da C | FALTA | **10 métodos 3 × 6**, **9 K + sobra**, e **10 mutantes tira-lote**. K13 é um caso adicional de releitura. Falta a tabela da volta com o vínculo aos K de manutenção e às **3 M** exigidas. `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:74–263`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23` [nao verificado]. |
-| 42. RED novo 3 × 6 do C11 | DEMONSTRADO | **2** casos novos, K2 e K1, com SELECTs de decisões, PKs julgados e PKs devolvidos pelo C11. `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:23–40,207–240`. |
-| 43. Tetos existentes E2 e C11 | SO-POR-EXECUCAO | Os **2** selos estão presentes. Faltam o verde nominal e o diff com a base para comprovar preservação. `app/chamados/tests/test_e2_tarefa_do_dia.py:913–938`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:378–402` [nao verificado]. |
-| 44. O261 por candidata, teto 9 | SO-POR-EXECUCAO | **2** testes cobram igualdade unitária em 3 × 6, teto **9** por candidata no selo e **1** SELECT de decisões por candidata no RED. Falta o verde nominal. `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–207`, `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:188–204` [nao verificado]. |
-| 45. Tabela de selos remedidos | FALTA | Há números nos selos do chokepoint, O261 e `_ancoradas`. Falta a publicação consolidada com antes/depois, motivo e rodada por selo. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–267`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:205–207`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:578–593` [nao verificado]. |
-| 46. Quatro tetos do chokepoint | DEMONSTRADO | **4 tetos** anotados, **230→234**, **145→146**, **294→298**, **219→221**, com sítios, commits e classificação de leitura. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–206,220–230,248–253,260–267`. |
-| 47. Quatro casos verdes do chokepoint | SO-POR-EXECUCAO | Falta a remedição nominal dos **4** casos, cruzando **1 e 3** furos com **fecha e fica**. `app/ponto/tests/test_selo_chokepoint_escrita.py:319–330,467–475,502–510` [nao verificado]. |
-| 48. Atribuição SQL e escritores novos | SO-POR-EXECUCAO | O 0110 aceita a atribuição anterior como leitura e **0** escritor novo. Faltam a tabela publicada e a remedição da cópia atual por SQL, verbo e sítio. `avais_posteriores.txt:4,11–13`, `app/ponto/tests/test_selo_chokepoint_escrita.py:196–267` [nao verificado]. |
-| 49. Harness dentro das exceções autorizadas | FALTA | **9 módulos** no selo de asserts, recontados em **0, 31, 86, 134, 29, 7, 65, 122 e 12**, iguais aos números registrados. Falta o mapa das **11 famílias** e o diff por exceção autorizada. `app/chamados/tests/test_e4c_f5_duble_conforme.py:14–35,76–80` [nao verificado]. |
-| 50. Onze famílias verdes | SO-POR-EXECUCAO | `test_pergunta_viva` tem **11 métodos**. Faltam os resultados nominais das **11 famílias**, do módulo e dos selos de conformidade e asserts. `app/chamados/tests/test_pergunta_viva.py:15–75`, `app/chamados/tests/test_e4c_f5_duble_conforme.py:38–87` [nao verificado]. |
-| 51. Décima segunda família | FALTA | As **2 fixtures RED-8** estão presentes. Falta a identificação delas no censo nominal das 12 famílias. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:119–186` [nao verificado]. |
-| 52. Medida de `respondida` | SO-POR-EXECUCAO | O anexo registra **51.563** e **0** mudanças em cada sentido numa árvore anterior. Falta sonda na árvore final ou equivalência comprovada entre as árvores. `lista_76.txt:54`, `app/chamados/models.py:3810–3816` [nao verificado]. |
-| 53. Medida de `sem_veredito_entre` | SO-POR-EXECUCAO | O anexo registra **0 em 51.563** na fase anterior. Falta a mesma sonda na árvore final. `lista_76.txt:55`, `app/chamados/models.py:2002–2027` [nao verificado]. |
-| 54. Medida de `estado` | SO-POR-EXECUCAO | O anexo registra **0 em 51.563** na fase anterior. Falta a mesma sonda na árvore final. `lista_76.txt:56`, `app/chamados/models.py:3249–3268` [nao verificado]. |
-| 55. Conversão dos 96 chamadores | FALTA | A varredura atual acha **44 diretas**, **40** de respondida e **4** temporais, com **43 compostas + 1 exceção**. A1(c) acrescenta duas chamadas identificáveis. Falta a matriz histórica dos **41 diretos + 55 indiretos = 96**, por volta. `app/chamados/juizes.py:1406–1428`, `app/chamados/services/materializacao.py:1056–1060`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–160` [nao verificado]. |
-| 56. Selo de chamada final em zero | DEMONSTRADO | **0** fora da exceção AST. A única exceção nominal é a face `values_list` de `creditos_perguntas`. `app/chamados/tests/test_e4c_f5_selo_chamada.py:20–28,126–160,188–193`, `app/chamados/services/raiox.py:135–147`. |
-| 57. Catraca publicada por volta | SO-POR-EXECUCAO | O zero atual é verificável estaticamente. Faltam série medida e publicação da base Opus e de A/B/C por hash e identidade. `lista_76.txt:59`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–160,188–193` [nao verificado]. |
-| 58. Commit Opus de `models.py` | SO-POR-EXECUCAO | Recontados **6 REDs**, âncoras 357, 1542, 2004, 2057, 3235 e 3791, além do teste do compositor. Faltam histórico do commit anterior à A, correspondência K41/K42 e logs nominais. `app/chamados/tests/test_e4c_f5_opus_models.py:58,76,83,87,120,132,149`, `bin/codex_pergunta.sh:346` [nao verificado]. |
-| 59. Limite da exceção de folha | FALTA | **2 sítios** funcionais identificados, carga da prévia e argumento composto. Falta o diff com a base que restringe as edições aos dois sítios. `app/folha/previa.py:64–67,139–146`, `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:71–95` [nao verificado]. |
-| 60. Prévia da competência 11 | SO-POR-EXECUCAO | O anexo registra **4 empresas, 450 colaboradores, 5.861 linhas, 2 referências e 0 diferenças** para a C5. Falta prova aplicável à árvore final, MAIN × cópia por colaborador e dia. `lista_76.txt:62`, `app/folha/previa.py:64–67,135–146` [nao verificado]. |
-| 61. Fixtures dos dois RED-8 | DEMONSTRADO | **2** casos com ato pela porta e projeção passiva. A fixture do fio faz o percurso chegar à quinta pergunta. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:27–35,145–152,171–186`. |
-| 62. Chamadas ORM da volta 2 | DEMONSTRADO | Casos de fonte passam `D.composta(p)`. O passivo usa o objeto cru como controle do contrato. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:37–105`. |
-| 63. Mutante mira o compositor | DEMONSTRADO | O mutante troca a chamada ao compositor pelo ORM cru após renomear o parâmetro. `app/chamados/tests/e4c_f5_volta2_mutantes.py:11–38`. |
-| 64. Tabela F2 por leitor | DEMONSTRADO | **7 leitores**, **5 `False`** e **2 `True`**, com motivo para cada expectativa. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:498–521`. |
-| 65. Instante e validação pelo ato | DEMONSTRADO | **2 casos** contrastam a leitura do ato com a projeção. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:523–544`. |
-| 66. Leitor F1 B2 | DEMONSTRADO | O teste exige chamada única e tipo `LeituraComposta`. `app/chamados/tests/test_f1nova_b2_leitores.py:87–97`. |
-| 67. `_ancoradas` | DEMONSTRADO | O selo cobra **2 consultas** em cada cenário, com **1 e 5** ancoradas, e verifica a forma da carga e do prefetch. `app/chamados/models.py:349–366`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:569–593`. |
-| 68. Inventário das adaptações | FALTA | A lista inicial tem **7 grupos distintos**. O 0545 acrescenta a classe vii às classes posteriores. Há exemplos de mudanças autorizadas. Falta inventário publicado de todos os usos, antes/depois e aval por alteração. `app/chamados/tests/e4b_c12_ast.py:18–27`, `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197–222`, `avais_posteriores.txt:23` [nao verificado]. |
-| 69. Placar raio-X pela face SQL | DEMONSTRADO | A exceção preserva `values_list` da projeção e adapta a tupla para o juiz. `app/chamados/services/raiox.py:135–147`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:23–28`. |
-| 70. Registro nominal do raio-X | FALTA | Falta a entrada nominal na E4D. `app/docs/BACKLOG.md:2023` [nao verificado]. |
-| 71. `resposta_display` lê o ato | DEMONSTRADO | A property segue lendo o ato e formata o valor de exibição. O teste fixa essa expectativa. `app/chamados/models.py:3837–3865`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:511–514`. |
-| 72. Registro nominal de `resposta_display` | FALTA | O teste menciona o registro. Falta a entrada nominal na E4D. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:511–512`, `app/docs/BACKLOG.md:2023` [nao verificado]. |
-| 73. Medida vigente de display | SO-POR-EXECUCAO | O 0545 aceita as duas comparações normalizadas, declaradas **0 e 0**. Recontei **16 PKs distintos** do literal, **16/51.563** na medida anterior. A aplicabilidade à cópia atual está
-
-[truncado em 20000 de 41238 caracteres]
-
-_7555 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7556 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
