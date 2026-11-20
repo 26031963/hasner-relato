@@ -1,7 +1,74 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 12:23** · publicado em **20/11/2026 12:23** (UTC-3)
+> Ultima resposta processada: **20/11/2026 12:38** · publicado em **20/11/2026 12:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 12:38 · sessao 4cd48316710c · E4C-F5-CONSTROI · construtor · origem=Code
+
+**Pendências da sessão.** Suíte, mutantes, corrida em duas conexões e censo A/B no SHA final [nao verificado]. Fiz a checagem estática de sintaxe dos dois arquivos e `git diff --check`. O selo fora do escopo continua chamando `carimbar` diretamente. [Selo direto](chamados/tests/test_e4c_f5_selo_par_ato_coluna.py#L515)
+
+**Empate.** `projecao_temporal_da_pergunta` corta somente `respondida_em > T1`. A resposta completa em T1 participa da passagem. [Leitor](chamados/juizes.py#L1394) · [RED do empate](chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py#L247)
+
+**Âncora única fora.** No cenário R5, a âncora fica `RESPONDIDA` e a dependente fica `PENDENTE`. Ambas ficam sem carimbo e sem `ABSORCAO`, com a validação ausente na composta e na coluna. O caminho posterior da dependente fica em aberto com Ronald. [RED de estado gravado](chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py#L201)
+
+**LEI-AKITA** `origem=materializador da ausência; testemunha=composta × coluna e grupo da rejeição; RED=T2, empate e DEVOLUCAO posterior; padrão=Parallel Change / Expand-Contract; juízes novos=0`. `chamados/services/materializacao.py:1052`
+
+### Construção
+
+- `_materializar_ausencia_de_resposta` mantém T1 comum e relê por PK sob a trava de cada tentativa. A resposta completa posterior entra em `recusadas` antes de `carimbar`. A trilha usa o escritor best-effort do C6, com razão própria e foto dos instantes. `chamados/services/materializacao.py:1036`, `chamados/services/materializacao.py:1052`, `chamados/services/materializacao.py:1088`, `core/observ.py:105`
+- O `atomic` da irmã conserva `ABSORCAO` junto do carimbo depois de conferir o par e, para grupo ancorado, a recuperação pelo leitor da rejeição. Divergência desfaz a tentativa local. A entrada `escolha` que já chega sem âncora de hora segue o fluxo anterior. `chamados/services/materializacao.py:1041`, `chamados/services/materializacao.py:1051`, `chamados/services/materializacao.py:1070`
+- `_perguntas_em_voo` usa o contexto existente durante os fechamentos síncronos. Isso protege as candidatas de um segundo carimbo via S143 ou S144 durante a própria passagem. `chamados/services/materializacao.py:1101`, `chamados/services/materializacao.py:1834`, `chamados/services/disputa_emissao.py:2016`, `chamados/services/materializacao.py:2211`
+
+**SELECTs por irmã, por leitura estática.** A releitura custa `+1` SELECT da pergunta com a célula. O prefetch fresco custa um SELECT de decisões e serve também ao C6 e à conferência do par, substituindo a leitura avulsa do C6 nas tentativas que chegam a ele. A conferência de grupo custa até `+3` SELECTs quando chamada. Contagem executada [nao verificado]. `chamados/services/materializacao.py:1045`, `chamados/services/materializacao.py:1053`, `chamados/models.py:4333`, `chamados/services/materializacao.py:1150`
+
+### Testes e comandos [nao verificado]
+
+```bash
+modulo=chamados.tests.test_e4c_f5_a1c_passagem_da_ausencia
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$modulo"
+a1c() {
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$modulo.PassagemDaAusenciaTest.$1"
+}
+```
+
+Os testes abaixo releem a pergunta e comparam a presença e o instante da validação nos dois lados. Os resultados são esperados [nao verificado]. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:104`
+
+| Teste | Regra | Esperado | [nao verificado]
+|---|---|---|
+| `test_RED_resposta_t2_concordante_fica_fora_da_passagem` | R1, R2, R4, R7 | `RESPONDIDA`, em `recusadas`, zero chamadas a `carimbar`, trilha temporal. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:122` |
+| `test_resposta_automatica_t2_tambem_fica_fora` | R1, R2 | A resposta automática em T2 recebe a mesma proteção. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:150` |
+| `test_controle_ancorado_em_t1_volta_na_rejeicao` | R2, R5, R7 | Dois carimbos em T1, assinatura anterior preservada e devolução real do grupo. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:169` |
+| `test_RED_ancora_unica_fora_deixa_dependente_sem_carimbo` | R5 | Âncora `RESPONDIDA`, dependente `PENDENTE`, ambas sem carimbo e sem `ABSORCAO`. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:201` |
+| `test_RED_resposta_t2_ja_validada_conserva_resposta_e_assinatura` | R1, R2 | Resposta T2 e validação T3 preservadas, inclusive no fechamento com lastro para S144. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:219` |
+| `test_RED_empate_com_t1_fica_na_passagem` | R1, R2 | Carimbo e `ABSORCAO` em T1. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:247` |
+| `test_RED_recusa_antes_da_trava_muda_a_via` | R1, R2, R7 | A releitura vê a recusa e carimba `VIA_AUSENCIA_DIA`, com o par vazio. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:259` |
+| `test_RED_devolucao_t2_desfaz_carimbo_aceito_pelo_c6` | R3, R6, R7 | C6 aceita a tentativa. O rollback descarta carimbo e `EventoCelula`, conserva a resposta T0 e põe a irmã em `recusadas`. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:276` |
+| `test_RED_falha_da_trilha_temporal_deixa_a_passagem_seguir` | R4, R7 | Erro registrado, irmã preservada e controle seguinte absorvido em T1. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:300` |
+| `test_RED_falha_no_insert_da_absorcao_desfaz_o_carimbo` | R2, R3, R7 | Falha no INSERT desfaz também o carimbo. `chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:327` |
+
+### Mutantes
+
+Uma troca temporária por linha, com o comando do teste que deve morrer [nao verificado]. [nao verificado]
+
+| Sítio | Troca exata | Comando |
+|---|---|---|
+| `chamados/services/materializacao.py:1052` | Mover `q = irmas_frescas.filter(pk=candidata.pk).first()` para imediatamente antes de `trava_do_colaborador`. | `a1c test_RED_resposta_t2_concordante_fica_fora_da_passagem` |
+| `chamados/services/materializacao.py:1065` | Trocar `declarou_hora(q)` por `declarou_hora(candidata)`. | `a1c test_RED_recusa_antes_da_trava_muda_a_via` |
+| `chamados/services/materializacao.py:1059` | Trocar a condição da recusa temporal por `if False:`. | `a1c test_RED_resposta_t2_concordante_fica_fora_da_passagem` |
+| `chamados/services/materializacao.py:1059` | Trocar `respondida_em_t1 is None` por `(respondida_em_t1 is None or leitura.respondida_em == agora)`, exercitando `>=` no consumidor. | `a1c test_RED_empate_com_t1_fica_na_passagem` |
+| `chamados/services/materializacao.py:1060` | Inserir na recusa temporal `q.validada_em = q.validada_por = None` seguido de `q.save(update_fields=['validada_em', 'validada_por'])`. | `a1c test_RED_resposta_t2_ja_validada_conserva_resposta_e_assinatura` |
+| `chamados/services/materializacao.py:1070` | Remover a atribuição `validada_pelo_ato` e o `if` que levanta `_Reprovada('par_ato_coluna_divergente')`. | `a1c test_RED_devolucao_t2_desfaz_carimbo_aceito_pelo_c6` |
+| `chamados/services/materializacao.py:1077` | Mover a chamada inteira a `DecisaoPergunta.registrar` para depois do `with _tx_abs.atomic()`, ainda no `try`, sob `if motivo is None:`. | `a1c test_RED_falha_no_insert_da_absorcao_desfaz_o_carimbo` |
+| `chamados/services/materializacao.py:1074` | Remover o `if` do grupo e o `raise _Reprovada('sem_grupo_recuperavel')`. | `a1c test_RED_ancora_unica_fora_deixa_dependente_sem_carimbo` |
+| `chamados/services/materializacao.py:1088` | Remover a chamada inteira a `_evento`, preservando `recusadas.append`. | `a1c test_RED_resposta_t2_concordante_fica_fora_da_passagem` |
+| `chamados/services/materializacao.py:1047` | Trocar `sorted(candidatas, key=lambda q: q.pk not in ancoras)` por `candidatas`. | `a1c test_controle_ancorado_em_t1_volta_na_rejeicao` |
+| `chamados/services/materializacao.py:1108` | Retirar `with _perguntas_em_voo(pks):` do fechamento da disputa e dedentar `disputa.fechar(...)`. | `a1c test_RED_resposta_t2_ja_validada_conserva_resposta_e_assinatura` |
+
+### Quem mais lê
+
+- **C6.** `carimbar` chama o juiz com a tentativa aplicada. O C6 lê a composta e usa a concordância com a luz quando cabível. `chamados/models.py:3358` · `chamados/juizes.py:1406` · `chamados/juizes.py:1428`
+- **Consumidor da rejeição.** O `on_commit` chama a devolução, que reencontra o grupo pela âncora, disputa, dia e relógio. `ponto/signals.py:254` · `chamados/services/materializacao.py:1146` · `chamados/services/materializacao.py:1188`
+- **Vigia A/B.** Compara a presença da validação composta com a coluna e publica as duas contagens. `chamados/services/vigia_ato_x_coluna.py:8` · `chamados/management/commands/vigiar_fio_morto.py:198`
 
 ## 20/11 12:23 · sessao e087ded65b96 · E4C-F5 · verificador · origem=Code
 
@@ -981,59 +1048,4 @@ PYTHONDONTWRITEBYTECODE=1 python -m chamados.tests.bug_par_mutantes \
 
 Conferi a sintaxe dos seis arquivos e a unicidade das duas âncoras sem carregar Django. Banco, suíte, execução dos mutantes, custo observado e nova medição de frota **[nao verificado]**. O `A=0`, `B=0` em 51.953 perguntas é o dado do anexo fornecido. A remedição e a certificação ficam com Code e Opus. [nao verificado]
 
-## 20/11 10:56 · sessao e05141ea45e1 · E4C-F5 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — item 2, F5 SILÊNCIO.** O corte autoriza ADMIN com Cobrar na tarefa do dia, mas o literal ainda deixa em aberto a precedência da tranca e o que fazer quando o botão existente fica inacessível. A ordem de reescrever o golden também alcança um controle de competência entregue. `respostas_2011_1100.txt:5`, `app/chamados/services/tarefa_do_dia.py:227`, `app/templates/chamados/partials/modal_fio.html:354`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:106`
-
-Identidade da cópia com o hash informado [nao verificado].
-
-## P1 — As premissas conferem?
-
-- **(a) Os quatro literais conferem no conteúdo.** Aberta é competência sem TXT vigente pelo K6, inclusive aprovada ou trancada sem TXT e com TXT invalidado sem substituto. A “lista dele” é a tarefa do dia. Cobrar é o botão existente. Entregue pelo K6 vai à lista textual do DP, com “paga fora” adiada até existir o juiz correspondente. A publicação às 10:33 ficou [nao verificado]. `respostas_1711_1410.txt:6`, `respostas_1711_1150.txt:2`, `respostas_1711_1120.txt:2`
-- **(b) O encaixe A confere.** É a primeira proposta da seção 7 do v05. Transporta a marca pela carga e publica Cobrar como ação explícita de ADMIN na composição, com âncora alcançável e projeção na Central. `r.txt:60`
-- **(c) A origem confere.** `CargaDaTarefa` carrega a sequência de atos ordenada por `ato_em, pk`. `_fatos_das_perguntas` reconhece a compensadora e a descarta antes do corte por `agora`. `_pela_decisao` devolve `silencio_decidido` sem ação. `_portas_da_tarefa` compõe o dono, a rota e a fila do dia. `app/chamados/services/tarefa_do_dia.py:532`, `app/chamados/services/tarefa_do_dia.py:393`, `app/chamados/services/tarefa_do_dia.py:182`, `app/chamados/services/tarefa_do_dia.py:724`
-- **(d) Cobrar já existe.** Central e modal usam o POST `cobrar_chamado`. O gestor autorizado pelo departamento aciona o botão, o colaborador recebe o push e deve a resposta. A Central trata o verbo residual `cobrar` como pendência do colaborador, fora do balão ADMIN. O POST consulta a cobrança anterior por colaborador e dia e registra a ocorrência após o envio bem-sucedido. `app/templates/chamados/partials/_lista_chamados.html:83`, `app/templates/chamados/partials/modal_fio.html:378`, `app/chamados/views_cobrar.py:24`, `app/chamados/views_cobrar.py:34`, `app/chamados/services/verbos.py:20`
-- **(e) O juiz existe e a tarefa já o lê.** K6 responde se existe TXT vigente. “Aberta” é o complemento dessa resposta para a competência identificada por K8. `_ler_exportadas` já importa o leitor de `folha.export` e os modelos de leitura de `folha.models`, consulta em lote e chama K6 sem escrita nem alteração em `folha/`. `app/core/juizes.py:185`, `app/core/juizes.py:342`, `app/folha/export.py:556`, `app/folha/export.py:580`, `app/chamados/services/tarefa_do_dia.py:563`
-- **(f) Há formatador de texto, mas gerador pronto para (c) ficou [nao verificado].** `partir_em_pautas` recebe linhas prontas. A aba DP lê `Pauta` gravada. O comando mais próximo imprime no `--dry`, seleciona o beco de folga indefinida e usa `escrever` no modo de aplicação. O corte pede PK e `colNNN`, sem escrita. Com a evidência disponível, vale a alternativa do aval de nomear DP e registrar a lista como obra própria. `app/pautas/services.py:103`, `app/pautas/views.py:29`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:92`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:119`, `app/pautas/management/commands/pauta_folga_nao_definida_exportada.py:130`, `app/docs/CORTES.md:545`, `respostas_2011_1100.txt:5`
-
-**(g) O conjunto de oito módulos e um golden que a leitura permite identificar:**
-
-| Arquivo::teste | O que o assert cobre | [nao verificado]
-|---|---|
-| `app/chamados/tests/test_f1nova_b1_juiz_respondida.py::test_RED_ressuscitar_com_SILENCIO_nao_devolve_ao_colaborador` | Compara razão e ações da mesma pergunta antes e depois da ressuscitação. É a expectativa diretamente atingida por (b). `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:320`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:338`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:343` |
-| `app/chamados/tests/test_e2_tarefa_do_dia.py::test_ato_duplicado_e_a_mesma_tarefa` | Silêncio comum duplicado conserva `silencio_decidido` e `[]`. `app/chamados/tests/test_e2_tarefa_do_dia.py:277` |
-| `app/chamados/tests/test_e3_portas_tarefa.py::test_v8_R15_produto_decisoes_residual_A` | Q12 conserva `silencio_decidido` com rota residual `porta_fila`. `app/chamados/tests/test_e3_portas_tarefa.py:721`, `app/chamados/tests/test_e3_portas_tarefa.py:733`, `app/chamados/tests/test_e3_portas_tarefa.py:756` |
-| `app/chamados/tests/test_e3_portas_v6_sem_banco.py::test_encerrada_externa_tem_porta_do_chamado_e_passivo_preserva_pergunta` | Silêncio com âncora externa usa `porta_fila`. `app/chamados/tests/test_e3_portas_v6_sem_banco.py:98` |
-| `app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py::test_sequencias` | Uma resposta que preserva validação deixa o silêncio efetivo no caso da matriz. `app/chamados/tests/test_e4c_f6f7_c14_lei3_pela_leitura.py:34` |
-| `app/api/tests/test_f6_u4_aguarda_admin_pela_tarefa.py::test_RED_silencio_decidido_nao_tem_dono_admin`, `::test_dono_admin_True_colaborador_False` | Silêncio sem compensadora resulta em `aguarda_admin=False`. `app/api/tests/test_f6_u4_aguarda_admin_pela_tarefa.py:59`, `app/api/tests/test_f6_u4_aguarda_admin_pela_tarefa.py:92` |
-| `app/chamados/tests/test_f2_p1_tarefa_ignora_reabertura_marcada.py::test_RED_reabertura_marcada_nao_vira_devolvida_ao_colaborador`, `::test_MORDE_reabertura_comum_segue_devolvida_ao_colaborador` | A fixture é respondida. O teste distingue compensadora de reabertura comum. `app/chamados/tests/test_f2_p1_tarefa_ignora_reabertura_marcada.py:54`, `app/chamados/tests/test_f2_p1_tarefa_ignora_reabertura_marcada.py:83` |
-| `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py::test_RED_b_mesmo_ressuscitar_mesma_tarefa_e_mesmo_csf` | Com K6 verdadeiro, compara a tarefa inteira e o CSF antes e depois com o golden. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:106`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:151`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:158` |
-| `app/chamados/tests/f2_ressuscitar_tarefa_main.json` | Golden de entregue. A pergunta P2 tem `silencio_decidido` e `acoes: []` antes e depois. `app/chamados/tests/f2_ressuscitar_tarefa_main.json:39`, `app/chamados/tests/f2_ressuscitar_tarefa_main.json:114` |
-
-**PROCEDE.** O 1150 manda reescrever a expectativa do caso F5 SILÊNCIO. A ordem de reescrever os oito módulos e o golden como se todos afirmassem a mesma expectativa inclui controles de silêncio comum, de pergunta respondida e de competência entregue. `respostas_1711_1150.txt:2`, `respostas_2011_1100.txt:5`, `app/chamados/tests/test_e2_tarefa_do_dia.py:277`, `app/chamados/tests/test_f2_p1_tarefa_ignora_reabertura_marcada.py:83`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:109`
-
-## P2 — Colisões e «juízes novos = 0»
-
-- **Zero juízes novos fecha para o recorte definido.** `es_da_ressuscitacao` já identifica a compensadora. C19 já julga o silêncio efetivo e responde quem age e por qual porta. K8 e K6 já respondem a competência e a entrega. O registro carece de um juiz separado com a frase “ressuscitada em silêncio decidido”, mas essa combinação pertence à pergunta já registrada em C19. `app/chamados/models.py:4246`, `app/chamados/services/tarefa_do_dia.py:158`, `app/chamados/services/tarefa_do_dia.py:182`, `app/core/juizes.py:158`, `app/core/juizes.py:303`, `app/core/juizes.py:342`
-- **Os selos delimitam o encaixe.** A catraca F5 cobra leitura pelos instantes da composta nos sítios nominados e nos chamadores dos dois juízes L-130. O selo de juiz único e o de leitor sem derivação própria vedam decidir dono ou competência de novo na tela. O tripwire da marca reserva a escrita à ressuscitação. A bateria da tarefa cobra zero escrita, relógio na borda e zero SQL de Folha ou `FechamentoMensal` no caso ordinário testado. Consultar K6 indiscriminadamente nesse caminho faria esse caso falhar. A leitura seletiva já tem precedente e selo próprio. `app/chamados/tests/test_e4c_f5_selo_catraca.py:298`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:189`, `app/docs/LEIS.md:60`, `app/docs/LEIS.md:151`, `CLAUDE.md:20`, `app/chamados/tests/test_contract_juiz_chamado.py:43`, `app/core/tests/test_medida_leitor_do_dia.py:39`, `app/chamados/tests/test_f2_ressuscitacao_um_escritor.py:66`, `app/chamados/tests/test_e2_tarefa_do_dia.py:518`, `app/chamados/tests/test_e2_tarefa_do_dia.py:879`, `app/chamados/tests/test_e2_tarefa_do_dia.py:1010`, `app/chamados/tests/test_e3_c8b_sem_banco.py:457`
-- **As colisões literais são o golden e a porta alcançável.** O 1120 preserva a F2 e autoriza a exceção do silêncio em aberta na F5. Se “nomeia DP” alterar a saída comparada em entregue, o golden também muda. E a regra vigente de dono do dia exige ação alcançável, com precedência do colaborador. Publicar ADMIN incondicionalmente contraria essa regra. `respostas_1711_1120.txt:2`, `respostas_1711_1120.txt:3`, `app/docs/CORTES.md:490`, `app/docs/CORTES.md:543`, `app/docs/CORTES.md:545`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:159`, `app/chamados/services/tarefa_do_dia.py:748`, `app/chamados/services/tarefa_do_dia.py:766`
-
-**PROCEDE.** A autorização para mudar o caso aberto está dada. A reescrita do golden de entregue e ADMIN como dono incondicional do dia excedem esse recorte. `respostas_1711_1150.txt:2`, `app/docs/CORTES.md:490`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:109`
-
-## P3 — O literal fecha na operação?
-
-- **O fato é legível, mas o alcance ainda precisa fechar.** A trilha distingue `REABERTURA` marcada de reabertura comum e permite ordenar por `(ato_em, pk)` até `agora`. A tarefa já distingue silêncio efetivo, ausência de ato e passivo sem linha. O literal deixa em aberto se uma compensadora histórica ainda qualifica depois de ato ordinário posterior. Também abrange trancada sem TXT, enquanto C20 encerra a tarefa cedo se o admin ainda não tocou o dia. Sem data ou empresa, a abertura pelo K6 fica indecidível. `app/chamados/models.py:1713`, `app/chamados/models.py:4224`, `app/chamados/models.py:4246`, `app/chamados/services/tarefa_do_dia.py:154`, `app/chamados/services/tarefa_do_dia.py:227`, `app/chamados/services/tarefa_do_dia.py:393`, `app/chamados/services/tarefa_do_dia.py:567`, `app/chamados/services/vigia_fio.py:789`, `respostas_1711_1410.txt:6`
-- **A saída de (b) é na própria tarefa do dia.** Hoje a instância ordinária fica sem ação exigível. O aval atribui Cobrar ao ADMIN nessa tarefa. A `fila` pública contém chamados das portas do dono escolhido para o dia. Se outro marco tiver resposta de colaborador alcançável no app, esse colaborador tem precedência no dia. A Central seleciona chamados por status e verbo próprios e pode manter a âncora fora da lista padrão. `respostas_1711_1150.txt:2`, `app/chamados/services/tarefa_do_dia.py:338`, `app/chamados/services/tarefa_do_dia.py:748`, `app/chamados/services/tarefa_do_dia.py:766`, `app/chamados/services/tarefa_do_dia.py:791`, `app/chamados/services/painel.py:300`
-- **Central e modal compartilham o POST, com critérios distintos de exibição.** A Central oferece Cobrar pela partição de verbos. O modal usa a âncora, a disputa aberta, o ramo sem `ancora_ausente` e a espera de resposta lida pelo fio. A ressuscitação reabre a disputa das perguntas afetadas, mas isso por si só deixa sem prova a alcançabilidade do botão para todo caso do aval. `app/chamados/services/verbos.py:30`, `app/templates/chamados/partials/_lista_chamados.html:83`, `app/chamados/services/fio.py:97`, `app/chamados/services/fio.py:164`, `app/chamados/services/fio.py:388`, `app/chamados/models.py:1729`, `app/templates/chamados/partials/modal_fio.html:354`
-- **Com TXT vigente, o destino do corte é DP.** O ramo ADMIN/Cobrar da F5 fica fora desse recorte. Hoje K6 protege as extensões administrativas da tarefa, enquanto o silêncio do marco ordinário continua sem ação. O envelope público da tarefa carece de destino DP próprio. O aval determina a lista textual sem escrita e prevê registrar sua construção separadamente quando faltar gerador. `respostas_1711_1120.txt:2`, `respostas_2011_1100.txt:5`, `app/docs/CORTES.md:545`, `app/chamados/services/tarefa_do_dia.py:273`, `app/chamados/services/tarefa_do_dia.py:338`, `app/chamados/services/tarefa_do_dia.py:809`
-
-**PROCEDE.** Falta fechar a precedência de C20 para trancada sem TXT e a saída quando a instância se qualifica, mas o botão existente fica inacessível. O literal também precisa distinguir o dono da instância do dono do dia. `app/chamados/services/tarefa_do_dia.py:227`, `app/chamados/services/tarefa_do_dia.py:748`, `app/chamados/services/tarefa_do_dia.py:766`, `app/templates/chamados/partials/modal_fio.html:354`, `app/docs/CORTES.md:490`
-
-## P4 — Exportada, dinheiro, escala/vínculo, `folha/` e `!`
-
-- O escopo declarado lê K6 nas entregues, nomeia DP e condiciona a lista textual ao caminho sem escrita. A tarefa é leitora. O ato de Cobrar já autorizado pelo corte é o push com ocorrência no chamado. Nesse caminho, a única escrita acionada pelo botão é a ocorrência. Alterar o gravado da exportada, dinheiro ou dados de escala/vínculo fica fora do item. `respostas_2011_1100.txt:5`, `app/docs/CORTES.md:545`, `app/chamados/services/tarefa_do_dia.py:830`, `app/chamados/views_cobrar.py:44`, `app/chamados/services/nota.py:83`, `app/docs/LEIS.md:125`, `CLAUDE.md:265`
-- O retrato é o consumidor indireto já declarado. A Folha seleciona primeiro os dias que retêm e depois lê a porta da tarefa. Em próxima lavra, o retrato pode refletir dono e ação dos dias já retidos. Seu mapa atual carece de entrada para `cobrar` e pode renderizar o rótulo legado “Validar no fio”. O impacto na frota e a contagem por K6 exigida antes do PRONTO estão [nao verificado]. `respostas_2011_1100.txt:5`, `app/folha/fora_da_folha.py:200`, `app/folha/fora_da_folha.py:215`, `app/folha/retrato_folha.py:989`, `app/folha/retrato_folha.py:1015`, `app/folha/retrato_folha.py:1066`, `app/folha/retrato_folha.py:1246`, `app/folha/management/commands/lavrar_retrato_folha.py:72`
-
-**SEGUE.** No recorte declarado, a leitura de K6, a lista sem escrita e o botão existente dispensam `!` adicional. O efeito indireto no retrato já consta do aval. `respostas_2011_1100.txt:5`, `app/docs/CORTES.md:545`, `CLAUDE.md:265`
-
-_7513 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7514 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
