@@ -1,7 +1,178 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 00:22** · publicado em **20/11/2026 00:25** (UTC-3)
+> Ultima resposta processada: **20/11/2026 00:29** · publicado em **20/11/2026 00:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 00:29 · sessao e8d689a8df3e · CADEIA-20-PASSO-1 · verificador · origem=Code
+
+**CADEIA-20-PASSO-1, item (3) — BLOQUEIA.** O raspado informa mudança de ata na segunda passada com o insumo capturado igual em (A). Em (B), a mudança de hash acompanha mudanças nos insumos que o código manda hashear. O bloqueio de (B) é de ordem da cadeia: o cartório pode carimbar antes de a própria rodada terminar de alterar esses insumos. A meta de R5 é diferença zero na segunda rodada. `app/core/placar_estrutural.py:416–420`, `app/ponto/services/cartorio.py:502–507`, `app/ponto/services/cartorio.py:543–547`, `app/ponto/services/cartorio.py:1133–1157`, `app/ponto/services/cartorio.py:1179–1181`.
+
+Identidade Git da cópia com `a4a9b6bfe5f7` [nao verificado]. `git rev-parse HEAD` retornou que o diretório fornecido não é um repositório Git.
+
+### 1. (A) — BLOQUEIA
+
+A primeira lavra e a relavra passam pelo mesmo corpo do cartório. Tanto o ramo normal quanto `nunca_bateu` montam a ata e chamam `_lavrar_razoes_sobras`. Com ata, zero órfãs e insumos da grade presentes, o escritor põe `[]`. Com insumos `None`, retorna sem incluir a chave na ata recém-montada. A grade por turno entrega os insumos, e a grade legada omite essa chave. O escritor do campo nunca atribui `None` a `razoes_orfas`. `app/ponto/services/cartorio.py:752–794`, `app/ponto/services/cartorio.py:962–971`, `app/ponto/services/cartorio.py:994–1001`, `app/ponto/services/cartorio.py:1123`, `app/ponto/services/cartorio.py:1156–1157`, `app/ponto/services/cartorio.py:1393`, `app/ponto/services/cartorio.py:1434–1459`, `app/ponto/services/cartorio.py:2013–2037`, `app/escala/utils.py:1065`, `app/escala/utils.py:2117–2137`.
+
+A porta `lavrar_veredito` compara a ata inteira e atribui `cel.ata` quando ela difere. `carimbar` persiste os campos devolvidos pela lavra. A entrada avulsa `julgar_celula` ainda chama `carimbar_precedencia`, que copia a ata e altera a chave `precedencia`. A limpeza de julgamento de célula futura zera a ata inteira pela própria porta. O caminho efetivo da primeira gravação nas 19 células [nao verificado]. `app/ponto/portas/celula.py:1049–1067`, `app/ponto/portas/celula.py:1090–1098`, `app/ponto/portas/celula.py:1146–1167`, `app/ponto/portas/celula.py:1189–1216`, `app/ponto/services/cartorio.py:2202–2211`.
+
+| Leitor direto | Ausente, `None` e `[]` |
+|---|---|
+| `sobras_da_ata` | Sem órfãs, devolve `[]` antes de ler a chave. Com órfãs, normaliza ausência e `None` para `[]`. É a projeção usada pela grade e pelo espelho. `app/escala/services/leitor_celula.py:193–223`, `app/escala/services/leitor_celula.py:450–454`, `app/ponto/services/espelho.py:708–710` |
+| `medir_razoes_sobras` | Chave ausente tem ramo próprio. `[]` é uma lista válida para `len`; `None` explícito cai em `len(None)` e levanta `TypeError`. Com zero órfãs, chave ausente e `[]` dão a mesma contagem. `app/ponto/services/cartorio.py:1004–1035` |
+| `atas_no_horizonte_sem_razao` | Sem órfãs nem contagem positiva, pula a ata antes de ler a chave. Com órfãs no horizonte, ausência e `None` falham no teste de tipo, e `[]` falha no alinhamento. `app/ponto/services/cartorio.py:1038–1056` |
+
+A comparação da ata inteira também distingue os três estados na escrita. `app/ponto/portas/celula.py:1049–1059`.
+
+### 2. (B) — BLOQUEIA pela ordem
+
+**Sim, a impressão inclui insumo que a própria cadeia pode alterar adiante.** Ela inclui `pk:status_local` dos chamados do dia. `fio` conta **chamados vivos com pelo menos uma pergunta viva**. Com chamados vivos e nenhum com fio, entra `fio:0`. Sem chamados vivos, a parte `fio` é omitida. O juiz da pergunta também lê a célula, portanto a própria lavra pode mudar o resultado da próxima leitura do fio. `app/ponto/services/cartorio.py:146–155`, `app/ponto/services/cartorio.py:502–507`, `app/ponto/services/cartorio.py:543–547`, `app/ponto/services/cartorio.py:1527–1547`, `app/chamados/juizes.py:1450–1469`, `app/chamados/juizes.py:1510–1519`.
+
+1. **Dentro do cartório**, o corpo calcula `imp` e depois o carimba. Há fechamentos e ressuscitações entre esses dois pontos. Depois do primeiro carimbo, o E2 carimba perguntas absolvidas e o cartório tenta fechar os chamados adiados. Os casos enfileirados voltam ao mesmo corpo. Depois, a fábrica pode criar perguntas ou desfazer carimbos. A releitura seguinte exige aumento de `emitidos`, e as filas produzidas nas releituras têm caminhos de descarte. `app/ponto/services/cartorio.py:1541–1547`, `app/ponto/services/cartorio.py:1691–1704`, `app/ponto/services/cartorio.py:1835–1861`, `app/ponto/services/cartorio.py:2035–2037`, `app/ponto/services/cartorio.py:1123–1164`, `app/ponto/services/cartorio.py:1179–1181`, `app/ponto/services/cartorio.py:1209–1231`, `app/chamados/reconciliador.py:634–648`, `app/chamados/services/fabrica_da_celula.py:160–174`, `app/chamados/services/fabrica_da_celula.py:206–219`.
+2. **Na ordem configurada**, `reconciliar_grade` precede `processar_cartorio --apply`. Depois do cartório, um ramo segue por `apurar_furos_diarios` → `disparar_perguntas_competencia --alarme` → `reconciliar_perguntas_orfas --alarme`. `apurar_furos_diarios` chama o agrupamento sob limbo, que pode reatar perguntas e reconciliar o furo. `supra_juiz --executar` também depende do cartório e pode chamar o retratador. A transição `em_analise → resolvido` vem de `RECONCILIAR` e é persistida por `_gravar_estado`. `app/config/crons.py:462`, `app/config/crons.py:599`, `app/config/crons.py:616`, `app/config/crons.py:1527–1545`, `app/escala/management/commands/apurar_furos_diarios.py:13–19`, `app/chamados/services/limbo_folgas.py:279–287`, `app/ponto/management/commands/supra_juiz.py:257–287`, `app/chamados/reconciliador.py:572–586`, `app/chamados/catalogo/motor.py:109–113`, `app/chamados/models.py:234–235`, `app/chamados/models.py:302`, `app/chamados/models.py:654–668`.
+3. **Pelo evento da célula**, a porta salva e publica no mesmo ato. O consumidor tem agenda própria e pode carimbar perguntas, retratar chamados e rodar a fábrica. O `post_save` do chamado tenta rejulgar quando está fora de um julgamento ativo e tem dia identificável. O comando, evento ou signal que produziu cada uma das oito transições, e a ordem efetiva da sonda, ficam [nao verificado]. `app/ponto/portas/celula.py:942–965`, `app/config/crons.py:393–394`, `app/chamados/reconciliador.py:1414–1438`, `app/chamados/signals.py:189–218`.
+
+### 3. Terceiro passe — BLOQUEIA o aceite de idempotência
+
+- **(A)** Com zero órfãs e a mesma grade por turno, uma nova lavra volta a produzir `[]`. Com a mesma impressão, o caminho comum pula a célula. Logo, o próprio caso `ausente/None → []` não se repete sob essas condições. O resultado efetivo do terceiro passe [nao verificado]. `app/ponto/services/cartorio.py:964–971`, `app/ponto/services/cartorio.py:1402–1408`, `app/ponto/services/cartorio.py:1552–1558`.
+- **(B)** Se o status e o fio lidos no terceiro passe já estiverem refletidos no hash do segundo e os demais insumos se mantiverem, o caminho comum pula. Se o segundo passe tiver deixado uma mudança posterior ao último carimbo, o terceiro pode gravar outro hash com a mesma ata. O código não garante convergência em três passes, e o raspado só vai até o segundo [nao verificado]. `app/ponto/services/cartorio.py:1209–1231`, `app/ponto/services/cartorio.py:1541–1558`, `app/ponto/portas/celula.py:1189–1201`.
+
+### 4. Classes de reprovação
+
+| Classe | Veredito no caminho lido |
+|---|---|
+| Segundo juiz registrado | **NAO BLOQUEIA.** O registro aponta `razao_da_sobra` e `fio_vivo`, e o cartório chama essas autoridades. `app/core/juizes.py:290–299`, `app/core/juizes.py:1332–1333`, `app/ponto/services/cartorio.py:994–996`, `app/ponto/services/cartorio.py:1466`, `app/ponto/services/cartorio.py:1532` |
+| Segundo escritor fora da porta | **NAO BLOQUEIA.** As duas lavras de razões convergem para o mesmo escritor e persistem pela porta da célula. `app/ponto/services/cartorio.py:1434–1436`, `app/ponto/services/cartorio.py:2013–2016`, `app/escala/models.py:1826–1828`, `app/ponto/portas/celula.py:1090–1098` |
+| Relógio fora da borda | **BLOQUEIA.** O cartório tem `agora`, mas a leitura de `fio` chama `fio_vivo` sem esse instante. O juiz pode cair em `date.today()` e em `classificar_falta` com fallback para `_tz.now()`. Efeito nas oito células [nao verificado]. `app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1532`, `app/chamados/juizes.py:588–596`, `app/chamados/juizes.py:1470–1477`, `app/chamados/juizes.py:1519`, `app/escala/servico_jornada.py:385–389` |
+| Derivação paralela | **BLOQUEIA na contagem do fio.** O cartório compartilha `_com_fio` entre hash e julgamento, mas o comando `supra_juiz` recalcula a agregação para o placar. Ambos consultam o mesmo predicado por chamado. Divergência de contagem no raspado [nao verificado]. `CLAUDE.md:20–22`, `app/ponto/services/cartorio.py:1527–1545`, `app/ponto/services/cartorio.py:1614–1617`, `app/ponto/management/commands/supra_juiz.py:211–225` |
+| Campo com dois significados | **BLOQUEIA em (A).** A ausência da chave e a lista vazia são distinguíveis na persistência, e o contador ainda trata `None` explícito de forma diferente. `app/ponto/services/cartorio.py:964–971`, `app/ponto/services/cartorio.py:1013–1022`, `app/ponto/portas/celula.py:1049–1059` |
+| Ordem de etapa | **BLOQUEIA em (B).** Há escrita posterior ao carimbo e a releitura é condicional. `app/ponto/services/cartorio.py:1123–1157`, `app/ponto/services/cartorio.py:1179–1181`, `app/ponto/services/cartorio.py:1209–1231` |
+
+## 20/11 00:27 · sessao 670009206e83 · E4C-F5-CONSTROI · construtor · origem=Code
+
+Apliquei as duas adaptações pedidas e atualizei quatro âncoras de mutação deslocadas pela B/B2. A B2 deixa uma pendência no beco: o módulo falso de `chamados.juizes` ainda precisa expor `pergunta_respondida`. Esse import vem antes de `DecisaoPergunta` e está fora das classes aprovadas para esta volta. `chamados/tests/test_cef_c1_sem_banco.py:88`, `chamados/tests/e3_volta7_apoio.py:106`, `escala/services/cadastro_realidade.py:439`.
+
+### Arquivos tocados e usos dos avais
+
+| Arquivo e linha | Classe | Método ou alvo | Antes → depois |
+|---|---|---|---|
+| `chamados/tests/test_cef_c1_sem_banco.py:88` | v | `Consulta.prefetch_related` | Ausente → devolve `self`, sem ramo. |
+| `chamados/tests/test_cef_c1_sem_banco.py:309` | i | `upload_arranca_motivo` | Âncora do `fio_vivo` sobre `filter(...)` → âncora sobre `filter(...).prefetch_related('decisoes')`. A mutação continua trocando a condição por `if True:`. |
+| `chamados/tests/e3_volta7_apoio.py:106` | ii | `cenario`, módulo falso `chamados.models` | `DecisaoPergunta` ausente → exporta a classe do helper único `chamados/tests/duble_pergunta.py:12`, já usada em `chamados/tests/test_e3_r3_c5_sem_banco.py:180` e `chamados/tests/test_e3_r3_c6_sem_banco.py:299`. |
+| `chamados/tests/e3_r3_c6_mutantes.py:48` | i | `K6_m1_sem_respondida` | Âncora no teste direto do instante → `a is None and respondida_no_horizonte(p)`. A mutação continua removendo o requisito de resposta. |
+| `chamados/tests/e3_r3_c6_mutantes.py:50` | i | `K6_m1_ignora_ancora` | Âncora no teste direto do instante → `a is None and respondida_no_horizonte(p)`. A mutação continua removendo o requisito de ausência de âncora. |
+| `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:113` | i | `test_reflexao_e_mutacao_de_perguntas_MORDEM` | `_item(p)` → `_item(p, DecisaoPergunta.composta(p))` na âncora. A mutação continua substituindo a lista publicada por `[]`. |
+
+### Varredura por família
+
+| Família | Resultado da leitura estática |
+|---|---|
+| **Foto e emissão** | O upload CEF C1 precisava de `prefetch_related`. Os casos CEF C3 reutilizam o mesmo dublê pelo `setUp` do C1. A resolução S128 em memória já usa `Linhas`, que tem o método. `api/foto_recebida.py:81`, `chamados/tests/test_cef_c3_sem_banco.py:143`, `chamados/tests/test_cef_c3_sem_banco.py:171`, `chamados/tests/test_e4b_classe_e_memoria.py:193`, `chamados/tests/test_e4b_classe_e_memoria.py:374`. |
+| **Beco C11 e M1** | C5 e C6 já fornecem `DecisaoPergunta.composta` e a projeção temporal. O retorno do helper é um `namedtuple` com `_replace`. A volta 7 já fornecia a projeção e agora exporta o compositor. A lista de imports pendentes está abaixo. `chamados/tests/duble_pergunta.py:7`, `chamados/tests/duble_pergunta.py:23`, `chamados/tests/test_e3_r3_c5_sem_banco.py:161`, `chamados/tests/test_e3_r3_c6_sem_banco.py:290`, `chamados/tests/e3_volta7_apoio.py:74`, `escala/services/cadastro_realidade.py:497`. |
+| **Juízes e calendário** | S127 já recebe `Linhas` em `.all()`. No calendário inteiro de LU3, `Consulta.__getattr__` já devolve a própria consulta para `prefetch_related`. O C11 de navegação executa o trecho anterior à consulta. `chamados/juizes.py:2490`, `chamados/tests/test_disputa_s127.py:22`, `chamados/tests/e3_lu3_apoio.py:17`, `chamados/tests/e3_lu3_apoio.py:93`, `chamados/tests/test_e3_r3_c11_sem_banco.py:64`, `colaboradores/services/calendario.py:505`. |
+| **API, views e serviços de chamados** | O selo sem banco da API tinha a âncora antiga. Nos demais sítios localizados, os selos leem fonte, dublam outra função ou chegam ao sítio alterado com ORM real. Isso inclui validação e recusa, declaração, detalhe e cobrança, classificação de becos, competência, explicador, migração do fio, limbo e pergunta no app. `api/views.py:2601`, `chamados/tests/test_bug_par_sem_banco.py:116`, `chamados/tests/test_bug_par_c2_sem_banco.py:97`, `chamados/tests/test_e1_volta2.py:141`, `chamados/tests/test_selo_resolucao_um_escritor.py:184`, `chamados/tests/test_e4b_c4v7_memoria.py:204`, `chamados/tests/test_tranca_vivas_08.py:123`, `chamados/tests/test_explicador_disputa.py:46`, `chamados/tests/test_e1_v7_catracas.py:467`, `chamados/tests/test_e1_v10.py:259`, `chamados/tests/test_e1_v6_horizonte.py:479`. |
+| **Ficha, folha, dia do colaborador e comandos** | Os casos localizados para as consultas alteradas usam ORM real ou verificam fonte. O dublê do executor supra exerce `pode_executar_csf`; o `prefetch_related` alterado fica em `Command.handle`. `colaboradores/tests/test_ficha_praca_uf.py:8`, `folha/tests/test_previa_proposta.py:33`, `escala/tests/test_leitores_segundo_intervalo.py:246`, `chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:116`, `chamados/tests/test_porta_chamado_e2.py:58`, `ponto/tests/test_supra_juiz_executor.py:67`, `ponto/management/commands/supra_juiz.py:192`. |
+
+**Fora das classes aprovadas.** Pela leitura estática, `pergunta_respondida` falta no juiz falso da volta 7, de C5, de C6 e do caso de porta só no app. O import falha antes de qualquer ramo do beco. Alterar o módulo falso do juiz exigiria ligar uma função de julgamento, além das adaptações de compositor e de ORM autorizadas. `escala/services/cadastro_realidade.py:439`, `chamados/tests/e3_volta7_apoio.py:66`, `chamados/tests/test_e3_r3_c5_sem_banco.py:174`, `chamados/tests/test_e3_r3_c6_sem_banco.py:294`, `chamados/tests/test_e3_degrau_dono_e_porta.py:507`, `chamados/tests/test_e3_tarefa_admin_sem_banco.py:79`.
+
+### Selo de asserções
+
+Comparei por AST com `a81f888dc`. A sequência e o conteúdo das asserções e os nomes dos testes são idênticos nos quatro módulos. `git diff --check` passou. Execução de testes e resultado dos mutantes **[nao verificado]**.
+
+| Módulo | `assert` base → final | `self.assert*` base → final | Testes base → final | [nao verificado]
+|---|---:|---:|---:|
+| `chamados/tests/test_cef_c1_sem_banco.py:1` | 0 → 0 | 25 → 25 | 10 → 10 |
+| `chamados/tests/e3_volta7_apoio.py:1` | 0 → 0 | 0 → 0 | 0 → 0 |
+| `chamados/tests/e3_r3_c6_mutantes.py:1` | 0 → 0 | 0 → 0 | 0 → 0 |
+| `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:1` | 0 → 0 | 14 → 14 | 6 → 6 |
+
+### Comandos para o Code
+
+Executar a partir de `app/`. Os comandos abaixo incluem os consumidores dos módulos de apoio e os harnesses que chegam aos sítios alterados. Em B2, os casos do beco têm a pendência de import descrita acima. `chamados/tests/test_e3_volta7_sem_banco.py:52`, `chamados/tests/test_e3_r3_c5_sem_banco.py:194`, `chamados/tests/test_e3_r3_c6_sem_banco.py:313`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
+  chamados.tests.test_cef_c1_sem_banco \
+  chamados.tests.test_cef_c3_sem_banco \
+  chamados.tests.test_e4c_f6f7_c7_sem_banco \
+  chamados.tests.test_e3_volta7_sem_banco \
+  chamados.tests.test_e3_r3_c5_sem_banco \
+  chamados.tests.test_e3_r3_c6_sem_banco \
+  chamados.tests.test_e3_r3_c11_sem_banco \
+  chamados.tests.test_e3_degrau_dono_e_porta \
+  chamados.tests.test_e3_portas_v6_sem_banco \
+  chamados.tests.test_e4b_classe_e_memoria
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_disputa_s127 \
+  chamados.tests.test_e4b_c4v14_memoria \
+  core.tests.test_medida_turno_do_par \
+  ponto.tests.test_supra_juiz_executor
+```
+
+**Foto.** O primeiro comando remove o método em memória e reproduz o RED de protocolo esperado. O segundo usa o mutante comportamental: retirar o motivo enquanto a irmã continua viva deve falhar no `assertIn`. `api/foto_recebida.py:81`, `chamados/tests/test_cef_c1_sem_banco.py:236`, `chamados/tests/test_cef_c1_sem_banco.py:242`, `chamados/tests/test_cef_c1_sem_banco.py:309`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -c '
+import unittest
+from chamados.tests import test_cef_c1_sem_banco as m
+del m.Consulta.prefetch_related
+unittest.main(module=m)
+' UploadTest.test_T3_foto_tardia_da_primeira_so_extingue_primeira
+
+CEF_C1_MUTANTE=upload_arranca_motivo PYTHONDONTWRITEBYTECODE=1 \
+  python3 -m unittest -v \
+  chamados.tests.test_cef_c1_sem_banco.UploadTest.test_T3_foto_tardia_da_primeira_so_extingue_primeira
+```
+
+**Beco.** Esta sonda usa em memória o corpo da B intermediária para isolar o RED anexado. Roda `test_beco` com o modelo falso atual e depois sem o export de `DecisaoPergunta`. O segundo caso deve dar `ImportError` nesse nome. A asserção de negócio continua no teste de origem. `chamados/tests/e3_volta7_apoio.py:106`, `chamados/tests/test_e3_volta7_sem_banco.py:52`, `escala/tests/test_f3_beco1_folga_na_lista.py:248`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import subprocess
+import sys
+import unittest
+from contextlib import contextmanager
+from unittest.mock import patch
+
+from chamados.tests import test_e3_volta7_sem_banco as teste [nao verificado]
+from chamados.tests.e4_catracas import FONTES_MUTADAS
+
+arquivo = 'escala/services/cadastro_realidade.py'
+fonte_b = subprocess.check_output(
+    ['git', 'show', 'd0210a400:app/' + arquivo], text=True)
+cenario_real = teste.cenario [nao verificado]
+
+@contextmanager
+def sem_compositor(caso):
+    with cenario_real(caso) as contexto:
+        del sys.modules['chamados.models'].DecisaoPergunta
+        yield contexto
+
+def rodar():
+    caso = teste.SelosAnexadosTest('test_beco') [nao verificado]
+    return unittest.TextTestRunner(verbosity=2).run(caso)
+
+with patch.dict(FONTES_MUTADAS, {arquivo: fonte_b}):
+    controle = rodar()
+    with patch.object(teste, 'cenario', sem_compositor): [nao verificado]
+        red = rodar()
+
+raise SystemExit(0 if controle.wasSuccessful() and len(red.errors) == 1
+                 and 'ImportError: cannot import name' in red.errors[0][1]
+                 and 'DecisaoPergunta' in red.errors[0][1] else 1)
+PY
+```
+
+**Âncoras C6 e API.** Os dois comandos C6 ficam bloqueados pelo import de `pergunta_respondida` no controle da B2; o próprio runner exige controle verde antes de aplicar cada mutante. O último comando executa o mutante interno da lista vazia da API. `chamados/tests/e3_r3_c6_mutantes.py:48`, `chamados/tests/e3_r3_c5_mutantes.py:76`, `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:125`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c6_mutantes K6_m1_sem_respondida
+PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c6_mutantes K6_m1_ignora_ancora
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
+  chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_reflexao_e_mutacao_de_perguntas_MORDEM
+```
+
+`LEI-AKITA | padrao=n/a (instrumento) | classes=i,ii,v | execução e certificação [nao verificado]`
 
 ## 20/11 00:22 · sessao 8aca83b0e978 · TRAVAS-SEM-MEMORIA · verificador · origem=Code
 
@@ -1083,91 +1254,4 @@ A cópia traz a referência ao CONSTRÓI 1010. O anexo `aval_1010.txt:1` é o RE
 - **`ata['razoes_orfas']`.** `_lavrar_razoes_sobras` escreve a chave nos dois ramos do cartório e `lavrar_veredito` com `carimbar` a persiste. `medir_razoes_sobras` lê a chave e tem chamadas em testes. Na cópia, zero chamador de produção do contador e zero leitor de produção da chave encontrado. `app/ponto/services/cartorio.py:959`, `app/ponto/services/cartorio.py:998`, `app/ponto/services/cartorio.py:1015`, `app/ponto/services/cartorio.py:1410`, `app/ponto/services/cartorio.py:1991`, `app/ponto/portas/celula.py:1090`, `app/ponto/portas/celula.py:1201`, `app/escala/tests/test_cadeia20_costura.py:52`, `laudo.md:2`.
 - **`ata['regra']` e `versao_para`.** Zero escritor ou leitor dessa chave na ata encontrado. A versão entra como `regra:N` no hash de `CelulaDia.impressao`. Em produção, `_regra_do_dia` é o único chamador direto encontrado. Ele alimenta os dois ramos. Há leitores em testes. Chamados e a migração de identidade citam o horizonte em comentários, com piso próprio. `app/ponto/services/cartorio.py:749`, `app/ponto/services/cartorio.py:518`, `app/ponto/services/cartorio.py:1310`, `app/ponto/services/cartorio.py:1375`, `app/ponto/services/cartorio.py:1520`, `app/ponto/portas/celula.py:1195`, `app/ponto/tests/test_o219_versao_da_regra.py:85`, `app/chamados/models.py:2582`, `app/chamados/migrations/0053_pergunta_unica_por_familia.py:8`.
 
-## 19/11 17:47 · sessao 7f0d1e40588a · E4C-F5-CONSTROI · verificador · origem=Code
-
-# AVAL-DEVOLVIDO — E4C-F5-CONSTROI, aval 1735
-
-**1 DESENHO — PROCEDE. 6 RED — PROCEDE em (b). 7 ADAPTAÇÕES DE TESTE — PROCEDE.** O bloqueio é a entrada em vigor dos juízes puros na A com chamadores crus em B/C, a falta de uma base definida para a catraca e de cenários nomeados para os REDs, e uma lista de adaptações que deixa de fora asserções incompatíveis com o desenho. `respostas_f5_constroi_1911_1735.txt:2–4`, `:8–11`, `chamados/juizes.py:1389–1397`, `:1559–1564`, `chamados/tests/test_f1nova_b2_leitores.py:87–97`.
-
-Conferi a cópia somente leitura. A identidade do commit, da ref e do merge está [nao verificado]. O wrapper documenta a extração da árvore por hash com `git archive`. `bin/codex_pergunta.sh:304–320`.
-
-## 1 DESENHO — PROCEDE
-
-**(a) SEGUE quanto ao escopo declarado.** `:2004` monta `LeituraDoAto` e `:2006` entrega ao juiz o **texto do ato**, incluindo o passivo incorporado pela leitura. A lista exige também ausência de validação e materialização e aplica a tranca, salvo `ignorar_tranca=True`. `estado` monta a mesma leitura em `:3235` e passa o **texto do ato** ao juiz em `:3241` e `:3244`. Para decidir o ramo, `estado` ainda chama C6 com `self` em `:3240`, caminho que usa **texto da projeção** e pode reler o ato. `chamados/models.py:1998–2007`, `:3233–3244`, `:4295–4326`, `chamados/juizes.py:1389–1411`.
-
-- **CSF e Pauta leem `sem_veredito_entre`.** A função do CSF chama a lista para o pai e para o destino, ambas com `ignorar_tranca=True`, e devolve os PKs ordenados. A medição da tranca também pede essa lista com `True`, via `respostas_sem_veredito`, e ainda chama C6 em dois pontos e `pode_fechar` no fechamento de disputas. Nenhuma dessas duas funções lê `PerguntaDisputa.estado`. A API e o vigia leem `estado`. `ponto/supra_juiz.py:552–588`, `chamados/services/competencia_trancada.py:119–144`, `:164–183`, `chamados/models.py:1979–1980`, `api/views.py:2566–2585`, `chamados/services/vigia_fio.py:256–260`.
-- **Alcance de escrita.** A lista guarda `fechar`, o CSF e a retenção da retratação. Em competência trancada, `medir` monta `decidir_pelo_dp`; no ramo de aplicação, `_pauta_do_dp` lê essa lista e pode gravar a Pauta por `pautas.services.escrever`. Esses efeitos chegam pelas portas existentes. Seu resultado em produção e eventual efeito no gravado de exportada ou em dinheiro estão [nao verificado]. `chamados/models.py:2009–2015`, `:2048–2058`, `:2095–2099`, `ponto/management/commands/supra_juiz.py:257–287`, `chamados/juizes.py:2124–2129`, `chamados/reconciliador.py:439–452`, `chamados/services/competencia_trancada.py:137–139`, `:188–257`, `pautas/services.py:180–185`, `CLAUDE.md:265–268`, `:401–417`.
-
-**(b) SEGUE com a descrição corrigida.** `values_list` produz uma tupla de cinco colunas. O juiz recebe um `SimpleNamespace` montado com `p[3]` e `p[4]`, o instante e o texto **da projeção**. `verbos.py` consome o par de conjuntos produzido pelo placar. Já existe a entrada `E4D-PROJECAO-UM-ESCRITOR` para o complemento nominal previsto no aval. O registro efetivo está [nao verificado]. `chamados/services/raiox.py:135–158`, `chamados/services/verbos.py:34`, `docs/BACKLOG.md:2023`, `respostas_f5_constroi_1911_1735.txt:3`.
-
-**(c) PROCEDE.** A varredura AST da cópia encontrou **41 expressões diretas** dos dois juízes. A linha 15 da matriz aponta `reconciliador.py:1130`, onde se ajusta o relógio. A chamada está em `:1133`. Pela regra do arquivo do chamador, a distribuição é esta. `respostas_f5_constroi_1911_1735.txt:3–5`, `chamados/reconciliador.py:1127–1137`.
-
-| Volta ou dono | Linhas da matriz A e chamadas na cópia |
-|---|---|
-| **A — 12** | 3–5 `chamados/juizes.py:351`, `:1411`, `:1430`. 14–15 `chamados/reconciliador.py:366`, `:1133`. 20–21 `chamados/services/disputa_emissao.py:1853`, `:2023`. 22–24 `chamados/services/fio.py:712`, `:1287`, `:1300`. 30 `chamados/services/pergunta_no_app.py:86`. 41 `ponto/services/cartorio.py:1689`. |
-| **B — 20** | 1–2 `api/views.py:2596`, `:2640`. 16 `chamados/services/acoes_disputa.py:134`. 17 `chamados/services/becos.py:31`. 18–19 `chamados/services/declaracao_texto.py:418`, `:688`. 25–29 `chamados/services/materializacao.py:192`, `:259`, `:290`, `:885`, `:1300`. 32–33 `chamados/services/validacao.py:682`, `:902`. 34 `chamados/services/vigia_fio.py:636`. 35 `chamados/views.py:1275`. 36–37 `chamados/views_cobrar.py:170`, `:178`. 38 `colaboradores/services/ficha.py:172`. 39 `escala/services/cadastro_realidade.py:502`. 40 `folha/previa.py:142`. |
-| **C — 4** | 6–8 `chamados/management/commands/auditar_invariantes_chamados.py:178`, `:597`, `:1671`. 9 `chamados/management/commands/dedup_perguntas_fato.py:76`. |
-| **Opus — 4** | 10–13 `chamados/models.py:2006`, `:3241`, `:3244`, `:3791`. `:2004` e `:3235` preparam os argumentos. |
-| **Exceção — 1** | 31 `chamados/services/raiox.py:147`. |
-
-- **Os 55 indiretos são entradas, não 55 conversões.** Contei 53 expressões Python para `pergunta_viva`, incluindo a implementação da propriedade `.viva`, e os dois usos externos da propriedade. No cálculo, `:1411` recebe a pergunta e `:1430` recebe o par já recortado pelo horizonte. Memo quente pode devolver antes do cálculo. Validação, tranca e via terminal também podem sair antes de `:1430`. A matriz tem referências deslocadas no reconciliador após o merge. `chamados/models.py:3629`, `templates/chamados/partials/_card_atendimento.html:77`, `chamados/management/commands/arquivar_competencia_encerrada.py:158`, `chamados/juizes.py:887–898`, `:1398–1430`, `chamados/reconciliador.py:711`, `:808`, `:1137`, `:1645`.
-- **Pureza e tipo próprio conferem com o 1710 e o 1510.** Hoje ambos fazem `isinstance` e chamam `DecisaoPergunta.leitura` no ramo ORM. A projeção temporal também depende da constante de via do modelo e lê cinco atributos. `LeituraDoAto` tem três campos e devolve o texto do ato. Remover só os ramos ORM deixaria a constante do modelo no juiz temporal. O contrato da composição precisa preservar materialização, via, o corte por `agora` e o par já recortado entregue em `:1430`. `chamados/juizes.py:1382–1430`, `:1551–1564`, `chamados/models.py:19`, `:2580`, `:2701`, `:4308–4326`, `e4c_f5_constroi_a_1911_1710.txt:4`, `respostas_f5_e_c7_1911_1510.txt:2–3`.
-- **O literal da sequência A/B/C quebra a autoridade do instante.** Se a A retira a leitura do ato do corpo dos juízes, as **24 chamadas ORM** programadas para B/C passam a entregar os instantes das colunas até sua volta. Isso também alcança o temporal de C11 em `:502`, enquanto K2 e o RED de C11 estão em A. Falta dizer em que commit entram em vigor os corpos puros e a conversão de **todas** essas entradas, com a suíte verde exigida entre voltas. Além disso, a linha 40 e K23 pedem edição em `folha/previa.py`. O 0815 proíbe tocar folha e a exceção do 1710 descreve carga em lote, enquanto a linha 40 é a própria chamada ao juiz. Falta autorização nominal para a edição em folha e para eventuais mudanças de rota ou partição fora do recorte declarado. `chamados/juizes.py:1389–1397`, `:1559–1564`, `escala/services/cadastro_realidade.py:460–466`, `:502`, `escala/tests/test_f3_beco1_folga_na_lista.py:395–402`, `folha/previa.py:39–43`, `:64–67`, `:139–146`, `e4c_f5_constroi_1911_0815.txt:3`, `e4c_f5_segue_as_tres_voltas_1911_1435.txt:16`, `e4c_f5_constroi_a_1911_1710.txt:3–8`, `respostas_f5_constroi_1911_1735.txt:3–4`.
-
-**(d) PROCEDE.** Na cópia original são **41 chamadas sem compositor, 40 fora da exceção do placar**. O commit do Opus antecede a A e já tem ordem para trocar quatro expressões. “Medida na abertura da A” deixa indefinido se a referência é o hash original ou a árvore entregue pelo Opus. Para a catraca só encolher, falta fixar a árvore de referência, impedir entrada nova mesmo quando outra sai e definir como o AST reconhece a origem de uma leitura atribuída a variável e a derivação temporal de `:1430`. O texto da exceção deve identificar o adaptador de `raiox.py:147`, que é quem entra no juiz. O 1735 dá autorização nominal para esse sítio no selo novo. O selo de leitores crus do 0815 tem outro objeto e seu veto geral a allowlist continua pertinente ali. `respostas_f5_constroi_1911_1735.txt:3–4`, `chamados/models.py:2004–2006`, `:3235–3244`, `:3791`, `chamados/juizes.py:1411–1430`, `chamados/services/raiox.py:135–147`, `e4c_f5_constroi_1911_0815.txt:3`.
-
-**(e) PROCEDE.** Há entradas reais de leitura. `q.estado` devolve um **rótulo**. `DisputaSupervisao.sem_veredito_entre([q], ignorar_tranca=…)` devolve uma **lista**, da qual se observa se o PK aparece. Falta fixar no literal a comparação do rótulo inteiro e da presença do PK nas duas modalidades da tranca. Medir só com o padrão pode ocultar mudança para CSF, retratação e Pauta, que pedem `True`. O `MUDAM=0 em 51.563` fornecido é da property `respondida`. Os dois resultados estendidos, os PKs e a identidade da sombra estão [nao verificado]. O contador de divergência literal de texto mede outra coisa. `chamados/models.py:1982–2007`, `:3225–3244`, `:3785–3791`, `ponto/supra_juiz.py:573–574`, `chamados/juizes.py:2127–2129`, `chamados/services/competencia_trancada.py:123–139`, `chamados/services/vigia_texto_resposta.py:8–18`, `e4c_f5_constroi_a_1911_1710.txt:10`, `respostas_f5_constroi_1911_1735.txt:3`, `:9`.
-
-**Quem escreve e quem lê os dados da composição**
-
-| Campo ou valor | Escrita e leitura |
-|---|---|
-| Texto e instante da projeção | Resposta humana e automática gravam o par. A trilha pode gravar o instante sobre texto existente, e reabertura/recusa limpa o par pela porta de lote. Os juízes hoje leem o texto corrente no ramo ORM. O placar lê as duas colunas. `chamados/services/disputa_emissao.py:1481–1496`, `:1527–1534`, `:1617–1656`, `:1680–1710`, `chamados/juizes.py:1395–1397`, `:1559–1564`, `chamados/services/raiox.py:135–147`. |
-| Instantes e texto do ato, mais passivo | Resposta, validação, devolução e recusa/reabertura alimentam `DecisaoPergunta.registrar`, que insere as linhas e invalida o cache recebido. `leitura` combina as linhas com o passivo, que lê `respondida_em`, `validada_em`, `validada_por_id` e texto da projeção. Os leitores afetados estão em `:2004`, `:3235` e `:3791`. `chamados/services/disputa_emissao.py:1532–1534`, `:1639–1656`, `chamados/services/validacao.py:161–175`, `:269–282`, `chamados/models.py:2004–2006`, `:3235–3244`, `:3791`, `:4251–4269`, `:4295–4347`. |
-| `materializada_em` e `via_resolucao` | `_escrever_carimbo` atribui os campos. `carimbar`, `carimbar_identidade` e `descarimbar` os gravam pelas portas existentes. A projeção temporal lê ambos, e `estado` e a lista sem veredito leem a materialização. `chamados/models.py:3293–3297`, `:3320–3348`, `:3373–3408`, `:2005`, `:3236–3244`, `chamados/juizes.py:1397–1407`. |
-
-## 6 RED — PROCEDE em (b)
-
-**(a) SEGUE.** O teste captura o **SQL total da porta real** com 1 e 3 PKs. Hoje exige `Q(3) = 3 × Q(1)` e `Q(1) ≤ 8`. É teto **por candidata**. A porta abre transação, trava e relê por candidata, e C6 lê a relação `decisoes`. O 1735 autoriza nominalmente `Q(3)/3 = Q(6)/6 ≤ 9` para O261, inclusive diante do veto geral do 1710. A triagem relata 9 no teste anterior. O SQL da sonda e o resultado em 3 × 6 estão [nao verificado]. A fixture validada exercita o caminho de recusa. Em produção, `desfazer_carimbo_sem_lastro` lê carimbo, via e C6, e pode chamar `descarimbar` e reabrir a disputa. O aval aqui muda a métrica do teste, com `DecisaoPergunta.leitura` como fronteira da leitura do ato. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–205`, `chamados/services/relavra_via.py:215–262`, `chamados/models.py:3399–3409`, `:4308`, `e4c_f5_constroi_a_1911_1710.txt:8–9`, `:13`, `respostas_f5_constroi_1911_1735.txt:8–11`, `triagem.md:14`.
-
-**(b) PROCEDE.** As **cinco funções L** existem. Três pertencem à A ou ao seu commit preparatório, `CargaDaTarefa.__init__` (K1), `alimentar_portas` (K2) e `_ancoradas` (K15). Duas pertencem à B, `perguntas_vivas_de` (K4) e `fio_vivo` (seis K). O predesenho lista **22 Q de B**, incluindo K41/K42 no commit do Opus, e **25 M de C**, mais a sobra. O 1735 pede três mutantes Q e três M, mas **não nomeia os seis IDs**, nem diz em que suíte se prova a mordida dos três L de A. `chamados/services/tarefa_do_dia.py:518–540`, `chamados/juizes.py:1512–1526`, `:1639–1672`, `chamados/models.py:343–359`, `:1542`, `:2057`, `chamados/management/commands/dedup_perguntas_fato.py:74–76`, `e4c_f5_constroi_a_1911_1710.txt:6–8`, `respostas_f5_constroi_1911_1735.txt:7–8`.
-
-- **A igualdade total não fecha para todos os K sob a instrução de só carregar decisões em lote.** K40 faz um `.get(pk=pk)` dentro do laço antes de julgar, portanto o SQL total já cresce por pergunta mesmo com decisões previamente disponíveis. `fio_vivo` faz `any`, que pode julgar apenas a primeira pergunta nas duas medidas. A sobra faz uma carga por grupo, logo o total depende também da quantidade de grupos. Faltam a unidade de captura por cenário, a prova de que 3 e 6 perguntas foram efetivamente julgadas, e a autorização de qualquer alteração de carga além das decisões. O selo AST verifica formato de chamada. Ele não prova custo SQL nem substitui a mordida de cada caso do 1510. `chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467`, `chamados/juizes.py:1517–1526`, `chamados/management/commands/dedup_perguntas_fato.py:74–82`, `respostas_f5_e_c7_1911_1510.txt:3–4`, `e4c_f5_constroi_a_1911_1710.txt:7–9`, `respostas_f5_constroi_1911_1735.txt:3`, `:8`.
-- **Escrita e alcance dos cenários.** As cargas leem `PerguntaDisputa`; o consumo das decisões ocorre em `leitura`. K14 percorre exportadas com `executar=False`. A sobra tem relatório de leitura e um ramo `--apply` que despacha ao backfill. O RED precisa identificar qual caminho mede. Prova de custo em leitura não verifica equivalência de valores exportados, dinheiro ou execução das portas escritoras [nao verificado]. `chamados/models.py:4308–4326`, `chamados/management/commands/backfill_fio_morto_e4b.py:153–175`, `chamados/management/commands/dedup_perguntas_fato.py:89–106`, `CLAUDE.md:265–268`, `:401–417`.
-
-## 7 ADAPTAÇÕES DE TESTE — PROCEDE [nao verificado]
-
-| Subitem | Veredito |
-|---|---|
-| **(i) SEGUE** | São os dois REDs 8. A fixture tenta criar o texto sem instante antes de `atos` chamar `D.registrar`. `save` a rejeita antes das capturas. O segundo RED está em `:167–180`, com o medidor em `:151–165`. A autorização é para a fixture. Contagem 1 × 5, zero SQL no cálculo com prefetch e conferência do cache fazem parte da prova. `chamados/tests/test_e4c_f5_volta2_juizes.py:27–30`, `:118–180`, `chamados/models.py:3680–3683`, `:3707–3712`, `chamados/services/fio.py:1718–1721`, `respostas_f5_constroi_1911_1735.txt:9`. |
-| **(ii) SEGUE** | `:37–104` chama os juízes com ORM cru. A fixture escreve atos por `registrar` e altera a projeção por `update` explícito. Os asserts leem a tupla e o booleano, incluindo passivo, reabertura, futuro e texto em branco. O caso seguinte já usa objeto sintético e vigia que a leitura do ato jamais seja chamada para ele. `chamados/tests/test_e4c_f5_volta2_juizes.py:27–116`. |
-| **(iii) SEGUE** | O mutante exige uma ocorrência literal de `_replace` e troca o argumento de `respondida_sem_texto` pela pergunta inteira renomeada para `questao`. O mutante atualizado precisa continuar chegando ao assert de **pergunta inteira** do selo 3d. Falhar na busca da âncora não prova a mordida. A transformação opera sobre texto em memória. `chamados/tests/e4c_f5_volta2_mutantes.py:1–9`, `:12–39`, `chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:187–196`, `:220–227`, `chamados/services/fio.py:187–192`, `e4c_f5_segue_as_tres_voltas_1911_1435.txt:12`. |
-| **(iv) PROCEDE** | O teste escreve uma `RESPOSTA` com `ato_texto='07:13'` e atesta a projeção vazia. O assert atual exige `True` para **sete** leitores. Pelo desenho, `sem_veredito_entre`, CSF, irmãs, `estado == RESPONDIDA` e a property passam a dar `False` nessa fixture. `resposta_display` continua lendo o texto do ato, e `q_vivas` continua incluindo a pergunta pelo ramo largo da célula furada. Falta explicitar as expectativas por leitor e conservar a prova do instante e da validação pelo ato. Inverter os sete quebraria o contrato. O `MUDAM=0` da property não certifica os outros leitores. `chamados/tests/test_e4c_f2_leitura_do_ato.py:313–365`, `:490–509`, `chamados/models.py:2004–2007`, `:3235–3244`, `:3609–3616`, `:3791`, `:3815`, `chamados/juizes.py:2127–2129`, `respostas_f5_e_c7_1911_1510.txt:2–3`, `respostas_f5_constroi_1911_1735.txt:9`. |
-| **(v) SEGUE** | A adaptação nominal é a do O261 descrita em 6(a). A captura lê o total de SQL da porta com PKs de fixtures validadas. `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–205`, `respostas_f5_constroi_1911_1735.txt:8–9`. |
-
-**O que falta na autorização de 7.** O teste B2 exige que `respondida` chame o juiz exatamente com `DecisaoPergunta.leitura(p)`. O tipo próprio exigido pelo 1735 muda justamente esse argumento. O selo de `_ancoradas()` mede **exatamente uma consulta** com retorno não vazio, enquanto a carga de decisões de K15 no mesmo caminho acrescenta um SELECT por lote. O 1710 admite remedir custo constante por lote, mas a lista fechada do 1735 só nomeia o O261 entre as adaptações de métrica. Tarefa e C11 ainda medem 1 × 3 e 1 × 5 dias. Falta dizer se o RED 3 × 6 entra como caso novo ou se os dois testes existentes podem ser adaptados. `chamados/tests/test_f1nova_b2_leitores.py:75–97`, `chamados/tests/test_e4c_f2_leitura_do_ato.py:534–551`, `chamados/models.py:343–359`, `chamados/tests/test_e2_tarefa_do_dia.py:913–938`, `escala/tests/test_f3_beco1_folga_na_lista.py:378–402`, `e4c_f5_constroi_a_1911_1710.txt:8–9`, `respostas_f5_constroi_1911_1735.txt:3`, `:9–11`.
-
-**As 11 famílias ainda precisam passar com seus dublês atuais.** Há harness que recompila C6 com globais próprios e há stub de `chamados.models` que fornece só `ChamadoColaborador` para a rota de C11. A pureza do juiz resolve a dependência de tipo dentro dele. A compatibilidade desses chamadores com uma nova dependência de composição e o verde das famílias estão [nao verificado]. As alterações de fixture, mutante e métrica são de teste. Qualquer efeito das mudanças de produção sobre as portas de fechamento, Pauta, exportada ou dinheiro continua sujeito às cercas e às medidas correspondentes. `chamados/tests/e3_c8b_apoio.py:83–120`, `chamados/tests/test_e3_r3_c6_sem_banco.py:284–312`, `chamados/tests/test_e4b_c4v14_memoria.py:43–53`, `chamados/tests/test_e4b_classe_e_memoria.py:377–394`, `e4c_f5_constroi_1911_0815.txt:3`, `CLAUDE.md:265–268`, `:401–417`.
-
-## 19/11 17:15 · sessao eaf908cd6bf6 · E4C-F5-CONSTROI · sonda · origem=Code
-
-- **Hoje.** `PerguntaDisputa.respondida` chama `pergunta_respondida(DecisaoPergunta.leitura(self))`. A leitura usa o instante e o texto da resposta vigente na sequência, incluindo o legado da projeção quando falta a linha correspondente. `app/chamados/models.py:3785–3791`, `app/chamados/models.py:4295–4326`
-- **Novo.** A composição descrita no item 2 do 1510 preserva `leitura.respondida_em` e troca apenas `leitura.resposta_colab` por `p.resposta_colab` antes de chamar o mesmo juiz. O `RELATO` registra essa composição no fio. Na cópia disponível, `fio.py:189–192` contém o início de `montar_chamados_fio`. A implementação da sonda e a confirmação do hash pelo Git ficam [nao verificado]. `app/docs/RELATO.md:11`, `app/chamados/juizes.py:1544–1552`, `app/chamados/services/fio.py:189–192`
-
-**Medida válida pela saída fornecida.** `ERROS=0` e `UNIVERSO=51563` é igual a `PERCORRIDAS=51563`. `DADO RASPADO:4`
-
-Transcrição literal de `DADO RASPADO:3–9`:
-
-```text
-BANCO=sombra
-UNIVERSO=51563 PERCORRIDAS=51563 ERROS=0
-MUDA_TRUE_PARA_FALSE=0
-MUDA_FALSE_PARA_TRUE=0
-PKS_TRUE_PARA_FALSE=[]
-PKS_FALSE_PARA_TRUE=[]
-VEREDITO=VALIDO MUDAM=0
-```
-
-MUDAM=0
-
-_7429 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7431 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
