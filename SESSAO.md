@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 02:58:04.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (10.1 MB). Acoes na janela: **223**.
+**Medido em 20/11/2026 03:03:17.** Transcript: `dcd9fe91-b0a5-4596-92e4-6c690f5d3db8.jsonl` (10.1 MB). Acoes na janela: **224**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:59:26 | Bash | Wait for the Codex readiness checklist | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vPRONTO; until [ -f $D/r.rc ]; do /usr/bin/sleep 20; done; cat $D/r.rc; wc -l $D/r.txt; date '+%H:%M'; cat logs/CADEIA-20-PASSO-1/v3/medida_d/roda*.fim 2>/dev/null \| tr '\n' ' '` |
 | 02:57:41 | Bash | Rerun the chain probe against a clean worktree at the chain copy's commit | `cd /home/ronald/saas-hasner; git diff --stat eb1e49c1e a4a9b6bfe -- '*/migrations/*' \| tail -2; until [ -f logs/CADEIA-20-PASSO-1/v3/medida_d/roda.fim ]; do /usr/bin/sleep 5; done; W=/home/ronald/wt-cadeia-medida-d-$(date +%H%M%S); git worktree add -q --detach $W a4a9b6bfe5f7234deeb14ce42f4b1d5535a211a6 && git -C $W log -1 --format=%H && mkdir -p $W/app/logs $W/app/media; echo $W > logs/CADEIA-20 ...` |
 | 02:57:30 | Bash | Compare the call sites in main and in the chain copy | `cd /home/ronald/saas-hasner; for r in eb1e49c1e a4a9b6bfe; do echo "== $r"; git grep -n "_julgar_colab_corpo(" $r -- app/ponto/services/cartorio.py \| cut -c1-130; done; git merge-base --is-ancestor eb1e49c1e a4a9b6bfe && echo "main e ancestral da copia"; git log --oneline eb1e49c1e..a4a9b6bfe \| wc -l; git worktree list \| /bin/grep -i cadeia` |
 | 02:57:24 | Bash | Read how the probe classifies call sites and the unrecognised site | `cd /home/ronald/saas-hasner; M=logs/CADEIA-20-PASSO-1/v3/medida_d; cat $M/lanca.sh \| cut -c1-700; /bin/grep -n "call site desconhecido" -B22 $M/script.py \| cut -c1-170 \| tail -40; sed -n '1150,1158p' app/ponto/services/cartorio.py \| cut -c1-170; cat $M/roda*.fim 2>/dev/null` |
