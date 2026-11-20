@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 14:58** · publicado em **20/11/2026 15:03** (UTC-3)
+> Ultima resposta processada: **20/11/2026 15:08** · publicado em **20/11/2026 15:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 15:08 · sessao 3e263297246d · - · - · origem=Ronald (tmux)
+
+1. **BLOQUEIA — Compatibilidade sequencial.** Uma irmã muda com `ABSORCAO` vigente e disputa aberta admite correção administrativa pelo serviço direto. Se o destino registra marco esperado às 19:00 e a correção informa 07:00, a resposta é gravada e a validação recusa por implausibilidade antes de assinar. `ausencia_dia` conserva o carimbo. A resposta completa fica viva no C6 quando a luz inexiste ou discorda. Um POST subsequente sem corrida então passa no C6 e recebe H4 onde antes o escritor aceitava. O teste cobre correção com validação bem-sucedida. `app/chamados/services/acoes_disputa.py:344–386` · `app/chamados/services/validacao.py:714–723` · `app/chamados/models.py:3566–3580,4116–4117` · `app/chamados/juizes.py:528–557,1347–1350,1373–1379,1423–1440,1861–1886,2064–2084` · `app/chamados/views.py:1237–1246,1276–1282` · `app/api/views.py:2637–2664` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:420–445`.
+
+2. **BLOQUEIA — Serialização incompleta do carimbo.** O consumidor de outbox pode selecionar uma órfã muda, sem carimbo, com marco aceso em dia encerrado, e decidir `ENCERRA`. Se a passagem absorve o mesmo PK antes de o consumidor salvar, o consumidor usa a instância anterior e pode trocar o instante e a via para `fantasma`, sem a trava de Colaborador e sem escrever `REABERTURA` ou `RECUSA`. A trava do novo veto protege a resposta perante a passagem, a reabertura, a recusa e a ressuscitação. Ela deixa esse escritor da projeção livre para intercalar. `app/chamados/reconciliador.py:1096–1105,1136–1146,1188–1202,1409–1429` · `app/chamados/models.py:3330–3405,3552–3560,3719–3735` · `app/chamados/juizes.py:1451–1457` · `app/chamados/services/materializacao.py:1055–1090` · `app/chamados/services/disputa_emissao.py:1478–1490`.
+
+3. **CORRIGE — Instância antiga apesar da trava.** `retratar_perguntas_absolvidas_por_celula` seleciona a muda sem carimbo, com célula que absolve, e depois toma a trava. Uma passagem interposta pode absorver o mesmo PK. A porta externa carimba `celula_absolveu` na instância anterior sem releitura e sem ato terminador. O novo predicado deixa de confirmar a absorção após a troca. Isso delimita a tensão entre “carimbo atual” da definição e “só com `REABERTURA` ou `RECUSA`” da escolha 3. O descarimbo sem lastro também deixa o ato histórico sem carimbo correspondente. `app/chamados/reconciliador.py:635–646,671–724` · `app/chamados/services/materializacao.py:1055–1090` · `app/chamados/services/relavra_via.py:229–252` · `app/chamados/models.py:4412–4422`.
+
+4. **CORRIGE — Escritores concorrentes de via.** `relavrar_via_i6 --apply` e `encerrar_perguntas_com_fato --apply` carregam os alvos antes do bloco de escrita, gravam somente a via e campos associados e entram sem trava de Colaborador. O primeiro aceita via `declaracao` na foto. O segundo seleciona apenas vias sem história na foto; chegaria a sobrescrever uma absorção somente após mudança interposta do alvo. `app/chamados/management/commands/relavrar_via_i6.py:55–69,96–102` · `app/chamados/services/relavra_via.py:76–103,118–128` · `app/chamados/management/commands/encerrar_perguntas_com_fato.py:31–44,66–77` · `app/chamados/models.py:3541–3549,3719–3735`.
+
+5. **FILA — Censo de ordem e fonte.** A passagem é o único emissor de `ABSORCAO` encontrado, com `ato_em == materializada_em` no mesmo `atomic` e PK de inserção `BigAutoField`. `REABERTURA` vem de `reabrir_para_correcao` e da ressuscitação. `RECUSA` delega à mesma reabertura. Cada um toma C antes da inserção, enquanto `registrar` somente encapsula inserção, invalida os caches e acorda célula. A época de `ABSORCAO` é capturada antes da trava e pode ser anterior ao `ato_em` de uma `RECUSA` inserida antes. Leitura composta, histórico e tarefa mantêm ordem por instante seguida de PK para suas próprias perguntas. A tarefa usa ausência ligada e seu status, enquanto a devolução por grupo usa dia, tipo de resposta, via, `(disputa, materializada_em)` e texto de escape. O veto consulta o PK, instante e presença dos dois vínculos, sem ler status de ausência. `app/chamados/services/materializacao.py:1036–1090,1131–1164,1184–1211` · `app/chamados/services/disputa_emissao.py:1630–1685` · `app/chamados/services/validacao.py:935–944` · `app/chamados/models.py:1646–1651,1701–1722,3846–3862,4219–4232,4252–4259,4347–4379,4400–4451` · `app/chamados/migrations/0050_resposta_anterior.py:19` · `app/chamados/services/tarefa_do_dia.py:158–192,388–404,537–538` · `app/config/settings/base.py:93–95,104`.
+
+6. **FILA — Ponto da primeira escrita.** O caminho H4 toma a trava da linha de Colaborador, confirma o registro e relê a pergunta antes da consulta de decisões. O primeiro `save` do core está depois do veto, assim como `registrar`, auditoria, resgate e nota. Os receivers da pergunta dependem desse `save`. O registro da trava agenda um callback que apenas retorna `None`. Nas declarações a emissão e o reapontamento podem ocorrer antes de entrar no core, preservando o comportamento do envelope. `app/chamados/services/disputa_emissao.py:1478–1490,1532–1584` · `app/chamados/models.py:2830–2836,2876–2878` · `app/chamados/services/trava_do_colaborador.py:22–23,37–47` · `app/chamados/signals.py:229–259` · `app/chamados/services/declaracao_texto.py:350–378,419–423,656–669,689–699`.
+
+7. **FILA — Verificação pendente.** Identidade Git da cópia e mensagem literal do commit [nao verificado]. A cópia contém os sítios H4 em `app/chamados/models.py:4400–4422,4591–4594` e `app/chamados/services/disputa_emissao.py:1489–1490,1587–1594`. Suite, mutantes, casos de duas conexões, reprodução da sequência de correção e incidência por empresa e competência [nao verificado]. A versão local do teste T2 em `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:433–480` já espera `carimbar=False` e `RECUSA_PAR_ATO_COLUNA`, ao contrário da leitura antiga do rascunho.
+
+## 20/11 15:08 · sessao 9814393f14d6 · - · - · origem=Ronald (tmux)
+
+1. **CORRIGE — Classe contrato de leitura.** `DecisaoPergunta.composta` declara fonte única para ler `decisoes` ao julgar a pergunta. H4 consulta o mesmo histórico diretamente em outro método da classe, com semântica adicional e ordem por PK. O selo B4.6 só lê funções de topo e o selo de vitalidade exclui `models.py` inteiro. Uma comparação nova de carimbo dentro do método passa fora dos dois. [app/chamados/models.py:4382](/home/ronald/codex_ws/c9a67ed52fe381d169b11d6c1f3f1edac92f6fa0/app/chamados/models.py:4382) · `app/chamados/models.py:4412–4423` · `app/chamados/tests/test_contract_deus_objeto.py:19–28` · `app/chamados/tests/test_contract_leitores_vitalidade.py:317–349`.
+
+2. **CORRIGE — Classe vigência e concorrência.** A fábrica pode, em disputa aberta, chamar o descarimbo quando a célula passa a acusar. Esse escritor conserva `ABSORCAO`, limpa os três campos e grava auditoria, sem `REABERTURA` ou `RECUSA`. A regra da escolha (3) tomada literalmente veta e a implementação libera. Lida como regra de ordenação dos atos, a escolha é compatível com o requisito de carimbo atual no rascunho. `app/chamados/services/fabrica_da_celula.py:148–156,206–209` · `app/chamados/juizes.py:1455–1462` · `app/chamados/services/relavra_via.py:171–184,219–252` · `app/chamados/models.py:3451–3461,4412–4414` · `respostas_2011_1450.txt:8`. Separadamente, `relavrar` grava via sem a trava do dono, e seu comando só envolve o laço em `atomic`. `PerguntaDisputa.save` também não adquire a trava. Alcance de `relavrar` sobre uma absorção concreta [nao verificado]. `app/chamados/services/relavra_via.py:117–128` · `app/chamados/management/commands/relavrar_via_i6.py:55–69,100–102` · `app/chamados/models.py:3719–3735`.
+
+3. **FILA — Classe censo da porta.** `core/portas.py` descreve Q2 como web e API e enumera cinco sítios incluindo S128. O selo vivo enumera três sítios de escrita e inclui a resposta automática. A H4 acrescenta um adaptador sem novo sítio de escrita, e o comentário deixa de documentar justamente a separação entre quatro chamadas com veto e a exceção direta. `app/core/portas.py:258–272` · `app/chamados/tests/test_porta_resposta_pergunta.py:65–76,100–134` · `app/chamados/services/disputa_emissao.py:1587–1594`.
+
+4. **FILA — Classe alcance e efeitos do chamador.** O censo textual encontrou Web com veto e `resposta_acao(False)` para toast 204 ou redirect com mensagem, API com veto e auditoria/JSON 400, declaração de colaborador com veto e JSON 400 `resposta_invalida`, aplicação administrativa com veto na ausência de resposta completa e retorno `resposta_invalida` com PK, e correção administrativa direta sem veto, com `resp('erro',...)` e sem validação no erro. A declaração pode retornar `ja_declarada`, ou o apply seguir à validação com resposta completa, sem chamar o escritor. Em uma declaração que agrega motivo antes do veto, a saída normal conserva o `save` da disputa. `app/chamados/views.py:1089–1100,1276–1282` · `app/core/respostas.py:47–71` · `app/api/views.py:2652–2664` · `app/chamados/services/declaracao_texto.py:318–319,350–365,419–428,656–664,689–699` · `app/chamados/services/disputa_emissao.py:548–550,578–580,641–645` · `app/chamados/services/acoes_disputa.py:359–388`. Nenhum caminho de produção adicional por alias/patch/getattr foi localizado, além do reexport e adaptador. `app/chamados/models.py:4586–4594` · `app/chamados/services/disputa_emissao.py:1587–1594` · `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:88,146`.
+
+5. **FILA — Classe selo do padrão.** A descrição fornecida de Single Writer Principle corresponde a manter o veto no mesmo escritor que salva o par e registra a resposta pelas quatro entradas, sem duplicar essa escrita no adaptador. A tarefa do dia escolhe por `ato_em` e lê status da ausência. O grupo de devolução procura uma âncora pelo carimbo e pode incluir legado sem ato. Nenhuma dessas autoridades responde à conjunção H4. A trava de juiz novo só fiscaliza autoridades registradas. O texto literal da mensagem de commit e o resultado dos selos [nao verificado]. `app/docs/GLOSSARIO.md:9–15` · `app/chamados/services/disputa_emissao.py:1478–1492,1532–1537,1587–1594` · `app/chamados/services/tarefa_do_dia.py:158–192,387–401` · `app/chamados/services/materializacao.py:1131–1164` · `app/core/juizes.py:290,303,305` · `bin/tests/test_juiz_novo_tem_corte.sh:27–45`.
+
+## 20/11 15:07 · sessao 2c6381917956 · - · - · origem=Ronald (tmux)
+
+1. **CORRIGE · ordem de inserção.** Trocar `.order_by('pk')` por `.order_by('-ato_em', 'pk')` preservaria os resultados esperados dos dois testes de ordenação. Em ambos, PK crescente coincide com instante decrescente. Uma `ABSORCAO` T1 seguida por `RECUSA` T2 com carimbo de pé distingue as ordens. A reabertura real do controle limpa o carimbo antes da leitura. `app/chamados/models.py:4417` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:201–210,273–296` · [nao verificado] em execução.
+
+2. **CORRIGE · foto e efeitos.** Um `save(update_fields=['recusa_motivo'])` ao retornar o veto pode alterar o campo sem mudar a foto dos dois REDs. A foto guarda IDs de trilhas e notas, não seus conteúdos. O filtro de eventos da irmã muda usa `celula_id=None`, enquanto o emissor pode resolver a célula por colaborador e dia. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:113–126,138–173` · `app/chamados/models.py:3468–3470,3485–3496` · `app/chamados/signals.py:230–259`.
+
+3. **CORRIGE · porta e ordem de chamadas.** O teste “sem validar” aceita uma chamada indevida a `validar_pergunta`, que devolve `sem_resposta` sem registrar `VALIDACAO`. O teste “antes do core” aceita que a declaração chame primeiro o escritor, receba o veto H4 e ainda retorne `validada_sem_registro`. O RED de validação coexistente usa `_carimbar_validacao`, que salta a porta pública. O controle da correção administrativa já termina com validação e absorção juntas, mas suas tentativas H4 são anteriores à correção. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:251–261,393–445` · `app/chamados/services/validacao.py:161–175,677–701` · `app/chamados/services/declaracao_texto.py:380–421,689–699`.
+
+4. **FILA · fidelidade da janela.** Os testes congelam T0 e avançam explicitamente, mas a interposição mede a ordem em uma transação de `TestCase`. O wrapper chama o método real e a passagem real, sem uma segunda conexão bloqueada. Nas declarações, `calado()` mantém a ata montada pela fixture ao suprimir o cartório acionado pelos saves. O teste de ato posterior escreve diretamente por `registrar`, produzindo o estado sintético que as portas reais descarimbam. `app/chamados/tests/cortes_f2_f9_apoio.py:37–44` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:63–108,281–298,359–402` · `app/ponto/services/cartorio.py:120–129` · `app/ponto/signals.py:85–93` · `app/chamados/services/disputa_emissao.py:1664–1685`.
+
+5. **FILA · aferição pela sessão.** A matriz de mutações dos 17 métodos foi enviada à raiz. PRONTO tem representação estática para os REDs, controles mutantes, inverso, quatro entradas, correção e foto. Ficam [nao verificado] o green da suíte e dos selos, a falha dos REDs na asserção esperada com o mutante, a ordem real em duas conexões, os callbacks normais após commit, a passagem via middleware e rotas, e a frequência em produção por empresa e competência. O teste anterior de devolução T2 já espera `False` e `RECUSA_PAR_ATO_COLUNA` na cópia. Identidade Git [nao verificado]. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:175–445` · `app/chamados/tests/e4c_f5_volta3_mutantes.py:80–99` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:433–471`.
 
 ## 20/11 14:58 · sessao a64acae05b1e · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -892,172 +932,4 @@ with transaction.atomic():
 - A causa dos vínculos múltiplos e qual disputa anterior deveria receber o motivo novo. **[nao verificado]**
 - A execução da sonda corrigida em produção. Conferi a sintaxe e a agregação com dados simulados em memória. A cópia foi identificada pelo diretório do hash, conforme o mecanismo de exportação. A identidade do commit e a revisão em execução em produção ficaram **[nao verificado]**. (`bin/codex_pergunta.sh:304`, `bin/codex_pergunta.sh:315`)
 
-## 20/11 14:08 · sessao 38319cb10f70 · - · - · origem=Ronald (tmux)
-
-Na faixa que examinei, há **31 linhas que leem a coluna crua**. A unidade é a linha de código que lê o campo, inclusive por ORM ou por um objeto intermediário. Chamadores dos predicados e `.only()` que prepara a instância aparecem como contexto da trilha.
-
-- **DECIDE** — `_universo_da_ressuscitacao` protege texto sem foto possível em `app/chamados/models.py:1567`. `carimbar` guarda o carimbo para desfazer a tentativa e testa se precisa preenchê-lo em `app/chamados/models.py:3347,3351`. `descarimbar_em_lote` e `_recusa_par_ilegal` usam a coluna na guarda do par em `app/chamados/models.py:3495,3730,3731`. `linhas_da_projecao_sem_linha` usa a coluna para selecionar, parear, deduplicar e preencher atos do legado em `app/chamados/models.py:4276,4285,4286,4287`.
-- **DECIDE** — `_slot_esperado`, `_chave_memo_pv`, `respondida_sem_texto`, `texto_sem_carimbo`, `pergunta_respondida`, as três faces SQL e `perguntas_respondidas_a_validar` em `app/chamados/juizes.py:353,857,1541,1548,1560,1580,1588,1599,1774`. Os predicados de `:1541` e `:1560` também recebem o instante do ato em rotas próprias. A origem crua de `:1560` vem de `app/chamados/services/raiox.py:138,147`, e a de `:1541` vem, entre outros, de `app/chamados/juizes.py:1752` e `app/chamados/services/validacao.py:406`. A origem crua de `:1548` pode chegar por `app/chamados/models.py:3495,3731` e `app/chamados/services/fio.py:1714,1719`.
-- **DECIDE** — `marcos_do_lote` filtra o carimbo pelo horizonte e pega o máximo para invalidar lavra em `app/chamados/veredito_lavrado.py:207,208,230`.
-- **DECIDE** — `reabrir_para_correcao`, `carimbar_resposta_pela_trilha`, `reabrir_credor_de_pergunta_viva` e `fila_validar_classificada` em `app/chamados/services/disputa_emissao.py:1642,1654,1713,1884` e `app/chamados/services/validacao.py:1275`. Este último é um caso conservador. A idade integra as estatísticas da fila, enquanto a classificação e as referências do lote são calculadas separadamente. `app/chamados/services/validacao.py:1273,1278,1284`.
-- **EXIBE** — `_resolver_perguntas_por_chamado_resolvido`, `devolver_instante_sem_texto_l130`, `recusar_pergunta` e `devolver_absorvidas_da_ausencia_rejeitada` serializam o carimbo cru apenas nas fotos de auditoria. `app/chamados/services/disputa_emissao.py:2109,2126`, `app/chamados/services/validacao.py:450,465,931,951`, `app/chamados/services/materializacao.py:1189,1208`.
-
-Entre os acessos indiretos do ato, `app/chamados/services/historico.py:106` lê o atributo por `getattr`, a partir do nome em `:100`, e usa o instante na cronologia enviada como texto. **EXIBE**. `app/api/views_mensageria.py:2177,2199`, `mensageria/nucleo/ferramentas.py:992,1005,1008`.
-
-`app/chamados/models.py:1715` preserva o instante da `leitura` como `respondida_original_em` num ato de reabertura. O destino nominal é a exibição de respostas anteriores. O gravador inclui a reabertura para cada alvo já selecionado, independentemente desse valor. `app/chamados/models.py:1705,1719,3818,3834`, `app/templates/chamados/partials/modal_fio.html:205,212`.
-
-`app/chamados/services/tarefa_do_dia.py:419,420` lê e recorta a coluna crua em `VistaNoHorizonte`. O resultado de `leitura` nessa trilha chega a `_pela_decisao`, que usa `validada_em`. `app/chamados/services/tarefa_do_dia.py:163,429,474`.
-
-## 20/11 14:08 · sessao 2f91232fad22 · E4C-F5-CONSTROI · sonda · origem=Code
-
-```python
-# Corpo para --command, a partir de app/:
-# python -B manage.py tenant_command shell --schema=juliani \
-#     --settings=config.settings.sombra --verbosity=0 --command '<corpo>'
-# bin/sonda_leitura.sh:94  bin/sonda_leitura.sh:239
-#
-# A guarda abaixo roda dentro do shell. O arranque padrão dos settings
-# prepara /app/logs e configura handlers de arquivo.
-# app/config/settings/sombra.py:27  app/config/settings/saas.py:118
-# app/config/settings/saas.py:136  app/config/settings/saas.py:160
-
-import json
-from collections import Counter, defaultdict
-from contextlib import closing
-
-from django.conf import settings
-from django.db import connection, transaction
-from django.db.models import F, Prefetch
-
-FORMAS = ("forma_1", "forma_2", "forma_3")
-CAMPOS = ("lidas", "coerentes", *FORMAS, "excecoes")
-
-
-def emitir(**dados):
-    print(json.dumps(dados, sort_keys=True), flush=True)
-
-
-def contar(empresas, exemplos, erros):
-    from chamados.models import DecisaoPergunta, PerguntaDisputa
-
-    # Campos usados pela leitura real e pelo prefetch reverso.
-    # app/chamados/models.py:4191  app/chamados/models.py:4276
-    # app/chamados/models.py:4317  app/chamados/models.py:4333
-    decisoes = DecisaoPergunta.objects.using(connection.alias).only(
-        "pergunta_id", "ato", "ato_em", "ato_texto", "resposta_mantem_validacao",
-    )
-    perguntas = (
-        PerguntaDisputa.objects.using(connection.alias)
-        .annotate(empresa_pk=F("colaborador__empresa_id"))
-        .only("respondida_em", "validada_em", "validada_por", "resposta_colab")
-        .order_by("pk")
-        .prefetch_related(Prefetch("decisoes", queryset=decisoes))
-    )
-
-    # O iterator carrega as decisões por lote.
-    # app/chamados/services/vigia_texto_resposta.py:14
-    with closing(perguntas.iterator(chunk_size=1000)) as linhas:
-        for pergunta in linhas:
-            contagem = empresas[pergunta.empresa_pk]
-            contagem["lidas"] += 1
-            try:
-                ato = DecisaoPergunta.leitura(pergunta).respondida_em
-                coluna = pergunta.respondida_em
-                if ato == coluna:
-                    classe = "coerentes"
-                elif coluna is None:
-                    classe = "forma_1"
-                elif ato is None:
-                    classe = "forma_2"
-                else:
-                    classe = "forma_3"
-            except Exception as erro:
-                contagem["excecoes"] += 1
-                erros[type(erro).__name__] += 1
-                continue
-
-            contagem[classe] += 1
-            if classe in exemplos and len(exemplos[classe]) < 20:
-                exemplos[classe].append(pergunta.pk)
-
-
-def principal():
-    # app/config/settings/sombra.py:13  app/config/settings/sombra.py:49
-    # app/config/settings/sombra.py:60
-    if (
-        getattr(settings, "HASNER_SOMBRA", False) is not True
-        or connection.settings_dict["NAME"] != "sombra"
-        or getattr(connection, "schema_name", None) != "juliani"
-        or connection.in_atomic_block
-    ):
-        emitir(status="INCONCLUSIVA")
-        return 1
-
-    empresas = defaultdict(Counter)
-    exemplos = {forma: [] for forma in FORMAS}
-    erros = Counter()
-    guarda_ok = False
-    erro_varredura = None
-    alias = connection.alias
-
-    try:
-        if not connection.get_autocommit():
-            emitir(status="INCONCLUSIVA")
-            return 1
-
-        with transaction.atomic(using=alias):
-            with connection.cursor() as cursor:
-                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-                cursor.execute("SELECT pg_catalog.current_database(), pg_catalog.current_schema()")
-                guarda_ok = cursor.fetchone() == ("sombra", "juliani")
-            if guarda_ok:
-                contar(empresas, exemplos, erros)
-            transaction.set_rollback(True, using=alias)
-    except Exception as erro:
-        if not guarda_ok:
-            emitir(status="INCONCLUSIVA", tipo_excecao=type(erro).__name__)
-            return 1
-        erro_varredura = type(erro).__name__
-
-    if not guarda_ok:
-        emitir(status="INCONCLUSIVA")
-        return 1
-
-    status = "INCONCLUSIVO" if erros or erro_varredura else "CONCLUSIVO"
-    frota = Counter()
-    for empresa_pk, contagem in sorted(empresas.items()):
-        frota.update(contagem)
-        emitir(
-            escopo="empresa", empresa_pk=empresa_pk, status=status,
-            **{campo: contagem[campo] for campo in CAMPOS},
-        )
-
-    emitir(
-        escopo="frota", status=status,
-        **{campo: frota[campo] for campo in CAMPOS},
-        exemplos_pks=exemplos, excecoes_por_tipo=dict(erros),
-        tipo_excecao_varredura=erro_varredura,
-    )
-    return int(status == "INCONCLUSIVO")
-
-
-raise SystemExit(principal())
-```
-
-**Dono** vem de `PerguntaDisputa.colaborador_id`, derivado do colaborador da disputa no nascimento e preenchido pela mesma relação no legado. [app/chamados/models.py:2643] [app/chamados/models.py:3738] [app/chamados/migrations/0051_decisao_pergunta.py:22]  
-**Empresa** vem de `Colaborador.empresa_id`, o PK da FK `Colaborador.empresa` do dono. [app/colaboradores/models.py:321]  
-**[nao verificado]** Execução no shell da sombra, contagens reais na sombra ou em produção e identidade Git da cópia.
-
-## 20/11 14:08 · sessao 38774a51bf64 · - · - · origem=Ronald (tmux)
-
-Encontrei 37 sítios externos de leitura da coluna crua, contando dois predicados SQL distintos em `app/chamados/services/verbos.py:335,337` e agrupando os repasses com seu uso. O inventário com linhas e classificação foi enviado ao agente principal.
-
-Para o instante do ato, confirmei três cadeias de exibição ou auditoria:
-
-- `app/chamados/services/historico.py:106` lê por `getattr` e monta a cronologia serializada em `app/api/views_mensageria.py:2177,2199`.
-- `app/chamados/models.py:1715` conserva o instante em `respondida_original_em`. A leitura de `app/chamados/models.py:3818–3834` entrega a foto ao template `app/templates/chamados/partials/modal_fio.html:212`.
-- `app/chamados/services/materializacao.py:1091` serializa o instante na trilha de auditoria iniciada em `app/chamados/services/materializacao.py:1087`. Outros usos dessa entrada de auditoria ficaram [nao verificado].
-
-A serialização de `app/api/views.py:2581` entrega o campo na rota do APK. O uso exato do campo pelo APK ficou [nao verificado], portanto indiquei DECIDE pela regra de dúvida. A seleção do subconjunto `respondidas` ocorre em `app/api/views.py:2590`.
-
-_7566 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7569 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
