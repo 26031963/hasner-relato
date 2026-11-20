@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 15:15:30.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (73.7 MB). Acoes na janela: **1269**.
+**Medido em 20/11/2026 15:21:20.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (73.7 MB). Acoes na janela: **1270**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:15:52 | Bash | Record mutant result and the three suite failures in the RELATO | `H=$(date +%H:%M) && python3 - "$H" <<'EOF' import sys h=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('PAREI SITIO E4C-F5 S144')) L[i:i]=["E4C-F5 H4 MEDIDAS em c9a67ed52 (%s): MUTANTE guarda antecipada aplicado no arquivo da copia de medida -> os dois REDs (com luz e muda) FALHAM na assercao de negocio, (True, None) != (False, err ...` |
 | 15:15:24 | Bash | Apply the early-guard mutant in the measurement copy, run the two H4 REDs, then restore | `E=/home/ronald/wt-f5-v3-143219; D=logs/ESPINHA-BRIEFS/F5/vE/h4; python3 -I - <<'EOF' import ast c='/home/ronald/wt-f5-v3-143219/app/chamados/services/disputa_emissao.py' f=open(c,encoding='utf-8').read() no=next(n for n in ast.parse(f).body if isinstance(n,ast.FunctionDef) and n.name=='responder_pergunta_disputa_core') L=f.splitlines(keepends=True); i,j=no.lineno-1,no.end_lineno t=''.join(L[i:j]); ...` |
 | 15:15:08 | Bash | Read the reexport block, the registered-lines entry and the two ruff sites | `cd /home/ronald/wt-codex-e4c-f5-constroi-184647 && sed -n 4578,4594p app/chamados/models.py \| cut -c1-200; /bin/grep -n "responder_pergunta_disputa_core" app/chamados/models.py \| cut -c1-160; /bin/grep -n "437, 458\\|438, 459" app/core/tests/test_medida_turno_do_par.py \| cut -c1-200; sed -n 150,160p app/chamados/tests/test_e4c_f5_volta2_juizes.py \| cut -c1-200; sed -n 252,260p app/chamados/tes ...` |
 | 15:14:58 | Bash | Show mypy errors and the registered-lines diff | `L=logs/ESPINHA-BRIEFS/F5/vE/h4/chamados_api_core_c9a.log; /bin/grep -n "error:" $L \| head -8 \| cut -c1-300; n=$(/bin/grep -n "^FAIL: test_CATRACA" $L \| cut -d: -f1); sed -n "$((n+18)),$((n+60))p" $L \| cut -c1-260` |
