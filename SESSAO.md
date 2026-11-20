@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 19/11/2026 21:50:22.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (26.5 MB). Acoes na janela: **716**.
+**Medido em 19/11/2026 21:55:40.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (26.6 MB). Acoes na janela: **722**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:51:23 | Bash | Update RELATO top with ESPERANDO and F5 PAREI | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO: codex_pergunta.sh') L[0]='ESPERANDO: sombra.sh cadeia20_v3_forcar \| pid=3964569' parei=("PAREI: e4c-f5-a2-k16-harness-s128 \| espera Ronald (21:51) -- A2 do Codex (r_A2.txt rc=0) rodada na copia wt-codex-e4c-f5-constroi-184647 " "(logs/ESPINHA-BRIEFS/F5/vA/quatro/r ...` |
+| 21:51:13 | Bash | Get forcar sonda pid and time | `pgrep -f rodar_forcar.sh; ls /home/ronald/saas-hasner/logs/CADEIA-20-PASSO-1/v3/medidas/FIM5 2>&1; date '+%H:%M'` |
+| 21:51:08 | Bash | Count failures per module and find Linhas duble | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vA/quatro; grep -E '^(FAIL\|ERROR):' $D/run6.log \| sed -E 's/.*\((chamados\.tests\.[a-z0-9_]+)\..*/\1/' \| sort \| uniq -c; grep -n "class Linhas" -A12 /home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/*.py \| head -30; head -5 app/docs/RELATO.md \| cut -c1-200` |
+| 21:51:01 | Bash | Read new lotes test k16 case | `cd /home/ronald/wt-codex-e4c-f5-constroi-184647/app; sed -n 1,60p chamados/tests/test_e4c_f5_voltaA_lotes.py; sed -n 100,125p chamados/tests/test_e4c_f5_voltaA_lotes.py` |
+| 21:50:53 | Bash | Read DUBLE-1945 aval | `cd /home/ronald/saas-hasner/logs/AVAIS-1515; ls \| grep -i -E "f5\|duble\|e4c"; cat $(ls \| grep -i duble \| head -1)` |
+| 21:50:48 | Bash | Classify errors and k16 failure | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vA/quatro; grep -E "^(AttributeError\|TypeError\|AssertionError\|[A-Za-z]+Error):" $D/run6.log \| sort \| uniq -c; grep -n -A25 "FAIL: test_RED_k16" $D/run6.log \| head -40` |
 | 21:50:03 | Bash | Run A2 targeted and neighbor tests on F5 copy | `cd /home/ronald/saas-hasner; W=/home/ronald/wt-codex-e4c-f5-constroi-184647; D=logs/ESPINHA-BRIEFS/F5/vA/quatro; L="chamados.tests.test_e4c_f5_voltaA_lotes chamados.tests.test_e2_tarefa_do_dia escala.tests.test_f3_beco1_folga_na_lista chamados.tests.test_o261_julgamento_desfaz_carimbo chamados.tests.test_e4c_f2_leitura_do_ato chamados.tests.test_e4c_f5_volta2_juizes chamados.tests.test_e4b_classe_ ...` |
 | 21:49:57 | Bash | Check labels file format and suite.sh options | `cd /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/vA/quatro; cat lab5.txt \| head -5; head -5 run5.log; grep -n "only\\|-- " /home/ronald/saas-hasner/bin/suite.sh \| head -20` |
 | 21:49:55 | Bash | Find how prior runs were launched | `cd /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/vA/quatro; ls; head -3 *.cmd 2>/dev/null; grep -l "suite.sh" * 2>/dev/null \| head; bash /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
