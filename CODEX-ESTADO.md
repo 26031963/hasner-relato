@@ -1,7 +1,818 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 02:26** · publicado em **20/11/2026 02:27** (UTC-3)
+> Ultima resposta processada: **20/11/2026 02:47** · publicado em **20/11/2026 02:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 02:47 · sessao 987528a4fa0c · - · - · origem=Ronald (tmux)
+
+Conferi por AST as 33 chaves A/B/C. Todas atingem funções existentes e têm a cardinalidade esperada. K16 elimina duas âncoras, incluindo a segunda, que tem seletor próprio K47. K47 elimina somente a segunda. O RED K16 exige todos os PKs julgados e igualdade de consultas entre 3 e 6, mas a fixture dá às perguntas um destino vivo, então `_todas` passa pelo `continue` antes do C6. A mordida de K16 não isola as duas remoções. A fixture específica de K47 usa perguntas sem destino no ramo sem credor. `app/chamados/tests/e4c_f5_voltaA_mutantes.py:14,21,39,44` · `app/chamados/tests/e4c_f5_voltaB_mutantes.py:23,98,100,104` · `app/chamados/services/disputa_emissao.py:1955,2080,2083,2093` · `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:21,28,110,130` · `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197,216`
+
+O RED do memo morde a remoção do `pop('_pv_memo', None)` com o ato registrado na mesma instância e o mesmo horizonte. Fora desse recorte, uma segunda instância com o mesmo PK ou uma linha recebida somente com `pergunta_id` conserva o memo. A ressuscitação usa essa forma por ID. `app/chamados/tests/test_e4c_f5_voltaFINAL.py:14,22` · `app/chamados/juizes.py:895,898` · `app/chamados/models.py:1714,4373,4381,4387`
+
+O RED do contador morde `for p in universo` por prever 1 consulta de decisões em vez de 3. Morde retirar o prefetch sozinho por prever 5 consultas em vez de 3. Passa com `for p in list(universo.iterator(chunk_size=lote))`, mantendo toda a frota na memória e as mesmas três consultas. A fixture alinhada também aceita o leitor produzir zero divergências após descartar o resultado da leitura, embora o teste preexistente morda esse erro. `app/chamados/services/vigia_texto_resposta.py:19,23` · `app/chamados/models.py:4333` · `app/chamados/tests/test_e4c_f5_contador_texto.py:26,38,87,95`
+
+O selo cobra contagem total e callbacks, de modo que um SELECT redundante no caminho ultrapassa o teto se o cenário já está no teto. Pode passar com a troca de um SELECT por uma escrita de custo igual sem novo callback. No cenário 3 FICAM, `vivos >= 1` aceita dois fechamentos. Os cenários que fecham verificam todos os estados finais, mas só consultam esses estados depois da batida medida. Runs e contagens efetivas [nao verificado]. `app/ponto/tests/test_selo_chokepoint_escrita.py:319,330,448,475,488,510`
+
+## 20/11 02:46 · sessao a021eb5414ee · CADEIA-20-PASSO-1 · sonda · origem=Code
+
+`FOTO` traz a leitura dos insumos nas duas bordas da etapa. `LEITURA` registra a chamada que o passe realmente fez, inclusive quando a guarda pulou a célula. A string preserva o fuso que entrou no hash. As horas de observação usam `timezone.localtime`. `app/ponto/services/cartorio.py:493–578,1399–1407,1527–1558`
+`DELTA` mostra as partes alteradas e o intervalo observado. `ESCRITA` mostra o antes/depois no SQL, a pilha e a fila naquele instante. `FILA` registra inclusões, consumos e descartes posteriores. `JUIZO` mostra os insumos efetivamente entregues ao classificador. `app/ponto/services/cartorio.py:1126–1164,1209–1231,1605–1627,2035–2037` `app/chamados/models.py:3344–3352,3484–3487`
+`RESUMO` tem uma linha por célula com P1, P2 e P3. A contagem é por linha de chamado ou pergunta com mudança monitorada, após a última `LEITURA` do passe. Se a releitura cair dentro do intervalo em que a mudança foi detectada, a ordem fica `[nao verificado]`. `app/ponto/services/cartorio.py:1123,1156–1157,1222,1399–1401,1541–1547`
+A sonda mantém a frota e a ordem do comando. A cascata de materialização pode alcançar clones por PK sem filtro de colaborador, e a equivalência de cortar a frota está `[nao verificado]`. `app/ponto/management/commands/processar_cartorio.py:51–69` `app/chamados/signals.py:149–167` `app/chamados/services/materializacao.py:1232–1279`
+`BRACO` seleciona três rodadas com relógio fixo ou o controle que avança em P3. A resposta efetiva do juiz do turno, os deltas transitórios entre fotos e os efeitos de callbacks `on_commit`, consumidores ou escritores externos estão `[nao verificado]` até onde as linhas da sonda os alcançarem. O ensaio termina por rollback e a execução desta entrega está `[nao verificado]`. `app/ponto/management/commands/processar_cartorio.py:35–41` `app/ponto/turnos.py:2117–2134` `app/chamados/signals.py:134–146,229–240` `bin/sombra.sh:483–492`
+
+=====SCRIPT=====
+```python
+import datetime as dt
+import hashlib
+import io
+import json
+import logging
+import re
+import sys
+import threading
+from collections import defaultdict
+from contextlib import ExitStack, redirect_stderr, redirect_stdout
+from functools import wraps
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from django.core.management import call_command
+from django.db import connection, transaction
+from django.db.models import Q
+from django.utils import timezone
+from freezegun import freeze_time  # app/requirements.txt:43
+
+from chamados import juizes, models as mc, reconciliador
+from chamados.catalogo.modulos import data_do_chamado
+from chamados.services import disputa_emissao, fabrica_da_celula, fecho_runtime, materializacao
+from colaboradores.models import Colaborador
+from core import observ
+from escala import servico_jornada, utils as eu
+from escala.models import CelulaDia, EscalaColaborador
+from ponto import supra_juiz, turnos
+from ponto.management.commands import detectar_ausencias, processar_cartorio
+from ponto.models import Ausencia, Batida
+from ponto.portas import celula as portas
+from ponto.services import cartorio, cluster_espurio, justificativa
+
+CELULAS = (128355, 129943, 138359, 129476, 129490, 138541, 142995, 143945, 129134)
+EMPRESAS = (2, 3, 4)
+RODADAS = ('P1', 'P2', 'P3')
+BRACO = 'encerrado'  # 'em_curso', 'encerrado' ou 'cruza'
+CEDO = '2026-11-20T00:30:00-03:00'
+TARDE = '2026-11-20T06:27:00-03:00'
+RELOGIOS = {
+    'em_curso': (CEDO, CEDO, CEDO),
+    'encerrado': (TARDE, TARDE, TARDE),
+    'cruza': (CEDO, CEDO, TARDE),
+}
+NV = '[nao verificado]'
+
+CH = mc.ChamadoColaborador
+PD = mc.PerguntaDisputa
+EMISSOR = detectar_ausencias.Command
+CMD = processar_cartorio.Command
+
+CORPO = cartorio._julgar_colab_corpo             # app/ponto/services/cartorio.py:1264
+ATO = cartorio.julgar_colab                     # app/ponto/services/cartorio.py:1059
+IMPRESSAO = cartorio.impressao_insumos          # app/ponto/services/cartorio.py:493
+CONTADORES = cartorio.contadores               # app/ponto/services/cartorio.py:2117
+CLASSIFICAR = supra_juiz.classificar_dia        # app/ponto/supra_juiz.py:217
+APP = str(Path(cartorio.__file__).resolve().parents[2]) + '/'
+ET_COMANDO = 'app/ponto/management/commands/processar_cartorio.py:35'
+
+CH_STATUS = dict(CH.STATUS_CHOICES)
+PD_VIAS = dict(PD.VIAS)
+VEREDITOS = CelulaDia.VEREDITOS_CARTORIO + CelulaDia.VEREDITOS_ADMIN
+BAT_TIPOS = dict(Batida.TIPO_CHOICES)
+AUS_STATUS = dict(Ausencia.STATUS_CHOICES)
+P_CARIMBO = (
+    'materializada_em', 'materializada_por_id', 'via_resolucao',
+    'validada_em', 'validada_por_id', 'respondida_em',
+)
+P_VAZIO = (None, None, '', None, None, None)
+CH_ESCOPO = ('colaborador_id', 'celula_id', 'celula__data', 'modulo_origem', 'contexto_json')
+
+DML = re.compile(
+    r'^\s*(UPDATE|INSERT\s+INTO|DELETE\s+FROM)\s+'
+    r'(?:"?\w+"?\.)?"?([a-z_][a-z_0-9]*)"?\s',
+    re.IGNORECASE,
+)
+ESTORNO = re.compile(r'^\s*ROLLBACK TO SAVEPOINT\s+"?(\w+)"?', re.IGNORECASE)
+
+
+class Desfazer(Exception):
+    pass
+
+
+class FalhaSonda(Exception):
+    pass
+
+
+def local(valor):
+    return timezone.localtime(valor).isoformat()
+
+
+def json_extra(valor):
+    if isinstance(valor, dt.datetime):
+        return local(valor)
+    if isinstance(valor, dt.date):
+        return valor.isoformat()
+    raise TypeError('tipo inesperado na saida')
+
+
+def fonte(codigo, linha):
+    arquivo = codigo.co_filename
+    if arquivo.startswith(APP):
+        arquivo = 'app/' + arquivo[len(APP):]
+    else:
+        arquivo = Path(arquivo).name
+    return '%s:%s' % (arquivo, linha)
+
+
+def pilha(quadro):
+    app, outros = [], []
+    while quadro:
+        codigo = quadro.f_code
+        item = '%s:%s' % (fonte(codigo, quadro.f_lineno), codigo.co_name)
+        (app if codigo.co_filename.startswith(APP) else outros).append(item)
+        quadro = quadro.f_back
+    return (app + outros)[:8]
+
+
+def codigo_publico(valor, permitidos):
+    if valor is not None and valor != '' and valor not in permitidos:
+        raise FalhaSonda('codigo persistido fora do vocabulario publicado') [nao verificado]
+    return valor
+
+
+class Silencio(io.TextIOBase):
+    def write(self, texto):
+        return len(texto)
+
+
+class Sonda:
+    def __init__(self):
+        self.saida = sys.stdout
+        self.erros = []
+        self.seq = 0
+        self.rodada = None
+        self.empresa = None
+        self.cels = {}
+        self.por_colab = defaultdict(list)
+        self.por_dia = {}
+        self.etapas = []
+        self.corpos = []
+        self.capturas = []
+        self.prova = None
+        self.prova_turno = None
+        self.c1 = []
+        self.versao_sql = 0
+        self.cache_fotos = {}
+        self.ultima_foto = {}
+        self.deltas = defaultdict(list)
+        self.leituras = defaultdict(list)
+        self.escritas = defaultdict(list)
+        self.savepoints = defaultdict(set)
+        self.estornadas = set()
+
+    def linha(self, tipo, **dados):
+        self.seq += 1
+        registro = dict(seq=self.seq, rodada=self.rodada, empresa=self.empresa,
+                        hora=local(timezone.now()), **dados)
+        print(tipo, json.dumps(registro, ensure_ascii=True, separators=(',', ':'),
+                               default=json_extra), file=self.saida, flush=True)
+        return self.seq
+
+    def erro(self, etapa, ids, exc):
+        if any(exc is anterior for anterior in self.erros):
+            return
+        self.erros.append(exc)
+        # Mensagens externas podem conter nomes, CPF, SQL ou texto de resposta.
+        seguro = repr(exc) if type(exc) is FalhaSonda else (
+            "%s('[redigido]')" % type(exc).__name__
+        )
+        celula = ','.join(map(str, ids)) if ids else NV
+        print('ERRO', etapa, celula, seguro, file=self.saida, flush=True)
+
+    def abrir_universo(self):
+        self.cels = {
+            pk: (cid, data, emp)
+            for pk, cid, data, emp in CelulaDia.objects.filter(pk__in=CELULAS)
+            .values_list('pk', 'colaborador_id', 'data', 'colaborador__empresa_id')
+        }
+        for pk in CELULAS:
+            if pk not in self.cels:
+                self.erro(ET_COMANDO, (pk,), FalhaSonda('celula ausente na sombra'))
+                continue
+            cid, data, emp = self.cels[pk]
+            if emp not in EMPRESAS:
+                self.erro(ET_COMANDO, (pk,), FalhaSonda('empresa fora do lote'))
+            self.por_colab[cid].append(pk)
+            self.por_dia[cid, str(data)] = pk
+
+    def fila(self, pk):
+        # Fila fisica e contador do MESMO ato. app/ponto/services/cartorio.py:1114,1149–1164,1209–1231
+        quadro = sys._getframe(1)
+        while quadro and quadro.f_code is not ATO.__code__:
+            quadro = quadro.f_back
+        if quadro is None:
+            return {'ato': None}
+        l = quadro.f_locals
+        cid = l['c'].pk
+        out = l['out']
+        conv = l.get('_conv')
+        corpo = self.corpos[-1] if self.corpos else None
+        escolhido = corpo is not None and pk in corpo.selecionadas
+        return {
+            'ato': cid,
+            'rejulgar': any(c.pk == pk for c in out.get('rejulgar', ())),
+            'rejulgar_na_releitura': conv is not None and
+                any(c.pk == pk for c in conv.get('rejulgar', ())),
+            'segunda_em_execucao': escolhido and corpo.tipo == 'segunda',
+            'releitura_em_execucao': escolhido and corpo.tipo == 'releitura',
+            'releitura_convocada': conv is not None and any(c.pk == pk for c in l['cels']),
+            'emitidos_entrada': l.get('_e0'),
+            'emitidos': out.get('emitidos'),
+            'emitidos_na_releitura': None if conv is None else conv['emitidos'],
+            'rejulgar_descartado': out.get('rejulgar_descartado'),
+        }
+
+    def contadores(self):
+        sonda = self
+
+        class Fila(list):
+            def append(self, cel):
+                super().append(cel)
+                if cel.pk in sonda.cels:
+                    f = sys._getframe(1)
+                    sonda.linha('FILA', celula=cel.pk, acao='incluiu',
+                                ponto=fonte(f.f_code, f.f_lineno), estado=sonda.fila(cel.pk))
+
+        class Out(dict):
+            def setdefault(self, chave, padrao=None):
+                # Todos os produtores reais usam setdefault(...).append(...).
+                # app/ponto/services/cartorio.py:1149–1150,1703–1704,1723,1737,1815,1831,1860
+                if chave == 'rejulgar' and chave not in self:
+                    padrao = Fila(padrao)
+                return super().setdefault(chave, padrao)
+
+            def pop(self, chave, *padrao):
+                valor = super().pop(chave, *padrao)
+                if chave == 'rejulgar' and valor:
+                    f = sys._getframe(1)
+                    acao = 'consumiu' if f.f_code is ATO.__code__ and f.f_lineno in (1156, 1157) else 'descartou'
+                    for cel in valor:
+                        if cel.pk in sonda.cels:
+                            sonda.linha('FILA', celula=cel.pk, acao=acao,
+                                        ponto=fonte(f.f_code, f.f_lineno), estado=sonda.fila(cel.pk))
+                return valor
+
+        return Out(CONTADORES())
+
+    def sha256(self, dado=b''):
+        # Leitura dos bytes e da lista local no ponto real do SHA.
+        # app/ponto/services/cartorio.py:502–507,508–578
+        if self.capturas:
+            quadro = sys._getframe(1)
+            if quadro.f_code is IMPRESSAO.__code__:
+                self.capturas[-1].append((dado, tuple(quadro.f_locals['partes'])))
+        return hashlib.sha256(dado)
+
+    def impressao(self, *args, **kw):
+        f = sys._getframe(1)
+        if f.f_code is not CORPO.__code__:
+            return IMPRESSAO(*args, **kw)
+        l = f.f_locals
+        cel = l['cel']
+        universo = self.prova if self.prova is not None else self.cels
+        if cel.pk not in universo:
+            return IMPRESSAO(*args, **kw)
+
+        etapas = self.etapas[-1:]
+        etapa = etapas[0].fonte if etapas else fonte(f.f_code, f.f_lineno)
+        captura = []
+        self.capturas.append(captura)
+        try:
+            batidas, aus, chamados, dna = args[:4]
+            codigo_publico(aus, AUS_STATUS)
+            for batida in batidas:
+                codigo_publico(batida.tipo, BAT_TIPOS)
+            d = dna or {}
+            versao, marcos = d.get('dna_versao'), d.get('marcos')
+            chaves = {'hi', 'hf'} | {k for par in CelulaDia.PARES_PAUSA_DNA for k in par}
+            if versao is not None and type(versao) is not int:
+                raise FalhaSonda('versao de DNA fora do formato')
+            if marcos is not None and (
+                not isinstance(marcos, dict) or set(marcos) - chaves
+                or any(v is not None and (not isinstance(v, str) or not re.fullmatch(r'\d\d:\d\d', v))
+                       for v in marcos.values())
+            ):
+                raise FalhaSonda('marcos de DNA fora do formato')
+            codigo_publico(kw.get('veto'), ('VETO_DEGENERADA', 'VETO_REGUA'))
+            parcial = kw.get('cob_parcial')
+            if isinstance(parcial, str) and not re.fullmatch(
+                r'(?:sem_periodo|dentro|fora|nao_sei|1)(?:;disp=\d+(?:,\d+)*)?', parcial
+            ):
+                raise FalhaSonda('cobertura parcial fora do formato')
+
+            h = IMPRESSAO(*args, **kw)  # app/ponto/services/cartorio.py:493–578
+            if len(captura) != 1:
+                raise FalhaSonda('chamada real nao entregou exatamente um preimage')
+            bruto, partes = captura[0]
+            por_insumo = dict(zip(('batidas', 'ausencia_status', 'chamados', 'dna'), partes[:4]))
+            por_insumo.update((p.partition(':')[0], p) for p in partes[4:])
+            # Sao as listas ja calculadas pelo corpo, inclusive no caminho da guarda.
+            # app/ponto/services/cartorio.py:1399–1404,1527–1547
+            vivos = {ch.pk for ch in l.get('vivos', ())}
+            fio = {ch.pk for ch in l.get('_com_fio', ())}
+            turno = self.prova_turno if self.prova is not None else (
+                self.corpos[-1].turnos if self.corpos else {}
+            )
+            foto = {
+                'insumos': bruto.decode('utf-8'), 'hash': h, 'partes': por_insumo,
+                'chamados': [
+                    {'pk': ch.pk, 'status_local': codigo_publico(ch.status_local, CH_STATUS),
+                     'viva': ch.pk in vivos, 'viva_com_fio': ch.pk in fio}
+                    for ch in chamados
+                ],
+                'turno': turno.get(cel.pk),
+                'hoje': l['hoje'], 'agora': l['agora'],
+            }
+            if self.prova is not None:
+                self.prova[cel.pk] = foto
+            else:
+                tipo = self.corpos[-1].tipo if self.corpos else NV
+                seq = self.linha('LEITURA', celula=cel.pk, etapa=fonte(f.f_code, f.f_lineno),
+                                 tipo=tipo, impressao_objeto=cel.impressao,
+                                 veredito_objeto=codigo_publico(cel.veredito, VEREDITOS),
+                                 fila=self.fila(cel.pk), **foto)
+                self.leituras[self.rodada, cel.pk].append((seq, tipo, h))
+            return h
+        except Exception as exc:
+            self.erro(etapa, (cel.pk,), exc)
+            raise
+        finally:
+            self.capturas.pop()
+
+    def classificar(self, *args, **kw):
+        f = sys._getframe(1)
+        cel = f.f_locals.get('cel') if f.f_code is CORPO.__code__ else None
+        if cel is None or cel.pk not in self.cels or self.prova is not None:
+            return CLASSIFICAR(*args, **kw)
+        etapa = 'app/ponto/supra_juiz.py:217'
+        try:
+            resultado = CLASSIFICAR(*args, **kw)  # app/ponto/services/cartorio.py:1411–1415,1605–1627
+            l = f.f_locals
+            self.linha('JUIZO', celula=cel.pk, etapa=etapa, chamada=fonte(f.f_code, f.f_lineno),
+                       total=kw['chamados_total'], protestam=kw['chamados_vivos'],
+                       com_fio=kw['cobrancas_vivas'],
+                       pks_protestam=[ch.pk for ch in l.get('_protestam', ())],
+                       pks_com_fio=[ch.pk for ch in l.get('_com_fio', ())],
+                       turno_encerrado=kw['turno_encerrado'], codigos=[c for c, _ in resultado])
+            return resultado
+        except Exception as exc:
+            self.erro(etapa, (cel.pk,), exc)
+            raise
+
+    def motivo_turno(self, real):
+        @wraps(real)
+        def embrulho(turnos_dia, ec, data, agora, celulas=None):
+            f = sys._getframe(1)
+            c = f.f_locals.get('colaborador') if f.f_code is turnos._dias_encerrados_puro.__code__ else None
+            pk = self.por_dia.get((c.pk, str(data))) if c is not None else None
+            destino = self.prova_turno if self.prova is not None else (
+                self.corpos[-1].turnos if self.corpos else None
+            )
+            if pk is None or destino is None:
+                return real(turnos_dia, ec, data, agora, celulas=celulas)
+            dados = {}
+            self.c1.append(dados)
+            try:
+                # app/ponto/turnos.py:2117–2134,2170–2183
+                motivo = real(turnos_dia, ec, data, agora, celulas=celulas)
+                destino[pk] = dict(motivo=motivo, agora=agora, **dados)
+                return motivo
+            except Exception as exc:
+                self.erro('app/ponto/turnos.py:2117', (pk,), exc)
+                raise
+            finally:
+                self.c1.pop()
+
+        return embrulho
+
+    def testemunha_turno(self, real, chave):
+        @wraps(real)
+        def embrulho(*args, **kw):
+            valor = real(*args, **kw)
+            if self.c1:
+                self.c1[-1][chave] = (
+                    getattr(valor.entrada, 'pk', None)
+                    if chave == 'entrada_turno_aberto' and valor is not None else valor
+                )
+            return valor
+
+        return embrulho
+
+    def fotos_do_colab(self, cid):
+        versao = (self.rodada, self.agora, self.versao_sql)
+        memo = self.cache_fotos.get(cid)
+        if memo is not None and memo[0] == versao:
+            return memo[1]
+        c = Colaborador.objects.get(pk=cid)
+        # Mesma lista e ordem da porta de lote. app/ponto/management/commands/processar_cartorio.py:64–69
+        cels = list(CelulaDia.objects.filter(colaborador=c, data__lt=self.hoje).order_by('data'))
+        alvo = {cel.pk: None for cel in cels if cel.pk in self.cels}
+        esperadas = set(self.por_colab[cid])
+        if set(alvo) != esperadas:
+            raise FalhaSonda('celula alvo fora da janela de leitura do comando')
+        tl = threading.local()
+        tl.agora = self.agora
+        tl.colaborador = c
+        self.prova, self.prova_turno = alvo, {}
+        try:
+            with patch.object(cartorio, '_tl', tl):
+                # O corpo real calcula ambos os caminhos da impressao antes de
+                # completar_status continuar. apply_=False veta a lavra de status.
+                # app/ponto/services/cartorio.py:942–959,1264–1317,1399–1409,1541–1558
+                CORPO(
+                    c, cels, hoje=self.hoje, agora=self.agora, apply_=False, emissor=None,
+                    out=CONTADORES(), prefix='', _w=lambda texto: None, forcar=False,
+                    EscalaColaborador=EscalaColaborador, Batida=Batida, ChamadoColaborador=CH,
+                    eu=eu, ausencia_cobre=turnos.ausencia_cobre, classificar_dia=CLASSIFICAR,
+                    completar_status=True,
+                )
+        finally:
+            self.prova, self.prova_turno = None, None
+        for cel in cels:
+            if cel.pk not in alvo:
+                continue
+            if alvo[cel.pk] is None:
+                raise FalhaSonda('a foto nao chegou a chamada real da impressao')
+            alvo[cel.pk].update(
+                impressao_gravada=cel.impressao,
+                veredito=codigo_publico(cel.veredito, VEREDITOS),
+            )
+        self.cache_fotos[cid] = (versao, alvo)
+        return alvo
+
+    def fotografar(self, ids, etapa, borda):
+        fotos = {}
+     
+
+[truncado em 20000 de 38478 caracteres]
+
+## 20/11 02:45 · sessao 4d4b82a49aca · E4C-F5-CONSTROI · sonda · origem=Code
+
+**Limite do envelope.** Os dois scripts usam a guarda da sombra e uma transação `REPEATABLE READ, READ ONLY`. O `bin/sombra.sh --rodar` chama `lavra_de_prod` antes de iniciar o Python. Essa etapa lê produção, cria arquivos e grava snapshots na sombra. Se a restrição de leitura se aplica à rodada inteira, o envelope atual impede a execução literal nos termos pedidos. O `echo` final do wrapper também pode mascarar o status do Python. [bin/sombra.sh:136] [bin/sombra.sh:151] [bin/sombra.sh:157] [bin/sombra.sh:483] [app/config/settings/sombra.py:29] [app/config/settings/sombra.py:47]
+
+**Prévia.** A sonda chama `montar_previa` uma vez por empresa de `empresas_visiveis()`. O único valor diário calculado a partir das perguntas é `material`, com os rótulos literais `resposta do colaborador`, `pergunta viva (sem resposta)` e `nada`. Os campos `tipo`, `hora_prevista` e `hora_proposta` vêm da lâmpada, `proposta` é constante e `veredito` vem da célula. A saída agrupa as lâmpadas em uma linha por empresa, colaborador e data, nas duas seções devolvidas. `colaboradores` conta os colaboradores devolvidos nessas seções, inclusive os de `mes_vazio` sem datas. [app/colaboradores/queries.py:78] [app/folha/previa.py:28] [app/folha/previa.py:83] [app/folha/previa.py:97] [app/folha/previa.py:136] [app/folha/previa.py:139]
+
+- **Relógio.** Fixei `hoje=2026-11-28`, depois do maior fim possível da competência 11, dia 27. O script fixa também `15:00 UTC` desse dia. `classificar_export` chega à retenção sem repassar `hoje`, e `fio_vivo` chega à janela viva sem `hoje` e à classificação de falta sem `agora`. Esses caminhos podem ler `localdate()`, `date.today()` e `now()`. [app/ponto/janelas.py:10] [app/folha/previa.py:41] [app/folha/previa.py:79] [app/folha/previa.py:145] [app/folha/export.py:968] [app/folha/export.py:1301] [app/folha/export.py:1238] [app/chamados/juizes.py:597] [app/chamados/juizes.py:1476] [app/chamados/juizes.py:1526] [app/escala/servico_jornada.py:387] [app/requirements.txt:39]
+- **Ordem e cache.** A carga direta de células e perguntas usa a ordem dos modelos, com célula única por colaborador e data, e perguntas por `id`. As decisões têm ordem por `ato_em, pk`, e a leitura ordena a sequência de novo. A ordem por nome do export e da prévia admite empates. A sonda ordena a saída por PK e data. Há ainda um empate possível na leitura de rubricas globais por evento, antes da montagem das linhas. A existência desse empate no banco é [nao verificado]. O cache de decisões, o memo de vida e o da tranca têm escopo de instância ou consulta nesse caminho. O catálogo de ausências tem cache de processo com TTL e fallback, e a sonda começa com esse cache vazio. A igualdade do estado da sombra entre as rodadas é [nao verificado]. [app/folha/previa.py:48] [app/folha/previa.py:64] [app/folha/previa.py:124] [app/escala/models.py:1833] [app/chamados/models.py:3785] [app/chamados/models.py:4225] [app/chamados/models.py:4333] [app/chamados/juizes.py:895] [app/chamados/juizes.py:1101] [app/folha/export.py:788] [app/folha/export.py:984] [app/folha/models.py:50] [app/folha/models.py:67] [app/ponto/catalogo/ausencias.py:240] [app/ponto/catalogo/ausencias.py:261] [app/ponto/turnos.py:2609]
+- **Falhas.** A API devolve o resultado da empresa inteiro. Se a chamada aborta, a sonda recupera o PK quando a pilha aponta para um laço por colaborador. Falhas de lote saem com `colab=?`. Os demais resultados daquela empresa ficam indisponíveis, e a rodada termina como inconclusiva. A representação do erro usa a classe da exceção, porque a mensagem pode conter dados pessoais. A sonda também conta as falhas registradas pelo mecanismo de best effort. [app/folha/previa.py:43] [app/folha/previa.py:57] [app/folha/previa.py:71] [app/folha/previa.py:136] [app/folha/export.py:495] [app/folha/export.py:817] [app/chamados/juizes.py:1484] [app/core/observ.py:60] [app/core/observ.py:73]
+
+=====SCRIPT f5_previa_11.py=====
+```python
+import ast
+import inspect
+import logging
+import os
+import sys
+from datetime import date
+from textwrap import dedent
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+
+HOJE = date(2026, 11, 28)
+AGORA_UTC = "2026-11-28T15:00:00Z"
+MATERIAIS = (
+    "resposta do colaborador",
+    "pergunta viva (sem resposta)",
+    "nada",
+)
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if (banco.get("NAME"), banco.get("HOST")) != ("sombra", "sombra_db"):
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        if cursor.fetchone() != ("sombra", "juliani"):
+            raise RuntimeError("conexao")
+
+
+def faixas_do_laco(funcao, variavel):
+    linhas, inicio = inspect.getsourcelines(funcao)
+    corpo = ast.parse(dedent("".join(linhas))).body[0].body
+    return tuple(
+        (inicio + no.body[0].lineno - 1, inicio + no.end_lineno - 1)
+        for no in corpo
+        if isinstance(no, ast.For)
+        and any(
+            isinstance(alvo, ast.Name) and alvo.id == variavel
+            for alvo in ast.walk(no.target)
+        )
+    )
+
+
+def pk_do_erro(exc, escopos):
+    tb = exc.__traceback__
+    while tb is not None:
+        for codigo, variavel, faixas, atributo in escopos:
+            if tb.tb_frame.f_code is codigo and any(
+                inicio <= tb.tb_lineno <= fim for inicio, fim in faixas
+            ):
+                dono = tb.tb_frame.f_locals.get(variavel)
+                pk = getattr(dono, atributo, None) if atributo else dono
+                if type(pk) is int:
+                    return pk
+        tb = tb.tb_next
+    return "?"
+
+
+def materiais_por_dia(item):
+    por_dia = {}
+    for detalhe in item["dias"]:
+        dia = detalhe["data"].isoformat()
+        material = detalhe["material"]
+        if material not in MATERIAIS:
+            raise ValueError("material fora do contrato")
+        if por_dia.setdefault(dia, material) != material:
+            raise ValueError("materiais distintos no mesmo dia")
+    return sorted(por_dia.items())
+
+
+def main():
+    print(f"HOJE={HOJE.isoformat()} AGORA_UTC={AGORA_UTC}", flush=True)
+    etapa = "GUARDA_SOMBRA"
+    empresas = colaboradores = linhas = erros = 0
+    nivel_anterior = logging.root.manager.disable
+    logging.disable(sys.maxsize)
+
+    try:
+        with transaction.atomic(durable=True):
+            guarda_sombra()
+            etapa = "PREPARO"
+            from freezegun import freeze_time
+
+            from colaboradores.queries import empresas_visiveis
+            from core.observ import engolidos
+            from folha.export import classificar_export, dias_ferias_com_batida
+            from folha.previa import montar_previa
+            from ponto.catalogo.ausencias import invalidar_cache
+
+            # A pilha serve somente para identificar o dono de uma falha.
+            escopos = (
+                (montar_previa.__code__, "cid",
+                 faixas_do_laco(montar_previa, "cid"), None),
+                (classificar_export.__code__, "fech",
+                 faixas_do_laco(classificar_export, "fech"), "colaborador_id"),
+                (dias_ferias_com_batida.__code__, "cid",
+                 faixas_do_laco(dias_ferias_com_batida, "cid"), None),
+            )
+
+            with freeze_time(AGORA_UTC), timezone.override("America/Sao_Paulo"):
+                invalidar_cache()
+                etapa = "EMPRESAS"
+                visiveis = list(empresas_visiveis().order_by("pk"))
+                empresas = len(visiveis)
+
+                etapa = "PREVIA"
+                for empresa in visiveis:
+                    antes = engolidos()["total"]
+                    itens = ()
+                    try:
+                        with transaction.atomic():
+                            dados = montar_previa(empresa, 11, 2026, hoje=HOJE)
+                            itens = sorted(
+                                dados["linhas"] + dados["mes_vazio"],
+                                key=lambda item: item["colaborador_id"],
+                            )
+                    except Exception as exc:
+                        itens = ()
+                        erros += 1
+                        pk = pk_do_erro(exc, escopos)
+                        print(f"ERRO emp={empresa.pk} colab={pk} {type(exc).__name__!r}")
+
+                    falhas = engolidos()["total"] - antes
+                    if falhas:
+                        erros += falhas
+                        resumo = ("best_effort_registrado", falhas)
+                        print(f"ERRO emp={empresa.pk} colab=? {resumo!r}")
+
+                    vistos = set()
+                    for item in itens:
+                        pk = item["colaborador_id"]
+                        try:
+                            if pk in vistos:
+                                raise ValueError("colaborador repetido na previa")
+                            vistos.add(pk)
+                            colaboradores += 1
+                            dias = materiais_por_dia(item)
+                        except Exception as exc:
+                            erros += 1
+                            print(f"ERRO emp={empresa.pk} colab={pk} {type(exc).__name__!r}")
+                            continue
+
+                        for dia, material in dias:
+                            print(f"emp={empresa.pk} colab={pk} dia={dia} material={material}")
+                            linhas += 1
+
+    except Exception as exc:
+        erros += 1
+        print(f"ERRO etapa={etapa} {type(exc).__name__!r}")
+    finally:
+        logging.disable(nivel_anterior)
+
+    print(f"UNIVERSO empresas={empresas} colaboradores={colaboradores} linhas={linhas}")
+    print(f"ERROS={erros}")
+    if erros:
+        print("SONDA INCONCLUSIVA")
+    return int(erros > 0)
+
+
+sys.exit(main())
+```
+=====FIM f5_previa_11.py=====
+
+**Property e display.** Na medida A, o sentido impresso é **ATO → PROJEÇÃO**, como no aval. O lado ATO passa `DecisaoPergunta.leitura(p)` ao juiz real. O lado PROJEÇÃO chama `p.respondida`, que já entrega `DecisaoPergunta.composta(p)` ao mesmo juiz. As duas leituras usam o mesmo instante vigente, inclusive o tratamento do passivo feito pela leitura real. [app/chamados/models.py:3810] [app/chamados/models.py:4320] [app/chamados/models.py:4354] [app/chamados/juizes.py:1551]
+
+Na medida B, `B_DISPLAY_LITERAL_VS_COLUNA` é a comparação literal do aval. A property `resposta_display` pode converter PKs de posto e escala em rótulos e resolver `opcoes` de `valor` para `rotulo`. `B_DISPLAY_COM_MESMA_FORMATACAO` compara os dois textos com a mesma formatação. Para o contrafactual, a sonda chama a property real com a leitura composta fornecida em memória. `B_TEXTO_LEITURA_VS_COLUNA` conta separadamente as diferenças de fonte antes da formatação. As listas têm até 50 PKs para A e até 50 para cada contagem de B. [app/chamados/models.py:2657] [app/chamados/models.py:3837] [app/chamados/models.py:4354]
+
+=====SCRIPT f5_property_e_display.py=====
+```python
+import logging
+import os
+import sys
+from collections import Counter
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import DatabaseError, InterfaceError, connection, transaction
+
+
+LOTE = 500
+LIMITE = 50
+MEDIDAS_B = (
+    "B_DISPLAY_LITERAL_VS_COLUNA",
+    "B_DISPLAY_COM_MESMA_FORMATACAO",
+    "B_TEXTO_LEITURA_VS_COLUNA",
+)
+
+
+def guarda_sombra():
+    if os.environ.get("DJANGO_SETTINGS_MODULE") != "config.settings.sombra":
+        raise RuntimeError("settings")
+    banco = settings.DATABASES["default"]
+    if (banco.get("NAME"), banco.get("HOST")) != ("sombra", "sombra_db"):
+        raise RuntimeError("configuracao")
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        if cursor.fetchone() != ("sombra", "juliani"):
+            raise RuntimeError("conexao")
+
+
+def main():
+    etapa = "GUARDA_SOMBRA"
+    universo = None
+    lidas = casos_com_erro = erros = 0
+    contagem_a = Counter()
+    contagem_b = Counter()
+    exemplos_a = []
+    exemplos_b = {nome: [] for nome in MEDIDAS_B}
+    nivel_anterior = logging.root.manager.disable
+    logging.disable(sys.maxsize)
+
+    try:
+        with transaction.atomic(durable=True):
+            guarda_sombra()
+            etapa = "PERGUNTAS"
+            from chamados.juizes import pergunta_respondida
+            from chamados.models import DecisaoPergunta, PerguntaDisputa
+
+            perguntas = PerguntaDisputa.objects.all().order_by("pk")
+            universo = perguntas.count()
+            for p in perguntas.prefetch_related("decisoes").iterator(chunk_size=LOTE):
+                lidas += 1
+                try:
+                    leitura_ato = DecisaoPergunta.leitura(p)
+                    respondida_ato = pergunta_respondida(leitura_ato)
+                    respondida_projecao = p.respondida
+
+                    projecao = p.resposta_colab
+                    display_ato = p.resposta_display
+                    texto_diverge = leitura_ato.resposta_colab != projecao
+                    display_projecao = display_ato
+                    if texto_diverge:
+                        leitura_projecao = DecisaoPergunta.composta(p)
+                        with patch.object(
+                            DecisaoPergunta, "leitura", return_value=leitura_projecao
+                        ):
+                            display_projecao = p.resposta_display
+
+                    diferencas_b = (
+                        display_ato != projecao,
+                        display_ato != display_projecao,
+                        texto_diverge,
+                    )
+                except Exception as exc:
+                    casos_com_erro += 1
+                    erros += 1
+                    print(f"ERRO pergunta_pk={p.pk} {type(exc).__name__!r}")
+                    if isinstance(exc, (DatabaseError, InterfaceError)):
+                        break
+                    continue
+
+                sentido = (respondida_ato, respondida_projecao)
+                contagem_a[sentido] += 1
+                if sentido[0] != sentido[1] and len(exemplos_a) < LIMITE:
+                    exemplos_a.append((p.pk, sentido))
+
+                for nome, diverge in zip(MEDIDAS_B, diferencas_b):
+                    if diverge:
+                        contagem_b[nome] += 1
+                        if len(exemplos_b[nome]) < LIMITE:
+                            exemplos_b[nome].append(p.pk)
+
+    except Exception as exc:
+        erros += 1
+        print(f"ERRO etapa={etapa} {type(exc).__name__!r}")
+    finally:
+        logging.disable(nivel_anterior)
+
+    total = universo if universo is not None else "?"
+    medidas = sum(contagem_a.values())
+    soma = medidas + casos_com_erro
+    conferiu = universo is not None and soma == lidas == universo
+    if not conferiu and erros == 0:
+        erros += 1
+
+    print(f"UNIVERSO perguntas={total} lidas={lidas} medidas={medidas}")
+    print(f"CASOS_COM_ERRO={casos_com_erro}")
+    print(f"A ATO->PROJECAO True->False={contagem_a[True, False]}")
+    print(f"A ATO->PROJECAO False->True={contagem_a[False, True]}")
+    for pk, (ato, projecao) in exemplos_a:
+        print(f"A_EXEMPLO pergunta_pk={pk} ATO->PROJECAO={ato}->{projecao}")
+
+    for nome in MEDIDAS_B:
+        pks = ",".join(str(pk) for pk in exemplos_b[nome])
+        print(f"{nome} contagem={contagem_b[nome]} pks=[{pks}]")
+
+    print(f"CONFERENCIA soma==universo={'s' if conferiu else 'n'} soma={soma} universo={total}")
+    print(f"ERROS={erros}")
+    if erros:
+        print("SONDA INCONCLUSIVA")
+    return int(erros > 0)
+
+
+sys.exit(main())
+```
+=====FIM f5_property_e_display.py=====
+
+Diff MAIN × CÓPIA, universos, contagens e PKs divergentes [nao verificado].
+
+## 20/11 02:44 · sessao fc325d08d437 · - · - · origem=Ronald (tmux)
+
+| Achado | Classificação |
+|---|---|
+| D1 | **NAO SUSTENTA.** O aval 1830 §7-iv fixa a expectativa de `q_vivas` para uma fixture com texto projetado vazio. A fila e as corrigíveis aplicam a coluna antes de carregar a trilha. Com texto projetado e instante só no ato, o juiz reconhece a resposta e ambas a excluem. A autorização específica dessa divergência e a medida citada de 15/11 estão [nao verificado]. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:488-520` · `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:41-53,66-80` · `app/chamados/juizes.py:1588,1765-1775` |
+| D2 | **SUSTENTA.** O aval 1735 §1(b) põe expressamente o placar fora da F5. `values_list` da projeção alimenta a exceção nominal. O registro individual em E4D está [nao verificado]. `app/chamados/services/raiox.py:135-147` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:23-26` · `app/docs/BACKLOG.md:2023` |
+| D3 | **NAO SUSTENTA como descarte geral.** Uma reabertura sincronizada limpa a coluna, portanto o exemplo particular é falho nos dois lados. Com a fixture existente de coluna validada em T1 e RECUSA na trilha em T2, para T1 ≤ `agora` < T2 a base encerra no degrau da validação e o HEAD remove T1 ao aplicar a RECUSA futura antes do teto. Sem outra guarda, o HEAD dá viva. A tarefa corta a trilha primeiro. `app/chamados/services/disputa_emissao.py:1617,1639-1656` · `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:105-109` · `eb1e49c1e:app/chamados/juizes.py:1389-1406` · `app/chamados/juizes.py:1408-1411,1487-1488` · `app/chamados/models.py:4302,4339-4351` · `app/chamados/services/tarefa_do_dia.py:398-429` |
+| D4 | **NAO SUSTENTA como descarte geral.** A guarda pré-trava existia. Em instância fresca, a base lia a foto do ato de silêncio pós-trava sem o prefetch da primeira lista. Agora, se outro ato respondeu depois da carga e antes da trava, a porta de exceção pode fechar uma pergunta que julgou muda e a foto F2 também usa a sequência antiga. O carimbo não limpa o prefetch. `eb1e49c1e:app/chamados/models.py:2048,2057-2067,2072-2089` · `app/chamados/models.py:2071-2081,2095,2103-2112,3270-3284,3405-3410,3691-3707,4333` |
+| D5 | **SUSTENTA** a preexistência e a ausência de consulta. O selo permite nominalmente a referência à tupla de classe. A dispensa formal da pureza literal do aval A está [nao verificado]. `eb1e49c1e:app/chamados/juizes.py:1398` · `app/chamados/juizes.py:1401` · `app/chamados/models.py:2721-2724` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:166-170` |
+| D6 | **SUSTENTA.** L-130 exige instante e texto no juiz único. M1 já se declarava composto de perguntas respondidas, mas a base testava somente instante. O RED força a chegada ao M1 sem porta e distingue texto vazio, igualdade com o horizonte e instante futuro. `app/docs/LEIS.md:151` · `eb1e49c1e:app/escala/services/cadastro_realidade.py:500-503` · `app/escala/services/cadastro_realidade.py:497-509` · `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:276-296` |
+| D7 | **NAO DA PARA DIZER** sobre o aval do campo JSON. O 1735 manda passar a leitura composta aos juízes. O literal do 1710 e o item 94 da matriz estão [nao verificado]. O campo ISO efetivamente passa de coluna para ato e o teste verifica a saída quando a coluna não tem instante. `eb1e49c1e:app/api/views.py:2581` · `app/api/views.py:2579-2581,2587,2601` · `app/chamados/tests/test_e4c_f5_voltaB_sitios.py:66-80` |
+| D8 | **SUSTENTA** o motivo técnico. O memo por disputa vive no render e chama o contador do mesmo juiz. O teto 90 existe, e os testes verificam dois cartões da mesma disputa, disputas com contagens diferentes e novo render pós-POST. A medida 90→92 e o aval específico de C3 estão [nao verificado]. `app/core/tests/test_selo_performance.py:143,377-380` · `app/chamados/templatetags/chamados_tags.py:222-238` · `app/templates/chamados/partials/modal_fio.html:396-401` · `app/chamados/tests/test_e4c_f5_voltaC3_reabrir.py:73-116` |
+| D9 | **NAO SUSTENTA.** A seleção usa o recorte estrito no relógio S, antes de a consulta ser avaliada, e julga C6 sem horizonte. A porta só revalida materialização/via para os IDs aceitos após a trava e grava a compensadora no relógio R. Uma VALIDACAO em `(S,R]` pode ser visível no SELECT de decisões da sonda, matar a pergunta no C6 e excluí-la da porta, embora a compensadora em R a limpasse. Isso pode ocorrer com uma gravação no intervalo entre o relógio e o SELECT, sem timestamp futuro ao ler a linha. No empate com R, o PK decide. Os selos vedam construir o ORM ou escrever sua marca fora da porta, e a autoridade já recebe uma vista de leitura em T. `app/chamados/models.py:1555-1561,1581-1595,1632-1638,1651-1674,1702-1722,4159-4169,4193,4225,4302-4303,4333-4351` · `app/chamados/juizes.py:1408-1411` · `app/chamados/tests/test_e1_entradas.py:185-222` · `app/chamados/tests/test_f2_ressuscitacao_um_escritor.py:21-44,65-71` · `app/chamados/services/tarefa_do_dia.py:404-429` |
+| D10 | **NAO SUSTENTA** a equivalência dos REDs. O antigo compara SQL total de um e cinco dias, com uma pergunta por dia. Um mutante `ancs[:1]` no M1 sobrevive. O aval 1830 §§6b-1 e 7-viii pede casos novos com 3×6, SELECTs de decisões e prova de que todas foram julgadas. `app/escala/services/cadastro_realidade.py:508` · `app/escala/tests/test_f3_beco1_folga_na_lista.py:84-107,378-402` |
+
+## 20/11 02:43 · sessao 562592a28004 · - · - · origem=Ronald (tmux)
+
+**Quesito 4.** Os quatro tetos de SQL são 234, 298, 146 e 221. Cada parcela positiva tem sítio, commit e classe no selo. A parcela `+2` do cartório usa uma só anotação para as duas ocorrências. Os `−2` registram método e commit sem linha nem classe individual. O cabeçalho dá classe geral `LEITURA`, e o aval 0110 item 2 exige anotação individual de cada `+1`. O detalhamento por execução e a medição no C5 ficam **[nao verificado]**. Os seis blobs da cópia correspondem ao hash pedido. O ponto de inserção dos prefetches e do compositor confere nos commits citados. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–206,220–230,248–253,260–267`
+
+| Parcela no selo | Origem conferida |
+|---|---|
+| `+1` absolvidas, `eaf69fe33` | O prefetch é montado na linha anotada e avaliado pela iteração. SELECT de decisões. `app/chamados/reconciliador.py:702–706` |
+| `+1` âncoras no plano e `+1` no S143, `18bf86f01` | O SELECT extra está no prefetch dentro de `list`. As duas linhas de chamada apontam para a mesma fábrica. `app/chamados/models.py:364–366,400` · `app/chamados/services/disputa_emissao.py:1985` |
+| `+2` cartório, `eaf69fe33` | O laço avalia o prefetch aninhado. O commit adicionou somente o nível `decisoes` ao relacionamento já prefetcheado `perguntas_que_resolvem`, portanto cada avaliação com perguntas acrescenta um SELECT, por estrutura. As duas ocorrências nos cenários de fecho exigem a pilha da medida **[nao verificado]**. `app/ponto/services/cartorio.py:145–146,1347` |
+| `+1` fechar e `−2` compartilhamento, `9d386d1b1` | A carga de perguntas e decisões usa SELECT. O prefetch em `fechar` entrou em `18bf86f01`, e `9d386d1b1` antecipou a carga e passou a lista ao juiz. Isso evita a primeira aquisição da relação em `respostas_sem_veredito` e a busca das decisões pelo prefetch de `sem_veredito_entre`. A própria porta tem escritas distintas em `registrar` e `self.save`; as linhas anotadas são de leitura. `app/chamados/models.py:1998,2018–2021,2071–2072,2110,2122` |
+| `+1` universo do fato, `eaf69fe33` | SELECT de decisões no prefetch avaliado por `list`, chamado por `_nascer`. `app/chamados/services/fio.py:1963–1964` · `app/chamados/models.py:3122` |
+| `+1` leitura avulsa, `18bf86f01` e `0db6afc73` | O SELECT nasce no `list(p.decisoes.all())` quando o prefetch não existe. O primeiro SHA introduz o compositor e o segundo introduz a chamada dele na guarda. `app/chamados/models.py:4333,4360` · `app/chamados/reconciliador.py:367` |
+
+O selo compara a contagem conjunta de SQL com `<=` e exige cardinalidade exata de registros `on_commit`. A frase “o próximo +1 falha onde nascer” excede a asserção. Um `+1` compensado por `−1` em outro sítio fica verde pela contagem. Uma troca de SELECT por escrita de mesmo custo pode ficar verde. O mutante mínimo compartilhado pelos quatro tetos é um `SELECT 1` antes do retorno de sucesso de `registrar_batida`. Cai se o cenário efetivamente ocupa seu teto, como afirma a anotação para a medida de `aa3bdd88c`. A execução no C5 fica **[nao verificado]**. A fixture `3 chamados FICAM` exige apenas um vivo e pode passar com dois fechados se custo e `on_commit` couberem. As duas fixtures de fecho exigem o número exato. `app/ponto/registro_batida.py:176–181` · `app/ponto/tests/test_selo_chokepoint_escrita.py:319–330,459–475,495–510`
+
+**D9.** A sonda toma `S` antes de avaliar o queryset e seus prefetches. Um ato gravado com `S < ato_em` pode aparecer normalmente nessa própria carga. O C6 recebe a cópia sem `agora=` e aceita a validação retida como vigente. Por exemplo, com as outras condições elegíveis, uma `VALIDACAO` visível com `S < ato_em <= R` tira a candidata da seleção, ao passo que a `REABERTURA` hipotética em `R` teria limpado a validação. Se era a única candidata, o caminho de produção retorna antes da trava e `R` sequer é lido. Para os efetivamente selecionados, a releitura sob trava testa só materialização e via. `ato_em > R` sobrevive ao ato real mesmo se a linha já foi confirmada antes da trava. A confirmação e o carimbo são ordens independentes nas portas que aceitam `instante`. Ocorrência em produção **[nao verificado]**. `app/chamados/models.py:1555–1561,1581–1596,1632–1651,1669–1674,1702–1722,4193,4333–4350` · `app/chamados/juizes.py:1408–1411` · `app/chamados/services/disputa_emissao.py:1662,1686,1692,1708`
 
 ## 20/11 02:26 · sessao fbd5107dcd84 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1005,301 +1816,4 @@ O import de `DIA` referido no anexo já existe em `d9319a215`. `chamados/tests/t
 
 [truncado em 20000 de 20416 caracteres]
 
-## 20/11 00:32 · sessao b9ffd9798ead · CADEIA-20-PASSO-1 · leitura · origem=Code
-
-**1. Quem escolhe a grade**
-
-A escolha é a mesma para todos os chamadores. `_julgar_colab_corpo` chama `montar_grade_prevista_periodo`, que usa **POR TURNO** se `settings.GRADE_POR_TURNO` for verdadeiro e **LEGADA** se for falso ou ausente. A configuração base vem do ambiente e tem padrão `True`. A POR TURNO devolve `insumos_razao_sobras` com turnos, avulsas e instantes. A LEGADA devolve `marcos` e `dias`. `app/ponto/services/cartorio.py:1317`, `app/escala/utils.py:2131`, `app/config/settings/base.py:165`, `app/escala/utils.py:2117`, `app/escala/utils.py:1065`.
-
-- **Dois chamadores diretos de `_lavrar_razoes_sobras`**. O ramo `nunca_bateu` entra quando `adesao is None` e grava com `apply_`. O ramo normal atende quem tem adesão e também grava com `apply_`. Ambos passam `g.get('insumos_razao_sobras')` imediatamente antes de `lavrar_veredito(ata=...)`. A data, o teto do dia e a versão da regra não participam do seletor da grade. `app/ponto/services/cartorio.py:1353`, `app/ponto/services/cartorio.py:1410`, `app/ponto/services/cartorio.py:1434`, `app/ponto/services/cartorio.py:1461`, `app/ponto/services/cartorio.py:2012`, `app/escala/utils.py:2131`.
-- **Três chamadas ao corpo**. `julgar_colab` chama o corpo na entrada, repete com `forcar=True` se houver células na fila `rejulgar` e faz a releitura sem forçar se houve emissão nova. As três passam pelo mesmo seletor. `app/ponto/services/cartorio.py:1123`, `app/ponto/services/cartorio.py:1152`, `app/ponto/services/cartorio.py:1209`, `app/ponto/services/cartorio.py:1222`, `app/ponto/services/cartorio.py:1317`.
-- **Entradas de `julgar_colab`**. `processar_cartorio`, `julgar_celula`, `rejulgar_furos_do_vinculo`, `celula_veredito_velho` e o script `rejulgar_o118_col221`. `lavrar_status_competencia` também entra, com `completar_status=True`, e escreve só status. `app/ponto/management/commands/processar_cartorio.py:69`, `app/ponto/services/cartorio.py:2203`, `app/escala/regua_defesa.py:695`, `app/ponto/management/commands/celula_veredito_velho.py:144`, `bin/rejulgar_o118_col221.py:24`, `app/ponto/management/commands/lavrar_status_competencia.py:56`, `app/ponto/services/cartorio.py:942`.
-- **Entradas por `julgar_celula`**. Vigia de hora, sinais de batida, ausência, justificativa e chamado, reconciliador de chamados, reescrita da célula, pós-vínculo, `cobrar_dia`, `furos_sem_cobranca`, `rejulgar_ausencia_em_folga` e `curar_residuo_bug115`. Todos chegam a `julgar_colab` pela mesma chamada. `app/ponto/services/vigia_de_hora.py:134`, `app/ponto/signals.py:93`, `app/ponto/signals.py:131`, `app/ponto/signals.py:161`, `app/chamados/signals.py:218`, `app/chamados/reconciliador.py:752`, `app/ponto/portas/celula.py:472`, `app/colaboradores/services/pos_vinculo.py:73`, `app/chamados/services/cobrar_dia.py:41`, `app/ponto/services/furos_sem_cobranca.py:128`, `app/ponto/management/commands/rejulgar_ausencia_em_folga.py:80`, `app/ponto/management/commands/curar_residuo_bug115.py:146`, `app/ponto/services/cartorio.py:2203`.
-
-**2. Célula que nasce no próprio dia**
-
-`gerar_celulas` cria a célula com DNA e `ata` nula. Ainda no próprio dia, o vigia de hora pode lavrá-la quando ela passa pelos filtros e tem marco vencido, usando `teto_de_hoje=True`. Uma chamada avulsa também pode lavrá-la no dia se `trabalha is False` ou se já passou o fim do turno. O lote `processar_cartorio` só a alcança quando `data < hoje`. Nessa rodada, a impressão em dia pode fazê-lo pular a célula, salvo `--forcar`. `app/ponto/management/commands/gerar_celulas.py:349`, `app/ponto/portas/celula.py:913`, `app/escala/models.py:1778`, `app/ponto/services/vigia_de_hora.py:117`, `app/ponto/services/cartorio.py:2196`, `app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/services/cartorio.py:1402`, `app/ponto/services/cartorio.py:1552`.
-
-O chamador efetivo de cada um dos dois passes das 19 células e o valor da flag em cada passe ficam **[nao verificado]**. A troca de passada interna, por si só, usa o mesmo seletor. `app/ponto/services/cartorio.py:1123`, `app/ponto/services/cartorio.py:1156`, `app/ponto/services/cartorio.py:1222`, `app/ponto/services/cartorio.py:1317`.
-
-**3. Quem grava a ata e quem lê a ausência**
-
-- `ata_do_dia` monta a ata-base com `orfas` e `n_orfas`. `lavrar_veredito` grava o dicionário recebido, preservando da ata anterior apenas a chave `precedencia` quando ela falta na nova. Assim, uma entrada sem `razoes_orfas` pode substituir uma ata que tinha a chave, mesmo com veredito igual. `carimbar_precedencia`, chamado depois do julgamento avulso, copia a ata atual e acrescenta `precedencia`. Se a ata era nula, pode gravar um dicionário contendo só essa chave. `app/ponto/services/cartorio.py:752`, `app/ponto/portas/celula.py:106`, `app/ponto/portas/celula.py:1049`, `app/ponto/portas/celula.py:1076`, `app/ponto/portas/celula.py:1090`, `app/ponto/services/cartorio.py:2209`, `app/ponto/portas/celula.py:1205`.
-- `sobras_da_ata`, usado pela grade lavrada e pelo espelho, devolve `[]` quando não há lista de `orfas` a projetar. Se há órfãs, chave ausente e lista de razões vazia resultam em **“razao nao lavrada”** por ocorrência, com o sufixo **“anterior ao horizonte”** abaixo da v5. A contagem de órfãs vem de `orfas` ou de `n_orfas`. `app/escala/services/leitor_celula.py:180`, `app/escala/services/leitor_celula.py:193`, `app/escala/services/leitor_celula.py:454`, `app/ponto/services/espelho.py:708`.
-- `medir_razoes_sobras` **distingue as formas quando há órfãs**. Chave ausente conta em `orfas_sem_chave`. Chave presente com `[]` e órfãs na ata conta como desalinhamento. `atas_no_horizonte_sem_razao` pula atas sem órfãs pela lista e pela contagem, e acusa ambas as formas quando há órfãs e a versão é pelo menos 5. `app/ponto/services/cartorio.py:1004`, `app/ponto/services/cartorio.py:1038`.
-
-**4. Escritor único da chave**
-
-O único ponto que atribui `razoes_orfas` é **`_lavrar_razoes_sobras`**. Ali estão os três resultados atuais: omissão quando faltam insumos, `[]` quando há insumos e zero órfãs, e uma lista de respostas quando há órfãs a classificar. Para uma ata com `orfas=[]` e `n_orfas=0`, os leitores acima produzem o mesmo resultado com a chave ausente ou com `[]`. Com órfãs na lista, a troca muda o significado para `medir_razoes_sobras`. `app/ponto/services/cartorio.py:962`, `app/ponto/services/cartorio.py:1001`, `app/ponto/services/cartorio.py:1010`, `app/ponto/services/cartorio.py:1042`, `app/escala/services/leitor_celula.py:198`.
-
-## 20/11 00:29 · sessao e8d689a8df3e · CADEIA-20-PASSO-1 · verificador · origem=Code
-
-**CADEIA-20-PASSO-1, item (3) — BLOQUEIA.** O raspado informa mudança de ata na segunda passada com o insumo capturado igual em (A). Em (B), a mudança de hash acompanha mudanças nos insumos que o código manda hashear. O bloqueio de (B) é de ordem da cadeia: o cartório pode carimbar antes de a própria rodada terminar de alterar esses insumos. A meta de R5 é diferença zero na segunda rodada. `app/core/placar_estrutural.py:416–420`, `app/ponto/services/cartorio.py:502–507`, `app/ponto/services/cartorio.py:543–547`, `app/ponto/services/cartorio.py:1133–1157`, `app/ponto/services/cartorio.py:1179–1181`.
-
-Identidade Git da cópia com `a4a9b6bfe5f7` [nao verificado]. `git rev-parse HEAD` retornou que o diretório fornecido não é um repositório Git.
-
-### 1. (A) — BLOQUEIA
-
-A primeira lavra e a relavra passam pelo mesmo corpo do cartório. Tanto o ramo normal quanto `nunca_bateu` montam a ata e chamam `_lavrar_razoes_sobras`. Com ata, zero órfãs e insumos da grade presentes, o escritor põe `[]`. Com insumos `None`, retorna sem incluir a chave na ata recém-montada. A grade por turno entrega os insumos, e a grade legada omite essa chave. O escritor do campo nunca atribui `None` a `razoes_orfas`. `app/ponto/services/cartorio.py:752–794`, `app/ponto/services/cartorio.py:962–971`, `app/ponto/services/cartorio.py:994–1001`, `app/ponto/services/cartorio.py:1123`, `app/ponto/services/cartorio.py:1156–1157`, `app/ponto/services/cartorio.py:1393`, `app/ponto/services/cartorio.py:1434–1459`, `app/ponto/services/cartorio.py:2013–2037`, `app/escala/utils.py:1065`, `app/escala/utils.py:2117–2137`.
-
-A porta `lavrar_veredito` compara a ata inteira e atribui `cel.ata` quando ela difere. `carimbar` persiste os campos devolvidos pela lavra. A entrada avulsa `julgar_celula` ainda chama `carimbar_precedencia`, que copia a ata e altera a chave `precedencia`. A limpeza de julgamento de célula futura zera a ata inteira pela própria porta. O caminho efetivo da primeira gravação nas 19 células [nao verificado]. `app/ponto/portas/celula.py:1049–1067`, `app/ponto/portas/celula.py:1090–1098`, `app/ponto/portas/celula.py:1146–1167`, `app/ponto/portas/celula.py:1189–1216`, `app/ponto/services/cartorio.py:2202–2211`.
-
-| Leitor direto | Ausente, `None` e `[]` |
-|---|---|
-| `sobras_da_ata` | Sem órfãs, devolve `[]` antes de ler a chave. Com órfãs, normaliza ausência e `None` para `[]`. É a projeção usada pela grade e pelo espelho. `app/escala/services/leitor_celula.py:193–223`, `app/escala/services/leitor_celula.py:450–454`, `app/ponto/services/espelho.py:708–710` |
-| `medir_razoes_sobras` | Chave ausente tem ramo próprio. `[]` é uma lista válida para `len`; `None` explícito cai em `len(None)` e levanta `TypeError`. Com zero órfãs, chave ausente e `[]` dão a mesma contagem. `app/ponto/services/cartorio.py:1004–1035` |
-| `atas_no_horizonte_sem_razao` | Sem órfãs nem contagem positiva, pula a ata antes de ler a chave. Com órfãs no horizonte, ausência e `None` falham no teste de tipo, e `[]` falha no alinhamento. `app/ponto/services/cartorio.py:1038–1056` |
-
-A comparação da ata inteira também distingue os três estados na escrita. `app/ponto/portas/celula.py:1049–1059`.
-
-### 2. (B) — BLOQUEIA pela ordem
-
-**Sim, a impressão inclui insumo que a própria cadeia pode alterar adiante.** Ela inclui `pk:status_local` dos chamados do dia. `fio` conta **chamados vivos com pelo menos uma pergunta viva**. Com chamados vivos e nenhum com fio, entra `fio:0`. Sem chamados vivos, a parte `fio` é omitida. O juiz da pergunta também lê a célula, portanto a própria lavra pode mudar o resultado da próxima leitura do fio. `app/ponto/services/cartorio.py:146–155`, `app/ponto/services/cartorio.py:502–507`, `app/ponto/services/cartorio.py:543–547`, `app/ponto/services/cartorio.py:1527–1547`, `app/chamados/juizes.py:1450–1469`, `app/chamados/juizes.py:1510–1519`.
-
-1. **Dentro do cartório**, o corpo calcula `imp` e depois o carimba. Há fechamentos e ressuscitações entre esses dois pontos. Depois do primeiro carimbo, o E2 carimba perguntas absolvidas e o cartório tenta fechar os chamados adiados. Os casos enfileirados voltam ao mesmo corpo. Depois, a fábrica pode criar perguntas ou desfazer carimbos. A releitura seguinte exige aumento de `emitidos`, e as filas produzidas nas releituras têm caminhos de descarte. `app/ponto/services/cartorio.py:1541–1547`, `app/ponto/services/cartorio.py:1691–1704`, `app/ponto/services/cartorio.py:1835–1861`, `app/ponto/services/cartorio.py:2035–2037`, `app/ponto/services/cartorio.py:1123–1164`, `app/ponto/services/cartorio.py:1179–1181`, `app/ponto/services/cartorio.py:1209–1231`, `app/chamados/reconciliador.py:634–648`, `app/chamados/services/fabrica_da_celula.py:160–174`, `app/chamados/services/fabrica_da_celula.py:206–219`.
-2. **Na ordem configurada**, `reconciliar_grade` precede `processar_cartorio --apply`. Depois do cartório, um ramo segue por `apurar_furos_diarios` → `disparar_perguntas_competencia --alarme` → `reconciliar_perguntas_orfas --alarme`. `apurar_furos_diarios` chama o agrupamento sob limbo, que pode reatar perguntas e reconciliar o furo. `supra_juiz --executar` também depende do cartório e pode chamar o retratador. A transição `em_analise → resolvido` vem de `RECONCILIAR` e é persistida por `_gravar_estado`. `app/config/crons.py:462`, `app/config/crons.py:599`, `app/config/crons.py:616`, `app/config/crons.py:1527–1545`, `app/escala/management/commands/apurar_furos_diarios.py:13–19`, `app/chamados/services/limbo_folgas.py:279–287`, `app/ponto/management/commands/supra_juiz.py:257–287`, `app/chamados/reconciliador.py:572–586`, `app/chamados/catalogo/motor.py:109–113`, `app/chamados/models.py:234–235`, `app/chamados/models.py:302`, `app/chamados/models.py:654–668`.
-3. **Pelo evento da célula**, a porta salva e publica no mesmo ato. O consumidor tem agenda própria e pode carimbar perguntas, retratar chamados e rodar a fábrica. O `post_save` do chamado tenta rejulgar quando está fora de um julgamento ativo e tem dia identificável. O comando, evento ou signal que produziu cada uma das oito transições, e a ordem efetiva da sonda, ficam [nao verificado]. `app/ponto/portas/celula.py:942–965`, `app/config/crons.py:393–394`, `app/chamados/reconciliador.py:1414–1438`, `app/chamados/signals.py:189–218`.
-
-### 3. Terceiro passe — BLOQUEIA o aceite de idempotência
-
-- **(A)** Com zero órfãs e a mesma grade por turno, uma nova lavra volta a produzir `[]`. Com a mesma impressão, o caminho comum pula a célula. Logo, o próprio caso `ausente/None → []` não se repete sob essas condições. O resultado efetivo do terceiro passe [nao verificado]. `app/ponto/services/cartorio.py:964–971`, `app/ponto/services/cartorio.py:1402–1408`, `app/ponto/services/cartorio.py:1552–1558`.
-- **(B)** Se o status e o fio lidos no terceiro passe já estiverem refletidos no hash do segundo e os demais insumos se mantiverem, o caminho comum pula. Se o segundo passe tiver deixado uma mudança posterior ao último carimbo, o terceiro pode gravar outro hash com a mesma ata. O código não garante convergência em três passes, e o raspado só vai até o segundo [nao verificado]. `app/ponto/services/cartorio.py:1209–1231`, `app/ponto/services/cartorio.py:1541–1558`, `app/ponto/portas/celula.py:1189–1201`.
-
-### 4. Classes de reprovação
-
-| Classe | Veredito no caminho lido |
-|---|---|
-| Segundo juiz registrado | **NAO BLOQUEIA.** O registro aponta `razao_da_sobra` e `fio_vivo`, e o cartório chama essas autoridades. `app/core/juizes.py:290–299`, `app/core/juizes.py:1332–1333`, `app/ponto/services/cartorio.py:994–996`, `app/ponto/services/cartorio.py:1466`, `app/ponto/services/cartorio.py:1532` |
-| Segundo escritor fora da porta | **NAO BLOQUEIA.** As duas lavras de razões convergem para o mesmo escritor e persistem pela porta da célula. `app/ponto/services/cartorio.py:1434–1436`, `app/ponto/services/cartorio.py:2013–2016`, `app/escala/models.py:1826–1828`, `app/ponto/portas/celula.py:1090–1098` |
-| Relógio fora da borda | **BLOQUEIA.** O cartório tem `agora`, mas a leitura de `fio` chama `fio_vivo` sem esse instante. O juiz pode cair em `date.today()` e em `classificar_falta` com fallback para `_tz.now()`. Efeito nas oito células [nao verificado]. `app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1532`, `app/chamados/juizes.py:588–596`, `app/chamados/juizes.py:1470–1477`, `app/chamados/juizes.py:1519`, `app/escala/servico_jornada.py:385–389` |
-| Derivação paralela | **BLOQUEIA na contagem do fio.** O cartório compartilha `_com_fio` entre hash e julgamento, mas o comando `supra_juiz` recalcula a agregação para o placar. Ambos consultam o mesmo predicado por chamado. Divergência de contagem no raspado [nao verificado]. `CLAUDE.md:20–22`, `app/ponto/services/cartorio.py:1527–1545`, `app/ponto/services/cartorio.py:1614–1617`, `app/ponto/management/commands/supra_juiz.py:211–225` |
-| Campo com dois significados | **BLOQUEIA em (A).** A ausência da chave e a lista vazia são distinguíveis na persistência, e o contador ainda trata `None` explícito de forma diferente. `app/ponto/services/cartorio.py:964–971`, `app/ponto/services/cartorio.py:1013–1022`, `app/ponto/portas/celula.py:1049–1059` |
-| Ordem de etapa | **BLOQUEIA em (B).** Há escrita posterior ao carimbo e a releitura é condicional. `app/ponto/services/cartorio.py:1123–1157`, `app/ponto/services/cartorio.py:1179–1181`, `app/ponto/services/cartorio.py:1209–1231` |
-
-## 20/11 00:27 · sessao 670009206e83 · E4C-F5-CONSTROI · construtor · origem=Code
-
-Apliquei as duas adaptações pedidas e atualizei quatro âncoras de mutação deslocadas pela B/B2. A B2 deixa uma pendência no beco: o módulo falso de `chamados.juizes` ainda precisa expor `pergunta_respondida`. Esse import vem antes de `DecisaoPergunta` e está fora das classes aprovadas para esta volta. `chamados/tests/test_cef_c1_sem_banco.py:88`, `chamados/tests/e3_volta7_apoio.py:106`, `escala/services/cadastro_realidade.py:439`.
-
-### Arquivos tocados e usos dos avais
-
-| Arquivo e linha | Classe | Método ou alvo | Antes → depois |
-|---|---|---|---|
-| `chamados/tests/test_cef_c1_sem_banco.py:88` | v | `Consulta.prefetch_related` | Ausente → devolve `self`, sem ramo. |
-| `chamados/tests/test_cef_c1_sem_banco.py:309` | i | `upload_arranca_motivo` | Âncora do `fio_vivo` sobre `filter(...)` → âncora sobre `filter(...).prefetch_related('decisoes')`. A mutação continua trocando a condição por `if True:`. |
-| `chamados/tests/e3_volta7_apoio.py:106` | ii | `cenario`, módulo falso `chamados.models` | `DecisaoPergunta` ausente → exporta a classe do helper único `chamados/tests/duble_pergunta.py:12`, já usada em `chamados/tests/test_e3_r3_c5_sem_banco.py:180` e `chamados/tests/test_e3_r3_c6_sem_banco.py:299`. |
-| `chamados/tests/e3_r3_c6_mutantes.py:48` | i | `K6_m1_sem_respondida` | Âncora no teste direto do instante → `a is None and respondida_no_horizonte(p)`. A mutação continua removendo o requisito de resposta. |
-| `chamados/tests/e3_r3_c6_mutantes.py:50` | i | `K6_m1_ignora_ancora` | Âncora no teste direto do instante → `a is None and respondida_no_horizonte(p)`. A mutação continua removendo o requisito de ausência de âncora. |
-| `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:113` | i | `test_reflexao_e_mutacao_de_perguntas_MORDEM` | `_item(p)` → `_item(p, DecisaoPergunta.composta(p))` na âncora. A mutação continua substituindo a lista publicada por `[]`. |
-
-### Varredura por família
-
-| Família | Resultado da leitura estática |
-|---|---|
-| **Foto e emissão** | O upload CEF C1 precisava de `prefetch_related`. Os casos CEF C3 reutilizam o mesmo dublê pelo `setUp` do C1. A resolução S128 em memória já usa `Linhas`, que tem o método. `api/foto_recebida.py:81`, `chamados/tests/test_cef_c3_sem_banco.py:143`, `chamados/tests/test_cef_c3_sem_banco.py:171`, `chamados/tests/test_e4b_classe_e_memoria.py:193`, `chamados/tests/test_e4b_classe_e_memoria.py:374`. |
-| **Beco C11 e M1** | C5 e C6 já fornecem `DecisaoPergunta.composta` e a projeção temporal. O retorno do helper é um `namedtuple` com `_replace`. A volta 7 já fornecia a projeção e agora exporta o compositor. A lista de imports pendentes está abaixo. `chamados/tests/duble_pergunta.py:7`, `chamados/tests/duble_pergunta.py:23`, `chamados/tests/test_e3_r3_c5_sem_banco.py:161`, `chamados/tests/test_e3_r3_c6_sem_banco.py:290`, `chamados/tests/e3_volta7_apoio.py:74`, `escala/services/cadastro_realidade.py:497`. |
-| **Juízes e calendário** | S127 já recebe `Linhas` em `.all()`. No calendário inteiro de LU3, `Consulta.__getattr__` já devolve a própria consulta para `prefetch_related`. O C11 de navegação executa o trecho anterior à consulta. `chamados/juizes.py:2490`, `chamados/tests/test_disputa_s127.py:22`, `chamados/tests/e3_lu3_apoio.py:17`, `chamados/tests/e3_lu3_apoio.py:93`, `chamados/tests/test_e3_r3_c11_sem_banco.py:64`, `colaboradores/services/calendario.py:505`. |
-| **API, views e serviços de chamados** | O selo sem banco da API tinha a âncora antiga. Nos demais sítios localizados, os selos leem fonte, dublam outra função ou chegam ao sítio alterado com ORM real. Isso inclui validação e recusa, declaração, detalhe e cobrança, classificação de becos, competência, explicador, migração do fio, limbo e pergunta no app. `api/views.py:2601`, `chamados/tests/test_bug_par_sem_banco.py:116`, `chamados/tests/test_bug_par_c2_sem_banco.py:97`, `chamados/tests/test_e1_volta2.py:141`, `chamados/tests/test_selo_resolucao_um_escritor.py:184`, `chamados/tests/test_e4b_c4v7_memoria.py:204`, `chamados/tests/test_tranca_vivas_08.py:123`, `chamados/tests/test_explicador_disputa.py:46`, `chamados/tests/test_e1_v7_catracas.py:467`, `chamados/tests/test_e1_v10.py:259`, `chamados/tests/test_e1_v6_horizonte.py:479`. |
-| **Ficha, folha, dia do colaborador e comandos** | Os casos localizados para as consultas alteradas usam ORM real ou verificam fonte. O dublê do executor supra exerce `pode_executar_csf`; o `prefetch_related` alterado fica em `Command.handle`. `colaboradores/tests/test_ficha_praca_uf.py:8`, `folha/tests/test_previa_proposta.py:33`, `escala/tests/test_leitores_segundo_intervalo.py:246`, `chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:116`, `chamados/tests/test_porta_chamado_e2.py:58`, `ponto/tests/test_supra_juiz_executor.py:67`, `ponto/management/commands/supra_juiz.py:192`. |
-
-**Fora das classes aprovadas.** Pela leitura estática, `pergunta_respondida` falta no juiz falso da volta 7, de C5, de C6 e do caso de porta só no app. O import falha antes de qualquer ramo do beco. Alterar o módulo falso do juiz exigiria ligar uma função de julgamento, além das adaptações de compositor e de ORM autorizadas. `escala/services/cadastro_realidade.py:439`, `chamados/tests/e3_volta7_apoio.py:66`, `chamados/tests/test_e3_r3_c5_sem_banco.py:174`, `chamados/tests/test_e3_r3_c6_sem_banco.py:294`, `chamados/tests/test_e3_degrau_dono_e_porta.py:507`, `chamados/tests/test_e3_tarefa_admin_sem_banco.py:79`.
-
-### Selo de asserções
-
-Comparei por AST com `a81f888dc`. A sequência e o conteúdo das asserções e os nomes dos testes são idênticos nos quatro módulos. `git diff --check` passou. Execução de testes e resultado dos mutantes **[nao verificado]**.
-
-| Módulo | `assert` base → final | `self.assert*` base → final | Testes base → final | [nao verificado]
-|---|---:|---:|---:|
-| `chamados/tests/test_cef_c1_sem_banco.py:1` | 0 → 0 | 25 → 25 | 10 → 10 |
-| `chamados/tests/e3_volta7_apoio.py:1` | 0 → 0 | 0 → 0 | 0 → 0 |
-| `chamados/tests/e3_r3_c6_mutantes.py:1` | 0 → 0 | 0 → 0 | 0 → 0 |
-| `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:1` | 0 → 0 | 14 → 14 | 6 → 6 |
-
-### Comandos para o Code
-
-Executar a partir de `app/`. Os comandos abaixo incluem os consumidores dos módulos de apoio e os harnesses que chegam aos sítios alterados. Em B2, os casos do beco têm a pendência de import descrita acima. `chamados/tests/test_e3_volta7_sem_banco.py:52`, `chamados/tests/test_e3_r3_c5_sem_banco.py:194`, `chamados/tests/test_e3_r3_c6_sem_banco.py:313`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
-  chamados.tests.test_cef_c1_sem_banco \
-  chamados.tests.test_cef_c3_sem_banco \
-  chamados.tests.test_e4c_f6f7_c7_sem_banco \
-  chamados.tests.test_e3_volta7_sem_banco \
-  chamados.tests.test_e3_r3_c5_sem_banco \
-  chamados.tests.test_e3_r3_c6_sem_banco \
-  chamados.tests.test_e3_r3_c11_sem_banco \
-  chamados.tests.test_e3_degrau_dono_e_porta \
-  chamados.tests.test_e3_portas_v6_sem_banco \
-  chamados.tests.test_e4b_classe_e_memoria
-
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_disputa_s127 \
-  chamados.tests.test_e4b_c4v14_memoria \
-  core.tests.test_medida_turno_do_par \
-  ponto.tests.test_supra_juiz_executor
-```
-
-**Foto.** O primeiro comando remove o método em memória e reproduz o RED de protocolo esperado. O segundo usa o mutante comportamental: retirar o motivo enquanto a irmã continua viva deve falhar no `assertIn`. `api/foto_recebida.py:81`, `chamados/tests/test_cef_c1_sem_banco.py:236`, `chamados/tests/test_cef_c1_sem_banco.py:242`, `chamados/tests/test_cef_c1_sem_banco.py:309`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -c '
-import unittest
-from chamados.tests import test_cef_c1_sem_banco as m
-del m.Consulta.prefetch_related
-unittest.main(module=m)
-' UploadTest.test_T3_foto_tardia_da_primeira_so_extingue_primeira
-
-CEF_C1_MUTANTE=upload_arranca_motivo PYTHONDONTWRITEBYTECODE=1 \
-  python3 -m unittest -v \
-  chamados.tests.test_cef_c1_sem_banco.UploadTest.test_T3_foto_tardia_da_primeira_so_extingue_primeira
-```
-
-**Beco.** Esta sonda usa em memória o corpo da B intermediária para isolar o RED anexado. Roda `test_beco` com o modelo falso atual e depois sem o export de `DecisaoPergunta`. O segundo caso deve dar `ImportError` nesse nome. A asserção de negócio continua no teste de origem. `chamados/tests/e3_volta7_apoio.py:106`, `chamados/tests/test_e3_volta7_sem_banco.py:52`, `escala/tests/test_f3_beco1_folga_na_lista.py:248`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import subprocess
-import sys
-import unittest
-from contextlib import contextmanager
-from unittest.mock import patch
-
-from chamados.tests import test_e3_volta7_sem_banco as teste [nao verificado]
-from chamados.tests.e4_catracas import FONTES_MUTADAS
-
-arquivo = 'escala/services/cadastro_realidade.py'
-fonte_b = subprocess.check_output(
-    ['git', 'show', 'd0210a400:app/' + arquivo], text=True)
-cenario_real = teste.cenario [nao verificado]
-
-@contextmanager
-def sem_compositor(caso):
-    with cenario_real(caso) as contexto:
-        del sys.modules['chamados.models'].DecisaoPergunta
-        yield contexto
-
-def rodar():
-    caso = teste.SelosAnexadosTest('test_beco') [nao verificado]
-    return unittest.TextTestRunner(verbosity=2).run(caso)
-
-with patch.dict(FONTES_MUTADAS, {arquivo: fonte_b}):
-    controle = rodar()
-    with patch.object(teste, 'cenario', sem_compositor): [nao verificado]
-        red = rodar()
-
-raise SystemExit(0 if controle.wasSuccessful() and len(red.errors) == 1
-                 and 'ImportError: cannot import name' in red.errors[0][1]
-                 and 'DecisaoPergunta' in red.errors[0][1] else 1)
-PY
-```
-
-**Âncoras C6 e API.** Os dois comandos C6 ficam bloqueados pelo import de `pergunta_respondida` no controle da B2; o próprio runner exige controle verde antes de aplicar cada mutante. O último comando executa o mutante interno da lista vazia da API. `chamados/tests/e3_r3_c6_mutantes.py:48`, `chamados/tests/e3_r3_c5_mutantes.py:76`, `chamados/tests/test_e4c_f6f7_c7_sem_banco.py:125`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c6_mutantes K6_m1_sem_respondida
-PYTHONDONTWRITEBYTECODE=1 python3 -m chamados.tests.e3_r3_c6_mutantes K6_m1_ignora_ancora
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
-  chamados.tests.test_e4c_f6f7_c7_sem_banco.CosturasSemDjango.test_reflexao_e_mutacao_de_perguntas_MORDEM
-```
-
-`LEI-AKITA | padrao=n/a (instrumento) | classes=i,ii,v | execução e certificação [nao verificado]`
-
-## 20/11 00:22 · sessao 8aca83b0e978 · TRAVAS-SEM-MEMORIA · verificador · origem=Code
-
-# AVAL-DEVOLVIDO — TRAVAS-SEM-MEMORIA-2011-0020
-
-## 1. PREMISSAS — PROCEDE
-
-- **(a) Hooks do Code.** Na cópia, `.claude/settings.json` da raiz aponta para `/home/ronald/saas-hasner/bin/`. `Stop` chama `hook_stop_fila1.py`. `PreToolUse` chama `disjuntor.py pretool`, que recebe o JSON no stdin e lê o comando Bash em `tool_input.command`. O `tool_input.prompt` que ele lê pertence à ferramenta `Agent`. O evento previsto por T2 para o texto colado pelo usuário é `UserPromptSubmit`, sem registro nessa configuração. `PreCompact` manual/auto chama `handoff_sessao.sh`. `SessionStart` compact/clear imprime o handoff e chama `marco_de_clear.py`. A `statusLine` chama `statusline_cota.py`. O RELATO registra uma sessão anterior em `app/` em que a configuração da raiz ficou inerte e só disparou o Stop de `~/.claude/settings.json`. Configuração efetivamente carregada hoje na VM **[nao verificado]**. `.claude/settings.json:2–77`, `bin/disjuntor.py:1837–1843,1864–1867,1912–1923`, `bin/hook_stop_fila1.py:1339–1345`, `app/docs/RELATO.md:3341`.
-- **(b) “`bin/suite.sh` (pista 2)” não fecha.** O script da cópia roda Docker local sob `bin/trava_teste.sh`. A **PISTA-2** documentada é o executor remoto no servidor do GLPI, com fila própria e entrada `ssh pista pede` para uma árvore commitada. A escolha de rota dentro de `bin/suite.sh` aparece como obra separada, com opção A registrada para `--volta` e pre-opus de lateral. Estado atual do executor remoto **[nao verificado]**. `bin/suite.sh:316–325`, `app/docs/BACKLOG.md:2191,2193–2195`, `app/docs/RELATO.md:65`.
-- **(c) “Por cópia em obra” precisa de universo definido.** `bin/relato.sh` já gera `ESTADO.md` por `bin/gerar_estado.py`, passa pela raspagem e publica. O encaixe de `copia=<nome>@<HEAD12>` é a seção **Raias**, que já usa `bin/raias_estado.py`. Esse medidor cruza `git worktree list --porcelain` e declarações `.agente`, inclui as declaradas, as à frente de `main` e as sujas, exclui a principal e as worktrees do harness, e agrupa as só sujas. Uma declaração pode aparecer sem caminho no disco. `wt-codex-*` é a convenção do construtor Codex. O BACKLOG registra a ordem da fila. O medidor é a fonte existente para as raias do ESTADO, mas a equivalência entre esse universo e **todas** as cópias em obra fica **[nao verificado]**. `bin/relato.sh:34–38,114–117,145–147`, `bin/gerar_estado.py:211–229,329,378–380`, `bin/raias_estado.py:13–27,73–135`, `bin/codex_pergunta.sh:217–232`, `bin/hook_stop_fila1.py:1394–1403`.
-- **(d) “Suite completa rodada na VM (fora do `bin/suite.sh`)” abrange chamadas legítimas.** A régua inteira e o pre-push rodam fora de `suite.sh` por exceção expressa do §3 e pegam a trava diretamente. Ambos entram no alcance literal de T1, embora o hook de ferramenta só veja a chamada externa e a negativa efetiva dependa da implementação. A volta intermediária chama `suite.sh --volta`, com ruff e selo do disjuntor. Ela fica livre enquanto a seleção for um recorte efetivo. A guarda atual considera inteira a seleção vazia ou a que cobre todos os módulos de teste reconhecidos, mesmo quando os módulos são nomeados em `--only`. Uma inteira com `--dir … --motivo "pre-opus OBRA"` é válida hoje e cairia na segunda recusa de T1 se faltasse `PRONTO`. Se o argumento for literalmente `--motivo "pre-opus"`, já sai `rc 2` por faltar a obra. `CLAUDE.md:95–106`, `bin/regua.sh:47–51,165–169`, `bin/pre-push.sh:142–145,184–198`, `bin/volta_intermediaria.sh:18–33`, `bin/suite.sh:215–263`.
-- **(e) “A linha ‘PRONTO item a item’ dessa obra” não tem formato demonstrado.** O RELATO traz prosa com formas como `CADEIA-20 PASSO 1 PRONTO (…)`, `PRONTO lista de repasse (…)` e `PRONTO (a) E3-NA-PROXIMA-VAGA …`. Alguns exemplos identificam a obra, mas o ID ocupa posições diferentes. Um formato canônico que permita ao hook casar a obra inteira, a volta e a prova exigida está **[nao verificado]**. `app/docs/RELATO.md:254,775,1753`, `CLAUDE.md:439–442`.
-
-## 2. COLISÃO COM AVAL OU REGRA VIGENTE — PROCEDE
-
-- **T1 — “SUITE CHEIA SO PELA PISTA 2” e “só lança se o RELATO tem […] PRONTO”.** A primeira frase conflita com as portas próprias da régua e do pre-push e, se “pista 2” for o executor remoto, com a destinação vigente de pouso e pre-opus da espinha à VM. A regra `TRAVA-MENOS-FILA-COM-SELO` já exige `pre-opus <OBRA>` ou `pouso <OBRA>` para a inteira em `suite.sh`, com `rc 2` na recusa. O novo `PRONTO` também precisa preservar a saída após mais de três voltas Codex, pois a regra manda subir ao opus e exige a inteira verde antes dele. O RELATO registra a retirada de uma guarda anterior que fechava essa saída. `CLAUDE.md:95–106,372–381`, `bin/suite.sh:236–263`, `app/docs/RELATO.md:65,1010,1209`, `app/docs/BACKLOG.md:2089`.
-- **T2 — “devolve […] e não executa”.** Recusar apenas o aval inválido é compatível com seguir a fila. Se “devolve” encerrar o turno enquanto houver outro item que possa andar, colide com PARADA. O `PAREI` do Stop exige `!` no item em curso e considera os demais itens andáveis. A regra também prevê `ESPERANDO` com prova. A semântica da recusa de T2 no cliente fica **[nao verificado]**. `CLAUDE.md:262–275,296–298`, `bin/hook_stop_fila1.py:1232–1245,1260–1276,1381–1403`.
-- **CODEX, contrato e pouso.** Preservar o wrapper, o despacho e as `#G` é compatível com o aval. A configuração e o código do instrumento cabem à sessão, com verificação pelo Codex. “REGISTRAR […] + CONSTRUIR” continua sujeito às cinco linhas no RELATO **antes** do código — quem chama, quem espera, falha/limite, medida e quem desliga — e ao envio único ao Codex. O contrato desta obra está **[nao verificado]**. O instrumento tem pouso próprio, conforme RAIAS item 5. `CLAUDE.md:325–329,344–358,394`, `app/docs/PISTA.md:169–176`, `bin/codex_pergunta.sh:122–135,241–254`.
-- **Retenção.** A regra manda arquivar conteúdo com mais de três dias no mesmo commit. Uma linha `PRONTO` arquivada pode desaparecer do RELATO vivo antes da suite. T1 não define como a prova continua válida depois dessa transferência. `CLAUDE.md:439–442`, `bin/relato.sh:114–131`.
-
-## 3. CONDIÇÃO QUE NÃO FECHA NO LITERAL — PROCEDE
-
-- **“Suite completa rodada na VM (fora do `bin/suite.sh`)”.** T1, como hook do Code, alcançaria o lançamento avulso que o Code envia à ferramenta Bash e que o hook consiga classificar como inteiro. O evento vê o comando externo. Em `git push`, por exemplo, o pre-push roda como hook filho do Git. Na pista remota, a entrada documentada recebe SHA e opções, sem `--motivo` ou ID explícito da obra para casar com o `PRONTO`. Cobertura de toda a VM ou da pista pelo hook local **[nao verificado]**. `bin/disjuntor.py:1794–1798,1837–1843`, `bin/hooks.sh:10–11,61–65`, `bin/trava_teste.sh:35–42`, `app/docs/BACKLOG.md:2191`.
-- **“Todo aval colado que diga CONSTRUIR” e “ou `copia=nova`”.** O anexo não define como reconhecer uma ordem efetiva de construção em meio a citações, proibições ou itens só de registro. Também falta a regra que associa cada item à sua cópia quando há várias, que distingue uma abertura real de um `copia=nova` escrito no texto, e que fixa o marco para reconhecer avais anteriores ao pouso. O RELATO já registra uma obra com duas cópias descendentes. Para instrumento sem worktree nomeada, falta definir que cópia e HEAD o aval deve citar. A regra vigente já exige preparar a mudança em cópia do HEAD e aplicar no commit. `app/docs/RELATO.md:1513`, `CLAUDE.md:37–40,309–313,436–438`, `.claude/settings.json:2–73`.
-- **“`<HEAD 12>`” comparado com “`git rev-parse` da cópia”.** Igualdade textual entre 12 caracteres e o hash completo recusa um HEAD atual. O aval precisa fixar a normalização e a identidade da cópia. O wrapper já distingue o hash completo usado na guarda do prefixo de 12 usado na trilha, e confere a limpeza da cópia separadamente. Um HEAD igual, por si, deixa alterações locais fora da conferência. `bin/codex_pergunta.sh:79,252–259,304–308,409–415`, `bin/raias_estado.py:100–102`.
-- **“Smoke dos 6 casos no ar” e “teste das duas travas na suite”.** O anexo enumera três resultados de T1 e quatro de T2, além da publicação no ESTADO, mas não identifica quais resultados compõem os seis casos nem onde os hooks devem estar ativos para a prova. Se o `PRONTO` exigido para o pre-opus da própria obra já incluir o smoke da configuração ativa, “pouso sem smoke” deixa a ordem de ativação e certificação indefinida. Hoje os selos de host são chamados pela régua, enquanto `suite.sh` executa o runner Django. O RELATO registra um precedente de hook validado com selos de host e configuração ativa, sem deploy do produto. Resultados dos quatro casos pré-cura e smoke na VM **[nao verificado]**. `bin/regua.sh:134–145`, `bin/suite.sh:316–325`, `app/docs/RELATO.md:3341,4356`.
-
-## 4. EXPORTADA, DINHEIRO, MOTOR V2 OU `!` FORA DO DECLARADO — NAO PROCEDE
-
-O escopo declarado é hook do Code e publicação do ESTADO. O anexo não pede alteração do gravado de exportada, apply de dinheiro, mudança em `ponto/motor_calculo_v2.py`, atalho ou outro ato da PARADA item 2. Configuração do Code **é tocada** para registrar o hook de prompt. A vedação de CODEX se aplica ao Codex, inclusive no papel construtor. Há precedente de configuração feita como instrumento, e também de instalação negada à sessão pelo classificador. O `PreToolUse` atual protege contra remover o próprio disjuntor. Permissão efetiva e carregamento da configuração nesta VM **[nao verificado]**. `CLAUDE.md:141–142,265–268,344–355,406–417`, `.claude/settings.json:62–73`, `bin/codex_pergunta.sh:122–135`, `bin/disjuntor.py:218–245`, `app/docs/RELATO.md:4356,4411`.
-
-A posição nas vagas do `ABRE-AS-LATERAIS-1911-2340` e a lista atual de cópias na VM ficam **[nao verificado]**.
-
-**BLOQUEIA=3 NAO_BLOQUEIA=1**
-
-## 20/11 00:17 · sessao ce1b950b7668 · E4C-F5-CONSTROI · construtor · origem=Code
-
-Implementei a volta B2 em seis arquivos. Conferi compilação em memória, `git diff --check`, os asserts preexistentes e as âncoras dos mutantes. Executei também o predicado isolado do M1 com os juízes reais em memória. Resultados com ORM, suíte e certificação pelo Code e pelo Opus final [nao verificado]. `escala/services/cadastro_realidade.py:497`, `chamados/tests/e4c_f5_voltaB_mutantes.py:28`.
-
-## Arquivos tocados
-
-- Produção — `api/views.py:2566`, `chamados/services/validacao.py:914`, `escala/services/cadastro_realidade.py:497`.
-- REDs e mutantes — `chamados/tests/test_e4c_f5_voltaB_sitios.py:66`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:182`, `chamados/tests/e4c_f5_voltaB_mutantes.py:28`.
-
-## Antes e depois
-
-| Item | Base `d0210a400` | B2 |
-|---|---|---|
-| **1 · GET** | O juiz de `respondidas` recebia a composta e `_item` publicava o instante da coluna. `api/views.py:2581`, `:2597` na base. | **Sim, `perguntas` e `historico` usam o mesmo `_item`.** A troca é coerente para os três. `_item` recebe a composta e publica seu par, com `respondida_em` em `isoformat()` ou `None`. O juiz de `respondidas` recebe a mesma instância de leitura usada para montar o item reutilizado do histórico. `api/views.py:2566`, `:2579`, `:2581`, `:2586`, `:2601`. |
-| **2 · Recusa** | A foto do evento usava o instante composto e a linha imutável fotografava a coluna. `chamados/services/validacao.py:914` na base, `chamados/services/disputa_emissao.py:1640`, `:1643`. | A composta alimenta só o juiz. A foto do evento lê as colunas antes da reabertura e serializa o instante em `isoformat()` quando presente, preservando `None`. `chamados/services/validacao.py:902`, `:913`, `:926`, `:935`. |
-| **3 · M1** | Testava só o instante recortado, pelo índice `[1]`. `escala/services/cadastro_realidade.py:502` na base. | Usa `projecao_temporal_da_pergunta(p, agora=None)` com o `agora` do M1 e entrega o par recortado a `pergunta_respondida(p)` pelo `_replace` da composta. O corte limpa instante e texto quando `respondida_em > agora` e conserva a igualdade. O juiz aplica instante **e** texto não vazio, conforme a L-130. `escala/services/cadastro_realidade.py:497`, `:508`, `chamados/juizes.py:1383`, `:1397`, `:1551`, `:1560`, `docs/LEIS.md:151`. |
-| **4 · REDs e K46** | O GET conferia ID e texto, a recusa conferia o estado posterior, e a medição do K46 compartilhava PKs com o K45. `chamados/tests/test_e4c_f5_voltaB_sitios.py:73`, `:118`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:165` na base. | O GET exige o instante vigente do ato. A recusa compara o evento persistido com a linha `RECUSA` para coluna nula e para coluna com instante divergente. O M1 cobre texto vazio, texto presente no limite e instante futuro. O novo K46 compara 3 × 6 perguntas sem validação, fora da janela do K45 e ligadas ao chamado só pelo destino. O conjunto de PKs é próprio do K46. Com `ficam = []`, `fica_pergunta_viva_fora` perde o chamado e a asserção deve falhar. `chamados/tests/test_e4c_f5_voltaB_sitios.py:78`, `:132`, `:276`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:40`, `:182`, `chamados/services/competencia_trancada.py:119`, `:164`, `:175`. |
-| **5 · Asserts e tetos** | Contagem AST de `assert` e `self.assert*`. | Sítios **37 → 44**, lotes **24 → 27**, mutantes **2 → 3**. Todos os anteriores têm a mesma expressão AST. A igualdade de SELECTs 3 × 6 continua com o mesmo limite. `chamados/tests/test_e4c_f5_voltaB_sitios.py:66`, `:116`, `:276`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:40`, `:182`, `chamados/tests/e4c_f5_voltaB_mutantes.py:75`. |
-
-## Quem escreve e quem lê
-
-| Campo | Escrita e significado nos sítios tocados |
-|---|---|
-| `respondida_em` | As portas humana e automática gravam a coluna e registram o instante na linha `RESPOSTA`. A reabertura limpa a coluna pela porta de lote. GET, juiz da recusa e M1 leem o instante **vigente** da composta, com corte adicional no M1. A foto da recusa e a linha imutável leem o instante **gravado na coluna antes do ato**. Esses dois significados podem divergir. `chamados/services/disputa_emissao.py:1528`, `:1532`, `:1683`, `:1686`, `:1617`, `:1656`, `chamados/models.py:4339`, `:4358`, `api/views.py:2581`, `chamados/services/validacao.py:902`, `:914`, `escala/services/cadastro_realidade.py:498`. |
-| `resposta_colab` | As portas humana e automática escrevem o texto da projeção e a reabertura o limpa. GET, juiz da recusa, M1 e foto da recusa partem da **mesma coluna**. No M1, o corte pode limpar o par entregue ao juiz. `chamados/services/disputa_emissao.py:1481`, `:1682`, `:1617`, `:1656`, `chamados/models.py:4358`, `api/views.py:2579`, `chamados/services/validacao.py:902`, `:913`, `escala/services/cadastro_realidade.py:498`, `chamados/juizes.py:1397`. |
-| `respondida_original_em` | `reabrir_para_correcao` grava na linha `RECUSA` a coluna anterior ao ato. O RED lê a linha persistida e compara seu instante com `LogAuditoria.valor_antes['respondida_em']`. Ambos representam a mesma foto, em `datetime` na linha e ISO no evento, ou `None` nos dois. `chamados/services/disputa_emissao.py:1639`, `:1643`, `chamados/services/validacao.py:935`, `core/observ.py:133`, `chamados/tests/test_e4c_f5_voltaB_sitios.py:132`. |
-
-## Comandos para o Code
-
-A partir de `app/`. Com os REDs da B2 sobre `d0210a400`, as falhas esperadas são `get` pelo instante nulo, `recusa` pela divergência da foto e `m1` pelo subcaso de texto vazio. Os casos K46 verificam o lote já presente na base e devem cair com os respectivos mutantes. Execução [nao verificado]. `chamados/tests/test_e4c_f5_voltaB_sitios.py:78`, `:138`, `:296`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:179`, `:182`.
-
-```bash
-s=chamados.tests.test_e4c_f5_voltaB_sitios
-l=chamados.tests.test_e4c_f5_voltaB_lotes.CarregadoresVoltaBTest
-
-get="$s.SitiosVoltaBTest.test_RED_get_do_app_reconhece_instante_do_ato"
-recusa="$s.SitiosVoltaBTest.test_RED_recusar_usa_instante_do_ato_e_reabre_sem_reusar_prefetch"
-m1="$s.BecoTemporalVoltaBTest.test_RED_m1_exige_texto_e_instante_no_horizonte"
-k46="$l.test_RED_k46_julga_cada_pergunta_fora_da_competencia"
-k46_lote="$l.test_RED_k46_perguntas_do_chamado_na_competencia"
-selo="$s.SeloMutanteVoltaBTest.test_MORDE_get_do_app_com_pergunta_crua"
-
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  "$get" "$recusa" "$m1" "$k46" "$k46_lote" "$selo"
-
-mutar() {
-  local seletor="$1"
-  shift
-  F5_VOLTA_B_MUTANTE="$seletor" PYTHONDONTWRITEBYTECODE=1 \
-    python3 manage.py test "$@"
-}
-
-mutar get_instante_da_coluna "$get"
-mutar recusa_foto_do_ato "$recusa"
-mutar m1_so_instante "$m1"
-mutar m1_sem_corte "$m1"
-mutar k46_sem_julgamento "$k46"
-mutar k46 "$k46_lote" "$k46"
-mutar api_p_cru "$selo"
-```
-
-As mordidas esperadas são `None` no GET, divergência entre as fotos na recusa, inclusão indevida com texto vazio ou instante futuro no M1, perda do chamado em `fica_pergunta_viva_fora` com `ficam = []`, crescimento dos SELECTs sem o lote K46 e acusação da chamada crua no selo. A acusação do `api_p_cru` foi observada na análise AST em `api/views.py:2590`. `chamados/tests/e4c_f5_voltaB_mutantes.py:21`, `:28`, `:118`, `chamados/tests/test_e4c_f5_voltaB_lotes.py:51`, `:191`.
-
-LEI-AKITA — L-130, padrao=juiz unico puro + fonte unica (compositor). `docs/LEIS.md:151`, `chamados/juizes.py:1551`, `chamados/models.py:4351`.
-
-_7447 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7452 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
