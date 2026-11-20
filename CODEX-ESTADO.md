@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 11:59** · publicado em **20/11/2026 12:01** (UTC-3)
+> Ultima resposta processada: **20/11/2026 12:04** · publicado em **20/11/2026 12:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 12:04 · sessao 4d65a86aeb77 · E4C-F5-CONSTROI · construtor · origem=Code
+
+O K47 conserva a medida de 3×6. As escolhas nascem pela porta de conversa e recebem resposta e validação pelos escritores reais. A guarda lê a composta em lote antes de excluir as validadas, e `self._comparar` continua exigindo a leitura de todos os PKs e o mesmo número positivo de SELECTs de decisões nas duas rodadas. [test_e4c_f5_voltaB_lotes.py:197](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197) [test_e4c_f5_voltaB_lotes.py:40](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaB_lotes.py:40) [disputa_emissao.py:2091](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:2091)
+
+### Mutações de produção para a sessão
+
+- **V — validação.** Em `_carimbar_validacao`, trocar `perg.save(update_fields=['validada_em', 'validada_por'])` por `pass`. A linha `VALIDACAO` é gravada e a coluna fica vazia. [validacao.py:171](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:171)
+- **R — nova resposta.** Em `responder_pergunta_disputa_core`, trocar `resposta_mantem_validacao=False` por `resposta_mantem_validacao=True`. A coluna é limpa e a composta conserva a validação anterior. [disputa_emissao.py:1506](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1506) [disputa_emissao.py:1531](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1531)
+- **D — devolução.** Em `devolver_validacao_recusada`, trocar `perg.save(update_fields=['validada_em', 'validada_por'])` por `pass`. A linha `DEVOLUCAO` limpa a validação composta e a coluna continua preenchida. [validacao.py:290](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:290) [models.py:4347](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4347)
+- **K47 sem lote.** O seletor existente retira a segunda chamada a `.prefetch_related('decisoes')` de `_resolver_perguntas_por_chamado_resolvido`. [e4c_f5_voltaB_mutantes.py:23](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaB_mutantes.py:23) [disputa_emissao.py:2091](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:2091)
+
+### Esperados por teste [nao verificado]
+
+Na volta D, a asserção comum relê a linha e compara a presença da validação composta com a presença de `validada_em`. A coluna também é conferida contra o instante fixo esperado. [test_e4c_f5_voltaD_portas.py:45](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:45)
+
+| Teste | Esperado antigo, no literal anterior à edição | Esperado novo | Mutante | [nao verificado]
+|---|---|---|---|
+| `test_RED_k47_escolhas_sem_credor` | `self.assertEqual(set(carimbadas.values_list('pk', flat=True)), pks)` · volta B:213 anterior, também em `k47_falha.log:102-117` | Par preenchido. A disputa fecha e nenhuma escolha já validada recebe carimbo de materialização. A medida de lote continua em `self._comparar`. [B:197](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197) | V e K47 sem lote |
+| `test_RED_corrigir` | `self.assertEqual(tipo, 'info' if ato_validado else 'sucesso')` · D:79 anterior | Com validação vigente, preserva `07:13` e o par original. Após nova resposta, corrige para `07:18` e valida com o par preenchido em `AGORA`. [D:84](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:84) | R |
+| `test_RED_declaracao` | `self.assertEqual(resultado['estado'], 'validada_sem_registro')` e `self.assertTrue(resultado['ok'], resultado)` · D:102 e 106 anteriores | A validação vigente preserva `07:13`. A declaração aceita após a nova resposta grava `07:18` e mantém o par vazio. [D:103](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:103) | R |
+| `test_RED_aplicar_declaracao` | `self.assertEqual(resultado['estado'], 'validada_sem_registro' if ato_validado else 'validada')` · D:127 anterior | Preserva a validação vigente ou aplica e valida pelo caminho real, com o par preenchido e o histórico esperado. [D:122](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:122) | V |
+| `test_RED_fecho` | `self.assertIsNone(retida.materializada_em)` e `self.assertEqual(aberta.materializada_em, AGORA)` · D:147-148 anteriores | Retém a pergunta com o par preenchido. O carimbo da outra pergunta preserva o par vazio que a nova resposta produziu. [D:142](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:142) | R |
+| `test_RED_fecho_3x6` | `self.assertEqual(set(disputa.perguntas.filter(materializada_em__isnull=True).values_list('pk', flat=True)), {p.pk for p in perguntas})` e `self.assertEqual(medidas, [1, 1])` · D:162-164 anteriores | Todas as perguntas têm o par preenchido e ficam sem carimbo de materialização. Mantém `[1, 1]`. [D:155](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:155) | V e `fecho_sem_lote` |
+| `test_RED_propostas_3x6` | `self.assertTrue(all(not p['aceita'] for p in propostas))` e `self.assertEqual(medidas, [1, 1])` · D:179-181 anteriores | O par preenchido vem da validação real. Todas as propostas continuam recusadas, com `[1, 1]`. [D:172](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:172) | V |
+| `test_RED_tela_3x6` | `self.assertEqual(resultado, esperados)` e `self.assertEqual(medidas, [1, 1])` · D:203-205 anteriores | Alterna validação vigente e validação desfeita por nova resposta. A tela mantém a aceitação esperada por dia e `[1, 1]`. [D:189](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:189) | R e `tela_sem_lote` |
+| `test_RED_irma_plantio` | `self.assertEqual((irma, par, impedimento), (q, (AGORA + timedelta(hours=1), 'E'), None))` ou `self.assertEqual((irma, par), (None, None))` com `self.assertIn('respondida, sem validacao', impedimento or '')` · D:226-229 anteriores | A irmã com o par preenchido é aceita. Após a nova resposta, o par fica vazio e a guarda informa falta de validação. [D:228](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:228) | R |
+| `test_RED_irma_implausivel` | `self.assertEqual((irma, par, impedimento), (q, (AGORA + timedelta(hours=1), 'E'), None))` ou `self.assertEqual((irma, par), (None, None))` com `self.assertIn('hora implausivel', impedimento or '')` · D:236-239 anteriores | A irmã com validação vigente é aceita. Com o par vazio após a nova resposta, a hora implausível impede o par. [D:238](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:238) | R |
+| `test_RED_materializar_ato_mudou_sob_trava` | `self.assertEqual(resultado['materializadas'], int(ato_validado))` e `self.assertEqual(p.materializada_em, AGORA if ato_validado else None)` · D:269-270 anteriores | Sob a trava real, outra instância responde e limpa o par. Só o ramo que revalida materializa. [D:248](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:248) | R |
+| `test_RED_validar_par` | `self.assertEqual(self._validacoes(q), [VALIDACAO_EM] if ato_validado else [VALIDACAO_EM, AGORA])` e `self.assertEqual(set(disputa.perguntas.filter(materializada_em__isnull=False).values_list('pk', flat=True)), {p.pk, q.pk})` · D:287-289 anteriores | As duas metades materializam pelo caminho real e terminam com o par preenchido. A irmã ganha nova validação apenas quando a resposta anterior desfez a original. [D:272](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:272) | R |
+| `test_RED_validar` | `self.assertEqual(resultado['estado'], 'ja_validada' if ato_validado else 'validada')` · D:304 anterior | `ja_validada` preserva o par original. `ja_no_espelho` é o resultado esperado no ramo que revalida, reutiliza a batida da fixture e preenche o par em `AGORA`. [D:300](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:300) | V |
+| `test_RED_recusar` | `self.assertEqual(resultado['estado'], 'ja_validada' if ato_validado else 'recusada')` e `self.assertEqual(D.objects.filter(pergunta=p, ato=D.RECUSA).count(), int(not ato_validado))` · D:315-316 anteriores | A recusa preserva a validação vigente ou, depois de uma nova resposta, mantém o par vazio e grava a recusa. [D:312](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:312) | R |
+| `test_RED_lote_entrada` | `self.assertEqual(resultado['recusados'], recusados)` e `self.assertEqual(resultado['validadas'], int(not ato_validado))` · D:329-330 anteriores | O lote recusa `Ja validada.` quando há par preenchido e valida de novo quando a resposta anterior limpou o par. [D:324](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:324) | V |
+| `test_RED_lote_entrada_3x6` | `self.assertEqual(resultado['recusados'], [{'ref': ref, 'motivo': 'Ja validada.'} for ref in refs])` e `self.assertEqual(medidas, [1, 1])` · D:341-343 anteriores | Todos os pares preenchidos vêm do escritor real. Mantém as recusas por PK e `[1, 1]`. [D:338](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:338) | V e `lote_entrada_sem_prefetch` |
+| `test_RED_lote_rele_ato_escrito_em_outra_instancia` | `self.assertEqual(D.composta(p).validada_em, AGORA if ato_validado else None)` e `self.assertEqual(resultado, {'validadas': int(ato_validado), 'erros': [], 'nao_gravados': [{'ref': p.pk, 'motivo': 'Sem plantio'}] if ato_validado else [], 'recusados': [] if ato_validado else [{'ref': p.pk, 'motivo': 'Passou pela porta'}]})` · D:364-369 anteriores | O lote relê a ação real. Conta a validação mantida sem plantio e informa o aviso em `nao_gravados`. Quando a recusa devolve a validação, o par termina vazio e o aviso entra em `recusados`. [D:350](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:350) | D | [nao verificado]
+| `test_devolucao_e_o_escritor_da_coluna` | `self.assertIs(resultado, True)`, `self.assertIsNone(p.validada_em)` e `self.assertEqual(D.objects.filter(pergunta=p, ato=D.DEVOLUCAO).count(), 1)` · D:390-392 anteriores | Começa com o par preenchido. A devolução real deixa as duas leituras vazias e grava uma linha `DEVOLUCAO`. [D:388](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:388) | D |
+
+`test_diagnostico_refresh_parcial_e_integral` ficou como estava. Seu `update` permite distinguir o cache preservado pela releitura parcial do cache descartado pela releitura integral. As asserções consultam o cache e a composta. [D:40](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:40) [D:376](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_voltaD_portas.py:376)
+
+### Comandos para a sessão
+
+O bloco usa `manage.py` e o executor de mutações em memória da volta D. Cada chamada de `mutar` roda os testes indicados com uma única troca de produção. [manage.py:7](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/manage.py:7) [e4c_f5_voltaD_mutantes.py:49](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaD_mutantes.py:49) [nao verificado]
+
+```bash
+b=chamados.tests.test_e4c_f5_voltaB_lotes.CarregadoresVoltaBTest
+d=chamados.tests.test_e4c_f5_voltaD_portas.PortasVoltaDTest
+k47="$b.test_RED_k47_escolhas_sem_credor"
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "${b%.*}" "${d%.*}"
+
+PYTHONDONTWRITEBYTECODE=1 F5_VOLTA_B_MUTANTE=k47 \
+  python3 manage.py test "$k47"
+PYTHONDONTWRITEBYTECODE=1 F5_VOLTA_D_MUTANTE=fecho_sem_lote \
+  python3 manage.py test "$d.test_RED_fecho_3x6"
+PYTHONDONTWRITEBYTECODE=1 F5_VOLTA_D_MUTANTE=tela_sem_lote \
+  python3 manage.py test "$d.test_RED_tela_3x6"
+PYTHONDONTWRITEBYTECODE=1 F5_VOLTA_D_MUTANTE=lote_entrada_sem_prefetch \
+  python3 manage.py test "$d.test_RED_lote_entrada_3x6"
+
+mutar() {
+  PYTHONDONTWRITEBYTECODE=1 F5_VOLTA_D_MUTANTE="$1" python3 - "$@" <<'PY'
+import os
+import sys
+
+import django
+from django.core.management import execute_from_command_line
+
+from chamados.tests.e4c_f5_voltaD_mutantes import SITIOS, mutar_sitio
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.saas")
+django.setup()
+nome, *testes = sys.argv[1:] [nao verificado]
+save = "perg.save(update_fields=['validada_em', 'validada_por'])"
+SITIOS.update({
+    "V": ("chamados.services.validacao", "_carimbar_validacao", save, "pass"),
+    "R": ("chamados.services.disputa_emissao", "responder_pergunta_disputa_core",
+          "resposta_mantem_validacao=False", "resposta_mantem_validacao=True"),
+    "D": ("chamados.services.validacao", "devolver_validacao_recusada", save, "pass"),
+})
+with mutar_sitio(nome):
+    execute_from_command_line(["manage.py", "test", *testes]) [nao verificado]
+PY
+}
+
+mutar V "$k47" "$d.test_RED_aplicar_declaracao" "$d.test_RED_fecho_3x6" \
+  "$d.test_RED_propostas_3x6" "$d.test_RED_validar" \
+  "$d.test_RED_lote_entrada" "$d.test_RED_lote_entrada_3x6"
+
+mutar R "$d.test_RED_corrigir" "$d.test_RED_declaracao" "$d.test_RED_fecho" \
+  "$d.test_RED_tela_3x6" "$d.test_RED_irma_plantio" "$d.test_RED_irma_implausivel" \
+  "$d.test_RED_materializar_ato_mudou_sob_trava" "$d.test_RED_validar_par" \
+  "$d.test_RED_recusar"
+
+mutar D "$d.test_RED_lote_rele_ato_escrito_em_outra_instancia" \
+  "$d.test_devolucao_e_o_escritor_da_coluna"
+```
+
+**PAREI da classe vii.** Nenhum impedimento de forma identificado nos dois arquivos. Compilei a sintaxe e conferi as três trocas em memória. O verde da suíte, as falhas dos mutantes nas asserções indicadas e os valores medidos dos SELECTs ficam para a sessão e o opus final. [nao verificado] [nao verificado]
 
 ## 20/11 11:59 · sessao ff2371be9831 · TRAVAS-SEM-MEMORIA · verificador · origem=Code
 
@@ -880,15 +978,4 @@ O selo de relógio cobra congelamento, já presente nos dois módulos de teste. 
 
 A flag já existe, mas há critérios concorrentes na árvore. `listar_ferias_dp` usa nome exato do banco e `replay_credenciais` aceita substring no módulo ou no banco. `BANCO_DE_ENSAIO` também vale no CI e teste_motor. A execução de sombra liga à rede Docker e configura proxy HTTP/HTTPS morto com exceções. A máscara desativa e substitui endpoints e zera tokens, levando Web Push e FCM à saída sem destinatário/token. O registro O-OUTBOX existe e está marcado NO AR. `app/config/settings/sombra.py:27-65`, `app/config/settings/ci.py:35-41`, `app/config/settings/teste_motor.py:15-18`, `app/ferias/management/commands/listar_ferias_dp.py:46-53`, `app/core/management/commands/replay_credenciais.py:46-63`, `bin/sombra.sh:182-190`, `bin/sombra_mascara.py:63-84`, `app/chamados/push_utils.py:20-26,89-118`, `app/chamados/fcm_utils.py:101-106`, `app/docs/BACKLOG.md:807-808`.
 
-## 20/11 10:54 · sessao ddf3b608f25e · - · - · origem=Ronald (tmux)
-
-**P3(b) — PROCEDE.** `FollowupChamado` e `TurnoMaterializado` ficam fora das tabelas nomeadas. A retratação aceita grava o follow-up. O signal do vínculo recompõe os turnos com `DELETE` e `bulk_create`. `FechamentoMensal` grava também `atualizado_em` ao limpar `previsto_em`. `app/colaboradores/services/feriado_do_posto.py:296-308`, `app/chamados/services/nota.py:102-109`, `app/ponto/signals.py:53-74`, `app/ponto/nucleo.py:40-83`, `app/ponto/services/fechamento.py:1607-1613`.
-
-- Conforme os ramos, a prova precisa alcançar também `DisputaSupervisao`, `DecisaoPergunta`, `auth_user` quando falta `sistema`, `Justificativa`, `Pauta` e `ContadorPauta`. O receiver de `FolgaDia` exige mudança de vigência, enquanto a propagação salva apenas `trabalha_em_feriado`. `app/colaboradores/signals.py:49-82`, `app/chamados/models.py:2217-2235`, `app/core/utils.py:6-18`, `app/ponto/services/cartorio.py:1038,1585`, `app/ponto/services/justificativa.py:337-355`, `app/chamados/services/fecho_runtime.py:118-141,156-169`, `app/pautas/services.py:180-188,344-368`, `app/escala/signals.py:18-28,185-204`, `app/colaboradores/services/vinculo.py:894-898`.
-
-**P4 — PROCEDE quanto ao alcance de um futuro `--apply`.** A prévia foi limitada à sombra pelo item 3 do 1100. O item 3 do 1035 condiciona o apply ao `!` do Ronald e o item 4 preserva a proibição de mover 10/2026. O comando verifica `--apply` e motivo. O `!` é exigência operacional. `respostas_2011_1100.txt:7-9`, `feriado_a5_respostas_2011_1035.txt:5-7`, `CLAUDE.md:265-268`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:105-113`.
-
-- A guarda pula dias com TXT vigente ou holerite publicado, na regeneração. A invalidação de `FechamentoMensal` filtra apenas pelo colaborador e por `previsto_em` preenchido. A retratação direta em FECHA segue o dia do fato e o signal pode rejulgar e carimbar célula. A cerca S143 atua nas escritas de pergunta que atravessam o ato cercado. Para corte 21, a virada em 21/11 retira outubro da janela de regeneração. Esses outros caminhos seguem seus próprios recortes. `app/ponto/portas/celula.py:218-221,284-288`, `app/folha/export.py:597-628`, `app/ponto/services/fechamento.py:1607-1613`, `app/colaboradores/services/feriado_do_posto.py:248-264,296-308`, `app/chamados/signals.py:189-218`, `app/ponto/services/cartorio.py:1920-1923,2059-2102`, `app/chamados/services/disputa_emissao.py:1911-1924`, `app/ponto/janelas.py:24-51,66-72`.
-- No apply, o vínculo é gravado e a regeneração pode agendar recálculo monetário por competência tocada no `on_commit`, que grava `FechamentoMensal` e `DiaPago`. O corte registra 10/2026 das empresas 2, 3 e 4 como paga fora do sistema. O alcance efetivo em produção e os valores monetários [nao verificado]. `app/colaboradores/services/vinculo.py:894-922`, `app/ponto/portas/celula.py:483-496`, `app/ponto/services/fechamento.py:1191-1202,1798-1824`, `app/ponto/services/dia_pago.py:359-360`, `app/docs/CORTES.md:529`.
-
-_7510 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7511 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
