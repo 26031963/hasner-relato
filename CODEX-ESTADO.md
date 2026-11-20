@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 13:07** · publicado em **20/11/2026 13:08** (UTC-3)
+> Ultima resposta processada: **20/11/2026 13:12** · publicado em **20/11/2026 13:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 13:12 · sessao 95331e88e99b · CADEIA-20-PASSO-1 · leitura · origem=Code
+
+[resposta retida: senha_atribuida -- nao se publica credencial nem caminho de segredo]
+
+## 20/11 13:10 · sessao f9b83514f0e5 · CODEX-FECHA-A-VOLTA-V1-RASCUNHO · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 20/11 13:07 · sessao 716ca21ae619 · E4C-F5-CONSTROI · leitura · origem=Code
 
@@ -787,158 +795,4 @@ Q5: segue. A L-097 exemplifica proteção explícita com a coluna vazia. app/doc
 
 RESUMO: 1 sobe ao Ronald como lei, sobre vigências históricas inativas (app/docs/BACKLOG.md:1223). 3 já respondidas, DISPUTA-FECHADA-SEM-RESOLUCAO, O62 e O37 (app/docs/BACKLOG.md:1618, app/docs/LEIS.md:80, app/docs/RELATO.md:1012). 7 podem morrer ou virar complemento (app/docs/GRADE-MESTRA.md:1049,1082,1238,1328, app/docs/BACKLOG.md:1460,1727, app/docs/RELATO-ARQUIVO.md:43426). 0 fecham por evidência de uso pelo corte de 16/11, que tratou de outras obras (app/docs/BACKLOG.md:2367, app/docs/RELATO.md:1037).
 
-## 20/11 11:56 · sessao a4b0bc5e8dec · CADERNO-DE-CORTES-2011 · leitura · origem=Code
-
-Li a cópia fornecida em somente leitura. A confirmação do hash como HEAD de `main` fica [nao verificado], pois a cópia não tem metadados Git.
-
-## O275 -- classe: espurias/HE -- tipo: corte
-Q1: “O FLAG NOVO DA O275 PODE SER LIGADO NUM TIPO DE PLANTAO (`12x36`/`24x48`), OU O PLANTAO RESPONDE SO PELA PRECEDENCIA QUE JA EXISTE?” app/docs/RELATO-ARQUIVO.md:746
-Q2: O administrador pode tornar um feriado dia de trabalho quando ele cai na folga de um plantão? app/docs/RELATO-ARQUIVO.md:748
-Q3 A: Admin pode usar a opção também nos plantões, salvo intermitente. A folha passa a contar o feriado como dia previsto onde a opção estiver ligada. Alcance hoje nao medido. O censo registrou 337 vínculos 12x36 potencialmente expostos. Atualiza e confere a implementação guardada. app/docs/RELATO-ARQUIVO.md:749–753
-Q3 B: Admin usa a opção em escalas semanais, 6x1 e 5x2. A folha dos plantões mantém a previsão atual. Alcance hoje nao medido. O censo apontou 1 vínculo no alvo e 4 tipos cadastrados como 12x36 fora do alcance. Acrescenta a restrição por ciclo e ajusta os testes. app/docs/RELATO-ARQUIVO.md:749–753
-Q4: nao respondida. SDF-FERIADO-E-DIA autoriza o cadastro. A escolha entre A e B permanece aberta. app/docs/BACKLOG.md:1682 e app/docs/RELATO.md:417
-Q5: segue. A publicação espera A ou B, e a O277 depende desse cadastro para tratar a dobra. app/docs/BACKLOG.md:1682 e app/docs/BACKLOG.md:1684
-
-## O10-D-PERMUTA-RECIPROCA -- classe: resto -- tipo: corte
-Q1: “(a) DNA carrega marcos do cedente ou (b) d1=d2 fora da porta”. O RELATO também lista tipo e aprovação da carta, falha de gravação, “cede so plantao”, descanso e o ! de escala. O literal desses cortes e do ! fica [nao verificado]. app/docs/RELATO.md:886–887
-Q2: Numa troca no mesmo dia, quem assume recebe os horários de quem cede ou o sistema recusa a troca? app/docs/RELATO.md:887
-Q3 A: A operação aceita a troca e mostra os horários assumidos ao admin. A folha trata o plantão assumido como dia normal com os adicionais cabíveis. Alcance hoje nao medido. Implementa o transporte dos horários do cedente. app/docs/RELATO.md:887 e app/docs/CORTES.md:286
-Q3 B: A operação mostra a recusa ao admin. A folha conserva os plantões originais. Alcance hoje nao medido. Implementa a recusa, condicionada à revisão do corte que já permite a mesma data. app/docs/RELATO.md:887 e app/docs/RELATO.md:2719
-Q4: ja respondida pelo corte LEI-O10-D-PERMUTA quanto a permitir a mesma data, reafirmado no preparo de 16/11. O desenho dos horários e os demais itens listados na revisão seguem abertos. app/docs/RELATO.md:2719 e app/docs/RELATO.md:1055 e app/docs/RELATO.md:886–887
-Q5: segue. A cópia aprovada ainda aguarda os cortes residuais e o ! de escala. app/docs/RELATO.md:879 e app/docs/RELATO.md:886
-
-## O14 -- classe: resto -- tipo: smoke
-Q1: “sem pergunta”. Falta “SMOKE de olho no app de um noturno 12x36 (ex.: col174 ou col788) depois do deploy.” app/docs/PENDENTES_RONALD.json:1587
-Q2: No celular do trabalhador noturno, a saída da madrugada e as horas aparecem junto com o restante do plantão? app/docs/PENDENTES_RONALD.json:1587
-Q3 A: Se a conferência passar, o admin conserva a tela atual, o colaborador vê o turno no dia correto e a folha conserva os valores. Alcance hoje nao medido. Registra a conferência do aparelho. app/docs/BACKLOG.md:1414 e app/api/views.py:1440–1453 e app/api/views.py:1475–1485
-Q3 B: Se falhar, o admin recebe o dia e a divergência vistos no celular. A conferência é uma leitura da folha. Alcance hoje nao medido. A correção depende do erro observado [nao verificado]. app/docs/PENDENTES_RONALD.json:1587 e app/docs/RELATO-ARQUIVO.md:27292–27293
-Q4: nao respondida quanto à conferência no aparelho. app/docs/BACKLOG.md:1414
-Q5: segue. Os 126 de 368 colaboradores com aviso diferente são da medição do servidor. O fechamento por uso de 16/11 registra outras operações. app/docs/RELATO-ARQUIVO.md:27288–27293 e app/docs/RELATO.md:1037
-
-## O261-E-F5C-PERGUNTA-SEM-ACAO-POSSIVEL -- classe: fio morto -- tipo: corte
-Q1: “sem pergunta” de mérito pendente. “esta PERGUNTA ja foi materializada de fato (clique morto)?” é o que a função já responde. A declaração separada dessa autoridade exige a frase de corte. app/docs/BACKLOG.md:1002 e app/docs/LEIS.md:69
-Q2: Como o sistema sabe se ainda há algo que o administrador pode fazer naquela pergunta? app/chamados/services/raiox.py:160–194
-Q3 A: Registra a regra existente por pergunta. O admin só vê a ação enquanto ela puder produzir efeito. A folha segue consultando as ações disponíveis para o dia. Alcance hoje nao medido. Formaliza o registro com teste do comportamento atual. app/docs/BACKLOG.md:1002 e app/chamados/services/fio.py:310–319 e app/folha/fora_da_folha.py:70–83
-Q3 B: O botão do admin passa a ler a mesma tarefa do dia que a folha já usa. Alcance hoje nao medido. Migra o leitor restante e confere que o botão continua disponível quando ainda há ação. app/docs/BACKLOG.md:2112 e app/chamados/services/tarefa_do_dia.py:142–147 e app/chamados/services/fio.py:310–319
-Q4: ja respondida pelo corte CLIQUE MORTO de 02/09. O efeito comprovado retira a ação, e o registro sozinho deixa a pergunta disponível. LAUDO-3010-JUIZ-DA-ACAO-DO-ADMIN responde por qual caminho se chega ao dia. app/chamados/services/raiox.py:160–194 e app/docs/CORTES.md:457 e app/docs/BACKLOG.md:1002
-Q5: vira complemento de FIO-E0-V4-E3-LEITORES. A migração já abrange a tela e a folha, e a tela ainda consulta a regra pelo caminho antigo. app/docs/BACKLOG.md:2112 e app/chamados/services/fio.py:310–319
-
-## O176 -- classe: resto -- tipo: corte
-Q1: “o que o pacote declara tocar (`declarados()`) ja esta na arvore?” app/docs/BACKLOG.md:1553
-Q2: Para liberar um novo trabalho, basta encontrar o título do anterior ou é preciso conferir que suas mudanças entraram? app/docs/BACKLOG.md:1553
-Q3 A: A fila interna continua liberando pelo título, sem efeito direto na tela do admin ou na folha. Alcance hoje nao medido. Em 04/10 houve 0 liberações erradas entre 47 rótulos examinados. Mantém o mecanismo atual. app/docs/BACKLOG.md:1553 e app/core/esteira_vigia.py:269–314
-Q3 B: A fila interna só libera após comprovar a entrega, sem efeito direto na tela do admin ou na folha. Alcance hoje nao medido. Constrói o verificador compartilhado de conteúdo e testa dois pacotes com o mesmo título. app/docs/BACKLOG.md:1553 e app/docs/CORTES.md:317
-Q4: nao respondida. ESTEIRA-SECA-1-E-2-AGORA exige uma fonte comum. L-011 exige a assinatura da nova autoridade. O critério de conteúdo ainda espera corte. app/docs/CORTES.md:317 e app/docs/LEIS.md:69 e app/docs/BACKLOG.md:1553
-Q5: segue. A cópia ainda usa o título para decidir se o pacote já entrou. app/core/esteira_vigia.py:269–314 e app/docs/BACKLOG.md:1553
-
-## O94 -- classe: resto -- tipo: !
-Q1: “o gravado de 09 passa a nao pagar essas 283 h (e elas viram cobranca a resolver com o DP/supervisao), ou ficam como estao ate a cobranca ser respondida?” app/docs/PENDENTES_RONALD.json:369
-Q2: As horas de setembro dos turnos sem saída devem ser retiradas do cálculo registrado agora ou mantidas até o DP resolver a pendência? app/docs/PENDENTES_RONALD.json:369
-Q3 A: Admin vê a cobrança da saída faltante. O cálculo registrado perde as horas indevidas, com eventual retificação pelo DP. Alcance hoje nao medido. A medida inicial foi 14 pessoas e 283,01 h, depois revista para 12 e 219,02 h. Prepara nova comparação e ato nominal com trilha e reversão. app/docs/BACKLOG.md:1495 e app/docs/RELATO-ARQUIVO.md:6233–6234 e app/docs/RELATO.md:5054
-Q3 B: Admin e DP recebem os dois valores e tratam a cobrança. A folha emitida conserva o valor enquanto o DP decide. Alcance hoje nao medido. Prepara a pauta com a diferença atualizada, sem executar recálculo por este ato. app/docs/BACKLOG.md:1676 e app/docs/RELATO.md:5054
-Q4: nao respondida quanto ao ! nominal. L-113 e RELAVRA-09-MOTOR-DE-HOJE separam o cálculo atual da folha já emitida. O registro posterior autoriza guarda e medição da 09 e deixa a aplicação para autorização própria. app/docs/LEIS.md:155 e app/docs/BACKLOG.md:1676 e app/docs/RELATO.md:5054
-Q5: segue como ! de dinheiro. O JSON ainda tem resposta nula e a última medida do alcance deste ato [nao verificado]. app/docs/PENDENTES_RONALD.json:366–373
-
-## HIGIENE-DE-CONTEXTO -- classe: resto -- tipo: !
-Q1: “pode QUEBRAR o paragrafo em dois -- regra num, historia no outro -- sem mudar uma palavra”. Era o ! do item 5. app/docs/RELATO-ARQUIVO.md:27476–27490
-Q2: Pode separar a regra da história que a explica, preservando todas as palavras da regra? app/docs/RELATO-ARQUIVO.md:27488–27490
-Q3 A: Tela do admin e folha ficam iguais. Alcance documental atual nao medido. A leitura histórica marcou 5 trechos misturados em 27 parágrafos. Move a história com ponteiro e confere a regra palavra por palavra. app/docs/RELATO-ARQUIVO.md:27481–27489 e app/docs/BACKLOG.md:1321
-Q3 B: Tela do admin e folha ficam iguais. Alcance documental atual nao medido. Na leitura histórica, 0 dos 27 parágrafos continham só história. Mantém os trechos juntos, sem trabalho novo. app/docs/RELATO-ARQUIVO.md:27481–27490
-Q4: ja respondida pelo corte DIETA-DO-CLAUDE-MD (O224), que aplica L-109 e preserva a regra palavra por palavra. app/docs/BACKLOG.md:1321 e app/docs/LEIS.md:135
-Q5: pode morrer como pendência independente. Os itens 1–4 e 6 foram fechados, e O220/O224 registram a transferência da história e sua conclusão. app/docs/BACKLOG.md:1388 e app/docs/BACKLOG.md:1337 e app/docs/BACKLOG.md:1321
-
-## O148-EDITAR -- classe: resto -- tipo: corte
-Q1: “sem pergunta” em forma interrogativa. A proposta literal que espera corte é “calendario com uso edita por versao com vigencia, nunca no lugar”. app/docs/BACKLOG.md:819 e app/docs/CORTES.md:390
-Q2: Quando um calendário de folgas já é usado, o administrador salva no mesmo cadastro ou cria uma versão que começa a valer numa data escolhida? app/docs/CORTES.md:390
-Q3 A: Admin escolhe a data da nova versão e pode consultar a anterior. A folha passa a usar as novas folgas a partir da vigência. Alcance hoje nao medido. Em 16/11 havia 72 calendários do tipo dias do mês em uso. Constrói versões, vigência, trilha e edição. app/docs/CORTES.md:390 e app/docs/RELATO.md:1058
-Q3 B: Admin edita o cadastro existente. A porta atual sincroniza as folgas e células futuras, sem recalcular a folha no clique. Alcance hoje nao medido. Mantém a porta atual. app/escala/folgas.py:571–601 e app/escala/folgas.py:605–640
-Q4: nao respondida. O148-EDITAR registra a proposta e pede corte de lei. CALENDARIO-DE-FOLGAS-ARQUIVA-NAO-APAGA decide o arquivamento. app/docs/CORTES.md:390 e app/docs/BACKLOG.md:2751
-Q5: vira complemento de O148, como já consta na grade, com o corte de versão pendente. O smoke de 16/11 usou calendário sem vínculo nem folga materializada e saiu sem salvar. app/docs/GRADE-MESTRA.md:1523–1526 e app/docs/RELATO.md:983
-
-## DIA-CONVOCADO-PELO-ADMIN -- classe: resto -- tipo: !
-Q1: “sem pergunta” pendente. Falta o aval de construção. O literal do posto já respondido foi “o ato de convocar vence a marca do posto para aquele colab-dia, ou convocacao em posto fechado exige reabrir o posto?” app/docs/BACKLOG.md:2290 e app/docs/RELATO.md:115
-Q2: O administrador pode convocar alguém para trabalhar no feriado mesmo quando o posto está marcado como fechado? app/docs/RELATO.md:115
-Q3 A: Admin convoca com motivo e recebe aviso de posto fechado. A folha passa a tratar aquele dia como previsto, admite a cobrança de falta e aplica a regra de feriado no pagamento. Alcance hoje nao medido. A leitura registrou 0 dias já editados, 12 postos e 26 vínculos potencialmente expostos. Constrói a tela e adapta os leitores do dia e da cobrança. app/docs/RELATO.md:114–118 e app/docs/BACKLOG.md:2290
-Q3 B: Admin teria de reabrir o posto antes de convocar. A folha manteria o dia como feriado sem falta até a convocação válida. Alcance hoje nao medido. Constrói a conferência do posto e a recusa explicada na tela. app/docs/RELATO.md:115 e app/docs/BACKLOG.md:2290
-Q4: ja respondida pelo corte FILA-PARALELA-1911-1150 item A, que permite a convocação individual com aviso, e pelo corte RESPOSTA-DESENHO-DIA-CONVOCADO-1911-1145, que a torna dia previsto. app/docs/RELATO.md:115 e app/docs/RELATO.md:118
-Q5: vira complemento de O10-TROCA-DE-PLANTAO-ENTRA. O vínculo já foi registrado e a construção aguarda aval. app/docs/RELATO.md:132 e app/docs/BACKLOG.md:2290
-
-## LAUDO-col33-0310 -- classe: contrato 20 -- tipo: corte
-Q1: “sem pergunta” pendente. O literal já respondido começa em “(a) rejulgar o resto pela 7b (comp 10 aberta: reversao antes, prova de frota depois), por grupo com DIFF publicado” e oferece também só o grupo de ata movida ou esperar o ciclo natural. app/docs/RELATO.md:4876
-Q2: Os registros antigos de outubro devem ser revistos em lote, só onde mudam as horas registradas, ou à medida que cada dia voltar a ser analisado? app/docs/RELATO.md:4876
-Q3 A: Admin vê os chamados dos dois grupos atualizados. A folha muda no grupo de horas, e o segundo grupo teve 0 linhas de DiaPago alteradas na comparação. Alcance hoje nao medido. Foram medidos 11 e 7 colaboradores nos dois grupos. Executa em lotes pela porta existente, com comparação e reversão. app/docs/RELATO.md:5071–5077
-Q3 B: Admin vê a atualização do primeiro grupo e encaminha os demais aos responsáveis. A folha muda só no primeiro grupo. Alcance hoje nao medido. O primeiro grupo medido tinha 11 colaboradores. Executa um lote restrito. app/docs/RELATO.md:4876 e app/docs/RELATO.md:5071
-Q3 C: Admin e folha recebem a atualização quando cada dia for revisto pelo fluxo regular. Alcance hoje nao medido. Dispensa lote específico. app/docs/RELATO.md:4876
-Q4: ja respondida pelo corte REJULGAR-COMP10-RESTO-DA-FROTA, opção A, com inclusão posterior de col444 por REJULGAR-COMP10-COL444-E-DERIVA. app/docs/CORTES.md:392 e app/docs/CORTES.md:395
-Q5: pode morrer como pendência de corte. Col33 foi resolvido, os grupos foram aplicados e os quatro revertidos foram reaplicados. A divergência de col988 tem registro próprio. O rejulgamento era pré-requisito do trabalho de dia da batida no contrato 20. app/docs/RELATO.md:5263 e app/docs/RELATO.md:5076–5081 e app/docs/RELATO.md:4794 e app/docs/BACKLOG.md:849 e app/docs/BACKLOG.md:1849
-
-## BO-ROTULO-REABRIR-SO-NO-DETALHE -- classe: resto -- tipo: corte
-Q1: “sem pergunta”. Falta aval para construir. SMOKES-1211 item 2 já reservou “Reabrir” ao detalhe completo. app/docs/BACKLOG.md:2337
-Q2: Como o administrador deve ver a opção “Reabrir” somente quando o chamado puder ser reaberto? app/docs/BACKLOG.md:2337 e app/docs/LEIS-UI.md:39–49
-Q3 A: Admin vê no detalhe local só as ações permitidas ao seu perfil. O detalhe integrado oferece comentário. Sem efeito direto na folha. Casos hoje nao medidos. Constrói o filtro por estado e perfil e retira o seletor integrado sem efeito. app/docs/BACKLOG.md:2337 e app/chamados/views.py:292–310 e app/chamados/catalogo/motor.py:139–156
-Q3 B: Admin vê ações permitidas nos dois detalhes quando a mudança puder ser gravada. Sem mudança na regra da folha. Casos hoje nao medidos. Constrói a ligação do detalhe integrado às transições autorizadas e confere as duas telas. app/docs/BACKLOG.md:2219–2220 e app/docs/BACKLOG.md:2337
-Q4: ja respondida pelo corte SMOKES-1211 item 2 quanto ao lugar e pela LEIS-UI L4 quanto à exibição da ação. O aval de construção continua pendente. app/docs/BACKLOG.md:2337 e app/docs/LEIS-UI.md:39–49
-Q5: segue. O smoke de rótulos de 12/11 cobriu 3 de 5 telas e saiu sem salvar. O fechamento por uso de 16/11 é de REABRIR-NAO-DESTROI. app/docs/RELATO.md:2198 e app/docs/RELATO.md:1037 e app/docs/BACKLOG.md:2337
-
-RESUMO: 3 sobem ao Ronald como lei (O275, O176 e O148-EDITAR), 6 já têm resposta de regra no escopo indicado em Q4, e 5 podem morrer ou ficar como complemento. O148-EDITAR conta também como complemento porque o vínculo com O148 já está escrito e a lei segue pendente. app/docs/RELATO.md:417 e app/docs/BACKLOG.md:1553 e app/docs/GRADE-MESTRA.md:1523–1526; demais fontes em Q4 e Q5 de cada ficha.
-
-## 20/11 11:55 · sessao bbbe83f93203 · CADERNO-DE-CORTES-2011 · leitura · origem=Code
-
-Usei a cópia local e os anexos da mensagem. A confirmação do hash pelo Git ficou [nao verificado]. A entrega está no chat, em modo somente leitura.
-
-```text
-## DST-L1 -- classe: espurias/HE -- tipo: corte
-Q1: “nasce o juiz `decisao_admin_dia_sem_trabalho`?” app/docs/RELATO.md:542. A revisão da alternativa pela hora extra foi marcada como respondida. Restam o registro da divisão dos casos e a medição de como aparecem as correções de escala e as invalidações de batida. app/docs/RELATO.md:451; app/docs/BACKLOG.md:2827
-Q2: Quando alguém bate ponto num dia em que não estava escalado, como o administrador registra o que aconteceu? app/docs/RELATO.md:542
-Q3: A) Usar a decisão de hora extra. O admin chega a Autorizar ou Não pelo dia; a decisão dispara recálculo e pode liberar a pendência de exportação. A porta existente atendia 55 de 65 dias com duas ou mais batidas na sombra de 18/11, dentro de 113 dias observados; hoje, nao medido. Depois, ligar as telas à porta e dar destino aos casos que ela não recebe. app/docs/BACKLOG.md:1976; app/docs/RELATO.md:461; app/ponto/portas/he.py:175,190,229; app/folha/porta_export.py:676
-Q3: B) Registrar o reconhecimento do trabalho numa ação própria do dia. O admin vê esse reconhecimento separado da autorização de hora extra; o efeito financeiro desse reconhecimento teria de ser definido, com alcance nao medido. Depois, construir o registro e a leitura da decisão por pessoa e dia. app/docs/RELATO.md:506,522,542
-Q4: ja respondida pelo corte DST-L1-1800 quanto a mandar o dia à decisão do admin. O desenho pela hora extra e a resposta à revisão constam de DSTL1-PELA-PORTA-DA-HE e RESPOSTAS-1811-1312, com registro e medição ainda na fila. app/docs/CORTES.md:549; app/docs/RELATO.md:451; app/docs/BACKLOG.md:1976,2827
-Q5: vira complemento de DIA-SEM-TRABALHO-PORTA. O backlog já registra a ação pela hora extra como parte L1 dessa obra. app/docs/BACKLOG.md:1975,1976
-
-## O-JANELA-HE -- classe: espurias/HE -- tipo: smoke
-Q1: “sem pergunta”. Falta o retorno do teste de clique dos 13 passos, com filtros, recusa em lote, autorização com motivo, PDF e atalho na Central. app/docs/BACKLOG.md:1255; app/docs/RELATO-ARQUIVO.md:28550,28554,28561,28573
-Q2: Os filtros, as decisões de hora extra, o PDF e o atalho da Central funcionam como esperado quando o administrador os usa? app/docs/RELATO-ARQUIVO.md:28550,28573
-Q3: A) Roteiro passa. O admin confirma o que viu na tela; autorizar põe o fechamento na fila de recálculo. Cobertura do roteiro inteiro: nao medido. Depois, registrar o resultado e encerrar o teste de clique. app/docs/RELATO-ARQUIVO.md:28554,28565,28573; app/docs/RELATO.md:1037
-Q3: B) Algum passo falha. O admin registra o clique e o que a tela mostrou; efeito da falha na folha e alcance: nao medido. Depois, reproduzir o passo e delimitar a correção. app/docs/BACKLOG.md:1255; app/docs/RELATO-ARQUIVO.md:28550,28573
-Q4: nao respondida. L-097 define o que deve acontecer com as horas extras; o corte de uso deixou esta confirmação de tela aberta. app/docs/LEIS.md:115; app/docs/RELATO.md:1037
-Q5: segue. PRIORIDADE-ESPELHO-VERDADE-E-TRES-CORTES, item 4 de 16/11, fechou BO-HE-RECUSAR-LOTE-500 com 71 atos e zero erro após a cura; O-JANELA-HE ficou aberta com 72 atos desde 01/10 e dois erros anteriores à cura. app/docs/BACKLOG.md:2367; app/docs/RELATO.md:1037
-
-## FRAC5-MINIMO-5 -- classe: resto -- tipo: corte
-Q1: “sem pergunta”. Falta o novo corte de pouso da correção guardada, com as pendências da revisão. app/docs/BACKLOG.md:788; app/docs/GRADE-MESTRA.md:1785
-Q2: O sistema deve impedir que o administrador agende uma parte das férias com menos de cinco dias? app/docs/BACKLOG.md:788
-Q3: A) Manter a correção guardada. O admin vê o aviso atual de até três partes, uma com pelo menos 14 dias; a validação e o efeito na folha seguem os caminhos atuais. O corte registrou 5 agendamentos e 0 com parte menor que 5; alcance atual nao medido. Depois, nenhuma construção nessa opção. app/templates/ferias/agendar.html:10; app/ferias/models.py:264; app/docs/CORTES.md:484
-Q3: B) Autorizar a correção guardada. O admin recebe recusa ao agendar ou remarcar fora da regra; ao aprovar, pode ver aviso de aprovação sem agendamento. Sem agendamento, a ausência de férias correspondente não é criada; impacto na folha e alcance atual nao medido. Depois, retomar a cópia guardada, tratar os achados da revisão e medir o histórico. app/docs/BACKLOG.md:788; app/docs/RELATO.md:1626; app/ferias/models.py:388; app/ferias/services.py:774,790
-Q4: nao respondida para o novo pouso. FRAC5-SO-O-QUE-O-CORTE-MANDOU escolheu a opção (b) anterior, que liberou o texto e mandou guardar a correção. app/docs/CORTES.md:476,484
-Q5: segue. O backlog exige novo corte de pouso e registra que falta medir o histórico. app/docs/BACKLOG.md:788
-
-## ESCALA-NAO-DESCREVE C8 -- classe: espurias/HE -- tipo: !
-Q1: “sem pergunta” para o aval atual. O fechamento está suspenso à espera do corte sobre a tabela 2d. A pergunta anterior foi “a amostra fica minutos_do_oraculo apesar da concatenacao, vai a outra fonte, ou o detector exclui (contado) o dia com >1 bloco?” app/docs/RELATO.md:48,122; app/docs/BACKLOG.md:2377
-Q2: De quais registros devem sair as sugestões de horário que o administrador vê quando as batidas e a escala cadastrada divergem? app/docs/RELATO.md:48,61,122
-Q3: A) Liberar a fonte cortada às 13h. O admin vê a sugestão calculada por essa fonte; o cálculo da sugestão não grava folha. A sombra registrou 233 pessoas e 15 dias com mais de um bloco; alcance atual nao medido. Depois, implementar o brief com o limite conhecido e testar os dias partidos. app/docs/RELATO.md:74,110,122; app/ponto/services/esmeril_espelho.py:239
-Q3: B) Usar os turnos fechados do sistema como fonte. As sugestões podem mudar; o efeito na folha dependeria de aplicar a escala pela ação da tela. Na sombra, essa fonte coincidiu com a proposta nova em 139 de 233 e com a antiga em 4; alcance atual nao medido. Depois, rever o brief e testar a dependência do cadastro nessa fonte. app/docs/RELATO.md:48,61; app/templates/escala/cadastro_x_realidade.html:32
-Q4: ja respondida pelo corte ORDEM-E-RESPOSTAS-1911-1300, item 4, quanto à pergunta anterior. O fechamento com a tabela posterior continua suspenso. app/docs/RELATO.md:48,74,122
-Q5: segue. A obra está sem construtor e espera o aval sobre a tabela 2d. app/docs/BACKLOG.md:2377; app/docs/RELATO.md:48
-
-## JUIZ-DE-DONO-DO-DIA -- classe: contrato 20 -- tipo: corte
-Q1: “sem pergunta”. Falta autorizar o critério que atribui a causa ao dia de cada pergunta para decidir entre a cobrança ao colaborador e a lista do admin, ligada ao R2 do placar. app/docs/GRADE-MESTRA.md:59; app/docs/CORTES.md:425,426; app/docs/BACKLOG.md:1201; app/core/placar_estrutural.py:135
-Q2: Como saber se o problema daquele dia deve continuar com o funcionário, ir ao administrador ou ser corrigido no sistema? app/docs/BACKLOG.md:1201; app/docs/LEIS.md:122
-Q3: A) Manter a cobrança atual. O admin não recebe uma nova classificação na lista; a folha segue pelas regras atuais. A medida de 27/10 registrou 787 perguntas em 394 dias de colaboradores; hoje, nao medido. Depois, nenhuma construção nessa opção. app/docs/CORTES.md:426; app/docs/RELATO.md:4840
-Q3: B) Classificar pelo cadastro e pelas batidas do próprio dia. O admin recebe na lista os problemas de cadastro ou de batida; a classificação direciona a ação, e o efeito de eventual correção na folha é nao medido. Casos que trocariam de destino: nao medido. Depois, ligar a classificação aos dados do dia e testar os destinos. app/docs/CORTES.md:425; app/docs/LEIS.md:122; app/ponto/management/commands/e6_oraculo.py:53,85
-Q4: nao respondida. L-099 define as categorias e FIO-EXPORTADA-X-O44 mantém a cobrança provisória; o critério para esses dias ficou pendente. app/docs/LEIS.md:122; app/docs/CORTES.md:426; app/docs/GRADE-MESTRA.md:59
-Q5: segue. A Grade Mestra ainda registra a falta de critério autorizado para o dia. app/docs/GRADE-MESTRA.md:59
-
-## RAIZ-DA-DISPUTA -- classe: fio morto -- tipo: corte
-Q1: F1 — “QUEM FECHA o orfao?” e “reabrir a dona, nascer outra ou Pauta DP?” app/docs/RELATO.md:328
-Q2: Quem encerra um chamado que ficou sem pergunta ao funcionário, e para onde vai um motivo novo quando a discussão original já foi encerrada? app/docs/RELATO.md:328
-Q3: Chamado sem pergunta, A) Encerrar pelo evento que resolve o caso. O admin vê o encerramento com trilha; efeito sobre retenção na folha e casos que podem fechar: nao medido. Depois, ligar o evento ao fechamento. app/docs/RELATO.md:245; app/folha/fora_da_folha.py:17
-Q3: Chamado sem pergunta, B) Mandar à fila de quem pode resolver. O admin vê responsável e ação; o encaminhamento não decide a folha. Alcance efetivo nao medido; o recorte de 19/11 achou 84 chamados vivos sem pergunta de destino, entre 5.504. Depois, construir o encaminhamento com responsável. app/docs/RELATO.md:245; app/folha/fora_da_folha.py:46
-Q3: Motivo novo, A) Reabrir a discussão original. O admin vê o motivo no histórico reaberto; efeito na folha depende da resolução e é nao medido. Depois, construir a reabertura com trilha. app/docs/RELATO.md:245,328; app/docs/CORTES.md:515
-Q3: Motivo novo, B) Abrir outra discussão. O admin vê uma nova pendência; efeito na folha e alcance nao medido. Depois, unificar a emissão e evitar duplicatas. app/docs/RELATO.md:245,328; app/chamados/services/disputa_emissao.py:540,1110
-Q3: Motivo novo, C) Encaminhar ao DP. O admin vê a pauta com a origem; o encaminhamento não altera o gravado. Alcance nao medido nas três opções: 24.399 é o estoque de perguntas em discussões fechadas, e o instante de chegada do motivo não é registrado. Depois, construir a pauta com vínculo à origem. app/docs/RELATO.md:245,328; app/docs/LEIS.md:125
-Q4: nao respondida para as duas perguntas da F1. RAIZ-F1-UM-ELEITOR-DO-DESTINO resolveu a escolha anterior do chamado de destino; BO-DISPUTA-DESENHO-RAIZ registrou a questão do motivo novo na F1. app/docs/RELATO.md:2453,328; app/docs/CORTES.md:515
-Q5: segue. A leitura de 19/11 confirmou as duas perguntas abertas e mediu o estoque, sem identificar quantos motivos chegaram depois do encerramento. app/docs/RELATO.md:245,328
-
-RESUMO: 2 obras sobem ao Ronald como lei, JUIZ-DE-DONO-DO-DIA e RAIZ-DA-DISPUTA F1, esta com duas perguntas (app/docs/GRADE-MESTRA.md:59; app/docs/RELATO.md:328). 2 têm corte para a pergunta de desenho já registrada, DST-L1 e C8 (app/docs/CORTES.md:549; app/docs/RELATO.md:74,122). 1 pode virar complemento, DST-L1 (app/docs/BACKLOG.md:1975,1976).
-```
-
-_7525 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7527 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
