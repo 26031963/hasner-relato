@@ -1,7 +1,73 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 04:00** · publicado em **20/11/2026 04:01** (UTC-3)
+> Ultima resposta processada: **20/11/2026 04:04** · publicado em **20/11/2026 04:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 04:04 · sessao 16fb3fee2234 · E4C-F5-CONSTROI · verificador · origem=Code
+
+**E4C-F5-CONSTROI — BLOQUEIA.** A volta D permite que a validação vigente impeça novas ações enquanto o materializador e o vigia excluem a mesma pergunta pela coluna nula. No sentido inverso, correção e recusa passam a admitir escritas que a coluna antes barrava, inclusive em competência entregue. `app/chamados/services/validacao.py:687`, `app/chamados/services/validacao.py:900`, `app/chamados/services/materializacao.py:2111`, `app/chamados/services/vigia_carimbo.py:97`, `app/chamados/services/acoes_disputa.py:349`, `app/chamados/services/acoes_disputa.py:375`.
+
+Usei o diff fornecido para o antes e os arquivos da cópia para o depois. Conferi a catraca e as substituições dos mutantes em memória, em modo somente leitura. Identidade Git da cópia, execução da suíte, ocorrências e contagens em produção [nao verificado]. [nao verificado]
+
+## 1. Quem escreve e quem lê — BLOQUEIA
+
+Chamo de **A** a validação que a `composta` dá como vigente com coluna nula, e de **B** a coluna preenchida com validação que a `composta` dá como desfeita. Em B, a ausência de uma linha `VALIDACAO` por si só é insuficiente. O leitor incorpora o carimbo sem linha correspondente como passivo, no instante da coluna. Uma `RESPOSTA` humana posterior que desfaça a validação produz B, como faz a fixture do delta. `app/chamados/models.py:4276`, `app/chamados/models.py:4290`, `app/chamados/models.py:4333`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:35`.
+
+| Campo ou sequência | Escritores no caminho auditado | Leitores que decidem |
+|---|---|---|
+| `PerguntaDisputa.validada_em` | `_carimbar_validacao` grava a assinatura e o ato, inclusive para irmã e folga. As duas devoluções limpam a assinatura. Resposta humana, reabertura/recusa e ressuscitação também limpam. O nascimento pode receber a assinatura e `carimbar(resposta='validar')` pode preencher a coluna. `app/chamados/services/validacao.py:161`, `app/chamados/services/validacao.py:270`, `app/chamados/services/validacao.py:347`, `app/chamados/services/validacao.py:641`, `app/chamados/services/disputa_emissao.py:1484`, `app/chamados/services/disputa_emissao.py:1617`, `app/chamados/models.py:1721`, `app/chamados/models.py:3229`, `app/chamados/models.py:3354`. | Materializador, vigia/reparo, absolvíveis e órfãs do reconciliador, devolução, estoque L130, os próprios escritores ao decidir o que limpar, sintetizar ou preencher, e os templates ao mostrar os botões. As janelas de painel, verbos e `flip_auto` também selecionam ou contam pela coluna. `app/chamados/services/materializacao.py:2111`, `app/chamados/services/vigia_carimbo.py:97`, `app/chamados/reconciliador.py:678`, `app/chamados/reconciliador.py:1100`, `app/chamados/services/validacao.py:270`, `app/chamados/services/validacao.py:393`, `app/chamados/models.py:4290`, `app/templates/chamados/partials/_pergunta_card.html:42`, `app/templates/chamados/partials/modal_fio.html:228`, `app/chamados/services/painel.py:268`, `app/chamados/services/verbos.py:264`, `app/ponto/services/flip_auto.py:130`. |
+| Sequência `DecisaoPergunta` | A inserção passa por `registrar`. Chamam a porta resposta humana, automática e pela trilha, validação e devoluções, recusa/reabertura, ressuscitação, silêncio, retratação, absorção, nascimento assinado e backfills. A 0056 atualiza historicamente a flag das respostas. `app/chamados/models.py:4365`, `app/chamados/services/disputa_emissao.py:1532`, `app/chamados/services/disputa_emissao.py:1639`, `app/chamados/services/disputa_emissao.py:1686`, `app/chamados/services/disputa_emissao.py:1708`, `app/chamados/services/validacao.py:173`, `app/chamados/services/validacao.py:280`, `app/chamados/services/validacao.py:355`, `app/chamados/services/validacao.py:440`, `app/chamados/models.py:1673`, `app/chamados/models.py:1719`, `app/chamados/models.py:2110`, `app/chamados/models.py:2242`, `app/chamados/models.py:3234`, `app/chamados/services/materializacao.py:1066`, `app/ponto/services/veredito_celula.py:195`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:150`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:351`, `app/chamados/migrations/0056_decisao_resposta_mantem_validacao_historico.py:14`. | As guardas da tabela do item 2, C6, respostas sem veredito/C7, fila de validação e âncoras, por `composta` ou pela face SQL da validação. A tarefa do dia lê a ordem dos atos para atribuir a próxima ação. A ressuscitação lê a sequência para compensar e o BUG-PAR-103 procura `DEVOLUCAO`. Histórico, respostas anteriores e vigia de texto também consomem a sequência. `app/chamados/models.py:357`, `app/chamados/models.py:1707`, `app/chamados/models.py:2023`, `app/chamados/models.py:3563`, `app/chamados/models.py:3636`, `app/chamados/models.py:3826`, `app/chamados/juizes.py:1406`, `app/chamados/juizes.py:1770`, `app/chamados/services/tarefa_do_dia.py:154`, `app/chamados/services/materializacao.py:270`, `app/chamados/services/historico.py:98`, `app/chamados/services/vigia_texto_resposta.py:23`. |
+| `PerguntaDisputa.materializada_em` | `_escrever_carimbo` atribui. `carimbar`, `carimbar_identidade` e `descarimbar` persistem, e `descarimbar_em_lote` limpa em SQL. Materializador, colisão, absorção, S143, S144 e reconciliador chamam essas portas. `app/chamados/models.py:3317`, `app/chamados/models.py:3372`, `app/chamados/models.py:3410`, `app/chamados/models.py:3432`, `app/chamados/models.py:3509`, `app/chamados/services/materializacao.py:1064`, `app/chamados/services/materializacao.py:1699`, `app/chamados/services/materializacao.py:1987`, `app/chamados/services/materializacao.py:2187`, `app/chamados/services/disputa_emissao.py:2031`, `app/chamados/services/disputa_emissao.py:2105`, `app/chamados/reconciliador.py:408`, `app/chamados/reconciliador.py:646`. | Seleção de irmã, confirmação do par, descarte no materializador, devolução, estado da pergunta, testemunha da tela, S143/S144, reconciliador, relavra, reparo do passivo, C6 e respostas sem veredito. O lastro pode contradizer o carimbo, e o vigia testa justamente essa diferença. `app/chamados/services/materializacao.py:146`, `app/chamados/services/materializacao.py:879`, `app/chamados/services/materializacao.py:2127`, `app/chamados/services/materializacao.py:2174`, `app/chamados/services/validacao.py:264`, `app/chamados/services/validacao.py:644`, `app/chamados/services/validacao.py:771`, `app/chamados/models.py:2025`, `app/chamados/models.py:3266`, `app/chamados/services/disputa_emissao.py:2084`, `app/chamados/reconciliador.py:369`, `app/chamados/reconciliador.py:680`, `app/chamados/services/relavra_via.py:181`, `app/chamados/services/passivo_validado.py:529`, `app/chamados/juizes.py:1393`, `app/chamados/services/vigia_carimbo.py:105`. |
+
+A troca de teste booleano por `is not None` é equivalente para `datetime` ou `None`. A divergência relevante é **qual instante** passa a contar. A irmã em A pode agora ser plantada sem nova linha `VALIDACAO`. No plantio real, `carimbar(resposta='validar')` preenche a coluna nula com instante e autor do plantio. A próxima `leitura` pode incorporar esse carimbo como validação sintética posterior e devolver o instante novo por cima do ato original. O escritor é anterior ao delta, mas esse caminho até ele foi aberto pela C8. `app/chamados/services/materializacao.py:200`, `app/chamados/services/materializacao.py:1738`, `app/chamados/services/materializacao.py:1987`, `app/chamados/services/validacao.py:641`, `app/chamados/models.py:3354`, `app/chamados/models.py:4290`, `app/chamados/models.py:4337`.
+
+## 2. Cada guarda e os dois sentidos — BLOQUEIA
+
+Na tabela, «passa» significa que aquela guarda libera. A escrita depende dos demais requisitos da porta.
+
+| Guarda | A — ato validado, coluna nula | B — ato sem validação, coluna preenchida |
+|---|---|---|
+| Corrigir | Antes podia corrigir e chamar validar. Agora retorna `info` sem corrigir. | Antes retornava `info`. Agora pode gravar resposta e ato, limpar o carimbo antigo e só então tentar validar. Uma recusa dessa validação deixa a correção gravada. `app/chamados/services/acoes_disputa.py:349`, `app/chamados/services/acoes_disputa.py:375`, `app/chamados/services/acoes_disputa.py:383`, `app/chamados/services/disputa_emissao.py:1484`. |
+| Declarações e testemunha da tela | Antes a guarda liberava. Agora as duas portas podem retornar `validada_sem_registro`, e a testemunha oferece `aceita=False`. | Antes barrava. Agora a declaração do colaborador pode gravar a resposta ou retornar `ja_declarada`. No aplicar do admin, se a pergunta já está respondida, segue direto para validar a resposta que já estava gravada. `app/chamados/services/declaracao_texto.py:229`, `app/chamados/services/declaracao_texto.py:280`, `app/chamados/services/declaracao_texto.py:380`, `app/chamados/services/declaracao_texto.py:414`, `app/chamados/services/declaracao_texto.py:670`, `app/chamados/services/declaracao_texto.py:685`. |
+| S143 sem credor | Antes entrava na seleção se M era nulo. Agora fica fora. | Antes ficava fora. Agora entra, mas o C6 ainda pode vetar o carimbo se a resposta mantiver a pergunta viva. Se carimbar, usa `resposta='responder'`. Fechar a disputa é outra decisão, pela cauda do C7. `app/chamados/services/disputa_emissao.py:2080`, `app/chamados/services/disputa_emissao.py:2093`, `app/chamados/services/disputa_emissao.py:2105`, `app/chamados/services/disputa_emissao.py:2126`, `app/chamados/juizes.py:1428`. |
+| Irmã já validada | Antes devolvia «sem validação». Agora pode puxar a irmã para o plantio. | Antes passava por essa guarda. Agora bloqueia o plantio da irmã. `app/chamados/services/materializacao.py:200`, `app/chamados/services/materializacao.py:1738`. |
+| Implausibilidade da irmã | Antes consultava a implausibilidade e podia impedir o par. Agora pula a consulta. | Antes pulava. Agora consulta e pode impedir o par, se a guarda anterior não tiver retornado. `app/chamados/services/materializacao.py:201`, `app/chamados/services/materializacao.py:203`. |
+| Materializador sob trava | Se a coluna já estava nula na seleção, fica fora antes e agora. Se foi selecionada com a coluna preenchida e chega à trava em A, antes pulava e agora pode materializar. | Com resposta elegível e M nulo, entra no SQL nos dois lados. Antes tentava materializar. Agora pula sem limpar a coluna nem registrar erro naquele ramo. `app/chamados/services/materializacao.py:2111`, `app/chamados/services/materializacao.py:2123`, `app/chamados/services/materializacao.py:2130`. |
+| Validar o par | Antes escrevia outra `VALIDACAO` da irmã. Agora pula essa escrita, com o efeito do carimbo descrito no item 1 se o plantio ocorrer. | Antes pulava a assinatura. Agora registra `VALIDACAO`. O savepoint exige os dois M preenchidos ou desfaz a tentativa. `app/chamados/services/validacao.py:633`, `app/chamados/services/validacao.py:641`, `app/chamados/services/validacao.py:644`. |
+| Validar a pergunta | Com resposta elegível, antes podia assinar e tentar o plantio. Agora retorna `ja_validada` antes da trava e da materialização. | Antes retornava `ja_validada`. Agora pode assinar, materializar ou devolver. Se M já estiver preenchido, pula a unidade própria e pode retornar «ponto gravado» sem novo plantio ou nova prova de lastro da pergunta. `app/chamados/services/validacao.py:683`, `app/chamados/services/validacao.py:742`, `app/chamados/services/validacao.py:771`, `app/chamados/services/validacao.py:807`, `app/chamados/services/validacao.py:838`. |
+| Recusar | Antes podia recusar e devolver ao colaborador. Agora retorna `ja_validada`. | Antes barrava. Agora pode gravar `RECUSA` e limpar resposta, validação e M. Se M já existia, a limpeza do carimbo da pergunta por essa porta não retrata a batida. `app/chamados/services/validacao.py:900`, `app/chamados/services/validacao.py:923`, `app/chamados/services/disputa_emissao.py:1617`, `app/chamados/services/disputa_emissao.py:1656`, `app/chamados/models.py:3509`. |
+| Lote, entrada | Antes podia encaminhar à ação. Agora entra em `recusados` com «Ja validada». | Antes recusava na entrada. Agora pode chegar à ação se for classe A. A classificação ainda examina os dados e o conflito do slot. `app/chamados/services/validacao.py:1059`, `app/chamados/services/validacao.py:1067`, `app/chamados/services/validacao.py:1181`. |
+| Lote, após a ação | Antes entrava em `recusados` se o refresh trouxesse coluna nula. Agora conta em `validadas` e também em `nao_gravados` se o retorno da ação indicar falha. | Antes contava em `validadas` pelo carimbo. Agora entra em `recusados`, mesmo se a ação tiver devolvido `sucesso`. Essa guarda contabiliza, sem escrever na pergunta ou na disputa. `app/chamados/services/validacao.py:1081`, `app/chamados/services/validacao.py:1088`. |
+
+**Filas e disputa.** O vigia e o reparo do passivo excluem A. No caso B de hora ou data/hora, o vigia inclui a pergunta e o reparo pode chamar `_materializar_uma` diretamente, sem a nova guarda do materializador normal e sem reler V no refresh sob trava. Os universos de absolvíveis e órfãs do reconciliador fazem o inverso pelo SQL cru. A pode entrar nesses universos se atender aos filtros restantes, mas as órfãs ainda exigem C6 viva. B fica fora dos dois. Na fila de validação normal, a face SQL usa o ato para V, enquanto o filtro de resposta ainda exige instante projetado. `app/chamados/services/vigia_carimbo.py:97`, `app/chamados/services/passivo_validado.py:327`, `app/chamados/services/passivo_validado.py:529`, `app/chamados/reconciliador.py:678`, `app/chamados/reconciliador.py:713`, `app/chamados/reconciliador.py:1100`, `app/chamados/reconciliador.py:1136`, `app/chamados/juizes.py:1583`, `app/chamados/juizes.py:1770`.
+
+**Caso sem saída ordinária.** Uma pergunta em A, com resposta válida, M nulo, sem lastro, sem irmã elegível e fora das absolvições do reconciliador, perde a tentativa de validar que antes podia aplicar a resposta. As portas individuais vetam pela validação vigente, a resposta direta web/app veta pelo C6, S143 sem credor a exclui e materializador/vigia não a selecionam. A disputa pode fechar sem aplicação se essa for a única pendência: C6 dá a pergunta por morta, respostas sem veredito não a retêm e S144 exige lastro. Há reabertura explícita para perguntas elegíveis, mas esse ato zera a resposta e a assinatura para começar de novo. A tarefa pode indicar `MATERIALIZAR` para o ato sem efeito mesmo com a pergunta fora da seleção do materializador. `app/chamados/services/validacao.py:687`, `app/chamados/views.py:1239`, `app/api/views.py:2636`, `app/chamados/services/disputa_emissao.py:2084`, `app/chamados/services/materializacao.py:2111`, `app/chamados/juizes.py:1406`, `app/chamados/models.py:2023`, `app/chamados/services/materializacao.py:2183`, `app/chamados/juizes.py:1762`, `app/chamados/services/acoes_disputa.py:100`, `app/chamados/services/tarefa_do_dia.py:173`.
+
+A Central recebe as instâncias ORM e decide rótulo e disponibilidade de ações pela coluna. Em B, pode esconder ações que o servidor aceitaria. Em A, pode oferecer ações que o servidor agora veta. O cartão de detalhe também usa V cru para decidir se renderiza as ações. `app/chamados/services/fio.py:251`, `app/templates/chamados/partials/modal_fio.html:228`, `app/templates/chamados/partials/modal_fio.html:315`, `app/chamados/services/acoes_chamado.py:350`, `app/templates/chamados/partials/_pergunta_card.html:42`.
+
+## 3. Devolução após a validação — BLOQUEIA
+
+Há duas fontes no encadeamento. Na entrada, `validar_pergunta` decide pelo ato. No fluxo normal que chega à devolução, grava primeiro a coluna e a linha `VALIDACAO` juntas, tenta materializar e então relê a coluna para a limpeza. Esse percurso ordinário produz uma assinatura nova coerente antes da devolução. A divergência A existente na entrada retorna cedo e sequer chega à limpeza. `app/chamados/services/validacao.py:161`, `app/chamados/services/validacao.py:683`, `app/chamados/services/validacao.py:745`, `app/chamados/services/validacao.py:771`, `app/chamados/services/validacao.py:262`.
+
+Na chamada direta, com recusa registrada, resposta de hora e M nulo, A pode reabrir a disputa **sem desfazer a validação do ato**. B limpa a coluna e grava `DEVOLUCAO` de uma validação já desfeita. Esse ato muda a leitura da tarefa do dia para `materializacao_recusada`. O teste novo fixa os dois resultados para a chamada direta, com disputa aberta. Chamadas diretas em produção [nao verificado]. `app/chamados/services/validacao.py:264`, `app/chamados/services/validacao.py:270`, `app/chamados/services/validacao.py:284`, `app/chamados/services/tarefa_do_dia.py:165`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:383`.
+
+## 4. Banco, trava e cache — BLOQUEIA
+
+| Caminho | O que a guarda lê |
+|---|---|
+| S143 sem credor | O wrapper pega a trava do colaborador antes de o corpo montar a lista. O prefetch da lista é feito sob essa trava. O encerramento por tranca retorna antes da guarda. `app/chamados/services/disputa_emissao.py:1907`, `app/chamados/services/disputa_emissao.py:1913`, `app/chamados/services/disputa_emissao.py:1946`, `app/chamados/services/disputa_emissao.py:2080`. |
+| Declarações | As portas elegem a candidata depois de `_trava_do_ato`. A carga do universo é nova e traz decisões. Quando a costura tem sucesso, o refresh integral descarta essa carga e a guarda consulta novamente. A testemunha de tela usa a foto carregada sem passar pela trava da escrita. `app/chamados/services/declaracao_texto.py:252`, `app/chamados/services/declaracao_texto.py:301`, `app/chamados/services/declaracao_texto.py:354`, `app/chamados/services/declaracao_texto.py:372`, `app/chamados/services/declaracao_texto.py:658`, `app/chamados/services/fio.py:1963`. |
+| Par e plantio | A irmã vem de consulta nova sem prefetch. As duas guardas de `par_do_intervalo` compartilham uma leitura e `_validar_o_par` consulta a irmã novamente. No materializador, a guarda usa outro `get` depois de `travar_o_ato_do_plantio`, portanto lê as decisões dessa nova instância. `app/chamados/services/materializacao.py:139`, `app/chamados/services/materializacao.py:195`, `app/chamados/services/materializacao.py:2123`, `app/chamados/services/validacao.py:633`, `app/chamados/services/validacao.py:641`. |
+| Lote | A guarda de entrada usa o prefetch de **todas** as refs feito antes do laço. Se uma validação for desfeita por outra instância nesse intervalo, uma ref ainda marcada como validada é pulada sem releitura. Uma irmã também pode ser assinada pelo processamento de uma ref anterior. A guarda pós-ação usa refresh integral e consulta o ato de novo. `app/chamados/services/validacao.py:641`, `app/chamados/services/validacao.py:1059`, `app/chamados/services/validacao.py:1067`, `app/chamados/services/validacao.py:1088`. |
+| Validar, recusar e corrigir individualmente | As guardas usam instâncias novas, sem prefetch, **antes** da respectiva trava. A decisão não é repetida sob trava. Outra transação pode validar nesse intervalo e a operação iniciada antes ainda assinar outra vez, recusar ou sobrescrever a resposta. A janela já existia com a coluna. A C8 muda quais estados chegam a ela. `app/chamados/services/validacao.py:678`, `app/chamados/services/validacao.py:737`, `app/chamados/services/validacao.py:896`, `app/chamados/services/validacao.py:923`, `app/chamados/services/acoes_disputa.py:345`, `app/chamados/services/disputa_emissao.py:1517`. |
+
+`registrar` invalida o cache apenas da instância recebida na linha. Refresh parcial conserva `decisoes`. Há ainda um caminho preexistente no reconciliador: ele faz prefetch e julga as absolvíveis, adquire a trava dentro do laço e passa **a mesma instância** para `carimbar`, que consulta C6. Se o chamador não tinha a trava desde a carga, um ato concorrente pode estar fora daquele cache. `app/chamados/models.py:4333`, `app/chamados/models.py:4381`, `app/chamados/models.py:3358`, `app/chamados/reconciliador.py:635`, `app/chamados/reconciliador.py:702`, `app/chamados/tests/test_e4c_f5_voltaD_portas.py:371`.
+
+## 5. Custo e REDs 3×6 — BLOQUEIA
+
+- **Consultas por item novas.
+
+[truncado em 20000 de 31218 caracteres]
 
 ## 20/11 04:00 · sessao a8398df51329 · - · - · origem=Ronald (tmux)
 
@@ -1175,455 +1241,4 @@ O RED do contador morde `for p in universo` por prever 1 consulta de decisões e
 
 O selo cobra contagem total e callbacks, de modo que um SELECT redundante no caminho ultrapassa o teto se o cenário já está no teto. Pode passar com a troca de um SELECT por uma escrita de custo igual sem novo callback. No cenário 3 FICAM, `vivos >= 1` aceita dois fechamentos. Os cenários que fecham verificam todos os estados finais, mas só consultam esses estados depois da batida medida. Runs e contagens efetivas [nao verificado]. `app/ponto/tests/test_selo_chokepoint_escrita.py:319,330,448,475,488,510`
 
-## 20/11 02:46 · sessao a021eb5414ee · CADEIA-20-PASSO-1 · sonda · origem=Code
-
-`FOTO` traz a leitura dos insumos nas duas bordas da etapa. `LEITURA` registra a chamada que o passe realmente fez, inclusive quando a guarda pulou a célula. A string preserva o fuso que entrou no hash. As horas de observação usam `timezone.localtime`. `app/ponto/services/cartorio.py:493–578,1399–1407,1527–1558`
-`DELTA` mostra as partes alteradas e o intervalo observado. `ESCRITA` mostra o antes/depois no SQL, a pilha e a fila naquele instante. `FILA` registra inclusões, consumos e descartes posteriores. `JUIZO` mostra os insumos efetivamente entregues ao classificador. `app/ponto/services/cartorio.py:1126–1164,1209–1231,1605–1627,2035–2037` `app/chamados/models.py:3344–3352,3484–3487`
-`RESUMO` tem uma linha por célula com P1, P2 e P3. A contagem é por linha de chamado ou pergunta com mudança monitorada, após a última `LEITURA` do passe. Se a releitura cair dentro do intervalo em que a mudança foi detectada, a ordem fica `[nao verificado]`. `app/ponto/services/cartorio.py:1123,1156–1157,1222,1399–1401,1541–1547`
-A sonda mantém a frota e a ordem do comando. A cascata de materialização pode alcançar clones por PK sem filtro de colaborador, e a equivalência de cortar a frota está `[nao verificado]`. `app/ponto/management/commands/processar_cartorio.py:51–69` `app/chamados/signals.py:149–167` `app/chamados/services/materializacao.py:1232–1279`
-`BRACO` seleciona três rodadas com relógio fixo ou o controle que avança em P3. A resposta efetiva do juiz do turno, os deltas transitórios entre fotos e os efeitos de callbacks `on_commit`, consumidores ou escritores externos estão `[nao verificado]` até onde as linhas da sonda os alcançarem. O ensaio termina por rollback e a execução desta entrega está `[nao verificado]`. `app/ponto/management/commands/processar_cartorio.py:35–41` `app/ponto/turnos.py:2117–2134` `app/chamados/signals.py:134–146,229–240` `bin/sombra.sh:483–492`
-
-=====SCRIPT=====
-```python
-import datetime as dt
-import hashlib
-import io
-import json
-import logging
-import re
-import sys
-import threading
-from collections import defaultdict
-from contextlib import ExitStack, redirect_stderr, redirect_stdout
-from functools import wraps
-from pathlib import Path
-from types import SimpleNamespace
-from unittest.mock import patch
-
-from django.core.management import call_command
-from django.db import connection, transaction
-from django.db.models import Q
-from django.utils import timezone
-from freezegun import freeze_time  # app/requirements.txt:43
-
-from chamados import juizes, models as mc, reconciliador
-from chamados.catalogo.modulos import data_do_chamado
-from chamados.services import disputa_emissao, fabrica_da_celula, fecho_runtime, materializacao
-from colaboradores.models import Colaborador
-from core import observ
-from escala import servico_jornada, utils as eu
-from escala.models import CelulaDia, EscalaColaborador
-from ponto import supra_juiz, turnos
-from ponto.management.commands import detectar_ausencias, processar_cartorio
-from ponto.models import Ausencia, Batida
-from ponto.portas import celula as portas
-from ponto.services import cartorio, cluster_espurio, justificativa
-
-CELULAS = (128355, 129943, 138359, 129476, 129490, 138541, 142995, 143945, 129134)
-EMPRESAS = (2, 3, 4)
-RODADAS = ('P1', 'P2', 'P3')
-BRACO = 'encerrado'  # 'em_curso', 'encerrado' ou 'cruza'
-CEDO = '2026-11-20T00:30:00-03:00'
-TARDE = '2026-11-20T06:27:00-03:00'
-RELOGIOS = {
-    'em_curso': (CEDO, CEDO, CEDO),
-    'encerrado': (TARDE, TARDE, TARDE),
-    'cruza': (CEDO, CEDO, TARDE),
-}
-NV = '[nao verificado]'
-
-CH = mc.ChamadoColaborador
-PD = mc.PerguntaDisputa
-EMISSOR = detectar_ausencias.Command
-CMD = processar_cartorio.Command
-
-CORPO = cartorio._julgar_colab_corpo             # app/ponto/services/cartorio.py:1264
-ATO = cartorio.julgar_colab                     # app/ponto/services/cartorio.py:1059
-IMPRESSAO = cartorio.impressao_insumos          # app/ponto/services/cartorio.py:493
-CONTADORES = cartorio.contadores               # app/ponto/services/cartorio.py:2117
-CLASSIFICAR = supra_juiz.classificar_dia        # app/ponto/supra_juiz.py:217
-APP = str(Path(cartorio.__file__).resolve().parents[2]) + '/'
-ET_COMANDO = 'app/ponto/management/commands/processar_cartorio.py:35'
-
-CH_STATUS = dict(CH.STATUS_CHOICES)
-PD_VIAS = dict(PD.VIAS)
-VEREDITOS = CelulaDia.VEREDITOS_CARTORIO + CelulaDia.VEREDITOS_ADMIN
-BAT_TIPOS = dict(Batida.TIPO_CHOICES)
-AUS_STATUS = dict(Ausencia.STATUS_CHOICES)
-P_CARIMBO = (
-    'materializada_em', 'materializada_por_id', 'via_resolucao',
-    'validada_em', 'validada_por_id', 'respondida_em',
-)
-P_VAZIO = (None, None, '', None, None, None)
-CH_ESCOPO = ('colaborador_id', 'celula_id', 'celula__data', 'modulo_origem', 'contexto_json')
-
-DML = re.compile(
-    r'^\s*(UPDATE|INSERT\s+INTO|DELETE\s+FROM)\s+'
-    r'(?:"?\w+"?\.)?"?([a-z_][a-z_0-9]*)"?\s',
-    re.IGNORECASE,
-)
-ESTORNO = re.compile(r'^\s*ROLLBACK TO SAVEPOINT\s+"?(\w+)"?', re.IGNORECASE)
-
-
-class Desfazer(Exception):
-    pass
-
-
-class FalhaSonda(Exception):
-    pass
-
-
-def local(valor):
-    return timezone.localtime(valor).isoformat()
-
-
-def json_extra(valor):
-    if isinstance(valor, dt.datetime):
-        return local(valor)
-    if isinstance(valor, dt.date):
-        return valor.isoformat()
-    raise TypeError('tipo inesperado na saida')
-
-
-def fonte(codigo, linha):
-    arquivo = codigo.co_filename
-    if arquivo.startswith(APP):
-        arquivo = 'app/' + arquivo[len(APP):]
-    else:
-        arquivo = Path(arquivo).name
-    return '%s:%s' % (arquivo, linha)
-
-
-def pilha(quadro):
-    app, outros = [], []
-    while quadro:
-        codigo = quadro.f_code
-        item = '%s:%s' % (fonte(codigo, quadro.f_lineno), codigo.co_name)
-        (app if codigo.co_filename.startswith(APP) else outros).append(item)
-        quadro = quadro.f_back
-    return (app + outros)[:8]
-
-
-def codigo_publico(valor, permitidos):
-    if valor is not None and valor != '' and valor not in permitidos:
-        raise FalhaSonda('codigo persistido fora do vocabulario publicado') [nao verificado]
-    return valor
-
-
-class Silencio(io.TextIOBase):
-    def write(self, texto):
-        return len(texto)
-
-
-class Sonda:
-    def __init__(self):
-        self.saida = sys.stdout
-        self.erros = []
-        self.seq = 0
-        self.rodada = None
-        self.empresa = None
-        self.cels = {}
-        self.por_colab = defaultdict(list)
-        self.por_dia = {}
-        self.etapas = []
-        self.corpos = []
-        self.capturas = []
-        self.prova = None
-        self.prova_turno = None
-        self.c1 = []
-        self.versao_sql = 0
-        self.cache_fotos = {}
-        self.ultima_foto = {}
-        self.deltas = defaultdict(list)
-        self.leituras = defaultdict(list)
-        self.escritas = defaultdict(list)
-        self.savepoints = defaultdict(set)
-        self.estornadas = set()
-
-    def linha(self, tipo, **dados):
-        self.seq += 1
-        registro = dict(seq=self.seq, rodada=self.rodada, empresa=self.empresa,
-                        hora=local(timezone.now()), **dados)
-        print(tipo, json.dumps(registro, ensure_ascii=True, separators=(',', ':'),
-                               default=json_extra), file=self.saida, flush=True)
-        return self.seq
-
-    def erro(self, etapa, ids, exc):
-        if any(exc is anterior for anterior in self.erros):
-            return
-        self.erros.append(exc)
-        # Mensagens externas podem conter nomes, CPF, SQL ou texto de resposta.
-        seguro = repr(exc) if type(exc) is FalhaSonda else (
-            "%s('[redigido]')" % type(exc).__name__
-        )
-        celula = ','.join(map(str, ids)) if ids else NV
-        print('ERRO', etapa, celula, seguro, file=self.saida, flush=True)
-
-    def abrir_universo(self):
-        self.cels = {
-            pk: (cid, data, emp)
-            for pk, cid, data, emp in CelulaDia.objects.filter(pk__in=CELULAS)
-            .values_list('pk', 'colaborador_id', 'data', 'colaborador__empresa_id')
-        }
-        for pk in CELULAS:
-            if pk not in self.cels:
-                self.erro(ET_COMANDO, (pk,), FalhaSonda('celula ausente na sombra'))
-                continue
-            cid, data, emp = self.cels[pk]
-            if emp not in EMPRESAS:
-                self.erro(ET_COMANDO, (pk,), FalhaSonda('empresa fora do lote'))
-            self.por_colab[cid].append(pk)
-            self.por_dia[cid, str(data)] = pk
-
-    def fila(self, pk):
-        # Fila fisica e contador do MESMO ato. app/ponto/services/cartorio.py:1114,1149–1164,1209–1231
-        quadro = sys._getframe(1)
-        while quadro and quadro.f_code is not ATO.__code__:
-            quadro = quadro.f_back
-        if quadro is None:
-            return {'ato': None}
-        l = quadro.f_locals
-        cid = l['c'].pk
-        out = l['out']
-        conv = l.get('_conv')
-        corpo = self.corpos[-1] if self.corpos else None
-        escolhido = corpo is not None and pk in corpo.selecionadas
-        return {
-            'ato': cid,
-            'rejulgar': any(c.pk == pk for c in out.get('rejulgar', ())),
-            'rejulgar_na_releitura': conv is not None and
-                any(c.pk == pk for c in conv.get('rejulgar', ())),
-            'segunda_em_execucao': escolhido and corpo.tipo == 'segunda',
-            'releitura_em_execucao': escolhido and corpo.tipo == 'releitura',
-            'releitura_convocada': conv is not None and any(c.pk == pk for c in l['cels']),
-            'emitidos_entrada': l.get('_e0'),
-            'emitidos': out.get('emitidos'),
-            'emitidos_na_releitura': None if conv is None else conv['emitidos'],
-            'rejulgar_descartado': out.get('rejulgar_descartado'),
-        }
-
-    def contadores(self):
-        sonda = self
-
-        class Fila(list):
-            def append(self, cel):
-                super().append(cel)
-                if cel.pk in sonda.cels:
-                    f = sys._getframe(1)
-                    sonda.linha('FILA', celula=cel.pk, acao='incluiu',
-                                ponto=fonte(f.f_code, f.f_lineno), estado=sonda.fila(cel.pk))
-
-        class Out(dict):
-            def setdefault(self, chave, padrao=None):
-                # Todos os produtores reais usam setdefault(...).append(...).
-                # app/ponto/services/cartorio.py:1149–1150,1703–1704,1723,1737,1815,1831,1860
-                if chave == 'rejulgar' and chave not in self:
-                    padrao = Fila(padrao)
-                return super().setdefault(chave, padrao)
-
-            def pop(self, chave, *padrao):
-                valor = super().pop(chave, *padrao)
-                if chave == 'rejulgar' and valor:
-                    f = sys._getframe(1)
-                    acao = 'consumiu' if f.f_code is ATO.__code__ and f.f_lineno in (1156, 1157) else 'descartou'
-                    for cel in valor:
-                        if cel.pk in sonda.cels:
-                            sonda.linha('FILA', celula=cel.pk, acao=acao,
-                                        ponto=fonte(f.f_code, f.f_lineno), estado=sonda.fila(cel.pk))
-                return valor
-
-        return Out(CONTADORES())
-
-    def sha256(self, dado=b''):
-        # Leitura dos bytes e da lista local no ponto real do SHA.
-        # app/ponto/services/cartorio.py:502–507,508–578
-        if self.capturas:
-            quadro = sys._getframe(1)
-            if quadro.f_code is IMPRESSAO.__code__:
-                self.capturas[-1].append((dado, tuple(quadro.f_locals['partes'])))
-        return hashlib.sha256(dado)
-
-    def impressao(self, *args, **kw):
-        f = sys._getframe(1)
-        if f.f_code is not CORPO.__code__:
-            return IMPRESSAO(*args, **kw)
-        l = f.f_locals
-        cel = l['cel']
-        universo = self.prova if self.prova is not None else self.cels
-        if cel.pk not in universo:
-            return IMPRESSAO(*args, **kw)
-
-        etapas = self.etapas[-1:]
-        etapa = etapas[0].fonte if etapas else fonte(f.f_code, f.f_lineno)
-        captura = []
-        self.capturas.append(captura)
-        try:
-            batidas, aus, chamados, dna = args[:4]
-            codigo_publico(aus, AUS_STATUS)
-            for batida in batidas:
-                codigo_publico(batida.tipo, BAT_TIPOS)
-            d = dna or {}
-            versao, marcos = d.get('dna_versao'), d.get('marcos')
-            chaves = {'hi', 'hf'} | {k for par in CelulaDia.PARES_PAUSA_DNA for k in par}
-            if versao is not None and type(versao) is not int:
-                raise FalhaSonda('versao de DNA fora do formato')
-            if marcos is not None and (
-                not isinstance(marcos, dict) or set(marcos) - chaves
-                or any(v is not None and (not isinstance(v, str) or not re.fullmatch(r'\d\d:\d\d', v))
-                       for v in marcos.values())
-            ):
-                raise FalhaSonda('marcos de DNA fora do formato')
-            codigo_publico(kw.get('veto'), ('VETO_DEGENERADA', 'VETO_REGUA'))
-            parcial = kw.get('cob_parcial')
-            if isinstance(parcial, str) and not re.fullmatch(
-                r'(?:sem_periodo|dentro|fora|nao_sei|1)(?:;disp=\d+(?:,\d+)*)?', parcial
-            ):
-                raise FalhaSonda('cobertura parcial fora do formato')
-
-            h = IMPRESSAO(*args, **kw)  # app/ponto/services/cartorio.py:493–578
-            if len(captura) != 1:
-                raise FalhaSonda('chamada real nao entregou exatamente um preimage')
-            bruto, partes = captura[0]
-            por_insumo = dict(zip(('batidas', 'ausencia_status', 'chamados', 'dna'), partes[:4]))
-            por_insumo.update((p.partition(':')[0], p) for p in partes[4:])
-            # Sao as listas ja calculadas pelo corpo, inclusive no caminho da guarda.
-            # app/ponto/services/cartorio.py:1399–1404,1527–1547
-            vivos = {ch.pk for ch in l.get('vivos', ())}
-            fio = {ch.pk for ch in l.get('_com_fio', ())}
-            turno = self.prova_turno if self.prova is not None else (
-                self.corpos[-1].turnos if self.corpos else {}
-            )
-            foto = {
-                'insumos': bruto.decode('utf-8'), 'hash': h, 'partes': por_insumo,
-                'chamados': [
-                    {'pk': ch.pk, 'status_local': codigo_publico(ch.status_local, CH_STATUS),
-                     'viva': ch.pk in vivos, 'viva_com_fio': ch.pk in fio}
-                    for ch in chamados
-                ],
-                'turno': turno.get(cel.pk),
-                'hoje': l['hoje'], 'agora': l['agora'],
-            }
-            if self.prova is not None:
-                self.prova[cel.pk] = foto
-            else:
-                tipo = self.corpos[-1].tipo if self.corpos else NV
-                seq = self.linha('LEITURA', celula=cel.pk, etapa=fonte(f.f_code, f.f_lineno),
-                                 tipo=tipo, impressao_objeto=cel.impressao,
-                                 veredito_objeto=codigo_publico(cel.veredito, VEREDITOS),
-                                 fila=self.fila(cel.pk), **foto)
-                self.leituras[self.rodada, cel.pk].append((seq, tipo, h))
-            return h
-        except Exception as exc:
-            self.erro(etapa, (cel.pk,), exc)
-            raise
-        finally:
-            self.capturas.pop()
-
-    def classificar(self, *args, **kw):
-        f = sys._getframe(1)
-        cel = f.f_locals.get('cel') if f.f_code is CORPO.__code__ else None
-        if cel is None or cel.pk not in self.cels or self.prova is not None:
-            return CLASSIFICAR(*args, **kw)
-        etapa = 'app/ponto/supra_juiz.py:217'
-        try:
-            resultado = CLASSIFICAR(*args, **kw)  # app/ponto/services/cartorio.py:1411–1415,1605–1627
-            l = f.f_locals
-            self.linha('JUIZO', celula=cel.pk, etapa=etapa, chamada=fonte(f.f_code, f.f_lineno),
-                       total=kw['chamados_total'], protestam=kw['chamados_vivos'],
-                       com_fio=kw['cobrancas_vivas'],
-                       pks_protestam=[ch.pk for ch in l.get('_protestam', ())],
-                       pks_com_fio=[ch.pk for ch in l.get('_com_fio', ())],
-                       turno_encerrado=kw['turno_encerrado'], codigos=[c for c, _ in resultado])
-            return resultado
-        except Exception as exc:
-            self.erro(etapa, (cel.pk,), exc)
-            raise
-
-    def motivo_turno(self, real):
-        @wraps(real)
-        def embrulho(turnos_dia, ec, data, agora, celulas=None):
-            f = sys._getframe(1)
-            c = f.f_locals.get('colaborador') if f.f_code is turnos._dias_encerrados_puro.__code__ else None
-            pk = self.por_dia.get((c.pk, str(data))) if c is not None else None
-            destino = self.prova_turno if self.prova is not None else (
-                self.corpos[-1].turnos if self.corpos else None
-            )
-            if pk is None or destino is None:
-                return real(turnos_dia, ec, data, agora, celulas=celulas)
-            dados = {}
-            self.c1.append(dados)
-            try:
-                # app/ponto/turnos.py:2117–2134,2170–2183
-                motivo = real(turnos_dia, ec, data, agora, celulas=celulas)
-                destino[pk] = dict(motivo=motivo, agora=agora, **dados)
-                return motivo
-            except Exception as exc:
-                self.erro('app/ponto/turnos.py:2117', (pk,), exc)
-                raise
-            finally:
-                self.c1.pop()
-
-        return embrulho
-
-    def testemunha_turno(self, real, chave):
-        @wraps(real)
-        def embrulho(*args, **kw):
-            valor = real(*args, **kw)
-            if self.c1:
-                self.c1[-1][chave] = (
-                    getattr(valor.entrada, 'pk', None)
-                    if chave == 'entrada_turno_aberto' and valor is not None else valor
-                )
-            return valor
-
-        return embrulho
-
-    def fotos_do_colab(self, cid):
-        versao = (self.rodada, self.agora, self.versao_sql)
-        memo = self.cache_fotos.get(cid)
-        if memo is not None and memo[0] == versao:
-            return memo[1]
-        c = Colaborador.objects.get(pk=cid)
-        # Mesma lista e ordem da porta de lote. app/ponto/management/commands/processar_cartorio.py:64–69
-        cels = list(CelulaDia.objects.filter(colaborador=c, data__lt=self.hoje).order_by('data'))
-        alvo = {cel.pk: None for cel in cels if cel.pk in self.cels}
-        esperadas = set(self.por_colab[cid])
-        if set(alvo) != esperadas:
-            raise FalhaSonda('celula alvo fora da janela de leitura do comando')
-        tl = threading.local()
-        tl.agora = self.agora
-        tl.colaborador = c
-        self.prova, self.prova_turno = alvo, {}
-        try:
-            with patch.object(cartorio, '_tl', tl):
-                # O corpo real calcula ambos os caminhos da impressao antes de
-                # completar_status continuar. apply_=False veta a lavra de status.
-                # app/ponto/services/cartorio.py:942–959,1264–1317,1399–1409,1541–1558
-                CORPO(
-                    c, cels, hoje=self.hoje, agora=self.agora, apply_=False, emissor=None,
-                    out=CONTADORES(), prefix='', _w=lambda texto: None, forcar=False,
-                    EscalaColaborador=EscalaColaborador, Batida=Batida, ChamadoColaborador=CH,
-                    eu=eu, ausencia_cobre=turnos.ausencia_cobre, classificar_dia=CLASSIFICAR,
-                    completar_status=True,
-                )
-        finally:
-            self.prova, self.prova_turno = None, None
-        for cel in cels:
-            if cel.pk not in alvo:
-                continue
-            if alvo[cel.pk] is None:
-                raise FalhaSonda('a foto nao chegou a chamada real da impressao')
-            alvo[cel.pk].update(
-                impressao_gravada=cel.impressao,
-                veredito=codigo_publico(cel.veredito, VEREDITOS),
-            )
-        self.cache_fotos[cid] = (versao, alvo)
-        return alvo
-
-    def fotografar(self, ids, etapa, borda):
-        fotos = {}
-     
-
-[truncado em 20000 de 38478 caracteres]
-
-_7470 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7471 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
