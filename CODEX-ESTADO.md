@@ -1,7 +1,523 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 19:13** · publicado em **20/11/2026 19:18** (UTC-3)
+> Ultima resposta processada: **20/11/2026 19:21** · publicado em **20/11/2026 19:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 19:21 · sessao 282f814c9fa2 · E4C-F5-CONSTROI · sonda · origem=Code
+
+```python
+# Uso na sombra com bin/sombra.sh --rodar sonda.py.
+# SOMBRA_ARVORE seleciona o app da outra copia.
+# bin/sombra.sh:179, bin/sombra.sh:182, bin/sombra.sh:483
+#
+# O --rodar chama lavra_de_prod antes do shell Python. Essa etapa le a
+# producao, grava arquivos auxiliares e atualiza a sombra fora do rollback
+# desta sonda. O lancador tambem grava a saida com tee.
+# bin/sombra.sh:136, bin/sombra.sh:151, bin/sombra.sh:157, bin/sombra.sh:483
+#
+# Nomes do anexo ausentes no main, resolvidos individualmente por getattr.
+# - PerguntaDisputa.RECUSA_FORA_DO_FATO. O main tem VIAS_FORA_DO_FATO e
+#   carimbar devolve False nesse caso. A sonda registra a falta do nome.
+#   app/chamados/models.py:2701, app/chamados/models.py:3316
+# - PerguntaDisputa.RECUSA_C6. O main devolve False no ramo do C6.
+#   A sonda registra a falta do nome. app/chamados/models.py:3334
+# - PerguntaDisputa.RECUSA_PAR_ATO_COLUNA. O main grava o ato da irma
+#   pelo ramo de sucesso e emite a recusa sem motivo. A sonda registra
+#   a falta do nome. app/chamados/services/materializacao.py:1055
+#
+# A trilha do main traz escape_pk, ausencia_pk, via_tentada e data_evento.
+# Quando falta motivo, a sonda guarda os PKs observados e marca a
+# classificacao INCONCLUSIVO. A rejeicao segue o resultado da passagem.
+# app/chamados/services/materializacao.py:1065
+#
+# A prova foto 3 == foto 1 usa hash integral e numero de linhas.
+# A saida mostra 12 caracteres do hash. O delta usa multiconjuntos
+# por matricula e contabiliza duplicatas. A ordem fica refletida no hash.
+# O registro 11 pertence ao ultimo 10, cuja matricula ocupa [2:12].
+# app/folha/export.py:34, app/folha/export.py:215, app/folha/export.py:246,
+# app/folha/export.py:525, app/folha/export.py:654
+#
+# Rejeicao pela porta real, seguida apenas do ramo de devolucao que o
+# anexo executava dentro do rollback. app/ponto/services/ausencia.py:1057,
+# app/ponto/signals.py:254, app/ponto/signals.py:272
+#
+# Execucao no banco da sombra e compatibilidade de runtime com c8eb8eddf
+# [nao verificado].
+
+import hashlib
+import io
+import json
+import logging
+import socket
+import sys
+from collections import Counter, defaultdict
+from contextlib import ExitStack, closing, redirect_stderr, redirect_stdout
+from unittest.mock import patch
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.storage import FileSystemStorage
+from django.db import DatabaseError, connection, transaction
+from django.db.models import F, Q, TextField
+from django.db.models.functions import Cast
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework.test import APIRequestFactory, force_authenticate
+
+from api.views import api_disputa_responder
+from chamados.models import PerguntaDisputa
+from chamados.services import disputa_emissao, materializacao as M
+from colaboradores.mixins import tem_acao
+from core import observ
+from folha import export as E
+from folha.models import ExportacaoDominio
+from ponto.models import Ausencia, Batida, FechamentoMensal
+from ponto.services import ausencia as A
+
+
+TETO = 8
+FOTOS = ("antes", "depois_passagem", "depois_rejeicao")
+NOMES_DE_RECUSA = ("RECUSA_FORA_DO_FATO", "RECUSA_C6", "RECUSA_PAR_ATO_COLUNA")
+REVERSOES = {"par_ato_coluna_divergente", "sem_grupo_recuperavel"}
+MOTIVOS_COMUNS = REVERSOES | {
+    "fora_da_releitura", "resposta_posterior_a_passagem", "ja_carimbada",
+}
+
+# app/api/views.py:2603, app/api/views.py:2631,
+# app/chamados/services/disputa_emissao.py:1439.
+# A mensagem de absorcao vigente vem do anexo para c8eb8eddf [nao verificado].
+RECUSAS = {
+    (404, "Colaborador nao encontrado."): "sem_vinculo",
+    (404, "Pergunta nao encontrada ou ja regularizada."): "nao_encontrada_ou_nao_viva",
+    (400, "Resposta obrigatoria."): "resposta_vazia",
+    (400, "Selecione/preencha uma resposta."): "resposta_vazia",
+    (400, "Opcao invalida."): "opcao_invalida",
+    (400, "Hora deve ser HH:MM."): "hora_invalida",
+    (400, "A pergunta já foi resolvida pela ausência declarada."): "absorcao_vigente",
+}
+
+
+class Descartar(io.TextIOBase):
+    def write(self, texto):
+        return len(texto)
+
+
+class GuardaSombra(RuntimeError):
+    pass
+
+
+class GuardaDeSequencias(RuntimeError):
+    pass
+
+
+class SemUsuarioAtivo(RuntimeError):
+    pass
+
+
+class SemDecisorDP(RuntimeError):
+    pass
+
+
+class EvidenciaInesperada(RuntimeError):
+    pass
+
+
+class LayoutDeExportInesperado(RuntimeError):
+    pass
+
+
+class RedeBloqueada(OSError):
+    pass
+
+
+class EscritaEmArquivoBloqueada(OSError):
+    pass
+
+
+def resolver_recusas(ausentes):
+    motivos = set(MOTIVOS_COMUNS)
+    for nome in NOMES_DE_RECUSA:
+        valor = getattr(PerguntaDisputa, nome, None)
+        if valor is None:
+            ausentes.add(f"PerguntaDisputa.{nome}")
+        else:
+            motivos.add(valor)
+    return motivos
+
+
+def guardar_sequencias(cursor):
+    # A sombra usa PostgreSQL 17. As portas podem inserir linhas com PK
+    # gerado. A sonda usa RESTART dentro do atomic externo para isolar
+    # os avanços de sequencia, preservando o proximo valor inicial.
+    # bin/sombra_db.sh:45, app/config/settings/base.py:104,
+    # app/ponto/services/ausencia.py:560, app/chamados/models.py:4338.
+    # Permissao e comportamento das sequencias instaladas [nao verificado].
+    try:
+        cursor.execute("""
+            DO $sonda$
+            DECLARE
+                s record;
+                qualificada text;
+                ultimo bigint;
+                usada boolean;
+                proximo numeric;
+            BEGIN
+                FOR s IN
+                    SELECT n.nspname, c.relname, p.seqcache, p.seqincrement,
+                           p.seqmin, p.seqmax, p.seqcycle
+                    FROM pg_catalog.pg_sequence p
+                    JOIN pg_catalog.pg_class c ON c.oid = p.seqrelid
+                    JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+                    WHERE n.nspname IN ('juliani', 'public')
+                    ORDER BY n.nspname, c.relname
+                LOOP
+                    qualificada := format('%I.%I', s.nspname, s.relname);
+                    EXECUTE format('ALTER SEQUENCE %s CACHE %s', qualificada, s.seqcache);
+                    EXECUTE 'SELECT last_value, is_called FROM ' || qualificada
+                        INTO ultimo, usada;
+                    proximo := ultimo::numeric;
+                    IF usada THEN
+                        proximo := proximo + s.seqincrement;
+                    END IF;
+                    IF proximo NOT BETWEEN s.seqmin AND s.seqmax THEN
+                        IF NOT s.seqcycle THEN
+                            CONTINUE;
+                        END IF;
+                        proximo := CASE WHEN s.seqincrement > 0
+                                       THEN s.seqmin ELSE s.seqmax END;
+                    END IF;
+                    EXECUTE format('ALTER SEQUENCE %s RESTART WITH %s', qualificada, proximo);
+                END LOOP;
+            END;
+            $sonda$;
+        """)
+    except DatabaseError as erro:
+        raise GuardaDeSequencias() from erro
+
+
+def sha(valor):
+    texto = json.dumps(valor, sort_keys=True, ensure_ascii=True, separators=(",", ":"))
+    return hashlib.sha256(texto.encode("ascii")).hexdigest()
+
+
+def assinatura(campos):
+    por_campo = {nome: sha(valor) for nome, valor in campos.items()}
+    return sha(por_campo), por_campo
+
+
+def fotografar_linhas(qs):
+    campos = [f for f in qs.model._meta.concrete_fields if not f.primary_key]
+    nomes = [f.name for f in campos]
+    colunas = [Cast(F(f.attname), TextField()) for f in campos]
+    return {
+        pk: assinatura(dict(zip(nomes, valores)))
+        for pk, *valores in qs.order_by("pk").values_list("pk", *colunas)
+    }
+
+
+def foto(colab, dia, mes, ano, montar):
+    empresa = colab.empresa
+    vigente = E.competencia_entregue(empresa.pk, mes, ano, registro=True)
+    montagens = []
+
+    def montar_observada(*args, **kwargs):
+        resultado = montar(*args, **kwargs)
+        linhas, _ = resultado
+        montagens.append(tuple(linhas) if isinstance(linhas, (list, tuple)) else None)
+        return resultado
+
+    # Captura as linhas da propria chamada que alimenta o comparador.
+    # app/folha/export.py:631, app/folha/export.py:654, app/folha/export.py:690
+    if montar is None:
+        txt = E.txt_vigente_x_gravado(empresa, mes, ano)
+    else:
+        with patch.object(E, "montar_linhas_export", montar_observada):
+            txt = E.txt_vigente_x_gravado(empresa, mes, ano)
+
+    par_txt = {chave: txt[chave] for chave in ("hash_hoje", "linhas_hoje")}
+    linhas = montagens[0] if len(montagens) == 1 else None
+    if linhas is not None and len(linhas) != par_txt["linhas_hoje"]:
+        linhas = None
+
+    criterio_dia = (
+        Q(data=dia)
+        | Q(data__lte=dia, data_fim__gte=dia)
+        | Q(data__lte=dia, data_fim__isnull=True, tipo__in=Ausencia.TIPOS_EM_ABERTO)
+    )
+    fechamentos = FechamentoMensal.objects.filter(
+        colaborador_id=colab.pk, mes=mes, ano=ano,
+    )
+    modelos = {
+        "FechamentoMensal": fotografar_linhas(fechamentos),
+        "Batida": fotografar_linhas(Batida.objects.filter(
+            colaborador_id=colab.pk, timestamp__date=dia,
+        )),
+        "Ausencia": fotografar_linhas(Ausencia.objects.filter(
+            criterio_dia, colaborador_id=colab.pk,
+        )),
+        "ExportacaoDominio": fotografar_linhas(ExportacaoDominio.objects.filter(
+            pk=vigente.pk if vigente is not None else None,
+        )),
+        "TXT_do_gravado": {empresa.pk: assinatura(par_txt)},
+    }
+    return {
+        "modelos": modelos,
+        "par_txt": par_txt,
+        "linhas": linhas,
+        "publica": {
+            "hash_hoje": par_txt["hash_hoje"][:12],
+            "linhas_hoje": par_txt["linhas_hoje"],
+            "divergente": txt["divergente"],
+            # app/ponto/models.py:398, app/ponto/models.py:481
+            "fechamento_mensal_status": fechamentos.order_by("pk").values_list(
+                "status", flat=True,
+            ).first(),
+        },
+    }
+
+
+def diferencas(antes, depois):
+    resultado = {}
+    for modelo, a in antes["modelos"].items():
+        b = depois["modelos"][modelo]
+        novas = sorted(b.keys() - a.keys())
+        removidas = sorted(a.keys() - b.keys())
+        mudadas = [
+            {"pk": pk, "campos": sorted(
+                nome for nome in a[pk][1] if a[pk][1][nome] != b[pk][1][nome]
+            )}
+            for pk in sorted(a.keys() & b.keys()) if a[pk][0] != b[pk][0]
+        ]
+        resultado[modelo] = {
+            "novas": {"n": len(novas), "pks": novas},
+            "mudadas": {"n": len(mudadas), "linhas": mudadas},
+            "removidas": {"n": len(removidas), "pks": removidas},
+        }
+    return resultado
+
+
+def linhas_por_matricula(linhas):
+    contagem = Counter()
+    matricula = None
+    for linha in linhas:
+        registro = linha[:2]
+        if registro == "10" and len(linha) == 43:
+            matricula = linha[2:12]
+        elif registro != "11" or len(linha) != 11 or matricula is None:
+            raise LayoutDeExportInesperado()
+        contagem[(registro, matricula, linha)] += 1
+    return contagem
+
+
+def diferencas_txt(antes, depois, matricula, status_etapa, montar):
+    if status_etapa == "NAO_EXERCITADA":
+        return {"status": "NAO_EXERCITADA"}
+    if montar is None:
+        return {"status": "INCONCLUSIVO", "motivo": "folha.export.montar_linhas_export_ausente"}
+    if antes is None or depois is None:
+        return {"status": "INCONCLUSIVO", "motivo": "FotoIndisponivel"}
+    if antes["linhas"] is None or depois["linhas"] is None:
+        return {"status": "INCONCLUSIVO", "motivo": "MontagemDoComparadorIndisponivel"}
+
+    try:
+        a = linhas_por_matricula(antes["linhas"])
+        b = linhas_por_matricula(depois["linhas"])
+    except Exception as erro:
+        return {"status": "INCONCLUSIVO", "motivo": type(erro).__name__}
+
+    por_tipo = {reg: {"adicionadas": 0, "removidas": 0} for reg in ("10", "11")}
+    afetadas = set()
+    for sentido, mudancas in (("adicionadas", b - a), ("removidas", a - b)):
+        for (registro, mat, _), n in mudancas.items():
+            por_tipo[registro][sentido] += n
+            afetadas.add(mat)
+
+    return {
+        "status": "CONCLUSIVO",
+        "por_tipo": por_tipo,
+        "matriculas_distintas_afetadas": len(afetadas),
+        "matricula_do_caso_afetada": matricula in afetadas,
+    }
+
+
+def censo(escapes):
+    # Mesmo teto, filtros e ordem do anexo. O leitor da competencia esta em
+    # app/chamados/services/materializacao.py:788 e os escapes em :1095.
+    por_escape = dict.fromkeys(escapes, 0)
+    selecionadas = {escape: [] for escape in escapes}
+    universo = sem_dia = 0
+    memo = {}
+    qs = (
+        PerguntaDisputa.objects.filter(tipo_resposta__in=("hora", "escolha"))
+        .select_related("disputa__colaborador__empresa")
+        .only("tipo_resposta", "opcoes", "data_evento",
+              "disputa__colaborador__empresa__dia_inicio_competencia")
+        .order_by(F("materializada_em").asc(nulls_first=True), "-data_evento", "pk")
+    )
+    with closing(qs.iterator(chunk_size=2000)) as perguntas:
+        for p in perguntas:
+            opcoes = p.opcoes or []
+            valores = [o.get("valor") if isinstance(o, dict) else o for o in opcoes]
+            oferecidos = [e for e in escapes if e in valores]
+            if not oferecidos:
+                continue
+            empresa = p.disputa.colaborador.empresa
+            chave = (empresa.pk, p.data_evento)
+            if chave not in memo:
+                memo[chave] = M.competencia_do_fato(p, empresa)
+            comp = memo[chave]
+            if comp is None:
+                sem_dia += 1
+                continue
+            mes, ano, entregue = comp
+            if not entregue:
+                continue
+            universo += 1
+            for escape in oferecidos:
+                por_escape[escape] += 1
+                if len(selecionadas[escape]) < TETO:
+                    selecionadas[escape].append((p.pk, escape, mes, ano))
+    casos = [caso for escape in escapes for caso in selecionadas[escape]]
+    return universo, sem_dia, por_escape, casos
+
+
+def tipos_de_falha(falhas):
+    contagem = Counter(x for x in falhas if isinstance(x, str))
+    excecoes = {id(x): x for x in falhas if isinstance(x, BaseException)}
+    contagem.update(type(x).__name__ for x in excecoes.values())
+    return dict(contagem)
+
+
+def medir_fatia(r, nome, acao, falhas):
+    inicio = len(falhas)
+    try:
+        dados = acao()
+        if transaction.get_rollback():
+            falhas.append("TransacaoMarcadaParaRollback")
+    except Exception as erro:
+        falhas.append(erro)
+    erros = tipos_de_falha(falhas[inicio:])
+    del falhas[inicio:]
+    r[nome] = (
+        {"status": "INCONCLUSIVO", "excecoes_por_tipo": erros}
+        if erros else {"status": "CONCLUSIVO", **dados}
+    )
+
+
+def decisor_dp():
+    usuarios = get_user_model().objects.filter(is_active=True).order_by("-is_superuser", "pk")
+    with closing(usuarios.iterator(chunk_size=200)) as ativos:
+        for usuario in ativos:
+            if tem_acao(usuario, "editar_ausencias"):
+                return usuario
+    raise SemDecisorDP()
+
+
+def medir_caso(caso, falhas, motivos_irmas, montar, ausentes):
+    pk, escape, mes, ano = caso
+    r = {
+        "registro": "caso", "pergunta_pk": pk, "escape": escape,
+        "tentou_porta": 0, "tentou_rejeicao": 0, "ausencia": None,
+        "passagem": {"status": "NAO_EXERCITADA"},
+        "rejeicao": {"status": "NAO_EXERCITADA"},
+    }
+    fotos = {}
+    ausencias = []
+    recusas_irmas = defaultdict(set)
+    criar_real, evento_real = A.criar_ausencia, observ.evento
+    colab = dia = matricula = None
+
+    def criar_observada(**kw):
+        # app/chamados/services/materializacao.py:994,
+        # app/chamados/services/materializacao.py:1011
+        chamada_da_passagem = (
+            sys._getframe(1).f_code is M._materializar_ausencia_de_resposta.__code__
+        )
+        ausencia = criar_real(**kw)
+        if chamada_da_passagem:
+            ausencias.append(getattr(ausencia, "pk", None))
+        return ausencia
+
+    def evento_observado(acao, modelo, objeto_id, **kw):
+        if acao == M.ACAO_IRMA_VIVA_NA_AUSENCIA and modelo == "PerguntaDisputa":
+            dados = kw.get("depois") or {}
+            if dados.get("escape_pk") == pk:
+                motivo = dados.get("motivo")
+                if "motivo" not in dados:
+                    ausentes.add("ACAO_IRMA_VIVA_NA_AUSENCIA.depois.motivo")
+                    recusas_irmas["motivo_indisponivel"].add(objeto_id)
+                elif isinstance(motivo, str) and motivo in motivos_irmas:
+                    recusas_irmas[motivo].add(objeto_id)
+                    if motivo in REVERSOES:
+                        falhas.append("_Reprovada")
+                else:
+                    falhas.append("MotivoDeRecusaInesperado")
+        return evento_real(acao, modelo, objeto_id, **kw)
+
+    def passagem():
+        nonlocal colab, dia, matricula
+        p = PerguntaDisputa.objects.select_related(
+            "disputa__colaborador__empresa", "disputa__colaborador__usuario",
+        ).get(pk=pk)
+        colab, dia = p.disputa.colaborador, p.data_evento
+        usuario = colab.usuario
+        if usuario is None or not usuario.is_active:
+            raise SemUsuarioAtivo()
+        r.update(colaborador_pk=colab.pk, empresa_pk=colab.empresa_id)
+        # Mesma normalizacao da montagem. app/folha/export.py:728
+        codigo = (colab.codigo_dominio or "").strip()
+        matricula = codigo.zfill(10) if codigo else None
+        fotos["antes"] = foto(colab, dia, mes, ano, montar)
+        req = APIRequestFactory().post(
+            reverse("api:disputa_responder", kwargs={"pk": pk}),
+            {"resposta": escape},
+            format="json",
+        )
+        force_authenticate(req, user=usuario)
+        with patch.object(A, "criar_ausencia", criar_observada), \
+                patch.object(observ, "evento", evento_observado):
+            r["tentou_porta"] = 1
+            resposta = api_disputa_responder(req, pk=pk)
+
+        if resposta.status_code == 200 and resposta.data.get("status") == "ok":
+            r["porta"] = "ACEITA"
+            if len(ausencias) != 1 or ausencias[0] is None:
+                raise EvidenciaInesperada()
+            r["ausencia_pk"] = ausencias[0]
+        else:
+            motivo = RECUSAS.get((resposta.status_code, resposta.data.get("erro")))
+            if motivo is None:
+                raise EvidenciaInesperada()
+            r.update(porta="RECUSADA", motivo_recusa=motivo)
+
+        fotos["depois_passagem"] = foto(colab, dia, mes, ano, montar)
+        if "ausencia_pk" in r:
+            # A porta pode criar, devolver ou reabrir uma linha.
+            # app/ponto/services/ausencia.py:392, app/ponto/services/ausencia.py:436,
+            # app/ponto/services/ausencia.py:560, app/ponto/models.py:749,
+            # app/ponto/models.py:809
+            ausencia = Ausencia.objects.values("tipo", "status").get(pk=r["ausencia_pk"])
+            r["ausencia"] = {
+                "tipo": ausencia["tipo"],
+                "status_apos_passagem": ausencia["status"],
+                "status_apos_rejeicao": None,
+                "nova_na_foto": r["ausencia_pk"] not in fotos["antes"]["modelos"]["Ausencia"],
+            }
+        return {"diferencas": diferencas(fotos["antes"], fotos["depois_passagem"])}
+
+    def rejeicao():
+        ausencia = Ausencia.objects.get(pk=r["ausencia_pk"])
+        dp = decisor_dp()
+        r["tentou_rejeicao"] = 1
+        A.decidir(ausencia, "rejeitada", por=dp, decisor=dp, aprovada_em=timezone.now())
+        ausencia.refresh_from_db()
+        r["ausencia"]["status_apos_rejeicao"] = ausencia.status
+        if ausencia.status != "rejeitada":
+            raise EvidenciaInesperada()
+        devolvidas = M.devolver_absorvidas_da_ausencia_rejeitada(ausencia)
+        fotos["depois_rejeicao"] = foto(colab, dia, mes, ano
+
+[truncado em 20000 de 28189 caracteres]
 
 ## 20/11 19:13 · sessao a29af3c9c491 · E4C-F5-CONSTROI · leitura · origem=Code
 
@@ -2214,8 +2730,4 @@ O ramo novo escreve só auditoria, sem alteração direta em `folha/`, competên
 
 [truncado em 20000 de 24212 caracteres]
 
-## 20/11 15:58 · sessao 8455103f6a11 · CADEIA-20-PASSO-1 · leitura · origem=Code
-
-[resposta retida: senha_atribuida -- nao se publica credencial nem caminho de segredo]
-
-_7593 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7594 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
