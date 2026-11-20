@@ -1,7 +1,19 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 01:12** · publicado em **20/11/2026 01:14** (UTC-3)
+> Ultima resposta processada: **20/11/2026 01:21** · publicado em **20/11/2026 01:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 01:21 · sessao 9305ea6475f1 · E4C-F5-CONSTROI · leitura · origem=Code
+
+TRIAGEM C | vermelho | o comando entregue usa `ponto.tests.test_selo_teto_modal`, mas o selo está em `chamados/tests/test_selo_teto_modal.py:37` | brief, entrega (d) | PROXIMO corrigir o label para `chamados.tests.test_selo_teto_modal` e medir a C no hash `57582ee14`
+
+- Catraca AST conferida, 10 → 0 fora da permissão nominal. Amostras em `chamados/tests/test_e4c_f5_selo_chamada.py:21`, `chamados/management/commands/auditar_invariantes_chamados.py:179` e `chamados/services/materializacao.py:193`.
+- Entraram 24 dos 25 K e a sobra de `dedup_perguntas_fato.py:75`. K40 ficou avulso, classe R. Amostras em `chamados/management/commands/backfill_decisoes_pergunta.py:534`, `chamados/services/vigia_fio.py:714`, `chamados/services/vigia_fio.py:719` e `chamados/management/commands/migrar_data_evento_dia_do_turno.py:466`.
+- Os outros cinco R são K3, K19, K20, K22 e K58. `chamados/services/relavra_via.py:236`, `chamados/services/materializacao.py:2122`, `chamados/services/validacao.py:677`, `chamados/services/materializacao.py:286`, `chamados/services/validacao.py:431`.
+- G segue avulso. K13 recarrega o restante após cada reabertura bem-sucedida, com custo SQL [nao verificado]. `chamados/reconciliador.py:367`, `chamados/services/disputa_emissao.py:473`, `chamados/management/commands/backfill_fio_morto_e4b.py:140`.
+- O construtor preservou todos os `models.py`. O item D entrou no commit posterior `9d386d1b1`, em `chamados/models.py:2068`.
+- As adaptações i, ii e v preservaram os asserts e seus operandos. A fixture da catraca ainda acusa a chamada crua de ordem 2. `chamados/tests/test_e4c_f5_selo_chamada.py:199`, `chamados/tests/test_bug_par_sem_banco.py:197`, `chamados/tests/test_bug_par_c2_sem_banco.py:32`, `chamados/tests/test_bug_par_c2_sem_banco.py:86`, `chamados/tests/test_estado_aplicacao.py:55`.
+- A lista `RESTAM` passou a vazia conforme o brief. Os valores esperados e os tetos do modal e dos quatro cenários de PASSAGEM foram preservados. RED/verde, mordida ORM e contagens SQL da C [nao verificado]. `chamados/tests/test_e4c_f5_selo_chamada.py:21`, `chamados/tests/test_selo_teto_modal.py:184`, `ponto/tests/test_selo_chokepoint_escrita.py:196`, `ponto/tests/test_selo_chokepoint_escrita.py:210`, `ponto/tests/test_selo_chokepoint_escrita.py:228`, `ponto/tests/test_selo_chokepoint_escrita.py:235`.
 
 ## 20/11 01:12 · sessao d4e67d9bba0e · CADEIA-20-PASSO-1 · verificador · origem=Code
 
@@ -1228,19 +1240,4 @@ A troca nominal de dublês incide sobre fixtures. Os testes de exportada, dinhei
 
 Para o registro do PRONTO, o comparador aplicado ao vocabulário da cópia rejeita `Test Double com contract test` e aceita `Architecture Conformance Test`, termo do selo de conformidade. A execução do hook sobre um commit A1 está **[nao verificado]**. `bin/tests/test_lei_akita.sh:96–149,337–356`; `app/docs/GLOSSARIO.md:15`; `resposta_f5_duble_1911_1945.txt:8` (anexo).
 
-## 19/11 19:34 · sessao 9d7185de4140 · CADEIA-20-PASSO-1 · sonda · origem=Code
-
-```text
-sonda_leitura: sonda.py [09aa035aee18a63b] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-HOJE 2026-11-19 ONTEM 2026-11-18 DIAS_COM_BATIDA 29858 CELULAS 51970
-SEM_CELULA TOTAL 36 [(('2026-09', 2), 34), (('2026-11', 2), 2)]
-ATA_NULA TOTAL 0 []
-ATA_SEM_CHAVE_ORFAS TOTAL 0 []
-FIM_SONDA
-```
-
-ERRO ou traceback no bloco fornecido? Não. `FIM_SONDA` apareceu? Sim, na última linha (`DADO RASPADO:1–7`).  
-Reexecução [nao verificado]. A porta cria arquivos e grava log (`bin/codex_pergunta.sh:307–309`).
-
-_7436 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7437 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
