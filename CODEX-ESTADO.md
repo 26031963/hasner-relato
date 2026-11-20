@@ -1,7 +1,491 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 18:21** · publicado em **20/11/2026 18:24** (UTC-3)
+> Ultima resposta processada: **20/11/2026 18:27** · publicado em **20/11/2026 18:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 18:27 · sessao cb5422d2333e · E4C-F5-CONSTROI · leitura · origem=Code
+
+## 1. `test_e4c_f5_medida_seis.py`
+
+Montar em `app/chamados/tests/` na cópia descartável e rodar pelo label `chamados.tests.test_e4c_f5_medida_seis` com `config.settings.ci`, que usa PostgreSQL. O teste reutiliza a fixture de `BaseCortes`, os relógios e auxiliares de A1(c), e o padrão de duas threads com conexões próprias de `CorridaDoAbrirTest`. `app/config/settings/ci.py:6–19` · `app/chamados/tests/cortes_f2_f9_apoio.py:30–44` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:24–104,135–140` · `app/chamados/tests/test_c2_corrida_do_abrir.py:62,75–124`
+
+Na corrida, a declaração inicial do atestado conclui a transação dela antes de entrar no materializador. A barreira põe a passagem e a resposta da irmã diante da mesma trava. A sessão que chega primeiro só prossegue depois de o PostgreSQL mostrar a outra sessão bloqueada por ela. A resposta usa o core direto, conforme o recorte A1(c). A entrada web/API liga o veto H4 quando a absorção já está vigente. `app/chamados/services/disputa_emissao.py:1478–1499,1532–1537,1561–1566,1587–1594` · `app/chamados/services/materializacao.py:1036–1058` · `app/chamados/models.py:2830–2836,2874–2878`
+
+No teste de rejeição, **CONTADO** exige a trilha persistida `irma_viva_na_ausencia` para o PK e o atestado da passagem. O código acumula `recusadas` e tenta gravar essa trilha. O auxiliar existente lê as linhas por ação e PK. A foto também mostra o leitor de carimbos sem lastro em disputa aberta, cujo universo é próprio. Um vínculo histórico `ABSORCAO` sozinho não comprova que a pergunta entrou na contagem das recusas. `app/chamados/services/materializacao.py:1083–1104,1115–1119` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:138–140,253–264` · `app/chamados/services/vigia_fio.py:755–786,814–818`
+
+```python
+import json
+import threading
+from contextlib import contextmanager
+from unittest.mock import patch
+
+from django.contrib.auth.models import User
+from django.db import IntegrityError, connection, transaction
+from django.db.models import Q
+from django.test import TransactionTestCase
+from django.utils import timezone
+from freezegun import freeze_time
+
+from chamados.models import DecisaoPergunta as D
+from chamados.models import DisputaSupervisao, PerguntaDisputa as P
+from chamados.services import disputa_emissao as E
+from chamados.services import materializacao as M
+from chamados.services import validacao, vigia_fio
+from chamados.services.vigia_ato_x_coluna import contar
+from chamados.tests import cortes_f2_f9_apoio as apoio
+from chamados.tests import test_e4c_f5_a1c_passagem_da_ausencia as a1c
+from core.models import LogAuditoria
+from escala.models import EventoCelula
+from ponto.services.ausencia import decidir
+from ponto.services.cartorio import calado
+
+
+HORA = "19:02"
+ACAO_DEVOLUCAO = "perguntas_devolvidas_ausencia_rejeitada"
+
+
+@contextmanager
+def medida(subitem):
+    fatos = {}
+    try:
+        yield fatos
+    except Exception as erro:
+        fatos["tipo_excecao"] = type(erro).__name__
+        raise
+    finally:
+        print(
+            f"MEDIDA: {subitem} | "
+            + json.dumps(fatos, default=lambda valor: valor.isoformat()),
+            flush=True,
+        )
+
+
+def par(qs):
+    placar = contar(perguntas=qs)
+    return dict(A=placar["a"]["numero"], B=placar["b"]["numero"],
+                universo=placar["universo"])
+
+
+def pergunta_foto(p):
+    leitura = D.composta(p)
+    return dict(
+        tipo=p.tipo_resposta, estado=p.estado,
+        resposta=p.resposta_colab, respondida_em=p.respondida_em,
+        resposta_composta=leitura.resposta_colab,
+        respondida_composta_em=leitura.respondida_em,
+        validada_em=p.validada_em, validada_por_id=p.validada_por_id,
+        validada_composta_em=leitura.validada_em,
+        materializada_em=p.materializada_em,
+        materializada_por_id=p.materializada_por_id, via=p.via_resolucao,
+        atos=list(p.decisoes.order_by("ato_em", "pk").values()),
+    )
+
+
+class MedidaSeisTest(TransactionTestCase):
+    # Reúso sem herdar o TestCase nem recolher os testes da classe vizinha. [nao verificado]
+    # app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:114–124
+    _escape = a1c.PassagemDaAusenciaTest._escape
+    _irma_da_celula = a1c.PassagemDaAusenciaTest._irma_da_celula
+    _irma_com_luz = a1c.PassagemDaAusenciaTest._irma_com_luz
+    _irma_muda = a1c.PassagemDaAusenciaTest._irma_muda
+    _responder = a1c.PassagemDaAusenciaTest._responder
+    _passagem = a1c.PassagemDaAusenciaTest._passagem
+    _ausencia = a1c.PassagemDaAusenciaTest._ausencia
+    _trilha = a1c.PassagemDaAusenciaTest._trilha
+
+    def setUp(self):
+        self.relogio = self.enterContext(freeze_time(a1c.T0))
+        self.enterContext(calado())
+        # app/chamados/tests/cortes_f2_f9_apoio.py:37–44
+        apoio.BaseCortes.setUpTestData.__func__(type(self))
+        # app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:31–39
+        self.usuario = User.objects.create_user(username="e4cf5_medida_colab")
+        self.colab.usuario = self.usuario
+        self.colab.save(update_fields=["usuario"])
+        self.disputa = DisputaSupervisao.objects.create(
+            colaborador=self.colab, contexto={},
+        )
+
+    def _corrida(self, primeira):
+        with medida(f"A1(c) corrida {primeira} primeiro") as fatos:
+            self.assertEqual(connection.vendor, "postgresql")
+            escape, irma = self._escape(), self._irma_com_luz()
+            usuario_pk = self.usuario.pk
+            fatos["pergunta_pk"] = irma.pk
+            connection.close()
+
+            segunda = "resposta" if primeira == "passagem" else "passagem"
+            relogios = {"passagem": a1c.T1, "resposta": a1c.T2}
+            local = threading.local()
+            barreira = threading.Barrier(2)
+            primeira_travou = threading.Event()
+            pausa = threading.Event()
+            sessoes, erros, retornos = {}, {}, {}
+            commits, bloqueios = [], [] [nao verificado]
+            fatos.update(sessoes=sessoes, commits=commits, [nao verificado]
+                         bloqueios=bloqueios, retornos=retornos)
+            trava_real = P.trava_do_colaborador
+            passagem_real = M._materializar_ausencia_de_resposta
+
+            def observar_passagem(*args):
+                local.na_passagem = True
+                try:
+                    recusadas = passagem_real(*args)
+                    retornos["recusadas"] = sorted(set(recusadas))
+                    return recusadas
+                finally:
+                    local.na_passagem = False
+
+            def interpor_trava(dono):
+                papel = local.papel
+                # A trava anterior, da declaração do escape, segue direto.
+                if local.interposta or (papel == "passagem" and not local.na_passagem):
+                    return trava_real(dono)
+                local.interposta = True
+                self.assertEqual(dono, self.colab.pk)
+                self.assertTrue(connection.in_atomic_block)
+                barreira.wait(timeout=12)
+                if papel == segunda:
+                    self.assertTrue(primeira_travou.wait(timeout=12))
+                trava_real(dono)
+                if papel == primeira:
+                    primeira_travou.set()
+                    with connection.cursor() as cursor:
+                        for _ in range(320):
+                            cursor.execute("SELECT pg_blocking_pids(%s)", [sessoes[segunda]])
+                            if sessoes[primeira] in cursor.fetchone()[0]:
+                                bloqueios.append([primeira, segunda])
+                                break
+                            pausa.wait(0.025)
+                        else:
+                            self.fail("O PostgreSQL não mostrou a segunda sessão na trava")
+                transaction.on_commit(lambda: commits.append(papel)) [nao verificado]
+
+            def sessao(papel, pk, texto):
+                local.papel = papel
+                local.interposta = local.na_passagem = False
+                try:
+                    with calado(), connection.cursor() as cursor:
+                        cursor.execute("SET lock_timeout = '15s'")
+                        cursor.execute("SET statement_timeout = '20s'")
+                        cursor.execute("SELECT pg_backend_pid()")
+                        sessoes[papel] = cursor.fetchone()[0]
+                    with calado():
+                        p = P.objects.get(pk=pk)
+                        usuario = User.objects.get(pk=usuario_pk)
+                        retornos[papel] = E.responder_pergunta_disputa_core(
+                            p, texto, usuario, ja_respondida=p.respondida_em is not None,
+                        )
+                except Exception as erro:
+                    erros[papel] = erro
+                    barreira.abort()
+                finally:
+                    connection.close()
+
+            threads = [
+                threading.Thread(target=sessao, args=("passagem", escape.pk, "ATESTADO")),
+                threading.Thread(target=sessao, args=("resposta", irma.pk, HORA)),
+            ]
+            with (
+                patch.object(P, "trava_do_colaborador", new=staticmethod(interpor_trava)),
+                patch.object(E, "_materializar_ausencia_de_resposta", new=observar_passagem),
+                patch.object(timezone, "now", new=lambda: relogios.get(
+                    getattr(local, "papel", None), a1c.T0)),
+            ):
+                for thread in threads:
+                    thread.start()
+                for thread in threads:
+                    thread.join(timeout=45)
+                self.assertTrue(all(not thread.is_alive() for thread in threads))
+            fatos["erros"] = {papel: type(erro).__name__ for papel, erro in erros.items()}
+            if erros:
+                raise next(iter(erros.values()))
+
+            # Releitura em uma conexão aberta após o fim das duas sessões.
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT pg_backend_pid()")
+                fatos["sessao_releitura"] = cursor.fetchone()[0]
+            qs = P.objects.filter(pk=irma.pk)
+            foto = pergunta_foto(qs.get())
+            sql_validada = qs.filter(P.q_validada_pelo_ato()).exists()
+            fatos.update(
+                pergunta=foto, q_validada_pelo_ato=sql_validada, par=par(qs),
+                pk_em_recusadas=irma.pk in retornos["recusadas"],
+            )
+
+            self.assertEqual(len(set(sessoes.values())), 2)
+            self.assertEqual(bloqueios, [[primeira, segunda]])
+            self.assertCountEqual(commits, ["passagem", "resposta"]) [nao verificado]
+            self.assertEqual(retornos["passagem"], (True, None))
+            self.assertEqual(retornos["resposta"], (True, None))
+            self.assertEqual(fatos["par"], {"A": 0, "B": 0, "universo": 1})
+            composta_validada = foto["validada_composta_em"] is not None
+            self.assertEqual(foto["validada_em"] is not None, composta_validada)
+            self.assertEqual(sql_validada, composta_validada)
+            self.assertEqual(
+                (foto["resposta"], foto["respondida_em"],
+                 foto["resposta_composta"], foto["respondida_composta_em"]),
+                (HORA, a1c.T2, HORA, a1c.T2),
+            )
+            self.assertIn(
+                (D.RESPOSTA, a1c.T2, HORA, usuario_pk),
+                [(ato["ato"], ato["ato_em"], ato["ato_texto"], ato["ato_por_id"])
+                 for ato in foto["atos"]],
+            )
+
+    def test_resposta_chega_primeiro_a_trava(self):
+        self._corrida("resposta")
+
+    def test_passagem_chega_primeiro_a_trava(self):
+        self._corrida("passagem")
+
+    def _foto_grupo(self, ausencia):
+        ausencia.refresh_from_db()
+        qs = P.objects.filter(disputa_id=self.disputa.pk).order_by("pk")
+        perguntas = {p.pk: pergunta_foto(p) for p in qs}
+        disputa = DisputaSupervisao.objects.values(
+            "pk", "fechada_em", "fechada_por_id", "motivo_fechamento",
+        ).get(pk=self.disputa.pk)
+        auditoria = list(LogAuditoria.objects.filter(
+            Q(modelo="PerguntaDisputa", objeto_id__in=perguntas)
+            | Q(modelo="Ausencia", objeto_id=ausencia.pk)
+            | Q(modelo="DisputaSupervisao", objeto_id=self.disputa.pk),
+        ).order_by("criado_em", "pk").values(
+            "pk", "criado_em", "acao", "modelo", "objeto_id", "usuario_id",
+            "valor_antes", "valor_depois",
+        ))
+        for linha in auditoria:
+            for campo in ("valor_antes", "valor_depois"):
+                if isinstance(linha[campo], dict):
+                    linha[campo].pop("por", None)
+        eventos = list(EventoCelula.objects.filter(
+            colaborador_id=self.colab.pk, data=a1c.DIA,
+        ).order_by("pk").values(
+            "pk", "celula_id", "data", "criado_em", "processado_em", "tentativas",
+        ))
+        contadas = {
+            p.pk: self._trilha(p).filter(valor_depois__ausencia_pk=ausencia.pk).count()
+            for p in qs
+        }
+        return dict(
+            ausencia_pk=ausencia.pk, status_ausencia=ausencia.status,
+            grupo=[p.pk for p in M.perguntas_absorvidas_por(ausencia)],
+            perguntas=perguntas, disputa=disputa, auditoria=auditoria,
+            eventos_celula=eventos, contadas_na_trilha=contadas, par=par(qs),
+            q_validada_pelo_ato=list(qs.filter(P.q_validada_pelo_ato())
+                                    .values_list("pk", flat=True)),
+        )
+
+    @staticmethod
+    def _novas_reaberturas(antes, depois):
+        atos_antes = {
+            ato["pk"] for p in antes["perguntas"].values() for ato in p["atos"]
+        }
+        return {
+            pk for pk, p in depois["perguntas"].items()
+            if p["estado"] == P.PENDENTE and any(
+                ato["ato"] == D.REABERTURA and ato["pk"] not in atos_antes
+                for ato in p["atos"]
+            )
+        }
+
+    def _medir_rejeicao(self, fatos, *, retirar_pk=None, falhar_auditoria=False):
+        ausencia = self._ausencia()
+        montado = self._foto_grupo(ausencia)
+        fatos["apos_passagem"] = montado
+        if retirar_pk is not None:
+            self.assertIn(retirar_pk, montado["grupo"], "A âncora precisa estar no grupo")
+            self.assertGreater(len(montado["grupo"]), 1, "O grupo precisa ter dependente")
+            self.relogio.move_to(a1c.T2)
+            fatos["retorno_retirada"] = E.reabrir_para_correcao(
+                P.objects.filter(pk=retirar_pk), por=self.admin, motivo="Retirada da âncora",
+            )
+            self.assertEqual(fatos["retorno_retirada"], 1)
+        antes = fatos["antes"] = self._foto_grupo(ausencia)
+
+        devolver = M.devolver_absorvidas_da_ausencia_rejeitada
+        criar = LogAuditoria.objects.create
+        chamadas, falhas = [], []
+        fatos.update(retornos_devolucao=chamadas, falhas_auditoria=falhas)
+
+        def observar_devolucao(a):
+            chamada = {"ausencia_pk": a.pk, "status": a.status}
+            chamadas.append(chamada)
+            chamada["retorno"] = devolver(a)
+            return chamada["retorno"]
+
+        def criar_auditoria(**campos):
+            if falhar_auditoria and campos["acao"] == ACAO_DEVOLUCAO:
+                campos["modelo"] = None  # INSERT real, como no teste vizinho. [nao verificado]
+            try:
+                return criar(**campos)
+            except IntegrityError as erro:
+                falhas.append(type(erro).__name__)
+                raise
+
+        self.relogio.move_to(a1c.T3)
+        # O callback real roda no commit de decidir, em TransactionTestCase. [nao verificado]
+        with (
+            patch.object(M, "devolver_absorvidas_da_ausencia_rejeitada",
+                         new=observar_devolucao),
+            patch.object(LogAuditoria.objects, "create", new=criar_auditoria),
+        ):
+            rejeitada = decidir(ausencia, "rejeitada", por=self.admin, motivo="Teste de rejeição") [nao verificado]
+        fatos["retorno_decidir"] = {"pk": rejeitada.pk, "status": rejeitada.status}
+        depois = fatos["depois"] = self._foto_grupo(ausencia)
+
+        reabertas_antes = self._novas_reaberturas(montado, antes)
+        reabertas_na_rejeicao = self._novas_reaberturas(antes, depois)
+        candidatas = {pk for pk, p in antes["perguntas"].items() if p["tipo"] == "hora"}
+        nao_devolvidas = candidatas - reabertas_antes - reabertas_na_rejeicao
+        contadas = {pk for pk, n in depois["contadas_na_trilha"].items() if n}
+        vigia = vigia_fio.carimbos_sem_lastro_por_dono(empresas=[self.emp.pk])
+        fatos.update(
+            reabertas_antes=sorted(reabertas_antes),
+            reabertas_na_rejeicao=sorted(reabertas_na_rejeicao),
+            nao_devolvidas=sorted(nao_devolvidas),
+            sem_contagem_na_trilha=sorted(nao_devolvidas - contadas),
+            vigia_carimbos_sem_lastro=vigia,
+        )
+
+        self.assertEqual(depois["status_ausencia"], "rejeitada")
+        self.assertTrue(any(c["ausencia_pk"] == ausencia.pk and c["status"] == "rejeitada"
+                            and "retorno" in c for c in chamadas))
+        if falhar_auditoria:
+            self.assertIn("IntegrityError", falhas, "A falha da trilha precisa ser exercitada")
+        self.assertEqual(depois["par"], {"A": 0, "B": 0, "universo": len(antes["perguntas"])})
+        self.assertEqual(fatos["sem_contagem_na_trilha"], [])
+
+    def _formar_grupo_ancorado(self):
+        irma, ancora = self._irma_com_luz(), self._escape("hora")
+        self._responder(irma)
+        with transaction.atomic():
+            P.trava_do_colaborador(self.colab.pk)
+            irma.refresh_from_db()
+            validacao._carimbar_validacao(irma, self.admin)
+        return ancora
+
+    def test_ancora_unica_recusada_e_atestado_rejeitado(self):
+        with medida("grupo única âncora recusada") as fatos:
+            self._irma_com_luz()
+            ancora = self._escape("hora")
+
+            def responder_ancora():
+                self.relogio.move_to(a1c.T2)
+                self._responder(ancora)
+
+            recusadas, travas = self._passagem(ancora, responder_ancora)
+            fatos.update(recusadas=recusadas, travas=travas, ancora_pk=ancora.pk)
+            self._medir_rejeicao(fatos)
+
+    def test_escolha_sem_ancora_e_atestado_rejeitado(self):
+        with medida("grupo escolha sem âncora") as fatos:
+            escape = self._escape()
+            self._irma_muda()
+            recusadas, travas = self._passagem(escape)
+            fatos.update(recusadas=recusadas, travas=travas, escape_pk=escape.pk)
+            self._medir_rejeicao(fatos)
+
+    def test_ancora_retirada_e_atestado_rejeitado(self):
+        with medida("grupo âncora retirada após formação") as fatos:
+            ancora = self._formar_grupo_ancorado()
+            recusadas, travas = self._passagem(ancora)
+            fatos.update(recusadas=recusadas, travas=travas, ancora_pk=ancora.pk)
+            self._medir_rejeicao(fatos, retirar_pk=ancora.pk)
+
+    def test_rejeicao_com_falha_na_auditoria_da_devolucao(self):
+        with medida("trilha falha no INSERT da devolução") as fatos:
+            ancora = self._formar_grupo_ancorado()
+            recusadas, travas = self._passagem(ancora)
+            fatos.update(recusadas=recusadas, travas=travas, ancora_pk=ancora.pk)
+            self._medir_rejeicao(fatos, falhar_auditoria=True)
+```
+
+A retirada usa `reabrir_para_correcao`. A rejeição usa `decidir` e observa o retorno do callback real. O caso extra provoca a violação `NOT NULL` somente no evento da devolução, dentro do savepoint real da auditoria. As fotos registram os retornos e os estados antes das asserções de negócio. `app/chamados/services/disputa_emissao.py:1597–1630,1664–1685` · `app/ponto/services/ausencia.py:1057–1088` · `app/ponto/signals.py:250–279` · `app/core/observ.py:124–139` · `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:189–220,482–508`
+
+Para produzir o comprovante por SHA, rodar a p
+
+[truncado em 20000 de 33066 caracteres]
+
+## 20/11 18:26 · sessao 03ad11b31d75 · E4C-F5-CONSTROI · leitura · origem=Code
+
+| Item | Estado | Prova na cópia ou execução devida |
+|---|---|---|
+| 01. Matriz e censo de entrada | FALTA | O RELATO registra **15 sítios, amostra 9/9 e 0 perguntas de lei** na base `3308f7599`. A matriz nominal para recontar os 15 e cruzá-los com o selo e o PRONTO está [nao verificado]. `app/docs/RELATO.md:158`, `bin/codex_pergunta.sh:241–247`. |
+| 02. Testemunha da leitura | DEMONSTRADO | `leitura` retorna `LeituraDoAto` de **3 campos**. `composta` retorna `LeituraComposta` de **5 campos**. `app/chamados/models.py:19–25,4348–4390`. |
+| 03. Conservação do passivo sem ato | DEMONSTRADO | A leitura incorpora as linhas sintéticas da projeção. O teste fixa os **2 juízes** e os cortes temporais do passivo. `app/chamados/models.py:4291–4323,4355–4379`, `app/chamados/tests/test_e4c_f5_volta2_juizes.py:59–75`. |
+| 04. RED-5 do histórico | DEMONSTRADO | O teste cobre **3 eventos**, resposta, validação e materialização, e contém o mutante `historico`. `app/chamados/services/historico.py:96–111`, `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:75–103`. |
+| 05. SILÊNCIO e dono ADMIN | RETIRADO-POR-AVAL | RESPOSTAS-2011-1255 item 3: “o SILENCIO dono admin SAI da F5 e vira fatia propria E4C-F5-SILENCIO-ADMIN”. O teste de regressão permanece na cópia. `avais_posteriores.txt:129–131`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:343–344`. |
+| 06. Catraca de leitores crus | FALTA | Recontadas por AST **13 funções em 8 arquivos, 0 acusações**. Há inspeção de `getattr` e `refresh_from_db`. `update_fields` aparece no controle de escrita permitida. Faltam a inspeção nominal de `update_fields` e o mapa dos 15. Catraca executada em `execucoes.txt:16`. `app/chamados/tests/test_e4c_f5_selo_catraca.py:11–26,174–197,291–307,314–369`. |
+| 07. Três passagens | SO POR EXECUCAO | Passagens A/B/C, em ordem e por hash, com a exceção do chokepoint na A. **EXECUCAO NAO LISTADA**. `bin/volta_intermediaria.sh:4,32`, `avais_posteriores.txt:3–5,10–13`. |
+| 08. Ordem, commits e RED antes da cura | SO POR EXECUCAO | Histórico A/B/C, RED na base de cada cura e pureza no primeiro commit da A. **EXECUCAO NAO LISTADA**. `app/docs/RELATO.md:27–28`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:271–285`. |
+| 09. Verificador do delta por volta | SO POR EXECUCAO | Triagem da volta 3/c3 listada, **3 procedentes curados e 7 descartados com motivo**. Deltas A/B/C e respectivas triagens: **EXECUCAO NAO LISTADA**. `execucoes.txt:19`, `app/docs/RELATO.md:94–95,131,134`. |
+| 10. Mutantes tira-lote mortos | SO POR EXECUCAO | **33 seletores, 9 A + 14 B + 10 C**. Saídas nominais, inclusive K16 e K47: **EXECUCAO NAO LISTADA**. `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9–21`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–27`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23`. |
+| 11. Sombra dos juízes e do passivo | SO POR EXECUCAO | Antes × depois por volta, classe e passivo sem ato: **EXECUCAO NAO LISTADA**. A referência é **40 + 213 = 253**. O RELATO anterior registra que as 213 divergências de SILÊNCIO conservaram o par do juiz. `app/chamados/juizes.py:1383–1403,1551–1560`, `app/docs/RELATO.md:393,397`. |
+| 12. Sombra das decisões por porta | SO POR EXECUCAO | Comparativo de validar, recusar e materializar pela função real: **EXECUCAO NAO LISTADA**. `app/chamados/services/validacao.py:677–704,875–923`, `app/chamados/services/materializacao.py:1318–1336,2106–2162`. |
+| 13. Entregues e exportadas | SO POR EXECUCAO | Lista ou zero de decisões alteradas nesse recorte: **EXECUCAO NAO LISTADA**. `app/chamados/services/validacao.py:225–231,692,757–759`, `app/chamados/services/materializacao.py:815–847,1900–1904`. |
+| 14. CHECK-DE-TELA | SO POR EXECUCAO | **4 superfícies**: espelho, Central, tarefa pelo serviço e API. Comparativo de resultado, consultas e escritas contra a referência: **EXECUCAO NAO LISTADA**. `app/ponto/urls.py:10`, `app/chamados/views.py:721`, `app/chamados/services/tarefa_do_dia.py:825–830`, `app/api/urls.py:92`, `app/docs/RELATO.md:188`. |
+| 15. Verificador inteiro, zero bloqueios | SO POR EXECUCAO | O teste da volta final cobre a invalidação do memo C6. A triagem c3 está listada. Laudo de escopo inteiro com matriz, predesenho, avais e **0 BLOQUEIA**: **EXECUCAO NAO LISTADA**. `app/chamados/models.py:4439–4450`, `app/chamados/tests/test_e4c_f5_voltaFINAL.py:12–13`, `app/docs/RELATO.md:94`, `execucoes.txt:19`. |
+| 16. Suíte inteira pré-Opus | SO POR EXECUCAO | Listada para `c8eb8eddf` às 16:54: `rc=0`, **17.268 testes**, **42 skips**, **41 falhas esperadas**, **2.303,169 s**. Pista 2 e precedência da guarda verde e da publicação do PRONTO [nao verificado]. `execucoes.txt:2`, `avais_depois_do_vPRONTO4.txt:7`, `bin/suite.sh:23–29,236–257`. |
+| 17. Opus final único | SO POR EXECUCAO | Laudo único no hash da pré-Opus, com triagens e isenção de pureza: **EXECUCAO NAO LISTADA**. `app/docs/RELATO.md:45,94`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:163–185`, `avais_posteriores.txt:31,168`. |
+| 18. Compositor nos três sítios | DEMONSTRADO | **1 compositor tipado, 3 delegações**: partição do app, property `respondida` e fio. Instantes do ato e texto da projeção. `app/chamados/models.py:24–25,3838–3844,4382–4390`, `app/chamados/services/pergunta_no_app.py:80–92`, `app/chamados/services/fio.py:187–190`. |
+| 19. Grep publicado | FALTA | Falta a saída nominal do compositor e das delegações no RELATO. `app/docs/RELATO.md:34–35`, `app/chamados/models.py:3844,4382–4390`. |
+| 20. RED da partição do app | SO POR EXECUCAO | Verde geral listado. Mordidas dos **2 mutantes**, `a1_app_coluna` e `a1_app_texto_do_ato`: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:32–53`. |
+| 21. RED da property | SO POR EXECUCAO | Verde geral listado. RED da property com texto só no ato e projeção carimbada após reabertura: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_opus_models.py:37–54,87–89`. |
+| 22. RED do fio | SO POR EXECUCAO | Verde geral listado. Mordidas dos **3 mutantes**, `a1_fio_coluna`, `a1_fio_texto_do_ato` e `a1_fio_composicao_local`: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_voltaA_sitios.py:55–71`. |
+| 23. RED de `sem_veredito_entre` | SO POR EXECUCAO | Verde geral listado. RED na base do caso de texto e instante divergentes: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/models.py:2022–2027`, `app/chamados/tests/test_e4c_f5_opus_models.py:76–81`. |
+| 24. RED de `estado` | SO POR EXECUCAO | Verde geral listado. RED na base do caso que espera `PENDENTE`: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/models.py:3249–3268`, `app/chamados/tests/test_e4c_f5_opus_models.py:83–85`. |
+| 25. Consumidores por consequência | DEMONSTRADO | **3 caminhos** chegam ao leitor comum: fechamento, CSF e Pauta. Preservação histórica dos arquivos por diff [nao verificado]. `app/chamados/models.py:1998–2027,2035,2072`, `app/ponto/supra_juiz.py:573–574`, `app/chamados/services/competencia_trancada.py:124–126`. |
+| 26. Vigia de texto em lotes | DEMONSTRADO | `iterator(chunk_size=lote)` com prefetch de decisões e padrão de **2.000** por lote. `app/chamados/services/vigia_texto_resposta.py:8–25`. |
+| 27. Contagem preservada no vigia | SO POR EXECUCAO | **4 pares** no teste: `(0,2)`, `(1,2)`, `(1,1)`, `(1,3)`. Verde geral listado. Comparação antes × depois com a mesma fixture: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_contador_texto.py:26–38`. |
+| 28. RED de consultas do vigia | SO POR EXECUCAO | **3 SELECTs** de decisões para **5 perguntas** em lotes de **2**. Verde geral listado. RED nominal na base: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_contador_texto.py:87–95`. |
+| 29. Remoção da chave sem leitor | DEMONSTRADO | O carimbo mantém `divergencia_texto_resposta` e o teste cobra a ausência de `divergencia_texto_resposta_universo`. Identidade do commit [nao verificado]. `app/chamados/management/commands/vigiar_fio_morto.py:264–284`, `app/chamados/tests/test_e4c_f5_contador_texto.py:56–70`. |
+| 30. Decisão técnica publicada | DEMONSTRADO | O RELATO registra a remoção escolhida, o motivo e a reversão. `app/docs/RELATO.md:37`. |
+| 31. Selo AST por identidade | DEMONSTRADO | O selo acompanha parâmetro, aliases e alvo de iteração. **2 testes** de renomeação e mutante que renomeia o parâmetro. `app/chamados/tests/test_e4c_f5_volta1_leem_o_ato.py:164–185,220–251`, `app/chamados/tests/e4c_f5_volta2_mutantes.py:11–38`. |
+| 32. Triagem de `casefold` | FALTA | Falta a linha motivada para o Opus final. A cópia tem o caso de caixa e registros de triagens anteriores. `app/chamados/tests/test_e4c_f5_contador_texto.py:50–53`, `app/docs/RELATO.md:29,32,94`. |
+| 33. PRONTO publicado | FALTA | Falta no topo do RELATO a linha “PRONTO E4C-F5 item a item”, com provas e faltas desta árvore. `app/docs/RELATO.md:1–42,158`, `avais_depois_do_vPRONTO4.txt:5,108–110`. |
+| 34. Pureza AST dos dois juízes | DEMONSTRADO | **2 juízes, 0 acusações** na leitura AST, **1 isenção nominal** no temporal e **5 variantes** de forma, localização ou quantidade. Identidade textual com a base [nao verificado]. `app/chamados/juizes.py:1383–1403,1551–1560`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:163–185,271–304`. |
+| 35. Censo dos carregadores e mapa K | FALTA | Recontadas **77 cargas explícitas de decisões em 66 escopos e 39 arquivos**, **75** de queryset + **2** por helper. **33 K identificáveis**: 9 A + 14 B + 9 C + K13. Falta o vínculo nominal dos **69 K** à conta avalizada de **63 não-R + 6 R**, **58 pontos + sobra**. `app/chamados/models.py:2020–2021`, `app/chamados/tests/e4c_f5_voltaA_mutantes.py:9–21`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–27`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:239–264`. |
+| 36. Seis R declarados | FALTA | **6 rótulos** nos avais: K3, K19, K20, K22, K40 e K58. A cópia liga K40 ao percurso avulso. Faltam os outros **5 vínculos** e a declaração por sítio. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:199–207`. |
+| 37. K40 por item | DEMONSTRADO | `get(pk=pk)` e julgamento de cada candidata em `_descarimbados`. `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467`. |
+| 38. Sobra por grupo | DEMONSTRADO | **1 sobra**, deduplicação, com prefetch por grupo, teste 3 × 6 e seletor de mutação. `app/chamados/management/commands/dedup_perguntas_fato.py:75–76`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:230–237`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:22`. |
+| 39. REDs 3 × 6 da A | SO POR EXECUCAO | **11 casos 3 × 6, 9 K distintos**, mais O261 por candidata. O caso do fio é **1 × 5**. Verde geral listado. RED e verde da passagem A: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:44–240`, `app/chamados/tests/test_e4c_f5_volta2_juizes.py:154–186`. |
+| 40. REDs e mutantes da B | FALTA | **15 métodos, 14 K, 14 tira-lote**, K46 em dois métodos, mais **5 mutantes funcionais**. Falta tabela nominal dos **29 K cobertos**, **27 editados na B**, K41/K42 no commit Opus e **5 L + 3 Q**. `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:40–251`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–52`. |
+| 41. REDs e mutantes da C | FALTA | **10 métodos 3 × 6**, **9 K + 1 sobra**, **10 tira-lote** e **1** caso adicional K13 de releitura. Falta tabela que vincule os K de manutenção, as **3 M** e a sobra. `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:74–264`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23`. |
+| 42. RED novo 3 × 6 do C11 | DEMONSTRADO | **2 casos**, K2 e K1, com SELECTs de decisões, PKs julgados e PKs devolvidos pelo C11. `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:23–40,207–240`. |
+| 43. Tetos existentes E2 e C11 | SO POR EXECUCAO | **2 selos** presentes, E2 com 1 colaborador/1 dia × 2/3, C11 com 1 × 5 dias. Verde geral listado. Diff de preservação dos tetos: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e2_tarefa_do_dia.py:913–938`, `app/escala/tests/test_f3_beco1_folga_na_lista.py:378–402`. |
+| 44. O261 por candidata, teto 9 | SO POR EXECUCAO | **2 testes** fixam igualdade 3 × 6 por candidata, teto **9** e **1 SELECT** de decisões por candidata. Verde geral listado. Saída nominal da remedição: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:187–207`, `app/chamados/tests/test_e4c_f5_voltaA_lotes.py:188–204`. |
+| 45. Tabela de selos remedidos | FALTA | Falta publicação consolidada de antes/depois, motivo e rodada por selo. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–267`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:205–207`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:578–593`. |
+| 46. Quatro tetos do chokepoint | DEMONSTRADO | **4 tetos anotados**, **230→234**, **145→146**, **294→298**, **219→221**, com sítios, commits e classe de leitura. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–206,220–230,248–253,260–267`. |
+| 47. Quatro casos verdes do chokepoint | SO POR EXECUCAO | **4 testes**, 1 e 3 furos × fecha e fica. Verde geral listado. Remedição nominal dos quatro: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/ponto/tests/test_selo_chokepoint_escrita.py:467–475,502–510`. |
+| 48. Atribuição SQL e escritores novos | SO POR EXECUCAO | O selo anota delta de leitura e **0** INSERT/UPDATE/DELETE/SAVEPOINT a mais na comparação que cita. Captura final por SQL, verbo e sítio: **EXECUCAO NAO LISTADA**. Publicação da tabela no item 45. `app/ponto/tests/test_selo_chokepoint_escrita.py:196–205,220–229,248–252,260–266`, `avais_posteriores.txt:4,11–13`. |
+| 49. Harness dentro das exceções autorizadas | FALTA | **9 módulos**, asserts recontados: **0, 31, 86, 134, 29, 7, 65, 122 e 12**. Falta mapa das **11 famílias** e vínculo de cada diff à exceção que o autoriza. `app/chamados/tests/test_e4c_f5_duble_conforme.py:14–35,76–80`. |
+| 50. Onze famílias verdes | SO POR EXECUCAO | **11 métodos** em `test_pergunta_viva` e **6 casos** no selo de dublê. Verde geral listado. Placar nominal por família: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_pergunta_viva.py:16–76`, `app/chamados/tests/test_e4c_f5_duble_conforme.py:51–87`. |
+| 51. Décima segunda família | FALTA | As **2 fixtures RED-8** estão presentes. Falta nomeá-las no inventário das **12 famílias**. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:119–186`, `app/chamados/tests/test_e4c_f5_duble_conforme.py:14–35`. |
+| 52. Medida de `respondida` | SO POR EXECUCAO | Comparação da property nos dois sentidos, **51.563 e 0/0** como referência anterior: **EXECUCAO NAO LISTADA** para esta árvore. `lista_101_do_vPRONTO4.txt:54`, `app/chamados/models.py:3838–3844`. |
+| 53. Medida de `sem_veredito_entre` | SO POR EXECUCAO | Comparação da decisão, **0 em 51.563** como referência anterior: **EXECUCAO NAO LISTADA** para esta árvore. `lista_101_do_vPRONTO4.txt:55`, `app/chamados/models.py:2002–2027`. |
+| 54. Medida de `estado` | SO POR EXECUCAO | Comparação de rótulos, **0 em 51.563** como referência anterior: **EXECUCAO NAO LISTADA** para esta árvore. `lista_101_do_vPRONTO4.txt:56`, `app/chamados/models.py:3249–3268`. |
+| 55. Conversão dos 96 chamadores | FALTA | AST atual: **44 chamadas diretas**, **40** de respondida e **4** temporais, **43 compostas + 1 exceção**. A1(c) tem dois usos identificáveis. Falta matriz histórica **41 diretos + 55 indiretos = 96**, por volta. `app/chamados/juizes.py:1406–1428`, `app/chamados/services/materializacao.py:1060–1065`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–160`. |
+| 56. Selo de chamada final em zero | DEMONSTRADO | **0 chamadas acusadas** na varredura atual. **1 exceção nominal**, a face `values_list` de `creditos_perguntas`. Catraca listada. `app/chamados/tests/test_e4c_f5_selo_chamada.py:20–28,126–160,188–193`, `app/chamados/services/raiox.py:135–147`, `execucoes.txt:16`. |
+| 57. Catraca publicada por volta | SO POR EXECUCAO | Catraca final listada. Série base Opus/A/B/C, com hash e identidade em cada rodada: **EXECUCAO NAO LISTADA**. `execucoes.txt:16`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–160,188–193`. |
+| 58. Commit Opus de `models.py` | SO POR EXECUCAO | **9 métodos**, dos quais **6 REDs** nas âncoras históricas 357, 1542, 2004, 2057, 3235 e 3791. Verde geral listado. Commit próprio anterior à A, mapa K41/K42 e REDs na base: **EXECUCAO NAO LISTADA**. `execucoes.txt:2`, `app/chamados/tests/test_e4c_f5_opus_models.py:57–167`, `bin/codex_pergunta.sh:126,346`. |
+| 59. Limite da exceção de folha | SO POR EXECUCAO | **2 sítios** atuais, carga e argumento do juiz. Diff com a base para provar o limite das edições: **EXECUCAO NAO LISTADA**. `app/folha/previa.py:64–67,139–146`, `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:71–95`. |
+| 60. Prévia da competência 11 | SO POR EXECUCAO | MAIN × cópia, por colaborador e dia: **EXECUCAO NAO LISTADA**. **4 empresas, 450 colaboradores, 5.861 linhas, 2 referências, 0 diferenças** são os números de referência da C5. `lista_101_do_vPRONTO4.txt:62`, `app/folha/previa.py:64–67,135–146`. |
+| 61. Fixtures dos dois RED-8 | DEMONSTRADO | **2 casos**, ato pela porta e projeção passiva. A fixture do fio chega à **5ª pergunta**. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:27–35,119–186`. |
+| 62. Chamadas ORM da volta 2 | DEMONSTRADO | Os casos de fonte passam `D.composta(p)`. O passivo usa ORM cru como controle. `app/chamados/tests/test_e4c_f5_volta2_juizes.py:37–117`. |
+| 63. Mutante mira o compositor | DEMONSTRADO | O mutante renomeia o parâmetro e troca a chamada ao compositor pelo ORM cru. `app/chamados/tests/e4c_f5_volta2_mutantes.py:11–38`. |
+| 64. Tabela F2 por leitor | DEMONSTRADO | **7 leitores**, **5 `False`**, **2 `True`**, com motivo por leitor. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:498–521`. |
+| 65. Instante e validação pelo ato | DEMONSTRADO | **2 casos** opõem o ato à projeção. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:523–544`. |
+| 66. Leitor F1 B2 | DEMONSTRADO | O teste exige **1 chamada** e o tipo `LeituraComposta`. `app/chamados/tests/test_f1nova_b2_leitores.py:87–97`. |
+| 67. `_ancoradas` | DEMONSTRADO | **2 consultas** com **1** e com **5** ancoradas. O selo verifica a carga e o prefetch. `app/chamados/models.py:349–366`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:569–593`. |
+| 68. Inventário das adaptações | FALTA | A lista anterior agrupa **7** tipos de alteração. O cadastro C12 tem **9 identidades** no trecho indicado. Falta inventário por uso, antes/depois e aval, inclusive classes v, vi e vii. `app/chamados/tests/e4b_c12_ast.py:18–27`, `app/chamados/tests/test_e4c_f5_duble_conforme.py:76–80`, `avais_posteriores.txt:23`. |
+| 69. Placar raio-X pela face SQL | DEMONSTRADO | A exceção preserva `values_list` da projeção e adapta a tupla ao juiz. `app/chamados/services/raiox.py:135–147`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:23–28`. |
+| 70. Registro nominal do raio-X | FALTA | Falta a entrada nominal do raio-X na E4D. `app/docs/BACKLOG.md:2023`, `app/chamados/services/raiox.py:135–147`. |
+| 71. `resposta_display` lê o ato | DEMONSTRADO | A property formata para exibição o texto lido do ato. O selo F2 fixa a expectativa. `app/chamados/models.py:3865–3891`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:511–521`. |
+| 72. Registro nominal de `resposta_display` | FALTA | Falta a entrada nominal da property na E4D. `app/docs/BACKLOG.md:2023`, `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:511–514`. |
+| 73. Medida vigente de display | SO POR EXECUCAO | **16 PKs distintos** no literal do 0545, **16/51.563** na referência anterior. O aval aceita os dois zeros normalizados daquela medida. Comparação aplicável à árvore final: **EXECUCAO NAO LISTADA**. Renderização nominal no 84. `avais_posteriores.txt:29`, `lista_101_do
+
+[truncado em 20000 de 52655 caracteres]
 
 ## 20/11 18:21 · sessao 4aaba5418ba9 · - · - · origem=Ronald (tmux)
 
@@ -834,88 +1318,4 @@ Leitores operacionais do atributo: ausência, que usa o motivo na trilha e na pr
 
 [truncado em 20000 de 33107 caracteres]
 
-## 20/11 14:41 · sessao 6915fcbb536e · E4C-F5-CONSTROI · leitura · origem=Code
-
-### 1. `test_controle_falta_exige_razao_e_identidade_da_dependente`
-
-**Causa no arranjo.** O teste monta uma falta aprovada, deixa a irmã `orfao_14h` sem carimbo nem absorção e adianta o relógio para depois do turno. O DNA tem entrada às `08:00` e saída às `19:00`, mas a ata lavrada tem uma única lâmpada, a saída `S` das `19:00`, apagada. [test_e4c_f5_volta3_ausencia.py:44](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_volta3_ausencia.py:44) · [test_e4c_f5_volta3_ausencia.py:85](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_volta3_ausencia.py:85) · [test_e4c_f5_a1c_passagem_da_ausencia.py:49](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:49)
-
-**Retorno pela leitura do código.** `tarefa_do_dia` abre uma carga para o dia. A grade fornece as lâmpadas da ata, e os marcos do turno servem para casar o vencimento por tipo e hora. Com uma única lâmpada, `posicao_do_marco(0, 1, 'S')` cai primeiro em `i == 0` e devolve `inicio`. O mapa só associa `orfao_14h` a `('fim', 'S')`. Assim, a lista tem **uma instância**, `inicio`, tipo `S`, hora `19:00`, apagada e vencida, com **`motivo=None`, `razao='ausencia_aprovada'` e `pergunta_id=None`**. A falta aprovada é efetivamente lida. É a condição `i == 0` que impede a criação do marco com o motivo procurado na linha 95. [tarefa_do_dia.py:830](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:830) · [leitor_celula.py:114](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/escala/services/leitor_celula.py:114) · [tarefa_do_dia.py:95](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:95) · [declaracao_texto.py:76](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/declaracao_texto.py:76) · [declaracao_texto.py:43](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/declaracao_texto.py:43) · [tarefa_do_dia.py:288](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:288)
-
-A irmã também fica fora da exposição de perguntas sem marco correspondente. Para ela, `aguarda_resposta` é ação do colaborador, e esse caminho só acrescenta a linha se a exposição administrativa preencher a pergunta ou suas ações. A âncora foi criada como conversa e fica fora da consulta inicial, que exige `conversa=False`. [tarefa_do_dia.py:154](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:154) · [tarefa_do_dia.py:273](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:273) · [tarefa_do_dia.py:348](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:348) · [tarefa_do_dia.py:532](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/tarefa_do_dia.py:532) · [test_e4c_f5_a1c_passagem_da_ausencia.py:41](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:41)
-
-### 2. `test_A2_evento_celula_absolveu_entrega_coluna_nula_e_resposta_none`
-
-**O carimbo passa. A divergência está na confirmação do lote.** O consumidor grava `processado_em` nos eventos lidos do colaborador se termina sem falhas e sem adiamento. Com `falhas`, mantém o campo nulo, soma uma tentativa e grava `erro`. Se só o relógio segura uma órfã, mantém o evento pendente sem gastar tentativa. Eventos que atingem cinco tentativas saem da seleção. Sem a trava exclusiva, o comando nem inicia o consumo. [test_e4c_f5_guarda_reconciliador.py:159](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:159) · [reconciliador.py:1429](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1429) · [reconciliador.py:1442](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1442) · [reconciliador.py:1263](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1263) · [reconciliador.py:1300](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1300) · [consumir_eventos_celula.py:17](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/management/commands/consumir_eventos_celula.py:17)
-
-**Neste arranjo, o caminho é `falhas`.** Depois do carimbo `celula_absolveu`, o filtro de órfãs exclui tanto a pergunta já materializada quanto a reaberta cuja coluna `validada_em` segue preenchida. Mais adiante, `perguntar_por_eventos` relê a célula. Ela é de um dia passado, está com `trabalha=True` e foi criada sem vínculo. Sem escala, o cartório devolve zero marcos, e a fábrica tenta escrever a pauta `CADASTRO: PASSADO SEM TURNO PREVISTO` antes de considerar o veredito `concorde`. O arranjo também não dá ao usuário `sistema` autorização de TI nem oferece o superusuário ativo que serviria de alternativa. A porta de pauta levanta `PautaRecusada`, o consumidor captura a exceção e deixa o lote aberto. O carimbo já foi gravado em bloco próprio. O anexo mostra a recusa de TI e o `None` final. O `erro` e as `tentativas` persistidos nessa rodada são [nao verificado]. [test_e4c_f5_guarda_reconciliador.py:45](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:45) · [test_e4c_f5_guarda_reconciliador.py:184](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:184) · [reconciliador.py:643](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:643) · [reconciliador.py:678](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:678) · [reconciliador.py:1096](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1096) · [cartorio.py:883](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/ponto/services/cartorio.py:883) · [fabrica_da_celula.py:199](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/fabrica_da_celula.py:199) · [fabrica_da_celula.py:288](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/fabrica_da_celula.py:288) · [fabrica_da_celula.py:354](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/fabrica_da_celula.py:354) · [pautas/services.py:49](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/pautas/services.py:49) · [pautas/services.py:84](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/pautas/services.py:84)
-
-O gêmeo cria escala `12x36`, vincula a célula à escala e monta duas batidas. A órfã é encerrada pela via `fantasma`, e a fábrica tem turno previsto, evitando a pauta que falha no outro teste. [test_e4c_f5_guarda_reconciliador.py:187](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:187) · [reconciliador.py:1188](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1188) · [models.py:3552](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/models.py:3552)
-
-**É o mesmo registro pelo PK.** `emitir_evento_celula` insere e devolve uma linha nova. O consumidor inclui essa linha no lote de pendentes e atualiza pelos PKs lidos. O registro da reabertura já emite outro evento para a mesma célula, e o carimbo pode emitir mais um. São linhas distintas, e o evento explícito também está sujeito à falha do lote. [ponto/portas/celula.py:945](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/ponto/portas/celula.py:945) · [reconciliador.py:1395](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1395) · [reconciliador.py:1447](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/reconciliador.py:1447) · [models.py:4425](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/models.py:4425) · [signals.py:252](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/signals.py:252)
-
-### 3. `test_trilha_identifica_a_irma_que_saiu_da_releitura`
-
-**Causa no arranjo.** O teste A1(c) cria explicitamente uma `CelulaDia` para o mesmo colaborador em `DIA - 1`, com `trabalha=True` e `origem='gerada'`, antes do callback em T2. Também liga a irmã a um chamado de destino para verificar sua reconciliação. O teste novo cria a célula de origem pelo helper e calcula `outro_dia`, mas falta a **célula de destino em 2026-10-19**. `rechavear_data_evento` procura a célula por colaborador e data e, como a pergunta já tem célula, devolve a recusa antes de gravar o novo dia. A asserção dentro do callback interrompe a passagem antes da releitura que registraria `fora_da_releitura`. [test_e4c_f5_a1c_passagem_da_ausencia.py:371](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:371) · [test_e4c_f5_a1c_passagem_da_ausencia.py:49](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:49) · [test_e4c_f5_volta3_ausencia.py:149](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_volta3_ausencia.py:149) · [fio.py:1087](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/fio.py:1087) · [materializacao.py:1056](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/services/materializacao.py:1056)
-
-### 4. `F5_VOLTA3_MUTANTE`
-
-Dois testes leem a variável por meio de `SELETOR`. Com ela ausente, ambos executam suas asserções sobre o fonte original. O executor de mutantes, quando chamado diretamente, atribui ao seletor o nome recebido e aplica a alteração em memória. O valor da variável na rodada anexada é [nao verificado]. [e4c_f5_volta3_mutantes.py:10](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/e4c_f5_volta3_mutantes.py:10) · [e4c_f5_volta3_mutantes.py:86](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/e4c_f5_volta3_mutantes.py:86) · [e4c_f5_volta3_mutantes.py:102](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/e4c_f5_volta3_mutantes.py:102)
-
-- `test_RED_s14_conserva_literal_do_cadastro_c12` aplica a substituição textual só com `m20_s14_perde_literal`. Sem a variável, conta a chamada literal de S14 no fonte lido. [test_e4c_f5_volta3_selos.py:33](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_volta3_selos.py:33)
-- `test_RED_validacao_iniciada_pelo_ato_tambem_grava_a_coluna` retira o `save` da coluna no trecho analisado só com `v_ato_sem_coluna`. Sem a variável, verifica o pareamento entre o ato e a gravação da coluna no fonte original. [test_e4c_f5_volta3_selos.py:41](/home/ronald/codex_ws/e69806f195aa0e13dfa1e738a6d4386428301fce/app/chamados/tests/test_e4c_f5_volta3_selos.py:41)
-
-## 20/11 14:40 · sessao b3f2dbc9909f · FERIADO-POR-POSTO · leitura · origem=Code
-
-## 1. Modos do verificador
-
-Toda importação de `e4b_c12_verificar` carrega `e4b_c12_sitios.json` e `e4b_c12_base.json`. Nos modos com censo, `fontes()` lê primeiro os `.py` de produção sob `app/` e depois aplica `SOBREPOSTAS` em memória. A varredura de produção exclui testes e migrations, entre outros diretórios. [app/chamados/tests/e4b_c12_verificar.py:16](/home/ronald/codex_ws/b747b98b0bd1535375e4957c0e3714b84d85c0b8/app/chamados/tests/e4b_c12_verificar.py:16) · `app/chamados/tests/e4b_c12_verificar.py:59` · `app/chamados/tests/e4b_c12_ast.py:32`
-
-| Modo | Texto congelado usado | Fontes da árvore atual |
-|---|---|---|
-| Sem flags | `BASE.get()` serve à comparação que escolhe a linha de cada sítio. | O selo censita a produção e relê cada arquivo nomeado no manifesto. O módulo de selo também lê `*/migrations/0*.py` nos testes próprios de migrations. O módulo de memória usa o `fecho_runtime.py` atual. `app/chamados/tests/e4b_c12_verificar.py:100–116,237–240` · `app/chamados/tests/test_e4b_c12_selo.py:147–169` · `app/chamados/tests/test_e4b_c12_memoria.py:8,36–47` |
-| `--base` | Sobrepõe **todas** as entradas da BASE ao mapa do censo, inclusive as duas sem sítio. | Lê a produção inteira antes da sobreposição. O censo usa a fonte atual nas chaves ausentes da BASE. `analisar_sitios()` ainda relê do disco o arquivo atual de cada sítio para localizar `novo`, antes de decidir se usa `linha_base`. `app/chamados/tests/e4b_c12_verificar.py:59–60,106–115,230–240` |
-| `--mutante <ID de sítio>` | `BASE.get()` participa da escolha da linha. O texto da reversão vem de `original` no manifesto. | Lê o arquivo atual do alvo, troca a chamada em memória e roda o teste por sítio sobre a produção com essa sobreposição. `app/chamados/tests/e4b_c12_verificar.py:84–97,106–115,234–240` |
-| `--mutante botao` ou `update` | `BASE.get()` participa da escolha da linha dos sítios existentes. | Censo da produção atual mais a view sintética `chamados/views_c12_botao.py`, criada em memória com o trecho do teste de selo. `app/chamados/tests/e4b_c12_verificar.py:106–115,232–240` · `app/chamados/tests/test_e4b_c12_selo.py:9–18` |
-| `--mutante R01` a `R06` | O JSON é carregado na importação. O enxerto usa o runtime atual. | Lê `chamados/services/fecho_runtime.py`, altera a AST de `transicionar_com_pauta` e roda o teste de memória associado ao ID, sem censo da produção. `app/chamados/tests/e4b_c12_verificar.py:20–56,219–229` |
-| `--todos-mutantes` | `BASE.get()` participa da escolha das linhas. Cada reversão usa `original` do manifesto. | Monta o índice com a produção atual, relê e muta um arquivo por vez, revarre esse arquivo e aproveita as portas do censo atual. Exige exatamente o subteste do ID alvo em vermelho, sem erro de execução. `app/chamados/tests/e4b_c12_verificar.py:95–115,197–218,244–247` |
-
-Há também a entrada de **ORM** `instrumentar_orm(pilha)`, acionada por `E4B_C12_MUTANTE`. Com a variável vazia, retorna após o carregamento dos JSONs. Com `R01`–`R06`, usa o runtime atual. Com ID de sítio, importa o módulo atual e enxerta a função obtida da fonte atual com a chamada revertida. Com `base`, usa o runtime congelado e tenta extrair da BASE uma função por escopo de sítio `S`, usando os globais dos módulos atuais. [app/chamados/tests/e4b_c12_verificar.py:119](/home/ronald/codex_ws/b747b98b0bd1535375e4957c0e3714b84d85c0b8/app/chamados/tests/e4b_c12_verificar.py:119) · `app/chamados/tests/e4b_c12_verificar.py:123–162`
-
-## 2. Diferenças entre as chaves da BASE e os arquivos do manifesto
-
-**(a) Só na BASE:** `chamados/services/fecho_runtime.py` e `colaboradores/management/commands/marcar_feriado_do_posto.py`. `app/chamados/tests/e4b_c12_base.json:31,13` · `app/chamados/tests/e4b_c12_sitios.json:1–442`
-
-**(b) Só no manifesto:** para os quatro arquivos abaixo, o caminho AST usa a fonte atual no censo, inclusive com `--base`. Em `analisar_sitios()`, `BASE.get(arquivo)` devolve `None`, a comparação com o texto do mapa dá falso e a chave fica com a linha encontrada na árvore atual. O `subTest` ainda exibe `linha_base` como parâmetro. Os quatro IDs também podem ser alvo de mutação sobre a fonte atual. `app/chamados/tests/e4b_c12_verificar.py:84–115,193,201–205,230–236` · `app/chamados/tests/test_e4b_c12_selo.py:22–29`
-
-| Arquivo e ID | Linha atual | `linha_base` | ORM com `E4B_C12_MUTANTE=base` |
-|---|---|---|---|
-| `chamados/models.py` · E01 | `app/chamados/models.py:467` | 455 · `app/chamados/tests/e4b_c12_sitios.json:371–376` | Pula o ID `E01`. `app/chamados/tests/e4b_c12_verificar.py:140–142` |
-| `chamados/services/fio.py` · E08 | `app/chamados/services/fio.py:770` | 722 · `app/chamados/tests/e4b_c12_sitios.json:427–432` | Pula o ID `E08`. `app/chamados/tests/e4b_c12_verificar.py:140–142` |
-| `colaboradores/services/feriado_do_posto.py` · S19 | `app/colaboradores/services/feriado_do_posto.py:298` | 277 · `app/chamados/tests/e4b_c12_sitios.json:147–152` | Passa pelo filtro `S` e, se chegar a `BASE[arquivo]`, levanta `KeyError` pela chave ausente. `app/chamados/tests/e4b_c12_verificar.py:140–153` |
-| `colaboradores/views.py` · E09 | `app/colaboradores/views.py:2112` | 2069 · `app/chamados/tests/e4b_c12_sitios.json:435–440` | Pula o ID `E09`. `app/chamados/tests/e4b_c12_verificar.py:140–142` |
-
-O índice variável **sem guarda** fica em `instrumentar_orm()`, no ramo `E4B_C12_MUTANTE=base`. O mesmo ramo também indexa diretamente a chave fixa de `fecho_runtime.py`, que existe. A flag CLI `--base` segue pelo selo AST, via `SOBREPOSTAS.update(BASE)` e `BASE.get()`. [app/chamados/tests/e4b_c12_verificar.py:132](/home/ronald/codex_ws/b747b98b0bd1535375e4957c0e3714b84d85c0b8/app/chamados/tests/e4b_c12_verificar.py:132) · `app/chamados/tests/e4b_c12_verificar.py:110,150–153,230–240` · `app/chamados/tests/e4b_c12_base.json:31`
-
-Quem chama a entrada ORM é `CascatasC12Test`. O repositório documenta `E4B_C12_MUTANTE=base python3 -B manage.py test ...` para vínculo, regularização, desligamento, cron, signal, cartório, API e D3. O próprio documento registra esses comandos como preparados e deixa a execução deles `[nao verificado]`. `app/chamados/tests/test_e4b_c12_orm.py:155,198–254,257–273` · `app/docs/FIO-E0-V4-E4B-c12.txt:129–165`
-
-## 3. Escrita, manutenção e commits [nao verificado]
-
-- **Escritor inicial dos dois JSONs:** `e4b_c12_migrar.py::main()`, acionável de `app/` com `python3 -B -m chamados.tests.e4b_c12_migrar`. Ele captura `ARQUIVOS + [RUNTIME]`, monta os registros `S`, reescreve as fontes produtivas e grava BASE e manifesto nessa ordem. A guarda aborta se a BASE já existir. [app/chamados/tests/e4b_c12_migrar.py:73](/home/ronald/codex_ws/b747b98b0bd1535375e4957c0e3714b84d85c0b8/app/chamados/tests/e4b_c12_migrar.py:73) · `app/chamados/tests/e4b_c12_migrar.py:112–135`
-- **Procedimento para mover ou acrescentar um sítio:** `[nao verificado]`. O aplicador se descreve como de uso único. A entrega documenta o acréscimo de S46, os IDs E01–E09 e a correção de `linha_base` em E04/E07. São registros de alterações específicas. O selo prevê um RED para um novo escritor fora da porta. `app/chamados/tests/e4b_c12_migrar.py:1–4,74–76` · `app/docs/FIO-E0-V4-E4B-c12.txt:8,21` · `app/chamados/tests/e4b_c12_execucao.txt:741` · `app/chamados/tests/test_e4b_c12_selo.py:30–32`
-- **Último commit da BASE:** `[nao verificado]`. **Último commit do manifesto:** `[nao verificado]`. A entrega associa `afc04fa4e993d8a76fe4aa4790db99ab0ef8ad81` à cópia c11 recebida e diz que o construtor não produziu commit. O relato cita `43a636fde` como a árvore c12 do DIFF e `087fe758a` como o pouso da E4B. Os registros dão a identidade dessas árvores, sem atribuição do último commit por JSON. `app/docs/FIO-E0-V4-E4B-c12.txt:3–4` · `app/chamados/tests/e4b_c12_execucao.txt:1` · `app/docs/RELATO.md:2086,2066`
-
-## 4. S19
-
-Hoje o manifesto aponta para `colaboradores/services/feriado_do_posto.py::aplicar_marca`, com `linha_base=277`, `original="ch.reconciliar()"` e o literal `transicionar_com_pauta(ch, 'resolvido', None, ato=ch.reconciliar)` na linha **298** da fonte atual. A BASE guarda a fonte inteira do **comando antigo**, com `if ch.reconciliar():` na linha **140** do texto congelado, em `Command._marcar`. Com `--base`, o censo acusa essa chamada antiga como `Novo escritor fora da porta`, pois a chave do S19 agora aponta para o serviço. `app/chamados/tests/e4b_c12_sitios.json:147–152` · `app/colaboradores/services/feriado_do_posto.py:268,298` · `app/chamados/tests/e4b_c12_base.json:13` · `app/docs/FIO-E0-V4-E4B-c12.txt:73` · `app/chamados/tests/e4b_c12_verificar.py:106–116` · `app/chamados/tests/test_e4b_c12_selo.py:30–32`
-
-Se o literal sumir e a fonte continuar válida, fica vermelho **`SeloEscritorUnicoTest.test_RED_um_subTest_por_sitio`**. A busca exige a função e o texto exato de `novo`. Sem candidato, `candidatos[indice]` levanta `IndexError` **antes** de abrir o subteste de S19. [app/chamados/tests/test_e4b_c12_selo.py:22](/home/ronald/codex_ws/b747b98b0bd1535375e4957c0e3714b84d85c0b8/app/chamados/tests/test_e4b_c12_selo.py:22) · `app/chamados/tests/e4b_c12_verificar.py:84–92,106–109`
-
-## 5. Testes que importam ou executam o verificador [nao verificado]
-
-- **`chamados/tests/test_e4b_c12_selo.py`** importa `fontes` e `analisar_sitios`. O teste por sítio chama ambos. Os testes adversariais também usam `fontes()` para montar o índice. `app/chamados/tests/test_e4b_c12_selo.py:7,22–25,38–46`
-- **`chamados/tests/test_e4b_c12_orm.py`** importa `instrumentar_orm` e o chama em `_provar`, no caso de desligamento com texto legado e no RED D3. `app/chamados/tests/test_e4b_c12_orm.py:19,155,224,273`
-- **`test_e4b_c12_memoria.py`** é carregado pelo verificador no modo padrão e nos mutantes `R01`–`R06`. O teste de memória importa o runtime. **`test_e4b_c12_uma_entrada.py`** importa o runtime e o selo de chokepoint de `ponto`. `app/chamados/tests/e4b_c12_verificar.py:219–240` · `app/chamados/tests/test_e4b_c12_memoria.py:2–8` · `app/chamados/tests/test_e4b_c12_uma_entrada.py:13–19`
-- **Outros apps:** a busca textual na cópia não encontrou importação ou execução direta por teste de outro app. Invocações indiretas construídas em tempo de execução `[nao verificado]`. [nao verificado]
-
-_7580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7582 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
