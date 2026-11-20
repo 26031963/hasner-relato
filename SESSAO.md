@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 00:02:58.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (36.8 MB). Acoes na janela: **1018**.
+**Medido em 20/11/2026 00:08:26.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (36.8 MB). Acoes na janela: **1021**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:08:21 | Bash | Register aval, PROMPTS line, update memory | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/code_so_despacha_item4_2011_0008.txt <<'EOF' aval Ronald: CODE-SO-DESPACHA-ITEM4-2011-0008 (20/11 00:08) -- unidade: turno do Code; nenhuma lei nova. COMPLEMENTO do CODE-SO-DESPACHA-1911-0005. 4 /clear a cada marco fechado (pouso, volta verde ou PAREI respondido), com o PRONTO PARA CLEAR de sempre, sem esperar Ronald; meta de contexto <= 100k entr ...` |
+| 00:07:41 | Bash | Find the parent CODE-SO-DESPACHA aval | `cd /home/ronald/saas-hasner; /bin/grep -rn "CODE-SO-DESPACHA" app/docs/PROMPTS.md app/docs/CORTES.md logs/AVAIS-1515 2>/dev/null \| cut -c1-400 \| head -5; /bin/grep -rln "CODE-SO-DESPACHA" logs/ 2>/dev/null \| head -3` |
+| 00:07:37 | Bash | Read CODE-SO-DESPACHA aval, PROMPTS tail, clear memory | `cd /home/ronald/saas-hasner; f=$(ls logs/AVAIS-1515/ \| /bin/grep -i "despacha" ); echo "$f"; for x in $f; do echo "== $x"; cat logs/AVAIS-1515/$x; done; tail -3 app/docs/PROMPTS.md \| cut -c1-250; cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/marco-fecha-com-linha-de-clear.md` |
 | 00:01:18 | Bash | Record F5 B progress in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() a="RED dos 30 testes novos: base ec7134368 FAILED 28/30 (vB/base_novos.log), B com o import de DIA OK 30/30 (vB/B_novos.log). Sem pouso." assert s.count(a)==1 s=s.replace(a,a+" Volta B COMMITADA na copia: d0210a400 (cmp com a copia de medicao, difere=0). Em curso: 15 mutantes (vB/mut/, os 6 primeiros MORTOS pela ...` |
 | 00:01:12 | Bash | Read first mutant results | `cd /home/ronald/saas-hasner; for f in logs/ESPINHA-BRIEFS/F5/vB/mut/*.log; do echo "$(basename $f) $(/bin/grep -E '^Ran ' $f \| tail -1) $(/bin/grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1) $(tail -1 $f)"; done; /bin/grep -h "AssertionError" logs/ESPINHA-BRIEFS/F5/vB/mut/k4.log \| head -2 \| cut -c1-200` |
 | 00:01:08 | Bash | Check probes and RELATO top | `cd /home/ronald/saas-hasner; ps -o pid,etime -p 4192176 \| tail -1; ls -la logs/cadeia20_v3_insumo.out; cat logs/ESPINHA-BRIEFS/F5/vB/mut/FIM 2>/dev/null; ls logs/ESPINHA-BRIEFS/F5/vB/mut/; head -2 app/docs/RELATO.md \| cut -c1-200` |
