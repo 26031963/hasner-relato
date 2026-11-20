@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 10:56** · publicado em **20/11/2026 10:58** (UTC-3)
+> Ultima resposta processada: **20/11/2026 10:59** · publicado em **20/11/2026 11:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 20/11 10:59 · sessao f9ea3a01eb41 · E4C-F5-CONSTROI · construtor · origem=Code
+
+Implementei a volta **E-CONTADOR** na base `48be81433dab4bb4ee9641e2daeedd22acf1cbff`. O contador lê `DecisaoPergunta.composta(p).validada_em` e `p.validada_em` uma vez por pergunta, com `decisoes` carregadas em lotes de 2.000 por padrão. A e B têm esperado `0` e dono `ESTRUTURA`. [vigia_ato_x_coluna.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/vigia_ato_x_coluna.py:8)
+
+O `vigiar_fio_morto` passa o mesmo queryset do contador de texto dentro de `tranca_em_lote()`, imprime `VFM|ATO_X_COLUNA|A=%d B=%d (esperado 0 e 0)|universo=%d` e publica `ato_x_coluna_a` e `ato_x_coluna_b` no `censo` e no `esperado` do carimbo. As duas chaves ficam fora de `ALARMA_SEMPRE` e `ALARMA_EM_0`. O encaixe usa o comando e o cron existentes. `app/chamados/management/commands/vigiar_fio_morto.py:79`, `:104`, `:188`, `:233`, `:274`, `:283`, `app/config/crons.py:1737`.
+
+### Leitura e escritores
+
+O passivo com coluna preenchida e zero decisões cai em **`(True, True)`**. `leitura(p)` acrescenta a validação sintética no instante da coluna e `composta(p)` devolve essa validação. A pergunta soma um ao universo e zero a A e B. `app/chamados/models.py:4290`, `:4333`, `:4345`, `:4360`, `app/chamados/tests/test_e4c_f5_contador_ato_x_coluna.py:63`.
+
+| Campo ou caminho | Escrita na cópia |
+|---|---|
+| `PerguntaDisputa.validada_em` na validação e nas devoluções | `_carimbar_validacao` grava a coluna e `VALIDACAO` na mesma transação. `devolver_validacao_recusada` e `devolver_paridade_bug_par_103` limpam a coluna e registram `DEVOLUCAO` na mesma transação. `app/chamados/services/validacao.py:168`, `:287`, `:347`, `:365`. |
+| `PerguntaDisputa.validada_em` na resposta, reabertura, recusa e ressuscitação | A resposta humana limpa a coluna e registra `RESPOSTA` com `resposta_mantem_validacao=False` no mesmo `atomic`. Reabertura e recusa limpam pelo lote e registram o ato no mesmo `atomic`. A ressuscitação registra `REABERTURA` e limpa pelo lote no mesmo `atomic`. `app/chamados/services/disputa_emissao.py:1478`, `:1506`, `:1529`, `:1626`, `:1636`, `:1653`, `app/chamados/services/validacao.py:943`, `app/chamados/models.py:1646`, `:1719`, `:3509`. |
+| `PerguntaDisputa.validada_em` no carimbo com `resposta='validar'` | `carimbar` persiste a coluna. A validação sintética vem da leitura, conforme o aval das 11:00. A sonda da ressuscitação e `_desfazer_em_memoria` atribuem o campo em memória. `app/chamados/models.py:1582`, `:3354`, `:3372`, `:3384`, `:4290`. |
+| `DecisaoPergunta.composta(p).validada_em` | `composta` produz o valor em memória a partir de `leitura`. `DecisaoPergunta.registrar` persiste as linhas de ato que alimentam a leitura. `app/chamados/models.py:4333`, `:4345`, `:4360`, `:4365`. |
+
+### Testes e leitores [nao verificado]
+
+- O [teste novo](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_contador_ato_x_coluna.py:19) cobre porta real, A, B, passivo, recorte inclusive vazio, carimbo com `--alarme` e custo. O teste do comando captura o payload de `_carimbar` em memória, com A=1 e B=2 para detectar troca de chaves. O teste O261 confere o JSON em disco. `app/chamados/tests/test_e4c_f5_contador_ato_x_coluna.py:47`, `:78`, `:99`, `app/chamados/tests/test_o261_vigia_fio.py:826`.
+- Os dois inventários de dublês ganharam a chamada nova. `test_e4a2_c5_memoria` executa o `handle` extraído por AST e `test_fio_mudo_placar` substitui as derivações do vigia. O contrato O261 ganhou as duas chaves nas comparações integrais de `censo` e `esperado`, com os valores anteriores preservados. `app/chamados/tests/test_e4a2_c5_memoria.py:132`, `app/core/tests/test_fio_mudo_placar.py:128`, `app/chamados/tests/test_o261_vigia_fio.py:816`, `:837`, `:851`, `:881`.
+- O selo de chamadas F5 varre fontes por chamadas a dois juízes. O contrato do dono de `validada_em` varre escritas. O contrato do relógio do vigia seleciona `censo` e `censo_alcance`. A inclusão dispensa alterações nesses contratos. `app/chamados/tests/test_e4c_f5_selo_chamada.py:126`, `:152`, `app/chamados/tests/test_contract_dono_validada.py:47`, `app/chamados/tests/test_e3_degrau_dono_e_porta.py:389`.
+- Fora de `app/`, `bin/fio_estado.py` lê o JSON, percorre todas as chaves de `esperado` e publica as divergências. `bin/gerar_estado.py` usa esse leitor. Ambos já aceitam A e B sem edição. O teste de `bin/` verifica o caminho e campos específicos do alcance. Dentro de `app/`, o `pipeline_placar` lê as chaves específicas `fio_mudo_alvos` e `nunca_bateu_sem_adesao`. `bin/fio_estado.py:98`, `:121`, `:191`, `bin/gerar_estado.py:260`, `bin/tests/test_fio_estado.sh:117`, `:203`, `app/core/management/commands/pipeline_placar.py:85`, `:135`.
+
+### Comandos para o Code
+
+**GREEN e vizinhos**, a partir de `app/`. Os casos novos estão em `app/chamados/tests/test_e4c_f5_contador_ato_x_coluna.py:47`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test --settings=config.settings.ci \
+  chamados.tests.test_e4c_f5_contador_ato_x_coluna
+
+PYTHONDONTWRITEBYTECODE=1 python manage.py test --settings=config.settings.ci \
+  chamados.tests.test_e4c_f5_contador_texto \
+  chamados.tests.test_f7_vigia_validada_sem_linha \
+  chamados.tests.test_o261_vigia_fio \
+  chamados.tests.test_e4a2_c5_memoria \
+  core.tests.test_fio_mudo_placar \
+  chamados.tests.test_e4c_f5_selo_chamada \
+  chamados.tests.test_contract_dono_validada
+```
+
+**RED por mutante.** A primeira troca faz A sair `0` no caso `(True, False)`. A segunda faz B sair `0` no caso `(False, True)`. Cada comando exige uma âncora de linha única e aplica a troca em memória. A falha esperada é na asserção de contagem. `app/chamados/services/vigia_ato_x_coluna.py:17`, `:19`, `app/chamados/tests/test_e4c_f5_contador_ato_x_coluna.py:55`, `:59`.
+
+```bash
+mutar_contador() {
+  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
+    python - "$@" <<'PY'
+import sys
+from pathlib import Path
+
+import django
+from django.conf import settings
+from django.test.utils import get_runner
+
+django.setup()
+from chamados.services import vigia_ato_x_coluna
+
+antes, depois, teste = sys.argv[1:] [nao verificado]
+fonte = Path(vigia_ato_x_coluna.__file__)
+texto = fonte.read_text(encoding='utf-8')
+linhas = [linha for linha in texto.splitlines(keepends=True) if linha.strip() == antes]
+if len(linhas) != 1:
+    raise SystemExit(f'Âncora inválida: {antes!r}, ocorrências: {len(linhas)}')
+(linha,) = linhas
+mutado = texto.replace(linha, linha.replace(antes, depois, 1), 1)
+escopo = vars(vigia_ato_x_coluna).copy()
+exec(compile(mutado, str(fonte), 'exec'), escopo)
+vigia_ato_x_coluna.contar.__code__ = escopo['contar'].__code__
+prefixo = 'chamados.tests.test_e4c_f5_contador_ato_x_coluna.ContadorAtoXColunaTest.'
+sys.exit(get_runner(settings)(interactive=False).run_tests([prefixo + teste])) [nao verificado]
+PY
+}
+
+mutar_contador 'if celula == (True, False):' 'if celula == (False, True):' \
+  test_RED_a_ato_validado_coluna_vazia
+
+mutar_contador 'elif celula == (False, True):' 'elif celula == (True, False):' \
+  test_RED_b_coluna_preenchida_ato_devolvido
+```
+
+**Mutante `retry_reativa` do aval**, pelo executor existente. `app/chamados/tests/bug_par_mutantes.py:68`, `:189`, `app/chamados/services/validacao.py:702`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python -m chamados.tests.bug_par_mutantes \
+  --django --mutante retry_reativa
+```
+
+Conferi a sintaxe dos seis arquivos e a unicidade das duas âncoras sem carregar Django. Banco, suíte, execução dos mutantes, custo observado e nova medição de frota **[nao verificado]**. O `A=0`, `B=0` em 51.953 perguntas é o dado do anexo fornecido. A remedição e a certificação ficam com Code e Opus. [nao verificado]
 
 ## 20/11 10:56 · sessao e05141ea45e1 · E4C-F5 · verificador · origem=Code
 
@@ -1000,65 +1090,4 @@ Nos pares abaixo, **atomic comum** significa que as duas escritas estão na mesm
 2. **PRODUZ-B — resposta humana usa a coluna nula da instância antiga.** T1, pela resposta web ou API, carrega a pergunta viva com coluna nula. T2 executa `validar_pergunta` e comita coluna + `VALIDACAO`. T1 segue com a instância antiga, adquire a trava e grava `RESPOSTA(False)` com horário posterior. Seu `save` omite `validada_em`. A coluna de T2 fica preenchida e a resposta de T1 desfaz a validação na composta. `app/chamados/views.py:1237–1246,1274–1278`, `app/api/views.py:2634–2653`, `app/chamados/services/validacao.py:161–175,731–745`, `app/chamados/services/disputa_emissao.py:1483–1534`, `app/chamados/models.py:4342–4351`
 3. **PRODUZ-B — absorção grava um carimbo anterior à recusa concorrente.** T1 responde `FALTA_DIA`, entra em `_materializar_ausencia_de_resposta`, marca `t1` e carrega uma irmã ainda não materializada, com texto e sem validação. Antes de T1 travar a irmã pelo colaborador, T2 executa `recusar_pergunta` para ela e comita `RECUSA(t2)`, com `t2 > t1`, limpando a resposta. T1 adquire a trava e usa a irmã antiga. Se o C6 a der por morta mesmo com a validação desfeita, por exemplo numa célula julgada que não acusa e sem marcos pendentes, T1 grava `validada_em=t1` e `ABSORCAO(t1)`. Na releitura, `RECUSA(t2)` vence o passivo sintético de `t1`. `app/chamados/services/disputa_emissao.py:1559–1563`, `app/chamados/services/materializacao.py:1033–1069,1100–1103`, `app/chamados/services/validacao.py:900–929`, `app/chamados/models.py:3344–3376,4333–4351`, `app/chamados/juizes.py:1458–1474`
 
-## 20/11 05:31 · sessao b6cdac3ea3bf · CADEIA-20-PASSO-1 · leitura · origem=Code
-
-# CADEIA-20-PASSO-1 · braço `cruza`
-
-Três mudanças de insumo ficaram depois da última leitura de P1: **138359, 129943 e 128355 perderam o fio no carimbo da segunda passada**. A primeira `LEITURA` com `fio:0` em cada uma foi a inicial de P2. Em P2, o fecho do chamado que ainda estava vivo teve sua própria segunda passada. `cruza.sem_foto.txt`, seq 395, 407, 1089, 1101, 1458, 1470, 1608–1636, 1675–1700 e 1729–1754 · `app/ponto/services/cartorio.py:1152–1164,1209–1231,1683–1707,2035–2037`
-
-Conferi o código da cópia em modo somente leitura. A identidade Git da cópia, o script original, as linhas `FOTO` e `LOTE` e a confirmação independente de `ERRO=0` estão **[nao verificado]**. A execução descrita abaixo é a do extrato `cruza`, com relógios de 00:30 em P1 e P2 e 06:27 em P3. `cruza.sem_foto.txt`, seq 1 · `legenda_do_script.txt:1–5`
-
-## 1 e 4 · Cada escrita e delta, com a leitura posterior
-
-`E` é `ESCRITA` e `D` é `DELTA`. Todos os números de sequência são do anexo 3. **(a)** é a segunda passada que consome `rejulgar`, usa a janela original e roda com `forcar=True`. **(b)** é a releitura da lista inteira do mesmo colaborador, depois da fábrica, se `emitidos` subiu naquele ato, com `forcar=False`. **(c)** indica ausência das duas vias após o evento naquele passe. `LEITURA` registra o cálculo da impressão antes da guarda, inclusive quando a célula é pulada. `cadeia_20_v3_complemento_2011_0215.txt:6–7` · `legenda_do_script.txt:1–3` · `app/ponto/management/commands/processar_cartorio.py:63–69` · `app/ponto/services/cartorio.py:1114–1123,1152–1164,1179–1184,1209–1231,1541–1558`
-
-| Célula | Rodada, etapa e evento | Leitura posterior no mesmo passe |
-|---|---|---|
-| **128355** | **P1, corpo inicial:** fecho por `COBRANCA_SEM_FURO`, `39255 aberto → resolvido` (E **1416**, D **1418**). **P1, carimbo da segunda passada:** `fio:1 → fio:0` (D **1470**). **P2, corpo inicial:** fecho por não protesto, `39234 em_analise → resolvido`, `fio:0 → ausente` (E **1733**, D **1735**). No sinal desse fecho, carimbo da pergunta **58553** com `chamado_encerrado` (E **1737**). `app/ponto/services/cartorio.py:1691–1707,1726–1738,2035–2037` · `app/ponto/portas/celula.py:1181–1202` · `app/chamados/signals.py:91–117` · `app/chamados/services/disputa_emissao.py:2005–2030` | **(a) 1458** para E 1416/D 1418, fila **1430 → 1450**. **(c)** para D 1470, primeira leitura posterior **1729**, inicial de P2. **(a) 1754** para E 1733/D 1735/E 1737, fila **1746 → 1752**. |
-| **129943** | **P1, corpo inicial:** fecho por `COBRANCA_SEM_FURO`, `36625 aberto → resolvido` (E **1052**, D **1054**). **P1, carimbo da segunda passada:** `fio:1 → fio:0` (D **1101**). **P2, corpo inicial:** fecho por não protesto, `36531 em_analise → resolvido`, `fio:0 → ausente` (E **1679**, D **1681**). No sinal desse fecho, carimbo da pergunta **53186** com `chamado_encerrado` (E **1683**). `app/ponto/services/cartorio.py:1691–1707,1726–1738,2035–2037` · `app/ponto/portas/celula.py:1181–1202` · `app/chamados/signals.py:91–117` · `app/chamados/services/disputa_emissao.py:2005–2030` | **(a) 1089** para E 1052/D 1054, fila **1066 → 1087**. **(c)** para D 1101, primeira leitura posterior **1675**, inicial de P2. **(a) 1700** para E 1679/D 1681/E 1683, fila **1692 → 1698**. |
-| **138359** | **P1, corpo inicial:** fecho por `COBRANCA_SEM_FURO`, `37433 aberto → resolvido` (E **352**, D **354**). **P1, carimbo da segunda passada:** `fio:1 → fio:0` (D **407**). **P2, corpo inicial:** fecho por não protesto, `37355 em_analise → resolvido`, `fio:0 → ausente` (E **1612**, D **1614**). `app/ponto/services/cartorio.py:1691–1707,1726–1738,2035–2037` · `app/ponto/portas/celula.py:1181–1202` | **(a) 395** para E 352/D 354, fila **366 → 393**. **(c)** para D 407, primeira leitura posterior **1608**, inicial de P2. **(a) 1636** para E 1612/D 1614, fila **1628 → 1634**. |
-| **129476** | **P1, repasse de órfãos dentro do emissor do corpo inicial:** inserção da pergunta **69484** para **36124** (E **607**). A inicial **564**, a releitura **1031** e as iniciais de P2 **1662** e P3 **1797** dão o mesmo hash e `fio:1`. O `RESUMO` **1876** registra `nenhuma nas fotos` nas três rodadas. `app/ponto/management/commands/detectar_ausencias.py:788–807` · `app/chamados/services/disputa_emissao.py:851–861,887–898,1180–1192` · `app/ponto/services/cartorio.py:1527–1558` | **(b) 1031** ocorreu depois de E 607, no ato 869, com `emitidos 143 → 144` (**686**). A leitura preservou a projeção e passou pela guarda com hash igual. Efeito individual da pergunta sobre o C6 **[nao verificado]**. |
-| **129490** | **P1, repasse de órfãos dentro do emissor do corpo inicial:** inserção de **69483** para **39014** (E **601**) e de **69485** para **39044** (E **663**, D **666**, `fio:1 → fio:2`). Ainda no repasse, `analisar()` pôs **39044** em `em_analise` (E **667**, D **670**). `app/ponto/management/commands/detectar_ausencias.py:788–807` · `app/chamados/services/disputa_emissao.py:1180–1192,1258–1266` · `app/chamados/models.py:859–866` | **(b) 1032** para todos, no ato 869, `emitidos 143 → 144` (**686**). Leu `fio:2` e o novo estado de 39044. O hash de D 666 já incluía `fio:2`, e o de D 670 acrescentou a transição de estado. **1032** coincide com D 670. O efeito isolado de E 601 **[nao verificado]**. |
-| **138541** | **P1, fábrica após o corpo inicial:** inserção de **69171** para **36617** (E **162**), `fio:0 → fio:1` (D **164**). `app/ponto/services/cartorio.py:1179–1184` · `app/chamados/services/fabrica_da_celula.py:160–174,178–182,217–220` · `app/chamados/models.py:3205–3209` | **(b) 200** para ambos, com o hash de D 164. O ato 371 já tinha `emitidos 66 → 67` antes da fábrica (**73**, **162**). |
-| **142995** | **P1, repasse de órfãos dentro do emissor do corpo inicial:** inserção de **69647** para **38675** (E **1238**, D **1240**, `fio:1 → fio:2`). Ainda no repasse, `analisar()` pôs **38675** em `em_analise` (E **1241**, D **1243**). `app/ponto/management/commands/detectar_ausencias.py:788–807` · `app/chamados/services/disputa_emissao.py:1258–1266` · `app/chamados/models.py:859–866` | **(b) 1303** para todos, com `emitidos 192 → 193` (**1250**). Leu `fio:2` e o novo estado de 38675. O hash coincide com D 1243, que inclui a alteração de estado posterior a D 1240. |
-| **143945** | **P1, repasse de órfãos dentro do emissor do corpo inicial:** reuso de **57630**, com destino **38873 → 38907** (E **1323**), `analisar()` de **38907 aberto → em_analise** (E **1325**, D **1327**) e inserção de **69697** para **38907** em `perguntar_entradas_pendentes` (E **1329**). `fio:1` na inicial **1315** e na releitura **1362**. `app/ponto/management/commands/detectar_ausencias.py:788–807` · `app/chamados/services/disputa_emissao.py:1091–1099,1284` · `app/chamados/models.py:859–866,3189–3209` | **(b) 1362** para todos, com `emitidos 207 → 208` (**1335**). Leu o novo estado e o hash de D 1327. O resultado individual de C6 para E 1323 e E 1329 **[nao verificado]**. |
-| **129134** | **Entre P2 e P3:** `enc:0 → ausente` (D **1777**, intervalo **1724–1776**), etapa e tipo **[nao verificado]**. **P3, emissor do corpo inicial:** nascimento de **43849** em `aberto`, lista vazia → `43849:aberto`, fio ausente → `fio:0` (E **1808**, D **1810**). No repasse, quatro perguntas para 43849, **69947–69950** (E **1811–1814**), e `analisar()` de **43849 aberto → em_analise** (E **1816**, D **1818**). No carimbo do corpo inicial, `fio:0 → fio:1` (D **1830**). `app/ponto/services/cartorio.py:1540–1545,1952–1955,2012–2037` · `app/ponto/management/commands/detectar_ausencias.py:694–714,788–807` · `app/chamados/services/disputa_emissao.py:1180–1192` · `app/ponto/portas/celula.py:1181–1202` | D **1777** já aparece na **inicial 1805**, com o mesmo hash. A **(b) 1837** também lê sem `enc` e é posterior a todas as E/D internas de P3, com `emitidos 10 → 11` (**1825**). Ela lê o chamado já em análise e o hash final de D 1830. `aberto` e `fio:0` foram estados intermediários fotografados, sem `LEITURA` registrada nesses estados. Qual das quatro perguntas passou no C6 **[nao verificado]**. |
-
-Para o **C3**, há duas leituras de “escrita que não couber”, com efeitos distintos no enquadramento:
-
-- **Se “escrita” inclui a lavra/carimbo que altera um insumo derivado**, a caixa **(c)** contém os carimbos de **138359, 129943 e 128355** em P1, com `fio:1 → fio:0` nos seq **407, 1101 e 1470**. O carimbo da inicial de **129134** em P3, `fio:0 → fio:1` no seq **1830**, cai em **(b)** pela releitura **1837**. `cadeia_20_v3_complemento_2011_0215.txt:6–7` · `app/ponto/services/cartorio.py:1209–1222,2012–2037` · `app/ponto/portas/celula.py:1181–1202`
-- **Se “escrita” se restringe às linhas `ESCRITA` do SQL monitorado**, todas as escritas exibidas têm leitura posterior **(a)** ou **(b)** conforme a tabela. Os três carimbos continuam sendo deltas sem leitura posterior em P1. Além disso, se “couber” exigir **gatilho próprio da etapa** em vez de cobertura no ato observado, a fábrica de **138541** (E **162**, D **164**) e o carimbo de **129134** (D **1830**) ficam em **(c)** por esse critério: as respectivas releituras **200** e **1837** foram abertas pela emissão já contada nos seq **73** e **1825**. Os carimbos das perguntas **53186** e **58553** (E **1683** e **1737**) também dependem da fila do fecho que disparou o sinal. `cadeia_20_v3_complemento_2011_0215.txt:6–7` · `legenda_do_script.txt:2–3` · `app/ponto/services/cartorio.py:1179–1184,1209–1222,1695–1704,2035–2037` · `app/chamados/signals.py:91–117`
-
-## 2 · Mudanças sem leitura posterior no passe
-
-| Célula | Braço e rodada | Etapa e números | O que ficou para a leitura seguinte |
-|---|---|---|---|
-| **138359** | `cruza` P1 | Carimbo da segunda passada, última leitura **395**, D **407** `[405,406]`, resumo **1875**. `app/ponto/services/cartorio.py:1156–1164,2035–2037` · `app/ponto/portas/celula.py:1181–1202` | `fio:1 → fio:0`, com **37355** ainda `em_analise`. P2 lê em **1608**. |
-| **129943** | `cruza` P1 | Carimbo da segunda passada, última leitura **1089**, D **1101** `[1099,1100]`, resumo **1874**. `app/ponto/services/cartorio.py:1156–1164,2035–2037` · `app/ponto/portas/celula.py:1181–1202` | `fio:1 → fio:0`, com **36531** ainda `em_analise`. P2 lê em **1675**. |
-| **128355** | `cruza` P1 | Carimbo da segunda passada, última leitura **1458**, D **1470** `[1468,1469]`, resumo **1873**. `app/ponto/services/cartorio.py:1156–1164,2035–2037` · `app/ponto/portas/celula.py:1181–1202` | `fio:1 → fio:0`, com **39234** ainda `em_analise`. P2 lê em **1729**. |
-
-Nas nove linhas `RESUMO`, toda ocorrência de `releu_depois: nao` vem com `primeira_mudanca: nenhuma nas fotos`. Nos três casos acima o `sim` cobre **o primeiro delta**, de estado do chamado. O `0` em `escritas_depois_da_ultima_leitura` conta linhas monitoradas de chamado ou pergunta. Os três deltas posteriores são da etapa de carimbo da **célula**. Em **129476**, o `nao` de P1 convive com E **607** e a releitura **1031**, que ocorreu depois da escrita com o mesmo hash da inicial **564**. `cruza.sem_foto.txt`, seq 395, 407, 564, 607, 1031, 1089, 1101, 1458, 1470 e 1873–1881 · `legenda_do_script.txt:2–3` · `app/ponto/portas/celula.py:1181–1202`
-
-No `RESUMO` **1881**, `[nao verificado]` é a **etapa e o tipo** do D **1777**. A sequência bruta põe a mudança entre as fotos **1724 e 1776**, antes da inicial **1805** e da releitura **1837**. O `false` ao lado de **1837** coincide com um hash diferente do D 1777, pois a releitura também traz **43849:em_analise** e `fio:1`. Qualquer escrita associada ao intervalo **[nao verificado]**. `cruza.sem_foto.txt`, seq 1670, 1777, 1805, 1830, 1837 e 1881 · `app/ponto/services/cartorio.py:523–532,1540–1545`
-
-## 3 · Insumo que voltou a mudar em outra rodada
-
-| Célula | P1 | P2 |
-|---|---|---|
-| **138359** | Corpo inicial fecha **37433** (E **352**, D **354**). Segunda passada ainda lê **37355** com fio (**395**), e seu carimbo derruba `fio:1 → fio:0` (**407**). | Inicial lê **37355** vivo sem fio (**1608–1609**). Fecho por não protesto resolve **37355** e tira `fio:0` da impressão (**1612–1614**). Segunda passada **1636**. |
-| **129943** | Corpo inicial fecha **36625** (E **1052**, D **1054**). Segunda passada ainda lê **36531** com fio (**1089**), e seu carimbo derruba `fio:1 → fio:0` (**1101**). | Inicial lê **36531** vivo sem fio (**1675–1676**). Fecho por não protesto resolve **36531** e tira `fio:0` da impressão (**1679–1681**). O sinal carimba **53186** (**1683**). Segunda passada **1700**. |
-| **128355** | Corpo inicial fecha **39255** (E **1416**, D **1418**). Segunda passada ainda lê **39234** com fio (**1458**), e seu carimbo derruba `fio:1 → fio:0` (**1470**). | Inicial lê **39234** vivo sem fio (**1729–1730**). Fecho por não protesto resolve **39234** e tira `fio:0` da impressão (**1733–1735**). O sinal carimba **58553** (**1737**). Segunda passada **1754**. |
-
-Nas três células, a entrada que só chegou ao corpo em P2 foi **o chamado remanescente vivo, sem protesto e sem fio**. Em P1, o corpo inicial dispõe do adiamento por fio para os não protestantes. O E2 e o fecho adiado rodam antes da segunda passada. A segunda passada usa o padrão `adiar_pela_lampada=False`, mas sua leitura ainda vê o fio vivo. Seu juízo já retorna `codigos=[]` e zero protestos, portanto a lavra pode passar de `cobranca_indevida` para `concorde`. O C6 lê o veredito da célula, e os deltas de fio aparecem no carimbo, depois dessa leitura. A guarda de fecho consulta perguntas vivas no pós-estado e pode barrar o fecho se elas continuarem ancoradas sem reaponte válido. O ramo exato que devolveu `false` para cada chamado em P1 é **[nao verificado]**. Os `RETORNO` trazem células, sem PK do chamado. Em particular, **1457** vem antes da `LEITURA` **1458** no extrato. `cruza.sem_foto.txt`, seq 349, 390–407, 1049, 1084–1101, 1413, 1441–1470, 1608–1609, 1675–1676 e 1729–1730 · `app/ponto/services/cartorio.py:1123–1157,1264–1265,1628–1653,1683–1707,2012–2037` · `app/chamados/models.py:361–405,422–443,684–705` · `app/chamados/juizes.py:1450–1469` · `app/escala/models.py:1624–1628,1767–1768`
-
-Em P2, a leitura da impressão já diverge do carimbo anterior pelo `fio:0`. O remanescente sem protesto fica fora do adiamento por fio, fecha no corpo inicial e enfileira a segunda passada. Com todos os chamados resolvidos, o código omite o campo `fio`. `cruza.sem_foto.txt`, seq 1608–1636, 1675–1700 e 1729–1754 · `app/ponto/services/cartorio.py:543–547,1527–1558,1683–1707`
-
-**129134 mudou de insumo em P3.** P1 e P2 leram o mesmo hash, lista vazia e `enc:0` às 00:30. O `None → concorde` visto no objeto entre as iniciais é a primeira lavra, com o mesmo insumo. Em P3, às 06:27, o relógio já tinha cruzado o fim previsto das 01:00. O juiz exige `agora >= fim` quando há fim previsto e nenhuma aberta viva. O juízo então recebeu `turno_encerrado=true` e devolveu `FURO_SEM_COBRANCA`, que abriu o caminho da emissão de **43849** neste ensaio. `cruza.sem_foto.txt`, seq 1, 210–211, 1670 e 1777–1838 · `app/ponto/turnos.py:2124–2134` · `app/ponto/services/cartorio.py:1293–1297,1540–1545,1614–1625,1909–1938,1952–1955` · `app/ponto/supra_juiz.py:326–329,373–383`
-
-## 5 · Limites da medida
-
-- **[nao medido]** Estados transitórios entre fotos, SQL fora dos campos e das tabelas monitoradas, resultado por pergunta quando a leitura só registra a presença de fio por chamado, e a totalização de `LOTE` nesta entrega. `legenda_do_script.txt:1–3,5` · `app/ponto/services/cartorio.py:1527–1545` · `app/ponto/management/commands/processar_cartorio.py:70–74`
-- **[nao medido]** Efeitos após o rollback descrito na legenda, incluindo callbacks `on_commit`, consumidores e escritores externos além do trecho capturado. A equivalência de recortar a frota também é **[nao medido]**. A cascata pode buscar clones por PK sem filtro de colaborador. A efetivação do rollback deste ensaio está **[nao verificado]**. `legenda_do_script.txt:4–5` · `app/ponto/management/commands/processar_cartorio.py:51–69` · `app/chamados/signals.py:134–165,229–240` · `app/chamados/services/materializacao.py:1271–1279`
-- **[nao medido]** Ausência geral de escrita ou cobertura em rodadas com `nenhuma nas fotos`, em células sem evento e em braços em que a célula não se moveu. O extrato só permite afirmar o que aparece nas nove células de `cruza`. O caso **129476** mostra concretamente que a ausência de delta fotografado pode coexistir com uma escrita e uma releitura. Os outros dois braços estão **[nao medido]** nesta resposta. `cruza.sem_foto.txt`, seq 1, 607, 1031 e 1873–1881 · `legenda_do_script.txt:1–5`
-
-_7494 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7495 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
