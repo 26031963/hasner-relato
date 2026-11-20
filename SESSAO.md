@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 20/11/2026 00:47:05.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (39.9 MB). Acoes na janela: **1088**.
+**Medido em 20/11/2026 00:52:32.** Transcript: `ee91c054-fa2c-4df6-b27f-67d95e7cfe5e.jsonl` (40.0 MB). Acoes na janela: **1094**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:51:34 | Bash | Record volta B green and get C pid | `cd /home/ronald/saas-hasner; pgrep -af "codex_pergunta.sh --construtor" \| cut -c1-100; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="Volta intermediaria da B3 em curso (vB3/volta.log)" assert s.count(a)==1 s=s.replace(a,"VOLTA B VERDE (00:5x, vB3/volta.log, worktree d9319a215 contra ec7134368): Ran 5632, FAILED(failures=4, expected failures=12) = SO os 4 do selo chokepoint em PASS ...` |
+| 00:51:29 | Bash | Fix brief line and launch volta C construtor | `cd /home/ronald/saas-hasner; V=logs/ESPINHA-BRIEFS/F5/vC; sed -i '1s/e B (d9319a215)\./B (d0210a400), B2 (a81f888dc) e B3 (d9319a215, harness sem banco pelas classes i-v; volta intermediaria B3 verde salvo os 4 do chokepoint em PASSAGEM, 236\/146\/300\/221)./' $V/q_C.txt; head -c 330 $V/q_C.txt; echo; bash $V/lanca_C.sh &>/dev/null & disown; sleep 0` |
+| 00:51:25 | Bash | Update volta C base to d9319a215 | `cd /home/ronald/saas-hasner; V=logs/ESPINHA-BRIEFS/F5/vC; W=/home/ronald/wt-codex-e4c-f5-constroi-184647; git -C $W log --oneline -1; git -C $W status --porcelain \| head; sed -i 's/d0210a400/d9319a215/g' $V/lanca_C.sh $V/q_C.txt; sed -i '1s/e B (d0210a400)/B (d0210a400), B2 (a81f888dc) e B3 (d9319a215, harness sem banco pelas classes i-v)/' $V/q_C.txt; head -c 400 $V/q_C.txt; echo; grep -c d9319a ...` |
+| 00:51:22 | Bash | Inspect volta C launcher | `cd /home/ronald/saas-hasner; V=logs/ESPINHA-BRIEFS/F5/vC; ls $V; cat $V/lanca_C.sh; grep -n "a81f888dc\\|d0210a400\\|d9319a215\\|ec7134368" $V/q_C.txt \| cut -c1-200` |
+| 00:51:17 | Bash | Confirm chokepoint numbers and ruff | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vB3; grep -o "subiu para [0-9]* queries (teto [0-9]*)" $D/volta.log; cat $D/volta.fim \| head -5; grep -i "ruff" $D/volta.log \| tail -2` |
+| 00:51:14 | Bash | Read B3 volta verdict | `cd /home/ronald/saas-hasner; D=logs/ESPINHA-BRIEFS/F5/vB3; cat $D/volta.rc; ls $D/volta*; cat $D/volta.porque 2>/dev/null \| head; L=$D/volta.log; grep -E "^(OK\|FAILED)($\| \()" $L \| tail -1; grep "^Ran" $L \| tail -1; grep -E "^(FAIL\|ERROR):" $L \| cut -c1-170; tail -3 $D/volta.disjuntor.log 2>/dev/null` |
 | 00:33:41 | Bash | Record B2 measurement in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="Volta intermediaria da B3 em curso (vB3/volta.log)" assert s.count(a)==1 s=s.replace(a,"B2 medida (vB2/FIM): REDs novos na base 32 testes FAILED(failures=4) = vermelhos na base, como devem; 7 mutantes MORTOS (7/7 FAILED); alvo B2 failures=2 errors=19 = harness sem banco, alvo da B3. 1a volta da B3 caiu na mo ...` |
 | 00:33:34 | Bash | Read B2 measurement summary | `cd /home/ronald/saas-hasner; cat logs/ESPINHA-BRIEFS/F5/vB2/FIM \| cut -c1-200 \| head -40` |
 | 00:33:28 | Bash | Fix ESPERANDO pid to sombra.sh process | `cd /home/ronald/saas-hasner; sed -i "1s/.*/ESPERANDO: sombra.sh \| pid=146777/" app/docs/RELATO.md; head -1 app/docs/RELATO.md` |
