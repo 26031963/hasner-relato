@@ -1,7 +1,21 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 17:25** · publicado em **21/11/2026 17:29** (UTC-3)
+> Ultima resposta processada: **21/11/2026 17:30** · publicado em **21/11/2026 17:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 17:30 · sessao 163ca4271953 · E4C-F5-CONSTROI · sonda · origem=Code
+
+| Empresa | Contagem | Fonte |
+|---|---:|---|
+| `7:2` | 1 | `sonda/anexos:4` |
+| `7:3` | 0 | `sonda/anexos:5` |
+| `7:4` | 0 | `sonda/anexos:6` |
+
+`SOMA	1	PAREI_SE_MAIOR_QUE	50` (`sonda/anexos:7`)
+
+Erro ou traceback ausentes no trecho. Há três linhas de contagem. (`sonda/anexos:1–7`)
+
+A soma de 1 não passa de 50. (`sonda/anexos:7`)
 
 ## 21/11 17:25 · sessao a4e8a30e5634 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1245,24 +1259,4 @@ O C8b passou na base e na sonda em memória que restaura `respondida_em=AGORA` e
 - A mudança de contrato requer exceção nominal para os cinco leitores, em cinco arquivos com o juiz incluído. O texto do 1945 item 2 se limita ao aval então discutido e não concede permissão. O rascunho amplo cruza o sítio da volta 3. A decisão anexa preserva o par legal e as cinco expectativas do C8b. Para manter o trajeto no degrau 6, conserve o instante e o veredito administrativo que a ajuda já fornece, retirando as respectivas sobrescritas locais. `CLAUDE.md:37–38` · `app/docs/PROMPTS.md:2711–2712` · `app/chamados/tests/e3_c8b_apoio.py:183–198` · `app/chamados/tests/test_e3_c8b_sem_banco.py:369–395` · `app/chamados/juizes.py:1424–1441`
 - Rodei os dois controles C8b e o de resposta posterior em `PosSuiteSemBanco`, três testes OK com Python sem bytecode e sem banco. Verificação da volta 3, ORM, suíte integral e incidência em produção [nao verificado]. `app/chamados/tests/test_e3_c8b_sem_banco.py:369–426` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:103–118`
 
-## 21/11 15:41 · sessao dbc71438521a · - · - · origem=Ronald (tmux)
-
-A troca para resultado estruturado muda seis arquivos de teste. O apoio AST do C8b pode ser um sétimo, conforme a forma escolhida. [nao verificado]
-
-| Arquivo | Ajuste |
-|---|---|
-| `app/chamados/tests/test_marco_por_motivo.py:76–136,168–211` | Migrar tuplas e asserts de cache. Preservar os três REDs, a borda inclusiva e a identidade da exceção relançada. |
-| `app/chamados/tests/test_e3_c8b_sem_banco.py:369–425` | Legalizar o par `data_hora` removendo as sobrescritas do veredito administrativo e do instante. Migrar o assert do cache no teste noturno somente se a ABI mudar. |
-| `app/chamados/tests/test_e3_pos_suite_sem_banco.py:103–118` | Migrar alias `slot`, fixture de cache e acesso `[1]`. Preservar veto no cálculo e no cache, mais sucesso no empate. |
-| `app/chamados/tests/test_hx_fallback_sem_lei.py:61–85` | Migrar mock do par vazio para ausência genuína de slot. Preservar o controle do chamado encerrado, a consulta à lei e a borda da janela. |
-| `app/chamados/tests/test_o306_vigia_carimbo.py:100–120` | Migrar o desempacotamento que prova slot derivável no caso de batida fora do marco. |
-| `app/chamados/tests/test_s3f4_data_e_ancora_pela_autoridade.py:96–108` | Comparar os campos de slot derivado com o par do plantio. |
-| `app/chamados/tests/e3_c8b_apoio.py:87,109–117` | Fornecer o tipo real ao ambiente caso o resultado use classe ou enum global. O extrator executa só a função AST e o carregador de literais pula construtores. `app/chamados/tests/e4_apoio.py:8–16` · `app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:55–69` |
-
-Na sonda em memória, manter o instante `AGORA` e o veredito administrativo da testemunha preservou as cinco expectativas C8b em ambos os caminhos. Legalizar apenas o instante, deixando `veredito=None`, falhou em três subcasos porque o C6 retornou no degrau de resposta. Há outros pares sintéticos com texto e instante nulo na fixture noturna e na textual, fora do reparo delimitado de `data_hora`. `app/chamados/tests/e3_c8b_apoio.py:189–198` · `app/chamados/tests/test_e3_c8b_sem_banco.py:369–395,403–404,428–441` · `app/chamados/juizes.py:1425–1441`
-
-Catracas a reexecutar incluem A1 e respondedores. A segunda ancora mutantes na assinatura atual e espera uma leitura booleana declarada por `_slot_esperado`. O P71 chama o juiz para provar ausência de exceção e dispensa mudança de ABI no teste. Os controles dos demais leitores podem preservar suas expectativas externas. `app/chamados/tests/test_e4c_f5_selo_chamada.py:188–193,251–268` · `app/chamados/tests/test_e3_catraca_respondedores.py:66–85,544–555,588–595` · `app/chamados/tests/test_p71_marco_sem_hora.py:46–49` · `app/chamados/tests/test_fila_validar_lote.py:43–74` · `app/chamados/tests/test_explicador_disputa.py:65–102` · `app/chamados/tests/test_o261_vigia_fio.py:354–394`
-
-Três testes focais passaram na base via `python3 -B`. A execução dos quatro módulos sem banco contou 63 testes, com dois erros de importação de `django.utils` no mesmo teste de cartório. Execução ORM pela porta e suíte final [nao verificado]. `app/chamados/tests/test_e3_c8b_sem_banco.py:369,397` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:103,173` · `app/ponto/services/cartorio.py:1158` · `app/core/fmt.py:8`
-
-_7713 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7714 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
