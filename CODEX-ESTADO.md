@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 20:29** · publicado em **21/11/2026 20:32** (UTC-3)
+> Ultima resposta processada: **21/11/2026 20:47** · publicado em **21/11/2026 20:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 20:47 · sessao cbb6edf614fc · MEDIDA-FOLHA11-2111 · sonda · origem=Code
+
+## (a) Retrato, prévia e reconstrução em memória
+
+As referências `dado:N` numeram as linhas JSON do bloco fornecido, começando em `MEDIDA`. As chaves identificam os registros da sonda.
+
+| PK | Retrato gravado | Prévia | Em memória | Datas do furo | Classificação | Fonte |
+|---|---|---|---|---|---|---|
+| 956 | `entra / null`, lavrado em `2026-11-21T09:45:30.477Z` | `fora / furo_espelho` | `fora / furo_espelho` | Gravado `null`. Em memória `2026-11-20`, com motivo `espelho_furo` e veredito `furo`. Lista própria da prévia [nao verificado]. | **DEFASAGEM**. O par gravado difere e a prévia coincide com a reconstrução. | `dado:2` `A/956` e `dado:3` `A_DIA/956/2026-11-20` |
+
+## (b) Retenção diária, rotas e donos
+
+Datas em 2026. `""` é a razão vazia da tarefa e `[]` é a lista vazia devolvida em `dono_r1`. A tabela mantém os dois campos de rotas que a sonda devolveu, `rotas_diarias` e `tela_retrato.rotas`.
+
+| Chave `B/pk/dia` | Razão / fio / rota da tarefa | Retenção do dia | Rotas diárias | Rotas da tela do retrato | Marca “Sem porta” | Juiz / R1 | Fonte |
+|---|---|---|---|---|---|---|---|
+| 246 / 01/11 | `"" / nada / null`, verbo `cobrar` | `espelho_cobranca_indevida` | “Validar no fio”, `chamados:modal_fio`, `existe=true` | `[]` | `true` | `CADASTRO / []` | `dado:15` |
+| 327 / 10/11 | `"" / nada / null` | `espelho_indefinida` | “Validar no fio”, `chamados:modal_fio`, `existe=true` | `[]` | `true` | `ESTRUTURA / []` | `dado:55` |
+| 476 / 24/10 | `"" / sistema / null`, `fio_folha=nada`. A instância `int_volta` oferece `perguntar` no `emissor`, com `porta_com_chamado=false`. | `null` | `[]` | “Vínculo da escala”, `colaboradores:painel_vinculo`, `existe=true` | `false` | `CADASTRO / []` | `dado:69` |
+| 476 / 25/10 | `"" / nada / null`. As instâncias `aguarda_resposta` oferecem `responder` com `porta=null` e `porta_com_chamado=false`. | `espelho_indefinida` | “Validar no fio”, `chamados:modal_fio`, `existe=true` | “Vínculo da escala”, `colaboradores:painel_vinculo`, `existe=true` | `true` | `CADASTRO / []` | `dado:70` |
+| 476 / 06/11 | `"" / admin / porta_fila`, ação `validar`, `nao_sei=true` e `fio_folha=admin` | `null` | `[]` | “Vínculo da escala”, `colaboradores:painel_vinculo`, `existe=true`. O texto do retrato diz `SEM PORTA`. | `false` | `BATIDA / [BATIDA]` | `dado:82` |
+| 97 / 01, 03, 05, 07, 09, 11, 13, 15, 17 e 19/11 | `"" / nada / null` em cada dia. Só em 03/11 consta o verbo `cobrar`. | `espelho_indefinida` em cada dia | “Validar no fio”, `chamados:modal_fio`, `existe=true` em cada dia | `[]` | `true` | `CADASTRO / []` | `dado:108–126`, linhas pares |
+
+**Candidatos a BUG por retenção sem porta funcional.** São 246 em 01/11, 327 em 10/11, 476 em 25/10 e 97 em cada data retida da tabela. Em cada chave, `retencao_dia.motivo` prova a retenção, `fio_folha="nada"` e `tarefa.rota=null` provam a falta de porta publicada, e `tela_retrato.marca_sem_porta=true` confirma a sinalização. A rota genérica “Validar no fio” tem `existe=true`. Para 476 em 25/10, `tarefa.instancias[].acoes[].porta=null` também comprova a falta de porta para responder. Em 24/10 e 06/11, `retencao_dia=null` deixa os dois dias fora desse critério. `Dado:15,55,69,70,82,108–126`; [app/folha/fora_da_folha.py:86](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/folha/fora_da_folha.py:86).
+
+**PK 97. A tela diz “Sem porta”.** Nos dias retidos, a marca é `true`, o dono exibido é “Sem ação disponível” e a lista de rotas do retrato é `[]`. `CADASTRO` vem de `dono_juiz`. A checagem separada `cadastro_97` registra `escala_a_definir=true` e confirma a existência do GET `colaboradores:painel_vinculo` e do POST `colaboradores:vincular_escala`. Envio do formulário e efeito sobre a retenção [nao verificado]. `Dado:108–126`, `B/97` nas datas retidas; [app/templates/folha/_retrato_o_que_fazer.html:46](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/templates/folha/_retrato_o_que_fazer.html:46) e [app/colaboradores/urls.py:12](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/colaboradores/urls.py:12).
+
+## (c) PK 265 em 31/10
+
+| Pergunta | Resultado | Fonte |
+|---|---|---|
+| Célula e vínculo do dia | Célula presente, `trabalha=true`, com geradora e lâmpadas. Vínculo vigente `12x36`, `isento_grade=false`. | `dado:128` `C/265/2026-10-31` |
+| Grade e previsto pelo juiz | Grade `trabalho`, `sem_ancora=false`, **660 min**. `previsto_min_juiz=660`. Ata com **4** células e `n_missing=0`. | `dado:128` `C/265/2026-10-31`, `grade`, `previsto_min_juiz` e `celula.ata` |
+| Vereditos | Célula e grade `cobrado`, via `cartorio`. D4 `irregular`, fonte `lavrado`. Retenção `espelho_cobrado`. No espelho visual, a linha existe, tem **4** marcos canônicos, `grade_pelo_builder=false`, veredito `trabalhou` e `dono_juiz=CADASTRO`. | `dado:128–129` `C` e `C_ESPELHO/265/2026-10-31` |
+| Leitura da tarefa | `tarefa.nao_sei=true`, `fio_folha=nao_sei`, `tarefa.rota=null`. A instância `batida_fora_escala_grave` está `passivo_sem_linha`, com `acoes=[]`. O bloco D publica “SEM LEITURA (sistema)”. | `dado:128,248` `C` e `D/265/2026-10-31` |
+
+**Candidato a bug estrutural na leitura da tarefa**, pela chave `265/2026-10-31`. O ramo `passivo_sem_linha` detecta projeção de resposta ou validação sem ato correspondente na sequência. A exposição do motivo fora dos marcos propaga `nao_sei=true` sem publicar ação, e a seleção do fio devolve `nao_sei` com rota nula. Qual ato faltou e por que a sequência ficou assim [nao verificado]. O espelho visual, por sua vez, tem linha e marcos previstos e usa um veredito visual próprio. `Dado:128–129,248`; [app/chamados/models.py:4238](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/chamados/models.py:4238), [app/chamados/services/tarefa_do_dia.py:154](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/chamados/services/tarefa_do_dia.py:154), [app/chamados/services/tarefa_do_dia.py:273](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/chamados/services/tarefa_do_dia.py:273), [app/chamados/services/tarefa_do_dia.py:350](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/chamados/services/tarefa_do_dia.py:350), [app/chamados/services/tarefa_do_dia.py:761](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/chamados/services/tarefa_do_dia.py:761) e [app/ponto/services/espelho.py:329](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/ponto/services/espelho.py:329).
+
+## (d) Empresa 2, competência 11/2026
+
+### Motivo × fio × guarda da porta
+
+A contagem cobre **271 colab-dias com linha `D` completa**. O registro `D/349/2026-11-12` termina antes das guardas. A distribuição dos **1.131 colab-dias** do total por motivo, fio e guarda fica [nao verificado]. Cada célula abaixo conta as chaves `D/pk/data` com o `motivo` da linha e o filtro de campos da coluna. Os zeros valem para o trecho completo fornecido. `Dado:1,130–402`, `MEDIDA`, `D_PONTE/emp=2` e `D`.
+
+| `D.motivo` | `colab` app oferece | `admin` calendário oferece | `admin` ausência libera | `admin` validar libera | `admin` guarda [nao verificado] | `nada` sem oferta | `nao_sei` oferta [nao verificado] | Total |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `espelho_cobrado` | 101 | 0 | 1 | 0 | 1 | 0 | 1 | 104 |
+| `espelho_furo` | 31 | 8 | 0 | 1 | 2 | 0 | 0 | 42 |
+| `espelho_indefinida` | 48 | 0 | 0 | 0 | 0 | 11 | 0 | 59 |
+| `espelho_nunca_bateu` | 25 | 34 | 0 | 0 | 0 | 0 | 0 | 59 |
+| `espelho_discordante` | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 2 |
+| `espelho_cobranca_indevida` | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 2 |
+| `espelho_fato_em_ausencia` | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 3 |
+| **Total no trecho** | **206** | **43** | **1** | **1** | **6** | **13** | **1** | **271** |
+
+- **App e calendário.** Os filtros são `fio=colab`, `rota_tarefa=porta_app`, `guardas_da_porta.resposta_oferecida_no_app=true`, e `fio=admin`, `acao=resolver_dia`, `guardas_da_porta.oferta_calendario=true`, respectivamente. `Dado:131–401`, bloco `D`, filtrado por esses campos e `motivo`.
+- **Ausência e validação com leitura positiva.** `D/220/19-11` traz `decidir_ausencia`, com `oferta_aprovar`, `aprovar_raiz_sem_confirmacao` e `rejeitar_raiz_aberta` verdadeiros. `D/334/17-11` traz `validar`, com **4** entradas em `guardas_de_validar` e `libera_guardas_lidas_sem_confirmacao=true` em todas, contadas como **1** colab-dia. `Dado:202,356`.
+- **Guardas administrativas sem resultado de leitura.** `validar` em `D/227/02-11`, `D/254/29-10` e `D/255/31-10`. `decidir` em `D/258/30-10`, `D/258/06-11` e `D/258/09-11`. Os campos são `guardas_de_validar` e `libera_acao_especifica`, respectivamente. `Dado:209,233,235,242–244`.
+- **Sem oferta e sem leitura.** `oferta_publicada=false` nas chaves `D/97` das dez datas retidas, `D/327/10-11`, `D/246/01-11` e `D/296/10-11`. Em `D/265/31-10`, `fio=nao_sei` e `oferta_publicada=[nao verificado]`. Para todos os registros completos, o resultado da execução do ato é [nao verificado]. `Dado:131–401`, campos `guardas_da_porta` e `resultado_do_ato`.
+
+### Ponte com o R1
+
+| Medida | Sonda | Referência do anexo | Chave em `D_PONTE/emp=2` |
+|---|---:|---:|---|
+| Colabs pendentes | 240 | 240 | `pendentes`, `pendentes_anexo` |
+| União de colabs do R1 | 128 | 128 | `ponte.uniao_r1`, `uniao_r1_anexo` |
+| Colabs em comum | 94 | 94 | `ponte.em_comum_colabs`, `em_comum_anexo` |
+| Só pendência | 146 | 146 | `ponte.so_pendencia_colabs`, confere com `240 − 94` |
+| Só R1 | 34 | 34 | `ponte.so_uniao_r1_colabs`, confere com `128 − 94` |
+| Colabs em comum por dono do R1 | `ESTRUTURA` 11, `CADASTRO` 26, `BATIDA` 73 | [nao verificado] | `ponte.por_dono_colabs_em_comum` |
+| Colab-dias em comum | 35 | [nao verificado] | `ponte.em_comum_colab_dias` |
+| Colab-dias de retenção | 1.131 | [nao verificado] | `colab_dias` |
+| Pendentes sem dia | 0 | [nao verificado] | `pendentes_sem_dia` |
+| Universo de colabs do R1 | 460 | [nao verificado] | `ponte.universo_colabs_r1` |
+
+Os cinco totais comparáveis coincidem em `D_PONTE`, `dado:130`. Os totais por dono somam **110** ocorrências para **94** pks em comum, com sobreposição entre donos. A interseção exata entre donos [nao verificado]. A interseção por pk e dia é **35**, uma unidade diferente da interseção por pk. `Dado:130`, `ponte`.
+
+**Universo e instante.** O trecho diário fornecido cobre **62** pks e **5** coincidências no mesmo dia, pelas chaves `D/174/01-11`, `D/218/14-11`, `D/288/22-10`, `D/296/02-11` e `D/320/20-11`. A ponte agrega a competência inteira. O instante da sonda é `2026-11-21T23:31:09.766Z`. O instante do R1 e a igualdade dos conjuntos de pks entre as medições ficam [nao verificado]. Entre os cinco números comparáveis, a sonda registra diferença numérica zero. `Dado:1,130,131–401`, em especial `143,199,269,274,342`.
+
+O trecho fornecido não registra `ERRO_TIPO`. O restante da saída após o corte está [nao verificado]. `Dado:1–402`.
 
 ## 21/11 20:29 · sessao 47380138b4db · MEDIDA-FOLHA11-2111 · leitura · origem=Code
 
@@ -1255,14 +1336,4 @@ Na matriz, `R` é `app/chamados/reconciliador.py`, `M` é `app/chamados/models.p
 
 **AUTOCONFERÊNCIA BRIEF-SEM-EXCEPT — `except` adicionados: produção 0, testes 0. Fallbacks adicionados: 0.** No diff fornecido, o `except Exception` do laço aparece como contexto. Os tratadores de carimbo, fecho e seleção são **PREEXISTENTES**. O primeiro agora também captura falhas dos novos SELECTs e da nova chamada ao C20, registra e segue. A contagem foi feita nas linhas adicionadas do patch fornecido. A execução de `git diff da copia | grep -n except` fica **[nao verificado]** nesta cópia exportada. `app/chamados/reconciliador.py:644–663,669–677,729–733` · `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:115–167` · `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:200–247` · `app/ponto/tests/test_selo_chokepoint_escrita.py:206–209,233–236`
 
-## 21/11 18:53 · sessao 68978cf9ffb4 · - · - · origem=Ronald (tmux)
-
-A troca de `p.respondida_em is None` por `texto_sem_carimbo(p)` em `f3d23021f` restringe a guarda somente quando o texto está vazio após `strip()`. Com `hora`, materialização visível, via vazia e ambas as validações ausentes, aeb repassava texto vazio ou espaços e f3 repassa `''`. O derivador trata ambos da mesma forma. A composta fornece o próprio texto da coluna e o veto temporal antecede a guarda. O predicado de integridade continua reconhecendo o meio-par ilegal que a porta recusa gravar. O uso do texto como coordenada histórica pertence à guarda, enquanto C21 continua a decidir vigência. Executei 18.144 combinações em memória com o derivador real e a composta simulada, com zero resultados divergentes entre aeb reconstruído e f3. [juizes.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/juizes.py:369) · [models.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/models.py:4382) · [materializacao.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/services/materializacao.py:691) · [fio.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/services/fio.py:1704)
-
-**Novo contra a base descrita no anexo.** Reproduzi em memória `hora`, sem marco fixo, com `06:30` residual, resposta desfeita na composta e batida viva vinculada às `05:24`. O hash final retorna `PLANTIO_SEM_TS` e confirma a materialização só pelo vínculo. Mantendo todo o resto e repondo a leitura do texto cru descrita para a base, o juiz recebe `SLOT(06:30, S)` e rejeita a batida fora da janela. O teste de `hora` afirma apenas o resultado do slot. Os novos testes que barram vínculo e destino são de `data_hora`. [juizes.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/juizes.py:409) · [juizes.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/juizes.py:798) · [test_marco_por_motivo.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_marco_por_motivo.py:231)
-
-O S3 elimina somente a sequência velha do `prefetch`. O passivo seleciona pela validação física pré-trava, depois relê materialização, via e autor. Uma nova resposta entre as duas etapas pode invalidar a anterior e alterar seu texto. A composta então junta o ato atual ao texto antigo, e o materializador usa esse texto para plantar sob a trava. A seleção e a leitura de colunas velhas são preexistentes. O `prefetch` acrescentou a sequência velha e o `pop` corrige essa parte. Ocorrência em produção [nao verificado]. [vigia_carimbo.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/services/vigia_carimbo.py:97) · [passivo_validado.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/services/passivo_validado.py:532) · [disputa_emissao.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/services/disputa_emissao.py:1499) · [materializacao.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/services/materializacao.py:1389)
-
-A lista no apoio apenas carrega funções reais via AST para C8b, C8c e pós-suíte. A catraca varre fontes de produção. Sua regra por sítio conta `respondida_em` direto, e o aeb reconstruído produz duas leituras declaradas onde espera uma. O final passa com uma leitura declarada e `texto_sem_carimbo` classificado como `PAR`; retirar a influência da guarda também deixa essa catraca verde. A regra estrutural deixa de alcançar o novo uso por delegação. A fixture de fechamento legado oferece controle positivo indireto, sem execução ORM aqui. A suíte sem banco de C8b e da catraca passou com 46 testes. [e3_c8b_apoio.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/e3_c8b_apoio.py:116) · [test_e3_pendentes_app.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_e3_pendentes_app.py:96) · [test_e3_catraca_respondedores.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_e3_catraca_respondedores.py:545) · [test_fechar_disputa_materializada.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_fechar_disputa_materializada.py:38)
-
-_7753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7754 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
