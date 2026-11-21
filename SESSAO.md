@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 05:32:22.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (116.6 MB). Acoes na janela: **706**.
+**Medido em 21/11/2026 05:38:03.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (116.7 MB). Acoes na janela: **709**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:36:34 | Bash | Wait for bateria or sonda4 | `for i in $(seq 1 28); do [ -f logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.rc ] \|\| [ -f logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc ] && break; /usr/bin/sleep 20; done; date +%H:%M; cat logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.rc logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc 2>/dev/null; /bin/grep -c "\| MORDE$" logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.out ...` |
+| 05:36:28 | Bash | Spot-check and publish vPUB8 result | `sed -n '28,30p' logs/ESPINHA-BRIEFS/F5/v3/predesenho.md \| cut -c1-200; sed -n '18,20p' logs/ESPINHA-BRIEFS/F5/v3/matriz.md \| cut -c1-200; python3 -I - <<'PY' p='app/docs/RELATO.md'; L=open(p).read().split('\n'); assert L[0].startswith('ESPERANDO:') i=[k for k,l in enumerate(L[:15]) if l.startswith('POSTMORTEM OPUS E4C-F5 b0935')]; assert len(i)==1 L.insert(i[0]+1,"PUBLICACOES DO PRONTO E4C-F5 NO ...` |
+| 05:36:19 | Bash | Read vPUB8 summary | `cat logs/ESPINHA-BRIEFS/F5/vPUB8/r.rc; awk '/^\\| *Item *\\|/{f=1} f' logs/ESPINHA-BRIEFS/F5/vPUB8/r.txt \| tail -16` |
 | 05:31:55 | Bash | Wait in foreground for a job | `for i in $(seq 1 28); do [ -f logs/ESPINHA-BRIEFS/F5/vPUB8/r.rc ] \|\| [ -f logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.rc ] \|\| [ -f logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc ] && break; /usr/bin/sleep 20; done; date +%H:%M; ls logs/ESPINHA-BRIEFS/F5/vPUB8/r.rc logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.rc logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc 2>&1; tail -2 ...` |
 | 05:31:40 | Bash | Wait for any of three jobs | `until [ -f logs/ESPINHA-BRIEFS/F5/vPUB8/r.rc ] \|\| [ -f logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.rc ] \|\| [ -f logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc ]; do /usr/bin/sleep 20; done; date +%H:%M; ls logs/ESPINHA-BRIEFS/F5/vPUB8/r.rc logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.rc logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc 2>&1` |
 | 05:31:35 | Bash | Verify sonda4 Codex is running | `ls logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/; cat logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/r.rc 2>/dev/null; pgrep -f "sonda4" \| head -3` |
