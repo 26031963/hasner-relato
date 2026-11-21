@@ -1,7 +1,53 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 19:34** · publicado em **21/11/2026 19:34** (UTC-3)
+> Ultima resposta processada: **21/11/2026 19:46** · publicado em **21/11/2026 19:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 19:46 · sessao f3277b50dc51 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**INCOMPLETO — E4C-F5 1.2, volta 5.** A cópia contém o RED, a cura, os dois mutantes e o ajuste da catraca. O RED foi escrito primeiro e pode ser aplicado sozinho sobre `4ab051ebd`. A entrega está em diff local, sem commits, conforme o veto da obra. A certificação da corrida, dos mutantes e dos nove testes herdados pela pista segue [nao verificado]. `chamados/tests/test_e4c_f5_validacao_plantio.py:89`, `chamados/services/validacao.py:713`, `core/tests/test_medida_turno_do_par.py:274`.
+
+### Leituras e trava
+
+| Insumo | Na base `4ab051ebd` | Na cura |
+|---|---|---|
+| Irmã | A prévia podia eleger a irmã e havia uma leitura explícita antes do `atomic`. A trava direta recebia os chamados dessa leitura. `validacao.py:714`, `validacao.py:743`, `validacao.py:752` | A trava compartilhada elege e reconfere dentro do `atomic`. O plantio usa a eleição confirmada. `validacao.py:713`, `validacao.py:773` |
+| Resposta vigente | `DecisaoPergunta.composta` decidia resposta e validação antes do `atomic`. `validacao.py:697` | A principal é relida depois da trava e a resposta vigente é consultada antes do carimbo. `validacao.py:716` |
+| Slot, conferência de data e batidas | A prévia anterior ao `atomic` consultava a derivação do slot, `data_conferida_em`, batida existente e vizinhança. O plantio voltava a consultar essas condições dentro do `atomic`. `validacao.py:714`, `materializacao.py:171`, `materializacao.py:920`, `materializacao.py:1947` | A prévia, a plausibilidade e o plantio consultam os juízes existentes após a trava. `validacao.py:725`, `validacao.py:772` |
+| Competência e exportação | A prévia consultava K6 e F6 antes do `atomic`. O K6 explícito rodava sob a trava direta, antes e depois do plantio de hora. `materializacao.py:916`, `materializacao.py:940`, `validacao.py:757`, `validacao.py:794` | O K6 explícito roda sob a trava compartilhada e usa a competência da principal. A eleição já exige o mesmo dia do fato para a irmã. `validacao.py:739`, `validacao.py:779`, `materializacao.py:149` |
+
+`travar_o_ato_do_plantio` reconfere o escopo da principal, a irmã eleita e todas as candidatas, incluindo seus vínculos com disputa, colaborador, chamado pai, destino e clones, além de motivo, dia e tipo de resposta. A ordem é Colaborador → Disputa → Chamado → Pergunta, por PK crescente em cada grupo. A comparação cobre a elegibilidade que muda a eleição. Texto ou horário que preserve a eleição, slot derivado, competência, exportação, conferência e batidas ficam fora dessa comparação. A cura consulta esses insumos depois da trava pelos leitores existentes. `chamados/services/materializacao.py:139`, `chamados/services/materializacao.py:2116`, `chamados/models.py:2839`, `chamados/services/validacao.py:716`.
+
+### Chamadores
+
+- **Detalhe, fio/modal e validação inline.** A casca traduz o dicionário de retorno. `AtoDoPlantioMudou` sobe antes dessa tradução, com 500 esperado [nao verificado]. `chamados/services/acoes_disputa.py:13`, `chamados/views.py:501`, `chamados/views.py:954`, `chamados/services/fio.py:658`, `chamados/views_cobrar.py:210`.
+- **Correção de horário, declaração em texto e upload de foto.** A exceção também sobe, com 500 esperado [nao verificado]. Esses caminhos escrevem antes de chamar a validação, portanto a recusa do plantio pode chegar depois de a resposta ou foto já ter sido gravada. `chamados/services/acoes_disputa.py:374`, `chamados/services/declaracao_texto.py:689`, `api/foto_recebida.py:48`, `api/views.py:850`, `api/views_core.py:834`.
+- **Lote web, copiloto e comando.** A exceção interrompe a iteração. O lote web e o copiloto ficam sem o resumo, com 500 esperado [nao verificado]. O comando sai antes do balanço final. `chamados/services/validacao.py:1063`, `chamados/services/validacao.py:1082`, `chamados/views_cobrar.py:263`, `chamados/views_cobrar.py:383`, `core/views_ia.py:169`, `chamados/management/commands/validar_classe_a.py:100`.
+- **Testes.** Os existentes exercitam a chamada direta e a view. O novo RED exige `AtoDoPlantioMudou` e verifica batidas, carimbos e atos de validação intactos. O controle exige as duas batidas e os dois carimbos. `chamados/tests/test_bug_par_projetado.py:136`, `chamados/tests/test_guard_s116_detalhe_local.py:63`, `chamados/tests/test_e4c_f5_validacao_plantio.py:122`.
+
+Proposta para a borda, pendente de aval: um `process_exception` tipado pode traduzir `AtoDoPlantioMudou` em HTTP 409 com mensagem para recarregar o caso, sem `except` novo. Para lotes, a mensagem deve pedir releitura do estado antes do reenvio, pois itens anteriores podem ter sido aplicados. `config/settings/base.py:53`, `chamados/services/validacao.py:1063`, `chamados/services/validacao.py:1082`.
+
+### Provas para a sessão
+
+Use `copia_red` com a base `4ab051ebd` e apenas o novo arquivo de teste. O RED deve falhar porque o par gravou e a exceção esperada não subiu. Na cura, RED e controle devem passar. O m1 deve falhar em `a irmã foi lida fora do atomic`. O m2 deve falhar pela ausência de `AtoDoPlantioMudou` após a gravação do par. Resultados na pista [nao verificado]. `chamados/tests/test_e4c_f5_validacao_plantio.py:19`, `chamados/tests/test_e4c_f5_validacao_plantio.py:27`, `chamados/tests/test_e4c_f5_validacao_plantio.py:122`, `bin/suite.sh:317`.
+
+```bash
+copia_red=/caminho/da/copia-red
+copia=/home/ronald/wt-codex-e4c-f5-constroi-193405
+modulo=chamados.tests.test_e4c_f5_validacao_plantio
+red=test_RED_validacao_recusa_irma_com_escopo_alterado_em_outra_conexao
+
+bin/suite.sh --dir "$copia_red" --only chamados --espera 7200 -- -k test_e4c_f5_validacao_plantio
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_e4c_f5_validacao_plantio
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 --parallel 1 -- --testrunner "$modulo.RunnerMutanteM1" -k "$red"
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 --parallel 1 -- --testrunner "$modulo.RunnerMutanteM2" -k "$red"
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_e4c_f5_passivo_releitura
+bin/suite.sh --dir "$copia" --only core --espera 7200 -- -k test_medida_turno_do_par
+```
+
+**Verificação local.** Conferi as 94 entradas da catraca. A única divergência era `passivo_validado.py::reparar` B1, de `[356]` para `[357]`. Após o ajuste, os 35 testes da catraca passaram no modo em memória. As duas mutações também compilaram em memória. `core/tests/test_medida_turno_do_par.py:20`, `core/tests/test_medida_turno_do_par.py:274`, `core/tests/test_medida_turno_do_par.py:558`, `chamados/services/passivo_validado.py:357`.
+
+**Diff e autoconferência.** 3 arquivos, **+195/−60**. Cura **+45/−59**, RED com mutantes **+149/−0**, catraca **+1/−1**. `except` novos no diff **0 em produção, 0 em teste**. Fallbacks novos **0**. `chamados/services/validacao.py:677`, `chamados/tests/test_e4c_f5_validacao_plantio.py:1`, `core/tests/test_medida_turno_do_par.py:274`.
 
 ## 21/11 19:34 · sessao 8b7779573fa6 · FERIADO-POR-POSTO · leitura · origem=Code
 
@@ -822,14 +868,4 @@ O uso do derivador pela tela pode ficar em fila, por ser leitura. O uso da mesma
 - **Chamadores.** O passivo transforma a exceção em recusa de grupo e o comando imprime `ERRO`, mantém o resultado no JSON e termina pelo fluxo normal. O laço da disputa agrega a mensagem em `erros`; a validação pública traduz esse retorno. As duas cascas de regularização podem retornar aviso ou sucesso antes de anexar o motivo, e o backfill descarta o retorno. `passivo_validado.py:397–401,437–440` · `materializar_passivo_validado.py:117–141,272–274` · `materializacao.py:2210–2236` · `validacao.py:803–848` · `acoes_disputa.py:143–149,164–179` · `fio.py:722–728,745–758` · `backfill_fio_morto_e4b.py:153–159`
 - **Ordem.** O teste atual verifica as quatro tabelas em sequência, SQL ascendente para cada uma, PIDs distintos e ausência de duplicação das duas batidas/trilhas no cenário. A inversão `Batida → Colaborador` do flip contra `Colaborador → Batida` continua possível no código, com execução [nao verificado]. `test_e4c_f5_plantio_concorrente.py:58–132` · `flip_automatico.py:62–79` · `flip_batida.py:25–33` · `registro_batida.py:264–274` · `ponto/signals.py:206–218` · `reconciliador.py:635–646,1486–1487` · `materializacao.py:1586–1590,2145–2146`
 
-## 21/11 18:34 · sessao fb9068025542 · - · - · origem=Ronald (tmux)
-
-O RED reproduz a janela do passivo por leitura estática. A devolução usa a porta real em outra thread, grava em `atomic(durable=True)` e fecha a conexão antes de entregar seu PK. O passivo aguarda o `Future` antes de chamar a trava real. O cenário específico usa a conexão Django vinculada à thread e não mede PIDs. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:101–117,298–327` · `app/chamados/services/validacao.py:269–296,309–321`
-
-O mutante `if False` em `passivo_validado.py:392` deve ficar VERMELHO. A principal avulsa tem motivo `orfao_14h` e a devolução altera a validação e a sequência, que ficam fora da foto estrutural do helper. Sem a comparação da composta, a execução alcança a unidade e o balde exato exigido pelo teste não é produzido. O teste isolado também exige que `_trabalhar_o_par` não seja chamado. Execuções do RED, do mutante e o trio veredito, `Ran` e RC neste hash [nao verificado]. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:44–58,113–119,165–202` · `app/chamados/services/materializacao.py:139–147,2116–2127,2152–2158` · `app/chamados/services/passivo_validado.py:389–401` · `CLAUDE.md:119–123`
-
-O executor espera o worker e o worker fecha sua conexão em `finally`. O commit da devolução persiste durante o teste e é identificado pelo PK. A limpeza dessas linhas cabe ao `flush` de `TransactionTestCase`, com banco de ensaio configurado. A execução do teardown [nao verificado]. O relógio de negócio está congelado, inclusive na devolução, e `hoje` chega explicitamente. O worker tem `lock_timeout` de 4s e o `Future` aguarda 15s. Esse timeout não cancela o worker. `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:30–58,110–111,133–144,298–327` · `app/config/settings/ci.py:6–17`
-
-O teste inverso assertou por código PIDs distintos, as quatro classes de SQL em ordem, `atomic`, `ASC`, uma tentativa vencedora, duas batidas e uma trilha por batida. O worker instala o contexto retornado, mas chama diretamente a unidade. `BrokenBarrierError` agora vira `AssertionError` com causa e escapa pelo `Future`. Um `order_by('-pk')` real nas quatro tabelas deve falhar por análise estática. Retirar simplesmente a ordenação explícita de Pergunta pode preservar o resultado porque `Meta.ordering = ['id']`. Execução e mutação [nao verificado]. O risco de inversão com flip permanece no código: flip adquire Batida e pode pedir Colaborador no reconciliador, enquanto plantio detém Colaborador e pode atualizar a mesma Batida reutilizada. Deadlock observado [nao verificado]. `app/chamados/tests/test_e4c_f5_plantio_concorrente.py:41–47,63–132` · `app/chamados/models.py:2875–2903,3813` · `app/ponto/management/commands/flip_automatico.py:62–79` · `app/ponto/services/flip_batida.py:25–33` · `app/ponto/registro_batida.py:264–274` · `app/ponto/signals.py:206–218` · `app/chamados/reconciliador.py:635–646,1486–1487` · `app/chamados/services/materializacao.py:1418,1586–1590,2145–2146`
-
-_7746 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7747 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
