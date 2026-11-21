@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 17:41** · publicado em **21/11/2026 17:41** (UTC-3)
+> Ultima resposta processada: **21/11/2026 17:49** · publicado em **21/11/2026 17:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 17:49 · sessao e72315cf8067 · E4C-F5-CONSTROI · construtor · origem=Code
+
+Implementei P1, P3, P5 e P7 na cópia `f3e48a4458e343075cc3873183ddc8c9cf03c533`. Confira o diff abaixo.
+
+- **P1.** A eleição entrega ao plantio todas as candidatas que leu, inclusive as ambíguas e as inelegíveis. A trava existente recebe seus PKs e vínculos. A releitura compara a eleição, o conjunto e os PKs efetivamente travados, com `AtoDoPlantioMudou` em caso de divergência. [materializacao.py:139](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/materializacao.py:139) · [materializacao.py:2123](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/materializacao.py:2123) · [models.py:2875](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:2875)
+- **P3.** O passivo guarda a composta da principal ao montar o grupo e relê as compostas em lote sob a trava, antes do plantio. Alteração recusa o grupo no balde `escopo_do_plantio_mudou`. [passivo_validado.py:360](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:360) · [passivo_validado.py:383](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:383)
+- **P5 e P7.** O teste concorrente confere a ordem das quatro tabelas e o `ASC` do SQL enviado, e usa a eleição confirmada no plantio. A barreira rompida chega ao teste como `AssertionError` com `BrokenBarrierError` como causa. Há selos separados para as duas cláusulas da guarda da principal e para o reset em exceção. [test_e4c_f5_plantio_concorrente.py:58](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_plantio_concorrente.py:58) · [test_e4c_f5_plantio_concorrente.py:230](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_plantio_concorrente.py:230) [nao verificado]
+
+### REDs na base
+
+| Caso | Asserção que cai por leitura da base |
+|---|---|
+| P1, ambiguidade | O `assertEqual` dos PKs enviados ao `FOR UPDATE` recebe só a principal. A eleição ambígua retorna `None`, e a base só acrescenta a irmã eleita. `test_e4c_f5_plantio_concorrente.py:202` · `materializacao.py:2128` na base |
+| P1, saída de candidata | O `assertRaisesRegex` espera `AtoDoPlantioMudou`. Uma candidata sem resposta sai do conjunto e a irmã eleita continua igual, então a base aceita. `test_e4c_f5_plantio_concorrente.py:215` · `materializacao.py:2148` na base |
+| P3, composta | O `assertEqual` espera `{'escopo_do_plantio_mudou': 1}` nos três subcasos, que alteram isoladamente resposta, validação e materialização. A base chama `_trabalhar_o_par` e o balde fica vazio com o dublê do teste. O cenário com devolução real também passa a exigir esse balde e nenhuma tentativa de carimbo. `test_e4c_f5_guarda_plantio_s144.py:114` · `test_e4c_f5_guarda_plantio_s144.py:166` · `test_e4c_f5_guarda_plantio_s144.py:200` | [nao verificado]
+| P7, barreira rompida | O `assertRaisesRegex` espera a falha do worker. O `except RuntimeError` da base converte a exceção da barreira em retorno de recusa. `test_e4c_f5_plantio_concorrente.py:101` · `test_e4c_f5_plantio_concorrente.py:78` na base |
+
+### Mutantes para a sessão
+
+Cada `sed` abaixo é independente e usa as linhas do diff entregue. Aplique um por vez em uma cópia descartável. As falhas previstas são o regex de SQL para m7/m7b, as duas asserções de `AtoDoPlantioMudou` para m8 e o `assertIs` do contexto externo para m9. `test_e4c_f5_plantio_concorrente.py:116` · `test_e4c_f5_plantio_concorrente.py:236` · `test_e4c_f5_plantio_concorrente.py:249` · `test_e4c_f5_plantio_concorrente.py:261`
+
+```bash
+obra_wt=/caminho/da/worktree-descartavel
+obra_mat="$obra_wt/app/chamados/services/materializacao.py"
+obra_passivo="$obra_wt/app/chamados/services/passivo_validado.py"
+obra_modelos="$obra_wt/app/chamados/models.py"
+obra_teste="$obra_wt/app/chamados/tests/test_e4c_f5_plantio_concorrente.py"
+
+# m7 Pergunta
+sed -i "2903s/order_by('pk')/order_by('-pk')/" "$obra_modelos"
+
+# m7b Colaborador, Disputa, Chamado, respectivamente
+sed -i "2876s/order_by('pk')/order_by('-pk')/" "$obra_modelos"
+sed -i "2885s/order_by('pk')/order_by('-pk')/" "$obra_modelos"
+sed -i "2898s/order_by('pk')/order_by('-pk')/" "$obra_modelos"
+
+# m8 remove cada cláusula isoladamente
+sed -i '2152s/pk not in travadas or //' "$obra_mat"
+sed -i '2152s/ or _dados_da_trava_do_plantio(p) != dados_p//' "$obra_mat"
+
+# m9 restaura o contexto somente no caminho normal
+sed -i '1839,1842c\    yield\n    _IRMAS_CONFIRMADAS_NO_PLANTIO.reset(tok)' "$obra_mat"
+
+# P1 só registra a eleita / ignora mudança do conjunto / ignora candidata sem trava
+sed -i '2126c\    candidatas = {irma.pk: _dados_da_trava_do_plantio(irma)} if irma is not None else {}' "$obra_mat"
+sed -i '2157s/candidatas_atuais != candidatas or //' "$obra_mat"
+sed -i '2157s/ or candidatas_atuais\.keys() - travadas//' "$obra_mat"
+
+# P3 pula a reconfirmação composta
+sed -i '390,393d' "$obra_passivo"
+
+# P7 volta a capturar RuntimeError como recusa
+sed -i '81,83c\                    except RuntimeError as exc:' "$obra_teste"
+```
+
+### Porta de cada teste [nao verificado]
+
+`--dir` recebe a raiz da worktree, que contém `app/`. Para cada mutante, a sessão usa o mesmo seletor na cópia descartável. `bin/suite.sh:285` · `bin/suite.sh:324`
+
+```bash
+obra_wt=/home/ronald/wt-codex-e4c-f5-constroi-160129
+
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_duas_materializacoes_inversas_travam_o_mesmo_par_em_ordem
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_MORDE_guarda_da_principal_sem_pk_travado
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_MORDE_guarda_da_principal_com_dados_mudados
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_MORDE_contexto_do_plantio_restaurado_em_excecao
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_RED_trava_todas_as_candidatas_mesmo_sem_irma_eleita
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_RED_conjunto_de_candidatas_muda_com_eleicao_igual
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_MORDE_guarda_recusa_candidata_sem_pk_travado
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_RED_passivo_reconfirma_a_composta_da_principal
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_RED_passivo_foto_velha_recusa_escopo_e_mesa_valida_mesmo_pk
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_RED_passivo_b_persistido_recusa_par_e_mesa_valida_mesmo_pk
+bash bin/suite.sh --dir "$obra_wt" --only chamados -- -k test_RED_barreira_rompida_escapa_do_worker
+```
+
+`git diff --check` e o parse dos quatro arquivos passaram. A prova isolada da barreira e do `ContextVar`, com dublê de conexão, terminou com `Ran 2 tests`, `OK`, `rc=0`. Suite em PostgreSQL, REDs na base, mutantes e certificação pelo Code e pelo Opus final **[nao verificado]**. `test_e4c_f5_plantio_concorrente.py:98` · `test_e4c_f5_plantio_concorrente.py:253` [nao verificado]
+
+**LEI-AKITA** · origem=`materializacao.py:2130` + `passivo_validado.py:383` · testemunha=`PerguntaDisputa.trava_na_ordem` (`models.py:2875`) + `DecisaoPergunta.composta` (`models.py:4382`) · RED=`test_e4c_f5_plantio_concorrente.py:189,204,98` + `test_e4c_f5_guarda_plantio_s144.py:166` · quem-mais-le=laço da disputa (`materializacao.py:2212`) + passivo (`passivo_validado.py:389`) · juízes novos=0 · padrao=Single Writer Principle com ordem canônica de travas.
 
 ## 21/11 17:41 · sessao 7598a4119613 · MEDIDA-FOLHA-[nome] · leitura · origem=Code
 
@@ -1382,37 +1461,4 @@ Para os achados 4, 5 e 7, perguntas de lei: 0. Os contratos vigentes cobrem a tr
 - `pede` e `espera` têm contrato de argumentos e de rc em `app/docs/BACKLOG.md:2227`. O RELATO nomeia os jobs e vereditos de Comboio, F3 e Escala. O formato literal de `espera` nos arquivos de captura permanece [nao verificado]. `app/docs/RELATO.md:1525–1526,1536,1541,1553,1563`.
 - O contrato registrado de `cancela` autoriza a sessão, restringe o cancelamento a volta superada da mesma obra e define confirmação por `estado` e `espera` rc 130. Automatizar o cancelamento do job corrente e decidir a VM quando o cancelamento fica inconclusivo exigem decisão de pista. `app/docs/RELATO.md:2558,2564,2644`; `CLAUDE.md:291–292`; `bin/suite.sh:386–396`.
 
-## 21/11 16:06 · sessao ac47ebc2279c · - · - · origem=Ronald (tmux)
-
-### 1. Formato da pista
-
-- A cura alcança a captura conjunta de stdout/stderr de `pede`, a extração de `_pl_id` e a validação do pedido. O selo fabrica `id=<id> sha=<sha> enfileirado` e testa o ID antigo em aviso. `bin/suite.sh:357–360`, `bin/tests/test_pista_lateral.sh:28–38,172–177,308–309,453–454`.
-- O anexo `laudo_opus.txt`, achado 1, relata ID nu em 12/12 capturas e nomeia `logs/COMBOIO-1911/c/pede.txt`, `logs/E4C-F3-LAVRA-FOTO/preopus/pede.txt` e `logs/ESCALA-NAO-DESCREVE/c7/pede.txt`. Só transcreve o último ID, `1119021427_2fd98211`, também registrado em `app/docs/RELATO.md:1526`. Linhas e bytes das capturas, inclusive stderr, [nao verificado]. `logs/` é ignorado em `.gitignore:50–54`.
-- Para `espera`, o contrato documenta o status da suite. O executor exige cabeçalho `id=<job> sha=<sha> rc=<n>`, igualdade do status do SSH e, no verde, `Ran N tests` positivo depois do cabeçalho. O dublê emite cabeçalho, `Ran` e veredito. `app/docs/BACKLOG.md:2227`, `bin/suite.sh:364–380`, `bin/tests/test_pista_lateral.sh:37–52`.
-- Há três registros indiretos de `Ran`, veredito e `rc`, com caminhos `logs/COMBOIO-1911/c/espera.out`, `logs/ESCALA-NAO-DESCREVE/c7/opus_delta/suite_pista.log` e `logs/DUAS-PISTAS/lote7_c7/pista.log`. O anexo, achado 13, menciona três capturas sem transcrição ou caminhos. Cabeçalhos, ordem e formato real em `espera*.txt` [nao verificado]. `app/docs/RELATO.md:1563,1541,2457`.
-- No código local `suite.sh` é o parser encontrado. `_pl_id` é escrito em `:359` e lido em `:360,363,368–369,374,379,383–386`. `_pl_esp`/`_pl_erc` são escritos em `:368` e consumidos em `:369–376`; `_pl_cab`, `_pl_jrc`, `_pl_ran` e `_pl_falta` são produzidos em `:369–376` e consumidos em `:370–386`. O selo lê o argv em `ssh.log` e a medição em `pista_lateral.log`. A sessão é leitora operacional do veredito, e o relato histórico menciona `comm` sobre `ERROR/FAIL` e a automação externa `logs/ORDEM-1811/p2/corrida.sh`. Conteúdo dos scripts externos e outros parsers [nao verificado]. `bin/tests/test_pista_lateral.sh:28,119–122,174–177,309,313`, `app/docs/RELATO.md:773,862,1847,2842`, `CLAUDE.md:122–126`.
-- O chamador canônico está em `CLAUDE.md:95–99`, e seu selo lê o comando em `bin/tests/test_suite_sh.sh:44`. O registro PreToolUse lê a invocação antes da execução em `.claude/settings.json:62–79`, `bin/hook_pista_pronto.py:146–173`. O SHA da ref é publicado em `bin/suite.sh:354`, a ref é verificada pela fixture em `bin/tests/test_pista_lateral.sh:176` e consumida pela pista segundo `app/docs/BACKLOG.md:2227`. Implementação remota [nao verificado].
-
-### 3. Árvore que deriva a volta
-
-- A cura alcança a seleção de `--volta` e a ordem das guardas, pois `ONLY` já foi construído antes da primeira leitura de `_pl_sha`. A guarda inicial chama `_suite_inteira` pelo disco. A rota posteriormente chama a mesma função com o SHA. `bin/suite.sh:161,181–198,253–283,309–336`.
-- O helper usa `base..HEAD` no diff, descobre testes por `rglob`, confere existência e abre os fontes no disco. Produz labels em stdout e causas e advertências no stderr. `bin/vizinhos_da_volta.py:25–30,43–51,92–96,116–132`. O manifesto lido em `:126` vem de `bin/selos_globais_da_volta.txt:1–25`.
-- `ONLY` é inicializado, recebe argumento ou stdout do helper e é filtrado em `bin/suite.sh:145,155,181–198`. Consumidores da seleção em `:182,193–207,256,344,402,405,459`. `LABELS` vem de `bin/regua.sh:23`; leitores `bin/regua.sh:168`, `bin/pre-push.sh:184–187`, `bin/suite.sh:176,194,205,258,402–405,459`, `bin/tests/test_labels_fonte_unica.sh:20,32–43,66–95`, `CLAUDE.md:117–119`.
-- `_pl_sha` nasce em `bin/suite.sh:324`; leitores `:325–326,336,340–341,343,346,354,359,363,369,379,384,391,394–396`. `_pl_head` relê o HEAD em `:335–336`. `SUITE_NA_VEZ_SHA` é exportado na contingência em `:394`, limpo em `:137`, lido em `:118–128`.
-- O wrapper fornece `WT`, `BASE`, `OUT` e `VOLTA_PORQUE`, lê causas do helper, publica log/veredito e faz ruff pelo HEAD e disco em uma fase anterior. `bin/volta_intermediaria.sh:13,18–25,32–47`, `bin/suite.sh:186–190`, `CLAUDE.md:104–106`, `app/docs/RELATO.md:1110`. Os dois selos substituem o helper por `SELO_VOLTA_SAIDA`, então não provam a proveniência das labels. `bin/tests/test_pista_lateral.sh:105,197–203,212–215,316–318,392–393,439–440`, `bin/tests/test_suite_motivo.sh:31–32,83,96–98`.
-
-### 6. Job aceito, espera inconclusiva e VM
-
-- A cura alcança o ramo que já tem `_pl_id` e `_pl_falta`, grava `_pl_causa` e entra na VM. O mesmo bloco recebe causas anteriores à admissão e contingência explícita. `bin/suite.sh:350–360,368–396`.
-- Escritores de `_pl_causa` em `:350,352,354,360,386`. Leitores em `:356,362,388–395`. `_pl_decl` nasce em `:350,352` e é lido em `:389`; `PISTA_CONTINGENCIA` é fornecida pela sessão e lida em `:351–352`, com inscrição no contrato local `:301–308`. Abertura VM em `:393–396`; `_PL_VM_FIM` é consumido com o rc do run em `:501–510`. `_run` chama a trava em `:451–460`; o rc do filho é registrado em `:476`. O log tem `_pl_mede` em `:315` como produtor e o selo como leitor em `bin/tests/test_pista_lateral.sh:177,313`.
-- O selo separa `fora` com um SSH e `mudo` após dois SSHs, mas exige VM nos dois. V5 e V6, e os mutantes que cobram VM e medição final, são sítios atingidos. `bin/tests/test_pista_lateral.sh:31–41,204–205,311–313,449–450,459–460`.
-- `cancela` tem contrato histórico limitado à sessão e a job de volta superada da mesma obra, com checagem por `estado`/`espera` e registro no servidor. Há relatos históricos divergentes sobre disponibilidade e um uso nominal para o P2 que antecede a VM. Estado atual do verbo, formato da resposta e confirmação de cancelamento [nao verificado]. `app/docs/RELATO.md:894,1847,2207,2564,2643–2644`, `app/docs/PROMPTS.md:2520`; regra de uso distingue ocupação de indisponibilidade em `app/docs/CORTES.md:523`.
-
-### Decisões pertinentes
-
-1. O `suite.sh` pode cancelar automaticamente o job exato de um recorte aceito cuja espera ficou inconclusiva, mesmo sem volta superada, ou o ato fica com a sessão? `app/docs/RELATO.md:894,2644`, `bin/suite.sh:368–396`.
-2. Enquanto o fim do job aceito não puder ser comprovado, o recorte aguarda decisão da sessão ou a regra autoriza iniciar a VM? `app/docs/CORTES.md:523`, `bin/suite.sh:386–396`, `bin/tests/test_pista_lateral.sh:311–313`.
-
-Nota correlata ao achado 9: `--espera` numérico é aceito e fica fora do argv do SSH. É consumido pela trava na VM, inclusive se houver contingência. O wrapper sempre o passa. Qualquer exigência de rejeitá-lo na rota remota ou levá-lo ao servidor altera o comportamento observado. `bin/suite.sh:158–159,343–344,393–397,452`, `bin/volta_intermediaria.sh:32`.
-
-_7717 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7718 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
