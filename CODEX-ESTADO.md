@@ -1,7 +1,114 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **20/11/2026 20:07** · publicado em **20/11/2026 20:07** (UTC-3)
+> Ultima resposta processada: **21/11/2026 01:41** · publicado em **21/11/2026 01:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 01:41 · sessao 36325ce6ae1e · E4C-F5-CONSTROI · construtor · origem=Code
+
+**E4C-F5, volta 3 do item 1.** Os 20 testes focados passaram em memória. Os cinco mutantes novos passaram na base `99a74feaf` e falharam nas asserções esperadas com o delta. Nas fontes sem mutação, os dois censos do par e a catraca não acusaram sítio de produção. [Selo do par](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:535) · [Catraca](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:338) · [Tabela dos mutantes](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:55)
+
+O delta ficou na cópia, na base `99a74feaf6544c643fd6bacefa5ee02ad5c7c05d`. A entrega pede commit, mas `REGRAS` proíbe expressamente `git commit` e escrita em `.git`. O hash continua sendo o da base. Django e Ruff seguem **[nao verificado]** nos comandos abaixo.
+
+### Arquivos tocados
+
+- [test_e4c_f5_volta3_selos.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_volta3_selos.py:16)
+- [test_e4c_f5_selo_par_ato_coluna.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:234)
+- [test_e4c_f5_selo_catraca.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:100)
+- [e4c_f5_voltaE_mutantes.py](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:55)
+
+### Achados (a)–(f)
+
+- **(a) Procede.** Reproduzi os dois `AttributeError` com o leitor da base. O leitor agora usa o terceiro elemento para os campos e compara `registro.chamada` com a chamada enumerada para continuar julgando o gravador no próprio escopo. Os dois testes do anexo passaram. `v_ato_sem_coluna` falhou na asserção de violações e apontou `_carimbar_validacao`. [`test_e4c_f5_volta3_selos.py:16`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_volta3_selos.py:16) · [`test_e4c_f5_volta3_selos.py:59`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_volta3_selos.py:59) [nao verificado]
+- **(b) Procede.** As duas variáveis do laço original também apareciam no iterável. Renomeei os nomes da primeira troca e os do laço. A verificação AST encontrou as duas colisões na base e zero no delta. A prova em memória `a → b → c` passou e os casos com âncora ausente ou duplicada falharam, inclusive na segunda troca. O comando de Ruff retornou `command not found`. A execução em memória do binário localizado no cache retornou `PermissionError`. Resultado do Ruff **[nao verificado]**. [`e4c_f5_voltaE_mutantes.py:92`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:92) [nao verificado]
+- **(c) Procede.** Reproduzi os dois falsos verdes da base. Os censos agora rejeitam seleção explicitamente vazia, incluindo `escrever_so=[]`, `escrever_so=()`, `.none()` e `filter(pk__in=[])`. `test_MORDE_lote_que_nao_alcanca_a_pergunta_do_ato` também conserva os controles `qs` e `escrever_so=None`. O mutante `d_recusa_escrever_so_vazio` acusa RECUSA e REABERTURA em `disputa_emissao.py:1664`, com escrita em `:1683`. `d_ressuscitacao_queryset_none` acusa REABERTURA em `models.py:1517` e `:1719`, com escrita em `:1721`. Ambos falham nos dois censos. Confirmei duas lacunas restantes em memória, um filtro adicional `alvo_lido.filter(pk=0)` no caminho que compara `escrever_so` e um UPDATE direto com `pk` correspondente seguido de `filter(pk__in=list())`. O visitante não resolve filtros dependentes dos dados nem coleções produzidas por chamadas arbitrárias. [`models.py:3536`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:3536) · [`test_e4c_f5_selo_par_ato_coluna.py:234`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:234) · [`test_e4c_f5_selo_par_ato_coluna.py:278`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:278) · [`test_e4c_f5_selo_par_ato_coluna.py:639`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:639)
+- **(d) Procede.** As asserções voltaram a fixar `{'devolucao', 'recusa', 'reabertura'}` e `'validada_em'`. `d_devolucao_renomeada_no_modelo` altera `DEVOLUCAO` e `_LIMPAM_VALIDACAO` para `devolvida` na fonte em memória. `test_atos_com_foto_limpam_validacao` passou na base com essa alteração e agora falha na comparação literal. [`test_e4c_f5_selo_par_ato_coluna.py:556`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:556) · [`test_e4c_f5_selo_par_ato_coluna.py:694`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:694) · [`e4c_f5_voltaE_mutantes.py:65`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:65) [nao verificado]
+- **(e) Procede.** `+` e `+=` sobre coleções locais conhecidas agora alimentam a mesma regra de campo e receptor do aval 1945. A lista varrida é a mesma. O controle `test_PASSAM_escrita_foto_e_leitura_do_ato` passou, e o novo sintético exercita campo diferente, receptor diferente e atribuição correspondente. Os mutantes `c_recusa_update_fields_concat` e `c_recusa_update_fields_acrescimo` acusam `update_fields(respondida_em)` em `validacao.py:940` e na linha `:942` da fonte mutada, respectivamente. Confirmei que ainda escapam `append`, `extend`, `**kwargs` inclusive literal, soma com operando sem coleção conhecida e `+=` por outro nome que aponta para a mesma lista. A atribuição continua sendo julgada sintaticamente no corpo da função, inclusive se vier depois do `save` ou estiver em outro ramo. [`test_e4c_f5_selo_catraca.py:17`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:17) · [`test_e4c_f5_selo_catraca.py:100`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:100) · [`test_e4c_f5_selo_catraca.py:304`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:304) · [`test_e4c_f5_selo_catraca.py:427`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:427) [nao verificado]
+- **(f) Procede por leitura do código.** Os asserts originais `:703` e `:721`, agora `:756` e `:774`, ficaram intactos. A validação tem data fixa e a reabertura usa `timezone.now()`. Se a reabertura for anterior à validação, a ordenação por instante pode processar a validação por último e mantê-la vigente. Execução ORM **[nao verificado]**. [`cortes_f2_f9_apoio.py:32`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/cortes_f2_f9_apoio.py:32) · [`disputa_emissao.py:1648`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/disputa_emissao.py:1648) · [`models.py:4367`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:4367) · [`test_e4c_f5_selo_par_ato_coluna.py:756`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:756)
+
+### Inventário de leitores
+
+As referências abaixo são relativas a `app/chamados/tests/`.
+
+| Retorno | Leitores e adaptação |
+|---|---|
+| `_registros` | `test_e4c_f5_volta3_selos.py:16` foi adaptado. `_erro` em `test_e4c_f5_selo_par_ato_coluna.py:460` e `_censo_dos_atos_que_desfazem` em `:507` já consumiam `Registro`. |
+| `_censo_dos_atos_que_desfazem` | `test_e4c_f5_selo_par_ato_coluna.py:551`, `:593` e `:633` já recebiam a mesma tupla de quatro elementos. O novo sintético usa o mesmo retorno em `:661`. |
+| `_ato`, `_registros_locais` e `_mesma_pergunta` | `_registros` lê `_ato` em `test_e4c_f5_selo_par_ato_coluna.py:328`, `:346` e `:349`, e `_registros_locais` em `:327` e `:345`. `_erro` e o censo dos atos leem `_mesma_pergunta` em `:463` e `:518`. Nenhum desses leitores precisou de adaptação de retorno. |
+| `fonte_mutada` e `_fontes_de_producao` | `fonte_mutada` continua devolvendo texto aos leitores em `test_e4c_f5_selo_par_ato_coluna.py:532` e `test_e4c_f5_selo_catraca.py:342`. `_fontes_de_producao` continua entregando `(arquivo, fonte)` em `test_e4c_f5_selo_par_ato_coluna.py:540`, `:550` e `test_e4c_f5_volta3_selos.py:43`. |
+| Tabelas anteriores | `e4c_f5_voltaA_mutantes.py:24`, `e4c_f5_voltaB_mutantes.py:64`, `e4c_f5_voltaC_mutantes.py:31`, `e4c_f5_voltaD_mutantes.py:50`, `e4c_f5_volta2_mutantes.py:5` e `e4c_f5_volta3_mutantes.py:106` não consomem esses retornos. O mutante `v_ato_sem_coluna` continua passando texto por `substituir`, chamado em `test_e4c_f5_volta3_selos.py:52`. |
+
+### Comandos
+
+O comando Django focado parou em `ModuleNotFoundError: django.core`, antes dos testes. O comando Ruff usou o `ruff.toml` da cópia e parou antes do lint. **[nao verificado]** [`manage.py:11`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/manage.py:11) · [`ruff.toml:4`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/ruff.toml:4) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_selo_par_ato_coluna.SeloParAtoColunaTest \
+  chamados.tests.test_e4c_f5_selo_catraca.SeloCatracaTest \
+  chamados.tests.test_e4c_f5_volta3_selos.SelosVolta3Test
+
+ruff check --no-cache --config ruff.toml \
+  chamados/tests/{test_e4c_f5_volta3_selos,test_e4c_f5_selo_par_ato_coluna,test_e4c_f5_selo_catraca,e4c_f5_voltaE_mutantes}.py
+```
+
+A execução em memória usou `unittest`, os visitantes da cópia e as declarações extraídas do modelo. Para a comparação com a base, carreguei os três módulos de teste de `git show 99a74feaf:app/<arquivo>` em memória. [`test_e4c_f5_selo_par_ato_coluna.py:495`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:495) · [`test_e4c_f5_selo_catraca.py:332`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:332)
+
+```bash
+f5() {
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
+import ast, sys, unittest
+from pathlib import Path
+from types import SimpleNamespace as NS
+from chamados.tests.e4c_f5_voltaE_mutantes import fonte_mutada
+
+arq = 'chamados/models.py'
+arvore = ast.parse(fonte_mutada(arq, Path(arq).read_text()))
+classes = {n.name: n for n in arvore.body if isinstance(n, ast.ClassDef)}
+nomes = {'RESPOSTA', 'REABERTURA', 'ATOS_COM_FOTO', '_LIMPAM_VALIDACAO'}
+nos = [n for n in classes['DecisaoPergunta'].body if isinstance(n, ast.Assign)
+       and any(isinstance(a, ast.Name) and a.id in nomes for t in n.targets for a in ast.walk(t))]
+dados = {}
+exec(compile(ast.Module(body=nos, type_ignores=[]), arq, 'exec'), {}, dados)
+campo = next(t.id for n in classes['PerguntaDisputa'].body if isinstance(n, ast.Assign)
+             for t in n.targets if isinstance(t, ast.Name) and t.id == 'validada_em')
+sys.modules.update({
+    'django.test': NS(SimpleTestCase=unittest.TestCase),
+    'chamados.models': NS(DecisaoPergunta=NS(**dados), PerguntaDisputa=NS(validada_em=NS(field=NS(name=campo)))),
+    'chamados.services.disputa_emissao': NS(reabrir_para_correcao=None),
+    'chamados.tests.cortes_f2_f9_apoio': NS(RESPOSTA_EM=None, VALIDACAO_EM=None, BaseCortes=object),
+    'ponto.services.cartorio': NS(calado=None),
+})
+from chamados.tests.test_e4c_f5_selo_par_ato_coluna import SeloParAtoColunaTest
+from chamados.tests.test_e4c_f5_selo_catraca import SeloCatracaTest
+from chamados.tests.test_e4c_f5_volta3_selos import SelosVolta3Test
+
+selecionados = sys.argv[1:]
+c = (SeloParAtoColunaTest, SeloCatracaTest, SelosVolta3Test)
+testes = [cls(t) for cls in c for t in unittest.defaultTestLoader.getTestCaseNames(cls) [nao verificado]
+          if t in selecionados or (not selecionados and not t.startswith('test_carimbo_sintetico'))]
+assert testes and (not selecionados or len(testes) == len(selecionados)) [nao verificado]
+sys.exit(not unittest.TextTestRunner().run(unittest.TestSuite(testes)).wasSuccessful()) [nao verificado]
+PY
+}
+
+f5
+
+F5_VOLTA3_MUTANTE=v_ato_sem_coluna f5 test_RED_validacao_iniciada_pelo_ato_tambem_grava_a_coluna
+F5_VOLTA3_MUTANTE=m20_s14_perde_literal f5 test_RED_s14_conserva_literal_do_cadastro_c12
+F5_VOLTA_E_MUTANTE=d_recusa_escrever_so_vazio f5 test_atos_que_desfazem_gravam_a_coluna test_escritores_fecham_o_par
+F5_VOLTA_E_MUTANTE=d_ressuscitacao_queryset_none f5 test_atos_que_desfazem_gravam_a_coluna test_escritores_fecham_o_par
+F5_VOLTA_E_MUTANTE=d_devolucao_renomeada_no_modelo f5 test_atos_com_foto_limpam_validacao
+F5_VOLTA_E_MUTANTE=c_recusa_update_fields_concat f5 test_producao_sem_leituras_cruas
+F5_VOLTA_E_MUTANTE=c_recusa_update_fields_acrescimo f5 test_producao_sem_leituras_cruas
+
+for m in limpa_sem_ato preenche_e_desfaz escritor_novo; do
+  F5_VOLTA_E_MUTANTE="$m" f5 test_escritores_fecham_o_par
+done
+for m in d_paridade_devolucao_sem_coluna d_ressuscitacao_reabertura_sem_coluna d_recusa_sem_coluna_no_lote; do
+  F5_VOLTA_E_MUTANTE="$m" f5 test_atos_que_desfazem_gravam_a_coluna test_escritores_fecham_o_par
+done
+F5_VOLTA_E_MUTANTE=c_recusa_update_fields_cru f5 test_producao_sem_leituras_cruas
+```
 
 ## 20/11 20:07 · sessao dfc7ddd27c8d · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -2009,400 +2116,4 @@ O `[M3]` usa a foto `apos_passagem`. No cenário sem âncora, `ausencia_dia` é 
 - Nenhum nos dois cenários. As referências para passagem, assinatura da irmã, retirada administrativa, rejeição e callback são `app/chamados/services/disputa_emissao.py:1560–1563`, `app/chamados/services/validacao.py:161–175`, `app/chamados/services/disputa_emissao.py:1584`, `app/ponto/services/ausencia.py:1057–1088` e `app/ponto/signals.py:259–279`.
 - Montagem e resultados em execução no MAIN [nao verificado].
 
-## 20/11 18:54 · sessao 04615e8207bf · E4C-F5-CONSTROI · sonda · origem=Code
-
-```python
-"""
-Sonda para bin/sonda_leitura.sh em produção, sem --sombra. O envelope
-executa o Python no shell Django, schema juliani, com a role leitor e
-a árvore montada em leitura. bin/sonda_leitura.sh:93, :140, :153, :235, :239.
-
-Autoridades do funil
-
-- Pergunta de hora: PerguntaDisputa.tipo_resposta e a entrada 'hora' do
-  catálogo. É o recorte do próprio leitor da devolução.
-  app/chamados/models.py:2629; app/chamados/catalogo/respostas.py:20;
-  app/chamados/services/materializacao.py:1121.
-- Resolvida neste funil: materializada_em preenchido, o carimbo que o leitor
-  da devolução exige. O rótulo PerguntaDisputa.estado também consulta a
-  validação da sequência e, conforme o caso, o C6. A sonda informa
-  separadamente quantas desse recorte têm o rótulo confirmado pelas faces
-  SQL e quantas ficam indeterminadas sem rodar o motor.
-  app/chamados/services/materializacao.py:1121;
-  app/chamados/models.py:3226, :3539, :3569; app/chamados/juizes.py:1470.
-- Via: via_resolucao e as constantes VIA_AUSENCIA_DIA e VIA_DECLARACAO.
-  app/chamados/models.py:2655, :2683, :2748.
-- Ato e ausência ligada: DecisaoPergunta.ABSORCAO e o FK absorcao_ausencia
-  da linha selecionada. A ordem da sequência é (ato_em, pk).
-  app/chamados/models.py:4152, :4166, :4178, :4199, :4202.
-- REJEITADA: Ausencia.status == 'rejeitada'.
-  app/ponto/models.py:704, :809; app/chamados/services/materializacao.py:1154.
-- Outra ausência: efeito 'cobranca', no colaborador e no dia da ausência
-  ligada, como na guarda da devolução. A carga chama _pelo_efeito e
-  _q_cobertura da árvore. O próprio efeito exclui a rejeitada.
-  app/chamados/services/materializacao.py:1146, :1161;
-  app/ponto/turnos.py:2523, :2768, :2773;
-  app/chamados/services/carga_pergunta_viva.py:99.
-- Competência: data_evento e empresa do colaborador da pergunta.
-  _competencia chama janela_atual e usa o mês e ano do fim da janela.
-  Entregue é o resultado de competencia_entregue com as exportações já
-  anotadas por anotar_vigencia. Sem data_evento, o K6 fica sem consulta.
-  app/chamados/models.py:2610, :2620;
-  app/chamados/services/materializacao.py:788;
-  app/chamados/services/passivo_validado.py:86; app/ponto/janelas.py:36, :60;
-  app/folha/export.py:556; app/folha/models.py:192, :203.
-
-LACUNA DE AUTORIDADE — ABSORÇÃO VIGENTE
-
-A árvore tem um escritor do carimbo, escritores que o retiram ou trocam
-a via e um leitor da decisão efetiva da tarefa. Um juiz único que defina
-“ABSORÇÃO vigente” para esta contagem [nao verificado]. A sonda publica
-as três leituras abaixo, cada uma com o funil completo.
-
-- carimbo_do_ato: ABSORCAO cujo ato_em coincide com materializada_em na
-  via atual. Se há várias linhas no mesmo instante, a sonda usa a última
-  pela ordem do modelo. O escritor grava o mesmo instante no carimbo e
-  no ato. Descarimbar tira instante e via. Retratar pode trocar só a via.
-  app/chamados/services/materializacao.py:1047, :1059;
-  app/chamados/models.py:2217, :3399, :3485, :4199.
-- sequencia_sem_desfazimento: última ABSORCAO após o último ato que
-  registra a retirada do carimbo ou a troca da via por retratação.
-  REABERTURA e RECUSA vêm de ATOS_COM_FOTO, usado pelo escritor que
-  descarimba. A REABERTURA compensadora também tira o carimbo.
-  app/chamados/models.py:4164, :1694, :2217;
-  app/chamados/services/disputa_emissao.py:1627, :1639, :1656.
-- ato_lido_na_tarefa: ABSORCAO que _pela_decisao lê como efetiva.
-  O leitor pode conservar o ato diante de respostas que preservam a
-  validação, ignora a reabertura compensadora e distingue o passivo sem
-  linha. Quando lê ABSORCAO, ela é a última ABSORCAO da sequência visível.
-  app/chamados/services/tarefa_do_dia.py:142, :154, :158, :184, :390, :425;
-  app/chamados/models.py:4220, :4237, :4295.
-"""
-
-import json
-
-
-LEITURAS = (
-    "carimbo_do_ato",
-    "sequencia_sem_desfazimento",
-    "ato_lido_na_tarefa",
-)
-DEGRAUS = (
-    "perguntas_de_hora",
-    "resolvidas",
-    "nas_duas_vias",
-    "com_ato_absorcao",
-    "com_absorcao_vigente",
-    "com_ausencia_ligada",
-    "ligada_rejeitada",
-    "sem_outra_ausencia_cobrindo_o_dia",
-)
-REJEITADA = "rejeitada"  # app/ponto/models.py:704, :809.
-
-
-def ler_absorcoes(alvo, agora):
-    # app/chamados/models.py:4199; app/chamados/services/tarefa_do_dia.py:390.
-    linhas = (
-        D.objects.filter(pergunta_id__in=alvo.order_by().values("pk"))
-        .select_related("pergunta__disputa", "absorcao_ausencia")
-        .only(
-            "pk", "pergunta", "ato", "ato_em", "ato_texto",
-            "da_ressuscitacao", "resposta_mantem_validacao",
-            "absorcao_ausencia", "absorcao_ausencia__status",
-            "absorcao_ausencia__colaborador", "absorcao_ausencia__data",
-            "pergunta__disputa", "pergunta__disputa__chamado",
-            "pergunta__chamado_destino", "pergunta__materializada_em",
-            "pergunta__respondida_em", "pergunta__validada_em",
-            "pergunta__validada_por", "pergunta__resposta_colab",
-        )
-        .order_by("pergunta_id", *D._meta.ordering)
-        .iterator(chunk_size=5000)
-    )
-    desfazem = (*D.ATOS_COM_FOTO, D.RETRATACAO)
-    leituras_absorcao = {
-        "absorvida_aprovada", "absorcao_rejeitada",
-        "absorcao_aguarda_documento", "absorcao_pendente",
-    }  # app/chamados/services/tarefa_do_dia.py:184.
-
-    por_pergunta = {}
-    for pk, grupo in groupby(linhas, key=attrgetter("pergunta_id")):
-        atos = list(grupo)
-        if not any(d.ato == D.ABSORCAO for d in atos):
-            continue
-        p = atos[0].pergunta
-        carimbo = sequencia = ultima_visivel = None
-        visiveis = []
-        for d in atos:
-            visivel = d.ato_em <= agora and not D.es_da_ressuscitacao(d)
-            if visivel:
-                visiveis.append(d)
-            if d.ato in desfazem:
-                sequencia = None
-            elif d.ato == D.ABSORCAO:
-                sequencia = d
-                if d.ato_em == p.materializada_em:
-                    carimbo = d
-                if visivel:
-                    ultima_visivel = d
-
-        tarefa = None
-        if ultima_visivel is not None:
-            # O passivo usa as linhas reais; a leitura usa a vista cortada.
-            # app/chamados/services/tarefa_do_dia.py:402, :425, :431.
-            ja = {(pk, d.ato, d.ato_em) for d in atos
-                  if d.ato in (D.RESPOSTA, D.VALIDACAO)}
-            passivo = (pk,) if any(
-                linha["ato_em"] <= agora
-                for linha in D.linhas_da_projecao_sem_linha([p], ja)
-            ) else ()
-            vista = SimpleNamespace(
-                pk=pk, resposta_colab=p.resposta_colab,
-                respondida_em=(
-                    p.respondida_em
-                    if p.respondida_em is not None and p.respondida_em <= agora
-                    else None
-                ),
-                validada_em=(
-                    p.validada_em
-                    if p.validada_em is not None and p.validada_em <= agora
-                    else None
-                ),
-                validada_por_id=p.validada_por_id,
-                decisoes=SimpleNamespace(all=lambda: visiveis),
-            )
-            # Só se usa a classificação do ato. Fila, lavra e efeitos não
-            # decidem o ramo ABSORCAO. app/chamados/services/tarefa_do_dia.py:152, :173, :184.
-            razao, _ = _pela_decisao(
-                p, visiveis, {}, frozenset(), passivo,
-                leitura=D.leitura(vista),
-            )
-            if razao in leituras_absorcao:
-                tarefa = ultima_visivel
-
-        por_pergunta[pk] = dict(zip(LEITURAS, (carimbo, sequencia, tarefa)))
-    return por_pergunta
-
-
-def ler_cobertura(absorcoes):
-    pares = {
-        (ausencia.colaborador_id, ausencia.data)
-        for leituras in absorcoes.values()
-        for ato in leituras.values()
-        if ato is not None
-        for ausencia in (ato.absorcao_ausencia,)
-        if ausencia is not None and ausencia.status == REJEITADA
-    }
-    if not pares:
-        return set()
-    dias = [dia for _, dia in pares]
-    # O mesmo recorte SQL é aplicado em memória para cada par distinto. [nao verificado]
-    # app/ponto/turnos.py:2523, :2773;
-    # app/chamados/services/carga_pergunta_viva.py:10, :99.
-    qs = _pelo_efeito(
-        Ausencia.objects.filter(colaborador_id__in={cid for cid, _ in pares}),
-        "cobranca",
-    ).filter(_q_cobertura(min(dias), max(dias))).only(
-        "colaborador", "data", "data_fim", "tipo",
-    ).order_by("colaborador_id")
-    por_colaborador = {
-        cid: LinhasLidas(grupo)
-        for cid, grupo in groupby(
-            qs.iterator(chunk_size=5000), key=attrgetter("colaborador_id"),
-        )
-    }
-    return {
-        (cid, dia) for cid, dia in pares
-        if cid in por_colaborador
-        and por_colaborador[cid].filter(_q_cobertura(dia, dia)).exists()
-    }
-
-
-def ler_entregues(chaves):
-    # app/chamados/services/tarefa_do_dia.py:558;
-    # app/folha/models.py:203; app/folha/export.py:580.
-    if not chaves:
-        return {}
-    registros = list(ExportacaoDominio.objects.filter(
-        empresa_id__in={e for e, _, _ in chaves},
-        mes__in={m for _, m, _ in chaves},
-        ano__in={a for _, _, a in chaves},
-    ).only("pk", "empresa", "mes", "ano", "invalidada_em").order_by())
-    por_chave = defaultdict(list)
-    for registro in anotar_vigencia(registros):
-        por_chave[registro.empresa_id, registro.mes, registro.ano].append(registro)
-    return {
-        chave: competencia_entregue(*chave, exportacoes=por_chave[chave])
-        for chave in chaves
-    }
-
-
-def nivel_com_absorcao(ato, cobertos):
-    if ato is None:
-        return 4
-    ausencia = ato.absorcao_ausencia
-    if ausencia is None:
-        return 5
-    if ausencia.status != REJEITADA:
-        return 6
-    if (ausencia.colaborador_id, ausencia.data) in cobertos:
-        return 7
-    return 8
-
-
-def novo_funil():
-    return {leitura: Counter(dict.fromkeys(DEGRAUS, 0)) for leitura in LEITURAS}
-
-
-def medir():
-    vias = (P.VIA_AUSENCIA_DIA, P.VIA_DECLARACAO)
-    # app/chamados/catalogo/respostas.py:20;
-    # app/chamados/services/materializacao.py:1121.
-    base = P.objects.filter(tipo_resposta="hora")
-    alvo = base.filter(materializada_em__isnull=False, via_resolucao__in=vias)
-    agora = timezone.now()
-    absorcoes = ler_absorcoes(alvo, agora)
-    cobertos = ler_cobertura(absorcoes)
-
-    # q_vivas é um superconjunto por contrato. Estar fora dele, ou ter
-    # validação pelo ato, basta para confirmar RESOLVIDA com carimbo.
-    # app/chamados/models.py:3235, :3539, :3580.
-    perguntas = base.annotate(
-        estado_confirmado=Case(
-            When(
-                Q(materializada_em__isnull=False)
-                & (P.q_validada_pelo_ato() | ~P.q_vivas()),
-                then=Value(True),
-            ),
-            default=Value(False),
-            output_field=BooleanField(),
-        ),
-    ).order_by("pk").values_list(
-        "pk", "colaborador__empresa_id",
-        "colaborador__empresa__dia_inicio_competencia",
-        "data_evento", "materializada_em", "via_resolucao", "estado_confirmado",
-    ).iterator(chunk_size=5000)
-
-    total = novo_funil()
-    empresas = defaultdict(novo_funil)
-    competencias = defaultdict(novo_funil)
-    finais = {leitura: defaultdict(list) for leitura in LEITURAS}
-    for pk, empresa, corte, dia, carimbo, via, confirmado in perguntas:
-        mes = ano = None
-        if dia is not None:
-            mes, ano = _competencia(
-                dia, SimpleNamespace(dia_inicio_competencia=corte),
-            )
-        chave = (empresa, mes, ano)
-        destinos = (total, empresas[empresa], competencias[chave])
-        nivel_base = 1
-        if carimbo is not None:
-            nivel_base = 3 if via in vias else 2
-        atos = absorcoes.get(pk) if nivel_base == 3 else None
-
-        for leitura in LEITURAS:
-            nivel = nivel_base if atos is None else nivel_com_absorcao(
-                atos[leitura], cobertos,
-            )
-            for destino in destinos:
-                contagem = destino[leitura]
-                contagem.update(DEGRAUS[:nivel])
-                if nivel >= 2:
-                    faixa = "confirmadas" if confirmado else "indeterminadas"
-                    contagem["rotulo_resolvida_" + faixa] += 1
-                    if nivel == len(DEGRAUS):
-                        contagem["rotulo_resolvida_no_final_" + faixa] += 1
-            if nivel == len(DEGRAUS):
-                finais[leitura][chave].append(pk)
-
-    entregues = ler_entregues({c for c in competencias if c[1] is not None})
-    saida = []
-    for empresa in sorted(empresas):
-        saida.append({
-            "tipo": "empresa", "empresa_pk": empresa, "funis": empresas[empresa],
-        })
-    for chave in sorted(competencias, key=lambda c: (c[0], c[2] or 0, c[1] or 0)):
-        empresa, mes, ano = chave
-        saida.append({
-            "tipo": "competencia",
-            "empresa_pk": empresa,
-            "competencia": f"{ano:04d}-{mes:02d}" if mes is not None else None,
-            "entregue": entregues.get(chave),
-            "funis": competencias[chave],
-        })
-    for leitura, grupos in finais.items():
-        pks = {True: [], False: [], None: []}
-        for chave, lista in grupos.items():
-            pks[entregues.get(chave)].extend(lista)
-        saida.append({
-            "tipo": "casos_finais", "leitura": leitura,
-            "pergunta_pks_entregue": sorted(pks[True]),
-            "pergunta_pks_nao_entregue": sorted(pks[False]),
-            "pergunta_pks_sem_competencia": sorted(pks[None]),
-        })
-    saida.append({"tipo": "total", "status": "OK", "funis": total})
-    return saida
-
-
-try:
-    from collections import Counter, defaultdict
-    from itertools import groupby
-    from operator import attrgetter
-    from types import SimpleNamespace
-
-    from django.db import connection, transaction
-    from django.db.models import BooleanField, Case, Q, Value, When
-    from django.utils import timezone
-
-    from chamados.models import DecisaoPergunta as D, PerguntaDisputa as P
-    from chamados.services.carga_pergunta_viva import LinhasLidas
-    from chamados.services.passivo_validado import _competencia
-    from chamados.services.tarefa_do_dia import _pela_decisao
-    from folha.export import competencia_entregue
-    from folha.models import ExportacaoDominio, anotar_vigencia
-    from ponto.models import Ausencia
-    from ponto.turnos import _pelo_efeito, _q_cobertura
-
-    # Até 5 SELECTs de dados: decisões e perguntas (1 cada), cobertura
-    # (0 ou 1), exportações (0 ou 1), anotação da vigência (0 ou 1).
-    # Mais um SET TRANSACTION e o controle da transação. A contagem é de
-    # consultas lógicas da sonda, à parte do bootstrap e das operações
-    # de cursor do backend. app/folha/models.py:203; bin/sonda_leitura.sh:235.
-    with transaction.atomic():
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-        linhas_json = [
-            json.dumps(linha, ensure_ascii=True, allow_nan=False)
-            for linha in medir()
-        ]
-    for linha_json in linhas_json:
-        print(linha_json, flush=True)
-except BaseException as exc:
-    print(json.dumps({
-        "tipo": "total",
-        "status": "INCONCLUSIVO",
-        "tipo_excecao": type(exc).__name__,
-    }, ensure_ascii=True), flush=True)
-    raise SystemExit(1) from None
-
-
-# O que a sonda não mede
-#
-# - O estado RESOLVIDA exato nos casos indeterminados e a materialização de
-#   fato. Essas respostas podem exigir o C6 e a apuração de testemunhas.
-#   Os campos rotulo_resolvida_* mostram o limite inferior e a parcela
-#   indeterminada do recorte. Campo de contagem ausente nessa família vale
-#   zero. app/chamados/models.py:3226; app/chamados/juizes.py:666, :1470.
-# - Ligações inferidas do legado sem ato. O carimbo legado pode aparecer
-#   até o degrau das vias. A reconstrução pelo escape, carimbo e batida
-#   pertence a outro leitor. app/chamados/services/materializacao.py:1101, :1121.
-# - Entrega quando falta o dia do fato. Nessa saída, competência e entregue
-#   são null. K6 mede TXT vigente para a tripla da empresa.
-#   app/chamados/services/materializacao.py:794; app/folha/export.py:556.
-# - Execução e contagens de produção [nao verificado]. O anexo é um molde
-#   de script e não contém resultados desta contagem [nao verificado].
-#   O JSONL e o tratamento de exceções são do Python. O envelope emite
-#   mensagens próprias e provisiona credencial, permissões e trilha.
-#   bin/sonda_leitura.sh:126, :140, :153, :216, :221, :239, :248.
-```
-
-_7610 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
