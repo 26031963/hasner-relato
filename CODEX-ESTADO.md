@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 19:09** · publicado em **21/11/2026 19:15** (UTC-3)
+> Ultima resposta processada: **21/11/2026 19:16** · publicado em **21/11/2026 19:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 19:16 · sessao e3fb8629437a · FERIADO-POR-POSTO · construtor · origem=Code
+
+**FERIADO-POR-POSTO, volta 5.** A cura está na cópia com `HEAD d72b72a76`. A regra explícita de `git commit` impediu os dois commits pedidos. O RED foi escrito e exercitado em memória antes da cura. O RED isolado está nos dois arquivos de teste indicados abaixo.
+
+- **N1.** `--apply` sem motivo ou com só espaços usa a validação da porta. O comando propaga `CommandError` com `MarcaInvalida` como causa. O teste exige o erro e relê a marca vazia nos dois casos. `colaboradores/management/commands/marcar_feriado_do_posto.py:118–127` · `colaboradores/services/feriado_do_posto.py:305–309` · `colaboradores/tests/test_feriado_por_posto.py:645–656`.
+- **N2.** A prévia consulta o juiz registrado `par_completo`, reutilizando os turnos e os encerramentos da mesma janela. O teste coloca o par com saída às 16h55 em `outras` às 16h56 e em `(a)` às 17h01. `core/juizes.py:243–248` · `ponto/turnos.py:2185–2219` · `colaboradores/services/feriado_do_posto.py:450–475` · `colaboradores/tests/test_feriado_volta5.py:31–67`.
+- **N3.** Na sombra, a prévia recusa `agora` ausente ou `None` antes de chamar a porta. `hoje` é argumento obrigatório, e o plano recusa `None`. O comando já entrega o instante e a data local derivados da mesma leitura. `colaboradores/services/feriado_do_posto.py:261–268,370–403` · `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47,117–123` · `colaboradores/tests/test_feriado_volta5.py:15–27`.
+
+### Origem e uso dos valores
+
+| Valor | Fonte e escritor | Instante | Leitores e significado |
+|---|---|---|---|
+| `motivo` | A supervisão fornece `--motivo`. `evento` grava `LogAuditoria.descricao`. `colaboradores/management/commands/marcar_feriado_do_posto.py:27–37` · `core/observ.py:133–137`. | A porta valida antes da trava. As descrições são gravadas quando muda a marca ou a chave. `colaboradores/services/feriado_do_posto.py:305–323,344–352` · `colaboradores/services/vinculo.py:896–904`. | A porta, a trilha do vínculo e a tela de auditoria leem a justificativa humana da mudança. `colaboradores/services/feriado_do_posto.py:305–323,349–352` · `templates/core/log_auditoria.html:73`. |
+| `agora` | `handle` lê `timezone.now()` e passa o valor em memória. `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47,75,123`. | Na entrada do comando. `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47`. | A prévia entrega ao juiz o instante de referência para o encerramento. `colaboradores/services/feriado_do_posto.py:397–404,459–461` · `ponto/turnos.py:2113–2130`. |
+| `hoje` | `handle` deriva `timezone.localdate(agora)` e passa a data em memória. `colaboradores/management/commands/marcar_feriado_do_posto.py:46–47,75,117–123`. | Na mesma passagem pela borda. `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47`. | O plano seleciona vínculos vigentes. A prévia delimita as competências e distingue passado, hoje e futuro pela data local do ato. `colaboradores/services/feriado_do_posto.py:261–283,450–477`. |
+| Par e encerramento | `turnos_do_colab` monta os turnos com batidas apuráveis e células da janela. `dias_encerrados` produz o mapa em memória. `ponto/turnos.py:1850–1893,1920,2133–2182`. | Dentro do savepoint, depois da aplicação simulada. `colaboradores/services/feriado_do_posto.py:397–404,450–461`. | O preparador do juiz lê as batidas e o encerramento. A prévia também lê o encerramento para `(b)` de hoje. Pareamento identifica o turno das batidas. Encerramento considera turno aberto vivo e fim previsto. `ponto/turnos.py:2113–2130,2195–2204` · `colaboradores/services/feriado_do_posto.py:462–475`. |
+| Veredito do par | `par_completo` devolve em memória o booleano da consulta preparada. `ponto/turnos.py:2195–2219`. | Na classificação, antes do rollback. `colaboradores/services/feriado_do_posto.py:397–406,462–473`. | A prévia e o detector de par-relâmpago leem a resposta para a mesma pergunta, se as duas batidas pertencem a um mesmo turno encerrado. `core/juizes.py:243–248` · `colaboradores/services/feriado_do_posto.py:462–473` · `ponto/management/commands/detectar_par_relampago.py:285–300`. |
+
+### Provas para a pista
+
+Com dependências simuladas em memória, os três REDs falharam na base, o controle das 17h01 passou, os quatro casos passaram na cura e cada mutante fez seu RED falhar na asserção esperada. A pista com Django e PostgreSQL fica [nao verificado]. `colaboradores/tests/test_feriado_por_posto.py:645–656` · `colaboradores/tests/test_feriado_volta5.py:15–67` · `colaboradores/tests/test_feriado_a5_volta3.py:342–357,367–401`.
+
+Da raiz de `app/`, com `BASE_RED` apontando para a raiz de uma cópia de ensaio da sessão em `d72b72a76`, copie apenas os dois arquivos do RED. O primeiro `prova` deve falhar nos três itens. O segundo, executado na cura, deve passar. As configurações de banco de ensaio são as da pista. `config/settings/ci.py:6–19,40–41`.
+
+```bash
+prova() {
+  PYTHONDONTWRITEBYTECODE=1 python -B manage.py test \
+    colaboradores.tests.test_feriado_por_posto.CascaDoComando.test_apply_sem_motivo_recusa_sem_escrever \
+    colaboradores.tests.test_feriado_volta5 \
+    --settings=config.settings.ci --noinput
+}
+
+cp -- colaboradores/tests/test_feriado_por_posto.py \
+      colaboradores/tests/test_feriado_volta5.py \
+      "$BASE_RED/app/colaboradores/tests/"
+(cd "$BASE_RED/app" && prova)
+prova
+
+PYTHONDONTWRITEBYTECODE=1 python -B manage.py test \
+  $(printf '%s\n' colaboradores/tests/test_feriado_*.py | sed 's/\.py$//; s#/#.#g') \
+  ponto.tests.test_cadastro_futuro_c5e \
+  ponto.tests.test_par_relampago_pelo_turno \
+  --settings=config.settings.ci --noinput
+```
+
+Os três comandos abaixo restauram, em memória, o retorno normal do comando, a classificação sem consultar o juiz e a leitura implícita do relógio, respectivamente. `colaboradores/tests/test_feriado_a5_volta3.py:342–357,391–401`.
+
+```bash
+mutante() {
+  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
+    python -B -c '
+import sys
+import django
+django.setup()
+from colaboradores.tests.test_feriado_a5_volta3 import rodar_mutante
+raise SystemExit(rodar_mutante(sys.argv[1]))
+' "$1"
+}
+mutante volta5_motivo
+mutante volta5_par
+mutante volta5_agora
+```
+
+### Diff e INCOMPLETO
+
+O diff tem **7 arquivos, +139/−40**, incluindo `colaboradores/tests/test_feriado_volta5.py:1–67`, novo na cópia. Os seis arquivos rastreados somam +72/−40. Para reproduzir o stat completo:
+
+```bash
+git diff --stat HEAD
+git diff --no-index --stat /dev/null colaboradores/tests/test_feriado_volta5.py
+```
+
+- O selo contou **44 → 44**. Saiu `timezone.now()` de `previa_da_marca`, em `d72b72a76:app/colaboradores/services/feriado_do_posto.py:385`, fora de `UNIVERSO_RELOGIO`. `ponto/tests/test_cadastro_futuro_c5e.py:327–334,376,576–599`.
+- Pelo escopo do aval, ficaram pendentes a releitura na célula, os testes de omissão de `hoje` em presença e na porta do vínculo, e os dois testes de `SincronizacaoDecideSobATrava`. `MarcaInvalidaSaiComErro` pertence à volta 4. `ponto/portas/celula.py:460–474` · `colaboradores/services/feriado_do_posto.py:74–89` · `colaboradores/services/vinculo.py:871,905–908` · `colaboradores/management/commands/sincronizar_feriado_admin.py:52–72` · `colaboradores/tests/test_feriado_volta4.py:15–25`.
+- Também ficaram fora do recorte os retornos para flags iguais e posto inexistente, a auditoria best-effort e o alcance dela na trilha do vínculo. `colaboradores/management/commands/marcar_feriado_do_posto.py:70–75,111–115` · `core/observ.py:85–98,124–139` · `core/auditoria.py:17–30` · `colaboradores/services/vinculo.py:896–904`.
+- Suíte da pista, `rc` em subprocesso real, certificação Code, Opus final e produção [nao verificado]. [nao verificado]
+
+**Autoconferência BRIEF-SEM-EXCEPT.** `except` adicionados **0**, fallbacks adicionados **0**. A conversão de `MarcaInvalida` continua no handler existente. `colaboradores/management/commands/marcar_feriado_do_posto.py:118–127` · `colaboradores/services/feriado_do_posto.py:379–406` · `ponto/turnos.py:2185–2219`.
 
 ## 21/11 19:09 · sessao eadbfc51bcf6 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1092,191 +1171,4 @@ mutante "$j" "$s3ii" 'resposta if vigente or carimbo_legado' 'resposta if vigent
 
 A confirmação independente do hash da cópia e do isolamento da transação em produção fica [nao verificado].
 
-## 21/11 18:07 · sessao c38aa6f720a9 · MEDIDA-FOLHA-[nome] · sonda · origem=Code
-
-**Na sonda, “Espelho pendente” soma 207 em outubro e 298 em novembro na prévia. Em novembro, a `emp2` tem a única defasagem observada entre o retrato gravado e a prévia. Na Central, a diferença de 1 é aritmética confirmada pelo aval, e a igualdade de universo e instante exigida para provar pílula dissonante está [nao verificado].** `C.<competência>.<empresa>.furo_espelho_colabs`, `E.2026-11.emp2.retrato_gravado_x_previa.mudaram`, `E.2026-11.emp2.retrato_em_memoria_x_previa.mudaram`, `aval.txt:1`, `app/chamados/services/painel.py:230`, `app/core/context_processors.py:68`
-
-Nos quadros, a primeira coluna dá o prefixo `P = competência.empresa`. Cada legenda indica como compor a chave da saída para cada número. As referências ao aval e à linha do log apontam para os anexos fornecidos. O carimbo de lavratura das fotos lidas está [nao verificado].
-
-## (a) Termômetro R1
-
-O E6 compara o espelho com o oráculo por dia-colab e atribui um dono a cada divergência. O universo é o de empresas ativas com fechamentos na competência, sem filtro de aptidão para o TXT. A comparação exclui dia sem linha, isento ou com ausência, sem valor lavrado, zero dos dois lados ou diferença explicada pela pausa declarada. Diferenças de até 10 minutos contam como concordância. `app/ponto/management/commands/e6_oraculo.py:303`, `app/ponto/management/commands/e6_oraculo.py:316`, `app/ponto/management/commands/e6_oraculo.py:331`, `app/ponto/management/commands/e6_oraculo.py:354`, `app/ponto/management/commands/e6_oraculo.py:366`, `app/ponto/management/commands/e6_oraculo.py:378`
-
-Chave `A.P.<coluna>`. Nas colunas dos donos, `dias/colabs` corresponde a `A.P.<dono>.dias` e `A.P.<dono>.colabs`. A união conta pessoas distintas e as duas últimas colunas mostram a sobreposição exata. `app/ponto/management/commands/e6_oraculo.py:378`, `app/ponto/management/commands/e6_oraculo.py:401`
-
-| P | `universo_colabs` | `dias_divergentes` | `ESTRUTURA` dias/colabs | `CADASTRO` dias/colabs | `BATIDA` dias/colabs | `uniao_colabs` | `em_exatamente_2_donos` | `em_exatamente_3_donos` |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| 2026-10.emp1 | 4 | 4 | 0/0 | 0/0 | 4/1 | 1 | 0 | 0 |
-| 2026-10.emp2 | 477 | 265 | 18/10 | 68/28 | 179/94 | 117 | 11 | 2 |
-| 2026-10.emp3 | 119 | 40 | 6/5 | 7/3 | 27/16 | 21 | 1 | 1 |
-| 2026-10.emp4 | 24 | 9 | 2/1 | 0/0 | 7/6 | 7 | 0 | 0 |
-| 2026-11.emp1 | 3 | 4 | 1/1 | 0/0 | 3/1 | 1 | 1 | 0 |
-| 2026-11.emp2 | 460 | 288 | 24/16 | 63/30 | 201/101 | 128 | 15 | 2 |
-| 2026-11.emp3 | 115 | 92 | 11/7 | 16/7 | 65/22 | 28 | 8 | 0 |
-| 2026-11.emp4 | 24 | 9 | 1/1 | 0/0 | 8/5 | 6 | 0 | 0 |
-
-## (b) Prévia e retrato × donos do R1
-
-A prévia usa `classificar_export` sobre os fechamentos da empresa e competência, sem filtro de status. O retrato lê as linhas já gravadas. A ponte conta colabs por competência. As colunas dos donos são interseções com o R1 e podem se sobrepor. `app/folha/views.py:350`, `app/folha/export.py:782`, `app/folha/retrato_folha.py:98`, `app/ponto/management/commands/e6_oraculo.py:305`, `app/ponto/management/commands/e6_oraculo.py:378`
-
-Cada célula segue a ordem **`no_r1 / sem_divergencia_r1 / ESTRUTURA / CADASTRO / BATIDA / so_no_leitor`**. A chave é `B.P.<leitor>.<coluna>.<métrica>`. Nas linhas sem leitor indicado, o valor vale para as duas chaves, `previa` e `retrato`.
-
-| P | Leitor | `universo` | `entram` | `fora_txt` | `furo_espelho` | `sem_codigo_dominio` | `ferias_com_batida` |
-|---|---|---|---|---|---|---|---|
-| 2026-10.emp1 | Ambos | 4/3/0/0/1/0 | 0/0/0/0/0/0 | 4/3/0/0/1/0 | 2/1/0/0/1/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
-| 2026-10.emp2 | Ambos | 477/360/10/28/94/0 | 244/196/4/9/41/0 | 233/164/6/19/53/0 | 173/106/6/19/51/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
-| 2026-10.emp3 | Ambos | 119/98/5/3/16/0 | 82/71/1/0/11/0 | 37/27/4/3/5/0 | 24/17/3/2/4/0 | 1/1/0/0/0/0 | 1/1/0/0/0/0 |
-| 2026-10.emp4 | Ambos | 24/17/1/0/6/0 | 14/12/0/0/2/0 | 10/5/1/0/4/0 | 8/4/1/0/3/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
-| 2026-11.emp1 | Ambos | 3/2/1/0/1/0 | 0/0/0/0/0/0 | 3/2/1/0/1/0 | 2/1/1/0/1/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
-| 2026-11.emp2 | `previa` | 460/332/16/30/101/0 | 191/157/5/4/28/0 | 269/175/11/26/73/0 | 240/146/11/26/73/0 | 1/1/0/0/0/0 | 1/1/0/0/0/0 |
-| 2026-11.emp2 | `retrato` | 460/332/16/30/101/0 | 192/158/5/4/28/0 | 268/174/11/26/73/0 | 239/145/11/26/73/0 | 1/1/0/0/0/0 | 1/1/0/0/0/0 |
-| 2026-11.emp3 | Ambos | 115/87/7/7/22/0 | 51/47/0/1/3/0 | 64/40/7/6/19/0 | 51/28/7/6/18/0 | 0/0/0/0/0/0 | 1/1/0/0/0/0 |
-| 2026-11.emp4 | Ambos | 24/18/1/0/5/0 | 16/14/1/0/1/0 | 8/4/0/0/4/0 | 5/1/0/0/4/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
-
-A barra do retrato separa `bloqueado` de `modulo_proprio`, que recebe as rescisões na janela. A prévia inclui essas rescisões em `fora_txt`. Mesma ordem de métricas, com chave `B.P.retrato.<coluna>.<métrica>`. `app/folha/retrato_folha.py:27`, `app/folha/retrato_folha.py:89`, `app/folha/views.py:351`
-
-| P | `bloqueado` | `modulo_proprio` |
-|---|---|---|
-| 2026-10.emp1 | 3/2/0/0/1/0 | 1/1/0/0/0/0 |
-| 2026-10.emp2 | 174/107/6/19/51/0 | 59/57/0/0/2/0 |
-| 2026-10.emp3 | 26/19/3/2/4/0 | 11/8/1/1/1/0 |
-| 2026-10.emp4 | 9/5/1/0/3/0 | 1/0/0/0/1/0 |
-| 2026-11.emp1 | 3/2/1/0/1/0 | 0/0/0/0/0/0 |
-| 2026-11.emp2 | 241/147/11/26/73/0 | 27/27/0/0/0/0 |
-| 2026-11.emp3 | 52/29/7/6/18/0 | 12/11/0/0/1/0 |
-| 2026-11.emp4 | 6/2/0/0/4/0 | 2/2/0/0/0/0 |
-
-- **Mesmo universo de pessoas, sim**, em cada linha do quadro. Em ambos os leitores, `B.P.<leitor>.r1_sem_linha = 0` e `B.P.<leitor>.universo.so_no_leitor = 0`. Para cada `P`, `B.P.empresa_no_seletor = 1` e `B.P.retrato_presente = 1`. `app/ponto/management/commands/e6_oraculo.py:305`, `app/folha/export.py:782`, `app/folha/retrato_folha.py:98`
-- **Mesma competência, sim.** R1 e prévia foram lidos na mesma rodada. A leitura do retrato nessa rodada usa a foto gravada, cujo `lavrado_em` está [nao verificado]. A coincidência de datas individuais entre o dia divergente do R1 e o dia que reteve na folha também está [nao verificado]. Em outubro, a igualdade acima é dos agregados da ponte. `app/ponto/janelas.py:54`, `app/ponto/management/commands/e6_oraculo.py:284`, `app/folha/fora_da_folha.py:146`, `app/folha/models.py:356`, `app/folha/retrato_folha.py:1237`
-
-## (c) Espelho pendente por motivo diário e rota
-
-A sonda abre o detalhe diário dos retidos por `furo_espelho` no universo comum com o R1. O leitor respeita a janela do vínculo e as dispensas por isenção, desligamento e vereditos dispensados. A unidade do detalhe é dia-colab, com pessoas distintas por célula da tabela. Uma pessoa pode aparecer em vários motivos ou rotas. `app/folha/fora_da_folha.py:115`, `app/folha/fora_da_folha.py:146`, `app/folha/export.py:1205`, `app/folha/export.py:1238`, `app/folha/export.py:1264`, `app/folha/export.py:1293`, `app/folha/retrato_folha.py:1024`
-
-| P | `furo_espelho_colabs` | `retidos_sem_dia_detalhado` |
-|---|---:|---:|
-| 2026-10.emp1 | 2 | 0 |
-| 2026-10.emp2 | 173 | 0 |
-| 2026-10.emp3 | 24 | 0 |
-| 2026-10.emp4 | 8 | 0 |
-| 2026-11.emp1 | 2 | 0 |
-| 2026-11.emp2 | 240 | 0 |
-| 2026-11.emp3 | 51 | 0 |
-| 2026-11.emp4 | 5 | 0 |
-
-O quadro acima usa `C.P.<coluna>`. No próximo, cada par é `dias/colabs`. A chave do Total é `C.P.<motivo>.<dias ou colabs>`. Nas outras colunas é `C.P.<motivo>.<rota>.<dias ou colabs>`. `—` indica chave ausente no bloco fornecido. As rotas são `chamados:modal_fio` para o fio, `colaboradores:calendario_ponto` para Resolver dia e `ponto:painel_ausencia` para Decidir ausência. A sonda identificou as rotas publicadas. A abertura e a resolução pela tela estão [nao verificado]. `app/folha/retrato_folha.py:989`, `app/folha/retrato_folha.py:1016`, `app/chamados/urls.py:39`, `app/colaboradores/urls.py:24`, `app/ponto/urls.py:70`
-
-| P | Motivo | Total | Fio | Calendário | Ausência | **`sem_porta`** | **`sem_leitura`** |
-|---|---|---:|---:|---:|---:|---:|---:|
-| 2026-10.emp1 | `espelho_furo` | 1/1 | — | 1/1 | — | — | — |
-| 2026-10.emp1 | `espelho_nunca_bateu` | 14/1 | 10/1 | — | — | **4/1** | — |
-| 2026-10.emp1 | `sem_celula` | 24/2 | — | 15/2 | — | **8/2** | **1/1** |
-| 2026-10.emp2 | `espelho_cobrado` | 212/68 | 206/65 | 1/1 | 5/4 | — | — |
-| 2026-10.emp2 | `espelho_cobranca_indevida` | 5/1 | — | 2/1 | — | **3/1** | — |
-| 2026-10.emp2 | `espelho_discordante` | 13/10 | 2/2 | 7/7 | — | — | **4/2** |
-| 2026-10.emp2 | `espelho_fato_em_ausencia` | 17/15 | 3/3 | 11/10 | — | **1/1** | **2/2** |
-| 2026-10.emp2 | `espelho_furo` | 197/84 | 179/78 | 14/8 | 4/2 | — | — |
-| 2026-10.emp2 | `espelho_indefinida` | 173/40 | 153/32 | 5/1 | — | **13/8** | **2/1** |
-| 2026-10.emp2 | `espelho_nunca_bateu` | 157/6 | 96/6 | — | 1/1 | **60/4** | — |
-| 2026-10.emp3 | `espelho_cobrado` | 50/16 | 50/16 | — | — | — | — |
-| 2026-10.emp3 | `espelho_discordante` | 3/1 | 2/1 | 1/1 | — | — | — |
-| 2026-10.emp3 | `espelho_furo` | 58/13 | 58/13 | — | — | — | — |
-| 2026-10.emp3 | `espelho_indefinida` | 16/7 | 12/6 | — | — | **1/1** | **3/1** |
-| 2026-10.emp3 | `espelho_nunca_bateu` | 30/1 | 15/1 | — | — | **15/1** | — |
-| 2026-10.emp4 | `espelho_cobrado` | 5/4 | 5/4 | — | — | — | — |
-| 2026-10.emp4 | `espelho_fato_em_ausencia` | 1/1 | — | 1/1 | — | — | — |
-| 2026-10.emp4 | `espelho_furo` | 6/5 | 6/5 | — | — | — | — |
-| 2026-11.emp1 | `espelho_cobrado` | 1/1 | 1/1 | — | — | — | — |
-| 2026-11.emp1 | `sem_celula` | 41/2 | — | 22/2 | — | **19/2** | — |
-| 2026-11.emp2 | `espelho_cobrado` | 505/128 | 484/121 | 17/9 | 3/3 | — | **1/1** |
-| 2026-11.emp2 | `espelho_cobranca_indevida` | 11/6 | 9/4 | — | — | **2/2** | — |
-| 2026-11.emp2 | `espelho_discordante` | 12/9 | 5/5 | 7/4 | — | — | — |
-| 2026-11.emp2 | `espelho_fato_em_ausencia` | 12/9 | 5/3 | 7/6 | — | — | — |
-| 2026-11.emp2 | `espelho_furo` | 222/117 | 206/111 | 12/6 | 1/1 | **1/1** | **2/2** |
-| 2026-11.emp2 | `espelho_indefinida` | 250/58 | 227/52 | 1/1 | — | **22/7** | — |
-| 2026-11.emp2 | `espelho_nunca_bateu` | 119/9 | 51/7 | 68/9 | — | — | — |
-| 2026-11.emp3 | `espelho_cobrado` | 103/30 | 103/30 | — | — | — | — |
-| 2026-11.emp3 | `espelho_discordante` | 4/2 | 3/1 | 1/1 | — | — | — |
-| 2026-11.emp3 | `espelho_fato_em_ausencia` | 1/1 | — | 1/1 | — | — | — |
-| 2026-11.emp3 | `espelho_furo` | 80/30 | 79/29 | 1/1 | — | — | — |
-| 2026-11.emp3 | `espelho_indefinida` | 34/11 | 34/11 | — | — | — | — |
-| 2026-11.emp3 | `espelho_nunca_bateu` | 15/1 | 7/1 | 8/1 | — | — | — |
-| 2026-11.emp4 | `espelho_cobrado` | 7/3 | 5/3 | 2/1 | — | — | — |
-| 2026-11.emp4 | `espelho_furo` | 5/3 | 5/3 | — | — | — | — |
-
-| Motivo | O que retém o dia |
-|---|---|
-| `sem_celula` | Dia passado com vínculo sem célula, ou célula com previsão definida e sem veredito. `app/folha/export.py:1264`, `app/folha/export.py:1293` |
-| `espelho_furo` | Furo integral ou parcial com veredito ainda acusador. `app/escala/models.py:1612`, `app/escala/models.py:1767` |
-| `espelho_cobrado` | A cobrança foi reconhecida e o dia segue acusado. `app/ponto/services/cartorio.py:1534`, `app/escala/models.py:1767` |
-| `espelho_cobranca_indevida` | Cobrança em dia sem trabalho ou sem furo. `app/escala/models.py:1613` |
-| `espelho_discordante` | Batida órfã fora da tolerância, realizado inflado ou realizado zero com turno. `app/escala/models.py:1616` |
-| `espelho_fato_em_ausencia` | Trabalho em dia coberto por ausência. `app/escala/models.py:1617`, `app/escala/models.py:1754` |
-| `espelho_indefinida` | Dia previsto indefinido, fase por declarar ou ausência parcial sem período. `app/escala/models.py:1615` |
-| `espelho_nunca_bateu` | Falta de adesão ao ponto em dia de trabalho sem cobertura integral. `app/ponto/services/cartorio.py:1312`, `app/ponto/services/cartorio.py:1318` |
-
-**Achado de desenho para o BO:** as células `sem_porta` registram ocorrências em que o motivo reteve o dia e o mapa deixou o admin sem rota publicada para a ocorrência. `sem_leitura` registra separadamente os dias sem rota em que o fio ficou `nao_sei`. `C.P.<motivo>.sem_porta.{dias,colabs}`, `C.P.<motivo>.sem_leitura.{dias,colabs}`, `app/folha/fora_da_folha.py:86`, `app/folha/retrato_folha.py:989`, `app/folha/retrato_folha.py:1024`
-
-| Competência | Aval `aval.txt:1` | Prévia `Σ C.P.furo_espelho_colabs` | Retrato `Σ B.P.retrato.furo_espelho.no_r1` |
-|---|---:|---:|---:|
-| 2026-10 | 207 | 2 + 173 + 24 + 8 = **207** | 2 + 173 + 24 + 8 = **207** |
-| 2026-11 | 298 | 2 + 240 + 51 + 5 = **298** | 2 + 239 + 51 + 5 = **297** |
-
-As somas usam `emp1` a `emp4` na competência da linha. Em outubro, o 207 bate nos dois leitores. Em novembro, o 298 bate na prévia e o retrato fica um abaixo, na `emp2`. `C.2026-11.emp2.furo_espelho_colabs`, `B.2026-11.emp2.retrato.furo_espelho.no_r1`, `aval.txt:1`
-
-## (d) Central
-
-| Contador | Valor citado | Fonte, unidade e universo |
-|---|---:|---|
-| **Validar** | 707 · `aval.txt:1` | `verbos_contagens.validar.n`. Conta chamados vivos classificados nesse verbo, dentro do recorte efetivo da Central. `app/templates/chamados/painel_gestao.html:42`, `app/chamados/services/painel.py:198`, `app/chamados/services/painel.py:230`, `app/chamados/services/verbos.py:30` |
-| **Decidir** | 705 · `aval.txt:1` | `verbos_contagens.decidir.n`. Conta chamados do mesmo recorte classificados no verbo Decidir. O juiz atribui um verbo por chamado e remapeia os silenciados. `app/templates/chamados/painel_gestao.html:79`, `app/chamados/services/painel.py:230`, `app/chamados/services/verbos.py:46` |
-| **Pra decidir** | 1413 · `aval.txt:1` | `badge_chamados` de `PlacarNavbar`. O cron computa Validar + Decidir para o tenant sem filtros e grava a soma com o `payload_placar` da mesma rodada. `app/templates/chamados/painel_gestao.html:191`, `app/core/context_processors.py:68`, `app/core/management/commands/lavrar_badge_navbar.py:39`, `app/core/management/commands/lavrar_badge_navbar.py:72`, `app/core/management/commands/lavrar_badge_navbar.py:91` |
-
-- **Mesmo universo e mesmo instante.** Para o mesmo payload gravado, `badge_chamados = Validar + Decidir` por construção. O aval traz `707 + 705 = 1412`, contra `1413` no cabeçalho. A igualdade de universo e instante para esses valores está [nao verificado]. A diferença observada, portanto, **não prova pílula dissonante** no sentido exigido pelo aval. `aval.txt:1`, `app/chamados/services/verbos.py:22`, `app/chamados/services/verbos.py:25`, `app/core/management/commands/lavrar_badge_navbar.py:72`, `app/core/management/commands/lavrar_badge_navbar.py:91`
-- **Diferença de universo ou instante.** O código permite pílulas ao vivo com filtro e cabeçalho global lavrado. Mesmo sem filtro, a renderização inicial pode contar ao vivo enquanto o cabeçalho lê a lavra. O refresh sem filtros pode buscar as pílulas no payload lavrado. Se faltar lavra, o cabeçalho tenta o mesmo juiz ao vivo para o tenant inteiro e, em caso de exceção, usa `qs_na_fila().count()`, de outro recorte. Qual desses caminhos produziu a diferença de 1 está [nao verificado]. `app/chamados/views.py:727`, `app/chamados/views.py:840`, `app/chamados/views.py:849`, `app/templates/chamados/painel_gestao.html:302`, `app/core/context_processors.py:68`, `app/core/context_processors.py:87`, `app/chamados/services/painel.py:188`, `aval.txt:1`
-
-## (e) Competência 11 — gravado × prévia × reconstrução em memória
-
-O retrato gravado vem de `linhas_do_retrato`. A reconstrução usa `montar_linhas`, chamada pelo lavrador antes de persistir, e deriva `status` e `motivo` do mesmo classificador da prévia. A sonda compara presença e o par `status/motivo` por colab-competência, na mesma leitura e com relógio comum para os leitores atuais. Datas dos dias, ações e fios ficam fora dessa comparação. `app/folha/retrato_folha.py:98`, `app/folha/retrato_folha.py:1212`, `app/folha/retrato_folha.py:1222`, `app/folha/retrato_folha.py:1237`, `app/folha/fora_da_folha.py:146`, `app/folha/management/commands/lavrar_retrato_folha.py:65`, `app/folha/management/commands/lavrar_retrato_folha.py:77`
-
-Cada célula segue a ordem **`so_esquerda / so_direita / mudaram`**, com chave `E.P.<coluna>.<métrica>`.
-
-| P | `retrato_em_memoria_x_previa` | `retrato_gravado_x_previa` | `retrato_gravado_x_em_memoria` | Leitura |
-|---|---:|---:|---:|---|
-| 2026-11.emp1 | 0/0/0 | 0/0/0 | 0/0/0 | Coincidem no recorte medido |
-| 2026-11.emp2 | 0/0/0 | 0/0/1 | 0/0/1 | **Defasagem** |
-| 2026-11.emp3 | 0/0/0 | 0/0/0 | 0/0/0 | Coincidem no recorte medido |
-| 2026-11.emp4 | 0/0/0 | 0/0/0 | 0/0/0 | Coincidem no recorte medido |
-
-Na `emp2`, a mudança é de `entra` na foto para `fora` por `furo_espelho` nos dois leitores atuais. É defasagem do veredito gravado, com o mesmo conjunto de pessoas. A comparação em memória coincide com a prévia em todas as empresas nos campos medidos. A idade da defasagem e o evento que a produziu estão [nao verificado]. `E.2026-11.emp2.retrato_gravado_x_previa.entra.-__fora.furo_espelho`, `E.2026-11.emp2.retrato_gravado_x_em_memoria.entra.-__fora.furo_espelho`, `E.P.retrato_em_memoria_x_previa.{so_esquerda,so_direita,mudaram}`, `app/folha/models.py:356`
-
-**Onde batem 302 e 303.** A tabela usa as chaves `B.P.<leitor>.<balde>.no_r1`. A última coluna aplica à prévia a regra de **Bloqueados** do retrato. Ela subtrai `retrato.modulo_proprio` de `previa.fora_txt` porque os pares de `status/motivo` preservam esse módulo na comparação E. A única mudança foi de `entra` para `fora.furo_espelho`. Pela igualdade memória × prévia nesses campos, a última coluna também é o valor derivado para a reconstrução em memória. `app/folha/retrato_folha.py:27`, `app/folha/retrato_folha.py:89`, `app/folha/views.py:351`, `E.P.retrato_em_memoria_x_previa.mudaram`, `E.2026-11.emp2.retrato_gravado_x_previa.entra.-__fora.furo_espelho`
-
-| P | `retrato.bloqueado` | `retrato.modulo_proprio` | `retrato.fora_txt` | `previa.fora_txt` | Prévia/memória no recorte de Bloqueados |
-|---|---:|---:|---:|---:|---:|
-| 2026-11.emp1 | 3 | 0 | 3 | 3 | 3 − 0 = 3 |
-| 2026-11.emp2 | 241 | 27 | 268 | 269 | 269 − 27 = 242 |
-| 2026-11.emp3 | 52 | 12 | 64 | 64 | 64 − 12 = 52 |
-| 2026-11.emp4 | 6 | 2 | 8 | 8 | 8 − 2 = 6 |
-| Soma das chaves acima | **302** | **41** | **343** | **344** | **303** |
-
-O **302** do aval bate com **Bloqueados** do retrato. O **303** bate com a prévia e a memória quando se aplica esse mesmo recorte. Se a referência for o contador literal **Retidos do TXT** da prévia, a sonda soma **344**. No recorte equivalente do retrato, `fora_txt` soma **343**. A tela, os filtros e o carimbo que deram origem aos números citados no aval estão [nao verificado]. `aval.txt:1`, `B.P.retrato.bloqueado.no_r1`, `B.P.retrato.modulo_proprio.no_r1`, `B.P.retrato.fora_txt.no_r1`, `B.P.previa.fora_txt.no_r1`, `app/folha/views.py:408`, `app/folha/retrato_folha.py:89`
-
-## (f) Porta do export
-
-**Linha fornecida, com o identificador da tentativa omitido.** `f_linhas_export.txt:1`
-
-```text
-2026-11-21 07:04:59,754 WARNING ponto.recusa_critica RECUSA-ACAO-CRITICA porta=porta_export […] objeto=emp3:2026-12:[…] tipo=erro motivo=antes=em_curso depois=concluido origem=cron […] os leitores discordam em 1 ponto(s)
-```
-
-- **Contagem e causa.** A linha fornecida corresponde a uma tentativa da `emp3`, competência **12/2026**, concluída pelo cron com resultado divergente e `n=1`. O ESTADO conta recusas dessa porta pela data local das linhas de `ponto.log` e dos rotados. O anexo sustenta uma ocorrência. O total nos arquivos completos e qual teste compôs o `1` estão [nao verificado]. `aval.txt:1`, `f_linhas_export.txt:1`, `bin/recusa_estado.py:60`, `app/core/recusa_critica.py:95`, `app/core/recusa_critica.py:108`, `app/core/recusa_critica.py:133`, `app/config/crons.py:1809`, `app/folha/porta_export.py:1235`, `app/folha/porta_export.py:1273`
-- **Impacto.** A tentativa do cron mediu e gravou o carimbo. Com esse carimbo vigente, a porta retorna `DIVERGENTE` e o POST é recusado antes da montagem do TXT. Exportação anterior ou posterior dessa empresa e competência está [nao verificado]. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:218`, `app/folha/porta_export.py:1273`, `app/folha/porta_export.py:1388`, `app/folha/views.py:130`, `app/folha/views.py:270`
-
-## (g) «Gerar TXT para conferir»
-
-**Achado de desenho.** O GE
-
-[truncado em 20000 de 21098 caracteres]
-
-_7740 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7741 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
