@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 11:48:23.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (15.3 MB). Acoes na janela: **408**.
+**Medido em 21/11/2026 11:54:08.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (15.5 MB). Acoes na janela: **412**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:51:33 | Bash | Rerun selo to name failing mutant | `cd /home/ronald/wt-travas-m5-095844; timeout 900 bash bin/tests/test_pista_lateral.sh > /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/scratchpad/selo_cura.out 2>&1; echo rc=$?; /bin/grep -v '^Traceback\\|^ File\\|^AssertionError' /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/scratchpad/selo_cura.out \| tail -25` |
+| 11:51:28 | Bash | Read selo tail section | `cd /home/ronald/wt-travas-m5-095844; sed -n 286,300p bin/tests/test_pista_lateral.sh` |
+| 11:51:25 | Bash | Fix mutante name in failure message | `cd /home/ronald/wt-travas-m5-095844; sed -i '275s/mutante \$MUT nao/mutante $1 nao/' bin/tests/test_pista_lateral.sh; sed -n 275p bin/tests/test_pista_lateral.sh; /bin/grep -n 'MUT' bin/tests/test_pista_lateral.sh \| head` |
+| 11:51:19 | Bash | Inspect selo output and mutante function | `cd /home/ronald/wt-travas-m5-095844; head -40 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/scratchpad/selo_cura.out; /bin/grep -n '_mutante()' -A14 bin/tests/test_pista_lateral.sh \| head -30` |
 | 11:47:40 | Bash | Run pista selo on cured copy | `cd /home/ronald/wt-travas-m5-095844; timeout 900 bash bin/tests/test_pista_lateral.sh > /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/scratchpad/selo_cura.out 2>&1; echo rc=$?; tail -25 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/scratchpad/selo_cura.out` |
 | 11:47:32 | Bash | Patch selo with registry dispatch and new cases | `cd /home/ronald/wt-travas-m5-095844; cat > /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/scratchpad/patch_selo.py <<'PYX' f = 'bin/tests/test_pista_lateral.sh' s = open(f).read() def rep(a, b): global s assert s.count(a) == 1, (s.count(a), a[:90]) s = s.replace(a, b) rep("""# H1-H4 o registro PreToolUse FD1-FD6 a ficha de rascunho """, """# H1-H7 o registro PreTool ...` |
 | 11:45:55 | Bash | Check disjuntor imports standalone | `cd /home/ronald/wt-travas-m5-095844; /bin/grep -nE "^(import\|from) " bin/disjuntor.py; d=$(mktemp -d); cp bin/disjuntor.py bin/orcamento_contexto.py $d/; python3 -B -c "import sys; sys.path.insert(0,'$d'); import disjuntor; print('ok')"; rm -rf $d` |
