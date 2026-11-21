@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 12:03** · publicado em **21/11/2026 12:05** (UTC-3)
+> Ultima resposta processada: **21/11/2026 12:09** · publicado em **21/11/2026 12:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 12:09 · sessao a161069b9565 · E4C-F5 · verificador · origem=Code
+
+**E4C-F5 `003abf218` — BLOQUEIA o pouso.** Os cinco testes D e o teste de texto atingem os sítios pedidos. Permanecem divergências entre seleção SQL e leitura composta, decisões sobre instâncias carregadas antes de uma escrita, dois relógios na ressuscitação e evidência incompleta no PRONTO. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:60–208`, `app/chamados/juizes.py:1583–1599`, `app/chamados/services/validacao.py:1074–1104`, `app/chamados/models.py:1558,1702`, `app/docs/RELATO.md:92–94`.
+
+Conferi a cópia e os snapshots locais das bases fornecidas em leitura. O inventário `ebfdcc4df` → cópia bate com `stat.txt` e `testes_numstat.txt`, e `b0935` → cópia difere apenas nos dois arquivos de teste do item 1. A cópia não contém metadados Git para autenticar o SHA. Suite, banco, logs integrais e implantação [nao verificado].
+
+## 1. Escopo — BLOQUEIA
+
+- **Leitura mista introduzida no slot.** `if respondida is None and p.respondida_em is not None:` combina a projeção temporal da composta com a coluna. Com ato vigente posterior ao horizonte e coluna nula, a guarda deixa calcular um slot que deveria ficar fora daquela consulta. A interpretação de `respondida is None` também inclui ato já desfeito. O recorte do invariante de escrita para `validada_em` consta do 1440, mas uma exceção nominal para essa leitura mista [nao verificado]. `app/chamados/juizes.py:344–378`, `app/docs/RELATO.md:148–157`.
+- **Seletores que ainda decidem antes do compositor.** `return Q(respondida_em__isnull=False) & Q(resposta_colab__regex=_RE_TEM_TEXTO)` é a face da coluna. Ela seleciona a irmã do intervalo, a fila para validar, as corrigíveis e a metade que entra no materializador. A chamada posterior à composta não recupera um PK já excluído. As chamadas são preexistentes ou preservadas nos hunks migrados. O 0545 mantém filas de **validação** na coluna, e o 1440 adia o invariante do **instante**. Uma exceção específica para a seleção da irmã e para as portas de correção e materialização [nao verificado]. `app/chamados/juizes.py:1583–1599,1762–1776`, `app/chamados/services/materializacao.py:139–150,2140–2163`, `app/chamados/models.py:1549–1555`.
+- **Outros leitores de instante/carimbo que encontrei fora do compositor.** `respondida_sem_texto(p)` em porta e vigia, o filtro de recuperação do legado, o limbo do credor, `Max('respondida_em')` da lavra, a idade da fila e a serialização das APIs. Há também leitura direta no modal e no cartão da pergunta. Os papéis são distintos, mas a autorização nominal de cada leitor [nao verificado]. `app/chamados/juizes.py:1752`, `app/chamados/services/vigia_fio.py:635,749`, `app/chamados/services/validacao.py:406–408,1275`, `app/chamados/services/disputa_emissao.py:1899`, `app/chamados/veredito_lavrado.py:206–209`, `app/api/views.py:1163–1165,2663`, `app/api/views_mensageria.py:569–572`, `app/templates/chamados/partials/modal_fio.html:219–228,345`, `app/templates/chamados/partials/_pergunta_card.html:20–42`.
+- **Exceções e leituras de outra finalidade.** O placar lê a tupla da projeção e tem exceção nominal no selo. `resposta_display` lê o texto do ato. As fotos de ressuscitação, silêncio, retratação e histórico leem o ato para trilha ou exibição. O vigia compara as duas fontes. O C19 lê a sequência até seu horizonte, e H4 lê o vínculo de absorção e a ordem de inserção. A face SQL de validação já existia na F2. `app/chamados/services/raiox.py:135–147`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:23–28`, `app/chamados/models.py:1705–1718,2110–2112,2242–2246,3591–3618,3854–3868,4402–4425`, `app/chamados/services/historico.py:97–111`, `app/chamados/services/tarefa_do_dia.py:387–429`, `app/chamados/services/vigia_texto_resposta.py:17–24`, `app/docs/RELATO.md:131–136,1486`.
+- O cache do modal tem registro no RELATO e delega à mesma contagem. H4, a guarda do par e a saída de SILÊNCIO têm os despachos na cópia. A correspondência nominal de **cada** carregador com os 59 pontos de toque permanece [nao verificado]. O mapa publicado na cópia explicita lacunas. `app/chamados/templatetags/chamados_tags.py:221–238`, `app/templates/chamados/partials/modal_fio.html:396`, `app/docs/RELATO.md:94,131–136,155–156,274,798`.
+
+## 2. Escritores, leitores e significado — BLOQUEIA
+
+| Campo ou valor | Escritores e leitores conferidos |
+|---|---|
+| `validada_em` | Validação e devoluções gravam coluna e ato. A resposta humana limpa e grava `RESPOSTA`. Reabertura e ressuscitação limpam pelo lote com ato compensador. `carimbar` pode preencher a coluna, e a leitura pode interpretá-la como passivo, sem `VALIDACAO` física. Leem a composta a correção, declaração, par, materializador, lote, estado, C6 e veredito. Filas, vigias e procedência também leem a coluna. `app/chamados/services/validacao.py:161–175,264–296,365–374,656,702,916,1082,1104`, `app/chamados/services/disputa_emissao.py:1503–1537,1664–1684`, `app/chamados/models.py:1702–1722,2024–2026,3259–3262,3371–3393,4318–4322`, `app/chamados/services/acoes_disputa.py:349`, `app/chamados/services/declaracao_texto.py:229`, `app/chamados/services/materializacao.py:201–203,2144,2161`, `app/chamados/services/vigia_carimbo.py:98`, `app/ponto/services/procedencia_batida.py:74`. |
+| `respondida_em` e `resposta_colab` | Resposta humana, automática, carimbo da trilha, nascimento, carimbo e portas de reabertura/ressuscitação. A composta lê instante vigente da sequência e texto corrente da projeção. Histórico migra o instante e mantém o texto corrente. O app serializa ambos e também inclui `resposta_display`, que tem fonte distinta. `app/chamados/services/disputa_emissao.py:1495–1537,1664–1684,1689–1737`, `app/chamados/models.py:3053–3055,3234,1721–1722,3367–3370,3844,3868,4388–4390`, `app/chamados/services/validacao.py:450–456`, `app/chamados/services/historico.py:97–111`, `app/api/views.py:2579–2590`. |
+| `materializada_em` e `via_resolucao` | `_escrever_carimbo` aplica o par usado por carimbo, identidade e descarimbo. O descarimbo em lote e as portas de alteração exclusiva da via também escrevem. Leem C6, estado, materializador, grupo de ausência, H4 e procedência de batida. `app/chamados/models.py:3324–3328,3366,3416–3460,3500–3550,4388–4425`, `app/chamados/services/relavra_via.py:118–126`, `app/chamados/juizes.py:1393–1403`, `app/chamados/services/materializacao.py:879–896,1154–1167,2143–2161`, `app/ponto/services/procedencia_batida.py:74`. |
+| `decisoes` e `LeituraComposta` | A inserção passa por `registrar`. `leitura` ordena por `(ato_em, pk)` e acrescenta o passivo sem correspondência após as linhas reais empatadas. `composta` monta cinco valores. Consumidores centrais são C6/C21, estado, sem veredito, app, histórico e portas da volta D. H4 ordena pelo PK de inserção para responder se uma absorção foi revogada. `app/chamados/models.py:4252–4254,4348–4390,4402–4449`, `app/chamados/juizes.py:1406–1428,1550–1560`, `app/api/views.py:2579–2602`, `app/chamados/services/historico.py:97–111`, `app/chamados/services/validacao.py:1082,1104`. |
+| Universo de `fechar` | Todas as perguntas da relação inversa da disputa, com atos. A lista passa a `respostas_sem_veredito` e ao C6 e fornece as vivas, os destinos a travar e os PKs da trilha. A porta de fechar grava a disputa e dispara a cascata do pai. `app/chamados/models.py:1982–2027,2071–2126`, `app/chamados/signals.py:43`. |
+| Contador de texto e retorno do lote | O vigia compara literalmente ato e `(p.resposta_colab or '')`, sem normalizar caixa ou espaços. A entrada humana aplica `strip`, e o C21 usa o vazio após trim. O lote soma PKs validados e devolve recusas por PK. JSON, HTMX e copiloto consomem o retorno. `app/chamados/services/vigia_texto_resposta.py:17–25`, `app/chamados/services/disputa_emissao.py:1446–1448,1689–1714`, `app/chamados/juizes.py:1534–1560`, `app/chamados/services/validacao.py:1063–1114`, `app/chamados/views_cobrar.py:263–269,381–388`, `app/core/views_ia.py:169–191`, `app/templates/chamados/partials/_lote_preview.html:6–9`. |
+
+**Trecho que bloqueia.** A minuta aprovada diz “Se a coluna estava vazia, a passagem não a preenche”. A passagem chama `q.carimbar(..., resposta='validar')`. Para uma irmã com texto anterior ou empatado com T1 e sem validação, `if resposta == 'validar' and self.validada_em is None: self.validada_em = quando` abre o caminho de escrita. O passivo sintético pode fazer o par retornar `(True, True)` e deixar o carimbo passar. O teste do grupo chega a exigir `validada_em=T1` para o escape de hora. O literal aprovado e o contrato exercitado divergem. `app/docs/RELATO.md:413–421`, `app/chamados/services/materializacao.py:1065–1087`, `app/chamados/models.py:3367–3393,4318–4322`, `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:189–209`.
+
+Os carimbos são instantes com `USE_TZ=True`. O C6 e a tarefa incluem o empate com `agora`. `data_evento` representa dia do turno para pergunta de fato e dia civil para conversa, que a função do dia do turno exclui. O memo C6 é de instância, e o contador do modal é de render por disputa. O censo completo de acessos dinâmicos, templates indiretos e consumidores fora das famílias acima [nao verificado]. `app/config/settings/base.py:93–95`, `app/chamados/models.py:2633–2659,3699`, `app/chamados/juizes.py:337–341,857–907,1394–1402`, `app/chamados/services/tarefa_do_dia.py:391–404`, `app/chamados/templatetags/chamados_tags.py:231–238`.
+
+## 3. Cache depois da escrita — BLOQUEIA
+
+- **Lote, antes do próximo item.** `achadas = {...prefetch_related('decisoes')}` é avaliado antes de todo o laço. Cada volta faz `perg = achadas.get(ref)`. Validar uma metade pode validar a outra em `_validar_o_par`; a outra instância já carregada no lote conserva a coluna e os atos anteriores e passa pela guarda de entrada com essa foto. A releitura de 1103 só vale para o item depois de chamar a ação. `app/chamados/services/validacao.py:648–659,1074–1086,1094–1104`.
+- **Disputa fechada com universo anterior à trava.** `perguntas = list(...)`, `_pend = self.respostas_sem_veredito(...)` e `vivas = [...]` antecedem `trava_na_ordem`. A porta grava usando as mesmas instâncias. Uma resposta pode entrar antes de o fecho adquirir a trava, e o fecho continua com a decisão anterior. A posição da trava é preexistente, e o hunk elimina a segunda carga de perguntas que havia entre as guardas. `app/chamados/models.py:2071–2106,2118–2126`, `app/chamados/services/disputa_emissao.py:1478–1537`, `prod.diff`, hunk de `DisputaSupervisao.fechar`.
+- **Absolvição pela célula.** O queryset passa a carregar `decisoes` antes da trava. Depois de `trava_do_colaborador(_cid)`, a porta chama `_gravou = p.carimbar(...)` na mesma instância. Uma resposta ou validação interposta por outra instância não invalida aquele prefetch. A separação entre seleção e trava já existia para as colunas, e o diff estende a foto velha aos atos. `app/chamados/reconciliador.py:635–646,696–724`, `app/chamados/models.py:3375–3386,4361,4443–4449`.
+- **Pontos que passam.** A releitura do item em `1103–1104` usa refresh integral e depois a composta. A corrida nova intercala o escritor real justamente entre essas duas linhas. O core relê integralmente sob a trava, antes do veto e da escrita, e `registrar` invalida prefetch e memo na instância recebida. A devolução limpa o prefetch após refresh parcial e relê o estado final e a disputa. O plantio relê cada PK sob trava, foto recebida atualiza `d`, e o backfill de fio morto recarrega os restantes após reabrir. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:113–147`, `app/chamados/services/disputa_emissao.py:1478–1537`, `app/chamados/models.py:4443–4449`, `app/chamados/services/validacao.py:267–309,1103–1104`, `app/chamados/services/materializacao.py:2149–2163`, `app/api/foto_recebida.py:70–84`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:132–145`.
+
+## 4. Classes de reprovação — BLOQUEIA
+
+| Classe | Veredito |
+|---|---|
+| **a. Segundo juiz** | **NAO BLOQUEIA.** C7, C21 e respostas sem veredito conservam os registros. O helper de horizonte em cadastro chama os dois juízes. H4 verifica carimbo e vínculo de absorção para um veto próprio. `app/core/juizes.py:291,305–307`, `app/escala/services/cadastro_realidade.py:497–507`, `app/chamados/models.py:4402–4425`, `app/chamados/services/disputa_emissao.py:1485–1490`. |
+| **b. Segundo escritor** | **NAO BLOQUEIA pelo diff lido.** O adaptador H4 chama o mesmo core. Validação, devolução, carimbo e registro usam as portas existentes. Escrita de `respondida_em` sem linha física e escritores de via fora da trava estão registrados no recorte 1440/H4. `app/chamados/services/disputa_emissao.py:1532–1537,1587–1594`, `app/chamados/models.py:3367–3374,4428–4449`, `app/docs/RELATO.md:144,148–157`, `app/docs/BACKLOG.md:2056–2059`. |
+| **c. Relógio fora da borda** | **BLOQUEIA.** `_agora_sonda = _tz_s.now()` corta `d.ato_em > _agora_sonda` antes da trava. A reabertura real lê novamente `_agora_r = _tz_r.now()` depois da trava. Uma linha no intervalo fica vigente na simulação e é anterior à reabertura gravada. O comentário “a mesma borda” descreve dois instantes distintos. `app/chamados/models.py:1558,1591–1595,1632,1651,1702–1718`. |
+| **d. Derivação paralela** | **BLOQUEIA.** A combinação `respondida is None and p.respondida_em is not None` e a seleção da irmã pela face SQL mantêm decisões fora da fonte escolhida. `app/chamados/juizes.py:350–354,1588`, `app/chamados/services/materializacao.py:145–150,192–203`. |
+| **e. Selo ou RED sem mordida** | **BLOQUEIA para a cobertura declarada.** `CAMPOS = frozenset({'respondida_em', 'validada_em'})` e `FUNCOES = {...}` limitam a catraca. `_slot_esperado` e a seleção da irmã ficam de fora. O selo de chamada aceita a chamada à composta no slot sem verificar a leitura crua imediatamente seguinte. A bateria do item 1 passa na revisão estática, conforme §5. `app/chamados/tests/test_e4c_f5_selo_catraca.py:12–28,338–349`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:70–77,190–193`, `app/chamados/juizes.py:350–354`. |
+| **f. Ordem de trava** | **NAO BLOQUEIA quanto à ordem de aquisição.** Os SELECTs de prefetch são leituras simples. S14 mudou de irmãs intercaladas com os fechos para todas as irmãs antes dos fechos. Cada irmã tem seu atomic, e o core já saiu do atomic da resposta. O uso de dados anteriores à trava é o bloqueio distinto do §3. `app/chamados/services/materializacao.py:1055–1058,1105–1114`, `app/chamados/services/disputa_emissao.py:1532–1566`, `app/docs/RELATO.md:134–139`. |
+| **g. Campo com dois significados** | **BLOQUEIA nos consumidores dos §§1–2.** Os tipos distinguem corretamente texto do ato e texto corrente. O slot ainda alterna instante vigente e carimbo físico dentro da mesma guarda. `app/chamados/models.py:17–25,4382–4390`, `app/chamados/juizes.py:350–354`. |
+| **h. Manager/anotação** | **NAO BLOQUEIA.** O manager próprio é o de imutabilidade do ato. Os prefetches do diff são explícitos nos carregadores. Os `Exists` da face da F2 já existiam e a leitura de H4 é do vínculo, sem introduzir atalho SQL para o O261. `app/chamados/models.py:3591–3618,4250,4402–4425`, `app/chamados/tests/test_o261_julgamento_desfaz_carimbo.py:203–207`. |
+| **i. Pré-requisito** | **NAO BLOQUEIA a construção.** A tabela, a marca de ressuscitação, a coluna de preservação e o backfill já estão no código das migrations 0051, 0054, 0055 e 0056. Aplicação no destino e ordem efetiva F6F7/F9/F5 [nao verificado]. `app/chamados/migrations/0051_decisao_pergunta.py:41–75`, `app/chamados/migrations/0054_decisao_da_ressuscitacao.py:15–21`, `app/chamados/migrations/0055_decisao_resposta_mantem_validacao.py:12–22`, `app/chamados/migrations/0056_decisao_resposta_mantem_validacao_historico.py:17–26`. |
+
+## 5. Testes novos do item 1 — NAO BLOQUEIA [nao verificado]
+
+Cada âncora ocorre uma vez no corpo de produção indicado. O seletor recompila o corpo verdadeiro com uma substituição, troca seu `__code__` e restaura no `finally`. Os pontos de interposição delegam à carga, ao refresh ou ao escritor real. Os seis casos, por leitura, não têm `expectedFailure`, `skip` nem mock do predicado alvo. `app/chamados/tests/e4c_f5_voltaD_mutantes.py:13–50,54–71`, `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:22–36,50–208`.
+
+| Mutante | Sítio e fato discriminado |
+|---|---|
+| `corrigir` | `app/chamados/services/acoes_disputa.py:349`. Validação real entre carga e guarda. O resultado deve ser `info`, texto `15:08` preservado e validação presente. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:50–71`. |
+| `declaracao` | `app/chamados/services/declaracao_texto.py:229`. Validação real entre carga do fato e prefetch. O marco fica com `aceita=False`. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:73–88`. |
+| `irma_implausivel` | `app/chamados/services/materializacao.py:203`. A irmã implausível é validada com confirmação pela porta. O teste exige que o fluxo prossiga até identificar a irmã já gravada no espelho. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:153–182`. |
+| `lote_entrada` | `app/chamados/services/validacao.py:1082`. Validação real interposta antes do prefetch. Exige PK recusado como já validado e zero em `validadas`. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:90–100`. |
+| `lote_releitura` | `app/chamados/services/validacao.py:1104`. Classe A real, POST web, entrada real e core real depois do refresh do lote. O assert final é exatamente `([pergunta.pk], 0, None)` e só extrai `ref` das recusas. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:102–147`, `app/chamados/views.py:1274–1278`, `app/chamados/services/disputa_emissao.py:1587–1594`. |
+| `casefold_projecao`, `strip_ato` | `app/chamados/services/vigia_texto_resposta.py:23`. Primeiro seletor usa `.lower()` na projeção e o segundo `.strip()` no ato. As portas automáticas e de reabertura criam a diferença observada. Cada caso exige `(1, 1)`. `app/chamados/tests/e4c_f5_voltaD_mutantes.py:46–50`, `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:185–208`. |
+
+O trecho fornecido de `MUT_FIM` registra seis verdes e sete falhas de asserção, zero erros. Os asserts indicados no topo batem com a árvore. Reprodução independente e tracebacks integrais [nao verificado]. `app/chamados/tests/test_e4c_f5_voltaD_corridas.py:70,88,99,144,182,208`.
+
+## 6. Adaptações preexistentes — BLOQUEIA
+
+**Trecho que bloqueia.** `composta=lambda p: N(validada_em=p.validada_em)` é um segundo dublê de `composta`, com um campo, fora do helper único. O 1050 item 2 nomeia os hunks de `test_e4_expand.py:101–104,180–182`, enquanto esse dublê está em `:82`. A ligação de `_foto_da_validacao` ao corpo real está em outro hunk, `:153`. O RELATO registra as adaptações desse harness, e um aval nominal para o dublê local [nao verificado]. `app/chamados/tests/test_e4_expand.py:80–83,101–104,153,180–191`, `app/chamados/tests/duble_pergunta.py:6–41`, `app/docs/RELATO.md:294,303`.
+
+Dos 35 arquivos preexistentes alterados, eis o enquadramento por sítio. A contagem estática de `assert` e `self.assert*` não caiu em nenhum deles. Ela aumentou no selo F2, no teste B2 de tipo e no teste do vigia. Equivalência de todos os efeitos dos harnesses em execução [nao verificado]. `app/chamados/tests/test_e4c_f2_leitura_do_ato.py:519–544,584–593`, `app/chamados/tests/test_f1nova_b2_leitores.py:95–97`, `app/chamados/tests/test_o261_vigia_fio.py:816–852`.
+
+- **Âncoras i.** `app/chamados/tests/bug_par_mutantes.py:69`, `app/chamados/tests/e3_mutantes.py:30`, `app/chamados/tests/e3_r3_c6_mutantes.py:49–51`, `app/chamados/tests/e4b_c12_ast.py:19–27`, `app/chamados/tests/test_cef_c1_sem_banco.py:309–312`, `app/chamados/tests/test_e4b_classe_e_memoria.py:40,51`, `app/chamados/tests/test_e4c_f6f7_c7_sem_banco.py:113`, `app/core/tests/test_medida_turno_do_par.py:258–274,319`.
+- **Dublês e ORM ii/v.** `app/chamados/tests/e3_v8_apoio.py:12,77,167`, `app/chamados/tests/e3_volta7_apoio.py:12,33,79,111`, `app/chamados/tests/test_bug_par_c2_sem_banco.py:13,32,80–83`, `app/chamados/tests/test_bug_par_sem_banco.py:14,170,193`, `app/chamados/tests/test_cef_c1_sem_ban
+
+[truncado em 20000 de 34867 caracteres]
 
 ## 21/11 12:03 · sessao 55480df206d3 · PISTA-ESCOLHE-SOZINHA · verificador · origem=Code
 
@@ -1086,159 +1162,4 @@ def principal(origem=None):
 
 [truncado em 20000 de 23631 caracteres]
 
-## 21/11 05:36 · sessao 305a78b7faaf · E4C-F5-CONSTROI · leitura · origem=Code
-
-**PUBLICÁVEIS: 35, 36 e 55.** O pré-desenho identifica os 69 K e os cinco R originais. O aval 1830 identifica o sexto R. A matriz identifica os 96 chamadores, e a cópia permite ligá-los às voltas. `predesenho.md:28–109`, `matriz.md:18–118`, `app/docs/PROMPTS.md:2659`, `app/docs/RELATO.md:37,1306,1314,1320`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:251–266`
-
-As linhas de `matriz.md` e `predesenho.md` são as dos anexos colados, contando o título como linha 1 e incluindo as linhas em branco. Nas tabelas, os caminhos de código partem de `app/`, salvo `bin/`. A comparação é por sítio e comportamento observável. A identidade Git dos dois snapshots e o diff integral estão [nao verificado]. As contagens atuais de chamadas e de asserts foram feitas por leitura estática. A execução dos testes nesta auditoria está [nao verificado]. [nao verificado]
-
-## 01 · Matriz de 15 sítios
-
-**NAO FECHA o vínculo com a numeração original do brief.** A tabela nominal dos sítios fecha em **15 de 15**, com os três campos adicionais do histórico. A tabela nova põe a devolução na posição 15 do cruzamento. O RELATO cita `matriz_c3.txt:13` para a mesma devolução. Essa citação é um endereço de arquivo. Sua equivalência ao ordinal do `brief_c3` está [nao verificado]. `matriz.md:151–170`, `app/docs/RELATO.md:94,752,768,1503`
-
-Na coluna de prova, `test_e4c_f5_*` refere-se a `chamados/tests/`.
-
-| Sítio e fonte | Sítio atual e delta | Selo ou RED atual |
-|---|---|---|
-| Projeção temporal, `matriz.md:151` | `chamados/juizes.py:1383–1403`. Lê os campos recebidos e aplica o horizonte. A leitura ORM foi para o chamador em `:1408–1409`. | `test_e4c_f5_selo_chamada.py:126–149,271–275`, `test_e4c_f5_volta2_juizes.py:77–92` |
-| Respondida, `matriz.md:152` | `chamados/juizes.py:1551–1560`. Julga o instante e a presença de texto do objeto recebido. O ramo de leitura ORM saiu do juiz. | `test_e4c_f5_selo_chamada.py:126–149,271–275`, `test_e4c_f5_volta2_juizes.py:94–105` |
-| Corrigir resposta, `matriz.md:153` | `chamados/services/acoes_disputa.py:349–350`. Guarda de validação pela composta. | `test_e4c_f5_selo_catraca.py:18`, `test_e4c_f5_voltaD_portas.py:84–95` |
-| Guarda de declaração, `matriz.md:154` | `chamados/services/declaracao_texto.py:217–229`. A guarda comum lê a validação pela composta. | `test_e4c_f5_selo_catraca.py:19`, `test_e4c_f5_voltaD_portas.py:103–134` |
-| Resolver sem credor, `matriz.md:155` | `chamados/services/disputa_emissao.py:2107–2112`. Prefetch e guarda de validação pela composta. | `test_e4c_f5_selo_catraca.py:20`, `test_e4c_f5_voltaD_portas.py:142–170` |
-| Esperar o texto, `matriz.md:156` | `chamados/services/fio.py:178–190`. A composta substitui a montagem local. O instante vem do ato e o texto da coluna. | `test_e4c_f5_selo_catraca.py:21`, `test_e4c_f5_voltaA_sitios.py:55–71` |
-| Irmã exigida validada, `matriz.md:157` | `chamados/services/materializacao.py:200–202`. Primeira guarda sobre a composta da irmã. | `test_e4c_f5_selo_catraca.py:16,22`, `test_e4c_f5_voltaD_portas.py:228–236` |
-| Irmã implausível, `matriz.md:158` | `chamados/services/materializacao.py:203–208`. Segunda guarda sobre a mesma leitura. | `test_e4c_f5_selo_catraca.py:16,22`, `test_e4c_f5_voltaD_portas.py:238–246` |
-| Materializar validadas, `matriz.md:159` | `chamados/services/materializacao.py:2142–2163`. Seleção inicial SQL e guarda pela composta após releitura sob trava. | `test_e4c_f5_selo_catraca.py:22`, `test_e4c_f5_voltaD_portas.py:248–270` |
-| Validar o par, `matriz.md:160` | `chamados/services/validacao.py:655–659`. Guarda pela composta da outra metade. | `test_e4c_f5_selo_catraca.py:23–24`, `test_e4c_f5_voltaD_portas.py:272–298` |
-| Validar pergunta, `matriz.md:161` | `chamados/services/validacao.py:697–704`. Uma composta fornece o par julgado e a validação vigente. | `test_e4c_f5_selo_catraca.py:24`, `test_e4c_f5_voltaD_portas.py:300–310` |
-| Recusar pergunta, `matriz.md:162` | `chamados/services/validacao.py:915–923,930–932`. A guarda lê a composta e a foto anterior lê a coluna. | `test_e4c_f5_selo_catraca.py:24`, `test_e4c_f5_voltaD_portas.py:312–322` |
-| Validar classe A em lote, `matriz.md:163` | `chamados/services/validacao.py:1074–1084,1102–1105`. Guarda pela composta na entrada e após releitura integral. | `test_e4c_f5_selo_catraca.py:25`, `test_e4c_f5_voltaD_portas.py:324–374` |
-| Resposta na tela, `matriz.md:164` | `chamados/templatetags/chamados_tags.py:166–171`. Permanece o atalho por texto corrente seguido do classificador. | `test_e4c_f5_selo_catraca.py:27`, `app/docs/RELATO.md:1503` |
-| Devolver validação, `matriz.md:165` | `chamados/services/validacao.py:267–296`. Descarta o cache e entra pela validação do ato ou da coluna, com escrita pareada. | `test_e4c_f5_selo_catraca.py:25`, `test_e4c_f5_item1_devolucao_ato_ou_coluna.py:69–128` |
-| Histórico R, `matriz.md:166` | `chamados/services/historico.py:98–107`. Lê e filtra o instante da resposta. | `test_e4c_f5_selo_catraca.py:26`, `test_e4c_f5_volta1_leem_o_ato.py:75–87` |
-| Histórico V, `matriz.md:167` | `chamados/services/historico.py:98–107`. A mesma leitura fornece o instante da validação. | `test_e4c_f5_selo_catraca.py:26`, `test_e4c_f5_volta1_leem_o_ato.py:75–87` |
-| Histórico T, `matriz.md:168` | `chamados/services/historico.py:110–116`. O rótulo usa o texto da coluna. | `test_e4c_f5_selo_catraca.py:26`, `test_e4c_f5_volta1_leem_o_ato.py:75–87` |
-
-A recontagem é `13 funções da catraca − 1 histórico + 1 segunda guarda da irmã + 2 juízes = 15 sítios`. Os três campos adicionais cabem na mesma função do histórico. A amostra **9/9** do brief e a amostra **5/5** da MATRIZ-F5-A têm referências distintas. A identidade das nove linhas da primeira amostra está [nao verificado]. `chamados/tests/test_e4c_f5_selo_catraca.py:14–28`, `matriz.md:3,166–170`, `app/docs/RELATO.md:1503`
-
-## 32 · Triagem de `casefold`
-
-**NAO FECHA.** O registro dá o encaminhamento **como anexo ao Opus, sem decisão da sessão**. A decisão motivada, o patch exato do sobrevivente e a execução nominal no integrado estão [nao verificado]. `app/docs/RELATO.md:94,1374,1377,1439`
-
-| Registro | Fato e sítio |
-|---|---|
-| Opus anterior da volta 1 | `casefold` ficou entre as pendências que aquele laudo tratou como não bloqueantes. `app/docs/RELATO.md:1390`, `app/docs/BACKLOG.md:2064` |
-| Verificador 4 | Zero bloqueios no delta. O sobrevivente `casefold` foi registrado como plausível, sem execução, para o anexo ao Opus. `app/docs/RELATO.md:1439` |
-| Replays | Terra **NAO BLOQUEIA**. Sol 6.1 e Sol 6.2 **BLOQUEIAM** para `casefold`. Sol 6.2 registra separadamente `strip()` só no texto do ato. Conta de pareceres sobre caixa **1 + 2 = 3**. `app/docs/RELATO.md:1374,1377` |
-| Teste de caixa e sobrevivente | `test_diferenca_so_de_caixa_conta` usa `Ato` no ato e `ato` na coluna, esperando `(1, 1)`. Pela leitura do teste, `casefold` nos dois lados ou só no ato derruba esse asserto. Só na coluna já minúscula preserva o resultado. O lado alterado pelo patch histórico está [nao verificado]. `chamados/tests/test_e4c_f5_contador_texto.py:21–24,50–53`, `chamados/services/vigia_texto_resposta.py:19–25`, `app/docs/RELATO.md:1439` |
-| Teste de espaço | As duas variações põem os espaços na coluna. O ato já vem sem espaços. Isso explica por leitura estática a sobrevivência de `strip()` só no ato nesses exemplos. `chamados/tests/test_e4c_f5_contador_texto.py:21–24,40–48`, `app/docs/RELATO.md:1377,1440` |
-
-| Leitor | Tratamento na cópia |
-|---|---|
-| Compositor e origem do texto | A sequência conserva o texto vigente do ato e incorpora o passivo. A composta recebe o texto da coluna. É a diferença de fontes descrita em `matriz.md:12`, `predesenho.md:115–117`. `chamados/models.py:4302–4323,4348–4390` |
-| `vigia_texto_resposta.contar` | Comparação literal `!=`, com `or ''` na coluna. A diferença só de caixa conta. A carga usa prefetch por bloco. `predesenho.md:127`, `chamados/services/vigia_texto_resposta.py:11–25` |
-| `validar_classe_a` | Segundo comparador literal. Separa o divergente antes do classificador e imprime um prefixo do texto do ato nos casos listados. `chamados/management/commands/validar_classe_a.py:60–70,80–84,88–103` |
-| `vigiar_fio_morto` e ESTADO | O comando lê divergentes e universo, imprime os totais e carimba a divergência com esperado zero. O ESTADO compara o carimbo com o esperado. `chamados/management/commands/vigiar_fio_morto.py:104–110,194–197,230–232,274–282`, `bin/fio_estado.py:121–126,191–194`, `bin/gerar_estado.py:260–261` |
-| Fotos de reabertura, silêncio e retratação | Copiam o texto do ato. `chamados/models.py:1707–1719,2104–2112,2236–2246` |
-| `resposta_display` | Lê o texto do ato, resolve rótulos de IDs e compara opções literalmente. API e cartões usam a propriedade. `chamados/models.py:3865–3891`, `api/views.py:1163–1164,2579–2580`, `templates/chamados/partials/_pergunta_card.html:31` |
-| Tarefa e juízes | A tarefa testa a presença de `ato_texto`. Os predicados de presença usam `strip()`. O temporal repassa o texto recebido ou o esvazia pelo horizonte. `chamados/services/tarefa_do_dia.py:159–168,427–429`, `chamados/juizes.py:1391–1403,1533–1560` |
-| Histórico, API e mensageria | O texto da coluna é usado no rótulo ou na serialização e conserva a caixa. `matriz.md:168`, `chamados/services/historico.py:98–113`, `api/views.py:1163,2579`, `api/views_mensageria.py:555–569` |
-| Classificadores | `classificar_resposta_validacao` usa `lower()` no ramo de escolha. `classe_do_lote` usa `lower()` e remoção de acentos sobre a coluna. `chamados/juizes.py:2043–2056`, `chamados/services/validacao.py:1181–1183,1196–1214` |
-
-## 35 · Mapa nominal dos carregadores
-
-**PUBLICÁVEL.** Os **69 de 69 K** são identificáveis. A tabela histórica tem **10 L + 29 Q + 5 R + 25 M**. K40 migrou de M para R, dando **10 L + 29 Q + 6 R + 24 M = 69**. A sobra é um sítio adicional. `matriz.md:174,178–190`, `predesenho.md:28–107`, `app/docs/PROMPTS.md:2659`, `app/docs/RELATO.md:788,1286`
-
-A coluna atual dá o ponto de carga ou de releitura. **Lote** indica prefetch de `decisoes` no percurso mostrado, com as exceções de localização explicitadas na própria linha.
-
-| K e fonte | Classe | Sítio atual e delta |
-|---|---|---|
-| 1 · `predesenho.md:28` | L | Tarefa, lote em `chamados/services/tarefa_do_dia.py:533–545`. |
-| 2 · `predesenho.md:29` | L | `alimentar_portas`, lote em `chamados/juizes.py:1664–1669`. |
-| 3 · `predesenho.md:30` | R | O261 mantém releitura em `chamados/services/relavra_via.py:229–242`. |
-| 4 · `predesenho.md:31` | L | `perguntas_vivas_de`, lote em `chamados/juizes.py:1512–1513`. |
-| 5 · `predesenho.md:32` | M | I21a, lote em `chamados/management/commands/auditar_invariantes_chamados.py:1587–1592`. |
-| 6 · `predesenho.md:33` | M | I2, lote em `chamados/management/commands/auditar_invariantes_chamados.py:591–595`. |
-| 7 · `predesenho.md:34` | M | F1, lote aninhado em `chamados/management/commands/auditar_invariantes_chamados.py:1643–1646`. |
-| 8 · `predesenho.md:35` | M | Universo do grupo, lote em `chamados/services/fio.py:2079–2081`. |
-| 9 · `predesenho.md:36` | Q | Órfãs reatáveis. Seletor em `chamados/reconciliador.py:1554`, lote no consumidor em `:1575`. |
-| 10 · `predesenho.md:37` | Q | Órfãs abertas, lote em `chamados/reconciliador.py:1100–1103`. |
-| 11 · `predesenho.md:38` | Q | Beco pelo evento, lote em `chamados/services/becos.py:86–87`. |
-| 12 · `predesenho.md:39` | M | Plano do backfill, lote em `chamados/management/commands/backfill_fio_morto_e4b.py:89–90`. |
-| 13 · `predesenho.md:40` | M | Execução do backfill, lote e releitura após ato em `chamados/management/commands/backfill_fio_morto_e4b.py:133–144`. |
-| 14 · `predesenho.md:41` | M | Exportadas, lote em `chamados/management/commands/backfill_fio_morto_e4b.py:175–178`. |
-| 15 · `predesenho.md:42` | L | `_ancoradas`, lote em `chamados/models.py:349–366`. |
-| 16 · `predesenho.md:43` | Q | Pendentes S128, lote em `chamados/services/disputa_emissao.py:1978–1982`. |
-| 17 · `predesenho.md:44` | Q | Universo do fato, lote em `chamados/services/fio.py:1963–1964`. |
-| 18 · `predesenho.md:45` | Q | Vizinhos, lote em `chamados/services/fio.py:1595–1597`. |
-| 19 · `predesenho.md:46` | R | Materialização mantém releitura sob trava em `chamados/services/materializacao.py:2149–2163`. |
-| 20 · `predesenho.md:47` | R | Validação mantém `.get()` da porta em `chamados/services/validacao.py:689–704`. |
-| 21 · `predesenho.md:48` | M | Contador de paridade, lote em `chamados/services/materializacao.py:328–329`. |
-| 22 · `predesenho.md:49` | R | Busca da irmã complementar permanece em `chamados/services/materializacao.py:284–294`. |
-| 23 · `predesenho.md:50` | Q | Prévia, lote em `folha/previa.py:64–67`. |
-| 24 · `predesenho.md:51` | Q | Cartório, lote aninhado em `ponto/services/cartorio.py:145–146`. |
-| 25 · `predesenho.md:52` | Q | Declaração por marco, lote em `chamados/services/declaracao_texto.py:475–477`. |
-| 26 · `predesenho.md:53` | Q | Declaração por lote de fatos, `chamados/services/declaracao_texto.py:589–590`. |
-| 27 · `predesenho.md:54` | Q | Proposta por fato, lote em `chamados/services/declaracao_texto.py:634–636`. |
-| 28 · `predesenho.md:55` | M | DRY de decisões, lote em `chamados/management/commands/backfill_decisoes_pergunta.py:531–534`. |
-| 29 · `predesenho.md:56` | Q | Corrigíveis, lote em `chamados/juizes.py:1765`. |
-| 30 · `predesenho.md:57` | Q | Fila a validar, lote em `chamados/juizes.py:1772–1775`. |
-| 31 · `predesenho.md:58` | Q | Dias com vivas, lote em `chamados/juizes.py:2435–2438`. |
-| 32 · `predesenho.md:59` | L | Disputa viva, lote no chamador em `chamados/juizes.py:2490–2491`. |
-| 33 · `predesenho.md:60` | M | F1t, lote em `chamados/management/commands/auditar_invariantes_chamados.py:1724–1727`. |
-| 34 · `predesenho.md:61` | M | I6, lote em `chamados/management/commands/auditar_invariantes_chamados.py:538–540`. |
-| 35 · `predesenho.md:62` | M | I8, lote em `chamados/management/commands/auditar_invariantes_chamados.py:861–864`. |
-| 36 · `predesenho.md:63` | M | I8b, lote em `chamados/management/commands/auditar_invariantes_chamados.py:897–900`. |
-| 37 · `predesenho.md:64` | M | F2, lote em `chamados/management/commands/auditar_invariantes_chamados.py:1782–1786`. |
-| 38 · `predesenho.md:65` | M | F3, lote em `chamados/management/commands/auditar_invariantes_chamados.py:1795–1799`. |
-| 39 · `predesenho.md:66` | M | Fio mudo, lote aninhado em `chamados/management/commands/disparar_perguntas_competencia.py:107–111`. |
-| 40 · `predesenho.md:67` | M → R | Migração mantém `.get(pk=pk)` em `chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467`. |
-| 41 · `predesenho.md:68` | Q | Ressuscitação, lote em `chamados/models.py:1549–1555`. A cópia para C6 recebe cache próprio recortado em `:1569,1585–1595`. |
-| 42 · `predesenho.md:69` | Q | A segunda carga de `fechar` foi absorvida pela lista única, com lote e reuso pela guarda. `chamados/models.py:2068–2072,2081`, `app/docs/RELATO.md:1289` |
-| 43 · `predesenho.md:70` | Q | Absolvíveis, lote em `chamados/reconciliador.py:702–703`. |
-| 44 · `predesenho.md:71` | Q | Detalhe, lote em `chamados/services/acoes_chamado.py:351–352`. |
-| 45 · `predesenho.md:72` | Q | Medição por competência, lote em `chamados/services/competencia_trancada.py:119–121`. |
-| 46 · `predesenho.md:73` | Q | Medição por chamado, lote em `chamados/services/competencia_trancada.py:165–167`. |
-| 47 · `predesenho.md:74` | Q | Sem credor, lote próprio e guarda composta em `chamados/services/disputa_emissao.py:2107–2112`. |
-| 48 · `predesenho.md:75` | Q | Migração, destino com lote em `chamados/services/fio.py:2297–2298`. |
-| 49 · `predesenho.md:76` | Q | Migração, origem com lote em `chamados/services/fio.py:2301–2303`. |
-| 50 · `predesenho.md:77` | Q | Marco já perguntado, lote em `chamados/services/pergunta_no_app.py:186–187`. |
-| 51 · `predesenho.md:78` | M | Vigia de disputa fechada, lote em `chamados/services/vigia_fio.py:713–714`. |
-| 52 · `predesenho.md:79` | M | Vigia de carimbos, lote em `chamados/services/vigia_fio.py:772–774`. |
-| 53 · `predesenho.md:80` | Q | Reabrir disputa, lote em `chamados/views.py:1412–1413`. |
-| 54 · `predesenho.md:81` | Q | Calendário, lote em `colaboradores/services/calendario.py:504–505`. |
-| 55 · `predesenho.md:82` | Q | Dia do colaborador, lote em `ponto/services/dia_do_colab.py:64–65`. |
-| 56 · `predesenho.md:83` | M | Foto inicial L-130 com lote em `chamados/management/commands/estoque_l130_instante_sem_texto.py:37–38`. |
-| 57 · `predesenho.md:84` | M | Releitura do conjunto L-130 com lote em `chamados/management/commands/estoque_l130_instante_sem_texto.py:97–98`. |
-| 58 · `predesenho.md:85` | R | Porta L-130 mantém releitura por ID em `chamados/services/validacao.py:444–448`. |
-| 59 · `predesenho.md:86` | M | Arquivamento, lote em `chamados/management/commands/arquivar_competencia_encerrada.py:158–159`. |
-| 60 · `predesenho.md:87` | M | Todas as perguntas do vigia, lote em `chamados/services/vigia_fio.py:570–571`. |
-| 61 · `predesenho.md:88` | Q | Explicador sem coleção recebida, lote em `chamados/services/explicador.py:160–161`. |
-| 62 · `predesenho.md:89` | L | Foto, lote no chamador em `api/foto_recebida.py:80–81`. |
-| 63 · `predesenho.md:90` | L | Encerrar por fato, lote no chamador em `chamados/management/commands/encerrar_perguntas_com_fato.py:82–85`. |
-| 64 · `predesenho.md:91` | L | Limbo, lote no chamador em `chamados/services/limbo_folgas.py:203–205`. |
-| 65 · `predesenho.md:92` | Q | Supra-juiz, lote externo em `ponto/management/commands/supra_juiz.py:190–192`. |
-| 66 · `predesenho.md:93` | M | Emissão retroativa, lote externo em `ponto/management/commands/emitir_furo_retroativo.py:82–83`. |
-| 67 · `predesenho.md:94` | L | Reconciliar grade, lote no chamador em `ponto/management/commands/reconciliar_grade.py:456–462`. |
-| 68 · `predesenho.md:95` | L | Dedup da emissão, lote no chamador em `chamados/services/disputa_emissao.py:1429–1436`. |
-| 69 · `predesenho.md:96` | M | Beco pelo comando, lote externo em `chamados/management/commands/fechar_becos_disputa.py:32–33`. |
-| Sobra · `predesenho.md:97` | M fora dos 69 | Dedup por grupo ganha prefetch em `chamados/management/commands/dedup_perguntas_fato.py:74–77`. |
-
-Os **59 pontos** originais batem na unidade do desenho, `5 L comuns + 29 Q + 25 M`. Incluindo a sobra, eram **60**. Mantida essa unidade após a reclassificação de K40, a conta é **58**, ou **59** com a sobra. Na implementação atual, `fio_vivo` itera a coleção recebida e os seis K desse grupo têm prefetches nos chamadores. Contando os sítios concretos da tabela, são **63 K com lote + 6 R**, ou **64 pontos de lote** com a sobra. K42 conta pela lista que hoje o abastece, cuja antiga segunda carga saiu. `predesenho.md:97,101–111`, `chamados/juizes.py:1516–1526`, `chamados/models.py:2068–2081`, `app/docs/RELATO.md:1286,1289,1329`
-
-## 36 · Seis R
-
-**PUBLICÁVEL.** São **cinco R do pré-desenho + K40 pelo 1830 = seis**. Cada percurso mantém a leitura por item na cópia. `predesenho.md:30,46–49,67,85,105`, `app/docs/PROMPTS.md:2659`, `app/docs/RELATO.md:788,1286`
-
-| R | Fonte | Sítio atual e razão |
-|---|---|---|
-| K3 | `predesenho.md:30` | O261 relê a candidata por PK após travar o dono. `chamados/services/relavra_via.py:229–242` |
-| K19 | `predesenho.md:46` | Materialização relê cada candidata após seleção e trava, antes da guarda de validação. `chamados/services/materializacao.py:2149–2163` |
-| K20 | `predesenho.md:47` | A porta valida por ID, inclusive quando chamada pelo lote. `chamados/services/validacao.py:689–704,1095–1096` |
-| K22 | `predesenho.md:49` | O contador busca a irmã complementar da pergunta corrente. `chamados/services/materializacao.py:284–294,341–346` |
-| K40 | `predesenho.md:67`, `app/docs/PROMPTS.md:2659` | `_descarimbados` percorre PKs, relê e julga cada candidata no retrato da migração. `chamados/management/commands/migrar_data_evento_dia_do_turno.py:448–467` |
-| K58 | `predesenho.md:85` | A porta L-130 relê por ID sob trava e rechecagem do impedimento. `chamados/serv
-
-[truncado em 20000 de 53012 caracteres]
-
-_7647 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7648 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
