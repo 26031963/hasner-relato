@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 15:37** · publicado em **21/11/2026 15:39** (UTC-3)
+> Ultima resposta processada: **21/11/2026 15:42** · publicado em **21/11/2026 15:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 15:42 · sessao 2c2cc7d2ff73 · - · - · origem=Ronald (tmux)
+
+Conferi cinco chamadores diretos e quatro saídas locais `(None, None)` na cópia. O cache pode devolver o mesmo par por uma quinta rota, ou relançar a exceção original. [Juiz do slot](app/chamados/juizes.py:344) · [Juiz de fato](app/chamados/juizes.py:758) · [Carga](app/chamados/services/carga_pergunta_viva.py:119) · [Validação](app/chamados/services/validacao.py:1223) · [Explicador](app/chamados/services/explicador.py:52) · [Vigia](app/chamados/services/vigia_carimbo.py:110)
+
+- O veto temporal abre indevidamente dois caminhos do juiz de fato, o vínculo sem conferência de horário e o destino encerrado. A retratação com trilha é uma testemunha que o juiz já admite com slot presente. [Juiz de fato](app/chamados/juizes.py:758) · [Testemunha de retratação](app/chamados/juizes.py:818)
+- A classe A do lote fica indevidamente elegível quando o slot não é derivável. Reproduzi em memória `data_hora='2026-02-30 15:10'` com instante e marco `15:10`. O juiz C21 aceitou o par, o parser devolveu `(None, None)`, o lote devolveu `a_obvio` e a consulta de conflito foi chamada zero vezes. Alcance em produção [nao verificado]. [Parser](app/chamados/juizes.py:365) · [Delta](app/chamados/juizes.py:1938) · [Lote](app/chamados/services/validacao.py:1213)
+- A fonte do texto é a projeção sobre a composta. A guarda C21 do par projetado precisa anteceder o cache de `data_hora`, pois uma reabertura pode limpar o instante composto sem limpar o texto da coluna na fotografia lida. A hora de marco fixo permanece elegível sem resposta. [Composta](app/chamados/models.py:4382) · [Projeção](app/chamados/juizes.py:1384) · [C21](app/chamados/juizes.py:1552) · [Marco fixo](app/chamados/services/materializacao.py:691)
+- A chave por PK não distingue horizonte nem versão da foto. Mudar apenas o slot com uma carga de outro horizonte deixa as testemunhas recortadas pelo slot anterior. O chamador normal usa o mesmo instante na construção e no julgamento. [Carga](app/chamados/services/carga_pergunta_viva.py:117) · [Chamador](app/chamados/services/tarefa_do_dia.py:630)
+
+O C8b passou na base e na sonda em memória que restaura `respondida_em=AGORA` e o veredito administrativo `concorde` já fornecidos pela fixture. Restaurar só o instante falhou três subcasos por saída antecipada no degrau da resposta. O módulo C8b passou 28 testes e as duas catracas AST passaram 28 testes na base. Suíte ORM e volta 3 [nao verificado]. [Cenário C8b](app/chamados/tests/test_e3_c8b_sem_banco.py:369) · [Fixture](app/chamados/tests/e3_c8b_apoio.py:183) · [Degrau da resposta](app/chamados/juizes.py:1424) · [Catraca de chamada](app/chamados/tests/test_e4c_f5_selo_chamada.py:188) · [Catraca de respondedores](app/chamados/tests/test_e3_catraca_respondedores.py:482)
+
+## 21/11 15:41 · sessao 47bd84d5dcea · - · - · origem=Ronald (tmux)
+
+- A fonte única do texto de `data_hora` é a projeção temporal da leitura composta, inclusive sem horizonte. `pergunta_respondida` julga o par projetado, como no C6. Compor e projetar sozinhos deixam passar texto antigo depois de reabertura, pois a composta ainda vem com a coluna física e a projeção limpa o texto apenas no corte futuro. O teste L-130 deve anteceder a consulta ao cache para `data_hora`. `app/chamados/models.py:4368–4390` · `app/chamados/juizes.py:1384–1404,1427–1429,1552–1561` · `app/docs/LEIS.md:151`
+- O veto cronológico é uma pergunta distinta e cabe antes do cache. A catraca declara exatamente uma leitura para essa pergunta. Há precedente de resultado nomeado com proveniência no próprio módulo. A derivação de plantio já fornece mensagens de erro pelos quatro caminhos sem timestamp, que `_slot_esperado` descarta. `app/chamados/tests/test_e3_catraca_respondedores.py:63–85,544–557` · `app/chamados/juizes.py:349–380,2417–2419,2444–2466` · `app/chamados/services/materializacao.py:627–663,694–704`
+- O veto aciona dois fallbacks hoje. Além da batida vinculada, medi em memória destino resolvido, zero plantadas e ato futuro em conversa. Sai `(None,None)` e o juiz de fato dá `True`. Com o destino aberto dá `False`. A retratação com trilha é uma testemunha independente comum aos ramos com e sem slot. `app/chamados/juizes.py:285–296,349–355,758–821` · `app/chamados/tests/test_e3_c8b_sem_banco.py:28–34`
+- O lote só promete classe A quando há hora próxima de marco e nenhuma batida perto. Medi com os corpos reais em memória e testemunhas controladas. `2026-02-31 13:00` com delta zero é A e pula a consulta de conflito. O controle `2026-02-28 13:00` com batida perto é B com `conflito=True`. A solução deve nomear a classe que impede validar em lote sem essa prova. `app/chamados/services/validacao.py:1161–1167,1186–1188,1213–1228` · `app/chamados/juizes.py:365–374,1938–1966,1984–1986`
+- A mudança de contrato requer exceção nominal para os cinco leitores, em cinco arquivos com o juiz incluído. O texto do 1945 item 2 se limita ao aval então discutido e não concede permissão. O rascunho amplo cruza o sítio da volta 3. A decisão anexa preserva o par legal e as cinco expectativas do C8b. Para manter o trajeto no degrau 6, conserve o instante e o veredito administrativo que a ajuda já fornece, retirando as respectivas sobrescritas locais. `CLAUDE.md:37–38` · `app/docs/PROMPTS.md:2711–2712` · `app/chamados/tests/e3_c8b_apoio.py:183–198` · `app/chamados/tests/test_e3_c8b_sem_banco.py:369–395` · `app/chamados/juizes.py:1424–1441`
+- Rodei os dois controles C8b e o de resposta posterior em `PosSuiteSemBanco`, três testes OK com Python sem bytecode e sem banco. Verificação da volta 3, ORM, suíte integral e incidência em produção [nao verificado]. `app/chamados/tests/test_e3_c8b_sem_banco.py:369–426` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:103–118`
+
+## 21/11 15:41 · sessao dbc71438521a · - · - · origem=Ronald (tmux)
+
+A troca para resultado estruturado muda seis arquivos de teste. O apoio AST do C8b pode ser um sétimo, conforme a forma escolhida. [nao verificado]
+
+| Arquivo | Ajuste |
+|---|---|
+| `app/chamados/tests/test_marco_por_motivo.py:76–136,168–211` | Migrar tuplas e asserts de cache. Preservar os três REDs, a borda inclusiva e a identidade da exceção relançada. |
+| `app/chamados/tests/test_e3_c8b_sem_banco.py:369–425` | Legalizar o par `data_hora` removendo as sobrescritas do veredito administrativo e do instante. Migrar o assert do cache no teste noturno somente se a ABI mudar. |
+| `app/chamados/tests/test_e3_pos_suite_sem_banco.py:103–118` | Migrar alias `slot`, fixture de cache e acesso `[1]`. Preservar veto no cálculo e no cache, mais sucesso no empate. |
+| `app/chamados/tests/test_hx_fallback_sem_lei.py:61–85` | Migrar mock do par vazio para ausência genuína de slot. Preservar o controle do chamado encerrado, a consulta à lei e a borda da janela. |
+| `app/chamados/tests/test_o306_vigia_carimbo.py:100–120` | Migrar o desempacotamento que prova slot derivável no caso de batida fora do marco. |
+| `app/chamados/tests/test_s3f4_data_e_ancora_pela_autoridade.py:96–108` | Comparar os campos de slot derivado com o par do plantio. |
+| `app/chamados/tests/e3_c8b_apoio.py:87,109–117` | Fornecer o tipo real ao ambiente caso o resultado use classe ou enum global. O extrator executa só a função AST e o carregador de literais pula construtores. `app/chamados/tests/e4_apoio.py:8–16` · `app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:55–69` |
+
+Na sonda em memória, manter o instante `AGORA` e o veredito administrativo da testemunha preservou as cinco expectativas C8b em ambos os caminhos. Legalizar apenas o instante, deixando `veredito=None`, falhou em três subcasos porque o C6 retornou no degrau de resposta. Há outros pares sintéticos com texto e instante nulo na fixture noturna e na textual, fora do reparo delimitado de `data_hora`. `app/chamados/tests/e3_c8b_apoio.py:189–198` · `app/chamados/tests/test_e3_c8b_sem_banco.py:369–395,403–404,428–441` · `app/chamados/juizes.py:1425–1441`
+
+Catracas a reexecutar incluem A1 e respondedores. A segunda ancora mutantes na assinatura atual e espera uma leitura booleana declarada por `_slot_esperado`. O P71 chama o juiz para provar ausência de exceção e dispensa mudança de ABI no teste. Os controles dos demais leitores podem preservar suas expectativas externas. `app/chamados/tests/test_e4c_f5_selo_chamada.py:188–193,251–268` · `app/chamados/tests/test_e3_catraca_respondedores.py:66–85,544–555,588–595` · `app/chamados/tests/test_p71_marco_sem_hora.py:46–49` · `app/chamados/tests/test_fila_validar_lote.py:43–74` · `app/chamados/tests/test_explicador_disputa.py:65–102` · `app/chamados/tests/test_o261_vigia_fio.py:354–394`
+
+Três testes focais passaram na base via `python3 -B`. A execução dos quatro módulos sem banco contou 63 testes, com dois erros de importação de `django.utils` no mesmo teste de cartório. Execução ORM pela porta e suíte final [nao verificado]. `app/chamados/tests/test_e3_c8b_sem_banco.py:369,397` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:103,173` · `app/ponto/services/cartorio.py:1158` · `app/core/fmt.py:8`
 
 ## 21/11 15:37 · sessao 9d4dd180151b · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -913,134 +953,4 @@ Nenhuma. As cinco linhas de `MUDA` são `admin` e somam 25, em acordo com `TOTAL
 
 O trecho fornecido não exibe erro. `POR CLASSE` soma 544, igual ao universo informado. Os dois zeros, `NAO_ADMIN=0` e `POSTOS_COM_MUDANCA … nao_admin=0`, são compatíveis com a ausência de classes `nao_admin` em `MUDA`. A contagem de postos distintos não pode ser recontada pelo trecho [nao verificado].
 
-## 21/11 14:41 · sessao aece5b6b5b73 · FICHAS-PACOTE-CONSUMO-f1 · leitura · origem=Code
-
-# RASCUNHO AUTO-CLEAR-NO-MARCO
-
-## MEDIDA
-
-- A base de leitura indicada pelo pedido é `ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5`. A exportação está sem metadados Git, portanto o HEAD é [nao verificado] de forma independente. O HANDOFF da cópia é um retrato de 19/11 às 16:08 e declara outro HEAD naquele instante. No anexo, `/usage` de 21/11 às 14:28 atribui **61%** a “sessions active over many hours”. Economia atribuível ao auto-clear e estado atual da VM [nao verificado]. (`app/docs/HANDOFF-SESSAO.md:3–7`, `fichas_pacote_consumo_2111_1440.txt:2`, numeração do texto fornecido.)
-- **Keepalive hoje.** A cada 600 s, o próprio `while true` testa `$HOME/saas-hasner/keepalive.off`, registra `off` e sai se o arquivo existir. Captura a tela com `tmux capture-pane -p -t code | tail -25`. Se achar `esc to interrupt`, fica quieto. Se achar `PAREI`, `Do you want`, `❯ 1.`, `! do export` ou `pergunta de LEI`, registra `parado-legitimo`. No restante, usa `send-keys` para digitar “segue a fila; PAREI so em lei ou !” e Enter, e registra `EMPURROU` em `logs/keepalive.log` mesmo se o envio falhar. O BACKLOG e o RELATO registram o laço como daemon do host. O lançador, o pai do processo e a instalação atual [nao verificado]. (`bin/keepalive.sh:2–10`, `app/docs/BACKLOG.md:1687`, `app/docs/RELATO.md:9306–9311`.)
-- **Caminho do `/clear`.** O script só envia a frase fixa. Um `send-keys` externo escreve no alvo tmux sem consultar as guardas do keepalive. O código de casa recebe `SessionStart(clear)` depois do comando, se o harness disparar o evento. Os registros da casa mostram recusa de **`/restart`** com Remote Control e uma recusa histórica do auto mode ao **escrever código** de `send-keys` para o próprio painel (“Tmux Self Drive”, O279). O keepalive não lê conexão nem modo de permissão. Aceitação de `/clear` por teclas, chegada do hook e retomada com Remote Control conectado e auto mode juntos [nao verificado]. (`bin/keepalive.sh:3–9`, `.claude/settings.json:48–59`, `app/docs/RELATO.md:3921`, `app/docs/PROMPTS.md:2194–2196`, `app/docs/BACKLOG.md:1687`.)
-- **PREPARA-CLEAR hoje é CLEAR-RÁPIDO/C1-PISO.** `orcamento_contexto.py::medir_contexto/avaliar` lê o último turno principal no transcript. O gatilho é tokens ≥ média inteira entre o piso pós-compact mais recente e 200.000. Sem piso válido, o gatilho não arma. Horas, percentual e marcos de deploy seguem como medidas. O Stop avalia depois da prova do RELATO e do B4, antes do PAREI comum. Ao armar, adia por ESPERANDO provado, PAREI comum, suite/régua/push ou pela guarda de DIFF/apply/agente. No disparo ativo, confere `PAREI: ! CLEAR` com mtime do handoff desde o disparo ou adiamento e reaplica a guarda de DIFF/agente. Libera para Ronald e, vencidos 10 min, no próximo Stop aplicável manda registrar “clear nao dado, seguiu” e seguir a fila. `ORCAMENTO_CONTEXTO=0` desliga esse caminho. O ESTADO lê o avaliador e a trilha `ATENDIDO/SEGUIU`. (`bin/orcamento_contexto.py:45–63`, `bin/orcamento_contexto.py:89–133`, `bin/orcamento_contexto.py:225–232`, `bin/orcamento_contexto.py:321–398`, `bin/hook_stop_fila1.py:941–977`, `bin/hook_stop_fila1.py:1000–1047`, `bin/hook_stop_fila1.py:1064–1162`, `bin/hook_stop_fila1.py:1349–1386`, `bin/gerar_estado.py:279–284`.)
-- **Handoff e confirmação.** `handoff_sessao.sh` gera o retrato com Git, fila e PAREI pelos leitores do Stop, avais, travas e próximo passo, com teto de 60 linhas. `PreCompact(manual|auto)` gera o arquivo. `SessionStart(compact|clear)` imprime o handoff existente e chama `marco_de_clear.py`. Esse escritor registra hora, origem, `session_id` e `source` em `logs/sessao/ultimo_clear.json`, sob lock e troca atômica. Conserva os horários dos últimos 20 `/clear` e sai com rc 0 mesmo em falha. **CLEAR-SEM-MARCO** segue registrado. O BACKLOG relata o `/clear` de 11:5x sem carimbo novo e a cobrança do ciclo anterior, 64% contra 17,6% naquele registro. O selo atual verifica a declaração dos hooks e o código do C1 tem casos de handoff, expiração e confirmação. `PreToolUse` chama o disjuntor e a `statusLine` publica a cota. A execução efetiva dos hooks na sessão alvo [nao verificado]. (`bin/handoff_sessao.sh:24–78`, `bin/handoff_sessao.sh:81–125`, `bin/handoff_sessao.sh:139–181`, `bin/handoff_sessao.sh:242–267`, `bin/handoff_sessao.sh:303–329`, `.claude/settings.json:14–77`, `bin/statusline_cota.py:4–13`, `.gitignore:66`, `bin/marco_de_clear.py:19–66`, `app/docs/BACKLOG.md:1135`, `app/docs/RELATO.md:5639`, `bin/tests/test_handoff_sessao.sh:41–85`, `bin/tests/test_orcamento_contexto.sh:187–211`.)
-
-## DESENHO
-
-Estender o **keepalive do host** como único escritor automatizado de teclas no painel. Um avaliador pode devolver o veredito sem escrever teclas. Usar uma instância por painel, resolver o alvo exato `=code:` e fixar a identidade do pane e da sessão até o fim da tentativa. A O133 já prevê vigia, sinal, Stop, retomada e selo, e consta como pedida, não começada. Aproveitar seu sinal `logs/marco.fechado` como proposta de um único registro de fecho, com identidade do evento e prova do marco publicado, em vez de abrir outro emissor. O Stop pode entregar o turno só pelo fecho válido, preservadas as guardas de prova e do B4. (`app/docs/BACKLOG.md:1509`, `app/docs/PROMPTS.md:382–397`, `bin/keepalive.sh:5–9`, `bin/gerar_estado.py:17–20`, `bin/hook_stop_fila1.py:1349–1386`.)
-
-Exigir **(a) ∧ (b) ∧ (c) ∧ (d)** no mesmo ato, imediatamente antes do envio. Estado desconhecido veta a tentativa. (`fichas_pacote_consumo_2111_1440.txt:2`, `app/docs/PROMPTS.md:385–396`.)
-
-| Condição | Onde ler no vivo e onde a leitura falha |
-|---|---|
-| **(a) Code ocioso** | Captura direta do pane exato. A leitura atual distingue o texto do spinner e os padrões acima, incluindo uma grafia de menu numerado e a frase `Do you want`. Não distingue prompt vazio de rascunho, shell ou captura vazia. Também não identifica `AskUserQuestion`, menu ou permissão pelo estado do harness, só pelas frases coincidentes. Um menu fora dos padrões pode cair no `else`. Já o próprio texto com `PAREI` pode vetar um prompt livre, como registra o O279. Exigir prova positiva de prompt do Code vazio e pronto, sem menu, pergunta, permissão, entrada pendente ou fila de mensagens. A fonte capaz de provar isso e excluir entrada local/remota concorrente até o Enter [nao verificado]. (`bin/keepalive.sh:5–8`, `bin/alarme_sessao_ociosa.py:66–86`, `bin/gerar_estado.py:17–20`, `app/docs/PROMPTS.md:389–390`, `app/docs/BACKLOG.md:1687`.) |
-| **(b) Marco fechado presente** | Ler a linha literal no painel atual e vinculá-la ao fecho publicado, por evento, HEAD, pane e sessão. Hoje a L-108 manda publicar a frase depois do handoff. O Stop usa mtime após o gatilho como indício de fim de marco no C1. Invalidar o fecho quando houver novo turno, obra ou mudança de sessão. Uma linha antiga, citada ou ainda na tela já casa. O RELATO registra até a frase seguida de “NAO /clear” com suite e construtor vivos. Sinal estruturado de fecho nesta cópia [nao verificado]. (`CLAUDE.md:332–336`, `bin/hook_stop_fila1.py:1120–1129`, `app/docs/RELATO.md:11188–11193`, `app/docs/PROMPTS.md:385–388`.) |
-| **(c) Zero produtor vivo** | No RELATO, usar `_esperando_com_prova` e `_prova_pid` para o PID nomeado, com identidade e estado em `/proc`. Prova por arquivo só após avanço de mtime e grava memória do Stop. Para suite, ler o `flock` de `/tmp/juliani_db_test.lock` de `trava_teste.sh`, e para DIFF/apply a trava de sombra via `diff_apply_em_curso`. Para Codex, observar `ini/fim` de `chamadas.log` e identidade do wrapper, inclusive antes do slot, e os locks `slot.gate/slot.N` do LOGD efetivo. Para agente, usar `agentes_sem_entrega` no transcript associado ao pane e as declarações de raia pelo leitor `raias_estado.py`, onde “vivo” significa declarado e ainda sem baixa. Ausência de `ESPERANDO`, trava livre ou lista vazia pode esconder wrapper ainda na preparação, suite fora da trava, container órfão ou agente cujo lançamento ainda não apareceu no transcript. `_guarda_clear` trata transcript ausente/ilegível como ausência de veto. Exigir cobertura dos produtores desde a abertura e excluir novos inícios durante a decisão e o envio. Cobertura integral [nao verificado]. (`bin/hook_stop_fila1.py:386–410`, `bin/hook_stop_fila1.py:604–631`, `bin/hook_stop_fila1.py:644–650`, `bin/hook_stop_fila1.py:704–723`, `bin/hook_stop_fila1.py:788–838`, `bin/hook_stop_fila1.py:941–951`, `bin/trava_teste.sh:20–42`, `bin/suite.sh:4–13`, `bin/suite.sh:102–107`, `bin/codex_pergunta.sh:83–101`, `bin/codex_pergunta.sh:266–282`, `bin/codex_pergunta.sh:305–309`, `bin/codex_pergunta.sh:364–400`, `bin/disjuntor.py:409–428`, `bin/disjuntor.py:468–484`, `bin/raias_estado.py:16–21`.) |
-| **(d) Handoff gravado depois do marco** | Ler `app/docs/HANDOFF-SESSAO.md` e vincular a geração ao mesmo evento e HEAD, com ordem **fecho comprovado → handoff completo → frase no painel**, como a L-108 permite. `_handoff_mtime` só lê `stat`. Um handoff velho tocado ou sobrescrito por PreCompact pode ter mtime novo, e o gerador pode gravar a saída cortada. Exigir conteúdo completo publicado para aquele fecho, com o próximo passo e a prova de geração. (`CLAUDE.md:332–336`, `bin/hook_stop_fila1.py:934–938`, `bin/hook_stop_fila1.py:1066–1078`, `bin/handoff_sessao.sh:24–40`, `bin/handoff_sessao.sh:303–329`, `.claude/settings.json:14–31`.) |
-
-Reservar o evento uma vez antes de enviar `/clear`. Aguardar confirmação nova de `SessionStart(clear)` vinculada à tentativa e à sessão alvo pelo escritor existente, e confirmar novamente o prompt pronto antes de enviar exatamente “le o HANDOFF-SESSAO.md e segue a fila; PAREI so em lei ou !”. `orcamento_contexto.py::ler_marco` já expõe `ref`, origem e sessão. Um `compact`, um clear de outra sessão ou só rc 0 de `send-keys` não satisfazem o reconhecimento. Registrar uma linha no RELATO por tentativa, com marco, sessão, hora e desfecho, e consumir o evento sem duplicar retomada. O arquivo de marco atual é único na raiz e sua lista de horas não traz identidade por clear. A correlação precisa ser provada antes de habilitar. (`bin/marco_de_clear.py:36–66`, `bin/orcamento_contexto.py:152–164`, `app/docs/BACKLOG.md:1135`, `app/docs/PROMPTS.md:389–395`, `fichas_pacote_consumo_2111_1440.txt:2`.)
-
-## RISCO
-
-**ADOTA COM MUDANÇAS.** Adotar o escritor único do host com prova positiva e consumo único do fecho. O texto pode ser de outro marco, `-t code` pode resolver o painel do Codex por prefixo, um produtor pode estar vivo sem sinal e o SessionStart pode faltar. Duas capturas iguais ainda deixam a janela entre a última leitura e o Enter. Em qualquer modo sem prova de prontidão e exclusão de concorrência, o instrumento fica desligado. (`bin/keepalive.sh:5–8`, `bin/gerar_estado.py:17–20`, `bin/tests/test_painel_e_do_code.sh:9–27`, `bin/disjuntor.py:468–484`, `app/docs/RELATO.md:11188–11193`, `app/docs/BACKLOG.md:1135`.)
-
-## PROIBIDO
-
-Enviar em menu, pergunta, permissão, prompt com texto ou estado desconhecido. Enviar com produtor vivo, PAREI de lei/! pendente, DIFF, apply, pouso ou push em curso. Ter segundo escritor, escolher outro pane por prefixo, fabricar o carimbo, contornar recusa de permissão ou repetir `/clear` após confirmação ausente. (`bin/keepalive.sh:5–8`, `.claude/settings.json:48–59`, `CLAUDE.md:262–270`, `CLAUDE.md:325–336`, `app/docs/PROMPTS.md:385–397`, `app/docs/BACKLOG.md:1687`.)
-
-## NAO MUDA
-
-O keepalive segue com sua função de religar a fila, e `marco_de_clear.py` segue como escritor único do marco de clear/compact. Preservar o CLEAR-RÁPIDO manual, PreCompact/SessionStart e as decisões de lei/!. Instrumento atrás da espinha, em pouso próprio, sem tomar F5, TRAVAS, N-VAGAS, FERIADO ou AUDITORIA em voo, sem alarme ou agenda para Ronald. O contrato passa uma vez pelo verificador Codex antes da construção. Esta entrega é só leitura. (`app/docs/PISTA.md:170–175`, `bin/keepalive.sh:3–10`, `bin/marco_de_clear.py:2–11`, `.claude/settings.json:14–59`, `bin/hook_stop_fila1.py:1100–1115`, `CLAUDE.md:325–329`, `fichas_pacote_consumo_2111_1440.txt:1–2`.)
-
-## PRONTO
-
-Selo de host exige zero teclas da tentativa se qualquer condição for falsa ou desconhecida. Cobrir prompt com texto, menu, AskUserQuestion, permissão, pane errado, linha antiga, handoff velho/tocado/truncado, produtor invisível e concorrência de escritor, entrada ou produtor. Com hook ausente, atrasado além do limite, marco de compact ou evento de outra sessão, exige zero retomadas e zero reenvios. Em sessão isolada e autorizada, provar um ciclo com Remote Control conectado **e** auto mode, com um fecho, um `/clear` confirmado, uma frase de retomada, próximo item do handoff andando e uma linha no RELATO. Repetir o tick e exigir zero duplicações. Validar a chave com zero teclas do auto-clear. Resultado desses selos e do ciclo [nao verificado]. (`app/docs/PROMPTS.md:385–397`, `bin/tests/test_painel_e_do_code.sh:9–27`, `bin/tests/test_disjuntor.sh:104–119`, `app/docs/BACKLOG.md:1135`, `fichas_pacote_consumo_2111_1440.txt:2`.)
-
-## CONTRATO
-
-1. **Quem chama** — o keepalive do host consome o fecho publicado pela sessão principal, com um escritor por pane. (`bin/keepalive.sh:3–10`, `app/docs/PROMPTS.md:385–391`.)
-2. **Quem espera** — só o escritor do host aguarda a confirmação e o prompt. Durante a tentativa ele suspende o próprio empurrão. (`bin/keepalive.sh:6–9`, `CLAUDE.md:316–319`, `app/docs/PISTA.md:170–174`.)
-3. **Falha/limite** — uma tentativa por fecho, até 60 s para confirmação e prompt como limite proposto para o piloto. Falha ou recusa encerra a tentativa, registra o motivo e corta a retomada automática. (`app/docs/PROMPTS.md:389–395`, `app/docs/BACKLOG.md:1135`.)
-4. **Medida** — contar fechos elegíveis, vetos por motivo, envios, confirmações, retomadas e tempo até o ACK. Esperado zero envios indevidos, duplicados ou retomadas sem confirmação. (`bin/orcamento_contexto.py:352–379`, `app/docs/PISTA.md:170–174`.)
-5. **Quem desliga** — Ronald remove o arquivo proposto `logs/pausas/auto-clear-no-marco.habilitado`. Ausência ou leitura ambígua desliga o auto-clear. `keepalive.off` continua encerrando o escritor inteiro. (`bin/keepalive.sh:4–8`, `app/docs/PISTA.md:170–174`, `fichas_pacote_consumo_2111_1440.txt:2`.)
-
-LEI-AKITA: origem=fecho L-108 e escritor do host (`CLAUDE.md:332–336`, `bin/keepalive.sh:5–8`), testemunha=pane/sessão do fecho, handoff, guardas de produtor e SessionStart clear (`bin/handoff_sessao.sh:242–263`, `bin/hook_stop_fila1.py:788–838`, `.claude/settings.json:48–59`), RED=casos de PRONTO, execução [nao verificado], quem-mais-le=Stop, ESTADO e SessionStart compact/clear (`bin/hook_stop_fila1.py:1018–1047`, `bin/gerar_estado.py:279–284`, `.claude/settings.json:34–59`), juizes novos=1 porta de decisão do auto-clear, proposta com as quatro provas e reaproveitamento dos leitores, padrao=n/a (instrumento). (`CLAUDE.md:17–29`, `CLAUDE.md:62–66`, `app/docs/PISTA.md:170–175`.)
-
-## PERGUNTAS-DA-FICHA
-
-1. Ronald aprova tratar este desenho como retomada da **O133**, usando o keepalive como vigia único, e preservar o `PAREI: ! CLEAR | espera Ronald` do C1 como pedido manual? A O133 propunha timer próprio e o C1 vigente pede Ronald explicitamente. (`app/docs/BACKLOG.md:1509`, `bin/hook_stop_fila1.py:1122–1129`, `bin/hook_stop_fila1.py:1157–1162`.)
-2. Ronald autoriza a prova isolada com Remote Control conectado e auto mode, e a habilitação apenas na configuração que provar o ciclo e as guardas? Se a recusa registrada se repetir ou a prontidão seguir sem prova, manter a operação manual. (`app/docs/BACKLOG.md:1687`, `app/docs/PROMPTS.md:389–396`, `fichas_pacote_consumo_2111_1440.txt:2`.)
-
----
-
-**PAREI RASCUNHO AUTO-CLEAR-NO-MARCO: leve ao chat** | SHA-256 do rascunho acima, com quebra de linha final: `cc5146e734a908e1058bcc4ea53aafbb78c5287525c8bed552133cf682d187f2`. Entregue nesta resposta em modo só leitura. (`fichas_pacote_consumo_2111_1440.txt:1`, `app/docs/BACKLOG.md:2080`.)
-
-## 21/11 14:41 · sessao 11194ffa1513 · FICHAS-PACOTE-CONSUMO-f3 · leitura · origem=Code
-
-# RASCUNHO MODELO-DO-SUBAGENTE
-
-## MEDIDA
-
-**1 chamada fora da rota padrão demonstrável. O total de infrações à regra fica [nao verificado].** “Run admin-list sonda (sonnet)” pediu Sonnet e resolveu em Sonnet. Para sonda, a rota padrão é Codex. A tabela não traz o rc, o tipo de sonda ou o motivo no DESPACHO para julgar uma exceção. (agentes_modelo.txt:37, CLAUDE.md:357–362)
-
-| Papel que a descrição permite ler | Chamadas | O que o dado sustenta |
-|---|---:|---|
-| Construção/cura e verificação final | 35 | 23 descrições de construção/cura e 12 de verificação final. Opus efetivo em 27, das quais 15 de construção/cura e 12 de verificação. As outras 8 são de construção/cura e ficaram sem modelo efetivo. Para julgar conformidade, o modelo da sessão em cada abertura e o enquadramento de cada cura como negócio ficam [nao verificado]. (agentes_modelo.txt:6–44, CLAUDE.md:316–319, CLAUDE.md:357–363) |
-| Sonda | 1 | Sonnet efetivo, fora da rota padrão, com exceção [nao verificado]. (agentes_modelo.txt:37, CLAUDE.md:359–362) |
-| Extração pontual de campos de log | 1 | “Extract subagent models from logs” descreve extração textual. Haiku efetivo é compatível com o escopo de contar/grep. (agentes_modelo.txt:45, CLAUDE.md:359–360) |
-| Papel indeterminado | 3 | “CODEX-MODELO medida M1/M2” (Haiku), “Mapa das falhas do construtor” (Sonnet) e “WRAPPER-N-VAGAS volta 2” (Opus). A descrição não resolve fonte, tarefa ou papel aplicável [nao verificado]. (agentes_modelo.txt:30, agentes_modelo.txt:40–41) |
-
-São **40 chamadas em 6 transcrições**, com 28 Opus, 2 Sonnet, 2 Haiku e 8 sem modelo efetivo achado pelo cruzamento fornecido. Só entre os **27 general-purpose**, incluindo tipo vazio, são **16 Opus, 2 Sonnet, 2 Haiku e 7 sem modelo efetivo**. Dos general-purpose, 20 pediram Opus, 2 pediram Sonnet e 2 pediram Haiku. As 3 aberturas sem model explícito chegaram a Opus. Os 13% de /usage são o motivo da ficha. Economia de tokens e cobertura fora dessas transcrições [nao verificado]. (agentes_modelo.txt:1–2, agentes_modelo.txt:6–65, fichas_pacote_consumo_2111_1440.txt:4)
-
-## DESENHO
-
-**Abertura hoje.** O único frontmatter de agente na cópia é o de verificador, com model: inherit. Ele declara herança. Na amostra, 11 verificadores sem model explícito resolveram em Opus. A sessão conseguiu abri-los sem repetir o campo. O efeito de pedir outro modelo ao verificador e o default de general-purpose fora da amostra ficam [nao verificado]. O settings da cópia registra o disjuntor com matcher vazio em PreToolUse, sem configuração de modelo por papel. (.claude/agents/verificador.md:1–6, .claude/settings.json:62–76, agentes_modelo.txt:6–55)
-
-**Guarda hoje.** O disjuntor lê o JSON do hook e usa tool_input.subagent_type e prompt para B3, censo do construtor e B4. O caminho de Agent não consulta tool_input.model. Há uma saída explícita de recusa por permissionDecision: deny. Essa porta permite desenhar a recusa de modelo ausente quando exigido ou incompatível com papel conhecido. A presença dos campos, a resolução do model omitido e a cobertura do hook no harness em uso ficam [nao verificado]. A cópia registra caso anterior em que abrir em app/ deixou o PreToolUse da raiz inerte. (bin/disjuntor.py:1796–1798, bin/disjuntor.py:1864–1898, bin/disjuntor.py:1912–1933, app/docs/RELATO.md:4686)
-
-**Contador hoje.** O ESTADO já exibe o agregado de agentes Claude em 24 h por modelo/tipo. _agentes_24h usa mtime do meta.json, agentType e params.model do primeiro api-request. O agregado não cruza papel, modelo da sessão ou motivo. A trilha do PreToolUse cobre recusas e eventos específicos de censo. O valor do novo contador neste HEAD fica [nao verificado]. (bin/disjuntor.py:1827–1834, bin/disjuntor.py:1926–1932, bin/disjuntor.py:2236–2271, bin/gerar_estado.py:285–291)
-
-**Construção proposta.** A sessão declara na abertura o item do DESPACHO, o papel e a referência ao motivo de exceção, quando aplicável. Explicita Sonnet para leitura de log e Haiku para extração ou contagem textual. No verificador, aceita a herança declarada e confere o efetivo. Para construtor de negócio, compara com o modelo da sessão na abertura, sem fixar Opus como constante. Leitura de código e sonda seguem ao wrapper do Codex, com as exceções da regra. Identificação estável do item no payload e prova de herança antes da execução [nao verificado]. (CLAUDE.md:316–319, CLAUDE.md:344–347, CLAUDE.md:357–363, .claude/agents/verificador.md:5, bin/codex_pergunta.sh:81–84)
-
-**Fonte e universo propostos.** A sessão Claude escreve as transcrições. O leitor privado casa a chamada e seu resultado por ID para ler resolvedModel e confere message.model do subagente, à maneira do anexo. O hook é o único escritor da trilha de abertura em logs/sessao/, com IDs, instante, papel, modelo pedido ou herdado, referência de exceção e decisão. Um avaliador cruza as fontes. O ESTADO publica só o agregado, em janela móvel de 24 h pelo instante de abertura, um registro por sessão e ID de chamada, incluindo general-purpose vazio, verificador e customizados, nas origens do projeto autorizadas. Chamadas recusadas, exceções autorizadas e casos sem prova aparecem com números próprios. Fonte ausente, chamada sem junção ou cobertura incompleta deixa o zero sem certificação. A coleta de Agent/Task por todas as origens e a chave comum no hook em execução ficam [nao verificado]. (agentes_modelo.txt:1–2, agentes_modelo.txt:65, bin/disjuntor.py:123–126, bin/disjuntor.py:1926–1932, bin/gerar_estado.py:285–291, CLAUDE.md:32–36, CLAUDE.md:389–391)
-
-## RISCO
-
-**ADOTA COM MUDANCAS.** Começar pela medição e habilitar a recusa após a prova de cobertura e o corte do dono. Exigir model de todo Agent atingiria os 11 verificadores sem argumento que resolveram em Opus. Tratar todo Sonnet como válido deixaria passar a sonda da amostra pela rota comum. Confiar só na trilha pode dar zero com o hook inerte em app/. Usar hora e descrição como chave também perderia uma das duas chamadas listadas às 04:38:58 com o mesmo texto. (agentes_modelo.txt:9–10, agentes_modelo.txt:13–34, agentes_modelo.txt:37, agentes_modelo.txt:47–56, app/docs/RELATO.md:4686, CLAUDE.md:35–36)
-
-## PROIBIDO
-
-Fabricar conformidade de description, tipo, alias pedido, ausência de resultado ou trilha vazia. Publicar prompt, transcript ou tool_result cru. Mudar settings/modelo global ou a regra dos papéis por este rascunho. (CLAUDE.md:32–36, CLAUDE.md:316–319, CLAUDE.md:357–363, bin/gerar_sessao.py:12–18, bin/relato.sh:114–118)
-
-## NAO MUDA
-
-Permanecem o DESPACHO e suas exceções, a verificação final e as travas atuais. Instrumento com pouso próprio, atrás da espinha e fora de F5, TRAVAS, N-VAGAS, FERIADO e AUDITORIA em voo. (CLAUDE.md:325–329, CLAUDE.md:357–363, CLAUDE.md:372–381, bin/disjuntor.py:1837–1898, fichas_pacote_consumo_2111_1440.txt:1)
-
-## PRONTO
-
-RED antes da cura e GREEN pelo caminho do hook e do ESTADO. O caso que morde abre sonda Sonnet sem exceção em fixture. Em medição, dá 1 desvio quando executada e conciliada. Com guarda ativa, dá 1 recusa e 0 abertura indevida. O controle com exceção comprovada passa e aparece na trilha. A leitura de log admite Sonnet explícito e recusa modelo obrigatório ausente ou trocado. O verificador herdado sem model passa com evidência de sessão e modelo efetivo iguais. Carga sem hook, trilha ilegível ou resultado ausente mostra cobertura ou classificação incompleta. Duas chamadas com a mesma hora e descrição e IDs distintos contam duas. Cobertura validada na raiz e em app/ antes de habilitar bloqueio. Resultados desses testes [nao verificado]. (CLAUDE.md:28–36, CLAUDE.md:357–362, bin/tests/test_disjuntor.sh:86–88, agentes_modelo.txt:9–10, agentes_modelo.txt:37, app/docs/RELATO.md:4686)
-
-## CONTRATO
-
-1. **Quem chama** — sessão Code no PreToolUse já registrado. O gerador do ESTADO lê o avaliador único do cruzamento. (.claude/settings.json:62–72, bin/gerar_estado.py:285–289)
-2. **Quem espera** — só a abertura recusada aguarda correção do despacho. A sessão segue os itens independentes e faz o polling em shell de fundo. (CLAUDE.md:269–275, CLAUDE.md:316–319)
-3. **Falha/limite** — sem dados de papel/modelo, registrar indeterminado. Na fase de recusa, negar o ramo coberto quando faltar prova obrigatória. Corpus ausente, ilegível ou junção incompleta deixa a medida indisponível ou parcial. (CLAUDE.md:32–36, bin/disjuntor.py:1933–1957, bin/gerar_estado.py:290–291)
-4. **Medida** — “agente fora do modelo do papel”, esperado 0 por 24 h verificadas, com total, recusas, exceções e indeterminados visíveis. (CLAUDE.md:35–36, CLAUDE.md:389–391, agentes_modelo.txt:65)
-5. **Quem desliga** — Ronald no terminal, por chave própria proposta para suspender só a recusa de modelo. A coleta mantém a indicação de recusa desligada. A chave atual do disjuntor permanece com seu escopo. (bin/disjuntor.py:126, bin/disjuntor.py:213–244, bin/disjuntor.py:1901–1925)
-
-LEI-AKITA: origem=abertura Agent no PreToolUse, testemunha=transcrição da sessão e do subagente cruzada com o DESPACHO, RED=sonda Sonnet sem exceção e verificador herdado como controle [nao verificado], quem-mais-le=PreToolUse e ESTADO, juizes novos=0 de negócio (avaliador de instrumento sujeito ao aval), padrao=n/a (instrumento). (CLAUDE.md:62–68, CLAUDE.md:357–362, bin/disjuntor.py:1796–1798, bin/gerar_estado.py:285–289, agentes_modelo.txt:65)
-
-## PERGUNTAS-DA-FICHA
-
-1. Aprovada a passagem de medição para recusa depois do PRONTO? No ramo coberto, a falta de papel, modelo obrigatório ou prova de exceção passa a recusar a abertura? (CLAUDE.md:316–319, CLAUDE.md:357–362, bin/disjuntor.py:1796–1798)
-2. Para cobrir raiz e app/, a operação fixa a abertura na raiz ou Ronald autoriza a instalação do mesmo hook nas duas origens? A configuração efetivamente carregada hoje fica [nao verificado]. (.claude/settings.json:62–72, app/docs/RELATO.md:4686)
-
----
-
-**PAREI RASCUNHO MODELO-DO-SUBAGENTE: leve ao chat** — `sha256-12 6976f70e7135` do Markdown acima, do título à última pergunta, em UTF-8 sem quebra final. Entrega em chat, sem gravação no RELATO, conforme o escopo de só leitura. (fichas_pacote_consumo_2111_1440.txt:1)
-
-## 21/11 14:33 · sessao 6d6411f4a2c6 · OPEN-REDIRECT-VOLTAR · leitura · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_7693 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7696 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
