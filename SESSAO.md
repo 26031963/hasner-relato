@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 16:21:37.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (39.9 MB). Acoes na janela: **1081**.
+**Medido em 21/11/2026 16:27:50.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (40.0 MB). Acoes na janela: **1084**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:27:50 | Bash | Read FERIADO copier and judge code | `cd ~/wt-codex-feriado-por-posto-120132/app; git log --oneline -1; sed -n 180,215p colaboradores/services/feriado_do_posto.py; echo ----; sed -n 895,935p escala/models.py; echo ----; sed -n 285,305p colaboradores/services/vinculo.py` |
+| 16:27:45 | Bash | Read FERIADO PARADA text | `cd ~/saas-hasner; ls -la logs/FERIADO-POR-POSTO/corte1445_cura/; /bin/grep -n -i -B2 -A8 'PARADA' logs/FERIADO-POR-POSTO/corte1445_cura/r2.txt \| cut -c1-500 \| head -60` |
+| 16:27:42 | Bash | Save aval and locate FERIADO PARADA text | `cd ~/saas-hasner; D=logs/RESPOSTAS-F5-12-E-FERIADO-2111-1630; mkdir -p $D; cat > $D/aval.txt <<'EOF' aval Ronald: RESPOSTAS-F5-12-E-FERIADO-2111-1630 (21/11 16:30) -- UNIDADE: conjunto travado da materializacao (1.2) e nascimento de vinculo pelo FERIADO; nenhuma lei nova. (1) E4C-F5 1.2: DECIDIDO PELO DESENHO (escritor unico; classe "lido antes da trava, gravado depois"): o conjunto travado de tra ...` |
 | 16:20:52 | Bash | Record 4c.1 opening in RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(4, f"E4C-F5 4c.1 opus construtor ABERTO ({H}; vaga opus 1; candidata C pelo RESPOSTA-4C1-CENSO-2111-1515; copia ~/wt-f5-4c1-135123 com o RED do par commitado 3c3e36bb1; roteiro logs/E4C-F5-4C1/candidata_c/r.txt anexo, ressalva = item de prova). FERIADO  ...` |
 | 16:20:47 | Agent | E4C-F5-CONSTROI 4c.1 opus construtor | `Obra E4C-F5-CONSTROI, item 4c.1 (candidata C). Brief/censo: logs/E4C-F5-CONSTROI/brief.md (censo fechado). Voce e o OPUS CONSTRUTOR. Leia /home/ronald/saas-hasner/CLAUDE.md antes (LEI-AKITA, construir em copia, git add por path, commit por heredoc com `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`). COPIA (unica onde voce escreve): /home/ronald/wt-f5-4c1-135123, HEAD 3c3e36bb1 (= F5 b09 ...` |
 | 16:20:28 | Bash | Commit 4c.1 par RED in copy | `cd ~/wt-f5-4c1-135123 && git add app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py && git commit -q -F - <<'EOF' E4C-F5 4c.1 RED: borda unica da ressuscitacao (par main verde x F5 vermelho, sha 3f647993c456) BordaUnicaDaRessuscitacaoTest: ato entre os tempos da F5 -> main ressuscita 1, F5 0 (par2_f5.log FAILED failures=2; par2_main.log OK Ran 15); controle do empate sem tick verde nas duas. C ...` |
