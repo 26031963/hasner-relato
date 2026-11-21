@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 06:09** · publicado em **21/11/2026 06:12** (UTC-3)
+> Ultima resposta processada: **21/11/2026 10:19** · publicado em **21/11/2026 10:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 10:19 · sessao 1706a82be043 · E4C-F5 · leitura · origem=Code
+
+## A. Logs citados no RELATO
+
+Os cinco itens têm uma referência comum em `c8eb8eddf`: “tabelas nominais inteiras em logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/ra.txt, montadas pelo Codex sobre c8eb8eddf, amostra da sessao 9 de 9”. A mesma linha registra as lacunas de cada tabela. Conteúdo dos logs brutos [nao verificado]. `app/docs/RELATO.md:94`
+
+| Item | Caminho, hash e trecho literal |
+|---|---|
+| **01 — Matriz e censo de entrada** | **`c8eb8eddf`**, `logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/ra.txt:43-59`: “[01 06] 15 sitios x selo: tabela nominal em ra.txt:43-59”. **`3308f7599`**, `logs/ESPINHA-BRIEFS/F5/brief_c3.md`: “Etapa A fechou -- matriz 15 sitios (logs/ESPINHA-BRIEFS/F5/brief_c3.md, amostra 9/9 arquivo:linha conferidos no 3308f7599), perguntas de lei 0, CENSO fechado pelo wrapper (disjuntor --censo, brief canonico logs/E4C-F5-CONSTROI/brief.md)”. O despacho do censo cita `logs/ESPINHA-BRIEFS/F5/c3/etapaA2`: “F5 Etapa A relancada sobre 3308f7599 (main POUSADO, F6F7+F9 no ar): Codex censo logs/ESPINHA-BRIEFS/F5/c3/etapaA2”. `app/docs/RELATO.md:94,1503,1511` |
+| **40 — REDs e mutantes da B** | **`c8eb8eddf`**, `logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/ra.txt:84-121`: “[35 36 40 41] mapa K: 33 K com carregador e arquivo:linha + K40 (ra.txt:84-121)”. A rodada cita `logs/ESPINHA-BRIEFS/F5/vB/alvo_B.log` e registra “RED dos 30 testes novos: base ec7134368 FAILED 28/30 (vB/base_novos.log), B com o import de DIA OK 30/30 (vB/B_novos.log)” e “Volta B COMMITADA na copia: d0210a400”. Os caminhos relativos dos mutantes e da passagem aparecem como “Em curso: 15 mutantes (vB/mut/”, “Mutantes da B: 15/15 MORTOS” e “VOLTA B VERDE (00:5x, vB3/volta.log, worktree d9319a215 contra ec7134368)”. A conciliação 29×27 segue listada como falta. `app/docs/RELATO.md:94,1296` |
+| **41 — REDs e mutantes da C** | **`c8eb8eddf`**, `logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/ra.txt:84-121`, pelo mesmo trecho “[35 36 40 41] mapa K”. Na volta C, o RELATO registra “57582ee14: 25 K + sobra dedup” e “triagem C no Codex leitura (logs/ESPINHA-BRIEFS/F5/vC/triagem)”. Para C+D, cita “F5 VOLTA C+D VERMELHA 01:32 (logs/ESPINHA-BRIEFS/F5/vC/volta.log, copia wt-f5-vC-copia-011631 = 9d386d1b1)”. Para o placar agregado, registra “mutantes tira-lote A+B+C 33 de 33 mordem pela medida” na **`a3c23d10b`**, cuja passagem cita `logs/ESPINHA-BRIEFS/F5/vC5/volta.log`. Na **`8938552e1`**, repete “33 de 33 mutantes MORDEM” com o caminho relativo `vC5/green_c6.log`. O vínculo nominal das três M segue listado como falta. `app/docs/RELATO.md:94,790,793,1283,1289` |
+| **49 — Harness nas exceções** | **`c8eb8eddf`**, `logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/ra.txt:161-171`: “[49 51] 9 modulos de harness com asserts MAIN = copia (ra.txt:161-171)”. A volta A cita o recorte `logs/ESPINHA-BRIEFS/F5/vA/prova/` sobre o **MAIN `eb1e49c1e`** e registra a migração em **`cda246732`**: “helper + migracao + selos (a)(b) -> Codex construtor 20:09 (logs/ESPINHA-BRIEFS/F5/vA/duble/; base (b) medida no MAIN em base_asserts_eb1e49c1e.txt)”. A partição nominal das 11 famílias segue listada como falta. `app/docs/RELATO.md:94,1312,1314` |
+| **51 — Décima segunda família** | **`c8eb8eddf`**, `logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/ra.txt`, no bloco “[49 51]”, que nomeia “os dois RED-8 nomeados (test_red_8_custo_pergunta_viva_calc_prefetch_uma_e_cinco, test_red_8_custo_montar_chamados_fio_uma_e_cinco)” e registra “FALTA: a particao nominal das 11 familias e o ordinal da 12a.” Para os RED-8, há registros históricos em `logs/ESPINHA-BRIEFS/F5/v2/prova/RED_base.log`, **`9fa5ad533`**, com “red_8 (custo) ERROR na fixture”, e `logs/ESPINHA-BRIEFS/F5/opus_models/`, **`18bf86f01`**, com “GREEN Ran 54, 2 ERROR test_red_8_* da base”. Para o RED do fio sem prefetch, a **`d40f1c9dc`** cita o caminho relativo `quatro/red_sem_lote.log`: “3 not less than or equal to 1”. `app/docs/RELATO.md:94,1309,1320,1372` |
+
+## B. Item 68
+
+O **“contrato de fechamento”** é `test_porta_humana_de_disputa_presta_contas`, em `app/chamados/tests/test_contract_dedup_status.py:135–151`. O RELATO usa o rótulo “contrato de fechamento” no item 68 e nomeia o módulo ao registrar “FAIL test_contract_dedup_status (ancora de TEXTO 'self.respostas_sem_veredito()' deslocada pelo item D, classe i)”. `app/docs/RELATO.md:94,1283`
+
+A tabela usa os blocos localizáveis na árvore final e o antes registrado no RELATO ou em comentários. O conteúdo exato da base `ebfdcc4dff23c46983c63e5a62e08cf671246a52`, os limites dos hunks e a completude do diff [nao verificado].
+
+| Uso e bloco | Antes | Depois | Efeito | Só ato × coluna? |
+|---|---|---|---|---|
+| **Contrato — guarda de fechamento** | O RELATO registra a âncora antiga `self.respostas_sem_veredito()`. A expressão completa do assert antigo [nao verificado]. `app/docs/RELATO.md:1283` | O `assertIn` exige `_pend = self.respostas_sem_veredito(perguntas=perguntas)` entre as atribuições do corpo de `fechar`, via AST. `app/chamados/tests/test_contract_dedup_status.py:14–16,135–144` | O teste passa a cobrar a chamada com o lote já carregado. `fechar` carrega perguntas e decisões uma vez e entrega essas instâncias à guarda. `app/chamados/models.py:2068–2073`, `app/docs/RELATO.md:1289` | **Outro efeito.** Reuso do lote no fechamento e troca do esperado estrutural. `app/chamados/models.py:2068–2072`, `app/chamados/tests/test_contract_dedup_status.py:142–144` |
+| **Expand — dublês da devolução** | A devolução passou a guardar por ato ou coluna e a fotografar a composta. A forma anterior dos dublês na base pedida [nao verificado]. `app/docs/RELATO.md:303` | `Pergunta.refresh_from_db` é um no-op. O dublê de `composta` devolve `validada_em` da própria coluna. A11 executa a devolução duas vezes e cobra `True`, depois `None`, resposta preservada, um ato e uma gravação. `app/chamados/tests/test_e4_expand.py:72–83,148–161` | Dá suporte à releitura e à foto da devolução na fixture. O dublê representa a mesma validação pelos dois lados. `app/chamados/tests/test_e4_expand.py:72–83,148–161`, `app/chamados/services/validacao.py:267–296` | **Só invariante**, no efeito identificado desse suporte à devolução. `app/chamados/services/validacao.py:267–296`, `app/chamados/models.py:4393–4399` |
+| **Expand — A13, `values_list`** | “A13 por flat=” era um dos vermelhos do dublê. A assinatura anterior exata [nao verificado]. `app/docs/RELATO.md:303` | `values_list(*campos, flat=False)` devolve lista plana com `flat=True` e lista de tuplas no outro ramo. `app/chamados/tests/test_e4_expand.py:178–183` | Acomoda a consulta que monta o conjunto de donos para a trava do lote. `app/chamados/services/disputa_emissao.py:1642–1647` | **Outro efeito.** Compatibilidade do dublê com a consulta da trava. `app/chamados/tests/test_e4_expand.py:178–183`, `app/chamados/services/disputa_emissao.py:1642–1647` |
+| **Expand — A13, releitura da reabertura** | “Pergunta validada so no ATO era limpa sem linha REABERTURA”. A forma anterior do dublê de `objects` [nao verificado]. `app/docs/RELATO.md:294` | `objects.filter(pk__in=...).prefetch_related(...)` devolve a pergunta se o PK estiver no lote. `app/chamados/tests/test_e4_expand.py:189–192` | Dá suporte à releitura pela composta quando as colunas estão vazias, para registrar o ato compensador quando ainda há validação pelo ato. `app/chamados/services/disputa_emissao.py:1652–1683` | **Só invariante**, no efeito identificado da releitura. `app/chamados/services/disputa_emissao.py:1652–1683`, `app/chamados/models.py:4393–4399` |
+| **Expand — A14, import de `fio`** | A14 isolado dava `ImportError`. O comentário diz que o import dependia de outro módulo já ter carregado `fio`. `app/docs/RELATO.md:303`, `app/chamados/tests/test_e4_expand.py:101–104` | O harness disponibiliza `chamados.services.fio` com o corpo de `recusa_par_ilegal` lido da fonte e os dois predicados de resposta no dublê de `juizes`. `app/chamados/tests/test_e4_expand.py:92–104` | Permite executar A14 isoladamente pela guarda do par **instante de resposta × texto**. `app/chamados/tests/test_e4_expand.py:101–104,218–225`, `app/chamados/services/disputa_emissao.py:1689–1707`, `app/chamados/services/fio.py:1704–1722` | **Outro efeito.** Independência do import e exercício da guarda de resposta da L-130. `app/chamados/tests/test_e4_expand.py:97–104`, `app/chamados/services/fio.py:1704–1722` |
+
+**B.3 — Mudança de assert.** Sim, no contrato. A âncora antiga registrada era `self.respostas_sem_veredito()`. O esperado final é a atribuição com `perguntas=perguntas`, procurada no AST do corpo de `fechar`. No Expand, os blocos identificados adaptam a instrumentação. Remoção, relaxamento ou troca de esperado no diff do Expand [nao verificado]. `app/docs/RELATO.md:1283`, `app/chamados/tests/test_contract_dedup_status.py:135–144`, `app/chamados/tests/test_e4_expand.py:148–161,178–225`
+
+- **A 01** | **log citado**. `app/docs/RELATO.md:94,1503,1511`
+- **A 40** | **log citado**. `app/docs/RELATO.md:94,1296`
+- **A 41** | **log citado**. `app/docs/RELATO.md:94,790,793,1283,1289`
+- **A 49** | **log citado**. `app/docs/RELATO.md:94,1312,1314`
+- **A 51** | **log citado**. `app/docs/RELATO.md:94,1309,1320,1372`
+- **B — Contrato de fechamento** | **outro efeito: reuso do lote de perguntas e decisões no fechamento, com troca do esperado estrutural. PAREI.** `aval.txt:7`, `app/chamados/models.py:2068–2072`, `app/chamados/tests/test_contract_dedup_status.py:142–144`
+- **B — `test_e4_expand.py`** | **outro efeito: compatibilidade de `values_list(flat=True)` com a consulta da trava e execução isolada de A14 pela guarda de instante × texto. PAREI.** `aval.txt:7`, `app/chamados/tests/test_e4_expand.py:92–104,178–183`, `app/chamados/services/disputa_emissao.py:1642–1647,1689–1707`
+
+## 21/11 10:18 · sessao 7556fe64fda6 · E4C-F5 · verificador · origem=Code
+
+**AVAL-DEVOLVIDO — RESPOSTAS-2111-1010, item 2.** As sete referências precisam ser corrigidas antes da construção. A unidade declarada é o mutante, e o código aponta cinco comparações alteradas. `aval.txt:1`, `aval.txt:4`, `e4c_f5_voltaD_mutantes.py:14`, `e4c_f5_voltaD_mutantes.py:23`, `e4c_f5_voltaD_mutantes.py:32`.
+
+## 1. As premissas conferem? NAO
+
+Nenhuma das sete linhas citadas contém a comparação mutada. Nos cinco pontos efetivos, há uma sequência permitida pelo código que produz a divergência na instância. O escritor grava a coluna e o ato no mesmo `atomic`. O leitor conserva a instância do primeiro `SELECT` e recebe as decisões do segundo, diretamente ou via prefetch. A composta usa essas decisões para calcular a validação vigente. `validacao.py:161`, `disputa_emissao.py:1478`, `disputa_emissao.py:1532`, `models.py:4361`, `models.py:4370`.
+
+| Linha do aval | Comparação efetiva e sequência alcançável |
+|---|---|
+| `acoes_disputa.py:344` | **SIM em `:349`.** O `get` de `:345` carrega `perg` com a coluna nula. `validar_pergunta` confirma a validação pelo `_carimbar_validacao` antes da consulta às decisões. A composta vê a assinatura e devolve `info`. A troca pela coluna passa pela guarda. `acoes_disputa.py:345`, `acoes_disputa.py:349`, `validacao.py:746`, `validacao.py:760`. |
+| `declaracao_texto.py:475` | **SIM em `:229`, pela projeção.** `:475` escolhe o caminho que carrega as perguntas com prefetch em `:476`. `_carimbar_validacao`, via `validar_pergunta`, confirma entre o `SELECT` das perguntas e o prefetch das decisões. Com a coluna ainda nula na instância, a composta produz `aceita=False` e o mutante produz `True`. `declaracao_texto.py:229`, `declaracao_texto.py:280`, `declaracao_texto.py:475`, `declaracao_texto.py:480`, `validacao.py:760`. |
+| `declaracao_texto.py:634` | **SIM na mesma `:229`, pelas propostas.** `:634` consulta o memo por fato e `:636` carrega as perguntas e as decisões. O mesmo escritor confirma entre esses dois `SELECTs`, com efeito em `aceita`. `aplicar_declaracao` seleciona pelo `followup_id` e refaz a guarda sob trava, então o resultado da aplicação por si só deixa passar essa diferença. `declaracao_texto.py:634`, `declaracao_texto.py:639`, `declaracao_texto.py:651`, `declaracao_texto.py:658`, `declaracao_texto.py:670`, `validacao.py:760`. |
+| `materializacao.py:195` | **SIM em `:203`.** `:195` busca a irmã `q`. No caminho da tela, `validar_pergunta(q.pk, ..., confirmar_implausivel=True)` pode confirmar a assinatura pelo `_carimbar_validacao` entre o `SELECT` de `q` e a leitura das decisões em `:200`. A composta pula o juiz da irmã. A coluna antiga, nula, faz o mutante chamar o juiz. A confirmação precisa passar pelo veto do U163, que antecede o carimbo. `materializacao.py:145`, `materializacao.py:195`, `materializacao.py:200`, `materializacao.py:203`, `validacao.py:714`, `validacao.py:720`, `validacao.py:760`. |
+| `materializacao.py:925` | **SIM na mesma `:203`.** `:925` abre o ramo da testemunha da tela e `:928` chama `par_do_intervalo`. É a mesma sequência, com a confirmação da irmã entre o `SELECT` de `q` e o das decisões. O efeito verificável é passar ou cair na recusa por implausibilidade da irmã. A original ainda pode cair em outra guarda do par. `materializacao.py:925`, `materializacao.py:928`, `materializacao.py:195`, `materializacao.py:200`, `materializacao.py:203`, `materializacao.py:231`, `validacao.py:760`. |
+| `validacao.py:1074` | **SIM em `:1082`.** `:1074` inicia a carga do lote. `_carimbar_validacao`, via `validar_pergunta`, confirma entre o `SELECT` das perguntas e o prefetch das decisões. A original devolve `Ja validada.` na entrada. A coluna antiga, nula, leva o mutante à reclassificação. `validacao.py:760`, `validacao.py:1074`, `validacao.py:1082`, `validacao.py:1085`. |
+| `validacao.py:1102` | **SIM em `:1104`.** Uma resposta humana passa pela guarda pública enquanto a pergunta ainda está viva. O lote valida a pergunta e o `refresh_from_db()` de `:1103` lê a coluna preenchida. Antes da consulta fresca às decisões, `responder_pergunta_disputa_core` relê sob trava, zera a coluna e grava `RESPOSTA` que desfaz a validação. A original põe o item em `recusados`. O mutante conta a validação lida no refresh. `views.py:1239`, `views.py:1278`, `disputa_emissao.py:1481`, `disputa_emissao.py:1503`, `disputa_emissao.py:1535`, `validacao.py:1096`, `validacao.py:1103`, `validacao.py:1110`. |
+
+## 2. Colide com aval vigente? NAO
+
+Acrescentar os testes de intercalação é compatível com os controles da classe vii, que afirmam o par ato × coluna após a escrita. Os testes atuais recarregam a pergunta para afirmar o par, enquanto as sequências acima observam uma instância já carregada durante uma segunda leitura. A fonte da decisão continua sendo a composta. `RELATO.md:283`, `PROMPTS.md:2688`, `test_e4c_f5_voltaD_portas.py:45`, `test_e4c_f5_voltaD_portas.py:60`, `models.py:4382`, `models.py:4393`. [nao verificado]
+
+## 3. Alguma condição não fecha no literal? SIM
+
+- **A unidade é o mutante, com um teste que o mate.** As sete referências descrevem caminhos de cinco trocas. Projeção e propostas chegam à mesma guarda de `declaracao`. A busca da irmã e a chamada da tela chegam à mesma guarda de `irma_implausivel`. `aval.txt:1`, `aval.txt:4`, `e4c_f5_voltaD_mutantes.py:13`, `declaracao_texto.py:229`, `declaracao_texto.py:480`, `declaracao_texto.py:635`, `materializacao.py:195`, `materializacao.py:203`, `materializacao.py:928`. [nao verificado]
+- **Nenhuma das cinco trocas exige forjar a divergência.** Para `lote_releitura`, o caso positivo atual usa texto e força `LOTE_A`. Esse arranjo não demonstra a entrada real no lote, pois o classificador exige `hora` ou `data_hora` com hora legível. A sequência da Q1 cabe numa pergunta de hora que entre pela classe A real e cuja assinatura fique até o refresh. O teste que apaga só a coluna é um diagnóstico separado. `test_e4c_f5_voltaD_portas.py:40`, `test_e4c_f5_voltaD_portas.py:350`, `test_e4c_f5_voltaD_portas.py:376`, `validacao.py:1213`, `test_fila_validar_lote.py:103`. [nao verificado]
+- **O seletor atual precisa ser acionado pelo teste ou pela bateria.** Definir `F5_VOLTA_D_MUTANTE` só aplica a troca dentro de `mutar_sitio` com o nome correspondente. Os três usos atuais nesse módulo selecionam mutantes de desempenho. A morte dos cinco no hash informado é [nao verificado]. `e4c_f5_voltaD_mutantes.py:49`, `test_e4c_f5_voltaD_portas.py:163`, `test_e4c_f5_voltaD_portas.py:199`, `test_e4c_f5_voltaD_portas.py:344`. [nao verificado]
+
+## 4. Toca exportada, dinheiro ou `!` fora do declarado? NAO
+
+O item autoriza testes e o seletor troca a função em memória, restaurando-a ao sair. Os cenários cabem em competência de teste aberta. O fluxo existente pode conferir a entrega e recalcular por evento, e a classificação do lote lê a tolerância do motor. O item não exige escrita em competência exportada, alteração no motor ou em escala/vínculo de produção, nem exclusão de arquivo. `aval.txt:4`, `aval.txt:9`, `e4c_f5_voltaD_mutantes.py:55`, `validacao.py:757`, `validacao.py:769`, `validacao.py:1147`, `CLAUDE.md:265`. [nao verificado]
+
+Identidade do hash por metadados Git e ocorrência das intercalações em produção [nao verificado].
+
+- **Q1 — PROCEDE (aval devolvido, item 2).** `acoes_disputa.py:344`, `acoes_disputa.py:349`.
+- **Q2 — NAO PROCEDE.** `RELATO.md:283`, `models.py:4393`.
+- **Q3 — PROCEDE (aval devolvido, item 2).** `aval.txt:1`, `aval.txt:4`, `e4c_f5_voltaD_mutantes.py:13`.
+- **Q4 — NAO PROCEDE.** `aval.txt:4`, `e4c_f5_voltaD_mutantes.py:55`.
 
 ## 21/11 06:09 · sessao f238c58b558f · FALTA-APROVADA-MOVE-O-TXT-ENTREGUE · leitura · origem=Code
 
@@ -1187,563 +1264,4 @@ Não identifiquei leitura de relógio real fora do congelamento nessas rotas sí
 
 A demonstração literal é fixar **o mesmo 21/10 nos dois lados**, incluindo o relógio das chamadas disparadas pela troca. Com o corpo antigo e sem célula plantada, a previsão é `CelulaDia.DoesNotExist` em 22/10 depois das checagens de migração e trilha. Com o delta, a porta pode gerar a célula em 21/10 e a asserção exige `trabalha=False`. Esse RED reproduz a falha de calendário. Desligar o signal no caso curado demonstra a mordida sobre a migração. As duas execuções estão **[nao verificado]**. `respostas_2111_0300.txt:6` · `delta.diff:95–103` · `app/escala/tests/test_folga_segue_a_pessoa.py:64–75` · `app/escala/signals.py:185–207` · `app/ponto/services/cadastro_futuro.py:19–25` · `app/ponto/portas/celula.py:289–311`
 
-## 21/11 02:58 · sessao 7a518789171c · REVISAO-AVAL-0300 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO nos itens 1 e 2. Item 3 — NAO PROCEDE como objeção à ordem.** O item 1 prorroga uma exceção usada pelo instalador de cron. No item 2, congelar o relógio sozinho reproduz a falha, mas a fixture precisa de uma célula futura para o teste passar. A ordem do item 3 é compatível com a exigência de suite verde na árvore que vai ao opus. `app/core/management/commands/crons.py:92–119` · `app/escala/tests/test_folga_segue_a_pessoa.py:53–64` · `app/ponto/services/cadastro_futuro.py:19–25` · `CLAUDE.md:320–328,377–378`
-
-### Item 1 — PROCEDE
-
-1. **Premissa.** `PRAZO` é **20/11/2026 inclusive**. `no_prazo()` compara com a data real capturada no import por `time.time()`. A partir de 21/11, o decorador conserva `__marca_cron15__`, mas deixa de aplicar `unittest.expectedFailure`. A varredura AST confirmou os 15 nomes abaixo. `app/core/tests/marca_cron15.py:24–62` · `app/core/tests/test_marca_cron15.py:25–50,73–87`
-2. **Avais.** O CRON-15 original deu prazo até 13/11, e `F3-PORTA-E-CRON-PRAZO` o moveu para 20/11. O anexo dá uma nova data expressa para a marca e preserva as proibições de mexer na folga 1,5, no JSON, no vizinho, em `SKIP_TESTS`, na lista de marcados ou em cron e horário. A vaga proposta depois da F5 e antes da CADEIA é uma mudança de ordem expressa no anexo. O registro de `SOMBRA-NAO-CABE-2` mantém a condição distinta de **sete sombras limpas antes de 20/11**. Cumprimento dessa condição e conteúdo do censo citado: [nao verificado]. `app/core/tests/marca_cron15.py:7–15` · `app/docs/BACKLOG.md:852,1910,1931,1960` · `respostas_2111_0300.txt:3–5,9`
-3. **Literal e tripwire.** O JSON da cópia traz **5.188 s já com a folga 1,5**, para um corredor de **4.680 s**. Conferi em memória que o render recusa com 5.188 s e 4.681 s e passa com 4.680 s. Logo, a borda efetiva inclui a igualdade de 3.120 s de p95 sem folga, apesar de o docstring dizer “abaixo”. Durante a marca, um marcado que passe vira `unexpected success`. O selo separado confirma a lista e exercita o render com a sombra reduzida para 4.620 s. O resultado dos 15 na suite inteira e o p95 vivo estão [nao verificado]. `app/config/crons_duracao.json:78,106,108` · `app/config/crons.py:182–183,219,259–278` · `app/core/tests/marca_cron15.py:9–11,26–27,57–62` · `app/core/tests/test_marca_cron15.py:48–50,67–71`
-4. **Escopo e `!`.** O bloqueio é `CRON-MARCA-COBRE-INSTALL`. O `install` passa o crontab do host ao comando de produção, que lê **a mesma constante** e, se apenas a sombra não couber e houver uma única linha ativa idêntica à esperada, pode conservá-la. Com um crontab de teste em memória, confirmei que mudar só `PRAZO` reabre essa exceção de **21 a 27/11 inclusive** e volta a recusá-la em 28/11. O `check` usa render puro. Assim, mesmo com o diff em `tests/`, o prazo muda comportamento de produção e estende um fallback fora do alcance declarado de “só teste”. Isso pede `!` explícito para o `install`. O delta proposto não altera dados de competência exportada nem dinheiro. Estado do crontab real: [nao verificado]. `app/docs/RELATO.md:3401,3407` · `app/docs/BACKLOG.md:2309` · `app/core/management/commands/crons.py:49–60,92–119` · `bin/crons.sh:23–40` · `CLAUDE.md:265–268` · `respostas_2111_0300.txt:1,3–4,9–10`
-
-**Os 15 nomes**, agrupados pelo prefixo `módulo.classe`:
-
-| Prefixo | Métodos | Fonte |
-|---|---|---|
-| `chamados.tests.test_contract_crons.ContratoCronsTest` | `test_por_empresa_expande_universo`, `test_sem_duplicata` | `app/core/tests/marca_cron15.py:30–31` |
-| `chamados.tests.test_contract_crons.ContratoOrquestracaoA5Test` | `test_allowlist_nao_esta_podre`, `test_ordem_dos_estagios_diarios` | `app/core/tests/marca_cron15.py:32–33` |
-| `chamados.tests.test_contract_crons.ContratoPipelineB6Test` | `test_placar_acusa_dependencia_quebrada`, `test_sem_sobreposicao_no_bloco_diario` | `app/core/tests/marca_cron15.py:34–35` |
-| `chamados.tests.test_contract_crons.ContratoPlacarA5Test` | `test_exit2_e_alarme_nao_erro`, `test_MORDE_a_corrente_nao_viaja_INLINE_na_linha`, `test_MORDE_nenhuma_linha_renderizada_passa_do_TETO_do_cron`, `test_placar_acusa_nao_rodou_e_erro`, `test_toda_linha_renderizada_passa_pelo_envelope` | `app/core/tests/marca_cron15.py:36–40` |
-| `chamados.tests.test_cron_longo_sai_da_medida.CronLongoSaiDaMedidaTest` | `test_o_derivado_respeita_o_PISO_do_dump`, `test_o_derivado_termina_ANTES_do_vizinho_com_a_tolerancia` | `app/core/tests/marca_cron15.py:41–43` |
-| `chamados.tests.test_cron_longo_sai_da_medida.MedicaoAusenteLevantaTest` | `test_MORDE_com_medida_ele_deriva_como_sempre` | `app/core/tests/marca_cron15.py:44` |
-| `core.tests.test_contract_crons_duracao_horario.DuracaoSoDoHorarioTest` | `test_horario_livre_e_nome_desconhecido_contam_sempre` | `app/core/tests/marca_cron15.py:45–46` |
-
-**Quem mais lê.** Os leitores diretos são o comando de produção, que chama `no_prazo` e imprime `PRAZO`, o selo da marca, que lê ambos, e o selo do `install`, que injeta `PRAZO` e `PRAZO + 1 dia`. `pre-push`, `suite.sh` e a régua chegam à marca indiretamente pelo `manage.py test`. `app/core/management/commands/crons.py:97,119` · `app/core/tests/test_marca_cron15.py:73–87` · `app/core/tests/test_crons_marca_cobre_install.py:99–172` · `bin/pre-push.sh:184–188` · `app/core/hooks/pre-push.sh:80–85` · `bin/suite.sh:319–325` · `bin/regua.sh:168`
-
-### Item 2 — PROCEDE
-
-1. **Premissa.** A linha 31 lê `timezone.localdate()` no `setUp` comum. Com o corte padrão 21 e o relógio em **21/11/2026**, `self.ini` é 21/11 e o primeiro teste escolhe **22/11**, portanto amanhã. A troca aciona a migração da `FolgaDia`. Para amanhã, a re-lavra só alcança células geradas já existentes. A fixture desse caso não cria uma, então a falha prevista é `CelulaDia.DoesNotExist` no `.get()` da linha 63, após as asserções de migração e trilha. A partir do dia 22 da mesma janela, a data testada já é hoje ou passada e a porta pode criar a célula. `app/escala/tests/test_folga_segue_a_pessoa.py:21–64` · `app/colaboradores/models.py:46` · `app/ponto/janelas.py:10–33,60–63` · `app/escala/signals.py:185–207` · `app/escala/folgas.py:280–299,512–525` · `app/ponto/services/cadastro_futuro.py:19–25` · `app/ponto/portas/celula.py:289–311`
-2. **Avais.** A cura na fixture é compatível com a regra de re-lavrar futuras geradas que já existem e preserva o caso da competência anterior lavrada. O repositório já usa `freeze_time` no próprio teste de escala. `app/ponto/services/cadastro_futuro.py:1–4,19–25` · `app/escala/folgas.py:521–525` · `app/escala/tests/test_folga_segue_a_pessoa.py:80–90` · `app/escala/tests/test_contador_vigencia_impossivel.py:22,27–32`
-3. **RED/GREEN.** O RED é realizável. Congele em 21/11 desde o `setUp` até as asserções, cobrindo também as leituras de relógio disparadas pela troca. Rode o corpo atual como RED. Para o GREEN, **mantenha 22/11** e plante, antes da troca, uma `CelulaDia` com `origem='gerada'`, `trabalha=True` e `escala_geradora=self.velho`. A porta real deve virar a célula para folga depois de migrar a `FolgaDia`. O próprio teste de resíduo já usa a técnica de plantar a célula. Congelamento sozinho deixa a célula ausente nos dois lados. Execução Django do RED/GREEN: [nao verificado]. `respostas_2111_0300.txt:6` · `app/escala/tests/test_folga_segue_a_pessoa.py:30–48,53–78` · `app/escala/folgas.py:280–299,512–525` · `app/ponto/portas/celula.py:289–311` · `app/escala/models.py:1309–1317`
-4. **Escopo e outros testes.** A cura fica no `TestCase` e nas fixtures do banco de teste, sem alteração de `.py` de produção, cron, folha ou gravado exportado que peça `!`. **Todos os outros cinco testes** herdam o relógio da linha 31: resíduo (`:66`), competência anterior (`:80`), sem vínculo (`:92`), destino ocupado (`:104`) e folga de calendário (`:113`). Resíduo e competência anterior também exercitam caminhos cujo resultado depende de a data ser futura ou estar na janela anterior. `app/escala/tests/test_folga_segue_a_pessoa.py:19–32,51,66–121` · `app/escala/folgas.py:280–299,499–525` · `app/config/settings/ci.py:6–17` · `CLAUDE.md:265–268`
-
-### Item 3 — NAO PROCEDE
-
-1. **Premissa e ordem.** O pouso próprio do instrumento, a integração do `main` na cópia da F5 e a suite inteira verde dessa árvore antes do opus são compatíveis com o caminho documentado. `suite.sh` aceita a cópia por `--dir` e exige motivo `pre-opus` ou `pouso` para a inteira. `respostas_2111_0300.txt:7–8` · `CLAUDE.md:320–328,372–381` · `bin/suite.sh:255–262,283–295,316–325`
-2. **Avais.** A ordem preserva o pouso separado e o escopo próprio da F5. O corte da F5 continua reservando `!` próprio para o estoque de competência entregue. `CLAUDE.md:325–328` · `app/docs/CORTES.md:560` · `respostas_2111_0300.txt:7–9`
-3. **Literal.** A suite inteira é obrigatória no hash integrado mesmo se o delta for apenas de teste. A dispensa de repetir sombra, A/B e instante pressupõe um delta efetivo sem mudança de produção. O item 1 precisa ser resolvido antes de classificar o commit combinado como só teste, pois o `install` consome aquele prazo. Hash integrado, verde da inteira e validade das medidas anteriores na F5: [nao verificado]. `respostas_2111_0300.txt:7–8` · `CLAUDE.md:320–323,377–378` · `app/core/management/commands/crons.py:92–119`
-4. **Escopo e `!`.** A sequência de integração e verificação não acrescenta autorização para editar produção, instalar cron, movimentar dinheiro ou tocar o gravado de competência exportada. O item 3 pode seguir como ordem, condicionado à resolução dos dois itens devolvidos. `respostas_2111_0300.txt:2,7–9` · `CLAUDE.md:265–268` · `app/docs/CORTES.md:560`
-
-As linhas de `respostas_2111_0300.txt` foram numeradas a partir de `aval Ronald` no texto colado. A revisão foi em leitura, com verificações em memória e sem executar a suite Django. Confirmação Git do hash informado: [nao verificado]. [nao verificado]
-
-## 21/11 02:51 · sessao 200517c5dfc8 · FALTA-APROVADA-MOVE-O-TXT-ENTREGUE · leitura · origem=Code
-
-```python
-"""
-FALTA-APROVADA-MOVE-O-TXT-ENTREGUE — volta 3
-
-A sonda foi escrita por leitura da cópia. A execução, o total da frota e a
-identidade Git da cópia estão [nao verificado]. O anexo mostra que FALTA_DIA
-retirou 3, 3 e 1 registros tipo 10 nas perguntas 33668, 33669 e 33686,
-respectivamente, para dois PKs de colaborador. A rejeição devolveu as linhas.
-O motivo do classificador nesses três casos está [nao verificado].
-f5fin_6a1_main.porta:15–17.
-
-UNIVERSO
-Toda tripla de ExportacaoDominio confirmada por competencia_entregue, inclusive
-quando tem zero casos. O último registro por (gerado_em, pk) decide a vigência.
-Cada caso é um colaborador com ao menos uma FALTA aprovada que cruza a janela
-da empresa, mesmo quando o fechamento está ausente ou tem outro status.
-app/folha/export.py:47–51,71–92,556–594; app/folha/models.py:192–225;
-app/chamados/services/materializacao.py:1095–1097.
-
-PORTA B E CAMPOS
-- Ausencia.status. criar_ausencia grava o estado inicial. A sonda usa
-  ausencia.decidir(..., "rejeitada"), a mesma porta de serviço do cancelamento
-  individual. A transição aprovada → rejeitada é permitida; mudar_estado
-  atribui o status e chama Ausencia.save. A folha lê aprovadas em
-  ausencias_na_janela. O cartório lê ausencia_cobre para cobrança, que exclui
-  rejeitadas. app/ponto/views.py:85–89,2872–2890;
-  app/ponto/services/ausencia.py:486,529,560–562,914–923,969–988,1057–1104;
-  app/ponto/models.py:918; app/folha/export.py:71–92,169–185;
-  app/ponto/turnos.py:2523–2532,2550–2571;
-  app/ponto/services/cartorio.py:1382–1385.
-- CelulaDia.veredito e protestos. O post_save de Ausencia chama o cartório
-  sincronicamente para os dias da ausência. O cartório chama lavrar_veredito
-  e carimbar. A porta da célula grava os campos e preserva o veredito de
-  admin. O espelho lê veredito e protestos para decidir se retém.
-  app/ponto/signals.py:85–93,115–128,143–147;
-  app/ponto/services/cartorio.py:1321–1326,1898–1922,2073–2090;
-  app/escala/models.py:1819–1828;
-  app/ponto/portas/celula.py:957–965,1060–1098,1181–1202;
-  app/folha/export.py:1247–1298,1301–1307.
-- CelulaDia.ata. O cartório monta a ata e a porta a grava em lavrar_veredito;
-  carimbar_precedencia também atualiza a chave precedencia. A exceção de
-  pausa da folha lê a ata e o DNA via periodos_do_dia.
-  app/ponto/services/cartorio.py:1898–1906,2034–2055;
-  app/ponto/portas/celula.py:1049–1067,1090–1098,1205–1217;
-  app/folha/export.py:1148–1155,1173,1293;
-  app/ponto/juiz_batida.py:149–176.
-- FechamentoMensal.status. O motor cria em aberto; aprovar e aprovar_lote
-  escrevem aprovado; reabrir, reabrir_lote e reabrir_periodo escrevem aberto.
-  A geração chama aprovar_lote. O montador filtra STATUS_NO_TXT. O
-  classificador recebe também fechamentos de outros status. Sem fechamento,
-  a lista do classificador fica vazia e a saída registra status e motivo nulos.
-  app/ponto/models.py:398–410,481–487;
-  app/ponto/services/fechamento.py:898–901,1323–1355,1449–1452;
-  app/folha/views.py:248–254; app/folha/export.py:687–728,765–788.
-
-O QUE A MEDIÇÃO COBRE
-- A → B é o delta da contribuição do próprio colaborador à montagem pelo
-  gravado, como no comparador da 6a1. A sonda chama classificar_export e passa
-  seu resultado a montar_linhas_export. O status e o motivo são os do
-  primeiro crivo que decidiu. Um crivo encoberto por outro fica
-  [nao verificado]. A montagem é isolada por fechamento para atribuir
-  linhas ao PK mesmo se houver código Domínio repetido. O delta usa
-  multiconjuntos e sinaliza também mudança apenas na ordem.
-  app/folha/export.py:654–658,690–746,765–788,866–884,946–981;
-  app/colaboradores/models.py:311–314.
-- O TXT arquivado, a importação no Domínio e a reprodução histórica das
-  perguntas ficam [nao verificado]. A rota de geração usa fechamentos
-  derivados em memória e valida o layout completo. Esta sonda mede pelo
-  gravado, com o relógio da execução e o teto normal do cartório. Rejeitar
-  uma falta que cruza a borda muda o status do registro inteiro dentro do
-  savepoint. A devolução de perguntas e a reconciliação do consumidor são
-  on_commit; seus efeitos ficam fora do ensaio com rollback.
-  app/folha/models.py:174–187; app/folha/views.py:209–214,267–281;
-  app/ponto/services/ausencia.py:969–988; app/ponto/signals.py:115–128,250–279;
-  app/ponto/services/cartorio.py:2073–2090.
-- A sonda conta exceções que chegam às etapas e falhas registradas no log
-  ou no stderr durante uma exceção. Fallbacks internos sem registro ficam
-  [nao verificado]. app/core/observ.py:73–91;
-  app/ponto/services/cartorio.py:1954–1965,2094–2101;
-  app/ponto/management/commands/detectar_ausencias.py:785–807.
-
-EXECUÇÃO FUTURA
-O corpo Python foi preparado para o shell tenant de bin/sombra.sh --rodar.
-O lançador, antes de entrar no Python, lê a lavra de produção, grava arquivos
-auxiliares e atualiza a sombra; também usa tee. Essas operações do lançador
-ficam fora do rollback do Python. bin/sombra.sh:136–167,179–191,483–493.
-
-Dentro do Python, o ensaio preserva os saves e signals e silencia os
-transportes de push. Os INSERTs de auditoria e outbox podem consumir [nao verificado]
-sequências. Por isso a sonda prepara RESTART transacional nas sequências de
-public e juliani sob a transação externa, antes de escrever nos casos.
-Permissões e comportamento das sequências na sombra instalada
-[nao verificado]. app/chamados/push_utils.py:12–44,89–111;
-app/chamados/fcm_utils.py:49–85,101–106;
-app/chamados/services/disputa_emissao.py:1777–1798;
-app/core/observ.py:133–138; app/ponto/portas/celula.py:945–965;
-bin/sombra_db.sh:45.
-"""
-
-import io
-import json
-import logging
-import socket
-import sys
-from collections import Counter, defaultdict
-from contextlib import ExitStack, closing, redirect_stderr, redirect_stdout
-from unittest.mock import patch
-
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.core.files.storage import FileSystemStorage
-from django.db import connection, transaction
-from django.db.models import Exists, OuterRef
-from django.utils import timezone
-
-from chamados import fcm_utils, push_utils [nao verificado]
-from chamados.services.disputa_emissao import push_disputa_silenciado [nao verificado]
-from chamados.services.materializacao import ESCAPES_QUE_VIRAM_AUSENCIA
-from colaboradores.mixins import tem_acao
-from colaboradores.models import Colaborador
-from folha import export as E
-from folha.models import ExportacaoDominio
-from ponto.models import Ausencia, FechamentoMensal
-from ponto.services.ausencia import decidir
-
-
-REGISTROS = ("10", "11")
-
-
-class GuardaSombra(RuntimeError):
-    pass
-
-
-class SemDecisorDP(RuntimeError):
-    pass
-
-
-class EstadoInesperado(RuntimeError):
-    pass
-
-
-class LayoutInesperado(RuntimeError):
-    pass
-
-
-class TransacaoMarcadaParaRollback(RuntimeError):
-    pass
-
-
-class EfeitoExternoBloqueado(RuntimeError):
-    pass
-
-
-class Descartar(io.TextIOBase):
-    def __init__(self, falhas=None):
-        super().__init__()
-        self.falhas = falhas
-
-    def write(self, texto):
-        erro = sys.exc_info()[1]
-        if self.falhas is not None and erro is not None:
-            self.falhas.append(erro)
-        return len(texto)
-
-
-def contagem_erros(falhas):
-    objetos = {id(erro): erro for erro in falhas if isinstance(erro, BaseException)}
-    tipos = Counter(type(erro).__name__ for erro in objetos.values())
-    tipos.update(erro for erro in falhas if isinstance(erro, str))
-    return dict(tipos)
-
-
-def etapa(falhas, acao, *args, desfazer=False):
-    inicio = len(falhas)
-    valor = None
-    try:
-        with transaction.atomic():
-            try:
-                valor = acao(*args)
-                if transaction.get_rollback():
-                    raise TransacaoMarcadaParaRollback()
-            finally:
-                if desfazer:
-                    transaction.set_rollback(True)
-    except Exception as erro:
-        falhas.append(erro)
-    erros = contagem_erros(falhas[inicio:])
-    del falhas[inicio:]
-    return valor, erros
-
-
-def guardar_sombra():
-    if not (
-        settings.SETTINGS_MODULE == "config.settings.sombra"
-        and getattr(settings, "HASNER_SOMBRA", False) is True
-        and set(settings.DATABASES) == {"default"}
-        and connection.vendor == "postgresql"
-        and connection.settings_dict["NAME"] == "sombra"
-        and connection.settings_dict["HOST"] == "sombra_db"
-        and getattr(connection, "schema_name", None) == "juliani"
-        and not connection.in_atomic_block
-        and connection.get_autocommit()
-    ):
-        raise GuardaSombra()
-
-
-def preparar_sequencias():
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            DO $sonda$
-            DECLARE
-                s record;
-                qualificada text;
-                ultimo bigint;
-                usada boolean;
-                proximo numeric;
-            BEGIN
-                FOR s IN
-                    SELECT n.nspname, c.relname, p.seqcache, p.seqincrement,
-                           p.seqmin, p.seqmax, p.seqcycle
-                    FROM pg_catalog.pg_sequence p
-                    JOIN pg_catalog.pg_class c ON c.oid = p.seqrelid
-                    JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-                    WHERE n.nspname IN ('juliani', 'public')
-                    ORDER BY n.nspname, c.relname
-                LOOP
-                    qualificada := format('%I.%I', s.nspname, s.relname);
-                    EXECUTE format('ALTER SEQUENCE %s CACHE %s', qualificada, s.seqcache);
-                    EXECUTE 'SELECT last_value, is_called FROM ' || qualificada
-                        INTO ultimo, usada;
-                    proximo := ultimo::numeric;
-                    IF usada THEN
-                        proximo := proximo + s.seqincrement;
-                    END IF;
-                    IF proximo NOT BETWEEN s.seqmin AND s.seqmax THEN
-                        IF NOT s.seqcycle THEN
-                            CONTINUE;
-                        END IF;
-                        proximo := CASE WHEN s.seqincrement > 0
-                                       THEN s.seqmin ELSE s.seqmax END;
-                    END IF;
-                    EXECUTE format('ALTER SEQUENCE %s RESTART WITH %s', qualificada, proximo);
-                END LOOP;
-            END
-            $sonda$;
-        """)
-
-
-def decisor_dp():
-    usuarios = get_user_model().objects.filter(is_active=True).order_by("-is_superuser", "pk")
-    with closing(usuarios.iterator(chunk_size=200)) as ativos:
-        for usuario in ativos:
-            if tem_acao(usuario, "editar_ausencias"):
-                return usuario
-    raise SemDecisorDP()
-
-
-def preparar_b():
-    dp = decisor_dp()
-    preparar_sequencias()
-    return dp
-
-
-def listar_casos(empresa, mes, ano, tipo, estado):
-    ini, fim = E.janela_competencia(empresa, mes, ano)
-    falta_na_janela = E.ausencias_na_janela(
-        OuterRef("pk"), tipo, ini, fim,
-    ).filter(status=estado)
-    candidatos = (
-        Colaborador.objects.filter(empresa_id=empresa.pk)
-        .filter(Exists(falta_na_janela))
-        .order_by("pk")
-        .values_list("pk", flat=True)
-    )
-    casos = []
-    for colab_pk in candidatos:
-        faltas = tuple(
-            E.ausencias_na_janela(colab_pk, tipo, ini, fim)
-            .filter(status=estado).order_by("pk").values_list("pk", flat=True)
-        )
-        if not faltas:
-            raise EstadoInesperado()
-        casos.append((colab_pk, faltas))
-    return casos
-
-
-def rejeitar_faltas(colab_pk, faltas, tipo, estado, dp):
-    ausencias = list(
-        Ausencia.objects.filter(pk__in=faltas, colaborador_id=colab_pk)
-        .select_related("colaborador__empresa").order_by("pk")
-    )
-    if tuple(a.pk for a in ausencias) != faltas:
-        raise EstadoInesperado()
-    if any(a.tipo != tipo or a.status != estado for a in ausencias):
-        raise EstadoInesperado()
-
-    agora = timezone.now()
-    for ausencia in ausencias:
-        decidir(
-            ausencia, "rejeitada", por=dp, decisor=dp, aprovada_em=agora,
-            motivo="sonda de falta aprovada",
-        )
-
-    gravadas = list(
-        Ausencia.objects.filter(pk__in=faltas).order_by("pk")
-        .values_list("pk", "status")
-    )
-    if gravadas != [(pk, "rejeitada") for pk in faltas]:
-        raise EstadoInesperado()
-
-
-def fotografar(empresa, mes, ano, colab_pk, foto):
-    fechs = list(
-        FechamentoMensal.objects.filter(colaborador_id=colab_pk, mes=mes, ano=ano)
-        .select_related("colaborador__empresa")
-    )
-    if len(fechs) > 1:
-        raise EstadoInesperado()
-    fech = fechs[0] if fechs else None
-    foto["fechamento_pk"] = fech.pk if fech else None
-    foto["fechamento_status"] = fech.status if fech else None
-
-    itens = E.classificar_export(empresa, mes, ano, fechamentos=fechs)
-    if [item["colaborador_id"] for item in itens] != [f.colaborador_id for f in fechs]:
-        raise EstadoInesperado()
-    item = itens[0] if itens else None
-    foto["classificador"] = {
-        "status": item["status"] if item else None,
-        "motivo": item["motivo"] if item else None,
-    }
-
-    linhas, _ = E.montar_linhas_export(
-        empresa, mes, ano, itens=itens, fechamentos=fechs,
-    )
-    matricula = item["codigo_dominio"].zfill(10) if item else None
-    por_tipo = {reg: Counter() for reg in REGISTROS}
-    pai = None
-    for linha in linhas:
-        partes = E.partes_da_linha(linha)
-        if partes is None:
-            raise LayoutInesperado()
-        reg = partes["reg"]
-        if reg == "10":
-            pai = partes["matricula"]
-            if pai != matricula:
-                raise LayoutInesperado()
-        elif reg != "11" or pai is None:
-            raise LayoutInesperado()
-        por_tipo[reg][linha] += 1
-    return linhas, por_tipo
-
-
-def fotografar_b(empresa, mes, ano, colab_pk, faltas, tipo, estado, dp, foto):
-    rejeitar_faltas(colab_pk, faltas, tipo, estado, dp)
-    return fotografar(empresa, mes, ano, colab_pk, foto)
-
-
-def delta_txt(a, b):
-    linhas_a, tipos_a = a
-    linhas_b, tipos_b = b
-    delta = {}
-    for reg in REGISTROS:
-        ca, cb = tipos_a[reg], tipos_b[reg]
-        delta[reg] = {
-            "A": sum(ca.values()),
-            "B": sum(cb.values()),
-            "adicionadas": sum((cb - ca).values()),
-            "removidas": sum((ca - cb).values()),
-        }
-    mudou = linhas_a != linhas_b
-    return mudou, mudou and tipos_a == tipos_b, delta
-
-
-def medir_caso(falhas, comp, colab_pk, faltas, tipo, estado, dp, erros_preparo):
-    empresa, mes, ano = comp
-    caso = {
-        "empresa_pk": empresa.pk, "mes": mes, "ano": ano,
-        "colaborador_pk": colab_pk, "ausencia_pks": faltas,
-        "A": {}, "B": {}, "delta_A_para_B": None,
-        "mudou_txt": None, "so_ordem": None, "mudou_so_linhas_com_entra_nos_dois": None,
-    }
-    a, erros_a = etapa(
-        falhas, fotografar, empresa, mes, ano, colab_pk, caso["A"], desfazer=True,
-    )
-    if erros_preparo:
-        b, erros_b = None, erros_preparo
-    else:
-        b, erros_b = etapa(
-            falhas, fotografar_b, empresa, mes, ano, colab_pk,
-            faltas, tipo, estado, dp, caso["B"], desfazer=True,
-        )
-    caso["excecoes_por_etapa"] = {
-        nome: erros for nome, erros in (("A", erros_a), ("B", erros_b)) if erros
-    }
-    if not caso["excecoes_por_etapa"]:
-        try:
-            mudou, so_ordem, delta = delta_txt(a, b)
-            ambos_entram = all(
-                caso[e]["classificador"]["status"] == "entra" for e in ("A", "B")
-            )
-            caso.update(
-                delta_A_para_B=delta, mudou_txt=mudou, so_ordem=so_ordem,
-                mudou_so_linhas_com_entra_nos_dois=mudou and ambos_entram,
-            )
-        except Exception as erro:
-            caso["excecoes_por_etapa"]["delta"] = contagem_erros([erro])
-    caso["status"] = "INCONCLUSIVO" if caso["excecoes_por_etapa"] else "CONCLUSIVO"
-    return caso
-
-
-def contar(casos):
-    pks = sorted({caso["colaborador_pk"] for caso in casos})
-    return {"casos": len(casos), "colaboradores": len(pks), "colaborador_pks": pks}
-
-
-def placar(casos):
-    conclusivos = [c for c in casos if c["status"] == "CONCLUSIVO"]
-    grupos = defaultdict(list)
-    for c in conclusivos:
-        a, b = c["A"]["classificador"], c["B"]["classificador"]
-        grupos[(a["status"], a["motivo"], b["status"], b["motivo"])].append(c)
-
-    por_caminho = []
-    for (sa, ma, sb, mb), grupo in grupos.items():
-        por_caminho.append({
-            "A": {"status": sa, "motivo": ma},
-            "B": {"status": sb, "motivo": mb},
-            "total": contar(grupo),
-            "mudam_txt": contar([c for c in grupo if c["mudou_txt"]]),
-            "mudam_so_linhas_com_entra_nos_dois": contar([
-                c for c in grupo if c["mudou_so_linhas_com_entra_nos_dois"]
-            ]),
-        })
-    return {
-        "total": contar(casos),
-        "conclusivos": contar(conclusivos),
-        "inconclusivos": contar([c for c in casos if c["status"] == "INCONCLUSIVO"]),
-        "mudam_txt": contar([c for c in conclusivos if c["mudou_txt"]]),
-        "mudam_so_linhas_com_entra_nos_dois": contar([
-            c for c in conclusivos if c["mudou_so_linhas_com_entra_nos_dois"]
-        ]),
-        "por_caminho": por_caminho,
-    }
-
-
-def censo(falhas, resultado):
-    tipo, estado = ESCAPES_QUE_VIRAM_AUSENCIA["FALTA_DIA"]
-    triplas = list(
-        ExportacaoDominio.objects.order_by("empresa_id", "ano", "mes")
-        .values_list("empresa_id", "mes", "ano").distinct()
-    )
-    entregues = []
-    for empresa_pk, mes, ano in triplas:
-        vigente, erros = etapa(
-            falhas, E.competencia_entregue, empresa_pk, mes, ano, True,
-        )
-        if erros:
-            resultado["erros_de_universo"].append({
-                "empresa_pk": empresa_pk, "mes": mes, "ano": ano,
-                "etapa": "competencia_entregue", "excecoes_por_tipo": erros,
-            })
-        elif vigente is not None:
-            entregues.append((empresa_pk, mes, ano, vigente))
-
-    competencias_percorridas = []
-    chaves_listadas = []
-    lotes = []
-    for empresa_pk, mes, ano, vigente in entregues:
-        chave = (empresa_pk, mes, ano)
-        comp = {
-            "empresa_pk": empresa_pk, "mes": mes, "ano": ano,
-            "exportacao_pk": vigente.pk, "casos_listados": None, "casos_percorridos": 0,
-        }
-        resultado["competencias"].append(comp)
-        competencias_percorridas.append(chave)
-
-        def listar():
-            empresa = vigente.empresa
-            return empresa, listar_casos(empresa, mes, ano, tipo, estado)
-
-        lote, erros = etapa(falhas, listar)
-        if erros:
-            comp.update(status="INCONCLUSIVO", excecoes_por_tipo=erros)
-            resultado["erros_de_universo"].append({
-                "empresa_pk": empresa_pk, "mes": mes, "ano": ano,
-                "etapa": "listar_casos", "excecoes_por_tipo": erros,
-            })
-            continue
-        empresa, casos = lote
-        comp["casos_listados"] = len(casos)
-        chaves_listadas.extend((*chave, colab_pk) for colab_pk, _ in casos)
-        lotes.append((comp, (empresa, mes, ano), casos))
-
-    dp, erros_preparo = etapa(falhas, preparar_b) if chaves_listadas else (None, {})
-    for comp, contexto, casos in lotes:
-        inconclusivos = 0
-        for colab_pk, faltas in casos:
-            caso = medir_caso(
-                falhas, contexto, colab_pk, faltas, tipo, estado, dp, erros_preparo,
-            )
-            resultado["casos"].append(caso)
-            comp["casos_percorridos"] += 1
-            inconclusivos += int(caso["status"] == "INCONCLUSIVO")
-        comp["status"] = "INCONCLUSIVO" if inconclusivos else "CONCLUSIVO"
-
-    comps_listadas = [(e, m, a) for e, m, a, _ in entregues]
-    chaves_percorridas = [
-        (c["empresa_pk"], c["mes"], c["ano"], c["colaborador_pk"])
-        for c in resultado["casos"]
-    ]
-    resultado["universo"] = {
-        "triplas_de_exportacao": len(triplas),
-        "competencias_listadas": l
-
-[truncado em 20000 de 23704 caracteres]
-
-_7634 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7636 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
