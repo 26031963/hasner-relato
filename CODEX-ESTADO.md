@@ -1,7 +1,222 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 18:03** · publicado em **21/11/2026 18:06** (UTC-3)
+> Ultima resposta processada: **21/11/2026 18:09** · publicado em **21/11/2026 18:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 18:09 · sessao c8af26ea4af5 · MEDIDA-FOLHA-[nome] · sonda · origem=Code
+
+## Item (d) — segunda medida
+
+| Chave da saída | Valor devolvido | Referência no código |
+|---|---:|---|
+| `gravado.badge_chamados` | 1420 | `app/core/context_processors.py:84,110-111` |
+| `gravado.lavrado_em` | 21/11 18:06:10 | `app/core/context_processors.py:110-111` |
+| `agora` | 21/11 18:08:29 | Relógio informado na saída fornecida. Linha da sonda [nao verificado]. |
+| `vivo.exige_o_admin` | 1420 | `app/chamados/services/verbos.py:22-27` |
+| `vivo.arquivado.n` | 136 | `app/chamados/services/painel.py:229-231,284-292` |
+| `vivo.cobrar.n` | 2553 | `app/chamados/services/painel.py:229-231,284-292` |
+| `vivo.decidir.n` | 712 | `app/chamados/services/painel.py:229-231,284-292` |
+| `vivo.historico.n` | 8 | `app/chamados/services/painel.py:229-231,284-292` |
+| `vivo.validar.n` | 708 | `app/chamados/services/painel.py:229-231,284-292` |
+
+**1. O badge gravado bate com o vivo.** Na saída fornecida, `1420 = 708 + 712`. O carimbo tinha **2 min 19 s** de idade e a diferença era **0**. A navbar lê `PlacarNavbar.badge_chamados`. A lavra e a medida viva aplicam `exige_o_admin` às contagens de `montar_contexto_painel` sem filtros. A unidade é o chamado vivo classificado como Validar ou Decidir. Cobrar, Arquivado e Histórico ficam fora da soma. A composição por verbo na hora da lavra e as variações durante o intervalo ficam [nao verificado]. `app/core/context_processors.py:68-84,110-111` · `app/core/management/commands/lavrar_badge_navbar.py:39-41,72-74,91-93` · `app/chamados/services/painel.py:153-155,229-231` · `app/chamados/services/verbos.py:22-27,44-56`.
+
+**2. Laudo versus sonda.** Pelos valores fornecidos, Validar foi de **707 para 708** (+1), Decidir de **705 para 712** (+7) e o badge de **1413 para 1420** (+7). No laudo, as pílulas somavam **1412**, um abaixo do badge. Na sonda, a soma e o badge fecham em **1420**. O código permite que as pílulas usem um recorte filtrado e que o badge venha de uma lavra anterior. Os filtros efetivos, as fontes que abasteceram as pílulas, o `lavrado_em` do laudo e a causa daquele 1 ficam [nao verificado]. `app/chamados/views.py:727-739,813-819,840-861` · `app/chamados/services/painel.py:117-130,229-231` · `app/core/context_processors.py:68-84`.
+
+**3. Sim, há caminhos com fontes diferentes mesmo sem filtro.**
+
+- **No GET inicial**, o cabeçalho renderiza `badge_chamados` da lavra, quando disponível, e as pílulas renderizam `verbos_contagens` calculadas ao vivo pelo GET. O recorte sem filtro segue a mesma regra de classificação em leituras de instantes distintos. `app/core/context_processors.py:68-84,154` · `app/chamados/views.py:727-739,767` · `app/templates/chamados/painel_gestao.html:42,79,191`.
+- **Na atualização por JSON**, sem filtro e com `payload_placar`, as pílulas passam a ler o payload lavrado. Sem payload, a rota calcula ao vivo. O JavaScript atualiza as pílulas e mantém no cabeçalho o valor do render inicial. Se houver uma lavra entre o GET e a atualização, cabeçalho e pílulas podem exibir lavras distintas. `app/chamados/views.py:840-862` · `app/templates/chamados/painel_gestao.html:191,302-325`.
+- **Se o cálculo vivo da navbar falhar**, o último fallback conta `qs_na_fila()`, que usa status de cobrança e exclui silenciados no futuro. Esse ramo tem outro critério. Sua ocorrência no laudo fica [nao verificado]. `app/core/context_processors.py:87-93` · `app/chamados/services/painel.py:188-190` · `app/chamados/services/verbos.py:22-27`.
+
+A confirmação independente do hash da cópia e do isolamento da transação em produção fica [nao verificado].
+
+## 21/11 18:07 · sessao c38aa6f720a9 · MEDIDA-FOLHA-[nome] · sonda · origem=Code
+
+**Na sonda, “Espelho pendente” soma 207 em outubro e 298 em novembro na prévia. Em novembro, a `emp2` tem a única defasagem observada entre o retrato gravado e a prévia. Na Central, a diferença de 1 é aritmética confirmada pelo aval, e a igualdade de universo e instante exigida para provar pílula dissonante está [nao verificado].** `C.<competência>.<empresa>.furo_espelho_colabs`, `E.2026-11.emp2.retrato_gravado_x_previa.mudaram`, `E.2026-11.emp2.retrato_em_memoria_x_previa.mudaram`, `aval.txt:1`, `app/chamados/services/painel.py:230`, `app/core/context_processors.py:68`
+
+Nos quadros, a primeira coluna dá o prefixo `P = competência.empresa`. Cada legenda indica como compor a chave da saída para cada número. As referências ao aval e à linha do log apontam para os anexos fornecidos. O carimbo de lavratura das fotos lidas está [nao verificado].
+
+## (a) Termômetro R1
+
+O E6 compara o espelho com o oráculo por dia-colab e atribui um dono a cada divergência. O universo é o de empresas ativas com fechamentos na competência, sem filtro de aptidão para o TXT. A comparação exclui dia sem linha, isento ou com ausência, sem valor lavrado, zero dos dois lados ou diferença explicada pela pausa declarada. Diferenças de até 10 minutos contam como concordância. `app/ponto/management/commands/e6_oraculo.py:303`, `app/ponto/management/commands/e6_oraculo.py:316`, `app/ponto/management/commands/e6_oraculo.py:331`, `app/ponto/management/commands/e6_oraculo.py:354`, `app/ponto/management/commands/e6_oraculo.py:366`, `app/ponto/management/commands/e6_oraculo.py:378`
+
+Chave `A.P.<coluna>`. Nas colunas dos donos, `dias/colabs` corresponde a `A.P.<dono>.dias` e `A.P.<dono>.colabs`. A união conta pessoas distintas e as duas últimas colunas mostram a sobreposição exata. `app/ponto/management/commands/e6_oraculo.py:378`, `app/ponto/management/commands/e6_oraculo.py:401`
+
+| P | `universo_colabs` | `dias_divergentes` | `ESTRUTURA` dias/colabs | `CADASTRO` dias/colabs | `BATIDA` dias/colabs | `uniao_colabs` | `em_exatamente_2_donos` | `em_exatamente_3_donos` |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 2026-10.emp1 | 4 | 4 | 0/0 | 0/0 | 4/1 | 1 | 0 | 0 |
+| 2026-10.emp2 | 477 | 265 | 18/10 | 68/28 | 179/94 | 117 | 11 | 2 |
+| 2026-10.emp3 | 119 | 40 | 6/5 | 7/3 | 27/16 | 21 | 1 | 1 |
+| 2026-10.emp4 | 24 | 9 | 2/1 | 0/0 | 7/6 | 7 | 0 | 0 |
+| 2026-11.emp1 | 3 | 4 | 1/1 | 0/0 | 3/1 | 1 | 1 | 0 |
+| 2026-11.emp2 | 460 | 288 | 24/16 | 63/30 | 201/101 | 128 | 15 | 2 |
+| 2026-11.emp3 | 115 | 92 | 11/7 | 16/7 | 65/22 | 28 | 8 | 0 |
+| 2026-11.emp4 | 24 | 9 | 1/1 | 0/0 | 8/5 | 6 | 0 | 0 |
+
+## (b) Prévia e retrato × donos do R1
+
+A prévia usa `classificar_export` sobre os fechamentos da empresa e competência, sem filtro de status. O retrato lê as linhas já gravadas. A ponte conta colabs por competência. As colunas dos donos são interseções com o R1 e podem se sobrepor. `app/folha/views.py:350`, `app/folha/export.py:782`, `app/folha/retrato_folha.py:98`, `app/ponto/management/commands/e6_oraculo.py:305`, `app/ponto/management/commands/e6_oraculo.py:378`
+
+Cada célula segue a ordem **`no_r1 / sem_divergencia_r1 / ESTRUTURA / CADASTRO / BATIDA / so_no_leitor`**. A chave é `B.P.<leitor>.<coluna>.<métrica>`. Nas linhas sem leitor indicado, o valor vale para as duas chaves, `previa` e `retrato`.
+
+| P | Leitor | `universo` | `entram` | `fora_txt` | `furo_espelho` | `sem_codigo_dominio` | `ferias_com_batida` |
+|---|---|---|---|---|---|---|---|
+| 2026-10.emp1 | Ambos | 4/3/0/0/1/0 | 0/0/0/0/0/0 | 4/3/0/0/1/0 | 2/1/0/0/1/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
+| 2026-10.emp2 | Ambos | 477/360/10/28/94/0 | 244/196/4/9/41/0 | 233/164/6/19/53/0 | 173/106/6/19/51/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
+| 2026-10.emp3 | Ambos | 119/98/5/3/16/0 | 82/71/1/0/11/0 | 37/27/4/3/5/0 | 24/17/3/2/4/0 | 1/1/0/0/0/0 | 1/1/0/0/0/0 |
+| 2026-10.emp4 | Ambos | 24/17/1/0/6/0 | 14/12/0/0/2/0 | 10/5/1/0/4/0 | 8/4/1/0/3/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
+| 2026-11.emp1 | Ambos | 3/2/1/0/1/0 | 0/0/0/0/0/0 | 3/2/1/0/1/0 | 2/1/1/0/1/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
+| 2026-11.emp2 | `previa` | 460/332/16/30/101/0 | 191/157/5/4/28/0 | 269/175/11/26/73/0 | 240/146/11/26/73/0 | 1/1/0/0/0/0 | 1/1/0/0/0/0 |
+| 2026-11.emp2 | `retrato` | 460/332/16/30/101/0 | 192/158/5/4/28/0 | 268/174/11/26/73/0 | 239/145/11/26/73/0 | 1/1/0/0/0/0 | 1/1/0/0/0/0 |
+| 2026-11.emp3 | Ambos | 115/87/7/7/22/0 | 51/47/0/1/3/0 | 64/40/7/6/19/0 | 51/28/7/6/18/0 | 0/0/0/0/0/0 | 1/1/0/0/0/0 |
+| 2026-11.emp4 | Ambos | 24/18/1/0/5/0 | 16/14/1/0/1/0 | 8/4/0/0/4/0 | 5/1/0/0/4/0 | 1/1/0/0/0/0 | 0/0/0/0/0/0 |
+
+A barra do retrato separa `bloqueado` de `modulo_proprio`, que recebe as rescisões na janela. A prévia inclui essas rescisões em `fora_txt`. Mesma ordem de métricas, com chave `B.P.retrato.<coluna>.<métrica>`. `app/folha/retrato_folha.py:27`, `app/folha/retrato_folha.py:89`, `app/folha/views.py:351`
+
+| P | `bloqueado` | `modulo_proprio` |
+|---|---|---|
+| 2026-10.emp1 | 3/2/0/0/1/0 | 1/1/0/0/0/0 |
+| 2026-10.emp2 | 174/107/6/19/51/0 | 59/57/0/0/2/0 |
+| 2026-10.emp3 | 26/19/3/2/4/0 | 11/8/1/1/1/0 |
+| 2026-10.emp4 | 9/5/1/0/3/0 | 1/0/0/0/1/0 |
+| 2026-11.emp1 | 3/2/1/0/1/0 | 0/0/0/0/0/0 |
+| 2026-11.emp2 | 241/147/11/26/73/0 | 27/27/0/0/0/0 |
+| 2026-11.emp3 | 52/29/7/6/18/0 | 12/11/0/0/1/0 |
+| 2026-11.emp4 | 6/2/0/0/4/0 | 2/2/0/0/0/0 |
+
+- **Mesmo universo de pessoas, sim**, em cada linha do quadro. Em ambos os leitores, `B.P.<leitor>.r1_sem_linha = 0` e `B.P.<leitor>.universo.so_no_leitor = 0`. Para cada `P`, `B.P.empresa_no_seletor = 1` e `B.P.retrato_presente = 1`. `app/ponto/management/commands/e6_oraculo.py:305`, `app/folha/export.py:782`, `app/folha/retrato_folha.py:98`
+- **Mesma competência, sim.** R1 e prévia foram lidos na mesma rodada. A leitura do retrato nessa rodada usa a foto gravada, cujo `lavrado_em` está [nao verificado]. A coincidência de datas individuais entre o dia divergente do R1 e o dia que reteve na folha também está [nao verificado]. Em outubro, a igualdade acima é dos agregados da ponte. `app/ponto/janelas.py:54`, `app/ponto/management/commands/e6_oraculo.py:284`, `app/folha/fora_da_folha.py:146`, `app/folha/models.py:356`, `app/folha/retrato_folha.py:1237`
+
+## (c) Espelho pendente por motivo diário e rota
+
+A sonda abre o detalhe diário dos retidos por `furo_espelho` no universo comum com o R1. O leitor respeita a janela do vínculo e as dispensas por isenção, desligamento e vereditos dispensados. A unidade do detalhe é dia-colab, com pessoas distintas por célula da tabela. Uma pessoa pode aparecer em vários motivos ou rotas. `app/folha/fora_da_folha.py:115`, `app/folha/fora_da_folha.py:146`, `app/folha/export.py:1205`, `app/folha/export.py:1238`, `app/folha/export.py:1264`, `app/folha/export.py:1293`, `app/folha/retrato_folha.py:1024`
+
+| P | `furo_espelho_colabs` | `retidos_sem_dia_detalhado` |
+|---|---:|---:|
+| 2026-10.emp1 | 2 | 0 |
+| 2026-10.emp2 | 173 | 0 |
+| 2026-10.emp3 | 24 | 0 |
+| 2026-10.emp4 | 8 | 0 |
+| 2026-11.emp1 | 2 | 0 |
+| 2026-11.emp2 | 240 | 0 |
+| 2026-11.emp3 | 51 | 0 |
+| 2026-11.emp4 | 5 | 0 |
+
+O quadro acima usa `C.P.<coluna>`. No próximo, cada par é `dias/colabs`. A chave do Total é `C.P.<motivo>.<dias ou colabs>`. Nas outras colunas é `C.P.<motivo>.<rota>.<dias ou colabs>`. `—` indica chave ausente no bloco fornecido. As rotas são `chamados:modal_fio` para o fio, `colaboradores:calendario_ponto` para Resolver dia e `ponto:painel_ausencia` para Decidir ausência. A sonda identificou as rotas publicadas. A abertura e a resolução pela tela estão [nao verificado]. `app/folha/retrato_folha.py:989`, `app/folha/retrato_folha.py:1016`, `app/chamados/urls.py:39`, `app/colaboradores/urls.py:24`, `app/ponto/urls.py:70`
+
+| P | Motivo | Total | Fio | Calendário | Ausência | **`sem_porta`** | **`sem_leitura`** |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 2026-10.emp1 | `espelho_furo` | 1/1 | — | 1/1 | — | — | — |
+| 2026-10.emp1 | `espelho_nunca_bateu` | 14/1 | 10/1 | — | — | **4/1** | — |
+| 2026-10.emp1 | `sem_celula` | 24/2 | — | 15/2 | — | **8/2** | **1/1** |
+| 2026-10.emp2 | `espelho_cobrado` | 212/68 | 206/65 | 1/1 | 5/4 | — | — |
+| 2026-10.emp2 | `espelho_cobranca_indevida` | 5/1 | — | 2/1 | — | **3/1** | — |
+| 2026-10.emp2 | `espelho_discordante` | 13/10 | 2/2 | 7/7 | — | — | **4/2** |
+| 2026-10.emp2 | `espelho_fato_em_ausencia` | 17/15 | 3/3 | 11/10 | — | **1/1** | **2/2** |
+| 2026-10.emp2 | `espelho_furo` | 197/84 | 179/78 | 14/8 | 4/2 | — | — |
+| 2026-10.emp2 | `espelho_indefinida` | 173/40 | 153/32 | 5/1 | — | **13/8** | **2/1** |
+| 2026-10.emp2 | `espelho_nunca_bateu` | 157/6 | 96/6 | — | 1/1 | **60/4** | — |
+| 2026-10.emp3 | `espelho_cobrado` | 50/16 | 50/16 | — | — | — | — |
+| 2026-10.emp3 | `espelho_discordante` | 3/1 | 2/1 | 1/1 | — | — | — |
+| 2026-10.emp3 | `espelho_furo` | 58/13 | 58/13 | — | — | — | — |
+| 2026-10.emp3 | `espelho_indefinida` | 16/7 | 12/6 | — | — | **1/1** | **3/1** |
+| 2026-10.emp3 | `espelho_nunca_bateu` | 30/1 | 15/1 | — | — | **15/1** | — |
+| 2026-10.emp4 | `espelho_cobrado` | 5/4 | 5/4 | — | — | — | — |
+| 2026-10.emp4 | `espelho_fato_em_ausencia` | 1/1 | — | 1/1 | — | — | — |
+| 2026-10.emp4 | `espelho_furo` | 6/5 | 6/5 | — | — | — | — |
+| 2026-11.emp1 | `espelho_cobrado` | 1/1 | 1/1 | — | — | — | — |
+| 2026-11.emp1 | `sem_celula` | 41/2 | — | 22/2 | — | **19/2** | — |
+| 2026-11.emp2 | `espelho_cobrado` | 505/128 | 484/121 | 17/9 | 3/3 | — | **1/1** |
+| 2026-11.emp2 | `espelho_cobranca_indevida` | 11/6 | 9/4 | — | — | **2/2** | — |
+| 2026-11.emp2 | `espelho_discordante` | 12/9 | 5/5 | 7/4 | — | — | — |
+| 2026-11.emp2 | `espelho_fato_em_ausencia` | 12/9 | 5/3 | 7/6 | — | — | — |
+| 2026-11.emp2 | `espelho_furo` | 222/117 | 206/111 | 12/6 | 1/1 | **1/1** | **2/2** |
+| 2026-11.emp2 | `espelho_indefinida` | 250/58 | 227/52 | 1/1 | — | **22/7** | — |
+| 2026-11.emp2 | `espelho_nunca_bateu` | 119/9 | 51/7 | 68/9 | — | — | — |
+| 2026-11.emp3 | `espelho_cobrado` | 103/30 | 103/30 | — | — | — | — |
+| 2026-11.emp3 | `espelho_discordante` | 4/2 | 3/1 | 1/1 | — | — | — |
+| 2026-11.emp3 | `espelho_fato_em_ausencia` | 1/1 | — | 1/1 | — | — | — |
+| 2026-11.emp3 | `espelho_furo` | 80/30 | 79/29 | 1/1 | — | — | — |
+| 2026-11.emp3 | `espelho_indefinida` | 34/11 | 34/11 | — | — | — | — |
+| 2026-11.emp3 | `espelho_nunca_bateu` | 15/1 | 7/1 | 8/1 | — | — | — |
+| 2026-11.emp4 | `espelho_cobrado` | 7/3 | 5/3 | 2/1 | — | — | — |
+| 2026-11.emp4 | `espelho_furo` | 5/3 | 5/3 | — | — | — | — |
+
+| Motivo | O que retém o dia |
+|---|---|
+| `sem_celula` | Dia passado com vínculo sem célula, ou célula com previsão definida e sem veredito. `app/folha/export.py:1264`, `app/folha/export.py:1293` |
+| `espelho_furo` | Furo integral ou parcial com veredito ainda acusador. `app/escala/models.py:1612`, `app/escala/models.py:1767` |
+| `espelho_cobrado` | A cobrança foi reconhecida e o dia segue acusado. `app/ponto/services/cartorio.py:1534`, `app/escala/models.py:1767` |
+| `espelho_cobranca_indevida` | Cobrança em dia sem trabalho ou sem furo. `app/escala/models.py:1613` |
+| `espelho_discordante` | Batida órfã fora da tolerância, realizado inflado ou realizado zero com turno. `app/escala/models.py:1616` |
+| `espelho_fato_em_ausencia` | Trabalho em dia coberto por ausência. `app/escala/models.py:1617`, `app/escala/models.py:1754` |
+| `espelho_indefinida` | Dia previsto indefinido, fase por declarar ou ausência parcial sem período. `app/escala/models.py:1615` |
+| `espelho_nunca_bateu` | Falta de adesão ao ponto em dia de trabalho sem cobertura integral. `app/ponto/services/cartorio.py:1312`, `app/ponto/services/cartorio.py:1318` |
+
+**Achado de desenho para o BO:** as células `sem_porta` registram ocorrências em que o motivo reteve o dia e o mapa deixou o admin sem rota publicada para a ocorrência. `sem_leitura` registra separadamente os dias sem rota em que o fio ficou `nao_sei`. `C.P.<motivo>.sem_porta.{dias,colabs}`, `C.P.<motivo>.sem_leitura.{dias,colabs}`, `app/folha/fora_da_folha.py:86`, `app/folha/retrato_folha.py:989`, `app/folha/retrato_folha.py:1024`
+
+| Competência | Aval `aval.txt:1` | Prévia `Σ C.P.furo_espelho_colabs` | Retrato `Σ B.P.retrato.furo_espelho.no_r1` |
+|---|---:|---:|---:|
+| 2026-10 | 207 | 2 + 173 + 24 + 8 = **207** | 2 + 173 + 24 + 8 = **207** |
+| 2026-11 | 298 | 2 + 240 + 51 + 5 = **298** | 2 + 239 + 51 + 5 = **297** |
+
+As somas usam `emp1` a `emp4` na competência da linha. Em outubro, o 207 bate nos dois leitores. Em novembro, o 298 bate na prévia e o retrato fica um abaixo, na `emp2`. `C.2026-11.emp2.furo_espelho_colabs`, `B.2026-11.emp2.retrato.furo_espelho.no_r1`, `aval.txt:1`
+
+## (d) Central
+
+| Contador | Valor citado | Fonte, unidade e universo |
+|---|---:|---|
+| **Validar** | 707 · `aval.txt:1` | `verbos_contagens.validar.n`. Conta chamados vivos classificados nesse verbo, dentro do recorte efetivo da Central. `app/templates/chamados/painel_gestao.html:42`, `app/chamados/services/painel.py:198`, `app/chamados/services/painel.py:230`, `app/chamados/services/verbos.py:30` |
+| **Decidir** | 705 · `aval.txt:1` | `verbos_contagens.decidir.n`. Conta chamados do mesmo recorte classificados no verbo Decidir. O juiz atribui um verbo por chamado e remapeia os silenciados. `app/templates/chamados/painel_gestao.html:79`, `app/chamados/services/painel.py:230`, `app/chamados/services/verbos.py:46` |
+| **Pra decidir** | 1413 · `aval.txt:1` | `badge_chamados` de `PlacarNavbar`. O cron computa Validar + Decidir para o tenant sem filtros e grava a soma com o `payload_placar` da mesma rodada. `app/templates/chamados/painel_gestao.html:191`, `app/core/context_processors.py:68`, `app/core/management/commands/lavrar_badge_navbar.py:39`, `app/core/management/commands/lavrar_badge_navbar.py:72`, `app/core/management/commands/lavrar_badge_navbar.py:91` |
+
+- **Mesmo universo e mesmo instante.** Para o mesmo payload gravado, `badge_chamados = Validar + Decidir` por construção. O aval traz `707 + 705 = 1412`, contra `1413` no cabeçalho. A igualdade de universo e instante para esses valores está [nao verificado]. A diferença observada, portanto, **não prova pílula dissonante** no sentido exigido pelo aval. `aval.txt:1`, `app/chamados/services/verbos.py:22`, `app/chamados/services/verbos.py:25`, `app/core/management/commands/lavrar_badge_navbar.py:72`, `app/core/management/commands/lavrar_badge_navbar.py:91`
+- **Diferença de universo ou instante.** O código permite pílulas ao vivo com filtro e cabeçalho global lavrado. Mesmo sem filtro, a renderização inicial pode contar ao vivo enquanto o cabeçalho lê a lavra. O refresh sem filtros pode buscar as pílulas no payload lavrado. Se faltar lavra, o cabeçalho tenta o mesmo juiz ao vivo para o tenant inteiro e, em caso de exceção, usa `qs_na_fila().count()`, de outro recorte. Qual desses caminhos produziu a diferença de 1 está [nao verificado]. `app/chamados/views.py:727`, `app/chamados/views.py:840`, `app/chamados/views.py:849`, `app/templates/chamados/painel_gestao.html:302`, `app/core/context_processors.py:68`, `app/core/context_processors.py:87`, `app/chamados/services/painel.py:188`, `aval.txt:1`
+
+## (e) Competência 11 — gravado × prévia × reconstrução em memória
+
+O retrato gravado vem de `linhas_do_retrato`. A reconstrução usa `montar_linhas`, chamada pelo lavrador antes de persistir, e deriva `status` e `motivo` do mesmo classificador da prévia. A sonda compara presença e o par `status/motivo` por colab-competência, na mesma leitura e com relógio comum para os leitores atuais. Datas dos dias, ações e fios ficam fora dessa comparação. `app/folha/retrato_folha.py:98`, `app/folha/retrato_folha.py:1212`, `app/folha/retrato_folha.py:1222`, `app/folha/retrato_folha.py:1237`, `app/folha/fora_da_folha.py:146`, `app/folha/management/commands/lavrar_retrato_folha.py:65`, `app/folha/management/commands/lavrar_retrato_folha.py:77`
+
+Cada célula segue a ordem **`so_esquerda / so_direita / mudaram`**, com chave `E.P.<coluna>.<métrica>`.
+
+| P | `retrato_em_memoria_x_previa` | `retrato_gravado_x_previa` | `retrato_gravado_x_em_memoria` | Leitura |
+|---|---:|---:|---:|---|
+| 2026-11.emp1 | 0/0/0 | 0/0/0 | 0/0/0 | Coincidem no recorte medido |
+| 2026-11.emp2 | 0/0/0 | 0/0/1 | 0/0/1 | **Defasagem** |
+| 2026-11.emp3 | 0/0/0 | 0/0/0 | 0/0/0 | Coincidem no recorte medido |
+| 2026-11.emp4 | 0/0/0 | 0/0/0 | 0/0/0 | Coincidem no recorte medido |
+
+Na `emp2`, a mudança é de `entra` na foto para `fora` por `furo_espelho` nos dois leitores atuais. É defasagem do veredito gravado, com o mesmo conjunto de pessoas. A comparação em memória coincide com a prévia em todas as empresas nos campos medidos. A idade da defasagem e o evento que a produziu estão [nao verificado]. `E.2026-11.emp2.retrato_gravado_x_previa.entra.-__fora.furo_espelho`, `E.2026-11.emp2.retrato_gravado_x_em_memoria.entra.-__fora.furo_espelho`, `E.P.retrato_em_memoria_x_previa.{so_esquerda,so_direita,mudaram}`, `app/folha/models.py:356`
+
+**Onde batem 302 e 303.** A tabela usa as chaves `B.P.<leitor>.<balde>.no_r1`. A última coluna aplica à prévia a regra de **Bloqueados** do retrato. Ela subtrai `retrato.modulo_proprio` de `previa.fora_txt` porque os pares de `status/motivo` preservam esse módulo na comparação E. A única mudança foi de `entra` para `fora.furo_espelho`. Pela igualdade memória × prévia nesses campos, a última coluna também é o valor derivado para a reconstrução em memória. `app/folha/retrato_folha.py:27`, `app/folha/retrato_folha.py:89`, `app/folha/views.py:351`, `E.P.retrato_em_memoria_x_previa.mudaram`, `E.2026-11.emp2.retrato_gravado_x_previa.entra.-__fora.furo_espelho`
+
+| P | `retrato.bloqueado` | `retrato.modulo_proprio` | `retrato.fora_txt` | `previa.fora_txt` | Prévia/memória no recorte de Bloqueados |
+|---|---:|---:|---:|---:|---:|
+| 2026-11.emp1 | 3 | 0 | 3 | 3 | 3 − 0 = 3 |
+| 2026-11.emp2 | 241 | 27 | 268 | 269 | 269 − 27 = 242 |
+| 2026-11.emp3 | 52 | 12 | 64 | 64 | 64 − 12 = 52 |
+| 2026-11.emp4 | 6 | 2 | 8 | 8 | 8 − 2 = 6 |
+| Soma das chaves acima | **302** | **41** | **343** | **344** | **303** |
+
+O **302** do aval bate com **Bloqueados** do retrato. O **303** bate com a prévia e a memória quando se aplica esse mesmo recorte. Se a referência for o contador literal **Retidos do TXT** da prévia, a sonda soma **344**. No recorte equivalente do retrato, `fora_txt` soma **343**. A tela, os filtros e o carimbo que deram origem aos números citados no aval estão [nao verificado]. `aval.txt:1`, `B.P.retrato.bloqueado.no_r1`, `B.P.retrato.modulo_proprio.no_r1`, `B.P.retrato.fora_txt.no_r1`, `B.P.previa.fora_txt.no_r1`, `app/folha/views.py:408`, `app/folha/retrato_folha.py:89`
+
+## (f) Porta do export
+
+**Linha fornecida, com o identificador da tentativa omitido.** `f_linhas_export.txt:1`
+
+```text
+2026-11-21 07:04:59,754 WARNING ponto.recusa_critica RECUSA-ACAO-CRITICA porta=porta_export […] objeto=emp3:2026-12:[…] tipo=erro motivo=antes=em_curso depois=concluido origem=cron […] os leitores discordam em 1 ponto(s)
+```
+
+- **Contagem e causa.** A linha fornecida corresponde a uma tentativa da `emp3`, competência **12/2026**, concluída pelo cron com resultado divergente e `n=1`. O ESTADO conta recusas dessa porta pela data local das linhas de `ponto.log` e dos rotados. O anexo sustenta uma ocorrência. O total nos arquivos completos e qual teste compôs o `1` estão [nao verificado]. `aval.txt:1`, `f_linhas_export.txt:1`, `bin/recusa_estado.py:60`, `app/core/recusa_critica.py:95`, `app/core/recusa_critica.py:108`, `app/core/recusa_critica.py:133`, `app/config/crons.py:1809`, `app/folha/porta_export.py:1235`, `app/folha/porta_export.py:1273`
+- **Impacto.** A tentativa do cron mediu e gravou o carimbo. Com esse carimbo vigente, a porta retorna `DIVERGENTE` e o POST é recusado antes da montagem do TXT. Exportação anterior ou posterior dessa empresa e competência está [nao verificado]. `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:218`, `app/folha/porta_export.py:1273`, `app/folha/porta_export.py:1388`, `app/folha/views.py:130`, `app/folha/views.py:270`
+
+## (g) «Gerar TXT para conferir»
+
+**Achado de desenho.** O GE
+
+[truncado em 20000 de 21098 caracteres]
 
 ## 21/11 18:03 · sessao e19f8d4e02f8 · FERIADO-POR-POSTO · verificador · origem=Code
 
@@ -1436,123 +1651,4 @@ Os nomes curtos da tabela apontam para `app/chamados/reconciliador.py` (`R`), `a
 
 O teto SQL é uma pendência da cura. O selo mede o caminho da batida com um e três furos que fecham, e o cartório é uma entrada direta do E2. O impacto da releitura nesse teto [nao verificado]. `app/ponto/tests/test_selo_chokepoint_escrita.py:324–325,467–475`, `app/ponto/services/cartorio.py:1018–1026`.
 
-## 21/11 16:10 · sessao 2f41c9f70b86 · E4C-F5-CONSTROI · construtor · origem=Code
-
-**PAREI no RED do item 1.2.** `travar_o_ato_do_plantio` chama `metade_irma_do_intervalo` antes de tomar a trava e inclui o PK da irmã em `perguntas`. No cenário da irmã vigente sem carimbo, o filtro atual envia `{principal}` à trava. C21 sobre a composta enviaria `{principal, irmã}`. Na divergência inversa, a irmã sai do conjunto. A ordem das quatro travas pode continuar idêntica e ainda assim mudar **quais PKs são travados**. O laço de materialização e o passivo usam esse mesmo caminho. `chamados/services/materializacao.py:139–150,2085–2103,2149–2163`, `chamados/models.py:2900–2904`, `chamados/services/passivo_validado.py:376–384`
-
-O diff ficou em [test_bug_par_projetado.py](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_bug_par_projetado.py:1354). A fixture usa um dia anterior ao índice por marco para representar duas irmãs elegíveis. A resposta e a reabertura passam pelas portas reais. Os `update`s da fixture introduzem a divergência física. `chamados/tests/test_bug_par_projetado.py:90–97,1354–1408`, `chamados/models.py:2605–2613,3823–3828`, `chamados/services/disputa_emissao.py:1532–1537,1664–1685`
-
-| Caso | Asserção |
-|---|---|
-| Irmã vigente excluída pela coluna | O par devolve o PK e o slot `D+1 02:00 E`. A validação pública devolve o PK da irmã e a batida gravada é conferida por tipo, instante e `pergunta_origem_id`. `chamados/tests/test_bug_par_projetado.py:102–115,1379–1393` |
-| Irmã desfeita admitida pela coluna | Após a reabertura real, a projeção obsoleta volta a ter instante e texto. A composta segue sem resposta vigente e a porta recusa o par. `chamados/tests/test_bug_par_projetado.py:1395–1410` |
-| Duas irmãs elegíveis | Ambas são respondidas pela composta e só uma tem carimbo físico. A porta deve recusar por falta de irmã única. `chamados/tests/test_bug_par_projetado.py:1412–1423` |
-| Competência entregue | O TXT vigente é semeado no modelo que K6 consulta. Tela e validação recusam, com comparação das perguntas, dos atos e das batidas antes e depois. `chamados/tests/test_bug_par_projetado.py:1425–1444`, `folha/export.py:580–594` |
-
-**Base** `b0935c1f106d232dc39b263676a588d66eddff54`, conferida com `git rev-parse HEAD`. **Commit RED** ausente pelo veto a `git commit` no brief. **Commit cura** ausente pela parada no conjunto de PKs. SHA-256 do diff RED `6545ec357dfbfeda0360175cbbab78c622f7f14ad026dabc8b828fa6057c5bdc`. `chamados/tests/test_bug_par_projetado.py:1354–1444`, `chamados/services/materializacao.py:2085–2103`
-
-Conferi a sintaxe com `compile()` em memória e o diff com `git diff --check`. RED executado, GREEN, mordida executada, pareamento main × F5, incidência em produção e resultado dos controles vizinhos ficam [nao verificado]. A suite usa Docker, rede e PostgreSQL de teste. Os controles vizinhos estão em `chamados/tests/test_bug_par_projetado.py:136–171,423,691,751`. `bin/suite.sh:316–325`, `config/settings/ci.py:6–18`
-
-**Comando RED e GREEN para o Code** na base com o teste e, futuramente, na cópia com a cura autorizada. `bin/suite.sh:192–208,316–325`
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 /home/ronald/wt-codex-e4c-f5-constroi-160129/bin/suite.sh \ [nao verificado]
-  --dir /home/ronald/wt-codex-e4c-f5-constroi-160129 \
-  --only chamados -- -k BugParIrmaCompostaTest
-```
-
-**Mutante `irma_pelo_carimbo`** restaura a seleção física antes da unicidade. Esse é o corpo presente na base, portanto o comando acima já exercita o alvo nesta entrega. Depois de uma cura autorizada, numa cópia de teste em que o único delta de `materializacao.py` seja o seletor, o Code pode aplicar a reversão abaixo e repetir o comando. As asserções-alvo são a do PK e slot, a da irmã reaberta e a das duas elegíveis. `chamados/services/materializacao.py:139–150`, `chamados/juizes.py:1583–1588`, `chamados/tests/test_bug_par_projetado.py:1382,1410,1423`
-
-```bash
-wt=/home/ronald/wt-codex-e4c-f5-constroi-160129
-git -C "$wt" diff b0935c1f106d232dc39b263676a588d66eddff54 -- app/chamados/services/materializacao.py \
-  | git -C "$wt" apply -R
-```
-
-**LEI-AKITA:** origem=`metade_irma_do_intervalo`, testemunha=C21 sobre a composta, RED=`BugParIrmaCompostaTest` [nao verificado], quem-mais-le=`par_do_intervalo`, `travar_o_ato_do_plantio` e `irma_da_validacao`, com tela, admin, materializador e passivo a jusante, juizes novos=0, padrao=Single Source of Truth. `chamados/juizes.py:1551–1560`, `chamados/services/materializacao.py:195,928,1766,2093,2154`, `chamados/services/validacao.py:212,648,743`, `chamados/services/passivo_validado.py:382`
-
-### Autoconferência · campos=19
-
-As referências abreviadas na matriz são de `app/chamados/`. Os três chamadores diretos são `materializacao.py:195,2093` e `validacao.py:212`. A tela chega pelo derivador, pelo tag e pelo explicador. O admin chega pela validação pública e pelo serviço de ações. O plantio e o passivo chegam pela trava comum. `services/materializacao.py:894–928,1766–1778,2149–2163`, `templatetags/chamados_tags.py:136`, `services/explicador.py:124`, `services/acoes_disputa.py:13–23,143`, `services/passivo_validado.py:376–384`
-
-| Campo ou valor | (a) Fonte | (b) Escritor | (c) Instante e trava | (d) Leitores | (e) Significado único |
-|---|---|---|---|---|---|
-| `disputa` / `disputa_id` | FK da pergunta e disputa recebida. `models.py:2626–2630`, `materializacao.py:139–148` | Porta de nascimento atribui a FK. `models.py:3035–3061,3228–3232` | Identidade lida antes da trava do plantio e do admin. `materializacao.py:2091–2103`, `validacao.py:743–756` | Par, trava e validação usam a mesma disputa. `materializacao.py:195,2093–2103`, `validacao.py:212` | `disputa=None` faz o seletor abster-se. `materializacao.py:143–144` |
-| `motivo` e complementar | Motivo persistido e mapa de ida e volta. `models.py:2631`, `materializacao.py:136,142` | Nascimento grava o motivo. O mapa é constante. `models.py:3228–3232`, `materializacao.py:136` | Motivo de `p` da instância recebida, da irmã no filtro SQL. `materializacao.py:142–149` | Par, derivador do tipo e K6. `materializacao.py:189,624–626,808–812` | `outro=None` significa motivo fora do mapa. A saída do seletor compartilha o `None`. `materializacao.py:142–150` |
-| `data_evento` | Dia do turno gravado na pergunta. `models.py:2633–2636`, `services/fio.py:845–854` | `gravar_dia_do_fato` é o ponto de atribuição de nascimento, costura e re-chaveamento. `services/fio.py:845–854,1084–1096` | Instância de `p` e filtro da irmã antes da trava inicial. Re-chaveamento relê sob trava. `materializacao.py:143–148,2091–2103`, `services/fio.py:1059–1066` | Identidade, plantio e K6 pelo dia do fato. `materializacao.py:147,624–635,792–805` | O dia civil do slot pode cair em D+1. O dia do fato continua sendo o dia do turno. `juizes.py:299–312,325–334` |
-| `tipo_resposta` | Campo da pergunta. `models.py:2652–2656` | Tipo fornecido pelo emissor, persistido pela porta de nascimento. `disputa_emissao.py:449–457`, `models.py:3228–3232` | Instância da principal e filtro SQL da candidata. `materializacao.py:143–148` | Escritor da resposta, admin e despacho do materializador. `disputa_emissao.py:1449–1467`, `validacao.py:199–200`, `materializacao.py:1957–1964` | `'hora'` identifica o formato da pergunta. O tipo `E`/`S` é derivado à parte. `materializacao.py:143,624–626,672–689` |
-| `materializada_em` | Coluna usada no corte SQL e publicada na composta. `materializacao.py:148`, `models.py:4382–4390` | Porta de carimbo e portas de descarimbo. `models.py:3324–3328,3400,3451–3461`, `disputa_emissao.py:1682–1684` | Corte inicial antes da trava. O laço relê a principal sob a trava. `materializacao.py:2091–2103,2153–2163` | Seletor, fila e confirmação do par gravado. `materializacao.py:148,2142–2163`, `validacao.py:659` | `NULL` significa sem carimbo físico. O lastro tem juiz próprio. `materializacao.py:148,1970–1972`, `juizes.py:667–674` | [nao verificado]
-| `via_resolucao` / fora do fato | Coluna e predicado `fora_do_fato`. `models.py:2603,3441–3449` | `_escrever_carimbo` recebe o valor pelas portas de carimbo. `models.py:3324–3328,3416–3438` | Avaliado sobre cada candidata da consulta, antes da trava inicial. `materializacao.py:146–149,2091–2103` | Seletor, índice de identidade e descarimbo. `materializacao.py:149`, `models.py:3451–3461,3823–3833` | `fora_do_fato` agrupa duplicata e motivo retratado pelo efeito comum de saída da identidade. `models.py:2599–2603,3441–3449` |
-| Em voo | PK no `ContextVar` e transação ativa. `materializacao.py:1819–1825,1875–1877` | `materializacao_em_voo` põe e retira o PK. `materializacao.py:1828–1838` | Durante o bloco atômico do plantio. `materializacao.py:1956–1964` | Seletor e proteção contra reentrada pelo fecho. `materializacao.py:149`, `disputa_emissao.py:2016,2032` | `True` indica materialização neste contexto transacional. `materializacao.py:1875–1877` |
-| Atos da irmã, FK, `ato`, `ato_em`, PK, `ato_texto`, `resposta_mantem_validacao` | Relação `decisoes`. `leitura` ordena linhas reais e passivo. `models.py:4219–4223,4333–4367` | `DecisaoPergunta.registrar` é a porta única e invalida o cache da instância recebida. `models.py:4428–4453` | Hoje a consulta da irmã vem depois da seleção física. A leitura do par fica antes da trava na tela, e dentro do ato no admin e no plantio. Carga em lote no seletor é parte da cura pendente. `materializacao.py:145–150,195–205,928,1765–1778`, `validacao.py:746–788` | `composta`, histórico e consumidores do par. `models.py:3846–3858,4382–4390`, `materializacao.py:200–205` | `ato_em` data o ato, PK desempata e `resposta_mantem_validacao` decide o efeito da resposta sobre a assinatura. C21 recebe texto da projeção. `models.py:4333–4378,4388–4390` |
-| `respondida_em` físico | Coluna da projeção. `models.py:2657–2659` | Resposta humana, automática, reparo pela trilha, carimbo e limpeza têm portas por evento. Não há um único escritor físico. `disputa_emissao.py:1499–1537,1682–1684,1707–1737`, `models.py:3367–3374` | A resposta humana toma a trava do dono antes de reler e ler `now()`. O seletor hoje lê a coluna antes da trava. `disputa_emissao.py:1478–1502`, `materializacao.py:145–150,2091–2103` | Face SQL, fila do materializador e composição do passivo. `juizes.py:1583–1588,1770–1775`, `materializacao.py:2140–2146`, `models.py:4312–4317` | **Achado.** O seletor trata o carimbo como resposta vigente. Os dois contracasos distinguem o carimbo do ato. `test_bug_par_projetado.py:1384–1410` |
-| `respondida_em` composto | `DecisaoPergunta.leitura` e o passivo sem linha correspondente. `models.py:4312–4317,4348–4389` | Derivado pela composta dos atos registrados e da projeção legada. `models.py:4361–4379,4382–4390,4428–4438` | A composição usa a sequência carregada e não lê relógio. A seleção que alimenta a trava seria anterior a ela. `models.py:4357–4367`, `materializacao.py:2091–2103` | C21 da principal, propriedade `respondida` e anuência do plantio. `materializacao.py:191–194,1332–1336`, `models.py:3838–3844` | `None` é ausência de instante vigente. Nunca respondida e resposta desfeita convergem para esse valor. `models.py:4368–4379` |
-| `resposta_colab` | A composta publica o texto da projeção. `models.py:4382–4390` | As portas de resposta e reabertura escrevem ou limpam o texto. `disputa_emissao.py:1499–1537,1630,1682–1684,1707–1715` | Na resposta humana, texto e instante são gravados juntos sob a trava do dono. Na seleção atual o texto é lido no SQL. `disputa_emissao.py:1478–1537`, `materializacao.py:145–149`, `juizes.py:1583–1588` | C21, implausibilidade, declaração de hora e derivador do slot. `juizes.py:1551–1560,1785–1803,2064–2084`, `materializacao.py:641–655,694–704` | **Acesso cru encontrado.** O derivador e a implausibilidade leem a coluna diretamente. É a mesma fonte de texto que a composta publica. O `ato_texto` tem papel histórico distinto. `materializacao.py:641,694`, `juizes.py:2073`, `models.py:4199–4202,4382–4390` |
-| `validada_em` / `validada_por_id` físicos | Projeção usada para sintetizar validação legada sem linha. `models.py:4318–4322` | A assinatura admin passa por `_carimbar_validacao`. Há também carimbo e limpeza por outras portas. `validacao.py:161–175`, `models.py:3371–3374`, `disputa_emissao.py:1503–1514,1682–1684` | Admin grava depois da trava da porta. A foto legada vem da instância da leitura. `validacao.py:746–760`, `models.py:4294–4303` | Compositor, fila física e vigia de paridade ato × coluna. `models.py:4318–4322,4393–4399`, `materializacao.py:2142–2146` | Coluna preenchida é presença física. A vigência tem leitura própria. `models.py:4393–4399` |
-| `validada_em` composto | Sequência processada pela composta. `models.py:4368–4390` | Ato de validação pela porta e atos posteriores com efeito de desfazer. `validacao.py:161–175`, `models.py:4325–4345,4428–4438` | No par, depois da seleção da irmã. No materializador, depois da releitura da principal sob a trava. `materializacao.py:195–205,2153–2163` | Guarda da irmã validada, admin e materializador. `materializacao.py:200–205,2161`, `validacao.py:655–658` | `None` significa ausência de validação vigente, inclusive após devolução, recusa ou reabertura. `models.py:4325–4331,4368–4379` |
-| Veredito C21 | `pergunta_respondida`. Sua face SQL atual recebe a projeção física. `juizes.py:1551–1560,1583–1588` | O juiz calcula o booleano. O seletor atual usa a face SQL para a irmã. `materializacao.py:145–150,191–195` | Principal julgada pela composta na entrada do par. Irmã cortada no SQL antes da releitura. `materializacao.py:145–150,191–205` | Par, propriedade `respondida` e anuência do plantio. `materializacao.py:193,1332–1336`, `models.py:3838–3844` | `False` significa ausência do par válido instante + texto. A divergência entre as duas fontes está no RED. `juizes.py:1551–1560`, `test_bug_par_projetado.py:1384–1423` |
-| Cardinalidade e retorno `None` | Tamanho da lista após os cortes atuais. `materializacao.py:143–150` | Retorno calculado pelo seletor. `materializacao.py:150` | Após a consulta e os cortes fora do fato e em voo. Na trava do plantio, ainda antes de `trava_na_ordem`. `materializacao.py:145–150,2091–2103` | Par, tráfego de trava e irmã da validação. `materializacao.py:195–197,2093–2103`, `validacao.py:212,743–756` | **Achado.** `None` cobre entrada inaplicável, zero e múltiplas candidatas. O par traduz zero e ambiguidade para a mesma mensagem `FALTA_A_OUTRA_METADE`. `materializacao.py:143–153,195–197` |
-| PK de `p` e da irmã | PK da linha persistida. O seletor exclui o da principal e devolve a única irmã. `models.py:3228–3232`, `materializacao.py:148–150` | Inserção pela porta de nascimento. O seletor entrega a instância. `models.py:3228–3232`, `materializacao.py:150` | Identidade calculada inicialmente antes da trava, e seleção refeita no par que planta. `materializacao.py:1765–1778,2091–2103` | Trava, validação, retorno público e vínculo na batida. `materializacao.py:1576–1579,2093–2103`, `validacao.py:659,849–852` | Um PK aponta uma única pergunta. O RED confere o mesmo PK no par, no recibo e na batida. `test_bug_par_projetado.py:102–115,1379–1393` |
-| Slot `(ts_q, tipo_q)` | `_ts_tipo_do_plantio`, marco e ajuste do dia do turno. `materializacao.py:224–238,615–626,691–710`, `juizes.py:299–334` | Derivador único. Escrita da batida pela porta `registrar_batida`. `materializacao.py:615–621,1521–1529` | Derivado após escolher a irmã. O plantio rederiva o slot ao chamar a unidade real. `materializacao.py:224,1394–1395,1766–1778` | Tela usa o slot do par. Validação e plantio usam o PK e recalculam pelo mesmo derivador. `materializacao.py:928–948,1766–1778`, `validacao.py:648–659` | `None` no slot do par vem com impedimento. A falta de irmã única conserva a ambiguidade acima. `materializacao.py:175–179,195–197,224–238` |
-| IDs de disputa, destino, clones e pai reunidos para a trava | FKs e `chamados_relacionados_ids` da principal e da irmã. `materializacao.py:2093–2101`, `models.py:3713–3717` | Destino escrito por nascimento/reuso e costura. Clones são fornecidos pelo emissor. `models.py:3194–3198,3228–3232`, `services/fio.py:857–867`, `disputa_emissao.py:850` | Coletados antes de `trava_na_ordem`, também na validação. `materializacao.py:2091–2103`, `validacao.py:743–756` | Trava global e reconciliação do destino e dos clones no plantio. `models.py:2880–2904`, `materializacao.py:1265–1312` | IDs identificam linhas. `None` e duplicados são descartados pela normalização da trava. `models.py:2845–2848,2862–2863` |
-| Trava | `PerguntaDisputa.trava_na_ordem`. `models.py:2839–2859` | Esse método adquire as quatro famílias de travas. O seletor fornece parte do conjunto. `models.py:2875–2904`, `materializacao.py:2091–2103` | Colaborador → Disputa → Chamado → Pergunta. A eleição da irmã antecede a primeira trava do laço. `models.py:2841–2848`, `materializacao.py:2091–2103,2153–2155` | Laço do admin, passivo e validação pública. `materializacao.py:2154`, `passivo_validado.py:382`, `validacao.py:743–756` | **Bloqueio do sítio.** A mesma ordem recebe outro conjunto de PKs quando a irmã muda de elegibilidade. `materializacao.py:145–150,2093–2103`, `test_bug_par_projetado.py:1384–1423` |
-
-## 21/11 16:09 · sessao 61c4c68ce30e · TRAVAS-SEM-MEMORIA · censo · origem=Code
-
-# Censo M8 — TRAVAS-SEM-MEMORIA
-
-A identificação `a9e3e967859085765806684361ab1c129a2f3779` vem do pedido e do laudo. O HEAD pelo Git e as capturas brutas estão [nao verificado]. A cópia disponível veio sem `.git` e sem `logs/`. A casa documenta a cópia de leitura por `git archive` e exclui `logs/` do Git. `CLAUDE.md:347`, `.gitignore:53`
-
-## 1. Formato do `pede` e do `espera`
-
-- **Sítios da cura.** A captura de `pede`, a extração de `_pl_id` e o ramo de admissão ficam em `bin/suite.sh:357`, `bin/suite.sh:359`, `bin/suite.sh:360`. O comando canônico chega a esse ramo depois da conferência de `PRONTO` e da publicação da ref. Com `rc=0` e ID vazio, a inteira sai 71 e o recorte segue para a VM. O selo fabrica `id=<id> sha=<sha> enfileirado` e mede se o ID correto chegou ao `espera`. `CLAUDE.md:96`, `bin/suite.sh:340`, `bin/suite.sh:354`, `bin/suite.sh:389`, `bin/suite.sh:393`, `bin/tests/test_pista_lateral.sh:32`, `bin/tests/test_pista_lateral.sh:174`, `bin/tests/test_pista_lateral.sh:308`, `bin/tests/test_pista_lateral.sh:453`
-- **Formato real de `pede`, conforme o anexo.** O laudo relata **ID nu em 12 de 12 capturas** e nomeia `logs/COMBOIO-1911/c/pede.txt`, `logs/E4C-F3-LAVRA-FOTO/preopus/pede.txt` e `logs/ESCALA-NAO-DESCREVE/c7/pede.txt`. Transcreve `1119021427_2fd98211` para a terceira. O RELATO associa os três pedidos aos IDs `1119013536_84786d94`, `1119020736_88f67e29` e `1119021427_2fd98211`, respectivamente. A linha exata de cada captura e o stderr do servidor estão [nao verificado]. `laudo_opus.txt:2` (anexo), `app/docs/RELATO.md:1553`, `app/docs/RELATO.md:1525`, `app/docs/RELATO.md:1526`
-- **Formato de `espera`.** O contrato documenta que o status do SSH é o rc da suite. O executor procura `id=<job> sha=<sha> rc=<n>`, compara o rc com o status do SSH e, para rc 0, exige `Ran N tests` positivo depois do cabeçalho. O dublê emite esse cabeçalho e o veredito. O RELATO registra `rc=0`, `Ran` e `OK` para `logs/COMBOIO-1911/c/espera.out` (16932), `logs/E4C-F3-LAVRA-FOTO/opus_final/suite_pista.log` (16938) e `logs/ESCALA-NAO-DESCREVE/c7/opus_delta/suite_pista.log` (16952). O anexo menciona três capturas de espera sem transcrevê-las. O cabeçalho real, a ordem das linhas e três provas diretas em `espera*.txt` ficam [nao verificado]. `app/docs/BACKLOG.md:2227`, `bin/suite.sh:368`, `bin/suite.sh:369`, `bin/suite.sh:372`, `bin/suite.sh:374`, `bin/tests/test_pista_lateral.sh:38`, `bin/tests/test_pista_lateral.sh:50`, `app/docs/RELATO.md:1563`, `app/docs/RELATO.md:1536`, `app/docs/RELATO.md:1541`, `laudo_opus.txt:14` (anexo)
-- **Escritores e leitores.** A sessão fornece obra e cópia. A suite resolve `_pl_sha`, monta `_pl_args`, escreve `refs/pista/<sha>` e captura resposta e status em `_pl_out` e `_pl_rc`. A pista recebe a ref pelo contrato. `_pl_id` nasce no parser e alimenta o diagnóstico, o `espera`, a validação da identidade e a medição. O segundo SSH escreve `_pl_esp` e `_pl_erc`. O parser produz `_pl_cab`, `_pl_jrc`, `_pl_ran` e `_pl_falta`, que determinam a saída, a causa e o registro em `pista_lateral.log`. O selo lê a ref, o argv gravado em `ssh.log` e a medição. `CLAUDE.md:96`, `bin/suite.sh:324`, `bin/suite.sh:343`, `bin/suite.sh:354`, `bin/suite.sh:357`, `bin/suite.sh:359`, `bin/suite.sh:363`, `bin/suite.sh:368`, `bin/suite.sh:369`, `bin/suite.sh:374`, `bin/suite.sh:379`, `bin/suite.sh:383`, `bin/suite.sh:315`, `app/docs/BACKLOG.md:2227`, `bin/tests/test_pista_lateral.sh:28`, `bin/tests/test_pista_lateral.sh:174`, `bin/tests/test_pista_lateral.sh:177`
-- **Quem mais lê.** `suite.sh` é o único parser dos dois retornos localizado no código entregue. O PreToolUse registrado lê a *invocação* da suite. A seção 3 prescreve ler `Ran`, o veredito e o rc de processo no log. O RELATO registra a sessão como leitora operacional e cita o esperador externo `logs/ORDEM-1811/p2/corrida.sh`. O parser desse script e outros parsers em `logs/` estão [nao verificado]. `bin/suite.sh:359`, `bin/suite.sh:369`, `.claude/settings.json:73`, `bin/hook_pista_pronto.py:146`, `CLAUDE.md:122`, `app/docs/RELATO.md:773`, `app/docs/RELATO.md:1847`
-
-## 2. Leitor da invocação de `codex_pergunta.sh`
-
-- **Sítios da cura.** O ramo de ficha de `decide` e `nega_ficha` em `bin/hook_pista_pronto.py:256`, `bin/hook_pista_pronto.py:291`, `bin/hook_pista_pronto.py:307`, a interface do reconhecedor em `bin/disjuntor.py:1448` e os casos pelo registro em `bin/tests/test_pista_lateral.sh:125`, `bin/tests/test_pista_lateral.sh:272`, `bin/tests/test_pista_lateral.sh:295`. O hook já compartilha `_trechos`, mas faz seu próprio reconhecimento por `comandos`, `_comando` e `_chama`. `_PALAVRA_CHAVE` remove as palavras de controle antes do reconhecimento no disjuntor. O exemplo do anexo usa obra sem `-RASCUNHO`, portanto mostra a divergência de reconhecimento. A recusa M9a depende do sufixo contratual. `bin/hook_pista_pronto.py:54`, `bin/hook_pista_pronto.py:58`, `bin/hook_pista_pronto.py:65`, `bin/hook_pista_pronto.py:108`, `bin/hook_pista_pronto.py:130`, `bin/hook_pista_pronto.py:260`, `bin/disjuntor.py:1370`, `bin/disjuntor.py:1454`, `app/docs/RELATO.md:1094`, `laudo_opus.txt:3` (anexo)
-- **Escritores e leitores do texto Bash.** A sessão fornece `CODEX_OBRA`, `CODEX_PAPEL` e os anexos na chamada. Os dois PreToolUse recebem `tool_input.command`. **O reconhecedor canônico da invocação do wrapper é `disjuntor._codex_cmds`.** Ele produz `papel`, `volta`, `obra` e `anexos`. Seus consumidores são `_codex_cmd` (auxiliar sem chamada localizada), `codex_decide` para B4 e ANEXO-ENXUTO, `_ramo_b3` no caminho de exceção e `_pretool` no caminho normal. O segundo leitor em M7b é `hook_pista_pronto`, que usa `papel`, `obra` e o primeiro anexo para decidir M9a. `CLAUDE.md:347`, `app/docs/RELATO.md:1094`, `.claude/settings.json:62`, `.claude/settings.json:77`, `bin/disjuntor.py:1841`, `bin/disjuntor.py:1460`, `bin/disjuntor.py:1466`, `bin/disjuntor.py:1477`, `bin/disjuntor.py:1486`, `bin/disjuntor.py:1819`, `bin/disjuntor.py:1853`, `bin/disjuntor.py:1947`, `bin/hook_pista_pronto.py:260`, `bin/hook_pista_pronto.py:295`
-- **Interfaces que a cura atravessa.** O hook hoje lê `export` anterior, opções de shell e palavras por `shlex`. `_codex_cmds` lê atribuições prefixadas e extrai anexos por regex. O wrapper recebe o argv e o ambiente efetivos, aceita `--anexo <arquivo>` e valida obra e papel. O próprio wrapper aciona o censo do construtor antes da vaga. A ficha vem do chat e a sessão a anexa. O hook confere cabeçalho, linhas `DECISAO` e referências. O wrapper escreve o `.id`, lido pelo disjuntor na triagem e pelo hook na conferência da ficha, que também admite o registro de entrega no RELATO. `bin/hook_pista_pronto.py:67`, `bin/hook_pista_pronto.py:79`, `bin/hook_pista_pronto.py:123`, `bin/disjuntor.py:1449`, `bin/disjuntor.py:1462`, `bin/disjuntor.py:1857`, `bin/codex_pergunta.sh:61`, `bin/codex_pergunta.sh:81`, `bin/codex_pergunta.sh:247`, `bin/codex_pergunta.sh:464`, `bin/disjuntor.py:855`, `bin/disjuntor.py:897`, `bin/hook_pista_pronto.py:190`, `bin/hook_pista_pronto.py:211`, `bin/hook_pista_pronto.py:270`, `app/docs/RELATO.md:1093`
-- **Outros leitores.** `hook_stop_fila1` lê argv e ambiente do processo já vivo em `/proc` para provar a espera do censo. Stop, handoff e alarme consomem essa prova. Os selos exercitam, separadamente, reconhecimento Bash, chegada ao wrapper, prova do processo e dono do censo. Invocações e decisões nos logs da obra estão [nao verificado]. `.claude/settings.json:9`, `bin/hook_stop_fila1.py:730`, `bin/hook_stop_fila1.py:754`, `bin/hook_stop_fila1.py:773`, `bin/hook_stop_fila1.py:804`, `bin/handoff_sessao.sh:130`, `bin/alarme_sessao_ociosa.py:137`, `bin/tests/test_disjuntor.sh:575`, `bin/tests/test_disjuntor.sh:591`, `bin/tests/test_pista_lateral.sh:131`, `bin/tests/test_pista_lateral.sh:276`, `bin/tests/test_hook_esperando_com_prova.sh:201`, `bin/tests/test_censo_antes_da_vaga.sh:258`
-
-## 3. Árvore usada para escolher a volta
-
-- **Sítios da cura.** A construção de `ONLY`, a ordem da guarda de inteira e da resolução do SHA, o comentário sobre o instante e o leitor da árvore no helper. Hoje o helper já escolheu as labels antes de `_pl_sha` nascer. Ele calcula `base..HEAD` e usa o disco para descobrir os testes, conferir existência e ler seu conteúdo. `_suite_inteira` é consultada primeiro pelo disco e novamente com o SHA. `bin/suite.sh:181`, `bin/suite.sh:187`, `bin/suite.sh:254`, `bin/suite.sh:283`, `bin/suite.sh:309`, `bin/suite.sh:322`, `bin/suite.sh:324`, `bin/suite.sh:326`, `bin/vizinhos_da_volta.py:28`, `bin/vizinhos_da_volta.py:44`, `bin/vizinhos_da_volta.py:93`, `bin/vizinhos_da_volta.py:117`
-- **Escritores e leitores da seleção.** O chamador fornece `DIR` e `VOLTA`. `ONLY` vem do argv ou do stdout do helper e passa pelo filtro de `LABELS`. A guarda, o `--only` remoto, o `--seco` e o Django da VM leem a seleção. O helper lê o manifesto de selos globais e emite labels em stdout e motivos em stderr. `LABELS` tem fonte na régua e leitores na própria régua, na suite, no pre-push e no selo de fonte única. `bin/suite.sh:153`, `bin/suite.sh:155`, `bin/suite.sh:161`, `bin/suite.sh:176`, `bin/suite.sh:187`, `bin/suite.sh:194`, `bin/suite.sh:206`, `bin/suite.sh:256`, `bin/suite.sh:344`, `bin/suite.sh:402`, `bin/suite.sh:459`, `bin/vizinhos_da_volta.py:126`, `bin/vizinhos_da_volta.py:129`, `bin/selos_globais_da_volta.txt:1`, `bin/regua.sh:23`, `bin/regua.sh:168`, `bin/pre-push.sh:184`, `bin/tests/test_labels_fonte_unica.sh:20`, `CLAUDE.md:117`
-- **SHA, diagnóstico e chamadores.** A rota lê `_pl_sha`, reconfere o HEAD e usa o SHA para julgar inteira, conferir `PRONTO`, criar a ref, pedir e validar o job e vincular a contingência à cópia. `volta_intermediaria.sh` fornece `VOLTA_PORQUE`, conta os motivos emitidos pelo helper e publica o resultado. O ruff do mesmo wrapper faz sua própria leitura anterior de HEAD e disco. Os selos substituem o helper por labels prontas. A5 exercita avanço entre SHA e pedido, enquanto V1/V2 exercitam a seleção devolvida pelo dublê. `bin/suite.sh:186`, `bin/suite.sh:189`, `bin/suite.sh:324`, `bin/suite.sh:335`, `bin/suite.sh:340`, `bin/suite.sh:343`, `bin/suite.sh:354`, `bin/suite.sh:369`, `bin/suite.sh:394`, `bin/volta_intermediaria.sh:18`, `bin/volta_intermediaria.sh:32`, `bin/volta_intermediaria.sh:34`, `bin/volta_intermediaria.sh:42`, `CLAUDE.md:104`, `bin/tests/test_pista_lateral.sh:105`, `bin/tests/test_pista_lateral.sh:199`, `bin/tests/test_pista_lateral.sh:316`, `bin/tests/test_suite_motivo.sh:32`
-
-## 4. Falha de `git status` dentro da vez
-
-- **Sítios da cura.** `_nv_confere` antes e depois do run, em paridade com a admissão da rota, e o selo das duas bordas. Há `pipefail`, mas o `-z` externo decide pelo texto da substituição e ignora seu status. A admissão consulta o status da atribuição antes de truncar a saída. `bin/suite.sh:34`, `bin/suite.sh:118`, `bin/suite.sh:122`, `bin/suite.sh:125`, `bin/suite.sh:128`, `bin/suite.sh:334`, `bin/suite.sh:337`
-- **Escritores e leitores.** Git produz o HEAD e o par saída/status. Na admissão, `_pl_suja` recebe essa saída e alimenta a recusa, com reconferência de `_pl_head`. Na VM, `DIR` atravessa a trava até `_NV_DIR`; a contingência exporta `SUITE_NA_VEZ_SHA` e a entrada normal remove valor herdado. `_nv_confere` lê ambos. O runner produz `_NV_RC`, que a reconferência posterior pode trocar por 2, preservando rc de sinal. O rc final também alimenta a medição de contingência. `bin/suite.sh:109`, `bin/suite.sh:119`, `bin/suite.sh:126`, `bin/suite.sh:128`, `bin/suite.sh:133`, `bin/suite.sh:137`, `bin/suite.sh:154`, `bin/suite.sh:334`, `bin/suite.sh:338`, `bin/suite.sh:394`, `bin/suite.sh:452`, `bin/trava_teste.sh:42`, `bin/suite.sh:509`, `CLAUDE.md:122`
-- **Cobertura existente.** O Git falso consegue falhar silenciosamente. A8 cobra essa falha antes do SSH. A3/A4 cobram avanço de HEAD na VM. A9 e A10 cobram ambiente herdado e preservação do sinal. A mesma falha silenciosa de status dentro da vez fica fora desses casos. `bin/tests/test_pista_lateral.sh:77`, `bin/tests/test_pista_lateral.sh:220`, `bin/tests/test_pista_lateral.sh:223`, `bin/tests/test_pista_lateral.sh:327`, `bin/tests/test_pista_lateral.sh:329`, `bin/tests/test_pista_lateral.sh:332`, `bin/tests/test_pista_lateral.sh:445`
-
-## 5. Visibilidade de `declaracoes_ambiguas`
-
-- **Sítios da cura.** O renderizador do ESTADO, a saída `--linhas` usada por `raia_agente.sh listar` e o selo de publicação. Duas cópias limpas sem commits à frente podem produzir uma ambiguidade com `raias` e `sujas` vazias. Nesse caso o ESTADO só imprime a mensagem de nenhuma raia viva. `--linhas` imprime raias, sujas e contadores. `bin/raias_estado.py:143`, `bin/raias_estado.py:157`, `bin/raias_estado.py:159`, `bin/raias_estado.py:230`, `bin/gerar_estado.py:217`, `bin/gerar_estado.py:228`, `bin/gerar_estado.py:232`, `bin/raia_agente.sh:81`
-- **Escritores e leitores.** `raia_agente.sh` cria, atualiza, relê e baixa a declaração `logs/raias/<basename>.agente`. `_declaradas` lê o nome e os campos. Git fornece caminhos, HEAD, avanço e sujeira. `ler` calcula `ambiguas`, usa o valor para suspender a atribuição às duas cópias e publica `declaracoes_ambiguas` junto de `raias`, `sujas` e contadores. O JSON expõe o campo. O gerador é o escritor atual da frase do aviso. `bin/raia_agente.sh:49`, `bin/raia_agente.sh:54`, `bin/raia_agente.sh:66`, `bin/raia_agente.sh:73`, `bin/raias_estado.py:51`, `bin/raias_estado.py:69`, `bin/raias_estado.py:77`, `bin/raias_estado.py:108`, `bin/raias_estado.py:142`, `bin/raias_estado.py:151`, `bin/raias_estado.py:157`, `bin/raias_estado.py:183`, `bin/raias_estado.py:189`, `bin/raias_estado.py:238`, `bin/gerar_estado.py:229`
-- **Publicação e selos.** O gerador grava o ESTADO. `relato.sh` o entrega ao raspador e publica o destino. E6 lê o campo do JSON com gêmeas que têm commits à frente. O selo de E1 cobre ESTADO gerado, publicado e `listar` para os tokens de cópia, sem cobrir o aviso isolado nessas saídas. Declarações reais e a publicação resultante estão [nao verificado]. `bin/gerar_estado.py:383`, `bin/gerar_estado.py:401`, `bin/relato.sh:38`, `bin/relato.sh:117`, `bin/relato.sh:147`, `bin/raspar_publico.py:28`, `bin/raspar_publico.py:40`, `bin/tests/test_travas_sem_memoria.sh:72`, `bin/tests/test_travas_sem_memoria.sh:110`, `bin/tests/test_travas_sem_memoria.sh:127`, `bin/tests/test_travas_sem_memoria.sh:159`, `bin/tests/test_raia_declarada_no_estado.sh:28`
-
-## 6. Recorte aceito, espera inconclusiva e VM
-
-- **Sítios da cura.** O ramo que já tem `_pl_id` e `_pl_falta` e entrega `_pl_causa` à contingência. V3 cobre falha no pedido. V5 cobre pedido aceito com espera inconclusiva e hoje exige VM após dois SSHs. V6 lê o rc final da VM no log. O dublê e essas expectativas são parte do sítio de prova. `bin/suite.sh:368`, `bin/suite.sh:374`, `bin/suite.sh:382`, `bin/suite.sh:386`, `bin/suite.sh:388`, `bin/tests/test_pista_lateral.sh:31`, `bin/tests/test_pista_lateral.sh:41`, `bin/tests/test_pista_lateral.sh:204`, `bin/tests/test_pista_lateral.sh:311`, `bin/tests/test_pista_lateral.sh:313`, `bin/tests/test_pista_lateral.sh:449`, `bin/tests/test_pista_lateral.sh:459`
-- **Escritores e leitores.** A sessão fornece `PISTA_CONTINGENCIA` para a inteira. O bloco escreve `_pl_decl` e `_pl_causa` para declaração, falha de ref, falha de `pede` ou falha de `espera`. O consumidor comum escreve a abertura da VM, exporta `SUITE_NA_VEZ_SHA` e prepara `_PL_VM_FIM`. A trava recebe a chamada, o fim lê `_PL_VM_FIM` e o rc do processo, e `_pl_mede` escreve a trilha que V6 lê. `bin/suite.sh:315`, `bin/suite.sh:350`, `bin/suite.sh:354`, `bin/suite.sh:360`, `bin/suite.sh:386`, `bin/suite.sh:389`, `bin/suite.sh:393`, `bin/suite.sh:396`, `bin/suite.sh:452`, `bin/suite.sh:509`, `bin/tests/test_pista_lateral.sh:313`
-- **Autoridade de cancelamento.** O contrato atribui `cancela <id>` à sessão, para volta superada da mesma obra e com trilha. Define confirmação via `estado` e `espera` com rc 130. Há relato de uso em uma corrida pista/VM e registros históricos divergentes sobre a disponibilidade do verbo. Implementação, disponibilidade e resposta atuais do servidor [nao verificado]. `CLAUDE.md:291`, `CLAUDE.md:292`, `app/docs/RELATO.md:2644`, `app/docs/RELATO.md:1847`, `app/docs/RELATO.md:2207`, `app/docs/RELATO.md:2564`, `app/docs/BACKLOG.md:2227`
-
-## 7. Prova de morte dos mutantes do selo
-
-- **Sítios da cura.** Seleção da árvore sob teste, distinção entre controle e rodada filha, contabilização da morte e resumo final. Os sete mutantes estão declarados no bloco. O resumo que pode mostrar `0 mutantes mortos` fica na linha 196 desta cópia. `bin/tests/test_travas_sem_memoria.sh:35`, `bin/tests/test_travas_sem_memoria.sh:170`, `bin/tests/test_travas_sem_memoria.sh:180`, `bin/tests/test_travas_sem_memoria.sh:186`, `bin/tests/test_travas_sem_memoria.sh:193`, `bin/tests/test_travas_sem_memoria.sh:196`
-- **Escritores e leitores.** A chamada filha é o escritor localizado de `SELO_TRAVAS_BIN`. O selo lê a variável para escolher `BSOB` e decidir se roda o lote. Valor herdado não vazio também ativa esses dois efeitos. `_erro` escreve `falhou`, lido pelo pré-check, pelo lote e pelo `exit`. `mortos` nasce em zero dentro do lote e é incrementado por qualquer rc não zero do filho. O filho escreve `$T/mut_$1.out`, e a decisão usa apenas o rc. A trap remove o diretório. A régua chama o selo pelo glob, lê o rc e exibe a saída quando há falha. `bin/tests/test_travas_sem_memoria.sh:19`, `bin/tests/test_travas_sem_memoria.sh:25`, `bin/tests/test_travas_sem_memoria.sh:27`, `bin/tests/test_travas_sem_memoria.sh:38`, `bin/tests/test_travas_sem_memoria.sh:170`, `bin/tests/test_travas_sem_memoria.sh:180`, `bin/tests/test_travas_sem_memoria.sh:183`, `bin/tests/test_travas_sem_memoria.sh:196`, `bin/tests/test_travas_sem_memoria.sh:197`, `bin/regua.sh:138`, `bin/regua.sh:140`, `CLAUDE.md:131`
-- **Casos a que o rc precisa corresponder.** E1/E2 verificam HEAD e tokens gerados/publicados. A fixture de gêmeas e pasta recriada verifica identidade e metadado velho. E4 confere avanço da cópia, E5 a pasta que some e E6 a atribuição ambígua. Hoje uma falha de preparação também conta, e E5 pode receber a mesma mensagem de falha após uma exceção. O selo vizinho já lê o motivo por caso. Resultado efetivo dos sete mutantes [nao verificado]. `bin/tests/test_travas_sem_memoria.sh:66`, `bin/tests/test_travas_sem_memoria.sh:89`, `bin/tests/test_travas_sem_memoria.sh:114`, `bin/tests/test_travas_sem_memoria.sh:139`, `bin/tests/test_travas_sem_memoria.sh:148`, `bin/tests/test_travas_sem_memoria.sh:153`, `bin/tests/test_travas_sem_memoria.sh:159`, `bin/tests/test_pista_lateral.sh:342`, `bin/tests/test_pista_lateral.sh:356`
-
-## 8. `PRONTO` em bloco cercado
-
-- **Sítios da cura.** A varredura de `tem_pronto` e as provas do mesmo juiz no executor e no hook registrado. O contrato trata citação como ausente. A varredura só tira CR/LF e compara a linha ao marcador ou ao marcador seguido de espaço. Uma linha literal dentro de bloco cercado na coluna 1 satisfaz essa comparação. Os selos existentes incluem citação com `>` e o marcador arquivado. `bin/pronto_item_a_item.py:8`, `bin/pronto_item_a_item.py:35`, `bin/pronto_item_a_item.py:39`, `bin/pronto_item_a_item.py:42`, `bin/tests/test_pista_lateral.sh:170`, `bin/tests/test_pista_lateral.sh:178`, `bin/tests/test_pista_lateral.sh:231`
-- **Escritores e leitores.** A sessão publica `PRONTO` por obra e SHA no RELATO. O arquivamento leva o registro a `RELATO-ARQUIVO.md`. `marcador` compõe a chave e `tem_pronto` lê os dois arquivos. O hook obtém obra e HEAD da chamada e consulta o juiz diretamente. A suite fornece chave e SHA à CLI, lê seu rc e usa a saída na recusa. O hook emite a decisão PreToolUse. A leitura dos mesmos arquivos em M9a procura registros `entrega`. O selo escreve suas próprias linhas de fixture. `app/docs/RELATO.md:1083`, `app/docs/RELATO.md:1084`, `CLAUDE.md:98`, `CLAUDE.md:445`, `bin/pronto_item_a_item.py:20`, `bin/pronto_item_a_item.py:26`, `bin/pronto_item_a_item.py:56
-
-[truncado em 20000 de 22540 caracteres]
-
-_7720 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7722 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
