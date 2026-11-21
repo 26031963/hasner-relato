@@ -1,7 +1,119 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 18:09** · publicado em **21/11/2026 18:12** (UTC-3)
+> Ultima resposta processada: **21/11/2026 18:13** · publicado em **21/11/2026 18:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 18:13 · sessao 82fd2448f20e · E4C-F5-CONSTROI · construtor · origem=Code
+
+Apliquei S1, S2, S2b e as duas curas de S3 na cópia `93ab82d08`. As provas em memória passaram com a cura, e os oito mutantes falharam por asserção. O recorte sem banco de C8b e do veto temporal passou com 29 testes. Execução ORM e suíte certificadora [nao verificado]. `chamados/tests/test_e3_c8b_sem_banco.py:369` · `chamados/tests/test_e3_pos_suite_sem_banco.py:103`
+
+## 1. Alterações e mordidas
+
+| Item | Alteração e mutante que o teste mata | [nao verificado]
+|---|---|
+| **S1** | Removi a captura da consulta de conflito. O teste exige `DatabaseError`, a mesma instância injetada e uma chamada a `.exists()`. Restaurar a conversão para `LOTE_B` falha no `assertRaises`. `chamados/services/validacao.py:1230` · `chamados/tests/test_fila_validar_lote.py:110` |
+| **S2a** | O explicador recebe uma foto com `REABERTURA` na sequência e texto ainda na coluna. O teste exige `sem resposta vigente` e verifica a ausência da data e hora antigas. Acrescentar `p.resposta_colab` à mensagem falha no `assertNotIn`. `chamados/services/explicador.py:61` · `chamados/tests/test_explicador_disputa.py:80` |
+| **S2, vínculo** | A pergunta tem `SEM_RESPOSTA_VIGENTE` e uma batida viva vinculada às 08h, com destino ausente. Deixar esse motivo passar pela guarda reabre o atalho do vínculo e muda o veredito para `True`. `chamados/juizes.py:799` · `chamados/juizes.py:805` · `chamados/tests/test_marco_por_motivo.py:231` |
+| **S2, destino** | A pergunta tem `SEM_RESPOSTA_VIGENTE` e destino resolvido, com vínculo ausente. Deixar esse motivo passar pela guarda reabre o atalho do destino e muda o veredito para `True`. `chamados/juizes.py:799` · `chamados/juizes.py:827` · `chamados/tests/test_marco_por_motivo.py:245` |
+| **S2, retratação** | Sob `SEM_RESPOSTA_VIGENTE`, carimbo mais trilha absolvem na leitura avulsa e na carga. Os controles com apenas uma das duas testemunhas reprovam. Trocar o retorno antecipado por `False` derruba o controle positivo. `chamados/juizes.py:293` · `chamados/juizes.py:800` · `chamados/tests/test_marco_por_motivo.py:253` |
+| **S2b** | A fixture afirma `PLANTIO_SEM_TS` antes de cada julgamento da lei. Trocar esse motivo por `DATA_HORA_INVALIDA` deixa a asserção vermelha mesmo quando os dois motivos seguem o mesmo caminho no juiz de fato. `chamados/juizes.py:419` · `chamados/tests/test_hx_fallback_sem_lei.py:62` |
+
+## 2. S3 — origem, cura e mutantes
+
+**(i) Passivo com foto velha.** A linha do delta é `chamados/services/vigia_carimbo.py:104`, commit `93ab82d08`. O `prefetch_related('decisoes')` passou a acompanhar a instância entregue ao passivo. A devolução gravada entre classificação e trava entra por outra instância. O refresh parcial do passivo atualiza o carimbo e a via, e a composta ainda encontra a sequência antiga na instância classificada. É uma causa de classe de **reuso da foto após a classificação**. `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:95` · `chamados/services/passivo_validado.py:382` · `chamados/services/passivo_validado.py:538` · `chamados/models.py:4361` · `chamados/models.py:4446`
+
+A cura mantém o carregamento em lote e descarta `decisoes` em cache antes de devolver a tripla. Remover esse descarte reproduziu `((True, True), True, 'validar', True, None)` em memória. Com a cura, a leitura reproduziu `((False, True), True, 'validar', False, 'par_ato_coluna')`. O teste existente também exige a recusa no placar e a validação posterior pela mesa no mesmo PK. `chamados/services/vigia_carimbo.py:104` · `chamados/services/vigia_carimbo.py:122` · `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:111` · `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:132`
+
+**(ii) Fechamento com uma pergunta já materializada.** A linha do delta é `chamados/juizes.py:410` em `93ab82d08`. A foto de `hora` passou a entregar texto vazio ao derivador quando o C21 recusava o par. A fixture tem `07:00`, carimbo de materialização e uma batida `E` às 07h, com os instantes de resposta e validação vazios. O texto vazio leva a `PLANTIO_SEM_TS`, o juiz de fato perde a comparação com a batida, e a pergunta volta viva ao gate. É uma causa de classe de **leitura do legado de hora no fechamento**. Nos recortes em memória, as duas regressões passaram em `c8eb8eddf` e `41d21a249` e falharam em `93ab82d08`. `chamados/tests/test_fechar_disputa_materializada.py:38` · `chamados/services/materializacao.py:695` · `chamados/juizes.py:1537` · `chamados/services/acoes_disputa.py:134` · `chamados/models.py:2035`
+
+A cura usa o texto legado para localizar a batida somente no ramo `hora`, com carimbo visível no horizonte, via vazia, instante físico de resposta ausente e validação ausente na coluna e na composta. O C21 continua exigindo o par, e a materialização ainda exige testemunha. O mutante que restaura `resposta if vigente else ''` deixou **uma pergunta viva** e o C7 devolveu `False` em memória. A asserção ORM correspondente exige `fechada_em` preenchido. `chamados/juizes.py:411` · `chamados/juizes.py:860` · `chamados/juizes.py:1603` · `chamados/tests/test_fechar_disputa_materializada.py:64`
+
+## 3. Quem escreve e quem lê
+
+| Campo ou valor | Escrita e leitura |
+|---|---|
+| `resposta_colab`, `respondida_em`, `validada_em` e sequência de atos | A porta de resposta escreve o par. A resposta automática também o escreve, e a recuperação pela trilha completa o instante. A validação grava `VALIDACAO`, a devolução grava `DEVOLUCAO`, e a reabertura registra o ato e limpa par e carimbo pela porta em lote. `DecisaoPergunta.registrar` persiste as linhas. `leitura` ordena e aplica os atos, `composta` combina instantes do ato com texto da coluna, e slot, C21, lote e explicador consomem essa leitura. `chamados/services/disputa_emissao.py:1499` · `chamados/services/disputa_emissao.py:1664` · `chamados/services/disputa_emissao.py:1709` · `chamados/services/disputa_emissao.py:1732` · `chamados/services/validacao.py:168` · `chamados/services/validacao.py:287` · `chamados/models.py:4361` · `chamados/models.py:4388` · `chamados/models.py:4438` · `chamados/juizes.py:371` · `chamados/services/validacao.py:1224` · `chamados/services/explicador.py:52` |
+| `materializada_em`, `via_resolucao`, `agora` e `slots[pk]` | `_escrever_carimbo` atribui carimbo e via. A projeção lê ambos e aplica o horizonte. A tarefa fornece `agora`, a carga copia o horizonte e grava resultado ou exceção por PK, e o slot lê o cache. O C6 lê a materialização projetada antes de consultar o juiz de fato. `chamados/models.py:3324` · `chamados/juizes.py:1434` · `chamados/juizes.py:1525` · `chamados/services/tarefa_do_dia.py:525` · `chamados/services/carga_pergunta_viva.py:88` · `chamados/services/carga_pergunta_viva.py:119` · `chamados/juizes.py:383` |
+| Identidade da pergunta e insumos do derivador | O nascimento fornece `tipo_resposta`, `motivo`, `disputa` e destino. `gravar_dia_do_fato` atribui `data_evento`, e a costura pode atualizar o destino. A transição do chamado atribui `status_local`. O slot lê a identidade para montar a foto, o derivador lê também o contexto da disputa e o marco, e o juiz de fato lê o estado do destino. `chamados/services/disputa_emissao.py:448` · `chamados/services/fio.py:853` · `chamados/services/fio.py:978` · `chamados/models.py:240` · `chamados/juizes.py:413` · `chamados/services/materializacao.py:556` · `chamados/services/materializacao.py:625` · `chamados/juizes.py:827` |
+| Batida e trilha de retratação | `registrar_batida` grava instante e tipo, o materializador anota `pergunta_origem`, e `retratar_batida` grava `retratada_em`. Juiz e vigia leem o vínculo vivo, o juiz lê a janela e o lote consulta `batidas_apuraveis`. A chave de auditoria `retratar_pergunta_obsoleta` é gravada pela fixture e lida pelo juiz avulso e pela carga. Escritor de produção dessa chave literal [nao verificado]. `ponto/registro_batida.py:177` · `ponto/registro_batida.py:294` · `chamados/services/materializacao.py:1578` · `chamados/juizes.py:803` · `chamados/juizes.py:860` · `chamados/services/vigia_carimbo.py:117` · `chamados/services/validacao.py:1230` · `chamados/tests/test_marco_por_motivo.py:262` · `chamados/juizes.py:296` · `chamados/services/carga_pergunta_viva.py:110` |
+| `slot.motivo`, `slot.ts`, `slot.tipo`, classe e detalhe | `_slot_esperado` produz o resultado. Leem o juiz de fato, a carga, o lote, o explicador e o vigia. `classe_do_lote` produz classe e detalhe. `classificar` produz `(pergunta, classe, ts)` e o consomem o passivo e os dois vigias. `chamados/juizes.py:360` · `chamados/juizes.py:798` · `chamados/services/carga_pergunta_viva.py:119` · `chamados/services/validacao.py:1226` · `chamados/services/explicador.py:52` · `chamados/services/vigia_carimbo.py:112` · `chamados/services/vigia_carimbo.py:123` · `chamados/services/vigia_carimbo.py:131` · `chamados/services/passivo_validado.py:330` · `chamados/services/vigia_fio.py:415` |
+| Cache de `decisoes`, `recusa_do_carimbo` e `fechada_em` | O prefetch do vigia preenche o cache, `leitura` o consome e `classificar` o descarta antes do `yield`. `carimbar` lê o par e grava a recusa em memória, que o passivo traduz em balde. C6 e C7 alimentam o fechamento e `DisputaSupervisao.fechar` grava `fechada_em`. `chamados/services/vigia_carimbo.py:104` · `chamados/models.py:4361` · `chamados/services/vigia_carimbo.py:122` · `chamados/models.py:3388` · `chamados/services/passivo_validado.py:145` · `chamados/models.py:2035` · `chamados/models.py:2118` |
+
+## 4. Censo S1
+
+`git grep -n -E 'classe_do_lote\(' -- api chamados/services` encontrou três consumidores. Dependência específica de `LOTE_B` **na falha** encontrada no censo estático: zero. O executor recusa qualquer classe diferente de A, a fila agrupa a classe devolvida e a API serializa a classe. No `93ab82d08`, os três consumiam genericamente o B produzido pela captura, e `git grep -n 'CONSULTA_CONFLITO_INDISPONIVEL' 93ab82d08 -- '*.py'` encontrou apenas o produtor. `chamados/services/validacao.py:1085` · `chamados/services/validacao.py:1277` · `api/views_mensageria.py:546` · `93ab82d08:app/chamados/services/validacao.py:1234`
+
+## Comandos para o Code
+
+O executor abaixo carrega cada mutante em memória. Os comandos ORM abaixo seguem [nao verificado]. Os alvos são as asserções de S1, S2, S2b e S3 listadas acima.
+
+```bash
+prova() {
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings_test "$@"
+}
+
+mutante() {
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
+from importlib.machinery import SourceFileLoader
+from pathlib import Path
+import runpy
+import sys
+
+arquivo, teste, antes, depois = sys.argv[1:] [nao verificado]
+alvo = Path(arquivo).resolve()
+get_code = SourceFileLoader.get_code
+
+def com_mutante(loader, nome):
+    if Path(loader.path).resolve() != alvo:
+        return get_code(loader, nome)
+    fonte = alvo.read_text()
+    if fonte.count(antes) != 1:
+        raise ValueError(f'{alvo}: trecho do mutante não é único')
+    return compile(fonte.replace(antes, depois), loader.path, 'exec')
+
+SourceFileLoader.get_code = com_mutante
+sys.argv = ['manage.py', 'test', '--settings=config.settings_test', teste] [nao verificado]
+runpy.run_path('manage.py', run_name='__main__')
+PY
+}
+
+t=chamados.tests
+j=chamados/juizes.py
+v=chamados/services/validacao.py
+e=chamados/services/explicador.py
+c=chamados/services/vigia_carimbo.py
+
+s1=$t.test_fila_validar_lote.FilaValidarLoteTest.test_RED_lote_propaga_falha_da_consulta_de_conflito
+s2a=$t.test_explicador_disputa.ExplicadorDisputaTest.test_RED_explicador_nao_cita_texto_residual_como_resposta_vigente
+marco=$t.test_marco_por_motivo.MarcoPorMotivoTest
+vinculo=$marco.test_RED_sem_resposta_vigente_nao_absolve_so_pelo_vinculo
+destino=$marco.test_RED_sem_resposta_vigente_nao_absolve_so_pelo_destino_encerrado
+trilha=$marco.test_RED_sem_resposta_vigente_preserva_retratacao_com_carimbo_e_trilha
+s2b=$t.test_hx_fallback_sem_lei.FallbackSemLeiTest
+s3i=$t.test_e4c_f5_guarda_plantio_s144.GuardaPlantioS144Test.test_RED_passivo_foto_velha_recusa_par_e_mesa_valida_mesmo_pk
+s3ii=$t.test_fechar_disputa_materializada.FecharDisputaPerguntaMaterializadaTest.test_pergunta_materializada_nao_bloqueia_fechamento
+
+prova "$s1" "$s2a" "$vinculo" "$destino" "$trilha" "$s2b" "$s3i" "$s3ii"
+
+mutante "$v" "$s1" \
+  '    if batidas_apuraveis(perg.disputa.colaborador, slot.ts - perto, slot.ts + perto).exists():' \
+  $'    from django.db import DatabaseError\n    try:\n        conflito = batidas_apuraveis(perg.disputa.colaborador, slot.ts - perto, slot.ts + perto).exists()\n    except DatabaseError:\n        return LOTE_B, dict(d, porque="CONSULTA_CONFLITO_INDISPONIVEL")\n    if conflito:'
+
+mutante "$e" "$s2a" $' % motivo\n' $' % motivo + " " + p.resposta_colab\n'
+
+guarda="if slot.motivo in ('VETO_TEMPORAL', 'SEM_RESPOSTA_VIGENTE'):"
+mutante "$j" "$vinculo" "$guarda" \
+  "if slot.motivo == 'VETO_TEMPORAL' or (slot.motivo == 'SEM_RESPOSTA_VIGENTE' and p.chamado_destino is not None):"
+mutante "$j" "$destino" "$guarda" \
+  "if slot.motivo == 'VETO_TEMPORAL' or (slot.motivo == 'SEM_RESPOSTA_VIGENTE' and p.chamado_destino is None):"
+mutante "$j" "$trilha" \
+  "            return _retratada_com_trilha(p) if carga is None else carga.retratada(p)" \
+  '            return False'
+
+mutante "$j" "$s2b" "return _ResultadoSlot('PLANTIO_SEM_TS')" "return _ResultadoSlot('DATA_HORA_INVALIDA')"
+mutante "$c" "$s3i" $'        getattr(p, \'_prefetched_objects_cache\', {}).pop(\'decisoes\', None)\n' ''
+mutante "$j" "$s3ii" 'resposta if vigente or carimbo_legado' 'resposta if vigente'
+```
 
 ## 21/11 18:09 · sessao c8af26ea4af5 · MEDIDA-FOLHA-[nome] · sonda · origem=Code
 
@@ -1593,62 +1705,4 @@ O RED **morde a antecipação pedida**, mas deixa uma lacuna. Se o mutante chama
 
 Os casos existentes de borda cobrem avanço dentro do wrapper, avanço na entrada da trava e empate com o relógio congelado. O `RED_10` avança o relógio enquanto a **resposta humana** espera sua trava. Há teste vizinho que usa `move_to` para intercalar uma devolução antes da trava do **fechamento da disputa**. Nenhum desses cenários citados exerce o recuo entre `_agora_sonda` e `_agora_r` na ressuscitação. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:244–274, :323–345, :374–389`, `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:224–245`.
 
-## 21/11 16:19 · sessao bba814d3db61 · E4C-F5-CONSTROI · construtor · origem=Code
-
-**PAREI no RED do item 3.3.** Escrevi a regressão e o controle. O aval exige a mordida pareada antes da cura de produção, e a execução da porta usa Docker e PostgreSQL, fora da autorização deste papel. A sintaxe, o `diff --check` e o seletor em `--seco` passaram. RED, GREEN, mutante executado e comparação com main [nao verificado]. `r.txt:39,74`, `bin/suite.sh:265–276,316–325`, `app/config/settings/ci.py:6–18`, [test_e2_pergunta_so_ao_c6.py](/home/ronald/wt-codex-e4c-f5-constroi-161213/app/chamados/tests/test_e2_pergunta_so_ao_c6.py:115).
-
-O teste intercala a resposta real `19:45` depois que o gerador seleciona a pergunta com os atos carregados e antes de o reconciliador pedir a trava. A lâmpada da saída registra `17:02`. A prova exige o ato persistido, C6 vivo na releitura, `RECUSA_C6` na porta real, o trio do carimbo vazio e contagem zero. O controle usa a mesma fixture sem intercalar resposta e exige carimbo de absolvição assinado por `sistema` e contagem um. A intercalação ocorre no `TestCase`, em uma conexão. `app/chamados/reconciliador.py:635–646,702–724`, `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:85–87,115–167`, `app/chamados/services/disputa_emissao.py:1478–1537`.
-
-### Comando e mutante
-
-O Code usa o mesmo seletor para RED na cópia atual, GREEN após a cura e RED com o mutante. A falha-alvo da corrida está na asserção do carimbo e da contagem. O controle deve passar nas três rodadas. `bin/suite.sh:197–207,316–325`, `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:153–167`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-161213 --only chamados -- -k test_f5_e2_absolvicao
-```
-
-**Cura proposta.** Após a trava existente, reler o PK pelo mesmo seletor de candidatas, com as relações e os atos carregados em consulta comum. Conferir o dono na instância relida, consultar o veto C20 existente e entregar a instância fresca a `carimbar`. Usar a disputa dessa instância para enfileirar o fecho. **Mutante `instancia_pre_trava`.** Na cura, trocar apenas o receptor de `fresca.carimbar(...)` pela candidata original do gerador e rodar o comando acima. A cópia atual já contém essa chamada sobre a instância original. `app/chamados/reconciliador.py:634–667,671–724`, `app/chamados/models.py:2830–2848,3330–3405`.
-
-### Quem mais lê
-
-- Há **três entradas diretas** do escritor. O consumidor `EventoCelula` soma o retorno em `out['perguntas']`. A reconciliação do colaborador soma o retorno ao total, com entradas pelos sinais de chamado e batida. O cartório também chama o escritor após a primeira lavra e segue para o gate de fechamento, descartando o retorno. `app/chamados/reconciliador.py:1410–1422,1482–1496`, `app/chamados/signals.py:370`, `app/ponto/signals.py:215`, `app/ponto/services/cartorio.py:1018–1033`.
-- O **vigia** consome o mesmo gerador e conta os itens emitidos para colaboradores sem evento. O escritor entrega a instância à porta de carimbo e usa sua disputa na fila de fecho. A docstring do seletor também cita a semeadura. O corpo da semeadura usa chamados vivos e `_orfas_abertas` com `fantasma_pela_lampada`. `app/chamados/management/commands/reconciliar_chamados.py:89–93,109`, `app/chamados/reconciliador.py:645–667,671–675,1332–1366`.
-
-`LEI-AKITA: origem=retratar_perguntas_absolvidas_por_celula, testemunha=C6 da porta de carimbo sobre a leitura fresca, RED=test_f5_e2_absolvicao [nao verificado], quem-mais-le=EventoCelula + reconciliação do colaborador + cartório + vigia do gerador, juizes novos=0, padrao=Single Source of Truth`. `app/chamados/reconciliador.py:635–646,702–724,1419,1486`, `app/chamados/models.py:3375–3383`, `app/ponto/services/cartorio.py:1025–1026`, `app/chamados/management/commands/reconciliar_chamados.py:91–92`.
-
-### Autoconferência · campos=26
-
-Os nomes curtos da tabela apontam para `app/chamados/reconciliador.py` (`R`), `app/chamados/models.py` (`M`), `app/chamados/juizes.py` (`J`) e `app/chamados/tests/test_e2_pergunta_so_ao_c6.py` (`T`). Os campos do mesmo ato aparecem juntos.
-
-| Campo ou valor | (a) Fonte | (b) Escritor | (c) Instante | (d) Leitores | (e) Significado único |
-|---|---|---|---|---|---|
-| 1. Candidata e `p.pk` | Linha ORM, universo de `R:671–693` | Nascimento pela porta `M:3016–3036` | Linha e relações antes da trava `R:635–646,702–706` | Escritor e vigia `R:635–651`, `management/commands/reconciliar_chamados.py:91–92` | PK identifica a linha. A emissão pelo gerador indica elegibilidade na leitura inicial. `R:702–724` |
-| 2. Colaborador, `_cid` e dono da disputa | Argumento e FK `M:1892`, `R:634–645` | `_cid` local. O nascimento vincula a pergunta à disputa. `R:634`, `M:2626–2629,3035–3036` | PK antes da trava. A exigência atual usa a disputa carregada antes dela. `R:635–645` | Trava, C20 e C6 `R:644–645`, `J:996–997,1478–1482` | O mapa troca instâncias do mesmo PK, sem decidir elegibilidade. `J:1174–1195` |
-| 3. Trava de linha e registro do dono | `SELECT FOR UPDATE` e registro da transação `M:2874–2878` | `trava_na_ordem` pela abreviação `trava_do_colaborador` `M:2830–2848` | Primeiro bloqueio no `atomic`, sobre o PK do dono `R:643–645` | Escritor de resposta e exigência do E2 `services/disputa_emissao.py:1478–1485`, `R:644–645` | O registro comprova o dono travado. A exigência detecta sua falta. `services/trava_do_colaborador.py:29–47,55–63` |
-| 4. Atos `decisoes` | Sequência real e complemento legado `M:4311–4323,4355–4367` | `DecisaoPergunta.registrar` `M:4428–4453` | Prefetch antes da trava. A resposta invalida o cache da própria instância. `R:702–703`, `M:4438–4450` | Composta, C6 e fecho `M:4382–4390,2017–2027`, `J:1406–1409` | `[]` no cache antigo e `[]` relido podem representar instantes distintos. `T:131–147`, `M:4355–4367` |
-| 5. `respondida_em` | Instante vigente do ato na composta `M:4368–4390` | Resposta humana, automática, recuperação da trilha e reabertura têm portas próprias. `services/disputa_emissao.py:1499–1537,1630–1683,1689–1737` | Resposta humana lê o relógio sob a trava. E2 recebe a foto pré-trava. `services/disputa_emissao.py:1478–1499`, `R:635–646` | C6/C21 e C7 `J:1408–1428,1551–1560`, `M:2022–2027` | `None` da leitura vigente cobre falta de resposta e resposta desfeita. O horizonte também pode ocultar a resposta. `M:4368–4379`, `J:1394–1398` |
-| 6. `resposta_colab` | Texto da projeção na composta `M:4382–4390` | Escritas humana, automática e de reabertura `services/disputa_emissao.py:1499–1502,1630–1683,1707–1715` | Coluna da candidata lida antes da trava. `R:635–646,702–703` | C21 e comparação com a luz `J:1359–1379,1426–1440` | A composta usa o texto da projeção. A comparação com a luz lê a coluna diretamente. `M:4385–4390`, `J:1361` |
-| 7. `validada_em` e `validada_por_id` | Instante vigente pelo ato. Coluna e autor físicos na pergunta. `M:2659,3683–3689,4382–4399` | Validação, devolução, resposta e carimbo com `resposta='validar'` têm caminhos próprios. `services/validacao.py:161–175,284–296`, `services/disputa_emissao.py:1503–1514`, `M:3367–3374` | SQL inicial lê a coluna antes da trava. A porta compara ato e coluna no `atomic`. `R:643–646,678–682`, `M:3384–3393` | Filtro E2, C6, C7 e guarda do par `R:681`, `J:1408–1411`, `M:2022–2027,4393–4399` | `NULL` físico e ausência de validação vigente têm significados distintos. O SQL usa o primeiro. `R:681`, `M:4385–4399` |
-| 8. `celula_id` | FK do fato `M:2623–2625` | Nascimento e rechaveamento da pergunta `M:3035–3036`, `services/fio.py:1059–1092` | Relação carregada antes da trava. `R:635–646,702–703` | Seletor, C6 e outbox `R:682–692`, `J:1423–1425`, `M:3472–3496` | FK nula exclui do universo inicial. A célula vinculada ainda precisa de veredito elegível. `R:682–692` |
-| 9. `celula.veredito` e `veredito_via` | Julgamento lavrado na célula `ponto/portas/celula.py:1032–1045` | `lavrar_veredito` `ponto/portas/celula.py:1032–1041,1090–1094` | O gerador lê antes da trava. O cartório chama E2 depois da primeira lavra. `R:702–719`, `ponto/services/cartorio.py:1015–1026` | SQL, C6 e lastro `R:688–692`, `J:1423–1440,1458–1474`, `ponto/services/lastro.py:145` | SQL exclui nulo, vazio e veredito acusador. C6 distingue a via admin e o julgamento provisório. `R:688–692`, `J:1423–1440,1458–1474` |
-| 10. DNA, ata e lâmpada | `CelulaDia.dna` dá o marco. A ata dá a luz e a pendência. `J:935–953,969–975,1351–1360` | Operações da porta de célula gravam DNA e ata. `ponto/portas/celula.py:294–306,1032–1067,1090–1094` | Dados carregados no `select_related` pré-trava. `R:702–703` | C6 e juiz do marco `J:935–975,1436–1440,1463–1474` | `None` agrega causas de falta de prova. Só `True` confirma o marco. `J:935–945,1472–1474` |
-| 11. `data_evento` e `conversa` | Dia da pergunta e discriminador do nascimento `M:2633–2645` | Nascimento e `gravar_dia_do_fato` no rechaveamento `M:3004–3024`, `services/fio.py:850–854,1090` | Colunas da candidata pré-trava. `R:635–646,702–703` | C20, C6 e outbox `J:337–341,991–997,1475–1482`, `M:3472–3476` | `data_evento` contém dia civil de conversa ou dia do turno. O juiz resolve pelo discriminador. `J:337–341` |
-| 12. `motivo` e `tipo_resposta` | Campos da pergunta `M:2631,2652` | Porta de nascimento `M:3016–3036` | Colunas carregadas antes da trava. `R:635–646,702–703` | C6, comparação com a luz e resposta `J:927–946,1347–1352`, `services/disputa_emissao.py:1449–1473` | O motivo identifica a cobrança. O tipo identifica o formato de resposta. `J:927–939`, `services/disputa_emissao.py:1449–1473` |
-| 13. `chamado_destino` e `status_local` | FK e estado do chamado `M:3691–3698`, `J:855–864` | Nascimento e recostura escrevem a FK. `_gravar_estado` é a porta de estado. `services/fio.py:857–876`, `M:213` | Relação carregada antes da trava. `R:702–703` | Chave do memo C6 e outbox `J:855–864`, `M:3463–3470` | FK ausente admite ausência de resolvedora ou FK zerada por exclusão. `M:3691–3698`, `services/fio.py:860–867` |
-| 14. Veto C20 | Tranca vigente e trilha de toque `J:979–997,1067–1085`, `ponto/services/fechamento.py:1464–1470` | Trancar e reabrir têm portas próprias. C20 calcula por leitura. `ponto/services/fechamento.py:1400,1432`, `J:979–989` | Veto explícito pré-trava. C6 o lê novamente e o memo pode vir do request ou colaborador. `R:713–720`, `J:1101–1117,1414–1415` | Gerador, C6 e C7 `R:719`, `J:1414`, `M:2022–2027` | `False` cobre dia sem tranca aplicável e dia liberado por toque. C6 morto pela tranca não autoriza absolvição. `J:1027–1032,1073–1085`, `R:715–720` |
-| 15. Veredito C6 e `_pv_memo` | Juiz registrado, sobre a composta `core/juizes.py:290`, `J:1406–1409` | Juiz calcula e guarda memo por instância. `J:895–908` | Gerador antes da trava. Porta sob a trava, depois de aplicar o carimbo em memória. `R:643–646,713–714`, `M:3361–3383` | Gerador, carimbo e C7 `R:713`, `M:3376,2029–2035` | `False` significa que o C6 dá por morta, com vários fundamentos. O cache do ato e o memo da instância antiga podem sobreviver à escrita em outra instância. `J:1406–1474`, `M:4438–4450`, `T:131–157` |
-| 16. Autor `_user` | Usuário `sistema` `core/utils.py:6–18` | Inicialização local com `get_user_sistema` `R:632,637–638` | Antes da trava. `R:637–644` | Porta de carimbo e fecho `R:646,663–665` | `None` local sinaliza carregamento pendente. O helper retorna um usuário. `R:632–638`, `core/utils.py:17–18` |
-| 17. Borda do relógio | `timezone.now()` na resposta e no carimbo. C6 avulso usa leitura corrente. `services/disputa_emissao.py:1494–1501`, `M:3361`, `J:880–899` | Cada porta é dona do instante do próprio ato. `services/disputa_emissao.py:1499–1501,1535–1537`, `M:3361–3366,2118–2122` | Resposta e carimbo sob a trava. Sem horizonte explícito, o fallback do C6 pode ler `date.today()`. `services/disputa_emissao.py:1478–1499`, `R:643–646`, `J:589–598` | Sequência, carimbo, janela viva e fecho `M:4363–4372,3361–3366,2118–2122`, `J:1475–1476` | Instante do ato, carimbo e horizonte têm funções próprias. A fixture avança o relógio na resposta. `J:1383–1403`, `T:137–147` |
-| 18. `materializada_em`, `materializada_por_id`, `via_resolucao` | Trio do carimbo e via `VIA_CELULA_ABSOLVEU` `M:2694,3293–3328` | Atribuição centralizada em `_escrever_carimbo`. E2 usa `carimbar`. `M:3324–3328,3365–3405`, `R:646` | SQL inicial lê ausência antes da trava. A porta aplica em memória e salva sob a trava após C6. `R:643–646,680`, `M:3363–3405` | SQL, C6, lastro e outbox `R:680`, `J:684–696,1408–1409`, `M:3468–3476` | `via_resolucao=''` também representa legado. O autor pode ficar nulo via `SET_NULL`. `M:2771–2773,3699–3708` |
-| 19. `_gravou` e `recusa_do_carimbo` | Retorno e motivo da porta `M:3317–3322,3353–3405` | `carimbar` `M:3330–3405` | Depois do julgamento em memória, no `atomic`. `R:643–647`, `M:3375–3405` | E2 lê o bool. Materialização também lê motivo. `R:646–649`, `services/materializacao.py:1074,2017,2222–2228` | `False` agrega três recusas. `RECUSA_C6` distingue a corrida no teste. `M:3317–3322,3353–3393`, `T:157` |
-| 20. Contagem `n` | Número de chamadas que gravaram `R:631,646–649,668` | Incremento local único `R:649` | Incremento após a saída do `atomic` da candidata. `R:643–649` | Evento e reconciliação do colaborador `R:1419,1486–1496` | Zero cobre universo vazio, recusas e falhas capturadas. O vigia conta candidatas por outro contrato. `R:647–653`, `management/commands/reconciliar_chamados.py:91–93`, `T:155–163` |
-| 21. Disputa, PK e `_disputas` | FK e mapa local por disputa `M:2626–2629`, `R:633,650–659` | O laço registra as disputas dos carimbos bem-sucedidos. `R:647–651` | Conjunto montado após cada carimbo. Consumido após o laço. `R:647–663` | Fila de fecho e log do fecho `R:659–667` | Repetir o PK deduplica a tentativa de fecho. `R:650–659` |
-| 22. `disputa.fechada_em` | Coluna da disputa `M:2118–2122,2335–2347,2359–2363` | Fecho grava. Portas admin e sistema limpam. `M:2118–2122,2312–2363` | Entrada na fila usa relação pré-carregada. Antes de C7 há refresh fora do `atomic` da pergunta. `R:650–663` | E2, porta de fecho e devolução `R:650–663`, `M:2061–2065`, `services/validacao.py:298–303` | `None` significa aberta, inclusive após reabertura. Uma foto velha pode impedir a entrada na fila. `M:2335–2363`, `R:650–661` |
-| 23. Veredito C7 | Respostas sem veredito e `fio_vivo` `M:2022–2035` | `pode_fechar` calcula. `fechar` aplica a guarda na porta. `M:2029–2048,2071–2088` | Depois do laço. A guarda interna do fecho também precede a própria trava. `R:659–665`, `M:2071–2097` | E2 e porta de fecho `R:662–665`, `M:2071–2088` | `False` agrega resposta sem veredito e pergunta viva. O E2 usa só a autorização booleana. `M:2029–2035`, `R:662` |
-| 24. `fechada_por`, `resolucao` e `motivo_fechamento` | Autor, texto do E2 e motivo escolhido pela porta `R:663–665`, `M:2088,2118–2122` | `fechar` grava o conjunto. Reaberturas limpam. `M:2118–2122,2335–2363` | Fecho usa seu próprio `atomic`, após o laço. `R:659–665`, `M:2090–2097,2118–2122` | Sinal do pai e auditoria `M:2053,2123–2126`, `app/chamados/signals.py:42–43` | Texto de resolução e motivo de fechamento são campos distintos. `M:2120–2126` |
-| 25. Foto da lavra | `veredito_lavrado`, `julgado_em`, `janela_expira_em` `veredito_lavrado.py:279–281` | A porta da lavra atribui os três. A chamada E2 usa o padrão `lavrar_veredito=False`. `veredito_lavrado.py:270–275`, `M:3330,3394–3403` | Fotografia em memória após C6, antes do save. `M:3394–3403` | Restauração em caso de falha e leitor do cache lavrado `veredito_lavrado.py:284–289`, `M:2776–2805` | Vazio significa nunca lavrado. `indeterminado` é um veredito próprio. `M:2783–2798` |
-| 26. Falhas e PK no log | Exceções por pergunta ou por disputa `R:652–653,666–667` | `_log.exception` nos dois tratadores `R:652–653,666–667` | Após falha do ato correspondente. `R:643–667` | O laço continua. O retorno carrega só a contagem. Leitor externo dos logs [nao verificado]. `R:652–668` | Falha da candidata e falha do fecho têm mensagens distintas. Nenhuma tem código próprio no retorno. `R:652–668` |
-
-O teto SQL é uma pendência da cura. O selo mede o caminho da batida com um e três furos que fecham, e o cartório é uma entrada direta do E2. O impacto da releitura nesse teto [nao verificado]. `app/ponto/tests/test_selo_chokepoint_escrita.py:324–325,467–475`, `app/ponto/services/cartorio.py:1018–1026`.
-
-_7722 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7723 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
