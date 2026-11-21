@@ -1,7 +1,24 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 11:38** · publicado em **21/11/2026 11:42** (UTC-3)
+> Ultima resposta processada: **21/11/2026 12:03** · publicado em **21/11/2026 12:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 12:03 · sessao 55480df206d3 · PISTA-ESCOLHE-SOZINHA · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 21/11 12:02 · sessao 6e0323cce2c0 · FERIADO-POR-POSTO · construtor · origem=Code
+
+**PAREI no achado 31.** A cópia em `df9df24c4c63a0cea98eca40890853e1d97a22e4` tem dois cálculos efetivos de `trabalha_em_feriado` no nascimento do vínculo. [Nascimento normal em vinculo.py:296](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/vinculo.py:296) · [Nascimento por cópia em feriado_do_posto.py:186](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:186)
+
+| Caminho | Valor gravado |
+|---|---|
+| `executar_vinculo` | Chama `EscalaColaborador.padrao_trabalha_em_feriado`, que usa a marca declarada sem consultar o cargo. [vinculo.py:296](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/vinculo.py:296) · [escala/models.py:905](/home/ronald/wt-codex-feriado-por-posto-120132/app/escala/models.py:905) |
+| `ajustar_vinculo_pelo_sistema` e `desfazer_ajuste_do_sistema` | Chamam `chave_ao_nascer`, que só usa a marca declarada para ciclos elegíveis e cargos não administrativos. Nos demais casos, grava a chave herdada. [vinculo.py:1118](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/vinculo.py:1118) · [vinculo.py:1142](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/vinculo.py:1142) · [feriado_do_posto.py:174](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:174) |
+
+Para um cargo administrativo em posto `OPERA`, o nascimento normal grava `True`. Uma cópia que herda `False` grava `False`. A escolha da regra comum fica devolvida ao opus pelos dois caminhos acima. [escala/models.py:911](/home/ronald/wt-codex-feriado-por-posto-120132/app/escala/models.py:911) · [feriado_do_posto.py:182](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:182) · [feriado_do_posto.py:190](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:190)
+
+A volta ficou em leitura, sem alterações. REDs, mutantes, Ruff e suíte [nao verificado]. [nao verificado]
 
 ## 21/11 11:38 · sessao b90a3599ab67 · WRAPPER-N-VAGAS · verificador · origem=Code
 
@@ -1224,18 +1241,4 @@ Os **59 pontos** originais batem na unidade do desenho, `5 L comuns + 29 Q + 25 
 
 [truncado em 20000 de 53012 caracteres]
 
-## 21/11 05:30 · sessao 6049758e46f8 · - · - · origem=Ronald (tmux)
-
-**01 — NAO FECHA no vínculo ao brief original.** `matriz.md:151–165` identifica 15 sítios, todos com correspondência na cópia. `matriz.md:166–168` identifica três campos do histórico na mesma função adicional. O cadastro atual tem 13 funções em oito arquivos e zero acusações na leitura AST. A conta fecha em `13 − 1 histórico + 1 segunda guarda de par + 2 juízes = 15`. A devolução aparece como #15 no cruzamento e em `matriz_c3.txt:13` na citação histórica. A relação entre a numeração do cruzamento e os ordinais do `brief_c3`, assim como a identidade das nove verificações da amostra original, permanece [nao verificado]. `app/chamados/tests/test_e4c_f5_selo_catraca.py:14–28,332–349`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–149,271–275`, `app/docs/RELATO.md:94,752,768,1503`.
-
-**55 — PUBLICAVEL.** As 96 expressões históricas têm correspondência na cópia. O recorte fecha em 41 diretas, 53 chamadas C6 e dois acessos externos a `.viva`, com oito avulsas e 88 em laço ou lista. A partição nominal das diretas é quatro usos Opus (#10–13), uma exceção SQL (#31), doze A1 (#3,4,5,14,15,20,21,22,23,24,30,41), catorze B (#1,2,16–19,32,33,35–40) e dez C (#6–9,25–29,34). As 55 indiretas passam pelo compositor introduzido no C6 na A1. `matriz.md:18–58,62–118`, `app/chamados/tests/test_e4c_f5_selo_chamada.py:25–28,251–266`, `app/docs/RELATO.md:1306,1314,1316–1317,1320`, `app/chamados/juizes.py:893–899,1406–1428`.
-
-O scanner atual conta 44 diretas em 22 arquivos, com 39 R compostas, quatro P compostas e uma R SQL permitida. As três adicionais estão em `cadastro_realidade.py:500` (R, B2) e `materializacao.py:1061,1065` (P/R, absorção A1(c)). Zero fora das permitidas na leitura AST. A série registrada fecha em `36 → 24 → 10 → 0`. A origem do 19 histórico e o diff Git integral seguem [nao verificado]. `app/chamados/tests/test_e4c_f5_selo_chamada.py:126–160`, `app/escala/services/cadastro_realidade.py:497–502`, `app/chamados/services/materializacao.py:1056–1067`, `app/docs/RELATO.md:37,276,1296,1317,1320`.
-
-## 21/11 05:29 · sessao acc0c17b903c · - · - · origem=Ronald (tmux)
-
-- **49 — NAO FECHA.** A matriz identifica 12 categorias de falha. A soma dá 112 ocorrências em 104 métodos. Retirada a fixture ilegal dos dois RED-8, sobram 11 categorias, 110 ocorrências e 102 métodos. A identidade dessas 11 com as protegidas pelo aval 1710 e o pareamento completo das exceções continuam [nao verificado]. A recontagem estática do selo reproduz os 9 módulos e os 486 asserts cadastrados. `matriz.md:194,198–209` · `predesenho.md:168–170` · `app/docs/RELATO.md:94,1314` · `app/chamados/tests/test_e4c_f5_duble_conforme.py:14–35,76–80`
-- **51 — NAO FECHA pelo ordinal histórico.** A fixture ilegal é a oitava linha da tabela de 12 famílias e é a única que o pré-desenho identifica como exigindo mudança no harness. Os dois RED-8 pertencem a `JuizesVolta2Test`. A fixture agora nasce sem texto e usa a porta de ato. O cálculo exige zero consultas e `LeituraComposta`. O fio exige até um SELECT de decisões, confere os PKs e o cache e percorre quatro perguntas mortas até a quinta viva. O ordinal histórico 12 permanece [nao verificado]. `matriz.md:205` · `predesenho.md:168–170` · `app/docs/RELATO.md:94,1308–1309,1338` · `app/chamados/tests/test_e4c_f5_volta2_juizes.py:26,119–186`
-- **80 — NAO FECHA.** Os anexos ligam K47 e as guardas D aos sítios históricos. O K47 atual usa as portas de resposta e validação, confirma equivalência e espera zero resolvidas, uma disputa fechada e zero materializações. A D tem 18 métodos atuais, com 16 REDs e dois controles, além do K47 em outro arquivo. O registro de 18 esperados antigos no corpo de `604505878` não permite identificar os 18 casos atuais correspondentes [nao verificado]. O único esperado anterior literal recuperado é zero DEVOLUÇÃO em A, diante de uma DEVOLUÇÃO hoje. Falta também a execução nominal final dos mutantes. `matriz.md:153–165` · `predesenho.md:74` · `app/docs/RELATO.md:62,64,283,752,762,786,790` · `app/chamados/services/disputa_emissao.py:2107–2120` · `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197–222` · `app/chamados/tests/test_e4c_f5_voltaD_portas.py:84–396`
-
-_7645 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7647 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
