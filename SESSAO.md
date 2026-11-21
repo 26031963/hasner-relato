@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 14:40:06.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (31.7 MB). Acoes na janela: **853**.
+**Medido em 21/11/2026 14:46:01.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (31.8 MB). Acoes na janela: **860**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:41:33 | Bash | Register RESPOSTAS-2111-1445 in docs | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() lines=s.split('\n') top=lines[:80] def resp(prefix, txt): hits=[i for i,l in enumerate(top) if l.startswith(prefix)] assert len(hits)==1,(prefix,hits) i=hits[0]; lines[i]=txt+' -- antes: '+lines[i] resp('PAREI LISTA E4C-F5-4C1','RESPONDIDA por RESPOSTAS-2111-1445 item 1 (base = travas do MAIN; candidata C RELOGIO LIDO DEPO ...` |
+| 14:41:12 | Bash | Save literals, briefs and Codex queue | `cd ~/saas-hasner; cat > logs/FERIADO-POR-POSTO/achado31/corte_2111_1445.txt <<'EOF' aval Ronald: LEI-FERIADO-ACHADO31-2111-1445 (21/11 14:45) -- CORTE Ronald, substitui SO o item (1) do RESPOSTAS-2111-1245 (o item 2 dele segue). (1) vinculo novo NAO administrativo em posto com marca declarada nasce pela MARCA, todo ciclo (corte 16/09 FERIADO-PADRAO-POR-ESCALA intacto; escala/tests/test_feriado_pad ...` |
+| 14:40:35 | Bash | Gather inputs for 4c1 and wrapper briefs | `cd ~/saas-hasner; kill 1757218; git -C ~/wt-f5-4c1-135123 log --oneline -1; git -C ~/wt-f5-4c1-main-135208 log --oneline -1; ls logs/E4C-F5-4C1/; /bin/grep -n "CODEX-ESTADO\\|14:04" -r logs/WRAPPER-N-VAGAS/verif_v1/ 2>/dev/null \| head -3; ls logs/WRAPPER-N-VAGAS/verif_v1/` |
+| 14:40:26 | Bash | Check leftover agent shell | `ps -o pid,etime,args --ppid 1705990 \| cut -c1-160; ps -o pid,etime,args -p 1705990 \| cut -c1-80; ps -eo pid,args \| /bin/grep -c "test_codex_n_vagas"` |
+| 14:40:21 | Bash | Inspect wrapper copy after stop | `W=~/wt-wrapper-n-vagas-125229; git -C $W log --oneline 5b359e88b..HEAD; git -C $W status --porcelain \| head; ls ~/saas-hasner/logs/WRAPPER-N-VAGAS/volta2/; pgrep -af "wt-wrapper-n-vagas" \| cut -c1-120` |
+| 14:40:20 | TaskStop |  | `-` |
+| 14:40:15 | Bash | See codex process argv shape | `ps -eo pid,ppid,args \| /bin/grep "codex_pergunta" \| /bin/grep -v grep \| cut -c1-160` |
 | 14:40:02 | Bash | Queue sonda; register corte | `cd ~/saas-hasner; D=logs/FERIADO-POR-POSTO/achado31/corte1445; F=logs/FICHAS-2111-1440; cat > $D/espera.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner until [ -e $F/f1/r.rc ] \|\| [ -e $F/f2/r.rc ] \|\| [ -e $F/f3/r.rc ]; do /usr/bin/sleep 20; done exec bash $D/lanca.sh EOF setsid bash $D/espera.sh </dev/null >/dev/null 2>&1 & sleep 2; pgrep -f "bash $D/espera.sh" python3 - <<'PY' p='app/docs/PR ...` |
 | 14:39:50 | Bash | Write measure-first sonda for corte 1445 | `cd ~/saas-hasner; D=logs/FERIADO-POR-POSTO/achado31; cat > $D/sonda_corte1445.py <<'EOF' # LEI-FERIADO-ACHADO31-2111-1445 -- MEDIR ANTES. LEITURA, so contagens, sem dado pessoal. # Pergunta: se cada vinculo VIGENTE (colab ativo) nascesse hoje, com que chave nasceria (A) hoje e (B) pelo corte? # A = EscalaColaborador.padrao_trabalha_em_feriado(template, posto) (funcao REAL do main) # B = False se c ...` |
 | 14:39:30 | Bash | Read sonda script | `cd ~/saas-hasner; D=logs/FERIADO-POR-POSTO/achado31; wc -l $D/sonda_delegar.py; cat $D/sonda_delegar.py; cat $D/lanca.sh` |

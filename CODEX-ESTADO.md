@@ -1,7 +1,293 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 14:33** · publicado em **21/11/2026 14:34** (UTC-3)
+> Ultima resposta processada: **21/11/2026 14:46** · publicado em **21/11/2026 14:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 14:46 · sessao 83a460904d37 · FICHAS-PACOTE-CONSUMO-f2 · leitura · origem=Code
+
+# RASCUNHO CLAUDE-MD-ENXUTO-2
+
+## MEDIDA
+
+Base de leitura informada: `ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5`. O `CLAUDE.md` extraído tem **47.578 bytes e 460 linhas**. A cópia veio sem `.git`, como prevê a extração por `git archive`. A identidade do objeto Git na origem [nao verificado]. A Ficha 2 fornecida relata **12k tokens por requisição e 42% do uso** no `/usage`. Tokenização desta cópia e economia no produto [nao verificado]. (CLAUDE.md:1–460, bin/codex_pergunta.sh:304–320)
+
+Cada seção vai do título até a linha anterior ao próximo título, contando títulos, linhas vazias, UTF-8 e fins de linha. A coluna de candidatos mede os trechos originais antes de acrescentar ponteiros. Zero significa que o recorte proposto deixa a seção como está. (CLAUDE.md:1–460)
+
+| Seção e linhas | Bytes | Linhas | Candidato a sair, em bytes | Destino e trecho |
+|---|---:|---:|---|---|
+| Primer, 1–13 | 793 | 13 | 110 de detalhe de consulta | INFRA, geração e guarda do diagrama. (CLAUDE.md:7–8, app/docs/PRIMER.md:3) |
+| 0. LEI-AKITA, 14–77 | 5.304 | 64 | 435 de repetição | LAPIDES, explicação após o corte literal L-110. Ficam a citação, a distinção entre validação e impacto e as condições de dinheiro. (CLAUDE.md:45–60, CLAUDE.md:406–424) |
+| 1. O QUE E, 78–83 | 323 | 6 | 0 | Escopo do produto e competência. (CLAUDE.md:78–83) |
+| 2. INFRA, 84–94 | 2.430 | 11 | 481, sendo 241 de repetição e 240 de consulta | INFRA, rotas, lista de apps e explicação do merge. Ficam a autoridade de Empresa, o nome FAST-FORWARD e o ponteiro para RAIAS E POUSO item 5. (CLAUDE.md:89–93, CLAUDE.md:325–329, app/docs/INFRA.md:29–30, app/docs/INFRA.md:70–76, app/docs/INFRA.md:89–90) |
+| 3. TESTES, 95–140 | 4.579 | 46 | 915, sendo 356 de história, 243 de repetição e 316 de explicação operacional | LAPIDES, O182, senha, resize, veredito, entrada de holerite e medições. INFRA, composição da chamada e efeito dos tmpfs. Ficam o comando imediatamente abaixo do título, a trava, os motivos, o rc e os requisitos de montagem. (CLAUDE.md:95–139, app/docs/LAPIDES.md:81, app/docs/LAPIDES.md:101, app/docs/LAPIDES.md:479, app/docs/LAPIDES.md:510) |
+| 4. ZONAS INVIOLAVEIS, 141–168 | 2.247 | 28 | 264, sendo 107 de história e 157 de prosa de caso | LAPIDES, explicação forense do carimbo e histórico do tripwire B5-j. Ficam os campos da regeneração, o universo de apuração e as fronteiras declaradas dos selos. (CLAUDE.md:149–167, app/docs/LAPIDES.md:697) |
+| 4a. TABULEIRO E LAMPADAS, 169–175 | 533 | 7 | 0 | Os quatro enunciados operativos e o ponteiro existente. (CLAUDE.md:169–175) |
+| 4b. ENCERRAMENTO DO ESTRUTURAL, 176–181 | 1.909 | 6 | 0 | Teto, contratos, precedência e L-099 ficam literais. (CLAUDE.md:176–181) |
+| 5. OS JUIZES, 182–185 | 235 | 4 | 48 de história | JUIZES, proveniência O224 já descrita no destino. Fica o ponteiro da tabela. (CLAUDE.md:182–185, app/docs/JUIZES.md:3–15) |
+| 6. CONDUTAS, 186–208 | 3.291 | 23 | 35, sendo 17 de exemplo e 18 de história | CONDUTAS, exemplo de horas decimais. LAPIDES, menção ao incidente de 27/08 com remissão à descrição já em CONDUTAS. Ficam a conversão obrigatória e as três condições do smoke. (CLAUDE.md:201–205, app/docs/CONDUTAS.md:48–49, app/docs/CONDUTAS.md:73–81) |
+| 6b. CCT VIGILANTES, 209–238 | 2.215 | 30 | 276, sendo 208 de história e 68 de repetição | LAPIDES, números históricos da praça, transição O211 e advertência sobre confundir hora reduzida com adicional. Ficam autoridade, vigência, aplicabilidade e cláusulas. (CLAUDE.md:209–235, app/docs/LAPIDES.md:773, app/docs/JUIZES.md:29–34) |
+| 7. CRON, 239–250 | 914 | 12 | 104, sendo 48 de história e 56 de explicação | LAPIDES, proveniência O224 e razão da espera por arquivo. Ficam a espera por arquivo, a fonte única, o aviso SUPRA_JUIZ e a idempotência. (CLAUDE.md:239–249, app/docs/LAPIDES.md:736–745) |
+| 7b. MODO DE TRABALHO, 251–456 | 22.534 | 206 | 271 de história | LAPIDES, fórmulas de apresentação das cinco consolidações. Ficam nomes, condições, apelidos e os 17 ponteiros para PISTA. O trecho NOTURNO de 87 B fica fora da conta. (CLAUDE.md:252–261, CLAUDE.md:301–306, CLAUDE.md:338–343, CLAUDE.md:392–403, CLAUDE.md:431–435, app/docs/RELATO.md:5101) |
+| 8. MANUTENCAO, 457–460 | 271 | 4 | 0 | Critério de atualização. (CLAUDE.md:457–460) |
+| **Total** | **47.578** | **460** | **2.939 brutos** | **1.056 de história, 987 de repetição, 17 de exemplo e 879 de prosa de caso ou detalhe de consulta.** (CLAUDE.md:1–460) |
+
+**Meta do pouso: até 45.500 B**, queda mínima de **2.078 B (4,37%)**. O recorte montado em memória mediu **45.145 B e 445 linhas**, com **506 B** de reposição, entre ponteiros, referências e ajustes de junção. A margem até o teto é 355 B. Essa medida de bancada usa âncoras de teste para as lapides novas. O pouso deve comprovar destinos efetivos e equivalência de cláusulas. (CLAUDE.md:1–460, app/docs/LAPIDES.md:3–11, bin/tests/test_claude_md_regras_preservadas.sh:55–78)
+
+**O que limita o corte.** O 7b sozinho tem 22.534 B, 1.534 B acima dos 21.000 B do PRONTO histórico do RACIONAL. Os 271 B brutos deste recorte levam a seção a 22.263 B antes da reposição. A meta histórica de 8k usava a aproximação de 4 B por token no RELATO, equivalente a cerca de 32.000 B naquela conta. Mesmo retirando os 2.939 B brutos, a base fica em 44.639 B. A conta documenta o limite desta passada em bytes. Atingimento de 8k tokens no produto [nao verificado]. (CLAUDE.md:251–456, app/docs/BACKLOG.md:1082–1084, app/docs/RELATO.md:5132)
+
+**Estado das obras**
+
+| Obra | Registro e pendência |
+|---|---|
+| CLAUDE-MD-ENXUTO | BACKLOG diz **NO AR**, merge `9ce5181d`, com histórias em LAPIDES, pistas em PISTA e quatro MORDE. O RELATO mediu 72.651 → 60.769 B na etapa (b) e registrou **“meta 8k nao fecha”**, parada pelo aval porque o restante incluía regra fora do escopo de pista. Os 109 nomes são a contagem registrada no pouso. A referência desta cópia tem 115. (app/docs/BACKLOG.md:1082, app/docs/RELATO.md:5132, bin/tests/claude_md_regras.ref:1–115) |
+| CLAUDE-MD-RACIONAL | BACKLOG ainda diz **registrada, constrói depois do B3**. RELATO registra **pouso** no comboio de instrumento `5693e462` às 15:51, com a volta 8 em `2f5e38c6` e deploy rc=0. A volta 8 registrou 20.955 B no 7b e 57.756 B no total. Na cópia já estão as cinco consolidações, o ponteiro de PAREI na seção 0 e o da L-084. A pendência documental é reconciliar o estado antigo do BACKLOG. Ancestralidade Git e logs do deploy [nao verificado]. (app/docs/BACKLOG.md:1084, app/docs/RELATO.md:5038, app/docs/RELATO.md:5114, CLAUDE.md:72, CLAUDE.md:252, CLAUDE.md:301, CLAUDE.md:338, CLAUDE.md:401, CLAUDE.md:429–431) |
+| CLAUDE-MD-PISTA-NO-ANEXO | BACKLOG diz **aberta**, com contrato antes, para incluir o texto de PISTA no anexo. Na cópia, ANEXO_CHEIO ainda classifica CLAUDE.md e deixa PISTA.md fora da lista. O wrapper lê PISTA se for passada explicitamente em `--anexo`. Uso efetivo em chamadas [nao verificado]. (app/docs/BACKLOG.md:1083, bin/disjuntor.py:1349–1352, bin/codex_pergunta.sh:323–335) |
+
+## DESENHO
+
+Mover os trechos da tabela, com texto literal no destino e ponteiro resolvível na origem. Usar as lapides existentes quando já tratam do mesmo caso. Conservar os cinco textos vigentes do RACIONAL. PISTA oferece a consulta dos 17 blocos anteriores e declara a precedência das consolidações. Reconciliar a linha do RACIONAL no BACKLOG pelo pouso registrado. Manter PISTA-NO-ANEXO na fila própria. Construir em cópia do HEAD, em vaga de instrumento atrás da espinha, com pouso próprio. Preservar a prioridade de F5, TRAVAS, N-VAGAS, FERIADO e AUDITORIA conforme o anexo fornecido. (app/docs/LAPIDES.md:3–11, app/docs/PISTA.md:8–14, app/docs/BACKLOG.md:1083–1084, app/docs/RELATO.md:5038, CLAUDE.md:39–40, CLAUDE.md:290–295, CLAUDE.md:325–329)
+
+**Censo de leitores.** Na falta da metadata Git, usei `rg` em `bin/` e `app/`, incluindo referências de caminho com a grafia escapada. Em `app/`, as ocorrências localizadas servem de referência, comentário, mensagem ou documentação. Leitor executável do arquivo em `app/` [nao verificado]. Os selos de host entram na régua pelo glob e AKITA tem chamada explícita no pre-push com o SHA do push. (bin/codex_pergunta.sh:311–320, app/core/hooks/pre-push.sh:79, app/core/placar_estrutural.py:102, app/folha/tests/test_o259_vigia_pausa.py:189, bin/regua.sh:134–144, bin/pre-push.sh:31–39)
+
+A prova desta leitura usou os predicados que operam sem gravar. Execução integral dos selos que plantam arquivos e da régua [nao verificado]. (bin/tests/test_suite_sh.sh:72–87, bin/tests/test_claude_md_regras_preservadas.sh:89–114, bin/regua.sh:138–145)
+
+| Leitor ou selo | Âncora de leitura e efeito |
+|---|---|
+| `test_suite_sh.sh` | Recorta pelo prefixo do título da seção 3 e inclui a primeira linha sem barra invertida final, encerrando ali. Exige que o comando seja `bin/suite.sh`, com um único `--motivo` válido. Renomear o prefixo, interpor linha vazia, cerca Markdown ou prólogo antes do comando, ou trocar o comando por link quebra o selo. A prosa posterior fica fora do recorte. Também confere trava, LABELS, chamada de teste e ausência de senha na porta. (bin/tests/test_suite_sh.sh:22–69, CLAUDE.md:95–107) |
+| `test_claude_md_regras_preservadas.sh` | Cobra **115 nomes congelados** na união CLAUDE + PISTA, nome de regra de pista nos dois, **17 hashes** de blocos de PISTA, ponteiro com `)` para cada âncora da referência e destino para toda âncora citada. Confere o destino dos `lap-NN` presentes em ambos os arquivos. Quebram nome faltante, lapide órfã, ponteiro de PISTA perdido e mudança no bloco hasheado. Os quatro MORDE incluem tirar a linha de pista do CLAUDE. O juiz da base retornou 0 em leitura, com 120 nomes na união, 22 do tipo L-NNN e cinco nomes informativos fora da referência. O conjunto de 38 referências distintas a lapides no CLAUDE entra no antes/depois desta obra. (bin/tests/test_claude_md_regras_preservadas.sh:43–118, bin/tests/claude_md_regras.ref:1–115, bin/tests/pista_blocos.ref:1–17, CLAUDE.md:1–460) |
+| `test_lei_akita.sh` | Lê `git show ALVO:CLAUDE.md`. Exige o prefixo `## 0. LEI-AKITA`, 13 linhas iniciadas por número, ponto e negrito no intervalo até `## 1.`, e a sequência `LEI-AKITA: origem=`. Perder título ou linha, renumerar visualmente com outra sintaxe ou mover o molde quebra essa checagem quando o literal deixa de casar. A cópia tem 13 e o molde. Execução integral no Git [nao verificado]. (bin/tests/test_lei_akita.sh:17–47, bin/pre-push.sh:33–38, CLAUDE.md:14–78) |
+| `test_segredo_fora_do_argv.sh` | Varre a presença de `-e DB_PASSWORD=` no arquivo. O exemplo de história atual está numa linha com crase. Relocar o texto dentro de CLAUDE para uma linha sem crase dá VERMELHO pelo predicado do selo. (bin/tests/test_segredo_fora_do_argv.sh:18–35, CLAUDE.md:108–112) |
+| `hook_stop_fila1.py` e `test_hook_parei_so_lei.sh` | A seção 7b descreve a conduta. O hook lê BACKLOG e o topo do RELATO, exige `PAREI:` com `!` do item em curso no caminho genérico e tem caminho próprio para ESPERANDO com prova. O selo injeta casos no hook. Mudar o cabeçalho da 7b deixa o predicado do hook igual. Alterar na prosa os formatos aceitos ou quando o turno pode parar cria divergência entre instrução e execução. (bin/hook_stop_fila1.py:26–34, bin/hook_stop_fila1.py:467–485, bin/hook_stop_fila1.py:1248–1287, bin/hook_stop_fila1.py:1381–1393, bin/tests/test_hook_parei_so_lei.sh:23–63, CLAUDE.md:262–275) |
+| `disjuntor.py`, ANEXO-ENXUTO | No PreToolUse de Bash, lê o basename dos `--anexo` da invocação, com volta ausente caindo em meio. `CLAUDE.md` integra a lista barrada no meio e permitida por esse filtro em `1, contrato, final`. O corpo do Markdown não entra no predicado. Trocar o nome do anexo muda o conjunto que a guarda reconhece. O wrapper é quem lê e raspa o conteúdo anexado. O selo do disjuntor exercita a guarda com LEIS e JUIZES. (bin/disjuntor.py:1349–1352, bin/disjuntor.py:1448–1462, bin/disjuntor.py:1486–1495, bin/disjuntor.py:1851–1863, bin/tests/test_disjuntor.sh:564–580, bin/codex_pergunta.sh:323–335) |
+| `relato.sh`, `raspar_publico.py` e `test_relato_publica_claude_md.sh` | Copiam o CLAUDE da raiz pela raspagem e o incluem no `git add` e no pathspec de commit. O selo cobra os três pontos no script. Mover o arquivo de lugar ou perder o par quebra o contrato. LAPIDES, PISTA, CONDUTAS, INFRA e JUIZES ficam fora da lista explícita do publicador, portanto o chat que recebe só esse espelho precisa receber os trechos de consulta no envelope de revisão. (bin/relato.sh:103–105, bin/relato.sh:114–146, bin/raspar_publico.py:23–40, bin/tests/test_relato_publica_claude_md.sh:10–31) |
+| Guardas de caminho e instruções | `raia_agente.sh` e o selo da raia usam existência de CLAUDE.md como prova de raiz. O wrapper veta esse caminho ao Codex construtor, com mutante próprio. O fabricante e o verificador têm instrução de leitura, inclusive seção 0. Retirar ou renomear o arquivo afeta essas entradas. Editar só prosa preserva os predicados de caminho. (bin/raia_agente.sh:19–29, bin/tests/test_raia_declarada_no_estado.sh:17, bin/codex_pergunta.sh:121–134, bin/tests/test_codex_pergunta.sh:326, bin/fabricante_prompt.md:4, bin/fabricante_prompt.md:51, .claude/agents/verificador.md:7–9) |
+
+Dois leitores registrados pedem ressalva. O ODOMETRO-DE-REGRAS previa recorte do 7b, teto de 25.000 B e detecção de emendas e predicados repetidos. O RELATO registra o estacionamento sem commit. O gerador de AGENTS listado para consumir 2/4/4a/4b pertence à obra com fontes acima do teto de 30.000 B. Execução desses dois leitores na cópia [nao verificado]. (app/docs/BACKLOG.md:935, app/docs/BACKLOG.md:1085, app/docs/RELATO.md:5063–5070, app/docs/RELATO.md:5126)
+
+## RISCO
+
+**ADOTA COM MUDANCAS.** Aprovar a meta em bytes e o recorte com transferência literal e conferência semântica. Preservar as âncoras mecânicas, inclusive quando o que parece ser prosa contém um token congelado. (app/docs/LEIS.md:135, bin/tests/test_claude_md_regras_preservadas.sh:43–78, app/docs/PROMPTS.md:1739)
+
+- **Forma:** rodei o predicado da seção 3 em memória. Original rc=0, linha vazia antes do comando rc=1 e cerca Markdown antes do comando rc=1. (CLAUDE.md:95–96, bin/tests/test_suite_sh.sh:22–53)
+- **Nome:** o recorte de INFRA precisa reter FAST-FORWARD. Remover o token da única ocorrência em CLAUDE fez a checagem de referência em memória marcar o nome faltante, embora a explicação exista em INFRA. (CLAUDE.md:91, app/docs/INFRA.md:73–76, bin/tests/claude_md_regras.ref:33, bin/tests/test_claude_md_regras_preservadas.sh:55–61)
+- **Sentido:** um mutante em memória mudou “Ninguem espera mais de 30 min” para 90 min. Passou pela checagem reproduzida de nomes, hashes e ponteiros. O RACIONAL já teve reprovação por perder “citando este aval” na montagem. Revisar cada cláusula é parte do PRONTO. (CLAUDE.md:320–324, bin/tests/test_claude_md_regras_preservadas.sh:55–78, app/docs/RELATO.md:5109)
+- **Anexo:** tratar PISTA como mero substituto de CLAUDE levaria ao leitor blocos anteriores a consolidações vigentes. PISTA tem 17.769 B na cópia e a guarda atual decide por basename. Ganho de consumo ao anexá-la [nao verificado]. (app/docs/PISTA.md:1–16, bin/disjuntor.py:1349–1352, bin/disjuntor.py:1486–1492)
+
+## PROIBIDO
+
+Apagar histórico, mudar regra ou precedência, regravar as referências para fazer o diff passar, tirar os nomes ou as linhas operativas de pista, mexer nos blocos hasheados de PISTA, tocar código de negócio, motor, dados ou banco de produção, cron, hook, wrapper, guarda de anexo ou publicação. A prova de preservação é do diff da obra. (app/docs/LEIS.md:135, app/docs/PISTA.md:8–14, CLAUDE.md:142–148, CLAUDE.md:343–356, CLAUDE.md:443–444, bin/tests/test_claude_md_regras_preservadas.sh:55–78, app/docs/BACKLOG.md:1083)
+
+## NAO MUDA
+
+Vigência das regras e seus limites, 13 itens e molde AKITA, porta literal da seção 3, L-NNN, nomes e apelidos, ponteiros existentes, decisão de Stop, filtros do Codex, raspagem e recorte do anexo. Continuam integrais os cortes L-117, AUTONOMIA item 2, PRE-VERIFICADOR para todo construtor e a cláusula (5) devolvida ao texto vigente. (CLAUDE.md:14–76, CLAUDE.md:95–107, CLAUDE.md:262–273, CLAUDE.md:372–392, app/docs/PROMPTS.md:1737–1739, app/docs/RELATO.md:5101, bin/hook_stop_fila1.py:1248–1287, bin/disjuntor.py:1486–1495)
+
+## PRONTO
+
+1. No commit candidato, `wc -c -l CLAUDE.md` e a mesma tabela por seção comprovam **≤45.500 B**. Diff limitado a CLAUDE, aos documentos de destino e à linha de estado do RACIONAL no BACKLOG. (CLAUDE.md:1–460, app/docs/BACKLOG.md:1084, app/docs/RELATO.md:5038)
+2. O diff lista origem e destino de cada trecho. Todo trecho movido reaparece literal, todos os ponteiros existentes sobrevivem, todos os novos resolvem e a revisão cláusula a cláusula confirma equivalência e precedência. Conferir em especial 0/13, 3, 7b/PARADA/RAIAS/CODEX/DINHEIRO. (app/docs/LAPIDES.md:3–11, app/docs/PISTA.md:8–14, CLAUDE.md:45–60, CLAUDE.md:95–107, CLAUDE.md:251–427)
+3. Mesmos conjuntos de nomes e L-NNN da base e 17 hashes intactos. Passam os quatro MORDE, o recorte da seção 3 e seus mutantes, o selo do segredo, o selo da publicação e a LEI-AKITA no SHA candidato. O mutante 30→90 deve ser reprovado na leitura de regra mesmo com selo lexical verde. (bin/tests/test_claude_md_regras_preservadas.sh:55–118, bin/tests/test_suite_sh.sh:72–119, bin/tests/test_segredo_fora_do_argv.sh:32–35, bin/tests/test_relato_publica_claude_md.sh:26–31, bin/pre-push.sh:33–38, CLAUDE.md:320–324)
+4. Contrato revisado uma vez pelo Codex, pré-verificador do diff, régua da árvore e verificação final pela ordem vigente. Pouso próprio de instrumento. Linha do RELATO com SHA, bytes antes/depois, prova dos selos e reversão. (CLAUDE.md:320–329, CLAUDE.md:372–381, CLAUDE.md:394, CLAUDE.md:439–444, bin/regua.sh:134–145)
+
+## CONTRATO
+
+1. **Quem chama** — Code, pelo aval final, em cópia do HEAD e na vaga de instrumento. (CLAUDE.md:39–40, CLAUDE.md:290–295, CLAUDE.md:325–329)
+2. **Quem espera** — o pouso deste instrumento espera seu diff, a régua e a verificação final. A fila de produto segue. (CLAUDE.md:296–298, CLAUDE.md:320–329, CLAUDE.md:372–381) [nao verificado]
+3. **Falha/limite** — teto 45.500 B, âncora quebrada, selo vermelho ou cláusula divergente seguram este pouso. A divergência vai ao RELATO com número e arquivo:linha. (CLAUDE.md:37–38, CLAUDE.md:274–275, CLAUDE.md:439–444, bin/regua.sh:138–144)
+4. **Medida** — bytes e linhas por seção, trechos brutos e economia líquida, ponteiros verificáveis, resultado dos selos e dos contraexemplos no marco. (CLAUDE.md:298–299, CLAUDE.md:439–444, bin/tests/test_claude_md_regras_preservadas.sh:89–117)
+5. **Quem desliga** — Ronald cancela o instrumento ou autoriza reverter o commit próprio, com trilha no RELATO e reversão em PENDENTES. (CLAUDE.md:265–268, CLAUDE.md:282–287, CLAUDE.md:325–329) [nao verificado]
+
+LEI-AKITA: origem=CLAUDE.md:1–460 e app/docs/LEIS.md:135, testemunha=texto vigente e bin/tests/test_claude_md_regras_preservadas.sh:55–78, RED=linha vazia antes do comando da seção 3 rc=1 e perda de FAST-FORWARD detectada em memória, quem-mais-le=selos e leitores do censo, juizes novos=0, padrao=n/a (instrumento) (CLAUDE.md:62–70, bin/tests/test_suite_sh.sh:22–53, bin/tests/claude_md_regras.ref:33)
+
+## PERGUNTAS-DA-FICHA
+
+1. Aprova 45.500 B como meta deste pouso e deixa a meta de 8k tokens sujeita a nova medição de `/usage`? Se 8k continuar como exigência, o recorte medido produz 44.639 B brutos antes de ponteiros, frente aos cerca de 32.000 B da estimativa histórica. A decisão de mover mais texto operativo passa por novo corte. (app/docs/BACKLOG.md:1082, app/docs/RELATO.md:5132, app/docs/PISTA.md:8–14, CLAUDE.md:1–460)
+2. O item (5) retroativo de NOTURNO, restaurado expressamente no RACIONAL e hoje com 87 B, pode virar lapide com ponteiro em novo corte? Este aval o preserva no 7b. (CLAUDE.md:382–392, app/docs/PROMPTS.md:1737, app/docs/RELATO.md:5101)
+
+---
+
+**PAREI RASCUNHO CLAUDE-MD-ENXUTO-2: leve ao chat**  
+SHA-256 do rascunho acima, do título até o fim da pergunt
+
+[truncado em 20000 de 20179 caracteres]
+
+## 21/11 14:42 · sessao f57a188d9deb · FERIADO-POR-POSTO · sonda · origem=Code
+
+### 1. Saída integral fornecida
+
+Execução e hash da sonda [nao verificado].
+
+```text
+HOJE=2026-11-21 UNIVERSO(vigentes de colab ativo, todo posto e ciclo)=544
+POR CLASSE (cargo, ciclo, marca, tipo_base) -> n
+  admin fora(12x36) marca=OPERA base=12x36 -> 5
+  admin fora(12x36) marca=SEM base=12x36 -> 10
+  admin fora(personalizado) marca=OPERA base=comercial -> 1
+  admin vira marca=FECHA base=comercial -> 2
+  admin vira marca=FECHA base=turno_partido -> 1
+  admin vira marca=OPERA base=comercial -> 8
+  admin vira marca=OPERA base=turno_partido -> 1
+  admin vira marca=SEM base=comercial -> 24
+  nao_admin fora(12x36) marca=FECHA base=12x36 -> 2
+  nao_admin fora(12x36) marca=OPERA base=12x36 -> 60
+  nao_admin fora(12x36) marca=SEM base=12x36 -> 260
+  nao_admin fora(intermitente) marca=OPERA base=intermitente -> 4
+  nao_admin fora(intermitente) marca=SEM base=intermitente -> 4
+  nao_admin fora(personalizado) marca=SEM base=comercial -> 3
+  nao_admin vira marca=FECHA base=comercial -> 12
+  nao_admin vira marca=FECHA base=turno_partido -> 5
+  nao_admin vira marca=OPERA base=comercial -> 47
+  nao_admin vira marca=OPERA base=turno_partido -> 15
+  nao_admin vira marca=SEM base=comercial -> 71
+  nao_admin vira marca=SEM base=turno_partido -> 9
+MUDA A!=B (classe + A->B) -> n
+  admin fora(12x36) marca=OPERA base=12x36 True->False -> 5
+  admin fora(12x36) marca=SEM base=12x36 True->False -> 10
+  admin fora(personalizado) marca=OPERA base=comercial True->False -> 1
+  admin vira marca=OPERA base=comercial True->False -> 8
+  admin vira marca=OPERA base=turno_partido True->False -> 1
+TOTAL_MUDA=25  ADMIN=25  NAO_ADMIN=0
+POSTOS_COM_MUDANCA admin=19 nao_admin=0
+```
+
+### 2. Conferência do código da cópia
+
+- `EscalaColaborador.padrao_trabalha_em_feriado` está definida em [app/escala/models.py:905](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/escala/models.py:905).
+- `cargo_e_administrativo` está definida em [app/colaboradores/management/commands/sincronizar_feriado_admin.py:19](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/colaboradores/management/commands/sincronizar_feriado_admin.py:19).
+- `sonda_corte1445.py` não foi localizado na cópia. A chamada de A e o import de `cargo_e_administrativo` pela sonda ficam [nao verificado]. A cópia veio sem metadados Git acessíveis, então o hash do HEAD fica [nao verificado].
+
+### 3. Classes `nao_admin` em `MUDA`
+
+Nenhuma. As cinco linhas de `MUDA` são `admin` e somam 25, em acordo com `TOTAL_MUDA=25  ADMIN=25  NAO_ADMIN=0`. Conferência pelo trecho fornecido. Execução [nao verificado].
+
+### 4. Erros e contagens zero
+
+O trecho fornecido não exibe erro. `POR CLASSE` soma 544, igual ao universo informado. Os dois zeros, `NAO_ADMIN=0` e `POSTOS_COM_MUDANCA … nao_admin=0`, são compatíveis com a ausência de classes `nao_admin` em `MUDA`. A contagem de postos distintos não pode ser recontada pelo trecho [nao verificado].
+
+## 21/11 14:41 · sessao aece5b6b5b73 · FICHAS-PACOTE-CONSUMO-f1 · leitura · origem=Code
+
+# RASCUNHO AUTO-CLEAR-NO-MARCO
+
+## MEDIDA
+
+- A base de leitura indicada pelo pedido é `ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5`. A exportação está sem metadados Git, portanto o HEAD é [nao verificado] de forma independente. O HANDOFF da cópia é um retrato de 19/11 às 16:08 e declara outro HEAD naquele instante. No anexo, `/usage` de 21/11 às 14:28 atribui **61%** a “sessions active over many hours”. Economia atribuível ao auto-clear e estado atual da VM [nao verificado]. (`app/docs/HANDOFF-SESSAO.md:3–7`, `fichas_pacote_consumo_2111_1440.txt:2`, numeração do texto fornecido.)
+- **Keepalive hoje.** A cada 600 s, o próprio `while true` testa `$HOME/saas-hasner/keepalive.off`, registra `off` e sai se o arquivo existir. Captura a tela com `tmux capture-pane -p -t code | tail -25`. Se achar `esc to interrupt`, fica quieto. Se achar `PAREI`, `Do you want`, `❯ 1.`, `! do export` ou `pergunta de LEI`, registra `parado-legitimo`. No restante, usa `send-keys` para digitar “segue a fila; PAREI so em lei ou !” e Enter, e registra `EMPURROU` em `logs/keepalive.log` mesmo se o envio falhar. O BACKLOG e o RELATO registram o laço como daemon do host. O lançador, o pai do processo e a instalação atual [nao verificado]. (`bin/keepalive.sh:2–10`, `app/docs/BACKLOG.md:1687`, `app/docs/RELATO.md:9306–9311`.)
+- **Caminho do `/clear`.** O script só envia a frase fixa. Um `send-keys` externo escreve no alvo tmux sem consultar as guardas do keepalive. O código de casa recebe `SessionStart(clear)` depois do comando, se o harness disparar o evento. Os registros da casa mostram recusa de **`/restart`** com Remote Control e uma recusa histórica do auto mode ao **escrever código** de `send-keys` para o próprio painel (“Tmux Self Drive”, O279). O keepalive não lê conexão nem modo de permissão. Aceitação de `/clear` por teclas, chegada do hook e retomada com Remote Control conectado e auto mode juntos [nao verificado]. (`bin/keepalive.sh:3–9`, `.claude/settings.json:48–59`, `app/docs/RELATO.md:3921`, `app/docs/PROMPTS.md:2194–2196`, `app/docs/BACKLOG.md:1687`.)
+- **PREPARA-CLEAR hoje é CLEAR-RÁPIDO/C1-PISO.** `orcamento_contexto.py::medir_contexto/avaliar` lê o último turno principal no transcript. O gatilho é tokens ≥ média inteira entre o piso pós-compact mais recente e 200.000. Sem piso válido, o gatilho não arma. Horas, percentual e marcos de deploy seguem como medidas. O Stop avalia depois da prova do RELATO e do B4, antes do PAREI comum. Ao armar, adia por ESPERANDO provado, PAREI comum, suite/régua/push ou pela guarda de DIFF/apply/agente. No disparo ativo, confere `PAREI: ! CLEAR` com mtime do handoff desde o disparo ou adiamento e reaplica a guarda de DIFF/agente. Libera para Ronald e, vencidos 10 min, no próximo Stop aplicável manda registrar “clear nao dado, seguiu” e seguir a fila. `ORCAMENTO_CONTEXTO=0` desliga esse caminho. O ESTADO lê o avaliador e a trilha `ATENDIDO/SEGUIU`. (`bin/orcamento_contexto.py:45–63`, `bin/orcamento_contexto.py:89–133`, `bin/orcamento_contexto.py:225–232`, `bin/orcamento_contexto.py:321–398`, `bin/hook_stop_fila1.py:941–977`, `bin/hook_stop_fila1.py:1000–1047`, `bin/hook_stop_fila1.py:1064–1162`, `bin/hook_stop_fila1.py:1349–1386`, `bin/gerar_estado.py:279–284`.)
+- **Handoff e confirmação.** `handoff_sessao.sh` gera o retrato com Git, fila e PAREI pelos leitores do Stop, avais, travas e próximo passo, com teto de 60 linhas. `PreCompact(manual|auto)` gera o arquivo. `SessionStart(compact|clear)` imprime o handoff existente e chama `marco_de_clear.py`. Esse escritor registra hora, origem, `session_id` e `source` em `logs/sessao/ultimo_clear.json`, sob lock e troca atômica. Conserva os horários dos últimos 20 `/clear` e sai com rc 0 mesmo em falha. **CLEAR-SEM-MARCO** segue registrado. O BACKLOG relata o `/clear` de 11:5x sem carimbo novo e a cobrança do ciclo anterior, 64% contra 17,6% naquele registro. O selo atual verifica a declaração dos hooks e o código do C1 tem casos de handoff, expiração e confirmação. `PreToolUse` chama o disjuntor e a `statusLine` publica a cota. A execução efetiva dos hooks na sessão alvo [nao verificado]. (`bin/handoff_sessao.sh:24–78`, `bin/handoff_sessao.sh:81–125`, `bin/handoff_sessao.sh:139–181`, `bin/handoff_sessao.sh:242–267`, `bin/handoff_sessao.sh:303–329`, `.claude/settings.json:14–77`, `bin/statusline_cota.py:4–13`, `.gitignore:66`, `bin/marco_de_clear.py:19–66`, `app/docs/BACKLOG.md:1135`, `app/docs/RELATO.md:5639`, `bin/tests/test_handoff_sessao.sh:41–85`, `bin/tests/test_orcamento_contexto.sh:187–211`.)
+
+## DESENHO
+
+Estender o **keepalive do host** como único escritor automatizado de teclas no painel. Um avaliador pode devolver o veredito sem escrever teclas. Usar uma instância por painel, resolver o alvo exato `=code:` e fixar a identidade do pane e da sessão até o fim da tentativa. A O133 já prevê vigia, sinal, Stop, retomada e selo, e consta como pedida, não começada. Aproveitar seu sinal `logs/marco.fechado` como proposta de um único registro de fecho, com identidade do evento e prova do marco publicado, em vez de abrir outro emissor. O Stop pode entregar o turno só pelo fecho válido, preservadas as guardas de prova e do B4. (`app/docs/BACKLOG.md:1509`, `app/docs/PROMPTS.md:382–397`, `bin/keepalive.sh:5–9`, `bin/gerar_estado.py:17–20`, `bin/hook_stop_fila1.py:1349–1386`.)
+
+Exigir **(a) ∧ (b) ∧ (c) ∧ (d)** no mesmo ato, imediatamente antes do envio. Estado desconhecido veta a tentativa. (`fichas_pacote_consumo_2111_1440.txt:2`, `app/docs/PROMPTS.md:385–396`.)
+
+| Condição | Onde ler no vivo e onde a leitura falha |
+|---|---|
+| **(a) Code ocioso** | Captura direta do pane exato. A leitura atual distingue o texto do spinner e os padrões acima, incluindo uma grafia de menu numerado e a frase `Do you want`. Não distingue prompt vazio de rascunho, shell ou captura vazia. Também não identifica `AskUserQuestion`, menu ou permissão pelo estado do harness, só pelas frases coincidentes. Um menu fora dos padrões pode cair no `else`. Já o próprio texto com `PAREI` pode vetar um prompt livre, como registra o O279. Exigir prova positiva de prompt do Code vazio e pronto, sem menu, pergunta, permissão, entrada pendente ou fila de mensagens. A fonte capaz de provar isso e excluir entrada local/remota concorrente até o Enter [nao verificado]. (`bin/keepalive.sh:5–8`, `bin/alarme_sessao_ociosa.py:66–86`, `bin/gerar_estado.py:17–20`, `app/docs/PROMPTS.md:389–390`, `app/docs/BACKLOG.md:1687`.) |
+| **(b) Marco fechado presente** | Ler a linha literal no painel atual e vinculá-la ao fecho publicado, por evento, HEAD, pane e sessão. Hoje a L-108 manda publicar a frase depois do handoff. O Stop usa mtime após o gatilho como indício de fim de marco no C1. Invalidar o fecho quando houver novo turno, obra ou mudança de sessão. Uma linha antiga, citada ou ainda na tela já casa. O RELATO registra até a frase seguida de “NAO /clear” com suite e construtor vivos. Sinal estruturado de fecho nesta cópia [nao verificado]. (`CLAUDE.md:332–336`, `bin/hook_stop_fila1.py:1120–1129`, `app/docs/RELATO.md:11188–11193`, `app/docs/PROMPTS.md:385–388`.) |
+| **(c) Zero produtor vivo** | No RELATO, usar `_esperando_com_prova` e `_prova_pid` para o PID nomeado, com identidade e estado em `/proc`. Prova por arquivo só após avanço de mtime e grava memória do Stop. Para suite, ler o `flock` de `/tmp/juliani_db_test.lock` de `trava_teste.sh`, e para DIFF/apply a trava de sombra via `diff_apply_em_curso`. Para Codex, observar `ini/fim` de `chamadas.log` e identidade do wrapper, inclusive antes do slot, e os locks `slot.gate/slot.N` do LOGD efetivo. Para agente, usar `agentes_sem_entrega` no transcript associado ao pane e as declarações de raia pelo leitor `raias_estado.py`, onde “vivo” significa declarado e ainda sem baixa. Ausência de `ESPERANDO`, trava livre ou lista vazia pode esconder wrapper ainda na preparação, suite fora da trava, container órfão ou agente cujo lançamento ainda não apareceu no transcript. `_guarda_clear` trata transcript ausente/ilegível como ausência de veto. Exigir cobertura dos produtores desde a abertura e excluir novos inícios durante a decisão e o envio. Cobertura integral [nao verificado]. (`bin/hook_stop_fila1.py:386–410`, `bin/hook_stop_fila1.py:604–631`, `bin/hook_stop_fila1.py:644–650`, `bin/hook_stop_fila1.py:704–723`, `bin/hook_stop_fila1.py:788–838`, `bin/hook_stop_fila1.py:941–951`, `bin/trava_teste.sh:20–42`, `bin/suite.sh:4–13`, `bin/suite.sh:102–107`, `bin/codex_pergunta.sh:83–101`, `bin/codex_pergunta.sh:266–282`, `bin/codex_pergunta.sh:305–309`, `bin/codex_pergunta.sh:364–400`, `bin/disjuntor.py:409–428`, `bin/disjuntor.py:468–484`, `bin/raias_estado.py:16–21`.) |
+| **(d) Handoff gravado depois do marco** | Ler `app/docs/HANDOFF-SESSAO.md` e vincular a geração ao mesmo evento e HEAD, com ordem **fecho comprovado → handoff completo → frase no painel**, como a L-108 permite. `_handoff_mtime` só lê `stat`. Um handoff velho tocado ou sobrescrito por PreCompact pode ter mtime novo, e o gerador pode gravar a saída cortada. Exigir conteúdo completo publicado para aquele fecho, com o próximo passo e a prova de geração. (`CLAUDE.md:332–336`, `bin/hook_stop_fila1.py:934–938`, `bin/hook_stop_fila1.py:1066–1078`, `bin/handoff_sessao.sh:24–40`, `bin/handoff_sessao.sh:303–329`, `.claude/settings.json:14–31`.) |
+
+Reservar o evento uma vez antes de enviar `/clear`. Aguardar confirmação nova de `SessionStart(clear)` vinculada à tentativa e à sessão alvo pelo escritor existente, e confirmar novamente o prompt pronto antes de enviar exatamente “le o HANDOFF-SESSAO.md e segue a fila; PAREI so em lei ou !”. `orcamento_contexto.py::ler_marco` já expõe `ref`, origem e sessão. Um `compact`, um clear de outra sessão ou só rc 0 de `send-keys` não satisfazem o reconhecimento. Registrar uma linha no RELATO por tentativa, com marco, sessão, hora e desfecho, e consumir o evento sem duplicar retomada. O arquivo de marco atual é único na raiz e sua lista de horas não traz identidade por clear. A correlação precisa ser provada antes de habilitar. (`bin/marco_de_clear.py:36–66`, `bin/orcamento_contexto.py:152–164`, `app/docs/BACKLOG.md:1135`, `app/docs/PROMPTS.md:389–395`, `fichas_pacote_consumo_2111_1440.txt:2`.)
+
+## RISCO
+
+**ADOTA COM MUDANÇAS.** Adotar o escritor único do host com prova positiva e consumo único do fecho. O texto pode ser de outro marco, `-t code` pode resolver o painel do Codex por prefixo, um produtor pode estar vivo sem sinal e o SessionStart pode faltar. Duas capturas iguais ainda deixam a janela entre a última leitura e o Enter. Em qualquer modo sem prova de prontidão e exclusão de concorrência, o instrumento fica desligado. (`bin/keepalive.sh:5–8`, `bin/gerar_estado.py:17–20`, `bin/tests/test_painel_e_do_code.sh:9–27`, `bin/disjuntor.py:468–484`, `app/docs/RELATO.md:11188–11193`, `app/docs/BACKLOG.md:1135`.)
+
+## PROIBIDO
+
+Enviar em menu, pergunta, permissão, prompt com texto ou estado desconhecido. Enviar com produtor vivo, PAREI de lei/! pendente, DIFF, apply, pouso ou push em curso. Ter segundo escritor, escolher outro pane por prefixo, fabricar o carimbo, contornar recusa de permissão ou repetir `/clear` após confirmação ausente. (`bin/keepalive.sh:5–8`, `.claude/settings.json:48–59`, `CLAUDE.md:262–270`, `CLAUDE.md:325–336`, `app/docs/PROMPTS.md:385–397`, `app/docs/BACKLOG.md:1687`.)
+
+## NAO MUDA
+
+O keepalive segue com sua função de religar a fila, e `marco_de_clear.py` segue como escritor único do marco de clear/compact. Preservar o CLEAR-RÁPIDO manual, PreCompact/SessionStart e as decisões de lei/!. Instrumento atrás da espinha, em pouso próprio, sem tomar F5, TRAVAS, N-VAGAS, FERIADO ou AUDITORIA em voo, sem alarme ou agenda para Ronald. O contrato passa uma vez pelo verificador Codex antes da construção. Esta entrega é só leitura. (`app/docs/PISTA.md:170–175`, `bin/keepalive.sh:3–10`, `bin/marco_de_clear.py:2–11`, `.claude/settings.json:14–59`, `bin/hook_stop_fila1.py:1100–1115`, `CLAUDE.md:325–329`, `fichas_pacote_consumo_2111_1440.txt:1–2`.)
+
+## PRONTO
+
+Selo de host exige zero teclas da tentativa se qualquer condição for falsa ou desconhecida. Cobrir prompt com texto, menu, AskUserQuestion, permissão, pane errado, linha antiga, handoff velho/tocado/truncado, produtor invisível e concorrência de escritor, entrada ou produtor. Com hook ausente, atrasado além do limite, marco de compact ou evento de outra sessão, exige zero retomadas e zero reenvios. Em sessão isolada e autorizada, provar um ciclo com Remote Control conectado **e** auto mode, com um fecho, um `/clear` confirmado, uma frase de retomada, próximo item do handoff andando e uma linha no RELATO. Repetir o tick e exigir zero duplicações. Validar a chave com zero teclas do auto-clear. Resultado desses selos e do ciclo [nao verificado]. (`app/docs/PROMPTS.md:385–397`, `bin/tests/test_painel_e_do_code.sh:9–27`, `bin/tests/test_disjuntor.sh:104–119`, `app/docs/BACKLOG.md:1135`, `fichas_pacote_consumo_2111_1440.txt:2`.)
+
+## CONTRATO
+
+1. **Quem chama** — o keepalive do host consome o fecho publicado pela sessão principal, com um escritor por pane. (`bin/keepalive.sh:3–10`, `app/docs/PROMPTS.md:385–391`.)
+2. **Quem espera** — só o escritor do host aguarda a confirmação e o prompt. Durante a tentativa ele suspende o próprio empurrão. (`bin/keepalive.sh:6–9`, `CLAUDE.md:316–319`, `app/docs/PISTA.md:170–174`.)
+3. **Falha/limite** — uma tentativa por fecho, até 60 s para confirmação e prompt como limite proposto para o piloto. Falha ou recusa encerra a tentativa, registra o motivo e corta a retomada automática. (`app/docs/PROMPTS.md:389–395`, `app/docs/BACKLOG.md:1135`.)
+4. **Medida** — contar fechos elegíveis, vetos por motivo, envios, confirmações, retomadas e tempo até o ACK. Esperado zero envios indevidos, duplicados ou retomadas sem confirmação. (`bin/orcamento_contexto.py:352–379`, `app/docs/PISTA.md:170–174`.)
+5. **Quem desliga** — Ronald remove o arquivo proposto `logs/pausas/auto-clear-no-marco.habilitado`. Ausência ou leitura ambígua desliga o auto-clear. `keepalive.off` continua encerrando o escritor inteiro. (`bin/keepalive.sh:4–8`, `app/docs/PISTA.md:170–174`, `fichas_pacote_consumo_2111_1440.txt:2`.)
+
+LEI-AKITA: origem=fecho L-108 e escritor do host (`CLAUDE.md:332–336`, `bin/keepalive.sh:5–8`), testemunha=pane/sessão do fecho, handoff, guardas de produtor e SessionStart clear (`bin/handoff_sessao.sh:242–263`, `bin/hook_stop_fila1.py:788–838`, `.claude/settings.json:48–59`), RED=casos de PRONTO, execução [nao verificado], quem-mais-le=Stop, ESTADO e SessionStart compact/clear (`bin/hook_stop_fila1.py:1018–1047`, `bin/gerar_estado.py:279–284`, `.claude/settings.json:34–59`), juizes novos=1 porta de decisão do auto-clear, proposta com as quatro provas e reaproveitamento dos leitores, padrao=n/a (instrumento). (`CLAUDE.md:17–29`, `CLAUDE.md:62–66`, `app/docs/PISTA.md:170–175`.)
+
+## PERGUNTAS-DA-FICHA
+
+1. Ronald aprova tratar este desenho como retomada da **O133**, usando o keepalive como vigia único, e preservar o `PAREI: ! CLEAR | espera Ronald` do C1 como pedido manual? A O133 propunha timer próprio e o C1 vigente pede Ronald explicitamente. (`app/docs/BACKLOG.md:1509`, `bin/hook_stop_fila1.py:1122–1129`, `bin/hook_stop_fila1.py:1157–1162`.)
+2. Ronald autoriza a prova isolada com Remote Control conectado e auto mode, e a habilitação apenas na configuração que provar o ciclo e as guardas? Se a recusa registrada se repetir ou a prontidão seguir sem prova, manter a operação manual. (`app/docs/BACKLOG.md:1687`, `app/docs/PROMPTS.md:389–396`, `fichas_pacote_consumo_2111_1440.txt:2`.)
+
+---
+
+**PAREI RASCUNHO AUTO-CLEAR-NO-MARCO: leve ao chat** | SHA-256 do rascunho acima, com quebra de linha final: `cc5146e734a908e1058bcc4ea53aafbb78c5287525c8bed552133cf682d187f2`. Entregue nesta resposta em modo só leitura. (`fichas_pacote_consumo_2111_1440.txt:1`, `app/docs/BACKLOG.md:2080`.)
+
+## 21/11 14:41 · sessao 11194ffa1513 · FICHAS-PACOTE-CONSUMO-f3 · leitura · origem=Code
+
+# RASCUNHO MODELO-DO-SUBAGENTE
+
+## MEDIDA
+
+**1 chamada fora da rota padrão demonstrável. O total de infrações à regra fica [nao verificado].** “Run admin-list sonda (sonnet)” pediu Sonnet e resolveu em Sonnet. Para sonda, a rota padrão é Codex. A tabela não traz o rc, o tipo de sonda ou o motivo no DESPACHO para julgar uma exceção. (agentes_modelo.txt:37, CLAUDE.md:357–362)
+
+| Papel que a descrição permite ler | Chamadas | O que o dado sustenta |
+|---|---:|---|
+| Construção/cura e verificação final | 35 | 23 descrições de construção/cura e 12 de verificação final. Opus efetivo em 27, das quais 15 de construção/cura e 12 de verificação. As outras 8 são de construção/cura e ficaram sem modelo efetivo. Para julgar conformidade, o modelo da sessão em cada abertura e o enquadramento de cada cura como negócio ficam [nao verificado]. (agentes_modelo.txt:6–44, CLAUDE.md:316–319, CLAUDE.md:357–363) |
+| Sonda | 1 | Sonnet efetivo, fora da rota padrão, com exceção [nao verificado]. (agentes_modelo.txt:37, CLAUDE.md:359–362) |
+| Extração pontual de campos de log | 1 | “Extract subagent models from logs” descreve extração textual. Haiku efetivo é compatível com o escopo de contar/grep. (agentes_modelo.txt:45, CLAUDE.md:359–360) |
+| Papel indeterminado | 3 | “CODEX-MODELO medida M1/M2” (Haiku), “Mapa das falhas do construtor” (Sonnet) e “WRAPPER-N-VAGAS volta 2” (Opus). A descrição não resolve fonte, tarefa ou papel aplicável [nao verificado]. (agentes_modelo.txt:30, agentes_modelo.txt:40–41) |
+
+São **40 chamadas em 6 transcrições**, com 28 Opus, 2 Sonnet, 2 Haiku e 8 sem modelo efetivo achado pelo cruzamento fornecido. Só entre os **27 general-purpose**, incluindo tipo vazio, são **16 Opus, 2 Sonnet, 2 Haiku e 7 sem modelo efetivo**. Dos general-purpose, 20 pediram Opus, 2 pediram Sonnet e 2 pediram Haiku. As 3 aberturas sem model explícito chegaram a Opus. Os 13% de /usage são o motivo da ficha. Economia de tokens e cobertura fora dessas transcrições [nao verificado]. (agentes_modelo.txt:1–2, agentes_modelo.txt:6–65, fichas_pacote_consumo_2111_1440.txt:4)
+
+## DESENHO
+
+**Abertura hoje.** O único frontmatter de agente na cópia é o de verificador, com model: inherit. Ele declara herança. Na amostra, 11 verificadores sem model explícito resolveram em Opus. A sessão conseguiu abri-los sem repetir o campo. O efeito de pedir outro modelo ao verificador e o default de general-purpose fora da amostra ficam [nao verificado]. O settings da cópia registra o disjuntor com matcher vazio em PreToolUse, sem configuração de modelo por papel. (.claude/agents/verificador.md:1–6, .claude/settings.json:62–76, agentes_modelo.txt:6–55)
+
+**Guarda hoje.** O disjuntor lê o JSON do hook e usa tool_input.subagent_type e prompt para B3, censo do construtor e B4. O caminho de Agent não consulta tool_input.model. Há uma saída explícita de recusa por permissionDecision: deny. Essa porta permite desenhar a recusa de modelo ausente quando exigido ou incompatível com papel conhecido. A presença dos campos, a resolução do model omitido e a cobertura do hook no harness em uso ficam [nao verificado]. A cópia registra caso anterior em que abrir em app/ deixou o PreToolUse da raiz inerte. (bin/disjuntor.py:1796–1798, bin/disjuntor.py:1864–1898, bin/disjuntor.py:1912–1933, app/docs/RELATO.md:4686)
+
+**Contador hoje.** O ESTADO já exibe o agregado de agentes Claude em 24 h por modelo/tipo. _agentes_24h usa mtime do meta.json, agentType e params.model do primeiro api-request. O agregado não cruza papel, modelo da sessão ou motivo. A trilha do PreToolUse cobre recusas e eventos específicos de censo. O valor do novo contador neste HEAD fica [nao verificado]. (bin/disjuntor.py:1827–1834, bin/disjuntor.py:1926–1932, bin/disjuntor.py:2236–2271, bin/gerar_estado.py:285–291)
+
+**Construção proposta.** A sessão declara na abertura o item do DESPACHO, o papel e a referência ao motivo de exceção, quando aplicável. Explicita Sonnet para leitura de log e Haiku para extração ou contagem textual. No verificador, aceita a herança declarada e confere o efetivo. Para construtor de negócio, compara com o modelo da sessão na abertura, sem fixar Opus como constante. Leitura de código e sonda seguem ao wrapper do Codex, com as exceções da regra. Identificação estável do item no payload e prova de herança antes da execução [nao verificado]. (CLAUDE.md:316–319, CLAUDE.md:344–347, CLAUDE.md:357–363, .claude/agents/verificador.md:5, bin/codex_pergunta.sh:81–84)
+
+**Fonte e universo propostos.** A sessão Claude escreve as transcrições. O leitor privado casa a chamada e seu resultado por ID para ler resolvedModel e confere message.model do subagente, à maneira do anexo. O hook é o único escritor da trilha de abertura em logs/sessao/, com IDs, instante, papel, modelo pedido ou herdado, referência de exceção e decisão. Um avaliador cruza as fontes. O ESTADO publica só o agregado, em janela móvel de 24 h pelo instante de abertura, um registro por sessão e ID de chamada, incluindo general-purpose vazio, verificador e customizados, nas origens do projeto autorizadas. Chamadas recusadas, exceções autorizadas e casos sem prova aparecem com números próprios. Fonte ausente, chamada sem junção ou cobertura incompleta deixa o zero sem certificação. A coleta de Agent/Task por todas as origens e a chave comum no hook em execução ficam [nao verificado]. (agentes_modelo.txt:1–2, agentes_modelo.txt:65, bin/disjuntor.py:123–126, bin/disjuntor.py:1926–1932, bin/gerar_estado.py:285–291, CLAUDE.md:32–36, CLAUDE.md:389–391)
+
+## RISCO
+
+**ADOTA COM MUDANCAS.** Começar pela medição e habilitar a recusa após a prova de cobertura e o corte do dono. Exigir model de todo Agent atingiria os 11 verificadores sem argumento que resolveram em Opus. Tratar todo Sonnet como válido deixaria passar a sonda da amostra pela rota comum. Confiar só na trilha pode dar zero com o hook inerte em app/. Usar hora e descrição como chave também perderia uma das duas chamadas listadas às 04:38:58 com o mesmo texto. (agentes_modelo.txt:9–10, agentes_modelo.txt:13–34, agentes_modelo.txt:37, agentes_modelo.txt:47–56, app/docs/RELATO.md:4686, CLAUDE.md:35–36)
+
+## PROIBIDO
+
+Fabricar conformidade de description, tipo, alias pedido, ausência de resultado ou trilha vazia. Publicar prompt, transcript ou tool_result cru. Mudar settings/modelo global ou a regra dos papéis por este rascunho. (CLAUDE.md:32–36, CLAUDE.md:316–319, CLAUDE.md:357–363, bin/gerar_sessao.py:12–18, bin/relato.sh:114–118)
+
+## NAO MUDA
+
+Permanecem o DESPACHO e suas exceções, a verificação final e as travas atuais. Instrumento com pouso próprio, atrás da espinha e fora de F5, TRAVAS, N-VAGAS, FERIADO e AUDITORIA em voo. (CLAUDE.md:325–329, CLAUDE.md:357–363, CLAUDE.md:372–381, bin/disjuntor.py:1837–1898, fichas_pacote_consumo_2111_1440.txt:1)
+
+## PRONTO
+
+RED antes da cura e GREEN pelo caminho do hook e do ESTADO. O caso que morde abre sonda Sonnet sem exceção em fixture. Em medição, dá 1 desvio quando executada e conciliada. Com guarda ativa, dá 1 recusa e 0 abertura indevida. O controle com exceção comprovada passa e aparece na trilha. A leitura de log admite Sonnet explícito e recusa modelo obrigatório ausente ou trocado. O verificador herdado sem model passa com evidência de sessão e modelo efetivo iguais. Carga sem hook, trilha ilegível ou resultado ausente mostra cobertura ou classificação incompleta. Duas chamadas com a mesma hora e descrição e IDs distintos contam duas. Cobertura validada na raiz e em app/ antes de habilitar bloqueio. Resultados desses testes [nao verificado]. (CLAUDE.md:28–36, CLAUDE.md:357–362, bin/tests/test_disjuntor.sh:86–88, agentes_modelo.txt:9–10, agentes_modelo.txt:37, app/docs/RELATO.md:4686)
+
+## CONTRATO
+
+1. **Quem chama** — sessão Code no PreToolUse já registrado. O gerador do ESTADO lê o avaliador único do cruzamento. (.claude/settings.json:62–72, bin/gerar_estado.py:285–289)
+2. **Quem espera** — só a abertura recusada aguarda correção do despacho. A sessão segue os itens independentes e faz o polling em shell de fundo. (CLAUDE.md:269–275, CLAUDE.md:316–319)
+3. **Falha/limite** — sem dados de papel/modelo, registrar indeterminado. Na fase de recusa, negar o ramo coberto quando faltar prova obrigatória. Corpus ausente, ilegível ou junção incompleta deixa a medida indisponível ou parcial. (CLAUDE.md:32–36, bin/disjuntor.py:1933–1957, bin/gerar_estado.py:290–291)
+4. **Medida** — “agente fora do modelo do papel”, esperado 0 por 24 h verificadas, com total, recusas, exceções e indeterminados visíveis. (CLAUDE.md:35–36, CLAUDE.md:389–391, agentes_modelo.txt:65)
+5. **Quem desliga** — Ronald no terminal, por chave própria proposta para suspender só a recusa de modelo. A coleta mantém a indicação de recusa desligada. A chave atual do disjuntor permanece com seu escopo. (bin/disjuntor.py:126, bin/disjuntor.py:213–244, bin/disjuntor.py:1901–1925)
+
+LEI-AKITA: origem=abertura Agent no PreToolUse, testemunha=transcrição da sessão e do subagente cruzada com o DESPACHO, RED=sonda Sonnet sem exceção e verificador herdado como controle [nao verificado], quem-mais-le=PreToolUse e ESTADO, juizes novos=0 de negócio (avaliador de instrumento sujeito ao aval), padrao=n/a (instrumento). (CLAUDE.md:62–68, CLAUDE.md:357–362, bin/disjuntor.py:1796–1798, bin/gerar_estado.py:285–289, agentes_modelo.txt:65)
+
+## PERGUNTAS-DA-FICHA
+
+1. Aprovada a passagem de medição para recusa depois do PRONTO? No ramo coberto, a falta de papel, modelo obrigatório ou prova de exceção passa a recusar a abertura? (CLAUDE.md:316–319, CLAUDE.md:357–362, bin/disjuntor.py:1796–1798)
+2. Para cobrir raiz e app/, a operação fixa a abertura na raiz ou Ronald autoriza a instalação do mesmo hook nas duas origens? A configuração efetivamente carregada hoje fica [nao verificado]. (.claude/settings.json:62–72, app/docs/RELATO.md:4686)
+
+---
+
+**PAREI RASCUNHO MODELO-DO-SUBAGENTE: leve ao chat** — `sha256-12 6976f70e7135` do Markdown acima, do título à última pergunta, em UTF-8 sem quebra final. Entrega em chat, sem gravação no RELATO, conforme o escopo de só leitura. (fichas_pacote_consumo_2111_1440.txt:1)
 
 ## 21/11 14:33 · sessao 6d6411f4a2c6 · OPEN-REDIRECT-VOLTAR · leitura · origem=Code
 
@@ -616,185 +902,4 @@ Produção fora dos cinco símbolos, cura de produção sem RED pareado que mord
 
 [truncado em 20000 de 21793 caracteres]
 
-## 21/11 13:10 · sessao a9caceda6bb8 · E4C-F5 · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — E4C-F5-QUATRO-SITIOS-2111-1310.** `PROCEDE` indica uma objeção que justifica devolver o item. A revisão foi somente leitura. A identidade Git da árvore, as execuções e a incidência em produção ficam [nao verificado]. Referências aos anexos usam a numeração de linhas do texto fornecido. `aval_2111_1310.txt:2`; `r.txt:1`.
-
-### Item 1 — Entrada dos quatro sítios
-
-1. **Premissas — NAO PROCEDE.** Os quatro nomes existem na cópia e correspondem aos quatro NOVO de produção da triagem, 1.1, 1.2, 3.3 e 4c.1. A classificação é da triagem. O par RED ainda é [nao verificado]. `app/chamados/juizes.py:345`; `app/chamados/services/materializacao.py:139`; `app/chamados/reconciliador.py:599`; `app/chamados/models.py:1579`; `r.txt:70`.
-2. **Colisão — PROCEDE.** A exceção nomeia apenas o veto do 1115. O 1945 §2 também proíbe tocar `.py` de produção e o §1 manda publicar PAREI quando houver sítio acusado. A exceção precisa alcançar expressamente esse veto para os mesmos quatro sítios. O limite do 1440 sobre a guarda de `validada_em` também precisa ser preservado no desenho dos leitores do instante. `aval_2111_1310.txt:3`; `respostas_2111_1115.txt:1`; `respostas_2011_1945.txt:2–3`; `app/docs/RELATO.md:148`; `CLAUDE.md:37–38`.
-3. **Literal — PROCEDE.** A cura descrita para 4c.1 inclui `_universo_da_ressuscitacao`, função separada que também atende leitores. O item nomeia apenas `ressuscitar_perguntas`. Falta demonstrar um desenho contido nesse método ou autorizar o segundo sítio. `r.txt:34`; `app/chamados/models.py:1513–1527`; `app/chamados/models.py:1613`; `aval_2111_1310.txt:3,9`.
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** O item autoriza curas de código. A seleção da irmã pode alterar quem chega à materialização, cuja porta consulta a competência entregue antes de escrever. O efeito das curas futuras fica [nao verificado]. `aval_2111_1310.txt:3`; `app/chamados/services/materializacao.py:1732–1744,1866–1870`; `CLAUDE.md:265–268,411–417`.
-
-### Item 2 — RED e matriz antes do código
-
-1. **Premissas — NAO PROCEDE.** Há sítios e mecanismos concretos para os quatro pares. Os hashes do par por sítio, as saídas e as matrizes publicadas ficam [nao verificado]. `r.txt:1,9,10,28,34`; `aval_2111_1310.txt:4`. [nao verificado]
-2. **Colisão — PROCEDE.** A linha LEI-AKITA põe o par RED no campo `testemunha`, reservado à autoridade lida, e põe a matriz em `quem-mais-le` sem exigir o censo de leitores. O RED pareado cabe no campo `RED`. `aval_2111_1310.txt:4,10`; `CLAUDE.md:20–22,28–29,62–68`.
-3. **Literal — PROCEDE.** Faltou destino para ambos verdes, main vermelho com cópia verde, ambos vermelhos em asserções diferentes e rodada inconclusiva. Esses resultados deixam a classificação pendente. `aval_2111_1310.txt:4`; `CLAUDE.md:28–29,37–38`. [nao verificado]
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** O par RED e a matriz cabem em árvore e ambiente de teste. O literal pede prova antes da cura. `aval_2111_1310.txt:4`; `CLAUDE.md:95–104,193,205`. [nao verificado]
-
-### Item 3 — Construtor e vagas
-
-1. **Premissas — PROCEDE.** O wrapper veda `models.py` e `app/core/juizes.py`. O juiz nomeado nesta obra está em `app/chamados/juizes.py`. Escolher Opus para os quatro sítios é compatível com o despacho por papel, mas a vedação ao juiz de `chamados` atribuída à L-126 e ao wrapper não confere. `bin/codex_pergunta.sh:121–135`; `app/docs/LEIS.md:147`; `app/chamados/juizes.py:345`; `CLAUDE.md:357–363`.
-2. **Colisão — NAO PROCEDE.** O item substitui expressamente o §2 do 1245, incluindo a abertura conjunta e a exceção para seções distintas de `CLAUDE.md`. O 1230-B ainda exige conferência de arquivos antes do paralelo, veda N vagas junto da V2 e mantém a validade da vaga temporária. A prioridade e a escolha de Opus para a vaga 1 são compatíveis com a L-126. `aval_2111_1310.txt:5`; `respostas_2111_1245.txt:1`; `vaga_opus_2_temporaria_2111_1230.txt:4`; `app/docs/LEIS.md:147`; `CLAUDE.md:288–294,309–311`.
-3. **Literal — PROCEDE.** “Primeira vaga livre” é insuficiente para abrir N vagas. Também são necessários elegibilidade da vaga, arquivos publicados, ausência de sobreposição e DESPACHO com carga. O BACKLOG registra TRAVAS e o RELATO identifica sua cópia M2–M5. A ficha nominal de `WRAPPER-N-VAGAS`, o cruzamento de arquivos e as vagas efetivamente livres ficam [nao verificado]. `aval_2111_1310.txt:5`; `vaga_opus_2_temporaria_2111_1230.txt:4–5`; `app/docs/BACKLOG.md:1908`; `app/docs/RELATO.md:296`; `CLAUDE.md:309–311`.
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** A alocação de construtor não concede autorização de apply nem altera o §1 do 1245 sobre FERIADO. `aval_2111_1310.txt:5,9`; `respostas_2111_1245.txt:1`; `CLAUDE.md:265–268,404–417`.
-
-### Item 4 — Onze novos de teste, registro ou evidência [nao verificado]
-
-1. **Premissas — NAO PROCEDE.** São 11, descontados os quatro sítios de produção dos 15 NOVO. `r.txt:35,37–39,48–49,55,58–59,61,63,66,70`.
-2. **Colisão — PROCEDE.** A triagem aponta autorização nominal pendente para 6.2 e 6.3. O 1115 autoriza intervenções específicas em testes e registros, e o BACKLOG registra uma exceção de dublê com escopo próprio. “Seguem pelo aval vigente” não resolve essas duas lacunas. `aval_2111_1310.txt:6`; `r.txt:38–39`; `respostas_2111_1115.txt:1`; `app/docs/BACKLOG.md:2055`; `CLAUDE.md:37–38`.
-3. **Literal — PROCEDE.** O RED de conformidade de 4e.1 pode ser preparado antes, mas seu fechamento depende das curas de 1.1 e 1.2. A triagem coloca a cobertura dessas fronteiras após as curas. `r.txt:35`; `aval_2111_1310.txt:3–6`.
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** Os destinos listados são testes, documentação e comprovantes. O registro de cron é documental e o registro do motivo do lote deixa a cura de produção em obra própria. `r.txt:58,62–63,71–72`; `respostas_2111_1115.txt:1`. [nao verificado]
-
-### Item 5 — Anexo dos preexistentes e dos fora de escopo
-
-1. **Premissas — NAO PROCEDE.** A triagem soma 11 preexistentes e 10 fora. As remissões são contadas uma vez. `r.txt:41,66`.
-2. **Colisão — PROCEDE.** O CODEX 5b exige resposta e linha de triagem com motivo no anexo ao Opus. Se “valem por ele” dispensa esse anexo, a cláusula conflita com a regra. Os executáveis exigidos pelo 1945 também continuam sujeitos à prova no hash final antes do Opus. `aval_2111_1310.txt:7`; `CLAUDE.md:372–378`; `respostas_2011_1945.txt:4`.
-3. **Literal — PROCEDE.** O texto cita `PORTAO-DE-NAO-REGRESSAO-2111-1310` sem fornecer o gatilho, a prova de ativação ou o efeito sobre o anexo. Essas condições ficam [nao verificado]. `aval_2111_1310.txt:7`.
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** Anexar a triagem é ato documental, inclusive para os achados sobre exportada. As ações do portão referido ficam [nao verificado]. `aval_2111_1310.txt:7`; `r.txt:56`; `CLAUDE.md:411–417`.
-
-### Item 6 — PRONTO, suite, verificador e Opus final [nao verificado]
-
-1. **Premissas — NAO PROCEDE.** A sequência é futura. O topo do RELATO registra execuções em árvores anteriores. Suite verde, mutantes e PRONTO na árvore que receberia as curas ficam [nao verificado]. `aval_2111_1310.txt:8`; `app/docs/RELATO.md:2–3,12`; `r.txt:59`.
-2. **Colisão — PROCEDE.** O item lista a suite antes do PRONTO item a item. O 1115 exige publicar a linha do PRONTO antes da suite e levar o PRONTO ao verificador. O 1945 exige todos os reexecutáveis no hash final antes do Opus, com PAREI para o que não fechar. `aval_2111_1310.txt:8`; `respostas_2111_1115.txt:1`; `respostas_2011_1945.txt:4`; `CLAUDE.md:372–381`. [nao verificado]
-3. **Literal — PROCEDE.** “Hash novo” e “hash final” precisam identificar a mesma árvore certificada, com suite inteira verde. Um mutante por sítio curado se soma aos cinco D, ao 32 e à reconciliação da bateria já exigida. `aval_2111_1310.txt:8`; `CLAUDE.md:320–324,377–378`; `respostas_2111_1115.txt:1`; `r.txt:55`. [nao verificado]
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** Suite, bateria e certificação são etapas de prova em cópia. A regra de exportada continua aplicável ao pouso. `aval_2111_1310.txt:8`; `CLAUDE.md:95–104,325–329,411–417`. [nao verificado]
-
-### PROIBIDO
-
-1. **Premissas — NAO PROCEDE.** A lista de quatro sítios é identificável e a matriz prévia está prevista no item 2. A situação atual das suites em voo fica [nao verificado]. `r.txt:70`; `aval_2111_1310.txt:4,9`; `app/docs/RELATO.md:2–3`.
-2. **Colisão — NAO PROCEDE.** Lida cumulativamente, a cláusula preserva as vedações do 1115 a `expectedFailure` e a relaxar asserts, e a do 1945 a contador novo. As reservas de FERIADO, TRAVAS e suites em voo são compatíveis com os anexos. `aval_2111_1310.txt:9`; `respostas_2111_1115.txt:1`; `respostas_2011_1945.txt:3`; `vaga_opus_2_temporaria_2111_1230.txt:4`.
-3. **Literal — PROCEDE.** O teto de quatro sítios deixa de fora o auxiliar explicitamente incluído na cura proposta de 4c.1. “Cura sem a matriz publicada” também precisa dizer se a condição vale só para os quatro sítios de produção, pois o item 4 manda seguir com teste, registro e evidência. `aval_2111_1310.txt:4,6,9`; `r.txt:34`; `app/chamados/models.py:1527,1613`.
-4. **Exportada, dinheiro ou `!` — NAO PROCEDE.** A cláusula impõe limites de escopo. Qualquer escrita no gravado de exportada continua a exigir `!` próprio e a porta prevista. `aval_2111_1310.txt:9`; `CLAUDE.md:265–268,411–417`.
-
-ITEM 1: PROCEDE  
-ITEM 2: PROCEDE  
-ITEM 3: PROCEDE  
-ITEM 4: PROCEDE  
-ITEM 5: PROCEDE  
-ITEM 6: PROCEDE  
-ITEM PROIBIDO: PROCEDE  
-PROCEDE=7 NAO_PROCEDE=0
-
-## 21/11 13:08 · sessao f5b6e3e70f00 · PORTAO-DE-NAO-REGRESSAO · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — PORTAO-DE-NAO-REGRESSAO-2111-1310.** As perguntas 2 e 3 têm pendências que impedem a ativação. `aval_2111_1310.txt:2,8` (anexo).
-
-### 1. As premissas conferem? **NAO PROCEDE**
-
-O CODEX 5(e) inclui leitores e escritores fora do diff. O 5(c) exige suite inteira verde antes do opus final. A referência ao precedente agora usa a identidade `BUG-PAR-103-MUTANTES-MAIN`, presente no anexo. O RELATO confirma que `command_txt` e `f5_sem_dia_calado` sobreviveram nas duas árvores. O caso registrado de falha na mesma asserção é o das duas ausências rejeitadas. A localização da entrada nominal no BACKLOG da cópia, os logs brutos, o corte das 12:48 e o aval 1115 ficam [nao verificado]. `aval_2111_1310.txt:1,6–7`, `backlog_bugpar103.txt:1` (anexos), `CLAUDE.md:372–381`, `app/docs/RELATO.md:62,70`, `app/docs/BACKLOG.md:2069–2070`.
-
-### 2. Colide com aval, lei ou regra vigente? **PROCEDE**
-
-- **B3.** O item 5(a) preserva a decisão do opus e o efeito da sua reprovação. O B3 também para a obra na terceira volta Codex triada `procedente`, antes do opus. A tabela nova classifica por achado, mas o disjuntor recebe um veredito binário por volta. O literal deixa aberta a triagem de uma volta com só passivo dispensável ou com passivo e outro bloqueio. `aval_2111_1310.txt:6–7` (anexo), `CLAUDE.md:375–378`, `app/docs/PISTA.md:120–127`, `bin/disjuntor.py:138–141,873–878,959–961,1001–1018`.
-- **Cura obrigatória sob veto.** O item 5(b) manda curar na obra o `PREEXISTENTE` em sítio tocado. O 5(c) prevê `PAREI LISTA` para `NOVO` e `PIORA` que exijam mudar produção fora do escopo. Falta o destino do `PREEXISTENTE` em sítio tocado cuja cura também exija `.py` de produção vedado pelo aval 1945. O veto e a parada por escopo literal continuam valendo. `aval_2111_1310.txt:7` (anexo), `CLAUDE.md:30–31,37–38`, `app/docs/RELATO.md:64`.
-- **Ativação.** O item 4 antecipa o contrato para antes da primeira conferência manual. A regra vigente exige contrato no RELATO e revisão pelo Codex antes da regra de pista. O item 6 permite anunciar a ativação sem exigir esse contrato nem o registro da lei em formato ADR no LEIS. O CORTES é gerado e já prevê registrar o recebimento do aval no mesmo turno. `aval_2111_1310.txt:6,8` (anexo), `CLAUDE.md:394`, `app/docs/PISTA.md:169–176`, `app/docs/LEIS.md:143`, `app/docs/CORTES.md:3–7`.
-
-### 3. Alguma condição fica aberta no literal? **PROCEDE**
-
-**Quatro mudanças da análise**
-
-1. **Alcance — resolvida.** O item 1 preserva PRONTO, escopo literal, pré-requisitos, suite inteira no hash, regras sensíveis e decisão do opus. `aval_2111_1310.txt:3` (anexo), `CLAUDE.md:375–381`, `app/docs/RELATO.md:64,1390`.
-2. **Tabela — parcial.** Agora cobre piora com o mesmo total, exige efeito preservado e bloqueia prova incomparável. Falta exigir evidência pelos caminhos alterados e definir o resultado esperado por tipo de prova. O próprio precedente tem teste verde sob mutação nas duas árvores, enquanto a definição pede mesma asserção e encaminha os dois verdes diante de achado procedente para `INCONCLUSIVO`. O item 3 manda mutar o alvo real, mas deixa sem classificação explícita o mutante que comprovadamente sobrevive nos dois lados. `aval_2111_1310.txt:4–6` (anexo), `app/docs/RELATO.md:9,62,70`.
-3. **Protocolo — parcial.** Fixa os dois hashes, o oráculo comum, a porta real, a comparação por chave e a repetição quando muda a árvore ou o instrumento. Faltam controles e ambiente registrados, incluindo foto, relógio e intercalação quando determinam a transição. `aval_2111_1310.txt:5` (anexo), `app/docs/RELATO.md:10,62,90`.
-4. **Auditoria — parcial.** A tabela nominal, a identidade do precedente e a fonte dos contadores estão escritas. Para a conferência manual, o texto exige publicar uma linha, mas deixa em aberto se ela precisa apontar para a reconciliação completa e para a obra efetivamente aberta por achado dispensado. `aval_2111_1310.txt:6–7,9` (anexo), `CLAUDE.md:394`.
-
-**Três PROCEDE da revisão anterior.** O de **premissas** foi sanado pela referência nominal. O de **colisão** foi parcialmente sanado pela prevalência do opus, pela distinção entre sítio tocado e só no escopo e pelo contrato antes da conferência manual. Permanecem as lacunas da pergunta 2. O de **literal** foi parcialmente sanado pela mesma asserção, pelos hashes fixados, pela classe inconclusiva, pela comparação por chave, pela fonte dos contadores e pelo gatilho único de ativação. O item 7 ainda deixa `N vagas` sem valor ou referência. `aval_2111_1310.txt:4–9` (anexo), `app/docs/BACKLOG.md:2069–2070`, `bin/disjuntor.py:1001–1018`, `CLAUDE.md:394`.
-
-### 4. Toca exportada, dinheiro ou `!` fora do declarado? **NAO PROCEDE**
-
-O item 1 preserva as condições próprias. O gravado da exportada continua sujeito a `!` e à porta de regeneração. O caso registrado na F5 foi uma sonda em sombra com rollback, `FechamentoMensal` intacto e obra própria de leitura. Efeito em produção além do recorte fornecido [nao verificado]. `aval_2111_1310.txt:3,7` (anexo), `CLAUDE.md:265–268,401–417`, `app/docs/LEIS.md:125`, `app/docs/RELATO.md:66`, `app/docs/BACKLOG.md:2060`.
-
-PROCEDE=2 NAO_PROCEDE=2
-
-## 21/11 12:54 · sessao d134f2f574ed · PORTAO-DE-NAO-REGRESSAO · leitura · origem=Code
-
-## (a) A regra pode deixar pousar defeito introduzido pela obra?
-
-**JUÍZO. Sim.** Um RED nas duas árvores prova que o cenário observado falha nas duas. Para liberar o pouso, ainda é preciso demonstrar que o diff preserva a causa, os caminhos atingidos e o efeito da falha. O item 3 salta dessa primeira prova para `PREEXISTENTE` e só reconhece `PIORA` quando cresce o universo medido. O escopo vigente já alcança leitores e escritores fora do diff. `aval_2111_1255.txt:4` (anexo), `CLAUDE.md:375–381`. [nao verificado]
-
-**FATO sobre as fontes.** A cópia local e os laudos têm linhas de revisões diferentes. Identifico como `003abf` as referências que vêm do laudo dessa revisão. A entrada `BUG-PAR-103-MUTANTES-MAIN` veio no anexo. Na cópia disponível, `BACKLOG.md:2069` e `:2070` apontam para `E4C-F8` e `DST-L2-JZ1-C6`. O precedente tem registro local no RELATO. SHA autenticado, banco, logs integrais e reprodução independente [nao verificado]. `app/docs/BACKLOG.md:2069–2070`, `app/docs/RELATO.md:62`.
-
-| FATO lido | JUÍZO sobre o que poderia escapar |
-|---|---|
-| No caminho do par, a seleção da irmã já usava a face SQL da coluna. Em `003abf`, o laudo aponta que a metade principal passou a ser julgada pela composta, enquanto a irmã continuou sujeita ao filtro SQL. `app/chamados/services/materializacao.py:139–150,189–203`, `app/chamados/juizes.py:1575–1580`, anexo `r.txt` §7, `app/docs/LEIS.md:151`. | Um RED da seleção antiga pode falhar nos dois lados e ocultar a **incoerência nova no par**. Com ato vigente, texto corrente e coluna de instante nula, a composta aceita uma metade nesse estado e o seletor exclui a irmã nesse mesmo estado. Um PK eliminado no SQL fica fora da leitura posterior. Mesmos sítios e linhas. |
-| A F5 passou a decidir pelo ato em guardas que antes liam a coluna. O RELATO registra o K47 vermelho e três caminhos de corrida já existentes que podem produzir divergência. A sonda contou **A=0 e B=0 em 51.953** na sombra e reconstruiu as guardas pelo prefixo de leitura. `app/docs/RELATO.md:752,786`. | A origem antiga do dado divergente pode encobrir uma **consequência nova**. No cenário A descrito, a porta diz “já validada” enquanto a fila exclui a pergunta pela coluna nula. Um censo em repouso pode dar zero nos dois lados e omitir essa transição. Ocorrência em produção [nao verificado]. `app/docs/RELATO.md:752`. |
-| Em `003abf`, o laudo registra leitura anterior à trava no fecho e na absolvição. A cópia local já mostra a posição da trava. Segundo o laudo, o diff elimina uma carga no fecho e estende aos atos o prefetch anterior à trava na absolvição. `app/chamados/models.py:2048–2074`, `app/chamados/reconciliador.py:630–645`, anexo `r.txt` §3 (`003abf`, `models.py:2071–2126`, `reconciliador.py:696–724`). | Um RED genérico de “instância velha” pode reproduzir nos dois lados e deixar passar **outra decisão sobre a mesma pergunta**, após a mesma escrita concorrente. A contagem pode ficar igual. Os dois efeitos precisam de comparação pelo ponto de interposição e pelo resultado da porta. Mesmos sítios e linhas. |
-| Em **19/11**, o opus reprovou a F5 pelo escopo literal de três voltas, embora o merge apresentado tivesse suite verde. Em **21/11**, o `opus.r` de `b0935` bloqueou pela falta da bateria inteira no hash final e pelo PRONTO aberto. Em `003abf`, o verificador ainda cobrou a reconciliação nominal **163 → 124**. `app/docs/RELATO.md:1390,62–64,92–94`, anexos `opus.r` §§1–2 e `r.txt` §10. | Comparar essas pendências com o main pode dar o mesmo vermelho por construção. O objeto da prova é a entrega prometida **pela obra**, no hash que ela quer pousar. Se o ratchet alcançar essa classe, transforma falta de entrega ou de certificação em passivo. `CLAUDE.md:372–381`, `app/docs/LEIS.md:62`. |
-
-## (b) Quando a prova mecânica classifica errado?
-
-| Caso | FATO lido | JUÍZO |
-|---|---|---|
-| **Teste ausente ou incompatível no main** | `JUIZ-DO-PAR-GRUPO-1` foi reprovada com RED rodado contra a raia após `ImportError` no main. Na volta B da F5, o RELATO distingue erros de montagem e de importação de falhas de asserção. `app/docs/RELATO.md:5866,1296`. | Importação, descoberta, fixture ou migração podem falhar antes do oráculo. Contar dois códigos de saída vermelhos dá falso `PREEXISTENTE`. Contar a impossibilidade de rodar como `NOVO` pode atribuir à obra um defeito antigo. O resultado probatório é **inconclusivo e bloqueante** até haver um cenário comum. `aval_2111_1255.txt:4` (anexo). |
-| **Efeito entre sítios** | O lote da cópia carrega os itens antes do laço, e validar uma metade pode carimbar a irmã. Em `003abf`, o laudo aponta que a próxima iteração usa também os atos prefetched antes da escrita. `app/chamados/services/validacao.py:632–644,1056–1085`, anexo `r.txt` §3 (`003abf`, `validacao.py:648–659,1074–1104`). | Dois REDs isolados podem reproduzir o passivo e perder o efeito da composição. A testemunha é o lote com as duas metades, a escrita pela porta real e a decisão do próximo item, comparando estado persistido, retorno e motivo. Mesmos sítios e linhas. |
-| **Dado ou relógio** | O laudo de `003abf` aponta um relógio na simulação de ressuscitação antes da trava e outro na escrita depois dela. A cópia confirma a captura da escrita sob a trava. O RELATO registra ainda o A/B zero na sombra com corridas possíveis no código. Anexo `r.txt` §4c (`003abf`, `models.py:1558,1591–1595,1632,1651,1702–1718`), `app/chamados/models.py:1627–1636,1682–1695`, `app/docs/RELATO.md:752`. | Uma sonda pode chamar a função real e perder justamente o ato entre os dois instantes. A prova precisa fixar a foto e o relógio de cada lado e exercitar a borda e a intercalação. Frequência futura [nao verificado]. Mesmos sítios e linhas. |
-| **Selo, AST ou contrato** | A renomeação de devolução ficou verde pelo seletor e vermelha pela mutação da fonte. O teste lia a classe importada. Em `fbad5075`, apagar a costura do comando passava porque a fixture usava o mesmo dia nos dois universos. `app/docs/RELATO.md:9,14,17,5272`. | O resultado depende de **qual artefato muda e qual o teste realmente lê**. Para forma, a prova deve rodar a regra estática comum nas duas árvores, identificar símbolo e cláusula e demonstrar mordida no alvo real. Para obrigação de entrega, a prova é o manifesto exigido para o hash. `CLAUDE.md:372–378`, `app/docs/RELATO.md:64`. |
-| **Flakiness** | O pre-opus de `9e90d` registrou um teste de folga afetado pela data real. A cópia contém a cura com `HOJE` congelado. Isso documenta sensibilidade ao calendário. Taxa de intermitência [nao verificado]. `app/docs/RELATO.md:5,10`, `app/escala/tests/test_folga_segue_a_pessoa.py:8–12`. | Um par de execuções pode produzir tanto falso `NOVO` como falso `PREEXISTENTE`. Fixar ambiente, hora e seed, controlar ordem e intercalação quando relevantes e registrar todas as tentativas permite identificar resultado instável. Instabilidade relevante deixa a prova inconclusiva. `aval_2111_1255.txt:4` (anexo), `app/core/tests/test_selo_teste_sem_relogio.py:24–44,66–74`. |
-
-**FATO sobre o precedente.** `command_txt` e `f5_sem_dia_calado` são **mutantes que sobreviveram** nas duas árvores, com controle verde, segundo o RELATO. É evidência pareada de uma lacuna de teste já presente na base citada. Um `OK` sob mutação tem significado diferente de um RED de comportamento e precisa de regra de interpretação própria. `app/docs/RELATO.md:62`, `app/chamados/tests/bug_par_mutantes.py:78–80,132–134`.
-
-## (c) Como a sessão poderia abusar, e qual guarda fecha cada abuso?
-
-As linhas abaixo são **JUÍZO** sobre a regra, com precedentes lidos. Uso efetivo desses abusos sob este aval [nao verificado].
-
-| Abuso possível | Guarda mecânica proposta |
-|---|---|
-| **Rotular pela classe ou pela idade do sítio.** Usar “cache velho” ou “face SQL antiga” para absorver uma consequência introduzida em outro leitor. | Dar a cada achado uma identidade com invariante, caminho real, gatilho, efeito e população. Cruzar a identidade com o diff e o mapa de leitores e escritores. Exigir evidência para cada caminho alterado e anexar todos os achados ao opus, incluindo os descartes. `CLAUDE.md:367–380`, `app/docs/PISTA.md:120–132`, `app/docs/RELATO.md:790,793`. |
-| **Escolher o RED que convém.** Usar asserção ampla, dublê que copia a coluna, seletor que deixa intacto o alvo ou rodada de um hash anterior. | Fixar teste, fixture, oráculo, alvo e controle antes da rodada. Validar que ambos chegam à mesma asserção pelo caminho real. Registrar hashes, inventário, `Ran`, asserções, erros, skips e resultado do controle. Para selo, exigir uma mutação que atinja o alvo e falhe pelo motivo esperado. Mudança no teste ou no candidato invalida a prova correspondente. `app/docs/RELATO.md:9,17,62–64,5272`, anexo `r.txt` §§5–6. |
-| **Recortar o universo.** Começar pelo seletor em disputa, impor limite, omitir erros ou trocar afetados mantendo a mesma contagem. | Fixar antes da medição o universo elegível a montante do seletor. Comparar por chave estável os conjuntos, as transições e os efeitos, com denominadores, excluídos, erros e inconclusivos publicados. A entrada de um novo afetado ou um efeito mais grave pode ser `PIORA` com total igual ou menor. `CLAUDE.md:35–36`, `app/docs/RELATO.md:752,5264`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:73–82`. |
-| **Escolher a base ou preencher o destino só no papel.** Usar uma base que já contém a falha, atualizar a referência a partir da candidata ou preencher BACKLOG e ESTADO com prova incompleta. | Fixar o SHA do main de integração e repetir a comparação se a base mudar. Fazer o portão reconciliar o inventário do verificador e do opus com a prova e a linha única de BACKLOG por achado dispensado. Gerar os contadores dessa reconciliação. Exigir decisão explícita do opus sobre a dispensa. `aval_2111_1255.txt:5–8` (anexo), `CLAUDE.md:375–381`, `app/docs/RELATO.md:11026`. |
-
-## (d) Prática de mercado e armadilhas
-
-**Conhecimento geral, sem fonte externa verificável neste recorte.** As armadilhas abaixo são conhecidas em termos gerais. Documentação primária de ferramenta, versão e configuração [nao verificado].
-
-| Prática | Como opera e onde pode falhar |
-|---|---|
-| **Baseline de análise estática** | Registra alertas existentes por regra e identidade do achado e cobra os novos. Mudança de versão, regra, configuração, caminho ou impressão digital pode quebrar o pareamento. Suprimir por arquivo ou categoria pode esconder ocorrências novas. [nao verificado] |
-| **Ratchet de cobertura** | Fixa um piso global que só sobe ou cobra cobertura de linhas ou ramos modificados. Percentual agregado pode melhorar enquanto um ramo crítico perde cobertura. Linha executada pode ter uma asserção sem mordida. [nao verificado] |
-| **Gate de código novo** | Define a referência por ramo, versão ou período e cobra métricas no código considerado novo. A referência escolhida muda o conjunto avaliado. Uma mudança numa linha nova pode alterar um caminho inteiro em linhas antigas, fora da métrica de diff. [nao verificado] |
-
-**FATO no repo.** Há um ratchet local para testes com relógio solto. O selo rejeita novas entradas e cobra a retirada das curadas. Seu detector também retorna zero para o arquivo inteiro ao reconhecer um padrão de congelamento, o que limita a granularidade da prova. Há ainda um precedente de exceção de suite bem delimitada, que exigia exatamente dois testes nomeados, zero erros, log do main do mesmo dia e prazo expresso. `app/core/tests/test_selo_teste_sem_relogio.py:24–44,58–74`, `app/docs/CORTES.md:558`.
-
-## (e)
-
-RECOMENDACAO: ADOTA COM MUDANCAS
-
-**JUÍZO.** O precedente dos dois mutantes sustenta dispensar passivo demonstrado. O literal proposto deixaria dispensar regressões de composição, de alcance ou de efeito com o mesmo RED e a mesma contagem. A revisão do aval tem três pontos que procedem no texto disponível. A referência nominal do BACKLOG não confere nesta cópia, a dispensa precisa ser conciliada expressamente com a decisão do opus em 5(b), e o item 3 carece de resultado para provas incomparáveis. O item 5 preserva exportada, dinheiro e `!`. Colisão com outros avais da árvore viva [nao verificado]. `app/docs/RELATO.md:62,752`, `app/docs/BACKLOG.md:2069–2070`, `CLAUDE.md:375–381,401–417`, `aval_2111_1255.txt:3–6` (anexo).
-
-1. **Delimitar a dispensa a passivo demonstrado.** Manter PRONTO, escopo literal, pré-requisitos, suite inteira no hash, regras de dinheiro/exportada/`!` e decisão do opus como condições próprias de pouso. `CLAUDE.md:37–38,372–381,401–417`, `app/docs/RELATO.md:64,1390`.
-2. **Definir a tabela de resultados.** `NOVO` exige diferença atribuível ao diff. `PIORA` inclui novos afetados, caminhos, transições ou efeitos agravados. `PREEXISTENTE` exige a mesma violação com efeito preservado e evidência para os caminhos alterados. Prova ausente, instável, incompatível ou com ambos verdes diante de achado ainda procedente fica `INCONCLUSIVO` e bloqueia. `aval_2111_1255.txt:4` (anexo), `app/docs/RELATO.md:752,790,5866`.
-3. **Fixar o protocolo por tipo de achado.** Par de árvores autenticado, oráculo comum, controles e ambiente registrados. Usar teste de transição pela porta real para comportamento, comparação por chave na sonda e regra estática com mutação do alvo real para selos. Revalidar a evidência afetada quando mudar a base, a candidata ou o instrumento. `app/docs/RELATO.md:9,17,62–64`, `app/chamados/tests/test_f1nova_b1_juiz_respondida.py:73–82`.
-4. **Tornar a dispensa auditável antes do primeiro uso.** Reconciliar todo `BLOQUEIA` nominalmente com prova, destino, dono e decisão do opus. Corrigir o ponteiro do precedente pela identidade da entrada. Vincular os dois contadores do ESTADO a essa tabela e exigir a mesma evidência nominal durante a conferência manual. `aval_2111_1255.txt:5–8` (anexo), `CLAUDE.md:375–381,394`, `app/docs/BACKLOG.md:2069–2070`.
-
-Pelo passo 1 do próprio aval, esta recomendação implica **AVAL-DEVOLVIDO**. A F5 e as demais obras aguardam texto revisto e novo corte para usar o portão. `aval_2111_1255.txt:2,8` (anexo).
-
-## 21/11 12:53 · sessao 23f683508e5a · PORTAO-DE-NAO-REGRESSAO · verificador · origem=Code
-
-## 1. As premissas conferem? **PROCEDE**
-
-- O escopo do CODEX 5(e) confere. Inclui os sítios que o diff cria ou toca e os escritores e leitores dos campos e funções que ele lê ou muda, mesmo fora do diff. O item 5(c) exige suite inteira verde antes do opus final. [CLAUDE.md:372](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/CLAUDE.md:372)
-- `BACKLOG:2069` aponta para `E4C-F8`. O anexo raspado traz a entrada `BUG-PAR-103-MUTANTES-MAIN`, cuja localização na cópia fica [nao verificado]. O RELATO confirma o precedente de comparação, mas registra `Ran 1 OK` para os dois mutantes no main e ausência de mordida na F5. Isso documenta um teste que deixa passar o mutante nas duas árvores. O precedente de falha na mesma asserção é o dos dois casos de ausência rejeitada, encaminhados à E4D item 93. [app/docs/BACKLOG.md:2069](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/BACKLOG.md:2069) [app/docs/RELATO.md:62](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:62) [app/docs/RELATO.md:70](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:70)
-- A `vFINAL` registrada já teve triagem em procedentes e descartados sobre `aa3bdd88c`. A triagem em voo às 12:55, com as três classes e o par de provas por achado, fica [nao verificado]. [app/docs/RELATO.md:793](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:793)
-
-## 2. Colide com regra ou aval vigente? **PROCEDE**
-
-- A exceção de pouso muda o CODEX 5(b), o CODEX-TRIAGEM-INDEPENDENTE e a LEI-AKITA 6. Hoje, achado procedente volta para cura, bug provado no caminho se cura na obra e o opus decide se um descarte vai à fila ou bloqueia. O aval precisa delimitar a exceção e dizer como ela se aplica se o opus mantiver o bloqueio e o B3 disparar. [CLAUDE.md:30](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/CLAUDE.md:30) [CLAUDE.md:375](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/CLAUDE.md:375) [app/docs/PISTA.md:120](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/PISTA.md:120) [bin/disjuntor.py:11](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/bin/disjuntor.py:11)
-- Na F5, o aval de 20/11 às 19:45 mantém o `PRONTO` integral, veda tocar `.py` de produção no escopo autorizado e manda reexecutar as provas no hash final antes do opus. A ordem genérica de curar `NOVO` e `PIORA` na obra não resolve o destino de um achado que exija mudar produção. Em 19/11, o opus já reprovou a F5 por tentar pousar só a primeira das três voltas exigidas. [app/docs/RELATO.md:64](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:64) [app/docs/RELATO.md:1390](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:1390)
-- O contrato prévio de cinco linhas também vale para regra de pista. O passo (6) o vincula ao selo futuro, mas já manda aplicar a regra por conferência manual. [aval_2111_1255.txt:7, anexo] [CLAUDE.md:394](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/CLAUDE.md:394)
-
-## 3. Alguma condição fica aberta no literal? **PROCEDE**
-
-- «Falha nos dois» admite falhas por motivos diferentes. O caso já registrado da F5 exigiu a mesma asserção e tratou `ERROR` ou outra asserção como falha do instrumento. O passo (3) também deixa indefinidos os hashes de referência e o destino de uma sonda inconclusiva. Há exemplo na F5 em que três casos ficaram inconclusivos no main por falta de nomes presentes na cópia. [aval_2111_1255.txt:4, anexo] [app/docs/RELATO.md:84](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:84) [app/docs/RELATO.md:22](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:22)
-- «Universo maior» deixa passar uma troca de casos com o mesmo total ou um efeito mais grave nos mesmos casos. O passo (6) também deixa sem fonte os dois contadores e sem referência o `N vagas`. Os passos (1), (2) e (7) precisam de uma condição única de ativação que resolva o caso `ADOTA` com revisão `PROCEDE` e fixe quando o registro no CORTES passa a valer. [aval_2111_1255.txt:1–8, anexo] [CLAUDE.md:35](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/CLAUDE.md:35)
-
-## 4. Excede o declarado em exportada, dinheiro ou `!`? **NAO PROCEDE**
-
-O literal preserva essas autorizações. O caso da F5 com efeito em competência entregue foi registrado como sonda em sombra com rollback, com o `FechamentoMensal` intacto, e ganhou obra própria de leitura. Qualquer alteração do gravado em exportada segue exigindo `!` próprio. Efeito em produção além do dado fornecido fica [nao verificado]. [aval_2111_1255.txt:6, anexo] [app/docs/RELATO.md:66](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/RELATO.md:66) [app/docs/BACKLOG.md:2060](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/docs/BACKLOG.md:2060) [CLAUDE.md:411](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/CLAUDE.md:411)
-
-`PROCEDE=3 NAO_PROCEDE=1`
-
-_7674 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7678 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
