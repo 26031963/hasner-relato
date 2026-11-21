@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 07:13:39.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (118.1 MB). Acoes na janela: **542**.
+**Medido em 21/11/2026 07:19:09.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (118.1 MB). Acoes na janela: **538**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -548,7 +548,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:21:37 | Bash | Compare the main transaction block of the new probe with the original | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2; sed -n 628,662p $D/sonda_v2.py \| cut -c1-150; sed -n 383,398p logs/sombra/e4c_f5_6a1_entregue.py \| cut -c1-150` |
 | 19:21:32 | Bash | Inspect the probe's handling of missing names and any raw SQL it runs | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2; sed -n 120,175p $D/sonda_v2.py \| cut -c1-160; /bin/grep -n "cursor\\|execute(\\|RESTART\\|ALTER\\|TRUNCATE\\|setval" $D/sonda_v2.py logs/sombra/e4c_f5_6a1_entregue.py \| cut -c1-170` |
 | 19:21:28 | Bash | Extract the probe script from the Codex answer, compile it in memory and review its writes and guards | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2; cat $D/r.rc; wc -lc $D/r.txt; /bin/grep -n '^```' $D/r.txt; python3 -I - <<'EOF' D='/home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2' t=open(D+'/r.txt',encoding='utf-8').read().split('\n') i=[k for k,l in enumerate(t) if l.startswith('```')] cod='\n'.join(t[i[0]+1:i[1]])+'\n' open(D+'/sonda_v2.py','w',en ...` |
-| 19:14:14 | Bash | Publish the reading result and the inconclusive main run at the top of the RELATO, repoint the wait line, check the hook | `/usr/bin/sleep 3; P=$(pgrep -f "^bash logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2/lanca.sh" \| head -1); echo "pid=$P"; H=$(date '+%H:%M'); python3 -I - "$H" "$P" <<'EOF' import sys h,pid=sys.argv[1:]; p='app/docs/RELATO.md' L=open(p,encoding='utf-8').read().split('\n') assert L[0].startswith('ESPERANDO:') and L[1]=='' and L[2].startswith('E4C-F5 PONTO 6-A1') L[0]='ESPERANDO: lanca.s ...` |
-| 19:14:03 | Bash | Ask Codex for the two-tree version of the 6-A1 probe | `bash logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2/lanca.sh` |
-| 19:14:01 | Bash | Prepare a Codex request for a probe version that runs on both trees and reports the TXT delta by record type | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2 && mkdir -p $D && cp logs/sombra/e4c_f5_6a1_entregue.py $D/sonda_6a1.py.txt && tail -c 400 logs/f5_6a1_main.out > $D/erro_no_main.txt && git diff eb1e49c1e c8eb8eddf -- app/chamados/models.py \| /bin/grep -n "RECUSA_FORA_DO_FATO" \| head -5 && cat > $D/q.txt <<'EOF' MAPAS JA FEITOS CONSULTADOS: nenhum mapa cobre esta sonda; anexos = a son ...` |
-| 19:13:41 | Bash | Read the outcome of the main-tree probe run | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move; cat $D/roda_main.fim $D/arvore_main.txt; wc -c $D/seis_a1_main.porta; tail -c 1500 $D/seis_a1_main.porta; ls -la logs/f5_6a1_main.out 2>&1` |
