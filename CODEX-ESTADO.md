@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 18:56** · publicado em **21/11/2026 18:56** (UTC-3)
+> Ultima resposta processada: **21/11/2026 19:04** · publicado em **21/11/2026 19:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 19:04 · sessao 526ee686a7be · E4C-F5-CONSTROI · construtor · origem=Code
+
+**INCOMPLETO.** A cura está na cópia, sobre `701096390b70775db88f42c90ebaae9d048ec930`. O RED foi escrito antes da cura. As duas etapas estão disponíveis como diffs separados por arquivo. Criação de commits [nao verificado], conforme a proibição de `git commit`. Vermelho na base, verde na cura, execução dos mutantes e medição do selo [nao verificado]. Os quatro arquivos e as quatro variantes compilam em memória. `chamados/reconciliador.py:644–657` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:173–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:201–279` · `ponto/tests/test_selo_chokepoint_escrita.py:206–212,236–242`
+
+### Cura e campos
+
+O E2 traz colaborador e empresa no `SELECT` da pergunta, depois de adquirir a trava do colaborador. A consulta do C20 nasce nesse ponto e fica aberta até o C6 da porta de carimbo. O lote local fornece apenas o PK do usuário de sistema, já obtido para assinar o ato. O teste de corrida exige a tranca gravada depois da emissão, o veto do C20 sob a trava, o trio vazio e `n = 0`. O A2 exige a releitura do PK no mesmo `atomic` da trava, a exclusão da candidata validada e, no controle positivo, que a porta receba a própria instância relida. `chamados/reconciliador.py:627–662` · `chamados/juizes.py:1132–1171` · `chamados/models.py:3361–3405` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:181–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:209–266`
+
+| Campo | Fonte, escritor e significado | Instante e leitores |
+|---|---|---|
+| Empresa | `Colaborador.empresa_id` identifica a empresa vigente usada na competência. A transferência atribui a FK do posto e grava pela porta `salvar_inteiro`. `colaboradores/models.py:321` · `colaboradores/views.py:1406–1418` · `colaboradores/services/colaborador.py:152–161` | O E2 lê a FK e a empresa após a trava. C20, fechamento mensal e fila da competência usam essa ligação. `chamados/reconciliador.py:644–649` · `chamados/juizes.py:1029–1068` · `ponto/views.py:1030` · `chamados/services/competencia_trancada.py:99–121` |
+| Corte | `Empresa.dia_inicio_competencia` marca o primeiro dia da janela. O cadastro passa o valor às portas de criação e atualização. `colaboradores/models.py:46` · `colaboradores/views.py:515–518,538–557` · `colaboradores/services/estrutura.py:13–22` | C20 deriva a competência da empresa relida sob a trava. O cartório e a fila da competência usam o mesmo motor de janelas. `chamados/reconciliador.py:644–654` · `chamados/juizes.py:1067–1068` · `ponto/janelas.py:36–63` · `ponto/services/cartorio.py:292,312` · `chamados/services/competencia_trancada.py:99` |
+| `fechado_em` | A porta `trancar_periodo` cria a tranca ou atualiza o instante ao retrancar. O C20 usa esse instante como limite inferior para procurar toque humano. `ponto/models.py:936` · `ponto/services/fechamento.py:1400–1419` · `chamados/juizes.py:1073–1085` | K7 lê a linha após a trava do colaborador no E2. C6, C7 e a fila da competência também consomem a tranca e seus efeitos. `chamados/reconciliador.py:644–657` · `chamados/juizes.py:1406–1415` · `chamados/models.py:2022–2035` · `chamados/services/competencia_trancada.py:117–118,155–156` |
+| `reaberto_em` | `reabrir_periodo` grava o instante e `trancar_periodo` o limpa ao retrancar. Valor nulo é o critério de tranca vigente em K7. `ponto/services/fechamento.py:1412–1419,1432–1441,1464–1470` | O C20 do E2 consulta K7 após a trava. A fila da competência e o fechamento mensal também chamam K7. `chamados/reconciliador.py:644–655` · `chamados/services/competencia_trancada.py:88–99` · `ponto/views.py:1030` |
+| Memo | C20 preenche empresa e resultado de K7, inclusive `None`. O juiz de toque preenche a entrada de toque. Empresa, corte e tranca podem mudar durante a rodada. O lote ordinário guarda o usuário de sistema e o toque positivo. `chamados/juizes.py:1021–1037,1057–1075,1101–1126,1217–1238` | O memo da tentativa nasce após a trava e serve ao veto do C20 e ao C6 do carimbo. `TRANCA_DA_CONSULTA` tem precedência sobre lote, request e instância. Para empresa e período, C20 chama `_memo_da_tranca(lote=False)`. `chamados/reconciliador.py:644–657` · `chamados/juizes.py:991–997,1035–1037,1101–1117,1132–1157` |
+
+No **cron do cartório** e no **comando `consumir_eventos_celula`**, a chamada direta chega ao E2 sem abrir os três contextos. No **request**, `REQUISICAO_DA_TRILHA` fica ativa pelo middleware, e a consulta do app ou o S143 podem abrir `TRANCA_DA_CONSULTA` nos respectivos escopos. O vigia e o instrumento de sombra abrem `LOTE_DA_TRANCA`. O E2 usa sua consulta interna também quando já existe um contexto externo. `ponto/management/commands/processar_cartorio.py:59–65` · `ponto/services/cartorio.py:1018–1026` · `chamados/management/commands/consumir_eventos_celula.py:17–31` · `chamados/reconciliador.py:1421–1430,654–657` · `core/middleware.py:76–82` · `chamados/services/pergunta_no_app.py:63–65` · `chamados/services/disputa_emissao.py:1983–2014,2149–2154` · `chamados/management/commands/vigiar_fio_morto.py:188` · `chamados/management/commands/diff_e3_sombra.py:117`
+
+### Diff e pista
+
+**Diff stat** — RED `+119 −6` em dois arquivos. Cura e anotação do selo `+19 −12` em dois arquivos. Total `+138 −18`. **Excepts adicionados** — produção 0, testes 0. **Fallbacks adicionados** — 0. `chamados/reconciliador.py:627–664` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:55–77,173–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:13–15,83–101,201–279` · `ponto/tests/test_selo_chokepoint_escrita.py:206–212,236–242`
+
+A anotação usa `701096390` para os dois sítios históricos. São `N` SELECTs de pergunta para `N` emitidas e `K` SELECTs de atos para `K` sobreviventes. A volta amplia o JOIN existente e volta a consultar K7 por sobrevivente com empresa e dia de turno. A trilha é consultada quando há tranca, e o fecho posterior pode reler K7. Os tetos continuam em `236` e `300`. Totais da volta [nao verificado]. `chamados/reconciliador.py:647–657,669–676` · `chamados/juizes.py:1027–1037,1067–1085` · `ponto/tests/test_selo_chokepoint_escrita.py:206–212,236–242`
+
+Comandos para o Code na pista. O executor usa Docker e banco de CI. `bin/suite.sh:316–325`
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+copia=/home/ronald/wt-codex-e4c-f5-constroi-165618
+
+# Série, em ordem
+git -C "$copia/app" diff --relative -- \
+  chamados/tests/test_e2_pergunta_so_ao_c6.py \
+  chamados/tests/test_e4c_f5_guarda_reconciliador.py
+git -C "$copia/app" diff --relative -- \
+  chamados/reconciliador.py ponto/tests/test_selo_chokepoint_escrita.py
+
+# Na base 701096390 com o primeiro diff, vermelho esperado.
+# Com os dois diffs, verde esperado. [nao verificado]
+"$copia/bin/suite.sh" --dir "$copia" --only chamados --espera 7200 -- \ [nao verificado]
+  -k test_f5_e2_tranca
+
+# Controle e A2 na cura
+"$copia/bin/suite.sh" --dir "$copia" --only chamados --espera 7200 -- \ [nao verificado]
+  -k test_e2_pergunta_so_ao_c6
+"$copia/bin/suite.sh" --dir "$copia" --only chamados --espera 7200 -- \ [nao verificado]
+  -k test_A2_evento_celula_absolveu
+
+# Selo
+"$copia/bin/suite.sh" --dir "$copia" --only ponto --espera 7200 -- \ [nao verificado]
+  -k test_selo_chokepoint_escrita
+```
+
+Cada mutante parte da cura e restaura o arquivo ao sair. Vermelho esperado nos quatro casos. A última chamada imprime a medição sem alterar o teto. `chamados/reconciliador.py:645–657` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:206–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:243–254` · `ponto/tests/test_selo_chokepoint_escrita.py:331–342`
+
+```bash
+pista_com_edicao() (
+  cd "$copia/app" || exit
+  arquivo=$1
+  edicao=$2
+  shift 2
+  original=$(cat "$arquivo") || exit
+  trap 'printf "%s\n" "$original" > "$arquivo"' EXIT
+  sed -i -e "$edicao" "$arquivo" || exit
+  "$copia/bin/suite.sh" --dir "$copia" --espera 7200 "$@" [nao verificado]
+)
+
+# Herda o memo do request
+pista_com_edicao chamados/reconciliador.py '654d;655,657s/^    //' \
+  --only chamados -- -k test_f5_e2_tranca_entre_emissao_e_trava_em_request
+
+# Reinstala o colaborador da pré-seleção
+pista_com_edicao chamados/reconciliador.py \
+  '654i\                fresca.disputa.colaborador = colab' \
+  --only chamados -- -k test_f5_e2_tranca_le_corte_novo_dentro_de_consulta_externa
+
+# Pula a candidata respondida antes da releitura
+pista_com_edicao chamados/reconciliador.py \
+  '646i\                if p.respondida_em:\n                    continue' \
+  --only chamados -- -k test_A2_evento_celula_absolveu_exclui_validada_apos_selecao
+
+# Carimba a instância da pré-seleção
+pista_com_edicao chamados/reconciliador.py '657s/fresca.carimbar/p.carimbar/' \
+  --only chamados -- -k test_A2_evento_celula_absolveu_entrega_coluna_nula_e_resposta_none
+
+# Remedição do selo
+pista_com_edicao ponto/tests/test_selo_chokepoint_escrita.py \
+  '/^    def _cobrar(self, nome, medido):$/a\        print(f"{nome}: {medido} queries", flush=True)' \
+  --only ponto --parallel 1 -- -k test_selo_chokepoint_escrita
+```
 
 ## 21/11 18:56 · sessao 4f6a2bf25e06 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1182,117 +1273,4 @@ O **302** do aval bate com **Bloqueados** do retrato. O **303** bate com a prév
    - **Selo, trava e significado dos campos.** F1 e F2 preservam as catracas existentes, F3/F4 preservam os dois casos adversariais e F5 atualiza a publicação informativa, com a lacuna de relógio do item 1. O rótulo novo distingue a candidatura do efeito, e a marca do posto continua separada da chave efetiva do vínculo, inclusive nos casos em que a propagação é excluída por ciclo ou cargo. `app/ponto/tests/test_contract_no_except_pass.py:64–78` · `app/chamados/tests/test_e1_v7_catracas.py:387–415` · `app/chamados/tests/test_jv1_volta5_posto_do_dia_nos_vetos.py:91–101` · `app/core/tests/test_medida_turno_do_par.py:12–16,565–571` · `app/colaboradores/services/feriado_do_posto.py:175–185,272–285,325–354`
    - **Pré-requisitos de pouso.** O registro exige `sombra_c2b = 0`, e o processo exige suíte inteira verde na árvore da obra antes do opus final. Na cópia pude conferir os trechos do patch e rodar as verificações estáticas descritas acima. Hash Git, suíte inteira pós-delta, `sombra_c2b`, opus, pouso e efeito em produção ficam [nao verificado]. `app/docs/BACKLOG.md:1965–1966` · `CLAUDE.md:372–381`
 
-## 21/11 17:56 · sessao 16374add9c62 · FERIADO-POR-POSTO · construtor · origem=Code
-
-F1–F5 estão na cópia em três arquivos. Os módulos estáticos de F1, F2 e F5 passaram isoladamente. Em F3 e F4, as duas asserções do rótulo passaram em memória. O módulo Django parou na importação de `django.core`, então os dois testes completos seguem [nao verificado]. [manage.py:11](/home/ronald/wt-codex-feriado-por-posto-120132/app/manage.py:11) [nao verificado]
-
-| Item | Mudança | Mesmo teste do log | [nao verificado]
-|---|---|---|
-| F1 | `previa_da_marca` retorna dentro do `except _DesfazAPrevia`, após a sentinela sair do `atomic`. [feriado_do_posto.py:398](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:398) | `test_sem_except_pass_novo` verde, **1/1** no módulo. O mutante que restaura `except: pass` falhou. [test_contract_no_except_pass.py:73](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/tests/test_contract_no_except_pass.py:73) | [nao verificado]
-| F2 | `aplicar_marca` nomeia `Posto` no `select_for_update`. [feriado_do_posto.py:307](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:307) | `test_zero_trava_fora_de_trava_na_ordem` verde, **22/22** no módulo. O mutante com `type(posto)` voltou a acusar `?type`. [test_e1_v7_catracas.py:387](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/test_e1_v7_catracas.py:387) | [nao verificado]
-| F3 | A asserção de vínculo em P espera o rótulo atual e conserva `1/1`. [test_jv1_volta5_posto_do_dia_nos_vetos.py:94](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/test_jv1_volta5_posto_do_dia_nos_vetos.py:94) | `test_RED_vinculo_em_P_cadastro_em_Maringa_entra_no_universo`. A asserção passou em memória e falhou com o literal antigo. Teste completo [nao verificado]. | [nao verificado]
-| F4 | A asserção de cadastro em P espera o rótulo atual e conserva `0/0`. [test_jv1_volta5_posto_do_dia_nos_vetos.py:100](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/test_jv1_volta5_posto_do_dia_nos_vetos.py:100) | `test_RED_cadastro_em_P_vinculo_em_Maringa_fica_fora`. A asserção passou em memória e falhou com o literal antigo. Teste completo [nao verificado]. | [nao verificado]
-| F5 | Registrei `Command.handle` em `B2_menos_B1`, imediatamente antes de `LinhaTransporte.custo_mensal`, que permaneceu na lista. [test_medida_turno_do_par.py:389](/home/ronald/wt-codex-feriado-por-posto-120132/app/core/tests/test_medida_turno_do_par.py:389) | `test_a_classificar_publicado_sem_entrar_como_criterio_amplo` verde, **35/35** no módulo. O mutante que omite só a entrada nova falhou na igualdade exata. [test_medida_turno_do_par.py:565](/home/ronald/wt-codex-feriado-por-posto-120132/app/core/tests/test_medida_turno_do_par.py:565) | [nao verificado]
-
-### F2 — posição da trava
-
-O modelo é `colaboradores.models.Posto`. Ele é travado primeiro em cada segmento de `aplicar_marca`, inclusive antes de chamar a retratação. A ordem de `PerguntaDisputa.trava_na_ordem` abrange **Colaborador → DisputaSupervisao → ChamadoColaborador → PerguntaDisputa**. A catraca cobra essas quatro classes e raízes ilegíveis. Nomear `Posto` preserva a trava que já existia. [feriado_do_posto.py:307](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:307) · [feriado_do_posto.py:325](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:325) · [chamados/models.py:2816](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/models.py:2816) · [test_e1_v7_catracas.py:71](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/test_e1_v7_catracas.py:71)
-
-### F5 — fonte do dia e do par
-
-A única entrada nova foi `colaboradores/management/commands/marcar_feriado_do_posto.py::Command.handle`, em **B2−B1**, o critério largo de dia. O detector marca `localdate(agora)`. O comando obtém `agora` de `timezone.now()` e passa o dia civil da execução à porta. O **dia do fato** vem de `dias_do_fato`, o **vínculo desse dia** de `vinculos_dos_dias`, e os **turnos da prévia** de `turnos_do_colab`. A prévia agrupa os turnos pelo `data_turno` já retornado e lê `entrada` e `saida` dos pares entregues. [core/medida_turno_do_par.py:220](/home/ronald/wt-codex-feriado-por-posto-120132/app/core/medida_turno_do_par.py:220) · [marcar_feriado_do_posto.py:46](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/management/commands/marcar_feriado_do_posto.py:46) · [feriado_do_posto.py:248](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:248) · [feriado_do_posto.py:453](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:453)
-
-### Escritores e leitores
-
-| Campo ou valor | Quem escreve e quem lê |
-|---|---|
-| `Posto.pk`, `nome`, `municipio`, `opera_em_feriado` | `criar_posto` insere a linha e `definir_municipio_posto` grava a FK. `marcar_opera_em_feriado` grava a marca. O comando lê o posto pelo `pk` e imprime nome, município e marca anterior. `aplicar_marca` relê a marca sob trava para planejar e para interromper segmentos que tenham sido superados por outra marca. `eh_feriado_do_posto` usa o município ao consultar `feriados_de`. `colaboradores/services/estrutura.py:43`, `:90`, `:99` · `colaboradores/management/commands/marcar_feriado_do_posto.py:111`, `:134` · `colaboradores/services/feriado_do_posto.py:55`, `:309`, `:328`, `:346` |
-| `EscalaColaborador.posto`, `trabalha_em_feriado`, `ChamadoColaborador.status_local` e dia do fato | A porta de vínculo grava o posto ao criar ou reaproveitar o vínculo e grava a chave de feriado em `marcar_trabalha_em_feriado`. `_chamados_do_posto` lê o posto do vínculo devolvido para o dia do fato e recebe os vivos de `qs_vivos`, que filtra `status_local`. A fixture grava `aberto` e `contexto_json.data_turno`. `dias_do_fato` lê `celula.data` ou, no degrau seguinte, `contexto_json.data_turno`. No ato de retratar, `reconciliar` delega a escrita do estado a `_gravar_estado`. `colaboradores/services/vinculo.py:274`, `:287`, `:898` · `colaboradores/services/feriado_do_posto.py:244`, `:283`, `:350` · `chamados/services/painel.py:155` · `chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:96` · `chamados/juizes.py:187` · `chamados/models.py:234`, `:667` |
-| `plano` e totais da aplicação | `plano_da_marca` produz `candidatos`, `sem_dia`, `vivos`, `alvo`, `propagar`, `marca_antes` e `marca_muda`. `aplicar_marca` consome o plano e devolve `marca_muda`, `retratados`, `propagados` e `plano`. A prévia repassa esses valores, e o comando lê o plano e imprime os totais do `--apply`. `colaboradores/services/feriado_do_posto.py:277`, `:318`, `:325`, `:343`, `:354`, `:406` · `colaboradores/management/commands/marcar_feriado_do_posto.py:132`, `:152` |
-| Foto da célula e `a`, `b`, `outras` | A porta da célula grava `colaborador_id`, `data`, `trabalha`, `escala_geradora` e `dna` na geração, `ata`, `veredito` e `veredito_em` na lavra, e `julgada_em` e `impressao` no carimbo. `_foto_das_celulas` lê a foto, `_classificar_previa` produz as três listas, e `_imprimir_previa` as lê. `ponto/portas/celula.py:293`, `:306`, `:1090`, `:1194` · `colaboradores/services/feriado_do_posto.py:403`, `:409`, `:431`, `:462` · `colaboradores/management/commands/marcar_feriado_do_posto.py:78` |
-| Rótulo e `CLASSIFICAR` | O comando escreve o rótulo em `stdout`; `_dry` seleciona a linha, e as duas asserções passam a lê-la com o literal atual. O censo publica `a_classificar_pela_regra`; a lista manual `CLASSIFICAR` guarda a expectativa e o teste compara as duas por igualdade. `colaboradores/management/commands/marcar_feriado_do_posto.py:137` · `chamados/tests/test_jv1_volta5_posto_do_dia_nos_vetos.py:83`, `:94`, `:100` · `core/medida_turno_do_par.py:432` · `core/tests/test_medida_turno_do_par.py:389`, `:566` |
-
-**LEI-AKITA 8.** O rótulo `candidatos a retratacao no feriado` descreve `len(plano['alvo'])`. O plano inclui chamados vivos no posto do dia do fato, alcançados pelo feriado, numa mudança para FECHA ou na retomada explícita. O total efetivamente retratado é contado depois de passar pelo gate de reconciliação. [feriado_do_posto.py:277](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:277) · [feriado_do_posto.py:331](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:331) · [marcar_feriado_do_posto.py:137](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/management/commands/marcar_feriado_do_posto.py:137)
-
-**Vizinho do rótulo antigo.** O `git grep` na wt inteira encontrou somente `chamados/tests/e4b_c12_base.json:13` após a correção. Ali está o **emissor histórico** congelado para os testes c12. O verificador lê a fonte congelada, e o manifesto aponta nela o sítio S19 da retratação. O outro teste de saída já espera o rótulo atual. [e4b_c12_base.json:13](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/e4b_c12_base.json:13) · [e4b_c12_verificar.py:18](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/e4b_c12_verificar.py:18) · [e4b_c12_sitios.json:148](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/e4b_c12_sitios.json:148) · [test_feriado_por_posto.py:636](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_por_posto.py:636)
-
-### Comandos
-
-De `app/`, a função abaixo reproduz as provas em memória. Nas catracas estáticas, `unittest.TestCase` serve de base para executar os módulos originais. Em F3 e F4, a prova executa a linha de saída e a asserção original com as contagens do anexo. [test_contract_no_except_pass.py:2](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/tests/test_contract_no_except_pass.py:2) · [test_e1_v7_catracas.py:51](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/test_e1_v7_catracas.py:51) · [test_medida_turno_do_par.py:95](/home/ronald/wt-codex-feriado-por-posto-120132/app/core/tests/test_medida_turno_do_par.py:95)
-
-```bash
-prova() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
-from importlib import import_module
-from io import StringIO
-from pathlib import Path
-import sys
-from textwrap import dedent
-from types import ModuleType
-import unittest
-from unittest.mock import patch
-
-case, mode, *targets = sys.argv[1:]
-command = 'colaboradores/management/commands/marcar_feriado_do_posto.py'
-
-if case in ('F3', 'F4'):
-    line, count = {'F3': (94, 1), 'F4': (100, 0)}[case]
-    rows, out = [None] * count, []
-    reader = Path('chamados/tests/test_jv1_volta5_posto_do_dia_nos_vetos.py')
-    expr = dedent(''.join(reader.read_text().splitlines(True)[line-1:line+1]))
-    if mode == 'mutante':
-        expr = expr.replace('candidatos a retratacao no feriado', 'em feriado que o alcanca')
-    emit = dedent(''.join(Path(command).read_text().splitlines(True)[136:138]))
-    exec(emit, dict(w=out.append, plano={'vivos': rows}, alvo=rows))
-    check = unittest.TestCase()
-    check._dry = lambda: out[0]
-    exec(compile('\n' * (line - 1) + expr, str(reader), 'exec'), {'self': check})
-    print(out[0])
-else:
-    django, test = ModuleType('django'), ModuleType('django.test')
-    test.SimpleTestCase = unittest.TestCase
-    sys.modules.update({'django': django, 'django.test': test})
-    path = Path('colaboradores/services/feriado_do_posto.py').resolve()
-    source = path.read_text().splitlines(True)
-    if mode == 'mutante' and case == 'F1':
-        source[405] = '        pass\n' + source[405][4:]
-    if mode == 'mutante' and case == 'F2':
-        source[306] = source[306].replace('Posto.objects', 'type(posto).objects')
-    if mode == 'mutante' and case == 'F5':
-        module = import_module('core.tests.test_medida_turno_do_par')
-        module.CLASSIFICAR['B2_menos_B1'].remove(command + '::Command.handle')
-    real_open = open
-
-    def read(name, *args, **kwargs):
-        if isinstance(name, (str, Path)) and Path(name).resolve() == path:
-            return StringIO(''.join(source))
-        return real_open(name, *args, **kwargs)
-
-    with patch('builtins.open', read):
-        unittest.main(module=None, argv=['unittest', *targets], warnings='ignore')
-PY
-}
-
-prova F1 cura ponto.tests.test_contract_no_except_pass
-prova F2 cura chamados.tests.test_e1_v7_catracas
-prova F3 cura
-prova F4 cura
-prova F5 cura core.tests.test_medida_turno_do_par
-
-prova F1 mutante ponto.tests.test_contract_no_except_pass.ContractNoExceptPassTest.test_sem_except_pass_novo
-prova F2 mutante chamados.tests.test_e1_v7_catracas.CatracaTravaTest.test_zero_trava_fora_de_trava_na_ordem
-prova F3 mutante
-prova F4 mutante
-prova F5 mutante core.tests.test_medida_turno_do_par.CatracaTurnoDoParTest.test_a_classificar_publicado_sem_entrar_como_criterio_amplo
-
-git grep -ni -F -e 'em feriado que o alcanca' -e 'em feriado que o alcança' -- :/
-```
-
-Comando do módulo F3/F4, que parou na importação local. [manage.py:11](/home/ronald/wt-codex-feriado-por-posto-120132/app/manage.py:11)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_jv1_volta5_posto_do_dia_nos_vetos --settings=config.settings_test
-```
-
-_7738 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7739 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
