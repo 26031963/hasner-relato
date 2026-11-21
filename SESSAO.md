@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 12:11:02.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (16.8 MB). Acoes na janela: **451**.
+**Medido em 21/11/2026 12:16:37.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (16.8 MB). Acoes na janela: **452**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:14:44 | Bash | Retarget mutant and rerun selo | `cd /home/ronald/wt-travas-m5-095844; python3 -B - <<'PY' f='bin/tests/test_travas_sem_memoria.sh'; s=open(f).read() a=''' _mutante sem_worktree_vira_copia raias_estado.py "a=\\"return vivo if vivo == head else ''\\"; assert s.count(a)==1; n['s']=s.replace(a,'return head')"''' assert s.count(a)==1, s.count(a) s=s.replace(a,''' _mutante head_do_metadado raias_estado.py "a=\\" top = _git(['rev-parse' ...` |
 | 12:09:32 | Bash | Add recreated-folder case and rerun selo | `cd /home/ronald/wt-travas-m5-095844; python3 -B - <<'PY' f='bin/tests/test_travas_sem_memoria.sh'; s=open(f).read() a=''' bash bin/raia_agente.sh --raiz "$R" abrir wt-orfa 'obra sem head' 'o selo' 'nada' >/dev/null ''' assert s.count(a)==1 s=s.replace(a,a+''' # verificador M5 achado 8: pasta da worktree apagada e RECRIADA como pasta comum antes do `prune`; # o metadado do git ainda lista o HEAD ve ...` |
 | 12:04:21 | Bash | Add E1 mutants to TRAVAS selo and run | `cd /home/ronald/wt-travas-m5-095844; python3 -B - <<'PY' f='bin/tests/test_travas_sem_memoria.sh'; s=open(f).read() a=' for f in "$RAIZ"/bin/*.py "$RAIZ"/bin/*.sh; do cp "$f" bin/; done\n' assert s.count(a)==1 s=s.replace(a,' # SELO_TRAVAS_BIN: o bin/ sob teste (mutante); sem ela, o bin/ DESTA arvore\n BSOB="${SELO_TRAVAS_BIN:-$RAIZ/bin}"\n for f in "$BSOB"/*.py "$BSOB"/*.sh; do cp "$f" bin/; done ...` |
 | 12:04:05 | Bash | Read head and ficha code | `cd /home/ronald/wt-travas-m5-095844; sed -n 80,125p bin/raias_estado.py; sed -n 180,215p bin/raias_estado.py` |
