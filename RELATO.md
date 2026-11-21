@@ -1,3 +1,5 @@
+PAREI: censo-TRAVAS-SEM-MEMORIA | espera Codex
+
 ESPERANDO: green_v3.sh | pid=2210804
 PAREI: censo-TRAVAS-SEM-MEMORIA | espera Codex (16:0x, escrita pelo DISJUNTOR CENSO; censo em logs/TRAVAS-SEM-MEMORIA/censo_m8/ no a9e3e9678; vira brief_m8.md com ## CENSO)
 TRAVAS-SEM-MEMORIA opus final REPROVOU M7b (16:03; logs/TRAVAS-SEM-MEMORIA/opus_final/r.txt sha256-12 0613474d1c26; BLOQUEIA 2 CORRIGE 7 FILA 6; triagem.txt amostra 2/2 PROCEDE: (1) pista `pede` real imprime id NU, suite.sh:359 exige `id= sha=`, fake test_pista_lateral.sh:36 inventa o formato; (2) hook_pista_pronto.py:54 _ANTES nao tira if/then/do, disjuntor.py:1370 tira). Regra 5(c): volta M8 ao construtor (a), pouso conjunto com WRAPPER segue TRAVAS primeiro. O construtor do WRAPPER so abre depois do opus APROVA da TRAVAS.
@@ -9990,6 +9992,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 **PERGUNTA DE LEI -- O DIA DA DEMISSAO E APURAVEL COMO FURO? A LEI ESCRITA NAO RESPONDE (10:0x).** Antes de abrir fatia nova fui atras do bug, que pela LEI-AKITA 6 vem primeiro. **NAO HA bug de universo no codigo de HOJE**, e duas leituras dizem isso: (a) `ponto/services/dia_pago.py:259-263` (O140) da linha a TODO dia de furo ainda que sem uma hora -- `_linha(d)` dentro de `for d in (_furos or ())` --, entao furo SEM linha nao existe no codigo de hoje; (b) o gravado da 09 tem **10.759 das 10.893 linhas com `furo_apurado` NULL**, que no idioma declarado na docstring de `lavrar` e `furos_do_motor=None`, *"nao perguntei"*: a 09 foi lavrada por chamador que ainda nao passava furo. E o CLAMP da borda (defeito 2 do `9632cdbd`) explica no maximo **1 dos 28**, porque 27 dos 28 dias TEM celula (`celula_trabalho_true=28`, `sem_celula=1`). Logo criar a linha que falta e **RELAVRAR a 09**, o PROIBIDO da L-092 -- nao e cura de universo, e por isso nao jumpa a fila como bug provado. O QUE SOBRA E PERGUNTA DE LEI, e eu nao a proponho (L-117): **19 dos 28 dias sao exatamente o dia da demissao, e a celula desse dia diz trabalho=True**. O seu corte de 19/10 `DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA` **nao responde**: ele e literal sobre `data_demissao` **ANTERIOR** a janela (*"sai do universo de derivacao"*), e aqui a demissao cai DENTRO da competencia. Se o dia da demissao e previsto, o furo e real e o dono e CADASTRO/BATIDA; se nao e, o motor chama furo **19 dias que nao existem** -- e ai o furo mente para todo desligado da frota, nao so na 09. A fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a linha esta no BACKLOG (`MOTOR-CHAMA-FURO-DIA-QUE-A-LAVRATURA-DA-09-NAO-COBRE`) e **nada se aplica na 09**.
 
 ## ALARMES DA ESTEIRA
+
+**21/11 16:10:24 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:723ac6a5cd (37 car., na trilha privada)
 
 **21/11 16:03:37 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:723ac6a5cd (37 car., na trilha privada)
 
