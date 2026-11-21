@@ -1,7 +1,72 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 01:41** · publicado em **21/11/2026 01:42** (UTC-3)
+> Ultima resposta processada: **21/11/2026 01:48** · publicado em **21/11/2026 01:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 01:48 · sessao 02771adbc27b · E4C-F5-CONSTROI · verificador · origem=Code
+
+**Veredito da E4C-F5** — Os dois testes da Volta 3 passam em memória, os selos registram zero acusações na cópia sem mutação e quatro dos cinco mutantes novos ficam vermelhos. `d_devolucao_renomeada_no_modelo` fica verde quando acionado pelo seletor entregue. As asserções literais mordem quando o modelo importado recebe a renomeação. `test_e4c_f5_volta3_selos.py:16`, `test_e4c_f5_selo_par_ato_coluna.py:546,555,696`, `test_e4c_f5_selo_catraca.py:349`, `e4c_f5_voltaE_mutantes.py:87`. [nao verificado]
+
+Executei os visitantes e as asserções AST reais em memória, com `unittest` e metadados extraídos do fonte do modelo. Suíte Django completa, Ruff completo, identidade do commit sem `.git`, execução em banco e ocorrências na frota [nao verificado]. [nao verificado]
+
+## 1. Dois ERROR, Ruff e leitores do retorno
+
+- **`test_RED_selo_encontra_escritor_sem_mencao_a_coluna`** volta a encontrar `nova_validacao` com `pareada=False`. `validacoes_gravadas` agora desempacota `(chamada, registro, campos, ato)`, usa `registro.chamada is chamada` para examinar a gravação no próprio escopo e chama `.get` no dicionário da terceira posição. Antes, chamava `.get` no `Registro`. `test_e4c_f5_volta3_selos.py:16,18,20,67,69,70`, `test_e4c_f5_selo_par_ato_coluna.py:328,349`.
+- **`test_RED_validacao_iniciada_pelo_ato_tambem_grava_a_coluna`** usa o mesmo helper corrigido. Em memória, encontrou `_carimbar_validacao` e terminou com `violacoes=[]`. O escritor salva a coluna e registra `VALIDACAO` com o instante dessa coluna. `test_e4c_f5_volta3_selos.py:54,58,59`, `services/validacao.py:168,171,173`.
+- **Ruff B020** — A primeira troca fica em `primeira_ancora` e `primeira_substituicao`. O `for` usa `ancora` e `substituicao`. Isso elimina as duas sobreposições apontadas no anexo. O contrato continua chamando `ruff check .`. `e4c_f5_voltaE_mutantes.py:92,95`, `core/tests/test_contract_esmeril.py:22`.
+- A busca na cópia encontrou **zero leitores restantes com o formato antigo**. Os outros leitores de `_registros` usam `Registro` na segunda posição. `_censo_dos_atos_que_desfazem` rende `(nome, linha, atos, pareado)` e seus quatro consumidores seguem esse formato. `test_e4c_f5_volta3_selos.py:16`, `test_e4c_f5_selo_par_ato_coluna.py:460,507,521,551,593,633,661`.
+
+## 2. Lote vazio
+
+- **Reconhece** lista, tupla e dicionário literais sem elementos. A regra também aceita um `ast.Set` sem elementos, mas `set()` é uma chamada e escapa. Segue um nome até a última definição local anterior, salvo quando ela é `AugAssign`. Reconhece qualquer método chamado `.none()`, `.filter(pk__in=…)` com valor reconhecido como vazio e propaga o vazio pelo receptor de chamadas encadeadas, com exceção de `.union()`. Verifica o receptor escrito e `escrever_so`. `test_e4c_f5_selo_par_ato_coluna.py:31,96,128,234,245,250,257,278,293`.
+- **Zero falsos vermelhos nos escritores atuais.** O censo devolveu cinco entradas pareadas. `reabrir` delega à ressurreição, `reabrir_para_correcao` usa `qs` sem `escrever_so`, e as duas devoluções usam `save`. Na ressurreição, `ids` pode ficar vazio depois da releitura sob trava. Nesse caso, o mesmo `ids` restringe o universo dos atos e o UPDATE, enquanto `alvo_lido` ainda serve às guardas. O visitante aceita essa forma real. `models.py:1517,1663,1669,1671,1705,1719,1721,3527,3536,4432`, `services/disputa_emissao.py:1664,1683`, `services/validacao.py:290,293,367,370`, `test_e4c_f5_selo_par_ato_coluna.py:280,555`.
+- **Escapam vazios que mudam o resultado no escritor real.** Troquei somente o receptor em `models.py:1721` por `alvo_lido.filter(id__in=[])`, `alvo_lido.filter(pk__in=list())`, `alvo_lido.exclude(pk__in=ids)` ou `alvo_lido.none().union(alvo_lido.none())`. Os dois censos continuaram verdes nas quatro variantes. O terceiro caso exclui precisamente os PKs que o UPDATE volta a exigir. Também ficam fora da regra construtores como `tuple()` e `set()`, compreensões vazias, `filter(Q(pk__in=[]))` e seleções que só ficam vazias em execução. `models.py:1669,1671,1719,1721,3536,3537`, `test_e4c_f5_selo_par_ato_coluna.py:234,248,250,280,293`.
+
+## 3. Literais de atos e de coluna
+
+`test_atos_com_foto_limpam_validacao` compara `set(DecisaoPergunta._LIMPAM_VALIDACAO)` e `ATOS_QUE_LIMPAM` com `{'devolucao', 'recusa', 'reabertura'}`. Exige `ATOS_COM_FOTO` não vazio e contido nesse literal, e `CAMPO == 'validada_em'`. `CAMPO` vem do metadado do campo e `ATOS_QUE_LIMPAM` das constantes do modelo. O censo de atos também compara `vistos` com o conjunto literal. `test_e4c_f5_selo_par_ato_coluna.py:22,29,556,695,696,697,698,699,700`.
+
+Com o **modelo importado renomeado**, a primeira quebra no teste de metadados é a linha **696**. O assert seguinte, na **697**, também diverge por construção. O teste do censo quebra na **556**. Com **apenas o seletor entregue**, todos passam. Ele fornece texto para o AST, enquanto a resolução de constantes e os asserts leem `DecisaoPergunta` já importada. Confirmei os dois cenários em memória. `e4c_f5_voltaE_mutantes.py:65,87,97`, `test_e4c_f5_selo_par_ato_coluna.py:12,208,211,532,556,696,697`. [nao verificado]
+
+## 4. Catraca e aval 1945
+
+Para listas ou tuplas conhecidas, `+` e `+=` ampliam a **sintaxe reconhecida** e preservam o critério do aval. A catraca procura o campo em `update_fields` e exige o mesmo campo em um `Attribute(Store)` cujo receptor tenha o mesmo `ast.dump`. O controle `test_PASSAM_escrita_foto_e_leitura_do_ato` passou em memória. Os sintéticos novos também passaram, inclusive os controles de campo e receptor diferentes. `test_e4c_f5_selo_catraca.py:100,117,200,225,304,308,320,402,427,438,440`. [nao verificado]
+
+**Em execução, a aproximação pode acusar além da regra literal.** Um `campos += ['respondida_em']` seguido de `campos.remove('respondida_em')` antes do `save` ainda acusa, embora o campo já tenha saído da coleção. Confirmei esse caso em memória. A isenção sintática também conserva as lacunas anteriores. Um `Store` em ramo oposto, depois do `save` ou em anotação sem valor pode isentar. Uma atribuição por alias do receptor pode ficar fora da isenção. `test_e4c_f5_selo_catraca.py:184,200,214,225,304,308,320`.
+
+**Sítios de produção acusados: zero no escopo da catraca.** Dos sete `save(update_fields=…)` que incluem esses campos na cópia, só o de `devolver_validacao_recusada` está na lista de funções varridas. Ele atribui `perg.validada_em` antes de salvar. Os outros seis estão nos sítios citados abaixo. `test_e4c_f5_selo_catraca.py:17,23,339,349`, `services/validacao.py:168,171,287,290,365,367`, `models.py:3369,3372,3400`, `services/disputa_emissao.py:1501,1512,1532,1712,1734`.
+
+## 5. Âncoras e mordida
+
+| Mutante | Âncora e efeito | Teste que acusa | [nao verificado]
+|---|---|---|
+| `d_recusa_escrever_so_vazio` | **1** em `services/disputa_emissao.py:1683`. Mantém o `registrar` de RECUSA/REABERTURA e deixa o UPDATE sem linhas quando há atos a gravar. `services/disputa_emissao.py:1664`, `models.py:3536`. | `test_atos_que_desfazem_gravam_a_coluna` acusa o sítio `disputa_emissao.py:1664`. `test_escritores_fecham_o_par` também falha. `test_e4c_f5_selo_par_ato_coluna.py:546,555`. |
+| `d_ressuscitacao_queryset_none` | **1** em `models.py:1721`. Mantém o registro da REABERTURA e esvazia o queryset usado para escrever. `models.py:1719,3537`. | Os mesmos dois testes falham. O censo de atos acusa `models.py:1517` e `models.py:1719`. `test_e4c_f5_selo_par_ato_coluna.py:546,555`. | [nao verificado]
+| `d_devolucao_renomeada_no_modelo` | **1 em cada troca**, `models.py:4205` e `models.py:4330`. Muda o código persistido para `devolvida`. Uma linha anterior com `devolucao` deixa de entrar no conjunto de limpeza em Python e SQL. `models.py:3603,4375`, `services/validacao.py:293,371`. | **Verde pelo seletor**. Com metadados mutados, falha em `test_atos_com_foto_limpam_validacao` e `test_atos_que_desfazem_gravam_a_coluna`. Há ainda um assert ORM preexistente sobre o valor gravado, cuja execução ficou [nao verificado]. `test_e4c_f5_selo_par_ato_coluna.py:556,696`, `test_e1_volta2.py:111`. |
+| `c_recusa_update_fields_concat` | **1** em `services/validacao.py:940`. Inclui `respondida_em` no `save` do motivo, sem atribuição nesse receptor na função. O `save` passa a considerar esse campo na guarda do par. `e4c_f5_voltaE_mutantes.py:72`, `models.py:3732,3749,3759`. | `test_producao_sem_leituras_cruas` acusa `update_fields(respondida_em)` na linha mutada 940. `test_e4c_f5_selo_catraca.py:225,349`. |
+| `c_recusa_update_fields_acrescimo` | **1** na mesma linha. Produz a mesma escrita extra via `+=`. `e4c_f5_voltaE_mutantes.py:77`, `services/validacao.py:934,940`. | O mesmo teste acusa o `save` na linha mutada 942. `test_e4c_f5_selo_catraca.py:200,225,349`. |
+
+## 6. Alcance do delta
+
+O `delta.diff` fornecido contém quatro `.py`, todos de `app/chamados/tests`, e os quatro blobs finais coincidem com a cópia. O quarto arquivo é um selo **já existente da Volta 3 da F5**, fora dos dois módulos centrais desta volta. Mudou o helper usado por dois testes existentes. As asserções desses dois testes e a do Ruff ficaram intactas. O anexo mostra zero alterações em testes alheios aos selos da obra e zero `.py` de produção. Completude contra o commit-base [nao verificado]. `e4c_f5_voltaE_mutantes.py:55,92`, `test_e4c_f5_selo_catraca.py:427`, `test_e4c_f5_selo_par_ato_coluna.py:548,639,694`, `test_e4c_f5_volta3_selos.py:12,54,69`, `core/tests/test_contract_esmeril.py:24`.
+
+## 7. Achados anteriores ainda abertos
+
+- **Par de alvo e valor.** O selo de atos ainda aceita presença da coluna como evidência e aproxima identidade pelo receptor e pelo PK. Filtros adicionais e o modelo da chamada `.update()` ficam fora dessa prova. A comparação de contexto ainda exige os mesmos nós `atomic`, `if` e `except`. Save integral, `bulk_update`, alias do objeto e transação só no chamador ou decorador continuam fora ou sujeitos a falso vermelho. **Falso verde em escritor real demonstrado** pelas variantes vazias de `models.py:1721`. `test_e4c_f5_selo_par_ato_coluna.py:86,92,148,167,275,299,514`, `models.py:3536`. [nao verificado]
+- **Projeção de chamadas.** Continua de um salto no mesmo arquivo e exige `registrar` posicional e fora de `if`/`except` no auxiliar. A chamada da RECUSA, os aliases entre arquivos e `validar_pergunta → devolver_validacao_recusada` seguem sem entrada própria. Os gravadores alcançados por essas chamadas entram diretamente no censo. A migração histórica continua excluída. `test_e4c_f5_selo_par_ato_coluna.py:322,333,342,524`, `services/validacao.py:284,293,798,943`, `models.py:2405,2423`, `migrations/0051_decisao_pergunta.py:49`.
+- **Catraca parcial.** Continuam escapando `append`/`extend`, `**kwargs`, coleções desconhecidas e certas mutações por alias. Confirmei que acrescentar `respondida_em` via `append` ou `**{'update_fields': ...}` no **`save` real da RECUSA** deixa o visitante verde. Também permanece a lista nominal de funções, com sítios reais fora dela. Um exemplo é `carimbar`, que já usa `append` para `respondida_em`. `test_e4c_f5_selo_catraca.py:17,87,100,200,214,339`, `services/validacao.py:940`, `models.py:3370,3400`.
+- **Expectativa literal e relógio.** Os literais foram restaurados, mas a renomeação ainda escapa pelo seletor, como no item 3. A fragilidade dos dois asserts ORM permanece. O teste fixa `VALIDACAO_EM`, a reabertura usa `timezone.now()` e a leitura ordena por instante. Se a reabertura sair anterior à validação, a validação pode continuar vigente. É dependência do teste, distinta dos falsos verdes dos visitantes. `test_e4c_f5_selo_par_ato_coluna.py:696,756,774`, `e4c_f5_voltaE_mutantes.py:87`, `cortes_f2_f9_apoio.py:32`, `services/disputa_emissao.py:1648,1668`, `models.py:4363,4367,4375`.
+
+## 8. Checklist de classes e fluxo dos valores
+
+| Classe | Quem escreve e quem lê em produção |
+|---|---|
+| **Segundo juiz** | `validada_em` e `respondida_em` vigentes vêm de `DecisaoPergunta.leitura` e chegam aos juízes por `composta`. `pergunta_respondida` lê instante e texto, e o C6 usa `projecao_temporal_da_pergunta`. O vigia lê a presença no ato e na coluna para contar divergência. O delta cria zero juízes de produção. `test_e4c_f5_selo_catraca.py:13,225`, `models.py:4348,4382,4399`, `juizes.py:1391,1408,1428,1560`, `services/vigia_ato_x_coluna.py:16`. |
+| **Segundo escritor** | Para `devolucao`, escrevem as duas portas de devolução. Para `recusa`, `recusar_pergunta` fornece o ato à porta de correção. Para `reabertura`, escrevem a porta de correção e a ressurreição. Todas entregam a linha a `registrar`, que faz o `bulk_create`. A projeção passa pelos `save` e pelo UPDATE da porta de lote. `test_e4c_f5_selo_par_ato_coluna.py:29,504`, `services/validacao.py:290,293,367,371,943`, `services/disputa_emissao.py:1597,1664,1683`, `models.py:1719,1721,3537,4438`. |
+| **Relógio fora da borda** | Atribuem `ato_em` nas portas de validação, devolução, correção e ressurreição. A leitura ordena os atos, e o juiz temporal recebe `agora` do chamador. O AST usa linhas de fonte. A dependência de relógio observada está nos dois testes ORM do item 7. `services/validacao.py:168,173,293,371`, `services/disputa_emissao.py:1648,1668`, `models.py:1702,1714,4367`, `juizes.py:1394,1409`, `test_e4c_f5_selo_par_ato_coluna.py:521,756,774`. |
+| **Derivação paralela** | `_LIMPAM_VALIDACAO` é declarado no modelo e lido tanto pelo redutor Python quanto pela face SQL. `ATOS_COM_FOTO` é declarado no modelo e lido pela guarda da porta de correção e pelo histórico de respostas. `pk`/`pk__in` ligam o ato ao alvo. A ressurreição fornece `escrever_so`, e a porta o lê como restrição adicional do UPDATE. `test_e4c_f5_selo_par_ato_coluna.py:248,257,268,695`, `models.py:1669,1671,3536,3603,3859,4217,4330,4375`, `services/disputa_emissao.py:1640`. |
+| **Selo/RED sem mordida** | Quatro REDs mordem nos escritores reais listados no item 5. O quinto muda a declaração do valor persistido, mas a execução pelo seletor deixa os leitores de metadados com os valores originais. `e4c_f5_voltaE_mutantes.py:55,65,72,87`, `test_e4c_f5_selo_par_ato_coluna.py:211,532,555,696`, `test_e4c_f5_selo_catraca.py:342,349`. |
+| **Campo com dois significados** | `PerguntaDisputa.validada_em` e `respondida_em` são colunas de projeção. `_carimbar_validacao`, as portas de resposta e `carimbar` escrevem os instantes. As devoluções e o lote limpam os campos pertinentes. A projeção é lida para o passivo, a guarda e a comparação do par. As fotos usam `*_original_em`, escritas nas portas dos atos com foto. `update_fields` é a seleção de colunas consumida por `save` e pela guarda do par. `recusa_motivo`, usado como âncora, é escrito pela RECUSA e lido pela guarda de devolução. `test_e4c_f5_selo_par_ato_coluna.py:22,700`, `test_e4c_f5_selo_catraca.py:225`, `models.py:2658,3369,3372,3732,3748,4225,4304,4399`, `services/disputa_emissao.py:1501,1665,1710,1732`, `services/validacao.py:168,273,287,365,934,940`. |
 
 ## 21/11 01:41 · sessao 36325ce6ae1e · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1830,290 +1895,4 @@ No caminho síncrono rastreado, a escrita no fechamento é a invalidação acima
 
 [truncado em 20000 de 22825 caracteres]
 
-## 20/11 18:55 · sessao 51a596ddf1e6 · E4C-F5-CONSTROI · leitura · origem=Code
-
-### `app/chamados/tests/test_main_dois_casos.py`
-
-```python
-import json
-from contextlib import contextmanager
-from datetime import timedelta
-from unittest.mock import patch
-
-from django.contrib.auth.models import User
-from django.db import transaction
-from django.test import TransactionTestCase
-from freezegun import freeze_time
-
-from chamados.models import DecisaoPergunta as D
-from chamados.models import DisputaSupervisao, PerguntaDisputa as P, _OPCOES_ESCAPE_FALTA
-from chamados.services import disputa_emissao as E
-from chamados.services import materializacao as M
-from chamados.services import validacao
-from chamados.tests import cortes_f2_f9_apoio as apoio
-from core.models import LogAuditoria
-from escala.models import CelulaDia
-from ponto.models import Ausencia
-from ponto.services.ausencia import decidir
-from ponto.services.cartorio import calado
-
-# apoio_a1c_c8eb.py.txt:24–28 e app/chamados/tests/cortes_f2_f9_apoio.py:30
-T1 = apoio.AGORA
-T0 = T1 - timedelta(seconds=2)
-T2 = T1 + timedelta(seconds=1)
-T3 = T1 + timedelta(seconds=2)
-DIA = T1.date()
-
-
-@contextmanager
-def medida(cenario):
-    fatos = dict(
-        apos_passagem=None,
-        antes=None,
-        depois=None,
-        retorno_retirada=None,
-        retornos_devolucao=[],
-        nao_devolvidas=None,
-        sem_contagem_na_trilha=None,
-    )
-    try:
-        yield fatos
-    except Exception as erro:
-        fatos["tipo_excecao"] = type(erro).__name__
-        raise
-    finally:
-        print(
-            f"MEDIDA: {cenario} | "
-            + json.dumps(fatos, default=lambda valor: valor.isoformat()),
-            flush=True,
-        )
-
-
-class MainDoisCasosTest(TransactionTestCase):
-    def _preparar(self):
-        # apoio_a1c_c8eb.py.txt:32–39 e app/chamados/tests/cortes_f2_f9_apoio.py:39–44
-        self.relogio = self.enterContext(freeze_time(T0))
-        self.enterContext(calado())
-        apoio.BaseCortes.setUpTestData.__func__(type(self))
-        self.usuario = User.objects.create_user(username="col01")
-        self.colab.usuario = self.usuario
-        self.colab.save(update_fields=["usuario"])
-        self.disputa = DisputaSupervisao.objects.create(colaborador=self.colab, contexto={})
-
-    def _escape(self, tipo="escolha"):
-        # apoio_a1c_c8eb.py.txt:41–47
-        p, criada = P.abrir_conversa(
-            disputa=self.disputa, motivo="saida_sem_entrada", pergunta="Por que faltou?",
-            tipo_resposta=tipo, opcoes=list(_OPCOES_ESCAPE_FALTA),
-        )
-        if not criada or p.data_evento != DIA:
-            self.fail("CENARIO NAO MONTAVEL: o escape não nasceu no dia da ausência.")
-        return p
-
-    def _irma_muda(self):
-        # apoio_a1c_c8eb.py.txt:73–78
-        p, criada = P.abrir_conversa(
-            disputa=self.disputa, motivo="intervalo_saida",
-            pergunta="A que horas saiu para o intervalo?", tipo_resposta="hora",
-        )
-        if not criada or p.data_evento != DIA:
-            self.fail("CENARIO NAO MONTAVEL: a irmã muda não nasceu no dia da ausência.")
-        return p
-
-    def _irma_com_luz(self):
-        # apoio_a1c_c8eb.py.txt:49–63
-        celula = CelulaDia.objects.create(
-            colaborador=self.colab, data=DIA, trabalha=True, origem="gerada",
-            dna={"marcos": {"hf": "19:00"}},
-        )
-        celula.lavrar_veredito(
-            via="cartorio", veredito="concorde", agora=T0,
-            ata={"lampadas": [{"tipo": "S", "hora": "19:00", "acesa": True, "luz": "19:00"}]},
-        )
-        p, criada = P.abrir(
-            disputa=self.disputa, motivo="orfao_14h", data_evento=DIA,
-            pergunta="A que horas saiu?", tipo_resposta="hora",
-        )
-        if not criada or p.celula_id != celula.pk:
-            self.fail("CENARIO NAO MONTAVEL: a irmã de hora não nasceu vinculada à célula.")
-        return p
-
-    def _responder(self, p, texto):
-        # apoio_a1c_c8eb.py.txt:80–83
-        p.refresh_from_db()
-        ok, erro = E.responder_pergunta_disputa_core(
-            p, texto, self.usuario, ja_respondida=p.respondida_em is not None,
-        )
-        if not ok:
-            self.fail(f"CENARIO NAO MONTAVEL: a porta de resposta recusou {texto!r} ({erro}).")
-
-    @staticmethod
-    def _trilha(p):
-        # apoio_a1c_c8eb.py.txt:138–140 e app/chamados/services/materializacao.py:1067–1071
-        return LogAuditoria.objects.filter(
-            acao=M.ACAO_IRMA_VIVA_NA_AUSENCIA, modelo="PerguntaDisputa", objeto_id=p.pk,
-        )
-
-    def _foto_grupo(self, ausencia):
-        ausencia.refresh_from_db()
-        perguntas = {}
-        contadas = {}
-        qs = P.objects.filter(disputa_id=self.disputa.pk).order_by("pk").prefetch_related("decisoes")
-        for p in qs:
-            leitura = D.leitura(p)
-            perguntas[p.pk] = dict(
-                tipo=p.tipo_resposta,
-                estado=p.estado,
-                via_resolucao=p.via_resolucao,
-                materializada_em=p.materializada_em,
-                resposta_composta=leitura.resposta_colab,
-                respondida_composta_em=leitura.respondida_em,
-                validada_composta_em=leitura.validada_em,
-                atos=[
-                    dict(pk=ato.pk, ato=ato.ato, instante=ato.ato_em)
-                    for ato in p.decisoes.all()
-                ],
-            )
-            contadas[p.pk] = self._trilha(p).filter(valor_depois__ausencia_pk=ausencia.pk).count()
-        return dict(
-            ausencia_pk=ausencia.pk,
-            status_ausencia=ausencia.status,
-            perguntas_absorvidas_por=[p.pk for p in M.perguntas_absorvidas_por(ausencia)],
-            perguntas=perguntas,
-            contadas_na_trilha=contadas,
-        )
-
-    @staticmethod
-    def _novas_reaberturas(antes, depois):
-        atos_antes = {
-            ato["pk"] for p in antes["perguntas"].values() for ato in p["atos"]
-        }
-        return {
-            pk for pk, p in depois["perguntas"].items()
-            if p["estado"] == P.PENDENTE and any(
-                ato["ato"] == D.REABERTURA and ato["pk"] not in atos_antes
-                for ato in p["atos"]
-            )
-        }
-
-    def _medir_rejeicao(self, fatos, escape, irma, *, retirar=False):
-        self.relogio.move_to(T1)
-        self._responder(escape, "ATESTADO")
-        try:
-            ausencia = Ausencia.objects.get(colaborador=self.colab, data=DIA, tipo="atestado")
-        except Ausencia.DoesNotExist:
-            self.fail("CENARIO NAO MONTAVEL: a passagem não criou o atestado do dia.")
-
-        montado = fatos["apos_passagem"] = self._foto_grupo(ausencia)
-        if retirar:
-            self.relogio.move_to(T2)
-            fatos["retorno_retirada"] = E.reabrir_para_correcao(
-                P.objects.filter(pk=escape.pk), por=self.admin, motivo="Retirada da âncora",
-            )
-        antes = fatos["antes"] = self._foto_grupo(ausencia)
-
-        devolver_real = M.devolver_absorvidas_da_ausencia_rejeitada
-        chamadas = fatos["retornos_devolucao"]
-
-        def observar_devolucao(a):
-            chamada = dict(ausencia_pk=a.pk, status=a.status)
-            chamadas.append(chamada)
-            chamada["retorno"] = devolver_real(a)
-            return chamada["retorno"]
-
-        self.relogio.move_to(T3)
-        # app/ponto/signals.py:259–279
-        with patch.object(M, "devolver_absorvidas_da_ausencia_rejeitada", new=observar_devolucao):
-            rejeitada = decidir(ausencia, "rejeitada", por=self.admin, motivo="Teste de rejeição") [nao verificado]
-        fatos["retorno_decidir"] = dict(pk=rejeitada.pk, status=rejeitada.status)
-        depois = fatos["depois"] = self._foto_grupo(ausencia)
-
-        reabertas_antes = self._novas_reaberturas(montado, antes)
-        reabertas_na_rejeicao = self._novas_reaberturas(antes, depois)
-        candidatas = {pk for pk, p in antes["perguntas"].items() if p["tipo"] == "hora"}
-        nao_devolvidas = candidatas - reabertas_antes - reabertas_na_rejeicao
-        contadas = {pk for pk, n in depois["contadas_na_trilha"].items() if n}
-        fatos.update(
-            reabertas_antes=sorted(reabertas_antes),
-            reabertas_na_rejeicao=sorted(reabertas_na_rejeicao),
-            nao_devolvidas=sorted(nao_devolvidas),
-            sem_contagem_na_trilha=sorted(nao_devolvidas - contadas),
-        )
-
-        self.assertEqual(depois["status_ausencia"], "rejeitada", "[M1] A ausência ficou rejeitada.")
-        self.assertTrue(
-            any(c["ausencia_pk"] == ausencia.pk and c["status"] == "rejeitada"
-                and "retorno" in c for c in chamadas),
-            "[M2] O callback real foi chamado com esta ausência rejeitada e retornou.",
-        )
-        vias_esperadas = {irma.pk: P.VIA_AUSENCIA_DIA}
-        if retirar:
-            vias_esperadas = {irma.pk: P.VIA_DECLARACAO, escape.pk: P.VIA_AUSENCIA_DIA}
-        fotos = montado["perguntas"]
-        campos = ("tipo", "estado", "via_resolucao", "materializada_em")
-        observado = {"perguntas": {
-            pk: tuple(fotos[pk][campo] for campo in campos) for pk in vias_esperadas
-        }}
-        esperado = {"perguntas": {
-            pk: ("hora", P.RESOLVIDA, via, T1) for pk, via in vias_esperadas.items()
-        }}
-        if retirar:
-            observado["grupo"] = sorted(montado["perguntas_absorvidas_por"])
-            esperado["grupo"] = sorted([escape.pk, irma.pk])
-            observado["retorno_retirada"] = fatos["retorno_retirada"]
-            esperado["retorno_retirada"] = 1
-        else:
-            observado["escape_tipo"] = fotos[escape.pk]["tipo"]
-            esperado["escape_tipo"] = "escolha"
-        self.assertEqual(observado, esperado, "[M3] A montagem divergiu da foto do anexo.")
-        self.assertEqual(
-            fatos["sem_contagem_na_trilha"], [],
-            "[R] Há perguntas de hora sem reabertura e sem linha de trilha desta ausência.",
-        )
-
-    def test_escolha_sem_ancora_e_atestado_rejeitado(self):
-        with medida("grupo escolha sem âncora") as fatos:
-            self._preparar()
-            escape = self._escape()
-            irma = self._irma_muda()
-            self._medir_rejeicao(fatos, escape, irma)
-
-    def test_ancora_retirada_e_atestado_rejeitado(self):
-        with medida("grupo âncora retirada após formação") as fatos:
-            self._preparar()
-            irma = self._irma_com_luz()
-            ancora = self._escape("hora")
-            self._responder(irma, "19:02")
-            with transaction.atomic():
-                P.trava_do_colaborador(self.colab.pk)
-                irma.refresh_from_db()
-                validacao._carimbar_validacao(irma, self.admin)
-            self._medir_rejeicao(fatos, ancora, irma, retirar=True)
-```
-
-Label para rodar a partir de `app/` na cópia descartável. (`app/manage.py:18`, `app/config/settings/ci.py:6`)
-
-```bash
-python3 manage.py test chamados.tests.test_main_dois_casos --settings=config.settings.ci
-```
-
-O `[M3]` usa a foto `apos_passagem`. No cenário sem âncora, `ausencia_dia` é a via esperada da irmã muda. No cenário ancorado, é a via esperada da própria pergunta de hora que recebe `ATESTADO`. A irmã com luz tem `declaracao` na foto do anexo. (`medida_dos_dois_em_c8eb.txt:1–2`, `app/chamados/models.py:2655`, `app/chamados/models.py:2683`)
-
-### Nome ausente → substituto
-
-| Nome procurado | Substituto e referência |
-|---|---|
-| `chamados.tests.test_e4c_f5_a1c_passagem_da_ausencia` e `PassagemDaAusenciaTest` | Fixtures locais com `BaseCortes.setUpTestData` do MAIN. Import procurado em `app/chamados/tests/`. (`medida_c8eb.py.txt:20`, `apoio_a1c_c8eb.py.txt:31–39`, `app/chamados/tests/cortes_f2_f9_apoio.py:37–44`) |
-| `a1c.T0`, `a1c.T1`, `a1c.T2`, `a1c.T3`, `a1c.DIA` | Constantes locais derivadas de `apoio.AGORA`, com os deslocamentos do anexo. (`apoio_a1c_c8eb.py.txt:24–28`, `app/chamados/tests/cortes_f2_f9_apoio.py:30`) |
-| `PassagemDaAusenciaTest._escape`, `._irma_muda`, `._irma_da_celula`, `._irma_com_luz` | `_escape` e `_irma_muda` locais. `_irma_com_luz` local incorpora a fixture da célula com luz acesa. (`apoio_a1c_c8eb.py.txt:41–63`, `apoio_a1c_c8eb.py.txt:73–78`, `app/chamados/models.py:2963`, `app/chamados/models.py:2981`, `app/escala/models.py:1819`) |
-| `PassagemDaAusenciaTest._responder`, `._passagem`, `._ausencia` | `_responder` local, avanço para `T1` com resposta `ATESTADO` e consulta direta do atestado pela mesma chave. (`apoio_a1c_c8eb.py.txt:80–104`, `apoio_a1c_c8eb.py.txt:135–136`, `app/chamados/services/disputa_emissao.py:1439`, `app/chamados/services/disputa_emissao.py:1560–1563`, `app/ponto/models.py:660`) |
-| `PassagemDaAusenciaTest._trilha` | `_trilha` local sobre o mesmo `LogAuditoria`, filtrando ação, modelo, PK e `valor_depois__ausencia_pk`. O PK é passado como inteiro, conforme o campo `objeto_id`. (`apoio_a1c_c8eb.py.txt:138–140`, `app/chamados/services/materializacao.py:1067–1071`, `app/chamados/services/materializacao.py:1089`, `app/core/models.py:296–301`) |
-| `DecisaoPergunta.composta` | `DecisaoPergunta.leitura` para os três campos compostos da foto. (`apoio_a1c_c8eb.py.txt:120`, `app/chamados/models.py:4295–4326`) |
-| `chamados.services.vigia_ato_x_coluna.contar` | Sem substituto para o placar A/B do anexo. O módulo foi procurado em `app/chamados/services/`. A medida pedida lê `PerguntaDisputa.estado`, os atos persistidos e a trilha da ausência. (`medida_c8eb.py.txt:18`, `app/chamados/models.py:3226`, `app/chamados/models.py:4166–4168`, `app/chamados/services/materializacao.py:1067–1071`) |
-
-### Passos sem caminho de produção localizado
-
-- Nenhum nos dois cenários. As referências para passagem, assinatura da irmã, retirada administrativa, rejeição e callback são `app/chamados/services/disputa_emissao.py:1560–1563`, `app/chamados/services/validacao.py:161–175`, `app/chamados/services/disputa_emissao.py:1584`, `app/ponto/services/ausencia.py:1057–1088` e `app/ponto/signals.py:259–279`.
-- Montagem e resultados em execução no MAIN [nao verificado].
-
-_7611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7612 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
