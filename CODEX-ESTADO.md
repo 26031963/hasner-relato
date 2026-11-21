@@ -1,7 +1,374 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 20:25** · publicado em **21/11/2026 20:25** (UTC-3)
+> Ultima resposta processada: **21/11/2026 20:29** · publicado em **21/11/2026 20:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 20:29 · sessao 47380138b4db · MEDIDA-FOLHA11-2111 · leitura · origem=Code
+
+## A. Fontes e recortes
+
+| Item | Fonte real | Unidade, universo e exclusões |
+|---|---|---|
+| **(a) 956** | A prévia chama `classificar_export`. O retrato lê `linhas_do_retrato` via `linha_do_colab`. Para comparar os dois critérios no instante da leitura, `montar_linhas` percorre em memória o mesmo caminho do lavrador até antes da persistência. `_dias_que_retem` fornece as datas e os motivos diários. `app/folha/views.py:350–351` · `app/folha/retrato_folha.py:98–111,930–953,1212–1243` · `app/folha/management/commands/lavrar_retrato_folha.py:65–79` · `app/folha/fora_da_folha.py:115–122` | **Colab-competência** para presença e `status/motivo`, **colab-dia** para o furo. Prévia e reconstrução partem dos fechamentos da empresa e competência, qualquer que seja o status. A foto parte das linhas gravadas e tem carimbo próprio. O detalhe diário exclui isentos, desligados e dias dispensados pelo retentor. `app/folha/export.py:765–788,1205–1213,1238–1296` · `app/folha/models.py:350–360` |
+| **(b) 246, 327, 476, 97** | `tarefa_do_dia` e `porta_da_tarefa` publicam razão, ações, fio e rota. `o_que_segura` dá o motivo de retenção e traduz a porta diária. O drawer usa `linha_do_colab` e `portas_da_linha`. `InsumosDoDono.dono` chama `dono_da_divergencia` com os insumos reais. `app/chamados/services/tarefa_do_dia.py:804–835` · `app/folha/fora_da_folha.py:257–305` · `app/colaboradores/views.py:994–1006` · `app/ponto/management/commands/e6_oraculo.py:182–195` | **Colab-dia**, em **todos os dias inclusivos da competência 11/2026** para cada PK, pelo corte de `Empresa.dia_inicio_competencia` via `janela_atual`. Os dias da CSV estão [nao verificado]. A sonda mostra o parecer do juiz em cada dia. O R1 só registra dono para divergências acima de 10 minutos que passaram pelos seus filtros. `app/ponto/janelas.py:24–63` · `app/ponto/management/commands/e6_oraculo.py:331–378` |
+| **(c) 265 em 31/10** | `celulas_do_periodo`, `vinculo_do_dia_carregado`, a `grade_da_celula` consumida pela tarefa, `minutos_previstos_do_dia`, `tarefa_do_dia`, `status_do_dia_lavrado` e `espelho_do_colab`. O resultado lavrado do supra-juiz fica em `CelulaDia.veredito` e `protestos`. `app/escala/alimentacao.py:54–76,269–317` · `app/chamados/services/tarefa_do_dia.py:635–643,825–835` · `app/escala/utils.py:2241–2282` · `app/ponto/status_dia.py:201–218` · `app/ponto/services/espelho.py:1210–1245` · `app/escala/models.py:1748–1778` | **Um colab-dia**, com janela pelo juiz `janela_atual`. A tarefa distingue fora do vínculo, isenção, tranca, célula ausente, marco ainda a vencer e ata sem lâmpadas. O espelho tem guardas próprias de escala, recorte e montagem da grade. Qual ramo explica o caso 265 está [nao verificado]. `app/ponto/janelas.py:60–63` · `app/chamados/services/tarefa_do_dia.py:214–246` · `app/ponto/services/espelho.py:489–501,523–585,687–706` |
+| **(d) emp2** | `dias_que_seguram` seleciona o motivo principal `furo_espelho` e devolve seus dias. A porta vem da tarefa e a tela de `portas_da_linha`. Para liberação, a sonda consulta a oferta de Resolver dia, as guardas de validação do fio, o gate de aprovação da ausência e a lista pendente do app, conforme a ação. A ponte lê `Command.handle` via `ler_r1`. `app/folha/fora_da_folha.py:125–174,279–295` · `app/folha/retrato_folha.py:1024–1076` · `app/colaboradores/services/calendario.py:97–104,125–167` · `app/chamados/services/validacao.py:681–706,740` · `app/ponto/services/ausencia.py:762–780` · `app/chamados/services/pergunta_no_app.py:68–90` · `app/ponto/management/commands/e6_oraculo.py:284–404` | **Colab-dia** para pendência e coincidência diária, **colaboradores distintos** para a ponte com o R1. Outros motivos principais do export ficam fora da lista de pendentes. O R1 parte de fechamentos de empresas ativas e exclui dia sem linha, isento, com ausência, sem valor no espelho, zero nos dois lados ou diferença explicada pela pausa; diferenças de até 10 minutos concordam. `app/folha/fora_da_folha.py:146–174` · `app/folha/export.py:1205–1213,1238–1296` · `app/ponto/management/commands/e6_oraculo.py:303–307,331–378` |
+
+O anexo registra **uma** troca de `entra` para `fora/furo_espelho` na `emp2`, com concordância entre prévia e reconstrução em memória no par `status/motivo`. A atribuição ao **956**, a data do furo e o evento que mudou o resultado estão [nao verificado]. `tabelas.txt:154,158` · `app/folha/retrato_folha.py:1212–1243`
+
+Na `emp2`, o anexo registra **240 pendentes** na prévia e **128** colaboradores na união do R1. A ponte por pessoa dá **94 em comum**, **146 só na pendência** e **34 só no R1**. A coincidência por dia está [nao verificado]. `tabelas.txt:22,39`
+
+Para o **97**, o juiz atribui `CADASTRO` quando o insumo aponta ausência de vínculo no dia. A tela de vínculo mostra **A definir** quando falta escala ativa e registra o GET `colaboradores:painel_vinculo` e o POST `colaboradores:vincular_escala`. O rótulo diário **Sem porta** vem da data gravada no retrato e pode coexistir com um link geral da linha. A sonda expõe os dois testemunhos para verificar o caso. As ocorrências individuais e os bugs em produção estão [nao verificado]. `app/ponto/management/commands/e6_oraculo.py:98–110` · `app/colaboradores/views.py:262–268` · `app/colaboradores/urls.py:12–13` · `app/templates/colaboradores/partials/painel_vinculo.html:42–48,128–137` · `app/templates/folha/_retrato_o_que_fazer.html:42–46` · `app/folha/retrato_folha.py:1066–1075`
+
+## B. `sonda.py`
+
+O script sai no chat. A execução em produção, a conferência Git do hash e as permissões de um admin concreto estão [nao verificado]. O envelope usa a rede dedicada ao Postgres e, na própria inicialização, reescreve a credencial, reafirma privilégios e grava trilha. Nesta volta de leitura, ficou sem execução. `bin/sonda_leitura.sh:121–143,153–193,216–240,245–250`
+
+```python
+import json
+import logging
+import socket
+import sys
+from collections import defaultdict
+from contextlib import ExitStack, redirect_stderr, redirect_stdout
+from datetime import date, timedelta
+from io import StringIO
+from unittest.mock import patch
+from urllib.parse import urlsplit
+
+ANO, MES, EMP2 = 2026, 11, 2
+REFERENCIA = date(ANO, MES, 1)
+DESCONHECIDO = "[nao verificado]"
+
+
+class EfeitoProibido(BaseException):
+    pass
+
+
+def proibir_efeito(*args, **kwargs):
+    raise EfeitoProibido()
+
+
+def ler_r1(Command, mes):
+    # Anexo sonda.py. Os pontos de coleta são do handle real do E6.
+    comando = Command(stdout=StringIO(), stderr=StringIO())
+    codigo = comando.handle.__func__.__code__
+    universo, div, falhas = {}, [], []
+
+    def coletar(quadro, evento, argumento):
+        # app/ponto/management/commands/e6_oraculo.py:307,316,401
+        if evento == "line" and quadro.f_lineno == 307:
+            dados = quadro.f_locals
+            universo[dados["e"].pk] = set(dados["ids"])
+        if evento == "exception" and quadro.f_lineno == 316 and not falhas:
+            falhas.append(argumento[1:])
+        if evento == "return":
+            div.extend(quadro.f_locals.get("div", ()))
+        return coletar
+
+    def observar(quadro, evento, argumento):
+        if evento == "call" and quadro.f_code is codigo:
+            return coletar
+
+    anterior = sys.gettrace()
+    sys.settrace(observar)
+    try:
+        comando.handle(mes=mes, ano=ANO, hoje=None, so_txt=False, csv=None)
+    finally:
+        sys.settrace(anterior)
+    if falhas:
+        erro, pilha = falhas[0]
+        raise erro.with_traceback(pilha)
+    return universo, div
+
+
+def selecionar(linha, *campos):
+    return None if linha is None else {k: linha.get(k) for k in campos}
+
+
+def medir(saida):
+    from django.core.serializers.json import DjangoJSONEncoder
+    from django.db import DatabaseError, connection, transaction
+    from django.db.models import Model
+    from django.urls import NoReverseMatch, Resolver404, get_urlconf, resolve, reverse, set_urlconf
+    from django.utils import timezone
+
+    from chamados.juizes import (
+        FIO_SEM_PORTA, motivo_implausivel_validacao, pergunta_respondida, pergunta_viva,
+    )
+    from chamados.models import ChamadoColaborador, PerguntaDisputa
+    from chamados.services.fio import chamado_que_lista
+    from chamados.services.materializacao import (
+        estado_aplicacao_pergunta, espera_declarado_x_gravado,
+    )
+    from chamados.services.pergunta_no_app import consulta_do_app
+    from chamados.services.tarefa_do_dia import (
+        carga_da_tarefa, porta_da_tarefa, tarefa_do_dia,
+    )
+    from chamados.services.validacao import _resposta_de_hora, entrega_que_barra_a_validacao
+    from colaboradores.models import Colaborador, Empresa
+    from colaboradores.services.calendario import resolver_dia_oferecido_nas_datas
+    from escala.alimentacao import celulas_do_periodo, vinculo_do_dia_carregado
+    from escala.models import EscalaColaborador
+    from escala.utils import minutos_previstos_do_dia
+    from folha.export import classificar_export
+    from folha.fora_da_folha import DESTRAVA, _dias_que_retem, _fio_da_porta, dias_que_seguram, o_que_segura
+    from folha.models import RetratoFolha
+    from folha.retrato_folha import linha_do_colab, montar_linhas, o_que_fazer, portas_da_linha
+    from ponto.janelas import janela_atual
+    from ponto.management.commands.e6_oraculo import Command, InsumosDoDono
+    from ponto.models import Ausencia
+    from ponto.services import espelho as servico_espelho
+    from ponto.services.ausencia import gate_aprovacao_ausencia
+    from ponto.status_dia import status_do_dia_lavrado
+
+    def emitir(bloco, pk=None, dia=None, **dados):
+        registro = {"bloco": bloco, "pk": pk, "data": dia, **dados}
+        print(json.dumps(registro, cls=DjangoJSONEncoder, ensure_ascii=False), file=saida)
+
+    def erro_tipo(bloco, classe):
+        print("ERRO_TIPO", bloco, classe, file=saida)
+
+    def executar(bloco, leitor):
+        falhas_sql = []
+
+        def so_leitura(execute, sql, params, many, context):
+            comando = sql.lstrip().upper()
+            permitidos = ("SELECT ", "SAVEPOINT ", "RELEASE SAVEPOINT ", "ROLLBACK TO SAVEPOINT ")
+            if many or not comando.startswith(permitidos):
+                raise EfeitoProibido()
+            try:
+                return execute(sql, params, many, context)
+            except DatabaseError as erro:
+                falhas_sql.append(erro)
+                raise
+
+        try:
+            with transaction.atomic():
+                with connection.execute_wrapper(so_leitura):
+                    valor = leitor()
+                    if falhas_sql:
+                        raise falhas_sql[0]
+            return valor
+        except (Exception, EfeitoProibido) as erro:
+            erro_tipo(bloco, type(erro).__name__)
+            return None
+
+    def colab(pk):
+        return Colaborador.objects.select_related("empresa").get(pk=pk)
+
+    def foto(c):
+        return RetratoFolha.objects.filter(empresa=c.empresa, mes=MES, ano=ANO).first()
+
+    def resolver_link(href):
+        try:
+            rota = resolve(urlsplit(href).path).view_name
+        except Resolver404:
+            return {"rota": None, "existe": False}
+        return {"rota": rota, "existe": True}
+
+    def rota_registrada(rota, pk):
+        try:
+            endereco = reverse(rota, args=[pk])
+        except NoReverseMatch:
+            return {"rota": rota, "existe": False}
+        return {"rota": rota, "existe": resolver_link(endereco)["rota"] == rota}
+
+    def links(portas):
+        return [
+            {"rotulo": p["rotulo"], **resolver_link(p["href"])}
+            for p in portas
+        ]
+
+    def tarefa_publicada(t):
+        campos = ("razao", "nao_sei", "fio", "rota", "acao")
+        instancias = []
+        for i in t["instancias"]:
+            instancias.append({
+                **selecionar(i, "instancia", "tipo", "razao", "motivo", "vencido"),
+                "acoes": [
+                    {**selecionar(a, "acao", "de"),
+                     "porta": a["porta"] if isinstance(a["porta"], str) else None,
+                     "porta_com_chamado": isinstance(a["porta"], int)}
+                    for a in i["acoes"]
+                ],
+            })
+        return {
+            **selecionar(t, *campos),
+            "tem_celula_na_tarefa": t["celula_id"] is not None,
+            "instancias": instancias,
+            "verbos": sorted({v for v in t["verbos"].values() if v is not None}),
+        }
+
+    def ler_a():
+        c = colab(956)
+        ini, fim = janela_atual(REFERENCIA, c.empresa)
+        retrato = foto(c)
+        gravado = linha_do_colab(retrato, c.pk)
+        previa = next(
+            (i for i in classificar_export(c.empresa, MES, ANO) if i["colaborador_id"] == c.pk),
+            None,
+        )
+        atual = next(
+            (i for i in montar_linhas(c.empresa, MES, ANO, agora=agora, hoje=hoje)
+             if i["colab"] == c.pk),
+            None,
+        )
+
+        def par(linha):
+            return None if linha is None else (linha["status"], linha.get("motivo") or None)
+
+        if par(previa) != par(atual):
+            leitura = "leitores_atuais_divergem"
+        elif previa is None:
+            leitura = "sem_linha_nos_leitores_atuais"
+        elif gravado is None:
+            leitura = "sem_linha_na_foto"
+        elif par(gravado) != par(previa):
+            leitura = "defasagem_do_par_gravado"
+        else:
+            leitura = "pares_concordam"
+
+        dias_gravados = None if gravado is None else gravado.get("datas")
+        dias = _dias_que_retem(c, ini, fim, hoje=hoje)[1]
+        return {
+            "ini": ini, "fim": fim, "foto_existe": retrato is not None,
+            "lavrado_em": None if retrato is None else retrato.lavrado_em,
+            "retrato": par(gravado), "previa": par(previa), "em_memoria": par(atual),
+            "comparacao": leitura, "datas_gravadas": dias_gravados,
+            "datas_em_memoria": None if atual is None else atual.get("datas"),
+        }, [
+            (d["data"], selecionar(d, "motivo", "veredito")) for d in dias
+        ]
+
+    def ler_b(pk, r1):
+        c = colab(pk)
+        ini, fim = janela_atual(REFERENCIA, c.empresa)
+        carga = carga_da_tarefa([c], ini, fim, agora)
+        retencao = o_que_segura(c, MES, ANO, agora=agora)
+        por_dia = {d["data"]: d for d in retencao["dias"]}
+        insumos = InsumosDoDono(c, ini, fim, hoje, agora=agora)
+        linha = linha_do_colab(foto(c), pk)
+        tela = None
+        if linha is not None:
+            tela = {
+                "campos": {r["chave"]: r["valor"] for r in o_que_fazer(linha, hoje=hoje)},
+                "rotas": links(portas_da_linha(linha)),
+            }
+        cadastro = None
+        if pk == 97:
+            tem_escala_ativa = EscalaColaborador.objects.filter(colaborador=c, ativa=True).exists()
+            cadastro = {
+                "escala_a_definir": not tem_escala_ativa,
+                "get": rota_registrada("colaboradores:painel_vinculo", pk),
+                "post": rota_registrada("colaboradores:vincular_escala", pk),
+                "envio_do_formulario": DESCONHECIDO,
+            }
+
+        linhas = []
+        dia = ini
+        while dia <= fim:
+            t = tarefa_do_dia(c, dia, agora, carga=carga)
+            fio = _fio_da_porta(porta_da_tarefa(t))
+            retido = por_dia.get(dia.isoformat())
+            marca = (
+                None if linha is None or "dias_sem_porta" not in linha
+                else dia.isoformat() in (linha["dias_sem_porta"] or ())
+            )
+            dono_dia = insumos.dono(dia)
+            tela_dia = None
+            if tela is not None:
+                tela_dia = {**tela, "marca_sem_porta": marca}
+            linhas.append((dia, {
+                "escopo": "todos os dias da janela 11/2026; dias da CSV [nao verificado]",
+                "ini": ini, "fim": fim,
+                "tarefa": tarefa_publicada(t), "fio_folha": fio,
+                "destrava": DESTRAVA.get(fio, DESCONHECIDO),
+                "status_export": retencao["entra"], "motivo_export": retencao["motivo"],
+                "retencao_dia": selecionar(retido, "motivo", "veredito"),
+                "rotas_diarias": links(retido["portas"]) if retido is not None else [],
+                "tela_retrato": tela_dia, "cadastro_97": cadastro,
+                "dono_juiz": dono_dia,
+                "dono_r1": (
+                    DESCONHECIDO if r1 is None
+                    else sorted(r1[1].get((c.empresa_id, pk, dia.isoformat()), ()))
+                ),
+            }))
+            dia += timedelta(days=1)
+        return linhas
+
+    def ler_c():
+        c, dia = colab(265), date(2026, 10, 31)
+        ini, fim = janela_atual(dia, c.empresa)
+        cel = celulas_do_periodo([c.pk], dia, dia).get((c.pk, dia))
+        vinculo = vinculo_do_dia_carregado(c.pk, dia)
+        carga = carga_da_tarefa([c], ini, fim, agora)
+        grade, isento = carga.grade(c)
+        gd = grade.get(dia)
+        t = tarefa_do_dia(c, dia, agora, carga=carga)
+        ata = {} if cel is None else cel.ata or {}
+        return {
+            "ini": ini, "fim": fim,
+            "celula": None if cel is None else {
+                "trabalha": cel.trabalha, "veredito": cel.veredito,
+                "via": cel.veredito_via, "veredito_em": cel.veredito_em,
+                "protestos": cel.protestos, "tem_geradora": bool(cel.escala_geradora_id),
+                "tem_lampadas": bool(ata.get("lampadas")),
+                "ata": selecionar(ata, "tipo_dia", "minutos_previstos", "n_celulas", "n_missing"),
+            },
+            "vinculo_do_dia": vinculo is not None,
+            "ciclo_do_vinculo": None if vinculo is None else vinculo.tipo_escala.tipo_ciclo,
+            "isento_grade": isento,
+            "grade": selecionar(gd, "tipo_dia", "minutos_previstos", "veredito", "sem_ancora"),
+            "previsto_min_juiz": minutos_previstos_do_dia(c, dia),
+            "estado_d4": selecionar(status_do_dia_lavrado(c, dia, agora=agora), "status", "fonte"),
+            "tarefa": tarefa_publicada(t),
+            "fio_folha": _fio_da_porta(porta_da_tarefa(t)),
+            "retencao_dia": next(
+                (selecionar(d, "motivo", "veredito")
+                 for d in _dias_que_retem(c, ini, fim, hoje=hoje)[1] if d["data"] == dia),
+                None,
+            ),
+        }
+
+    def ler_c_espelho():
+        c, dia = colab(265), date(2026, 10, 31)
+        ini, fim = janela_atual(dia, c.empresa)
+        falhas_grade = []
+
+        def observar_aviso(mensagem, *args, **kwargs):
+            classe = sys.exc_info()[0]
+            if mensagem.startswith("montar_dias: grade prevista falhou") and classe is not None:
+                falhas_grade.append(classe.__name__)
+
+        # app/ponto/services/espelho.py:583–585
+        with patch.object(servico_espelho.logger, "warning", observar_aviso):
+            esp = servico_espelho.espelho_do_colab(c, hoje, ini, fim, agora=agora)
+        linha = next((d for d in esp["dias"] if str(d["data"])[:10] == dia.isoformat()), None)
+        escala = esp["esc"]
+        tipo = escala.tipo_escala if escala is not None else None
+        insumos = InsumosDoDono(c, ini, fim, hoje, espelho=esp, agora=agora)
+        return {
+            "ini_visual": esp["data_ini"], "fim_visual": esp["data_fim"],
+            "ciclo_espelho": None if tipo is None else tipo.tipo_ciclo,
+            "template_tem_hora_inicio": None if tipo is None else bool(tipo.hora_inicio),
+            "grade_pelo_builder": bool(esp["resumo"].get("grade_pelo_builder")),
+            "linha_existe": linha is not None,
+            "marcos_previstos_canonicos": None if linha is None else len(linha["previsto_canon"]),
+            "veredito_espelho": None if linha is None else linha["veredito_dia"],
+            "dono_juiz": insumos.dono(dia),
+        }, falhas_grade
+
+    def indexar_r1():
+        universo, div = ler_r1(Command, MES)
+        por_dia = defaultdict(set)
+        for eid, pk, dia, dono, *_ in div:
+            por_dia[eid, pk, dia].add(dono)
+        return universo, por_dia
+
+    def
+
+[truncado em 20000 de 30354 caracteres]
 
 ## 21/11 20:25 · sessao 9e691ebcaa22 · - · - · origem=Ronald (tmux)
 
@@ -898,16 +1265,4 @@ O S3 elimina somente a sequência velha do `prefetch`. O passivo seleciona pela 
 
 A lista no apoio apenas carrega funções reais via AST para C8b, C8c e pós-suíte. A catraca varre fontes de produção. Sua regra por sítio conta `respondida_em` direto, e o aeb reconstruído produz duas leituras declaradas onde espera uma. O final passa com uma leitura declarada e `texto_sem_carimbo` classificado como `PAR`; retirar a influência da guarda também deixa essa catraca verde. A regra estrutural deixa de alcançar o novo uso por delegação. A fixture de fechamento legado oferece controle positivo indireto, sem execução ORM aqui. A suíte sem banco de C8b e da catraca passou com 46 testes. [e3_c8b_apoio.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/e3_c8b_apoio.py:116) · [test_e3_pendentes_app.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_e3_pendentes_app.py:96) · [test_e3_catraca_respondedores.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_e3_catraca_respondedores.py:545) · [test_fechar_disputa_materializada.py](/home/ronald/codex_ws/f3d23021f4cc0aa6f6e72efa1d6350647488ded9/app/chamados/tests/test_fechar_disputa_materializada.py:38)
 
-## 21/11 18:53 · sessao 86e7880ec7da · - · - · origem=Ronald (tmux)
-
-**Catraca.** A lista de `e3_c8b_apoio.py:116–124` carrega funções reais por AST no ambiente de testes. A catraca lê fontes de produção e exclui diretórios `test*`. A tolerância efetiva é a lista `FORA_PELA_PERGUNTA`, com contagem exata por sítio. Restaurar `p.respondida_em is None` em memória manteve zero respondedores, mas fez `_slot_esperado` saltar de uma para duas leituras declaradas e a asserção reprovar. `app/chamados/tests/e4_apoio.py:8–16` · `app/chamados/tests/test_e3_pendentes_app.py:96–115` · `app/chamados/tests/test_e3_catraca_respondedores.py:66–86,393–395,437–457,544–557` · `app/chamados/juizes.py:374,411`
-
-**S2 e S2b.** Os casos pedidos estão presentes. O explicador exige a classe, o motivo e a ausência do texto residual. Vínculo e destino caem no retorno `SEM_RESPOSTA_VIGENTE`. Remover esse motivo do retorno permitiria a absolvição pelos dois atalhos. A retratação exige carimbo mais trilha e cobre avulso e carga. O teste HX confirma `PLANTIO_SEM_TS` antes de aplicar os três controles. Execução ORM [nao verificado]. `app/chamados/tests/test_explicador_disputa.py:80–101` · `app/chamados/tests/test_marco_por_motivo.py:167–173,231–269` · `app/chamados/juizes.py:339–343,798–845` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–86`
-
-**Mordida do legado.** Os 46 casos da catraca e do C8b passaram. Os 38 casos C8b, C8c e pós-suíte selecionado também passaram com `or carimbo_legado` removido da foto. A fixture noturna fornece um par legal. O teste de fio com texto sem instante pode absolver pelo veredito da célula antes do slot. Cobertura ORM específica da exceção de legado [nao verificado]. `app/chamados/juizes.py:411–415,1498–1517` · `app/chamados/tests/e3_c8b_apoio.py:190–205` · `app/chamados/tests/test_e3_c8b_sem_banco.py:404–433` · `app/chamados/tests/test_fio_disputa_resolvido.py:44–50,94–106`
-
-**Foto velha.** O vigia expurga apenas o prefetch da sequência. O RED existente injeta devolução entre classificação e trava e cobra que o ato novo seja visto. A seleção, o agrupamento e as colunas da resposta permanecem pré-trava. O passivo relê só campos da materialização, e a composta combina sequência atual com texto da instância. A guarda posterior compara presença da validação e pode aceitar duas validações presentes de instantes distintos. `app/chamados/services/vigia_carimbo.py:121–123` · `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:95–129,146–156` · `app/chamados/services/passivo_validado.py:330–356,377–384,532–540` · `app/chamados/models.py:3384–3393,4382–4399` · `app/chamados/services/materializacao.py:1332–1336,1389–1395,1956–1971`
-
-Os oito blobs finais coincidem com os oito prefixos `index` do `delta.patch` fornecido. O comando para comparar com `5cc451ac3` falhou ao acessar a base. Total exato de `except` contra a base [nao verificado]. O delta fornecido elimina as duas capturas de `DatabaseError` e acrescenta a exceção semântica que deixa o texto legado alimentar o derivador sem C21. `app/chamados/services/validacao.py:1224–1232` · `app/chamados/tests/test_fila_validar_lote.py:110–123` · `app/chamados/juizes.py:409–419`
-
-_7752 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
