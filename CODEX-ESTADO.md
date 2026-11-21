@@ -1,7 +1,97 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 16:40** · publicado em **21/11/2026 16:46** (UTC-3)
+> Ultima resposta processada: **21/11/2026 16:48** · publicado em **21/11/2026 16:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 16:48 · sessao 1a64a28f04be · E4C-F5-CONSTROI · construtor · origem=Code
+
+PAREI no RED
+
+Obra **E4C-F5-CONSTROI**, base `41d21a249017e328617fbbd0dc4841f0794c78c8`. Aval `44f7c468aeb7` e rascunho `566c3b225f0c`, conforme `aval.txt:1`. Conferência independente dos hashes dos anexos [nao verificado].
+
+Editei três arquivos de teste e conferi a sintaxe por AST. A execução dos REDs, dos mutantes e da suíte fica com o Code e o opus final [nao verificado]. `chamados/tests/test_marco_por_motivo.py:168–277` · `chamados/tests/test_fila_validar_lote.py:79–126` · `chamados/tests/test_e3_c8b_sem_banco.py:369–402`
+
+### REDs e mutantes
+
+| Caso | Arquivo::teste | Asserção e sítio mordido | Mutante isolado | [nao verificado]
+|---|---|---|---|
+| a1 | `test_marco_por_motivo.py::test_RED_ato_posterior_nao_absolve_por_batida_vinculada_fora_do_marco` | Batida vinculada às 08h para marco às 13h. O juiz de fato reprova e o slot devolve `VETO_TEMPORAL` com `ts` e `tipo` vazios. Preserva o controle no empate. `chamados/tests/test_marco_por_motivo.py:178–197` · `chamados/juizes.py:349–356,765–782` | Deixar o vínculo sozinho absolver sob veto. |
+| a2 | `test_marco_por_motivo.py::test_RED_veto_temporal_nao_absolve_so_pelo_destino_encerrado` | Destino resolvido, sem batida vinculada nem carimbo. O juiz de fato reprova e o slot devolve `VETO_TEMPORAL`. A fixture atribui o destino em memória. `chamados/tests/test_marco_por_motivo.py:199–211` · `chamados/juizes.py:337–341,786–818` | Deixar o destino encerrado absolver sob veto. |
+| b1 | `test_marco_por_motivo.py::test_RED_data_hora_desfeita_nao_fornece_slot_pelo_texto_fisico` | Após reabertura com texto físico residual, exige `SEM_RESPOSTA_VIGENTE` e campos vazios, com horizonte explícito e em leitura avulsa. `chamados/tests/test_marco_por_motivo.py:149–158,213–222` · `chamados/juizes.py:349–379` | Voltar a entregar o texto físico residual ao parser. |
+| b2 | `test_marco_por_motivo.py::test_RED_hora_desfeita_depende_do_marco_fixo` | A resposta desfeita das 08h deixa `PLANTIO_SEM_TS` sem marco fixo. Com marco fixo, preserva `SLOT` às 13h, tipo `E`. Exercita os dois caminhos de leitura. `chamados/tests/test_marco_por_motivo.py:224–235` · `chamados/juizes.py:382–387` · `chamados/services/materializacao.py:691–704` | Voltar a passar o texto físico ao derivador de `hora`. |
+| c | `test_marco_por_motivo.py::test_RED_data_hora_desfeita_nao_relanca_erro_cacheado_do_slot` | A carga real armazena o motivo da `data_hora` inelegível e a própria exceção injetada na derivação da hora. A guarda da `data_hora` prevalece sobre uma entrada de erro. A hora elegível relança a mesma instância. `chamados/tests/test_marco_por_motivo.py:237–259` · `chamados/services/carga_pergunta_viva.py:117–127` · `chamados/juizes.py:361–367` | Isoladamente, perder o motivo ao armazenar, relançar o erro antes da guarda ou recriar a exceção com a mesma mensagem. |
+| d | `test_marco_por_motivo.py::test_RED_horizonte_divergente_e_recusado_antes_da_leitura` | Exige `ValueError` para horizontes separados por um segundo, antes de chamar a composta ou consultar o cache. `chamados/tests/test_marco_por_motivo.py:261–277` · `chamados/juizes.py:344–367` | Aceitar a carga de outro horizonte ou rejeitá-la só depois de ler a composta ou o cache. |
+| e1 | `test_fila_validar_lote.py::test_RED_lote_sem_resposta_vigente_vai_para_b_mesmo_com_marco_fixo` | A pergunta é A antes da reabertura. Depois, com texto residual e marco fixo, exige B com `SEM_RESPOSTA_VIGENTE`. `chamados/tests/test_fila_validar_lote.py:79–99` · `chamados/services/validacao.py:1213–1228` | Dispensar o C21 quando o marco fixo fornece slot. |
+| e2 | `test_fila_validar_lote.py::test_RED_lote_com_data_impossivel_vai_para_b_com_motivo` | O par passa no C21, mas `2026-09-31 15:08` exige B com `DATA_HORA_INVALIDA`. `chamados/tests/test_fila_validar_lote.py:101–108` · `chamados/juizes.py:370–381` · `chamados/services/validacao.py:1213–1228` | Deixar a ausência de slot cair em A. |
+| e3 | `test_fila_validar_lote.py::test_RED_lote_sem_consulta_de_conflito_vai_para_b_com_motivo` | Com consulta disponível e sem batida próxima, o controle é A. Se `.exists()` levanta `DatabaseError`, exige B com `porque` preenchido. Usei a chave `porque` já presente no classificador e deixei livre o código para falha da consulta. `chamados/tests/test_fila_validar_lote.py:110–126` · `chamados/services/validacao.py:1202–1211,1223–1228` | Propagar o erro ou tratar a consulta indisponível como ausência de conflito. |
+| f | `test_e3_c8b_sem_banco.py::test_testemunhas_de_materializacao_com_e_sem_carga` | Exige uma chamada ao juiz real em cada caminho, avulso e carregado, nas cinco expectativas originais. A asserção da chamada precede a do resultado. `chamados/tests/test_e3_c8b_sem_banco.py:369–402` · `chamados/juizes.py:1439–1456,1503–1512` | Zerar `celula.veredito` na fixture, fazendo a resposta vigente sair pelo degrau anterior ao juiz de fato. `chamados/tests/e3_c8b_apoio.py:183–198` |
+
+### Comandos para o Code
+
+Cada seletor também roda o mutante da linha correspondente, aplicado isoladamente sobre a cura. Os comandos da parte ORM usam a configuração de teste do repositório. `config/settings/ci.py:6–18,38–41`
+
+```bash
+red() {
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    --settings=config.settings.ci "chamados.tests.$1" -k "$2"
+}
+
+red test_marco_por_motivo test_RED_ato_posterior_nao_absolve_por_batida_vinculada_fora_do_marco
+red test_marco_por_motivo test_RED_veto_temporal_nao_absolve_so_pelo_destino_encerrado
+red test_marco_por_motivo test_RED_data_hora_desfeita_nao_fornece_slot_pelo_texto_fisico
+red test_marco_por_motivo test_RED_hora_desfeita_depende_do_marco_fixo
+red test_marco_por_motivo test_RED_data_hora_desfeita_nao_relanca_erro_cacheado_do_slot
+red test_marco_por_motivo test_RED_horizonte_divergente_e_recusado_antes_da_leitura
+red test_fila_validar_lote test_RED_lote_sem_resposta_vigente_vai_para_b_mesmo_com_marco_fixo
+red test_fila_validar_lote test_RED_lote_com_data_impossivel_vai_para_b_com_motivo
+red test_fila_validar_lote test_RED_lote_sem_consulta_de_conflito_vai_para_b_com_motivo
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest \
+  -k test_testemunhas_de_materializacao_com_e_sem_carga \
+  chamados.tests.test_e3_c8b_sem_banco
+```
+
+O mutante do C8b pode ser aplicado em memória. A falha esperada é a ausência da chamada ao juiz de fato [nao verificado]. `chamados/tests/test_e3_c8b_sem_banco.py:377–401` · `chamados/juizes.py:1439–1456`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import unittest
+from unittest.mock import patch
+
+from chamados.tests import e3_c8b_apoio
+
+testemunha_original = e3_c8b_apoio.testemunha
+
+def sem_veredito(*args, **kwargs):
+    caso = testemunha_original(*args, **kwargs)
+    for pergunta in caso[2]:
+        pergunta.celula.veredito = None
+    return caso
+
+nome = (
+    'chamados.tests.test_e3_c8b_sem_banco.AlimentacaoC6.'
+    'test_testemunhas_de_materializacao_com_e_sem_carga'
+)
+with patch.object(e3_c8b_apoio, 'testemunha', sem_veredito):
+    suite = unittest.defaultTestLoader.loadTestsFromName(nome) [nao verificado]
+    resultado = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
+raise SystemExit(0 if resultado.wasSuccessful() else 1)
+PY
+```
+
+### Escritores, leitores e significado
+
+| Campo | Quem escreve e quem lê | Significado |
+|---|---|---|
+| `motivo` | O contrato atribui a escrita a `_slot_esperado`. Os cinco leitores são `_pergunta_materializada_de_fato`, `carga_da_vida`, `classe_do_lote`, `_explicar_validada` e `classificar`. A base usa o par e, no juiz de fato, recompõe o veto. `rascunho.txt:7–21` · `chamados/juizes.py:344–387,765–774` · `chamados/services/carga_pergunta_viva.py:117–127` · `chamados/services/validacao.py:1223–1228` · `chamados/services/explicador.py:48–55` · `chamados/services/vigia_carimbo.py:105–116` | Uma causa explícita por resultado, com a mesma semântica nos cinco leitores. Unidade, fuso e limites temporais ficam nos campos de instante. `rascunho.txt:7–21` |
+| `ts` | `_slot_esperado` deriva `data_hora` e repassa o instante da autoridade de plantio em `hora`. Os cinco leitores consomem o instante. O vigia o repassa a `passivo_validado`, que deriva o dia do plantio. `chamados/juizes.py:370–387,765–781,833–835` · `chamados/services/materializacao.py:691–710` · `chamados/services/carga_pergunta_viva.py:126–143` · `chamados/services/validacao.py:1223–1227` · `chamados/services/explicador.py:52–78` · `chamados/services/vigia_carimbo.py:110–116` · `chamados/services/passivo_validado.py:330–348` | Mesmo significado de `datetime` com fuso. `data_hora` usa a data declarada, e `hora` pode chegar a D+1 pela cadeia do turno. As janelas são próprias de cada leitor. O juiz e a carga usam ±20 min inclusivos, a consulta de conflito usa ±60 min inclusivos e o explicador usa ±20 min inclusivos para a vizinha e `[−6h, +30h)` para o contexto do dia. `chamados/juizes.py:238–282,313–333,370–387` · `chamados/services/carga_pergunta_viva.py:126–143` · `chamados/services/validacao.py:1152,1223–1227` · `ponto/turnos.py:2891–2896` · `chamados/services/explicador.py:57–78` |
+| `tipo` | `_slot_esperado` fornece `E` em `data_hora` e repassa o tipo do plantio em `hora`. O juiz de fato usa o valor na busca por janela e o explicador usa na descrição e comparação. Carga e vigia descartam o tipo na leitura atual. O lote lê só `ts`. `chamados/juizes.py:379–387,833–835` · `chamados/services/materializacao.py:624–626,672–689,710` · `chamados/services/explicador.py:52,80–87` · `chamados/services/carga_pergunta_viva.py:126` · `chamados/services/vigia_carimbo.py:110` · `chamados/services/validacao.py:1223` | `E` ou `S` designa o tipo da batida. Os consumidores que usam o valor compartilham esse significado. `chamados/juizes.py:238–248,379–387` · `chamados/services/explicador.py:80–87` |
+| `carga.agora` | `CargaDaTarefa` guarda o argumento e `carga_da_vida` o copia. `_slot_esperado`, `_pergunta_materializada_de_fato` e `pergunta_viva` leem o atributo quando o horizonte explícito está ausente. `chamados/services/tarefa_do_dia.py:520–525,629–637` · `chamados/services/carga_pergunta_viva.py:83–88` · `chamados/juizes.py:344–354,690–691,903–908` | Mesmo horizonte em `datetime` com fuso. A projeção exclui atos estritamente posteriores, preservando o empate. `_hoje` converte o instante para a data civil local quando necessário. `chamados/juizes.py:1399–1419` · `chamados/veredito_lavrado.py:95–104` · `config/settings/base.py:93–95` |
+| `carga.slots` | `carga_da_vida` inicializa e grava por `p.pk`, além de ler a entrada para montar limites. `_slot_esperado` consulta o cache e relança a exceção alcançada. O contrato troca o par pelo resultado completo e conserva a própria exceção. `chamados/services/carga_pergunta_viva.py:95,113–144` · `chamados/juizes.py:361–367` · `rascunho.txt:13–15` | Um mapa por consulta, com PK como chave e horizonte em `carga.agora`. A entrada preserva o significado de `motivo`, `ts` e `tipo`, ou a identidade do erro. Os limites de batida usam inclusividade no filtro, fora do valor guardado. `chamados/services/carga_pergunta_viva.py:69–75,88,113–144` · `rascunho.txt:13–15` |
+
+Na cópia, o único chamador direto que pode passar `agora` e `carga` juntos é `_pergunta_materializada_de_fato`. No caminho carregado da tarefa, ambos saem de `self.agora`. O aquecimento passa só a carga, e lote, explicador e vigia passam só a pergunta. Divergência na frota e contagem A → B por empresa [nao verificado]. `chamados/services/tarefa_do_dia.py:629–637` · `chamados/services/carga_pergunta_viva.py:88,119` · `chamados/juizes.py:765–766,1510–1512` · `chamados/services/validacao.py:1223` · `chamados/services/explicador.py:52` · `chamados/services/vigia_carimbo.py:110`
+
+**LEI-AKITA.** Origem em `_slot_esperado`, testemunha no motivo explícito, REDs de veto temporal, resposta desfeita e identidade da exceção. Cinco chamadores diretos, zero juízes novos. Padrão Single Writer Principle. `chamados/juizes.py:344–387,765–766` · `chamados/tests/test_marco_por_motivo.py:178–259` · `rascunho.txt:47`
 
 ## 21/11 16:40 · sessao 332160fd17f8 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -896,90 +986,4 @@ Os existentes divergentes cabem na lista ao admin pela L-099. O A4 exclui admini
 
 [truncado em 20000 de 30853 caracteres]
 
-## 21/11 15:17 · sessao c9bbc1c0c0a2 · E4C-F5-CONSTROI · leitura · origem=Code
-
-## 1. Ordem dos relógios no hash `cb600242b`
-
-O `models.py` do hash pedido tem o mesmo conteúdo que o da F5 `b0935c1f1` usada no par. Os resultados medidos abaixo são da rodada 2 do par. [app/chamados/models.py:1555](/home/ronald/codex_ws/cb600242bd2a129e5bea3aea19c53ebb363a49e1/app/chamados/models.py:1555), `par.md:2–5`.
-
-| Função | Relógio e ordem atual |
-|---|---|
-| `_universo_da_ressuscitacao` | Monta o queryset com `prefetch_related('decisoes')`, lê `_agora_sonda = _tz_s.now()` e só então itera. A iteração avalia o SELECT das perguntas e o SELECT do prefetch antes do primeiro `yield`. O cache da cópia conserva `ato_em > _agora_sonda`. A chamada à trava ocorre depois de o auxiliar retornar. `app/chamados/models.py:1549–1561`, `app/chamados/juizes.py:1188–1196`, `app/chamados/models.py:1591–1596`, `app/chamados/models.py:1632–1651`. |
-| `ressuscitar_perguntas` | Chama o auxiliar e retorna `0` se `ids` vier vazio. Com IDs, busca as disputas, pede `trava_na_ordem`, relê o conjunto gravável e promove o passivo da projeção. Depois lê `_agora_r = _tz_r.now()`, **antes do segundo prefetch** de `decisoes`, o das fotos. `_agora_r` carimba a `REABERTURA`. `app/chamados/models.py:1632–1651`, `app/chamados/models.py:1669–1674`, `app/chamados/models.py:1701–1719`. |
-| `perguntas_a_ressuscitar` | Devolve os `ids` de uma chamada ao auxiliar. A única leitura direta de hora desse caminho é `_agora_sonda` no auxiliar, hoje antes do prefetch. `app/chamados/models.py:1520–1526`, `app/chamados/models.py:1555–1561`. |
-| `perguntas_puladas_na_ressuscitacao` | Faz uma chamada própria ao auxiliar e devolve `marco_aceso` e `c6_morta`. Sua leitura de `_agora_sonda` também antecede o prefetch. `app/chamados/models.py:1528–1532`, `app/chamados/models.py:1555–1561`. |
-
-Esses são os dois `timezone.now()` diretos nos quatro corpos. No caminho indireto do C6, a janela pode usar `date.today()` e a classificação de falta pode usar `_tz.now()` para o fim do turno. Esses valores pertencem ao julgamento da janela e da falta. `app/chamados/models.py:1520–1759`, `app/chamados/juizes.py:590–599`, `app/chamados/juizes.py:1476–1483`, `app/escala/servico_jornada.py:385–388`.
-
-## 2. Diff exato para o Opus
-
-O hunk passou por `git apply --check` contra a cópia e por análise sintática em memória. A leitura ocorre uma vez por lote não vazio, na primeira entrada no corpo do laço, antes de qualquer `continue`. O gerador continua intercalando a entrega da pergunta com o preenchimento do mapa de colaboradores. `app/chamados/models.py:1555–1568`, `app/chamados/juizes.py:1188–1196`.
-
-```diff
-diff --git a/app/chamados/models.py b/app/chamados/models.py
-index d8a66cf41..9cc8d5b68 100644
---- a/app/chamados/models.py
-+++ b/app/chamados/models.py
-@@ -1555,10 +1555,12 @@
-         ).select_related('celula', 'disputa').prefetch_related('decisoes')   # E4C-F5: linhas do ato num lote so
-         ids, pulados, mortas_c6 = [], [], []
-         from django.utils import timezone as _tz_s
--        _agora_sonda = _tz_s.now()   # o instante da REABERTURA que a porta grava (`_agora_r`, a mesma borda)
-+        _agora_sonda = None
-         # IDENTITY MAP (N1-PERGUNTAS-DO-APP, aval Ronald N1-IDENTITY-MAP 04/11 18:0x): o C6 e a tranca leem UMA instancia do
-         # colaborador por laco (`chamados/juizes.py::um_colaborador_por_identidade`), nao uma por pergunta.
-         for p in um_colaborador_por_identidade(qs):
-+            if _agora_sonda is None:
-+                _agora_sonda = _tz_s.now()   # a iteracao ja avaliou o lote e o prefetch
-             # E4c F1 NOVA B2 volta 3 (Codex v2 achado 2): a face negada do juiz traz o legado TEXTO SEM INSTANTE. Sem
-             # instante e sem validacao, `DecisaoPergunta.linhas_da_projecao_sem_linha` nao tem linha que guarde o
-             # texto, e a porta abaixo o zeraria sem trilha (L-130: o anterior fica na trilha do ato). Fica FORA,
-```
-
-O escritor pede, em ordem, **o colaborador do chamado, as disputas distintas dos `ids`, o próprio chamado e as perguntas de `ids`**. A releitura sob trava restringe a escrita às perguntas ainda materializadas e dentro do fato. `app/chamados/models.py:1632–1651`, `app/chamados/models.py:1669–1674`, `app/chamados/models.py:2875–2904`.
-
-**No par**, o wrapper grava a `VALIDACAO` em `12:00:00,5` antes de executar o lote real. Com C, `_agora_sonda` lê `12:00:00,5` e o filtro estrito `>` descarta o ato empatado. O C6 recebe a projeção zerada e inclui a PK `1`. A main chega ao mesmo resultado julgando a projeção zerada. Os dois caminhos passam `[1]` para `perguntas=`, com o mesmo colaborador, disputa e chamado da fixture. A main mediu `pedidas=[[1]]`. O resultado deduzido para C é `pedidas=[[1]]`, `n=1`, uma `REABERTURA` em `12:00:01,5` ou `12:00:00,5` conforme o teste, e `n2=0`. `test_f2_ressuscitar_tarefa_igual.par.py:321–353`, `app/chamados/models.py:1581–1596`, `app/chamados/models.py:1651`, `app/chamados/models.py:1713–1722`, [main app/chamados/models.py:1572](/home/ronald/wt-f5-4c1-main-135208/app/chamados/models.py:1572), [main app/chamados/models.py:1632](/home/ronald/wt-f5-4c1-main-135208/app/chamados/models.py:1632), `par.md:12–17`. Execução com C [nao verificado].
-
-## 3. As duas bordas que ficam
-
-- **`_agora_sonda`, depois do lote.** Simula a reabertura sobre os atos que o primeiro prefetch trouxe. É inócua para um ato visível com `ato_em <= _agora_sonda`, inclusive no empate. Uma `VALIDACAO` vigente, visível e carimbada além desse relógio continua no cache e pode pôr a PK em `c6_morta`. `parei.md:16`, `app/chamados/models.py:1581–1596`, `app/chamados/juizes.py:1407–1412`.
-- **`_agora_r`, sob a trava.** Carimba a reabertura real. A sequência ordena as linhas reais por `(ato_em, pk)` e a `REABERTURA` limpa validação e resposta. Com relógio não decrescente, a diferença é inócua para a seleção se nenhuma validação vigente visível cair em `(_agora_sonda, _agora_r]`. Exemplo que expõe a diferença: sonda em `12:00:00,5`, validação já visível carimbada `12:00:01,0`, e reabertura em `12:00:01,5` **se a PK chegasse à escrita**. A simulação exclui a PK, embora uma reabertura naquele instante limpasse a validação. Com uma única PK, o retorno é `0` antes da trava. `parei.md:16`, `app/chamados/models.py:1592–1596`, `app/chamados/models.py:1632–1638`, `app/chamados/models.py:1702–1719`, `app/chamados/models.py:4330–4331`, `app/chamados/models.py:4361–4379`.
-
-O aval 1515 fecha o censo da aplicação em **0 sítios** e exclui o restore do censo de escritores. O caso de dump vindo de uma origem com relógio adiantado fica no registro `RESTORE-CONFERE-RELOGIO`, dono Code, depois do pouso. Ocorrência em produção [nao verificado]. `resposta_4c1_censo_2111_1515.txt:1`, `scripts/restore_tenant.sh:8`.
-
-## 4. Chamadores, guarda e `agora=`
-
-| Função | Chamadores diretos de produção |
-|---|---|
-| `ressuscitar_perguntas` | `ChamadoColaborador.reabrir`, cartório e desarquivamento. `app/chamados/models.py:1517`, `app/ponto/services/cartorio.py:1721`, `app/chamados/views_arquivar.py:86`. |
-| `_universo_da_ressuscitacao` | Escritor e as duas prévias. A trilha do escritor também consome `pulados` e `mortas_c6`. `app/chamados/models.py:1526`, `app/chamados/models.py:1531`, `app/chamados/models.py:1632`, `app/chamados/models.py:1745–1754`. |
-| `perguntas_a_ressuscitar` | `_perguntas_relavradas_ou_ressuscitadas`, que une a prévia às ancoradas da relavra. A guarda acrescenta a pergunta gatilho, testa exportada e limbo e só então pode chamar `credor.reabrir()`. `app/chamados/services/disputa_emissao.py:1851–1861`, `app/chamados/services/disputa_emissao.py:1889–1911`. |
-| `perguntas_puladas_na_ressuscitacao` | Cartório, após retorno `0`, para `[FIO-MARCO-ACESO]` e `[FIO-C6-MORTA]`. `app/ponto/services/cartorio.py:1721–1739`. |
-
-O auxiliar chama `pergunta_viva(_q)` com `agora=None` por padrão. A costura `pergunta_viva(..., agora=...)` recorta valores futuros e pode fixar `hoje` a partir do instante passado. C usa `_agora_sonda` apenas no recorte do cache. `app/chamados/models.py:1591–1595`, `app/chamados/juizes.py:868–900`, `app/chamados/juizes.py:1384–1412`.
-
-**As prévias continuam iguais à main no par, por leitura do código.** O relógio fica congelado no instante da validação durante as duas chamadas de prévia. Ler a sonda depois do lote conserva `ids=[1]`, `marco_aceso=[]` e `c6_morta=[]`. O par anterior mediu a igualdade das prévias nesse instante e chamou o escritor diretamente. A execução da guarda de exportada com C fica [nao verificado]. `test_f2_ressuscitar_tarefa_igual.par.py:323–353`, `par.md:12–17`, `parei.md:6`, `app/chamados/services/disputa_emissao.py:1889–1911`.
-
-## 5. Mutante e comandos pela porta
-
-No diff aplicado, troque só `_agora_sonda = None` por `_agora_sonda = _tz_s.now()`. A leitura volta a anteceder o wrapper, e a guarda interna deixa de reler. Os dois `RED_4c1` devem voltar a falhar em `n == 1`, com `n=0` e sem pedido de trava na primeira chamada. O controle sem tick deve seguir verde. `app/chamados/models.py:1557–1561`, `app/chamados/models.py:1592–1596`, `app/chamados/models.py:1632–1638`, `test_f2_ressuscitar_tarefa_igual.par.py:364–389`, `par.md:12–15`.
-
-Use o mesmo teste do par, SHA256 `3f647993c456943a45d8312f310a326bed73d36bbea36281b1c9e635d022e1ef`. O primeiro comando cobre o par e os controles herdados. O segundo isola os dois alvos para a volta mutante. `par.md:2–5`, `par.md:15`, `bin/suite.sh:136–146`, `bin/suite.sh:197–207`, `bin/suite.sh:318–325`.
-
-```bash
-bin/suite.sh --dir "<wt>" --only chamados -- -k test_f2_ressuscitar_tarefa_igual
-bin/suite.sh --dir "<wt>" --only chamados -- -k test_RED_4c1
-```
-
-## 6. Contraexemplos
-
-| Caso | Efeito de C |
-|---|---|
-| **VM atrasada, `ato_em > _agora_sonda`** | Com relógio não decrescente durante a chamada, uma validação visível em `(_agora_sonda, _agora_r]` ainda pode excluir indevidamente a PK. É a falha residual da F5. Se o ato está além de `_agora_r`, uma reabertura nesse instante também o deixaria vigente. Se o relógio **recua entre as leituras**, há contraexemplo de regressão: sonda antiga em `12:00:00`, validação em `12:00:01`, sonda de C em `12:00:02` e `_agora_r` em `12:00:00,5`. A F5 exclui a PK, C pode gravar e a validação sobreviver na sequência. Ocorrência [nao verificado]. `app/chamados/models.py:1558`, `app/chamados/models.py:1592–1596`, `app/chamados/models.py:1702–1722`, `app/chamados/models.py:4361–4379`. |
-| **Commit depois do SELECT do prefetch inicial** | O ato fica fora da simulação em ambas. Se a PK já foi selecionada e o ato aparece na releitura da escrita, a `REABERTURA` o limpa quando `ato_em <= _agora_r` e a linha já existe no empate. O caso de texto chegando entre a leitura e a trava continua coberto pelas fotos da escrita. Concorrência real no par [nao verificado]. `app/chamados/models.py:1591–1595`, `app/chamados/models.py:1652–1683`, `app/chamados/models.py:1702–1719`, `app/chamados/models.py:4361–4379`, `par.md:18`. |
-| **Empate sem tick** | Sem regressão pela ordem do código. A validação igual à sonda sai pelo `>` estrito, e a `REABERTURA` gravada depois vence por PK no mesmo instante. Controle verde na rodada 2 original. `app/chamados/models.py:1592`, `app/chamados/models.py:4361–4379`, `test_f2_ressuscitar_tarefa_igual.par.py:386–389`, `par.md:14`. |
-| **`RED_10`** | Sem regressão pela ordem do código. O teste faz A ressuscitar enquanto B espera a trava. B carimba e grava a resposta **depois** de A, sob a trava do dono, e a resposta continua vigente. C preserva `_agora_r` sob a trava de A e o relógio pós-trava de B. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:244–274`, `app/chamados/models.py:1651`, `app/chamados/models.py:1702`, `app/chamados/services/disputa_emissao.py:1478–1501`, `app/chamados/services/disputa_emissao.py:1532–1537`, `par.md:15`. |
-
-**DIFF com ressalva (a validação futura visível ainda pode excluir a PK, e o aceite com C e o mutante está [nao verificado]).** `parei.md:16`, `resposta_4c1_censo_2111_1515.txt:1`, `respostas_2111_1445.txt:2`.
-
-_7706 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7707 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
