@@ -1,7 +1,128 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 13:35** · publicado em **21/11/2026 13:36** (UTC-3)
+> Ultima resposta processada: **21/11/2026 13:42** · publicado em **21/11/2026 13:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 13:42 · sessao d77d5d11c5bb · AUDITORIA-DE-TRAVAS · leitura · origem=Code
+
+## 1. Inventário
+
+**AUDITORIA-DE-TRAVAS-2111-1325, papel leitura.** Entrega em texto, em modo somente leitura. A cópia foi identificada pelo hash informado no pedido. A confirmação do hash por metadados Git, a instalação efetiva dos hooks no host e a posição da auditoria na fila real de leitura ficam **[nao verificado]**. A ordem prescrita põe a auditoria depois da FICHA 1, fora do teto de construtores. `aval_2111_1325.txt:1–2,6–7`
+
+**Linha de base.** O pré-voo entrou em vigor em 14/11. O GATE-PELA-CLASSE saiu por aval complementar no mesmo dia, antes de entrar em vigor. O DIFF na sombra permaneceu. O timeout por papel já tinha pousado em 12/11. O HEAD ainda cobra composição, identidade, posição e publicação na catraca, além do total. Também mantém prova de `ESPERANDO` por arquivo. A cura do andável e a liberação automática de B3 ficaram estacionadas. Esses pontos entram como divergências de implantação ou decisões anteriores, fora de um novo corte. `corte_das_travas_1411.txt:2–7` `contrato.md:1–12` `app/docs/RELATO.md:3031,3035,3039,3093,3442` `app/docs/BACKLOG.md:2805,2807–2809` `app/core/tests/test_medida_turno_do_par.py:504–517,542–571` `bin/hook_stop_fila1.py:814–838`
+
+A unidade da tabela é uma decisão que pode barrar ou devolver uma etapa. Entradas em fases diferentes têm IDs próprios quando podem barrar independentemente. O CENSO automático recebe um ID para o juiz e uma referência para a chamada do wrapper. Os testes que exercitam uma guarda ficam na linha dela. O lote de selos de host da régua é um portão de execução. `aval_2111_1325.txt:3` `bin/disjuntor.py:46–55,1723–1759` `bin/regua.sh:128–149` `bin/pre-push.sh:12–42`
+
+Na tabela, `B`, `Rlt`, `Cor`, `Pst`, `Lap`, `Lei` e `Prm` são os respectivos `app/docs/BACKLOG.md`, `RELATO.md`, `CORTES.md`, `PISTA.md`, `LAPIDES.md`, `LEIS.md` e `PROMPTS.md`. `W` é `bin/codex_pergunta.sh`, `H` é `bin/hook_stop_fila1.py`, `D` é `bin/disjuntor.py`, `PP` é `bin/pre-push.sh` e `CT` é `app/core/tests/test_medida_turno_do_par.py`. Na origem do wrapper, **L-126** remete ao corte de **06/11** e ao pouso de **07/11**. A coluna de data distingue **antes**, **14/11** e **depois**. `Lei:147` `B:1929`
+
+| ID | Trava vigente | Arquivo:linha | O que confere | Incidente ou origem e data | Corte 14/11 |
+|---|---|---|---|---|---|
+| P01 | Devolução do turno | `CLAUDE.md:262–264` | Exige `!` no topo ou espera provada | PAREI por encaixe técnico, consolidado 31/10. `Lap:531–538` `CLAUDE.md:252–259` | Antes |
+| P02 | `!` reservado a Ronald | `CLAUDE.md:265–268` | Exportada, escala/vínculo, arquivo usado por prod, escopo, atalho e motor v2 | Três estragos em 25/09, incluindo checkout que pôs a UI em 500. `Lap:213–221` | Antes |
+| P03 | Pergunta de lei | `CLAUDE.md:269–273` | Suspende a fatia dependente, exige números e preserva o corte literal | Turno devolvido com B1 e S4 andáveis em 29/09. `Lap:520–527` | Antes |
+| P04 | Pergunta de desenho | `CLAUDE.md:274–275` | Para a obra quando a classe muda o desenho ou há reprovação final | REPROVA-E-DESENHO, 31/10. `D:11–19,138–139` | Antes |
+| P05 | Lei escrita, autoridade medida e cura restritiva | `CLAUDE.md:272–281` | Declara juiz existente com autoridade e universo medidos. Exige pergunta para predicado novo | AUTONOMIA-DE-CODIGO 11/10. `CLAUDE.md:260–261` `Pst:53–56` | Antes |
+| P06 | Prova da etapa anterior | `CLAUDE.md:282–290` | Passagem com prova no RELATO e trilha de reversão | Autorização prévia aplicada à FOLGA-6X1 em 22/09. `Lap:225–230` | Antes | [nao verificado]
+| P07 | Ordem da vaga e continuidade da fila | `CLAUDE.md:288–298` | Prioriza fila 1 e dependências, confere teto antes de abrir, respeita portão e quarentena | Consolidação 31/10, modo 1 Opus + 1 Codex em 06/11. `CLAUDE.md:252–255` `Prm:1905` | Antes |
+| P08 | CONGELA-O-20 | `Cor:469` | Limita o escopo ativo da espinha e envia novidade a POS-20, salvo os casos do corte | Lista fechada, 11/11. `B:2368` | Antes |
+| P09 | Reserva de leitura | `Cor:538` | Prioriza espinha e revisão sobre leitura de reserva | Corte de 17/11. `Cor:538` | Depois |
+| R01 | Cópia e colisão por arquivo | `CLAUDE.md:309–311` | Obra em cópia, paralelismo condicionado a arquivos em comum e teto dos BOs | RAIA-NAO-FICA-PARADA, 10/10. `Pst:44–50` | Antes |
+| R02 | Raia própria da UI | `CLAUDE.md:311–313` | Restringe `wt-ui` a casca e testes de tela, com deploy sem migrate | Descongelamento da fila 2, 29/09. `Pst:17–25` | Antes | [nao verificado]
+| R03 | Juiz antes do sítio | `CLAUDE.md:314–315` | Declara autoridade antes de curar sítio de pergunta sem juiz | O261-E-CELULA-20, quatro reprovações, corte 31/10. `Pst:53–56` | Antes |
+| R04 | Agente entrega e encerra | `CLAUDE.md:316–319` | Espera de processo fica com a sessão, agente entrega comando e caminho | AGENTE-NAO-ESPERA, 28/10. `Pst:59–62` | Antes |
+| R05 | Modelo pelo papel | `CLAUDE.md:317–319,357–365` | Seleciona modelo no despacho e condiciona os desvios | AGENTE-NO-MODELO-CERTO, 28/10. `Pst:64–69` | Antes |
+| R06 | Suíte uma vez por árvore | `CLAUDE.md:320–321` | Exige árvore certificada e `cmp` dos arquivos antes do pouso | Deduplicação 01/10, regra de identidade 10/10. `B:1402` `Pst:29–41` | Antes | [nao verificado]
+| R07 | Comboio | `CLAUDE.md:321–324` | Confere janela de 30 min, conflito, veredito e sequência dos pousos | POUSO-EM-COMBOIO, 10/10. `Pst:29–41` | Antes | [nao verificado]
+| R08 | Pouso verde e dependências | `CLAUDE.md:282–285,325–329` | Pousa raia certificada antes de nova fatia e mantém merge, commit e deploy no mesmo ato | Folha travada em 04/10. `Lap:203–209` | Antes | [nao verificado]
+| R09 | Pouso próprio de instrumento | `CLAUDE.md:325–329` | Separa o pouso do instrumento do pouso do produto | CERT-AST no pacote da folha, 04/10. `Lap:203–209` | Antes | [nao verificado]
+| R10 | Esmeril do marco | `CLAUDE.md:330–331` | Apaga órfão com zero chamador provado. Achado externo vai à fila | Consolidação 31/10. Incidente e data original [nao verificado]. `CLAUDE.md:301–306` `Lap:599–604` | Antes |
+| R11 | Docs e push no marco | `CLAUDE.md:332–336` | Docs no mesmo commit do marco, push por marco e exceção do derivado | 23 de 42 commits só de docs em 04/10. `Lap:203–209` | Antes | [nao verificado]
+| R12 | Marco antes de compactar | `CLAUDE.md:332–336` `.claude/settings.json:14–60` | Handoff do marco fechado e vedação durante DIFF/apply. PreCompact e SessionStart executam o handoff e o registro do ciclo | Perda de medida ainda sem publicação. Handoff datado de 01/10. `Lap:590–595` `bin/handoff_sessao.sh:2–15` | Antes |
+| R13 | Pré-voo | `Rlt:3093` | Ruff, mypy, catraca, diagrama e selos de host verdes na mesma árvore antes da inteira | 20 inteiras falharam só por forma na medida anterior, corte 14/11. `corte_das_travas_1411.txt:2` | 14/11 |
+| R14 | Janela de deploy de auth | `bin/deploy.sh:145–147` `bin/janela_auth.sh:2–24` | Auth na faixa 23:20–06:00, com saída de emergência motivada | P0 de login 20/09, lei em 23/09, faixa refeita em 14/11 após pouso revertido. `bin/janela_auth.sh:2–14` `B:755–756` `Cor:480` | Antes, forma de 14/11 |
+| R15 | Triagem da trava, item A | `Rlt:12042` | Preverif no mesmo hash, obra em pergunta/lei/`!` fora da fila da suíte, pouso antes de pre-opus e volta do meio | Aval 15/11 17:17. A guarda automática B saiu. `Rlt:12042` `B:2125` | Depois | [nao verificado]
+| R16 | Pista remota e paridade | `B:858–859,2227–2230` `Cor:523` | Pista para lateral, VM para espinha/pouso/push, paridade na entrada da pista | Instrumento registrado 14/11, uso delimitado 16/11 e retomada 17/11. `B:858–859,2227–2228` | 14/11, conduta posterior | [nao verificado]
+| R17 | Proporção por risco A/B | `Cor:466–470` | Classe pelo caminho, exigências de prova e escopo da classe B | PROPORCAO-POR-RISCO, 11/11. `B:2249` | Antes |
+| R18 | Selo de proporção v10 | `bin/selo_proporcao.py:84–174` `bin/tests/test_selo_proporcao.sh:12,68–118` | Compara diffs e lista da base. Harness exercita o selo na régua | V10 com exceção A da tela de batida, 11/11. `B:2249` `Rlt:3620` | Antes |
+| C01 | Ambiente de leitura e envelope de produção | `CLAUDE.md:344–352` | Cópia arquivada, wrapper, modo leitura e dados raspados | GPT6-CODEX-SO-LEITURA e CODE-CHAMA-CODEX, 28–29/10. `Pst:72–98` | Antes |
+| C02 | Escrita de RED | `CLAUDE.md:349–351` | Cópia própria, contrato e revisão do Code antes do uso | VETO-NA-PORTA-DIVIDIR, 30/10. `Pst:143–145` | Antes |
+| C03 | Construtor Codex | `CLAUDE.md:353–356` | Isola escrita em `<wt>/app`, exige inventário e Opus final | L-126, 06–07/11. `Lei:147` `B:1929` | Antes |
+| C04 | Despacho por papel | `CLAUDE.md:357–365` | Decompõe trabalho, exige motivo para desvio e limita investigação/paralelismo | DESPACHO-POR-PAPEL, 29/10. `Pst:148–167` | Antes |
+| C05 | Pergunta sem hipótese imposta | `CLAUDE.md:366–368` | Premissa em pergunta, escritores/leitores e anexos na primeira e na final | Forma Codex de 29–30/10. `Pst:80–87,120–132` | Antes |
+| C06 | Conferência do segundo leitor | `CLAUDE.md:369–371` | Sessão confere citações antes de usar o resultado em decisão, RED, DIFF ou pouso | CODE-CHAMA-CODEX, 29/10. `Pst:80–87` | Antes | [nao verificado]
+| C07 | Pré-verificador Codex | `CLAUDE.md:372–380` | Diff, leis, classes recorrentes e nova volta após procedente | CODEX-PRE-VERIFICADOR, 29/10. `Pst:102–112` | Antes |
+| C08 | Triagem e anexo dos descartes | `CLAUDE.md:375–387` | Motivo de descarte, testemunha e envio da triagem ao Opus | CODEX-TRIAGEM-INDEPENDENTE, 30/10. `Pst:120–132` | Antes |
+| C09 | Inteira antes do Opus | `CLAUDE.md:377–379` | Exige inteira verde da árvore da obra antes da revisão final | Cinco regressões da O261(C), 30/10. `Pst:113–114` `Lap:755–760` | Antes | [nao verificado]
+| C10 | Opus final | `CLAUDE.md:377–381` | Aprovação final obrigatória. Reprovação volta à cura | CODEX-PRE-VERIFICADOR, 29/10, mantido em 14/11. `Pst:102–112` `corte_das_travas_1411.txt:5` | Antes |
+| C11 | Postmortem da reprovação | `CLAUDE.md:382–391` | Classifica por achado e cobra evidência da pergunta e da triagem | Triagem independente de 30/10. `Pst:120–132` | Antes |
+| C12 | MODO-COMUM | `CLAUDE.md:393` | Achado perdido pelas duas leituras exige fila estrutural, juiz, mapa e mutante | O261(C), 30/10. `Pst:135–140` `Lap:764–769` | Antes |
+| C13 | Contrato de instrumento | `CLAUDE.md:394` | Cinco linhas e uma leitura antes de construir | CONTRATO-DE-INSTRUMENTO, 29/10. `Pst:169–176` | Antes |
+| C14 | DESCARTE-COM-PROVA | `Cor:544` | Descarte com medida/citação. Argumento isolado passa antes pelo Opus | F2, 4 de 5 rejeições já vistas e descartadas, 17/11. `Cor:544` | Depois |
+| M01 | Apply de competência aberta | `CLAUDE.md:406–410` | Reversão antes, hash da exportada intacto e prova de frota. DIFF surpresa segura apply | Recalculo da 10, 29/09. `Lap:146–154` | Antes |
+| M02 | Apply de exportada | `CLAUDE.md:411–414` | `!`, DIFF de frota antes, porta staff-only, reversão, prova e retificação | Correção alcançava cadastro e parava antes da célula, 29/09. `Lap:137–144` | Antes |
+| M03 | Aval de critério | `CLAUDE.md:415–417` | Campos-alvo, zero no resto e faixa aprovada | Deriva além do aval em 26/09. `Lap:156–164` | Antes |
+| M04 | TXT vigente e preservação do histórico | `CLAUDE.md:418–422` | Um vigente por empresa/competência e invalidação pela porta | Consolidação 31/10. Data original [nao verificado]. `CLAUDE.md:401–403` `Lap:617–623` | Antes |
+| M05 | Troca de motor | `CLAUDE.md:45–60,423–424` | Bateria pela regra, propriedades fixas e DIFF antecipado de impacto | Corte de 21/10. Incidente específico [nao verificado]. `CLAUDE.md:45–60` | Antes |
+| M06 | Deploy e migration pendente | `CLAUDE.md:425–427` `bin/deploy.sh:172–209` | Suíte verde, deploy, prova de casca e migration como precondição | DEPLOY JA, 26/09. `Lap:175–181` | Antes |
+| M07 | DIFF na sombra em todas as classes | `corte_das_travas_1411.txt:4` `Rlt:3093` | Preserva a comparação, inclusive para leitor | Dispensa rejeitada em 14/11 após diferença em universo e memória. `corte_das_travas_1411.txt:4` | Antes, reafirmada 14/11 |
+| M08 | Placar da S3 por exercício | `CLAUDE.md:395–399` | Zero leitura de número sem rótulo e zero derivação própria de dinheiro | Três arquivos saíram do placar pelo critério errado em 28–29/09. `Lap:234–239` | Antes |
+| M09 | Bandeira de dinheiro fechado | `CLAUDE.md:296–298` `bin/trava.sh:43–53` | Respeita o portão declarado da esteira | `esteira.dinheiro_fechado:1–17`, 25/09. Estado no host [nao verificado]. | Antes |
+| L01 | Recebimento de prompt e obra | `CLAUDE.md:436–438` | Deduplica título e exige linha da obra no BACKLOG | COERENCIA-PORTAO recebido três vezes, 22/09. `Lap:196–201` | Antes |
+| L02 | RELATO curto e arquivamento | `CLAUDE.md:439–442` | Seção de marco, prova, limite, preservação e arquivo | RELATO-CURTO, 10/10. `Prm:1133` | Antes |
+| L03 | Estado do BACKLOG | `CLAUDE.md:443–444` | Limite da célula e preservação da história com ponteiro | Consolidação 31/10. Incidente específico [nao verificado]. `CLAUDE.md:431–444` | Antes |
+| L04 | Duas filas de pendências | `CLAUDE.md:445–446` | Só decisões no JSON de Ronald e execução no FABRICANTE | Consolidação 31/10. Incidente específico [nao verificado]. `CLAUDE.md:431–446` | Antes |
+| L05 | Pausa com dono | `CLAUDE.md:446–447` | Quem, motivo e condição escrita de saída | Pausa anônima de 2 h em 21/09. `Lap:608–613` | Antes |
+| L06 | Baixa de pendente de juiz | `CLAUDE.md:448–451` | Corte, frota real, condição literal, contador, mutante e reversão | L-118, 13/10. `Lei:139` `Prm:1194` | Antes |
+| L07 | Regra de prazo | `CLAUDE.md:452–455` | Autoridade para prazo e consulta a Ronald quando a condição exige | Regra da raia do Contrato 20, 26/10. `Prm:1472` | Antes |
+| H01 | Prova do RELATO no Stop | `.claude/settings.json:3–12` `H:1324–1358` | Checa afirmação de ato antes de qualquer liberação | O297, afirmação NO AR sem prova, 24/10. `Rlt:7440–7445` | Antes |
+| H02 | Stop com fila aberta e marcador | `H:192–228,1391–1404` | Impede encerrar com fila 1 em pé. Marcador inválido recebe recado próprio | Stop 28/09. Marcador como autoridade em 12/10, após duas ordens percebidas. `H:2–7,192–228` `B:1221` | Antes |
+| H03 | `PAREI` e andável | `H:231–298,1232–1313` | `!` tem de se referir ao item em curso e o Stop verifica se outro pode andar | O261 devolveu o turno com E1 e triagem livres, 23–24/10. `H:1232–1245` | Antes |
+| H04 | ESPERANDO por processo/arquivo | `H:604–632,644–723,788–838` | Confere produtor, PID, identidade e/ou prova de avanço de arquivo | ESPERA-SEM-TURNO 29/10. Espera vencida após morte do produtor em 10/11. `B:1169,2272` | Antes |
+| H05 | ESPERANDO pela faixa do CENSO | `H:730–785,798–813` | Exige `PAREI censo` com prova da chamada de censo viva | SELOS-CANON-I1, 08–09/11. `B:802` `D:46–55` | Antes |
+| H06 | Teto de bloqueios por HEAD | `H:1404–1417,1432–1448` | Libera e alarma após o teto sem novo commit | Válvula do Stop, 28/09. `H:2–14,1440–1448` | Antes | [nao verificado]
+| H07 | Espera fica fora do teto | `H:1418–1452` | Suíte, régua ou push em curso suspende teto e B2 nessa passagem | Quinto turno de espera liberou a sessão com S3 em pé, 29/09. `H:1418–1429` | Antes | [nao verificado]
+| H08 | Orçamento de contexto | `H:995–1063,1120–1162,1370–1380` | Piso do ciclo, gatilho e adiamento com trabalho vivo. Arma PREPARA-CLEAR | ORCAMENTO-DE-CONTEXTO e CLEAR-RAPIDO, 30/10. `Rlt:5701` `B:1158–1159` | Antes |
+| H09 | Porta de `! CLEAR` | `H:941–953,1066–1119` | Ciclo ativo, handoff novo, segurança de DIFF/agentes e expiração | CLEAR sem marco e CLEAR-RAPIDO, 30/10. `B:1135,1158–1159` | Antes |
+| H10 | Prova do RELATO no pre-commit | `bin/relato_prova_no_commit.sh:7–12` | Aplica o mesmo juiz de H01 ao RELATO do índice | O297 de 24/10. `Rlt:7440–7445` | Antes |
+| H11 | Hook `commit-msg` | `bin/hooks.sh:68–76` `bin/commit_msg.sh:2–31` | Verifica mensagem e árvore do índice pelo juiz LEI-AKITA | PUSH-LEI-AKITA-6 após recusas de mensagem, 14/11 15:53. `Rlt:2247,2962,2974` | 14/11 |
+| H12 | INDEX-VS-ÁRVORE no pre-commit | `bin/index_vs_arvore.sh:60–77` | Recusa diferença não staged no arquivo que está no índice | `git add` cedo, 12/09. `bin/index_vs_arvore.sh:2–12` | Antes |
+| W01 | Argumentos e entradas legíveis | `W:58–68,99–100` | Pergunta, sonda, anexos e aridade | Wrapper de 29/10. Incidente de origem [nao verificado]. `Pst:80–98` | Antes |
+| W02 | Repo, hash e cópia de leitura | `W:72,79,312–320` | Repositório, commit válido e árvore arquivável | CODE-CHAMA-CODEX, 29/10. `Pst:80–87` `B:1180` | Antes | [nao verificado]
+| W03 | Obra e papel obrigatórios | `W:80–84` | Identifica chamada e papel admitido | CODEX-PADRAO-PRO, 29/10. `B:1167` `W:80–84` | Antes |
+| W04 | Teto por papel | `W:85–98,392,417–425` | `#G:teto_*`, `timeout_int` e `timeout_zero`, limita duração e escala término do construtor | Três timeouts na medida anterior, alteração pousada 12/11. `auditoria.r`, §9 `Rlt:3442,3478` | Antes |
+| W05 | Papel e flag compatíveis | `W:197–199` | `papel_flag`, `flag_papel` | L-126 | Antes |
+| W06 | Sonda vedada ao construtor | `W:200` | `sem_sonda` | L-126 | Antes |
+| W07 | Forma do ID | `W:201` | `obra`, restringe ID usado em caminho | L-126 | Antes |
+| W08 | Topologia da vaga | `W:69–77,202` | `vaga_sitio`, `vaga_leitura`, `vaga_topologia` | L-126 | Antes |
+| W09 | Nome reservado da vaga | `W:78` | `vaga_reservada`, impede resposta sobre a vaga | L-126 | Antes |
+| W10 | Pausa de construtor | `W:204,408–415` | `pausa` e sua revalidação | L-126 | Antes |
+| W11 | LOGD confinado | `W:206–207,239–240` | `logd`, sob a raiz de logs autorizada | L-126 | Antes |
+| W12 | Destino regular da resposta | `W:208–212` | `resposta`, `resposta_nome` | L-126 | Antes |
+| W13 | Symlink de saída ou trava | `W:213–215,389–391` | `saida_symlink`, `lock_symlink` | L-126. Incidente específico [nao verificado]. | Antes |
+| W14 | Identidade da worktree | `W:217–238` | `absoluto`, `nome`, `canonico`, `gitfile`, `nao_viva`, `registro`, `common_dir`, `gitdir_volta` | L-126 e correções de validação da própria worktree. `W:228–238` | Antes |
+| W15 | Vaga exclusiva | `W:248–253` | `vaga_abre`, `vaga`, um construtor Codex por repo | L-126 e modo padrão 06/11. `Prm:1905` | Antes |
+| W16 | Base da worktree | `W:254` | `base`, HEAD tem de ser o SHA pedido | L-126 | Antes |
+| W17 | Cópia limpa na abertura | `W:255–262` | `limpa_fs`, inventário vazio | L-126, hardlink preexistente na revisão. `W:255–262` | Antes |
+| W18 | Isolamento do Python auxiliar | `W:109–117,257,290,409,437` | `py_iso_pre`, `py_iso_nomes`, `py_iso_reval`, `py_iso_fim` | Revisão v4 item 1b, pouso v5 em 07/11. `W:109–117` `B:1929` | Antes | [nao verificado]
+| W19 | Integridade do inventário | `W:142–193` | `inv_status`, `fs_walk`, `inv_ilegivel`, `poda_so_raiz`, `inv_nlink`, `inv_falha`, `inv_head` | `.git` invisível à primeira implementação, 06–07/11. `Rlt:4539–4540` `B:1929` | Antes |
+| W20a | Motor | `W:122,432–450` | `p_motor` | L-126 | Antes |
+| W20b | Porta de célula | `W:123,432–450` | `p_celula` | L-126 | Antes |
+| W20c | Registro de juízes | `W:124,432–450` | `p_juizes` | L-126 | Antes |
+| W20d | Migrations | `W:125,432–450` | `p_migr` | L-126 | Antes |
+| W20e | Models | `W:126,432–450` | `p_models` | L-126 | Antes |
+| W20f | Crons | `W:127,432–450` | `p_crons` | L-126 | Antes |
+| W20g | Instrumentos `bin/` | `W:128,432–450` | `p_bin` | L-126 | Antes |
+| W20h | CLAUDE.md | `W:129,432–450` | `p_claudemd` | L-126 | Antes |
+| W20i | Configuração `.claude` | `W:130,432–450` | `p_claude` | L-126 | Antes |
+| W20j | Metadados `.git*` | `W:131,432–450` | `p_git` | `.git` aninhado fora da primeira detecção, 06–07/11. `Rlt:4539–4540` | Antes |
+| W20k | Compose | `W:132,432–450` | `p_compose` | L-126 | Antes |
+| W20l | Arquivo de ambiente | `W:133,432–450` | `p_env` | L-126 | Antes |
+| W20m | Fora de `app/` | `W:134,432–450` | `p_fora` | L-126 | Antes |
+| W20n | Autoload Python | `W:135,432–450` | `p_autoload` | L-126 | Antes |
+| W20o | Arquivo ignorado no diff | `W:185,432–450` | `p_ignorado` | L-126 | Antes |
+| W20p | Tipo especial | 
+
+[truncado em 20000 de 59842 caracteres]
 
 ## 21/11 13:35 · sessao b274344edd41 · - · - · origem=Ronald (tmux)
 
@@ -831,42 +952,4 @@ Revisão estática da cópia fornecida. A confirmação independente do hash por
 | 4 | 3. Literal | **PROCEDE** | `aval.txt:6`; `app/docs/RELATO.md:284,3026,4107`; `.gitignore:53–54` |
 | 4 | 4. Exportada, dinheiro ou `!` | **PROCEDE** | `app/docs/BACKLOG.md:1966,1981–1982`; `app/docs/RELATO.md:1366`; `app/ponto/services/fechamento.py:1607–1613`; `app/docs/LEIS.md:147` |
 
-## 21/11 11:22 · sessao 04a8e3820a94 · E4C-F5-CONSTROI · construtor · origem=Code
-
-Entreguei os seis testes do item 1 e os dois seletores de texto. O inventário da volta é [test_e4c_f5_voltaD_corridas.py:1](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:1), criado, e [e4c_f5_voltaD_mutantes.py:46](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:46), ampliado. [nao verificado]
-
-Conferi a sintaxe dos dois arquivos e a unicidade das sete âncoras. Em memória, os dois mutantes de texto mudaram o contador de `(1, 1)` para `(0, 1)` com seus respectivos pares. A execução dos seis testes com ORM e a certificação pelo Code e pelo Opus final seguem [nao verificado]. [vigia_texto_resposta.py:23](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/vigia_texto_resposta.py:23), [e4c_f5_voltaD_mutantes.py:55](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:55) [nao verificado]
-
-| Teste | Mutante e sítio | Resultado exigido na original | [nao verificado]
-|---|---|---|
-| [test_RED_corrigir:60](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:60) | [`corrigir`:14](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:14), [acoes_disputa.py:349](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/acoes_disputa.py:349) | Retorna `info` e preserva `15:08` e a validação. |
-| [test_RED_declaracao:73](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:73) | [`declaracao`:16](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:16), [declaracao_texto.py:229](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/declaracao_texto.py:229) | A projeção devolve `aceita=False`. |
-| [test_RED_irma_implausivel:153](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:153) | [`irma_implausivel`:23](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:23), [materializacao.py:203](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/materializacao.py:203) | Após a confirmação administrativa, a tela chega à batida da irmã que o escritor acabou de gravar. |
-| [test_RED_lote_entrada:90](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:90) | [`lote_entrada`:32](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:32), [validacao.py:1082](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/validacao.py:1082) | Recusa o PK com `Ja validada.` e devolve `validadas=0`. |
-| [test_RED_lote_releitura:102](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:102) | [`lote_releitura`:35](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:35), [validacao.py:1104](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/validacao.py:1104) | PK em `recusados`, `validadas=0` e `validada_em` nulo no banco. |
-| [test_RED_casefold:187](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:187) | [`casefold_projecao`:46](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:46), [`strip_ato`:48](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:48), [vigia_texto_resposta.py:23](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/vigia_texto_resposta.py:23) | `(1, 1)` para ato `'ato'` × projeção `'Ato'` e ato `'ato '` × projeção `'ato'`. |
-
-As corridas intercalam leitor e escritor na transação do teste, com instâncias ORM distintas do mesmo PK. Em `corrigir`, `declaracao` e `lote_entrada`, a pausa fica após carregar a linha da pergunta e antes da leitura das decisões. Em `irma_implausivel`, fica após a busca real da irmã, antes da composta. As quatro pausas ficam antes das guardas que os mutantes trocam. [test_e4c_f5_voltaD_corridas.py:23](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:23), [test_e4c_f5_voltaD_corridas.py:50](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:50), [test_e4c_f5_voltaD_corridas.py:160](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:160) [nao verificado]
-
-Em `lote_releitura`, o POST passa pela guarda web antes do lote. A resposta real retoma logo após o `refresh_from_db()` integral da instância do lote, que continua no caminho mutado. Prevaleceu a opção (a) do aval das 11h15 sobre o `PAREI` do anexo `r.txt`. A asserção final cobre somente o resultado por PK e a coluna persistida. O motivo copiado do sucesso é o ponto já identificado como `LOTE-MOTIVO-DO-SUCESSO`. [views.py:1239](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/views.py:1239), [test_e4c_f5_voltaD_corridas.py:117](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:117), [test_e4c_f5_voltaD_corridas.py:144](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/test_e4c_f5_voltaD_corridas.py:144), [validacao.py:1103](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/validacao.py:1103), [validacao.py:1112](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/services/validacao.py:1112)
-
-**Comandos para o Code**, a partir de `app/`, com os vereditos esperados indicados em cada linha. [config/settings_test.py:1](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/config/settings_test.py:1), [e4c_f5_voltaD_mutantes.py:55](/home/ronald/wt-codex-e4c-f5-constroi-111415/app/chamados/tests/e4c_f5_voltaD_mutantes.py:55)
-
-```bash
-f5_mod=chamados.tests.test_e4c_f5_voltaD_corridas
-f5() {
-  F5_VOLTA_D_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 \
-    python3 -B manage.py test --settings=config.settings_test --noinput "$2"
-}
-
-f5 ''                 "$f5_mod"                                            # OK, 6 testes [nao verificado]
-f5 corrigir           "$f5_mod.CorridasValidacaoVoltaDTest.test_RED_corrigir"       # FAILED
-f5 declaracao         "$f5_mod.CorridasValidacaoVoltaDTest.test_RED_declaracao"     # FAILED
-f5 irma_implausivel   "$f5_mod.CorridaIrmaVoltaDTest.test_RED_irma_implausivel"     # FAILED
-f5 lote_entrada       "$f5_mod.CorridasValidacaoVoltaDTest.test_RED_lote_entrada"   # FAILED
-f5 lote_releitura     "$f5_mod.CorridasValidacaoVoltaDTest.test_RED_lote_releitura" # FAILED
-f5 casefold_projecao  "$f5_mod.TextoLiteralVoltaDTest.test_RED_casefold"            # FAILED
-f5 strip_ato          "$f5_mod.TextoLiteralVoltaDTest.test_RED_casefold"            # FAILED
-```
-
-_7663 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7664 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
