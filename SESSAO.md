@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 06:34:34.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (118.1 MB). Acoes na janela: **646**.
+**Medido em 21/11/2026 06:40:13.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (118.1 MB). Acoes na janela: **642**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -652,7 +652,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:41:01 | Bash | Find the existing mutant runner scripts to reuse | `F=logs/ESPINHA-BRIEFS/F5; ls $F/vE/volta3/c3/ \| head -50; echo ---; ls $F/vE/volta3/*.sh $F/vE/volta3/retry/ 2>/dev/null; echo ---; cat $F/vE/volta3/retry/roda.sh 2>/dev/null \| head -60; echo; ls ~/wt-f5-v3-143219/app/chamados/tests/ \| /bin/grep -i mutante` |
 | 18:40:55 | Bash | Read the 6-A1 answer outline and locate remaining probe logs | `F=logs/ESPINHA-BRIEFS/F5; D=$F/vE/volta3/medida_6a1; cat $D/r.rc; wc -lc $D/r.txt; /bin/grep -n "nao verificado\\|^## \\|^[0-9]\.\\|universo" $D/r.txt \| cut -c1-220 \| head -40; echo ---; ls -la $F/opus_models/medir_1e/ 2>&1 \| head -12; sed -n 1239p app/docs/RELATO.md \| cut -c250-700; sed -n 692p app/docs/RELATO.md \| /bin/grep -o "previa[^;]*;" \| head -3; ls $F/vPRONTO/ \| head -30; ls logs/s ...` |
 | 18:40:50 | Bash | Locate logs behind the eight declared-only items | `F=logs/ESPINHA-BRIEFS/F5; ls -la $F/vE/h4/freq/ 2>&1 \| head; ls -la logs/f5_display16_*.out 2>&1; ls logs/ \| /bin/grep -i "f5\\|e4c" \| head -40; /bin/grep -n "17:3\\|18:4.*1(e)\\|MUDA_SEM_VEREDITO\\|MUDA_ESTADO" app/docs/RELATO.md \| cut -c1-260 \| head -8; /bin/grep -n "16 diferen\\|display16\\|previa.py" app/docs/RELATO.md \| cut -c1-300 \| head -8` |
-| 18:39:25 | Read |  | `/home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/rb.txt` |
-| 18:39:20 | Bash | Summarize the execution cross-check by state | `N=logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza; awk -F'\|' 'NF>=6 && $2 ~ /^ *[0-9]/ {e=$(NF-1); gsub(/^ +\| +$/,"",e); printf "%s\|%s\n", $2, substr(e,1,90)}' $N/rb.txt \| sort -t'\|' -k2 \| awk -F'\|' '{c[$2]=c[$2] $1","} END{for(k in c) print k" => "c[k]}'; tail -25 $N/rb.txt \| cut -c1-500` |
-| 18:39:16 | Bash | Summarize the per-item states of the publication cross-check | `N=logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza; awk -F'\|' 'NF>=5 && $2 ~ /^ *[0-9]/ {e=$(NF-1); gsub(/^ +\| +$/,"",e); printf "%s\|%s\n", $2, substr(e,1,150)}' $N/ra.txt \| head -40; /bin/grep -n -i "contagem\\|^#" $N/ra.txt \| cut -c1-200 \| head -30` |
-| 18:39:13 | Bash | Check the two cross-check return codes and sizes | `N=logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza; date +%H:%M; cat $N/ra.rc $N/rb.rc; wc -lc $N/ra.txt $N/rb.txt; tail -5 $N/wa.out \| cut -c1-200; tail -5 $N/wb.out \| cut -c1-200` |
