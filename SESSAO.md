@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 19:08:47.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (65.1 MB). Acoes na janela: **1731**.
+**Medido em 21/11/2026 19:15:15.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (65.1 MB). Acoes na janela: **1733**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:09:55 | Bash | Put SENTINELA design question at RELATO top | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L[0]='ESPERANDO: codex_pergunta.sh \| pid=3806848' L.insert(1,'PERGUNTA DE DESENHO SENTINELA-DO-SLOT V1 (19:10; Codex construtor volta4 rc 0 19:09:43, logs/SENTINELA-DO-SLOT/volta4/r.txt; copia 141636 intacta em f3d23021f, nada escrito): `hora` sem resposta vigente (C21/L-130) e sem carimbo_legado,  ...` |
+| 19:09:46 | Bash | Read SENTINELA volta4 result | `cd /home/ronald/saas-hasner; head -c 6000 logs/SENTINELA-DO-SLOT/volta4/r.txt; echo; cd /home/ronald/wt-codex-e4c-f5-constroi-141636 && git log --oneline -2 && git status --porcelain; ps -ef \| /bin/grep '[c]odex_pergunta.sh' \| cut -c1-120` |
 | 19:06:11 | Bash | Log status in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('- 19:00: 1.2 v4')) L.insert(i,'- 19:08: 1.2 prova: RED na base 37a74182a FAILED (failures=8) Ran 9 rc 1; cura f48d00eac OK Ran 9 rc 0 (logs/E4C-F5-1_2/v4/prova/). 3.3 cura4 Codex construtor rc 0 (orfao; wrapper.out sessao rc=0), INCOMPLETO por proibi ...` |
 | 19:06:06 | Bash | Check 1.2 proof progress | `cd /home/ronald/saas-hasner; ls logs/E4C-F5-1_2/v4/prova/*.rc; cat logs/E4C-F5-1_2/v4/prova/mut.rc 2>/dev/null` |
 | 19:06:04 | Monitor | rc dos Codex e das provas 1.2/3.3 | `cd /home/ronald/saas-hasner; declare -A seen; for f in logs/E4C-F5-3_3/cura4/r.rc logs/E4C-F5-1_2/v4/prova/{red_base,green}.rc; do seen[$f]=1; done; while true; do for f in logs/E4C-F5-3_3/cura4/r.rc logs/SENTINELA-DO-SLOT/volta4/r.rc logs/FERIADO-POR-POSTO/volta5/r.rc logs/E4C-F5-1_2/v4/prova/{red_base,green,mut,viz_chamados,viz_ponto,viz_core,fim}.rc logs/E4C-F5-3_3/cura4/prova/{red_base,green,s ...` |
