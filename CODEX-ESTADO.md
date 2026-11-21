@@ -1,7 +1,77 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 11:22** · publicado em **21/11/2026 11:25** (UTC-3)
+> Ultima resposta processada: **21/11/2026 11:38** · publicado em **21/11/2026 11:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 11:38 · sessao b90a3599ab67 · WRAPPER-N-VAGAS · verificador · origem=Code
+
+# AVAL-DEVOLVIDO — itens 2, 3 e 4
+
+Revisão estática da cópia fornecida. A confirmação independente do hash por Git, a ocupação atual das vagas e o estado das worktrees no host estão [nao verificado].
+
+## Item 2 — Wrapper com N vagas
+
+**1. Premissas e leitores — PROCEDE.** O comentário de vaga única confere. O wrapper deriva um caminho por repositório a partir do `git-common-dir` de `CODEX_VIVO`, abre o arquivo com `exec 6>>` na linha 252 e tenta `flock -n 6` na linha 253. Quando a vaga está ocupada, `_recusa2` devolve **rc 2**. O rc 75 já tem usos distintos para pausa do construtor e limite ou indisponibilidade do Codex. `bin/codex_pergunta.sh:42–45,54–56,69–78,196,203–204,248–259,447–459`.
+
+| Quem usa a vaga | O que lê ou testa | Efeito de trocar apenas o nome para `construtor.vaga.<k>` |
+|---|---|---|
+| `#G:vaga_reservada` | Em todos os papéis, compara o `realpath -m` da resposta com o caminho exato em `$VAGA`. | Se continuar protegendo só o caminho antigo, uma resposta pode substituir o inode de uma vaga numerada por `mv -f`, enquanto o lock permanece no inode anterior. `bin/codex_pergunta.sh:69–78,405–406,428–430`. |
+| `#G:vaga_topologia` | No ramo construtor, exige `$VAGA` não vazia. Isso representa um `git-common-dir` cujo basename é `.git`. | A guarda continua válida se o sítio continuar vazio para topologia sem `.git`. Gerar caminhos numerados a partir de um sítio vazio invalida a recusa. `bin/codex_pergunta.sh:72–78,195–204`; `bin/tests/test_codex_pergunta.sh:405–420`. |
+| Guarda de symlink, `#G:vaga_abre` e `#G:vaga` | Conferem o caminho e a pasta, abrem o arquivo e testam o lock pelo FD 6. | Cada candidato precisa passar pelas mesmas verificações. A exclusão que hoje cerca a validação da própria worktree também se perde se duas chamadas da mesma worktree puderem adquirir vagas distintas. `bin/codex_pergunta.sh:216–238,248–262,407–422`. |
+| Selos de ocupação `c_vaga`, `c_vaga_outra_wt` e `c_vaga_copia` | Prendem o caminho literal antigo e exigem rc 2. Cobrem outro `LOGD`, outra worktree do mesmo repositório e outra cópia do wrapper. | O lock do selo deixa de disputar a vaga real. Os casos perdem a prova de exclusão e a expectativa de rc ainda diverge do rc 75 proposto. `bin/tests/test_codex_pergunta.sh:216–220,399–403,422–427,553,583–584`. |
+| Selos `c_censo`, `c_vaga_reservada` e `c_vaga_abre` | Prendem a vaga para provar a precedência do censo, usam o caminho como resposta e põem um diretório no caminho para forçar erro de abertura, respectivamente. | O censo ainda pode recusar, mas o caso perde a prova de que veio antes de uma vaga realmente ocupada. Os outros dois casos passam a mirar o caminho antigo. O controle de resposta legítima em outra pasta deve continuar passando. `bin/tests/test_codex_pergunta.sh:222–236,262–264,274–282,539–540,591`. |
+| `bin/raias_estado.py`, `raia_agente.sh` e `ESTADO` | O medidor lê `logs/raias/*.agente` e Git. `raia_agente.sh listar` e o `ESTADO` usam esse medidor. O painel Codex do `ESTADO` lê `chamadas.log` e `limite.log`. | A troca do arquivo de lock não quebra esses leitores. O placar de ocupação alegado no aval não aparece nesses caminhos. `bin/raias_estado.py:51–102,125–135`; `bin/raia_agente.sh:80–81`; `bin/gerar_estado.py:211–229,275–289`; `bin/codex_limite_estado.py:20–22,45–67,82–89`. |
+| Hooks em `bin/` | O `PreToolUse` usa `disjuntor.py`; a via Codex faz o censo no wrapper antes do lock. O placar do censo casa `ini` com obra, PID e hash. O Stop procura o wrapper em `/proc` para provar espera de censo. | Esses caminhos não dependem do nome do arquivo de lock. Mudar as posições dos campos de `ini` pode quebrar o casamento. Outros leitores exclusivos do host estão [nao verificado]. `.claude/settings.json:62–72`; `bin/disjuntor.py:1851–1863,2096–2108,2148–2158`; `bin/hook_stop_fila1.py:730–766`; `bin/codex_pergunta.sh:241–253`. |
+
+**2. Colisão com aval ou corte — PROCEDE.** O anexo autoriza a emenda para **1 opus + 3 Codex**. A cópia ainda prescreve **1 opus + 1 Codex** na L-126 e **1 Codex por repositório** na 7b CODEX item 1. O registro em `CORTES.md` passa pela fonte `CORTES.json`. Há também uma colisão a resolver com o desenho anterior `CODEX-2-RAIAS-PORTAO-CPU`, ainda marcado ABERTA, que condiciona a segunda vaga Codex a load, horário e desligamento. O item 2 permite ocupar a segunda vaga pelo primeiro `flock` livre. A vigência operacional daquele portão no host está [nao verificado]. Como a obra toca `bin/`, sua construção cabe à sessão/opus pela cerca atual. `aval.txt:1,4`; `app/docs/LEIS.md:147`; `CLAUDE.md:353–356`; `app/docs/CORTES.md:3–6`; `bin/gerar_cortes.py:23–24`; `app/docs/BACKLOG.md:2317`; `app/docs/RELATO.md:4104`; `bin/codex_pergunta.sh:121–128,343–347`.
+
+**3. Condições no literal — PROCEDE.** Há três incompatibilidades. `aval.txt:4,9`.
+
+- **Rc e mordida.** `CODEX_VAGAS=1` com vaga ocupada não pode preservar o rc 2 de hoje e exigir rc 75 ao mesmo tempo. O selo atual já neutraliza `#G:vaga` e cobra a recusa pelo motivo certo. Para provar saturação com N vagas, os N falsos precisam estar simultaneamente admitidos no mesmo repositório e usar cópias e respostas distintas. O N+1 precisa falhar pela ocupação, pois a pausa também devolve 75 e há outro gate de slots no wrapper. `bin/codex_pergunta.sh:196,204,248–259,364–380,383–392`; `bin/tests/test_codex_pergunta.sh:216–220,553,605–625`.
+- **Guardas e transição.** Preservar literalmente a reserva de um só caminho deixa os demais desprotegidos. O aval também não define como uma chamada nova respeita um lock ainda preso no nome antigo, nem como `CODEX_VAGAS` fica limitado a três vagas Codex. O anexo mostra o arquivo antigo. Um detentor atual desse lock está [nao verificado]. `aval.txt:1,4`; `bin/codex_pergunta.sh:69–78,248–259,428–430`; `app/docs/LEIS.md:147`.
+- **`chamadas.log`.** O escritor de produção na cópia é o próprio wrapper. O destino padrão é `logs/codex/chamadas.log`, substituível por `CODEX_LOGD`. `ini` e `fim` ainda não levam `k`, e a recusa por ocupação ocorre antes de `ini`. O log pode receber a vaga adquirida, mas o contrato precisa dizer em qual registro e preservar os campos posicionais. A presença do log no host está [nao verificado]. `bin/codex_pergunta.sh:101,248–273,304–309`; `bin/codex_limite_estado.py:49–68`; `bin/disjuntor.py:2096–2108`.
+
+**4. Exportada, dinheiro ou `!` — NAO PROCEDE.** O escopo declarado é admissão, log e selo de host, com pouso próprio de instrumento. A cerca vigente continua aplicável a competência exportada, arquivos protegidos e itens que pedem `!`. `aval.txt:4`; `app/docs/LEIS.md:131,147`; `CLAUDE.md:265–268`; `bin/codex_pergunta.sh:343–347`.
+
+## Item 3 — Teto 4 na conduta
+
+**1. Premissas — NAO PROCEDE.** A 7b CODEX item 2 exige linha `DESPACHO` no RELATO e cita CPU/load da VM e `/health/` do `saas_core` na rajada. A regra de raias considera teste um arquivo para o cruzamento. O teto 6 da cláusula de DESPACHO é o de itens independentes em paralelo. O teto específico de construtores está na L-126. `CLAUDE.md:309–311,357–365`; `app/docs/LEIS.md:147`.
+
+**2. Colisão com aval ou corte — PROCEDE.** Além da atualização da L-126, há uma reserva nominal anterior: vaga 3 para TRAVAS-V2 e vaga 4 para LASTRO-REDESENHO, com a quarta reservada até a liberação dos arquivos em comum. O teto 4 já apareceu na abertura de laterais de 20/11. O novo literal condiciona a abertura à medida e à disjunção, mas não diz se a quarta vaga passa a ser de uso geral. Revogação dessa reserva em registro posterior está [nao verificado]. `aval.txt:1,5–6`; `app/docs/PROMPTS.md:2671,2675`; `app/docs/RELATO.md:1290–1291`; `app/docs/LEIS.md:147`.
+
+**3. Condições no literal — PROCEDE.** O item exige registrar medidas, mas não diz qual resultado impede a abertura, qual janela de load vale ou como tratar `/health/` indisponível. A 7b cita medição **na rajada**, e a prova citada no wrapper foi de seis chamadas **curtas**. A condição também precisa distinguir a terceira ou quarta abertura **total**, que inclui opus, do índice `k` das três vagas Codex. Para a regra de arquivos valer antes da abertura, é preciso conhecer os arquivos previstos na próxima volta, inclusive testes, além do diff já produzido. Medidas atuais e listas das obras em voo estão [nao verificado]. `aval.txt:1,4–5,9`; `CLAUDE.md:309–311,355–365`; `bin/codex_pergunta.sh:10–13,248–259`; `app/docs/RELATO.md:4103,4107`.
+
+**4. Exportada, dinheiro ou `!` — NAO PROCEDE.** O item regula quantas obras podem abrir e o que medir. A autorização de cada obra continua sujeita aos limites da L-126 e da seção 7b. `aval.txt:1,5`; `app/docs/LEIS.md:147`; `CLAUDE.md:265–268,357–365`.
+
+## Item 4 — FERIADO-A5 na vaga Codex
+
+**1. Premissas — PROCEDE.** O RELATO confirma o registro do verificador de escopo inteiro sobre `6e36bd3b0`, com 10 BLOQUEIA, 9 CORRIGE e 1 FILA. O anexo informa FERIADO em `df9df24c4` e F5 em `003abf218`, sem as listas de arquivos. Os achados que ainda se aplicam à cópia indicada e a interseção atual estão [nao verificado]. Há ainda uma incompatibilidade concreta de entrada: `wt-feriado-posto-135549` é a cópia referida, e o wrapper exige `wt-codex-<obra>-<6 dígitos>`, registrada no mesmo repositório, com HEAD igual ao hash informado e inventário limpo. `aval.txt:6`; `app/docs/RELATO.md:151,175,179,284`; `bin/codex_pergunta.sh:216–238,254–259`.
+
+**2. Colisão com aval ou corte — PROCEDE.** O novo aval altera expressamente a espera pela F5 quando a interseção for zero. A colisão restante é tratar interseção zero como condição suficiente para abrir: o BACKLOG também põe FERIADO atrás da fila 1 e sujeito a vaga no teto, e há a reserva documentada da quarta vaga. Se a L-126 for a via, a abertura também passa pelo wrapper vigente. Para o pouso, a condição registrada é **a partir de 21/11 com `sombra_c2b = 0`**. O anexo não identifica qual seria a outra “condição já escrita”. `aval.txt:1,5–6`; `app/docs/BACKLOG.md:1965–1966`; `app/docs/RELATO.md:284,764,1291,1366`; `app/docs/LEIS.md:147`; `bin/codex_pergunta.sh:241–259`.
+
+**3. Condições no literal — PROCEDE.** `git diff --name-only` sem base não é o mesmo que comparar a cópia com `main`. O aval nomeia `main` para FERIADO, mas deixa sem base a lista da F5. Para que o zero tenha significado, o registro precisa identificar a referência imutável usada nos dois lados, os HEADs comparados e se a lista cobre alterações locais, arquivos novos e os arquivos previstos para a volta. O RELATO já distingue diff de commits e estado local em uma regra de cruzamento. O `r.txt` está ausente da cópia examinada, `logs/` é ignorado e o RELATO documenta o caminho; a presença atual e o conteúdo do arquivo no host estão [nao verificado]. `aval.txt:6`; `app/docs/RELATO.md:284,3026,4107`; `CLAUDE.md:309–311,344–346`; `.gitignore:53–54`.
+
+**4. Exportada, dinheiro ou `!` — PROCEDE.** A abertura de uma volta de construção não é um apply. O defeito está no escopo aberto de “volta dos achados”: há achado do próprio verificador já remetido à fila por atingir `ponto/portas/celula.py`, proibido ao Codex. Também está registrada, sem autorização de cura nessa volta, a invalidação de `FechamentoMensal.previsto_em` sem filtro de exportada. O RELATO registra efeito em dinheiro na sombra, que deu origem ao portão `sombra_c2b = 0`. O aval precisa limitar a volta aos achados triados dentro do escopo autorizado, com a prévia só na sombra e a prova por chave e valor. Efeito da volta proposta sobre exportada ou dinheiro em produção está [nao verificado]. `aval.txt:6`; `app/docs/BACKLOG.md:1966,1981–1982`; `app/docs/RELATO.md:763,1366`; `app/escala/signals.py:137–146`; `app/ponto/services/fechamento.py:1607–1613`; `app/docs/LEIS.md:147`; `CLAUDE.md:265–268,372–380`.
+
+## Colisões com os itens 5 e 6
+
+- **Item 5.** Alterar a fila do V2 deixa duas cláusulas do rascunho aprovado em colisão com o item 2: a vaga única por repositório e o rc 2 quando a retomada encontra a vaga tomada. O contrato do lançador já manda encerrar a automação nessa situação. `aval.txt:4,7`; `app/docs/BACKLOG.md:1984`; `app/docs/RELATO.md:185,199,219,247,254–256`.
+- **Item 6.** A autoria dos próximos testes passa à sessão pelo novo aval. Usar isso como prova de que uma vaga já foi liberada colide com o ciclo do lock, que é adquirido pelo wrapper e mantido durante a chamada. O último despacho de construção da F5 encontrado na cópia registra Codex para testes, e o anexo não informa detentor atual. Liberação efetiva da vaga está [nao verificado]. `aval.txt:4,8`; `app/docs/RELATO.md:18,21`; `bin/codex_pergunta.sh:248–259,417–430`.
+
+| Item | Pergunta | PROCEDE/NAO PROCEDE | Arquivo:linha |
+|---|---|---|---|
+| 2 | 1. Premissas e leitores | **PROCEDE** | `bin/codex_pergunta.sh:69–78,196,202,248–259`; `bin/tests/test_codex_pergunta.sh:216–226,274–282,399–427`; `bin/gerar_estado.py:211–229,275–289` |
+| 2 | 2. Aval ou corte | **PROCEDE** | `app/docs/LEIS.md:147`; `CLAUDE.md:353–356`; `app/docs/CORTES.md:3–6`; `app/docs/BACKLOG.md:2317` |
+| 2 | 3. Literal | **PROCEDE** | `aval.txt:4`; `bin/codex_pergunta.sh:204,248–273,304–309`; `bin/tests/test_codex_pergunta.sh:553,605–625` |
+| 2 | 4. Exportada, dinheiro ou `!` | **NAO PROCEDE** | `aval.txt:4`; `app/docs/LEIS.md:131,147` |
+| 3 | 1. Premissas | **NAO PROCEDE** | `CLAUDE.md:309–311,357–365`; `app/docs/LEIS.md:147` |
+| 3 | 2. Aval ou corte | **PROCEDE** | `app/docs/PROMPTS.md:2671,2675`; `app/docs/RELATO.md:1290–1291`; `app/docs/LEIS.md:147` |
+| 3 | 3. Literal | **PROCEDE** | `aval.txt:1,4–5,9`; `CLAUDE.md:355–365`; `bin/codex_pergunta.sh:10–13`; `app/docs/RELATO.md:4103,4107` |
+| 3 | 4. Exportada, dinheiro ou `!` | **NAO PROCEDE** | `aval.txt:5`; `CLAUDE.md:265–268`; `app/docs/LEIS.md:147` |
+| 4 | 1. Premissas | **PROCEDE** | `app/docs/RELATO.md:284`; `bin/codex_pergunta.sh:216–238,254–259` |
+| 4 | 2. Aval ou corte | **PROCEDE** | `app/docs/BACKLOG.md:1965–1966`; `app/docs/RELATO.md:764,1291,1366`; `app/docs/LEIS.md:147` |
+| 4 | 3. Literal | **PROCEDE** | `aval.txt:6`; `app/docs/RELATO.md:284,3026,4107`; `.gitignore:53–54` |
+| 4 | 4. Exportada, dinheiro ou `!` | **PROCEDE** | `app/docs/BACKLOG.md:1966,1981–1982`; `app/docs/RELATO.md:1366`; `app/ponto/services/fechamento.py:1607–1613`; `app/docs/LEIS.md:147` |
 
 ## 21/11 11:22 · sessao 04a8e3820a94 · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1168,12 +1238,4 @@ O scanner atual conta 44 diretas em 22 arquivos, com 39 R compostas, quatro P co
 - **51 — NAO FECHA pelo ordinal histórico.** A fixture ilegal é a oitava linha da tabela de 12 famílias e é a única que o pré-desenho identifica como exigindo mudança no harness. Os dois RED-8 pertencem a `JuizesVolta2Test`. A fixture agora nasce sem texto e usa a porta de ato. O cálculo exige zero consultas e `LeituraComposta`. O fio exige até um SELECT de decisões, confere os PKs e o cache e percorre quatro perguntas mortas até a quinta viva. O ordinal histórico 12 permanece [nao verificado]. `matriz.md:205` · `predesenho.md:168–170` · `app/docs/RELATO.md:94,1308–1309,1338` · `app/chamados/tests/test_e4c_f5_volta2_juizes.py:26,119–186`
 - **80 — NAO FECHA.** Os anexos ligam K47 e as guardas D aos sítios históricos. O K47 atual usa as portas de resposta e validação, confirma equivalência e espera zero resolvidas, uma disputa fechada e zero materializações. A D tem 18 métodos atuais, com 16 REDs e dois controles, além do K47 em outro arquivo. O registro de 18 esperados antigos no corpo de `604505878` não permite identificar os 18 casos atuais correspondentes [nao verificado]. O único esperado anterior literal recuperado é zero DEVOLUÇÃO em A, diante de uma DEVOLUÇÃO hoje. Falta também a execução nominal final dos mutantes. `matriz.md:153–165` · `predesenho.md:74` · `app/docs/RELATO.md:62,64,283,752,762,786,790` · `app/chamados/services/disputa_emissao.py:2107–2120` · `app/chamados/tests/test_e4c_f5_voltaB_lotes.py:197–222` · `app/chamados/tests/test_e4c_f5_voltaD_portas.py:84–396`
 
-## 21/11 05:29 · sessao 06a1e74a8a57 · - · - · origem=Ronald (tmux)
-
-**35 e 36 — PUBLICÁVEIS.** O mapa nominal cobre os 69 K e a sobra. Os 69 se repartem em 10 L, 29 Q, 6 R e 24 M depois da reclassificação de K40. A cópia tem prefetch nos 63 sítios K de lote e na sobra. Os seis R preservam releituras por item. O pré-desenho contava 59 pontos na unidade lógica, agrupando seis cargas em `fio_vivo`; a cópia põe o prefetch nos seis chamadores. `predesenho.md:28–111`, `app/docs/PROMPTS.md:2659`, `app/chamados/juizes.py:1516–1526`
-
-**40 — NÃO FECHA.** B planejada tem 7 L + 22 Q. Os 14 seletores atuais cobrem 3 L + 11 Q; K41 e K42 acrescentam 2 Q no despacho. K41 é a ressuscitação com cópia e cache próprio. K42 é a lista agora única de `fechar`, partilhada com a guarda pela D. Os 13 IDs restantes do plano correspondem a 4 L + 9 Q e têm prefetch na cópia. A conciliação histórica 29 cobertos × 27 editados e o subconjunto 5 L + 3 Q seguem [nao verificado]. `predesenho.md:28–96,133,135`, `app/chamados/tests/e4c_f5_voltaB_mutantes.py:12–27`, `app/docs/RELATO.md:1296,1329`, `app/chamados/models.py:1549–1555,1591–1595,2068–2072`
-
-**41 — NÃO FECHA pelo recorte das três M.** A manutenção fecha em 24 M + sobra depois da saída de K40. Nove M têm seletor C, K13 tem RED de releitura e as 14 restantes têm carga atual. Há um trio verificável de M de auditoria, K5/I21a, K6/I2 e K7/F1, com REDs próprios. Sua identidade como o trio histórico pedido segue [nao verificado]. `predesenho.md:28–97,137`, `app/docs/RELATO.md:94,1286,1289`, `app/chamados/tests/e4c_f5_voltaC_mutantes.py:12–23`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:239–264`, `app/chamados/tests/test_e4c_f5_voltaC_sitios.py:65–85`
-
-_7644 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7645 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
