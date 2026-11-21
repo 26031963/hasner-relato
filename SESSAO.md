@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 07:08:10.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (118.1 MB). Acoes na janela: **548**.
+**Medido em 21/11/2026 07:13:39.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (118.1 MB). Acoes na janela: **542**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -552,9 +552,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:14:03 | Bash | Ask Codex for the two-tree version of the 6-A1 probe | `bash logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2/lanca.sh` |
 | 19:14:01 | Bash | Prepare a Codex request for a probe version that runs on both trees and reports the TXT delta by record type | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/v2 && mkdir -p $D && cp logs/sombra/e4c_f5_6a1_entregue.py $D/sonda_6a1.py.txt && tail -c 400 logs/f5_6a1_main.out > $D/erro_no_main.txt && git diff eb1e49c1e c8eb8eddf -- app/chamados/models.py \| /bin/grep -n "RECUSA_FORA_DO_FATO" \| head -5 && cat > $D/q.txt <<'EOF' MAPAS JA FEITOS CONSULTADOS: nenhum mapa cobre esta sonda; anexos = a son ...` |
 | 19:13:41 | Bash | Read the outcome of the main-tree probe run | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move; cat $D/roda_main.fim $D/arvore_main.txt; wc -c $D/seis_a1_main.porta; tail -c 1500 $D/seis_a1_main.porta; ls -la logs/f5_6a1_main.out 2>&1` |
-| 19:13:37 | Bash | Repoint the wait line to the live main-tree probe launcher and confirm the hook releases | `P=$(pgrep -f "bash logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/roda_main.sh" \| head -1); echo $P; ps -o args -p $P \| tail -1 \| cut -c1-120; sed -i "1s/.*/ESPERANDO: roda_main.sh \| pid=$P/" app/docs/RELATO.md && echo '{}' \| python3 bin/hook_stop_fila1.py \| cut -c1-200; echo hook-fim` |
-| 19:13:32 | Bash | Check by sample the Codex citations on the live absence read of the export | `sed -n 86,92p app/folha/export.py; sed -n 159,185p app/folha/export.py \| cut -c1-170; sed -n 722,746p app/folha/export.py \| cut -c1-170; git diff eb1e49c1e c8eb8eddf --stat -- app/folha/export.py \| tail -1; sed -n 1024,1036p ~/wt-codex-e4c-f5-constroi-184647/app/chamados/services/materializacao.py \| cut -c1-170` |
-| 19:13:30 | Bash | Run the same 6-A1 probe against the main tree in the shadow (rollback) | `bash logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move/roda_main.sh` |
-| 19:13:27 | Bash | Create a main-tree copy and a launcher to run the same 6-A1 probe against main in the shadow | `W=~/wt-main-6a1-$(date +%H%M%S) && git worktree add --detach $W eb1e49c1e >/dev/null 2>&1; git -C $W log -1 --format=%H && mkdir -p $W/app/logs $W/app/media && D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move && echo $W > $D/copia_main.txt && cat > $D/roda_main.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner; D=$D; rm -f \$D/roda_main.fim git -C $W rev-parse HEAD > \$D/arvore_main.txt; gi ...` |
-| 19:13:22 | Bash | Read the previous shadow launcher and see how much the path differs between main and the F5 tree | `cat logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/roda.sh \| cut -c1-500; git diff --stat eb1e49c1e c8eb8eddf -- app/chamados/services/materializacao.py app/ponto/services/ausencia.py app/api/views.py app/chamados/services/disputa_emissao.py \| tail -5; bin/trava_teste.sh --quem 2>&1 \| head -2; ls logs/crons_em_curso 2>/dev/null \| head` |
-| 19:13:11 | Bash | Read the Codex answer about the TXT signature | `D=logs/ESPINHA-BRIEFS/F5/vE/volta3/sombra_final/txt_move; cat $D/r.rc; wc -lc $D/r.txt; cat $D/r.txt \| cut -c1-1400` |
