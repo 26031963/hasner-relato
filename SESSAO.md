@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 05:49:19.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (117.6 MB). Acoes na janela: **723**.
+**Medido em 21/11/2026 05:54:55.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (117.9 MB). Acoes na janela: **731**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:52:39 | Bash | Wait for battery and Codex | `B=logs/ESPINHA-BRIEFS/F5/final_b0935/bateria; G=logs/ESPINHA-BRIEFS/F5/final_b0935/grupoD; for i in $(seq 1 28); do [ -f $B/bateria.rc ] && [ -f $G/r.rc ] && break; /usr/bin/sleep 20; done; date +%H:%M; cat $B/bateria.rc $G/r.rc 2>/dev/null; wc -l < $B/bateria.out; /bin/grep -c "\| MORDE$" $B/bateria.out; /bin/grep "NAO MORDE\\|PAROU" $B/bateria.out \| cut -d'\|' -f1 \| tr '\n' ' '` |
+| 05:52:34 | Bash | Write PAREI LISTA for group D | `python3 -I - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() a=s.split('\n',2) assert a[0].startswith('ESPERANDO:') and a[1].startswith('PERGUNTA DE DESENHO E4C-F5') linha="PAREI LISTA E4C-F5 BATERIA NO HASH FINAL b0935c1f1 (05:5x; aval 1945 item 3; a bateria segue rodando, parcial em logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.out): os 8 do grupo D SEGUEM sem morder no hash final, os mesmo ...` |
+| 05:52:26 | Bash | View RELATO top | `date +%H:%M; head -c 1500 app/docs/RELATO.md \| cut -c1-300` |
+| 05:52:22 | Bash | Dispatch Codex on group D survivors | `D=logs/ESPINHA-BRIEFS/F5/final_b0935/grupoD; mkdir -p $D; /bin/grep "\| D \\|^D \\|NAO MORDE" logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.out > $D/bateria_D.txt; sed -n '200,225p' logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.sh > $D/mapa_D.txt; cat > $D/q.txt <<'EOF' OBRA E4C-F5, papel leitura, hash b0935c1f1. Sem hipotese: responda pelo codigo, com arquivo:linha. Na bateria de mutant ...` |
+| 05:52:10 | Bash | Reuse prior Codex launcher form | `cat logs/ESPINHA-BRIEFS/F5/vPUB8/lanca.sh` |
+| 05:52:04 | Bash | Read battery script header | `sed -n '1,40p' logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.sh` |
+| 05:52:03 | Bash | Battery progress and mapping | `B=logs/ESPINHA-BRIEFS/F5/final_b0935/bateria; wc -l < $B/bateria.out; /bin/grep -c . /home/ronald/wt-f5-bateria-045408/app/chamados/tests/e4c_f5_voltaD_mutantes.py; ls $B; /bin/grep -n "corrigir\\|declaracao\\|irma_plantio\\|lote_entrada" $B/bateria.sh \| head; git -C /home/ronald/wt-f5-bateria-045408 rev-parse --short HEAD` |
+| 05:51:53 | Bash | Inspect group D mutant table | `cd /home/ronald/wt-f5-bateria-045408 && sed -n '1,60p' app/chamados/tests/e4c_f5_voltaD_mutantes.py; ls /home/ronald/saas-hasner/logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/saida \| head -20` |
 | 05:42:26 | Bash | Wait for mutant battery | `B=logs/ESPINHA-BRIEFS/F5/final_b0935/bateria; for i in $(seq 1 28); do [ -f $B/bateria.rc ] && break; /usr/bin/sleep 20; done; date +%H:%M; cat $B/bateria.rc 2>/dev/null; /bin/grep -c "\| MORDE$" $B/bateria.out; /bin/grep "NAO MORDE\\|PAROU" $B/bateria.out \| cut -c1-200; pgrep -f bateria.sh \| head -2` |
 | 05:42:19 | Bash | Publish sonda4 result | `date +%H:%M && python3 -I - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() a="Proximo passo e MEDIDA, nao lei: sonda A/B que guarda o motivo e chama o dono_da_divergencia REAL." assert s.count(a)==1 b="MEDIDO 05:41 (sombra, sonda_ab4 escrita pelo Codex e revista pela sessao: guarda sombra, atomic com rollback, push e socket bloqueados; logs/FALTA-APROVADA-MOVE-O-TXT-ENTREGUE/sonda4/roda.out): 19  ...` |
 | 05:42:07 | Bash | Check whether lavratura runs on_commit | `git show 250a29b60:app/ponto/signals.py \| sed -n '80,95p;140,150p;248,280p'` |
