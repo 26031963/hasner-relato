@@ -1,7 +1,304 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 18:13** · publicado em **21/11/2026 18:18** (UTC-3)
+> Ultima resposta processada: **21/11/2026 18:28** · publicado em **21/11/2026 18:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 18:28 · sessao 24f049b85777 · FERIADO-POR-POSTO · leitura · origem=Code
+
+**Leitura do código: a releitura é preexistente na porta da célula, mas a marca do posto ganha um caminho até ela na cópia.** A linha 464 é idêntica nas duas árvores. No main, o comando grava a marca do posto e pode retratar chamados. Na cópia, ele também propaga a chave aos vínculos e, por essa propagação, pode julgar uma célula que ainda é futura para o `hoje` do ato. A igualdade no caminho comum, por si só, não demonstra igualdade no caminho da marca. `app/ponto/portas/celula.py:460–478` (ambas) · `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` (main) · `app/colaboradores/management/commands/marcar_feriado_do_posto.py:117–126` e `app/colaboradores/services/feriado_do_posto.py:343–354` (cópia)
+
+Conferi as duas árvores locais e compilei em memória o texto do teste abaixo. O Python disponível em ambas falhou ao importar `freezegun`, declarado em `app/requirements.txt:43`. A execução Django, as linhas `PAREADA:` efetivamente emitidas e o efeito em produção ficam **[nao verificado]**.
+
+## 1. Caminhos até a releitura
+
+| Salto | Main `ab351aa9b` | Cópia `b95a383d6` |
+|---|---|---|
+| `Command.handle` → `_marcar` | `handle` chama `_marcar(o, w)`. `_marcar` lê `localdate()` para a janela de feriados usada na seleção dos chamados. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:33–37,57–67,93–116` | `handle` lê `agora`, deriva `hoje` e passa os dois a `_marcar`. Sugestões recebem `hoje` e leem a presença. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:41–50,75` · `app/colaboradores/services/feriado_do_posto.py:74–97,137–144` |
+| `_marcar` → escrita ou prévia | O dry-run retorna. `--apply` chama `marcar_opera_em_feriado`, que grava só o campo do posto, e percorre o alvo da retratação. O corpo termina aí, sem chamada à porta do vínculo. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` · `app/colaboradores/services/estrutura.py:83–86` | `--apply` chama `aplicar_marca(hoje=...)`. O dry-run passa `hoje` e `agora` a `previa_da_marca`, que, somente na sombra, chama a mesma `aplicar_marca` com `hoje` dentro do savepoint. `agora` segue para a classificação da prévia. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:117–126` · `app/colaboradores/services/feriado_do_posto.py:370–385,397–406` |
+| `aplicar_marca` → `marcar_trabalha_em_feriado` | O serviço da marca ainda não existe nessa árvore. A porta do vínculo já existe, com `hoje` lido dentro dela. O chamador de produção localizado é `sincronizar_feriado_admin --apply`. `app/colaboradores/services/feriado_do_posto.py:146–158` · `app/colaboradores/services/vinculo.py:869,890–914` · `app/colaboradores/management/commands/sincronizar_feriado_admin.py:53–57` | O plano seleciona vínculos vigentes em `hoje`. Sob a trava do posto, a propagação reconfirma a marca e o vínculo divergente e chama `marcar_trabalha_em_feriado(hoje=...)`. `reaplicar_marca` também delega à mesma porta. `app/colaboradores/services/feriado_do_posto.py:203–219,283–285,307–315,343–359` |
+| Porta do vínculo → regeneração | Usa o `hoje` que acabou de ler nos dois ramos. Regenera até `hoje` diretamente e chama `regenerar_futuras_do_cadastro` para o restante. `app/colaboradores/services/vinculo.py:895–914` | Usa o `hoje` recebido da marca nos mesmos dois ramos. A leitura local fica para os chamadores que omitem o argumento, como o sincronizador. `app/colaboradores/services/vinculo.py:905–925` · `app/colaboradores/management/commands/sincronizar_feriado_admin.py:68–72` |
+| Regeneração → linha 464 → cartório | Em ambas, o suplemento seleciona células **geradas já existentes** com `data > hoje` e chama `regenerar_celulas_vinculo` para cada dia, com esse mesmo `hoje`. A porta usa o dia recebido para desfazer o julgamento anterior da futura reescrita. Em seguida chama `_o_chao_do_dia_mudou` sem `hoje`. Havendo dias tocados e recálculo, a linha 464 relê o dia e a linha 472 despacha ao cartório. | Mesmos arquivos e linhas nas duas árvores. `app/ponto/services/cadastro_futuro.py:8–25,43–59` · `app/ponto/portas/celula.py:112–114,193–199,306–318,390–394,460–478` · `app/ponto/services/cartorio.py:2059–2089` |
+
+A retratação de `--fecha` tem outro caminho nas duas árvores. `transicionar_com_pauta` chama `reconciliar`. Se o fechamento passar pelo gate, `_gravar_estado` salva o chamado e o `post_save` pode chamar `cartorio.julgar_celula` diretamente. Esse salto contorna a linha 464 e não carrega o dia da marca. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:139–147` (main) · `app/colaboradores/services/feriado_do_posto.py:325–341` (cópia) · `app/chamados/services/fecho_runtime.py:146–169`, `app/chamados/models.py:654–668,286–302` e `app/chamados/signals.py:189–218` (ambas)
+
+## 2. `app/colaboradores/tests/test_pareada_hoje_injetado.py`
+
+Um único método mede o comando real com a virada após `sugestoes` e, em outro vínculo, o caminho comum mais próximo com `hoje` explícito. No comando, a chamada direta a `handle(**opções)` usa a assinatura das duas árvores e fornece os campos que a cópia lê. No caminho comum, a única escrita direta da chave prepara a entrada da fixture. A seleção das futuras, a regeneração e o julgamento rodam pelo código real. A observação separa datas enviadas pela chamada forçada da linha 472 de datas para as quais o cartório devolveu resultado. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:33–37,60–62` (main), `:41–50,117–126` (cópia) · `app/colaboradores/tests/test_feriado_a5_volta3.py:243–266` (cópia) · `app/ponto/services/cadastro_futuro.py:43–59`, `app/ponto/portas/celula.py:460–478` e `app/ponto/services/cartorio.py:2073–2102` (ambas)
+
+| Símbolo importado | Main | Cópia |
+|---|---|---|
+| `datetime`, `StringIO`, `TestCase`, `User` | `app/colaboradores/tests/test_feriado_admin_sync.py:1–5` | Mesmas linhas |
+| `mock`, `freeze_time` | `app/colaboradores/tests/test_relogio_riscado_calendario.py:27–30` · `app/requirements.txt:43` | Mesmas linhas |
+| `timezone` | `app/ponto/tests/test_porta_celula.py:9` | Mesma linha |
+| `Command` | `app/colaboradores/management/commands/marcar_feriado_do_posto.py:19,33` | `app/colaboradores/management/commands/marcar_feriado_do_posto.py:23,41` |
+| `Empresa`, `Praca`, `Posto`, `Colaborador`, `Municipio` | `app/colaboradores/models.py:40,177,219,283,962` | Mesmas linhas |
+| `feriado_do_posto` | `app/colaboradores/tests/test_feriado_do_posto.py:108` · `app/colaboradores/services/feriado_do_posto.py:136` | `app/colaboradores/tests/test_feriado_do_posto.py:108` · `app/colaboradores/services/feriado_do_posto.py:137` |
+| `Feriado` | `app/core/models.py:5` | Mesma linha |
+| `CelulaDia`, `EscalaColaborador`, `TipoEscala` | `app/escala/models.py:1635,871,24` | `app/escala/models.py:1646,871,24` |
+| `celula` | `app/ponto/tests/test_porta_celula_dia.py:147` · `app/ponto/portas/celula.py:112` | Mesmas linhas |
+| `cartorio` | `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:178–182` · `app/ponto/services/cartorio.py:2059` | Mesmas linhas |
+| `regenerar_futuras_do_cadastro` | `app/ponto/services/cadastro_futuro.py:28` | Mesma linha |
+
+```python
+import datetime
+from io import StringIO
+from unittest import mock
+
+from django.contrib.auth.models import User
+from django.test import TestCase
+from django.utils import timezone
+from freezegun import freeze_time
+
+from colaboradores.management.commands.marcar_feriado_do_posto import Command
+from colaboradores.models import Colaborador, Empresa, Municipio, Posto, Praca
+from colaboradores.services import feriado_do_posto
+from core.models import Feriado
+from escala.models import CelulaDia, EscalaColaborador, TipoEscala
+from ponto.portas import celula
+from ponto.services import cartorio
+from ponto.services.cadastro_futuro import regenerar_futuras_do_cadastro
+
+
+D = datetime.date(2026, 12, 16)
+UM_DIA = datetime.timedelta(days=1)
+HOJE = D - UM_DIA
+DIAS = {HOJE, D, D + UM_DIA}
+
+
+def datas(dias):
+    return [dia.isoformat() for dia in sorted(dias)]
+
+
+class PareadaHojeInjetadoTest(TestCase):
+    def _cenario(self, empresa, municipio, praca, tipo, nome, cpf, matricula):
+        posto = Posto.objects.create(
+            nome=nome, empresa=empresa, municipio=municipio, praca=praca,
+            opera_em_feriado=True,
+        )
+        colab = Colaborador.objects.create(
+            nome=nome, cpf=cpf, matricula_hasner=matricula, empresa=empresa,
+            posto=posto, situacao='ativo', data_admissao=HOJE, cargo='Vigilante',
+        )
+        ec = EscalaColaborador.objects.create(
+            colaborador=colab, posto=posto, tipo_escala=tipo, ativa=True,
+            data_inicio=HOJE, trabalha_em_feriado=True,
+        )
+        self.assertEqual(celula.regenerar_celulas_vinculo(
+            ec, HOJE, max(DIAS), hoje=HOJE, estender_horizonte=False, recalculo=False,
+        ), len(DIAS))
+        self.assertEqual(
+            dict(self._dias(ec).values_list('data', 'trabalha')),
+            dict.fromkeys(DIAS, True),
+        )
+        return posto, ec
+
+    def _dias(self, ec):
+        return CelulaDia.objects.filter(
+            colaborador_id=ec.colaborador_id, data__in=DIAS, origem='gerada',
+        )
+
+    def _observar(self, nome, ec, ato):
+        enviados = set()
+        julgados = set()
+        julgar_real = cartorio.julgar_celula
+
+        def julgar(colab, dia, **opcoes):
+            alvo = colab.pk == ec.colaborador_id and dia in DIAS and opcoes.get('forcar')
+            if alvo:
+                enviados.add(dia)
+            resultado = julgar_real(colab, dia, **opcoes)
+            if alvo and resultado is not None:
+                julgados.add(dia)
+            return resultado
+
+        with mock.patch.object(cartorio, 'julgar_celula', side_effect=julgar), \
+                mock.patch.object(celula, 'regenerar_celulas_vinculo',
+                                  wraps=celula.regenerar_celulas_vinculo) as regenerar:
+            ato()
+
+        alterados = set(self._dias(ec).filter(trabalha=False).values_list('data', flat=True))
+        hoje_porta = sorted({c.kwargs['hoje'].isoformat() for c in regenerar.call_args_list})
+        print(
+            f'PAREADA: {nome} hoje_porta={hoje_porta} alterados={datas(alterados)} '
+            f'enviados={datas(enviados)} julgados={datas(julgados)} '
+            f'pulados={datas(alterados - enviados)} intactos={datas(DIAS - alterados)}',
+            flush=True,
+        )
+        return alterados, enviados, julgados
+
+    def test_hoje_da_borda_governa_a_regeneracao(self):
+        with timezone.override('America/Sao_Paulo'), freeze_time(
+            '2026-12-15 23:59:00-03:00',
+        ) as relogio:
+            User.objects.get_or_create(username='sistema')
+            empresa = Empresa.objects.create(
+                razao_social='Pareada', cnpj='19131243000359', ativa=True,
+                dia_inicio_competencia=21,
+            )
+            municipio, _ = Municipio.objects.get_or_create(
+                codigo_ibge=4113700, defaults={'nome': 'Londrina', 'uf': 'PR'},
+            )
+            praca = Praca.objects.create(nome='Pareada', cidade='Londrina', estado='PR')
+            tipo = TipoEscala.objects.create(
+                codigo='PAREADA-5X2', descricao='Pareada 5x2', tipo_ciclo='5x2',
+                tipo_base='comercial', hora_inicio=datetime.time(8),
+                hora_fim=datetime.time(17), folga_dia_semana='5,6',
+            )
+            for dia in sorted(DIAS):
+                Feriado.objects.get_or_create(
+                    data=dia, abrangencia='nacional', uf='', municipio='',
+                    defaults={'nome': 'Feriado sintetico', 'fonte': 'teste'}, [nao verificado]
+                )
+            posto, ec_marca = self._cenario(
+                empresa, municipio, praca, tipo, 'Marca', '[cpf]', 993001,
+            )
+            _, ec_comum = self._cenario(
+                empresa, municipio, praca, tipo, 'Comum', '[cpf]', 993002,
+            )
+            self.assertEqual(timezone.localdate(), HOJE)
+
+            sugerir_real = feriado_do_posto.sugestoes
+
+            def sugerir_e_virar_dia(**opcoes):
+                resultado = sugerir_real(**opcoes)
+                relogio.tick(delta=datetime.timedelta(minutes=2))
+                self.assertEqual(timezone.localdate(), D)
+                return resultado
+
+            def marcar():
+                Command(stdout=StringIO()).handle(
+                    sugestoes=True, posto=posto.pk, fecha=True, opera=False,
+                    por='sistema', apply=True, motivo='Prova pareada de relogio',
+                    retomar_retratacao=False,
+                )
+
+            with mock.patch.object(feriado_do_posto, 'sugestoes',
+                                   side_effect=sugerir_e_virar_dia) as sugestoes:
+                marca = self._observar('marca', ec_marca, marcar)
+
+            sugestoes.assert_called_once()
+            self.assertEqual(timezone.localdate(), D)
+            posto.refresh_from_db()
+            self.assertIs(posto.opera_em_feriado, False)
+
+            def regenerar():
+                EscalaColaborador.objects.filter(pk=ec_comum.pk).update(trabalha_em_feriado=False)
+                ec_comum.refresh_from_db()
+                celula.regenerar_celulas_vinculo(
+                    ec_comum, HOJE, HOJE, hoje=HOJE, estender_horizonte=False,
+                )
+                regenerar_futuras_do_cadastro(ec_comum, hoje=HOJE)
+
+            comum = self._observar('comum', ec_comum, regenerar)
+
+        self.assertEqual(comum[0], DIAS, 'a prova precisa reescrever os tres dias')
+        for nome, (alterados, enviados, julgados) in (('marca', marca), ('comum', comum)):
+            with self.subTest(caminho=nome):
+                self.assertEqual(julgados, enviados, 'o cartorio precisa concluir o julgamento enviado')
+                self.assertEqual(
+                    julgados, alterados & {HOJE},
+                    'Clock Injection: D e D+1 ainda sao futuros para o ato',
+                )
+```
+
+## 3. Como decidir pela saída
+
+Com `hoje=15/12` e relógio congelado em `16/12` na regeneração, a regra permite julgar **15/12** e manda pular **16/12 e 17/12**, mesmo quando as três células são reescritas. O cenário usa `FECHA` para que as células reescritas virem folga e a guarda pelo fim do turno não mascare a releitura de `16/12`. `app/docs/PLANO-PADROES.md:97–103` (ambas) · `app/escala/models.py:1369–1395` (main), `:1380–1406` (cópia) · `app/ponto/services/cartorio.py:2073–2089` (ambas)
+
+| Linha | Main, previsão pela leitura | Cópia, previsão pela leitura |
+|---|---|---|
+| `PAREADA: comum` | `hoje_porta=15/12`. Altera os três dias, julga `15/12` e `16/12`, pula `17/12`. | Mesma previsão. `app/ponto/services/cadastro_futuro.py:43–59` · `app/ponto/portas/celula.py:306–318,390–394,460–478` (ambas) |
+| `PAREADA: marca` | `hoje_porta=[]`. Os três dias ficam intactos, sem despacho pela regeneração. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` (main) | `hoje_porta=15/12`. Altera os três dias, julga `15/12` e `16/12`, pula `17/12`. `app/colaboradores/services/feriado_do_posto.py:343–354` · `app/colaboradores/services/vinculo.py:905–925` (cópia) · `app/ponto/portas/celula.py:460–478` (ambas) |
+
+- **MESMO na porta compartilhada:** as duas linhas `comum` coincidem, com regeneração efetiva dos três dias, `15/12` julgado como controle positivo e o mesmo destino para `16/12` e `17/12`. Se ambas julgarem `16/12`, a violação é preexistente nessa porta. `app/ponto/services/cadastro_futuro.py:43–59` · `app/ponto/portas/celula.py:460–478` (ambas)
+- **NOVO/PIORA no caminho da marca:** `16/12` fica intacto no main e é julgado na cópia na linha `marca`, embora `hoje_porta` registre `15/12`. Esse par demonstra que o ato da marca passou a expor a releitura preexistente. Se a divergência aparecer também na linha `comum`, com `16/12` pulado no main e julgado na cópia, a piora aparece também no caminho compartilhado. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` (main) · `app/colaboradores/services/feriado_do_posto.py:343–354` (cópia) · `app/ponto/portas/celula.py:460–478` (ambas)
+
+Para o item 2 do aval, o resultado previsto é **mesmo defeito na porta comum e exposição nova no ato da marca**. A prova pareada executada continua **[nao verificado]**.
+
+## 21/11 18:25 · sessao e6269bff1d70 · E4C-F5-CONSTROI · construtor · origem=Code
+
+A falha da volta 2 vem da simulação. O teste agora confirma a devolução em outra conexão antes de o passivo adquirir a trava. O diff da volta 3 está em dois arquivos de teste. [guarda_plantio_s144.py:298](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:298) · [cortes_f2_f9_apoio.py:37](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/cortes_f2_f9_apoio.py:37) [nao verificado]
+
+### Respostas
+
+1. **Por que o par volta a `(True, True)`.** Na base, o gancho chamava `devolver_validacao_recusada` na própria conexão do passivo, já dentro do `atomic()` da competência. A devolução zerava `validada_em` e `validada_por` e inseria `DEVOLUCAO` em savepoints aninhados. Depois da trava, a composta relida diferia da foto classificada. O `raise` saía do `atomic()` da competência e desfazia a limpeza e a inserção. O `except` externo contabilizava `escopo_do_plantio_mudou`. Assim, a leitura do ato e a coluna voltavam a mostrar a validação original. Em `f3e48a445`, o fluxo seguia da trava direto para `_trabalhar_o_par`. `1d0b5058b:app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:96` · `f3e48a445:app/chamados/services/passivo_validado.py:385` · [validacao.py:284](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/validacao.py:284) · [models.py:4437](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:4437) · [passivo_validado.py:383](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:383) · [passivo_validado.py:397](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:397) · [models.py:4399](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:4399)
+
+2. **Onde está o defeito.** O rollback da competência alcançava a devolução injetada porque ambas as escritas pertenciam àquela transação. Com o outro ato já confirmado, a releitura ocorre após a trava e a divergência encerra a tentativa antes de `_trabalhar_o_par`. A captura altera apenas o resultado em memória. O commit da outra conexão fica preservado. [passivo_validado.py:361](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:361) · [passivo_validado.py:389](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:389) [nao verificado]
+
+3. **O que fica gravado.** Pela regra, `validada_em` e `validada_por_id` ficam nulos, `recusa_motivo` continua `'Recusa anterior do plantio'` e há três decisões. A fixture grava `RESPOSTA` e `VALIDACAO`. A devolução acrescenta `DEVOLUCAO` e copia o motivo preexistente para `ato_motivo`. Nesse cenário, a fixture é quem preenche `recusa_motivo`. `_carimbar_recusa` é o escritor desse campo no caminho de materialização, que a recusa de escopo antecede. [guarda_plantio_s144.py:52](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:52) · [models.py:4313](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:4313) · [validacao.py:287](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/validacao.py:287) · [materializacao.py:1733](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/materializacao.py:1733) · [passivo_validado.py:392](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:392)
+
+### Diff e RED
+
+- [cortes_f2_f9_apoio.py:37](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/cortes_f2_f9_apoio.py:37) extrai a criação da empresa e do colaborador para reuso entre `TestCase` e `TransactionTestCase`.
+- [guarda_plantio_s144.py:101](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:101) intercala a devolução antes da trava real. O RED usa um worker com relógio congelado e `atomic(durable=True)`. O passivo espera o worker retornar após o commit. [guarda_plantio_s144.py:305](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:305) [nao verificado]
+- A asserção de uma devolução bem-sucedida agora confere `True` dentro do worker e o PK exato da decisão depois do rollback do passivo. O RED exige o balde `escopo_do_plantio_mudou`, zero plantio, zero tentativa de carimbo e as três decisões. Em seguida, a mesa valida e planta pelo mesmo PK. [guarda_plantio_s144.py:113](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:113) · [guarda_plantio_s144.py:138](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:138) · [guarda_plantio_s144.py:143](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:143) · [guarda_plantio_s144.py:311](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:311)
+
+### Porta para o Code
+
+O recorte foi reconstruído a partir do anexo e do delta da volta 2. A seleção estática encontrou três testes do passivo e oito do plantio concorrente. Execução pela porta e veredito [nao verificado]. [guarda_plantio_s144.py:159](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:159) · [guarda_plantio_s144.py:317](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:317) · [plantio_concorrente.py:98](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_plantio_concorrente.py:98) · [plantio_concorrente.py:189](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_plantio_concorrente.py:189) [nao verificado]
+
+```bash
+wt=/home/ronald/wt-codex-e4c-f5-constroi-160129
+bash bin/suite.sh --dir "$wt" --only chamados -- \
+  -k '*test_e4c_f5_guarda_plantio_s144.*.test_RED_passivo*' \
+  -k '*test_e4c_f5_plantio_concorrente.*.test_RED_*' \
+  -k '*test_e4c_f5_plantio_concorrente.*.test_MORDE_*' \
+  -k test_duas_materializacoes_inversas_travam_o_mesmo_par_em_ordem
+```
+
+### Mutantes para o Code
+
+- **M1, devolução na conexão do passivo.** Reintroduz a simulação da volta 2. A mordida esperada é `(True, True)` na leitura após o rollback. [guarda_plantio_s144.py:126](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:126)
+- **M2, worker sem commit.** O worker executa a devolução e faz rollback. O RED deve acusar que o passivo deixou de recusar pelo escopo mudado. [guarda_plantio_s144.py:114](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:114) · [guarda_plantio_s144.py:313](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:313) [nao verificado]
+- **M3, P3 sem reconfirmação.** Mantém a devolução confirmada e suprime a recusa da foto velha. O RED deve acusar o desvio no resultado do passivo. [passivo_validado.py:392](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:392) · [guarda_plantio_s144.py:114](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:114)
+
+Os três mutantes têm âncora única e compilam em memória. Mordidas pela porta [nao verificado]. O bloco abaixo restaura o arquivo após cada chamada.
+
+```bash
+red=test_RED_passivo_foto_velha_recusa_escopo_e_mesa_valida_mesmo_pk
+teste=chamados/tests/test_e4c_f5_guarda_plantio_s144.py [nao verificado]
+
+mutar() {
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$wt" "$red" "$@" <<'PY'
+from pathlib import Path
+import subprocess
+import sys
+
+wt, red, rel, antes, depois = sys.argv[1:]
+arquivo = Path(wt) / 'app' / rel
+original = arquivo.read_bytes()
+assert original.count(antes.encode()) == 1, rel
+mutado = original.replace(antes.encode(), depois.encode())
+compile(mutado, str(arquivo), 'exec')
+try:
+    arquivo.write_bytes(mutado)
+    resultado = subprocess.run(
+        ['bash', 'bin/suite.sh', '--dir', wt, '--only', 'chamados', '--', '-k', red] [nao verificado]
+    )
+finally:
+    arquivo.write_bytes(original)
+raise SystemExit(resultado.returncode)
+PY
+}
+
+# M1
+mutar "$teste" \ [nao verificado]
+  'return executor.submit(self._devolver_em_outra_transacao, p.pk).result(timeout=15)' \
+  $'with freeze_time(DEVOLUCAO_EM):\n                    atual = PerguntaDisputa.objects.get(pk=p.pk)\n                    self.assertIs(validacao.devolver_validacao_recusada(atual, self.admin), True)\n                    return atual.decisoes.get(ato=D.DEVOLUCAO).pk'
+
+# M2
+mutar "$teste" 'return devolucao.pk' \ [nao verificado]
+  $'transaction.set_rollback(True)\n                return devolucao.pk'
+
+# M3
+mutar chamados/services/passivo_validado.py \
+  'if DecisaoPergunta.composta(atuais[p.pk]) != estados_classificados[p.pk]:' \
+  'if False:'
+```
+
+**LEI-AKITA** `origem=validacao.py:289` · `testemunha=models.py:4393` · `quem-mais-le=passivo_validado.py:390` · `RED=test_e4c_f5_guarda_plantio_s144.py:317` · `juizes novos=0` · `padrao=Single Writer Principle`
+
+**AUTOCONFERÊNCIA** · except/fallback novos no diff: **0**. `git diff | grep -n except` sem ocorrências. O `finally` novo fecha a conexão do worker e deixa o erro subir. [guarda_plantio_s144.py:305](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:305)
 
 ## 21/11 18:13 · sessao 82fd2448f20e · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1607,102 +1904,4 @@ As mordidas esperadas são o PK/slot ou a ambiguidade no mutante 1, os PKs envia
 
 **Outro ponto do censo fora do sítio 1.2.** A validação pública lê `_irma` antes do seu `atomic` para montar chamados e consultar K6. Dentro do ato ela chama `par_do_intervalo` por `_validar_o_par`. Esse caminho direto tem sua própria aquisição de travas e fica fora da prova de concorrência de `travar_o_ato_do_plantio`. `chamados/services/validacao.py:643–659,741–760,786–803`
 
-## 21/11 16:36 · sessao 0715cead0a23 · SENTINELA-DO-SLOT · censo · origem=Code
-
-**A divergência é impossível por construção nos caminhos de produção da cópia.** Há cinco sítios de chamada direta. O único que pode entregar `agora` e `carga` juntos recebe ambos do C6. Nesse caminho, o `agora` explícito é o mesmo `self.agora` que a carga acabou de copiar. O aquecimento do cache passa somente a carga. A condição para a sonda do item 5 não se aplica. `app/chamados/juizes.py:681–682,756–757,887–898,1488–1495` · `app/chamados/services/carga_pergunta_viva.py:88,117–119` · `app/chamados/services/tarefa_do_dia.py:518–522,624–632`
-
-**Base do censo.** O aval fornecido declara `44f7c468aeb7` para `logs/SENTINELA-DO-SLOT/r.txt` e `566c3b225f0c` para o rascunho extraído. Conferência independente desses hashes, do HEAD Git `ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5` e da execução na frota [nao verificado]. Usei as linhas da cópia disponível. `aval.txt:1`
-
-## 1–2. Produção
-
-| Chamador direto | `agora` explícito | `carga` | Origem e possibilidade de divergência |
-|---|---|---|---|
-| `CargaDaVida.__init__` | Não | Sim, `self` | O construtor escreve `self.agora = tarefa.agora` antes do laço. `_slot_esperado` adota esse valor. Há um único horizonte. `app/chamados/services/carga_pergunta_viva.py:83–95,117–119` · `app/chamados/juizes.py:345–351` |
-| `_pergunta_materializada_de_fato` | Quando definido | Quando fornecida | Repassa os dois argumentos por `**`. Se receber só a carga, preenche `agora` com `carga.agora`. Nos dois ramos carregados da tarefa, o escritor é `CargaDaTarefa.__init__`, que grava seu argumento em `self.agora`. O C6 recebe esse valor e a carga que o copiou. `app/chamados/juizes.py:666,681–682,756–757,887–898,1488–1491` · `app/chamados/services/tarefa_do_dia.py:518–522,624–632` · `app/chamados/services/carga_pergunta_viva.py:88` |
-| `classe_do_lote` | Não | Não | Passa só `perg`. O relógio de `fila_validar_classificada` é usado para calcular a idade da resposta. `app/chamados/services/validacao.py:1177–1182,1196–1209,1244–1256` |
-| `_explicar_validada` | Não | Não | Importa pelo reexport de `chamados.models` e passa só `p`. A lista `_bts` é consultada pelo explicador depois da chamada ao slot. `app/chamados/models.py:4475` · `app/chamados/services/explicador.py:48–64,137,165–171` |
-| `vigia_carimbo.classificar` | Não | Não | Passa só `p`, tanto ao juiz de materialização quanto, se ele reprovar, ao slot. `censo`, `vigia_fio` e `passivo_validado` entram pela mesma função `classificar`. `app/chamados/services/vigia_carimbo.py:94–110,119–124` · `app/chamados/services/vigia_fio.py:415` · `app/chamados/services/passivo_validado.py:327` |
-
-**Repasses indiretos de horizonte e carga**
-
-- **Os dois valores.** `tarefa_do_dia` cria `CargaDaTarefa` com o `agora` recebido ou verifica a igualdade com a carga fornecida. `.tarefa()` entra em `_ler_vida`, que cria `carga_da_vida(self, ...)` e chama `pergunta_viva` para as candidatas e para as pendentes do app ainda sem resultado. A sequência é `pergunta_viva → _pergunta_viva_calc → _pergunta_materializada_de_fato → _slot_esperado`, quando o degrau 6 chega ao ramo `hora` ou `data_hora`. Mesmo um instante vindo de argumento externo, como `--agora`, entra nessa sequência por um único atributo. `app/chamados/services/tarefa_do_dia.py:518–522,624–632,656–665,820–835` · `app/chamados/juizes.py:712,756–757,887–898,1482–1495` · `app/chamados/management/commands/diff_e3_sombra.py:95–108,127–145`
-- **Só `agora`.** `alimentar_portas` repassa o argumento que recebeu e também o disponibiliza a `_no_app`. `consulta_do_app` repassa seu argumento a `perguntas_do_app`, que chama o C6 sem carga. A rota do app escreve o valor com `_tz_borda.now()`. `_calados` usa o argumento ou `timezone.now()`. `contexto_calendario` faz o mesmo e chama o C6 pelo alias `_pv`. Até quando a própria tarefa abre o calendário com `self.agora`, essa chamada ao C6 recebe somente o horizonte. `app/chamados/juizes.py:1627,1656–1677` · `app/chamados/services/pergunta_no_app.py:45–77` · `app/api/views.py:2549–2553` · `app/chamados/services/cobranca.py:221–241` · `app/colaboradores/services/calendario.py:157–159,188–193,498–507` · `app/chamados/services/tarefa_do_dia.py:703–706`
-- **Chamadas avulsas ao juiz de materialização.** `explicador`, `vigia_carimbo` pelo alias `_juiz`, `raiox`, `disputa_emissao`, `materializacao`, `veredito_lavrado`, o backfill e o auditor pelos aliases `PMF` e `_juiz_s6` passam só a pergunta. `app/chamados/services/explicador.py:91–116` · `app/chamados/services/vigia_carimbo.py:95–106` · `app/chamados/services/raiox.py:193–194` · `app/chamados/services/disputa_emissao.py:2023` · `app/chamados/services/materializacao.py:1937,2176` · `app/chamados/veredito_lavrado.py:262–263` · `app/chamados/management/commands/backfill_veredito_lavrado.py:88,105` · `app/chamados/management/commands/auditar_invariantes_chamados.py:509,541,1165,1181`
-
-A API do juiz aceita em tese dois valores independentes. Hoje, um `agora` explícito prevalece na projeção temporal, e o cache ainda pode devolver o resultado da carga. Isso descreve o que aconteceria se um chamador cruzasse dois horizontes. Nos repasses inventariados, o par carregado deriva do mesmo atributo. `app/chamados/juizes.py:345–358,887–898` · `app/chamados/services/carga_pergunta_viva.py:88` · `app/chamados/services/tarefa_do_dia.py:624–632`
-
-## 1 e 3. Testes [nao verificado]
-
-| Acesso ao slot | Argumentos observados | Sítios |
-|---|---|---|
-| Import pelo reexport de `models` | Nenhum dos dois | `app/chamados/tests/test_marco_por_motivo.py:18–19,67,73,81` |
-| Atributo de módulo `juizes` ou `J`, ou import direto | Nenhum dos dois | `app/chamados/tests/test_p71_marco_sem_hora.py:49` · `app/chamados/tests/test_s3f4_data_e_ancora_pela_autoridade.py:108` · `app/chamados/tests/test_o306_vigia_carimbo.py:108–112` |
-| Alias local `slot = env.js['_slot_esperado']` | Só `agora`, só `carga`, só `agora`, respectivamente | `app/chamados/tests/test_e3_pos_suite_sem_banco.py:112–117` |
-| C8b, por `carga_da_vida` e pelo C6 real do harness | Só carga no aquecimento. No degrau 6 dos controles `data_hora` e `hora` noturna, ambos com o mesmo horizonte. | `app/chamados/tests/test_e3_c8b_sem_banco.py:271–441` · `app/chamados/tests/e3_c8b_apoio.py:109–117,165,183–202` · `app/chamados/juizes.py:887–893,1488–1491,756–757` |
-
-São **nove chamadas diretas escritas em testes**, incluindo as três pelo alias `slot`. A busca textual e por AST em `app/` encontrou o reexport, o alias de dicionário e o carregamento do corpo real pelo harness. Nenhum sítio adicional apareceu por `getattr` ou por passagem de `_slot_esperado` como callback. O mock de HX substitui a função e depois chama o juiz de materialização. As referências da catraca e de O317 inspecionam código. `app/chamados/models.py:4475` · `app/chamados/tests/e4_apoio.py:8–16` · `app/chamados/tests/e3_c8b_apoio.py:109–117` · `app/chamados/tests/test_hx_fallback_sem_lei.py:62–65` · `app/chamados/tests/test_e3_catraca_respondedores.py:588–595,790–798` · `app/chamados/tests/test_o317_passivo_pela_porta.py:554–571`
-
-**Nenhum caso identificado levantaria o novo `ValueError` por divergência.** Executei 11 testes sem banco, observando os argumentos na entrada da função real. Foram 48 chamadas, com 34 só com carga, 2 só com `agora`, 6 sem ambos e 6 com ambos iguais. As seis com ambos foram as cinco testemunhas `data_hora` e o controle de hora noturna. A fixture escreve `tarefa.agora = AGORA`, e `pergunta_viva` adota `carga.agora` antes de repassá-lo. A execução da suíte ORM [nao verificado]. `app/chamados/tests/test_e3_c8b_sem_banco.py:198–443` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:102–117` · `app/chamados/tests/e3_c8b_apoio.py:183–202` · `app/chamados/juizes.py:887–893,1488–1491,756–757`
-
-## 4. Forma do horizonte
-
-O parâmetro é **`agora`**, nomeado e opcional em `_slot_esperado(p, *, carga=None, agora=None)`. O valor esperado é um `datetime.datetime` com fuso, ou `None` para ausência de horizonte explícito. A carga guarda o instante no atributo **`carga.agora`**, separado de `carga.slots[p.pk]`. O construtor copia o valor sem conversão nem validação de tipo. O comando com `--agora` valida o fuso na borda. `app/chamados/juizes.py:345–358,1382–1400` · `app/chamados/services/carga_pergunta_viva.py:83–95,117–126` · `app/chamados/management/commands/diff_e3_sombra.py:99–108`
-
-`CargaDaTarefa.__init__` escreve o primeiro atributo a partir do argumento `agora`. `CargaDaVida.__init__` lê esse atributo e escreve o da carga do C6. Os leitores diretos de `CargaDaVida.agora` são `pergunta_viva`, `_pergunta_materializada_de_fato` e `_slot_esperado`, cada um quando seu `agora` é `None`. A comparação já existente em `tarefa_do_dia` lê o `agora` de **`CargaDaTarefa`**. `app/chamados/services/tarefa_do_dia.py:518–522,825–835` · `app/chamados/services/carga_pergunta_viva.py:69,83–88` · `app/chamados/juizes.py:345–351,681–682,887–893`
-
-## 21/11 16:35 · sessao ce01571cc26e · E4C-F5-CONSTROI · verificador · origem=Code
-
-**Veredito geral — BLOQUEIA.** A leitura de `_agora_sonda` passou para depois do prefetch, mas continua antes da trava. Se o relógio recuar entre essa leitura e `_agora_r`, a simulação pode descartar uma `VALIDACAO` que a `REABERTURA` gravada deixa vigente. O resultado é uma pergunta descarimbada, com `validada_em` nula na coluna e preenchida na leitura do ato. `app/chamados/models.py:1565–1567, :1597–1601, :1657, :1707–1728, :4367–4385`.
-
-Conferi a cópia contra o diff fornecido e executei, em memória e com dublês de ORM, o universo, o C6 e a leitura dos atos nos casos de avanço, empate e recuo. A identidade Git da cópia, a execução da suíte Django e a ocorrência desses casos em produção ficam **[nao verificado]**. A comparação com o pai usa a versão anterior mostrada no `verif1.diff`. [nao verificado]
-
-## 1. Fonte, escritores, instante, leitores e significado — RESSALVA
-
-| Valor | Fonte, escritor e instante | Leitores e significado |
-|---|---|---|
-| `_agora_sonda` | Local de `_universo_da_ressuscitacao`. Começa em `None` e recebe `timezone.now()` uma vez, na entrada da primeira iteração, antes de qualquer `continue`. `app/chamados/models.py:1557–1574`. | Apenas o filtro do cache lê o valor. É um `datetime` com fuso, compartilhado pelo lote. O filtro retém `ato_em > _agora_sonda`, portanto a limpeza simulada inclui a igualdade. Esse instante delimita a simulação. `app/config/settings/base.py:93–95`, `app/chamados/models.py:1591–1601`. |
-| `DecisaoPergunta.ato_em` | Fonte persistida em `DateTimeField`. Cada porta fornece o instante do ato a `registrar`, que insere a linha. O prefetch hidrata o campo, e o filtro o compara em memória para cada pergunta que chega ao C6. `app/chamados/models.py:1555, :1597–1601, :4225–4227, :4433–4444`. | É o instante atribuído ao ato, com fuso, inclusive quando recuperado de um carimbo histórico. `leitura` e a face SQL da validação ordenam por `(ato_em, pk)`. A tarefa inclui `ato_em <= agora`. A foto da reabertura busca a validação por igualdade de instante, e a absorção usa igualdade com o carimbo, ordenando a vigência por PK. Portanto o campo tem unidade comum, mas cada leitor tem sua própria regra de inclusão e desempate. `app/chamados/models.py:1713–1718, :3609–3619, :4319–4328, :4367–4385, :4423–4431`, `app/chamados/services/tarefa_do_dia.py:388–403, :430–434`. |
-| Cache `decisoes` de `_q` | O ORM carrega o cache de `p` pelo prefetch. Depois das guardas de texto e marco aceso, o método clona o queryset relacionado, instala `_result_cache` filtrado e `_prefetch_done=True`, e coloca a entrada num dicionário próprio da cópia `_q`. `app/chamados/models.py:1555, :1573–1586, :1597–1600`. | `pergunta_viva(_q)` chega ao cache por `DecisaoPergunta.composta` → `leitura` → `p.decisoes.all()`. Para essa cópia, o cache representa somente as linhas prefetchadas estritamente posteriores ao corte, sobre colunas já zeradas. O cache original de `p` continua com a sequência carregada pelo ORM. `app/chamados/models.py:1587–1601, :4367–4373, :4387–4396`, `app/chamados/juizes.py:1406–1411`. |
-| `_agora_r` | Local de `ressuscitar_perguntas`. A porta lê `timezone.now()` uma vez, dentro do `atomic`, após adquirir as travas, reler os PKs graváveis e registrar as fotos legadas. A leitura precede a consulta das fotos para os atos compensadores. `app/chamados/models.py:1652–1657, :1675–1680, :1707–1713`. | A montagem de `_compensa` usa esse `datetime` com fuso como `ato_em` de todas as `REABERTURA` do lote e o persiste por `registrar`. Uma validação com timestamp igual é limpa se sua linha preceder a reabertura por PK. Uma validação com timestamp maior continua vigente. `app/config/settings/base.py:93–95`, `app/chamados/models.py:1719–1725, :4336–4337, :4367–4385`. |
-
-Os fornecedores de **`ato_em`** são a resposta humana, que lê o relógio após a trava, a resposta automática, que recebe o instante do processamento, e a cura pela trilha, que recebe o `criado_em` da nota. A validação usa o próprio `validada_em`; as devoluções leem `now()`; recusa e reabertura por correção usam o instante lido sob a trava. `app/chamados/services/disputa_emissao.py:1480–1501, :1535–1537, :1642–1668, :1705–1715, :1719–1737`, `app/api/foto_recebida.py:38–48`, `app/chamados/management/commands/curar_perguntas_em_limbo.py:65–69`, `app/chamados/services/validacao.py:161–175, :284–295, :365–374`.
-
-O silêncio usa `materializada_em`; a retratação usa `_agora_ret`, capturado antes da sua transação; a absorção usa o relógio da passagem; a ressuscitação usa `_agora_r`. A promoção do legado copia `respondida_em` ou `validada_em`, e a migração herdou `versao_reaberta_em`. Assim, `ato_em` tem um significado de domínio, **instante atribuído ao ato**. Inferir dele a hora do commit ou uma ordem monotônica de inserção extrapola o contrato. `app/chamados/models.py:1720, :2112–2118, :2216–2218, :2246–2253, :4319–4328`, `app/ponto/services/veredito_celula.py:190–197`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:350–354`, `app/chamados/services/materializacao.py:1036, :1056–1058, :1073–1090`, `app/chamados/migrations/0051_decisao_pergunta.py:39–61`.
-
-## 2. Chamadores, elegibilidade e travas — RESSALVA
-
-- **`ressuscitar_perguntas`** usa `ids` para selecionar as disputas e pedir as travas. Se `ids` vier vazio, devolve zero. Sob a trava, restringe a escrita aos PKs ainda materializados e fora das vias terminais. Havendo escrita, a auditoria leva os `ids` relidos e as listas originais `pulados` e `mortas_c6`. Chegam à porta `reabrir`, o cartório e o desarquivamento por competência trancada. `app/chamados/models.py:1517, :1638–1657, :1675–1678, :1725–1728, :1741–1765`, `app/ponto/services/cartorio.py:1721`, `app/chamados/views_arquivar.py:70–86`.
-- **`perguntas_a_ressuscitar`** devolve só `ids`. `disputa_emissao` une esses PKs às ancoradas na carga de reabertura do credor, que alimenta as guardas de competência exportada e limbo. **`perguntas_puladas_na_ressuscitacao`** devolve `marco_aceso=pulados` e `c6_morta=mortas_c6`. Quando a escrita devolve zero, o cartório roda essa prévia para contabilizar e nomear os motivos. `app/chamados/models.py:1520–1532`, `app/chamados/services/disputa_emissao.py:1851–1861, :1889–1911`, `app/ponto/services/cartorio.py:1721–1739`.
-
-**Caso concreto.** Tome uma pergunta materializada, sem resposta, de marco apagado, cujo C6 daria viva sem validação. O pai lê o relógio em `T0`. Uma `VALIDACAO` é registrada em `T1 > T0` e fica visível no prefetch. No pai, ela sobrevive ao filtro e o PK cai em `mortas_c6`. Na cópia, a sonda lê `T1` ou depois, descarta a linha e o PK entra em `ids`. Isso muda o retorno de ambas as prévias se cada uma atravessar essa mesma intercalação. Com uma única candidata, a porta passa de zero, antes da trava, para pedir as travas do colaborador, da disputa, do chamado e da pergunta. A ordem do protocolo é **Colaborador → Disputa → Chamado → Pergunta**, por PK crescente em cada grupo. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:320–345, :364–384`, `app/chamados/models.py:1526–1532, :1583–1602, :1638–1657, :2881–2909`, `app/chamados/juizes.py:1406–1415, :1458–1462`.
-
-## 3. Posição real do relógio — OK
-
-No caminho normal e com lote não vazio, **sim, o relógio é lido depois dos dois SELECTs**. O método constrói um queryset novo e entrega o próprio queryset ao gerador. O `for p in perguntas` usa a iteração normal do QuerySet, que materializa o resultado e roda o prefetch antes de entregar a primeira pergunta ao gerador. O `yield p` vem depois disso, e só então o corpo do laço externo chama `now()`. O teste de custo também exige um lote de decisões para uma ou cinco perguntas. `app/requirements.txt:13`, `app/chamados/models.py:1549–1567`, `app/chamados/juizes.py:1187–1195`, `app/chamados/tests/test_e4c_f5_opus_models.py:132–147`.
-
-O queryset local chega à iteração sem avaliação anterior no método. Se já estivesse materializado, o acesso ao cache ocorreria após a avaliação anterior. O gerador aceita `.iterator()` de outros chamadores, mas este passa `qs` diretamente. Lote vazio conserva `None` e retorna as três listas vazias. Num lote não vazio, até a primeira pergunta que seria pulada por texto legado ou marco aceso já fixou o instante antes do `continue`. `app/chamados/models.py:1549–1574, :1582–1586, :1597–1602`, `app/chamados/juizes.py:1183–1195`.
-
-Essa ordem estabelece o fim do carregamento em memória. Os SELECTs ainda são distintos. Há teste vizinho que intercala uma escrita depois de carregar as colunas e antes do prefetch das decisões. `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:112–137`.
-
-## 4. Classes de reprovação — BLOQUEIA
-
-| Classe | Veredito |
-|---|---|
-| **(a) Segundo juiz** | **OK.** A cópia continua chamando o C6 registrado. Os filtros de resposta e de marco continuam delegados aos juízes existentes. `app/docs/JUIZES.md:10–15, :102–109`, `app/core/juizes.py:290, :305`, `app/chamados/models.py:1546–1555, :1582–1585, :1601`. |
-| **(b) Segundo escritor** | **OK.** O filtro escreve no cache da cópia. A linha compensadora persistida passa por `registrar`, que faz o `bulk_create`. O selo de escritor único verifica esse caminho por AST. `app/chamados/models.py:1597–1600, :1719–1725, :4433–4444`, `app/chamados/tests/test_e1_entradas.py:185–222`. |
-| **(c) Relógio fora da borda** | **BLOQUEIA.** A sonda está na borda do lote lido. O ato usa outra amostra, sob a trava e depois da releitura. O universo entra na trava já decidido e a releitura filtra materialização e via, sem refazer o C6. Isso permite a divergência do item 5. `app/chamados/models.py:1565–1567, :1598–1601, :1638–1657, :1675–1680, :1707–1725`. |
-| **(d) Derivação paralela** | **RESSALVA.** O diff desloca o relógio de um filtro que já existia no pai. O C6 e a leitura dos atos continuam únicos, mas a simulação representa o efeito de uma reabertura por um corte no cache, e a escrita produz uma linha que a autoridade ordena por `(ato_em, pk)`. A equivalência entre esses dois caminhos tem a falha concreta do item 5. `verif1.diff`, `app/chamados/models.py:1587–1601, :1719–1725, :4367–4385`. |
-| **(e) RED sem mordida** | **OK para o mutante pedido.** Ao mover `now()` para antes do laço, a sonda pega `T0`. O wrapper avança a `T0 + 500 ms`, registra a validação e entrega o gerador real. A validação fica no cache simulado, o C6 exclui o único PK e a primeira chamada retorna `0`. `_alvo` exige `n == 1`. Isso vale para os dois REDs com avanço na leitura. O controle sem avanço conserva o empate. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:323–345, :364–389`, `app/chamados/models.py:1598–1601, :1638–1644`, `app/chamados/juizes.py:1406–1411`. |
-| **(f) Ordem e conjunto de travas** | **RESSALVA.** O protocolo de ordem é o mesmo. O conjunto muda porque `ids` muda antes da trava, inclusive de nenhuma aquisição nessa porta para a aquisição dos quatro grupos no caso do item 2. `app/chamados/models.py:1638–1657, :2881–2909`. |
-| **(g) Campo com dois significados** | **OK quanto ao campo.** `ato_em` continua sendo o instante atribuído ao ato. O problema é tomar dois instantes locais de finalidades diferentes como cortes equivalentes. A própria sequência admite ato inserido depois com timestamp anterior, como no caso de absorção já testado. `app/chamados/models.py:1565–1567, :1707–1725, :4225–4227, :4411–4429`, `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:368–377`. |
-
-O RED **morde a antecipação pedida**, mas deixa uma lacuna. Se o mutante chamar primeiro o wrapper, ler o relógio e só depois consumir o gerador retornado, a validação do teste já terá sido injetada e o relógio já terá avançado, embora a iteração real ainda esteja por começar. As prévias também são coletadas após a injeção e `_alvo` deixa esses retornos sem asserção. `app/chamados/juizes.py:1187–1193`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:332–339, :357–372`.
-
-## 5. Regressões frente ao pai — BLOQUEIA
-
-1. **Recuo entre a sonda e a trava.** Use a intercalação dos REDs, com `T0 = 12:00:00.000` e `T1 = 12:00:00.500`. A validação nasce em `T1`, entra no prefetch e a sonda nova, em `T1`, a descarta por igualdade. Na entrada da trava, faça o relógio voltar a `T0`. O pai teria mantido a validação (`T1 > T0`) e pulado a pergunta. A cópia trava o PK, grava `REABERTURA` em `T0` e limpa a coluna. Na leitura posterior, a validação em `T1` vem depois da reabertura em `T0`, mesmo com PK menor. A coluna fica nula e o ato continua validado. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:323–345, :364–384`, `app/chamados/models.py:1598–1601, :1675–1680, :1707–1728, :4367–4385`.
-2. **Recuo durante o carregamento.** Suponha uma validação já gravada às `12:00:00.500`. O pai lê `12:00:01.000` antes do lote. O relógio volta a `12:00:00.000` antes do primeiro `yield` e volta a `12:00:01.000` antes da eventual escrita. O pai descarta a validação, inclui o PK e a sua reabertura a vence. A cópia conserva a validação, põe o PK em `mortas_c6` e retorna zero se for a única candidata. É a mudança de elegibilidade no sentido inverso ao do RED. `app/chamados/models.py:1565–1567, :1598–1602, :1638–1644, :1707–1725, :4367–4385`, `app/chamados/juizes.py:1406–1411`.
-
-Os casos existentes de borda cobrem avanço dentro do wrapper, avanço na entrada da trava e empate com o relógio congelado. O `RED_10` avança o relógio enquanto a **resposta humana** espera sua trava. Há teste vizinho que usa `move_to` para intercalar uma devolução antes da trava do **fechamento da disputa**. Nenhum desses cenários citados exerce o recuo entre `_agora_sonda` e `_agora_r` na ressuscitação. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:244–274, :323–345, :374–389`, `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:224–245`.
-
-_7723 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7725 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
