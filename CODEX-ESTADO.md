@@ -1,7 +1,493 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 05:36** · publicado em **21/11/2026 05:38** (UTC-3)
+> Ultima resposta processada: **21/11/2026 05:40** · publicado em **21/11/2026 05:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 05:40 · sessao 23ac1ea19728 · FALTA-APROVADA-MOVE-O-TXT-ENTREGUE · leitura · origem=Code
+
+A sonda abaixo seleciona os 19 casos a partir do JSON caso a caso da volta 3. O critério é `CONCLUSIVO`, `mudou_txt=True` e transição `entra ↔ fora/furo_espelho`. A cópia confirma 17 saídas em 16 PKs distintos e duas entradas, nos PKs 161 e 504. As 19 chaves completas estão [nao verificado]. Com o anexo resumido, a seleção falha antes de abrir a transação. `app/docs/RELATO.md:7`, `app/folha/export.py:837–842,968–981`.
+
+A captura observa a própria execução de `classificar_export`. Guarda em memória `motivos_espelho`, os dias devolvidos pelo retentor, o PK e o veredito da célula, seus protestos e a ata quando o leitor da pausa a consulta. `sem_celula` pode sair com PK nulo ou com uma célula sem veredito. Os protestos participam das exceções do crivo como conjunto. A assinatura ainda recebe `inconsistencias`, mas o corpo atual ignora esse argumento. `app/folha/export.py:968–973,1148–1155,1173,1212–1213,1247–1298,1301–1307`, `app/ponto/juiz_batida.py:149–161`.
+
+| Insumo do juiz | Caminho reutilizado |
+|---|---|
+| Colaborador, janela, `hoje` e `agora` | O registro do colaborador no fechamento, `janelas.janela_fechamento` e a data local do instante do ato. `app/ponto/management/commands/e6_oraculo.py:285–316`, `app/ponto/janelas.py:54–57`. |
+| `horas_do_dia` | `InsumosDoDono` lê `batidas_apuraveis`, monta `minutos_do_oraculo` e passa `horas` do dia. `app/ponto/management/commands/e6_oraculo.py:128–154,182–195`, `app/ponto/turnos.py:2891–2899`. |
+| `em_cadastro_x_realidade` | `espelho_do_colab` fornece `resultado`. `InsumosDoDono.cxr()` lê `resultado.dias_cadastro_x_realidade`. `app/ponto/management/commands/e6_oraculo.py:162–172,195,316–328`, `app/ponto/services/espelho.py:1241–1245,1310–1312`, `app/ponto/motor_calculo_v2.py:2719`. |
+| `folga_nao_definida`, `sem_vinculo_no_dia`, `sem_vinculo_em_dia_de_trabalho` | Os três vêm de `cadastro_do_dia_carregado`. `app/ponto/management/commands/e6_oraculo.py:182–188`, `app/ponto/supra_juiz.py:179–214`. |
+| `batida_fora_de_turno` | `InsumosDoDono.turnos()` carrega a janela com bordas e `batida_fora_de_turno()` consulta o realizado e a batida solta apurável. `app/ponto/management/commands/e6_oraculo.py:156–160,185,198–212`. |
+| `fase_deslocada` | `InsumosDoDono.fase()` lê `dias_de_fase_as_of` até `hoje`. `app/ponto/management/commands/e6_oraculo.py:174–187`, `app/escala/services/fase_12x36.py:117–148`. |
+
+Todos os argumentos do juiz estão disponíveis pelo carregador compartilhado. O índice diário `dias_esp` e a sequência de cortes que decide **se o E6 registra uma divergência** são locais de `Command.handle`, pois pertencem ao laço de comparação do comando. A sonda reproduz esses cortes para o placar e chama `InsumosDoDono.dono()` em todos os dias da união A/B, nas duas fotos. `retornos_do_juiz` conta todas as chamadas. `divergencias_e6_por_dono` conta as que passam pelos cortes do comando. `app/ponto/management/commands/e6_oraculo.py:182–195,215–269,320–320,328–381`.
+
+### `sonda_ab4.py`
+
+```python
+import io
+import json
+import logging
+import socket
+import sys
+from collections import Counter
+from contextlib import ExitStack, closing, redirect_stderr, redirect_stdout
+from copy import deepcopy
+from unittest.mock import patch
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.storage import FileSystemStorage
+from django.db import connection, transaction
+from django.utils import timezone
+
+from chamados import fcm_utils, push_utils [nao verificado]
+from chamados.services.disputa_emissao import push_disputa_silenciado [nao verificado]
+from chamados.services.materializacao import ESCAPES_QUE_VIRAM_AUSENCIA
+from colaboradores.mixins import tem_acao
+from folha import export as E
+from ponto import janelas
+from ponto.juiz_batida import periodos_do_dia
+from ponto.management.commands import e6_oraculo as E6
+from ponto.models import Ausencia, FechamentoMensal
+from ponto.services import dia_pago
+from ponto.services.ausencia import decidir
+from ponto.services.espelho import espelho_do_colab
+
+
+ENTRA, FURO = ("entra", None), ("fora", "furo_espelho")
+CAMINHOS = {(ENTRA, FURO): "sai", (FURO, ENTRA): "entra"}
+TIPO, ESTADO = ESCAPES_QUE_VIRAM_AUSENCIA["FALTA_DIA"]
+MEDICOES = {}
+
+
+class SondaFalhou(RuntimeError):
+    pass
+
+
+def exigir(condicao, erro):
+    if not condicao:
+        raise SondaFalhou(erro)
+
+
+def caminho(a, b):
+    return CAMINHOS.get(((a["status"], a["motivo"]), (b["status"], b["motivo"])))
+
+
+def selecionar(origem):
+    exigir(
+        origem["universo"]["percorrido_igual_ao_listado"] is True
+        and origem["placar"]["status"] == "CONCLUSIVO",
+        "selecao_inconclusiva",
+    )
+    casos = {}
+    por_caminho = {"sai": [], "entra": []}
+    for c in origem["casos"]:
+        if c["status"] != "CONCLUSIVO" or c["mudou_txt"] is not True:
+            continue
+        grupo = caminho(c["A"]["classificador"], c["B"]["classificador"])
+        if grupo is None:
+            continue
+        chave = tuple(c[k] for k in ("empresa_pk", "mes", "ano", "colaborador_pk"))
+        exigir(all(type(n) is int and n > 0 for n in chave), "chave_invalida")
+        exigir(chave not in casos, "caso_repetido")
+        faltas = tuple(sorted(c["ausencia_pks"]))
+        exigir(
+            faltas and len(set(faltas)) == len(faltas)
+            and all(type(p) is int and p > 0 for p in faltas),
+            "faltas_invalidas",
+        )
+        casos[chave] = grupo, faltas
+        por_caminho[grupo].append(chave[-1])
+    exigir(
+        len(por_caminho["sai"]) == 17
+        and len(set(por_caminho["sai"])) == 16
+        and sorted(por_caminho["entra"]) == [161, 504],
+        "lote_diferente_de_19",
+    )
+    return casos
+
+
+def classificar_com_prova(empresa, mes, ano, fech):
+    # app/folha/export.py:1212-1213,1247,1259-1262,1298
+    laco = E._dias_sem_decisao.__code__
+    pausa = E._furo_so_da_pausa.__code__
+    periodos = periodos_do_dia.__code__
+    por_motivo, atas_lidas = {}, {}
+
+    def observar(frame, evento, retorno):
+        if evento != "return" or retorno is None:
+            return
+        codigo = frame.f_code
+        if codigo is periodos and frame.f_back.f_code is pausa:
+            cel = frame.f_locals["celula"]
+            atas_lidas[cel.data] = {
+                "celula_pk": cel.pk,
+                "ata": deepcopy(cel.ata),
+                "periodos": deepcopy(retorno),
+            }
+        elif codigo is laco:
+            _, dias = retorno
+            celulas = frame.f_locals.get("cels", {})
+            for dia in dias:
+                data = dia["data"]
+                cel = celulas.get(data)
+                por_motivo.setdefault(dia["motivo"], []).append({
+                    **dia,
+                    "protestos": deepcopy(cel.protestos) if cel is not None else None,
+                    "leitura_ata": atas_lidas.get(data),
+                })
+
+    exigir(sys.getprofile() is None, "perfilador_ja_ativo")
+    sys.setprofile(observar)
+    try:
+        item, = E.classificar_export(empresa, mes, ano, fechamentos=[fech])
+    finally:
+        sys.setprofile(None)
+
+    motivos = deepcopy(item.get("motivos_espelho"))
+    exigir(
+        item["colaborador_id"] == fech.colaborador_id
+        and (motivos is not None) == (item["motivo"] == "furo_espelho")
+        and (motivos or []) == sorted(por_motivo),
+        "rastro_do_espelho_incompleto",
+    )
+    return item, motivos, por_motivo, atas_lidas
+
+
+def fotografar(empresa, mes, ano, colab_pk):
+    fech = FechamentoMensal.objects.select_related("colaborador__empresa").get(
+        colaborador_id=colab_pk, colaborador__empresa=empresa, mes=mes, ano=ano,
+    )
+    item, motivos, dias, atas = classificar_com_prova(empresa, mes, ano, fech)
+    linhas, _ = E.montar_linhas_export(
+        empresa, mes, ano, itens=[item], fechamentos=[fech],
+    )
+
+    matricula = item["codigo_dominio"].zfill(10)
+    pai = None
+    tipos = {"10": Counter(), "11": Counter()}
+    for linha in linhas:
+        partes = E.partes_da_linha(linha)
+        exigir(partes is not None, "layout_txt")
+        reg = partes["reg"]
+        if reg == "10":
+            pai = partes["matricula"]
+            exigir(pai == matricula, "matricula_txt")
+        else:
+            exigir(reg == "11" and pai is not None, "layout_txt")
+        tipos[reg][linha] += 1
+
+    return {
+        "status": item["status"],
+        "motivo": item["motivo"],
+        "motivos_espelho": motivos,
+        "dias_por_motivo": dias,
+        "atas_lidas": atas,
+        "fechamento_pk": fech.pk,
+        "colaborador": fech.colaborador,
+        "linhas": linhas,
+        "tipos": tipos,
+    }
+
+
+def situacao_e6(ins, linha, chave):
+    # app/ponto/management/commands/e6_oraculo.py:336-369
+    if linha is None:
+        return "sem_linha"
+    if linha.get("isencao") or linha.get("ausencia") is not None:
+        return "isento_ou_ausencia"
+    m_esp, _ = E6.minutos_do_espelho(linha)
+    if m_esp is None:
+        return "sem_lavratura"
+    m_e6 = ins.oraculo.minutos.get(chave, 0.0)
+    if m_esp == 0 and m_e6 == 0:
+        return "ambos_zero"
+    diferenca = m_e6 - m_esp
+    if E6.diferenca_e_a_janela_declarada(diferenca, linha):
+        return "desconto_janela_declarada"
+    return "ate_10_min" if abs(diferenca) <= 10 else "divergencia"
+
+
+def julgar(foto, empresa, mes, ano, dias, agora):
+    # app/ponto/management/commands/e6_oraculo.py:285,297,304,316,320,328,378
+    hoje = timezone.localtime(agora).date()
+    ini, fim = janelas.janela_fechamento(mes, ano, empresa)
+    c = foto["colaborador"]
+    esp = espelho_do_colab(c, hoje, ini, fim, agora=agora)
+    ins = E6.InsumosDoDono(c, ini, fim, hoje, espelho=esp, agora=agora)
+    linhas = {str(l.get("data"))[:10]: l for l in (esp.get("dias") or [])}
+    foto["e6"] = {}
+    for data in sorted(dias):
+        exigir(ini <= data <= fim, "dia_fora_da_janela_e6")
+        dono = ins.dono(data)
+        exigir(dono in ("CADASTRO", "BATIDA", "ESTRUTURA"), "juiz_sem_resposta")
+        chave = str(data)
+        foto["e6"][data] = (dono, situacao_e6(ins, linhas.get(chave), chave))
+    exigir(timezone.localdate() == hoje, "mudou_dia_do_ato")
+
+
+class Descartar(io.TextIOBase):
+    def __init__(self, falhas=None):
+        self.falhas = falhas
+
+    def write(self, texto):
+        erro = sys.exc_info()[1]
+        if self.falhas is not None and erro is not None:
+            self.falhas.append(erro)
+        return len(texto)
+
+
+def contar_erros(falhas):
+    objetos = {id(e): e for e in falhas if isinstance(e, BaseException)}
+    totais = Counter(
+        str(e) if isinstance(e, SondaFalhou) else type(e).__name__
+        for e in objetos.values()
+    )
+    totais.update(e for e in falhas if isinstance(e, str))
+    return dict(totais)
+
+
+def etapa(falhas, acao):
+    inicio = len(falhas)
+    valor = None
+    try:
+        with transaction.atomic():
+            try:
+                valor = acao()
+                exigir(not transaction.get_rollback(), "transacao_marcada_para_rollback")
+            finally:
+                transaction.set_rollback(True)
+    except Exception as erro:
+        falhas.append(erro)
+    erros = contar_erros(falhas[inicio:])
+    del falhas[inicio:]
+    return valor, erros
+
+
+def preparar_b():
+    usuarios = get_user_model().objects.filter(is_active=True).order_by("-is_superuser", "pk")
+    with closing(usuarios.iterator(chunk_size=200)) as ativos:
+        dp = next((u for u in ativos if tem_acao(u, "editar_ausencias")), None)
+    exigir(dp is not None, "sem_decisor_dp")
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            DO $sonda$
+            DECLARE
+                s record;
+                qualificada text;
+                ultimo bigint;
+                usada boolean;
+                proximo numeric;
+            BEGIN
+                FOR s IN
+                    SELECT n.nspname, c.relname, p.seqcache, p.seqincrement,
+                           p.seqmin, p.seqmax, p.seqcycle
+                    FROM pg_catalog.pg_sequence p
+                    JOIN pg_catalog.pg_class c ON c.oid = p.seqrelid
+                    JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+                    WHERE n.nspname IN ('juliani', 'public')
+                    ORDER BY n.nspname, c.relname
+                LOOP
+                    qualificada := format('%I.%I', s.nspname, s.relname);
+                    EXECUTE format('ALTER SEQUENCE %s CACHE %s', qualificada, s.seqcache);
+                    EXECUTE 'SELECT last_value, is_called FROM ' || qualificada
+                        INTO ultimo, usada;
+                    proximo := ultimo::numeric;
+                    IF usada THEN
+                        proximo := proximo + s.seqincrement;
+                    END IF;
+                    IF proximo NOT BETWEEN s.seqmin AND s.seqmax THEN
+                        IF NOT s.seqcycle THEN
+                            CONTINUE;
+                        END IF;
+                        proximo := CASE WHEN s.seqincrement > 0
+                                       THEN s.seqmin ELSE s.seqmax END;
+                    END IF;
+                    EXECUTE format('ALTER SEQUENCE %s RESTART WITH %s', qualificada, proximo);
+                END LOOP;
+            END
+            $sonda$;
+        """)
+    return dp
+
+
+def rejeitar(colab_pk, pks, dp):
+    # app/ponto/services/ausencia.py:1057-1088,1090-1104
+    ausencias = list(
+        Ausencia.objects.filter(pk__in=pks, colaborador_id=colab_pk)
+        .select_related("colaborador__empresa").order_by("pk")
+    )
+    exigir(
+        tuple(a.pk for a in ausencias) == pks
+        and all((a.tipo, a.status) == (TIPO, ESTADO) for a in ausencias),
+        "faltas_mudaram",
+    )
+    agora = timezone.now()
+    for aus in ausencias:
+        decidir(
+            aus, "rejeitada", por=dp, decisor=dp, aprovada_em=agora,
+            motivo="sonda de falta aprovada",
+        )
+    gravadas = list(
+        Ausencia.objects.filter(pk__in=pks).order_by("pk").values_list("pk", "status")
+    )
+    exigir(gravadas == [(pk, "rejeitada") for pk in pks], "rejeicao_incompleta")
+
+
+def publicar_foto(foto):
+    dias_retidos = [d for ds in foto["dias_por_motivo"].values() for d in ds]
+    return {
+        "fechamento_pk": foto["fechamento_pk"],
+        "motivos_espelho": len(foto["motivos_espelho"] or []),
+        "dias_retidos": len(dias_retidos),
+        "celula_pks_retidas": sorted({
+            d["celula_id"] for d in dias_retidos if d["celula_id"] is not None
+        }),
+        "dias_por_situacao_e6": dict(Counter(s for _, s in foto["e6"].values())),
+        "divergencias_e6_por_dono": dict(Counter(
+            d for d, s in foto["e6"].values() if s == "divergencia"
+        )),
+        "retornos_do_juiz": dict(Counter(d for d, _ in foto["e6"].values())),
+    }
+
+
+def medir(falhas, chave, esperado, dp):
+    emp_pk, mes, ano, colab_pk = chave
+    grupo, faltas = esperado
+    fotos = MEDICOES[chave] = {}
+    erros = {}
+    pub = {
+        "empresa_pk": emp_pk, "colaborador_pk": colab_pk,
+        "ausencia_pks": faltas, "erros": erros,
+    }
+    hoje_ato = timezone.localdate()
+
+    def foto_a():
+        vig = E.competencia_entregue(emp_pk, mes, ano, registro=True)
+        exigir(vig is not None, "competencia_sem_entrega")
+        empresa = vig.empresa
+        pub["exportacao_pk"] = vig.pk
+        ini, fim = E.janela_competencia(empresa, mes, ano)
+        atuais = tuple(
+            E.ausencias_na_janela(colab_pk, TIPO, ini, fim).filter(status=ESTADO)
+            .order_by("pk").values_list("pk", flat=True)
+        )
+        exigir(atuais == faltas, "faltas_diferentes_da_sonda3")
+        fotos["A"] = fotografar(empresa, mes, ano, colab_pk)
+        return empresa
+
+    def foto_b():
+        rejeitar(colab_pk, faltas, dp)
+        fotos["B"] = fotografar(empresa, mes, ano, colab_pk)
+        a, b = fotos["A"], fotos["B"]
+        exigir(
+            caminho(a, b) == grupo and a["linhas"] != b["linhas"],
+            "delta_diferente_da_sonda3",
+        )
+        dias = {
+            d["data"] for foto in (a, b)
+            for registros in foto["dias_por_motivo"].values() for d in registros
+        }
+        exigir(dias, "nenhum_dia_retido")
+        agora = timezone.now()
+        exigir(timezone.localtime(agora).date() == hoje_ato, "mudou_dia_do_ato")
+        _, falhas_e6 = etapa(falhas, lambda: julgar(b, empresa, mes, ano, dias, agora))
+        if falhas_e6:
+            erros["E6_B"] = falhas_e6
+        return dias, agora
+
+    empresa, falhas_a = etapa(falhas, foto_a)
+    if falhas_a:
+        erros["A"] = falhas_a
+        return pub
+    contexto, falhas_b = etapa(falhas, foto_b)
+    if falhas_b:
+        erros["B"] = falhas_b
+        return pub
+
+    dias, agora = contexto
+    _, falhas_e6 = etapa(
+        falhas, lambda: julgar(fotos["A"], empresa, mes, ano, dias, agora),
+    )
+    if falhas_e6:
+        erros["E6_A"] = falhas_e6
+
+    if not erros:
+        pub.update({estado: publicar_foto(foto) for estado, foto in fotos.items()})
+        a, b = (fotos[estado]["tipos"] for estado in ("A", "B"))
+        pub["delta_txt"] = {
+            reg: {
+                "A": sum(a[reg].values()),
+                "B": sum(b[reg].values()),
+                "adicionadas": sum((b[reg] - a[reg]).values()),
+                "removidas": sum((a[reg] - b[reg]).values()),
+            }
+            for reg in a
+        }
+    return pub
+
+
+def principal(origem=None):
+    falhas = []
+    saida = {"esperados": 19, "selecionados": 0, "casos": []}
+
+    def observar_log(_logger, registro):
+        erro = registro.exc_info[1] if registro.exc_info else None
+        args = registro.args if isinstance(registro.args, tuple) else ()
+        excecoes = [a for a in args if isinstance(a, BaseException)]
+        if erro is not None:
+            falhas.append(erro)
+        elif excecoes:
+            falhas.extend(excecoes)
+        elif registro.levelno >= logging.ERROR:
+            falhas.append("erro_registrado_sem_tipo")
+
+    def bloquear(*args, **kwargs):
+        erro = SondaFalhou("efeito_externo_bloqueado")
+        falhas.append(erro)
+        raise erro
+
+    def push_suprimido(*args, **kwargs): [nao verificado]
+        return {"ok": False, "motivo": "sonda", "token_invalido": False}
+
+    ler_dia_pago = dia_pago.linhas_do_periodo
+
+    def observar_dia_pago(*args, **kwargs):
+        # app/ponto/services/espelho.py:420-426
+        try:
+            return ler_dia_pago(*args, **kwargs)
+        except Exception as erro:
+            falhas.append(erro)
+            raise
+
+    try:
+        with ExitStack() as pilha:
+            pilha.enter_context(redirect_stdout(Descartar()))
+            pilha.enter_context(redirect_stderr(Descartar(falhas)))
+            pilha.enter_context(patch.object(logging.Logger, "handle", observar_log))
+            pilha.enter_context(timezone.override(settings.TIME_ZONE))
+
+            casos = selecionar(json.load(sys.stdin) if origem is None else origem)
+            saida["selecionados"] = len(casos)
+            exigir(
+                settings.SETTINGS_MODULE == "config.settings.sombra"
+                and getattr(settings, "HASNER_SOMBRA", False) is True
+                and set(settings.DATABASES) == {"default"}
+                and connection.vendor == "postgresql"
+                and connection.settings_dict["NAME"] == "sombra"
+                and connection.settings_dict["HOST"] == "sombra_db"
+                and getattr(connection, "schema_name", None) == "juliani"
+                and not connection.in_atomic_block
+                and connection.get_autocommit(),
+                "guarda_sombra",
+            )
+            pilha.enter_context(push_disputa_silenciado()) [nao verificado]
+            pilha.enter_context(patch.object(push_utils, "_enviar_push_usuario", push_suprimido)) [nao verificado]
+            pilha.enter_context(patch.object(fcm_utils, "push_fcm", push_suprimido)) [nao verificado]
+            pilha.enter_context(patch.object(dia_pago, "linhas_do_periodo", observar_dia_pago))
+            pilha.enter_context(patch.object(socket, "getaddrin
+
+[truncado em 20000 de 23631 caracteres]
 
 ## 21/11 05:36 · sessao 305a78b7faaf · E4C-F5-CONSTROI · leitura · origem=Code
 
@@ -1431,20 +1917,4 @@ Nos três mutantes do par também falha a asserção antiga de sítio ausente do
 - **Média — Duas asserções antigas perderam a expectativa literal.** Uma mudança coordenada em `DEVOLUCAO` e na entrada correspondente de `_LIMPAM_VALIDACAO` pode passar onde a igualdade antiga acusaria. `test_e4c_f5_selo_par_ato_coluna.py:29,645–647`, `models.py:4205,4330`.
 - **Baixa — Dois asserts ORM preexistentes dependem da ordem entre a data fixa e o relógio.** A leitura pode manter a validação quando a reabertura sai com instante anterior. `test_e4c_f5_selo_par_ato_coluna.py:690–705,713–722`, `cortes_f2_f9_apoio.py:32`, `disputa_emissao.py:1648,1664–1668`, `models.py:4363–4379`.
 
-## 20/11 20:05 · sessao 04a20458663e · - · - · origem=Ronald (tmux)
-
-**C10.** O seletor `F5_VOLTA_E_MUTANTE` muda o texto entregue ao AST. O par já o consultava e a catraca passou a consultá-lo. Os censos leem fontes sob `app`; a referência a `timezone.now` no visitante do par é um reconhecimento sintático. Fontes: `e4c_f5_voltaE_mutantes.py:5,58–69`, `test_e4c_f5_selo_par_ato_coluna.py:345–351,499–507`, `test_e4c_f5_selo_chamada.py:9`, `test_e4c_f5_selo_catraca.py:12,306–316`. [nao verificado]
-
-O arquivo do par também contém testes ORM preexistentes, com banco de teste. Dois vereditos dependem indiretamente do relógio: a porta carimba a reabertura com `timezone.now()`, e a leitura ordena por `ato_em` e PK. Em memória, executei a leitura real com a fixture. Uma reabertura às 09:00 UTC de 18/10 deixa vigente a validação das 10:00 UTC. Às 10:00 com PK posterior ou às 11:00, ela a zera. Fontes: `cortes_f2_f9_apoio.py:32,37–74`, `test_e4c_f5_selo_par_ato_coluna.py:687–705,713–722`, `disputa_emissao.py:1648,1664–1668`, `models.py:4363–4379`. [nao verificado]
-
-**C11.** O delta fornecido altera três arquivos sob `app/chamados/tests`. Reconstituí os três blobs da base em memória. Os IDs da base e do final coincidem com o anexo. Identidade do commit e completude do delta contra a base fora do anexo [nao verificado], pois a cópia não contém `.git`. [nao verificado]
-
-- Nenhuma expressão `assert` ou `assert*` existente foi removida ou substituída. A asserção de unicidade da âncora, antes única em `e4c_f5_voltaE_mutantes.py:37` da base, agora é executada por substituição em `e4c_f5_voltaE_mutantes.py:66–68`.
-- As duas asserções existentes que usam `ATOS_QUE_LIMPAM` perderam a expectativa literal. Antes, igualdade e subconjunto contra `{'devolucao', 'recusa', 'reabertura'}`. Agora, contra `{DecisaoPergunta.DEVOLUCAO, DecisaoPergunta.RECUSA, DecisaoPergunta.REABERTURA}`. Base `test_e4c_f5_selo_par_ato_coluna.py:29,498,500`, final `test_e4c_f5_selo_par_ato_coluna.py:29,645,647`.
-- `assertEqual(erros, [])` e `assertEqual(vermelhos, [])` mantêm as expressões. Mudaram o pareamento dos registros e a preparação da fonte, respectivamente. Par `:465` na base, `:435–440,521` no final. Catraca `:307` na base, `:306–316` no final.
-
-**C12.** Os julgamentos usam AST. A substituição textual aplica os mutantes antes de analisar a fonte. O oráculo dos atos passou a acompanhar o valor de produção. Renomear `DEVOLUCAO` e a entrada correspondente em `_LIMPAM_VALIDACAO` mantém verdes as duas asserções citadas. O nome da coluna vem do modelo, mas o acesso nominal e a fixture do censo ainda fixam `validada_em`. Fontes: `e4c_f5_voltaE_mutantes.py:66–68`, `test_e4c_f5_selo_catraca.py:193–196,299–315`, `test_e4c_f5_selo_par_ato_coluna.py:22,29,208–214,470–494,624–633,645–647`, `models.py:4205–4206,4330`. [nao verificado]
-
-O delta não introduz campo de dupla semântica. A coluna da projeção e o valor vigente da composta são comparados explicitamente. A foto histórica e o sinal de manutenção da validação têm campos próprios. Fontes: `models.py:2658–2659,4225–4228,4241–4248,4382–4399`.
-
-_7628 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7629 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
