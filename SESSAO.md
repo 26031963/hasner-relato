@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 15:45:33.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (36.2 MB). Acoes na janela: **994**.
+**Medido em 21/11/2026 15:51:29.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (37.1 MB). Acoes na janela: **999**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:46:55 | Bash | Read FERIADO agent result and check live producers | `tail -c 3500 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/a142e7e64bc657dbf.output; echo; pgrep -fa '^bash bin/codex_pergunta.sh' \| cut -c1-100; ps -p 1920461 -o pid=,args= \| cut -c1-80` |
+| 15:46:51 | Bash | Publish SENTINELA PAREI line in RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/RELATO.md'; s=open(p).read().split('\n') s.insert(1,f"PAREI RASCUNHO SENTINELA-DO-SLOT: leve ao chat ({H}; FICHA-SENTINELA-DO-SLOT-2111-1540; Codex leitura rc 0 15:46:18 no 9d13aa9c2; logs/SENTINELA-DO-SLOT/r.txt sha256-12 44f7c468aeb7, 102 linhas; rascunho extraido logs/SENTINELA-DO-SLOT/rascunho.txt  ...` |
+| 15:46:40 | Bash | Extract draft, hash, sample-check citations | `cd ~/saas-hasner/logs/SENTINELA-DO-SLOT; sed -n '62,102p' r.txt > rascunho.txt; wc -l rascunho.txt; sha256sum rascunho.txt\|cut -c1-12; cat r.rc 2>/dev/null W=~/wt-codex-e4c-f5-constroi-141636/app/chamados; cd $W; git -C .. log --oneline -1 sed -n '1213,1228p' services/validacao.py; echo ----; sed -n '105,112p' services/vigia_carimbo.py; echo ----; sed -n '117,126p' services/carga_pergunta_viva.py` |
+| 15:46:33 | Read |  | `/home/ronald/saas-hasner/logs/SENTINELA-DO-SLOT/r.txt` |
+| 15:46:29 | Bash | Read SENTINELA result structure | `cd ~/saas-hasner/logs/SENTINELA-DO-SLOT; wc -l r.txt; sha256sum r.txt\|cut -c1-12; /bin/grep -n "^## \\|^### \\|PAREI\\|sha\\|SHA" r.txt \| cut -c1-250;` |
 | 15:44:47 | Bash | Mark CODEX-FECHA-A-VOLTA V2 frozen | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys H=sys.argv[1]; p='app/docs/BACKLOG.md'; s=open(p).read().split('\n') for k,l in enumerate(s): if l.startswith('\| CODEX-FECHA-A-VOLTA-V1 \|'): cs=l.split(' \| '); cs[1]=f"CONGELADO {H} a V2 (CONGELA-INSTRUMENTO-2111-1545, saida: 1o pouso de produto da E4C-F5 no ar ou revogacao). "+cs[1]; s[k]=' \| '.join(cs); print('ok') open(p, ...` |
 | 15:44:43 | Bash | Locate CODEX-FECHA-A-VOLTA backlog line | `cd ~/saas-hasner; /bin/grep -n "FECHA-A-VOLTA" app/docs/BACKLOG.md \| cut -c1-120 \| head` |
 | 15:44:39 | Bash | Retry backlog and RELATO updates robustly | `cd ~/saas-hasner; H=$(date +%H:%M); S=25abbec1765b; tail -1 app/docs/PROMPTS.md \| cut -c1-60 python3 - "$H" "$S" <<'EOF' import sys H,S=sys.argv[1:]; src=f"logs/CONGELA-INSTRUMENTO-2111-1545/aval.txt sha256-12 {S}" def pre(l,txt): cs=l.split(' \| ') i=2 if len(cs)>2 else len(cs)-1 cs[i]=txt+cs[i]; return ' \| '.join(cs) cong=["PORTAO-DE-NAO-REGRESSAO","AUTO-CLEAR-NO-MARCO","CLAUDE-MD-ENXUTO-2","M ...` |

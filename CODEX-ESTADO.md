@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 15:42** · publicado em **21/11/2026 15:45** (UTC-3)
+> Ultima resposta processada: **21/11/2026 15:46** · publicado em **21/11/2026 15:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 15:46 · sessao 05d61cb7b2de · SENTINELA-DO-SLOT · leitura · origem=Code
+
+O retorno atual mistura **quatro motivos locais** em `(None, None)`. O efeito mais grave está no juiz de fato: o veto temporal hoje permite aceitar tanto uma batida pelo vínculo, sem conferir a hora, quanto um destino encerrado. A migração integral pede **exceção nominal para os cinco leitores**, em cinco arquivos de produção, contando o do próprio juiz. `app/chamados/juizes.py:344–380,758–803` · `app/chamados/services/carga_pergunta_viva.py:119` · `app/chamados/services/validacao.py:1223` · `app/chamados/services/explicador.py:52` · `app/chamados/services/vigia_carimbo.py:110` · `CLAUDE.md:37–38`
+
+## Saídas e leitores da cópia
+
+| Linha na cópia | O que produz `(None, None)` |
+|---|---|
+| `app/chamados/juizes.py:349–355` | **Veto temporal.** Há instante na leitura composta, mas a projeção o retira por ser posterior ao horizonte. A igualdade passa. `app/chamados/juizes.py:1395–1399` |
+| `app/chamados/juizes.py:363–364` | **Tipo sem slot.** O cálculo admite `hora` e `data_hora`. |
+| `app/chamados/juizes.py:365–374` | **Falha no parse de `data_hora`.** Inclui texto vazio. O sucesso está em `:372`. O `except` atual abrange toda exceção dentro desse bloco. |
+| `app/chamados/juizes.py:377–380` | **Plantio sem timestamp.** O delegado devolve `None` no primeiro campo. Isso ocorre por falta de data, resposta de escape ou descartada, default de relógio rejeitado pela régua, ou hora ausente/inválida na fonte. A falta de marco, por si, ainda permite cálculo pelo motivo. `app/chamados/services/materializacao.py:624–645,655–663,672–710` |
+| `app/chamados/juizes.py:356–360` | **Releitura do cache.** Pode repassar um dos quatro pares vazios. Se a entrada for uma `Exception`, relança o objeto. `app/chamados/services/carga_pergunta_viva.py:117–126` |
+
+São seis instruções `return` no corpo, quatro capazes de produzir localmente o par vazio, uma que o repassa do cache e uma de sucesso exclusivo. O reexport em `models.py` é a mesma função. A cópia contém a guarda composta e os REDs a/b/c. A cadeia dos commits declarados e o hash da volta 3 estão [nao verificado]. `app/chamados/juizes.py:349–380` · `app/chamados/models.py:4580` · `app/chamados/tests/test_marco_por_motivo.py:168–211`
+
+### Matriz de fallback
+
+A coluna **sem resposta vigente** discrimina o que hoje pode cair no parse vazio ou escapar pelo texto residual. A legitimidade abaixo distingue o comportamento já sustentado pelos controles da política proposta para esse motivo novo. `app/chamados/juizes.py:365–374,758–821,1552–1561` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–86`
+
+| Leitor e fallback atual | Veto temporal | Tipo sem slot | Parse inválido de `data_hora` | Plantio sem ts | `data_hora` sem resposta vigente |
+|---|---|---|---|---|---|
+| **Juiz de fato**. Vínculo vivo por existência, depois destino encerrado sujeito à lei e à janela, ou retratação auditada. `app/chamados/juizes.py:714,758–821` | **Ilegítimos** vínculo sem conferir hora e destino. A retratação com carimbo e trilha já vale também com slot e é prova independente. | A guarda de tipo exclui esse motivo. | **Legítimo no contrato legado de ausência de slot**, como prova independente e sujeito aos controles existentes. O parse falho por si nada prova. | **Legítimo** nas mesmas condições. O controle HX exige que o destino ceda à lei quando ela acusa. | **Proposta** de fechar vínculo e destino nesse ramo. A falta de resposta vigente inclui a reaberta e a que carece de par. |
+| **Carga de vida**. Guarda a entrada, omite limites daquele slot e ainda carrega batidas por origem. `app/chamados/services/carga_pergunta_viva.py:113–144,185–194` | Legítimo carregar por origem sem dar veredito. | Legítimo omitir limites. | Legítimo omitir limites. | Legítimo omitir limites. | Mesmo tratamento de alimentação. |
+| **Explicador**. Emite diagnóstico de slot não derivável citando texto físico. `app/chamados/services/explicador.py:48–55,115–143` | A chamada avulsa carece de horizonte. | Cabe explicar o tipo sem slot. | Cabe explicar o parse. | Cabe explicar a ausência de ts. | Cabe explicar a ausência de resposta vigente. O texto residual é inadequado nessa mensagem. |
+| **Vigia**. Se o juiz reprovar, emite `slot_nao_derivavel`. `app/chamados/services/vigia_carimbo.py:94–116` | As duas chamadas carecem de horizonte. O veto de uma consulta temporal seria outro estado. | O queryset exclui esse motivo. | Legítimo classificar como `slot_nao_derivavel`. | Legítimo classificar como `slot_nao_derivavel`. | Legítimo manter a classe quando o juiz reprovar. O reparo já exclui essa classe do plantio. `app/chamados/services/passivo_validado.py:52–60` |
+| **Lote**. Pula a consulta de conflito e chega a A. `app/chamados/services/validacao.py:1161–1167,1196–1228` | A chamada avulsa carece de horizonte. | As guardas anteriores excluem esse motivo. | Legítimo omitir consulta sem instante. **Ilegítimo concluir A.** | A mesma falta de prova impede A. | A ausência de resposta vigente impede A. A proposta é B, conferência individual, para quem chegaria a A. |
+
+Sonda em memória com os corpos da cópia: `2026-02-30 15:10`, com instante de resposta e marco às `15:10`, passou pelo C21 e pelo delta do lote. O slot saiu vazio, a classe foi `a_obvio` e houve **zero** consultas de conflito. A regex da porta humana aceita esse formato. O efeito medido é a classificação, e a ocorrência pela porta ORM ou em produção está [nao verificado]. `app/chamados/services/disputa_emissao.py:1464–1466` · `app/chamados/juizes.py:365–374,1552–1561,1938–1967` · `app/chamados/services/validacao.py:1186–1188,1213–1228`
+
+## Fonte da resposta e desenhos
+
+**O texto de `data_hora` vem da projeção**, aplicada à `DecisaoPergunta.composta(p)` inclusive na chamada sem horizonte. O C21 fornece o veredito booleano sobre o par projetado, como já faz o C6. A troca direta de `p.resposta_colab` por `_resposta` tem um furo: após REABERTURA ou RECUSA, a composição pode trazer **instante nulo com texto físico residual**. A projeção só apaga o texto quando corta um instante futuro. Por isso o C21 precisa anteceder o parser e a consulta ao cache nesse ramo. `app/chamados/models.py:4330–4331,4368–4390` · `app/chamados/juizes.py:349–374,1384–1404,1427–1429,1552–1561` · `app/docs/LEIS.md:151`
+
+Já existe motivo **a montante**: o plantio escreve o diagnóstico em `erros`, lista que `_slot_esperado` descarta. `estado_aplicacao_pergunta` reaproveita esse diagnóstico. Existe também precedente local de retorno nomeado com proveniência, `CompetenciaDoChamado.fonte`. O próprio slot ainda devolve o par sem motivo. `app/chamados/services/materializacao.py:624–645,655–663,691–704,915–918` · `app/chamados/juizes.py:377–380,2417–2419,2444–2466`
+
+| Desenho | Custo e contraexemplo |
+|---|---|
+| **A. Resultado imutável com motivo e valores. Escolhido.** | Migra os cinco chamadores juntos. Cada entrada continua sendo um resultado ou a própria `Exception`. Um leitor esquecido quebra de modo visível se o tipo não expuser desempacotamento nem indexação. Se a guarda de resposta rodar após o cache, `data_hora` desfeita ainda pode relançar a exceção ou usar o slot antigo. `app/chamados/juizes.py:349–380` · `app/chamados/services/validacao.py:1223` · `app/chamados/tests/test_marco_por_motivo.py:196–211` |
+| **B. Resultado rico numa autoridade, com adaptador que devolve o par antigo.** | Permite migrar o juiz de fato primeiro e manter um contrato de transição para os demais. Custa manter duas interfaces e provar quais consumidores ainda perdem o motivo. Contraexemplo: o lote ligado ao adaptador segue classificando a data impossível em A sem conferir conflito. `app/chamados/juizes.py:758–767` · `app/chamados/services/validacao.py:1213–1228` |
+| **C. Par antigo e motivo em estrutura paralela.** | Preserva os desempacotamentos, mas obriga a sincronizar os dois registros e criar um canal também para as chamadas avulsas. Contraexemplo: se o slot ou a exceção de uma foto ficar sob a mesma PK que o motivo de outra, o leitor pode decidir pelo motivo errado. A carga já usa o slot para recortar as testemunhas. `app/chamados/juizes.py:347–360` · `app/chamados/services/carga_pergunta_viva.py:88–95,117–144,185–194` |
+
+O motivo explícito resolve a ambiguidade do retorno. Para resolver o descompasso de cache, o desenho A também exige a mesma foto e o mesmo horizonte. Recalcular só o slot em T1 com uma carga de T0 pode perder uma batida sem vínculo que ficou fora do recorte de T0. `tarefa_do_dia` já rejeita relógio incompatível na sua borda. O reuso entre fotos pelos chamadores de produção está [nao verificado]. `app/chamados/services/carga_pergunta_viva.py:117–144,185–194` · `app/chamados/services/tarefa_do_dia.py:630–637,830–839`
+
+## Cinco perguntas por campo
+
+| Campo ou valor | Fonte | Escritor | Instante e trava | Leitores | Significado único e leitura crua |
+|---|---|---|---|---|---|
+| `ato`, `ato_em` e ordem | Trilha e complemento legado. `app/chamados/models.py:4304–4317,4361–4367` | `DecisaoPergunta.registrar`. `app/chamados/models.py:4428–4453` | Na resposta humana, o relógio é lido após trava e releitura. A redução ordena por instante, origem real/legado e PK. `app/chamados/services/disputa_emissao.py:1478–1501` · `app/chamados/models.py:4361–4370` | Composta e tarefa C19. `app/chamados/models.py:4382–4390` · `app/chamados/services/tarefa_do_dia.py:390–429` | C19 corta a sequência; a projeção mascara a foto já reduzida. São leituras temporais distintas. `app/chamados/services/tarefa_do_dia.py:390–429` · `app/chamados/juizes.py:1384–1404` |
+| `respondida_em` físico e composto | Coluna para o legado, ato vigente para a composta. `app/chamados/models.py:4304–4317,4368–4390` | Par humano, automático e reparo por trilha passam pelas portas existentes. Reabertura chama `descarimbar_em_lote`. `app/chamados/services/disputa_emissao.py:1499–1502,1532–1537,1682–1684,1707–1737` | Instante da resposta, do processamento ou da nota conforme a porta. A composta é projetada no horizonte, sem nova trava. `app/chamados/services/disputa_emissao.py:1494–1499,1704–1707,1719–1725` · `app/chamados/juizes.py:1392–1399` | Slot, C6, C21 e face SQL da fila. `app/chamados/juizes.py:349–355,1407–1429,1552–1561,1584–1589,1771–1776` | `None` na projeção pode vir de ausência de ato vigente ou de corte futuro. A guarda atual usa também o valor composto para distingui-los. `app/chamados/juizes.py:349–355` |
+| `resposta_colab` físico e projetado | Texto da coluna servido pela composta e pela projeção. `app/chamados/models.py:4382–4390` · `app/chamados/juizes.py:1392–1399` | Mesmas portas do par. A porta de integridade recusa as duas metades ilegais. `app/chamados/services/disputa_emissao.py:1499–1502,1682–1684,1707–1715` · `app/chamados/services/fio.py:1704–1722` | Foto do objeto com a sequência carregada ou consultada. Query e prefetch são leituras separadas. `app/chamados/models.py:4353–4367` · `app/chamados/services/tarefa_do_dia.py:533–539` | Slot, C6, lote, explicador e derivador de hora. `app/chamados/juizes.py:366,1427–1429,1938–1951` · `app/chamados/services/validacao.py:1202–1215` · `app/chamados/services/explicador.py:53–55,100–103` · `app/chamados/services/materializacao.py:562,641,694–704` | **Sim, há leitura crua** no parser atual e no delegado de hora. Também há leitura crua no delta, nos filtros do lote e na exibição. Texto preenchido pode ser residual. C21 decide vigência pelo par. `app/chamados/models.py:4377–4390` · `app/chamados/juizes.py:1552–1561` |
+| `tipo_resposta`, `motivo`, `data_evento`, `conversa` | Identidade da pergunta. A conversa grava dia civil; a pergunta do fato usa dia do turno. `app/chamados/models.py:2631–2652,3004–3012,3084–3111` | Nascimento pelas portas `abrir`/`abrir_conversa`; re-chaveamento do dia pela porta própria. `app/chamados/models.py:2986–3017` · `app/chamados/services/fio.py:1032–1066` | Nascimento sob trava do colaborador; re-chaveamento relê sob as travas ordenadas. `app/chamados/models.py:3056–3062` · `app/chamados/services/fio.py:1059–1066` | Slot, juiz de fato, plantio e vigia. `app/chamados/juizes.py:337–341,363–380,714` · `app/chamados/services/materializacao.py:624–635` · `app/chamados/services/vigia_carimbo.py:97–110` | `data_evento` tem dois domínios discriminados por `conversa`. O legado de `hora` lê diretamente `data_evento`, com recurso ao contexto. `app/chamados/juizes.py:337–341` · `app/chamados/services/materializacao.py:624–635` |
+| Marco fixo, régua e vínculo | Marco do chamado por `entrada_de_marco`; régua pela ata via `grade_da_celula`; vínculo pela escala vigente. `app/chamados/juizes.py:299–332,529–558` · `app/chamados/services/materializacao.py:510–525,528–567` | O materializador e o slot leem. Inventário integral dos escritores dessas fontes [nao verificado]. `app/chamados/services/materializacao.py:615–621,672–710` | Chamado e grade disponíveis na consulta, avulsos ou pré-lidos. A reprodução histórica da escala, com a mesma foto do plantio original, está [nao verificado]. `app/chamados/juizes.py:734–744` · `app/chamados/services/carga_pergunta_viva.py:152–162` | Derivador de hora, delta do lote e slot por delegação. `app/chamados/services/materializacao.py:672–710` · `app/chamados/juizes.py:377–380,1948–1955` | O horário do marco fixo pode existir com resposta vazia. O tipo pelo motivo é recurso do derivador. `app/chamados/services/materializacao.py:624–626,672–704` |
+| `agora` e `carga.agora` | Borda da consulta. `app/chamados/juizes.py:347–348,683–684` | A tarefa recebe, a carga de vida copia. `app/chamados/services/tarefa_do_dia.py:520–525` · `app/chamados/services/carga_pergunta_viva.py:83–95` | Mesmo instante repassado ao C6 pelo lote; a leitura avulsa admite ausência de horizonte. `app/chamados/services/tarefa_do_dia.py:630–637` · `app/chamados/juizes.py:1384–1404` | Slot, juiz de fato e C6. `app/chamados/juizes.py:347–355,683–684,1407–1410` | `agora=None` herda o horizonte se houver carga e seleciona a foto atual no avulso. Hoje a PK, sozinha, deixa passar uma carga de outro horizonte. `app/chamados/juizes.py:347–360` |
+| `(ts, tipo)`, motivo e `carga.slots[pk]` | Slot e derivador delegado de hora. `app/chamados/juizes.py:344–380` | O juiz produz o resultado; a carga escreve a entrada em memória. `app/chamados/services/carga_pergunta_viva.py:117–126` | Antecipado no horizonte da carga. `app/chamados/services/carga_pergunta_viva.py:88,113–144` | Os cinco chamadores da matriz. O próprio slot relê a entrada. `app/chamados/juizes.py:356–360,758` | **Sim**, o par vazio representa quatro decisões. No desenho, o motivo distingue a condição, a PK ausente indica falta de cálculo e a `Exception` indica falha. `app/chamados/juizes.py:349–380` · `app/chamados/services/carga_pergunta_viva.py:117–126` |
+| Batida, vínculo, retratação, destino e trilha | Batida viva e vínculo, destino sujeito à lei, ou trilha com carimbo. `app/chamados/juizes.py:253–296,761–821` | Registro e anotação pela porta da batida; reuso vincula pelo materializador. Censo integral dos escritores do destino e da trilha [nao verificado]. `app/ponto/registro_batida.py:118,225,255–287` · `app/chamados/services/materializacao.py:1578` | Leitura avulsa ou coleção pré-lida. O recorte da carga combina vínculo e limites de slot. `app/chamados/services/carga_pergunta_viva.py:110–144,185–194` | Juiz de fato, C6 e vigia. `app/chamados/juizes.py:758–821,1494–1501` · `app/chamados/services/vigia_carimbo.py:105–116` | Vínculo prova identidade da origem. Com slot, a hora também é confrontada. No vigia, `ts=None` sozinho significa tanto `com_registro` sem consulta quanto `slot_nao_derivavel`; a classe distingue os casos. `app/chamados/juizes.py:727–767` · `app/chamados/services/vigia_carimbo.py:74–77,105–116` |
+
+O 1350 e os complementos fornecidos situam a cura da 1.1 em `juizes.py`. A migração do contrato pede nomear, além desse sítio, os quatro serviços do rascunho. O 1945 item 2 registra a proibição de tocar produção para a lacuna do aval de 1845. A regra que exige a autorização nominal aqui é o escopo literal. O rascunho-base integral do 1350 está [nao verificado]. `app/docs/RELATO.md:64,84` · `app/docs/PROMPTS.md:2711–2712` · `CLAUDE.md:37–38`
+
+Em só leitura, passaram os 28 testes do módulo C8b e os 28 das duas catracas AST. A sonda da fixture C8b passou com o `AGORA` e o veredito admin originais preservados, inclusive no controle noturno. Restaurar só o instante no caso `data_hora` falhou em três subcasos por saída antecipada no C6. O par ilegal do controle textual também foi localizado, fora do contrato de derivação de slot. Na execução mais ampla de 63 testes houve dois erros de importação de `django.utils` no mesmo teste de cartório. GREEN dos REDs ORM e suíte final [nao verificado]. `app/chamados/tests/test_e3_c8b_sem_banco.py:369–441` · `app/chamados/tests/e3_c8b_apoio.py:183–201` · `app/chamados/juizes.py:1424–1441` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:188,271` · `app/chamados/tests/test_e3_catraca_respondedores.py:482,560` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:173` · `app/core/fmt.py:8`
+
+**Frase para o chat:** `APROVA RASCUNHO SENTINELA-DO-SLOT 566c3b225f0c`. SHA-256 dos 41 versos do bloco abaixo em UTF-8, com LF após a última linha `---`: `566c3b225f0ca57958fbc859705970b79ae14ddf6df039c133ed50a99d2e8376`. O rito usa os primeiros 12 caracteres. `app/docs/PROMPTS.md:2676`
+
+## RASCUNHO SENTINELA-DO-SLOT
+
+**Unidade e autorização.** Uma consulta de slot de uma PerguntaDisputa, o retorno de _slot_esperado e seus cinco chamadores diretos. A autorização pedida é nominal, com as funções e os arquivos abaixo. Leis vigentes L-130 e LEI-AKITA 2/7/9, com Clock Injection. app/chamados/juizes.py:344–380,758 · app/docs/LEIS.md:151 · CLAUDE.md:21–38 · app/docs/GLOSSARIO.md:19
+
+**Contrato.** Resultado imutável com campos motivo, ts e tipo, sem interface de par. SLOT exige ts e tipo presentes. VETO_TEMPORAL, TIPO_SEM_SLOT, SEM_RESPOSTA_VIGENTE, DATA_HORA_INVALIDA e PLANTIO_SEM_TS têm ts e tipo vazios. Cada motivo nomeia uma condição do juiz. SEM_RESPOSTA_VIGENTE é o veredito do C21 no ramo data_hora, que perdeu ou carece de par válido. PLANTIO_SEM_TS é a devolução sem instante da autoridade de hora. app/chamados/juizes.py:344–380,1552–1561 · app/chamados/models.py:4368–4390 · app/chamados/services/materializacao.py:615–645,655–663,691–710
+
+**Ordem de leitura.** Use o horizonte recebido ou o da carga. Horizonte explícito divergente da carga levanta ValueError antes do uso da carga, no molde de tarefa_do_dia. Preserve o veto por ato posterior e o empate inclusivo. Em hora e data_hora, inclusive na leitura avulsa, use a projeção da composta. Em data_hora, consulte C21 sobre o par projetado antes do cache e entregue ao parser o texto projetado somente quando elegível. Em hora, entregue ao derivador existente uma foto de entrada com o texto projetado quando elegível e vazio nos demais casos, sem modificar a pergunta. O marco fixo continua podendo fornecer slot por conta própria. app/chamados/juizes.py:347–380,1384–1404,1427–1429 · app/chamados/services/materializacao.py:528–590,615–710 · app/chamados/services/tarefa_do_dia.py:830–839
+
+**Cache.** Uma carga pertence à foto de uma consulta. Cada PK guarda o resultado completo ou a própria Exception da leitura antecipada. Após as guardas de elegibilidade, uma entrada de erro alcançada relança o mesmo objeto. Preserve a captura no degrau 6 e o carregamento por origem; só SLOT acrescenta limites temporais. Considere reuso após mutação da foto fora desse contrato. app/chamados/services/carga_pergunta_viva.py:69–75,88–95,113–144,185–194 · app/chamados/juizes.py:356–360,1494–1501
+
+**Escopo literal de produção.**
+
+- app/chamados/juizes.py — contrato de retorno, _slot_esperado e _pergunta_materializada_de_fato. SLOT conserva as testemunhas por janela e hora. DATA_HORA_INVALIDA e PLANTIO_SEM_TS conservam os caminhos existentes de ausência de slot, com os controles de destino e lei. VETO_TEMPORAL e SEM_RESPOSTA_VIGENTE em data_hora fecham ambos os atalhos, vínculo sem comparaç
+
+[truncado em 20000 de 27514 caracteres]
 
 ## 21/11 15:42 · sessao 2c2cc7d2ff73 · - · - · origem=Ronald (tmux)
 
@@ -900,57 +979,4 @@ SHA-256 do rascunho acima, do título até o fim da pergunt
 
 [truncado em 20000 de 20179 caracteres]
 
-## 21/11 14:42 · sessao f57a188d9deb · FERIADO-POR-POSTO · sonda · origem=Code
-
-### 1. Saída integral fornecida
-
-Execução e hash da sonda [nao verificado].
-
-```text
-HOJE=2026-11-21 UNIVERSO(vigentes de colab ativo, todo posto e ciclo)=544
-POR CLASSE (cargo, ciclo, marca, tipo_base) -> n
-  admin fora(12x36) marca=OPERA base=12x36 -> 5
-  admin fora(12x36) marca=SEM base=12x36 -> 10
-  admin fora(personalizado) marca=OPERA base=comercial -> 1
-  admin vira marca=FECHA base=comercial -> 2
-  admin vira marca=FECHA base=turno_partido -> 1
-  admin vira marca=OPERA base=comercial -> 8
-  admin vira marca=OPERA base=turno_partido -> 1
-  admin vira marca=SEM base=comercial -> 24
-  nao_admin fora(12x36) marca=FECHA base=12x36 -> 2
-  nao_admin fora(12x36) marca=OPERA base=12x36 -> 60
-  nao_admin fora(12x36) marca=SEM base=12x36 -> 260
-  nao_admin fora(intermitente) marca=OPERA base=intermitente -> 4
-  nao_admin fora(intermitente) marca=SEM base=intermitente -> 4
-  nao_admin fora(personalizado) marca=SEM base=comercial -> 3
-  nao_admin vira marca=FECHA base=comercial -> 12
-  nao_admin vira marca=FECHA base=turno_partido -> 5
-  nao_admin vira marca=OPERA base=comercial -> 47
-  nao_admin vira marca=OPERA base=turno_partido -> 15
-  nao_admin vira marca=SEM base=comercial -> 71
-  nao_admin vira marca=SEM base=turno_partido -> 9
-MUDA A!=B (classe + A->B) -> n
-  admin fora(12x36) marca=OPERA base=12x36 True->False -> 5
-  admin fora(12x36) marca=SEM base=12x36 True->False -> 10
-  admin fora(personalizado) marca=OPERA base=comercial True->False -> 1
-  admin vira marca=OPERA base=comercial True->False -> 8
-  admin vira marca=OPERA base=turno_partido True->False -> 1
-TOTAL_MUDA=25  ADMIN=25  NAO_ADMIN=0
-POSTOS_COM_MUDANCA admin=19 nao_admin=0
-```
-
-### 2. Conferência do código da cópia
-
-- `EscalaColaborador.padrao_trabalha_em_feriado` está definida em [app/escala/models.py:905](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/escala/models.py:905).
-- `cargo_e_administrativo` está definida em [app/colaboradores/management/commands/sincronizar_feriado_admin.py:19](/home/ronald/codex_ws/ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5/app/colaboradores/management/commands/sincronizar_feriado_admin.py:19).
-- `sonda_corte1445.py` não foi localizado na cópia. A chamada de A e o import de `cargo_e_administrativo` pela sonda ficam [nao verificado]. A cópia veio sem metadados Git acessíveis, então o hash do HEAD fica [nao verificado].
-
-### 3. Classes `nao_admin` em `MUDA`
-
-Nenhuma. As cinco linhas de `MUDA` são `admin` e somam 25, em acordo com `TOTAL_MUDA=25  ADMIN=25  NAO_ADMIN=0`. Conferência pelo trecho fornecido. Execução [nao verificado].
-
-### 4. Erros e contagens zero
-
-O trecho fornecido não exibe erro. `POR CLASSE` soma 544, igual ao universo informado. Os dois zeros, `NAO_ADMIN=0` e `POSTOS_COM_MUDANCA … nao_admin=0`, são compatíveis com a ausência de classes `nao_admin` em `MUDA`. A contagem de postos distintos não pode ser recontada pelo trecho [nao verificado].
-
-_7696 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7697 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
