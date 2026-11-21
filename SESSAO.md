@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 03:31:12.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (111.9 MB). Acoes na janela: **683**.
+**Medido em 21/11/2026 03:36:53.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (111.9 MB). Acoes na janela: **680**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -690,6 +690,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:41:23 | Bash | Record suite verdict and look at the round-3 state | `H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('PAREI SITIO E4C-F5 S144')) L[i:i]=["E4C-F5 H4 SUITE chamados+api+core em c2601465f (%s; h4/chamados_api_core_c26.log): Ran 7529, failures=1 (era 3): mypy e ruff CURADOS; resta so a catraca test_medida_turno_do_par, uma entrada (_pl ...` |
 | 15:41:14 | Bash | Read the catraca failure detail | `sed -n 4036,4075p logs/ESPINHA-BRIEFS/F5/vE/h4/chamados_api_core_c26.log \| cut -c1-400` |
 | 15:41:12 | Bash | Read the suite verdict on the round-2 commit | `L=logs/ESPINHA-BRIEFS/F5/vE/h4/chamados_api_core_c26.log; cat ${L%.log}.rc; /bin/grep -E "^Ran " $L \| tail -1; /bin/grep -E "^(OK\|FAILED)($\| \()" $L \| tail -1; /bin/grep -E "^(FAIL\|ERROR): " $L \| cut -c1-200; /bin/grep -n "LINHAS_REGISTRADAS\\|^[-+?] .*\[" $L \| cut -c1-220 \| head -30` |
-| 15:31:43 | Bash | Record the round-2 triage in the RELATO | `H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1]; p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('PAREI SITIO E4C-F5 S144')) L[i:i]=["E4C-F5 H4 VERIFICADOR volta 2 de 3 (%s; h4/verif2/r.txt, rc=0, 9 achados, 0 de negocio no delta). TRIAGEM: [1 BLOQUEIA] 2 testes antigos editados fora do aval -> DESCARTADO: os dois nasceram NEST ...` |
-| 15:31:33 | Bash | Correct the docstring and commit in the copy | `python3 -I - <<'EOF' import ast p='/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py' f=open(p,encoding='utf-8').read() a="O CARIMBO nao e inteiro: ha\n escritor de via/carimbo anterior a H4 que nao toma essa trava (`encerrar_por_fato_no_espelho`, a relavra de\n via, a retratacao pela celula) -- pergunta de desenho no RELATO de 20/11, verificador H4 volta 1 achado 2." d="O CARIMB ...` |
-| 15:31:21 | Bash | Check the cell-retraction writer's lock and whether the two tests exist on main | `cd ~/wt-codex-e4c-f5-constroi-184647 && sed -n 219,252p app/chamados/services/relavra_via.py \| cut -c1-170; git cat-file -e eb1e49c1e:app/chamados/tests/test_e4c_f5_volta2_juizes.py 2>&1 \| head -1; git cat-file -e eb1e49c1e:app/chamados/tests/test_e4c_f5_voltaD_portas.py 2>&1 \| head -1; echo "main-check-fim"; /bin/grep -n "retratar_perguntas_absolvidas_por_celula" -r app/chamados --include=*.py ...` |
