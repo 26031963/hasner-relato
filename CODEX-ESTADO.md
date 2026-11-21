@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 14:04** · publicado em **21/11/2026 14:04** (UTC-3)
+> Ultima resposta processada: **21/11/2026 14:24** · publicado em **21/11/2026 14:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 14:24 · sessao 24eb35d8b37c · E4C-F5-CONSTROI · construtor · origem=Code
+
+**PAREI no RED do item 1.1.** Deixei na cópia o teste com os três cenários pedidos. A produção ficou na base `b0935c1f106d232dc39b263676a588d66eddff54`. O aval exige o RED pareado antes da cura, e a execução pela porta usa Docker, rede e banco de teste, vedados nesta volta. RED e cura sem commits, conforme a proibição de `git commit`. [RED e controles](chamados/tests/test_marco_por_motivo.py:74) · `chamados/juizes.py:344–359` · `r.txt:24–29,51` · `bin/suite.sh:316–325`
+
+| Prova escrita | Asserção |
+|---|---|
+| Ato posterior, coluna nula | O marco `13:00 E` é calculável e já está na carga. Após registrar o ato pela porta real, o horizonte deve devolver `(None, None)` tanto no cálculo quanto no cache. `chamados/tests/test_marco_por_motivo.py:74–97` |
+| Empate | No instante exato do ato, o slot continua `13:00 E`. `chamados/tests/test_marco_por_motivo.py:99–104` |
+| Ato desfeito, carimbo físico presente | O core real grava a resposta com o relógio fixado. `registrar` grava a reabertura, e a releitura confirma carimbo presente, ato vigente ausente e slot ainda calculável. `chamados/tests/test_marco_por_motivo.py:106–121` |
+
+A sintaxe e o `git diff --check` passaram. O `--seco` aceitou os seletores. O par main × F5, o GREEN e a mordida comportamental ficam **[nao verificado]**. `chamados/tests/test_marco_por_motivo.py:74–121` · `bin/suite.sh:183–213,265–271`
+
+**Comandos para o Code**, a partir da raiz da worktree. O primeiro é o mesmo nas árvores RED e GREEN. Para o mutante, recolocar `p.respondida_em` como comparador após a cura. A F5 desta cópia já contém essa expressão, e as asserções-alvo estão nas linhas 93 e 96. `chamados/juizes.py:349–354` · `chamados/tests/test_marco_por_motivo.py:92–97` · `bin/suite.sh:183–213`
+
+```bash
+# RED/GREEN com os controles irmãos
+bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-141636 --only chamados -- -k chamados.tests.test_marco_por_motivo.MarcoPorMotivoTest
+
+# Mutante do comparador físico
+bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-141636 --only chamados -- -k test_slot_esperado_usa_o_marco_do_motivo
+```
+
+Conferi os **cinco chamadores de produção**. C6 encaminha o horizonte para a prova de materialização, e a carga usa o instante da tarefa para preencher o cache. Explicador, classificação do lote e vigia pedem o slot sem horizonte. O ponto atual da classificação do lote é `services/validacao.py:1223`. `chamados/juizes.py:757,1494–1496` · `chamados/services/carga_pergunta_viva.py:88,119` · `chamados/services/tarefa_do_dia.py:630–637` · `chamados/services/explicador.py:52` · `chamados/services/validacao.py:1223` · `chamados/services/vigia_carimbo.py:110`
+
+Dois achados ficam para a conferência. A catraca E3 passou na base e, em memória, contou uma leitura declarada tanto com o comparador físico quanto com o comparador direto na composta. Ela não discrimina esse mutante. A tarefa também tem uma leitura que recompõe a sequência até o horizonte, enquanto a guarda do slot corta o instante vigente da composta. A equivalência geral entre as duas leituras fica **[nao verificado]**. `chamados/tests/test_e3_catraca_respondedores.py:66–85,422–458,544–557` · `chamados/services/tarefa_do_dia.py:388–429` · `chamados/juizes.py:349–354,1391–1403`
+
+**LEI-AKITA** `origem=_slot_esperado, testemunha=DecisaoPergunta.composta e projecao_temporal_da_pergunta sobre a mesma leitura, RED=test_slot_esperado_usa_o_marco_do_motivo + controles [nao verificado], quem-mais-le=juizes.py:757, services/carga_pergunta_viva.py:119, services/explicador.py:52, services/validacao.py:1223, services/vigia_carimbo.py:110, juizes novos=0, padrao=Single Source of Truth`. `chamados/juizes.py:344–379,1383–1403` · `chamados/models.py:4382–4390` · `chamados/tests/test_marco_por_motivo.py:74–121`
+
+**Autoconferência — BRIEF COM 4 PERGUNTAS 1.1: sim, campos=20.** Na tabela, `juizes.py`, `models.py`, `services/` e `tests/` são relativos a `app/chamados/`. A leitura é estática. `juizes.py:344–379,1383–1403`
+
+| Campo ou valor | (a) Fonte | (b) Escritor e porta | (c) Instante e trava | (d) Outros leitores |
+|---|---|---|---|---|
+| `p` | Instância ORM de `PerguntaDisputa`. `models.py:2616–2659` | Nascimento por `_nascer`; a guarda recebe a instância. `models.py:3224–3234` · `juizes.py:344` | Foto do chamador. A tarefa carrega FKs e atos sem pedir trava de linha. `services/tarefa_do_dia.py:533–539` | C6 passa a mesma instância à prova de materialização. `juizes.py:1494–1496` |
+| `carga` | Carga opcional do C6. `services/carga_pergunta_viva.py:69–88,196` | A fábrica `carga_da_vida` constrói a carga a partir da tarefa. `services/carga_pergunta_viva.py:83–98` | Carga de uma consulta, com o horizonte da tarefa e sem trava própria. `services/carga_pergunta_viva.py:69–88` | C6 usa a carga para tranca e testemunhas. `juizes.py:761,817–820,1414` |
+| `agora` / `carga.agora` | Instante explícito tem precedência; na ausência dele, vale o da carga. `juizes.py:347–349` | Chamador injeta; tarefa e carga copiam. `services/tarefa_do_dia.py:520–525,825–839` · `services/carga_pergunta_viva.py:88` | Borda da consulta. O sítio não chama o relógio nem toma trava. `juizes.py:344–354` | C6, lavra e marcos da tarefa. `juizes.py:887–895` · `services/tarefa_do_dia.py:633–637,650–653` |
+| Leitura composta | Ato para instantes; projeção para texto, materialização e via. `models.py:4382–4390` | `composta` monta a tupla; `registrar` escreve a sequência. `models.py:4388–4390,4428–4438` | Instância recebida e sequência carregada ou consultada, sem trava própria. `models.py:4353–4366` | C6, cadastro-realidade e passagem da ausência. `juizes.py:1406–1409` · `app/escala/services/cadastro_realidade.py:497–500` · `services/materializacao.py:1056–1066` |
+| Instante vigente da resposta | `composta(p).respondida_em`, derivado da sequência com passivo por correspondência. `models.py:4313–4317,4361–4389` | `registrar`; o core humano usa o mesmo instante no ato e na coluna. `models.py:4428–4438` · `services/disputa_emissao.py:1499–1502,1532–1537` | Core lê o relógio após travar o dono e reler a pergunta; o seletor lê a foto disponível. `services/disputa_emissao.py:1478–1499` · `models.py:4357–4361` | C6, validação e API da disputa. `juizes.py:1407–1428` · `services/validacao.py:697–704` · `app/api/views.py:2581` |
+| `respondida` após o corte | Projeção temporal da composta. `juizes.py:349–353,1391–1398` | `projecao_temporal_da_pergunta` deriva o valor local. `juizes.py:1383–1403` | Mesmo horizonte da guarda; corte estrito `>`, sem trava própria. `juizes.py:1394–1398` · `tests/test_marco_por_motivo.py:99–104` | C6, cadastro-realidade e passagem. `juizes.py:1428` · `app/escala/services/cadastro_realidade.py:497–500` · `services/materializacao.py:1060–1066` |
+| `p.respondida_em` físico | Coluna ORM; também fornece passivo quando falta ato correspondente. `models.py:2658,4304–4317` | Há várias portas físicas: core humano, resposta automática, carimbo pela trilha, `carimbar` e limpeza pelo lote. `services/disputa_emissao.py:1499–1535,1683,1707–1715,1728–1737` · `models.py:3367–3370` | Foto ORM no seletor; a trava e a borda de escrita variam entre as portas. `juizes.py:353` · `services/disputa_emissao.py:1478–1499,1642–1648,1707–1713` | Passivo, fila, lavra, vigia físico e API legada. `models.py:4313–4317` · `juizes.py:1770–1775` · `veredito_lavrado.py:206–209` · `services/vigia_fio.py:747–752` · `app/api/views.py:1165` |
+| `p.pk` | Identidade ORM da pergunta. `models.py:3229–3234` · `app/config/settings/base.py:104` | Inserção pelo `save(force_insert=True)` da porta de nascimento. `models.py:3229–3234` | Mesmo PK da instância durante a consulta; sem trava no acesso ao mapa. `juizes.py:355–356` | Sequência, carga e busca de batidas por origem. `models.py:4361–4366` · `services/carga_pergunta_viva.py:115–126,185–186` |
+| `carga.slots[p.pk]` | Resultado ou exceção do próprio `_slot_esperado`. `services/carga_pergunta_viva.py:117–126` | `carga_da_vida` inicializa e preenche. `services/carga_pergunta_viva.py:95,119–124` | Foto da carga, no seu `agora`; acesso em memória após a guarda. `services/carga_pergunta_viva.py:88,119` · `juizes.py:347–359` | A carga usa a tupla para limitar a busca de testemunhas; o seletor relança exceções. `services/carga_pergunta_viva.py:126–144` · `juizes.py:355–359` |
+| `p.tipo_resposta` | Campo da pergunta alimentado pelo emissor. `models.py:2652` · `services/disputa_emissao.py:448–460` | Emissão por `abrir`/`abrir_conversa`, convergindo no nascimento. `models.py:2986–3031,3229–3232` | Identidade atual da foto; nascimento sob trava do colaborador. `services/tarefa_do_dia.py:513–518,533–539` · `models.py:3056–3060` | C6, core da resposta, carga, validação e vigia. `juizes.py:711–713` · `services/disputa_emissao.py:1449–1466` · `services/carga_pergunta_viva.py:133` · `services/validacao.py:1205–1214` · `services/vigia_carimbo.py:97–98` |
+| `p.resposta_colab` | Texto da projeção física, também entregue na composta F5. `models.py:2657,4385–4390` | Core humano, resposta automática e limpeza pela porta do lote. `services/disputa_emissao.py:1500–1535,1630,1683,1709–1715` · `models.py:3742–3764` | Texto da instância atual; core grava sob trava após releitura. `juizes.py:365` · `services/disputa_emissao.py:1478–1502` | Plantio, explicador, lote e API. `services/materializacao.py:641–645,694–701` · `services/explicador.py:53–55` · `services/validacao.py:1202–1214` · `app/api/views.py:2579` |
+| `p.disputa` | FK da pergunta para `DisputaSupervisao`. `models.py:2626–2630` | O emissor entrega a FK à porta de nascimento. `services/disputa_emissao.py:448–460` · `models.py:3229–3232` | Relação atual, pré-carregada na tarefa; sem trava no seletor. `services/tarefa_do_dia.py:533–539` · `juizes.py:376–378` | Plantio usa contexto e colaborador; core usa o dono para travar; explicador e lote usam o colaborador. `services/materializacao.py:624–632,708–709` · `services/disputa_emissao.py:1480–1482` · `services/explicador.py:56` · `services/validacao.py:1226` |
+| Retorno de `_ts_tipo_do_plantio` | Derivação única do ramo `hora`, com marco e ajuste pela cadeia do turno. `services/materializacao.py:615–621,672–710` | O derivador calcula a tupla; o materializador consome para plantar. `services/materializacao.py:699–710,1394–1408` | Dados atuais da pergunta e da escala, em consulta avulsa ou pela carga. `juizes.py:319–324,735–737` · `services/carga_pergunta_viva.py:152–162` | Par, testemunha da tela e materialização. `services/materializacao.py:216–228,915–928,1395–1408` |
+| `_validada` | Instante de validação da composta, recortado pela projeção. `models.py:4373–4389` · `juizes.py:1391–1396` | Validação e devolução registram pela porta da sequência. `services/validacao.py:161–174,284–296` | Foto da composta e corte no `agora` da consulta. `juizes.py:349–352,1394–1396` | Descartado no slot; C6 usa o valor e a validação lê a composta. `juizes.py:351,1409–1411` · `services/validacao.py:698–704` |
+| `_resposta` | Texto da composta, esvaziado quando o instante é cortado. `models.py:4388–4390` · `juizes.py:1392–1398` | Escritores da projeção gravam o texto; o juiz temporal deriva o valor local. `services/disputa_emissao.py:1500–1535,1709–1715` · `juizes.py:1392–1398` | Mesmo horizonte de `respondida`, sem trava própria. `juizes.py:1394–1398` | Descartado no slot; C6 e cadastro-realidade entregam o par a C21. `juizes.py:351,1426–1428` · `app/escala/services/cadastro_realidade.py:497–500` |
+| `_materializada` | Coluna de materialização na composta, cortada pelo horizonte. `models.py:4389–4390` · `juizes.py:1393,1399–1400` | `_escrever_carimbo` atende às portas de instância; o lote limpa pela sua porta. `models.py:3324–3328,3366,3430–3438,3536–3539` | Foto da instância no `agora`; o lote exige trava dos donos para escrever. `juizes.py:1394–1400` · `models.py:3525–3528` | Descartado no slot; C6 usa no ramo terminal e antes da prova de materialização. `juizes.py:351,1421–1422,1455–1457,1487–1496` |
+| `_via` | Coluna da composta; o recorte conserva vias fora do fato conforme a constante do modelo. `models.py:4389–4390` · `juizes.py:1399–1403` | Portas de carimbo e limpeza; `encerrar_por_fato_no_espelho` também grava só a via. `models.py:3324–3328,3430–3438,3536–3549` | Via atual, com o tratamento temporal do carimbo; sem trava própria na leitura. `juizes.py:1393–1403` | Descartado no slot; C6, `fora_do_fato` e filtros de identidade leem a via. `juizes.py:351,1421,1448–1450` · `models.py:2964–2965,3441–3449` |
+| Valores de `data_hora` | Texto declarado, decomposto em data e hora e tornado aware no fuso ativo. `juizes.py:360–373` · `app/config/settings/base.py:93–95` | O ramo local constrói o slot; o core valida e grava o texto pela porta. `juizes.py:365–373` · `services/disputa_emissao.py:1464–1466,1500–1535` | Data e hora declaradas, com o fuso da leitura; sem nova amostra do relógio. `juizes.py:365–371` | A prova de materialização usa o instante completo para esse tipo. `juizes.py:269–275,753–765` |
+| Slot devolvido | Guarda, cache ou derivação conforme o ramo. `juizes.py:349–379` | `_slot_esperado` devolve a tupla; a carga pode memorizá-la. `juizes.py:354–379` · `services/carga_pergunta_viva.py:119–126` | Guarda anterior ao cache e ao cálculo. `juizes.py:349–362` · `tests/test_marco_por_motivo.py:92–97` | Os cinco chamadores censados. `juizes.py:757` · `services/carga_pergunta_viva.py:119` · `services/explicador.py:52` · `services/validacao.py:1223` · `services/vigia_carimbo.py:110` |
+| `erros=[]` e `pendencia=None` | Argumentos locais da chamada ao derivador. `juizes.py:376–378` | O derivador pode acrescentar erros à lista temporária; só preenche pendência quando recebe lista. `services/materializacao.py:633–644,682–687,699–704` | Válidos durante o cálculo avulso do slot; sem persistência nessa chamada. `juizes.py:376–379` | A porta de plantio passa suas próprias listas e grava a pendência quando indicada. `services/materializacao.py:1394–1400` |
 
 ## 21/11 14:04 · sessao 05a88d6e4db1 · WRAPPER-N-VAGAS · verificador · origem=Code
 
@@ -813,64 +866,4 @@ Nenhum log encontrado tem o mesmo papel. `chamadas.log` registra tentativas e se
 
 **Interseção com TRAVAS.** O `CLAUDE.md` aparece dos dois lados, em seções distintas, e o 1245 manda desconsiderar esse cruzamento. `bin/raias_estado.py` é a interseção potencial que precisa constar do brief se o WRAPPER o alterar: o RELATO já registra mudança de TRAVAS nesse medidor. Os selos de TRAVAS registrados são `test_suite_motivo`, `test_pista_lateral`, `test_travas_sem_memoria` e `test_suite_sh`, distintos do selo de vaga. O escopo obrigatório acima não exige tocar `bin/suite.sh`, `bin/hook_pista_pronto.py`, `bin/pronto_item_a_item.py` ou `.claude/settings.json`. O 1245 autoriza as duas obras juntas nas vagas opus com linha `DESPACHO` e load; o cruzamento efetivo entre os diffs vivos e as listas finais dos briefs permanece [nao verificado]. `CLAUDE.md:95,251,353–365`; `app/docs/RELATO.md:286,296,771–778`; `bin/suite.sh:41–47`; `.claude/settings.json:62–73`; `respostas_2111_1245.txt:1`
 
-## 21/11 12:43 · sessao 128321b2ebc2 · FERIADO-POR-POSTO · construtor · origem=Code
-
-Implementei a volta 3 nos seis arquivos autorizados. Os sete REDs novos do selo falharam antes da cura e passaram depois. A rodada final teve 17 testes estáticos verdes, incluindo o selo C12, e Ruff 0.17.4 verde nos seis arquivos. Os REDs ORM na base `df9df24c4`, os mutantes ORM, a concorrência em PostgreSQL, a suíte e a remedição na SOMBRA ficam [nao verificado]. [Selo:215](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:215) · [C12:19](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/tests/test_e4b_c12_selo.py:19) · [Pin do Ruff:34](/home/ronald/wt-codex-feriado-por-posto-120132/app/requirements.txt:34)
-
-### Inventário
-
-- **R-a.** Cada segmento trava o `Posto` com `select_for_update`. O primeiro relê e grava a marca. Os demais relêem a marca e o chamado ou vínculo antes de agir. Uma aplicação superada encerra o segmento. Repetir `--fecha` tem a semântica de `reaplicar_marca`. A recuperação de uma retratação interrompida usa `--retomar-retratacao`, em posto já FECHA. O universo da retratação inclui chamados vivos silenciados e usa as datas dos fatos para carregar os feriados. [Porta:231](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:231) · [Travas:300](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:300) · [CLI:38](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/management/commands/marcar_feriado_do_posto.py:38) · [Teste da retomada:532](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_por_posto.py:532) [nao verificado]
-- **R-b e R-c.** A prévia fotografa o plano da própria porta e chama `turnos_do_colab` na janela de apuração, antes do rollback. Uma entrada avulsa aparece em `outras`, com `sem par completo`. Para o feriado de hoje sem batida, a prévia consulta `dias_encerrados` com os turnos já lidos. A CLI captura um instante para sugestões, prévia e propagação. [Prévia:363](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:363) · [Pareamento:443](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:443) · [Relógio da CLI:41](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/management/commands/marcar_feriado_do_posto.py:41)
-- **R-d.** A foto por chave e valor inclui `TurnoMaterializado`, `DisputaSupervisao`, `Pauta` e `ContadorPauta`. O controle positivo identifica o callback de fechamento e confere colaborador e competência. O selo segue os campos fornecidos por dict, `setattr`, `bulk_update` e `criar_posto(**dados)`. [Foto:36](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_previa_da_marca.py:36) · [Callback:194](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_previa_da_marca.py:194) · [Selo:215](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:215)
-
-### RED → mutante → resultado esperado
-
-Cada `mut` roda um RED com a alteração em memória. O esperado é `rc 1` pela asserção indicada. Os casos `selo` injetam o trecho AST e esperam `rc 0` ao confirmar que o censo acusou o sítio. [Executor:336](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:336) · [Selo:263](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:263)
-
-| RED | Comando do mutante | Resultado esperado |
-|---|---|---|
-| Marca superada | `mut plano_superado`, `mut retratacao_superada`, `mut reaplicar_instancia_velha` | Acusa chave divergente, retratação superada ou reaplicação da marca velha. [REDs:50](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:50) |
-| FECHA repetido e chamados vivos | `mut fecha_repetido`, `mut so_fila`, `mut limite_180` | Acusa retratação indevida na repetição ou perda do chamado silenciado ou antigo. [REDs:105](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:105) |
-| Fotografia da prévia | `mut chave_mutada`, `mut plano_duplo`, `mut municipio_velho`, `mut foto_sem_ata` | Acusa `True -> True`, plano duplicado, feriado municipal ausente ou ata omitida. [REDs:147](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:147) |
-| Pareamento | `mut turno_aberto`, `mut pos_rollback`, `mut janela_de_um_dia`, `mut hoje_como_futuro` | Acusa entrada avulsa em `(a)`, leitura da célula anterior, janela de um dia ou rótulo incorreto para hoje. [REDs:185](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:185) |
-| Virada do dia | `mut reler_hoje` | Acusa a data nova nas chamadas de propagação. [RED:232](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:232) |
-| Foto e callback | `mut foto_turno`, `mut foto_disputa`, `mut foto_pauta`, `mut foto_contador`, `mut sem_recalculo` | Acusa cada tabela retirada e a falta do callback de fechamento, mesmo com o geofence presente. [Foto:258](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:258) · [Callback:194](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_previa_da_marca.py:194) |
-| Escritor único | `selo dict`, `selo setattr`, `selo bulk_update`, `selo criar_posto`, `selo construtor_apelidado`, `selo save_de_posto_inteiro`, `selo chamador_por_getattr_dinamico` | O censo acusa os sete sítios injetados. [REDs:268](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_selo_marca_do_posto_um_escritor.py:268) |
-
-### Comandos para o Code
-
-Rodar no ambiente de teste do Code, com os settings de CI. Para reproduzir os REDs na base, copiar somente o arquivo novo de casos para a cópia `df9df24c4` e rodar o label `test_feriado_a5_volta3` antes da cura. [CI:6](/home/ronald/wt-codex-feriado-por-posto-120132/app/config/settings/ci.py:6) · [REDs:18](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/tests/test_feriado_a5_volta3.py:18)
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
-t=colaboradores.tests
-
-python3 manage.py test --noinput \
-  "$t.test_feriado_a5_volta3" "$t.test_feriado_por_posto" \
-  "$t.test_feriado_previa_da_marca" "$t.test_selo_marca_do_posto_um_escritor"
-
-mut() {
-  python3 -c 'import sys, django; django.setup(); from colaboradores.tests.test_feriado_a5_volta3 import rodar_mutante; raise SystemExit(rodar_mutante(sys.argv[1]))' "$1"
-}
-
-selo() {
-  python3 -m unittest "$t.test_selo_marca_do_posto_um_escritor.MarcaDoPostoUmEscritorTest.test_mutante_${1}_MORRE"
-}
-
-ruff check --no-cache \
-  colaboradores/services/feriado_do_posto.py \
-  colaboradores/management/commands/marcar_feriado_do_posto.py \
-  colaboradores/tests/test_feriado_por_posto.py \
-  colaboradores/tests/test_feriado_previa_da_marca.py \
-  colaboradores/tests/test_selo_marca_do_posto_um_escritor.py \
-  colaboradores/tests/test_feriado_a5_volta3.py
-```
-
-### Devoluções
-
-- **26.** A retomada cobre a retratação interrompida e as chaves ainda divergentes. Uma chave já confirmada não reagenda o callback de folha. Recuperar falha pós-commit de forma durável exige decisão de desenho no escritor do efeito. [Porta do vínculo:894](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/vinculo.py:894) · [Callback:1798](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/services/fechamento.py:1798) [nao verificado]
-- **27.** Relógios fora da lista de escrita permanecem na materialização pelo signal, no rejulgamento da célula, no cartório chamado também pelo E2 e na passada do fechamento. Deadlock [nao verificado]. [Signal:63](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/signals.py:63) · [Célula:464](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/portas/celula.py:464) · [E2:83](/home/ronald/wt-codex-feriado-por-posto-120132/app/chamados/services/feriado_reavaliar.py:83) · [Cartório:2064](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/services/cartorio.py:2064) · [Fechamento:616](/home/ronald/wt-codex-feriado-por-posto-120132/app/ponto/services/fechamento.py:616)
-- **32 e 33.** No pouso próprio do instrumento, o ESTADO pode publicar `vinculos_divergentes_da_marca_do_posto=N`, esperado `0`, dono CADASTRO, com `?` em falha de coleta. O selo desta volta cobre os chamadores de `criar_posto`; bloquear a marca no próprio `**dados` exigiria editar `estrutura.py`. [Contador A4:18](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/management/commands/vinculos_divergentes_da_marca_do_posto.py:18) · [Encaixe no placar:296](/home/ronald/wt-codex-feriado-por-posto-120132/bin/placar_code.sh:296) · [Escritor genérico:43](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/estrutura.py:43) [nao verificado]
-- **24, 31 e 35/36.** O zero de valor da competência 10/2026 no dia do pouso segue [nao verificado]. A unificação dos nascimentos fica com o opus, e a invalidação de `previsto_em` continua na fila indicada. [K9:597](/home/ronald/wt-codex-feriado-por-posto-120132/app/folha/export.py:597) · [Nascimento normal:296](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/vinculo.py:296) · [Nascimento por cópia:187](/home/ronald/wt-codex-feriado-por-posto-120132/app/colaboradores/services/feriado_do_posto.py:187) · [Invalidação:137](/home/ronald/wt-codex-feriado-por-posto-120132/app/escala/signals.py:137) [nao verificado]
-
-_7672 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7673 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

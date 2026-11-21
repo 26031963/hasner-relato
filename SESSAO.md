@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 14:22:18.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (30.4 MB). Acoes na janela: **824**.
+**Medido em 21/11/2026 14:28:17.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (30.5 MB). Acoes na janela: **827**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:23:50 | Bash | Register ficha in PROMPTS, BACKLOG, RELATO | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/PROMPTS.md'; s=open(p).read().rstrip('\n') s+='\n\| 21/11 14:25 \| FICHA-OPEN-REDIRECT-2111-1425 \| registrado 14:2x logs/FICHAS-2111-1425/ficha_open_redirect_2111_1425.txt; BO no BACKLOG; Codex leitura rascunhando (logs/FICHAS-2111-1425/r.txt), sai como PAREI RASCUNHO OPEN-REDIRECT-VOLTAR \|\n' open(p,'w').write(s) p='app/docs/BACKLOG.md'; s=open(p). ...` |
+| 14:23:34 | Bash | Save ficha literal and launch Codex leitura | `cd ~/saas-hasner; D=logs/FICHAS-2111-1425; cat > $D/ficha_open_redirect_2111_1425.txt <<'EOF' aval Ronald: FICHA-OPEN-REDIRECT-2111-1425 (21/11 14:25) -- REGISTRAR + leitura, nada constroi. Rito AVAL-RASCUNHADO-PELO-CODEX / FICHA-SEM-DECISAO: o Codex (papel leitura) mede e redige o aval de CONSTRUIR inteiro; rascunho no RELATO como "PAREI RASCUNHO OPEN-REDIRECT-VOLTAR: leve ao chat" com sha; o cha ...` |
+| 14:23:10 | Bash | Check registry formats and sitio | `cd ~/saas-hasner; D=logs/FICHAS-2111-1425; mkdir -p $D; tail -2 app/docs/PROMPTS.md \| cut -c1-200; /bin/grep -n "^\| BO-" app/docs/BACKLOG.md \| tail -2 \| cut -c1-150; sed -n 40,50p app/core/templatetags/nav_extras.py` |
 | 14:20:20 | Bash | Publish lei line and check M7 suite | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read(); L=s.split('\n',1) d=('lei: FERIADO-POR-POSTO achado 31 -- DELEGAR padrao_trabalha_em_feriado (escala/models.py:905) a chave_ao_nascer (feriado_do_posto.py:187) MOVE VINCULO FORA DO ALCANCE DO AVAL 1245 (1) (14:2x; logs/FERIADO-POR-POSTO/achado31/parei.md; sonda de leitura prod rc 0, sonda_delegar.out conferido pela sessao ...` |
 | 14:20:08 | Bash | Find 12x36 FECHA case in test | `/bin/grep -n "fecha\\|FECHA\\|v12\\|12x36" ~/wt-codex-feriado-por-posto-120132/app/escala/tests/test_feriado_padrao_por_escala.py \| head -12` |
 | 14:20:03 | Bash | Spot-check FERIADO PAREI evidence | `W=~/wt-codex-feriado-por-posto-120132/app; sed -n 57,60p $W/escala/tests/test_feriado_padrao_por_escala.py; sed -n 170,190p $W/colaboradores/services/feriado_do_posto.py \| cut -c1-150; tail -8 ~/saas-hasner/logs/FERIADO-POR-POSTO/achado31/sonda_delegar.out \| cut -c1-200` |
