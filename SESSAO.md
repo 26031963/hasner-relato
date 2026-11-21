@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 05:20:56.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (116.3 MB). Acoes na janela: **686**.
+**Medido em 21/11/2026 05:26:39.** Transcript: `33d8679a-4e76-4e12-aea3-7f1c19e935fc.jsonl` (116.4 MB). Acoes na janela: **693**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:26:34 | Bash | Wait for push end or vPUB8 | `F=logs/ESPINHA-BRIEFS/F5; until [ -f $F/vPUB8/r.rc ] \|\| ! ps -p 3843563 >/dev/null; do /usr/bin/sleep 20; done; date +%H:%M; cat $F/vPUB8/r.rc 2>/dev/null; ps -p 3843563 >/dev/null && echo PUSH_VIVO \|\| echo PUSH_ACABOU` |
+| 05:26:27 | Bash | Dispatch second Codex pass with matriz | `D=logs/ESPINHA-BRIEFS/F5/vPUB8 && mkdir -p $D && cp logs/ESPINHA-BRIEFS/F5/vPUB7/r.txt $D/vPUB7_r.txt && cat > $D/q.txt <<'EOF' Obra E4C-F5, arvore b0935c1f1. Papel: leitura. Nada se escreve. O anexo vPUB7_r.txt e a sua leitura anterior dos itens 01 32 35 36 40 41 49 51 55 80 102 do PRONTO. Quase todos ficaram NAO FECHA por falta de identidade historica (69 K, 96 chamadores, 12 familias, 6 R, 29x2 ...` |
+| 05:26:14 | Bash | List v3 logs including matriz | `ls -la logs/ESPINHA-BRIEFS/F5/v3/ \| head -40; wc -c logs/ESPINHA-BRIEFS/F5/v3/matriz.md` |
+| 05:26:09 | Bash | Check citations in b0935 RELATO | `git show b0935c1f1:app/docs/RELATO.md \| sed -n '793p;797p;1338p' \| cut -c1-300` |
+| 05:26:05 | Bash | Spot-check vPUB7 citations | `sed -n 793p app/docs/RELATO.md \| cut -c1-300; sed -n 1338p app/docs/RELATO.md \| cut -c1-300` |
+| 05:25:59 | Bash | Read vPUB7 summary table | `D=logs/ESPINHA-BRIEFS/F5/vPUB7; wc -c $D/r.txt; awk '/^\\| *Item *\\|/{f=1} f' $D/r.txt \| tail -20;` |
+| 05:25:54 | Bash | Read push verdict and remote | `cat /tmp/claude-1001/-home-ronald-saas-hasner/33d8679a-4e76-4e12-aea3-7f1c19e935fc/tasks/bw1ie119f.output; cat logs/push_0458.fim; tail -5 logs/push_0458.log \| cut -c1-250; git fetch -q origin; git log -1 --format=%h origin/main; bash bin/trava_teste.sh --quem; tail -3 logs/ESPINHA-BRIEFS/F5/final_b0935/bateria/bateria.out` |
 | 05:14:07 | Bash | Wait for push end or Codex vPUB7 | `F=logs/ESPINHA-BRIEFS/F5; until [ -f $F/vPUB7/r.rc ] \|\| ! ps -p 3843563 >/dev/null; do /usr/bin/sleep 20; done; date +%H:%M; cat $F/vPUB7/r.rc 2>/dev/null; ps -p 3843563 >/dev/null && echo PUSH_VIVO \|\| echo PUSH_ACABOU` |
 | 05:14:00 | Bash | Dispatch Codex leitura for publication items | `D=logs/ESPINHA-BRIEFS/F5/vPUB7 && mkdir -p $D && cp logs/ESPINHA-BRIEFS/F5/vPRONTO6/r.txt $D/vPRONTO6_r.txt && cat > $D/q.txt <<'EOF' Obra E4C-F5, arvore b0935c1f1 (HEAD da copia). Papel: leitura. Nada se escreve. O anexo vPRONTO6_r.txt lista na secao 4 "FALTA-PUBLICACAO" os itens 01 32 35 36 40 41 45 49 51 55 80 102 (o 33 e o 68 ficam fora desta pergunta). Os anexos ra.txt e rb.txt sao tabelas mo ...` |
 | 05:13:43 | Bash | Check prod diff c8eb->b0935 and cruza files | `git diff --name-only c8eb8eddf b0935c1f1 -- app ':!app/docs' \| /bin/grep -v '/tests/'; echo rc=$?; ls -la logs/ESPINHA-BRIEFS/F5/vPRONTO5/cruza/; sed -n 102p app/docs/RELATO.md \| wc -c` |
