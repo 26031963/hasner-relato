@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 17:35:30.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (49.7 MB). Acoes na janela: **1336**.
+**Medido em 21/11/2026 17:41:44.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (50.0 MB). Acoes na janela: **1350**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:41:03 | Bash | Check prova dir and except block | `cd ~/saas-hasner; cat logs/SENTINELA-DO-SLOT/cura/prova/run.sh \| cut -c1-250; sed -n 1210,1240p ~/wt-codex-e4c-f5-constroi-141636/app/chamados/services/validacao.py` |
+| 17:40:50 | Bash | Read SENTINELA verifier result | `cd ~/saas-hasner; wc -l logs/SENTINELA-DO-SLOT/verif1/r.txt; cut -c1-700 logs/SENTINELA-DO-SLOT/verif1/r.txt` |
+| 17:40:46 | Bash | Write triage and launch 1.2 construtor volta 2 | `cd ~/saas-hasner; D=logs/E4C-F5-1_2/v2; mkdir -p $D; cat > $D/triagem_v1.txt <<'EOF' TRIAGEM 5(b) do verificador 1.2 volta 1 (logs/E4C-F5-1_2/verif1/r.txt, CORRIGE), pela sessao, arquivo:linha conferidos na copia f3e48a445: P1 PROCEDENTE (sitio 1.2): travar_o_ato_do_plantio (materializacao.py:2121-2152) le TODAS as candidatas da irma em metade_irma_do_intervalo para decidir unicidade e so poe em ` ...` |
+| 17:40:21 | Bash | Check mutant dir and copy cleanliness | `cd ~/saas-hasner; sed -n 1,7p logs/E4C-F5-1_2/mutantes/lanca.sh; cat logs/E4C-F5-1_2/cura/wt_mut.txt; git -C ~/wt-codex-e4c-f5-constroi-160129 status --porcelain \| head; find ~/wt-codex-e4c-f5-constroi-160129/app -maxdepth 1 -user root` |
+| 17:40:16 | Bash | Read 1.2 construtor launcher | `cd ~/saas-hasner; cat logs/E4C-F5-1_2/cura/lanca.sh` |
+| 17:39:57 | Bash | Verify flip and passivo claims | `cd ~/wt-codex-e4c-f5-constroi-160129/app; f=$(find . -name flip_automatico.py \| head -1); echo $f; sed -n 60,80p $f; echo ....; sed -n 330,395p chamados/services/passivo_validado.py` |
+| 17:39:41 | Bash | Files touched by sibling F5 copies | `cd ~; for w in wt-f5-4c1-135123 wt-codex-e4c-f5-constroi-165618 wt-codex-e4c-f5-constroi-141636; do echo "== $w"; git -C $w diff --stat b0935c1f1 HEAD 2>/dev/null \| tail -12; done` |
+| 17:39:22 | Bash | Read public validation path | `cd ~/wt-codex-e4c-f5-constroi-160129/app/chamados/services; sed -n 636,680p validacao.py; echo ...; sed -n 690,810p validacao.py` |
+| 17:39:16 | Bash | Read F5 brief header | `cd ~/saas-hasner; sed -n 1,60p logs/E4C-F5-CONSTROI/brief.md \| cut -c1-300` |
+| 17:39:13 | Bash | Map sitios to items in brief | `cd ~/saas-hasner; /bin/grep -n "validacao.py\\|4c\.1\\|3\.3\\|1\.1\\|1\.2" logs/E4C-F5-CONSTROI/brief.md \| cut -c1-300 \| head -30` |
+| 17:39:10 | Bash | Find the aval with sitios list | `cd ~/saas-hasner; ls logs/E4C-F5-CONSTROI \| head -30; /bin/grep -rln "15e8e32d5989" logs/E4C-F5-CONSTROI logs/*APROVA* 2>/dev/null \| head` |
+| 17:39:07 | Bash | Find E4C-F5 sitios aval | `cd ~/saas-hasner; ls logs \| /bin/grep -i "E4C-F5\\|QUATRO"; f=$(ls -d logs/*QUATRO* 2>/dev/null \| head -1); ls $f; cat $f/*.txt 2>/dev/null \| cut -c1-3000 \| head -30` |
+| 17:38:58 | Bash | Read aval and lock helper | `cd ~/saas-hasner; cat logs/RESPOSTAS-F5-12-E-FERIADO-2111-1630/aval.txt \| cut -c1-2500; W=~/wt-codex-e4c-f5-constroi-160129/app/chamados; echo ==== ; sed -n 2108,2155p $W/services/materializacao.py` |
+| 17:38:51 | Bash | Read 1.2 verifier result | `cd ~/saas-hasner; wc -l logs/E4C-F5-1_2/verif1/r.txt; cat logs/E4C-F5-1_2/verif1/r.txt \| cut -c1-600` |
 | 17:33:23 | Bash | Confirm ESPERANDO pid alive | `ps -p 3095023 -o pid= \|\| echo morto` |
 | 17:33:16 | Bash | View export failure line | `cd ~/saas-hasner; cut -c1-400 logs/MEDIDA-FOLHA-2111/f_linhas_export.txt \| sed 's/usuario=[^ ]*/usuario=<x>/'` |
 | 17:33:12 | TaskStop |  | `-` |
