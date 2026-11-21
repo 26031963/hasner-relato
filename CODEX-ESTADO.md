@@ -1,7 +1,180 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 19:16** · publicado em **21/11/2026 19:21** (UTC-3)
+> Ultima resposta processada: **21/11/2026 19:34** · publicado em **21/11/2026 19:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 19:34 · sessao 8b7779573fa6 · FERIADO-POR-POSTO · leitura · origem=Code
+
+# FERIADO-POR-POSTO — matriz da porta da marca
+
+**Na cópia `302ca7e77`, (i) está aberto. (ii), (iii) e (iv) estão curados por inspeção do código.** Quatro testes do anexo ainda acusam falhas nos caminhos adjacentes de presença, vínculo e sincronização. A matriz identifica esses caminhos separadamente. [celula.py:392,464] [marcar_feriado_do_posto.py:118–127] [feriado_do_posto.py:305–306,379–383,450–475] [feriado_do_posto.py:74–89] [vinculo.py:896–908] [sincronizar_feriado_admin.py:52–72]
+
+Li as duas cópias nomeadas pelos hashes, em somente leitura. O main `ab351aa9b` já tem o comando antigo, que grava o posto e retrata diretamente. A porta de serviço que propaga a chave e a API de prévia aparecem na cópia da obra. `celula.py` e `cadastro_futuro.py` são idênticos nas duas cópias. A releitura já existia no main, e o que nasce nesta obra é o caminho **marca → propagação → releitura**. A cadeia Git `1c3647461` → `302ca7e77`, o pouso, a execução dos testes e os efeitos em produção ficam **[nao verificado]**. [main/app/colaboradores/management/commands/marcar_feriado_do_posto.py:62,129–149] [main/app/colaboradores/services/feriado_do_posto.py:136–158] [main/app/ponto/portas/celula.py:392,464] [feriado_do_posto.py:288–406]
+
+**Referências da matriz.** `CLI` = `app/colaboradores/management/commands/marcar_feriado_do_posto.py`, `PORTA` = `app/colaboradores/services/feriado_do_posto.py`, `VÍNCULO` = `app/colaboradores/services/vinculo.py`, `CÉLULA` = `app/ponto/portas/celula.py`, `FUTURO` = `app/ponto/services/cadastro_futuro.py`, `SYNC` = `app/colaboradores/management/commands/sincronizar_feriado_admin.py`. Os arquivos de prova abreviados a seguir ficam em `app/colaboradores/tests/`: `FPP` = `test_feriado_por_posto.py`, `PRÉVIA` = `test_feriado_previa_da_marca.py`, `A5` = `test_feriado_a5_volta3.py`, `V4` = `test_feriado_volta4.py`, `V5` = `test_feriado_volta5.py`. **SEM PROVA** indica que não localizei teste que fixe aquela transição específica.
+
+## Matriz — CLI e aplicação
+
+| Linha | Estado de entrada | Juiz consultado | Operação | Persistido | Retorno ao chamador | Prova existente |
+|---|---|---|---|---|---|---|
+| C1 | Sem `--posto`, inclusive com `--apply` | `PORTA:74,137::presenca_em_feriado/sugestoes`, com `vinculo_do_dia` em `app/escala/alimentacao.py:228` e calendário em `app/core/feriados.py:70::feriados_de` | Lê presença e lista sugestões. Com `--sugestoes` e posto, lista e segue para a ação. `CLI:46–68` | Nada. `CLI:49–68` | Sem posto, aviso `Nada marcado` e retorno normal. `CLI:64–68` | A passagem com posto e a data da borda são fixadas por `A5::RelogioDoLote.test_sugestoes_e_propagacoes_usam_o_dia_da_borda_ao_virar_meia_noite:245`. Saída sem posto **SEM PROVA** |
+| C2 | Posto informado, ambas as ações ou nenhuma | Guarda de argumentos, `CLI:70–72::Command.handle` | Imprime `Diga --fecha OU --opera, um so.` | Nada. `CLI:70–72` | Retorno normal, apesar do estilo de erro. `CLI:71–72` | **SEM PROVA** |
+| C3 | Ação `--opera` com `--retomar-retratacao` | Guarda de argumentos, `CLI:73–75::Command.handle` | Recusa antes de buscar o posto | Nada. `CLI:73–75` | `CommandError('--retomar-retratacao exige --fecha')` | **SEM PROVA** |
+| C4 | PK de posto inexistente | Busca do cadastro, `CLI:111–115::Command._marcar` | Imprime `posto … nao existe.` | Nada. `CLI:111–115` | Retorno normal, com ou sem `--apply`. `CLI:113–119` | **SEM PROVA** |
+| C5 **(ii)** | `--fecha` ou `--opera`, `--apply`, motivo ausente ou só espaços, posto encontrado | `PORTA:288,305–306::aplicar_marca` | Recusa o motivo antes da trava e do plano | Nada. `PORTA:305–315` | `MarcaInvalida('aplicar_marca: motivo e obrigatorio')` → `CommandError` com causa, antes de imprimir o plano. `CLI:118–130` | `FPP::CascaDoComando.test_apply_sem_motivo_recusa_sem_escrever:645`, com `--opera` e o mesmo ramo de `--fecha`. `FPP::R1TrilhaDaTrocaDaChave.test_R1_motivo_e_obrigatorio:172` fixa a porta |
+| C6 | `--fecha --apply` com motivo, posto sem município | `PORTA:261,269–271::plano_da_marca` | Relê posto sob trava e recusa FECHA | Nada. `PORTA:307–323` | `MarcaInvalida('Posto SEM MUNICIPIO …')` → `CommandError`. `CLI:126–127` | `V4::MarcaInvalidaSaiComErro.test_fecha_em_posto_sem_municipio_levanta_command_error:17` e `FPP::R3FechaRetrataEPropaga.test_R3_fecha_sem_municipio_recusa_sem_escrever:250` |
+| C7 | Porta Python com `novo` fora de `True`/`False`, `hoje=None`, ou retomada sem posto já FECHA. Reaplicação de posto sem marca | `PORTA:261–275::plano_da_marca` e `PORTA:308–315,357–359::aplicar_marca/reaplicar_marca` | Recusa após reler o posto, antes de observar ou gravar o plano | Nada. `PORTA:307–323` | `MarcaInvalida` na API. Se a entrada alcançar a CLI, C6 dá a tradução. `CLI:126–127` | `FPP::R3FechaRetrataEPropaga.test_R3_voltar_a_sem_marca_nao_existe:261`, `test_R3_hoje_e_obrigatorio:271`, `FPP::R4ReaplicarAMarcaVigente.test_R4_reaplicar_sem_marca_recusa:357`. Retomada inválida **SEM PROVA** |
+| C8 | `--fecha` ou `--opera`, sem `--apply`, com ou sem `--motivo` | `PORTA:370–406::previa_da_marca`, P1–P4 | Chama a prévia com `hoje` e `agora`. O motivo da CLI só é lido no `--apply`. `CLI:117–127` | Nada após a prévia. `PORTA:397–406` | Sucesso na sombra imprime plano, grupos e `DRY-RUN`. Fora da sombra ou marca inválida, `CommandError`. `CLI:124–146` | `PRÉVIA::PreviaNaSombra.test_dry_run_do_comando_le_a_previa_e_nao_escreve:217` e `PRÉVIA::PreviaForaDaSombraRecusa.test_PROVA_a_comando_sai_com_erro_sem_chamar_a_porta_e_sem_escrever:277`. Variante FECHA com motivo no dry-run **SEM PROVA** |
+| C9 | `--apply` válido | `PORTA:288::aplicar_marca`, M1–M7 | Busca autor por username e aplica. A busca pode entregar `None` à porta. `CLI:119–122` | Os segmentos concluídos de M1–M7. `PORTA:308–354` | Imprime plano, `MARCADO`, retratados e propagados, e retorna normalmente. `CLI:128–150` | `FPP::CascaDoComando.test_apply_chama_a_porta:658`, `PRÉVIA::PreviaForaDaSombraRecusa.test_apply_segue_valendo_fora_da_sombra:317`, e FECHA repetido em `A5::SegmentosDaMarca.test_fecha_ja_fecha_e_reaplicar_preservam_chamado_vivo:105` |
+
+| Linha | Estado de entrada | Juiz consultado | Operação | Persistido | Retorno ao chamador | Prova existente |
+|---|---|---|---|---|---|---|
+| M1 | Pedido válido, marca muda | `PORTA:237–254,261–285::_chamados_do_posto/plano_da_marca`. `app/chamados/services/painel.py:135::qs_vivos`, `app/chamados/juizes.py:175::dias_do_fato`, `app/escala/alimentacao.py:334::vinculos_dos_dias`, `app/core/feriados.py:70::feriados_de` via `PORTA:47`. Para propagar, `app/escala/alimentacao.py:219::q_vinculo_cobre_a_data` e `PORTA:175,203::segue_a_marca/vinculos_que_seguem_a_marca` | Trava posto, lê o plano e grava a marca. FECHA novo seleciona vivos do posto **do dia do fato** em feriado que o alcança. OPERA tem alvo de retratação vazio. A propagação seleciona chaves divergentes de vínculos weekday vigentes, fora cargos administrativos. `PORTA:277–323` | `Posto.opera_em_feriado` pelo escritor `app/colaboradores/services/estrutura.py:90–95`. `LogAuditoria.marcar_feriado_do_posto` com antes/depois, motivo e ator, em savepoint best-effort. Falha só de auditoria pode deixar a marca gravada. `PORTA:318–323` [app/core/observ.py:94–105,124–139] | Segue para retratação e propagação. O plano é o calculado sob a trava inicial. `PORTA:325–354` | `FPP::R1TrilhaDaTrocaDaChave.test_R1_porta_da_marca_um_evento_no_posto_uma_linha_por_vinculo_2a_rodada_zero:151`, `FPP::R2IntactosNoMesmoAto.test_R2_admin_12x36_outro_posto_e_encerrado_ficam_e_o_irmao_muda:185`, `A5::SegmentosDaMarca.test_fecha_alcanca_chamado_vivo_silenciado:120`, `test_fecha_alcanca_feriado_vivo_anterior_a_180_dias:123` |
+| M2 | Mesma marca, com ou sem divergências. Retomada explícita de posto já FECHA | `PORTA:261–285::plano_da_marca` | Mesma marca comum ou reaplicação só propaga divergências. Retomada de FECHA volta a selecionar vivos. `PORTA:272–285,357–359` | Sem novo evento do posto. Se houver trabalho, persistem os segmentos M3–M6 correspondentes. `PORTA:318–354` | `marca_muda=False`, contagens do que de fato avançou. Sem divergência e sem retomada, `0/0`. `PORTA:325–354` | `FPP::R4ReaplicarAMarcaVigente.test_R4_reaplicar_propaga_so_aos_divergentes_sem_evento_do_posto:321`, `A5::SegmentosDaMarca.test_fecha_ja_fecha_e_reaplicar_preservam_chamado_vivo:105`, `FPP::FalhaNoMeioDaPortaRetoma.test_falha_na_retratacao_nao_deixa_nota_sem_chamado_fechado:533` |
+| M3 | Alvo de FECHA continua vivo, pertence ao posto do fato e o feriado ainda o alcança. Fechamento autorizado | `app/chamados/models.py:654,676::reconciliar/_decisao_do_fechamento`, `app/chamados/catalogo/motor.py:125::decidir`, guardas de premissa, conversa e pergunta viva em `app/chamados/models.py:776,711,422` | Revalida o alvo sob a trava do posto. Reconcilia via `app/chamados/services/fecho_runtime.py:146::transicionar_com_pauta` e anexa nota da marca no mesmo segmento. `PORTA:325–341` | `ChamadoColaborador.status_local`, `resolvido_em`, `via_encerramento`, `atualizado_em`, urgência quando aplicável, auditoria de estado e `FollowupChamado` da marca, com chave de evento por chamado/tipo/dia. [app/chamados/models.py:207–252,286–302] [app/chamados/services/nota.py:75–109] | `reconciliar=True`, soma um a `retratados`. `PORTA:335–341` | `FPP::R3FechaRetrataEPropaga.test_R3_dia_ja_folga_pela_celula_retrata_pela_nota_da_marca:217` |
+| M4 | Alvo saiu do recorte sob a trava, ou o gate de fechamento recusa | `PORTA:237–254,331–335::_chamados_do_posto/eh_feriado_do_posto`, ou os gates de M3 | Pula alvo inelegível ou recebe `False` do reconciliador e continua. `PORTA:331–341` | Sem nota da marca e sem fechamento nesse passo. Uma recusa material pode gravar `LogAuditoria.fechamento_recusado` e, na guarda de conversa, nota de retenção no fio. A coleta S143 pode gravar pauta quando houver recusas coletadas. [app/chamados/models.py:409–443,734–752,821–830] [app/chamados/services/fecho_runtime.py:127–142,157–169] | Sem incremento em `retratados`. A propagação pode fechar o mesmo chamado mais tarde pelo evento da célula. `PORTA:335–354` [CÉLULA:528–540] | `FPP::R3FechaRetrataEPropaga.test_R3_dia_trabalho_a_premissa_recusa_e_a_celula_propagada_fecha:232`. Alvo que perde elegibilidade entre leituras **SEM PROVA** |
+| M5 | Outra aplicação trocou a marca entre segmentos | `PORTA:328–330,346–348::aplicar_marca`, comparação com a marca relida sob trava | Interrompe o laço afetado ao ver marca diferente | Os segmentos já concluídos permanecem. Nenhuma escrita daquele segmento pela aplicação superada. `PORTA:308–354` | Retorno normal com plano inicial e contagens parciais. `PORTA:354` | `A5::SegmentosDaMarca.test_opera_superada_por_fecha_nao_grava_chave_velha:50`, `test_fecha_superada_por_opera_nao_retrata:73` |
+| M6 | Vínculo ainda elegível e divergente, ou já igual | `PORTA:203–219,344–352::vinculos_que_seguem_a_marca/aplicar_marca`, `VÍNCULO:870–925::marcar_trabalha_em_feriado` | Relê elegibilidade e chave sob trava. Se mudou, grava chave e regenera passado/hoje e futuras. Se igual, pula na marca ou retorna `ec` na chamada direta. `VÍNCULO:896–925` | `EscalaColaborador.trabalha_em_feriado`, auditoria `editar` best-effort, invalidação de `FechamentoMensal.previsto_em` com `atualizado_em` pelo signal, e efeitos R1–R6. Tudo no segmento do vínculo. [app/core/auditoria.py:8–30] [app/escala/signals.py:137–151] [app/ponto/services/fechamento.py:1607–1613] | A porta do vínculo devolve `ec`. A marca conta um vínculo após a chamada completar, independentemente de quantas células mudaram. `VÍNCULO:915–925` [PORTA:349–354] | `FPP::R1TrilhaDaTrocaDaChave.test_R1_porta_do_vinculo_grava_UMA_linha_da_troca_com_autor_e_motivo:133`, `FPP::A4ContadorDosDivergentes.test_A4_vigencia_e_inclusiva_nas_duas_pontas_e_so_nelas:609` |
+| M7 | Exceção que escapa durante retratação ou propagação | O gate e escritor do segmento em curso, `PORTA:325–353`, `VÍNCULO:870` | Desfaz o segmento atual. Em `--apply` ordinário, a marca e os segmentos anteriores já foram confirmados. Dentro da prévia, P3/P4 abrangem todos os segmentos. `PORTA:308–353,397–406` | Falha na nota desfaz o fechamento daquele chamado. Falha na propagação desfaz a chave, a trilha e a regeneração daquele vínculo. O que o segmento anterior confirmou fica. `PORTA:326–352` [VÍNCULO:870–925] | Exceção sobe. Um `ValueError` puro, por exemplo do invariante em `app/chamados/models.py:227–233`, passa pela CLI sem tradução. `CLI:124–127` | `FPP::FalhaNoMeioDaPortaRetoma.test_falha_na_2a_propagacao_fica_denunciada_e_a_porta_retoma:503`, `test_falha_na_retratacao_nao_deixa_nota_sem_chamado_fechado:533`. `ValueError` tardio específico **SEM PROVA** |
+
+## Matriz — prévia e classificação
+
+| Linha | Estado de entrada | Juiz consultado | Operação | Persistido | Retorno ao chamador | Prova existente |
+|---|---|---|---|---|---|---|
+| P1 | `HASNER_SOMBRA` ausente ou diferente do booleano `True` | Guarda, `PORTA:370–381::previa_da_marca` | Recusa antes da validação de `agora`, do plano e da marca | Nada. `PORTA:379–398` | `PreviaForaDaSombra` direto na API, `CommandError` na CLI. `CLI:124–125` | `PRÉVIA::PreviaForaDaSombraRecusa.test_PROVA_a_a_funcao_recusa_antes_da_porta:291`, `test_chave_que_nao_e_o_booleano_True_recusa:299`, `test_settings_sem_a_chave_tambem_recusa:310` |
+| P2 **(iv)** | Sombra, `agora` omitido ou `None` | Guarda, `PORTA:370,382–383::previa_da_marca` | Recusa antes de chamar a porta da marca | Nada. `PORTA:382–399` | `ValueError('previa_da_marca: agora e obrigatorio')`. Omitir `hoje` dá `TypeError` pela assinatura. `hoje=None` explícito com `agora` válido cai em C7. `PORTA:267–268,370–383` | `V5::RelogioDesceDaBorda.test_previa_da_marca_sem_agora_recusa:18`. Omissão de `hoje` na prévia **SEM PROVA** |
+| P3 | Sombra, entrada válida | `PORTA:288::aplicar_marca` e `PORTA:420:: _classificar_previa` | Fotografa os colaboradores de `alvo ∪ propagar` no plano sob trava, executa a porta real, fotografa e classifica dentro do `atomic`. `_DesfazAPrevia` força rollback. `PORTA:390–406` | Nada no banco após a saída. Os `on_commit` da simulação são descartados. `PORTA:397–406` | Dict com `marca_muda`, `retratados`, `propagados`, `plano`, `a`, `b`, `outras`. Contagens da simulação. `PORTA:354,406` | `PRÉVIA::PreviaNaSombra.test_o_plano_devolvido_e_o_do_ATO:127`, `test_PROVA_b_banco_identico_por_chave_e_valor:158`, `test_a_instancia_do_chamador_nao_sai_marcada:185`, `test_PROVA_a_nenhum_on_commit_sobra_da_previa:190`, `PRÉVIA::PreviaDoFechaComChamadoVivo.test_PROVA_b_banco_identico_no_ramo_da_retratacao:253` |
+| P4 | Entrada inválida após a guarda, ou falha tardia na simulação/classificação | `PORTA:261–275::plano_da_marca`, ou a função que falhou em `PORTA:397–404` | O `atomic` exterior reverte a execução. Só a sentinela de rollback bem-sucedido é capturada. `PORTA:397–406` | Nada da simulação. `PORTA:397–406` | Exceção original na API. CLI traduz `MarcaInvalida` e `PreviaForaDaSombra`. Demais exceções sobem. `CLI:124–127` | Rollback normal em P3. Erro tardio específico na prévia **SEM PROVA** |
+| P5 | Foto igual, ou foto mudou sem passar a trabalho num feriado deste posto | `PORTA:420–449::_classificar_previa`, `PORTA:47::eh_feriado_do_posto`, `app/escala/alimentacao.py:334::vinculos_dos_dias` | Compara `trabalha`, `dna`, `escala_geradora`, `ata`, `veredito`, `julgada_em`, `impressao`, `veredito_em`. Sem diferença, omite. Se mudou e não atende ao recorte, manda para `outras`. `PORTA:409–449` | Nada pelo classificador | `outras` com colaborador, data, antes/depois, campos mudados e indicador de feriado, ou ausência de linha. `PORTA:431–449,478` | `PRÉVIA::PreviaNaSombra.test_celula_que_muda_de_geradora_sem_mudar_trabalha_aparece_em_outras:112`, `A5::ClassificacaoDaPrevia.test_ata_mudada_sem_troca_de_trabalho_aparece:166`. Foto igual isolada **SEM PROVA** |
+| P6 **(iii)** | Feriado vira trabalho, há turno do dia, mas o par ainda está antes do fim previsto ou há turno sem par completo | `app/ponto/turnos.py:1850::turnos_do_colab`, `:2133::dias_encerrados`, `:2195::preparar_par_completo_da_janela`, `:2207::par_completo` | Usa os turnos pós-escrita, a mesma janela e `agora` injetado. Entrada e saída formadas pelo pareador ainda precisam passar no juiz. `PORTA:450–473` | Nada pelo classificador | `outras` com `pareamento='sem par completo'`. `PORTA:472–473` | `V5::ParDoDiaPeloJuiz.test_par_antes_do_fim_previsto_nao_e_a:50`, `A5::ClassificacaoDaPrevia.test_entrada_sozinha_fica_fora_de_a_e_de_b:185` |
+| P7 | Feriado vira trabalho e o juiz confirma par completo | Os juízes de P6 e `app/ponto/calculador/regras.py:302::feriado_em_dobra_do_ciclo` | Classifica em `a` e formata batidas em hora local. `PORTA:465–471` | Nada pelo classificador | Colaborador, data, nome do feriado, `batidas`, `regra` (`feriado_em_dobra` ou `feriado_simples`) e `valor='sem apuracao ainda'`. `PORTA:465–471` | `V5::ParDoDiaPeloJuiz.test_par_depois_do_fim_previsto_e_a:62`, `PRÉVIA::PreviaNaSombra.test_previa_reparte_a_com_batida_e_b_sem_batida:99` |
+| P8 | Feriado vira trabalho e não há turno do dia na janela carregada, ou a data é futura | `app/ponto/janelas.py:60,66::janela_atual/janela_anterior` e os turnos de P6. Para hoje, `app/ponto/turnos.py:2133::dias_encerrados` | Classifica em `b`. A saída de turno da véspera pertence à véspera. Para `d > hoje`, o classificador usa lista vazia de turnos. `PORTA:450–477` | Nada pelo classificador | `quando=passado/futuro`, ou `quando=hoje` com booleano `encerrado`. `PORTA:474–477` | `PRÉVIA::PreviaNaSombra.test_previa_reparte_a_com_batida_e_b_sem_batida:99`, `test_saida_de_turno_da_vespera_nao_e_batida_do_feriado:142`, `A5::ClassificacaoDaPrevia.test_sem_batida_hoje_usa_encerramento_do_turno:232` fixa `True`. Caso `False` dedicado **SEM PROVA** |
+
+## Matriz — regeneração disparada pela marca
+
+| Linha | Estado de entrada | Juiz consultado | Operação | Persistido | Retorno ao chamador | Prova existente |
+|---|---|---|---|---|---|---|
+| R1 | Chave mudou e a janela anterior/início do vínculo alcança `hoje` | `app/ponto/janelas.py:66::janela_anterior` e `CÉLULA:112::regenerar_celulas_vinculo` | Regenera de `max(início do vínculo, início da anterior)` até `hoje`, sem extensão. Depois chama R2. `VÍNCULO:909–924` | Efeitos R3–R6, no mesmo segmento da chave. `VÍNCULO:870,915–924` | Regenerador devolve número de células alteradas. Vínculo descarta esse número. `CÉLULA:395–401` [VÍNCULO:915–925] | `FPP::R3FechaRetrataEPropaga.test_R3_dia_trabalho_a_premissa_recusa_e_a_celula_propagada_fecha:232`, `FPP::R5CompetenciaExportadaIntacta.test_R5_dia_da_comp_exportada_fica_e_o_da_aberta_muda:368` |
+| R2 | Futuras já geradas, inclusive fora da competência. `hoje` presente | `FUTURO:8,28::alcance_celulas_geradas/regenerar_futuras_do_cadastro`, `app/escala/alimentacao.py:334::vinculos_dos_dias` | Trava as geradas `data > hoje`, recorta por `desde` e passa cada dia com dono igual ao vínculo ou sem dono. Marca de atributo usa `substitui_dono=False`. Cada chamada recebe o mesmo `hoje` e `estender_horizonte=False`. `FUTURO:21–25,43–60` [VÍNCULO:920–924] | Só futuras selecionadas pelas guardas da célula. Sem futuras elegíveis, nada. `FUTURO:50–60` | Soma dos retornos, inclusive `0`. Vínculo descarta a soma. `FUTURO:56–60` [VÍNCULO:921–925] | `app/ponto/tests/test_cadastro_futuro_c5b.py::C5bTest.test_d2_flag_de_outro_vinculo_nao_toma_o_dia:122`, `test_d2_juiza_calada_segue_para_a_porta:133`, `test_d2_contra_exemplo_o_dono_segue_reescrevendo:141` |
+| R3 | `hoje=None` nas portas de regeneração, ou vínculo sem vigência declarada | `FUTURO:28,41–42::regenerar_futuras_do_cadastro`, `CÉLULA:112,138–162::regenerar_celulas_vinculo`, `app/escala/alimentacao.py:189::tem_vigencia_declarada` | `None` é erro antes da escrita. Sem vigência declarada, recusa normal da regeneração direta. A seleção da marca já exclui esse vínculo. `PORTA:203–219` | `None` → nada. Sem vigência → tentativa de auditoria `regenerar_recusado_sem_vigencia`, sem gravar célula. `CÉLULA:138–162` | `ValueError` para `None`, `TypeError` por 
+
+[truncado em 20000 de 38827 caracteres]
+
+## 21/11 19:32 · sessao e161a5ec7905 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**INCOMPLETO para certificação.** A opção B está aplicada em `_slot_esperado`. Em `hora` sem resposta vigente e sem carimbo legado, o derivador recebe texto vazio. Se o marco fixo fornece instante, sai `SLOT`. Se não fornece, sai `SEM_RESPOSTA_VIGENTE`. `PLANTIO_SEM_TS` fica reservado à falha de derivação com texto elegível. O B3 segue aberto. `app/chamados/juizes.py:409–423` · `app/chamados/services/materializacao.py:691–710` · `aval_1930.txt:1` (anexo)
+
+### V1 e provas locais
+
+| Prova | Base `f3d23021f` | Cura |
+|---|---|---|
+| r1 · Batida vinculada às 05:24, a 66 minutos do slot original de 06:30 | `True` após a reabertura | `False` · `app/chamados/tests/test_e3_c8b_sem_banco.py:499–507` |
+| r2 · Só destino encerrado | `True` | `False` · `app/chamados/tests/test_e3_c8b_sem_banco.py:509–515` |
+| r3 · Hora desfeita com marco fixo e batida no marco | `SLOT` às 13:00, `True` | `SLOT` às 13:00, `True` · `app/chamados/tests/test_e3_c8b_sem_banco.py:517–527` |
+| r4 · HX com lei calada e fora da janela viva | `True` nos dois | `False` nos dois, `SEM_RESPOSTA_VIGENTE` · `app/chamados/tests/test_e3_c8b_sem_banco.py:529–538` |
+| r5 · Texto residual presente e ausente | `[True, True]` | `[False, False]` · `app/chamados/tests/test_e3_c8b_sem_banco.py:540–551` |
+
+Rodei os REDs antes da edição de produção. Na cura, passaram 34 testes C8b, 18 da catraca de respondedores e 10 da A1. O `v3_cru` falhou na catraca com duas leituras onde se espera uma. Um teste adicional de cartório parou na importação de `django.utils` com a fonte da base e com a cura. `app/chamados/tests/test_e3_c8b_sem_banco.py:465–558` · `app/chamados/tests/test_e3_catraca_respondedores.py:544–557` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:188–293` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:174–181`
+
+### Cinco leitores
+
+| Leitor | Efeito da opção B |
+|---|---|
+| `carga_pergunta_viva` | Guarda o novo motivo. Os dois motivos sem instante recebem o mesmo tratamento na montagem dos limites. O marco fixo continua contribuindo com a janela de `SLOT`. `app/chamados/services/carga_pergunta_viva.py:119–145` |
+| `classe_do_lote` | C21 já manda a candidata sem vigência para B antes da leitura do slot. A distinção entre os motivos é repassada em `porque` quando o lote alcança a leitura. `app/chamados/services/validacao.py:1214–1232` |
+| Explicador | Distingue os motivos. Quando chega à explicação do slot, passa a mostrar “sem resposta vigente”. `app/chamados/services/explicador.py:52–61,122–150` |
+| `vigia_carimbo` | Agrupa os dois motivos em `slot_nao_derivavel` após reprovação. Um caso antes aceito só por vínculo ou destino pode sair de `com_registro` para essa classe. `app/chamados/services/vigia_carimbo.py:97–123` |
+| Juiz de fato → C6 | Distingue os motivos. `SEM_RESPOSTA_VIGENTE` vai direto à prova de retração com carimbo e trilha, fechando os atalhos de vínculo e destino. C6 inverte o veredito ao alcançar o degrau 6. `app/chamados/juizes.py:287–298,801–848,1535–1542` |
+
+### Comandos de prova
+
+Os três mutantes locais saíram com `rc=1` por asserção. m1 atingiu r1 e r2, m2 atingiu r3 e m3 atingiu a igualdade de r5 com `False != True`. O gerador também emite cada patch com `--patch`. `app/chamados/tests/sentinela_volta5_mutantes.py:18–45`
+
+```sh
+# A partir de app/
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest -v chamados.tests.test_e3_c8b_sem_banco.SentinelaVolta5
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.sentinela_volta5_mutantes m1
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.sentinela_volta5_mutantes m2
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.sentinela_volta5_mutantes m3
+```
+
+Na pista, rode o primeiro comando sobre `f3d23021f` com o recorte de testes para o RED, e sobre a cura para o GREEN. Para os três comandos seguintes, aplique isoladamente o patch correspondente emitido com `--patch` e reverta-o após a prova. A pista usa Docker e banco. `bin/suite.sh:197–209,316–325` · `app/chamados/tests/sentinela_volta5_mutantes.py:26–38`
+
+```sh
+copia=/home/ronald/wt-codex-e4c-f5-constroi-141636
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5_r1_ -k test_RED_sentinela_volta5_r2_
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5_r3_
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5_r5_
+```
+
+**Diff e autoconferência.** Zero commits pela proibição de `git commit`. O RED precedeu a cura na cópia, com `HEAD` em `f3d23021f`. Diff total de 5 arquivos, `+161/−16`, incluindo o gerador novo. `except` adicionados: **0 em produção e 0 em teste**. Fallbacks novos: **0**. `app/chamados/juizes.py:409–423` · `app/chamados/tests/test_e3_c8b_sem_banco.py:465–558` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–80` · `app/chamados/tests/test_marco_por_motivo.py:271–282` · `app/chamados/tests/sentinela_volta5_mutantes.py:1–50`
+
+**Pendente** · ORM e mordidas anteriores `s1`, `s2a`, `s2b`, `s3i`, `s3ii`, vínculo, destino e trilha, suíte inteira pelo Code, opus final e incidência em produção [nao verificado]. [nao verificado]
+
+## 21/11 19:32 · sessao e7d6683e92e8 · - · - · origem=Ronald (tmux)
+
+Na cópia, `--apply` sem motivo ou com espaços está curado. `aplicar_marca` levanta `MarcaInvalida` antes da primeira transação. `_marcar` entrega `CommandError` encadeado antes do plano. O teste cobre os dois motivos e verifica a marca nula. `app/colaboradores/services/feriado_do_posto.py:305-308`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:118-128`, `app/colaboradores/tests/test_feriado_por_posto.py:645::test_apply_sem_motivo_recusa_sem_escrever`.
+
+| Entrada | Juiz → operação | Persistência | Saída e prova |
+|---|---|---|---|
+| Sem `--posto` | `sugestoes` e `presenca_em_feriado` recebem o dia capturado no `handle`. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:46-68` | Nada. Mesmo arquivo, `:49-68`. | Sugestões e retorno normal. A passagem do dia antes da virada está em `app/colaboradores/tests/test_feriado_a5_volta3.py:245::test_sugestoes_e_propagacoes_usam_o_dia_da_borda_ao_virar_meia_noite`. |
+| Ambas ou nenhuma ação, com posto | `Command.handle` recusa pela igualdade dos argumentos. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:70-72` | Nada. Mesmo trecho. | Mensagem e retorno normal. **SEM PROVA**. |
+| `--opera --retomar-retratacao` | `Command.handle` exige `--fecha`. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:73-75` | Nada. Mesmo trecho. | `CommandError`. **SEM PROVA**. |
+| Posto inexistente | `_marcar` faz busca por PK. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:111-115` | Nada. Mesmo trecho. | Mensagem e retorno normal. **SEM PROVA**. |
+| Dry-run, com ou sem motivo, em sombra | `_marcar` chama `previa_da_marca` com `hoje` e `agora`, sem repassar motivo. A prévia usa motivo próprio, roda a porta e força rollback. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:117-127,144-147`, `app/colaboradores/services/feriado_do_posto.py:397-406` | Nenhuma linha do ato persiste. Mesmos trechos. | Plano, grupos e `DRY-RUN`, retorno `None`. Prova em `app/colaboradores/tests/test_feriado_previa_da_marca.py:217::test_dry_run_do_comando_le_a_previa_e_nao_escreve` e `:253::test_PROVA_b_banco_identico_no_ramo_da_retratacao`. |
+| Dry-run fora da sombra | `previa_da_marca` recusa antes da porta. `app/colaboradores/services/feriado_do_posto.py:379-383` | Nada. Mesmo trecho. | `PreviaForaDaSombra` vira `CommandError` pela CLI. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124-125`, `app/colaboradores/tests/test_feriado_previa_da_marca.py:277::test_PROVA_a_comando_sai_com_erro_sem_chamar_a_porta_e_sem_escrever`. |
+| `--fecha --apply` com motivo, sem município | `plano_da_marca` valida após reler o posto travado, antes das escritas. `app/colaboradores/services/feriado_do_posto.py:265-275,305-323` | Nada. Mesmo trecho. | `MarcaInvalida` vira `CommandError`. Prova `app/colaboradores/tests/test_feriado_volta4.py:17::test_fecha_em_posto_sem_municipio_levanta_command_error`. O teste fixa a exceção de `call_command`, e o cabeçalho documenta rc 1 de `manage.py`. Mesmo arquivo, `:1-4,17-25`. |
+| Marca válida nova | `plano_da_marca` sob trava, seguido de `marcar_opera_em_feriado`. `app/colaboradores/services/feriado_do_posto.py:307-323` | `Posto.opera_em_feriado` e antes/depois em `LogAuditoria`, com trilha best-effort sob savepoint próprio. `app/colaboradores/services/estrutura.py:90-95`, `app/core/observ.py:94-139`. | Serviço entrega `marca_muda`, `retratados`, `propagados`, `plano`. CLI imprime contagens e retorna `None`. `app/colaboradores/services/feriado_do_posto.py:354`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:75,148-150`, `app/colaboradores/tests/test_feriado_por_posto.py:151::test_R1_porta_da_marca_um_evento_no_posto_uma_linha_por_vinculo_2a_rodada_zero` e `:658::test_apply_chama_a_porta`. |
+| FECHA, chamado vivo no posto do fato e em feriado | `_chamados_do_posto` consulta `qs_vivos`, `dias_do_fato`, `vinculos_dos_dias`. `eh_feriado_do_posto` delega a `feriados_de`. Cada chamado revalida marca, pertencimento e alcance sob trava e chama `transicionar_com_pauta(... ato=ch.reconciliar)`. `app/colaboradores/services/feriado_do_posto.py:47-57,237-254,277-285,325-341`, `app/core/feriados.py:70`. | Se o gate autoriza, `ChamadoColaborador.status_local`, `resolvido_em`, `via_encerramento`, `atualizado_em`, urgência quando couber, `LogAuditoria.estado_chamado` e `FollowupChamado` de tipo lógico `feriado_do_posto`. `app/chamados/models.py:234-252,286-302,654-668`, `app/chamados/services/nota.py:75-109`. | `reconciliar=True`, `retratados += 1`. Prova `app/colaboradores/tests/test_feriado_por_posto.py:217::test_R3_dia_ja_folga_pela_celula_retrata_pela_nota_da_marca`. |
+| Chamado candidato, gate recusa | `_decisao_do_fechamento` consulta `decidir`, premissa, conversa do pai e pergunta viva. `app/chamados/models.py:676-709` | Status e nota da marca intactos no segmento. Conforme gate, `LogAuditoria.fechamento_recusado` deduplicado, e na conversa do pai o `FollowupChamado` de tipo `retido_pela_conversa`. `app/chamados/models.py:409-456,735-752,821-830`, `app/colaboradores/services/feriado_do_posto.py:335-341`. | `False`, sem incremento, laço segue. A propagação pode fechar a falta em etapa posterior. Prova `app/colaboradores/tests/test_feriado_por_posto.py:232::test_R3_dia_trabalho_a_premissa_recusa_e_a_celula_propagada_fecha`. |
+| Marca superada entre segmentos | `aplicar_marca` relê travado e quebra o laço correspondente. `app/colaboradores/services/feriado_do_posto.py:325-353` | Ficam os segmentos já concluídos. Segmento superado sem escrita. Mesmo trecho. | Contagens parciais e retorno normal. Provas `app/colaboradores/tests/test_feriado_a5_volta3.py:50::test_opera_superada_por_fecha_nao_grava_chave_velha` e `:73::test_fecha_superada_por_opera_nao_retrata`. |
+| FECHA já vigente, sem retomada | `plano_da_marca` deixa de montar alvos de retratação e ainda seleciona divergências. `app/colaboradores/services/feriado_do_posto.py:272-285` | Sem novo evento do posto e sem retratação direta. Eventual propagação de divergência. Mesmo arquivo, `:318-323,343-354`. | Resultado normal. Prova `app/colaboradores/tests/test_feriado_a5_volta3.py:105::test_fecha_ja_fecha_e_reaplicar_preservam_chamado_vivo`. |
+| Vínculo divergente elegível | `vinculos_que_seguem_a_marca` consulta `q_vinculo_cobre_a_data`, `segue_a_marca` e cargo. Sob trava, revalida e chama `marcar_trabalha_em_feriado`. `app/colaboradores/services/feriado_do_posto.py:175-185,203-219,343-354` | `EscalaColaborador.trabalha_em_feriado`, `LogAuditoria.editar` best-effort e regeneração por vínculo atômico. O signal invalida `FechamentoMensal.previsto_em` e carimba `atualizado_em`. `app/colaboradores/services/vinculo.py:870-925`, `app/escala/signals.py:137-151`, `app/ponto/services/fechamento.py:1607-1613`. | Retorna `ec`, soma propagado. Provas `app/colaboradores/tests/test_feriado_por_posto.py:133::test_R1_porta_do_vinculo_grava_UMA_linha_da_troca_com_autor_e_motivo` e `:185::test_R2_admin_12x36_outro_posto_e_encerrado_ficam_e_o_irmao_muda`. |
+| Exceção em segmento da retratação ou propagação | `aplicar_marca` usa `atomic` por chamado e por vínculo. Um `ValueError` puro é possível no reaponte recusado e não é convertido pela CLI. `app/colaboradores/services/feriado_do_posto.py:325-353`, `app/chamados/models.py:449-451`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:118-127`. | Desfaz o segmento em falha. Em execução sem transação envolvente, ficam marca e segmentos anteriores. O `atomic` externo da prévia desfaz todos. `app/colaboradores/services/feriado_do_posto.py:308-353,397-406`. | Exceção sobe. O caso específico do `ValueError` puro na porta tem **SEM PROVA**. Falha injetada no segundo vínculo e na nota têm provas em `app/colaboradores/tests/test_feriado_por_posto.py:503::test_falha_na_2a_propagacao_fica_denunciada_e_a_porta_retoma` e `:533::test_falha_na_retratacao_nao_deixa_nota_sem_chamado_fechado`. |
+
+**Diferença para main.** `ab351aa9b:app/colaboradores/management/commands/marcar_feriado_do_posto.py:23-31,86-94,128-149` não oferece `--motivo`, imprime e retorna normal para FECHA sem município, lê o dia em `_marcar` e faz escrita/retratação diretamente, sem propagação pela CLI. A API Python nova da marca está em `app/colaboradores/services/feriado_do_posto.py:288-406`. A releitura da célula já existe no main em `ab351aa9b:app/ponto/portas/celula.py:464`. O caminho novo é a CLI/preview acima de uma data capturada na borda. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:46-47,117-123`, `app/colaboradores/services/feriado_do_posto.py:349-352`, `app/ponto/portas/celula.py:392-405,464`.
+
+**Extras do anexo.** `presenca_em_feriado()` ainda lê `localdate()` se faltar `hoje` e algum limite. `marcar_trabalha_em_feriado` ainda lê `localdate` depois de salvar campo e trilha. A sincronização consulta a marca na listagem e grava a seleção antiga sem `hoje` e sem a trava do posto. Os respectivos REDs continuam prevendo falha pela leitura da fonte. Os testes correntes de sync cobrem marca declarada antes da listagem e regra de cargo, não a corrida. `app/colaboradores/services/feriado_do_posto.py:74-89`, `app/colaboradores/services/vinculo.py:896-908`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:43-72`, `app/colaboradores/tests/test_feriado_admin_sync.py:80-103`.
+
+**Proibição e mutantes.** A cura na origem requer `app/ponto/portas/celula.py:392,404-405,464`, com passagem nas outras duas chamadas `:665,858`. O wrapper proíbe esse arquivo ao construtor Codex e descarta a volta com rc 3. A integração fica com opus/sessão no rascunho. Os mutantes já presentes de motivo, par e `agora` estão em `app/colaboradores/tests/test_feriado_a5_volta3.py:342-356`; o teste de meia-noite `:245-267` fixa só a chegada do `hoje` ao escritor de vínculo. Para comprovar o corte da célula, o novo RED deve dirigir a CLI antes da meia-noite, avançar o relógio após a captura e observar uma célula de amanhã efetivamente regenerada e fora do julgamento síncrono enquanto a de hoje está incluída. Proposta de teste e mutantes ainda [nao verificado]. `bin/codex_pergunta.sh:346`, `app/ponto/services/cadastro_futuro.py:43-59`, `app/ponto/portas/celula.py:460-474`.
+
+## 21/11 19:31 · sessao e5f10b72d3d3 · - · - · origem=Ronald (tmux)
+
+O achado (i) está aberto. `Command.handle` captura `agora` e deriva `hoje` uma vez. O dia passa por `_marcar`, `aplicar_marca` e `marcar_trabalha_em_feriado`, tanto para a regeneração até hoje quanto para as futuras geradas já existentes. Os dois caminhos chegam a `regenerar_celulas_vinculo` com o dia correto. A perda ocorre na chamada de `_o_chao_do_dia_mudou`, cuja assinatura omite `hoje`. Ela lê `timezone.localdate()` e usa esse segundo dia para decidir quais células tocadas chegam ao cartório. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:46-47,117-123`, `app/colaboradores/services/feriado_do_posto.py:315,349-352`, `app/colaboradores/services/vinculo.py:909-924`, `app/ponto/services/cadastro_futuro.py:41-60`, `app/ponto/portas/celula.py:112-140,193,392-405,460-474`.
+
+A releitura tem o mesmo código no snapshot de `main`. O alcance pela porta da marca é novo. O comando antigo gravava a marca e retratava chamados diretamente e já tinha leitura própria de dia para esse recorte. `main@ab351aa9b:app/ponto/portas/celula.py:392-405,464-469`, `main@ab351aa9b:app/colaboradores/management/commands/marcar_feriado_do_posto.py:93-105,128-149`.
+
+A cura na origem exige `app/ponto/portas/celula.py::_o_chao_do_dia_mudou` com `hoje` explícito e os três chamadores `::regenerar_celulas_vinculo`, `::editar_dia` e `::reverter_regeneracao_dia`. Regeneração e reversão já recebem o valor. A edição já captura `agora` para o carimbo e pode derivar a data desse mesmo instante. Se a sessão exigir um único dia para as duas edições do ato de troca, `::trocar_plantao` passa o mesmo dia aos dois lados. A mudança vai ao Opus/sessão porque `celula.py` está proibida ao construtor Codex. Juiz novo = 0. `app/ponto/portas/celula.py:112-140,392-405,464-472,572,636-647,665-666,670-713,779,858-859`. A injeção corrige o corte do despacho. O cartório, depois da fronteira pedida, ainda consulta dia e instante próprios. `app/ponto/services/cartorio.py:2059-2089`.
+
+RED a acrescentar pela CLI ou pela porta pública, com feriados de 5×2 no dia injetado D e em D+1, ambos materializados e efetivamente alterados, enquanto o relógio ambiente já está em D+1. A asserção pede despacho de D e exclui D+1. O mutante de restauração de `localdate()`, os mutantes que omitem o repasse e a troca de `>` por `>=` devem falhar. O teste de meia-noite existente espia só a chegada em `marcar_trabalha_em_feriado`. O teste estrutural existente sobre o cadastro futuro não inclui o helper que relê. Prova específica para (i) na cópia = SEM PROVA. `app/colaboradores/tests/test_feriado_a5_volta3.py:245-267`, `app/ponto/tests/test_cadastro_futuro_c5d.py:24-35,131-136,152-191`, `app/ponto/portas/celula.py:464-474`.
+
+A regeneração passada/hoje pode criar `CelulaDia` gerada ou reescrever trabalho, geradora e DNA de célula gerada e carimbar `dna_anterior`, `regenerada_em` e `regeneracoes`. O futuro do evento de atributo seleciona só geradas já existentes e deixa de fora as cujo dono é outro vínculo. Lavrada pula, editada fica e desativado sem fim devolve `0` e registra a recusa. O contador da marca conta vínculos com chamada concluída, mesmo quando a regeneração devolve zero para todas as células. `app/ponto/portas/celula.py:153-162,218-229,284-318,392-401`, `app/ponto/services/cadastro_futuro.py:44-60`, `app/colaboradores/services/vinculo.py:912-925`, `app/colaboradores/services/feriado_do_posto.py:344-354`. Provas `app/colaboradores/tests/test_feriado_por_posto.py::test_R5_dia_da_comp_exportada_fica_e_o_da_aberta_muda` e `::test_R6_editada_fica_e_a_gerada_do_irmao_muda`, `app/ponto/tests/test_cadastro_futuro_c5b.py::test_d2_flag_de_outro_vinculo_nao_toma_o_dia`, `app/escala/tests/test_e4_regenerar_recusa_sem_vigencia.py::test_MORDE_desativado_sem_fim_e_recusado_com_motivo`.
+
+A marca, cada retratação e cada vínculo usam blocos próprios. Exceção na nota desfaz a retratação corrente. Exceção na segunda propagação deixa os segmentos anteriores confirmados. A trilha comum é best-effort, com savepoint próprio. Faltar a trilha obrigatória da limpeza/conservação do julgamento futuro levanta `RuntimeError` e desfaz a propagação corrente. A prévia põe os segmentos sob um atomic externo que ela desfaz. `app/colaboradores/services/feriado_do_posto.py:305-354,397-406`, `app/core/observ.py:94-105,124-139`, `app/core/auditoria.py:8-30`, `app/ponto/portas/celula.py:1146-1175`. Provas `app/colaboradores/tests/test_feriado_por_posto.py::test_falha_na_2a_propagacao_fica_denunciada_e_a_porta_retoma`, `::test_falha_na_retratacao_nao_deixa_nota_sem_chamado_fechado` e `app/ponto/tests/test_cadastro_futuro_c5d_banco.py::test_MORDE_trilha_que_nao_grava_DESFAZ_a_limpeza`, `::test_conservado_sem_trilha_recusa`.
+
+## 21/11 19:31 · sessao 822c2d88a55e · - · - · origem=Ronald (tmux)
+
+A prévia tem os achados (iii) e (iv) curados por inspeção. Os testes foram lidos, sem execução. [feriado_do_posto.py:379](./app/colaboradores/services/feriado_do_posto.py#L379), [feriado_do_posto.py:450](./app/colaboradores/services/feriado_do_posto.py#L450), [test_feriado_volta5.py:18](./app/colaboradores/tests/test_feriado_volta5.py#L18)
+
+| Estado de entrada | Juiz ou guarda → operação | Persistência → retorno | Prova |
+|---|---|---|---|
+| Fora da sombra | `previa_da_marca` exige `HASNER_SOMBRA is True` antes de qualquer plano, inclusive com `agora=None`. `feriado_do_posto.py:370-383` | Nada → `PreviaForaDaSombra`; CLI converte em `CommandError`. `marcar_feriado_do_posto.py:123-127` | `test_feriado_previa_da_marca.py::PreviaForaDaSombraRecusa.test_PROVA_a_comando_sai_com_erro_sem_chamar_a_porta_e_sem_escrever` :277 |
+| Sombra sem `agora` | `previa_da_marca` recusa antes de abrir transação. `feriado_do_posto.py:382-386` | Nada → `ValueError('previa_da_marca: agora e obrigatorio')`. | `test_feriado_volta5.py::RelogioDesceDaBorda.test_previa_da_marca_sem_agora_recusa` :18 |
+| Sombra válida | `aplicar_marca` consulta `plano_da_marca` sob trava, fotografa as células dos alvos e propagados, executa realmente e classifica a foto seguinte dentro do `atomic`. `feriado_do_posto.py:307-317,390-404` | Rollback integral, inclusive callbacks `on_commit`. Devolve `marca_muda`, `retratados`, `propagados`, `plano`, `a`, `b`, `outras`. `feriado_do_posto.py:354,397-406` | `test_feriado_previa_da_marca.py::PreviaNaSombra.test_PROVA_b_banco_identico_por_chave_e_valor` :158, `test_PROVA_a_nenhum_on_commit_sobra_da_previa` :190; FECHA `PreviaDoFechaComChamadoVivo.test_PROVA_b_banco_identico_no_ramo_da_retratacao` :253 |
+| Execução simulada dá erro | `previa_da_marca` captura apenas `_DesfazAPrevia`, após sair do `atomic`. `feriado_do_posto.py:397-406` | Rollback integral → exceção original. `MarcaInvalida` é `ValueError` e CLI a converte em `CommandError`. `feriado_do_posto.py:257,265-275` e `marcar_feriado_do_posto.py:126-127` | SEM PROVA específica de falha tardia dentro da prévia. |
+| Campos iguais; ou mudança sem virar trabalho em feriado deste posto | `_classificar_previa` encontra diferenças nos oito campos da foto, usa `eh_feriado_do_posto` → `feriados_de` e `vinculos_dos_dias` → `vinculo_do_dia`. `feriado_do_posto.py:47-57,409-449`, `core/feriados.py:70`, `escala/alimentacao.py:228,334-358` | Nada próprio → sem linha se igual, ou `outras` com id/data, antes/depois, campos mudados e feriado booleano. `feriado_do_posto.py:431-449` | `test_feriado_previa_da_marca.py::PreviaNaSombra.test_celula_que_muda_de_geradora_sem_mudar_trabalha_aparece_em_outras` :112, `test_feriado_a5_volta3.py::ClassificacaoDaPrevia.test_ata_mudada_sem_troca_de_trabalho_aparece` :166. SEM PROVA isolada da igualdade. |
+| Virou trabalho e tem par completo | `turnos_do_colab` → `dias_encerrados(agora=agora,turnos=pareados)` → `preparar_par_completo_da_janela` → `par_completo`. `feriado_do_posto.py:450-464`, `turnos.py:1850,2113-2130,2133,2195-2219` | Nada próprio → `a`, nome do feriado, batidas em hora local, regra por ciclo e literal `sem apuracao ainda`. `feriado_do_posto.py:465-471`, `ponto/calculador/regras.py:302` | `test_feriado_volta5.py::ParDoDiaPeloJuiz.test_par_depois_do_fim_previsto_e_a` :62 |
+| Par formado antes do fim ou turno órfão | Mesmo juiz; turno do dia existe, par não passou. `feriado_do_posto.py:450-473` | Nada próprio → `outras` com `pareamento='sem par completo'`. | `test_feriado_volta5.py::ParDoDiaPeloJuiz.test_par_antes_do_fim_previsto_nao_e_a` :50, `test_feriado_a5_volta3.py::ClassificacaoDaPrevia.test_entrada_sozinha_fica_fora_de_a_e_de_b` :185 | [nao verificado]
+| Virou trabalho, sem turno do dia | Datas são comparadas com `hoje`; para hoje, `dias_encerrados` decide `encerrado`. `feriado_do_posto.py:459-462,474-477` | Nada próprio → `b` com `passado`, `futuro` ou `hoje` e booleano `encerrado`. | `test_feriado_previa_da_marca.py::PreviaNaSombra.test_previa_reparte_a_com_batida_e_b_sem_batida` :99 e `test_feriado_a5_volta3.py::ClassificacaoDaPrevia.test_sem_batida_hoje_usa_encerramento_do_turno` :232. SEM PROVA dedicada para `encerrado=False`. |
+
+O CLI lê `timezone.now()` uma vez, deriva `timezone.localdate(agora)` e passa ambos à prévia. O classificador usa `hoje` para a janela anterior + atual e `agora` no encerramento. `turnos_do_colab` usa a janela e as batidas vivas, e `par_completo(janela=...)` lê o veredito já preparado. O fallback `timezone.now()` de `dias_encerrados` fica fora desse caminho. O leitor dos baldes é `_imprimir_previa`. `marcar_feriado_do_posto.py:46-47,75,78-100,117-127,145`, `feriado_do_posto.py:450-477`, `ponto/turnos.py:1867-1871,2148-2163,2207-2219`.
+
+A API localizada é a função Python. Endpoint HTTP, JSON, status ou chamador view [não verificado]. A marca está na lista de comandos excluídos do cron como ato humano. O texto menciona a pauta das sugestões, mas a agregação efetiva nem lê `feriado_do_posto`; há um produtor e um rótulo declarados. `config/crons.py:1350-1355`, `escala/services/fase_12x36.py:254-280`, `feriado_do_posto.py:147-159`, `pautas/semanal.py:43`. O `main` tem dry-run por listagem e marca escrita pelo comando, sem `previa_da_marca` no serviço que acaba em `linhas_para_a_pauta`. `ab351aa9b/app/colaboradores/management/commands/marcar_feriado_do_posto.py:93-149`, `ab351aa9b/app/colaboradores/services/feriado_do_posto.py:146-158`.
+
+Os REDs anexos de município, falta de `agora` e par antes/depois do fechamento têm equivalentes na árvore e passam pela lógica atual, execução [não verificado]. Os de ausência de `hoje` continuam vermelhos por inspeção no fallback de `presenca_em_feriado` e no fallback após a escrita de `marcar_trabalha_em_feriado`. Os dois de sincronização continuam vermelhos por inspeção: aplica lista velha que foi decidida antes do `stdout` e não transmite a kwarg `hoje`, de modo que a asserção do spy dá `KeyError`. `test_feriado_volta4.py:17`, `test_feriado_volta5.py:18,50,62`, `feriado_do_posto.py:74-90`, `vinculo.py:896-908`, `sincronizar_feriado_admin.py:52-72`.
+
+Para o rascunho, preserve os mutantes existentes `volta5_par` e `volta5_agora`. Para os REDs anexos auxiliares, restaurar o fallback é o mutante de relógio e aplicar decisão pré-listagem é o mutante de sincronização. O teste por `stdout` mata a decisão antecipada, mas uma releitura tardia sem `select_for_update` ainda o satisfaz, logo a prova do lock exige outro instrumento caso a sincronização seja aprovada. Testar a ausência de `hoje` no mesmo processo requer restaurar a função real nos dois testes existentes que hoje a sobrescrevem e apagam. O juiz de par já está registrado e tem outro leitor no cron de par-relâmpago. `test_feriado_a5_volta3.py:351-356`, `sincronizar_feriado_admin.py:52-72`, `test_feriado_do_posto.py:113-117,126-132`, `core/juizes.py:243-248`, `ponto/management/commands/detectar_par_relampago.py:289-300,349-353`.
 
 ## 21/11 19:16 · sessao e3fb8629437a · FERIADO-POR-POSTO · construtor · origem=Code
 
@@ -659,516 +832,4 @@ O executor espera o worker e o worker fecha sua conexão em `finally`. O commit 
 
 O teste inverso assertou por código PIDs distintos, as quatro classes de SQL em ordem, `atomic`, `ASC`, uma tentativa vencedora, duas batidas e uma trilha por batida. O worker instala o contexto retornado, mas chama diretamente a unidade. `BrokenBarrierError` agora vira `AssertionError` com causa e escapa pelo `Future`. Um `order_by('-pk')` real nas quatro tabelas deve falhar por análise estática. Retirar simplesmente a ordenação explícita de Pergunta pode preservar o resultado porque `Meta.ordering = ['id']`. Execução e mutação [nao verificado]. O risco de inversão com flip permanece no código: flip adquire Batida e pode pedir Colaborador no reconciliador, enquanto plantio detém Colaborador e pode atualizar a mesma Batida reutilizada. Deadlock observado [nao verificado]. `app/chamados/tests/test_e4c_f5_plantio_concorrente.py:41–47,63–132` · `app/chamados/models.py:2875–2903,3813` · `app/ponto/management/commands/flip_automatico.py:62–79` · `app/ponto/services/flip_batida.py:25–33` · `app/ponto/registro_batida.py:264–274` · `app/ponto/signals.py:206–218` · `app/chamados/reconciliador.py:635–646,1486–1487` · `app/chamados/services/materializacao.py:1418,1586–1590,2145–2146`
 
-## 21/11 18:34 · sessao 109c7d33a892 · E4C-F5-CONSTROI · construtor · origem=Code
-
-Corrigi `_slot_esperado` para usar `texto_sem_carimbo(p)` na guarda do legado de hora. A catraca continua exigindo exatamente uma leitura declarada no slot, a do veto temporal. Reproduzi as cinco falhas da base. Após a cura, passaram os 47 testes do recorte local sem banco. [chamados/juizes.py:374](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/juizes.py:374) · [chamados/juizes.py:411](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/juizes.py:411) · [chamados/tests/test_e3_catraca_respondedores.py:544](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/tests/test_e3_catraca_respondedores.py:544) [nao verificado]
-
-### 1. O que o selo mede
-
-`(2, 1)` significa **duas ocorrências medidas pelo censo AST e uma declarada**. A chave identifica a função. O censo registra cada ocorrência classificada como `DECLARADO`, agrupa por `arquivo::função` e compara o total exato com `LEITURAS_DECLARADAS`. `chamados/tests/test_e3_catraca_respondedores.py:81–85`, `:393–395`, `:422–430`, `:444–458`.
-
-### 2. Por que a cura ficou no código
-
-O delta foi **`1 → 2`**. O censo de `93ab82d08` encontrou o veto temporal em `_lido.respondida_em`. O de `aeb326255` encontrou também `p.respondida_em is None`, acrescentado na guarda do legado. A declaração existente cobre a pergunta temporal. A segunda leitura veio de outra pergunta: se há texto de hora com o instante físico ausente. `93ab82d08:app/chamados/juizes.py:374` · `chamados/juizes.py:374`, `:409–416` · `chamados/tests/test_e3_catraca_respondedores.py:67–69`.
-
-O `r.txt` fornecido exige a ausência do instante físico para usar o texto legado na busca da batida. `texto_sem_carimbo(p)` aplica essa condição junto com a presença de texto, sobre a própria instância. O C21 segue julgando o par composto, e o juiz de fato exige a testemunha. Em memória, a batida determinou o resultado com o legado elegível. Preencher só a coluna física bloqueou o uso do texto mesmo com o instante composto vazio. O texto integral da FICHA e do aval está [nao verificado]. `chamados/juizes.py:371–382`, `:409–416`, `:860–863`, `:1587–1603` · `chamados/tests/test_fechar_disputa_materializada.py:38–52`.
-
-### 3. As quatro falhas `MORDE`
-
-| Teste | Causa | [nao verificado]
-|---|---|
-| `leitura_booleana_nova_DENTRO_de_um_declarado` | Injeta um teste de nulo no slot. O censo sobe de dois para três e devolve `(3, 1)`, enquanto a prova espera `(2, 1)`. `chamados/tests/test_e3_catraca_respondedores.py:588–595` |
-| `volta4_a_corpo_diferido_nao_e_uso_de_VALOR` | O `isoformat()` na lambda diferida deixa o teste de nulo externo contar. A injeção também produz `(3, 1)`. `chamados/tests/test_e3_catraca_respondedores.py:792–798` |
-| `volta4_b_disjuncao_no_ORM_nao_e_guarda` | O lookup de ordem no outro ramo do `\|` deixa o teste `isnull` contar. Dentro do slot, a injeção produz `(3, 1)`. `chamados/tests/test_e3_catraca_respondedores.py:339–357`, `:824–839` |
-| `volta4_c_compensacao_entre_declarados` | Adiciona uma leitura no slot e retira uma no modelo. A troca conserva o total de partida, que já era seis, e falha na asserção de total cinco. `chamados/tests/test_e3_catraca_respondedores.py:866–880` |
-
-### Diff
-
-```diff
---- a/app/chamados/juizes.py
-+++ b/app/chamados/juizes.py
-@@ -411 +411 @@
--    carimbo_legado = (materializada is not None and not via and p.respondida_em is None
-+    carimbo_legado = (materializada is not None and not via and texto_sem_carimbo(p)
---- a/app/chamados/tests/e3_c8b_apoio.py
-+++ b/app/chamados/tests/e3_c8b_apoio.py
-@@ -117 +117 @@
--                 'texto_vazio', 'pergunta_respondida', 'ausencia_parcial_cobra_o_resto',
-+                 'texto_vazio', 'texto_sem_carimbo', 'pergunta_respondida', 'ausencia_parcial_cobra_o_resto',
-```
-
-### Porta do Code e prova RED
-
-```bash
-bash bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-141636 --only chamados --espera 7200 -- -k test_e3_catraca_respondedores
-```
-
-Da pasta `app`, este comando executa o selo e os `MORDE` com as injeções existentes. Na base, o módulo deu cinco falhas em 18 testes. Com a cura, os 18 passaram no recorte local. `chamados/tests/test_e3_catraca_respondedores.py:544–574`, `:588–595`, `:792–880`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest chamados.tests.test_e3_catraca_respondedores
-```
-
-O mutante abaixo restaura a leitura crua em memória. O próprio selo fica vermelho na igualdade de contagem, com `(2, 1)` e `rc 1`. `chamados/juizes.py:411` · `chamados/tests/test_e3_catraca_respondedores.py:556`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import unittest
-from unittest.mock import patch
-from chamados.tests import test_e3_catraca_respondedores as selo
-
-arquivo = 'chamados/juizes.py'
-fontes = selo.production_sources()
-antes = 'and texto_sem_carimbo(p)'
-assert fontes[arquivo].count(antes) == 1
-fontes[arquivo] = fontes[arquivo].replace(antes, 'and p.respondida_em is None', 1)
-
-teste = selo.ContadorRespondedoresTest('test_os_quatro_declarados_pela_pergunta') [nao verificado]
-with patch.object(selo, 'production_sources', return_value=fontes):
-    resultado = unittest.TextTestRunner().run(unittest.TestSuite([teste])) [nao verificado]
-raise SystemExit(2 if resultado.errors else int(not resultado.wasSuccessful()))
-PY
-```
-
-O recorte local mais amplo encontrou dois erros de importação de `django.utils` nos subcasos do teste de hash legado. Reproduzi ambos com a fonte da base. A execução ORM e a certificação pelo Code e pelo Opus final estão [nao verificado]. `chamados/tests/test_e3_pos_suite_sem_banco.py:175` · `core/fmt.py:8`.
-
-**Autoconferência — except/fallback novos no diff: 0, esperado 0.** `chamados/juizes.py:411` · `chamados/tests/e3_c8b_apoio.py:117`.
-
-## 21/11 18:28 · sessao 24f049b85777 · FERIADO-POR-POSTO · leitura · origem=Code
-
-**Leitura do código: a releitura é preexistente na porta da célula, mas a marca do posto ganha um caminho até ela na cópia.** A linha 464 é idêntica nas duas árvores. No main, o comando grava a marca do posto e pode retratar chamados. Na cópia, ele também propaga a chave aos vínculos e, por essa propagação, pode julgar uma célula que ainda é futura para o `hoje` do ato. A igualdade no caminho comum, por si só, não demonstra igualdade no caminho da marca. `app/ponto/portas/celula.py:460–478` (ambas) · `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` (main) · `app/colaboradores/management/commands/marcar_feriado_do_posto.py:117–126` e `app/colaboradores/services/feriado_do_posto.py:343–354` (cópia)
-
-Conferi as duas árvores locais e compilei em memória o texto do teste abaixo. O Python disponível em ambas falhou ao importar `freezegun`, declarado em `app/requirements.txt:43`. A execução Django, as linhas `PAREADA:` efetivamente emitidas e o efeito em produção ficam **[nao verificado]**.
-
-## 1. Caminhos até a releitura
-
-| Salto | Main `ab351aa9b` | Cópia `b95a383d6` |
-|---|---|---|
-| `Command.handle` → `_marcar` | `handle` chama `_marcar(o, w)`. `_marcar` lê `localdate()` para a janela de feriados usada na seleção dos chamados. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:33–37,57–67,93–116` | `handle` lê `agora`, deriva `hoje` e passa os dois a `_marcar`. Sugestões recebem `hoje` e leem a presença. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:41–50,75` · `app/colaboradores/services/feriado_do_posto.py:74–97,137–144` |
-| `_marcar` → escrita ou prévia | O dry-run retorna. `--apply` chama `marcar_opera_em_feriado`, que grava só o campo do posto, e percorre o alvo da retratação. O corpo termina aí, sem chamada à porta do vínculo. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` · `app/colaboradores/services/estrutura.py:83–86` | `--apply` chama `aplicar_marca(hoje=...)`. O dry-run passa `hoje` e `agora` a `previa_da_marca`, que, somente na sombra, chama a mesma `aplicar_marca` com `hoje` dentro do savepoint. `agora` segue para a classificação da prévia. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:117–126` · `app/colaboradores/services/feriado_do_posto.py:370–385,397–406` |
-| `aplicar_marca` → `marcar_trabalha_em_feriado` | O serviço da marca ainda não existe nessa árvore. A porta do vínculo já existe, com `hoje` lido dentro dela. O chamador de produção localizado é `sincronizar_feriado_admin --apply`. `app/colaboradores/services/feriado_do_posto.py:146–158` · `app/colaboradores/services/vinculo.py:869,890–914` · `app/colaboradores/management/commands/sincronizar_feriado_admin.py:53–57` | O plano seleciona vínculos vigentes em `hoje`. Sob a trava do posto, a propagação reconfirma a marca e o vínculo divergente e chama `marcar_trabalha_em_feriado(hoje=...)`. `reaplicar_marca` também delega à mesma porta. `app/colaboradores/services/feriado_do_posto.py:203–219,283–285,307–315,343–359` |
-| Porta do vínculo → regeneração | Usa o `hoje` que acabou de ler nos dois ramos. Regenera até `hoje` diretamente e chama `regenerar_futuras_do_cadastro` para o restante. `app/colaboradores/services/vinculo.py:895–914` | Usa o `hoje` recebido da marca nos mesmos dois ramos. A leitura local fica para os chamadores que omitem o argumento, como o sincronizador. `app/colaboradores/services/vinculo.py:905–925` · `app/colaboradores/management/commands/sincronizar_feriado_admin.py:68–72` |
-| Regeneração → linha 464 → cartório | Em ambas, o suplemento seleciona células **geradas já existentes** com `data > hoje` e chama `regenerar_celulas_vinculo` para cada dia, com esse mesmo `hoje`. A porta usa o dia recebido para desfazer o julgamento anterior da futura reescrita. Em seguida chama `_o_chao_do_dia_mudou` sem `hoje`. Havendo dias tocados e recálculo, a linha 464 relê o dia e a linha 472 despacha ao cartório. | Mesmos arquivos e linhas nas duas árvores. `app/ponto/services/cadastro_futuro.py:8–25,43–59` · `app/ponto/portas/celula.py:112–114,193–199,306–318,390–394,460–478` · `app/ponto/services/cartorio.py:2059–2089` |
-
-A retratação de `--fecha` tem outro caminho nas duas árvores. `transicionar_com_pauta` chama `reconciliar`. Se o fechamento passar pelo gate, `_gravar_estado` salva o chamado e o `post_save` pode chamar `cartorio.julgar_celula` diretamente. Esse salto contorna a linha 464 e não carrega o dia da marca. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:139–147` (main) · `app/colaboradores/services/feriado_do_posto.py:325–341` (cópia) · `app/chamados/services/fecho_runtime.py:146–169`, `app/chamados/models.py:654–668,286–302` e `app/chamados/signals.py:189–218` (ambas)
-
-## 2. `app/colaboradores/tests/test_pareada_hoje_injetado.py`
-
-Um único método mede o comando real com a virada após `sugestoes` e, em outro vínculo, o caminho comum mais próximo com `hoje` explícito. No comando, a chamada direta a `handle(**opções)` usa a assinatura das duas árvores e fornece os campos que a cópia lê. No caminho comum, a única escrita direta da chave prepara a entrada da fixture. A seleção das futuras, a regeneração e o julgamento rodam pelo código real. A observação separa datas enviadas pela chamada forçada da linha 472 de datas para as quais o cartório devolveu resultado. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:33–37,60–62` (main), `:41–50,117–126` (cópia) · `app/colaboradores/tests/test_feriado_a5_volta3.py:243–266` (cópia) · `app/ponto/services/cadastro_futuro.py:43–59`, `app/ponto/portas/celula.py:460–478` e `app/ponto/services/cartorio.py:2073–2102` (ambas)
-
-| Símbolo importado | Main | Cópia |
-|---|---|---|
-| `datetime`, `StringIO`, `TestCase`, `User` | `app/colaboradores/tests/test_feriado_admin_sync.py:1–5` | Mesmas linhas |
-| `mock`, `freeze_time` | `app/colaboradores/tests/test_relogio_riscado_calendario.py:27–30` · `app/requirements.txt:43` | Mesmas linhas |
-| `timezone` | `app/ponto/tests/test_porta_celula.py:9` | Mesma linha |
-| `Command` | `app/colaboradores/management/commands/marcar_feriado_do_posto.py:19,33` | `app/colaboradores/management/commands/marcar_feriado_do_posto.py:23,41` |
-| `Empresa`, `Praca`, `Posto`, `Colaborador`, `Municipio` | `app/colaboradores/models.py:40,177,219,283,962` | Mesmas linhas |
-| `feriado_do_posto` | `app/colaboradores/tests/test_feriado_do_posto.py:108` · `app/colaboradores/services/feriado_do_posto.py:136` | `app/colaboradores/tests/test_feriado_do_posto.py:108` · `app/colaboradores/services/feriado_do_posto.py:137` |
-| `Feriado` | `app/core/models.py:5` | Mesma linha |
-| `CelulaDia`, `EscalaColaborador`, `TipoEscala` | `app/escala/models.py:1635,871,24` | `app/escala/models.py:1646,871,24` |
-| `celula` | `app/ponto/tests/test_porta_celula_dia.py:147` · `app/ponto/portas/celula.py:112` | Mesmas linhas |
-| `cartorio` | `app/chamados/tests/test_e2_celula_regenerada_reavalia.py:178–182` · `app/ponto/services/cartorio.py:2059` | Mesmas linhas |
-| `regenerar_futuras_do_cadastro` | `app/ponto/services/cadastro_futuro.py:28` | Mesma linha |
-
-```python
-import datetime
-from io import StringIO
-from unittest import mock
-
-from django.contrib.auth.models import User
-from django.test import TestCase
-from django.utils import timezone
-from freezegun import freeze_time
-
-from colaboradores.management.commands.marcar_feriado_do_posto import Command
-from colaboradores.models import Colaborador, Empresa, Municipio, Posto, Praca
-from colaboradores.services import feriado_do_posto
-from core.models import Feriado
-from escala.models import CelulaDia, EscalaColaborador, TipoEscala
-from ponto.portas import celula
-from ponto.services import cartorio
-from ponto.services.cadastro_futuro import regenerar_futuras_do_cadastro
-
-
-D = datetime.date(2026, 12, 16)
-UM_DIA = datetime.timedelta(days=1)
-HOJE = D - UM_DIA
-DIAS = {HOJE, D, D + UM_DIA}
-
-
-def datas(dias):
-    return [dia.isoformat() for dia in sorted(dias)]
-
-
-class PareadaHojeInjetadoTest(TestCase):
-    def _cenario(self, empresa, municipio, praca, tipo, nome, cpf, matricula):
-        posto = Posto.objects.create(
-            nome=nome, empresa=empresa, municipio=municipio, praca=praca,
-            opera_em_feriado=True,
-        )
-        colab = Colaborador.objects.create(
-            nome=nome, cpf=cpf, matricula_hasner=matricula, empresa=empresa,
-            posto=posto, situacao='ativo', data_admissao=HOJE, cargo='Vigilante',
-        )
-        ec = EscalaColaborador.objects.create(
-            colaborador=colab, posto=posto, tipo_escala=tipo, ativa=True,
-            data_inicio=HOJE, trabalha_em_feriado=True,
-        )
-        self.assertEqual(celula.regenerar_celulas_vinculo(
-            ec, HOJE, max(DIAS), hoje=HOJE, estender_horizonte=False, recalculo=False,
-        ), len(DIAS))
-        self.assertEqual(
-            dict(self._dias(ec).values_list('data', 'trabalha')),
-            dict.fromkeys(DIAS, True),
-        )
-        return posto, ec
-
-    def _dias(self, ec):
-        return CelulaDia.objects.filter(
-            colaborador_id=ec.colaborador_id, data__in=DIAS, origem='gerada',
-        )
-
-    def _observar(self, nome, ec, ato):
-        enviados = set()
-        julgados = set()
-        julgar_real = cartorio.julgar_celula
-
-        def julgar(colab, dia, **opcoes):
-            alvo = colab.pk == ec.colaborador_id and dia in DIAS and opcoes.get('forcar')
-            if alvo:
-                enviados.add(dia)
-            resultado = julgar_real(colab, dia, **opcoes)
-            if alvo and resultado is not None:
-                julgados.add(dia)
-            return resultado
-
-        with mock.patch.object(cartorio, 'julgar_celula', side_effect=julgar), \
-                mock.patch.object(celula, 'regenerar_celulas_vinculo',
-                                  wraps=celula.regenerar_celulas_vinculo) as regenerar:
-            ato()
-
-        alterados = set(self._dias(ec).filter(trabalha=False).values_list('data', flat=True))
-        hoje_porta = sorted({c.kwargs['hoje'].isoformat() for c in regenerar.call_args_list})
-        print(
-            f'PAREADA: {nome} hoje_porta={hoje_porta} alterados={datas(alterados)} '
-            f'enviados={datas(enviados)} julgados={datas(julgados)} '
-            f'pulados={datas(alterados - enviados)} intactos={datas(DIAS - alterados)}',
-            flush=True,
-        )
-        return alterados, enviados, julgados
-
-    def test_hoje_da_borda_governa_a_regeneracao(self):
-        with timezone.override('America/Sao_Paulo'), freeze_time(
-            '2026-12-15 23:59:00-03:00',
-        ) as relogio:
-            User.objects.get_or_create(username='sistema')
-            empresa = Empresa.objects.create(
-                razao_social='Pareada', cnpj='19131243000359', ativa=True,
-                dia_inicio_competencia=21,
-            )
-            municipio, _ = Municipio.objects.get_or_create(
-                codigo_ibge=4113700, defaults={'nome': 'Londrina', 'uf': 'PR'},
-            )
-            praca = Praca.objects.create(nome='Pareada', cidade='Londrina', estado='PR')
-            tipo = TipoEscala.objects.create(
-                codigo='PAREADA-5X2', descricao='Pareada 5x2', tipo_ciclo='5x2',
-                tipo_base='comercial', hora_inicio=datetime.time(8),
-                hora_fim=datetime.time(17), folga_dia_semana='5,6',
-            )
-            for dia in sorted(DIAS):
-                Feriado.objects.get_or_create(
-                    data=dia, abrangencia='nacional', uf='', municipio='',
-                    defaults={'nome': 'Feriado sintetico', 'fonte': 'teste'}, [nao verificado]
-                )
-            posto, ec_marca = self._cenario(
-                empresa, municipio, praca, tipo, 'Marca', '[cpf]', 993001,
-            )
-            _, ec_comum = self._cenario(
-                empresa, municipio, praca, tipo, 'Comum', '[cpf]', 993002,
-            )
-            self.assertEqual(timezone.localdate(), HOJE)
-
-            sugerir_real = feriado_do_posto.sugestoes
-
-            def sugerir_e_virar_dia(**opcoes):
-                resultado = sugerir_real(**opcoes)
-                relogio.tick(delta=datetime.timedelta(minutes=2))
-                self.assertEqual(timezone.localdate(), D)
-                return resultado
-
-            def marcar():
-                Command(stdout=StringIO()).handle(
-                    sugestoes=True, posto=posto.pk, fecha=True, opera=False,
-                    por='sistema', apply=True, motivo='Prova pareada de relogio',
-                    retomar_retratacao=False,
-                )
-
-            with mock.patch.object(feriado_do_posto, 'sugestoes',
-                                   side_effect=sugerir_e_virar_dia) as sugestoes:
-                marca = self._observar('marca', ec_marca, marcar)
-
-            sugestoes.assert_called_once()
-            self.assertEqual(timezone.localdate(), D)
-            posto.refresh_from_db()
-            self.assertIs(posto.opera_em_feriado, False)
-
-            def regenerar():
-                EscalaColaborador.objects.filter(pk=ec_comum.pk).update(trabalha_em_feriado=False)
-                ec_comum.refresh_from_db()
-                celula.regenerar_celulas_vinculo(
-                    ec_comum, HOJE, HOJE, hoje=HOJE, estender_horizonte=False,
-                )
-                regenerar_futuras_do_cadastro(ec_comum, hoje=HOJE)
-
-            comum = self._observar('comum', ec_comum, regenerar)
-
-        self.assertEqual(comum[0], DIAS, 'a prova precisa reescrever os tres dias')
-        for nome, (alterados, enviados, julgados) in (('marca', marca), ('comum', comum)):
-            with self.subTest(caminho=nome):
-                self.assertEqual(julgados, enviados, 'o cartorio precisa concluir o julgamento enviado')
-                self.assertEqual(
-                    julgados, alterados & {HOJE},
-                    'Clock Injection: D e D+1 ainda sao futuros para o ato',
-                )
-```
-
-## 3. Como decidir pela saída
-
-Com `hoje=15/12` e relógio congelado em `16/12` na regeneração, a regra permite julgar **15/12** e manda pular **16/12 e 17/12**, mesmo quando as três células são reescritas. O cenário usa `FECHA` para que as células reescritas virem folga e a guarda pelo fim do turno não mascare a releitura de `16/12`. `app/docs/PLANO-PADROES.md:97–103` (ambas) · `app/escala/models.py:1369–1395` (main), `:1380–1406` (cópia) · `app/ponto/services/cartorio.py:2073–2089` (ambas)
-
-| Linha | Main, previsão pela leitura | Cópia, previsão pela leitura |
-|---|---|---|
-| `PAREADA: comum` | `hoje_porta=15/12`. Altera os três dias, julga `15/12` e `16/12`, pula `17/12`. | Mesma previsão. `app/ponto/services/cadastro_futuro.py:43–59` · `app/ponto/portas/celula.py:306–318,390–394,460–478` (ambas) |
-| `PAREADA: marca` | `hoje_porta=[]`. Os três dias ficam intactos, sem despacho pela regeneração. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` (main) | `hoje_porta=15/12`. Altera os três dias, julga `15/12` e `16/12`, pula `17/12`. `app/colaboradores/services/feriado_do_posto.py:343–354` · `app/colaboradores/services/vinculo.py:905–925` (cópia) · `app/ponto/portas/celula.py:460–478` (ambas) |
-
-- **MESMO na porta compartilhada:** as duas linhas `comum` coincidem, com regeneração efetiva dos três dias, `15/12` julgado como controle positivo e o mesmo destino para `16/12` e `17/12`. Se ambas julgarem `16/12`, a violação é preexistente nessa porta. `app/ponto/services/cadastro_futuro.py:43–59` · `app/ponto/portas/celula.py:460–478` (ambas)
-- **NOVO/PIORA no caminho da marca:** `16/12` fica intacto no main e é julgado na cópia na linha `marca`, embora `hoje_porta` registre `15/12`. Esse par demonstra que o ato da marca passou a expor a releitura preexistente. Se a divergência aparecer também na linha `comum`, com `16/12` pulado no main e julgado na cópia, a piora aparece também no caminho compartilhado. `app/colaboradores/management/commands/marcar_feriado_do_posto.py:124–149` (main) · `app/colaboradores/services/feriado_do_posto.py:343–354` (cópia) · `app/ponto/portas/celula.py:460–478` (ambas)
-
-Para o item 2 do aval, o resultado previsto é **mesmo defeito na porta comum e exposição nova no ato da marca**. A prova pareada executada continua **[nao verificado]**.
-
-## 21/11 18:25 · sessao e6269bff1d70 · E4C-F5-CONSTROI · construtor · origem=Code
-
-A falha da volta 2 vem da simulação. O teste agora confirma a devolução em outra conexão antes de o passivo adquirir a trava. O diff da volta 3 está em dois arquivos de teste. [guarda_plantio_s144.py:298](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:298) · [cortes_f2_f9_apoio.py:37](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/cortes_f2_f9_apoio.py:37) [nao verificado]
-
-### Respostas
-
-1. **Por que o par volta a `(True, True)`.** Na base, o gancho chamava `devolver_validacao_recusada` na própria conexão do passivo, já dentro do `atomic()` da competência. A devolução zerava `validada_em` e `validada_por` e inseria `DEVOLUCAO` em savepoints aninhados. Depois da trava, a composta relida diferia da foto classificada. O `raise` saía do `atomic()` da competência e desfazia a limpeza e a inserção. O `except` externo contabilizava `escopo_do_plantio_mudou`. Assim, a leitura do ato e a coluna voltavam a mostrar a validação original. Em `f3e48a445`, o fluxo seguia da trava direto para `_trabalhar_o_par`. `1d0b5058b:app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:96` · `f3e48a445:app/chamados/services/passivo_validado.py:385` · [validacao.py:284](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/validacao.py:284) · [models.py:4437](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:4437) · [passivo_validado.py:383](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:383) · [passivo_validado.py:397](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:397) · [models.py:4399](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:4399)
-
-2. **Onde está o defeito.** O rollback da competência alcançava a devolução injetada porque ambas as escritas pertenciam àquela transação. Com o outro ato já confirmado, a releitura ocorre após a trava e a divergência encerra a tentativa antes de `_trabalhar_o_par`. A captura altera apenas o resultado em memória. O commit da outra conexão fica preservado. [passivo_validado.py:361](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:361) · [passivo_validado.py:389](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:389) [nao verificado]
-
-3. **O que fica gravado.** Pela regra, `validada_em` e `validada_por_id` ficam nulos, `recusa_motivo` continua `'Recusa anterior do plantio'` e há três decisões. A fixture grava `RESPOSTA` e `VALIDACAO`. A devolução acrescenta `DEVOLUCAO` e copia o motivo preexistente para `ato_motivo`. Nesse cenário, a fixture é quem preenche `recusa_motivo`. `_carimbar_recusa` é o escritor desse campo no caminho de materialização, que a recusa de escopo antecede. [guarda_plantio_s144.py:52](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:52) · [models.py:4313](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/models.py:4313) · [validacao.py:287](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/validacao.py:287) · [materializacao.py:1733](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/materializacao.py:1733) · [passivo_validado.py:392](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:392)
-
-### Diff e RED
-
-- [cortes_f2_f9_apoio.py:37](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/cortes_f2_f9_apoio.py:37) extrai a criação da empresa e do colaborador para reuso entre `TestCase` e `TransactionTestCase`.
-- [guarda_plantio_s144.py:101](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:101) intercala a devolução antes da trava real. O RED usa um worker com relógio congelado e `atomic(durable=True)`. O passivo espera o worker retornar após o commit. [guarda_plantio_s144.py:305](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:305) [nao verificado]
-- A asserção de uma devolução bem-sucedida agora confere `True` dentro do worker e o PK exato da decisão depois do rollback do passivo. O RED exige o balde `escopo_do_plantio_mudou`, zero plantio, zero tentativa de carimbo e as três decisões. Em seguida, a mesa valida e planta pelo mesmo PK. [guarda_plantio_s144.py:113](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:113) · [guarda_plantio_s144.py:138](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:138) · [guarda_plantio_s144.py:143](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:143) · [guarda_plantio_s144.py:311](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:311)
-
-### Porta para o Code
-
-O recorte foi reconstruído a partir do anexo e do delta da volta 2. A seleção estática encontrou três testes do passivo e oito do plantio concorrente. Execução pela porta e veredito [nao verificado]. [guarda_plantio_s144.py:159](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:159) · [guarda_plantio_s144.py:317](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:317) · [plantio_concorrente.py:98](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_plantio_concorrente.py:98) · [plantio_concorrente.py:189](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_plantio_concorrente.py:189) [nao verificado]
-
-```bash
-wt=/home/ronald/wt-codex-e4c-f5-constroi-160129
-bash bin/suite.sh --dir "$wt" --only chamados -- \
-  -k '*test_e4c_f5_guarda_plantio_s144.*.test_RED_passivo*' \
-  -k '*test_e4c_f5_plantio_concorrente.*.test_RED_*' \
-  -k '*test_e4c_f5_plantio_concorrente.*.test_MORDE_*' \
-  -k test_duas_materializacoes_inversas_travam_o_mesmo_par_em_ordem
-```
-
-### Mutantes para o Code
-
-- **M1, devolução na conexão do passivo.** Reintroduz a simulação da volta 2. A mordida esperada é `(True, True)` na leitura após o rollback. [guarda_plantio_s144.py:126](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:126)
-- **M2, worker sem commit.** O worker executa a devolução e faz rollback. O RED deve acusar que o passivo deixou de recusar pelo escopo mudado. [guarda_plantio_s144.py:114](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:114) · [guarda_plantio_s144.py:313](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:313) [nao verificado]
-- **M3, P3 sem reconfirmação.** Mantém a devolução confirmada e suprime a recusa da foto velha. O RED deve acusar o desvio no resultado do passivo. [passivo_validado.py:392](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:392) · [guarda_plantio_s144.py:114](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:114)
-
-Os três mutantes têm âncora única e compilam em memória. Mordidas pela porta [nao verificado]. O bloco abaixo restaura o arquivo após cada chamada.
-
-```bash
-red=test_RED_passivo_foto_velha_recusa_escopo_e_mesa_valida_mesmo_pk
-teste=chamados/tests/test_e4c_f5_guarda_plantio_s144.py [nao verificado]
-
-mutar() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$wt" "$red" "$@" <<'PY'
-from pathlib import Path
-import subprocess
-import sys
-
-wt, red, rel, antes, depois = sys.argv[1:]
-arquivo = Path(wt) / 'app' / rel
-original = arquivo.read_bytes()
-assert original.count(antes.encode()) == 1, rel
-mutado = original.replace(antes.encode(), depois.encode())
-compile(mutado, str(arquivo), 'exec')
-try:
-    arquivo.write_bytes(mutado)
-    resultado = subprocess.run(
-        ['bash', 'bin/suite.sh', '--dir', wt, '--only', 'chamados', '--', '-k', red] [nao verificado]
-    )
-finally:
-    arquivo.write_bytes(original)
-raise SystemExit(resultado.returncode)
-PY
-}
-
-# M1
-mutar "$teste" \ [nao verificado]
-  'return executor.submit(self._devolver_em_outra_transacao, p.pk).result(timeout=15)' \
-  $'with freeze_time(DEVOLUCAO_EM):\n                    atual = PerguntaDisputa.objects.get(pk=p.pk)\n                    self.assertIs(validacao.devolver_validacao_recusada(atual, self.admin), True)\n                    return atual.decisoes.get(ato=D.DEVOLUCAO).pk'
-
-# M2
-mutar "$teste" 'return devolucao.pk' \ [nao verificado]
-  $'transaction.set_rollback(True)\n                return devolucao.pk'
-
-# M3
-mutar chamados/services/passivo_validado.py \
-  'if DecisaoPergunta.composta(atuais[p.pk]) != estados_classificados[p.pk]:' \
-  'if False:'
-```
-
-**LEI-AKITA** `origem=validacao.py:289` · `testemunha=models.py:4393` · `quem-mais-le=passivo_validado.py:390` · `RED=test_e4c_f5_guarda_plantio_s144.py:317` · `juizes novos=0` · `padrao=Single Writer Principle`
-
-**AUTOCONFERÊNCIA** · except/fallback novos no diff: **0**. `git diff | grep -n except` sem ocorrências. O `finally` novo fecha a conexão do worker e deixa o erro subir. [guarda_plantio_s144.py:305](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:305)
-
-## 21/11 18:13 · sessao 82fd2448f20e · E4C-F5-CONSTROI · construtor · origem=Code
-
-Apliquei S1, S2, S2b e as duas curas de S3 na cópia `93ab82d08`. As provas em memória passaram com a cura, e os oito mutantes falharam por asserção. O recorte sem banco de C8b e do veto temporal passou com 29 testes. Execução ORM e suíte certificadora [nao verificado]. `chamados/tests/test_e3_c8b_sem_banco.py:369` · `chamados/tests/test_e3_pos_suite_sem_banco.py:103`
-
-## 1. Alterações e mordidas
-
-| Item | Alteração e mutante que o teste mata | [nao verificado]
-|---|---|
-| **S1** | Removi a captura da consulta de conflito. O teste exige `DatabaseError`, a mesma instância injetada e uma chamada a `.exists()`. Restaurar a conversão para `LOTE_B` falha no `assertRaises`. `chamados/services/validacao.py:1230` · `chamados/tests/test_fila_validar_lote.py:110` |
-| **S2a** | O explicador recebe uma foto com `REABERTURA` na sequência e texto ainda na coluna. O teste exige `sem resposta vigente` e verifica a ausência da data e hora antigas. Acrescentar `p.resposta_colab` à mensagem falha no `assertNotIn`. `chamados/services/explicador.py:61` · `chamados/tests/test_explicador_disputa.py:80` |
-| **S2, vínculo** | A pergunta tem `SEM_RESPOSTA_VIGENTE` e uma batida viva vinculada às 08h, com destino ausente. Deixar esse motivo passar pela guarda reabre o atalho do vínculo e muda o veredito para `True`. `chamados/juizes.py:799` · `chamados/juizes.py:805` · `chamados/tests/test_marco_por_motivo.py:231` |
-| **S2, destino** | A pergunta tem `SEM_RESPOSTA_VIGENTE` e destino resolvido, com vínculo ausente. Deixar esse motivo passar pela guarda reabre o atalho do destino e muda o veredito para `True`. `chamados/juizes.py:799` · `chamados/juizes.py:827` · `chamados/tests/test_marco_por_motivo.py:245` |
-| **S2, retratação** | Sob `SEM_RESPOSTA_VIGENTE`, carimbo mais trilha absolvem na leitura avulsa e na carga. Os controles com apenas uma das duas testemunhas reprovam. Trocar o retorno antecipado por `False` derruba o controle positivo. `chamados/juizes.py:293` · `chamados/juizes.py:800` · `chamados/tests/test_marco_por_motivo.py:253` |
-| **S2b** | A fixture afirma `PLANTIO_SEM_TS` antes de cada julgamento da lei. Trocar esse motivo por `DATA_HORA_INVALIDA` deixa a asserção vermelha mesmo quando os dois motivos seguem o mesmo caminho no juiz de fato. `chamados/juizes.py:419` · `chamados/tests/test_hx_fallback_sem_lei.py:62` |
-
-## 2. S3 — origem, cura e mutantes
-
-**(i) Passivo com foto velha.** A linha do delta é `chamados/services/vigia_carimbo.py:104`, commit `93ab82d08`. O `prefetch_related('decisoes')` passou a acompanhar a instância entregue ao passivo. A devolução gravada entre classificação e trava entra por outra instância. O refresh parcial do passivo atualiza o carimbo e a via, e a composta ainda encontra a sequência antiga na instância classificada. É uma causa de classe de **reuso da foto após a classificação**. `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:95` · `chamados/services/passivo_validado.py:382` · `chamados/services/passivo_validado.py:538` · `chamados/models.py:4361` · `chamados/models.py:4446`
-
-A cura mantém o carregamento em lote e descarta `decisoes` em cache antes de devolver a tripla. Remover esse descarte reproduziu `((True, True), True, 'validar', True, None)` em memória. Com a cura, a leitura reproduziu `((False, True), True, 'validar', False, 'par_ato_coluna')`. O teste existente também exige a recusa no placar e a validação posterior pela mesa no mesmo PK. `chamados/services/vigia_carimbo.py:104` · `chamados/services/vigia_carimbo.py:122` · `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:111` · `chamados/tests/test_e4c_f5_guarda_plantio_s144.py:132`
-
-**(ii) Fechamento com uma pergunta já materializada.** A linha do delta é `chamados/juizes.py:410` em `93ab82d08`. A foto de `hora` passou a entregar texto vazio ao derivador quando o C21 recusava o par. A fixture tem `07:00`, carimbo de materialização e uma batida `E` às 07h, com os instantes de resposta e validação vazios. O texto vazio leva a `PLANTIO_SEM_TS`, o juiz de fato perde a comparação com a batida, e a pergunta volta viva ao gate. É uma causa de classe de **leitura do legado de hora no fechamento**. Nos recortes em memória, as duas regressões passaram em `c8eb8eddf` e `41d21a249` e falharam em `93ab82d08`. `chamados/tests/test_fechar_disputa_materializada.py:38` · `chamados/services/materializacao.py:695` · `chamados/juizes.py:1537` · `chamados/services/acoes_disputa.py:134` · `chamados/models.py:2035`
-
-A cura usa o texto legado para localizar a batida somente no ramo `hora`, com carimbo visível no horizonte, via vazia, instante físico de resposta ausente e validação ausente na coluna e na composta. O C21 continua exigindo o par, e a materialização ainda exige testemunha. O mutante que restaura `resposta if vigente else ''` deixou **uma pergunta viva** e o C7 devolveu `False` em memória. A asserção ORM correspondente exige `fechada_em` preenchido. `chamados/juizes.py:411` · `chamados/juizes.py:860` · `chamados/juizes.py:1603` · `chamados/tests/test_fechar_disputa_materializada.py:64`
-
-## 3. Quem escreve e quem lê
-
-| Campo ou valor | Escrita e leitura |
-|---|---|
-| `resposta_colab`, `respondida_em`, `validada_em` e sequência de atos | A porta de resposta escreve o par. A resposta automática também o escreve, e a recuperação pela trilha completa o instante. A validação grava `VALIDACAO`, a devolução grava `DEVOLUCAO`, e a reabertura registra o ato e limpa par e carimbo pela porta em lote. `DecisaoPergunta.registrar` persiste as linhas. `leitura` ordena e aplica os atos, `composta` combina instantes do ato com texto da coluna, e slot, C21, lote e explicador consomem essa leitura. `chamados/services/disputa_emissao.py:1499` · `chamados/services/disputa_emissao.py:1664` · `chamados/services/disputa_emissao.py:1709` · `chamados/services/disputa_emissao.py:1732` · `chamados/services/validacao.py:168` · `chamados/services/validacao.py:287` · `chamados/models.py:4361` · `chamados/models.py:4388` · `chamados/models.py:4438` · `chamados/juizes.py:371` · `chamados/services/validacao.py:1224` · `chamados/services/explicador.py:52` |
-| `materializada_em`, `via_resolucao`, `agora` e `slots[pk]` | `_escrever_carimbo` atribui carimbo e via. A projeção lê ambos e aplica o horizonte. A tarefa fornece `agora`, a carga copia o horizonte e grava resultado ou exceção por PK, e o slot lê o cache. O C6 lê a materialização projetada antes de consultar o juiz de fato. `chamados/models.py:3324` · `chamados/juizes.py:1434` · `chamados/juizes.py:1525` · `chamados/services/tarefa_do_dia.py:525` · `chamados/services/carga_pergunta_viva.py:88` · `chamados/services/carga_pergunta_viva.py:119` · `chamados/juizes.py:383` |
-| Identidade da pergunta e insumos do derivador | O nascimento fornece `tipo_resposta`, `motivo`, `disputa` e destino. `gravar_dia_do_fato` atribui `data_evento`, e a costura pode atualizar o destino. A transição do chamado atribui `status_local`. O slot lê a identidade para montar a foto, o derivador lê também o contexto da disputa e o marco, e o juiz de fato lê o estado do destino. `chamados/services/disputa_emissao.py:448` · `chamados/services/fio.py:853` · `chamados/services/fio.py:978` · `chamados/models.py:240` · `chamados/juizes.py:413` · `chamados/services/materializacao.py:556` · `chamados/services/materializacao.py:625` · `chamados/juizes.py:827` |
-| Batida e trilha de retratação | `registrar_batida` grava instante e tipo, o materializador anota `pergunta_origem`, e `retratar_batida` grava `retratada_em`. Juiz e vigia leem o vínculo vivo, o juiz lê a janela e o lote consulta `batidas_apuraveis`. A chave de auditoria `retratar_pergunta_obsoleta` é gravada pela fixture e lida pelo juiz avulso e pela carga. Escritor de produção dessa chave literal [nao verificado]. `ponto/registro_batida.py:177` · `ponto/registro_batida.py:294` · `chamados/services/materializacao.py:1578` · `chamados/juizes.py:803` · `chamados/juizes.py:860` · `chamados/services/vigia_carimbo.py:117` · `chamados/services/validacao.py:1230` · `chamados/tests/test_marco_por_motivo.py:262` · `chamados/juizes.py:296` · `chamados/services/carga_pergunta_viva.py:110` |
-| `slot.motivo`, `slot.ts`, `slot.tipo`, classe e detalhe | `_slot_esperado` produz o resultado. Leem o juiz de fato, a carga, o lote, o explicador e o vigia. `classe_do_lote` produz classe e detalhe. `classificar` produz `(pergunta, classe, ts)` e o consomem o passivo e os dois vigias. `chamados/juizes.py:360` · `chamados/juizes.py:798` · `chamados/services/carga_pergunta_viva.py:119` · `chamados/services/validacao.py:1226` · `chamados/services/explicador.py:52` · `chamados/services/vigia_carimbo.py:112` · `chamados/services/vigia_carimbo.py:123` · `chamados/services/vigia_carimbo.py:131` · `chamados/services/passivo_validado.py:330` · `chamados/services/vigia_fio.py:415` |
-| Cache de `decisoes`, `recusa_do_carimbo` e `fechada_em` | O prefetch do vigia preenche o cache, `leitura` o consome e `classificar` o descarta antes do `yield`. `carimbar` lê o par e grava a recusa em memória, que o passivo traduz em balde. C6 e C7 alimentam o fechamento e `DisputaSupervisao.fechar` grava `fechada_em`. `chamados/services/vigia_carimbo.py:104` · `chamados/models.py:4361` · `chamados/services/vigia_carimbo.py:122` · `chamados/models.py:3388` · `chamados/services/passivo_validado.py:145` · `chamados/models.py:2035` · `chamados/models.py:2118` |
-
-## 4. Censo S1
-
-`git grep -n -E 'classe_do_lote\(' -- api chamados/services` encontrou três consumidores. Dependência específica de `LOTE_B` **na falha** encontrada no censo estático: zero. O executor recusa qualquer classe diferente de A, a fila agrupa a classe devolvida e a API serializa a classe. No `93ab82d08`, os três consumiam genericamente o B produzido pela captura, e `git grep -n 'CONSULTA_CONFLITO_INDISPONIVEL' 93ab82d08 -- '*.py'` encontrou apenas o produtor. `chamados/services/validacao.py:1085` · `chamados/services/validacao.py:1277` · `api/views_mensageria.py:546` · `93ab82d08:app/chamados/services/validacao.py:1234`
-
-## Comandos para o Code
-
-O executor abaixo carrega cada mutante em memória. Os comandos ORM abaixo seguem [nao verificado]. Os alvos são as asserções de S1, S2, S2b e S3 listadas acima.
-
-```bash
-prova() {
-  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings_test "$@"
-}
-
-mutante() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
-from importlib.machinery import SourceFileLoader
-from pathlib import Path
-import runpy
-import sys
-
-arquivo, teste, antes, depois = sys.argv[1:] [nao verificado]
-alvo = Path(arquivo).resolve()
-get_code = SourceFileLoader.get_code
-
-def com_mutante(loader, nome):
-    if Path(loader.path).resolve() != alvo:
-        return get_code(loader, nome)
-    fonte = alvo.read_text()
-    if fonte.count(antes) != 1:
-        raise ValueError(f'{alvo}: trecho do mutante não é único')
-    return compile(fonte.replace(antes, depois), loader.path, 'exec')
-
-SourceFileLoader.get_code = com_mutante
-sys.argv = ['manage.py', 'test', '--settings=config.settings_test', teste] [nao verificado]
-runpy.run_path('manage.py', run_name='__main__')
-PY
-}
-
-t=chamados.tests
-j=chamados/juizes.py
-v=chamados/services/validacao.py
-e=chamados/services/explicador.py
-c=chamados/services/vigia_carimbo.py
-
-s1=$t.test_fila_validar_lote.FilaValidarLoteTest.test_RED_lote_propaga_falha_da_consulta_de_conflito
-s2a=$t.test_explicador_disputa.ExplicadorDisputaTest.test_RED_explicador_nao_cita_texto_residual_como_resposta_vigente
-marco=$t.test_marco_por_motivo.MarcoPorMotivoTest
-vinculo=$marco.test_RED_sem_resposta_vigente_nao_absolve_so_pelo_vinculo
-destino=$marco.test_RED_sem_resposta_vigente_nao_absolve_so_pelo_destino_encerrado
-trilha=$marco.test_RED_sem_resposta_vigente_preserva_retratacao_com_carimbo_e_trilha
-s2b=$t.test_hx_fallback_sem_lei.FallbackSemLeiTest
-s3i=$t.test_e4c_f5_guarda_plantio_s144.GuardaPlantioS144Test.test_RED_passivo_foto_velha_recusa_par_e_mesa_valida_mesmo_pk
-s3ii=$t.test_fechar_disputa_materializada.FecharDisputaPerguntaMaterializadaTest.test_pergunta_materializada_nao_bloqueia_fechamento
-
-prova "$s1" "$s2a" "$vinculo" "$destino" "$trilha" "$s2b" "$s3i" "$s3ii"
-
-mutante "$v" "$s1" \
-  '    if batidas_apuraveis(perg.disputa.colaborador, slot.ts - perto, slot.ts + perto).exists():' \
-  $'    from django.db import DatabaseError\n    try:\n        conflito = batidas_apuraveis(perg.disputa.colaborador, slot.ts - perto, slot.ts + perto).exists()\n    except DatabaseError:\n        return LOTE_B, dict(d, porque="CONSULTA_CONFLITO_INDISPONIVEL")\n    if conflito:'
-
-mutante "$e" "$s2a" $' % motivo\n' $' % motivo + " " + p.resposta_colab\n'
-
-guarda="if slot.motivo in ('VETO_TEMPORAL', 'SEM_RESPOSTA_VIGENTE'):"
-mutante "$j" "$vinculo" "$guarda" \
-  "if slot.motivo == 'VETO_TEMPORAL' or (slot.motivo == 'SEM_RESPOSTA_VIGENTE' and p.chamado_destino is not None):"
-mutante "$j" "$destino" "$guarda" \
-  "if slot.motivo == 'VETO_TEMPORAL' or (slot.motivo == 'SEM_RESPOSTA_VIGENTE' and p.chamado_destino is None):"
-mutante "$j" "$trilha" \
-  "            return _retratada_com_trilha(p) if carga is None else carga.retratada(p)" \
-  '            return False'
-
-mutante "$j" "$s2b" "return _ResultadoSlot('PLANTIO_SEM_TS')" "return _ResultadoSlot('DATA_HORA_INVALIDA')"
-mutante "$c" "$s3i" $'        getattr(p, \'_prefetched_objects_cache\', {}).pop(\'decisoes\', None)\n' ''
-mutante "$j" "$s3ii" 'resposta if vigente or carimbo_legado' 'resposta if vigente'
-```
-
-## 21/11 18:09 · sessao c8af26ea4af5 · MEDIDA-FOLHA-[nome] · sonda · origem=Code
-
-## Item (d) — segunda medida
-
-| Chave da saída | Valor devolvido | Referência no código |
-|---|---:|---|
-| `gravado.badge_chamados` | 1420 | `app/core/context_processors.py:84,110-111` |
-| `gravado.lavrado_em` | 21/11 18:06:10 | `app/core/context_processors.py:110-111` |
-| `agora` | 21/11 18:08:29 | Relógio informado na saída fornecida. Linha da sonda [nao verificado]. |
-| `vivo.exige_o_admin` | 1420 | `app/chamados/services/verbos.py:22-27` |
-| `vivo.arquivado.n` | 136 | `app/chamados/services/painel.py:229-231,284-292` |
-| `vivo.cobrar.n` | 2553 | `app/chamados/services/painel.py:229-231,284-292` |
-| `vivo.decidir.n` | 712 | `app/chamados/services/painel.py:229-231,284-292` |
-| `vivo.historico.n` | 8 | `app/chamados/services/painel.py:229-231,284-292` |
-| `vivo.validar.n` | 708 | `app/chamados/services/painel.py:229-231,284-292` |
-
-**1. O badge gravado bate com o vivo.** Na saída fornecida, `1420 = 708 + 712`. O carimbo tinha **2 min 19 s** de idade e a diferença era **0**. A navbar lê `PlacarNavbar.badge_chamados`. A lavra e a medida viva aplicam `exige_o_admin` às contagens de `montar_contexto_painel` sem filtros. A unidade é o chamado vivo classificado como Validar ou Decidir. Cobrar, Arquivado e Histórico ficam fora da soma. A composição por verbo na hora da lavra e as variações durante o intervalo ficam [nao verificado]. `app/core/context_processors.py:68-84,110-111` · `app/core/management/commands/lavrar_badge_navbar.py:39-41,72-74,91-93` · `app/chamados/services/painel.py:153-155,229-231` · `app/chamados/services/verbos.py:22-27,44-56`.
-
-**2. Laudo versus sonda.** Pelos valores fornecidos, Validar foi de **707 para 708** (+1), Decidir de **705 para 712** (+7) e o badge de **1413 para 1420** (+7). No laudo, as pílulas somavam **1412**, um abaixo do badge. Na sonda, a soma e o badge fecham em **1420**. O código permite que as pílulas usem um recorte filtrado e que o badge venha de uma lavra anterior. Os filtros efetivos, as fontes que abasteceram as pílulas, o `lavrado_em` do laudo e a causa daquele 1 ficam [nao verificado]. `app/chamados/views.py:727-739,813-819,840-861` · `app/chamados/services/painel.py:117-130,229-231` · `app/core/context_processors.py:68-84`.
-
-**3. Sim, há caminhos com fontes diferentes mesmo sem filtro.**
-
-- **No GET inicial**, o cabeçalho renderiza `badge_chamados` da lavra, quando disponível, e as pílulas renderizam `verbos_contagens` calculadas ao vivo pelo GET. O recorte sem filtro segue a mesma regra de classificação em leituras de instantes distintos. `app/core/context_processors.py:68-84,154` · `app/chamados/views.py:727-739,767` · `app/templates/chamados/painel_gestao.html:42,79,191`.
-- **Na atualização por JSON**, sem filtro e com `payload_placar`, as pílulas passam a ler o payload lavrado. Sem payload, a rota calcula ao vivo. O JavaScript atualiza as pílulas e mantém no cabeçalho o valor do render inicial. Se houver uma lavra entre o GET e a atualização, cabeçalho e pílulas podem exibir lavras distintas. `app/chamados/views.py:840-862` · `app/templates/chamados/painel_gestao.html:191,302-325`.
-- **Se o cálculo vivo da navbar falhar**, o último fallback conta `qs_na_fila()`, que usa status de cobrança e exclui silenciados no futuro. Esse ramo tem outro critério. Sua ocorrência no laudo fica [nao verificado]. `app/core/context_processors.py:87-93` · `app/chamados/services/painel.py:188-190` · `app/chamados/services/verbos.py:22-27`.
-
-A confirmação independente do hash da cópia e do isolamento da transação em produção fica [nao verificado].
-
-_7741 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7746 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
