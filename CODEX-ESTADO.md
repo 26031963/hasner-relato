@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 14:24** · publicado em **21/11/2026 14:28** (UTC-3)
+> Ultima resposta processada: **21/11/2026 14:33** · publicado em **21/11/2026 14:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 14:33 · sessao 6d6411f4a2c6 · OPEN-REDIRECT-VOLTAR · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 21/11 14:24 · sessao 24eb35d8b37c · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -793,77 +797,4 @@ O literal preserva essas autorizações. O caso da F5 com efeito em competência
 
 `PROCEDE=3 NAO_PROCEDE=1`
 
-## 21/11 12:50 · sessao 9f53844ba3f1 · WRAPPER-N-VAGAS · censo · origem=Code
-
-# WRAPPER-N-VAGAS — censo de abertura
-
-A cópia fornecida veio sem metadados Git. As linhas abaixo são da cópia disponível. A correspondência com `ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5`, o estado em produção e o diff das worktrees vivas ficam [nao verificado].
-
-## 1. Quem cria, trava, libera e lê a vaga
-
-| Sitio | O que faz hoje e o que considera ocupação |
-|---|---|
-| **Wrapper, `#G:vaga_sitio`, `#G:vaga_abre` e `#G:vaga`** | Resolve o `git-common-dir` do repo vivo e deriva um único `logs/construtor.vaga` para todas as cópias daquele repo. Cria a pasta se necessário, verifica symlinks, abre ou cria o arquivo em append no fd 6 e tenta `flock -n 6`. O lock preso ocupa a vaga. Um arquivo existente com lock livre pode ser reutilizado. Falha ao abrir tem mensagem própria. Falha do `flock` recebe a mensagem de vaga ocupada. `bin/codex_pergunta.sh:69–78,195–204,247–253` |
-| **Liberação** | O wrapper mantém o fd 6 aberto até a saída. A trava se libera quando fecha a última referência ao descritor, inclusive eventual herança por filho. O `trap EXIT` registra o fim e termina o shell. O arquivo de vaga permanece no disco. `bin/codex_pergunta.sh:248–253,269–282,416–422,464–472` |
-| **Wrapper, `#G:vaga_reservada`** | Em todos os papéis, compara a resposta e o caminho canônico da vaga com `realpath -m`. Recusa o caminho reservado com `rc 2` mesmo com lock livre, para proteger o inode contra o `mv` da resposta. Hoje protege um único caminho. `bin/codex_pergunta.sh:69–78,405–406,428–431` |
-| **Disjuntor** | `#G:vaga` e `#G:vaga_reservada` ficam no wrapper. `disjuntor.py --censo` julga o brief antes de qualquer tomada de vaga e registra aprovação, negativa ou dispensa. A métrica posterior cruza `ini` com a trilha por obra, PID e hash. O `ini` significa tentativa iniciada no wrapper. As horas de espera por censo vêm da união dos intervalos de negativa até aprovação, sem consulta ao lock. `bin/codex_pergunta.sh:241–253`; `bin/disjuntor.py:1851–1859,2096–2109,2147–2171,2304–2310,2331–2348` |
-| **`gerar_codex_estado.py`** | Publica respostas dos JSONL e lê a procedência via `sessoes_do_code`, que casa `ini` e `fim` de `chamadas.log` pelo `thread_id`. Não lê a vaga nem depende de exclusão mútua entre chamadas. `bin/gerar_codex_estado.py:153–156,162–177`; `bin/codex_limite_estado.py:49–68,92–96` |
-| **ESTADO e `raias_estado.py`** | O ESTADO publica raias, chamadas por papel, últimos RCs, recusas por limite e a métrica do censo. `raias_estado.py` lê declarações `.agente` e dados Git de worktrees. Uma raia declarada, à frente ou suja é uma classificação de raia, sem afirmação sobre o fd 6. `bin/gerar_estado.py:213–229,275–289`; `bin/raias_estado.py:51–69,73–135`; `bin/codex_limite_estado.py:27–46,71–88` |
-| **Selos e sessão** | O selo abre a vaga falsa em fd 5, toma `flock` e solta fechando o fd. É a prova de ocupação usada nos testes. O teto de **1 opus** e o opus final são conduta da sessão. O lock do wrapper cobre apenas o construtor Codex. `bin/tests/test_codex_pergunta.sh:216–226,399–427`; `CLAUDE.md:353–356` |
-
-## 2. Quem recebe o RC da vaga ocupada
-
-- **Hoje é `rc 2`.** O `flock -n` que falha chama `_recusa2`, escreve o motivo em stderr e sai antes de instalar o `trap` e gravar `ini`. Essa recusa sai pelo RC do processo e pelo stderr. Ela não produz uma nova linha em `chamadas.log` nem um novo sidecar `.rc`. `bin/codex_pergunta.sh:195–196,248–253,264–282,307–309`
-- **Consumidores encontrados.** `test_codex_pergunta.sh` captura `$?` e exige `2`, o motivo de vaga e nenhuma chamada ao Codex falso. `prova_codex_pergunta_real.sh` captura `WRC` e marca a prova inconclusiva para qualquer retorno diferente de zero, inclusive `2`. No registro de conduta, o RELATO mostra uma chamada recusada por vaga ocupada e a obra recolocada na fila por arquivo. Tratador automático de `rc 2` ou retry em produção [nao verificado]. `bin/tests/test_codex_pergunta.sh:131–143,216–220,399–427`; `bin/tests/prova_codex_pergunta_real.sh:85–94`; `app/docs/RELATO.md:11869`
-- **`rc 75`.** A pausa já presente na entrada sai com `75`. Uma pausa surgida durante a espera cai hoje no `rc 2` genérico da revalidação. Limite ou indisponibilidade reconhecida na saída do CLI grava `limite.log` e sai com `75`, com instrução de seguir pelo caminho anterior sem retry. O 1210 corrige expressamente o `75` proposto no 1135 para vaga cheia e N+1. `bin/codex_pergunta.sh:22–26,203–204,407–415,447–459`; `desacopla_da_f5_2111_1135.txt:5`; `respostas_desacopla_2111_1210.txt:2`
-
-## 3. Autoridades que o portão pode consultar
-
-| Medida | Autoridade encontrada na cópia |
-|---|---|
-| **Load** | Não existe função versionada encontrada para `load5 < nproc-2` ou para a média do dia. A leitura existente em `esteira_slots.sh` pega o **primeiro** campo de `/proc/loadavg`, e a guarda ativa ali usa RAM. O contrato anterior documenta `/proc/loadavg` na abertura e `sar -q` para a média. `bin/esteira_slots.sh:29–33`; `app/docs/RELATO.md:4105,4108–4109` |
-| **Relógio 06:00–07:30** | Não existe função encontrada para essa janela. `_hhmm()` e `proibido()` medem a janela de **auth**, 23:20–06:00. As horas do portão Codex constam no contrato anterior, e o RELATO registra que o fuso explícito foi decidido no anexo D1–D8. O fuso e as bordas literais desse anexo estão [nao verificado]. `bin/janela_auth.sh:48–61,72–76`; `app/docs/RELATO.md:4103,4105–4106` |
-| **`/health/` do `saas_core`** | A rota é `tenant_health`, encaminhada pelo Caddy ao core. A casa já tem `prova()` do deploy com `Client` dentro da casca e host do tenant, aceitando `200/301/302`. O smoke HTTPS passa pelo Caddy e exige `200`. A conduta exige medir `/health/` na rajada. Não existe chamada isolada encontrada que já seja a autoridade de admissão de vagas. `Caddyfile:7–10`; `app/config/urls_core.py:2–5`; `app/core/views.py:1306–1310`; `bin/deploy.sh:389–416`; `ops/smoke_migracao.sh:7–19`; `CLAUDE.md:357–365` |
-| **Arquivo em comum** | A interseção que já existe é `core.esteira_vigia.cruza_arquivos`, chamada por `esperar_se_cruzar`; opera sobre `pronta.json` e ausência de lista dá conjunto vazio. Para as fontes do contrato, `raias_estado._worktrees` enumera worktrees, `selo_proporcao.py` usa `merge-base(main, head)` e `diff --name-only`, e `disjuntor._briefs_do_censo` resolve os briefs. Não existe função encontrada que junte essas entradas, feche por lista ausente e aplique a exceção de seções do `CLAUDE.md`. `app/core/esteira_vigia.py:156–162`; `bin/fim_de_fatia.sh:53–74`; `app/core/tests/test_apertos_esteira.py:16–24`; `bin/raias_estado.py:73–110`; `bin/selo_proporcao.py:145–158`; `bin/disjuntor.py:1605–1645`; `respostas_desacopla_2111_1210.txt:3`; `respostas_2111_1245.txt:1` |
-
-## 4. `logs/codex/vagas.log`
-
-O contrato atribui a escrita exclusivamente a `bin/codex_pergunta.sh` e a leitura ao **ESTADO**, com eventos `hora obra pid k abriu|fechou`. O ponto de publicação na cópia é `bin/gerar_estado.py`, chamado por `bin/relato.sh`. O 1135 menciona `raias_estado.py` no placar. O 1210 fixa ESTADO como leitor e deixa em aberto o módulo que fará o parsing. Escritor e leitor de `vagas.log` em execução estão [nao verificado]. `contrato.txt:1` (cláusula 4); `desacopla_da_f5_2111_1135.txt:10`; `respostas_desacopla_2111_1210.txt:2,5`; `bin/relato.sh:37–38,115–118`; `bin/gerar_estado.py:213–229,275–289`
-
-Nenhum log encontrado tem o mesmo papel. `chamadas.log` registra tentativas e seus fins, com leiaute posicional e sem `k`; `limite.log` registra limite/indisponibilidade; `disjuntor.log` cobre decisões como o censo. Nenhum registra a abertura e o fechamento por vaga. O 1210 manda preservar `chamadas.log`. `bin/codex_pergunta.sh:264–282,307–309,451–459`; `bin/codex_limite_estado.py:49–68`; `bin/disjuntor.py:123–124,2096–2109`; `respostas_desacopla_2111_1210.txt:2`
-
-## 5. Selos e o que muda
-
-| Selo | Premissa e delta |
-|---|---|
-| **`test_codex_pergunta.sh`** | `vaga`, `vaga_outro_logd`, `vaga_outra_wt` e `vaga_copia` pressupõem que prender o arquivo antigo esgota a capacidade. Esses casos devem fixar `CODEX_VAGAS=1`. `vaga_reservada` precisa cobrir o caminho antigo e `.<k>`; o controle positivo precisa usar o mesmo basename em outra pasta, pois hoje usa `construtor.vaga.txt`. `vaga_abre`, `vaga_topologia` e `leitura_topologia` exercitam falha de abertura, topologia e papéis de leitura. Os mutantes alteram linhas literais `#G:` e precisam acompanhar as guardas que forem movidas. `bin/tests/test_codex_pergunta.sh:216–226,262–282,399–427,520–540,553,583–606`; `respostas_desacopla_2111_1210.txt:2` |
-| **N+1 e mutante `portao-removido`** | Com o portão aberto e briefs disjuntos, manter N construtores falsos simultaneamente presos, conferir a vaga 1 legada e `2..N`, recusar N+1 com `rc 2` e conferir reuso após a liberação. Com a vaga 1 presa, fazer cada condição do portão recusar uma vaga extra pelo motivo certo. A remoção do portão tem de tornar vermelho o caso de recusa. A prova precisa distinguir a vaga de construtor dos `slot.*` de `CODEX_TETO`. `contrato.txt:1` (cláusulas 1–3 e 5); `respostas_desacopla_2111_1210.txt:2`; `bin/codex_pergunta.sh:364–392`; `bin/tests/test_codex_pergunta.sh:139–143,520–521` |
-| **`test_censo_antes_da_vaga.sh`** | Cobra que o PreToolUse deixe a via Codex com o wrapper e que a contagem case cada aprovação com um `ini`. Não fixa quantidade de vagas. A prova de ordem no wrapper é `c_censo`, que prende a vaga legada antes de exigir a recusa pelo censo. Para N vagas, o caso pertinente é censo recusado sem tomada de nenhuma vaga, mesmo com extras livres. `bin/tests/test_censo_antes_da_vaga.sh:250–265,445–511`; `bin/tests/test_codex_pergunta.sh:222–242,591–603` |
-| **`test_disjuntor.sh`** | O `CODEX_TETO=1` do teste força espera em `slot.1` para provar B3 depois do slot. Outro caso trava `<resposta>.lock` para proteger a identidade da resposta. São duas travas distintas da vaga de construtor. Os testes de B4 ainda exercitam orçamento anterior à chamada, relevante se o aval também alcançar esse guarda. `bin/tests/test_disjuntor.sh:547–599,1444–1472,1854–1857`; `bin/disjuntor.py:1486–1514` |
-| **Outros selos vizinhos** | `test_codex_papel_estado.sh` conta uma *chamada* de construtor na amostra e cobra procedência. `test_codex_sonda.sh` cobra uma chamada read-only fora do ramo cercado. `test_hook_esperando_com_prova.sh` recusa usar um construtor como prova de censo vivo. A prova real cobra o sandbox. Nenhum desses casos enumera vagas. O selo do ESTADO a ampliar é o do leitor que publicar os eventos de vaga. `bin/tests/test_codex_papel_estado.sh:20,31–49`; `bin/tests/test_codex_sonda.sh:87–90`; `bin/tests/test_hook_esperando_com_prova.sh:192–215`; `bin/tests/prova_codex_pergunta_real.sh:85–102`; `bin/tests/test_raia_declarada_no_estado.sh:29–41`; `contrato.txt:1` (cláusula 4) |
-
-## 6. Lacunas e perguntas de lei
-
-**Texto técnico que falta no contrato**
-
-- **Admissão e identidade.** “Qual operação torna indivisíveis a foto das worktrees e briefs, a comparação e a reserva? Como ficam vedadas duas chamadas na mesma worktree? Qual brief vale por raia e qual fonte identifica uma worktree viva? Como entram nomes renomeados, alterações ainda sem commit e as seções previstas de `CLAUDE.md`?” Há precedente textual de meta-trava e `--toca`. O novo aval define diff mais previstos, e o 1245 abre a exceção por seção. O protocolo completo aplicável à nova obra está [nao verificado]. `bin/codex_pergunta.sh:230–259,407–415`; `app/docs/RELATO.md:4103,4107`; `respostas_desacopla_2111_1210.txt:2–3`; `respostas_2111_1245.txt:1`
-- **Configuração e falha.** “Quem fixa `CODEX_VAGAS` por repo para que duas invocações com ambientes diferentes respeitem o mesmo teto? Quais valores são válidos? Se uma vaga não abre ou o lock falha por erro de I/O, o wrapper tenta a próxima ou recusa? A reserva de nomes cobre sufixos fora do N ativo? Qual raiz contém a pausa e a trilha quando o wrapper é chamado de uma cópia?” Hoje o lock deriva do repo vivo, a pausa deriva de `$R` e os logs usam `$LOGD`. `contrato.txt:1` (cláusulas 1, 3–5); `bin/codex_pergunta.sh:55–78,101,202–207,248–253`
-- **Registro, fechamento e espera.** “`abriu` significa `flock` adquirido ou Codex efetivamente lançado? Como o ESTADO trata evento sem par após morte abrupta ou falha de escrita? Se todos os slots gerais estiverem presos, vale a espera já existente mesmo com vaga de construtor adquirida? Qual RC distingue pausa que aparece nessa espera de worktree alterada?” `contrato.txt:1` (cláusulas 2–5); `bin/codex_pergunta.sh:248–282,364–392,397–422`
-
-**Perguntas de conduta sem resposta literal completa**
-
-- “Qual fuso define o dia do load e a janela? Às `06:00` e às `07:30` em ponto, a vaga extra abre? Qual resposta do `/health/` autoriza a vaga, por qual caminho e com qual prazo? Se a média diária estiver ausente ou incompleta, fica em uma vaga, e quando volta a ampliar?” O contrato fornece os limiares e o precedente cita `sar -q`. O critério completo está [nao verificado]. `contrato.txt:1` (cláusulas 2–3); `app/docs/RELATO.md:4103,4105–4109`; `bin/deploy.sh:393–405`; `ops/smoke_migracao.sh:18–19`
-- “Se um brief mudar e passar a cruzar outra obra já admitida, quem cede o arquivo e em que ponto? Depois de `rc 2` por portão ou lotação, quem recoloca a obra na fila e em qual evento reavalia a abertura?” Há ordem de fila e regra de admissão escrita. A ação posterior e o responsável estão [nao verificado]. `CLAUDE.md:309–317`; `respostas_desacopla_2111_1210.txt:2–3`; `app/docs/RELATO.md:4106–4107,11869`
-- “A retirada do freio por cota vale só para a abertura de vagas extras ou obriga retirar também o B4-CODEX já aplicado pelo PreToolUse, inclusive a construtor?” O 1210 retira a cláusula de cota do portão. O código ainda aplica B4 antes de rodar o wrapper, e o teste o exige. O alcance dessa retirada sobre o B4 está [nao verificado]. `respostas_desacopla_2111_1210.txt:2`; `bin/disjuntor.py:1486–1514,1851–1862`; `bin/tests/test_disjuntor.sh:547–575`
-
-## 7. Arquivos para comparar com TRAVAS-SEM-MEMORIA
-
-| Arquivos | Motivo |
-|---|---|
-| `bin/codex_pergunta.sh`, `bin/tests/test_codex_pergunta.sh` | Admissão, nomes reservados, trilha, regressão N=1, selo N+1 e mutante do portão. `bin/codex_pergunta.sh:69–78,241–253,264–282`; `bin/tests/test_codex_pergunta.sh:216–242,520–606`; `respostas_desacopla_2111_1210.txt:2` |
-| `bin/gerar_estado.py` e o módulo leitor de vagas | Publicação do placar. `bin/codex_limite_estado.py` é um sítio candidato pela integração já existente. Se a admissão precisar estender a identificação de worktrees em `bin/raias_estado.py`, esse arquivo e seu selo de raia entram no diff previsto. O módulo definitivo está [nao verificado]. `bin/gerar_estado.py:213–229,275–289`; `bin/codex_limite_estado.py:20–49`; `bin/raias_estado.py:73–135`; `bin/tests/test_raia_declarada_no_estado.sh:29–41`; `respostas_desacopla_2111_1210.txt:2` |
-| `CLAUDE.md` **7b, CODEX itens 1–2**, `app/docs/LEIS.md` **L-126**, `app/docs/CORTES.json`, `app/docs/CORTES.md`, `app/docs/RELATO.md` | Atualizar os sítios operativos que ainda dizem uma vaga, registrar a emenda e publicar contrato e despacho. `CORTES.json` é a fonte; o gerador escreve `CORTES.md` e atualiza o bloco correspondente do RELATO. A ficha anterior está em `app/docs/BACKLOG.md:2317` e entra se for atualizada no mesmo pouso. `CLAUDE.md:251,353–365`; `app/docs/LEIS.md:147`; `bin/gerar_cortes.py:23–25,114–136`; `desacopla_da_f5_2111_1135.txt:1,10`; `respostas_desacopla_2111_1210.txt:5` |
-
-**Interseção com TRAVAS.** O `CLAUDE.md` aparece dos dois lados, em seções distintas, e o 1245 manda desconsiderar esse cruzamento. `bin/raias_estado.py` é a interseção potencial que precisa constar do brief se o WRAPPER o alterar: o RELATO já registra mudança de TRAVAS nesse medidor. Os selos de TRAVAS registrados são `test_suite_motivo`, `test_pista_lateral`, `test_travas_sem_memoria` e `test_suite_sh`, distintos do selo de vaga. O escopo obrigatório acima não exige tocar `bin/suite.sh`, `bin/hook_pista_pronto.py`, `bin/pronto_item_a_item.py` ou `.claude/settings.json`. O 1245 autoriza as duas obras juntas nas vagas opus com linha `DESPACHO` e load; o cruzamento efetivo entre os diffs vivos e as listas finais dos briefs permanece [nao verificado]. `CLAUDE.md:95,251,353–365`; `app/docs/RELATO.md:286,296,771–778`; `bin/suite.sh:41–47`; `.claude/settings.json:62–73`; `respostas_2111_1245.txt:1`
-
-_7673 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7674 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
