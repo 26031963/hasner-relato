@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 15:20** · publicado em **21/11/2026 15:21** (UTC-3)
+> Ultima resposta processada: **21/11/2026 15:26** · publicado em **21/11/2026 15:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 15:26 · sessao af9a45c12994 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**PAREI — E4C-F5-CONSTROI 1.1, volta 2.** Deixei os três novos REDs e reverti a cura de diagnóstico. A cura pela leitura composta quebrou dois subcasos de um teste já existente fora do arquivo autorizado. A fixture desse teste fornece texto de `data_hora` com `respondida_em=None` e espera que o texto forneça o slot. Esse par é inválido pela L-130. [Fixture C8b](chamados/tests/test_e3_c8b_sem_banco.py:369) · [L-130](docs/LEIS.md:151) · [Juiz restaurado](chamados/juizes.py:344)
+
+O C8b passou na base, falhou em dois subcasos com a cura e passou com a cura ao ajustar **somente em memória** a fixture externa. O ajuste preservou o instante da resposta e a decisão administrativa que a fixture original já fornece, mantendo as cinco expectativas do teste. A execução pela porta continua [nao verificado]. [Fixture original](chamados/tests/e3_c8b_apoio.py:183) · [Sobrescritas do C8b](chamados/tests/test_e3_c8b_sem_banco.py:377) · [Degrau administrativo do C6](chamados/juizes.py:1421)
+
+### Diff entregue e linhas que os REDs atacam
+
+O diff acrescenta três casos aos sete existentes. As fixtures passam pela resposta humana, por `DecisaoPergunta.registrar` para a reabertura e por `registrar_batida` para a batida vinculada. A sonda em memória reproduziu os três comportamentos da base com os corpos reais do compositor, da projeção e dos juízes. Os testes ORM novos pela porta estão [nao verificado]. [Testes existentes](chamados/tests/test_marco_por_motivo.py:69) · [Portas das fixtures](chamados/tests/test_marco_por_motivo.py:142)
+
+| RED | Comportamento reproduzido na base e linha a restaurar no futuro mutante |
+|---|---|
+| **(a)** Ato posterior e batida vinculada fora do marco. [Teste](chamados/tests/test_marco_por_motivo.py:168) | A base absolve. Restaurar `if _plantadas.exists():` sem distinguir veto de ausência de slot. [Juiz](chamados/juizes.py:764) |
+| **(b)** `data_hora` desfeita com texto físico presente. [Teste](chamados/tests/test_marco_por_motivo.py:187) | A base deriva o slot do texto desfeito. Restaurar `raw = (p.resposta_colab or '').strip().replace('T', ' ')`. [Juiz](chamados/juizes.py:366) |
+| **(c)** Exceção cacheada e composta sem resposta. [Teste](chamados/tests/test_marco_por_motivo.py:196) | A base relança a exceção em `data_hora`. Restaurar `if carga is not None and p.pk in carga.slots:` sem verificar se `data_hora` tem resposta vigente. A exceção de um slot elegível continua sendo relançada, inclusive para `hora` com marco fixo e sem resposta. Se chegar ao degrau 6, o C6 registra a falha e devolve `False` para vitalidade. [Cache](chamados/juizes.py:356) · [Marco fixo](chamados/services/materializacao.py:691) · [C6](chamados/juizes.py:1494) |
+
+**Comando da sessão para RED, GREEN e cada mutante isolado.** Na árvore entregue, a fase disponível é RED. GREEN e mutantes pela porta [nao verificado]. [Classe](chamados/tests/test_marco_por_motivo.py:36)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-141636 --only chamados -- -k MarcoPorMotivoTest
+```
+
+### Matriz do sítio e censo
+
+**Campos=8**, incluindo os valores derivados que decidem o ramo. [Slot](chamados/juizes.py:344) · [Consumo](chamados/juizes.py:758)
+
+| Campo ou valor | Fonte | Escritor | Instante e trava | Leitores |
+|---|---|---|---|---|
+| Sequência `ato`, `ato_em` e ordem por PK | Atos reais e complemento legado. `chamados/models.py:4304,4361` | `registrar`. `chamados/models.py:4428` | Resposta marca o tempo depois da trava do colaborador. A leitura usa a sequência disponível ou o prefetch. `chamados/services/disputa_emissao.py:1482,1498` · `chamados/models.py:4357` | Redutor e histórico. `chamados/models.py:4361,3853` |
+| `respondida_em` composta | Redução, limpa por REABERTURA ou RECUSA. `chamados/models.py:4331,4370` | Compositor em memória. `chamados/models.py:4382` | Foto vigente comparada ao horizonte, com igualdade inclusiva. `chamados/juizes.py:1392–1399` | Slot, C6, C21 e API. `chamados/juizes.py:351,1409,1552` · `api/views.py:2587` |
+| `resposta_colab` composta | Coluna entregue pelo mesmo compositor. `chamados/models.py:4382` | Porta humana grava o par. A reabertura normal limpa pela porta de lote. `chamados/services/disputa_emissao.py:1500,1532,1632,1683` | Foto da instância que acompanha o ato. `chamados/models.py:4389` | Slot, C6 e C21. `chamados/juizes.py:366,1425,1561` |
+| `agora` | Argumento da borda ou relógio da carga. `chamados/juizes.py:347,683` | `CargaDaTarefa` recebe e `CargaDaVida` copia. `chamados/services/tarefa_do_dia.py:520` · `chamados/services/carga_pergunta_viva.py:88` | Mesmo instante repassado pelo lote. `chamados/services/tarefa_do_dia.py:630` | Slot, juiz de fato e C6. `chamados/juizes.py:352,758,1410` |
+| `tipo_resposta` | Identidade da pergunta. `chamados/models.py:2652` | Emissor de âncora pela porta de conversa. `chamados/services/disputa_emissao.py:1383` · `chamados/models.py:3004` | Definido no nascimento sob a trava do dono. `chamados/models.py:3062` | Slot, porte de resposta e juiz de fato. `chamados/juizes.py:363,714` · `chamados/services/disputa_emissao.py:1451` |
+| `carga.slots[p.pk]` | Retorno do slot ou exceção capturada. `chamados/services/carga_pergunta_viva.py:117` | Construtor da carga em memória. `chamados/services/carga_pergunta_viva.py:119,125` | Cálculo antecipado no horizonte da carga. `chamados/services/carga_pergunta_viva.py:88,117` | Slot relê a entrada e a carga usa o par para abrir a janela. `chamados/juizes.py:356` · `chamados/services/carga_pergunta_viva.py:126` |
+| Par `(ts, tipo)` e veto temporal | Slot e projeção existentes. `chamados/juizes.py:344,1384` | `_slot_esperado`, em memória. `chamados/juizes.py:354,372,378` | Calculado para o horizonte recebido. `chamados/juizes.py:347` | Cinco sítios abaixo. `chamados/juizes.py:758` · `chamados/services/carga_pergunta_viva.py:119` |
+| Vínculo e retratação da batida | `Batida.pergunta_origem` e filtro de testemunha vigente. `ponto/models.py:38` · `chamados/juizes.py:761` | Porta de batida e vínculo pelo materializador. `ponto/registro_batida.py:175,255` · `chamados/services/materializacao.py:1578` | Testemunha na leitura avulsa ou na coleção já carregada. `chamados/juizes.py:761` · `chamados/services/carga_pergunta_viva.py:185` | Juiz de fato e vigia. `chamados/juizes.py:763` · `chamados/services/vigia_carimbo.py:113` |
+
+**Cinco chamadores diretos, zero mudanças de produção no diff entregue.** Na tentativa revertida, **dois sítios** exibiram efeito além das fixtures novas no C8b: o juiz de fato e `CargaDaVida`, sobre `data_hora` sintética sem instante. Os outros **três** chamam sem horizonte e receberiam a mesma mudança no slot caso chegassem ao mesmo par inválido. O alcance desse par pelos filtros desses três caminhos e a ocorrência em produção estão [nao verificado]. [Juiz de fato](chamados/juizes.py:758) · [Carga](chamados/services/carga_pergunta_viva.py:119) · [Explicador](chamados/services/explicador.py:52) · [Vigia](chamados/services/vigia_carimbo.py:110) · [Lote](chamados/services/validacao.py:1223)
+
+### Autoconferência
+
+| Classe | Resultado |
+|---|---|
+| 2º juiz que duplica juiz registrado | O diff só exercita os juízes existentes. `chamados/tests/test_marco_por_motivo.py:179` |
+| 2º escritor fora da porta | Resposta, reabertura e batida usam as portas reais. `chamados/tests/test_marco_por_motivo.py:144,152,173` |
+| Relógio lido fora da borda | Instantes das fixtures são fixados e o horizonte entra por argumento. `chamados/tests/test_marco_por_motivo.py:143,172,183` |
+| Derivação paralela de fonte única | O RED (b) acusa o texto físico após a perda do instante composto. `chamados/tests/test_marco_por_motivo.py:149,187` |
+| Selo ou RED sem mordida | Três comportamentos reproduzidos em memória. Mordida ORM pela porta [nao verificado]. `chamados/juizes.py:359,366,764` |
+| Ordem de trava | O diff usa a porta humana com releitura sob a trava existente. `chamados/services/disputa_emissao.py:1482–1487` |
+| Pouso antes do pré-requisito | Cura revertida após o conflito com a fixture externa. `chamados/tests/test_e3_c8b_sem_banco.py:380–394` |
+| Dado lido antes da trava e gravado depois | A escrita humana relê sob trava. A foto partida dos REDs é montada explicitamente pelo registro da REABERTURA seguido de releitura. `chamados/services/disputa_emissao.py:1482–1502` · `chamados/tests/test_marco_por_motivo.py:149–157` |
+| Campo com dois significados | O RED (a) chega ao `ts is None` que trata veto como falta de slot. `chamados/tests/test_marco_por_motivo.py:183` · `chamados/juizes.py:354,763` |
+
+**LEI-AKITA** origem=`chamados/models.py:4382` + `chamados/juizes.py:1384`, testemunha=`chamados/tests/test_marco_por_motivo.py:168,187,196`, RED=corpos reais em memória e porta [nao verificado], quem-mais-le=`chamados/juizes.py:1410` + cinco sítios censados, juízes novos=0 (`chamados/tests/test_marco_por_motivo.py:142`), padrão=Single Source of Truth (`docs/GLOSSARIO.md:11`).
+
+## 21/11 15:26 · sessao ba80f18ffd7d · FERIADO-POR-POSTO · verificador · origem=Code
+
+## 1. Delta e trilha
+
+**PROCEDENTE na documentação.** Os comentários dos dois copiadores agora dizem que, fora do cargo administrativo, a chave nasce pela marca e «nunca copiada». A docstring do modelo também diz que os copiadores consultam o juiz no nascimento. Na execução, só o ramo administrativo consulta o juiz. Para os demais cargos, a marca precisa estar declarada e o ciclo precisa passar por `segue_a_marca`. Nos outros casos, a chave é herdada. `app/colaboradores/services/vinculo.py:1124`, `app/colaboradores/services/vinculo.py:1148`, `app/escala/models.py:915`, `app/colaboradores/services/feriado_do_posto.py:193–200`.
+
+**A derivação nova é a do rótulo.** Os dois copiadores calculam a chave com `chave_ao_nascer` e criam o vínculo antes de chamar `_nasce_pela_marca`. Havendo diferença frente à herdada, essa função monta a frase e envia um `editar` para o PK novo, com antes/depois em JSON. `registrar_log` encaminha o evento e `core.observ.evento` grava a linha. `app/colaboradores/services/vinculo.py:1102–1111`, `app/colaboradores/services/vinculo.py:1121–1126`, `app/colaboradores/services/vinculo.py:1145–1152`, `app/core/auditoria.py:22`, `app/core/observ.py:133–137`.
+
+**A causa coincide hoje, mas pode se descolar sob mudança de regra.** O copiador e a trilha usam o mesmo cargo e o mesmo classificador. Hoje o juiz retorna `False` no ramo administrativo, e uma mudança de chave no ramo não administrativo só pode vir da marca. A trilha infere a causa pelo cargo depois da criação. Se, por exemplo, o juiz passasse a deixar o posto OPERA decidir para `Supervisor`, uma troca de `False` para `True` ainda sairia como «pelo cargo administrativo». `app/colaboradores/services/vinculo.py:1102–1109`, `app/colaboradores/services/vinculo.py:1122–1125`, `app/colaboradores/services/feriado_do_posto.py:193–200`, `app/escala/models.py:918–927`.
+
+**Quem lê a frase** é a tela de auditoria, que a exibe e busca por trecho, e o teste novo, que procura `cargo administrativo`. O leitor de feriado usa a chave do vínculo e o ciclo. O `help` novo corresponde ao comando, que pula o vínculo que segue marca declarada e mantém `True` para os demais não administrativos. Essa regra do comando já consta no contexto do diff fornecido. `app/core/views.py:713–714`, `app/templates/core/log_auditoria.html:56`, `app/templates/core/log_auditoria.html:73`, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:169–171`, `app/escala/models.py:1399–1405`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:30–31`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:52–61`.
+
+## 2. O que os testes pegam e o que escapa [nao verificado]
+
+| Teste | O que pega | Um mutante que escapa | [nao verificado]
+|---|---|---|
+| Juiz administrativo | Pega `True` em qualquer combinação testada com `SUPERVISOR`, agora incluindo 6x1 e 24x48. | Fazer o juiz retornar `True` para administrativo em ciclo `semanal`, ausente do laço. `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:100–104`, `app/escala/models.py:27`, `app/escala/models.py:918–920`. |
+| Guarda do juiz não administrativo | Pega regressão em 6x1 comercial sem marca ou em OPERA, e em 24x48 sem marca. | Fazer 24x48 não administrativo ignorar FECHA e retornar `True`. O único 24x48 da guarda está sem marca. `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:106–115`, `app/escala/models.py:921–927`. |
+| Renascimento no desfazer | Pega a volta do PK antigo, a falta de consulta com `Supervisor`, a herança de `True` e a omissão do rótulo de cargo. | Em `chave_ao_nascer`, chamar o juiz e descartar a resposta, retornando `False` fixo no ramo administrativo. O espião registra a consulta e o resultado esperado continua igual. O selo AST também aceita esse mutante, pois procura a chamada e veda a forma `not cargo_e_administrativo(...)`. `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:137–142`, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:159–171`, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:205–227`, `app/colaboradores/services/feriado_do_posto.py:193–196`. |
+
+## 3. Descartes
+
+- **Não administrativo fora do ciclo — manter PARADA.** A porta normal aceita a marca declarada em 12x36. O copiador herda nesse ciclo, e a guarda fixa o caso OPERA com chave herdada `False`. Mudar o copiador mudaria o comportamento que a parada preserva. `app/colaboradores/services/vinculo.py:297–298`, `app/escala/models.py:32`, `app/escala/models.py:921–923`, `app/colaboradores/services/feriado_do_posto.py:197–200`, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:173–182`.
+- **Trecho retroativo — manter PARADA.** `--novo-trecho` pode criar um vínculo inativo com `True` herdado de um administrativo. Com `data_fim`, o trecho inativo pode cobrir datas, e o comando chama a regeneração sobre ele. Alterar dado retroativo de vínculo exige aval. `app/colaboradores/services/vinculo.py:978–985`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:192–203`, `app/colaboradores/management/commands/corrigir_escala_retroativa.py:225–234`, `app/escala/alimentacao.py:190–216`, `CLAUDE.md:265–268`.
+- **Inversão de camada — manter na fila.** O import do comando pelo modelo já aparece como contexto inalterado no anexo. A volta 2 acrescenta outro consumidor dessa dependência, na montagem do rótulo. `app/escala/models.py:918–920`, `app/colaboradores/services/vinculo.py:1103–1106`.
+
+Análise estática, com mutantes avaliados por leitura das asserções. Execução dos testes, confirmação independente do hash e ocorrência ou impacto em produção [nao verificado]. [nao verificado]
 
 ## 21/11 15:20 · sessao 11cfea23d568 · FERIADO-POR-POSTO · verificador · origem=Code
 
@@ -942,42 +1025,4 @@ O diff implementa a vaga 1 legada, k=2..N, o default 3 com faixa 1..3, a reserva
 
 A cópia ainda traz teto 2 na L-126 e rota local de suíte. O pouso anterior da PISTA, o registro da emenda na viva e os despachos com load ficam [nao verificado]. `app/docs/LEIS.md:147`, `app/docs/BACKLOG.md:2231`, `bin/suite.sh:316–325`, `CLAUDE.md:361–369`.
 
-## 21/11 14:03 · sessao a5a0c009e850 · - · - · origem=Ronald (tmux)
-
-**BLOQUEIA**
-
-- A régua fica vermelha no selo de sonda. `test_codex_sonda.sh` proíbe `manage.py` e `docker exec` em todas as linhas executáveis do wrapper. O novo health contém ambos. A régua executa esse selo antes da suíte. `bin/tests/test_codex_sonda.sh:80-86`, `bin/tests/test_codex_sonda.sh:111-112`, `bin/codex_pergunta.sh:419`, `bin/regua.sh:138-144`.
-- O selo N+1 mantém N execuções simultâneas e cobra `rc 2`, motivo e ausência de chamada ao Codex, mas serializa as admissões. Cada `_prende` espera pela captura do Codex antes da próxima chamada. O mutante de meta-trava cobre falha no `open`, e retirar o `flock` fica sem prova de disputa. O mutante legado `#G:vaga` retira a primeira recusa, mas a segunda ainda recusa N=1, podendo matar o mutante somente pela mensagem trocada. Os mutantes de portão removido têm controles positivos e negativos para as condições medidas na fixture. `bin/tests/test_codex_n_vagas.sh:131-173`, `bin/tests/test_codex_n_vagas.sh:344-365`, `bin/tests/test_codex_pergunta.sh:221-225`, `bin/tests/test_codex_pergunta.sh:564`, `bin/tests/test_codex_pergunta.sh:632-636`, `bin/codex_pergunta.sh:394-405`.
-- A falta de lista do admitido não fecha o portão. A pode entrar sozinha sem lista, alterar um arquivo e deixar B entrar porque o `git status` preenche `arqs` antes do teste de vazio. O selo só exercita a falta de lista no candidato. Também não cobre mudança já commitada, a mesma worktree em duas vagas ou pausa nos slots e na trava da resposta. `bin/codex_pergunta.sh:273-292`, `bin/codex_pergunta.sh:424-426`, `bin/codex_pergunta.sh:539-597`, `bin/tests/test_codex_n_vagas.sh:125-138`, `bin/tests/test_codex_n_vagas.sh:232-245`, `bin/tests/test_codex_n_vagas.sh:277-293`.
-- Duas chamadas com mesma obra e worktree, respostas distintas e briefs citados disjuntos podem chegar juntas ao Codex se a worktree continuar limpa durante a revalidação. O coletor admite briefs citados de outras pastas e o portão usa `wt` para obter status. A identidade da worktree candidata não entra na comparação. `bin/disjuntor.py:1612-1645`, `bin/codex_pergunta.sh:273-292`, `bin/codex_pergunta.sh:421-436`, `bin/codex_pergunta.sh:584-597`.
-
-**CORRIGE**
-
-- PID morto no selo também vem sem `wt=`. Retirar `os.kill` ainda produz recusa genérica por falta da chave. O teste de censo sem vaga verifica zero eventos de k=1 e passaria com aquisição anterior ao censo caso `abriu` viesse depois dele. O fake de censo aceita briefs com `escritores: -`, que o juiz real recusaria na fila 1. `bin/tests/test_codex_n_vagas.sh:34-47`, `bin/tests/test_codex_n_vagas.sh:106-111`, `bin/tests/test_codex_n_vagas.sh:248-253`, `bin/tests/test_codex_n_vagas.sh:290-293`, `bin/codex_pergunta.sh:273-288`, `bin/disjuntor.py:1589-1593`.
-- O controle positivo de nome reservado usa `construtor.vaga.txt`, apesar de dizer que usa o mesmo basename. O selo de health aceita qualquer espera inferior a 9 s e só muta o timeout de 5 para 20. O leitor do ESTADO é chamado isoladamente com arquivo fabricado. Retirar sua chamada do gerador passa pelos casos do selo. `bin/tests/test_codex_pergunta.sh:267-269`, `bin/tests/test_codex_n_vagas.sh:223-229`, `bin/tests/test_codex_n_vagas.sh:319-334`, `bin/tests/test_codex_n_vagas.sh:360`, `bin/gerar_estado.py:279-285`.
-- Na limpeza, chamadas síncronas bem-sucedidas deixam `cap_*`, mas só `_prende` cria `rc_*`. Cada captura síncrona ainda presente dispara espera de cerca de 30 s. A execução nominal tem esse caminho em reuso, janela, desligador e health. A variável `CODEX_VAGAS` herdada também pode fazer os casos de default 3 rodarem com 1 ou 2. `bin/tests/test_codex_n_vagas.sh:118-155`, `bin/tests/test_codex_n_vagas.sh:159-165`, `bin/tests/test_codex_n_vagas.sh:183-187`, `bin/tests/test_codex_n_vagas.sh:209-230`.
-- `test_censo_antes_da_vaga` cobre CLI do censo, encaminhamento do PreToolUse e associação de `ini` à aprovação. `test_disjuntor` usa papel verificador e trava `slot.1` ou `<resposta>.lock`, com mutantes próprios para B3. Esses selos deixam o ciclo da vaga de construtor para os selos do wrapper. `bin/tests/test_censo_antes_da_vaga.sh:69-81`, `bin/tests/test_censo_antes_da_vaga.sh:258-265`, `bin/tests/test_censo_antes_da_vaga.sh:445-513`, `bin/tests/test_disjuntor.sh:1236-1239`, `bin/tests/test_disjuntor.sh:1444-1472`, `bin/tests/test_disjuntor.sh:1854-1860`.
-
-Execução dos selos, duração observada e resultado em produção [nao verificado].
-
-## 21/11 14:03 · sessao 758b62c48047 · - · - · origem=Ronald (tmux)
-
-**BLOQUEIA**
-
-- A pausa é por cópia do script, enquanto a vaga é por repositório. Uma pausa na viva fica invisível ao wrapper de outra worktree. O escritor não coordena com a meta-trava. Uma pausa durante a espera de `slot.*` ou da resposta devolve 2, já depois de remover sidecars. Se a espera da meta-trava expirar, o wrapper também sai com 2 antes de conferir a pausa. `bin/codex_pergunta.sh:66–67,83–90,316,367–376,539–555,565–590`; `bin/pausar.sh:24–28,39–47`.
-- A exclusividade da mesma worktree desaparece quando as duas chamadas usam briefs citados disjuntos e a cópia ainda está limpa. A entrada valida o nome e o registro da WT, mas o portão nunca compara sua identidade com a WT publicada. As duas chamadas podem passar pelos inventários antes da primeira escrita. O portão ainda omite `merge-base..HEAD`, o estado da candidata e outras WTs vivas fora dos arquivos de vaga. `bin/codex_pergunta.sh:270–293,329–350,421–436,582–597`; `bin/disjuntor.py:1632–1645`.
-- A resposta genérica pode substituir `vagas.log`. O destino `construtor.vagas` também deriva um `.lock` cujo nome é exatamente a meta-trava, que um papel de leitura pode prender durante toda a chamada. A reserva inicial só testa o destino principal e não inclui `vagas.log`. `bin/codex_pergunta.sh:89–90,367,565–567,593–605`.
-- A vaga é travada pelo fd6, mas publicação e limpeza reabrem o pathname com truncamento. Uma troca do caminho depois do `flock` muda o inode escrito e pode permitir duas tomadas do mesmo nome lógico; um hardlink existente também expõe seu outro nome ao truncamento. O `mkdir` precede a checagem do symlink e um FIFO em meta, vaga ou trilha pode travar durante abertura, antes do timeout. `bin/codex_pergunta.sh:39–40,367–389,395–405,425–427`.
-- A abertura e a trilha antecedem a lotação, o portão e a validação da base. A janela pode virar 06h entre `date`, health e Git, ou durante a espera posterior dos slots/resposta. O caminho nominal lê as medidas sob meta-trava, mas não garante que a decisão ainda vale no início do Codex. Também adiciona espera de até 30 s na meta ao contrato «ninguém espera». `bin/codex_pergunta.sh:371–376,388–436,539–555,565–597`; `contrato.txt:1`; `app/docs/RELATO.md:4105–4107`.
-- `CODEX_VAGAS` só configura aquela chamada. Um construtor com `CODEX_VAGAS=1`, seguido de outro com o ambiente padrão, pode terminar com duas vagas presas. O desligador só funciona como configuração compartilhada se todos os chamadores adotarem o mesmo ambiente. `bin/codex_pergunta.sh:305–306,385–405`.
-- `exec {_MFD}>&-` fecha a meta antes do Codex. O fd6 ainda é passado para `timeout` e Codex. A morte só do wrapper pode deixar a vaga presa por um descendente. Sem troca de inode, o mesmo fd6 impede dupla tomada da mesma vaga e não há ciclo nominal entre meta e vaga. `bin/codex_pergunta.sh:371–392,427,454–455,593–597`.
-
-**CORRIGE**
-
-- O leitor de estado toma `kill(pid, 0)` como dono vivo, abre duas vezes e não verifica identidade, `k` ou vínculo ao lock. PID reciclado pode validar sobra de estado. A limpeza fora da meta ainda pode zerar o estado enquanto a vaga continua presa e provocar recusa espúria. `bin/codex_pergunta.sh:273–288,395–400,425–427`; `bin/hook_stop_fila1.py:729–768`.
-- `CLAUDE.md` por seção usa somente títulos `##` e salta pelas linhas da viva. O bloco CODEX está dentro da seção 7b, e um `CLAUDE.md` sujo vindo de `status` perde qualquer distinção de seção. O próprio documento ainda manda teto 2 na conduta. `bin/codex_pergunta.sh:220–247,263–284`; `CLAUDE.md:251,290–291,346–369`; `app/docs/LEIS.md:147`.
-- A trilha perde órfão se `(pid,k)` for reutilizado, conta eventos futuros e esconde órfãos com mais de 24 h. O leitor não valida a faixa de `k` nem o PID. `bin/codex_vagas_estado.py:28–50`.
-- A saúde replica `prova()` com host fixo e ignora o RC de `timeout`/Docker se o stdout chegou a conter `STATUS 200`. O deploy permite `HOST_TENANT` configurável. `bin/codex_pergunta.sh:295–296,419–420`; `bin/deploy.sh:393–405,416`.
-- O requisito de pouso é de conduta. A cópia pode apontar para as vagas vivas antes do pouso. Após ativação, um wrapper legado copiado ainda pode pegar a vaga 1, quando só a 2 está ativa, sem passar pelo novo portão. A execução efetiva de qualquer cenário fica [nao verificado]. `complemento_1_desacopla_2111_1200.txt:5`; `bin/codex_pergunta.sh:66–67,83–90,367–389`; `diff.patch`, hunk da vaga legada.
-
-_7688 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7690 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

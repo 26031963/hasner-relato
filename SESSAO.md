@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 15:21:09.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (35.7 MB). Acoes na janela: **964**.
+**Medido em 21/11/2026 15:27:07.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (35.7 MB). Acoes na janela: **966**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:21:22 | Monitor | WRAPPER volta 3 Codex rc | `cd ~/saas-hasner; until [ -f logs/WRAPPER-N-VAGAS/volta3_lease/r.rc ]; do /usr/bin/sleep 20; done; echo "wrapper volta3 $(cat logs/WRAPPER-N-VAGAS/volta3_lease/r.rc)"` |
+| 15:21:14 | Bash | Register aval and launch WRAPPER volta 3 reading | `cd ~/saas-hasner; H=$(date +%H:%M); D=logs/WRAPPER-N-VAGAS/volta3_lease; mkdir -p $D cat > $D/aval_mudanca_rumo.txt <<'EOF' APROVA RASCUNHO WRAPPER-N-VAGAS-PREDESENHO 6c83ceb0e5c3 COM MUDANCA DE RUMO -- (1) P3/P4 resolvidas no main: CORTES.md:589 (corte 1135) e PROMPTS.md:2722 + BACKLOG.md:2244 (PISTA-ESCOLHE absorvida pela TRAVAS M2); o PAREI de P4 cai; a copia 5b359e88b e anterior. (2) M-LEASE:  ...` |
 | 15:20:41 | Bash | Check cited lines exist at HEAD | `cd ~/saas-hasner; git show HEAD:app/docs/CORTES.md \| sed -n 589p \| cut -c1-200; git show HEAD:app/docs/BACKLOG.md \| sed -n 2244p \| cut -c1-200; git show HEAD:app/docs/PROMPTS.md \| sed -n 2722p \| cut -c1-200` |
 | 15:20:36 | Bash | Inspect previous WRAPPER Codex launch | `cd ~/saas-hasner; ls logs/WRAPPER-N-VAGAS/ logs/WRAPPER-N-VAGAS/volta2b_p1p4/; cat logs/WRAPPER-N-VAGAS/volta2b_p1p4/lanca.sh; git rev-parse HEAD` |
 | 15:19:13 | TaskStop |  | `-` |
