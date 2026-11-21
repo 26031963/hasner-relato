@@ -1,7 +1,525 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 02:04** · publicado em **21/11/2026 02:04** (UTC-3)
+> Ultima resposta processada: **21/11/2026 02:51** · publicado em **21/11/2026 02:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 02:51 · sessao 200517c5dfc8 · FALTA-APROVADA-MOVE-O-TXT-ENTREGUE · leitura · origem=Code
+
+```python
+"""
+FALTA-APROVADA-MOVE-O-TXT-ENTREGUE — volta 3
+
+A sonda foi escrita por leitura da cópia. A execução, o total da frota e a
+identidade Git da cópia estão [nao verificado]. O anexo mostra que FALTA_DIA
+retirou 3, 3 e 1 registros tipo 10 nas perguntas 33668, 33669 e 33686,
+respectivamente, para dois PKs de colaborador. A rejeição devolveu as linhas.
+O motivo do classificador nesses três casos está [nao verificado].
+f5fin_6a1_main.porta:15–17.
+
+UNIVERSO
+Toda tripla de ExportacaoDominio confirmada por competencia_entregue, inclusive
+quando tem zero casos. O último registro por (gerado_em, pk) decide a vigência.
+Cada caso é um colaborador com ao menos uma FALTA aprovada que cruza a janela
+da empresa, mesmo quando o fechamento está ausente ou tem outro status.
+app/folha/export.py:47–51,71–92,556–594; app/folha/models.py:192–225;
+app/chamados/services/materializacao.py:1095–1097.
+
+PORTA B E CAMPOS
+- Ausencia.status. criar_ausencia grava o estado inicial. A sonda usa
+  ausencia.decidir(..., "rejeitada"), a mesma porta de serviço do cancelamento
+  individual. A transição aprovada → rejeitada é permitida; mudar_estado
+  atribui o status e chama Ausencia.save. A folha lê aprovadas em
+  ausencias_na_janela. O cartório lê ausencia_cobre para cobrança, que exclui
+  rejeitadas. app/ponto/views.py:85–89,2872–2890;
+  app/ponto/services/ausencia.py:486,529,560–562,914–923,969–988,1057–1104;
+  app/ponto/models.py:918; app/folha/export.py:71–92,169–185;
+  app/ponto/turnos.py:2523–2532,2550–2571;
+  app/ponto/services/cartorio.py:1382–1385.
+- CelulaDia.veredito e protestos. O post_save de Ausencia chama o cartório
+  sincronicamente para os dias da ausência. O cartório chama lavrar_veredito
+  e carimbar. A porta da célula grava os campos e preserva o veredito de
+  admin. O espelho lê veredito e protestos para decidir se retém.
+  app/ponto/signals.py:85–93,115–128,143–147;
+  app/ponto/services/cartorio.py:1321–1326,1898–1922,2073–2090;
+  app/escala/models.py:1819–1828;
+  app/ponto/portas/celula.py:957–965,1060–1098,1181–1202;
+  app/folha/export.py:1247–1298,1301–1307.
+- CelulaDia.ata. O cartório monta a ata e a porta a grava em lavrar_veredito;
+  carimbar_precedencia também atualiza a chave precedencia. A exceção de
+  pausa da folha lê a ata e o DNA via periodos_do_dia.
+  app/ponto/services/cartorio.py:1898–1906,2034–2055;
+  app/ponto/portas/celula.py:1049–1067,1090–1098,1205–1217;
+  app/folha/export.py:1148–1155,1173,1293;
+  app/ponto/juiz_batida.py:149–176.
+- FechamentoMensal.status. O motor cria em aberto; aprovar e aprovar_lote
+  escrevem aprovado; reabrir, reabrir_lote e reabrir_periodo escrevem aberto.
+  A geração chama aprovar_lote. O montador filtra STATUS_NO_TXT. O
+  classificador recebe também fechamentos de outros status. Sem fechamento,
+  a lista do classificador fica vazia e a saída registra status e motivo nulos.
+  app/ponto/models.py:398–410,481–487;
+  app/ponto/services/fechamento.py:898–901,1323–1355,1449–1452;
+  app/folha/views.py:248–254; app/folha/export.py:687–728,765–788.
+
+O QUE A MEDIÇÃO COBRE
+- A → B é o delta da contribuição do próprio colaborador à montagem pelo
+  gravado, como no comparador da 6a1. A sonda chama classificar_export e passa
+  seu resultado a montar_linhas_export. O status e o motivo são os do
+  primeiro crivo que decidiu. Um crivo encoberto por outro fica
+  [nao verificado]. A montagem é isolada por fechamento para atribuir
+  linhas ao PK mesmo se houver código Domínio repetido. O delta usa
+  multiconjuntos e sinaliza também mudança apenas na ordem.
+  app/folha/export.py:654–658,690–746,765–788,866–884,946–981;
+  app/colaboradores/models.py:311–314.
+- O TXT arquivado, a importação no Domínio e a reprodução histórica das
+  perguntas ficam [nao verificado]. A rota de geração usa fechamentos
+  derivados em memória e valida o layout completo. Esta sonda mede pelo
+  gravado, com o relógio da execução e o teto normal do cartório. Rejeitar
+  uma falta que cruza a borda muda o status do registro inteiro dentro do
+  savepoint. A devolução de perguntas e a reconciliação do consumidor são
+  on_commit; seus efeitos ficam fora do ensaio com rollback.
+  app/folha/models.py:174–187; app/folha/views.py:209–214,267–281;
+  app/ponto/services/ausencia.py:969–988; app/ponto/signals.py:115–128,250–279;
+  app/ponto/services/cartorio.py:2073–2090.
+- A sonda conta exceções que chegam às etapas e falhas registradas no log
+  ou no stderr durante uma exceção. Fallbacks internos sem registro ficam
+  [nao verificado]. app/core/observ.py:73–91;
+  app/ponto/services/cartorio.py:1954–1965,2094–2101;
+  app/ponto/management/commands/detectar_ausencias.py:785–807.
+
+EXECUÇÃO FUTURA
+O corpo Python foi preparado para o shell tenant de bin/sombra.sh --rodar.
+O lançador, antes de entrar no Python, lê a lavra de produção, grava arquivos
+auxiliares e atualiza a sombra; também usa tee. Essas operações do lançador
+ficam fora do rollback do Python. bin/sombra.sh:136–167,179–191,483–493.
+
+Dentro do Python, o ensaio preserva os saves e signals e silencia os
+transportes de push. Os INSERTs de auditoria e outbox podem consumir [nao verificado]
+sequências. Por isso a sonda prepara RESTART transacional nas sequências de
+public e juliani sob a transação externa, antes de escrever nos casos.
+Permissões e comportamento das sequências na sombra instalada
+[nao verificado]. app/chamados/push_utils.py:12–44,89–111;
+app/chamados/fcm_utils.py:49–85,101–106;
+app/chamados/services/disputa_emissao.py:1777–1798;
+app/core/observ.py:133–138; app/ponto/portas/celula.py:945–965;
+bin/sombra_db.sh:45.
+"""
+
+import io
+import json
+import logging
+import socket
+import sys
+from collections import Counter, defaultdict
+from contextlib import ExitStack, closing, redirect_stderr, redirect_stdout
+from unittest.mock import patch
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.storage import FileSystemStorage
+from django.db import connection, transaction
+from django.db.models import Exists, OuterRef
+from django.utils import timezone
+
+from chamados import fcm_utils, push_utils [nao verificado]
+from chamados.services.disputa_emissao import push_disputa_silenciado [nao verificado]
+from chamados.services.materializacao import ESCAPES_QUE_VIRAM_AUSENCIA
+from colaboradores.mixins import tem_acao
+from colaboradores.models import Colaborador
+from folha import export as E
+from folha.models import ExportacaoDominio
+from ponto.models import Ausencia, FechamentoMensal
+from ponto.services.ausencia import decidir
+
+
+REGISTROS = ("10", "11")
+
+
+class GuardaSombra(RuntimeError):
+    pass
+
+
+class SemDecisorDP(RuntimeError):
+    pass
+
+
+class EstadoInesperado(RuntimeError):
+    pass
+
+
+class LayoutInesperado(RuntimeError):
+    pass
+
+
+class TransacaoMarcadaParaRollback(RuntimeError):
+    pass
+
+
+class EfeitoExternoBloqueado(RuntimeError):
+    pass
+
+
+class Descartar(io.TextIOBase):
+    def __init__(self, falhas=None):
+        super().__init__()
+        self.falhas = falhas
+
+    def write(self, texto):
+        erro = sys.exc_info()[1]
+        if self.falhas is not None and erro is not None:
+            self.falhas.append(erro)
+        return len(texto)
+
+
+def contagem_erros(falhas):
+    objetos = {id(erro): erro for erro in falhas if isinstance(erro, BaseException)}
+    tipos = Counter(type(erro).__name__ for erro in objetos.values())
+    tipos.update(erro for erro in falhas if isinstance(erro, str))
+    return dict(tipos)
+
+
+def etapa(falhas, acao, *args, desfazer=False):
+    inicio = len(falhas)
+    valor = None
+    try:
+        with transaction.atomic():
+            try:
+                valor = acao(*args)
+                if transaction.get_rollback():
+                    raise TransacaoMarcadaParaRollback()
+            finally:
+                if desfazer:
+                    transaction.set_rollback(True)
+    except Exception as erro:
+        falhas.append(erro)
+    erros = contagem_erros(falhas[inicio:])
+    del falhas[inicio:]
+    return valor, erros
+
+
+def guardar_sombra():
+    if not (
+        settings.SETTINGS_MODULE == "config.settings.sombra"
+        and getattr(settings, "HASNER_SOMBRA", False) is True
+        and set(settings.DATABASES) == {"default"}
+        and connection.vendor == "postgresql"
+        and connection.settings_dict["NAME"] == "sombra"
+        and connection.settings_dict["HOST"] == "sombra_db"
+        and getattr(connection, "schema_name", None) == "juliani"
+        and not connection.in_atomic_block
+        and connection.get_autocommit()
+    ):
+        raise GuardaSombra()
+
+
+def preparar_sequencias():
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            DO $sonda$
+            DECLARE
+                s record;
+                qualificada text;
+                ultimo bigint;
+                usada boolean;
+                proximo numeric;
+            BEGIN
+                FOR s IN
+                    SELECT n.nspname, c.relname, p.seqcache, p.seqincrement,
+                           p.seqmin, p.seqmax, p.seqcycle
+                    FROM pg_catalog.pg_sequence p
+                    JOIN pg_catalog.pg_class c ON c.oid = p.seqrelid
+                    JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+                    WHERE n.nspname IN ('juliani', 'public')
+                    ORDER BY n.nspname, c.relname
+                LOOP
+                    qualificada := format('%I.%I', s.nspname, s.relname);
+                    EXECUTE format('ALTER SEQUENCE %s CACHE %s', qualificada, s.seqcache);
+                    EXECUTE 'SELECT last_value, is_called FROM ' || qualificada
+                        INTO ultimo, usada;
+                    proximo := ultimo::numeric;
+                    IF usada THEN
+                        proximo := proximo + s.seqincrement;
+                    END IF;
+                    IF proximo NOT BETWEEN s.seqmin AND s.seqmax THEN
+                        IF NOT s.seqcycle THEN
+                            CONTINUE;
+                        END IF;
+                        proximo := CASE WHEN s.seqincrement > 0
+                                       THEN s.seqmin ELSE s.seqmax END;
+                    END IF;
+                    EXECUTE format('ALTER SEQUENCE %s RESTART WITH %s', qualificada, proximo);
+                END LOOP;
+            END
+            $sonda$;
+        """)
+
+
+def decisor_dp():
+    usuarios = get_user_model().objects.filter(is_active=True).order_by("-is_superuser", "pk")
+    with closing(usuarios.iterator(chunk_size=200)) as ativos:
+        for usuario in ativos:
+            if tem_acao(usuario, "editar_ausencias"):
+                return usuario
+    raise SemDecisorDP()
+
+
+def preparar_b():
+    dp = decisor_dp()
+    preparar_sequencias()
+    return dp
+
+
+def listar_casos(empresa, mes, ano, tipo, estado):
+    ini, fim = E.janela_competencia(empresa, mes, ano)
+    falta_na_janela = E.ausencias_na_janela(
+        OuterRef("pk"), tipo, ini, fim,
+    ).filter(status=estado)
+    candidatos = (
+        Colaborador.objects.filter(empresa_id=empresa.pk)
+        .filter(Exists(falta_na_janela))
+        .order_by("pk")
+        .values_list("pk", flat=True)
+    )
+    casos = []
+    for colab_pk in candidatos:
+        faltas = tuple(
+            E.ausencias_na_janela(colab_pk, tipo, ini, fim)
+            .filter(status=estado).order_by("pk").values_list("pk", flat=True)
+        )
+        if not faltas:
+            raise EstadoInesperado()
+        casos.append((colab_pk, faltas))
+    return casos
+
+
+def rejeitar_faltas(colab_pk, faltas, tipo, estado, dp):
+    ausencias = list(
+        Ausencia.objects.filter(pk__in=faltas, colaborador_id=colab_pk)
+        .select_related("colaborador__empresa").order_by("pk")
+    )
+    if tuple(a.pk for a in ausencias) != faltas:
+        raise EstadoInesperado()
+    if any(a.tipo != tipo or a.status != estado for a in ausencias):
+        raise EstadoInesperado()
+
+    agora = timezone.now()
+    for ausencia in ausencias:
+        decidir(
+            ausencia, "rejeitada", por=dp, decisor=dp, aprovada_em=agora,
+            motivo="sonda de falta aprovada",
+        )
+
+    gravadas = list(
+        Ausencia.objects.filter(pk__in=faltas).order_by("pk")
+        .values_list("pk", "status")
+    )
+    if gravadas != [(pk, "rejeitada") for pk in faltas]:
+        raise EstadoInesperado()
+
+
+def fotografar(empresa, mes, ano, colab_pk, foto):
+    fechs = list(
+        FechamentoMensal.objects.filter(colaborador_id=colab_pk, mes=mes, ano=ano)
+        .select_related("colaborador__empresa")
+    )
+    if len(fechs) > 1:
+        raise EstadoInesperado()
+    fech = fechs[0] if fechs else None
+    foto["fechamento_pk"] = fech.pk if fech else None
+    foto["fechamento_status"] = fech.status if fech else None
+
+    itens = E.classificar_export(empresa, mes, ano, fechamentos=fechs)
+    if [item["colaborador_id"] for item in itens] != [f.colaborador_id for f in fechs]:
+        raise EstadoInesperado()
+    item = itens[0] if itens else None
+    foto["classificador"] = {
+        "status": item["status"] if item else None,
+        "motivo": item["motivo"] if item else None,
+    }
+
+    linhas, _ = E.montar_linhas_export(
+        empresa, mes, ano, itens=itens, fechamentos=fechs,
+    )
+    matricula = item["codigo_dominio"].zfill(10) if item else None
+    por_tipo = {reg: Counter() for reg in REGISTROS}
+    pai = None
+    for linha in linhas:
+        partes = E.partes_da_linha(linha)
+        if partes is None:
+            raise LayoutInesperado()
+        reg = partes["reg"]
+        if reg == "10":
+            pai = partes["matricula"]
+            if pai != matricula:
+                raise LayoutInesperado()
+        elif reg != "11" or pai is None:
+            raise LayoutInesperado()
+        por_tipo[reg][linha] += 1
+    return linhas, por_tipo
+
+
+def fotografar_b(empresa, mes, ano, colab_pk, faltas, tipo, estado, dp, foto):
+    rejeitar_faltas(colab_pk, faltas, tipo, estado, dp)
+    return fotografar(empresa, mes, ano, colab_pk, foto)
+
+
+def delta_txt(a, b):
+    linhas_a, tipos_a = a
+    linhas_b, tipos_b = b
+    delta = {}
+    for reg in REGISTROS:
+        ca, cb = tipos_a[reg], tipos_b[reg]
+        delta[reg] = {
+            "A": sum(ca.values()),
+            "B": sum(cb.values()),
+            "adicionadas": sum((cb - ca).values()),
+            "removidas": sum((ca - cb).values()),
+        }
+    mudou = linhas_a != linhas_b
+    return mudou, mudou and tipos_a == tipos_b, delta
+
+
+def medir_caso(falhas, comp, colab_pk, faltas, tipo, estado, dp, erros_preparo):
+    empresa, mes, ano = comp
+    caso = {
+        "empresa_pk": empresa.pk, "mes": mes, "ano": ano,
+        "colaborador_pk": colab_pk, "ausencia_pks": faltas,
+        "A": {}, "B": {}, "delta_A_para_B": None,
+        "mudou_txt": None, "so_ordem": None, "mudou_so_linhas_com_entra_nos_dois": None,
+    }
+    a, erros_a = etapa(
+        falhas, fotografar, empresa, mes, ano, colab_pk, caso["A"], desfazer=True,
+    )
+    if erros_preparo:
+        b, erros_b = None, erros_preparo
+    else:
+        b, erros_b = etapa(
+            falhas, fotografar_b, empresa, mes, ano, colab_pk,
+            faltas, tipo, estado, dp, caso["B"], desfazer=True,
+        )
+    caso["excecoes_por_etapa"] = {
+        nome: erros for nome, erros in (("A", erros_a), ("B", erros_b)) if erros
+    }
+    if not caso["excecoes_por_etapa"]:
+        try:
+            mudou, so_ordem, delta = delta_txt(a, b)
+            ambos_entram = all(
+                caso[e]["classificador"]["status"] == "entra" for e in ("A", "B")
+            )
+            caso.update(
+                delta_A_para_B=delta, mudou_txt=mudou, so_ordem=so_ordem,
+                mudou_so_linhas_com_entra_nos_dois=mudou and ambos_entram,
+            )
+        except Exception as erro:
+            caso["excecoes_por_etapa"]["delta"] = contagem_erros([erro])
+    caso["status"] = "INCONCLUSIVO" if caso["excecoes_por_etapa"] else "CONCLUSIVO"
+    return caso
+
+
+def contar(casos):
+    pks = sorted({caso["colaborador_pk"] for caso in casos})
+    return {"casos": len(casos), "colaboradores": len(pks), "colaborador_pks": pks}
+
+
+def placar(casos):
+    conclusivos = [c for c in casos if c["status"] == "CONCLUSIVO"]
+    grupos = defaultdict(list)
+    for c in conclusivos:
+        a, b = c["A"]["classificador"], c["B"]["classificador"]
+        grupos[(a["status"], a["motivo"], b["status"], b["motivo"])].append(c)
+
+    por_caminho = []
+    for (sa, ma, sb, mb), grupo in grupos.items():
+        por_caminho.append({
+            "A": {"status": sa, "motivo": ma},
+            "B": {"status": sb, "motivo": mb},
+            "total": contar(grupo),
+            "mudam_txt": contar([c for c in grupo if c["mudou_txt"]]),
+            "mudam_so_linhas_com_entra_nos_dois": contar([
+                c for c in grupo if c["mudou_so_linhas_com_entra_nos_dois"]
+            ]),
+        })
+    return {
+        "total": contar(casos),
+        "conclusivos": contar(conclusivos),
+        "inconclusivos": contar([c for c in casos if c["status"] == "INCONCLUSIVO"]),
+        "mudam_txt": contar([c for c in conclusivos if c["mudou_txt"]]),
+        "mudam_so_linhas_com_entra_nos_dois": contar([
+            c for c in conclusivos if c["mudou_so_linhas_com_entra_nos_dois"]
+        ]),
+        "por_caminho": por_caminho,
+    }
+
+
+def censo(falhas, resultado):
+    tipo, estado = ESCAPES_QUE_VIRAM_AUSENCIA["FALTA_DIA"]
+    triplas = list(
+        ExportacaoDominio.objects.order_by("empresa_id", "ano", "mes")
+        .values_list("empresa_id", "mes", "ano").distinct()
+    )
+    entregues = []
+    for empresa_pk, mes, ano in triplas:
+        vigente, erros = etapa(
+            falhas, E.competencia_entregue, empresa_pk, mes, ano, True,
+        )
+        if erros:
+            resultado["erros_de_universo"].append({
+                "empresa_pk": empresa_pk, "mes": mes, "ano": ano,
+                "etapa": "competencia_entregue", "excecoes_por_tipo": erros,
+            })
+        elif vigente is not None:
+            entregues.append((empresa_pk, mes, ano, vigente))
+
+    competencias_percorridas = []
+    chaves_listadas = []
+    lotes = []
+    for empresa_pk, mes, ano, vigente in entregues:
+        chave = (empresa_pk, mes, ano)
+        comp = {
+            "empresa_pk": empresa_pk, "mes": mes, "ano": ano,
+            "exportacao_pk": vigente.pk, "casos_listados": None, "casos_percorridos": 0,
+        }
+        resultado["competencias"].append(comp)
+        competencias_percorridas.append(chave)
+
+        def listar():
+            empresa = vigente.empresa
+            return empresa, listar_casos(empresa, mes, ano, tipo, estado)
+
+        lote, erros = etapa(falhas, listar)
+        if erros:
+            comp.update(status="INCONCLUSIVO", excecoes_por_tipo=erros)
+            resultado["erros_de_universo"].append({
+                "empresa_pk": empresa_pk, "mes": mes, "ano": ano,
+                "etapa": "listar_casos", "excecoes_por_tipo": erros,
+            })
+            continue
+        empresa, casos = lote
+        comp["casos_listados"] = len(casos)
+        chaves_listadas.extend((*chave, colab_pk) for colab_pk, _ in casos)
+        lotes.append((comp, (empresa, mes, ano), casos))
+
+    dp, erros_preparo = etapa(falhas, preparar_b) if chaves_listadas else (None, {})
+    for comp, contexto, casos in lotes:
+        inconclusivos = 0
+        for colab_pk, faltas in casos:
+            caso = medir_caso(
+                falhas, contexto, colab_pk, faltas, tipo, estado, dp, erros_preparo,
+            )
+            resultado["casos"].append(caso)
+            comp["casos_percorridos"] += 1
+            inconclusivos += int(caso["status"] == "INCONCLUSIVO")
+        comp["status"] = "INCONCLUSIVO" if inconclusivos else "CONCLUSIVO"
+
+    comps_listadas = [(e, m, a) for e, m, a, _ in entregues]
+    chaves_percorridas = [
+        (c["empresa_pk"], c["mes"], c["ano"], c["colaborador_pk"])
+        for c in resultado["casos"]
+    ]
+    resultado["universo"] = {
+        "triplas_de_exportacao": len(triplas),
+        "competencias_listadas": l
+
+[truncado em 20000 de 23704 caracteres]
 
 ## 21/11 02:04 · sessao 3ed4ecd09de6 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1322,44 +1840,4 @@ O cartório também abre e fecha chamado de cluster pela chamada em `app/ponto/s
 
 O censo AST existente, `PYTHONPATH=app python3 -B` e `core.censo_escritas.varrer_arvore('app')`, fornece candidatos com 21 ocorrências de `PerguntaDisputa`, 19 de `DisputaSupervisao`, 16 de `ChamadoColaborador`, 10 de `CelulaDia` e 1 de `DecisaoPergunta`. O método usa atribuição heurística e deixa fora, por exemplo, os nascimentos via `cls.objects` e o `p.save(force_insert=True)` desta árvore. `app/core/censo_escritas.py:6–56,469–492` `app/chamados/models.py:1030,1154,3209`
 
-## 20/11 19:46 · sessao 15c545c76fcc · E4C-F5-CONSTROI · construtor · origem=Code
-
-**PAREI pelo item (78).** O selo enumerou **5 sítios e acusou 1**. A acusação é ruído do visitante, e o teste ficou vermelho conforme o aval. A catraca (06) examinou **2 chamadas com `update_fields`**, encontrou **1** com um dos campos vigiados e fez **0 acusações**. A medição foi feita sobre o AST da cópia, com os mutantes aplicados em memória. [Selo do par:505](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:505) · [Catraca:306](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:306) · [Tabela de mutantes:48](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:48) [nao verificado]
-
-### Lista completa da parada
-
-| Sítio | Acusação | Classificação |
-|---|---|---|
-| [`chamados/models.py:1517`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:1517), `ChamadoColaborador.reabrir` | `REABERTURA` sem UPDATE pareado de `validada_em` | **Ruído.** O visitante atribui o ato ao chamador ao seguir `self.ressuscitar_perguntas()`, mas procura o UPDATE no escopo do chamador. A função chamada registra a `REABERTURA` e passa `validada_em=None` à porta do lote no mesmo `atomic`. [Visitante:281](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:281) · [Ato:1719](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:1719) · [UPDATE:1721](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/models.py:1721) |
-
-### Arquivos tocados e alcance
-
-- **(78) [`test_e4c_f5_selo_par_ato_coluna.py:452`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:452).** Antes, o censo partia das escritas da coluna. O selo vizinho partia do ato apenas para `VALIDACAO`. Agora, o censo adicional parte de `RECUSA`, `REABERTURA` e `DEVOLUCAO` e procura a coluna no `save(update_fields=...)` ou no `.update(...)` da mesma pergunta, inclusive pela porta de lote. Os atos vêm das constantes do modelo e o nome da coluna vem do campo do modelo. Os sintéticos passaram para as duas formas, incluindo a rejeição de um UPDATE em outra pergunta. [Selo vizinho:12](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_volta3_selos.py:12) · [Campo e atos:22](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:22) · [Censo novo:461](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:461) · [Sintéticos:515](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:515)
-- **(06) [`test_e4c_f5_selo_catraca.py:182`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:182).** Antes, a catraca varria atributos crus, `getattr`, `refresh_from_db` e projeções `only`/`values*` usadas em decisões. Agora, também resolve strings em `update_fields`, inclusive em lista, tupla ou conjunto literal ligado a um nome local. O aval das 19h45, item 1, especifica o critério de (06) do aval das 18h45. A acusação exige ausência de atribuição ao mesmo campo no mesmo receptor na função. O controle original passou com o texto e o esperado intactos. Os sintéticos passaram com atribuição correspondente e acusaram ausência de atribuição, outro campo e outro receptor. Na cópia, `validada_em` aparece no `save` de `devolver_validacao_recusada`, que atribui o campo ao mesmo `perg`. A outra chamada grava `recusa_motivo`. [Projeções:118](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:118) · [Resolução de textos:83](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:83) · [Controle:369](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:369) · [Sintéticos:380](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:380) · [Devolução:287](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:287) · [Recusa:940](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:940) [nao verificado]
-- **[`e4c_f5_voltaE_mutantes.py:26`](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:26).** Tabela dos dois mutantes novos, com aplicação sobre o texto em memória. [Aplicação:48](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:48)
-
-### Mutantes e comandos por label
-
-- **`d_paridade_devolucao_sem_coluna`** remove toda menção a `validada_em` de `devolver_paridade_bug_par_103`, incluindo a atribuição, o campo do `save`, as fotos e a docstring. Preserva o ato `DEVOLUCAO`. É distinto de `d_devolucao_mantem_coluna`, que troca apenas o `save` de `devolver_validacao_recusada` por `pass`. A execução isolada acrescentou uma falha no subteste da devolução da paridade, na linha **512**, além do ruído já presente na base. [Alvo:324](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:324) · [Trocas:26](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:26) · [Mutante anterior:61](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_volta3_mutantes.py:61) · [Asserção:512](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:512)
-- **`c_recusa_update_fields_cru`** acrescenta `respondida_em` ao `save(update_fields=...)` de `recusar_pergunta` sem atribuição correspondente. A execução isolada acusou `update_fields(respondida_em)` na linha **316** da catraca. [Alvo:940](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/services/validacao.py:940) · [Troca:40](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/e4c_f5_voltaE_mutantes.py:40) · [Asserção:316](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:316)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings_test \
-  python3 manage.py test \
-  chamados.tests.test_e4c_f5_selo_par_ato_coluna \
-  chamados.tests.test_e4c_f5_selo_catraca --noinput
-
-PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings_test \
-  F5_VOLTA_E_MUTANTE=d_paridade_devolucao_sem_coluna \
-  python3 manage.py test \
-  chamados.tests.test_e4c_f5_selo_par_ato_coluna.SeloParAtoColunaTest.test_atos_que_desfazem_gravam_a_coluna --noinput
-
-PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings_test \
-  F5_VOLTA_E_MUTANTE=c_recusa_update_fields_cru \
-  python3 manage.py test \
-  chamados.tests.test_e4c_f5_selo_catraca.SeloCatracaTest.test_producao_sem_leituras_cruas --noinput
-```
-
-**Limites.** A catraca compara a expressão AST do receptor. Equivalência entre nomes locais distintos e `update_fields` passado por `**kwargs` ficaram fora da cobertura nova. A execução acima pelo Django, a suíte, os testes com banco e o comportamento em produção ficam **[nao verificado]**. A certificação cabe ao Code e ao opus final. [Comparação de receptores:271](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:271) · [Leitura da palavra-chave:193](/home/ronald/wt-codex-e4c-f5-constroi-184647/app/chamados/tests/test_e4c_f5_selo_catraca.py:193) [nao verificado]
-
-_7614 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7615 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
