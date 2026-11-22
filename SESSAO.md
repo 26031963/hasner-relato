@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 08:08:54.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **823**.
+**Medido em 22/11/2026 08:14:41.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **816**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -826,10 +826,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:15:21 | Bash | Compare with earlier 1.2 recortes | `cd /home/ronald/saas-hasner/logs/E4C-F5-1_2; for f in $(ls -t $(find . -name '*.log' -size +1M) \| head -8); do echo "$f $(stat -c %y $f\|cut -c6-16) $(/bin/grep -E '^(OK\|FAILED)($\| \()' $f \| tail -1) \| $(/bin/grep -cE '^(FAIL\|ERROR): (test_unidade_entregue_sai_antes\|test_5644_plantio_real)' $f)"; done; cd /home/ronald/wt-codex-e4c-f5-constroi-193405; git log --oneline -S'_IRMAS_CONFIRMADAS_ ...` |
 | 20:15:12 | Bash | Show tracebacks of 1.2 recorte failures | `cd /home/ronald/saas-hasner/logs/E4C-F5-1_2/v5/prova; for t in test_unidade_entregue_sai_antes_de_recusa_e_carimbo test_5644_plantio_real_par_completa_celula_21; do awk -v t="$t" '$0 ~ "^(FAIL\|ERROR): "t {p=1} p&&/^-{60}/{c++} p{print} c==2{exit}' chamados.log \| tail -25 \| cut -c1-250; echo ======; done` |
 | 20:15:11 | TaskStop |  | `-` |
-| 20:13:02 | Bash | Find proofs using broken mutant activation | `cd /home/ronald; for d in wt-*; do f=$(/bin/grep -rlE "^mutante\(.*\)\.__enter__\(\)" $d/app 2>/dev/null); [ -n "$f" ] && echo "$d $(stat -c %y $d \| cut -c6-16) $f"; done` |
-| 20:12:51 | Bash | See activation lines | `tail -22 /home/ronald/wt-12v5p-sonda-m2/app/chamados/tests/test_e4c_f5_validacao_plantio.py \| head -11; /bin/grep -n 'CORTES_F2_MUTANTE\\|mutante(' /home/ronald/wt-12v5p-194740-m2/app/chamados/tests/test_e4c_f5_validacao_plantio.py \| tail -3` |
-| 20:12:47 | Bash | Read mutante helper and probe appendix | `W=/home/ronald/wt-codex-e4c-f5-constroi-193405/app; /bin/grep -n 'def mutante' -A40 $W/chamados/tests/cortes_f2_f9_apoio.py \| head -60; tail -12 /home/ronald/wt-12v5p-sonda-m2/app/chamados/tests/test_e4c_f5_validacao_plantio.py` |
-| 20:12:41 | Bash | Read 1.2 recorte failures and sonda result | `cd /home/ronald/saas-hasner/logs/E4C-F5-1_2/v5/prova; /bin/grep -E '^(FAIL\|ERROR):' chamados.log; cat sonda_m2.rc; /bin/grep -n 'SONDA' sonda_m2.log \| head; /bin/grep -A25 'SONDA-PILHA' sonda_m2.log \| head -60; tail -30 sonda_m2.log` |
-| 20:09:13 | Bash | Add 20:0x status line to RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read().split('\n') assert s[7].startswith('- 19:5x: 3.3') s.insert(7,"- 20:0x: SENTINELA v5 recorte chamados rc 1 (3 FAIL): (a) test_contagem_dos_asserts_igual_ao_main -- a classe entrou no harness congelado test_e3_c8b (86); CURA f1d73910b: classe em test_sentinela_volta5_sem_banco.py, c8b byte a byte = f3d23021f; (b ...` |
-| 20:09:07 | Bash | Read RELATO top lines | `cd /home/ronald/saas-hasner; date +%H:%M; sed -n 1,9p app/docs/RELATO.md \| cut -c1-220` |
-| 20:09:02 | Bash | Peek WRAPPER agent output | `tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/a13972992d4e679ed.output` |
