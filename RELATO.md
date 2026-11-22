@@ -10059,6 +10059,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**21/11 21:40:26 disjuntor (NEGOU B1)** -- agente a71846cfbdce7d0d7 -- Bash -- alvo sha1:cb53418b78 (338 car., na trilha privada)
+
 **21/11 20:49:16 disjuntor (NEGOU B1)** -- agente af22b35b9a636ef1a -- Bash -- alvo sha1:d85c333743 (106 car., na trilha privada)
 
 **21/11 18:49:14 disjuntor (NEGOU ANEXO-ENXUTO)** -- agente abf94d602302172a1 -- Bash -- alvo sha1:cc90e701b9 (470 car., na trilha privada)
@@ -12290,3 +12292,4 @@ INCOMPLETO: item 3 sim/nao por dia.
 - SENTINELA: PERGUNTA DE DESENHO da opcao B -> DECIDIDO PELA LEI (topo, linha 2): opcao A | contestavel. Base: aval 1930 (1) "texto residual nunca decide" + L-130 + LEI-AKITA 1 (o ramo que absolvia pelo destino e o circulo HX-FALLBACK-SEM-LEI, logs/o261e/f0_desenho_opus.txt:3). test_d (O261e) e bc_beco: lei nenhuma em LEIS/CORTES/DOSSIES os sela (grep 0). Proxima: 2 pedacos so de teste; prova de frota antes do pouso.
 - 3.3 verif3 BLOQUEIA (logs/E4C-F5-3_3/verif3/r.txt). Triagem em logs/E4C-F5-3_3/verif3/triagem.txt, amostra 3/3 conferida. 4 procedentes, todos so de teste ou nota: A2 com SELECT antes da trava, C20 com espiao, prefetch velho, nota N+K+D. Descartes sustentados: tranca_em_lote; C6 pre-selecao e K7 vao a fila.
 - Cura 5 Codex construtor em /home/ronald/wt-codex-e4c-f5-constroi-213412 (pid 1073055), brief em 4 pedacos, 0 arquivo de producao. Pela 5(d), depois da cura vem a suite inteira e o opus, sem Codex 4.
+- FERIADO P1 (agente a71846 cortado pelo B1 esperando a trava, 0 commit): RED test_feriado_matriz_p1.py na copia wt-feriado-matriz-203331 (nao commitado), cura pronta em scratchpad/p1/cura_p1.py (9 trocas, 0 except). RED na fila da pista (pid 975748), veredito em logs/FERIADO-POR-POSTO/p1/red.rc. DECIDIDO PELA LEI aval 2125 (b) "agora NAO vira obrigatorio; editar_dia le o relogio UMA vez" + Clock Injection: editar_dia ganha kwarg opcional agora (borda le uma vez quando ausente), trocar_plantao le uma vez e passa aos dois lados; assinatura publica mantida, as 16 chamadas ficam | contestavel; reversao: nada gravado. Sessao conclui P1 (gravar cura apos o RED, catraca test_cadastro_futuro_c5e 44 pelo censo do selo, green + vizinhos, commit).
