@@ -1,7 +1,65 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 19:09** · publicado em **22/11/2026 19:14** (UTC-3)
+> Ultima resposta processada: **22/11/2026 19:18** · publicado em **22/11/2026 19:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 19:18 · sessao 7442dcdcf01c · SIMPLIFICA-V3-2211-1726 · verificador · origem=Code
+
+**REPROVADO — SIMPLIFICA-V3-2211-1726, volta final sobre a cópia `52f298e35fa71e2361e5c4388f48319af9583aa2`.** O certificador devolve `0` para um fragmento sintético que declara todas as LABELS e `Ran 1 test`. A volta intermediária também pode devolver `3` diante de um vermelho, porque relê marcadores no mesmo log em que captura a saída dos filhos. `bin/pista_certifica.sh:39–65`, `bin/pista_certifica.sh:68–113`, `bin/volta_intermediaria.sh:18–52`.
+
+Conferi os 25 arquivos presentes pelos hashes de blob dos anexos e a ausência do selo removido. Fiz sondas de Bash e Python em memória, com dublês de Git e Docker para o certificador. A cópia veio sem `.git`. A identidade do commit pelo Git, os RED/GREEN citados na triagem, a execução integral dos selos e os logs reais da VM e da Pista 2 ficam **[nao verificado]**. [nao verificado]
+
+## 1. Achados da volta 2 e mordida dos selos
+
+| Achado | O que a árvore e os selos mostram |
+|---|---|
+| **(a) Vínculo do job e forma da linha de fim** | Tirar **só a igualdade do job** derruba os casos «outro job do mesmo sha» e «sem AMBIENTE job». Tirar a regex do restante derruba `rc=` repetido e `inicio=x fim=y`. **Tirar só a regex do ID sobrevive** aos 42 casos do script original que reproduzi em memória: a fixture deixa o ID inválido só na linha de fim, e a igualdade ainda barra. Com `_<sha8>` nos dois lados, o mutante certifica e a árvore recusa. `bin/pista_certifica.sh:39–50`, `bin/tests/test_pista_certifica.sh:113–124`. |
+| **(b) Veredito e `Ran`** | `OK (lixo` morde a volta à regra antiga. `Ran … in lixo` morde a perda da duração numérica. ` FAILED (failures=3)` antes de `OK` morde a volta ao leitor antigo. **Sobrevivem duas remoções isoladas:** tornar opcional o `)` aceita `OK (skipped=2` e ainda recusa a fixture `OK (lixo`; tirar a guarda de prefixo `FAILED` deixa passar `FAILED com erro` antes de `OK`, enquanto os `FAILED (...)` dos selos continuam barrados pela contagem. `bin/pista_certifica.sh:57–65`, `bin/tests/test_pista_certifica.sh:91–97`, `bin/tests/test_pista_certifica.sh:125–138`. |
+| **(c) Fronteira de `argv`** | Tirar **só `set -f`** faz `ap[i]` virar `api` no diretório da fixture e derruba o caso. O teste do escritor morde o retorno ao `join` cru com argumento composto e com glob. Um mutante do escritor que admite aspas preserva todas as asserções existentes, e o leitor ainda barra a palavra com aspas. `bin/pista_certifica.sh:75–95`, `bin/tests/test_pista_certifica.sh:131–133`, `app/core/tests/test_ambiente_do_run.py:28–33`, `app/core/tests/test_ambiente_do_run.py:57–60`. |
+| **(e) Consulta ao Postgres** | O caso verde falha ao trocar a consulta da VM, e `MORDE 3` exige que `select version()` seja recusada. O dublê reconhece a consulta por substring e aceita outro nome de container. Trocar só `juliani_db_test` preservou os resultados dos casos reproduzidos. Do lado Django, trocar a consulta por outra que devolva texto preserva `assertTrue(pg)`. `bin/pista_certifica.sh:101–109`, `bin/tests/test_pista_certifica.sh:14–21`, `bin/tests/test_pista_certifica.sh:155–159`, `app/core/tests/test_ambiente_do_run.py:37–51`. |
+| **(f) Inspect e imagem do run** | Remover `timeout 30`, a guarda `exit 3` ou o uso de `"$IMAGEM_ID"` no run derruba a respectiva inspeção textual de `test_suite_sh`. A guarda só é conferida por presença. Retirar a passagem de `HASNER_IMAGEM_ID`, mantendo o run pelo ID, escapa dessas asserções. `bin/suite.sh:320–335`, `bin/tests/test_suite_sh.sh:68–78`, `app/core/tests/test_ambiente_do_run.py:43–51`. |
+| **Docs, SHA, dublê e volta** | O comando documentado tem três argumentos. O selo de `suite.sh` confere o repasse de `HASNER_SHA`, e `SHA_RUN=''` preservaria essa checagem. Retirar o dublê de `test_suite_motivo` volta a fazer os casos «0 sim» dependerem do Docker da máquina. O selo da volta morde `3 → 1`, mas usa uma suite falsa que só devolve um número. `CLAUDE.md:126`, `bin/tests/test_suite_sh.sh:77–78`, `bin/tests/test_suite_motivo.sh:13–21`, `bin/tests/test_suite_motivo.sh:38–51`, `bin/tests/test_suite_motivo.sh:68–72`, `bin/tests/test_volta_intermediaria_rc.sh:14–35`. |
+
+## 2. O que certifica e o que o formato recusa
+
+- **Certifica um fragmento.** Na sonda, as cinco linhas `AMBIENTE` coerentes, `Ran 1 test in 1.0s`, `OK` e uma linha de fim sintética coerente deram `0`, sem `Found`. Também deu `0` com `OK` antes de `Ran` e `ERROR:` depois. O código prova que o SHA resolve para um commit local, compara os textos de SHA e job e mede imagem e Postgres da VM. A associação desses arquivos ao processo e a execução integral ficam sem prova. `bin/pista_certifica.sh:19–50`, `bin/pista_certifica.sh:57–65`, `bin/pista_certifica.sh:68–113`.
+- **A linha de fim aceita valores impossíveis.** Datas como `0000-99-99 99:99:99` passam. Linhas vazias anexas também passam, pois a contagem é de linhas com algum caractere. O ID admite qualquer quantidade positiva de dígitos antes do sufixo. `bin/pista_certifica.sh:40–50`.
+- **As formas verdes descritas são compatíveis, com uma condição.** A prosa `OK — …` é ignorada, e `Found 17209` com `Ran 17206 tests in X.Ys` passa pela forma. `Found 935` com `Ran 935 tests in X.Ys` e `OK` também passa. Se `Ran 935` for a linha literal, é recusada pela falta de `test(s) in X.Ys`. O texto integral dos dois logs reais é **[nao verificado]**. `bin/pista_certifica.sh:52–65`, `bin/tests/test_pista_certifica.sh:134–138`.
+- A presença de `--settings=config.settings.ci` é opcional no certificador. A porta da VM sempre passa esse argumento, e `manage.py` usa `config.settings.saas` quando o ambiente também não fornece settings. O `argv` aceito, por si só, deixa o settings efetivo indeterminado. `bin/pista_certifica.sh:77–95`, `bin/suite.sh:331–337`, `app/manage.py:7–18`.
+
+## 3. Escritores, leitores e semântica
+
+| Linha | Origem, escritor e leitor |
+|---|---|
+| `AMBIENTE imagem_id` | `suite.sh` mede o ID e injeta `HASNER_IMAGEM_ID`. O teste Django lê a variável e imprime a linha. O certificador lê a linha e compara com seu próprio inspect. `bin/suite.sh:320–335`, `app/core/tests/test_ambiente_do_run.py:43`, `bin/pista_certifica.sh:101–108`. |
+| `AMBIENTE sha` | `suite.sh` põe `SHA_RUN` em `HASNER_SHA`. O teste Django lê e imprime. O certificador lê e exige igualdade literal com o SHA pedido. `bin/suite.sh:322–333`, `app/core/tests/test_ambiente_do_run.py:44`, `bin/pista_certifica.sh:25–42`. |
+| `AMBIENTE job` | O teste Django lê `HASNER_JOB` e imprime `ausente` se estiver vazio. O certificador lê e compara com `id=` da linha de fim. O lançamento da VM passa imagem e SHA explicitamente. Quem escreve `HASNER_JOB` e a linha de fim no srv-glpi é **[nao verificado]**. `app/core/tests/test_ambiente_do_run.py:46`, `bin/suite.sh:329–337`, `bin/pista_certifica.sh:7–10`, `bin/pista_certifica.sh:40–46`. |
+| `AMBIENTE pg_server_version` | O teste Django consulta `SHOW server_version` pela conexão do run e imprime o resultado. O certificador lê e compara com a consulta no `juliani_db_test` da VM. `app/core/tests/test_ambiente_do_run.py:37–45`, `bin/pista_certifica.sh:102–109`. |
+| `AMBIENTE argv` | O teste Django lê `sys.argv` depois de `test` e serializa cada argumento. O certificador relê, separa flags e compara as labels com a régua. `app/core/tests/test_ambiente_do_run.py:23–33`, `app/core/tests/test_ambiente_do_run.py:47`, `bin/pista_certifica.sh:68–95`, `bin/regua.sh:23`. |
+
+Para `HASNER_SHA` e `HASNER_IMAGEM_ID` na Pista 2, **não sei** quem os injeta no lançador real. A árvore documenta a obrigação, e o anexo relata que hoje o lançador ainda omite as três variáveis. **[nao verificado]** `bin/pista_certifica.sh:7–16`.
+
+**`HASNER_SHA` tem dois significados.** Na VM é um registro do HEAD observado, com `+suja` ou `+arvore-viva` nos caminhos previstos. Na certificação é a identidade exata do commit declarado. O escritor usa a mesma chave para ambos e o leitor rejeita os sufixos. Até o SHA nu na VM pode sair de um `status` que falhou sem saída, de uma árvore com arquivos não rastreados ou de uma cópia alterada após a medição. `bin/suite.sh:322–336`, `app/core/tests/test_ambiente_do_run.py:44`, `bin/pista_certifica.sh:25–42`.
+
+## 4. `git`, rc 3 e a volta intermediária
+
+- **Os dois comandos Git podem atrasar ou travar o lançamento.** São síncronos, sem timeout, antes da trava e antes dos traps de encaminhamento de sinais. Em falhas normais, `rev-parse` limpa `SHA_RUN` e `status` sem saída mantém o SHA nu. Os dois casos seguiram adiante na sonda. Se o run chega a nascer, o retorno final vem do comando executado, pelo arquivo de rc ou por `wait`. `bin/suite.sh:34`, `bin/suite.sh:325–350`, `bin/suite.sh:371–384`.
+- **Há dois emissores explícitos de rc 3:** inspect sem ID e falha do `mktemp` do arquivo de rc. Ambos significam que a suite ainda não foi lançada. Além disso, `--na-vez` propaga qualquer rc do comando, inclusive 3. A volta conhece o número e perde a origem. `bin/suite.sh:108–120`, `bin/suite.sh:320–321`, `bin/suite.sh:350–353`, `bin/volta_intermediaria.sh:32–49`.
+- **O vermelho pode perder na releitura.** O `if` dá precedência a Ruff ou disjuntor vermelhos. Depois, três `grep` independentes percorrem o log inteiro. Uma linha `VOLTA_NAO_RODOU` vinda de um filho sobrescreve `rc_final=1` com `3`. O selo da volta injeta códigos e não emite esse tipo de saída. `bin/volta_intermediaria.sh:23–49`, `bin/tests/test_volta_intermediaria_rc.sh:14–35`.
+
+## 5. Descartes da triagem
+
+- **`Found == Ran` — descarte sustentado.** O runner CI pode podar testes após construir a suite. A fixture verde cobre a divergência. Isso sustenta aceitar `Found != Ran`; o fragmento `Ran 1` continua sendo um falso verde do certificador. `app/config/settings/ci.py:38–40`, `app/core/runner_quarentena.py:75–91`, `bin/tests/test_pista_certifica.sh:134–138`, `bin/pista_certifica.sh:62–65`.
+- **`:latest` na régua e no pre-push — sustentado para a comparação da Pista 2.** Os dois lançam suas próprias suites na VM. O certificador mede a tag diretamente e independe dos logs desses runs. Unificar os lançadores fica fora dessa comparação. `bin/regua.sh:165–171`, `bin/pre-push.sh:184–198`, `bin/pista_certifica.sh:98–109`.
+- **Lançador externo — sustentado condicionalmente.** Sem as variáveis relatadas, as linhas ausentes ou `ausente` falham nas guardas. O retorno `1` informa que o pouso precisa da suite na VM. A chamada da suite é uma instrução documentada, e sua execução efetiva é **[nao verificado]**. `app/core/tests/test_ambiente_do_run.py:43–47`, `bin/pista_certifica.sh:39–45`, `bin/pista_certifica.sh:105–117`, `CLAUDE.md:126`.
+
+## 6. Classes de reprovação e `except`
+
+- **Segundo escritor, derivação paralela e selo sem mordida.** Há um escritor de produção encontrado para `AMBIENTE`, e a lista de LABELS continua vindo da régua. A gramática de `argv` está duplicada à mão em Python e Bash. Na volta, a saída dos filhos disputa o mesmo campo de veredito que o supervisor. Os mutantes sobreviventes estão no item 1. `app/core/tests/test_ambiente_do_run.py:28–51`, `bin/pista_certifica.sh:68–95`, `bin/regua.sh:23`, `bin/volta_intermediaria.sh:23–49`.
+- **Relógio fora da borda e ordem da trava.** O relógio da volta mede a duração do invólucro. A medição Git descreve a cópia **antes** da espera, e o bind mount usa a árvore quando chega a vez. A limpeza antes/depois do container fica dentro da trava. No Codex, a ordem é slot → trava da resposta; a triagem lê sob `LOCK_SH` da resposta e só então toma a trava do estado. `bin/volta_intermediaria.sh:17`, `bin/volta_intermediaria.sh:50`, `bin/suite.sh:108–120`, `bin/suite.sh:325–337`, `bin/trava_teste.sh:35–42`, `bin/codex_pergunta.sh:365–389`, `bin/disjuntor.py:867–915`.
+- **Pouso antes do pré-requisito — também há lacuna no B3 do diff inteiro.** O PreToolUse manda varrer, mas descarta o resultado da varredura. Se uma reprovação nova do opus não for persistida, `commit-msg` consulta o B3 sem transcript e pode ver a obra livre. O selo restaura a escrita antes de tentar de novo. Além disso, a guarda de fast-forward deixou passar `env -i git merge --ff-only raia` na sonda do parser; o default `merge.ff=false` é configurado à parte. A guarda do hook atua no commit, após o `merge --no-commit` da sequência documentada, e a sequência pode já ter alterado a árvore viva. `bin/disjuntor.py:1041–1087`, `bin/disjuntor.py:1135–1168`, `bin/disjuntor.py:1218–1227`, `bin/disjuntor.py:1832–1840`, `bin/tests/test_disjuntor.sh:821–831`, `bin/hooks.sh:48–53`, `bin/hooks.sh:82–83`, `bin/commit_msg.sh:23–38`, `CLAUDE.md:90–91`.
+- **Campo com dois significados.** `sha` alterna entre registro da árvore da VM e identidade de commit da pista. `3` cobre falha do inspect, falha do `mktemp` e qualquer `3` propagado do comando. `bin/suite.sh:108–120`, `bin/suite.sh:320–333`, `bin/suite.sh:348–353`, `bin/pista_certifica.sh:25–45`.
+- **`except` adicionados:** **0** no delta `ab48a4b7e..52f298e35`; **2** no diff integral apresentado, ambos em `bin/disjuntor.py` — `ValueError` no parser de fast-forward e `OSError` na abertura da mensagem do merge. `bin/disjuntor.py:1145–1151`, `bin/disjuntor.py:2369–2375`.
 
 ## 22/11 19:09 · sessao 0b730e044b60 · [nome]-FERIADO-PELA-TELA-2211-1612 · verificador · origem=Code
 
@@ -767,18 +825,4 @@ A edição avulsa alcança um par colaborador-dia. As outras duas opções ficar
 
 **Passo para o Mauricio, após aprovação:** no Calendário de Ponto do colaborador, abra 02/11, clique em **Tornar dia de trabalho**, informe o motivo e confirme. No mesmo dia, abra **Resolver dia → Não trabalhou (falta)**. [app/templates/colaboradores/detalhe.html:201] [app/templates/ponto/partials/_feriado_vira_trabalho.html:6] [app/templates/ponto/partials/_veredito_dia.html:19]
 
-## 22/11 17:57 · sessao 964d343c49ab · - · - · origem=Ronald (tmux)
-
-A dependência direta da F5 passa pela ressuscitação de perguntas. O cartório consulta o C6 e chama `ressuscitar_perguntas`, que grava tanto o passivo de resposta/validação quanto a reabertura compensatória em `DecisaoPergunta`. O HEAD relê parte das guardas sob a trava, mas preserva explicitamente guardas baseadas no universo anterior à trava. A reabertura ainda usa `now()` diretamente. (`app/ponto/services/cartorio.py:1690–1721`; `app/chamados/models.py:1632–1703`)
-
-O outro acoplamento passa pela leitura do fio na impressão e na guarda de fechamento. O C6 ainda parte das colunas da pergunta, dá peso à lavra e alcança a exceção `HX-FALLBACK-SEM-LEI`. A janela codificada vai da véspera do início da competência anterior ao fim da corrente, com o corte padrão nesse sítio. (`app/ponto/services/cartorio.py:1413–1438`; `app/chamados/models.py:386–443`, `:676–709`; `app/chamados/juizes.py:588–622`, `:769–802`, `:1382–1495`, `:1510–1519`)
-
-O caminho de emissão pode inserir pergunta e registrar atos do legado. O INSERT atualmente pula a cerca de escrita de perguntas. A fábrica também pode descarimbar a projeção via C6, sem chamar `DecisaoPergunta.registrar` nesse ramo. (`app/chamados/models.py:3205–3211`, `:3667–3683`; `app/chamados/services/fabrica_da_celula.py:178–220`; `app/chamados/services/relavra_via.py:219–246`)
-
-A montagem da ata, o estudo da junção por instante, o censo e a sonda de leitura têm caminhos separáveis da F5. A construção nas três fatias do desenho A espera a F5 segundo o registro posterior ao anexo. (`app/ponto/services/cartorio.py:749–791`; `app/ponto/turnos.py:1192`, `:1606–1617`; `app/docs/BACKLOG.md:2112`; `app/docs/RELATO.md:290`, `:306`, `:319`)
-
-Para a sonda, `janela_atual(dia, empresa)` fornece a competência pela data final e pelo corte cadastrado. O binário aberta/fechada é `competencia_trancada`. A entrega de TXT é uma dimensão separada, consultada no K6. (`app/colaboradores/models.py:46`; `app/ponto/janelas.py:24–63`; `app/ponto/services/fechamento.py:1473–1480`, `:1518–1538`; `app/folha/export.py:556–594`)
-
-O perímetro mensurável sem motor contém células, células lavradas, atas que declaram órfãs, ocorrências de órfãs e legado sem hora. Chamados por FK e perguntas de fato por `data_evento` formam medidas adicionais de exposição, junto com os atos vinculados. A nova razão exata e o efeito causal pós-F5 ficam [nao verificado]. O caminho canônico `turnos_do_colab` alcança `MotorBase` ao preparar a alimentação do pareador, e certas coberturas apagam a lista antes de lavrar. (`app/escala/models.py:1692–1700`, `:1785–1789`; `app/ponto/services/cartorio.py:749–766`; `app/escala/services/leitor_celula.py:180–190`; `app/chamados/models.py:44–58`, `:2600–2622`, `:4166–4168`; `app/chamados/juizes.py:338–342`; `app/ponto/turnos.py:1695–1700`, `:1920`, `:1940–1944`; `app/escala/utils.py:1224–1229`, `:1262–1270`)
-
-_7867 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7868 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
