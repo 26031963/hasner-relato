@@ -6,10 +6,35 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 20:02:37.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (48.6 MB). Acoes na janela: **1290**.
+**Medido em 22/11/2026 20:08:34.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (49.9 MB). Acoes na janela: **1315**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:07:32 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_suite_motivo.sh'; s=open(p).read() def r(a,b): global s; assert s.count(a)==1,a; s=s.replace(a,b) r(""" echo y > "$c/app/nao_rastreado.py" # nao rastreado TAMBEM suja: ele seria testado _roda "$a" --dir "$c" --only appA >/dev/null for w in 'HASNER_SHA= ' 'HASNER_ARVORE=copia-suja '; do /bin/grep -qF -- " $w" "$a/trava.chamada" 2>/dev/n ...` |
+| 20:06:59 | Bash |  | `cd ~/wt-simplifica-104405; grep -n "_mede_arvore\\|SUITE_ARVORE_MEDIDA\\|_HEAD\\|_ST\b" bin/suite.sh; sed -n '/^_run() {/,/^}/p' bin/suite.sh` |
+| 20:06:35 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/suite.sh'; s=open(p).read() def r(a,b): global s; assert s.count(a)==1,a; s=s.replace(a,b) r("""if [ "${1:-}" = "--na-vez" ]; then _NV_DIR="${2-}"; read -r -a _NV_AL <<< "${3-}"; shift 3 [ "${1:-}" = -- ] && shift if [ -n "$_NV_DIR" ]; then limpa_montagens_vazias "$_NV_DIR" "${_NV_AL[@]}"; _nv=$? [ "$_nv" -ne 2 ] \|\| exit 2 fi "$@"; _NV_RC=$?""" ...` |
+| 20:06:13 | Bash |  | `cd ~/wt-simplifica-104405; grep -rn "\-\-na-vez" bin/ --include=*.sh \| grep -v "^bin/tests" \| cut -c1-160; sed -n 60,100p bin/suite.sh` |
+| 20:05:57 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1,60p bin/tests/test_suite_motivo.sh; sed -n 160,264p bin/tests/test_suite_motivo.sh` |
+| 20:05:47 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_pista_certifica.sh'; s=open(p).read() a="""espera "$SHA" 0 [ "$FAIL" = 0 ]""" b="""espera "$SHA" 0 # MORDE 11 (r_v4 (5)): a VM perguntando SEM o usuario do banco de teste nao certifica o caso igual sed 's/psql -U "\\$POSTGRES_USER" -tAc/psql -tAc/' "$ORIG" > "$M/bin/mut11.sh" cmp -s "$ORIG" "$M/bin/mut11.sh" && { echo "FAIL mutante 11  ...` |
+| 20:05:30 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_pista_certifica.sh'; s=open(p).read() def r(a,b): global s; assert s.count(a)==1,a; s=s.replace(a,b) r("""# MORDE 8 (r_v4 (1)): sem a ordem Found < Ran, o Found depois do Ran CERTIFICA sed 's/\\[ "\\$L_FOUND" -lt "\\$L_RAN" \\] \\&\\& //' "$ORIG" > "$M/bin/mut8.sh" cmp -s "$ORIG" "$M/bin/mut8.sh" && { echo "FAIL mutante 8 nao se aplico ...` |
+| 20:05:08 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/pista_certifica.sh'; s=open(p).read() def r(a,b): global s; assert s.count(a)==1,a; s=s.replace(a,b) r("""[[ "$F_ID" =~ ^id=[0-9]{10}_${SHA:0:8}$ ]] \|\| nao "id do job nao e <10 digitos>_${SHA:0:8}: '$F_ID'\"""", """[[ "$F_ID" =~ ^id=[0-9]{10}_${SHA:0:8}$ ]] \|\| nao "id do job nao e <10 digitos>_${SHA:0:8}: '$F_ID'" # (r_v4 (5)) e os dez digito ...` |
+| 20:04:38 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 60,230p bin/tests/test_pista_certifica.sh` |
+| 20:04:38 | Bash |  | `cd ~/wt-simplifica-104405; wc -l bin/tests/test_pista_certifica.sh bin/tests/test_suite_motivo.sh bin/tests/test_volta_intermediaria_rc.sh; sed -n 1,60p bin/tests/test_pista_certifica.sh` |
+| 20:04:28 | Bash |  | `cd ~/wt-simplifica-104405; git status --porcelain --ignored=matching -- app \| head; echo ---; git -C ~/wt-kaua-feriado-161647 status --porcelain --ignored=matching -- app \| head; cat .gitignore` |
+| 20:04:20 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 100,122p bin/suite.sh; sed -n 346,395p bin/suite.sh` |
+| 20:04:15 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 958,1000p bin/disjuntor.py \| grep -n "agora"; sed -n 2380,2400p bin/disjuntor.py; cat bin/volta_intermediaria.sh \| sed -n 1,60p` |
+| 20:04:11 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1226,1250p bin/disjuntor.py; grep -n "def estado_b3\\|def decide_b3\\|agora=None\\|agora or\\|time.time()\\|datetime.now" bin/disjuntor.py \| sed -n 1,40p` |
+| 20:03:53 | Bash |  | `cat ~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v6/r2/resumo.txt 2>/dev/null \|\| echo rodando; cd ~/wt-simplifica-104405; sed -n 1130,1225p bin/disjuntor.py` |
+| 20:03:28 | Bash |  | `cd ~/wt-simplifica-104405; cat -n bin/pista_certifica.sh; sed -n 315,346p bin/suite.sh` |
+| 20:03:24 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; W=~/wt-kaua-feriado-161647/app; for k in red mA mB mC; do cp $W/ponto/tests/test_kaua_feriado_pela_tela.py $W/ponto/tests/test_cadastro_futuro_sem_banco.py $SP/k6_$k/app/ponto/tests/; done L=~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v6; mkdir -p $L/r2; sed -e "s#$L/#$L/r2/#g" -e 's#ponto.tests.test_cadast ...` |
+| 20:03:17 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; grep -rln "test_cadastro_futuro_sem_banco" --include=*.py . \| head` |
+| 20:03:16 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; python3 - <<'EOF' import py_compile p='ponto/tests/test_kaua_feriado_pela_tela.py'; s=open(p).read() a=""" ups = [x['sql'] for x in q.captured_queries if x['sql'].startswith('UPDATE "%s"' % tabela)]""" b=""" # so a escrita do DNA (o julgamento do rabo grava ata/impressao pela PK, e isso e outro escritor) ups = [x['sql'] for x in q.captured_queries if x['sql'].start ...` |
+| 20:02:57 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; sed -n 120,215p ponto/tests/test_cadastro_futuro_sem_banco.py` |
+| 20:02:56 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; sed -n 20,110p ponto/tests/test_cadastro_futuro_c5.py \| grep -n "class Query\\|def filter\\|Q\b\\|filter" \| head; grep -rn "class Query" ponto/tests/ core/tests/*.py 2>/dev/null \| head` |
+| 20:02:54 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; grep -n "porta\b\\|self.porta =\\|CelulaDia\\|objects" ponto/tests/test_cadastro_futuro_c5.py \| head -30` |
+| 20:02:51 | Bash |  | `L=~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v6; sed -n 144p $L/green.log \| python3 -c " import sys,ast; s=sys.stdin.read(); s=s.split(' : ',1)[1]; for u in ast.literal_eval(s): print(u[:120],' ... WHERE',u.split(' WHERE ',1)[1][:300]); print()"; grep -n "Query\b\\|class Query\\|def filter" ~/wt-kaua-feriado-161647/app/ponto/tests/test_cadastro_futuro_c5.py \| head` |
+| 20:02:45 | Bash |  | `L=~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v6; grep -n -A25 "^ERROR: test_d1\\|^FAIL: test_K9e" $L/green.log \| grep -v "^\-\-$" \| cut -c1-260 \| head -80` |
+| 20:02:42 | Bash |  | `L=~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v6; ls -la $L; cat $L/resumo.txt 2>/dev/null; pgrep -f k6_run.sh` |
 | 20:02:28 | Bash |  | `cd ~/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| grep -E "^\s+--" \| head -30; tail -5 logs/sessao/disjuntor.log \| cut -c1-200` |
 | 20:02:13 | Bash |  | `cd ~/saas-hasner; grep -E "SIMPLIFICA-V3\|[nome]-FERIADO" logs/sessao/disjuntor.log \| tail -8 \| cut -c1-220` |
 | 20:02:11 | Bash |  | `cd ~/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| head -5; ls logs/disjuntor* logs/*b3* 2>/dev/null \| head; grep -rl "REARMA" logs/disjuntor*/ 2>/dev/null \| head -3` |
