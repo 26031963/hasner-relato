@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 16:32:53.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (18.4 MB). Acoes na janela: **522**.
+**Medido em 22/11/2026 16:38:36.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (18.4 MB). Acoes na janela: **524**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:33:14 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && cp chamados/tests/test_e1_v13_ordem.py /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/e1v13_bak.py && python3 - <<'EOF' p='chamados/tests/test_e1_v13_ordem.py'; s=open(p).read() a=""" with _mutante(), self.assertLogs(level='ERROR') as cm:""" b=""" import chamados.reconciliador as _R _orig = _R.retratar_perguntas_absolv ...` |
+| 16:33:02 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 1012,1045p ponto/services/cartorio.py; grep -n "def _cenario" -A30 chamados/tests/test_selo_celula_absolveu.py \| head -35` |
 | 16:32:00 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && git grep -n "retratar_perguntas_absolvidas_por_celula\\|reconciliar_chamados_colab" -- ponto/ ':!*/tests/*' \| head; python3 - <<'EOF' p='chamados/tests/test_e1_v13_ordem.py'; s=open(p).read() a=""" with _mutante(), self.assertLogs('ponto.signals', 'ERROR') as cm:""" b=""" with _mutante(), self.assertLogs(level='ERROR') as cm:""" assert s.count(a)==1; s=s.repla ...` |
 | 16:31:53 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 150,200p chamados/tests/test_e1_v13_ordem.py` |
 | 16:31:48 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 1440,1470p chamados/reconciliador.py; sed -n 1505,1535p chamados/reconciliador.py; grep -n "MUTANTE_a_falha" -A3 ~/saas-hasner/logs/E4C-F5/v1/diag_v3_base_recorte.log \| head; grep -n "Traceback" -A12 ~/saas-hasner/logs/E4C-F5/v1/diag_v3_base_recorte.log \| grep -B2 -A10 "nao_barra" \| head -20` |
