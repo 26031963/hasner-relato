@@ -1,4 +1,5 @@
-ESPERANDO: codex_pergunta.sh | pid=1305157
+ESPERANDO: trava_teste.sh | pid=1273714
+COTA CODEX: 89% (22/11 16:58, DISJUNTOR B4-CODEX > 85%) -- TERRENO-POS-F5-2211-1656: lista de 13 obras em logs/TERRENO-POS-F5/lista.md (12 pacotes + MAPA-E4D); 12 perguntas prontas (logs/TERRENO-POS-F5/<obra>/q.txt + backlog.txt/cortes.txt + CONTRATO-V2 anexo), NAO disparadas: o hook reserva o Codex a escada/verificador final. Saida: upgrade da cota (o aval diz 'sem freio', o disjuntor nao sabe) ou Ronald mandar rotear a sonnet; nada construido.
 DESPACHO PARALELO-V2-2211-1644: (b) MAPA-E4D leitura -> Codex (pid 1305155, logs/MAPA-E4D/q1.txt, HEAD 161066a90; sonda de impacto em volta 2 pelo envelope, script lido antes) | (a) [nome] -> ver linha abaixo | (c) UI-SETAS-VOLTAR -> Codex construtor depois do [nome] | F5 -> sessao
 DESVIO DO LITERAL PARALELO-V2 (a) [nome], contestavel: o aval chegou com o agente ja tendo commit d49b138bd em ~/wt-kaua-feriado-161647 e suite inteira correndo; reconstruir no Codex jogaria fora um RED/GREEN pronto -- o commit vai ao Codex VERIFICADOR, opus final e pouso pela sessao; se o Ronald quiser o literal, a wt vira anexo do Codex construtor
 PERGUNTA DE ORDEM UI-SETAS-VOLTAR: o aval UI-SETAS-[nome]-2111-1520 (3) poe a obra DEPOIS do pouso da OPEN-REDIRECT-VOLTAR (mesmos arquivos nav_extras.py/_voltar.html; segue PAREI RASCUNHO), o PARALELO-V2 (c) manda entrar quando o [nome] entregar -- sem conflito se a obra nao tocar nav_extras.py/_voltar.html nem a matriz OPEN-REDIRECT; o construtor abre so com esse PROIBIDO no brief
@@ -10149,6 +10150,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**22/11 16:59:59 disjuntor (NEGOU B4-CODEX)** -- agente principal -- Bash -- alvo sha1:55b890e4ba (414 car., na trilha privada)
+
 **22/11 16:49:30 disjuntor (NEGOU B1)** -- agente a0c9e57af609aa7f6 -- Bash -- alvo sha1:4e888354d1 (284 car., na trilha privada)
 
 **22/11 14:20:24 disjuntor (NEGOU CHAVE)** -- agente principal -- Bash -- alvo sha1:312effddda (914 car., na trilha privada)
@@ -12453,3 +12456,14 @@ INCOMPLETO: item 3 sim/nao por dia.
 - INCOMPLETO: efeito do 8792 com hora 0 no Dominio nao medido (so leitura do export); identidade do "Kaua" pendente do admin.
 - CORRECAO 22/11 14:1x da resposta BO-[nome] acima (secao nao se reescreve): o "lancamento da falta do col945 por Ausencia gera 8792 sem hora" estava ERRADO -- a tela RECUSA (veto O198, juiz real chamado em leitura: RECUSA com o motivo "nao tem jornada prevista em 02/11/2026"); o mesmo para col911. Nao ha 8792 sem hora a nascer desse caso. Prova: logs/AUSENCIA-FALTA-SEM-JORNADA/diag2.out.
 - FILA (achados desta leitura, nenhum vira obra sem padrao nomeado): (a) 8932 conta dia de abono sem previsto (57 na comp 10, 82 na 11; L-089 "abona so dia previsto") -- impacto.out; (b) `desligamento` entra no 8792 por descontam_vigentes (col866 30/10); (c) falta lancada com jornada e celula regenerada depois para folga segue com os minutos no horas_falta (col474) -- leitor do lavrado x motor L-089; (d) B5-k (3 escritores que pulam o veto) segue na fila.
+
+## MAPA-E4D PRONTO (PARALELO-V2-2211-1644 (b)), 22/11 17:1x -- so leitura, nada construido
+- Codex leitura rc 0 no HEAD 161066a90: logs/MAPA-E4D/r1.txt (443 linhas, 8 secoes); amostra 5/5 arquivo:linha conferida (fechar 2076, reabrir_sistema 2330, encerrar_por_fato 3489, devolver_validacao 262, limpar_resolucao 2425).
+- Inventario: 24 escritores de coluna (A01-A24) em ChamadoColaborador/DisputaSupervisao/PerguntaDisputa + migrations 0038/0039; leitores em app, modal, SQL/painel, PDF, TXT e limbo/I20.
+- Invariante CONTRADITA: "toda escrita de coluna grava ato" -- A05 carimba validacao sem VALIDACAO fisica, A09 so salva via, D3 limpa sem ato compensador (models.py:3324-3353,3489-3498).
+- Invariante CONTRADITA: fonte unica ja vigente -- C6 le projecao, q_vivas le ato/passivo, particao do app le o par cru (juizes.py:1382-1404).
+- SONDA PROD (sonda_leitura, role leitor, rc 0, 41.431 MEDIDA, logs/MAPA-E4D/sonda.out): diverge_vigente = 0 em toda coluna projetavel (DecisaoPergunta.leitura == coluna em 100%).
+- PASSIVO SO NA COLUNA (diverge_atos_fisicos = sem_ato_no_carimbo): respondida_em aberta 5.794 / fechada 11.076 / entregue 12.229; validada_em 4.489 / 10.637 / 11.230 -- parar de escrever a coluna sem backfill de ato perde esse passado.
+- Universo: 35.190 perguntas em competencia aberta, 17.940 trancada, 25.769 em competencia entregue (balde sobreposto).
+- Decisoes de negocio pendentes (secao 6, 9 superficies): app/modal, correcao/historico, materializacao, irmas, fechamento, PDF, SQL/painel/ETag, TXT/entregue, limbo/I20 -- todas abertas ao Ronald.
+- Contrato E4D: 9 secoes propostas, NAO congelado (r1.txt secao 8). Construcao so depois do pouso da F5.

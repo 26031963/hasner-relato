@@ -1,7 +1,78 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 16:51** · publicado em **22/11/2026 16:56** (UTC-3)
+> Ultima resposta processada: **22/11/2026 17:00** · publicado em **22/11/2026 17:01** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 17:00 · sessao ab62840ad6e2 · MAPA-E4D · leitura · origem=Code
+
+# 1. Inventário
+
+**MAPA-E4D — cópia indicada como `161066a90670241f43edf65251fde90a2e418a87`.** A cópia não disponibiliza metadados Git para confirmar árvore, branch e hash. A identidade Git, o acervo atual de Juliani e a incidência em produção ficam **[nao verificado]**. As referências abaixo são da cópia local.
+
+**Resultado central.** A sequência já governa a leitura de texto e instante de resposta e do instante de validação em alguns caminhos. Essa leitura ainda incorpora o passivo das colunas. Em paralelo, C6 lê os cinco atributos da instância que recebe, o app ainda julga o par de resposta sobre o objeto cru, e SQL, materialização, relatórios e PDF ainda têm leitores de coluna. [app/chamados/models.py:4295](app/chamados/models.py:4295) · [app/chamados/juizes.py:1382](app/chamados/juizes.py:1382) · [app/chamados/services/pergunta_no_app.py:80](app/chamados/services/pergunta_no_app.py:80) · [app/chamados/services/raiox.py:135](app/chamados/services/raiox.py:135) · [app/ponto/services/procedencia_batida.py:69](app/ponto/services/procedencia_batida.py:69)
+
+Nos índices abaixo, `m` significa `app/chamados/models.py`, `j` significa `app/chamados/juizes.py`, `s/` significa `app/chamados/services/` e `cmd/` significa `app/chamados/management/commands/`. **C** = COLUNA, **A** = ATO físico de `DecisaoPergunta`, **AP** = ATO com passivo da COLUNA e **T** = outra trilha, como `LogAuditoria` ou ocorrência no fio. A distinção entre A e AP segue o leitor efetivo. [app/chamados/models.py:4251](app/chamados/models.py:4251) · [app/chamados/models.py:4308](app/chamados/models.py:4308)
+
+### 1.1. Escritores
+
+| Sítio | Escrita na cópia e relação com a trilha |
+|---|---|
+| A01 `m::_gravar_estado` | Salva `status_local`, `resolvido_em`, `via_encerramento`, `atualizado_em` e, sob `set_user`, `respondido_por`. Rebaixa ou restaura a urgência e pode relavrar perguntas ao cruzar `ENCERRADOS`. Emite `estado_chamado` em T. `m:234–259,298–319`. |
+| Nascimento do chamado `m::abrir`, `m::criar` | `get_or_create`/criação com estado inicial e defaults. A trilha `nascimento_chamado` tem ação própria. `m:997–1032,1154,1268–1280`. |
+| Migrations do chamado | `0038_a3_registrado_backfill.py::registrar/desfazer` muda `status_local`. `0039_a3_via_backfill.py::backfill/desfazer` muda `status_local`, `via_encerramento` e `superado_por`. `app/chamados/migrations/0038_a3_registrado_backfill.py:10,15` · `app/chamados/migrations/0039_a3_via_backfill.py:24–34`. |
+| A02 `m::fechar` | Salva `fechada_em`, `fechada_por`, `resolucao`, `motivo_fechamento`. Emite `disputa_fechada` em T. Conforme a porta, carimba perguntas mudas e registra `SILENCIO` por pergunta carimbada. `m:2076–2103`. |
+| A03 `m::reabrir_admin` | Limpa as quatro colunas de fechamento, incrementa `reaberturas_admin` e pode escrever `motivos`. A ação de admin deixa trilha no chamador. Ato próprio na sequência de perguntas **[nao verificado]**. `m:2301–2324` · `s/acoes_disputa.py:259–302` · `app/docs/BACKLOG.md:2198`. |
+| A04 `m::reabrir_sistema` | Limpa as quatro colunas de fechamento. Anexa ocorrência ao chamado quando há pai. Entradas confirmadas na ressuscitação, na devolução de validação, na devolução de absorvidas e no descarimbo sem lastro. `m:2330–2344,1711–1712` · `s/validacao.py:291–292` · `s/materializacao.py:1180–1184` · `s/relavra_via.py:260–261`. |
+| A23 `m::reabrir_por_colab` | Delega a correção e aumenta `reaberturas_colab` uma vez por chamada admitida. Pode anexar `pedido_de_correcao` em T. A API e a view delegam à porta. `m:2386–2411` · `app/api/views.py:2706` · `app/chamados/views.py:1329`. |
+| A24 `m::limpar_resolucao_residual` | Limpa `resolucao` na disputa aberta. Anexa ocorrência quando há chamado. `m:2425–2436`. |
+| `m::aparar_motivo_respondido`, A21 `m::remover_motivo` | Ambos salvam `motivos` e `contexto`. O primeiro é chamado pelo upload separado de foto. O segundo registra `RETRATACAO` nas perguntas elegíveis, delega carimbo de identidade e pode chamar `fechar`. `m:2124–2132,2194–2236` · `app/api/foto_recebida.py:82` · `app/colaboradores/signals.py:77` · `app/escala/signals.py:174`. |
+| Emissão de disputa | `s/disputa_emissao.py::_abrir_ou_agregar_disputa`, `criar_disputa_a_partir_de_chamados_orfaos` e `criar_disputa_ancora_de_chamado` gravam `motivos` na criação ou atualização e gravam `contexto` nos ramos indicados. As criações também persistem os defaults das colunas de disputa. `s/disputa_emissao.py:545–551,601–605,1095–1098,1137–1146,1174–1175,1268–1270,1372–1381` · `m:1893–1932`. |
+| A05 `m::carimbar` | `save(update_fields)` de `materializada_em`, `materializada_por`, `via_resolucao`. Pode preencher `respondida_em` com texto já presente, preencher `validada_em`/`validada_por` e relavrar a tríade. `_escrever_carimbo` atribui os três valores à instância. `_desfazer_em_memoria` os restaura junto com os carimbos de resposta e validação em caso de recusa ou erro. `m:3293–3297,3320–3361`. |
+| Chamadores de A05 | `s/materializacao.py::_materializar_ausencia_de_resposta:1059–1064` registra `ABSORCAO` quando carimba a irmã. `_materializar_uma:1981–1985` usa `resposta='validar'`. `materializar_pendentes_aprovadas:2180` é alcançado pelo signal. `s/disputa_emissao.py::_resolver_perguntas_por_chamado_resolvido:2029,2103` usa os modos com assinatura. `app/chamados/reconciliador.py::lavrar_sem_turno_aberto:407`, `retratar_perguntas_absolvidas_por_celula:645`, `encerrar_orfas_pela_lampada:1198` também carimbam, este último via `m::encerrar_fantasma:3500–3508`. `app/chamados/signals.py:155–165`. |
+| A06 `m::carimbar_identidade` | Grava a tríade de materialização e, se informado, `recusa_motivo`. `manter_carimbo` preserva o instante/autor já gravados. Entradas incluem `fechar_por_admin`, `remover_motivo`, `s/fio.py::retratar_duplicata` e os ramos de paridade/colisão do materializador. `m:3260,3378–3387,2224` · `s/fio.py:1484,1502–1506` · `s/materializacao.py:1474,1699`. |
+| A07 `m::descarimbar` | Limpa a tríade. Com `salvar=False`, devolve os campos para o `save` externo. `reabrir_por_resposta` usa esse modo, `reabrir_por_competencia` usa o persistente, e `_universo_da_ressuscitacao` simula em memória. `m:3399–3409,3526–3536,1572–1575` · `s/disputa_emissao.py:1527–1534` · `s/competencia_trancada.py:276–279`. |
+| A08 `m::descarimbar_em_lote` | `QuerySet.update` na tríade mais `**outros`. Os payloads comprovados são par de resposta + par de validação na correção e ressuscitação, e só o par de resposta na D3. `m:3448–3487,1694–1703` · `s/disputa_emissao.py:1617,1656` · `s/validacao.py:436–445`. |
+| A09 `m::encerrar_por_fato_no_espelho` | Salva só `via_resolucao`. O comando chama o método e registra uma ocorrência. `m:3489–3498` · `cmd/encerrar_perguntas_com_fato.py:31–44,64–77`. |
+| A10 `s/validacao.py::_carimbar_validacao` | Salva `validada_em`/`validada_por` e registra `VALIDACAO` com instante e autor correspondentes, além da foto legada quando necessária. Entradas `_aceitar_a_folga`, `_validar_o_par` e `validar_pergunta`. `s/validacao.py:161–175,519,551,641,743`. |
+| A11 `s/validacao.py::devolver_validacao_recusada` | Limpa `validada_em`/`validada_por`, registra `DEVOLUCAO` quando havia validação, pode chamar A04. `s/validacao.py:262–303,781`. |
+| A12 `s/disputa_emissao.py::responder_pergunta_disputa_core` | Persiste `respondida_em` e `resposta_colab`. Conforme o ramo, limpa o par de validação, persiste descarimbo preparado em memória ou altera `recusa_motivo`. Registra `RESPOSTA` humana. Entradas Web/API, correção e declaração textual. `s/disputa_emissao.py:1481–1513,1518–1534` · `app/chamados/views.py:1278` · `app/api/views.py:2647` · `s/acoes_disputa.py:375` · `s/declaracao_texto.py:420,694`. |
+| A13 `s/disputa_emissao.py::reabrir_para_correcao` | Delega limpeza dos sete campos de resposta, validação e materialização a A08. Registra `REABERTURA` ou `RECUSA` para a pergunta elegível da qual retira algo. Entradas incluem A23, correção Web, recusa humana, rejeição da ausência e cura de limbo. `s/disputa_emissao.py:1617,1624–1658` · `m:2400` · `app/chamados/views.py:1432` · `s/acoes_disputa.py:106` · `s/validacao.py:925` · `s/materializacao.py:1180` · `cmd/curar_perguntas_em_limbo.py:70`. |
+| A14 e A15 `s/disputa_emissao.py::responder_automaticamente`, `carimbar_resposta_pela_trilha` | A14 salva o par, A15 só `respondida_em`. Ambos registram `RESPOSTA` que mantém validação. Entradas confirmadas no upload separado e no comando de limbo. `s/disputa_emissao.py:1662–1714` · `app/api/foto_recebida.py:48` · `cmd/curar_perguntas_em_limbo.py:68–69`. |
+| A16 `s/relavra_via.py::relavrar` | Salva `via_resolucao`, relavra a tríade e registra evento em T. `relavrar_dia` e o comando I6 delegam. O docstring registra ausência de chamador produtivo de `relavrar_dia`. `s/relavra_via.py:15–27,106–138,155–157` · `cmd/relavrar_via_i6.py:102`. |
+| A17 e A18 `s/materializacao.py::_materializar_resposta_hora`, `_carimbar_recusa` | A17 salva `pendencia_admin` + `recusa_motivo` e tem ramo de paridade que delega A06. A18 salva `recusa_motivo` ou delega M + motivo a A06 na colisão. Chamadas a A18 na materialização, validação e passivo. `s/materializacao.py:1302,1363–1366,1463–1474,1683–1717,1908,2003` · `s/validacao.py:649` · `s/passivo_validado.py:566`. |
+| A19 e A20 `s/validacao.py::recusar_pergunta`, `conferir_data_do_fato` | A19 salva `recusa_motivo` e delega a A13 com `RECUSA`. A20 salva os dois `data_conferida_*` e audita o par de dias e a justificativa em T. `s/validacao.py:912–942,990–1004` · `app/chamados/views.py:1307`. |
+| A22 `m::_nascer`, `m::save` | Inserção por `**campos` e defaults, com foto de R/V quando há assinatura. O reuso pode gravar a lavra. `save` protege o par de resposta e preenche a identidade na inserção. Entre os kwargs de produção resolvidos estão texto da pergunta, tipo, opções e `chamados_relacionados_ids`. Outros kwargs dinâmicos **[nao verificado]**. `m:3195–3219,3667–3738` · `s/disputa_emissao.py:448–460,848–859,1385–1392` · `s/declaracao_texto.py:377–378,667–668` · `s/acoes_disputa.py:267–272`. |
+| Devoluções D1–D4 | D1 `s/validacao.py::devolver_paridade_bug_par_103` limpa M/V e registra `DEVOLUCAO`. D2 `m::ressuscitar_perguntas` limpa M/R/V e registra `REABERTURA` marcada. D3 `s/validacao.py::devolver_instante_sem_texto_l130` limpa M/R, registra foto anterior quando falta e evento T, sem ato compensador na sequência. D4 `s/relavra_via.py::desfazer_carimbo_sem_lastro` delega limpeza M. `s/validacao.py:334–365,408–456` · `m:1694–1703` · `s/relavra_via.py:244–261` · `cmd/bug_par_103.py:108–112` · `cmd/estoque_l130_instante_sem_texto.py:70,105` · `s/fabrica_da_celula.py:169,209`. |
+| Lavra L1–L5 | `lavrar` salva a tríade e `gravar_lavras_em_lote` faz `bulk_update`. `desfazer_lavra_em_memoria` restaura a instância. O comando de backfill monta a tríade em memória e envia lotes. `reapontar_resolvedora`, `rechavear_data_evento` e `_nascer` no reuso persistem o retorno em memória. A01, A05 e A16 também acionam a lavra. `app/chamados/veredito_lavrado.py:237–289` · `cmd/lavrar_perguntas_stale.py:89` · `cmd/backfill_veredito_lavrado.py:138–146` · `s/fio.py:974–976,1088–1092` · `m:309–319,3195–3198,3342–3348` · `s/relavra_via.py:125–138` · `app/config/crons.py:390–391`. |
+| Backfill e dedup | `backfill_decisoes_pergunta.py::aplicar` registra `SILENCIO` elegível e delega a retratação de duplicatas, que grava M e motivo por A06. `dedup_perguntas_fato.py::handle` reutiliza `aplicar`. `cmd/backfill_decisoes_pergunta.py:341–363,610,622` · `cmd/dedup_perguntas_fato.py:106` · `s/fio.py:1488–1506`. |
+| ORM implícito e memória | As FKs de usuário dos cinco autores inventariados têm `SET_NULL`. A FK `superado_por` tem o mesmo comportamento na remoção do chamado referenciado. `m::_vivas_entre` troca estado em memória durante o julgamento e `s/fio.py::montar_chamados_fio` anota `reaberturas_colab` em memória sobre o chamado. Incidência de remoções em PROD **[nao verificado]**. `m:61–66,367–383,1903–1908,2645–2649,3631–3637,3651–3657` · `s/fio.py:389–394` · `app/core/contratos_estruturais.py:716–720`. |
+| Porta 27 | `disparar_perguntas_competencia.py::handle` conta o universo que as funções de leitura devolvem. O laço examinado é vigia. `cmd/disparar_perguntas_competencia.py:147–168,185–221`. |
+
+**Campos derivados adicionais e fronteiras.** `DisputaSupervisao.contexto` também é escrito por `anotar_contexto` e `renovar_contexto`. A parte ligada aos motivos é consumida pela emissão e pela construção da identidade da batida. `urgencia_original` guarda a urgência anterior ao rebaixamento e tem escritas em `_rebaixar_urgencia_em_memoria`, `rebaixar`, `_rebaixar_sem_post_save`, A01 e migrations 0023/0024. `superado_por` tem backfill/reversão 0039 e leitor I17. Nenhum desses campos tem projeção pela interface `DecisaoPergunta.leitura`. `m:2124–2131,2226–2287,472–486,505–511,644–650,3714–3756,4295–4326` · `app/chamados/signals.py:69–73` · `app/chamados/migrations/0023_rebaixar_urgencia_resolvidos.py:5–21` · `app/chamados/migrations/0024_rebaixar_urgencia_resolvidos_regressao.py:5–26` · `cmd/auditar_invariantes_chamados.py:1078–1079`.
+
+`PerguntaDisputa.colaborador_id`, `instancia_marco`, `batida_origem_id`, `data_evento` e `chamados_relacionados_ids` são derivados ou fotografados de identidade, data ou agrupamento. Os três primeiros passam por `_chave_de_identidade`, os dois primeiros têm backfill 0051, `data_evento` passa por `gravar_dia_do_fato` no nascimento e no rechaveamento, e os IDs relacionados chegam por `_criar_pergunta_se_couber`. Leitores incluem chave/índices, tarefa, junção do fio, validação e materialização dos clones. Destino desses campos no Contract **[nao verificado]**. `m:2610–2628,3205–3209,3661–3665,3714–3780` · `app/chamados/migrations/0051_decisao_pergunta.py:22–27` · `s/fio.py:839–850,974–976,1085–1092` · `s/disputa_emissao.py:837–860` · `s/tarefa_do_dia.py:130–132` · `s/validacao.py:727–737` · `s/materializacao.py:1273,1565,2062`.
+
+### 1.2. Leitores das perguntas
+
+Para compactar as listas, **R** = `respondida_em` + `resposta_colab`, **V** = `validada_em` + `validada_por`, **M** = `materializada_em` + `materializada_por` + `via_resolucao`, **Lavra** = `veredito_lavrado` + `julgado_em` + `janela_expira_em`. Quando o sítio lê somente parte do grupo, ela está indicada. `m:2634–2636,2748–2750,2772–2791,3631–3657`.
+
+| Sítio leitor | Fonte e campos |
+|---|---|
+| `DecisaoPergunta::leitura`, `linhas_da_projecao_sem_linha` | **AP** para R e instante de V. O segundo sítio lê **C** de R/V, inclusive autor, e procura a linha física pelo mesmo ato e instante. `m:4238–4269,4295–4326`. |
+| `PerguntaDisputa::estado`, `respondida`, `resposta_display`, `respostas_anteriores` | `estado` usa **AP** para R e instante de V, **C** para instante de M e vitalidade. `respondida` e `resposta_display` usam **AP** para R e texto, respectivamente. O histórico `respostas_anteriores` usa **A**. `m:3226–3244,3789–3838`. |
+| `DisputaSupervisao::sem_veredito_entre`, `pode_fechar`, `fechar`, `remover_motivo` | **AP** para R/instante V e para as fotos de texto de `SILENCIO`/`RETRATACAO`. **C** para carimbo/via e estado de fechamento. `m:1996–2015,2041–2044,2082–2093,2217–2224`. |
+| `PerguntaDisputa::q_validada_pelo_ato`, `q_nao_validada_pelo_ato`, `q_vivas` | SQL **AP** para presença de validação. `q_vivas` combina esse predicado com SQL **C** de R, materialização/via e tranca. Os seletores de A01 e `_ancoradas` usam a negação **AP**. `m:314–319,343–359,3539–3566,3597–3616`. |
+| `PerguntaDisputa::do_fato`, `q_dos_fatos`, `Meta`, `fora_do_fato` | **C** da via na seleção/exclusão e nos índices parciais de identidade. `m:2911,2942,3397,3773–3780` · `app/chamados/migrations/0053_pergunta_unica_por_familia.py:32`. |
+| `ChamadoColaborador::_universo_da_ressuscitacao`, `ressuscitar_perguntas` e portas do modelo | **C** M/R/V e **AP** R/instante V na foto para ressuscitar. `_nascer` lê R de entrada e Lavra, `fechar_por_admin` lê M instante/via, `carimbar` lê R/V e Lavra, `carimbar_identidade` lê M instante/autor, `descarimbar_em_lote` lê R/via, A09 lê via, `encerrar_fantasma` lê M/via, `reabrir_por_resposta` e `reabrir_por_competencia` leem M/via, `_recusa_par_ilegal` lê R em SQL e em memória. `m:1543–1575,1650–1699,3031–3032,3195–3197,3251–3252,3322–3343,3378–3379,3464–3480,3494,3505,3526–3535,3705–3712`. |
+| `j::projecao_temporal_da_pergunta`, `_pergunta_viva_calc`, `_chave_memo_pv` | **C** de instante V, R, instante M e via quando recebem a pergunta ORM. A projeção temporal corta carimbos futuros. `_resposta_concorda_com_a_luz` também lê texto **C** diretamente. `j:855–862,1360,1382–1452`. |
+| Outros juízes em `j` | `_retratada_com_trilha` lê M **C** e **T**. `_slot_esperado` lê R, `_pergunta_materializada_de_fato` M/via, `pergunta_sem_lastro_ou_viva` M, `declarou_hora`, `delta_da_resposta`, `classificar_resposta_validacao` e `motivo_implausivel_validacao` texto **C**. `pergunta_respondida` lê o par que recebe, **C** sobre objeto cru e **AP** quando recebe `leitura`. `q_respondida_com_texto`, `q_respondida_sem_texto`, `q_nao_respondida`, `perguntas_corrigiveis` e `perguntas_respondidas_a_validar` consultam R em SQL **C**. `irmas_respondidas_sem_consumo` delega ao leitor híbrido de `sem_veredito_entre`. `j:292–297,351–376,683–711,1502,1544–1591,1753–1766,1791,1938,2042–2064,2116–2117`. |
+| App e API | `pergunta_no_app::perguntas_do_app` usa SQL híbrido e C6, `particao_do_app` lê R e `fechada_em` **C**. `api_chamados_v2`, `api_disputa_perguntas`, `api_disputa_responder` e `_item_validar` têm R **C**, com `resposta_display` **AP** e `estado` híbrido onde chamados. `s/pergunta_no_app.py:45–90` · `app/api/views.py:1163–1165,2553–2581,2596,2657` · `app/api/views_mensageria.py:569–572`. |
+| Tarefa do dia e relatório de retidos | `_fatos_das_perguntas` usa **A** até `agora`, exclui a reabertura marcada da ressuscitação, chama **AP** no horizonte e lê Lavra **C**. `_pela_decisao` usa ato, passivo, fila e efeito de batida. `CargaDaTarefa::_ler_vida` também lê C6 e partição do app. `folha/fora_da_folha` usa a tarefa para mostrar fio, dono e ação no universo já retido. `s/tarefa_do_dia.py:142–193,374–452,615–626` · `app/folha/fora_da_folha.py:61–86,143–157,200–234,272–280`. |
+| Templates de atendimento, modal e lote | `_card_atendimento.html` combina `resposta_display` **AP** com fallback de texto, relógio, via, pendência e recusa **C**. `_pergunta_card.html` combina display **AP** com instantes **C**. `modal_fio.html` lê `respostas_anteriores` **A**, carimbos de resposta/validação, conferência/autor, recusa e pendência **C**. `_lote_preview.html` lê texto **C**. `app/templates/chamados/partials/_card_atendimento.html:106,114,141–157,185–195,394` · `app/templates/chamados/partials/_pergunta_card.html:20–42` · `app/templates/chamados/partials/modal_fio.html:170–171,205–228,345` · `app/templates/chamados/partials/_lote_preview.html:24`. |
+| Fio, explicador e tags | `fio::espera_o_texto_do_colaborador` lê R, `montar_chamados_fio` lê texto e as saídas de C6/raio-x/aplicação. `recusa_par_ilegal` lê R. `reapontar_resolvedora`, `rechavear_data_evento`, `reuso_sem_rechave`, `sem_dia_na_saida`, `merito_perdedor`, `retratar_duplicata`, `_no_fato`, `fecho_cruza_dias`, `perguntas_sobre_batida_retratada`, `universo_do_grupo` e `grupos_de_colisao` leem via ou Lavra **C** nos sítios indicados. `explicador::_explicar_validada/explicar_pergunta` lê texto, pendência, recusa, via e `estado`. As tags `aplicacao_da_resposta` e `leitura_da_resposta` leem texto **C**. `s/fio.py:188,282,356–390,907,1050,1149,1216,1295,1493,1576,1699–1716,2017,2053,2075,2120` · `s/explicador.py:55,95,102–118` · `app/chamados/templatetags/chamados_tags.py:139,166`. |
+| Serviços de emissão/correção | **C** para M em `_derivar_chamado_destino`, `motivo_fora_da_fabrica`, criação por órfãos/âncora e fábrica. **C** para via em `gerar_perguntas_disputa` e fábrica. A12 lê R/V/autor, A13 faz foto por `values_list` de R/V/M/via, A14 e A15 leem texto ou par cru. `_resolver_perguntas_por_c
+
+[truncado em 20000 de 77528 caracteres]
 
 ## 22/11 16:51 · sessao df5b2fa77e67 · - · - · origem=Ronald (tmux)
 
@@ -718,105 +789,4 @@ Os caminhos `logs/...` abaixo são os citados nos arquivos da cópia. O conteúd
 
 Para as lacunas, busquei os nomes literais e variantes em `CLAUDE.md`, `app/docs/` — incluindo `CORTES.json`, `CORTES.md`, `LEIS.md`, `PISTA.md`, `PROMPTS.md`, `BACKLOG.md`, `RELATO.md` e `LAPIDES.md` —, `bin/` e `.claude/`. As buscas incluíram `congel*` com `instrument*`, `morat*`, `um/1 arquivo por pedaço/fatia/vez`, `portão/checklist de aval` com `6/seis itens/campos`, `pouso/troca inteira`, `várias cópias`, `HAIKU no aval` e os leitores `estado_b3`, `julga_b3` e `--b3-parada`. Os pontos marcados na tabela continuam [nao verificado]. [nao verificado]
 
-## 22/11 11:13 · sessao b62901562fb7 · SIMPLIFICA-2211-1040 · censo · origem=Code
-
-# Censo SIMPLIFICA-2211-1040
-
-**O único leitor encontrado que exige texto hoje na seção 7b é `bin/tests/test_claude_md_regras_preservadas.sh`.** O selo varre o arquivo inteiro. A seção começa em `## 7b. MODO DE TRABALHO` e termina antes de `## 8.`, mas nenhum dos dois títulos é âncora do selo. Se o corpo atual inteiro da 7b sumir, o resultado é **VERMELHO, rc 1** por 44 nomes que somem da união com `PISTA.md`, 19 nomes exigidos no próprio `CLAUDE.md` e 17 ponteiros obrigatórios. `CLAUDE.md:251,457` · `bin/tests/test_claude_md_regras_preservadas.sh:43,57,66–84,118` · `bin/tests/claude_md_regras.ref:1–115` · `bin/tests/pista_blocos.ref:1–17`
-
-O censo usa os arquivos da cópia fornecida. A identidade Git `ab351aa9bfa6ca96e314a46b4e9e48032b4a33a5` ficou **[nao verificado]** porque a cópia está sem `.git`. A conferência foi em somente leitura.
-
-## Dependências da 7b
-
-O selo monta a raiz a partir do próprio script e passa `$R/CLAUDE.md` para `_julgar`. Ele extrai o conjunto de tokens pela regex `\bL-[0-9]{3}\b|\b[A-Z][A-Z0-9]*(-[A-Z0-9]+)+\b` e compara a união `CLAUDE.md` + `PISTA.md` com os 115 nomes congelados. Nome novo só gera aviso. As menções a `git show` nesse selo documentam a origem das referências congeladas. A leitura executada usa os arquivos em disco. `bin/tests/test_claude_md_regras_preservadas.sh:9,19,30–44,55–62,83–87`
-
-### 19 nomes e 17 ponteiros exigidos no próprio `CLAUDE.md`
-
-Cada nome deve ocorrer nos dois arquivos. Cada ponteiro abaixo é buscado literalmente, com o `)` final. O SHA-256 é do bloco em `PISTA.md`. A perda da última ocorrência de qualquer nome obrigatório no `CLAUDE.md`, a perda de um ponteiro obrigatório ou a divergência do hash em `PISTA.md` dá **VERMELHO, rc 1**. `bin/tests/pista_blocos.ref:1–17` · `bin/tests/test_claude_md_regras_preservadas.sh:47–52,66–84,118`
-
-| Nome literal e localização na 7b | Ponteiro literal e localização na 7b |
-|---|---|
-| `FILA-2-EM-RAIA-PROPRIA` — `CLAUDE.md:301` | `PISTA.md#fila-2-em-raia-propria)` — `CLAUDE.md:305` |
-| `POUSO-EM-COMBOIO`, `SUITE-UMA-VEZ-POR-ARVORE` — `CLAUDE.md:301,302` | `PISTA.md#pouso-em-comboio)` — `CLAUDE.md:305` | [nao verificado]
-| `RAIA-NAO-FICA-PARADA` — `CLAUDE.md:302` | `PISTA.md#raia-nao-fica-parada)` — `CLAUDE.md:305` |
-| `JUIZ-ANTES-DO-SITIO` — `CLAUDE.md:303` | `PISTA.md#juiz-antes-do-sitio)` — `CLAUDE.md:305` |
-| `AGENTE-NAO-ESPERA` — `CLAUDE.md:303` | `PISTA.md#agente-nao-espera)` — `CLAUDE.md:305` |
-| `AGENTE-NO-MODELO-CERTO` — `CLAUDE.md:303,340` | `PISTA.md#agente-no-modelo-certo)` — `CLAUDE.md:343` |
-| `GPT6-CODEX-SO-LEITURA` — `CLAUDE.md:338` | `PISTA.md#gpt6-codex-so-leitura)` — `CLAUDE.md:342` |
-| `CODE-CHAMA-CODEX` — `CLAUDE.md:338` | `PISTA.md#code-chama-codex)` — `CLAUDE.md:342` |
-| `CODEX-PADRAO-PRO` — `CLAUDE.md:339` | `PISTA.md#codex-padrao-pro)` — `CLAUDE.md:342` |
-| `CODEX-PRE-VERIFICADOR`, `SUITE-ANTES-DO-OPUS` — `CLAUDE.md:339,378` | `PISTA.md#codex-pre-verificador)` — `CLAUDE.md:342` | [nao verificado]
-| `CODEX-TRIAGEM-INDEPENDENTE` — `CLAUDE.md:339` | `PISTA.md#codex-triagem-independente)` — `CLAUDE.md:343` |
-| `MODO-COMUM` — `CLAUDE.md:387,393` | `PISTA.md#modo-comum)` — `CLAUDE.md:393` |
-| `CODEX-ESCREVE-RED` — `CLAUDE.md:339` | `PISTA.md#codex-escreve-red)` — `CLAUDE.md:343` |
-| `DESPACHO-POR-PAPEL` — `CLAUDE.md:340` | `PISTA.md#despacho-por-papel)` — `CLAUDE.md:343` |
-| `MAIS-CODEX` — `CLAUDE.md:340` | `PISTA.md#mais-codex)` — `CLAUDE.md:343` |
-| `CONTRATO-DE-INSTRUMENTO` — `CLAUDE.md:350,394` | `PISTA.md#contrato-de-instrumento)` — `CLAUDE.md:394` |
-| `ACELERAR-PELA-LEI` — `CLAUDE.md:254,340` | `PISTA.md#acelerar-pela-lei)` — `CLAUDE.md:343` |
-
-### Outros 44 nomes que hoje só a 7b fornece à união
-
-A perda da última ocorrência de qualquer um destes nomes dá **VERMELHO, rc 1** se ele continuar ausente de `PISTA.md`. `bin/tests/claude_md_regras.ref:1–115` · `bin/tests/test_claude_md_regras_preservadas.sh:43–44,57–62,83–84,118`
-
-| Localização em `CLAUDE.md`, toda na 7b | Literais |
-|---|---|
-| `CLAUDE.md:253,282,288,325,406` | `PRE-APROVADO` |
-| `CLAUDE.md:254–256,402` | `CURA-MAIS-RESTRITIVA` (254), `DINHEIRO-EM-COMPETENCIA-ABERTA` (255, 402), `ESPERA-SEM-TURNO`, `PRE-APROVADOS`, `REPROVA-E-DESENHO` (256) |
-| `CLAUDE.md:261` | `CORTES-DOS-CONTRATOS`, `S-BATIDA`, `S-ESCALA` |
-| `CLAUDE.md:302–304,307,332–333,336` | `DOCS-NO-MARCO`, `ESMERIL-DO-MARCO`, `RAIA-VERDE-POUSA` (302), `L-106` (302, 333), `L-108` (303, 304, 332), `HIGIENE-DE-CONTEXTO` (304), `CELULA-TURNO-FECHA` (307), `HANDOFF-SESSAO` (336) | [nao verificado]
-| `CLAUDE.md:353,356,372` | `CODEX-CONSTRUTOR-NEGOCIO`, `L-126` (353), `MODO-PADRAO-POS-RESET` (356), `PRE-VERIFICADOR` (372) |
-| `CLAUDE.md:395–396,399,402,404–405,412,421,429` | `PLACAR-DA-S3-CONTA-EXERCICIO` (395), `O-DIA-PAGO` (396), `L-095` (399), `AVAL-DE-CRITERIO` (402), `REGEN-EM-EXPORTADA` (402, 412), `L-009` (404, 405), `L-082` (404), `HAIKU-EXPORT` (421), `L-084`, `PONTUALIDADE-SO-CONTRA-O-DIA-DECLARADO` (429) |
-| `CLAUDE.md:431–435,442,448,452` | `L-109`, `L-116`, `PROMPT-NAO-SE-REPETE`, `RELATO-CURTO` (431), `L-118` (432, 433, 448), `PENDENTE-SAI` (432), `REGRA-DE-PRAZO` (432, 435), `MORATORIA-DE-LEI`, `PENDENTE-SAI-PELA-CONDICAO-ESCRITA`, `PORTA-EXTRA-E-CONTADOR` (433), `RELATO-CURTO-SELO` (434), `RELATO-ARQUIVO` (442), `RAIA-DO-CONTRATO-20` (452) |
-
-### Demais nomes da referência
-
-**14 também aparecem na 7b.** Tirar só as ocorrências da 7b deixa outra ocorrência válida na união. `bin/tests/test_claude_md_regras_preservadas.sh:57–62` · `bin/tests/claude_md_regras.ref:1–115`
-
-| Literais | Ocorrência na 7b | Ocorrência que sustenta a união |
-|---|---|---|
-| `AUTONOMIA-DE-CODIGO`, `BOS-EM-RAIA-UM-POR-VEZ`, `CODEX-SONDA-LEITURA`, `L-105`, `L-117` | `CLAUDE.md:254,260,271,302,311,325,348,432,433` | `app/docs/PISTA.md:30,34,46,48,54,98,151` |
-| `L-092`, `L-099`, `L-107`, `L-110`, `L-111`, `L-NNN`, `LEI-AKITA`, `PAREI-DE-LEI-NAO-DEVOLVE-TURNO`, `PAREI-SO-LEI` | `CLAUDE.md:252,268,272,291,293,302,309,325,331,402,408,411,423,424,439` | §0 `CLAUDE.md:14,46,50–53,55,58,63,72`, §2 `CLAUDE.md:91`, §4b `CLAUDE.md:179`, §6 `CLAUDE.md:190,191` |
-
-**31 aparecem no `CLAUDE.md` fora da 7b.** A mesma regra da união se aplica. `bin/tests/test_claude_md_regras_preservadas.sh:57–62` · `bin/tests/claude_md_regras.ref:1–115`
-
-| Seção | Literais e localização |
-|---|---|
-| Preâmbulo | `LEIS-UI` — `CLAUDE.md:9` |
-| §0 | `BAND-AID` — `CLAUDE.md:17`; `L-094` — `CLAUDE.md:50`; `L-123`, `PADRAO-NA-CURA` — `CLAUDE.md:65`; `PLANO-PADROES` — `CLAUDE.md:66`; `JUIZ-NOVO` — `CLAUDE.md:74` |
-| §2, §3, §4 | `FAST-FORWARD` — `CLAUDE.md:91`; `SEGREDO-FORA-DO-ARGV`, `L-074` — `CLAUDE.md:108,120`; `UTC-3`, `CELULA-DIA` — `CLAUDE.md:146,149` |
-| §4b | `L-100`, `TETO-20-SEM-FAMILIA-SEM-CADASTRO` — `CLAUDE.md:178`; `BUG-144`, `E1-E6` — `CLAUDE.md:179`; `AUSENCIA-COBRE`, `F4-F6`, `S-DINHEIRO`, `S-TELA`, `S2-S7`, `S4-PENDENTE`, `S7-S13` — `CLAUDE.md:180` |
-| §6 | `LEI-PROTEGE-SITIO` — `CLAUDE.md:190`; `ANTI-VACUIDADE` — `CLAUDE.md:194`; `MEIA-CORRECAO` — `CLAUDE.md:196`; `ASSINATURA-EC-P256` — `CLAUDE.md:198`; `SOMBRA-INCREMENTAL`, `SOMBRA-MASCARA-2` — `CLAUDE.md:206` |
-| §6b, §7 | `TRT-PR-AR-329` — `CLAUDE.md:226`; `BLOCO-DA-MANHA-SATURADO` — `CLAUDE.md:243` |
-
-**7 estão só no `PISTA.md` hoje.** `CLAUDE-MD-ENXUTO`, `L-096`, `O261-E-CELULA-20-UM-DONO`, `GPT-6`, `VETO-NA-PORTA`, `VETO-NA-PORTA-DIVIDIR` e `MORATORIA-DE-INSTRUMENTO`. `app/docs/PISTA.md:4,20,56,72,113,143,176` · `bin/tests/claude_md_regras.ref:15,35,49,72,75,114,115`
-
-**Ponteiros de história.** O selo extrai os `LAPIDES.md#lap-NN` presentes nos dois documentos e exige `## LAPIDE NN ` no destino. Na 7b, as ocorrências estão em `CLAUDE.md:259,306,399,403,429,434`. Destino ausente dá **VERMELHO**. Apagar só a citação de uma lápide passa por essa checagem. Para `PISTA.md#slug`, todo ponteiro encontrado precisa de `<a id="slug"></a>` no destino, além da exigência fixa dos 17 ponteiros da tabela. `bin/tests/test_claude_md_regras_preservadas.sh:63–65,74–84,118`
-
-## Leitores sem âncora da 7b
-
-| Leitor e ponto de leitura | Extração, literais e efeito |
-|---|---|
-| `bin/tests/test_lei_akita.sh:17,21,30–33`, chamado pelo pre-push em `bin/pre-push.sh:33–38` | Lê `git show "$ALVO:CLAUDE.md"`, com `HEAD` por padrão e `PUSH_SHA` no hook. Busca `## 0. LEI-AKITA` na §0 (`CLAUDE.md:14`), conta 13 linhas pelo regex `^[0-9]+\. \*\*` até `## 1.` (`CLAUDE.md:17–45,78`) e busca `LEI-AKITA: origem=` no documento inteiro, hoje na §0 (`CLAUDE.md:63`). Título, contagem ou literal inválidos dão **FALHA, rc 1**. A perda isolada de `## 1.` prolonga a contagem até o fim. O `commit-msg` também abre a versão do commit sintético, mas seu retorno depende do juiz da mensagem. `bin/tests/test_lei_akita.sh:44–47,1029–1035,1048–1052` · `bin/commit_msg.sh:19–31` |
-| `bin/tests/test_suite_sh.sh:15–16,22–29,46–48` | `awk` procura `## 3. TESTES - COMANDO CANONICO` e pega as linhas seguintes até a primeira sem `\` final, inclusive. Hoje extrai `bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus <OBRA>"` na §3. Exige `bin/suite.sh --motivo`, um único `--motivo` e motivo `pre-opus` ou `pouso` seguido de `<OBRA>` ou ID válido. Arquivo, título ou comando inválido dá **RED, rc 1**. `CLAUDE.md:95–96` · `bin/tests/test_suite_sh.sh:42–54,119–120` |
-| `bin/tests/test_segredo_fora_do_argv.sh:18–20,33–36` | Varre o arquivo inteiro pelo literal **proibido** `-e DB_PASSWORD=`. A ocorrência atual está na §3 e tem crase na mesma linha, então é descartada. Ocorrência sem crase dá **rc 1**. Remover a ocorrência passa. Arquivo ausente ou ilegível deixa essa cláusula em **falha aberta**. `CLAUDE.md:108–109` · `bin/tests/test_segredo_fora_do_argv.sh:33–36,59–60` |
-| `bin/relato.sh:22–23,114,131` → `bin/raspar_publico.py:23–31` | Passa `$RAIZ/CLAUDE.md:CLAUDE.md` e lê o **documento inteiro**, inclusive a 7b. Aplica máscaras e conta substituições, sem âncora de seção. Remover texto só altera a cópia. Fonte ausente imprime `AUSENTE (pulado)` e segue no raspador. Erro de leitura ou resíduo detectado faz essa etapa falhar. `bin/raspar_publico.py:25–46` · `bin/relato.sh:131,136,145–147` |
-
-### Caminhos indiretos e condicionais
-
-| Leitor | O que lê e efeito |
-|---|---|
-| `bin/tests/test_publicacao_sem_nome.sh:31,60–76` | Lê o **`CLAUDE.md` da cópia publicada** se estiver entre os rastreados de `DEST_RELATO`, por `git ls-files`. Varre o conteúdo inteiro por dados pessoais. Nenhuma âncora textual. Se o caminho ainda rastreado estiver ausente no disco, dá **RED**. Se sair do índice, sai da seleção. `bin/relato.sh:131,136,145–147` · `bin/tests/test_publicacao_sem_nome.sh:60–76,111–119` |
-| `bin/codex_pergunta.sh:61,67–68,100,295,331,358` | Pode ler o arquivo inteiro se o chamador o fornecer como `--anexo` ou arquivo da pergunta. O anexo é raspado e o envelope é limitado a 300.000 bytes. Nenhuma âncora. Caminho ausente na validação dá **rc 2**, falha da raspagem do anexo dá **rc 4** e o `cat` do anexo após a validação segue sem teste explícito de retorno. Chamada que forneça especificamente o `CLAUDE.md` **[nao verificado]**. `bin/codex_pergunta.sh:53,323–335,358–360` |
-| `bin/disjuntor.py:2323–2330` | No `--censo`, pode abrir o arquivo inteiro se recebido como pergunta ou anexo do construtor. Procura citações de briefs `logs/<dir>/brief*.md` no texto combinado. Nenhuma âncora do `CLAUDE.md`. Leitura ilegível recusa com **rc 1** no CLI e **rc 2** no wrapper. `bin/disjuntor.py:1531–1532,1612–1621,1723–1745,2316–2346` · `bin/codex_pergunta.sh:246–247` |
-| `bin/disjuntor.py:678–704` | Os hooks podem abrir `CLAUDE.md` quando uma linha `DESENHO` cita `CLAUDE.md:N`. A função conta quebras de linha para verificar se `N` existe. Nenhuma âncora textual. Arquivo ilegível ou linha fora do arquivo invalida aquela linha de liberação do B3. Citação efetiva do `CLAUDE.md` por esse caminho **[nao verificado]**. `.claude/settings.json:9,68` · `bin/hook_stop_fila1.py:1204` · `bin/disjuntor.py:711–751,1029,1076–1088,1801–1807` |
-| `bin/codex_pergunta.sh:139–141,155–176` | O inventário do construtor lê os bytes integrais do `CLAUDE.md` da worktree para comparar o SHA-1 do blob e o modo com a base. O caminho é protegido. Qualquer alteração ou remoção frente à base dá **PROIBIDO**, com **rc 2** na validação inicial ou **rc 3** ao final. Nenhum literal é procurado no texto. `bin/codex_pergunta.sh:129,183–196,254–259,434–450` |
-
-O arquivamento genérico do Codex transporta a árvore do commit por `git archive`. O carimbo da régua inclui os arquivos da árvore pelo índice temporário de `git add -A` e `git write-tree`. Em ambos, a unidade é a árvore Git. `bin/codex_pergunta.sh:311–320` · `bin/arvore_hash.sh:19–28` · `bin/regua.sh:41–45`
-
-## Pastas varridas
-
-- **`bin/`, `bin/tests/` e `.claude/`.** O Stop cita a 7b e lê `BACKLOG.md` e `RELATO.md`. O selo de prompt lê `PROMPTS.md` e `BACKLOG.md`. O selo de publicação abre `relato.sh` para conferir os argumentos. A guarda de raia testa a existência de `CLAUDE.md`. A definição do agente verificador pede a leitura da §0 em prosa. O glob da régua despacha os selos de host listados acima. `.claude/settings.json:3–9,14–76` · `.claude/agents/verificador.md:8` · `bin/hook_stop_fila1.py:4,186,330,364,472` · `bin/tests/test_prompt_virou_item.sh:16–30` · `bin/tests/test_relato_publica_claude_md.sh:8–23` · `bin/raia_agente.sh:29` · `bin/tests/test_raia_declarada_no_estado.sh:17` · `bin/regua.sh:138–145`
-- **`app/`**, incluindo testes Django, hooks e geradores. Nenhum leitor da raiz encontrado **[nao verificado]** fora da cópia varrida. O teste de vocabulário que cita `CLAUDE.md` percorre apenas `app/`, e a montagem da suíte no pre-push também começa em `app/`. O `--check` do gerador de diagramas lê `ARQUITETURA.mmd` e `MAPA.md`. `app/pautas/tests/test_contract_vocabulario.py:8–10,17,20,29–38,51` · `bin/pre-push.sh:144` · `app/core/management/commands/gerar_diagrama.py:923–929`
-- **`mensageria/`, `docs/`, `eval/`, `fatias_agendadas/`, `ops/`, `scripts/` e arquivos da raiz.** A varredura não encontrou leitor programático do `CLAUDE.md` da raiz nessas áreas. Cobertura fora da cópia fornecida **[nao verificado]**.
-
-_7833 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7834 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
