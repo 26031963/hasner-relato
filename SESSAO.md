@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 14:34:30.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (5.2 MB). Acoes na janela: **164**.
+**Medido em 22/11/2026 14:40:07.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (5.3 MB). Acoes na janela: **168**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:39:53 | Bash |  | `cd ~/saas-hasner && W=~/wt-f5-base-$(date +%H%M%S) && git worktree add -q --detach $W 4cd2f4fd3 && git -C $W log --oneline -1 && mkdir -p $W/app/logs $W/app/media && echo $W > /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/wbase && L="chamados.tests.test_fechar_disputa_materializada chamados.tests.test_n1_perguntas_do_app.RetratarAbsolvidas chamados.tests ...` |
+| 14:39:45 | Bash |  | `cd ~/saas-hasner && for t in test_pergunta_materializada_nao_bloqueia test_RED_retratar_conta_a_tranca test_d_controle_hora_elegivel test_CATRACA_linhas_reais; do echo "=== $t"; grep -n "^FAIL: $t" logs/E4C-F5/v1/volta1.log \| head -1 \| cut -d: -f1 \| while read n; do sed -n "$((n+2)),$((n+30))p" logs/E4C-F5/v1/volta1.log \| grep -v "/usr/local/lib" \| grep -v "^\s*\^*\s*$" \| head -14; done; don ...` |
+| 14:39:42 | Bash |  | `cd ~/saas-hasner && cat logs/E4C-F5/v1/volta1.fim; grep -E "^(FAIL\|ERROR):" logs/E4C-F5/v1/volta1.log; for t in test_RED_retratar_conta_a_tranca_uma_vez test_d_controle_hora_elegivel test_CATRACA_linhas_reais_congeladas; do echo "=== $t"; awk "/^FAIL: $t/,/^-{20,}\$/" logs/E4C-F5/v1/volta1.log \| grep -v "^ File \"/usr" \| tail -12; done` |
+| 14:39:38 | Bash |  | `cd ~/saas-hasner && tail -5 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/b4j1iemgh.output; ls logs/E4C-F5/v1/ \| grep volta1; grep -E "^(FAIL\|ERROR):\|^Ran \|^(OK\|FAILED)($\| \()" logs/E4C-F5/v1/volta1.log \| tail -5` |
 | 14:21:08 | Bash |  | `cd ~/saas-hasner && sed -i '1s/^ESPERANDO: .*$/ESPERANDO: volta_intermediaria.sh \| pid=978715/' app/docs/RELATO.md && python3 -c " import sys;sys.path.insert(0,'bin');import hook_stop_fila1 as h print(h._esperando_com_prova())"` |
 | 14:21:05 | Bash |  | `cd ~/saas-hasner && python3 -c " import sys;sys.path.insert(0,'bin');import hook_stop_fila1 as h print(h._linha_do_topo()); print(h._esperando_com_prova())"; sed -n 788,850p bin/hook_stop_fila1.py \| grep -n "return\\|if " \| head -30` |
 | 14:21:01 | Bash |  | `cd ~/saas-hasner && sed -i '1s/^ESPERANDO: .*$/ESPERANDO: volta_intermediaria \| pid=978715/' app/docs/RELATO.md && head -1 app/docs/RELATO.md && echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| cut -c1-200; tail -1 logs/hook_stop_fila1.log \| cut -c1-160` |
