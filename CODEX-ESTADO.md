@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 22:02** · publicado em **21/11/2026 22:03** (UTC-3)
+> Ultima resposta processada: **21/11/2026 22:09** · publicado em **21/11/2026 22:15** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 22:09 · sessao 528e13d013f8 · E4C-F5-CONSTROI · construtor · origem=Code
+
+**INCOMPLETO.** Os dois pedaços estão no diff da cópia. O HEAD segue em `f1d73910ba305d4ca43e61f4dd33c640d83ae6dd`, conforme a regra que proíbe `git commit`.
+
+- **S1 — +44/−8.** O RED exige `reconciliar() == False`, pergunta viva e chamado `aberto`. O controle mantém a mesma batida e acrescenta apenas a hora elegível ao carimbo legado. Com o slot comprovado, exige que o chamado feche. O `test_d_RED_MORDE` foi preservado e o novo mutante exige que o RED morda ao restaurar o veredito antigo. [RED e controle](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/tests/test_o261e_f1_porta_encerramento.py:173) · [Mutante](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/tests/test_o261e_f1_porta_encerramento.py:212)
+- **S2 — +15/−1.** `bc_beco` agora verifica o slot da resposta validada e confirma que o C7 permite fechar antes do ato cercado. O mutante e o harness foram preservados. O veredito esperado continua sendo `ALVO`. [Fixture](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/tests/test_e4c_b2_cerca_retratar.py:435) · [Veredito esperado](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/tests/test_e4c_b2_cerca_retratar.py:580)
+
+O `git diff --check` passou, os dois arquivos compilaram em memória e os seis testes existentes da sentinela sem banco passaram. A execução dos recortes e a mordida dos mutantes ficam **[nao verificado]**. A pista usa Docker e banco. [Sentinela sem banco](/home/ronald/wt-codex-e4c-f5-constroi-141636/app/chamados/tests/test_sentinela_volta5_sem_banco.py:21) · [Pista](/home/ronald/wt-codex-e4c-f5-constroi-141636/bin/suite.sh:316) [nao verificado]
+
+```bash
+copia=/home/ronald/wt-codex-e4c-f5-constroi-141636
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k F1PosEstadoTest
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k CercaMordeTest
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_d_RED_hora_sem_resposta_segue_viva_e_impede_fechamento
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_mutante_sem_veto_de_resposta_ausente
+bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_mutante_sem_escopo_fechar_beco
+```
+
+**Autoconferência final — except/fallback novos no diff: 0.** `git diff | grep -n except` sem ocorrências.
 
 ## 21/11 22:02 · sessao e24f7350c635 · WRAPPER-N-VAGAS · verificador · origem=Code
 
@@ -1034,83 +1054,4 @@ Os REDs anexos de município, falta de `agora` e par antes/depois do fechamento 
 
 Para o rascunho, preserve os mutantes existentes `volta5_par` e `volta5_agora`. Para os REDs anexos auxiliares, restaurar o fallback é o mutante de relógio e aplicar decisão pré-listagem é o mutante de sincronização. O teste por `stdout` mata a decisão antecipada, mas uma releitura tardia sem `select_for_update` ainda o satisfaz, logo a prova do lock exige outro instrumento caso a sincronização seja aprovada. Testar a ausência de `hoje` no mesmo processo requer restaurar a função real nos dois testes existentes que hoje a sobrescrevem e apagam. O juiz de par já está registrado e tem outro leitor no cron de par-relâmpago. `test_feriado_a5_volta3.py:351-356`, `sincronizar_feriado_admin.py:52-72`, `test_feriado_do_posto.py:113-117,126-132`, `core/juizes.py:243-248`, `ponto/management/commands/detectar_par_relampago.py:289-300,349-353`.
 
-## 21/11 19:16 · sessao e3fb8629437a · FERIADO-POR-POSTO · construtor · origem=Code
-
-**FERIADO-POR-POSTO, volta 5.** A cura está na cópia com `HEAD d72b72a76`. A regra explícita de `git commit` impediu os dois commits pedidos. O RED foi escrito e exercitado em memória antes da cura. O RED isolado está nos dois arquivos de teste indicados abaixo.
-
-- **N1.** `--apply` sem motivo ou com só espaços usa a validação da porta. O comando propaga `CommandError` com `MarcaInvalida` como causa. O teste exige o erro e relê a marca vazia nos dois casos. `colaboradores/management/commands/marcar_feriado_do_posto.py:118–127` · `colaboradores/services/feriado_do_posto.py:305–309` · `colaboradores/tests/test_feriado_por_posto.py:645–656`.
-- **N2.** A prévia consulta o juiz registrado `par_completo`, reutilizando os turnos e os encerramentos da mesma janela. O teste coloca o par com saída às 16h55 em `outras` às 16h56 e em `(a)` às 17h01. `core/juizes.py:243–248` · `ponto/turnos.py:2185–2219` · `colaboradores/services/feriado_do_posto.py:450–475` · `colaboradores/tests/test_feriado_volta5.py:31–67`.
-- **N3.** Na sombra, a prévia recusa `agora` ausente ou `None` antes de chamar a porta. `hoje` é argumento obrigatório, e o plano recusa `None`. O comando já entrega o instante e a data local derivados da mesma leitura. `colaboradores/services/feriado_do_posto.py:261–268,370–403` · `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47,117–123` · `colaboradores/tests/test_feriado_volta5.py:15–27`.
-
-### Origem e uso dos valores
-
-| Valor | Fonte e escritor | Instante | Leitores e significado |
-|---|---|---|---|
-| `motivo` | A supervisão fornece `--motivo`. `evento` grava `LogAuditoria.descricao`. `colaboradores/management/commands/marcar_feriado_do_posto.py:27–37` · `core/observ.py:133–137`. | A porta valida antes da trava. As descrições são gravadas quando muda a marca ou a chave. `colaboradores/services/feriado_do_posto.py:305–323,344–352` · `colaboradores/services/vinculo.py:896–904`. | A porta, a trilha do vínculo e a tela de auditoria leem a justificativa humana da mudança. `colaboradores/services/feriado_do_posto.py:305–323,349–352` · `templates/core/log_auditoria.html:73`. |
-| `agora` | `handle` lê `timezone.now()` e passa o valor em memória. `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47,75,123`. | Na entrada do comando. `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47`. | A prévia entrega ao juiz o instante de referência para o encerramento. `colaboradores/services/feriado_do_posto.py:397–404,459–461` · `ponto/turnos.py:2113–2130`. |
-| `hoje` | `handle` deriva `timezone.localdate(agora)` e passa a data em memória. `colaboradores/management/commands/marcar_feriado_do_posto.py:46–47,75,117–123`. | Na mesma passagem pela borda. `colaboradores/management/commands/marcar_feriado_do_posto.py:41–47`. | O plano seleciona vínculos vigentes. A prévia delimita as competências e distingue passado, hoje e futuro pela data local do ato. `colaboradores/services/feriado_do_posto.py:261–283,450–477`. |
-| Par e encerramento | `turnos_do_colab` monta os turnos com batidas apuráveis e células da janela. `dias_encerrados` produz o mapa em memória. `ponto/turnos.py:1850–1893,1920,2133–2182`. | Dentro do savepoint, depois da aplicação simulada. `colaboradores/services/feriado_do_posto.py:397–404,450–461`. | O preparador do juiz lê as batidas e o encerramento. A prévia também lê o encerramento para `(b)` de hoje. Pareamento identifica o turno das batidas. Encerramento considera turno aberto vivo e fim previsto. `ponto/turnos.py:2113–2130,2195–2204` · `colaboradores/services/feriado_do_posto.py:462–475`. |
-| Veredito do par | `par_completo` devolve em memória o booleano da consulta preparada. `ponto/turnos.py:2195–2219`. | Na classificação, antes do rollback. `colaboradores/services/feriado_do_posto.py:397–406,462–473`. | A prévia e o detector de par-relâmpago leem a resposta para a mesma pergunta, se as duas batidas pertencem a um mesmo turno encerrado. `core/juizes.py:243–248` · `colaboradores/services/feriado_do_posto.py:462–473` · `ponto/management/commands/detectar_par_relampago.py:285–300`. |
-
-### Provas para a pista
-
-Com dependências simuladas em memória, os três REDs falharam na base, o controle das 17h01 passou, os quatro casos passaram na cura e cada mutante fez seu RED falhar na asserção esperada. A pista com Django e PostgreSQL fica [nao verificado]. `colaboradores/tests/test_feriado_por_posto.py:645–656` · `colaboradores/tests/test_feriado_volta5.py:15–67` · `colaboradores/tests/test_feriado_a5_volta3.py:342–357,367–401`.
-
-Da raiz de `app/`, com `BASE_RED` apontando para a raiz de uma cópia de ensaio da sessão em `d72b72a76`, copie apenas os dois arquivos do RED. O primeiro `prova` deve falhar nos três itens. O segundo, executado na cura, deve passar. As configurações de banco de ensaio são as da pista. `config/settings/ci.py:6–19,40–41`.
-
-```bash
-prova() {
-  PYTHONDONTWRITEBYTECODE=1 python -B manage.py test \
-    colaboradores.tests.test_feriado_por_posto.CascaDoComando.test_apply_sem_motivo_recusa_sem_escrever \
-    colaboradores.tests.test_feriado_volta5 \
-    --settings=config.settings.ci --noinput
-}
-
-cp -- colaboradores/tests/test_feriado_por_posto.py \
-      colaboradores/tests/test_feriado_volta5.py \
-      "$BASE_RED/app/colaboradores/tests/"
-(cd "$BASE_RED/app" && prova)
-prova
-
-PYTHONDONTWRITEBYTECODE=1 python -B manage.py test \
-  $(printf '%s\n' colaboradores/tests/test_feriado_*.py | sed 's/\.py$//; s#/#.#g') \
-  ponto.tests.test_cadastro_futuro_c5e \
-  ponto.tests.test_par_relampago_pelo_turno \
-  --settings=config.settings.ci --noinput
-```
-
-Os três comandos abaixo restauram, em memória, o retorno normal do comando, a classificação sem consultar o juiz e a leitura implícita do relógio, respectivamente. `colaboradores/tests/test_feriado_a5_volta3.py:342–357,391–401`.
-
-```bash
-mutante() {
-  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
-    python -B -c '
-import sys
-import django
-django.setup()
-from colaboradores.tests.test_feriado_a5_volta3 import rodar_mutante
-raise SystemExit(rodar_mutante(sys.argv[1]))
-' "$1"
-}
-mutante volta5_motivo
-mutante volta5_par
-mutante volta5_agora
-```
-
-### Diff e INCOMPLETO
-
-O diff tem **7 arquivos, +139/−40**, incluindo `colaboradores/tests/test_feriado_volta5.py:1–67`, novo na cópia. Os seis arquivos rastreados somam +72/−40. Para reproduzir o stat completo:
-
-```bash
-git diff --stat HEAD
-git diff --no-index --stat /dev/null colaboradores/tests/test_feriado_volta5.py
-```
-
-- O selo contou **44 → 44**. Saiu `timezone.now()` de `previa_da_marca`, em `d72b72a76:app/colaboradores/services/feriado_do_posto.py:385`, fora de `UNIVERSO_RELOGIO`. `ponto/tests/test_cadastro_futuro_c5e.py:327–334,376,576–599`.
-- Pelo escopo do aval, ficaram pendentes a releitura na célula, os testes de omissão de `hoje` em presença e na porta do vínculo, e os dois testes de `SincronizacaoDecideSobATrava`. `MarcaInvalidaSaiComErro` pertence à volta 4. `ponto/portas/celula.py:460–474` · `colaboradores/services/feriado_do_posto.py:74–89` · `colaboradores/services/vinculo.py:871,905–908` · `colaboradores/management/commands/sincronizar_feriado_admin.py:52–72` · `colaboradores/tests/test_feriado_volta4.py:15–25`.
-- Também ficaram fora do recorte os retornos para flags iguais e posto inexistente, a auditoria best-effort e o alcance dela na trilha do vínculo. `colaboradores/management/commands/marcar_feriado_do_posto.py:70–75,111–115` · `core/observ.py:85–98,124–139` · `core/auditoria.py:17–30` · `colaboradores/services/vinculo.py:896–904`.
-- Suíte da pista, `rc` em subprocesso real, certificação Code, Opus final e produção [nao verificado]. [nao verificado]
-
-**Autoconferência BRIEF-SEM-EXCEPT.** `except` adicionados **0**, fallbacks adicionados **0**. A conversão de `MarcaInvalida` continua no handler existente. `colaboradores/management/commands/marcar_feriado_do_posto.py:118–127` · `colaboradores/services/feriado_do_posto.py:379–406` · `ponto/turnos.py:2185–2219`.
-
-_7760 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7761 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
