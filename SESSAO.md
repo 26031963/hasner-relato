@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 20:21:00.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (51.5 MB). Acoes na janela: **1364**.
+**Medido em 22/11/2026 20:27:19.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (51.6 MB). Acoes na janela: **1367**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:21:14 | Bash |  | `cd ~/wt-simplifica-104405; cat >> app/core/tests/test_quarentena.py <<'EOF' def test_MORDE_o_log_lista_cada_podado_dentro_do_run(self): """SIMPLIFICA-RAN-FOUND-2211-2020, opcao (ii): o log da pista 2 certifica se Ran == Found menos os podados que o PROPRIO log lista (bin/pista_certifica.sh). A linha de contagem sozinha nao lista ninguem: cada teste podado sai numa linha `QUARENTENA-PODADO: <id>`,  ...` |
+| 20:21:05 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1,30p app/core/tests/test_quarentena.py; tail -5 app/core/tests/test_quarentena.py; grep -n "^class\\|^from\\|^import" app/core/tests/test_quarentena.py` |
+| 20:21:01 | Bash |  | `grep -E "FALHA\|FAIL\|^OK\|rc=\|mutantes" /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/motivo.log \| tail -8` |
 | 20:20:58 | Bash |  | `cd ~/wt-simplifica-104405; git grep -n "QUARENTENA:\\|QUARENTENA (\\|fora da suite" -- bin app \| grep -v "^app/docs" \| head -20; sed -n 100,145p app/core/tests/test_quarentena.py` |
 | 20:20:57 | TaskStop |  | `-` |
 | 20:19:46 | Bash |  | `cd ~/wt-simplifica-104405; git status --short \| head; sed -n 1,60p bin/tests/test_pista_certifica.sh; grep -n "Found\\|mut[0-9]*\b\\|^_mut\\|MORDE" bin/tests/test_pista_certifica.sh \| head -60` |
