@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 04:32:19.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1601**.
+**Medido em 22/11/2026 04:38:23.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1595**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1605,9 +1605,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:38:40 | Bash | Read _nasce_pela_marca trail writer | `cd ~/wt-codex-feriado-por-posto-120132/app; /bin/grep -n "def _nasce_pela_marca" -A25 colaboradores/services/vinculo.py \| cut -c1-200` |
 | 16:38:36 | Bash | Read cure site and comments | `cd ~/wt-codex-feriado-por-posto-120132/app; sed -n 182,205p colaboradores/services/feriado_do_posto.py; sed -n 1118,1126p colaboradores/services/vinculo.py; sed -n 1144,1150p colaboradores/services/vinculo.py` |
 | 16:38:29 | Bash | Read FERIADO 2a RED result | `cd ~/saas-hasner; L=logs/FERIADO-POR-POSTO/red_2a/red.log; /bin/grep -E '^(OK\|FAILED)($\| \()' $L\|tail -1; /bin/grep '^Ran' $L\|tail -1; /bin/grep -E '^(FAIL\|ERROR):' $L; /bin/grep -E '^AssertionError' $L` |
-| 16:37:01 | Bash | Prepare SENTINELA construtor brief | `cd ~/saas-hasner; D=logs/SENTINELA-DO-SLOT/constroi; mkdir -p $D; cat > $D/q.txt <<'EOF' PAPEL construtor, obra E4C-F5-CONSTROI, item SENTINELA-DO-SLOT (aval APROVA RASCUNHO SENTINELA-DO-SLOT 44f7c468aeb7 COM MUDANCAS, anexo aval.txt; rascunho aprovado anexo rascunho.txt sha 566c3b225f0c). Copia: a desta chamada, que JA contem a volta 3 da 1.1 (41d21a249) -- integrar SOBRE ela numa arvore so, pres ...` |
-| 16:36:40 | Bash | Read 1.2 launcher and volta3 state | `cd ~/saas-hasner; cat logs/E4C-F5-1_2/cura/lanca.sh; wc -c logs/E4C-F5-1_2/cura/q.txt; cd ~/wt-codex-e4c-f5-constroi-141636 && git log --oneline -3 && git status --porcelain \| head` |
-| 16:36:34 | Bash | Find volta 3 copy path | `cd ~/saas-hasner; cat logs/E4C-F5-1_1/volta3/green.sh; cat logs/E4C-F5-1_1/volta3/lanca.sh \| /bin/grep -o 'construtor [^ ]*'; cat logs/E4C-F5-1_1/volta3/decisao.txt \| cut -c1-300 \| head -8` |
-| 16:36:29 | Bash | Record census in RELATO, locate volta3 copy | `cd ~/saas-hasner; sha=$(sha256sum logs/SENTINELA-DO-SLOT/censo2/r.txt\|cut -c1-12); python3 - "$sha" <<'EOF' import sys p='app/docs/RELATO.md'; s=open(p).read(); L=s.split('\n',1) assert L[0].startswith('ESPERANDO:') n="SENTINELA-DO-SLOT mudanca (2) MEDIDA (16:36; Codex censo rc 0 16:36:04, logs/SENTINELA-DO-SLOT/censo2/r.txt sha256-12 %s): 5 chamadores diretos de producao, so o C6 (_pergunta_mate ...` |
-| 16:36:17 | Bash | Spot-check census citations | `cd ~/saas-hasner; git show HEAD:app/chamados/services/carga_pergunta_viva.py \| sed -n 83,95p; echo ---; git show HEAD:app/chamados/services/carga_pergunta_viva.py \| sed -n 115,120p; echo ---; git show HEAD:app/chamados/juizes.py \| sed -n 344,352p; echo ---; git show HEAD:app/chamados/juizes.py \| sed -n 885,898p` |
-| 16:36:12 | Bash | Read SENTINELA census result | `cd ~/saas-hasner; wc -l logs/SENTINELA-DO-SLOT/censo2/r.txt; cut -c1-400 logs/SENTINELA-DO-SLOT/censo2/r.txt \| head -80` |
