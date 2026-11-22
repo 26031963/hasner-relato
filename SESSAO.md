@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 18:01:41.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (34.1 MB). Acoes na janela: **933**.
+**Medido em 22/11/2026 18:07:48.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (34.3 MB). Acoes na janela: **942**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:07:46 | Bash |  | `cd ~/saas-hasner; timeout 540 bash -c 'until grep -q "^rc=" logs/SIMPLIFICA-V3-2211-1726/suite_final.log \|\| [ -f logs/TERRENO-POS-F5/relanca.fim ]; do /usr/bin/sleep 20; done'; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/SIMPLIFICA-V3-2211-1726/suite_final.log \| tail -3; ls logs/TERRENO-POS-F5/relanca.fim 2>/dev/null` |
+| 18:07:32 | Bash |  | `cd ~/saas-hasner/logs/TERRENO-POS-F5; for f in */r.txt; do echo "=== $f ($(wc -l <$f) linhas)"; head -c 700 $f; echo; done` |
+| 18:07:27 | Bash |  | `cd ~/saas-hasner; tail -c 300 logs/SIMPLIFICA-V3-2211-1726/suite_final.log; echo; ls logs/TERRENO-POS-F5/*/r.txt \| wc -l; ls logs/TERRENO-POS-F5/relanca.fim 2>&1 \| tail -1` |
+| 18:07:16 | Bash |  | `cd ~/saas-hasner; cat > logs/SIMPLIFICA-V3-2211-1726/selos_host_copia.txt <<'EOF' Selos de host na copia ~/wt-simplifica-104405 @3f7d3fd6c (22/11 ~18:0x), 12 nao-zero de 66+; os mesmos rodados no main 161066a90: PRE-EXISTENTES (vermelhos tambem no main): test_atomicidade_da_porta, test_esmeril_chamado_censo, test_esmeril_turno_censo, test_hora_da_secao_nao_e_futura, test_leis_indice, test_placar_c ...` |
+| 18:07:07 | Bash |  | `cd ~/wt-simplifica-104405; git diff --name-only 161066a90 HEAD; echo ===; grep -nE 'logs/\|RAIZ\|\.git' bin/tests/test_inventario_pessoal_no_commit.sh \| head -8; echo ===; grep -nE 'logs/\|ALARME\|RAIZ' bin/tests/test_furo_encadeado_ao_cartorio.sh \| head -10` |
+| 18:05:53 | Bash |  | `cd ~/wt-simplifica-104405; timeout 300 bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| tail -15; echo ====; timeout 300 bash bin/tests/test_import_tardio_contra_o_ar.sh 2>&1 \| tail -10; echo ===; timeout 300 bash bin/tests/test_furo_encadeado_ao_cartorio.sh 2>&1 \| tail -15; git diff --stat 161066a90 HEAD \| tail -3` |
+| 18:04:39 | Bash |  | `cd ~/wt-simplifica-104405; for s in test_furo_encadeado_ao_cartorio test_inventario_pessoal_no_commit test_import_tardio_contra_o_ar; do echo "== $s"; timeout 300 bash bin/tests/$s.sh 2>&1 \| grep -iE 'falha\|FAIL\|VERMELH\|RED\|acus\|cura\|nao existe\|No such' \| head -6; done` |
+| 18:01:55 | Bash |  | `cd ~/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; for s in $(grep -v '^0 ' $S/selos_simpl.txt \| grep -v FIM \| awk '{print $2}'); do timeout 300 bash $s > $S/m.out 2>&1; echo "$? $s :: $(tail -1 $S/m.out \| cut -c1-110)"; done` |
+| 18:01:42 | Bash |  | `cd ~/saas-hasner; python3 -I - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='ESPERANDO: bin/suite.sh \| pid=1431366\n' assert s.count(a)==1 and s.startswith(a) s=s.replace(a,'ESPERANDO: bin/suite.sh \| pid=1707069\n',1) open(p,'w').write(s) EOF head -1 app/docs/RELATO.md` |
 | 18:01:40 | Bash |  | `cd ~/saas-hasner; pgrep -af 'bin/suite.sh --dir' \| grep -v pgrep \| cut -c1-150; head -2 app/docs/RELATO.md \| cut -c1-200` |
 | 18:01:37 | Monitor | [nome] RED / SIMPLIFICA suite / selos SIMPLIFICA FIM / TERRENO relanca.fim | `B=/home/ronald/saas-hasner/logs; S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad a=0;b=0;c=0;d=0 while true; do [ $a = 0 ] && grep -q '^rc=' $B/[nome]-FERIADO-PELA-TELA/red_v2.log 2>/dev/null && { echo "[nome] RED: $(grep -E '^(OK\|FAILED)($\| \()' $B/[nome]-FERIADO-PELA-TELA/red_v2.log\|tail -1) $(grep '^Ran ' $B/[nome]-FERIADO-PELA-TELA/red_v2.log\|tail -1) $( ...` |
 | 18:01:30 | ToolSearch |  | `-` |
