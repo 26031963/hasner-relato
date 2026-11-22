@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 12:53** · publicado em **22/11/2026 12:56** (UTC-3)
+> Ultima resposta processada: **22/11/2026 12:59** · publicado em **22/11/2026 13:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 12:59 · sessao 9a66fadbca4e · FERIADO-P4-MINIMO-V2-2211-1105 · verificador · origem=Code
+
+A v5 comprova os **26 candidatos administrativos de 22/11** e corrige a descrição do ensaio. O título ainda chama os 26 de nova medição do “25” do aval, enquanto o próprio texto atribui ao levantamento antigo uma pergunta diferente. A origem do “25” e a comparação `A != B` ficam **[nao verificado]**. (`lista_pouso.md:136–145`, `vigencia.out:3–30`, `r3.txt:5,13–15`)
+
+## 1. Achados da volta 3
+
+| Achado | Situação na v5 |
+|---|---|
+| Recortes e universo dos 26 | **Respondido para 22/11.** A v5 distingue o filtro do sync do filtro de vigência e situação. Os 26 passam nos dois recortes e a consulta inversa retorna zero. A coincidência é dos candidatos administrativos com chave `True` no dado fornecido. (`lista_pouso.md:137–144`, `vigencia.out:3–30`) |
+| Ensaio atribuía à saída mais do que ela mostrava | **Respondido.** A v5 descreve `--apply` com a porta de escrita substituída. O ensaio mede as chamadas que o comando faria à porta. (`lista_pouso.md:138–140`, `feriado_lista_admin_vigencia.py:16–27`) |
+| Os cinco antigos | **Em parte.** A nota agora descreve corretamente o filtro da sonda antiga, incluindo posto `OPERA` e ciclos 6x1, 5x2 e semanal. A volta 3 registra que os cinco estão nos 26. A saída com os cinco PKs fica **[nao verificado]**. (`lista_pouso.md:174`, `feriado_lista_admin_pk.py:8–15`, `app/escala/models.py:26–32`, `r3.txt:5,14`) |
+| Recálculo | **Respondido quanto ao agendamento.** A v5 fala em `on_commit` e em competências com dias tocados. A frase “tem as células da janela regeneradas” ainda é ampla: a porta cria células ausentes e só reescreve as geradas quando encontra diferença, observadas as guardas. (`lista_pouso.md:8`, `app/ponto/portas/celula.py:284–318,490–507`, `app/ponto/services/fechamento.py:1798–1827`) |
+| Validação da CLI | **Respondido.** Sem `--posto`, o ramo de sugestões retorna antes das validações citadas. Com `--posto`, as combinações inválidas e os erros indicados da porta viram `CommandError`. (`lista_pouso.md:8`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:49–76,112–128`) |
+| Recusa da marca pela tela | **Respondido.** A view omite `opera_em_feriado` do POST encaminhado. `atualizar_posto` rejeita a chave se a receber, e a desativação grava só `ativo`. (`lista_pouso.md:9,16`, `app/colaboradores/views.py:851–884,895–912`, `app/colaboradores/services/estrutura.py:66–86`) |
+
+## 2. O que a sonda mede
+
+- **Comando real, porta substituída.** `call_command` entra no `handle` real com `apply=True`. O `handle` importa a porta dentro desse ramo, com o `mock.patch` em vigor. `_espia` só acrescenta `(PK, chave atual, chave desejada)` a uma lista em memória. A escrita da chave, a trilha e a regeneração da porta real ficam fora desse ensaio. (`feriado_lista_admin_vigencia.py:16–26`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:40–73`, `app/colaboradores/services/vinculo.py:898–926`)
+- **Rollback por empresa.** `_Desfaz` sai do `atomic()` antes de ser capturada e reverte eventuais escritas abrangidas pela transação. As anotações em memória sobrevivem. As consultas de vigência rodam depois, fora desses blocos. (`feriado_lista_admin_vigencia.py:18–38`)
+- **Saída normal.** O nome e o cargo que o comando imprime vão ao `StringIO`. Os `print`s da sonda emitem contagens, PKs, datas, situação e flags. O caminho mostrado e a saída fornecida não expõem nome, CPF ou matrícula. Logs externos e saída de falha ficam **[nao verificado]**. (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:66–74`, `feriado_lista_admin_vigencia.py:20–41`, `vigencia.out:1–30`)
+- **“Fora do sync” é outra seleção.** O sync parte de `ativa=True` por empresa. A consulta inversa procura, sem filtro de empresa, administrativos com chave `True`, vigentes na data da sonda e com colaborador `ativo`, e exclui os PKs capturados. Um vínculo desativado com fim declarado ainda pode cobrir a data. Os 26 de um lado e o zero da diferença inversa sustentam a igualdade observada. (`app/colaboradores/management/commands/sincronizar_feriado_admin.py:40–65`, `app/escala/alimentacao.py:199–225`, `feriado_lista_admin_vigencia.py:26–41`, `vigencia.out:3–30`)
+
+## 3. Conferência de números e afirmações
+
+- Os 26 pares vínculo/posto, com suas empresas, batem com `vigencia.out`, sem duplicatas: **24 + 1 + 1**. Na seção 3, **62 + 12 + 1** confere com a contagem das linhas e soma os **75** registros da sonda. A sonda nova só publica o detalhe dos 26 `True → False`. As outras 49 linhas e as contagens de ativos e pulados por empresa ficam **[nao verificado]** contra a saída original. (`lista_pouso.md:54–133,147–172`, `vigencia.out:3–30`, `feriado_lista_admin_vigencia.py:26–32`)
+- A seção 2 contém **25** linhas da competência 11 em **30** linhas totais. Os quatro postos citados somam **7** dessas 25 linhas. A marca anterior dos postos, a reprodução dos efeitos por colaborador-dia e as fotos de contagem e hash ficam **[nao verificado]** nos anexos fornecidos. A prévia do código classifica a ausência de batidas, inclusive futura. A abertura de Pauta para essas linhas fica **[nao verificado]**. (`lista_pouso.md:2,13,16–49`, `app/colaboradores/services/feriado_do_posto.py:416–425,464–496`, `r3.txt:8`)
+- A frase “toda reescrita” precisa de escopo. As portas de regeneração e de troca da chave recebem `hoje`, mas o rejulgamento chamado pela porta da célula ainda lê o dia no cartório. A própria v5 registra essa pendência na seção 5. (`lista_pouso.md:11,181`, `app/ponto/portas/celula.py:112–140,467–479`, `app/colaboradores/services/vinculo.py:898–926`, `app/ponto/services/cartorio.py:2059–2064`)
+- A cópia fornecida não tem metadados Git. HEAD, base `ab351aa9b`, **61 commits / 39 arquivos**, ausência de migration e de alteração em `motor_calculo_v2`, e a reversão histórica do P4 ficam **[nao verificado]**. (`lista_pouso.md:5,13,176–181`)
+
+## 4. Quem escreve e quem lê `EscalaColaborador.trabalha_em_feriado`
+
+| Caminho | Escrita e leitura |
+|---|---|
+| `executar_vinculo` | No nascimento, grava o valor de `padrao_trabalha_em_feriado`, que devolve `False` para cargo administrativo. No reaproveitamento, `existente.save()` pode regravar o valor carregado junto com os outros campos. O campo tem `default=True` no modelo. (`app/colaboradores/services/vinculo.py:259–299`, `app/escala/models.py:896–928`) |
+| ESCALA-AUTO e trecho retroativo | Ajuste e renascimento leem a chave anterior e gravam o resultado de `chave_ao_nascer`. A trilha compara a chave nova com a herdada. O desfazer que só reabre atualiza vigência e `ativa`. `criar_trecho_retroativo` lê e copia a chave anterior. (`app/colaboradores/services/vinculo.py:980–987,1097–1156`, `app/colaboradores/services/feriado_do_posto.py:192–204`) |
+| Marca do posto e sync | Ambos leem a chave para detectar divergência. A marca propaga por `marcar_trabalha_em_feriado`, e o sync chama a mesma porta com `--apply`. Essa porta compara, grava com `update_fields=['trabalha_em_feriado']`, registra trilha e aciona a regeneração. (`app/colaboradores/services/feriado_do_posto.py:280–293,362–378`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:53–77`, `app/colaboradores/services/vinculo.py:898–926`) |
+| Tela, A4 e apuração | A tela do posto não edita a chave do vínculo, e `EscalaColaborador` é somente leitura no Django admin. A4 lê a chave e a compara à marca. `feriado_vira_folga` lê a chave para os ciclos weekday e é consultado pela geração da célula, pela precedência do dia, pelo calculador e pelo fechamento. (`app/colaboradores/views.py:851–884,895–912`, `app/escala/admin.py:18–36`, `app/colaboradores/services/feriado_do_posto.py:226–238`, `app/escala/models.py:1376–1406`, `app/ponto/portas/celula.py:289–297`, `app/ponto/precedencia.py:364–377`, `app/ponto/calculador/alimentacao.py:514–522`, `app/ponto/services/fechamento.py:944–955`) |
+
+VEREDITO: REPROVADO
 
 ## 22/11 12:53 · sessao 93b893778d7d · FERIADO-P4-MINIMO-V2-2211-1105 · verificador · origem=Code
 
@@ -680,61 +720,4 @@ Todos os `docker run` da tabela usam `--rm`, ficam anexados ao cliente Docker e 
 - **Sem timeout de Docker no caminho da pista.** Os `run` da tabela e os `ps` que a régua ou o pre-push podem alcançar são síncronos e sem prazo por chamada. O `flock -w` limita só a aquisição. Se o Docker bloquear depois da aquisição, o detentor pode continuar com o fd aberto e os próximos solicitantes podem sair 75. O laço de 30 tentativas em `db_teste.sh` tampouco limita a duração de cada `docker exec … pg_isready`. (`bin/trava_teste.sh:35`, `bin/trava_teste.sh:42`, `bin/suite.sh:319`, `bin/suite.sh:344`, `bin/pre-push.sh:24`, `bin/regua_rotas_mensageria.sh:28`, `bin/regua.sh:138`, `bin/tests/test_cpuset_de_teste.sh:50`, `app/core/esteira_vigia.py:747`, `app/core/esteira_vigia.py:760`, `bin/db_teste.sh:73`)
 - **`docker kill` e `memory.events`.** Os lançadores da pista não chamam `docker kill`. O `docker kill -s HUP` executável encontrado em `bin/` recarrega cascas de produção e também não está sob timeout. O `timeout 180` do deploy envolve outra operação, a prova por `docker exec`. A busca em `bin/` e `app/` encontrou zero leitor de `memory.events`. `recursos.sh` define `--memory` para os lançadores que usam `$TESTE_DOCKER` e menciona `State.OOMKilled` em comentário. O executor Python monta o próprio argv sem essa flag. (`bin/suite.sh:347`, `bin/deploy.sh:360`, `bin/deploy.sh:382`, `bin/recursos.sh:64`, `bin/recursos.sh:69`, `bin/recursos.sh:81`, `app/core/esteira_vigia.py:751`)
 
-## 22/11 10:26 · sessao ae6110b2a3aa · FERIADO-POR-POSTO · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — FERIADO-P4-MINIMO-2211-1016.** Voltar o sync ao main e acrescentar apenas o relógio corrige os dois casos citados, mas deixa vermelho o teste remanescente de posto que FECHA. A retirada de `test_feriado_admin_pelo_cargo.py` também elimina a prova de que o sync consulta o juiz do cargo. `app/colaboradores/tests/test_feriado_admin_sync.py:38–47,80–103`, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:202–213,239–252`.
-
-### 1. Retorno ao main e alcance dos nove commits — PROCEDE [nao verificado]
-
-- **Histórico [nao verificado].** A cópia disponível veio sem metadados Git. A ancestralidade de `ab351aa9b`, os arquivos tocados por cada um dos nove commits e os commits fora da lista que tocaram os três caminhos ficam [nao verificado]. O anexo lista os hashes, e o selo identifica `f4cfb40cb` como a mudança do perguntador para `_desejado`. Isso comprova a referência no código, sem comprovar a exclusividade dos nove. `p4_commits.txt:1–9`, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:239–249`.
-- **Escopo PROCEDE.** Apagar `test_feriado_admin_pelo_cargo.py` retira também os casos de nascimento pela porta real, a matriz do juiz e as provas dos copiadores e do renascimento no desfazer. Essa cobertura vai além do sync. `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:64–105,145–189`.
-
-### 2. Cura mínima, trava e colisão com os avais — PROCEDE
-
-- **Relógio CONFERE.** Reconstruí em memória o arquivo do main a partir do diff e conferi o blob `552d04845`. O `handle` chama `marcar_trabalha_em_feriado(ec, desejado)` sem `hoje`. Na cópia, o P2 levanta `ValueError` antes de comparar a chave ou gravar. Uma leitura de `timezone.localdate()` no `handle`, passada por `hoje=`, fecha esse contrato. `app/colaboradores/management/commands/sincronizar_feriado_admin.py:38–60` **no main**, `app/colaboradores/services/vinculo.py:870–871,893–904`.
-- **Trava CONFERE contra o main.** O `handle` do main lista e aplica os valores já calculados, sem trava explícita de posto, colaborador ou vínculo e sem releitura. A porta chamada conserva o `@transaction.atomic` por vínculo. A cópia acrescenta `Posto` e vínculo em `FOR NO KEY UPDATE`, com `Colaborador` em `FOR UPDATE` pela porta `trava_na_ordem`, além de releitura no universo ativo da empresa. O P3 tem trava própria na porta da marca e teste próprio contra o ciclo com a FK. `app/colaboradores/management/commands/sincronizar_feriado_admin.py:38–60` **no main**, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:78–104` **na cópia**, `app/chamados/models.py:2852–2855`, `app/colaboradores/services/vinculo.py:870`, `app/colaboradores/services/feriado_do_posto.py:319–325,362–371`, `app/colaboradores/tests/test_feriado_matriz_p3_trava.py:1–15`. Ausência de ciclo em execução [nao verificado].
-- **LEI-FERIADO-ACHADO31 PROCEDE.** O juiz continua dando `False` ao administrativo no nascimento, e a porta de vínculo e os copiadores continuam consultando-o. O sync proposto mantém o resultado `False` pelo cargo, mas volta a calculá-lo diretamente com `not cargo_e_administrativo(...)`. A exclusão do arquivo remove o RED com espião do sync e o selo AST que detecta essa derivação, além dos REDs de nascimento e cópia. `app/escala/models.py:905–924`, `app/colaboradores/services/vinculo.py:297,1128,1153`, `app/colaboradores/services/feriado_do_posto.py:192–204`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:47` **no main**, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:78–105,145–189,202–252`.
-- **Achado 5 PROCEDE.** O main fornecido aplica `True` ao não administrativo mesmo em posto FECHA. A proteção do sync aparece na cópia em `_desejado`, identificado como perguntador desde a cura P4 `f4cfb40cb`. A exigência de respeitar a marca já estava registrada no verificador de escopo de 20/11. O código efetivamente implantado e o uso do comando em produção ficam [nao verificado]. `app/colaboradores/management/commands/sincronizar_feriado_admin.py:47–56` **no main**, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:39–55` **na cópia**, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:242–249`, `app/docs/RELATO.md:284`.
-- **Demais avais [nao verificado].** O código permite conferir os contratos locais de P2 e P3 acima. A vigência e o literal integral de `UMA-OBRA-FERIADO-2211-0105` e `CONGELA-INSTRUMENTO` ficam [nao verificado]. A regra da cópia exige pouso próprio para instrumento. `app/colaboradores/tests/test_feriado_matriz_p2.py:29–51`, `app/colaboradores/tests/test_feriado_matriz_p3_trava.py:1–15`, `CLAUDE.md:325–328`.
-
-### 3. RED/GREEN e censo AST — PROCEDE
-
-Os dois testes nomeados existem na cópia. No ensaio em memória, com persistência simulada, ambos deram `ERROR` por `ValueError` antes da cura e passaram com `hoje=`. O terceiro, `test_posto_com_marca_o_vinculo_que_a_segue_nao_e_deste_comando`, também deu `ERROR` sem a cura e, com a cura, deu `FAIL` na primeira asserção de estado. O sync transformou de `False` para `True` o vínculo que já respeitava o posto FECHA. A presença dos testes no main, a execução Django e os respectivos RCs ficam [nao verificado]. `app/colaboradores/tests/test_feriado_admin_sync.py:38–47,75–103`, `app/colaboradores/services/vinculo.py:898–904`.
-
-| Chamadas de `marcar_trabalha_em_feriado` na cópia | Passam `hoje=`? |
-|---|---|
-| `app/colaboradores/management/commands/sincronizar_feriado_admin.py:104`, `app/colaboradores/services/feriado_do_posto.py:370` | Sim, as duas chamadas diretas de produto. |
-| `app/colaboradores/tests/test_feriado_matriz_p2.py:33,41` | **Não**, de propósito. Os REDs exigem a recusa. |
-| `app/colaboradores/tests/test_feriado_matriz_p2.py:49`, `app/colaboradores/tests/test_feriado_matriz_p1.py:133`, `app/colaboradores/tests/test_feriado_por_posto.py:139,148`, `app/escala/tests/test_porta_escala.py:62,65`, `app/chamados/tests/test_jv1_feriado_vira_vigia.py:89`, `app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:133` | Sim, chamadas diretas em testes. |
-| `app/ponto/tests/test_cadastro_futuro_c3.py:114`, `app/ponto/tests/test_cadastro_futuro_c5b.py:124,138,144`, `app/ponto/tests/test_cadastro_futuro_sem_banco.py:446,469,476,481,679,681` | Sim, chamadas indiretas em testes. |
-| `app/colaboradores/tests/test_feriado_por_posto.py:509–517` | Sim, por `**kw`, recebido da chamada em `app/colaboradores/services/feriado_do_posto.py:370`. |
-
-### 4. Diff contra o main — CONFERE para o relógio
-
-O diff em memória contém o import de `timezone`, uma leitura de `timezone.localdate()` e o argumento `hoje=hoje`. O import precisa constar no diff publicado, pois o main fornecido não o tem. `app/colaboradores/management/commands/sincronizar_feriado_admin.py:1–2,38–56` **no main**, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:107–113` **na cópia**.
-
-**Exportada, dinheiro e `!` — PROCEDE.** O `--apply` grava o vínculo e pode recalcular fechamentos das competências afetadas pela regeneração. A guarda de lavra pula as células de competência exportada ou com holerite publicado. Há outra escrita antes dessa guarda. O `post_save` do vínculo chama `invalidar_previsto`, que zera `previsto_em` e atualiza `atualizado_em` em todo `FechamentoMensal` daquele colaborador com previsto preenchido, inclusive exportado. É alteração do gravado, e os dois campos ficam fora do hash da porta de exportada. O efeito já consta no backlog. Ocorrência em produção e valor financeiro efetivamente movido ficam [nao verificado]. `app/colaboradores/services/vinculo.py:902–926`, `app/ponto/portas/celula.py:112–114,218–221,284–288,490–503`, `app/folha/export.py:617–628`, `app/escala/signals.py:137–151`, `app/ponto/services/fechamento.py:1607–1613`, `app/ponto/portas/regen_exportada.py:35–38`, `app/docs/BACKLOG.md:730`.
-
-O item 5 prevê deploy. Um `--apply` operacional que toque esse gravado exige o `!` da regra da casa. Para dinheiro em competência não exportada, valem reversão prévia, prova de integridade da exportada e prova de frota posterior. O comando consta como sincronização sob ordem, fora do pipeline da cópia. `aval.txt:6`, `CLAUDE.md:265–268,406–413`, `app/config/crons.py:769,1425`.
-
-### 5. Verificador, suíte, opus e pouso — PROCEDE [nao verificado]
-
-A sequência e as opções da suíte conferem com a regra da casa. A proposta atual para no teste remanescente de posto FECHA, antes do opus e do pouso. A frase “sync de feriado do admin segue como hoje” só descreve o retorno ao comportamento de seleção do main fornecido. Equivalência com produção, suíte integral, opus, deploy, smoke e entrega da lista ficam [nao verificado]. `CLAUDE.md:325–328,372–381`, `bin/suite.sh:139–143,236,255–262`, `app/colaboradores/tests/test_feriado_admin_sync.py:80–94`, `aval.txt:6`.
-
-### 6. P4-SYNC-FERIADO e MAPA-TRAVAS — CONFERE no escopo proposto
-
-O aval manda deixá-los registrados. Restaurar o sync do main retira a aquisição prévia da trava do Colaborador que existe na cópia. O estado dos dois registros fora do anexo fica [nao verificado]. `aval.txt:7`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:89–96` **na cópia** e `:38–60` **no main**.
-
-### PROIBIDO — PROCEDE no literal da trava
-
-Comparado à cópia, o item 1 remove a trava e a releitura do sync. Comparado ao main restaurado, a cura de relógio pode preservar a ausência dessas travas, manter a recusa de `None` e propagar o erro sem `except` novo. O histórico necessário para provar que nenhum dos nove commits voltou fica [nao verificado]. `aval.txt:2–3,8`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:78–104` **na cópia** e `:53–57` **no main**, `app/colaboradores/services/vinculo.py:898–904`.
-
-### PRONTO — PROCEDE
-
-Os dois verdes isolados deixam de fora o teste de posto FECHA que bloqueia a suíte integral. Censo publicado, diff final aplicado, RCs Django, verificação final, opus, deploy, smoke e lista ficam [nao verificado]. `aval.txt:9`, `app/colaboradores/tests/test_feriado_admin_sync.py:80–103`, `CLAUDE.md:372–381`.
-
-### LEI-AKITA — PROCEDE
-
-A origem do erro, a porta testemunha e `Clock Injection` conferem. A injeção de relógio cria zero juízes. O retorno completo ao main, porém, restaura a decisão de cargo dentro do `handle`, perde o selo que a detecta e deixa descoberto no RED declarado o caso de posto FECHA. O censo literal também precisa registrar as duas omissões intencionais de `hoje=` no P2. `app/docs/LEIS.md:150`, `CLAUDE.md:17–29,62–68`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:47,56` **no main**, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:239–252`, `app/colaboradores/tests/test_feriado_admin_sync.py:80–94`, `app/colaboradores/tests/test_feriado_matriz_p2.py:29–43`.
-
-_7822 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7823 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
