@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 17:46** · publicado em **22/11/2026 17:49** (UTC-3)
+> Ultima resposta processada: **22/11/2026 17:53** · publicado em **22/11/2026 17:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 17:53 · sessao c0d8e8352587 · - · - · origem=Ronald (tmux)
+
+ok
 
 ## 22/11 17:46 · sessao 91e1e9e9122a · TERRENO-POS-F5 · leitura · origem=Code
 
@@ -618,54 +622,4 @@ A leitura composta continua usando texto da coluna. Os campos gravados pelas dua
 
 A catraca de coordenadas B1 passou no modo `unittest` em memória documentado no teste. Suíte Django, mutações completas com ORM e efeito em produção [nao verificado]. `app/core/tests/test_medida_turno_do_par.py:21`, `app/core/tests/test_medida_turno_do_par.py:560`.
 
-## 22/11 13:26 · sessao 39fccf63ef79 · SIMPLIFICA-V2-2211-1202 · verificador · origem=Code
-
-## 1. Procedentes da volta 2 ainda abertos
-
-- **(a) Fast-forward.** Os exemplos exatos da volta 2 foram corrigidos. A lista ainda descreve `git -c merge.ff=true merge raia` como brecha, embora o filtro agora recuse esse comando e o caso 55 o exija. Há outras brechas e recusas indevidas fora da lista, demonstradas abaixo. `lista_do_que_falta.md:33–40` · `bin/disjuntor.py:1140–1192` · `bin/tests/test_disjuntor.sh:1243–1252`
-- **(h) Relógio e trava.** A lista corrigiu o efeito principal e registrou que a trava termina antes do commit. Ainda erra ao atribuir uma possível recusa a mais à amostragem antecipada. Para as mesmas observações do RELATO, antecipar `agora` só pode baixar ou manter `disparado_em = max(agora, mtimes)`, tornando mais permissivo o teste `mtime >= disparado_em`. O código também não limita a diferença a “segundos”, pois lê o transcript antes de disputar a trava. A linha de liberação ainda precisa passar pelos testes de conteúdo, fotografia e consumo. `lista_do_que_falta.md:50–54` · `bin/disjuntor.py:343–354,809–826,972–979,1023–1055` · `bin/commit_msg.sh:33–42`
-- **(i) Pista 2.** A lista promete a conferência no pouso. O RELATO registra paridade parcial e o contrato disponível ainda chama a pista de pré-filtro. Igualdade da imagem Docker e da versão do Postgres, SHA certificado, suite com todas as LABELS e publicação da conferência **[nao verificado]**. `lista_do_que_falta.md:55` · `aval.txt:6,9` · `app/docs/RELATO.md:2208,2352` · `app/docs/BACKLOG.md:2227,2230`
-
-Os demais pontos da volta 2 estão curados ou declarados com o efeito correto. **(b)** A leitura é por linha e a identidade continua declaratória. **(c)** `PAREI: !` casa com o Stop. **(d)** A exigência adicional de censo na fila 1 está declarada. **(e)** CODEX 5(e) enumera as quatro condições. **(f)** A lista registra a linha ao propor a cura e o alcance do selo, que aceita commit sem ela. **(g)** A tabela de dez obras e o VERMELHO estão no CODEX 6. A lista também corrigiu o alcance do `rc 4` e registrou que o Stop pode sair antes da varredura. `lista_do_que_falta.md:4–8,30–32,41–49` · `bin/disjuntor.py:1070–1087,1201–1217,1730–1740` · `bin/hook_stop_fila1.py:1249–1265,1368–1402` · `CLAUDE.md:62–70,196,266–267,386–398` · `bin/tests/test_lei_akita.sh:84–95,441–448`
-
-## 2. Contraexemplos do filtro
-
-Conferi em memória a decisão do hook e os argumentos entregues pelo Bash, usando uma função que só imprime os argumentos no lugar do Git. A atualização real de refs e a configuração efetiva da instalação ficam **[nao verificado]**. O efeito abaixo pressupõe uma `raia` à frente do `HEAD`, apta a fast-forward. `bin/disjuntor.py:1140–1192,1820–1830` · `bin/hooks.sh:48–53,82–83` · `bin/commit_msg.sh:29–38`
-
-| Comando | Resultado e causa |
-|---|---|
-| `git mer"ge" --ff-only raia` | Passa. O Bash entrega `merge` e `--ff-only`. `merge_pede_ff` daria `True`, mas `_pretool` exige `merge` literal no texto antes de chamá-la. A regex da varredura do B3 também perde o comando. `bin/disjuntor.py:1130,1177–1192,1820–1830` |
-| `git merge --ff-o\` seguido de quebra de linha e `nly raia`, sem indentação | Passa. O Bash junta `--ff-only`, enquanto o filtro insere um espaço e vê `--ff-o` e `nly`. O caso 55 cobre a quebra **entre** argumentos. `bin/disjuntor.py:1140–1145,1180–1192` · `bin/tests/test_disjuntor.sh:1243–1247` |
-| `if true; then git merge --ff-only raia; fi` | Passa. O segmento começa em `then`, que o reconhecedor não consome. `bin/disjuntor.py:1150–1166` |
-| `: $'it\'s'; git merge --ff-only raia` | Passa. O Bash aceita a primeira expressão e chega ao merge. O `shlex` acusa aspas abertas e o filtro retorna `False` para o comando inteiro. `bin/disjuntor.py:1143–1149` |
-| `git -c merge.ff merge raia` ou `FF=true git --config-env=merge.ff=FF merge raia` | Passam. A primeira forma dá valor booleano verdadeiro à chave sem `=`. A segunda fornece o valor por variável para aquele comando. O filtro só interpreta `-c` com valor explícito da lista. `bin/disjuntor.py:1135,1161–1178` |
-| `git merge --ff-only -m ';' --no-ff raia` | Recusado, embora a última opção seja `--no-ff`. O filtro perde a informação de que `';'` é o valor literal de `-m` e julga o primeiro segmento antes de chegar ao `--no-ff`. `bin/disjuntor.py:1143–1156,1180–1192` |
-
-## 3. Selo e mutantes
-
-**Os três mutantes de FF caem pelo motivo esperado.** Em memória, cada âncora casou uma vez. `v2-ff-passa` caiu no **53**. `v2-ff-config-ignorada` caiu no **55**, em `-c merge.ff=true`. `v2-ff-regex-no-texto` caiu no **56**, em `-m "--ff-only"`. Esse último tira o consumo do valor de `-m`. A frase `"documenta --ff-only"` continua passando sob essa mutação, pois forma um único token diferente da opção. `bin/disjuntor.py:1168–1192` · `bin/tests/test_disjuntor.sh:1237–1252,1582–1589,1892–1894`
-
-**Há costuras que passam.** Tirar só o reconhecimento de `--ff`, preservando `--ff-only`, mantém **53–56** verdes. Trocar `permissionDecision` de `deny` para `allow` só no ramo de FF, preservando o texto do motivo, também mantém os quatro verdes. O **53/55** procura o texto, e o **54/56** procura a ausência de `"deny"`. Simulei ainda uma exceção na varredura e os controles **54/56** aceitaram o stdout vazio. O selo já tem `_passa`, que também confere a ausência de `FALHA` nova, mas esses controles não o usam. `bin/disjuntor.py:1187–1192,1803–1805,1918–1933` · `bin/tests/test_disjuntor.sh:110–114,538,1237–1252`
-
-O anexo registra verde agregado. A execução integral nesta verificação e os retornos individuais daquela execução **[nao verificado]**. O integrado monta outro repositório e testa `commit-msg` com `--no-ff`, enquanto as asserções acima exercitam o PreToolUse. `disjuntor_seal7.log:13–14` · `bin/tests/test_disjuntor.sh:1253–1267,1582–1589`
-
-## 4. Escritores, leitores e significados
-
-| Valor | Escrita, leitura e divergência |
-|---|---|
-| **Retorno de `merge_pede_ff`** | `_segmento_pede_ff` calcula o booleano por segmento e `merge_pede_ff` agrega. `_pretool` é o leitor e interpreta `True` como ordem de recusa. O desencontro está na entrada: o leitor exige `merge` literal antes de consultar o reconhecedor. A varredura do estado usa outra regex. `git mer"ge" --no-ff -m $'Pouso\n\nOBRA: Y9' raia` chega ao Git como merge normal sem essa varredura. No commit do merge, o juiz recebe a mensagem e consulta o estado sem transcript. `bin/disjuntor.py:1130,1140–1192,1208–1217,1820–1830` · `bin/commit_msg.sh:29–38` |
-| **`B3_MERGE_FF`** | A constante nasce no módulo, `_pretool` a devolve e `main_pretool` a usa em `NEGOU`, no JSON de permissão e no registro do RELATO. O RELATO extrai a classe `B3-MERGE`. O selo lê o prefixo do motivo. A mensagem fala em `--ff`/`--ff-only` mesmo quando a recusa vem só de `-c merge.ff=true`, e descreve como certo um fast-forward que o filtro só inferiu do comando. `bin/disjuntor.py:254–295,1195–1196,1803–1825,1911–1917` · `bin/tests/test_disjuntor.sh:1239–1247` |
-| **Estado do B3** | `_com_estado` lê e grava o JSON sob `flock`, com `os.replace`. `decide_b3` migra, arma e libera com base em transcripts, triagens e topo do RELATO. `rearma_b3` grava o rearme. `--triagem` escreve a trilha e atualiza `b3_triagem_linhas`, que `_triagens` lê e também atualiza. PreToolUse de merge, commit e verificadores, o ramo de recados do Stop e `--merge-obra` passam por `julga_b3`, podendo produzir transições. O merge interpreta `PARADA` como `3`, `NAO_SEI` como `4`, `LIVRE` como `0` e ausência de `OBRA:` válida como `1`. O Stop usa o resultado para aviso. A mensagem de disparo ainda anuncia que os próximos verificadores serão negados, embora os ramos atuais só varram o B3. `bin/disjuntor.py:333–384,890–950,977–1087,1096–1126,1201–1217,1828–1859,2355–2371` · `bin/hook_stop_fila1.py:1194–1202,1397–1405` |
-
-## 5. `CLAUDE.md` contra FICA e PROPORCIONAL
-
-O delta preserva as regras de MÃO ÚNICA e corrige a ambiguidade nova da volta 2. O PRINCÍPIO mantém o núcleo da LEI-AKITA, dinheiro, exportada, zonas invioláveis, `!`, um run por banco e deploy pelo `bin/deploy.sh`. CODEX 5(e) agora repete as quatro condições do opus final. O pré-verificador de 5(a) segue obrigatório por disposição expressa do corte, que torna proporcional a revisão **do aval**. A exigência adicional de censo na fila 1 segue declarada. Fora do `CLAUDE.md`, o prompt do wrapper ainda pede mutantes e cita o opus final sem a condição de proporcionalidade. `aval.txt:3` · `CLAUDE.md:17–40,90,131–144,196,252–271,377–390,405–431` · `app/docs/CORTES.md:609` · `bin/codex_pergunta.sh:343–347`
-
-**VEREDITO: REPROVADO**
-
-- **Fast-forward passa e merge sem FF é recusado**, com casos fora da lista e uma declaração obsoleta sobre `-c merge.ff=true`. A busca por `merge` literal também perde a varredura de certos merges sem FF. `bin/disjuntor.py:1130,1140–1192,1820–1830` · `lista_do_que_falta.md:33–40`
-- **O selo deixa passar regressões** no `--ff` simples, na decisão JSON e nos controles com falha silenciosa. `bin/disjuntor.py:1187–1192,1803–1805,1918–1933` · `bin/tests/test_disjuntor.sh:1237–1252`
-- **Os recados do B3 divergem do comportamento** na recusa por configuração e no anúncio de bloqueio dos verificadores. `bin/disjuntor.py:1010–1012,1168–1174,1195–1196,1837–1859`
-- **O efeito do relógio ainda está descrito incorretamente** e **a certificação da Pista 2 segue sem a prova exigida**. `lista_do_que_falta.md:50–55` · `bin/disjuntor.py:809–826,972–979,1023–1028` · `aval.txt:6,9` · `app/docs/RELATO.md:2208,2352`
-
-_7845 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7846 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
