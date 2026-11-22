@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 11:58:30.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (129.3 MB). Acoes na janela: **868**.
+**Medido em 22/11/2026 12:04:24.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (129.3 MB). Acoes na janela: **869**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:58:33 | Bash | Wait for FERIADO suite rc | `cd ~/saas-hasner; L=logs/FERIADO-P4-MINIMO-V2-2211-1105; for i in $(seq 1 19); do [ -f $L/suite.rc ] && break; /usr/bin/sleep 30; done; cat $L/suite.rc 2>/dev/null \|\| { echo ainda; tail -c 300 $L/suite.log; }` |
 | 11:58:30 | Bash | Commit fixes; register triage; check suite | `cd ~/wt-simplifica-104405; git add CLAUDE.md; git commit -q -F - <<'EOF' SIMPLIFICA-2211-1040: triagem da volta Codex verif8 (delta 7b) -- 3 procedentes curados PARADA 1 volta a dizer que so o `!` no PAREI devolve o turno (hook_stop_fila1.py:1275 _SO_BANG) e a forma inteira do ESPERANDO (arquivo=); B3 nomeia o formato que libera (DESENHO <obra>/ERRO-BOBO <obra>), nao a "PERGUNTA DE DESENHO"; MODO- ...` |
 | 11:57:13 | Bash | Apply Codex fixes; remeasure; rerun seals | `cd ~/wt-simplifica-104405; python3 -I - <<'EOF' p='CLAUDE.md'; t=open(p).read() R=[(""" 1. PARADA tem nome: `PAREI: <trava> \| espera <quem>` no topo do RELATO (`!` = so dele), ou `ESPERANDO: <produtor> \| pid=N` com o produtor vivo. Trava sem nome nao e trava; fila pendente nao segura o turno (o hook AVISA). """,""" 1. PARADA tem nome no topo do RELATO: `! PAREI: <trava> \| espera <quem>` (so o ` ...` |
 | 11:54:34 | Bash | Wait for Codex delta answer and read it | `cd ~/saas-hasner; D=logs/SIMPLIFICA-2211-1040/verif8; for i in $(seq 1 18); do [ -f $D/rc ] && break; /usr/bin/sleep 30; done; cat $D/rc 2>/dev/null; [ -f $D/r.txt ] && cut -c1-300 $D/r.txt` |
