@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 07:34:42.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **908**.
+**Medido em 22/11/2026 07:40:25.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **903**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -913,8 +913,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:44:17 | Monitor | rc dos jobs 3.3 sql / SENTINELA prova / 1.2 v5 | `cd /home/ronald/saas-hasner; declare -A seen; while true; do for f in logs/E4C-F5-3_3/cura4/prova/sql2_{med,fim}.rc logs/SENTINELA-DO-SLOT/volta5/prova/{red_base,green,mut1,mut2,mut3,chamados,fim}.rc logs/E4C-F5-1_2/v5/r.rc; do if [ -f "$f" ] && [ -z "${seen[$f]}" ]; then seen[$f]=1; echo "$f $(head -c 100 $f)"; fi; done; /usr/bin/sleep 20; done` |
 | 19:44:09 | Bash | Inspect pista holder | `cd /home/ronald/saas-hasner; ps -o pid=,etime=,args= -p 3877108 \| cut -c1-200; tail -5 logs/E4C-F5-3_3/cura4/prova/sql2_med.log \| cut -c1-200; tail -3 logs/SENTINELA-DO-SLOT/volta5/prova/red_base.log \| cut -c1-200` |
 | 19:44:04 | Bash | Check pista lock and job progress | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem 2>&1 \| head -3; ls logs/SENTINELA-DO-SLOT/volta5/prova/ logs/E4C-F5-3_3/cura4/prova/ \| grep -E 'sql2\|log$' \| tr '\n' ' '; ps -o pid= -p 3978042` |
-| 19:38:59 | Monitor | rc dos jobs 3.3 sql / SENTINELA prova / 1.2 v5 | `cd /home/ronald/saas-hasner; declare -A seen; while true; do for f in logs/E4C-F5-3_3/cura4/prova/sql2_{med,fim}.rc logs/SENTINELA-DO-SLOT/volta5/prova/{red_base,green,mut1,mut2,mut3,chamados,fim}.rc logs/E4C-F5-1_2/v5/r.rc; do if [ -f "$f" ] && [ -z "${seen[$f]}" ]; then seen[$f]=1; echo "$f $(head -c 100 $f)"; fi; done; /usr/bin/sleep 20; done` |
-| 19:35:14 | Bash | Publish PAREI RASCUNHO FERIADO-MATRIZ | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(1,'PAREI RASCUNHO FERIADO-MATRIZ: leve ao chat (19:3x; aval RESPOSTAS-SENTINELA-12-FERIADO-2111-1930 item (3); Codex leitura rc 0 19:34:43 no 302ca7e77; logs/FERIADO-POR-POSTO/matriz/r.txt sha256-12 13d82690b936, 116 linhas; amostra conferida celula.py:392-405,464 e marcar_feriado_do_posto. ...` |
-| 19:35:06 | Bash | Spot-check matrix citations | `cd /home/ronald/wt-codex-feriado-por-posto-120132/app; sed -n '392,394p;404,405p;462,470p' ponto/portas/celula.py; sed -n '118,127p' colaboradores/management/commands/marcar_feriado_do_posto.py` |
-| 19:35:02 | Read |  | `/home/ronald/saas-hasner/logs/FERIADO-POR-POSTO/matriz/r.txt` |
-| 19:34:58 | Bash | Read FERIADO matrix answer | `cd /home/ronald/saas-hasner; D=logs/FERIADO-POR-POSTO/matriz; wc -l $D/r.txt; sha256sum $D/r.txt \| cut -c1-12; cat $D/r.txt \| cut -c1-700` |
