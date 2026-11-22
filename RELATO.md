@@ -1,3 +1,4 @@
+ESPERANDO: suite.sh | pid=2437764
 DESENHO [nome]-FERIADO-PELA-TELA-2211-1612: lei=escritor unico pergunta=quem escreve a celula e sob qual trava ponto/portas/celula.py:853
 DESENHO SIMPLIFICA-V3-2211-1726: lei=juiz unico pergunta=quem atesta que o run da pista 2 e inteiro bin/pista_certifica.sh:62
 DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454
