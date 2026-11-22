@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 08:54:12.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (107.9 MB). Acoes na janela: **701**.
+**Medido em 22/11/2026 08:59:50.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (108.0 MB). Acoes na janela: **706**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:59:48 | Bash | Record the kill, check rc 70 usage | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[j for j,l in enumerate(L) if l.startswith('CONTRATO SUITE-OOM-FAIL-FAST-2211-0852')] assert len(i)==1 L.insert(i[0],"08:59 ! docker kill awesome_khorana (Ronald, chat 08:59): container morto, pid 2226528 saiu, trava_teste livre 08:59:39. Pista da VM LIVRE; F5 congelada nao relanca (0845 item 4).") ...` |
+| 08:59:36 | Bash | Kill the hung 3.3 suite container per Ronald | `date +%H:%M:%S; docker kill awesome_khorana; /usr/bin/sleep 5; docker ps --format '{{.Names}}' \| /bin/grep -c awesome_khorana; ps -p 2226528 -o pid= ; /home/ronald/saas-hasner/bin/trava_teste.sh --quem` |
+| 08:58:06 | Bash | Read OOM review | `cat /home/ronald/saas-hasner/logs/SUITE-OOM-FAIL-FAST-2211-0852/revisao/r.txt` |
+| 08:54:23 | Bash | Wait for Codex OOM review | `for i in $(seq 1 57); do kill -0 3834594 2>/dev/null \|\| break; /usr/bin/sleep 10; done; ls -la /home/ronald/saas-hasner/logs/SUITE-OOM-FAIL-FAST-2211-0852/revisao/r.txt 2>&1` |
+| 08:54:15 | Bash | Write CONTRATO and launch Codex review for OOM aval | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[j for j,l in enumerate(L) if l.startswith('lei nova: precisa de corte -- Lock Ordering')] assert len(i)==1 c=["CONTRATO SUITE-OOM-FAIL-FAST-2211-0852 (instrumento, antes do codigo):", " quem chama: toda suite pela porta bin/suite.sh (regua.sh, pre-push.sh, volta_intermediaria.sh, chamada direta) - ...` |
 | 08:53:55 | Bash | Read suite.sh parallel/docker run section | `cd /home/ronald/saas-hasner; sed -n 100,140p bin/suite.sh; /bin/grep -n "docker run\\|TESTE_DOCKER\\|parallel" bin/suite.sh \| head -30; sed -n 55,70p bin/recursos.sh; /bin/grep -n "parallel\\|suite.sh" bin/volta_intermediaria.sh \| head` |
 | 08:53:51 | Bash | Write AVAL-DEVOLVIDO P4, record SUITE-OOM aval | `cd /home/ronald/saas-hasner; D=logs/SUITE-OOM-FAIL-FAST-2211-0852; mkdir -p $D; cat > $D/aval.txt <<'EOF' aval Ronald: SUITE-OOM-FAIL-FAST-2211-0852 (22/11 08:52) -- unidade: INSTRUMENTO bin/suite.sh (bug provado 3x na noite: v6 21:56, v7 23:12, 3.3 00:33 -- worker morto por OOM, Pool do Django espera para sempre, pista tomada); nenhuma lei nova. CONSTRUIR. Excecao NOMINAL ao CONGELA-INSTRUMENTO-2 ...` |
 | 08:53:25 | Bash | Check transicionar path locks Colaborador | `cd /home/ronald/wt-feriado-p2-002020/app; git grep -n "trava_na_ordem" -- chamados/services/fecho_runtime.py chamados/models.py \| head; sed -n 495,505p chamados/models.py` |
