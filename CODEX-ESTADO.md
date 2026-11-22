@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 12:48** · publicado em **22/11/2026 12:50** (UTC-3)
+> Ultima resposta processada: **22/11/2026 12:53** · publicado em **22/11/2026 12:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 12:53 · sessao 93b893778d7d · FERIADO-P4-MINIMO-V2-2211-1105 · verificador · origem=Code
+
+Os **26 vínculos da seção 4 conferem integralmente com o sync de 22/11**, por PK do vínculo, PK do posto e empresa. A empresa 2 tem 24, a empresa 3 tem um (`1448`, posto `22`) e a empresa 4 tem um (`749`, posto `22`). Todos são `True → False`, sem duplicatas ou ausências. Pelo código, essa direção só ocorre para cargo administrativo, em qualquer posto e ciclo. (`lista_mauricio.md:142–167`, `lista_v3.out:53–131`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:45–65`, `app/colaboradores/services/feriado_do_posto.py:179–189`, `app/escala/models.py:905–924`)
+
+### Os cinco achados da volta 2
+
+1. **Aval pendente — respondido em parte.** A seção 4 agora inclui os cinco de `admin.out` e entrega todos os 26 candidatos administrativos do sync. A seção 2 identifica os 25 colaborador-dias da competência 11 como projeção da aplicação da marca. A sonda de 21/11 registra 25 vínculos administrativos, mas o aval não identifica os PKs nem cita essa sonda. A correspondência exata com os 25 pedidos e a publicação no topo do RELATO no mesmo marco do pouso ficam **[nao verificado]**. (`r_volta2.txt:17`, `admin.out:4–9`, `lista_mauricio.md:15–44,136–169`, `lista_v3.out:21–45,53–131`, `r.txt:28–35`, `aval.txt:1` do POUSO-NOTURNO, `app/docs/RELATO.md:1–4`)
+2. **Efeitos omitidos — respondido em parte.** A retomada explícita de retratação de posto já FECHA confere. A CLI levanta `CommandError` pelas combinações de flags citadas quando recebe `--posto`, e converte os erros da porta descritos na lista. Sem `--posto`, lista sugestões e retorna antes de validar as flags. A frase “cada vínculo […] recalcula” é forte demais. O recálculo é agendado após o commit para as competências com dias tocados, e a guarda pula os dias exportados. (`r_volta2.txt:18`, `lista_mauricio.md:8`, `app/colaboradores/management/commands/marcar_feriado_do_posto.py:37–39,49–76,119–128`, `app/colaboradores/services/feriado_do_posto.py:280–291,362–371`, `app/colaboradores/services/vinculo.py:909–926`, `app/ponto/portas/celula.py:284–288,490–507`, `app/ponto/services/fechamento.py:1798–1827`)
+3. **Tela do posto — respondido na seção 1, com erro remanescente na seção 2.** A linha 9 descreve corretamente o POST, o `update_fields` e a desativação. A linha 16 ainda diz que a tela recusa a marca. A view omite o campo do dicionário, e `atualizar_posto` o recusa se o receber. (`r_volta2.txt:19`, `lista_mauricio.md:9,16`, `app/colaboradores/views.py:851–887,895–912`, `app/colaboradores/services/estrutura.py:66–86`)
+4. **Igualdade do banco — corrigido.** A lista limita a igualdade às contagens e aos hashes de `CelulaDia` e `EscalaColaborador`, que são as duas tabelas exibidas nas fotos. A igualdade de `FechamentoMensal` e das demais tabelas fica **[nao verificado]**. (`r_volta2.txt:20`, `lista_mauricio.md:2,13`, `lista_v3.out:132–134`)
+5. **Nome pessoal — corrigido no corpo da lista.** O corpo atual usa `[nome]` e PKs, sem nome de pessoa, CPF ou matrícula visíveis. O nome do arquivo ainda contém um prenome. O pacote também traz um prenome nos avais, no relatório anterior e na linha removida do delta, além de um identificador de usuário nos caminhos das saídas. (`lista_mauricio.md:1–2,16–49,54–133,136–169`, `aval.txt:1` nos dois blocos, `r_volta2.txt:21`, `delta3.diff:13`, `admin.out:10`, `lista_v3.out:135`)
+
+### Achados procedentes
+
+- **Os recortes podem mudar a composição da lista.** O sync seleciona `ativa=True` por empresa, sem filtrar vigência por data ou situação do colaborador. A sonda de 21/11 declara “vigentes de colab ativo”. Pelo predicado de vigência da cópia, um vínculo desativado com data de fim ainda pode cobrir o dia, e um vínculo com `ativa=True` pode estar fora das datas. São 555 vínculos nos três blocos de 22/11 e 544 no agregado de 21/11. Como as datas também diferem, a sonda antiga não lista PKs e a saída nova não mostra as datas de vigência nem a situação dos colaboradores, o efeito do filtro sobre os 26 fica **[nao verificado]**. A equivalência afirmada no cabeçalho e na linha 137 continua sem sustentação. (`lista_mauricio.md:136–140`, `lista_v3.out:54,117,130`, `r.txt:3–7,28–35,40–42`, `app/escala/alimentacao.py:189–225`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:40–47`)
+- **A seção 4 atribui ao ensaio mais do que a saída demonstra.** O dry-run normal calcula candidatos. A porta de escrita só é chamada com `--apply`. O anexo rotula a porta como “espiada”, mas o modo de instrumentação e o resultado de uma aplicação real ficam **[nao verificado]**. A afirmação de que os cinco antigos eram todos de ciclo weekday e posto OPERA também fica **[nao verificado]**. `admin.out` não traz ciclo ou marca, e a outra saída só confirma `marca=True` para quatro dos cinco postos. (`lista_mauricio.md:139–140,169`, `lista_v3.out:6–19,53–54`, `admin.out:4–9`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:53–77`)
+- **Continuam pendentes a comprovação do marco exigido pelo aval e as ressalvas de redação sobre recálculo, validação da CLI e recusa da marca pela tela.** A confirmação independente do HEAD e do diff de 61 commits e 39 arquivos, incluindo a ausência de migration e de alteração no motor, também fica **[nao verificado]**. (`aval.txt:1` do POUSO-NOTURNO, `app/docs/RELATO.md:1–4`, `lista_mauricio.md:5,8–9,13,16`, `r_volta2.txt:1`)
+
+**VEREDITO: REPROVADO**
+
+## 22/11 12:52 · sessao 479cf548029e · SIMPLIFICA-V2-2211-1202 · verificador · origem=Code
+
+### 1. Contradições na 7b
+
+- **Censo.** A seção 6 exige censo de escritores fechado antes de qualquer filtro ou regra nova. O PRINCÍPIO limita o censo a mão única, concorrência, schema ou multi-tenant. As duas exigências divergem para um filtro novo classificado como mão dupla. Além disso, a porta de abertura de construtor continua exigindo censo pela pertença à fila 1, sem consultar essa classificação. `CLAUDE.md:196,252–257` · `app/docs/CORTES.md:610` · `bin/disjuntor.py:1662–1684` · `bin/codex_pergunta.sh:241–247`
+- **PAREI.** A seção 0 remete a PARADA, que passou a prescrever `! PAREI:`. O hook exige o prefixo `PAREI:` e procura o `!` depois. A grafia nova perde o reconhecimento da parada nomeada. Com fila aberta, o Stop ainda pode encerrar pela saída de aviso. O selo usa a grafia anterior. `CLAUDE.md:72,266–267` · `bin/hook_stop_fila1.py:1249–1265,1368–1375,1400–1405` · `bin/tests/test_hook_parei_so_lei.sh:61–66`
+- **CODEX 5.** O item 4 veda certificação pelo Codex sozinho em geral. O item 5(e) restringe essa vedação expressa a mão única, embora o item 4 ainda exija conferência pelo Code. O item 5(d) também manda subir ao opus após mais de três voltas sem repetir a condição de proporcionalidade. Especificar se essa subida é escalonamento ou revisão final resolve a ambiguidade. `CLAUDE.md:256–257,377–390`
+- **Pouso e dinheiro.** RAIAS 5 e DEPLOY JÁ dão uma ordem de pouso com suite verde. O bloqueio de mão única prevalece pela precedência escrita no PRINCÍPIO. A mesma leitura preserva a intervenção autorizada em exportada pelas condições específicas de DINHEIRO 2. A seção 4 continua exigindo aval explícito para o motor, repetido em PARADA 2. `CLAUDE.md:142,252–256,268–271,328–331,413–419,427–429` [nao verificado]
+- **LEI-AKITA na fila.** A seção 0 ainda pede a linha ao propor a cura e condiciona a entrada na fila. A 7b retira a linha do aval e a situa no commit. A obrigação prévia da seção 0 continua escrita. `CLAUDE.md:62–70,259` · `app/docs/CORTES.md:607`
+
+### 2. Proteções de mão única
+
+As regras diretas de dinheiro, competência exportada, zonas invioláveis e `!` permanecem. A suspensão de revisão do aval, opus, mutante e censo exclui expressamente mão única, concorrência, schema e multi-tenant. A suspensão adicional da tabela de dez obras também retirou o vermelho por falha do Codex sem a tabela, inclusive do acompanhamento de mão única. O alerta de descartes e o postmortem ficaram. `CLAUDE.md:141–167,255–257,268–271,391–396,403–429` · `app/docs/CORTES.md:610–611`
+
+A proteção de pouso **ficou mais fraca no B3**. O aval deslocou a recusa para o merge. A implementação concentra a recusa no `commit-msg`, deixa fast-forward fora da porta e depende de uma varredura anterior para materializar reprovação do opus. A etiqueta “mão dupla” do anexo não muda o alcance da brecha, pois a porta não distingue as duas classes. `aval.txt:5` · `app/docs/CORTES.md:609` · `bin/commit_msg.sh:23–38` · `bin/disjuntor.py:1135–1149,1754–1760`
+
+### 3. FICA do aval
+
+| Item | Onde ficou |
+|---|---|
+| Núcleo da LEI-AKITA | Origem, RED primeiro, escopo literal e construção em cópia. `CLAUDE.md:17–19,28–29,37–40,255` |
+| Dinheiro | Reversão anterior, exportada intacta, prova de frota e condição de troca de motor. `CLAUDE.md:406–412,425–426` |
+| Exportada | `!`, DIFF prévio, reversão, porta staff-only, trilha e retificação. `CLAUDE.md:268,413–423` |
+| Zonas invioláveis | Motor, batida, identificação, fuso, grade, célula, universo de apuração e smoke de porta. `CLAUDE.md:141–167,205–206` |
+| Os `!` | Lista de atos reservados e condições de dinheiro. A grafia do `PAREI` diverge do hook, como acima. `CLAUDE.md:266–271,299–300,406–419` |
+| Um run por banco | Princípio explícito e trava de `juliani_db_test`, com push na mesma vez. `CLAUDE.md:131–133,256` · `bin/trava_teste.sh:21,35–42` |
+| Deploy só pelo `deploy.sh` | Exclusividade e condições de publicação. `CLAUDE.md:90,255–256,427–429` | [nao verificado]
+
+### 4. SAI do aval
+
+| Item | CORTES | LEIS |
+|---|---|---|
+| CONGELA-INSTRUMENTO | `app/docs/CORTES.md:602` | `app/docs/LEIS.md:209` |
+| Um arquivo por pedaço fixo | `app/docs/CORTES.md:603` | `app/docs/LEIS.md:210` |
+| Ficha para o Codex rascunhar o aval | `app/docs/CORTES.md:604` | `app/docs/LEIS.md:211` |
+| Portão do aval | `app/docs/CORTES.md:605` | `app/docs/LEIS.md:212` |
+| Obra com várias cópias | `app/docs/CORTES.md:606` | `app/docs/LEIS.md:213` |
+| LEI-AKITA/HAIKU no texto do aval | `app/docs/CORTES.md:607` | `app/docs/LEIS.md:214` |
+
+**Quatro suspensões excedem a lista do item 3.** Stop por fila e B3 sobre o turno são cobertos pelo item 4. A proporcionalidade é coberta pelo item 2. A retirada da tabela de dez obras **e do vermelho associado** não é expressa no aval. As dez suspensões estão na lápide. `aval.txt:3–5` · `app/docs/CORTES.md:608–611` · `app/docs/LEIS.md:215–218` · `app/docs/LAPIDES.md:792`
+
+### 5. B3 — escrita, leitura e caminhos de merge
+
+- **Quem escreve.** `_com_estado` persiste `disjuntor_estado.json` com `flock` e `os.replace`. `decide_b3` arma e libera, chamado pelo PreToolUse de merge/commit e verificadores, pelo ramo de recados do Stop e pelo próprio merge. `rearma_b3` altera o mesmo estado pela mesma porta. `--triagem` é o escritor da trilha Codex e atualiza seu contador sob a mesma trava. `bin/disjuntor.py:124,333–384,900–914,987–1055,1096–1126,1754–1789` · `bin/hook_stop_fila1.py:1194–1202,1400–1405`
+- **Quem lê e decide.** `commit_msg.sh` chama `--merge-obra`, que consulta `estado_b3` → `julga_b3` → `decide_b3`, sem transcript. Esse leitor pode materializar um disparo por triagem ou consumir uma liberação. Os retornos são `1` sem identificação válida, `3` para obra armada e `4` para estado indeterminado. Qualquer retorno diferente de zero recusa o commit. `bin/commit_msg.sh:33–38` · `bin/disjuntor.py:974–979,1002–1058,1070–1087,1135–1149,2289–2298`
+
+| Caminho | Resultado |
+|---|---|
+| `git merge` com commit automático | A recusa se aplica quando o Git chama o `commit-msg` com `MERGE_HEAD` presente. O selo integrado fornecido exercita o commit separado. Execução do automático **[nao verificado]**. `bin/commit_msg.sh:23–38` · `bin/tests/test_disjuntor.sh:1231–1245` |
+| `--no-commit` seguido de commit | A recusa ocorre no commit, com o merge já aberto. O selo integrado distingue linha ausente, obra armada e obra livre. `bin/commit_msg.sh:23–38` · `bin/tests/test_disjuntor.sh:1240–1245` |
+| Fast-forward | **Escapa.** Não gera commit. `merge.ff=false` protege o padrão quando instalado, mas `--ff-only` explícito segue disponível e há um chamador versionado. Configuração efetiva da casa **[nao verificado]**. `bin/commit_msg.sh:29–38` · `bin/hooks.sh:48–53,82–83` · `fatias_agendadas/o135-teto20/esteira.sh:109–116` |
+
+Também escapam o commit que pula o hook e a reprovação do opus que ficou só no transcript quando nenhuma varredura consegue persistir o estado. O Stop pode sair por `PAREI`, espera provada ou fila vazia antes de chegar à varredura de recados. O `pos_push.sh`, quando chega ao commit com merge aberto, cai na recusa por falta de `OBRA:`. `app/docs/PROMPTS.md:360–363` · `bin/disjuntor.py:431–435,832–846,1144,1754–1760` · `bin/tests/test_disjuntor.sh:821–830` · `bin/hook_stop_fila1.py:132–142,1368–1405` · `bin/pos_push.sh:22–38` · `bin/commit_msg.sh:33–38`
+
+### 6. Classes de reprovação
+
+- **Juiz e escritor duplicados.** Os caminhos examinados convergem em `decide_b3` e `_com_estado`. O rearme é uma transição explícita pela mesma trava. A regra reserva a liberação a Ronald, mas o leitor de `DESENHO`/`ERRO-BOBO` valida conteúdo, identidade e recência. A autoria da linha não é conferida nessa porta. `app/docs/CORTES.md:609` · `app/docs/PROMPTS.md:2612` · `bin/disjuntor.py:722–750,1023–1055,1070–1087,1096–1126`
+- **Relógio e ordem de trava.** O merge entra sem instante de borda e `decide_b3` lê `time.time()` antes de adquirir o `flock`. A fotografia do RELATO é feita sob a trava. A trava termina antes da gravação do commit pelo Git. Na árvore viva, o merge pode alterar arquivos antes da recusa, e o próprio CLAUDE registra que templates entram em efeito imediatamente. `bin/disjuntor.py:343–364,382–384,809–826,972–978,1143–1148` · `bin/commit_msg.sh:19–38` · `CLAUDE.md:88–91` · `app/docs/LEIS.md:133`
+- **Campo com dois significados.** `OBRA:` é uma declaração da mensagem e também a chave que decide qual obra consultar. O código não a vincula à árvore ou à raia efetivamente incorporada. Há ainda um erro de fronteira: o `\s+` da cauda pode consumir uma quebra de linha e incorporar a linha seguinte à identidade de um ID sem hífen. `bin/commit_msg.sh:33–36` · `bin/disjuntor.py:155–166,614–625,1129–1149`
+- **Selo e pré-requisito.** Há casos e mutantes para linha ausente, obra armada, indeterminado e varredura. O integrado cobre `--no-commit` seguido de commit. Verde do B3, instalação efetiva e pouso depois do feriado **[nao verificado]**. Para a Pista 2, o aval exige paridade publicada, e o RELATO disponível registra imagem/Postgres da pista ainda sem conferência completa. `bin/tests/test_disjuntor.sh:1221–1245,1859–1868` · `aval.txt:6,9` · `app/docs/RELATO.md:2208,2352` · `app/docs/CORTES.md:601`
+
+**VEREDITO: REPROVADO.** O B3 deixa passar fast-forward e pode consultar uma identidade diferente da obra incorporada. A grafia nova do `PAREI` é rejeitada pelo leitor. A prova de paridade exigida para a Pista 2 segue **[nao verificado]**. `bin/hooks.sh:82–83` · `bin/commit_msg.sh:23–38` · `bin/disjuntor.py:155–166,614–625,1129–1149` · `CLAUDE.md:266` · `bin/hook_stop_fila1.py:1249–1265` · `aval.txt:6,9` · `app/docs/RELATO.md:2208`
 
 ## 22/11 12:48 · sessao 27f9b66c2e4b · FERIADO-P4-MINIMO-V2-2211-1105 · verificador · origem=Code
 
@@ -654,121 +737,4 @@ Os dois verdes isolados deixam de fora o teste de posto FECHA que bloqueia a su�
 
 A origem do erro, a porta testemunha e `Clock Injection` conferem. A injeção de relógio cria zero juízes. O retorno completo ao main, porém, restaura a decisão de cargo dentro do `handle`, perde o selo que a detecta e deixa descoberto no RED declarado o caso de posto FECHA. O censo literal também precisa registrar as duas omissões intencionais de `hoje=` no P2. `app/docs/LEIS.md:150`, `CLAUDE.md:17–29,62–68`, `app/colaboradores/management/commands/sincronizar_feriado_admin.py:47,56` **no main**, `app/colaboradores/tests/test_feriado_admin_pelo_cargo.py:239–252`, `app/colaboradores/tests/test_feriado_admin_sync.py:80–94`, `app/colaboradores/tests/test_feriado_matriz_p2.py:29–43`.
 
-## 22/11 10:24 · sessao 537f5604b013 · SUITE-OOM-FAIL-FAST · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — V3, itens 3 e 4.** O watchdog precisa definir quem mantém a trava quando devolve `72`. O cerco precisa encontrar e identificar o contêiner anterior, inclusive quando o run anterior saiu de outra árvore ou morreu antes de registrar o CID. `aval.txt:4–5` · `bin/trava_teste.sh:21,35–42` · `bin/suite.sh:35,316–325`
-
-A revisão foi só leitura. As linhas de `aval.txt` contam a partir de `aval Ronald`. A cópia fornecida veio sem metadados Git. A correspondência com o HEAD de `main` no hash informado é **[nao verificado]**.
-
-### 1. Escopo e premissas
-
-- **CONFERE — `71`.** O contrato PISTA-ESCOLHE-SOZINHA usa `rc 71` para SHA sem commit ou `refs/pista` inalcançável, com queda para a VM. `app/docs/RELATO.md:1426`
-- **CONFERE na cópia — inventário de `72` como código de saída: zero.** A busca pelo numeral nos 83 `bin/*.sh` e no texto integral de `RELATO.md` e `CORTES.md` não encontrou `exit 72`, `rc 72`, `rc=72`, `return 72`, `72)` ou equivalente. As duas ocorrências em `CORTES.md` são um prazo de 72 h e uma referência a linha de código. No HEAD Git, **[nao verificado]**. `aval.txt:4` · `app/docs/CORTES.md:384,533`
-- **[nao verificado] — `d38599eefde2`.** `bin/tests/test_suite_oom_watchdog.sh` está ausente na cópia usada como base do HEAD. O anexo V2 o acrescenta como arquivo novo. A presença no HEAD Git e o vínculo com `d38599eefde2` ficam **[nao verificado]**. `aval.txt:6` · `diff_v2.txt`, adição de `bin/tests/test_suite_oom_watchdog.sh:1`
-- **CONFERE com ressalva — `flock` e contêiner.** A suite passa por `trava_teste.sh`, que adquire o lock no fd 9 e chama `--na-vez`, que executa `docker run --rm`. O fd é herdado, portanto a morte do pai externo, sozinha, pode deixar a trava presa. Quando fecha a última cópia do fd, a trava cai. O código prevê que o contêiner possa continuar vivo após a morte do comando por sinal. Ocorrência real **[nao verificado]**. `bin/trava_teste.sh:35–42` · `bin/suite.sh:102–120,316–325,341–348`
-- **CONFERE — escopo e avais disponíveis.** Repassar `--parallel` pela volta é compatível com a guarda de motivo e o `--seco` do TRAVA-MENOS-FILA-COM-SELO. Os defaults na cópia são `--parallel 4` e `TESTE_MEM=2g`. A PISTA-ESCOLHE-SOZINHA mantém o `71` e prevê rota própria para `--volta` e pre-opus de lateral. O cerco descrito cobre a rota local que passa pelo `flock`. A cobertura da pista remota, o registro `WATCHDOG-NOS-LANCADORES` e os literais de `UMA-OBRA-FERIADO-2211-0105` e `CONGELA-INSTRUMENTO-2111-1545` estão **[nao verificado]**. A exceção nominal ao congelamento consta no V3. `aval.txt:1–2,9` · `bin/volta_intermediaria.sh:31–42` · `bin/suite.sh:127–140,255–271` · `bin/recursos.sh:69,81` · `app/docs/RELATO.md:1410,1426,11892–11897` · `app/docs/BACKLOG.md:2227,2231`
-
-### 2. CID e log — CONFERE
-
-O V3 nomeia `bin/suite.sh` como escritor do log por run e prevê `--cidfile`. O caminho atual já concentra o `docker run` em `--na-vez`. A gravação e a captura da saída pelo V3 estão **[nao verificado]**. `aval.txt:3` · `bin/suite.sh:108–120,316–325`
-
-### 3. Watchdog — PROCEDE
-
-- **Prazo e confirmação.** O literal atribui 30 s ao `wait` e também diz “sem fim confirmado em 30 s”. Falta fixar se o prazo cobre `kill → wait → ps` inteiro e como distinguir `ps` com erro de `ps` bem-sucedido sem o CID. No V2, um `wait` que retorna erro diferente de `124` ainda pode passar pela confirmação, e `kill` e `ps` têm prazos próprios. `aval.txt:4` · `diff_v2.txt`, hunk de `bin/suite.sh:121–127,179–181`
-- **`72` com trava presa e linha no topo.** Devolver `72` encerra o caminho normal de posse. O V3 precisa dizer quem fica com o fd, como se confirma a transferência e qual condição libera a trava. Também falta dizer **topo de qual arquivo e quem escreve**. No V2, `bin/suite.sh` escreve em stderr e acrescenta ao `logs/suite_watchdog.log`. Se o destino for o topo do RELATO, o V3 não atribui essa escrita a ninguém. `aval.txt:4,12` · `bin/trava_teste.sh:35–42` · `bin/suite.sh:115–120,366–372` · `diff_v2.txt`, hunk de `bin/suite.sh:120,183–197`
-
-### 4. Cerco na entrada — PROCEDE
-
-- **Duas árvores.** Com `ultimo.cid` relativo a `RAIZ`, **não**: um run invocado pelo `bin/suite.sh` da cópia grava na cópia, e o próximo invocado pelo script da viva procura na viva. Se o script invocado for o da viva com `--dir <cópia>`, os dois usam a `RAIZ` da viva. `--dir` escolhe o app montado. O lock usa o mesmo caminho nos dois casos. O V3 precisa fixar um local comum aos participantes desse lock. `aval.txt:5` · `bin/suite.sh:35,283–299,316–325` · `bin/trava_teste.sh:21,35–42`
-- **Morte antes do registro.** “Cada run grava o próprio cid” não fecha nessa janela. Se o contêiner nasce e run/watchdog morrem antes de publicar o CID, o próximo leitor encontra o marcador antigo ou nenhum. O literal precisa prever como localizar o run já iniciado ou impedir outro run enquanto a identidade estiver indeterminada. `aval.txt:3–5` · `bin/suite.sh:115–120,316–325`
-- **Quem lê e quando.** Pelo V3, a leitura é **depois** de adquirir a trava. Na rota normal, o lugar compatível é dentro de `--na-vez`, antes da limpeza e do novo `docker run`. O modo também aceita chamada direta, e há um selo que o chama assim. Entrar nesse ramo, por si só, não prova posse da trava. O `72` do cerco também precisa dizer se mantém a trava. Se a última cópia do fd fechar, régua e pre-push podem adquirir o mesmo lock sem consultar `ultimo.cid`. `aval.txt:4–5,9` · `bin/suite.sh:108–120,316–319` · `bin/tests/test_rm_com_guarda.sh:337–340` · `bin/trava_teste.sh:35–42` · `bin/regua.sh:165–169` · `bin/pre-push.sh:142–145`
-- **CID de outro contêiner.** Régua e pre-push não escrevem `ultimo.cid` nos caminhos mostrados. O V3, porém, manda agir pelo valor do arquivo sem exigir prova de que o contêiner encontrado pertence à suite. Um marcador incorreto ou obsoleto fica sem tratamento definido. Reciclagem efetiva de CID ou presença de CID alheio no arquivo **[nao verificado]**. `aval.txt:3–5,9` · `bin/regua.sh:165–169` · `bin/pre-push.sh:142–145`
-
-### 5. RED — [nao verificado]
-
-O V2 já traz o mutante que remove a espera e outro que remove o portador da trava. O segundo simula cliente caído com contêiner vivo no caminho do watchdog. Para provar o cerco do V3, o caso “pai morto” precisa fazer **um segundo run tentar entrar**, inclusive por outra árvore e com a morte antes de publicar `ultimo.cid`. A execução e a mordida dos casos V3 estão **[nao verificado]**. `aval.txt:5–6` · `diff_v2.txt`, adição de `bin/tests/test_suite_oom_watchdog.sh:11–14,157–176`
-
-### 6. Contrato — CONFERE
-
-Republicar antes do código está de acordo com a regra das cinco linhas no RELATO e do envio ao verificador. O contrato precisa incorporar as decisões dos itens 3 e 4. Republicação e envio do contrato V3 **[nao verificado]**. `aval.txt:7` · `CLAUDE.md:394` · `app/docs/PISTA.md:169–175`
-
-### 7. Pouso — CONFERE quanto ao pouso próprio [nao verificado]
-
-Commit e push próprios são compatíveis com a separação entre instrumento e produto. Se FERIADO e instrumento estiverem ambos aptos a pousar, a L-105 dá precedência ao produto. O estado da fila e a compatibilidade de “sem esperar o FERIADO” com o aval `0105` estão **[nao verificado]**. `aval.txt:1,8` · `app/docs/LEIS.md:131`
-
-### PROIBIDO — PROCEDE quanto ao alvo do `kill`
-
-O conteúdo de `ultimo.cid` sozinho não comprova autorização para matar o contêiner. Quanto a exportada, dinheiro ou `!` fora do declarado, **CONFERE no escopo escrito**: o V3 descreve controle de execução da suite, cuja rota usa `config.settings.ci` e banco de teste por padrão. Efeito real **[nao verificado]**. `aval.txt:2–5,8–9` · `bin/suite.sh:305–325` · `app/config/settings/ci.py:6–19,40–41`
-
-### PRONTO — [nao verificado]
-
-RED → GREEN, os dois casos mordendo, contrato publicado, commit e primeiro run real pela porta nova estão **[nao verificado]**. Para evidenciar o cerco, o registro do primeiro run precisa identificar a rota que passou pela trava local. `aval.txt:10` · `bin/suite.sh:316–325` · `app/docs/BACKLOG.md:2227`
-
-### LEI-AKITA — PROCEDE quanto à testemunha e a quem mais lê
-
-`bin/suite.sh` é a origem da espera local. `memory.events` foi declarado como testemunha do OOM, mas sua disponibilidade na VM está **[nao verificado]**. `ultimo.cid` precisa ser compartilhado entre árvores e vinculado ao run antes de servir de autoridade para o `kill`. No censo da posse, a volta lê o retorno da suite, enquanto régua e pre-push disputam a mesma trava por portas próprias. O aval declara zero juízes novos. `aval.txt:11` · `CLAUDE.md:28–34,62–64` · `bin/volta_intermediaria.sh:31–39` · `bin/trava_teste.sh:21,35–42` · `bin/regua.sh:165–169` · `bin/pre-push.sh:142–145`
-
-## 22/11 10:19 · sessao c39a9ed286c9 · SUITE-OOM-FAIL-FAST · verificador · origem=Code
-
-**AVAL-DEVOLVIDO — item 3, PROCEDE.** O diff ainda permite devolver `71` e soltar o flock com o container vivo se o filho destacado pelo `setsid -f` falhar antes de assumir a espera. Também permite devolver `70` com um `ps` vazio mesmo quando `docker wait` nem chegou a executar. O `71` continua reservado no contrato da PISTA. `aval.txt:4`, `bin/suite.sh:119–127`, `bin/suite.sh:179–202`, `app/docs/RELATO.md:1426` (HEAD).
-
-As linhas abaixo são do lado novo do diff, salvo indicação de HEAD. A cópia não tem metadados Git, então a identidade do hash fica **[nao verificado]**. A triagem relata selos verdes, mas a execução dos selos, o primeiro run real, a publicação no RELATO e o commit/push ficam **[nao verificado]**. `triagem.txt:24`, `aval.txt:7–10`. [nao verificado]
-
-## 1. Corrigidos 1–12
-
-| Item | Veredito | Conferência |
-|---|---|---|
-| 1. Nascimento do portador | **NAO PROCEDE** | O fallback existe, mas testa o retorno do lançador. Com `setsid -f`, o pai pode sair `0` antes de o filho executar `bash`. Se o `exec` falhar e o cliente Docker já tiver caído, o `--na-vez` sai `71` e o flock cai com o container vivo. `bin/suite.sh:182–197`, `bin/trava_teste.sh:35–42` (HEAD). |
-| 2. FDs do portador | **PROCEDE** | O comando destacado recebe stdin, stdout e stderr em `/dev/null` e fecha as cópias de `fo` e `fe`. O shell fecha as próprias cópias antes de devolver `71`. Um cliente Docker ainda vivo continua podendo segurar os alimentadores e atrasar o EOF do chamador. `bin/suite.sh:153–156`, `bin/suite.sh:188–197`. |
-| 3. `cidfile` em diretório próprio | **PROCEDE** | `mktemp -d` tira a escolha do caminho de um nome solto. Os três ramos têm `rm -rf "${cidd:?}"`. A expansão barra caminho vazio ou indefinido. A remoção tem rc ignorado, então uma falha de `rm` ainda pode deixar o diretório. `bin/suite.sh:148–152`, `bin/suite.sh:175`, `bin/suite.sh:185`, `bin/suite.sh:200`. |
-| 4. Prazo de `ps` e `kill` | **NAO PROCEDE** | Ambos ganharam `timeout 15` e o rc do `kill` vai ao log. Falta escalonamento para um processo que ignore `TERM`. Nesse contraexemplo, o `kill` pode impedir que se chegue ao `wait`, ou o `ps` pode impedir a classificação do fim. `bin/suite.sh:121–127`, `bin/suite.sh:179–181`. |
-| 5. Fonte única para ausência do CID | **PROCEDE** | A confirmação inicial, o portador e o fallback chamam `_cid_no_ps`. Bash normal importa a função exportada. No `until`, o teste lê o rc imediatamente anterior e só encerra em `1`. CID presente dá `0`, falha de `ps` vira `2` e erro do `grep` também fica fora da condição de saída. `bin/suite.sh:121–127`, `bin/suite.sh:188–194`. |
-| 6. `stat` falho | **PROCEDE** | `-1` reinicia a contagem. A primeira amostra válida depois da falha também reinicia, pois difere de `-1`. Essa falha deixou de contar para `PARADO`. `bin/suite.sh:165–170`. |
-| 7. Validação dos segundos | **NAO PROCEDE** | A regex barra `1m` e `0`, mas aceita `SUITE_KILL_PRAZO_S=31`, acima do teto do aval, e `SUITE_PARADO_S=9223372036854775808`, fora da faixa inteira da comparação no Bash de 64 bits. Este último passa pela validação e a comparação falha durante a vigia, sem o `rc 2` prometido. Vazio explícito usa o default por `:-`. `aval.txt:4`, `bin/suite.sh:126`, `bin/suite.sh:131`, `bin/suite.sh:143–144`, `bin/suite.sh:168`. |
-| 8. Desligamento | **PROCEDE** | `=1` com motivo executa o Docker sem vigia e tenta registrar o comando. `=0` agora devolve `2`, sem executar o run. Ainda é possível desligar sem gravar `DESLIGADO` se o append falhar, pois o rc de `_wlog` é ignorado. `contrato.txt:7`, `bin/suite.sh:120`, `bin/suite.sh:135–145`. |
-| 9. Comando avulso | **PROCEDE** | O teste pelos dois primeiros argumentos vem antes da leitura do bypass e da criação do log. Por exemplo, `--na-vez "" "" -- bash -c 'exit 5'` preserva `5` mesmo com `SUITE_SEM_WATCHDOG=1` sem motivo. Com `--dir`, a limpeza de montagem anterior ao comando continua no fluxo. `bin/suite.sh:132–145`, `bin/suite.sh:204–217`. |
-| 10. Retirada dos traps | **PROCEDE** | Os três ramos retiram `TERM`, `INT` e `HUP` antes de sair da função, fechando o achado sobre `pc` local. No ramo `71`, a retirada acontece cedo demais para o fallback, que passa a esperar sem esses handlers e ainda pode ser o único dono do fd 9. `bin/suite.sh:157`, `bin/suite.sh:175`, `bin/suite.sh:185–200`. |
-| 11. Selo sem `docker wait` | **PROCEDE** | O Docker falso grava os verbos. Qualquer implementação que jamais invoque `docker wait` deixa `w=0` e falha na asserção OOM. A asserção cobre uma subsequência de chamadas. `bin/tests/test_suite_oom_watchdog.sh:37`, `bin/tests/test_suite_oom_watchdog.sh:92–95`. |
-| 12. `FIM-CONFIRMADO` com `log=` | **PROCEDE** | O campo foi incluído. A linha sai depois da espera pelo cliente e ainda não inclui `parallel=`. `bin/suite.sh:199–202`, `contrato.txt:6`. |
-
-## 2. Descartados a–h
-
-| Item | Veredito | Conferência |
-|---|---|---|
-| a. Qualquer erro de `wait` salvo `124` | **NAO PROCEDE** | O HEAD usa `--rm`, então é razoável considerar um desaparecimento durante a espera. Isso não justifica aceitar qualquer erro. Se `timeout` retornar `125` antes de iniciar `docker wait`, um `ps` vazio ainda produz `70`. O literal exige que a espera seja executada antes do `ps`. `aval.txt:4`, `contrato.txt:3–4`, `bin/suite.sh:125–127`, `bin/suite.sh:319` (HEAD). |
-| b. Colisão do `71` | **PROCEDE** | A pendência sustenta segurar o pouso. O contrato da PISTA reserva `71` e o diff ainda grava e testa esse numeral. A triagem registra a devolução anterior. O despacho no topo fica **[nao verificado]**. `triagem.txt:17`, `app/docs/RELATO.md:1426` (HEAD), `bin/suite.sh:119`, `bin/tests/test_suite_oom_watchdog.sh:24`. |
-| c. Saída espontânea `70/71` | **NAO PROCEDE** | Preservar o rc espontâneo segue o contrato, mas a distinção pelo log depende de uma gravação sem garantia. Com o log do watchdog sem permissão de escrita, um `71` de KILL-SEM-FIM pode chegar sem o evento persistido, igual ao `71` espontâneo para quem lê apenas rc e log. O diagnóstico em stderr ainda pode distingui-los. `contrato.txt:5–6`, `bin/suite.sh:120`, `bin/suite.sh:173–175`, `bin/suite.sh:182–197`. |
-| d. PID, espera final e CID tardio | **NAO PROCEDE** | O status guardado pelo Bash só responde pelo filho. `kill -0 "$pc"` e os traps operam sobre o PID numérico, sujeito a reciclagem. Se `ps` já respondeu vazio mas o cliente não sai, a espera final não tem prazo e o `70` não chega. Se o cliente cair antes da leitura do CID, o caminho normal devolve seu rc sem prova sobre um eventual container já criado. A ocorrência na VM fica **[nao verificado]**. `bin/suite.sh:155–160`, `bin/suite.sh:173–175`, `bin/suite.sh:199–202`. |
-| e. Run saudável calado ou run preso produzindo log | **PROCEDE** | São limites do critério escolhido no aval. Há um defeito diferente na aplicação do critério, descrito abaixo, em que a medida usada pelo `kill` já ficou velha. `aval.txt:4`, `contrato.txt:4`, `bin/suite.sh:165–170`. |
-| f. `memory.events` ilegível | **NAO PROCEDE** | O contrato informa o layout e o gatilho. O código silencia stderr e ignora o rc do `awk`. Um `EACCES` vira ausência de gatilho OOM e pode deixar o run seguir, inclusive indefinidamente se o log crescer. A leitura efetiva na VM fica **[nao verificado]**. `contrato.txt:4`, `triagem.txt:21`, `bin/suite.sh:160–170`. |
-| g. Limpeza e retenção de pipe fora do selo | **NAO PROCEDE** | Os casos do selo usam `--only` sem `--dir`, então o curto-circuito impede exercitar a guarda `_NV_KSF` na limpeza. As saídas vão a arquivos regulares, que permitem observar o rc sem comprovar EOF por pipe. O caso de montagens do HEAD usa comando avulso morto por TERM. `bin/suite.sh:213–215`, `bin/tests/test_suite_oom_watchdog.sh:69–72`, `bin/tests/test_rm_com_guarda.sh:337–340` (HEAD). |
-| h. `VOLTA_SEM_VEZ` sobrescreve vermelho | **NAO PROCEDE** | O defeito é preexistente, mas alcança a nova promessa de `70/71` virar `1`. Se o run imprimir uma linha exata `VOLTA_SEM_VEZ` e em seguida sair `70`, a volta também imprime `VOLTA_VERMELHA`. Os dois greps encontram suas linhas e o segundo deixa `75`. `contrato.txt:6`, `bin/volta_intermediaria.sh:37–52`, `bin/volta_intermediaria.sh:37–47` (HEAD), `bin/suite.sh:153–155`. |
-
-## 3. Defeitos novos e classes de reprovação
-
-- **Ordem da trava — PROCEDE.** Se `setsid` retornar erro síncrono, o shell entra no fallback e retém o fd 9 enquanto espera. Um `TERM` direto nesse shell, com cliente já morto e container vivo, pode derrubar o último dono porque os traps já foram retirados. Se o filho destacado nascer mas Bash não importar a função, o comando devolve `127` e o laço fica repetindo com stderr descartado. `bin/suite.sh:182–197`, `bin/trava_teste.sh:35–42` (HEAD).
-- **Relógio fora da borda — PROCEDE.** `t_ult` começa antes de haver CID. Se o CID chegar depois de 20 minutos com tamanho constante, o primeiro `ps` positivo já permite matar. Também há uma janela depois do último `stat`: se o log crescer enquanto o `ps` responde, o `kill` usa a amostra anterior. Para confirmação do fim, um `wait` que volte aos 29 s seguido por um `ps` que demore 10 s ainda pode dar `70`, embora a confirmação tenha ocorrido aos 39 s. Se o fallback assumir a trava, ele ainda posterga o próprio `71` até o `ps` ficar vazio. `aval.txt:4`, `bin/suite.sh:121–127`, `bin/suite.sh:158–181`, `bin/suite.sh:190–197`.
-- **Segundo escritor fora da porta — PROCEDE para a garantia de execução sob flock.** O caminho normal passa por `trava_teste.sh`. A chamada direta ao modo interno `--na-vez` já podia contornar a trava no HEAD e agora também pode gravar logs e acionar o watchdog sem verificar a posse do fd 9. Os dois `tee` e o `echo` do portador são escritores físicos lançados pela própria `suite.sh`. A existência de outro escritor em produção fica **[nao verificado]**. `bin/suite.sh:108–120` (HEAD), `bin/suite.sh:316–325` (HEAD), `bin/suite.sh:120`, `bin/suite.sh:153–155`, `bin/suite.sh:189`, `bin/suite.sh:204–217`.
-- **Derivação paralela — NAO PROCEDE para a prova de ausência do CID e para o default de `--parallel`.** O predicado é compartilhado e a volta sem opção passa um array vazio. **PROCEDE para a escrita de `TRAVA-SOLTA`**, com dois caminhos de formatação. O portador calcula a hora e escreve diretamente, enquanto o fallback passa por `_wlog`. `bin/suite.sh:120–127`, `bin/suite.sh:188–194`, `bin/volta_intermediaria.sh:14–15`, `bin/volta_intermediaria.sh:37`, `bin/suite.sh:129–140` (HEAD).
-- **Campo com dois significados — PROCEDE.** O rc pode ser do cliente ou do watchdog, e `71` também está reservado pela PISTA. `TRAVA-SOLTA` prova que o portador viu `ps` sem o CID e está saindo. O fd 9 ainda pode estar aberto no cliente Docker. A linha do fallback ainda pode duplicar `KILL-SEM-FIM` na mesma ocorrência. `bin/suite.sh:119`, `bin/suite.sh:155`, `bin/suite.sh:174`, `bin/suite.sh:182–202`, `app/docs/RELATO.md:1426` (HEAD).
-- **Erro engolido — PROCEDE.** O rc do `kill` é registrado, o de `ps` vira `2` e a falha de `stat` reinicia a contagem. Permanecem sem tratamento adequado o rc de `wait` diferente de `124`, o `awk` de OOM, a escrita dos logs, a falha dos `tee` e a remoção de `cidd`. Por exemplo, no bypass, `_wlog` roda antes de qualquer `mkdir` da porta. Se `$RAIZ/logs` não existir, o append falha e o run segue desligado. `bin/suite.sh:120–127`, `bin/suite.sh:136–145`, `bin/suite.sh:153–175`, `bin/suite.sh:179–201`.
-- **Escopo — PROCEDE para o repasse e a preservação dos defaults.** A volta entrega `2` e `auto` à validação da suite, e omite a opção quando não a recebe. A base mantém `--parallel 4` e `TESTE_MEM=2g` por default. A régua e o pre-push continuam com seus lançadores próprios. O registro de `WATCHDOG-NOS-LANCADORES` e a invocação efetiva do FERIADO com `--parallel 2` ficam **[nao verificado]**. `bin/volta_intermediaria.sh:14–15`, `bin/volta_intermediaria.sh:37`, `bin/tests/test_volta_repassa_parallel.sh:17–28`, `bin/suite.sh:129–140` (HEAD), `bin/recursos.sh:69–82` (HEAD), `bin/regua.sh:166` (HEAD), `bin/pre-push.sh:143` (HEAD), `aval.txt:2,5,9`.
-
-## 4. Quem escreve e quem lê
-
-| Valor | Escritor | Leitor |
-|---|---|---|
-| `cidd`, `cidf`, conteúdo do `cidfile` | A suite cria `cidd`, monta `cidf` e injeta o caminho no argv. O `docker run` recebe a incumbência de gravar o CID. O Docker falso grava explicitamente no teste. | A suite lê o arquivo via `cat`; o CID em memória alimenta o caminho de `memory.events`, `ps`, `kill`, `wait` e o argv do portador. `rm` consome `cidd` na saída. `bin/suite.sh:148–162`, `bin/suite.sh:168–200`, `bin/tests/test_suite_oom_watchdog.sh:39–45`. |
-| `logs/suite/run-*.log` | A suite escolhe o nome e o anuncia no stderr. Dois `tee -a` escrevem stdout e stderr do Docker no mesmo arquivo e seguem para os respectivos streams. | O vigia lê o tamanho com `stat`; o selo lê o conteúdo para conferir os dois streams. `bin/suite.sh:145–155`, `bin/suite.sh:165–170`, `bin/tests/test_suite_oom_watchdog.sh:107–114`. |
-| `logs/suite_watchdog.log` | `_wlog` faz os appends do shell. O Bash destacado escreve `TRAVA-SOLTA` diretamente no caminho recebido em `$2`. | O selo lê a linha OOM. O contrato atribui à sessão as leituras para contagem e RELATO. Leituras efetivas de produção ficam **[nao verificado]**. `bin/suite.sh:120`, `bin/suite.sh:139`, `bin/suite.sh:178–201`, `bin/tests/test_suite_oom_watchdog.sh:91`, `contrato.txt:6`. |
-| `_NV_RC` | `_vigia_run` atribui o rc do comando, `2/3` nas recusas ou `70/71` no watchdog. | `--na-vez` lê para a guarda de limpeza e no `exit`. O wrapper externo transporta o status pelo seu arquivo de rc e a volta captura `$?` para `testes_rc=`. `bin/suite.sh:135–148`, `bin/suite.sh:174`, `bin/suite.sh:197–217`, `bin/suite.sh:338–372` (HEAD), `bin/volta_intermediaria.sh:37–39`. |
-| `_NV_KSF` | `_vigia_run` zera na entrada e marca `1` se `_fim_confirmado` falhar. | O próprio vigia lê para entrar no ramo `71`; `--na-vez` lê para pular a limpeza. O portador recebe o CID e o caminho do log, sem ler essa variável. `bin/suite.sh:132`, `bin/suite.sh:181–197`, `bin/suite.sh:211–215`. |
-| argv `--parallel` da volta | O chamador fornece a opção. `volta_intermediaria.sh` copia os dois tokens para `PARALELO` e os expande como argumentos separados. | A suite valida e monta o argv de `manage.py test`; o vigia lê esse argv para o `parallel=` do evento. No selo da volta, a suite falsa grava `suite.argv` e o teste lê com `grep`. `bin/volta_intermediaria.sh:14–15`, `bin/volta_intermediaria.sh:37`, `bin/suite.sh:129–140` (HEAD), `bin/suite.sh:319–325` (HEAD), `bin/suite.sh:150–163`, `bin/tests/test_volta_repassa_parallel.sh:16–26`. |
-
-## 5. Selos e mutantes
-
-- **FENCING-ESPERA — PROCEDE na leitura estática.** A âncora é única e a linha 181 é uma instrução completa. Trocá-la por `:` pula `_fim_confirmado` e deixa `_NV_KSF` vazio. O Docker falso derruba o cliente imediatamente e deixa dois segundos de container vivo. O selo exige a mensagem `DOIS DONOS`, de modo que falhar só pela sequência de chamadas não basta para acusar esse mutante. A observação da janela depende da amostragem de 100 ms. `bin/suite.sh:132,181`, `bin/tests/test_suite_oom_watchdog.sh:55–60`, `bin/tests/test_suite_oom_watchdog.sh:74–90`, `bin/tests/test_suite_oom_watchdog.sh:157–165`.
-- **TRAVA-PRESA — PROCEDE na leitura estática.** A âncora é única e a linha 189 contém o `setsid` inteiro. Substituí-la por `:` também devolve `0`, então o fallback não entra. O caso mata só o cliente, tenta adquirir a trava com o container vivo e exige a mensagem específica de soltura prematura. No caso vivo também confere que o flock fica adquirível depois de o container morrer. `bin/suite.sh:188–197`, `bin/tests/test_suite_oom_watchdog.sh:53–54`, `bin/tests/test_suite_oom_watchdog.sh:134–145`, `bin/tests/test_suite_oom_watchdog.sh:168–175`.
-- **Asserção `kill → wait → ps` — PROCEDE contra ausência total de `wait`.** Ainda passa, por exemplo, com a subsequência `kill CID`, `wait OUTRO`, `ps CID`, porque `docker.calls` guarda só `$1`. Também não verifica o retorno do `wait`, apenas a ordem em que os verbos aparecem. A mordida observada dos dois mutantes nesta cópia permanece **[nao verificado]**. `bin/tests/test_suite_oom_watchdog.sh:37`, `bin/tests/test_suite_oom_watchdog.sh:59–62`, `bin/tests/test_suite_oom_watchdog.sh:92–95`, `triagem.txt:24`.
-
-_7820 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7822 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
