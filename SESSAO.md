@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 05:20:40.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1442**.
+**Medido em 22/11/2026 05:26:41.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1438**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1448,7 +1448,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:27:22 | Bash | SENTINELA copy status and rest of result | `cd ~/wt-codex-e4c-f5-constroi-141636 && git status --porcelain && git diff --stat \| tail -3; cd ~/saas-hasner; sed -n 80,200p logs/SENTINELA-DO-SLOT/cura/r.txt \| cut -c1-260` |
 | 17:27:17 | Bash | Check 4c.1 state and SENTINELA result head | `cd ~/saas-hasner; ls -la --time-style=+%H:%M logs/E4C-F5-4C1/v2_* 2>/dev/null; cd ~/wt-f5-4c1-135123 && git log --oneline -3 && git status --porcelain \| head; cd ~/saas-hasner; bin/trava_teste.sh --quem; echo ===; sed -n 1,80p logs/SENTINELA-DO-SLOT/cura/r.txt \| cut -c1-260` |
 | 17:27:11 | Bash | Read 4c.1 handback and SENTINELA cure result | `cd ~/saas-hasner; tail -60 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/a7b1422c6d411b1f7.output \| cut -c1-400; echo ====; wc -l logs/SENTINELA-DO-SLOT/cura/r.txt; tail -50 logs/SENTINELA-DO-SLOT/cura/r.txt \| cut -c1-300` |
-| 17:26:15 | Bash | Queue selo measurement base vs cure | `cd ~/saas-hasner; M=~/wt-med-f5-33-$(date +%H%M%S); git worktree add -q --detach $M 701096390 && python3 - $M <<'EOF' import sys; p=sys.argv[1]+'/app/ponto/tests/test_selo_chokepoint_escrita.py'; s=open(p).read() for a,b in [("'registrar_batida (furo vivo, 1 chamado fecha)': 236,","'registrar_batida (furo vivo, 1 chamado fecha)': 1,"),("'registrar_batida (furo vivo, 3 chamados fecham)': 300,","'re ...` |
-| 17:26:03 | Bash | Read selo teto check semantics | `cd ~/saas-hasner; /bin/grep -n "234\\|236\\|298\\|300" ~/wt-codex-e4c-f5-constroi-165618/app/ponto/tests/test_selo_chokepoint_escrita.py \| head; /bin/grep -n "assertLessEqual\\|assertEqual\\|<= \\|> teto\\|teto" ~/wt-codex-e4c-f5-constroi-165618/app/ponto/tests/test_selo_chokepoint_escrita.py \| sed -n 1,15p \| cut -c1-160` |
-| 17:25:55 | Bash | Check FERIADO mutant reason; read selo diff | `cd ~/saas-hasner; /bin/grep -B2 -A6 "AssertionError" logs/FERIADO-POR-POSTO/green_2b/mut.log \| head -12; cd ~/wt-codex-e4c-f5-constroi-165618; git show HEAD -- app/ponto/tests/test_selo_chokepoint_escrita.py \| head -60` |
-| 17:25:50 | Bash | Read verdicts of finished runs | `cd ~/saas-hasner; for f in logs/FERIADO-POR-POSTO/green_2b/green logs/FERIADO-POR-POSTO/green_2b/mut logs/E4C-F5-3_3/cura3/prova/green_a2 logs/E4C-F5-3_3/cura3/prova/selo logs/E4C-F5-3_3/cura3/prova/mut_red33 logs/E4C-F5-1_2/mutantes/m3 logs/E4C-F5-1_2/mutantes/m4; do echo "$f $(cat $f.rc) \| $(/bin/grep -E '^(OK\|FAILED)($\| \()' $f.log\| tail -1) \| $(/bin/grep '^Ran' $f.log\| tail -1)"; /bin/gr ...` |
