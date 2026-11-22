@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 04:13:54.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1647**.
+**Medido em 22/11/2026 04:20:04.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1639**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1649,11 +1649,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:20:20 | Bash | Check 4c.1 copy state and read candidata C rest | `cd ~/saas-hasner; git -C ~/wt-f5-4c1-135123 status --porcelain; git -C ~/wt-f5-4c1-135123 log --oneline -1; sha256sum ~/wt-f5-4c1-135123/app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py logs/E4C-F5-4C1/test_f2_ressuscitar_tarefa_igual.par.py \| cut -c1-14; sed -n 30,82p logs/E4C-F5-4C1/candidata_c/r.txt \| cut -c1-400` |
 | 16:20:15 | Bash | Check existing brief censo status and agent obra detection | `cd ~/saas-hasner; python3 -c "import sys; sys.path.insert(0,'bin'); import disjuntor; print(repr(disjuntor.censo_do_brief('logs/E4C-F5-CONSTROI/brief.md')))"; sed -n 1700,1745p bin/disjuntor.py \| cut -c1-180; cat logs/E4C-F5-4C1/entrega.md \| head -30` |
 | 16:20:12 | Bash | Check disjuntor obra detection and existing briefs | `cd ~/saas-hasner; /bin/grep -n 'def censo_do_brief\\|def _obra_do\\|brief\*\\|glob(.brief' bin/disjuntor.py \| head; ls logs/E4C-F5-CONSTROI/ \| head -30; ls logs/E4C-F5-CONSTROI/brief* 2>/dev/null` |
-| 16:20:03 | Bash | Read 4c.1 RELATO lines in full | `cd ~/saas-hasner; sed -n 31p app/docs/RELATO.md; sed -n 35p app/docs/RELATO.md` |
-| 16:20:00 | Bash | Read candidata_c and RELATO lines about 4c.1 | `cd ~/saas-hasner; ls -la logs/E4C-F5-4C1/candidata_c; for f in logs/E4C-F5-4C1/candidata_c/*; do echo "== $f"; head -c 1500 $f; echo; done 2>/dev/null \| head -80; /bin/grep -n '4c.1\\|4C1' app/docs/RELATO.md \| head -8 \| cut -c1-300` |
-| 16:19:57 | Bash | Read 4c.1 state and response | `cd ~/saas-hasner; ls -la logs/E4C-F5-4C1/; cat logs/RESPOSTA-4C1-2111-1515/resposta_4c1_censo_2111_1515.txt \| cut -c1-1500` |
-| 16:19:54 | Bash | Find 4c.1 ficha and response | `cd ~/saas-hasner; ls logs/ \| /bin/grep -i 4c; /bin/grep -n '4c.1' logs/FICHAS-2111-1320/f1/r.txt \| cut -c1-700; ls logs/RESPOSTA-4C1* 2>/dev/null` |
-| 16:19:49 | Monitor | rc: 3.3 RED pela porta | `cd /home/ronald/saas-hasner; until [ -f logs/E4C-F5-3_3/red.rc ]; do /usr/bin/sleep 30; done; echo "3.3 red $(cat logs/E4C-F5-3_3/red.rc)"` |
-| 16:19:46 | Bash | Point ESPERANDO at 3.3 RED runner, note status | `cd ~/saas-hasner; ps -o pid,args -p $(pgrep -d, -f "E4C-F5-3_3/red.sh") ; python3 - <<'EOF' import subprocess p='app/docs/RELATO.md'; L=open(p).read().split('\n') pid=[l.split()[0] for l in subprocess.run(['pgrep','-af','E4C-F5-3_3/red.sh'],capture_output=True,text=True).stdout.splitlines() if l.split()[1]=='bash'][0] L[0]=f"ESPERANDO: red.sh \| pid={pid}" i=[k for k,x in enumerate(L[:8]) if x.sta ...` |
-| 16:19:33 | Bash | Commit 3.3 RED and run via porta | `cd ~/saas-hasner; W=$(cat logs/E4C-F5-3_3/wt.txt); cd $W && git add app/chamados/tests/test_e2_pergunta_so_ao_c6.py && git commit -q -F - <<'EOF' E4C-F5 3.3 RED: absolvicao por celula le a candidata fresca sob a trava (Codex construtor) test_f5_e2_absolvicao: resposta real 19:45 intercalada entre o prefetch do gerador e a trava do reconciliador -> C6 vivo na releitura, RECUSA_C6 na porta, sem cari ...` |
-| 16:19:23 | Bash | Read 3.3 Codex result | `cd ~/saas-hasner; R=logs/E4C-F5-3_3/r.txt; wc -l $R; head -12 $R \| cut -c1-600; /bin/grep -nE 'PAREI\|campos=\|suite.sh' $R \| head; git -C $(cat logs/E4C-F5-3_3/wt.txt) status --porcelain` |
