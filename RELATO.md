@@ -12322,3 +12322,5 @@ INCOMPLETO: item 3 sim/nao por dia.
 - 23:48 Mesa 1.2 green rc=0 OK Ran 54 23:47:57 (wt-12mesa-green-233059 cff4d6a0b). Ruff do teste pendente (host sem ruff; entra na suite inteira).
 - 23:49 3.3 cura5 prova: green rc 0 OK Ran 20; mutantes m_sql/m_c20/m_pref VERMELHOS (mordem). 5(d): 3a volta Codex -> suite inteira (copia /home/ronald/wt-33suite-234916 de 7e4b30b7f, logs/E4C-F5-3_3/cura5/suite/) e depois opus final.
 - 23:52 FERIADO P1 green2 rc=1 Ran 892, 1 failure: selo de forma da VOLTA (test_reverter_regen_sem_banco) copia a chamada do rabo -> forma atualizada com hoje=hoje + mutante test_morde_hoje_perdido (unittest Ran 12 OK). Cura commitada a2d7a4b9c na copia 203331; green3 em logs/FERIADO-POR-POSTO/p1/green3/.
+- 23:54 4c.1 v4 verificador rc=124 (timeout 657 s, 20 eventos, varredura --hidden); relancado com orcamento na pergunta (t1/ guarda a 1a).
+- 23:55 1.2 verif volta 6 rc 0 BLOQUEIA; triagem em logs/E4C-F5-1_2/v6verif/triagem.txt: (A) trilha falsa do fio apos retorno nao-sucesso PROCEDENTE PREEXISTENTE (ja_validada ja produz), (F) M1 sem isolamento PROCEDENTE so teste, (B-E) fila/descartado. 5(d) >3 voltas -> opus final.
