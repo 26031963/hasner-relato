@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 08:37:19.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **718**.
+**Medido em 22/11/2026 08:42:57.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **710**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -720,11 +720,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:47:16 | Bash | Move RELATO line-1 to live suite pid | `cd /home/ronald/saas-hasner; ps -p 744539 -o pid=,args= \| cut -c1-80; sed -i '1s/.*/ESPERANDO: lanca.sh \| pid=744539/' app/docs/RELATO.md; head -1 app/docs/RELATO.md` |
 | 20:47:10 | Bash | Launch full suite on 1.2 copy 5b4454c59 | `cd /home/ronald/saas-hasner; D=logs/E4C-F5-1_2/v5/suite; mkdir -p $D; C=/home/ronald/wt-12suite-$(date +%H%M%S); mkdir $C; git archive 5b4454c59 \| tar -x -C $C; echo "$C 5b4454c59" > $D/copia.txt cat > $D/lanca.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner bash bin/suite.sh --dir $C --motivo "pre-opus E4C-F5-1.2" --espera 7200 > $D/suite.log 2>&1; rc=\$? echo "rc=\$rc \$(/bin/grep -E '^(OK\|FA ...` |
 | 20:47:04 | Bash | See prova4 launcher and copy | `cd /home/ronald/saas-hasner; cat logs/E4C-F5-1_2/v5/prova4/lanca.sh \| head -8; ls -d /home/ronald/wt-12v5r-*` |
-| 20:38:56 | Monitor | c12 selo na base ed7d24934 | `cd /home/ronald/saas-hasner; f=logs/E4C-F5-4C1/medida_v3/c12base/c12.rc; until [ -f $f ]; do /usr/bin/sleep 20; done; cat $f` |
-| 20:38:51 | Bash | Run c12 seal on base ed7d24934 copy | `cd /home/ronald/saas-hasner; D=logs/E4C-F5-4C1/medida_v3/c12base; mkdir -p $D; C=/home/ronald/wt-c12base-$(date +%H%M%S); mkdir $C; git archive ed7d24934 \| tar -x -C $C; echo $C > $D/copia.txt cat > $D/lanca.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner bash bin/suite.sh --dir $C --only chamados --espera 7200 -- -k test_e4b_c12_selo > $D/c12.log 2>&1; rc=\$? echo "rc=\$rc \$(/bin/grep -E '^(OK ...` |
-| 20:38:42 | Bash | Check base context of c12 seal red | `cd /home/ronald/saas-hasner/logs/E4C-F5-4C1; /bin/grep -E "Novo escritor fora\|^(OK\|FAILED)\|^Ran" c_chamados_ponto.log \| tail -4; /bin/grep -rn "c_chamados" *.txt \| head -3; cd /home/ronald/saas-hasner; git log --oneline -1 ed7d24934 \| cat; git show ed7d24934:app/chamados/tests/test_e4b_c12_selo.py \| sed -n 1,40p` |
-| 20:38:35 | Bash | Earlier 4c.1 chamados run context | `cd /home/ronald/saas-hasner/logs/E4C-F5-4C1; ls -la c_chamados* ; /bin/grep -E "Novo escritor fora\|^(OK\|FAILED)\|^Ran" c_chamados.log \| tail -5; ls *.txt 2>/dev/null; /bin/grep -l c_chamados *.sh 2>/dev/null \| head -2` |
-| 20:38:31 | Bash | Check if c12 seal failure appears elsewhere | `cd /home/ronald/saas-hasner; /bin/grep -l "FAIL: test_RED_um_subTest_por_sitio" -r logs/E4C-F5* logs/SENTINELA-DO-SLOT 2>/dev/null \| head; /bin/grep -rl "test_e4b_c12_selo" logs/E4C-F5* 2>/dev/null \| head -5` |
-| 20:38:26 | Bash | Inspect 4c.1 measurement copy diff around models.py:1790 | `cd /home/ronald/wt-4c1med-202048 2>/dev/null && { git log --oneline -3 \| cat; git status --porcelain \| head; git diff --stat HEAD \| tail -3; sed -n 1785,1812p app/chamados/models.py; }` |
-| 20:38:22 | Bash | Read c12 selo failure detail | `cd /home/ronald/saas-hasner/logs/E4C-F5-4C1/medida_v3; /bin/grep -n -A25 'FAIL: test_RED_um_subTest_por_sitio' recorte.log \| /bin/grep -vE '^\s*$' \| head -40; cat copia.txt` |
-| 20:38:18 | Bash | List failures in 4c.1 recorte | `cd /home/ronald/saas-hasner/logs/E4C-F5-4C1/medida_v3; ls; L=$(ls recorte*.log \| head -1); /bin/grep -E '^(FAIL\|ERROR):' $L` |
