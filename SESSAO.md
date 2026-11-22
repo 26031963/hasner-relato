@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 18:13:56.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (34.3 MB). Acoes na janela: **942**.
+**Medido em 22/11/2026 18:19:59.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (35.1 MB). Acoes na janela: **946**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:17:07 | Bash |  | `for d in ~/saas-hasner ~/wt-simplifica-104405; do echo "##### $d"; cd $d; for s in test_rm_com_guarda test_selo_espera_processo_morde test_inventario_pessoal_no_commit; do timeout 300 bash bin/tests/$s.sh > /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/o.txt 2>&1; echo "rc=$? $s"; grep -iE 'red\|verm\|fail\|colun\|falt' /tmp/claude-1001/-home-ronald-saas ...` |
+| 18:17:02 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; grep -v '^0 ' $S/selos_simpl.txt \| cut -c1-200` |
+| 18:16:57 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/E4C-F5; cat > logs/E4C-F5/aval_libera_b3_2211-1810.txt <<'EOF' aval Ronald: LIBERA-B3-F5-2211-1810 -- a F5 foi descongelada e refeita pelo CONTRATO-V2 (logs/E4C-F5/CONTRATO-V2.md); escrever no topo: "DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454"; depois do rearme de Ronald, o verificador fi ...` |
+| 18:16:51 | Bash |  | `cd ~/saas-hasner; head -5 app/docs/RELATO.md \| cut -c1-250; tail -3 app/docs/PROMPTS.md \| cut -c1-250; date '+%d/%m %H:%M'` |
 | 18:07:46 | Bash |  | `cd ~/saas-hasner; timeout 540 bash -c 'until grep -q "^rc=" logs/SIMPLIFICA-V3-2211-1726/suite_final.log \|\| [ -f logs/TERRENO-POS-F5/relanca.fim ]; do /usr/bin/sleep 20; done'; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/SIMPLIFICA-V3-2211-1726/suite_final.log \| tail -3; ls logs/TERRENO-POS-F5/relanca.fim 2>/dev/null` |
 | 18:07:32 | Bash |  | `cd ~/saas-hasner/logs/TERRENO-POS-F5; for f in */r.txt; do echo "=== $f ($(wc -l <$f) linhas)"; head -c 700 $f; echo; done` |
 | 18:07:27 | Bash |  | `cd ~/saas-hasner; tail -c 300 logs/SIMPLIFICA-V3-2211-1726/suite_final.log; echo; ls logs/TERRENO-POS-F5/*/r.txt \| wc -l; ls logs/TERRENO-POS-F5/relanca.fim 2>&1 \| tail -1` |

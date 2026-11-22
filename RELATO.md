@@ -1,3 +1,4 @@
+DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454
 ESPERANDO: bin/suite.sh | pid=1707069
 RESPONDIDA por codex login (auth.json de volta, 17:5x): PAREI: codex-deslogado | espera Ronald: `! codex login` (auth.json ausente, 401 desde 17:46); E4C-F5 e TRAVAS-SEM-MEMORIA seguem paradas no B3, decisao dele. Rodando: suite [nome] pid 1431366, selos SIMPLIFICA, agente c4orm (leitura). | rodando 17:54: [nome] verificador final Codex pid 1659496, TERRENO relanca 9 pacotes, selos SIMPLIFICA
 CODEX-DESLOGADO 17:46: ~/.codex/auth.json ausente, wrapper rc 1 com "401 Missing bearer" (logs/codex/E4C-F5_20261122_174609_1554685.jsonl). TERRENO: 3/12 rc 0 (ATO-EM-ESCRITOR-UNICO, CRON-NAO-CABE-VAGA-POS-F5, E4C-F1-B2b-F0), 9 por relancar com logs/TERRENO-POS-F5/relanca.sh depois do `! codex login`. DESPACHO E4C-F5-C4ORM: leitura -> sonnet (motivo: falha do Codex 401)
