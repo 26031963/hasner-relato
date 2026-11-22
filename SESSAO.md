@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 02:41:31.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1855**.
+**Medido em 22/11/2026 02:47:39.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1854**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1864,4 +1864,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:47:57 | Bash | Confirm PISTA-ESCOLHE retirement in 1210 | `cd ~/saas-hasner; /bin/grep -n "PISTA-ESCOLHE\\|M2" logs/AVAIS-1515/respostas_desacopla_2111_1210.txt \| cut -c1-400; sed -n 2244p app/docs/BACKLOG.md \| cut -c280-700` |
 | 14:47:53 | Bash | Check clock and 1210 line | `cd ~/saas-hasner; date '+%H:%M:%S'; /bin/grep -n "1210" app/docs/PROMPTS.md \| cut -c1-350 \| tail -4; /bin/grep -n "PISTA-ESCOLHE" app/docs/BACKLOG.md \| cut -c1-300 \| head -4` |
 | 14:47:47 | Bash | Queue state and P4 PROMPTS grep | `cd ~/saas-hasner; cat logs/RESPOSTAS-2111-1445/fila_codex.log 2>/dev/null; for f in f1 f2 f3; do echo "$f $(cat logs/FICHAS-2111-1440/$f/r.rc 2>/dev/null)"; done; /bin/grep -n "PISTA-ESCOLHE" app/docs/PROMPTS.md \| cut -c1-250 \| tail -5; /bin/grep -n "RESPOSTAS-2111-1210\\|RESPOSTAS-1210" app/docs/PROMPTS.md \| cut -c1-300` |
-| 14:41:33 | Bash | Register RESPOSTAS-2111-1445 in docs | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() lines=s.split('\n') top=lines[:80] def resp(prefix, txt): hits=[i for i,l in enumerate(top) if l.startswith(prefix)] assert len(hits)==1,(prefix,hits) i=hits[0]; lines[i]=txt+' -- antes: '+lines[i] resp('PAREI LISTA E4C-F5-4C1','RESPONDIDA por RESPOSTAS-2111-1445 item 1 (base = travas do MAIN; candidata C RELOGIO LIDO DEPO ...` |
