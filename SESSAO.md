@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 18:50:27.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (39.5 MB). Acoes na janela: **1064**.
+**Medido em 22/11/2026 18:56:30.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (39.5 MB). Acoes na janela: **1067**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:51:07 | Bash |  | `timeout 590 tail --pid=1880331 -f /dev/null; cd ~/saas-hasner; L=logs/[nome]-FERIADO-PELA-TELA/suite_v2.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L\|tail -1; tail -n1 $L; ls logs/SIMPLIFICA-V3-2211-1726/r_v3b.txt 2>&1` |
+| 18:50:58 | Bash |  | `cd ~/saas-hasner; sed -n 1,4p app/docs/RELATO.md \| cut -c1-300; pgrep -af 'suite.sh --dir /home/ronald/wt-kaua' \| head -3; tail -c 300 logs/[nome]-FERIADO-PELA-TELA/suite_v2.log` |
+| 18:50:49 | Bash |  | `cat > /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/kaua_testes_v3.py <<'EOF' def _tabela_da_trava(sql): import re m = re.search(r'\bFROM "([a-z_]+)"', sql) return m.group(1) if m else '' @freeze_time(_AGORA) class K8OrdemDeTravaDasOutrasPortas(_Base): """Codex v2 (achado ordem): `regenerar_celulas_vinculo`, `reverter_regeneracao_dia` e `trocar_plantao`  ...` |
 | 18:50:24 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; sed -n 150,205p ponto/tests/test_porta_celula_dia.py; grep -n '^class\\|def setUp' ponto/tests/test_porta_celula_dia.py \| head` |
 | 18:50:19 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; sed -n 20,120p ponto/tests/test_o10b_editar_dia_troca.py; grep -n 'reverter_regeneracao_dia(' -r --include=test_*.py . \| head -3` |
 | 18:50:10 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; sed -n 300,360p ponto/tests/test_kaua_feriado_pela_tela.py; grep -n 'trocar_plantao' -r --include=test_*.py . \| head -5` |

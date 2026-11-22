@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 18:36** · publicado em **22/11/2026 18:38** (UTC-3)
+> Ultima resposta processada: **22/11/2026 18:54** · publicado em **22/11/2026 18:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 18:54 · sessao 23dfce2f7d1a · SIMPLIFICA-V3-2211-1726 · verificador · origem=Code
+
+**Veredito da volta 2 — reprova.** O delta corrige os exemplos originais de SHA divergente, `FAILED` canônico antes de `OK`, LABEL repetida, filtros anexados e comparação de Postgres. A porta da VM também passa a executar pelo ID inspecionado. Ainda obtive `CERTIFICA` com log e recibo de jobs distintos do mesmo SHA, com `OK` malformado e com uma LABEL produzida por expansão de glob. `bin/pista_certifica.sh:39–51`, `:62–76`, `:82–94`, `bin/suite.sh:320–331`.
+
+## 1. Achados (a)–(f)
+
+| Achado | O que a cura fecha e qual caso pega a reversão |
+|---|---|
+| **(a) SHA e identidade do job** | Fecha SHA ausente ou divergente no log, e SHA divergente no recibo. Pegam a reversão `log de OUTRO sha`, `log sem AMBIENTE sha` e `linha de fim de OUTRO job`. O último troca SHA **e** sufixo juntos. Retirar só a guarda do sufixo passa pelos casos existentes. O ID completo continua sem vínculo com o log. `bin/pista_certifica.sh:29–44`, `bin/tests/test_pista_certifica.sh:77–87`. |
+| **(b) Veredito, `Ran` e RC** | Fecha `FAILED (...)` antes de `OK`, `Ran 0`, `rc=1` e arquivo de fim vazio. Pegam a reversão `FAILED antes do OK`, `Ran 0 tests`, `rc do processo 1` e `linha de fim ausente`. A contagem considera só as formas que casam com os regex. A ordem e a sintaxe completa continuam abertas. `bin/pista_certifica.sh:40–51`, `bin/tests/test_pista_certifica.sh:82–92`. |
+| **(c) LABEL repetida** | Fecha a repetição literal. Restaurar `sort -u` no lado do run derruba `LABEL repetida`. A expansão anterior ao `sort` ainda pode fabricar uma LABEL válida. `bin/pista_certifica.sh:62–76`, `bin/tests/test_pista_certifica.sh:93–94`. |
+| **(d) Filtros no argv** | Fecha os quatro exemplos `-kX`, `-pX`, `--ta=x`, `--exclude-ta=x`. A volta à lista negra também derruba os casos `--reverse`, `--debug-sql` e `numero solto`. `--parallel x` já era recusado no blob anterior, pois `x` sobrava como LABEL. O parse atual continua operando sobre texto recombinado. `bin/pista_certifica.sh:55–76`, `bin/tests/test_pista_certifica.sh:95–100`. |
+| **(e) Postgres** | Fecha os dois defeitos. Voltar à comparação numérica derruba `Postgres com sufixo diferente`. Voltar à pipeline que aceita saída de comando com erro derruba `docker exec da VM que imprime e falha`. A consulta coincide com a do teste. O stub aceita qualquer subcomando de `docker exec`, portanto trocar **só** `SHOW server_version` por `postgres -V` mantendo o tratamento novo de status passa pelo selo. `bin/pista_certifica.sh:79–90`, `app/core/tests/test_ambiente_do_run.py:26–29`, `bin/tests/test_pista_certifica.sh:14–18`, `:101–106`. |
+| **(f) Imagem da VM** | Fecha a corrida de retag entre `inspect` e `run`. Repor `:latest` na posição da imagem derruba a checagem de `test_suite_sh.sh`. Remover só o `timeout 30` ou só a guarda de ID vazio passa por ela. O `inspect` continua síncrono, antes da trava e das traps. `bin/suite.sh:318–341`, `bin/tests/test_suite_sh.sh:61–70`. |
+
+**Contraexemplos que deram `rc 0` em memória**, usando os demais campos do caso verde e dublês de Git e Docker. A origem dessas formas na PISTA 2 real permanece [nao verificado]. `bin/tests/test_pista_certifica.sh:14–23`, `:25–52`.
+
+- **Fim de outro job.** Para um log atribuído ao job `1122183000_ab48a4b7`, use `id=1122183001_ab48a4b7 sha=ab48a4b7e0ab8a9b2f2eec1db424871becdb5c2a rc=0`. Também passaram `id=_ab48a4b7` e um recibo cujo final é `rc=0 rc=1`. O leitor compara o sufixo e os três primeiros campos. `bin/pista_certifica.sh:39–44`.
+- **Fim de log inválido.** Use `OK (lixo`, seguido de `Ran 1 tests in lixo` e `fim qualquer`. Também passou um ` FAILED (failures=3)` com espaço inicial antes do `OK` válido. E `Found 100 test(s).` com `Ran 1 test in 1.0s` passa. As buscas são independentes e a contagem de vereditos segue o regex. `bin/pista_certifica.sh:46–51`, `:92–94`.
+- **Argv reinterpretado.** A partir de `app/`, troque apenas `api` por `ap[i]` na linha `AMBIENTE argv=`. O shell do certificador expande o padrão para `api` e certifica. Também passou a linha gerada quando `--settings=config.settings.ci --noinput` é **um único argumento**. A mesma linha representa dois argumentos distintos. O primeiro caso depende do diretório corrente. `app/api/views.py:1`, `bin/regua.sh:23`, `app/core/tests/test_ambiente_do_run.py:20–22`, `:35`, `bin/pista_certifica.sh:55–76`.
+
+## 2. Escritores, leitores e contrato antigo
+
+| Valor | Escritor → leitor |
+|---|---|
+| `AMBIENTE sha` | `AmbienteDoRunTest` imprime `HASNER_SHA` ou `ausente`. A fixture `log()` também escreve a linha. `amb sha` exige uma ocorrência e o certificador compara com o SHA do primeiro argumento. `app/core/tests/test_ambiente_do_run.py:33`, `bin/tests/test_pista_certifica.sh:26–29`, `bin/pista_certifica.sh:19`, `:29–39`. |
+| `AMBIENTE argv` | O mesmo teste recorta `sys.argv` após `test` e junta com espaços. A fixture `log()` escreve o equivalente sintético. O certificador lê via `amb argv`, separa palavras, expande globs e compara com as LABELS da régua. `app/core/tests/test_ambiente_do_run.py:20–22`, `:35`, `bin/tests/test_pista_certifica.sh:32`, `bin/pista_certifica.sh:54–76`, `bin/regua.sh:23`. |
+| `id= sha= rc=` | A fixture `espera()` escreve os três campos. O contrato aponta `ssh pista espera <id>` como produtor remoto. O certificador recebe o arquivo no terceiro argumento e lê os três campos. Implementação, formato e RC do emissor remoto [nao verificado]. `bin/tests/test_pista_certifica.sh:41–45`, `bin/pista_certifica.sh:7–10`, `:19–20`, `:40–44`, `app/docs/BACKLOG.md:2260`. |
+| `HASNER_SHA` | O teste Python é o leitor localizado. O lançador é o escritor previsto pelo comentário. A chamada da VM injeta `HASNER_IMAGEM_ID`, sem atribuição explícita de `HASNER_SHA`. Valor vindo da imagem ou de env-file da VM e escritor remoto [nao verificado]. `app/core/tests/test_ambiente_do_run.py:6–7`, `:33`, `bin/suite.sh:325–331`, `bin/recursos.sh:134`. |
+| `HASNER_IMAGEM_ID` e `IMAGEM_ID` | Na VM, `docker image inspect` fornece `IMAGEM_ID`. `_run` usa esse valor no `-e HASNER_IMAGEM_ID` e como imagem do `docker run`. O teste Python lê a variável e imprime `AMBIENTE imagem_id`, que o certificador compara com seu próprio `inspect`. Escritor remoto [nao verificado]. `bin/suite.sh:320–329`, `app/core/tests/test_ambiente_do_run.py:32`, `bin/pista_certifica.sh:82–89`. |
+
+**Leitor antigo comprovado.** `CLAUDE.md` ainda manda chamar com dois argumentos. Executei essa forma com um arquivo legível e obtive `rc 2`, antes de qualquer consulta ao Git ou Docker. O chamador executável localizado é o selo, já com três argumentos. A versão antiga de Postgres também ficou no comentário que diz `postgres -V`. `CLAUDE.md:126`, `bin/pista_certifica.sh:13–20`, `:83`, `bin/tests/test_pista_certifica.sh:45`.
+
+Quanto à imagem, o selo da porta já procura `"$IMAGEM_ID"`. A régua e os dois fontes de pre-push ainda lançam por `:latest` em chamadas próprias. O `:latest` de `test_suite_sh.sh:83` pertence ao exemplo que deve ser recusado. Um leitor externo que dependa do argumento antigo da porta fica [nao verificado]. `bin/tests/test_suite_sh.sh:68–83`, `bin/regua.sh:165–169`, `bin/pre-push.sh:142–145`, `:184–199`, `app/core/hooks/pre-push.sh:80–88`.
+
+## 3. `exit 3` e chamadores
+
+- **`volta_intermediaria.sh`** registra `testes_rc=3`, marca `VOLTA_VERMELHA` e sai `1`, a mesma classificação dada a `testes_rc=1`. `75` vira `VOLTA_SEM_VEZ` e sai `75` quando Ruff e disjuntor estão verdes. Assim, uma falha de `inspect` pode produzir vermelho antes que a chamada tenha a oportunidade de retornar `75` pela fila. `bin/volta_intermediaria.sh:31–47`, `bin/suite.sh:320–324`, `bin/trava_teste.sh:35–38`.
+- **Hooks versionados.** O pre-push tem um tratamento próprio de `75`, vindo da sua chamada direta à trava. O registro de Stop e PreToolUse aponta para os scripts de hook, e o instalador de Git delega para pre-push e commit-msg. Chamadores locais não versionados [nao verificado]. `bin/pre-push.sh:141–157`, `bin/hooks.sh:65–79`, `.claude/settings.json:3–9`, `:62–68`.
+- **Regressão de selo.** `test_suite_motivo.sh` simula recursos e trava, mas deixa o `inspect` resolver pelo Docker do host. Com Docker indisponível, imagem ausente ou `inspect` vazio, os casos que esperam `0 sim` e `75 sim` recebem `3 nao`. `test_rm_com_guarda.sh` ganhou o dublê que falta ali. A régua aborta antes da suíte se esse selo falhar. Já conferi em memória que `inspect` vazio, erro com saída e status simulado de timeout retornam `3` antes da trava. A execução integral desses selos [nao verificado]. `bin/tests/test_suite_motivo.sh:25–42`, `:59–64`, `:84–89`, `bin/tests/test_rm_com_guarda.sh:124–129`, `bin/regua.sh:138–145`, `bin/suite.sh:320–324`.
+
+## 4. Os quatro duvidosos
+
+- **Texto da 7b.** Persiste a tensão editorial entre `TODO construtor` e o princípio prioritário de proporcionalidade. A cobrança por pertença à fila 1 continua expressamente declarada e implementada. O defeito novo de documentação está na seção 3, no comando de dois argumentos. `CLAUDE.md:126`, `:197`, `:252–262`, `:383–390`, `bin/disjuntor.py:1740–1759`.
+- **Tamanho da 7b.** Este delta acrescenta **0 bytes** à seção, conforme os arquivos do anexo. Os `+173 bytes` são da comparação anterior relatada em `r_v3`. Registro de `PODA-7B` [nao verificado]. `CLAUDE.md:252`, `:463`.
+- **Argv unido por espaço.** **Procedente**, com perda de fronteiras e expansão de glob demonstradas no certificador. `app/core/tests/test_ambiente_do_run.py:35`, `bin/pista_certifica.sh:55–76`.
+- **Servidor x executável.** **Fechado no código.** Os dois lados executam `SHOW server_version`. A igualdade é da versão retornada. O teste mede a conexão que o settings abriu, com `DB_HOST` configurável, enquanto o certificador consulta `juliani_db_test`. Servidores efetivos e resultado em produção [nao verificado]. `app/core/tests/test_ambiente_do_run.py:26–29`, `bin/pista_certifica.sh:83–90`, `app/config/settings/ci.py:6–17`.
+
+## 5. `except`, RED e ESMERIL-SEMÂNTICA
+
+- **`except` no delta fornecido, inclusive `bin/`** — **0 adicionados, 0 removidos**. Os seis blobs da cópia batem com os prefixos de destino do anexo. Identidade do commit e cadeia de pais [nao verificado]. `app/core/tests/test_ambiente_do_run.py:3`, `bin/pista_certifica.sh:7`, `bin/suite.sh:316`, `bin/tests/test_pista_certifica.sh:76`, `bin/tests/test_rm_com_guarda.sh:124`, `bin/tests/test_suite_sh.sh:68`.
+- **RED e mordida.** São **18 negativos novos, 17 que distinguem a guarda antiga da nova** na simulação. Confirmei o caso excepcional `--parallel x` rodando o blob anterior reconstruído, com hash `84b63d59a…` igual ao do anexo. Os dois mutantes antigos do certificador dão `0` em seus casos. O grep da imagem acusa a volta direta a `:latest`, mas aceita remover o timeout ou a guarda de vazio. `red_v3.txt` e verde integral [nao verificado]. `bin/tests/test_pista_certifica.sh:76–119`, `bin/tests/test_suite_sh.sh:61–70`, `:75–78`.
+- **ESMERIL-SEMÂNTICA.** `argv` significa lista de argumentos para o escritor e palavras expandidas para o leitor. `AMBIENTE sha` é uma declaração do lançador que a certidão usa como prova da árvore executada. `id=` é a identidade do job no recibo, mas no certificador funciona como sufixo do SHA. Na VM, `IMAGEM_ID` passou a ter o mesmo significado nos dois usos, como imagem pedida ao Docker e imagem declarada ao teste. `CLAUDE.md:338–340`, `app/core/tests/test_ambiente_do_run.py:32–35`, `bin/pista_certifica.sh:25–44`, `:55–76`, `:92–94`, `bin/suite.sh:320–329`.
 
 ## 22/11 18:36 · sessao b9023c0c0235 · [nome]-FERIADO-PELA-TELA-2211-1612 · verificador · origem=Code
 
@@ -678,8 +732,4 @@ A recusa `pergunta_viva_na_competencia_aberta` tem cláusula real no fecho. O re
 
 As perguntas pendentes registradas são quais entradas além do INSERT cercado recebem K6 e onde fica `--forcar`, qual estado pai e disputa representam quando só parte prospera, o que o chamador observa no sucesso parcial hoje expresso como `REPASSE_RECUSADO`, e se a divergência residual conserva ou desfaz o já gravado. Também cabe perguntar como tela/PDF identificam uma sobra legada no mesmo minuto e como o dono quer tratar diferenças de folha fora dos casos já discutidos. `app/docs/RELATO.md:290,1559,1583` `app/escala/orfa_classe.py:53,77`
 
-## 22/11 17:53 · sessao c0d8e8352587 · - · - · origem=Ronald (tmux)
-
-ok
-
-_7865 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7866 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
