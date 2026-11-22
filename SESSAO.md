@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 08:31:40.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **727**.
+**Medido em 22/11/2026 08:37:19.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **718**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -728,12 +728,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:38:26 | Bash | Inspect 4c.1 measurement copy diff around models.py:1790 | `cd /home/ronald/wt-4c1med-202048 2>/dev/null && { git log --oneline -3 \| cat; git status --porcelain \| head; git diff --stat HEAD \| tail -3; sed -n 1785,1812p app/chamados/models.py; }` |
 | 20:38:22 | Bash | Read c12 selo failure detail | `cd /home/ronald/saas-hasner/logs/E4C-F5-4C1/medida_v3; /bin/grep -n -A25 'FAIL: test_RED_um_subTest_por_sitio' recorte.log \| /bin/grep -vE '^\s*$' \| head -40; cat copia.txt` |
 | 20:38:18 | Bash | List failures in 4c.1 recorte | `cd /home/ronald/saas-hasner/logs/E4C-F5-4C1/medida_v3; ls; L=$(ls recorte*.log \| head -1); /bin/grep -E '^(FAIL\|ERROR):' $L` |
-| 20:33:52 | Agent | FERIADO matriz construtor opus | `You are the OPUS construtor for obra FERIADO-POR-POSTO, the single construction volta "FERIADO-MATRIZ". The project is a Django CLT time-clock SaaS (Portuguese codebase). Read /home/ronald/saas-hasner/CLAUDE.md sections 0, 3, 4, 6 and 7b first; its rules bind you. WORK ONLY in the copy /home/ronald/wt-feriado-matriz-203333 (wait: the real path is in /home/ronald/saas-hasner/logs/FERIADO-POR-POSTO/ ...` |
-| 20:33:31 | Bash | Create FERIADO matriz construction worktree | `cd /home/ronald/saas-hasner; S=$(date +%H%M%S); W=/home/ronald/wt-feriado-matriz-$S; git worktree add --detach $W 302ca7e77 2>&1 \| tail -1; git -C $W log --oneline -1 \| cat; mkdir -p logs/FERIADO-POR-POSTO/matriz_constroi; echo $W > logs/FERIADO-POR-POSTO/matriz_constroi/wt.txt; ls logs/FERIADO-POR-POSTO/volta4/test_feriado_volta4_itens_1a4_RED.py; date '+%H:%M'` |
-| 20:33:26 | Bash | Find RED anexo and mutants/quem-mais-le lines | `cd /home/ronald/saas-hasner; cat logs/FERIADO-POR-POSTO/matriz/lanca.sh; sed -n 95,125p logs/FERIADO-POR-POSTO/matriz/r.txt` |
-| 20:33:22 | Bash | Locate FERIADO volta 5 worktree | `cd /home/ronald/saas-hasner; ls logs/FERIADO-POR-POSTO/volta5 \| head; cat logs/FERIADO-POR-POSTO/volta5/*wt* 2>/dev/null; git worktree list \| /bin/grep -i feriado; for w in $(git worktree list \| awk '/feriado/{print $1}'); do echo "== $w"; git -C $w log --oneline -2 \| cat; git -C $w status --porcelain \| head -3; done; ls logs/FERIADO-POR-POSTO/ \| /bin/grep -i red` |
-| 20:33:15 | Bash | Check FERIADO landing state and matriz question | `cd /home/ronald/saas-hasner; git log --oneline -4 -- app/colaboradores/services/feriado_do_posto.py \| cat; git -C /home/ronald/wt-feriado-posto-135549 log --oneline -3 2>&1 \| cat; git -C /home/ronald/wt-feriado-posto-135549 status --porcelain 2>&1 \| head -5; sed -n 1,40p logs/FERIADO-POR-POSTO/matriz/q.txt` |
-| 20:33:11 | Bash | Find FERIADO worktree and backlog state | `cd /home/ronald/saas-hasner; cat logs/FERIADO-POR-POSTO/wt.txt; ls logs/FERIADO-POR-POSTO/corte1445_cura logs/FERIADO-POR-POSTO/pouso_2111; /bin/grep -n "FERIADO-POR-POSTO" app/docs/BACKLOG.md \| head -3; git log --oneline -3 --all --grep=FERIADO \| cat` |
-| 20:33:07 | Bash | Inspect FERIADO matriz artefacts | `cd /home/ronald/saas-hasner/logs/FERIADO-POR-POSTO; ls -la matriz/ \| head -30; sha256sum matriz/r.txt \| cut -c1-12; ls \| head -40` |
-| 20:33:01 | Bash | Read FERIADO aval and locate rascunho | `cd /home/ronald/saas-hasner; cat logs/APROVA-FERIADO-MATRIZ-2111-2030/aval.txt; ls logs/APROVA-FERIADO-MATRIZ-2111-2030/ logs/ \| /bin/grep -i feriado` |
-| 20:32:55 | Monitor | Veredito do n_vagas completo do WRAPPER volta 4 | `cd /home/ronald/saas-hasner; L=logs/WRAPPER-N-VAGAS/volta4/final_test_codex_n_vagas_862f9671d.log; until /bin/grep -qE '^rc=' $L 2>/dev/null; do /usr/bin/sleep 30; done; /bin/grep -E '^(OK\|VERMELHO)\|^rc=\|mutantes #V' $L \| tail -4` |
