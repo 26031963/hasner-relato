@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 07:11:42.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **981**.
+**Medido em 22/11/2026 07:17:26.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **976**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -986,8 +986,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:18:17 | Bash | Update RELATO top with live pid and 4c.1 question | `cd /home/ronald/saas-hasner; T=$(date +%H:%M); python3 - "$T" <<'EOF' import sys t=sys.argv[1] p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO:') L[0]='ESPERANDO: lanca.sh \| pid=3778419' nova=('PERGUNTA DE DESENHO E4C-F5-4C1 V3 (%s; construtor opus volta3, copia /home/ronald/wt-f5-4c1-135123 em ed7d24934, nada pousado): ' '(1) o aval 1825 pede ato_em=max(agor ...` |
 | 19:18:03 | Bash | Check live provers and RELATO top | `cd /home/ronald/saas-hasner; for p in 3796551; do ps -o pid=,etime=,args= -p $p; done; ls logs/E4C-F5-1_2/v4/prova/; cat logs/E4C-F5-1_2/v4/prova/lanca.sh \| head -40; ps -eo pid,args \| /bin/grep -F 'E4C-F5-1_2/v4/prova/lanca.sh' \| /bin/grep -v grep; head -3 app/docs/RELATO.md \| cut -c1-200` |
 | 19:17:32 | Bash | Check the par named by the aval | `cd /home/ronald/wt-f5-4c1-135123; git show 959b9a5c6:app/chamados/tests/test_e4c_f5_4c1_medida_b.py \| sed -n 60,95p; git log --oneline -1 3c3e36bb1; git show --stat 3c3e36bb1 \| tail -4` |
-| 19:17:19 | Bash | Inspect surviving slot mutant test | `sed -n 155,172p /home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_passivo_releitura.py; sed -n 456,476p /home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py` |
-| 19:17:15 | Bash | Read 1.2 mutant verdict | `cd /home/ronald/saas-hasner/logs/E4C-F5-1_2/v4/prova; grep -E '^(OK\|FAILED)($\| \()' mut.log \| tail -1; grep '^Ran ' mut.log \| tail -1; grep -E '^(FAIL\|ERROR):' mut.log \| sed 's/ (.*//'` |
-| 19:17:11 | Bash | Commit FERIADO volta5 RED and cure | `cd /home/ronald/wt-codex-feriado-por-posto-120132 && git add app/colaboradores/tests/test_feriado_por_posto.py app/colaboradores/tests/test_feriado_volta5.py && git commit -q -F - <<'EOF' FERIADO-POR-POSTO volta 5 RED: N1 apply sem motivo sobe erro, N2 previa pergunta ao par_completo, N3 agora obrigatorio Codex construtor volta5 (logs/FERIADO-POR-POSTO/volta5/r.txt), revisado pela sessao. Co-Autho ...` |
-| 19:16:55 | Bash | Inspect FERIADO volta5 production diff | `cd /home/ronald/wt-codex-feriado-por-posto-120132; git diff \| /bin/grep -n '^+.*except' ; git diff app/ponto/turnos.py app/colaboradores/management/commands/marcar_feriado_do_posto.py app/colaboradores/services/feriado_do_posto.py` |
-| 19:16:51 | Bash | Read FERIADO volta5 result | `cd /home/ronald/saas-hasner; head -c 4000 logs/FERIADO-POR-POSTO/volta5/r.txt; echo; cd /home/ronald/wt-codex-feriado-por-posto-120132 && git log --oneline -2 && git status --porcelain && git diff --stat && git diff \| /bin/grep -c '^+.*except'` |
