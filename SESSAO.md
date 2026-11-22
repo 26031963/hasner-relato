@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 17:01:53.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (21.4 MB). Acoes na janela: **610**.
+**Medido em 22/11/2026 17:07:37.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (21.5 MB). Acoes na janela: **618**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:02:35 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a="script de sonda; volta 2 = sonda de prod pelo envelope \| ABERTA \| 22/11 \|" assert s.count(a)==1 s=s.replace(a,"script de sonda \| PRONTO 17:1x: r1.txt 443 linhas, amostra 5/5; sonda prod rc 0 diverge_vigente 0, passivo so-coluna respondida_em 5.794 aberta/11.076 fechada (RELATO MAPA-E4D PRONTO) \| 22/11 \|") open ...` |
+| 17:02:32 | Bash |  | `cd ~/saas-hasner && grep -n "^\| MAPA-E4D \|" app/docs/BACKLOG.md \| cut -c1-400` |
+| 17:02:29 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('## MAPA-E4D PRONTO')) j=i+1 while not L[j].startswith('## '): j+=1 blk=L[i:j]; del L[i:j] while blk and blk[-1]=='': blk.pop() while L and L[-1]=='': L.pop() L += ['']+blk+[''] open(p,'w').write('\n'.join(L)) EOF grep -n "^## " app/docs/RELATO.md \| tail -2;  ...` |
+| 17:02:25 | Bash |  | `cd ~/saas-hasner && grep -n "^## " app/docs/RELATO.md \| head -5; grep -n "^## " app/docs/RELATO.md \| tail -5; wc -l app/docs/RELATO.md` |
+| 17:02:22 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() bloco=""" ## MAPA-E4D PRONTO (PARALELO-V2-2211-1644 (b)), 22/11 17:1x -- so leitura, nada construido - Codex leitura rc 0 no HEAD 161066a90: logs/MAPA-E4D/r1.txt (443 linhas, 8 secoes); amostra 5/5 arquivo:linha conferida (fechar 2076, reabrir_sistema 2330, encerrar_por_fato 3489, devolver_validacao 262, limpar_resoluca ...` |
+| 17:02:12 | Bash |  | `cd ~/saas-hasner/logs/MAPA-E4D && grep -c "diverge_vigente=[1-9]" sonda.out; sed -n 182,208p r1.txt \| cut -c1-260` |
+| 17:02:09 | Bash |  | `cd ~/saas-hasner/logs/MAPA-E4D && grep -v "_pk=\\|_20[0-9][0-9]-" sonda.out \| grep -E "(respondida_em\|resposta_colab\|validada_em) " \| grep -v "=0$" ; echo; grep -E "^MEDIDA \S+ (aberta\|fechada\|sem_competencia\|multicompetencia\|entregue)_com_valor=" sonda.out \| grep -v "=0$" \| awk '{print $2, $3}' \| column -c 200 \| head -40` |
+| 17:02:06 | Bash |  | `cd ~/saas-hasner && cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bf1hr9q57.output; tail -15 logs/MAPA-E4D/sonda.out \| cut -c1-300` |
 | 17:01:38 | Bash |  | `cd ~/saas-hasner/app && sed -n 2076,2080p chamados/models.py; echo ---; sed -n 2330,2333p chamados/models.py; echo ---; sed -n 3489,3492p chamados/models.py; echo ---; sed -n 262,265p chamados/services/validacao.py; echo ---; sed -n 2425,2428p chamados/models.py` |
 | 17:01:37 | Bash |  | `cd ~/saas-hasner && ps -p 1273714 -o args= \| cut -c1-60 && sed -i '1s/.*/ESPERANDO: trava_teste.sh \| pid=1273714/' app/docs/RELATO.md && head -1 app/docs/RELATO.md` |
 | 17:01:35 | Bash |  | `cd ~/saas-hasner && timeout 1500 bash bin/sonda_leitura.sh logs/MAPA-E4D/sonda.py > logs/MAPA-E4D/sonda.out 2>&1; echo rc=$?; grep -c MEDIDA logs/MAPA-E4D/sonda.out; grep -m3 -i "erro\\|Traceback" logs/MAPA-E4D/sonda.out` |
