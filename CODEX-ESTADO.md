@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 10:32** · publicado em **22/11/2026 10:36** (UTC-3)
+> Ultima resposta processada: **22/11/2026 10:40** · publicado em **22/11/2026 10:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 10:40 · sessao 6cd3fd55fee8 · SUITE-OOM-FAIL-FAST · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 22/11 10:32 · sessao eb220a71365e · SUITE-OOM-FAIL-FAST · leitura · origem=Code
 
@@ -924,16 +928,4 @@ O censo direto encontrou cinco escritas de posto, seis operações de escrita em
 
 O selo P3 espera qualquer `wait_event_type='Lock'`, atribui a espera ao posto sem ler bloqueador ou relação e trata qualquer exceção da mesma forma. Também verifica a chave do vínculo fechado, enquanto a chave do novo vínculo pode nascer da instância de posto sem marca que a fixture já tinha em memória. Fora do teste, `executar_vinculo` salva a instância existente inteira e pode recolocar um valor antigo de `trabalha_em_feriado` depois da correção. [Selo P3](app/colaboradores/tests/test_feriado_matriz_p3_trava.py:56) · [Asserções](app/colaboradores/tests/test_feriado_matriz_p3_trava.py:109) · [Fixture](app/colaboradores/tests/test_feriado_por_posto.py:83) · [Nascimento](app/colaboradores/services/vinculo.py:1123) · [Save integral](app/colaboradores/services/vinculo.py:259)
 
-## 22/11 01:40 · sessao 0255321456e0 · - · - · origem=Ronald (tmux)
-
-Censo A encontrou inversões alcançáveis na cópia. Ocorrências em produção e SQL efetivamente instalado [nao verificado].
-
-- **P4 × recusa do aceite de escala.** P4 trava Posto → Colaborador → vínculo. A recusa trava os vínculos em `FOR UPDATE`, depois as células, e pede o Colaborador `FOR UPDATE` ao transicionar o chamado no mesmo `atomic`. O `SELECT FOR UPDATE` de células sem `of` também pode trazer o Colaborador pelo `Meta.ordering`. `app/colaboradores/management/commands/sincronizar_feriado_admin.py:78–104`, `app/chamados/services/acoes_chamado.py:142–155`, `app/colaboradores/services/vinculo.py:1030–1048`, `app/chamados/models.py:286–302,459–462,2853`, `app/escala/models.py:1841–1845`, `app/ponto/services/cadastro_futuro.py:14–16`.
-- **P4 × fechamento seguido de criação de vínculo ou histórico.** `executar_vinculo` no ramo de criação, ajuste automático e ramo de desfazer que cria sucessor, e absorção de vigências posteriores seguram vínculo por `UPDATE` de campos sem chave e então precisam de `KEY SHARE` no Colaborador por FK. `reabrir_vigencia_impossivel` é outro par quando o vínculo alvo já é ativo e há autor. O `FOR UPDATE` do P4 conflita com esse `KEY SHARE`. O `NO KEY UPDATE` sobre Posto é compatível com a FK de Posto. `app/colaboradores/services/vinculo.py:169,214–219,287–290,642–643,731–745,790–822,1121–1124,1145–1149`, `app/escala/services/escala_auto_executor.py:101–114,144–151`, `app/colaboradores/services/historico_vinculo.py:13–17`, `app/colaboradores/models.py:570–575`, `app/escala/models.py:872–873`.
-- **P4 × desvincular escala.** A rota pega vínculo ativo e chama `encerrar_vinculo`; o `UPDATE` no vínculo dispara regeneração síncrona no mesmo `atomic`, após o vínculo. Uma célula nova pede `KEY SHARE` no Colaborador, e uma cobrança marcada órfã pode pedir `FOR UPDATE` no Colaborador. `app/escala/views.py:253–270`, `app/colaboradores/services/vinculo.py:844–847`, `app/escala/signals.py:54–83`, `app/ponto/portas/celula.py:289–327`, `app/ponto/management/commands/gerar_celulas.py:252–265`, `app/chamados/services/contexto.py:101–104`, `app/chamados/models.py:488–499`.
-- **P3 × desligamento efetivo.** A propagação pega Posto → vínculo → Colaborador por `KEY SHARE` se criar célula, ou `FOR UPDATE` se atualizar cobrança órfã. O desligamento pega Colaborador `FOR UPDATE` pela guarda de `salvar_inteiro`, e depois deseja o mesmo vínculo. Isto fecha o ciclo mesmo com Posto `NO KEY UPDATE`. `app/colaboradores/services/feriado_do_posto.py:364–371`, `app/colaboradores/services/vinculo.py:857–867,904–921`, `app/ponto/portas/celula.py:289–327`, `app/escala/models.py:1692–1705`, `app/colaboradores/services/desligamento.py:128–149`, `app/colaboradores/services/colaborador.py:84–91,152–160`, `app/chamados/models.py:2853`.
-- **P3 × P4 com posto mudado entre leituras.** P4 captura o posto anterior sem trava. Editar vínculo existente pode trocar o posto na mesma linha. Se P3 no novo posto adquirir o vínculo e precisar do Colaborador, o P4 pode segurar esse Colaborador enquanto espera o vínculo. A validação de posto diferente acontece depois da tentativa de travar o vínculo. `app/colaboradores/management/commands/sincronizar_feriado_admin.py:78–100`, `app/colaboradores/services/vinculo.py:274–283,904–921`, `app/colaboradores/services/feriado_do_posto.py:364–371`, `app/ponto/portas/celula.py:289–327`.
-- **Posto primeiro também no `post_save`.** Qualquer save de posto ativo preexistente passa no filtro do signal. Uma disputa `posto_desativado` aciona trava de Colaborador durante a escrita da marca ou atualização de posto, antes de sair do `atomic`. `app/colaboradores/services/feriado_do_posto.py:324–342`, `app/colaboradores/services/estrutura.py:66–79,90–95`, `app/colaboradores/signals.py:49–82`, `app/chamados/models.py:2187–2193,2853`.
-- A cópia declara FKs normais de vínculo para Colaborador e Posto na migração inicial. O script da sombra documenta o padrão Django PostgreSQL `DEFERRABLE INITIALLY DEFERRED`. No padrão, a espera pode ocorrer no commit do `atomic` externo. O módulo `django.db` não estava instalado na execução local e as constraints de produção [nao verificado]. `app/escala/migrations/0001_initial.py:35–44`, `app/config/settings/prod.py:9–17`, `bin/sombra_incremental.sh:65–66`.
-
-_7804 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7805 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
