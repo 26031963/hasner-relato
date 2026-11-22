@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 03:18:36.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1758**.
+**Medido em 22/11/2026 03:24:51.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1748**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1758,13 +1758,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:27:25 | Bash | Read 1.1 scope in aval and L-130 | `cd ~/saas-hasner; ls logs/FICHAS-2111-1320/f1/; /bin/grep -o "1\.1[^\|]\{0,700\}" logs/FICHAS-2111-1320/f1/aprova_2111_1350.txt \| head -5; sed -n 151p ~/wt-codex-e4c-f5-constroi-141636/app/docs/LEIS.md \| cut -c1-600` |
 | 15:27:18 | Bash | Read volta 2 head for the conflict | `cd ~/saas-hasner; sed -n 1,30p logs/E4C-F5-1_1/volta2/r.txt \| cut -c1-900` |
 | 15:27:15 | Bash | Read volta 2 result and copy diff | `cd ~/saas-hasner; tail -40 logs/E4C-F5-1_1/volta2/r.txt \| cut -c1-500; tail -3 logs/E4C-F5-1_1/volta2/wrapper.out; cd ~/wt-codex-e4c-f5-constroi-141636; git status --porcelain; git diff --stat` |
-| 15:21:22 | Monitor | WRAPPER volta 3 Codex rc | `cd ~/saas-hasner; until [ -f logs/WRAPPER-N-VAGAS/volta3_lease/r.rc ]; do /usr/bin/sleep 20; done; echo "wrapper volta3 $(cat logs/WRAPPER-N-VAGAS/volta3_lease/r.rc)"` |
-| 15:21:14 | Bash | Register aval and launch WRAPPER volta 3 reading | `cd ~/saas-hasner; H=$(date +%H:%M); D=logs/WRAPPER-N-VAGAS/volta3_lease; mkdir -p $D cat > $D/aval_mudanca_rumo.txt <<'EOF' APROVA RASCUNHO WRAPPER-N-VAGAS-PREDESENHO 6c83ceb0e5c3 COM MUDANCA DE RUMO -- (1) P3/P4 resolvidas no main: CORTES.md:589 (corte 1135) e PROMPTS.md:2722 + BACKLOG.md:2244 (PISTA-ESCOLHE absorvida pela TRAVAS M2); o PAREI de P4 cai; a copia 5b359e88b e anterior. (2) M-LEASE:  ...` |
-| 15:20:41 | Bash | Check cited lines exist at HEAD | `cd ~/saas-hasner; git show HEAD:app/docs/CORTES.md \| sed -n 589p \| cut -c1-200; git show HEAD:app/docs/BACKLOG.md \| sed -n 2244p \| cut -c1-200; git show HEAD:app/docs/PROMPTS.md \| sed -n 2722p \| cut -c1-200` |
-| 15:20:36 | Bash | Inspect previous WRAPPER Codex launch | `cd ~/saas-hasner; ls logs/WRAPPER-N-VAGAS/ logs/WRAPPER-N-VAGAS/volta2b_p1p4/; cat logs/WRAPPER-N-VAGAS/volta2b_p1p4/lanca.sh; git rev-parse HEAD` |
-| 15:19:13 | TaskStop |  | `-` |
-| 15:19:11 | Monitor | 1.1 volta 2 construtor rc | `cd ~/saas-hasner; until [ -f logs/E4C-F5-1_1/volta2/r.rc ]; do /usr/bin/sleep 20; done; echo "volta2 $(cat logs/E4C-F5-1_1/volta2/r.rc)"` |
-| 15:19:07 | Bash | Register candidate C reading in RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); S=$(sha256sum logs/E4C-F5-4C1/candidata_c/r.txt\|cut -c1-12) python3 - "$H" "$S" <<'EOF' import sys H,S=sys.argv[1:] p='app/docs/RELATO.md'; s=open(p).read().split('\n') s.insert(1,f"E4C-F5 4c.1 CANDIDATA C leitura Codex rc 0 15:17:29 ({H}; logs/E4C-F5-4C1/candidata_c/r.txt sha256-12 {S}, 82 linhas): ordem dos relogios mapeada (_agora_sonda antes do prefetch em  ...` |
-| 15:19:00 | Bash | Check FERIADO agent, M7b monitor, live Codex | `cd ~/saas-hasner; tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/a142e7e64bc657dbf.output; echo; echo ===; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bysx6kj2t.output \| tail -5; pgrep -fa '^bash bin/codex_pergunta.sh' \| cut -c1-90; date +%H:%M:%S` |
-| 15:18:54 | Bash | Read candidate C reading summary | `cd ~/saas-hasner; sed -n 1,12p logs/E4C-F5-4C1/candidata_c/r.txt \| cut -c1-700; /bin/grep -n "ressalva\\|futura" logs/E4C-F5-4C1/candidata_c/r.txt \| cut -c1-500 \| head -8` |
-| 15:18:48 | Bash | Register UI-SETAS aval and 1.1 verifier state | `cd ~/saas-hasner; H=$(date +%H:%M); mkdir -p logs/UI-SETAS-2111-1520; A=logs/UI-SETAS-2111-1520/ui_setas_fernando_2111_1520.txt cat > $A <<'EOF' aval Ronald: UI-SETAS-[nome]-2111-1520 (21/11 15:20) -- UNIDADE: seta de navegacao de tela (templates); nenhuma lei nova. DECIDIDO PELO DESENHO, contestavel: padrao Up x Back. (1) Seta rotulada com o nome do pai ("Configuracoes") e UP hierarquico, desti ...` |
