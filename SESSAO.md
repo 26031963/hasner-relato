@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 03:31:02.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1735**.
+**Medido em 22/11/2026 03:37:09.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1731**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1741,7 +1741,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:37:25 | Bash | Read volta 3 result head and diff stat | `cd ~/saas-hasner; head -c 2500 logs/E4C-F5-1_1/volta3/r.txt; echo; cd ~/wt-codex-e4c-f5-constroi-141636; git status --porcelain; git diff --stat` |
 | 15:37:24 | Monitor | SENTINELA Codex reading rc | `cd ~/saas-hasner; until [ -f logs/SENTINELA-DO-SLOT/r.rc ]; do /usr/bin/sleep 20; done; echo "sentinela $(cat logs/SENTINELA-DO-SLOT/r.rc)"` |
 | 15:37:20 | Bash | Register SENTINELA ficha in docs | `cd ~/saas-hasner; H=$(date +%H:%M) python3 - "$H" <<'EOF' import sys H=sys.argv[1]; src="logs/SENTINELA-DO-SLOT/ficha_2111_1540.txt sha256-12 2ee2fe26367b" p='app/docs/PROMPTS.md'; t=open(p).read().rstrip('\n')+'\n' t+=f"\| 21/11 15:40 \| FICHA-SENTINELA-DO-SLOT-2111-1540 \| registrado {H} {src}; Codex leitura em voo no hash 9d13aa9c2 (copia F5); volta 3 da 1.1 segue mas nao vai ao verificador/opu ...` |
-| 15:37:04 | Bash | Launch SENTINELA Codex reading | `cd ~/saas-hasner; D=logs/SENTINELA-DO-SLOT cat > $D/lanca.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner CODEX_OBRA=SENTINELA-DO-SLOT CODEX_PAPEL=leitura bin/codex_pergunta.sh --anexo $D/ficha_2111_1540.txt --anexo logs/AVAIS-1515/respostas_2011_1945.txt --anexo logs/FICHAS-2111-1320/f1/aprova_2111_1350.txt --anexo logs/FICHAS-2111-1320/f1/complemento2_2111_1400.txt --anexo logs/E4C-F5-1_1/volta ...` |
-| 15:36:56 | Bash | Find 1945 aval literal file | `cd ~/saas-hasner; /bin/grep -rl "1945" logs/ --include=*.txt 2>/dev/null \| /bin/grep -i aval \| head -5; /bin/grep -n "1945" app/docs/PROMPTS.md \| tail -3 \| cut -c1-250` |
-| 15:36:53 | Bash | Register ficha and write Codex question | `cd ~/saas-hasner; H=$(date +%H:%M); D=logs/SENTINELA-DO-SLOT; mkdir -p $D cat > $D/ficha_2111_1540.txt <<'EOF' aval Ronald: FICHA-SENTINELA-DO-SLOT-2111-1540 (21/11 15:40) -- UNIDADE: valor de retorno de chamados/juizes.py::_slot_esperado e seus 5 leitores; lei: nenhuma nova (juiz unico + "campo com dois significados", classe do MAPA DAS FALHAS, 48 casos). Rito AVAL-RASCUNHADO-PELO-CODEX / FICHA-S ...` |
-| 15:36:28 | Monitor | TRAVAS M7b suite verdict | `cd ~/saas-hasner/logs/TRAVAS-SEM-MEMORIA/m7b; until [ -f suite.rc ]; do pgrep -f "m7b/lanca.sh" >/dev/null \|\| { echo "lancador morreu sem suite.rc"; exit; }; /usr/bin/sleep 30; done; echo "SUITE $(cat suite.rc) $(/bin/grep -E '^(OK\|FAILED)($\| \()' suite.log\|tail -1) $(/bin/grep -E '^Ran ' suite.log\|tail -1)"` |
