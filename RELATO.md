@@ -12278,3 +12278,9 @@ ITEM 2 (sonda_v3.out, sombra, ERROS=0, CONTADOR=14 UNIVERSO=14): (a) oraculo | (
 CONTAGEM: dono muda 1 / nao muda 13. Limite declarado (r2): (b) e parear_turnos SEM marcos/ata sobre o MESMO universo do oraculo -- nao certifica os pares do motor.
 ITEM 3 (r3): os 7 dia-colab de intervalo (252 x5, 884/11-08, 114/11-08): NAO CONSTA no universo do censo da CADEIA-20 nem razao_da_sobra no brief -- os anexos nao trazem a lista por dia; a sonda4 so lista sobras sem batida viva no minuto. Sim/nao por dia = INCOMPLETO (precisa da lista de sobras por dia do passo 1, nao gerada).
 INCOMPLETO: item 3 sim/nao por dia.
+
+
+## MEDIDA-FOLHA11-2111 s2 -- leitura publicada (21/11 21:26)
+- tabelas (a)-(d): `logs/MEDIDA-FOLHA11-2111/tabelas.txt` sha256-12 e00965a00fba (fonte s2/r.txt Codex sonda rc 0 20:47:27).
+- (a) 956 = DEFASAGEM; (b) 246/327/476/97 retidos sem porta = CANDIDATOS; (c) 265 31/10 ramo passivo_sem_linha = CANDIDATO estrutural; (d) 271 de 1.131 colab-dias (saida truncada), ponte 240/128/94/146/34 = anexo.
+- INCOMPLETO: amostra nao conferida (bruto nao guardado) -> nenhum BO aberto; s3 paginada com stdout em disco.
