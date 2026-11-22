@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 02:22:56.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1890**.
+**Medido em 22/11/2026 02:29:06.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.5 MB). Acoes na janela: **1887**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1897,6 +1897,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 14:30:45 | Bash | Publish design questions; check producers | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read(); L=s.split('\n',1) d=('PERGUNTA DE DESENHO WRAPPER-N-VAGAS volta 2 (14:4x; triagem logs/WRAPPER-N-VAGAS/verif_v1/triagem.txt: 21 PROCEDENTE curaveis + 4 procedentes fora da copia (1c/3c bin/disjuntor.py, 9b deploy.sh em comum com wt-deploy-exclusao) + 12 DESCARTADO com motivo + 4 PERGUNTA; 0 curado: o construtor caiu no DI ...` |
 | 14:30:32 | Bash | Spot-check P1 citation | `sed -n 370,376p ~/wt-wrapper-n-vagas-125229/bin/codex_pergunta.sh \| cut -c1-200; /bin/grep -n "QUEM ESPERA" ~/saas-hasner/logs/WRAPPER-N-VAGAS/contrato.txt 2>/dev/null \| cut -c1-200; ls ~/saas-hasner/logs/WRAPPER-N-VAGAS/` |
 | 14:30:27 | Bash | Read wrapper baseline logs and perguntas | `cd ~/saas-hasner/logs/WRAPPER-N-VAGAS/volta2; ls -la; for f in base_*.log; do echo "== $f"; tail -3 $f \| cut -c1-200; done; /bin/grep -n "^P[1-4]\\|PERGUNTA" ../verif_v1/triagem.txt \| head -8 \| cut -c1-300` |
-| 14:23:50 | Bash | Register ficha in PROMPTS, BACKLOG, RELATO | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/PROMPTS.md'; s=open(p).read().rstrip('\n') s+='\n\| 21/11 14:25 \| FICHA-OPEN-REDIRECT-2111-1425 \| registrado 14:2x logs/FICHAS-2111-1425/ficha_open_redirect_2111_1425.txt; BO no BACKLOG; Codex leitura rascunhando (logs/FICHAS-2111-1425/r.txt), sai como PAREI RASCUNHO OPEN-REDIRECT-VOLTAR \|\n' open(p,'w').write(s) p='app/docs/BACKLOG.md'; s=open(p). ...` |
-| 14:23:34 | Bash | Save ficha literal and launch Codex leitura | `cd ~/saas-hasner; D=logs/FICHAS-2111-1425; cat > $D/ficha_open_redirect_2111_1425.txt <<'EOF' aval Ronald: FICHA-OPEN-REDIRECT-2111-1425 (21/11 14:25) -- REGISTRAR + leitura, nada constroi. Rito AVAL-RASCUNHADO-PELO-CODEX / FICHA-SEM-DECISAO: o Codex (papel leitura) mede e redige o aval de CONSTRUIR inteiro; rascunho no RELATO como "PAREI RASCUNHO OPEN-REDIRECT-VOLTAR: leve ao chat" com sha; o cha ...` |
-| 14:23:10 | Bash | Check registry formats and sitio | `cd ~/saas-hasner; D=logs/FICHAS-2111-1425; mkdir -p $D; tail -2 app/docs/PROMPTS.md \| cut -c1-200; /bin/grep -n "^\| BO-" app/docs/BACKLOG.md \| tail -2 \| cut -c1-150; sed -n 40,50p app/core/templatetags/nav_extras.py` |
