@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 01:21:02.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (103.4 MB). Acoes na janela: **1996**.
+**Medido em 22/11/2026 01:27:13.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (104.5 MB). Acoes na janela: **2002**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:24:42 | PushNotification |  | `-` |
+| 01:24:39 | ToolSearch |  | `-` |
+| 01:24:36 | Bash | Read ajustar_vinculo_pelo_sistema body | `cd /home/ronald/wt-feriado-p2-002020/app; sed -n 1115,1132p colaboradores/services/vinculo.py` |
+| 01:24:30 | Bash | Update ESPERANDO and add P4 design question | `python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO:') L[0]='ESPERANDO: lanca.sh \| pid=2911361' k=[i for i,l in enumerate(L) if l.startswith('AVAL-DEVOLVIDO COMPLEMENTO-2 UMA-OBRA-FERIADO-2211-0109 quesito 3')] assert len(k)==1 L[k[0]]=L[k[0]].replace("RED = DeadlockDetected numa das duas conexoes, sequenciado por pg_locks (sem sleep/retry)", "R ...` |
+| 01:24:00 | Bash | Check escala_auto_executor lock order | `cd /home/ronald/wt-feriado-p2-002020/app; sed -n 85,110p escala/services/escala_auto_executor.py; git grep -n "select_for_update\\|trava_na_ordem\\|_travar" -- escala/services/escala_auto_executor.py` |
+| 01:23:56 | Bash | Check locks in fechar_vigencia, marcar, callers | `cd /home/ronald/wt-feriado-p2-002020/app; sed -n 582,640p colaboradores/services/vinculo.py \| /bin/grep -n "select_for_update\\|trava\\|save\\|update(\\|Colaborador" ; sed -n 871,905p colaboradores/services/vinculo.py \| /bin/grep -n "select_for_update\\|trava\\|save\\|regenerar\\|Colaborador"; git grep -n "ajustar_vinculo_pelo_sistema(\\|desfazer_ajuste_do_sistema(" -- '*.py' \| /bin/grep -v tes ...` |
 | 01:20:41 | Bash | Save memory about OOM-hung suite | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && cat > suite-com-oom-kill-fica-presa.md <<'EOF' --- name: suite-com-oom-kill-fica-presa description: worker do --parallel morto por OOM deixa o Pool esperando a tarefa perdida; a suite nunca publica veredito e segura a pista metadata: type: feedback --- Em 22/11 a suite 3.3 (--parallel 4, container de 2 GiB) teve oom_kill 17 no mem ...` |
 | 01:20:29 | Bash | Add RELATO body line for 0109 progress | `python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('- 01:1x COMPLEMENTO-2 UMA-OBRA-FERIADO-2211-0109 recebido')] assert len(i)==1 L.insert(i[0]+1, "- 01:2x 0109 item 1 (DESPACHO 0109: censo de ordem + revisao -> Codex \| RED/cura -> opus): ordem_v3 CONFIRMOU o ciclo de aplicar_marca (r.txt rc 0 01:11:58). BUG NO CAMINHO (LEI-AKITA 6), ...` |
 | 01:20:20 | Bash | Find 0109 lines in RELATO | `cd /home/ronald/saas-hasner; /bin/grep -n "0109" app/docs/RELATO.md \| cut -c1-160 \| head` |
