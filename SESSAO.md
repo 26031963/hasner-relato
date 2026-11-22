@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 18:19:59.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (35.1 MB). Acoes na janela: **946**.
+**Medido em 22/11/2026 18:25:58.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (35.2 MB). Acoes na janela: **953**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:24:27 | Bash |  | `cd ~/wt-simplifica-104405; timeout 300 bash bin/tests/test_rm_com_guarda.sh 2>&1 \| grep -B3 -iE 'falha\|nao conforme' \| head -20` |
+| 18:22:54 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_rm_com_guarda.sh'; s=open(p).read() a="cat > \"$1/fakebin/docker\" <<'DK'\n#!/usr/bin/env bash\n" n="# so o `run` e o run da suite; `image inspect` (a imagem medida para as linhas AMBIENTE, SIMPLIFICA-V3) nao monta nada\n[ \"${1:-}\" = run ] \|\| exit 0\n" if n in s: print('ja'); raise SystemExit assert s.count(a)==1 s=s.replace(a,a+n) ...` |
+| 18:22:42 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 118,140p bin/tests/test_rm_com_guarda.sh; sed -n 236,252p bin/tests/test_rm_com_guarda.sh` |
+| 18:22:40 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'docker\\|montagem.arrancada' bin/tests/test_rm_com_guarda.sh \| head -40 \| cut -c1-220` |
+| 18:22:37 | Bash |  | `ls -la ~/wt-simplifica-104405/.env 2>&1 \| head -1; cd ~/wt-simplifica-104405; git diff 161066a90 -- bin/suite.sh; grep -n 'segundo --dir' -n bin/tests/test_rm_com_guarda.sh \| head` |
+| 18:22:33 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1,60p bin/tests/test_inventario_pessoal_no_commit.sh \| cut -c1-200; git diff --stat 161066a90 -- bin/sombra_regras_pessoais.py bin/tests/test_inventario_pessoal_no_commit.sh bin/tests/test_rm_com_guarda.sh bin/suite.sh` |
+| 18:20:36 | Bash |  | `cd ~/wt-simplifica-104405; bash bin/tests/test_rm_com_guarda.sh 2>&1 \| tail -15 \| cut -c1-250; echo ----; bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| head -30 \| cut -c1-250` |
 | 18:17:07 | Bash |  | `for d in ~/saas-hasner ~/wt-simplifica-104405; do echo "##### $d"; cd $d; for s in test_rm_com_guarda test_selo_espera_processo_morde test_inventario_pessoal_no_commit; do timeout 300 bash bin/tests/$s.sh > /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/o.txt 2>&1; echo "rc=$? $s"; grep -iE 'red\|verm\|fail\|colun\|falt' /tmp/claude-1001/-home-ronald-saas ...` |
 | 18:17:02 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; grep -v '^0 ' $S/selos_simpl.txt \| cut -c1-200` |
 | 18:16:57 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/E4C-F5; cat > logs/E4C-F5/aval_libera_b3_2211-1810.txt <<'EOF' aval Ronald: LIBERA-B3-F5-2211-1810 -- a F5 foi descongelada e refeita pelo CONTRATO-V2 (logs/E4C-F5/CONTRATO-V2.md); escrever no topo: "DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454"; depois do rearme de Ronald, o verificador fi ...` |
