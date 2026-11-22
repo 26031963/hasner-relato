@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 19:56:38.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (47.7 MB). Acoes na janela: **1278**.
+**Medido em 22/11/2026 20:02:37.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (48.6 MB). Acoes na janela: **1290**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:02:28 | Bash |  | `cd ~/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| grep -E "^\s+--" \| head -30; tail -5 logs/sessao/disjuntor.log \| cut -c1-200` |
+| 20:02:13 | Bash |  | `cd ~/saas-hasner; grep -E "SIMPLIFICA-V3\|[nome]-FERIADO" logs/sessao/disjuntor.log \| tail -8 \| cut -c1-220` |
+| 20:02:11 | Bash |  | `cd ~/saas-hasner; python3 bin/disjuntor.py --help 2>&1 \| head -5; ls logs/disjuntor* logs/*b3* 2>/dev/null \| head; grep -rl "REARMA" logs/disjuntor*/ 2>/dev/null \| head -3` |
+| 20:02:07 | Bash |  | `cat ~/saas-hasner/logs/SIMPLIFICA-V3-2211-1726/v4/r_v4.txt` |
+| 19:58:35 | Bash |  | `timeout 590 tail --pid=2357539 -f /dev/null; cd ~/saas-hasner; tail -1 logs/SIMPLIFICA-V3-2211-1726/v4/wrapper_v4.log; wc -l logs/SIMPLIFICA-V3-2211-1726/v4/r_v4.txt 2>&1` |
+| 19:58:30 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; L=~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v6; mkdir -p $L; cat > $SP/k6_run.sh <<EOF cd ~/saas-hasner T2="ponto.tests.test_kaua_feriado_pela_tela ponto.tests.test_reverter_exportada_sem_banco" TG="\$T2 ponto.tests.test_reverter_regen_sem_banco ponto.tests.test_cadastro_futuro_sem_banco ponto.tests.test_ ...` |
+| 19:58:21 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; W=~/wt-kaua-feriado-161647; for k in red mA mB mC; do rm -rf $SP/k6_$k; mkdir $SP/k6_$k; git -C $W archive 2fffe8622 \| tar -x -C $SP/k6_$k; done # RED: HEAD v5 + testes novos cp $W/app/ponto/tests/test_kaua_feriado_pela_tela.py $W/app/ponto/tests/test_reverter_exportada_sem_banco.py $SP/k6_red/app/ponto/ ...` |
+| 19:58:06 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; python3 - <<'EOF' import py_compile # 1 porta p='ponto/portas/celula.py'; s=open(p).read() a=""" _onde = {'pk': cel.pk, 'origem': 'gerada', 'dna_anterior': alvo, 'regeneracoes': cel.regeneracoes} _onde.update({'dna__isnull': True} if de is None else {'dna': de}) n = CelulaDia.objects.filter(**_onde).update(""" b=""" # `dna` lido como None e SQL NULL OU JSON null (o ...` |
+| 19:57:38 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; grep -n "montar_dna" ponto/portas/celula.py \| head; sed -n 610,650p ponto/portas/celula.py; grep -n "def _post\\|def _trilha\\|def _cel" ponto/tests/test_kaua_feriado_pela_tela.py; sed -n "$(grep -n 'def _post' ponto/tests/test_kaua_feriado_pela_tela.py \| cut -d: -f1),+8p" ponto/tests/test_kaua_feriado_pela_tela.py` |
+| 19:57:28 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; grep -n "^from datetime\\|^import datetime\\|^from django.db.models import" ponto/views.py \| head; sed -n 330,425p ponto/tests/test_kaua_feriado_pela_tela.py; sed -n 455,520p ponto/tests/test_reverter_exportada_sem_banco.py` |
+| 19:57:24 | Bash |  | `cd ~/wt-kaua-feriado-161647/app; sed -n 3528,3592p ponto/views.py; sed -n 820,870p ponto/portas/celula.py; sed -n 1700,1715p escala/models.py` |
+| 19:57:03 | Bash |  | `cat ~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v5/r_v5.txt` |
 | 19:55:37 | Bash |  | `timeout 590 tail --pid=2333099 -f /dev/null; cd ~/saas-hasner; tail -2 logs/[nome]-FERIADO-PELA-TELA/v5/wrapper_v5.log; wc -l logs/[nome]-FERIADO-PELA-TELA/v5/r_v5.txt 2>&1` |
 | 19:55:34 | Bash |  | `pgrep -af "codex" \| grep -v pgrep \| cut -c1-160 \| head` |
 | 19:55:32 | Bash |  | `cd ~/saas-hasner; cat logs/[nome]-FERIADO-PELA-TELA/v5/wrapper_v5.log \| tail -25; echo ====; tail -8 logs/SIMPLIFICA-V3-2211-1726/v4/wrapper_v4.log; ls logs/SIMPLIFICA-V3-2211-1726/v4/` |
