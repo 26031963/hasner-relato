@@ -6,10 +6,45 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 19:32:38.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (43.8 MB). Acoes na janela: **1173**.
+**Medido em 22/11/2026 19:38:36.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (45.1 MB). Acoes na janela: **1208**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:37:19 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_suite_motivo.sh'; s=open(p).read() a='''# MUTANTES: cada um tem de ser pego pelo MESMO juiz que aprovou o vivo. ''' b='''# AMBIENTE DO RUN (SIMPLIFICA-V3 r_v3c (3)/(5)): o que chega ao executor, pelo COMPORTAMENTO (a trava falsa registra o # argv): a imagem inspecionada vai em HASNER_IMAGEM_ID; HASNER_SHA tem UM significado -- o commit ...` |
+| 19:37:04 | Bash |  | `cd ~/wt-simplifica-104405; grep -n '_alvos_da_montagem()' -A8 bin/suite.sh \| head -12; grep -n 'limpa_montagens_vazias' bin/suite.sh` |
+| 19:36:58 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 140,220p bin/tests/test_suite_motivo.sh; grep -n 'limpa_montagens_vazias()' bin/recursos.sh` |
+| 19:36:52 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 278,299p bin/suite.sh; sed -n 80,140p bin/tests/test_suite_motivo.sh` |
+| 19:36:48 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1,80p bin/tests/test_suite_motivo.sh; grep -n 'SECO\\|--seco' bin/suite.sh \| head` |
+| 19:36:43 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/suite.sh'; s=open(p).read() a='''# O SHA DO RUN (r_v3b): a arvore montada nao tem `.git`; quem lanca o passa em HASNER_SHA. Na VM e REGISTRO (o # comparador mede a PISTA 2, nao este log): o HEAD da copia, `+suja` se ela tem mudanca rastreada fora do commit, e # `+arvore-viva` sem --dir (a arvore viva nunca e exatamente um commit). Sem git = `ause ...` |
+| 19:36:30 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'DIR=\\|^DIR\\|ARVORE=' bin/suite.sh \| head` |
+| 19:36:26 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/volta_intermediaria.sh'; s=open(p).read() a=''' echo "VOLTA_VERMELHA" elif [ $testes_rc -eq 75 ]; then echo "VOLTA_SEM_VEZ" elif [ $testes_rc -eq 3 ]; then echo "VOLTA_NAO_RODOU" fi } > "$OUT.log" 2>&1 /bin/grep -q '^VOLTA_VERMELHA$' "$OUT.log" && rc_final=1 /bin/grep -q '^VOLTA_SEM_VEZ$' "$OUT.log" && rc_final=75 /bin/grep -q '^VOLTA_NAO_RODOU$' ...` |
+| 19:36:11 | Bash |  | `cd ~/wt-simplifica-104405; sed -i "1258s/'git merge --ff-only raia \\\\\\\\\\\\\\\\'/'git merge --ff-only raia \\\\\\\\'/" bin/tests/test_disjuntor.sh; sed -n 1258p bin/tests/test_disjuntor.sh` |
+| 19:36:07 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_disjuntor.sh'; s=open(p).read() a=''' \|\| { echo "b3_codex falso positivo: $fc"; return 56; } done ''' b=a+''' # r_v3c (4): a guarda das aspas SEM tratador de excecao -- aspas sem par nao derrubam o hook (o bash recusa o comando # inteiro); escape aberto no fim idem; `#` fora de aspas comenta o resto for fc in "git merge --ff-only 'ra ...` |
+| 19:36:00 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1215,1262p bin/tests/test_disjuntor.sh` |
+| 19:35:58 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1395,1420p bin/tests/test_disjuntor.sh` |
+| 19:35:58 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'ff-only\\|--ff' bin/tests/test_disjuntor.sh \| head -20; grep -n '^b3_codex()' bin/tests/test_disjuntor.sh` |
+| 19:35:56 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'merge_pede_ff\\|aspas sem par\\|ilegivel.*merge\\|merge-obra.*inexist' bin/tests/test_disjuntor.sh \| head -20` |
+| 19:35:54 | Bash |  | `cd ~/wt-simplifica-104405; sed -i 's/(SIMPLIFICA-V3 r_v3c (4): sem `except`);/(SIMPLIFICA-V3 r_v3c (4): sem tratador de excecao);/; s/# sem `except` (r_v3c (4)): falha/# sem tratador de excecao (r_v3c (4)): falha/' bin/disjuntor.py; git diff 161066a90 -- bin/ app/ \| grep '^+' \| grep -c except` |
+| 19:35:46 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' import ast,shlex,random src=open('bin/disjuntor.py').read(); m=ast.parse(src) f=[n for n in m.body if isinstance(n,ast.FunctionDef) and n.name=='_shlex_fecha'][0] ns={}; exec(compile(ast.Module([f],[]),'x','exec'),ns); fecha=ns['_shlex_fecha'] def ref(t): lx=shlex.shlex(t,posix=True,punctuation_chars=True); lx.whitespace_split=True try: list(lx); return ...` |
+| 19:35:41 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/disjuntor.py'; s=open(p).read() a=''' try: toks = list(lx) except ValueError: return False # aspas sem par: o bash recusa o comando inteiro, nada roda ''' b=''' if not _shlex_fecha(texto.replace('\\n', ' ; ')): return False # aspas sem par: o bash recusa o comando inteiro, nada roda toks = list(lx) ''' assert s.count(a)==1; s=s.replace(a,b) a2='' ...` |
+| 19:35:27 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' import shlex,random def fecha(t): st=' ' for c in t: if st in (' ','a'): if c=='#': return True if c in '\'"': st=c elif c=='\\': st='\\a' else: st='a' elif st=="'": if c=="'": st='a' elif st=='"': if c=='"': st='a' elif c=='\\': st='\\"' elif st=='\\a': st='a' elif st=='\\"': st='"' return st in (' ','a') def ref(t): lx=shlex.shlex(t,posix=True,punctua ...` |
+| 19:35:21 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 25,50p bin/commit_msg.sh; sed -n 1820,1845p bin/disjuntor.py; grep -n 'ilegivel\\|rc 4\\|== 4\\|= 4' bin/tests/test_disjuntor.sh \| head` |
+| 19:35:19 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'merge-obra' -r bin \| grep -v '^bin/disjuntor.py' \| head; grep -n 'merge_pede_ff' -r bin \| head` |
+| 19:34:53 | Bash |  | `cd ~/wt-simplifica-104405; B=$(git merge-base HEAD 161066a90); echo $B; git diff $B HEAD --stat \| tail -30; git diff $B HEAD \| grep -nE '^\+.*except'` |
+| 19:34:50 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1125,1160p bin/disjuntor.py; sed -n 2355,2385p bin/disjuntor.py; git log --oneline -3` |
+| 19:34:37 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 300,360p bin/suite.sh; sed -n 85,200p bin/tests/test_suite_sh.sh; grep -nE '^(Found\|ERROR:\|FAIL:\|Ran )' ~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/suite_v2.log \| head` |
+| 19:34:07 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 24,175p bin/tests/test_pista_certifica.sh` |
+| 19:34:04 | Bash |  | `ps -o pid,etime,cmd -p 2191067,2191069 2>&1 \| cut -c1-150; date +%H:%M` |
+| 19:34:02 | Bash |  | `cd ~/saas-hasner; ls -la logs/[nome]-FERIADO-PELA-TELA/v4/; tail -5 logs/[nome]-FERIADO-PELA-TELA/v4/wrapper_v4.log` |
+| 19:34:00 | Bash |  | `cd ~/saas-hasner; sed -n 1,72p logs/[nome]-FERIADO-PELA-TELA/v4/r_v4.txt` |
+| 19:33:29 | Bash |  | `cd ~/wt-simplifica-104405; grep -n '^\s*log \\|LABELS' bin/tests/test_pista_certifica.sh \| sed -n 1,80p` |
+| 19:33:20 | Bash |  | `cd ~/wt-simplifica-104405; cat bin/tests/test_volta_intermediaria_rc.sh` |
+| 19:33:15 | Bash |  | `cd ~/wt-simplifica-104405; cat bin/volta_intermediaria.sh; sed -n 1,24p bin/tests/test_pista_certifica.sh; sed -n 60,85p bin/tests/test_suite_sh.sh; cat app/core/tests/test_ambiente_do_run.py \| sed -n 1,70p` |
+| 19:32:58 | Bash |  | `cd ~/saas-hasner; sed -n 1,8p logs/SIMPLIFICA-V3-2211-1726/v3c/r_v3c.txt; sed -n 12,50p logs/SIMPLIFICA-V3-2211-1726/v3c/r_v3c.txt` |
+| 19:32:56 | Bash |  | `cd ~/saas-hasner; grep -n -i 'mutante\\|sobreviv' logs/SIMPLIFICA-V3-2211-1726/v3c/r_v3c.txt \| head -30` |
+| 19:32:46 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'SHA_RUN\\|HASNER_SHA\\|HASNER_IMAGEM_ID\\|HASNER_JOB' bin/suite.sh app/core/tests/test_ambiente_do_run.py bin/*.sh \| head -30; sed -n 1140,1155p bin/disjuntor.py; sed -n 2360,2380p bin/disjuntor.py` |
+| 19:32:40 | Bash |  | `cd ~/saas-hasner; cat logs/SIMPLIFICA-V3-2211-1726/v3c/triagem_v3c.txt` |
+| 19:32:38 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 25,56p bin/tests/test_pista_certifica.sh; sed -n 130,175p bin/tests/test_pista_certifica.sh` |
 | 19:32:37 | Bash |  | `cd ~/wt-simplifica-104405; git checkout -q -- app/docs/HANDOFF-SESSAO.md; git log --oneline -1; grep -n 'Found\\|^log()\\|^espera()\\|^caso\\|r_v3b\\|certifica (' bin/tests/test_pista_certifica.sh \| head -60` |
 | 19:32:25 | Bash |  | `cd ~/saas-hasner; sed -n 1,24p app/core/quarentena_lista.py; grep -rn 'ler_quarentena\\|em_quarentena' --include=*.py --include=*.sh app bin \| grep -v '/tests/' \| head` |
 | 19:32:23 | Bash |  | `cd ~/saas-hasner; grep -n 'def ler_quarentena' -A25 app/core/quarentena_lista.py` |
