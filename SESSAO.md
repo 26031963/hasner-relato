@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 16:50:16.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (19.9 MB). Acoes na janela: **562**.
+**Medido em 22/11/2026 16:56:05.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (20.0 MB). Acoes na janela: **569**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:56:01 | Bash |  | `cd ~/saas-hasner && mkdir -p logs/TERRENO-POS-F5 && cat > logs/TERRENO-POS-F5/aval.txt <<'EOF' aval Ronald: TERRENO-POS-F5-2211-1656 -- OBJETIVO: listar por grep no BACKLOG/RELATO/CORTES toda obra que espera a F5 (ex.: B2b F0, E4d, LOTE-MOTIVO-DO-SUCESSO) e, para cada uma, o Codex prepara em leitura o mesmo pacote do MAPA-F5 -- inventario com arquivo:linha no main, CORTES e LEIS por sitio, sonda d ...` |
+| 16:50:31 | Bash |  | `cd ~/saas-hasner && sed -i '1s/^ESPERANDO: codex_pergunta.sh \| pid=1305155$/ESPERANDO: codex_pergunta.sh \| pid=1305157/' app/docs/RELATO.md && head -1 app/docs/RELATO.md` |
+| 16:50:29 | Bash |  | `pgrep -af "codex_pergunta.sh" \| cut -c1-140; pgrep -af "suite.sh --dir /home/ronald/wt-kaua" \| cut -c1-120` |
+| 16:50:26 | Bash |  | `cd ~/saas-hasner && grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py \| head -35` |
+| 16:50:25 | Bash |  | `cd ~/saas-hasner && sed -n 814,856p bin/hook_stop_fila1.py; sed -n 1370,1420p bin/hook_stop_fila1.py \| grep -n "B3\\|esperando\\|_declarou"` |
+| 16:50:23 | Bash |  | `cd ~/saas-hasner && grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
+| 16:50:21 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='\| [nome]-FERIADO-PELA-TELA \|' i=s.index(a); j=s.index('\n',i) add=('\| FERIADO-VINCULO-CHAVE-PELA-TELA \| fila (porta NAO tomada do aval [nome]-FERIADO-PELA-TELA-2211-1612) \| admin liga/desliga trabalha_em_feriado do VINCULO pela tela com trilha; alcanca todo feriado do vinculo e regenera celulas; hoje a chave nasce  ...` |
 | 16:50:12 | Bash |  | `cd ~/saas-hasner && ps -p 1305155,1273714 -o pid,etime,args \| cut -c1-120; ls logs/MAPA-E4D/; head -2 app/docs/RELATO.md \| cut -c1-200` |
 | 16:49:57 | Bash |  | `cd ~/saas-hasner && L=logs/E4C-F5/v1/chk_sql; for t in f66:$HOME/wt-f5-chk-f66 wt:$HOME/wt-f5-contrato-v1-140439; do n=${t%%:*}; d=${t#*:}; bash bin/suite.sh --dir $d --only "ponto.tests.test_zz_chk_sql_probe" --espera 7200 > $L/$n.log 2>&1; echo "$n rc=$?"; done; rm -f ~/wt-f5-contrato-v1-140439/app/ponto/tests/test_zz_chk_sql_probe.py; echo FIM` |
 | 16:49:54 | Bash |  | `cd ~/saas-hasner && for d in ~/wt-f5-chk-f66 ~/wt-f5-contrato-v1-140439; do cp logs/E4C-F5/v1/chk_sql/test_zz_chk_sql_probe.py $d/app/ponto/tests/; done; for d in .ruff_cache .hypothesis .mypy_cache; do rmdir ~/wt-f5-chk-f66/app/$d 2>/dev/null; done; echo ok` |
