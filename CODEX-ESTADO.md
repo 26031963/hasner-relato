@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 23:54** · publicado em **21/11/2026 23:58** (UTC-3)
+> Ultima resposta processada: **22/11/2026 00:04** · publicado em **22/11/2026 00:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 00:04 · sessao f1f4ca749695 · E4C-F5-CONSTROI · verificador · origem=Code
+
+**Pré-verificação da volta 4 — a fórmula e P1–P4 conferem no código. O aval completo fica pendente do registro de `SELO-C12-POR-NOME`, exigido em `aval.txt:1` e ausente do diff entregue.** Os três blobs da cópia batem com os destinos do anexo. Reconstruí os três blobs anteriores em memória e eles batem com as origens do anexo. A associação desses blobs aos commits `af495e9abb22f03efbb4b8e21aad48d0faf6c5f6` e `ed7d24934` é **[nao verificado]**, pois a cópia não tem metadados Git disponíveis. `app/chamados/models.py:1707–1735`, `app/chamados/tests/e4b_c12_ast.py:26–27`, `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:217–348`.
+
+## 1. Cláusulas do aval
+
+| Cláusula | Verificação |
+|---|---|
+| Fórmula sem `+1 us`, com desempate pela pk | O diff remove o incremento e grava `max([_agora_r] + [d.ato_em ...])`. O desempate já existente continua em `seq.sort` pela tripla `(ato_em, classe da linha, pk)`. Entre linhas reais, a classe é constante. `app/chamados/models.py:1707–1728`, `:4377–4386`. |
+| P1 | `_caso` mede o maior `ato_em` da pergunta excluindo a reabertura compensadora. `_coerente` exige que a reabertura seja igual ou posterior a esse máximo e ao relógio da borda. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:205–226`. |
+| P2 nova | `r1` e `r3_recuo` exigem empate real com o último `ato_em`. A leitura roda numa pergunta relida e verifica que a validação caiu na sequência e na coluna. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:207–213`, `:227–244`, `:282–291`. |
+| P3 | M3 move a leitura do relógio para antes da trava e preserva o `max`. O teste exige que o carimbo mutado preceda a borda e que `_coerente` falhe. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:112–121`, `:226`, `:307–312`. |
+| P4 | O teste exige uma reabertura acima de `AGORA + 1 min` e chama o auditor real, com contagem `0` antes e `1` depois. Está no diff do teste. O contador já existia. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:329–348`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1132`. |
+| Dois empates do par | Intocados no diff anexo. Ambos continuam exigindo o instante exato do empate e a validação nula na leitura e na coluna. `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:364–389`. |
+| Selo `e4b_c12` | Só os dois números da tabela mudam, com os comentários de justificativa pedidos. No blob anterior reconstruído, as mesmas chamadas a `_gravar_estado` estão em `1792` e `1812`. Na cópia estão em `1791` e `1811`, com os mesmos argumentos. Rodei os 11 testes do selo em modo somente leitura, todos OK. `app/chamados/tests/e4b_c12_ast.py:18–29`, `app/chamados/models.py:1791`, `:1811`, `app/chamados/tests/test_e4b_c12_selo.py:21–52`. |
+| Mutante que inverte a pk | O diff troca apenas a chave de ordenação por `(x[0], x[1], -x[2])` e aplica o mutante aos dois cenários de recuo. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:34–50`, `:140–145`, `:293–303`. |
+| Fila congelada | O registro de `SELO-C12-POR-NOME` não está no diff e não foi localizado em `app/`. Registro fora da cópia **[nao verificado]**. `aval.txt:1`, `app/chamados/tests/e4b_c12_ast.py:17–27`. |
+
+## 2. Quem escreve e quem lê
+
+**O relógio e a escrita.** `ChamadoColaborador.ressuscitar_perguntas` atribui `_agora_r` com uma chamada a `timezone.now()` e o lê para calcular o máximo. A mesma porta monta a linha de `REABERTURA` com `da_ressuscitacao=True`. `DecisaoPergunta.registrar` materializa a linha via `bulk_create`. Os chamadores são `ChamadoColaborador.reabrir`, o cartório e o desarquivamento após registrar o toque administrativo. `app/chamados/models.py:1517`, `:1716–1737`, `:4443–4454`, `app/ponto/services/cartorio.py:1721`, `app/chamados/views_arquivar.py:63–86`.
+
+**As fontes dos `ato_em` do máximo.** Ele lê todas as decisões reais da mesma pergunta. Podem alimentá-lo os atos de resposta humana, automática e pela trilha, a correção ou recusa, a validação e suas devoluções, o silêncio, a retratação, a absorção, as reaberturas compensadoras anteriores e as fotos do passivo. Os backfills também podem inserir silêncio ou fotos do passivo pelos mesmos campos. `app/chamados/models.py:1679–1680`, `:1720–1735`, `:2126–2128`, `:2258–2262`, `:3250`, `:4324–4338`, `app/chamados/services/disputa_emissao.py:1535`, `:1664–1681`, `:1713`, `:1735`, `app/chamados/services/validacao.py:168–175`, `:293–296`, `:370–372`, `:452–455`, `app/chamados/services/materializacao.py:1087–1090`, `app/ponto/services/veredito_celula.py:195–197`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:350–354`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:149–150`.
+
+| Leitor | O que acontece no empate |
+|---|---|
+| `DecisaoPergunta.leitura` e `composta` | Entre linhas reais, a maior pk é processada depois. A reabertura de maior pk limpa resposta e validação. O passivo virtual vem **depois de todas as linhas reais** no mesmo instante. Na ressuscitação, o passivo é registrado antes do cálculo e a projeção é zerada na mesma transação. `app/chamados/models.py:1679–1680`, `:1735–1738`, `:4346–4347`, `:4377–4406`. |
+| Face SQL e autor da validação | `q_validada_pelo_ato` usa `ato_em >` ou `ato_em =` com `pk >` entre atos reais. No ramo do passivo sem linha correspondente, usa `>` estrito, em acordo com a precedência do passivo virtual. A foto do autor percorre as validações no mesmo instante e conserva a última da ordem padrão `(ato_em, pk)`. `app/chamados/models.py:1722–1727`, `:3617–3629`, `:4268–4269`. |
+| Sonda de ressuscitação | Recorta por `d.ato_em > _agora_sonda`. Todos os atos no instante da sonda caem do recorte, independentemente da pk. Os remanescentes seguem para C6, que lê `composta`. É um corte temporal do pré-filtro. `app/chamados/models.py:1565–1567`, `:1587–1602`, `app/chamados/juizes.py:1406–1411`. |
+| `disputa_emissao.py` | A prévia delega à porta, as leituras do estado delegam a `composta` e o histórico a `respostas_anteriores`. A guarda de absorção é específica. Ela percorre por **pk** e compara `ato_em` ao carimbo para reconhecer a absorção. Reabertura ou recusa de pk posterior derruba a absorção, qualquer que seja seu `ato_em`. `app/chamados/services/disputa_emissao.py:1489`, `:1660–1663`, `:1851–1859`, `:2052`, `:2112`, `:2169–2173`, `app/chamados/models.py:4433–4441`. |
+| Cartório e desarquivamento | O cartório pré-carrega `decisoes` e usa `fio_vivo` e `composta`. Com ambas as linhas carregadas, herda o desempate da leitura. `views_arquivar.py` chama as portas e não escolhe uma decisão por timestamp. `app/ponto/services/cartorio.py:144–146`, `:1683–1697`, `:1721`, `app/chamados/juizes.py:1516–1526`, `app/chamados/views_arquivar.py:63–86`. |
+| `modal_fio.html` | O histórico recebe `respostas_anteriores`, que percorre a ordem do modelo, limpa a resposta vigente ao encontrar a reabertura e inverte a lista para exibição. O template só formata `ato_em`. As etiquetas de validação leem a coluna, que a ressuscitação limpa. `app/chamados/models.py:3862–3878`, `:4268–4269`, `:1737–1738`, `app/chamados/services/fio.py:263–267`, `app/templates/chamados/partials/modal_fio.html:204–229`, `:345–348`. |
+| `validacao.py` | As guardas que leem o ato usam `composta`. A foto da devolução consulta a coluna primeiro e usa `composta` se a coluna estiver vazia. O lote recarrega a instância antes da conferência final. Não há uma ordenação própria por `ato_em`. `app/chamados/services/validacao.py:178–188`, `:269–293`, `:309–320`, `:656–657`, `:697–704`, `:915–923`, `:1074–1105`. |
+| Tarefa do dia | Na sequência para ações, ambos os caminhos de carga ordenam por `(ato_em, pk)` por pergunta. A reabertura compensadora é **excluída pelo predicado antes** do corte `<= agora` e da escolha do último ato. Esse leitor pode, por desenho, continuar usando o ato anterior para a tarefa. A consulta separada de vitalidade C6 recebe a pergunta com a sequência integral e usa a leitura composta. `app/chamados/services/tarefa_do_dia.py:142–170`, `:387–403`, `:424–434`, `:533–545`, `:625–637`, `app/chamados/juizes.py:1406–1411`. |
+| I23 e demais comparações diretas | I23 compara ao limiar e lista pks. A correspondência do passivo usa a chave composta `(pergunta_id, ato, ato_em)` para verificar existência e preserva todas as linhas reais na leitura. A foto E4b identifica as linhas pela pk. No censo dos leitores de produção em `app/`, não encontrei seleção de vigente ordenada apenas por `ato_em` ou `-ato_em`, nem uso de `ato_em` isolado como chave única. `app/chamados/management/commands/auditar_invariantes_chamados.py:1129–1132`, `app/chamados/models.py:4323–4338`, `:4377–4386`, `app/chamados/services/foto_e4b.py:247–252`, `:280–281`. |
+
+## 3. A pk da reabertura é sempre maior?
+
+**No fluxo com sequência crescente e pks automáticas, sim para as linhas da pergunta já visíveis no prefetch.** A pk é `BigAutoField`, herdada da tabela renomeada. O lote de reaberturas é montado sem pk, após adquirir as travas e registrar o passivo. A inserção acontece no `bulk_create`. A ordem por pk no laço é a das **perguntas**. A pk da **decisão** vem da inserção. Não encontrei chamador de produção que pré-atribua `pk` ou `id` à decisão, inclusive nos backfills. `app/chamados/migrations/0050_resposta_anterior.py:16–23`, `app/chamados/migrations/0051_decisao_pergunta.py:39–45`, `app/chamados/models.py:1652–1657`, `:1679–1680`, `:1720–1735`, `:4443–4454`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:350–354`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:149–150`.
+
+**O “sempre” não é imposto pela porta.** `registrar` repassa `**ln` ao `bulk_create` sem rejeitar pk explícita e sem checar a relação entre a pk gerada e as existentes. A guarda de `save` está em outro caminho. Estado e configuração efetiva da sequência em produção **[nao verificado]**. Se a reabertura tiver pk menor que uma validação anterior com o mesmo `ato_em`, a validação será processada depois e ficará vigente, inclusive na face SQL. Uma validação inserida depois com pk menor, no mesmo instante, terá o efeito inverso. `app/chamados/models.py:4296–4299`, `:4443–4454`, `:4379–4395`, `:3619–3623`.
+
+## 4. Quando o relógio e os atos são lidos
+
+A seleção inicial avalia seu próprio prefetch antes da trava e entrega **ids**. No `atomic`, a porta adquire Colaborador → Disputa → Chamado → Pergunta, relê o conjunto gravável e grava o passivo. Depois lê `_agora_r`. Só então a iteração avalia o novo `prefetch_related('decisoes')`. A leitura, a foto do autor e o máximo usam esse mesmo lote. As instâncias e o cache da sonda não alimentam o máximo em nenhum caminho encontrado. Visibilidade efetiva entre transações em produção **[nao verificado]**. `app/chamados/models.py:1549–1567`, `:1597–1602`, `:1638–1657`, `:1675–1680`, `:1716–1728`, `:2891–2920`.
+
+## 5. Mordida dos testes e relógio [nao verificado]
+
+- **P2 e M3 mordem nas propriedades esperadas.** Em memória, usando a `leitura`, `_coerente` e os transformadores AST da cópia, confirmei que inverter a pk deixa a validação vigente e dispara a divergência ato/coluna. Para M3, confirmei a relocação da atribuição no AST e que o carimbo anterior à borda dispara a asserção temporal. Nos testes de integração, a aplicação do mutante e a execução do caso ficam fora de `assertRaises`. O `assertRaises` aceita qualquer falha de `_coerente`, mas as testemunhas de empate e de relógio ficam fora dele. Execução independente com ORM/banco **[nao verificado]**. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:34–50`, `:112–145`, `:217–230`, `:293–312`.
+- **M1/M2, M4/M5.** M1/M2 exigem `n=0` após antecipar a sonda à iteração. M4 tira o `max`, M5 coloca a coleta antes da trava, e ambos exigem o carimbo antigo antes de cobrar `_coerente`. Nesses casos o ato injetado já faz falhar a comparação da linha 223. A nova asserção da linha 225 não tem uma mordida independente com outro ato mais alto. A “corrida” injeta na mesma execução, antes de chamar a trava real, sem reproduzir um commit em outra conexão. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:73–86`, `:124–137`, `:167–204`, `:223–226`, `:247–268`, `:314–326`.
+- **P4 tem positivo e negativos.** O positivo contém também uma validação adiantada, então omitir o predicado inteiro faria a contagem exceder `1`. Falta caso em `+60 s` exatos e falta uma reabertura adiantada **sem** a marca, portanto os mutantes `>=` e “só checar o tipo `REABERTURA`” podem sobreviver. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:329–348`.
+- **Relógio dos testes.** Não achei `timezone.now()` ou `localdate()` soltos nos testes do delta. O caso e a segunda chamada ficam no `freeze_time`, assim como a chamada ao auditor. A fixture vem da classe do par decorada com `freeze_time(AGORA)`. O recorte de 10.938 testes com `rc 0` é o informado no enunciado. A execução desse recorte é **[nao verificado]** independentemente. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:148–204`, `:329–336`, `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:49–85`.
+
+## 6. I23
+
+O universo é exatamente **reaberturas da ressuscitação com `ato_em > agora + 1 min`**. O SQL aplica o `>` estrito e o código pergunta `DecisaoPergunta.es_da_ressuscitacao(d)`, que exige tipo `REABERTURA` e marca. O contador ordena por pk para a amostra. O comentário ainda diz **`+1 us`**. O rótulo da tarefa do dia em `JUIZES.md` é resumido como “por `ato_em`”. No código, a tarefa inclui pk na ordenação e chama o mesmo predicado para excluir a compensação. Contagem I23 em produção **[nao verificado]**. `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1132`, `app/chamados/models.py:4289–4294`, `app/docs/JUIZES.md:81–87`, `app/chamados/services/tarefa_do_dia.py:387–403`, `:537–545`.
+
+## 7. Checklist
+
+| Classe | Resultado no delta |
+|---|---|
+| `except`, fallback, default e silêncio | **49 linhas `+`**. **0** `except` ou `except*`, **0** fallbacks/defaults que escondam erro e **0** ramos novos que troquem erro por silêncio. Há **1** default técnico em `getattr(real, '__func__', real)`, que aceita função comum e `classmethod`. Há **1** novo `assertRaises(AssertionError)` no teste do mutante, restrito à propriedade. Falha de aplicação do mutante sobe. O `except` da trilha de ressuscitação já existia. `app/chamados/models.py:1709–1728`, `:1759–1774`, `app/chamados/tests/e4b_c12_ast.py:26–27`, `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:34–50`, `:89–99`, `:293–312`. |
+| Segundo juiz | **0 novos**. O máximo usa os atos da pergunta e o estado continua lido pela sequência. `app/chamados/models.py:1720–1728`, `:4377–4406`, `app/core/juizes.py:290–303`. |
+| Segundo escritor fora da porta | **0 novos**. O escritor da marca segue chamando `registrar`. A catraca exige uma ocorrência na porta e nenhuma fora. `app/chamados/models.py:1729–1735`, `:4443–4454`, `app/chamados/tests/test_f2_ressuscitacao_um_escritor.py:65–79`. |
+| Relógio fora da borda | **0 novos**. `_agora_r` está depois da trava. Fora da unidade, a retratação já lê seu relógio antes da trava e a foto automática recebe o relógio do lote do upload. `app/chamados/models.py:1652–1657`, `:1716–1717`, `:2226–2232`, `app/api/foto_recebida.py:38–48`, `app/chamados/services/disputa_emissao.py:1707–1715`. |
+| Derivação paralela | **0 novas**. A sonda anterior só seleciona, o máximo usa o novo lote e o I23 pergunta ao predicado existente. `app/chamados/models.py:1597–1602`, `:1638–1646`, `:1720–1728`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1127–1132`. |
+| Selo ou RED sem mordida | P2 e M3 têm mordida discriminada em memória. O limite da prova de concorrência e os controles que faltam ao I23 estão no item 5. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:194–204`, `:293–312`, `:329–348`. |
+| Ordem de trava | A ordem e o local da aquisição são os mesmos. O primeiro consumo do prefetch da escrita vem depois. `app/chamados/models.py:1652–1657`, `:1720–1728`, `:2891–2920`. |
+| Pouso antes do pré-requisito | O delta usa a marca e o leitor já presentes. A migração `0054` é o pré-requisito da marca. Ordem de migração e pouso em produção **[nao verificado]**. `app/chamados/migrations/0054_decisao_da_ressuscitacao.py:14–25`, `app/chamados/models.py:4256`, `:4289–4294`, `app/chamados/services/tarefa_do_dia.py:393–401`. |
+| ESMERIL-SEMÂNTICA | O duplo uso permanece. O campo documenta o instante do ato, mas a ressuscitação pode gravar o instante maior de outro ato para garantir posição na sequência. Se `ultimo > agora_sob_trava`, o carimbo fica adiantado. O I23 observa o adiantamento acima de um minuto e o modal exibe o carimbo como data da reabertura. É o risco já aceito no aval. `aval.txt:1`, `app/chamados/models.py:1707–1728`, `:4203–4213`, `app/templates/chamados/partials/modal_fio.html:212`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1124–1132`. |
+
+## 8. Alcance permitido
+
+No diff anexo, **zero alterações fora do permitido**. Em `models.py`, os dois hunks estão no instante da reabertura. No `e4b_c12_ast.py`, só mudam `1792 → 1791`, `1812 → 1811` e os comentários justificativos dessas duas linhas. O terceiro arquivo é o teste da unidade. `core/juizes.py`, `chamados/juizes.py`, `motor_calculo_v2.py`, `ponto/portas/celula.py`, `config/crons.py`, `bin/`, `CLAUDE.md` e migrations não constam do delta anexo. Diferenças adicionais entre os commits completos **[nao verificado]**. `app/chamados/models.py:1707–1730`, `app/chamados/tests/e4b_c12_ast.py:26–27`, `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:34–348`.
+
+## ACHADOS
+
+1. **Bloqueia — registro exigido pelo aval ausente da entrega.** `SELO-C12-POR-NOME` deve constar da fila congelada. O diff comprova a atualização dos números e a justificativa. O registro externo é **[nao verificado]**. `aval.txt:1`, `app/chamados/tests/e4b_c12_ast.py:17–27`.
+2. **Fila — a garantia no empate depende da atribuição da pk.** A porta não impõe monotonicidade, e os testes injetam na mesma execução. Não encontrei chamador de produção atribuindo pk explicitamente a uma decisão. `app/chamados/models.py:1729–1735`, `:4379–4395`, `:4443–4454`, `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:167–204`.
+3. **Fila — `ato_em` continua servindo de instante exibido e posição de ordenação.** Com relógio recuado, o timestamp de outro ato pode aparecer como data da reabertura. A ocorrência em produção é **[nao verificado]**. `app/chamados/models.py:1707–1728`, `app/templates/chamados/partials/modal_fio.html:212`.
+4. **Nota — dois comentários ainda mencionam `+1 us`.** Um no I23 e outro no teste `r3`. O predicado do contador e o teste positivo já cobram a propriedade vigente. `app/chamados/management/commands/auditar_invariantes_chamados.py:1124–1132`, `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:274–280`, `:342–348`.
+5. **Nota — controles que faltam ao I23 e à mordida independente de P1.** Faltam o limiar exato, uma reabertura sem marca e um caso em que o maior ato seja diferente do ato injetado. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:208–226`, `:314–348`.
 
 ## 21/11 23:54 · sessao 528d3bd6a4c2 · E4C-F5-CONSTROI · verificador · origem=Code
 
@@ -1141,56 +1224,4 @@ Li as duas cópias nomeadas pelos hashes, em somente leitura. O main `ab351aa9b`
 
 [truncado em 20000 de 38827 caracteres]
 
-## 21/11 19:32 · sessao e161a5ec7905 · E4C-F5-CONSTROI · construtor · origem=Code
-
-**INCOMPLETO para certificação.** A opção B está aplicada em `_slot_esperado`. Em `hora` sem resposta vigente e sem carimbo legado, o derivador recebe texto vazio. Se o marco fixo fornece instante, sai `SLOT`. Se não fornece, sai `SEM_RESPOSTA_VIGENTE`. `PLANTIO_SEM_TS` fica reservado à falha de derivação com texto elegível. O B3 segue aberto. `app/chamados/juizes.py:409–423` · `app/chamados/services/materializacao.py:691–710` · `aval_1930.txt:1` (anexo)
-
-### V1 e provas locais
-
-| Prova | Base `f3d23021f` | Cura |
-|---|---|---|
-| r1 · Batida vinculada às 05:24, a 66 minutos do slot original de 06:30 | `True` após a reabertura | `False` · `app/chamados/tests/test_e3_c8b_sem_banco.py:499–507` |
-| r2 · Só destino encerrado | `True` | `False` · `app/chamados/tests/test_e3_c8b_sem_banco.py:509–515` |
-| r3 · Hora desfeita com marco fixo e batida no marco | `SLOT` às 13:00, `True` | `SLOT` às 13:00, `True` · `app/chamados/tests/test_e3_c8b_sem_banco.py:517–527` |
-| r4 · HX com lei calada e fora da janela viva | `True` nos dois | `False` nos dois, `SEM_RESPOSTA_VIGENTE` · `app/chamados/tests/test_e3_c8b_sem_banco.py:529–538` |
-| r5 · Texto residual presente e ausente | `[True, True]` | `[False, False]` · `app/chamados/tests/test_e3_c8b_sem_banco.py:540–551` |
-
-Rodei os REDs antes da edição de produção. Na cura, passaram 34 testes C8b, 18 da catraca de respondedores e 10 da A1. O `v3_cru` falhou na catraca com duas leituras onde se espera uma. Um teste adicional de cartório parou na importação de `django.utils` com a fonte da base e com a cura. `app/chamados/tests/test_e3_c8b_sem_banco.py:465–558` · `app/chamados/tests/test_e3_catraca_respondedores.py:544–557` · `app/chamados/tests/test_e4c_f5_selo_chamada.py:188–293` · `app/chamados/tests/test_e3_pos_suite_sem_banco.py:174–181`
-
-### Cinco leitores
-
-| Leitor | Efeito da opção B |
-|---|---|
-| `carga_pergunta_viva` | Guarda o novo motivo. Os dois motivos sem instante recebem o mesmo tratamento na montagem dos limites. O marco fixo continua contribuindo com a janela de `SLOT`. `app/chamados/services/carga_pergunta_viva.py:119–145` |
-| `classe_do_lote` | C21 já manda a candidata sem vigência para B antes da leitura do slot. A distinção entre os motivos é repassada em `porque` quando o lote alcança a leitura. `app/chamados/services/validacao.py:1214–1232` |
-| Explicador | Distingue os motivos. Quando chega à explicação do slot, passa a mostrar “sem resposta vigente”. `app/chamados/services/explicador.py:52–61,122–150` |
-| `vigia_carimbo` | Agrupa os dois motivos em `slot_nao_derivavel` após reprovação. Um caso antes aceito só por vínculo ou destino pode sair de `com_registro` para essa classe. `app/chamados/services/vigia_carimbo.py:97–123` |
-| Juiz de fato → C6 | Distingue os motivos. `SEM_RESPOSTA_VIGENTE` vai direto à prova de retração com carimbo e trilha, fechando os atalhos de vínculo e destino. C6 inverte o veredito ao alcançar o degrau 6. `app/chamados/juizes.py:287–298,801–848,1535–1542` |
-
-### Comandos de prova
-
-Os três mutantes locais saíram com `rc=1` por asserção. m1 atingiu r1 e r2, m2 atingiu r3 e m3 atingiu a igualdade de r5 com `False != True`. O gerador também emite cada patch com `--patch`. `app/chamados/tests/sentinela_volta5_mutantes.py:18–45`
-
-```sh
-# A partir de app/
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest -v chamados.tests.test_e3_c8b_sem_banco.SentinelaVolta5
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.sentinela_volta5_mutantes m1
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.sentinela_volta5_mutantes m2
-PYTHONDONTWRITEBYTECODE=1 python3 -B -m chamados.tests.sentinela_volta5_mutantes m3
-```
-
-Na pista, rode o primeiro comando sobre `f3d23021f` com o recorte de testes para o RED, e sobre a cura para o GREEN. Para os três comandos seguintes, aplique isoladamente o patch correspondente emitido com `--patch` e reverta-o após a prova. A pista usa Docker e banco. `bin/suite.sh:197–209,316–325` · `app/chamados/tests/sentinela_volta5_mutantes.py:26–38`
-
-```sh
-copia=/home/ronald/wt-codex-e4c-f5-constroi-141636
-bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5
-bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5_r1_ -k test_RED_sentinela_volta5_r2_
-bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5_r3_
-bin/suite.sh --dir "$copia" --only chamados --espera 7200 -- -k test_RED_sentinela_volta5_r5_
-```
-
-**Diff e autoconferência.** Zero commits pela proibição de `git commit`. O RED precedeu a cura na cópia, com `HEAD` em `f3d23021f`. Diff total de 5 arquivos, `+161/−16`, incluindo o gerador novo. `except` adicionados: **0 em produção e 0 em teste**. Fallbacks novos: **0**. `app/chamados/juizes.py:409–423` · `app/chamados/tests/test_e3_c8b_sem_banco.py:465–558` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–80` · `app/chamados/tests/test_marco_por_motivo.py:271–282` · `app/chamados/tests/sentinela_volta5_mutantes.py:1–50`
-
-**Pendente** · ORM e mordidas anteriores `s1`, `s2a`, `s2b`, `s3i`, `s3ii`, vínculo, destino e trilha, suíte inteira pelo Code, opus final e incidência em produção [nao verificado]. [nao verificado]
-
-_7764 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7765 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
