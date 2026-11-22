@@ -1,7 +1,114 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **21/11/2026 21:40** · publicado em **21/11/2026 21:43** (UTC-3)
+> Ultima resposta processada: **21/11/2026 22:02** · publicado em **21/11/2026 22:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 21/11 22:02 · sessao e24f7350c635 · WRAPPER-N-VAGAS · verificador · origem=Code
+
+BLOQUEIA
+
+**NOVO contra `e1ac53dce`.** Uma vaga livre pode recusar todas as tentativas por causa de um JSON v1 deixado pela versão anterior. Uma vaga ocupada pelo lançador legado pode fazer o portão comparar os arquivos da chamada errada. E a espera nova do gate pode girar indefinidamente se a abertura do lock falhar. São contraexemplos de código. Ocorrência em produção e os resultados informados de 38 casos, 55 mutantes e 82 mutantes ficam **[nao verificado]**. A classificação do delta usa o patch fornecido. Conferi a sintaxe dos scripts e do helper em leitura; a identidade Git da cópia fica **[nao verificado]**. [`bin/codex_pergunta.sh:342–356,522–543,554–558,667–678`](bin/codex_pergunta.sh#L342) · [`bin/codex_admissao.py:139–162`](bin/codex_admissao.py#L139)
+
+### 1. Decisões que mudam
+
+| Estado | Decisão |
+|---|---|
+| **PREEXISTENTE** · Meta de admissão ocupada ou capacidade esgotada | Espera a meta até `meta_timeout_s`. No vencimento, `75 PAUSADO` se a flag estiver presente, senão `75 META_OCUPADA`. Capacidade esgotada dá `75 SEM_VAGA` sem esperar vaga. `bin/codex_pergunta.sh:500–506,511–524` |
+| **NOVO** · Há outra vaga viva | O portão soma o delta commitado aos previstos de ambas as partes e mantém o `git status` da admitida. Conflito ou `COMUM-NAO-SEI` dá `2 PORTAO`. Sem outra vaga viva, pula M3, como na base. `bin/codex_pergunta.sh:279–320,525–543` |
+| **NOVO** · Vaga escolhida, antes de `abriu` | Lê a geração da pausa sob a meta. Valor não numérico dá `2 PRE_CHECK`. Publica JSON v2 e arquiva o anterior. JSON anterior não vazio sem ID válido, histórico divergente ou erro na publicação dá `3 FALHA_TRILHA`, sem `abriu`. O `1` do projetor é interno. `bin/codex_pergunta.sh:342–362,392,501–507,552–558` |
+| **NOVO** · Admitida esperando gate, slot ou resposta | Gate e slot repetem fatias de 1 s, sem prazo total. A construtora solta o gate para esperar o slot. Pausa viva dá `75 PAUSADO`. Na resposta, esgotar as tentativas sem pausa dá `3` e a chamada preserva o `.rc` alheio enquanto não pegou a trava. Os outros papéis seguem pelos ramos anteriores. `bin/codex_pergunta.sh:570–577,667–699,708–723` |
+| **NOVO** · Com slot e resposta, antes do executor | Readquire a meta. Vencimento dá `75 PAUSADO` ou `75 META_OCUPADA`. Abertura da meta falha em `2 PRE_CHECK`. Pausa ou geração diferente dá `75 PAUSADO`. N inválido, lease recusada, worktree alterada ou insumo divergente dão `2 REVALIDACAO`. Falha na projeção de `iniciou` dá `3 FALHA_TRILHA`. Sucesso publica `iniciou`, libera a meta e envia `GO`. `bin/codex_pergunta.sh:739–778` |
+| **NOVO** · Fecho | Persiste `fechou/rc/motivo` no JSON do mesmo ID e acrescenta o motivo no 10º campo de `chamadas.log` para o construtor. Falha de trilha converte `0` em `3` e preserva um rc já não zero. A normalização de `2` ou `75` bruto do executor para `1 FALHA_EXECUCAO`, sem evidência de limite, é **PREEXISTENTE**. `bin/codex_pergunta.sh:372–376,407–416,568–583,820–827` |
+
+**Admissão simultânea indevida.** **NOVO** · A termina e deixa seu JSON na vaga 1. O lançador legado pega só a trava gêmea. B vê a vaga 1 ocupada, mas compara contra o JSON de A. Se a worktree de A continua legível e é disjunta de B, B pode entrar mesmo com arquivo em comum com o legado. O selo de estado alheio limpa os JSONs antes do cenário. **PREEXISTENTE** · Duas chamadas da mesma obra podem usar a mesma worktree limpa com briefs citados disjuntos. O código confere o nome e o registro Git da worktree, mas não compara sua identidade com a da ocupante. Também aceita `app/folha/../ponto/a.py` e `app/ponto/a.py` como declarações disjuntas quando os deltas estão vazios. `bin/codex_admissao.py:139–162` · `bin/codex_pergunta.sh:266–278,298–320,407–415,454–474,519–549` · `bin/disjuntor.py:1526,1612–1645` · `bin/tests/test_codex_n_vagas.sh:212–215,346–352`
+
+**Recusa ou espera sem saída própria.** **NOVO** · Um JSON v1 não vazio deixado por morte abrupta fica preservado. A próxima tentativa escolhe a mesma menor vaga livre e volta a sair `3` até intervenção. O selo exige essa recusa para registro sem ID. Um `slot.gate` que virou diretório deixa o `exec 9>` falhar; o laço interpreta o erro de `flock` como contenção e repete com a lease presa. Um FIFO em `pausa.seq` ou no JSON anterior também pode bloquear leitura sob a meta. **PREEXISTENTE** · Gate ou slots legitimamente retidos sem soltura já podiam deixar a espera sem prazo. `bin/codex_admissao.py:146–151` · `bin/codex_pergunta.sh:72,329–356,397–398,501–507,554–556,667–698` · `bin/tests/test_codex_n_vagas.sh:574–577`
+
+### 2. Pulso durante a espera do gate
+
+**NOVO** · Com o gate ainda preso, a primeira fatia malsucedida depois da publicação vê a flag ou a geração alterada e sai `75 PAUSADO`. Em contenção normal, isso leva até aproximadamente **1 s mais o custo de execução e leitura**, contado do ato efetivo sobre a flag ou a geração. Se o `flock` adquire o gate na fatia, o ramo de sucesso pula essa consulta. A chamada segue e pode detectar a pausa na espera do slot, na resposta ou em M6. Ao passar do slot de volta para um gate ocupado, pode gastar outra fatia. M6 só consulta a pausa depois de adquirir a meta ou ao vencer seu prazo. `bin/codex_pergunta.sh:397–398,672–692,714–718,744–748`
+
+**Trilha e relógio.** O prazo de cada fatia vem de `flock -w 1`. `date +%s` mede a espera e a duração para exibição. Num cancelamento no gate, `vagas.log` registra `abriu/fechou` sem causa. O JSON registra `75/PAUSADO` com `iniciou` nulo, `chamadas.log` registra `fim` com o motivo, e stderr identifica a espera do gate e emite `CODEX_RESULTADO`. Sem a trava da resposta, não há `.rc` novo. O leitor de `vagas.log` continua limitado aos cinco campos e o leitor de `chamadas.log` aceita o décimo, mas só consome os nove anteriores. `bin/codex_pergunta.sh:372–376,391–393,407–415,557–558,568–583,611–612,669–700` · `bin/codex_vagas_estado.py:20–49` · `bin/codex_limite_estado.py:49–68`
+
+### 3. M3 e o “não sei”
+
+| Caso | Saída |
+|---|---|
+| **NOVO** · `merge-base` ausente, ou diff falha, com outra vaga viva | `COMUM-NAO-SEI`, portanto `2 PORTAO`. Na própria worktree, timeout ou erro de decodificação pode derrubar o Python sem linha de resultado, e o wrapper também recusa. Na outra worktree, a exceção vai para o `except` preexistente. `bin/codex_pergunta.sh:279–313,540–543` |
+| **NOVO** · `HEAD` destacado | Funciona quando `refs/heads/main` existe no repositório compartilhado e há ancestral comum. Os casos do selo usam worktrees destacadas. `bin/codex_pergunta.sh:279–288,469–472` · `bin/tests/test_codex_n_vagas.sh:149–151,323–343` |
+| **PREEXISTENTE / NOVO** · Worktree sem `main` | Estar destacada em vez de estar na branch `main` é válido. Se a ref compartilhada está ausente na viva já no pre-check, dá `2 PRE_CHECK`, **PREEXISTENTE**. Se a ref deixa de estar disponível quando M3 roda, dá `2 PORTAO`. Se o blob de configuração fica ilegível na autorização, dá `2 REVALIDACAO`, **NOVO**. `bin/codex_pergunta.sh:279–288,425–430,540–543,749–752` |
+| **PREEXISTENTE / NOVO** · Previstos vazios | Para quem entra, `if not meus` fecha antes do delta, **PREEXISTENTE**. Para a admitida, `decl` guarda o tamanho da lista original, de modo que status e delta não preenchem o vazio declarado, **NOVO**. Em concorrência, ambos dão `2 PORTAO`. Sozinha, a chamada pode entrar sem previstos ou sem ancestral comum, pois M3 é pulado. O CENSO mantém sua decisão própria para obra da fila 1. `bin/codex_pergunta.sh:289–315,483,540–549` · `bin/disjuntor.py:1723–1747` |
+
+### 4. Escritor e leitores da pausa
+
+- **NOVO** · `pausar.sh` tenta publicar e retirar sob a meta derivada do caminho fornecido. `--soltar` avança `pausa.seq` antes de remover a flag. **PREEXISTENTE** · `--ler` exige `-f`, exibe o conteúdo e calcula idade pelo mtime. `SAIDA` é texto obrigatório na publicação. A volta depende da retirada manual. `PAUSOU` e `SOLTOU` vão para `logs/pausas.log` da raiz **do script**, mesmo quando o alvo pertence a outra raiz. `bin/pausar.sh:14–50,53–72`
+- **PREEXISTENTE** · O wrapper aponta para a viva pelo `git-common-dir`. Lê a presença no pre-check, no vencimento da meta de admissão e ao obtê-la. **NOVO** · Lê a sequência em M4 e usa flag ou diferença de geração no gate, slot, resposta e M6. Um pulso inteiro antes da amostra de M4 pode passar despercebido. O PreToolUse configurado trata B3, cota e CENSO, sem ler essa flag. O vigia que interpreta `QUEM/SAIDA` enumera as duas flags da esteira. `bin/codex_pergunta.sh:90–98,397–398,424,440,501–507,674–675,689–692,715–718,744–748` · `.claude/settings.json:62–69` · `bin/disjuntor.py:1851–1863` · `app/core/esteira_vigia.py:467–486`
+- **ESMERIL-SEMANTICA.** **PREEXISTENTE** · Para o wrapper um diretório conta como pausa por `-e`, enquanto `--ler` e `--soltar` exigem `-f`. Os selos legados gravam só `QUEM`, inclusive diretamente enquanto a meta está retida. **NOVO** · O escritor pode resolver `pausas/../vagas` através de um symlink e ordenar em uma meta diferente da viva usada pelo wrapper. Dois `--soltar` podem passar pelo teste de presença antes da meta e incrementar duas vezes por uma única retirada, cancelando uma chamada admitida entre eles. Os selos novos leem presença e geração; não verificam `SAIDA` nem `pausas.log`. `bin/pausar.sh:23–50` · `bin/codex_pergunta.sh:397–398,424,440,491,501–507` · `bin/tests/test_codex_pergunta.sh:170–182,261–278,311–317` · `bin/tests/test_codex_n_vagas.sh:398–413,597–639,666–679`
+- **PREEXISTENTE, ampliado pela espera nova.** A preparação usa o mesmo `$f.novo` antes da meta. Duas publicações podem trocar o conteúdo atribuído ao autor. O script também pode anunciar `PAUSOU` sem validar o `mv`, ou registrar `SOLTOU` e sair `0` mesmo se o `rm` falhar. `bin/pausar.sh:39–50,61–72`
+
+### 5. Selos
+
+**NOVO** · São **21 mutantes novos**, um removido (`limpa_estado`) e um preexistente reaplicado (`publica`). A tabela abaixo identifica a asserção de efeito disponível. Qual asserção matou cada mutante na execução informada fica **[nao verificado]**. O motor aceita qualquer falha com o prefixo esperado, inclusive uma falha de diagnóstico sob o mesmo rótulo. `bin/tests/test_codex_n_vagas.sh:184–198,691–707,735–745,757–781`
+
+| Mutantes | Efeito que o caso exige |
+|---|---|
+| `m3_decl`, `m3_minha`, `m3_outra`, `m3_pontas` | `2` e Codex não invocado, com controle disjunto que entra. `bin/tests/test_codex_n_vagas.sh:189–198,323–343` |
+| `pausa_seq`, `pausa_gate`, `gate_solta`, `pausa_slot`, `pausa_resp`, `rc_sidecar` | Saída com a trava ainda retida, gate adquirível por outro, `75 PAUSADO` ou bytes do `.rc` alheio preservados, conforme o mutante. `bin/tests/test_codex_n_vagas.sh:598–638,695–700` |
+| `m6_meta`, `m6_confere`, `m6_inicia`, `adm:confere_ino`, `adm:confere_n` | Recusa com rc de negócio e sem Codex nas respectivas condições de meta, N, insumo e inode. `bin/tests/test_codex_n_vagas.sh:641–663,701–705` |
+| `pz:meta`, `pz:seq` | Flag muda somente depois de soltar a meta e retirada produz sequência `1`. `bin/tests/test_codex_n_vagas.sh:605–610,666–679,706–707` |
+| `hist_arquiva`, `proj_fecha`, `proj_dono`, `fim_motivo` | Histórico anterior legível, fecho persistido, rc `3` por dono divergente e 10º campo com o motivo. `proj_dono` verifica apenas a presença do ID antigo, que pode permanecer num JSON indevidamente alterado. `#V:publica` pode ser contado morto pelo erro de lançamento de `_prende` sob o mesmo rótulo da asserção de conteúdo. `bin/tests/test_codex_n_vagas.sh:169–176,438–458,546–577,735–744` |
+
+**Vacuidade parcial nova.** `m5_gate_preso` pode passar com a flag ainda presente porque descarta as duas saídas de `pausar.sh` e não prova retirada nem avanço da sequência. `_ate_abriu` pode retornar sem um novo `abriu`; os casos M5 podem, assim, observar a recusa em outra fase. No selo legado `pausa_reval`, a espera da resposta agora pode detectar a pausa antes de M6, dar o `75` correto e falhar só pelo texto esperado. M3 usa o CLI `--censo` falso e não exercita ref ou merge-base ausente. `bin/tests/test_codex_n_vagas.sh:34–47,323–343,589–623` · `bin/tests/test_codex_pergunta.sh:261–278` · `bin/codex_pergunta.sh:715–718,748`
+
+### 6. Checklist
+
+- **Except e fallback.** **NOVO** · `0` cláusulas Python `except`, `0` `|| true` literais e `1` `raise OSError` capturado pelo `except` **PREEXISTENTE**. Há **1** `2>/dev/null` novo em produção (`_N6`), além dos dois sítios preexistentes movidos com `_COM` e `fim`. No selo são **21** literais adicionados e **3** retirados, mais **7** chamadas a `pausar.sh` que descartam stdout e stderr. Entre os tratamentos novos, os dois retornos `None` do Git fecham M3, sequência ausente vira `0`, e os três `flock -w 1` tratam qualquer falha como contenção. A checagem de `CONFERE` usa o conteúdo e abandona o status do `read`. Os `rev-parse` na publicação também podem deixar metadado vazio. `bin/codex_pergunta.sh:279–313,397–398,540,554–555,573–574,674,689–692,715,749–752` · `bin/pausar.sh:25–26,44–47` · `bin/tests/test_codex_n_vagas.sh:441–458,551–573,593–596,605–645,669–675`
+- **Segundo escritor.** **PREEXISTENTE** · A reserva de caminhos filtra `RESPOSTA`, mas `CODEX_LOGD` pode criar diretório em um caminho reservado sob os logs da própria raiz. A interface genérica de `pausar.sh` pode substituir ou remover inode e JSON de vaga fora da porta. **NOVO** · Essas vias também alcançam os artefatos novos `pausa.seq` e `historico`. `bin/codex_pergunta.sh:98–99,122,442–443,475,562` · `bin/pausar.sh:23–25,39–50,53–69`
+- **Ordem de trava.** **NOVO** · M6 pega meta com lease, slot e resposta já presos. O caminho de admissão vai de meta para vaga, mas tenta a vaga com `LOCK_NB`. Não há ciclo bloqueante entre esses caminhos normais. `CONFERE` aplica `outras + 1 <= N`; se a chamada ficou em `k > N` mas o total baixou até N, ela inicia. A seleção inicial exige `k <= N`. `bin/codex_pergunta.sh:500–524,699–723,739–766` · `bin/codex_admissao.py:55–60,84–103,139–151`
+- **Relógio e significado.** **NOVO** · `iniciou` carimba a projeção da autorização, antes do `GO` e do `Popen`. O `abriu` do JSON usa `time.strftime` antes dos hashes e o `abriu` da trilha usa outro `date` depois da publicação. `QUANDO` da pausa é escrito antes da meta e pode anteceder a ativação, que tem outro carimbo em `PAUSOU`. A sequência é texto comparado por desigualdade no shell, inteiro no JSON e aritmética Bash no escritor. Por exemplo, `08` passa a regex e dá `rc 1` em `--soltar` antes da remoção. A janela do portão continua lendo `date +%H%M` na admissão, **PREEXISTENTE**. `bin/codex_pergunta.sh:335,357–371,397–398,507,534–537,557,760–778` · `bin/codex_admissao.py:164–177` · `bin/pausar.sh:44–49,61–70`
+- **Insumo autorizado.** **NOVO** · M4 guarda o hash dos caminhos já resolvidos. O prompt lê os argumentos originais, e M6 confere os caminhos gravados. Se um symlink de pergunta ou anexo mudar de alvo entre M4 e a montagem do prompt, M6 pode validar o arquivo antigo intacto e autorizar bytes do novo alvo. Também não relê os briefs usados para formar `arq`, salvo a conferência de bytes quando forem anexos. `bin/codex_pergunta.sh:221–256,357–371,482–490,555,634,661,760–765`
+
+## 21/11 22:02 · sessao 2c512c616764 · - · - · origem=Ronald (tmux)
+
+BLOQUEIA
+
+- **NOVO — espera sem saída.** Se a abertura de `slot.gate` falhar, o Bash continua com FD inválido. `_gate` repete qualquer erro do `flock` como se fosse contenção, segurando a vaga até observar pausa. `pausa.seq` FIFO também pode bloquear indefinidamente a consulta inicial sob a meta, o polling e o `--soltar`. `bin/codex_pergunta.sh:72,397–398,501–507,667–678`, `bin/pausar.sh:42–45`.
+- **NOVO — retirada duplicada.** Dois `--soltar` podem observar a mesma flag antes da meta. O primeiro remove e incrementa. Uma chamada pode ser admitida depois, e o segundo incrementa sem reconferir a flag, cancelando essa chamada por uma retirada que já ocorreu. **PREEXISTENTE — publicação concorrente.** O `.novo` compartilhado é escrito antes da trava, de modo que uma publicação pode renomear o conteúdo da outra com autor diferente na trilha. `bin/pausar.sh:39–50,61–72`, `bin/codex_pergunta.sh:397–398,501–507`.
+- **NOVO — M5 em condições normais.** Gate ocupado continuamente implica consulta a cada falha genuína de `flock -w 1`, cerca de uma fatia mais custo do processo. A aquisição bem-sucedida pula a leitura e segue para slot/resposta/M6. A resposta soma tentativas falhas, não mede tempo decorrido. Gate/slot têm espera sem prazo, **PREEXISTENTE**. `bin/codex_pergunta.sh:667–700,711–723,744–748`.
+- **Trilha e relógio.** `vagas.log` só tem `abriu/fechou`, JSON fecha com `75/PAUSADO` e `iniciou` nulo antes de M6, `chamadas.log` tem o novo motivo no `fim`. Sem trava da resposta, nenhum `.rc` novo. `iniciou` é autorização, gravada antes de liberar a meta e antes do GO. `date` lê a janela, carimbos e métricas, Python lê outro relógio para o registro, e `flock` governa as fatias. `bin/codex_pergunta.sh:335,361–376,408–415,534–537,554–557,563,570–577,611–612,669–723,760–781`.
+- **Semântica.** A flag é a da viva. Wrapper lê presença com `-e` e pulso pela geração; `--ler/--soltar` exigem `-f`; mero diretório pausa para o wrapper e não pode ser solto pela ferramenta. `SAIDA` é declaração humana, sem avaliação automática. `pausas.log` fica na raiz do script mesmo para flag de outra raiz, `SOLTOU` é escrito antes de um `rm` cujo erro é ignorado. Hooks usam portas distintas e não consomem flag/seq na cópia examinada. `bin/codex_pergunta.sh:90–98,397–398,424,440,504–507,675,690,717,746–748`, `bin/pausar.sh:14–16,33–50,53–72`, `.claude/settings.json:3–9,62–69`, `bin/disjuntor.py:1851–1862,1920–1925`, `bin/hook_stop_fila1.py:726–744,788–838`.
+- **Selos.** `pausa_gate` morde saída enquanto gate preso, `gate_solta` morde aquisição efetiva, `pausa_slot/resp` mordem rc e motivo, `rc_sidecar` morde bytes, `pz:meta` morde existência e `pz:seq` morde geração/cancelamento. Mas `_ate_abriu` não exige abertura ao vencer prazo. O pulso pode coincidir com a leitura da flag e o teste da geração ficar inconclusivo. O selo legado de M6 exige mensagem específica, mas M5 pode primeiro devolver o mesmo `75 PAUSADO`. `proj_dono` altera campos do registro mantendo ID, de modo que a asserção de preservação por ID passa vazia, embora rc/marcador/mensagem matem o mutante. `bin/tests/test_codex_n_vagas.sh:439–444,591–639,666–679,695–707,740,770–775`, `bin/tests/test_codex_pergunta.sh:261–278,577`, `bin/codex_pergunta.sh:374–376,715–718,748`.
+
+## 21/11 22:02 · sessao 3758c9c9e020 · - · - · origem=Ronald (tmux)
+
+**BLOQUEIA.** O novo loop do gate transforma erro permanente de `flock` em espera sem saída. Se `slot.gate` for diretório, `exec 9>` falha e o shell prossegue. Com fd 9 inválido, `flock -w 1 9` retorna imediatamente e o loop retém a vaga até observar pausa. A abertura sem guarda é preexistente. O loop infinito é novo. `bin/codex_pergunta.sh:72,668–676`.
+
+**Selos.** São 21 mutantes novos, um removido e `#V:publica` reaplicado. Reproduzi em memória a aplicação dos 55 mutantes e a validação sintática. As mortes efetivas estão [nao verificado]. `bin/tests/test_codex_n_vagas.sh:691–707,735–745,757–780`.
+
+- `m3_decl`, `m3_minha`, `m3_outra`, `m3_pontas` testam admissão indevida via rc, captura e marcador. `bin/tests/test_codex_n_vagas.sh:189–193,323–343`.
+- `pausa_seq`, `pausa_gate` testam saída com a trava ainda presa. `gate_solta` testa disponibilidade do gate. `pausa_slot`, `pausa_resp` testam `75 PAUSADO`. `rc_sidecar` testa preservação dos bytes do `.rc` alheio. `bin/tests/test_codex_n_vagas.sh:598–638`.
+- `m6_meta`, `m6_confere`, `m6_inicia`, `adm:confere_ino`, `adm:confere_n` testam recusa antes do Codex. `pz:meta` testa publicação e retirada sob a meta. `pz:seq` testa a geração resultante. `bin/tests/test_codex_n_vagas.sh:607,641–679`.
+- `hist_arquiva` testa preservação do registro anterior. `proj_fecha` testa `fechou/rc/motivo`. `proj_dono` testa rc 3 e diagnóstico, mas o `grep` preservaria o verde se os bytes alheios fossem modificados mantendo o ID. `fim_motivo` testa o campo 10, mas seleciona a última linha por obra, sem vínculo com a chamada corrente. `publica` testa os campos do registro e seu fecho. `bin/tests/test_codex_n_vagas.sh:440–458,546–577`.
+- `m5_gate_preso` pode passar com flag persistente. Silencia `pausar.sh`, não exige que a flag tenha sumido e não verifica a geração. `_ate_abriu` também encerra no timeout ou no rc sem exigir o incremento. O motor aceita o primeiro `FALHA:` com o prefixo esperado, inclusive mensagem de fixture. O selo preexistente `test_codex_pergunta.sh` aceita qualquer ocorrência de `FALHA`. `bin/tests/test_codex_n_vagas.sh:589–592,613–623,769–780`; `bin/tests/test_codex_pergunta.sh:657–659`.
+
+**Contagem literal do delta.** Zero cláusulas `except` novas, zero `|| true` novo e um novo `raise OSError` sob o `except Exception` preexistente. Há um `2>/dev/null` novo em produção e dois preservados em linhas alteradas. No selo há 21 adições e três remoções de `2>/dev/null`, mais sete chamadas que descartam ambos os canais. `bin/codex_pergunta.sh:305–313,540,574,749`; `bin/tests/test_codex_n_vagas.sh:441–458,551–573,593–607,619–645,669–675`.
+
+**Outros fallbacks e escritas.** M3 traduz erro do Git em `None` e recusa, com stderr capturado. O teste de geração trata ausência como zero e em espera usa somente o texto de `_seq`. `pausa.seq` FIFO pode travar sob a meta. Revalidação lê somente o conteúdo do pipeline N e o token de `read`, e as três chamadas `flock -w 1` tratam qualquer erro como contenção. O `flock -u` não testa rc. A projeção retorna 1 internamente para registro anterior sem ID, e o wrapper converte para 3. `bin/codex_pergunta.sh:279–315,334–355,397–398,507,555–556,674–692,715–718,749–752`.
+
+`pausar.sh` genérico ainda aceita caminho de vaga, fora da porta. A mesma via alcança os novos `pausa.seq` e histórico. A confirmação de existência de `--soltar` ocorre antes da meta, permitindo que dois soltas da mesma flag incrementem duas vezes e cancelem uma chamada admitida no intervalo. A publicação prepara um `.novo` compartilhado antes da meta e o `mv` e a trilha não são validados. `pausar.sh` aceita `0008` no regex, mas a soma Bash aborta por octal. `bin/pausar.sh:23–30,39–50,53–72`; `bin/codex_pergunta.sh:506–507`.
+
+## 21/11 22:01 · sessao e1e882bdbf25 · - · - · origem=Ronald (tmux)
+
+**BLOQUEIA.** A projeção persistida deixa o lançador legado herdar o conjunto de arquivos de uma chamada encerrada. Uma projeção v1 sobrevivente impede indefinidamente o reuso da vaga. O gate novo pode girar indefinidamente com fd inválido, e a conferência de insumos pode autorizar um prompt diferente do que foi registrado. `bin/codex_admissao.py:139–151`, `bin/codex_pergunta.sh:298–320,334–371,522–555,634,661,668–678`.
+
+- **NOVO — estado alheio.** Depois de um fechamento normal, um legado segura só a trava gêmea de k=1. A nova chamada conta k=1 ocupada, mas compara o JSON persistido da ocupante anterior. Se a WT antiga existir e for disjunta, o candidato passa embora possa tocar o mesmo arquivo que o legado. A base truncava o JSON no fecho. O selo limpa os JSONs antes de testar o ocupante legado. `bin/codex_admissao.py:139–146`, `bin/codex_pergunta.sh:298–320,408–415,519–543`, `bin/tests/test_codex_n_vagas.sh:212–215,346–352`.
+- **NOVO — reuso bloqueado.** Um JSON v1 não vazio, deixado por encerramento abrupto na base, falha por ausência de `id_chamada`. A vaga continua livre, mas é selecionada de novo no próximo lançamento e retorna novamente `3 FALHA_TRILHA` antes do `abriu`. Um histórico prévio de conteúdo divergente produz o mesmo efeito. O caso de JSON sem ID está explícito no selo. `bin/codex_admissao.py:146–151`, `bin/codex_pergunta.sh:342–356,554–558`, `bin/tests/test_codex_n_vagas.sh:574–577`.
+- **NOVO — esperas sem saída.** A falha de abrir `slot.gate`, por exemplo se for diretório, deixa fd 9 inválido e o novo `until flock` interpreta o erro imediato como contenção. Um FIFO em `pausa.seq` prende `cat`, inclusive com meta em mãos. Um FIFO no JSON anterior de uma vaga livre prende a leitura do novo publicador, com meta e lease em mãos. **PREEXISTENTE:** segurar de fato o gate indefinidamente, sem pausa, não tinha prazo total. `bin/codex_pergunta.sh:72,334,397–398,501–507,555,668–678,748`, `bin/pausar.sh:42–47`.
+- **NOVO — insumos M6.** O registro guarda hashes dos caminhos canônicos, mas o CAB lê os argumentos originais e a M6 reabre os caminhos gravados. Trocar um symlink de entrada entre M4 e CAB pode mudar o prompt sem mudar os arquivos conferidos. Trocar A→B antes de CAB e B→A antes de M6 também passa. Os briefs descobertos pelo coletor ficam fora dos hashes salvo anexação explícita. `bin/codex_pergunta.sh:221–256,363–371,482,489,555,634,661,760`.
+- **PREEXISTENTE — admissão em comum.** Duas declarações como `app/folha/../ponto/a.py` e `app/ponto/a.py`, com HEADs sem delta e WT admitida limpa, apontam para o mesmo arquivo; a comparação não normaliza `..`. Também não há exclusão explícita pela identidade da WT. A mesma obra sem brief próprio pode citar um brief de outra pasta de `logs` em cada pergunta e apresentar listas disjuntas a partir da mesma WT limpa. `bin/disjuntor.py:1526,1612–1645,1723–1747`, `bin/codex_pergunta.sh:249–256,266–320,454–471,522–549`.
+- **NOVO — demais decisões.** M3 soma os dois deltas e conserva as duas pontas do rename. HEAD destacado funciona com ref compartilhada. Sem merge-base na concorrência ou com lista declarada vazia, o portão retorna rc 2. Ausência inicial de main na viva já causava `2 PRE_CHECK`; primeira vaga continua sem M3. M6 relê N e confere o inode próprio; `k>N` ainda pode autorizar se a cardinalidade couber. Sob meta, a busca de vaga é não bloqueante, por isso a ordem `meta→vaga` e `vaga→meta` não forma ciclo nas rotas normais. `bin/codex_pergunta.sh:279–320,426–429,540–544,744–766`, `bin/codex_admissao.py:55–60,84–103,139–151`.
+- **Checklist.** Zero `except` novo e zero `|| true` literal novo. Há um novo `2>/dev/null` em produção, em `_N6`. O selo introduz 19 usos literais em novos trechos, três substituindo supressões anteriores, e sete `>/dev/null 2>&1` adicionais. O `except Exception` antigo cobre as novas falhas do delta alheio. A ferramenta de pausa genérica continua podendo escrever em um nome de vaga por caminho explícito sem passar pela meta, que só é tomada para o basename `codex-construtor`. `bin/codex_pergunta.sh:297–313,749`, `bin/pausar.sh:23–30,39–50,53–69`, `bin/tests/test_codex_n_vagas.sh:441–674`.
+- **Selos.** M3/M6 aferem rc e não chamada pelo fake além de texto. O motor aceita qualquer falha com o prefixo esperado, então a prova fornecida não identifica qual asserção matou cada mutante. `#V:publica` reaplicado para antes de conferir o JSON, pois M6 rejeita registro ausente e `_prende` acusa que não entrou no Codex. `proj_dono` muda o resultado, mas a suposta preservação verifica só o ID que permanece mesmo quando o mutante altera os demais campos. `bin/tests/test_codex_n_vagas.sh:169–193,438–458,646–663,691–705,735–740,757–775`, `bin/codex_pergunta.sh:334–340,760–764`.
 
 ## 21/11 21:40 · sessao b7bed28275bf · E4C-F5-CONSTROI · construtor · origem=Code
 
@@ -1006,295 +1113,4 @@ git diff --no-index --stat /dev/null colaboradores/tests/test_feriado_volta5.py
 
 **Autoconferência BRIEF-SEM-EXCEPT.** `except` adicionados **0**, fallbacks adicionados **0**. A conversão de `MarcaInvalida` continua no handler existente. `colaboradores/management/commands/marcar_feriado_do_posto.py:118–127` · `colaboradores/services/feriado_do_posto.py:379–406` · `ponto/turnos.py:2185–2219`.
 
-## 21/11 19:09 · sessao eadbfc51bcf6 · E4C-F5-CONSTROI · construtor · origem=Code
-
-PERGUNTA DE DESENHO: em `hora` sem resposta vigente e sem `carimbo_legado`, o veto deve alcançar também o slot de marco fixo e o fechamento HX, ou deve preservar alguma dessas provas? A L-130 resolve a vigência da resposta. O corte registrado repete a regra do par. A precedência entre o veto e essas provas ficou sem decisão escrita nos trechos conferidos. `app/docs/LEIS.md:151` · `app/docs/CORTES.md:518,560` · `app/chamados/tests/test_marco_por_motivo.py:112–128` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–86`
-
-A resposta da regra para V1 é **sem resposta vigente**. A composta já perdeu o instante do ato, e `06:30` residual não satisfaz C21. Reproduzi em memória, com o derivador e o juiz reais e a composta e a jornada simuladas. Em `5cc451ac3`, o texto ainda gera `SLOT(06:30, S)` e o juiz dá `False`. Em `f3d23021f`, dá `PLANTIO_SEM_TS` e o juiz dá `True` nos **3 cenários**: vínculo às `05:24`, destino encerrado com lei calada e destino encerrado fora da janela. São **66 minutos** entre as duas horas, para uma tolerância de **20 minutos**. Incidência em produção [nao verificado]. `5cc451ac3:app/chamados/juizes.py:382–387,775–786` · `app/chamados/juizes.py:255–284,374–420,798–845,1594–1603` · `app/chamados/models.py:4370–4390`
-
-| Opção | Efeito medido em memória |
-|---|---|
-| **A. Veto geral como em `data_hora`.** Devolver `SEM_RESPOSTA_VIGENTE` em `hora` sem vigência e sem legado antes de derivar. | **3/3** contraexemplos dão `False`. O controle de marco fixo perde o `SLOT`. No HX, **2/3** vereditos mudam de `True` para `False`, com lei calada e fora da janela. Os três controles HX mudam de motivo. `app/chamados/juizes.py:379–387,798–845` · `app/chamados/tests/test_marco_por_motivo.py:271–282` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–86` |
-| **B. Vetar depois de tentar o marco.** Se a derivação sem texto não produzir instante, devolver `SEM_RESPOSTA_VIGENTE`. | **3/3** dão `False` e o marco fixo mantém `SLOT`. O HX tem as mesmas **2 mudanças de veredito** e **3 de motivo** da opção A. `app/chamados/juizes.py:409–420,798–845` · `app/chamados/services/materializacao.py:691–710` · `app/chamados/tests/test_hx_fallback_sem_lei.py:61–86` |
-| **C. Vetar depois de tentar o marco, só com texto residual.** | **3/3** dão `False`, o marco fixo e os **3 controles HX** conservam seus resultados. Em **2/2** controles adicionais, com o par limpo e via vazia, vínculo ou destino ainda dão `True`, como na base. Esta opção faz a presença do texto residual decidir a admissibilidade da prova. A reabertura normal limpa o par inteiro. `app/chamados/juizes.py:409–420,798–845` · `app/chamados/services/disputa_emissao.py:1630–1635,1664–1683` · `app/docs/LEIS.md:151` |
-
-Nos três desenhos, `SEM_RESPOSTA_VIGENTE` usa a saída já existente de **retração com carimbo e trilha**. Nos casos reclassificados, vínculo e destino deixam de dar `True` por si. A escolha pendente é se o marco fixo e as provas do HX continuam admissíveis quando o C21 nega vigência. `app/chamados/juizes.py:287–298,798–845,860–863`
-
-**Os cinco leitores**
-
-| Leitor | Efeito de A, B e C |
-|---|---|
-| `carga_pergunta_viva` | Guarda o novo motivo nos casos reclassificados. Só `SLOT` estende a janela de batidas sem origem. A perde essa janela para o marco fixo. B e C a preservam. A carga já armazena exceções e `_slot_esperado` as relança quando chega à leitura do cache. `app/chamados/services/carga_pergunta_viva.py:113–145` · `app/chamados/juizes.py:381–387` |
-| Lote e validação | Nos três desenhos, o lote já barra em C21 os casos sem vigência que chegam à consulta de slot. A validação individual e a porta de plantio também exigem C21. `app/chamados/services/validacao.py:697–704,1203–1232` · `app/chamados/services/materializacao.py:1332–1341` |
-| Explicador | Nos casos reclassificados que chegam à explicação, passa a dizer “sem resposta vigente”. A também substitui a explicação pelo horário do marco fixo. A e B alcançam o HX. C conserva o HX. `app/chamados/services/explicador.py:48–72,98–125,138–150` |
-| `vigia_carimbo` | Dentro do universo com validação física, um caso antes aceito só por vínculo ou destino pode passar de `com_registro` a `slot_nao_derivavel`. A também retira o instante dos marcos fixos afetados. B e C conservam esse instante. `app/chamados/services/vigia_carimbo.py:94–123` |
-| Juiz de fato → C6 | Nos casos reclassificados, o juiz vai direto à prova de retração. A também corta a prova pelo slot de marco fixo. A e B cortam o HX sem resposta. C conserva inclusive os dois caminhos com par limpo medidos acima. Quando chega ao degrau 6, C6 inverte o resultado do juiz de fato. `app/chamados/juizes.py:798–845,860–863,1530–1543` |
-
-**Fonte, escritor, instante e significado**
-
-| Campo | Contrato conferido |
-|---|---|
-| `resposta_colab` | Texto físico da projeção, lido pela composta. A porta humana grava junto com o instante obtido sob trava. A automática grava o par com o instante recebido. A reabertura guarda o texto no ato e limpa a coluna. C21, slot e lote leem esse texto em seus respectivos recortes. `resposta_display` lê o texto vigente da sequência. Texto preenchido, sozinho, não prova vigência. `app/chamados/services/disputa_emissao.py:1491–1502,1630–1635,1664–1683,1705–1715` · `app/chamados/models.py:3865–3869,4382–4390` · `app/chamados/services/validacao.py:1203–1226` |
-| `respondida_em` | Coluna escrita junto com a resposta. A cura pela trilha também pode reparar a coluna com a hora da nota. Para C21, slot e C6, a composta usa o instante vigente da sequência, incluindo a projeção sem linha correspondente. A reabertura desfaz o instante no ato. O horizonte veta resposta posterior. `app/chamados/services/disputa_emissao.py:1494–1502,1664–1683,1719–1737` · `app/chamados/models.py:4304–4317,4348–4390` · `app/chamados/juizes.py:369–382,1433–1446,1449–1471` |
-| `materializada_em` / `via_resolucao` | Colunas de carimbo e modalidade. `_escrever_carimbo` atribui o par a mando das portas, no `quando` recebido ou no relógio da porta. Descarimbar limpa o par. A composta lê as colunas e o corte temporal retira carimbo futuro, preservando as vias de identidade previstas. O juiz de fato, C6 e explicador usam o par para decidir qual prova procurar. `app/chamados/models.py:3324–3335,3361–3374,3416–3433,3451–3460,4382–4390` · `app/chamados/juizes.py:723–749,1433–1446,1464–1465` · `app/chamados/services/explicador.py:122–134` |
-| `motivo` do slot | Valor calculado por `_slot_esperado` no horizonte recebido. Só `SLOT` leva `ts` e `tipo`. Hoje `PLANTIO_SEM_TS` agrega falha de derivação de uma resposta elegível e falta de instante após suprimir texto sem vigência. O juiz aceita provas diferentes conforme o motivo. Essa ambiguidade é a origem de V1. `app/chamados/juizes.py:346–387,404–420,798–845` |
-
-**INCOMPLETO.** A cópia ficou em `f3d23021f4cc0aa6f6e72efa1d6350647488ded9`. `git diff --stat f3d23021f` ficou vazio. **0 commits, 0 arquivos alterados, 0 `except` novos em produção, 0 em teste e 0 fallbacks novos.** Rodei **65 testes sem banco**, todos verdes na base. REDs novos, mutante por reversão, mordidas ORM anteriores e certificação pela suíte e pelo opus [nao verificado]. A pista executa Docker com rede e banco. `app/chamados/tests/e3_c8b_apoio.py:1–5` · `app/docs/LEIS.md:147` · `bin/suite.sh:316–325`
-
-Para o Code, o seletor abaixo é proposto para os dois REDs do juiz de fato, depois do corte. Resultado esperado com os testes sobre `f3d23021f`: vermelho. Com a cura: verde. Revertendo só a decisão de motivo: vermelho. Os testes existentes de vínculo, destino e trilha usam `data_hora`; o de `hora` verifica apenas o slot. `app/chamados/tests/test_marco_por_motivo.py:231–282` · `bin/suite.sh:197–209`
-
-```sh
-bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-constroi-141636 --only chamados --espera 7200 -- -k test_RED_hora_desfeita_nao_absolve
-```
-
-Seguem fora da volta o passivo pré-trava, o parser duplicado de `data_hora`, `detalhe['porque']` misturado e o efeito preexistente da validação só no ato posterior a `agora`. Logs dos comandos de mutação da volta 3 e alcance no acervo [nao verificado]. `app/chamados/services/passivo_validado.py:330–356,372–384,532–545` · `app/chamados/juizes.py:389–412,1433–1446` · `app/chamados/services/materializacao.py:1624–1637` · `app/chamados/services/validacao.py:1203–1232`
-
-## 21/11 19:04 · sessao 526ee686a7be · E4C-F5-CONSTROI · construtor · origem=Code
-
-**INCOMPLETO.** A cura está na cópia, sobre `701096390b70775db88f42c90ebaae9d048ec930`. O RED foi escrito antes da cura. As duas etapas estão disponíveis como diffs separados por arquivo. Criação de commits [nao verificado], conforme a proibição de `git commit`. Vermelho na base, verde na cura, execução dos mutantes e medição do selo [nao verificado]. Os quatro arquivos e as quatro variantes compilam em memória. `chamados/reconciliador.py:644–657` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:173–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:201–279` · `ponto/tests/test_selo_chokepoint_escrita.py:206–212,236–242`
-
-### Cura e campos
-
-O E2 traz colaborador e empresa no `SELECT` da pergunta, depois de adquirir a trava do colaborador. A consulta do C20 nasce nesse ponto e fica aberta até o C6 da porta de carimbo. O lote local fornece apenas o PK do usuário de sistema, já obtido para assinar o ato. O teste de corrida exige a tranca gravada depois da emissão, o veto do C20 sob a trava, o trio vazio e `n = 0`. O A2 exige a releitura do PK no mesmo `atomic` da trava, a exclusão da candidata validada e, no controle positivo, que a porta receba a própria instância relida. `chamados/reconciliador.py:627–662` · `chamados/juizes.py:1132–1171` · `chamados/models.py:3361–3405` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:181–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:209–266`
-
-| Campo | Fonte, escritor e significado | Instante e leitores |
-|---|---|---|
-| Empresa | `Colaborador.empresa_id` identifica a empresa vigente usada na competência. A transferência atribui a FK do posto e grava pela porta `salvar_inteiro`. `colaboradores/models.py:321` · `colaboradores/views.py:1406–1418` · `colaboradores/services/colaborador.py:152–161` | O E2 lê a FK e a empresa após a trava. C20, fechamento mensal e fila da competência usam essa ligação. `chamados/reconciliador.py:644–649` · `chamados/juizes.py:1029–1068` · `ponto/views.py:1030` · `chamados/services/competencia_trancada.py:99–121` |
-| Corte | `Empresa.dia_inicio_competencia` marca o primeiro dia da janela. O cadastro passa o valor às portas de criação e atualização. `colaboradores/models.py:46` · `colaboradores/views.py:515–518,538–557` · `colaboradores/services/estrutura.py:13–22` | C20 deriva a competência da empresa relida sob a trava. O cartório e a fila da competência usam o mesmo motor de janelas. `chamados/reconciliador.py:644–654` · `chamados/juizes.py:1067–1068` · `ponto/janelas.py:36–63` · `ponto/services/cartorio.py:292,312` · `chamados/services/competencia_trancada.py:99` |
-| `fechado_em` | A porta `trancar_periodo` cria a tranca ou atualiza o instante ao retrancar. O C20 usa esse instante como limite inferior para procurar toque humano. `ponto/models.py:936` · `ponto/services/fechamento.py:1400–1419` · `chamados/juizes.py:1073–1085` | K7 lê a linha após a trava do colaborador no E2. C6, C7 e a fila da competência também consomem a tranca e seus efeitos. `chamados/reconciliador.py:644–657` · `chamados/juizes.py:1406–1415` · `chamados/models.py:2022–2035` · `chamados/services/competencia_trancada.py:117–118,155–156` |
-| `reaberto_em` | `reabrir_periodo` grava o instante e `trancar_periodo` o limpa ao retrancar. Valor nulo é o critério de tranca vigente em K7. `ponto/services/fechamento.py:1412–1419,1432–1441,1464–1470` | O C20 do E2 consulta K7 após a trava. A fila da competência e o fechamento mensal também chamam K7. `chamados/reconciliador.py:644–655` · `chamados/services/competencia_trancada.py:88–99` · `ponto/views.py:1030` |
-| Memo | C20 preenche empresa e resultado de K7, inclusive `None`. O juiz de toque preenche a entrada de toque. Empresa, corte e tranca podem mudar durante a rodada. O lote ordinário guarda o usuário de sistema e o toque positivo. `chamados/juizes.py:1021–1037,1057–1075,1101–1126,1217–1238` | O memo da tentativa nasce após a trava e serve ao veto do C20 e ao C6 do carimbo. `TRANCA_DA_CONSULTA` tem precedência sobre lote, request e instância. Para empresa e período, C20 chama `_memo_da_tranca(lote=False)`. `chamados/reconciliador.py:644–657` · `chamados/juizes.py:991–997,1035–1037,1101–1117,1132–1157` |
-
-No **cron do cartório** e no **comando `consumir_eventos_celula`**, a chamada direta chega ao E2 sem abrir os três contextos. No **request**, `REQUISICAO_DA_TRILHA` fica ativa pelo middleware, e a consulta do app ou o S143 podem abrir `TRANCA_DA_CONSULTA` nos respectivos escopos. O vigia e o instrumento de sombra abrem `LOTE_DA_TRANCA`. O E2 usa sua consulta interna também quando já existe um contexto externo. `ponto/management/commands/processar_cartorio.py:59–65` · `ponto/services/cartorio.py:1018–1026` · `chamados/management/commands/consumir_eventos_celula.py:17–31` · `chamados/reconciliador.py:1421–1430,654–657` · `core/middleware.py:76–82` · `chamados/services/pergunta_no_app.py:63–65` · `chamados/services/disputa_emissao.py:1983–2014,2149–2154` · `chamados/management/commands/vigiar_fio_morto.py:188` · `chamados/management/commands/diff_e3_sombra.py:117`
-
-### Diff e pista
-
-**Diff stat** — RED `+119 −6` em dois arquivos. Cura e anotação do selo `+19 −12` em dois arquivos. Total `+138 −18`. **Excepts adicionados** — produção 0, testes 0. **Fallbacks adicionados** — 0. `chamados/reconciliador.py:627–664` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:55–77,173–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:13–15,83–101,201–279` · `ponto/tests/test_selo_chokepoint_escrita.py:206–212,236–242`
-
-A anotação usa `701096390` para os dois sítios históricos. São `N` SELECTs de pergunta para `N` emitidas e `K` SELECTs de atos para `K` sobreviventes. A volta amplia o JOIN existente e volta a consultar K7 por sobrevivente com empresa e dia de turno. A trilha é consultada quando há tranca, e o fecho posterior pode reler K7. Os tetos continuam em `236` e `300`. Totais da volta [nao verificado]. `chamados/reconciliador.py:647–657,669–676` · `chamados/juizes.py:1027–1037,1067–1085` · `ponto/tests/test_selo_chokepoint_escrita.py:206–212,236–242`
-
-Comandos para o Code na pista. O executor usa Docker e banco de CI. `bin/suite.sh:316–325`
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-copia=/home/ronald/wt-codex-e4c-f5-constroi-165618
-
-# Série, em ordem
-git -C "$copia/app" diff --relative -- \
-  chamados/tests/test_e2_pergunta_so_ao_c6.py \
-  chamados/tests/test_e4c_f5_guarda_reconciliador.py
-git -C "$copia/app" diff --relative -- \
-  chamados/reconciliador.py ponto/tests/test_selo_chokepoint_escrita.py
-
-# Na base 701096390 com o primeiro diff, vermelho esperado.
-# Com os dois diffs, verde esperado. [nao verificado]
-"$copia/bin/suite.sh" --dir "$copia" --only chamados --espera 7200 -- \ [nao verificado]
-  -k test_f5_e2_tranca
-
-# Controle e A2 na cura
-"$copia/bin/suite.sh" --dir "$copia" --only chamados --espera 7200 -- \ [nao verificado]
-  -k test_e2_pergunta_so_ao_c6
-"$copia/bin/suite.sh" --dir "$copia" --only chamados --espera 7200 -- \ [nao verificado]
-  -k test_A2_evento_celula_absolveu
-
-# Selo
-"$copia/bin/suite.sh" --dir "$copia" --only ponto --espera 7200 -- \ [nao verificado]
-  -k test_selo_chokepoint_escrita
-```
-
-Cada mutante parte da cura e restaura o arquivo ao sair. Vermelho esperado nos quatro casos. A última chamada imprime a medição sem alterar o teto. `chamados/reconciliador.py:645–657` · `chamados/tests/test_e2_pergunta_so_ao_c6.py:206–248` · `chamados/tests/test_e4c_f5_guarda_reconciliador.py:243–254` · `ponto/tests/test_selo_chokepoint_escrita.py:331–342`
-
-```bash
-pista_com_edicao() (
-  cd "$copia/app" || exit
-  arquivo=$1
-  edicao=$2
-  shift 2
-  original=$(cat "$arquivo") || exit
-  trap 'printf "%s\n" "$original" > "$arquivo"' EXIT
-  sed -i -e "$edicao" "$arquivo" || exit
-  "$copia/bin/suite.sh" --dir "$copia" --espera 7200 "$@" [nao verificado]
-)
-
-# Herda o memo do request
-pista_com_edicao chamados/reconciliador.py '654d;655,657s/^    //' \
-  --only chamados -- -k test_f5_e2_tranca_entre_emissao_e_trava_em_request
-
-# Reinstala o colaborador da pré-seleção
-pista_com_edicao chamados/reconciliador.py \
-  '654i\                fresca.disputa.colaborador = colab' \
-  --only chamados -- -k test_f5_e2_tranca_le_corte_novo_dentro_de_consulta_externa
-
-# Pula a candidata respondida antes da releitura
-pista_com_edicao chamados/reconciliador.py \
-  '646i\                if p.respondida_em:\n                    continue' \
-  --only chamados -- -k test_A2_evento_celula_absolveu_exclui_validada_apos_selecao
-
-# Carimba a instância da pré-seleção
-pista_com_edicao chamados/reconciliador.py '657s/fresca.carimbar/p.carimbar/' \
-  --only chamados -- -k test_A2_evento_celula_absolveu_entrega_coluna_nula_e_resposta_none
-
-# Remedição do selo
-pista_com_edicao ponto/tests/test_selo_chokepoint_escrita.py \
-  '/^    def _cobrar(self, nome, medido):$/a\        print(f"{nome}: {medido} queries", flush=True)' \
-  --only ponto --parallel 1 -- -k test_selo_chokepoint_escrita
-```
-
-## 21/11 18:56 · sessao 4f6a2bf25e06 · E4C-F5-CONSTROI · construtor · origem=Code
-
-Implementei a cura do item 1.2 no laço do passivo. `reparar` fotografa os sete valores no laço de classificação e os reconfirma após `travar_o_ato_do_plantio`, dentro do mesmo `atomic`. Qualquer divergência recusa o grupo inteiro em `escopo_do_plantio_mudou` antes de chamar a unidade de trabalho. Classe e slot saem da mesma função nas duas leituras. [Foto e trava](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:362) · [Comparações](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/passivo_validado.py:456) · [Classificador](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/services/vigia_carimbo.py:65)
-
-**K6 e dry.** A leitura inicial usa `_esta_exportada`. Para o último TXT invalidado sem substituto, `haiku_export` ainda preenche `vigente`, enquanto K6 devolve `False`. Nesse caso, o dry exibe `exportada=True` e o apply recusa o grupo após reler pelo K6. Uma troca na leitura inicial mudaria a marcação de exportada no dry. A incidência desse caso em produção é [nao verificado]. `chamados/services/passivo_validado.py:368` · `:376` · `:404` · `folha/haiku_export.py:69` · `:74` · `folha/export.py:588` · `core/juizes.py:342`
-
-### Cinco perguntas por campo
-
-| Campo | Fonte | Escritor | Instante | Leitores | Significado |
-|---|---|---|---|---|---|
-| Composta | Sequência de decisões, texto projetado, carimbo e via. `chamados/models.py:4382` | Resposta, assinatura, devolução e carimbo. `chamados/services/disputa_emissao.py:1532` · `chamados/services/validacao.py:161` · `:269` · `chamados/services/materializacao.py:2042` | Foto e reconfirmação. `chamados/services/passivo_validado.py:363` · `:457` | Guarda do grupo e eleição da irmã. `chamados/services/passivo_validado.py:457` · `chamados/services/materializacao.py:153` | Estado efetivo de resposta, validação e materialização. `chamados/models.py:4385` |
-| Classe | Juiz de materialização, slot esperado e batida vinculada viva. `chamados/services/vigia_carimbo.py:65` | O vigia deriva a classe. Plantio, vínculo e retratação alteram a evidência. `chamados/services/materializacao.py:1531` · `:1588` · `ponto/registro_batida.py:287` | Classificação e releitura. `chamados/services/passivo_validado.py:335` · `:459` | Censo e seleção do passivo. `chamados/services/vigia_carimbo.py:129` · `chamados/services/passivo_validado.py:337` | Presença de registro ou motivo da falta dele. `chamados/services/vigia_carimbo.py:70` |
-| `ts` | Derivador de `hora` e parser de `data_hora`. `chamados/juizes.py:344` | O slot é derivado da resposta e dos dados do fato e do marco. `chamados/services/disputa_emissao.py:1532` · `chamados/services/fio.py:1096` · `chamados/services/materializacao.py:701` | Junto da classe, nas duas leituras. `chamados/services/passivo_validado.py:335` · `:459` | Juiz de materialização e derivação do dia. `chamados/juizes.py:757` · `chamados/services/passivo_validado.py:118` | Instante esperado da batida. `chamados/services/vigia_carimbo.py:89` |
-| Dia | `data_evento` ou a data local do slot. `chamados/services/passivo_validado.py:118` | Emissão e rechaveamento gravam `data_evento`. `chamados/services/disputa_emissao.py:453` · `chamados/services/fio.py:1096` | Antes do agrupamento e após a trava. `chamados/services/passivo_validado.py:352` · `:462` | Competência e geometria diária. `chamados/services/passivo_validado.py:353` · `:522` · `:574` | Dia do turno usado pelo passivo. `chamados/services/passivo_validado.py:103` |
-| Competência | Mês e ano do fim da janela que contém o dia. `chamados/services/passivo_validado.py:91` · `ponto/janelas.py:60` | O cadastro grava o corte da empresa. `colaboradores/views.py:539` · `colaboradores/services/estrutura.py:18` | Na classificação e com a empresa relida sob a trava. `chamados/services/passivo_validado.py:353` · `:399` · `:463` | Recorte, agrupamento e regeneração. `chamados/services/passivo_validado.py:358` · `:371` · `:500` | Competência à qual pertence o dia do turno. `chamados/services/passivo_validado.py:91` |
-| Exportada | Histórico do TXT na foto e K6 na releitura. `folha/haiku_export.py:59` · `folha/export.py:556` | `ExportacaoDominio.registrar` e `invalidar`. `folha/models.py:174` · `:143` | Na foto da classificação e após a trava. `chamados/services/passivo_validado.py:368` · `:404` | Relato e decisão de regenerar. `chamados/services/passivo_validado.py:377` · `:491` | Presença de TXT na leitura histórica e entrega vigente no K6. `folha/haiku_export.py:74` · `folha/export.py:591` |
-| `data_conferida_em` | Coluna da pergunta. `chamados/models.py:2668` | `conferir_data_do_fato`. `chamados/services/validacao.py:1014` | Na foto da classificação e na pergunta relida sob a trava. `chamados/services/passivo_validado.py:369` · `:464` | Guardas de data da avulsa e da irmã. `chamados/services/materializacao.py:171` · `:1949` | Instante da confirmação humana do dia em disputa. `chamados/services/validacao.py:975` · `:1014` |
-
-### Diff e verificações
-
-| Arquivo | Adições | Remoções |
-|---|---:|---:|
-| `chamados/services/passivo_validado.py:362` | 34 | 7 |
-| `chamados/services/vigia_carimbo.py:65` | 18 | 13 |
-| `chamados/tests/test_e4c_f5_passivo_releitura.py:1` | 209 | 0 |
-| `core/tests/test_medida_turno_do_par.py:270` | 5 | 5 |
-| `ponto/tests/test_cadastro_futuro_c5e.py:204` | 10 | 2 |
-| **Total** | **276** | **27** |
-
-- **`except` adicionados: 0 em produção e 0 em testes.** A divergência usa a captura já existente. `chamados/services/passivo_validado.py:410` · `:456` · `chamados/tests/test_e4c_f5_passivo_releitura.py:48`
-- **Catraca de linhas:** o censo reproduziu as quatro entradas do selo na base `b0935c1f1` e os quatro deslocamentos previstos no HEAD. Atualizei as posições das mesmas ocorrências, conforme a igualdade exigida pelo selo. Rodada em memória: `Ran 35 tests in 39.067s`, `OK`, RC 0. `core/tests/test_medida_turno_do_par.py:17` · `:271` · `:558`
-- **C5E:** completei o stub da trava e da releitura para o controle que chega ao plantio. `Ran 30 tests in 9.631s`, `OK`, RC 0. `ponto/tests/test_cadastro_futuro_c5e.py:204` · `:238`
-- **RED e mutantes:** o teste congela o relógio nas duas threads, exige PIDs distintos e aguarda o commit da outra conexão antes da trava real. No caso que isola o dia, a trava real recebe o escopo estrutural atualizado para que a comparação de `data_evento` já existente não masque a nova guarda. O caso de slot derivado do contexto também muda dia e competência e usa a chamada normal à trava. Em memória, as seis mutações suprimiram as respectivas recusas da guarda isolada. [RED](/home/ronald/wt-codex-e4c-f5-constroi-160129/app/chamados/tests/test_e4c_f5_passivo_releitura.py:48) · `chamados/tests/test_e4c_f5_passivo_releitura.py:82` · `:136` · `:157` · `chamados/services/materializacao.py:2116`
-
-### Comandos para a pista
-
-No HEAD `6a5ab520c`, com apenas o arquivo do RED, o primeiro `provar "$red"` deve falhar na asserção de recusa do grupo. Na cópia com a cura, o mesmo comando deve passar e cada mutante deve falhar nessa asserção. Resultados com PostgreSQL [nao verificado]. `chamados/tests/test_e4c_f5_passivo_releitura.py:69` · `:103` · `config/settings/ci.py:6`
-
-```bash
-provar() {
-    PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
-        --settings=config.settings.ci --noinput "$@"
-    rc=$?
-    printf 'RC=%s\n' "$rc"
-    return "$rc"
-}
-
-red=chamados.tests.test_e4c_f5_passivo_releitura
-caso="$red.PassivoReleituraTest"
-
-# Rodar no HEAD com apenas o RED e repetir com a cura aplicada. [nao verificado]
-provar "$red"
-
-CORTES_F2_MUTANTE=f5_passivo_sem_data_conferida_em provar "$caso.test_RED_conferencia_da_avulsa_recusa_o_grupo_sem_DATA_EM_DISPUTA"
-CORTES_F2_MUTANTE=f5_passivo_sem_exportada provar "$caso.test_RED_exportacao_nova_recusa_o_grupo"
-CORTES_F2_MUTANTE=f5_passivo_sem_dia provar "$caso.test_RED_data_evento_muda_o_dia_com_TS_e_competencia_iguais"
-CORTES_F2_MUTANTE=f5_passivo_sem_competencia provar "$caso.test_RED_corte_da_empresa_muda_a_competencia_com_dia_e_TS_iguais"
-CORTES_F2_MUTANTE=f5_passivo_sem_ts provar "$caso.test_RED_marco_fixo_muda_o_TS_com_dia_e_competencia_iguais"
-CORTES_F2_MUTANTE=f5_passivo_sem_classe provar "$caso.test_RED_batida_fora_do_slot_muda_a_classe_com_TS_igual"
-
-provar chamados.tests.test_e4c_f5_guarda_plantio_s144 \
-    chamados.tests.test_e4c_f5_plantio_concorrente \
-    chamados.tests.test_e4c_f5_voltaD_portas \
-    chamados.tests.test_bug_par_projetado \
-    chamados.tests.test_o306_vigia_carimbo \
-    chamados.tests.test_o317_passivo_pela_porta \
-    ponto.tests.test_cadastro_futuro_c5e \
-    core.tests.test_medida_turno_do_par
-```
-
-**Incompleto.** Os commits separados de RED e cura ficaram pendentes pela proibição expressa de `git commit`. Antes da edição de produção, a tentativa de carregar o RED terminou com `ModuleNotFoundError: django.db`, RC 1, na importação. O RED de negócio no HEAD, o verde com a cura, os mutantes concorrentes, os vizinhos com banco e a suíte inteira seguem [nao verificado]. `chamados/tests/test_e4c_f5_passivo_releitura.py:7` · `config/settings/ci.py:6`
-
-## 21/11 18:56 · sessao c9da406da684 · E4C-F5-CONSTROI · verificador · origem=Code
-
-**Veredito da pré-verificação: bloqueia.** O diff implementa a fórmula do aval para as decisões que já existem quando a ressuscitação lê a pergunta sob a trava. A leitura pode, porém, apagar uma resposta gravada **depois** da ressuscitação. Dois testes existentes ainda exigem os carimbos que o `+1 µs` substituiu, e o I23 repete o predicado que identifica a ressuscitação. [app/chamados/models.py:1717](/home/ronald/codex_ws/f0be31c63502311204d23bf44ae0b4757cdf811b/app/chamados/models.py:1717) [app/chamados/models.py:4384](/home/ronald/codex_ws/f0be31c63502311204d23bf44ae0b4757cdf811b/app/chamados/models.py:4384) [app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:380](/home/ronald/codex_ws/f0be31c63502311204d23bf44ae0b4757cdf811b/app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:380) [app/chamados/management/commands/auditar_invariantes_chamados.py:1127](/home/ronald/codex_ws/f0be31c63502311204d23bf44ae0b4757cdf811b/app/chamados/management/commands/auditar_invariantes_chamados.py:1127)
-
-Conferi os quatro blobs presentes contra os índices do diff e reconstruí em memória os quatro blobs anteriores. Também compilei em memória os três mutantes novos e avaliei a expressão do HLC com os horários das fixtures. Identidade do commit inteiro, execução da suíte, concorrência real e valores de produção ficam **[nao verificado]**. [nao verificado]
-
-## 1. Cláusulas do item (1)
-
-| Cláusula | Conferência |
-|---|---|
-| Ler o relógio uma vez sob a trava | **Sim.** A chamada de trava está fora do laço. `_agora_r = _tz_r.now()` roda uma vez no `atomic`, antes do laço de escrita. A leitura já existia nessa posição no delta-base. `app/chamados/models.py:1652–1657,1715–1722`. |
-| Gravar `max(agora sob trava, último ato da mesma pergunta + 1 µs)` | **Sim.** O `max` usa as decisões de `_q` e o relógio único. Com histórico vazio, o conjunto do `max` contém apenas o relógio. O resultado vai a `registrar` na REABERTURA marcada. `app/chamados/models.py:1717–1736`. |
-| Curar r1 e r3 pela vista sob a trava | **Sim para os atos anteriores visíveis nessa consulta.** O passivo é registrado antes do novo prefetch. O `+1 µs` coloca a REABERTURA depois de cada linha lida, inclusive a validação inserida entre lote e trava nos cenários de teste. `app/chamados/models.py:1675–1680,1721–1736`; `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:222–228,255–275`. |
-| Sonda só como pré-filtro | **Sim.** `_agora_sonda` retém na simulação apenas decisões com `ato_em > _agora_sonda`. Saem da função três listas de PKs. O carimbo persistido vem de `_agora_r` e do prefetch de escrita. `app/chamados/models.py:1555–1567,1587–1602,1717–1736`. |
-| Travas do aval 1445(1) | **Mesmo conjunto e ordem do delta-base**, conforme seção 3. O texto do aval 1445(1) está **[nao verificado]**. `app/chamados/models.py:1638–1678,2892–2921`. |
-| r1, r3 e par verdes na cura e vermelhos em C e B | **Parcial.** A matriz completa está ausente. O r3 sem recuo e o caso do par de `+1,5 s` também satisfazem suas asserções em C. Dois controles de empate do par conservam os valores antigos e o HLC produz `+1 µs` a mais. A medida de B foi removida. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:222–228,255–275`; `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:364–389`; `app/chamados/tests/test_e4c_f5_4c1_medida_b.py:39–50,72–92` na versão removida do anexo. |
-| Mutante de relógio antes da trava e mutante sem `max` | **Presentes e discriminantes pela leitura.** M3 muda o instante de r3. M4 põe a REABERTURA antes da validação de r1. M5 também cobre a vista velha. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:113–137,279–298`. |
-| Aceitar carimbo adiantado e contar `> agora + 1 min`, esperado zero | **Presente para REABERTURAs da ressuscitação.** O I23 lê a marca, o tipo e o limite estrito. Há dupla implementação do predicado de pertencimento, detalhada na seção 6. `app/chamados/models.py:1729–1736,4282–4295`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1129,1862–1866`. |
-
-## 2. Quem escreve e quem lê
-
-| Valor | Escrita e leitura |
-|---|---|
-| **(i) `_agora_r`** | Variável local atribuída por `ressuscitar_perguntas` sob a trava. O consumidor é o `max`. É o relógio da borda de escrita e fica separado do carimbo persistido. `app/chamados/models.py:1657,1715–1729`. |
-| **(ii) `ato_em` das decisões para o `max`** | `DecisaoPergunta.registrar` persiste o valor recebido dos chamadores sem recalculá-lo. Fornecem relógio cru a resposta humana, a validação/devolução, a reabertura/recusa comum e a retratação. Respostas automáticas ou pela trilha, silêncio, absorção e passivo também podem fornecer instante recebido ou carimbo existente. O `max` lê todas as decisões persistidas da pergunta, inclusive REABERTURAs anteriores e o passivo recém-promovido. `app/chamados/models.py:1679–1680,1721–1729,2127–2129,2227,2259–2261,4321–4339,4445–4455`; `app/chamados/services/disputa_emissao.py:1499–1501,1535–1537,1648–1668,1689–1737`; `app/chamados/services/validacao.py:168–175,287–296,365–374`; `app/chamados/services/materializacao.py:1087`; `app/ponto/services/veredito_celula.py:195–196`. |
-| **(iii) `ato_em` da REABERTURA compensadora** | `ressuscitar_perguntas` calcula e fornece o carimbo e a marca. `registrar` insere. A leitura vigente, a face SQL da validação, o histórico do modal e o I23 o consomem com semânticas distintas, detalhadas abaixo. `app/chamados/models.py:1729–1736,3608–3629,3863–3879,4378–4396,4445–4455`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1127–1129`. |
-| **(iv) `PerguntaDisputa.validada_em`, coluna** | `_carimbar_validacao` a preenche e grava a VALIDACAO com o mesmo instante. `carimbar(resposta='validar')` também a preenche pela materialização. Zeram a coluna a ressuscitação, a resposta humana, a reabertura/recusa comum e as devoluções em `validacao.py`. A simulação da prévia zera só a cópia em memória. `app/chamados/models.py:1587–1590,1738–1739,2676,3384–3391,3548–3556`; `app/chamados/services/materializacao.py:1073,2015–2016`; `app/chamados/services/disputa_emissao.py:1493–1514,1532,1630,1683`; `app/chamados/services/validacao.py:168–175,287–296,365–374`. |
-| **(iv) `validada_em` derivada** | `leitura` dobra as linhas e o passivo. VALIDACAO atribui o instante respectivo. REABERTURA, RECUSA, DEVOLUCAO e a resposta humana que desfaz validação limpam o resultado. `composta` propaga o valor. A ressuscitação usa o valor na foto do ato. Leem-no também estado, C6, validação/recusa, materialização, histórico e vigia. `app/chamados/models.py:1723–1734,3276–3285,4342–4362,4378–4416`; `app/chamados/juizes.py:1383–1411`; `app/chamados/services/validacao.py:178–187,275–284,656–657,698–704,915–923`; `app/chamados/services/materializacao.py:201–203,2161`; `app/chamados/services/historico.py:96–108`; `app/chamados/services/vigia_ato_x_coluna.py:8–23`. |
-| **(v) Prévias** | `_universo_da_ressuscitacao` monta `ids`, `marco_aceso` e `c6_morta`. Os dois métodos públicos devolvem partes dessa computação, sem persistência. A porta chama o mesmo produtor diretamente. O emissor usa `ids` na carga para avaliar a reabertura do credor. O cartório, ao receber zero da porta, recomputa as listas de puladas para contadores e mensagens. `app/chamados/models.py:1520–1532,1556,1583–1602,1638–1646`; `app/chamados/services/disputa_emissao.py:1851–1861,1889–1911`; `app/ponto/services/cartorio.py:1721–1741`. |
-
-**Semântica por leitor.** A configuração da cópia tem `USE_TZ=True` e zona padrão `America/Sao_Paulo`. Os recortes abaixo comparam instantes. O modal aplica o filtro de apresentação `date:"d/m H:i"`. A zona efetiva de um request em produção está **[nao verificado]**. `app/config/settings/base.py:92–95`; `app/templates/chamados/partials/modal_fio.html:204–212`.
-
-- **`leitura` e face SQL.** `(ato_em, pk)` ordena os atos reais. No empate, o passivo sintético fica depois dos reais daquele instante. `leitura` aplica efeitos sem horizonte de relógio. A face SQL usa `>` ou empate com `pk` maior para limpar uma linha real e `>` estrito para limpar o passivo. Ambas aplicam a REABERTURA adiantada assim que ela está visível. `app/chamados/models.py:3608–3629,4365–4396`.
-- **C6 e prévias.** A sonda descarta `<= _agora_sonda` e preserva `>` para o C6 simulado. O emissor e o cartório recebem listas ou contagens. O C6 com `agora` corta os valores derivados `> agora` **depois** da dobra e, por isso, o corte não restaura uma validação que uma REABERTURA futura já limpou na dobra. `app/chamados/models.py:1587–1602`; `app/chamados/services/disputa_emissao.py:1857–1861`; `app/ponto/services/cartorio.py:1721–1741`; `app/chamados/juizes.py:1390–1411`.
-- **Desarquivar.** A segunda chamada da porta vem depois do registro do toque para a competência trancada. A view ignora o retorno da ressuscitação e segue para a nota. Ela não interpreta `ato_em` nem consome as listas. `app/chamados/views_arquivar.py:63–89`.
-- **Modal.** `respostas_anteriores` percorre as decisões na ordem do modelo, põe REABERTURA/RECUSA no histórico e devolve as mais recentes primeiro. O template mostra o carimbo como hora da ação, com precisão de minuto e sem corte pelo presente. Um carimbo lógico adiantado pode aparecer como hora futura. `app/chamados/models.py:3863–3879,4269–4270`; `app/templates/chamados/partials/modal_fio.html:204–214`.
-- **Validação e leitores da coluna.** As guardas de validar e recusar usam a composta sem horizonte. A foto da devolução prefere a coluna e recorre à composta quando a coluna está vazia. A coluna também serve ao I18, ao cache do painel, à procedência da batida e ao placar de validações, que usa limites inferiores inclusivos e meia-noite em hora local. `app/chamados/services/validacao.py:178–187,269–284,698–704,915–923`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1081–1086`; `app/chamados/services/painel.py:62–68`; `app/ponto/services/procedencia_batida.py:69–75`; `app/chamados/services/verbos.py:247–271`.
-- **Tarefa do dia.** Exclui a REABERTURA marcada pela autoridade `es_da_ressuscitacao` **antes** de cortar pelo horizonte. Para os atos restantes, `ato_em <= agora` é inclusivo. Passivo e projeção temporal seguem a mesma inclusão. Assim, a tarefa nunca usa a REABERTURA marcada como a última decisão, mesmo depois que o relógio alcança seu carimbo. `app/chamados/services/tarefa_do_dia.py:152–174,387–434,533–547`.
-
-## 3. Momento da leitura, travas e elegibilidade
-
-1. **Antes da chamada de `trava_na_ordem`**, a porta avalia `_universo_da_ressuscitacao`. O gerador entra no queryset, que avalia o lote e o prefetch antes da primeira leitura de `_agora_sonda`. A porta obtém os IDs e as disputas do pré-filtro. `app/chamados/models.py:1549–1567,1638–1657`; `app/chamados/juizes.py:1174–1195`.
-2. **Depois da chamada de trava**, a porta relê materialização e vias fora do fato, fixa os IDs graváveis, monta outro queryset e registra o passivo. Lê **(i)** depois disso. Lê **(ii)** ao avaliar o novo prefetch e percorrer `_q.decisoes.all()`. A vista da sonda e seu cache filtrado ficam nas instâncias do pré-filtro. O caminho de escrita não reutiliza essas instâncias. Isolamento efetivo do banco e visibilidade de commits em transações reais ficam **[nao verificado]**. `app/chamados/models.py:1597–1602,1675–1680,1715–1729,4374–4378`.
-3. **Conjunto e ordem preservados no delta.** Trava-se o colaborador, as disputas obtidas dos IDs prévios, o chamado e as perguntas desses IDs, por grupo em PK crescente. O subconjunto relido manda na escrita. A guarda do lote ainda recebe `alvo_lido`. Os filtros e a sonda das prévias permanecem os mesmos, inclusive o corte estrito. O novo carimbo pode virar insumo de uma prévia futura porque a sonda compara os `ato_em` persistidos. `app/chamados/models.py:1549–1602,1645–1678,1738–1739,2892–2921,3542–3556`.
-
-## 4. Ato posterior que fica antes na leitura
-
-**Há uma sequência concreta, mesmo com a trava correta.** Use o r1 como partida. A validação tem `T + 500 ms`, o relógio volta a `T` e a ressuscitação grava `T + 500 ms + 1 µs`. Depois de a ressuscitação terminar, uma resposta humana consegue a trava e lê, por exemplo, `T + 100 ms`. Ela grava esse mesmo instante na coluna e na linha RESPOSTA. Seu PK é posterior, mas a leitura ordena primeiro por `ato_em`. A REABERTURA é aplicada depois da RESPOSTA e limpa os valores derivados. A coluna conserva texto e instante. O avanço posterior do relógio deixa a ordem gravada intacta. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:222–228`; `app/chamados/services/disputa_emissao.py:1478–1502,1532–1537`; `app/chamados/models.py:1729–1736,4347–4348,4378–4396`.
-
-O **vigia de texto** conta essa divergência. O **vigia ato × coluna** conta somente presença de validação, portanto o exemplo só de resposta não entra em A/B. Se uma VALIDACAO de relógio cru for gravada com carimbo abaixo da REABERTURA e sua coluna permanecer preenchida, o par é **B `(False, True)`**. O I23 conta apenas o adiantamento superior a um minuto. No exemplo de `500 ms + 1 µs`, ele fica em zero apesar da divergência. `app/chamados/services/vigia_texto_resposta.py:17–25`; `app/chamados/services/vigia_ato_x_coluna.py:14–23`; `app/chamados/management/commands/vigiar_fio_morto.py:194–198,231–234`; `app/chamados/services/validacao.py:168–175`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1127–1129`.
-
-## 5. Testes, mutantes e relógio solto [nao verificado]
-
-| Caso | O que a asserção discrimina |
-|---|---|
-| **r1** | A cura exige `T + 500 ms + 1 µs`. C sem `max` grava `T` e falha em `_coerente`. B grava `T + 500 ms` e falha na nova igualdade exata, embora o empate por PK permita a coerência antiga. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:205–228`; `app/chamados/tests/test_e4c_f5_4c1_medida_b.py:45–50` na versão removida. |
-| **r3 sem recuo / com recuo** | Sem recuo, cura e C gravam `T + 1 s`. B usa `T`. Com recuo, cura exige `T + 500 ms + 1 µs` e C/B usam `T`. O segundo caso distingue a vista fresca da antiga. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:255–275`; `app/chamados/tests/test_e4c_f5_4c1_medida_b.py:72–82` na versão removida. |
-| **Par de `+1,5 s` e controles** | O caso de `+1,5 s` é compatível com cura e C. A medida removida de B cobrava `+0,5 s`. Os outros dois testes exigem `T + 500 ms` e `T`; a expressão da cura devolve `T + 500 ms + 1 µs` e `T + 1 µs`. A igualdade de `_alvo` reprova esses resultados. `app/chamados/models.py:1729`; `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:364–389`; `app/chamados/tests/test_e4c_f5_4c1_medida_b.py:83–92` na versão removida. |
-| **M1–M5** | M1/M2 exigem `n=0` contra `n=1` de r2. M3 exige o mutante em `T + 500 ms + 1 µs` e reprova a expectativa de `T + 1 s`. M4/M5 exigem uma REABERTURA real em `T` antes de cobrar a falha de `_coerente`. Nesses dois, a primeira falha esperada é a ordem em `:211`. O teste do mutante não chega a cobrar separadamente a divergência em `:212`. As trocas AST ocorrem fora do `assertRaises`, com verificação de sítio único. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:34–50,89–137,205–215,234–252,279–298`. |
-| **I23 e selo C12** | O caso positivo do I23 exige uma linha do auditor e total `1`. O negativo confirma que existe uma REABERTURA dentro da janela e cobra `0`. Falta caso de igualdade exata a um minuto e caso de REABERTURA comum adiantada. C12 atualiza dois endereços que o censo usa como parte da identidade. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:301–319`; `app/chamados/tests/e4b_c12_ast.py:17–29,221–224`; `app/chamados/models.py:1792,1812`. |
-
-Os testes novos exercitam a porta com injeção síncrona por mock. A validação da fixture é `UPDATE` + `registrar` na mesma conexão, antes de chamar a trava real. Ela discrimina a ordem das leituras no código. Commit concorrente e espera de lock entre duas conexões ficam **[nao verificado]**. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:152–195`.
-
-**Há relógio solto indireto.** Nas duas `_caso`, o chamado e a pergunta são criados antes do `freeze_time` local. A criação tem carimbos `auto_now_add` e o sinal do chamado pode chamar o cartório, que lê `localdate()` e, chegando ao lote sem `agora`, `now()`. A injeção, as chamadas da porta e a chamada do auditor estão sob seus respectivos freezes. O efeito do relógio solto no resultado da suíte fica **[nao verificado]**. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:143–152,192–195,301–305`; `app/chamados/tests/test_f2_ressuscitar_tarefa_igual.py:312–323`; `app/chamados/models.py:79,1929`; `app/chamados/signals.py:189–218`; `app/ponto/services/cartorio.py:2059–2088`.
-
-## 6. I23
-
-- **Predicado e universo.** Conta linhas de decisão marcadas como REABERTURA da ressuscitação, em todo o queryset, com `ato_em > timezone.now() + 1 minuto`. Igualdade fica fora. O universo corresponde ao contexto do aval sobre a REABERTURA compensadora. Uma leitura literal da frase isolada que incluísse qualquer REABERTURA seria mais ampla. O resultado vai à saída comum do auditor, com esperado zero. `app/chamados/management/commands/auditar_invariantes_chamados.py:1118–1129,1862–1866`.
-- **Duplicação.** `ato=REABERTURA` mais `da_ressuscitacao=True` repete em SQL a parte de identidade de `es_da_ressuscitacao`, que se declara predicado único e é usado pela tarefa. O limite de um minuto é a condição nova de monitoramento. A constraint existente também prende a marca ao tipo. O diff não acrescenta entrada ao registro vivo. A duplicação é da autoridade efetiva do modelo, ainda que uma inscrição nominal desse método em `core/juizes.py` esteja **[nao verificado]**. `app/chamados/models.py:4250–4257,4282–4295`; `app/chamados/services/tarefa_do_dia.py:393–403`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1127–1129`; `app/docs/LEIS.md:60`.
-- **Contrato de saída.** O teste novo exige exatamente uma linha I23 e verifica seus totais. O emissor do auditor percorre `res`, sem lista fixa para imprimir as linhas. O contrato F9 enumera usos específicos de colunas no auditor. Uma enumeração fechada de todos os IDs que precise receber I23 está **[nao verificado]**. `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:301–319`; `app/chamados/tests/test_e4c_f9_comandos_leem_o_ato.py:272–284`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1862–1884`.
-
-## 7. Checklist
-
-**137 linhas `+` de conteúdo** no anexo. São 8 no auditor, 12 no modelo, 2 no selo C12 e 115 no teste de instante. **0 `except` novo, 0 fallback que esconda erro e 0 ramo novo que silencie erro em produção.** O relógio como único candidato para histórico vazio é parte da fórmula. O `or ''` da foto é contexto preexistente. Os três `assertRaises(AssertionError)` novos são verificações de teste. `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1129`; `app/chamados/models.py:1707–1736`; `app/chamados/tests/e4b_c12_ast.py:26–27`; `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:31,89–139,227–228,255–319`.
-
-**Efeito do tratamento preexistente no sítio novo.** Falha na avaliação da consulta I23 dentro de `add` vira linha `ERR` pelo `except` existente. O erro fica visível e não sobe por esse caminho. I23 sozinho não muda o código de saída. O teste descarta `_rc`, mas `ERR` no próprio I23 fornece `-` e faz falhar a conversão para `int`. `app/chamados/management/commands/auditar_invariantes_chamados.py:564–573,1127–1129,1862–1884`; `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:301–308`.
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz | **Reincide no predicado de pertencimento do I23.** `app/chamados/models.py:4290–4295`; `app/chamados/management/commands/auditar_invariantes_chamados.py:1127–1129`. |
-| Segundo escritor fora da porta | **0 novos.** A REABERTURA continua por `registrar` e a limpeza continua por `descarimbar_em_lote`. `app/chamados/models.py:1730–1739,4445–4455`. |
-| Relógio fora da borda | **0 novas leituras de relógio de escrita fora da trava.** A sonda conserva a bord
-
-[truncado em 20000 de 24188 caracteres]
-
-_7756 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7760 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

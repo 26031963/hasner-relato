@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 21/11/2026 21:56:46.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (81.2 MB). Acoes na janela: **2116**.
+**Medido em 21/11/2026 22:03:01.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (82.2 MB). Acoes na janela: **2127**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:02:54 | Bash | Read rest of WRAPPER verifier v2 | `cd /home/ronald/saas-hasner; tail -c +6000 logs/WRAPPER-N-VAGAS/verif_v2/r.txt` |
+| 22:02:49 | Bash | Read WRAPPER verifier v2 | `cd /home/ronald/saas-hasner; wc -l logs/WRAPPER-N-VAGAS/verif_v2/r.txt; head -c 6000 logs/WRAPPER-N-VAGAS/verif_v2/r.txt` |
+| 21:57:45 | Monitor | rc: WRAPPER verificador v2 | `cd /home/ronald/saas-hasner; until [ -f logs/WRAPPER-N-VAGAS/verif_v2/r.rc ]; do /usr/bin/sleep 30; done; echo "WRAPPER verif_v2 $(cat logs/WRAPPER-N-VAGAS/verif_v2/r.rc)"` |
+| 21:57:32 | Bash | Launch WRAPPER verifier v2 | `cd /home/ronald/saas-hasner; D=logs/WRAPPER-N-VAGAS/verif_v2; setsid bash $D/lanca.sh >/dev/null 2>&1 </dev/null & disown; /usr/bin/sleep 10; tail -2 $D/wrapper.out` |
+| 21:57:27 | Bash | Prepare WRAPPER verifier v2 | `cd /home/ronald/saas-hasner; D=logs/WRAPPER-N-VAGAS/verif_v2; mkdir -p $D; W=/home/ronald/wt-wrapper-n-vagas-125229; git -C $W diff e1ac53dce 809a25e03 > $D/diff.patch; git -C $W log --format='%h %s%n%b' e1ac53dce..809a25e03 > $D/commits.txt; wc -c $D/diff.patch $D/commits.txt; /bin/grep -n 'codex_pergunta\\|L-126' app/docs/LEIS.md \| cut -c1-200 \| head -5 > $D/leis.txt cat > $D/q.txt <<'EOF' VER ...` |
+| 21:57:11 | Bash | Locate review that named M3/M5 | `cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/volta3_lease logs/WRAPPER-N-VAGAS/cura5 \| head -30; /bin/grep -ln 'M5\b\\|M3\b' logs/WRAPPER-N-VAGAS/*/r.txt logs/WRAPPER-N-VAGAS/*/*.txt 2>/dev/null \| head` |
+| 21:57:04 | Bash | Find WRAPPER verifier voltas | `cd /home/ronald/saas-hasner; /bin/grep -l 'CODEX_PAPEL=verificador' logs/WRAPPER-N-VAGAS/*/lanca*.sh logs/WRAPPER-N-VAGAS/*/*/lanca*.sh 2>/dev/null; git -C /home/ronald/wt-wrapper-n-vagas-125229 log --oneline e1ac53dce -1; git -C /home/ronald/wt-wrapper-n-vagas-125229 diff --stat e1ac53dce 809a25e03 \| tail -3` |
+| 21:56:57 | Bash | Read prior WRAPPER verifier and triagem | `cd /home/ronald/saas-hasner; V=logs/WRAPPER-N-VAGAS/verif_v1; cat $V/lanca.sh; head -3 $V/r.txt; tail -15 $V/triagem.txt; git -C /home/ronald/wt-wrapper-n-vagas-125229 log --oneline -8` |
+| 21:56:54 | Bash | Find WRAPPER verif dirs | `cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/ ; ls logs/WRAPPER-N-VAGAS/verif* 2>/dev/null \| head -20` |
+| 21:56:50 | Bash | Tail selos logs | `cd /home/ronald/saas-hasner/logs/WRAPPER-N-VAGAS/volta4; for t in n_vagas pergunta; do echo "== $t"; tail -4 final_test_codex_${t}_809a25e03.log; /bin/grep -c -i 'FALHA\\|VERMELHO\\|ESCAPOU' final_test_codex_${t}_809a25e03.log; done` |
+| 21:56:46 | Bash | Read WRAPPER selos results | `cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/volta4/; cat logs/WRAPPER-N-VAGAS/volta4/lanca_809.sh; for f in logs/WRAPPER-N-VAGAS/volta4/*809*.rc logs/WRAPPER-N-VAGAS/volta4/*.rc; do echo "$f: $(cat $f)"; done 2>/dev/null \| sort -u` |
 | 21:41:54 | Monitor | rc: FERIADO P1 RED, 3.3 cura5 provas | `cd /home/ronald/saas-hasner; declare -A seen; while true; do for f in logs/FERIADO-POR-POSTO/p1/red.rc logs/E4C-F5-3_3/cura5/prova/prova.rc; do if [ -f "$f" ] && [ -z "${seen[$f]}" ]; then seen[$f]=1; echo "$f $(head -c 200 $f)"; fi; done; /usr/bin/sleep 30; done` |
 | 21:41:49 | Bash | Waiter for FERIADO RED; log decision | `cd /home/ronald/saas-hasner; D=logs/FERIADO-POR-POSTO/p1; cat > $D/espera_red.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner; D=logs/FERIADO-POR-POSTO/p1 while kill -0 975748 2>/dev/null; do /usr/bin/sleep 20; done echo "red fim $(grep -E '^(OK\|FAILED)($\| \()' $D/red.log \| tail -1) $(grep -E '^Ran [0-9]+ test' $D/red.log \| tail -1) $(date +%H:%M:%S)" > $D/red.rc EOF setsid bash $D/espera_r ...` |
 | 21:41:37 | Bash | Is FERIADO RED still waiting | `cd /home/ronald/saas-hasner; ps -eo pid,etime,args \| /bin/grep -F 'wt-feriado-matriz-203331' \| /bin/grep -v grep \| cut -c1-200; bin/trava_teste.sh --quem 2>&1 \| head -5` |
