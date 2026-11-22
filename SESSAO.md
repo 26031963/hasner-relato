@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 07:40:25.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **903**.
+**Medido em 22/11/2026 07:46:10.** Transcript: `274c3bd1-4188-403d-a35f-cc687202484b.jsonl` (106.6 MB). Acoes na janela: **900**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -910,6 +910,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:46:55 | Bash | Check changed signatures and lock order | `cd /home/ronald/wt-codex-e4c-f5-constroi-193405/app; git diff --stat HEAD -- . ; /bin/grep -n 'def entrega_que_barra_a_validacao\\|def _foto_da_validacao\\|def irma_da_validacao' -A6 chamados/services/validacao.py \| head -40; /bin/grep -n 'def travar_o_ato_do_plantio\\|def usar_irmas_confirmadas_no_plantio\\|abertas_do_colaborador' chamados/services/materializacao.py \| head` |
 | 19:46:46 | Bash | Read 1.2 cure diff | `cd /home/ronald/wt-codex-e4c-f5-constroi-193405; /bin/grep -c 'except' app/chamados/tests/test_e4c_f5_validacao_plantio.py; git diff app/chamados/services/validacao.py \| head -150` |
 | 19:46:41 | Bash | Inspect 1.2 v5 construtor output | `cd /home/ronald/wt-codex-e4c-f5-constroi-193405; git status --porcelain \| head -20; git diff --stat \| tail -3; git diff \| /bin/grep -c '^+.*except'; tail -40 /home/ronald/saas-hasner/logs/E4C-F5-1_2/v5/r.txt \| cut -c1-300` |
-| 19:44:17 | Monitor | rc dos jobs 3.3 sql / SENTINELA prova / 1.2 v5 | `cd /home/ronald/saas-hasner; declare -A seen; while true; do for f in logs/E4C-F5-3_3/cura4/prova/sql2_{med,fim}.rc logs/SENTINELA-DO-SLOT/volta5/prova/{red_base,green,mut1,mut2,mut3,chamados,fim}.rc logs/E4C-F5-1_2/v5/r.rc; do if [ -f "$f" ] && [ -z "${seen[$f]}" ]; then seen[$f]=1; echo "$f $(head -c 100 $f)"; fi; done; /usr/bin/sleep 20; done` |
-| 19:44:09 | Bash | Inspect pista holder | `cd /home/ronald/saas-hasner; ps -o pid=,etime=,args= -p 3877108 \| cut -c1-200; tail -5 logs/E4C-F5-3_3/cura4/prova/sql2_med.log \| cut -c1-200; tail -3 logs/SENTINELA-DO-SLOT/volta5/prova/red_base.log \| cut -c1-200` |
-| 19:44:04 | Bash | Check pista lock and job progress | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem 2>&1 \| head -3; ls logs/SENTINELA-DO-SLOT/volta5/prova/ logs/E4C-F5-3_3/cura4/prova/ \| grep -E 'sql2\|log$' \| tr '\n' ' '; ps -o pid= -p 3978042` |
