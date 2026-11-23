@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 08:51:48.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.6 MB). Acoes na janela: **76**.
+**Medido em 23/11/2026 08:57:27.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.7 MB). Acoes na janela: **83**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:55:01 | Bash |  | `cd ~/saas-hasner && bash bin/handoff_sessao.sh > /dev/null 2>&1; echo rc=$?; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() l="PAREI: ! CLEAR \| espera Ronald (CLEAR-RAPIDO: contexto 156198 >= 147951; F5 parada no B3 com PERGUNTA DE DESENHO no topo, E4d com lei: CONTRATO-E4D; push no remoto 68eb689b5; nada roda -- PODE /clear AGORA)\n" open(p,'w').write(l+s) EOF head -c 40 app/docs/RELA ...` |
+| 08:54:46 | ScheduleWakeup |  | `-` |
+| 08:54:41 | Bash |  | `cd ~/saas-hasner && D=logs/E4D-CONTRATO && { echo "RASCUNHO CONTRATO E4d (E4D-PROJECAO-UM-ESCRITOR, fase Contract do Expand-Contract de DecisaoPergunta) -- 23/11, nada construido"; echo "Fonte: Codex leitura rc 0 no 68eb689b5 (r.txt 115 linhas); amostra conferida 3/3: models.py:4227-4233 (save sem pk = brecha, Q7), models.py:3631-3636 (validada_por SET_NULL, Q5), laudo E4D-ENSAIO:26-33 (P61006/P61 ...` |
+| 08:54:31 | Bash |  | `cd ~/saas-hasner/app && sed -n 4227,4233p chamados/models.py; echo ---; sed -n 3631,3636p chamados/models.py; echo ---; sed -n 26,33p ../logs/E4D-ENSAIO/laudo.txt \| cut -c1-300` |
+| 08:54:27 | Bash |  | `cd ~/saas-hasner && D=logs/E4C-F5/v4e/verif && cat > $D/triagem.txt <<'EOF' TRIAGEM verificador v4 (Codex rc 0 no a1b5eafbe, r.txt 81 linhas) 23/11 12 achados novos: 10 BLOQUEIA (1-10, 12) + 1 fila (11). Amostra conferida 2/2 procedente: #1 chamados/views.py:1415-1432 rota de detalhe: qs=_corrig(d) antes de C, _reabrir2(qs) sem releitura -> PROCEDENTE (3a rota de reabertura fora do R1a/R1b) #2 cha ...` |
+| 08:54:08 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 2455,2490p chamados/models.py; sed -n 495,506p chamados/models.py; sed -n 1410,1435p chamados/views.py` |
+| 08:54:03 | Bash |  | `cd ~/saas-hasner && tail -3 logs/E4C-F5/v4e/verif/wrapper.log; D=logs/E4C-F5/v4e/verif; test -f $D/r.txt && { wc -l $D/r.txt; /bin/grep -n -A40 "ACHADOS NOVOS" $D/r.txt \| cut -c1-450; }` |
 | 08:44:42 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' import subprocess h=subprocess.check_output(['date','+%H:%M']).decode().strip() p='app/docs/RELATO.md' s=open(p).read() l=(f"PERGUNTA DE DESENHO E4C-F5 (DISJUNTOR B3 disparado 23/11 01:00:02 pelo opus escalonado que REPROVOU a v3 928c5cad1, logs/E4C-F5/v3/opus_escala/laudo_opus.txt; obra PARADA no MERGE ate o rearme/libera dele; a sessao nao escreve DESENHO ne ...` |
 | 08:44:31 | Bash |  | `cd ~/saas-hasner && sed -n 1,30p app/docs/RELATO.md \| cut -c1-260` |
 | 08:44:27 | Bash |  | `cd ~/saas-hasner && /bin/grep -n "B3 E4C-F5\\|E4C-F5" logs/sessao/disjuntor.log \| tail -5 \| cut -c1-300; /bin/grep -n -E "^(DESENHO\|ERRO-BOBO\|PERGUNTA DE DESENHO).*E4C-F5" app/docs/RELATO.md \| head -5 \| cut -c1-200` |
