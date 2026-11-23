@@ -6,10 +6,32 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 14:58:26.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (10.0 MB). Acoes na janela: **266**.
+**Medido em 23/11/2026 15:04:17.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (11.1 MB). Acoes na janela: **288**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:02:53 | Bash | Read where motor builds marcos_por_dia | `sed -n 440,489p ponto/motor_calculo_v2.py` |
+| 15:02:49 | Bash | Inspect how motor passes params to pareador | `cd /home/ronald/saas-hasner/app && sed -n 490,515p ponto/motor_calculo_v2.py; sed -n 55,80p ponto/turnos.py; /bin/grep -n 'def parear_turnos' -A25 ponto/turnos.py \| head -40` |
+| 15:02:46 | Bash | Read the PAR-PELO-TURNO aval text | `cat logs/PAR-PELO-TURNO/aval_v2.txt; echo; cat logs/PAR-PELO-TURNO/aval_v2_anexo.txt \| head -30` |
+| 15:02:43 | Bash | Create PAR-PELO-TURNO copy and check backlog line | `date '+%d/%m %H:%M'; N=$(date +%H%M%S); W=/home/ronald/wt-par-turno-$N; git worktree add -q -b raia/par-turno-$N $W HEAD && cd $W && git log --oneline -1 && echo $W; ls /home/ronald/saas-hasner/logs/PAR-PELO-TURNO/; /bin/grep -n 'PAR-PELO-TURNO' /home/ronald/saas-hasner/app/docs/BACKLOG.md \| cut -c1-400` |
+| 15:02:19 | Bash | Show the except-word lines in vigia diff | `cd /home/ronald/wt-vigia-tmux-132928 && git diff eac7a6741..HEAD \| /bin/grep -n '^+.*\bexcept\b' \| cut -c1-200` |
+| 15:01:47 | Bash | Run vigia selo and hook neighbor selos in copy | `cd /home/ronald/wt-vigia-tmux-132928 && git diff eac7a6741..HEAD \| /bin/grep -c '^+.*\bexcept\b'; for t in bin/tests/test_vigia_tmux.sh bin/tests/test_hook_*.sh; do bash $t >/tmp/claude-1001/-home-ronald-saas-hasner/374f1b51-3fa8-4c61-8f0e-d589913f003d/scratchpad/$(basename $t).log 2>&1; echo "$t rc=$?"; done; git status --porcelain \| head` |
+| 15:01:41 | Bash | Inspect vigia construtor artifacts | `ls -la logs/VIGIA-DO-TMUX/construtor/; tail -15 logs/VIGIA-DO-TMUX/construtor/mutantes.log 2>/dev/null; cd /home/ronald/wt-vigia-tmux-132928 && git show --stat HEAD \| tail -8` |
+| 15:01:39 | Bash | Read vigia construtor delivery | `tail -c 3500 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/a75c052208e0704eb.output; cd /home/ronald/wt-vigia-tmux-132928 && git log --oneline -3 && git status --porcelain \| head` |
+| 15:01:25 | Bash | Read A-TELA origin answer and brief template | `sed -n 1,200p logs/A-TELA-DO-DIA/origem.r \| cut -c1-900; echo ----; sed -n 1,60p logs/VIGIA-DO-TMUX/brief.md` |
+| 15:01:16 | Read |  | `/home/ronald/saas-hasner/logs/PAR-PELO-TURNO/censo1.r` |
+| 15:01:15 | Bash | Wait for full suite verdict by log | `cd /home/ronald/saas-hasner/logs/E4C-F5/v6/final && until /bin/grep -qE '^Ran [0-9]+ tests' suite_7bd367700.log && /bin/grep -qE '^(OK\|FAILED)($\| \()' suite_7bd367700.log; do /usr/bin/sleep 60; done; /usr/bin/sleep 20; /bin/grep -E '^(OK\|FAILED)($\| \()' suite_7bd367700.log \| tail -1; /bin/grep '^Ran' suite_7bd367700.log \| tail -1; tail -3 suite_7bd367700.log` |
+| 15:01:13 | Bash | Wait for both verificador parts by rc line | `cd /home/ronald/saas-hasner/logs/E4C-F5/v6/final && until /bin/grep -q ' rc=' verif_a.out && /bin/grep -q ' rc=' verif_b.out; do /usr/bin/sleep 30; done; /bin/grep -h ' rc=' verif_a.out verif_b.out; wc -l verif_a.r verif_b.r` |
+| 15:00:45 | Bash | Launch full suite on F5 v6 copy | `L=logs/E4C-F5/v6/final/suite_7bd367700.log && setsid nohup bash bin/suite.sh --dir /home/ronald/wt-f5-v6-132253 --motivo "pre-opus E4C-F5" > $L 2>&1 < /dev/null & /usr/bin/sleep 25; tail -3 logs/E4C-F5/v6/final/suite_7bd367700.log; bin/trava_teste.sh --quem` |
+| 15:00:42 | Bash | Check test lock and copy cleanliness | `bin/trava_teste.sh --quem; W=/home/ronald/wt-f5-v6-132253; cd $W && git status --porcelain \| head; find $W/app -maxdepth 1 -user root -type d 2>/dev/null` |
+| 15:00:20 | Bash | Relaunch verificador split in two parts | `D=logs/E4C-F5/v6/final && mv $D/verif.out $D/verif_timeout124.out; rm -f $D/verif.r $D/verif.r.lock head -4 $D/verif.q > $D/hdr.txt python3 - <<'EOF' D='logs/E4C-F5/v6/final/' q=open(D+'verif.q').read() head,rest=q.split('PERGUNTAS',1) lines=rest.split('\n') qs=[l for l in lines if l[:3].strip().rstrip('.').isdigit()] fmt=[l for l in lines if l.startswith('Formato')][0] open(D+'verif_a.q','w').wri ...` |
+| 15:00:10 | TaskStop |  | `-` |
+| 15:00:10 | TaskStop |  | `-` |
+| 15:00:09 | TaskStop |  | `-` |
+| 15:00:09 | TaskStop |  | `-` |
+| 15:00:08 | TaskStop |  | `-` |
+| 15:00:08 | TaskStop |  | `-` |
+| 15:00:06 | Bash | Check the three Codex results | `ls -la logs/E4C-F5/v6/final/verif.* logs/PAR-PELO-TURNO/censo1.r logs/A-TELA-DO-DIA/origem.r; tail -2 logs/E4C-F5/v6/final/verif.out; wc -l logs/E4C-F5/v6/final/verif.r logs/PAR-PELO-TURNO/censo1.r logs/A-TELA-DO-DIA/origem.r` |
 | 14:48:16 | Bash | Add C20 item to PORTA-CONFERE-TRAVA backlog row | `cp logs/E4C-F5/v6/construtor/i6_red_guardado_fora_do_commit.py logs/E4C-F5/v6/construtor/censo_c20.txt logs/PORTA-CONFERE-TRAVA/ 2>/dev/null \|\| { mkdir -p logs/PORTA-CONFERE-TRAVA && cp logs/E4C-F5/v6/construtor/i6_red_guardado_fora_do_commit.py logs/E4C-F5/v6/construtor/censo_c20.txt logs/PORTA-CONFERE-TRAVA/; }; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k ...` |
 | 14:48:10 | Bash | Register C20 answer in CORTES, RELATO, PROMPTS | `/bin/grep -n '^\| PORTA-CONFERE-TRAVA' app/docs/BACKLOG.md \| cut -c1-200; python3 - <<'EOF' import json p='app/docs/CORTES.json'; d=json.load(open(p)) d.append({"id":"RESPOSTA-LEI-C20-PURO-2311-1450","quando":"2026-11-23 14:50","estado":"registrado; item da PORTA-CONFERE-TRAVA (depois do pouso da F5)","fatia":"PORTA-CONFERE-TRAVA","onde":"logs/E4C-F5/v6/construtor/censo_c20.txt", "frase":"corte R ...` |
 | 14:43:51 | Bash | Add lei line and v6 status to RELATO top | `python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(0,"lei: C20-PURO-EXIGE-PORTA-ENTREGAR-O-COLABORADOR (E4C-F5 v6 item 6, 14:4x) -- tirar o ramo chamados/juizes.py:1082-1106 (_dono_travado/colaboradores_travados) exige mudar a assinatura do juiz em 43 portas (fecho de 654 funcoes; logs/E4C-F5/v6/construtor/censo_c20.txt): pergunta_viva, tranca_da_consulta, DisputaSuper ...` |
