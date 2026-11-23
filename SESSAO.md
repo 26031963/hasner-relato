@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 21:16:58.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (55.9 MB). Acoes na janela: **1489**.
+**Medido em 22/11/2026 21:23:09.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (56.1 MB). Acoes na janela: **1497**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:22:54 | Bash |  | `cd ~/saas-hasner; ls -la logs/sombra/e4d/; git rev-parse HEAD; ls logs/E4D-ENSAIO/` |
+| 21:22:49 | Bash |  | `cd ~/saas-hasner/logs/sombra; python3 - <<'PY' p='e4d_ensaio_lib.py'; s=open(p).read() def rep(a,b): global s assert s.count(a)==1, a[:70]; s=s.replace(a,b) rep('''def contador_coluna_sem_ato():''','''def _absorcoes(pids): """{(pergunta_id, ato_em)} das linhas ABSORCAO: a validada pela absorcao (carimbo `resposta='validar'`, materializacao.py:1059-1061) tem validada_em == ato_em da ABSORCAO e NAO  ...` |
+| 21:22:33 | Bash |  | `cd ~/saas-hasner/logs/sombra; sed -n 36,80p e4d_ensaio_lib.py; sed -n 109,200p e4d_ensaio_lib.py` |
+| 21:22:16 | Bash |  | `cd ~/saas-hasner; sed -i "s/.values('pergunta_id').distinct()/.order_by().values('pergunta_id').distinct()/" logs/sombra/e4d_absorcao.py; timeout 600 bin/sombra.sh --rodar e4d_absorcao.py E4D-ENSAIO/absorcao > logs/E4D-ENSAIO/absorcao.sh.log 2>&1; echo rc=$?; grep "E4D\|" logs/E4D-ENSAIO/absorcao.out; tail -3 logs/E4D-ENSAIO/absorcao.sh.log` |
+| 21:22:12 | Bash |  | `cd ~/saas-hasner/app; /bin/grep -n "VIA_AUSENCIA_DIA = \\|VIA_DECLARACAO = " chamados/models.py; cat > ~/saas-hasner/logs/sombra/e4d_absorcao.py <<'EOF' from django.db import connection from django.conf import settings import os assert os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings.sombra' and connection.settings_dict['NAME'] == 'sombra' from collections import Counter from chamados. ...` |
+| 21:21:56 | Bash |  | `cd ~/saas-hasner/app; sed -n 1035,1075p chamados/services/materializacao.py` |
+| 21:21:54 | Bash |  | `cd ~/saas-hasner/app; /bin/grep -rn "ABSORCAO" --include=*.py chamados ponto ferias core \| /bin/grep -v tests \| /bin/grep -v "^chamados/models.py:41[56]" \| head -15` |
+| 21:21:43 | Bash |  | `cd ~/saas-hasner/app; for f in respondida_em validada_em validada_por resposta_colab; do echo "$f: $(sed -n 2593,3700p chamados/models.py \| /bin/grep -n "^ $f = " \| head -2)"; done; /bin/grep -n "ABSORCAO\\|^ VALIDACAO\\|^ RESPOSTA = \\|ATO_CHOICES" chamados/models.py \| head -20; /bin/grep -n "def linhas_da_projecao_sem_linha" -A45 chamados/models.py \| head -70` |
 | 21:11:46 | Bash |  | `cd ~/saas-hasner; sed -i '1s/^ESPERANDO: suite.sh \| pid=2718632$/ESPERANDO: suite.sh \| pid=2718634/' app/docs/RELATO.md; head -1 app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
 | 21:11:44 | Bash |  | `cd ~/saas-hasner; pgrep -af "bin/suite.sh" \| cut -c1-150` |
 | 21:11:41 | Bash |  | `cd ~/saas-hasner; sed -n 1130,1160p bin/hook_stop_fila1.py; /bin/grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py \| head -35` |

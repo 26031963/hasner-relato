@@ -2,6 +2,7 @@ ESPERANDO: suite.sh | pid=2718634
 DESENHO [nome]-FERIADO-PELA-TELA-2211-1612: lei=escritor unico pergunta=quem escreve a celula e sob qual trava ponto/portas/celula.py:853
 DESENHO SIMPLIFICA-V3-2211-1726: lei=juiz unico pergunta=quem atesta que o run da pista 2 e inteiro bin/pista_certifica.sh:62
 DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454
+lei: E4D-ENSAIO-V2 (2) legado 5.389 perguntas via ausencia_dia/declaracao validadas SEM linha ABSORCAO (sombra 22/11 04:17; 493 do mesmo tipo ja tem VALIDACAO): o backfill da VALIDACAO (como o projetor faz hoje) ou ABSORCAO? o aval nomeia ~47 (=47 medidas, ABSORCAO com ato_em==validada_em, puladas); o ensaio segue dando VALIDACAO as 5.389 | contestavel | logs/E4D-ENSAIO/absorcao.out
 TRIA-VERIF1-F5-2211-2100 21:0x: verif1 F5 v2 triado (logs/E4C-F5/v2/verif1/triagem.txt): ESMERIL-SEMANTICA ato_em COBERTO por RESPOSTA-4C1-RECUO-2111-1715 opcao B + CONTRATO-V2 (3) (DECIDIDO PELA LEI | contestavel), residuo ato futuro -> contrato E4d; 6 procedentes P1-P6 + 2 fila; F5 segue no censo do item 2 na proxima vaga
 [nome]-FERIADO-PELA-TELA-2211-1612 NO AR 20:5x: pouso 4b6c5cf6e, deploy --sem-migrate rc 0, opus APROVA (achados 1-4 = fila: [nome]-PRECEDENCIA-FERIADO-EDITADA, [nome]-FILA-OPUS); voltas Codex 6, opus 1 (aprovou)
 DESPACHO E4D-ENSAIO: leitura do escritor do ato/backfill/contador/45+224 -> Codex (logs/E4D-ENSAIO/q1.txt) | script de ensaio na sombra -> sessao (instrumento) | leitura de log -> sonnet
