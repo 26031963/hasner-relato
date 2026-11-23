@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 06:12:36.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1439**.
+**Medido em 23/11/2026 06:18:32.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1435**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1445,7 +1445,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:22:37 | Bash |  | `ls -la ~/wt-simplifica-104405/.env 2>&1 \| head -1; cd ~/wt-simplifica-104405; git diff 161066a90 -- bin/suite.sh; grep -n 'segundo --dir' -n bin/tests/test_rm_com_guarda.sh \| head` |
 | 18:22:33 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1,60p bin/tests/test_inventario_pessoal_no_commit.sh \| cut -c1-200; git diff --stat 161066a90 -- bin/sombra_regras_pessoais.py bin/tests/test_inventario_pessoal_no_commit.sh bin/tests/test_rm_com_guarda.sh bin/suite.sh` |
 | 18:20:36 | Bash |  | `cd ~/wt-simplifica-104405; bash bin/tests/test_rm_com_guarda.sh 2>&1 \| tail -15 \| cut -c1-250; echo ----; bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| head -30 \| cut -c1-250` |
-| 18:17:07 | Bash |  | `for d in ~/saas-hasner ~/wt-simplifica-104405; do echo "##### $d"; cd $d; for s in test_rm_com_guarda test_selo_espera_processo_morde test_inventario_pessoal_no_commit; do timeout 300 bash bin/tests/$s.sh > /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/o.txt 2>&1; echo "rc=$? $s"; grep -iE 'red\|verm\|fail\|colun\|falt' /tmp/claude-1001/-home-ronald-saas ...` |
-| 18:17:02 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; grep -v '^0 ' $S/selos_simpl.txt \| cut -c1-200` |
-| 18:16:57 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/E4C-F5; cat > logs/E4C-F5/aval_libera_b3_2211-1810.txt <<'EOF' aval Ronald: LIBERA-B3-F5-2211-1810 -- a F5 foi descongelada e refeita pelo CONTRATO-V2 (logs/E4C-F5/CONTRATO-V2.md); escrever no topo: "DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454"; depois do rearme de Ronald, o verificador fi ...` |
-| 18:16:51 | Bash |  | `cd ~/saas-hasner; head -5 app/docs/RELATO.md \| cut -c1-250; tail -3 app/docs/PROMPTS.md \| cut -c1-250; date '+%d/%m %H:%M'` |
