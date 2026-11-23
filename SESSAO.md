@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 06:06:40.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1444**.
+**Medido em 23/11/2026 06:12:36.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1439**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1449,8 +1449,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:17:02 | Bash |  | `S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; grep -v '^0 ' $S/selos_simpl.txt \| cut -c1-200` |
 | 18:16:57 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/E4C-F5; cat > logs/E4C-F5/aval_libera_b3_2211-1810.txt <<'EOF' aval Ronald: LIBERA-B3-F5-2211-1810 -- a F5 foi descongelada e refeita pelo CONTRATO-V2 (logs/E4C-F5/CONTRATO-V2.md); escrever no topo: "DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454"; depois do rearme de Ronald, o verificador fi ...` |
 | 18:16:51 | Bash |  | `cd ~/saas-hasner; head -5 app/docs/RELATO.md \| cut -c1-250; tail -3 app/docs/PROMPTS.md \| cut -c1-250; date '+%d/%m %H:%M'` |
-| 18:07:46 | Bash |  | `cd ~/saas-hasner; timeout 540 bash -c 'until grep -q "^rc=" logs/SIMPLIFICA-V3-2211-1726/suite_final.log \|\| [ -f logs/TERRENO-POS-F5/relanca.fim ]; do /usr/bin/sleep 20; done'; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/SIMPLIFICA-V3-2211-1726/suite_final.log \| tail -3; ls logs/TERRENO-POS-F5/relanca.fim 2>/dev/null` |
-| 18:07:32 | Bash |  | `cd ~/saas-hasner/logs/TERRENO-POS-F5; for f in */r.txt; do echo "=== $f ($(wc -l <$f) linhas)"; head -c 700 $f; echo; done` |
-| 18:07:27 | Bash |  | `cd ~/saas-hasner; tail -c 300 logs/SIMPLIFICA-V3-2211-1726/suite_final.log; echo; ls logs/TERRENO-POS-F5/*/r.txt \| wc -l; ls logs/TERRENO-POS-F5/relanca.fim 2>&1 \| tail -1` |
-| 18:07:16 | Bash |  | `cd ~/saas-hasner; cat > logs/SIMPLIFICA-V3-2211-1726/selos_host_copia.txt <<'EOF' Selos de host na copia ~/wt-simplifica-104405 @3f7d3fd6c (22/11 ~18:0x), 12 nao-zero de 66+; os mesmos rodados no main 161066a90: PRE-EXISTENTES (vermelhos tambem no main): test_atomicidade_da_porta, test_esmeril_chamado_censo, test_esmeril_turno_censo, test_hora_da_secao_nao_e_futura, test_leis_indice, test_placar_c ...` |
-| 18:07:07 | Bash |  | `cd ~/wt-simplifica-104405; git diff --name-only 161066a90 HEAD; echo ===; grep -nE 'logs/\|RAIZ\|\.git' bin/tests/test_inventario_pessoal_no_commit.sh \| head -8; echo ===; grep -nE 'logs/\|ALARME\|RAIZ' bin/tests/test_furo_encadeado_ao_cartorio.sh \| head -10` |
