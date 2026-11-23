@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 04:23:54.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.6 MB). Acoes na janela: **1857**.
+**Medido em 23/11/2026 04:30:01.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.6 MB). Acoes na janela: **1858**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:26:23 | Bash |  | `cd ~/saas-hasner; until [ ! -e logs/crons_em_curso/sombra.sh_-.3886133 ]; do /usr/bin/sleep 20; done; date +%H:%M` |
 | 04:16:21 | Bash |  | `cd ~/saas-hasner; D=logs/ESPURIAS-VAGA-2-2211-2359/comboio4; cat > $D/msg_pouso.txt <<'EOF' POUSO ESPURIAS-VAGA-2 (C8 escala descreve pelo juiz do turno + O62 pausa sem marco pela celula + DSTL1 espelho le a decisao de HE): merge comboio e0d2e6c78 OBRA: ESPURIAS-VAGA-2 LEI-AKITA: origem=escala/detector_proposta.py::medir_padrao (C8) + ponto/juiz_batida.py::intervalo_cadastrado/periodos_do_dia (O62 ...` |
 | 04:16:10 | Bash |  | `cd ~/saas-hasner; for c in e561dd91b ed1e293a7; do git log -1 --format=%B $c \| grep '^LEI-AKITA' \| grep -o 'juizes novos=.*'; done` |
 | 04:16:08 | Bash |  | `cd ~/saas-hasner; for c in e561dd91b ed1e293a7 3e1c8b356; do git log -1 --format=%B $c \| grep '^LEI-AKITA' \| cut -c1-400; done; git log -1 --format=%B 6f48ecf3b \| head -30` |
