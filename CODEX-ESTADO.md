@@ -1,7 +1,240 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 13:18** · publicado em **23/11/2026 13:18** (UTC-3)
+> Ultima resposta processada: **23/11/2026 13:19** · publicado em **23/11/2026 13:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 13:19 · sessao a29591adb793 · A-TELA-DO-DIA-LE-UM-JUIZ · leitura · origem=Code
+
+```python
+import json
+import logging
+from collections import Counter
+from datetime import date
+from math import fsum
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.db.models import Max
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador
+from colaboradores.services.calendario import (
+    STATUS_QUE_PEDEM_DECISAO,
+    contexto_calendario,
+)
+from escala.alimentacao import celulas_do_periodo
+from escala.utils import minutos_previstos_do_dia
+from folha.export import competencia_entregue
+from ponto.janelas import janela_atual, janela_fechamento
+from ponto.models import Batida
+from ponto.services.dia_pago import pago_do_dia
+from ponto.turnos import CargaDaJanela, cobertura_ausencia_periodo, realizado_do_dia
+
+MES, ANO = 11, 2026
+DIAS_AUSENCIA_941 = tuple(date(2026, 11, d) for d in range(16, 20))
+CASOS = {
+    945: (date(2026, 10, 24), date(2026, 10, 26), date(2026, 10, 28)),
+    941: (date(2026, 10, 31), *DIAS_AUSENCIA_941),
+}
+
+
+def falhar_em_log_de_erro(_logger, registro):
+    # A tela tem fallbacks com exc_info, por exemplo em app/colaboradores/services/calendario.py:622.
+    if registro.exc_info and registro.exc_info[1] is not None:
+        _, erro, traceback = registro.exc_info
+        raise erro.with_traceback(traceback)
+    if registro.levelno >= logging.ERROR:
+        raise RuntimeError(f"Erro registrado em {registro.pathname}:{registro.lineno}")
+
+
+def ler_grade(colab, mes, ano, agora):
+    ctx = contexto_calendario(
+        colab, {"modo": "competencia", "mes": str(mes), "ano": str(ano)},
+        agora=agora,
+    )
+    for dia in ctx["dias"]:
+        if not dia["em_aberto_perguntado"] or dia["resolver_dia_oferecido"] is None:
+            raise RuntimeError(f"Grade sem resposta para pk={colab.pk}, dia={dia['data']}")
+    return ctx
+
+
+def minutos_pagos(dia):
+    horas = pago_do_dia(dia["dia_pago"])
+    return None if horas is None else round(horas * 60, 9)
+
+
+def batidas(batidas_da_grade):
+    return [
+        [timezone.localtime(b.timestamp).isoformat(), b.tipo]
+        for b in batidas_da_grade
+    ]
+
+
+def registro_ausencia(a):
+    if a is None:
+        return None
+    return {
+        "pk": a.pk,
+        "data": a.data.isoformat(),
+        "data_fim": a.data_fim.isoformat() if a.data_fim is not None else None,
+        "minutos": a.minutos,
+        "tipo": a.tipo,
+        "status": a.status,
+    }
+
+
+def imprimir(obj):
+    print(json.dumps(obj, ensure_ascii=False), flush=True)
+
+
+def sondar():
+    if connection.settings_dict["NAME"] != "sombra":
+        raise RuntimeError("Use o banco de ensaio sombra.")
+    if connection.in_atomic_block or not connection.get_autocommit():
+        raise RuntimeError("A sonda exige uma transação própria.")
+
+    with (
+        patch.object(logging.Logger, "handle", falhar_em_log_de_erro),
+        schema_context("juliani"),
+        transaction.atomic(),
+    ):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cursor.execute("SELECT current_database(), current_schema()")
+            if cursor.fetchone() != ("sombra", "juliani"):
+                raise RuntimeError("Banco/schema diferente de sombra/juliani.")
+
+        agora = timezone.now()
+        ultima = Batida.objects.aggregate(ultima=Max("timestamp"))["ultima"]
+        qs = Colaborador.objects.select_related("empresa", "posto__praca").order_by("pk")
+        colabs = list(qs.filter(situacao="ativo"))
+        por_pk = {c.pk: c for c in colabs}
+        colabs_dos_casos = {
+            pk: por_pk[pk] if pk in por_pk else qs.get(pk=pk)
+            for pk in CASOS
+        }
+        empresas = {
+            c.empresa_id: c.empresa for c in [*colabs, *colabs_dos_casos.values()]
+        }
+        cabecalho_empresas = []
+        for pk, empresa in sorted(empresas.items()):
+            ini, fim = janela_fechamento(MES, ANO, empresa)
+            cabecalho_empresas.append({
+                "empresa_pk": pk,
+                "inicio": ini.isoformat(),
+                "fim": fim.isoformat(),
+                "exportada": competencia_entregue(pk, MES, ANO),
+            })
+        imprimir({
+            "dump_referencia_max_batida_timestamp": (
+                timezone.localtime(ultima).isoformat() if ultima is not None else None
+            ),
+            "competencia": "2026-11",
+            "empresas": cabecalho_empresas,
+            "colaboradores_no_universo": len(colabs),
+        })
+
+        por_status = Counter()
+        afetados = 0
+        comparacao = Counter()
+        excessos = []
+        grades_dos_casos = {}
+        for colab in colabs:
+            ctx = ler_grade(colab, MES, ANO, agora)
+            if colab.pk in CASOS:
+                grades_dos_casos[colab.pk] = {
+                    (MES, ANO): {dia["data"]: dia for dia in ctx["dias"]}
+                }
+            divergentes = [
+                dia for dia in ctx["dias"]
+                if "Em aberto" in dia["palavra_dia"]
+                and dia["status"] not in STATUS_QUE_PEDEM_DECISAO
+            ]
+            if not divergentes:
+                continue
+            afetados += 1
+            turnos = None
+            for dia in divergentes:
+                por_status[dia["status"]] += 1
+                d = dia["data"]
+                previsto = minutos_previstos_do_dia(colab, d)
+                pago = minutos_pagos(dia)
+                if pago is None:
+                    comparacao["sem_pago"] += 1
+                    continue
+                comparacao["ge" if pago >= previsto else "lt"] += 1
+                if turnos is None:
+                    turnos = CargaDaJanela([colab], ctx["data_ini"], ctx["data_fim"]).turnos(colab)
+                realizado = realizado_do_dia(colab, d, turnos=turnos, previsto_min=previsto)
+                if realizado.minutos is None:
+                    comparacao["sem_realizado_dos_pares"] += 1
+                else:
+                    excessos.append(max(0, pago - realizado.minutos))
+
+        saida_casos = []
+        for pk, datas in CASOS.items():
+            colab = colabs_dos_casos[pk]
+            grades = grades_dos_casos.get(pk, {})
+            celulas = celulas_do_periodo([pk], min(datas), max(datas))
+            cobertura = (
+                cobertura_ausencia_periodo(
+                    colab, min(DIAS_AUSENCIA_941), max(DIAS_AUSENCIA_941), para="folha",
+                ) if pk == 941 else {}
+            )
+            for d in datas:
+                _, fim = janela_atual(d, colab.empresa)
+                competencia = (fim.month, fim.year)
+                if competencia not in grades:
+                    ctx = ler_grade(colab, fim.month, fim.year, agora)
+                    grades[competencia] = {dia["data"]: dia for dia in ctx["dias"]}
+                dia = grades[competencia][d]
+                celula = celulas.get((pk, d))
+                caso = {
+                    "colaborador_pk": pk,
+                    "data": d.isoformat(),
+                    "status": dia["status"],
+                    "texto": dia["palavra_dia"],
+                    "resolver_dia_oferecido": dia["resolver_dia_oferecido"],
+                    "batidas_do_turno": batidas(dia["batidas"]),
+                    "batidas_retratadas_do_dia_civil": batidas(dia["retratadas"]),
+                    "celula_status_dia": celula.status_dia if celula is not None else None,
+                    "minutos_pagos": minutos_pagos(dia),
+                    "minutos_previstos": minutos_previstos_do_dia(colab, d, celulas=celulas),
+                }
+                if pk == 941 and d in DIAS_AUSENCIA_941:
+                    caso["ausencia_cobertura_folha"] = registro_ausencia(cobertura.get(d))
+                saida_casos.append(caso)
+
+    imprimir({
+        "dias_divergentes_por_status": dict(sorted(por_status.items())),
+        "colaboradores_com_divergencia": afetados,
+        "divergencia_status_x_em_aberto_total": sum(por_status.values()),
+        "dias_pago_ge_previsto": comparacao["ge"],
+        "dias_pago_lt_previsto": comparacao["lt"],
+        "dias_sem_minutos_pagos_sustentados": comparacao["sem_pago"],
+        "dias_com_pago_sem_minutos_dos_pares": comparacao["sem_realizado_dos_pares"],
+        "dias_com_pago_e_minutos_dos_pares": len(excessos),
+        "soma_minutos_pagos_acima_dos_pares": round(fsum(excessos), 9),
+    })
+    for caso in saida_casos:
+        imprimir(caso)
+
+
+sondar()
+```
+
+**Sítios no repositório**
+
+- **Universo.** Adotei a lista padrão de Colaboradores, `situacao="ativo"`, com todas as páginas e sem filtros opcionais. As contagens usam esse universo. Os casos literais são consultados por PK mesmo quando estão fora dele, como permite a entrada do calendário do perfil. `app/colaboradores/views.py:1044`, `app/colaboradores/views.py:1048`, `app/colaboradores/views.py:1066`, `app/colaboradores/views.py:1077`, `app/colaboradores/views.py:1984`.
+- **Calendário.** `contexto_calendario` recebe o colaborador, um dicionário de parâmetros e um instante comum à rodada. É a chamada direta usada pelo drawer, sem request ou usuário para produzir os campos pedidos. A sonda lê `palavra_dia`, `status` e `resolver_dia_oferecido` da própria grade. A permissão do usuário é aplicada pelo template ao exibir o botão. `app/colaboradores/services/drawer.py:122`, `app/colaboradores/services/calendario.py:188`, `app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:754`, `app/colaboradores/services/calendario.py:809`, `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/colaboradores/partials/_calendario_grade.html:134`.
+- **Competência e exportação.** `janela_fechamento` usa o corte da empresa. `janela_atual` localiza a competência de cada data literal. `competencia_entregue` verifica o TXT vigente para empresa, mês e ano. `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`, `app/ponto/janelas.py:60`, `app/colaboradores/services/calendario.py:204`, `app/folha/export.py:556`, `app/folha/export.py:588`.
+- **Pago e previsto.** A grade chama `linhas_do_periodo` e `rubricas_do_dia` e entrega o próprio `DiaPago`. Sobre essa linha, `pago_do_dia` lê as horas pagas de trabalho, incluindo folga trabalhada e folga em feriado. A sonda conta separadamente os dias em que o leitor devolve `None`. O previsto vem de `minutos_previstos_do_dia`. `app/colaboradores/services/calendario.py:319`, `app/colaboradores/services/calendario.py:688`, `app/colaboradores/services/calendario.py:781`, `app/ponto/services/dia_pago.py:833`, `app/ponto/services/dia_pago.py:867`, `app/ponto/services/dia_pago.py:901`, `app/escala/utils.py:2241`.
+- **Pares fechados.** `CargaDaJanela.turnos` usa o mesmo carregador da grade. `realizado_do_dia` fornece os minutos realizados pelo pareador, como no espelho. A soma acumula diferenças positivas nos dias em que ambas as fontes devolvem minutos. `app/colaboradores/services/calendario.py:249`, `app/ponto/turnos.py:2980`, `app/ponto/turnos.py:3044`, `app/ponto/turnos.py:774`, `app/ponto/services/espelho.py:276`, `app/ponto/services/espelho.py:412`.
+- **Casos literais.** `celulas_do_periodo` carrega a `CelulaDia` e seu `status_dia` persistido. As batidas seguem a grade, que atribui as vivas ao dia do turno e as retratadas ao dia civil local. `cobertura_ausencia_periodo(..., para="folha")` usa a mesma cobertura aprovada que alimenta a palavra do dia. `app/escala/alimentacao.py:54`, `app/escala/models.py:1827`, `app/colaboradores/services/calendario.py:643`, `app/colaboradores/services/calendario.py:658`, `app/colaboradores/services/calendario.py:765`, `app/colaboradores/services/calendario.py:561`, `app/colaboradores/services/calendario.py:748`, `app/ponto/turnos.py:2752`, `app/ponto/models.py:749`, `app/ponto/models.py:809`.
+- **Sombra e erros.** A configuração `config.settings.sombra` aponta para o banco `sombra`, com schema `juliani`. A transação segue o padrão `REPEATABLE READ, READ ONLY` da sonda da cópia. O tratamento de log relança as exceções registradas com `exc_info` nas degradações da tela. O cabeçalho usa o maior `Batida.timestamp` como referência de data do dump. `app/config/settings/sombra.py:13`, `app/config/settings/sombra.py:29`, `app/config/settings/sombra.py:47`, `app/chamados/tests/cef_c3_sonda.py:21`, `app/colaboradores/services/calendario.py:509`, `app/colaboradores/services/calendario.py:617`, `app/ponto/models.py:23`.
+
+Execução na sombra, contagens, data efetiva do dump e confirmação independente do hash [não verificado].
 
 ## 23/11 13:18 · sessao c69dd7bd31d0 · VIGIA-DO-TMUX · leitura · origem=Code
 
@@ -845,13 +1078,4 @@ O anexo `aval_1312.txt`, item 1(ii), manda manter em A os dias com duas ou mais 
 
 [truncado em 20000 de 20215 caracteres]
 
-## 23/11 01:31 · sessao bd8da83d7ec4 · - · - · origem=Ronald (tmux)
-
-- O Retrato da folha abre em `/folha/exportar/retrato/`, pela view `retrato_folha`, que renderiza `folha/retrato_folha.html` ou `folha/_retrato_parcial.html`; ambas usam `_retrato_lista.html`. A lista tem uma linha por pessoa e competência, com `motivo` e número de dias. `rotulo_do_motivo` consulta `MOTIVO_RH`, que inclui “Bateu ponto dentro de ferias”. `app/config/urls.py:34`, `app/folha/urls.py:24`, `app/folha/views_retrato.py:220`, `app/folha/views_retrato.py:278-293`, `app/folha/views_retrato.py:345-346`, `app/templates/folha/retrato_folha.html:53`, `app/templates/folha/_retrato_parcial.html:7`, `app/folha/retrato_folha.py:76-86`, `app/folha/views.py:14-22`.
-- Clicar no nome abre o drawer `painel_colaborador` com `mes` e `ano`. Seu bloco “O que fazer” mostra `retrato_linha.datas` e o rótulo `Sem porta` quando a data pertence a `dias_sem_porta`. Os dias de furo vêm de `motivos_retencao_celula` via `fora_da_folha`; as datas de férias com batida vêm de `dias_ferias_com_batida`, que chama `batidas_apuraveis`. A linha gravada traz datas, motivo e tarefas, sem estado HE nem indicador geral de elegibilidade L1. `app/templates/folha/_retrato_lista.html:60-66`, `app/colaboradores/views.py:994-1018`, `app/templates/colaboradores/partials/painel_colaborador.html:26`, `app/templates/folha/_retrato_o_que_fazer.html:42-50`, `app/folha/fora_da_folha.py:115-122`, `app/folha/fora_da_folha.py:216-246`, `app/folha/retrato_folha.py:1222-1255`, `app/folha/export.py:464-505`, `app/folha/export.py:876-884`.
-- Proposta para o Retrato: anexar contexto vivo aos chips de datas elegíveis no drawer, com estado pelo `estado_por_dia`, disponibilidade de HE na foto da competência e link exato. Dias fora das datas que seguram a folha podem usar a aba Espelho do drawer. A lista da folha continuará respondendo por pessoa e competência por esse desenho. `app/templates/folha/_retrato_lista.html:60-66`, `app/templates/folha/_retrato_o_que_fazer.html:42-50`, `app/templates/colaboradores/partials/painel_colaborador.html:33-35`, `app/ponto/services/gestao_he.py:63-89`, `app/ponto/services/he_pendente_lavrado.py:193-206`.
-- `porta_export` já lê o mapa vivo pelo mesmo `estado_por_dia` da Gestão de HE. Para a trava de HE, qualquer decisão vigente, inclusive `nao`, elimina o bloqueio daquele par. O modelo filtra `revogada_em` nulo e impõe chave única `colaborador,data`. A porta administrativa chama `_gravar`, a recusa automática também usa `_gravar`, e a revogação de recusa automática escreve `revogada_em` por `_marcar_revogada`. `app/folha/porta_export.py:218-234`, `app/folha/porta_export.py:681-686`, `app/ponto/services/gestao_he.py:63-89`, `app/ponto/models.py:1265-1267`, `app/ponto/models.py:1300-1303`, `app/ponto/models.py:1354-1358`, `app/ponto/portas/he.py:65-86`, `app/ponto/portas/he.py:195-208`, `app/ponto/portas/he.py:369-371`, `app/ponto/portas/he.py:398-403`, `app/ponto/portas/he.py:473-504`.
-- Na Gestão de HE o clique por dia posta `autorizado` e pergunta “Autorizar a HE do dia …?”. A ciência visível é por colaborador ou por lista. Para ciência exata de um dia, a proposta pode usar um controle da própria Gestão que poste `estado=nao` ao endpoint de dia existente. `app/templates/ponto/gestao_he.html:68-80`, `app/templates/ponto/gestao_he.html:139-150`, `app/templates/ponto/gestao_he.html:256-259`, `app/templates/ponto/gestao_he.html:405-410`, `app/ponto/views.py:522-538`, `app/ponto/portas/he.py:175-193`.
-- Um dia autorizado pode desaparecer da foto de HE em nova lavratura, porque a autorização faz o motor sair antes de publicar a ponta de dia sem previsto. O GET focado deve poder mostrar a decisão vigente mesmo quando a foto estiver sem essa linha. Para um dia sem HE publicada, mostrar informação sem formulário. A porta rejeita minutos `<=0` fornecidos pelo POST; a view transmite o valor do formulário. `app/ponto/motor_calculo_v2.py:1455-1457`, `app/ponto/motor_calculo_v2.py:1484-1488`, `app/ponto/services/espelho.py:757-763`, `app/ponto/services/he_pendente_lavrado.py:132-151`, `app/templates/ponto/gestao_he.html:236-243`, `app/ponto/views.py:532-538`, `app/ponto/portas/he.py:164-170`, `app/ponto/portas/he.py:186-193`.
-
-_7924 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7925 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
