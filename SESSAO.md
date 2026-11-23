@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 14:47:06.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (9.9 MB). Acoes na janela: **264**.
+**Medido em 23/11/2026 14:52:48.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (10.0 MB). Acoes na janela: **266**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:48:16 | Bash | Add C20 item to PORTA-CONFERE-TRAVA backlog row | `cp logs/E4C-F5/v6/construtor/i6_red_guardado_fora_do_commit.py logs/E4C-F5/v6/construtor/censo_c20.txt logs/PORTA-CONFERE-TRAVA/ 2>/dev/null \|\| { mkdir -p logs/PORTA-CONFERE-TRAVA && cp logs/E4C-F5/v6/construtor/i6_red_guardado_fora_do_commit.py logs/E4C-F5/v6/construtor/censo_c20.txt logs/PORTA-CONFERE-TRAVA/; }; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k ...` |
+| 14:48:10 | Bash | Register C20 answer in CORTES, RELATO, PROMPTS | `/bin/grep -n '^\| PORTA-CONFERE-TRAVA' app/docs/BACKLOG.md \| cut -c1-200; python3 - <<'EOF' import json p='app/docs/CORTES.json'; d=json.load(open(p)) d.append({"id":"RESPOSTA-LEI-C20-PURO-2311-1450","quando":"2026-11-23 14:50","estado":"registrado; item da PORTA-CONFERE-TRAVA (depois do pouso da F5)","fatia":"PORTA-CONFERE-TRAVA","onde":"logs/E4C-F5/v6/construtor/censo_c20.txt", "frase":"corte R ...` |
 | 14:43:51 | Bash | Add lei line and v6 status to RELATO top | `python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(0,"lei: C20-PURO-EXIGE-PORTA-ENTREGAR-O-COLABORADOR (E4C-F5 v6 item 6, 14:4x) -- tirar o ramo chamados/juizes.py:1082-1106 (_dono_travado/colaboradores_travados) exige mudar a assinatura do juiz em 43 portas (fecho de 654 funcoes; logs/E4C-F5/v6/construtor/censo_c20.txt): pergunta_viva, tranca_da_consulta, DisputaSuper ...` |
 | 14:43:44 | Bash | Wait for F5 v6 verificador answer | `until [ -s logs/E4C-F5/v6/final/verif.r ] && ! pgrep -f 'v6/final/verif.q' >/dev/null; do /usr/bin/sleep 30; done; tail -1 logs/E4C-F5/v6/final/verif.out; wc -l logs/E4C-F5/v6/final/verif.r` |
 | 14:43:21 | Bash | Dispatch Codex verificador for F5 v6 | `D=logs/E4C-F5/v6/final && cp logs/E4C-F5/v6/triagem_5d.txt $D/ && cp logs/E4C-F5/v6/construtor/censo_c20.txt $D/ 2>/dev/null; du -ch $D/* \| tail -1; cat > $D/verif.q <<'EOF' PAPEL: verificador (CODEX-PRE-VERIFICADOR 5a). OBRA E4C-F5, volta 6. Leia o repo no hash dado; o diff anexo (por ultimo) e e8e067acc..7bd367700 (a volta 6 sobre a v5 ja mergeada com main). Contrato: CONTRATO-V2.md. Achados da ...` |
