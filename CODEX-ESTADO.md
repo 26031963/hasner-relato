@@ -1,7 +1,302 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 17:09** · publicado em **23/11/2026 17:12** (UTC-3)
+> Ultima resposta processada: **23/11/2026 17:16** · publicado em **23/11/2026 17:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 17:16 · sessao 70c481a06ab8 · NOTURNO-NAO-APURADO · leitura · origem=Code
+
+```python
+import logging
+import sys
+from collections import Counter, defaultdict
+from contextlib import ExitStack
+from datetime import date, datetime, time, timedelta
+from unittest.mock import patch
+
+sys.dont_write_bytecode = True
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador
+from folha.export import competencia_entregue
+from ponto import motor_calculo_v2 as motores
+from ponto.janelas import janela_atual
+from ponto.models import DiaPago
+from ponto.services import dia_pago, fechamento
+from ponto.turnos import batidas_apuraveis
+
+INI, ATE = date(2026, 10, 1), date(2026, 11, 22)
+UM_DIA = timedelta(days=1)
+H22, H05 = time(22), time(5)
+ALERTA = "contados dos pares fechados"
+ARGUMENTOS = ("periodos", "ft_certa", "ft_feriado", "ft_sem_escala")
+[nome] = ("cauda_paga", "cauda_nao_paga_capada", "sem_cauda_noturna")
+TOL_MIN = 1.0
+NV = "[nao verificado]"
+
+
+def linhas_base():
+    # app/ponto/models.py:311-327,349-351
+    return DiaPago.objects.filter(
+        data__range=(INI, ATE), tipo=DiaPago.TIPO_DIA, versao="motor",
+        minutos_realizados__gt=0, horas_noturnas=0,
+    )
+
+
+def alvos_por_competencia(colab):
+    # noturno_ramo_frota.py:32-57
+    inicio = timezone.make_aware(datetime.combine(INI, H22))
+    fim = timezone.make_aware(datetime.combine(ATE + UM_DIA, H05))
+    dias_com_batida = set()
+    # app/ponto/turnos.py:2877-2904
+    batidas = batidas_apuraveis(colab, inicio, fim).values_list("timestamp", flat=True)
+    for timestamp in batidas.iterator():
+        local = timezone.localtime(timestamp)
+        if local.time() >= H22:
+            dias_com_batida.add(local.date())
+        elif local.time() < H05:
+            dias_com_batida.add(local.date() - UM_DIA)
+
+    linhas = linhas_base().filter(colaborador_id=colab.pk).values_list(
+        "data", "mes", "ano", "minutos_realizados", "horas_noturnas", "minutos_previstos",
+    )
+    alvos = defaultdict(dict)
+    for dia, mes, ano, realizado, noturno_h, previsto in linhas:
+        if dia in dias_com_batida:
+            _, fim_comp = janela_atual(dia, colab.empresa)  # app/ponto/janelas.py:60-63
+            if (ano, mes) == (fim_comp.year, fim_comp.month):
+                alvos[ano, mes][dia] = (realizado, noturno_h * 60, previsto)
+    return alvos
+
+
+def capturar_lavratura(cid, mes, ano):
+    capturas, chamadas_janela, rastros = [], [], {}
+    janela_real = motores.MotorBase._janela_do_par
+
+    def capturar_janela(motor, entrada, saida=None):
+        resposta = janela_real(motor, entrada, saida)  # app/ponto/motor_calculo_v2.py:1752-1763
+        chamadas_janela.append((entrada, saida, resposta))
+        return resposta
+
+    def observar_periodo(calcular_real):
+        def calcular(motor, entrada, saida, intervalos=()):
+            inicio = len(chamadas_janela)
+            periodo = calcular_real(motor, entrada, saida, intervalos)
+            chamadas = chamadas_janela[inicio:]
+            del chamadas_janela[inicio:]
+            if len(chamadas) != int(periodo.saida is not None):
+                raise RuntimeError(f"Quantidade inesperada de janelas para col{cid:03d} {mes:02d}/{ano}")
+            janela = chamadas[0] if chamadas else None
+            if janela is not None and janela[:2] != (periodo.entrada, periodo.saida):
+                raise RuntimeError(f"Pontas originais divergentes para col{cid:03d} {mes:02d}/{ano}")
+            rastros[id(periodo)] = (periodo, motor, janela)
+            return periodo
+        return calcular
+
+    def capturar(colab, mes_arg, ano_arg, *, versao, **dados):
+        if versao == "motor":
+            capturas.append(((colab.pk, mes_arg, ano_arg), dados))
+        return 0
+
+    with ExitStack() as pilha:
+        # app/ponto/services/fechamento.py:1191-1204,1227,1277-1296
+        pilha.enter_context(patch.object(dia_pago, "lavrar", new=capturar))
+        pilha.enter_context(patch.object(motores.MotorBase, "_janela_do_par", new=capturar_janela))
+        # app/ponto/motor_calculo_v2.py:2750,2877,3215,3534-3547,3560-3569
+        for classe in (motores.Motor12x36, motores.MotorTurnoPartido, motores.MotorComercial):
+            pilha.enter_context(patch.object(
+                classe, "calcular_periodo", new=observar_periodo(classe.calcular_periodo),
+            ))
+        # Propaga erros dos handlers genericos destes dois modulos.
+        # app/ponto/motor_calculo_v2.py:1387-1420,1535-1538
+        # app/ponto/services/fechamento.py:54-59,1043-1045,1081-1099,1238-1241,1297-1308
+        pilha.enter_context(patch.object(motores, "Exception", new=(), create=True))
+        pilha.enter_context(patch.object(
+            fechamento, "Exception", new=fechamento._GradeSemCelula, create=True,
+        ))
+        fechamento.recalcular_fechamento_mes(  # app/ponto/services/fechamento.py:448
+            mes, ano, colaborador_ids=[cid], somente_leitura=True, lavrar_dias_pagos=True,
+        )
+
+    if not capturas:
+        return None, rastros
+    if len(capturas) != 1 or capturas[0][0] != (cid, mes, ano):
+        raise RuntimeError(f"Captura inesperada para col{cid:03d} {mes:02d}/{ano}")
+    return capturas[0][1], rastros
+
+
+def ramo_do_dia(periodos, realizado, noturno):
+    # noturno_ramo_frota.py:86-112
+    if not periodos:
+        return "sem_periodo"
+    if noturno != 0:
+        return "outro:periodo_com_noturno"
+
+    positivos = [(p, credito) for _, p, credito in periodos if p.minutos_trabalhados > 0]
+    if not positivos:
+        if any(p.saida is not None and (p.minutos_fora_janela or 0) >
+               (p.saida - p.entrada).total_seconds() / 60 for _, p, _ in periodos):
+            return "fechado_fora_janela_maior_que_o_par"
+        return "outro:periodos_sem_trabalhado"
+
+    creditados = [p for p, credito in positivos if p.turno_aberto and credito]
+    if creditados:
+        if realizado is None:
+            return "outro:credito_com_realizado_ausente"
+        if len(positivos) == 1 and realizado > 0 and round(creditados[0].minutos_trabalhados) == realizado:
+            return "credito_turno_aberto"
+        return "outro:credito_nao_cobre_sozinho_o_realizado"
+
+    if all(not p.turno_aberto and p.saida is not None for p, _ in positivos):
+        return "periodo_fechado_sem_noturno"
+    return "outro:trabalhado_em_aberto_sem_alerta_de_credito"
+
+
+def instante(ts):
+    return timezone.localtime(ts).isoformat(timespec="microseconds") if ts is not None else "-"
+
+
+def sim_nao(valor):
+    return "sim" if valor else "nao"
+
+
+def emitir(colab, mes, ano, alvos, lavra, rastros, totais_ramo, dias_motor, periodos_motor):
+    if lavra is None:
+        return
+    por_dia = defaultdict(list)
+    for argumento in ARGUMENTOS:
+        for p in lavra[argumento]:
+            dia = dia_pago._dia_de(p, lavra["dia_da_jornada"])  # app/ponto/services/dia_pago.py:109-132
+            if dia in alvos:
+                por_dia[dia].append((argumento, p, any(ALERTA in a for a in p.alertas)))
+
+    exportada = sim_nao(
+        colab.empresa_id is not None and competencia_entregue(colab.empresa_id, mes, ano)
+    )  # app/folha/export.py:556-594
+    rotulo = f"col{colab.pk:03d}"
+    for dia, (realizado, noturno_gravado, previsto) in sorted(alvos.items()):
+        periodos = por_dia[dia]
+        realizado_reap = (lavra["realizado_por_dia"] or {}).get(dia)
+        noturno_reap = sum(p.minutos_noturnos_legais or 0 for _, p, _ in periodos)
+        if ramo_do_dia(periodos, realizado_reap, noturno_reap) != "periodo_fechado_sem_noturno":
+            continue
+
+        trabalhado = sum(p.minutos_trabalhados or 0 for _, p, _ in periodos)
+        fora_janela = sum(p.minutos_fora_janela or 0 for _, p, _ in periodos)
+        bruto = trabalhado + fora_janela
+        com_teto = min(bruto, previsto)
+        confere = sim_nao(abs(realizado - com_teto) <= TOL_MIN)
+        noturno_original = 0.0
+        motores_do_dia = set()
+
+        for numero, (argumento, p, _) in enumerate(periodos, 1):
+            _, motor, janela = rastros[id(p)]
+            classe = type(motor).__name__
+            motores_do_dia.add(classe)
+            periodos_motor[classe] += 1
+
+            original = NV
+            e, s, fora_e, fora_s = None, None, None, None
+            ponta = "sem_janela"
+            if janela is not None:
+                entrada, saida, (e, s, fora_e, fora_s) = janela
+                pontas = [nome for nome, antes, depois in (("entrada", entrada, e), ("saida", saida, s))
+                          if antes != depois]
+                ponta = "+".join(pontas) or "nenhuma"
+                # A mesma lista passada ao escritor do noturno.
+                # app/ponto/motor_calculo_v2.py:969-1005,1834-1842,2764-2792,2891-2896,3237-3260
+                _, original = motores.MotorBase.calcular_noturnas(motor, entrada, saida, p.intervalos_do_motor)
+                noturno_original += original
+
+            print(
+                f"PERIODO {rotulo} {dia} n={numero} argumento={argumento} motor={classe} "
+                f"entrada_original={instante(p.entrada)} saida_original={instante(p.saida)} "
+                f"entrada_efetiva={instante(e)} saida_efetiva={instante(s)} ponta_recortada={ponta} "
+                f"fora_entrada={fora_e} fora_saida={fora_s} noturno_legal_original={original} "
+                f"noturno_legal_efetivo={p.minutos_noturnos_legais} "
+                f"trabalhado_periodo={p.minutos_trabalhados} fora_janela_periodo={p.minutos_fora_janela} "
+                f"previsto={previsto} realizado={realizado} trabalhado_dia={trabalhado} "
+                f"fora_janela_dia={fora_janela} min_trabalhado_mais_fora_previsto={com_teto} "
+                f"realizado_igual_min_aprox={confere} "
+                f"competencia={ano:04d}-{mes:02d} competencia_exportada={exportada}"
+            )
+
+        if noturno_original == 0:
+            ramo_sub = "sem_cauda_noturna"
+        elif min(realizado, previsto) >= bruto - TOL_MIN:
+            ramo_sub = "cauda_paga"
+        else:
+            ramo_sub = "cauda_nao_paga_capada"
+
+        totais_ramo[ramo_sub] += 1
+        dias_motor.update(motores_do_dia)
+        print(
+            f"DIA2 {rotulo} {dia} ramo_sub={ramo_sub} noturno_original={noturno_original} "
+            f"noturno_gravado={noturno_gravado} realizado={realizado} previsto={previsto}"
+        )
+
+
+def main():
+    totais_ramo = Counter(dict.fromkeys([nome], 0))
+    dias_motor, periodos_motor = Counter(), Counter()
+    nivel_anterior = logging.root.manager.disable
+    logging.disable(sys.maxsize)  # app/config/settings/saas.py:138-141,160-183
+    try:
+        with schema_context("juliani"), transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
+                cursor.execute("SET TRANSACTION READ ONLY")
+                cursor.execute("SELECT current_schema(), current_setting('transaction_read_only')")
+                if cursor.fetchone() != ("juliani", "on"):
+                    raise RuntimeError("A sonda exige juliani em READ ONLY")
+
+            ids = set(linhas_base().values_list("colaborador_id", flat=True).order_by().distinct())
+            # app/colaboradores/models.py:283
+            colabs = Colaborador.objects.filter(pk__in=ids).select_related("empresa").order_by("pk")
+            for colab in colabs:
+                for (ano, mes), alvos in sorted(alvos_por_competencia(colab).items()):
+                    lavra, rastros = capturar_lavratura(colab.pk, mes, ano)
+                    emitir(colab, mes, ano, alvos, lavra, rastros, totais_ramo, dias_motor, periodos_motor)
+    finally:
+        logging.disable(nivel_anterior)
+
+    for ramo in [nome]:
+        print(f"TOTAL RAMO_SUB={ramo} n_dias={totais_ramo[ramo]}")
+    for motor in sorted(dias_motor):
+        print(f"TOTAL MOTOR={motor} n_dias={dias_motor[motor]} n_periodos={periodos_motor[motor]}")
+    print("FIM")
+
+
+main()
+```
+
+- O universo, o pseudônimo e o predicado `periodo_fechado_sem_noturno` seguem o anexo. `noturno_ramo_frota.py:32–57,86–112,119–147`
+- O cálculo original reutiliza o motor da fatia e os intervalos passados ao escritor do noturno após o recorte. Períodos abertos saem antes da janela e ficam com original `[nao verificado]`. `app/ponto/motor_calculo_v2.py:969–1005,1834–1842,2750–2792,2877–2896,3215–3260`
+- `noturno_legal_efetivo` vem do período entregue à lavratura interceptada. `noturno_gravado`, `realizado` e `previsto` vêm do `DiaPago`, e `competencia_exportada` usa `folha.export.competencia_entregue`. `app/ponto/services/fechamento.py:1191–1227`, `app/ponto/models.py:325–351`, `app/folha/export.py:556–594`
+- Adotei tolerância absoluta de 1 minuto. Com original positivo, `cauda_paga` indica que `trabalhado + fora_janela` cabe em `min(realizado, previsto)` nessa tolerância. `cauda_nao_paga_capada` indica cobertura insuficiente nessa aproximação. A atribuição da diferença à cauda e seu pagamento seguem `[nao verificado]`. `app/ponto/turnos.py:725–771`, `app/ponto/services/dia_pago.py:386–402`
+- A sonda usa `READ ONLY` e intercepta as lavraturas `motor` e `oraculo`. Erros dos tratamentos genéricos instrumentados propagam com traceback. A execução em `juliani` e os totais reais seguem `[nao verificado]`. `app/ponto/services/fechamento.py:54–59,1128–1144,1191–1204,1277–1308`, `app/ponto/services/dia_pago.py:359–360`
+
+## 23/11 17:13 · sessao 9266594fb093 · NOTURNO-NAO-APURADO · verificador · origem=Code
+
+**REPROVADO.** O diff copia o noturno dos mesmos pares usados no crédito, mas pode levar à rubrica 25 minutos já contados em outro período ou bloqueáveis pela L-097. [app/ponto/motor_calculo_v2.py:2525](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:2525) [app/ponto/motor_calculo_v2.py:2553](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:2553) [app/folha/export.py:447](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/folha/export.py:447)
+
+Conferi os blobs do motor `2892f7ff9` e `a2e7c6ab5` e reconstruí o diff em memória. As sondas usaram batidas sintéticas e respostas de cadastro e janela injetadas. Hash do commit da cópia, suíte Django, RED original e impacto em produção [nao verificado].
+
+| id | procede? | arquivo:linha | consequência | cura mínima |
+|---|---|---|---|---|
+| 1a · Mesmos pares | **Sim, no crédito** | Diff `app/ponto/motor_calculo_v2.py:2561–2575`, `:1010–1016` | Cada `_pc` que passa pelos filtros entra nas três somas. A porta lê relógio e legais já gravados pelo `calcular_periodo`, com o recorte e os intervalos daquele par. Um par diurno pode contribuir só com trabalhado e um par totalmente recortado pode contribuir só com `fora_janela`. A seleção dos objetos é a mesma. | Manter a transferência pela porta. |
+| 1b · Dupla contagem | **Sim, reproduzida** | `app/ponto/motor_calculo_v2.py:2403–2408`, `:2492–2494`, `:2522–2525`, `:2550–2556`, `:321`, `:2940–2955` | `_pagos_a` exclui fechados com a mesma entrada em `resultado.periodos`, inclusive se estiverem em outro dia da chamada. A guarda deixa passar sobreposição com entradas diferentes e ignora `periodos_ft`. Na sonda do partido, `16:00 E, 21:30 E, 22:30 S` contou **22:00–22:30 duas vezes**. Em outra sonda, o par da madrugada **01:00–01:30** entrou inteiro em `periodos_ft` e também no crédito de um aberto de D+1. O trabalhado já duplicava no código-base. O diff estende a duplicação ao adicional. | Resolver a sobreposição no crédito, usando os trechos efetivamente pagos nas duas listas. Selar a sobreposição parcial e a repetição integral na virada. |
+| 1c · HE noturna e resets | **O aberto conserva o adicional e os splits ficam em zero** | `app/ponto/motor_calculo_v2.py:1012`, `:2855`, `:3294`, `:2928–2939`, `:3329–3338`, `:3104`, `:3160`, `:3191`, `:3361`, `:3423`; `app/folha/export.py:424–447` | A porta transfere dois campos. Os resets mensais zeram os **subconjuntos** 50/100 e as reescritas pulam o aberto por `saida=None`. Se o excedente diário do partido mudar e o portador for fechado, o split desse fechado pode mudar. O TXT usa o adicional e as faixas totais de HE, sem emitir os subconjuntos em linhas próprias. | Preservar os dois campos do adicional e testar o split no portador fechado quando a régua `legais` elevar a HE. |
+| 2 · Escritor único | **Sim, no escopo do selo** | `app/ponto/tests/test_noturno_sitio_unico.py:63–79`, `:107–155`; diff `app/ponto/motor_calculo_v2.py:1010–1016`; base `:1473–1476` | Rodei `varrer` sobre os dois blobs. Ambos retornam somente `MotorBase._escrever_noturnas`. `pares_creditados` agrega resultados, sem recalcular geometria, janela ou fator. O `setattr` dinâmico da L-097 já existia e fica fora da detecção por nome literal. | Manter a allowlist em zero e o cálculo do par na porta atual. |
+| 3 · Minutos | **Sem delta pelo diff, para os mesmos insumos** | **Trabalhado / fora:** `app/ponto/motor_calculo_v2.py` base `:2785/:2787`, `:2893/:2895`, `:3256/:3258` → diff `:2800/:2802`, `:2908/:2910`, `:3271/:3273`. Bloqueio base `:1472–1476` → diff `:1483–1487`. Crédito base `:2559–2560` → diff `:2572–2573`. **Realizado, antes e depois:** `app/escala/utils.py:2056–2069`, `app/ponto/services/cartorio.py:757–759`, `app/escala/services/leitor_celula.py:423`, `app/ponto/services/fechamento.py:1060–1064`, `:1185`, `app/ponto/services/dia_pago.py:288–292`, `:394–401`, `:477–483`. | As escritas de trabalhado e fora mantêm as mesmas expressões. O `minutos_realizados` publicado vem da grade e passa pelo teto diário. Se “realizado” no aval significa esse campo, a equivalência com o crédito do motor continua sem garantia. O BO-B já fixa **360 no motor e 300 no juiz** em `app/ponto/tests/test_bob_dia_pago_se_contradiz.py:183–190`. | Preservar a grade e explicitar que a igualdade provada é entre os insumos do **crédito do motor**. |
+| 4 · Régua `legais` | **Efeito da regra existente, com efeito em dinheiro** | `app/ponto/motor_calculo_v2.py:3120–3160`, `:3560–3567`, `:3409`; diff `:3151–3159`; `app/core/regua_cct.py:107` | **Um sítio de excedente, uma família de motor:** `MotorTurnoPartido`, inclusive `MotorTurnoPartidoNoturno` por herança. `legais − relógio` do aberto passa a compor a base diária e pode cruzar a tolerância ou mudar as faixas 50/100. `relogio`, `semanal_44` e o comercial seguem suas bases atuais. Quantidade de dias e valores [nao verificado]. | Selar o efeito no partido e medir HE 50/100 junto da rubrica 25 no escopo aberto. |
+| 5 · L-097 | **Fura em feriado alcançável pelo crédito** | `app/docs/LEIS.md:115`; `app/ponto/motor_calculo_v2.py:1440–1488`, `:2461`, `:2492–2516`, `:2553`; diff `:2575` | O bloqueio vê o aberto ainda com zero trabalhado. Depois, o `_pc` do crédito passa por `calcular_periodo` sem passar pelo bloqueio total. Na sonda com **feriado, previsto zero, janela ativa e sem autorização**, o fechado saiu com zero de noturno e o aberto passou de zero a **180 min de relógio e 205,71 legais**. A rubrica nova expõe um desvio que já existia no trabalhado. Uma folga classificada em `periodos_ft` fica fora do laço de crédito do aberto. | Aplicar o bloqueio existente ao par do crédito antes de acumular, com o dia de jornada e a classificação já julgados. Selar feriado bloqueado, autorização e folga. |
+| 6 · Testes, mutantes e relógio | **Os três mordem na sonda isolada** | Diff `app/ponto/tests/test_noturno_credito_turno_aberto.py:32–38`, `:86–113`; diff `app/ponto/motor_calculo_v2.py:1010–1016`, `:2561–2575` | Tirar a chamada ou passar `[]` dá **0/0** em vez de **180/205,71**. Somar legais em relógio dá **205,71** em vez de **180** no caso com redução. O gêmeo sem redução e o BO-B de crédito zero cobrem as outras duas bordas. **0 `except` novos**. O relógio está congelado na classe. Resultado dos testes Django [nao verificado]. | Acrescentar casos com múltiplos pares, duplicação, feriado bloqueado e excedente do partido. |
+| 7a · Quem escreve e lê | **Rastreado** | `app/ponto/motor_calculo_v2.py:214–215`, `:260–261`, `:321`, `:1004–1005`, `:1473–1476`, `:3139`; diff `:1015–1016`, `:2575`; `app/ponto/calculador/periodo.py:644–646`, `:739–756`; `app/ponto/services/fechamento.py:918`, `:1163`, `:1201–1227`; `app/ponto/services/dia_pago.py:179`, `:224`, `:924`; `app/ponto/services/espelho.py:99–103`, `:831`, `:1306`; `app/relatorios/cartao_pela_celula.py:176`, `app/relatorios/pdf_espelho.py:844–859`, `:910–914`; `app/api/views.py:1431`, `:1662`; `app/ponto/management/commands/diff_calculador.py:260`; `app/folha/export.py:447`, `:730–739` | O aberto nasce com zero. A porta passa a gravar os dois campos. O reset da L-097 opera antes do crédito e a releitura V3 pula o aberto. O partido e o espelho leem ambos. Os legais alimentam o fechamento e a rubrica 25, a lavratura `motor`, o cartão e o comparador. Tela, PDF e app consomem a lavratura ou o resumo. | Manter a escrita na porta e corrigir a seleção dos pares na origem. |
+| 7b · Oráculo | **Pode divergir da linha `motor`** | `app/ponto/calculador/alimentacao.py:83–112`, `:157–158`, `:525–528`; `app/ponto/calculador/regras.py:613–615`, `:844–851`; `app/ponto/services/fechamento.py:1265–1294`; `app/ponto/services/dia_pago.py:322–333` | O oráculo vê o aberto como `(entrada, None, dia)`, sem os segmentos do crédito em `pares_por_dia` ou nas pontas de HE. Se fornecer `horas_noturnas` para o dia, `lavrar` substitui a soma que já incluía o crédito. Se omitir a rubrica, esse laço conserva a soma do motor. O objeto `PeriodoCalculo` fica intacto. | Na obra do oráculo, levar à lavratura a contribuição já apurada pelo motor para o dia. |
+| Escopo · Exportadas | **Proteção geral ausente no diff** | `app/ponto/services/fechamento.py:36–43`, `:539–564`, `:1160–1163`, `:1537`; `app/folha/export.py:556` | O recálculo de exportadas em geral registra aviso. A exclusão efetiva da cópia é específica de 09/2026 nas empresas que exportaram. O dif﻿f do motor não distingue competência aberta de entregue. Competências atingidas, gravado e TXT histórico [nao verificado]. | Restringir a aplicação da obra, inclusive por recálculo, às triplas abertas pelo juiz `competencia_entregue`. |
 
 ## 23/11 17:09 · sessao a5f00ae68c59 · PAR-PELO-TURNO · leitura · origem=Code
 
@@ -968,82 +1263,4 @@ O wrapper invoca `lavra_de_prod` antes do Python solicitado e grava arquivos e s
 - A autoridade recebe `batidas_limpas` de `MotorBase.remover_duplicatas`, geometria do perfil de `get_motor`, `_ec` e `celulas_alimentadas`. Fatias contíguas com halo de um dia permitem aplicar o vínculo de D e preservar a borda à meia-noite. Copie batidas por pareamento porque a autoridade coloca marcas transitórias nos objetos. O intervalo liquidável vem de `intervalos_do_turno`. `app/ponto/motor_calculo_v2.py:453-506`, `app/ponto/motor_calculo_v2.py:897-912`, `app/ponto/motor_calculo_v2.py:2351-2354`, `app/ponto/motor_calculo_v2.py:3626-3705`, `app/ponto/services/fechamento.py:239-262`, `app/ponto/turnos.py:1517-1535`, `app/ponto/turnos.py:502-546`.
 - O anexo fornecido não traz `medir()`, de modo que opção exata de prorrogação e equivalência com aquele método são [nao verificado]. Para 22h–05h estritas, passe `prorrogacao=False` às duas funções puras. `app/ponto/motor_calculo_v2.py:82-121`.
 
-## 23/11 15:50 · sessao c066df8bb348 · - · - · origem=Ronald (tmux)
-
-- A competência de D é o mês e ano do fim retornado por `janela_atual(D, colab.empresa)`. O recorte pode alcançar dezembro, conforme o corte de cada empresa. `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:60`.
-- Consulte `DiaPago` por colaborador, intervalo de datas, `tipo=DiaPago.TIPO_DIA` e `versao='motor'`. Retenha somente a linha com mês e ano iguais à competência de D antes de calcular o universo. `app/folha/porta_export.py:284`, `app/ponto/models.py:311`, `app/ponto/models.py:327`, `app/ponto/models.py:351`, `app/ponto/models.py:386`.
-- `competencia_entregue(empresa_id, mes, ano)` devolve o booleano de exportação vigente e aceita cache do resultado por tripla. `app/folha/export.py:556`, `app/folha/export.py:580`, `app/folha/export.py:594`.
-- A autoridade acionada pela sonda lê uma borda de um dia em cada ponta e as fatias usam `data_local` para filtrar suas batidas. `app/ponto/services/espelho.py:1055`, `app/ponto/services/fechamento.py:239`.
-- O pareador direto recebe o vínculo por `_ec` e o mapa por `celulas_alimentadas`. Preserve instâncias independentes de batidas quando rodar perfis sobrepostos. `app/ponto/management/commands/aplicar_09_corte_b.py:131`, `app/ponto/motor_calculo_v2.py:453`, `app/ponto/turnos.py:160`, `app/ponto/turnos.py:178`.
-- O noturno líquido de relógio usa `max(0.0, minutos_noturnos(e, s, prorrogacao=p) - minutos_noturnos_dos_intervalos(e, s, intervalos, prorrogacao=p))`. A correspondência com `medir()` da sonda está [nao verificado]. `app/ponto/motor_calculo_v2.py:82`, `app/ponto/motor_calculo_v2.py:121`, `app/ponto/motor_calculo_v2.py:983`.
-- Para identificar marcos da célula, `marcos_dna_periodo` retorna o DNA congelado. `EscalaColaborador.marcos_do_dia` possui fallback para template, inclusive quando há célula sem marcos. `app/escala/utils.py:84`, `app/escala/models.py:1109`, `app/escala/models.py:1135`.
-- `bin/sombra.sh --rodar` localiza o script por basename em `logs/sombra/`, usa o shell Django no schema e envolve a saída em `tee`. As credenciais da sombra são configuradas no wrapper. `bin/sombra.sh:79`, `bin/sombra.sh:184`, `bin/sombra.sh:483`, `app/config/settings/sombra.py:49`.
-
-## 23/11 15:49 · sessao 057c9d4c1879 · PAR-PELO-TURNO · sonda · origem=Code
-
-A sonda imprimiu **5 `a`, 0 `b` e 24 `c`**. Pelas evidências do anexo e pelos critérios pedidos, a triagem fica em **27 `a`, 0 `b` e 2 `c`**. Das **22 divergências**, **13** têm par separado pelo teto no próprio dia e **9** têm entrada apurável aberta no próprio dia, sem saída final no `turno`. As outras **7** classificações são sustentadas. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` `app/ponto/models.py:327` `app/ponto/models.py:351`
-
-**Competência exportada:** **0 de 29 dias-colab**, abrangendo **0 dos 14 casos**, nas linhas `competencia` fornecidas. **NAO RESOLVIDO:** nenhum. Cada caso tem `RESOLVIDO n=1` com um único PK, reproduzido abaixo como `colNNN`. `app/folha/export.py:556` `app/ponto/models.py:315`
-
-### Conferência por dia-colab
-
-`E→S` indica os papéis no pareamento, identificados pelo PK. `Vão × teto` está em minutos, com até duas casas decimais. As órfãs vêm de `turnos_contagem` e podem incluir dias vizinhos. `DiaPago` traz `minutos_realizados / horas_noturnas` da versão `motor` em D, salvo quando D−1 está indicado. `app/ponto/turnos.py:43` `app/ponto/turnos.py:183` `app/ponto/turnos.py:1447` `app/ponto/motor_calculo_v2.py:503` `app/ponto/models.py:319` `app/ponto/models.py:327` `app/ponto/models.py:351`
-
-| Caso | Colab | D | Classe impressa | Motivo impresso | Evidência do pareamento | DiaPago motor | Exportada | Conferência |
-|---|---|---|---|---|---|---|---|---|
-| caso01 | col129 | 2026-10-11 | c | `L-099_sem_batida_noturna_alvo` | Recusado `124339→124645`, **780,06 × 732**. D−1 fechou `123883→124025`, vão impresso [nao verificado], teto 732. Órfãs `123274, 124645, 125077`. | `0 / 0` (1414808). D−1 `492 / 8,8`. | Não · 10/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso01 | col129 | 2026-10-25 | c | `L-099_sem_batida_noturna_alvo` | Recusado `137026→137305`, **780,29 × 732**. D−1 fechou `136544→136691`, 539,55 × 732. Órfãs `135921, 137305`. | `0 / 0` (2400115). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso01 | col129 | 2026-11-01 | c | `L-099_sem_batida_noturna_alvo` | Recusado `143430→143722`, **780,01 × 732**. D−1 fechou `142959→143112`, 539,77 × 732. Órfãs `142323, 143722`. | `0 / 0` (2400121). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso01 | col129 | 2026-11-02 | c | `L-099_sem_batida_noturna_alvo` | Recusados `144111→144456` em D, **779,01 × 732**, e `143430→143722` em D−1, 780,01 × 732. Órfãs `143112, 143722, 144456`. | `0 / 0` (2400122). D−1 `0 / 0`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D e S `143722` órfã atribuída a D. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` |
-| caso01 | col129 | 2026-11-08 | c | `L-099_sem_batida_noturna_alvo` | Recusado `149397→149717`, **780,29 × 732**. D−1 fechou `148929→149080`, 540,23 × 732. Órfãs `148307, 149717`. | `0 / 0` (2400127). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso01 | col129 | 2026-11-15 | c | `L-099_sem_batida_noturna_alvo` | Recusado `155814→156153`, **779,99 × 732**. D−1 fechou `155325→155481`, 539,98 × 732. Órfãs `154676, 156153`. | `0 / 0` (2400134). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso02 | col155 | 2026-10-04 | c | `L-099_sem_batida_noturna_alvo` | Recusado `118190→118479`, **782,25 × 732**. D−1 fechou `117743→117877`, 543,34 × 732. Órfãs `117099, 118479`. | `0 / 0` (1419406). D−1 `492 / 8,8`. | Não · 10/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso02 | col155 | 2026-10-18 | c | `L-099_sem_batida_noturna_alvo` | Recusado `130455→130747`, **783,99 × 732**. D−1 fechou `130003→130139`, 540,31 × 732. Órfãs `129385, 130747`. | `0 / 0` (1419420). D−1 `492 / 8,8`. | Não · 10/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso02 | col155 | 2026-10-25 | c | `L-099_sem_batida_noturna_alvo` | Recusado `137024→137304`, **781,02 × 732**. D−1 fechou `136542→136683`, 538,67 × 732. Órfãs `135924, 137304`. | `0 / 0` (2450136). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso02 | col155 | 2026-11-01 | c | `L-099_sem_batida_noturna_alvo` | Recusado `143429→143724`, **781,71 × 732**. D−1 fechou `142958→143111`, 543,33 × 732. Órfãs `142326, 143724`. | `0 / 0` (2450143). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso02 | col155 | 2026-11-15 | c | `L-099_sem_batida_noturna_alvo` | Recusado `155813→156154`, **782,82 × 732**. D−1 fechou `155324→155479`, 539,11 × 732. Órfãs `154673, 156154`. | `0 / 0` (2450157). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
-| caso03 | col121 | 2026-11-03 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=145213, S=None`. Internas `S145367/E145385`. Comparação fora da fatia `143660→143828`, 312,64 × 1560, aceita. Órfã `143649`, fora da fatia. | `354 / 0` (2453972) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D. Os alvos noturnos aparecem como internos e a saída final está ausente. `app/ponto/turnos.py:312` |
-| caso04 | col502 | 2026-10-17 | c | `L-099_sem_batida_noturna_alvo` | Fechado `129546→129953`, **565,97 × 740**, com `129953` gravada como `E` e usada como saída. Internas `S129743/S129805`. D+1 tem comparação aceita `130188→130268`, 178,41 × 1560, e E `130283` aberta. Órfãs `[]`. | `440 / 0` (1529039) | Não · 10/2026 | **Sustentada.** Em D, `abertas_e_orfas=(False, False)` e `minutos_noturnos_relogio=0`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
-| caso05 | col868 | 2026-10-02 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=117058, S=None`. Internas `S117059/E117060`. Sem `teto_comparado` no bloco. Órfãs `[]`. | `367 / 0` (1413722) | Não · 10/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
-| caso06 | col174 | 2026-11-11 | c | `L-099_criterios_a_b_ausentes_na_janela` | Recusado `152378→152727`, **722 × 720** na linha `par_separado_pelo_teto`. Decimal de `teto_comparado` [nao verificado]. Internas `S152566/E152577`. Órfã `152727`. | `420 / 0` (2470743) | Não · 11/2026 | **Diverge → a.** A saída final está na lista de órfãs e o par separado está explícito. `app/ponto/turnos.py:183` |
-| caso07 | col612 | 2026-11-11 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=152381, S=None`. Internas `S152546/E152562`. Comparação fora da fatia `150586→150650`, 279,61 × 1560, aceita. Órfã `150567`, fora da fatia. | `378 / 0` (2450464) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
-| caso08 | col999 | 2026-11-09 | c | `L-099_sem_batida_noturna_alvo` | `E=150272, S=None` no vínculo 1569, `na_fatia=True`. D+1 fechou `150789→151169`, 540,18 × 780, com tipos gravados `S/E`. Órfã `149108`, fora da fatia. | `0 / 0` (2434305) | Não · 11/2026 | **Diverge → a.** `turno` do próprio D fica aberto no vínculo de D. `app/ponto/turnos.py:312` `app/escala/alimentacao.py:228` |
-| caso08 | col999 | 2026-11-10 | c | `L-099_sem_batida_noturna_alvo` | Fechado `150789→151169`, **540,18 × 780**, com tipos gravados `S/E` e internas `E150858/S150916`. E `150272` aberta em D−1. D+1 fechou `151739→152239`, 551,62 × 780. Órfãs `[]`. | `470 / 0` (2434306) | Não · 11/2026 | **Sustentada.** Em D, `abertas_e_orfas=(False, False)` e `minutos_noturnos_relogio=0`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
-| caso09 | col992 | 2026-11-03 | c | `L-099_criterios_a_b_ausentes_na_janela` | Recusado `145230→145574`, **721,94 × 720**. Internas `S145380/E145394`. Comparação fora da fatia `143666→143759`, 294,74 × 1560, aceita. Órfãs `143652, 145574`. | `367 / 0` (2535747) | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D, com S `145574` órfã. `app/ponto/turnos.py:183` |
-| caso10 | col490 | 2026-10-28 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=140120, S=None`. Internas `S140345/E140351`. Comparação fora da fatia `138327→138452`, 165,99 × 1560, aceita. Órfã `138319`, fora da fatia. | `495 / 0` (2452929) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
-| caso10 | col490 | 2026-11-01 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=143507, S=None`. Internas `S143678/E143686`. Comparação fora da fatia `142287→142356`, 175,12 × 1560, aceita. Órfã `142279`, fora da fatia. | `484 / 0` (2452931) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
-| caso11 | col788 | 2026-10-04 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=118383, S=None`. Comparações aceitas `117003→117074` 337,79 × 1560, `117003→117213` 422,88 × 1560, `118456→118477` 50,00 × 1560 e `118578→119321` 950,67 × 1560. Órfãs `[]`. | `0 / 0` (1406259) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=118383` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
-| caso11 | col788 | 2026-10-14 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=127324, S=None`. Comparações vizinhas aceitas `125753→126275` 475,61 × 840 e `127416→127422` 60,77 × 1560. Órfãs `[]`. | `0 / 0` (1406268) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=127324` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
-| caso11 | col788 | 2026-10-16 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=129246, S=None`. Comparações vizinhas aceitas `127416→127422` 60,77 × 1560 e `129342→129348` 69,43 × 1560. Órfãs `[]`. | `0 / 0` (1406270) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=129246` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
-| caso11 | col788 | 2026-10-28 | c | `L-099_sem_batida_noturna_alvo` | `E=140245, S=None`. Comparações vizinhas aceitas `138680→139201` 455,64 × 840 e `140352→140360` 51,23 × 1560. Órfãs `[]`. | `0 / 0` (2542626) | Não · 11/2026 | **Diverge → a.** `turno` de D aberto com E `140245` às 21:33. O par com 22,87 min noturnos tem `data_turno=2026-10-29`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
-| caso11 | col788 | 2026-11-01 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=143603, S=None`. D+1 tem comparações aceitas `143682→143689` 66,49 × 1560, `143682→144086` 766,02 × 1560 e `144090→144298` 268,03 × 1560. Órfãs `[]`. | `0 / 0` (2542629) | Não · 11/2026 | **Sustentada.** `batida_alvo pk=143603` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
-| caso12 | col516 | 2026-10-30 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=142071, S=None`. Internas `S142228/E162536`. Comparação fora da fatia `140300→140413`, 371,92 × 1560, aceita. Órfã `162534`, fora da fatia. | `303 / 0` (2528760) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
-| caso13 | col820 | 2026-10-16 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | Em D, E `129248` e E `128591` abertas. Comparações vizinhas aceitas `127945→128276` 414,99 × 720 e `129345→129355` 65,04 × 1560. Órfãs `[]`. | `0 / 0` (1404220) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=129248` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
-| caso14 | col467 | 2026-10-11 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=124392, S=None`. Internas `S124547/E124563`. Comparação fora da fatia `123191→123287`, 311,48 × 1560, aceita. Órfã `123173`, fora da fatia. | `330 / 0` (1415304) | Não · 10/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
-
-A leitura de `a` inclui a entrada apurável sem saída final em D, a mesma situação registrada como `E_aberta` nos cinco `a` impressos. Nas nove divergências por abertura, a causa da falta de fechamento é [nao verificado]. Para `b`, nenhum bloco combina par **do próprio D** com `minutos_noturnos_relogio > 0`, `minutos_realizados > 0` e `horas_noturnas = 0`. Nos dois `c` sustentados, o par de D é diurno. Onde D está aberto, a própria linha `turno` informa `sem_par_E_S`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` `app/ponto/models.py:327` `app/ponto/models.py:351`
-
-### Dono L-099 dos `c` impressos
-
-**BATIDA** é o dono sugerido quando o `turno` de D tem entrada aberta e o PK aparece em `batidas_apuraveis`. Essa é a evidência local que corresponde à guarda de batida solta do juiz. O veredito do juiz em PROD é [nao verificado]. O leitor dos pares separados também consulta esse juiz para determinar o dono. `app/ponto/management/commands/e6_oraculo.py:98` `app/ponto/management/commands/e6_oraculo.py:182` `app/ponto/management/commands/e6_oraculo.py:198` `app/ponto/services/teto_na_lista.py:86`
-
-| `c` impresso | Dono sugerido | Linha da saída que sustenta |
-|---|---|---|
-| caso01 · col129 · seis datas | **BATIDA** | `turno` em D com `S=None` e E `124339` (10-11), `137026` (10-25), `143430` (11-01), `144111` (11-02), `149397` (11-08) e `155814` (11-15). Cada E consta em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso02 · col155 · cinco datas | **BATIDA** | `turno` em D com `S=None` e E `118190` (10-04), `130455` (10-18), `137024` (10-25), `143429` (11-01) e `155813` (11-15). Cada E consta em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso03 · col121 · 11-03 | **BATIDA** | `turno` em D `E=145213, S=None`, com `145213` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso04 · col502 · 10-17 | **não decide** | `turno` em D `129546→129953`, fechado e com `minutos_noturnos_relogio=0`. Dono [nao verificado]. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
-| caso05 · col868 · 10-02 | **BATIDA** | `turno` em D `E=117058, S=None`, com `117058` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso06 · col174 · 11-11 | **BATIDA** | `turno` em D `E=152378, S=None`, com `152378` em `batidas_apuraveis`. `par_separado_pelo_teto` identifica a S `152727`. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso07 · col612 · 11-11 | **BATIDA** | `turno` em D `E=152381, S=None`, com `152381` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso08 · col999 · 11-09 | **BATIDA** | `turno` do vínculo 1569 em D `E=150272, S=None, na_fatia=True`, com `150272` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso08 · col999 · 11-10 | **não decide** | `turno` em D `150789→151169`, fechado e com `minutos_noturnos_relogio=0`. A E `150272` aberta tem `data_turno=2026-11-09`. Dono [nao verificado]. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
-| caso09 · col992 · 11-03 | **BATIDA** | `turno` em D `E=145230, S=None`, com `145230` em `batidas_apuraveis`. `par_separado_pelo_teto` identifica a S `145574`. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso10 · col490 · 10-28 e 11-01 | **BATIDA** | `turno` em D com `S=None` e E `140120` (10-28) ou `143507` (11-01). Ambas constam em `batidas_apuraveis` nos respectivos blocos. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso11 · col788 · 10-28 | **BATIDA** | `turno` em D `E=140245, S=None`, com `140245` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso12 · col516 · 10-30 | **BATIDA** | `turno` em D `E=142071, S=None`, com `142071` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-| caso14 · col467 · 10-11 | **BATIDA** | `turno` em D `E=124392, S=None`, com `124392` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
-
-Hash da cópia e implementação da seleção de alvos em `sonda.py` [nao verificado].
-
-_7966 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7968 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

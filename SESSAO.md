@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 17:12:15.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (25.8 MB). Acoes na janela: **650**.
+**Medido em 23/11/2026 17:18:30.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (26.9 MB). Acoes na janela: **662**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:16:58 | Bash | After baseline, run ramo 2 cauda sonda | `until /bin/grep -q "^FIM$" logs/NOTURNO-FROTA-GLOBAL-HEAD.out; do /usr/bin/sleep 30; done; bin/sombra.sh --rodar logs/sombra/noturno_ramo2_cauda.py NOTURNO-RAMO2-CAUDA > logs/NOTURNO-NAO-APURADO/r2/cauda.run 2>&1; /bin/grep -E "^TOTAL\|^FIM\|Traceback\|Error" logs/NOTURNO-RAMO2-CAUDA.out \| tail -12` |
+| 17:16:56 | Bash | Wait for PISTA verificador v3 | `until /bin/grep -q " rc=" logs/PISTA-2-CERTIFICA/camadas/v3/verif.out; do /usr/bin/sleep 30; done; tail -1 logs/PISTA-2-CERTIFICA/camadas/v3/verif.out` |
+| 17:16:55 | Bash | Launch PISTA verificador volta 3 | `D=logs/PISTA-2-CERTIFICA/camadas/v3; cat > $D/verif.q <<'EOF' OBRA PISTA-2-CERTIFICA (instrumento PISTA-CAMADAS) volta 3, PAPEL verificador, delta. A volta 2 (anexo verif2.r) reprovou SO o item 1b-janela: a segunda leitura das linhas AMBIENTE (grep -nE da janela) podia sair 2 sem saida e deixar sair CERTIFICA; e `AMBIENTE imagem_camadas =x` (branco antes do =) nao contava como ocorrencia. Anexo di ...` |
+| 17:16:44 | Bash | Extract sonda, enforce sombra guard | `python3 - <<'EOF' import re s=open('logs/NOTURNO-NAO-APURADO/r2/sonda.r').read() code=s.split('```python\n',1)[1].split('```',1)[0] a='cursor.execute("SELECT current_schema(), current_setting(\'transaction_read_only\')")\n if cursor.fetchone() != ("juliani", "on"):' assert code.count(a)==1 code=code.replace(a,'cursor.execute("SELECT current_database(), current_schema(), current_setting(\'transacti ...` |
+| 17:16:40 | Bash | Verify sonda references exist | `/bin/grep -n "intervalos_do_motor" app/ponto/motor_calculo_v2.py \| head -5; /bin/grep -n "def competencia_entregue" app/folha/export.py; /bin/grep -n "def calcular_noturnas" app/ponto/motor_calculo_v2.py; /bin/grep -n "def _janela_do_par" app/ponto/motor_calculo_v2.py; sed -n '/def _janela_do_par/,/+3p' app/ponto/motor_calculo_v2.py \| head -4` |
+| 17:16:34 | Bash | Read ramo 2 sonda script from Codex | `tail -1 logs/NOTURNO-NAO-APURADO/r2/sonda.out; wc -l logs/NOTURNO-NAO-APURADO/r2/sonda.r; cat logs/NOTURNO-NAO-APURADO/r2/sonda.r` |
+| 17:14:31 | Bash | Wait for HEAD fleet baseline | `until /bin/grep -q "^FIM$" logs/NOTURNO-FROTA-GLOBAL-HEAD.out; do /usr/bin/sleep 30; done; tail -2 logs/NOTURNO-FROTA-GLOBAL-HEAD.out` |
+| 17:14:29 | TaskStop |  | `-` |
+| 17:14:25 | Bash | Kill chain parent, keep HEAD run | `kill 2158851; sleep 1; ps -eo pid,args \| /bin/grep -F "NOTURNO-FROTA-GLOBAL-HEAD" \| /bin/grep -v grep \| head -2; tail -1 logs/NOTURNO-FROTA-GLOBAL-HEAD.out \| cut -c1-80` |
+| 17:14:22 | Bash | Find chain parent process | `ps -eo pid,ppid,args \| /bin/grep -F "NOTURNO-FROTA-GLOBAL-COPIA" \| /bin/grep -v grep \| head -3` |
+| 17:14:17 | SendMessage |  | `-` |
+| 17:13:58 | Bash | Read NOTURNO verificador answer | `tail -1 logs/NOTURNO-NAO-APURADO/verif.out; cat logs/NOTURNO-NAO-APURADO/verif.r \| head -c 12000` |
 | 17:10:32 | Bash | Wait for fleet global sondas | `until /bin/grep -q "^FIM-RC=" logs/NOTURNO-NAO-APURADO/frota_global.run; do /usr/bin/sleep 30; done; tail -2 logs/NOTURNO-FROTA-GLOBAL-HEAD.out logs/NOTURNO-FROTA-GLOBAL-COPIA.out` |
 | 17:10:30 | Bash | Wait for ramo 2 sonda script | `until /bin/grep -q " rc=" logs/NOTURNO-NAO-APURADO/r2/sonda.out; do /usr/bin/sleep 30; done; tail -1 logs/NOTURNO-NAO-APURADO/r2/sonda.out` |
 | 17:10:28 | Bash | Write RELATO lines for PAR lei and ramo 2 | `python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l1=("lei: PAR-PELO-TURNO-V4 'E-S-E-S com pausa comprovada separa sempre' (17:3x; Codex leitura rc 0, logs/PAR-PELO-TURNO/v4/r.txt secao B): lida literal, o 12x36 19:00-01:00 / 02:00-07:00 vira DUAS jornadas com alerta de interjornada de 1 h; " "o laudo e o teste negativo '12x36 com pausa' esperam UMA jornada I/SI/VI/F. Candidatas: (a) paus ...` |
