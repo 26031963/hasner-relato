@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 19:47:54.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.9 MB). Acoes na janela: **78**.
+**Medido em 23/11/2026 19:53:50.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (3.0 MB). Acoes na janela: **81**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:48:05 | Bash |  | `cd /home/ronald/saas-hasner; ps -o args= -p 3012519 \| cut -c1-140; sed -i '2s/pid=2833504/pid=3012519/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
+| 19:48:03 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -af 'wt-noturno-aberto' \| grep -v pgrep \| cut -c1-120; bin/trava_teste.sh --quem; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO:') L[0]='ESPERANDO: agente F5 volta c3c (R1-R4 do verificador) \| pid=2833504 \| arquivo=logs/E4C-F5/v7/s82b/c3c_chamados.log' L.insert(0,"PAREI: ! NOTURNO-NAO-APURADO item (1)  ...` |
+| 19:47:54 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v3; for f in red green2 suite_ponto; do echo "$f: $(grep -E '^(OK\|FAILED)($\| \()' $D/$f.log \| tail -1) \| $(grep '^Ran' $D/$f.log \| tail -1)"; done; grep -c FAILED $D/cadeia.out; grep -E '^\+' $D/v3c.diff \| grep -c 'except'; head -5 $D/verif4.r \| cut -c1-300` |
 | 19:37:32 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"E4C-F5 8.2 c3b pre-pouso (19:4x): suite INTEIRA da wt-f5-v7 54794f38a VERDE OK (skipped=51, expected failures=41) Ran 17750 rc=0 (s82b/pouso/suite_inteira.log). Codex verificador REPROVADO (s82b/pouso/verif.r): c3 itens 1-4 e c3b FECHAM; 8.2 reprova -- conferido fio.py:308-322,406 e modal ...` |
 | 19:37:28 | SendMessage |  | `-` |
 | 19:37:11 | Bash |  | `cd /home/ronald/wt-f5-v7-153543/app; sed -n 300,325p chamados/services/fio.py; sed -n 400,416p chamados/services/fio.py; grep -n 'disputa_obj\\|reabert' templates/chamados/partials/modal_fio.html \| sed -n 1,40p \| cut -c1-150` |
