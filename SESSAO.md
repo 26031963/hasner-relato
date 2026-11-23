@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 07:24:13.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1240**.
+**Medido em 23/11/2026 07:30:07.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1225**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1235,18 +1235,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:30:28 | Bash |  | `cd ~/wt-kaua-feriado-161647 && D=~/saas-hasner/logs/[nome]-FERIADO-PELA-TELA/v4 && mkdir -p $D && cp app/ponto/portas/celula.py $D/celula_cura.py && git show 161066a90:app/ponto/portas/celula.py > app/ponto/portas/celula.py && cd ~/saas-hasner && timeout 900 bash bin/suite.sh --dir ~/wt-kaua-feriado-161647 --only "ponto.tests.test_kaua_feriado_pela_tela" > $D/red.log 2>&1; echo rc=$?; grep -E '^(OK\ ...` |
 | 19:30:25 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; grep -n 'only)' -A6 bin/suite.sh \| head -20` |
 | 19:30:20 | Bash |  | `cd ~/wt-kaua-feriado-161647 && python3 - <<'EOF' p='app/ponto/tests/test_kaua_feriado_pela_tela.py'; s=open(p).read() i=s.index('@freeze_time(_AGORA)\nclass K7OrdemDeTrava(_Base):'); j=s.index('@freeze_time(_AGORA)\nclass K4dPkNaoAscii(_Base):') novo='''@freeze_time(_AGORA) class K9ReverterReleSobATrava(_Base): """Achado (1) do verificador final v3 (aval RESPOSTAS-B3-2211-1930): `reverter_regenera ...` |
-| 19:30:03 | Bash |  | `cd ~/wt-kaua-feriado-161647; sed -n 1,30p app/ponto/tests/test_kaua_feriado_pela_tela.py; sed -n 315,440p app/ponto/tests/test_kaua_feriado_pela_tela.py` |
-| 19:30:00 | Bash |  | `cd ~/wt-kaua-feriado-161647 && git show 161066a90:app/ponto/portas/celula.py > app/ponto/portas/celula.py && git diff --stat && python3 - <<'EOF' p='app/ponto/portas/celula.py'; s=open(p).read() a=''' alvo = cel.dna_anterior de = cel.dna with transaction.atomic(): cel.dna = alvo ''' b=''' with transaction.atomic(): # [nome]-FERIADO-PELA-TELA (aval RESPOSTAS-B3-2211-1930, achado (1)): a celula lida a ...` |
-| 19:29:49 | Bash |  | `cd ~/wt-kaua-feriado-161647; git status --porcelain\|head -3; sed -n 600,700p app/ponto/portas/celula.py; grep -n 'trava\\|ordem\\|lock\\|select_for_update\\|def test' app/ponto/tests/test_kaua_feriado_pela_tela.py \| head -80` |
-| 19:29:31 | Bash |  | `cd ~/saas-hasner; sed -n 18,60p logs/[nome]-FERIADO-PELA-TELA/v3/r_v3.txt` |
-| 19:29:16 | Bash |  | `cd ~/saas-hasner; cat logs/[nome]-FERIADO-PELA-TELA/v3/triagem_v3.txt \| cut -c1-600; grep -n '^(1)\\|^1[.)]\\|achado (1)\\|^## \\|^\*\*1' logs/[nome]-FERIADO-PELA-TELA/v3/r_v3.txt \| head` |
-| 19:28:40 | Bash |  | `cd ~/saas-hasner; git show 161066a90:app/ponto/portas/celula.py \| sed -n 815,900p` |
-| 19:28:29 | Bash |  | `cd ~/wt-kaua-feriado-161647; git status --porcelain \| head; git diff 161066a90..HEAD -- app/ponto/portas/celula.py app/ponto/views.py app/colaboradores/services/calendario.py` |
-| 19:28:26 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='ordem global de travas Colaborador x vinculo x Posto em todos os escritores (acoes_chamado.py:142, colaborador.py:164, desligamento.py:128-149, escala_auto_executor.py:101-103);' assert s.count(a)==1 s=s.replace(a,a[:-1]+' + ciclo Colaborador x CelulaDia (RESPOSTAS-B3-2211-1930: cadastro_futuro.py:43, folgas.py:617, v ...` |
-| 19:28:23 | Bash |  | `cd ~/saas-hasner; sed -n 1985p app/docs/BACKLOG.md \| cut -c1-600; grep -n '^\| [nome]' app/docs/BACKLOG.md \| cut -c1-200` |
-| 19:28:21 | Bash |  | `cd ~/saas-hasner; echo '22/11 19:28 \| aval Ronald RESPOSTAS-B3-2211-1930: linhas DESENHO [nome] e SIMPLIFICA literais dele no topo (sitios nao existem na raiz: libera so pelo rearme); [nome] = ordem de trava IGUAL ao main em editar_dia/regenerar/reverter, achado (1) cura pela releitura da celula depois da trava do main, ciclo dos 3 chamadores -> MAPA-TRAVAS; SIMPLIFICA = opcao (a) Ran==Found do mesmo ...` |
-| 19:28:18 | Bash |  | `cd ~/saas-hasner; tail -3 app/docs/PROMPTS.md \| cut -c1-200; date '+%d/%m %H:%M'` |
-| 19:28:03 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read().split('\n') a='DESENHO [nome]-FERIADO-PELA-TELA-2211-1612: lei=escritor unico pergunta=quem escreve a celula e sob qual trava ponto/portas/celula.py:853' b='DESENHO SIMPLIFICA-V3-2211-1726: lei=juiz unico pergunta=quem atesta que o run da pista 2 e inteiro bin/pista_certifica.sh:62' assert a not in s and b not in s s[0:0]=[ ...` |
-| 19:27:55 | Bash |  | `cd ~/saas-hasner; sed -n '/def _sitio_existe/,/^def /p' bin/disjuntor.py \| head -25` |
-| 19:27:53 | Bash |  | `cd ~/saas-hasner; sed -n '/def _sitios_validos/,/^def /p' bin/disjuntor.py \| head -30` |
-| 19:27:52 | Bash |  | `cd ~/saas-hasner; sed -n '/def linhas_libera_b3/,/^def /p' bin/disjuntor.py \| grep -n 'exists\\|isfile\\|app/\\|RAIZ\\|raiz' \| head; ls app/ponto/portas/celula.py bin/pista_certifica.sh 2>&1; wc -l app/ponto/portas/celula.py bin/pista_certifica.sh` |
