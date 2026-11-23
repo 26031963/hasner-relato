@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 20:46:54.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (6.9 MB). Acoes na janela: **182**.
+**Medido em 23/11/2026 20:52:55.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (7.0 MB). Acoes na janela: **184**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:51:25 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('DECIDIDO PELA LEI NOTURNO-ITEM1-GUARDA')][0] L[i]+=" Guarda pre-obra `_pagos_a` (motor ~2533, par com entrada igual a fechado pulado inteiro) SAI: e caso da mesma classe (ii) (fechado 08-12 x par 08-14 -> 120, nao 0) \| contestavel." open(p,'w').write('\n'.join(L)) ...` |
+| 20:51:22 | SendMessage |  | `-` |
 | 20:43:25 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PAR-PELO-TURNO \|')][0] L.insert(i+1,"\| GUARDA-LE-O-JUIZ \| MAO UNICA (ponto/services/fechamento.py, exportada). Aval GUARDA-LE-O-JUIZ-REGISTRO-2311-2045: GUARDA_COMPETENCIA deixa de ser lista a mao e le empresas_exportadas_no_escopo (juiz unico). SO REGISTRO; ...` |
 | 20:43:19 | Bash |  | `cd ~/saas-hasner; grep -n "^\| PISTA-CAMADAS\\|^\| NOTURNO-NAO-APURADO\\|^\| PAR-PELO-TURNO" app/docs/BACKLOG.md \| cut -c1-300 \| head` |
 | 20:42:06 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(1,"DECIDIDO PELA LEI NOTURNO-ITEM1-GUARDA (a) + DINHEIRO 2/L-092: GUARDA_COMPETENCIA ganha 06, 07 e 08/2026 na forma da 09 (exportadas medidas na sombra pelo juiz empresas_exportadas_no_escopo: 06[4] 07[3,4] 08[2] 09[2,3,4]; so a 09 estava guardada; logs/NOTURNO-NAO-APURADO/v4/exportadas.out); saida = ...` |
