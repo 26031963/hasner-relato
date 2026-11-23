@@ -1,7 +1,155 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **22/11/2026 21:28** · publicado em **22/11/2026 21:29** (UTC-3)
+> Ultima resposta processada: **22/11/2026 21:34** · publicado em **22/11/2026 21:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 22/11 21:34 · sessao f93dbf5e0bfb · E4D-ENSAIO · leitura · origem=Code
+
+## 1. Escritores
+
+**HEAD `5b063c009787407f071a43426e0d125d64cce828` [nao verificado].** A cópia está sem `.git`. O anexo identifica os juízes. Execução dos ramos, quantidade de linhas afetadas e incidência em produção [nao verificado].
+
+**Campos:** `R` = `respondida_em`, `T` = `resposta_colab`, `V` = `validada_em`, `A` = `validada_por` ou `validada_por_id`. `app/chamados/models.py:2634–2636,3631–3637`.
+
+| Sítio | Colunas | `DecisaoPergunta` no mesmo `atomic` |
+|---|---|---|
+| `responder_pergunta_disputa_core` — `app/chamados/services/disputa_emissao.py:1481–1496,1528–1534` | R/T, limpa V/A se havia V | **Sim**, `RESPOSTA`, com o mesmo instante de R. `app/chamados/services/disputa_emissao.py:1517,1528–1534` |
+| `responder_automaticamente` — `app/chamados/services/disputa_emissao.py:1682–1688` | R/T | **Sim**, `RESPOSTA` com `resposta_mantem_validacao=True`. `app/chamados/services/disputa_emissao.py:1684–1688` |
+| `carimbar_resposta_pela_trilha` — `app/chamados/services/disputa_emissao.py:1701–1710` | R, usando T existente | **Sim**, `RESPOSTA` com `resposta_mantem_validacao=True`. `app/chamados/services/disputa_emissao.py:1706–1710` |
+| `_carimbar_validacao` — `app/chamados/services/validacao.py:168–175` | V/A | **Sim**, `VALIDACAO` com o mesmo instante e autor. `app/chamados/services/validacao.py:170–175` |
+| `devolver_validacao_recusada` — `app/chamados/services/validacao.py:269–282` | Limpa V/A | **Sim**, `DEVOLUCAO`. `app/chamados/services/validacao.py:275–282` |
+| `devolver_paridade_bug_par_103` — `app/chamados/services/validacao.py:349–358` | Limpa V/A | **Sim**, `DEVOLUCAO`. `app/chamados/services/validacao.py:331,349–358` |
+| `reabrir_para_correcao` — `app/chamados/services/disputa_emissao.py:1617,1656` | Limpa R/T/V/A | **Sim, sob o filtro da linha 1654**, `REABERTURA` ou `RECUSA`. `app/chamados/services/disputa_emissao.py:1583,1629,1639–1656` |
+| `recusar_pergunta`, via `reabrir_para_correcao` — `app/chamados/services/validacao.py:920–926` | Limpa R/T/V/A | **Sim**, `RECUSA` explícita no `atomic` da recusa. `app/chamados/services/validacao.py:920–926`, `app/chamados/services/disputa_emissao.py:1629,1639–1656` |
+| `ressuscitar_perguntas` — `app/chamados/models.py:1702–1703` | Limpa R/T/V/A | **Sim**, `REABERTURA` com `da_ressuscitacao=True`, além das linhas anteriores faltantes. `app/chamados/models.py:1627,1654–1655,1694–1703` |
+| `devolver_instante_sem_texto_l130` — `app/chamados/services/validacao.py:428,434–440` | Limpa R/T | **Sem ato da limpeza**. Pode registrar a `RESPOSTA` **anterior** no mesmo `atomic`. `app/chamados/services/validacao.py:414–419,428,436–440` |
+| `PerguntaDisputa._nascer` — `app/chamados/models.py:3031–3033,3206–3211` | Insere os quatro campos, com valores recebidos em `**campos` ou defaults | **Sim, se houver os instantes correspondentes**, `RESPOSTA` para R e `VALIDACAO` para V. Nascimento pendente com defaults gera lista vazia. `app/chamados/models.py:3206–3211,4251–4269,4332–4336` |
+| `PerguntaDisputa.save` — `app/chamados/models.py:3679–3683` | Persiste os campos que o chamador inclui no `save` | **Sem ato próprio**. Os chamadores acima delimitam campos e ato. `app/chamados/models.py:3679–3683` |
+| `PerguntaDisputa.descarimbar_em_lote` — `app/chamados/models.py:3448,3484–3487` | `.update(**outros)` persiste os campos enviados | **Sem ato próprio**. Chamadores com R/T/V/A ou R/T nas linhas citadas acima. `app/chamados/models.py:1700–1703`, `app/chamados/services/disputa_emissao.py:1639–1656`, `app/chamados/services/validacao.py:436–440` |
+| `PerguntaDisputa.carimbar` — `app/chamados/models.py:3326–3348` | Com T não vazio, preenche R se nulo. Em `validar`, também preenche V/A se V nulo | **Sem ato próprio**. Persiste após o C6 aceitar. `app/chamados/models.py:3334–3353,3679–3683` |
+| `_materializar_uma`, `resposta='validar'` — `app/chamados/services/materializacao.py:1924,1981–1986` | Porta capaz de preencher R/V/A. Guardas dos caminhos verificados na seção 3 | **Não**, a chamada e seu ramo final gravam sem `RESPOSTA`/`VALIDACAO` novos. `app/chamados/services/materializacao.py:1981–1986`, `app/chamados/models.py:3326–3353` |
+| `_resolver_perguntas_por_chamado_resolvido`, laço com destino, `resposta='validar'` — `app/chamados/services/disputa_emissao.py:2023–2033` | Pode preencher R e/ou V/A | **Não**, embora a porta rode em transação. `app/chamados/services/disputa_emissao.py:1912–1919,2029–2033` |
+| `_resolver_perguntas_por_chamado_resolvido`, laço sem credor, `resposta='responder'` — `app/chamados/services/disputa_emissao.py:2082–2113` | Pode preencher R | **Não**. Registra `fecho_sem_credor` na auditoria. `app/chamados/services/disputa_emissao.py:1912–1919,2103–2113`, `app/core/observ.py:133–138` |
+| `_materializar_ausencia_de_resposta` — `app/chamados/services/materializacao.py:1030–1031,1055–1064` | Pode preencher R e/ou V/A nas irmãs | **Sim, `ABSORCAO`**, no mesmo `atomic`. Sem `RESPOSTA`/`VALIDACAO` correspondentes aos novos carimbos. `app/chamados/services/materializacao.py:1055–1064`, `app/chamados/models.py:4272–4278,4317–4326` |
+| `_universo_da_ressuscitacao` — `app/chamados/models.py:1560,1572–1577` | Atribui R/T/V numa cópia para o C6 | **Só memória**, sem ato nem `save`. `app/chamados/models.py:1560,1572–1577` |
+| `_desfazer_em_memoria` — `app/chamados/models.py:3355–3362` | Restaura R/V/A na instância | **Só memória**, sem ato nem `save`. `app/chamados/models.py:3334–3341,3349–3362` |
+
+## 2. Leitores
+
+### N1 — JSON e templates
+
+| Sítio | Leitura e significado |
+|---|---|
+| `api_chamados_v2` — `app/api/views.py:1148–1167` | `chamados[].perguntas_disputa[].resposta_colab` é T bruto. `respondida_em` é R em ISO ou `null`. `resposta_display` é o texto vigente apresentado, via leitura dos atos com fallback. `app/chamados/models.py:3812–3838,4308–4326` |
+| `api_disputa_perguntas._item` — `app/api/views.py:2566–2582` | `perguntas[]`, `historico[]` e `respondidas[]` compartilham `resposta_colab` e `respondida_em` crus. `resposta_display` e `estado` passam pela leitura dos atos com fallback. `aguarda_admin` usa a exigência da tarefa e a conservação do estado `RESPONDIDA`. `app/api/views.py:2556,2584–2597`, `app/chamados/models.py:3235–3244,3815`, `app/chamados/services/tarefa_do_dia.py:427–432,471–485` |
+| `api_disputa_responder` — `app/api/views.py:2640,2647,2654–2657` | `respondida_em` é o instante gravado no POST. A detecção de reenvio usa R **e** T. `app/chamados/juizes.py:1552` |
+| `_item_validar` — `app/api/views_mensageria.py:569–575` | `itens[].resposta` é T, `respondida_em` é R, `dias_esperando` é a idade de R. `classe` e `diferenca_min` interpretam o texto. `app/api/views_mensageria.py:540–552`, `app/chamados/juizes.py:1938,2042–2048` |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:100,106` | Texto exibido com fallback em T e R como horário do envio, sob `resposta_enviada`. `app/chamados/services/fio.py:188,360` |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:114` | T seleciona o rádio já respondido. |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:141,143` | T decide se mostra a fala anterior. R data a fala se `resposta_enviada`. |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:151` | T preenche `datetime-local` se `resposta_enviada`. |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:157` | T identifica a opção selecionada do dropdown se `resposta_enviada`. |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:164` | `resposta_enviada` distingue Enviar/Reenviar. `app/chamados/services/fio.py:188,360` |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:185–186` | T decide a presença e serve de fallback do rótulo “Sua resposta”. |
+| `_card_atendimento.html` — `app/templates/chamados/partials/_card_atendimento.html:393–394` | Texto com fallback em T e data R no selo “Enviado”. |
+| `modal_fio.html` — `app/templates/chamados/partials/modal_fio.html:185,217` | `perg.respondida` decide existência de resposta vigente. `app/chamados/models.py:3789–3791` |
+| `modal_fio.html` — `app/templates/chamados/partials/modal_fio.html:219` | T é a fala apresentada. |
+| `modal_fio.html` — `app/templates/chamados/partials/modal_fio.html:220` | R é o horário apresentado da resposta. |
+| `modal_fio.html` — `app/templates/chamados/partials/modal_fio.html:228–229` | V preenchido rende “Validada” no ramo com resposta. |
+| `modal_fio.html` — `app/templates/chamados/partials/modal_fio.html:274` | `leitura_da_resposta` usa T para interpretar a fala. `app/chamados/templatetags/chamados_tags.py:166–171` |
+| `modal_fio.html` — `app/templates/chamados/partials/modal_fio.html:345–346` | V preenchido rende “Validada” também sem resposta vigente. |
+| `_pergunta_card.html` — `app/templates/chamados/partials/_pergunta_card.html:20` | V preenchido esmaece o cartão. |
+| `_pergunta_card.html` — `app/templates/chamados/partials/_pergunta_card.html:23–24` | V rende “validada” com a data do carimbo. `respondida` rende “aguardando validação” no ramo seguinte. `app/chamados/models.py:3789–3791` |
+| `_pergunta_card.html` — `app/templates/chamados/partials/_pergunta_card.html:29–32` | Resposta vigente via `respondida`/`resposta_display`, com data R crua. `app/chamados/models.py:3789–3791,3812–3815` |
+| `_pergunta_card.html` — `app/templates/chamados/partials/_pergunta_card.html:42–43` | V controla a disponibilidade de ações. Os filtros interpretam T e aplicabilidade. `app/chamados/templatetags/chamados_tags.py:136–140,166–171` |
+| `_lote_preview.html` — `app/templates/chamados/partials/_lote_preview.html:24` | T é o texto apresentado para conferência no lote. |
+
+### N1 — demais leituras de coluna
+
+| Sítio | Significado |
+|---|---|
+| `_slot_esperado` — `app/chamados/juizes.py:351–364` | R limita a leitura no horizonte. T fornece a data/hora declarada. |
+| `_chave_memo_pv` — `app/chamados/juizes.py:855–857` | R/T/V compõem a chave do cache de vitalidade. |
+| `_resposta_concorda_com_a_luz` — `app/chamados/juizes.py:1357–1379` | T é a hora a confrontar com a batida. |
+| `projecao_temporal_da_pergunta` — `app/chamados/juizes.py:1389–1400` | R/T/V representam a resposta e a validação até `agora`. |
+| `respondida_sem_texto` — `app/chamados/juizes.py:1534` | Instante sem fala. |
+| `texto_sem_carimbo` — `app/chamados/juizes.py:1541` | Fala sem instante. |
+| `pergunta_respondida` — `app/chamados/juizes.py:1552` | Resposta existente exige R e T após trim. |
+| `q_respondida_sem_texto` — `app/chamados/juizes.py:1572` | Filtro SQL de instante sem fala. |
+| `q_respondida_com_texto` — `app/chamados/juizes.py:1580` | Filtro SQL de resposta íntegra. |
+| `q_nao_respondida` — `app/chamados/juizes.py:1591` | Filtro SQL de falta de resposta íntegra. |
+| `perguntas_respondidas_a_validar` — `app/chamados/juizes.py:1765` | R ordena a fila da resposta mais antiga. |
+| `declarou_hora` — `app/chamados/juizes.py:1791` | T distingue declaração de hora de outras respostas. |
+| `delta_da_resposta` — `app/chamados/juizes.py:1938` | T é a hora alegada para calcular a diferença. |
+| `classificar_resposta_validacao` — `app/chamados/juizes.py:2042–2048` | T identifica escolhas e alimenta a classificação. |
+| `motivo_implausivel_validacao` — `app/chamados/juizes.py:2064` | T é a fala inspecionada para o aviso de implausibilidade. |
+| `ChamadoColaborador._universo_da_ressuscitacao` — `app/chamados/models.py:1558` | Exclui texto órfão sem R/V. |
+| `ChamadoColaborador.ressuscitar_perguntas` — `app/chamados/models.py:1654–1655` | Carrega R/T/V/A para conservar atos anteriores faltantes. |
+| `PerguntaDisputa._nascer` — `app/chamados/models.py:3031–3032` | Confere a integridade de R/T recebidos no nascimento. |
+| `PerguntaDisputa.carimbar` — `app/chamados/models.py:3322–3333` | Guarda a foto anterior e confere existência do texto e ausência de R/V. |
+| `PerguntaDisputa.descarimbar_em_lote` — `app/chamados/models.py:3459–3472` | Confere o par R/T que ficará após o `UPDATE`. |
+| `PerguntaDisputa.q_validada_pelo_ato` — `app/chamados/models.py:3554–3561` | Usa V como validação legada quando falta a linha correspondente e nenhum ato posterior o limpa. |
+| `PerguntaDisputa._recusa_par_ilegal` — `app/chamados/models.py:3696–3712` | Compara R/T que ficarão gravados ao par atual no banco. |
+| `DecisaoPergunta.linhas_da_projecao_sem_linha` — `app/chamados/models.py:4251–4269` | R/V são instantes de atos faltantes. T é a fala, A é a assinatura da validação. |
+| `qs_perguntas_absolviveis` — `app/chamados/reconciliador.py:680` | V distingue perguntas ainda não validadas para absolvição. |
+| `_orfas_abertas` — `app/chamados/reconciliador.py:1099` | V restringe a varredura de órfãs abertas. |
+| `acao_corrigir_resposta` — `app/chamados/services/acoes_disputa.py:349,357` | V bloqueia correção e T fornece a fala anterior. |
+| `_resposta_validada` — `app/chamados/services/declaracao_texto.py:228` | V preenchido significa resposta validada. |
+| `declarar_hora_colab` — `app/chamados/services/declaracao_texto.py:418` | T igual à hora recebida permite reconhecer a mesma resposta. |
+| `responder_pergunta_disputa_core` — `app/chamados/services/disputa_emissao.py:1484–1485,1534` | V/A identificam a assinatura que a nova fala pode desfazer. |
+| `reabrir_para_correcao` — `app/chamados/services/disputa_emissao.py:1639–1654` | R/T/V/A formam a foto anterior e o filtro decide se há ato a registrar. |
+| `responder_automaticamente` — `app/chamados/services/disputa_emissao.py:1671` | T já preenchido bloqueia a resposta automática. |
+| `carimbar_resposta_pela_trilha` — `app/chamados/services/disputa_emissao.py:1701–1709` | Detecta T sem R e reaproveita T na `RESPOSTA`. |
+| `reabrir_credor_de_pergunta_viva` — `app/chamados/services/disputa_emissao.py:1871` | R nulo com T identifica limbo no grupo de reabertura. |
+| `_resolver_perguntas_por_chamado_resolvido` — `app/chamados/services/disputa_emissao.py:2083,2095–2113` | V é a guarda de validação. R/T alimentam a foto e o diagnóstico de presença de fala. |
+| `_explicar_validada` — `app/chamados/services/explicador.py:55` | T é a fala mostrada no diagnóstico. |
+| `explicar_pergunta` — `app/chamados/services/explicador.py:102–103` | T é a fala a validar ou recusar. |
+| `espera_o_texto_do_colaborador` — `app/chamados/services/fio.py:188` | R nulo ou instante sem T significa que ainda se aguarda resposta. |
+| `montar_chamados_fio` — `app/chamados/services/fio.py:378` | T não vazio condiciona a apresentação do estado de aplicação da hora. |
+| `nascimentos` — `app/chamados/services/foto_e4b.py:180` | Detecta perda de R/V entre fotos do registro. |
+| `_eventos_dos_chamados` — `app/chamados/services/historico.py:96–114` | R/V viram datas de eventos de resposta/validação. T vira fala exibida. A autoria é literal “o colaborador”/“o admin”. |
+| `par_do_intervalo` — `app/chamados/services/materializacao.py:199–201` | V é a condição de validação prévia da irmã. |
+| `_tipo_pelo_marco` — `app/chamados/services/materializacao.py:558,586` | T é a hora alegada ao determinar o marco. |
+| `_ts_tipo_do_plantio` — `app/chamados/services/materializacao.py:637,683,690` | T é a hora usada para derivar o instante da batida. |
+| `_declarado_da_metade` — `app/chamados/services/materializacao.py:730` | T é a hora declarada da metade do intervalo. |
+| `divergencia_declarado_x_gravado` — `app/chamados/services/materializacao.py:745` | T aparece no diagnóstico da diferença com o gravado. |
+| `espera_na_escrita` — `app/chamados/services/materializacao.py:782` | T preenchido habilita a checagem de espera. |
+| `_declarar_ausencia_de_pergunta` — `app/chamados/services/materializacao.py:966` | T identifica a declaração de ausência. |
+| `_materializar_ausencia_de_resposta` — `app/chamados/services/materializacao.py:1063` | T é a fala guardada na linha `ABSORCAO`. |
+| `perguntas_absorvidas_por` — `app/chamados/services/materializacao.py:1121–1134` | T com a opção de ausência ancora o agrupamento das irmãs absorvidas. |
+| `devolver_absorvidas_da_ausencia_rejeitada` — `app/chamados/services/materializacao.py:1166–1170` | R/T/V/A compõem a foto anterior à reabertura. |
+| `_materializar_resposta_hora` — `app/chamados/services/materializacao.py:1385,1567` | T é a hora alegada usada no diagnóstico e na trilha. |
+| `_materializar_resposta_data_hora` — `app/chamados/services/materializacao.py:1593–1602,1654` | T fornece data/hora da batida e o texto da trilha. |
+| `materializar_perguntas_validadas_da_disputa` — `app/chamados/services/materializacao.py:2104–2108,2123–2125` | V seleciona e revalida a entrada na fila de materialização. |
+| `marcador_do_placar` — `app/chamados/services/painel.py:67` | Máximos de R/V são marcadores de atualização do placar. |
+| `montar_contexto_painel` — `app/chamados/services/painel.py:260–262` | A preenchido e diferente de `sistema` delimita validação atribuída a pessoa. |
+| `_jan_val` — `app/chamados/services/painel.py:270–273` | V coloca a validação na janela do placar. |
+| `_reversao_de` — `app/chamados/services/passivo_validado.py:64–66,81–83` | R/V/A compõem a foto para reversão. |
+| `creditos_perguntas` — `app/chamados/services/raiox.py:138–147` | R/T juntos creditam resposta no raio X. |
+| `VistaNoHorizonte.__getattr__` — `app/chamados/services/tarefa_do_dia.py:414–420` | R/V são instantes cortados pelo horizonte de consulta. |
+| `_carimbar_validacao` — `app/chamados/services/validacao.py:167–175` | Foto anterior e T validado compõem a sequência. |
+| `_foto_da_validacao` — `app/chamados/services/validacao.py:181–182` | V/A registram a assinatura a comparar. |
+| `devolver_validacao_recusada` — `app/chamados/services/validacao.py:262–281` | V decide se há assinatura a devolver. T é a fala da devolução. |
+| `devolver_paridade_bug_par_103` — `app/chamados/services/validacao.py:341–356` | V/A compõem a foto. T é a fala preservada. |
+| `impedimento_estoque_l130` — `app/chamados/services/validacao.py:390–392` | V impede a devolução do meio-par. |
+| `devolver_instante_sem_texto_l130` — `app/chamados/services/validacao.py:434–439` | R/T são a foto da resposta incompleta. |
+| `_e_aceite_de_folga` — `app/chamados/services/validacao.py:467` | T identifica aceite de folga. |
+| `_aceitar_a_folga` — `app/chamados/services/validacao.py:576` | Relê V/A da assinatura após o processamento. |
+| `_validar_o_par` — `app/chamados/services/validacao.py:640` | V distingue irmã a validar de irmã já validada. |
+| `validar_pergunta` — `app/chamados/services/validacao.py:685,789` | V bloqueia repetição e é relido após materializar. |
+| `recusar_pergunta` — `app/chamados/services/validacao.py:898,912–913` | V é guarda da recusa. R/T vão na foto. |
+| `validar_lote_classe_a` — `app/chamados/services/validacao.py:1064,1085` | V impede repetição e conta o resultado do lote. |
+| `classe_do_lote` — `app/chamados/services/validacao.py:1183–1204` | T classifica escape, posto, confirmação e hora elegível. |
+| `fila_validar_classificada` — `app/chamados/services/validacao.py:1256` | R é a idade da resposta na fila. |
+| `placar_equipe` — `app/chamados/services/verbos.py:264–271` | A identifica staff não `sistema`. V data a produtividade atribuída. |
+| `placar_aceite` — `app/chamados/services/verbos.py:335–347` | R data a resposta em relação à cobrança e ao dia atual. |
+| `vigia_carimbo.classificar` — `app/chamados/services/vigia_carimbo.py:97–105` | V delimita o universo de perguntas de hora validadas. |
+| `respondida_sem_resposta` — `app/chamados/services/vigia_fio.py:747–750` | Conta R no período com T vazio. |
+| `aplicacao_da_resposta` — `app/chamados/templatetags/chamados_tags.py:136–140` | T condiciona a explicação de aplicabilidade. |
+| `leitura_da_resposta` — `app/chamados/templatetags/chamados_tags.py:166–171` | T determina se há fala para interpretar. |
+| `marcos_do_lote` — `app/chamados/veredito_lavrado.py:207–208` | Máximo 
+
+[truncado em 20000 de 72266 caracteres]
 
 ## 22/11 21:28 · sessao 0de99fc0f137 · - · - · origem=Ronald (tmux)
 
@@ -692,80 +840,4 @@ Para `HASNER_SHA` e `HASNER_IMAGEM_ID` na Pista 2, **não sei** quem os injeta n
 - **Campo com dois significados.** `sha` alterna entre registro da árvore da VM e identidade de commit da pista. `3` cobre falha do inspect, falha do `mktemp` e qualquer `3` propagado do comando. `bin/suite.sh:108–120`, `bin/suite.sh:320–333`, `bin/suite.sh:348–353`, `bin/pista_certifica.sh:25–45`.
 - **`except` adicionados:** **0** no delta `ab48a4b7e..52f298e35`; **2** no diff integral apresentado, ambos em `bin/disjuntor.py` — `ValueError` no parser de fast-forward e `OSError` na abertura da mensagem do merge. `bin/disjuntor.py:1145–1151`, `bin/disjuntor.py:2369–2375`.
 
-## 22/11 19:09 · sessao 0b730e044b60 · [nome]-FERIADO-PELA-TELA-2211-1612 · verificador · origem=Code
-
-# Parecer final — REPROVADA
-
-A v3 corrige a primeira trava das portas quando chamadas isoladamente e fecha a troca de dono entre as duas leituras da carta. Ainda há três bloqueadores demonstráveis pelo código: a reversão usa uma célula lida antes da trava, a regeneração de futuras chega à porta com `CelulaDia` já travada, e a view ainda pode levantar `ValueError` antes da recusa. `app/ponto/portas/celula.py:225` · `app/ponto/portas/celula.py:724` · `app/ponto/portas/celula.py:853` · `app/ponto/services/cadastro_futuro.py:43` · `app/ponto/views.py:3555`
-
-Os dez arquivos do diff conferem com os prefixos dos blobs fornecidos. A tabela dos juízes foi conferida na cópia e confrontada com o registro vivo. A cópia veio sem `.git`, então a identidade do commit, a base e o histórico são [nao verificado]. A revisão foi só leitura. RED, GREEN, execução dos mutantes, suite inteira e ocorrência em produção são [nao verificado]. `app/docs/JUIZES.md:13` · `app/core/juizes.py:190` · `app/core/juizes.py:294` · `app/core/juizes.py:352`
-
-## 1. Procedentes da volta 2 e mordida dos testes [nao verificado]
-
-| Procedente | O que o teste detecta e o que passa pela asserção | [nao verificado]
-|---|---|
-| Regeneração | O K8 de regenerar falha se retirar a trava nova, pois a primeira escrita da célula vem antes da marca de órfã. Mover a trava para **depois** da carga de `existentes` e antes da primeira escrita passa. O teste compara posições de trava e DML, sem testar a posição da leitura. `app/ponto/portas/celula.py:229` · `app/ponto/portas/celula.py:297` · `app/ponto/portas/celula.py:331` · `app/ponto/tests/test_kaua_feriado_pela_tela.py:357` · `app/ponto/tests/test_kaua_feriado_pela_tela.py:371` |
-| Reversão | O K8 de reverter falha se retirar a trava nova, pois o `UPDATE` precede qualquer trava que o julgamento posterior possa tomar. A própria versão atual passa pela asserção com a leitura, o filtro `origem='gerada'` e a captura de `dna_anterior` **antes** da trava. `app/ponto/tests/test_kaua_feriado_pela_tela.py:383` · `app/ponto/portas/celula.py:853` · `app/ponto/portas/celula.py:865` · `app/ponto/portas/celula.py:875` |
-| Troca e lacuna do K7 | O K8 de troca falha na ordem antiga porque o primeiro `FOR UPDATE` seria em `Ausencia`. Tirar só a reconferência do dono passa no cenário do teste, que mantém as cartas estáveis. A asserção também aceita primeira trava correta com o segundo colaborador travado só depois das cartas. O A11 vizinho confere a ordem de chamadas a `editar_dia`. `app/ponto/portas/celula.py:724` · `app/ponto/tests/test_kaua_feriado_pela_tela.py:412` · `app/ponto/tests/test_kaua_feriado_pela_tela.py:421` · `app/ponto/tests/test_o10b_editar_dia_troca.py:443` |
-| `int('²')` | O K4d falha com a regressão para apenas `isdigit()`, antes de obter o `302`. A asserção cobre `²` e deixa passar a implementação atual com decimal ASCII longo. `app/ponto/tests/test_kaua_feriado_pela_tela.py:430` · `app/ponto/views.py:3555` |
-
-**A reversão ainda pode desfazer parte de uma edição humana concorrente.** Se A lê uma célula `gerada`, B a edita e confirma, e A só então obtém a trava, A escreve o DNA, `trabalha` e a geradora do estado antigo por cima da edição. O `update_fields` da reversão preserva `origem`, `editada_em` e `editada_por`. O resultado pode carregar autoria humana com o plano sobrescrito pela reversão. `app/ponto/portas/celula.py:653` · `app/ponto/portas/celula.py:666` · `app/ponto/portas/celula.py:853` · `app/ponto/portas/celula.py:865` · `app/ponto/portas/celula.py:875`
-
-## 2. Ordem de travas
-
-A tabela descreve os caminhos que chegam à escrita. A porta comum trava `Colaborador`, `Disputa`, `Chamado` e `Pergunta`, em PK crescente dentro de cada conjunto solicitado. Ela registra os colaboradores após o `FOR UPDATE`. `app/chamados/models.py:2816` · `app/chamados/models.py:2852` · `app/chamados/models.py:2862` · `app/chamados/models.py:2875`
-
-| Porta | Primeira linha e sequência no `atomic` próprio |
-|---|---|
-| `regenerar_celulas_vinculo` | `Colaborador` → leitura simples das células → `INSERT`/`UPDATE` de `CelulaDia` em data crescente. Em futura reescrita, pode limpar o julgamento na mesma célula e inserir evento e trilha. Depois do laço, marca órfãs. `app/ponto/portas/celula.py:225` · `app/ponto/portas/celula.py:269` · `app/ponto/portas/celula.py:293` · `app/ponto/portas/celula.py:331` · `app/ponto/portas/celula.py:1194` |
-| `regenerar_celulas_dia` | Delega à anterior com intervalo de um dia e sem estender horizonte. A primeira trava é a mesma. `app/ponto/portas/celula.py:808` · `app/ponto/portas/celula.py:229` |
-| `reverter_regeneracao_dia` | `Colaborador` → `UPDATE` da célula carregada antes → `INSERT` do evento → eventual limpeza do julgamento da futura na mesma célula → trilha. A função segue ao julgamento pelo caminho comum depois do `atomic` próprio. `app/ponto/portas/celula.py:853` · `app/ponto/portas/celula.py:865` · `app/ponto/portas/celula.py:875` · `app/ponto/portas/celula.py:897` |
-| `editar_dia` | `Colaborador` → `CelulaDia FOR UPDATE` ou `INSERT` quando inexistente → trilha → marca de órfã. O vínculo e o DNA foram calculados antes da trava. `app/ponto/portas/celula.py:633` · `app/ponto/portas/celula.py:640` · `app/ponto/portas/celula.py:646` · `app/ponto/portas/celula.py:657` · `app/ponto/portas/celula.py:668` · `app/ponto/portas/celula.py:683` |
-| `trocar_plantao` | Leitura simples dos donos → **todos os colaboradores por PK** → **cartas por PK**, com `OF self` → reconferência → cada lado por `(colaborador_id, data)`. Cada lado repete a trava do seu colaborador, pega a célula, pode marcar chamados e executa o julgamento síncrono antes de começar o outro lado. A trilha do par vem por último. `app/ponto/portas/celula.py:724` · `app/ponto/portas/celula.py:747` · `app/ponto/portas/celula.py:760` · `app/ponto/portas/celula.py:684` |
-
-**Cascatas.** A marca de órfã percorre chamados vivos de furo, pergunta ao juiz e passa a escrita para `renovar_contexto`. Cada escrita repete `Colaborador` e trava aquele `Chamado` antes do `UPDATE`. O laço não explicita ordem por PK. O S143 exige escrita de estado e o signal do cartório sai quando o estado continua igual. `app/ponto/management/commands/gerar_celulas.py:250` · `app/chamados/services/contexto.py:97` · `app/chamados/models.py:488` · `app/chamados/signals.py:97` · `app/chamados/signals.py:189`
-
-`julgar_celula` começa com leitura simples. Conforme o ramo, reconcilia chamados antes da lavra ou depois de carimbar perguntas absolvidas. No fecho, a porta pede `Colaborador → Disputas abertas → Chamados`, e o S143 pode atualizar `Pergunta`. A auto-rejeição pega `Justificativa` por PK depois dos fechos. A emissão abre chamado sob a trava do colaborador. A lavra atualiza a célula e pode inserir `EventoCelula`. A fábrica posterior pode pegar `Colaborador → Disputa → Pergunta` para desfazer carimbo e, depois, voltar à porta que pede disputas abertas e chamados. Portanto, a ordem vale **dentro de cada pedido**, e o conjunto de travas do `atomic` externo pode ganhar uma disputa depois de já ter um chamado ou uma pergunta. No caso da troca, os dois colaboradores já estão travados nesse ponto. `app/ponto/services/cartorio.py:2075` · `app/ponto/services/cartorio.py:1026` · `app/ponto/services/cartorio.py:1581` · `app/chamados/models.py:770` · `app/chamados/services/disputa_emissao.py:1913` · `app/chamados/services/disputa_emissao.py:2029` · `app/ponto/services/justificativa.py:283` · `app/chamados/models.py:964` · `app/ponto/services/cartorio.py:1921` · `app/ponto/portas/celula.py:997` · `app/chamados/services/fabrica_da_celula.py:160` · `app/chamados/services/relavra_via.py:230` · `app/chamados/services/disputa_emissao.py:539`
-
-O julgamento roda depois do `atomic` **interno** de regeneração, reversão e edição. Com um `atomic` externo, continua dentro dele. Recálculo financeiro, rejunção e reavaliação de falta espúria passam por `on_commit`. Travas implícitas de FK e ordem observada no PostgreSQL são [nao verificado]. `app/ponto/portas/celula.py:396` · `app/ponto/portas/celula.py:471` · `app/ponto/portas/celula.py:542` · `app/ponto/portas/celula.py:551` · `app/ponto/portas/celula.py:684` · `app/ponto/portas/celula.py:897` · `app/ponto/services/fechamento.py:1824`
-
-**Inversão em chamador de produção, confirmada pelo código.** `regenerar_futuras_do_cadastro` avalia `SELECT FOR UPDATE` das células antes de chamar a regeneração. `sincronizar_foto_futura_do_calendario` também trava as células antes, e a recusa do aceite de escala passa por `reverter_para_snapshot`, que pode entrar com vínculos e células já travados. Assim, uma edição pode segurar o colaborador e esperar a célula futura enquanto o evento de cadastro segura essa célula e espera o colaborador. Para chamador que entre nessas cinco portas com `Chamado`, `Disputa`, `Pergunta` ou `Ausencia` já travados, **não sei** [nao verificado]. Há um caminho concorrente distinto da troca: `decidir` pode atualizar uma `Ausencia` existente e, ainda no mesmo `atomic`, seu `post_save` chama o cartório, que pode pedir o colaborador. Essa ordem é inversa à da troca quando o julgamento alcança uma porta que pede essa trava. `app/ponto/services/cadastro_futuro.py:21` · `app/ponto/services/cadastro_futuro.py:43` · `app/escala/folgas.py:617` · `app/colaboradores/services/vinculo.py:1030` · `app/chamados/services/acoes_chamado.py:142` · `app/ponto/portas/celula.py:646` · `app/ponto/services/ausencia.py:988` · `app/ponto/services/ausencia.py:1079` · `app/ponto/signals.py:143` · `app/ponto/services/cartorio.py:1581`
-
-**Lotes.** `salvar_tipo` é atômico e o wizard delega a ele. Os laços de passado e futuras usam a ordenação padrão do vínculo, `-data_inicio`, sem desempate por PK. O admin de tipos também retém as travas do lote de futuras até o fim. `gerar_celulas` retém as travas do lote de regeneração de hoje e pede colaboradores por PK crescente. Logo, com `A.pk < B.pk` e vínculo de B mais recente, wizard e cron podem pedir `B → A` e `A → B` para o mesmo par. O cron depois chama `gerar_celulas_periodo`, que pode inserir células e preencher DNA legado sem uma trava inicial de colaborador para cada pessoa dessa segunda etapa. Outros lotes com ordem por vínculo incluem o editor de calendário e a aplicação de calendário ao tipo. `app/escala/views_wizard.py:98` · `app/escala/services/cadastro_tipo.py:140` · `app/escala/services/cadastro_tipo.py:339` · `app/escala/services/cadastro_tipo.py:375` · `app/escala/services/cadastro_tipo.py:384` · `app/escala/models.py:1014` · `app/ponto/management/commands/gerar_celulas.py:321` · `app/ponto/management/commands/gerar_celulas.py:345` · `app/ponto/portas/celula.py:939` · `app/ponto/portas/celula.py:953` · `app/escala/folgas.py:578` · `app/escala/folgas.py:600` · `app/escala/views.py:392` · `app/escala/views.py:407`
-
-## 3. Reconferência do dono na troca
-
-Uma transferência ou exclusão visível entre as duas leituras muda o mapa `carta → colaborador` e causa recusa. Depois da segunda leitura, a trava da carta impede alteração concorrente até o fim da transação. A edição usa o colaborador da carta relida. Se o dono mudou **antes da primeira leitura**, prevalece o dono encontrado no banco, pois os argumentos fornecem os PKs das cartas. A recusa nova ocorre antes de qualquer edição ou trilha, sai pelo rollback do `atomic` e só acrescenta o motivo a `barrados` em memória. `app/ponto/portas/celula.py:716` · `app/ponto/portas/celula.py:720` · `app/ponto/portas/celula.py:729` · `app/ponto/portas/celula.py:747` · `app/ponto/portas/celula.py:760` · `app/ponto/portas/celula.py:768`
-
-## 4. `colab` e o `reverse`
-
-**Sim.** Com o limite padrão do Python, uma string decimal ASCII com mais de 4.300 dígitos, sem zeros à esquerda, passa em ambos os predicados e `int()` levanta `ValueError` na linha 3555. A conversão antecede a permissão, o formulário e até a chamada que validaria `volta`. O limite efetivo em produção é [nao verificado]. `app/Dockerfile:1` · `app/ponto/views.py:3548` · `app/ponto/views.py:3555`
-
-`0` cai em `/` na falta de uma `volta` aceita. Sinais ficam fora da conversão antecipada. Um positivo convertido cabe no padrão da rota `<int:cid>` independentemente de existir no banco. Após o formulário, um PK negativo só chegaria ao segundo `reverse` se a busca encontrasse uma linha com esse PK e não houvesse `volta` aceita. Nesse caso, o sinal é incompatível com a rota. Existência desse cadastro é [nao verificado]. `app/ponto/views.py:3534` · `app/ponto/views.py:3553` · `app/ponto/views.py:3563` · `app/colaboradores/urls.py:23`
-
-## 5. Escritores, leitores e semântica
-
-| Campo ou valor | Escritores, leitores e significado |
-|---|---|
-| `Ausencia.pk`, `colaborador_id`, `data`, `documento` | `criar_ausencia` fornece o titular, a data e o documento no nascimento. Edição do registro pode mudar a data e as portas de documento podem anexá-lo. A troca lê PK e titular antes da trava, relê a carta travada e usa titular, data e documento para editar e compor a trilha. Cobertura e precedência leem ausência pelo titular. O titular tem um significado. Não encontrei uma porta de transferência do titular [nao verificado]. `app/ponto/services/ausencia.py:483` · `app/ponto/services/ausencia.py:649` · `app/ponto/services/ausencia.py:1017` · `app/ponto/portas/celula.py:724` · `app/ponto/portas/celula.py:756` · `app/ponto/turnos.py:2571` |
-| Registro de colaboradores travados | `trava_na_ordem` chama `_registrar_travados`, que põe sentinelas `on_commit` na conexão. `colaboradores_travados` é o leitor direto. A deduplicação e `exigir_colaboradores_travados` o consomem. Entre os consumidores da exigência estão a foto E4B, o reconciliador e a reabertura para correção. O significado é o PK registrado sob a transação corrente. `app/chamados/models.py:2852` · `app/chamados/services/trava_do_colaborador.py:29` · `app/chamados/services/trava_do_colaborador.py:37` · `app/chamados/services/trava_do_colaborador.py:55` · `app/chamados/services/foto_e4b.py:225` · `app/chamados/reconciliador.py:644` · `app/chamados/services/disputa_emissao.py:1638` |
-| `CelulaDia.pk`, `colaborador_id`, `data`, `origem`, `trabalha`, `dna`, `escala_geradora_id` | Geração e edição criam o par colaborador-dia. Geração, regeneração, reversão e edição gravam o plano conforme a operação. Calendário, autoridade do dia, precedência, leitor da grade e Resolução do dia o leem. A geradora tem **dois usos declarados**: proveniência do plano e primeira referência que o juiz do vínculo avalia, sujeita à vigência. A FK pode virar `NULL` por exclusão, enquanto `dna.vinculo_id` pertence ao snapshot. `app/escala/models.py:1692` · `app/ponto/portas/celula.py:297` · `app/ponto/portas/celula.py:657` · `app/ponto/portas/celula.py:866` · `app/ponto/portas/celula.py:953` · `app/colaboradores/services/calendario.py:791` · `app/escala/models.py:1105` · `app/escala/alimentacao.py:269` · `app/escala/services/leitor_celula.py:397` · `app/ponto/services/veredito_celula.py:29` |
-| `dna_anterior`, `regeneracoes`, `regenerada_em`, `gerada_em`, `editada_em`, `editada_por_id` | Regeneração guarda o snapshot e avança contador e carimbo. Reversão consome o snapshot e também avança contador e carimbo. `gerada_em` nasce com a linha e a edição é dona de `editada_*`. Reversão, CLI e auditoria leem o snapshot ou os carimbos. Cobrança órfã, cartório e invalidação de julgamento leem os instantes conforme suas perguntas. `dna_anterior` guarda **uma versão imediata**. `regeneracoes` inclui reversões. `editada_por_id` identifica o autor e a trilha o captura. `app/escala/models.py:1713` · `app/ponto/portas/celula.py:309` · `app/ponto/portas/celula.py:573` · `app/ponto/portas/celula.py:664` · `app/ponto/portas/celula.py:866` · `app/ponto/management/commands/aplicar_col900.py:175` · `app/escala/services/regeneracao.py:72` · `app/ponto/services/cartorio.py:412` · `app/chamados/veredito_lavrado.py:193` |
-| Campos de julgamento e `orfa_regeneracao` | `lavrar_veredito` e `carimbar` escrevem veredito, ata, status e carimbos. O desfazer da futura limpa a lista declarada. Grade, leitor do status e vigia os consomem. A marca de órfã guarda os marcos cobrados na emissão, é gravada pela porta de contexto e consumida pelo reconciliador da grade. `app/ponto/portas/celula.py:1152` · `app/ponto/portas/celula.py:1205` · `app/ponto/portas/celula.py:1229` · `app/ponto/status_dia.py:201` · `app/escala/services/leitor_celula.py:397` · `app/ponto/management/commands/gerar_celulas.py:259` · `app/ponto/management/commands/reconciliar_grade.py:445` |
-
-**Esmeril.** `trabalha` é triestado. `montar_dna` guarda `marcos=None` tanto para `False` quanto para `None`. A reversão traduz ambos em `False`. Isso pode converter um indeterminado em folga afirmada e habilitar a oferta nova num feriado. Além disso, o botão aceita qualquer célula com `trabalha=False` em feriado. Esse campo sozinho não diz se a folga foi causada pelo feriado. Uma folga lançada pode continuar vetando a falta depois da edição, e a precedência pode continuar classificando o feriado pela política do vínculo mesmo com `trabalha=True` na célula. `app/escala/models.py:1697` · `app/ponto/management/commands/gerar_celulas.py:85` · `app/ponto/portas/celula.py:868` · `app/colaboradores/services/calendario.py:791` · `app/ponto/precedencia.py:376` · `app/ponto/precedencia.py:506`
-
-## 6. Classes de reprovação
-
-- **Segundo juiz e segundo escritor.** A oferta tem um produtor no calendário e dois consumidores, template e POST. A abrangência vem do calendário de feriados e do juiz do vínculo. A marca de órfã usa o juiz registrado, a lavra consulta K9 e a view chama a porta registrada de escrita da célula. Os problemas demonstrados são a divergência com a precedência do vínculo e a reconstrução do triestado a partir do DNA. `app/colaboradores/services/calendario.py:347` · `app/colaboradores/services/calendario.py:791` · `app/templates/colaboradores/partials/_calendario_grade.html:131` · `app/ponto/views.py:3569` · `app/ponto/views.py:3577` · `app/core/juizes.py:294` · `app/core/juizes.py:352` · `app/core/portas.py:112` · `app/ponto/portas/celula.py:868`
-- **Relógio.** A view lê `agora` uma vez e o passa ao calendário e à edição. A cauda usa o dia recebido para selecionar o que julgar, mas chama `julgar_celula` sem `agora`. O cartório relê o dia e o instante, de modo que a cascata pode atravessar a meia-noite com outra referência. Regeneração e reversão também leem a hora local da escrita para `regenerada_em`. `app/ponto/views.py:3567` · `app/ponto/views.py:3577` · `app/ponto/portas/celula.py:479` · `app/ponto/services/cartorio.py:2064` · `app/ponto/services/cartorio.py:2088` · `app/ponto/portas/celula.py:312` · `app/ponto/portas/celula.py:873`
-- **Selo, ordem e pré-requisito.** Os K8 verificam a ordem parcial descrita acima. A validação da oferta também ocorre antes da trava e fica sem reconferência sob ela. Uma mudança concorrente para trabalho gerado ainda permite gravar `origem='editada'` com base na oferta antiga. Para pouso, a regra da árvore exige suite inteira verde antes do Opus e proíbe o verificador de aprovar sozinho. Cumprimento desse rito é [nao verificado]. `app/ponto/tests/test_kaua_feriado_pela_tela.py:357` · `app/ponto/tests/test_kaua_feriado_pela_tela.py:421` · `app/ponto/views.py:3569` · `app/ponto/portas/celula.py:647` · `CLAUDE.md:372` · `CLAUDE.md:377`
-- **`except` adicionados no delta fornecido: 0, incluindo `bin/`.** O `except _TrocaRecusada` já existia e recebe a nova recusa. A comparação independente do histórico de `bin/` é [nao verificado]. `app/ponto/portas/celula.py:729` · `app/ponto/portas/celula.py:768` · `app/ponto/views.py:3555` · `app/ponto/tests/test_kaua_feriado_pela_tela.py:345`
-
-## 7. Descartados da triagem
-
-- **Drawer. O descarte só se sustenta para a escrita.** Botão e POST exigem `editar_escalas`, mas a view da gaveta exige login e busca pelo PK, enquanto o calendário comum exige `ver_cadastro`. A gaveta expõe escala, horários de batidas e diagnóstico. O teste de au
-
-[truncado em 20000 de 21309 caracteres]
-
-_7886 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7887 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
