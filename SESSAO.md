@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 21:59:13.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (58.0 MB). Acoes na janela: **1561**.
+**Medido em 22/11/2026 22:05:16.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (58.9 MB). Acoes na janela: **1569**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:04:24 | Bash |  | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(0,'ESPERANDO: push do lote (33 commits, cc2d19cd5, regua+suite no pre-push) \| pid=3031439 \| arquivo=logs/SIMPLIFICA-V3-2211-1726/push.log') open(p,'w').write('\n'.join(L)) PY python3 bin/hook_stop_fila1.py --conferir >/dev/null 2>&1; echo hook_rc=$?` |
+| 22:04:21 | Bash |  | `cd ~/saas-hasner; ps -o pid,cmd -p 3031435,3031439 \| cut -c1-80; sed -n 1p app/docs/RELATO.md \| cut -c1-120` |
+| 22:04:12 | Bash |  | `cd ~/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; mkdir -p logs/SIMPLIFICA-V3-2211-1726; setsid nohup bash bin/push.sh > logs/SIMPLIFICA-V3-2211-1726/push.log 2>&1 < /dev/null & disown; sleep 5; pgrep -f "bin/push.sh" \| head -3; tail -3 logs/SIMPLIFICA-V3-2211-1726/push.log` |
+| 22:04:09 | Bash |  | `cd ~/saas-hasner; sed -n 1,30p bin/push.sh \| /bin/grep '^#' \| cut -c1-160; ls logs/push* 2>/dev/null \| tail -3` |
+| 22:04:06 | Bash |  | `cd ~/saas-hasner; git diff --stat -- app/docs/; S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; cat > $S/msg_marco_simp.txt <<'EOF' MARCO SIMPLIFICA-V3-2211-1726 NO AR (6f48ecf3b) + E4D-ENSAIO-V2-2211-2121 FEITO: docs do marco SIMPLIFICA: pouso 6f48ecf3b (merge --no-ff de f71acc4bb, cmp 32/32), deploy --sem-migrate rc 0, hooks.sh install (merge.ff=false ...` |
+| 22:03:54 | Bash |  | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| SIMPLIFICA-V3-2211-1726 \|')]; assert len(i)==1; i=i[0] c=L[i].split(' \| '); c[2]='NO AR 22/11 21:5x: pouso 6f48ecf3b (merge f71acc4bb, cmp 32/32), deploy --sem-migrate rc 0, hooks.sh install (merge.ff=false); suite Found 17191-3 podados=Ran 17188 OK; opus APRO ...` |
+| 22:03:43 | Bash |  | `cd ~/saas-hasner; sed -n 1993p app/docs/BACKLOG.md \| awk -F' \\\| ' '{print NF; for(i=3;i<=NF;i++) print i": "substr($i,1,150)}'; sed -n 5570,5583p app/docs/RELATO.md \| cut -c1-120` |
+| 22:03:41 | Bash |  | `cd ~/saas-hasner; /bin/grep -n "^\| SIMPLIFICA-V3-2211-1726 \\|^\| SIMPLIFICA-RAN-FOUND\\|^\| CODEX-N-VAGAS-SIMPLES-2211-1724 \\|^\| QUARENTENA-VENCIDA " app/docs/BACKLOG.md \| cut -c1-200; /bin/grep -n "^## " app/docs/RELATO.md \| head -3` |
 | 21:55:20 | Bash |  | `cd ~/saas-hasner; for t in test_hook_nao_e_copia test_codex_pergunta test_rm_com_guarda test_disjuntor; do [ -f bin/tests/$t.sh ] \|\| { echo "$t AUSENTE"; continue; }; timeout 900 bash bin/tests/$t.sh > logs/SIMPLIFICA-V3-2211-1726/pos_$t.log 2>&1; echo "$t rc=$? $(tail -1 logs/SIMPLIFICA-V3-2211-1726/pos_$t.log \| cut -c1-120)"; done` |
 | 21:54:56 | Bash |  | `cd ~/saas-hasner; timeout 900 bash bin/deploy.sh --sem-migrate > logs/SIMPLIFICA-V3-2211-1726/deploy.log 2>&1; echo rc=$?; tail -8 logs/SIMPLIFICA-V3-2211-1726/deploy.log` |
 | 21:54:53 | Bash |  | `cd ~/saas-hasner; git log -1 --format='%h %p' ; bash bin/hooks.sh install 2>&1 \| tail -3; bash bin/hooks.sh check; echo check_rc=$?; git config --get merge.ff` |
