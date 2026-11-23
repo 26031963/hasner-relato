@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 19:24:16.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.6 MB). Acoes na janela: **69**.
+**Medido em 23/11/2026 19:30:14.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.7 MB). Acoes na janela: **73**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:26:43 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"E4C-F5 8.2 SONDA DE FROTA (sombra, 19:1x; logs/E4C-F5/v7/s82b/sondas/{base,c3}.out, FIM, montador e juiz REAIS): universo 728 colabs com D (451 com D aberta), 9467 cartoes adm / 4221 col. BASE 06c3a2e88: cartao mostra D diferente da eleita pelo juiz em 11 (adm) / 5 (col) -> C3: 0 / 0. Dis ...` |
+| 19:26:36 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; for f in base c3; do echo == $f; sed -n '/^CONTAGENS/,/^FIM/p' $O/$f.out; done; grep -E '^A82' $O/base.out \| awk '{print $3}' \| sort -u \| wc -l; grep -c '^C ' $O/c3.out; grep -c '^DSC.*aberta=1' $O/c3.out` |
+| 19:26:32 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; grep -m2 -B1 '^NoneType' $O/base.out \| cut -c1-200; grep -E '^(UNIVERSO\|A82\|A_DIF\|C \|DSC)' $O/base.out \| head -30 \| cut -c1-220; echo ==C3; grep -E '^(UNIVERSO\|A82\|A_DIF\|C \|DSC\|lavra)' $O/c3.out \| head; grep -nE 'A82\|A_DIF\|^ *print' logs/sombra/sonda_fechadas.py \| head -20` |
+| 19:26:28 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; cat $O/resumo.txt; for f in base c3 c4; do echo "== $f"; grep -m3 FIM $O/$f.out \| cut -c1-300; cut -d' ' -f1 $O/$f.out \| sort \| uniq -c \| sort -rn \| head -8; done` |
 | 18:59:04 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"E4C-F5 c3b ENTREGUE (19:0x): 54794f38a na wt-f5-v7-153543 (validar_classe_a::_classe_da_pendente, catraca segue 1, so o nome da funcao no selo). chamados na c3b OK (skipped=2, expected failures=14) Ran 5833 rc=0 (s82b/c3b_chamados.log, conferido). Mutantes c3 M1a/M1b/M2/M3/M4 FAILED nos a ...` |
 | 18:58:45 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/E4C-F5/v7/s82b/pouso; git diff 06c3a2e88..54794f38a > $D/delta_c3b.diff; wc -c $D/delta_c3b.diff; cat > $D/verif.q <<'EOF' OBRA E4C-F5 v7, volta 8.2 + c3 + c3b, PAPEL verificador. Delta = git diff 06c3a2e88..54794f38a (anexo delta_c3b.diff, por ultimo). Anexos: leis.txt (leis dos sitios), verif.r da c2 (verificacao anterior) e achados_para_c3.txt (os 4 itens que ...` |
 | 18:58:33 | Bash |  | `cd /home/ronald/saas-hasner; head -c 1500 logs/E4C-F5/v7/c2/verif.q; echo; echo ----; head -20 logs/E4C-F5/v7/c2/achados_para_c3.txt; ls logs/E4C-F5/v7/s82/ \| head` |
