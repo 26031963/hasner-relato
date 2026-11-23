@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 04:30:01.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.6 MB). Acoes na janela: **1858**.
+**Medido em 23/11/2026 04:36:10.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.6 MB). Acoes na janela: **1850**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1860,11 +1860,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:43:25 | Bash |  | `cd ~/saas-hasner && ls logs/PRE-MAPA-E4D logs/MAPA-F5-2211-0906 \| head -30; head -30 logs/MAPA-F5-2211-0906/q.txt 2>/dev/null \|\| ls logs/MAPA-F5-2211-0906` |
 | 16:43:20 | Bash |  | `cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/codex-obra-e-o-token-da-fila1.md \| head -20` |
 | 16:43:19 | Bash |  | `cd ~/saas-hasner && ls logs/ \| grep -i "mapa" ; ls logs/MAPA-F5* 2>/dev/null \| head; grep -n "E4d\\|E4D" app/docs/BACKLOG.md \| head -8; tail -3 app/docs/PROMPTS.md \| cut -c1-300` |
-| 16:33:14 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && cp chamados/tests/test_e1_v13_ordem.py /tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad/e1v13_bak.py && python3 - <<'EOF' p='chamados/tests/test_e1_v13_ordem.py'; s=open(p).read() a=""" with _mutante(), self.assertLogs(level='ERROR') as cm:""" b=""" import chamados.reconciliador as _R _orig = _R.retratar_perguntas_absolv ...` |
-| 16:33:02 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 1012,1045p ponto/services/cartorio.py; grep -n "def _cenario" -A30 chamados/tests/test_selo_celula_absolveu.py \| head -35` |
-| 16:32:00 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && git grep -n "retratar_perguntas_absolvidas_por_celula\\|reconciliar_chamados_colab" -- ponto/ ':!*/tests/*' \| head; python3 - <<'EOF' p='chamados/tests/test_e1_v13_ordem.py'; s=open(p).read() a=""" with _mutante(), self.assertLogs('ponto.signals', 'ERROR') as cm:""" b=""" with _mutante(), self.assertLogs(level='ERROR') as cm:""" assert s.count(a)==1; s=s.repla ...` |
-| 16:31:53 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 150,200p chamados/tests/test_e1_v13_ordem.py` |
-| 16:31:48 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 1440,1470p chamados/reconciliador.py; sed -n 1505,1535p chamados/reconciliador.py; grep -n "MUTANTE_a_falha" -A3 ~/saas-hasner/logs/E4C-F5/v1/diag_v3_base_recorte.log \| head; grep -n "Traceback" -A12 ~/saas-hasner/logs/E4C-F5/v1/diag_v3_base_recorte.log \| grep -B2 -A10 "nao_barra" \| head -20` |
-| 16:31:46 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 195,225p ponto/signals.py; git grep -n "retratar_perguntas_absolvidas_por_celula(" -- '*.py' ':!*/tests/*'` |
-| 16:31:39 | Bash |  | `cd ~/saas-hasner; L=logs/E4C-F5/v1/diag_v3_base_recorte.log; grep -E "AssertionError" $L \| cut -c1-300 \| sort \| uniq -c` |
-| 16:30:54 | Bash |  | `cd ~/saas-hasner; W=~/wt-f5-contrato-v1-140439; S=/tmp/claude-1001/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/scratchpad; cp $W/app/chamados/reconciliador.py $S/reconciliador_fora.py; git -C $W show HEAD:app/chamados/reconciliador.py > $W/app/chamados/reconciliador.py; for d in .ruff_cache .hypothesis .mypy_cache; do rmdir $W/app/$d 2>/dev/null; done; L=logs/E4C-F5/v1/diag_v3_ba ...` |
