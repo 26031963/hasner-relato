@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 15:13** · publicado em **23/11/2026 15:16** (UTC-3)
+> Ultima resposta processada: **23/11/2026 15:44** · publicado em **23/11/2026 15:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 15:44 · sessao f124818f214d · PAR-PELO-TURNO · sonda · origem=Code
+
+A saída fornecida contém **2 casos com `CAUSA c` e 14 `NAO RESOLVIDO`**. Nos dois casos com `CAUSA`, o motivo impresso é sustentado pelos turnos diurnos, mas **a classe diverge do critério literal do aval**. O `DiaPago` motor tem realizado positivo e noturno zero, o que preenche **b**. Os outros 15 dos 31 casos declarados estão [nao verificado]. Linhas `CAUSA`, `turno` e `DiaPago` da saída; `app/ponto/motor_calculo_v2.py:82`, `app/ponto/models.py:327`, `app/ponto/models.py:351`.
+
+### Triagem por dia-colab
+
+Os pares abaixo são os do dia `D`, identificados por pk e horário local. A coluna de evidência usa `minutos_realizados` em minutos e `horas_noturnas` em horas, ambos da versão `motor`. Linhas `turno`, `teto_comparado` e `DiaPago` da saída; `app/ponto/turnos.py:43`, `app/ponto/models.py:322`, `app/ponto/models.py:325`, `app/ponto/models.py:351`.
+
+| Caso | colNNN (pk) | D | Classe impressa → auditada | Motivo | Evidência |
+|---|---|---|---|---|---|
+| caso01 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso01 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso02 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso02 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso03 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso03 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso04 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso04 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso05 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso05 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso06 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso06 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso07 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso07 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso08 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso08 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso09 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso09 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso10 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso10 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso11 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso11 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso12 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso12 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso13 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso13 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| caso14 | [nao verificado] | [nao verificado] | NAO RESOLVIDO | `NAO RESOLVIDO caso14 n=0` | E/S, vão × teto, órfãs, DiaPago e exportação [nao verificado] |
+| col214 | col214 (214) | 2026-11-15 | **c → b · DIVERGÊNCIA** | `L-099_sem_batida_noturna_alvo` é sustentado por `b_dia_E_S=[]` e 0 min noturnos nos dois turnos. O gravado `440 min / 0 h` preenche b literal. `app/ponto/motor_calculo_v2.py:82`, `app/ponto/models.py:327`, `app/ponto/models.py:351`. | E155565 07:00:20 → S155668 12:06:40 **306,33 × 1560 min**. E155704 13:06:42 → S155775 15:20:54 **134,20 × 740 min**. Ambos aceitos; órfãs `[]`. `DiaPago` motor 2476612 **440 min / 0 h**. 11/2026 **exportada não**. Linhas `teto_comparado`, `turno`, `turnos_contagem`, `DiaPago` e `competencia`; `app/ponto/turnos.py:1447`, `app/ponto/models.py:351`, `app/folha/export.py:556`. |
+| col107 | col107 (107) | 2026-11-15 | **c → b · DIVERGÊNCIA** | `L-099_sem_batida_noturna_alvo` é sustentado por `b_dia_E_S=[]` e 0 min noturnos nos dois turnos. O gravado `382 min / 0 h` preenche b literal. `app/ponto/motor_calculo_v2.py:82`, `app/ponto/models.py:327`, `app/ponto/models.py:351`. | E155585 07:05:19 → S155607 09:15:09 **129,83 × 1560 min**. E155627 10:13:25 → S155739 14:25:11 **251,76 × 750 min**, via `pos_pausa_sem_volta`. Ambos aceitos; órfãs `[]`. `DiaPago` motor 2441257 **382 min / 0 h**. 11/2026 **exportada não**. Linhas `teto_comparado`, `turno`, `turnos_contagem`, `DiaPago` e `competencia`; `app/ponto/turnos.py:1183`, `app/ponto/turnos.py:1447`, `app/ponto/models.py:351`, `app/folha/export.py:556`. |
+
+Cada dia tem dois turnos fechados. As linhas `turno` trazem `_separada_pelo_teto=None` e `abertas_e_orfas=(False, False)`, e `evidencias_causa` traz `a_pares_recusados=[]` e `a_abertas_ou_orfas=[]`. Que os dois turnos de cada dia fossem uma única jornada separada fica [nao verificado]. A classe **b** aqui é a aplicação do critério literal. Noturno devido e omitido fica [nao verificado]. `app/ponto/turnos.py:183`, `app/ponto/turnos.py:312`, `app/ponto/motor_calculo_v2.py:82`.
+
+### Totais
+
+| Contagem no trecho fornecido | a | b | c | NAO RESOLVIDO |
+|---|---:|---:|---:|---:|
+| Impressa nas linhas `CAUSA` e `NAO RESOLVIDO` | 0 | 0 | 2 | 14 |
+| Auditada pelo critério literal, com os dois `DiaPago` motor (`app/ponto/models.py:327`, `app/ponto/models.py:351`) | 0 | 2 | 0 | 14 |
+
+- **Competência EXPORTADA:** 0 sim, 2 não. As duas linhas `competencia` mostram `status='aberto' exportada=False exportacao_pk=None`. A situação dos outros 29 casos e o total nos 31 ficam [nao verificado]. `app/folha/export.py:556`.
+- **NAO RESOLVIDO:** `caso01` a `caso14`, todos com `n=0` nas respectivas linhas da saída. O status dos 15 casos ausentes fica [nao verificado].
+
+### Dono L-099 para os dois `c` impressos
+
+- **col214 — não decide.** `teto_comparado` para E155565/S155668 mostra `teto_do_dia=False` com marcos `12:40–21:00`. É indício de **CADASTRO**, pois o pareador usa o envelope quando ambas as pontas estão fora da régua da L-084. A inclusão de `D` em `dias_cadastro_x_realidade`, insumo do juiz L-099, fica [nao verificado]. `app/ponto/turnos.py:1435`, `app/ponto/motor_calculo_v2.py:1931`, `app/ponto/management/commands/e6_oraculo.py:162`.
+- **col107 — não decide.** `teto_comparado` para E155585/S155607 mostra `teto_do_dia=False` com marcos `12:50–21:20`. É o mesmo indício de **CADASTRO**. A inclusão de `D` em `dias_cadastro_x_realidade` fica [nao verificado]. `app/ponto/turnos.py:1435`, `app/ponto/motor_calculo_v2.py:1931`, `app/ponto/management/commands/e6_oraculo.py:162`.
+
+## 23/11 15:42 · sessao 727a1b162816 · PAR-PELO-TURNO · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 23/11 15:41 · sessao 238bcbc77caa · VIGIA-DO-TMUX · verificador · origem=Code
+
+**VIGIA-DO-TMUX, volta 2 — P4 não realizado.** O Stop e o vigia compartilham dois predicados, mas só o Stop decide sobre ciclo, disparo ativo, expiração e agentes com transcript. Há entradas em que o Stop devolve `siga` e `recusa_clear()` devolve `''`. `bin/hook_stop_fila1.py:973–987` (diff), `bin/hook_stop_fila1.py:1012–1041,1060–1113` (cópia).
+
+As referências marcadas **diff** usam as linhas novas dos hunks. As demais usam a cópia do main. Os contraexemplos foram conferidos em memória. Execução integral do selo, resultados dos mutantes, identidade dos commits e estado de produção **[nao verificado]**. [nao verificado]
+
+### P1–P7
+
+| id | procede? | arquivo:linha | consequência concreta | cura mínima |
+|---|---|---|---|---|
+| P1 | **parcial** | diff `bin/vigia_tmux.py:197–206,225,233–265` · diff `bin/tests/test_vigia_tmux.sh:160–184,223–225,265–269` | Cada envio fixa um `%N`, grava a marca antes da segunda captura e recaptura antes do Enter. `a` acusa troca de alvo ou ordem, `c4` acusa marca que ficou após adiamento, `j` acusa Enter com conteúdo divergente. A comparação aceita espaço adicional: `❯  /clear`, com um espaço extra após o separador do prompt, vira `/clear` pelo `.strip()`. | Remover só o separador do prompt e exigir igualdade do conteúdo restante. Acrescentar a `j` uma divergência só de espaço. |
+| P2 | **parcial** | diff `bin/vigia_tmux.py:209–225` · diff `bin/tests/test_vigia_tmux.sh:234–235` | `c12` morde o falso ocioso original. Uma linha de entrada iniciada por `─` passa por borda superior. Na sequência `──── / ❯ texto / ─ detalhe / ❯ / ────` (uma linha por trecho), o parser descarta o primeiro `❯` e retorna caixa vazia. | Validar o delimitador da interface e recusar recortes ambíguos. Acrescentar essa tela ao selo. |
+| P3 | **parcial** | diff `bin/vigia_tmux.py:160–190,243,251,265,311,325` · diff `bin/tests/test_vigia_tmux.sh:213–221,267–269,294–298` | `c1` e `c2` cobram uma linha após dois ticks do mesmo SHA. `c2` também cobra que o adiado possa enviar depois. Em execução normal, a chave é SHA + decisão + ação. Se o processo cair após publicar no RELATO e antes de gravar `relatados.json`, o próximo adiado ou recusado duplica a linha. | Verificar a chave e inserir sob a mesma trava da porta do RELATO. |
+| P4 | **não** | diff `bin/hook_stop_fila1.py:965–987,1105` · diff `bin/vigia_tmux.py:309–315` · diff `bin/tests/test_vigia_tmux.sh:237–250` | `c13` e seu controle mordem o predicado de handoff. `c14` morde o teste de `sombra.lock`, com fixture sem disparo ativo. Nenhum compara o veredito com a transição do Stop. | Fazer Stop e vigia chamarem a mesma decisão de autorização, com o estado do ciclo e o transcript do painel. Cobrar a paridade no selo. |
+| P5 | **parcial** | diff `bin/vigia_tmux.py:156–157,235,247–261,328–337` · diff `bin/tests/test_vigia_tmux.sh:48,227,252–255` | O código relê sob a trava e antes das duas teclas. `c15` e `c16` mordem as leituras por tecla. Ambos criam a pausa depois da leitura sob a trava, então passam se essa leitura for removida. | Criar `PAUSADO` no momento da aquisição da trava e cobrar saída antes da leitura do topo. |
+| P6 | **parcial** | diff `bin/tests/test_vigia_tmux.sh:34–42,50–51,67–68,153–184,213,257–260,305–313` | O fake registra os alvos. `a` reprova marca tardia e resolução repetida; `c17` reprova remover o `flock`. `c1` cobra o texto do motivo até o fim da linha, mas `[0-9a-f]*` aceita até SHA vazio. O isolamento só procura os SHAs da rodada depois do teste, então uma alteração no RELATO real sem esses SHAs passa. | Cobrar a linha inteira com o SHA esperado, medir o hash do RELATO real antes e depois e registrar o RED dos dois mutantes. |
+| P7 | **sim** | diff `bin/vigia_tmux.py:84–94,116,346–350` · diff `bin/tests/test_vigia_tmux.sh:143–156,262–263` | O handler fica instalado antes do parse de `TETO_CLEAR` e da importação do Stop. `c18` cobra `ValueError` no log, rc 0, saída vazia e nenhuma tecla. Recolocar o handler no fim do módulo quebra esse caso. | — |
+
+### CLEAR e comportamento do Stop
+
+“Libera CLEAR” abaixo é a autorização explícita do ramo `CLEAR-RAPIDO`. O fallback `AVISO` pode encerrar o turno sem essa autorização. `bin/hook_stop_fila1.py:1094–1113,1266–1270,1361–1367,1391–1405`.
+
+| id | procede? | arquivo:linha | consequência concreta | cura mínima |
+|---|---|---|---|---|
+| C1 · Sem disparo ativo | **sim** | diff `bin/hook_stop_fila1.py:980–987` · `bin/hook_stop_fila1.py:1110–1133,1151–1156` | Estado ausente, sem `disparo` ou com `desfecho` preenchido deixa a recusa vazia com sombra livre. O Stop não libera por essa porta. Com gatilho novo e caminho livre, devolve `siga` para preparar CLEAR. | Exigir disparo ativo do ciclo vigente na decisão compartilhada. |
+| C2 · CLEAR expirado | **sim** | diff `bin/hook_stop_fila1.py:985–987` · `bin/hook_stop_fila1.py:1061–1064,1094–1109` · `bin/orcamento_contexto.py:56` | Com handoff novo e `clear_parei_desde` há mais de 10 min, a recusa fica vazia. O Stop grava `desfecho='seguiu'` e manda retirar o `PAREI` do topo. | Aplicar a janela do Stop ao mesmo `agora`. |
+| C3 · Agente sem entrega | **sim** | diff `bin/vigia_tmux.py:309` · diff `bin/hook_stop_fila1.py:973,987` · `bin/hook_stop_fila1.py:936–945,1078–1093` · `bin/disjuntor.py:465–481` | Com disparo ativo, handoff novo e agente pendente no transcript, o Stop devolve `siga`, atualiza `handoff_min` e limpa `clear_parei_desde`. O vigia chama sem transcript e pode enviar. | Resolver o transcript do painel e aplicar a guarda existente. Adiar quando a identidade da sessão for indispensável e estiver indisponível. |
+| C4 · Ciclo trocado ou orçamento desligado | **sim** | diff `bin/hook_stop_fila1.py:980–987` · `bin/hook_stop_fila1.py:959–971,1003–1041` | Um marco novo pode invalidar um disparo ainda gravado no JSON. O Stop troca o ciclo antes de julgar o topo, enquanto a recusa usa o disparo antigo. Com `ORCAMENTO_CONTEXTO=0`, o Stop também sai desse ramo e a recusa ainda pode autorizar o envio. | Compartilhar seleção do ciclo e condição de desligamento. |
+| C5 · Bloqueios anteriores ao orçamento | **sim** | `bin/hook_stop_fila1.py:1342–1367` · `bin/disjuntor.py:1413–1433` · diff `bin/hook_stop_fila1.py:973–987` | Uma afirmação sem prova no RELATO ou o primeiro `siga` do B4 pode bloquear o Stop antes de chegar ao CLEAR, mesmo com `recusa_clear()==''`. | Fazer a autorização do vigia respeitar os bloqueios anteriores aplicáveis. |
+| C6 · Guarda vencida antes da tecla | **sim** | diff `bin/vigia_tmux.py:309–315,233–261` · `bin/disjuntor.py:416–425` | A sondagem da sombra solta a trava antes das capturas e esperas. Um DIFF pode tomar a trava nesse intervalo e o vigia ainda digitar ou enviar Enter. O Stop consultado nesse instante recusaria com disparo ativo. | Revalidar junto da tecla e manter a exclusão com a sombra até o Enter. Liberar antes de esperar o marco ou publicar no RELATO. |
+| Stop · Mudança pela extração | **não** | diff `bin/hook_stop_fila1.py:965–970,1102–1108` · `bin/hook_stop_fila1.py:1061–1075` | A linha antiga e o helper avaliam o mesmo `< max(disp.get('hora') or 0, disp.get('handoff_min') or 0)`, na mesma ordem. Igualdade continua passando. Erros da avaliação continuam subindo ao mesmo tratamento. Os ramos e as gravações do Stop não mudam. | — |
+| Base · APIs de ESPERANDO | **sim** | diff `bin/vigia_tmux.py:286–297` · `bin/hook_stop_fila1.py:599–626,807–831` | O anexo chama `campos_do_esperando` e `MOTIVO_PID_MORTO`. Na cópia main, o parser está dentro de `_esperando_com_prova` e `_prova_pid` usa o literal. Portar só o delta deixa esse caminho sem as APIs. A implementação herdada de `89db6b43e` está **[nao verificado]**. | Conferir no pouso o pré-requisito da volta 1 que fornece as duas APIs. |
+
+### Escritores, leitores e classes de reprovação
+
+| id | procede? | arquivo:linha | consequência concreta | cura mínima |
+|---|---|---|---|---|
+| Estado · `feitos.json` | **sim** | diff `bin/vigia_tmux.py:119–153,245–268,291–307,313–324` · diff `bin/tests/test_vigia_tmux.sh:50–51,67–68` | O vigia escreve por `_marca` e `_desmarca`, lê por `_le_feitos` e consulta o registro nas duas ações. O fake observa a marca nas capturas e teclas. O mesmo registro serve para impedir reenvio e para permitir só a retomada de um CLEAR pendente. A captura que levanta após a marca deixa `enviando-*` gravado, mesmo antes do literal. | Manter um escritor. Cobrar no selo a distinção entre falha antes da primeira tecla e envio de resultado incerto. |
+| Estado · `relatados.json`, RELATO e log | **sim** | diff `bin/vigia_tmux.py:77–81,160–190,337` · diff `bin/tests/test_vigia_tmux.sh:153,158,307–313` · `bin/hook_stop_fila1.py:408–416,462–479` · `app/core/esteira_vigia.py:815–843,895–927` | `_decide` lê e grava a deduplicação, escreve em `vigia.log` e chama `no_relato`. A porta lê e regrava o RELATO. O vigia e o Stop leem dali o comando do topo pelo mesmo leitor. O selo lê log e RELATO. Topo é comando e ALARMES é trilha. O cache registra publicação anterior, mesmo se a linha sumir depois. | Usar a inserção idempotente da porta como autoridade para a deduplicação. |
+| Estado · `PAUSADO` | **sim** | `bin/pausar.sh:18–28,31–49` · diff `bin/vigia_tmux.py:101,156–157,235,248,258,328–336` · diff `bin/tests/test_vigia_tmux.sh:48,227` | `pausar.sh` publica e remove o arquivo, e `--ler` lê os metadados. O vigia só testa a existência. O `touch` é escritor da fixture. A publicação da pausa pode ocorrer entre a última consulta e `send-keys`. | Cobrir a releitura sob a trava. Para exclusão estrita, serializar publicação e tecla pelo mesmo mecanismo. |
+| Estado · `pane_id` | **sim** | diff `bin/vigia_tmux.py:197–206,238,247,253,261,304–307` · diff `bin/tests/test_vigia_tmux.sh:40–42,188–195` | O tmux fornece o `%N`. O vigia usa o valor local nas capturas e teclas e o grava em `feitos.json`. A decisão de retomar consulta estado e hora, e o próximo envio resolve o alvo de novo. Uma troca de painel pode mandar a retomada a outro `%N`. O fake sempre devolve `%7`. | Vincular a retomada ao painel do `/clear` e testar mudança de alvo entre as duas ações. |
+| Estado · orçamento, handoff e marco | **sim** | `bin/hook_stop_fila1.py:903–910,929–933,996–1041` · diff `bin/hook_stop_fila1.py:968,981–987` · `bin/orcamento_contexto.py:152–164,352–361` · `bin/disjuntor.py:2104–2105` · `bin/handoff_sessao.sh:318–327` · `bin/marco_de_clear.py:38–61` · diff `bin/vigia_tmux.py:103,306,313–325` | O Stop grava o orçamento. Stop, vigia, `orcamento_contexto` e disjuntor o leem. `handoff_sessao.sh` grava o handoff e o Stop fornece seu mtime às duas decisões. `marco_de_clear.py` lê e grava o marco. O Stop o usa para trocar de ciclo e o vigia para soltar a retomada. | Reusar a leitura de ciclo do Stop e associar a prova de CLEAR ao evento da sessão correta. |
+| Ordem de trava | **sem inversão identificada** | diff `bin/vigia_tmux.py:333–337,184,309–325` · `bin/hook_stop_fila1.py:973–986,1078` · `bin/sombra_trava.sh:21–38` · `bin/disjuntor.py:406–425` · `app/core/esteira_vigia.py:846–862` · `bin/marco_de_clear.py:38–63` | Ticks do vigia disputam `.trava`. Sob ela, o vigia sonda a trava da sombra, já solta quando entra na porta do RELATO. O Stop sonda a sombra sob `orcamento_estado.json.lock`. O escritor do marco usa `ultimo_clear.json.lock`. A lacuna demonstrada é a sondagem solta antes da tecla, em C6. | Ao fechar C6, evitar adquirir a trava do RELATO ou esperar o marco enquanto segura a trava da sombra. |
+| Relógio fora da borda | **sim** | diff `bin/vigia_tmux.py:245–261,306,313–314` · `bin/marco_de_clear.py:41–57` · diff `bin/tests/test_vigia_tmux.sh:73–76,199–210` | `hora_clear` é amostrada antes de resolver o painel e das três capturas. Um CLEAR de outra origem, posterior a essa amostra e anterior ao Enter do vigia, pode satisfazer a retomada. `clear_horas` só guarda horários e `session_id` pertence ao último marco. O teste não injeta um marco concorrente antes do Enter. | Amostrar junto do Enter e exigir um evento de CLEAR correlacionado à sessão e à tentativa. |
+| Segundo juiz e emissor | **sim** | diff `bin/hook_stop_fila1.py:973–987,1105` · `bin/keepalive.sh:4–9` · diff `bin/vigia_tmux.py:199,253,261,309` | `recusa_clear` é o segundo juiz de autorização. `keepalive.sh` é um emissor preexistente com alvo re-resolvido e guardas próprias, fora da trava do vigia. Execução em produção **[nao verificado]**. | Unificar a decisão de CLEAR e retirar ou serializar o emissor legado no pouso. |
+| Escritores fora da porta | **sim, preexistentes** | `bin/gerar_cortes.py:117–136` · `bin/deploy_agendado.sh:31–44` · `app/core/esteira_vigia.py:834–843,922–927` · diff `bin/vigia_tmux.py:181–190` | Ambos leem e regravam o RELATO fora da trava do diretório. Podem sobrescrever um alarme recém-inserido. Com a chave já gravada em `relatados.json`, o vigia suprime a republicação. | Fazer essas regravações usarem a mesma transação do RELATO. |
+| Selo · Limpeza | **sim** | diff `bin/tests/test_vigia_tmux.sh:24,248–261` | Se o selo sair antes de inicializar `SOMBRA` ou `TRAVADO`, o `trap` passa `0` ao `kill`, que sinaliza o grupo de processos. | Sinalizar só PIDs inicializados e ainda sob responsabilidade do selo. |
+| `except` novo | **não, 0** | diff `bin/vigia_tmux.py:84–94` · diff `bin/hook_stop_fila1.py:965–987` · diff `bin/tests/test_vigia_tmux.sh:302–303` | O delta acrescenta `try/finally` e instala `sys.excepthook`. Acrescenta zero cláusulas `except`. O selo conta `ast.ExceptHandler` no vigia. | — |
 
 ## 23/11 15:13 · sessao 5917bcb4ab53 · PAR-PELO-TURNO · sonda · origem=Code
 
@@ -1155,368 +1252,4 @@ sondar()
 
 Execução das duas novas sondas em banco e registros de `Ausencia` do 941 em produção [nao verificado].
 
-## 23/11 13:25 · sessao 0ec30af5c5d8 · PAR-PELO-TURNO · leitura · origem=Code
-
-lei: falta o corte que diz **qual vão `S→E` separa duas jornadas reais** para o PAR-PELO-TURNO. Os números existentes respondem a perguntas diferentes. **11h** é descanso entre jornadas citado no repo, **2h** classifica os blocos do turno previsto, **3h** é o teto padrão para inferir pausa, **6h** pode fazer o motor atribuir dois períodos ao mesmo dia e **previsto + 4h / 26h** limita o fechamento `E→S`. Qual desses critérios vale para juntar os blocos do aval fica **[nao verificado]**. `aval.txt:1` (anexo colado), `app/docs/mapa_seletor_cobranca.md:27`, `app/escala/servico_jornada.py:130`, `app/ponto/turnos.py:382`, `app/ponto/motor_calculo_v2.py:2400`, `app/ponto/turnos.py:1430`.
-
-Leitura da cópia no diretório informado. A correspondência com o SHA está **[nao verificado]** porque a cópia não tem metadados Git.
-
-## 1. Onde o par é decidido e por que sobram as marcações
-
-`parear_turnos` ordena por instante e usa o papel da ata quando disponível, senão o tipo gravado. Pausas e ecos reconhecidos são tratados antes das bordas. Uma `E` de borda abre um turno e deixa uma abertura anterior sem saída. Uma `S` de borda fecha a abertura corrente, sujeita às guardas de duração e pausa. Sem abertura corrente, a `S` sai como `Turno` sem entrada. Um vão de **até 60 segundos** também deixa a `S` órfã, mantendo a abertura corrente disponível. `app/ponto/turnos.py:1192`, `app/ponto/turnos.py:1304`, `app/ponto/turnos.py:1377`, `app/ponto/turnos.py:1398`, `app/ponto/turnos.py:1482`, `app/ponto/turnos.py:117`, `app/ponto/management/commands/detectar_par_relampago.py:49`.
-
-- **Teto da `S` que fecha.** Busca `hi/hf` em `marcos_por_dia` pela **data local da entrada**. Com duas bordas distintas, o teto é `(hf − hi) módulo 24h + 4h`, usando o vão previsto bruto. Com borda ausente ou coincidente, usa **26h**. Se **ambas** as pontas distam estritamente mais de **180 min** de seus respectivos marcos, a L-084 volta a usar **26h**. O ramo separa se o vão real for **maior** que o teto escolhido. As duas passagens finais ainda podem recuperar uma saída órfã antes da próxima entrada, inclusive pela exceção posicional, ou uma ida à pausa sem volta com fato encerrado. Ambas conferem o teto do dia, com `cont_max_s` de fallback. `app/ponto/turnos.py:66`, `app/ponto/turnos.py:326`, `app/ponto/turnos.py:1430`, `app/ponto/motor_calculo_v2.py:1931`, `app/docs/LEIS.md:116`, `app/ponto/turnos.py:1029`, `app/ponto/turnos.py:1064`, `app/ponto/turnos.py:1165`.
-- **Janela prevista e órfã da grade.** `janela_turno_de` monta os instantes previstos a partir de `hi/hf`, com a virada de data. A grade, no caminho sem alinhamento por papel, busca candidatas entre o primeiro marco **−90 min** e o último **+90 min**, e conserva sobras na lista `orfas`. Na reconciliação, só um par fechado pode recuperar suas bordas, com condições de marco faltante, presença na lista de órfãs, proximidade e L-084. Assim, uma órfã da grade pode existir mesmo quando o pareador fechou outro par no dia. `app/ponto/selecao_periodo.py:132`, `app/escala/utils.py:595`, `app/escala/utils.py:635`, `app/escala/utils.py:1288`, `app/escala/utils.py:1824`, `app/escala/utils.py:1955`, `app/escala/utils.py:2001`.
-- **`pares_separados_pelo_teto` é leitor do resultado.** O ramo de fechamento carimba a `S` se o teto do dia foi decisivo e o vão era **≤26h**. O leitor exige que a `S` continue sem entrada e que a `E` carimbada continue aberta no resultado final. Compara por PK quando disponível. A lista Cadastro × Realidade consome esse resultado por `teto_na_lista`. `app/ponto/turnos.py:165`, `app/ponto/turnos.py:183`, `app/ponto/turnos.py:1447`, `app/ponto/services/teto_na_lista.py:47`.
-
-| Caso do aval | O que a cópia permite concluir |
-|---|---|
-| **col129, 17:30 → 06:30** | A escala 21:30–05:42 tem vão de **492 min** e teto de **732 min**. O par tem **780 min**. As distâncias são **240 e 48 min**, então a L-084 não devolve o teto a 26h. Resultado do ramo: `E` aberta e `S` órfã, com carimbo. O teste da cópia fixa exatamente esses horários e esse resultado. `aval.txt:1`, `app/ponto/turnos.py:78`, `app/ponto/turnos.py:1440`, `app/ponto/tests/test_col129_par_separado_pelo_teto.py:52` |
-| **col155, 17:29 → 06:32** | Com a mesma escala alimentada, são **783 min** contra **732 min**, com distâncias de **241 e 50 min**. A execução isolada do corpo do pareador com essas duas marcas deu a mesma separação. Os demais insumos do caso real ficam **[nao verificado]**. `aval.txt:1`, `app/ponto/turnos.py:1430`, `app/ponto/turnos.py:1447` |
-| **col214, 07:00** | O aval confirma uma órfã. Ele não dá tipo, marca complementar, bordas previstas ou papel da ata. O ramo exato fica **[nao verificado]**. Uma `S` sem abertura e uma marca não atribuída pela grade são caminhos distintos que produzem sobras. `aval.txt:1`, `app/ponto/turnos.py:1495`, `app/escala/utils.py:1824` |
-| **col107, 07:05 e 09:15 antes de 10:13–14:25** | As marcas antecedem o início informado em **188 e 58 min**. O ramo E/S não anexa pelo simples fato de estarem antes de um turno já fechado, e a reconciliação da grade recupera as próprias bordas do par. A marca das 09:15 estar a 58 min do início real não prova que estava a 58 min de um **marco previsto**. Tipos, DNA e ramo efetivo ficam **[nao verificado]**. `aval.txt:1`, `app/ponto/turnos.py:1417`, `app/ponto/turnos.py:1491`, `app/escala/utils.py:635`, `app/escala/utils.py:1985`, `app/escala/utils.py:2010` |
-
-## 2. Limites escritos e quem os lê
-
-| Candidata | Número e leitura atual |
-|---|---|
-| **Interjornada, art. 66** | **11h** no mapa de cobrança e no corte de **permuta** registrado em `PROMPTS.md`. O helper de cobertura cita expressamente que a validação de 11h está fora dele. Leitura pelo juiz do par ou por juiz vivo de interjornada **[nao verificado]**. `app/docs/mapa_seletor_cobranca.md:27`, `app/docs/PROMPTS.md:2015`, `app/ponto/utils.py:141` |
-| **Intervalo previsto / turno partido, art. 71** | Vão declarado **≤120 min** é contínuo e **>120 min** é partido. O juiz `eh_turno_partido` usa `hii/hfi` circulares do desenho. Tem corte assinado e leitores de cadastro e rótulo de escala. O predicado classifica **dois blocos do mesmo turno previsto**. `app/escala/servico_jornada.py:114`, `app/escala/servico_jornada.py:130`, `app/escala/servico_jornada.py:193`, `app/escala/services/cadastro_tipo.py:113`, `app/core/juizes.py:228`, `app/docs/CORTES.md:359` |
-| **Vão real `S→E` como pausa** | **3h** no pareador e no `MotorBase`, **8h** no `MotorPlantao`, **0** no `MotorTurnoPartido`, que desliga a inferência por duração. Há guardas de distância dos marcos e de continuidade. Com `hii` e `hfi` acesos, a ata pode declarar a pausa acima do teto de inferência. Para descontar como pausa gozada, `intervalos_do_turno` exige **15 min** ou mais. `app/ponto/turnos.py:382`, `app/ponto/turnos.py:1402`, `app/ponto/turnos.py:1466`, `app/ponto/turnos.py:1816`, `app/ponto/turnos.py:537`, `app/ponto/motor_calculo_v2.py:728`, `app/ponto/motor_calculo_v2.py:2859`, `app/ponto/motor_calculo_v2.py:3511` |
-| **Duração total `E→S`** | **Previsto bruto + 4h** ou fallback de **26h** no fechamento principal, com a exceção L-084 de **180 min nas duas pontas**. `cont_max_s` vale **14h** por padrão e **26h** no plantão para guardas de absorção e fallback dos pós-fechos. A vigência do turno aberto tem outro relógio, **fim previsto + 4h**. `app/ponto/turnos.py:66`, `app/ponto/turnos.py:1192`, `app/ponto/turnos.py:1349`, `app/ponto/turnos.py:1430`, `app/ponto/turnos.py:2021`, `app/ponto/motor_calculo_v2.py:3513` |
-| **Vão entre períodos no motor** | **0 a 6h** desde uma saída real permite herdar `data_jornada` em `MotorBase.calcular_mes`. Esse trecho mantém os dois períodos e altera a atribuição ao dia. `app/ponto/motor_calculo_v2.py:2399`, `app/ponto/motor_calculo_v2.py:2423` |
-| **Empresa, Sindicato e régua CCT** | Empresa tem piso de HE **0 min**, limite padrão de decisão **15 min** e tetos de Cadastro × Realidade **60 min** por ponta. Sindicato e `REGUA_LEGAL` têm intrajornada **mínima de 60 min** e teto de **prorrogação de 120 min**. A régua marca estes dois campos de Sindicato como sem efeito no cálculo e `get_motor_cct` injeta outros parâmetros. A aplicação por empresa/praça seleciona a convenção. Um campo que fixe o vão entre jornadas **[nao verificado]**. `app/colaboradores/models.py:58`, `app/colaboradores/models.py:69`, `app/colaboradores/models.py:101`, `app/core/models.py:63`, `app/core/models.py:119`, `app/core/regua_cct.py:39`, `app/core/regua_cct.py:72`, `app/core/regua_cct.py:352`, `app/core/regua_cct.py:428` |
-
-## 3. Gestão de HE e desconto da pausa
-
-- **Minutos e dias da tela.** `views.gestao_he` lê `he_pendente_lavrado.ler` e passa o retrato a `gestao_he.enriquecer`. A fonte da pendência é **`dia['he_fora_da_janela']`** de `espelho.montar_dias`. Com a janela empresarial ativa e vigente, ele publica as pontas da grade, complementa pontas faltantes pelo relato de Cadastro × Realidade do motor e incorpora o dia inteiro sem previsto quando o motor o publica. O retrato da competência soma as pontas por dia e é gravado em `MetricaSnapshot` por `lavrar_he_pendente`. `app/ponto/views.py:948`, `app/ponto/views.py:969`, `app/ponto/services/espelho.py:735`, `app/ponto/services/espelho.py:790`, `app/ponto/janela_he.py:194`, `app/ponto/janela_he.py:267`, `app/ponto/services/he_pendente_lavrado.py:55`, `app/ponto/services/he_pendente_lavrado.py:84`, `app/ponto/services/he_pendente_lavrado.py:132`, `app/ponto/services/he_pendente_lavrado.py:177`, `app/ponto/management/commands/lavrar_he_pendente.py:62`.
-- **Decisão e DST-L1.** A porta é `ponto/portas/he.py::decidir_he` e o modelo é `DecisaoHE`, por pessoa e dia. `gestao_he.estado_por_dia` lê `objects.vigentes()` e `estado_do_dia` publica `sem_decisao` quando a chave está ausente. O espelho usa o mesmo estado e o link DST-L1 leva à Gestão de HE com pessoa e dia em foco quando há ponta sem decisão. Para folga ou feriado elegível, com previsto zero, janela ativa e período calculado, o motor publica como pendência os minutos que pagaria, já líquidos. O escritor exige minutos positivos. A entrada isolada que o corte DST-L1 manda à porta do admin, por si só, não produz esse período. `app/docs/CORTES.md:575`, `app/ponto/portas/he.py:159`, `app/ponto/portas/he.py:186`, `app/ponto/models.py:1265`, `app/ponto/models.py:1270`, `app/ponto/services/gestao_he.py:69`, `app/ponto/services/gestao_he.py:98`, `app/ponto/services/espelho.py:936`, `app/ponto/views.py:170`, `app/ponto/motor_calculo_v2.py:1422`, `app/ponto/adaptador_motor.py:24`.
-- **Intervalo efetivo.** `intervalos_do_turno` entrega os pares internos julgados ao adaptador, por timestamp de entrada. O motor também pode receber pausas pela ata. `calcular_periodo` aplica a janela de HE às bordas, recorta os intervalos ao trecho efetivo e subtrai `_intra_real(intervalos)` da duração. O desconto aparece no **12x36 acima de 360 min**, no **comercial acima de 240 min**, e o **plantão** delega ao 12x36. A decisão de HE altera o clipe, com recálculo por evento. A configuração de HE e os minutos líquidos dos quatro casos ficam **[nao verificado]**. `app/ponto/turnos.py:502`, `app/ponto/adaptador_motor.py:26`, `app/ponto/motor_calculo_v2.py:685`, `app/ponto/motor_calculo_v2.py:1892`, `app/ponto/motor_calculo_v2.py:2759`, `app/ponto/motor_calculo_v2.py:3224`, `app/ponto/motor_calculo_v2.py:3534`, `app/ponto/portas/he.py:206`.
-
-## 4. Censo AST e ponto comum
-
-O AST encontrou **13 chamadas diretas** a `parear_turnos`, contando aliases e deixando fora testes e migrações. O documento anterior é referenciado no backlog e o RELATO confirma a mesma contagem histórica. O arquivo `logs/PAR-CONFIRMADO/censo.md` está ausente da cópia entregue e seu conteúdo fica **[nao verificado]**. `app/docs/BACKLOG.md:2242`, `app/docs/RELATO.md:2857`, `.gitignore:53`.
-
-| Apelido | Chamada a `parear_turnos` |
-|---|---|
-| Fila por causa | `particionar` · `app/chamados/services/fila_por_causa.py:197` |
-| Observado de meio período | `observado_meio_periodo` · `app/escala/services/meio_periodo.py:168` |
-| Semana do posto | `_bateram` · `app/escala/services/semana_do_posto.py:120` |
-| Reconciliar fantasmas | `_completude` · `app/ponto/management/commands/reconciliar_fantasmas.py:99` |
-| Motor v2 | `turnos_via_autoridade` · `app/ponto/motor_calculo_v2.py:503` |
-| Diagnóstico de escala | `diagnostico_escala` · `app/ponto/services/diagnostico_escala.py:142` |
-| Lastro | `julgar` · `app/ponto/services/lastro.py:268` |
-| Piso de intervalo | `pares_abaixo_do_piso` · `app/ponto/services/piso_intervalo.py:48` |
-| Triagem da tela de bater | `triagem_bater_ponto`, alias `_pt` · `app/ponto/services/triagem_batida.py:178` |
-| Batidas já carregadas | `turnos_de_batidas` · `app/ponto/turnos.py:1535` |
-| Juiz do colaborador / lote | `_turnos_do_colab_puro` · `app/ponto/turnos.py:1997` |
-| Turno aberto vivo | `_turno_aberto_puro` · `app/ponto/turnos.py:2295` |
-| Bloqueio de órfão | `detectar_bloqueio_turno_orfao` · `app/ponto/utils_turno_orfao.py:31` |
-
-**`batidas_apuraveis` teve 57 chamadas diretas**, incluindo um script de `bin/`. A função seleciona marcações sem retratação e aplica os cortes de instante solicitados. A casca avulsa `turnos_do_colab` usa uma consulta própria com filtro de retratação e janela com bordas, enquanto `CargaDaJanela` chama a porta diretamente. `app/ponto/turnos.py:1867`, `app/ponto/turnos.py:2877`, `app/ponto/turnos.py:3020`, `app/ponto/turnos.py:3038`, `bin/r3_turno_aberto_alcanca.py:61`.
-
-| Apelidos dos leitores de `batidas_apuraveis` | Sítios |
-|---|---|
-| APIs e painel | Bater e justificativas `app/api/views.py:531`, `app/api/views.py:2030`, `app/api/views_core.py:517`. Painel operacional e dashboard `app/core/services/painel_op.py:83`, `app/core/services/painel_op.py:269`, `app/core/views.py:114`. Detalhe `app/colaboradores/services/detalhe.py:49`. |
-| Chamados | Fato `app/chamados/juizes.py:1825`. Fio `app/chamados/services/fio.py:1673`, `app/chamados/services/fio.py:2054`. Vizinhas `app/chamados/services/materializacao.py:112`, `app/chamados/services/materializacao.py:115`. Tarefa e validação `app/chamados/services/tarefa_do_dia.py:443`, `app/chamados/services/validacao.py:1207`. |
-| Escala e grade | Defesa `app/escala/regua_defesa.py:153`, `app/escala/regua_defesa.py:523`. Fase, previsto cego, posto e grade `app/escala/services/fase_na_tela.py:47`, `app/escala/services/previsto_cego.py:159`, `app/escala/services/semana_do_posto.py:117`, `app/escala/utils.py:1495`. |
-| Folha, férias, pauta e relatórios | `app/folha/export.py:499`, `app/folha/export.py:914`, `app/folha/previa.py:58`, `app/ferias/management/commands/listar_ferias_com_batida.py:47`, `app/pautas/services.py:431`, `app/relatorios/pdf_espelho.py:272`, `app/relatorios/views.py:502`, `app/relatorios/management/commands/diff_extrato_parcial.py:37`. |
-| Operação do ponto | Abertura, cartório, cobertura, deslogados e dia `app/ponto/services/abriu_nao_bateu.py:174`, `app/ponto/services/cartorio.py:1201`, `app/ponto/services/cobertura.py:301`, `app/ponto/services/deslogados.py:172`, `app/ponto/services/dia_do_colab.py:60`. Diagnóstico, passivo, esmeril, espelho, faltas e fechamento `app/ponto/services/diagnostico_escala.py:142`, `app/ponto/services/dias_em_aberto.py:122`, `app/ponto/services/esmeril_espelho.py:165`, `app/ponto/services/espelho.py:1058`, `app/ponto/services/faltas_de_hoje.py:57`, `app/ponto/services/fechamento.py:633`, `app/ponto/services/fechamento.py:811`. Triagem, vigia, lote e bloqueio `app/ponto/services/triagem_batida.py:175`, `app/ponto/services/triagem_batida.py:666`, `app/ponto/services/triagem_batida.py:716`, `app/ponto/services/vigia_de_hora.py:79`, `app/ponto/turnos.py:3020`, `app/ponto/turnos.py:3038`, `app/ponto/utils_turno_orfao.py:28`. |
-| Comandos de ponto e script | `app/ponto/management/commands/aplicar_09_corte_b.py:126`, `app/ponto/management/commands/censo_col900.py:128`, `app/ponto/management/commands/diff_espelho_alimentacao.py:92`, `app/ponto/management/commands/e6_oraculo.py:152`, `app/ponto/management/commands/e6_oraculo.py:212`, `app/ponto/management/commands/mapa_divergencia.py:96`, `app/ponto/management/commands/reconciliar_fantasmas.py:96`, `app/ponto/management/commands/tripwire_celulas.py:283`, `app/ponto/management/commands/vigiar_motor_autoridade.py:54`, `bin/r3_turno_aberto_alcanca.py:61`. |
-
-**Leitores indiretos e alcance do ponto único.** Espelho e cartão PDF consultam `turnos_do_colab` e também leem a grade. O cartório monta a grade e passa o dia a `supra_juiz.classificar_dia`, que consome `dia['orfas']`. Nos chamados, `perguntar_entradas_pendentes` resolve o dia pelo juiz do turno e consulta `classificar_falta`. `_orfao_resolvido_cross_meianoite` lê os pares fechados, com guarda própria de 26h. O núcleo materializa `TurnoMaterializado` a partir de `turnos_do_colab`. `app/ponto/services/espelho.py:520`, `app/ponto/services/espelho.py:625`, `app/relatorios/pdf_espelho.py:211`, `app/relatorios/pdf_espelho.py:475`, `app/ponto/services/cartorio.py:1201`, `app/ponto/services/cartorio.py:1500`, `app/ponto/supra_juiz.py:522`, `app/chamados/services/disputa_emissao.py:257`, `app/chamados/services/disputa_emissao.py:721`, `app/ponto/nucleo.py:40`.
-
-**O sítio comum da regra geométrica é `parear_turnos`, com `_teto_da_jornada` compartilhado pelos fechamentos.** A mesma resposta para todos exige também a mesma alimentação e o consumo do par devolvido. Há chamadas sem DNA ou ata, `turnos_do_colab` segmenta a janela, e o v2 monta períodos por `turnos_via_autoridade` e pode substituí-los por `juiz_batida.periodos_do_dia`. Ele obtém o mapa de dia em outra chamada e ainda aplica a herança de 6h. Portanto, mudar só o teto alcança a regra compartilhada, mas não garante par idêntico em todos os leitores. `MOTOR-LE-O-TURNO` já registra a convergência de motor e DiaPago para o par e o dia de `turnos_do_colab`. O arquivo do motor é zona inviolável e o aval registrado é para esse escopo. `app/ponto/turnos.py:66`, `app/ponto/turnos.py:1997`, `app/ponto/utils_turno_orfao.py:31`, `app/ponto/motor_calculo_v2.py:453`, `app/ponto/motor_calculo_v2.py:611`, `app/ponto/motor_calculo_v2.py:679`, `app/ponto/motor_calculo_v2.py:2346`, `app/ponto/motor_calculo_v2.py:2400`, `app/core/juizes.py:215`, `app/docs/BACKLOG.md:2173`, `CLAUDE.md:142`.
-
-## 5. Lista de órfãs e vigia
-
-**Existe lista real por dia.** A grade publica `dia['orfas']`, o cartório grava as horas e `n_orfas` em `CelulaDia.ata`, e `grade_da_celula` as devolve por `_orfas_da_ata`. `datas_saida_orfa` é uma leitura mais estreita, só dos dias de turno em que o pareador devolveu uma `S` sem `E`. `app/escala/utils.py:1818`, `app/escala/utils.py:1824`, `app/ponto/services/cartorio.py:755`, `app/escala/services/leitor_celula.py:180`, `app/escala/services/leitor_celula.py:420`, `app/ponto/turnos.py:234`.
-
-O vigia `vigia_pareador_celula.censo` lista `(colab, dia_turno, borda, hora)` quando **a própria borda de um par fechado** consta como órfã na ata e sua lâmpada correspondente está apagada. Ele publica `cego` quando falta universo observável. `tripwire_celulas.medir_sobra_com_tipo_trocado` mede outra classe específica, com órfã no raio de ponta apagada, confirmação por instante e par-relâmpago de **até 10 min**. Um contador geral de **órfã contígua a qualquer turno** e o **zero da frota da comp. 11** ficam **[nao verificado]**. `app/ponto/services/vigia_pareador_celula.py:42`, `app/ponto/services/vigia_pareador_celula.py:93`, `app/ponto/management/commands/tripwire_celulas.py:199`, `aval.txt:1`.
-
-## 6. DNA, ata e competência exportada
-
-- **DNA e janela.** `CelulaDia.dna.marcos` congela o previsto. `EscalaColaborador.marcos_do_dia` lê o DNA e cai no template na ausência de marcos. O lote `marcos_dna_periodo` alimenta o teto do pareador quando disponível. Há caminhos que usam o template, inclusive a guarda de segundo intervalo na alimentação do pareador. A janela prevista pode vir do DNA, enquanto a janela de consulta de `turnos_do_colab` é ou
-
-[truncado em 20000 de 22133 caracteres]
-
-## 23/11 13:19 · sessao a29591adb793 · A-TELA-DO-DIA-LE-UM-JUIZ · leitura · origem=Code
-
-```python
-import json
-import logging
-from collections import Counter
-from datetime import date
-from math import fsum
-from unittest.mock import patch
-
-from django.db import connection, transaction
-from django.db.models import Max
-from django.utils import timezone
-from django_tenants.utils import schema_context
-
-from colaboradores.models import Colaborador
-from colaboradores.services.calendario import (
-    STATUS_QUE_PEDEM_DECISAO,
-    contexto_calendario,
-)
-from escala.alimentacao import celulas_do_periodo
-from escala.utils import minutos_previstos_do_dia
-from folha.export import competencia_entregue
-from ponto.janelas import janela_atual, janela_fechamento
-from ponto.models import Batida
-from ponto.services.dia_pago import pago_do_dia
-from ponto.turnos import CargaDaJanela, cobertura_ausencia_periodo, realizado_do_dia
-
-MES, ANO = 11, 2026
-DIAS_AUSENCIA_941 = tuple(date(2026, 11, d) for d in range(16, 20))
-CASOS = {
-    945: (date(2026, 10, 24), date(2026, 10, 26), date(2026, 10, 28)),
-    941: (date(2026, 10, 31), *DIAS_AUSENCIA_941),
-}
-
-
-def falhar_em_log_de_erro(_logger, registro):
-    # A tela tem fallbacks com exc_info, por exemplo em app/colaboradores/services/calendario.py:622.
-    if registro.exc_info and registro.exc_info[1] is not None:
-        _, erro, traceback = registro.exc_info
-        raise erro.with_traceback(traceback)
-    if registro.levelno >= logging.ERROR:
-        raise RuntimeError(f"Erro registrado em {registro.pathname}:{registro.lineno}")
-
-
-def ler_grade(colab, mes, ano, agora):
-    ctx = contexto_calendario(
-        colab, {"modo": "competencia", "mes": str(mes), "ano": str(ano)},
-        agora=agora,
-    )
-    for dia in ctx["dias"]:
-        if not dia["em_aberto_perguntado"] or dia["resolver_dia_oferecido"] is None:
-            raise RuntimeError(f"Grade sem resposta para pk={colab.pk}, dia={dia['data']}")
-    return ctx
-
-
-def minutos_pagos(dia):
-    horas = pago_do_dia(dia["dia_pago"])
-    return None if horas is None else round(horas * 60, 9)
-
-
-def batidas(batidas_da_grade):
-    return [
-        [timezone.localtime(b.timestamp).isoformat(), b.tipo]
-        for b in batidas_da_grade
-    ]
-
-
-def registro_ausencia(a):
-    if a is None:
-        return None
-    return {
-        "pk": a.pk,
-        "data": a.data.isoformat(),
-        "data_fim": a.data_fim.isoformat() if a.data_fim is not None else None,
-        "minutos": a.minutos,
-        "tipo": a.tipo,
-        "status": a.status,
-    }
-
-
-def imprimir(obj):
-    print(json.dumps(obj, ensure_ascii=False), flush=True)
-
-
-def sondar():
-    if connection.settings_dict["NAME"] != "sombra":
-        raise RuntimeError("Use o banco de ensaio sombra.")
-    if connection.in_atomic_block or not connection.get_autocommit():
-        raise RuntimeError("A sonda exige uma transação própria.")
-
-    with (
-        patch.object(logging.Logger, "handle", falhar_em_log_de_erro),
-        schema_context("juliani"),
-        transaction.atomic(),
-    ):
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-            cursor.execute("SELECT current_database(), current_schema()")
-            if cursor.fetchone() != ("sombra", "juliani"):
-                raise RuntimeError("Banco/schema diferente de sombra/juliani.")
-
-        agora = timezone.now()
-        ultima = Batida.objects.aggregate(ultima=Max("timestamp"))["ultima"]
-        qs = Colaborador.objects.select_related("empresa", "posto__praca").order_by("pk")
-        colabs = list(qs.filter(situacao="ativo"))
-        por_pk = {c.pk: c for c in colabs}
-        colabs_dos_casos = {
-            pk: por_pk[pk] if pk in por_pk else qs.get(pk=pk)
-            for pk in CASOS
-        }
-        empresas = {
-            c.empresa_id: c.empresa for c in [*colabs, *colabs_dos_casos.values()]
-        }
-        cabecalho_empresas = []
-        for pk, empresa in sorted(empresas.items()):
-            ini, fim = janela_fechamento(MES, ANO, empresa)
-            cabecalho_empresas.append({
-                "empresa_pk": pk,
-                "inicio": ini.isoformat(),
-                "fim": fim.isoformat(),
-                "exportada": competencia_entregue(pk, MES, ANO),
-            })
-        imprimir({
-            "dump_referencia_max_batida_timestamp": (
-                timezone.localtime(ultima).isoformat() if ultima is not None else None
-            ),
-            "competencia": "2026-11",
-            "empresas": cabecalho_empresas,
-            "colaboradores_no_universo": len(colabs),
-        })
-
-        por_status = Counter()
-        afetados = 0
-        comparacao = Counter()
-        excessos = []
-        grades_dos_casos = {}
-        for colab in colabs:
-            ctx = ler_grade(colab, MES, ANO, agora)
-            if colab.pk in CASOS:
-                grades_dos_casos[colab.pk] = {
-                    (MES, ANO): {dia["data"]: dia for dia in ctx["dias"]}
-                }
-            divergentes = [
-                dia for dia in ctx["dias"]
-                if "Em aberto" in dia["palavra_dia"]
-                and dia["status"] not in STATUS_QUE_PEDEM_DECISAO
-            ]
-            if not divergentes:
-                continue
-            afetados += 1
-            turnos = None
-            for dia in divergentes:
-                por_status[dia["status"]] += 1
-                d = dia["data"]
-                previsto = minutos_previstos_do_dia(colab, d)
-                pago = minutos_pagos(dia)
-                if pago is None:
-                    comparacao["sem_pago"] += 1
-                    continue
-                comparacao["ge" if pago >= previsto else "lt"] += 1
-                if turnos is None:
-                    turnos = CargaDaJanela([colab], ctx["data_ini"], ctx["data_fim"]).turnos(colab)
-                realizado = realizado_do_dia(colab, d, turnos=turnos, previsto_min=previsto)
-                if realizado.minutos is None:
-                    comparacao["sem_realizado_dos_pares"] += 1
-                else:
-                    excessos.append(max(0, pago - realizado.minutos))
-
-        saida_casos = []
-        for pk, datas in CASOS.items():
-            colab = colabs_dos_casos[pk]
-            grades = grades_dos_casos.get(pk, {})
-            celulas = celulas_do_periodo([pk], min(datas), max(datas))
-            cobertura = (
-                cobertura_ausencia_periodo(
-                    colab, min(DIAS_AUSENCIA_941), max(DIAS_AUSENCIA_941), para="folha",
-                ) if pk == 941 else {}
-            )
-            for d in datas:
-                _, fim = janela_atual(d, colab.empresa)
-                competencia = (fim.month, fim.year)
-                if competencia not in grades:
-                    ctx = ler_grade(colab, fim.month, fim.year, agora)
-                    grades[competencia] = {dia["data"]: dia for dia in ctx["dias"]}
-                dia = grades[competencia][d]
-                celula = celulas.get((pk, d))
-                caso = {
-                    "colaborador_pk": pk,
-                    "data": d.isoformat(),
-                    "status": dia["status"],
-                    "texto": dia["palavra_dia"],
-                    "resolver_dia_oferecido": dia["resolver_dia_oferecido"],
-                    "batidas_do_turno": batidas(dia["batidas"]),
-                    "batidas_retratadas_do_dia_civil": batidas(dia["retratadas"]),
-                    "celula_status_dia": celula.status_dia if celula is not None else None,
-                    "minutos_pagos": minutos_pagos(dia),
-                    "minutos_previstos": minutos_previstos_do_dia(colab, d, celulas=celulas),
-                }
-                if pk == 941 and d in DIAS_AUSENCIA_941:
-                    caso["ausencia_cobertura_folha"] = registro_ausencia(cobertura.get(d))
-                saida_casos.append(caso)
-
-    imprimir({
-        "dias_divergentes_por_status": dict(sorted(por_status.items())),
-        "colaboradores_com_divergencia": afetados,
-        "divergencia_status_x_em_aberto_total": sum(por_status.values()),
-        "dias_pago_ge_previsto": comparacao["ge"],
-        "dias_pago_lt_previsto": comparacao["lt"],
-        "dias_sem_minutos_pagos_sustentados": comparacao["sem_pago"],
-        "dias_com_pago_sem_minutos_dos_pares": comparacao["sem_realizado_dos_pares"],
-        "dias_com_pago_e_minutos_dos_pares": len(excessos),
-        "soma_minutos_pagos_acima_dos_pares": round(fsum(excessos), 9),
-    })
-    for caso in saida_casos:
-        imprimir(caso)
-
-
-sondar()
-```
-
-**Sítios no repositório**
-
-- **Universo.** Adotei a lista padrão de Colaboradores, `situacao="ativo"`, com todas as páginas e sem filtros opcionais. As contagens usam esse universo. Os casos literais são consultados por PK mesmo quando estão fora dele, como permite a entrada do calendário do perfil. `app/colaboradores/views.py:1044`, `app/colaboradores/views.py:1048`, `app/colaboradores/views.py:1066`, `app/colaboradores/views.py:1077`, `app/colaboradores/views.py:1984`.
-- **Calendário.** `contexto_calendario` recebe o colaborador, um dicionário de parâmetros e um instante comum à rodada. É a chamada direta usada pelo drawer, sem request ou usuário para produzir os campos pedidos. A sonda lê `palavra_dia`, `status` e `resolver_dia_oferecido` da própria grade. A permissão do usuário é aplicada pelo template ao exibir o botão. `app/colaboradores/services/drawer.py:122`, `app/colaboradores/services/calendario.py:188`, `app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:754`, `app/colaboradores/services/calendario.py:809`, `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/colaboradores/partials/_calendario_grade.html:134`.
-- **Competência e exportação.** `janela_fechamento` usa o corte da empresa. `janela_atual` localiza a competência de cada data literal. `competencia_entregue` verifica o TXT vigente para empresa, mês e ano. `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`, `app/ponto/janelas.py:60`, `app/colaboradores/services/calendario.py:204`, `app/folha/export.py:556`, `app/folha/export.py:588`.
-- **Pago e previsto.** A grade chama `linhas_do_periodo` e `rubricas_do_dia` e entrega o próprio `DiaPago`. Sobre essa linha, `pago_do_dia` lê as horas pagas de trabalho, incluindo folga trabalhada e folga em feriado. A sonda conta separadamente os dias em que o leitor devolve `None`. O previsto vem de `minutos_previstos_do_dia`. `app/colaboradores/services/calendario.py:319`, `app/colaboradores/services/calendario.py:688`, `app/colaboradores/services/calendario.py:781`, `app/ponto/services/dia_pago.py:833`, `app/ponto/services/dia_pago.py:867`, `app/ponto/services/dia_pago.py:901`, `app/escala/utils.py:2241`.
-- **Pares fechados.** `CargaDaJanela.turnos` usa o mesmo carregador da grade. `realizado_do_dia` fornece os minutos realizados pelo pareador, como no espelho. A soma acumula diferenças positivas nos dias em que ambas as fontes devolvem minutos. `app/colaboradores/services/calendario.py:249`, `app/ponto/turnos.py:2980`, `app/ponto/turnos.py:3044`, `app/ponto/turnos.py:774`, `app/ponto/services/espelho.py:276`, `app/ponto/services/espelho.py:412`.
-- **Casos literais.** `celulas_do_periodo` carrega a `CelulaDia` e seu `status_dia` persistido. As batidas seguem a grade, que atribui as vivas ao dia do turno e as retratadas ao dia civil local. `cobertura_ausencia_periodo(..., para="folha")` usa a mesma cobertura aprovada que alimenta a palavra do dia. `app/escala/alimentacao.py:54`, `app/escala/models.py:1827`, `app/colaboradores/services/calendario.py:643`, `app/colaboradores/services/calendario.py:658`, `app/colaboradores/services/calendario.py:765`, `app/colaboradores/services/calendario.py:561`, `app/colaboradores/services/calendario.py:748`, `app/ponto/turnos.py:2752`, `app/ponto/models.py:749`, `app/ponto/models.py:809`.
-- **Sombra e erros.** A configuração `config.settings.sombra` aponta para o banco `sombra`, com schema `juliani`. A transação segue o padrão `REPEATABLE READ, READ ONLY` da sonda da cópia. O tratamento de log relança as exceções registradas com `exc_info` nas degradações da tela. O cabeçalho usa o maior `Batida.timestamp` como referência de data do dump. `app/config/settings/sombra.py:13`, `app/config/settings/sombra.py:29`, `app/config/settings/sombra.py:47`, `app/chamados/tests/cef_c3_sonda.py:21`, `app/colaboradores/services/calendario.py:509`, `app/colaboradores/services/calendario.py:617`, `app/ponto/models.py:23`.
-
-Execução na sombra, contagens, data efetiva do dump e confirmação independente do hash [não verificado].
-
-## 23/11 13:18 · sessao c69dd7bd31d0 · VIGIA-DO-TMUX · leitura · origem=Code
-
-Usei a cópia no diretório `eac7a67419eb54c3af01f061dde311b5bae06717`. O procedimento do repo entrega essas cópias via `git archive`. A confirmação independente do hash por Git e o estado atual do host ficam [nao verificado]. As linhas dos anexos contam a partir do primeiro conteúdo de cada anexo. [CLAUDE.md:354](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/CLAUDE.md:354)
-
-## 1. O contrato cobre o aval?
-
-**Parcialmente.** Ele cobre o agendamento, os dois caminhos de ação e os registros. Faltam condições explícitas para autorizar o `/clear` e critérios do pouso. O contrato também acrescenta escrita no RELATO quando nenhuma tecla foi enviada. `aval.txt:1`, `contrato.txt:2–6`. [nao verificado]
-
-| Exigência ou proibição do aval | Cobertura no contrato |
-|---|---|
-| Descongelar só esta obra. Manter `AUTO-CLEAR-NO-MARCO` congelado e substituído. | **Lacuna.** As cinco linhas descrevem o vigia novo sem declarar o limite do descongelamento ou a substituição. O item antigo consta no BACKLOG da cópia. `aval.txt:1`, `contrato.txt:2–6`. [app/docs/BACKLOG.md:2853](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/docs/BACKLOG.md:2853) |
-| Vigia externo, somente na sessão tmux `code`, lendo o topo a cada poucos minutos. Reversível ao desligar. | **Coberto no desenho.** Cron de host a cada 3 min, nenhum chamado pelo Code, leitura das 15 primeiras linhas e pausa por arquivo. Retirar a declaração exige reinstalar o crontab para surtir efeito. `aval.txt:1`, `contrato.txt:2–3,6`. [bin/crons.sh:29](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/crons.sh:29) |
-| `ESPERANDO` com produtor morto → frase exata com PID e arquivo. | **Coberto no texto.** A frase é literal. A prova proposta, `kill -0`, consulta o PID e deixa aberta a identidade do produtor. O Stop atual também admite espera com só `pid=` ou só `arquivo=`. A frase do vigia exige os dois. `aval.txt:1`, `contrato.txt:3–4`. [bin/hook_stop_fila1.py:809](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:809) |
-| `/clear` só com `PAREI: ! CLEAR` e “nada roda -- PODE /clear” escrito pelo próprio Code. Depois, ler `HANDOFF-SESSAO` e o topo do RELATO, seguir a fila, parar só em lei ou `!`. | **Parcial.** O item 2 exige o texto autorizador e ordena `/clear` antes da retomada. Falta exigir a autoria do Code e fixar o conteúdo da retomada. O Stop da cópia orienta escrever `PAREI: ! CLEAR \| espera Ronald`, sem a autorização literal nova. `aval.txt:1`, `contrato.txt:3`. [bin/hook_stop_fila1.py:1116](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:1116) |
-| Digitar somente o autorizado, nunca no meio de turno ativo, e preservar a config do Code. | **Parcial.** “Nada mais é digitado” é explícito. A guarda de turno ativo fica sem definição do indicador e da caixa vazia. A proibição de mexer na config do Code fica implícita no desenho de host. `aval.txt:1`, `contrato.txt:2–4`. |
-| Registrar cada ação no RELATO e em log próprio. Nunca repetir o empurrão da mesma linha. | **Previsto.** O item 4 dá os dois destinos. O item 3 dá o SHA da linha, mas omite a coordenação entre a tecla e a gravação do estado. **Além do aval**, o item 4 manda gravar também cada adiamento e recusa nos dois destinos. `aval.txt:1`, `contrato.txt:4–5`. |
-| Contrato de cinco linhas **no RELATO**, selo de host que morde os dois casos e o caso sem ação, pouso próprio e no ar antes da noite se couber no teto. | **Parcial.** O anexo tem os cinco campos e especifica o selo com tmux falso e os três grupos de casos. Ainda faltam no texto o pouso próprio e a condição de prazo e vaga. Registro no RELATO, selo executado, pouso e vaga real [nao verificado]. `aval.txt:1`, `contrato.txt:2–6`. [app/docs/PISTA.md:170](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/docs/PISTA.md:170), [CLAUDE.md:297](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/CLAUDE.md:297), [CLAUDE.md:331](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/CLAUDE.md:331) |
-
-## 2. Onde entra o cron de host de 3 minutos?
-
-- **Aceita comando fora do Django.** `C(...)` gera `tenant_command`. `RAW(...)` aceita script de host e `linhas()` o passa ao `cron_run.sh`, que executa o comando e mede a corrida. `bin/crons.sh` usa Django para **renderizar** e instala o texto resultante no crontab do host. `vigia_arvore.sh` já entra por `RAW`, na hora cheia mais cinco minutos. O alarme da sessão por `RAW` é o precedente mais próximo. [app/config/crons.py:19](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:19), [app/config/crons.py:102](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:102), [app/config/crons.py:292](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:292), [app/config/crons.py:311](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:311), [app/config/crons.py:1895](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:1895), [bin/cron_run.sh:5](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/cron_run.sh:5), [bin/crons.sh:23](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/crons.sh:23)
-- **O sítio do contrato é `CRONS` em `app/config/crons.py`, com `RAW('*/3 * * * *', ...)`.** Conferi em memória que `log='logs/vigia_tmux/vigia.log'` resolve para o caminho previsto. Um relativo com barra é resolvido a partir da raiz do repo, então `vigia_tmux/vigia.log` cairia fora de `logs/`. `vigia_esteira.sh` tem outro mecanismo, uma unidade systemd de usuário declarada em `AGENDADOS_FORA_DO_CRON`. O `OnCalendar` versionado é `*:0/5`, embora o comentário diga 10 min. `contrato.txt:2,5`. [app/config/crons.py:1888](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:1888), [app/config/crons.py:760](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:760), [bin/hasner-esteira.timer:1](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hasner-esteira.timer:1), [bin/hasner-esteira.service:13](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hasner-esteira.service:13)
-- **O que fica vermelho com só a entrada nova.** `test_contract_tabuleiro` cobra `vigia_tmux.py` em `PAPEL_DO_CRON`. `test_contract_crons` cobra o mesmo nome em `DUR_MAX_S`, por duração medida ou declarada. O gerador do diagrama consulta `papel()` e falha se faltar a chave. Com papel `vigia`, mudam a contagem do Tabuleiro e o bloco Vigias de `ARQUITETURA.mmd`. O selo compara `ARQUITETURA.mmd` e `MAPA.md` com o gerador. O bloco do pipeline diário pula `RAW`. `CRONS.md` pede atualização no mesmo commit como tabela de consulta. Um selo automático de paridade para `CRONS.md` [nao verificado]. [app/core/tests/test_contract_tabuleiro.py:15](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/tests/test_contract_tabuleiro.py:15), [app/chamados/tests/test_contract_crons.py:369](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/chamados/tests/test_contract_crons.py:369), [app/config/crons.py:2375](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:2375), [app/core/management/commands/gerar_diagrama.py:163](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/management/commands/gerar_diagrama.py:163), [app/core/management/commands/gerar_diagrama.py:242](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/management/commands/gerar_diagrama.py:242), [app/core/management/commands/gerar_diagrama.py:395](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/management/commands/gerar_diagrama.py:395), [app/core/management/commands/gerar_diagrama.py:921](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/management/commands/gerar_diagrama.py:921), [app/docs/CRONS.md:7](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/docs/CRONS.md:7)
-- **Há uma trava de pouso separada.** O render integral da cópia, sem alteração, recusou `sombra.sh`: 87 min empurrariam o início para 03:56, antes do piso 04:05. A marca CRON-15 está documentada até **27/11/2026** e veda cron novo enquanto existir. O `install` pode tecnicamente preservar a linha existente da sombra sob condições estritas. O aval fornecido cita o descongelamento de `CONGELA-INSTRUMENTO`, e uma exceção à CRON-15 para esta obra fica [nao verificado]. `aval.txt:1`. [app/config/crons_duracao.json:78](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons_duracao.json:78), [app/config/crons.py:259](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/config/crons.py:259), [app/core/tests/marca_cron15.py:7](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/tests/marca_cron15.py:7), [app/core/management/commands/crons.py:91](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/management/commands/crons.py:91)
-
-## 3. Como o repo reconhece turno ativo no pane?
-
-- **O texto já usado é `esc to interrupt`.** `keepalive.sh` procura nas últimas 25 linhas e também reconhece `background agent`, `shell(s) still running`, `◯ ` e contagem de shells. `alarme_sessao_ociosa.py` pega o primeiro pane cujo comando aparece como `claude`, procura `esc to interrupt` e usa também a idade do transcript para decidir se avisa. São precedentes de heurística. O marcador da versão em produção e um reconhecedor confiável de caixa de entrada vazia ficam [nao verificado]. [bin/keepalive.sh:3](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/keepalive.sh:3), [bin/alarme_sessao_ociosa.py:48](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/alarme_sessao_ociosa.py:48), [bin/alarme_sessao_ociosa.py:66](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/alarme_sessao_ociosa.py:66), [bin/alarme_sessao_ociosa.py:144](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/alarme_sessao_ociosa.py:144)
-- **Falsos “ocioso” possíveis.** O texto pode ficar fora da janela, mudar ou faltar durante uma transição. Uma captura com erro pode parecer vazia se o leitor olhar só o `stdout`. O alvo `-t code` ainda pode casar por prefixo com `codex-hasner` quando `code` está ausente, caso reproduzido no selo com tmux falso. `gerar_estado.py` usa `=code:` para casar o nome exato da sessão. Os hooks existentes consultam transcript, processos ou arquivos para suas decisões, conforme a porta. [bin/keepalive.sh:5](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/keepalive.sh:5), [bin/alarme_sessao_ociosa.py:69](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/alarme_sessao_ociosa.py:69), [bin/gerar_estado.py:17](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/gerar_estado.py:17), [bin/tests/test_painel_e_do_code.sh:19](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/tests/test_painel_e_do_code.sh:19), [bin/hook_stop_fila1.py:382](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:382), [bin/hook_stop_fila1.py:936](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:936)
-
-## 4. Quais falhas ficam abertas?
-
-| Falha | O que fica sem regra |
-|---|---|
-| **Vigia e Code escrevem no RELATO ao mesmo tempo** | O vigia pode agir sobre uma autorização já retirada ou sobrescrever uma edição feita depois da leitura. A porta existente serializa os escritores que a usam com `flock` e `os.replace`. O próprio código registra que a edição manual e `gerar_cortes.py` ficam fora dessa trava. O contrato também omite trava entre dois ticks e o que fazer se a tecla sair antes de falhar a gravação do SHA. `contrato.txt:3–5`. [app/core/esteira_vigia.py:834](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/esteira_vigia.py:834), [app/core/esteira_vigia.py:915](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/esteira_vigia.py:915) |
-| **Code declara PID de outro processo** | Se o PID errado estiver vivo, o empurrão pode ficar retido. Se estiver morto, o vigia pode anunciar que o produtor terminou sem prova. O Stop já compara executável e `argv` com o produtor declarado, verifica ancestrais e distingue leitura falha de PID morto. `contrato.txt:3–4`. [bin/hook_stop_fila1.py:577](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:577), [bin/hook_stop_fila1.py:599](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:599) |
-| **PID reciclado** | Um novo processo no mesmo número pode segurar a retomada. O Stop confere `starttime` antes e depois de ler o processo, o que pega a troca durante a consulta. O contrato do vigia carece de uma identidade registrada na declaração para distinguir a instância original de outra que já ocupava o número antes da consulta. `contrato.txt:3–4`. [bin/hook_stop_fila1.py:570](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:570), [bin/hook_stop_fila1.py:610](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:610) |
-| **`/clear` no meio de texto digitado** | A caixa pode estar vazia na captura e receber texto antes do `send-keys`. A checagem do item 3 cobre só o instante observado. O contrato deixa em aberto como tratar essa janela entre checar e digitar. `contrato.txt:3–4`. [bin/keepalive.sh:5](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/keepalive.sh:5) |
-| **Retomada antes de o `/clear` terminar** | “Espera o prompt vazio” carece de um sinal que confirme a transição, de um timeout e de uma regra para o caso em que só o `/clear` saiu. Já existe `SessionStart` com matcher `clear`, que lê o handoff e grava hora, origem e sessão em `ultimo_clear.json`. É evidência de início da nova sessão. A prontidão do pane após o hook fica [nao verificado]. `contrato.txt:3–5`. [.claude/settings.json:48](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/.claude/settings.json:48), [bin/marco_de_clear.py:19](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/marco_de_clear.py:19), [bin/marco_de_clear.py:43](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/marco_de_clear.py:43) |
-
-## 5. Quem escreve no topo e o que `VIGIA-TMUX` quebra?
-
-- **O escritor instrumental do topo útil é o disjuntor.** `disjuntor._parei_censo_no_relato` usa `esteira_vigia.no_topo` com `hook_stop_fila1.painel_do_topo` e relê pela porta do Stop para provar a escrita. A faixa acima do painel só reconhece o literal `PAREI: censo-<ID> | espera Codex`. O Stop lê esse topo e grava sua própria trilha à parte. `pos_push.sh` grava o topo do **TICKETS**. `gerar_cortes.py` reescreve o bloco `SEUS-CORTES` entre marcadores e, se faltarem, o insere antes da primeira seção `## `. [bin/disjuntor.py:299](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/disjuntor.py:299), [app/core/esteira_vigia.py:865](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/esteira_vigia.py:865), [bin/hook_stop_fila1.py:39](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:39), [bin/hook_stop_fila1.py:419](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:419), [bin/pos_push.sh:18](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/pos_push.sh:18), [bin/gerar_cortes.py:114](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/gerar_cortes.py:114)
-- **Sim, `VIGIA-TMUX ...` na primeira linha útil quebra a leitura do Stop e do B3.** Conferi em memória com o leitor da cópia. Antes ele devolve `[ESPERANDO, DESENHO]`. Depois da inserção, devolve `[VIGIA-TMUX, ESPERANDO]`. Assim o Stop perde o comando na primeira posição e o B3 perde a pergunta na segunda. Um `PAREI` ou `CLEAR` deslocado também deixa de ser visto naquela primeira posição. No handoff, a lista textual ainda encontra `PAREI`, `lei:` e `!:` até o primeiro `## `, mas os vereditos importados do Stop e a leitura da faixa do censo podem mudar. [bin/hook_stop_fila1.py:408](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:408), [bin/hook_stop_fila1.py:446](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:446), [bin/hook_stop_fila1.py:1058](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:1058), [bin/disjuntor.py:758](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/disjuntor.py:758), [bin/handoff_sessao.sh:85](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/handoff_sessao.sh:85), [bin/handoff_sessao.sh:114](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/handoff_sessao.sh:114)
-- **O precedente compatível com a trilha do vigia é `no_relato` na seção `## ALARMES DA ESTEIRA`.** O aval e o contrato pedem uma linha no RELATO. Essa porta registra na seção pinada, abaixo do painel útil. Para decidir o que fazer, as 15 linhas do contrato também precisam respeitar o recorte do Stop. A própria cópia tem, nas linhas 13 e 14, `ESPERANDO` antigos citados em linhas `SUPERADA`. `aval.txt:1`, `contrato.txt:3,5`. [app/core/esteira_vigia.py:815](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/core/esteira_vigia.py:815), [bin/hook_stop_fila1.py:462](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/bin/hook_stop_fila1.py:462), [app/docs/RELATO.md:13](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/docs/RELATO.md:13)
-
-_7943 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7946 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
