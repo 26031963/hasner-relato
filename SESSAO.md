@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 06:18:32.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1435**.
+**Medido em 23/11/2026 06:24:28.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1428**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1438,10 +1438,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:27:44 | Bash |  | `cd ~/saas-hasner; grep -E '^(FAIL\|ERROR):' logs/[nome]-FERIADO-PELA-TELA/red_v2.log; grep -E 'AssertionError' -A2 logs/[nome]-FERIADO-PELA-TELA/red_v2.log \| cut -c1-250 \| head -20` |
 | 18:26:08 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' for p,a,b in [('bin/tests/test_disjuntor.sh',' rm -rf "$G" "$H"; mkdir -p "$G" "$H"\n',' rm -rf "${G:?}" "${H:?}"; mkdir -p "$G" "$H"\n'), ('bin/tests/test_pista_certifica.sh',"T=$(mktemp -d); trap 'rm -rf \"$T\"' EXIT","T=$(mktemp -d); trap 'rm -rf \"${T:?}\"' EXIT")]: s=open(p).read() if b in s: print('ja',p); continue assert s.count(a)==1,p; open(p,' ...` |
 | 18:26:03 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1259p bin/tests/test_disjuntor.sh; git diff 161066a90 --stat -- bin/tests/test_disjuntor.sh; grep -n '"\$G" "\$H"' ~/saas-hasner/bin/tests/test_disjuntor.sh \| head -3; sed -n 1250,1262p bin/tests/test_disjuntor.sh` |
-| 18:24:27 | Bash |  | `cd ~/wt-simplifica-104405; timeout 300 bash bin/tests/test_rm_com_guarda.sh 2>&1 \| grep -B3 -iE 'falha\|nao conforme' \| head -20` |
-| 18:22:54 | Bash |  | `cd ~/wt-simplifica-104405; python3 - <<'EOF' p='bin/tests/test_rm_com_guarda.sh'; s=open(p).read() a="cat > \"$1/fakebin/docker\" <<'DK'\n#!/usr/bin/env bash\n" n="# so o `run` e o run da suite; `image inspect` (a imagem medida para as linhas AMBIENTE, SIMPLIFICA-V3) nao monta nada\n[ \"${1:-}\" = run ] \|\| exit 0\n" if n in s: print('ja'); raise SystemExit assert s.count(a)==1 s=s.replace(a,a+n) ...` |
-| 18:22:42 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 118,140p bin/tests/test_rm_com_guarda.sh; sed -n 236,252p bin/tests/test_rm_com_guarda.sh` |
-| 18:22:40 | Bash |  | `cd ~/wt-simplifica-104405; grep -n 'docker\\|montagem.arrancada' bin/tests/test_rm_com_guarda.sh \| head -40 \| cut -c1-220` |
-| 18:22:37 | Bash |  | `ls -la ~/wt-simplifica-104405/.env 2>&1 \| head -1; cd ~/wt-simplifica-104405; git diff 161066a90 -- bin/suite.sh; grep -n 'segundo --dir' -n bin/tests/test_rm_com_guarda.sh \| head` |
-| 18:22:33 | Bash |  | `cd ~/wt-simplifica-104405; sed -n 1,60p bin/tests/test_inventario_pessoal_no_commit.sh \| cut -c1-200; git diff --stat 161066a90 -- bin/sombra_regras_pessoais.py bin/tests/test_inventario_pessoal_no_commit.sh bin/tests/test_rm_com_guarda.sh bin/suite.sh` |
-| 18:20:36 | Bash |  | `cd ~/wt-simplifica-104405; bash bin/tests/test_rm_com_guarda.sh 2>&1 \| tail -15 \| cut -c1-250; echo ----; bash bin/tests/test_inventario_pessoal_no_commit.sh 2>&1 \| head -30 \| cut -c1-250` |
