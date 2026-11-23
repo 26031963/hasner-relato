@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 04:48:19.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.7 MB). Acoes na janela: **1834**.
+**Medido em 23/11/2026 04:54:24.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.7 MB). Acoes na janela: **1807**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1817,30 +1817,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:56:08 | Bash |  | `cd ~/saas-hasner && grep -noiE "[A-Z0-9][A-Z0-9-]{4,}[^\|]{0,120}(depois\|apos\|atras) (do pouso )?da F5" app/docs/CORTES.md app/docs/RELATO.md \| cut -c1-200 \| head -30` |
 | 16:56:06 | Bash |  | `cd ~/saas-hasner && for id in E4C-F8 E4C-F1-B2b-F0 E4C-F1-B2b F5-BECO-PENDENTE-SEM-ACAO FILA-POR-CAUSA-AS-OF E4C-F3-LAVRA-FOTO; do grep -m1 "^\| $id \|" app/docs/BACKLOG.md \| cut -c1-700; echo; done` |
 | 16:56:01 | Bash |  | `cd ~/saas-hasner && mkdir -p logs/TERRENO-POS-F5 && cat > logs/TERRENO-POS-F5/aval.txt <<'EOF' aval Ronald: TERRENO-POS-F5-2211-1656 -- OBJETIVO: listar por grep no BACKLOG/RELATO/CORTES toda obra que espera a F5 (ex.: B2b F0, E4d, LOTE-MOTIVO-DO-SUCESSO) e, para cada uma, o Codex prepara em leitura o mesmo pacote do MAPA-F5 -- inventario com arquivo:linha no main, CORTES e LEIS por sitio, sonda d ...` |
-| 16:50:31 | Bash |  | `cd ~/saas-hasner && sed -i '1s/^ESPERANDO: codex_pergunta.sh \| pid=1305155$/ESPERANDO: codex_pergunta.sh \| pid=1305157/' app/docs/RELATO.md && head -1 app/docs/RELATO.md` |
-| 16:50:29 | Bash |  | `pgrep -af "codex_pergunta.sh" \| cut -c1-140; pgrep -af "suite.sh --dir /home/ronald/wt-kaua" \| cut -c1-120` |
-| 16:50:26 | Bash |  | `cd ~/saas-hasner && grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py \| head -35` |
-| 16:50:25 | Bash |  | `cd ~/saas-hasner && sed -n 814,856p bin/hook_stop_fila1.py; sed -n 1370,1420p bin/hook_stop_fila1.py \| grep -n "B3\\|esperando\\|_declarou"` |
-| 16:50:23 | Bash |  | `cd ~/saas-hasner && grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
-| 16:50:21 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() a='\| [nome]-FERIADO-PELA-TELA \|' i=s.index(a); j=s.index('\n',i) add=('\| FERIADO-VINCULO-CHAVE-PELA-TELA \| fila (porta NAO tomada do aval [nome]-FERIADO-PELA-TELA-2211-1612) \| admin liga/desliga trabalha_em_feriado do VINCULO pela tela com trilha; alcanca todo feriado do vinculo e regenera celulas; hoje a chave nasce  ...` |
-| 16:50:12 | Bash |  | `cd ~/saas-hasner && ps -p 1305155,1273714 -o pid,etime,args \| cut -c1-120; ls logs/MAPA-E4D/; head -2 app/docs/RELATO.md \| cut -c1-200` |
-| 16:49:57 | Bash |  | `cd ~/saas-hasner && L=logs/E4C-F5/v1/chk_sql; for t in f66:$HOME/wt-f5-chk-f66 wt:$HOME/wt-f5-contrato-v1-140439; do n=${t%%:*}; d=${t#*:}; bash bin/suite.sh --dir $d --only "ponto.tests.test_zz_chk_sql_probe" --espera 7200 > $L/$n.log 2>&1; echo "$n rc=$?"; done; rm -f ~/wt-f5-contrato-v1-140439/app/ponto/tests/test_zz_chk_sql_probe.py; echo FIM` |
-| 16:49:54 | Bash |  | `cd ~/saas-hasner && for d in ~/wt-f5-chk-f66 ~/wt-f5-contrato-v1-140439; do cp logs/E4C-F5/v1/chk_sql/test_zz_chk_sql_probe.py $d/app/ponto/tests/; done; for d in .ruff_cache .hypothesis .mypy_cache; do rmdir ~/wt-f5-chk-f66/app/$d 2>/dev/null; done; echo ok` |
-| 16:49:51 | Bash |  | `cd ~/saas-hasner && grep -n "\-\-only\\|\-\-espera" bin/suite.sh \| head -12; grep -o "suite.sh[^>]*" /proc/1274325/cmdline 2>/dev/null \| head -2; tr '\0' ' ' < /proc/1274325/cmdline \| grep -o "suite.sh.\{0,200\}"` |
-| 16:49:43 | Bash |  | `mkdir -p ~/saas-hasner/logs/E4C-F5/v1/chk_sql && cat > ~/saas-hasner/logs/E4C-F5/v1/chk_sql/test_zz_chk_sql_probe.py <<'EOF' """PROBE descartavel (E4C-F5, atribuicao do teto do chokepoint por SQL): roda os cenarios do selo e imprime o SQL normalizado de cada um. Nao entra em commit.""" import re from django.test.utils import CaptureQueriesContext as _CQC import ponto.tests.test_selo_chokepoint_esc ...` |
-| 16:49:35 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && grep -n "def _cobrar" -A8 ponto/tests/test_selo_chokepoint_escrita.py; grep -n "^from\\|^import\\|CaptureQueriesContext" ponto/tests/test_selo_chokepoint_escrita.py \| head; grep -n "class SeloChokepoint" ponto/tests/test_selo_chokepoint_escrita.py; grep -n "def test_registrar_batida" ponto/tests/test_selo_chokepoint_escrita.py` |
-| 16:49:27 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && grep -n "sem pergunta\\|def _cobrar\\|TETO\b\\|^TETOS\\|'registrar_batida" ponto/tests/test_selo_chokepoint_escrita.py \| head -20; ls ~/saas-hasner/logs/E4C-F5/v1/ \| grep -i chk` |
-| 16:49:22 | Bash |  | `cd ~/saas-hasner && ls -la logs/MAPA-E4D/; tail -5 logs/MAPA-E4D/wrapper1.out` |
-| 16:49:18 | Bash |  | `ps -o pid,ppid,etime,args -p 1273714,1273686 \| cut -c1-250; date +%H:%M:%S` |
-| 16:49:15 | Bash |  | `cd ~/saas-hasner && bin/trava_teste.sh --quem; ps -o pid,etime,args -p $(pgrep -f "diag_v3_batida_probe" \| head -3 \| tr '\n' ',' \| sed 's/,$//') 2>/dev/null \| cut -c1-200; tail -c 400 logs/[nome]-FERIADO-PELA-TELA/suite.log \| tr -d '.' \| tail -3` |
-| 16:49:12 | Bash |  | `F=/tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/b2dm8hu8m.output; grep -a "PROBE\\|^Ran\\|^OK\\|^FAILED\\|rc=" $F \| tail; wc -c $F; ls -la ~/saas-hasner/logs/E4C-F5/v1/diag_v3_batida_probe.log 2>/dev/null; grep -a "PROBE\\|^Ran\\|^FAILED\\|^OK" ~/saas-hasner/logs/E4C-F5/v1/diag_v3_batida_probe.log \| tail` |
-| 16:49:07 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 149,240p chamados/tests/test_e1_v13_ordem.py` |
-| 16:49:06 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && git diff --stat; grep -n "class \\|def setUp\\|def _cenario\\|def test_\\|def _mutante\\|^from\\|^import" chamados/tests/test_e1_v13_ordem.py \| head -40; sed -n 1,40p ponto/tests/test_selo_chokepoint_escrita.py \| grep -n "setUp\\|colab\\|dia ="` |
-| 16:48:56 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 86,120p core/observ.py; grep -n "atomic" ponto/services/cartorio.py \| sed -n 1,30p` |
-| 16:48:50 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 80,100p ponto/signals.py; grep -rn "def engolir" --include=*.py . \| head -2` |
-| 16:48:48 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && grep -n "julgar\\|except\\|on_commit\\|def " ponto/signals.py \| head -50` |
-| 16:48:46 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 400,440p ponto/tests/test_selo_chokepoint_escrita.py; grep -n "ColaboradorNaoTravado\\|except" chamados/reconciliador.py \| head -20; grep -n "except\\|_e2\\|def _julgar_colab\b" ponto/services/cartorio.py \| sed -n 1,60p \| grep -n "" \| awk -F: '$2>950 && $2<1100'` |
-| 16:48:45 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 440,500p ponto/tests/test_selo_chokepoint_escrita.py; git log --oneline -1 c2e8ce648; git show c2e8ce648 --stat \| tail -8` |
-| 16:48:40 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 1005,1045p ponto/services/cartorio.py; git grep -n "_batida_com_furos_vivos\\|def _e2\b\\|_e2 =" -- ponto chamados \| head` |
-| 16:48:37 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='ESPERANDO: codex_pergunta.sh \| pid=1134062\n' assert s.startswith(a) novo=('ESPERANDO: codex_pergunta.sh \| pid=1305155\n' 'DESPACHO PARALELO-V2-2211-1644: (b) MAPA-E4D leitura -> Codex (pid 1305155, logs/MAPA-E4D/q1.txt, HEAD 161066a90; sonda de impacto em volta 2 pelo envelope, script lido antes) \| (a) [nome] -> ve ...` |
-| 16:48:26 | Bash |  | `cd ~/saas-hasner && sed -n 1,12p app/docs/RELATO.md \| cut -c1-400; pgrep -f "codex_pergunta.sh.*q1.txt" \| head -1; pgrep -f "suite.sh" \| head` |
