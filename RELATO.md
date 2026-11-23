@@ -1,4 +1,5 @@
 LEI REGISTRADA 13:2x: LEI-RESOLVER-COM-PERGUNTA-ABERTA-2311-1306 em CORTES.json/CORTES.md (gerar_cortes.py; Resolver dia tambem com pergunta aberta, motivo+trilha, o ato encerra a pergunta pela porta unica sob a trava) + obra RESOLVER-PASSA-NA-FRENTE no BACKLOG, construcao DEPOIS do pouso da E4C-F5. A-TELA-DO-DIA-LE-UM-JUIZ intocada pela lei.
+ESPERANDO: suite bisect b2 da E4C-F5 (109 modulos F5 + vitimas, --parallel 1) | pid=775540 | arquivo=logs/E4C-F5/v5/bisect/b2_todos_f5.log -- em paralelo: opus 5(d) triando o verif v5 REPROVADA; Codex lendo o CONTRATO VIGIA-DO-TMUX e escrevendo a sonda A-TELA-DO-DIA (sombra)
 CONTRATO-DE-INSTRUMENTO VIGIA-DO-TMUX (23/11 13:2x):
 1. QUEM CHAMA: timer de host declarado em config/crons.py (fonte unica, `bin/crons.sh install`), a cada 3 min, rodando `bin/vigia_tmux.py`; o Code nunca o chama.
 2. QUEM ESPERA: so a sessao tmux `code`; o vigia le as 15 primeiras linhas do RELATO e age em 2 casos: ESPERANDO com pid= morto (kill -0) -> send-keys da frase fixa "o produtor <pid> terminou; siga pelo resultado em <arquivo>"; `PAREI: ! CLEAR` com "nada roda -- PODE /clear" -> `/clear`, espera o prompt vazio, frase fixa de retomada. Nada mais e digitado.
@@ -11158,7 +11159,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 > **calado**; agora o lugar e declarado (acima da 1a secao) e o motivo sai no stderr.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (280)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (281)
 
 > **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (1458 h), FECHAMENTO-UI-PORTAS (1440 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (1437 h), ESTEIRA-RETA-FINAL (1436 h), ZUMBIDO (1433 h), CARTAO-TOTAL-IGUAL-SOMA (1430 h), CERT-VIGIA (1419 h), CHAMADO-GANHA-CADASTRO (1418 h), JUIZ-BATIDA-NASCE (1418 h), JUIZ-ESCALA-NASCE (1418 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (1418 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (1418 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
@@ -11343,7 +11344,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **LIBERA-B3-FRAC5** | 2026-11-14 15:37 | 213 h | em curso: rearma-b3 feito; suite da arvore final rodando, depois UM opus; reprovou = PAREI sem volta; literal logs/AVAIS-1313/libera_b3_e3_qual_main_1537.txt | FRAC5 |
 | **E3-V10-QUAL-MAIN** | 2026-11-14 15:37 | 213 h | em curso: lei L-129 COLAB-DEVE-PERGUNTA-E-DO-COLAB (LEIS.md na copia wt-e3-v10-150600, pousa com a E3); remedida das 4 condicoes na sombra (logs/e3v10_cond_*.out); literal logs/AVAIS-1313/libera_b3_e3_qual_main_1537.txt | E3 |
 | **E3-V10-COMPLEMENTO-L129** | 2026-11-14 15:5x | 213 h | em curso: item (2) SUBSTITUIDO por E3-V10-DEGRAU-DONO-E-PORTA 16:16; matriz Codex m1 entregue (logs/E3-V10/matriz/m1.r); literal logs/AVAIS-1313/e3_v10_complemento_l129.txt | E3 |
-| **E3-V10-DEGRAU-DONO-E-PORTA** | 2026-11-14 16:16 | 212 h | em curso: lei (corte) fio = 1o com ACAO ALCANCAVEL na ordem colab > admin, senao "sem porta" contado; pousa com a E3; obra PORTA-DO-ADMIN-NA-PERGUNTA-VENCIDA registrada (2333); literal logs/AVAIS-1313/e3_v10_degrau_dono_porta.txt | E3 |
+| **E3-V10-DEGRAU-DONO-E-PORTA** | 2026-11-14 16:16 | 213 h | em curso: lei (corte) fio = 1o com ACAO ALCANCAVEL na ordem colab > admin, senao "sem porta" contado; pousa com a E3; obra PORTA-DO-ADMIN-NA-PERGUNTA-VENCIDA registrada (2333); literal logs/AVAIS-1313/e3_v10_degrau_dono_porta.txt | E3 |
 | **LU-01** | 2026-11-14 19:23 | 209 h | E3-RESTO-R3 (nao barra o pouso da E3 v10); literal logs/AVAIS-1313/lista_unica_cortada.txt | E3 |
 | **LU-02** | 2026-11-14 19:23 | 209 h | lote LU da E3 v10 (construtor c1 lote_lu); literal logs/AVAIS-1313/lista_unica_cortada.txt | E3 |
 | **LU-03** | 2026-11-14 19:23 | 209 h | lote LU da E3 v10 (construtor c1 lote_lu); literal logs/AVAIS-1313/lista_unica_cortada.txt | E3 |
@@ -11412,7 +11413,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **CURA-DE-FASE-1800** | 2026-11-17 18:00 | 139 h | vigente | CENSO-FASE-12X36 |
 | **RESPOSTAS-1711-1950** | 2026-11-17 19:50 | 137 h | vigente (texto literal logs/AVAIS-1515/respostas_1711_1950.txt; quebra de linha = espaco; nenhuma lei nova) | [nome]-NAO-DESFAZ-O-PAPEL |
 | **B2-ENTRA-NA-VESPERA-2034** | 2026-11-17 20:34 | 136 h | vigente | E4C-F1-B2-CERCA |
-| **RESPOSTAS-B2-TETOS-E-TORNEIRA** | 2026-11-18 01:16 | 131 h | vigente (texto literal logs/AVAIS-1515/respostas_b2_tetos_e_torneira_1811_0116.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA F2 (P2) cita item 1 (tetos do chokepoint) |
+| **RESPOSTAS-B2-TETOS-E-TORNEIRA** | 2026-11-18 01:16 | 132 h | vigente (texto literal logs/AVAIS-1515/respostas_b2_tetos_e_torneira_1811_0116.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA F2 (P2) cita item 1 (tetos do chokepoint) |
 | **U163-PRECONDICAO-RED-1811** | 2026-11-18 08:55 | 124 h | vigente | E4C-F4 |
 | **F5-L1-VALE-L130-1811** | 2026-11-18 10:10 | 123 h | vigente | ESPINHA F5 |
 | **F5-DSTL1-RESPOSTAS-1811** | 2026-11-18 11:40 | 121 h | vigente | ESPINHA F5 |
@@ -11444,6 +11445,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **FECHAMENTO-ONLINE** | 2026-09-20 21:0x (corte original, NAO registrado na epoca) / reafirmado 2026-09-25 12:0x | 0 h | recebido | O48 FECHAMENTO-ONLINE |
 | **LEI-RESOLVER-COM-PERGUNTA-ABERTA-2311-1306** | 2026-11-23 13:06 | 0 h | registrado; construcao (obra RESOLVER-PASSA-NA-FRENTE) so DEPOIS do pouso da E4C-F5 | RESOLVER-PASSA-NA-FRENTE |
 | **VIGIA-DO-TMUX-2311-1315** | 2026-11-23 13:15 | 0 h | registrado; CONTRATO-DE-INSTRUMENTO no RELATO, ao Codex uma vez; construir em copia propria (vaga livre), pouso proprio de instrumento | VIGIA-DO-TMUX |
+| **PAR-PELO-TURNO-2311-1320** | 2026-11-23 13:20 | 0 h | registrado; na fila depois da A-TELA-DO-DIA-LE-UM-JUIZ; SUBSTITUI o PAR-CONFIRMADO-PELO-SUPERVISOR (HJ-026) | PAR-PELO-TURNO |
 <!-- SEUS-CORTES:FIM -->
 
 ## DEPLOYS AGENDADOS
