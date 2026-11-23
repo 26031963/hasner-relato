@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 08:11:06.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.2 MB). Acoes na janela: **53**.
+**Medido em 23/11/2026 08:17:01.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.2 MB). Acoes na janela: **55**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:11:20 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' import subprocess h=subprocess.check_output(['date','+%H:%M']).decode().strip() p='app/docs/RELATO.md' s=open(p).read() l=(f"E4C-F5 volta 4 {h}: construtor opus 1 derrubado pelo DISJUNTOR B1 (15 min lendo sem arquivo novo na copia), sem diff; vereditos lidos: R1a/R1b/R2/R3a/R3b/R4a/R4b/R5/P3/T5 FICAM, T4/R5b CAEM, item 6 coberto pela estampa, Q4(b) latente (te ...` |
+| 08:11:14 | Agent | F5 volta 4b construtor opus | `Voce e o construtor da obra E4C-F5 (CONTRATO-V2, item 1: "toda guarda que autoriza gravar e reavaliada apos a trava; recusa antes pode"), volta 4b, na copia /home/ronald/wt-f5-contrato-v1-140439 (HEAD cafabd1b9, limpa). Leia /home/ronald/saas-hasner/CLAUDE.md (secoes 0, 3, 6, 7b) e logs/E4C-F5/CONTRATO-V2.md antes. A volta anterior foi DERRUBADA pelo disjuntor B1 por ler 15 min sem escrever arquiv ...` |
 | 08:10:43 | Bash |  | `cd ~/saas-hasner && /bin/grep -n -i -E "B1\|libera" bin/disjuntor.py \| head -40` |
 | 08:03:15 | Bash |  | `cd ~/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() l=("E4D-CONTRATO inventario 08:0x: Codex leitura rc 0 no 68eb689b5 (logs/E4D-CONTRATO/r.txt, 115 linhas): 14 PERGUNTAS DE LEI ABERTAS (emitir EventoCelula no backfill, promover ABSORCAO, ato de conclusao x exportada, ato_em futuro, FK SET_NULL do autor, texto SQL/API/tela...); " "amostra arquivo:linha aind ...` |
 | 08:03:09 | Bash |  | `cd ~/saas-hasner && tail -2 logs/E4D-CONTRATO/wrapper.log; wc -l logs/E4D-CONTRATO/r.txt; /bin/grep -n -A30 "PERGUNTAS DE LEI ABERTAS" logs/E4D-CONTRATO/r.txt \| cut -c1-350` |
