@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 18:42:39.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.4 MB). Acoes na janela: **60**.
+**Medido em 23/11/2026 18:48:30.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.5 MB). Acoes na janela: **61**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:42:41 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() L=s.split('\n') i=next(k for k,x in enumerate(L) if x.startswith('lei: E4C-F5 8.2 D-FECHADA-NO-CARTAO')) L[i]='RESPONDIDA por RESPOSTA-DESENHO-F5-82-B-2311-1845 (18:45: (B) c3, 3 selos vivos, c4 morta) -- era: lei E4C-F5 8.2 D-FECHADA-NO-CARTAO' L.insert(1,"E4C-F5 8.2 (18:5x): desenho (B) c3 recebido. VOLTA_C3 d ...` |
 | 18:42:35 | SendMessage |  | `-` |
 | 18:42:25 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' 23/11 18:45 \| aval Ronald RESPOSTA-DESENHO-F5-82-B-2311-1845: 8.2 = (B) c3 -- sem disputa aberta o cartao segue a fechada propria; correcao vale so ENTRE abertas; 3 selos vivos; PROIBIDO esconder pergunta/validar/reabertura em fechada; PRONTO = chamados verdes na c3 + numero de cartoes da sonda no RELATO \| item E4C-F5 23/11 18:45 \| ...` |
 | 18:42:20 | Bash |  | `cd /home/ronald/saas-hasner; tail -2 app/docs/PROMPTS.md \| cut -c1-200; cat logs/E4C-F5/v7/s82b/sondas/resumo.txt 2>/dev/null; cat logs/E4C-F5/v7/s82b/mut/resultado.txt 2>/dev/null` |
