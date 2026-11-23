@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 01:29:32.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (86.9 MB). Acoes na janela: **2159**.
+**Medido em 23/11/2026 01:35:54.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (87.1 MB). Acoes na janela: **2165**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:35:42 | Bash |  | `cd ~/saas-hasner; W=~/wt-dstl1-$(date +%H%M%S); git worktree add --detach $W HEAD 2>&1 \| tail -1; git -C $W log --oneline -1; echo $W` |
+| 01:35:39 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a="verificador Codex v1 triado (logs/ESPURIAS-VAGA-2-2211-2359/triagem_verif.txt: descartes anexos ao opus, faltas declaradas); mao dupla." assert s.count(a)==1 s=s.replace(a,"verificador Codex v1 triado (logs/ESPURIAS-VAGA-2-2211-2359/triagem_verif.txt: descartes anexos ao opus, faltas declaradas); MAO UNICA (toca ponto/ ...` |
+| 01:35:19 | Bash |  | `cd ~/saas-hasner/app; grep -n "_he_pendencias" ponto/services/espelho.py \| head; sed -n 1405,1470p ponto/motor_calculo_v2.py` |
+| 01:35:16 | Bash |  | `cd ~/saas-hasner; grep -n "ESPURIA-TELA" app/docs/BACKLOG.md app/docs/CORTES.md \| cut -c1-300 \| head -8; grep -n "he_fora_da_janela" app/ponto/services/espelho.py \| head; grep -n "def dias_sem_previsto_fora_da_janela\\|def _dia_sem_previsto_fora_da_janela" -A30 app/ponto/motor_calculo_v2.py \| grep -n "autoriz\\|decis\\|estado" \| head` |
+| 01:34:03 | Bash |  | `cd ~/saas-hasner/app; sed -n 188,194p ponto/portas/he.py; sed -n 60,70p ponto/services/gestao_he.py; sed -n 186,192p templates/ponto/espelho.html; grep -n "GET.get" ponto/views.py \| sed -n 1,200p \| awk -F: '$1>=915 && $1<=960'` |
+| 01:33:59 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/b4k0zuyx6.output; cat ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/dstl1/r_predesenho.md` |
 | 01:28:33 | Bash |  | `while kill -0 3518512 2>/dev/null; do /usr/bin/sleep 20; done; tail -3 ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/dstl1/wrapper.out; wc -l ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/dstl1/r_predesenho.md` |
 | 01:28:30 | Bash |  | `pgrep -af "codex_pergunta.sh" \| grep -v pgrep \| head -3; tail -3 ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/o62/vizinhos3.log \| cut -c1-200` |
 | 01:28:12 | Bash |  | `mkdir -p ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/dstl1; cd ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/dstl1; cat > q_predesenho.md <<'EOF' PRE-DESENHO (leitura, nada se escreve) -- obra DIA-SEM-TRABALHO-PORTA-L1-PELA-HE. Contexto (aval literal, anexo): dia de pessoa com celula SEM trabalho e batida apuravel. Particao por DecisaoHE.objects.vigentes() (ponto/models.py): A 'nenhuma' = sem Deci ...` |
