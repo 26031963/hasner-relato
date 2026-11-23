@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 20:11:45.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (4.0 MB). Acoes na janela: **99**.
+**Medido em 23/11/2026 20:17:39.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (4.3 MB). Acoes na janela: **117**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:16:01 | Monitor | wait host selos (re-arm) | `until grep -q 'test_labels_fonte_unica rc=' /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bx3jd7c2h.output; do sleep 5; done; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bx3jd7c2h.output` |
+| 20:15:57 | Bash |  | `cd ~/saas-hasner; sed -i '2s/pid=3012519/pid=3058852/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md \| cut -c1-120` |
+| 20:15:56 | Bash |  | `ps -o pid,args= -p 3012519,3058852 \| cut -c1-160` |
+| 20:15:53 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(2,"PAREI: ! srv-glpi PISTA-CAMADAS v6 (20:2x) -- certificador CORTADO as 3 provas na copia wt-pista-camadas-161321 (bin/pista_certifica.sh 288 -> 63 linhas; selo 16 casos, 5 mutantes mordem, RED do v5 em logs/PISTA-2-CERTIFICA/camadas/v6/). As provas (1) camadas e (3) sem-OOM so o LANCADOR escreve e h ...` |
+| 20:15:48 | Monitor | wait host selos in pista-camadas copy | `until grep -q 'test_labels_fonte_unica rc=' /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bx3jd7c2h.output; do sleep 5; done; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bx3jd7c2h.output` |
+| 20:15:45 | Write |  | `/home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v6/comandos_ronald.txt` |
+| 20:15:37 | Bash |  | `sleep 60; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bx3jd7c2h.output; tail -2 /tmp/claude-1001/-home-ronald-saas-hasner/89a6e205-b4a9-4b33-8895-b727c11c86b7/scratchpad/test_suite_motivo.out` |
+| 20:15:19 | Bash |  | `cd ~/saas-hasner; sed -n 40,200p logs/PISTA-2-CERTIFICA/comandos_ronald.txt` |
+| 20:15:14 | Bash |  | `cd ~/wt-pista-camadas-161321; grep -n 'trava_teste\\|docker run\\|TRAVA' bin/tests/test_suite_motivo.sh \| head; ~/saas-hasner/bin/trava_teste.sh --quem; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bx3jd7c2h.output` |
+| 20:13:10 | Bash |  | `cd ~/wt-pista-camadas-161321; python3 - <<'EOF' p='CLAUDE.md'; L=open(p).read().split('\n') assert L[125].startswith('PISTA 2 (srv-glpi') L[125]="PISTA 2 (srv-glpi, `ssh pista`) so CERTIFICA suite de pouso com `bin/pista_certifica.sh <sha> <log> <saida-do-espera>` rc 0, por 3 provas e SO elas (aval PISTA-CAMADAS-DESCONGELA-2311-2010): (1) camadas da imagem do run = as da VM (`bin/recursos.sh::cama ...` |
+| 20:13:04 | Bash |  | `cd ~/wt-pista-camadas-161321; sed -n 126p CLAUDE.md; diff <(sed -n 126p CLAUDE.md) <(sed -n 126p ~/saas-hasner/CLAUDE.md) && echo IGUAL_VIVO` |
+| 20:12:58 | Bash |  | `cd ~; D=$(mktemp -d); mkdir -p $D/bin/tests; cp ~/wt-pista-camadas-161321/bin/recursos.sh ~/wt-pista-camadas-161321/bin/regua.sh $D/bin/; cp ~/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v6/pista_certifica.sh $D/bin/; cp ~/wt-pista-camadas-161321/bin/tests/test_pista_certifica.sh $D/bin/tests/; git init -q $D && git -C $D -c user.email=x -c user.name=x commit -q --allow-empty -m x; bash $D/bin/test ...` |
+| 20:12:50 | Bash |  | `cd ~/wt-pista-camadas-161321; grep -n 'source\\|\. "' bin/recursos.sh \| head; python3 - <<'EOF' p='bin/tests/test_pista_certifica.sh'; s=open(p).read() old='''# mutante <marca>: copia do script com a recusa da linha marcada desligada (`\|\| nao` -> `\|\| :`), na MESMA raiz mutante() { local m="$R/bin/.pista_certifica_mut_$1.sh"''' new='''# mutante <marca>: copia do script com a recusa da linha ma ...` |
+| 20:12:42 | Write |  | `/home/ronald/wt-pista-camadas-161321/bin/tests/test_pista_certifica.sh` |
+| 20:12:16 | Write |  | `/home/ronald/wt-pista-camadas-161321/bin/pista_certifica.sh` |
+| 20:11:57 | Read |  | `/home/ronald/wt-pista-camadas-161321/bin/tests/test_pista_certifica.sh` |
+| 20:11:57 | Read |  | `/home/ronald/wt-pista-camadas-161321/bin/pista_certifica.sh` |
+| 20:11:55 | Write |  | `/home/ronald/wt-pista-camadas-161321/bin/pista_certifica.sh` |
 | 20:11:36 | Bash |  | `cd ~/wt-pista-camadas-161321; git grep -n 'pista_certifica' -- ':!logs' \| grep -v '^bin/pista_certifica.sh\\|^bin/tests/test_pista_certifica.sh' \| cut -c1-220; sed -n 120,200p bin/tests/test_pista_certifica.sh \| grep -n 'MUT\\|mutante\\|sed ' \| head` |
 | 20:11:14 | Bash |  | `cd ~/wt-pista-camadas-161321; mkdir -p ~/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v6; git diff > ~/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v6/v5_wt_antes.diff; cp bin/pista_certifica.sh bin/tests/test_pista_certifica.sh ~/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v6/; sed -n 1,120p bin/tests/test_pista_certifica.sh` |
 | 20:10:59 | Bash |  | `cd ~/wt-pista-camadas-161321; git diff \| cmp - ~/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v5/diff.txt && echo IGUAL; git diff --stat; cat ~/saas-hasner/bin/pista_certifica.sh \| sed -n 1,40p` |
