@@ -1,7 +1,70 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 01:42** · publicado em **23/11/2026 01:42** (UTC-3)
+> Ultima resposta processada: **23/11/2026 02:17** · publicado em **23/11/2026 02:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 02:17 · sessao b7fb90ed7429 · ESPURIAS-VAGA-2 · verificador · origem=Code
+
+**REPROVADO na volta 4.** O delta cobre o mutante do cadastro zero e tira `date.today()` do cálculo de `minutos` no ramo livre. Ainda assim, a data certa pode devolver a pausa errada: um override de sábado com uma única pausa de 30 min devolve os 60 min da janela padrão. O mesmo retorno ainda expõe um par de cadastro calculado com o dia do relógio. `app/ponto/juiz_batida.py:127–150,274,317,328–335` · `app/escala/models.py:298–308,326–345` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:138–183`
+
+Os hashes dos dois arquivos da cópia conferem com os blobs do anexo (`4586ebfda` e `a6df9185b`). Fiz o censo com `rg`, seguindo também os aliases, porque a cópia veio sem `.git`. Executei os corpos dos dois testes novos em memória, com o juiz e os métodos de escala da cópia, substituindo ORM e relógio no ensaio. Hash do commit, censo pelo índice Git, `TestCase` Django, suíte, aval efetivo e impacto em produção [nao verificado].
+
+## 1. Achados da volta 3
+
+| Achado | Veredito |
+|---|---|
+| Mutante que troca a fonte só no cadastro zero | **Sim.** A asserção do ramo livre falhou no ensaio com `(0, 'duracao declarada')`, pois exige `(0, 'sem intervalo declarado')`. A pré-condição do teste continuou passando quando a mutação estava só no ramo livre. `app/ponto/juiz_batida.py:147–150,307–317` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:147–155` |
+| `minutos` do ramo livre dependia de `date.today()` | **Sim, para o achado exato.** Mantendo célula e template, a sexta devolveu 90 e o sábado 60, sob os dois relógios. A C2 subtrai esse `minutos`. **Parcial para o retorno inteiro:** a mesma célula de sexta mantém `minutos=90`, mas `cadastrado_min` cai de 90 para 60 quando o relógio passa de sexta para sábado. O ramo com marco de pausa incompleto também continua usando o par sem data. `app/ponto/juiz_batida.py:129,274,298–306,317,332` · `app/escala/services/cadastro_realidade.py:238–243` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:164–183` |
+
+## 2. Quem passa `dia` e quem lê
+
+- **Quem passa:** só `periodos_do_dia`, no ramo `intervalo_livre is True`, com `dia=celula.data`. A geração grava `data=d` e monta o DNA com o mesmo `d`. É um `DateField`, a data civil local que ancora o início previsto do turno. O produtor de lâmpadas usa essa âncora e põe os marcos após a meia-noite em D+1 quando cabível. `app/ponto/juiz_batida.py:117–119,178–180,307–317` · `app/escala/models.py:1696` · `app/ponto/portas/celula.py:947–953` · `app/ponto/management/commands/gerar_celulas.py:36–40,62–69`
+- **Quem lê:** `intervalo_cadastrado` encaminha `dia` a `TipoEscala.pausas_do_dia(data)`. Ela passa a data a `marcos_do_dia` e também consulta `_override_do_dia` para decidir se inclui o segundo par. `_override_do_dia` reduz a data a `data.weekday()` e busca a chave em `horarios_por_dia`. Os significados batem: chega a data do turno e o leitor usa o dia da semana dessa data. O caminho trabalha com data de calendário, sem hora, instante ou conversão de fuso. As chamadas que omitem `dia` continuam usando a data civil do processo via `date.today()`. `app/ponto/juiz_batida.py:117–129` · `app/escala/models.py:224–231,304–308,326–345`
+
+## 3. Censo e leitores do retorno
+
+**Sete chamadas de produção e três de teste** nos arquivos da cópia. Só a chamada nova passa `dia`. As chamadas sem `dia` preservam a regra anterior para os mesmos dados e o mesmo relógio. `app/ponto/juiz_batida.py:106–150,274,317`
+
+| Chamador | Arquivo e linha |
+|---|---|
+| `periodos_do_dia`, cadastro lateral e ramo livre | `app/ponto/juiz_batida.py:274,317` |
+| `MotorBase.__init__`, alias `_int_cad` | `app/ponto/motor_calculo_v2.py:831–832` |
+| `regua_do_dia` | `app/ponto/calculador/periodo.py:519–523` |
+| `rubricas_por_dia`, cadastro inicial e por vínculo do dia, alias `_cad_do_template` | `app/ponto/calculador/alimentacao.py:382,407,498` |
+| Comando `diff_calculador`, alias `_cad_do_template` | `app/ponto/management/commands/diff_calculador.py:169–170` |
+| Teste O119, dois casos | `app/ponto/tests/test_o119_intra_de_todas_as_pausas.py:147,150` |
+| Teste O62, pré-condição do cadastro zero | `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:150` |
+
+No ramo livre, `minutos` e `fonte` agora descrevem a pausa obtida com a data da célula. `cadastrado_min` e `cadastrado_fonte` descrevem a consulta feita com a data do relógio. Antes do delta, nesse ramo os dois pares vinham da mesma chamada. `app/ponto/juiz_batida.py:129,274,307–317,328–335` · `diff_v4_delta.txt`, hunk de `periodos_do_dia`
+
+- **`minutos`:** a C2 subtrai o valor no cálculo líquido. **`fonte`:** os testes conferem o rótulo. **`cadastrado_min`:** encontrei leitura executável só nos dois testes listados abaixo. **`cadastrado_fonte`:** nenhuma leitura executável encontrada no censo da cópia. `app/escala/services/cadastro_realidade.py:238–252` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:80–83,111,154,181–183` · `app/ponto/tests/test_juiz_batida.py:110–114` · `app/ponto/juiz_batida.py:332`
+- **Demais consumidores de `periodos_do_dia`:** o motor lê `inicio`, `fim` e `pausas`. `turnos.py` usa papéis e bordas. A retenção da folha usa papéis e guardas. O mínimo do motor vem de outra chamada ao helper, sem `dia`. `app/ponto/motor_calculo_v2.py:689–723,831–847,1824–1831` · `app/ponto/turnos.py:1633–1645,1682–1685` · `app/folha/export.py:1148–1155`
+
+## 4. Mordida dos testes [nao verificado]
+
+- **(a) Sim.** Recolocar `date.today()` dentro do helper ou voltar a reaproveitar o par da chamada sem data produz `[90, 60]` para a célula de sexta, onde a asserção exige `[90, 90]`. Ambos falharam no ensaio em memória. `app/ponto/juiz_batida.py:129,274,317` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:171–183`
+- **(b) Sim.** A troca de fonte só no zero falha na asserção do par devolvido pelo juiz. O zero vem do fixture sem janelas e com duração explicitamente zerada. O rótulo é a saída que o helper define para esses dados. `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:143–155` · `app/ponto/juiz_batida.py:139–150`
+- **(c) Parcial.** `celula.data + 1 dia` falhou. `celula.data + 7 dias` passou, pois preserva o weekday. Usar `saida.date()` também passou: os dois turnos do teste acabam no mesmo dia civil em que começam. O teste discrimina sexta de sábado e deixa sem cobertura a escolha da data em turno que cruza meia-noite. `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:171–183` · `app/escala/models.py:224–231` · `app/ponto/management/commands/gerar_celulas.py:62–69`
+- **Relógio solto nos testes novos: não.** A classe está sob `freeze_time` e o teste de relógio usa dois congelamentos internos. **Literais:** 90 vem da soma das janelas de 60 e 30. Os 60 do sábado coincidem com a regra do fixture: a janela do override e a primeira janela padrão têm ambas 60 min. O helper chega ao literal do sábado pela janela **padrão**, porque só usa a lista da autoridade quando ela tem mais de um par. `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:26–32,164–183` · `app/ponto/juiz_batida.py:129–146`
+
+## 5. Checklist
+
+| Classe | Resultado no delta |
+|---|---|
+| Segundo juiz que duplica juiz registrado | **Não.** O mesmo juiz registrado passa uma data ao leitor existente do cadastro. `app/core/juizes.py:1201–1208` · `app/ponto/juiz_batida.py:307–317` |
+| Segundo escritor fora da porta | **Não.** A escrita nova é de fixture. O caminho de produção lê e devolve o dict. `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:143–149` · `app/ponto/juiz_batida.py:317,328–337` |
+| Relógio lido fora da borda | **Sim, residual.** A chamada sem data continua dentro do juiz e alimenta os campos laterais e a pausa com marco incompleto. `app/ponto/juiz_batida.py:127–129,274,298–306,332` |
+| Derivação paralela de fonte única | **Sim.** O desvio preexistente pelos campos escalares do template agora contraria a promessa da chamada datada quando a autoridade retorna zero ou um par. O modo vem do DNA da célula. `app/ponto/juiz_batida.py:129–150,307–317` · `app/escala/models.py:298–308,326–345` |
+| Selo/RED sem mordida | **Sim, na lacuna.** Os dois mutantes pedidos falham. O caso de sábado passa mesmo ignorando sua única janela, e as duas datas erradas do item 4(c) também passam. `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:154,164–183` · `app/ponto/juiz_batida.py:132–146` |
+| Ordem de trava | **Não.** O caminho de produção acrescenta uma chamada de leitura. `app/ponto/juiz_batida.py:121–150,307–317` |
+| Pouso antes do pré-requisito | **Não quanto a dependência nova de código.** Se o fechamento reivindica a opção (b), o consumo na folha continua pendente. Pouso efetivo [nao verificado]. `app/docs/RELATO.md:805–809` · `app/ponto/motor_calculo_v2.py:689–723,3237–3256` |
+| Campo com dois significados | **Sim para duas referências temporais no mesmo dict.** O par julgado no ramo livre usa a data do turno, e o par lateral usa hoje. As duas referências já divergem com o próprio fixture. `app/ponto/juiz_batida.py:129,274,317,332` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:164–183` |
+| `except` novo | **Não.** O `except Exception` existente continua envolvendo a consulta ao cadastro. `app/ponto/juiz_batida.py:126–131` · `diff_v4_delta.txt`, primeiro hunk |
+
+## 6. Outros defeitos ou pendências
+
+- **Override descartado, reproduzido em memória.** Mantive as duas janelas padrão do fixture e troquei só a pausa de sábado para `12:00–12:30`. `pausas_do_dia(sábado)` devolveu esse único par, mas o juiz devolveu `(60, 'janela declarada')`. Com override `08:00–12:00` sem pausa, a autoridade devolveu `()` e o juiz também devolveu 60. A leitura escalar é anterior à volta 4. O defeito do delta é passar a prometer o número daquele dia deixando essa leitura prevalecer. A C2 subtrai o número devolvido. `app/escala/models.py:298–308,326–345` · `app/ponto/juiz_batida.py:117–129,132–150,307–317` · `app/escala/services/cadastro_realidade.py:238–243`
+- **A lacuna da opção (b) segue aberta.** Para uma célula livre julgada apenas com entrada e saída, o juiz entrega a duração prevista e deixa as janelas vazias. O motor só incorpora as janelas com `inicio` e `fim` e desconta a soma das janelas recebidas. Com `intervalos=()`, a subtração nesse caminho é zero, ainda que `minutos` no juiz seja 70. Isso é a pendência de folha já apontada na volta 3. `app/docs/RELATO.md:805–808` · `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:75–88` · `app/ponto/juiz_batida.py:311–317,328–335` · `app/ponto/motor_calculo_v2.py:689–723,1909–1912,3237–3256`
 
 ## 23/11 01:42 · sessao d973b2c50d3b · DIA-SEM-TRABALHO-PORTA-L1-PELA-HE · censo · origem=Code
 
@@ -714,12 +777,4 @@ Há alteração comprovada fora da porta na **sombra**, por `_base_manager.bulk_
 
 Os leitores diretos incluem as faces SQL da resposta, estado agregado do Raio X por tupla da projeção, filtros de absolvíveis/órfãs, grupo de absorção por carimbo/via/escape, materialização de validadas com filtro cru anterior à reconferência, contadores de validações, e os templates de card/modal que decidem o selo e a disponibilidade das ações com `validada_em`. Os leitores compostos, inclusive `estado` e `respondida`, continuam usando o texto e os campos de materialização da projeção. `juizes.py:1620,1628,1639`, `raiox.py:135–147`, `reconciliador.py:718–721,1137–1144`, `materializacao.py:1164–1177,2199–2223`, `painel.py:261–275`, `verbos.py:263–271`, `templates/chamados/partials/_pergunta_card.html:20–25,42`, `templates/chamados/partials/modal_fio.html:217–230,345–348`, `models.py:3299–3318,3888–3894,4436–4444`.
 
-## 22/11 22:15 · sessao c0ec1a9461a3 · - · - · origem=Ronald (tmux)
-
-- `backfill_fio_morto_e4b._executar_dia` grava em `app/chamados/management/commands/backfill_fio_morto_e4b.py:150`. A borda carimba `agora` para decidir o dia, mas os atos de passivo preservam `p.respondida_em` e `p.validada_em`. O `--aplicar` exige competência corrente antes da trava. O `handle` trava primeiro os colaboradores e as disputas abertas e depois recalcula o plano e reavalia entrega, limbo e credor ligado a exportada. O executor toma a trava da pergunta e consulta correspondência por tipo e instante. O DRY com competência executa em transação desfeita. `app/chamados/management/commands/backfill_fio_morto_e4b.py:82-112,148-150,192-198,223-241,289-325,367-373`, `app/chamados/models.py:4358-4376`, `app/config/crons.py:769,797`.
-- `backfill_decisoes_pergunta.aplicar` grava `SILENCIO` com `ato_em=p.materializada_em` histórico. Antes da trava, `admin_decidiu_sem_ato` filtra carimbo não nulo, `validada_em` de coluna nulo, via, horizonte e ausência de `SILENCIO`/`VALIDACAO`. Depois das travas de colaborador, disputa e pergunta, confere horizonte, veto de competência/recusas, via e ausência dos atos. Carimbo presente e `validada_em` da coluna nulo não reaparecem nessas guardas. O CLI chama em DRY com rollback ou apply. O `dedup_perguntas_fato` passa `sem_ato=[]`, excluindo esse ponto de gravação. `app/chamados/management/commands/backfill_decisoes_pergunta.py:121-132,244-261,269-284,325-354,371-376,514,607-624`, `app/chamados/management/commands/dedup_perguntas_fato.py:100-106`.
-- O segundo escritor explícito encontrado na árvore é da **sombra**. O registro dinâmico de `DecisaoPergunta` especifica dois campos de texto, atualizados por `_base_manager.bulk_update`. O script checa o banco `sombra`, e o executor distingue os contêineres de produção e ensaio. `bin/sombra_regras_pessoais.py:142`, `bin/sombra_mascara_pessoal.py:10,44-64`, `bin/sombra.sh:69-74,204-205,272-273`.
-- Fora dos atos de domínio, o restore operacional pode substituir a tabela se o dump do schema a incluir. A ocorrência em produção é [nao verificado]. As duas FKs de autoria para `auth.User` têm `SET_NULL`, portanto a exclusão permitida de um autor pode limpar esses campos. A rota Django Admin está configurada, mas uma exclusão efetiva que alcance as linhas e as permissões vigentes são [nao verificado]. `scripts/backup_tenant.sh:3-10`, `scripts/restore_tenant.sh:3-8`, `app/chamados/models.py:4273-4286`, `app/config/settings/base.py:8-10`, `app/config/urls.py:24`.
-- Na leitura, `composta` usa instantes e validação dos atos, texto/materialização/via da coluna e passivo sem ato correspondente. As faces SQL de resposta leem colunas, e o raio X classifica as tuplas de colunas com o predicado Python. Há condições de validação por coluna nos templates, pré-filtros do reconciliador/plantio, contadores de painel/placar e seleção dos commands de passivo. Foram repassadas ao agente principal as referências individuais de consumos, métricas e exibição. `app/chamados/models.py:3309-3318,3653-3663,3699-3718,4358-4376,4415-4444`, `app/chamados/juizes.py:1613-1639,1802-1815`, `app/chamados/services/raiox.py:135-147`, `app/chamados/reconciliador.py:718-722,1141-1144`, `app/chamados/services/materializacao.py:2199-2223`, `app/templates/chamados/partials/_pergunta_card.html:20-25,42`, `app/templates/chamados/partials/modal_fio.html:228-229,345-348`, `app/chamados/services/painel.py:260-273`, `app/chamados/services/verbos.py:264-271,335-347`.
-
-_7908 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7909 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
