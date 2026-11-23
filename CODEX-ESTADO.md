@@ -1,7 +1,274 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 13:25** · publicado em **23/11/2026 13:29** (UTC-3)
+> Ultima resposta processada: **23/11/2026 13:37** · publicado em **23/11/2026 13:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 13:37 · sessao c751a3c4fda1 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
+
+**Script A — sombra.** O anexo registrou 14 dias com pago ≥ previsto e 111 dias com pago e minutos dos pares. O histograma usa a diferença com sinal, arredondada a nove casas, e inclui 10, 60 e 240 na faixa que termina nesse valor. O pago soma `horas_trabalhadas`, `horas_folga_trabalhada` e `detalhe.folga_feriado_min`, após a checagem das rubricas de sustentação. `sonda.out:4`, `sonda_pago_pares_sombra.py:130`, [app/ponto/services/dia_pago.py:861](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/services/dia_pago.py:861).
+
+```python
+# sonda_pago_pares_sombra.py
+import json
+import logging
+from bisect import bisect_left
+from collections import Counter
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador
+from colaboradores.services.calendario import (
+    STATUS_QUE_PEDEM_DECISAO,
+    contexto_calendario,
+)
+from escala.utils import minutos_previstos_do_dia
+from ponto.services.dia_pago import _RUBRICAS_DE_DINHEIRO, pago_do_dia
+from ponto.turnos import CargaDaJanela, realizado_do_dia
+
+MES, ANO = 11, 2026
+LIMITES = (0, 10, 60, 240)
+FAIXAS = ("<=0", "0-10", "10-60", "60-240", ">240")
+
+
+def falhar_em_log_de_erro(_logger, registro):
+    if registro.exc_info and registro.exc_info[1] is not None:
+        _, erro, traceback = registro.exc_info
+        raise erro.with_traceback(traceback)
+    if registro.levelno >= logging.ERROR:
+        raise RuntimeError(f"Erro registrado em {registro.pathname}:{registro.lineno}")
+
+
+def ler_grade(colab, agora):
+    ctx = contexto_calendario(
+        colab, {"modo": "competencia", "mes": str(MES), "ano": str(ANO)},
+        agora=agora,
+    )
+    for dia in ctx["dias"]:
+        if not dia["em_aberto_perguntado"] or dia["resolver_dia_oferecido"] is None:
+            raise RuntimeError(f"Grade sem resposta para pk={colab.pk}, dia={dia['data']}")
+    return ctx
+
+
+def fonte_do_pago(linha):
+    return {
+        "dia_pago_pk": linha.pk,
+        "versao": linha.versao,
+        "evento_origem": linha.evento_origem,
+        "parcelas_somadas": [
+            "horas_trabalhadas", "horas_folga_trabalhada", "detalhe.folga_feriado_min",
+        ],
+        "rubricas_horas": {campo: getattr(linha, campo) for campo in _RUBRICAS_DE_DINHEIRO},
+        "detalhe": {"folga_feriado_min": (linha.detalhe or {}).get("folga_feriado_min")},
+    }
+
+
+def imprimir(obj):
+    print(json.dumps(obj, ensure_ascii=False), flush=True)
+
+
+def sondar():
+    if connection.settings_dict["NAME"] != "sombra":
+        raise RuntimeError("Use o banco de ensaio sombra.")
+    if connection.in_atomic_block or not connection.get_autocommit():
+        raise RuntimeError("A sonda exige uma transação própria.")
+
+    with (
+        patch.object(logging.Logger, "handle", falhar_em_log_de_erro),
+        schema_context("juliani"),
+        transaction.atomic(),
+    ):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cursor.execute("SELECT current_database(), current_schema()")
+            if cursor.fetchone() != ("sombra", "juliani"):
+                raise RuntimeError("Banco/schema diferente de sombra/juliani.")
+
+        agora = timezone.now()
+        qs = Colaborador.objects.select_related("empresa", "posto__praca").order_by("pk")
+        colabs = list(qs.filter(situacao="ativo"))
+        comparacao = Counter()
+        histograma = dict.fromkeys(FAIXAS, 0)
+        diferencas = []
+        for colab in colabs:
+            ctx = ler_grade(colab, agora)
+            turnos = None
+            for dia in ctx["dias"]:
+                status = dia["status"]
+                texto = dia["palavra_dia"]
+                if "Em aberto" not in texto or status in STATUS_QUE_PEDEM_DECISAO:
+                    continue
+
+                d = dia["data"]
+                previsto = minutos_previstos_do_dia(colab, d)
+                linha = dia["dia_pago"]
+                horas = pago_do_dia(linha)
+                if horas is None:
+                    comparacao["dias_sem_minutos_pagos_sustentados"] += 1
+                    continue
+                pago = round(horas * 60, 9)
+                ge = pago >= previsto
+                comparacao["dias_pago_ge_previsto" if ge else "dias_pago_lt_previsto"] += 1
+
+                if turnos is None:
+                    turnos = CargaDaJanela([colab], ctx["data_ini"], ctx["data_fim"]).turnos(colab)
+                pares = realizado_do_dia(colab, d, turnos=turnos, previsto_min=previsto).minutos
+                chave_dia = {
+                    "colaborador_pk": colab.pk,
+                    "data": d.isoformat(),
+                    "status": status,
+                }
+                if ge:
+                    imprimir({
+                        **chave_dia,
+                        "texto": texto,
+                        "batidas_do_turno": [
+                            [timezone.localtime(b.timestamp).isoformat(), b.tipo]
+                            for b in dia["batidas"]
+                        ],
+                        "minutos_pagos": pago,
+                        "minutos_previstos": previsto,
+                        "minutos_dos_pares": pares,
+                        "fonte_pago": fonte_do_pago(linha),
+                    })
+
+                if pares is None:
+                    comparacao["dias_com_pago_sem_minutos_dos_pares"] += 1
+                    continue
+                diferenca = round(pago - pares, 9)
+                histograma[FAIXAS[bisect_left(LIMITES, diferenca)]] += 1
+                diferencas.append({**chave_dia, "diferenca_minutos": diferenca})
+
+    diferencas.sort(key=lambda item: (-item["diferenca_minutos"], item["colaborador_pk"], item["data"]))
+    imprimir({
+        "colaboradores_no_universo": len(colabs),
+        "dias_pago_ge_previsto": comparacao["dias_pago_ge_previsto"],
+        "dias_pago_lt_previsto": comparacao["dias_pago_lt_previsto"],
+        "dias_sem_minutos_pagos_sustentados": comparacao["dias_sem_minutos_pagos_sustentados"],
+        "dias_com_pago_sem_minutos_dos_pares": comparacao["dias_com_pago_sem_minutos_dos_pares"],
+        "dias_com_pago_e_minutos_dos_pares": len(diferencas),
+        "histograma_pago_menos_pares": histograma,
+        "maiores_diferencas": diferencas[:10],
+    })
+
+
+sondar()
+```
+
+**Script B — produção.** Para `para="folha"`, o campo decisivo é `Ausencia.status`, com valor `aprovada`. Entre as aprovadas que cobrem a data, vence a de maior `data` e, no empate, de maior `pk`. Uma ausência anterior a novembro com `data_fim=NULL` só alcança novembro se o tipo tiver fim indeterminado no catálogo vivo. A sonda imprime essas linhas candidatas com `toca_novembro="[nao verificado]"`. [app/ponto/turnos.py:2528](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/turnos.py:2528), [app/ponto/turnos.py:2786](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/turnos.py:2786), [app/ponto/catalogo/ausencias.py:430](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/catalogo/ausencias.py:430).
+
+Os rótulos de ausência dependem do catálogo vivo de `TipoAusencia`. `rotulo_de` consulta o efeito e, quando aplicável, a regra de parcialidade. `palavra_do_dia` recebe um veredito e pode consultar o nome do tipo. A dependência é do catálogo. Com as duas tabelas pedidas, a sonda emite `[nao verificado]` para os rótulos quando há linhas candidatas. `null` indica que a consulta encontrou zero candidatas naquele dia. [app/ponto/services/dia_decidido.py:217](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/services/dia_decidido.py:217), [app/ponto/services/dia_decidido.py:502](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/services/dia_decidido.py:502), [app/ponto/turnos.py:2602](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/turnos.py:2602), [app/ponto/catalogo/ausencias.py:240](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/catalogo/ausencias.py:240), `sonda_ausencias_941_prod.py:47`.
+
+```python
+# sonda_ausencias_941_prod.py
+import json
+import logging
+from datetime import date
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.db.models import F, Q
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador
+from ponto.models import Ausencia
+
+INICIO, FIM = date(2026, 11, 1), date(2026, 11, 30)
+DIAS = tuple(date(2026, 11, dia) for dia in range(16, 20))
+NAO_VERIFICADO = "[nao verificado]"
+
+
+def falhar_em_log_de_erro(_logger, registro):
+    if registro.exc_info and registro.exc_info[1] is not None:
+        _, erro, traceback = registro.exc_info
+        raise erro.with_traceback(traceback)
+    if registro.levelno >= logging.ERROR:
+        raise RuntimeError(f"Erro registrado em {registro.pathname}:{registro.lineno}")
+
+
+def iso(valor):
+    return valor.isoformat() if valor is not None else None
+
+
+def imprimir(obj):
+    print(json.dumps(obj, ensure_ascii=False), flush=True)
+
+
+def ler_dia(dia, ausencias):
+    candidatas = [
+        a for a in ausencias
+        if a.data <= dia and (a.data_fim is None or dia <= a.data_fim)
+    ]
+    confirmadas = [a.pk for a in candidatas if a.data_fim is not None or a.data == dia]
+    sem_fim_a_confirmar = [a.pk for a in candidatas if a.data_fim is None and a.data < dia]
+    aprovadas = [a for a in candidatas if a.status == "aprovada"]
+    cobertura_folha_pk = None
+    if aprovadas:
+        ultima = aprovadas[-1]
+        cobertura_folha_pk = ultima.pk if ultima.pk in confirmadas else NAO_VERIFICADO
+    rotulo = NAO_VERIFICADO if candidatas else None
+    return {
+        "data": dia.isoformat(),
+        "ausencias_pks_confirmadas": confirmadas,
+        "ausencias_pks_sem_fim_a_confirmar": sem_fim_a_confirmar,
+        "ausencia_cobertura_folha_pk": cobertura_folha_pk,
+        "rotulo_de": rotulo,
+        "palavra_do_dia": rotulo,
+    }
+
+
+def sondar():
+    if connection.settings_dict["NAME"] != "saas_hasner":
+        raise RuntimeError("Use o banco de produção saas_hasner.")
+    if connection.in_atomic_block or not connection.get_autocommit():
+        raise RuntimeError("A sonda exige uma transação própria.")
+
+    with (
+        patch.object(logging.Logger, "handle", falhar_em_log_de_erro),
+        schema_context("juliani"),
+        transaction.atomic(),
+    ):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cursor.execute("SELECT current_database(), current_schema()")
+            if cursor.fetchone() != ("saas_hasner", "juliani"):
+                raise RuntimeError("Banco/schema diferente de saas_hasner/juliani.")
+
+        pk = Colaborador.objects.values_list("pk", flat=True).get(pk=941)
+        ausencias = list(
+            Ausencia.objects.filter(colaborador_id=pk, data__lte=FIM)
+            .filter(
+                Q(data_fim__isnull=True)
+                | Q(data_fim__gte=INICIO, data__lte=F("data_fim"))
+            )
+            .only("tipo", "status", "data", "data_fim", "minutos", "criado_em", "atualizado_em")
+            .order_by("data", "pk")
+        )
+        for a in ausencias:
+            imprimir({
+                "colaborador_pk": pk,
+                "pk": a.pk,
+                "tipo": a.tipo,
+                "status": a.status,
+                "data": iso(a.data),
+                "data_fim": iso(a.data_fim),
+                "minutos": a.minutos,
+                "criado_em": iso(a.criado_em),
+                "atualizado_em": iso(a.atualizado_em),
+                "toca_novembro": (
+                    True if a.data_fim is not None or a.data >= INICIO else NAO_VERIFICADO
+                ),
+            })
+        for dia in DIAS:
+            imprimir({"colaborador_pk": pk, **ler_dia(dia, ausencias)})
+
+
+sondar()
+```
+
+Execução das duas novas sondas em banco e registros de `Ausencia` do 941 em produção [nao verificado].
 
 ## 23/11 13:25 · sessao 0ec30af5c5d8 · PAR-PELO-TURNO · leitura · origem=Code
 
@@ -1092,15 +1359,4 @@ O dado raspado relata sete dias de turno aberto e outros três sem pendência pu
 
 perguntas de lei: 0
 
-## 23/11 01:42 · sessao 0893302463ec · ESPURIAS-VAGA-2 · verificador · origem=Code
-
-1. **O caso novo rejeita o mutante da volta 2.** Ele devolve `(60, 'duracao declarada')` para a janela 12–13, e o assert exige `(60, 'janela declarada')`. O mutante que troca `cad_fonte` por `'duracao declarada'` **apenas quando** ela vale `'sem intervalo declarado'` ainda passa. Ele devolve `(0, 'duracao declarada')` no lugar de `(0, 'sem intervalo declarado')` para DNA livre com cadastro de zero. Reproduzi os seis casos do anexo em memória, com o juiz da cópia e os ramos finais aplicados em memória. `app/ponto/juiz_batida.py:135–146`, `app/ponto/juiz_batida.py:303–311` (diff final), `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:72–133` (diff final).
-
-2. **Eu bloquearia pelo item 7 da triagem.** O `date.today()` já existia no helper, mas o ramo novo faz o `intervalo['minutos']` de um dia livre depender dele. Reproduzi a mesma célula e o mesmo template com duas janelas e sábado reduzido. A base devolveu zero nas duas consultas. O diff final devolveu 90 min na sexta e 60 min no sábado. A C2 subtrai esse valor da jornada medida, portanto o relógio pode mudar o diagnóstico com os mesmos dados, contrariando a L-099. `triagem_verif2.txt:8`, `app/ponto/juiz_batida.py:122–142,303–304` (base), `app/ponto/juiz_batida.py:303–311` (diff final), `app/escala/models.py:224–231,304–308,326–345`, `app/escala/services/cadastro_realidade.py:238–252`, `CLAUDE.md:180`.  
-   O item 2 também precisa de correção na triagem. O mutante sobrevivente demonstra que a janela de 60 min deixa a fonte do cadastro zero sem cobertura. Se o fechamento reivindica a **opção (b)** citada no diff, a lacuna da folha também impede dar a opção por entregue. Quando nenhuma janela chega ao motor, o novo `minutos` fica fora da subtração. `triagem_verif2.txt:3,7`, `app/ponto/tests/test_o62_pausa_sem_marco_no_dia.py:87–100` (diff final), `app/ponto/juiz_batida.py:304–311` (diff final), `app/docs/RELATO.md:805–808`, `app/ponto/motor_calculo_v2.py:689–723,1909–1912,3242–3256`.
-
-3. **Procede para a troca isolada `d ↔ e`.** A C2 pode mudar a presença do colaborador na lista. A assinatura C2 é do vínculo inteiro e fica fora do índice por dia. Sob as guardas do vigia, a troca muda os contadores por causa, o detalhe de `e` e a linha publicada, mantendo a rota `sem_porta` e o total `fio_morto_alcance`. O vigia imprime e carimba esses dados. O alarme usa as chaves de `censo`, e o backfill seleciona pela rota e executa o ato de `ato_do_dia`, revalidado sob trava. **Nenhuma escrita de banco muda por causa do rótulo `d/e`.** `app/escala/services/cadastro_realidade.py:245–263,1135–1155`, `app/chamados/services/vigia_fio.py:194–196,226–229,638–660,678–680`, `app/chamados/management/commands/vigiar_fio_morto.py:85–86,204–210,259–284,290–291`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:76–87,250–262,302–316,376–387`.
-
-Hash Git da cópia, execução do `TestCase` Django, suíte completa, aval efetivo e impacto em produção [nao verificado]. [nao verificado]
-
-_7926 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7927 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
