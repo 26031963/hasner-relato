@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 17:49:16.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (30.1 MB). Acoes na janela: **744**.
+**Medido em 23/11/2026 17:55:20.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (30.2 MB). Acoes na janela: **750**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:55:06 | Bash | Read vigia verificador | `head -c 7000 logs/VIGIA-DO-TMUX/v4/verif.r` |
+| 17:53:34 | Bash | Wait vigia verificador | `until /bin/grep -q " rc=" logs/VIGIA-DO-TMUX/v4/verif.out; do /usr/bin/sleep 30; done; /bin/grep -o ' rc=[0-9]*' logs/VIGIA-DO-TMUX/v4/verif.out` |
+| 17:53:31 | SendMessage |  | `-` |
+| 17:53:20 | Bash | Spot-check ler port lines | `cd /home/ronald/wt-pista-camadas-161321 && sed -n 45,66p bin/pista_certifica.sh` |
+| 17:53:16 | Bash | Read rest of PISTA verif | `tail -c +5000 logs/PISTA-2-CERTIFICA/camadas/v4/verif.r \| head -c 7000` |
+| 17:53:09 | Bash | Read PISTA verificador | `cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/btb2r3y3v.output; head -c 5000 logs/PISTA-2-CERTIFICA/camadas/v4/verif.r` |
 | 17:48:36 | Bash | Wait for PISTA or vigia verificador | `until /bin/grep -q " rc=" logs/PISTA-2-CERTIFICA/camadas/v4/verif.out logs/VIGIA-DO-TMUX/v4/verif.out 2>/dev/null; do /usr/bin/sleep 30; done; for f in logs/PISTA-2-CERTIFICA/camadas/v4/verif.out logs/VIGIA-DO-TMUX/v4/verif.out; do echo "$f: $(/bin/grep -o ' rc=[0-9]*' $f)"; done` |
 | 17:48:33 | Bash | Check launch output | `cat logs/VIGIA-DO-TMUX/v4/verif.out` |
 | 17:48:26 | Bash | Launch vigia verificador | `D=logs/VIGIA-DO-TMUX/v4 && cat > $D/verif.q <<'EOF' OBRA VIGIA-DO-TMUX, PAPEL verificador, volta 4. Anexo triagem3.txt = os achados V1..V9 da volta 3 que esta volta diz curar; anexo delta.diff = volta 4 (c71a93bb6..8dd023236). O construtor relata 39 mutantes todos mortos (rc=1) e selo verde. Aval VIGIA-DO-TMUX: o vigia manda /clear ao painel tmux da sessao so quando o Stop permite e a sessao ativa ...` |
