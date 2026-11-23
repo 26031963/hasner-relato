@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 08:22:47.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.2 MB). Acoes na janela: **55**.
+**Medido em 23/11/2026 08:28:36.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.3 MB). Acoes na janela: **58**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:26:04 | ScheduleWakeup |  | `aval Ronald: RETOMA-POS-CLEAR-2311-0750 -- seguir: conferir construtor opus volta 4b F5 (logs/E4C-F5/v4d/), depois Codex verificador, merge do main na copia, suite inteira, opus final, pouso; depois rascunho do contrato E4d (logs/E4D-CONTRATO/r.txt)` |
+| 08:25:34 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' import subprocess h=subprocess.check_output(['date','+%H:%M']).decode().strip() p='app/docs/RELATO.md' s=open(p).read() l=(f"PUSH RETOMA-POS-CLEAR-2311-0750 {h}: NO REMOTO -- bin/push.sh rc 0, origin/main cc2d19cd5..68eb689b5 (os 11 do marco ESPURIAS-VAGA-2 + o placar 68eb689b5), provado por git fetch; pos_push deixou o derivado eac7a6741 (topo do TICKETS) a f ...` |
+| 08:25:28 | Bash |  | `cd ~/saas-hasner && tail -4 logs/RETOMA-2311-0750/push2.log; git fetch -q origin && git rev-list --count origin/main..HEAD; git log -1 --format=%h origin/main` |
 | 08:11:20 | Bash |  | `cd ~/saas-hasner && python3 - <<'EOF' import subprocess h=subprocess.check_output(['date','+%H:%M']).decode().strip() p='app/docs/RELATO.md' s=open(p).read() l=(f"E4C-F5 volta 4 {h}: construtor opus 1 derrubado pelo DISJUNTOR B1 (15 min lendo sem arquivo novo na copia), sem diff; vereditos lidos: R1a/R1b/R2/R3a/R3b/R4a/R4b/R5/P3/T5 FICAM, T4/R5b CAEM, item 6 coberto pela estampa, Q4(b) latente (te ...` |
 | 08:11:14 | Agent | F5 volta 4b construtor opus | `Voce e o construtor da obra E4C-F5 (CONTRATO-V2, item 1: "toda guarda que autoriza gravar e reavaliada apos a trava; recusa antes pode"), volta 4b, na copia /home/ronald/wt-f5-contrato-v1-140439 (HEAD cafabd1b9, limpa). Leia /home/ronald/saas-hasner/CLAUDE.md (secoes 0, 3, 6, 7b) e logs/E4C-F5/CONTRATO-V2.md antes. A volta anterior foi DERRUBADA pelo disjuntor B1 por ler 15 min sem escrever arquiv ...` |
 | 08:10:43 | Bash |  | `cd ~/saas-hasner && /bin/grep -n -i -E "B1\|libera" bin/disjuntor.py \| head -40` |
