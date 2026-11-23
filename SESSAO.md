@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 16:23:37.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (18.6 MB). Acoes na janela: **491**.
+**Medido em 23/11/2026 16:29:48.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (19.6 MB). Acoes na janela: **498**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:29:22 | Bash | Confer census sample: credit block, selo, partido regua | `sed -n 2511,2570p app/ponto/motor_calculo_v2.py; echo ====; sed -n 55,115p app/ponto/tests/test_noturno_sitio_unico.py; echo ===; sed -n 3130,3148p app/ponto/motor_calculo_v2.py` |
+| 16:29:19 | Bash | Read F5 and Vigia agent outputs | `cd /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/ && tail -c 2500 a81aef8b4ffe16aa7.output; echo ======; tail -c 2500 a4a69759c4bc312c6.output` |
+| 16:29:06 | Bash | Read canonical night writer | `sed -n 975,1012p app/ponto/motor_calculo_v2.py` |
+| 16:28:59 | Bash | Read NOTURNO census result | `tail -1 logs/NOTURNO-NAO-APURADO/censo.out; wc -c logs/NOTURNO-NAO-APURADO/censo.r; cat logs/NOTURNO-NAO-APURADO/censo.r` |
+| 16:26:06 | Bash | Wait for UI census | `until /bin/grep -q ' rc=' logs/UI-EDITAR-RAIZ/censo.out; do /usr/bin/sleep 20; done; tail -1 logs/UI-EDITAR-RAIZ/censo.out` |
+| 16:25:58 | Bash | Log BO aval and launch UI census on Codex | `mkdir -p logs/UI-EDITAR-RAIZ && python3 - <<'EOF' p='app/docs/PROMPTS.md'; s=open(p).read() s+="23/11 16:25 \| aval Ronald UI-EDITAR-RAIZ-2311-1625: BO tela sem saida -- raiz de escala (ex. tipo 106, 0 filhos) sem editar/renomear em tipos_lista.html; a raiz ganha o mesmo editar (wizard_tipo_editar, editar_escalas, aviso de dias lavrados) e o nome editado aparece na lista; PROIBIDO heranca pai/filh ...` |
+| 16:25:39 | Bash | Read tipos_lista template and editar route | `f=$(git ls-files app \| /bin/grep tipos_lista.html); echo $f; sed -n 40,130p $f; /bin/grep -rn "wizard_tipo_editar" app --include=*.py \| head` |
 | 16:23:21 | Bash | Record fleet branch numbers in RELATO | `python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() t="""NOTURNO-NAO-APURADO FROTA POR RAMO (antes da cura; sombra; universo C1 402 dias, contem os 326 do C2; logs/NOTURNO-NAO-APURADO/ramo_frota_antes.out): periodo_fechado_sem_noturno 332 \| credito_turno_aberto 13 + credito_nao_cobre_sozinho 33 = 46 (CASO LITERAL desta cura) \| fechado_fora_janela_maior_que_o_par 13 (classe propria, lista) ...` |
 | 16:23:16 | Bash | Wait for Codex census | `until /bin/grep -q ' rc=' logs/NOTURNO-NAO-APURADO/censo.out; do /usr/bin/sleep 20; done; tail -1 logs/NOTURNO-NAO-APURADO/censo.out` |
 | 16:23:10 | Bash | Write PAREI censo and launch Codex census | `python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() open(p,'w').write("PAREI: censo-NOTURNO-NAO-APURADO \| espera Codex (16:2x; censo de escritores/leitores do noturno do credito do turno aberto antes do construtor)\n"+s) EOF cat > logs/NOTURNO-NAO-APURADO/censo.q <<'EOF' PAPEL: censo (somente leitura). Obra NOTURNO-NAO-APURADO, mao unica (dinheiro). Sem hipotese: responda o que o codigo di ...` |
