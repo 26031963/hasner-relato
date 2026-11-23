@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 21:10:43.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (54.9 MB). Acoes na janela: **1476**.
+**Medido em 22/11/2026 21:16:58.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (55.9 MB). Acoes na janela: **1489**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:11:46 | Bash |  | `cd ~/saas-hasner; sed -i '1s/^ESPERANDO: suite.sh \| pid=2718632$/ESPERANDO: suite.sh \| pid=2718634/' app/docs/RELATO.md; head -1 app/docs/RELATO.md; echo '{}' \| python3 bin/hook_stop_fila1.py; echo rc=$?` |
+| 21:11:44 | Bash |  | `cd ~/saas-hasner; pgrep -af "bin/suite.sh" \| cut -c1-150` |
+| 21:11:41 | Bash |  | `cd ~/saas-hasner; sed -n 1130,1160p bin/hook_stop_fila1.py; /bin/grep -n "def _prova_pid" -A25 bin/hook_stop_fila1.py \| head -35` |
+| 21:11:39 | Bash |  | `cd ~/saas-hasner; echo '{}' \| python3 bin/hook_stop_fila1.py 2>&1 \| cut -c1-1500` |
+| 21:11:36 | Bash |  | `cd ~/saas-hasner; sed -n 812,850p bin/hook_stop_fila1.py` |
+| 21:11:35 | Bash |  | `cd ~/saas-hasner; /bin/grep -n "ESPERANDO" bin/hook_stop_fila1.py \| head -20` |
+| 21:11:31 | Bash |  | `cd ~/saas-hasner; ps -p 2718632 -o pid,etime,cmd \| cut -c1-120; head -8 app/docs/RELATO.md \| cut -c1-200; tail -3 logs/SIMPLIFICA-V3-2211-1726/v5/suite/inteira.log \| cut -c1-200` |
+| 21:11:14 | Bash |  | `cd ~/saas-hasner; setsid nohup bash -c 'until grep -q "^rc=" logs/SIMPLIFICA-V3-2211-1726/v5/suite/inteira.log; do /usr/bin/sleep 20; done; bash logs/E4D-ENSAIO/corrida.sh' > logs/E4D-ENSAIO/corrida.launch.log 2>&1 < /dev/null & disown; /usr/bin/sleep 2; pgrep -f "E4D-ENSAIO/corrida" -a \| head -3; date +%H:%M` |
+| 21:11:07 | Bash |  | `cd ~/saas-hasner; /bin/grep -n "sombra" bin/deploy.sh \| head -15; bin/trava_teste.sh --quem 2>/dev/null \| head -3; ls logs/sombra/*.lock logs/*sombra*trava* 2>/dev/null` |
+| 21:11:03 | Bash |  | `cd ~/saas-hasner/app; sed -n 33,80p chamados/models.py \| /bin/grep -n "models\.\(Char\\|Date\\|Bool\)" \| head; /bin/grep -n "fechada_em = \\|materializada_em = \\|via_resolucao = " chamados/models.py` |
+| 21:11:02 | Bash |  | `cd ~/saas-hasner/app; sed -n 1303,1315p chamados/reconciliador.py; for f in status_local fechada_em materializada_em via_resolucao; do echo "$f: $(/bin/grep -c "^ $f = " chamados/models.py)"; done; /bin/grep -n "^class DisputaSupervisao\\|^class ChamadoColaborador\\|^class PerguntaDisputa" chamados/models.py` |
+| 21:10:58 | Bash |  | `cd ~/saas-hasner/logs/sombra; grep -n "def fio_morto" -A14 e4d_ensaio_lib.py; grep -n "reg = \\|reg\[\\|def _r\\|def _w\\|Counter\\|^from\\|^import" e4d_ensaio_lib.py \| head -30; grep -n "def eventos_mortos" ~/saas-hasner/app/chamados/reconciliador.py` |
+| 21:10:49 | Bash |  | `cd ~/saas-hasner/logs/sombra; mv e4d/medida_antes.json e4d/medida_antes_sem_drenar.json; python3 - <<'PY' p='e4d_ensaio_lib.py'; s=open(p).read() def rep(a,b): global s assert s.count(a)==1, a[:60]; s=s.replace(a,b) # hash por linha rep(""" out = {} for emp, mes, ano in entregues: h = hashlib.sha256() n = 0 for row in (FechamentoMensal.objects.filter(colaborador__empresa_id=emp, mes=mes, ano=ano)  ...` |
 | 21:10:15 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app; /bin/grep -n "I23" chamados/management/commands/auditar_invariantes_chamados.py \| head; sed -n 1125,1136p chamados/management/commands/auditar_invariantes_chamados.py` |
 | 21:10:09 | Bash |  | `cd ~/saas-hasner/app; /bin/grep -n "I23" chamados/management/commands/auditar_invariantes_chamados.py \| head -5` |
 | 21:10:07 | Bash |  | `cd ~/saas-hasner/app; grep -n "'I23'" chamados/management/commands/auditar_invariantes_chamados.py \| head -3; n=$(grep -n "add('I23'" chamados/management/commands/auditar_invariantes_chamados.py \| cut -d: -f1); sed -n "$((n-3)),$((n+8))p" chamados/management/commands/auditar_invariantes_chamados.py` |
