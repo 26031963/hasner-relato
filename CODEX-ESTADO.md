@@ -1,7 +1,204 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 15:55** · publicado em **23/11/2026 15:58** (UTC-3)
+> Ultima resposta processada: **23/11/2026 16:20** · publicado em **23/11/2026 16:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 16:20 · sessao 283dd0d8704d · NOTURNO-NAO-APURADO · sonda · origem=Code
+
+```python
+import logging
+import sys
+from collections import Counter, defaultdict
+from datetime import date, datetime, time, timedelta
+from unittest.mock import patch
+
+sys.dont_write_bytecode = True
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Colaborador
+from ponto.janelas import janela_atual
+from ponto.models import DiaPago
+from ponto.services import dia_pago
+from ponto.services.fechamento import recalcular_fechamento_mes
+from ponto.turnos import batidas_apuraveis
+
+
+INI = date(2026, 10, 1)
+ATE = date(2026, 11, 22)
+COLABS = (37, 113, 174, 218, 868, 382)
+UM_DIA = timedelta(days=1)
+H22, H05 = time(22), time(5)
+ALERTA_CREDITO = "contados dos pares fechados"
+ARGUMENTOS_PERIODOS = ("periodos", "ft_certa", "ft_feriado", "ft_sem_escala")
+FLAGS_PERIODO = ("turno_aberto", "folga_trabalhada", "hora_extra_100")
+NV = "[nao verificado]"
+
+
+def alvos_por_competencia(colab):
+    # C1 do anexo g3.py. Competencia em app/ponto/janelas.py:10,60.
+    inicio = timezone.make_aware(datetime.combine(INI, H22))
+    fim = timezone.make_aware(datetime.combine(ATE + UM_DIA, H05))
+    dias_com_batida = set()
+    batidas = batidas_apuraveis(colab, inicio, fim).values_list("timestamp", flat=True)
+    for timestamp in batidas.iterator():
+        local = timezone.localtime(timestamp)
+        if local.time() >= H22:
+            dias_com_batida.add(local.date())
+        elif local.time() < H05:
+            dias_com_batida.add(local.date() - UM_DIA)
+
+    linhas = DiaPago.objects.filter(
+        colaborador_id=colab.pk, data__range=(INI, ATE),
+        tipo=DiaPago.TIPO_DIA, versao="motor",
+        minutos_realizados__gt=0, horas_noturnas=0,
+    ).values_list("data", "mes", "ano", "minutos_realizados", "horas_noturnas")
+
+    alvos = defaultdict(dict)
+    for dia, mes, ano, realizado, noturno_h in linhas:
+        if dia in dias_com_batida:
+            _, fim_comp = janela_atual(dia, colab.empresa)
+            if (ano, mes) == (fim_comp.year, fim_comp.month):
+                alvos[ano, mes][dia] = (realizado, noturno_h * 60)
+    return alvos
+
+
+def capturar_lavratura(cid, mes, ano):
+    capturas = []
+
+    def capturar(colab, mes_arg, ano_arg, *, versao, **dados):
+        if versao == "motor":
+            capturas.append(((colab.pk, mes_arg, ano_arg), dados))
+        return 0
+
+    # O alias e importado dentro da funcao. app/ponto/services/fechamento.py:1191,1200,1277.
+    with patch.object(dia_pago, "lavrar", new=capturar):
+        recalcular_fechamento_mes(
+            mes, ano, colaborador_ids=[cid],
+            somente_leitura=True, lavrar_dias_pagos=True,
+        )
+
+    if not capturas:
+        return None
+    if len(capturas) != 1 or capturas[0][0] != (cid, mes, ano):
+        raise RuntimeError(f"Captura inesperada para col{cid:03d} {mes:02d}/{ano}")
+    return capturas[0][1]
+
+
+def hora_local(instante):
+    return timezone.localtime(instante).strftime("%H:%M:%S") if instante is not None else "-"
+
+
+def ramo_do_dia(periodos, realizado, noturno):
+    if not periodos:
+        return "sem_periodo"
+    if noturno != 0:
+        return "outro:periodo_com_noturno"
+
+    positivos = [(p, credito) for _, p, credito in periodos if p.minutos_trabalhados > 0]
+    if not positivos:
+        return "outro:periodos_sem_trabalhado"
+
+    creditados = [p for p, credito in positivos if p.turno_aberto and credito]
+    if creditados:
+        # Grade inteira e arredondamento do proprio alerta.
+        # app/escala/services/leitor_celula.py:422,423
+        # app/ponto/motor_calculo_v2.py:2559,2563
+        if realizado is None:
+            return "outro:credito_com_realizado_ausente"
+        if len(positivos) == 1 and realizado > 0 and round(creditados[0].minutos_trabalhados) == realizado:
+            return "credito_turno_aberto"
+        return "outro:credito_nao_cobre_sozinho_o_realizado"
+
+    if all(not p.turno_aberto and p.saida is not None for p, _ in positivos):
+        return "periodo_fechado_sem_noturno"
+    return "outro:trabalhado_em_aberto_sem_alerta_de_credito"
+
+
+def emitir(colab_rotulo, alvos, lavra, contagem):
+    por_dia = defaultdict(list)
+    if lavra is not None:
+        mapa = lavra["dia_da_jornada"]
+        for argumento in ARGUMENTOS_PERIODOS:
+            for p in lavra[argumento]:
+                dia = dia_pago._dia_de(p, mapa)  # app/ponto/services/dia_pago.py:174,235,245,260
+                if dia in alvos:
+                    credito = any(ALERTA_CREDITO in alerta for alerta in p.alertas)
+                    por_dia[dia].append((argumento, p, credito))
+
+    for dia, (gravado, noturno_gravado) in sorted(alvos.items()):
+        prefixo = f"{colab_rotulo} {dia}"
+        if lavra is None:
+            trabalhado = noturno = realizado_saida = NV
+            ramo = "outro:lavratura_motor_nao_capturada"
+        else:
+            periodos = por_dia[dia]
+            for argumento, p, credito in periodos:
+                flags = [campo for campo in FLAGS_PERIODO if getattr(p, campo)]
+                print(
+                    f"PERIODO {prefixo} argumento={argumento} "
+                    f"entrada={hora_local(p.entrada)} saida={hora_local(p.saida)} "
+                    f"turno_aberto={p.turno_aberto} minutos_trabalhados={p.minutos_trabalhados} "
+                    f"minutos_noturnos_legais={p.minutos_noturnos_legais} "
+                    f"minutos_fora_janela={p.minutos_fora_janela} "
+                    f"alerta_contados_dos_pares_fechados={credito} lista_de_ramos={flags}"
+                )
+            trabalhado = sum(p.minutos_trabalhados or 0 for _, p, _ in periodos)
+            noturno = sum(p.minutos_noturnos_legais or 0 for _, p, _ in periodos)
+            realizado = (lavra["realizado_por_dia"] or {}).get(dia)
+            realizado_saida = NV if realizado is None else realizado
+            ramo = ramo_do_dia(periodos, realizado, noturno)
+
+        print(
+            f"DIA {prefixo} DiaPago_minutos_realizados={gravado} "
+            f"DiaPago_horas_noturnas_x60={noturno_gravado} "
+            f"soma_trabalhados={trabalhado} soma_noturnos={noturno} "
+            f"realizado_por_dia={realizado_saida} RAMO={ramo}"
+        )
+        contagem[ramo] += 1
+
+
+def main():
+    contagem = Counter(dict.fromkeys((
+        "credito_turno_aberto", "periodo_fechado_sem_noturno", "sem_periodo",
+    ), 0))
+    nivel_anterior = logging.root.manager.disable
+    logging.disable(sys.maxsize)  # app/ponto/services/fechamento.py:1305,1306
+    try:
+        with schema_context("juliani"), transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
+                cursor.execute("SET TRANSACTION READ ONLY")
+                cursor.execute(
+                    "SELECT current_database(), current_schema(), "
+                    "current_setting('transaction_read_only')"
+                )
+                if cursor.fetchone() != ("sombra", "juliani", "on"):
+                    raise RuntimeError("A sonda exige sombra/juliani em READ ONLY")
+
+            colabs = Colaborador.objects.filter(pk__in=COLABS).select_related("empresa").order_by("pk")
+            for colab in colabs:
+                for (ano, mes), alvos in sorted(alvos_por_competencia(colab).items()):
+                    lavra = capturar_lavratura(colab.pk, mes, ano)
+                    emitir("col%03d" % colab.pk, alvos, lavra, contagem)
+    finally:
+        logging.disable(nivel_anterior)
+
+    for ramo, total in sorted(contagem.items()):
+        print(f"TOTAL RAMO={ramo} n={total}")
+    print("FIM")
+
+
+main()
+```
+
+`recalcular_por_evento` chama `recalcular_fechamento_mes`, que chama `apurar_por_fatia`. A montagem passa por `get_motor_cct` e pela fábrica `motor_calculo_v2.get_motor`. Cada fatia roda `motor.calcular_mes`, e o fechamento concatena os períodos e mescla `dia_da_jornada` antes de chamar `lavrar(periodos=resultado.periodos, ...)`. A sonda captura essa chamada e lê `realizado_por_dia` do mesmo conjunto de argumentos, vindo de `por_dia_da_grade`. `app/ponto/services/fechamento.py:1810`, `:735–756`, `:279–316`, `:1060–1061`, `:1200–1227`, `app/core/regua_cct.py:428–479`, `app/ponto/motor_calculo_v2.py:3626`.
+
+`lista_de_ramos` imprime os nomes dos campos booleanos verdadeiros do `PeriodoCalculo`. Para rotular `credito_turno_aberto`, a sonda exige que o período aberto com o alerta seja o único com trabalhado positivo e que seus minutos arredondados, na precisão do próprio alerta, coincidam com o realizado da grade. A execução em Sombra e o ramo histórico de cada dia estão [nao verificado]. `app/ponto/motor_calculo_v2.py:236–253`, `:2553–2563`, `app/escala/services/leitor_celula.py:422–423`.
+
+A transação `READ ONLY` protege a sonda. O lançador `--rodar` desta cópia executa `lavra_de_prod` antes de iniciar o script, com `update_or_create` em Sombra, e grava a saída com `tee`. `bin/sombra.sh:136–167`, `:483–493`.
 
 ## 23/11 15:55 · sessao f539a8e990a7 · PAR-PELO-TURNO · leitura · origem=Code
 
@@ -1196,12 +1393,4 @@ O RED I7 chama a trava diretamente para D e Ch já incluídos e rejeita somente 
 
 `replan_fora_da_trava` recusa antes de `_executar_dia`, desfaz o savepoint do dia e retira callbacks da tentativa. No apply, outros dias aceitos podem persistir. A cerca testa a competência e a materialização da D abrange outras datas, portanto efeitos de cascata de dia aceito não são revertidos pela recusa do próximo. A recusa devolvida pela porta do credor dentro da execução é registrada em `nao_executado` e sozinha não impede os atos seguintes nem faz rollback do dia. [backfill_fio_morto_e4b.py:139](/home/ronald/codex_ws/7bd3677008acd93a118c20b458b11cc9af2f1e1a/app/chamados/management/commands/backfill_fio_morto_e4b.py:139), [backfill_fio_morto_e4b.py:351](/home/ronald/codex_ws/7bd3677008acd93a118c20b458b11cc9af2f1e1a/app/chamados/management/commands/backfill_fio_morto_e4b.py:351), [backfill_fio_morto_e4b.py:373](/home/ronald/codex_ws/7bd3677008acd93a118c20b458b11cc9af2f1e1a/app/chamados/management/commands/backfill_fio_morto_e4b.py:373), [backfill_fio_morto_e4b.py:398](/home/ronald/codex_ws/7bd3677008acd93a118c20b458b11cc9af2f1e1a/app/chamados/management/commands/backfill_fio_morto_e4b.py:398), [backfill_fio_morto_e4b.py:417](/home/ronald/codex_ws/7bd3677008acd93a118c20b458b11cc9af2f1e1a/app/chamados/management/commands/backfill_fio_morto_e4b.py:417), [foto_e4b.py:145](/home/ronald/codex_ws/7bd3677008acd93a118c20b458b11cc9af2f1e1a/app/chamados/services/foto_e4b.py:145)
 
-## 23/11 15:04 · sessao 363b72af1eae · - · - · origem=Ronald (tmux)
-
-**4. ACHADO.** O detalhe HTMX mostra `mudou_de_cartao` como `info`, mas busca novamente a pergunta só pelo PK e renderiza o fragmento com `pode_agir=True`. Se a pergunta sai de A para B, A continua exibindo a pergunta já reapontada e pode mostrar os botões. A borda verifica a listagem novamente no próximo POST. O fio/modal recompõe a listagem corrente e o mapa de permissões por cartão. `app/chamados/services/acoes_disputa.py:95`, `app/chamados/views.py:394`, `app/chamados/views.py:499`, `app/chamados/views.py:516`, `app/templates/chamados/partials/_pergunta_card.html:20`, `app/templates/chamados/partials/_pergunta_card.html:42`, `app/chamados/services/fio.py:276`, `app/chamados/services/fio.py:486`, `app/chamados/services/fio.py:543`.
-
-- `resposta_mudou` vira erro com a mensagem do serviço na correção, depois da `RESPOSTA` inicial e de sua trilha. `aplicar_declaracao` repassa estado, `ok` e mensagem. O detalhe lê `ok` e mensagem. O botão de aplicar no modal tem uma lacuna anterior ao diff. O formulário envia a ação ao modal, que a encaminha a um roteador sem esse ramo e recebe `Nada a fazer`. `app/chamados/services/acoes_disputa.py:440`, `app/chamados/services/acoes_disputa.py:452`, `app/chamados/services/acoes_disputa.py:461`, `app/chamados/services/declaracao_texto.py:738`, `app/chamados/views.py:477`, `app/templates/chamados/partials/modal_fio.html:137`, `app/chamados/views.py:951`, `app/chamados/services/fio.py:607`, `app/chamados/services/fio.py:809`.
-- A casca de recusa tem lista própria, atualizada para `mudou_de_cartao`. Seu fallback é sucesso. A casca de validação tem traduções específicas e fallback por `ok`. A CLI conta chaves dinamicamente e a foto lê `ok`. Inline agrega `tipo` e lote web consulta a validação composta. Esses caminhos de validação não enviam `resposta_esperada`. O leitor localizado da tupla `ESTADOS` é a catraca AST de teste. `app/chamados/services/acoes_disputa.py:21`, `app/chamados/services/acoes_disputa.py:33`, `app/chamados/services/acoes_disputa.py:60`, `app/chamados/services/acoes_disputa.py:95`, `app/chamados/management/commands/validar_classe_a.py:100`, `app/api/foto_recebida.py:89`, `app/chamados/views_cobrar.py:212`, `app/chamados/services/validacao.py:1149`, `app/chamados/tests/test_porta_validacao_pergunta.py:140`.
-- O estado exibido da pergunta vem da leitura composta e do C6. As listas fechadas `ap.estado` nos templates vêm da testemunha de aplicação. Contadores, filtros e placares usam fila, status de chamados, carimbos/atores e o par da resposta. O TXT usa o veredito de exportação e os fechamentos mensais. Os novos valores de retorno não entram nessas dimensões. `app/chamados/models.py:3312`, `app/chamados/templatetags/chamados_tags.py:131`, `app/templates/chamados/partials/_pergunta_card.html:43`, `app/chamados/services/painel.py:198`, `app/chamados/services/painel.py:256`, `app/chamados/services/painel.py:300`, `app/chamados/services/verbos.py:253`, `app/chamados/services/verbos.py:325`, `app/folha/export.py:711`.
-
-_7952 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7953 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
