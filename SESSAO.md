@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 07:18:18.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1247**.
+**Medido em 23/11/2026 07:24:13.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (94.8 MB). Acoes na janela: **1240**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1250,10 +1250,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:27:55 | Bash |  | `cd ~/saas-hasner; sed -n '/def _sitio_existe/,/^def /p' bin/disjuntor.py \| head -25` |
 | 19:27:53 | Bash |  | `cd ~/saas-hasner; sed -n '/def _sitios_validos/,/^def /p' bin/disjuntor.py \| head -30` |
 | 19:27:52 | Bash |  | `cd ~/saas-hasner; sed -n '/def linhas_libera_b3/,/^def /p' bin/disjuntor.py \| grep -n 'exists\\|isfile\\|app/\\|RAIZ\\|raiz' \| head; ls app/ponto/portas/celula.py bin/pista_certifica.sh 2>&1; wc -l app/ponto/portas/celula.py bin/pista_certifica.sh` |
-| 19:19:44 | Bash |  | `timeout 590 tail --pid=2163212 -f /dev/null; ps -p 2163212 >/dev/null && echo vivo \|\| { echo terminou; ls -la ~/saas-hasner/logs/E4C-F5/v2/verif1/r.txt; head -3 ~/saas-hasner/logs/E4C-F5/v2/verif1/r.txt; }` |
-| 19:19:31 | Bash |  | `cd ~/saas-hasner; ps -o pid,etime -p 2163212 \| tail -1; sed -i '2s/^ESPERANDO: bin\/suite.sh \| pid=2049749$/ESPERANDO: bin\/codex_pergunta.sh \| pid=2163212/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
-| 19:19:28 | Bash |  | `cd ~/saas-hasner; L=logs/E4C-F5/v2/chokepoint_base.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep -E '^(FAIL\|ERROR):' $L \| head -8; grep "TETO DE CHOKEPOINT" $L \| cut -c1-140 \| head -8; tail -c 600 /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/ae2b04cd99320d1bc.output` |
-| 19:19:24 | Bash |  | `cd ~/saas-hasner; ps -o pid,etime,cmd -p 2049749 \| cut -c1-120; tail -2 logs/E4C-F5/v2/chokepoint_base.log \| cut -c1-150; sed -i '2s/^RESPONDIDA 19:5x (Codex final SIMPLIFICA.*$/ESPERANDO: bin\/suite.sh \| pid=2049749/' app/docs/RELATO.md; sed -n 2p app/docs/RELATO.md` |
-| 19:19:19 | Bash |  | `cd ~/saas-hasner; S=logs/SIMPLIFICA-V3-2211-1726/v3c; cat > $S/triagem_v3c.txt <<'EOF' TRIAGEM r_v3c (Codex verificador FINAL, REPROVADO), 22/11 ~19:5x, hash 52f298e35. Conferido arquivo:linha na copia (amostra: disjuntor.py:1145-1151 e :2369-2375 abertos; volta_intermediaria.sh relida). PROCEDENTE: (1) fragmento certifica: as 5 linhas AMBIENTE coerentes + `Ran 1 test` + `OK` + linha de fim dao rc ...` |
-| 19:19:05 | Bash |  | `cd ~/saas-hasner; S=logs/SIMPLIFICA-V3-2211-1726/v3c; cd ~/wt-simplifica-104405; sed -n 1140,1152p bin/disjuntor.py; sed -n 2366,2376p bin/disjuntor.py; git log --oneline 161066a90..HEAD -- bin/disjuntor.py \| head` |
-| 19:18:57 | Bash |  | `cd ~/saas-hasner; sed -n 6,200p logs/SIMPLIFICA-V3-2211-1726/v3c/r_v3c.txt` |
