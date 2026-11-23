@@ -1,7 +1,158 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 20:23** · publicado em **23/11/2026 20:23** (UTC-3)
+> Ultima resposta processada: **23/11/2026 20:29** · publicado em **23/11/2026 20:29** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 20:29 · sessao 909fc9e96657 · PISTA-CAMADAS · verificador · origem=Code
+
+**REPROVA pela prova (2), no D2.** O fluxo documentado do chamador permite certificar `H` e pousar um commit `K` criado por `merge --no-ff`. O certificador volta verde quando `AMBIENTE sha=H` coincide com o argumento `H`, mesmo que o SHA publicado seja `K`. Essa lacuna é anterior ao delta. `bin/pista_certifica.sh:46–48,66–68` · `CLAUDE.md:326–333` · `bin/deploy.sh:430–436`.
+
+### P1–P3
+
+- **P1 fecha a releitura do mesmo caminho.** Há um `cat` por entrada. Depois, `head`, `tr` e `grep` usam as cópias privadas. Uma troca de arquivo entre `head` e `tr` já não mistura os dois recibos. A regravação durante o próprio `cat` ainda é possível. `bin/pista_certifica.sh:25–29,34–37,50–59`.
+- **P2 fechado.** `Ran 0` passa a checagem de contagem quando `Found - podados = 0`. As checagens de `rc=0` e `oom=0` continuam. `bin/pista_certifica.sh:56–64`.
+- **P3 parcial.** `rc=0` com saída totalmente vazia agora falha no selo. Como o teste junta stdout e stderr, `CERTIFICA` só no stderr ainda passa. O stub também devolveu `rc=0` para `docker image inspect -f '{{json .RootFS.Layers}}' saas-hasner-core:latest-errada`. O script real usa `saas-hasner-core:latest`. `bin/tests/test_pista_certifica.sh:13–20,51–56` · `bin/pista_certifica.sh:40–44,66–68`.
+
+### D1–D6
+
+- **D1 mantido para a troca descrita.** A referência da VM é medida na certificação. Se as novas camadas diferirem das gravadas no run, a prova recusa. Troca real da tag ou divergência entre a tag e as cascas em execução [não verificado]. `bin/pista_certifica.sh:40–44` · `bin/deploy.sh:324–329,356–360`.
+- **D2 descartado indevidamente.** A entrada concreta do chamador é pedir o run de `H`, chamar `bin/pista_certifica.sh "$H" "$log" "$espera"` e usar o verde para seguir com `git merge --no-ff --no-commit`, commit e deploy. A cópia registra esse par de SHAs no COMBOIO-E: job de `d3744c21c`, pouso de `433e2e57e`, com árvore igual e `cmp` 12/12. O `cmp` confirma os bytes, e os SHAs continuam distintos. A invocação do certificador v6b nesse pouso histórico [não verificado]. `app/docs/BACKLOG.md:2277` · `app/docs/RELATO.md:1795,1799` · `CLAUDE.md:326–333` · `bin/pista_certifica.sh:46–48`.
+- **D3 mantido.** Cortar depois da linha `Ran` pode omitir o `OK` textual. A prova (3) usa as contagens e o `rc` e OOM do recibo. `bin/pista_certifica.sh:50–64`.
+- **D4 mantido.** Listagem e poda aplicam o mesmo predicado por ocorrência. Duas ocorrências do mesmo ID entram duas vezes na listagem quando ambas são podadas. `app/core/runner_quarentena.py:27–38,58–69,84–95`.
+- **D5 mantido com ressalva.** `unica` rejeita dois resumos; um resumo único de outro processo ainda casaria. Uma entrada do nosso lançador que produza esse resumo sozinho [não verificado]. `bin/pista_certifica.sh:33–38,60–64`.
+- **D6 mantido.** O SHA do cabeçalho, junto com o ID, vincula o recibo usado para `rc` e OOM ao run da prova (3). `bin/pista_certifica.sh:50–59`.
+
+### Cópia, `mktemp` e `trap`
+
+A cópia ainda pode misturar recibos se dois `ssh pista espera <id> > espera` reutilizarem o mesmo arquivo durante o `cat`. Se o `cat` ler o prefixo `id=A sha=H ` e o segundo redirecionamento truncar e preencher o arquivo antes da leitura seguinte, o prefixo de A pode ficar com `rc=0 oom=0` de B. Com IDs de mesmo comprimento e o log de A, a prova (3) pode passar falsa. Esse reuso e esse intercalamento no chamador real [não verificado]. `bin/pista_certifica.sh:12–15,25–29,50–59`.
+
+O delta também passa a exigir espaço gravável para as cópias. Falha em `mktemp` ou em qualquer cópia dá `rc=2`. O `trap EXIT` preserva o código de saída do veredito. A execução integral do selo [não verificado]. `bin/pista_certifica.sh:27–29,66–72` · `bin/tests/test_pista_certifica.sh:9–13,23`.
+
+## 23/11 20:25 · sessao 686f6976e2fc · E4C-F5 · verificador · origem=Code
+
+# REPROVADO — E4C-F5 v7, 8.2 c3c + c3c-2
+
+O caso misto recupera a reabertura da fechada própria, mas há um empate em que o formulário some em relação à base. A porta também pode escolher uma D diferente da desenhada. O R4 agrupa a carga de perguntas e decisões, mas conserva uma consulta de batidas por disputa. `54794f38a:app/chamados/services/fio.py:236,319` · `app/chamados/services/fio.py:170,326,336,355` · `app/chamados/services/acoes_disputa.py:296` · `app/chamados/services/explicador.py:171`
+
+Comparei as duas cópias em leitura. As quatro diferenças e os hashes dos arquivos batem com o anexo. A identidade dos commits via Git, a execução dos testes e a ocorrência dos casos em produção ficam **[nao verificado]**. [nao verificado]
+
+## 1. R1–R4
+
+| Achado | Veredito | Evidência |
+|---|---|---|
+| **R1 — Reabertura administrativa** | **Fecha em parte** | Com aberta eleita por destino e fechada própria, o modal volta a oferecer a reabertura da fechada. Cartão e porta chamam o mesmo seletor, mas entregam conjuntos diferentes quando o dono da D diverge do dono do chamado. O desempate das fechadas também muda em relação à base. `app/chamados/services/fio.py:160,250,336,355` · `app/chamados/services/acoes_disputa.py:294` · `app/templates/chamados/partials/modal_fio.html:412` |
+| **R2 — Testemunha de Validar** | **Fecha** | A testemunha usa a D da própria P, a mesma identidade que a porta de validação usa. A perda do botão por K6 da empresa da D eleita fica corrigida. O caso inverso pode retirar uma oferta que a porta já recusava. `app/chamados/services/fio.py:445,710,739` · `app/chamados/services/validacao.py:218,782` |
+| **R3 — Desempate das abertas** | **Fecha** | O juiz unitário delega ao lote. A aberta direta vence pela ordem `-aberta_em, -pk`. Na falta de direta, vence a D aberta da P de maior PK apontada ao chamado. O RED exige os dois PKs e a ordenação explícita no SQL. `app/docs/JUIZES.md:43` · `app/chamados/services/fio.py:120,148,153` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:231,239` |
+| **R4 — N+1 do explicador** | **Fecha em parte** | A carga externa passa a agrupar D, P e decisões. Batidas ainda são consultadas por D com P datada. Uma D sem P também pode cair na recarga individual por causa de `or None`. `app/chamados/services/fio.py:282,326,400,413` · `app/chamados/services/explicador.py:166,171` |
+
+## 2. O que pode sumir e o que o POST pode fazer
+
+- **Pergunta da fechada.** A lista continua sendo montada pela P viva e sua âncora, antes de escolher o cabeçalho. A carga externa do R4 alimenta somente o explicador. A guarda de permissão do bloco permanece a mesma. `app/chamados/services/fio.py:277,291,304,326,333` · `app/templates/chamados/partials/modal_fio.html:123,157`
+- **Validar pode sumir.** Considere uma P viva e respondida de intervalo, cuja empresa tem K6 entregue, com uma aberta eleita de outra empresa sem entrega. Com as demais guardas livres, a base podia desenhar o botão usando a empresa da eleita. Agora a testemunha consulta a empresa da P e suprime o botão, em acordo com a recusa da porta. `54794f38a:app/chamados/services/fio.py:407` · `app/chamados/services/fio.py:445` · `app/chamados/services/materializacao.py:825,907` · `app/chamados/services/validacao.py:782` · `app/templates/chamados/partials/modal_fio.html:274`
+- **A reabertura pode sumir.** Sem aberta, tome duas fechadas próprias com o mesmo `fechada_em`. A tem `aberta_em` mais recente e contador abaixo de dois. B tem PK maior e contador dois. A base desenhava A e oferecia o formulário. A cópia escolhe B e mostra o limite. Além disso, a condição do c3c-2 cobre uma aberta **sem container** eleita por destino, pois `None` também difere do PK do cartão. `54794f38a:app/chamados/services/fio.py:236,248,319` · `app/chamados/services/fio.py:170,345,354` · `app/templates/chamados/partials/modal_fio.html:412` · `app/chamados/tests/test_e4c_f5_82_render_le_o_juiz.py:170`
+- **O formulário pode ser recusado ou reabrir outra D.** A fechada que aparece só pela P ainda pode oferecer formulário, como na base. Sem fechada própria, a porta devolve “Nenhuma disputa fechada neste chamado”. Com uma fechada de outro colaborador ligada diretamente ao mesmo chamado, o montador a exclui pelo dono e a porta a inclui pelo container. Se essa D for mais recente, a porta pode reabri-la ou recusar pelo limite. Uma fixture anterior comprova que o vínculo direto com dono divergente é gravável. `app/chamados/services/fio.py:250,346,355` · `app/chamados/services/acoes_disputa.py:294` · `app/chamados/models.py:2369` · `app/chamados/tests/test_f5_v7_guarda_sob_trava.py:254`
+- **Uma mudança entre leituras também troca o alvo.** O PK desenhado fica em `data-reabertura-admin`. O POST manda o `chamado_id` e a porta resolve a fechada de novo. Se outra sessão já reabriu a D desenhada, o POST pode reabrir a próxima fechada, inclusive com uma aberta própria já presente. Dentro do próprio render, o R4 também pode reler como fechada uma D externa que fechou após a eleição e oferecer o formulário pela via de contingência. `app/templates/chamados/partials/modal_fio.html:418` · `app/chamados/services/fio.py:320,328,337,355,691` · `app/chamados/services/acoes_disputa.py:296` · `app/chamados/models.py:2369`
+
+## 3. `KeyError` e consultas
+
+**O índice é seguro para as P listadas.** Os dois ramos da busca restringem `disputa_id` aos IDs da mesma carga que preenche `_disputa_por_pk`. Só essa busca alimenta `perguntas_por_chamado`. A carga externa acrescenta P apenas em `perguntas_por_disputa`. O acesso ao mapa e à D já carregada com `colaborador__empresa` custa zero consultas. `app/chamados/services/fio.py:250,277,291,304,326,420,445`
+
+**O custo do montador ainda pode crescer por item.** O R4 tem até **três** SQL fixos de carga externa, para D, P e decisões, além do custo por D do explicador. O R2 pode avançar para consultas de batidas e irmã quando o K6 correto libera uma P que antes parava cedo. O delta também passou a carregar P de **todas** as abertas próprias por container, enquanto o `continue` da base deixava só a primeira aberta alimentar a lista de IDs. As P adicionais podem acrescentar consultas da testemunha e alterar o ramo de **Regularizar**. Há ainda uma mudança visível no R4, os itens externos da explicação passam de `data_evento, pk` para `id`. `54794f38a:app/chamados/services/fio.py:239` · `app/chamados/services/fio.py:254,282,326,445,454` · `app/chamados/services/materializacao.py:149,916,929` · `app/chamados/services/explicador.py:166,178` · `app/templates/chamados/partials/modal_fio.html:363,468`
+
+## 4. REDs e mutantes
+
+| Selo | O que observa |
+|---|---|
+| **R1** | GET e POST reais, com push simulado. Exige P, Validar, um formulário para o chamado e o PK desenhado. Depois confere a fechada reaberta e o contador persistido. O teste de empate do seletor muda `fechada_em` antes de comparar montador e POST, então o empate só é testado diretamente no seletor. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106,131,139,178` |
+| **R2** | Testemunha e porta reais, com K6 e push simulados. Exige a P, o formulário e `validada_em` persistido. A asserção negativa de estado isolada aceita `None`. O espião delega à testemunha real e exige a chamada para a P fechada. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:196,205,209,216` |
+| **R3 e R4** | R3 chama seletores reais e exige resultado e SQL. R4 faz GET real e exige HTTP 200, mas **pode passar vazio** quanto ao comportamento medido. A desigualdade aceita duas inclinações iguais, inclusive com N+1 ou sem explicação renderizada. `_Ancora` confere texto do template. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106,231,258,277,281` |
+
+O POST `acao=nada` usa o mesmo render completo do GET. Os POSTs de negócio passam pelo render parcial, mas os REDs conferem a persistência e deixam o HTML dessas respostas sem as asserções dos formulários. `app/chamados/views.py:883,952` · `app/chamados/services/fio.py:609,696,739,876` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:141,148,209`
+
+**M_R1 e M_R2.** `mut_resultado.txt` e `fila2_resultado.txt` não constam do material fornecido nem das cópias comparadas. Patches, falhas nas asserções esperadas e verdes correspondentes **[nao verificado]**.
+
+## 5. Quem escreve e quem lê
+
+| Campo ou valor | Escritor e leitores |
+|---|---|
+| **`ch.disputa_da_reabertura_admin`** | `montar_chamados_fio` atribui em memória. `modal_fio.html` lê a D para o limite, o rótulo e `data-reabertura-admin`. O valor pode representar a fechada própria ou uma fechada histórica alcançada pela P. O segundo uso explica a oferta sem alvo aceito pela porta. `app/chamados/services/fio.py:346,355` · `app/templates/chamados/partials/modal_fio.html:412,418` · `app/chamados/services/acoes_disputa.py:296` |
+| **Retorno de `disputa_fechada_da_reabertura_admin`** | O helper calcula o máximo de `(fechada_em, pk)`. O montador lê o retorno para o cabeçalho sem aberta e para o formulário. `acao_reabrir_disputa_admin` lê o retorno para executar `reabrir_admin`. O montador filtra por colaborador. A porta filtra pelo container. `app/chamados/services/fio.py:160,250,336,345` · `app/chamados/services/acoes_disputa.py:294` |
+| **Ordenação e mapa da eleição** | O ORM atribui o PK na inserção e o modelo carimba `aberta_em` no nascimento. A emissão fornece dono e container. `PerguntaDisputa.abrir` grava a D e o destino de P. `disputas_do_chamado_em_lote` lê essas chaves e monta `eleita`. O montador lê o mapa diretamente. `_disputa_do_chamado` lê a entrada unitária para o POST, o inline e a releitura da correção. `app/chamados/models.py:1923,1930,3291` · `app/chamados/services/disputa_emissao.py:601` · `app/chamados/services/fio.py:120,145,320,683` · `app/chamados/views_cobrar.py:162,222` · `app/chamados/services/acoes_disputa.py:111` |
+| **Estado persistido de D e insumos de P** | `fechar` grava `fechada_em`. `reabrir_admin` limpa o fechamento e incrementa `reaberturas_admin`. `reabrir_sistema` limpa o fechamento pela via própria. Eleição e seletor leem `fechada_em`. Template e método de reabertura leem o contador. Para P, `DecisaoPergunta.registrar` grava a sequência que o lote pré-carrega. O montador atribui `estado_aplicacao` e `explicacao` em memória, e o modal lê ambos. `app/chamados/models.py:2160,2369,2380,2404,4532` · `app/chamados/services/fio.py:148,170,282,413,445` · `app/templates/chamados/partials/modal_fio.html:274,413,465` |
+
+A eleição continua com um só corpo e a escrita administrativa continua em `reabrir_admin`. Os trechos alterados não acrescentam leitura de relógio nem aquisição de trava. A divergência estrutural está nos universos oferecidos ao mesmo seletor e no uso do campo do cartão como alvo do formulário também quando a fechada vem apenas do histórico da P. `app/chamados/services/fio.py:120,160,250,326,336,355,445` · `app/chamados/services/acoes_disputa.py:294` · `app/chamados/models.py:2357`
+
+## 23/11 20:25 · sessao e5371bc248f9 · PISTA-CAMADAS · verificador · origem=Code
+
+**REPROVA.** O certificador pode conferir o ID de um job e aceitar o `rc` e o `oom` de outro. Ele abre o arquivo de `espera` duas vezes, uma com `head` para ler o cabeçalho e outra com `tr` para ler os valores. Reutilizar o mesmo caminho entre as duas leituras basta, com duas saídas genuínas e sem editar o conteúdo de nenhuma delas. [bin/pista_certifica.sh:13–15,46–53,60–62]
+
+O anexo traz o diff. As contagens `17260/17257` e os recibos do selo são gerados pelo próprio teste. A ocorrência dos cenários abaixo em produção está [nao verificado]. [bin/tests/test_pista_certifica.sh:29–48,67–68] [nao verificado]
+
+## 1. Falsos positivos por prova
+
+| Prova | Entrada e resultado |
+|---|---|
+| **(1) Camadas** | **Na VM, trocar `:latest` entre a medição do run e o `docker run` preserva o vínculo.** `suite.sh` resolve `:latest` para o ID `I1`, mede `I1`, passa o digest no ambiente e executa `I1`. Já o certificador mede o `:latest` do Docker que responde à chamada. Se a suite da VM já fixou `I1`, mas a tag agora aponta para `I2`, um log legítimo da pista com as camadas de `I2` passa. Isso é falso se a referência pretendida era o run da VM fixado em `I1`. Se a referência é a tag da VM **no ato da certificação**, medir `I2` está de acordo com o script. Na pista 2, o caso «mediu `I1` e executou `I2`» também passaria se a VM medisse `I1`, pois o teste só repete a variável recebida. O vínculo entre o `inspect` remoto e o `docker run` remoto está [nao verificado]. [bin/suite.sh:353–373] [bin/pista_certifica.sh:34–38] [bin/recursos.sh:157–175] [app/core/tests/test_ambiente_do_run.py:50–51] | [nao verificado]
+| **(2) SHA** | **Sim, por erro do chamador.** Um job válido de `H` fornece log com `AMBIENTE sha=H` e recibo com `sha=H`. A sessão passa `H` ao certificador e pousa `K`, por exemplo o novo commit criado pelo merge `--no-ff` documentado. O script imprime `CERTIFICA sha=H` porque compara com o argumento, enquanto o deploy carimba o `HEAD` efetivo. Na VM, há também uma janela entre remedir a cópia e executar o comando com o bind mount de `app/`; uma alteração da cópia nessa janela preserva o `HASNER_SHA` já montado no comando. Como o lançador remoto vincula `HASNER_SHA` à árvore montada está [nao verificado]. [bin/pista_certifica.sh:21–23,40–49,60–62] [CLAUDE.md:331–333] [bin/deploy.sh:430–436] [bin/suite.sh:138–145,363–373] | [nao verificado]
+| **(3) Ran** | **Sim, se o chamador reutilizar o caminho do log durante a leitura.** O certificado pode ler as três linhas `AMBIENTE` do job A, validar o cabeçalho de A e depois ler `Found 17260`, três podados e `Ran 17257` do log de B que substituiu o arquivo. Se A terminou antes de publicar `Ran`, a conta aceita é toda de B. Com A abortado, a mesma troca de `espera` descrita abaixo fornece o `rc=0` necessário. Os números são uma entrada ilustrativa do selo. [bin/pista_certifica.sh:28–31,34–58,60–62] [bin/tests/test_pista_certifica.sh:67–68] |
+| **(3) rc** | **Sim, com dois recibos genuínos.** Para o mesmo SHA `H`, o log e a primeira leitura de `espera` são de A, cujo cabeçalho traz `id=A sha=H rc=1`. Entre `head` e `tr`, outra coleta grava no mesmo caminho o recibo de B, com `id=B sha=H rc=0` e `oom=0`. O cabeçalho preservado de A satisfaz a checagem de identidade e o `rc=0` de B satisfaz a checagem de status. Com as demais provas verdes, sai `CERTIFICA` para a entrada de A. A troca simples, com o arquivo de B já estável antes da chamada, é recusada pelo ID. [bin/pista_certifica.sh:13–15,46–53,60–62] |
+| **(3) OOM** | **Sim, pela mesma leitura dividida.** Se o recibo de A traz `oom=1` e o de B traz `oom=0`, `L1` pode vir de A e `TOK` de B. O certificador aceita o zero de B. Em arquivo estável, `oom=1` e campo ausente são recusados. A origem do contador remoto, quais processos cobre e quando é coletado estão [nao verificado]. [bin/pista_certifica.sh:14–15,46–53,60–62] |
+
+**Paralelo, subprocessos, truncamento e podados.**
+
+- **`--parallel` e subprocessos.** O runner percorre as subsuítes, lista os testes a podar e refaz a estrutura antes de delegar a execução ao Django. O certificador exige um único `Found` e um único `Ran` que casem com suas expressões. Se pai e filho imprimirem ambos os resumos reconhecidos, a duplicidade reprova. Se sobrar um único resumo de cada, o parser não identifica o processo que os escreveu. Há um utilitário da cópia que roda `manage.py test` em subprocesso e reimprime a saída, mas o teste que chama esse caminho substitui o subprocesso e captura a saída. Um run normal da pista que publique um par enganoso por esse caminho está [nao verificado]. [app/core/runner_quarentena.py:22–33,41–69,75–105] [bin/pista_certifica.sh:27–31,54–58] [app/chamados/tests/e4b_c4_verificar.py:116–142] [app/chamados/tests/test_e4b_c4_orm_protocolo.py:194–205] [nao verificado]
+- **Log truncado.** Se o corte remove `Found`, `Ran` ou uma linha `AMBIENTE` necessária, a prova correspondente falha. Se termina em `Ran 17257 tests in `, o parser já tem a contagem. Cortar depois desse ponto, preservando os campos e o recibo correto, pode certificar. O corte por si só não torna falsa a igualdade nem o `rc` ou `oom`. [bin/pista_certifica.sh:27–58]
+- **Podado contado duas vezes.** `Found 6`, `Ran 3` e três linhas com IDs `p, q, q` passam pelo parser. Se apenas `p` e `q` foram removidos, o esperado era `Ran 4`. No runner da cópia, a listagem e a remoção usam o mesmo predicado por ocorrência da árvore. Estar na lista pelo método e pela classe continua sendo uma decisão booleana por teste. Se duas ocorrências foram descobertas e ambas removidas, contar duas é correto. A produção do caso `p, q, q` com apenas duas remoções em um log genuíno está [nao verificado]. [bin/pista_certifica.sh:54–58] [app/core/runner_quarentena.py:27–38,58–69,86–95] [nao verificado]
+
+## 2. Critérios além das três provas
+
+**Sim, na leitura literal.** `Ran > 0` é uma condição adicional à igualdade e rejeita `Found = podados`, `Ran = 0`. Num run comum com zero testes executados, o próprio teste que escreve `AMBIENTE` também não roda. Um recibo genuíno com zero e todas as outras provas presentes está [nao verificado]. [bin/pista_certifica.sh:54–58] [app/core/tests/test_ambiente_do_run.py:43–55] [nao verificado]
+
+O prefixo `id=<job> sha=<SHA>` exige que o recibo corrobore a identidade do run. Isso vincula `rc` e `oom` ao job do log. O SHA repetido no recibo é uma exigência textual além da igualdade de `AMBIENTE sha=`. SHA de 40 hex e arquivos regulares são guardas de uso com `rc=2`. LABELS, Postgres, settings, `--parallel`, `OK` e o formato das datas ficam fora da decisão. [bin/pista_certifica.sh:20–23,34–62]
+
+## 3. Selo
+
+- Os cinco pares negativo/mutante montam entradas e comparam o status esperado. Os casos positivos podem passar com **stdout vazio**. Trocar o `echo "CERTIFICA ..."` por `:` e preservar `exit 0` mantém as expectativas do selo. A cobertura da imagem da VM também tem um ponto cego. O stub responde pelo texto `{{json .RootFS.Layers}}` com qualquer referência, então o selo aceitaria o certificador consultando outra tag. [bin/tests/test_pista_certifica.sh:13–20,51–54,67–93] [bin/pista_certifica.sh:60–62]
+- **`PROVA1` desliga a comparação, mas mantém a exigência de que a VM seja medida.** Seu caso morde para digest diferente. O mutante continua recusando uma medição vazia. `PROVA2`, `PROVA3-ran`, `PROVA3-rc` e `PROVA3-oom` desligam as guardas marcadas que seus casos exercitam. O caso de `espera` trocado roda só contra o original. [bin/pista_certifica.sh:35–58] [bin/tests/test_pista_certifica.sh:60–93]
+- `bash -n` passou nos dois scripts. A execução do selo está [nao verificado]. A auditoria foi só de leitura e o selo cria e apaga arquivos temporários. [bin/tests/test_pista_certifica.sh:11–22,42–59] [nao verificado]
+
+## 4. Quem escreve e quem lê
+
+| Valor | Escritor e origem | Leitor |
+|---|---|---|
+| `AMBIENTE imagem_camadas` | `AmbienteDoRunTest` imprime `HASNER_IMAGEM_CAMADAS`. Na VM, `suite.sh` injeta o digest de `RootFS.Layers` do ID executado. Injeção remota [nao verificado]. [app/core/tests/test_ambiente_do_run.py:51] [bin/suite.sh:355–371] [bin/recursos.sh:157–175] | `RUN_CAM`, comparado com `VM_CAM`. [bin/pista_certifica.sh:35–38] | [nao verificado]
+| `AMBIENTE sha` | O mesmo teste imprime `HASNER_SHA`. Na VM, `_mede_arvore` fornece o SHA da cópia limpa e `suite.sh` o injeta. Resolução e injeção remotas [nao verificado]. [app/core/tests/test_ambiente_do_run.py:52] [bin/suite.sh:117–130,363–370] | `RUN_SHA`, comparado com o primeiro argumento. [bin/pista_certifica.sh:21,41–42] | [nao verificado]
+| `AMBIENTE job` | O mesmo teste imprime `HASNER_JOB`, ou `ausente`. O escritor remoto da variável e o gerador do ID estão [nao verificado]. [app/core/tests/test_ambiente_do_run.py:16,55] [app/docs/BACKLOG.md:1994] | `RUN_JOB`, comparado com `id=` no cabeçalho do `espera`. [bin/pista_certifica.sh:46–49] | [nao verificado]
+| `Found` | Descoberta do `DiscoverRunner` do Django, à qual o runner local delega antes da poda. A linha de emissão da biblioteca está [nao verificado]. [app/config/settings/ci.py:40] [app/core/runner_quarentena.py:15,72–77] | `FOUND`. [bin/pista_certifica.sh:54,57] |
+| `Ran` | Resumo do executor Django/`unittest` chamado por `super().run_suite`. A linha de emissão da biblioteca está [nao verificado]. [app/core/runner_quarentena.py:98–105] | `RAN`. [bin/pista_certifica.sh:55,57] |
+| `QUARENTENA-PODADO` | `RunnerComQuarentena.build_suite`, uma linha por ocorrência selecionada para poda. [app/core/runner_quarentena.py:86–95] | `POD`, contagem de linhas pelo prefixo. [bin/pista_certifica.sh:56–57] |
+| `rc=` | A primeira linha é atribuída ao `ssh pista espera <id>`. A sessão captura a saída e o contrato documenta que o comando também sai com o rc da suite. A captura do rc e a escrita remotas estão [nao verificado]. [bin/pista_certifica.sh:14] [app/docs/BACKLOG.md:2277] | Procura `rc=0` e conta ocorrências em `TOK`, lendo o texto do arquivo. [bin/pista_certifica.sh:46,50–51] | [nao verificado]
+| `oom=` | A segunda linha é atribuída ao lançador do srv-glpi. Medidor e escrita remotos [nao verificado]. [bin/pista_certifica.sh:14–15] | Procura `oom=0` e conta ocorrências em `TOK`. [bin/pista_certifica.sh:46,52–53] |
+
+## 23/11 20:24 · sessao 6ab5e15bc77d · - · - · origem=Ronald (tmux)
+
+**R2 fecha a troca de identidade.** Os IDs usados para carregar P saem da mesma carga de D que forma `_disputa_por_pk`. O único ponto que insere na lista do cartão está dentro dessa consulta. A carga de R4 alimenta exclusivamente o mapa do explicador. Logo o acesso de R2 encontra toda P listada e reutiliza a D com `colaborador__empresa` já carregados. `app/chamados/services/fio.py:250–259,277–309,326–334,439–453`
+
+**Validar pode sumir em relação à base.** Para P viva e respondida de intervalo, se a empresa da P fechada tem K6 entregue e a empresa da aberta eleita está livre, a base julga a empresa da eleita e pode exibir Validar. O delta consulta a empresa da P, produz o bloqueio que o template respeita e coincide com a porta. K6 entregue não implica pergunta morta pelo C6, que consulta a tranca pelo juiz K7. `54794f38a:app/chamados/services/fio.py:405–410` · `app/chamados/services/fio.py:445,707–739` · `app/chamados/juizes.py:1078–1079,1121–1129,1494–1528` · `app/chamados/services/materializacao.py:825–841,916–919` · `app/chamados/services/validacao.py:218–234,782–784` · `app/templates/chamados/partials/modal_fio.html:274–276`
+
+**R3 fecha.** O juiz unitário delega ao lote, que desempata as diretas por maior PK após `aberta_em`, e a busca por destino conserva `-P.pk`. O RED exige os PKs reais e a cláusula SQL, então a ordenação física sozinha não o satisfaz. `app/chamados/services/fio.py:120–157` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:231–244`
+
+**R4 fecha em parte.** Até três consultas fixas carregam D, P e decisões. O explicador ainda faz uma consulta de Batida por D distinta com P datada. A expressão `or None` também relê P por D direta externa sem perguntas. O RED compara duas inclinações, então permite crescimento comum aos dois grupos e consultas de respostas vazias com HTTP 200. O novo lote ainda altera a ordem das P externas no explicador, de `data_evento, pk` para `id`. `app/chamados/services/fio.py:282–290,326–332,400–415` · `app/chamados/services/explicador.py:166–179` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:105–109,246–278` · `app/templates/chamados/partials/modal_fio.html:468–476`
+
+**Há ampliação de escopo com possível aumento linear de SQL.** A base pulava D posteriores do mesmo container depois de encontrar a primeira aberta, inclusive antes de coletar seus IDs. O delta coleta todas as abertas e lista suas P, mesmo quando o caso não tem empate. Essas P podem acionar novas consultas por pergunta no derivador e mudar o ramo de ações da aberta. Também há crescimento possível para P que já existiam: a D correta com K6 livre deixa a testemunha avançar para as buscas de batida que o K6 errado e entregue interrompia. O mapa em si agrega zero SQL. `54794f38a:app/chamados/services/fio.py:233–250` · `app/chamados/services/fio.py:250–259,291–309,381–385,420–458` · `app/chamados/services/materializacao.py:109–117,916–935` · `app/chamados/juizes.py:240–252` · `app/templates/chamados/partials/modal_fio.html:363–388`
+
+**R1 tem divergência de universo e limite.** O cartão seleciona fechadas do colaborador, o POST seleciona todas as fechadas do container. Uma D direta de outro dono é construível na fixture existente. Se ela estiver fechada e for mais recente, o POST pode reabrir a D diferente da desenhada ou recusá-la pelo teto. A comparação `d.chamado_id == ch.pk` também permite o formulário com uma aberta eleita sem container. `app/chamados/services/fio.py:250–257,335–356` · `app/chamados/services/acoes_disputa.py:284–302` · `app/chamados/models.py:2369–2374` · `app/chamados/tests/test_f5_v7_guarda_sob_trava.py:254–264` · `app/chamados/tests/test_e4c_f5_82_render_le_o_juiz.py:170–177`
+
+Base e cópia comparadas pelo conteúdo, com os quatro hashes de blob da cópia iguais aos do anexo. HEAD e execução dos REDs e mutantes [nao verificado].
+
+## 23/11 20:24 · sessao 116d515ade98 · - · - · origem=Ronald (tmux)
+
+- **R1** executa GET e POST reais com mocks de push. Exige uma reabertura com o `chamado_id` e o PK de D desenhado, depois confirma a transição da fechada e o incremento do contador. O caso de desempate testa o helper diretamente, mas muda a data antes de comparar montador e porta. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106–115,139–154,178–193`
+- **R2** executa testemunha e validação reais com K6 simulado. Confere presença do formulário pelo PK da pergunta e `validada_em` persistido. O espião delega à testemunha real e exige uma chamada correspondente, portanto não passa vazio. A asserção negativa isolada do estado aceita `None`, e o formulário testado não vincula a pergunta ao `chamado_id` na mesma asserção. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:131–136,196–228` · `app/chamados/services/fio.py:700–739` · `app/chamados/services/acoes_disputa.py:13–24`
+- **R3** usa ambos os seletores reais e exige PK e `ORDER BY` explícitos. **R4** usa GET real e exige 200, mas compara só inclinações. Pode passar com a explicação omitida ou com custo linear igual nos dois grupos. O selo `_Ancora` verifica texto no fonte. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106–109,230–290`
+- Os asserts de HTML no POST `acao=nada` usam o mesmo renderer integral do GET. Os POSTs de negócio usam `contexto_parcial_fio`, mas seu HTML não é conferido. `app/chamados/views.py:883–890,928–957` · `app/chamados/services/fio.py:552–561,609–613,696–698,739–748,875–876` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:139–154,209–214`
+- Patches e execuções M_R1 e M_R2, asserções atingidas e verdes correspondentes **[nao verificado]**. Os resultados não constam do material fornecido nem da cópia inspecionada. `.gitignore:53–54` · **[nao verificado]**
+- O R4 carrega D, P e decisões em até três consultas fixas, mas mantém a consulta de batidas para cada D com perguntas datadas. O lote altera a ordem dos itens externos de `data_evento,pk` para PK e o modal itera na nova ordem. `app/chamados/services/fio.py:282–290,326–332,400–415` · `app/chamados/services/explicador.py:166–179,212` · `app/templates/chamados/partials/modal_fio.html:465–476`
 
 ## 23/11 20:23 · sessao fdebdce8e070 · - · - · origem=Ronald (tmux)
 
@@ -447,400 +598,4 @@ Executei o fluxo Python da cópia com tmux, relógio e E/S em memória, sem cria
 
 As linhas de `par_v4_r.txt` são relativas ao anexo fornecido, com `### A` na linha 1. A identidade Git da cópia com o hash informado está [nao verificado].
 
-## 23/11 17:27 · sessao d8fd53722896 · E4C-F5 · leitura · origem=Code
-
-Revisão do rascunho 8.2 pelo código da cópia e pelo anexo raspado. A identificação do `HEAD` pelo Git ficou **[nao verificado]**. A cópia não tem metadados Git acessíveis.
-
-| id | bate? | evidência | o que não bate |
-|---|---|---|---|
-| 1 — Juiz e predicado | Parcial | `JUIZES.md` aponta `_disputa_do_chamado` em **FIO / DISPUTA**, mas a função fica fora do registro formal `JUIZES` em `core/juizes.py`. Ela prioriza a D aberta ligada diretamente ao chamado. Só na falta dessa D pega a P de maior `pk` com destino no chamado e D aberta, sem exigir que a P esteja viva. Chamadores de produção: o POST compartilhado do fio e do modal, a reabertura pela supervisão, a fila por causa e os comandos de arquivamento e de validação classe A. [JUIZES.md:7](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/docs/JUIZES.md:7), [JUIZES.md:43](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/docs/JUIZES.md:43), [core/juizes.py:284](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/core/juizes.py:284), [fio.py:130](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:130), [fio.py:615](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:615), [views.py:1405](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/views.py:1405), [fila_por_causa.py:209](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fila_por_causa.py:209), [arquivar_competencia_encerrada.py:155](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/management/commands/arquivar_competencia_encerrada.py:155), [validar_classe_a.py:48](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/management/commands/validar_classe_a.py:48) | A função já existe e é documentada. A condição de maior `pk` descreve apenas o fallback. |
-| 2 — `setdefault` e leitores | Não | Na cópia, o `setdefault` está em `fio.py:278`. A primeira P por `id` só fornece a D quando falta uma D no mapa direto. A D alimenta `disputa_obj`, a explicação, o estado de aplicação das perguntas e as flags de correção. O fio admin usa `disputa_obj` para as cores. O Meu Atendimento usa também o `pk` dela no POST de solicitação de correção. O modal completo e o re-render parcial usam o mesmo montador. [fio.py:265](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:265), [fio.py:278](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:278), [fio.py:286](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:286), [fio.py:336](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:336), [fio.py:375](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:375), [fio.py:493](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:493), [views.py:889](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/views.py:889), [fio_colaborador.html:164](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/templates/chamados/fio_colaborador.html:164), [_card_atendimento.html:199](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/templates/chamados/partials/_card_atendimento.html:199) | Uma troca restrita ao render do modal deixa a eleição antiga no montador e nos outros leitores. Trocar o montador compartilhado alcança também esses leitores, inclusive o destino do POST do colaborador. |
-| 3 — Tela e porta | Não como regra geral | **Inline da lista:** recebe o `cid`. Busca D aberta direta e, na falta dela, a primeira D aberta do mesmo colaborador com P apontando para o chamado. A ordenação é `-aberta_em` da D. **Validar no modal:** recebe `pergunta_id`, confere a âncora e o dono e usa `P.disputa`. **Regularizar e Reabrir questionário:** as portas já usam `_disputa_do_chamado`. [_lista_chamados.html:82](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/templates/chamados/partials/_lista_chamados.html:82), [views_cobrar.py:155](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/views_cobrar.py:155), [models.py:1941](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/models.py:1941), [modal_fio.html:306](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/templates/chamados/partials/modal_fio.html:306), [fio.py:632](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:632), [fio.py:656](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:656), [fio.py:615](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:615), [fio.py:718](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:718), [views.py:1405](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/views.py:1405) | Com (A) só no render, o inline conserva sua consulta e pode escolher outra D. No modal, a D do cabeçalho pode diferir da D da pergunta validada. A coincidência pelo helper vale para Regularizar e Reabrir questionário. |
-| 4 — Outro colaborador | Zero no recorte do anexo. Garantia **[nao verificado]** | A listagem atual limita as Ds ao colaborador. `_disputa_do_chamado` consulta sem filtro de colaborador nos dois ramos. Se houver vínculo cruzado gravado, pode devolver a D de outro colaborador pelo container direto ou pela P vencedora do fallback. As portas de nascimento e reapontamento recusam destino cruzado na escrita. [fio.py:214](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:214), [fio.py:130](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:130), [models.py:3024](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/models.py:3024), [fio.py:909](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:909) | O zero fornecido é de **P de D aberta com destino em cartão de outro colaborador**. Vínculos cruzados pelo container direto e a contagem de cartões após (A) ficam **[nao verificado]**. |
-| PRONTO — 25 cartões | **[nao verificado]** | O anexo relata 25 divergências entre o render e `_disputa_do_chamado`. No código, o montador também pode associar D fechada, enquanto o helper só devolve D aberta. O modal exige `disputa_obj` para exibir o bloco de perguntas. [fio.py:209](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:209), [fio.py:130](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/chamados/services/fio.py:130), [modal_fio.html:123](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/templates/chamados/partials/modal_fio.html:123) | O anexo traz a contagem da divergência. O resultado do render nos 25 cartões após (A), inclusive em casos em que o helper possa devolver `None`, fica **[nao verificado]**. |
-
-## 23/11 17:25 · sessao 4087a873873c · PISTA-2-CERTIFICA · verificador · origem=Code
-
-| id | procede? | arquivo:linha | consequência | cura mínima |
-|---|---|---|---|---|
-| **Veredito** | **Reprova o fechamento geral. Os dois casos exatos da volta 2 foram curados.** | `bin/pista_certifica.sh:41–54`, `:134–144`, `:191–199` | A janela de `AMBIENTE` usa a leitura conferida e `imagem_camadas =x` conta como ocorrência. Ainda sai `CERTIFICA` com erro de leitura na janela de `QUARENTENA` ou com uma chave em maiúsculas ao lado da canônica, dentro da janela. | Fechar os dois caminhos e selar cada um. |
-| 1a · Uma leitura de `AMBIENTE` | Sim | `bin/pista_certifica.sh:41–54`, `:134–141` | Um `grep -nE` entrega conteúdo e número de linha. `amb` e a janela consomem `AMB_LINHAS`. `grep rc 2` com digest na saída deu `rc 1`. `AMBIENTE` depois do `OK` também deu `rc 1` com o dublê que falharia na segunda leitura. | Manter a leitura compartilhada. |
-| 1b · Outras leituras diretas de `$LOG` | Sim, 12 chamadas descartam o status | `bin/pista_certifica.sh:94`, `:95`, `:96`, `:100`, `:104`, `:110`, `:116`, `:126` (duas), `:127`, `:130`, `:142–143` | Contagem e texto do veredito, busca de `FAILED`, `Ran`, `Found`, podados, resumo, posições de `Found`/`Ran`/`OK`, cabeçalhos `ERROR:`/`FAIL:` e janela de `QUARENTENA`. Testadas uma por vez, as 12 deixaram sair `rc 0` com `grep rc 2` e a saída normal preservada. Na janela de `QUARENTENA`, uma linha após o `OK` deu `rc 1` com leitura normal e `rc 0` com `grep rc 2` **sem saída**. | Conferir o status antes de usar a saída. Na janela, distinguir ausência legítima de falha e registrar falha em qualquer estágio. |
-| 1c · Comandos sobre dados extraídos do log | Sim | `bin/pista_certifica.sh:102`, `:106`, `:111`, `:112` (duas), `:114`, `:115`, `:117`, `:179–181` | Também se perde o status das contagens de `Ran`/`Found`, do filtro e das contagens de podados, do pipeline de duplicatas, da contagem do resumo e dos dois pipelines de rótulos. As guardas decidem pelo texto produzido. | Conferir cada status ou fazer essas validações com operações do Bash. |
-| 2a · Branco, tab e CRLF | `rc 1` nos casos ensaiados | `bin/pista_certifica.sh:48–54`, `:191–195` | Espaço ou tab antes de `=`, tab ou espaço extra depois de `AMBIENTE` e indentação deram `rc 1`, sozinhos e junto da canônica. CRLF deu `rc 1` na linha isolada, na duplicata e no log inteiro. Na linha isolada, o `\r` fica no valor e causa divergência. | Manter a recusa e selar CRLF. |
-| 2b · Caixa e grafia ignorada | Sim, há caminho para `rc 0` | `bin/pista_certifica.sh:41`, `:48–54`, `:134–141`, `:191–199` | `AMBIENTE IMAGEM_CAMADAS=x`, caixa mista na chave e `AMBIENTE imagem_camadas x` deram `rc 1` sozinhas e `rc 0` junto da canônica, dentro da janela. Com `AMBIENTE` em maiúsculas, a janela ainda pega a variante tardia. Com `ambiente` em minúsculas, a variante tardia também passou junto da canônica. | Reconhecer prefixo e chaves conhecidas sem distinguir caixa na detecção. Contar também a chave com delimitador ausente e exigir a grafia exata para aceitar o valor. |
-| 3a · Mutantes 23 e 24 | Sim, ambos mordem | `bin/tests/test_pista_certifica.sh:143–148`, `:435–443`, `:89–93`, `:503` | Cada mutação alterou uma linha. Original `rc 1`, mutante `rc 0` nos dois casos. Como `ORIG`, cada mutante faria a asserção correspondente falhar e o selo sair `1`. | Manter os dois casos. |
-| 3b · Mutantes 17–22 | Sim, os seis seguem mordendo | `bin/tests/test_pista_certifica.sh:409–434` | Original `rc 1`, mutante `rc 0` em cada caso: `9` nas duas grafias, opção repetida, saída plausível com `grep rc 2`, duplicata indentada e `--parallel` sem valor no fim. | Manter os seis casos. |
-| 4 · Teto, `auto`, juiz e `exit 3` | Nenhuma regressão nos ensaios | `bin/pista_certifica.sh:157–175`, `:187–195`; `bin/suite.sh:162–183`, `:355–373`; `bin/recursos.sh:157–175` | O certificador aceitou `1` e `8` nas duas grafias e recusou `9` e `auto`. A porta manteve default `4`, aceitou `--parallel 8` e devolveu `2` para `9`, `auto` e `--parallel=8`. O juiz manteve os bytes com zero, um e dois LFs. Timeout, erro do `inspect` e formato inválido deram ao juiz `3`, `1` e `4`, respectivamente, com saída vazia. Com `.Id` válido, os três erros fizeram a porta sair `3` antes da trava. | Manter as guardas. |
-| 5 · Abafadores novos no fluxo real | **Desde a volta 2: 0 / 0 / 0. No diff desde a base: 0 / 0 / 1 adição.** | `bin/pista_certifica.sh:41–54`, `:134–141`, `:187–190`; `bin/recursos.sh:161–167`; `bin/pista_certifica.sh:157` na base | Na ordem `except`, `\|\| true`, `2>/dev/null`. A adição no diff inteiro fica no `inspect` de camadas, com status tratado e diagnóstico próprio. Saiu o `2>/dev/null` do antigo `inspect` de `.Id` no certificador. Saldo líquido zero. | Nenhuma para esses três mecanismos. A perda de status do log está em 1b e 1c. |
-| Escopo | Ensaios parciais em memória | `bin/pista_certifica.sh:27–35`; `bin/tests/test_pista_certifica.sh:13–15`, `:89–93`; `bin/suite.sh:309–310`, `:355–365` | A cópia local tem os blobs-base. As referências acima usam a numeração após o diff. Os ensaios usaram entradas sintéticas e dublês de Git e Docker. A porta foi exercitada em modo seco e até a guarda de camadas. O commit da cópia, o hash integral do selo reconstruído, a execução integral dos selos, o banco, o log de produção e o lançador remoto ficam [nao verificado]. | — |
-
-## 23/11 17:16 · sessao 70c481a06ab8 · NOTURNO-NAO-APURADO · leitura · origem=Code
-
-```python
-import logging
-import sys
-from collections import Counter, defaultdict
-from contextlib import ExitStack
-from datetime import date, datetime, time, timedelta
-from unittest.mock import patch
-
-sys.dont_write_bytecode = True
-
-from django.db import connection, transaction
-from django.utils import timezone
-from django_tenants.utils import schema_context
-
-from colaboradores.models import Colaborador
-from folha.export import competencia_entregue
-from ponto import motor_calculo_v2 as motores
-from ponto.janelas import janela_atual
-from ponto.models import DiaPago
-from ponto.services import dia_pago, fechamento
-from ponto.turnos import batidas_apuraveis
-
-INI, ATE = date(2026, 10, 1), date(2026, 11, 22)
-UM_DIA = timedelta(days=1)
-H22, H05 = time(22), time(5)
-ALERTA = "contados dos pares fechados"
-ARGUMENTOS = ("periodos", "ft_certa", "ft_feriado", "ft_sem_escala")
-[nome] = ("cauda_paga", "cauda_nao_paga_capada", "sem_cauda_noturna")
-TOL_MIN = 1.0
-NV = "[nao verificado]"
-
-
-def linhas_base():
-    # app/ponto/models.py:311-327,349-351
-    return DiaPago.objects.filter(
-        data__range=(INI, ATE), tipo=DiaPago.TIPO_DIA, versao="motor",
-        minutos_realizados__gt=0, horas_noturnas=0,
-    )
-
-
-def alvos_por_competencia(colab):
-    # noturno_ramo_frota.py:32-57
-    inicio = timezone.make_aware(datetime.combine(INI, H22))
-    fim = timezone.make_aware(datetime.combine(ATE + UM_DIA, H05))
-    dias_com_batida = set()
-    # app/ponto/turnos.py:2877-2904
-    batidas = batidas_apuraveis(colab, inicio, fim).values_list("timestamp", flat=True)
-    for timestamp in batidas.iterator():
-        local = timezone.localtime(timestamp)
-        if local.time() >= H22:
-            dias_com_batida.add(local.date())
-        elif local.time() < H05:
-            dias_com_batida.add(local.date() - UM_DIA)
-
-    linhas = linhas_base().filter(colaborador_id=colab.pk).values_list(
-        "data", "mes", "ano", "minutos_realizados", "horas_noturnas", "minutos_previstos",
-    )
-    alvos = defaultdict(dict)
-    for dia, mes, ano, realizado, noturno_h, previsto in linhas:
-        if dia in dias_com_batida:
-            _, fim_comp = janela_atual(dia, colab.empresa)  # app/ponto/janelas.py:60-63
-            if (ano, mes) == (fim_comp.year, fim_comp.month):
-                alvos[ano, mes][dia] = (realizado, noturno_h * 60, previsto)
-    return alvos
-
-
-def capturar_lavratura(cid, mes, ano):
-    capturas, chamadas_janela, rastros = [], [], {}
-    janela_real = motores.MotorBase._janela_do_par
-
-    def capturar_janela(motor, entrada, saida=None):
-        resposta = janela_real(motor, entrada, saida)  # app/ponto/motor_calculo_v2.py:1752-1763
-        chamadas_janela.append((entrada, saida, resposta))
-        return resposta
-
-    def observar_periodo(calcular_real):
-        def calcular(motor, entrada, saida, intervalos=()):
-            inicio = len(chamadas_janela)
-            periodo = calcular_real(motor, entrada, saida, intervalos)
-            chamadas = chamadas_janela[inicio:]
-            del chamadas_janela[inicio:]
-            if len(chamadas) != int(periodo.saida is not None):
-                raise RuntimeError(f"Quantidade inesperada de janelas para col{cid:03d} {mes:02d}/{ano}")
-            janela = chamadas[0] if chamadas else None
-            if janela is not None and janela[:2] != (periodo.entrada, periodo.saida):
-                raise RuntimeError(f"Pontas originais divergentes para col{cid:03d} {mes:02d}/{ano}")
-            rastros[id(periodo)] = (periodo, motor, janela)
-            return periodo
-        return calcular
-
-    def capturar(colab, mes_arg, ano_arg, *, versao, **dados):
-        if versao == "motor":
-            capturas.append(((colab.pk, mes_arg, ano_arg), dados))
-        return 0
-
-    with ExitStack() as pilha:
-        # app/ponto/services/fechamento.py:1191-1204,1227,1277-1296
-        pilha.enter_context(patch.object(dia_pago, "lavrar", new=capturar))
-        pilha.enter_context(patch.object(motores.MotorBase, "_janela_do_par", new=capturar_janela))
-        # app/ponto/motor_calculo_v2.py:2750,2877,3215,3534-3547,3560-3569
-        for classe in (motores.Motor12x36, motores.MotorTurnoPartido, motores.MotorComercial):
-            pilha.enter_context(patch.object(
-                classe, "calcular_periodo", new=observar_periodo(classe.calcular_periodo),
-            ))
-        # Propaga erros dos handlers genericos destes dois modulos.
-        # app/ponto/motor_calculo_v2.py:1387-1420,1535-1538
-        # app/ponto/services/fechamento.py:54-59,1043-1045,1081-1099,1238-1241,1297-1308
-        pilha.enter_context(patch.object(motores, "Exception", new=(), create=True))
-        pilha.enter_context(patch.object(
-            fechamento, "Exception", new=fechamento._GradeSemCelula, create=True,
-        ))
-        fechamento.recalcular_fechamento_mes(  # app/ponto/services/fechamento.py:448
-            mes, ano, colaborador_ids=[cid], somente_leitura=True, lavrar_dias_pagos=True,
-        )
-
-    if not capturas:
-        return None, rastros
-    if len(capturas) != 1 or capturas[0][0] != (cid, mes, ano):
-        raise RuntimeError(f"Captura inesperada para col{cid:03d} {mes:02d}/{ano}")
-    return capturas[0][1], rastros
-
-
-def ramo_do_dia(periodos, realizado, noturno):
-    # noturno_ramo_frota.py:86-112
-    if not periodos:
-        return "sem_periodo"
-    if noturno != 0:
-        return "outro:periodo_com_noturno"
-
-    positivos = [(p, credito) for _, p, credito in periodos if p.minutos_trabalhados > 0]
-    if not positivos:
-        if any(p.saida is not None and (p.minutos_fora_janela or 0) >
-               (p.saida - p.entrada).total_seconds() / 60 for _, p, _ in periodos):
-            return "fechado_fora_janela_maior_que_o_par"
-        return "outro:periodos_sem_trabalhado"
-
-    creditados = [p for p, credito in positivos if p.turno_aberto and credito]
-    if creditados:
-        if realizado is None:
-            return "outro:credito_com_realizado_ausente"
-        if len(positivos) == 1 and realizado > 0 and round(creditados[0].minutos_trabalhados) == realizado:
-            return "credito_turno_aberto"
-        return "outro:credito_nao_cobre_sozinho_o_realizado"
-
-    if all(not p.turno_aberto and p.saida is not None for p, _ in positivos):
-        return "periodo_fechado_sem_noturno"
-    return "outro:trabalhado_em_aberto_sem_alerta_de_credito"
-
-
-def instante(ts):
-    return timezone.localtime(ts).isoformat(timespec="microseconds") if ts is not None else "-"
-
-
-def sim_nao(valor):
-    return "sim" if valor else "nao"
-
-
-def emitir(colab, mes, ano, alvos, lavra, rastros, totais_ramo, dias_motor, periodos_motor):
-    if lavra is None:
-        return
-    por_dia = defaultdict(list)
-    for argumento in ARGUMENTOS:
-        for p in lavra[argumento]:
-            dia = dia_pago._dia_de(p, lavra["dia_da_jornada"])  # app/ponto/services/dia_pago.py:109-132
-            if dia in alvos:
-                por_dia[dia].append((argumento, p, any(ALERTA in a for a in p.alertas)))
-
-    exportada = sim_nao(
-        colab.empresa_id is not None and competencia_entregue(colab.empresa_id, mes, ano)
-    )  # app/folha/export.py:556-594
-    rotulo = f"col{colab.pk:03d}"
-    for dia, (realizado, noturno_gravado, previsto) in sorted(alvos.items()):
-        periodos = por_dia[dia]
-        realizado_reap = (lavra["realizado_por_dia"] or {}).get(dia)
-        noturno_reap = sum(p.minutos_noturnos_legais or 0 for _, p, _ in periodos)
-        if ramo_do_dia(periodos, realizado_reap, noturno_reap) != "periodo_fechado_sem_noturno":
-            continue
-
-        trabalhado = sum(p.minutos_trabalhados or 0 for _, p, _ in periodos)
-        fora_janela = sum(p.minutos_fora_janela or 0 for _, p, _ in periodos)
-        bruto = trabalhado + fora_janela
-        com_teto = min(bruto, previsto)
-        confere = sim_nao(abs(realizado - com_teto) <= TOL_MIN)
-        noturno_original = 0.0
-        motores_do_dia = set()
-
-        for numero, (argumento, p, _) in enumerate(periodos, 1):
-            _, motor, janela = rastros[id(p)]
-            classe = type(motor).__name__
-            motores_do_dia.add(classe)
-            periodos_motor[classe] += 1
-
-            original = NV
-            e, s, fora_e, fora_s = None, None, None, None
-            ponta = "sem_janela"
-            if janela is not None:
-                entrada, saida, (e, s, fora_e, fora_s) = janela
-                pontas = [nome for nome, antes, depois in (("entrada", entrada, e), ("saida", saida, s))
-                          if antes != depois]
-                ponta = "+".join(pontas) or "nenhuma"
-                # A mesma lista passada ao escritor do noturno.
-                # app/ponto/motor_calculo_v2.py:969-1005,1834-1842,2764-2792,2891-2896,3237-3260
-                _, original = motores.MotorBase.calcular_noturnas(motor, entrada, saida, p.intervalos_do_motor)
-                noturno_original += original
-
-            print(
-                f"PERIODO {rotulo} {dia} n={numero} argumento={argumento} motor={classe} "
-                f"entrada_original={instante(p.entrada)} saida_original={instante(p.saida)} "
-                f"entrada_efetiva={instante(e)} saida_efetiva={instante(s)} ponta_recortada={ponta} "
-                f"fora_entrada={fora_e} fora_saida={fora_s} noturno_legal_original={original} "
-                f"noturno_legal_efetivo={p.minutos_noturnos_legais} "
-                f"trabalhado_periodo={p.minutos_trabalhados} fora_janela_periodo={p.minutos_fora_janela} "
-                f"previsto={previsto} realizado={realizado} trabalhado_dia={trabalhado} "
-                f"fora_janela_dia={fora_janela} min_trabalhado_mais_fora_previsto={com_teto} "
-                f"realizado_igual_min_aprox={confere} "
-                f"competencia={ano:04d}-{mes:02d} competencia_exportada={exportada}"
-            )
-
-        if noturno_original == 0:
-            ramo_sub = "sem_cauda_noturna"
-        elif min(realizado, previsto) >= bruto - TOL_MIN:
-            ramo_sub = "cauda_paga"
-        else:
-            ramo_sub = "cauda_nao_paga_capada"
-
-        totais_ramo[ramo_sub] += 1
-        dias_motor.update(motores_do_dia)
-        print(
-            f"DIA2 {rotulo} {dia} ramo_sub={ramo_sub} noturno_original={noturno_original} "
-            f"noturno_gravado={noturno_gravado} realizado={realizado} previsto={previsto}"
-        )
-
-
-def main():
-    totais_ramo = Counter(dict.fromkeys([nome], 0))
-    dias_motor, periodos_motor = Counter(), Counter()
-    nivel_anterior = logging.root.manager.disable
-    logging.disable(sys.maxsize)  # app/config/settings/saas.py:138-141,160-183
-    try:
-        with schema_context("juliani"), transaction.atomic(durable=True):
-            with connection.cursor() as cursor:
-                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
-                cursor.execute("SET TRANSACTION READ ONLY")
-                cursor.execute("SELECT current_schema(), current_setting('transaction_read_only')")
-                if cursor.fetchone() != ("juliani", "on"):
-                    raise RuntimeError("A sonda exige juliani em READ ONLY")
-
-            ids = set(linhas_base().values_list("colaborador_id", flat=True).order_by().distinct())
-            # app/colaboradores/models.py:283
-            colabs = Colaborador.objects.filter(pk__in=ids).select_related("empresa").order_by("pk")
-            for colab in colabs:
-                for (ano, mes), alvos in sorted(alvos_por_competencia(colab).items()):
-                    lavra, rastros = capturar_lavratura(colab.pk, mes, ano)
-                    emitir(colab, mes, ano, alvos, lavra, rastros, totais_ramo, dias_motor, periodos_motor)
-    finally:
-        logging.disable(nivel_anterior)
-
-    for ramo in [nome]:
-        print(f"TOTAL RAMO_SUB={ramo} n_dias={totais_ramo[ramo]}")
-    for motor in sorted(dias_motor):
-        print(f"TOTAL MOTOR={motor} n_dias={dias_motor[motor]} n_periodos={periodos_motor[motor]}")
-    print("FIM")
-
-
-main()
-```
-
-- O universo, o pseudônimo e o predicado `periodo_fechado_sem_noturno` seguem o anexo. `noturno_ramo_frota.py:32–57,86–112,119–147`
-- O cálculo original reutiliza o motor da fatia e os intervalos passados ao escritor do noturno após o recorte. Períodos abertos saem antes da janela e ficam com original `[nao verificado]`. `app/ponto/motor_calculo_v2.py:969–1005,1834–1842,2750–2792,2877–2896,3215–3260`
-- `noturno_legal_efetivo` vem do período entregue à lavratura interceptada. `noturno_gravado`, `realizado` e `previsto` vêm do `DiaPago`, e `competencia_exportada` usa `folha.export.competencia_entregue`. `app/ponto/services/fechamento.py:1191–1227`, `app/ponto/models.py:325–351`, `app/folha/export.py:556–594`
-- Adotei tolerância absoluta de 1 minuto. Com original positivo, `cauda_paga` indica que `trabalhado + fora_janela` cabe em `min(realizado, previsto)` nessa tolerância. `cauda_nao_paga_capada` indica cobertura insuficiente nessa aproximação. A atribuição da diferença à cauda e seu pagamento seguem `[nao verificado]`. `app/ponto/turnos.py:725–771`, `app/ponto/services/dia_pago.py:386–402`
-- A sonda usa `READ ONLY` e intercepta as lavraturas `motor` e `oraculo`. Erros dos tratamentos genéricos instrumentados propagam com traceback. A execução em `juliani` e os totais reais seguem `[nao verificado]`. `app/ponto/services/fechamento.py:54–59,1128–1144,1191–1204,1277–1308`, `app/ponto/services/dia_pago.py:359–360`
-
-## 23/11 17:13 · sessao 9266594fb093 · NOTURNO-NAO-APURADO · verificador · origem=Code
-
-**REPROVADO.** O diff copia o noturno dos mesmos pares usados no crédito, mas pode levar à rubrica 25 minutos já contados em outro período ou bloqueáveis pela L-097. [app/ponto/motor_calculo_v2.py:2525](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:2525) [app/ponto/motor_calculo_v2.py:2553](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:2553) [app/folha/export.py:447](/home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/folha/export.py:447)
-
-Conferi os blobs do motor `2892f7ff9` e `a2e7c6ab5` e reconstruí o diff em memória. As sondas usaram batidas sintéticas e respostas de cadastro e janela injetadas. Hash do commit da cópia, suíte Django, RED original e impacto em produção [nao verificado].
-
-| id | procede? | arquivo:linha | consequência | cura mínima |
-|---|---|---|---|---|
-| 1a · Mesmos pares | **Sim, no crédito** | Diff `app/ponto/motor_calculo_v2.py:2561–2575`, `:1010–1016` | Cada `_pc` que passa pelos filtros entra nas três somas. A porta lê relógio e legais já gravados pelo `calcular_periodo`, com o recorte e os intervalos daquele par. Um par diurno pode contribuir só com trabalhado e um par totalmente recortado pode contribuir só com `fora_janela`. A seleção dos objetos é a mesma. | Manter a transferência pela porta. |
-| 1b · Dupla contagem | **Sim, reproduzida** | `app/ponto/motor_calculo_v2.py:2403–2408`, `:2492–2494`, `:2522–2525`, `:2550–2556`, `:321`, `:2940–2955` | `_pagos_a` exclui fechados com a mesma entrada em `resultado.periodos`, inclusive se estiverem em outro dia da chamada. A guarda deixa passar sobreposição com entradas diferentes e ignora `periodos_ft`. Na sonda do partido, `16:00 E, 21:30 E, 22:30 S` contou **22:00–22:30 duas vezes**. Em outra sonda, o par da madrugada **01:00–01:30** entrou inteiro em `periodos_ft` e também no crédito de um aberto de D+1. O trabalhado já duplicava no código-base. O diff estende a duplicação ao adicional. | Resolver a sobreposição no crédito, usando os trechos efetivamente pagos nas duas listas. Selar a sobreposição parcial e a repetição integral na virada. |
-| 1c · HE noturna e resets | **O aberto conserva o adicional e os splits ficam em zero** | `app/ponto/motor_calculo_v2.py:1012`, `:2855`, `:3294`, `:2928–2939`, `:3329–3338`, `:3104`, `:3160`, `:3191`, `:3361`, `:3423`; `app/folha/export.py:424–447` | A porta transfere dois campos. Os resets mensais zeram os **subconjuntos** 50/100 e as reescritas pulam o aberto por `saida=None`. Se o excedente diário do partido mudar e o portador for fechado, o split desse fechado pode mudar. O TXT usa o adicional e as faixas totais de HE, sem emitir os subconjuntos em linhas próprias. | Preservar os dois campos do adicional e testar o split no portador fechado quando a régua `legais` elevar a HE. |
-| 2 · Escritor único | **Sim, no escopo do selo** | `app/ponto/tests/test_noturno_sitio_unico.py:63–79`, `:107–155`; diff `app/ponto/motor_calculo_v2.py:1010–1016`; base `:1473–1476` | Rodei `varrer` sobre os dois blobs. Ambos retornam somente `MotorBase._escrever_noturnas`. `pares_creditados` agrega resultados, sem recalcular geometria, janela ou fator. O `setattr` dinâmico da L-097 já existia e fica fora da detecção por nome literal. | Manter a allowlist em zero e o cálculo do par na porta atual. |
-| 3 · Minutos | **Sem delta pelo diff, para os mesmos insumos** | **Trabalhado / fora:** `app/ponto/motor_calculo_v2.py` base `:2785/:2787`, `:2893/:2895`, `:3256/:3258` → diff `:2800/:2802`, `:2908/:2910`, `:3271/:3273`. Bloqueio base `:1472–1476` → diff `:1483–1487`. Crédito base `:2559–2560` → diff `:2572–2573`. **Realizado, antes e depois:** `app/escala/utils.py:2056–2069`, `app/ponto/services/cartorio.py:757–759`, `app/escala/services/leitor_celula.py:423`, `app/ponto/services/fechamento.py:1060–1064`, `:1185`, `app/ponto/services/dia_pago.py:288–292`, `:394–401`, `:477–483`. | As escritas de trabalhado e fora mantêm as mesmas expressões. O `minutos_realizados` publicado vem da grade e passa pelo teto diário. Se “realizado” no aval significa esse campo, a equivalência com o crédito do motor continua sem garantia. O BO-B já fixa **360 no motor e 300 no juiz** em `app/ponto/tests/test_bob_dia_pago_se_contradiz.py:183–190`. | Preservar a grade e explicitar que a igualdade provada é entre os insumos do **crédito do motor**. |
-| 4 · Régua `legais` | **Efeito da regra existente, com efeito em dinheiro** | `app/ponto/motor_calculo_v2.py:3120–3160`, `:3560–3567`, `:3409`; diff `:3151–3159`; `app/core/regua_cct.py:107` | **Um sítio de excedente, uma família de motor:** `MotorTurnoPartido`, inclusive `MotorTurnoPartidoNoturno` por herança. `legais − relógio` do aberto passa a compor a base diária e pode cruzar a tolerância ou mudar as faixas 50/100. `relogio`, `semanal_44` e o comercial seguem suas bases atuais. Quantidade de dias e valores [nao verificado]. | Selar o efeito no partido e medir HE 50/100 junto da rubrica 25 no escopo aberto. |
-| 5 · L-097 | **Fura em feriado alcançável pelo crédito** | `app/docs/LEIS.md:115`; `app/ponto/motor_calculo_v2.py:1440–1488`, `:2461`, `:2492–2516`, `:2553`; diff `:2575` | O bloqueio vê o aberto ainda com zero trabalhado. Depois, o `_pc` do crédito passa por `calcular_periodo` sem passar pelo bloqueio total. Na sonda com **feriado, previsto zero, janela ativa e sem autorização**, o fechado saiu com zero de noturno e o aberto passou de zero a **180 min de relógio e 205,71 legais**. A rubrica nova expõe um desvio que já existia no trabalhado. Uma folga classificada em `periodos_ft` fica fora do laço de crédito do aberto. | Aplicar o bloqueio existente ao par do crédito antes de acumular, com o dia de jornada e a classificação já julgados. Selar feriado bloqueado, autorização e folga. |
-| 6 · Testes, mutantes e relógio | **Os três mordem na sonda isolada** | Diff `app/ponto/tests/test_noturno_credito_turno_aberto.py:32–38`, `:86–113`; diff `app/ponto/motor_calculo_v2.py:1010–1016`, `:2561–2575` | Tirar a chamada ou passar `[]` dá **0/0** em vez de **180/205,71**. Somar legais em relógio dá **205,71** em vez de **180** no caso com redução. O gêmeo sem redução e o BO-B de crédito zero cobrem as outras duas bordas. **0 `except` novos**. O relógio está congelado na classe. Resultado dos testes Django [nao verificado]. | Acrescentar casos com múltiplos pares, duplicação, feriado bloqueado e excedente do partido. |
-| 7a · Quem escreve e lê | **Rastreado** | `app/ponto/motor_calculo_v2.py:214–215`, `:260–261`, `:321`, `:1004–1005`, `:1473–1476`, `:3139`; diff `:1015–1016`, `:2575`; `app/ponto/calculador/periodo.py:644–646`, `:739–756`; `app/ponto/services/fechamento.py:918`, `:1163`, `:1201–1227`; `app/ponto/services/dia_pago.py:179`, `:224`, `:924`; `app/ponto/services/espelho.py:99–103`, `:831`, `:1306`; `app/relatorios/cartao_pela_celula.py:176`, `app/relatorios/pdf_espelho.py:844–859`, `:910–914`; `app/api/views.py:1431`, `:1662`; `app/ponto/management/commands/diff_calculador.py:260`; `app/folha/export.py:447`, `:730–739` | O aberto nasce com zero. A porta passa a gravar os dois campos. O reset da L-097 opera antes do crédito e a releitura V3 pula o aberto. O partido e o espelho leem ambos. Os legais alimentam o fechamento e a rubrica 25, a lavratura `motor`, o cartão e o comparador. Tela, PDF e app consomem a lavratura ou o resumo. | Manter a escrita na porta e corrigir a seleção dos pares na origem. |
-| 7b · Oráculo | **Pode divergir da linha `motor`** | `app/ponto/calculador/alimentacao.py:83–112`, `:157–158`, `:525–528`; `app/ponto/calculador/regras.py:613–615`, `:844–851`; `app/ponto/services/fechamento.py:1265–1294`; `app/ponto/services/dia_pago.py:322–333` | O oráculo vê o aberto como `(entrada, None, dia)`, sem os segmentos do crédito em `pares_por_dia` ou nas pontas de HE. Se fornecer `horas_noturnas` para o dia, `lavrar` substitui a soma que já incluía o crédito. Se omitir a rubrica, esse laço conserva a soma do motor. O objeto `PeriodoCalculo` fica intacto. | Na obra do oráculo, levar à lavratura a contribuição já apurada pelo motor para o dia. |
-| Escopo · Exportadas | **Proteção geral ausente no diff** | `app/ponto/services/fechamento.py:36–43`, `:539–564`, `:1160–1163`, `:1537`; `app/folha/export.py:556` | O recálculo de exportadas em geral registra aviso. A exclusão efetiva da cópia é específica de 09/2026 nas empresas que exportaram. O dif﻿f do motor não distingue competência aberta de entregue. Competências atingidas, gravado e TXT histórico [nao verificado]. | Restringir a aplicação da obra, inclusive por recálculo, às triplas abertas pelo juiz `competencia_entregue`. |
-
-## 23/11 17:09 · sessao a5f00ae68c59 · PAR-PELO-TURNO · leitura · origem=Code
-
-### A. Os 29 casos pelo aval V4
-
-| Caso | Colab. | Dia | Batidas citadas · ID, hora local, tipo | Papel pelo V4, na mesma ordem | Jornada ou pendência | Alerta de interjornada | O que o laudo observou |
-|---|---|---|---|---|---|---|---|
-| 001 | col992 | 03/11 | `145230` 19:00 E · `145380` +01:07 S · `?` +02:03 E · `?` +07:02 S | I · P · P · P | **PENDÊNCIA. Precisa das batidas do dia.** Faltam os IDs de 02:03 e 07:02 e a confirmação do papel de 01:07–02:03. | [nao verificado]. Sim, 56 min, se forem duas jornadas reais. | Aberto com 367,65 min parciais e noturno zero. ATA sem `hi`, 01:07 em `hii`. `laudo_anon.json:54` |
-| 002 | col820 | 16/10 | `?` 09:15 E anterior, data [nao verificado] · `129248` 22:22 E · `?` +04:00 E · `129355` +05:05 S | P · P · P · F do trecho 04:00–05:05, vínculo P | **PENDÊNCIA. Precisa das batidas do dia.** Faltam IDs de 09:15 e 04:00, a data de 09:15 e as eventuais S entre as três E, com IDs e horas [nao verificado]. | [nao verificado] | 22:22 aberto. Trecho FT 04:00–05:05 recortado para 04:00–04:00, zero minuto. `hi` e `hf` apagados. `laudo_anon.json:75` |
-| 003 | col612 | 11/11 | `152381` 19:00 E · `152546` +01:18 S · `?` +02:08 E | I · SI? · VI? | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 02:08 e S após 02:08, ID e hora [nao verificado]. | [nao verificado] | Aberto com 378,69 min parciais e noturno zero. ATA vê a pausa, sem `hf`. `laudo_anon.json:96` |
-| 004 | col788 | 04/10 | `118383` 23:04 E · `118477` +06:29 S. Outro E citado, ID e hora [nao verificado]. | P · P · P | **PENDÊNCIA. Precisa das batidas do dia.** Faltam ID e hora do outro E, das S que delimitariam o turno anterior e da pausa, se registrada. | [nao verificado] | 23:04 aberto e lido como `hf`. Crédito parcial de 0,8811 h noturnas em 05/10, vínculo com este par [nao verificado]. `laudo_anon.json:117` |
-| 005 | col788 | 14/10 | `127324` 22:01 E · `?` +03:54 E · `127422` +04:55 S | P · P · F do trecho 03:54–04:55, vínculo P | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 03:54 e a sequência do turno anterior e entre as E, sobretudo eventual S, ID e hora [nao verificado]. | [nao verificado] | 22:01 aberto e lido como `hf`. 03:54–04:55 contado como FT em 15/10, com 1,01279 h noturnas. `laudo_anon.json:138` |
-| 006 | col788 | 16/10 | `129246` 22:12 E · `?` +03:22 E · `129348` +04:31 S | P · P · F do trecho 03:22–04:31, vínculo P | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 03:22 e a sequência do turno anterior e entre as E, sobretudo eventual S, ID e hora [nao verificado]. | [nao verificado] | 22:12 aberto e lido como `hf`. 03:22–04:31 creditado em 17/10, com 1,15721 h noturnas. `laudo_anon.json:159` |
-| 007 | col788 | 28/10 | `140245` 21:33 E · `?` +04:37 E · `140360` +05:28 S | P · P · F do trecho 04:37–05:28, vínculo P | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 04:37 e a sequência do turno anterior e entre as E, sobretudo eventual S, ID e hora [nao verificado]. | [nao verificado] | 21:33 aberto e lido como `hf`. Parte de 04:37–05:28 aparece em 29/10, com 0,38125 h noturnas. `laudo_anon.json:180` |
-| 008 | col788 | 01/11 | `143603` 22:24 E · `?` +03:42 E · `143689` +04:48 S | P · P · P | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 03:42 e faltam IDs, horas e tipos das demais batidas, inclusive as sucessivas de 02/11. | [nao verificado] | 22:24 aberto e lido como `hf`. Segmentos subsequentes somam 1,1082 h noturnas em 02/11. `laudo_anon.json:201` |
-| 009 | col516 | 30/10 | `142071` 18:58 E · `142228` +00:01 S · `?` +01:00 E | I · SI? · VI? | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 01:00 e S após 01:00, ID e hora [nao verificado]. | [nao verificado] | Aberto com 301,25 min parciais e noturno zero. ATA vê a pausa, sem `hf`. `laudo_anon.json:222` |
-| 010 | col490 | 28/10 | `140120` 18:55 E · `140345` +03:10 S | I · F no recorte | **18:55–+03:10** no recorte. Demais batidas posteriores para cotejo, IDs, horas e tipos [nao verificado]. | [nao verificado] | Aberto com 490,06 min parciais e noturno zero. `hi` aceso, `hf` apagado. `laudo_anon.json:243` |
-| 011 | col490 | 01/11 | `143507` 18:56 E · `143678` +03:00 S | I · F no recorte | **18:56–+03:00** no recorte. Demais batidas do fechamento de 02/11, IDs, horas e tipos [nao verificado]. | [nao verificado] | Aberto com 480,53 min parciais e noturno zero. `hi` aceso, `hf` apagado. `laudo_anon.json:264` |
-| 012 | col467 | 11/10 | `124392` 18:52 E · `124547` +00:22 S | I · SI? | **PENDÊNCIA. Precisa das batidas do dia.** Faltam E de volta e S final, IDs e horas [nao verificado]. | [nao verificado] | Aberto com 322,63 min parciais e noturno zero. 00:22 tratado como intervalo, `hf` apagado. `laudo_anon.json:285` |
-| 013 | col999 | 09/11 | `150272` 17:01 E · `150789` +07:56 S | I/F candidatos, ambos P | **PENDÊNCIA. Precisa das batidas do dia.** Candidato 17:01–+07:56. Faltam IDs, horas e tipos das demais marcas de 09–10/11 para resolver a divergência com a escala diurna. | [nao verificado] | 17:01 aberto e lido como `hf`. S07:56 lida como `hi` de 10/11. `laudo_anon.json:306` |
-| 014 | col999 | 10/11 | `150789` 07:56 S · `151169` 16:56 E · `151739` +07:51 S | F anterior? · I? · F? Todos P. | **PENDÊNCIA. Precisa das batidas do dia.** Candidato 16:56–+07:51. Faltam IDs, horas e tipos das demais marcas de 10–11/11 para resolver a divergência com o período diurno. | [nao verificado]. Sim, 9 h, se confirmados os pares de 013 e 014. | Motor monta S07:56→E16:56, recorta para 08:00→16:56 e apura 479,7 min, noturno zero. `laudo_anon.json:306`, `laudo_anon.json:327` |
-| 015 | col174 | 11/11 | `152378` 18:59 E · `152566` +02:50 S | I · F no recorte | **18:59–+02:50** no recorte. Demais marcas e insumos da lavratura [nao verificado]. | [nao verificado] | Aberto com 350,24 min parciais no motor, 420 min no DiaPago e noturno zero no dia. Diferença mensal de +5,95 h noturnas, atribuição ao dia [nao verificado]. `laudo_anon.json:348` |
-| 016 | col502 | 17/10 | `129953` 19:20 E · `?` +06:57 E · `130268` +09:55 S | P · P · F do trecho 06:57–09:55, vínculo P | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 06:57 e faltam IDs e horas das marcas do diurno e de eventual S entre 19:20 e 06:57. | [nao verificado] | E19:20 lida como `hf` do diurno, com fim efetivo às 18:20. 06:57–09:55 contado no dia seguinte, sem noturno. `laudo_anon.json:369` |
-| 017 | col121 | 03/11 | `145213` 18:58 E · `145367` +00:52 S · `?` +01:55 E | I · SI? · VI? | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 01:55 e S após 01:55, ID e hora [nao verificado]. | [nao verificado] | Aberto com 352,59 min parciais e noturno zero. ATA vê a pausa, sem `hf`. `laudo_anon.json:390` |
-| 018 | col868 | 02/10 | `117058` 19:01 E · `117059` +01:08 S · `?` +02:14 E | I · SI? · VI? | **PENDÊNCIA. Precisa das batidas do dia.** Falta ID de 02:14 e S após 02:14, ID e hora [nao verificado]. | [nao verificado] | Aberto com 366,94 min parciais e noturno zero. ATA vê a pausa, sem `hf`. Diferença mensal de +6,81 h noturnas, atribuição ao dia [nao verificado]. `laudo_anon.json:411` |
-| 019 | col129 | 11/10 | `124339` 17:31 E · `124645` +06:31 S | I · F | **17:31–+06:31** | [nao verificado] | T | `laudo_anon.json:432` |
-| 020 | col129 | 25/10 | `137026` 17:30 E · `137305` +06:30 S | I · F | **17:30–+06:30** | [nao verificado] | T · `laudo_anon.json:453` |
-| 021 | col129 | 01/11 | `?` 31/10 21:34 E · `?` 01/11 06:34 S · `143430` 17:30 E · `143722` +06:30 S | I · F · I · F | **31/10 21:34–01/11 06:34** e **01/11 17:30–02/11 06:30**. IDs do par anterior [nao verificado]. | **Sim, 10h56.** | T para 01/11 · `laudo_anon.json:38`, `laudo_anon.json:474` |
-| 022 | col129 | 02/11 | `143722` 06:30 S do caso 021 · `144111` 17:31 E · `144456` +06:30 S | F anterior · I · F | **17:31–+06:30** | **Não** na transição 021→022, 11h01. | T · `laudo_anon.json:474`, `laudo_anon.json:495` |
-| 023 | col129 | 08/11 | `149397` 17:30 E · `149717` +06:30 S | I · F | **17:30–+06:30** | [nao verificado] | T · `laudo_anon.json:516` |
-| 024 | col129 | 15/11 | `155814` 17:30 E · `156153` +06:30 S | I · F | **17:30–+06:30** | [nao verificado] | T · `laudo_anon.json:537` |
-| 025 | col155 | 04/10 | `118190` 17:29 E · `118479` +06:31 S | I · F | **17:29–+06:31** | [nao verificado] | T · `laudo_anon.json:558` |
-| 026 | col155 | 18/10 | `130455` 17:29 E · `130747` +06:33 S | I · F | **17:29–+06:33** | [nao verificado] | T · `laudo_anon.json:579` |
-| 027 | col155 | 25/10 | `137024` 17:28 E · `137304` +06:29 S | I · F | **17:28–+06:29** | [nao verificado] | T · `laudo_anon.json:600` |
-| 028 | col155 | 01/11 | `143429` 17:29 E · `143724` +06:31 S | I · F | **17:29–+06:31** | [nao verificado] | T · `laudo_anon.json:621` |
-| 029 | col155 | 15/11 | `155813` 17:29 E · `156154` +06:32 S | I · F | **17:29–+06:32** | [nao verificado] | T · `laudo_anon.json:642` |
-
-**Leitura da tabela.** Datas de 2026, horas locais UTC−03. `+` indica o dia seguinte e `?` junto de uma hora indica ID ausente. I = início, F = fim, SI = saída-intervalo, VI = volta-intervalo, P = papel pendente. `SI?` e `VI?` são papéis candidatos relatados pela ATA. As referências `laudo_anon.json` e `V4` numeram os blocos fornecidos, a partir de `{` e do cabeçalho do aval, respectivamente. Os papéis e os alertas são inferências pelo `V4:2`, `V4:4` e `V4:5`. `laudo_anon.json:54`, `CLAUDE.md:46`
-
-**T** = o teto de 12h12 deixa E aberta e S órfã ou separada. ATA com `hi` apagado e `hf` aceso. DiaPago com trabalho e noturno zero. Pelo V4, os pares 019–029 fecham no recorte fornecido e o teto vira sinal de conferência. Nos cinco casos de col788, o crédito observado no dia seguinte entra na reconciliação para evitar pagamento em duplicidade. `laudo_anon.json:24`, `laudo_anon.json:32`, `laudo_anon.json:432`, `V4:2`, `V4:3`, `V4:7`
-
-### B. Testes negativos pela regra [nao verificado]
-
-| Caso sintético | Batidas locais, com IDs sintéticos | Resposta esperada |
-|---|---|---|
-| Duas jornadas reais com repouso de 10h56 | `b1` D 21:34 E · `b2` D+1 06:34 S · `b3` D+1 17:30 E · `b4` D+2 06:30 S | Dois pares, I/F e I/F. Alerta **sim**, 10h56. Com `b3` às 17:34, seguem dois pares e o alerta é **não**, 11h exatas. `V4:4` |
-| Diurno comum | `b1` D 08:00 E · `b2` D 16:00 S | Um par 08:00–16:00, I/F. Sem alerta no cenário de uma jornada. `V4:4` |
-| 12x36 com pausa comprovada | `b1` D 19:00 E · `b2` D+1 01:00 S · `b3` D+1 02:00 E · `b4` D+1 07:00 S | A leitura literal de «separa sempre» dá dois pares, 19:00–01:00 e 02:00–07:00, com alerta de 1 h se forem duas jornadas reais. Para esperar uma jornada única com papéis I/SI/VI/F e sem alerta, seria preciso explicitar a exceção para pausa intrajornada comprovada. Essa exceção está [nao verificado]. `V4:4` |
-| E duplicada, sem evidência que desambigue | `b1` D 08:00 E · `b2` D 08:00 E · `b3` D 16:00 S | **PENDÊNCIA** ao supervisor com os três IDs. Há duas escolhas de E. Preservar as batidas, sem plantio. `V4:5`, `V4:7` |
-| Falta E | `b1` D 16:00 S isolada | **PENDÊNCIA** de início, com ID `b1`, sem plantio. `V4:5` |
-| Falta S | `b1` D 08:00 E isolada | **PENDÊNCIA** de fim, com ID `b1`, sem plantio. `V4:5` |
-| Antecipação e prorrogação acima do teto | Escala 21:30–05:42. `b1` D 17:30 E · `b2` D+1 06:30 S, par comprovado. | Um par de 13 h, I/F, com sinal de conferência. A apuração classifica a HE na Gestão de HE. O recorte preserva o trabalhado e o noturno comprovados. `V4:2`, `V4:3`, `V4:6` |
-
-### C. Autoridades e leitores na cópia
-
-| Pergunta | Autoridade e comportamento atual | Quem lê |
-|---|---|---|
-| **1. A que jornada pertence a batida e onde ela termina?** | O registro vivo declara `turnos_do_colab` para `data_turno` e para a lista de pares. Essa porta carrega batidas apuráveis com margem de datas e delega a `parear_turnos`, que decide as bordas. `_teto_da_jornada` é o corpo único da fórmula previsto + 4 h, com envelope do chamador quando faltam bordas válidas. No fecho principal, o envelope é 26 h e também vale quando ambas as pontas se afastam dos marcos além da tolerância de cadastro. Ultrapassar o teto aplicável gera E aberta e S órfã. `app/docs/JUIZES.md:20`, `app/core/juizes.py:216`, `app/core/juizes.py:741`, `app/ponto/turnos.py:66`, `app/ponto/turnos.py:1867`, `app/ponto/turnos.py:1997`, `app/ponto/turnos.py:1430`, `app/ponto/turnos.py:1447` | O motor chama o pareador diretamente. Os dois repasses de fecho e a atribuição à véspera também leem o teto. Núcleo, calendário, espelho e PDF leem a porta de turnos ou sua carga em lote. `app/ponto/motor_calculo_v2.py:503`, `app/ponto/turnos.py:230`, `app/ponto/turnos.py:1086`, `app/ponto/turnos.py:1177`, `app/ponto/nucleo.py:47`, `app/colaboradores/services/calendario.py:250`, `app/ponto/services/espelho.py:625`, `app/relatorios/pdf_espelho.py:451` |
-| **2. Qual papel a ATA atribui à batida?** | Para ocupar **marco previsto**, o registro declara `escala/utils.py::_match_marcos`. Para **períodos e intervalo lidos da ATA**, declara `juiz_batida.periodos_do_dia`. Este cruza lâmpadas com o DNA congelado, devolve o tipo do marco e conserva `tipo_real` e a divergência. `papel_por_minuto_da_ata` adapta essa resposta. Quando há papel aplicável no mapa, o pareador usa esse papel. Na ausência dele, usa o tipo gravado. `app/docs/JUIZES.md:27`, `app/core/juizes.py:220`, `app/core/juizes.py:1207`, `app/ponto/juiz_batida.py:153`, `app/ponto/juiz_batida.py:242`, `app/ponto/juiz_batida.py:260`, `app/ponto/turnos.py:1565`, `app/ponto/turnos.py:1382` | Leitores diretos de `periodos_do_dia` são o adaptador de papéis, o motor, Cadastro × Realidade e a exportação de folha. O mapa de papéis alimenta `turnos_do_colab`, o turno aberto vivo e o pareador chamado pelo motor. `app/ponto/turnos.py:1633`, `app/ponto/motor_calculo_v2.py:616`, `app/escala/services/cadastro_realidade.py:238`, `app/folha/export.py:1150`, `app/ponto/turnos.py:1944`, `app/ponto/turnos.py:2289`, `app/ponto/motor_calculo_v2.py:500` |
-| **3. Onde a janela de HE recorta o par?** | `MotorBase._janela_do_par` é a porta do recorte. `_janela_do_dia` resolve cadastro, vigência e autorização. `ponto/janela_he.py` calcula as duas pontas efetivas. A autoridade registrada para **quanto vale o par** é `MotorBase.calcular_periodo`. Os ramos calculam o trabalhado a partir de `s − e` e passam as mesmas pontas ao noturno, que retorna zero quando `e >= s`. Há ainda um corte próprio de 26 h no cálculo noturno. `app/docs/JUIZES.md:29`, `app/core/juizes.py:1208`, `app/ponto/motor_calculo_v2.py:1490`, `app/ponto/motor_calculo_v2.py:1752`, `app/ponto/janela_he.py:76`, `app/ponto/janela_he.py:117`, `app/ponto/motor_calculo_v2.py:91` | 12x36, Turno Partido e Comercial chamam a porta. Plantão reutiliza o cálculo 12x36. 12x36 com escala também lê a entrada efetiva para pontualidade. A Gestão de HE lê o retrato de pendências. `app/ponto/motor_calculo_v2.py:2759`, `app/ponto/motor_calculo_v2.py:2792`, `app/ponto/motor_calculo_v2.py:2886`, `app/ponto/motor_calculo_v2.py:2896`, `app/ponto/motor_calculo_v2.py:3224`, `app/ponto/motor_calculo_v2.py:3260`, `app/ponto/motor_calculo_v2.py:3534`, `app/ponto/motor_calculo_v2.py:3552`, `app/ponto/views.py:948` |
-
-Em **002**, o colapso 04:00–05:05 → 04:00–04:00 é do laudo. A cópia tem uma guarda que dispensa a janela quando o par já está marcado como folga no cálculo. A condição efetiva que deixou o recorte incidir nesse FT em produção está [nao verificado]. `laudo_anon.json:75`, `app/ponto/motor_calculo_v2.py:1520`, `app/ponto/motor_calculo_v2.py:2457`
-
-### D. Os nove abertos com crédito parcial
-
-| Resultado pelo V4 | Casos |
-|---|---|
-| **Fecham um par no recorte fornecido** | **010, 011 e 015.** Cada recorte tem E e S identificadas, sem volta de intervalo citada. A sequência integral dos dias está [nao verificado]. `laudo_anon.json:243`, `laudo_anon.json:264`, `laudo_anon.json:348`, `V4:5` |
-| **Seguem abertos, em pendência** | **001**, porque falta resolver se 01:07–02:03 separa jornadas ou é pausa interna. **003, 009, 012, 017 e 018**, porque falta validar a saída final depois da pausa indicada. `laudo_anon.json:54`, `laudo_anon.json:96`, `laudo_anon.json:222`, `laudo_anon.json:285`, `laudo_anon.json:390`, `laudo_anon.json:411`, `V4:5` |
-
-O mecanismo do item (1) está no crédito parcial do motor. Ele calcula os trechos fechados, transfere só trabalhado e fora da janela ao período aberto e deixa de transferir o noturno calculado para esses trechos. **014 e 016** são os dois outros G3, classificados pelo laudo como releituras diurnas da ATA. `app/ponto/motor_calculo_v2.py:2495`, `app/ponto/motor_calculo_v2.py:2550`, `laudo_anon.json:19`, `laudo_anon.json:327`, `laudo_anon.json:369`
-
-A análise foi em leitura apenas. A identidade Git da cópia com o hash informado está [nao verificado].
-
-_7985 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7990 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
