@@ -1,7 +1,78 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 13:47** · publicado em **23/11/2026 13:47** (UTC-3)
+> Ultima resposta processada: **23/11/2026 13:49** · publicado em **23/11/2026 13:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 13:49 · sessao dd8f4a95c65d · A-TELA-DO-DIA-LE-UM-JUIZ · leitura · origem=Code
+
+A sonda registra **370 dias com “Em aberto” e outro status**. São 138 `ok`, 231 `escala_suspeita` e 1 `folga_trabalhada`. Para o colaborador 945, os três dias têm `ok` e `resolver_dia_oferecido=false`. Em 24/10 há uma `E` e `minutos_pagos=null`. Em 26 e 28/10 há `E–S–E` e, respectivamente, 238,20 e 229,60 minutos pagos no dado raspado. `sonda.out:4–7` (anexo).
+
+A correspondência da cópia com o hash informado está **[nao verificado]**. A cópia não contém os metadados Git necessários para confirmar o `HEAD`.
+
+## 1. Como o cartório grava `ok` e quem escreve a coluna
+
+O caminho automático é `processar_cartorio` → `julgar_colab` → `classificar_dia` → `lavrar_veredito` → `carimbar`. O lote seleciona células de datas passadas. O cartório monta a grade com batidas apuráveis, conta marcos casados e órfãs e entrega ao classificador, entre outros insumos, `turno_encerrado`. `app/ponto/management/commands/processar_cartorio.py:49–65`, `app/ponto/services/cartorio.py:1016,1180–1184,1199–1204,1453–1455,1500–1511,1898–1922`.
+
+- **Uma `E` e `E–S–E` podem chegar a `ok` pela mesma sequência.** Com `turno_encerrado=False`, os dois ramos de `FURO_PARCIAL` ficam fora, tanto o de realizado positivo quanto o de batida sem par fechado. Se o julgamento ficar sem códigos e sem fio que proteste, `derivar_veredito([])` devolve `concorde`. A regra do status recebe `tem_batida` como booleano. Com batida e sem a precedência de folga trabalhada, `concorde`, `coberta` e `cobranca_indevida` retornam `ok`. A regra também tem o ramo `ok` por isenção sem batida. `app/ponto/supra_juiz.py:291,392–439,450–463`, `app/ponto/services/cartorio.py:1514–1546`, `app/escala/models.py:1635–1639`, `app/ponto/portas/celula.py:1013–1020`, `app/ponto/status_dia.py:147–163,185–192`.
+- **Com o turno encerrado**, os mesmos ramos podem emitir `FURO_PARCIAL` se as demais guardas passarem. O código vira veredito `furo` e, no ramo com batida, status `irregular`. A própria rotina pode preservar uma lavra anterior ao pular uma célula cuja impressão segue igual. O marcador de turno em curso entra na impressão normal apenas para `data < hoje`. O caminho avulso também admite julgar no próprio dia depois do fim previsto. O veredito, os protestos, a impressão, a via e o instante que produziram os três `ok` do 945 estão **[nao verificado]**. `app/ponto/supra_juiz.py:392–439,450–463`, `app/escala/models.py:1622–1627`, `app/ponto/status_dia.py:67–70,157–162`, `app/ponto/services/cartorio.py:1425–1444,2081–2090`, `sonda.out:5–7` (anexo).
+
+**Escritores da coluna.** `_aplicar_status` atribui `status_dia` e `status_rotulo`. A lavra normal e o ramo `nunca_bateu` passam pela porta e persistem com `carimbar`. O D5, chamado por `lavrar_status_competencia`, completa a coluna nula com o veredito já gravado e o carimbo em dia. A decisão do admin passa pela mesma porta e mapeia `trabalhou → ok`, `faltou → falta` e `justificado → ausencia`. O cartório preserva essa precedência. A regeneração ou reversão de célula futura também pode escrever `NULL` via `desfazer_julgamento_da_futura`, preservando decisão de admin. A coluna nasce anulável. `app/ponto/portas/celula.py:267,314,877,1045–1065,1096–1134,1148,1182–1203,1217–1237`, `app/ponto/services/cartorio.py:939–956,1321–1326,1438–1441,1898–1922`, `app/ponto/management/commands/lavrar_status_competencia.py:56–57`, `app/ponto/services/veredito_celula.py:352`, `app/ponto/status_dia.py:65,98–101`, `app/escala/models.py:1827`.
+
+## 2. Autoridades e ponto da divergência
+
+| Pergunta | Autoridade registrada |
+|---|---|
+| A que turno a batida pertence e como ele foi pareado? | `parear_turnos` e `turnos_do_colab`. `app/docs/JUIZES.md:20–24`, `app/core/juizes.py:216` |
+| Há turno aberto **vivo agora**? | `turno_aberto_de`. `app/docs/JUIZES.md:20`, `app/core/juizes.py:219`, `app/ponto/turnos.py:2300–2309` |
+| Que marco do dia faltou? | `classificar_falta`. Para uma `E` sem `S` devolve falta de saída. Com `E` e `S`, também consulta `t.aberto` antes da contagem, quando há marcos esperados e as guardas deixam chegar ao ramo. `app/docs/JUIZES.md:132`, `app/core/juizes.py:200`, `app/escala/servico_jornada.py:401–415,448–486` |
+| Qual é o status do dia? | `status_do_dia_lavrado`, cuja implementação é `status_dos_dias_lavrados`. `app/docs/JUIZES.md:133–134`, `app/core/juizes.py:207`, `app/ponto/status_dia.py:201–221` |
+
+**O D4 consulta a geometria para saber se o dia está em curso.** Ele usa `dias_encerrados`, que consulta `turno_aberto_vivo`. Onde há janela de expiração, a aberta deixa de ser viva depois do fim previsto mais quatro horas. O D4 então pode devolver a coluna lavrada. `classificar_falta` e `datas_em_aberto_de` ficam fora desse caminho. `app/core/juizes.py:243`, `app/ponto/turnos.py:2005–2035,2113–2130,3063–3067`, `app/ponto/status_dia.py:269–295`.
+
+**“Em aberto” usa a pendência histórica.** No calendário, a entrada é `t.aberto` da geometria, mais saídas órfãs e furos apurados pelo motor. `folha_manda` publica a união, subtraindo datas decididas e o dia do turno ainda vivo. O teto de data e a isenção se aplicam à parcela de furo apurado. Assim, uma aberta expirada pode continuar na lista enquanto o D4 já entrega `ok`. O calendário usa a pertinência na lista para a palavra e o D4 para o status. `app/colaboradores/services/calendario.py:600–616,639–640,748–763`, `app/relatorios/cartao_pela_celula.py:373–374,395–422`, `app/ponto/services/dia_decidido.py:241–246,346–355,398–430`.
+
+## 3. `escala_suspeita` com saída órfã
+
+O pareador cria a saída órfã com `entrada=None` e `saida` preenchida. Isso dá `t.aberto=False`, mas `datas_saida_orfa` inclui seu `data_turno` na união de “Em aberto”. Uma saída órfã sozinha, portanto, entra na lista histórica sem acionar o motivo de turno vivo no D4. A lei do furo, se chegar ao ramo de `S` sem `E`, devolve falta de **entrada**. `app/ponto/turnos.py:234–245,312–324,1495–1498,2011–2018`, `app/ponto/services/dia_decidido.py:346–355`, `app/ponto/status_dia.py:273–289`, `app/escala/servico_jornada.py:459–468`.
+
+Na lavra, `escala_suspeita` vem do veredito `indefinida`, depois das guardas de falta, ausência e folga humana. Seu rótulo fixo começa com “Sem batida”, e o ramo pode ser alcançado com `tem_batida=True`. Já `BATIDA_ORFA_FORA_TOLERANCIA` é um código sobre **órfã da grade**. Sozinho, vira `discordante` e, no ramo com batida, `irregular`. Se coexistir com código de `indefinida`, este tem precedência no mapa sobre `discordante`. `app/ponto/status_dia.py:38–39,139–146,157–163,185–190`, `app/ponto/supra_juiz.py:527–537`, `app/escala/models.py:1622–1642`.
+
+A linha de 31/10 do colaborador 941 tem `batidas_do_turno=[]`. O agregado de 231 conta `escala_suspeita` com “Em aberto”, sem identificar a parcela que pôs cada dia na lista. Um caso individual de `escala_suspeita` **com saída órfã** na sonda está **[nao verificado]**. `sonda.out:4,8` (anexo).
+
+## 4. Leitores do status, do botão e de `datas_em_aberto`
+
+| Leitor | O que usa |
+|---|---|
+| Calendário e espelho | O calendário lê D4 para fundo, ícone e contador. A faixa semanal do espelho também lê D4 e aplica a classe `st-ok`. O miolo do espelho monta `palavra_dia` pela lista do resumo. `app/colaboradores/services/calendario.py:639,696–697,762–763,817`, `app/templates/colaboradores/partials/_calendario_grade.html:68–74,99,152–155`, `app/ponto/services/espelho.py:170–174,1327`, `app/templates/ponto/espelho.html:113,151` |
+| **Resolver dia** | Exige dia passado, anterior ao início da competência corrente, sem pergunta viva com resposta, e status em `falta`, `irregular`, `aberto` ou `sem_certidao`. `ok` e `escala_suspeita` ficam fora. O template ainda exige `pode_veredito`. A tarefa do dia reutiliza a oferta do calendário. `app/colaboradores/services/calendario.py:94–104,117–122,493–508,774,812–813`, `app/templates/colaboradores/partials/_calendario_grade.html:134–135`, `app/chamados/services/tarefa_do_dia.py:697–712` |
+| Cobrança | A auditoria de espelhos seleciona só `irregular` no D4 e lê os marcos apagados na ata. O ranking “Quem cobrar” agrega `FuroDiario` e fila de chamados. A emissão efetiva segue códigos, guardas e ata no cartório, e a emissão de disputa consulta `classificar_falta`. Cobrança efetiva nos casos da sonda **[nao verificado]**. `app/relatorios/furos.py:127–145,164–168`, `app/relatorios/views.py:1643`, `app/escala/services/furos_diarios.py:178–213`, `app/ponto/services/cartorio.py:1783–1841,1861–1879`, `app/chamados/services/disputa_emissao.py:813–820,1214,1251` |
+| Folha | A retenção do TXT consulta `veredito`, `protestos` e ausência de célula ou de veredito. A aprovação também tem trava por `FechamentoMensal.turnos_abertos`. O Raio-X lê marcos da ata, e o detalhamento de destrava pode herdar o D4 via tarefa e oferta de Resolver. Os minutos do calendário vêm de `DiaPago`. O motor tem uma regra própria para creditar pares fechados em dia de turno aberto. A origem dos valores exatos da sonda e seu efeito no TXT estão **[nao verificado]**. `app/folha/export.py:830–848,968–973,1265–1307`, `app/folha/views.py:637`, `app/relatorios/furos.py:190–214`, `app/folha/fora_da_folha.py:273–280`, `app/colaboradores/services/calendario.py:319,688–689,781–783`, `app/ponto/motor_calculo_v2.py:2511–2564` |
+| App e Painel Operacional | A API publica o D4 em `status_dia`, traduz para `status` e leva a palavra do espelho. O painel lê D4 para os dias encerrados que selecionou. `app/api/views.py:1361,1387–1395,1496,1548,1561–1563,1621–1626`, `app/ponto/status_dia.py:79–91`, `app/core/services/painel_op.py:329–338` |
+
+- **Censo AST de `status_dia == 'ok'`.** Zero comparações literais ou filtros ORM de execução contra `ok` na coluna. O leitor funcional da coluna é o D4. O leitor Python que compara a projeção do D4 com `ok` é o contador do calendário, `d['status'] == 'ok'`. A porta, o D5 e a fotografia E4B também leem a coluna para seus próprios fins. `app/ponto/status_dia.py:287–289`, `app/colaboradores/services/calendario.py:696–697,762,817`, `app/ponto/portas/celula.py:1056–1065,1082`, `app/ponto/services/cartorio.py:946`, `app/chamados/services/foto_e4b.py:247–252,269`.
+- **Censo AST de `datas_em_aberto`.** Os leitores de execução são o calendário, por parâmetro ou pelo resumo, o miolo do espelho, o PDF, o passivo da Pauta DP e o comando `diff_pdf_x_espelho`, que lê a chave dinamicamente e compara comprimentos. A API herda a palavra do espelho. PDF, placar da folha e comando cartão × TXT também leem a contagem derivada `dias_em_aberto`. `app/colaboradores/services/calendario.py:595–616,749`, `app/ponto/services/espelho.py:330–345,1327`, `app/relatorios/pdf_espelho.py:638,791–792`, `app/ponto/services/dias_em_aberto.py:112`, `app/pautas/management/commands/pauta_dia_em_aberto.py:82`, `app/relatorios/management/commands/diff_pdf_x_espelho.py:36,93–102`, `app/api/views.py:1361,1387–1395`, `app/folha/porta_export.py:621`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:64`.
+
+## 5. `Falta (desconta Nh)` e minutos do dia
+
+| Leitura | Unidade e consumidores |
+|---|---|
+| **Rótulo de falta e cartão diário** | `Ausencia.minutos` é a duração **do registro**. Para falta aprovada com zero minutos, `save` soma o previsto de `data` a `data_fim`. `rotulo_de` passa o total cru para `palavra_do_dia`, que imprime `Falta (desconta Nh)`. `cartao_do_dia` também expõe o total cru, e `decididos_do_periodo` monta esse cartão para cada data da faixa. Assim, o rótulo diário pode repetir o total da faixa no calendário, espelho, PDF e app. `app/ponto/models.py:750–759,887–897`, `app/ponto/services/dia_decidido.py:156–169,249–256,473–478,533–546,561–569,605–611`, `app/colaboradores/services/calendario.py:748–757`, `app/ponto/services/espelho.py:329–346,1327`, `app/relatorios/pdf_espelho.py:638,923–924`, `app/api/views.py:1387–1400` |
+| **Leituras diretas com guarda de um dia** | `cobre_parte_do_dia` exige tipo habilitado, uma única data e `0 < minutos < 480`. `creditos_por_dia` soma por `a.data` para abater atraso no próprio dia. `efeitos_da_ausencia` soma essas parciais no período para o PDF. A lista e o painel de ausências exibem os minutos sob a guarda de parcialidade. `app/ponto/turnos.py:2599–2619`, `app/ponto/services/credito_parcial.py:24–28`, `app/ponto/services/fechamento.py:994–1001`, `app/ponto/services/dia_pago.py:188–195`, `app/ponto/services/efeito_ausencia.py:46–50,63–65`, `app/relatorios/pdf_espelho.py:332–336,479`, `app/ponto/views.py:2112,2340–2344`, `app/templates/ponto/ausencias.html:159–165`, `app/templates/ponto/partials/painel_ausencia.html:310–327` |
+| **Rateio de falta por dia** | `minutos_de_falta_por_dia` seleciona ausências aprovadas que descontam, divide o total pela quantidade de datas da expansão **inteira** do registro e soma as parcelas por data da janela. A única chamada direta de execução encontrada é no recálculo do fechamento. Alimenta `FechamentoMensal.horas_falta`, `DiaPago.horas_falta` e `detalhe['falta_min']`. A rubrica 8792 do TXT usa `datas_falta` e monta o bloco de datas. `app/folha/export.py:87–92,113–143,740–744`, `app/ponto/services/fechamento.py:873–875,1003,1200–1206,1277–1282`, `app/ponto/services/dia_pago.py:274–277` |
+
+A ocorrência em produção de uma falta de várias datas com o rótulo diário divergente do rateio está **[nao verificado]**. `sonda.out:3–12` (anexo).
+
+## 23/11 13:48 · sessao 492e33b59d8e · - · - · origem=Ronald (tmux)
+
+- A porta que grava `CelulaDia.status_dia` é `lavrar_veredito`, via `_aplicar_status`. Entram por ela o julgamento normal do cartório, o ramo sem batida na vida, o complemento D5 e a decisão humana. O desfazimento de julgamento futuro também grava `NULL` pelo `setattr` da mesma porta. A varredura em memória do selo AST percorreu 828 fontes de produção sem encontrar escritor fora da porta. `app/ponto/portas/celula.py:1045–1065`, `:1096–1134`, `:1148–1149`, `:1182–1203`, `app/ponto/services/cartorio.py:939–956`, `:1321–1326`, `:1898–1922`, `app/ponto/services/veredito_celula.py:352`, `app/ponto/tests/test_selo_veredito_so_pela_porta.py:171–194`.
+
+- No fluxo do cartório, lista de códigos vazia produz `concorde`. Havendo batida, `concorde`, `coberta` e `cobranca_indevida` podem produzir `ok`. O status recebe presença como booleano, sem a quantidade de marcas faltantes. `app/ponto/services/cartorio.py:1500–1547`, `app/escala/models.py:1635–1642`, `app/ponto/status_dia.py:157–163`, `:185–192`. Com as demais guardas satisfeitas, o classificador atual acusa `FURO_PARCIAL` tanto para E sem par e realizado zero quanto para E-S-E com realizado positivo. Ambos os ramos dependem de `dia_encerrado` e de `not sem_ancora`. O ramo isento devolve lista vazia. `app/ponto/supra_juiz.py:229–250`, `:392–463`. Qual guarda, decisão humana ou fotografia da lavra escreveu o `ok` do 945 é [não verificado].
+
+- O próprio código permite lavrar enquanto o turno de um dia anterior ainda vive. Nesse caso o término muda `enc=0` para ausente e habilita rejulgamento. Há outra trajetória no avulso do próprio dia, após o fim previsto mas dentro da margem da abertura. Nela `enc=0` fica ausente por `data < hoje`, assim como na próxima avaliação já encerrada. Com o restante da impressão igual, a avaliação seguinte pula o dia. `app/ponto/services/cartorio.py:528–529`, `:1424–1444`, `:1500–1511`, `:2073–2090`, `app/ponto/tests/test_celula_concorde_meio_turno.py:44–67`. Ocorrência dessa trajetória no dado fornecido [não verificado].
+
+- A autoridade registrada de furo é `classificar_falta`, a de presença viva é `turno_aberto_de`, e a de status é `status_do_dia_lavrado`. D4 consulta o juiz de encerramento, que usa `turno_aberto_vivo` e expira a abertura depois do fim da janela do template mais quatro horas, então lê a coluna. `datas_em_aberto_de` usa abertura geométrica, saída órfã e furo do motor, com suas respectivas exclusões. A abertura geométrica expirada pode permanecer nessa lista. `app/docs/JUIZES.md:20–24`, `:132–134`, `app/core/juizes.py:200–219`, `:243`, `app/ponto/status_dia.py:269–290`, `app/ponto/turnos.py:2005–2035`, `:2113–2130`, `app/colaboradores/services/calendario.py:600–616`, `:748–763`, `app/relatorios/cartao_pela_celula.py:373–422`, `app/ponto/services/dia_decidido.py:346–355`.
+
+- A S órfã forma turno com `entrada=None`, `saida` preenchida e `aberto=False`. Pode entrar na palavra por `datas_saida_orfa` sem bloquear a leitura da coluna no D4. `escala_suspeita` deriva de `indefinida` no ramo que passou pelas precedências. A órfã da grade, em jornada prevista de trabalho com zero realizado, pode gerar `BATIDA_ORFA_FORA_TOLERANCIA`, que isolado leva a `discordante` e `irregular`. Se coexistir código de `indefinida`, este tem prioridade sobre `discordante` no mapa. `app/ponto/turnos.py:234–245`, `:312–324`, `:1495–1498`, `app/ponto/status_dia.py:139–146`, `:159–160`, `app/ponto/supra_juiz.py:527–537`, `app/escala/models.py:1622–1642`. A sonda não mostra uma S órfã no exemplo 941 de 31/10, nem discrimina por S órfã os 231 casos [não verificado].
 
 ## 23/11 13:47 · sessao 5b8da13f9df7 · - · - · origem=Ronald (tmux)
 
@@ -1117,156 +1188,4 @@ Usei a cópia no diretório `cafabd1b92d543ff9bb1ec116c21e869f6b0a23d`. Ela veio
 
 Nos testes, há inspeção do valor de `_pv_memo` em `app/chamados/tests/test_e3_c8b_sem_banco.py:322,326`, da presença da chave em `test_e4c_f5_voltaFINAL.py:16`, `test_o261e_f2_fila.py:199` e `test_o261e_f2_porta_carimbo.py:728`, e filtragem da chave ao comparar atributos em `test_e3_c8c_sem_banco.py:141` e `test_e3_pos_suite_sem_banco.py:89`, no mesmo diretório. O harness de tranca lê seu memo e seu contexto de teste em `app/chamados/tests/test_e4b_c4_tranca_memoria.py:58,79–80,112`.
 
-## 23/11 02:41 · sessao b5718eb6f54d · DIA-SEM-TRABALHO-PORTA-L1-PELA-HE · verificador · origem=Code
-
-## 1. Escritores e leitores
-
-Identidade Git da cópia, execução dos testes e ocorrência em produção: [nao verificado]. A análise abaixo usa os arquivos da cópia e o diff fornecido. [nao verificado]
-
-### `he_estado`
-
-| Papel | Referências |
-|---|---|
-| Escritor | `montar_dias` inicializa `None` e preenche pelo estado vigente nos dias com `he_fora_da_janela`. `app/ponto/services/espelho.py:790`, `app/ponto/services/espelho.py:793`, `app/ponto/services/espelho.py:939`, `app/ponto/services/espelho.py:947` |
-| Leitores | `montar_dias` usa o valor como chave do rótulo. `espelho_ponto` testa `sem_decisao` para gerar a URL. As asserções diretas cobrem `sem_decisao` e `nao`. `app/ponto/services/espelho.py:948`, `app/ponto/views.py:179`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:113`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:124` |
-
-### `he_decisao_rotulo`
-
-| Papel | Referências |
-|---|---|
-| Escritor | `montar_dias` inicializa `''` e preenche por indexação direta do mapa de rótulos. `app/ponto/services/espelho.py:794`, `app/ponto/services/espelho.py:948` |
-| Leitores | `espelho.html` imprime o valor em cada aviso, nas duas cascas. Os testes leem o campo, o texto visível e a referência no template. O PDF recebe o campo no dict e imprime sua própria frase. A API seleciona outros campos e omite este. `app/templates/ponto/espelho.html:1`, `app/templates/ponto/espelho.html:189`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:114`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:125`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:146`, `app/ponto/tests/test_b1_relogio_riscado_e_aviso.py:99`, `app/relatorios/pdf_espelho.py:602`, `app/relatorios/pdf_espelho.py:932`, `app/api/views.py:1388` |
-| Nome próximo | `c.he_rotulo`, lido na Gestão e no PDF dela, explica a situação da **lavratura** da pessoa na competência. `app/ponto/services/gestao_he.py:321`, `app/ponto/services/dia_pago.py:742`, `app/templates/ponto/gestao_he.html:220`, `app/ponto/views.py:863` |
-
-### `url_decidir_he`
-
-| Papel | Referências |
-|---|---|
-| Escritor | `espelho_ponto` acrescenta a chave ao dict já montado, sob `_modo_gestor` e `autorizar_he`, se o estado for `sem_decisao` e houver item com minutos positivos. A URL leva empresa, mês e ano do fim de `janela_atual`, PK, data ISO e `#foco-he`. `app/ponto/views.py:119`, `app/ponto/views.py:163`, `app/ponto/views.py:175`, `app/ponto/views.py:184` |
-| Leitores | `espelho.html` testa a presença e usa a URL no `href`. Os testes extraem o link renderizado, conferem o destino e os parâmetros e verificam sua ausência para colaborador, gestor sem permissão e dia recusado. `app/templates/ponto/espelho.html:189`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:58`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:157`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:172`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:180`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:187` |
-
-### `ROTULO_DO_ESTADO`
-
-| Papel | Referências |
-|---|---|
-| Escritor | Constante em `gestao_he.py`: `sem_decisao` → `sem decisão`, `autorizado` → `HE autorizada`, `nao` → `HE recusada`. `app/ponto/services/gestao_he.py:31`, `app/ponto/services/gestao_he.py:42` |
-| Leitores | `montar_dias` indexa o mapa. O teste compara suas chaves com `ESTADOS`. A Gestão tem textos próprios condicionados ao estado. `app/ponto/services/espelho.py:941`, `app/ponto/services/espelho.py:948`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:127`, `app/templates/ponto/gestao_he.html:262`, `app/templates/ponto/gestao_he.html:317` |
-
-### `estado_do_dia`
-
-| Papel | Referências |
-|---|---|
-| Definição e fonte | A função retorna o valor de `(PK, str(data))` no mapa de `estado_por_dia`. Chave ausente retorna `sem_decisao`. O mapa vem de `DecisaoHE.objects.vigentes()`. A porta grava a decisão em `_gravar` e altera sua vigência em `_marcar_revogada`. `app/ponto/services/gestao_he.py:92`, `app/ponto/services/gestao_he.py:98`, `app/ponto/services/gestao_he.py:107`, `app/ponto/models.py:1265`, `app/ponto/portas/he.py:44`, `app/ponto/portas/he.py:66`, `app/ponto/portas/he.py:75`, `app/ponto/portas/he.py:398` |
-| Chamadores | `montar_dias` preenche `he_estado`. `enriquecer` sobrescreve o `estado` de cada dia do retrato, usado pela tela, pelo PDF da Gestão e por `itens_sem_decisao`. Central e trava do TXT consultam diretamente o mapa de `estado_por_dia`. `app/ponto/services/espelho.py:947`, `app/ponto/services/gestao_he.py:302`, `app/ponto/views.py:823`, `app/ponto/views.py:862`, `app/ponto/views.py:969`, `app/ponto/services/gestao_he.py:429`, `app/ponto/services/gestao_he.py:502`, `app/folha/porta_export.py:227`, `app/folha/porta_export.py:682` |
-
-### `linha['aberto']`
-
-| Papel | Referências |
-|---|---|
-| Escritor | `enriquecer` escreve `bool(_colab)` na linha que passou pelo recorte de pessoa. `app/ponto/services/gestao_he.py:350` |
-| Leitores | `gestao_he.html` usa `c.aberto` na seta, no `display` inicial e nas duas condições do foco. `toggleHe` lê e altera o `display` no navegador. O PDF da Gestão consome a mesma lista enriquecida e lê os agregados. `app/templates/ponto/gestao_he.html:99`, `app/templates/ponto/gestao_he.html:216`, `app/templates/ponto/gestao_he.html:261`, `app/templates/ponto/gestao_he.html:263`, `app/templates/ponto/gestao_he.html:428`, `app/ponto/views.py:859` |
-| Homônimo | O dict de diagnóstico usa `aberto` para turno aberto. O espelho usa `dia.realizado_aberto` para exibir jornada ainda aberta. `app/ponto/services/diagnostico_escala.py:161`, `app/templates/ponto/espelho.html:187` |
-
-### `f_colab`
-
-| Papel | Referências |
-|---|---|
-| Escritor | `gestao_he` publica o GET aparado se `.isdigit()` passar, ou `''`. `app/ponto/views.py:965`, `app/ponto/views.py:985` |
-| Leitor | `gestao_he.html` usa o campo para ocultar a ciência global no recorte. O POST global leva `empresa`, `mes`, `ano`, `q` e os controles `voltar` e `todos_sem_decisao`. `app/templates/ponto/gestao_he.html:59`, `app/templates/ponto/gestao_he.html:71`, `app/templates/ponto/gestao_he.html:75` |
-| Homônimos | Chamados usa `f_colab` como filtro de PK nos próprios partials. O histórico de chamados usa o mesmo nome para busca por matrícula, nome ou PK, no seu template. `app/chamados/services/painel.py:125`, `app/chamados/services/painel.py:424`, `app/templates/chamados/partials/_lista_resumo.html:7`, `app/templates/chamados/partials/_lista_chamados.html:5`, `app/relatorios/views.py:703`, `app/relatorios/views.py:722`, `app/relatorios/views.py:770`, `app/templates/relatorios/historico_chamados.html:86` |
-
-### `foco_dia`
-
-| Papel | Referências |
-|---|---|
-| Escritor | `gestao_he` publica o GET `dia` aparado quando há `_f_colab` e o valor passa pela regex `\d{4}-\d{2}-\d{2}`. Nos demais casos publica `''`. `app/ponto/views.py:965`, `app/ponto/views.py:968`, `app/ponto/views.py:985` |
-| Leitores | `gestao_he.html` compara com `s.data` na linha aberta e escreve a âncora e o contorno na célula **com ponta**. Uma célula sem ponta segue outro ramo. `app/templates/ponto/gestao_he.html:239`, `app/templates/ponto/gestao_he.html:243`, `app/templates/ponto/gestao_he.html:261`, `app/templates/ponto/gestao_he.html:263` |
-
-### Parâmetro `colab` de `enriquecer`
-
-| Papel | Referências |
-|---|---|
-| Fornecedores | `gestao_he` passa `_f_colab`. `gestao_he_pdf` e `itens_sem_decisao` usam o padrão `''`. `itens_sem_decisao` tem seu próprio parâmetro `colab`, aplicado ao selecionar os itens do ato. `app/ponto/views.py:823`, `app/ponto/views.py:969`, `app/ponto/services/gestao_he.py:234`, `app/ponto/services/gestao_he.py:429`, `app/ponto/services/gestao_he.py:434` |
-| Leitor | `enriquecer` normaliza o valor, compara com `str(linha['colab'])`, escreve `aberto` e inclui o recorte em `filtrou` e nos totais. Com retrato vazio, o retorno antecipado calcula `filtrou` só pela busca. `app/ponto/services/gestao_he.py:258`, `app/ponto/services/gestao_he.py:263`, `app/ponto/services/gestao_he.py:282`, `app/ponto/services/gestao_he.py:350`, `app/ponto/services/gestao_he.py:380` |
-
-### GET `colab` de `gestao_he`
-
-| Papel | Referências |
-|---|---|
-| Escritores | O link do espelho envia `colaborador.pk`. Os testes da Gestão enviam PK e valor ilegível. `app/ponto/views.py:184`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:249`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:271` |
-| Leitores | `gestao_he` usa o valor para o recorte, a abertura, a habilitação do foco e a visibilidade da ciência global. O PDF da Gestão lê `empresa/mes/ano/q/praca/posto/estado/dono`. O formulário GET que aciona o PDF envia `empresa/mes/ano/q`. `app/ponto/views.py:965`, `app/ponto/views.py:809`, `app/ponto/views.py:818`, `app/ponto/views.py:823`, `app/templates/ponto/gestao_he.html:27`, `app/templates/ponto/gestao_he.html:59` |
-| Homônimo | No GET do **espelho**, `colab` seleciona a pessoa e ativa `_modo_gestor` quando o usuário é gestor. Os formulários de decisão na Gestão usam `colab` no **POST** para identificar a pessoa do ato. `app/ponto/views.py:119`, `app/templates/ponto/gestao_he.html:145`, `app/templates/ponto/gestao_he.html:259`, `app/ponto/views.py:542`, `app/ponto/views.py:613` |
-
-### GET `dia` de `gestao_he`
-
-| Papel | Referências |
-|---|---|
-| Escritores | O link do espelho envia `data.isoformat()`. Os testes enviam uma data ISO e um texto inválido. `app/ponto/views.py:184`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:249`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:271` |
-| Leitores | `gestao_he` só o encaminha como `foco_dia`. O template o usa para marcar a célula. PDF e ciência global têm os parâmetros descritos acima. `app/ponto/views.py:967`, `app/ponto/views.py:985`, `app/templates/ponto/gestao_he.html:261`, `app/ponto/views.py:823`, `app/templates/ponto/gestao_he.html:75` |
-
-**Censo dos chamadores.** Os 12 arquivos de aplicação abaixo chegam a `montar_dias` e, havendo itens de HE, à leitura do mapa. Há 13 pontos de chamada nesses arquivos, dois em `e6_oraculo.py`, e uma sonda adicional em `bin/`. `app/ponto/services/espelho.py:939`, `app/ponto/services/espelho.py:1298`, `bin/r3_turno_aberto_alcanca.py:47`
-
-- **Tela, cartão e API.** A view HTML lê `he_estado` e acrescenta a URL. O cartão recebe os dicts e lê `he_fora_da_janela`. A API projeta outros campos do dia em seu próprio payload. `app/ponto/views.py:162`, `app/ponto/views.py:179`, `app/relatorios/pdf_espelho.py:598`, `app/relatorios/pdf_espelho.py:932`, `app/api/views.py:1361`, `app/api/views.py:1388`, `app/api/views.py:1681`
-- **Consumidores de HE.** O lavrador e a porta do TXT leem os minutos de `he_fora_da_janela` e consultam o estado por seus mapas. O `gestao_he_pdf` chega à decisão via `enriquecer`. `app/ponto/services/he_pendente_lavrado.py:94`, `app/ponto/services/he_pendente_lavrado.py:132`, `app/folha/porta_export.py:184`, `app/folha/porta_export.py:476`, `app/folha/porta_export.py:686`, `app/ponto/views.py:823`
-- **Demais consumidores do espelho.** Ficha, CxR, `diff_pdf_x_espelho`, `pdf_x_espelho_divergentes`, `vinculo_do_dia_divergentes`, `e6_oraculo` e `e6_piso_autopsia` usam resumo, resultado ou outros campos dos dias. `app/colaboradores/services/ficha.py:200`, `app/ponto/services/cxr_na_lista.py:78`, `app/relatorios/management/commands/diff_pdf_x_espelho.py:76`, `app/relatorios/management/commands/pdf_x_espelho_divergentes.py:92`, `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:68`, `app/ponto/management/commands/e6_oraculo.py:169`, `app/ponto/management/commands/e6_oraculo.py:316`, `app/ponto/management/commands/e6_piso_autopsia.py:65`
-
-## 2. Significado, unidade e bordas
-
-- **Chave e vigência coincidem no caminho novo.** O modelo usa `DateField`. O espelho passa `date`, o retrato guarda ISO, e `estado_do_dia` normaliza com `str(data)`. O lavrador usa um mapa próprio com `date`. Central e TXT consultam a chave ISO e interpretam ausência de valor como falta de decisão vigente. A recusa `nao` é decisão. `app/ponto/models.py:1265`, `app/ponto/models.py:1283`, `app/ponto/models.py:1302`, `app/ponto/services/espelho.py:668`, `app/ponto/services/espelho.py:947`, `app/ponto/services/he_pendente_lavrado.py:149`, `app/ponto/management/commands/lavrar_he_pendente.py:48`, `app/ponto/services/gestao_he.py:92`, `app/ponto/services/gestao_he.py:107`, `app/ponto/services/gestao_he.py:504`, `app/folha/porta_export.py:232`
-- **Os limites são inclusivos, com intervalos de tamanhos diferentes.** `estado_por_dia` usa `>= ini` e `<= fim`. O espelho chama uma vez entre a menor e a maior data marcada, e zero vezes se a lista estiver vazia. Gestão e Central usam as datas do retrato, o TXT usa a janela da competência e o cartão recorta ao período pedido. O link calcula a competência pelo fim de `janela_atual` para a data da linha. A API monta o payload diário sobre o mês civil. `app/ponto/services/gestao_he.py:94`, `app/ponto/services/espelho.py:939`, `app/ponto/services/gestao_he.py:268`, `app/ponto/services/gestao_he.py:500`, `app/folha/porta_export.py:682`, `app/relatorios/pdf_espelho.py:602`, `app/ponto/views.py:181`, `app/ponto/janelas.py:10`, `app/ponto/janelas.py:60`, `app/api/views.py:1347`
-- **Dia do turno e dia civil podem divergir.** O fuso configurado é `America/Sao_Paulo`. A apresentação atribui a batida reclamada ao `data_turno` e a avulsa ao dia civil local. Para HE sem previsto, o motor publica `data_jornada`, que pode herdar o dia do período anterior. Para a janela das pontas, o motor consulta a decisão pelo dia civil da entrada localizada. Uma entrada de madrugada atribuída à véspera pode, portanto, usar chaves diferentes na tela e no motor. Ocorrência em produção: [nao verificado]. `app/config/settings/base.py:93`, `app/ponto/turnos.py:2969`, `app/ponto/services/espelho.py:588`, `app/ponto/services/espelho.py:760`, `app/ponto/motor_calculo_v2.py:1487`, `app/ponto/motor_calculo_v2.py:1528`, `app/ponto/motor_calculo_v2.py:1653`, `app/ponto/motor_calculo_v2.py:2403`, `app/ponto/motor_calculo_v2.py:2461`, `app/ponto/motor_calculo_v2.py:2886`
-- **A unidade é minuto.** O aviso mostra minutos de cada item, com `sentido='dia'` para a publicação de dia sem previsto. O link exige algum item positivo. Gestão e TXT usam a soma diária para comparar com o limite. O estado é um por pessoa e dia. `app/templates/ponto/espelho.html:189`, `app/ponto/services/espelho.py:760`, `app/ponto/views.py:179`, `app/ponto/services/he_pendente_lavrado.py:68`, `app/ponto/services/gestao_he.py:302`, `app/folha/porta_export.py:230`, `app/ponto/models.py:1354`
-- **O GET compara texto.** `colab=001` passa por `.isdigit()` e fica sem correspondência para PK `1`. `dia=2026-02-31` passa pela regex e fica sem célula correspondente. O link gerado usa a PK e o ISO da data da linha. `app/ponto/views.py:184`, `app/ponto/views.py:965`, `app/ponto/services/gestao_he.py:350`, `app/ponto/services/gestao_he.py:167`, `app/templates/ponto/gestao_he.html:261`
-
-## 8. Leitor que ficou para trás
-
-- **PDF do espelho.** Recebe os mesmos dicts, mas a observação de dia sem jornada prevista ainda imprime **“nao conta sem decisao”** para todo item `sentido='dia'`, inclusive quando o dict já diz `HE recusada`. É o leitor que faltou para manter a palavra do dia igual no cartão e no espelho. `app/relatorios/pdf_espelho.py:602`, `app/relatorios/pdf_espelho.py:932`, `app/relatorios/pdf_espelho.py:938`, `app/ponto/services/espelho.py:947`, `app/docs/LEIS.md:85`, `app/docs/LEIS.md:86`
-- **Tooltip do próprio espelho.** O texto visível do crachá lê o rótulo certo, mas o `title` do dia sem jornada prevista mantém “nao viram hora extra sem decisao” e a orientação para decidir na Gestão. O teste extrai só o conteúdo interno do `span` e deixa o `title` fora da verificação. `app/templates/ponto/espelho.html:189`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:52`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:151`
-- **Gestão, PDF da Gestão e API.** Os textos de estado da Gestão distinguem ciência dada, autorização e pendência. No PDF da Gestão, “Sem decisao” é cabeçalho de contagem apurada após a leitura da decisão vigente. A API omite os campos de HE na sua projeção. Texto apresentado pelo cliente móvel: [nao verificado]. `app/templates/ponto/gestao_he.html:262`, `app/templates/ponto/gestao_he.html:317`, `app/ponto/views.py:857`, `app/ponto/services/gestao_he.py:302`, `app/api/views.py:1388`, `app/api/views.py:1541`, `app/api/views.py:1604`
-
-## 23/11 02:41 · sessao d8b240e598fe · DIA-SEM-TRABALHO-PORTA-L1-PELA-HE · verificador · origem=Code
-
-## 3. Checklist do diff
-
-| Classe | Veredito |
-|---|---|
-| **(a) Segundo juiz** | **Não.** `estado_do_dia` centraliza o acesso ao mapa que Espelho e Gestão compartilham. A vigência continua em `DecisaoHE.objects.vigentes()`. `app/ponto/services/gestao_he.py:92`, `app/ponto/services/gestao_he.py:107`, `app/ponto/services/gestao_he.py:302`, `app/ponto/services/espelho.py:944`, `app/ponto/models.py:1265` |
-| **(b) Segundo escritor** | **Não no produto.** O montador preenche o contexto e o link navega por GET. O POST existente chama a porta, que chama `_gravar`. O `objects.create` adicionado é preparação de teste. `app/ponto/services/espelho.py:944`, `app/ponto/views.py:182`, `app/ponto/views.py:548`, `app/ponto/portas/he.py:206`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:104` |
-| **(c) Relógio fora da borda** | **Não.** O trecho novo usa a data da linha e o corte da empresa. O instante do espelho continua vindo da view. `app/ponto/views.py:101`, `app/ponto/views.py:162`, `app/ponto/views.py:181` |
-| **(d) Derivação paralela de fonte única** | **Não nos três domínios pedidos.** O estado vem do mapa compartilhado, a competência vem de `janela_atual` e a ação `autorizar_he` passa pelo mesmo `tem_acao` na interface e na porta. `_modo_gestor` é a condição adicional de exibição pedida pelo brief. `app/ponto/services/espelho.py:944`, `app/ponto/services/gestao_he.py:302`, `app/ponto/views.py:175`, `app/ponto/views.py:181`, `app/ponto/portas/he.py:178`, `app/docs/JUIZES.md:51`, `app/docs/JUIZES.md:116` |
-| **(e) Selo/RED sem mordida** | **Sim, em parte.** `all(... for a in _avisos(c))` passa com a lista vazia no teste que junta recusa e ausência de link. O outro RED de recusa exige avisos antes do `all`, então a perda do crachá é pega pela suíte. Os testes mordem o link positivo, as duas negativas de permissão/render e o recorte com foco. A cobertura nova deixa de fora zero minuto, recusa revogada, o ramo `autorizado`, a contagem de consultas e a travessia do link até um retrato lavrado para o mesmo dia. A execução dos testes e o RED contra o pai estão [nao verificado]. `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:109`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:146`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:187`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:213`, `app/ponto/tests/test_dstl1_espelho_le_a_decisao_de_he.py:248` |
-| **(f) Ordem de trava** | **Não.** A leitura nova é um `SELECT` comum. Na porta, a sequência segue validação, `select_for_update`, consulta de vigência e gravação, sob `atomic`. `app/ponto/services/gestao_he.py:92`, `app/ponto/portas/he.py:158`, `app/ponto/portas/he.py:175`, `app/ponto/portas/he.py:195`, `app/ponto/portas/he.py:206` |
-| **(g) Pouso antes do pré-requisito** | **Sem inversão demonstrada.** A cópia já contém o leitor de vigência e a Gestão já admite quem tem só `autorizar_he`. O pouso da vigência está registrado. A ordem efetiva de deploy desta obra e a filiação dos hashes na cópia estão [nao verificado]. `app/docs/RELATO.md:2802`, `app/ponto/models.py:1265`, `app/ponto/views.py:926` |
-| **(h) Campo com dois significados** | **Não.** `he_fora_da_janela` guarda as ocorrências, `he_estado` guarda o estado, `he_decisao_rotulo` guarda a palavra e `url_decidir_he` guarda o destino. `he_rotulo` na Gestão continua sendo o rótulo da HE lavrada da pessoa. `app/ponto/services/espelho.py:787`, `app/ponto/services/espelho.py:947`, `app/ponto/views.py:182`, `app/ponto/services/gestao_he.py:321` |
-| **(i) `except` novo ou fallback que esconde estado** | **Não.** O `.get` novo interpreta ausência da chave como `sem_decisao`. Um estado presente e desconhecido chega intacto à indexação de `ROTULO_DO_ESTADO`, onde falha. `app/ponto/services/gestao_he.py:98`, `app/ponto/services/gestao_he.py:107`, `app/ponto/services/espelho.py:939`, `app/ponto/services/espelho.py:948`, `app/ponto/views.py:964` |
-| **(j) `if` de regra no template** | **Não no crachá do espelho.** Ele imprime a palavra pronta e testa a presença da URL. Na Gestão há uma condição nova de exibição do ato global, `and not f_colab`. As demais condições novas controlam expansão e destaque visual. `app/templates/ponto/espelho.html:189`, `app/templates/ponto/gestao_he.html:59`, `app/templates/ponto/gestao_he.html:99`, `app/templates/ponto/gestao_he.html:216`, `app/templates/ponto/gestao_he.html:261` |
-
-## 4. Coerência com a porta
-
-- **Permissão e recusa vigente batem.** O link exige render gestor, `autorizar_he`, estado `sem_decisao` e ao menos uma ocorrência com minutos positivos. A Gestão aceita `autorizar_he` sozinho. Uma recusa vigente dá **HE recusada** e deixa o espelho sem link. Uma recusa revogada sai do mapa e volta a `sem_decisao` se o dia ainda tiver ocorrência. `app/ponto/views.py:175`, `app/ponto/views.py:930`, `app/ponto/models.py:1265`, `app/ponto/services/gestao_he.py:42`, `app/ponto/services/gestao_he.py:92`, `app/templates/ponto/espelho.html:189`
-- **Ver o link não garante aceitar o POST.** A porta confere novamente a permissão, valida data e minutos recebidos e exige motivo de pelo menos 10 caracteres para autorizar. O inverso existe pelo código. Quem tem `autorizar_he` em render pessoal fica sem link, mas pode entrar na Gestão e decidir. Na Gestão, um dia `nao` ainda pode ser autorizado individualmente. O limite da empresa restringe a autorização por período, enquanto a porta individual exige minutos positivos. `app/ponto/views.py:120`, `app/ponto/views.py:175`, `app/ponto/views.py:930`, `app/ponto/portas/he.py:37`, `app/ponto/portas/he.py:124`, `app/ponto/portas/he.py:175`, `app/ponto/portas/he.py:195`, `app/ponto/views.py:679`, `app/templates/ponto/gestao_he.html:259`
-- **O link pode chegar sem o dia.** O espelho monta o dia no ato. A Gestão só abre as linhas do retrato, que pode estar ausente, ser anterior à pendência ou omitir o colaborador, pois a lavratura só percorre ativos e pula erros de montagem. Empresa inativa ou de diagnóstico também fica fora da seleção da Gestão, que nesse caso usa a primeira visível, se houver. Se a pessoa estiver na foto e só o dia faltar, o calendário mostra a célula sem ponta, sem foco e sem botão daquele dia. Ocorrência em produção [nao verificado]. `app/ponto/views.py:162`, `app/ponto/views.py:933`, `app/ponto/views.py:948`, `app/colaboradores/queries.py:78`, `app/ponto/services/he_pendente_lavrado.py:92`, `app/ponto/services/he_pendente_lavrado.py:132`, `app/templates/ponto/gestao_he.html:41`, `app/templates/ponto/gestao_he.html:241`
-
-## 5. Recorte, totais, vazio, PDF e ciência
-
-- **Com linhas no retrato**, `colab` recorta antes de somar `saida`, marca `filtrou` e abre a pessoa selecionada. `dia` só destaca a célula. **Com retrato ausente ou sem colaboradores**, o retorno antecipado zera os totais, mas calcula `filtrou` só pela busca. Assim, um retrato existente com zero linhas e `colab` válido cai na mensagem geral da competência. O retrato ausente tem mensagem própria. `app/ponto/services/gestao_he.py:258`, `app/ponto/services/gestao_he.py:350`, `app/ponto/services/gestao_he.py:376`, `app/ponto/services/gestao_he.py:385`, `app/ponto/views.py:965`, `app/templates/ponto/gestao_he.html:41`, `app/templates/ponto/gestao_he.html:216`, `app/templates/ponto/gestao_he.html:261`, `app/templates/ponto/gestao_he.html:326`
-- **O PDF preserva os parâmetros atuais**, como pede D3. No caminho do link, a tela mostra uma pessoa e o botão PDF pode imprimir toda a competência. A dica do botão ainda promete os mesmos filtros. O PDF também continua exigindo `ver_folha`, inclusive quando a Gestão foi aberta só com `autorizar_he`. `app/templates/ponto/gestao_he.html:27`, `app/templates/core/_btn_pdf.html:38`, `app/ponto/views.py:804`, `app/ponto/views.py:823`, `app/ponto/views.py:930`
-- **Esconder a ciência global não tira a decisão das linhas presentes.** Com pendência e permissão, continua disponível **Dar ciência no padrão**, cujo POST leva o `colab` e cobre os dois donos. A autorização individual continua na célula. Se `estado` ou `dono` forem combinados manualmente com `colab`, a lista pode ficar mais estreita que o ato de ciência por pessoa, pois o POST leva `q` e `colab`, sem aqueles dois filtros. `app/templates/ponto/gestao_he.html:59`, `app/templates/ponto/gestao_he.html:133`, `app/templates/ponto/gestao_he.html:259`, `app/ponto/views.py:606`, `app/ponto/services/gestao_he.py:357`, `app/ponto/services/gestao_he.py:428`
-
-## 6. Competência do link
-
-**Sim, para a mesma empresa e o mesmo corte efetivo.** O link envia mês e ano do fim retornado por `janela_atual`. A Gestão usa esses parâmetros para ler o retrato, e tanto a busca quanto a lavratura usam `janela_fechamento` com o corte da empresa. Com corte 21, os dias 21 a 31 que existem no mês vão para a competência seguinte. Com corte 26, dia 25 fica na competência do mês civil e dia 26 vai para a seguinte. A mesma conta trata dezembro para janeiro. Se o corte mudar desde a lavratura, as datas exatas procuradas podem deixar de encontrar a foto antiga. A presença efetiva do dia em produção está [nao verificado]. `app/ponto/views.py:181`, `app/ponto/views.py:944`, `app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:54`, `app/ponto/services/he_pendente_lavrado.py:89`, `app/ponto/services/he_pendente_lavrado.py:118`, `app/ponto/services/he_pendente_lavrado.py:202`
-
-## 7. Custo na frota
-
-**A consulta nova custa zero ou uma por montagem de espelho.** Basta uma lista `he_fora_da_janela` não vazia na faixa visual, inclusive em dia recusado ou fora da competência que o chamador recorta depois. A consulta usa o intervalo entre a primeira e a última ocorrência e o laço de dias só consulta o mapa em memória. `app/ponto/services/espelho.py:939`, `app/ponto/services/espelho.py:1261`, `app/ponto/services/espelho.py:1298`, `app/ponto/services/gestao_he.py:92`
-
-| Caminho | Consultas adicionais por colaborador |
-|---|---|
-| **Lavrador** | **0–1 por competência apurada.** O lavrador ainda carrega seu mapa em lote por empresa e competência e usa esse mapa ao montar o retrato. `app/ponto/management/commands/lavrar_he_pendente.py:43`, `app/ponto/management/commands/lavrar_he_pendente.py:62`, `app/ponto/services/he_pendente_lavrado.py:92`, `app/ponto/services/he_pendente_lavrado.py:136` |
-| **Medição do export** | **0–2 no laço principal**, pelo espelho direto e pelo coletor do cartão. Pode somar **0–1** na passagem de `cartao_x_txt_divergentes` para quem também entra nessa varredura. A leitura já existente da trava continua sendo uma consulta em lote se houver pendências. `app/folha/porta_export.py:469`, `app/folha/porta_export.py:496`, `app/folha/porta_export.py:667`, `app/folha/porta_export.py:681`, `app/relatorios/pdf_espelho.py:596`, `app/relatorios/pdf_espelho.py:654`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51` |
-| **Oráculo E6** | **0–1 no laço principal.** `InsumosDoDono` recebe e reaproveita o espelho já montado. O caminho avulso de `cxr()` também paga 0–1 quando precisa montar o próprio espelho. `app/ponto/management/commands/e6_oraculo.py:132`, `app/ponto/management/commands/e6_oraculo.py:162`, `app/ponto/management/commands/e6_oraculo.py:314`, `app/ponto/management/commands/e6_oraculo.py:328` |
-
-Esses números são o acréscimo de `montar_dias`. O motor já tem sua própria leitura de decisões. Volume total e latência em produção [nao verificado]. `app/ponto/motor_calculo_v2.py:1397`, `app/ponto/services/espelho.py:944`
-
-_7929 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7931 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
