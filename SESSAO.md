@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 20:40:54.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (6.7 MB). Acoes na janela: **171**.
+**Medido em 23/11/2026 20:46:54.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (6.9 MB). Acoes na janela: **182**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:43:25 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PAR-PELO-TURNO \|')][0] L.insert(i+1,"\| GUARDA-LE-O-JUIZ \| MAO UNICA (ponto/services/fechamento.py, exportada). Aval GUARDA-LE-O-JUIZ-REGISTRO-2311-2045: GUARDA_COMPETENCIA deixa de ser lista a mao e le empresas_exportadas_no_escopo (juiz unico). SO REGISTRO; ...` |
+| 20:43:19 | Bash |  | `cd ~/saas-hasner; grep -n "^\| PISTA-CAMADAS\\|^\| NOTURNO-NAO-APURADO\\|^\| PAR-PELO-TURNO" app/docs/BACKLOG.md \| cut -c1-300 \| head` |
+| 20:42:06 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(1,"DECIDIDO PELA LEI NOTURNO-ITEM1-GUARDA (a) + DINHEIRO 2/L-092: GUARDA_COMPETENCIA ganha 06, 07 e 08/2026 na forma da 09 (exportadas medidas na sombra pelo juiz empresas_exportadas_no_escopo: 06[4] 07[3,4] 08[2] 09[2,3,4]; so a 09 estava guardada; logs/NOTURNO-NAO-APURADO/v4/exportadas.out); saida = ...` |
+| 20:42:02 | SendMessage |  | `-` |
+| 20:41:48 | Bash |  | `cd ~/saas-hasner; grep -n "tripla\\|entregue\\|exportad" logs/NOTURNO-NAO-APURADO/v3/verif3.r \| cut -c1-600 \| head -12` |
+| 20:41:46 | Bash |  | `cd ~/saas-hasner; grep -rln "triplas\\|tripla" logs/NOTURNO-NAO-APURADO/ 2>/dev/null \| head; grep -rh "tripla" logs/NOTURNO-NAO-APURADO/v3/*.r 2>/dev/null \| head -8 \| cut -c1-400` |
+| 20:41:34 | Bash |  | `cd ~/saas-hasner; cp logs/NOTURNO-NAO-APURADO/v4/sonda_exportadas.py logs/sombra/noturno_v4_exportadas.py; timeout 600 bin/sombra.sh --rodar logs/sombra/noturno_v4_exportadas.py noturno_v4_exportadas 2>&1 \| grep -E 'EXPORTADA\|FIM\|ERRO\|Traceback\|Error' \| tee logs/NOTURNO-NAO-APURADO/v4/exportadas.out` |
+| 20:41:31 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/NOTURNO-NAO-APURADO/v4; cat > logs/NOTURNO-NAO-APURADO/v4/sonda_exportadas.py <<'EOF' from ponto.services.fechamento import empresas_exportadas_no_escopo, GUARDA_COMPETENCIA for ano in (2025, 2026): for mes in range(1, 13): try: e = empresas_exportadas_no_escopo(mes, ano) except Exception as x: print('ERRO %02d/%d %r' % (mes, ano, x)); raise if e: print('EXPORTADA % ...` |
+| 20:41:25 | Bash |  | `cd ~/saas-hasner/app; grep -n "class ExportacaoDominio" -A30 folha/models.py \| grep -n "models\.\\|def " \| head -20; grep -n "def empresas_exportadas_no_escopo" -A15 -r --include=*.py . \| head -25` |
+| 20:41:22 | SendMessage |  | `-` |
+| 20:41:06 | Bash |  | `cd ~/saas-hasner/app; sed -n 20,70p ponto/services/fechamento.py; grep -rn "GUARDA_COMPETENCIA" --include=*.py . \| grep -v tests \| head; grep -n "GUARDA\\|NOTURNO-NAO-APURADO-V2-2311-1700" docs/PROMPTS.md \| tail -4 \| cut -c1-400` |
 | 20:40:42 | Bash |  | `cd ~/saas-hasner; until [ -s logs/PISTA-2-CERTIFICA/camadas/v6/verif3.r ] && ! pgrep -f "codex_pergunta.sh.*verif3.q" >/dev/null; do /usr/bin/sleep 20; done; tail -c 3000 logs/PISTA-2-CERTIFICA/camadas/v6/verif3.r` |
 | 20:40:39 | ToolSearch |  | `-` |
 | 20:40:38 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('PISTA-CAMADAS ! srv-glpi RESPONDIDA')][0] L[i]+=" v6d 666be4c33 na copia: LABELS da regua de volta na prova (3) (RED v6c 4 FAIL; selo VERDE, 6 mutantes); Codex verif3 em curso; pista run de pre-prova do lancador 1123203850_dcaa1c63 (PRONTO = run do main apos o pous ...` |
