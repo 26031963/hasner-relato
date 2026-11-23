@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 14:11:19.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (9.6 MB). Acoes na janela: **252**.
+**Medido em 23/11/2026 14:17:17.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (9.8 MB). Acoes na janela: **258**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:17:01 | Bash | Wait for Codex census answer | `until [ -s logs/PAR-PELO-TURNO/censo1.r ] && ! /bin/grep -q . <(pgrep -f 'censo1.q'); do /usr/bin/sleep 30; done; tail -2 logs/PAR-PELO-TURNO/censo1.out; wc -l logs/PAR-PELO-TURNO/censo1.r` |
+| 14:16:43 | Bash | Dispatch Codex census for PAR-PELO-TURNO | `cp logs/PAR-PELO-TURNO/aval_v2.txt logs/PAR-PELO-TURNO/aval_v2_anexo.txt && cat > logs/PAR-PELO-TURNO/censo1.q <<'EOF' PAPEL: censo. OBRA PAR-PELO-TURNO. Anexos: aval_v2_anexo.txt (lei literal do DP, SUBSTITUI a anterior), leitura1.r (sua leitura anterior no mesmo hash), JUIZES.md. Fato novo (corte REORDENA-VAGA2-2311-1416): quando a entrada antecipada separa a jornada, a noite nao fecha num par e ...` |
+| 14:16:25 | Bash | See how prior Codex reading was invoked | `cat logs/PAR-PELO-TURNO/leitura1.out; cat logs/PAR-PELO-TURNO/leitura1.r.id; sed -n 1,12p logs/PAR-PELO-TURNO/leitura1.q; git rev-parse HEAD` |
+| 14:16:20 | Bash | Register reorder and read prior Codex reading | `python3 - <<'EOF' import json p='app/docs/CORTES.json'; d=json.load(open(p)) d.append({"id":"REORDENA-VAGA2-2311-1416","quando":"2026-11-23 14:16","estado":"registrado; PAR-PELO-TURNO na frente da A-TELA na vaga 2","fatia":"PAR-PELO-TURNO","onde":"app/docs/BACKLOG.md PAR-PELO-TURNO", "frase":"corte Ronald (REORDENA-VAGA2-2311-1416): a PAR-PELO-TURNO-V2-2311-1350 passa NA FRENTE da A-TELA-DO-DIA-LE ...` |
+| 14:11:38 | Bash | Register col673 case in BACKLOG and RELATO | `python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| DIA-DA-BATIDA-JUIZ-UNICO \|')]; assert len(i)==1 c=L[i[0]].split(' \| ') c[1]+=" CASO DE PROVA col673 (aval CASO-JV-DIA-DA-BATIDA-2311-1412; dossie das espurias): escala noturna, 21/10 trabalha, 22/10 folga, saida anterior 20/10 07:00; sem entrada 21/10 ~19:00 (esquecida, real); ...` |
+| 14:11:25 | Bash | Find candidate BACKLOG rows | `/bin/grep -n '^\| DIA-DA-BATIDA-JUIZ-UNICO\\|^\| MOTOR-LE-O-TURNO' app/docs/BACKLOG.md \| cut -c1-400` |
 | 13:53:40 | SendMessage |  | `-` |
 | 13:53:33 | Bash | Record origin finding in RELATO and PROMPTS | `python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L[:20]) if l.startswith('RESPONDIDA por ! VIGIA-DO-TMUX-INSTALA')]; assert len(i)==1 L.insert(i[0]+1,"VIGIA-SO-NA-COPIA-2311-1352 ORIGEM (13:5x): NAO foi o vigia. Provas: o transcript do construtor tem 0 'RETOMA-AUTO' e 0 tmux real (so o tmux FALSO por PATH do selo); nenhum logs/vigia_tmux/vigia.log ex ...` |
 | 13:53:21 | Bash | Search Stop hook for RETOMA phrase | `/bin/grep -rn 'RETOMA' bin/*.py bin/*.sh .claude/settings*.json 2>/dev/null \| head; /bin/grep -n '"Stop"\\|hook_stop\\|command' .claude/settings.json \| head` |
