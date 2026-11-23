@@ -1,5 +1,3 @@
-PAREI: censo-NOTURNO-NAO-APURADO | espera Codex
-
 RESPONDIDA por censo.r rc 0 16:4x -- censo NOTURNO-NAO-APURADO | espera Codex (16:2x; censo de escritores/leitores do noturno do credito do turno aberto antes do construtor)
 RESPONDIDA por censo.r rc 0 16:4x -- censo NOTURNO (linha duplicada)
 
