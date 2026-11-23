@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 16:04:58.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (16.9 MB). Acoes na janela: **445**.
+**Medido em 23/11/2026 16:11:03.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (17.2 MB). Acoes na janela: **456**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:11:02 | Bash | Write end line file for certification | `/bin/grep "^id=1123154403_f82d5354" logs/PISTA-2-CERTIFICA/p12b.fim > logs/PISTA-2-CERTIFICA/p12b.linhafim \|\| ssh -o BatchMode=yes pista estado \| /bin/grep 1123154403_f82d5354; cat logs/PISTA-2-CERTIFICA/p12b.linhafim` |
+| 16:11:00 | Bash | See linhafim format; check real OOM | `cd /home/ronald/saas-hasner && cat logs/PISTA-2-CERTIFICA/p12_eac7a674.linhafim; /bin/grep -iE "oom\|killed" logs/PISTA-2-CERTIFICA/p12b.log \| /bin/grep -viE "boom" \| head -3` |
+| 16:10:55 | Bash | Fetch pista log and verdict lines | `cd /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA && tail -3 p12b.fim; ssh -o BatchMode=yes pista log 1123154403_f82d5354 1000000 > p12b.log 2>&1; wc -l p12b.log; /bin/grep -E "^AMBIENTE\|^Ran \|^(OK\|FAILED)($\| \()\|^id=\|Found [0-9]+\|QUARENTENA-PODADO" p12b.log \| tail -15; /bin/grep -ciE "oom\|killed" p12b.log` |
+| 16:10:40 | Bash | Record PISTA-2 p8 aval in PROMPTS | `cd /home/ronald/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/PROMPTS.md'; s=open(p).read() s+="23/11 16:10 \| aval Ronald PISTA-2-CERTIFICA-EM-8-2311-1610 (SUBSTITUI o 1512): pista 2 certifica pouso em parallel 8; PROIBIDO >8 e mexer no srv-glpi; PRONTO run do main p8 + pista_certifica rc 0; 12/16 lateral (RAM Hyper-V) \| job 1123154403_f82d5354 em curso (pedido 12, runner limita a  ...` |
+| 16:10:32 | Bash | Check the f82d5354 job | `ssh -o BatchMode=yes pista estado 2>&1 \| /bin/grep -i "f82d5354\\|rodando\\|fila"; ssh -o BatchMode=yes pista log 1123154403_f82d5354 5 2>&1 \| tail -5` |
+| 16:10:26 | Bash | Check pista job state | `cd /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA && cat p12b.fim 2>/dev/null \| tail -3; ssh -o BatchMode=yes pista estado 2>&1 \| tail -5` |
+| 16:05:14 | Bash | Mark design question as answered in RELATO | `sed -i '17s/^PERGUNTA DE DESENHO E4C-F5 v7 item 2\/8.1/RESPONDIDA por RESPOSTA-DESENHO-F5-V7-281-2311-1605 (16:05; extracao, repassada ao construtor) -- PERGUNTA DE DESENHO E4C-F5 v7 item 2\/8.1/' app/docs/RELATO.md && sed -n 17p app/docs/RELATO.md \| cut -c1-140` |
+| 16:05:11 | Bash | Find the 2/8.1 design question line in RELATO | `/bin/grep -n "2/8.1" app/docs/RELATO.md \| head -5 \| cut -c1-160` |
+| 16:05:09 | Bash | Log aval in PROMPTS and mark design question answered | `python3 - <<'EOF' p='app/docs/PROMPTS.md'; s=open(p).read() s+="23/11 16:05 \| aval Ronald RESPOSTA-DESENHO-F5-V7-281-2311-1605: 2/8.1 por extracao (perguntas_prontas_da_disputa + universo_da_trava_do_plantio de materializacao.py:2184-2192/:2250-2254, lidos por plantio e backfill); entra no commit da v7 \| repassado ao construtor F5 v7 16:0x\n" open(p,'w').write(s) p='app/docs/RELATO.md'; s=open(p ...` |
+| 16:05:05 | SendMessage |  | `-` |
+| 16:04:59 | ToolSearch |  | `-` |
 | 15:56:27 | Bash | Register NOTURNO-NAO-APURADO and PAREI in RELATO | `python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PAR-PELO-TURNO \|')]; assert len(i)==1 novo="\| NOTURNO-NAO-APURADO \| MAO UNICA, NA FRENTE da PAR-PELO-TURNO (classe b do aval V3). Frota 01/10-22/11 (sombra): 326 dias realizado>0 noturno 0 com turno fechado noturno>0 (>=15 min: 80; >=60: 67), exportada 0. Mecanismo provado: c ...` |
 | 15:56:17 | Bash | Find PAR-PELO-TURNO line in BACKLOG | `cd /home/ronald/saas-hasner && /bin/grep -n "PAR-PELO-TURNO" app/docs/BACKLOG.md \| head -5` |
 | 15:56:12 | Bash | Spot-check Codex citations in motor and dia_pago | `cd /home/ronald/saas-hasner/app && sed -n 210,218p ponto/motor_calculo_v2.py; echo ---; sed -n 2538,2562p ponto/motor_calculo_v2.py; echo ---; sed -n 173,180p ponto/services/dia_pago.py; echo ---; sed -n 286,293p ponto/services/dia_pago.py` |
