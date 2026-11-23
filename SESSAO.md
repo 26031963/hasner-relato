@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 07:59:15.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (1.3 MB). Acoes na janela: **48**.
+**Medido em 23/11/2026 08:05:14.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.1 MB). Acoes na janela: **52**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:03:15 | Bash |  | `cd ~/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() l=("E4D-CONTRATO inventario 08:0x: Codex leitura rc 0 no 68eb689b5 (logs/E4D-CONTRATO/r.txt, 115 linhas): 14 PERGUNTAS DE LEI ABERTAS (emitir EventoCelula no backfill, promover ABSORCAO, ato de conclusao x exportada, ato_em futuro, FK SET_NULL do autor, texto SQL/API/tela...); " "amostra arquivo:linha aind ...` |
+| 08:03:09 | Bash |  | `cd ~/saas-hasner && tail -2 logs/E4D-CONTRATO/wrapper.log; wc -l logs/E4D-CONTRATO/r.txt; /bin/grep -n -A30 "PERGUNTAS DE LEI ABERTAS" logs/E4D-CONTRATO/r.txt \| cut -c1-350` |
+| 08:00:16 | SendMessage |  | `-` |
+| 08:00:05 | Bash |  | `cd ~/saas-hasner && tail -3 logs/E4C-F5/v4c/censo/wrapper.log; wc -l logs/E4C-F5/v4c/censo/r.txt; cat logs/E4C-F5/v4c/censo/r.txt \| cut -c1-400 \| head -80` |
 | 07:55:55 | ScheduleWakeup |  | `aval Ronald: RETOMA-POS-CLEAR-2311-0750 -- seguir: conferir push2 (logs/RETOMA-2311-0750/push2.log), censo F5 (logs/E4C-F5/v4c/censo/r.txt), construtor opus volta 4 F5, inventario E4d (logs/E4D-CONTRATO/r.txt)` |
 | 07:55:50 | Bash |  | `cd ~/saas-hasner && sed -i '1s/^EM VOO 08:0x:/EM VOO 07:55:/' app/docs/RELATO.md && head -c 60 app/docs/RELATO.md` |
 | 07:55:47 | Bash |  | `cd ~/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() l=("EM VOO 08:0x: (1) push 2 dos 12 (bin/push.sh, logs/RETOMA-2311-0750/push2.log) -- push 1 recusado pela regua: placar do TICKETS 22/11 -> 23/11, cura derivada tickets_placar.sh --escrever = 68eb689b5; " "(2) F5 v4 parcial commitada na copia cafabd1b9 (T2 estampa + T3 + 2 instrumentos), construtor opus d ...` |
