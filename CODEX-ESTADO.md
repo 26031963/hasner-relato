@@ -1,7 +1,101 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 15:44** · publicado em **23/11/2026 15:46** (UTC-3)
+> Ultima resposta processada: **23/11/2026 15:51** · publicado em **23/11/2026 15:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 15:51 · sessao 0558da3094ac · - · - · origem=Ronald (tmux)
+
+Para C2, `turnos_via_autoridade` aceita um `SimpleNamespace` com `escala`, `_ec`, `celulas_alimentadas` e as três constantes `AUT_*`. O perfil usa os valores de `MOTOR_POR_BASE`, a precedência do intermitente e o ajuste de geometria do partido contínuo. `MotorBase.remover_duplicatas(MotorBase, copias)` executa a limpeza sem instanciar o motor. [app/ponto/motor_calculo_v2.py:453](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:453>), [app/ponto/motor_calculo_v2.py:897](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:897>), [app/ponto/motor_calculo_v2.py:2351](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:2351>), [app/ponto/motor_calculo_v2.py:3593](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:3593>), [app/ponto/motor_calculo_v2.py:3626](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:3626>).
+
+Separe por segmentos consecutivos de vínculo de D, use contexto civil de um dia em cada ponta e retenha apenas o `data_turno` do segmento. Exija entrada e saída. Subtraia os `intervalos_do_turno` com `minutos_noturnos_dos_intervalos`, usando o mesmo parâmetro `prorrogacao` no bruto e no desconto. O comportamento do `medir()` referido permanece [nao verificado]. [app/ponto/turnos.py:1946](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/turnos.py:1946>), [app/ponto/services/fechamento.py:239](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/services/fechamento.py:239>), [app/ponto/turnos.py:312](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/turnos.py:312>), [app/ponto/turnos.py:502](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/turnos.py:502>), [app/ponto/motor_calculo_v2.py:82](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:82>), [app/ponto/motor_calculo_v2.py:121](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/app/ponto/motor_calculo_v2.py:121>).
+
+O wrapper invoca `lavra_de_prod` antes do Python solicitado e grava arquivos e snapshots nesse caminho. O script pode proteger suas próprias consultas com a transação solicitada. [bin/sombra.sh:144](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/bin/sombra.sh:144>), [bin/sombra.sh:151](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/bin/sombra.sh:151>), [bin/sombra.sh:157](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/bin/sombra.sh:157>), [bin/sombra.sh:483](</home/ronald/codex_ws/f82d53543f49cbcdc92893694536c3e3a28a65bf/bin/sombra.sh:483>).
+
+## 23/11 15:51 · sessao 1e56280ea7e7 · - · - · origem=Ronald (tmux)
+
+- O script pode usar `schema_context("juliani")` e `transaction.atomic(durable=True)`, emitir `SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY` antes da primeira consulta e conferir banco, schema e modo. `bin/sombra_mascara_pessoal.py:7-16`, `app/chamados/tests/cef_c3_sonda.py:22`, `app/config/settings/sombra.py:47-51`.
+- O `--rodar` desta cópia importa uma lavra de produção antes de executar o script, grava arquivos e faz `update_or_create` na sombra. A restrição de somente leitura exige outra entrada para executar o mesmo Python. O launcher ainda usa `exec(open(...).read())`, então a chamada a `main()` deve ser incondicional. `bin/sombra.sh:136-166`, `bin/sombra.sh:483-493`.
+- Carregue células e escalas em lote, passando os IDs das geradoras em `mais=`, e resolva `vinculo_do_dia` por colaborador e data. Para “célula tem marcos”, `marcos_dna_periodo` devolve os quatro marcos congelados. `EC.marcos_do_dia` devolve os mesmos quatro quando existe DNA e cai no template vivo na ausência. A quebra pode testar a presença de um marco pontual na faixa como interpretação explícita. `app/escala/alimentacao.py:54-78`, `app/escala/alimentacao.py:105-160`, `app/escala/alimentacao.py:228-286`, `app/escala/models.py:1109-1144`, `app/escala/utils.py:84-108`.
+- A autoridade recebe `batidas_limpas` de `MotorBase.remover_duplicatas`, geometria do perfil de `get_motor`, `_ec` e `celulas_alimentadas`. Fatias contíguas com halo de um dia permitem aplicar o vínculo de D e preservar a borda à meia-noite. Copie batidas por pareamento porque a autoridade coloca marcas transitórias nos objetos. O intervalo liquidável vem de `intervalos_do_turno`. `app/ponto/motor_calculo_v2.py:453-506`, `app/ponto/motor_calculo_v2.py:897-912`, `app/ponto/motor_calculo_v2.py:2351-2354`, `app/ponto/motor_calculo_v2.py:3626-3705`, `app/ponto/services/fechamento.py:239-262`, `app/ponto/turnos.py:1517-1535`, `app/ponto/turnos.py:502-546`.
+- O anexo fornecido não traz `medir()`, de modo que opção exata de prorrogação e equivalência com aquele método são [nao verificado]. Para 22h–05h estritas, passe `prorrogacao=False` às duas funções puras. `app/ponto/motor_calculo_v2.py:82-121`.
+
+## 23/11 15:50 · sessao c066df8bb348 · - · - · origem=Ronald (tmux)
+
+- A competência de D é o mês e ano do fim retornado por `janela_atual(D, colab.empresa)`. O recorte pode alcançar dezembro, conforme o corte de cada empresa. `app/ponto/janelas.py:24`, `app/ponto/janelas.py:36`, `app/ponto/janelas.py:60`.
+- Consulte `DiaPago` por colaborador, intervalo de datas, `tipo=DiaPago.TIPO_DIA` e `versao='motor'`. Retenha somente a linha com mês e ano iguais à competência de D antes de calcular o universo. `app/folha/porta_export.py:284`, `app/ponto/models.py:311`, `app/ponto/models.py:327`, `app/ponto/models.py:351`, `app/ponto/models.py:386`.
+- `competencia_entregue(empresa_id, mes, ano)` devolve o booleano de exportação vigente e aceita cache do resultado por tripla. `app/folha/export.py:556`, `app/folha/export.py:580`, `app/folha/export.py:594`.
+- A autoridade acionada pela sonda lê uma borda de um dia em cada ponta e as fatias usam `data_local` para filtrar suas batidas. `app/ponto/services/espelho.py:1055`, `app/ponto/services/fechamento.py:239`.
+- O pareador direto recebe o vínculo por `_ec` e o mapa por `celulas_alimentadas`. Preserve instâncias independentes de batidas quando rodar perfis sobrepostos. `app/ponto/management/commands/aplicar_09_corte_b.py:131`, `app/ponto/motor_calculo_v2.py:453`, `app/ponto/turnos.py:160`, `app/ponto/turnos.py:178`.
+- O noturno líquido de relógio usa `max(0.0, minutos_noturnos(e, s, prorrogacao=p) - minutos_noturnos_dos_intervalos(e, s, intervalos, prorrogacao=p))`. A correspondência com `medir()` da sonda está [nao verificado]. `app/ponto/motor_calculo_v2.py:82`, `app/ponto/motor_calculo_v2.py:121`, `app/ponto/motor_calculo_v2.py:983`.
+- Para identificar marcos da célula, `marcos_dna_periodo` retorna o DNA congelado. `EscalaColaborador.marcos_do_dia` possui fallback para template, inclusive quando há célula sem marcos. `app/escala/utils.py:84`, `app/escala/models.py:1109`, `app/escala/models.py:1135`.
+- `bin/sombra.sh --rodar` localiza o script por basename em `logs/sombra/`, usa o shell Django no schema e envolve a saída em `tee`. As credenciais da sombra são configuradas no wrapper. `bin/sombra.sh:79`, `bin/sombra.sh:184`, `bin/sombra.sh:483`, `app/config/settings/sombra.py:49`.
+
+## 23/11 15:49 · sessao 057c9d4c1879 · PAR-PELO-TURNO · sonda · origem=Code
+
+A sonda imprimiu **5 `a`, 0 `b` e 24 `c`**. Pelas evidências do anexo e pelos critérios pedidos, a triagem fica em **27 `a`, 0 `b` e 2 `c`**. Das **22 divergências**, **13** têm par separado pelo teto no próprio dia e **9** têm entrada apurável aberta no próprio dia, sem saída final no `turno`. As outras **7** classificações são sustentadas. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` `app/ponto/models.py:327` `app/ponto/models.py:351`
+
+**Competência exportada:** **0 de 29 dias-colab**, abrangendo **0 dos 14 casos**, nas linhas `competencia` fornecidas. **NAO RESOLVIDO:** nenhum. Cada caso tem `RESOLVIDO n=1` com um único PK, reproduzido abaixo como `colNNN`. `app/folha/export.py:556` `app/ponto/models.py:315`
+
+### Conferência por dia-colab
+
+`E→S` indica os papéis no pareamento, identificados pelo PK. `Vão × teto` está em minutos, com até duas casas decimais. As órfãs vêm de `turnos_contagem` e podem incluir dias vizinhos. `DiaPago` traz `minutos_realizados / horas_noturnas` da versão `motor` em D, salvo quando D−1 está indicado. `app/ponto/turnos.py:43` `app/ponto/turnos.py:183` `app/ponto/turnos.py:1447` `app/ponto/motor_calculo_v2.py:503` `app/ponto/models.py:319` `app/ponto/models.py:327` `app/ponto/models.py:351`
+
+| Caso | Colab | D | Classe impressa | Motivo impresso | Evidência do pareamento | DiaPago motor | Exportada | Conferência |
+|---|---|---|---|---|---|---|---|---|
+| caso01 | col129 | 2026-10-11 | c | `L-099_sem_batida_noturna_alvo` | Recusado `124339→124645`, **780,06 × 732**. D−1 fechou `123883→124025`, vão impresso [nao verificado], teto 732. Órfãs `123274, 124645, 125077`. | `0 / 0` (1414808). D−1 `492 / 8,8`. | Não · 10/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso01 | col129 | 2026-10-25 | c | `L-099_sem_batida_noturna_alvo` | Recusado `137026→137305`, **780,29 × 732**. D−1 fechou `136544→136691`, 539,55 × 732. Órfãs `135921, 137305`. | `0 / 0` (2400115). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso01 | col129 | 2026-11-01 | c | `L-099_sem_batida_noturna_alvo` | Recusado `143430→143722`, **780,01 × 732**. D−1 fechou `142959→143112`, 539,77 × 732. Órfãs `142323, 143722`. | `0 / 0` (2400121). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso01 | col129 | 2026-11-02 | c | `L-099_sem_batida_noturna_alvo` | Recusados `144111→144456` em D, **779,01 × 732**, e `143430→143722` em D−1, 780,01 × 732. Órfãs `143112, 143722, 144456`. | `0 / 0` (2400122). D−1 `0 / 0`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D e S `143722` órfã atribuída a D. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` |
+| caso01 | col129 | 2026-11-08 | c | `L-099_sem_batida_noturna_alvo` | Recusado `149397→149717`, **780,29 × 732**. D−1 fechou `148929→149080`, 540,23 × 732. Órfãs `148307, 149717`. | `0 / 0` (2400127). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso01 | col129 | 2026-11-15 | c | `L-099_sem_batida_noturna_alvo` | Recusado `155814→156153`, **779,99 × 732**. D−1 fechou `155325→155481`, 539,98 × 732. Órfãs `154676, 156153`. | `0 / 0` (2400134). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso02 | col155 | 2026-10-04 | c | `L-099_sem_batida_noturna_alvo` | Recusado `118190→118479`, **782,25 × 732**. D−1 fechou `117743→117877`, 543,34 × 732. Órfãs `117099, 118479`. | `0 / 0` (1419406). D−1 `492 / 8,8`. | Não · 10/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso02 | col155 | 2026-10-18 | c | `L-099_sem_batida_noturna_alvo` | Recusado `130455→130747`, **783,99 × 732**. D−1 fechou `130003→130139`, 540,31 × 732. Órfãs `129385, 130747`. | `0 / 0` (1419420). D−1 `492 / 8,8`. | Não · 10/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso02 | col155 | 2026-10-25 | c | `L-099_sem_batida_noturna_alvo` | Recusado `137024→137304`, **781,02 × 732**. D−1 fechou `136542→136683`, 538,67 × 732. Órfãs `135924, 137304`. | `0 / 0` (2450136). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso02 | col155 | 2026-11-01 | c | `L-099_sem_batida_noturna_alvo` | Recusado `143429→143724`, **781,71 × 732**. D−1 fechou `142958→143111`, 543,33 × 732. Órfãs `142326, 143724`. | `0 / 0` (2450143). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso02 | col155 | 2026-11-15 | c | `L-099_sem_batida_noturna_alvo` | Recusado `155813→156154`, **782,82 × 732**. D−1 fechou `155324→155479`, 539,11 × 732. Órfãs `154673, 156154`. | `0 / 0` (2450157). D−1 `492 / 8,8`. | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D. `app/ponto/turnos.py:183` |
+| caso03 | col121 | 2026-11-03 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=145213, S=None`. Internas `S145367/E145385`. Comparação fora da fatia `143660→143828`, 312,64 × 1560, aceita. Órfã `143649`, fora da fatia. | `354 / 0` (2453972) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D. Os alvos noturnos aparecem como internos e a saída final está ausente. `app/ponto/turnos.py:312` |
+| caso04 | col502 | 2026-10-17 | c | `L-099_sem_batida_noturna_alvo` | Fechado `129546→129953`, **565,97 × 740**, com `129953` gravada como `E` e usada como saída. Internas `S129743/S129805`. D+1 tem comparação aceita `130188→130268`, 178,41 × 1560, e E `130283` aberta. Órfãs `[]`. | `440 / 0` (1529039) | Não · 10/2026 | **Sustentada.** Em D, `abertas_e_orfas=(False, False)` e `minutos_noturnos_relogio=0`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
+| caso05 | col868 | 2026-10-02 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=117058, S=None`. Internas `S117059/E117060`. Sem `teto_comparado` no bloco. Órfãs `[]`. | `367 / 0` (1413722) | Não · 10/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
+| caso06 | col174 | 2026-11-11 | c | `L-099_criterios_a_b_ausentes_na_janela` | Recusado `152378→152727`, **722 × 720** na linha `par_separado_pelo_teto`. Decimal de `teto_comparado` [nao verificado]. Internas `S152566/E152577`. Órfã `152727`. | `420 / 0` (2470743) | Não · 11/2026 | **Diverge → a.** A saída final está na lista de órfãs e o par separado está explícito. `app/ponto/turnos.py:183` |
+| caso07 | col612 | 2026-11-11 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=152381, S=None`. Internas `S152546/E152562`. Comparação fora da fatia `150586→150650`, 279,61 × 1560, aceita. Órfã `150567`, fora da fatia. | `378 / 0` (2450464) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
+| caso08 | col999 | 2026-11-09 | c | `L-099_sem_batida_noturna_alvo` | `E=150272, S=None` no vínculo 1569, `na_fatia=True`. D+1 fechou `150789→151169`, 540,18 × 780, com tipos gravados `S/E`. Órfã `149108`, fora da fatia. | `0 / 0` (2434305) | Não · 11/2026 | **Diverge → a.** `turno` do próprio D fica aberto no vínculo de D. `app/ponto/turnos.py:312` `app/escala/alimentacao.py:228` |
+| caso08 | col999 | 2026-11-10 | c | `L-099_sem_batida_noturna_alvo` | Fechado `150789→151169`, **540,18 × 780**, com tipos gravados `S/E` e internas `E150858/S150916`. E `150272` aberta em D−1. D+1 fechou `151739→152239`, 551,62 × 780. Órfãs `[]`. | `470 / 0` (2434306) | Não · 11/2026 | **Sustentada.** Em D, `abertas_e_orfas=(False, False)` e `minutos_noturnos_relogio=0`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
+| caso09 | col992 | 2026-11-03 | c | `L-099_criterios_a_b_ausentes_na_janela` | Recusado `145230→145574`, **721,94 × 720**. Internas `S145380/E145394`. Comparação fora da fatia `143666→143759`, 294,74 × 1560, aceita. Órfãs `143652, 145574`. | `367 / 0` (2535747) | Não · 11/2026 | **Diverge → a.** `par_separado_pelo_teto` em D, com S `145574` órfã. `app/ponto/turnos.py:183` |
+| caso10 | col490 | 2026-10-28 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=140120, S=None`. Internas `S140345/E140351`. Comparação fora da fatia `138327→138452`, 165,99 × 1560, aceita. Órfã `138319`, fora da fatia. | `495 / 0` (2452929) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
+| caso10 | col490 | 2026-11-01 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=143507, S=None`. Internas `S143678/E143686`. Comparação fora da fatia `142287→142356`, 175,12 × 1560, aceita. Órfã `142279`, fora da fatia. | `484 / 0` (2452931) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
+| caso11 | col788 | 2026-10-04 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=118383, S=None`. Comparações aceitas `117003→117074` 337,79 × 1560, `117003→117213` 422,88 × 1560, `118456→118477` 50,00 × 1560 e `118578→119321` 950,67 × 1560. Órfãs `[]`. | `0 / 0` (1406259) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=118383` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
+| caso11 | col788 | 2026-10-14 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=127324, S=None`. Comparações vizinhas aceitas `125753→126275` 475,61 × 840 e `127416→127422` 60,77 × 1560. Órfãs `[]`. | `0 / 0` (1406268) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=127324` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
+| caso11 | col788 | 2026-10-16 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=129246, S=None`. Comparações vizinhas aceitas `127416→127422` 60,77 × 1560 e `129342→129348` 69,43 × 1560. Órfãs `[]`. | `0 / 0` (1406270) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=129246` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
+| caso11 | col788 | 2026-10-28 | c | `L-099_sem_batida_noturna_alvo` | `E=140245, S=None`. Comparações vizinhas aceitas `138680→139201` 455,64 × 840 e `140352→140360` 51,23 × 1560. Órfãs `[]`. | `0 / 0` (2542626) | Não · 11/2026 | **Diverge → a.** `turno` de D aberto com E `140245` às 21:33. O par com 22,87 min noturnos tem `data_turno=2026-10-29`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
+| caso11 | col788 | 2026-11-01 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | `E=143603, S=None`. D+1 tem comparações aceitas `143682→143689` 66,49 × 1560, `143682→144086` 766,02 × 1560 e `144090→144298` 268,03 × 1560. Órfãs `[]`. | `0 / 0` (2542629) | Não · 11/2026 | **Sustentada.** `batida_alvo pk=143603` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
+| caso12 | col516 | 2026-10-30 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=142071, S=None`. Internas `S142228/E162536`. Comparação fora da fatia `140300→140413`, 371,92 × 1560, aceita. Órfã `162534`, fora da fatia. | `303 / 0` (2528760) | Não · 11/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
+| caso13 | col820 | 2026-10-16 | a | `batida_noturna_em_E_aberta_ou_S_orfa` | Em D, E `129248` e E `128591` abertas. Comparações vizinhas aceitas `127945→128276` 414,99 × 720 e `129345→129355` 65,04 × 1560. Órfãs `[]`. | `0 / 0` (1404220) | Não · 10/2026 | **Sustentada.** `batida_alvo pk=129248` tem papel `E_aberta` em D. `app/ponto/turnos.py:312` |
+| caso14 | col467 | 2026-10-11 | c | `L-099_criterios_a_b_ausentes_na_janela` | `E=124392, S=None`. Internas `S124547/E124563`. Comparação fora da fatia `123191→123287`, 311,48 × 1560, aceita. Órfã `123173`, fora da fatia. | `330 / 0` (1415304) | Não · 10/2026 | **Diverge → a.** `turno` aberto em D, com alvos internos e sem saída final. `app/ponto/turnos.py:312` |
+
+A leitura de `a` inclui a entrada apurável sem saída final em D, a mesma situação registrada como `E_aberta` nos cinco `a` impressos. Nas nove divergências por abertura, a causa da falta de fechamento é [nao verificado]. Para `b`, nenhum bloco combina par **do próprio D** com `minutos_noturnos_relogio > 0`, `minutos_realizados > 0` e `horas_noturnas = 0`. Nos dois `c` sustentados, o par de D é diurno. Onde D está aberto, a própria linha `turno` informa `sem_par_E_S`. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` `app/ponto/models.py:327` `app/ponto/models.py:351`
+
+### Dono L-099 dos `c` impressos
+
+**BATIDA** é o dono sugerido quando o `turno` de D tem entrada aberta e o PK aparece em `batidas_apuraveis`. Essa é a evidência local que corresponde à guarda de batida solta do juiz. O veredito do juiz em PROD é [nao verificado]. O leitor dos pares separados também consulta esse juiz para determinar o dono. `app/ponto/management/commands/e6_oraculo.py:98` `app/ponto/management/commands/e6_oraculo.py:182` `app/ponto/management/commands/e6_oraculo.py:198` `app/ponto/services/teto_na_lista.py:86`
+
+| `c` impresso | Dono sugerido | Linha da saída que sustenta |
+|---|---|---|
+| caso01 · col129 · seis datas | **BATIDA** | `turno` em D com `S=None` e E `124339` (10-11), `137026` (10-25), `143430` (11-01), `144111` (11-02), `149397` (11-08) e `155814` (11-15). Cada E consta em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso02 · col155 · cinco datas | **BATIDA** | `turno` em D com `S=None` e E `118190` (10-04), `130455` (10-18), `137024` (10-25), `143429` (11-01) e `155813` (11-15). Cada E consta em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso03 · col121 · 11-03 | **BATIDA** | `turno` em D `E=145213, S=None`, com `145213` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso04 · col502 · 10-17 | **não decide** | `turno` em D `129546→129953`, fechado e com `minutos_noturnos_relogio=0`. Dono [nao verificado]. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
+| caso05 · col868 · 10-02 | **BATIDA** | `turno` em D `E=117058, S=None`, com `117058` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso06 · col174 · 11-11 | **BATIDA** | `turno` em D `E=152378, S=None`, com `152378` em `batidas_apuraveis`. `par_separado_pelo_teto` identifica a S `152727`. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso07 · col612 · 11-11 | **BATIDA** | `turno` em D `E=152381, S=None`, com `152381` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso08 · col999 · 11-09 | **BATIDA** | `turno` do vínculo 1569 em D `E=150272, S=None, na_fatia=True`, com `150272` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso08 · col999 · 11-10 | **não decide** | `turno` em D `150789→151169`, fechado e com `minutos_noturnos_relogio=0`. A E `150272` aberta tem `data_turno=2026-11-09`. Dono [nao verificado]. `app/ponto/turnos.py:312` `app/ponto/motor_calculo_v2.py:983` |
+| caso09 · col992 · 11-03 | **BATIDA** | `turno` em D `E=145230, S=None`, com `145230` em `batidas_apuraveis`. `par_separado_pelo_teto` identifica a S `145574`. `app/ponto/turnos.py:183` `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso10 · col490 · 10-28 e 11-01 | **BATIDA** | `turno` em D com `S=None` e E `140120` (10-28) ou `143507` (11-01). Ambas constam em `batidas_apuraveis` nos respectivos blocos. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso11 · col788 · 10-28 | **BATIDA** | `turno` em D `E=140245, S=None`, com `140245` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso12 · col516 · 10-30 | **BATIDA** | `turno` em D `E=142071, S=None`, com `142071` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+| caso14 · col467 · 10-11 | **BATIDA** | `turno` em D `E=124392, S=None`, com `124392` em `batidas_apuraveis`. `app/ponto/turnos.py:312` `app/ponto/turnos.py:2877` |
+
+Hash da cópia e implementação da seleção de alvos em `sonda.py` [nao verificado].
 
 ## 23/11 15:44 · sessao f124818f214d · PAR-PELO-TURNO · sonda · origem=Code
 
@@ -946,310 +1040,4 @@ A linha de 31/10 do colaborador 941 tem `batidas_do_turno=[]`. O agregado de 231
 
 A ocorrência em produção de uma falta de várias datas com o rótulo diário divergente do rateio está **[nao verificado]**. `sonda.out:3–12` (anexo).
 
-## 23/11 13:48 · sessao 492e33b59d8e · - · - · origem=Ronald (tmux)
-
-- A porta que grava `CelulaDia.status_dia` é `lavrar_veredito`, via `_aplicar_status`. Entram por ela o julgamento normal do cartório, o ramo sem batida na vida, o complemento D5 e a decisão humana. O desfazimento de julgamento futuro também grava `NULL` pelo `setattr` da mesma porta. A varredura em memória do selo AST percorreu 828 fontes de produção sem encontrar escritor fora da porta. `app/ponto/portas/celula.py:1045–1065`, `:1096–1134`, `:1148–1149`, `:1182–1203`, `app/ponto/services/cartorio.py:939–956`, `:1321–1326`, `:1898–1922`, `app/ponto/services/veredito_celula.py:352`, `app/ponto/tests/test_selo_veredito_so_pela_porta.py:171–194`.
-
-- No fluxo do cartório, lista de códigos vazia produz `concorde`. Havendo batida, `concorde`, `coberta` e `cobranca_indevida` podem produzir `ok`. O status recebe presença como booleano, sem a quantidade de marcas faltantes. `app/ponto/services/cartorio.py:1500–1547`, `app/escala/models.py:1635–1642`, `app/ponto/status_dia.py:157–163`, `:185–192`. Com as demais guardas satisfeitas, o classificador atual acusa `FURO_PARCIAL` tanto para E sem par e realizado zero quanto para E-S-E com realizado positivo. Ambos os ramos dependem de `dia_encerrado` e de `not sem_ancora`. O ramo isento devolve lista vazia. `app/ponto/supra_juiz.py:229–250`, `:392–463`. Qual guarda, decisão humana ou fotografia da lavra escreveu o `ok` do 945 é [não verificado].
-
-- O próprio código permite lavrar enquanto o turno de um dia anterior ainda vive. Nesse caso o término muda `enc=0` para ausente e habilita rejulgamento. Há outra trajetória no avulso do próprio dia, após o fim previsto mas dentro da margem da abertura. Nela `enc=0` fica ausente por `data < hoje`, assim como na próxima avaliação já encerrada. Com o restante da impressão igual, a avaliação seguinte pula o dia. `app/ponto/services/cartorio.py:528–529`, `:1424–1444`, `:1500–1511`, `:2073–2090`, `app/ponto/tests/test_celula_concorde_meio_turno.py:44–67`. Ocorrência dessa trajetória no dado fornecido [não verificado].
-
-- A autoridade registrada de furo é `classificar_falta`, a de presença viva é `turno_aberto_de`, e a de status é `status_do_dia_lavrado`. D4 consulta o juiz de encerramento, que usa `turno_aberto_vivo` e expira a abertura depois do fim da janela do template mais quatro horas, então lê a coluna. `datas_em_aberto_de` usa abertura geométrica, saída órfã e furo do motor, com suas respectivas exclusões. A abertura geométrica expirada pode permanecer nessa lista. `app/docs/JUIZES.md:20–24`, `:132–134`, `app/core/juizes.py:200–219`, `:243`, `app/ponto/status_dia.py:269–290`, `app/ponto/turnos.py:2005–2035`, `:2113–2130`, `app/colaboradores/services/calendario.py:600–616`, `:748–763`, `app/relatorios/cartao_pela_celula.py:373–422`, `app/ponto/services/dia_decidido.py:346–355`.
-
-- A S órfã forma turno com `entrada=None`, `saida` preenchida e `aberto=False`. Pode entrar na palavra por `datas_saida_orfa` sem bloquear a leitura da coluna no D4. `escala_suspeita` deriva de `indefinida` no ramo que passou pelas precedências. A órfã da grade, em jornada prevista de trabalho com zero realizado, pode gerar `BATIDA_ORFA_FORA_TOLERANCIA`, que isolado leva a `discordante` e `irregular`. Se coexistir código de `indefinida`, este tem prioridade sobre `discordante` no mapa. `app/ponto/turnos.py:234–245`, `:312–324`, `:1495–1498`, `app/ponto/status_dia.py:139–146`, `:159–160`, `app/ponto/supra_juiz.py:527–537`, `app/escala/models.py:1622–1642`. A sonda não mostra uma S órfã no exemplo 941 de 31/10, nem discrimina por S órfã os 231 casos [não verificado].
-
-## 23/11 13:47 · sessao 5b8da13f9df7 · - · - · origem=Ronald (tmux)
-
-**Leitores do D4.** O único leitor funcional direto da coluna para classificação é `status_dos_dias_lavrados`, que devolve `cel.status_dia` quando o relógio deixa ler a lavra. A porta e a retrolavra também leem a coluna para comparar, preservar ou completar o registro. `app/ponto/status_dia.py:272–295`, `app/ponto/portas/celula.py:1056–1065,1082`, `app/ponto/services/cartorio.py:946`.
-
-- **Calendário.** Lê o D4 e publica `status`/`status_rotulo`. A palavra vem, em paralelo, da pertinência em `_em_aberto` passada a `do_dia`. O template usa a palavra como título da célula e o status para fundo e ícone. `app/colaboradores/services/calendario.py:639,696–697,748–763`, `app/templates/colaboradores/partials/_calendario_grade.html:68–74,97–104`.
-- **Espelho e app.** A faixa semanal do espelho lê status/rotulo do D4, e o miolo aplica a palavra pelo resumo. O app lê esse miolo e consulta o D4 separadamente, publicando os dois sinais e ainda `turno_aberto` por geometria. O adaptador do app mantém `ok` e traduz `escala_suspeita` como `neutro`. O Painel Operacional lê D4 nos dias encerrados. `app/ponto/views.py:162–164,203`, `app/ponto/services/espelho.py:170–174,1327`, `app/templates/ponto/espelho.html:151–153`, `app/api/views.py:1361,1387–1395,1496,1512–1516,1547–1548,1560–1563,1610–1626`, `app/ponto/status_dia.py:79–91`, `app/core/services/painel_op.py:329–338`.
-- **Resolver dia.** O gate da oferta exige dia passado, anterior ao início da competência corrente, sem pergunta viva com resposta, e status em `falta`, `irregular`, `aberto` ou `sem_certidao`. `ok` e `escala_suspeita` ficam fora. O template exige também `pode_veredito`, oriundo da permissão `regularizar_batida`. A tarefa pergunta pela mesma oferta nos dias elegíveis sem rota. O POST tem seus próprios controles de permissão, datas e veredito e delega à porta de ação. `app/colaboradores/services/calendario.py:94–104,117–122,493–508,774,812–813,157–161`, `app/colaboradores/views.py:1990–2000`, `app/templates/colaboradores/partials/_calendario_grade.html:134–135`, `app/chamados/services/tarefa_do_dia.py:697–712`, `app/ponto/views.py:3491–3520`.
-- **Cobrança.** A auditoria de espelhos seleciona só `irregular` no D4, lê horários apagados da ata e passa `NAO_PERGUNTADO` ao calendário. O ranking «Quem cobrar» agrega `FuroDiario` e a fila de chamados. A emissão efetiva segue códigos do julgamento, guardas e marcos apagados no cartório, e o agrupador de órfãos consulta `classificar_falta` e a ata. Ocorrência efetiva de cobrança nos registros da sonda [nao verificado]. `app/relatorios/furos.py:127–145,164–168`, `app/relatorios/views.py:1643`, `app/escala/services/furos_diarios.py:25–57,178–186,193–213`, `app/ponto/services/cartorio.py:1783–1796,1813–1841,1861–1879`, `app/chamados/services/disputa_emissao.py:813–820,1214–1233,1251–1264`.
-- **Folha.** A retenção do TXT usa `CelulaDia.veredito`, protestos e guardas de célula/veredito ausente. O Raio‑X lê os marcos apagados da ata. O detalhamento de destrava lê a tarefa e pode herdar indiretamente a oferta de Resolver produzida pelo calendário. `app/folha/export.py:968–973,1205–1213,1265–1307`, `app/folha/views.py:637`, `app/relatorios/furos.py:190–214`, `app/folha/fora_da_folha.py:273–280`, `app/chamados/services/tarefa_do_dia.py:697–712`.
-
-**Censo AST.** Nas 3.752 árvores Python parseadas em memória, não apareceu comparação literal `status_dia == 'ok'` ou invertida. O consumidor Python do predicado equivalente sobre a projeção D4 é o contador `d['status'] == 'ok'`. No template do calendário, ele pinta o fundo e o check, e aparece também num laço sem saída renderizada antes da leitura do contador. `app/colaboradores/services/calendario.py:696–697,762,817`, `app/templates/colaboradores/partials/_calendario_grade.html:69,99,152–155`.
-
-- **Acessos de execução a `datas_em_aberto`.** Calendário recebe a lista por parâmetro ou lê o resumo e testa pertinência. Espelho transforma a lista em conjunto e a passa à palavra. PDF reaplica com a lista do seu resumo. Pauta DP consome a lista no diagnóstico. O comando de diff acessa a chave indiretamente e compara comprimentos. `app/colaboradores/services/calendario.py:595–597,616,749`, `app/ponto/services/espelho.py:330,341,1327`, `app/relatorios/pdf_espelho.py:638`, `app/ponto/services/dias_em_aberto.py:112`, `app/pautas/management/commands/pauta_dia_em_aberto.py:82`, `app/relatorios/management/commands/diff_pdf_x_espelho.py:36,94–101`.
-- `folha_manda` grava a lista efetiva e a contagem. O PDF tem placeholder anterior e lê a palavra na coluna Obs. Auditoria de furos passa uma sentinela para pular a lista. A contagem derivada é lida no PDF, placar e comando cartão × TXT. `app/relatorios/cartao_pela_celula.py:419–422`, `app/relatorios/pdf_espelho.py:468,791–792,923–924`, `app/relatorios/furos.py:168`, `app/folha/porta_export.py:621`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:64`.
-
-**Saída órfã.** `datas_saida_orfa` coleta a `data_turno` quando há saída sem entrada no par. Calendário, espelho e PDF publicam essa parcela, unida com turno aberto e furo apurado, retirando datas decididas e o turno em curso. O teste estático usa `S–E–S` noturno ancorado na véspera e exige `em_aberto` e parcial positivo, sem afirmar `escala_suspeita`. A sonda mostra o agregado de 231 e um exemplo de `escala_suspeita` com `batidas_do_turno=[]`. Caso individual de `escala_suspeita` com saída órfã na sonda [nao verificado]. `app/ponto/turnos.py:234–245`, `app/colaboradores/services/calendario.py:607–613`, `app/ponto/services/espelho.py:630–631`, `app/relatorios/pdf_espelho.py:619–622`, `app/ponto/services/dia_decidido.py:346–355`, `app/ponto/tests/test_saida_orfa_dia_em_aberto.py:91–104`, `sonda.out:4,8` (anexo).
-
-## 23/11 13:46 · sessao dc35802cd5c9 · - · - · origem=Ronald (tmux)
-
-**5. Rótulo de falta e minutos por dia**
-
-- `Ausencia.minutos` é a duração do registro. Ao salvar falta aprovada com zero minutos, `Ausencia.save` soma os previstos entre `data` e `data_fim`. `rotulo_de` entrega esse total a `palavra_do_dia`, que formata `Falta (desconta Nh)`. A única supressão de minutos em `rotulo_de` é para abono que cobre dia inteiro. Um registro descontado que cobre várias datas pode, portanto, exibir seu total em cada linha de dia. `app/ponto/models.py:750-759,887-897`; `app/ponto/services/dia_decidido.py:156-169,249-256,398-399,473-476,533-546`; `app/ponto/turnos.py:2752-2778`.
-- `cartao_do_dia` também expõe `minutos` crus e `decididos_do_periodo` põe esse cartão em cada data da faixa. Para o rótulo diário, os leitores são calendário, espelho, PDF e API do app. `app/ponto/services/dia_decidido.py:561-569,605-611`; `app/colaboradores/services/calendario.py:748-757`; `app/templates/colaboradores/partials/_calendario_grade.html:97-98`; `app/ponto/services/espelho.py:329-346,1327`; `app/relatorios/pdf_espelho.py:636-638,923-924`; `app/api/views.py:1387-1400`.
-- Outras leituras de minutos como duração **do próprio dia** têm a guarda de ausência parcial, que exige tipo habilitado, uma única data e `0 < minutos < 480`. `cobre_parte_do_dia` lê o campo para essa classificação. `creditos_por_dia` soma o valor por `a.data` para abater o atraso daquele dia, `efeitos_da_ausencia` soma o valor das parciais do período para o PDF, e lista e painel mostram os minutos quando a guarda permite. `app/ponto/turnos.py:2599,2602,2617-2619`; `app/ponto/services/credito_parcial.py:24-28`; `app/ponto/services/fechamento.py:994-1001`; `app/ponto/services/dia_pago.py:188-195`; `app/ponto/services/efeito_ausencia.py:46-50,63-65`; `app/relatorios/pdf_espelho.py:332-336,479`; `app/ponto/views.py:2112,2340-2344`; `app/templates/ponto/ausencias.html:159-165`; `app/templates/ponto/partials/painel_ausencia.html:310-313,323-327`.
-- `minutos_de_falta_por_dia` seleciona ausências aprovadas que descontam, divide os minutos do registro pelo número de datas de sua expansão integral e soma os valores por data da janela. A chamada direta de produção está em `recalcular_fechamento_mes`, que usa o total para `FechamentoMensal.horas_falta` e passa o mapa para `DiaPago.horas_falta` e `detalhe['falta_min']`. O resumo do cartão lê o fechamento ou a soma das diárias. A rubrica 8792 do TXT usa `datas_falta` e emite contagem e datas. `app/folha/export.py:87-92,113-122,125-143`; `app/ponto/services/fechamento.py:873-875,1003,1200-1206,1277-1282`; `app/ponto/services/dia_pago.py:274-277`; `app/relatorios/cartao_pela_celula.py:115,143-146,183-185`; `app/folha/export.py:215-221,740-744`.
-- Leituras por registro incluem serialização da API, admin, detalhe e edição, auditoria, duração em horas, fotografia do insumo da folha, histórico, CSV de atestados e espelhamento da tabela. O ramo de pendência lê o campo, mas o rótulo pendente não o usa. `app/api/views.py:1882`; `app/ponto/admin.py:44`; `app/templates/ponto/partials/painel_ausencia.html:125,163`; `app/ponto/views.py:2476,2910,2950,2993`; `app/ponto/services/ausencia.py:119,126-139,590`; `app/ponto/models.py:874-876`; `app/ponto/services/dia_decidido.py:259-264,465-469,648,665-675`; `app/ponto/services/atestados_lote.py:54-58,118-128`; `bin/sombra_incremental.sh:36`. Ocorrência em produção de falta de várias datas com o rótulo divergente do valor por dia [nao verificado].
-
-## 23/11 13:37 · sessao c751a3c4fda1 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
-
-**Script A — sombra.** O anexo registrou 14 dias com pago ≥ previsto e 111 dias com pago e minutos dos pares. O histograma usa a diferença com sinal, arredondada a nove casas, e inclui 10, 60 e 240 na faixa que termina nesse valor. O pago soma `horas_trabalhadas`, `horas_folga_trabalhada` e `detalhe.folga_feriado_min`, após a checagem das rubricas de sustentação. `sonda.out:4`, `sonda_pago_pares_sombra.py:130`, [app/ponto/services/dia_pago.py:861](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/services/dia_pago.py:861).
-
-```python
-# sonda_pago_pares_sombra.py
-import json
-import logging
-from bisect import bisect_left
-from collections import Counter
-from unittest.mock import patch
-
-from django.db import connection, transaction
-from django.utils import timezone
-from django_tenants.utils import schema_context
-
-from colaboradores.models import Colaborador
-from colaboradores.services.calendario import (
-    STATUS_QUE_PEDEM_DECISAO,
-    contexto_calendario,
-)
-from escala.utils import minutos_previstos_do_dia
-from ponto.services.dia_pago import _RUBRICAS_DE_DINHEIRO, pago_do_dia
-from ponto.turnos import CargaDaJanela, realizado_do_dia
-
-MES, ANO = 11, 2026
-LIMITES = (0, 10, 60, 240)
-FAIXAS = ("<=0", "0-10", "10-60", "60-240", ">240")
-
-
-def falhar_em_log_de_erro(_logger, registro):
-    if registro.exc_info and registro.exc_info[1] is not None:
-        _, erro, traceback = registro.exc_info
-        raise erro.with_traceback(traceback)
-    if registro.levelno >= logging.ERROR:
-        raise RuntimeError(f"Erro registrado em {registro.pathname}:{registro.lineno}")
-
-
-def ler_grade(colab, agora):
-    ctx = contexto_calendario(
-        colab, {"modo": "competencia", "mes": str(MES), "ano": str(ANO)},
-        agora=agora,
-    )
-    for dia in ctx["dias"]:
-        if not dia["em_aberto_perguntado"] or dia["resolver_dia_oferecido"] is None:
-            raise RuntimeError(f"Grade sem resposta para pk={colab.pk}, dia={dia['data']}")
-    return ctx
-
-
-def fonte_do_pago(linha):
-    return {
-        "dia_pago_pk": linha.pk,
-        "versao": linha.versao,
-        "evento_origem": linha.evento_origem,
-        "parcelas_somadas": [
-            "horas_trabalhadas", "horas_folga_trabalhada", "detalhe.folga_feriado_min",
-        ],
-        "rubricas_horas": {campo: getattr(linha, campo) for campo in _RUBRICAS_DE_DINHEIRO},
-        "detalhe": {"folga_feriado_min": (linha.detalhe or {}).get("folga_feriado_min")},
-    }
-
-
-def imprimir(obj):
-    print(json.dumps(obj, ensure_ascii=False), flush=True)
-
-
-def sondar():
-    if connection.settings_dict["NAME"] != "sombra":
-        raise RuntimeError("Use o banco de ensaio sombra.")
-    if connection.in_atomic_block or not connection.get_autocommit():
-        raise RuntimeError("A sonda exige uma transação própria.")
-
-    with (
-        patch.object(logging.Logger, "handle", falhar_em_log_de_erro),
-        schema_context("juliani"),
-        transaction.atomic(),
-    ):
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-            cursor.execute("SELECT current_database(), current_schema()")
-            if cursor.fetchone() != ("sombra", "juliani"):
-                raise RuntimeError("Banco/schema diferente de sombra/juliani.")
-
-        agora = timezone.now()
-        qs = Colaborador.objects.select_related("empresa", "posto__praca").order_by("pk")
-        colabs = list(qs.filter(situacao="ativo"))
-        comparacao = Counter()
-        histograma = dict.fromkeys(FAIXAS, 0)
-        diferencas = []
-        for colab in colabs:
-            ctx = ler_grade(colab, agora)
-            turnos = None
-            for dia in ctx["dias"]:
-                status = dia["status"]
-                texto = dia["palavra_dia"]
-                if "Em aberto" not in texto or status in STATUS_QUE_PEDEM_DECISAO:
-                    continue
-
-                d = dia["data"]
-                previsto = minutos_previstos_do_dia(colab, d)
-                linha = dia["dia_pago"]
-                horas = pago_do_dia(linha)
-                if horas is None:
-                    comparacao["dias_sem_minutos_pagos_sustentados"] += 1
-                    continue
-                pago = round(horas * 60, 9)
-                ge = pago >= previsto
-                comparacao["dias_pago_ge_previsto" if ge else "dias_pago_lt_previsto"] += 1
-
-                if turnos is None:
-                    turnos = CargaDaJanela([colab], ctx["data_ini"], ctx["data_fim"]).turnos(colab)
-                pares = realizado_do_dia(colab, d, turnos=turnos, previsto_min=previsto).minutos
-                chave_dia = {
-                    "colaborador_pk": colab.pk,
-                    "data": d.isoformat(),
-                    "status": status,
-                }
-                if ge:
-                    imprimir({
-                        **chave_dia,
-                        "texto": texto,
-                        "batidas_do_turno": [
-                            [timezone.localtime(b.timestamp).isoformat(), b.tipo]
-                            for b in dia["batidas"]
-                        ],
-                        "minutos_pagos": pago,
-                        "minutos_previstos": previsto,
-                        "minutos_dos_pares": pares,
-                        "fonte_pago": fonte_do_pago(linha),
-                    })
-
-                if pares is None:
-                    comparacao["dias_com_pago_sem_minutos_dos_pares"] += 1
-                    continue
-                diferenca = round(pago - pares, 9)
-                histograma[FAIXAS[bisect_left(LIMITES, diferenca)]] += 1
-                diferencas.append({**chave_dia, "diferenca_minutos": diferenca})
-
-    diferencas.sort(key=lambda item: (-item["diferenca_minutos"], item["colaborador_pk"], item["data"]))
-    imprimir({
-        "colaboradores_no_universo": len(colabs),
-        "dias_pago_ge_previsto": comparacao["dias_pago_ge_previsto"],
-        "dias_pago_lt_previsto": comparacao["dias_pago_lt_previsto"],
-        "dias_sem_minutos_pagos_sustentados": comparacao["dias_sem_minutos_pagos_sustentados"],
-        "dias_com_pago_sem_minutos_dos_pares": comparacao["dias_com_pago_sem_minutos_dos_pares"],
-        "dias_com_pago_e_minutos_dos_pares": len(diferencas),
-        "histograma_pago_menos_pares": histograma,
-        "maiores_diferencas": diferencas[:10],
-    })
-
-
-sondar()
-```
-
-**Script B — produção.** Para `para="folha"`, o campo decisivo é `Ausencia.status`, com valor `aprovada`. Entre as aprovadas que cobrem a data, vence a de maior `data` e, no empate, de maior `pk`. Uma ausência anterior a novembro com `data_fim=NULL` só alcança novembro se o tipo tiver fim indeterminado no catálogo vivo. A sonda imprime essas linhas candidatas com `toca_novembro="[nao verificado]"`. [app/ponto/turnos.py:2528](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/turnos.py:2528), [app/ponto/turnos.py:2786](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/turnos.py:2786), [app/ponto/catalogo/ausencias.py:430](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/catalogo/ausencias.py:430).
-
-Os rótulos de ausência dependem do catálogo vivo de `TipoAusencia`. `rotulo_de` consulta o efeito e, quando aplicável, a regra de parcialidade. `palavra_do_dia` recebe um veredito e pode consultar o nome do tipo. A dependência é do catálogo. Com as duas tabelas pedidas, a sonda emite `[nao verificado]` para os rótulos quando há linhas candidatas. `null` indica que a consulta encontrou zero candidatas naquele dia. [app/ponto/services/dia_decidido.py:217](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/services/dia_decidido.py:217), [app/ponto/services/dia_decidido.py:502](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/services/dia_decidido.py:502), [app/ponto/turnos.py:2602](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/turnos.py:2602), [app/ponto/catalogo/ausencias.py:240](/home/ronald/codex_ws/eac7a67419eb54c3af01f061dde311b5bae06717/app/ponto/catalogo/ausencias.py:240), `sonda_ausencias_941_prod.py:47`.
-
-```python
-# sonda_ausencias_941_prod.py
-import json
-import logging
-from datetime import date
-from unittest.mock import patch
-
-from django.db import connection, transaction
-from django.db.models import F, Q
-from django_tenants.utils import schema_context
-
-from colaboradores.models import Colaborador
-from ponto.models import Ausencia
-
-INICIO, FIM = date(2026, 11, 1), date(2026, 11, 30)
-DIAS = tuple(date(2026, 11, dia) for dia in range(16, 20))
-NAO_VERIFICADO = "[nao verificado]"
-
-
-def falhar_em_log_de_erro(_logger, registro):
-    if registro.exc_info and registro.exc_info[1] is not None:
-        _, erro, traceback = registro.exc_info
-        raise erro.with_traceback(traceback)
-    if registro.levelno >= logging.ERROR:
-        raise RuntimeError(f"Erro registrado em {registro.pathname}:{registro.lineno}")
-
-
-def iso(valor):
-    return valor.isoformat() if valor is not None else None
-
-
-def imprimir(obj):
-    print(json.dumps(obj, ensure_ascii=False), flush=True)
-
-
-def ler_dia(dia, ausencias):
-    candidatas = [
-        a for a in ausencias
-        if a.data <= dia and (a.data_fim is None or dia <= a.data_fim)
-    ]
-    confirmadas = [a.pk for a in candidatas if a.data_fim is not None or a.data == dia]
-    sem_fim_a_confirmar = [a.pk for a in candidatas if a.data_fim is None and a.data < dia]
-    aprovadas = [a for a in candidatas if a.status == "aprovada"]
-    cobertura_folha_pk = None
-    if aprovadas:
-        ultima = aprovadas[-1]
-        cobertura_folha_pk = ultima.pk if ultima.pk in confirmadas else NAO_VERIFICADO
-    rotulo = NAO_VERIFICADO if candidatas else None
-    return {
-        "data": dia.isoformat(),
-        "ausencias_pks_confirmadas": confirmadas,
-        "ausencias_pks_sem_fim_a_confirmar": sem_fim_a_confirmar,
-        "ausencia_cobertura_folha_pk": cobertura_folha_pk,
-        "rotulo_de": rotulo,
-        "palavra_do_dia": rotulo,
-    }
-
-
-def sondar():
-    if connection.settings_dict["NAME"] != "saas_hasner":
-        raise RuntimeError("Use o banco de produção saas_hasner.")
-    if connection.in_atomic_block or not connection.get_autocommit():
-        raise RuntimeError("A sonda exige uma transação própria.")
-
-    with (
-        patch.object(logging.Logger, "handle", falhar_em_log_de_erro),
-        schema_context("juliani"),
-        transaction.atomic(),
-    ):
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-            cursor.execute("SELECT current_database(), current_schema()")
-            if cursor.fetchone() != ("saas_hasner", "juliani"):
-                raise RuntimeError("Banco/schema diferente de saas_hasner/juliani.")
-
-        pk = Colaborador.objects.values_list("pk", flat=True).get(pk=941)
-        ausencias = list(
-            Ausencia.objects.filter(colaborador_id=pk, data__lte=FIM)
-            .filter(
-                Q(data_fim__isnull=True)
-                | Q(data_fim__gte=INICIO, data__lte=F("data_fim"))
-            )
-            .only("tipo", "status", "data", "data_fim", "minutos", "criado_em", "atualizado_em")
-            .order_by("data", "pk")
-        )
-        for a in ausencias:
-            imprimir({
-                "colaborador_pk": pk,
-                "pk": a.pk,
-                "tipo": a.tipo,
-                "status": a.status,
-                "data": iso(a.data),
-                "data_fim": iso(a.data_fim),
-                "minutos": a.minutos,
-                "criado_em": iso(a.criado_em),
-                "atualizado_em": iso(a.atualizado_em),
-                "toca_novembro": (
-                    True if a.data_fim is not None or a.data >= INICIO else NAO_VERIFICADO
-                ),
-            })
-        for dia in DIAS:
-            imprimir({"colaborador_pk": pk, **ler_dia(dia, ausencias)})
-
-
-sondar()
-```
-
-Execução das duas novas sondas em banco e registros de `Ausencia` do 941 em produção [nao verificado].
-
-_7946 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7950 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
