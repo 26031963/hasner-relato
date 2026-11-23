@@ -1,8 +1,8 @@
-ESPERANDO: suite.sh | pid=2718632
+ESPERANDO: suite.sh | pid=2718634
 DESENHO [nome]-FERIADO-PELA-TELA-2211-1612: lei=escritor unico pergunta=quem escreve a celula e sob qual trava ponto/portas/celula.py:853
 DESENHO SIMPLIFICA-V3-2211-1726: lei=juiz unico pergunta=quem atesta que o run da pista 2 e inteiro bin/pista_certifica.sh:62
 DESENHO E4C-F5: lei=escritor unico pergunta=quem grava o instante e a vigencia do ato sob a trava chamados/models.py:4454
-TRIA-VERIF1-F5-2211-2100 21:1x: verif1 F5 v2 triado (logs/E4C-F5/v2/verif1/triagem.txt): ESMERIL-SEMANTICA ato_em COBERTO por RESPOSTA-4C1-RECUO-2111-1715 opcao B + CONTRATO-V2 (3) (DECIDIDO PELA LEI | contestavel), residuo ato futuro -> contrato E4d; 6 procedentes P1-P6 + 2 fila; F5 segue no censo do item 2 na proxima vaga
+TRIA-VERIF1-F5-2211-2100 21:0x: verif1 F5 v2 triado (logs/E4C-F5/v2/verif1/triagem.txt): ESMERIL-SEMANTICA ato_em COBERTO por RESPOSTA-4C1-RECUO-2111-1715 opcao B + CONTRATO-V2 (3) (DECIDIDO PELA LEI | contestavel), residuo ato futuro -> contrato E4d; 6 procedentes P1-P6 + 2 fila; F5 segue no censo do item 2 na proxima vaga
 [nome]-FERIADO-PELA-TELA-2211-1612 NO AR 20:5x: pouso 4b6c5cf6e, deploy --sem-migrate rc 0, opus APROVA (achados 1-4 = fila: [nome]-PRECEDENCIA-FERIADO-EDITADA, [nome]-FILA-OPUS); voltas Codex 6, opus 1 (aprovou)
 DESPACHO E4D-ENSAIO: leitura do escritor do ato/backfill/contador/45+224 -> Codex (logs/E4D-ENSAIO/q1.txt) | script de ensaio na sombra -> sessao (instrumento) | leitura de log -> sonnet
 SUPERADA (opus final [nome] APROVA 20:5x) -- era: ESPERANDO: agente | arquivo=/home/ronald/.claude/projects/-home-ronald-saas-hasner/fed23df3-5867-427b-a56f-61563d8d89a2/subagents/agent-a00b97cc1d5e49170.jsonl
