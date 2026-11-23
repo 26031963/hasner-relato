@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 09:16** · publicado em **23/11/2026 09:20** (UTC-3)
+> Ultima resposta processada: **23/11/2026 11:40** · publicado em **23/11/2026 11:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 11:40 · sessao a87007d25862 · - · - · origem=Ronald (tmux)
+
+**2. ACHADO.** As novas aquisições explícitas do diff passam pelo protocolo C→D→Ch→P, por PK em cada grupo. O backfill corrige a ordem no topo, com duas chamadas a C, mas deixa disputas fechadas fora do conjunto. Exemplo reproduzível pela leitura: um credor terminal reabre seu chamado e depois ressuscita uma irmã carimbada em disputa fechada. A primeira trava dessa disputa vem depois da aquisição e do `UPDATE` do chamado. `app/chamados/models.py:2939,2948,2961,2965,1505,1517,1644,1655,1731`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:192,200,291,327`; `app/chamados/services/disputa_emissao.py:1943,1971`.
+
+O conjunto lógico do topo do backfill continua sendo a união dos universos individuais. A ordem passa de D1→Ch1→D2→Ch2 para todas as D antes de todos os Ch. Para os demais chamadores escalares, `= cid` passa a `IN (cid)` com os mesmos filtros e a mesma ordenação. A única coleção com `True` é o backfill. Os 22 sítios de produção são:
+
+- `app/chamados/models.py:302,777,2123,2259`; `app/chamados/reconciliador.py:547,662`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:200`.
+- `app/chamados/services/becos.py:53`; `app/chamados/services/declaracao_texto.py:303`; `app/chamados/services/disputa_emissao.py:539,1345,2001`; `app/chamados/services/limbo_folgas.py:275`; `app/chamados/services/materializacao.py:1243,2184`; `app/chamados/services/validacao.py:284,549,581`.
+- `app/ponto/services/justificativa.py:41,80,129`; `app/ponto/services/veredito_celula.py:185`.
+
+No core de resposta, o resgate está depois do `atomic` em que Ch é pré-travado. No admin o `atomic` externo mantém a trava. Nas entradas avulsas web/API, o resgate ocorre depois de liberá-la. `app/chamados/services/disputa_emissao.py:1487,1500,1568,1592`; `app/chamados/services/acoes_disputa.py:407,430`; `app/chamados/views.py:1278`; `app/api/views.py:2653`.
+
+**3. ACHADO.** O juiz C20 tem entrada lateral. Com Empresa carregada com corte 21 e o banco já com corte 10 e novembro trancado, 14/10 pode dar `False` antes da trava e `True` depois dela, com banco idêntico. No mesmo lote, se o primeiro par compartilhar o memo e a empresa e vier de outro colaborador destravado com FK velha, o par travado pula a carga e herda o corte velho. Inverter os pares pode mudar o resultado do par travado. A releitura ainda usa `c.empresa_id` antigo após transferência. `app/core/juizes.py:304`; `app/chamados/juizes.py:1045,1084,1091,1098,1107,1111,1125,1188,1199,1238`; `app/chamados/tests/test_f5_v5_guarda_sob_trava.py:370`; `app/colaboradores/views.py:1413,1417`.
+
+O escritor é `trava_na_ordem`, que envia os IDs pedidos após o SELECT de C. O registro é um callback sem efeito. Sai no commit ou rollback externo. Liberar savepoint mantém o callback, e desfazer savepoint de `atomic` elimina os callbacks pendurados nele, conservando as aquisições anteriores. O savepoint manual não publica SID na pilha de `atomic`, daí o corte explícito de callbacks pelo backfill. No `TestCase` o registro das transações internas persiste no `atomic` externo até rollback. O helper de teste simula o commit limpando a fila, sem liberar a trava. `app/chamados/models.py:2939,2941`; `app/chamados/services/trava_do_colaborador.py:16,30,37,45,54`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:306,354`; `app/chamados/tests/test_f5_v3_guarda_sob_trava.py:27`.
+
+A porta pode reler C e Empresa via `select_related('empresa')` depois da trava, ou em lote, e entregar explicitamente Empresa, dia e memo ao mesmo C20. Já há uma carga pós-C no E2. Isso permite escolher a Empresa a partir do vínculo relido e evita que o juiz consulte o registro. `app/chamados/reconciliador.py:650,652,666`; `app/chamados/juizes.py:1121,1221`.
+
+**6. ACHADO.** O SELECT adicional possível é o `in_bulk` das Empresas faltantes, deduplicado dentro da chamada pela combinação de memo e empresa. No E2 a Empresa já chega num `select_related` executado após C, portanto a explicação de que essa FK veio de antes da trava falha nesse caminho. Não há garantia geral de três por transição. Com FK fria a base já carregava a Empresa. Com várias disputas que alcancem C20 na consulta reiniciada dentro do laço S143, podem existir novas cargas por disputa. As três pilhas escritas são compatíveis com chamadas alcançáveis, mas a medida das três queries, suas posições e a folga zero são [nao verificado]. Os dois selos exercitam um colaborador/dia e 1 ou 3 chamados e apenas exigem total menor ou igual ao teto. `app/chamados/juizes.py:1045,1091,1107,1494,1502`; `app/chamados/reconciliador.py:650,652,666`; `app/chamados/services/disputa_emissao.py:2054,2074,2206,2213`; `app/ponto/tests/test_selo_chokepoint_escrita.py:218,254,343,464,491`.
+
+Outros achados enviados à principal incluem vínculo de disputa do inline não relido, cartão conferido pela borda não entregue à ação de correção, e falha de recuperação do fechamento da órfã após persistir o primeiro item e falhar no seguinte. `app/chamados/views_cobrar.py:160,216`; `app/chamados/services/fio.py:695,703`; `app/chamados/services/acoes_disputa.py:398,416`; `app/chamados/reconciliador.py:1141,1236,1263,1495`.
 
 ## 23/11 09:16 · sessao 991fd090b45f · E4C-F5 · censo · origem=Code
 
@@ -843,59 +865,4 @@ Para o caso principal, `dna['marcos']` é um dicionário preenchido com `hi` e `
 
 Identidade Git da cópia, configuração efetiva em produção, conteúdo das atas lavradas e impacto em colaboradores ou competências específicos **[nao verificado]**.
 
-## 23/11 00:33 · sessao 20d83e043bc7 · ESPURIAS-VAGA-2 · sonda · origem=Code
-
-## 1. O que a sonda mede
-
-**A sonda mede a mudança nas propostas para 525 colaboradores em operação, não isentos, na sombra.** Ela monta uma única lista e chama os dois detectores para cada colaborador, com as mesmas datas. A fonte antiga embutida confere byte a byte com `detector_proposta.py` de `4da4e6212`. Os dois detectores executam no ambiente da cópia, com as dependências e o catálogo da cópia. A equivalência com os resultados em produção é [nao verificado]. `sonda_impacto.py:6–12, 33–58`, `dado-raspado:1–5, 333`.
-
-- **Universo.** O filtro é o mesmo do espelho: colaboradores comuns ativos, de empresa ativa em rollout, com vínculo de escala vigente hoje, excluindo os isentos pela flag `isento_ponto`. O espelho só chama `propor_escala` quando encontra alguma assinatura de anomalia. A sonda chama para os 525. Portanto, as 312 perdas são do universo da sonda. Quantas apareceriam na lista do espelho é [nao verificado]. `sonda_impacto.py:37–49`, `app/colaboradores/queries.py:15–29, 50–65`, `app/core/constants.py:13–18`, `app/ponto/services/esmeril_espelho.py:229–247`, `dado-raspado:334`.
-- **Janela.** `HOJE=2026-11-23`, `INI=2026-09-24`, `FIM=2026-11-22`, os 60 dias inclusivos que o espelho passa ao propositor. O detector antigo agrupa batidas por dia civil. O novo usa a data do turno e pode ler a saída em `fim+1`. A janela usada pelo espelho para encontrar as próprias assinaturas é outra, calculada por colaborador. `dado-raspado:4`, `sonda_impacto.py:10, 34–35, 45–49`, `app/ponto/services/esmeril_espelho.py:38–63, 233–241`, `app/ponto/turnos.py:1834–1847, 1997–2001`.
-- **Motivos.** `PROPOE` vem da presença da proposta. Para os demais, a sonda busca trechos de `porque` e usa `NONE_OUTRO` se nenhum casar. Os trechos cobrem os motivos exibidos nesta rodada. A classificação depende da redação, e registra o primeiro bloqueio retornado pelo detector. Em `TRANSICAO`, a igualdade de proposta é pelo `tipo_escala_id`. As mudanças de confiança são contadas também, então essas chaves se sobrepõem às de proposta. `sonda_impacto.py:21–30, 53–79`, `app/escala/detector_proposta.py:134–147, 156–172`, `dado-raspado:334–336`.
-- **Queries e tempo.** A sonda soma deltas de `len(connection.queries)` na conexão padrão com `DEBUG=True` e tempos de `time.monotonic()`. A montagem do universo e a agregação ficam fora dos tempos. O velho roda sempre primeiro, e o tempo do novo inclui a leitura intermediária de `connection.queries`. Os números descrevem uma passada nessa ordem. O efeito da ordem e a completude do histórico de queries são [nao verificado]. `sonda_impacto.py:33–51, 80–93`.
-- **Furo em `EMPATES_TOP`.** O `split(':', 1)` corta no `:` do horário inicial, por isso `07:00->16:00` vira `00->16:00`. A chave ainda carrega os minutos e o horário de saída, então o mesmo conjunto de códigos aparece em várias posições e horários de entrada com a mesma minutagem podem cair na mesma chave. O contador usa todos os empates, inclusive os de quem já não tinha proposta. `sonda_impacto.py:70–85`, `app/escala/detector_proposta.py:144–147`, `dado-raspado:335–338`.
-
-## 2. Transcrição
-
-As referências `dado-raspado:linha` numeram o bloco fornecido a partir do primeiro `sonda_leitura:`.
-
-```text
-N=525
-TRANSICAO {'conf_alta_para_insuficiente': 190, 'conf_alta_para_media': 3, 'conf_insuficiente_para_alta': 23, 'conf_insuficiente_para_media': 9, 'conf_media_para_alta': 4, 'conf_media_para_insuficiente': 122, 'nao_tinha_ganhou': 32, 'nenhum_dos_dois': 134, 'propoe_igual': 32, 'propoe_outro': 15, 'tinha_proposta_perdeu': 312}
-MOTIVO_NOVO {'NONE_CICLO': 12, 'NONE_EIXO80': 14, 'NONE_EMPATE': 371, 'NONE_POUCOS_DIAS': 36, 'NONE_SEM_TEMPLATE': 13, 'PROPOE': 79}
-MOTIVO_VELHO_X_NOVO {('NONE_POUCOS_DIAS', 'NONE_POUCOS_DIAS'): 32, ('NONE_SEM_TEMPLATE', 'NONE_CICLO'): 3, ('NONE_SEM_TEMPLATE', 'NONE_EIXO80'): 9, ('NONE_SEM_TEMPLATE', 'NONE_EMPATE'): 77, ('NONE_SEM_TEMPLATE', 'NONE_POUCOS_DIAS'): 3, ('NONE_SEM_TEMPLATE', 'NONE_SEM_TEMPLATE'): 10, ('NONE_SEM_TEMPLATE', 'PROPOE'): 32, ('PROPOE', 'NONE_CICLO'): 9, ('PROPOE', 'NONE_EIXO80'): 5, ('PROPOE', 'NONE_EMPATE'): 294, ('PROPOE', 'NONE_POUCOS_DIAS'): 1, ('PROPOE', 'NONE_SEM_TEMPLATE'): 3, ('PROPOE', 'PROPOE'): 47}
-NONE_CICLO_POR_PADRAO {'semanal': 12}
-EMPATES_TOP [
-  ('00->16:00 com ciclo compativel: 100, 101, 132, 143, 144, 146, 35, 60, 62, AJ1076-1, AJ206-1, AJ224-1, AJ533-1, PAI-COMERCIAL.6', 10),
-  ('00->07:00 com ciclo compativel: 134, PAI-12x36.10, PAI-12x36.101, PAI-12x36.104, PAI-12x36.15, PAI-12x36.36, PAI-12x36.40, PAI-12x36.5, PAI-12x36.7', 9),
-  ('00->19:00 com ciclo compativel: 85, PAI-12x36.1, PAI-12x36.102, PAI-12x36.11, PAI-12x36.16, PAI-12x36.3, PAI-12x36.3x1', 9),
-  ('55->19:00 com ciclo compativel: 85, PAI-12x36.1, PAI-12x36.102, PAI-12x36.11, PAI-12x36.16, PAI-12x36.3, PAI-12x36.3x1', 6),
-  ('55->07:00 com ciclo compativel: 134, PAI-12x36.10, PAI-12x36.101, PAI-12x36.104, PAI-12x36.15, PAI-12x36.36, PAI-12x36.40, PAI-12x36.5, PAI-12x36.7', 6),
-  ('00->17:00 com ciclo compativel: 119, 146.1, 163, 168, 27, 33, 46, AJ1029-1, AJ981-1, PAI-6X1.44, PAI-COMERCIAL.10, PAI-COMERCIAL.50', 5),
-  ('55->06:55 com ciclo compativel: 134, PAI-12x36.10, PAI-12x36.101, PAI-12x36.104, PAI-12x36.15, PAI-12x36.36, PAI-12x36.40, PAI-12x36.5, PAI-12x36.7', 4),
-  ('56->19:00 com ciclo compativel: 85, PAI-12x36.1, PAI-12x36.102, PAI-12x36.11, PAI-12x36.16, PAI-12x36.3, PAI-12x36.3x1', 4),
-  ('55->18:56 com ciclo compativel: 85, PAI-12x36.1, PAI-12x36.102, PAI-12x36.11, PAI-12x36.16, PAI-12x36.3, PAI-12x36.3x1', 4),
-  ('55->06:55 com ciclo compativel: PAI-12x36, PAI-12x36.103, PAI-12x36.4, TPL-12x36-NOT', 4)
-]
-ABERTOS_FORA=801 SOLTAS_FORA=179
-CUSTO velho=5.3s/1018q novo=14.7s/3214q por_colab_novo=0.03s
-```
-
-`dado-raspado:333–340`.
-
-## 3. Perdas, pares e erros
-
-**312 colaboradores perdem a proposta**: **5** por eixo de 80%, **294** por empate, **9** por ciclo, **3** por falta de template e **1** por poucos dias. São as transições de `PROPOE` para cada `NONE_*`. `dado-raspado:334, 336`.
-
-Entre as **294 perdas por empate**, os pares mais frequentes aparecem **45 vezes cada**. Contando como par quaisquer dois códigos presentes no mesmo empate, são os 21 pares possíveis do primeiro grupo e os 28 do segundo. `dado-raspado:6–332, 336`, `sonda_impacto.py:70–76`.
-
-| Ocorrências por par | Códigos do grupo |
-|---:|---|
-| 45 | `85`, `PAI-12x36.1`, `PAI-12x36.102`, `PAI-12x36.11`, `PAI-12x36.16`, `PAI-12x36.3`, `PAI-12x36.3x1` |
-| 45 | `1`, `1.1`, `1.2`, `12x36_DG`, `PAI-12x36.2`, `PAI-12x36.33`, `PAI-12x36.57`, `TPL-12x36-DIU` |
-
-Considerando apenas empates com **exatamente dois candidatos**, o par mais frequente nas perdas é `PAI-12x36.51` × `PAI-12x36.90`, com **9** ocorrências. O ranking global dos 371 empates é [nao verificado]. O dado traz 77 empates de quem já estava sem proposta, cobertos pelo agregado, e `EMPATES_TOP` só mostra as dez chaves de texto mais frequentes. `dado-raspado:6–332, 335–338`, `sonda_impacto.py:70–85`.
-
-**Nenhum `ERRO` ou traceback aparece na saída fornecida**, que chega até `CUSTO`. O código de saída do processo é [nao verificado]. `dado-raspado:1–340`, `bin/sonda_leitura.sh:235–251`.
-
-_7918 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7919 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
