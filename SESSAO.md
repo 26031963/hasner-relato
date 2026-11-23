@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 17:36:59.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (28.9 MB). Acoes na janela: **724**.
+**Medido em 23/11/2026 17:43:07.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (28.9 MB). Acoes na janela: **725**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:43:05 | Bash | Check PISTA copy state | `cd /home/ronald/wt-pista-camadas-161321 && git status --porcelain \| head -12; git log --oneline -2` |
 | 17:33:59 | Bash | Update BACKLOG and RELATO for UI pouso | `python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=1981 c=L[i].split('\|'); c[6]=' NO AR be0bf6863 23/11 17:4x (deploy rc 0; escala 1438 OK); smoke de clique dele pendente ' L[i]='\|'.join(c) open(p,'w').write('\n'.join(L)) p='app/docs/RELATO.md' s=open(p).read() s+=("\n\n## UI-EDITAR-RAIZ -- NO AR (23/11 17:4x)\n" "- LEI-AKITA: origem=templates/escala/tipos_lista.html, teste ...` |
 | 17:33:52 | Bash | Inspect BACKLOG row columns | `python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=1981 assert L[i].startswith('\| UI-EDITAR-RAIZ \|') c=L[i].split('\|') print(len(c)); print([x[:60] for x in c]) EOF` |
 | 17:33:50 | Bash | Find UI row in BACKLOG | `/bin/grep -n "UI-EDITAR-RAIZ" app/docs/BACKLOG.md \| cut -c1-250 \| head -3` |
