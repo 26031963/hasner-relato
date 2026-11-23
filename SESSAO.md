@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 18:36:49.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.4 MB). Acoes na janela: **56**.
+**Medido em 23/11/2026 18:42:39.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.4 MB). Acoes na janela: **60**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:42:35 | SendMessage |  | `-` |
+| 18:42:25 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' 23/11 18:45 \| aval Ronald RESPOSTA-DESENHO-F5-82-B-2311-1845: 8.2 = (B) c3 -- sem disputa aberta o cartao segue a fechada propria; correcao vale so ENTRE abertas; 3 selos vivos; PROIBIDO esconder pergunta/validar/reabertura em fechada; PRONTO = chamados verdes na c3 + numero de cartoes da sonda no RELATO \| item E4C-F5 23/11 18:45 \| ...` |
+| 18:42:20 | Bash |  | `cd /home/ronald/saas-hasner; tail -2 app/docs/PROMPTS.md \| cut -c1-200; cat logs/E4C-F5/v7/s82b/sondas/resumo.txt 2>/dev/null; cat logs/E4C-F5/v7/s82b/mut/resultado.txt 2>/dev/null` |
+| 18:42:19 | SendMessage |  | `-` |
 | 18:34:39 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO:') L[0]='ESPERANDO: construtor NOTURNO v3 (agente) + fila F5 s82b roda.sh \| pid=2813989 \| arquivo=logs/E4C-F5/v7/s82b/mut/resultado.txt' L.insert(1,"NOTURNO-NAO-APURADO v2 REPROVADA pelo Codex verificador (18:24, logs/NOTURNO-NAO-APURADO/v2/verif2.r, rc 0; conferid ...` |
 | 18:34:34 | Agent | NOTURNO item 1 volta 3 | `You are the CONSTRUTOR of obra NOTURNO-NAO-APURADO item (1), VOLTA 3, repo /home/ronald/saas-hasner (read /home/ronald/saas-hasner/CLAUDE.md first; sections 0, 4, 6, 7b CODEX and DINHEIRO bind you). MAO UNICA, dinheiro (rubrica 25). Aval `! NOTURNO-NAO-APURADO-V2-2311-1700` item (1): the credit of the TURNO ABERTO (`MotorBase.calcular_mes`, loop over `_pares_a`) must carry the noturno of the SAME  ...` |
 | 18:34:08 | Bash |  | `ps -o pid,args -p 2817150 2814124 \| cut -c1-140` |
