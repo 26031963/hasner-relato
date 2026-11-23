@@ -6,10 +6,30 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 18:07:18.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (0.9 MB). Acoes na janela: **9**.
+**Medido em 23/11/2026 18:13:17.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (1.2 MB). Acoes na janela: **29**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:12:36 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=2290; assert L[i].startswith('\| PISTA-ESCOLHE-SOZINHA \|') L.insert(i+1,"\| PISTA-CAMADAS \| instrumento (aval PISTA-2-CERTIFICA-EM-8-2311-1615; ULTIMA VOLTA = v5 por PISTA-CAMADAS-ULTIMA-VOLTA-2311-1812), pouso proprio; padrao=n/a (instrumento) \| bin/pista_certifica.sh julga a imagem pelas CAMA ...` |
+| 18:12:25 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2291p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; for(i=2;i<NF;i++) print i": "substr($i,1,120)}'` |
+| 18:12:22 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'PISTA-CAMADAS\\|PISTA-2-CERTIFICA' app/docs/BACKLOG.md \| cut -c1-200 \| head` |
+| 18:12:20 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '^\| PISTA' app/docs/BACKLOG.md \| cut -c1-160` |
+| 18:12:20 | SendMessage |  | `-` |
+| 18:09:32 | Bash |  | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && echo '- [PAREI ! CLEAR só sem vivo](parei-clear-so-sem-vivo.md) — com agente/suite viva o CLEAR espera; vigia do tmux congelado (VIGIA-CONGELA 23/11)' >> MEMORY.md` |
+| 18:09:31 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/parei-clear-so-sem-vivo.md` |
+| 18:09:25 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('PISTA-CAMADAS v5 ENTREGUE')][0] L.insert(i,"VIGIA-CONGELA-2311-1810 FEITO (18:1x): agente do vigia v5 PARADO 18:09 (TaskStop; nenhum processo com cwd na wt); copia wt-vigia-tmux-132928 @8dd023236 + diff da v5 (vigia_tmux.py, marco_de_clear.py, statusline_ ...` |
+| 18:09:18 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=1984; assert L[i].startswith('\| VIGIA-DO-TMUX \|') old='\| registrada 23/11 13:2x; CONTRATO no RELATO, ao Codex \|' assert L[i].count(old)==1 L[i]=L[i].replace(old,'\| CONGELADO 23/11 18:10 (VIGIA-CONGELA-2311-1810): agente v5 parado, copia wt-vigia-tmux-132928 @8dd023236 + diff da v5 intocada, n ...` |
+| 18:09:14 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' import json p='app/docs/CORTES.json' d=json.load(open(p)) e=[x for x in d if x['id']=='VIGIA-DO-TMUX-INSTALA-2311-1350']; assert len(e)==1 e[0]['estado']='REVOGADO por VIGIA-CONGELA-2311-1810 (23/11 18:10): nada instala' d.append({"id":"VIGIA-CONGELA-2311-1810","quando":"2026-11-23 18:10","estado":"vigente (conduta); agente da v5 parado 18:09, copia w ...` |
+| 18:09:06 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,16p bin/gerar_cortes.py; tail -12 app/docs/CORTES.json` |
+| 18:09:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2355,2375p app/docs/CORTES.json; grep -n 'REVOGAD' app/docs/CORTES.json \| head -5; head -40 bin/gerar_cortes.py \| grep -nE 'argv\|escrever\|conferir\|json'` |
+| 18:09:00 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1040,1105p bin/hook_stop_fila1.py` |
+| 18:08:57 | Bash |  | `cd /home/ronald/saas-hasner; grep -rn 'VIGIA-DO-TMUX-INSTALA' --include=*.md --include=*.json --include=*.py app/docs bin .claude 2>/dev/null \| cut -c1-220 \| head; grep -n 'VIGIA-DO-TMUX' app/docs/BACKLOG.md \| cut -c1-200 \| head -5; grep -rn 'CLEAR-RAPIDO' bin/*.py \| head -5` |
+| 18:08:52 | TaskStop |  | `-` |
+| 18:08:50 | Bash |  | `date +%T; stat -c '%y %n' /home/ronald/wt-vigia-tmux-132928/bin/vigia_tmux.py /home/ronald/wt-vigia-tmux-132928/bin/*.py 2>/dev/null \| sort \| tail -3; for p in $(pgrep -u ronald); do c=$(readlink /proc/$p/cwd 2>/dev/null); case "$c" in *vigia*) echo "$p $c $(tr '\0' ' ' </proc/$p/cmdline\|cut -c1-100)";; esac; done` |
+| 18:08:46 | ListAgents |  | `-` |
+| 18:08:46 | ToolSearch |  | `-` |
+| 18:07:38 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() lines=s.split('\n') i=[k for k,l in enumerate(lines) if l.startswith('RETOMA-POS-CLEAR-2311-1806')][0] lines.insert(i,"PISTA-CAMADAS v5 ENTREGUE (18:1x): copia wt-pista-camadas-161321 sobre 86e7ae265, diff nao commitado (bin/pista_certifica.sh, bin/tests/test_pista_certifica.sh; +193 -45 contra v4); selos test_p ...` |
+| 18:07:34 | Agent | Opus final PISTA-CAMADAS v5 | `OBRA: PISTA-CAMADAS (aval PISTA-2-CERTIFICA-EM-8-2311-1615), instrumento de host, volta 5. Voce e a leitura FINAL (CODEX 5(d): mais de 3 voltas escalona ao opus). Somente leitura; nao edite nada, nao rode suite Django, nao commite. Copia: /home/ronald/wt-pista-camadas-161321 (HEAD 86e7ae265 = v4; diff nao commitado da v5 em bin/pista_certifica.sh e bin/tests/test_pista_certifica.sh). Juiz das cama ...` |
 | 18:07:18 | Bash |  | `cd /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v5; for f in test_*.log; do echo "$f: $(tail -n1 $f)"; done; cd /home/ronald/wt-pista-camadas-161321 && git diff \| grep -nE '^\+.*(\\|\\| true\|2>/dev/null)' \| head; ls /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v4 \| head -20` |
 | 18:07:15 | Bash |  | `cd /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v5; ls; tail -1 test_pista_certifica.log test_suite_sh.log test_suite_motivo.log; cat real_p12b.out \| cut -c1-200; cd /home/ronald/wt-pista-camadas-161321; git status --porcelain; git diff --stat; git diff \| grep -cE '^\+.*\bexcept\b'; ls /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/` |
 | 18:06:10 | Bash |  | `cd /home/ronald/saas-hasner; echo "23/11 18:06 \| aval Ronald RETOMA-POS-CLEAR-2311-1806: retomar pelo HANDOFF+topo, conferir os 4 vivos (F5 8.2+c3, vigia v5, PISTA v5, NOTURNO item 1 v2) e relancar so o perdido; FEITO 18:0x: 4/4 vivos, 0 relancado, linha no topo do RELATO" >> app/docs/PROMPTS.md; tail -1 app/docs/PROMPTS.md \| cut -c1-80` |
