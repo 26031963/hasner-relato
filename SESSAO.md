@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 18:54:24.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.5 MB). Acoes na janela: **61**.
+**Medido em 23/11/2026 19:00:22.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (2.6 MB). Acoes na janela: **69**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:59:04 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"E4C-F5 c3b ENTREGUE (19:0x): 54794f38a na wt-f5-v7-153543 (validar_classe_a::_classe_da_pendente, catraca segue 1, so o nome da funcao no selo). chamados na c3b OK (skipped=2, expected failures=14) Ran 5833 rc=0 (s82b/c3b_chamados.log, conferido). Mutantes c3 M1a/M1b/M2/M3/M4 FAILED nos a ...` |
+| 18:58:45 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/E4C-F5/v7/s82b/pouso; git diff 06c3a2e88..54794f38a > $D/delta_c3b.diff; wc -c $D/delta_c3b.diff; cat > $D/verif.q <<'EOF' OBRA E4C-F5 v7, volta 8.2 + c3 + c3b, PAPEL verificador. Delta = git diff 06c3a2e88..54794f38a (anexo delta_c3b.diff, por ultimo). Anexos: leis.txt (leis dos sitios), verif.r da c2 (verificacao anterior) e achados_para_c3.txt (os 4 itens que ...` |
+| 18:58:33 | Bash |  | `cd /home/ronald/saas-hasner; head -c 1500 logs/E4C-F5/v7/c2/verif.q; echo; echo ----; head -20 logs/E4C-F5/v7/c2/achados_para_c3.txt; ls logs/E4C-F5/v7/s82/ \| head` |
+| 18:58:31 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/E4C-F5/v7/verif logs/E4C-F5/v7/c2 \| head -30; ls logs/E4C-F5/*.txt logs/E4C-F5/leis* 2>/dev/null \| head` |
+| 18:58:27 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/E4C-F5/v7/ \| head -30; ls logs/E4C-F5/v7/s82b/ \| head -30; git -C /home/ronald/wt-f5-v7-153543 log --oneline 06c3a2e88..HEAD \| cat; git -C /home/ronald/wt-f5-v7-153543 merge-base HEAD main` |
+| 18:58:26 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/E4C-F5/v7/s82b/pouso; bash bin/suite.sh --dir /home/ronald/wt-f5-v7-153543 --motivo "pre-opus E4C-F5" --espera 7200 > logs/E4C-F5/v7/s82b/pouso/suite_inteira.log 2>&1; echo rc=$? >> logs/E4C-F5/v7/s82b/pouso/suite_inteira.log` |
+| 18:58:21 | Bash |  | `cd /home/ronald/saas-hasner; ls -la logs/E4C-F5/v7/s82b/sondas/; tail -3 logs/E4C-F5/v7/s82b/sondas/*.out \| cut -c1-160` |
+| 18:58:19 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/E4C-F5/v7/s82b/c3b_chamados.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; cat $L.rc 2>/dev/null; git -C /home/ronald/wt-f5-v7-153543 log --oneline -1; git -C /home/ronald/wt-f5-v7-153543 status --porcelain \| head; tail -3 logs/E4C-F5/v7/s82b/mut/resultado.txt; bin/trava_teste.sh --quem; cat logs/E4C-F5/v7/s82b/sondas/resumo.txt  ...` |
 | 18:42:41 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() L=s.split('\n') i=next(k for k,x in enumerate(L) if x.startswith('lei: E4C-F5 8.2 D-FECHADA-NO-CARTAO')) L[i]='RESPONDIDA por RESPOSTA-DESENHO-F5-82-B-2311-1845 (18:45: (B) c3, 3 selos vivos, c4 morta) -- era: lei E4C-F5 8.2 D-FECHADA-NO-CARTAO' L.insert(1,"E4C-F5 8.2 (18:5x): desenho (B) c3 recebido. VOLTA_C3 d ...` |
 | 18:42:35 | SendMessage |  | `-` |
 | 18:42:25 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' 23/11 18:45 \| aval Ronald RESPOSTA-DESENHO-F5-82-B-2311-1845: 8.2 = (B) c3 -- sem disputa aberta o cartao segue a fechada propria; correcao vale so ENTRE abertas; 3 selos vivos; PROIBIDO esconder pergunta/validar/reabertura em fechada; PRONTO = chamados verdes na c3 + numero de cartoes da sonda no RELATO \| item E4C-F5 23/11 18:45 \| ...` |
