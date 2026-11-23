@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 03:33:51.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (93.5 MB). Acoes na janela: **2034**.
+**Medido em 23/11/2026 03:39:59.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (93.6 MB). Acoes na janela: **2028**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:39:54 | Bash |  | `cd ~/saas-hasner; D=logs/ESPURIAS-VAGA-2-2211-2359/comboio4; bin/pista_certifica.sh e0d2e6c78b5c51bf5f0fc0828c3e581dcf5fbde9 $D/suite.log $D/fim.txt > $D/certifica.txt 2>&1; echo rc=$? \| tee -a $D/certifica.txt; tail -6 $D/certifica.txt` |
+| 03:39:51 | Bash |  | `cd ~/saas-hasner; cat logs/ESPURIAS-VAGA-2-2211-2359/comboio4/fim.txt; grep -n 'uso:' -B6 bin/pista_certifica.sh \| grep -v '^.*#' \| head -12` |
+| 03:34:47 | Bash |  | `D=~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/comboio4; for i in $(seq 1 19); do grep -q '^rc=' $D/certifica.txt 2>/dev/null && break; /usr/bin/sleep 30; done; date +%H:%M; tail -4 $D/certifica.txt 2>/dev/null; grep -E '^(FAIL\|ERROR):' $D/suite.log 2>/dev/null; grep -E '^(OK\|FAILED)($\| \()' $D/suite.log 2>/dev/null\| tail -1; grep -E '^Ran' $D/suite.log 2>/dev/null \| tail -1` |
 | 03:25:14 | Bash |  | `D=~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/comboio4; for i in $(seq 1 19); do grep -q '^rc=' $D/certifica.txt 2>/dev/null && break; /usr/bin/sleep 30; done; date +%H:%M; tail -3 $D/certifica.txt 2>/dev/null` |
 | 03:15:41 | Bash |  | `D=~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/comboio4; for i in $(seq 1 19); do grep -q '^rc=' $D/certifica.txt 2>/dev/null && break; /usr/bin/sleep 30; done; date +%H:%M; cat $D/certifica.txt 2>/dev/null \| tail -3` |
 | 03:15:29 | Bash |  | `D=~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/comboio4; until grep -q '^rc=' $D/certifica.txt 2>/dev/null; do /usr/bin/sleep 30; done; grep '^id=' $D/fim.txt; tail -4 $D/certifica.txt; grep -E '^(FAIL\|ERROR):' $D/suite.log; grep -E '^Ran' $D/suite.log \| tail -1; grep -E '^(OK\|FAILED)($\| \()' $D/suite.log \| tail -1` |
@@ -2035,12 +2038,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:40:29 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && python3 - <<'EOF' p='chamados/tests/test_n1_perguntas_do_app.py'; s=open(p).read() ini=s.index("class RetratarLoteAbortadoNoCron(TransactionTestCase):") s=s[:ini]+'''class RetratarLoteAbortadoNoCron(TransactionTestCase): """E4C-F5 contrato v1 item (1), caminho do CRON (sem atomic externo): o lote do E2 roda sob UMA transacao, e o juizo (C6/C20 no gerador, C7 no ...` |
 | 15:40:05 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 440,470p chamados/tests/test_n1_perguntas_do_app.py; grep -n "^from\\|^import" chamados/tests/test_n1_perguntas_do_app.py` |
 | 15:40:01 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -i '43s/from django.db import DatabaseError, transaction/from django.db import transaction/' chamados/reconciliador.py && sed -n 43p chamados/reconciliador.py && python3 - <<'EOF' p='chamados/tests/test_e4c_f5_guarda_reconciliador.py'; s=open(p).read() old=''' atomic = next(no for no in ast.walk(funcao) if isinstance(no, ast.With) and ast.unparse(no.items[0 ...` |
-| 15:39:51 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && python3 - <<'EOF' import py_compile p='chamados/reconciliador.py'; s=open(p).read() ini=s.index(" # Recusa barata ANTES da trava (contrato F5 v1 item (1)") fim=s.index(" return n\n\n\ndef qs_perguntas_absolviveis") assert s.count(" # Recusa barata ANTES da trava (contrato F5 v1 item (1)")==1 novo=''' # E4C-F5 contrato v1 item (1) + N1-PERGUNTAS-DO-APP: UMA trav ...` |
-| 15:39:30 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && grep -n "^from django.db import\\|^import\\|connection" chamados/reconciliador.py \| head; grep -rn "cursor()" chamados/*.py \| head -5; grep -rln "connection.cursor\\|raw SQL" core/tests/ chamados/tests \| head` |
-| 15:39:07 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 230,298p chamados/tests/test_e4c_f5_guarda_reconciliador.py; grep -n "_transacao_viva\\|def _sql_vivo\\|INERROR" -r chamados core \| head` |
-| 15:38:57 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 60,120p chamados/tests/test_e4c_f5_guarda_reconciliador.py; sed -n 300,360p chamados/tests/test_e4c_f5_guarda_reconciliador.py; sed -n 470,530p chamados/tests/test_n1_perguntas_do_app.py` |
-| 15:38:43 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && grep -n "def trava_na_ordem" -A60 chamados/models.py \| head -90; sed -n 2100,2120p chamados/models.py; sed -n 1650,1670p chamados/models.py` |
-| 15:38:38 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app && sed -n 995,1030p ponto/services/cartorio.py; sed -n 1440,1490p chamados/reconciliador.py; grep -n "ordem" chamados/models.py \| sed -n 1,400p \| grep -in "trava\\|C ->\\|C→\\|D ->" \| head -20` |
-| 15:38:24 | Bash |  | `cd ~/wt-f5-contrato-v1-140439 && git diff 11d74e7cc -- app/chamados/reconciliador.py \| head -150; sed -n 625,700p app/chamados/reconciliador.py` |
-| 15:38:04 | Read |  | `/home/ronald/saas-hasner/logs/E4C-F5/v1/verif1/r.txt` |
-| 15:38:03 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bj95uofxr.output; cd ~/saas-hasner; cat logs/E4C-F5/v1/verif1/r.txt \| cut -c1-400` |
