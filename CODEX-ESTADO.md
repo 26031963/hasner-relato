@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **23/11/2026 19:05** · publicado em **23/11/2026 19:06** (UTC-3)
+> Ultima resposta processada: **23/11/2026 19:09** · publicado em **23/11/2026 19:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 23/11 19:09 · sessao 427dfca9c655 · NOTURNO-NAO-APURADO · verificador · origem=Code
+
+**Volta 3b reprovada na cobertura da pausa.** O delta leva o aviso da L-097 ao aberto e passa a exigir um FT com minutos trabalhados positivos na virada. O teste novo de 12x36 injeta a pausa sem o carimbo que o motor lê. `v3b.diff, app/ponto/motor_calculo_v2.py:2587–2605` · `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:219–247,306–324` · `app/ponto/turnos.py:798–824,875–884`
+
+## Q1 — Pontos da volta 3
+
+- **Aviso L-097 no portador — resolve.** `calcular_mes` mede a lista de `_pc` antes da L-097, recolhe o sufixo acrescentado pela chamada e o anexa ao primeiro aberto do dia. O sufixo contém o aviso de bloqueio. Os avisos que já estavam no `_pc`, incluindo os de pontualidade, ficam no temporário. `v3b.diff, app/ponto/motor_calculo_v2.py:2582–2605` · `app/ponto/motor_calculo_v2.py:1484–1488`
+- **Virada sem provar que o FT pagou — resolve no teste do motor.** O teste autoriza a véspera, exige o FT 22h–01h30 com `minutos_trabalhados > 0` e exige o aberto zerado com uma sobreposição contada. O controle seguinte ainda exige **0 trabalhados / 210 fora** no FT bloqueado e a exclusão do candidato. `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:219–269` · `app/ponto/motor_calculo_v2.py:1453–1457`
+- **Pausa cruzando 360 no 12x36 — deixa a lacuna e acrescenta um teste com fixture errado.** `_turno` cria `_B` só com instante, tipo e ID. A sequência `23h S → 00h E` fica sem marca de intervalo. Na sonda em memória, o caminho do crédito extraiu 19h–03h com `intervalos=()` e deu **480 min** sem recorte de janela. Com a pausa marcada, deu **420 min**. O `pc` de referência do teste recebe a pausa explicitamente e exige que o aberto coincida com ele. O cenário ainda é de par livre, sem fragmento abaixo de 360 nem sobreposição. `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:58–67,306–324` · `app/ponto/tests/test_o280_bateria_da_lei.py:103–104` · `app/ponto/turnos.py:542–546,675–704,798–824,875–884` · `app/ponto/motor_calculo_v2.py:2542–2548,2759–2785`
+
+## Q2 — O que o delta acrescenta
+
+- **Texto duplicado, sim.** No próprio fixture de dois pares de 60 min, a L-097 gera duas strings idênticas no aberto, pois o texto contém o total arredondado e omite a hora de origem. As duas pendências têm horas distintas, **19h e 20h30**. A tela pode mostrar o mesmo bloqueio no indicador de HE e no texto do período. `app/ponto/motor_calculo_v2.py:1484–1488` · `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:326–343` · `app/templates/ponto/espelho.html:189,299–305`
+- **Aviso com zero pago, sim.** O par bloqueado pela L-097 leva minutos **fora da janela** ao portador e agora leva também o aviso. O candidato rejeitado por sobreposição sai antes de calcular o `_pc` e de chamar a L-097. A lista do portador passa a reunir avisos sobre o próprio aberto e sobre o bloqueio de outros pares. O R3 de **0 min contados** já acompanhava o caso com saldo só em fora da janela. `v3b.diff, app/ponto/motor_calculo_v2.py:2576–2605` · `delta_v3_v3b.diff:1–18` · `app/ponto/motor_calculo_v2.py:1471–1488`
+- **Teste que passa vazio, não nas novas asserções positivas.** A virada exige FT positivo e contador `1`. O teste de avisos exige duas pendências com hora e duas strings com `L-097`. A contagem das strings admite repetir o aviso de um par e omitir o do outro. O `assertNotIn` da virada aceita uma lista de pendências vazia, pois só cobra a ausência de `01:00`. `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:236–247,336–343`
+- **`except` novo, nenhum.** O delta acrescenta a cópia da lista em torno da chamada à L-097 que já estava na v3. As capturas de falha na leitura da empresa e das decisões são da cópia. `delta_v3_v3b.diff:1–18` · `app/ponto/motor_calculo_v2.py:1379–1420`
+
+**Quem escreve.** `PeriodoCalculo` inicializa a lista. Os três `calcular_periodo` escrevem o aviso de saída ausente. A L-097 escreve no `_pc`, e `MotorBase.calcular_mes` transfere o aviso e acrescenta o R3 ao portador. O teto de pontualidade pode reescrever a lista e preserva o texto da L-097 pelos seus filtros de prefixo. `app/ponto/motor_calculo_v2.py:253,1093–1104,1156–1168,1484–1488,2750–2755,2877–2882,3215–3220` · `v3b.diff, app/ponto/motor_calculo_v2.py:2587–2605`
+
+**Quem lê.** O serviço do espelho usa a lista como sinal de inconsistência, condição que o aberto já satisfaz por `turno_aberto`. O template exibe cada texto. O PDF lê a lista, pula o período cuja entrada foi marcada como órfã e trunca os textos. `plano_b_no_dinheiro` imprime a lista e `diff_reclassificar_partido` filtra avisos de pontualidade. A Gestão de HE lê as pendências estruturadas do espelho. `app/ponto/services/espelho.py:667–671,757–763` · `app/templates/ponto/espelho.html:299–305` · `app/relatorios/pdf_espelho.py:963–977` · `app/ponto/management/commands/plano_b_no_dinheiro.py:83–99,146–155` · `app/ponto/management/commands/diff_reclassificar_partido.py:117–129` · `app/ponto/services/he_pendente_lavrado.py:132–152`
+
+Suíte Django, renderização efetiva e ocorrência em produção **[nao verificado]**. [nao verificado]
 
 ## 23/11 19:05 · sessao 37da671d787f · E4C-F5 · verificador · origem=Code
 
@@ -826,46 +849,4 @@ A análise foi em leitura apenas. A identidade Git da cópia com o hash informad
 | V2 · Saída do certificador | Mudança confirmada. Impacto em consumidor externo [nao verificado] | `bin/pista_certifica.sh:190` | A linha de sucesso passa de `imagem=` para `camadas=`. A troca só afeta consumidores que dependam desse campo textual. | Se houver consumidor externo, alinhar a leitura com `camadas=`. |
 | Escopo | Ensaios parciais em memória | `bin/tests/test_pista_certifica.sh:9–15`; `bin/tests/test_suite_sh.sh:92–93`; `app/docs/RELATO.md:2642` | Usei a cópia e o diff fornecido, com dublês para Docker, Git e leituras dos casos sintéticos. Hash Git da cópia, execução integral dos selos, logs, banco e estado do `srv-glpi` [nao verificado]. | — |
 
-## 23/11 17:05 · sessao 4fa4050bce72 · NOTURNO-NAO-APURADO · leitura · origem=Code
-
-**332 dias.** Em **327**, a linha `PERIODO` exibida tem uma ponta em `[22:00, 05:00)` no horário local. São **310 saídas** e **17 entradas de períodos abertos**. Das 310 saídas, **295** passam das 22h e **15** aparecem exatamente às `22:00:00`. A sonda imprime horas até o segundo, sem frações. `ramo2_linhas.txt:1–664,666`, `noturno_ramo_frota.py:38–43,82–83,133–142`.
-
-| Minutos de relógio em 22h–05h no par fechado exibido | Dias | Fonte |
-|---|---:|---|
-| Mais de 0 até 10 | **240** | `ramo2_linhas.txt:1–664` |
-| Mais de 10 até 30 | **8** | `ramo2_linhas.txt:1–664` |
-| Mais de 30 até 60 | **8** | `ramo2_linhas.txt:1–664` |
-| Mais de 60 | **39** | `ramo2_linhas.txt:1–664` |
-| Zero na precisão exibida | **19** | `ramo2_linhas.txt:1–664` |
-| Duração indeterminada, único período exibido em aberto | **18** | `ramo2_linhas.txt:1–664` |
-
-Os **19** são pares fechados diurnos pelos horários exibidos, **15** com saída às `22:00:00` e **4** com saída anterior. Exemplo de `10:00:00–22:00:00`, **col769 2026-10-30**. O total de jornadas inteiras com **zero legal real**, considerando eventuais períodos omitidos e frações de segundo, é **[nao verificado]**. `ramo2_linhas.txt:1–664,209–210`, `noturno_ramo_frota.py:82–83,133–147`.
-
-### 1. O que a sonda testa
-
-- **Universo C1 reproduzido pela sonda.** Exige uma batida apurável de **qualquer tipo** às 22h ou depois, atribuída à data local, ou antes das 05h, atribuída à véspera. Cruza esse conjunto com `DiaPago` de tipo dia, versão `motor`, realizado positivo e noturno gravado igual a zero, na competência que contém a data. `batidas_apuraveis` exclui batidas retratadas. O filtro mede **presença de marcação na faixa**, inclusive entrada solta ou saída às 22h exatas. O predicado original `noturno > 0` de `g3.py` é **[nao verificado]**. `noturno_ramo_frota.py:32–57`, `app/ponto/turnos.py:2896–2904`, `app/ponto/janelas.py:60–63`.
-- **`periodo_fechado_sem_noturno`.** A captura tem períodos, a soma de `minutos_noturnos_legais` dá zero, existe pelo menos um período com `minutos_trabalhados > 0` e **todos os positivos** têm saída e `turno_aberto=False`. O ramo de crédito de aberto é testado antes. Um período aberto com zero trabalhado pode coexistir no dia. `noturno_ramo_frota.py:86–112,119–124,132–147`.
-- **De onde vem o valor comparado.** A sonda lê o `DiaPago.horas_noturnas` gravado e multiplica por 60. Na reapuração, intercepta `dia_pago.lavrar` da versão `motor` e soma o `p.minutos_noturnos_legais` dos períodos dos quatro argumentos. Esse campo vem de `MotorBase.calcular_noturnas`, por `_escrever_noturnas`. A sonda compara o gravado com a saída da reapuração do motor. Um cálculo independente do noturno legalmente devido é **[nao verificado]**. `noturno_ramo_frota.py:45–56,60–79,119–144`, `app/ponto/services/fechamento.py:1200–1204,1227`, `app/ponto/motor_calculo_v2.py:969–1005`.
-
-### 2. Onde o noturno vira zero
-
-1. **O par é recortado antes do cálculo do noturno.** O fechamento escolhe o motor pelo cadastro da fatia. `Motor12x36`, `MotorComercial` e `MotorTurnoPartido` guardam as pontas originais em `periodo.entrada/saida`, usam `_janela_do_par` para obter `e/s` efetivos e passam estes a `_escrever_noturnas`. O regime de cada linha é **[nao verificado]**. `app/ponto/services/fechamento.py:724–741`, `app/ponto/motor_calculo_v2.py:2750–2765,2785–2792,2877–2896,3215–3238,3256–3260`.
-2. **A L-097 aplica o corte.** O motor lê os marcos do dia, a vigência e configuração da janela por empresa, a extra declarada e a decisão de HE. Acima do piso aplicável, `entrada_efetiva` devolve o limite de entrada e `saida_efetiva` devolve o limite de saída. Uma autorização preserva as pontas originais. A L-084 também afasta a janela quando ambas as pontas excedem três horas de distância dos marcos. `app/docs/LEIS.md:115–116`, `app/ponto/motor_calculo_v2.py:1389–1395,1529–1571,1582–1629,1641–1653,1691–1712,1733–1763,1930–1949,2290–2291`, `app/ponto/janela_he.py:94–103,145–153`.
-3. **O zero é calculado sobre o trecho que sobrou.** Se a saída efetiva de um par diurno termina às 22h, `inter_ini < inter_fim` falha para a faixa noturna e a soma fica zero. Se ainda houver interseção, `calcular_noturnas` desconta os intervalos julgados que caem nela, limita o resultado a zero e aplica o fator da hora noturna. A atribuição final está na linha **1005**. O teste de 5/10 min do art. 58 §1 trata variações de marcação. No motor, as guardas de pontualidade e HE atuam nas próprias rubricas, enquanto o corte das pontas usa o **piso cadastrado da janela de HE**. `app/ponto/motor_calculo_v2.py:98–118,983–1005,1647–1653,2005–2010,2842–2848,3151–3152,3412–3416`, `app/ponto/janela_he.py:149–153`, `app/ponto/tests/test_o280_bateria_da_lei.py:3294–3299`.
-4. **O bloqueio integral é outro caminho.** Depois de `calcular_periodo`, `_dia_sem_previsto_fora_da_janela` exige folga ou feriado, janela ativa, previsto igual a zero e ausência de autorização. Folga sem escala certa fica fora do bloqueio. As linhas **1473–1476** zeram **trabalhado e noturno juntos**. Portanto, **zero** dos períodos positivos que sustentam o ramo pode ter sido zerado por esse caminho. A presença de outros períodos bloqueados nesses dias é **[nao verificado]**. `app/ponto/motor_calculo_v2.py:1440–1483,2457–2461`, `noturno_ramo_frota.py:92–111`.
-
-### 3. Onde realizado e noturno se separam
-
-O **realizado** vem do juiz de turnos, que usa as pontas dos pares fechados truncadas ao minuto e desconta a pausa batida ou, quando aplicável, a pausa fixa declarada. A ata grava esse número, a grade o lê e `por_dia_da_grade` aplica `min(realizado, previsto)`. Já o **noturno** vem dos períodos que o motor monta e pode substituir pelo julgamento dos marcos da ata, **depois** do recorte de HE em `_janela_do_par`. A lavratura recebe as duas saídas separadas. Em **col704 2026-10-10**, são **637 min** de realizado da grade, **519,96 min** trabalhados no período, **116,41 min** fora da janela e **zero** noturno. A identidade do pareamento original em cada dia é **[nao verificado]**. `app/ponto/turnos.py:725–771`, `app/escala/utils.py:2056–2069`, `app/ponto/services/cartorio.py:757–759`, `app/escala/services/leitor_celula.py:378–379,418–424`, `app/ponto/services/dia_pago.py:174–179,288–292,386–402`, `app/ponto/motor_calculo_v2.py:530–531,632–645,669–688,1760–1763`, `app/ponto/services/fechamento.py:1201–1217`, `ramo2_linhas.txt:181–182`.
-
-### 4. Subramos verificáveis nos 332
-
-| Dias | Mecanismo e exemplo | Regra ou defeito |
-|---:|---|---|
-| **295** | **Par com tempo após as 22h e recorte registrado.** Em **col877 2026-10-03**, a saída foi `23:10:41` e o fora da janela foi `70,69728 min`. A fração em segundos desse total só é compatível com recorte na saída, pois os limites efetivos ficam em minutos inteiros. Subtraído o recorte, a saída efetiva é `22:00:00`. A contribuição de cada ponta e de eventual pausa nos demais casos é **[nao verificado]**. `ramo2_linhas.txt:1–664,351–352`, `app/ponto/janela_he.py:20–30,94–103,145–153`, `app/ponto/motor_calculo_v2.py:1361–1362,2785–2792,2893–2896,3256–3260`. | O corte é a implementação da **L-097**. Dos 295, **193** têm até 5 min após as 22h, **47** têm mais de 5 até 10 e **55** passam de 10. O art. 58 §1 não explica os 55 e a saída isolada não comprova a tolerância diária nos 193. Se houve trabalho noturno devido no trecho retirado, zerar também seu adicional é defeito de apuração pelo art. 73. A CCT citada na **L-036** muda o fator no 12x36 e mantém o adicional. A **L-035** disciplina a prorrogação após as 05h. Trabalho efetivo na ponta e CCT aplicável por dia são **[nao verificado]**. `ramo2_linhas.txt:1–664`, `app/docs/LEIS.md:83–84,115`, `app/ponto/tests/test_o280_bateria_da_lei.py:3294–3299`, `app/ponto/tests/test_v3_dobra_sem_noturna.py:4–6`. |
-| **19** | **Par fechado sem duração noturna visível.** Exemplo **col769 2026-10-30**, `10:00:00–22:00:00`. `ramo2_linhas.txt:1–664,209–210`. | Zero é o resultado correto para o trecho exibido se ele termina até as 22h e não há outro trabalho noturno. As frações de segundo dos 15 casos de borda e o veredito legal da jornada inteira são **[nao verificado]**. `app/ponto/motor_calculo_v2.py:98–118`, `noturno_ramo_frota.py:82–83`. |
-| **18** | **Só aparece um período aberto com zero trabalhado.** Em **col081 2026-10-03**, a entrada exibida é `23:55:15`, sem saída, mas o `DIA` soma **156,05295 min** trabalhados. Pelo predicado, precisou existir um fechado positivo cujas pontas não aparecem no anexo. `ramo2_linhas.txt:1–664,3–4`, `noturno_ramo_frota.py:92–111,132–147`. | O período aberto retorna com os campos noturnos no zero inicial. O mecanismo e o veredito legal do fechado positivo são **[nao verificado]**. `app/ponto/motor_calculo_v2.py:208–215,2750–2755,2877–2882,3215–3220`. |
-
-Há ainda **1** lacuna de períodos dentro dos 295. Em **col889 2026-10-23**, o par mostrado tem **60 min** trabalhados e o `DIA` soma **119,43067 min**. O histograma usa o par visível. A duração noturna dos períodos omitidos é **[nao verificado]**. `ramo2_linhas.txt:415–416`, `noturno_ramo_frota.py:133–147`.
-
-_7983 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_7984 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
