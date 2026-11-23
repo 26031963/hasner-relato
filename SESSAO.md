@@ -6,10 +6,31 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 17:06:12.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (24.6 MB). Acoes na janela: **629**.
+**Medido em 23/11/2026 17:12:15.** Transcript: `374f1b51-3fa8-4c61-8f0e-d589913f003d.jsonl` (25.8 MB). Acoes na janela: **650**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:10:32 | Bash | Wait for fleet global sondas | `until /bin/grep -q "^FIM-RC=" logs/NOTURNO-NAO-APURADO/frota_global.run; do /usr/bin/sleep 30; done; tail -2 logs/NOTURNO-FROTA-GLOBAL-HEAD.out logs/NOTURNO-FROTA-GLOBAL-COPIA.out` |
+| 17:10:30 | Bash | Wait for ramo 2 sonda script | `until /bin/grep -q " rc=" logs/NOTURNO-NAO-APURADO/r2/sonda.out; do /usr/bin/sleep 30; done; tail -1 logs/NOTURNO-NAO-APURADO/r2/sonda.out` |
+| 17:10:28 | Bash | Write RELATO lines for PAR lei and ramo 2 | `python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l1=("lei: PAR-PELO-TURNO-V4 'E-S-E-S com pausa comprovada separa sempre' (17:3x; Codex leitura rc 0, logs/PAR-PELO-TURNO/v4/r.txt secao B): lida literal, o 12x36 19:00-01:00 / 02:00-07:00 vira DUAS jornadas com alerta de interjornada de 1 h; " "o laudo e o teste negativo '12x36 com pausa' esperam UMA jornada I/SI/VI/F. Candidatas: (a) paus ...` |
+| 17:10:15 | Bash | Read rest of PAR V4 answer | `tail -c +9000 logs/PAR-PELO-TURNO/v4/r.txt \| head -c 7000` |
+| 17:10:11 | Bash | Read PAR V4 Codex answer | `tail -1 logs/PAR-PELO-TURNO/v4/out; wc -l logs/PAR-PELO-TURNO/v4/r.txt; head -c 9000 logs/PAR-PELO-TURNO/v4/r.txt` |
+| 17:09:38 | Bash | Launch fleet-wide sonda HEAD then copy | `W=/home/ronald/wt-noturno-aberto-162231/app; (setsid nohup bash -c "bin/sombra.sh --rodar logs/sombra/noturno_frota_global.py NOTURNO-FROTA-GLOBAL-HEAD; SOMBRA_ARVORE=$W bin/sombra.sh --rodar logs/sombra/noturno_frota_global.py NOTURNO-FROTA-GLOBAL-COPIA; echo FIM-RC=\$? " > logs/NOTURNO-NAO-APURADO/frota_global.run 2>&1 < /dev/null &); sleep 30; tail -2 logs/NOTURNO-FROTA-GLOBAL-HEAD.out 2>/dev/n ...` |
+| 17:09:34 | Bash | Check relogio field name | `/bin/grep -rn "minutos_noturnos_relogio" app/ponto/motor_calculo_v2.py \| head -3` |
+| 17:09:33 | Bash | Write fleet-wide noturno sonda | `cat > logs/sombra/noturno_frota_global.py <<'EOF' # NOTURNO-NAO-APURADO item (1): frota INTEIRA (nao so C1), por dia: realizado_por_dia e soma dos # minutos_noturnos_legais/relogio que o motor manda lavrar. Roda igual no HEAD e na copia; o diff e por dia. import logging, sys from collections import defaultdict from datetime import date from unittest.mock import patch sys.dont_write_bytecode = True ...` |
+| 17:09:20 | Bash | Read rest of sonda main | `sed -n 160,194p logs/sombra/noturno_ramo_frota.py` |
+| 17:09:16 | Bash | Read fleet sonda script | `wc -l logs/sombra/noturno_ramo_frota.py && sed -n 1,160p logs/sombra/noturno_ramo_frota.py` |
+| 17:09:12 | Bash | Read sombra cobre mode | `sed -n '/^cobre()/,/^}/p' bin/sombra.sh \| head -60; /bin/grep -n "SOMBRA_ARVORE" bin/sombra.sh \| head` |
+| 17:09:08 | Bash | Ask Codex to write ramo 2 sonda | `D=logs/NOTURNO-NAO-APURADO/r2; cat > $D/sonda.q <<'EOF' OBRA NOTURNO-NAO-APURADO ramo (2), PAPEL leitura: ESCREVA um script de sonda (texto completo, Python para `manage.py shell` no tenant juliani, SOMENTE LEITURA: sem save, sem lavrar real -- intercepte `dia_pago.lavrar` como em logs/sombra/noturno_ramo_frota.py anexo) que, para cada dia do ramo periodo_fechado_sem_noturno (mesmo universo e mesm ...` |
+| 17:08:56 | Bash | Wait for UI escala rerun | `until /bin/grep -q "^FIM-RC=" logs/UI-EDITAR-RAIZ/escala_final.log; do /usr/bin/sleep 30; done; /bin/grep -E "^Ran \|^(OK\|FAILED)($\| \()\|FIM-RC" logs/UI-EDITAR-RAIZ/escala_final.log \| tail -3` |
+| 17:08:54 | Bash | Wait for NOTURNO verificador | `until /bin/grep -q " rc=" logs/NOTURNO-NAO-APURADO/verif.out; do /usr/bin/sleep 30; done; tail -1 logs/NOTURNO-NAO-APURADO/verif.out` |
+| 17:08:49 | Bash | Rerun escala suite on UI copy | `(setsid nohup bash bin/suite.sh --dir /home/ronald/wt-ui-editar-raiz-163107 --only escala > logs/UI-EDITAR-RAIZ/escala_final.log 2>&1 < /dev/null; echo "FIM-RC=$?" >> logs/UI-EDITAR-RAIZ/escala_final.log) > /dev/null 2>&1 & sleep 3; tail -2 logs/UI-EDITAR-RAIZ/escala_final.log` |
+| 17:08:47 | SendMessage |  | `-` |
+| 17:08:38 | Bash | Read PISTA verificador v2 | `cat logs/PISTA-2-CERTIFICA/camadas/v2/verif.r` |
+| 17:08:35 | Bash | Compare before/after per day | `/bin/grep "^TOTAL" logs/NOTURNO-RAMO-FROTA-ANTES.out logs/NOTURNO-RAMO-FROTA.out 2>/dev/null; echo; /bin/grep "^TOTAL" logs/NOTURNO-RAMO-FROTA-DEPOIS.out; python3 - <<'EOF' import re def load(p): d={} for l in open(p): if l.startswith('DIA '): m=re.match(r'DIA (\S+) (\S+) .*soma_noturnos=(\S+) realizado_por_dia=(\S+) RAMO=(\S+)',l) if m: d[(m[1],m[2])]=(float(m[3]),m[4],m[5]) return d a=load('logs ...` |
+| 17:08:30 | Bash | Check sonda, verif statuses | `tail -2 logs/NOTURNO-NAO-APURADO/ramo_frota_depois.run \| cut -c1-200; tail -3 logs/NOTURNO-RAMO-FROTA-DEPOIS.out \| cut -c1-200; tail -1 logs/NOTURNO-NAO-APURADO/verif.out; echo ---; tail -1 logs/PISTA-2-CERTIFICA/camadas/v2/verif.out; wc -l logs/PISTA-2-CERTIFICA/camadas/v2/verif.r` |
+| 17:08:28 | TaskStop |  | `-` |
+| 17:08:25 | Bash | Check sombra end marker | `tail -3 logs/NOTURNO-NAO-APURADO/ramo_frota_antes.run 2>/dev/null; ls logs/NOTURNO-NAO-APURADO/*.run; /bin/grep -n "FIM-RC\\|echo" bin/sombra.sh \| /bin/grep -i "rodar\\|FIM" \| head` |
 | 17:05:36 | Bash | Read ramo 2 mechanism answer | `tail -1 logs/NOTURNO-NAO-APURADO/r2/out; cat logs/NOTURNO-NAO-APURADO/r2/r.txt \| head -90` |
 | 17:05:29 | Bash | Write 8.2 design question at RELATO top | `python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l=("PERGUNTA DE DESENHO E4C-F5 v7 item 8.2 (17:2x; sonda Codex na SOMBRA rc 0, logs/E4C-F5/v7/s82/r.txt; amostra conferida fio.py:130-137, fio.py:262-296): " "o modal elege a D do cartao pela 1a P carregada (fio.py:285, setdefault), o inline pelo juiz `_disputa_do_chamado` (P de maior pk, fio.py:134-137). " "Frota: 476 D abertas, 18 colabs ...` |
 | 17:05:23 | Bash | Read RELATO top | `sed -n 1,25p app/docs/RELATO.md \| cut -c1-260` |
