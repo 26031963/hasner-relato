@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 08:05:14.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.1 MB). Acoes na janela: **52**.
+**Medido em 23/11/2026 08:11:06.** Transcript: `a25f3ae8-ad1d-44ac-b9ce-e2b4f26a4ef7.jsonl` (2.2 MB). Acoes na janela: **53**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:10:43 | Bash |  | `cd ~/saas-hasner && /bin/grep -n -i -E "B1\|libera" bin/disjuntor.py \| head -40` |
 | 08:03:15 | Bash |  | `cd ~/saas-hasner && date +%H:%M && python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p).read() l=("E4D-CONTRATO inventario 08:0x: Codex leitura rc 0 no 68eb689b5 (logs/E4D-CONTRATO/r.txt, 115 linhas): 14 PERGUNTAS DE LEI ABERTAS (emitir EventoCelula no backfill, promover ABSORCAO, ato de conclusao x exportada, ato_em futuro, FK SET_NULL do autor, texto SQL/API/tela...); " "amostra arquivo:linha aind ...` |
 | 08:03:09 | Bash |  | `cd ~/saas-hasner && tail -2 logs/E4D-CONTRATO/wrapper.log; wc -l logs/E4D-CONTRATO/r.txt; /bin/grep -n -A30 "PERGUNTAS DE LEI ABERTAS" logs/E4D-CONTRATO/r.txt \| cut -c1-350` |
 | 08:00:16 | SendMessage |  | `-` |
