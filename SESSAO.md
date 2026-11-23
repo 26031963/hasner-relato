@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 23:13:23.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (64.6 MB). Acoes na janela: **1702**.
+**Medido em 22/11/2026 23:19:28.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (64.8 MB). Acoes na janela: **1711**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:19:04 | Bash |  | `cd ~/saas-hasner; /bin/grep -n "E4C-F5\\|F5-CONTRATO\\|F5 v2\\|F5-SAI" app/docs/RELATO.md \| tail -15; head -20 logs/E4C-F5/v2/volta.log` |
+| 23:19:00 | Bash |  | `cd ~/saas-hasner/logs/E4C-F5/v2; cat bisect_ck/resumo.txt; /bin/grep -rn "chokepoint\\|teto" triagem*.txt volta.log 2>/dev/null \| head; /bin/grep -n "chokepoint" ~/saas-hasner/app/docs/RELATO.md \| tail -5` |
+| 23:18:57 | Bash |  | `cd ~/wt-f5-contrato-v1-140439; git log --oneline 11d74e7cc..HEAD \| head -40; ls ~/saas-hasner/logs/E4C-F5/v2/bisect_ck; cat ~/saas-hasner/logs/E4C-F5/v2/chokepoint_base.log \| tail -5; tail -5 ~/saas-hasner/logs/E4C-F5/v2/chokepoint_main.log` |
+| 23:18:52 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app; f=chamados/tests/test_e4b_c4_orm.py; sed -n 1,115p $f` |
+| 23:18:45 | Bash |  | `cd ~/wt-f5-contrato-v1-140439/app; f=chamados/tests/test_e4_expand.py; sed -n 95,135p $f; sed -n 370,410p $f` |
+| 23:18:32 | Bash |  | `cd ~/wt-f5-contrato-v1-140439; git log --oneline -1; B=$(git merge-base HEAD main); echo base $B; git log --oneline -1 $B; git diff --stat $B HEAD \| tail -3; git diff --name-only $B HEAD \| /bin/grep -E "marco_por_motivo\|testes_sem_relogio\|e4_expand\|e4b_c4\|cerca_retratar\|h4_resposta\|chokepoint\|registro_batida" ; git status --porcelain \| head` |
+| 23:18:27 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' import re s=open('/home/ronald/saas-hasner/logs/E4C-F5/v2/suite/inteira.log',errors='replace').read() for name in ['test_H2_ato_e_evento_no_mesmo_atomic_inclusive_falha','test_RED_lote_da_tranca_remove_periodo_avulso','test_a_lista_so_encolhe']: i=s.find('\n'+('ERROR' if 'H2' in name else 'FAIL')+': '+name) j=s.find('\n=====',i+10); j2=s.find('\n---------------- ...` |
+| 23:18:15 | Bash |  | `cd ~/saas-hasner; L=logs/E4C-F5/v2/suite/inteira.log; python3 - <<'EOF' import re s=open('/home/ronald/saas-hasner/logs/E4C-F5/v2/suite/inteira.log',errors='replace').read() blocks=re.split(r'\n(?====+\n(?:FAIL\|ERROR):)',s) seen=set() for b in blocks: m=re.search(r'(FAIL\|ERROR): (\S+) \(([\w.]+)\.',b) if not m: continue mod=m.group(3).rsplit('.',1)[0] if mod in seen: continue seen.add(mod) lines ...` |
+| 23:18:07 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bfia5mu5y.output; cd ~/saas-hasner; /bin/grep -E '^(FAIL\|ERROR):' logs/E4C-F5/v2/suite/inteira.log \| head -20; /bin/grep -E '^AMBIENTE\|QUARENTENA-PODADO\|^Found' logs/E4C-F5/v2/suite/inteira.log \| head; bin/trava_teste.sh --quem` |
 | 22:54:11 | Bash |  | `mkdir -p ~/saas-hasner/logs/E4C-F5/v3/verif; cat > ~/saas-hasner/logs/E4C-F5/v3/verif/q.txt <<'EOF' PAPEL: verificador (CODEX_PAPEL=verificador), obra E4C-F5 (CONTRATO-V2), VOLTA 3 -- o delta sobre dfffac9b1 (volta 2 que voce verificou em logs/E4C-F5/v2/verif1/r.txt). Anexos, nesta ordem: CONTRATO-V2.md (literal), JUIZES.md, leis_sitios.txt, a triagem da volta 2 (o que entrou como P1-P10) e por UL ...` |
 | 22:53:54 | Bash |  | `cd ~/saas-hasner; head -60 logs/E4C-F5/v2/verif1/q.txt; cat logs/E4C-F5/v2/verif1/wrapper.log \| tail -5` |
 | 22:53:51 | Bash |  | `cd ~/saas-hasner; ls logs/E4C-F5/v2/ \| head -30; ls logs/E4C-F5/v3/ 2>/dev/null; ls logs/E4C-F5/v2/verif1 2>/dev/null \| head` |
