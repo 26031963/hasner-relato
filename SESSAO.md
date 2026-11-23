@@ -6,10 +6,30 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 20:58:00.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (53.3 MB). Acoes na janela: **1431**.
+**Medido em 22/11/2026 21:04:21.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (54.5 MB). Acoes na janela: **1451**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:04:19 | Bash |  | `cd ~/saas-hasner; grep -n "\-\-rodar\\|\-\-com-a-sombra\\|rollback\\|ROLLBACK" bin/sombra.sh \| head -30` |
+| 21:04:06 | Bash |  | `cd ~/saas-hasner; sed -n 60,130p logs/MAPA-E4D/sonda.py; grep -n "consum" app/config/crons.py \| head -5` |
+| 21:03:59 | Bash |  | `cd ~/saas-hasner; grep -E "MEDIDA (respondida_em\|validada_em) [a-z_]*sem_ato" logs/MAPA-E4D/sonda.out \| cut -c1-200; grep -n "sem_ato_no_carimbo" logs/MAPA-E4D/sonda.py \| head -5` |
+| 21:03:57 | Bash |  | `cd ~/saas-hasner; grep -n "MEDIDA" logs/MAPA-E4D/sonda.out \| cut -c1-300; grep -n "sem_ato_no_carimbo" logs/MAPA-E4D/sonda.py \| head; sed -n 1,30p bin/sombra.sh \| head -40; ls logs/sombra/ \| tail -5` |
+| 21:03:53 | Bash |  | `cd ~/saas-hasner; cat logs/MAPA-E4D/sonda.py \| head -60; sed -n 4238,4275p app/chamados/models.py; sed -n 120,160p app/chamados/management/commands/backfill_fio_morto_e4b.py` |
+| 21:03:49 | Bash |  | `cd ~/saas-hasner; grep -rn "\b224\b" app/docs/BACKLOG.md app/docs/RELATO.md 2>/dev/null \| grep -iv "linha\\|:224" \| tail -8 \| cut -c1-300` |
+| 21:03:48 | Bash |  | `cd ~/saas-hasner; f=$(ls -t logs/vigiar_fio_morto*.log \| head -1); echo $f; grep -n "224" $f \| tail -5 \| cut -c1-400; tail -c 6000 $f \| grep -n "^VFM" \| head -20 \| cut -c1-300` |
+| 21:03:40 | Bash |  | `cd ~/saas-hasner; grep -rln "fio_morto" logs/*/ 2>/dev/null \| xargs grep -l "\b224\b" 2>/dev/null \| head; tail -c 2000 logs/vigiar_fio_morto*.log 2>/dev/null \| tail -15; ls logs \| grep -i fio \| head` |
+| 21:03:38 | Bash |  | `cd ~/saas-hasner; ls logs/TERRENO-POS-F5/ 2>/dev/null; grep -rn "224" logs/TERRENO-POS-F5/*.txt logs/MAPA-E4D/*.txt 2>/dev/null \| grep -i "45\\|fio" \| head -8 \| cut -c1-300; grep -n "45+224\\|45 + 224\\|224 do fio\\|45 e 224" app/docs/*.md logs/*/r*.txt 2>/dev/null \| head -5 \| cut -c1-300` |
+| 21:03:30 | Bash |  | `cd ~/saas-hasner; tail -3 logs/SIMPLIFICA-V3-2211-1726/v5/suite/inteira.log \| cut -c1-200; sed -n 1,200p logs/E4D-ENSAIO/r1.txt` |
+| 21:03:27 | Bash |  | `cd ~/saas-hasner; cat > logs/E4C-F5/v2/verif1/triagem.txt <<'EOF' TRIAGEM do verif1 da F5 v2 (logs/E4C-F5/v2/verif1/r.txt, Codex verificador sobre dfffac9b1, 19:27) -- aval TRIA-VERIF1-F5-2211-2100, 22/11 21:1x. Amostra conferida no arquivo: models.py:4415-4433 da copia (seq ordenada por (ato_em, 0\|1, pk); horizonte ausente na leitura) bate com r.txt sec.2/3. ESMERIL-SEMANTICA (r.txt:103, ato_em  ...` |
+| 21:03:04 | Bash |  | `cd ~/saas-hasner; sed -n 1,40p logs/RESPOSTA-4C1-RECUO-2111-1715/aval.txt >/dev/null; grep -n "censo ato futuro\\|ato futuro" app/docs/RELATO.md \| head -5 \| cut -c1-300; sed -n 4410,4435p ~/wt-f5-contrato-v1-140439/app/chamados/models.py` |
+| 21:02:44 | Bash |  | `cd ~/saas-hasner; cat logs/E4C-F5/CONTRATO-V2.md \| cut -c1-600` |
+| 21:02:43 | Bash |  | `cd ~/saas-hasner; grep -n "F5-CONTRATO-V2" app/docs/PROMPTS.md \| cut -c1-900; ls logs/E4C-F5/ logs/E4C-F5/v2 \| head -30` |
+| 21:02:41 | Bash |  | `cd ~/saas-hasner; ls logs \| grep -i "F5-CONTRATO"; cat logs/F5-CONTRATO-V2*/aval.txt 2>/dev/null \| head -30` |
+| 21:02:30 | Bash |  | `cd ~/saas-hasner; cat logs/RESPOSTA-4C1-RECUO-2111-1715/aval.txt; sed -n 103p logs/E4C-F5/v2/verif1/r.txt \| cut -c1-200` |
+| 21:02:24 | Bash |  | `cd ~/saas-hasner; cat logs/E4C-F5/v2/verif1/r.txt; grep -rln "RECUO-2111-1715" app/docs logs 2>/dev/null \| head -8` |
+| 21:02:22 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/TRIA-VERIF1-F5; cat > logs/TRIA-VERIF1-F5/aval.txt <<'EOF' 22/11 21:0x aval Ronald (verbatim): aval Ronald: TRIA-VERIF1-F5-2211-2100. Objetivo: triar o verif1 da F5 v2 (logs/E4C-F5/v2/verif1/r.txt, sobre dfffac9b1, 19:27), que ficou sem triagem e sem linha no RELATO; ler o procedente ESMERIL-SEMANTICA (r.txt:103, ato_em com 3 sentidos) contra a RESPOSTA-4C1-RECUO-21 ...` |
+| 20:58:15 | Bash |  | `cd ~/saas-hasner; for i in $(seq 1 38); do [ -s logs/E4D-ENSAIO/r1.txt ] && break; grep -q '^rc=' logs/SIMPLIFICA-V3-2211-1726/v5/suite/inteira.log && break; /usr/bin/sleep 15; done; ls -la logs/E4D-ENSAIO/r1.txt 2>&1; tail -1 logs/SIMPLIFICA-V3-2211-1726/v5/suite/inteira.log \| cut -c1-80` |
+| 20:58:05 | Bash |  | `cd ~/wt-f5-contrato-v1-140439 2>/dev/null && git log --oneline -2 \| cat; git status --porcelain \| wc -l; ls -t ~/saas-hasner/logs \| head -5` |
 | 20:57:59 | Bash |  | `cd ~/saas-hasner; for i in $(seq 1 240); do [ -s logs/E4D-ENSAIO/r1.txt ] && break; /usr/bin/sleep 15; done; wc -l logs/E4D-ENSAIO/r1.txt; tail -2 logs/E4D-ENSAIO/wrapper1.out` |
 | 20:57:54 | Bash |  | `cd ~/saas-hasner; ps -p 2718632 -o etime=; ls -la logs/E4D-ENSAIO/; tail -2 logs/E4D-ENSAIO/wrapper1.out` |
 | 20:57:43 | Bash |  | `cd ~/saas-hasner; sed -n 1,60p bin/sombra.sh \| grep -n "^#" \| cut -c1-170 \| head -45` |
