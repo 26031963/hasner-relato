@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 22/11/2026 21:47:19.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (57.8 MB). Acoes na janela: **1547**.
+**Medido em 22/11/2026 21:53:16.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (57.8 MB). Acoes na janela: **1548**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:47:20 | Bash |  | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('DESPACHO E4D-ENSAIO')][0] L.insert(i,'DESPACHO QUARENTENA-VENCIDA: diagnostico dos 3 testes (relogio/lote, curar x apagar) -> Codex leitura (logs/QUARENTENA-VENCIDA/q1.txt, HEAD 5b063c009) \| cura do teste -> sessao em copia \| suite -> pista. Construcao so depois d ...` |
 | 21:47:13 | Bash |  | `cd ~/saas-hasner; mkdir -p logs/QUARENTENA-VENCIDA; H=$(git rev-parse HEAD); cat > logs/QUARENTENA-VENCIDA/q1.txt <<'EOF' PAPEL: leitura. OBRA: QUARENTENA-VENCIDA. Responda com arquivo:linha; marque [nao verificado] o que nao abriu. Tres testes estao em app/core/testes_em_quarentena.txt desde ~20/09 (prazo vencido); a obra os tira da lista curando o TESTE ou apagando-o com lapide (a lista so encol ...` |
 | 21:46:56 | Bash |  | `cd ~/saas-hasner; /bin/grep -n "QUARENTENA-VENCIDA\\|CODEX-N-VAGAS-SIMPLES" app/docs/BACKLOG.md \| cut -c1-300; cat core/testes_em_quarentena.txt 2>/dev/null \|\| cat app/core/testes_em_quarentena.txt \| head -20; git -C ~/wt-simplifica-104405 diff --stat 161066a90 HEAD -- app/core/testes_em_quarentena.txt` |
 | 21:46:49 | Bash |  | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO: corrida.sh') L[0]=('E4D-ENSAIO-V2-2211-2121 FEITO 21:36 (logs/E4D-ENSAIO/laudo.txt; LEI-AKITA: origem=n/a (medida), testemunha=DecisaoPergunta.registrar+linhas_da_projecao_sem_linha, RED=n/a, quem-mais-le=r2.txt, juizes novos=0, padrao=n/a (medida)): ' '(1) digest 4 colunas 52 ...` |

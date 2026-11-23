@@ -61,7 +61,7 @@ e corrija este arquivo no mesmo commit.
 
 **SELO DE CONDUTA.** Ao propor qualquer cura, escrever uma linha:
 `LEI-AKITA: origem=<sitio>, testemunha=<autoridade lida>, RED=<teste>, quem-mais-le=<censo>, juizes novos=<0 ou lista com o corte>, padrao=<termo>`
-Fatia sem essa linha **nao entra na fila** (`bin/tests/test_lei_akita.sh`).
+Fatia sem essa linha **nao pousa**: a linha vai no corpo do commit, nao no texto do aval (`bin/tests/test_lei_akita.sh`).
 **PADRAO-NA-CURA (L-123, corte Ronald 27/10 17:0x -- regra sagrada).** O norte e o desenho do `app/docs/GLOSSARIO.md` e do
 `app/docs/PLANO-PADROES.md`; **nenhuma cura entra sem dizer qual PADRAO ela realiza**, e cura e a CLASSE, nunca o caso (queixa,
 laudo ou BO so vira obra depois de nomeado o padrao que mostra quebrado). A linha acima ganha o campo obrigatorio
@@ -123,6 +123,7 @@ o espaco: o `\(` em vez do espaco (o Django so imprime `OK`, `OK (skipped=N)` ou
 `tail -1` (o veredito e a ULTIMA linha do run, a prosa vem no meio). (historia: LAPIDES.md#lap-41) Rodar SEM labels da centenas de
 errors MIRAGEM.
 Control-plane (tenants) roda separado, settings teste_motor.
+PISTA 2 (srv-glpi, `ssh pista`) so CERTIFICA suite de pouso com `bin/pista_certifica.sh <sha> <log> <linha-de-fim>` rc 0 (SIMPLIFICA-V3-2211-1726 item 5): sha commitado, todas as LABELS, imagem e Postgres iguais aos da VM nas linhas `AMBIENTE` do run, e `Ran N` igual ao `Found N` do mesmo log menos os podados que ele lista em `QUARENTENA-PODADO:` (run INTEIRO; podado nao listado nao certifica; aval SIMPLIFICA-RAN-FOUND-2211-2020 (ii)); rc 1 = a suite do pouso roda aqui. Selo `bin/tests/test_pista_certifica.sh`.
 `holerite` ENTROU em 04/09 (achado H-c): (historia: LAPIDES.md#lap-42)
 Pre-push hook INSTALADO e ATIVO: roda os dois runners antes de liberar push.
 Selos de HOST (sem Django, sem container -- o container nao monta `bin/` nem `.git/`):
@@ -193,7 +194,7 @@ Texto integral com a historia de cada uma: **app/docs/CONDUTAS.md** (lookup).
 - CODIGO DE NEGOCIO: RED evidenciado -> fix -> GREEN -> suite; "conserta ao vivo" e so para infra.
 - SELO ANTI-VACUIDADE: selo com mock ou sobre a SAIDA tem caso que MORDE (`test_a_costura_MORDE`).
 - Sonda chama a FUNCAO REAL (interceptando a escrita), nunca reconstroi a chamada.
-- MEIA-CORRECAO E PIOR QUE NENHUMA: CENSO DE ESCRITORES fechado antes de filtro/regra nova.
+- MEIA-CORRECAO E PIOR QUE NENHUMA: CENSO DE ESCRITORES fechado antes de filtro/regra nova -- PROPORCIONAL (PRINCIPIO 7b: MAO UNICA, concorrencia, schema, multi-tenant); a porta do construtor da fila 1 segue cobrando o censo (mais restritiva, declarada).
 - SILENCIAR EXIGE prazo + tripwire + item de fila.
 - GIT: add por PATH, nunca -A; commit na hora; nunca 2 push simultaneos; pull/reset/checkout/restore so com tar e proposito; nao commitar sem ok. O push do fabricante (`[ASSINATURA-EC-P256]`, `TICKETS: ... lote`) e dele: `git fetch` e olhar antes de empurrar.
 - PATCH: ler o VIVO; ancora unica (assert count==1); montar em memoria -> py_compile -> gravar; skip-guard idempotente; ancorar por grep, nunca por linha.
@@ -249,63 +250,68 @@ SUPRA_JUIZ - 9 entradas, 1 por empresa (2,3,4). O nome engana: NAO e' so leitura
 Todo cron e IDEMPOTENTE por requisito - pode ser adiantado na mao.
 
 ## 7b. MODO DE TRABALHO (regras de conduta -- vivem AQUI, nao se repetem em prompt)
-PARADA E AUTONOMIA (regra consolidada 31/10; funde, sem mudar o vigente, PAREI-DE-LEI-NAO-DEVOLVE-TURNO, PAREI-SO-LEI,
-  AUTORIZACAO PREVIA DA SESSAO, TURNO NAO TERMINA COM FILA 1 NAO VAZIA, PRE-APROVADO x NUNCA PRE-APROVADO,
-  AUTONOMIA-DE-CODIGO, ACELERAR-PELA-LEI (1)(3), CURA-MAIS-RESTRITIVA e o "PAREI passa a existir so para" da
-  DINHEIRO-EM-COMPETENCIA-ABERTA; a forma viva e `bin/hook_stop_fila1.py` (_SO_BANG) e `bin/disjuntor.py`).
-  Apelidos: ESPERA-SEM-TURNO (1), PRE-APROVADOS, REPROVA-E-DESENHO (4; mecanismo `bin/disjuntor.py` B3,
-  `linhas_libera_b3`, selo `bin/tests/test_disjuntor.sh`). Selo:
-  `bin/tests/test_hook_parei_so_lei.sh` (RED `PAREI: bloco-da-manha-saturado` -> `block`; decisao tecnica
-  e pergunta de lei bloqueiam, so o `!` libera). LAPIDES.md#lap-45 LAPIDES.md#lap-46 LAPIDES.md#lap-17 LAPIDES.md#lap-16 LAPIDES.md#lap-11 LAPIDES.md#lap-49.
-  AUTONOMIA-DE-CODIGO (11/10 ~12:0x): a frase do item 5 vai ao CORTES.md citando este aval; vale fora de
-  S-BATIDA/S-ESCALA (CORTES-DOS-CONTRATOS item 4).
-  1. SO O `!` DEVOLVE O TURNO. O hook libera o Stop com `!` na linha do topo do RELATO ou com ESPERANDO PROVADO
-     (`ESPERANDO: <produtor> | pid=N | arquivo=<c>`, produtor vivo); tudo o mais e `siga`. Linha de parada: `PAREI: <trava> |
-     espera <quem>`, publicada. Trava sem nome nao e trava.
+PRINCIPIO (corte Ronald SIMPLIFICA-V3-2211-1726, 22/11 17:26, substitui o V2; "menos e mais"). Manda sobre toda regra abaixo.
+  MAO UNICA bloqueia o pouso: grava dinheiro errado, mexe em competencia exportada, corrompe ou mistura dado em silencio, nao
+  tem volta. MAO DUPLA pousa com a lista do que falta; a rede e `bin/deploy.sh` + `git revert`. CLASSIFICACAO PADRAO: todo
+  diff que toca `ponto/`, `folha/`, fechamento, celula, export ou holerite e MAO UNICA; mao dupla so fora desses caminhos.
+  FICA: nucleo da LEI-AKITA (origem, RED primeiro, escopo literal, construir em copia), DINHEIRO, exportada, zonas
+  inviolaveis, os `!`, um run por banco, suite verde antes de todo pouso, deploy so pelo `bin/deploy.sh`. PROPORCIONAL:
+  revisao do Codex, opus final, mutante e censo obrigatorios em mao unica, concorrencia, schema ou multi-tenant; nos demais,
+  a criterio. VIRA AVISO: hook de Stop (fila pendente nao impede encerrar); B3 segura so o MERGE (PARADA 4). PISTA 2 so
+  certifica a suite de pouso com `bin/pista_certifica.sh` rc 0 (secao 3). SAI o que esta "SUSPENSA por
+  SIMPLIFICA-V3-2211-1726" no CORTES.md (historia na LAPIDES); a LEI-AKITA fica no commit, nao no aval.
+PARADA E AUTONOMIA (31/10; funde PAREI-DE-LEI-NAO-DEVOLVE-TURNO, PAREI-SO-LEI, AUTONOMIA-DE-CODIGO, ACELERAR-PELA-LEI (1)(3),
+  CURA-MAIS-RESTRITIVA e a parada da DINHEIRO-EM-COMPETENCIA-ABERTA; forma viva `bin/hook_stop_fila1.py` e `bin/disjuntor.py`). Apelidos: ESPERA-SEM-TURNO (1), PRE-APROVADOS, REPROVA-E-DESENHO (4; `bin/disjuntor.py` B3,
+  `linhas_libera_b3`, selo `bin/tests/test_disjuntor.sh`; AVISO: trilha `logs/hook_stop_fila1.log`, selo
+  `bin/tests/test_hook_parei_so_lei.sh`). LAPIDES.md#lap-45 LAPIDES.md#lap-46
+  LAPIDES.md#lap-17 LAPIDES.md#lap-16 LAPIDES.md#lap-11 LAPIDES.md#lap-49. AUTONOMIA-DE-CODIGO (11/10 ~12:0x): a frase do item
+  5 vai ao CORTES.md citando este aval; vale fora de S-BATIDA/S-ESCALA (CORTES-DOS-CONTRATOS item 4).
+  1. PARADA tem nome no topo do RELATO: `PAREI: ! <trava> | espera <quem>` (prefixo `PAREI:`; so o `!` devolve o turno) ou `ESPERANDO:
+     <produtor> | pid=N | arquivo=<c>`, produtor vivo. Trava sem nome nao e trava; fila pendente so AVISA.
   2. O QUE EXIGE `!` (NUNCA pre-aprovado, e so dele): tocar o GRAVADO de competencia EXPORTADA; dado de ESCALA ou VINCULO
      (inclusive retroativo); apagar ou voltar ao HEAD arquivo que PROD usa; regra de negocio fora do pedido; qualquer
      atalho (fallback, pular teste, SKIP_TESTS); `ponto/motor_calculo_v2.py` (secao 4). "Dinheiro nao se moveu" nao amplia
      aval; escopo do aval e literal (LEI-AKITA 9).
   3. PERGUNTA DE LEI NAO DEVOLVE TURNO. Falta lei, predicado novo de juiz ou duas candidatas: linha `lei: <a que falta>` no
      TOPO do RELATO COM NUMEROS, e a esteira SEGUE o proximo item da ORDEM VIVA que nao depende dela; a resposta entra quando
-     vier. Ate 20/20 o Code nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele (L-117). Se uma lei do desenho ESCRITA ja responde (celula soberana/
-     lampada 4a, juiz unico, escritor unico, exportada = Pauta DP sem tocar o gravado), nao espera: `DECIDIDO PELA LEI <L-NNN
-     ou secao>: <opcao> | contestavel`, reversao antes e prova depois.
-  4. PERGUNTA DE DESENHO IDEM. Classe de bug NOVA que muda o DESENHO (um padrao, nao um caso) e reprovacao do verificador final
-     (DISJUNTOR B3) vao ao TOPO do RELATO como PERGUNTA DE DESENHO com numeros, a obra para e as outras seguem.
+     vier. Ate 20/20 o Code nao numera nem propoe lei nova por iniciativa propria: lei nova so nasce de CORTE LITERAL dele
+     (L-117). Se uma lei do desenho ESCRITA ja responde (celula soberana/lampada 4a, juiz unico, escritor unico, exportada =
+     Pauta DP sem tocar o gravado), nao espera: `DECIDIDO PELA LEI <L-NNN ou secao>: <opcao> | contestavel`, reversao antes e
+     prova depois.
+  4. PERGUNTA DE DESENHO IDEM. Classe de bug NOVA que muda o DESENHO (um padrao, nao um caso) e reprovacao do verificador
+     final (DISJUNTOR B3) vao ao TOPO do RELATO como PERGUNTA DE DESENHO com numeros; o B3 segura so o MERGE da obra
+     (todo merge declara `OBRA: <id>` no commit; sem a linha ou com a obra armada, `bin/commit_msg.sh` recusa), nao o turno nem
+     as voltas; libera `DESENHO <obra>`/`ERRO-BOBO <obra>`.
   5. DECISAO TECNICA E DO CODE, em UMA linha no RELATO, sem aval: horario de cron, desenho de encaixe, caminho de codigo;
-     ordem e encaixe na fila por DEPENDENCIA DE CODIGO; qual raia ou agente pega qual obra e quando uma obra registrada
-     entra como COMPLEMENTO de outra; destino de achado de esmeril (cura no marco, complemento, linha de fila); a frase `corte Ronald: juiz <nome>
-     nasce` no CORTES.md quando a funcao JA existe, JA e a unica autoridade MEDIDA, MESMO predicado e universo IGUAL antes e
-     depois (as tres medidas na sessao -- declara autoridade que ja era unica, nunca juiz novo). Bug PROVADO com mais de uma
-     cura: aplica a mais RESTRITIVA (ou as duas, se nao conflitam), porque no RELATO, segue -- `!` so se cair no item 2.
+     ordem e encaixe na fila por DEPENDENCIA DE CODIGO; qual raia ou agente pega qual obra e quando uma obra registrada entra
+     como COMPLEMENTO de outra; destino de achado de esmeril (cura no marco, complemento, linha de fila); a frase `corte
+     Ronald: juiz <nome> nasce` no CORTES.md quando a funcao JA existe, JA e a unica autoridade MEDIDA, MESMO predicado e
+     universo IGUAL antes e depois (as tres medidas na sessao -- declara autoridade que ja era unica, nunca juiz novo). Bug
+     PROVADO com mais de uma cura: aplica a mais RESTRITIVA (ou as duas, se nao conflitam), porque no RELATO, segue -- `!` so
+     se cair no item 2.
   6. PRE-APROVADO (rotina, nunca contorno): construir, medir, provar na sombra, curar, fabricar fatia, rodar DIFF, cadastrar
      com trilha; push pela regua e nova tentativa com a CAUSA em uma linha; empurrar se o integrador nao empurrar em 20 min;
      passar etapa com a porta da anterior PROVADA no RELATO; pausar/religar esteira e timers COM TRILHA (quem, por que,
      condicao de saida; `bin/pausar.sh`); registrar BACKLOG e publicar RELATO; copiar para /tmp ANTES de remover; apply de
-     dinheiro em competencia NAO exportada (regra DINHEIRO). Tudo aplicado OU parado vira linha em PENDENTES com a frase de
-     reversao; o Ronald revisa quando olhar.
-     PRE-APROVADO-AMPLIA (corte Ronald 31/10 23:1x), sempre com linha `PRE-APROVADO <item>: o que, obra, log` no RELATO:
-     (a) cancelar job na fila ou rodando de VOLTA SUPERADA da mesma obra; (b) topo do RELATO: linha respondida ou superada
-     desce com `RESPONDIDA por <aval/hora>`, e nunca duas linhas da mesma obra dizendo coisas opostas; (c) ordem das vagas:
-     fila 1 (contrato 20 e itens do placar L-099), depois negocio, depois instrumento, teto 2 construtores conferido ANTES
-     de abrir; (d) agente esperando job proprio so para se o job estiver destacado (trava/setsid) E uma obra de fila 1
-     precisar da vaga; (e) sobra de opus final: "trava o contrato 20 ou item do placar L-099?" sim -> fila 1, nao ->
-     ESMERIL-V2. CONTINUA com aval: lei, todo `!`, dinheiro e a liberacao de B3 (DESENHO/ERRO-BOBO nao e escrita pela
-     propria obra).
-  7. FILA 1 NAO PARA. Fechou item da fila 1 (bloco OBRAS do BACKLOG): pega o proximo NO MESMO TURNO. A esteira nunca para por
-     aval: fatia bloqueada -> proxima do BACKLOG; trava A sempre >= 4; nunca ocioso esperando clique. Para so por trava
-     NOMEADA do item 1 ou 2, portao declarado (ex. `esteira.dinheiro_fechado`) ou quarentena.
+     dinheiro em competencia NAO exportada (regra DINHEIRO). Aplicado OU parado = linha em PENDENTES com a frase de reversao.
+     PRE-APROVADO-AMPLIA (corte Ronald 31/10 23:1x), sempre com linha `PRE-APROVADO <item>: o que, obra, log` no RELATO: (a)
+     cancelar job na fila ou rodando de VOLTA SUPERADA da mesma obra; (b) topo do RELATO: linha respondida ou superada desce
+     com `RESPONDIDA por <aval/hora>`, e nunca duas linhas da mesma obra dizendo coisas opostas; (c) ordem das vagas: fila 1
+     (contrato 20 e itens do placar L-099), depois negocio, depois instrumento, teto 2 construtores conferido ANTES de abrir;
+     (d) agente esperando job proprio so para se o job estiver destacado (trava/setsid) E uma obra de fila 1 precisar da vaga;
+     (e) sobra de opus final: "trava o contrato 20 ou item do placar L-099?" sim -> fila 1, nao -> ESMERIL-V2. CONTINUA com
+     aval: lei, todo `!`, dinheiro e a liberacao de B3 (DESENHO/ERRO-BOBO nao e escrita pela propria obra).
+  7. FILA 1 ANDA. Fechou item (bloco OBRAS do BACKLOG): pega o proximo; fatia bloqueada -> proxima; trava A sempre >= 4.
+     Para por trava NOMEADA (itens 1-2), portao declarado (ex. `esteira.dinheiro_fechado`) ou quarentena.
   8. MEDIDA por marco no RELATO: pousos de produto nas ultimas 24 h e horas paradas em PAREI esperando o Ronald.
 
-RAIAS E POUSO (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, FILA-2-EM-RAIA-PROPRIA, POUSO-EM-COMBOIO e
-  SUITE-UMA-VEZ-POR-ARVORE, RAIA-NAO-FICA-PARADA, RAIA-VERDE-POUSA L-105, DOCS-NO-MARCO L-106, L-107 (secao 2), ESMERIL-DO-MARCO,
-  MARCO FECHADO L-108, JUIZ-ANTES-DO-SITIO, AGENTE-NAO-ESPERA, AGENTE-NO-MODELO-CERTO (parte restante)).
-  Apelidos: HIGIENE-DE-CONTEXTO (L-108). Selo: `bin/tests/test_handoff_sessao.sh`.
+RAIAS E POUSO (PISTA, 31/10; funde FILA-2-EM-RAIA-PROPRIA, POUSO-EM-COMBOIO e SUITE-UMA-VEZ-POR-ARVORE, RAIA-NAO-FICA-PARADA,
+  RAIA-VERDE-POUSA L-105, DOCS-NO-MARCO L-106, L-107 (secao 2), ESMERIL-DO-MARCO, MARCO FECHADO L-108 (HIGIENE-DE-CONTEXTO),
+  JUIZ-ANTES-DO-SITIO, AGENTE-NAO-ESPERA, AGENTE-NO-MODELO-CERTO (resto)). Selo `bin/tests/test_handoff_sessao.sh`.
   (PISTA.md#fila-2-em-raia-propria)(PISTA.md#pouso-em-comboio)(PISTA.md#raia-nao-fica-parada)(PISTA.md#juiz-antes-do-sitio)(PISTA.md#agente-nao-espera)
-  LAPIDES.md#lap-52 LAPIDES.md#lap-15 LAPIDES.md#lap-53.
-  Contador de raias (5) + selo no pre-push: fila 2 apos CELULA-TURNO-FECHA e O145; ate la, conduta. HANDOFF: HEAD/origin, status,
-  ORDEM VIVA e item (do `hook_stop_fila1`, nao de leitor novo), PAREI, avais de hoje nao cumpridos, processos vivos, proximo passo.
+  LAPIDES.md#lap-52 LAPIDES.md#lap-15 LAPIDES.md#lap-53. Contador de raias (5) + selo no pre-push: fila 2 apos CELULA-TURNO-FECHA
+  e O145; ate la, conduta. HANDOFF: HEAD/origin, status, ORDEM VIVA e item (do `hook_stop_fila1`, nao de leitor
+  novo), PAREI, avais de hoje nao cumpridos, processos vivos, proximo passo.
   1. CONSTRUIR EM COPIA (LEI-AKITA 10). Obra que nao cruza ARQUIVO com a que esta na raia anda em AGENTE PROPRIO ao lado
      (o teste e arquivo em comum, nao familia nem app); BOs abertos simultaneos: DOIS sem arquivo em comum, UM se tocam o
      mesmo arquivo (os outros limites do BOS-EM-RAIA-UM-POR-VEZ no topo do BACKLOG). Quem anda nao escreve parada. Fila 2
@@ -313,10 +319,10 @@ RAIAS E POUSO (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, FIL
      arvore principal JA ESTA NO AR (secao 2), e tira-lo e `!` (voltar arquivo de prod).
   2. JUIZ ANTES DO SITIO. Fatia que toca pergunta SEM juiz em `core/juizes.py` comeca declarando o juiz: predicado ja unico e
      MEDIDO = frase no CORTES.md (PARADA item 5); predicado NOVO = pergunta no topo ANTES de curar qualquer sitio.
-  3. AGENTES. Agente nasce para CONSTRUIR ou VERIFICAR e termina quando entrega; nunca espera -- polling e da sessao principal,
-     em shell de fundo; entrega dependente de suite = comando + caminho do log. Modelo pelo papel no ato de abrir, sem settings:
-     construir cura de negocio e verificador = modelo da sessao; leitura de log = sonnet; o resto da leitura e sonda = regra
-     CODEX. Agente ocioso ou relendo log de obra fechada e encerrado no ato.
+  3. AGENTES. Agente nasce para CONSTRUIR ou VERIFICAR e termina quando entrega; nunca espera -- polling e da sessao
+     principal, em shell de fundo; entrega dependente de suite = comando + caminho do log. Modelo pelo papel no ato de abrir,
+     sem settings: construir cura de negocio e verificador = modelo da sessao; leitura de log = sonnet; o resto da leitura e
+     sonda = regra CODEX. Agente ocioso ou relendo log de obra fechada e encerrado no ato.
   4. SUITE UMA VEZ POR ARVORE. A arvore que a suite certificou e a que POUSA: entre veredito e merge nenhum `.py` muda (nem na
      copia nem na principal); antes do commit, `cmp` arquivo a arquivo contra a copia, citado no corpo do commit. Raia pronta
      PERGUNTA (`git worktree list` + `git status --porcelain`) se a outra fica pronta em ate 30 min: sim -> UMA copia main +
@@ -327,11 +333,11 @@ RAIAS E POUSO (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, FIL
      foi ff e o pouso JA COMECOU). INSTRUMENTO (`bin/`, selo de host, portao do push) nao pousa com PRODUTO: pouso proprio,
      depois. Raia que nao pode pousar: motivo em UMA linha (lei, `!` ou janela). ESTADO conta raias com commit a frente do
      main ha mais de 6 h (esperado 0).
-  6. ESMERIL DO MARCO. A espera da suite e o esmeril DAQUELE marco: censo so do que ele deixou orfao, zero chamador de
-     producao provado, orfao apagado no mesmo marco (L-111). Achado de fora do marco = linha na fila, nunca trabalho agora.
-     PERGUNTA DA SEMANTICA (ESMERIL-SEMANTICA, corte 06/11 18:52; vale tambem no ESMERIL-V2): para todo campo ou
-     parametro que o diff le ou grava, todos os escritores e leitores supoem o MESMO significado (unidade, fuso, dia do
-     turno x dia civil x instante, inclusive/exclusivo)? arquivo:linha de cada. O esmeril RODA NO CODEX (ESMERIL-NO-CODEX):
+  6. ESMERIL DO MARCO. A espera da suite e o esmeril DAQUELE marco: censo (PROPORCIONAL, PRINCIPIO) so do que ele deixou
+     orfao, zero chamador de producao provado, orfao apagado no mesmo marco (L-111). Achado de fora do marco = linha na fila,
+     nunca trabalho agora. PERGUNTA DA SEMANTICA (ESMERIL-SEMANTICA, corte 06/11 18:52; vale tambem no ESMERIL-V2): para todo
+     campo ou parametro que o diff le ou grava, todos os escritores e leitores supoem o MESMO significado (unidade, fuso, dia
+     do turno x dia civil x instante, inclusive/exclusivo)? arquivo:linha de cada. O esmeril RODA NO CODEX (ESMERIL-NO-CODEX):
      papel censo, sem vaga; inventario AST = script devolvido como texto e rodado pelo envelope na copia do HEAD; a sessao
      confere amostra; o opus nao refaz o censo.
   7. MARCO FECHADO, DEPOIS COMPACTA (L-108). Fechou marco (item da fila 1, cura com DIFF publicado, lote empurrado): docs
@@ -340,25 +346,25 @@ RAIAS E POUSO (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, FIL
      FECHADO -- pode compactar"; nunca no meio de DIFF ou apply. Hooks PreCompact geram e SessionStart(compact) imprime o
      `HANDOFF-SESSAO.md` (teto 60 linhas, de COMANDO). PUSH: um por MARCO.
 
-CODEX (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX,
-  CODEX-PADRAO-PRO, CODEX-PRE-VERIFICADOR (+SUITE-ANTES-DO-OPUS), CODEX-TRIAGEM-INDEPENDENTE, CODEX-ESCREVE-RED,
-  DESPACHO-POR-PAPEL, MAIS-CODEX, ACELERAR-PELA-LEI (2) e a parte de sonda/censo da AGENTE-NO-MODELO-CERTO; os nomes
-  antigos seguem validos como apelido nos scripts e no CORTES.md; historia em LAPIDES).
+CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO-PRO, CODEX-PRE-VERIFICADOR
+  (+SUITE-ANTES-DO-OPUS), CODEX-TRIAGEM-INDEPENDENTE, CODEX-ESCREVE-RED, DESPACHO-POR-PAPEL, MAIS-CODEX, ACELERAR-PELA-LEI (2)
+  e sonda/censo da AGENTE-NO-MODELO-CERTO; nomes antigos valem como apelido; historia em LAPIDES).
   (PISTA.md#gpt6-codex-so-leitura)(PISTA.md#code-chama-codex)(PISTA.md#codex-padrao-pro)(PISTA.md#codex-pre-verificador)
   (PISTA.md#codex-triagem-independente)(PISTA.md#codex-escreve-red)(PISTA.md#despacho-por-papel)(PISTA.md#mais-codex)(PISTA.md#acelerar-pela-lei)(PISTA.md#agente-no-modelo-certo)
-  1. AMBIENTE. Codex CLI (plano Pro, so limite semanal; tmux `codex-hasner`) LE nos 4 papeis de leitura: `~/codex_ws/<hash>` por `git archive`
-     do HEAD, `--sandbox read-only --ask-for-approval never`, SEMPRE pelo wrapper
-     `bin/codex_pergunta.sh [--sonda <script.py>] [--anexo <arq>]... <hash> <pergunta> <resposta>` com CODEX_OBRA e
-     CODEX_PAPEL (leitura|censo|verificador|sonda|construtor) obrigatorios. Dado de prod so por `--sonda` (envelope unico
+  1. AMBIENTE. Codex CLI (plano Pro, so limite semanal; tmux `codex-hasner`) LE nos 4 papeis de leitura: `~/codex_ws/<hash>`
+     por `git archive` do HEAD, `--sandbox read-only --ask-for-approval never`, SEMPRE pelo wrapper `bin/codex_pergunta.sh
+     [--sonda <script.py>] [--anexo <arq>]... <hash> <pergunta> <resposta>` com CODEX_OBRA e CODEX_PAPEL
+     (leitura|censo|verificador|sonda|construtor) obrigatorios. Dado de prod so por `--sonda` (envelope unico
      `bin/sonda_leitura.sh`, saida raspada antes do Codex; CODEX-SONDA-LEITURA no CORTES.md). A via pelo chat (Ronald) le a
-     resposta por `bin/gerar_codex_estado.py`. DUAS escritas permitidas, e so elas: (i) teste RED de lote em copia
-     PROPRIA, sob CONTRATO-DE-INSTRUMENTO, revisado pelo Code antes do uso; (ii) o papel construtor abaixo. PROIBIDO: outro sandbox, `-C` na arvore viva, chamada sem
-     wrapper, `--dangerously*`, Codex escrevendo codigo de producao FORA do papel construtor, mexer em config do Code,
-     cron novo.
+     resposta por `bin/gerar_codex_estado.py`. DUAS escritas permitidas, e so elas: (i) teste RED de lote em copia PROPRIA,
+     sob CONTRATO-DE-INSTRUMENTO, revisado pelo Code antes do uso; (ii) o papel construtor abaixo. PROIBIDO: outro sandbox,
+     `-C` na arvore viva, chamada sem wrapper, `--dangerously*`, Codex escrevendo codigo de producao FORA do papel construtor,
+     mexer em config do Code, cron novo.
      CONSTRUTOR (L-126, CODEX-CONSTRUTOR-NEGOCIO): copia propria `--construtor ~/wt-codex-<obra>-NNNNNN`, escrita so em
      `<wt>/app`, inventario no fim (varredura de FS) proibido ou falho = rc 3 (guarda no wrapper); descartar a wt e CONDUTA do
-     Code (o wrapper nao remove a wt). O wrapper guarda 1 Codex construtor por vez por repositorio (vaga `logs/construtor.vaga`, flock); "opus
-     final sempre" e o "1 opus" do teto MODO-PADRAO-POS-RESET sao CONDUTA: o wrapper nao os guarda.
+     Code (o wrapper nao remove a wt). O wrapper guarda 1 Codex construtor por vez por repositorio (vaga
+     `logs/construtor.vaga`, flock); o opus final (PROPORCIONAL, PRINCIPIO) e o "1 opus" do teto MODO-PADRAO-POS-RESET sao
+     CONDUTA: o wrapper nao os guarda.
   2. DESPACHO. Todo aval, laudo ou BO e DECOMPOSTO antes de qualquer trabalho, 1 linha no RELATO:
      `DESPACHO <id>: a,b -> Codex | c -> sonnet | d -> opus`. CODEX (primeiro, sempre) = leitura de codigo, rastrear classe,
      censo pela regra, quem-mais-le, autopsia de escritor/leitor, contra-exemplo, sonda de prod (contagem, censo de frota,
@@ -374,35 +380,30 @@ CODEX (regra de PISTA consolidada 31/10; funde, sem mudar o vigente, GPT6-CODEX-
   4. CONFERENCIA. O Codex e 2o leitor de outra linha; NAO certifica sozinho, NAO prova dado de prod (sem banco) e NAO
      substitui a leitura do Code: toda afirmacao dele usada em decisao e conferida abrindo o arquivo:linha citado (amostra
      declarada) antes de virar aval, RED, DIFF ou pouso. Censo em modelo menor que vire base de cura: idem.
-  5. PRE-VERIFICADOR. (a) TODO construtor, ANTES de declarar pronto, `CODEX_PAPEL=verificador` com: diff do hash da
-     copia; LEIS dos sitios tocados (grep LEIS/CORTES pelos arquivos); e a lista de classes que ja reprovaram obra -- 2o
-     juiz que duplica juiz registrado, 2o escritor fora da porta, relogio lido fora da borda, derivacao paralela de fonte
-     unica, selo/RED sem mordida, ordem de trava, pouso antes do pre-requisito, campo com dois significados
-     (ESMERIL-SEMANTICA). (b) Achado: confere arquivo:linha;
-     procedente -> corrige e chama de novo; descartado ("fila", "fora do escopo", "nao procede") -> 1 linha de motivo E vai
-     ANEXO ao opus (resposta + linha da triagem), que decide se e fila ou bloqueia. (c) Suite INTEIRA da arvore da obra
-     VERDE, depois UM opus final (SUITE-ANTES-DO-OPUS); opus reprovou -> volta ao (a), nunca direto a outro opus. (d) Mais
-     de 3 voltas Codex na mesma obra -> sobe ao opus sem esperar. (e) ESCOPO = todo sitio que o diff cria ou toca MAIS os
-     escritores e leitores dos campos e funcoes que ele le ou muda, mesmo fora do diff. PROIBIDO: Codex aprovar sozinho o
-     pouso; pular o opus final antes do corte.
+  5. PRE-VERIFICADOR. (a) TODO construtor, ANTES de declarar pronto, `CODEX_PAPEL=verificador` com: diff do hash da copia;
+     LEIS dos sitios tocados (grep LEIS/CORTES pelos arquivos); e a lista de classes que ja reprovaram obra -- 2o juiz que
+     duplica juiz registrado, 2o escritor fora da porta, relogio lido fora da borda, derivacao paralela de fonte unica,
+     selo/RED sem mordida, ordem de trava, pouso antes do pre-requisito, campo com dois significados (ESMERIL-SEMANTICA). (b)
+     Achado: confere arquivo:linha; procedente -> corrige e chama de novo; descartado ("fila", "fora do escopo", "nao
+     procede") -> 1 linha de motivo E vai ANEXO ao opus (resposta + linha da triagem), que decide fila ou bloqueio; sem opus,
+     vai a lista do que falta. (c) Suite INTEIRA da arvore da obra VERDE; o opus final, UM so e depois dela
+     (SUITE-ANTES-DO-OPUS), e PROPORCIONAL (PRINCIPIO); opus reprovou -> volta ao (a), nunca direto a outro opus. (d) Mais de
+     3 voltas Codex na mesma obra -> [nome] ao opus sem esperar (nao e o opus final; vale quando o PRINCIPIO exige opus). (e) ESCOPO = todo sitio que o diff cria ou toca MAIS os
+     escritores e leitores dos campos e funcoes que ele le ou muda, mesmo fora do diff. PROIBIDO: Codex aprovar sozinho
+     qualquer pouso (o Code confere, item 4); pular o opus final quando o PRINCIPIO o exige (mao unica, concorrencia, schema ou multi-tenant).
   6. MEDIDA E POSTMORTEM. Linha por obra no RELATO do pouso: voltas Codex, procedentes/descartados, leituras opus, "opus
-     reprovou depois do Codex aprovar". Toda reprovacao do opus e CLASSIFICADA pelo Codex (CODEX_PAPEL=censo, com os
-     achados do opus, TODAS as .q/.r da obra e as linhas de triagem; devolve por achado o trecho da pergunta e da
-     resposta): (a) nao viu com o tema PRESENTE = falha do Codex (a unica) | (b) viu e a triagem descartou = falha da
-     triagem, com motivo | (c) fora do alcance (RED, suite, dado de prod) = nao conta | (e) NAO PERGUNTADO = falha de quem
-     perguntou | (d) NENHUM viu = MODO-COMUM (regra propria). Rejeicao audita PRIMEIRO quem perguntou e quem triou. Apos 10
-     obras o Code publica a tabela; falha do Codex = 0 -> PROPOE o corte de rebaixar o opus final a amostra (lei nova: so
-     por corte). ESTADO: placar por papel (leitura/sonda/investigacao no Codex x em opus/sonnet nas 24 h, motivo de cada
-     desvio; itens de leitura de codigo fora do Codex esperado 0) e ALERTA "descartes do Codex nas 24 h" com a lista,
-     VERMELHO se houver falha do Codex sem a tabela (instrumento, CONTRATO antes, pouso proprio).
-     (5) retroativo 10:4x: NOTURNO (e) 1,5 / (b) 2,3 / (b) parcial 4,6, falha Codex 0.
+     reprovou depois do Codex aprovar". Reprovacao do opus e CLASSIFICADA pelo Codex (CODEX_PAPEL=censo, com os achados, TODAS
+     as .q/.r da obra e a triagem; trecho da pergunta e da resposta por achado): (a) nao viu com o tema PRESENTE = falha do
+     Codex (a unica) | (b) viu e a triagem descartou | (c) fora do alcance (RED, suite, prod) = nao conta | (e) NAO PERGUNTADO
+     = falha de quem perguntou | (d) NENHUM viu = MODO-COMUM. Rejeicao audita PRIMEIRO quem perguntou e quem triou. ESTADO:
+     placar por papel nas 24 h (leitura de codigo fora do Codex esperado 0) e ALERTA "descartes do Codex nas 24 h". Apos 10
+     obras o Code publica a tabela; falha do Codex = 0 -> PROPOE o corte de rebaixar o opus final a amostra (so por corte);
+     VERMELHO se houver falha do Codex sem a tabela.
 MODO-COMUM: achado que Codex E opus deixaram passar = classe (d): linha `MODO-COMUM:` no topo do RELATO e obra ESTRUTURA na frente da fila 1, fechada com juiz + MAPA + selo que morde mutante. (PISTA.md#modo-comum)
 CONTRATO-DE-INSTRUMENTO: instrumento, hook, wrapper, cron ou regra de pista novos so depois de CONTRATO de 5 linhas no RELATO (quem chama, quem espera, falha/limite, medida, quem desliga), mandado UMA vez ao Codex. (PISTA.md#contrato-de-instrumento)
-PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x).
-  O-DIA-PAGO S3: EXERCICIO, nao CAMINHO; **0** com os 2 verdes:
-    (a) **0 leitor mostrando numero de motor sem o rotulo** `'sem apuracao ainda'`;
-    (b) **0 leitor com derivacao propria de dinheiro** (por AST).
-  **A L-095 nao cede**; corte 23/09 19:2x: sem fechamento, MOSTRAR rotulado; morre "quem CHAMA o motor". LAPIDES.md#lap-18
+PLACAR-DA-S3-CONTA-EXERCICIO (corte Ronald 29/09 ~15:1x). O-DIA-PAGO S3: EXERCICIO, nao CAMINHO; **0** com os 2 verdes:
+  (a) **0 leitor mostrando numero de motor sem o rotulo** `'sem apuracao ainda'`; (b) **0 leitor com derivacao propria de
+  dinheiro** (por AST). **A L-095 nao cede** (23/09 19:2x): sem fechamento, MOSTRAR rotulado; morre "quem CHAMA o motor". LAPIDES.md#lap-18
 
 DINHEIRO (regra consolidada 31/10; funde, sem mudar o vigente, AUTORIZACAO PREVIA item 2, O TXT E FOTOGRAFIA DO CALCULO,
   REGEN-EM-EXPORTADA, DINHEIRO-EM-COMPETENCIA-ABERTA, AVAL-DE-CRITERIO e DEPLOY JA; L-092, L-110).
@@ -434,10 +435,9 @@ DINHEIRO (regra consolidada 31/10; funde, sem mudar o vigente, AUTORIZACAO PREVI
 
 PONTUALIDADE-SO-CONTRA-O-DIA-DECLARADO (L-084): texto vigente em `app/docs/LEIS.md`. (historia: LAPIDES.md#lap-13 LAPIDES.md#lap-50 LAPIDES.md#lap-51)
 
-RELATO, BACKLOG E PENDENTES (regra consolidada 31/10; funde PROMPT-NAO-SE-REPETE, DIETA DE PROSA L-109, RELATO-CURTO L-116,
-  MORATORIA L-117 (texto em PARADA 3), PAUSA COM DONO, DUAS FILAS, PENDENTE-SAI L-118, REGRA-DE-PRAZO).
-  Apelidos: MORATORIA-DE-LEI (L-117), PENDENTE-SAI-PELA-CONDICAO-ESCRITA (L-118; 1o uso PORTA-EXTRA-E-CONTADOR),
-  RELATO-CURTO-SELO. LAPIDES.md#lap-14 LAPIDES.md#lap-54.
+RELATO, BACKLOG E PENDENTES (31/10; funde PROMPT-NAO-SE-REPETE, DIETA DE PROSA L-109, RELATO-CURTO L-116 (RELATO-CURTO-SELO),
+  MORATORIA-DE-LEI L-117 (texto em PARADA 3), PAUSA COM DONO, DUAS FILAS, PENDENTE-SAI L-118 (PENDENTE-SAI-PELA-CONDICAO-ESCRITA;
+  1o uso PORTA-EXTRA-E-CONTADOR), REGRA-DE-PRAZO). LAPIDES.md#lap-14 LAPIDES.md#lap-54.
   REGRA-DE-PRAZO: juiz existente so se responde a MESMA pergunta; o novo tambem vai a `JUIZES_DO_PRAZO`.
   1. PROMPT recebido = linha em `app/docs/PROMPTS.md`; titulo repetido = resposta em UMA linha ("ja recebido HH:MM, estado X,
      onde Y"), nada refeito (contador `prompts_repetidos`); prompt que pede obra vira item no bloco OBRAS do BACKLOG no mesmo
