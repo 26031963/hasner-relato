@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 02:26:05.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (90.2 MB). Acoes na janela: **2067**.
+**Medido em 23/11/2026 02:32:11.** Transcript: `fed23df3-5867-427b-a56f-61563d8d89a2.jsonl` (90.3 MB). Acoes na janela: **2076**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:29:24 | Bash |  | `while kill -0 3668957 2>/dev/null; do /usr/bin/sleep 20; done; tail -2 ~/saas-hasner/logs/DIA-SEM-TRABALHO-PORTA-L1-PELA-HE/codex_verif.out; wc -l ~/saas-hasner/logs/DIA-SEM-TRABALHO-PORTA-L1-PELA-HE/r_verificador.txt` |
+| 02:29:21 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; l=open(p).read().split('\n') assert l[1].startswith('ESPERANDO: suite inteira pre-opus ESPURIAS-VAGA-2 comboio NA PISTA 2') and l[2].startswith('O62 Codex verificador volta 4') l[1]='PERGUNTA DE DESENHO O62 (ESPURIAS-VAGA-2, 4a volta Codex -> opus escalonado em curso): ponto/juiz_batida.py:132 `len(pausas)>1` descarta override de PAUSA UN ...` |
+| 02:29:13 | Agent | Opus escalonado O62 v4 | `ESCALONAMENTO AO OPUS (CLAUDE.md 7b CODEX 5(d): 4 voltas Codex). Obra ESPURIAS-VAGA-2, item O62. O aval ESPURIAS-VAGA-2-2211-2359 diz literalmente: "O62 DECIDIDO PELA LEI L-032 opcao (b), cura em ponto/juiz_batida.py". Proibido: ponto/motor_calculo_v2.py; gravado exportado; apply de dinheiro na comp 11 (em fechamento) sem DIFF por colab publicado antes. Copia: /home/ronald/wt-o62-004140, HEAD ed1e ...` |
+| 02:29:01 | Bash |  | `cd ~/saas-hasner/logs/ESPURIAS-VAGA-2-2211-2359/o62; cat > triagem_verif4.txt <<'EOF' TRIAGEM r_verif4 (O62 v4 ed1e293a7) -- sessao, 23/11 02:3x. Conferido abrindo: juiz_batida.py:106-150 (copia wt-o62-004140), escala/models.py:296-345. 1. Achados da v3 (mutante zero, relogio em `minutos`): CURADOS -- procede o "Sim" do Codex (m6/m7 FAILED, mutantes_v4/VEREDITOS.txt). 2. OVERRIDE DE PAUSA UNICA IG ...` |
+| 02:28:39 | Bash |  | `cd ~/wt-o62-004140/app; sed -n 106,152p ponto/juiz_batida.py; echo ----; sed -n 296,346p escala/models.py` |
+| 02:28:31 | Bash |  | `cd ~/saas-hasner; timeout 60 bash bin/sombra.sh --conferir 2>&1 \| tail -6; echo rc=$?; timeout 60 bash bin/deploy.sh --conferir 2>&1 \| grep -i -E "sombra\|ensaio\|falhou" \| head` |
+| 02:28:26 | Bash |  | `cd ~/saas-hasner; grep -n -- "--conferir" bin/deploy.sh \| head -5; timeout 120 bash bin/deploy.sh --conferir 2>&1 \| tail -15; echo rc=$?; ls logs/crons_em_curso 2>/dev/null` |
+| 02:28:15 | Bash |  | `cd ~/saas-hasner; timeout 30 ssh pista cancela 1123021219_1fb86eb6; /usr/bin/sleep 5; timeout 30 ssh pista estado \| tail -2; pgrep -af "ssh pista espera" \| head` |
+| 02:28:15 | TaskStop |  | `-` |
 | 02:26:00 | Bash |  | `cd ~/saas-hasner; wc -l logs/ESPURIAS-VAGA-2-2211-2359/o62/r_verif4.txt; cat logs/ESPURIAS-VAGA-2-2211-2359/o62/r_verif4.txt` |
 | 02:25:56 | Bash |  | `cd ~/saas-hasner; tail -3 logs/DIA-SEM-TRABALHO-PORTA-L1-PELA-HE/codex_verif.out; tail -2 logs/ESPURIAS-VAGA-2-2211-2359/o62/codex_v4.out; for w in red-015124 mut-rot-015413 mut-colab-015413 mut-mes-015413; do git -C ~/wt-dstl1-$w status --porcelain \| head -2; done` |
 | 02:25:48 | Bash |  | `cd ~/saas-hasner; D=logs/DIA-SEM-TRABALHO-PORTA-L1-PELA-HE; H=$(git rev-parse 5bf811b24); sed -i "s/<HASH>/$H/g" $D/q_verificador.md; grep -c "<HASH>" $D/q_verificador.md; git diff 4da4e6212 $H > $D/diff_verif.txt; wc -c $D/leis_sitios.txt app/docs/JUIZES.md $D/diff_verif.txt $D/q_verificador.md; CODEX_OBRA=DIA-SEM-TRABALHO-PORTA-L1-PELA-HE CODEX_PAPEL=verificador setsid bash bin/codex_pergunta.sh ...` |
