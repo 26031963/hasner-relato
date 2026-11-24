@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 21:04:36.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (7.2 MB). Acoes na janela: **201**.
+**Medido em 23/11/2026 21:10:33.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (7.3 MB). Acoes na janela: **209**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:05:55 | Bash |  | `cd ~/saas-hasner; until [ -s logs/E4C-F5/v7/s82b/c3d/suite_pouso.log.rc ]; do /usr/bin/sleep 30; done; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log; cat $L.rc; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1` |
+| 21:05:52 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; ps -o pid,etime -p 3260713 \| tail -1; rm logs/E4C-F5/v7/s82b/c3d/suite_pouso.log.rc && echo removido` |
+| 21:05:48 | Bash |  | `cd ~/saas-hasner; grep -n 'exit 3\\|rc 3\\|return 3' bin/suite.sh \| head; ls -la --time-style=+%H:%M:%S logs/E4C-F5/v7/s82b/c3d/suite_pouso.log*; date +%H:%M:%S; sudo -n dmesg 2>/dev/null \| grep -i oom \| tail -3; journalctl -k --since "-40min" 2>/dev/null \| grep -i 'oom\\|killed' \| tail -3; docker ps -a --since 5m --format '{{.Names}} {{.Status}}' 2>/dev/null \| head` |
+| 21:05:44 | Bash |  | `cd ~/saas-hasner; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log; cat $L.rc; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; tail -5 $L \| cut -c1-300` |
+| 21:05:36 | Bash |  | `cd ~/saas-hasner; until [ -s logs/E4C-F5/v7/s82b/c3d/suite_pouso.log.rc ]; do /usr/bin/sleep 30; done; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log; cat $L.rc; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep -c -i 'oom' $L` |
+| 21:05:33 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: F5 c3d PRONTA')][0] L[i]="ESPERANDO: F5 c3d (158adcc59) suite de pouso \| pid=3260713 \| arquivo=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log.rc -- em paralelo Codex verif c3d e sonda c3d na sombra; aval RESPOSTA-DESENHO-F5-82-C-2311-2105 (pousa com verificad ...` |
+| 21:04:59 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log; setsid bash -c "bash bin/suite.sh --motivo 'pouso E4C-F5' --dir /home/ronald/wt-f5-v7-153543 --espera 3600 > $L 2>&1; echo rc=\$? > $L.rc" </dev/null >/dev/null 2>&1 & /usr/bin/sleep 30; tail -3 $L; bin/trava_teste.sh --quem` |
+| 21:04:55 | Bash |  | `ps -o pid,etime,args -p 3256616 \| cut -c1-250; cd ~/wt-f5-v7-153543 && git status --porcelain \| head` |
 | 21:04:32 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log; setsid bash -c "bash bin/suite.sh --motivo 'pouso E4C-F5' --dir /home/ronald/wt-f5-v7-153543 --espera 3600 > $L 2>&1; echo rc=\$? > $L.rc" </dev/null >/dev/null 2>&1 & /usr/bin/sleep 20; tail -3 $L; pgrep -f "suite.sh --motivo pouso E4C-F5" \| head -2` |
 | 21:04:26 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| E4C-F5-SILENCIO-ADMIN \|')][0] new=["\| E4C-F5-82-FALTA \| lista do que falta da F5 8.2 (aval RESPOSTA-DESENHO-F5-82-C-2311-2105; nao segura o pouso): A3 porta x cartao por dono (fechada alheia no container, R1_porta_alheia); A4 corrida GET->POST; A5 N+1 do exp ...` |
 | 21:04:18 | Bash |  | `cd ~/saas-hasner; grep -n "^\| E4C-F5\b\\|^\| E4C-F5 " app/docs/BACKLOG.md \| cut -c1-200; cat logs/E4C-F5/v7/s82b/c3c/triagem_c3c.txt \| cut -c1-300` |
