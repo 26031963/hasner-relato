@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 02:50:06.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (20.9 MB). Acoes na janela: **514**.
+**Medido em 24/11/2026 02:55:59.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.0 MB). Acoes na janela: **516**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 02:52:51 | Bash |  | `cd ~/saas-hasner; git -C /home/ronald/wt-janela-mut-022029 diff > logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mutante.diff; wc -l logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mutante.diff; git -C /home/ronald/wt-janela-red-021624 status --porcelain \| head -3 for w in /home/ronald/wt-janela-red-021624 /home/ronald/wt-janela-mut-022029; do git worktree remove --force $w && echo removida $w; done cd app/docs; py ...` |
+| 02:52:38 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO; ls; grep -i "327" pares_mudados.txt \| head -3; grep -ci "invert" saida_depois_sonda_pares.txt; grep -i "invertidos\\|INVERT" saida_antes_sonda_pares.txt saida_depois_sonda_pares.txt \| head -4` |
 | 02:40:37 | Bash |  | `cd ~/saas-hasner; for i in $(seq 1 200); do bash bin/sombra.sh --conferir >/dev/null 2>&1 && { echo "ENSAIO-OK $(date +%H:%M)"; bash bin/sombra.sh --conferir 2>&1 \| tail -1; exit 0; }; /usr/bin/sleep 60; done; echo TIMEOUT` |
 | 02:40:34 | Agent | Construtor RESOLVER-PASSA-NA-FRENTE | `Voce e o construtor da obra RESOLVER-PASSA-NA-FRENTE no repo /home/ronald/saas-hasner (Django em app/). Leia PRIMEIRO /home/ronald/saas-hasner/CLAUDE.md inteiro, depois o brief /home/ronald/saas-hasner/logs/RESOLVER-PASSA-NA-FRENTE/brief_2411.md (inclui o ADENDO no fim, que manda sobre a base e a sombra) e o aval RESPOSTA-DESENHO-RESOLVER-2411-0110 em app/docs/CORTES.md (grep). Construa SO em copi ...` |
 | 02:40:29 | Bash |  | `cd ~/saas-hasner/logs/RESOLVER-PASSA-NA-FRENTE; cat >> brief_2411.md <<'EOF' ## ADENDO 24/11 02:5x (sessao) - BASE: f3bac95b765636a3d59d22c4d25e2f993ddf4ae1 (arvore da F0 que POUSA; o commit de merge da F0 so acrescenta app/docs/). `git -C ~/saas-hasner worktree add ~/wt-resolver-c-$(date +%H%M%S) f3bac95b7` (nome unico; conferir o log). O teste RED ja escrito esta em /home/ronald/wt-resolver-0034 ...` |
