@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 01:50:04.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (18.3 MB). Acoes na janela: **462**.
+**Medido em 24/11/2026 01:56:01.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (19.2 MB). Acoes na janela: **463**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:56:00 | Bash |  | `cd /home/ronald/wt-f0-004802/app; git log --oneline -3; sed -n 480,540p chamados/reconciliador.py; grep -n "def engolir" -A15 -r chamados/ \| head -30` |
 | 01:36:11 | Bash |  | `cd ~/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=1; assert L[i].startswith('PERGUNTA DE DESENHO NOTURNO-NAO-APURADO') old="Propriedade fixa violada (efetivo_entrada >= efetivo_saida), dono ESTRUTURA [hipotese]; censo de FROTA em curso (sonda_inv)." assert old in L[i] L[i]=L[i].replace(old,"(7) CENSO DE FROTA (sonda_inv2, sombra, 01/10-22/11, 16.167 pares f ...` |
 | 01:36:00 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; tail -1 sonda_inv2.out; head -c 5000 sonda_inv2.r` |
 | 01:32:06 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; python3 - <<'EOF' s=open('sonda_inv.py').read() old=" if ee is not None and es is not None and ee >= es:" assert s.count(old)==1 s=s.replace(old,""" if ee is not None and es is not None and ee == es: tot["COLAPSADO", comp] += 1 if ee is not None and es is not None and ee > es:""") s=s.replace(' for k in sorted(tot):',' for k in sorted(tot, key=s ...` |
