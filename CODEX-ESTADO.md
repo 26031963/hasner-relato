@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 01:31** · publicado em **24/11/2026 01:31** (UTC-3)
+> Ultima resposta processada: **24/11/2026 01:35** · publicado em **24/11/2026 01:37** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 01:35 · sessao 50bc8a92b541 · NOTURNO-NAO-APURADO · sonda · origem=Code
+
+## 1. Universo e empresa × competência
+
+`sonda/anexos` conta as linhas da saída atual a partir de `sonda_leitura`, incluindo a linha em branco. `sonda_inv.r` conta as linhas do anexo anterior a partir do primeiro título.
+
+**UNIVERSO** `pares_fechados 16316 invertidos 25 colabs 18 min_brutos 4370`. `sonda/anexos:3`
+
+As linhas `COLAPSADO` registram os fechados com pontas efetivas iguais. O bloqueio do dia sem previsto produz essa igualdade. `sonda/anexos:4–6` · `app/ponto/motor_calculo_v2.py:1471–1483`
+
+| Empresa | Competência | Fechados | Invertidos | Colabs | Minutos brutos | Fonte |
+|:---|:---|---:|---:|---:|---:|:---|
+| COLAPSADO | 10/2026 | 57 | 0 | 0 | 0 | `sonda/anexos:4` |
+| COLAPSADO | 11/2026 | 77 | 0 | 0 | 0 | `sonda/anexos:5` |
+| COLAPSADO | 12/2026 | 15 | 0 | 0 | 0 | `sonda/anexos:6` |
+| 1 | 10/2026 | 12 | 0 | 0 | 0 | `sonda/anexos:7` |
+| 1 | 11/2026 | 14 | 0 | 0 | 0 | `sonda/anexos:8` |
+| 2 | 10/2026 | 6038 | 6 | 6 | 692 | `sonda/anexos:9` |
+| 2 | 11/2026 | 6337 | 10 | 10 | 1846 | `sonda/anexos:10` |
+| 2 | 12/2026 | 275 | 1 | 1 | 98 | `sonda/anexos:11` |
+| 3 | 10/2026 | 1478 | 4 | 3 | 769 | `sonda/anexos:12` |
+| 3 | 11/2026 | 1408 | 2 | 1 | 483 | `sonda/anexos:13` |
+| 3 | 12/2026 | 61 | 0 | 0 | 0 | `sonda/anexos:14` |
+| 4 | 10/2026 | 276 | 2 | 1 | 482 | `sonda/anexos:15` |
+| 4 | 11/2026 | 258 | 0 | 0 | 0 | `sonda/anexos:16` |
+| 4 | 12/2026 | 10 | 0 | 0 | 0 | `sonda/anexos:17` |
+
+A saída fornecida termina em `rc_sombra=0`, sem traceback no trecho. `sonda/anexos:1–30`
+
+## 2. Exemplos e ramo pelas pontas
+
+A classificação indica quais pontas mudaram pela janela de HE. O motor aplica os recortes de entrada e saída separadamente e grava as pontas resultantes. `app/ponto/motor_calculo_v2.py:1691–1712,1731–1763,1834–1842`
+
+| Colab | Comp. | Entrada bruta | Saída bruta | Entrada efetiva | Saída efetiva | `trab` | `fora` | `not_leg` | Ramo | Fonte |
+|---:|:---|:---|:---|:---|:---|---:|---:|---:|:---|:---|
+| 37 | 10/2026 | `2026-10-06 03:00:38` | `2026-10-06 07:01:01` | `2026-10-06 19:00:00` | `2026-10-06 07:00:00` | 0 | 960.4 | 0.0 | HE nas duas pontas | `sonda/anexos:18` · `sonda_inv.r:27` |
+| 37 | 10/2026 | `2026-10-10 03:00:40` | `2026-10-10 07:01:50` | `2026-10-10 19:00:00` | `2026-10-10 07:00:00` | 0 | 961.2 | 0.0 | HE nas duas pontas | `sonda/anexos:19` · `sonda_inv.r:28` |
+| 109 | 10/2026 | `2026-10-05 22:00:41` | `2026-10-05 22:10:41` | `2026-10-05 22:00:41` | `2026-10-05 22:00:00` | 0 | 10.7 | 0.0 | HE só na saída | `sonda/anexos:20` · `sonda_inv.r:34` |
+| 113 | 11/2026 | `2026-10-31 03:00:00` | `2026-10-31 07:02:00` | `2026-10-31 19:00:00` | `2026-10-31 07:00:00` | 0 | 962.0 | 0.0 | HE nas duas pontas | `sonda/anexos:21` · `sonda_inv.r:36` |
+| 113 | 11/2026 | `2026-11-02 03:00:00` | `2026-11-02 07:01:00` | `2026-11-02 19:00:00` | `2026-11-02 07:00:00` | 0 | 961.0 | 0.0 | HE nas duas pontas | `sonda/anexos:22` · `sonda_inv.r:37` |
+| 174 | 10/2026 | `2026-09-24 02:32:11` | `2026-09-24 05:00:58` | `2026-09-24 21:00:00` | `2026-09-24 05:00:00` | 0 | 1108.8 | 0.0 | HE nas duas pontas | `sonda/anexos:23` |
+| 174 | 11/2026 | `2026-10-25 02:32:15` | `2026-10-25 04:57:35` | `2026-10-25 21:00:00` | `2026-10-25 04:57:35` | 0 | 1107.7 | 0.0 | HE só na entrada | `sonda/anexos:24` |
+| 200 | 11/2026 | `2026-11-03 02:00:33` | `2026-11-03 06:00:15` | `2026-11-03 22:00:00` | `2026-11-03 06:00:00` | 0 | 1199.7 | 0.0 | HE nas duas pontas | `sonda/anexos:25` |
+| 218 | 10/2026 | `2026-10-16 03:15:06` | `2026-10-16 05:00:01` | `2026-10-16 21:00:00` | `2026-10-16 05:00:00` | 0 | 1064.9 | 0.0 | HE nas duas pontas | `sonda/anexos:26` |
+| 218 | 11/2026 | `2026-11-15 03:17:11` | `2026-11-15 05:00:03` | `2026-11-15 21:00:00` | `2026-11-15 05:00:00` | 0 | 1062.9 | 0.0 | HE nas duas pontas | `sonda/anexos:27` |
+| 218 | 12/2026 | `2026-11-22 03:22:03` | `2026-11-22 05:00:16` | `2026-11-22 21:00:00` | `2026-11-22 05:00:00` | 0 | 1058.2 | 0.0 | HE nas duas pontas | `sonda/anexos:28` |
+| 296 | 11/2026 | `2026-11-03 00:15:19` | `2026-11-03 07:00:41` | `2026-11-03 19:00:00` | `2026-11-03 07:00:00` | 0 | 1125.4 | 0.0 | HE nas duas pontas | `sonda/anexos:29` |
+
+## 3. Destino dos 4.370 minutos brutos
+
+- **No próprio par invertido, zero em `minutos_trabalhados`.** O motor mede `saída efetiva − entrada efetiva` e grava `max(0, duração)`. `minutos_fora_janela` recebe a soma dos recortes, que pode superar a duração bruta do par. O teto de pontualidade lê esse campo separadamente. `sonda/anexos:3,18–29` · `app/ponto/motor_calculo_v2.py:2759–2787,2886–2895,3224–3258,1170–1196`
+- **O crédito do aberto pula candidatos cuja entrada bruta já consta em um fechado de `resultado.periodos`, inclusive se o fechado tem zero trabalhado.** A guarda usa `resultado.periodos`, enquanto os fechados de folga ficam em `resultado.periodos_ft`. Para cada candidato aceito, o motor roda `calcular_periodo` e credita os campos retornados separadamente. Se o candidato também sai invertido, acrescenta zero ao trabalhado e pode acrescentar minutos ao `fora_janela`. `app/ponto/motor_calculo_v2.py:2492–2494,2513–2560,2759–2787,2886–2895,3224–3258`
+- **Outro par contribui com seu próprio `minutos_trabalhados`.** A soma mensal e a lavratura leem esse campo dos períodos. `DiaPago.minutos_realizados` recebe o mapa da grade por dia. Se algum dos 4.370 minutos brutos aparece sob outro pareamento, no crédito de um candidato com outras pontas ou no realizado da grade, é [nao verificado]. `app/ponto/motor_calculo_v2.py:294–300,2549–2560` · `app/ponto/services/dia_pago.py:173–179,234–267,285–292`
 
 ## 24/11 01:31 · sessao bf4a511fb0a8 · NOTURNO-NAO-APURADO · sonda · origem=Code
 
@@ -990,24 +1044,4 @@ print(dumps(sonda("2026-10-01", "2026-10-31"), sort_keys=True))
 
 Qual caminho gravou as 06:57, quais marcos estavam disponíveis e se houve reescrita posterior ficam [nao verificado].
 
-## 24/11 00:16 · sessao 052fbee03723 · - · - · origem=Ronald (tmux)
-
-**Q2.** A batida gravada `E` pode ser a `saida` do turno da véspera. O pareador ordena por timestamp, recebe o papel da ata por minuto e usa o `tipo` gravado quando a ata se abstém. Um segundo passe pode fechar o turno por posição com a própria batida `E`, preservando seu tipo gravado. `app/ponto/turnos.py:1217`, `:890–909`, `:1310–1326`, `:1377–1382`, `:1096–1102`, `:1497–1502`.
-
-| Caso | Resultado |
-|---|---|
-| Ata diz `S`, batida chega ao ramo de borda e cabe entre piso e teto | Fecha o aberto como saída. Fora do teto ou em par degenerado, vira saída órfã. `app/ponto/turnos.py:1377–1382`, `:1421–1457`, `:1487–1496` |
-| Ata diz `E` e a batida chega ao ramo de borda | Abre turno próprio e veta a fusão posicional. `app/ponto/turnos.py:997–999`, `:1417–1420` |
-| Ata diz `X`/`Xi`, batida é absorvida como intervalo, eco de flush ou volta de pausa deslocada | No aberto, segue como batida interna, sem formar borda. `app/ponto/turnos.py:1315–1326`, `:1356–1376`, `:1398–1416` |
-| Ata se abstém, `E` abre um turno unitário e todas as guardas posicionais passam | Fecha pela posição, conserva `data_turno` do anterior, agrega a batida, elimina o turno unitário da lista e carimba a virada de data. `app/ponto/turnos.py:991–1026`, `:1059–1102`, `:1417–1420` |
-| Falha qualquer guarda posicional | A `E` não fecha por esse caminho. Uma `S` órfã que venha antes da próxima entrada ou uma `S` de pausa sem volta podem fechar por caminhos próprios. `app/ponto/turnos.py:1059–1095`, `:1170–1188` |
-
-A fusão exige turno anterior com entrada e sem saída, candidata no turno seguinte com uma única batida e sem saída própria, ata sem `E` ou `S` para a candidata, duas bordas declaradas no mapa do dia do aberto, pausa anterior fechada e carimbada entre 15 min e 3 h inclusive, candidata depois da volta, distância ao `hf` encadeado menor que ao `hi` concorrente e duração acima de 60 s até previsto + 4 h. Empate veta. Sem `hi` concorrente, só o `hf` participa. Bordas iguais fazem o teto retornar a `cont_max_s`, cujo padrão é 14 h. `app/ponto/turnos.py:66–82`, `:117–131`, `:382`, `:499`, `:912–940`, `:991–1026`, `:1059–1102`, `:1192–1194`; `app/ponto/management/commands/detectar_par_relampago.py:49`.
-
-O histórico pode levar `marcos_por_dia` ao pareador, com exceção do template de segundo intervalo. O caminho de turno vivo leva a ata e as tuplas de marcos, mas chama sem `marcos_por_dia`, então não entra nessa fusão posicional. `app/ponto/turnos.py:1940–1944`, `:1988–2000`, `:2264–2297`, `:991–992`.
-
-O teste de quatro batidas `E` afirma fechamento pela última, preservação das quatro e virada de data. Os negativos cobrem falta de pausa, candidata já fechada, dia sem DNA, `hi` mais próximo, teto e ata dizendo `E`. `app/ponto/tests/test_saida_pela_posicao_entre_turnos.py:103–112`, `:228–239`, `:260–292`.
-
-O papel das 06:57 de JV, a sequência adjacente, a pausa, os marcos e a ata daquele dia ficam **[nao verificado]**. Os exemplos de outra batida às 06:57 na suíte mostram resultados distintos conforme a ata, inclusive `X` por sobra próxima de uma `S` às 07:00 e `E` de uma célula vizinha. `app/ponto/tests/test_o68b_papel_da_ata_no_motor.py:79–103`, `:212–226`.
-
-_8023 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8024 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
