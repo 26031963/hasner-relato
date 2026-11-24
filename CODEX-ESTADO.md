@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 09:45** · publicado em **24/11/2026 09:45** (UTC-3)
+> Ultima resposta processada: **24/11/2026 10:21** · publicado em **24/11/2026 10:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 10:21 · sessao 0bcf3a448c61 · R1-REMEDE-2411 · sonda · origem=Code
+
+No dado fornecido, não há `rc_sombra` diferente de `0`. A execução original está [nao verificado].
+
+```text
+sonda_leitura: script.py [0d4e6e058a9c5469] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+AUTORIDADE {'dia_sem_lavratura_no_espelho': 8912, 'dias_comparados': 7521, 'bate_ate_10min': 7203, 'dia_isento_ou_ausencia': 1878, 'dia_batida_impar': 361, 'impar_que_BATE': 148, 'esp_zero_e6_trabalho': 35, 'dono_BATIDA': 217, 'diverge_acima_60': 235, 'impar_que_DIVERGE': 213, 'impar_no_conjunto_do_dia': 212, 'impar_FORA_da_faixa': 32, 'impar_dentro_da_faixa': 181, 'dono_CADASTRO': 75, 'e6_zero_esp_trabalho': 19, 'dia_sem_trabalho_ambos': 151, 'esp_desconta_janela_declarada': 258, 'dono_ESTRUTURA': 26, 'diverge_10_60': 29, 'impar_SO_POR_CORTE_do_oraculo': 1}
+AUTORIDADE erros no espelho: 0
+AUTORIDADE BATE (ate 10 min): 95.8% de 7521 dias comparados
+AUTORIDADE dos que divergem: 181 dentro da faixa piso..teto (indecidivel sem DNA), 32 FORA da faixa (contraditorio)
+AUTORIDADE paridade de quem: 212 com contagem impar no conjunto do dia (falta OU sobra batida), 1 partidos SO pelo corte do proprio oraculo
+AUTORIDADE ESTRUTURA    26 dia-colab      88.4 h   16 colabs   o sistema se contradiz ou calcula errado DADO o cadastro -- fila 1
+AUTORIDADE CADASTRO     75 dia-colab     295.0 h   31 colabs   o DNA nao descreve as batidas -- lista do admin, nao codigo
+AUTORIDADE BATIDA      217 dia-colab    1021.0 h  117 colabs   falta ou sobra batida -- lista do admin, nao codigo
+AUTORIDADE SOMA        318   <- tem de ser igual a soma das classes (318)
+AUTORIDADE colabs com divergencia: 146
+CSV_POR_DONO {'BATIDA': 217, 'CADASTRO': 75, 'ESTRUTURA': 26} TOTAL 318
+CSV_PARIDADE {('par', 'BATIDA'): 43, ('IMPAR', 'BATIDA'): 174, ('IMPAR', 'CADASTRO'): 39, ('par', 'CADASTRO'): 36, ('par', 'ESTRUTURA'): 26}
+CAB emp|colab|dia|dono_da_divergencia|esp_min|piso_min|teto_min|dif|classe|paridade|dono_da_paridade|veredito
+ESTRUTURA 4|37|2026-10-05|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 4|37|2026-10-09|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|129|2026-10-12|ESTRUTURA|0|779|779|779|esp_zero_e6_trabalho|par|2|em_aberto |n_batidas=2
+ESTRUTURA 2|218|2026-10-15|ESTRUTURA|105|0|0|-105|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|252|2026-09-23|ESTRUTURA|548|594|608|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-09-24|ESTRUTURA|552|598|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-09-25|ESTRUTURA|556|604|616|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-09-28|ESTRUTURA|535|581|595|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-01|ESTRUTURA|545|590|605|45|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-02|ESTRUTURA|545|593|606|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-06|ESTRUTURA|551|597|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-09|ESTRUTURA|544|592|604|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|369|2026-10-12|ESTRUTURA|476|416|476|-60|diverge_10_60|par|4|feriado |n_batidas=4
+ESTRUTURA 2|382|2026-09-30|ESTRUTURA|364|0|0|-364|e6_zero_esp_trabalho|par|2|trabalhou |n_batidas=0
+ESTRUTURA 2|451|2026-09-23|ESTRUTURA|707|718|718|11|diverge_10_60|par|2|em_aberto |n_batidas=2
+ESTRUTURA 2|451|2026-09-25|ESTRUTURA|705|718|718|13|diverge_10_60|par|2|em_aberto |n_batidas=2
+ESTRUTURA 2|478|2026-09-25|ESTRUTURA|719|8|8|-711|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|515|2026-10-09|ESTRUTURA|244|0|0|-244|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|515|2026-10-11|ESTRUTURA|245|0|0|-245|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|723|2026-10-08|ESTRUTURA|440|345|500|-95|diverge_acima_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 3|746|2026-09-24|ESTRUTURA|289|193|350|-96|diverge_acima_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|841|2026-10-20|ESTRUTURA|681|522|701|-159|diverge_acima_60|par|4|em_aberto |n_batidas=4
+ESTRUTURA 2|854|2026-10-04|ESTRUTURA|718|7|7|-711|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 2|864|2026-10-12|ESTRUTURA|509|449|509|-60|diverge_10_60|par|4|feriado |n_batidas=4
+ESTRUTURA 3|868|2026-09-22|ESTRUTURA|0|679|733|679|esp_zero_e6_trabalho|par|1|em_aberto |n_batidas=4
+ESTRUTURA 3|876|2026-09-21|ESTRUTURA|550|665|722|115|diverge_acima_60|par|1|em_aberto |n_batidas=4
+FIM_LISTA
+rc_sombra=0
+```
 
 ## 24/11 09:45 · sessao 01fb331cff27 · RESOLVER-PASSA-NA-FRENTE · verificador · origem=Code
 
@@ -919,58 +969,4 @@ Usei o diff fornecido e o código da cópia, em leitura. Confirmação independe
 
 6. **Fila — alcance das demais leis e dos comandos.** L-039 preservada no status, que distingue `irregular` de falta. L-102/L-103 tratam de dia sem turno/valor pareado e o diff lê os minutos da grade. A prova de reconstrução de projeções do pouso, L-121, e de impacto em dinheiro pela L-094 e 7b [nao verificado]. `emitir_furo_retroativo` segue emitindo apenas em `FURO_SEM_COBRANCA`; `supra_juiz` usa o código novo para placar/exemplos, não no `--alarme` nem para decidir a escrita da retratação, que lê a lavra. `app/docs/LEIS.md:87,112,128–129,142`, `CLAUDE.md:413–429`, `app/ponto/status_dia.py:139–160`, `app/ponto/supra_juiz.py:257–259,504`, `app/ponto/management/commands/emitir_furo_retroativo.py:104–117`, `app/ponto/management/commands/supra_juiz.py:225–249,251–292,309–315`.
 
-## 24/11 01:35 · sessao 50bc8a92b541 · NOTURNO-NAO-APURADO · sonda · origem=Code
-
-## 1. Universo e empresa × competência
-
-`sonda/anexos` conta as linhas da saída atual a partir de `sonda_leitura`, incluindo a linha em branco. `sonda_inv.r` conta as linhas do anexo anterior a partir do primeiro título.
-
-**UNIVERSO** `pares_fechados 16316 invertidos 25 colabs 18 min_brutos 4370`. `sonda/anexos:3`
-
-As linhas `COLAPSADO` registram os fechados com pontas efetivas iguais. O bloqueio do dia sem previsto produz essa igualdade. `sonda/anexos:4–6` · `app/ponto/motor_calculo_v2.py:1471–1483`
-
-| Empresa | Competência | Fechados | Invertidos | Colabs | Minutos brutos | Fonte |
-|:---|:---|---:|---:|---:|---:|:---|
-| COLAPSADO | 10/2026 | 57 | 0 | 0 | 0 | `sonda/anexos:4` |
-| COLAPSADO | 11/2026 | 77 | 0 | 0 | 0 | `sonda/anexos:5` |
-| COLAPSADO | 12/2026 | 15 | 0 | 0 | 0 | `sonda/anexos:6` |
-| 1 | 10/2026 | 12 | 0 | 0 | 0 | `sonda/anexos:7` |
-| 1 | 11/2026 | 14 | 0 | 0 | 0 | `sonda/anexos:8` |
-| 2 | 10/2026 | 6038 | 6 | 6 | 692 | `sonda/anexos:9` |
-| 2 | 11/2026 | 6337 | 10 | 10 | 1846 | `sonda/anexos:10` |
-| 2 | 12/2026 | 275 | 1 | 1 | 98 | `sonda/anexos:11` |
-| 3 | 10/2026 | 1478 | 4 | 3 | 769 | `sonda/anexos:12` |
-| 3 | 11/2026 | 1408 | 2 | 1 | 483 | `sonda/anexos:13` |
-| 3 | 12/2026 | 61 | 0 | 0 | 0 | `sonda/anexos:14` |
-| 4 | 10/2026 | 276 | 2 | 1 | 482 | `sonda/anexos:15` |
-| 4 | 11/2026 | 258 | 0 | 0 | 0 | `sonda/anexos:16` |
-| 4 | 12/2026 | 10 | 0 | 0 | 0 | `sonda/anexos:17` |
-
-A saída fornecida termina em `rc_sombra=0`, sem traceback no trecho. `sonda/anexos:1–30`
-
-## 2. Exemplos e ramo pelas pontas
-
-A classificação indica quais pontas mudaram pela janela de HE. O motor aplica os recortes de entrada e saída separadamente e grava as pontas resultantes. `app/ponto/motor_calculo_v2.py:1691–1712,1731–1763,1834–1842`
-
-| Colab | Comp. | Entrada bruta | Saída bruta | Entrada efetiva | Saída efetiva | `trab` | `fora` | `not_leg` | Ramo | Fonte |
-|---:|:---|:---|:---|:---|:---|---:|---:|---:|:---|:---|
-| 37 | 10/2026 | `2026-10-06 03:00:38` | `2026-10-06 07:01:01` | `2026-10-06 19:00:00` | `2026-10-06 07:00:00` | 0 | 960.4 | 0.0 | HE nas duas pontas | `sonda/anexos:18` · `sonda_inv.r:27` |
-| 37 | 10/2026 | `2026-10-10 03:00:40` | `2026-10-10 07:01:50` | `2026-10-10 19:00:00` | `2026-10-10 07:00:00` | 0 | 961.2 | 0.0 | HE nas duas pontas | `sonda/anexos:19` · `sonda_inv.r:28` |
-| 109 | 10/2026 | `2026-10-05 22:00:41` | `2026-10-05 22:10:41` | `2026-10-05 22:00:41` | `2026-10-05 22:00:00` | 0 | 10.7 | 0.0 | HE só na saída | `sonda/anexos:20` · `sonda_inv.r:34` |
-| 113 | 11/2026 | `2026-10-31 03:00:00` | `2026-10-31 07:02:00` | `2026-10-31 19:00:00` | `2026-10-31 07:00:00` | 0 | 962.0 | 0.0 | HE nas duas pontas | `sonda/anexos:21` · `sonda_inv.r:36` |
-| 113 | 11/2026 | `2026-11-02 03:00:00` | `2026-11-02 07:01:00` | `2026-11-02 19:00:00` | `2026-11-02 07:00:00` | 0 | 961.0 | 0.0 | HE nas duas pontas | `sonda/anexos:22` · `sonda_inv.r:37` |
-| 174 | 10/2026 | `2026-09-24 02:32:11` | `2026-09-24 05:00:58` | `2026-09-24 21:00:00` | `2026-09-24 05:00:00` | 0 | 1108.8 | 0.0 | HE nas duas pontas | `sonda/anexos:23` |
-| 174 | 11/2026 | `2026-10-25 02:32:15` | `2026-10-25 04:57:35` | `2026-10-25 21:00:00` | `2026-10-25 04:57:35` | 0 | 1107.7 | 0.0 | HE só na entrada | `sonda/anexos:24` |
-| 200 | 11/2026 | `2026-11-03 02:00:33` | `2026-11-03 06:00:15` | `2026-11-03 22:00:00` | `2026-11-03 06:00:00` | 0 | 1199.7 | 0.0 | HE nas duas pontas | `sonda/anexos:25` |
-| 218 | 10/2026 | `2026-10-16 03:15:06` | `2026-10-16 05:00:01` | `2026-10-16 21:00:00` | `2026-10-16 05:00:00` | 0 | 1064.9 | 0.0 | HE nas duas pontas | `sonda/anexos:26` |
-| 218 | 11/2026 | `2026-11-15 03:17:11` | `2026-11-15 05:00:03` | `2026-11-15 21:00:00` | `2026-11-15 05:00:00` | 0 | 1062.9 | 0.0 | HE nas duas pontas | `sonda/anexos:27` |
-| 218 | 12/2026 | `2026-11-22 03:22:03` | `2026-11-22 05:00:16` | `2026-11-22 21:00:00` | `2026-11-22 05:00:00` | 0 | 1058.2 | 0.0 | HE nas duas pontas | `sonda/anexos:28` |
-| 296 | 11/2026 | `2026-11-03 00:15:19` | `2026-11-03 07:00:41` | `2026-11-03 19:00:00` | `2026-11-03 07:00:00` | 0 | 1125.4 | 0.0 | HE nas duas pontas | `sonda/anexos:29` |
-
-## 3. Destino dos 4.370 minutos brutos
-
-- **No próprio par invertido, zero em `minutos_trabalhados`.** O motor mede `saída efetiva − entrada efetiva` e grava `max(0, duração)`. `minutos_fora_janela` recebe a soma dos recortes, que pode superar a duração bruta do par. O teto de pontualidade lê esse campo separadamente. `sonda/anexos:3,18–29` · `app/ponto/motor_calculo_v2.py:2759–2787,2886–2895,3224–3258,1170–1196`
-- **O crédito do aberto pula candidatos cuja entrada bruta já consta em um fechado de `resultado.periodos`, inclusive se o fechado tem zero trabalhado.** A guarda usa `resultado.periodos`, enquanto os fechados de folga ficam em `resultado.periodos_ft`. Para cada candidato aceito, o motor roda `calcular_periodo` e credita os campos retornados separadamente. Se o candidato também sai invertido, acrescenta zero ao trabalhado e pode acrescentar minutos ao `fora_janela`. `app/ponto/motor_calculo_v2.py:2492–2494,2513–2560,2759–2787,2886–2895,3224–3258`
-- **Outro par contribui com seu próprio `minutos_trabalhados`.** A soma mensal e a lavratura leem esse campo dos períodos. `DiaPago.minutos_realizados` recebe o mapa da grade por dia. Se algum dos 4.370 minutos brutos aparece sob outro pareamento, no crédito de um candidato com outras pontas ou no realizado da grade, é [nao verificado]. `app/ponto/motor_calculo_v2.py:294–300,2549–2560` · `app/ponto/services/dia_pago.py:173–179,234–267,285–292`
-
-_8043 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8044 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
