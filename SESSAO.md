@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 09:02:57.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (3.6 MB). Acoes na janela: **85**.
+**Medido em 24/11/2026 09:08:57.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (3.7 MB). Acoes na janela: **87**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:08:21 | Bash | Record recorte2 verdict in RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys; h=sys.argv[1]; p='app/docs/RELATO.md'; s=open(p).read() anc='PERGUNTA DE DESENHO A-TELA-DO-DIA-LE-UM-JUIZ item (10)' i=s.index(anc); j=s.index('\n',i)+1 s=s[:j]+'A-TELA recorte2 (core chamados escala) na copia 32e4bd52a: OK (skipped=25, expected failures=15) Ran 8775 (%s; logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0815/recorte2. ...` |
+| 09:08:16 | Bash | Read A-TELA recorte2 verdict | `cd /home/ronald/saas-hasner; L=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0815/recorte2.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran ' $L \| tail -1; grep -E '^(FAIL\|ERROR):' $L \| head; bin/trava_teste.sh --quem` |
 | 09:00:28 | Bash | Update RESOLVER row in BACKLOG | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); sed -i "s/^\| RESOLVER-PASSA-NA-FRENTE \|\(.*\)PAUSADA 24\/11 08:3x pelo teto 3\/raia 3 serial[^\|]*/\| RESOLVER-PASSA-NA-FRENTE \|\1RETOMADA 24\/11 $H na raia 3: A-TELA parada em PERGUNTA DE DESENHO (10), 0 arquivo em comum; construtor sobre a WIP 5aec0e802 /" app/docs/BACKLOG.md; grep -n '^\| RESOLVER-PASSA-NA-FRENTE \|' app/docs/BACKLOG.md \| grep  ...` |
 | 09:00:23 | Agent | construtor RESOLVER retoma | `Voce e o CONSTRUTOR da obra RESOLVER-PASSA-NA-FRENTE no repo /home/ronald/saas-hasner (SaaS de ponto Django multi-tenant). Brief: logs/RESOLVER-PASSA-NA-FRENTE/brief_2411.md (CENSO) e o brief do aval vigente logs/RESOLVER-PASSA-NA-FRENTE/v0815/brief.md (itens (1)-(4) do aval ! RESPOSTAS-1-11-V2-2411-0830, que manteve para o RESOLVER o mesmo texto do 0815). Leia PRIMEIRO, inteiros: /home/ronald/saa ...` |
 | 09:00:07 | Bash | Check RESOLVER v0815 brief covers V2 answers | `cd /home/ronald/saas-hasner; wc -l logs/RESOLVER-PASSA-NA-FRENTE/brief_2411.md logs/RESOLVER-PASSA-NA-FRENTE/v0815/brief.md; grep -n '0830\\|V2\\|nao_sei\\|879\\|trancad\\|INCOMPLETO\\|REMANESC\\|falta' logs/RESOLVER-PASSA-NA-FRENTE/v0815/brief.md \| cut -c1-200 \| head -20` |
