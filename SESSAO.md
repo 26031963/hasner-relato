@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 06:08:28.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **513**.
+**Medido em 24/11/2026 06:14:11.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **491**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -501,25 +501,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:18:13 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v2; cat > $D/verif2.q <<'EOF' OBRA NOTURNO-NAO-APURADO item (1), VOLTA 2, PAPEL verificador. MAO UNICA, DINHEIRO (rubrica 25). Workspace = f82d53543 (antes da obra). Anexos: leis dos sitios (leis.txt), laudo da volta 1 (verif.r, REPROVADO em 1b e 5), e por ultimo o diff da v2 (diff.txt = git diff f82d53543 + teste novo). Aval ! NOTURNO-NAO-AP ...` |
 | 18:17:58 | Bash |  | `cd /home/ronald/saas-hasner/logs/NOTURNO-NAO-APURADO; cat verif.out; head -c 2500 verif.q; echo; grep -c . verif.r; head -30 verif.r \| cut -c1-250` |
 | 18:17:55 | Bash |  | `cd /home/ronald/saas-hasner/logs/NOTURNO-NAO-APURADO/v2; for f in red.log green_alvo.log mutante_M1_sem_exclusao.log mutante_M2_sem_bloqueio.log suite_ponto.log; do echo "$f: $(grep -E '^Ran [0-9]+ tests' $f\|tail -1) \| $(grep -E '^(OK\|FAILED)($\| \()' $f\|tail -1)"; done; cd /home/ronald/wt-noturno-aberto-162231 && git status --porcelain && git diff --stat && git diff \| grep -cE '^\+.*\bexcept ...` |
-| 18:13:42 | Bash |  | `cd /home/ronald/saas-hasner; sed -i '1s#.*#ESPERANDO: suite NOTURNO v2 --only ponto na wt-noturno-aberto-162231 (trava da pista desde 18:10:33) \| pid=2698675 \| arquivo=logs/NOTURNO-NAO-APURADO/v2/suite_ponto.log#' app/docs/RELATO.md; head -1 app/docs/RELATO.md` |
-| 18:13:39 | Bash |  | `cd /home/ronald/saas-hasner; date +%T; bin/trava_teste.sh --quem; ps -p 2696616,2698675 -o pid,etime,args \| cut -c1-120` |
-| 18:13:37 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/PISTA-2-CERTIFICA/camadas/v5/opus_final.txt <<'EOF' OPUS FINAL PISTA-CAMADAS v5 (verificador, 23/11 18:1x) -- REPROVADO (gravado pela sessao; o verificador nao escreve) MUST-FIX 1 (furo JA apontado no v4/verif.r item 2a, reaberto na v5): bin/pista_certifica.sh:110 exige (^\|[^a-z0-9]) antes da chave; AMBIENTEsha=x, AMBIENTEimagem_camadas=x, AMBIENTEjob=x, AM ...` |
-| 18:13:22 | Bash |  | `cd /home/ronald/wt-pista-camadas-161321; sed -n 100,116p bin/pista_certifica.sh; git show 86e7ae265:bin/pista_certifica.sh \| sed -n 80,88p; grep -n '2a' /home/ronald/saas-hasner/logs/PISTA-2-CERTIFICA/camadas/v4/verif.r \| head -5` |
-| 18:12:36 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=2290; assert L[i].startswith('\| PISTA-ESCOLHE-SOZINHA \|') L.insert(i+1,"\| PISTA-CAMADAS \| instrumento (aval PISTA-2-CERTIFICA-EM-8-2311-1615; ULTIMA VOLTA = v5 por PISTA-CAMADAS-ULTIMA-VOLTA-2311-1812), pouso proprio; padrao=n/a (instrumento) \| bin/pista_certifica.sh julga a imagem pelas CAMA ...` |
-| 18:12:25 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2291p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; for(i=2;i<NF;i++) print i": "substr($i,1,120)}'` |
-| 18:12:22 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'PISTA-CAMADAS\\|PISTA-2-CERTIFICA' app/docs/BACKLOG.md \| cut -c1-200 \| head` |
-| 18:12:20 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '^\| PISTA' app/docs/BACKLOG.md \| cut -c1-160` |
-| 18:12:20 | SendMessage |  | `-` |
-| 18:09:32 | Bash |  | `cd /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory && echo '- [PAREI ! CLEAR só sem vivo](parei-clear-so-sem-vivo.md) — com agente/suite viva o CLEAR espera; vigia do tmux congelado (VIGIA-CONGELA 23/11)' >> MEMORY.md` |
-| 18:09:31 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/parei-clear-so-sem-vivo.md` |
-| 18:09:25 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('PISTA-CAMADAS v5 ENTREGUE')][0] L.insert(i,"VIGIA-CONGELA-2311-1810 FEITO (18:1x): agente do vigia v5 PARADO 18:09 (TaskStop; nenhum processo com cwd na wt); copia wt-vigia-tmux-132928 @8dd023236 + diff da v5 (vigia_tmux.py, marco_de_clear.py, statusline_ ...` |
-| 18:09:18 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' L=open(p).read().split('\n') i=1984; assert L[i].startswith('\| VIGIA-DO-TMUX \|') old='\| registrada 23/11 13:2x; CONTRATO no RELATO, ao Codex \|' assert L[i].count(old)==1 L[i]=L[i].replace(old,'\| CONGELADO 23/11 18:10 (VIGIA-CONGELA-2311-1810): agente v5 parado, copia wt-vigia-tmux-132928 @8dd023236 + diff da v5 intocada, n ...` |
-| 18:09:14 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' import json p='app/docs/CORTES.json' d=json.load(open(p)) e=[x for x in d if x['id']=='VIGIA-DO-TMUX-INSTALA-2311-1350']; assert len(e)==1 e[0]['estado']='REVOGADO por VIGIA-CONGELA-2311-1810 (23/11 18:10): nada instala' d.append({"id":"VIGIA-CONGELA-2311-1810","quando":"2026-11-23 18:10","estado":"vigente (conduta); agente da v5 parado 18:09, copia w ...` |
-| 18:09:06 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,16p bin/gerar_cortes.py; tail -12 app/docs/CORTES.json` |
-| 18:09:05 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 2355,2375p app/docs/CORTES.json; grep -n 'REVOGAD' app/docs/CORTES.json \| head -5; head -40 bin/gerar_cortes.py \| grep -nE 'argv\|escrever\|conferir\|json'` |
-| 18:09:00 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1040,1105p bin/hook_stop_fila1.py` |
-| 18:08:57 | Bash |  | `cd /home/ronald/saas-hasner; grep -rn 'VIGIA-DO-TMUX-INSTALA' --include=*.md --include=*.json --include=*.py app/docs bin .claude 2>/dev/null \| cut -c1-220 \| head; grep -n 'VIGIA-DO-TMUX' app/docs/BACKLOG.md \| cut -c1-200 \| head -5; grep -rn 'CLEAR-RAPIDO' bin/*.py \| head -5` |
-| 18:08:52 | TaskStop |  | `-` |
-| 18:08:50 | Bash |  | `date +%T; stat -c '%y %n' /home/ronald/wt-vigia-tmux-132928/bin/vigia_tmux.py /home/ronald/wt-vigia-tmux-132928/bin/*.py 2>/dev/null \| sort \| tail -3; for p in $(pgrep -u ronald); do c=$(readlink /proc/$p/cwd 2>/dev/null); case "$c" in *vigia*) echo "$p $c $(tr '\0' ' ' </proc/$p/cmdline\|cut -c1-100)";; esac; done` |
-| 18:08:46 | ListAgents |  | `-` |
-| 18:08:46 | ToolSearch |  | `-` |
