@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 16:31** · publicado em **24/11/2026 16:31** (UTC-3)
+> Ultima resposta processada: **24/11/2026 16:51** · publicado em **24/11/2026 16:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 16:51 · sessao e8deac470600 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
+
+Não localizei o `sonda.py` na cópia e não executei a sonda. Abaixo está a saída raspada integral fornecida no pedido. Uma nova execução e a saída de produção estão [nao verificado]. [nao verificado]
+
+```text
+sonda_leitura: sonda.py [a4d0026544e2e54a] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+== col456 2026-11-14 chamados=3
+ ch=38964 mod=batida_ausente status=resolvido via=sistema resolvido_em=2026-11-14 22:20:24.178025+00:00 dia_do_fato=2026-11-14
+  G1 situacao=ativo
+  G2 trancada=False
+  G3 veto_da_regua=None
+  G4 recusa_da_reabertura=('premissa_regularizada', None)
+ ch=39068 mod=turno_aberto status=aberto via= resolvido_em=None dia_do_fato=2026-11-14
+  G1 situacao=ativo
+  G2 trancada=False
+  G3 veto_da_regua=None
+  G4 recusa_da_reabertura=('transicao', None)
+ ch=39102 mod=par_relampago status=aberto via= resolvido_em=None dia_do_fato=2026-11-14
+  G1 situacao=ativo
+  G2 trancada=False
+  G3 veto_da_regua=None
+  G4 recusa_da_reabertura=('transicao', None)
+== col788 2026-11-09 chamados=2
+ ch=37980 mod=batida_ausente status=resolvido via=sistema resolvido_em=2026-11-10 01:20:17.589828+00:00 dia_do_fato=2026-11-09
+  G1 situacao=ativo
+  G2 trancada=False
+  G3 veto_da_regua=None
+  G4 recusa_da_reabertura=('premissa_regularizada', None)
+ ch=38064 mod=turno_aberto status=em_analise via= resolvido_em=None dia_do_fato=2026-11-09
+  G1 situacao=ativo
+  G2 trancada=False
+  G3 veto_da_regua=None
+  G4 recusa_da_reabertura=('transicao', None)
+```
+
+### Primeira guarda por chamado
+
+Com os valores fornecidos, os cinco passam pelas quatro guardas iniciais, nesta ordem:
+
+1. `situacao` é `ativo`. `app/chamados/models.py:1071`
+2. `via_encerramento` é `sistema` ou vazio. `VIA_CASCADE` vale `cascade`. `app/chamados/models.py:1073`, `app/chamados/catalogo/motor.py:89`
+3. `_dia_em_competencia_trancada()` dá `False`. `app/chamados/models.py:1075`
+4. `_veto_da_regua()` dá `None`. `app/chamados/models.py:1081`, `app/chamados/models.py:1082`
+
+A quinta guarda é o retorno de `reabrir()`, que consulta `recusa_da_reabertura()`. A tabela aplica a ordem do código ao G4 fornecido para cada chamado. `app/chamados/models.py:1085`, `app/chamados/models.py:1384`, `app/chamados/models.py:1456`
+
+| Chamado | Primeira recusa com os valores da sonda | Se `abrir()` selecionar esse chamado no dedup |
+|---|---|---|
+| `38964` · `col456` · `2026-11-14` | `premissa_regularizada`. `app/chamados/models.py:1414`, `app/chamados/models.py:1416` | `resolvido` integra `ENCERRADOS`. `abrir()` chama `_renascer_por_premissa_viva`. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987` |
+| `39068` · `col456` · `2026-11-14` | `transicao`, se consultada. O motor recusa `REABRIR` a partir de `aberto`. `app/chamados/models.py:1424`, `app/chamados/catalogo/motor.py:113`, `app/chamados/catalogo/motor.py:161` | `aberto` fica fora de `ENCERRADOS`. `abrir()` devolve o existente sem chamar o método. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987`, `app/chamados/models.py:990` |
+| `39102` · `col456` · `2026-11-14` | `transicao`, se consultada. O motor recusa `REABRIR` a partir de `aberto`. `app/chamados/models.py:1424`, `app/chamados/catalogo/motor.py:113`, `app/chamados/catalogo/motor.py:161` | `aberto` fica fora de `ENCERRADOS`. `abrir()` devolve o existente sem chamar o método. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987`, `app/chamados/models.py:990` |
+| `37980` · `col788` · `2026-11-09` | `premissa_regularizada`. `app/chamados/models.py:1414`, `app/chamados/models.py:1416` | `resolvido` integra `ENCERRADOS`. `abrir()` chama `_renascer_por_premissa_viva`. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987` |
+| `38064` · `col788` · `2026-11-09` | `transicao`, se consultada. O motor recusa `REABRIR` a partir de `em_analise`. `app/chamados/models.py:1424`, `app/chamados/catalogo/motor.py:113`, `app/chamados/catalogo/motor.py:161` | `em_analise` fica fora de `ENCERRADOS`. `abrir()` devolve o existente sem chamar o método. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987`, `app/chamados/models.py:990` |
+
+### Caminho do emissor na cópia
+
+Para `batida_ausente`, o emissor `detectar_ausencias._abrir_chamado()` chama `ChamadoColaborador.abrir()` pela chave colaborador, módulo e `contexto_json__data_turno`. O ramo c2 do reconciliador, descrito na linha 1719 e chamado na linha 1757, usa a mesma chave. Em ambos, `abrir()` pega o primeiro resultado do filtro e só chama `_renascer_por_premissa_viva` se esse resultado estiver em `ENCERRADOS`. O c2 busca especificamente `batida_ausente`, portanto os dois `turno_aberto` e o `par_relampago` ficam fora da busca desse ramo. `app/ponto/management/commands/detectar_ausencias.py:29`, `app/ponto/management/commands/detectar_ausencias.py:694`, `app/chamados/reconciliador.py:957`, `app/chamados/reconciliador.py:1032`, `app/chamados/reconciliador.py:1719`, `app/chamados/reconciliador.py:1757`, `app/chamados/models.py:972`, `app/chamados/models.py:987`
+
+Para os dois dias, a execução efetiva do emissor ou do c2, o chamado selecionado pelo filtro e os `marcos_faltantes` passados à reabertura estão [nao verificado]. O código repassa esses marcos de `defaults` e os usa na checagem de `premissa_regularizada`. `app/chamados/models.py:989`, `app/chamados/models.py:1353`, `app/chamados/models.py:1415`
 
 ## 24/11 16:31 · sessao 238fef4ab099 · CLASSE-D-NA-FRENTE-DA-E4D · verificador · origem=Code
 
@@ -684,49 +745,4 @@ LEI-AKITA: origem=ponto/services/cartorio.py:1609, testemunha=ponto/services/las
 
 - **Item (11), leis restantes e pré-requisitos.** O classificador compara previsto menos realizado **em minutos**, lê o `10` do motor e acusa acima de 10 no ramo de sem par com marcos acesos. O selo cobre 10, 11 e a leitura da constante. O trecho preserva o significado de falta decidida (**L-039**) e o tratamento já existente do realizado sem par (**L-102/L-103**). O horizonte **L-124** segue a competência de cada empresa a partir de `2026-11`, por `janela_atual`. Esse recorte por mês não consulta entrega efetiva pelo K6. Integridade do TXT 09/10, igualdade do gravado 09–12, efeito em competência entregue (**L-052/L-092/L-113**), ordem dos três commits, RED e pré-requisitos de pouso **[nao verificado]**. `app/ponto/supra_juiz.py:276`, `app/ponto/supra_juiz.py:526`, `app/ponto/motor_calculo_v2.py:51`, `app/ponto/tests/test_a_tela_dia_cheio_tolerancia.py:49`, `app/folha/export.py:169`, `app/folha/export.py:556`, `app/ponto/services/cartorio.py:316`, `app/ponto/services/cartorio.py:333`, `app/docs/LEIS.md:87`, `app/docs/LEIS.md:128`, `app/docs/LEIS.md:129`, `app/docs/LEIS.md:145`, `CLAUDE.md:383`.
 
-## 24/11 11:27 · sessao 245c30ab182b · CLASSE-D-NA-FRENTE-DA-E4D · verificador · origem=Code
-
-**Pré-verificação, volta 1 — DEVOLVER.** A C5 passa a publicar um item por dia e o filtro de `em_rollout` está no ponto pedido. A montagem da C5 usa uma janela diferente da do C11. Além disso, a R1 pode retirar candidatos do backfill em empresa em operação, e o LU2-07 deixa intacto o universo que alimenta `VFM|ALARME`. `app/escala/services/cadastro_realidade.py:197-221,596-605`; `app/chamados/services/vigia_fio.py:289-293,517-546,619-624`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:76-79`; `app/chamados/management/commands/vigiar_fio_morto.py:184-190,210-211,257-258`.
-
-Conferi os 17 blobs da cópia com os identificadores do diff anexo. A identidade do commit `c970dc4ba64620ae43355ee2a253d91f74b70352` e sua relação com `7a4e79eef` ficam **[nao verificado]**. O procedimento do repositório entrega a cópia por `git archive`. `CLAUDE.md:354-358`.
-
-### A. Escopo e mudanças de comportamento
-
-- **R1, formato e autoridade corretos.** A C5 emite um item por data de `colabs_nunca_bateu`, com ISO de `CelulaDia.data`, detalhe datado e dono por `InsumosDoDono.dono()`. Usa `sem_motor=True` e `cxr_lavrado`. O ramo C5 preenche `_extra['dono']` antes do acesso feito para `DONO_PELO_JUIZ` e conserva a ação no detalhe da pessoa. `app/escala/services/cadastro_realidade.py:167-173,194-221,722-724,1056-1071,1124`; `app/ponto/management/commands/e6_oraculo.py:182-195`.
-- **R1, montagem diferente.** A C5 passa o fim integral da competência de `janela_atual`; o C11 passa `min(fim, ontem)`. Esse `fim` delimita a carga de células, vínculos, batidas e turnos. O teste de equivalência consulta o juiz com a mesma janela integral da C5 e deixa essa diferença sem cobertura. A mudança efetiva de dono por essa diferença no dado raspado é **[nao verificado]**. `app/escala/services/cadastro_realidade.py:200-218,529-535,551-557,597-605`; `app/ponto/management/commands/e6_oraculo.py:149-160`; `app/escala/tests/test_classe_d_c5_por_dia.py:112-122`.
-- **LU2-07, filtro local correto; critério do alarme incompleto.** O filtro usa a empresa retornada por `empresas_visiveis` e respeita o recorte explícito de IDs. A decisão de preservar `ListaDoAdmin` e `censo` está declarada no comentário. A tela continua usando a visibilidade anterior. O `censo` é uma medição do vigia, com universo próprio de chamados vivos, e suas chaves comandam o alarme real. Uma empresa fora de operação ainda pode contribuir ali. `app/chamados/services/vigia_fio.py:183-196,289-293,337,517-523`; `app/chamados/management/commands/vigiar_fio_morto.py:87-88,184-190,210-211,302-303`; `app/escala/views.py:519-529`.
-- **Efeitos além do recorte declarado.** A nova C5 também pode mover um dia de `fio_morto` para `fio_do_admin` no `censo` histórico, inclusive em empresa visível fora de operação. Se C5 e C9/C10/C12 trouxerem donos diferentes para o mesmo par, a inclusão em `DONO_PELO_JUIZ` pode reescrever também o dono e, por consequência, a ação da outra assinatura. O backfill pode perder o par quando ele sai de `sem_porta`. Há ainda a atualização de texto no cadastro de efeitos e no tooltip C5. Os cruzamentos efetivos da sonda são **[nao verificado]**. `app/chamados/services/vigia_fio.py:200-206,256-263,386-407`; `app/escala/services/cadastro_realidade.py:78-80,1036-1059,1142-1170`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:76-79`; `app/core/configuracao_efeito.py:211-214`; `app/templates/escala/cadastro_x_realidade.html:20`.
-- **Fixtures alteradas.** Nove criações de empresa passam do default `False` a `True`, dois objetos sintéticos ganham a flag e um teste passa a atualizar a flag junto com o CNPJ. São mudanças de premissa para todos os leitores da fixture compartilhada, inclusive os leitores anteriores de rollout. A empresa diagnóstica do teste 2×2 conserva o default `False`, de modo que sua exclusão do alcance agora tem duas causas suficientes. `app/colaboradores/models.py:45`; `app/colaboradores/queries.py:65`; `app/chamados/tests/cortes_f2_f9_apoio.py:37-49`, `e3_v8_apoio.py:43`, `e3_volta7_apoio.py:51`, `test_e3_bloqueantes.py:43`, `test_e3_item1b.py:262-263`, `test_e3_leitores_c17_chamadores.py:39`, `test_e3_portas_tarefa.py:337-338,374-386`, `test_e4_backfill.py:49`, `test_n1_alimentacao_unica.py:39`, `test_o261e_f2_ramo_e_i20.py:118`, `test_o261e_f5_alcance.py:47`, `test_o261e_f5b_juiz_porta.py:39`. O teste novo cria um caso ligado e um desligado. O teste de folha passa a fornecer o instante à C5 e continua esperando um item na sua fixture de um dia. `app/escala/tests/test_classe_d_c5_por_dia.py:40-42,166-173`; `app/folha/tests/test_vigia_retido_calado.py:98-105`.
-
-### B. Escritores, leitores e unidades
-
-| Campo ou valor | Quem escreve e quem lê |
-|---|---|
-| `colabs_nunca_bateu` | O cartório lavra `veredito='nunca_bateu'` pela porta da célula. `colabs_nunca_bateu` lê o veredito e escreve em memória `{colab_id: [date]}`, da competência anterior até ontem, excluindo desligados pelo juiz. `_nunca_bateu` usa as datas. `disparar_perguntas_competencia` usa **pares** para cruzar os dias e conta pessoas e dias separadamente. `folha/vigia_retido_calado` usa só as **chaves** e conta pessoa por competência. Esses dois leitores continuam com a mesma entrada e os mesmos resultados para o mesmo dado. O cartório é escritor da fonte. `app/ponto/services/cartorio.py:1317-1325,1342-1344`; `app/ponto/portas/celula.py:1217-1238`; `app/escala/services/cadastro_realidade.py:138-173,194`; `app/chamados/management/commands/disparar_perguntas_competencia.py:52-74`; `app/folha/vigia_retido_calado.py:44-47,71-80`. |
-| C5 `data`, `dono_do_dia`, `detalhe` e `DONO_PELO_JUIZ` | `_nunca_bateu` escreve os três campos por dia-colab. O módulo declara `DONO_PELO_JUIZ`; `lista` lê o conjunto para contar por dono, `um_dono_por_dia` o lê para reconciliar e reescrever os donos divergentes, e `_dono_resolvido` o lê para dar precedência ao dono do juiz. `dias_na_lista` lê código, data e dono, distinguindo dia ausente de dia presente com dono `None`. `ListaDoAdmin` carrega esse mapa e o conjunto de pessoas, e entrega ambos a `censo`/`censo_alcance`. `app/escala/services/cadastro_realidade.py:213-221,1056-1071,1124-1206`; `app/chamados/services/vigia_fio.py:189-229,261-262,386-399,625-650`. |
-| `ASSINATURAS_CADASTRO['C5']` e `por_assinatura[*].colabs` | O módulo declara o texto e a descrição da fonte do dono. `lista` usa esses textos e monta `colabs` com um conjunto de IDs, enquanto `ocorrencias` e `por_dono` contam itens por dia. HTML e PDF passam a mostrar N assinaturas C5 sob a mesma pessoa, com o detalhe de cada dia e o dono exibido. O tooltip do HTML lê o texto agregado e o total de pessoas. A ordem continua por carga decrescente, sem medida por último e empate por nome. Os fechadores de fora do diff leem exclusivamente C7 e C8, respectivamente. `app/escala/services/cadastro_realidade.py:78-80,1056-1071,1096-1117,1240-1252`; `app/templates/escala/cadastro_x_realidade.html:20,25-31`; `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27-34`; `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:31-42`. |
-| `Empresa.em_rollout` e `core/configuracao_efeito.py` | O modelo e a migração dão default `False`. A tela envia o checkbox e `form_empresa` grava pela porta `estrutura`. Já liam a flag `colaboradores_em_operacao`, a tela de colaboradores, o painel de chamados, a apuração de furos e o selo de leitores. A leitura nova é `censo_alcance`. A declaração estática conserva `(CONSUMIDO, None)` e só acrescenta a descrição do leitor. `estado` e o rótulo leem o status, e a matriz lê status e família. `empresas_visiveis` usa `ativa` e CNPJ, com significado próprio. `app/colaboradores/models.py:45`; `app/colaboradores/migrations/0029_empresa_em_rollout.py:12-17`; `app/templates/colaboradores/empresa_form.html:34`; `app/colaboradores/views.py:508-556,2630`; `app/colaboradores/services/estrutura.py:13-22`; `app/colaboradores/queries.py:50-65,78-87`; `app/chamados/services/painel.py:411`; `app/ponto/services/furos_sem_cobranca.py:59`; `app/escala/management/commands/apurar_furos_diarios.py:9`; `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:51`; `app/chamados/services/vigia_fio.py:523`; `app/core/configuracao_efeito.py:211-214,253-281`; `app/core/contratos_estruturais.py:1027-1034`. |
-| `censo_alcance`, `causa` e `detalhe` | O censo escreve os contadores e as linhas em memória. Para o dia sem pergunta viva, `d` é pessoa presente com dia ausente; `e/dia_na_lista_dono_*` é dia presente que chegou a esse ramo sem dono da mesa. `linhas_alcance` imprime os agregados. `vigiar_fio_morto` carimba o bloco e o ESTADO lê a manchete. O backfill seleciona pela **rota** `sem_porta`; `causa` e `detalhe` seguem para plano e relato, enquanto a tarefa decide o ato. `diff_e3_sombra` só projeta rota, fio e exigência de admin da porta e conserva seu resultado para a mesma entrada. `app/chamados/services/vigia_fio.py:585-589,619-665,669-685`; `app/chamados/management/commands/vigiar_fio_morto.py:215-216,280-293`; `bin/fio_estado.py:175-183`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:76-87,326-338,459-463`; `app/chamados/management/commands/diff_e3_sombra.py:46-62,127-147`. |
-
-A data da C5 é **o dia do turno representado pela célula**, codificado em ISO. `hoje` é **a data civil local do instante da rodada** e serve de corte. A chave do cruzamento é dia-colab. Já `roteado` em folha indica presença da pessoa na C5 por competência e pode coexistir com um dia de dono `ESTRUTURA` ou `None` no vigia de alcance. O `dono='CADASTRO'` de `disparar_perguntas_competencia` é o rótulo do contador de adesão. `app/escala/models.py:1692-1696`; `app/ponto/turnos.py:2960-2964`; `app/chamados/veredito_lavrado.py:95-104`; `app/escala/services/cadastro_realidade.py:162-169,220,1199-1206`; `app/folha/vigia_retido_calado.py:71-80`; `app/chamados/management/commands/disparar_perguntas_competencia.py:68-74`.
-
-### C. Classes de reprovação
-
-- **Juiz e fonte.** Juízes novos: zero. A C5 reaproveita o E6 e o juiz do vínculo via `cadastro_do_dia`. A alimentação em lote, porém, tem um segundo corpo com a mesma sequência células → geradoras → vínculos → cadastro, e os dois chamadores escolhem fins de janela diferentes. A partição de dias usa a fonte única `janela_atual`. `app/escala/services/cadastro_realidade.py:188-218,523-535,551-557,597-605`; `app/ponto/supra_juiz.py:155-176`; `app/core/juizes.py:1324`; `app/ponto/janelas.py:60-72`.
-- **Escritor, trava, relógio e pouso.** Os trechos novos de produção fazem leituras e montam estruturas em memória. O backfill mantém as portas de escrita, a ordem C→D→Ch→P e a revalidação de entrega sob trava. A C5 recebe o relógio de `lista`; o legado C2 ainda lê `date.today()` por conta própria. O pré-requisito F1 tem pouso registrado, assim como a lavra CXR. Cobertura da lavra para os dois C5 do dado fornecido é **[nao verificado]**. `app/escala/services/cadastro_realidade.py:194-222,264-265,914-915,998`; `app/chamados/services/vigia_fio.py:516-547`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:137-168,236-254,377-399`; `app/docs/RELATO.md:2856,3055,4713`; `app/ponto/services/cxr_na_lista.py:165-185`.
-- **Except e perda silenciosa para o leitor.** Zero `except` novo. O `except` existente da C5 passa a cobrir também a carga de cadastro, batidas, turnos, fase e lavra CXR. Uma falha em um colaborador pode descartar **toda** a C5 antes de `_nunca_bateu` retornar. `lista` registra o erro e segue com as outras assinaturas; `ListaDoAdmin` recebe uma lista parcial como resposta bem-sucedida. Assim, `fio_do_admin_sem_resposta` pode ficar em zero com a C5 ausente. `app/escala/services/cadastro_realidade.py:197-222,996-1005`; `app/ponto/management/commands/e6_oraculo.py:149-160,174-195`; `app/chamados/services/vigia_fio.py:183-214,231-233`.
-- **Mordida.** As asserções exercitam m1/m4 pelo conjunto de datas, m2 por `por_dono`, m3 pelo dono `None` e sua causa `e`, e m5 com uma empresa `False` que continua visível. O selo de custo mede 6→14 dias nas mesmas janelas, com fixtures sem batidas. O juiz pode fazer um `.exists()` por dia com turno aberto e batida solta, e o leitor da lâmpada aceita vereditos de acervo sem checar frescor. O selo também não mede a reconciliação da lista, que pode fazer nova consulta por dia de conflito. RED antes da cura, GREEN, mortes executadas dos mutantes e custo medido na frota são **[nao verificado]**. `app/escala/tests/test_classe_d_c5_por_dia.py:43-50,95-110,124-155,203-231`; `app/ponto/management/commands/e6_oraculo.py:198-212`; `app/escala/services/cadastro_realidade.py:167-169,1148-1168`.
-
-### D. Alarme e backfill em empresa em operação
-
-- **Filtro LU2-07 isolado.** Entre empresas antes visíveis e selecionadas, o filtro conserva todas as com `em_rollout=True`. Ele atua no universo de `censo_alcance`, que alimenta a manchete do ESTADO e o backfill. O `VFM|ALARME` e seu código de saída usam as chaves do outro `censo`. A contagem da emp1 nesse alarme é **[nao verificado]**. `app/chamados/services/vigia_fio.py:289-293,517-546`; `app/chamados/management/commands/vigiar_fio_morto.py:87-106,189-190,210-211,302-303`; `bin/fio_estado.py:175-183`.
-- **Emp1.** O dado raspado identifica **21 candidatos `sem_porta`** da emp1 antes, 7 em `d` e 14 em `e`. Esses 21 passam a **0 na entrada do backfill vinda de `censo_alcance`**, por dedução do filtro. O comando ainda consulta empresas visíveis no pré-check de `--aplicar` e pode listar dias da emp1 pelo complemento de entregues/indeterminadas. Esse complemento entra como `bang` e fica fora dos executáveis. Quantidade de linhas complementares e de escritas efetivas antes ou depois são **[nao verificado]**. `app/chamados/services/vigia_fio.py:517-546`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:76-79,172-199,299-314,326-338,377-399`.
-- **R1 em operação.** Se um dos dois C5 passa a `fio_do_admin`, esse dia sai dos candidatos do backfill, mesmo que não tivesse ato executável antes. Se passa a `e/dia_na_lista_dono_nenhum` ou `e/dia_na_lista_dono_estrutura`, continua candidato. Logo, a condição do brief de perda zero em operação fica **[nao verificado]**. Para os grupos informados, sob a condição de que só ocorram as transições descritas no brief, a projeção é `d = 22`, `e = 3 + k` e `sem_porta = 30 + k`, onde `k` é quantos dos dois C5 ficam em `e`. O dono dos dois C5, o resultado posterior e a paridade dos 20 `indefinida` e 2 `fato_em_ausencia` são **[nao verificado]**. `app/chamados/services/vigia_fio.py:256-263,619-624,643-665`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:76-79,326-338`; `app/escala/services/cadastro_realidade.py:167-169,219-221`.
-
-### E. Leis dos sítios
-
-- **L-006 e L-100 atendidas pelo diff.** O recorte consulta o cadastro editável e nomeia o leitor. A descrição em `DECLARACAO` mantém o status e a família, portanto o teto da matriz permanece igual. `app/docs/LEIS.md:64,126`; `app/docs/CORTES.md:573`; `app/colaboradores/views.py:513,538-558`; `app/chamados/services/vigia_fio.py:523`; `app/core/configuracao_efeito.py:211-214,269-276`.
-- **L-040 e corte de 18/11 atendidos na montagem da lista.** Tela e PDF consomem a mesma lista ordenada por carga, e a C5 lê a lavra CXR sem acionar o motor. **L-041** conserva a dívida registrada do propositor; o diff só adiciona o ramo que aponta para a ação C5 existente. **L-026** é atendida pelo novo caminho, que usa o corte da empresa; a dívida de C2 com dia 21 fixo permanece no código. **JUIZ-ESTA-DESLIGADO-NASCE** é respeitado pela leitura da C5. `app/docs/LEIS.md:77,88-89,170-171,191`; `app/docs/CORTES.md:514,604`; `app/escala/views.py:524-529`; `app/escala/services/cadastro_realidade.py:159-173,200-218,247-267,722-724,1056-1059,1104-1117,1240-1252`; `app/ponto/management/commands/e6_oraculo.py:182-195`.
-- **Pendência do corte LU2-07.** Localidade do filtro e autoridade do cadastro conferem. A exclusão do alarme efetivo segue descoberta, e o C5 pode mudar o conjunto de candidatos do escritor E4b em operação. O código alterado não grava folha, fechamento ou célula. A comparação da competência exportada e a medição de dinheiro zero em produção são **[nao verificado]**. `app/docs/CORTES.md:573`; `app/chamados/management/commands/vigiar_fio_morto.py:184-190,210-211,302-303`; `app/chamados/management/commands/backfill_fio_morto_e4b.py:76-79,326-338`; `app/chamados/services/vigia_fio.py:517-546,619-624`; `app/escala/services/cadastro_realidade.py:194-222`.
-
-_8077 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8078 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
