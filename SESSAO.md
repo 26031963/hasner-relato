@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 15:00:00.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (22.1 MB). Acoes na janela: **598**.
+**Medido em 24/11/2026 15:06:06.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (22.2 MB). Acoes na janela: **607**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:05:54 | Bash | Snapshot V2 delta and size the anexos | `cd ~/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE; mkdir -p $D/matriz; git -C /home/ronald/wt-resolver-d-024937 diff > $D/matriz/v2_nao_commitado.patch; git diff 7a4e79eef fbf5ba2a5 -- app ':!app/docs' > $D/matriz/obra_inteira.patch; wc -c $D/codex/v1.r $D/v0815/verif1.r $D/v0815/verif2.r $D/v0815/verif3.r $D/matriz/*.patch; grep -n -i '15/11.*4b\\|4b' app/docs/AVAIS.md \| head -3` |
+| 15:05:45 | Bash | Kill queued V2 suite and check copy state | `cd ~/saas-hasner; bin/trava_teste.sh --quem; for p in 1852477 1852475 1852315; do kill $p 2>/dev/null; done; sleep 2; ps -eo pid,args \| grep wt-resolver-d-024937 \| grep -v grep \| cut -c1-120; git -C /home/ronald/wt-resolver-d-024937 log -3 --oneline; git -C /home/ronald/wt-resolver-d-024937 status --porcelain \| head` |
+| 15:05:43 | TaskStop |  | `-` |
+| 15:05:40 | Bash | Find V2 builder's running processes | `ps -eo pid,etime,args \| grep -E 'wt-resolver-d-024937' \| grep -v grep \| cut -c1-200; docker ps --format '{{.Names}} {{.Command}}' \| grep -i resolver \| head` |
+| 15:05:38 | ToolSearch |  | `-` |
+| 15:04:01 | Bash | Record Codex verif3 result in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() l="RESOLVER-PASSA-NA-FRENTE verif3 (Codex verificador fbf5ba2a5, rc 0, logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.r): REPROVADA. Procedentes (em parte): B-ii rollback/push sincrono antes do rollback, B-iii recorte P2, C dia_trancado com 2 significados, D trava tardia Disputa apos Pergunta + C6 sem instante, E tarefa nao_s ...` |
+| 15:03:56 | SendMessage |  | `-` |
+| 15:03:45 | Bash | Skim Codex verif3 verdicts | `cd ~/saas-hasner; grep -n -E 'PROCEDENTE\|PRE-EXISTENTE\|^#\|^\*\*\|^- \*\*' logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.r \| cut -c1-330 \| head -60` |
+| 15:03:42 | Bash | Check CLASSE-D mutantes and Codex verif3 status | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bv0ncoei5.output 2>/dev/null \| tail -12; echo ===; tail -3 logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.wrap.log; ls -la logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.r 2>/dev/null; bin/trava_teste.sh --quem` |
 | 14:52:14 | Agent | RESOLVER ordem-de-trava V2 builder | `Voce e o CONSTRUTOR da obra RESOLVER-PASSA-NA-FRENTE (SaaS de ponto Django, repo /home/ronald/saas-hasner). Leia /home/ronald/saas-hasner/CLAUDE.md, secoes 0, 3, 6 e 7b, antes de agir. Trabalhe SO na copia /home/ronald/wt-resolver-d-024937: ela esta em fbf5ba2a5, limpa e verde na pista 2. Nunca edite a arvore viva /home/ronald/saas-hasner/app. AVAL a cumprir, literal (Ronald, RESOLVER-ORDEM-DE-TRA ...` |
 | 14:51:19 | Bash | Mark PAREI answered and log aval V2 | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a="PAREI: ! RESOLVER-ORDEM-DE-TRAVA-2411-1440 condicao" assert s.count(a)==1 s=s.replace(a,"RESPONDIDA por RESOLVER-ORDEM-DE-TRAVA-V2-2411-1455 (15:0x: unidade = DIA; (1) escritas do dia no atomic do dia senao PAREI, (2) repetir lote idempotente RED, (3) tela mostra resolvidos/falhou, engolir fora de escopo; enviado ao co ...` |
 | 14:51:14 | SendMessage |  | `-` |
