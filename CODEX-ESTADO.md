@@ -1,7 +1,87 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 01:13** · publicado em **24/11/2026 01:13** (UTC-3)
+> Ultima resposta processada: **24/11/2026 01:16** · publicado em **24/11/2026 01:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 01:16 · sessao 348924c27255 · NOTURNO-NAO-APURADO · sonda · origem=Code
+
+| Conferência | Resultado | Fonte |
+|---|---|---|
+| C1 total | **402 dias** | `sonda/anexos:1` |
+| Soma das classes | **382 iguais + 20 com pontas divergentes = 402** | `sonda/anexos:2–15` |
+| Comparação com o g3 | **Bate com os 402** de `frota.out`. Os totais por empresa e por competência também batem. | `sonda/anexos:1–51` · `frota.out:4–23`, citado em `mapa.r` §5 · `app/docs/BACKLOG.md:1981` |
+| Execução | `rc_sombra=0`. A saída anexada termina sem traceback. | `sonda/anexos:1–77` |
+
+As referências `sonda/anexos` numeram as linhas da saída colada a partir de `C1 402` como linha 1.
+
+### Classe, empresa e competência
+
+`—` indica combinação sem linha impressa. A empresa 29 tem total `0` na referência do g3 e não aparece na quebra da sonda. `frota.out:4–23` · `sonda/anexos:16–34`
+
+| Classe | Total | Emp. 1 | Emp. 2 | Emp. 3 | Emp. 4 | 10/2026 | 11/2026 | 12/2026 | Fonte `sonda/anexos` |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| `aberto_ou_saida_orfa` | 1 | — | 1 | — | — | — | 1 | — | 2, 17, 39 |
+| `aberto_ou_saida_orfa+quantidade_de_blocos` | 1 | — | 1 | — | — | 1 | — | — | 3, 18, 35 |
+| `aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | — | 1 | — | — | — | 1 | — | 4, 19, 40 |
+| `batida_orfa_na_celula+aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | — | 1 | — | — | — | 1 | — | 5, 20, 41 |
+| `entrada_repetida+aberto_ou_saida_orfa+virada_ou_outro_dia` | 2 | — | 2 | — | — | 1 | 1 | — | 6, 21, 36, 42 |
+| `entrada_repetida+batida_orfa_na_celula+aberto_ou_saida_orfa` | 2 | 1 | 1 | — | — | — | 2 | — | 7, 16, 22, 43 |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa` | 1 | — | 1 | — | — | 1 | — | — | 8, 23, 37 |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa+virada_ou_outro_dia+quantidade_de_blocos` | 1 | — | 1 | — | — | — | 1 | — | 9, 24, 44 |
+| `entrada_repetida+saida_apos_marco+virada_ou_outro_dia` | 1 | — | 1 | — | — | — | 1 | — | 10, 25, 45 |
+| `entrada_repetida+virada_ou_outro_dia` | 1 | — | 1 | — | — | — | 1 | — | 11, 26, 46 |
+| `iguais` | 382 | — | 264 | 113 | 5 | 143 | 204 | 35 | 12, 27, 30, 33, 38, 47, 51 |
+| `saida_apos_marco+aberto_ou_saida_orfa` | 1 | — | — | 1 | — | — | 1 | — | 13, 31, 48 |
+| `saida_apos_marco+virada_ou_outro_dia` | 4 | — | 2 | 1 | 1 | — | 4 | — | 14, 28, 32, 34, 49 |
+| `virada_ou_outro_dia` | 3 | — | 3 | — | — | — | 3 | — | 15, 29, 50 |
+| **Soma** | **402** | **1** | **280** | **115** | **6** | **146** | **221** | **35** | 2–51 |
+
+### Um exemplo por classe
+
+Nas tabelas, as datas abreviadas estão em `MM-DD` de 2026. `M` é o motor, `J` é `turnos_do_colab`, `null` é uma entrada sem saída e `[]` é a lista vazia de pares no dia. `sonda/anexos:52–76` · `app/ponto/services/espelho.py:1198–1227` · `app/ponto/turnos.py:1997–2002`
+
+| Classe | `colab_id` / dia | Batidas do exemplo | Pares de M e J | Fonte |
+|---|---|---|---|---|
+| `aberto_ou_saida_orfa` | 827 / 2026-11-20 | 11-18: 11:28:46 E, 17:00:12 S, 18:00:34 E, 23:31:23 S<br>11-20: 11:27:05 E, 17:00:04 S, 22:50:34 E<br>11-22: 10:55:35 E, 17:00:09 S, 18:00:04 E, 22:50:36 S | **M** 11-20 11:27:05 → 22:50:34<br>**J** 11-20 11:27:05 → 17:00:04<br>**Órfã J** 11-20 22:50:34 | `sonda/anexos:52` |
+| `aberto_ou_saida_orfa+quantidade_de_blocos` | 599 / 2026-10-20 | 10-18: 11:28:35 E, 17:04:43 S, 23:30:26 E<br>10-20: 11:27:45 E, 17:02:08 S, 18:02:22 E, 23:31:41 S<br>10-22: 11:28:10 E, 18:11:24 S, 19:13:19 E, 23:30:19 S | **M** 10-20 11:27:45 → 17:02:08, 18:02:22 → `null`<br>**J** 10-20 11:27:45 → 17:02:08, 18:02:22 → 23:31:41 | `sonda/anexos:53` |
+| `aberto_ou_saida_orfa+virada_ou_outro_dia` | 820 / 2026-10-28 | 10-26: 18:40:19 E, 19:46:56 S<br>10-27: 00:13:17 S, 18:09:41 E<br>10-28: 00:21:05 S, 19:06:19 E, 23:28:34 S<br>10-29: 00:43:33 E, 18:24:01 S, 19:07:16 E, 22:01:55 S<br>10-30: 23:28:07 E | **M** 10-28 19:06:19 → 23:28:34, 10-29 00:43:33 → `null`<br>**J** 10-28 19:06:19 → 23:28:34 | `sonda/anexos:54` |
+| `batida_orfa_na_celula+aberto_ou_saida_orfa+virada_ou_outro_dia` | 820 / 2026-10-29 | 10-27: 00:13:17 S, 18:09:41 E<br>10-28: 00:21:05 S, 19:06:19 E, 23:28:34 S<br>10-29: 00:43:33 E, 18:24:01 S, 19:07:16 E, 22:01:55 S<br>10-30: 23:28:07 E | **M** 10-29 19:07:16 → 22:01:55<br>**J** 10-29 00:43:33 → `null`, 19:07:16 → 22:01:55<br>**Órfã J** 10-29 18:24:01 | `sonda/anexos:55` |
+| `entrada_repetida+aberto_ou_saida_orfa+virada_ou_outro_dia` | 820 / 2026-11-03 | 11-02: 18:24:39 E<br>11-03: 16:53:08 E, 21:20:13 S<br>11-04: 00:32:23 E<br>11-05: 06:14:23 E | **M** 11-03 16:53:08 → 21:20:13, 11-04 00:32:23 → `null`<br>**J** 11-03 16:53:08 → 21:20:13 | `sonda/anexos:57` |
+| `entrada_repetida+batida_orfa_na_celula+aberto_ou_saida_orfa` | 788 / 2026-11-09 | 11-08: 22:07:28 E<br>11-09: 04:11:16 E, 05:07:10 S, 05:58:41 E, 15:41:28 S, 18:04:19 E, 19:35:14 S, 22:59:46 S<br>11-10: 15:06:53 E, 18:39:07 S, 19:26:48 E, 22:59:39 S<br>11-11: 12:12:22 E, 18:06:09 S, 18:58:46 E, 20:00:01 S | **M** 11-09 15:41:28 → 22:59:46<br>**J** 11-09 04:11:16 → `null`, 15:41:28 → 22:59:46 | `sonda/anexos:58` |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa` | 788 / 2026-10-12 | 10-10: 01:27:12 E, 03:49:20 S, 04:46:51 E, 05:59:35 S<br>10-11: 21:57:27 E<br>10-12: 03:36:36 E, 04:31:38 S, 06:00:17 E, 17:25:50 S, 21:14:21 S, 22:08:35 E, 23:01:26 S<br>10-13: 12:05:09 E, 17:56:34 S, 18:54:49 E, 20:00:46 S<br>10-14: 22:01:37 E | **M** 10-12 17:25:50 → 23:01:26<br>**J** 10-12 03:36:36 → 04:31:38, 06:00:17 → `null`<br>**Órfã J** 10-12 23:01:26 | `sonda/anexos:60` |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa+virada_ou_outro_dia+quantidade_de_blocos` | 174 / 2026-10-26 | 10-24: 03:00:17 S, 04:00:48 S, 05:12:40 E<br>10-25: 02:32:15 E, 03:31:49 S, 04:57:35 S<br>10-26: 02:27:46 E<br>10-27: 02:39:56 E, 03:40:39 S, 05:01:23 S, 21:08:54 E<br>10-28: 02:40:52 S, 03:43:33 E, 05:00:25 S, 21:05:53 E | **M** 10-26 02:27:46 → `null`<br>**J** 10-27 02:39:56 → 05:01:23 | `sonda/anexos:61` |
+| `entrada_repetida+saida_apos_marco+virada_ou_outro_dia` | 174 / 2026-11-01 | 10-30: 21:04:53 E<br>10-31: 02:45:30 S, 03:48:53 E, 05:07:37 S, 20:58:58 E, 21:00:09 E<br>11-01: 02:59:23 S, 04:01:26 S, 05:08:03 E<br>11-02: 02:47:25 E, 03:47:24 S, 05:09:11 S, 21:15:43 E<br>11-03: 02:49:17 S, 03:50:09 E, 04:56:52 S, 20:56:51 E | **M** `[]`<br>**J** 11-02 02:47:25 → 05:09:11 | `sonda/anexos:62` |
+| `entrada_repetida+virada_ou_outro_dia` | 174 / 2026-10-24 | 10-22: 02:45:42 S, 03:45:28 E, 05:00:35 S<br>10-23: 21:12:34 E<br>10-24: 03:00:17 S, 04:00:48 S, 05:12:40 E<br>10-25: 02:32:15 E, 03:31:49 S, 04:57:35 S<br>10-26: 02:27:46 E | **M** `[]`<br>**J** 10-25 02:32:15 → 04:57:35 | `sonda/anexos:63` |
+| `iguais` | 28 / 2026-11-22 | 11-20: 19:04:15 E<br>11-21: 02:03:02 S, 03:00:19 E, 07:03:23 S<br>11-22: 19:02:43 E<br>11-23: 02:02:18 S, 03:00:13 E | **M e J** 11-22 19:02:43 → `null` | `sonda/anexos:64` |
+| `saida_apos_marco+aberto_ou_saida_orfa` | 769 / 2026-11-03 | 11-03: 09:52:23 E, 16:03:00 S, 22:09:25 E | **M** 11-03 09:52:23 → 22:09:25<br>**J** 11-03 09:52:23 → `null`, 16:03:00 → 22:09:25 | `sonda/anexos:69` |
+| `saida_apos_marco+virada_ou_outro_dia` | 37 / 2026-11-14 | 11-12: 19:00:51 E<br>11-13: 02:00:02 S, 03:00:51 E, 07:01:25 S<br>11-15: 02:00:18 S, 03:00:30 E, 07:01:13 S<br>11-16: 19:00:34 E | **M** `[]`<br>**J** 11-15 02:00:18 → 07:01:13 | `sonda/anexos:70` |
+| `virada_ou_outro_dia` | 922 / 2026-10-26 | 10-24: 07:00:00 S, 23:08:05 E<br>10-25: 07:13:10 S, 23:06:15 E<br>10-26: 03:20:43 S, 07:00:45 E, 23:10:55 S<br>10-27: 03:35:27 E, 04:40:29 S, 23:07:46 E<br>10-28: 03:51:01 S, 07:02:09 E, 23:06:23 S | **M** `[]`<br>**J** 10-26 07:00:45 → 23:10:55 | `sonda/anexos:74` |
+
+### Regra de pareamento em cada exemplo
+
+| Exemplo | Regra da seção 2 e alcance da evidência |
+|---|---|
+| **827 · 20/11** | **Papel e saída órfã.** M usa `22:50:34 E` como saída, enquanto J a devolve como saída órfã depois de fechar em `17:00:04`. No núcleo de J, o papel da ATA pode prevalecer sobre o tipo gravado, e uma saída pode ficar sem entrada. Em M, a ATA pode fornecer as pontas e o núcleo também pode fechar pela posição. O ramo que produziu a ponta de M está **[nao verificado]**. `sonda/anexos:52` · `app/ponto/turnos.py:1377–1382,1491–1502,1065–1075` · `app/ponto/motor_calculo_v2.py:632–645,669–688` |
+| **599 · 20/10** | **Aberto e blocos.** J fecha o segundo bloco em `23:31:41`, e M devolve `null` para a mesma entrada. São dois pares em cada lado, com um fechado em M e dois em J. M passa os limites do regime ao núcleo. J passa o provedor da última batida, que pode permitir fechar uma pausa sem volta sob as guardas do núcleo. Qual regra fechou o bloco em J e por que M o deixou aberto estão **[nao verificado]**. `sonda/anexos:53` · `app/ponto/motor_calculo_v2.py:475–479,494–506` · `app/ponto/turnos.py:1170–1188,1997–2000` |
+| **820 · 28/10** | **Dia da jornada.** O mesmo aberto de `29/10 00:43:33` aparece em 28/10 no M e em 29/10 no J. Em M, o aberto começa dentro das seis horas seguintes à saída do par fechado mostrado em 28/10, condição compatível com herdar o dia. J publica pelo `data_turno`. O ramo efetivo de atribuição em M está **[nao verificado]**. `sonda/anexos:54–55` · `app/ponto/motor_calculo_v2.py:2399–2423` · `app/ponto/turnos.py:312–324,1997–2000` |
+| **820 · 29/10** | **Dia da jornada e órfã.** J conserva em 29/10 a entrada aberta que M mostrou no dia anterior e lista `18:24:01` como saída órfã. O núcleo pode separar uma saída do aberto pelo teto de fechamento ou produzir uma órfã quando não há entrada corrente. O ramo usado e qual ponta coincidiu com a lista de órfãs da célula estão **[nao verificado]**. `sonda/anexos:54–55` · `app/ponto/turnos.py:1430–1456,1487–1498,1997–2000` |
+| **820 · 03/11** | **Dia da jornada e E repetida.** M põe o aberto de `04/11 00:32:23` no dia 03/11. O intervalo desde a saída de `21:20:13` cabe na regra de herança de M. As E consecutivas de 04/11 e 05/11 estão além do corte de deduplicação de M. O destino desse aberto em J e o ramo efetivo de M estão **[nao verificado]**. `sonda/anexos:57` · `app/ponto/motor_calculo_v2.py:70,736,897–912,2399–2423` |
+| **788 · 09/11** | **Papel e aberto.** Os dois usam `15:41:28 S` como entrada do mesmo par. A diferença é o aberto de `04:11:16` em J. O núcleo pode consumir uma batida como miolo pelo papel da ATA, e M pode substituir períodos do dia pelas pontas da ATA. O papel efetivo da batida de `04:11:16` e o motivo de ela não figurar no M estão **[nao verificado]**. `sonda/anexos:58` · `app/ponto/turnos.py:1310–1326,1371–1401` · `app/ponto/motor_calculo_v2.py:632–645,669–688` |
+| **788 · 12/10** | **Papel, aberto e órfã.** M usa `17:25:50 S` como entrada e fecha com `23:01:26`, saída que J devolve órfã. J também mantém `06:00:17` aberta. São resultados compatíveis com papéis diferentes para as batidas ou com substituição do par em M. O ramo efetivo e o valor do marco final estão **[nao verificado]**. `sonda/anexos:60` · `app/ponto/turnos.py:1377–1421,1487–1498` · `app/ponto/motor_calculo_v2.py:632–645,669–688` |
+| **174 · 26/10** | **Dia da jornada e blocos fechados.** J atribui a 26/10 um par cujas duas pontas são de 27/10, conforme a regra que permite atribuir a madrugada à véspera. M mostra um aberto de 26/10. A quantidade de fechados é zero em M e um em J. Os marcos usados e a razão de M manter o aberto estão **[nao verificado]**. `sonda/anexos:61` · `app/ponto/turnos.py:285–324,1997–2000` |
+| **174 · 01/11** | **Dia da jornada.** J atribui o par de 02/11 a 01/11 pela regra de `data_turno` da véspera. A lista de M está vazia no dia consultado. O destino do par em M e o valor do marco final comparado pela sonda estão **[nao verificado]**. `sonda/anexos:62` · `app/ponto/turnos.py:285–324,1997–2000` · `app/ponto/motor_calculo_v2.py:2399–2432` |
+| **174 · 24/10** | **Dia da jornada.** J atribui o par de 25/10 a 24/10 pela regra da véspera. As E consecutivas de `24/10 05:12:40` e `25/10 02:32:15` estão além do corte de deduplicação de M. O tratamento dessas entradas e o destino do par em M estão **[nao verificado]**. `sonda/anexos:63` · `app/ponto/turnos.py:285–324,1997–2000` · `app/ponto/motor_calculo_v2.py:70,736,897–912` |
+| **28 · 22/11** | **Aberto nos dois lados.** M e J preservam a mesma entrada com saída `null`. A razão de as batidas da madrugada seguinte não fecharem esse par está **[nao verificado]**. `sonda/anexos:64` · `app/ponto/adaptador_motor.py:24–44` · `app/ponto/turnos.py:1497–1502` |
+| **769 · 03/11** | **Papel da batida e ponta bruta.** Os dois usam `22:09:25 E` como saída. J usa `16:03:00 S` como entrada desse par e mantém a primeira entrada aberta. A regra de papel da ATA permite usar o papel do marco sobre o tipo gravado. A ponta `22:09:25` é a única saída dos pares divergentes, portanto é a que dispara `saida_apos_marco` no teste da sonda. O marco exato e a saída efetiva da rubrica estão **[nao verificado]**. `sonda/anexos:69` · `mapa.r` §5, função `classe` · `app/ponto/turnos.py:1377–1421` · `app/ponto/motor_calculo_v2.py:2750–2765` |
+| **37 · 14/11** | **Dia da jornada e papel.** J atribui a 14/11 o par de 15/11, com `02:00:18 S` no papel de entrada. A regra da véspera explica o dia, e a leitura do papel permite abrir com uma batida gravada como S. O destino do par em M e o valor do marco final estão **[nao verificado]**. `sonda/anexos:70` · `app/ponto/turnos.py:285–324,1377–1421,1997–2000` |
+| **922 · 26/10** | **Mesmo par em dia vizinho.** As duas pontas de J são de 26/10. Pelo teste de `virada_ou_outro_dia` do script anexado, com `M=[]` no dia, o rótulo implica que o mesmo par aparece em M em 25/10 ou 27/10. M pode atribuir o dia pelo mapa interno ou por herança do período anterior. Qual dos dois dias recebeu o par e qual ramo o atribuiu estão **[nao verificado]**. `sonda/anexos:74` · `mapa.r` §5, função `classe` · `app/ponto/motor_calculo_v2.py:884–895,2399–2423` |
+
+### O que `iguais` diz sobre C1
+
+| Pergunta | Resposta | Fonte |
+|---|---|---|
+| Há dias `iguais` em C1? | **Sim, 382 dos 402.** Nesses dias, os multiconjuntos de pontas brutas por dia coincidiram, incluindo entradas com saída `null`. | `sonda/anexos:1,12,64–68` · `mapa.r` §5, função `classe` |
+| A divergência de pareamento explica C1? | **A divergência de pontas medida pela sonda não explica C1 inteiro.** Ela aparece em 20 dias. A causa do noturno zerado nos 382 dias `iguais` e o efeito da divergência sobre o noturno nos outros 20 estão **[nao verificado]**. | `sonda/anexos:1–15` · `app/ponto/motor_calculo_v2.py:2750–2765` · `app/ponto/services/dia_pago.py:173–179,285–292` |
 
 ## 24/11 01:13 · sessao 152ff60dfb62 · E4C-F1-B2b-F0 · verificador · origem=Code
 
@@ -943,19 +1023,4 @@ Os contraexemplos foram exercitados em memória com código da cópia e entradas
 - **Q4 DENTRO da CAUDA.** Derivação paralela da cobertura paga e RED sem mordida da invariante no fixture acima. O delta continua usando a porta `calcular_periodo` e a mesma régua de noturno. A aproximação por pontas brutas é uma segunda resposta para “quais minutos o fechado contou”, apesar de o período já publicar a janela efetiva, a pausa e o desconto. A escrita dos campos noturnos no crédito segue pela `_escrever_noturnas`. `app/ponto/motor_calculo_v2.py:239–252,995–1027,1885–1893,2625,2663–2699`.
 - **Q2 DENTRO da cura do relato.** Mesmo dia e causa podem representar nova ocorrência. Num comercial 08h–17h, piso 0 e teto de saída 60, o fechado 08h–18:30 acusa saída 18:30 com 90 fora. O candidato 08h–20h tem 90 fora adicionais na cauda, mas silencia o item de saída das 20h. A lavra anterior deduplica o item inteiro. O RED da volta 5 só prova que uma **causa** nova passa. `app/ponto/motor_calculo_v2.py:1692–1699,1715–1720,1795–1797,2673–2697` · `app/ponto/services/cxr_na_lista.py:79–110` · `app/ponto/tests/test_noturno_credito_turno_aberto.py:625–641`.
 
-## 23/11 23:42 · sessao 68bf882b7ddb · - · - · origem=Ronald (tmux)
-
-**REPROVA Q2.** Os efeitos abaixo estão **DENTRO** da CAUDA, pois nascem na apuração adicional do par sobreposto. A ocorrência em produção fica **[nao verificado]**. `app/ponto/motor_calculo_v2.py:2652–2692`
-
-- **Exceção deixa a flag ligada.** A execução grava `_sobre_a` antes de `calcular_periodo` e zera a flag somente após retorno normal. Em sonda em memória, uma exceção no par sobreposto deixou `True`. Os `continue` vêm antes do armamento. Uma nova apuração mensal zera a flag. Uma chamada direta ao mesmo motor pode herdar o estado. As delegações das subclasses mantêm o valor durante o cálculo. Reentrada na apuração pela mesma instância em produção **[nao verificado]**. `app/ponto/motor_calculo_v2.py:2340,2652–2664,3674–3697`
-- **Suprime saída nova da mesma causa.** Com marcos 08h–17h, fechado 06h30–19h e candidato 06h30–20h, a sonda confirmou 60 minutos fora creditados ao aberto e apenas a saída antiga, `19:00/120`, no relato. A chamada direta para o candidato, com flag desligada, publicou `20:00/180`. A chave ignora a hora e os minutos. A lavra distingue os dois dicionários. O RED só cobre uma nova causa diferente da já publicada. `app/ponto/motor_calculo_v2.py:1692–1699,1715–1720,1790–1798,2673–2692` · `app/ponto/services/cxr_na_lista.py:81–110` · `app/ponto/tests/test_noturno_credito_turno_aberto.py:628–640`
-- **Mantém dois vereditos L-084 no mesmo dia.** Em sonda, com marcos 08h–17h, fechado do motor 10h30–14h e par do juiz 04h30–13h, o fechado publicou a L-084 das pontas julgadas do dia, 04h30–22h, sob `l084_do_dia`. O candidato sobreposto publicou segunda L-084, 04h30–13h, com causa ausente. A chave separa os dois escritores. Quando o mapa devolve `None`, o auxiliar também libera a escrita. `app/ponto/motor_calculo_v2.py:1581–1651,1692–1699,2039–2059`
-- **O dia muda de significado.** O relato de janela usa a data civil da entrada. A L-084 usa o dia de turno do mapa do juiz, que pode ser a véspera. O piso usa a data civil da entrada efetiva e, no ajuste do partido, recebe a saída do período anterior. O set novo também sobrevive à troca de apuração. Na sonda com motor reaproveitado, A fez o contador passar de 0 para 1. B, com fechado 11h–13h e candidato 06h–15h no mesmo dia, creditou 420 minutos, mas o contador permaneceu em 1. Com motor novo, B acrescentou 1. `app/ponto/motor_calculo_v2.py:850–851,885–896,1249,1550,1669,1757–1759,1795–1797,1873–1879,2043–2053,2336–2341,2912,3135,3386` · `app/ponto/turnos.py:285–309`
-
-**Escritores e leitores.** `_janela_do_dia` também escreve diretamente na lista CXR e tem marcador próprio por turno. A Zona 5 chama `aplicar_tolerancia` depois do cálculo base. `Motor12x36ComEscala` volta a chamar `_entrada_efetiva`, e os fechados comuns permanecem fora da deduplicação do delta. O calculador reaproveita `aplicar_tolerancia` em contexto mínimo e publica a projeção em `det['cadastro_x_realidade']` ou `censo.cxr`. `app/ponto/motor_calculo_v2.py:1636–1650,2455,2859,3048,3217–3220,3686–3697` · `app/ponto/calculador/regras.py:98–112,264–275,856–866` · `app/ponto/calculador/periodo.py:474–477,793`
-
-O resultado mensal recebe a lista do motor por referência e fechamento a compõe por fatias. Leem a lista o espelho, o tradutor de pendências, a lavra e os comandos de comparação. O leitor direto localizado para `_piso_sem_previsto` é o teste novo. O atributo do calculador `det['piso_sem_previsto']` tem escrita própria. `app/ponto/motor_calculo_v2.py:2859` · `app/ponto/services/fechamento.py:115–117,202` · `app/ponto/services/espelho.py:748–755,1296` · `app/ponto/janela_he.py:277–315` · `app/ponto/services/cxr_na_lista.py:79–110` · `app/ponto/management/commands/e6_oraculo.py:170` · `app/ponto/management/commands/diff_janela_he.py:70` · `app/ponto/management/commands/diff_reclassificar_partido.py:188` · `app/ponto/tests/test_noturno_credito_turno_aberto.py:738` · `app/ponto/calculador/regras.py:763`
-
-**Q4.** O censo de privados passa de 10 para 11 e verifica contagem e classe. Os REDs de relato têm asserções de comportamento para os casos cobertos, com lacunas para virada, exceção, reuso e fato novo de mesma causa. O delta repete derivação de data civil da chave do previsto para o set do piso. A flag e o filtro operam sobre os escritores do motor existente. `app/ponto/tests/test_contract_juiz_batida.py:324–336` · `app/ponto/tests/test_noturno_credito_turno_aberto.py:603–640,720–740` · `app/ponto/motor_calculo_v2.py:1249,1677–1720,1873–1879,2039–2059`
-
-_8014 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8015 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 01:13:53.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (17.0 MB). Acoes na janela: **440**.
+**Medido em 24/11/2026 01:19:57.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (17.9 MB). Acoes na janela: **444**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:17:24 | Bash |  | `cd ~/saas-hasner/app; sed -i '2s/virada\/outro dia 13, aberto\/saida orfa 12, entrada repetida 8, saida apos marco 7/com sobreposicao: virada\/outro dia 14, aberto\/saida orfa 11, entrada repetida 8, saida apos marco 8/' docs/RELATO.md; grep -c "virada/outro dia 14" docs/RELATO.md cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; cat > $D/causa_c1.q <<'EOF' PAPEL: leitura. Obra NOTURNO-NAO-A ...` |
+| 01:17:11 | Bash |  | `cd ~/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() old=s.split('\n')[1] assert old.startswith('NOTURNO-NAO-APURADO REDESENHO') and s.count(old)==1 new=("PERGUNTA DE DESENHO NOTURNO-NAO-APURADO (aval NOTURNO-REDESENHO-2411-0105; pacote para a manha, logs/NOTURNO-NAO-APURADO/redesenho/): " "(1) MAPA (mapa.r, amostra 3/3 conferida: core/juizes.py:216 nomeia turnos_do_colab j ...` |
+| 01:17:02 | Bash |  | `cd ~/saas-hasner/app; grep -n "NOTURNO-NAO-APURADO REDESENHO" docs/RELATO.md \| head -3 \| cut -c1-600` |
+| 01:16:59 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; tail -4 $D/sonda_c1.out; cat $D/sonda_c1.r \| head -80` |
 | 01:12:52 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; CODEX_SONDA_ENVELOPE=$D/envelope.sh CODEX_OBRA=NOTURNO-NAO-APURADO CODEX_PAPEL=sonda bash bin/codex_pergunta.sh --sonda $D/sonda_c1.py --anexo $D/mapa.r $(cat $D/hash.txt) $D/sonda_c1.q $D/sonda_c1.r > $D/sonda_c1.out 2>&1; echo rc=$? >> $D/sonda_c1.out` |
 | 01:12:49 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; awk '/^```python$/{f=1;next} /^```$/{if(f){f=0}} f' $D/mapa.r > $D/sonda_c1.py; wc -l $D/sonda_c1.py; python3 -m py_compile $D/sonda_c1.py && echo compila; cp logs/PAR-PELO-TURNO/envelope.sh $D/envelope.sh; sed -i 's/PAR-PELO-TURNO/NOTURNO-NAO-APURADO redesenho/' $D/envelope.sh cat > $D/sonda_c1.q <<'EOF' PAPEL: sonda (leitura). Obra NOTURNO- ...` |
 | 01:12:39 | Bash |  | `cd ~/saas-hasner; grep -n "NOME_DO_BANCO *=" app/config/settings/sombra.py; cat logs/PAR-PELO-TURNO/envelope.sh; grep -n "CODEX_SONDA_ENVELOPE" bin/codex_pergunta.sh \| head -3 \| cut -c1-200` |
