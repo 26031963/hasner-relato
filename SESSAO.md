@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 22:10:30.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (8.6 MB). Acoes na janela: **239**.
+**Medido em 23/11/2026 22:16:24.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (8.6 MB). Acoes na janela: **241**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:10:41 | Bash |  | `cd ~/saas-hasner; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso_merge2.log; until [ -s $L.rc ]; do /usr/bin/sleep 30; done; cat $L.rc; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep -E '^Found' $L; grep -c '^QUARENTENA-PODADO' $L; grep -E '^AMBIENTE sha' $L; grep -E '^(ERROR\|FAIL):' $L \| head` |
+| 22:10:38 | Bash |  | `cd ~/saas-hasner; sed -i 's/(1a ferramenta apos o recado)/(1a ferramenta apos o aviso)/' app/docs/RELATO.md; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: F5 c3d')][0] L[i]="ESPERANDO: F5 815c384c3 (c3d + main b522f42a0, merge commitado na raia) suite de pouso 2 \| pid=3454439 \| arquivo=logs/E4C-F5/v7/s82b/c3d/suite ...` |
 | 22:10:18 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso_merge2.log; rm -f $L.rc; setsid bash -c "bash bin/suite.sh --motivo 'pouso E4C-F5' --dir /home/ronald/wt-f5-v7-153543 --espera 3600 > $L 2>&1; echo rc=\$? > $L.rc" </dev/null >/dev/null 2>&1 & /usr/bin/sleep 15; pgrep -f "suite_pouso_merge2" \| head -2; ps -eo pid,etime,args \| grep "suite.sh --dir" \| grep -v grep  ...` |
 | 22:10:15 | Bash |  | `cd ~/wt-f5-v7-153543; git add app/docs/RELATO.md; git commit -q -F - <<'EOF' 2>&1 \| tail -4 E4C-F5 c3d: junta o main b522f42a0 (UI-EDITAR-RAIZ, B1-30) na raia para a suite certificar a arvore que pousa OBRA: E4C-F5 Merge do main na raia: a suite de pouso 158adcc59 (rc 0, Ran 17761) nao cobria escala/views.py nem test_ui_editar_raiz.py do main; SUITE-UMA-VEZ-POR-ARVORE pede a suite na arvore do me ...` |
 | 22:09:58 | Bash |  | `cd ~/wt-f5-v7-153543/app; python3 - <<'EOF' import os,re P=('post-it','postit','post it','bilhete','mural','recado');F={'migrations','__pycache__','staticfiles','node_modules','.git','leaflet','pdfjs','logs','backups'} r=[] for b,d,a in os.walk('.'): d[:]=[x for x in d if x not in F and not x.startswith('.')] for f in a: if not f.endswith(('.py','.html','.js','.md')) or f=='test_contract_vocabular ...` |
