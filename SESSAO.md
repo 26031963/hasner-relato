@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 06:31:24.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **483**.
+**Medido em 24/11/2026 06:37:10.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **468**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -478,18 +478,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:42:25 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' 23/11 18:45 \| aval Ronald RESPOSTA-DESENHO-F5-82-B-2311-1845: 8.2 = (B) c3 -- sem disputa aberta o cartao segue a fechada propria; correcao vale so ENTRE abertas; 3 selos vivos; PROIBIDO esconder pergunta/validar/reabertura em fechada; PRONTO = chamados verdes na c3 + numero de cartoes da sonda no RELATO \| item E4C-F5 23/11 18:45 \| ...` |
 | 18:42:20 | Bash |  | `cd /home/ronald/saas-hasner; tail -2 app/docs/PROMPTS.md \| cut -c1-200; cat logs/E4C-F5/v7/s82b/sondas/resumo.txt 2>/dev/null; cat logs/E4C-F5/v7/s82b/mut/resultado.txt 2>/dev/null` |
 | 18:42:19 | SendMessage |  | `-` |
-| 18:34:39 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') assert L[0].startswith('ESPERANDO:') L[0]='ESPERANDO: construtor NOTURNO v3 (agente) + fila F5 s82b roda.sh \| pid=2813989 \| arquivo=logs/E4C-F5/v7/s82b/mut/resultado.txt' L.insert(1,"NOTURNO-NAO-APURADO v2 REPROVADA pelo Codex verificador (18:24, logs/NOTURNO-NAO-APURADO/v2/verif2.r, rc 0; conferid ...` |
-| 18:34:34 | Agent | NOTURNO item 1 volta 3 | `You are the CONSTRUTOR of obra NOTURNO-NAO-APURADO item (1), VOLTA 3, repo /home/ronald/saas-hasner (read /home/ronald/saas-hasner/CLAUDE.md first; sections 0, 4, 6, 7b CODEX and DINHEIRO bind you). MAO UNICA, dinheiro (rubrica 25). Aval `! NOTURNO-NAO-APURADO-V2-2311-1700` item (1): the credit of the TURNO ABERTO (`MotorBase.calcular_mes`, loop over `_pares_a`) must carry the noturno of the SAME  ...` |
-| 18:34:08 | Bash |  | `ps -o pid,args -p 2817150 2814124 \| cut -c1-140` |
-| 18:34:06 | Bash |  | `cd /home/ronald/saas-hasner; docker ps -q --filter id=50a8a965c84f; pgrep -f 'wt-noturno-aberto-162231' ; bin/trava_teste.sh --quem; tail -2 logs/E4C-F5/v7/s82b/mut/roda.out 2>/dev/null` |
-| 18:34:02 | Bash |  | `cd /home/ronald/saas-hasner; docker kill 50a8a965c84f >/dev/null; pkill -f 'suite.sh --dir /home/ronald/wt-noturno-aberto-162231'; sleep 3; docker ps -q --filter id=50a8a965c84f; bin/trava_teste.sh --quem; tail -3 logs/E4C-F5/v7/s82b/mut/roda.out 2>/dev/null` |
-| 18:34:01 | TaskStop |  | `-` |
-| 18:33:59 | Bash |  | `cd /home/ronald/saas-hasner; for c in $(docker ps -q); do m=$(docker inspect -f '{{range .Mounts}}{{.Source}} {{end}}' $c); case "$m" in *wt-noturno-aberto-162231*) echo "$c $(docker inspect -f '{{.Name}}' $c)";; esac; done` |
-| 18:33:57 | Bash |  | `cd /home/ronald/saas-hasner; docker ps --format '{{.ID}} {{.Names}} {{.RunningFor}} {{.Mounts}}' \| grep -i noturno \| cut -c1-200; pgrep -af 'suite.sh --dir /home/ronald/wt-noturno' \| cut -c1-120` |
-| 18:33:49 | Bash |  | `cd /home/ronald/wt-noturno-aberto-162231/app; git diff -U2 ponto/motor_calculo_v2.py \| sed -n 1,90p` |
-| 18:33:41 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/NOTURNO-NAO-APURADO/v2/verif2.r` |
-| 18:33:39 | Bash |  | `cd /home/ronald/saas-hasner; head -3 app/docs/RELATO.md \| cut -c1-160; bin/trava_teste.sh --quem; ls -la logs/NOTURNO-NAO-APURADO/v2/verif2.r 2>&1 \| tail -1; cat logs/E4C-F5/v7/s82b/sondas/resumo.txt 2>/dev/null` |
-| 18:33:35 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"lei: E4C-F5 8.2 D-FECHADA-NO-CARTAO (18:3x; logs/E4C-F5/v7/s82b/dnone_chamados.log, conferido) -- o aval RESPOSTA-DESENHO-F5-82-2311-1730 manda o montador replicar o juiz `_disputa_do_chamado` como ESTA, e o juiz so elege D ABERTA. Lido literal (c4 08ac83521, ramo de MEDIDA): cartao cuja  ...` |
-| 18:33:26 | Bash |  | `cd /home/ronald/saas-hasner; git -C /home/ronald/wt-f5-v7-153543 log --oneline -2; git -C /home/ronald/wt-f5-82-c4-181843 log --oneline -1; grep -E '^(Ran\|OK\|FAILED)' logs/E4C-F5/v7/s82b/dnone_chamados.log \| tail -2; grep -E '^Ran\|^(OK\|FAILED)' logs/E4C-F5/v7/s82b/c3_foco2.log \| tail -2; grep -E '^(FAIL\|ERROR):' logs/E4C-F5/v7/s82b/dnone_chamados.log` |
-| 18:33:22 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; mkdir -p $O; for v in base:wt-f5-82-base-06c3a2e88 c3:wt-f5-82-c3-ec46c1d4f c4:wt-f5-82-c4-181843; do n=${v%%:*}; w=${v#*:}; N=$(echo $n \| tr a-z A-Z); SOMBRA_ARVORE=/home/ronald/$w/app bin/sombra.sh --rodar logs/sombra/sonda_fechadas.py E4C-F5-82-FECHADAS-$N > $O/$n.out 2>&1; echo "rc=$? $(grep -c . $O/$n.out) linhas; FIM: $(grep -m1 FIM ...` |
-| 18:33:17 | Bash |  | `cd /home/ronald/saas-hasner; S=logs/sombra/sonda_fechadas.py; sha256sum $S logs/E4C-F5/v7/s82/sonda_fechadas.py \| cut -c1-16; wc -l $S; grep -nE '\.save\(\|\.create\(\|\.update\(\|\.delete\(\|bulk_\|execute\(\|except\|open\(.*w' $S; ls -d /home/ronald/wt-f5-82-base-06c3a2e88 /home/ronald/wt-f5-82-c3-ec46c1d4f /home/ronald/wt-f5-82-c4-181843; ls logs/crons_em_curso/; ps aux \| grep -c '[s]ombra.sh ...` |
