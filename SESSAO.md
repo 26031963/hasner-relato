@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 12:52:37.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (17.5 MB). Acoes na janela: **474**.
+**Medido em 24/11/2026 12:58:33.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (17.5 MB). Acoes na janela: **475**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:53:23 | SendMessage |  | `-` |
 | 12:50:41 | Bash | Update PONTA-PEQUENA-CLASSE BACKLOG state | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n'); i=832 c=L[i].split('\|'); c[3]=' construindo: item 2 e7d35b9db REPROVADO Codex v1 (K6 na porta, gatilho dia_encerrado) entra com item 3 opcao (1) (aval PONTA-ITEM3-OPCAO1-2411-1250); copia wt-ponta-110734 ' L[i]='\|'.join(c); open(p,'w').write('\n'.join(L)) EOF sed -n 833p app/docs/BACKLOG.md \| cut -c1-80` |
 | 12:50:37 | Bash | Inspect PONTA-PEQUENA-CLASSE row columns | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n'); i=832 c=L[i].split('\|'); print(len(c)); print([x[:60] for x in c]) EOF` |
 | 12:50:35 | Bash | Find PONTA rows in BACKLOG | `cd ~/saas-hasner; grep -n 'PONTA' app/docs/BACKLOG.md \| cut -c1-140` |
