@@ -1,4 +1,4 @@
-PERGUNTA DE DESENHO RESOLVER-PASSA-NA-FRENTE (24/11 00:5x): o ato do Resolver NAO encerra a pergunta RESPONDIDA que o C6 deixa viva -- chamados/juizes.py:1515-1528 devolve VIVA antes do degrau de identidade (:1535) salvo p.celula com veredito_via='admin' (lido SO pela FK; escritor unico veredito_celula.py:357). RED 3/3 vermelho no 051e1b5b4 (logs/RESOLVER-PASSA-NA-FRENTE/red_encerra.log): (a) sem FK c/ celula, (b) sem FK sem celula, (c) FK de outro dia; espelho declarar_dia falta deve ficar viva. Frota prod (sonda_semfk.r/sonda_fk2.r): respondidas vivas 1.346 (FK do dia 1.336, sem FK c/ celula 10, FK outro dia 0, celula ja admin 0). Opcoes: (1) C6 le celula do dia por identidade -- fecha a,c; NAO b; arrasta declarar_dia; (2) via nova do Resolver em VIAS_QUE_VENCEM_A_RESPOSTA -- fecha a,b,c, sem arrasto; migration (choices 0051) + muda lista nomeada (SeloFonteUnicaDasViasDeIdentidade); (3) marca booleana no ato (DecisaoPergunta, CheckConstraint) + degrau no C6 antes da resposta -- fecha tudo; schema + degrau novo; (4) ato reaponta p.celula -- fecha a,c; 2o escritor da FK (LEI-AKITA 7). Raia 3 segue A-TELA enquanto isso.
+RESPONDIDA por RESPOSTA-DESENHO-RESOLVER-2411-0110 (01:10): RESOLVER-PASSA-NA-FRENTE opcao (2), via nova em VIAS_QUE_VENCEM_A_RESPOSTA + migration so de choices. Construcao espera o POUSO da F0: as duas tocam app/chamados/models.py (F0 4346eddae, wt-f0-004802), e o LATERAIS proibe 2 construtores no mesmo arquivo; nasce do HEAD pos-F0.
 NOTURNO-NAO-APURADO REDESENHO (aval NOTURNO-REDESENHO-2411-0105): 2a reprovacao da mesma classe encerrou a tentativa -- volta 7 NAO construida (agente parado antes de editar; wt-noturno-aberto-162231 intacta em b5d115a07, nada pousa). Codex LEITURA do mapa motor x juiz do par (frota C1 402 dias + caso 420 x 480), lei do desenho e cura candidata: logs/NOTURNO-NAO-APURADO/redesenho/ -- para o Ronald decidir de manha. Q-B entra no redesenho (raiz = dois pareadores no mesmo dia).
 RESPONDIDA por NOTURNO-REDESENHO-2411-0105 (01:05): Q-A = SIM, o F do fechado veta o credito W/N do aberto no mesmo instante (cada minuto conta uma vez, lei 2038).
 RESPONDIDA por NOTURNO-REDESENHO-2411-0105: volta 6 REPROVADA (verif6.r, triagem_v6.txt, 5 procedentes, classe reconstruido-no-leitor) -- a tentativa encerra; nao ha volta 7.
@@ -11272,7 +11272,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 > **calado**; agora o lugar e declarado (acima da 1a secao) e o motivo sai no stderr.
 
 <!-- SEUS-CORTES:INICIO -->
-### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (292)
+### SEUS CORTES -- o que voce mandou e ainda nao esta no ar (293)
 
 > **ALARME: 12 corte(s) com mais de 24 h em "recebido"** -- TROCA-DE-PLANTAO (1470 h), FECHAMENTO-UI-PORTAS (1452 h), CATALOGO-SAIDA-ANTECIPADA-DESCONTA (1449 h), ESTEIRA-RETA-FINAL (1448 h), ZUMBIDO (1445 h), CARTAO-TOTAL-IGUAL-SOMA (1442 h), CERT-VIGIA (1431 h), CHAMADO-GANHA-CADASTRO (1430 h), JUIZ-BATIDA-NASCE (1430 h), JUIZ-ESCALA-NASCE (1430 h), PERTO-DO-MOTOR-ESPERA-O-EXPORT (1430 h), E3-CHAMADO-APOS-ARQUIVO-SIMPLES (1430 h). Cada um vira Pauta de sistema para o DP ate sair de "recebido".
 
@@ -11510,10 +11510,10 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **ENSAIO-DA-FOLHA-11** | 2026-11-17 08:4x | 160 h | Parte A medida na sombra 09:2x (logs/ENSAIO-FOLHA-11/quadro_a.txt); B2 nao isola na VM -> piloto por fora; B1 AVAL-DEVOLVIDO item 4 da RESPOSTAS-1711-0900 | ENSAIO-DA-FOLHA-11 |
 | **COMPLEMENTO-1-PISTA-VOLTOU-1711** | 2026-11-17 08:4x | 160 h | item 3 RETIRADO; rota da pre-opus da espinha entra na PISTA-CERTIFICA-POUSO | PISTA-VOLTOU-1711 |
 | **RESPOSTAS-1711-0900** | 2026-11-17 09:0x | 160 h | item 1 ENCERRADO (sem lavra anterior); item 2 em construcao; item 3 aplicado; item 4 AVAL-DEVOLVIDO; item 5 aplicado; item 6 nao isola -> piloto por fora | ENSAIO-DA-FOLHA-11 |
+| **RESPOSTAS-1711-1005** | 2026-11-17 10:05 | 159 h | vigente (texto literal logs/AVAIS-1515/respostas_1711_1005.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA E4c (F8/B1/export) |
 | **CORTE-F2-RESSUSCITAR-GRAVA-ATO** | 2026-11-17 10:3x | 158 h | vigente (texto literal logs/AVAIS-1515/corte_f2_ressuscitar_grava_ato_1711.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA F2 (P2) |
 | **RESPOSTAS-1711-1050** | 2026-11-17 10:5x | 158 h | vigente (texto literal logs/AVAIS-1515/respostas_1711_1050.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA F2 (P2) |
 | **CORTE-RESSUSCITAR-TEM-DONO** | 2026-11-17 10:5x | 158 h | vigente (texto literal logs/AVAIS-1515/corte_ressuscitar_tem_dono_1711.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA F2 (P2) cita item 3 |
-| **RESPOSTAS-1711-1005** | 2026-11-17 10:05 | 158 h | vigente (texto literal logs/AVAIS-1515/respostas_1711_1005.txt; quebra de linha = espaco; nenhuma lei nova) | ESPINHA E4c (F8/B1/export) |
 | **CORTE-FOLHA-UNIDADE-1711** | 2026-11-17 14:5x | 154 h | recebido; corte registrado (RESPOSTAS-1711-1410 itens 3-5 + COMPLEMENTO-2 item 4); pre-desenho final no Codex; aval de construcao vem depois citando a entrega | FOLHA-ENTRA-COM-DISPUTA-ABERTA |
 | **JUIZ-PESSOA-SEGURA-A-FOLHA-1725** | 2026-11-17 17:25 | 151 h | recebido; so LEITURA: pre-desenho volta 4 (pd4) no Codex retomando do item (ii); construcao so por aval novo citando a entrega, nao pousa antes de quinta 19/11 | FOLHA-ENTRA-COM-DISPUTA-ABERTA |
 | **[nome]-D1-1800** | 2026-11-17 18:00 | 151 h | substituido por RESPOSTAS-1711-1950 item 1 (17/11 19:50) | [nome]-NAO-DESFAZ-O-PAPEL |
@@ -11554,7 +11554,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **SUSPENSA-B3-SEGURA-O-TURNO** | 2026-11-22 10:40 | 38 h | registrado; em copia ~/wt-simplifica-104405, pousa DEPOIS do FERIADO-P4-MINIMO-V2 | SIMPLIFICA-2211-1040 |
 | **SUSPENSA-REVISAO-OPUS-MUTANTE-CENSO-FORA-DE-MAO-UNICA** | 2026-11-22 10:40 | 38 h | registrado; em copia ~/wt-simplifica-104405, pousa DEPOIS do FERIADO-P4-MINIMO-V2 | SIMPLIFICA-2211-1040 |
 | **SIMPLIFICA-V3-2211-1726** | 2026-11-22 17:26 | 31 h | registrado; em copia ~/wt-simplifica-104405, POUSA AGORA (o FERIADO ja pousou) | SIMPLIFICA-V3-2211-1726 |
-| **LEI-RESOLVER-COM-PERGUNTA-ABERTA-2311-1306** | 2026-11-23 13:06 | 11 h | registrado; construcao (obra RESOLVER-PASSA-NA-FRENTE) so DEPOIS do pouso da E4C-F5 | RESOLVER-PASSA-NA-FRENTE |
+| **LEI-RESOLVER-COM-PERGUNTA-ABERTA-2311-1306** | 2026-11-23 13:06 | 12 h | registrado; construcao (obra RESOLVER-PASSA-NA-FRENTE) so DEPOIS do pouso da E4C-F5 | RESOLVER-PASSA-NA-FRENTE |
 | **VIGIA-DO-TMUX-2311-1315** | 2026-11-23 13:15 | 11 h | registrado; CONTRATO-DE-INSTRUMENTO no RELATO, ao Codex uma vez; construir em copia propria (vaga livre), pouso proprio de instrumento | VIGIA-DO-TMUX |
 | **PAR-PELO-TURNO-2311-1320** | 2026-11-23 13:20 | 11 h | SUBSTITUIDO INTEIRO por PAR-PELO-TURNO-V2-2311-1350 (23/11 13:50) | PAR-PELO-TURNO |
 | **RESPOSTA-LEI-PAR-PELO-TURNO-2311-1350** | 2026-11-23 13:50 | 11 h | SUBSTITUIDO INTEIRO por PAR-PELO-TURNO-V2-2311-1350 (23/11 13:50) | PAR-PELO-TURNO |
@@ -11570,6 +11570,7 @@ linha dele** ("inclui a chamado e a pdf") e elas entram no proximo ato.
 | **RESPOSTA-LEI-A-TELA-2411-0050** | 2026-11-24 00:50 | 0 h | registrado; constroi na raia 3 depois do pouso da RESOLVER-PASSA-NA-FRENTE (calendario.py em comum) | A-TELA-DO-DIA-LE-UM-JUIZ |
 | **RESPOSTA-F0-2411-0050** | 2026-11-24 00:50 | 0 h | registrado; construtor da F0 reaberto 24/11 00:5x | E4C-F1-B2b-F0 |
 | **NOTURNO-REDESENHO-2411-0105** | 2026-11-24 01:05 | 0 h | registrado; volta 7 cancelada (agente parado antes de editar, wt em b5d115a07); Codex leitura do mapa motor x juiz do par lancado | NOTURNO-NAO-APURADO |
+| **RESPOSTA-DESENHO-RESOLVER-2411-0110** | 2026-11-24 01:10 | 0 h | registrado; construcao espera o pouso da F0 (mesmo arquivo app/chamados/models.py, LATERAIS proibe 2 construtores no mesmo arquivo) | RESOLVER-PASSA-NA-FRENTE |
 <!-- SEUS-CORTES:FIM -->
 
 ## DEPLOYS AGENDADOS
