@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 11:47:01.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (15.7 MB). Acoes na janela: **413**.
+**Medido em 24/11/2026 11:53:09.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (15.8 MB). Acoes na janela: **416**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:53:05 | Bash | Read sonda and CHAMADO-PRESO test results | `cd ~/saas-hasner; cat logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.rc; tail -30 logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.out; echo ===; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bcns7rqk8.output` |
+| 11:53:02 | Bash | Run timing sonda and prep PONTA verifier | `cd ~/saas-hasner; setsid nohup bash -c 'bash bin/sonda_leitura.sh --sombra logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.py > logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.out 2>&1; echo $? > logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.rc' < /dev/null > /dev/null 2>&1 & D=logs/PONTA-PEQUENA-NA-BORDA; git -C ~/wt-ponta-110734 diff cfe32f0ef e7d35b9db > $D/verif_v1.diff; wc -c $D/verif_v1.diff cat > $D/verif_ ...` |
+| 11:52:52 | Bash | Check PONTA copy state and sonda script | `cd ~/saas-hasner; ls -ld ruff.toml 2>&1; git -C ~/wt-ponta-110734 log --oneline -2; git -C ~/wt-ponta-110734 status --porcelain \| head; ls logs/PONTA-PEQUENA-NA-BORDA/; head -40 logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.py` |
 | 11:40:22 | Bash | Review CHAMADO-PRESO core diff | `cd ~/wt-codex-chamado-preso-classe-112213; git diff app/ponto/services/cartorio.py app/chamados/reconciliador.py \| head -220` |
 | 11:40:19 | Bash | Run CHAMADO-PRESO new test in copy via suite door | `cd ~/saas-hasner; bash bin/suite.sh --dir ~/wt-codex-chamado-preso-classe-112213 --only ponto.tests.test_chamado_preso_classe --parallel 1 --espera 3600 > logs/CHAMADO-PRESO-CLASSE/green_c1.log 2>&1; echo rc=$?; grep -E '^(OK\|FAILED)($\| \()' logs/CHAMADO-PRESO-CLASSE/green_c1.log \| tail -1; grep '^Ran' logs/CHAMADO-PRESO-CLASSE/green_c1.log \| tail -1` |
 | 11:40:17 | Bash | Inspect CHAMADO-PRESO diff stats and excepts | `cd ~/saas-hasner; W=~/wt-codex-chamado-preso-classe-112213; git -C $W diff --stat; grep -c 'except' <(git -C $W diff) ; git -C $W diff \| grep -n '^+.*except' \| head` |
