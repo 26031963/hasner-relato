@@ -1,7 +1,154 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 02:26** · publicado em **24/11/2026 02:26** (UTC-3)
+> Ultima resposta processada: **24/11/2026 02:31** · publicado em **24/11/2026 02:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 02:31 · sessao 98532e6761ac · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · verificador · origem=Code
+
+**BLOQUEIA.** A nova âncora corrige a volta noturna antes do `hf`, mas cria um par invertido quando a volta e a saída já ocorreram depois do `hf`. Na geometria do selo B-I28, a janela da cópia devolveu **07:32 → 07:00 e 43 min fora**, para **11 min brutos**, em execução isolada em memória. A catraca do dia do par também falhou em duas verificações. `app/ponto/tests/test_o280_bateria_da_lei.py:5007,5081` · `app/ponto/motor_calculo_v2.py:1574,1775` · `app/ponto/janela_he.py:168` · `app/core/tests/test_medida_turno_do_par.py:544,560`
+
+## 1. Escritores, leitores e chamadores
+
+- **OK — Memo e chave.** Há três escritas em `_dia_jornada_do_par`: inicialização vazia a cada `calcular_mes`, gravação no laço principal e gravação no crédito do turno aberto. O único leitor é `_janela_do_dia`. Nos dois caminhos, o motor grava `localizar(entrada)` e repassa a mesma entrada a `calcular_periodo`. As três implementações que chamam `_janela_do_par` e a segunda leitura de `Motor12x36ComEscala` usam a mesma `localizar`, que converte ao fuso configurado e preserva segundos e microssegundos. O clipe vem depois da busca. Não encontrei caminho normal com a entrada ajustada, truncada ou em outro fuso usada como chave. `app/ponto/motor_calculo_v2.py:28,73,1549,2343,2493,2593,2800,2927,3265,3593`
+- **BLOQUEIA — A chave pode existir com um dia diferente do juiz.** `_dia_do_turno` transpõe `Turno.data_turno` para um mapa por instante localizado das batidas que o juiz classificou como `E`. `calcular_mes` grava esse mapa em `_dia_turno_juiz_calc`. Para `data_jornada`, o laço usa a data civil local na ausência da chave e, com saída anterior fechada e vão inclusivo de **0 a 6 h**, herda `_prev_dj` mesmo quando há resposta diferente do juiz. A janela lê `data_jornada`. O BO-B e a acusação de `aplicar_tolerancia` leem o mapa do juiz. Os overrides comercial e partido também reagrupam pelo juiz após `super().calcular_mes`. `app/ponto/motor_calculo_v2.py:867,884,1612,2030,2432,2439,2459,2494,2949,2983,3355,3367`
+- **OK — Crédito do aberto, subclasses e FT.** `_d_a` vem do `data_jornada` já atribuído ao período aberto. O crédito seleciona turnos cujo `t.data_turno == _d_a` e grava `_d_a` para a entrada materializada, inclusive `_za.timestamp` na borda posicional. Essa seleção prova o dia **do grupo**. A chave individual pode faltar no mapa do juiz, que só indexa `E`. `MotorIntermitente` herda o 12x36, `MotorPlantao` delega ao 12x36 e `MotorTurnoPartidoNoturno` herda o partido. A FT do laço principal grava os dois memos e sai da janela pela guarda de folga. O crédito do aberto grava apenas o memo de dia e parte de `resultado.periodos`, cuja classificação é anterior. `app/ponto/motor_calculo_v2.py:889,1532,2483,2493,2529,2550,2559,2572,2593,3575,3601,3610`
+- **OK — Marcos e parâmetros.** `_marcos_do_dia_fn` vem do vínculo ou do template. `_janela_do_dia` usa `hi`/`hf` para construir `m_entrada`/`m_saida` e grava `j['dia']`, `j['marco_entrada']` e `j['marco_saida']`. `marco_na_jornada` recebe `date`, hora cadastrada e referência local, mantém o `tzinfo` da referência e zera segundos e microssegundos do **marco**. Seus chamadores são as construções de entrada e saída do par e do BO-B. As pontas efetivas leem os respectivos `datetime`, a extra declarada, o piso, o teto e o estado autorizado. `hi`/`hf` continuam sendo as horas cruas usadas no relato. O cadastro de empresa é lido uma vez por cálculo, e o motor verifica a vigência pelo dia recebido. `app/escala/models.py:1128` · `app/colaboradores/models.py:54,117` · `app/ponto/janela_he.py:33,46` · `app/ponto/motor_calculo_v2.py:1372,1394,1562,1574,1633,1679,1735,1744,1767,1775,1782,2323,2334`
+
+**Censo dos chamadores diretos na cópia**
+
+| Severidade e método | Chamadores |
+|---|---|
+| **OK — `calcular_periodo`, código de execução** | Laço e crédito do aberto em `app/ponto/motor_calculo_v2.py:2495,2594`. Delegações de `MotorPlantao` e `Motor12x36ComEscala` em `app/ponto/motor_calculo_v2.py:3576,3588`. O censo não encontrou chamada direta em view, serviço, cron, management command ou script da cópia. |
+| **OK — `_janela_do_dia`** | `_entrada_efetiva` e `_saida_efetiva` quando `_j` é omitido, e `_janela_do_par`. `app/ponto/motor_calculo_v2.py:1724,1766,1793` |
+| **OK — `_janela_do_par`** | `Motor12x36`, `MotorTurnoPartido` e `MotorComercial`. `app/ponto/motor_calculo_v2.py:2800,2927,3265` |
+| **FILA — `_entrada_efetiva` e `_saida_efetiva`** | `_janela_do_par` chama ambas passando `j`. `Motor12x36ComEscala` chama `_entrada_efetiva` de novo, sem `j`, e repete a consulta da janela e os efeitos de relato. Essa releitura já existia no comportamento descrito pelo selo B-O272b. `app/ponto/motor_calculo_v2.py:1793,3593` · `app/ponto/tests/test_o280_bateria_da_lei.py:2571` |
+| **OK — `calcular_periodo`, testes diretos existentes** | `app/ponto/tests/test_plantao_he_distribuicao.py:27` · `app/ponto/tests/test_plantao_he_8a_hora.py:38` · `app/ponto/tests/test_noturno_desconta_intervalo.py:195,198` · `app/ponto/tests/test_o271_pontualidade_no_comercial.py:60,175` · `app/ponto/tests/test_antecipada_intervalo_12x36.py:53,59,65,70,79` · `app/ponto/tests/test_l084_vence_o_t8.py:65,173` · `app/ponto/tests/test_a6_12x36_tolerancia.py:33` · `app/ponto/tests/test_12x36_atraso_pela_autoridade.py:56,61,66,70,74` · `app/ponto/tests/test_12x36_com_escala_noturna.py:41,53,66` · `app/ponto/tests/test_motor_escala_marcos_do_dia.py:31` |
+| **OK — `calcular_periodo`, teste novo** | Chamada com janela ligada que espera `RuntimeError`. `app/ponto/tests/test_janela_no_dia_do_turno.py:197,206` |
+
+## 2. Semântica do dia em cada leitor
+
+- **BLOQUEIA — L-084 por par × BO-B por dia.** A primeira usa `data_jornada` para buscar os marcos, mede as pontas **cruas do par** e pode dispensar a janela antes de consultar o BO-B. O BO-B usa `_dt_b` do juiz e mede a primeira entrada e a última saída do grupo, ou a borda posicional. Ambos exigem **duas** distâncias absolutas estritamente acima de 180 min. Mesmo quando os dias coincidem, uma volta de pausa pode ficar a mais de 180 min de `hi` pela própria posição dentro da jornada. Quando os dias divergem, o BO-B pode dispensar a janela com base em outro dia. Sua acusação grava `_dt_b`, mas o contador grava `dia` do par. `app/ponto/motor_calculo_v2.py:1562,1589,1612,1633,1641,1650,1980`
+- **BLOQUEIA — Relato × espelho × Gestão de HE.** `_acusa_cadastro_x_realidade` recebe `j['dia'] = data_jornada` e grava batida e marco em `HH:MM` e minutos arredondados. `pontas_do_relato` exige igualdade com a data da linha, mesma hora de marco, célula da ponta `missing` e ausência de ponta já marcada no mesmo sentido. O espelho apresenta as batidas no dia de `dia_das_batidas`, que usa o juiz por PK e data civil local para a batida que nenhum turno reclama. Portanto uma cauda herdada pelo motor em **D**, mas exibida em **D+1**, pode ter sua acusação ignorada. O caminho normal da grade também usa **primeira E e última S**, enquanto o motor agora pode recortar a saída de **cada par**. A Gestão recebe as pendências do espelho. `app/ponto/motor_calculo_v2.py:1702,1742,1780,2441` · `app/ponto/janela_he.py:217,300,316,334` · `app/ponto/turnos.py:2907` · `app/ponto/services/espelho.py:464,741,754` · `app/ponto/services/he_pendente_lavrado.py:114,132,148`
+- **BLOQUEIA — Extra declarada e vigência.** O cadastro escreve minutos inteiros por ponta no tipo de escala. A geração congela os valores no DNA. O vínculo lê `(colaborador, data)`, responde zero se a célula existe sem declaração e lê o template se a célula falta. O motor consulta `data_jornada` pelo vínculo da fatia. Espelho e calendário consultam a data da linha e escolhem o vínculo desse dia. Concordam quando dia e vínculo coincidem. Na herança divergente, podem ler DNA, extra e vigência diferentes. A vigência inclui o dia inicial, o piso inclui a igualdade e a acusação por teto exige sobra estritamente maior. A janela calcula em minutos fracionários e as telas arredondam as pontas publicadas. `app/escala/services/cadastro_tipo.py:256` · `app/ponto/management/commands/gerar_celulas.py:128` · `app/escala/models.py:1238` · `app/ponto/motor_calculo_v2.py:1356,1382,1679,2329` · `app/ponto/services/espelho.py:736` · `app/colaboradores/services/calendario.py:413` · `app/ponto/janela_he.py:70,123,173,242`
+- **BLOQUEIA — `DecisaoHE.data`.** O campo é `DateField`. A porta grava **a data recebida**, sem deduzir dia civil nem dia do turno. O formulário individual manda `s.data` do retrato do espelho. Lote e autorização por período leem o mesmo retrato, e o cron de recusa passa a data do item à porta. Assim, para turno reconhecido pelo juiz a origem usual é o **dia exibido do turno**. A divergência aparece quando ele difere de `data_jornada`, ou quando um chamador envia outra data. O motor carrega `{d.data: d.estado}` e `autorizado` solta ambas as pontas dos pares que consultam aquela chave. Uma decisão exibida em **D+1** pode ficar sem efeito no par herdado em **D**, ou a autorização de **D** pode alcançar um par exibido em **D+1**. O selo novo cria a linha em **D** diretamente no ORM e deixa essa ligação sem exercício. Datas de decisões reais [nao verificado]. `app/ponto/models.py:1300` · `app/ponto/portas/he.py:66,195,206,265,369,595` · `app/templates/ponto/gestao_he.html:259` · `app/ponto/views.py:543,630,684` · `app/ponto/services/gestao_he.py:397` · `app/ponto/management/commands/recusar_ponta_pequena.py:156,170` · `app/ponto/motor_calculo_v2.py:1428,1686,1730,1772` · `app/ponto/tests/test_janela_no_dia_do_turno.py:95`
+- **FILA — `_janela_fora_por_l084`.** O motor inicializa a lista e insere `dia` com deduplicação nos dois ramos. O leitor externo efetivo encontrado é o teste que mede seu comprimento. O comando `diff_janela_he` conta `len(resultado.dias_cadastro_x_realidade)`, que também recebe acusações de teto da janela e da pontualidade. Assim, esse comando não mede dias únicos retirados pela L-084. `app/ponto/motor_calculo_v2.py:1596,1640,1702,2025,2336,2760` · `app/ponto/tests/test_o280_bateria_da_lei.py:2819` · `app/ponto/management/commands/diff_janela_he.py:63,70`
+
+## 3. `RuntimeError` e produção
+
+- **OK — Alcance no código atual.** A view e o comando de recálculo entram pelo fechamento. O recálculo por evento, inclusive disparado por um fato de um dia, recalcula a competência e chega a `calcular_mes`. Espelho e simulação de autorização passam pela autoridade do período. PDF e diagnóstico também chamam `calcular_mes`. O cron `vigiar_motor_autoridade` e os comandos `diff_espelho_alimentacao` e `diff_extrato_parcial` fazem o mesmo. A entrega de holerite busca o documento gravado. Não identifiquei caminho dessas rotas até o novo `raise` com a chave ausente. Uso fora da cópia e ocorrência em produção [nao verificado]. `app/ponto/views.py:1280` · `app/ponto/services/fechamento.py:286,754,827,1810` · `app/ponto/management/commands/recalcular_fechamento.py:118` · `app/ponto/services/espelho.py:1200,1215` · `app/ponto/services/autorizacao_he_periodo.py:96` · `app/relatorios/pdf_espelho.py:434` · `app/ponto/services/esmeril_espelho.py:174` · `app/config/crons.py:596` · `app/ponto/management/commands/vigiar_motor_autoridade.py:58` · `app/ponto/management/commands/diff_espelho_alimentacao.py:58` · `app/relatorios/management/commands/diff_extrato_parcial.py:68` · `app/holerite/views.py:1304,1393,1445`
+- **FILA — Mudança de contrato do chamador direto.** Com par fechado, chave ausente e empresa identificada com janela ligada, o `raise` acontece **antes** da vigência e da consulta de marcos. Pode levantar mesmo com `janela_he_desde` ausente ou posterior ao par. É uma falha explícita, sem retorno à data civil. Se um chamador novo atingir esse ramo, a exceção propaga onde não houver captura. O recálculo por evento tem captura externa. Entre os testes diretos do censo, só o teste novo injeta o contexto de empresa com janela ligada, e espera a exceção. `app/ponto/motor_calculo_v2.py:1379,1394,1532,1549,1556,2793` · `app/ponto/services/fechamento.py:1807,1818` · `app/ponto/tests/test_janela_no_dia_do_turno.py:197,206`
+
+## 4. Marco de saída e valor do par
+
+- **OK — 15:00–23:50 com saída 00:10.** No diff anterior, `m_saida` usava a data civil **da saída**, logo o marco era 23:50 de **D+1**. Com a âncora em **D**, fica 23:50 de **D**. Com a janela aplicável, piso e extra zero, a mesma regra L-097 passa a recortar 20 min, de 550 para 530 min brutos após a janela. Isso é consequência direta da âncora dentro do aval. `app/ponto/motor_calculo_v2.py:1574,1775` · `app/ponto/janela_he.py:166` · `app/ponto/tests/test_janela_no_dia_do_turno.py:177`
+- **BLOQUEIA — Par inteiro depois do marco.** No B-I28, a cauda de **07:32–07:43** herda o dia do turno 19–07. O motor conserva a entrada às 07:32 e recorta a saída a 07:00. Para a L-084, só a distância da entrada passa de 180 min. O cálculo carimba a duração invertida, limita trabalhadas a zero e conserva **43 min fora**. Antes, a fixture mantinha o par cru de 11 min. A nova saída viola as duas propriedades do aval. Resultado da execução isolada da janela em memória, com os insumos da fixture. Incidência em produção [nao verificado]. `app/ponto/tests/test_o280_bateria_da_lei.py:4993,5007,5081,5127` · `app/ponto/motor_calculo_v2.py:1574,1589,2800,2826` · `app/ponto/janela_he.py:168,175` · `app/ponto/tests/test_janela_no_dia_do_turno.py:121`
+- **BLOQUEIA — A troca também altera a dispensa pela L-084 sem troca do dia civil da entrada.** Com `data_jornada=D`, escala **19:00–00:10**, par **D 00:00–23:55**, piso e extra zero, a geometria anterior via duas pontas longe e preservava **1.435 min brutos**. Com `hf` em **D+1**, a saída fica a 15 min do marco e a janela corta **1.140 min** na entrada. Restam **295 min brutos**. O caso foi reproduzido no recorte em memória. O pareamento dessa geometria em produção [nao verificado]. `app/ponto/motor_calculo_v2.py:1574,1589,1980` · `app/ponto/janela_he.py:115,125`
+- **FILA — FT e 24x48.** A FT marcada no laço sai antes da construção dos marcos. Para plantão com `hi == hf`, a autoridade registra que cruza a meia-noite. Um plantão 07:00 de **D** até 07:00 de **D+1** conserva o `hf`. Para **06:40–07:30 de D**, com `hi == hf == 07:00`, a janela isolada passa de **0 min efetivos e 50 fora** para **30 efetivos e 20 fora**, pois o `hf` muda de **D** para **D+1**. O exemplo mostra a mudança de valor na borda de igualdade. Um caso real de 24x48 com essa geometria [nao verificado]. `app/ponto/motor_calculo_v2.py:1538,1578,2493,3575` · `app/escala/servico_jornada.py:104` · `app/ponto/janela_he.py:125,175`
+
+## 5. Classes de reprovação
+
+- **BLOQUEIA — Derivação paralela presente.** O juiz registrado da atribuição da batida é `turnos_do_colab`. O diff não introduz outro pareador nem outro predicado `cruza?`. Ele eleva a herança e a degradação civil já existentes a fonte do dinheiro da janela, enquanto BO-B e apresentação continuam lendo o dia do juiz. Há também composição paralela do **instante de saída**: `marcos_turno` encadeia todos os marcos, inclusive pausa, enquanto os dois ramos da janela usam apenas `hi/hf` e `+1`. Por exemplo, a sequência `18:00 / 23:00 / 01:00 / 19:00` põe `hf` em **D+1** no encadeador e em **D** na janela. Uso dessa sequência em produção [nao verificado]. `app/docs/JUIZES.md:20,24` · `app/core/juizes.py:215` · `app/escala/servico_jornada.py:69,82,104` · `app/ponto/motor_calculo_v2.py:1574,1612,1633,2439`
+- **OK — Segundo escritor persistente, relógio fora da borda e mudança de trava ausentes no diff.** As escritas novas são no memo da instância, antes dos dois cálculos. A porta de HE continua adquirindo a trava e gravando a decisão. O marco usa a referência recebida. A L-084 segue antes do clipe e da leitura do estado autorizado. Há **zero `except` adicionados e zero removidos** no diff fornecido. O `except Exception` da consulta de empresa já existia. A chave ausente ganhou um `raise` e o retorno sem janela para empresa desligada ou indisponível. `app/ponto/motor_calculo_v2.py:1394,1549,1589,1674,2494,2593` · `app/ponto/portas/he.py:158,195,206` · `app/ponto/janela_he.py:46`
+- **BLOQUEIA — Campo com dois significados presente.** `dia` no relato de janela e no contador vem do período com herança. `dia` da acusação BO-B e da pontualidade vem do juiz. `DecisaoHE.data` recebe o dia apresentado e o motor a consulta pelo dia herdado. `app/ponto/motor_calculo_v2.py:1641,1655,1686,1703,2030,2444` · `app/ponto/services/he_pendente_lavrado.py:148` · `app/ponto/portas/he.py:66`
+- **OK — Os dois mutantes têm asserções capazes de morder.** Restaurar `entrada.date()` perde, por exemplo, o recorte de **2 min** esperado na cauda literal de col113. Suprimir o `+1` do marco **do par** quebra a guarda **18:40 → 07:00**, que espera saída em **D+1**, 720 min trabalhados e 20 fora. A execução em memória confirmou a quebra da geometria da guarda sem `+1`. O mutante que remove **só** o `+1` do BO-B não tem prova dedicada localizada. `app/ponto/tests/test_janela_no_dia_do_turno.py:160,231,310,323` · `app/ponto/motor_calculo_v2.py:1579,1635`
+- **BLOQUEIA — Matriz incompleta e pré-requisito de pouso aberto.** As fixtures comercial e vespertina gravam `tipo_base='5x2'`, que a fábrica rejeita antes das asserções. A propriedade não cobre a cauda depois do `hf` do B-I28. O caso col200 cobra apenas a entrada, e o DNA criado na fixture não inclui `extra_declarada`, ainda que o tipo tenha minutos cadastrados. Suite integral verde, sonda dos 57 dias e dos ~16 mil pares e zero violações na frota [nao verificado]. `app/ponto/tests/test_janela_no_dia_do_turno.py:68,73,106,121,243,279,290,321` · `app/ponto/motor_calculo_v2.py:3634,3692` · `app/escala/models.py:1245` · `CLAUDE.md:383` · `CORTES.md:643` (anexo)
+- **OK — `.replace(hour=...)` fora do módulo da janela ausente nos sítios vigiados.** O novo `replace` fica em `janela_he.py`. O teste estrutural verifica o módulo, os quatro métodos da janela e `calculador/regras.py`. `app/ponto/janela_he.py:48` · `app/ponto/tests/test_janela_he_regra.py:124,136,147,154`
+
+## 6. Selos existentes e assinatura
+
+- **OK — Assinatura no censo da cópia.** `entrada_efetiva` agora exige o marco como `datetime`. Um consumidor com `hi=` falharia pela assinatura, e um `time` posicional falharia na subtração. O chamador executável encontrado já passa `j['marco_entrada']`. `calculador/regras.py` só importa a função. `test_janela_he_regra.py` usa `calcular_mes` e verifica o import e a AST. O teste direto de `saida_efetiva` já passa `datetime`, e as chamadas com aliases no selo do calculador são texto de fixture AST. `app/ponto/janela_he.py:95,115` · `app/ponto/motor_calculo_v2.py:1734` · `app/ponto/calculador/regras.py:30` · `app/ponto/tests/test_janela_he_regra.py:67,124,136` · `app/ponto/tests/test_janela_he_saida.py:134` · `app/ponto/tests/test_chamador_do_calculador_aplica_a_janela.py:134`
+- **BLOQUEIA — Duas falhas confirmadas na catraca.** Executei a versão em memória indicada no próprio teste, com `unittest` e sem Django. `test_CATRACA_numeros_exatos_e_registro_no_mesmo_commit` falha porque o contador desce **84 → 83**. `test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit` falha porque a entrada civil da janela saiu e o registro mantém posições antigas, inclusive `2408 → 2444` na herança. `app/core/tests/test_medida_turno_do_par.py:20,299,544,560` · `app/ponto/motor_calculo_v2.py:1549,2444`
+- **BLOQUEIA — A bateria O280 fixa comportamentos que a obra muda.** B-P4a exige o par antigo invertido e carrega um `expectedFailure` para os **150 min** da lei. B-I28 exige a cauda crua e **731 min** no dia, além de ter outro `expectedFailure`. São incompatibilidades identificadas por leitura e pela execução isolada da janela. Resultado integral desses testes Django e dos pinos [nao verificado]. `app/ponto/tests/test_o280_bateria_da_lei.py:4926,4935,4961,4982,5081,5113,5123`
+
+## 7. Limite do aval, atraso e competência exportada
+
+- **BLOQUEIA — O recorte excede a correção pedida no B-I28.** Os corpos de `calcular_per
+
+[truncado em 20000 de 22110 caracteres]
+
+## 24/11 02:29 · sessao 08df8f8609fb · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
+
+# DEPOIS — NOTURNO-A-JANELA-NO-DIA-DO-TURNO
+
+A soma das 18 classes é **402**, igual ao `C1 402` do anexo. Em `iguais_so_fechados`, são **320** casos, dos quais **308** têm `motor_agora=0` e **12** têm `motor_agora>0`. [nao verificado]
+
+As marcações `[nao verificado]` nas tabelas indicam que a fonte é o anexo raspado fornecido, sem verificação independente na sombra. [nao verificado]
+
+## 1. Contagem por classe
+
+| Classe | Contagem | Fonte |
+|---|---:|---|
+| `aberto_ou_saida_orfa` | 1 | [nao verificado] |
+| `aberto_ou_saida_orfa+quantidade_de_blocos` | 1 | [nao verificado] |
+| `aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | [nao verificado] |
+| `batida_orfa_na_celula+aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | [nao verificado] |
+| `entrada_repetida+aberto_ou_saida_orfa+virada_ou_outro_dia` | 2 | [nao verificado] |
+| `entrada_repetida+batida_orfa_na_celula+aberto_ou_saida_orfa` | 2 | [nao verificado] |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa` | 1 | [nao verificado] |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa+virada_ou_outro_dia+quantidade_de_blocos` | 1 | [nao verificado] |
+| `entrada_repetida+saida_apos_marco+virada_ou_outro_dia` | 1 | [nao verificado] |
+| `entrada_repetida+virada_ou_outro_dia` | 1 | [nao verificado] |
+| `iguais_com_aberto` | 62 | [nao verificado] |
+| `iguais_so_fechados\|bruto5-30\|motor_agora=0` | 55 | [nao verificado] |
+| `iguais_so_fechados\|bruto<=5\|motor_agora=0` | 208 | [nao verificado] |
+| `iguais_so_fechados\|bruto>30\|motor_agora=0` | 45 | [nao verificado] |
+| `iguais_so_fechados\|bruto>30\|motor_agora>0` | 12 | [nao verificado] |
+| `saida_apos_marco+aberto_ou_saida_orfa` | 1 | [nao verificado] |
+| `saida_apos_marco+virada_ou_outro_dia` | 4 | [nao verificado] |
+| `virada_ou_outro_dia` | 3 | [nao verificado] |
+| **Soma = C1** | **402** | [nao verificado] |
+
+O anexo termina em `rc_sombra=0` e não traz traceback para transcrever. [nao verificado]
+
+## 2. Exemplos `fech` e corte da faixa 22h–05h
+
+Cada `pares` mantém a ordem do anexo `[entrada, saida, efetivo_entrada, efetivo_saida, min_trab, min_fora_janela]`. O teste usa a borda da faixa que o par bruto alcançou. Nos 12 exemplos com motor zero, a saída efetiva eliminou o trecho após as 22h. Nos quatro com motor positivo, a entrada efetiva ficou antes das 05h do dia seguinte e o par preservou esse trecho da madrugada. [nao verificado] [nao verificado]
+
+### `iguais_so_fechados|bruto5-30|motor_agora=0`
+
+| Colab | Dia | Bruto | Leg | Pares | Cortou a faixa? |
+|---:|---|---:|---:|---|---|
+| 108 | 2026-10-19 | 10.5 | 0.0 | `[["2026-10-19 10:00:31", "2026-10-19 22:10:29", "2026-10-19 10:00:31", "2026-10-19 22:00:00", 657.9, 10.5]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 108 | 2026-10-21 | 6.3 | 0.0 | `[["2026-10-21 09:59:32", "2026-10-21 22:06:16", "2026-10-21 10:00:00", "2026-10-21 22:00:00", 659.9, 6.7]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 108 | 2026-10-25 | 17.6 | 0.0 | `[["2026-10-25 10:00:52", "2026-10-25 22:17:37", "2026-10-25 10:00:52", "2026-10-25 22:00:00", 658.1, 17.6]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 108 | 2026-11-16 | 15.6 | 0.0 | `[["2026-11-16 09:59:13", "2026-11-16 22:15:37", "2026-11-16 10:00:00", "2026-11-16 22:00:00", 659.7, 16.4]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+
+### `iguais_so_fechados|bruto<=5|motor_agora=0`
+
+| Colab | Dia | Bruto | Leg | Pares | Cortou a faixa? |
+|---:|---|---:|---:|---|---|
+| 60 | 2026-10-31 | 3.5 | 0.0 | `[["2026-10-31 09:52:32", "2026-10-31 22:03:32", "2026-10-31 09:52:32", "2026-10-31 19:00:00", 486.3, 183.5]]` | Sim, saída efetiva 19:00:00 < 22:00. [nao verificado] |
+| 108 | 2026-10-01 | 0.7 | 0.0 | `[["2026-10-01 09:59:41", "2026-10-01 22:00:39", "2026-10-01 10:00:00", "2026-10-01 22:00:00", 659.3, 1.0]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 108 | 2026-10-03 | 0.5 | 0.0 | `[["2026-10-03 09:56:13", "2026-10-03 22:00:27", "2026-10-03 10:00:00", "2026-10-03 22:00:00", 658.2, 4.2]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 108 | 2026-10-05 | 0.9 | 0.0 | `[["2026-10-05 09:56:07", "2026-10-05 22:00:54", "2026-10-05 10:00:00", "2026-10-05 22:00:00", 660.5, 4.8]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+
+### `iguais_so_fechados|bruto>30|motor_agora=0`
+
+| Colab | Dia | Bruto | Leg | Pares | Cortou a faixa? |
+|---:|---|---:|---:|---|---|
+| 373 | 2026-10-22 | 48.8 | 0.0 | `[["2026-10-22 16:58:11", "2026-10-22 22:48:50", "2026-10-22 16:58:11", "2026-10-22 22:00:00", 301.8, 48.8]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 373 | 2026-10-24 | 48.9 | 0.0 | `[["2026-10-24 16:52:22", "2026-10-24 22:48:55", "2026-10-24 16:52:22", "2026-10-24 22:00:00", 307.6, 48.9]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 373 | 2026-10-26 | 49.6 | 0.0 | `[["2026-10-26 16:56:11", "2026-10-26 22:49:38", "2026-10-26 16:56:11", "2026-10-26 22:00:00", 303.8, 49.6]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+| 373 | 2026-10-28 | 48.9 | 0.0 | `[["2026-10-28 16:59:53", "2026-10-28 22:48:56", "2026-10-28 16:59:53", "2026-10-28 22:00:00", 300.1, 48.9]]` | Sim, saída efetiva = 22:00:00. [nao verificado] |
+
+### `iguais_so_fechados|bruto>30|motor_agora>0`
+
+| Colab | Dia | Bruto | Leg | Pares | Cortou a faixa? |
+|---:|---|---:|---:|---|---|
+| 37 | 2026-10-05 | 119.4 | 119.4 | `[["2026-10-06 03:00:38", "2026-10-06 07:01:01", "2026-10-06 03:00:38", "2026-10-06 07:00:00", 239.4, 1.0]]` | Não, preservou 03:00:38–05:00 do dia seguinte. [nao verificado] |
+| 37 | 2026-10-09 | 119.3 | 119.3 | `[["2026-10-10 03:00:40", "2026-10-10 07:01:50", "2026-10-10 03:00:40", "2026-10-10 07:00:00", 239.3, 1.8]]` | Não, preservou 03:00:40–05:00 do dia seguinte. [nao verificado] |
+| 113 | 2026-10-30 | 120.0 | 137.1 | `[["2026-10-31 03:00:00", "2026-10-31 07:02:00", "2026-10-31 03:00:00", "2026-10-31 07:00:00", 240.0, 2.0]]` | Não, preservou 03:00:00–05:00 do dia seguinte. [nao verificado] |
+| 113 | 2026-11-01 | 120.0 | 137.1 | `[["2026-11-02 03:00:00", "2026-11-02 07:01:00", "2026-11-02 03:00:00", "2026-11-02 07:00:00", 240.0, 1.0]]` | Não, preservou 03:00:00–05:00 do dia seguinte. [nao verificado] |
+
+## 3. `motor_agora>0` com `DiaPago=0`
+
+**Sim, no sentido de divergência de valor frente ao recálculo da cópia.** Nos 12 casos dessa subclasse, a sonda reporta noturno legal positivo no motor atual e zero no `DiaPago` usado pelo C1. [nao verificado]
+
+No código da cópia, a janela busca o dia da jornada atribuído ao par e coloca o marco de saída no dia seguinte quando o turno cruza a meia-noite. O motor calcula `minutos_noturnos_legais` sobre as pontas efetivas, desconta o noturno dos intervalos e aplica o fator de hora noturna, com prorrogação conforme a configuração. [`motor_calculo_v2.py:2494`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/motor_calculo_v2.py:2494), [`motor_calculo_v2.py:1549`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/motor_calculo_v2.py:1549), [`motor_calculo_v2.py:1574`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/motor_calculo_v2.py:1574), [`motor_calculo_v2.py:2833`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/motor_calculo_v2.py:2833), [`motor_calculo_v2.py:983`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/motor_calculo_v2.py:983)
+
+Na lavra `versao='motor'`, o fechamento entrega os períodos e o mapa `dia_da_jornada`. `lavrar` soma `minutos_noturnos_legais / 60` em `horas_noturnas` do dia atribuído e substitui as linhas da competência para aquela versão. Se receber os mesmos períodos positivos do recálculo para o mesmo dia, a lavra desse dia sai positiva. [`fechamento.py:1201`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/services/fechamento.py:1201), [`fechamento.py:1217`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/services/fechamento.py:1217), [`fechamento.py:1227`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/services/fechamento.py:1227), [`dia_pago.py:173`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/services/dia_pago.py:173), [`dia_pago.py:359`](/home/ronald/codex_ws/b4528cb2fe8ea8de737890fbdca26169931c8ab4/app/ponto/services/dia_pago.py:359)
+
+**A causa histórica do zero fica em aberto.** Data e versão da lavra original, períodos e insumos que ela recebeu, eventual tentativa de relavra e atribuição dos 12 casos à mudança de ancoragem da janela estão [nao verificado].
 
 ## 24/11 02:26 · sessao 7e01b5d91af0 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
 
@@ -653,186 +800,4 @@ O segundo injeta `RuntimeError` em `reter_se_vetada` e exige que instante, autor
 
 O F9b também falharia sem a atribuição nova. Ele parte de `None` e exige `RECUSA_RETIDA`. [test_e4c_b2b_f0_espinha.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/tests/test_e4c_b2b_f0_espinha.py:314), [models.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/models.py:3386) A execução dos testes nesta cópia está [nao verificado].
 
-## 24/11 01:26 · sessao 4c298ef0e2f4 · NOTURNO-NAO-APURADO · sonda · origem=Code
-
-## 1. Contagem por classe
-
-As 17 classes somam **402 = C1**. Os **320** casos de `iguais_so_fechados` aparecem nas três subclasses com `motor_agora=0`. Para as demais classes, a saída não informa esse indicador. `sonda/anexos:3–20`
-
-As referências a `sonda/anexos` contam a partir de `sonda_leitura`, a primeira linha do dado raspado. `sonda/anexos:1`
-
-| Classe | Contagem | Fonte |
-|---|---:|---|
-| `aberto_ou_saida_orfa` | 1 | `sonda/anexos:4` |
-| `aberto_ou_saida_orfa+quantidade_de_blocos` | 1 | `sonda/anexos:5` |
-| `aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | `sonda/anexos:6` |
-| `batida_orfa_na_celula+aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | `sonda/anexos:7` |
-| `entrada_repetida+aberto_ou_saida_orfa+virada_ou_outro_dia` | 2 | `sonda/anexos:8` |
-| `entrada_repetida+batida_orfa_na_celula+aberto_ou_saida_orfa` | 2 | `sonda/anexos:9` |
-| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa` | 1 | `sonda/anexos:10` |
-| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa+virada_ou_outro_dia+quantidade_de_blocos` | 1 | `sonda/anexos:11` |
-| `entrada_repetida+saida_apos_marco+virada_ou_outro_dia` | 1 | `sonda/anexos:12` |
-| `entrada_repetida+virada_ou_outro_dia` | 1 | `sonda/anexos:13` |
-| `iguais_com_aberto` | 62 | `sonda/anexos:14` |
-| `iguais_so_fechados\|bruto5-30\|motor_agora=0` | 55 | `sonda/anexos:15` |
-| `iguais_so_fechados\|bruto<=5\|motor_agora=0` | 208 | `sonda/anexos:16` |
-| `iguais_so_fechados\|bruto>30\|motor_agora=0` | 57 | `sonda/anexos:17` |
-| `saida_apos_marco+aberto_ou_saida_orfa` | 1 | `sonda/anexos:18` |
-| `saida_apos_marco+virada_ou_outro_dia` | 4 | `sonda/anexos:19` |
-| `virada_ou_outro_dia` | 3 | `sonda/anexos:20` |
-| **Soma** | **402** | `sonda/anexos:3–20` |
-
-**Traceback.** Nenhum traceback consta no trecho fornecido. A última linha da saída é `rc_sombra=0`. `sonda/anexos:1–125`
-
-## 2. Exemplos `fech` e corte da faixa noturna
-
-A ordem de cada par é `[entrada, saida, efetivo_entrada, efetivo_saida, min_trab, min_fora_janela]`. O corte é avaliado contra a faixa noturna que o par bruto alcançava. O motor calcula o noturno pelas pontas efetivas e exige interseção positiva. `sonda/anexos:73–84` · [motor_calculo_v2.py:89](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:89) · [motor_calculo_v2.py:2792](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:2792)
-
-### `iguais_so_fechados|bruto5-30|motor_agora=0`
-
-| Colab / dia | Bruto / leg | Par | Cortou a faixa? | Fonte |
-|---|---:|---|---|---|
-| 108 / 2026-10-19 | 10.5 / 0.0 | `["2026-10-19 10:00:31", "2026-10-19 22:10:29", "2026-10-19 10:00:31", "2026-10-19 22:00:00", 657.9, 10.5]` | Sim, saída efetiva = 22:00 | `sonda/anexos:73` |
-| 108 / 2026-10-21 | 6.3 / 0.0 | `["2026-10-21 09:59:32", "2026-10-21 22:06:16", "2026-10-21 10:00:00", "2026-10-21 22:00:00", 659.9, 6.7]` | Sim, saída efetiva = 22:00 | `sonda/anexos:74` |
-| 108 / 2026-10-25 | 17.6 / 0.0 | `["2026-10-25 10:00:52", "2026-10-25 22:17:37", "2026-10-25 10:00:52", "2026-10-25 22:00:00", 658.1, 17.6]` | Sim, saída efetiva = 22:00 | `sonda/anexos:75` |
-| 108 / 2026-11-16 | 15.6 / 0.0 | `["2026-11-16 09:59:13", "2026-11-16 22:15:37", "2026-11-16 10:00:00", "2026-11-16 22:00:00", 659.7, 16.4]` | Sim, saída efetiva = 22:00 | `sonda/anexos:76` |
-
-### `iguais_so_fechados|bruto<=5|motor_agora=0`
-
-| Colab / dia | Bruto / leg | Par | Cortou a faixa? | Fonte |
-|---|---:|---|---|---|
-| 60 / 2026-10-31 | 3.5 / 0.0 | `["2026-10-31 09:52:32", "2026-10-31 22:03:32", "2026-10-31 09:52:32", "2026-10-31 19:00:00", 486.3, 183.5]` | Sim, saída efetiva 19:00 < 22:00 | `sonda/anexos:77` |
-| 108 / 2026-10-01 | 0.7 / 0.0 | `["2026-10-01 09:59:41", "2026-10-01 22:00:39", "2026-10-01 10:00:00", "2026-10-01 22:00:00", 659.3, 1.0]` | Sim, saída efetiva = 22:00 | `sonda/anexos:78` |
-| 108 / 2026-10-03 | 0.5 / 0.0 | `["2026-10-03 09:56:13", "2026-10-03 22:00:27", "2026-10-03 10:00:00", "2026-10-03 22:00:00", 658.2, 4.2]` | Sim, saída efetiva = 22:00 | `sonda/anexos:79` |
-| 108 / 2026-10-05 | 0.9 / 0.0 | `["2026-10-05 09:56:07", "2026-10-05 22:00:54", "2026-10-05 10:00:00", "2026-10-05 22:00:00", 660.5, 4.8]` | Sim, saída efetiva = 22:00 | `sonda/anexos:80` |
-
-### `iguais_so_fechados|bruto>30|motor_agora=0`
-
-| Colab / dia | Bruto / leg | Par | Cortou a faixa? | Fonte |
-|---|---:|---|---|---|
-| 37 / 2026-10-05 | 119.4 / 0.0 | `["2026-10-06 03:00:38", "2026-10-06 07:01:01", "2026-10-06 19:00:00", "2026-10-06 07:00:00", 0, 960.4]` | Sim, entrada efetiva 19:00 > 05:00 e posterior à saída efetiva de 07:00 | `sonda/anexos:81` |
-| 37 / 2026-10-09 | 119.3 / 0.0 | `["2026-10-10 03:00:40", "2026-10-10 07:01:50", "2026-10-10 19:00:00", "2026-10-10 07:00:00", 0, 961.2]` | Sim, entrada efetiva 19:00 > 05:00 e posterior à saída efetiva de 07:00 | `sonda/anexos:82` |
-| 113 / 2026-10-30 | 120.0 / 0.0 | `["2026-10-31 03:00:00", "2026-10-31 07:02:00", "2026-10-31 19:00:00", "2026-10-31 07:00:00", 0, 962.0]` | Sim, entrada efetiva 19:00 > 05:00 e posterior à saída efetiva de 07:00 | `sonda/anexos:83` |
-| 113 / 2026-11-01 | 120.0 / 0.0 | `["2026-11-02 03:00:00", "2026-11-02 07:01:00", "2026-11-02 19:00:00", "2026-11-02 07:00:00", 0, 961.0]` | Sim, entrada efetiva 19:00 > 05:00 e posterior à saída efetiva de 07:00 | `sonda/anexos:84` |
-
-Nos oito primeiros exemplos, o trecho efetivo termina às 22h ou antes. Nos quatro de `bruto>30`, o par efetivo está invertido, e `minutos_noturnos` retorna zero quando a entrada é igual ou posterior à saída. A regra ou configuração que produziu cada recorte na sombra fica **[nao verificado]**. `sonda/anexos:73–84` · [motor_calculo_v2.py:89](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:89)
-
-## 3. `motor_agora>0` com `DiaPago.horas_noturnas=0`
-
-**Só caracteriza uma lavra desatualizada frente ao recálculo se o valor positivo for o que o fechamento de hoje entregaria a `lavrar` para a mesma linha.** O fechamento passa os períodos e o mapa `dia_da_jornada` à lavra da versão `motor`. `lavrar` soma `minutos_noturnos_legais / 60` no dia atribuído, tanto nos períodos normais quanto nas partições de folga trabalhada, e grava a rubrica em `DiaPago.horas_noturnas`. Se a soma hoje entregue à mesma linha fosse positiva, o zero persistido divergiriria do que seria lavrado hoje. [fechamento.py:1200](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/fechamento.py:1200) · [dia_pago.py:126](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:126) · [dia_pago.py:173](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:173) · [dia_pago.py:223](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:223) · [dia_pago.py:345](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:345)
-
-Nesta saída, o zero do C1 vem do `DiaPago` lavrado, e os 320 `iguais_so_fechados` também têm zero no recálculo da sonda. A equivalência entre o recálculo da sonda e os períodos que o fechamento entregaria à mesma linha, a data e a régua da lavra original, e a causa de uma eventual divergência ficam **[nao verificado]**. O código de `sonda_c1c.py` e o vínculo da cópia com o hash informado também ficam **[nao verificado]**. `causa_c1.r:3–5` · `sonda/anexos:1,15–17`
-
-## 24/11 01:23 · sessao bc2e125c7f87 · NOTURNO-NAO-APURADO · sonda · origem=Code
-
-## 1. C1 e contagem por classe
-
-**C1 = 402.** As referências a `sonda/anexos` numeram a saída colada a partir de `C1 402` como linha 1. `sonda/anexos:1`
-
-| Classe | Contagem | Fonte |
-|---|---:|---|
-| `aberto_ou_saida_orfa` | 1 | `sonda/anexos:2` |
-| `aberto_ou_saida_orfa+quantidade_de_blocos` | 1 | `sonda/anexos:3` |
-| `aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | `sonda/anexos:4` |
-| `batida_orfa_na_celula+aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | `sonda/anexos:5` |
-| `entrada_repetida+aberto_ou_saida_orfa+virada_ou_outro_dia` | 2 | `sonda/anexos:6` |
-| `entrada_repetida+batida_orfa_na_celula+aberto_ou_saida_orfa` | 2 | `sonda/anexos:7` |
-| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa` | 1 | `sonda/anexos:8` |
-| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa+virada_ou_outro_dia+quantidade_de_blocos` | 1 | `sonda/anexos:9` |
-| `entrada_repetida+saida_apos_marco+virada_ou_outro_dia` | 1 | `sonda/anexos:10` |
-| `entrada_repetida+virada_ou_outro_dia` | 1 | `sonda/anexos:11` |
-| `iguais_com_aberto` | 62 | `sonda/anexos:12` |
-| `iguais_so_fechados` | 320 | `sonda/anexos:13` |
-| `iguais_sem_par` | 0, por saldo | `sonda/anexos:1–16` |
-| `saida_apos_marco+aberto_ou_saida_orfa` | 1 | `sonda/anexos:14` |
-| `saida_apos_marco+virada_ou_outro_dia` | 4 | `sonda/anexos:15` |
-| `virada_ou_outro_dia` | 3 | `sonda/anexos:16` |
-
-As demais classes somam 20. A soma fecha em **20 + 62 + 320 + 0 = 402**. A linha de `iguais_sem_par` está ausente da listagem, e seu saldo é `402 − (20 + 62 + 320) = 0`. `sonda/anexos:1–16`
-
-A saída fornecida termina em `rc_sombra=0` e não contém traceback para transcrever. `sonda/anexos:1–89`
-
-## 2. Cinco exemplos de `iguais_so_fechados`
-
-Em cada exemplo, usei o único par publicado, igual no motor e no juiz. A conta mede a interseção das pontas brutas com a faixa das 22h do dia indicado às 05h do dia seguinte, sem prorrogação e sem desconto de pausas. Os cinco pares intersectam a faixa. `sonda/anexos:76–80` · `app/ponto/motor_calculo_v2.py:99–118`
-
-### `37` · `2026-10-05`
-
-Batidas transcritas por data. `sonda/anexos:76`
-
-```text
-2026-10-03  19:00:08 E
-2026-10-04  02:00:42 S  03:00:46 E  07:00:00 S
-2026-10-06  02:00:15 S  03:00:38 E  07:01:01 S
-2026-10-07  19:21:03 E
-```
-
-Motor e juiz `2026-10-06 03:00:38 → 2026-10-06 07:01:01`. **Sim.** Na madrugada de 06/10, `05:00:00 − 03:00:38 = 1h59min22s`. `sonda/anexos:76` · `app/ponto/motor_calculo_v2.py:99–118`
-
-### `37` · `2026-10-09`
-
-Batidas transcritas por data. `sonda/anexos:77`
-
-```text
-2026-10-07  19:21:03 E
-2026-10-08  02:00:01 S  03:00:25 E  07:00:25 S
-2026-10-10  02:00:04 S  03:00:40 E  07:01:50 S
-2026-10-11  19:00:04 E
-```
-
-Motor e juiz `2026-10-10 03:00:40 → 2026-10-10 07:01:50`. **Sim.** Na madrugada de 10/10, `05:00:00 − 03:00:40 = 1h59min20s`. `sonda/anexos:77` · `app/ponto/motor_calculo_v2.py:99–118`
-
-### `60` · `2026-10-31`
-
-Batidas transcritas por data. `sonda/anexos:78`
-
-```text
-2026-10-29  06:56:19 E  11:02:34 S  12:02:20 E  19:00:25 S
-2026-10-31  09:52:32 E  12:02:15 S  13:03:23 E  22:03:32 S
-2026-11-02  10:05:20 E  15:20:23 S  16:20:32 E  22:01:25 S
-```
-
-Motor e juiz `2026-10-31 09:52:32 → 2026-10-31 22:03:32`. **Sim.** Em 31/10, `22:03:32 − 22:00:00 = 3min32s`. `sonda/anexos:78` · `app/ponto/motor_calculo_v2.py:99–118`
-
-### `108` · `2026-10-01`
-
-Batidas transcritas por data. `sonda/anexos:79`
-
-```text
-2026-10-01  09:59:41 E  15:00:22 S  16:01:05 E  22:00:39 S
-2026-10-03  09:56:13 E  15:00:34 S  16:02:19 E  22:00:27 S
-```
-
-Motor e juiz `2026-10-01 09:59:41 → 2026-10-01 22:00:39`. **Sim.** Em 01/10, `22:00:39 − 22:00:00 = 39s`. `sonda/anexos:79` · `app/ponto/motor_calculo_v2.py:99–118`
-
-### `108` · `2026-10-03`
-
-Batidas transcritas por data. `sonda/anexos:80`
-
-```text
-2026-10-01  09:59:41 E  15:00:22 S  16:01:05 E  22:00:39 S
-2026-10-03  09:56:13 E  15:00:34 S  16:02:19 E  22:00:27 S
-2026-10-05  09:56:07 E  15:01:46 S  16:01:15 E  22:00:54 S
-```
-
-Motor e juiz `2026-10-03 09:56:13 → 2026-10-03 22:00:27`. **Sim.** Em 03/10, `22:00:27 − 22:00:00 = 27s`. `sonda/anexos:80` · `app/ponto/motor_calculo_v2.py:99–118`
-
-## 3. Sítios candidatos por exemplo
-
-A janela de HE teria de retirar toda a interseção ou produzir `saída efetiva <= entrada efetiva`. Se a janela deixar interseção positiva, `calcular_noturnas` só a zera por desconto de pausas quando elas cobrem todo o noturno efetivo, inclusive a prorrogação quando aplicável. `app/ponto/motor_calculo_v2.py:89–118,162–196,983–1005,1689–1763`
-
-| Colab e dia | Condição que explicaria zero no cálculo do par |
-|---|---|
-| `37` · `2026-10-05` | **Janela de HE na entrada.** Deslocar a entrada efetiva de 06/10 para `05:00:00` ou depois retiraria a faixa de `1h59min22s`. Um recorte só da saída teria de chegar à entrada ou antes dela para zerar. Com as pontas brutas mantidas, pausas julgadas teriam de cobrir `03:00:38–05:00:00` e, se houver prorrogação, também `05:00:00–07:01:01`. `sonda/anexos:76` · `app/ponto/motor_calculo_v2.py:89–118,983–987,1689–1750` |
-| `37` · `2026-10-09` | **Janela de HE na entrada.** Deslocar a entrada efetiva de 10/10 para `05:00:00` ou depois retiraria a faixa de `1h59min20s`. Um recorte só da saída teria de chegar à entrada ou antes dela para zerar. Com as pontas brutas mantidas, pausas julgadas teriam de cobrir `03:00:40–05:00:00` e, se houver prorrogação, também `05:00:00–07:01:50`. `sonda/anexos:77` · `app/ponto/motor_calculo_v2.py:89–118,983–987,1689–1750` |
-| `60` · `2026-10-31` | **Janela de HE na saída.** Uma saída efetiva às `22:00:00` ou antes eliminaria os `3min32s`. Com as pontas brutas mantidas, pausas julgadas teriam de cobrir `22:00:00–22:03:32`. `sonda/anexos:78` · `app/ponto/motor_calculo_v2.py:99–118,983–987,1731–1750` |
-| `108` · `2026-10-01` | **Janela de HE na saída.** Uma saída efetiva às `22:00:00` ou antes eliminaria os `39s`. Com as pontas brutas mantidas, pausas julgadas teriam de cobrir `22:00:00–22:00:39`. `sonda/anexos:79` · `app/ponto/motor_calculo_v2.py:99–118,983–987,1731–1750` |
-| `108` · `2026-10-03` | **Janela de HE na saída.** Uma saída efetiva às `22:00:00` ou antes eliminaria os `27s`. Com as pontas brutas mantidas, pausas julgadas teriam de cobrir `22:00:00–22:00:27`. `sonda/anexos:80` · `app/ponto/motor_calculo_v2.py:99–118,983–987,1731–1750` |
-
-Para cada um dos cinco, a aplicação da janela, os marcos, as pontas efetivas, as pausas julgadas e a prorrogação estão **[nao verificado]**. O cálculo preserva frações de minuto e a lavra soma os minutos legais divididos por 60 em um campo `FloatField`. Os `39s` e `27s`, por si sós, dão valor positivo nesse caminho. `app/ponto/motor_calculo_v2.py:112–118,983–992` · `app/ponto/services/dia_pago.py:173–179` · `app/ponto/models.py:327`
-
-Dois sítios posteriores também são candidatos para cada exemplo. **Bloqueio do dia sem previsto** exigiria trabalho apurado, folga ou feriado, janela vigente, previsto igual a zero, ausência de autorização e, em folga com colaborador identificado, escala certa. O bloqueio zera os dois campos de noturno. As guardas e o antes/depois de cada exemplo estão **[nao verificado]**. `app/ponto/motor_calculo_v2.py:1440–1483,2457–2461`
-
-**Fatia ou atribuição na lavra** exigiria verificar se o par entrou no resultado usado pelo fechamento e em que data foi somado. Nos dois exemplos do `37`, a data civil da entrada é o dia seguinte ao `dia` publicado. Na lavra normal, o mapa da jornada pode atribuir o par ao dia publicado, com a data civil da entrada como fallback. No O85, o fechamento agrupa pela data civil da entrada e encaminha só minutos trabalhados. O mapa efetivo, a aplicação do O85 e a correspondência entre o motor vivo da sonda e o fechamento que gerou o zero estão **[nao verificado]**. `sonda/anexos:76–80` · `app/ponto/services/espelho.py:1198–1227` · `app/ponto/motor_calculo_v2.py:2399–2432` · `app/ponto/services/fechamento.py:792–796,838–843,1201–1217` · `app/ponto/services/dia_pago.py:126–132,269–272`
-
-_8036 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8038 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
