@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 04:07:21.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.0 MB). Acoes na janela: **516**.
+**Medido em 24/11/2026 04:13:04.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.1 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:10:55 | Bash |  | `cd ~/saas-hasner; ps aux \| grep -c "[s]ombra.sh --conferir" ; ps aux \| grep "[u]sr/bin/sleep 60" \| head -2 cd app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,"PAREI: ! RESOLVER-PASSA-NA-FRENTE (4 perguntas de desenho fora do aval 2411-0110) \| espera Ronald -- cura a8b670fd1 em wt-resolver-d-024937 (base f3bac95b7; VIA_RESOLVER_DIA em VIAS_QUE_VENCEM_A_RESPOST ...` |
+| 04:10:43 | Bash |  | `cd ~/saas-hasner; date +%H:%M; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bao3is14s.output; bash bin/sombra.sh --conferir 2>&1 \| tail -1; sed -n 60,67p /home/ronald/wt-resolver-d-024937/app/api/views.py; git -C /home/ronald/wt-resolver-d-024937 log --oneline -1` |
 | 02:52:51 | Bash |  | `cd ~/saas-hasner; git -C /home/ronald/wt-janela-mut-022029 diff > logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mutante.diff; wc -l logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mutante.diff; git -C /home/ronald/wt-janela-red-021624 status --porcelain \| head -3 for w in /home/ronald/wt-janela-red-021624 /home/ronald/wt-janela-mut-022029; do git worktree remove --force $w && echo removida $w; done cd app/docs; py ...` |
 | 02:52:38 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO; ls; grep -i "327" pares_mudados.txt \| head -3; grep -ci "invert" saida_depois_sonda_pares.txt; grep -i "invertidos\\|INVERT" saida_antes_sonda_pares.txt saida_depois_sonda_pares.txt \| head -4` |
 | 02:40:37 | Bash |  | `cd ~/saas-hasner; for i in $(seq 1 200); do bash bin/sombra.sh --conferir >/dev/null 2>&1 && { echo "ENSAIO-OK $(date +%H:%M)"; bash bin/sombra.sh --conferir 2>&1 \| tail -1; exit 0; }; /usr/bin/sleep 60; done; echo TIMEOUT` |
