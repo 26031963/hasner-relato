@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 19:44:08.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (35.9 MB). Acoes na janela: **926**.
+**Medido em 24/11/2026 19:50:21.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (36.0 MB). Acoes na janela: **931**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:47:18 | Bash | Write PAREI for DXG trava vs floor punch | `cd ~/saas-hasner; sed -i '1i PAREI: ! DXG-33-TRAVA-x-BATIDA-DE-CHAO \| espera Ronald -- Codex verif2 v8 (verif2.r 62 l, rc 0) REPROVA; conferido: o lote e UM atomic que segura Colaborador FOR UPDATE (chamados/models.py:2938 trava_na_ordem, select_for_update simples) por 91,9 s medidos no COMMIT da sombra; o INSERT de Batida precisa de KEY SHARE no Colaborador (FK ponto/models.py:22) e espera; o co ...` |
+| 19:47:03 | Bash | Read core gunicorn conf timeout | `cd ~/saas-hasner; find . -maxdepth 3 -name "gunicorn.core.conf.py" -not -path "*/node_modules/*" \| head -2 \| xargs grep -n "timeout\\|worker"` |
+| 19:47:01 | Bash | Find saas_core gunicorn timeout | `cd ~/saas-hasner; grep -n "saas_core" -A25 docker-compose.yml \| grep -n "command\\|timeout\\|gunicorn" \| head; grep -rn "timeout" app/config/gunicorn*.py 2>/dev/null \| head` |
+| 19:46:58 | Bash | Verify lock type and timeouts on floor punch path | `cd ~/saas-hasner; git show HEAD:app/chamados/models.py \| sed -n 2925,2945p; echo ---; git show HEAD:app/ponto/models.py \| sed -n 18,26p; echo ---; grep -rn "lock_timeout\\|statement_timeout" app/config/settings/*.py \| head; grep -n "timeout" config/gunicorn* app/config/gunicorn* docker-compose*.yml 2>/dev/null \| head` |
+| 19:45:01 | Bash | Read DXG v8 Codex verdict | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; tail -1 $D/verif2.wrap.log; wc -l $D/verif2.r; cat $D/verif2.r` |
 | 19:42:57 | Bash | Record full suite verdict | `cd ~/saas-hasner; sed -i '1i NOTURNO-A v4 suite inteira (20:xx): rc=0, OK (skipped=42, expected failures=40), Ran 17822 (v4/suite_inteira.log). Nao certifica o pouso: a volta 3 (7a testemunha) muda a arvore e roda de novo.' app/docs/RELATO.md` |
 | 19:42:54 | Bash | Read full suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bb84rkgy0.output` |
 | 19:40:56 | Bash | Record NOTURNO verif2 in RELATO | `cd ~/saas-hasner; sed -i '1i NOTURNO-A verif2 (20:xx): Codex rc 0 -- catraca fecha (9->9 pareadores, 84->84), 13 pares explicados pela regra (7 recortes +1645,9 min, col327 L-093, col841 teto, 3 l084_par). ACHADO procedente: 7a testemunha porta_export.py:101-105 agrupa por data CIVIL de p.entrada (derivacao propria, LEI-AKITA 2), DiaPago por dia_da_jornada; a cura acende col113 30/10x31/10. Volta  ...` |
