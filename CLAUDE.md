@@ -97,7 +97,7 @@ bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus <OBRA>"
 A FORMA DEIXOU DE SER PROSA E VIROU ARQUIVO (O182, corte pela lei existente 04/10 05:5x). (historia: LAPIDES.md#lap-03) Agora `bin/suite.sh` compoe recursos + `teste_envfile` + LABELS lido da regua + montagem +
 trava, e nao ha como rodar a suite inteira destravada sem escrever um comando novo A MAO.
 `--only "ponto core"` recorta (e SEGUE pela trava, de proposito), `--dir <copia>` roda contra COPIA,
-`--parallel N|auto` e `--espera <segundos>` repassam, `-- <resto>` leva so flag da lista fechada de `bin/suite.sh`.
+`--parallel N` (1 a 8; teto do aval PISTA-2-CERTIFICA-EM-8, `auto` recusado) e `--espera <segundos>` repassam, `-- <resto>` leva so flag da lista fechada de `bin/suite.sh`.
 INTEIRA SO COM MOTIVO (aval TRAVA-MENOS-FILA-COM-SELO 11/11): sem `--only`/`--volta`, ou com um recorte que cubra todo app
 das LABELS, `--motivo "pre-opus <OBRA>"` ou `--motivo "pouso <OBRA>"`, senao rc 2; volta do meio = `bin/volta_intermediaria.sh`
 (`--volta <base>`: obra + vizinhos + selos globais, mais ruff e `test_disjuntor.sh`). Selo: `bin/tests/test_suite_motivo.sh`. **rc 75 = a vez nao
@@ -123,7 +123,7 @@ o espaco: o `\(` em vez do espaco (o Django so imprime `OK`, `OK (skipped=N)` ou
 `tail -1` (o veredito e a ULTIMA linha do run, a prosa vem no meio). (historia: LAPIDES.md#lap-41) Rodar SEM labels da centenas de
 errors MIRAGEM.
 Control-plane (tenants) roda separado, settings teste_motor.
-PISTA 2 (srv-glpi, `ssh pista`) so CERTIFICA suite de pouso com `bin/pista_certifica.sh <sha> <log> <linha-de-fim>` rc 0 (SIMPLIFICA-V3-2211-1726 item 5): sha commitado, todas as LABELS, imagem e Postgres iguais aos da VM nas linhas `AMBIENTE` do run, e `Ran N` igual ao `Found N` do mesmo log menos os podados que ele lista em `QUARENTENA-PODADO:` (run INTEIRO; podado nao listado nao certifica; aval SIMPLIFICA-RAN-FOUND-2211-2020 (ii)); rc 1 = a suite do pouso roda aqui. Selo `bin/tests/test_pista_certifica.sh`.
+PISTA 2 (srv-glpi, `ssh pista`) so CERTIFICA suite de pouso com `bin/pista_certifica.sh <sha> <log> <saida-do-espera>` rc 0, por 3 provas e SO elas (aval PISTA-CAMADAS-DESCONGELA-2311-2010): (1) camadas da imagem do run = as da VM (`bin/recursos.sh::camadas_da_imagem`); (2) `AMBIENTE sha=` = o sha que pousa; (3) RUN INTEIRO -- os rotulos do `AMBIENTE argv=` sao as LABELS da regua, cada uma uma vez (um `pede --only` NAO certifica; PISTA-CAMADAS-V6-CORRIGE-2311-2038) --, `Ran N` = `Found N` menos os `QUARENTENA-PODADO:` do log, rc 0 e `oom=0` na saida do `espera`. Postgres, --parallel e settings SAIRAM do criterio. rc 1 = a suite do pouso roda aqui. Selo `bin/tests/test_pista_certifica.sh`.
 `holerite` ENTROU em 04/09 (achado H-c): (historia: LAPIDES.md#lap-42)
 Pre-push hook INSTALADO e ATIVO: roda os dois runners antes de liberar push.
 Selos de HOST (sem Django, sem container -- o container nao monta `bin/` nem `.git/`):
