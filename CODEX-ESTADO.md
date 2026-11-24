@@ -1,7 +1,164 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 11:03** · publicado em **24/11/2026 11:03** (UTC-3)
+> Ultima resposta processada: **24/11/2026 11:10** · publicado em **24/11/2026 11:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 11:10 · sessao d5304cd15d9e · CHAMADO-PRESO-NA-REGENERACAO · sonda · origem=Code
+
+```text
+sonda_leitura: script.py [6efc9f20be43d662] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+CH 40589 col 549 emp 2 dia 2026-11-22 ini_comp_atual 2026-11-21 oferecido {datetime.date(2026, 11, 22): False}
+CH 40588 col 549 emp 2 dia 2026-11-20 ini_comp_atual 2026-11-21 oferecido {datetime.date(2026, 11, 20): False}
+CH 37336 col 932 emp 2 dia 2026-11-06 ini_comp_atual 2026-11-21 oferecido {datetime.date(2026, 11, 6): False}
+CH 36687 col 899 emp 2 dia 2026-11-03 ini_comp_atual 2026-11-21 oferecido {datetime.date(2026, 11, 3): True}
+CH 35243 col 872 emp 2 dia 2026-10-27 ini_comp_atual 2026-11-21 oferecido {datetime.date(2026, 10, 27): False}
+CH 34070 col 941 emp 2 dia 2026-10-23 ini_comp_atual 2026-11-21 oferecido {datetime.date(2026, 10, 23): False}
+FIM
+```
+
+O bloco é a transcrição verbatim do dado raspado fornecido. Não encontrei `script.py` na cópia e não reexecutei a sonda. O `HEAD` não pôde ser confirmado por Git localmente [nao verificado]. As referências abaixo são da cópia fornecida, que o wrapper prepara por hash com `git archive`. `bin/codex_pergunta.sh:304`, `bin/codex_pergunta.sh:315`, `bin/codex_pergunta.sh:360`.
+
+`resolver_dia_oferecido` exige as três condições juntas. O dia deve ser anterior ao início da competência atual, não pode ter pergunta viva com resposta e deve ser anterior a `hoje` com status D4 em `falta`, `irregular`, `aberto` ou `sem_certidao`. A pergunta só bloqueia se tiver `respondida_em`, texto não branco e passar em `pergunta_viva`. `app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:122`, `app/colaboradores/services/calendario.py:503`, `app/colaboradores/services/calendario.py:697`, `app/chamados/juizes.py:1676`.
+
+| CH | Dia | Oferecido | O que o dado permite concluir |
+|---|---|---|---|
+| 40589 | 2026-11-22 | `False` | **O corte da competência basta para bloquear.** `22/11 >= 21/11`. Status e pergunta viva com resposta [nao verificado]. `app/colaboradores/services/calendario.py:122` |
+| 40588 | 2026-11-20 | `False` | `20/11 < 21/11`, passa no corte. Se bloqueou por status, por pergunta viva com resposta ou por ambos [nao verificado]. `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:122` |
+| 37336 | 2026-11-06 | `False` | `06/11 < 21/11`, passa no corte. Se bloqueou por status, por pergunta viva com resposta ou por ambos [nao verificado]. `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:122` |
+| 36687 | 2026-11-03 | `True` | `03/11 < 21/11`, passa no corte. O `True` implica dia anterior a `hoje`, nenhuma pergunta viva com resposta que bloqueie e status D4 entre os quatro aceitos. Status exato [nao verificado]. `app/colaboradores/services/calendario.py:94`, `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:122` |
+| 35243 | 2026-10-27 | `False` | `27/10 < 21/11`, passa no corte. Se bloqueou por status, por pergunta viva com resposta ou por ambos [nao verificado]. `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:122` |
+| 34070 | 2026-10-23 | `False` | `23/10 < 21/11`, passa no corte. Se bloqueou por status, por pergunta viva com resposta ou por ambos [nao verificado]. `app/colaboradores/services/calendario.py:103`, `app/colaboradores/services/calendario.py:122` |
+
+A janela atual contém o `hoje` usado para calculá-la, então uma data anterior ao início dessa mesma janela também é anterior a `hoje`. Na consulta em lote, se a chamada recebeu `agora`, o corte já devolve `False` para 22/11 antes de montar o calendário. Se a sonda passou `agora` [nao verificado]. `app/ponto/janelas.py:60`, `app/colaboradores/services/calendario.py:140`, `app/colaboradores/services/calendario.py:150`, `app/colaboradores/services/calendario.py:193`, `app/colaboradores/services/calendario.py:493`.
+
+## 24/11 11:07 · sessao de2a5d3ea4f8 · CHAMADO-PRESO-NA-REGENERACAO · sonda · origem=Code
+
+Não localizei o `script.py` na cópia e não executei a sonda em PROD. Abaixo está a transcrição literal do recorte fornecido. A cópia não tem metadados Git para confirmar o hash do HEAD. As referências apontam para as linhas da cópia recebida. [nao verificado] [nao verificado]
+
+```text
+sonda_leitura: script.py [53d2a9b534707c7a] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+U657 JSP02 True True
+U657_ACOES [(('EscalaColaborador', 'regenerar_celulas_vinculo'), 159), (('CelulaDia', 'veredito_celula'), 50), (('ChamadoColaborador', 'estado_chamado'), 48), (('', 'pos_vinculo'), 13), (('PerguntaDisputa', 'pergunta_emitida'), 4), (('EscalaColaborador', 'editar'), 4), (('ChamadoColaborador', 'nascimento_chamado'), 3), (('Batida', 'retratar_batida_admin'), 3), (('EscalaColaborador', 'criar'), 2), (('CelulaDia', 'editar_dia'), 2), (('Colaborador', 'editar'), 2), (('User', 'toggle_ativo_adm'), 2), (('PerguntaDisputa', 'carimbo_desfeito_por_lastro'), 1), (('ChamadoColaborador', 'fechamento_recusado'), 1)]
+  A 08:53:52 ChamadoColaborador estado_chamado 37755 status aberto -> resolvido via sistema
+  A 08:53:52 CelulaDia veredito_celula 129577 veredito cobrado -> concorde via cartorio
+  A 08:53:52 CelulaDia veredito_celula 129577 veredito cobrado -> trabalhou via admin
+  A 08:53:52 CelulaDia veredito_celula 129577 veredito trabalhou do colab #872 em 2026-11-08: o dia ja estava completo, nada a corrigir; pergunta #55294 fechada (admin decidiu); pergunta #55342 fe
+  A 08:53:53  pos_vinculo None [nome] col872 2026-11-08..2026-11-08: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 08:53:58 ChamadoColaborador estado_chamado 36950 status aberto -> resolvido via sistema
+  A 08:53:59 CelulaDia veredito_celula 129573 veredito cobrado -> concorde via cartorio
+  A 08:53:59 CelulaDia veredito_celula 129573 veredito cobrado -> trabalhou via admin
+  A 08:53:59 CelulaDia veredito_celula 129573 veredito trabalhou do colab #872 em 2026-11-04: o dia ja estava completo, nada a corrigir; pergunta #53867 fechada (admin decidiu); pergunta #53896 fe
+  A 08:53:59  pos_vinculo None [nome] col872 2026-11-04..2026-11-04: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 08:54:08 ChamadoColaborador estado_chamado 36509 status em_analise -> resolvido via sistema
+  A 08:54:08 CelulaDia veredito_celula 129571 veredito cobrado -> concorde via cartorio
+  A 08:54:08 CelulaDia veredito_celula 129571 veredito cobrado -> trabalhou via admin
+  A 08:54:08 CelulaDia veredito_celula 129571 veredito trabalhou do colab #872 em 2026-11-02: o dia ja estava completo, nada a corrigir; pergunta #53079 fechada (admin decidiu); pergunta #53137 fe
+  A 08:54:09  pos_vinculo None [nome] col872 2026-11-02..2026-11-02: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 08:59:31 ChamadoColaborador estado_chamado 36125 status aberto -> resolvido via sistema
+  A 08:59:31 CelulaDia veredito_celula 129569 veredito cobrado -> concorde via cartorio
+  A 08:59:31 CelulaDia veredito_celula 129569 veredito cobrado -> trabalhou via admin
+  A 08:59:31 CelulaDia veredito_celula 129569 veredito trabalhou do colab #872 em 2026-10-31: o dia ja estava completo, nada a corrigir; pergunta #52208 fechada (admin decidiu); pergunta #52237 fe
+  A 08:59:32  pos_vinculo None [nome] col872 2026-10-31..2026-10-31: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 08:59:39 ChamadoColaborador estado_chamado 35721 status aberto -> resolvido via sistema
+  A 08:59:39 CelulaDia veredito_celula 129567 veredito cobrado -> concorde via cartorio
+  A 08:59:39 CelulaDia veredito_celula 129567 veredito cobrado -> trabalhou via admin
+  A 08:59:39 CelulaDia veredito_celula 129567 veredito trabalhou do colab #872 em 2026-10-29: o dia ja estava completo, nada a corrigir; pergunta #51589 fechada (admin decidiu); pergunta #51616 fe
+  A 08:59:40  pos_vinculo None [nome] col872 2026-10-29..2026-10-29: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 08:59:48 ChamadoColaborador estado_chamado 34898 status aberto -> resolvido via sistema
+  A 08:59:49 ChamadoColaborador estado_chamado 34719 status em_analise -> resolvido via sistema
+  A 08:59:49 CelulaDia veredito_celula 129563 veredito cobrado -> concorde via cartorio
+  A 08:59:49 CelulaDia veredito_celula 129563 veredito cobrado -> trabalhou via admin
+  A 08:59:49 CelulaDia veredito_celula 129563 veredito trabalhou do colab #872 em 2026-10-25: o dia ja estava completo, nada a corrigir; pergunta #50083 fechada (admin decidiu); pergunta #50084 fe
+  A 08:59:49  pos_vinculo None [nome] col872 2026-10-25..2026-10-25: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 08:59:55 ChamadoColaborador estado_chamado 34239 status em_analise -> resolvido via sistema
+  A 08:59:55 CelulaDia veredito_celula 129561 veredito cobrado -> concorde via cartorio
+  A 08:59:55 CelulaDia veredito_celula 129561 veredito cobrado -> trabalhou via admin
+  A 08:59:55 CelulaDia veredito_celula 129561 veredito trabalhou do colab #872 em 2026-10-23: o dia ja estava completo, nada a corrigir; pergunta #49222 fechada (admin decidiu); pergunta #49223 fe
+  A 08:59:55  pos_vinculo None [nome] col872 2026-10-23..2026-10-23: {'julgadas': 0, 'puladas_humanas': 1, 'reconciliados': 0, 'furos_antes': 0, 'furos_
+  A 09:00:01 ChamadoColaborador estado_chamado 33274 status em_analise -> resolvido via sistema
+  A 09:00:01 CelulaDia veredito_celula 129559 veredito cobrado -> concorde via cartorio
+  A 09:00:01 CelulaDia veredito_celula 129559 veredito cobrado -> trabalhou via admin
+  A 09:00:01 CelulaDia veredito_celula 129559 veredito trabalhou do colab #872 em 2026-10-21: o dia ja estava completo, nada a corrigir; pergunta #46499 fechada (admin decidiu); pergunta #46500 fe
+CH 40589 aberto perguntas 2 fio_vivo True
+  P 61522 intervalo_saida 2026-11-22 marco int_ida tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da saída do intervalo no dia 22/11/2026'
+  P 61523 intervalo_volta 2026-11-22 marco int_volta tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da volta do intervalo no dia 22/11/2026'
+CH 40588 aberto perguntas 2 fio_vivo True
+  P 61520 intervalo_saida 2026-11-20 marco int_ida tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da saída do intervalo no dia 20/11/2026'
+  P 61521 intervalo_volta 2026-11-20 marco int_volta tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da volta do intervalo no dia 20/11/2026'
+CH 37336 aberto perguntas 1 fio_vivo True
+  P 54538 saida_sem_entrada 2026-11-06 marco inicio tipo hora resp '07:00' respondida True validada False retratada False perg 'Confirme o horário da entrada no dia 06/11/2026'
+CH 36687 aberto perguntas 4 fio_vivo True
+  P 53408 saida_sem_entrada 2026-11-03 marco inicio tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da entrada no dia 03/11/2026'
+  P 53534 intervalo_volta 2026-11-03 marco int_volta tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da volta do intervalo no dia 03/11/2026'
+  P 53580 orfao_14h 2026-11-03 marco fim tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da saída no dia 03/11/2026'
+  P 53584 intervalo_saida 2026-11-03 marco int_ida tipo hora resp '' respondida False validada False retratada False perg 'Confirme o horário da saída do intervalo no dia 03/11/2026'
+CH 35243 aberto perguntas 2 fio_vivo True
+  P 50720 intervalo_saida 2026-10-27 marco int_ida tipo hora resp 'FOLGA_CONTESTA' respondida True validada False retratada False perg 'Confirme o horário da saída do intervalo no dia 27/10/2026'
+  P 50749 intervalo_volta 2026-10-27 marco int_volta tipo hora resp 'FOLGA_CONTESTA' respondida True validada False retratada False perg 'Confirme o horário da volta do intervalo no dia 27/10/2026'
+CH 34070 em_analise perguntas 1 fio_vivo True
+  P 49602 intervalo_volta 2026-10-23 marco int_volta tipo hora resp '13:14' respondida True validada False retratada False perg 'Confirme o horário da volta do intervalo no dia 23/10/2026'
+FIM
+```
+
+### 1. Porta que explica as ações de 657
+
+- **“Resolver dia” → “Trabalhou no horário da escala”** é a ação que corresponde às linhas A. O formulário faz `POST /ponto/celula/veredito/`, atendido por `ponto.views.veredito_celula_view`. A view passa `request.user` e a própria `request` para o serviço. O serviço gera o texto “o dia ja estava completo, nada a corrigir”, fecha o fio do dia e lavra `trabalhou` via `admin`. Depois de um sucesso, a view chama `reconciliar_apos_vinculo` com `motivo='resolver_dia'`, que grava a linha `pos_vinculo`. `app/templates/ponto/partials/_veredito_dia.html:6`, `app/templates/ponto/partials/_veredito_dia.html:17`, `app/templates/ponto/partials/_veredito_dia.html:21`, `app/config/urls.py:29`, `app/ponto/urls.py:58`, `app/ponto/views.py:3519`, `app/ponto/views.py:3530`, `app/ponto/services/veredito_celula.py:252`, `app/ponto/services/veredito_celula.py:352`, `app/ponto/services/veredito_celula.py:361`, `app/colaboradores/services/pos_vinculo.py:92`.
+- **`via sistema` e usuário 657 cabem na mesma linha.** `fechar_o_fio_do_dia` chama `c.reconciliar`, que grava a transição com a via `sistema`. `_gravar_estado` emite `estado_chamado` sem autor explícito nesse caminho. O middleware guarda a request, e `core.observ.evento` usa o usuário autenticado dela para preencher `LogAuditoria.usuario`. O `save` do chamado também pode disparar o julgamento do Cartório antes da lavra administrativa. O ramo exato que fechou cada chamado da lista A fica [nao verificado]. `app/ponto/services/veredito_celula.py:207`, `app/chamados/models.py:674`, `app/chamados/catalogo/motor.py:88`, `app/chamados/catalogo/motor.py:95`, `app/chamados/models.py:304`, `app/core/middleware.py:78`, `app/core/observ.py:108`, `app/core/observ.py:134`, `app/chamados/signals.py:189`, `app/chamados/signals.py:218`.
+- O controle aparece no **calendário de ponto do perfil** e no **painel de diagnóstico**, com formulário individual e em lote. A página de origem e o formulário usados por 657 ficam [nao verificado]. `app/templates/colaboradores/detalhe.html:215`, `app/templates/colaboradores/calendario_partial.html:67`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:33`, `app/templates/colaboradores/partials/_calendario_grade.html:135`, `app/templates/ponto/partials/_veredito_lote_barra.html:2`.
+
+### 2. Marcos das perguntas e presença na ata atual
+
+O código mapeia o motivo da pergunta para a posição e o tipo do marco. Para conferir um horário cobrado, o lastro procura o par **hora + tipo** em `ata.lampadas`. O recorte traz os pares cobrados, mas a presença deles na ata atual fica [nao verificado]. `app/chamados/services/declaracao_texto.py:43`, `app/chamados/juizes.py:971`, `app/ponto/services/lastro.py:75`, `app/ponto/services/lastro.py:82`.
+
+| Chamado e dia | Marco pedido nas linhas P | Hora e tipo cobrados no dado | Existe na ata atual? |
+|---|---|---|---|
+| 40589 · 22/11 | 61522 saída para intervalo (`int_ida`, S). 61523 volta do intervalo (`int_volta`, E). `app/chamados/services/declaracao_texto.py:46` | `11:00S`, `12:00E` | [nao verificado] |
+| 40588 · 20/11 | 61520 saída para intervalo (`int_ida`, S). 61521 volta do intervalo (`int_volta`, E). `app/chamados/services/declaracao_texto.py:46` | `11:00S`, `12:00E` | [nao verificado] |
+| 37336 · 06/11 | 54538 entrada do turno (`inicio`, E). A resposta registrada é `07:00`. `app/chamados/services/declaracao_texto.py:44` | `10:00E` | [nao verificado] |
+| 36687 · 03/11 | 53408 entrada (`inicio`, E). 53534 volta do intervalo (`int_volta`, E). 53580 saída final (`fim`, S). 53584 saída para intervalo (`int_ida`, S). `app/chamados/services/declaracao_texto.py:44` | `08:00E`, `14:00E`. A associação de cada E à sua pergunta fica [nao verificado]. A lista fornecida não traz horário S. | [nao verificado] |
+| 35243 · 27/10 | 50720 saída para intervalo (`int_ida`, S). 50749 volta do intervalo (`int_volta`, E). Ambas registram `FOLGA_CONTESTA`. `app/chamados/services/declaracao_texto.py:46` | `12:00S`, `13:00E` | [nao verificado] |
+| 34070 · 23/10 | 49602 volta do intervalo (`int_volta`, E). A resposta registrada é `13:14`. `app/chamados/services/declaracao_texto.py:47` | `12:00E` | [nao verificado] |
+
+`fio_vivo=True` indica que pelo menos uma pergunta do conjunto passado ao juiz está viva. Nos chamados com várias linhas P, a vitalidade individual de cada pergunta fica [nao verificado]. `app/chamados/juizes.py:1604`.
+
+## 24/11 11:05 · sessao 8416cdb68151 · PONTA-PEQUENA-NA-BORDA · leitura · origem=Code
+
+### 1. O que grava e efeito no dinheiro
+
+Com `--apply`, o comando chama `ponto.portas.he.recusar_ponta_pequena`, que usa o escritor `_gravar`. Ele cria uma `DecisaoHE` por `(colaborador, data)` com `estado='nao'`, `origem='sistema'`, `decidida_por=None`, `minutos_na_decisao` e um `motivo` com os minutos e o limite. O campo que identifica a via é `origem`. Se já há decisão vigente, a porta pula o dia. Se há uma linha revogada e o dia voltou a caber no limite, atualiza a mesma linha e limpa as três marcas de revogação. `app/ponto/management/commands/recusar_ponta_pequena.py:168–183`, `app/ponto/portas/he.py:65–86`, `app/ponto/portas/he.py:346–372`, `app/ponto/models.py:1297–1317`, `app/ponto/models.py:1354–1357`.
+
+A trilha é `LogAuditoria`, com `acao='recusar_ponta_pequena'`, `modelo='DecisaoHE'`, o PK da decisão e `valor_antes`/`valor_depois`. Em execução pelo `manage.py`, o ator da trilha é `sistema:recusar_ponta_pequena`. A trilha é *best effort*. `app/ponto/portas/he.py:89–106`, `app/ponto/portas/he.py:369–371`, `app/core/auditoria.py:17–29`, `app/core/observ.py:22–32`, `app/core/observ.py:108–137`.
+
+**Pelo código, a recusa não altera valores.** Sem decisão e com `estado='nao'`, a apuração segue o mesmo ramo. Só `autorizado` libera os minutos. A porta do sistema não chama recálculo nem escreve `FechamentoMensal`, `DiaPago` ou holerite. O comando só lê o hash de `FechamentoMensal` antes e depois. Se divergir, para **depois** das escritas já feitas, sem revertê-las. Resultado em produção [não verificado]. `app/ponto/motor_calculo_v2.py:1455–1457`, `app/ponto/motor_calculo_v2.py:1647–1653`, `app/ponto/motor_calculo_v2.py:1691–1706`, `app/ponto/motor_calculo_v2.py:1733–1744`, `app/ponto/portas/he.py:360–372`, `app/ponto/management/commands/recusar_ponta_pequena.py:166–202`, `app/ponto/management/commands/lavrar_dias_pagos.py:54–78`.
+
+### 2. Universo, competência e guardas
+
+- Por padrão, percorre as empresas ativas e escolhe **uma competência por empresa**, a que contém `timezone.localdate()`, pelo corte da empresa. Aceita `--mes` e `--ano` juntos e `--empresas` com IDs separados por vírgula. Se chega apenas mês ou apenas ano, usa a competência de hoje. Sem `--apply`, faz ensaio pela mesma porta. `app/ponto/management/commands/recusar_ponta_pequena.py:55–59`, `app/ponto/management/commands/recusar_ponta_pequena.py:71–96`, `app/ponto/management/commands/recusar_ponta_pequena.py:168–170`, `app/ponto/janelas.py:36–63`.
+- Lê os dias do retrato `he_pendente` da competência escolhida. Exige retrato calculado **hoje**, colaborador existente, ausência de decisão vigente, `CelulaDia.veredito` preenchido e lista vazia de marcos ainda não vencidos em `cartorio.marcos_vencidos(...)[1]`. Esse teste usa o instante do marco **mais 30 min**, inclusive em turno que cruza a meia-noite. `app/ponto/management/commands/recusar_ponta_pequena.py:98–156`, `app/ponto/services/he_pendente_lavrado.py:193–206`, `app/ponto/services/cartorio.py:880–911`.
+- **Exportada ou trancada.** O comando e a porta de recusa não consultam `competencia_entregue` nem `periodo_trancado`. A guarda de exportação que existe está na seleção padrão de **`lavrar_he_pendente`**, que inclui a anterior só se `competencia_entregue` for falso. A corrente entra sempre nessa seleção, e `--mes`/`--ano` explícitos no lavrador pulam essa seleção. Assim, um retrato de hoje pode satisfazer a guarda do recusador mesmo para competência exportada ou trancada. O estado da competência 11/2026 em produção é [não verificado]. `app/ponto/management/commands/recusar_ponta_pequena.py:78–170`, `app/ponto/portas/he.py:330–372`, `app/ponto/management/commands/lavrar_he_pendente.py:34–43`, `app/ponto/services/he_pendente_lavrado.py:209–225`, `app/folha/export.py:580–594`, `app/ponto/services/fechamento.py:1464–1470`.
+- **15 min é o default** de `Empresa.limite_decisao_he_min`. Vale o valor cadastrado por empresa, sobre o total do dia somado no retrato. A porta aceita `0 < minutos <= limite`, portanto 15 exatos cabem quando o cadastro é 15. Limite zero desliga a recusa automática. Valores cadastrados em produção [não verificado]. `app/colaboradores/models.py:82–89`, `app/ponto/services/he_pendente_lavrado.py:55–68`, `app/ponto/management/commands/recusar_ponta_pequena.py:92–96`, `app/ponto/portas/he.py:277–293`, `app/ponto/portas/he.py:332–344`.
+
+### 3. Reversão
+
+O comando **gera arquivo de reversão, mas não tem flag para consumi-lo**. Comando irmão que consuma esse JSON [não verificado]. Com `--apply` e candidatos, grava **antes das escritas** um JSON UTF-8 em `/app/logs/ponta_pequena/emp<id>_<MM><AAAA>_<AAAAMMDD_HHMMSS>.json`. Campos: `empresa`, `mes`, `ano`, `limite_decisao_he_min`, `escrito_em`, `como_reverter` e `pares`, cada um com `colab`, `data` ISO e `minutos`. Falha ao gravar o arquivo aborta antes de chamar a porta para aquela empresa. `app/ponto/management/commands/recusar_ponta_pequena.py:49–59`, `app/ponto/management/commands/recusar_ponta_pequena.py:156–170`, `app/ponto/management/commands/recusar_ponta_pequena.py:208–229`.
+
+**O JSON lista candidatos, não as escritas confirmadas.** A instrução de apagar por `origem='sistema'` usa filtros independentes de colaborador e data, que podem cruzar pares, e não distingue inserção de reativação. Para desfazer com precisão, o snapshot teria de guardar, por par exato, a ausência ou a linha completa **antes** e a linha **depois** da escrita confirmada, com PK, estado, origem, autor, motivo, minutos, carimbos e os três campos de revogação. Assim é possível remover só a inserção da rodada ou restaurar a linha revogada anterior, conferindo o estado posterior para preservar decisões e alterações subsequentes. A trilha atual não guarda o motivo nem os minutos **da revogação anterior**. `app/ponto/management/commands/recusar_ponta_pequena.py:163–183`, `app/ponto/management/commands/recusar_ponta_pequena.py:215–223`, `app/ponto/portas/he.py:61–99`, `app/ponto/models.py:1300–1346`.
+
+Há uma revogação de negócio em `lavrar_he_pendente`: ele chama `revogar_recusa_do_sistema` quando os minutos passam do limite. A porta marca a linha e a retira das vigentes. Esse fluxo não consome o JSON. `app/ponto/management/commands/lavrar_he_pendente.py:48–62`, `app/ponto/portas/he.py:473–505`, `app/ponto/models.py:1265–1267`.
+
+### 4. Quem chama e quem lê
+
+- **Agenda.** `recusar_ponta_pequena --apply` é encadeado ao término de `lavrar_he_pendente`, com log `ponta_pequena.log` e até 900 s de espera pelo gatilho. Não tem horário próprio. A raiz diária `processar_cartorio --apply` está configurada para **06:27, 06:29 e 06:31** nas empresas 2, 3 e 4. Horário efetivo da recusa em produção [não verificado]. `app/config/crons.py:17–33`, `app/config/crons.py:614–616`, `app/config/crons.py:1531–1578`, `app/config/crons.py:1580–1591`, `app/config/crons.py:1903–1924`, `bin/encadeado.sh:84–102`.
+- **Tela e fila.** Gestão de HE, seu PDF, espelho e contador da Central leem a decisão vigente. O dia segue visível como `HE recusada` e sai da contagem de `sem_decisao`. O lavrador também lê as vigentes ao montar o retrato. `app/ponto/services/gestao_he.py:42`, `app/ponto/services/gestao_he.py:69–95`, `app/ponto/services/gestao_he.py:295–310`, `app/ponto/services/gestao_he.py:488–505`, `app/ponto/views.py:823`, `app/ponto/views.py:969`, `app/ponto/services/espelho.py:939–948`, `app/ponto/management/commands/lavrar_he_pendente.py:43–62`.
+- **Folha e cartório.** A folha lê a decisão no motor e no portão do TXT. O portão de HE, quando ligado, só barra dia **acima** do limite e **sem decisão vigente**, portanto a ponta pequena já fica fora dessa trava antes da recusa. No caminho do cartório, a dependência observada vai da recusa para o cartório: o comando lê o veredito da célula e pergunta pelos marcos. Leitura de `DecisaoHE` pelo julgamento do cartório [não verificado]. `app/ponto/motor_calculo_v2.py:1397–1418`, `app/folha/porta_export.py:223–236`, `app/folha/porta_export.py:676–691`, `app/ponto/management/commands/recusar_ponta_pequena.py:120–156`, `app/ponto/services/cartorio.py:1898–1923`.
+
+### 5. Onde a mesma decisão poderia entrar por evento
+
+**O evento já existe.** O cartório chama `lavrar_veredito` e persiste pelo `carimbar`. Quando a lavra escreve `veredito` ou `ata`, `salvar_e_emitir` grava um `EventoCelula` na mesma transação. `recompute_turnos` também emite esse evento quando um turno materializado deixa de estar aberto. O consumidor atual roda a cada minuto e trata chamados e perguntas. Ele ainda não chama a recusa de HE. `app/ponto/services/cartorio.py:1898–1923`, `app/ponto/portas/celula.py:1217–1238`, `app/ponto/portas/celula.py:977–1001`, `app/ponto/nucleo.py:57–66`, `app/ponto/nucleo.py:86–93`, `app/chamados/reconciliador.py:1492–1523`, `app/config/crons.py:393–394`.
+
+O ponto de encaixe é o **consumo desse evento**, reaproveitando `ponto/portas/he.py::recusar_ponta_pequena` para decidir e gravar, e `acima_do_limite` como predicado único do limiar. O juiz geral de **fato encerrado** é `ponto/turnos.py::dia_encerrado`, que o cartório consulta em lote por `dias_encerrados`. Para reproduzir o comportamento atual do comando, o consumidor teria de conferir também as guardas que o comando realmente usa: veredito presente, nenhum marco pendente e os minutos do dia apurados pela fonte de HE. O evento carrega só a identidade da célula e do dia. Cobertura de todos os casos que se tornam elegíveis só pela passagem do tempo [não verificado]. `app/ponto/portas/he.py:277–297`, `app/ponto/portas/he.py:330–372`, `app/ponto/turnos.py:2038–2083`, `app/ponto/services/cartorio.py:1179–1183`, `app/ponto/management/commands/recusar_ponta_pequena.py:141–170`, `app/ponto/services/he_pendente_lavrado.py:132–152`, `app/escala/models.py:1856–1874`.
 
 ## 24/11 11:03 · sessao d51b367827f3 · CHAMADO-PRESO-NA-REGENERACAO · sonda · origem=Code
 
@@ -855,152 +1012,4 @@ Se o positivo vier de um período que a lavratura `versao='motor'` incluiria na 
 
 A ocorrência dessa divergência na sombra, a data e a versão da lavra e a hipótese de que o zero veio de uma lavra anterior à mudança do motor ficam [nao verificado].
 
-## 24/11 02:22 · sessao 42fa281c12fe · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
-
-1. `UNIVERSO` e `emp_comp` — nenhuma dessas linhas aparece no trecho fornecido. [nao verificado]
-2. `INV` — nenhuma linha para transcrever. O trecho mostra um erro de montagem do Docker e termina com `rc_sombra=125`. A quantidade de `INV` fica [nao verificado].
-3. Classes A, B e C — sem linhas `INV`, faltam os horários de cada par para fazer as contas e atribuir uma classe. [nao verificado]
-
-## 24/11 02:22 · sessao 9d23ce02ad2a · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
-
-### Transcrição verbatim do anexo
-
-```text
-CASO 37 2026-10-05 emp 4 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 517 2026-05-21 None TE 12x36 12x36 19:00:00 07:00:00 02:00:00 03:00:00 720 he_extra 0 0
-    marcos_do_dia 2026-10-04 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-    marcos_do_dia 2026-10-05 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-10-06 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-  CEL 2026-10-04 False gerada None
-  CEL 2026-10-05 True gerada {'hf': '07:00', 'hi': '19:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-10-06 False gerada None
-  BAT 2026-10-06 02:00:15 S app
-  BAT 2026-10-06 03:00:38 E app
-  BAT 2026-10-06 07:01:01 S app
-CASO 113 2026-10-30 emp 3 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 818 2026-06-24 None TE 12x36 12x36 19:00:00 07:00:00 02:00:00 03:00:00 720 he_extra 0 0
-    marcos_do_dia 2026-10-29 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-    marcos_do_dia 2026-10-30 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-10-31 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-  CEL 2026-10-29 False gerada None
-  CEL 2026-10-30 True gerada {'hf': '07:00', 'hi': '19:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-10-31 False gerada None
-  BAT 2026-10-31 02:00:00 S disputa_s84_retro
-  BAT 2026-10-31 03:00:00 E disputa_s84_retro
-  BAT 2026-10-31 07:02:00 S disputa_s84_retro
-CASO 113 2026-11-01 emp 3 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 818 2026-06-24 None TE 12x36 12x36 19:00:00 07:00:00 02:00:00 03:00:00 720 he_extra 0 0
-    marcos_do_dia 2026-10-31 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-    marcos_do_dia 2026-11-01 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-11-02 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-  CEL 2026-10-31 False gerada None
-  CEL 2026-11-01 True gerada {'hf': '07:00', 'hi': '19:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-11-02 False gerada None
-  BAT 2026-11-02 02:01:00 S disputa_s84_retro
-  BAT 2026-11-02 03:00:00 E disputa_s84_retro
-  BAT 2026-11-02 07:01:00 S disputa_s84_retro
-CASO 174 2026-09-23 emp 2 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 1616 2026-11-16 None TE 12x36 12x36 18:00:00 06:00:00 01:00:00 02:00:00 720 he_extra 0 0
-    marcos_do_dia 2026-09-22 (datetime.time(21, 0), datetime.time(5, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-09-23 (datetime.time(21, 0), datetime.time(5, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-09-24 (datetime.time(21, 0), datetime.time(5, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-  CEL 2026-09-22 True gerada {'hf': '05:00', 'hi': '21:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-09-23 True gerada {'hf': '05:00', 'hi': '21:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-09-24 True gerada {'hf': '05:00', 'hi': '21:00', 'hfi': '03:00', 'hii': '02:00'}
-  BAT 2026-09-22 20:58:21 E app
-  BAT 2026-09-23 02:46:44 S app
-  BAT 2026-09-23 03:46:54 E app
-  BAT 2026-09-23 05:02:44 S app
-  BAT 2026-09-24 02:32:11 E app
-  BAT 2026-09-24 03:24:34 S app
-  BAT 2026-09-24 05:00:58 S app
-CASO 200 2026-11-02 emp 2 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 1548 2026-11-10 None TE 6x1 turno_partido 15:00:00 23:00:00 18:00:00 19:00:00 420 he_extra 10 10
-    marcos_do_dia 2026-11-01 (datetime.time(22, 0), datetime.time(6, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-11-02 (datetime.time(22, 0), datetime.time(6, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-11-03 (datetime.time(22, 0), datetime.time(6, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-  CEL 2026-11-01 True gerada {'hf': '06:00', 'hi': '22:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-11-02 True gerada {'hf': '06:00', 'hi': '22:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-11-03 True gerada {'hf': '06:00', 'hi': '22:00', 'hfi': '03:00', 'hii': '02:00'}
-  BAT 2026-11-03 02:00:00 S disputa_s84_retro
-  BAT 2026-11-03 02:00:33 E app
-  BAT 2026-11-03 03:02:17 S app
-  BAT 2026-11-03 06:00:15 S app
-  BAT 2026-11-03 22:00:47 E app
-  BAT 2026-11-04 02:00:24 S app
-  BAT 2026-11-04 03:00:36 E app
-  BAT 2026-11-04 06:00:48 S app
-CASO 218 2026-10-15 emp 2 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 1262 2026-09-20 None TE 6x1 turno_partido 21:00:00 05:00:00 02:00:00 03:00:00 420 he_extra 0 0
-    marcos_do_dia 2026-10-14 (datetime.time(21, 0), datetime.time(5, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-    marcos_do_dia 2026-10-15 (datetime.time(21, 0), datetime.time(5, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-10-16 (datetime.time(21, 0), datetime.time(5, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-  CEL 2026-10-14 False gerada None
-  CEL 2026-10-15 True gerada {'hf': '05:00', 'hi': '21:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-10-16 True gerada {'hf': '05:00', 'hi': '21:00', 'hfi': '03:00', 'hii': '02:00'}
-  BAT 2026-10-16 02:15:08 S app
-  BAT 2026-10-16 03:15:06 E app
-  BAT 2026-10-16 05:00:01 S app
-  BAT 2026-10-16 20:59:13 E app
-  BAT 2026-10-17 02:15:42 S app
-  BAT 2026-10-17 03:15:07 E app
-  BAT 2026-10-17 05:00:33 S app
-CASO 296 2026-11-02 emp 2 janela True 2026-08-21 piso 0 teto 60 saida True 60
-  EC 261 2026-07-21 None TE 12x36 12x36 19:00:00 07:00:00 02:00:00 03:00:00 720 he_extra 0 0
-    marcos_do_dia 2026-11-01 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-    marcos_do_dia 2026-11-02 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha True
-    marcos_do_dia 2026-11-03 (datetime.time(19, 0), datetime.time(7, 0), datetime.time(2, 0), datetime.time(3, 0)) trabalha False
-  CEL 2026-11-01 False gerada None
-  CEL 2026-11-02 True gerada {'hf': '07:00', 'hi': '19:00', 'hfi': '03:00', 'hii': '02:00'}
-  CEL 2026-11-03 False gerada None
-  BAT 2026-11-03 00:15:19 E app
-  BAT 2026-11-03 01:29:03 E app
-  BAT 2026-11-03 07:00:41 S app
-```
-
-### Turno de D por caso
-
-`hi` e `hf` vêm da célula de D. Quando o turno previsto cruza a meia-noite, `hf` cai em D+1. [app/escala/models.py:1135] [app/ponto/selecao_periodo.py:138] [app/escala/servico_jornada.py:111]
-
-A lista de batidas resulta do pareador da cópia alimentado com os marcos e os tipos `E`/`S` do anexo. O pareamento efetivo na sombra, que também pode usar o papel dado pela ata, fica [nao verificado]. [app/ponto/turnos.py:1192] [app/ponto/turnos.py:1944] [app/ponto/turnos.py:3125]
-
-- **CASO 37 · 2026-10-05** — `hi` 19:00 em D, `hf` 07:00 em D+1, cruza a meia-noite. Batidas de 2026-10-06: `02:00:15 S`, `03:00:38 E`, `07:01:01 S`. [app/ponto/turnos.py:293]
-- **CASO 113 · 2026-10-30** — `hi` 19:00 em D, `hf` 07:00 em D+1, cruza a meia-noite. Batidas de 2026-10-31: `02:00:00 S`, `03:00:00 E`, `07:02:00 S`. [app/ponto/turnos.py:293]
-- **CASO 113 · 2026-11-01** — `hi` 19:00 em D, `hf` 07:00 em D+1, cruza a meia-noite. Batidas de 2026-11-02: `02:01:00 S`, `03:00:00 E`, `07:01:00 S`. [app/ponto/turnos.py:293]
-- **CASO 174 · 2026-09-23** — `hi` 21:00 em D, `hf` 05:00 em D+1, cruza a meia-noite. Batidas de 2026-09-24: `02:32:11 E`, `03:24:34 S`, `05:00:58 S`. [app/ponto/turnos.py:299] [app/ponto/turnos.py:1371]
-- **CASO 200 · 2026-11-02** — `hi` 22:00 em D, `hf` 06:00 em D+1, cruza a meia-noite. Batidas de 2026-11-03: `02:00:00 S`, `02:00:33 E`, `03:02:17 S`, `06:00:15 S`. [app/ponto/turnos.py:293] [app/ponto/turnos.py:1371]
-- **CASO 218 · 2026-10-15** — `hi` 21:00 em D, `hf` 05:00 em D+1, cruza a meia-noite. Batidas de 2026-10-16: `02:15:08 S`, `03:15:06 E`, `05:00:01 S`. [app/ponto/turnos.py:293]
-- **CASO 296 · 2026-11-02** — `hi` 19:00 em D, `hf` 07:00 em D+1, cruza a meia-noite. Batidas de 2026-11-03: `00:15:19 E`, `01:29:03 E`, `07:00:41 S`. [app/ponto/turnos.py:299] [app/ponto/turnos.py:1371]
-
-## 24/11 02:21 · sessao cebe1e5caa38 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
-
-## 1. DEPOIS — contagem e saída da sonda
-
-O Docker falhou ao montar `/app/logs` durante a inicialização do contêiner, antes da chamada ao Python. O trecho fornecido contém o erro abaixo. Traceback Python [nao verificado]. [bin/sonda_leitura.sh:203](/home/ronald/wt-janela-turno-020503/bin/sonda_leitura.sh:203) · [bin/sonda_leitura.sh:235](/home/ronald/wt-janela-turno-020503/bin/sonda_leitura.sh:235)
-
-```text
-docker: Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "tmpfs" to rootfs at "/app/logs": create mountpoint for /app/logs mount: make mountpoint "/app/logs": mkdirat /var/lib/docker/rootfs/overlayfs/2f6ba2df7015b1f000d88291ba0c235856952da9e2aea595a35b059ad3fbbb1a/app/logs: read-only file system
-
-Run 'docker run --help' for more information
-rc_sombra=125
-```
-
-| Classe | Noturno bruto | Motor agora `=0` | Motor agora `>0` |
-|---|---:|---|---|
-| `iguais_so_fechados` | ≤ 5 min | [nao verificado] | [nao verificado] |
-| `iguais_so_fechados` | > 5 a 30 min | [nao verificado] | [nao verificado] |
-| `iguais_so_fechados` | > 30 min | [nao verificado] | [nao verificado] |
-
-Demais classes, total C1 e conferência da soma das classes com C1 [nao verificado].
-
-## 2. Exemplos `fech` e corte da faixa noturna
-
-Para cada uma das seis subclasses, os pares `[entrada, saida, efetivo_entrada, efetivo_saida, min_trab, min_fora_janela]` e o resultado do teste por par ficam [nao verificado]. O teste usa as datas completas da faixa em questão, com `efetivo_saida <= 22:00` do início da faixa ou `efetivo_entrada >= 05:00` do fim dela. O motor carimba as pontas efetivas e calcula a interseção em horário local. [app/ponto/motor_calculo_v2.py:89](/home/ronald/wt-janela-turno-020503/app/ponto/motor_calculo_v2.py:89) · [app/ponto/motor_calculo_v2.py:1867](/home/ronald/wt-janela-turno-020503/app/ponto/motor_calculo_v2.py:1867) [nao verificado]
-
-## 3. `motor_agora > 0` com `DiaPago = 0`
-
-**Se a comparação for para o mesmo colaborador, competência, dia de jornada e `DiaPago` de versão `motor`, com os mesmos períodos elegíveis à lavra, o zero gravado está divergente do que o motor da cópia lavraria hoje.** O motor calcula `minutos_noturnos_legais` pelas pontas efetivas, com desconto de intervalo, prorrogação conforme a configuração e aplicação do fator de hora noturna. A lavra da versão `motor` recebe os períodos e o mapa do dia de jornada, soma os minutos legais divididos por 60 e substitui as linhas daquela versão na competência. [app/ponto/motor_calculo_v2.py:983](/home/ronald/wt-janela-turno-020503/app/ponto/motor_calculo_v2.py:983) · [app/ponto/motor_calculo_v2.py:2929](/home/ronald/wt-janela-turno-020503/app/ponto/motor_calculo_v2.py:2929) · [app/ponto/services/fechamento.py:1201](/home/ronald/wt-janela-turno-020503/app/ponto/services/fechamento.py:1201) · [app/ponto/services/fechamento.py:1227](/home/ronald/wt-janela-turno-020503/app/ponto/services/fechamento.py:1227) · [app/ponto/services/dia_pago.py:173](/home/ronald/wt-janela-turno-020503/app/ponto/services/dia_pago.py:173) · [app/ponto/services/dia_pago.py:359](/home/ronald/wt-janela-turno-020503/app/ponto/services/dia_pago.py:359)
-
-Nesta execução, a ocorrência dessa divergência, a equivalência dos insumos, a data da lavra e a causa do eventual zero, inclusive se veio de uma lavra anterior à correção, ficam [nao verificado].
-
-_8051 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8054 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
