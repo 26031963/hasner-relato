@@ -1,7 +1,26 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 02:31** · publicado em **24/11/2026 02:32** (UTC-3)
+> Ultima resposta processada: **24/11/2026 02:40** · publicado em **24/11/2026 02:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 02:40 · sessao 8353229698a2 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
+
+Nova execução [nao verificado]. O executor grava arquivos. [bin/sonda_leitura.sh:126](/home/ronald/codex_ws/1f80df53084f4f5c8ea6abae96379375674459d4/bin/sonda_leitura.sh:126)
+
+Saída fornecida [nao verificado]
+
+```text
+25
+sonda_leitura: sonda_divergencia.py [284cfa46e4b59aba] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+sonda_leitura: arvore=/home/ronald/wt-janela-turno-020503/app (copia), banco segue sombra como leitor
+
+TOT diverge 25
+TOT diverge_com_decisaohe 13
+TOT diverge_janela_ligada 25
+TOT pares_com_chave 23948
+TOT sem_dia_do_juiz 107
+rc_sombra=0
+```
 
 ## 24/11 02:31 · sessao 98532e6761ac · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · verificador · origem=Code
 
@@ -792,12 +811,4 @@ As linhas somam **81267 minutos brutos**, um a mais que os **81266** do `UNIVERS
 - Leitura indireta de produção após `carimbar_identidade`: `app/chamados/services/passivo_validado.py:151`. O laço entrega a mesma instância e a mesma lista de erros a `_materializar_uma` e `_balde_da_recusa`. Se houve colisão, `_materializar_uma` chama `_carimbar_recusa` no `finally`, que chama `carimbar_identidade(VIA_FATO_OCUPADO)`. Com `RETIDA` a via fica igual e o erro permanece. `_balde_da_recusa` lê o valor, compara com `RECUSA_PAR_ATO_COLUNA` e devolve a classificação do erro de colisão. Ocorrência com coletor ativo em produção [nao verificado]. `app/chamados/services/passivo_validado.py:147–154`, `:577–593`; `app/chamados/services/materializacao.py:1625–1629`, `:1782–1793`, `:2034–2042`, `:2106–2116`; `app/chamados/models.py:3509–3511`.
 - Leitura direta após identidade no teste F9b: `app/chamados/tests/test_e4c_b2b_f0_espinha.py:323`, `:328`. Demais leituras de teste: `app/chamados/tests/test_e4c_b2b_f0_espinha.py:311`, `:402`; `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:455`; `app/chamados/tests/test_e4c_f5_volta3_ausencia.py:223`; `app/chamados/tests/test_e4c_f5_guarda_par_s143.py:59`; `app/chamados/tests/test_e4c_f5_guarda_reconciliador.py:134`; `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:78`; `app/chamados/tests/test_e2_pergunta_so_ao_c6.py:149`. A injeção de `RECUSA_C6` em teste fica em `app/chamados/tests/test_e4c_f5_guarda_plantio_s144.py:262`.
 
-## 24/11 01:27 · sessao 86c298e2de0f · - · - · origem=Ronald (tmux)
-
-**3. PROCEDE.** Os dois testes novos falham com os defeitos que nomeiam, por inspeção. O primeiro liga a cerca, injeta `StopIteration` no próprio auxiliar importado pela guarda e exige essa classe. Com o `yield` do diff anexado, a exceção escaparia como `RuntimeError`. [test_e4c_b2b_f0_espinha.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/tests/test_e4c_b2b_f0_espinha.py:221), [fio.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/services/fio.py:1506)
-
-O segundo injeta `RuntimeError` em `reter_se_vetada` e exige que instante, autor e via voltem aos valores anteriores. Na posição antiga do julgador, o erro escapava depois da mutação e antes da restauração. O caso cobre o trio do carimbo. A cobertura da lavra e da validação está nos testes anteriores. [test_e4c_b2b_f0_espinha.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/tests/test_e4c_b2b_f0_espinha.py:234), [models.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/models.py:3432), [models.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/models.py:3465), [test_o261e_f2_fila.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/tests/test_o261e_f2_fila.py:186)
-
-O F9b também falharia sem a atribuição nova. Ele parte de `None` e exige `RECUSA_RETIDA`. [test_e4c_b2b_f0_espinha.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/tests/test_e4c_b2b_f0_espinha.py:314), [models.py](/home/ronald/codex_ws/81c096c32aef53d72411b8327c8aace96c6fc429/app/chamados/models.py:3386) A execução dos testes nesta cópia está [nao verificado].
-
-_8038 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8039 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
