@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 14:47:57.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (21.9 MB). Acoes na janela: **595**.
+**Medido em 24/11/2026 14:53:56.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (22.1 MB). Acoes na janela: **598**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:52:14 | Agent | RESOLVER ordem-de-trava V2 builder | `Voce e o CONSTRUTOR da obra RESOLVER-PASSA-NA-FRENTE (SaaS de ponto Django, repo /home/ronald/saas-hasner). Leia /home/ronald/saas-hasner/CLAUDE.md, secoes 0, 3, 6 e 7b, antes de agir. Trabalhe SO na copia /home/ronald/wt-resolver-d-024937: ela esta em fbf5ba2a5, limpa e verde na pista 2. Nunca edite a arvore viva /home/ronald/saas-hasner/app. AVAL a cumprir, literal (Ronald, RESOLVER-ORDEM-DE-TRA ...` |
+| 14:51:19 | Bash | Mark PAREI answered and log aval V2 | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a="PAREI: ! RESOLVER-ORDEM-DE-TRAVA-2411-1440 condicao" assert s.count(a)==1 s=s.replace(a,"RESPONDIDA por RESOLVER-ORDEM-DE-TRAVA-V2-2411-1455 (15:0x: unidade = DIA; (1) escritas do dia no atomic do dia senao PAREI, (2) repetir lote idempotente RED, (3) tela mostra resolvidos/falhou, engolir fora de escopo; enviado ao co ...` |
+| 14:51:14 | SendMessage |  | `-` |
 | 14:38:43 | Bash | Record PAREI with sites at RELATO top | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() l=("PAREI: ! RESOLVER-ORDEM-DE-TRAVA-2411-1440 condicao 'o Resolver inteiro roda numa transacao so' NAO fecha \| espera Ronald (14:5x; conferido por mim no fbf5ba2a5). Sitios: " "(1) ponto/views.py:3521-3526 lote = 1 atomic POR DIA (veredito_celula.py:280), dia 1 commita antes do 2, view sem atomic e sem ATOMIC_REQUESTS - ...` |
 | 14:38:36 | Bash | Spot-check atomicity claims in RESOLVER copy | `cd /home/ronald/wt-resolver-d-024937/app; sed -n 3518,3550p ponto/views.py; echo ===; sed -n 278,282p ponto/services/veredito_celula.py; echo ===; sed -n 205,216p ponto/signals.py; grep -rn ATOMIC_REQUESTS config/ \| head -2` |
 | 14:36:41 | Bash | Mark design question answered in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a='PERGUNTA DE DESENHO RESOLVER-PASSA-NA-FRENTE (13:4x;' assert s.count(a)==1 s=s.replace(a,'RESPONDIDA por RESOLVER-ORDEM-DE-TRAVA-2411-1440 (14:4x: opcao (a), ordem declarada no selo, todas as travas por tabela, condicao transacao unica senao PAREI com sitio; (b) so registro) -- era: PERGUNTA DE DESENHO RESOLVER-PASSA-N ...` |
