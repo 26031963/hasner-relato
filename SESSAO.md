@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 01:19:57.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (17.9 MB). Acoes na janela: **444**.
+**Medido em 24/11/2026 01:25:55.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (18.1 MB). Acoes na janela: **453**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:24:26 | Bash |  | `cat > sonda_c1c.q <<'EOF' PAPEL: sonda (leitura). Obra NOTURNO-NAO-APURADO, redesenho. Saida anexa = sonda_c1c.py (sonda_c1b com iguais_so_fechados partido por: noturno BRUTO das pontas brutas dos pares (22-05, sem prorrogacao, sem pausa) <=5 / 5-30 / >30 min; e se o motor RECALCULADO AGORA (minutos_noturnos_legais dos periodos) da >0 ou =0 -- o C1 vem do DiaPago lavrado). Linhas 'fech' = ate 4 ex ...` |
+| 01:24:18 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; python3 - <<'EOF' s=open('sonda_c1b.py').read() # 1) motor guarda tambem o periodo old=" motor[d].append((p.entrada, p.saida))" assert s.count(old)==1 s=s.replace(old, old+"\n PER[(colab.pk, d)].append(p)") old2="def comparar_janela(colab, ini, fim):" assert s.count(old2)==1 s=s.replace(old2, "PER = defaultdict(list)\n\n\n"+old2) old3=""" rotulo ...` |
+| 01:24:08 | Bash |  | `cd ~/saas-hasner/app; grep -n "minutos_noturnos_legais\\|efetivo_entrada\b\\|efetivo_saida\b" ponto/motor_calculo_v2.py \| head -8` |
+| 01:24:04 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; sed -n 60,99p sonda_c1.py; sed -n 160,196p sonda_c1.py` |
+| 01:23:54 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; tail -1 sonda_c1b.out; head -c 7000 sonda_c1b.r` |
+| 01:20:48 | Bash |  | `python3 - <<'EOF' s=open('sonda_c1.py').read() old=""" total["C1"] += 1 por_classe[rotulo] += 1""" assert s.count(old)==1 new=""" if rotulo == "iguais": rotulo = "iguais_com_aberto" if any(s_ is None for _, s_ in m) else ( "iguais_sem_par" if not m else "iguais_so_fechados") total["C1"] += 1 por_classe[rotulo] += 1""" open('sonda_c1b.py','w').write(s.replace(old,new)) EOF python3 -m py_compile son ...` |
+| 01:20:39 | Bash |  | `sed -n 100,130p sonda_c1.py; sed -n 195,243p sonda_c1.py` |
+| 01:20:37 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; grep -n "iguais\\|def classe\\|print(" sonda_c1.py \| head -30` |
+| 01:20:33 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; tail -2 $D/causa_c1.out; wc -c $D/causa_c1.r; head -c 9000 $D/causa_c1.r` |
 | 01:17:24 | Bash |  | `cd ~/saas-hasner/app; sed -i '2s/virada\/outro dia 13, aberto\/saida orfa 12, entrada repetida 8, saida apos marco 7/com sobreposicao: virada\/outro dia 14, aberto\/saida orfa 11, entrada repetida 8, saida apos marco 8/' docs/RELATO.md; grep -c "virada/outro dia 14" docs/RELATO.md cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; cat > $D/causa_c1.q <<'EOF' PAPEL: leitura. Obra NOTURNO-NAO-A ...` |
 | 01:17:11 | Bash |  | `cd ~/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; s=open(p).read() old=s.split('\n')[1] assert old.startswith('NOTURNO-NAO-APURADO REDESENHO') and s.count(old)==1 new=("PERGUNTA DE DESENHO NOTURNO-NAO-APURADO (aval NOTURNO-REDESENHO-2411-0105; pacote para a manha, logs/NOTURNO-NAO-APURADO/redesenho/): " "(1) MAPA (mapa.r, amostra 3/3 conferida: core/juizes.py:216 nomeia turnos_do_colab j ...` |
 | 01:17:02 | Bash |  | `cd ~/saas-hasner/app; grep -n "NOTURNO-NAO-APURADO REDESENHO" docs/RELATO.md \| head -3 \| cut -c1-600` |
