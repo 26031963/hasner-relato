@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 01:25:55.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (18.1 MB). Acoes na janela: **453**.
+**Medido em 24/11/2026 01:31:55.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (18.2 MB). Acoes na janela: **457**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:27:33 | Bash |  | `cd ~/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('PERGUNTA DE DESENHO NOTURNO-NAO-APURADO') old="(6) proximo, sem construir: Codex leitura da causa do C1 nos 382 iguais (o noturno some depois do pareamento)." assert old in L[1] L[1]=L[1].replace(old,"(6) OS 382 IGUAIS (sonda_c1b/c1c, sombra, motor recalculado hoje = lavra, 320/320 zero ...` |
+| 01:27:27 | Bash |  | `python3 - <<'EOF' s=open('sonda_c1.py').read() head=s[:s.index('def c1(colab, janelas):')] body=''' def contar(): tot = Counter(); inv = Counter(); bruto_min = Counter(); ex = [] colabs_inv = defaultdict(set) janelas = {} for colab in Colaborador.objects.select_related("empresa").order_by("pk").iterator(chunk_size=500): emp = colab.empresa_id if emp not in janelas: janelas[emp] = sorted({janela_at ...` |
+| 01:27:09 | Bash |  | `sed -n 1,58p sonda_c1.py` |
+| 01:26:56 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; tail -1 sonda_c1c.out; head -c 9000 sonda_c1c.r` |
 | 01:24:26 | Bash |  | `cat > sonda_c1c.q <<'EOF' PAPEL: sonda (leitura). Obra NOTURNO-NAO-APURADO, redesenho. Saida anexa = sonda_c1c.py (sonda_c1b com iguais_so_fechados partido por: noturno BRUTO das pontas brutas dos pares (22-05, sem prorrogacao, sem pausa) <=5 / 5-30 / >30 min; e se o motor RECALCULADO AGORA (minutos_noturnos_legais dos periodos) da >0 ou =0 -- o C1 vem do DiaPago lavrado). Linhas 'fech' = ate 4 ex ...` |
 | 01:24:18 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; python3 - <<'EOF' s=open('sonda_c1b.py').read() # 1) motor guarda tambem o periodo old=" motor[d].append((p.entrada, p.saida))" assert s.count(old)==1 s=s.replace(old, old+"\n PER[(colab.pk, d)].append(p)") old2="def comparar_janela(colab, ini, fim):" assert s.count(old2)==1 s=s.replace(old2, "PER = defaultdict(list)\n\n\n"+old2) old3=""" rotulo ...` |
 | 01:24:08 | Bash |  | `cd ~/saas-hasner/app; grep -n "minutos_noturnos_legais\\|efetivo_entrada\b\\|efetivo_saida\b" ponto/motor_calculo_v2.py \| head -8` |
