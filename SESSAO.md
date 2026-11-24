@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 19:06:11.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.7 MB). Acoes na janela: **902**.
+**Medido em 24/11/2026 19:12:37.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.7 MB). Acoes na janela: **905**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:09:52 | Bash | Wait for verif2 and full suite | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; while kill -0 2425565 2>/dev/null \|\| [ ! -s $V/suite_inteira.rc ]; do /usr/bin/sleep 30; done; tail -1 $V/verif2.wrap.log; cat $V/suite_inteira.rc; grep -E '^(OK\|FAILED)($\| \()' $V/suite_inteira.log \| tail -1; grep '^Ran ' $V/suite_inteira.log \| tail -1; grep -E '^(FAIL\|ERROR):' $V/suite_inteira.log \| head` |
+| 19:09:39 | Bash | Launch full suite and Codex verif2 for NOTURNO | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; (cd ~/wt-noturno-v4-175246 && git status --short); sha256sum $V/cura_v4_completa.patch \| cut -c1-12 setsid nohup bash -c "bash bin/suite.sh --dir /home/ronald/wt-noturno-v4-175246 --motivo 'pre-opus NOTURNO-A-JANELA-NO-DIA-DO-TURNO' > $V/suite_inteira.log 2>&1; echo rc=\$? > $V/suite_inteira.rc" > /dev/null 2>&1 & cat > $V/verif2.q <<' ...` |
+| 19:09:26 | Bash | Read suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b521b6szk.output` |
 | 19:04:32 | Bash | Registrar NOTURNO volta 2 no RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,"NOTURNO-A volta 2 (cura_v4_completa.patch sha256-12 e73e0be21e5e): catraca _janela_do_dia 1528->1533 com RED (catraca_red.log rc1); mutantes executados M1 dia=None 6 falhas, M2 sem +1 4 falhas; DIFF comp 11 rechaveado pelo mapa do motor: 8402 pares nos 2 lados, 13 mudam, dia do juiz igual H/C nos 1 ...` |
 | 19:04:23 | Bash | Wait for NOTURNO core+ponto suite verdict | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; while [ ! -s $V/suite_core_ponto.rc ]; do /usr/bin/sleep 30; done; cat $V/suite_core_ponto.rc; grep -E '^(OK\|FAILED)($\| \()' $V/suite_core_ponto.log \| tail -1; grep '^Ran ' $V/suite_core_ponto.log \| tail -1; grep -E '^(FAIL\|ERROR):' $V/suite_core_ponto.log \| head` |
 | 19:04:21 | SendMessage |  | `-` |
