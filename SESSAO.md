@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 21:40:33.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (8.4 MB). Acoes na janela: **229**.
+**Medido em 23/11/2026 21:46:36.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (8.5 MB). Acoes na janela: **231**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:43:47 | Bash |  | `cd ~/saas-hasner; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso_merge.log; until [ -s $L.rc ]; do /usr/bin/sleep 30; done; cat $L.rc; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep -E '^Found\|QUARENTENA-PODADO' $L \| head -5; grep -E '^(ERROR\|FAIL):' $L \| head` |
+| 21:43:43 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[0].startswith('PAREI: ! libera B3 E4C-F5') L[0]="DESENHO E4C-F5: lei=juiz unico pergunta=o cartao e a porta leem o MESMO seletor do juiz da disputa (aval LIBERA-B3-F5-2311-2145, liberado por Ronald 'libera B3 E4C-F5 -- DESENHO: lei=juiz unico') app/chamados/services/fio.py:148" L.insert(1,"RESPONDIDA  ...` |
 | 21:40:01 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: F5 c3d')][0] L[i]="ESPERANDO: F5 c3d+main (merge b522f42a0 na raia, sem commit -- B3) suite de pouso \| pid=3358594 \| arquivo=logs/E4C-F5/v7/s82b/c3d/suite_pouso_merge.log.rc -- 158adcc59 sozinho ja deu rc 0 (OK skipped=51 xf=41, Ran 17761 de Found 1776 ...` |
 | 21:39:55 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: F5 c3d')][0] L[i]="ESPERANDO: F5 c3d+main (merge b522f42a0 na raia, sem commit -- B3) suite de pouso \| pid=3358594 \| arquivo=logs/E4C-F5/v7/s82b/c3d/suite_pouso_merge.log.rc -- 158adcc59 sozinho ja deu rc 0 (OK skipped=51 xf=41, Ran 17761 de Found 1776 ...` |
 | 21:39:47 | Bash |  | `cd ~/saas-hasner; date +%T; cat logs/E4C-F5/v7/s82b/c3d/suite_pouso_merge.log \| head -5 \| cut -c1-200; ps -eo pid,etime,args \| grep -E "suite.sh\|trava_teste" \| grep -v grep \| cut -c1-220` |
