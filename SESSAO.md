@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 21:10:33.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (7.3 MB). Acoes na janela: **209**.
+**Medido em 23/11/2026 21:16:30.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (7.4 MB). Acoes na janela: **211**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:15:34 | Bash |  | `cd ~/saas-hasner; cp logs/sonda_c3d.out logs/E4C-F5/v7/s82b/c3d/sonda_c3d.out; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('F5 c3c SONDA SOMBRA')][0] L.insert(i,"F5 c3d SONDA SOMBRA = numero do PRONTO (21:15, arvore 158adcc59, frota inteira, FIM sem except): cartoes 38821 \| form_visivel 6955 \| R1_nomeia_d_de_outro_container  ...` |
+| 21:15:28 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bdpsbiso3.output; ls -la --time-style=+%H:%M ~/saas-hasner/logs/sonda_c3d.out` |
 | 21:05:55 | Bash |  | `cd ~/saas-hasner; until [ -s logs/E4C-F5/v7/s82b/c3d/suite_pouso.log.rc ]; do /usr/bin/sleep 30; done; L=logs/E4C-F5/v7/s82b/c3d/suite_pouso.log; cat $L.rc; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1` |
 | 21:05:52 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; ps -o pid,etime -p 3260713 \| tail -1; rm logs/E4C-F5/v7/s82b/c3d/suite_pouso.log.rc && echo removido` |
 | 21:05:48 | Bash |  | `cd ~/saas-hasner; grep -n 'exit 3\\|rc 3\\|return 3' bin/suite.sh \| head; ls -la --time-style=+%H:%M:%S logs/E4C-F5/v7/s82b/c3d/suite_pouso.log*; date +%H:%M:%S; sudo -n dmesg 2>/dev/null \| grep -i oom \| tail -3; journalctl -k --since "-40min" 2>/dev/null \| grep -i 'oom\\|killed' \| tail -3; docker ps -a --since 5m --format '{{.Names}} {{.Status}}' 2>/dev/null \| head` |
