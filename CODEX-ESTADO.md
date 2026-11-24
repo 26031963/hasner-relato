@@ -1,7 +1,133 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 00:09** · publicado em **24/11/2026 00:14** (UTC-3)
+> Ultima resposta processada: **24/11/2026 00:17** · publicado em **24/11/2026 00:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 00:17 · sessao e051b537137b · LATERAIS-EM-PARALELO · leitura · origem=Code
+
+## Q1 — Quem decide e quem pode reescrever o tipo
+
+**Na gravação, o chamador escolhe o `E` ou `S`.** `registrar_batida` recebe `tipo` e o passa ao `Batida.objects.create`. A porta pode devolver uma batida existente por deduplicação ou recusar uma colisão de tipo oposto. A consulta aos marcos nessa colisão decide se a gravação pode seguir com o tipo recebido. `app/ponto/registro_batida.py:94`, `app/ponto/registro_batida.py:118`, `app/ponto/registro_batida.py:137`, `app/ponto/registro_batida.py:144`, `app/ponto/registro_batida.py:162`
+
+- **App pelas duas APIs.** O `tipo` enviado precisa ser `E` ou `S`. Se a hora efetiva estiver a até cinco minutos do relógio do servidor, vale `proximo_tipo_de(colab, ts_efetivo)`. No ramo comum, sem turno aberto vivo sai `E`, com turno aberto fora do intervalo sai `S`, e durante o intervalo a função compara os marcos de retorno e de fim do turno. Para intermitente, a função alterna a partir da última batida viva nas 14 horas anteriores. `app/api/views.py:420`, `app/api/views.py:569`, `app/api/views_core.py:406`, `app/api/views_core.py:555`, `app/ponto/turnos.py:2480`, `app/ponto/turnos.py:2491`
+- **App com mais de cinco minutos de diferença.** A API usa o vínculo da data local e chama `tipo_por_marcos` com os marcos do *template* daquele dia. Havendo um único tipo de marco a até 30 minutos, grava esse tipo. Sem vínculo, sem marco compatível ou com os dois tipos na janela, mantém o tipo enviado. `app/api/views.py:578`, `app/api/views.py:654`, `app/api/views_core.py:564`, `app/api/views_core.py:645`, `app/ponto/turnos.py:2441`
+- **Formulário web e lançamentos institucionais.** O formulário web repassa o `E` ou `S` do POST. Na materialização de disputa, o motivo da pergunta fornece o tipo. Na aprovação de justificativa de saída, o serviço passa `S`. `app/ponto/views.py:288`, `app/ponto/views.py:365`, `app/ponto/services/triagem_batida.py:700`, `app/chamados/services/materializacao.py:636`, `app/chamados/services/materializacao.py:1581`, `app/ponto/services/justificativa.py:188`
+
+**Depois de gravada, há dois caminhos de reescrita no código da cópia.**
+
+- **`flip_tipo`** inverte `E ↔ S` via `anotar`, registra a trilha e recompõe os turnos. Exige `request` ou autor e recusa batida retratada, tipo fora de `E/S` ou competência aprovada ou exportada. Chamam essa porta o POST de inversão com permissão `regularizar_batida`, o veredito `trabalhou` quando a simulação seleciona a inversão e o comando `flip_automatico --apply` para itens com veredito `auto`. O cron da cópia está configurado com `--competencia --apply`. `app/ponto/services/flip_batida.py:10`, `app/ponto/registro_batida.py:255`, `app/ponto/janelas.py:75`, `app/ponto/views.py:3439`, `app/ponto/services/veredito_celula.py:265`, `app/ponto/services/veredito_celula.py:317`, `app/ponto/management/commands/flip_automatico.py:37`, `app/ponto/management/commands/flip_automatico.py:51`, `app/config/crons.py:707`
+- **Regularização externa, item `corrigir`.** Após a confirmação do lote pelo colaborador, o materializador escolhe `S` se o item tem `hora_saida`, ou `E` se tem `hora_entrada`, e salva diretamente `tipo` e `timestamp` na batida-alvo, com trilha `corrigir_batida`. Esse caminho passa por `alvo.save` diretamente. `app/chamados/services/regularizacao_ext.py:52`, `app/chamados/services/regularizacao_ext.py:125`, `app/chamados/services/regularizacao_ext.py:143`, `app/chamados/services/regularizacao_ext.py:154`, `app/chamados/services/regularizacao_ext.py:160`, `app/chamados/services/regularizacao_ext.py:348`
+
+**CASO-JV.** O enunciado informa `E` às 06:57. A rota usada, o tipo enviado, o estado do turno naquele instante, eventual reescrita e o papel de saída da véspera estão [nao verificado].
+
+## Q4 — Sonda de frota
+
+A unidade é **uma batida apurável por PK**, no intervalo inclusivo de datas locais e em toda a frota do schema selecionado. O script compara o tipo persistido com as pontas finais devolvidas por `CargaDaJanela` e com as pontas das pausas reconhecidas pelo próprio pareador. A janela de pareamento inclui dias vizinhos para alcançar turnos que cruzam a meia-noite. Batidas sem papel binário ou com papéis conflitantes têm contadores próprios. Onde o pareador recorre ao tipo gravado, a concordância pode vir desse próprio fallback. `app/ponto/turnos.py:798`, `app/ponto/turnos.py:1382`, `app/ponto/turnos.py:1499`, `app/ponto/turnos.py:1834`, `app/ponto/turnos.py:2877`, `app/ponto/turnos.py:3044`
+
+O bloco é para um shell Django já aberto no schema desejado, fora de uma transação, com datas de exemplo na última linha. A consulta usa uma transação PostgreSQL somente leitura e imprime apenas totais. A agregação foi checada em memória. Execução com Django/PostgreSQL e totais de produção [nao verificado]. `app/config/settings/saas.py:83`
+
+```python
+from collections import defaultdict
+from datetime import date
+from json import dumps
+
+from django.db import connection, transaction
+from ponto.turnos import CargaDaJanela, _pares_marcados, batidas_apuraveis, janela_com_pad
+
+
+def sonda(inicio, fim):
+    inicio, fim = date.fromisoformat(inicio), date.fromisoformat(fim)
+    if inicio > fim:
+        raise ValueError("Inicio posterior ao fim.")
+
+    contexto_ini, contexto_fim = janela_com_pad(inicio, fim)
+    placar = dict.fromkeys((
+        "apuraveis", "concordantes", "divergentes",
+        "E_gravado_S_pareado", "S_gravado_E_pareado",
+        "sem_papel_ES", "papeis_conflitantes", "tipo_fora_de_ES",
+    ), 0)
+
+    with transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+
+        universo = batidas_apuraveis(None).filter(timestamp__date__range=(inicio, fim))
+        ids = list(universo.order_by("colaborador_id")
+                   .values_list("colaborador_id", flat=True).distinct())
+
+        for offset in range(0, len(ids), 100):
+            lote = ids[offset:offset + 100]
+            gravadas = dict(universo.filter(colaborador_id__in=lote)
+                            .order_by().values_list("pk", "tipo"))
+            papeis = defaultdict(set)
+            carga = CargaDaJanela(lote, contexto_ini, contexto_fim)
+
+            for colaborador_id in lote:
+                for turno in carga.turnos(colaborador_id):
+                    for batida, papel in ((turno.entrada, "E"), (turno.saida, "S")):
+                        if batida is not None and batida.pk in gravadas:
+                            papeis[batida.pk].add(papel)
+
+                    por_instante = {b.timestamp: b.pk for b in turno.batidas}
+                    for ida, volta in _pares_marcados(turno):
+                        for instante, papel in ((ida, "S"), (volta, "E")):
+                            pk = por_instante[instante]
+                            if pk in gravadas:
+                                papeis[pk].add(papel)
+
+            placar["apuraveis"] += len(gravadas)
+            for pk, tipo in gravadas.items():
+                atribuicoes = papeis.get(pk, ())
+                if tipo not in ("E", "S"):
+                    placar["tipo_fora_de_ES"] += 1
+                elif not atribuicoes:
+                    placar["sem_papel_ES"] += 1
+                elif len(atribuicoes) > 1:
+                    placar["papeis_conflitantes"] += 1
+                elif tipo in atribuicoes:
+                    placar["concordantes"] += 1
+                else:
+                    papel, = atribuicoes
+                    placar["divergentes"] += 1
+                    placar[f"{tipo}_gravado_{papel}_pareado"] += 1
+
+    return placar
+
+
+print(dumps(sonda("2026-10-01", "2026-10-31"), sort_keys=True))
+```
+
+## 24/11 00:17 · sessao 37dc27fdd841 · - · - · origem=Ronald (tmux)
+
+`registrar_batida` grava o `tipo` recebido do chamador. Pode devolver uma batida existente pelo mesmo tipo em ±60 s ou pela chave colaborador/instante, inclusive se a chave já estiver gravada com o tipo oposto. Na colisão de tipo oposto, a porta recusa o automático e permite a criação com aviso se houver autoridade humana. `app/ponto/registro_batida.py:118–178`
+
+- **API de batida.** O cliente envia E/S. Antes de classificar, a API deduplica pelo tipo enviado em ±5 min. Para nova batida com diferença de até 300 s entre chegada e instante efetivo, o servidor usa `proximo_tipo_de`. Acima de 300 s, consulta o vínculo do dia civil da batida e `TipoEscala.marcos_do_dia` desse dia. Se exatamente um tipo casa com marco a até 30 min, usa esse tipo. Se ambos ou nenhum casam, preserva o tipo do cliente. `app/api/views.py:420–427,506–509,528–545,569–600,654–668`, `app/api/views_core.py:406–413,492–495,514–531,555–586,645–659`, `app/ponto/turnos.py:2441–2464`
+- **Regra ao vivo.** Sem turno vivo, sugere E. Com turno vivo fora do intervalo, S. Em intervalo, compara a proximidade do fim da pausa com a do fim do turno. Empate favorece E. Intermitente alterna pelo último tipo vivo nas 14 h anteriores. `app/ponto/turnos.py:2222–2241,2284–2297,2467–2525`
+- **Formulário web.** Passa o E/S recebido por POST, com possível confirmação para E sobre turno aberto. Materialização e ajustes fornecem o próprio tipo. `app/ponto/views.py:287–292,335–349,365–371`, `app/ponto/services/triagem_batida.py:617–637,698–712`, `app/chamados/services/materializacao.py:1580–1588,1697–1710`, `app/chamados/services/regularizacao_ext.py:168–188`
+- **Reescrita normal.** `flip_tipo` inverte E↔S por `anotar`, registra trilha e recompõe turnos. Recusa retratada, falta de autor/request, tipo inválido ou competência aprovada/exportada. Chamam a porta o POST com `regularizar_batida`, o veredito administrativo `trabalhou` após simulação e `flip_automatico --apply`. O automático usa a regra estrita − marco oposto ≤10 min e nenhum do próprio tipo ≤30 min − e conta com alternativa por slots da célula. `app/ponto/services/flip_batida.py:10–39`, `app/ponto/registro_batida.py:223–225,255–283`, `app/ponto/janelas.py:75–89`, `app/ponto/views.py:3438–3447,3491–3495`, `app/ponto/services/veredito_celula.py:266–272,298–325`, `app/ponto/turnos.py:2409–2438`, `app/ponto/services/flip_auto.py:207–245,285–313`, `app/ponto/management/commands/flip_automatico.py:51–68`, `app/config/crons.py:707`
+- **Outra reescrita efetiva.** No lote de regularização externa confirmado pelo colaborador e sem disputa aberta, o item `corrigir` pendente com batida-alvo grava diretamente `tipo` e `timestamp`. `hora_saida` escolhe S. Na sua ausência, `hora_entrada` escolhe E. O fluxo registra `corrigir_batida`. `app/chamados/views_regularizacao.py:19–22,102–130,186–198,216–217`, `app/chamados/services/regularizacao_ext.py:52–66,122–130,143–162,348–357`
+
+Qual caminho gravou as 06:57, quais marcos estavam disponíveis e se houve reescrita posterior ficam [nao verificado].
+
+## 24/11 00:16 · sessao 052fbee03723 · - · - · origem=Ronald (tmux)
+
+**Q2.** A batida gravada `E` pode ser a `saida` do turno da véspera. O pareador ordena por timestamp, recebe o papel da ata por minuto e usa o `tipo` gravado quando a ata se abstém. Um segundo passe pode fechar o turno por posição com a própria batida `E`, preservando seu tipo gravado. `app/ponto/turnos.py:1217`, `:890–909`, `:1310–1326`, `:1377–1382`, `:1096–1102`, `:1497–1502`.
+
+| Caso | Resultado |
+|---|---|
+| Ata diz `S`, batida chega ao ramo de borda e cabe entre piso e teto | Fecha o aberto como saída. Fora do teto ou em par degenerado, vira saída órfã. `app/ponto/turnos.py:1377–1382`, `:1421–1457`, `:1487–1496` |
+| Ata diz `E` e a batida chega ao ramo de borda | Abre turno próprio e veta a fusão posicional. `app/ponto/turnos.py:997–999`, `:1417–1420` |
+| Ata diz `X`/`Xi`, batida é absorvida como intervalo, eco de flush ou volta de pausa deslocada | No aberto, segue como batida interna, sem formar borda. `app/ponto/turnos.py:1315–1326`, `:1356–1376`, `:1398–1416` |
+| Ata se abstém, `E` abre um turno unitário e todas as guardas posicionais passam | Fecha pela posição, conserva `data_turno` do anterior, agrega a batida, elimina o turno unitário da lista e carimba a virada de data. `app/ponto/turnos.py:991–1026`, `:1059–1102`, `:1417–1420` |
+| Falha qualquer guarda posicional | A `E` não fecha por esse caminho. Uma `S` órfã que venha antes da próxima entrada ou uma `S` de pausa sem volta podem fechar por caminhos próprios. `app/ponto/turnos.py:1059–1095`, `:1170–1188` |
+
+A fusão exige turno anterior com entrada e sem saída, candidata no turno seguinte com uma única batida e sem saída própria, ata sem `E` ou `S` para a candidata, duas bordas declaradas no mapa do dia do aberto, pausa anterior fechada e carimbada entre 15 min e 3 h inclusive, candidata depois da volta, distância ao `hf` encadeado menor que ao `hi` concorrente e duração acima de 60 s até previsto + 4 h. Empate veta. Sem `hi` concorrente, só o `hf` participa. Bordas iguais fazem o teto retornar a `cont_max_s`, cujo padrão é 14 h. `app/ponto/turnos.py:66–82`, `:117–131`, `:382`, `:499`, `:912–940`, `:991–1026`, `:1059–1102`, `:1192–1194`; `app/ponto/management/commands/detectar_par_relampago.py:49`.
+
+O histórico pode levar `marcos_por_dia` ao pareador, com exceção do template de segundo intervalo. O caminho de turno vivo leva a ata e as tuplas de marcos, mas chama sem `marcos_por_dia`, então não entra nessa fusão posicional. `app/ponto/turnos.py:1940–1944`, `:1988–2000`, `:2264–2297`, `:991–992`.
+
+O teste de quatro batidas `E` afirma fechamento pela última, preservação das quatro e virada de data. Os negativos cobrem falta de pausa, candidata já fechada, dia sem DNA, `hi` mais próximo, teto e ata dizendo `E`. `app/ponto/tests/test_saida_pela_posicao_entre_turnos.py:103–112`, `:228–239`, `:260–292`.
+
+O papel das 06:57 de JV, a sequência adjacente, a pausa, os marcos e a ata daquele dia ficam **[nao verificado]**. Os exemplos de outra batida às 06:57 na suíte mostram resultados distintos conforme a ata, inclusive `X` por sobra próxima de uma `S` às 07:00 e `E` de uma célula vizinha. `app/ponto/tests/test_o68b_papel_da_ata_no_motor.py:79–103`, `:212–226`.
 
 ## 24/11 00:09 · sessao 480de46bb833 · E4C-F1-B2b-F0 · censo · origem=Code
 
@@ -598,50 +724,4 @@ O prefixo `id=<job> sha=<SHA>` exige que o recibo corrobore a identidade do run.
 
 Base e cópia comparadas pelo conteúdo, com os quatro hashes de blob da cópia iguais aos do anexo. HEAD e execução dos REDs e mutantes [nao verificado].
 
-## 23/11 20:24 · sessao 116d515ade98 · - · - · origem=Ronald (tmux)
-
-- **R1** executa GET e POST reais com mocks de push. Exige uma reabertura com o `chamado_id` e o PK de D desenhado, depois confirma a transição da fechada e o incremento do contador. O caso de desempate testa o helper diretamente, mas muda a data antes de comparar montador e porta. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106–115,139–154,178–193`
-- **R2** executa testemunha e validação reais com K6 simulado. Confere presença do formulário pelo PK da pergunta e `validada_em` persistido. O espião delega à testemunha real e exige uma chamada correspondente, portanto não passa vazio. A asserção negativa isolada do estado aceita `None`, e o formulário testado não vincula a pergunta ao `chamado_id` na mesma asserção. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:131–136,196–228` · `app/chamados/services/fio.py:700–739` · `app/chamados/services/acoes_disputa.py:13–24`
-- **R3** usa ambos os seletores reais e exige PK e `ORDER BY` explícitos. **R4** usa GET real e exige 200, mas compara só inclinações. Pode passar com a explicação omitida ou com custo linear igual nos dois grupos. O selo `_Ancora` verifica texto no fonte. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106–109,230–290`
-- Os asserts de HTML no POST `acao=nada` usam o mesmo renderer integral do GET. Os POSTs de negócio usam `contexto_parcial_fio`, mas seu HTML não é conferido. `app/chamados/views.py:883–890,928–957` · `app/chamados/services/fio.py:552–561,609–613,696–698,739–748,875–876` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:139–154,209–214`
-- Patches e execuções M_R1 e M_R2, asserções atingidas e verdes correspondentes **[nao verificado]**. Os resultados não constam do material fornecido nem da cópia inspecionada. `.gitignore:53–54` · **[nao verificado]**
-- O R4 carrega D, P e decisões em até três consultas fixas, mas mantém a consulta de batidas para cada D com perguntas datadas. O lote altera a ordem dos itens externos de `data_evento,pk` para PK e o modal itera na nova ordem. `app/chamados/services/fio.py:282–290,326–332,400–415` · `app/chamados/services/explicador.py:166–179,212` · `app/templates/chamados/partials/modal_fio.html:465–476`
-
-## 23/11 20:23 · sessao fdebdce8e070 · - · - · origem=Ronald (tmux)
-
-**R1 fecha em parte.** O caso misto nominal recupera o formulário para a fechada própria. O cartão e a porta usam o mesmo seletor e, com o mesmo conjunto de candidatas, escolhem a mesma D. O cartão não oferece formulário quando a eleita é aberta e tem o próprio chamado como container. `app/chamados/services/fio.py:160–171,333–356` · `app/chamados/services/acoes_disputa.py:294–302` · `app/templates/chamados/partials/modal_fio.html:412–422`
-
-**A reabertura pode sumir em comparação com a base.** Sem aberta, suponha duas fechadas próprias empatadas em `fechada_em`. A tem `aberta_em` mais recente e contador abaixo de dois. B tem PK maior e contador dois. A base escolhia A pela ordenação por `-fechada_em,-aberta_em` com primeira fechada. A cópia escolhe B e desenha só o aviso de limite. `54794f38a:app/chamados/services/fio.py:234–250,308–322` (anexo) · `app/chamados/services/fio.py:170–171,333–356` · `app/templates/chamados/partials/modal_fio.html:412–419`
-
-**A oferta pode ser recusada ou abrir outra D.** A fechada de uma pergunta listada continua a gerar formulário quando inexiste fechada própria. A porta recusa por ausência de fechada do chamado. O PK exibido vai em `data-reabertura-admin`, e o POST envia `chamado_id`. Se a candidata mudar entre render e POST, a porta pode reabrir outra ou recusar. Com dados inconsistentes de dono, a divergência também é possível sem concorrência. O montador filtra pelo colaborador do fio, e a porta filtra só pelo container. As duas FKs são independentes no modelo. Ocorrência desse passivo [nao verificado]. `app/chamados/services/fio.py:241–257,333–356` · `app/chamados/services/acoes_disputa.py:294–302` · `app/templates/chamados/partials/modal_fio.html:418–422` · `app/chamados/models.py:1910–1914,1923–1931,1975–1981`
-
-**Pergunta preservada. Validar pode sumir corretamente.** A lista continua ancorada pela P. No inverso do RED R2, P viva e respondida de intervalo pertence à fechada de empresa com K6 entregue, enquanto a eleita aberta é de empresa sem entrega. Com K7 e demais guardas livres, a base podia oferecer Validar usando empresa errada. A cópia consulta a empresa da P e esconde o botão que a porta recusaria. `app/chamados/services/fio.py:277–309,330–348,439–453,700–739` · `app/chamados/juizes.py:1023–1042,1494–1528` · `app/chamados/services/validacao.py:218–234` · `app/chamados/services/materializacao.py:802–842,907–919` · `app/templates/chamados/partials/modal_fio.html:123–125,157–160,274–311`
-
-**Casca dos REDs.** `acao='nada'` chega ao mesmo `_resp_modal_full` do GET. Os POSTs reais entram no render parcial, mas o HTML dessas respostas não recebe as asserções dos formulários. R1 verifica `fechada_em` e `reaberturas_admin` persistidos. R2 verifica `validada_em`, com apenas K6 e notificações substituídos. `app/chamados/services/fio.py:609–613,696–698,739,841–842,875–876` · `app/chamados/views.py:883–890,928–958` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:110–114,139–154,196–214`
-
-Os quatro hashes dos arquivos locais coincidem com os pós-blobs do anexo. A identidade dos commits e a execução dos testes estão [nao verificado]. [nao verificado]
-
-## 23/11 19:09 · sessao 427dfca9c655 · NOTURNO-NAO-APURADO · verificador · origem=Code
-
-**Volta 3b reprovada na cobertura da pausa.** O delta leva o aviso da L-097 ao aberto e passa a exigir um FT com minutos trabalhados positivos na virada. O teste novo de 12x36 injeta a pausa sem o carimbo que o motor lê. `v3b.diff, app/ponto/motor_calculo_v2.py:2587–2605` · `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:219–247,306–324` · `app/ponto/turnos.py:798–824,875–884`
-
-## Q1 — Pontos da volta 3
-
-- **Aviso L-097 no portador — resolve.** `calcular_mes` mede a lista de `_pc` antes da L-097, recolhe o sufixo acrescentado pela chamada e o anexa ao primeiro aberto do dia. O sufixo contém o aviso de bloqueio. Os avisos que já estavam no `_pc`, incluindo os de pontualidade, ficam no temporário. `v3b.diff, app/ponto/motor_calculo_v2.py:2582–2605` · `app/ponto/motor_calculo_v2.py:1484–1488`
-- **Virada sem provar que o FT pagou — resolve no teste do motor.** O teste autoriza a véspera, exige o FT 22h–01h30 com `minutos_trabalhados > 0` e exige o aberto zerado com uma sobreposição contada. O controle seguinte ainda exige **0 trabalhados / 210 fora** no FT bloqueado e a exclusão do candidato. `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:219–269` · `app/ponto/motor_calculo_v2.py:1453–1457`
-- **Pausa cruzando 360 no 12x36 — deixa a lacuna e acrescenta um teste com fixture errado.** `_turno` cria `_B` só com instante, tipo e ID. A sequência `23h S → 00h E` fica sem marca de intervalo. Na sonda em memória, o caminho do crédito extraiu 19h–03h com `intervalos=()` e deu **480 min** sem recorte de janela. Com a pausa marcada, deu **420 min**. O `pc` de referência do teste recebe a pausa explicitamente e exige que o aberto coincida com ele. O cenário ainda é de par livre, sem fragmento abaixo de 360 nem sobreposição. `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:58–67,306–324` · `app/ponto/tests/test_o280_bateria_da_lei.py:103–104` · `app/ponto/turnos.py:542–546,675–704,798–824,875–884` · `app/ponto/motor_calculo_v2.py:2542–2548,2759–2785`
-
-## Q2 — O que o delta acrescenta
-
-- **Texto duplicado, sim.** No próprio fixture de dois pares de 60 min, a L-097 gera duas strings idênticas no aberto, pois o texto contém o total arredondado e omite a hora de origem. As duas pendências têm horas distintas, **19h e 20h30**. A tela pode mostrar o mesmo bloqueio no indicador de HE e no texto do período. `app/ponto/motor_calculo_v2.py:1484–1488` · `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:326–343` · `app/templates/ponto/espelho.html:189,299–305`
-- **Aviso com zero pago, sim.** O par bloqueado pela L-097 leva minutos **fora da janela** ao portador e agora leva também o aviso. O candidato rejeitado por sobreposição sai antes de calcular o `_pc` e de chamar a L-097. A lista do portador passa a reunir avisos sobre o próprio aberto e sobre o bloqueio de outros pares. O R3 de **0 min contados** já acompanhava o caso com saldo só em fora da janela. `v3b.diff, app/ponto/motor_calculo_v2.py:2576–2605` · `delta_v3_v3b.diff:1–18` · `app/ponto/motor_calculo_v2.py:1471–1488`
-- **Teste que passa vazio, não nas novas asserções positivas.** A virada exige FT positivo e contador `1`. O teste de avisos exige duas pendências com hora e duas strings com `L-097`. A contagem das strings admite repetir o aviso de um par e omitir o do outro. O `assertNotIn` da virada aceita uma lista de pendências vazia, pois só cobra a ausência de `01:00`. `v3b.diff, app/ponto/tests/test_noturno_credito_turno_aberto.py:236–247,336–343`
-- **`except` novo, nenhum.** O delta acrescenta a cópia da lista em torno da chamada à L-097 que já estava na v3. As capturas de falha na leitura da empresa e das decisões são da cópia. `delta_v3_v3b.diff:1–18` · `app/ponto/motor_calculo_v2.py:1379–1420`
-
-**Quem escreve.** `PeriodoCalculo` inicializa a lista. Os três `calcular_periodo` escrevem o aviso de saída ausente. A L-097 escreve no `_pc`, e `MotorBase.calcular_mes` transfere o aviso e acrescenta o R3 ao portador. O teto de pontualidade pode reescrever a lista e preserva o texto da L-097 pelos seus filtros de prefixo. `app/ponto/motor_calculo_v2.py:253,1093–1104,1156–1168,1484–1488,2750–2755,2877–2882,3215–3220` · `v3b.diff, app/ponto/motor_calculo_v2.py:2587–2605`
-
-**Quem lê.** O serviço do espelho usa a lista como sinal de inconsistência, condição que o aberto já satisfaz por `turno_aberto`. O template exibe cada texto. O PDF lê a lista, pula o período cuja entrada foi marcada como órfã e trunca os textos. `plano_b_no_dinheiro` imprime a lista e `diff_reclassificar_partido` filtra avisos de pontualidade. A Gestão de HE lê as pendências estruturadas do espelho. `app/ponto/services/espelho.py:667–671,757–763` · `app/templates/ponto/espelho.html:299–305` · `app/relatorios/pdf_espelho.py:963–977` · `app/ponto/management/commands/plano_b_no_dinheiro.py:83–99,146–155` · `app/ponto/management/commands/diff_reclassificar_partido.py:117–129` · `app/ponto/services/he_pendente_lavrado.py:132–152`
-
-Suíte Django, renderização efetiva e ocorrência em produção **[nao verificado]**. [nao verificado]
-
-_8003 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8006 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
