@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 16:31:32.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (25.1 MB). Acoes na janela: **673**.
+**Medido em 24/11/2026 16:37:36.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (25.1 MB). Acoes na janela: **674**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:35:13 | Bash | Register INTERVALO V2 aval replacing 1630 | `cd ~/saas-hasner; cat > logs/AVAIS-1515/intervalo_pre_assinalado_contrato_v2.txt <<'EOF' aval Ronald: INTERVALO-PRE-ASSINALADO-CONTRATO-V2 substitui o INTERVALO-PRE-ASSINALADO-CONTRATO-2411-1630 inteiro. Objetivo: escala com intervalo cadastrado e dia sem batida de intervalo = deduz o intervalo cadastrado da jornada, indenizacao intrajornada 0, nenhuma cobranca ao colab (L-031/L-032, pre-assinalac ...` |
 | 16:26:01 | Bash | Record CLASSE-D v3 in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() s="CLASSE-D v3 (16:2x) COMMITADA 803b8f8e8 (wt-classed-084513): P1 RED prende cego; P2 universos MEDIDOS diferentes (reparo passivo_validado.py:336 sem em_rollout x ensaio com) -> censo volta a medir o que recebe e o corte do ALARME vai ao vigiar_fio_morto::handle (inverte o lugar da volta 2, flag ao verificador); P3 cura ...` |
 | 16:25:56 | Bash | Wait for CLASSE-D v3 pista suite | `cd ~/saas-hasner; L=logs/CLASSE-D-NA-FRENTE-DA-E4D/v3; ssh -o BatchMode=yes pista espera 1124162554_adf6c752 > $L/pista_espera.out 2>&1; ssh -o BatchMode=yes pista log 1124162554_adf6c752 100000 > $L/pista_suite.log 2>&1; tail -3 $L/pista_espera.out` |
 | 16:25:52 | Bash | Send CLASSE-D v3 candidate to pista 2 | `cd ~/saas-hasner; S=$(cd /home/ronald/wt-pouso-classed-v3-162549 && git rev-parse HEAD); git update-ref refs/pista/$S $S; ssh -o BatchMode=yes pista pede $S 2>&1 \| tail -3` |
