@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 13:22:20.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (18.9 MB). Acoes na janela: **507**.
+**Medido em 24/11/2026 13:28:29.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (19.0 MB). Acoes na janela: **518**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:27:50 | Bash | Locate pista server script on disk | `grep -rln 'caractere recusado' ~ /opt /usr/local/bin 2>/dev/null \| head; grep -rn -i 'pista 2\\|PISTA-2' ~/saas-hasner/app/docs/INFRA.md \| head -5; ss -ltnp 2>/dev/null \| grep 2222` |
+| 13:27:47 | Bash | Find docs on pista server setup | `cd ~/saas-hasner; grep -rn -i 'srv-glpi\\|forced\\|command=' app/docs/INFRA.md app/docs/PISTA.md 2>/dev/null \| head -12; grep -n -A3 'Host pista' ~/.ssh/config` |
+| 13:27:45 | Bash | Find pista server-side script source | `cd ~/saas-hasner; git grep -l 'verbos = ping' ; git grep -n 'caractere recusado' \| head -3` |
+| 13:27:08 | Bash | Confirm pista job is running | `/usr/bin/sleep 25; ssh -o BatchMode=yes pista estado 2>&1 \| tail -2; ssh -o BatchMode=yes pista log 1124132706_cfe32f0e 15 2>&1` |
+| 13:27:05 | Bash | Request full HEAD suite on pista 2 | `cd ~/saas-hasner; f=$(git rev-parse HEAD); echo $f; git update-ref refs/pista/$f $f; ssh -o BatchMode=yes pista pede $f --parallel 8 2>&1 \| tail -3` |
+| 13:26:56 | Bash | Read memory on pista pede usage | `cat ~/.claude/projects/-home-ronald-saas-hasner/memory/pista-pede-sha-completo.md; cd ~/saas-hasner; grep -rn -i 'refs/pista' app/docs/INFRA.md app/docs/PISTA.md bin 2>/dev/null \| head -5` |
+| 13:26:38 | Bash | Check pista 2 state and how shas are sent | `cd ~/saas-hasner; ssh -o BatchMode=yes pista estado 2>&1 \| head -30; git ls-remote pista 2>/dev/null \| head -3; git remote -v \| grep -i pista; grep -rn 'refs/pista' bin/*.sh \| head -5` |
+| 13:26:35 | Bash | Get pista 2 command interface | `cd ~/saas-hasner; ssh -o BatchMode=yes pista ajuda 2>&1 \| head -40; echo; ssh -o BatchMode=yes pista rodando 2>&1 \| head` |
+| 13:26:30 | Bash | Read pista_certifica and look at pista host | `cd ~/saas-hasner; sed -n 1,80p bin/pista_certifica.sh; ssh -o BatchMode=yes -o ConnectTimeout=5 pista 'hostname; ls; ls bin 2>/dev/null \| head -30' 2>&1 \| head -50` |
+| 13:26:28 | Bash | Read pista_lock and find pista dispatch scripts | `cd ~/saas-hasner; sed -n 1,60p bin/pista_lock.sh; grep -rn -l 'ssh pista' bin \| head; ls bin \| grep -i -E 'pede\|espera\|remot'` |
+| 13:26:26 | Bash | Survey pista 2 tooling | `cd ~/saas-hasner; date +%H:%M; ls bin \| grep -i -E 'pista\|fila\|trava\|suite'; grep -n -i 'pista' bin/suite.sh \| head -20` |
 | 13:14:57 | SendMessage |  | `-` |
 | 13:14:50 | Bash | Read CLASSE-D green verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b35k38kcs.output; cd ~/saas-hasner/logs/CLASSE-D-NA-FRENTE-DA-E4D/v2; ls; head -5 green.log` |
 | 13:09:23 | Bash | Replace drifting line refs with heading anchors | `cd ~/saas-hasner; A='RELATO.md, marcos "MARCO ESCRITOR-UNICO-DE-CHAMADO" de 22/10'; sed -i "s\|RELATO.md:8492-8516\|$A\|" app/docs/BACKLOG.md; sed -i "s\|RELATO:8510-8516\|$A\|" app/docs/RELATO.md; sed -i -E 's\|app/docs/RELATO.md:(8510-8516\\|8501-8508\\|8492)\|app/docs/RELATO.md (secao "MARCO ESCRITOR-UNICO-DE-CHAMADO")\|' logs/CHAMADO-PRESO-CLASSE/brief_leis_herdadas.md; grep -c 'MARCO ESCRITOR ...` |
