@@ -1,7 +1,163 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 02:12** · publicado em **24/11/2026 02:14** (UTC-3)
+> Ultima resposta processada: **24/11/2026 02:17** · publicado em **24/11/2026 02:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 02:17 · sessao fc72fded9863 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
+
+**ANTES — C1 = 402.** As 17 classes somam 402. Entre os 320 casos `iguais_so_fechados`, todos estão em `motor_agora=0`. `anexo-sonda:3–20`
+
+As referências `anexo-sonda:N` numeram a saída fornecida a partir de `sonda_leitura`, incluindo a linha em branco. A correspondência da cópia local com o hash informado e o conteúdo do script `sonda_c1c.py` ficam [nao verificado].
+
+### 1. Contagem por classe
+
+| Classe | Contagem | Fonte |
+|---|---:|---|
+| `aberto_ou_saida_orfa` | 1 | `anexo-sonda:4` |
+| `aberto_ou_saida_orfa+quantidade_de_blocos` | 1 | `anexo-sonda:5` |
+| `aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | `anexo-sonda:6` |
+| `batida_orfa_na_celula+aberto_ou_saida_orfa+virada_ou_outro_dia` | 1 | `anexo-sonda:7` |
+| `entrada_repetida+aberto_ou_saida_orfa+virada_ou_outro_dia` | 2 | `anexo-sonda:8` |
+| `entrada_repetida+batida_orfa_na_celula+aberto_ou_saida_orfa` | 2 | `anexo-sonda:9` |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa` | 1 | `anexo-sonda:10` |
+| `entrada_repetida+saida_apos_marco+aberto_ou_saida_orfa+virada_ou_outro_dia+quantidade_de_blocos` | 1 | `anexo-sonda:11` |
+| `entrada_repetida+saida_apos_marco+virada_ou_outro_dia` | 1 | `anexo-sonda:12` |
+| `entrada_repetida+virada_ou_outro_dia` | 1 | `anexo-sonda:13` |
+| `iguais_com_aberto` | 62 | `anexo-sonda:14` |
+| `iguais_so_fechados\|bruto5-30\|motor_agora=0` | 55 | `anexo-sonda:15` |
+| `iguais_so_fechados\|bruto<=5\|motor_agora=0` | 208 | `anexo-sonda:16` |
+| `iguais_so_fechados\|bruto>30\|motor_agora=0` | 57 | `anexo-sonda:17` |
+| `saida_apos_marco+aberto_ou_saida_orfa` | 1 | `anexo-sonda:18` |
+| `saida_apos_marco+virada_ou_outro_dia` | 4 | `anexo-sonda:19` |
+| `virada_ou_outro_dia` | 3 | `anexo-sonda:20` |
+| **Soma = C1** | **402** | `anexo-sonda:3–20` |
+
+O trecho fornecido termina em `rc_sombra=0`, sem traceback para transcrever. `anexo-sonda:1–125`
+
+### 2. Exemplos `fech` e corte da faixa noturna
+
+A comparação usa a data e a hora dos limites da faixa que o par bruto alcançou. Nos pares da tarde, o limite relevante é 22h do próprio dia. Nos pares da madrugada, 05h é do dia civil das batidas. `anexo-sonda:73–84` · [motor_calculo_v2.py:97](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:97)
+
+| Subclasse de `iguais_so_fechados` | `colab` | `dia` | `bruto` | `leg` | `pares` | A ponta efetiva cortou a faixa? | Fonte |
+|---|---:|---|---:|---:|---|---|---|
+| `bruto5-30\|motor_agora=0` | 108 | 2026-10-19 | 10.5 | 0.0 | `[["2026-10-19 10:00:31", "2026-10-19 22:10:29", "2026-10-19 10:00:31", "2026-10-19 22:00:00", 657.9, 10.5]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:73` |
+| `bruto5-30\|motor_agora=0` | 108 | 2026-10-21 | 6.3 | 0.0 | `[["2026-10-21 09:59:32", "2026-10-21 22:06:16", "2026-10-21 10:00:00", "2026-10-21 22:00:00", 659.9, 6.7]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:74` |
+| `bruto5-30\|motor_agora=0` | 108 | 2026-10-25 | 17.6 | 0.0 | `[["2026-10-25 10:00:52", "2026-10-25 22:17:37", "2026-10-25 10:00:52", "2026-10-25 22:00:00", 658.1, 17.6]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:75` |
+| `bruto5-30\|motor_agora=0` | 108 | 2026-11-16 | 15.6 | 0.0 | `[["2026-11-16 09:59:13", "2026-11-16 22:15:37", "2026-11-16 10:00:00", "2026-11-16 22:00:00", 659.7, 16.4]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:76` |
+| `bruto<=5\|motor_agora=0` | 60 | 2026-10-31 | 3.5 | 0.0 | `[["2026-10-31 09:52:32", "2026-10-31 22:03:32", "2026-10-31 09:52:32", "2026-10-31 19:00:00", 486.3, 183.5]]` | Sim, saída efetiva = 19:00 < 22:00 | `anexo-sonda:77` |
+| `bruto<=5\|motor_agora=0` | 108 | 2026-10-01 | 0.7 | 0.0 | `[["2026-10-01 09:59:41", "2026-10-01 22:00:39", "2026-10-01 10:00:00", "2026-10-01 22:00:00", 659.3, 1.0]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:78` |
+| `bruto<=5\|motor_agora=0` | 108 | 2026-10-03 | 0.5 | 0.0 | `[["2026-10-03 09:56:13", "2026-10-03 22:00:27", "2026-10-03 10:00:00", "2026-10-03 22:00:00", 658.2, 4.2]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:79` |
+| `bruto<=5\|motor_agora=0` | 108 | 2026-10-05 | 0.9 | 0.0 | `[["2026-10-05 09:56:07", "2026-10-05 22:00:54", "2026-10-05 10:00:00", "2026-10-05 22:00:00", 660.5, 4.8]]` | Sim, saída efetiva = 22:00 | `anexo-sonda:80` |
+| `bruto>30\|motor_agora=0` | 37 | 2026-10-05 | 119.4 | 0.0 | `[["2026-10-06 03:00:38", "2026-10-06 07:01:01", "2026-10-06 19:00:00", "2026-10-06 07:00:00", 0, 960.4]]` | Sim, entrada efetiva = 19:00 > 05:00 e posterior à saída | `anexo-sonda:81` |
+| `bruto>30\|motor_agora=0` | 37 | 2026-10-09 | 119.3 | 0.0 | `[["2026-10-10 03:00:40", "2026-10-10 07:01:50", "2026-10-10 19:00:00", "2026-10-10 07:00:00", 0, 961.2]]` | Sim, entrada efetiva = 19:00 > 05:00 e posterior à saída | `anexo-sonda:82` |
+| `bruto>30\|motor_agora=0` | 113 | 2026-10-30 | 120.0 | 0.0 | `[["2026-10-31 03:00:00", "2026-10-31 07:02:00", "2026-10-31 19:00:00", "2026-10-31 07:00:00", 0, 962.0]]` | Sim, entrada efetiva = 19:00 > 05:00 e posterior à saída | `anexo-sonda:83` |
+| `bruto>30\|motor_agora=0` | 113 | 2026-11-01 | 120.0 | 0.0 | `[["2026-11-02 03:00:00", "2026-11-02 07:01:00", "2026-11-02 19:00:00", "2026-11-02 07:00:00", 0, 961.0]]` | Sim, entrada efetiva = 19:00 > 05:00 e posterior à saída | `anexo-sonda:84` |
+
+Nos quatro exemplos `bruto>30`, o `dia` do registro antecede a data civil da entrada bruta. No código, `_janela_do_dia` busca os marcos por `entrada.date()`, e `entrada_efetiva` ancora o marco na data da batida. Essa lógica é compatível com o par efetivo invertido mostrado no anexo. O motor devolve zero quando a entrada é igual ou posterior à saída e só soma interseções de duração positiva. O corte nos demais casos de cada subclasse fica [nao verificado]. `anexo-sonda:81–84` · [motor_calculo_v2.py:1528](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:1528) · [janela_he.py:20](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/janela_he.py:20) · [janela_he.py:94](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/janela_he.py:94) · [motor_calculo_v2.py:91](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:91) · [motor_calculo_v2.py:112](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:112)
+
+### 3. `motor_agora>0` com `DiaPago=0`
+
+**Para a mesma linha de `DiaPago` e o mesmo conjunto de períodos que entrariam na lavra, sim, no sentido de divergência frente ao cálculo atual.** Na versão `motor`, o fechamento entrega os períodos e o mapa `dia_da_jornada` a `lavrar`. A função usa esse mapa quando há dia para o período, soma `minutos_noturnos_legais / 60` em `horas_noturnas` e grava as linhas da competência e da versão. Se o total comparável agora é positivo, uma lavra com esses períodos atribuiria horas noturnas positivas à linha hoje zerada. [fechamento.py:1201](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/fechamento.py:1201) · [fechamento.py:1217](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/fechamento.py:1217) · [dia_pago.py:126](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:126) · [dia_pago.py:173](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:173) · [dia_pago.py:224](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:224) · [dia_pago.py:359](/home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/services/dia_pago.py:359)
+
+O anexo mostra **zero casos `motor_agora>0` entre os 320 `iguais_so_fechados`**. A presença dessa divergência nas outras classes, a data e os insumos da lavra original e o motivo de eventual defasagem ficam [nao verificado]. `anexo-sonda:4–20`
+
+## 24/11 02:15 · sessao d29f00865ac3 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
+
+## 1. UNIVERSO e emp_comp
+
+Transcrição literal do dado raspado fornecido. Execução da sonda e hashes [nao verificado] de forma independente.
+
+```text
+UNIVERSO pares_fechados 16167 invertidos 25 sha256 1247d31fd41f181b3e4f14c331ac9a98cf5d99d830c1833d6ce403daaa6aff5b
+emp_comp 1 10/2026 fechados 12 invertidos 0
+emp_comp 1 11/2026 fechados 14 invertidos 0
+emp_comp 2 10/2026 fechados 6038 invertidos 6
+emp_comp 2 11/2026 fechados 6337 invertidos 10
+emp_comp 2 12/2026 fechados 275 invertidos 1
+emp_comp 3 10/2026 fechados 1478 invertidos 4
+emp_comp 3 11/2026 fechados 1408 invertidos 2
+emp_comp 3 12/2026 fechados 61 invertidos 0
+emp_comp 4 10/2026 fechados 276 invertidos 2
+emp_comp 4 11/2026 fechados 258 invertidos 0
+emp_comp 4 12/2026 fechados 10 invertidos 0
+```
+
+## 2. Linhas INV
+
+Transcrição literal do mesmo dado raspado.
+
+```text
+INV 1010 2 11/2026 N 2026-11-05 2026-11-05 01:04:44 2026-11-05 05:59:33 2026-11-05 18:00:00 2026-11-05 05:59:33 0.0 1015.3 0.0 0.0 INV
+INV 109 3 10/2026 N 2026-10-05 2026-10-05 22:00:41 2026-10-05 22:10:41 2026-10-05 22:00:41 2026-10-05 22:00:00 0.0 10.7 0.0 649.3 INV
+INV 113 3 11/2026 N 2026-10-30 2026-10-31 03:00:00 2026-10-31 07:02:00 2026-10-31 19:00:00 2026-10-31 07:00:00 0.0 962.0 0.0 0.0 INV
+INV 113 3 11/2026 N 2026-11-01 2026-11-02 03:00:00 2026-11-02 07:01:00 2026-11-02 19:00:00 2026-11-02 07:00:00 0.0 961.0 0.0 0.0 INV
+INV 174 2 10/2026 N 2026-09-23 2026-09-24 02:32:11 2026-09-24 05:00:58 2026-09-24 21:00:00 2026-09-24 05:00:00 0.0 1108.8 0.0 0.0 INV
+INV 174 2 11/2026 N 2026-10-25 2026-10-25 02:32:15 2026-10-25 04:57:35 2026-10-25 21:00:00 2026-10-25 04:57:35 0.0 1107.7 0.0 0.0 INV
+INV 200 2 11/2026 N 2026-11-02 2026-11-03 02:00:33 2026-11-03 06:00:15 2026-11-03 22:00:00 2026-11-03 06:00:00 0.0 1199.7 0.0 0.0 INV
+INV 218 2 10/2026 N 2026-10-15 2026-10-16 03:15:06 2026-10-16 05:00:01 2026-10-16 21:00:00 2026-10-16 05:00:00 0.0 1064.9 0.0 0.0 INV
+INV 218 2 11/2026 N 2026-11-14 2026-11-15 03:17:11 2026-11-15 05:00:03 2026-11-15 21:00:00 2026-11-15 05:00:00 0.0 1062.9 0.0 0.0 INV
+INV 218 2 12/2026 N 2026-11-21 2026-11-22 03:22:03 2026-11-22 05:00:16 2026-11-22 21:00:00 2026-11-22 05:00:00 0.0 1058.2 0.0 0.0 INV
+INV 296 2 11/2026 N 2026-11-02 2026-11-03 00:15:19 2026-11-03 07:00:41 2026-11-03 19:00:00 2026-11-03 07:00:00 0.0 1125.4 0.0 0.0 INV
+INV 37 4 10/2026 N 2026-10-05 2026-10-06 03:00:38 2026-10-06 07:01:01 2026-10-06 19:00:00 2026-10-06 07:00:00 0.0 960.4 0.0 0.0 INV
+INV 37 4 10/2026 N 2026-10-09 2026-10-10 03:00:40 2026-10-10 07:01:50 2026-10-10 19:00:00 2026-10-10 07:00:00 0.0 961.2 0.0 0.0 INV
+INV 382 2 10/2026 N 2026-09-30 2026-10-01 01:01:26 2026-10-01 07:50:17 2026-10-01 23:50:00 2026-10-01 07:50:00 0.0 1368.9 0.0 0.0 INV
+INV 382 2 11/2026 N 2026-11-10 2026-11-11 00:02:41 2026-11-11 07:51:20 2026-11-11 23:50:00 2026-11-11 07:50:00 0.0 1428.7 0.0 0.0 INV
+INV 399 2 10/2026 N 2026-09-30 2026-09-30 18:30:29 2026-09-30 18:30:29 2026-09-30 18:30:29 2026-09-30 18:30:00 0.0 0.5 0.0 0.0 INV
+INV 456 2 11/2026 N 2026-11-14 2026-11-14 19:00:08 2026-11-14 19:00:08 2026-11-14 19:00:08 2026-11-14 19:00:00 0.0 0.1 0.0 0.0 INV
+INV 473 2 10/2026 N 2026-09-21 2026-09-21 19:00:18 2026-09-21 19:23:54 2026-09-21 19:00:18 2026-09-21 19:00:00 0.0 23.9 0.0 0.0 INV
+INV 515 3 10/2026 N 2026-10-09 2026-10-10 02:59:26 2026-10-10 07:03:44 2026-10-10 19:00:00 2026-10-10 07:00:00 0.0 964.3 0.0 0.0 INV
+INV 515 3 10/2026 N 2026-10-11 2026-10-12 03:00:00 2026-10-12 07:05:26 2026-10-12 19:00:00 2026-10-12 07:00:00 0.0 965.4 0.0 0.0 INV
+INV 673 2 11/2026 N 2026-10-21 2026-10-22 06:57:21 2026-10-22 07:00:00 2026-10-22 19:00:00 2026-10-22 07:00:00 0.0 722.6 0.0 0.0 INV
+INV 841 2 11/2026 N 2026-11-13 2026-11-14 06:53:31 2026-11-14 07:05:54 2026-11-14 19:00:00 2026-11-14 07:00:00 0.0 732.4 0.0 0.0 INV
+INV 868 3 10/2026 N 2026-10-10 2026-10-10 02:29:34 2026-10-10 06:58:56 2026-10-10 19:00:00 2026-10-10 06:58:56 0.0 990.4 0.0 0.0 INV
+INV 922 2 11/2026 N 2026-10-27 2026-10-29 04:07:39 2026-10-29 07:02:13 2026-10-29 23:00:00 2026-10-29 07:00:00 0.0 1134.6 0.0 0.0 INV
+INV 973 2 10/2026 N 2026-10-07 2026-10-08 06:55:11 2026-10-08 07:00:43 2026-10-08 19:00:00 2026-10-08 07:00:00 0.0 725.5 0.0 0.0 INV
+```
+
+## 3. Classificação e conta por INV
+
+- **A\* — 18 linhas pelo limite efetivo de entrada.** A data civil da entrada difere do dia da jornada. O motor consulta o marco pela data civil da batida, e o recorte leva a entrada efetiva para depois da saída bruta em todas as 18 linhas. A regra admite `limite efetivo = marco nominal − extra declarada antes`. A igualdade com o marco nominal em cada linha fica **[nao verificado]**. [app/ponto/motor_calculo_v2.py:1528][dia] · [app/ponto/motor_calculo_v2.py:1702][entrada-motor] · [app/ponto/janela_he.py:94][entrada]
+- **B — 4 linhas.** Em cada uma, `saída efetiva < entrada bruta ≤ saída bruta`, com a entrada intacta. A saída recortada fica no marco de saída ou depois dele se houver extra declarada. A desigualdade põe o par bruto inteiro depois do marco. [app/ponto/janela_he.py:143][saida] · [app/escala/models.py:83][extra-saida]
+- **C — 3 linhas.** A entrada bruta está no próprio dia da jornada. O recorte desloca apenas a entrada, que passa da saída bruta. A saída efetiva permanece igual à saída bruta. [app/ponto/motor_calculo_v2.py:1760][pontas] · [app/ponto/janela_he.py:94][entrada] · [app/ponto/janela_he.py:143][saida]
+
+Cada linha abaixo usa os horários da INV na mesma posição do bloco acima. A última coluna faz `efetivo_saida − efetivo_entrada` em `hh:mm:ss`, antes de limitar a duração trabalhada a zero. [app/ponto/motor_calculo_v2.py:2888][duracao] · [app/ponto/motor_calculo_v2.py:2893][trabalhado]
+
+| INV · colab | Classe | Jornada → dia civil da entrada | Entrada bruta → efetiva | Saída bruta → efetiva | Saída efetiva − entrada efetiva |
+|---|---|---|---|---|---:|
+| 01 · 1010 | [C][pontas] | 05/11 → 05/11 | 01:04:44 → 18:00:00 | 05:59:33 → 05:59:33 | −12:00:27 |
+| 02 · 109 | [B][saida] | 05/10 → 05/10 | 22:00:41 → 22:00:41 | 22:10:41 → 22:00:00 | −00:00:41 |
+| 03 · 113 | [A*][entrada] | 30/10 → 31/10 | 03:00:00 → 19:00:00 | 07:02:00 → 07:00:00 | −12:00:00 |
+| 04 · 113 | [A*][entrada] | 01/11 → 02/11 | 03:00:00 → 19:00:00 | 07:01:00 → 07:00:00 | −12:00:00 |
+| 05 · 174 | [A*][entrada] | 23/09 → 24/09 | 02:32:11 → 21:00:00 | 05:00:58 → 05:00:00 | −16:00:00 |
+| 06 · 174 | [C][pontas] | 25/10 → 25/10 | 02:32:15 → 21:00:00 | 04:57:35 → 04:57:35 | −16:02:25 |
+| 07 · 200 | [A*][entrada] | 02/11 → 03/11 | 02:00:33 → 22:00:00 | 06:00:15 → 06:00:00 | −16:00:00 |
+| 08 · 218 | [A*][entrada] | 15/10 → 16/10 | 03:15:06 → 21:00:00 | 05:00:01 → 05:00:00 | −16:00:00 |
+| 09 · 218 | [A*][entrada] | 14/11 → 15/11 | 03:17:11 → 21:00:00 | 05:00:03 → 05:00:00 | −16:00:00 |
+| 10 · 218 | [A*][entrada] | 21/11 → 22/11 | 03:22:03 → 21:00:00 | 05:00:16 → 05:00:00 | −16:00:00 |
+| 11 · 296 | [A*][entrada] | 02/11 → 03/11 | 00:15:19 → 19:00:00 | 07:00:41 → 07:00:00 | −12:00:00 |
+| 12 · 37 | [A*][entrada] | 05/10 → 06/10 | 03:00:38 → 19:00:00 | 07:01:01 → 07:00:00 | −12:00:00 |
+| 13 · 37 | [A*][entrada] | 09/10 → 10/10 | 03:00:40 → 19:00:00 | 07:01:50 → 07:00:00 | −12:00:00 |
+| 14 · 382 | [A*][entrada] | 30/09 → 01/10 | 01:01:26 → 23:50:00 | 07:50:17 → 07:50:00 | −16:00:00 |
+| 15 · 382 | [A*][entrada] | 10/11 → 11/11 | 00:02:41 → 23:50:00 | 07:51:20 → 07:50:00 | −16:00:00 |
+| 16 · 399 | [B][saida] | 30/09 → 30/09 | 18:30:29 → 18:30:29 | 18:30:29 → 18:30:00 | −00:00:29 |
+| 17 · 456 | [B][saida] | 14/11 → 14/11 | 19:00:08 → 19:00:08 | 19:00:08 → 19:00:00 | −00:00:08 |
+| 18 · 473 | [B][saida] | 21/09 → 21/09 | 19:00:18 → 19:00:18 | 19:23:54 → 19:00:00 | −00:00:18 |
+| 19 · 515 | [A*][entrada] | 09/10 → 10/10 | 02:59:26 → 19:00:00 | 07:03:44 → 07:00:00 | −12:00:00 |
+| 20 · 515 | [A*][entrada] | 11/10 → 12/10 | 03:00:00 → 19:00:00 | 07:05:26 → 07:00:00 | −12:00:00 |
+| 21 · 673 | [A*][entrada] | 21/10 → 22/10 | 06:57:21 → 19:00:00 | 07:00:00 → 07:00:00 | −12:00:00 |
+| 22 · 841 | [A*][entrada] | 13/11 → 14/11 | 06:53:31 → 19:00:00 | 07:05:54 → 07:00:00 | −12:00:00 |
+| 23 · 868 | [C][pontas] | 10/10 → 10/10 | 02:29:34 → 19:00:00 | 06:58:56 → 06:58:56 | −12:01:04 |
+| 24 · 922 | [A*][entrada] | 27/10 → 29/10 | 04:07:39 → 23:00:00 | 07:02:13 → 07:00:00 | −16:00:00 |
+| 25 · 973 | [A*][entrada] | 07/10 → 08/10 | 06:55:11 → 19:00:00 | 07:00:43 → 07:00:00 | −12:00:00 |
+
+[dia]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:1528
+[entrada-motor]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:1702
+[entrada]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/janela_he.py:94
+[saida]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/janela_he.py:143
+[extra-saida]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/escala/models.py:83
+[pontas]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:1760
+[duracao]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:2888
+[trabalhado]: /home/ronald/codex_ws/327da9db714e53557f69cd1800d673fe8c99c768/app/ponto/motor_calculo_v2.py:2893
 
 ## 24/11 02:12 · sessao e9d3f1c19b9b · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
 
@@ -785,212 +941,4 @@ O dado fornecido registra `erros_c6: 0`. Execução da sonda [nao verificado].
 - `('fk_do_dia', 'cel_dia_nao_admin')` — **Degrau 1, resposta do colaborador.** Sem decisão de admin na célula vinculada, a pergunta segue viva quando `_resposta_concorda_com_a_luz(p)` retorna `False` ou `None`. O retorno individual é [nao verificado]. [app/chamados/models.py:3689](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:3689), [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511), [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524).
 - `('sem_fk', 'cel_dia_nao_admin')` — **Degrau 1, resposta do colaborador.** Sem `p.celula`, a leitura do marco retorna `None`, a concordância retorna `None` e a pergunta segue viva. [app/chamados/juizes.py:993](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:993), [app/chamados/juizes.py:1435](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1435), [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524).
 
-## 24/11 00:40 · sessao af828c423230 · RESOLVER-PASSA-NA-FRENTE · sonda · origem=Code
-
-## 1. Saída da sonda
-
-Transcrição do dado fornecido. `erros_c6` é **zero**. Execução em produção [nao verificado].
-
-```text
-sonda_leitura: sonda_semfk.py [dcb9515faf345b5d] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-UNIVERSO q_vivas conversa=False: 16148 erros_c6: 0
-morta_c6 3675
-('respondida', 'cel_do_dia_existe') 10
-('respondida', 'fk') 1336
-('sem_resposta', 'cel_do_dia_existe') 19
-('sem_resposta', 'fk') 11108
-```
-
-## 2. Resultado no C6 depois do Resolver dia
-
-O Resolver dia busca a célula por colaborador e data. Filtra as perguntas pelo C6 antes de carimbar `admin_decidiu` junto com `materializada_em`. Em seguida, se encontrou a célula, lavra o veredito com via `admin`. A gravação do carimbo deixa a FK como estava. [app/ponto/services/veredito_celula.py:30](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/ponto/services/veredito_celula.py:30) · [app/ponto/services/veredito_celula.py:193](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/ponto/services/veredito_celula.py:193) · [app/chamados/models.py:3347](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:3347) · [app/chamados/models.py:3496](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:3496) · [app/ponto/services/veredito_celula.py:352](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/ponto/services/veredito_celula.py:352)
-
-| Grupo | Resultado numa nova leitura do C6 |
-|---|---|
-| `('respondida', 'cel_do_dia_existe')` | **Viva**, se o C6 reconhecer a resposta e a FK continuar nula. O C6 procura o veredito em `p.celula`. Com a FK nula, a checagem do marco devolve `None` e o ramo da resposta retorna `True` antes de chegar ao carimbo. [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511) · [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524) · [app/chamados/juizes.py:1435](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1435) · [app/chamados/juizes.py:993](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:993) |
-| `('respondida', 'fk')` | **Morta** se a FK aponta para a célula que recebeu o veredito `admin`. O veredito faz o C6 passar pelo ramo da resposta e chegar ao encerramento por identidade. A correspondência entre a FK e a célula lavrada para cada registro está [nao verificado]. [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511) · [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524) · [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536) |
-| `('sem_resposta', 'cel_do_dia_existe')` | **Morta** se o C6 a lê como sem resposta. `admin_decidiu` com `materializada_em` encerra por identidade, mesmo com FK nula. [app/chamados/juizes.py:1516](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1516) · [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536) · [app/chamados/models.py:2782](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:2782) |
-| `('sem_resposta', 'fk')` | **Morta** se o C6 a lê como sem resposta. O encerramento por identidade vem antes da avaliação do veredito da célula. [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536) · [app/chamados/juizes.py:1546](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1546) |
-
-A mesma regra vale no caso sem FK e sem célula no dia, se o carimbo for gravado. Com resposta reconhecida pelo C6, fica **viva**. Sem resposta, fica **morta**. Contagens explícitas desses grupos na sonda [nao verificado]. [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511) · [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524) · [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536)
-
-A sonda agrupa pela coluna `respondida_em` e pelo texto via SQL. O C6 lê o instante da sequência de decisões e o texto da coluna. A saída traz as contagens da leitura inicial. A correspondência desses estados por registro e o resultado após o Resolver dia em produção ficam [nao verificado]. [app/chamados/juizes.py:1671](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1671) · [app/chamados/juizes.py:1494](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1494) · [app/chamados/models.py:4449](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:4449)
-
-## 24/11 00:32 · sessao b9c5fc6eacb3 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
-
-## 1. RESUMO
-
-As referências `DADO RASPADO:n` numeram as linhas JSON do texto fornecido, a partir do primeiro `d1`. A linha `RESUMO` é a 404. As contagens abaixo são as da sonda. [DADO RASPADO:404]
-
-| Chave | Valor |
-|---|---|
-| `RESUMO` | `true` |
-| `agora` | `2026-11-24 00:15:56.989532-03:00` |
-| `colaboradores` | 662 |
-| `dias_com_celula` | 18.395 |
-| `janelas` | `2026-10-21` a `2026-11-20` — 662 colaboradores |
-| `ausencia_varios_dias` | `dias` = 9, `rotulo_difere_do_rateio` = 9 |
-
-**`cruz_texto_aberto_x_status_pede_decisao_x_oferta`** [DADO RASPADO:404]
-
-| Texto aberto | Status pede decisão | Oferta | Dias |
-|---|---|---|---:|
-| `false` | `false` | `false` | 15.996 |
-| `true` | `true` | `true` | 1.096 |
-| `false` | `true` | `true` | 575 |
-| `true` | `false` | `false` | 394 |
-| `false` | `true` | `false` | 213 |
-| `true` | `true` | `false` | 121 |
-
-**`D1_texto_aberto_status_nao_pede_por_status_e_ramo`** [DADO RASPADO:404]
-
-| Status | Ramo | Dias |
-|---|---|---:|
-| `escala_suspeita` | `furo_apurado` | 244 |
-| `ok` | `turno_aberto` | 123 |
-| `ok` | `saida_orfa` | 18 |
-| `escala_suspeita` | `saida_orfa` | 5 |
-| `ok` | `furo_apurado` | 3 |
-| `folga_trabalhada` | `turno_aberto` | 1 |
-
-**`D1_fonte_do_d4`** [DADO RASPADO:404]
-
-| Status | Fonte | Terceiro valor da tupla | Dias |
-|---|---|---|---:|
-| `escala_suspeita` | `lavrado` | `true` | 249 |
-| `ok` | `lavrado` | `true` | 144 |
-| `folga_trabalhada` | `lavrado` | `true` | 1 |
-
-**`D1_veredito_da_celula`** [DADO RASPADO:404]
-
-| Status | Veredito da célula | Via | Dias |
-|---|---|---|---:|
-| `escala_suspeita` | `indefinida` | `cartorio` | 249 |
-| `ok` | `concorde` | `cartorio` | 144 |
-| `folga_trabalhada` | `concorde` | `cartorio` | 1 |
-
-**`D2_status_pede_texto_nao_aberto`** [DADO RASPADO:404]
-
-| Status | `veredito_dia` | Dias |
-|---|---|---:|
-| `irregular` | `trabalhou` | 641 |
-| `falta` | `descontado` | 73 |
-| `irregular` | `rejeitado` | 32 |
-| `irregular` | `abonado` | 29 |
-| `falta` | `abonado` | 5 |
-| `irregular` | `folga` | 5 |
-| `irregular` | `feriado` | 1 |
-| `sem_certidao` | `trabalhou` | 1 |
-| `irregular` | `descontado` | 1 |
-
-**`cruz_completo_veredito_status_oferta_ultimo_recurso`** [DADO RASPADO:404]
-
-| `veredito_dia` | Status | Oferta | Último recurso | Dias |
-|---|---|---|---|---:|
-| `trabalhou` | `ok` | `false` | `true` | 7.079 |
-| `folga` | `folga` | `false` | `true` | 5.453 |
-| `em_aberto` | `irregular` | `true` | `true` | 1.071 |
-| `feriado` | `folga` | `false` | `true` | 889 |
-| `trabalhou` | `folga` | `false` | `true` | 879 |
-| `abonado` | `ausencia` | `false` | `true` | 743 |
-| `suprimido` | `ausencia` | `false` | `true` | 437 |
-| `trabalhou` | `irregular` | `true` | `true` | 435 |
-| `em_aberto` | `escala_suspeita` | `false` | `true` | 232 |
-| `trabalhou` | `irregular` | `false` | `false` | 206 |
-| `folga` | `folga_trabalhada` | `false` | `true` | 190 |
-| `em_aberto` | `ok` | `false` | `true` | 133 |
-| `em_aberto` | `irregular` | `false` | `false` | 121 |
-| `feriado` | `folga_trabalhada` | `false` | `true` | 109 |
-| `descontado` | `falta` | `true` | `true` | 73 |
-| `trabalhou` | `ok` | `false` | `false` | 57 |
-| `trabalhou` | `escala_suspeita` | `false` | `true` | 44 |
-| `rejeitado` | `irregular` | `true` | `true` | 31 |
-| `folga` | `ok` | `false` | `true` | 27 |
-| `abonado` | `irregular` | `true` | `true` | 24 |
-| `em_aberto` | `sem_certidao` | `true` | `true` | 23 |
-| `folga` | `folga` | `false` | `false` | 18 |
-| `em_aberto` | `escala_suspeita` | `false` | `false` | 17 |
-| `rejeitado` | `folga` | `false` | `true` | 15 |
-| `feriado` | `ok` | `false` | `true` | 12 |
-| `abonado` | `ausencia` | `false` | `false` | 12 |
-| `em_aberto` | `ok` | `false` | `false` | 11 |
-| `rejeitado` | `ok` | `false` | `true` | 8 |
-| `abonado` | `ok` | `false` | `true` | 6 |
-| `abonado` | `falta` | `true` | `true` | 5 |
-| `abonado` | `irregular` | `false` | `false` | 5 |
-| `folga` | `irregular` | `true` | `true` | 5 |
-| `abonado` | `escala_suspeita` | `false` | `true` | 4 |
-| `descontado` | `ausencia` | `false` | `true` | 4 |
-| `descontado` | `folga` | `false` | `true` | 2 |
-| `em_aberto` | `aberto` | `true` | `true` | 2 |
-| `rejeitado` | `folga_trabalhada` | `false` | `true` | 2 |
-| `rejeitado` | `irregular` | `false` | `false` | 1 |
-| `trabalhou` | `folga_trabalhada` | `false` | `true` | 1 |
-| `rejeitado` | `ok` | `false` | `false` | 1 |
-| `feriado` | `irregular` | `true` | `true` | 1 |
-| `trabalhou` | `sem_certidao` | `true` | `true` | 1 |
-| `rejeitado` | `escala_suspeita` | `false` | `false` | 1 |
-| `descontado` | `irregular` | `false` | `false` | 1 |
-| `rejeitado` | `escala_suspeita` | `false` | `true` | 1 |
-| `descontado` | `ok` | `false` | `true` | 1 |
-| `em_aberto` | `folga_trabalhada` | `false` | `true` | 1 |
-| `feriado` | `folga` | `false` | `false` | 1 |
-
-## 2. Grupos D1 e caminho até a lavra
-
-A palavra “Em aberto” vem da união dos turnos com `aberto=True`, das saídas sem entrada e dos furos apurados pela autoridade do período, com os recortes de `datas_em_aberto_de`. O D4 consulta o relógio e lê `CelulaDia.status_dia` quando o relógio deixa passar. Os 394 D1 têm fonte `lavrado`. Seus três status ficam fora de `STATUS_QUE_PEDEM_DECISAO`, o que derruba a oferta mesmo quando `pode_ultimo_recurso=true`. [app/colaboradores/services/calendario.py:94–104,603–616,748–757] [app/ponto/services/dia_decidido.py:346–355,419–430] [app/ponto/status_dia.py:273–289] [DADO RASPADO:404]
-
-No caminho principal, o cartório monta a grade com batidas apuráveis e passa ao supra-juiz a contagem de células da grade preenchidas mais órfãs da grade, os dados de cadastro, a cobertura, as cobranças e o encerramento. `ata_n_missing` é a contagem gravada na ata, em geral de lâmpadas apagadas. O `_n_missing` do classificador é contado nas células da grade que ele recebe. Uma saída órfã do pareador é um turno com `entrada=None` e saída presente, por isso pode aparecer com `ata_n_orfas=0`. [app/ponto/services/cartorio.py:1198–1207,1452–1458,1499–1510,748–765] [app/ponto/supra_juiz.py:317–319,527–537] [app/ponto/turnos.py:234–245]
-
-O cartório passa os códigos à lavra e grava a ata e o status; `[]` deriva `concorde`, salvo a variante `cobrado` quando há fio vivo que ainda protesta. O código `PREVISTO_COM_DIA_INDEFINIDO` deriva `indefinida`. Na regra de status, `concorde` com fato de batida chega a `ok` ou, se o tipo da grade é `folga`, a `folga_trabalhada`. `indefinida` chega a `escala_suspeita` quando as precedências de ausência integral, falta decidida ou folga humana aplicáveis não vencem. [app/ponto/services/cartorio.py:1513–1538,1898–1922] [app/ponto/portas/celula.py:1013–1020,1052–1057,1104–1111] [app/escala/models.py:1622–1643] [app/ponto/status_dia.py:139–162,185–192]
-
-| Status | Ramo | `cel_veredito` | Protestos | `ata_n_missing` | Dias | Padrão da sonda e caminho compatível |
-|---|---|---|---|---:|---:|---|
-| `ok` | `turno_aberto` | `concorde` | Vazios | 0 | 39 | Há entrada sem saída no pareamento, às vezes junto de par fechado. O turno aberto mantém o texto. Na lavra, a batida afasta o furo integral, e o furo parcial exige marco `missing` na grade julgada. Ex. col56 e col81. [DADO RASPADO:1,7] [app/ponto/supra_juiz.py:326–329,429–439,450–463] |
-| `ok` | `turno_aberto` | `concorde` | Vazios | 1 | 40 | Há uma ou mais entradas sem saída no pareamento, com uma falta lavrada. A falta só vira `FURO_PARCIAL` se o ramo satisfizer, entre outras guardas, encerramento e ausência de `sem_ancora`. A guarda efetiva de cada lavra é [nao verificado]. Ex. col60 e col254. [DADO RASPADO:2,66] [app/ponto/services/cartorio.py:1452–1458,1499–1510] [app/ponto/supra_juiz.py:393–439,450–463] |
-| `ok` | `turno_aberto` | `concorde` | Vazios | 2 | 17 | Mesmo caminho com duas faltas. Há linhas com trecho fechado e entrada solta, e linhas com um único turno aberto no pareador. Ex. col446. [DADO RASPADO:116] [app/ponto/supra_juiz.py:326–329,393–439,450–463] |
-| `ok` | `turno_aberto` | `concorde` | Vazios | 3 | 25 | Mesmo caminho com três faltas. Uma entrada sozinha, como em col204, pode valer como batida para o status com zero minuto realizado. O ramo de parcial com batida e zero realizado ainda exige encerramento, previsto e as demais guardas. [DADO RASPADO:47] [app/ponto/supra_juiz.py:450–463] [app/ponto/status_dia.py:185–192] |
-| `ok` | `turno_aberto` | `concorde` | Vazios | 4 | 2 | As duas linhas de col592 têm trecho fechado, entrada aberta, quatro faltas e três órfãs de grade. Com realizado positivo, essas órfãs não acionam o protesto de realizado zero. Se a grade julgada também tinha `missing`, o parcial dependeria do encerramento e de `sem_ancora`, entre outras guardas. A guarda efetiva é [nao verificado]. [DADO RASPADO:186,191] [app/ponto/supra_juiz.py:392–439,527–537] |
-| `ok` | `saida_orfa` | `concorde` | Vazios | 0 | 15 | Uma saída sem entrada, sozinha ou junto de par fechado, abre o texto. A saída observada pode casar na grade ou coexistir com realizado positivo. O protesto por órfã da grade exige previsto positivo e realizado zero. Ex. col129 e col407. [DADO RASPADO:25–26,114] [app/ponto/supra_juiz.py:326–329,527–537] [app/ponto/status_dia.py:185–192] |
-| `ok` | `saida_orfa` | `concorde` | Vazios | 2 | 1 | Col988 tem um par fechado, uma saída avulsa e 157 min. O positivo afasta o protesto por órfãs com realizado zero. O parcial ainda exige as guardas de grade e encerramento. A guarda efetiva é [nao verificado]. [DADO RASPADO:368] [app/ponto/supra_juiz.py:392–439,527–537] |
-| `ok` | `saida_orfa` | `concorde` | Vazios | 3 | 2 | Col988 tem par fechado mais saída avulsa. Col964 tem só `S 11:00`, zero min e zero órfãs na ata, padrão compatível com saída casada a um marco sem formar par. Para esse segundo padrão, o parcial sem realizado ainda exige as guardas de 450–463. O casamento e a guarda efetivos são [nao verificado]. [DADO RASPADO:333,367] [app/ponto/supra_juiz.py:392–439,450–463,527–537] |
-| `ok` | `furo_apurado` | `concorde` | Vazios | 1 | 1 | Col922 tem listas vazias na tela, zero min e falta de entrada às 23:00. Com previsto positivo, o furo integral só acusa se todas as guardas passarem. Para `ok` sem `tem_batida`, a regra tem a saída de isenção. O fato de batida da grade e a isenção efetivos são [nao verificado]. [DADO RASPADO:295] [app/ponto/supra_juiz.py:230–237,326–329] [app/ponto/status_dia.py:147–162,185–192] |
-| `ok` | `furo_apurado` | `concorde` | Vazios | 2 | 1 | Col174 tem par fechado na madrugada e 145 min. O motor registra furo, enquanto o supra-juiz, com realizado positivo, avalia o ramo de fato e só protesta por parcial sob suas guardas. A guarda efetiva é [nao verificado]. [DADO RASPADO:34] [app/colaboradores/services/calendario.py:602–606] [app/ponto/supra_juiz.py:326–329,392–439] |
-| `ok` | `furo_apurado` | `concorde` | Vazios | 4 | 1 | Col174 tem par fechado de manhã, 63 min, duas órfãs na ata e quatro faltas. O realizado positivo afasta o furo integral e o protesto de órfã com zero realizado. O ramo de parcial é o mesmo do grupo anterior. A guarda efetiva é [nao verificado]. [DADO RASPADO:41] [app/ponto/supra_juiz.py:326–329,392–439,527–537] |
-| `escala_suspeita` | `furo_apurado` | `indefinida` | Não vazios | 2 | 52 | Sem batida ou turno na tela, previsto positivo e realizado zero. É o padrão do furo integral: se o dia de cobrança está encerrado, sem batida da grade, sem fio vivo e sem cobertura integral, o ramo pode emitir `PREVISTO_COM_DIA_INDEFINIDO` por `sem_vinculo` ou pelo caminho de `sem_ancora`, conforme a precedência. Qual condição de cadastro valeu em cada linha é [nao verificado]. [DADO RASPADO:8,80] [app/ponto/supra_juiz.py:250–265,326–372] |
-| `escala_suspeita` | `furo_apurado` | `indefinida` | Não vazios | 4 | 192 | Mesmo caminho de furo integral, com quatro faltas lavradas. Ex. col245. Qual condição de cadastro valeu em cada linha é [nao verificado]. [DADO RASPADO:62] [app/ponto/services/cartorio.py:1168–1183,1499–1510] [app/ponto/supra_juiz.py:326–372] |
-| `escala_suspeita` | `saida_orfa` | `indefinida` | Não vazios | 2 | 4 | Em três linhas de col155, só aparece uma saída de madrugada, com previsto 492, zero realizado e zero órfãs na ata. Se essa saída ficou fora da contagem da grade do dia julgado, cabe o ramo de furo integral. Em col741, a ata tem previsto zero e uma órfã. Para esse padrão existe a via de célula de trabalho sem vínculo válido, inclusive pelo ramo que usa a data civil. Os insumos efetivos de cadastro e `n_bat` são [nao verificado]. [DADO RASPADO:28–29,32,224] [app/ponto/services/cartorio.py:1452–1454,1499–1510] [app/ponto/supra_juiz.py:206–214,326–372,392–422,464–469] |
-| `escala_suspeita` | `saida_orfa` | `indefinida` | Não vazios | 4 | 1 | Col992 tem só uma saída de manhã, com previsto 420, zero realizado e zero órfãs na ata. A saída abre o texto pelo pareador. O padrão é compatível com o furo integral se a grade do dia julgou zero batidas. O `n_bat` e o motivo de cadastro efetivos são [nao verificado]. [DADO RASPADO:375] [app/ponto/services/cartorio.py:1447–1454,1499–1510] [app/ponto/supra_juiz.py:326–372] |
-| `folga_trabalhada` | `turno_aberto` | `concorde` | Vazios | 0 | 1 | Col969 tem uma entrada, uma órfã na ata e zero min previstos e realizados. Sem previsto, os ramos de furo e de órfã com previsto positivo ficam fora. Com tipo de grade `folga` e fato de batida, D2 grava `folga_trabalhada`. O tipo de grade histórico é [nao verificado]. [DADO RASPADO:346] [app/ponto/supra_juiz.py:326–329,392–393,450–451,527–537] [app/ponto/status_dia.py:157–162,185–192] |
-
-Os 249 protestos não vazios das linhas D1 contêm apenas `PREVISTO_COM_DIA_INDEFINIDO`. O ramo `nunca_bateu` da cópia passa `codigos=[]` à lavra, portanto o caminho que produz esse protesto persistido é o principal. As contagens das 15 combinações acima somam os 394 D1 do resumo. [DADO RASPADO:1–403,404] [app/ponto/services/cartorio.py:1296–1325,1898–1906]
-
-## 3. `julgada_em` em relação à expiração
-
-A regra da aberta viva usa **fim da janela prevista do template + 4 horas**, ancorado em `data_turno`. Se o fim cruza a meia-noite, cai no dia seguinte. A aberta só deixa de estar viva quando `agora > expiração`. O encerramento consulta também o fim previsto pelos marcos da célula. O vigia do cartório pode julgar até os marcos vencidos, com teto próprio de 30 minutos. `julgada_em` é o `agora` gravado pelo carimbo. [app/ponto/turnos.py:2005–2035,2113–2130] [app/ponto/selecao_periodo.py:151–170] [app/ponto/services/cartorio.py:880–883,900–911,1391–1411,1505–1510] [app/ponto/portas/celula.py:1217–1237]
-
-A sonda traz horários de alguns marcos faltantes, horas de batidas e minutos previstos. O fim do **template vigente no ato de cada lavra**, a expiração efetiva e a modalidade de julgamento são [nao verificado]. Na tabela, quando o texto identifica a saída final, a comparação usa essa hora **se ela coincidia com o fim do template**. Para os grupos sem aberta geométrica, `fim + 4h` serve como comparação de horários. A regra de encerramento, sem aberta viva, verifica o fim previsto sem somar a margem. [DADO RASPADO:1–403] [app/colaboradores/services/calendario.py:395–408] [app/ponto/turnos.py:2021–2035,2122–2130]
-
-| Grupo (`status` / `ramo` / `ata_n_missing`) | O que os horários permitem dizer |
-|---|---|
-| `ok` / `turno_aberto` / 0 | **Posterior** em casos distantes como col56, dia 25/10 e julgamento em 02/11, se havia janela finita ancorada naquele dia. Há carimbo no próprio dia, como col936 às 19:01, com fim previsto [nao verificado]. [DADO RASPADO:1,315] |
-| `ok` / `turno_aberto` / 1 | **Há exemplos dos dois lados.** Col254, 06/11, saída prevista exibida às 19:00, referência às 23:00 e carimbo às 19:20, **anterior**. Col1024, 13/11, saída às 21:20, referência em 14/11 às 01:20 e carimbo às 21:22 daquele dia, **posterior**. [DADO RASPADO:66,398] |
-| `ok` / `turno_aberto` / 2 | **Posterior** no exemplo col446, dia 01/11 com saída às 23:00, referência em 02/11 às 03:00 e carimbo às 23:01. Para linhas que só nomeiam entradas faltantes, o fim exato é [nao verificado]. [DADO RASPADO:116] |
-| `ok` / `turno_aberto` / 3 | **Posterior** no exemplo col204, dia 18/11 com saída final às 15:20, referência às 19:20 e carimbo em 19/11 às 15:21. O fim exato das linhas que omitem a saída final é [nao verificado]. [DADO RASPADO:47] |
-| `ok` / `turno_aberto` / 4 | **Posterior** nas duas linhas de col592 pela saída final exibida de 23:00. As referências são 06/11 e 20/11 às 03:00, com carimbos às 16:28 e 06:35 nesses dias. [DADO RASPADO:186,191] |
-| `ok` / `saida_orfa` / 0 | **Posterior** em casos como col407, dia 23/10 e carimbo em 06/11, se havia janela finita ancorada naquele dia. Em col129 nos dias 09 e 16/11, o carimbo é no mesmo segundo exibido para o fechamento observado do par. O fim **previsto** nesses casos é [nao verificado]. [DADO RASPADO:25–26,114] |
-| `ok` / `saida_orfa` / 2 | **Posterior** para col988, dia 06/11 com saída final exibida às 17:00, referência às 21:00 e carimbo em 10/11 às 11:52. [DADO RASPADO:368] |
-| `ok` / `saida_orfa` / 3 | **Posterior** nas duas linhas pela saída final exibida. Col964, dia 23/10, referência às 19:00 e carimbo em 02/11. Col988, dia 05/11, referência às 21:00 e carimbo em 10/11. [DADO RASPADO:333,367] |
-| `ok` / `furo_apurado` / 1 | **[nao verificado]** para col922. A linha mostra a entrada prevista de 08/11 às 23:00 e o carimbo de 09/11 às 23:07. A hora de saída prevista é [nao verificado]. [DADO RASPADO:295] |
-| `ok` / `furo_apurado` / 2 | **Posterior** se havia janela finita ancorada em 24/10. O carimbo é de 02/11 e a saída de 02:00 citada no texto é a do primeiro bloco faltante. O fim exato é [nao verificado]. [DADO RASPADO:34] |
-| `ok` / `furo_apurado` / 4 | **Posterior** pela saída final exibida. Col174, dia 15/11, saída em 16/11 às 05:00, referência às 09:00 e carimbo às 22:08. [DADO RASPADO:41] |
-| `escala_suspeita` / `furo_apurado` / 2 | **Posterior** onde a saída final está explícita. Col81, dia 15/11, saída em 16/11 às 00:00, referência às 04:00 e carimbo às 06:29. O fim exato das linhas com “Em aberto” sem horário é [nao verificado]. [DADO RASPADO:1–403,8] |
-| `escala_suspeita` / `furo_apurado` / 4 | **Posterior** onde a saída final está explícita. Col245, dia 03/11, saída em 04/11 às 00:00, referência às 04:00 e carimbo às 23:53. O fim exato das linhas com “Em aberto” sem horário é [nao verificado]. [DADO RASPADO:1–403,62] |
-| `escala_suspeita` / `saida_orfa` / 2 | **Posterior** pela saída final exibida. Em col155, dia 02/11, a referência é 03/11 às 09:42 e o carimbo é às 21:29. Em col741, a referência textual é 03/11 às 22:00 e o carimbo é em 04/11 às 06:29, com `ata_min_prev=0`. A janela efetiva de col741 é [nao verificado]. [DADO RASPADO:28–29,32,224] |
-| `escala_suspeita` / `saida_orfa` / 4 | **Posterior** pela saída final exibida. Col992, dia 04/11, saída em 05/11 às 07:00, referência às 11:00 e carimbo em 13/11 às 12:45. [DADO RASPADO:375] |
-| `folga_trabalhada` / `turno_aberto` / 0 | **[nao verificado]** no instante da lavra. Col969 tem zero minuto previsto na ata, sem hora de fim exibida, e carimbo em 16/11 às 07:57:03.977280, logo após a entrada exibida de 07:57:02. [DADO RASPADO:346] |
-
-Para os grupos `turno_aberto`, há ainda uma conclusão **no instante da leitura da sonda**. A tela e o D4 usam os turnos da mesma carga. Com uma aberta ainda viva nessa leitura, o D4 devolveria `aberto` com fonte `relogio`. A fonte `lavrado` mostra que a aberta examinada já havia passado da expiração **na leitura**, inclusive em `folga_trabalhada`. A posição do carimbo histórico em relação à janela efetiva continua [nao verificado] onde faltam os insumos acima. [app/colaboradores/services/calendario.py:246–253,635–640] [app/ponto/turnos.py:2005–2018,2121–2126,3063–3067] [app/ponto/status_dia.py:273–289] [DADO RASPADO:404]
-
-_8028 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8030 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
