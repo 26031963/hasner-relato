@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 09:33:06.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (5.0 MB). Acoes na janela: **115**.
+**Medido em 24/11/2026 09:39:25.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (5.1 MB). Acoes na janela: **120**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:35:33 | Bash | Wait more for DEPOIS sondas | `cd /home/ronald/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE/v0815; for i in $(seq 1 115); do [ -f $D/DEPOIS.fim ] && break; /usr/bin/sleep 5; done; ls $D/DEPOIS.fim 2>&1; /bin/grep -E "HASH\|^DIAS\|nao_sei\|nada" $D/sonda_c19_DEPOIS_2411.out \| head -5; for f in sonda_v0815_DEPOIS_2411.out sonda_antes_depois_DEPOIS_2411.out; do echo "== $f"; /bin/grep -v "ERROR\\|NoneType" $D/$f \| tail -12 \| cu ...` |
+| 09:35:28 | Bash | Register CONTRATO-E4D aval in docs | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') assert L[828].startswith('\| E4C-F1-B2b-PORTAS-HUMANAS') row="\| E4D-CONTRATO-ROTA-B \| espinha DEPOIS da E4c, aval CONTRATO-E4D-14-LEIS-2411-0930 (!): 14 leis do logs/E4D-CONTRATO/RASCUNHO.md respondidas, rumo B (projecao, um escritor: porta decide, ato registra, projetor unico grava; ato manda, c ...` |
+| 09:35:19 | Bash | Inspect row format | `cd /home/ronald/saas-hasner; sed -n 829p app/docs/BACKLOG.md \| awk -F'\|' '{print NF}'; sed -n 829p app/docs/BACKLOG.md \| cut -c1-600` |
+| 09:35:15 | Bash | Find E4c/E4d rows in BACKLOG | `cd /home/ronald/saas-hasner; /bin/grep -n "^\| E4D\\|^\| E4C\\|^\| E4c\\|^\| E4d" app/docs/BACKLOG.md \| cut -c1-200 \| head` |
+| 09:35:13 | Bash | Find E4D lines in RELATO, BACKLOG, PROMPTS | `cd /home/ronald/saas-hasner; /bin/grep -n "^lei: CONTRATO-E4D" app/docs/RELATO.md \| cut -c1-200; /bin/grep -n "E4D-CONTRATO\\|CONTRATO-E4D" app/docs/BACKLOG.md \| cut -c1-220 \| head; tail -3 app/docs/PROMPTS.md \| cut -c1-200` |
 | 09:25:57 | Bash | Wait for DEPOIS sondas and read results | `cd /home/ronald/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE/v0815; for i in $(seq 1 110); do [ -f $D/DEPOIS.fim ] && break; /usr/bin/sleep 5; done; ls $D/DEPOIS.fim 2>&1; for f in sonda_c19_os42_DEPOIS_2411.out sonda_c19_DEPOIS_2411.out sonda_v0815_DEPOIS_2411.out sonda_antes_depois_DEPOIS_2411.out; do echo "== $f"; tail -15 $D/$f \| cut -c1-250; done; echo == ANTES3; /bin/grep -E "HASH\|DIAS" $D ...` |
 | 09:25:53 | Bash | Prepend status lines to RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l=("RESOLVER v0815 construtor ENTREGOU (09:25): 71f402199 + 5746291dd (catraca registrada pela sessao: 719->723 e encerradas_pelo_resolver em B2_menos_B1, numeros 9/9 84/84 iguais) na wt-resolver-d-024937; GREEN obra OK Ran 16; ANTES sombra c19 HASH d96c932759d25f5a 3x estavel, tranca 12 pares; DEPOIS em voo (s ...` |
 | 09:25:48 | Bash | Check time and RELATO top | `cd /home/ronald/saas-hasner; date +%H:%M; /bin/grep -n "^- RESPONDIDA por RESPOSTAS-ATELA-E-VINTE" app/docs/RELATO.md \| head -2; sed -n 1,12p app/docs/RELATO.md \| cut -c1-160` |
