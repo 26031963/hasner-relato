@@ -1,7 +1,183 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 00:24** · publicado em **24/11/2026 00:26** (UTC-3)
+> Ultima resposta processada: **24/11/2026 00:32** · publicado em **24/11/2026 00:32** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 00:32 · sessao b9c5fc6eacb3 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
+
+## 1. RESUMO
+
+As referências `DADO RASPADO:n` numeram as linhas JSON do texto fornecido, a partir do primeiro `d1`. A linha `RESUMO` é a 404. As contagens abaixo são as da sonda. [DADO RASPADO:404]
+
+| Chave | Valor |
+|---|---|
+| `RESUMO` | `true` |
+| `agora` | `2026-11-24 00:15:56.989532-03:00` |
+| `colaboradores` | 662 |
+| `dias_com_celula` | 18.395 |
+| `janelas` | `2026-10-21` a `2026-11-20` — 662 colaboradores |
+| `ausencia_varios_dias` | `dias` = 9, `rotulo_difere_do_rateio` = 9 |
+
+**`cruz_texto_aberto_x_status_pede_decisao_x_oferta`** [DADO RASPADO:404]
+
+| Texto aberto | Status pede decisão | Oferta | Dias |
+|---|---|---|---:|
+| `false` | `false` | `false` | 15.996 |
+| `true` | `true` | `true` | 1.096 |
+| `false` | `true` | `true` | 575 |
+| `true` | `false` | `false` | 394 |
+| `false` | `true` | `false` | 213 |
+| `true` | `true` | `false` | 121 |
+
+**`D1_texto_aberto_status_nao_pede_por_status_e_ramo`** [DADO RASPADO:404]
+
+| Status | Ramo | Dias |
+|---|---|---:|
+| `escala_suspeita` | `furo_apurado` | 244 |
+| `ok` | `turno_aberto` | 123 |
+| `ok` | `saida_orfa` | 18 |
+| `escala_suspeita` | `saida_orfa` | 5 |
+| `ok` | `furo_apurado` | 3 |
+| `folga_trabalhada` | `turno_aberto` | 1 |
+
+**`D1_fonte_do_d4`** [DADO RASPADO:404]
+
+| Status | Fonte | Terceiro valor da tupla | Dias |
+|---|---|---|---:|
+| `escala_suspeita` | `lavrado` | `true` | 249 |
+| `ok` | `lavrado` | `true` | 144 |
+| `folga_trabalhada` | `lavrado` | `true` | 1 |
+
+**`D1_veredito_da_celula`** [DADO RASPADO:404]
+
+| Status | Veredito da célula | Via | Dias |
+|---|---|---|---:|
+| `escala_suspeita` | `indefinida` | `cartorio` | 249 |
+| `ok` | `concorde` | `cartorio` | 144 |
+| `folga_trabalhada` | `concorde` | `cartorio` | 1 |
+
+**`D2_status_pede_texto_nao_aberto`** [DADO RASPADO:404]
+
+| Status | `veredito_dia` | Dias |
+|---|---|---:|
+| `irregular` | `trabalhou` | 641 |
+| `falta` | `descontado` | 73 |
+| `irregular` | `rejeitado` | 32 |
+| `irregular` | `abonado` | 29 |
+| `falta` | `abonado` | 5 |
+| `irregular` | `folga` | 5 |
+| `irregular` | `feriado` | 1 |
+| `sem_certidao` | `trabalhou` | 1 |
+| `irregular` | `descontado` | 1 |
+
+**`cruz_completo_veredito_status_oferta_ultimo_recurso`** [DADO RASPADO:404]
+
+| `veredito_dia` | Status | Oferta | Último recurso | Dias |
+|---|---|---|---|---:|
+| `trabalhou` | `ok` | `false` | `true` | 7.079 |
+| `folga` | `folga` | `false` | `true` | 5.453 |
+| `em_aberto` | `irregular` | `true` | `true` | 1.071 |
+| `feriado` | `folga` | `false` | `true` | 889 |
+| `trabalhou` | `folga` | `false` | `true` | 879 |
+| `abonado` | `ausencia` | `false` | `true` | 743 |
+| `suprimido` | `ausencia` | `false` | `true` | 437 |
+| `trabalhou` | `irregular` | `true` | `true` | 435 |
+| `em_aberto` | `escala_suspeita` | `false` | `true` | 232 |
+| `trabalhou` | `irregular` | `false` | `false` | 206 |
+| `folga` | `folga_trabalhada` | `false` | `true` | 190 |
+| `em_aberto` | `ok` | `false` | `true` | 133 |
+| `em_aberto` | `irregular` | `false` | `false` | 121 |
+| `feriado` | `folga_trabalhada` | `false` | `true` | 109 |
+| `descontado` | `falta` | `true` | `true` | 73 |
+| `trabalhou` | `ok` | `false` | `false` | 57 |
+| `trabalhou` | `escala_suspeita` | `false` | `true` | 44 |
+| `rejeitado` | `irregular` | `true` | `true` | 31 |
+| `folga` | `ok` | `false` | `true` | 27 |
+| `abonado` | `irregular` | `true` | `true` | 24 |
+| `em_aberto` | `sem_certidao` | `true` | `true` | 23 |
+| `folga` | `folga` | `false` | `false` | 18 |
+| `em_aberto` | `escala_suspeita` | `false` | `false` | 17 |
+| `rejeitado` | `folga` | `false` | `true` | 15 |
+| `feriado` | `ok` | `false` | `true` | 12 |
+| `abonado` | `ausencia` | `false` | `false` | 12 |
+| `em_aberto` | `ok` | `false` | `false` | 11 |
+| `rejeitado` | `ok` | `false` | `true` | 8 |
+| `abonado` | `ok` | `false` | `true` | 6 |
+| `abonado` | `falta` | `true` | `true` | 5 |
+| `abonado` | `irregular` | `false` | `false` | 5 |
+| `folga` | `irregular` | `true` | `true` | 5 |
+| `abonado` | `escala_suspeita` | `false` | `true` | 4 |
+| `descontado` | `ausencia` | `false` | `true` | 4 |
+| `descontado` | `folga` | `false` | `true` | 2 |
+| `em_aberto` | `aberto` | `true` | `true` | 2 |
+| `rejeitado` | `folga_trabalhada` | `false` | `true` | 2 |
+| `rejeitado` | `irregular` | `false` | `false` | 1 |
+| `trabalhou` | `folga_trabalhada` | `false` | `true` | 1 |
+| `rejeitado` | `ok` | `false` | `false` | 1 |
+| `feriado` | `irregular` | `true` | `true` | 1 |
+| `trabalhou` | `sem_certidao` | `true` | `true` | 1 |
+| `rejeitado` | `escala_suspeita` | `false` | `false` | 1 |
+| `descontado` | `irregular` | `false` | `false` | 1 |
+| `rejeitado` | `escala_suspeita` | `false` | `true` | 1 |
+| `descontado` | `ok` | `false` | `true` | 1 |
+| `em_aberto` | `folga_trabalhada` | `false` | `true` | 1 |
+| `feriado` | `folga` | `false` | `false` | 1 |
+
+## 2. Grupos D1 e caminho até a lavra
+
+A palavra “Em aberto” vem da união dos turnos com `aberto=True`, das saídas sem entrada e dos furos apurados pela autoridade do período, com os recortes de `datas_em_aberto_de`. O D4 consulta o relógio e lê `CelulaDia.status_dia` quando o relógio deixa passar. Os 394 D1 têm fonte `lavrado`. Seus três status ficam fora de `STATUS_QUE_PEDEM_DECISAO`, o que derruba a oferta mesmo quando `pode_ultimo_recurso=true`. [app/colaboradores/services/calendario.py:94–104,603–616,748–757] [app/ponto/services/dia_decidido.py:346–355,419–430] [app/ponto/status_dia.py:273–289] [DADO RASPADO:404]
+
+No caminho principal, o cartório monta a grade com batidas apuráveis e passa ao supra-juiz a contagem de células da grade preenchidas mais órfãs da grade, os dados de cadastro, a cobertura, as cobranças e o encerramento. `ata_n_missing` é a contagem gravada na ata, em geral de lâmpadas apagadas. O `_n_missing` do classificador é contado nas células da grade que ele recebe. Uma saída órfã do pareador é um turno com `entrada=None` e saída presente, por isso pode aparecer com `ata_n_orfas=0`. [app/ponto/services/cartorio.py:1198–1207,1452–1458,1499–1510,748–765] [app/ponto/supra_juiz.py:317–319,527–537] [app/ponto/turnos.py:234–245]
+
+O cartório passa os códigos à lavra e grava a ata e o status; `[]` deriva `concorde`, salvo a variante `cobrado` quando há fio vivo que ainda protesta. O código `PREVISTO_COM_DIA_INDEFINIDO` deriva `indefinida`. Na regra de status, `concorde` com fato de batida chega a `ok` ou, se o tipo da grade é `folga`, a `folga_trabalhada`. `indefinida` chega a `escala_suspeita` quando as precedências de ausência integral, falta decidida ou folga humana aplicáveis não vencem. [app/ponto/services/cartorio.py:1513–1538,1898–1922] [app/ponto/portas/celula.py:1013–1020,1052–1057,1104–1111] [app/escala/models.py:1622–1643] [app/ponto/status_dia.py:139–162,185–192]
+
+| Status | Ramo | `cel_veredito` | Protestos | `ata_n_missing` | Dias | Padrão da sonda e caminho compatível |
+|---|---|---|---|---:|---:|---|
+| `ok` | `turno_aberto` | `concorde` | Vazios | 0 | 39 | Há entrada sem saída no pareamento, às vezes junto de par fechado. O turno aberto mantém o texto. Na lavra, a batida afasta o furo integral, e o furo parcial exige marco `missing` na grade julgada. Ex. col56 e col81. [DADO RASPADO:1,7] [app/ponto/supra_juiz.py:326–329,429–439,450–463] |
+| `ok` | `turno_aberto` | `concorde` | Vazios | 1 | 40 | Há uma ou mais entradas sem saída no pareamento, com uma falta lavrada. A falta só vira `FURO_PARCIAL` se o ramo satisfizer, entre outras guardas, encerramento e ausência de `sem_ancora`. A guarda efetiva de cada lavra é [nao verificado]. Ex. col60 e col254. [DADO RASPADO:2,66] [app/ponto/services/cartorio.py:1452–1458,1499–1510] [app/ponto/supra_juiz.py:393–439,450–463] |
+| `ok` | `turno_aberto` | `concorde` | Vazios | 2 | 17 | Mesmo caminho com duas faltas. Há linhas com trecho fechado e entrada solta, e linhas com um único turno aberto no pareador. Ex. col446. [DADO RASPADO:116] [app/ponto/supra_juiz.py:326–329,393–439,450–463] |
+| `ok` | `turno_aberto` | `concorde` | Vazios | 3 | 25 | Mesmo caminho com três faltas. Uma entrada sozinha, como em col204, pode valer como batida para o status com zero minuto realizado. O ramo de parcial com batida e zero realizado ainda exige encerramento, previsto e as demais guardas. [DADO RASPADO:47] [app/ponto/supra_juiz.py:450–463] [app/ponto/status_dia.py:185–192] |
+| `ok` | `turno_aberto` | `concorde` | Vazios | 4 | 2 | As duas linhas de col592 têm trecho fechado, entrada aberta, quatro faltas e três órfãs de grade. Com realizado positivo, essas órfãs não acionam o protesto de realizado zero. Se a grade julgada também tinha `missing`, o parcial dependeria do encerramento e de `sem_ancora`, entre outras guardas. A guarda efetiva é [nao verificado]. [DADO RASPADO:186,191] [app/ponto/supra_juiz.py:392–439,527–537] |
+| `ok` | `saida_orfa` | `concorde` | Vazios | 0 | 15 | Uma saída sem entrada, sozinha ou junto de par fechado, abre o texto. A saída observada pode casar na grade ou coexistir com realizado positivo. O protesto por órfã da grade exige previsto positivo e realizado zero. Ex. col129 e col407. [DADO RASPADO:25–26,114] [app/ponto/supra_juiz.py:326–329,527–537] [app/ponto/status_dia.py:185–192] |
+| `ok` | `saida_orfa` | `concorde` | Vazios | 2 | 1 | Col988 tem um par fechado, uma saída avulsa e 157 min. O positivo afasta o protesto por órfãs com realizado zero. O parcial ainda exige as guardas de grade e encerramento. A guarda efetiva é [nao verificado]. [DADO RASPADO:368] [app/ponto/supra_juiz.py:392–439,527–537] |
+| `ok` | `saida_orfa` | `concorde` | Vazios | 3 | 2 | Col988 tem par fechado mais saída avulsa. Col964 tem só `S 11:00`, zero min e zero órfãs na ata, padrão compatível com saída casada a um marco sem formar par. Para esse segundo padrão, o parcial sem realizado ainda exige as guardas de 450–463. O casamento e a guarda efetivos são [nao verificado]. [DADO RASPADO:333,367] [app/ponto/supra_juiz.py:392–439,450–463,527–537] |
+| `ok` | `furo_apurado` | `concorde` | Vazios | 1 | 1 | Col922 tem listas vazias na tela, zero min e falta de entrada às 23:00. Com previsto positivo, o furo integral só acusa se todas as guardas passarem. Para `ok` sem `tem_batida`, a regra tem a saída de isenção. O fato de batida da grade e a isenção efetivos são [nao verificado]. [DADO RASPADO:295] [app/ponto/supra_juiz.py:230–237,326–329] [app/ponto/status_dia.py:147–162,185–192] |
+| `ok` | `furo_apurado` | `concorde` | Vazios | 2 | 1 | Col174 tem par fechado na madrugada e 145 min. O motor registra furo, enquanto o supra-juiz, com realizado positivo, avalia o ramo de fato e só protesta por parcial sob suas guardas. A guarda efetiva é [nao verificado]. [DADO RASPADO:34] [app/colaboradores/services/calendario.py:602–606] [app/ponto/supra_juiz.py:326–329,392–439] |
+| `ok` | `furo_apurado` | `concorde` | Vazios | 4 | 1 | Col174 tem par fechado de manhã, 63 min, duas órfãs na ata e quatro faltas. O realizado positivo afasta o furo integral e o protesto de órfã com zero realizado. O ramo de parcial é o mesmo do grupo anterior. A guarda efetiva é [nao verificado]. [DADO RASPADO:41] [app/ponto/supra_juiz.py:326–329,392–439,527–537] |
+| `escala_suspeita` | `furo_apurado` | `indefinida` | Não vazios | 2 | 52 | Sem batida ou turno na tela, previsto positivo e realizado zero. É o padrão do furo integral: se o dia de cobrança está encerrado, sem batida da grade, sem fio vivo e sem cobertura integral, o ramo pode emitir `PREVISTO_COM_DIA_INDEFINIDO` por `sem_vinculo` ou pelo caminho de `sem_ancora`, conforme a precedência. Qual condição de cadastro valeu em cada linha é [nao verificado]. [DADO RASPADO:8,80] [app/ponto/supra_juiz.py:250–265,326–372] |
+| `escala_suspeita` | `furo_apurado` | `indefinida` | Não vazios | 4 | 192 | Mesmo caminho de furo integral, com quatro faltas lavradas. Ex. col245. Qual condição de cadastro valeu em cada linha é [nao verificado]. [DADO RASPADO:62] [app/ponto/services/cartorio.py:1168–1183,1499–1510] [app/ponto/supra_juiz.py:326–372] |
+| `escala_suspeita` | `saida_orfa` | `indefinida` | Não vazios | 2 | 4 | Em três linhas de col155, só aparece uma saída de madrugada, com previsto 492, zero realizado e zero órfãs na ata. Se essa saída ficou fora da contagem da grade do dia julgado, cabe o ramo de furo integral. Em col741, a ata tem previsto zero e uma órfã. Para esse padrão existe a via de célula de trabalho sem vínculo válido, inclusive pelo ramo que usa a data civil. Os insumos efetivos de cadastro e `n_bat` são [nao verificado]. [DADO RASPADO:28–29,32,224] [app/ponto/services/cartorio.py:1452–1454,1499–1510] [app/ponto/supra_juiz.py:206–214,326–372,392–422,464–469] |
+| `escala_suspeita` | `saida_orfa` | `indefinida` | Não vazios | 4 | 1 | Col992 tem só uma saída de manhã, com previsto 420, zero realizado e zero órfãs na ata. A saída abre o texto pelo pareador. O padrão é compatível com o furo integral se a grade do dia julgou zero batidas. O `n_bat` e o motivo de cadastro efetivos são [nao verificado]. [DADO RASPADO:375] [app/ponto/services/cartorio.py:1447–1454,1499–1510] [app/ponto/supra_juiz.py:326–372] |
+| `folga_trabalhada` | `turno_aberto` | `concorde` | Vazios | 0 | 1 | Col969 tem uma entrada, uma órfã na ata e zero min previstos e realizados. Sem previsto, os ramos de furo e de órfã com previsto positivo ficam fora. Com tipo de grade `folga` e fato de batida, D2 grava `folga_trabalhada`. O tipo de grade histórico é [nao verificado]. [DADO RASPADO:346] [app/ponto/supra_juiz.py:326–329,392–393,450–451,527–537] [app/ponto/status_dia.py:157–162,185–192] |
+
+Os 249 protestos não vazios das linhas D1 contêm apenas `PREVISTO_COM_DIA_INDEFINIDO`. O ramo `nunca_bateu` da cópia passa `codigos=[]` à lavra, portanto o caminho que produz esse protesto persistido é o principal. As contagens das 15 combinações acima somam os 394 D1 do resumo. [DADO RASPADO:1–403,404] [app/ponto/services/cartorio.py:1296–1325,1898–1906]
+
+## 3. `julgada_em` em relação à expiração
+
+A regra da aberta viva usa **fim da janela prevista do template + 4 horas**, ancorado em `data_turno`. Se o fim cruza a meia-noite, cai no dia seguinte. A aberta só deixa de estar viva quando `agora > expiração`. O encerramento consulta também o fim previsto pelos marcos da célula. O vigia do cartório pode julgar até os marcos vencidos, com teto próprio de 30 minutos. `julgada_em` é o `agora` gravado pelo carimbo. [app/ponto/turnos.py:2005–2035,2113–2130] [app/ponto/selecao_periodo.py:151–170] [app/ponto/services/cartorio.py:880–883,900–911,1391–1411,1505–1510] [app/ponto/portas/celula.py:1217–1237]
+
+A sonda traz horários de alguns marcos faltantes, horas de batidas e minutos previstos. O fim do **template vigente no ato de cada lavra**, a expiração efetiva e a modalidade de julgamento são [nao verificado]. Na tabela, quando o texto identifica a saída final, a comparação usa essa hora **se ela coincidia com o fim do template**. Para os grupos sem aberta geométrica, `fim + 4h` serve como comparação de horários. A regra de encerramento, sem aberta viva, verifica o fim previsto sem somar a margem. [DADO RASPADO:1–403] [app/colaboradores/services/calendario.py:395–408] [app/ponto/turnos.py:2021–2035,2122–2130]
+
+| Grupo (`status` / `ramo` / `ata_n_missing`) | O que os horários permitem dizer |
+|---|---|
+| `ok` / `turno_aberto` / 0 | **Posterior** em casos distantes como col56, dia 25/10 e julgamento em 02/11, se havia janela finita ancorada naquele dia. Há carimbo no próprio dia, como col936 às 19:01, com fim previsto [nao verificado]. [DADO RASPADO:1,315] |
+| `ok` / `turno_aberto` / 1 | **Há exemplos dos dois lados.** Col254, 06/11, saída prevista exibida às 19:00, referência às 23:00 e carimbo às 19:20, **anterior**. Col1024, 13/11, saída às 21:20, referência em 14/11 às 01:20 e carimbo às 21:22 daquele dia, **posterior**. [DADO RASPADO:66,398] |
+| `ok` / `turno_aberto` / 2 | **Posterior** no exemplo col446, dia 01/11 com saída às 23:00, referência em 02/11 às 03:00 e carimbo às 23:01. Para linhas que só nomeiam entradas faltantes, o fim exato é [nao verificado]. [DADO RASPADO:116] |
+| `ok` / `turno_aberto` / 3 | **Posterior** no exemplo col204, dia 18/11 com saída final às 15:20, referência às 19:20 e carimbo em 19/11 às 15:21. O fim exato das linhas que omitem a saída final é [nao verificado]. [DADO RASPADO:47] |
+| `ok` / `turno_aberto` / 4 | **Posterior** nas duas linhas de col592 pela saída final exibida de 23:00. As referências são 06/11 e 20/11 às 03:00, com carimbos às 16:28 e 06:35 nesses dias. [DADO RASPADO:186,191] |
+| `ok` / `saida_orfa` / 0 | **Posterior** em casos como col407, dia 23/10 e carimbo em 06/11, se havia janela finita ancorada naquele dia. Em col129 nos dias 09 e 16/11, o carimbo é no mesmo segundo exibido para o fechamento observado do par. O fim **previsto** nesses casos é [nao verificado]. [DADO RASPADO:25–26,114] |
+| `ok` / `saida_orfa` / 2 | **Posterior** para col988, dia 06/11 com saída final exibida às 17:00, referência às 21:00 e carimbo em 10/11 às 11:52. [DADO RASPADO:368] |
+| `ok` / `saida_orfa` / 3 | **Posterior** nas duas linhas pela saída final exibida. Col964, dia 23/10, referência às 19:00 e carimbo em 02/11. Col988, dia 05/11, referência às 21:00 e carimbo em 10/11. [DADO RASPADO:333,367] |
+| `ok` / `furo_apurado` / 1 | **[nao verificado]** para col922. A linha mostra a entrada prevista de 08/11 às 23:00 e o carimbo de 09/11 às 23:07. A hora de saída prevista é [nao verificado]. [DADO RASPADO:295] |
+| `ok` / `furo_apurado` / 2 | **Posterior** se havia janela finita ancorada em 24/10. O carimbo é de 02/11 e a saída de 02:00 citada no texto é a do primeiro bloco faltante. O fim exato é [nao verificado]. [DADO RASPADO:34] |
+| `ok` / `furo_apurado` / 4 | **Posterior** pela saída final exibida. Col174, dia 15/11, saída em 16/11 às 05:00, referência às 09:00 e carimbo às 22:08. [DADO RASPADO:41] |
+| `escala_suspeita` / `furo_apurado` / 2 | **Posterior** onde a saída final está explícita. Col81, dia 15/11, saída em 16/11 às 00:00, referência às 04:00 e carimbo às 06:29. O fim exato das linhas com “Em aberto” sem horário é [nao verificado]. [DADO RASPADO:1–403,8] |
+| `escala_suspeita` / `furo_apurado` / 4 | **Posterior** onde a saída final está explícita. Col245, dia 03/11, saída em 04/11 às 00:00, referência às 04:00 e carimbo às 23:53. O fim exato das linhas com “Em aberto” sem horário é [nao verificado]. [DADO RASPADO:1–403,62] |
+| `escala_suspeita` / `saida_orfa` / 2 | **Posterior** pela saída final exibida. Em col155, dia 02/11, a referência é 03/11 às 09:42 e o carimbo é às 21:29. Em col741, a referência textual é 03/11 às 22:00 e o carimbo é em 04/11 às 06:29, com `ata_min_prev=0`. A janela efetiva de col741 é [nao verificado]. [DADO RASPADO:28–29,32,224] |
+| `escala_suspeita` / `saida_orfa` / 4 | **Posterior** pela saída final exibida. Col992, dia 04/11, saída em 05/11 às 07:00, referência às 11:00 e carimbo em 13/11 às 12:45. [DADO RASPADO:375] |
+| `folga_trabalhada` / `turno_aberto` / 0 | **[nao verificado]** no instante da lavra. Col969 tem zero minuto previsto na ata, sem hora de fim exibida, e carimbo em 16/11 às 07:57:03.977280, logo após a entrada exibida de 07:57:02. [DADO RASPADO:346] |
+
+Para os grupos `turno_aberto`, há ainda uma conclusão **no instante da leitura da sonda**. A tela e o D4 usam os turnos da mesma carga. Com uma aberta ainda viva nessa leitura, o D4 devolveria `aberto` com fonte `relogio`. A fonte `lavrado` mostra que a aberta examinada já havia passado da expiração **na leitura**, inclusive em `folga_trabalhada`. A posição do carimbo histórico em relação à janela efetiva continua [nao verificado] onde faltam os insumos acima. [app/colaboradores/services/calendario.py:246–253,635–640] [app/ponto/turnos.py:2005–2018,2121–2126,3063–3067] [app/ponto/status_dia.py:273–289] [DADO RASPADO:404]
 
 ## 24/11 00:24 · sessao fcf72d029d65 · LATERAIS-EM-PARALELO · leitura · origem=Code
 
@@ -652,58 +828,4 @@ A cópia ainda pode misturar recibos se dois `ssh pista espera <id> > espera` re
 
 O delta também passa a exigir espaço gravável para as cópias. Falha em `mktemp` ou em qualquer cópia dá `rc=2`. O `trap EXIT` preserva o código de saída do veredito. A execução integral do selo [não verificado]. `bin/pista_certifica.sh:27–29,66–72` · `bin/tests/test_pista_certifica.sh:9–13,23`.
 
-## 23/11 20:25 · sessao 686f6976e2fc · E4C-F5 · verificador · origem=Code
-
-# REPROVADO — E4C-F5 v7, 8.2 c3c + c3c-2
-
-O caso misto recupera a reabertura da fechada própria, mas há um empate em que o formulário some em relação à base. A porta também pode escolher uma D diferente da desenhada. O R4 agrupa a carga de perguntas e decisões, mas conserva uma consulta de batidas por disputa. `54794f38a:app/chamados/services/fio.py:236,319` · `app/chamados/services/fio.py:170,326,336,355` · `app/chamados/services/acoes_disputa.py:296` · `app/chamados/services/explicador.py:171`
-
-Comparei as duas cópias em leitura. As quatro diferenças e os hashes dos arquivos batem com o anexo. A identidade dos commits via Git, a execução dos testes e a ocorrência dos casos em produção ficam **[nao verificado]**. [nao verificado]
-
-## 1. R1–R4
-
-| Achado | Veredito | Evidência |
-|---|---|---|
-| **R1 — Reabertura administrativa** | **Fecha em parte** | Com aberta eleita por destino e fechada própria, o modal volta a oferecer a reabertura da fechada. Cartão e porta chamam o mesmo seletor, mas entregam conjuntos diferentes quando o dono da D diverge do dono do chamado. O desempate das fechadas também muda em relação à base. `app/chamados/services/fio.py:160,250,336,355` · `app/chamados/services/acoes_disputa.py:294` · `app/templates/chamados/partials/modal_fio.html:412` |
-| **R2 — Testemunha de Validar** | **Fecha** | A testemunha usa a D da própria P, a mesma identidade que a porta de validação usa. A perda do botão por K6 da empresa da D eleita fica corrigida. O caso inverso pode retirar uma oferta que a porta já recusava. `app/chamados/services/fio.py:445,710,739` · `app/chamados/services/validacao.py:218,782` |
-| **R3 — Desempate das abertas** | **Fecha** | O juiz unitário delega ao lote. A aberta direta vence pela ordem `-aberta_em, -pk`. Na falta de direta, vence a D aberta da P de maior PK apontada ao chamado. O RED exige os dois PKs e a ordenação explícita no SQL. `app/docs/JUIZES.md:43` · `app/chamados/services/fio.py:120,148,153` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:231,239` |
-| **R4 — N+1 do explicador** | **Fecha em parte** | A carga externa passa a agrupar D, P e decisões. Batidas ainda são consultadas por D com P datada. Uma D sem P também pode cair na recarga individual por causa de `or None`. `app/chamados/services/fio.py:282,326,400,413` · `app/chamados/services/explicador.py:166,171` |
-
-## 2. O que pode sumir e o que o POST pode fazer
-
-- **Pergunta da fechada.** A lista continua sendo montada pela P viva e sua âncora, antes de escolher o cabeçalho. A carga externa do R4 alimenta somente o explicador. A guarda de permissão do bloco permanece a mesma. `app/chamados/services/fio.py:277,291,304,326,333` · `app/templates/chamados/partials/modal_fio.html:123,157`
-- **Validar pode sumir.** Considere uma P viva e respondida de intervalo, cuja empresa tem K6 entregue, com uma aberta eleita de outra empresa sem entrega. Com as demais guardas livres, a base podia desenhar o botão usando a empresa da eleita. Agora a testemunha consulta a empresa da P e suprime o botão, em acordo com a recusa da porta. `54794f38a:app/chamados/services/fio.py:407` · `app/chamados/services/fio.py:445` · `app/chamados/services/materializacao.py:825,907` · `app/chamados/services/validacao.py:782` · `app/templates/chamados/partials/modal_fio.html:274`
-- **A reabertura pode sumir.** Sem aberta, tome duas fechadas próprias com o mesmo `fechada_em`. A tem `aberta_em` mais recente e contador abaixo de dois. B tem PK maior e contador dois. A base desenhava A e oferecia o formulário. A cópia escolhe B e mostra o limite. Além disso, a condição do c3c-2 cobre uma aberta **sem container** eleita por destino, pois `None` também difere do PK do cartão. `54794f38a:app/chamados/services/fio.py:236,248,319` · `app/chamados/services/fio.py:170,345,354` · `app/templates/chamados/partials/modal_fio.html:412` · `app/chamados/tests/test_e4c_f5_82_render_le_o_juiz.py:170`
-- **O formulário pode ser recusado ou reabrir outra D.** A fechada que aparece só pela P ainda pode oferecer formulário, como na base. Sem fechada própria, a porta devolve “Nenhuma disputa fechada neste chamado”. Com uma fechada de outro colaborador ligada diretamente ao mesmo chamado, o montador a exclui pelo dono e a porta a inclui pelo container. Se essa D for mais recente, a porta pode reabri-la ou recusar pelo limite. Uma fixture anterior comprova que o vínculo direto com dono divergente é gravável. `app/chamados/services/fio.py:250,346,355` · `app/chamados/services/acoes_disputa.py:294` · `app/chamados/models.py:2369` · `app/chamados/tests/test_f5_v7_guarda_sob_trava.py:254`
-- **Uma mudança entre leituras também troca o alvo.** O PK desenhado fica em `data-reabertura-admin`. O POST manda o `chamado_id` e a porta resolve a fechada de novo. Se outra sessão já reabriu a D desenhada, o POST pode reabrir a próxima fechada, inclusive com uma aberta própria já presente. Dentro do próprio render, o R4 também pode reler como fechada uma D externa que fechou após a eleição e oferecer o formulário pela via de contingência. `app/templates/chamados/partials/modal_fio.html:418` · `app/chamados/services/fio.py:320,328,337,355,691` · `app/chamados/services/acoes_disputa.py:296` · `app/chamados/models.py:2369`
-
-## 3. `KeyError` e consultas
-
-**O índice é seguro para as P listadas.** Os dois ramos da busca restringem `disputa_id` aos IDs da mesma carga que preenche `_disputa_por_pk`. Só essa busca alimenta `perguntas_por_chamado`. A carga externa acrescenta P apenas em `perguntas_por_disputa`. O acesso ao mapa e à D já carregada com `colaborador__empresa` custa zero consultas. `app/chamados/services/fio.py:250,277,291,304,326,420,445`
-
-**O custo do montador ainda pode crescer por item.** O R4 tem até **três** SQL fixos de carga externa, para D, P e decisões, além do custo por D do explicador. O R2 pode avançar para consultas de batidas e irmã quando o K6 correto libera uma P que antes parava cedo. O delta também passou a carregar P de **todas** as abertas próprias por container, enquanto o `continue` da base deixava só a primeira aberta alimentar a lista de IDs. As P adicionais podem acrescentar consultas da testemunha e alterar o ramo de **Regularizar**. Há ainda uma mudança visível no R4, os itens externos da explicação passam de `data_evento, pk` para `id`. `54794f38a:app/chamados/services/fio.py:239` · `app/chamados/services/fio.py:254,282,326,445,454` · `app/chamados/services/materializacao.py:149,916,929` · `app/chamados/services/explicador.py:166,178` · `app/templates/chamados/partials/modal_fio.html:363,468`
-
-## 4. REDs e mutantes
-
-| Selo | O que observa |
-|---|---|
-| **R1** | GET e POST reais, com push simulado. Exige P, Validar, um formulário para o chamado e o PK desenhado. Depois confere a fechada reaberta e o contador persistido. O teste de empate do seletor muda `fechada_em` antes de comparar montador e POST, então o empate só é testado diretamente no seletor. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106,131,139,178` |
-| **R2** | Testemunha e porta reais, com K6 e push simulados. Exige a P, o formulário e `validada_em` persistido. A asserção negativa de estado isolada aceita `None`. O espião delega à testemunha real e exige a chamada para a P fechada. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:196,205,209,216` |
-| **R3 e R4** | R3 chama seletores reais e exige resultado e SQL. R4 faz GET real e exige HTTP 200, mas **pode passar vazio** quanto ao comportamento medido. A desigualdade aceita duas inclinações iguais, inclusive com N+1 ou sem explicação renderizada. `_Ancora` confere texto do template. `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:106,231,258,277,281` |
-
-O POST `acao=nada` usa o mesmo render completo do GET. Os POSTs de negócio passam pelo render parcial, mas os REDs conferem a persistência e deixam o HTML dessas respostas sem as asserções dos formulários. `app/chamados/views.py:883,952` · `app/chamados/services/fio.py:609,696,739,876` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:141,148,209`
-
-**M_R1 e M_R2.** `mut_resultado.txt` e `fila2_resultado.txt` não constam do material fornecido nem das cópias comparadas. Patches, falhas nas asserções esperadas e verdes correspondentes **[nao verificado]**.
-
-## 5. Quem escreve e quem lê
-
-| Campo ou valor | Escritor e leitores |
-|---|---|
-| **`ch.disputa_da_reabertura_admin`** | `montar_chamados_fio` atribui em memória. `modal_fio.html` lê a D para o limite, o rótulo e `data-reabertura-admin`. O valor pode representar a fechada própria ou uma fechada histórica alcançada pela P. O segundo uso explica a oferta sem alvo aceito pela porta. `app/chamados/services/fio.py:346,355` · `app/templates/chamados/partials/modal_fio.html:412,418` · `app/chamados/services/acoes_disputa.py:296` |
-| **Retorno de `disputa_fechada_da_reabertura_admin`** | O helper calcula o máximo de `(fechada_em, pk)`. O montador lê o retorno para o cabeçalho sem aberta e para o formulário. `acao_reabrir_disputa_admin` lê o retorno para executar `reabrir_admin`. O montador filtra por colaborador. A porta filtra pelo container. `app/chamados/services/fio.py:160,250,336,345` · `app/chamados/services/acoes_disputa.py:294` |
-| **Ordenação e mapa da eleição** | O ORM atribui o PK na inserção e o modelo carimba `aberta_em` no nascimento. A emissão fornece dono e container. `PerguntaDisputa.abrir` grava a D e o destino de P. `disputas_do_chamado_em_lote` lê essas chaves e monta `eleita`. O montador lê o mapa diretamente. `_disputa_do_chamado` lê a entrada unitária para o POST, o inline e a releitura da correção. `app/chamados/models.py:1923,1930,3291` · `app/chamados/services/disputa_emissao.py:601` · `app/chamados/services/fio.py:120,145,320,683` · `app/chamados/views_cobrar.py:162,222` · `app/chamados/services/acoes_disputa.py:111` |
-| **Estado persistido de D e insumos de P** | `fechar` grava `fechada_em`. `reabrir_admin` limpa o fechamento e incrementa `reaberturas_admin`. `reabrir_sistema` limpa o fechamento pela via própria. Eleição e seletor leem `fechada_em`. Template e método de reabertura leem o contador. Para P, `DecisaoPergunta.registrar` grava a sequência que o lote pré-carrega. O montador atribui `estado_aplicacao` e `explicacao` em memória, e o modal lê ambos. `app/chamados/models.py:2160,2369,2380,2404,4532` · `app/chamados/services/fio.py:148,170,282,413,445` · `app/templates/chamados/partials/modal_fio.html:274,413,465` |
-
-A eleição continua com um só corpo e a escrita administrativa continua em `reabrir_admin`. Os trechos alterados não acrescentam leitura de relógio nem aquisição de trava. A divergência estrutural está nos universos oferecidos ao mesmo seletor e no uso do campo do cartão como alvo do formulário também quando a fechada vem apenas do histórico da P. `app/chamados/services/fio.py:120,160,250,326,336,355,445` · `app/chamados/services/acoes_disputa.py:294` · `app/chamados/models.py:2357`
-
-_8008 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8009 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
