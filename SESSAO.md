@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 13:10:25.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (18.9 MB). Acoes na janela: **505**.
+**Medido em 24/11/2026 13:16:22.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (18.9 MB). Acoes na janela: **507**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:14:57 | SendMessage |  | `-` |
+| 13:14:50 | Bash | Read CLASSE-D green verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b35k38kcs.output; cd ~/saas-hasner/logs/CLASSE-D-NA-FRENTE-DA-E4D/v2; ls; head -5 green.log` |
 | 13:09:23 | Bash | Replace drifting line refs with heading anchors | `cd ~/saas-hasner; A='RELATO.md, marcos "MARCO ESCRITOR-UNICO-DE-CHAMADO" de 22/10'; sed -i "s\|RELATO.md:8492-8516\|$A\|" app/docs/BACKLOG.md; sed -i "s\|RELATO:8510-8516\|$A\|" app/docs/RELATO.md; sed -i -E 's\|app/docs/RELATO.md:(8510-8516\\|8501-8508\\|8492)\|app/docs/RELATO.md (secao "MARCO ESCRITOR-UNICO-DE-CHAMADO")\|' logs/CHAMADO-PRESO-CLASSE/brief_leis_herdadas.md; grep -c 'MARCO ESCRITOR ...` |
 | 13:09:16 | Bash | Add PROMPTS and RELATO lines for REENCAIXA | `cd ~/saas-hasner; echo "24/11 13:15 \| aval Ronald REENCAIXA-BOS-NA-GRADE-2411-1315: as 3 obras de BO de hoje ja existiam (LEI-AKITA 4); TIPO-NO-FIM-DO-TURNO parado, aval 1120 revogado, s1 vira MEDIDA da PAR-RELAMPAGO-A-LISTA-DO-ADMIN; PONTA-PEQUENA = fatia da RAZAO-DA-SOBRA; CHAMADO-PRESO = E2 INCOMPLETO do ESCRITOR-UNICO-DE-CHAMADO \| FEITO 13:2x: BACKLOG:832/2046/2293, briefs com LEIS HERDADAS  ...` |
 | 13:09:08 | Bash | See PROMPTS tail and RELATO top format | `cd ~/saas-hasner; tail -2 app/docs/PROMPTS.md \| cut -c1-200; head -3 app/docs/RELATO.md \| cut -c1-200` |
