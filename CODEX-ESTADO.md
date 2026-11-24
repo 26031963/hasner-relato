@@ -1,7 +1,42 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 12:29** · publicado em **24/11/2026 12:34** (UTC-3)
+> Ultima resposta processada: **24/11/2026 13:35** · publicado em **24/11/2026 13:35** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 13:35 · sessao b43d0b174535 · - · - · origem=Ronald (tmux)
+
+O parser aceita o teste comum e agrega `subTest` no método pai. A cópia mostra cabeçalhos `FAIL: método (módulo.Classe.método) (parâmetros)` e dois subcasos do mesmo método. Ambos viram a mesma chave. A consulta pelo método ou pelo cabeçalho encontra a falha, mas a consulta pelo ID pontuado seguido dos parâmetros pode cair em `PASSAVA`. `app/chamados/tests/e3_r3_c11_mutantes.txt:7,169,178`, `linha_de_base.sh.txt:59-61,72-76`.
+
+`ERROR: setUpClass (módulo.Classe)` casa com o regex e fica na chave da classe. Os métodos ficam sem entrada própria. Se o setup impedir a execução dos métodos e `Ran` baixar, a base responde `SEM-BASE`. Se a contagem fechar, a consulta pelo método pode responder `PASSAVA`. O formato literal e a ocorrência de `_ErrorHolder` na pista estão [nao verificado]. A cópia mostra o hook e o runner delegando ao Django. `app/core/tests/test_medida_leitor_do_dia.py:27-28`, `app/core/runner_quarentena.py:72-76,98-105`, `linha_de_base.sh.txt:55-61,68-76`.
+
+Falha de import também casa, porém grava a chave sintética `unittest.loader._FailedTest.nome`. A cópia mostra esse cabeçalho, a exceção de import e um `Ran 1`. Se o placeholder completar a conta, a consulta pelo módulo real ou pelos métodos que ficaram fora da descoberta cai em `PASSAVA`. `app/chamados/tests/e3_r3_c12_integrais.txt:1-7,18-21`, `linha_de_base.sh.txt:55-61,68-76`.
+
+A causa comum é que `pergunta` consulta só `atual` e usa `PASSAVA` para qualquer chave ausente em uma base marcada inteira. A base tem lista de falhas, erros e podados apenas. Um `PASSAVA` falso observado em produção está [nao verificado]. `linha_de_base.sh.txt:14-17,63-76`.
+
+Para Q5, a regra detalhada exige os cinco campos no RELATO, incluindo como se espera, erro/timeout/limite, contador e esperado, e condição de saída. O anexo dá os cinco títulos para cada fase. Na Fase 1 a pausa bloqueia novos `pede`, e o gancho prometido pelo rascunho ainda não aparece no final do deploy da cópia. Na Fase 2 Ronald está nomeado, mas falta como ele desliga e a condição de saída. `app/docs/PISTA.md:169-176`, `contrato.txt:2-3`, `linha_de_base.sh.txt:4,28-35`, `bin/deploy.sh:430-449`.
+
+## 24/11 13:35 · sessao fccf8f7abc7e · - · - · origem=Ronald (tmux)
+
+**Q4.** Há um contêiner PostgreSQL persistente `juliani_db_test`, com volume `juliani_db_test_data` e banco-base `juliani`. São distintos do banco lógico de execução `test_juliani`. `bin/db_teste.sh:20-24,49-56,67-74`; `app/config/settings/ci.py:6-18`.
+
+- O CI usa `DB_HOST` e `DB_NAME`, com defaults `juliani_db_test` e `juliani`, e usa `REGUA_DB` para substituir `TEST.NAME=test_juliani`. O próprio settings documenta os nomes fixos dos clones paralelos `test_juliani_1/2`. `ci_tenants` tem os mesmos defaults de servidor e banco-base, e `teste_motor` fixa servidor, banco-base e usuário. Nesses dois settings não há `TEST.NAME` explícito. A derivação de `test_<NAME>` pela dependência está [não verificado] na cópia. `app/config/settings/ci.py:6-18`; `app/config/settings/ci_tenants.py:9-18`; `app/config/settings/teste_motor.py:5-8`; `app/config/settings/saas.py:83-92`.
+- A trava operacional é `/tmp/juliani_db_test.lock`, compartilhada por todos os chamadores, com espera padrão de 3600 s e rc 75 por timeout. Chamam a trava a suite, inclusive recortes e `REGUA_DB` próprio, o pre-push nos dois settings, a régua e o relógio no banco default, o vigia com banco próprio e a execução principal do molde de fatia com banco próprio. `bin/trava_teste.sh:21-42`; `bin/suite.sh:336-347,365-373`; `bin/pre-push.sh:142-150,184-199`; `bin/regua.sh:159-169`; `bin/regua_relogio.sh:34-55`; `bin/vigia_arvore.sh:79-88,106,127-135`; `bin/molde_fatia/rodar.sh:28-47`.
+- Também há nomes próprios fixos que seguem os settings de CI, sem identidade por execução, no calendário, isolamento, molde de autocura, placar, vigia Python e integrador. O vigia Python lê credencial do contêiner nominal e executa a suite diretamente. A cópia secundária do pre-push também usa o host nominal, enquanto o instalador aponta para `bin/pre-push.sh`. `bin/regua_calendario.sh:28-46`; `bin/isolamento.sh:27-45,58`; `bin/molde_autocura/rodar.sh:17-26`; `bin/placar_code.sh:137-142`; `app/core/esteira_vigia.py:740-758,1312,1361,1448`; `app/core/integrador_lote.py:373,403,783`; `app/core/hooks/pre-push.sh:54-88`; `bin/hooks.sh:64-70`.
+- Recursos inclui esse contêiner no cpuset de testes. A credencial vem do arquivo, com fallback no contêiner nominal, e o helper gera um env-file compartilhado via `$TESTE_ENVFILE.novo`. `suite.sh` chama o helper antes de entrar no flock. O smoke do motor também exige literalmente o host nominal. `bin/recursos.sh:40-56,81-82,99-137,178-194`; `bin/suite.sh:309-312,365-369`; `app/ponto/management/commands/gerar_batidas_smoke_motor.py:45-52`.
+- Os selos de host que acoplam esse desenho são `test_trava_teste.sh` (chamadores, nome literal, serialização e rc 75), `test_suite_sh.sh` (porta canônica e passagem pela trava), `test_recursos_sourced.sh` (cpuset e criação/ajuste do contêiner) e `test_handoff_sessao.sh` (nome literal da trava usado pelo handoff). A régua roda a pasta de selos antes da suite. `bin/tests/test_trava_teste.sh:39-71,101-137`; `bin/tests/test_suite_sh.sh:48-65`; `bin/tests/test_recursos_sourced.sh:37-74`; `bin/tests/test_handoff_sessao.sh:116`; `bin/handoff_sessao.sh:248-262`; `bin/regua.sh:134-145`.
+- `pista_lock.sh` mantém um marcador de dono da pista separado. A certificação exclui Postgres do critério e o teste de ambiente registra sua versão. `bin/pista_lock.sh:2-14`; `bin/pista_certifica.sh:9-11`; `app/core/tests/test_ambiente_do_run.py:43-60`.
+
+## 24/11 13:35 · sessao c8a79ba7e4fb · - · - · origem=Ronald (tmux)
+
+**1. Mesmas saídas de origem, com critérios diferentes.** O rascunho baixa as saídas de `ssh pista log` e `ssh pista espera` e usa `Ran == Found - podados` e `oom=0`. O certificador documenta essas mesmas entradas. (`linha_de_base.sh.txt:42–56`, `bin/pista_certifica.sh:13–16,57–60,88–92`)
+
+- O rascunho pega o último `Found` e `Ran` que casam com prefixos amplos, conta podas com ID e aceita a primeira ocorrência numérica de `rc=` e `oom=`. O certificador exige ocorrências únicas de `Found N test(s).` e `Ran N test(s) in ...`, conta todas as linhas com o prefixo de poda e confere exatamente um `rc=0`, um `oom=0` e o vínculo do recibo com `AMBIENTE job=` e o SHA solicitado. (`linha_de_base.sh.txt:48–56`, `bin/pista_certifica.sh:34–39,51–60,88–92`)
+- O rascunho aceita `OK` com `rc=0` ou `FAILED` com `rc!='0'`. Se faltar `rc`, o valor vira `?` e satisfaz o ramo `FAILED`. O certificador decide pelo `rc=0` e pelas três provas, sem ler `OK` ou `FAILED`. (`linha_de_base.sh.txt:51–58`, `bin/pista_certifica.sh:41–60,84–100`)
+- O rascunho grava SHA e job recebidos pelo programa. O certificador verifica as camadas da imagem contra a VM, o SHA emitido pelo teste e os rótulos do `argv`. Assim, as contagens de um recorte podem produzir `inteira=sim` no rascunho. (`linha_de_base.sh.txt:44–58`, `bin/pista_certifica.sh:41–49,61–92`)
+
+**3. Fatias de jobs distintos entre VM e pista não certificam.** A frase é “os rotulos do `AMBIENTE argv=` sao os `LABELS` da regua (`bin/regua.sh`), cada um uma vez e nenhum a mais (um `pede --only` NAO certifica)”. O script exige uma linha `AMBIENTE argv=` completa, contagens únicas e recibo de um job e SHA. Concatenar os logs das fatias duplica os registros exigidos como únicos. O selo cobre o recorte `--only`. O contrato encaminha esse resultado como `lei:`. (`bin/pista_certifica.sh:6–8,34–39,51–60,70–92`, `bin/tests/test_pista_certifica.sh:92–97`, `contrato.txt:3`)
+
+Há ainda uma divergência de disparador. O anexo atribui `pede` à sessão, o comentário do rascunho o atribui ao deploy e o fim do deploy na cópia grava o carimbo e o histórico e emite `OK`, sem chamar `pede`. A identidade da cópia com o HEAD do hash informado fica [não verificado], pois a cópia não expõe metadados Git. (`contrato.txt:2`, `linha_de_base.sh.txt:4`, `bin/deploy.sh:430–449`)
 
 ## 24/11 12:29 · sessao cb5d74dfa55b · PONTA-PEQUENA-NA-BORDA · leitura · origem=Code
 
@@ -845,124 +880,4 @@ Na cópia, não localizei contador geral de todos os `batida_ausente` em `VIVOS`
 
 O lastro por lâmpada acesa devolve `None` quando a lâmpada do marco cobrado está ausente, e o fechador do evento pula o chamado. O cartório tem um ramo próprio para todos os marcos nomeados e tipados ausentes de uma ata com lâmpadas. O ramo tenta `reconciliar()` e registra `marco_inexistente` após aceitação. O gate pode recusar por pergunta viva sem reata na competência aberta. O código permite calcular `cobrado` quando não há códigos e há fio vivo de um chamado cujo dia segue de trabalho e cujos marcos não estão todos acesos. Qual caminho incidiu no caso de produção permanece [nao verificado]. [lastro.py:110](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/lastro.py:110) [lastro.py:175](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/lastro.py:175) [lastro.py:395](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/lastro.py:395) [cartorio.py:1492](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/cartorio.py:1492) [cartorio.py:1514](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/cartorio.py:1514) [cartorio.py:1537](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/cartorio.py:1537) [cartorio.py:1593](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/cartorio.py:1593) [chamados/models.py:429](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/chamados/models.py:429)
 
-## 24/11 10:47 · sessao 055c866779be · - · - · origem=Ronald (tmux)
-
-- **Escritores de `CelulaDia.dna.marcos`.** `montar_dna` produz o blob, e a porta concentra `regenerar_celulas_vinculo`, `editar_dia`, `reverter_regeneracao_dia` e `gerar_celulas_periodo`. `regenerar_celulas_dia` delega à regeneração de vínculo, e `trocar_plantao` chama `editar_dia` nos dois lados. `app/core/contratos_estruturais.py:113-125`, `app/ponto/portas/celula.py:74-85,292-315,641-664,729-737,796-800,865-878,948-972`.
-- **Regeneração e edição.** O save de DNA não insere `EventoCelula`. A regeneração marca cobranças órfãs dos dias reescritos e audita o ato. A edição também marca órfãs e usa o mesmo processamento posterior. O marcador grava `orfa_regeneracao` com os marcos da emissão no contexto, condicionado à reescrita posterior à criação e a marcos nomeados. Esse save altera contexto e data de atualização, então o receiver do chamado retorna se o status for igual. `app/ponto/portas/celula.py:261-279,292-327,369-394,654-684`, `app/ponto/management/commands/gerar_celulas.py:232-265`, `app/escala/services/regeneracao.py:141-155`, `app/chamados/services/contexto.py:52,97-105`, `app/chamados/signals.py:189-195`.
-- **Processamento posterior.** Por padrão, a porta força o cartório para dias tocados até hoje sem veredito humano e recalcula uma vez por competência. A frota passa `recalculo=False`, que pula essas duas etapas, e invalida fechamento. Em ambos os casos, `on_commit` rejunta a FK nula dos vivos de escopo dia do colaborador e reavalia nos dias tocados `batida_ausente` cuja premissa morreu por feriado/folga. O próprio cartório mantém a guarda da jornada de hoje. `app/ponto/portas/celula.py:439-441,467-503,535-547`, `app/escala/services/cadastro_tipo.py:353-364,375-378`, `app/chamados/services/feriado_reavaliar.py:24-56,65-86`, `app/ponto/services/cartorio.py:2059-2089`.
-- **Outbox e outros escritores.** `salvar_e_emitir` insere `EventoCelula` quando a lavra grava `veredito` ou `ata`, inclusive mudança de precedência. Nos dois ramos de regeneração futura, apagar julgamento prévio pode emitir via `desfazer_julgamento_da_futura`, que preserva decisão de admin e retorna quando nada foi julgado. A reversão insere o evento explicitamente no atomic e depois usa o mesmo processamento posterior. O gerador de período só cria célula ou preenche DNA nulo passado, sem julgamento ou evento nessa função. `app/ponto/portas/celula.py:267-268,312-315,865-895,948-1001,1181-1207,1241-1252`, `app/ponto/services/cartorio.py:1898-1922,2034-2055,2094-2096`.
-- **Chamado vivo.** O cron de minuto consome o outbox agrupado por colaborador, roda rejunção, retrata perguntas e chamados absolvidos, verifica premissa e órfãs, chama `fechar_pelo_marco_colab` e aciona a fábrica. A retratação por absolvição ignora veredito acusatório, classe que contém `cobrado`, e rejeita ata com marcos pendentes. No julgamento síncrono, o cartório também tem ramo explícito para marcos inexistentes. Verifica todos ausentes numa ata com lâmpadas e todos os marcos tipados, tenta `reconciliar`, só anota `marco_inexistente` e rejulga no sucesso. Um chamado de dia de trabalho com `marcos_acesos is not True` protesta, e sem códigos um vivo com fio que protesta pode produzir `cobrado`. `app/config/crons.py:393-394`, `app/chamados/reconciliador.py:1140-1153,1484-1523`, `app/escala/models.py:1778-1779`, `app/ponto/services/lastro.py:98-115`, `app/ponto/services/cartorio.py:1492-1495,1514-1538,1593-1610`.
-- **Distinção entre porta e executor.** `lastro.fechar_pelo_marco_colab` pula ausência de lâmpada antes do gate. O gate `reconciliar` considera a premissa regularizada por `marcos_inexistentes` mediante o mesmo juiz do cartório, mas ainda passa pelas demais guardas, inclusive pergunta viva. A causa do chamado de 27/10 ter continuado vivo após o julgamento de 09/11 fica [nao verificado]. `app/ponto/services/lastro.py:170-181,391-403`, `app/chamados/models.py:683-712,1345-1367`.
-
-## 24/11 10:28 · sessao 8540913dc18e · R1-REMEDE-2411 · sonda · origem=Code
-
-No dado fornecido, `rc_sombra=0` é a única linha `rc_sombra`. A transcrição abaixo reproduz o dado fornecido linha a linha. A execução em produção está [nao verificado].
-
-```text
-sonda_leitura: script.py [e6495196abed8215] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-AUTORIDADE {'dia_sem_lavratura_no_espelho': 8808, 'dia_batida_impar': 435, 'dias_comparados': 7763, 'diverge_acima_60': 300, 'dono_BATIDA': 275, 'impar_que_DIVERGE': 280, 'impar_no_conjunto_do_dia': 276, 'impar_dentro_da_faixa': 240, 'bate_ate_10min': 7372, 'impar_FORA_da_faixa': 40, 'dono_ESTRUTURA': 37, 'dia_sem_trabalho_ambos': 151, 'dia_isento_ou_ausencia': 1683, 'e6_zero_esp_trabalho': 26, 'dono_CADASTRO': 79, 'esp_zero_e6_trabalho': 42, 'impar_que_BATE': 155, 'esp_desconta_janela_declarada': 288, 'diverge_10_60': 23, 'impar_SO_POR_CORTE_do_oraculo': 4}
-AUTORIDADE erros no espelho: 0
-AUTORIDADE BATE (ate 10 min): 95.0% de 7763 dias comparados
-AUTORIDADE dos que divergem: 240 dentro da faixa piso..teto (indecidivel sem DNA), 40 FORA da faixa (contraditorio)
-AUTORIDADE paridade de quem: 276 com contagem impar no conjunto do dia (falta OU sobra batida), 4 partidos SO pelo corte do proprio oraculo
-AUTORIDADE ESTRUTURA    37 dia-colab     152.9 h   25 colabs   o sistema se contradiz ou calcula errado DADO o cadastro -- fila 1
-AUTORIDADE CADASTRO     79 dia-colab     315.3 h   37 colabs   o DNA nao descreve as batidas -- lista do admin, nao codigo
-AUTORIDADE BATIDA      275 dia-colab    1473.0 h  129 colabs   falta ou sobra batida -- lista do admin, nao codigo
-AUTORIDADE SOMA        391   <- tem de ser igual a soma das classes (391)
-AUTORIDADE colabs com divergencia: 164
-CSV_POR_DONO {'BATIDA': 275, 'ESTRUTURA': 37, 'CADASTRO': 79} TOTAL 391
-CSV_PARIDADE {('IMPAR', 'BATIDA'): 226, ('par', 'ESTRUTURA'): 36, ('par', 'CADASTRO'): 26, ('IMPAR', 'CADASTRO'): 53, ('par', 'BATIDA'): 49, ('IMPAR', 'ESTRUTURA'): 1}
-CAB emp|colab|dia|dono_da_divergencia|esp_min|piso_min|teto_min|dif|classe|paridade|dono_da_paridade|veredito
-ESTRUTURA 4|37|2026-11-14|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 3|110|2026-11-12|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 3|112|2026-10-21|ESTRUTURA|546|838|838|292|diverge_acima_60|par|2|trabalhou |n_batidas=2
-ESTRUTURA 3|112|2026-10-22|ESTRUTURA|541|835|835|294|diverge_acima_60|par|2|trabalhou |n_batidas=2
-ESTRUTURA 3|113|2026-10-30|ESTRUTURA|242|0|0|-242|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 3|113|2026-11-01|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 3|114|2026-11-08|ESTRUTURA|439|429|499|-10|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 3|114|2026-11-15|ESTRUTURA|499|440|499|-59|diverge_10_60|par|4|feriado |n_batidas=4
-ESTRUTURA 3|130|2026-10-29|ESTRUTURA|335|672|730|337|diverge_acima_60|par|1|trabalhou |n_batidas=4
-ESTRUTURA 2|200|2026-10-29|ESTRUTURA|180|0|0|-180|e6_zero_esp_trabalho|par|3|em_aberto |n_batidas=0
-ESTRUTURA 2|200|2026-11-02|ESTRUTURA|180|0|0|-180|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 2|218|2026-11-14|ESTRUTURA|103|0|0|-103|e6_zero_esp_trabalho|par|3|em_aberto |n_batidas=0
-ESTRUTURA 2|220|2026-11-10|ESTRUTURA|337|430|486|93|diverge_acima_60|par|1|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-09|ESTRUTURA|551|597|610|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-10|ESTRUTURA|551|598|611|47|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-11|ESTRUTURA|550|598|611|48|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-13|ESTRUTURA|551|597|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-17|ESTRUTURA|553|598|612|45|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-18|ESTRUTURA|550|596|610|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-11-19|ESTRUTURA|554|599|613|45|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|296|2026-11-02|ESTRUTURA|345|0|0|-345|e6_zero_esp_trabalho|par|0|trabalhou |n_batidas=0
-ESTRUTURA 2|302|2026-11-20|ESTRUTURA|296|0|0|-296|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 2|334|2026-11-16|ESTRUTURA|209|591|683|382|diverge_acima_60|par|3|folga |n_batidas=4
-ESTRUTURA 2|382|2026-11-10|ESTRUTURA|418|0|0|-418|e6_zero_esp_trabalho|par|3|trabalhou |n_batidas=0
-ESTRUTURA 2|516|2026-10-23|ESTRUTURA|361|0|0|-361|e6_zero_esp_trabalho|par|2|folga |n_batidas=0
-ESTRUTURA 2|727|2026-11-10|ESTRUTURA|307|0|0|-307|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 2|841|2026-11-16|ESTRUTURA|178|0|0|-178|e6_zero_esp_trabalho|par|2|folga |n_batidas=0
-ESTRUTURA 2|874|2026-10-22|ESTRUTURA|667|383|383|-284|diverge_acima_60|par|3|trabalhou |n_batidas=2
-ESTRUTURA 2|884|2026-11-08|ESTRUTURA|679|699|739|20|diverge_10_60|par|4|rejeitado |n_batidas=4
-ESTRUTURA 3|909|2026-11-11|ESTRUTURA|831|245|374|-586|diverge_acima_60/FORA|IMPAR|CORTE_do_oraculo|em_aberto |n_batidas=4
-ESTRUTURA 2|922|2026-11-01|ESTRUTURA|1382|68|68|-1314|diverge_acima_60|par|4|trabalhou |n_batidas=2
-ESTRUTURA 2|922|2026-11-04|ESTRUTURA|676|458|458|-218|diverge_acima_60|par|3|trabalhou |n_batidas=2
-ESTRUTURA 1|950|2026-11-11|ESTRUTURA|480|240|240|-240|diverge_acima_60|par|4|trabalhou |n_batidas=2
-ESTRUTURA 2|989|2026-10-23|ESTRUTURA|721|567|567|-154|diverge_acima_60|par|2|trabalhou |n_batidas=2
-ESTRUTURA 3|996|2026-10-28|ESTRUTURA|0|580|580|580|esp_zero_e6_trabalho|par|1|folga |n_batidas=2
-ESTRUTURA 3|996|2026-11-10|ESTRUTURA|443|1026|1116|583|diverge_acima_60|par|5|em_aberto |n_batidas=6
-ESTRUTURA 2|1044|2026-11-13|ESTRUTURA|204|135|339|-69|diverge_acima_60|par|4|em_aberto |n_batidas=4
-FIM_LISTA
-rc_sombra=0
-```
-
-## 24/11 10:21 · sessao 0bcf3a448c61 · R1-REMEDE-2411 · sonda · origem=Code
-
-No dado fornecido, não há `rc_sombra` diferente de `0`. A execução original está [nao verificado].
-
-```text
-sonda_leitura: script.py [0d4e6e058a9c5469] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-AUTORIDADE {'dia_sem_lavratura_no_espelho': 8912, 'dias_comparados': 7521, 'bate_ate_10min': 7203, 'dia_isento_ou_ausencia': 1878, 'dia_batida_impar': 361, 'impar_que_BATE': 148, 'esp_zero_e6_trabalho': 35, 'dono_BATIDA': 217, 'diverge_acima_60': 235, 'impar_que_DIVERGE': 213, 'impar_no_conjunto_do_dia': 212, 'impar_FORA_da_faixa': 32, 'impar_dentro_da_faixa': 181, 'dono_CADASTRO': 75, 'e6_zero_esp_trabalho': 19, 'dia_sem_trabalho_ambos': 151, 'esp_desconta_janela_declarada': 258, 'dono_ESTRUTURA': 26, 'diverge_10_60': 29, 'impar_SO_POR_CORTE_do_oraculo': 1}
-AUTORIDADE erros no espelho: 0
-AUTORIDADE BATE (ate 10 min): 95.8% de 7521 dias comparados
-AUTORIDADE dos que divergem: 181 dentro da faixa piso..teto (indecidivel sem DNA), 32 FORA da faixa (contraditorio)
-AUTORIDADE paridade de quem: 212 com contagem impar no conjunto do dia (falta OU sobra batida), 1 partidos SO pelo corte do proprio oraculo
-AUTORIDADE ESTRUTURA    26 dia-colab      88.4 h   16 colabs   o sistema se contradiz ou calcula errado DADO o cadastro -- fila 1
-AUTORIDADE CADASTRO     75 dia-colab     295.0 h   31 colabs   o DNA nao descreve as batidas -- lista do admin, nao codigo
-AUTORIDADE BATIDA      217 dia-colab    1021.0 h  117 colabs   falta ou sobra batida -- lista do admin, nao codigo
-AUTORIDADE SOMA        318   <- tem de ser igual a soma das classes (318)
-AUTORIDADE colabs com divergencia: 146
-CSV_POR_DONO {'BATIDA': 217, 'CADASTRO': 75, 'ESTRUTURA': 26} TOTAL 318
-CSV_PARIDADE {('par', 'BATIDA'): 43, ('IMPAR', 'BATIDA'): 174, ('IMPAR', 'CADASTRO'): 39, ('par', 'CADASTRO'): 36, ('par', 'ESTRUTURA'): 26}
-CAB emp|colab|dia|dono_da_divergencia|esp_min|piso_min|teto_min|dif|classe|paridade|dono_da_paridade|veredito
-ESTRUTURA 4|37|2026-10-05|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 4|37|2026-10-09|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 3|129|2026-10-12|ESTRUTURA|0|779|779|779|esp_zero_e6_trabalho|par|2|em_aberto |n_batidas=2
-ESTRUTURA 2|218|2026-10-15|ESTRUTURA|105|0|0|-105|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 2|252|2026-09-23|ESTRUTURA|548|594|608|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-09-24|ESTRUTURA|552|598|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-09-25|ESTRUTURA|556|604|616|48|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-09-28|ESTRUTURA|535|581|595|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-10-01|ESTRUTURA|545|590|605|45|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-10-02|ESTRUTURA|545|593|606|48|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-10-06|ESTRUTURA|551|597|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|252|2026-10-09|ESTRUTURA|544|592|604|48|diverge_10_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|369|2026-10-12|ESTRUTURA|476|416|476|-60|diverge_10_60|par|4|feriado |n_batidas=4
-ESTRUTURA 2|382|2026-09-30|ESTRUTURA|364|0|0|-364|e6_zero_esp_trabalho|par|2|trabalhou |n_batidas=0
-ESTRUTURA 2|451|2026-09-23|ESTRUTURA|707|718|718|11|diverge_10_60|par|2|em_aberto |n_batidas=2
-ESTRUTURA 2|451|2026-09-25|ESTRUTURA|705|718|718|13|diverge_10_60|par|2|em_aberto |n_batidas=2
-ESTRUTURA 2|478|2026-09-25|ESTRUTURA|719|8|8|-711|diverge_acima_60|par|2|trabalhou |n_batidas=2
-ESTRUTURA 3|515|2026-10-09|ESTRUTURA|244|0|0|-244|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 3|515|2026-10-11|ESTRUTURA|245|0|0|-245|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
-ESTRUTURA 2|723|2026-10-08|ESTRUTURA|440|345|500|-95|diverge_acima_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 3|746|2026-09-24|ESTRUTURA|289|193|350|-96|diverge_acima_60|par|4|trabalhou |n_batidas=4
-ESTRUTURA 2|841|2026-10-20|ESTRUTURA|681|522|701|-159|diverge_acima_60|par|4|em_aberto |n_batidas=4
-ESTRUTURA 2|854|2026-10-04|ESTRUTURA|718|7|7|-711|diverge_acima_60|par|2|trabalhou |n_batidas=2
-ESTRUTURA 2|864|2026-10-12|ESTRUTURA|509|449|509|-60|diverge_10_60|par|4|feriado |n_batidas=4
-ESTRUTURA 3|868|2026-09-22|ESTRUTURA|0|679|733|679|esp_zero_e6_trabalho|par|1|em_aberto |n_batidas=4
-ESTRUTURA 3|876|2026-09-21|ESTRUTURA|550|665|722|115|diverge_acima_60|par|1|em_aberto |n_batidas=4
-FIM_LISTA
-rc_sombra=0
-```
-
-_8063 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8066 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
