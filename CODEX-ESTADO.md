@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 04:07** · publicado em **24/11/2026 04:13** (UTC-3)
+> Ultima resposta processada: **24/11/2026 08:38** · publicado em **24/11/2026 08:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 08:38 · sessao e6153ad48c0f · CLASSE-D-NA-FRENTE-DA-E4D · censo · origem=Code
+
+No HEAD `7a4e79eefb7bd2613e4826449b0b22a43401cfb5`, o **C5 ainda emite um item por colaborador**, sem `data` e sem `dono_do_dia`. O alcance do vigia ainda usa `empresas_visiveis()`, e o juiz `dono_da_divergencia` ainda não recebe `FATO_EM_AUSENCIA`. `app/escala/services/cadastro_realidade.py:176-182,1079` · `app/chamados/services/vigia_fio.py:517-520` · `app/ponto/management/commands/e6_oraculo.py:53-54,98-110`
+
+Comparei a cópia com os dois objetos Git e consultei o histórico no repositório de origem, cujo `HEAD` coincide com o hash pedido. As contagens e os casos individuais em produção ficam `[nao verificado]`.
+
+## 1. Citações das seções 1, 3 e 4
+
+O prefixo `app/` está implícito nas duas tabelas. Em “mudou?”, a comparação é com o código de `77dfa94fa`.
+
+| citacao_antiga | hoje | mudou? |
+|---|---|---|
+| `escala/services/cadastro_realidade.py:78,137-173,176-182` (inclui `:180`) | `escala/services/cadastro_realidade.py:78,137-173,176-182` | **Não.** O coletor traz datas por colaborador. O formatador C5 emite um item por colaborador e põe até três datas no texto. |
+| `escala/services/cadastro_realidade.py:342-355,358-376,383-397` | `escala/services/cadastro_realidade.py:342-355,358-376,383-397` | **Não.** C9 e C10 mantêm os itens datados. C12 mantém um item por publicação do motor, inclusive com `data=None` se a origem não trouxer dia. |
+| `escala/services/cadastro_realidade.py:414` | `escala/services/cadastro_realidade.py:414-530`, em especial `:497-510` | **Sim.** Além do caminho por âncora terminal, o C11 aceita M1, com todas as vivas respondidas no horizonte e sem âncora. Os dois caminhos exigem folga não definida. |
+| `escala/services/cadastro_realidade.py:450-453` | `escala/services/cadastro_realidade.py:452-455` | **Não.** A consulta mantém a seleção do colaborador ativo, veredito `indefinida`, protesto e janela. |
+| `escala/services/cadastro_realidade.py:469` | `escala/services/cadastro_realidade.py:470-473` | **Sim, pelo retorno consultado.** O `if` é idêntico, mas agora também exclui o envelope de leitura desconhecida sem rota. `chamados/services/tarefa_do_dia.py:809-822` |
+| `escala/services/cadastro_realidade.py:503-507,512` | `escala/services/cadastro_realidade.py:513-517,522` | **Não.** A montagem do dono continua com `sem_motor=True` e CxR lavrado. O item continua gravando o ISO da célula e o retorno de `.dono(d)`. |
+| `escala/services/cadastro_realidade.py:671` | `escala/services/cadastro_realidade.py:682-684` | **Não.** A ação C5 ainda aponta a `TELA_COLAB` para adesão ou lançamento de ausência. |
+| `escala/services/cadastro_realidade.py:768` | `escala/services/cadastro_realidade.py:860-868,1059-1073` | **Sim.** `lista()` passou a publicar também `linhas` ordenadas pela carga e `carga_resumo`. `postos` segue no retorno. |
+| `escala/services/cadastro_realidade.py:857-863,866` | `escala/services/cadastro_realidade.py:956-962,965` | **Não.** A inclusão de C5 segue sob `try/except`, antes da chamada a `um_dono_por_dia`. |
+| `escala/services/cadastro_realidade.py:885-916` (inclui `:887-904,910-912`) | `escala/services/cadastro_realidade.py:996-1027` (ramos `:998-1015`, contador `:1021-1023`) | **Não.** Só C9–C12 preenchem `_extra['dono']`. Incluir C5 apenas no conjunto faria o acesso em `:1023` levantar `KeyError` fora do `try` do produtor. |
+| `escala/services/cadastro_realidade.py:941-947` | `escala/services/cadastro_realidade.py:1052-1058` | **Não.** `colabs` conta IDs distintos e `ocorrencias` conta itens incluídos. Para o C5 atual, os números coincidem. `escala/services/cadastro_realidade.py:180,1025-1027` |
+| `escala/services/cadastro_realidade.py:963,966-1011` | `escala/services/cadastro_realidade.py:1079,1082-1127` | **Não.** Mesmo conjunto C9–C12 e mesma reconciliação de donos divergentes por dia. |
+| `escala/services/cadastro_realidade.py:1014-1022,1025-1045` (inclui `:1042`) | `escala/services/cadastro_realidade.py:1130-1138,1141-1161` (guarda em `:1158`) | **Não.** A projeção exige `data` preenchida. O nível do juiz tem precedência. Conflito no nível escolhido dá `None`. |
+| `chamados/services/vigia_fio.py:188-255` (inclui `:222-228,230-236,248-251`) | `chamados/services/vigia_fio.py:166-233` (métodos em `:200-206,208-214,226-229`) | **Não.** A classe conserva as consultas separadas de dia, colaborador e dono da mesa. |
+| `chamados/services/vigia_fio.py:274-315` (inclui `:313`) | `chamados/services/vigia_fio.py:240-263` (`fio_do_admin` em `:261-262`) | **Sim.** O ramo `decisao_do_dia_pendente` saiu da função. `Resolver dia` passou a ser uma porta publicada pela tarefa. `chamados/services/tarefa_do_dia.py:781-790` |
+| `chamados/services/vigia_fio.py:542,592` | `chamados/services/vigia_fio.py:487,537` | **Sim.** O alcance hoje testa a `rota` publicada, contabiliza `porta_acao` e passa o `hoje` da rodada a `dias_que_seguram`. `chamados/services/vigia_fio.py:595-609` |
+| `chamados/services/vigia_fio.py:621,654` | `chamados/services/vigia_fio.py:566,598` | **Não.** `ps` continua vindo das vivas da célula em `alim['vivas']`. |
+| `chamados/services/vigia_fio.py:696,700-703` | `chamados/services/vigia_fio.py:640-647` | **Não.** Os predicados de d e de `dia_na_lista_dono_*` são os mesmos. A porta e a causa c, avaliadas antes, mudaram. `chamados/services/vigia_fio.py:595-609,635-639` |
+| `chamados/services/vigia_fio.py:715,737` | `chamados/services/vigia_fio.py:659,681` (`ROTULO_CAUSA` em `:483-484`) | **Não.** Mesmo incremento por causa e emissão de seu rótulo. |
+| `chamados/management/commands/vigiar_fio_morto.py:175,181` | `chamados/management/commands/vigiar_fio_morto.py:184,190` | **Não.** O comando ainda passa a mesma `ListaDoAdmin` e o mesmo instante aos dois censos. |
+| `chamados/management/commands/backfill_fio_morto_e4b.py:78` | `chamados/management/commands/backfill_fio_morto_e4b.py:78-79` | **Não.** `_alcance` ainda chama o censo real e seleciona as linhas `sem_porta`. |
+| `chamados/management/commands/disparar_perguntas_competencia.py:56` | `chamados/management/commands/disparar_perguntas_competencia.py:56-57,68-71` | **Não.** O contador desdobra o dict em pares `(cid, dia)`. |
+| `folha/vigia_retido_calado.py:43` | `folha/vigia_retido_calado.py:54-58,71-80` | **Sim.** Agora chama com os IDs visíveis intersectados com o recorte, sem a guarda antiga de existência de retrato. Tanto antes quanto hoje, `set(dict)` usa as **chaves de colaborador**. |
+| `chamados/services/pergunta_no_app.py:35` | `chamados/services/pergunta_no_app.py:35` | **Não.** O motivo `celula_nunca_bateu` continua apontando a lista C5 do admin. |
+| `chamados/services/tarefa_do_dia.py:638,648` | `chamados/services/tarefa_do_dia.py:809-822,825-827` | **Sim** para `porta_da_tarefa`, que inclui ações diretas e envelope de desconhecimento sem rota. **Não** para o delegador `carga_da_tarefa`. |
+| `chamados/juizes.py:1595` | `chamados/juizes.py:1723,1748-1761` | **Sim** na carga. Passou a trazer decisões em lote. Continua publicando as vivas pelo juiz. |
+| `folha/fora_da_folha.py:109` | `folha/fora_da_folha.py:125-140,165` | **Sim.** `dias_que_seguram` exige `hoje` da borda para a leitura dos dias. A seleção dos retidos ainda chama `classificar_export` em `:147`. |
+| `ponto/management/commands/e6_oraculo.py:98-110,113-195` (inclui `:182-195,193-194`) | `ponto/management/commands/e6_oraculo.py:98-110,113-195` | **Não.** Mesmas precedências e mesmo `None` para o residual que dependeria de CxR quando `sem_motor=True` e a lavra falta. |
+| `ponto/motor_calculo_v2.py:1623,1997,1528` | `ponto/motor_calculo_v2.py:1623,1997,1528` | **Não.** Os dois primeiros publicam dia do turno. `:1528` continua tomando `entrada.date()`. |
+| `test_MORDE_F5_queries_nao_crescem_com_os_dias`, `escala/tests/test_f3_beco1_folga_na_lista.py:351` | `escala/tests/test_f3_beco1_folga_na_lista.py:395` | **Não** quanto ao contrato medido pelo teste, que segue sendo custo por número de dias do C11. |
+
+## 2. Escritores e leitores no HEAD
+
+| Dado | Escritores e leitores |
+|---|---|
+| `item['data']` | **Escrevem** C9 `escala/services/cadastro_realidade.py:350`, C10 `:395`, C11 `:522` e C12 `:374`. **Leem** o encaminhamento C11 `:1010` → `:714-719`, `um_dono_por_dia` `:1100-1101` e `dias_na_lista` `:1158-1160`. C11 usa `CelulaDia.data`; C9 publica `data_turno`, e C12 copia o dia publicado pelo motor, quando presente. `ponto/services/teto_na_lista.py:68-79` · `ponto/services/cxr_na_lista.py:84-103` |
+| `item['dono_do_dia']` | **Escrevem** C9 `escala/services/cadastro_realidade.py:351`, C10 `:396`, C11 `:522` e C12 `:375`. **Reescreve** `um_dono_por_dia` em `:1125`, quando há divergência. Ele lê os candidatos em `:1104-1108`. O laço lê o dono para ação e exibição em `:998-1023`. `dias_na_lista` lê o valor cru em `:1160`. Tela e PDF exibem o `dono` formatado. `templates/escala/cadastro_x_realidade.html:31` · `escala/services/cadastro_realidade.py:1203-1206` |
+| `dias_na_lista` | **Produz** `{(cid, ISO): dono\|None}` em `escala/services/cadastro_realidade.py:1141-1161`. O leitor de produção é `ListaDoAdmin._carregar`, `chamados/services/vigia_fio.py:189-196`. |
+| `ListaDoAdmin` | **Preenche** `_dias` e `_colabs` em `chamados/services/vigia_fio.py:183-198` e registra dias sem resposta em `:200-233`. **Instanciam** o comando `chamados/management/commands/vigiar_fio_morto.py:184` e os dois censos quando chamados sem instância, `chamados/services/vigia_fio.py:337,580`. **Leem** `dono_fora_do_fio` em `:259-262`, as causas d/e em `:622,640-647` e o comando, que lê `sem_resposta` em `chamados/management/commands/vigiar_fio_morto.py:203`. |
+| `censo_alcance`, d e e | **Escreve** d para célula sem viva, com `dia_na_lista == (False, None)` e colaborador presente, depois das exclusões anteriores. **Escreve** e para `sem_celula` ou o residual, incluindo dia datado sem viva com dono `ESTRUTURA` ou `None`. Incrementa `alcance_d/e`, `alcance_e_detalhe` e publica a linha em `chamados/services/vigia_fio.py:616-662`. **Leem** `linhas_alcance` em `:666-684`, o comando que imprime e carimba o agregado em `chamados/management/commands/vigiar_fio_morto.py:190,215,284` e o backfill que recolhe as linhas `sem_porta` em `chamados/management/commands/backfill_fio_morto_e4b.py:76-79,313-326`. A chave do balde no alcance é `alcance_fio_do_admin`. `chamados/services/vigia_fio.py:481-482,526-527,616-621` |
+| `colabs_nunca_bateu` | **Produz** `{cid: [date, ...]}` a partir de `CelulaDia.veredito='nunca_bateu'`, da janela anterior até ontem, excluindo desligados. **Leem** `_nunca_bateu`, o contador de disparo por par e o vigia da Folha por colaborador. `escala/services/cadastro_realidade.py:137-182` · `ponto/services/cartorio.py:1317-1321` · `chamados/management/commands/disparar_perguntas_competencia.py:52-71` · `folha/vigia_retido_calado.py:71-80` |
+| `DONO_PELO_JUIZ` | **Define** `frozenset({'C9','C10','C11','C12'})` em `escala/services/cadastro_realidade.py:1079`. **Leem** o contador `por_dono` em `:1021-1023`, a seleção para reconciliação em `:1100-1101` e os dois níveis de `_dono_resolvido` em `:1135-1138`. |
+
+**`Empresa.em_rollout`.** Leitura direta no formulário `templates/colaboradores/empresa_form.html:34`, nos recortes `colaboradores/views.py:2630` e `chamados/services/painel.py:411`, no queryset `colaboradores/queries.py:65` e nas consultas `escala/management/commands/apurar_furos_diarios.py:9`, `ponto/services/furos_sem_cobranca.py:59` e `relatorios/management/commands/selo_leitores_no_mesmo_numero.py:51`. A borda do cadastro recebe a caixa e encaminha o valor nas operações de atualização e criação. `colaboradores/models.py:45` · `colaboradores/views.py:513,539-542,550-556`
+
+**`empresas_visiveis()`.** O helper filtra `ativa=True` e exclui CNPJ iniciado por `11222333`. Chamadas de produção encontradas por arquivo. `colaboradores/queries.py:78-87`
+
+- **Vigias, Folha e backfill.** `chamados/services/vigia_fio.py:191,517` · `chamados/management/commands/backfill_fio_morto_e4b.py:183,301` · `folha/vigia_retido_calado.py:54` · `folha/retrato_folha.py:1411` · `folha/views_retrato.py:149` · `folha/management/commands/lavrar_retrato_folha.py:51` · `folha/views.py:36,89,462,493`
+- **Cadastro, escala, chamados e ponto.** `colaboradores/views.py:124,499,716,737,1002,1074,1124,1263,1787,1901,2221,2739,2977` · `escala/views.py:492,524` · `escala/views_plano_folgas.py:37` · `chamados/services/painel.py:438,544` · `chamados/views.py:763,1492` · `ponto/views.py:598,668,807,933,1130,1775`
+- **Demais chamadas.** `api/views_mensageria.py:1222` · `comunicados/views.py:122` · `core/services/painel_op.py:66` · `core/views.py:767` · `core/views_config.py:399,486` · `core/views_usuarios.py:118` · `ferias/views.py:50` · `holerite/views.py:57,799` · `inteligencia/views.py:61` · `relatorios/views.py:43,118,169,238,326,377,426,589,671,1165,1499,1501,1556,1608` · `relatorios/views_pend.py:15`
+
+## 3. Complementos e estado da cura
+
+| Complemento | Sítios do HEAD e o que já existe |
+|---|---|
+| **CORTE-LU2-07-EMPRESA-1** | O sítio do recorte é `chamados/services/vigia_fio.py:517-520`, antes da iteração por empresa e competência em `:534-543`. A autoridade já existe em `colaboradores/models.py:45` e `templates/colaboradores/empresa_form.html:34-35`. **O recorte ainda não usa o campo.** Essas linhas do vigia vêm de `fc9beecea`, anterior à base. O mesmo `censo_alcance` é chamado pelo backfill em `chamados/management/commands/backfill_fio_morto_e4b.py:76-79`. A lista do admin tem seu próprio cruzamento em `chamados/services/vigia_fio.py:189-196`. Alterar o helper global alcançaria a lavra da Folha em `folha/management/commands/lavrar_retrato_folha.py:51`. O registro separado de `EMPRESAS=(2,3,4)` corresponde a `config/crons.py:17`. O anexo documenta 46 como subconjunto de 80. A recontagem no HEAD é `[nao verificado]`. |
+| **1711-1005 item 6, `SEM_LEITURA`** | A cadeia a conferir para col265/col407 é `chamados/models.py:4377-4409` → `chamados/services/tarefa_do_dia.py:430-434,154-155,340-347` → `chamados/management/commands/backfill_fio_morto_e4b.py:98-100,158-161`. O backfill **já tem** a escrita pela porta `registrar`, anterior à base (`1250dbd98`), e `registrar` persiste a sequência em `chamados/models.py:4551-4576`. Desde a base, `d948d2ab5` e `20f5a0338` acrescentaram transporte e contagem de sem leitura. As testemunhas atuais são `chamados/services/vigia_fio.py:599-602,683`, `folha/fora_da_folha.py:215-238`, `folha/retrato_folha.py:1244` e `folha/vigia_retido_calado.py:84-100,115-117`. O anexo identifica a origem e tira col838 do recorte histórico. A linha faltante, a causa histórica da lacuna, o estado atual dos dois casos e qual alteração adicional seria necessária ficam `[nao verificado]`. |
+| **1711-1050 item 6, `FATO_EM_AUSENCIA`** | Os dois sítios de implementação são **o juiz e seus insumos**, `ponto/management/commands/e6_oraculo.py:53-54,98-110,182-195`, e **o produtor e encaminhamento diário**, `escala/services/cadastro_realidade.py:928-965,996-1027,1079-1127`. A referência antiga `:1047` cai hoje na linha em branco `:1163`, entre `dias_na_lista` e `pdf_bytes`. A classificação já existe em `ponto/supra_juiz.py:395-418,450-457`, com mapeamento em `escala/models.py:1622-1631`. A tarefa já lê esse veredito numa faixa específica e emite `VALIDAR` para admin sem âncora nessa faixa. Esse ramo antecede a base e a porta é resolvida separadamente. `chamados/services/tarefa_do_dia.py:358-370,751-756`. **A entrega do item 6 ainda falta:** o juiz segue sem esse insumo e o laço da lista segue sem esse produtor. A edição de ausência e a retratação já têm portas em `ponto/views.py:2930-2937,2973,3453-3462`; a retratação anota e preserva a batida em `ponto/registro_batida.py:287-302`. |
+
+Os leitores do juiz a cruzar para `FATO_EM_AUSENCIA` são `ponto/services/teto_na_lista.py:72,86`, `ponto/services/cxr_na_lista.py:99-103`, `ponto/management/commands/censo_fase_12x36.py:280-289`, `ferias/management/commands/listar_ferias_com_batida.py:53-57` e o próprio comando `ponto/management/commands/e6_oraculo.py:328,378`. `pautas_discordantes` tem uma chamada **direta** ao juiz para decidir se precisa do motor, além da chamada final via `.dono()`. `ponto/management/commands/pautas_discordantes.py:100-106,118`
+
+## 4. Commits desde `77dfa94fa`
+
+Hashes na ordem do `git log --oneline 77dfa94fa..HEAD -- <arquivo>`, consultado por caminho. Os números de linha identificam os sítios acima.
+
+| Arquivo no HEAD | Commits | [nao verificado]
+|---|---|
+| `escala/services/cadastro_realidade.py:176,956,996,1079` | `a81f888dc` `d0210a400` `550c810b6` `4536fe161` `106920782` `a5ff3627f` `d948d2ab5` |
+| `chamados/services/vigia_fio.py:517,640` | `57582ee14` `a65c4b712` `b9acb6828` `96d16af7d` `20f5a0338` `d948d2ab5` `c5a1bf90c` `b8681db0e` `f39d24d58` |
+| `ponto/management/commands/e6_oraculo.py:53,182` | **Nenhum.** |
+| `chamados/management/commands/backfill_fio_morto_e4b.py:98,161` | `ec46c1d4f` `67f5606ee` `568c14c0a` `b240b2f52` `57582ee14` |
+| `chamados/services/tarefa_do_dia.py:154,363,433` | `eaf69fe33` `0dc6512a8` `c983ccc90` `0ee6521f5` `8542d4e72` `dae3bfca0` `96d16af7d` `57c1c9b94` `efcf3937a` `20f5a0338` `af1df2fe8` `a5ff3627f` `d948d2ab5` `517b6f16c` `c5a1bf90c` `b8681db0e` `f39d24d58` |
+| `chamados/models.py:4377,4551` | `81c096c32` `4346eddae` `b240b2f52` `a1b5eafbe` `928c5cad1` `dfffac9b1` `131f1f6cf` `55f6689a0` `af495e9ab` `38da8c04d` `55d268b05` `05cb513bb` `c2601465f` `c9a67ed52` `f1e9c487e` `23e80acde` `d34dbfc84` `a3c23d10b` `9d386d1b1` `acdcd556d` `0db6afc73` `18bf86f01` `9500f8063` `41620774b` `5d9e1b0e4` `f54d7d15a` `dae3bfca0` `afda61fbd` `21f1e9e49` `e1386f13c` `a65c4b712` `b9acb6828` `f90ead1e0` `fbac30539` `0340fc1ca` `1fcb5d0b6` `d0cf621ac` |
+| `templates/escala/cadastro_x_realidade.html:20,31` | `cff719f7d` `550c810b6` `106920782` |
+| `escala/tests/test_f3_beco1_folga_na_lista.py:395` | `57c1c9b94` `efcf3937a` `6fb74c6d2` `714a92a61` `a5ff3627f` `d948d2ab5` `c5a1bf90c` `b8681db0e` |
+| `escala/tests/test_cadastro_x_realidade.py:53,70` | **Nenhum.** |
+| `chamados/tests/test_o261e_f5_alcance.py:260,308` | `a65c4b712` `efcf3937a` `20f5a0338` `714a92a61` `b8681db0e` `f39d24d58` |
+| `chamados/tests/test_e4_backfill.py:151-162` | `c5a1bf90c` |
+
+Entre os leitores do juiz citados no complemento, houve commits em `ponto/management/commands/pautas_discordantes.py:100-118` (`57c1c9b94`, `20f5a0338`, `a5ff3627f`) e `ponto/management/commands/censo_fase_12x36.py:280-289` (`0dd5f8323`). O histórico por caminho ficou vazio para `ponto/services/teto_na_lista.py:72`, `ponto/services/cxr_na_lista.py:99`, `ferias/management/commands/listar_ferias_com_batida.py:53` e a fonte de classificação `ponto/supra_juiz.py:395-418`.
+
+## 5. Contra-exemplos
+
+- **Algum produtor já emite C5 por dia? Não.** A busca de C5 no produtor encontra o cadastro da assinatura, `_nunca_bateu`, a ação e a ligação em `lista()`. O único ponto de emissão é `out[cid] = [{...}]`. Os pares produzidos pelo contador de disparo vêm do dict de datas e ficam no contador. `escala/services/cadastro_realidade.py:78,176-182,682-684,956-962` · `chamados/management/commands/disparar_perguntas_competencia.py:56-71`
+- **Algum leitor de `por_ass['C5']['ocorrencias']` em tela ou PDF supõe unidade COLAB? Não encontrei leitor desse campo nesses dois caminhos.** A etiqueta da tela lê explicitamente `por_assinatura[*].colabs`. Na linha, tela e PDF leem primeiro `detalhe`, com fallback para `ocorrencias` **do item**. O C5 atual tem `detalhe`, e `lista()` atribui `ocorrencias=1` a cada assinatura de cadastro. A previsão do brief de mudança no número exibido na tela e no PDF não se confirma para o agregado `ocorrencias` no HEAD. `templates/escala/cadastro_x_realidade.html:20,31` · `escala/services/cadastro_realidade.py:180-181,1018-1020,1052-1058,1197-1206`
 
 ## 24/11 04:07 · sessao 0d2157c46e78 · RESOLVER-PASSA-NA-FRENTE · verificador · origem=Code
 
@@ -836,16 +934,4 @@ As linhas somam **81267 minutos brutos**, um a mais que os **81266** do `UNIVERS
 - **4b.** A fixture herdada lê o relógio real antes do `freeze_time` dos métodos. `setUpTestData` cria o vínculo, cujo `post_save` chama `invalidar_previsto`, que avalia `timezone.now()`. Efeito nas asserções [nao verificado]. `app/chamados/tests/test_e4c_b2_cerca_retratar.py:116`, `app/chamados/tests/_vinculo_do_dia.py:25`, `app/escala/signals.py:137`, `app/ponto/services/fechamento.py:1607`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:223`
 - **3, E′, 4a e F — SEM ACHADO adicional.** `A,B,A` segue o contrato de registrar mudanças. A corrida continua possível entre leitura e escrita e já está anotada para a ativação. O ramo aceita `modelo` genérico, com dois modelos exercitados e exigência de lista fechada [nao verificado]. O ponto cego de `getattr` e `**kwargs` é real, com uso efetivo [nao verificado]. As tags de M1 e CERCA são compartilhadas dentro de cada caso, e o teste exige `AssertionError` com a tag esperada. O resultado de **H** consta do anexo para `4346eddae`. Confirmação independente e resultado no delta [nao verificado]. `app/chamados/reconciliador.py:468`, `app/chamados/reconciliador.py:519`, `app/chamados/reconciliador.py:525`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:473`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:521`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:538`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:583`
 
-## 24/11 01:29 · sessao 68876d82a44d · - · - · origem=Ronald (tmux)
-
-**4. PROCEDE em E e 4b, com alcance limitado.**
-
-- **E — PROCEDE.** O ramo de item introduz uma captura na leitura de deduplicação. A leitura sem `alvo` pode propagar a exceção. Com `alvo`, `engolir` captura, registra e devolve `False`. O best-effort de `evento` já cobria a escrita. Autorização literal do corte para essa captura e efeito em produção [nao verificado]. `app/chamados/reconciliador.py:505-532`, `app/core/observ.py:73-105`.
-- **4b — PROCEDE.** A fixture herdada cria um vínculo antes do `freeze_time(T0)`. O `post_save` desse vínculo chama `invalidar_previsto`, que avalia `timezone.now()`. Os corpos dos testes novos estão congelados. Dependência das asserções do horário real [nao verificado]. `app/chamados/tests/test_e4c_b2_cerca_retratar.py:116-128`, `app/chamados/tests/_vinculo_do_dia.py:25-26`, `app/escala/signals.py:137-146`, `app/ponto/services/fechamento.py:1607-1613`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:102,217-244`.
-- **3 — SEM ACHADO adicional.** `A,B,A` dá três linhas por construção, conforme a regra de gravar as mudanças. A corrida continua possível porque a leitura precede o insert sem trava ou unicidade nessa chave. O censo local mostrou os seis chamadores diretos e nenhum passa `alvo`. Ocorrência concorrente em produção [nao verificado]. `app/chamados/reconciliador.py:466-482,525-531`, `app/core/models.py:285-316`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:620-640`.
-- **E′ — SEM ACHADO.** O modelo do item é genérico, e o próprio teste usa `PerguntaDisputa` e `ChamadoColaborador`. Uma lista obrigatória de modelos [nao verificado]. `app/chamados/reconciliador.py:516-531`, `app/chamados/tests/test_e4c_b2b_f0_espinha.py:473-488`.
-- **4a — SEM ACHADO adicional.** Confirmei em memória os dois pontos cegos. `getattr` com nome literal passa despercebido e o desempacotamento de `alvo` aparece como lista vazia de argumentos nomeados. Uso efetivo dessas formas para ativar a fatia [nao verificado]. `app/chamados/tests/test_e4c_b2b_f0_espinha.py:570-595,614-640`.
-- **F — NAO PROCEDE como vacuidade.** Cada tag admite mais de uma asserção, porém o executor exige `AssertionError` com a tag no caso designado. Ligando o coletor em `M1`, a porta devolve uma recusa falsy e a primeira asserção falha. O mutante `CERCA` remove a guarda e provoca o veto esperado pelo caso. `app/chamados/tests/test_e4c_b2b_f0_espinha.py:55-61,91-93,341-354,410-422,521-545`, `app/chamados/reconciliador.py:408-409`.
-- **H — SEM ACHADO.** O anexo informa o resultado para `4346eddae`. A execução histórica e o resultado da suíte no delta ficam [nao verificado].
-
-_8040 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8041 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

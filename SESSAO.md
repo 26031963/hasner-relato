@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 08:32:47.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (1.3 MB). Acoes na janela: **36**.
+**Medido em 24/11/2026 08:38:42.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (2.1 MB). Acoes na janela: **40**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:38:34 | Bash | Read rest of CLASSE-D brief | `cd /home/ronald/saas-hasner; sed -n 50,115p logs/CLASSE-D/brief/brief.md \| cut -c1-600` |
+| 08:38:31 | Bash | Find open questions and backlog row for CLASSE-D | `cd /home/ronald/saas-hasner; grep -n 'D1\\|D2\\|LU2-08\\|LU2-07\\|perguntas de lei\\|## ' logs/CLASSE-D/brief/brief.md \| cut -c1-350 \| head -40; wc -l logs/CLASSE-D/brief/brief.md; grep -n 'LU2-08\\|LU2-07' app/docs/CORTES.md app/docs/PROMPTS.md \| cut -c1-300 \| tail -6; grep -n 'CLASSE-D' app/docs/BACKLOG.md \| cut -c1-400` |
+| 08:38:24 | Bash | Confer Codex sample and check intersection with other lanes | `cd /home/ronald/saas-hasner; sed -n 176,182p app/escala/services/cadastro_realidade.py; echo ---; sed -n 1018,1027p app/escala/services/cadastro_realidade.py; echo ---; sed -n 1079p app/escala/services/cadastro_realidade.py; echo ---; sed -n 515,521p app/chamados/services/vigia_fio.py; echo ---; for w in ~/wt-atela-004739 ~/wt-janela-turno-020503; do echo "== $w"; git -C $w diff --stat 327da9db7 2 ...` |
+| 08:38:16 | Bash | Read Codex censo result | `cd /home/ronald/saas-hasner/logs/CLASSE-D/v2411; tail -3 censo.out; wc -c censo.r; cat censo.r \| cut -c1-400 \| head -120` |
 | 08:32:27 | Bash | Record RESOLVER RED result in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') i=next(k for k,l in enumerate(L) if l.startswith('DESPACHO RESPOSTAS-1-11-V2-2411-0830')) L.insert(i+1,"RESOLVER v0815 RED (08:5x, logs/RESOLVER-PASSA-NA-FRENTE/v0815/red_a8b.log): codigo a8b + testes novos = FAILED (failures=15) Ran 162 rc=1, os 4 itens vermelhos pelo motivo certo (3 testes 4b; hist ...` |
 | 08:32:14 | Bash | Wait for Codex censo to finish | `while kill -0 711224 2>/dev/null; do /usr/bin/sleep 30; done; tail -3 /home/ronald/saas-hasner/logs/CLASSE-D/v2411/censo.out; wc -c /home/ronald/saas-hasner/logs/CLASSE-D/v2411/censo.r` |
 | 08:32:12 | Bash | Find Codex censo wrapper pid | `pgrep -f 'codex_pergunta.sh --anexo logs/CLASSE-D' \| head -3` |
