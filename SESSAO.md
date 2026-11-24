@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 23:44:56.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (11.4 MB). Acoes na janela: **313**.
+**Medido em 23/11/2026 23:50:57.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (11.4 MB). Acoes na janela: **316**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:45:21 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('ESPERANDO: Codex verificador NOTURNO')][0] L[i]='NOTURNO-NAO-APURADO volta 5 REPROVADA pelo Codex verificador (verif5.r 23:44, procedente, triagem_v5.txt): a cauda desconta o envelope BRUTO do fechado (2x 30 min fora no proprio RED; 0x 60 trab/noturno na pausa; 0x  ...` |
+| 23:45:17 | SendMessage |  | `-` |
+| 23:45:05 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v5; python3 bin/disjuntor.py --triagem $D/verif5.r procedente; cat > $D/triagem_v5.txt <<'EOF' TRIAGEM verif5.r (NOTURNO-NAO-APURADO volta 5, 1b62f9965) -- 23/11 ~23:5x Amostra conferida no codigo: motor_calculo_v2.py:2625-2626 (_fechados_a = entrada/saida BRUTAS, nao efetivo/pausa do fechado) e :2662-2664 (flag armada sem try/finally) -- PROCEDE. PROCE ...` |
 | 23:44:52 | Bash |  | `cd ~/wt-noturno-aberto-162231/app; sed -n 2620,2680p ponto/motor_calculo_v2.py` |
 | 23:44:49 | Bash |  | `cd ~/saas-hasner; grep -n "^def triagem" -A22 bin/disjuntor.py \| head -30` |
 | 23:44:46 | Bash |  | `cd ~/saas-hasner; grep "NOTURNO-NAO-APURADO" logs/codex/triagem.log \| tail -8; grep -n "'--triagem'" -A6 bin/disjuntor.py \| head -12` |
