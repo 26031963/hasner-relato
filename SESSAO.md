@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 09:14:56.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (3.8 MB). Acoes na janela: **92**.
+**Medido em 24/11/2026 09:20:58.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (3.9 MB). Acoes na janela: **98**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:15:47 | Bash | Wait for the real Codex wrapper pid | `while kill -0 849077 2>/dev/null; do /usr/bin/sleep 20; done; cd /home/ronald/saas-hasner; tail -3 logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915/censo.wrap.log; wc -l logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915/censo.r` |
+| 09:15:44 | Bash | Check if the Codex wrapper is still alive | `ps -o pid,etime,cmd -p 849077 2>&1 \| cut -c1-150; pgrep -af codex \| grep -v pgrep \| cut -c1-150 \| head` |
+| 09:15:40 | Bash | Inspect Codex censo failure | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b6d3pq46u.output; tail -8 logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915/censo.wrap.log; ls -la logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915/` |
+| 09:15:31 | Bash | Wait for Codex censo to finish | `while kill -0 849072 2>/dev/null; do /usr/bin/sleep 20; done; cd /home/ronald/saas-hasner; tail -3 logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915/censo.wrap.log; wc -l logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915/censo.r` |
+| 09:15:13 | Bash | Launch Codex censo for A-TELA option (a) | `cd /home/ronald/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915; mkdir -p $D; cat > $D/censo.q <<'EOF' Censo pela regra, sem hipotese de quem pergunta. Codigo no commit da copia (32e4bd52a). Responda com arquivo:linha para cada afirmacao. Contexto do pedido: um dia com protesto FURO_PARCIAL de "batida sem par" (todas as lampadas da ata acesas, mas sobra uma batida que nao forma par) deve RETER  ...` |
+| 09:15:00 | Bash | Check codex wrapper usage | `cd /home/ronald/saas-hasner; sed -n '1,40p' bin/codex_pergunta.sh \| grep -n 'uso\\|CODEX_\\|--anexo\\|--sonda' \| head -15` |
 | 09:14:55 | Bash | Fix A-TELA row column layout | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') c=L[1980].split('\|'); assert c[1].strip()=='A-TELA-DO-DIA-LE-UM-JUIZ' and len(c)==7 new=c[5].rstrip().rstrip('\|').rstrip()+'; antes: '+c[4].strip()[:120]+' ' L[1980]='\|'.join(c[:4]+[new,'']) open(p,'w').write('\n'.join(L)) EOF sed -n 1981p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; print subs ...` |
 | 09:14:49 | Bash | Inspect A-TELA row columns | `cd /home/ronald/saas-hasner; sed -n 1981p app/docs/BACKLOG.md \| awk -F'\|' '{for(i=1;i<=NF;i++) print i": ["substr($i,1,90)"]"}'; git diff app/docs/BACKLOG.md \| grep '^-\| A-TELA' \| awk -F'\|' '{print NF; print "last: "$NF; print "5: "substr($5,1,200)}'` |
 | 09:14:46 | Bash | Update A-TELA row; find its briefs | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys; h=sys.argv[1]; p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') r=L[1980]; c=r.split('\|'); assert c[1].strip()=='A-TELA-DO-DIA-LE-UM-JUIZ' c[5]=' (10)=(a) por aval RESPOSTAS-ATELA-E-VINTE-2411-0915 (%s): marco "batida sem par" no escritor unico, dia RETEM com chamado, selo MORDE original, col348 junto; copia 32 ...` |
