@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 12:11:00.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (15.9 MB). Acoes na janela: **422**.
+**Medido em 24/11/2026 12:16:55.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (16.0 MB). Acoes na janela: **431**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:14:38 | Bash | Register BACKLOG item and PROMPTS line | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n') i=max(n for n,l in enumerate(L) if l.startswith('\| UI-EDITOR-CAL-ESPERA-NOMEIA-TESTE')) L.insert(i+1,"\| UI-VALIDADO-POR \| cartao da pergunta mostra QUEM validou: hoje nenhum template le PerguntaDisputa.validada_por \| FILA 2 tela, SEM VAGA (so registro), mao dupla \| aval SMOKE-F5-OK-2411-1215 \| aberto \| ...` |
+| 12:14:32 | Bash | Regenerate AVAIS and locate BACKLOG/PROMPTS anchors | `cd ~/saas-hasner; python3 bin/gerar_avais.py --escrever; git diff --stat app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md; grep -n '^## OBRAS\\|^\| *UI-' app/docs/BACKLOG.md \| head -5; tail -n 3 app/docs/PROMPTS.md \| cut -c1-200` |
+| 12:14:29 | Edit |  | `/home/ronald/saas-hasner/app/docs/PENDENTES_RONALD.json` |
+| 12:14:27 | Edit |  | `/home/ronald/saas-hasner/app/docs/PENDENTES_RONALD.json` |
+| 12:14:24 | Read |  | `/home/ronald/saas-hasner/app/docs/PENDENTES_RONALD.json` |
+| 12:14:23 | Bash | See answered smoke entry format | `cd ~/saas-hasner; sed -n 3118,3128p app/docs/PENDENTES_RONALD.json; git status --porcelain app/docs/PENDENTES_RONALD.json app/docs/AVAIS.md` |
+| 12:14:20 | Bash | Read gerar_avais main | `cd ~/saas-hasner; sed -n 94,140p bin/gerar_avais.py; grep -rln 'respondido_em' bin/*.py \| head` |
+| 12:14:18 | Bash | Inspect pendente entry and gerar_avais interface | `cd ~/saas-hasner; sed -n 3128,3150p app/docs/PENDENTES_RONALD.json; grep -n 'def main\\|argparse\\|add_argument\\|baixa\\|resolvid' bin/gerar_avais.py \| head -30` |
+| 12:14:16 | Bash | Find where the F5 smoke pendente lives | `cd ~/saas-hasner; grep -rn 'SMOKE-FIO-LE-O-JUIZ-MODAL' --include=*.json --include=*.py --include=*.md . 2>/dev/null \| grep -v '^./logs' \| cut -c1-250 \| head; ls app/docs/PENDENTES_RONALD.json 2>/dev/null; git log --oneline -3 --all -S'SMOKE-' -- app/docs/PENDENTES_RONALD.json \| head` |
 | 11:53:59 | Bash | Add PONTA design question to RELATO top | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[17].startswith('lei: A-TELA col348') L.insert(17,"PERGUNTA DE DESENHO PONTA-PEQUENA-NA-BORDA item 3 (11:5x; aval PONTA 'segue para a classe (evento)'): o dia de ponta pequena fica ELEGIVEL so pelo RELOGIO -- sonda_relogio.py (sombra, rc 0, 21-23/11): 47/47 dias ate o limite sem decisao (emp2=37 emp3=9 ...` |
 | 11:53:51 | Bash | Locate RELATO top lines | `cd ~/saas-hasner; grep -n '^PAREI\\|^lei:\\|^PERGUNTA DE DESENHO' app/docs/RELATO.md \| head` |
 | 11:53:49 | Bash | Read timing sonda output | `cd ~/saas-hasner; tail -n 25 logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.out` |
