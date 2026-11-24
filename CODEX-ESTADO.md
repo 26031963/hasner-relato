@@ -1,7 +1,189 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 16:51** · publicado em **24/11/2026 16:55** (UTC-3)
+> Ultima resposta processada: **24/11/2026 16:57** · publicado em **24/11/2026 17:02** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 16:57 · sessao 6fb75020db7e · PONTA-PEQUENA-NA-BORDA · construtor · origem=Code
+
+Cura aplicada na worktree sobre `a6fa3a5d94a8f9f8f2ea1de9f05342314a4a74a4`. O diff passa em `git diff --check` e acrescenta **0 `except`**. `chamados/reconciliador.py:1388`, `ponto/services/ponta_pequena.py:83`, `ponto/services/vigia_de_hora.py:98`, `ponto/tests/test_ponta_pequena_prazo_evento.py:156`
+
+**Escolha (i)**  
+O consumidor julga cada dia no maior instante entre o início do consumo e o `criado_em` dos eventos daquele dia. O cálculo dos minutos usa o mesmo instante. `ponto/services/ponta_pequena.py:74`, `ponto/services/ponta_pequena.py:91`, `ponto/services/ponta_pequena.py:111`  
+O vigia exclui os mortos antes do `Max('criado_em')`, usando o mesmo filtro da contagem do outbox. `chamados/reconciliador.py:1388`, `ponto/services/vigia_de_hora.py:104`  
+A opção mantém a leitura de `DecisaoHE` vigente em `motivo_de_nao_decidir` e usa o juiz de encerramento já chamado pelos dois caminhos. `ponto/services/ponta_pequena.py:53`, `ponto/services/ponta_pequena.py:60`, `ponto/services/vigia_de_hora.py:111`
+
+### RED, GREEN e mutantes
+
+Os comandos Django pararam no `import django.core`, antes de executar os testes. **RED e GREEN integrados [nao verificado].** O resultado abaixo é da reprodução em memória, executada sobre as funções da cópia com juiz, ORM e portas simulados. `manage.py:11`, `ponto/services/ponta_pequena.py:83`, `ponto/services/vigia_de_hora.py:87`
+
+| Execução em memória | Saída observada |
+|---|---|
+| RED, antes da cura | `Ran 2 tests in 0.000s` · `FAILED (failures=2)`. Em (a), zero recusa e `prazo_ja_emitido=1`. Em (b), os contadores deram `(0, 1)` em vez de `(1, 0)`. `ponto/tests/test_ponta_pequena_prazo_evento.py:156`, `ponto/tests/test_ponta_pequena_prazo_evento.py:188` |
+| GREEN, com a cura | `Ran 2 tests in 0.000s` · `OK`. `ponto/services/ponta_pequena.py:111`, `ponto/services/vigia_de_hora.py:104` |
+| Mutante (a) | Trocar a atribuição por `agora_por_data[e.data] = agora` fez o caso (a) voltar a perder a recusa. `Ran 1 test in 0.000s` · `FAILED (failures=1)`. Teste integrado correspondente `test_RED_evento_pos_encerramento_com_consumidor_iniciado_antes`. `ponto/services/ponta_pequena.py:117`, `ponto/tests/test_ponta_pequena_prazo_evento.py:156` |
+| Mutante (b) | Remover `.exclude(filtro_evento_morto())` fez o caso (b) voltar a suprimir a emissão. `Ran 1 test in 0.000s` · `FAILED (failures=1)`. Teste integrado correspondente `test_RED_evento_morto_pos_encerramento_nao_suprime_prazo`. `ponto/services/vigia_de_hora.py:106`, `ponto/tests/test_ponta_pequena_prazo_evento.py:188` |
+
+Comandos para o Code rodar em `app/`. O GREEN inclui os dois módulos de `chamados.tests` encontrados com import direto. A certificação fica com o Code e o opus final. `config/settings/ci.py:6`, `chamados/tests/test_e4a2_disparar_e_vigia.py:503`, `chamados/tests/test_pergunta_do_dia_em_curso.py:326`, `docs/LEIS.md:147`
+
+```bash
+classe=ponto.tests.test_ponta_pequena_prazo_evento.DiurnoQueFechaDepoisDoRetratoTest
+a="$classe.test_RED_evento_pos_encerramento_com_consumidor_iniciado_antes"
+b="$classe.test_RED_evento_morto_pos_encerramento_nao_suprime_prazo"
+
+# RED com os testes e o código de negócio da base [nao verificado]
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput "$a" "$b"
+
+# GREEN com a cura
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput \
+  ponto.tests.test_ponta_pequena_prazo_evento \
+  ponto.tests.test_o214_ponta_pequena \
+  chamados.tests.test_e4a2_disparar_e_vigia \
+  chamados.tests.test_pergunta_do_dia_em_curso
+
+# Mutante (a) isolado
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput "$a"
+
+# Mutante (b) isolado
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput "$b"
+```
+
+### Leitores dos campos
+
+- **`EventoCelula.data`, `colaborador_id`, `criado_em`** — o consumidor ordena e agrupa o lote, a fábrica lê as datas, a ponta pequena calcula o instante por dia, o vigia agrega por par e a medição de idade lê o evento mais velho. A foto E4B lê todos os campos concretos. `chamados/reconciliador.py:1403`, `chamados/reconciliador.py:1486`, `chamados/services/fabrica_da_celula.py:297`, `ponto/services/ponta_pequena.py:117`, `ponto/services/vigia_de_hora.py:104`, `chamados/services/foto_e4b.py:247`, `chamados/services/foto_e4b.py:270`
+- **`EventoCelula.processado_em`, `tentativas`** — pendentes, mortos, supressão e retenção leem esses campos. O consumidor grava a baixa ou incrementa as tentativas. Os dois comandos de chamados leem as contagens resultantes. `chamados/reconciliador.py:1382`, `chamados/reconciliador.py:1388`, `chamados/reconciliador.py:1541`, `chamados/reconciliador.py:1556`, `ponto/services/vigia_de_hora.py:106`, `chamados/management/commands/consumir_eventos_celula.py:36`, `chamados/management/commands/reconciliar_chamados.py:113`
+- **`DecisaoHE.data`, `estado`, `origem`** — os testes conferem a recusa gravada pela porta existente. O pré-filtro, a porta, o lavrador, a Gestão de HE, o espelho, o motor e o portão do TXT consultam a decisão. `ponto/tests/test_ponta_pequena_prazo_evento.py:156`, `ponto/services/ponta_pequena.py:53`, `ponto/portas/he.py:352`, `ponto/portas/he.py:379`, `ponto/management/commands/lavrar_he_pendente.py:48`, `ponto/services/gestao_he.py:69`, `ponto/services/espelho.py:943`, `ponto/motor_calculo_v2.py:1397`, `folha/porta_export.py:686`
+
+Eventos que a versão anterior já baixou continuam elegíveis para a supressão enquanto estiverem retidos. A ocorrência desse estado em produção fica [nao verificado]. `chamados/reconciliador.py:1391`, `chamados/reconciliador.py:1556`, `ponto/services/vigia_de_hora.py:104`
+
+<details>
+<summary>Diff unificado aplicado na worktree</summary> [nao verificado]
+
+```diff
+diff --git a/app/chamados/reconciliador.py b/app/chamados/reconciliador.py
+index 2d4a68f90..ac458af42 100644
+--- a/app/chamados/reconciliador.py
++++ b/app/chamados/reconciliador.py
+@@ -1387,0 +1388,6 @@ def eventos_pendentes():
++def filtro_evento_morto():
++    """Evento sem baixa que esgotou as tentativas do outbox."""
++    from django.db.models import Q
++    return Q(processado_em__isnull=True, tentativas__gte=MAX_TENTATIVAS_EVENTO)
++
++
+@@ -1391 +1397 @@ def eventos_mortos():
+-    return EventoCelula.objects.filter(processado_em__isnull=True, tentativas__gte=MAX_TENTATIVAS_EVENTO).count()
++    return EventoCelula.objects.filter(filtro_evento_morto()).count()
+diff --git a/app/ponto/services/ponta_pequena.py b/app/ponto/services/ponta_pequena.py
+index 202a20337..81d08e240 100644
+--- a/app/ponto/services/ponta_pequena.py
++++ b/app/ponto/services/ponta_pequena.py
+@@ -12 +12 @@ AGORA o dono do RELOGIO e um so (`ponto/services/vigia_de_hora.py::rodar`, papel
+-`ponto/turnos.py::dia_encerrado` diz que o dia acabou e nenhum evento do par nasceu DEPOIS disso, ele emite o
++`ponto/turnos.py::dia_encerrado` diz que o dia acabou e nenhum evento nao morto do par nasceu DEPOIS disso, ele emite o
+@@ -70 +70 @@ def minutos_do_dia(colaborador, data, agora, *, cache=None):
+-    guarda o espelho por (colab, competencia) dentro de um lote."""
++    guarda o espelho por (colab, competencia, instante) dentro de um lote."""
+@@ -74 +74 @@ def minutos_do_dia(colaborador, data, agora, *, cache=None):
+-    _k = (colaborador.pk, ini, fim)
++    _k = (colaborador.pk, ini, fim, agora)
+@@ -83 +83 @@ def minutos_do_dia(colaborador, data, agora, *, cache=None):
+-def decidir_dias(colaborador, datas, agora):
++def decidir_dias(colaborador, datas, agora, *, agora_por_data=None):
+@@ -90,0 +91 @@ def decidir_dias(colaborador, datas, agora):
++    agora_por_data = agora_por_data or {}
+@@ -92 +93,2 @@ def decidir_dias(colaborador, datas, agora):
+-        _mot = motivo_de_nao_decidir(colaborador, data, agora, memo=memo)
++        agora_do_dia = agora_por_data.get(data, agora)
++        _mot = motivo_de_nao_decidir(colaborador, data, agora_do_dia, memo=memo)
+@@ -96 +98 @@ def decidir_dias(colaborador, datas, agora):
+-        _m = minutos_do_dia(colaborador, data, agora, cache=cache)
++        _m = minutos_do_dia(colaborador, data, agora_do_dia, cache=cache)
+@@ -112 +114,5 @@ def decidir_eventos(colaborador, lote, agora):
+-    return decidir_dias(colaborador, [e.data for e in lote], agora)['recusados']
++    # Um lote pode trazer evento criado depois do inicio do consumidor.
++    agora_por_data = {}
++    for e in lote:
++        agora_por_data[e.data] = max(agora_por_data.get(e.data, agora), e.criado_em)
++    return decidir_dias(colaborador, agora_por_data, agora, agora_por_data=agora_por_data)['recusados']
+diff --git a/app/ponto/services/vigia_de_hora.py b/app/ponto/services/vigia_de_hora.py
+index 9a47e4656..483145460 100644
+--- a/app/ponto/services/vigia_de_hora.py
++++ b/app/ponto/services/vigia_de_hora.py
+@@ -14 +14 @@ Event): este e o RELOGIO UNICO da casa para o fim do dia. Quando o juiz `ponto/t
+-acabou e nenhum `EventoCelula` do par nasceu DEPOIS disso, `_emitir_no_prazo` emite UM pela porta unica
++acabou e nenhum `EventoCelula` nao morto do par nasceu DEPOIS disso, `_emitir_no_prazo` emite UM pela porta unica
+@@ -90,2 +90,2 @@ def _emitir_no_prazo(cels, agora, tot):
+-    IDEMPOTENCIA PELO FATO, nao por marca nova: o par ja tem evento nascido DEPOIS do encerramento
+-    (`dia_encerrado(..., agora=criado_em do ultimo)`) -> nada a emitir, porque o consumidor que o le ja ve o dia acabado
++    O par ja tem evento processado ou com tentativas sobrando, nascido DEPOIS do encerramento
++    (`dia_encerrado(..., agora=criado_em do ultimo)`) -> nada a emitir: o consumidor julga a partir do carimbo do evento
+@@ -97,0 +98 @@ def _emitir_no_prazo(cels, agora, tot):
++    from chamados.reconciliador import filtro_evento_morto
+@@ -104,0 +106 @@ def _emitir_no_prazo(cels, agora, tot):
++        .exclude(filtro_evento_morto())
+diff --git a/app/ponto/tests/test_ponta_pequena_prazo_evento.py b/app/ponto/tests/test_ponta_pequena_prazo_evento.py
+index 41bbcae95..cc595faec 100644
+--- a/app/ponto/tests/test_ponta_pequena_prazo_evento.py
++++ b/app/ponto/tests/test_ponta_pequena_prazo_evento.py
+@@ -128 +128 @@ class DiurnoQueFechaDepoisDoRetratoTest(_Base):
+-            self._celula_e_batidas(self.BATIDAS)
++            cel = self._celula_e_batidas(self.BATIDAS)
+@@ -130,0 +131 @@ class DiurnoQueFechaDepoisDoRetratoTest(_Base):
++        return cel
+@@ -154,0 +156,50 @@ class DiurnoQueFechaDepoisDoRetratoTest(_Base):
++    def test_RED_evento_pos_encerramento_com_consumidor_iniciado_antes(self):
++        from chamados import reconciliador
++        from ponto.models import DecisaoHE
++        from ponto.portas.celula import emitir_evento_celula
++
++        cel = self._dia_de_manha_consumido()
++        antes = _instante(D, 18) - datetime.timedelta(seconds=10)
++        depois = _instante(D, 18) + datetime.timedelta(seconds=10)
++        ler_pendentes = reconciliador.eventos_pendentes
++        evento = None
++
++        def ler_lote():
++            nonlocal evento
++            if evento is None:
++                # O consumidor ja capturou seu instante. O evento entra na fila antes da leitura do lote.
++                relogio.move_to(depois)
++                evento = emitir_evento_celula(cel)
++            return ler_pendentes()
++
++        with freeze_time(antes) as relogio, \
++                mock.patch.object(reconciliador, 'eventos_pendentes', side_effect=ler_lote), \
++                mock.patch('ponto.services.espelho.espelho_do_colab', return_value=_esp(D, 9)):
++            out = reconciliador.consumir_eventos_celula()
++        self.assertEqual(evento.criado_em, depois)
++        evento.refresh_from_db()
++        self.assertIsNotNone(evento.processado_em, out)
++
++        r = self._vigia(D, 18, 50)
++        out_seguinte, _ = self._consumir(D, 18, 51)
++        self.assertEqual([(x.data, x.estado, x.origem) for x in self._decisoes()],
++                         [(D, DecisaoHE.NAO, DecisaoHE.ORIGEM_SISTEMA)], (out, r, out_seguinte))
++
++    def test_RED_evento_morto_pos_encerramento_nao_suprime_prazo(self):
++        from chamados.reconciliador import MAX_TENTATIVAS_EVENTO, eventos_mortos
++        from ponto.models import DecisaoHE
++        from ponto.portas.celula import emitir_evento_celula
++
++        cel = self._dia_de_manha_consumido()
++        with freeze_time(_instante(D, 18, 40)):
++            morto = emitir_evento_celula(cel)
++            morto.tentativas = MAX_TENTATIVAS_EVENTO
++            morto.save(update_fields=['tentativas'])
++        self.assertEqual(eventos_mortos(), 1)
++
++        r = self._vigia(D, 18, 50)
++        self.assertEqual((r.get('prazo_eventos', 0), r.get('prazo_ja_emitido', 0)), (1, 0), r)
++        out, _ = self._consumir(D, 18, 51)
++        self.assertEqual([(x.data, x.estado, x.origem) for x in self._decisoes()],
++                         [(D, DecisaoHE.NAO, DecisaoHE.ORIGEM_SISTEMA)], out)
++
+```
+
+</details>
 
 ## 24/11 16:51 · sessao e8deac470600 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
 
@@ -715,34 +897,4 @@ PYTHONDONTWRITEBYTECODE=1 CHAMADO_PRESO_MUTANTE=sem_alarme_da_classe python3 pon
 
 LEI-AKITA: origem=ponto/services/cartorio.py:1609, testemunha=ponto/services/lastro.py:98, RED=ponto/tests/test_chamado_preso_classe.py:174, quem-mais-le=ponto/management/commands/processar_cartorio.py:65 e ponto/management/commands/fechar_cobranca_com_lastro.py:80, juizes novos=0, padrao=escritor unico (docs/GLOSSARIO.md:12)
 
-## 24/11 11:38 · sessao 352238a8beea · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
-
-**Pré-verificação reprovada no item (10).** A abertura pelo funil existente e a retenção isolada estão na cópia. O fecho e a reabertura ainda podem decidir contra o sinal da própria ata, e uma célula já carimbada pode continuar retida sem chamado. O item (11) implementa o limite inclusivo de 10 minutos no classificador. `app/ponto/services/cartorio.py:1504`, `app/ponto/services/cartorio.py:1930`, `app/chamados/models.py:1352`, `app/folha/export.py:1295`, `app/ponto/supra_juiz.py:526`.
-
-## Achados
-
-1. **Bloqueia — o gate de fecho e reabertura pode contrariar o lastro.** Para um chamado `batida_sem_par`, `marcos_acesos=False` e `marcos_inexistentes=False` deixam `premissa_regularizada` cair em `_celula_furada`. Com todas as lâmpadas acesas e sem órfã **da grade**, esse leitor dá o dia por regularizado mesmo com `ata.sem_par='E'`. Confirmei o contraexemplo em memória com as funções da cópia: `False`, `False`, `True`, respectivamente. O `True` autoriza o gate de reconciliação, sujeito às demais guardas, e recusa o renascimento de um encerrado. A materialização chega a esse gate pelo fecho do destino e dos clones. Isso viola a autoridade da lâmpada para esse marco (**L-061**) e deixa a idempotência do fluxo completo em aberto (**L-099**). `app/ponto/services/lastro.py:124`, `app/ponto/services/lastro.py:189`, `app/chamados/juizes.py:554`, `app/chamados/models.py:804`, `app/chamados/models.py:1352`, `app/chamados/models.py:1414`, `app/chamados/services/materializacao.py:1351`, `app/docs/LEIS.md:95`, `app/docs/LEIS.md:122`.
-
-2. **Bloqueia — a ata confunde “sem par de fato”, “sem protesto” e “sem observação”.** O cartório grava `E`, `S` ou `ES` do pareador, antes de classificar. O classificador pode calar o protesto por dia cheio, inclusive com a tolerância do item (11), enquanto o lastro continua lendo o sinal como cobrança pendente. No outro sentido, chave ausente com lâmpadas vira `True`, embora a chave também falte em ata legada e quando o turno ainda não encerrou. O teto pode deixar lâmpadas pendentes e mesmo assim o lastro aceita a ausência da chave como resolução. É uma falha de **L-061** e de **L-073** no fecho. Além disso, o chamado guarda o PK da batida, mas o fecho só compara o tipo. Se a E cobrada forma par e outra E sobra no mesmo dia, o lastro mantém o marco antigo pendente, e a nota de fecho afirma que a batida formou par sem conferir sua identidade. `app/ponto/services/cartorio.py:816`, `app/ponto/services/cartorio.py:959`, `app/ponto/services/cartorio.py:1228`, `app/ponto/services/cartorio.py:1531`, `app/ponto/services/cartorio.py:2061`, `app/ponto/supra_juiz.py:527`, `app/ponto/services/lastro.py:70`, `app/ponto/services/lastro.py:189`, `app/ponto/services/lastro.py:383`, `app/docs/LEIS.md:95`, `app/docs/LEIS.md:100`.
-
-3. **Bloqueia — o caminho normal pode preservar o estoque retido sem chamado.** A impressão já carrega `sem_par:E/S/ES`. Uma célula lavrada com esse sinal e com os mesmos insumos passa pela guarda de impressão igual antes de chegar à emissão ou à nova ata. O cron roda sem `--forcar`. A folha retém pelo veredito e pelos protestos, independentemente de haver chamado. O passivo força a leitura, mas mede só a competência corrente e pula portas excluídas. Também há um caminho de emissão que consulta o **veredito gravado** antes de lavrar o novo, de modo que um veto da foto anterior pode impedir a abertura nessa passada. Para os **18 dias** e os **21 de col348**, a guarda efetiva, o dono de cada resíduo e o resultado após duas rodadas estão **[nao verificado]**. `app/ponto/services/cartorio.py:601`, `app/ponto/services/cartorio.py:1493`, `app/ponto/services/cartorio.py:1504`, `app/ponto/services/cartorio.py:1945`, `app/ponto/services/cartorio.py:1967`, `app/config/crons.py:616`, `app/ponto/marcos.py:154`, `app/ponto/management/commands/detectar_ausencias.py:632`, `app/ponto/services/furos_sem_cobranca.py:59`, `app/ponto/services/furos_sem_cobranca.py:117`, `app/folha/export.py:1285`.
-
-4. **Bloqueia — a seleção de marcos permite perder a batida sem par ou usar o novo marco como fallback.** Quando sobra um marco convencional nomeável, ele toma toda a lista. Se há lâmpada apagada, mas ela foi descartada por falta de instante na cadeia ou de motivo, `if not nomeados` também entra no ramo criado para “todas acesas”. E, quando já há um vivo de outro módulo de furo, `not vivos` barra a abertura, mas o espelho só atualiza `batida_ausente`. A folha ainda pode dispensar um `FURO_PARCIAL` com `ata.sem_par` presente quando só as lâmpadas da pausa estão apagadas. A **L-033** está preservada para a pausa isolada. A condição atual também concede a dispensa nessa combinação, sem distinguir se há outro furo a cobrar. Alcance na frota **[nao verificado]**. `app/ponto/services/cartorio.py:145`, `app/ponto/services/cartorio.py:1945`, `app/ponto/services/cartorio.py:2053`, `app/folha/export.py:1148`, `app/folha/export.py:1173`, `app/ponto/juiz_batida.py:254`, `app/docs/LEIS.md:81`.
-
-5. **Bloqueia — o novo marco muda o caminho do fio e fica invisível aos leitores de ação.** `cobra_marcos_da_ata` usa `_marcos_cobrados`, que agora exclui `batida_sem_par`. Um chamado só com esse marco cai fora do caminho de marcos nomeados e pode seguir a classificação genérica. A fábrica da célula, o fio e a API projetam lâmpadas apagadas, portanto a projeção do próprio dia com todas acesas sai sem o marco novo. `entrada_de_marco` exige motivo igual no formato nomeado, então a materialização de uma pergunta de motivo convencional não recebe esse marco e segue suas regras de tipo pela grade ou pelo motivo. Fio e API, nesses trechos, só projetam. A materialização pode tentar fechar pelo gate do achado 1. Pergunta específica para a batida, porta efetiva de resolução e ausência de duplicatas nesse fluxo **[nao verificado]**. `app/ponto/services/lastro.py:89`, `app/chamados/services/disputa_emissao.py:736`, `app/chamados/services/disputa_emissao.py:1180`, `app/chamados/services/fabrica_da_celula.py:62`, `app/chamados/services/declaracao_texto.py:129`, `app/chamados/services/fio.py:451`, `app/chamados/services/fio.py:495`, `app/api/views.py:1078`, `app/chamados/juizes.py:598`, `app/chamados/juizes.py:625`, `app/chamados/services/materializacao.py:567`, `app/chamados/services/materializacao.py:682`.
-
-6. **Bloqueia — falta prova de retenção com chamado e de idempotência ponta a ponta.** O selo `test_MORDE_dia_com_todas_as_lampadas_acesas_RETEM` está presente e exige `espelho_furo`. A igualdade literal com `f6d97f310` está **[nao verificado]**. O teste da folha fabrica a célula sem o novo sinal e sem chamado. O teste de duas passadas força o cartório e compara status, marcos, ata e contagens de perguntas e notas. Ele não drena o consumidor nem inspeciona a trilha de transições, então uma troca que devolva o mesmo status ou um fecho posterior fica fora da prova. Os selos de hora/tipo e de inexistência exercitam diretamente o lastro, mas não o gate do achado 1. RED anterior, mutantes executados, `trocas_de_estado_em_loop` e duas rodadas completas com zero trocas e zero duplicatas **[nao verificado]**. `app/folha/tests/test_furo_so_intervalo_nao_retem.py:151`, `app/folha/tests/test_a_tela_furo_sem_marco_nao_retem.py:49`, `app/ponto/tests/test_a_tela_sem_par_cobra.py:66`, `app/ponto/tests/test_a_tela_sem_par_cobra.py:77`, `app/ponto/tests/test_a_tela_sem_par_cobra.py:117`, `app/ponto/tests/test_a_tela_sem_par_cobra.py:163`, `app/chamados/reconciliador.py:1499`, `app/docs/LEIS.md:136`.
-
-7. **Fila — regeneração e diagnóstico ainda usam a semântica antiga.** `lastro.julgar` conta um chamado que só tem o novo marco como `sem_marco`, embora o consumidor de eventos use `marcos_acesos` para fechá-lo. `cobranca_orfa` aceita qualquer lista não vazia, então um marco que identifica uma batida também envelhece por reescrita do DNA. Esse leitor só sinaliza e pode segurar a retratação no comando do supra-juiz. Já `reconciliar_grade --apply`, quando encontra a marca de regeneração, compara só horas e pode substituir a lista por marcos previstos. O texto do supra-juiz também pode chamar a hora real de “marco que não existe na escala”. Efeito no estoque **[nao verificado]**. `app/ponto/services/lastro.py:299`, `app/ponto/services/lastro.py:425`, `app/chamados/reconciliador.py:1518`, `app/escala/services/regeneracao.py:141`, `app/ponto/management/commands/supra_juiz.py:264`, `app/ponto/supra_juiz.py:182`, `app/ponto/management/commands/reconciliar_grade.py:442`, `app/ponto/management/commands/reconciliar_grade.py:473`.
-
-## Escritores, leitores e limites do aval
-
-- **Par, dia e relógio.** O pareador continua sendo a autoridade. `_sem_par_por_dia` agrupa pelo `Turno.data_turno` e reaproveita `datas_saida_orfa`. `sem_par_do_pareador` devolve dois booleanos por dia para cartório, supra-juiz e retroativo. `batidas_sem_par_do_pareador` devolve as instâncias ordenadas por timestamp para o cartório. Há **duas varreduras da mesma lista**, pelo mesmo derivador, sem segundo pareamento. O cartório usa o `agora` recebido para o encerramento e publica o sinal na impressão e na ata, gravada pela porta da célula. O retroativo usa os booleanos para classificar, mas só emite `FURO_SEM_COBRANCA`. O sync seleciona pelo dia **civil local** de `ts_efetivo`, que pode divergir do dia do turno. O diff fornecido não acrescenta leitura de relógio nem altera a ordem de travas. `app/docs/JUIZES.md:20`, `app/ponto/turnos.py:234`, `app/ponto/supra_juiz.py:86`, `app/ponto/services/cartorio.py:1213`, `app/ponto/services/cartorio.py:1493`, `app/ponto/portas/celula.py:1126`, `app/ponto/management/commands/supra_juiz.py:120`, `app/ponto/management/commands/emitir_furo_retroativo.py:113`, `app/ponto/services/entrada_sincronizada.py:26`, `app/chamados/models.py:968`, `app/chamados/services/contexto.py:101`.
-
-- **Contexto e porta de escrita.** O cartório monta `{motivo, tipo, hora, batida}`. O funil `detectar_ausencias._abrir_chamado` passa a lista para `ChamadoColaborador.abrir`, que deduplica sob trava. O mesmo funil espelha no vivo pela porta `renovar_contexto`. Para `batida_sem_par`, `hora` é a hora **real** local `HH:MM`, em `America/Sao_Paulo`, e `batida` é o PK. O timestamp integral do primeiro marco vira âncora, é gravado sob `horario_previsto` e alimenta `atraso_min`. Isso dá dois significados aos campos já usados para hora prevista e atraso. A descrição distingue o motivo, mas assunto e push continuam falando de batida ausente e horário previsto. O c2 e `reconciliar_grade` mantêm caminhos legados de abertura pela porta comum. O c2 grava só apagados da ata, `nomear_marco_por_lampada` só atua em lista vazia, e a abertura web genérica não nomeia o novo marco. O diff fornece um único produtor do motivo novo. Unicidade entre módulos e nas duas rodadas completas **[nao verificado]**. `app/ponto/services/cartorio.py:2061`, `app/config/settings/base.py:93`, `app/ponto/management/commands/detectar_ausencias.py:555`, `app/ponto/management/commands/detectar_ausencias.py:583`, `app/ponto/management/commands/detectar_ausencias.py:677`, `app/ponto/management/commands/detectar_ausencias.py:697`, `app/ponto/management/commands/detectar_ausencias.py:779`, `app/chamados/models.py:968`, `app/chamados/reconciliador.py:826`, `app/chamados/reconciliador.py:1032`, `app/ponto/management/commands/reconciliar_grade.py:507`, `app/chamados/management/commands/nomear_marco_por_lampada.py:47`, `app/chamados/services/abertura.py:47`.
-
-- **Quem fecha e quem retém.** `_protesta` lê a ata em curso, o caminho de inexistência rejeita o motivo novo, e o consumidor do reconciliador, o detector e o sync consultam o lastro para o fecho por marco. O reconciliador genérico de premissa não coleta `falta_descoberta` nesse laço, e a retratação por absolvição limita-se a módulos de turno. Na folha, a lavra fornece `veredito` e `protestos`; `_dias_sem_decisao` devolve `espelho_furo`, `classificar_export` o traduz em `furo_espelho`, e o vigia lê a mesma dispensa de pausa. Os dois sítios cuja retirada foi pedida, `nao_retem_sem_chamado` e `ata_toda_acesa`, estão ausentes na cópia (**L-111**). `app/ponto/services/cartorio.py:1560`, `app/ponto/services/cartorio.py:1665`, `app/ponto/services/lastro.py:124`, `app/ponto/services/lastro.py:429`, `app/chamados/reconciliador.py:263`, `app/chamados/reconciliador.py:337`, `app/chamados/reconciliador.py:1118`, `app/ponto/management/commands/detectar_ausencias.py:405`, `app/ponto/services/entrada_sincronizada.py:26`, `app/ponto/portas/celula.py:1127`, `app/folha/export.py:968`, `app/folha/export.py:1293`, `app/folha/services/vigia_pausa.py:125`, `app/docs/LEIS.md:137`.
-
-- **Item (11), leis restantes e pré-requisitos.** O classificador compara previsto menos realizado **em minutos**, lê o `10` do motor e acusa acima de 10 no ramo de sem par com marcos acesos. O selo cobre 10, 11 e a leitura da constante. O trecho preserva o significado de falta decidida (**L-039**) e o tratamento já existente do realizado sem par (**L-102/L-103**). O horizonte **L-124** segue a competência de cada empresa a partir de `2026-11`, por `janela_atual`. Esse recorte por mês não consulta entrega efetiva pelo K6. Integridade do TXT 09/10, igualdade do gravado 09–12, efeito em competência entregue (**L-052/L-092/L-113**), ordem dos três commits, RED e pré-requisitos de pouso **[nao verificado]**. `app/ponto/supra_juiz.py:276`, `app/ponto/supra_juiz.py:526`, `app/ponto/motor_calculo_v2.py:51`, `app/ponto/tests/test_a_tela_dia_cheio_tolerancia.py:49`, `app/folha/export.py:169`, `app/folha/export.py:556`, `app/ponto/services/cartorio.py:316`, `app/ponto/services/cartorio.py:333`, `app/docs/LEIS.md:87`, `app/docs/LEIS.md:128`, `app/docs/LEIS.md:129`, `app/docs/LEIS.md:145`, `CLAUDE.md:383`.
-
-_8078 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8079 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
