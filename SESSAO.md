@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 05:34:10.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.1 MB). Acoes na janela: **518**.
+**Medido em 24/11/2026 05:39:57.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **524**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:39:49 | Bash |  | `cd ~/saas-hasner; git worktree remove --force /home/ronald/wt-f0-red-v1-015646 && echo removida; bash bin/handoff_sessao.sh >/dev/null 2>&1; echo handoff=$?; git status --porcelain \| grep -v '^??'` |
+| 05:39:26 | Bash |  | `cd ~/saas-hasner; bash bin/deploy.sh > logs/E4C-F1-B2b-F0/v2411/deploy.log 2>&1; echo rc=$?; tail -8 logs/E4C-F1-B2b-F0/v2411/deploy.log` |
+| 05:39:23 | Bash |  | `cd ~/saas-hasner; python3 bin/gerar_cortes.py >/dev/null 2>&1; echo gc=$?; git add app/docs/BACKLOG.md app/docs/CORTES.json app/docs/CORTES.md app/docs/PROMPTS.md app/docs/RELATO.md app/docs/HANDOFF-SESSAO.md; cat > /tmp/claude-1001/-home-ronald-saas-hasner/89a6e205-b4a9-4b33-8895-b727c11c86b7/scratchpad/msg_f0.txt <<'EOF' POUSO E4C-F1-B2b-F0: merge de f3bac95b7 -- espinha da cerca com os 4 instru ...` |
+| 05:39:12 | Bash |  | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L[:40]) if l.startswith('ESPERANDO: cron sombra.sh 04:11')][0] L[i]="RESPONDIDA por ensaio 24/11 05:38 (carimbo 20261124 OK): POUSO E4C-F1-B2b-F0 FECHADA -- merge --no-ff de f3bac95b7 (suite de pouso rc 0 Ran 17797 OK skipped=42 xf=41; opus APROVA; RED 3/3 evidenciado: red_head/red_v1 ...` |
+| 05:39:02 | Bash |  | `cd ~/saas-hasner; git diff --name-only 327da9db7 f3bac95b7; ls logs/crons_em_curso/` |
+| 05:38:59 | Bash |  | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bao3is14s.output; ls logs/crons_em_curso/; tail -3 logs/sombra.log; git status --porcelain \| grep -v '^??'; git rev-parse HEAD` |
 | 04:10:55 | Bash |  | `cd ~/saas-hasner; ps aux \| grep -c "[s]ombra.sh --conferir" ; ps aux \| grep "[u]sr/bin/sleep 60" \| head -2 cd app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,"PAREI: ! RESOLVER-PASSA-NA-FRENTE (4 perguntas de desenho fora do aval 2411-0110) \| espera Ronald -- cura a8b670fd1 em wt-resolver-d-024937 (base f3bac95b7; VIA_RESOLVER_DIA em VIAS_QUE_VENCEM_A_RESPOST ...` |
 | 04:10:43 | Bash |  | `cd ~/saas-hasner; date +%H:%M; cat /tmp/claude-1001/-home-ronald-saas-hasner/274c3bd1-4188-403d-a35f-cc687202484b/tasks/bao3is14s.output; bash bin/sombra.sh --conferir 2>&1 \| tail -1; sed -n 60,67p /home/ronald/wt-resolver-d-024937/app/api/views.py; git -C /home/ronald/wt-resolver-d-024937 log --oneline -1` |
 | 02:52:51 | Bash |  | `cd ~/saas-hasner; git -C /home/ronald/wt-janela-mut-022029 diff > logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mutante.diff; wc -l logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mutante.diff; git -C /home/ronald/wt-janela-red-021624 status --porcelain \| head -3 for w in /home/ronald/wt-janela-red-021624 /home/ronald/wt-janela-mut-022029; do git worktree remove --force $w && echo removida $w; done cd app/docs; py ...` |
