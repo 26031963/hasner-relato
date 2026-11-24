@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 10:21** · publicado em **24/11/2026 10:21** (UTC-3)
+> Ultima resposta processada: **24/11/2026 10:28** · publicado em **24/11/2026 10:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 10:28 · sessao 8540913dc18e · R1-REMEDE-2411 · sonda · origem=Code
+
+No dado fornecido, `rc_sombra=0` é a única linha `rc_sombra`. A transcrição abaixo reproduz o dado fornecido linha a linha. A execução em produção está [nao verificado].
+
+```text
+sonda_leitura: script.py [e6495196abed8215] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+AUTORIDADE {'dia_sem_lavratura_no_espelho': 8808, 'dia_batida_impar': 435, 'dias_comparados': 7763, 'diverge_acima_60': 300, 'dono_BATIDA': 275, 'impar_que_DIVERGE': 280, 'impar_no_conjunto_do_dia': 276, 'impar_dentro_da_faixa': 240, 'bate_ate_10min': 7372, 'impar_FORA_da_faixa': 40, 'dono_ESTRUTURA': 37, 'dia_sem_trabalho_ambos': 151, 'dia_isento_ou_ausencia': 1683, 'e6_zero_esp_trabalho': 26, 'dono_CADASTRO': 79, 'esp_zero_e6_trabalho': 42, 'impar_que_BATE': 155, 'esp_desconta_janela_declarada': 288, 'diverge_10_60': 23, 'impar_SO_POR_CORTE_do_oraculo': 4}
+AUTORIDADE erros no espelho: 0
+AUTORIDADE BATE (ate 10 min): 95.0% de 7763 dias comparados
+AUTORIDADE dos que divergem: 240 dentro da faixa piso..teto (indecidivel sem DNA), 40 FORA da faixa (contraditorio)
+AUTORIDADE paridade de quem: 276 com contagem impar no conjunto do dia (falta OU sobra batida), 4 partidos SO pelo corte do proprio oraculo
+AUTORIDADE ESTRUTURA    37 dia-colab     152.9 h   25 colabs   o sistema se contradiz ou calcula errado DADO o cadastro -- fila 1
+AUTORIDADE CADASTRO     79 dia-colab     315.3 h   37 colabs   o DNA nao descreve as batidas -- lista do admin, nao codigo
+AUTORIDADE BATIDA      275 dia-colab    1473.0 h  129 colabs   falta ou sobra batida -- lista do admin, nao codigo
+AUTORIDADE SOMA        391   <- tem de ser igual a soma das classes (391)
+AUTORIDADE colabs com divergencia: 164
+CSV_POR_DONO {'BATIDA': 275, 'ESTRUTURA': 37, 'CADASTRO': 79} TOTAL 391
+CSV_PARIDADE {('IMPAR', 'BATIDA'): 226, ('par', 'ESTRUTURA'): 36, ('par', 'CADASTRO'): 26, ('IMPAR', 'CADASTRO'): 53, ('par', 'BATIDA'): 49, ('IMPAR', 'ESTRUTURA'): 1}
+CAB emp|colab|dia|dono_da_divergencia|esp_min|piso_min|teto_min|dif|classe|paridade|dono_da_paridade|veredito
+ESTRUTURA 4|37|2026-11-14|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|110|2026-11-12|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|112|2026-10-21|ESTRUTURA|546|838|838|292|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|112|2026-10-22|ESTRUTURA|541|835|835|294|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|113|2026-10-30|ESTRUTURA|242|0|0|-242|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|113|2026-11-01|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|114|2026-11-08|ESTRUTURA|439|429|499|-10|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 3|114|2026-11-15|ESTRUTURA|499|440|499|-59|diverge_10_60|par|4|feriado |n_batidas=4
+ESTRUTURA 3|130|2026-10-29|ESTRUTURA|335|672|730|337|diverge_acima_60|par|1|trabalhou |n_batidas=4
+ESTRUTURA 2|200|2026-10-29|ESTRUTURA|180|0|0|-180|e6_zero_esp_trabalho|par|3|em_aberto |n_batidas=0
+ESTRUTURA 2|200|2026-11-02|ESTRUTURA|180|0|0|-180|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|218|2026-11-14|ESTRUTURA|103|0|0|-103|e6_zero_esp_trabalho|par|3|em_aberto |n_batidas=0
+ESTRUTURA 2|220|2026-11-10|ESTRUTURA|337|430|486|93|diverge_acima_60|par|1|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-09|ESTRUTURA|551|597|610|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-10|ESTRUTURA|551|598|611|47|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-11|ESTRUTURA|550|598|611|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-13|ESTRUTURA|551|597|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-17|ESTRUTURA|553|598|612|45|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-18|ESTRUTURA|550|596|610|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-19|ESTRUTURA|554|599|613|45|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|296|2026-11-02|ESTRUTURA|345|0|0|-345|e6_zero_esp_trabalho|par|0|trabalhou |n_batidas=0
+ESTRUTURA 2|302|2026-11-20|ESTRUTURA|296|0|0|-296|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|334|2026-11-16|ESTRUTURA|209|591|683|382|diverge_acima_60|par|3|folga |n_batidas=4
+ESTRUTURA 2|382|2026-11-10|ESTRUTURA|418|0|0|-418|e6_zero_esp_trabalho|par|3|trabalhou |n_batidas=0
+ESTRUTURA 2|516|2026-10-23|ESTRUTURA|361|0|0|-361|e6_zero_esp_trabalho|par|2|folga |n_batidas=0
+ESTRUTURA 2|727|2026-11-10|ESTRUTURA|307|0|0|-307|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|841|2026-11-16|ESTRUTURA|178|0|0|-178|e6_zero_esp_trabalho|par|2|folga |n_batidas=0
+ESTRUTURA 2|874|2026-10-22|ESTRUTURA|667|383|383|-284|diverge_acima_60|par|3|trabalhou |n_batidas=2
+ESTRUTURA 2|884|2026-11-08|ESTRUTURA|679|699|739|20|diverge_10_60|par|4|rejeitado |n_batidas=4
+ESTRUTURA 3|909|2026-11-11|ESTRUTURA|831|245|374|-586|diverge_acima_60/FORA|IMPAR|CORTE_do_oraculo|em_aberto |n_batidas=4
+ESTRUTURA 2|922|2026-11-01|ESTRUTURA|1382|68|68|-1314|diverge_acima_60|par|4|trabalhou |n_batidas=2
+ESTRUTURA 2|922|2026-11-04|ESTRUTURA|676|458|458|-218|diverge_acima_60|par|3|trabalhou |n_batidas=2
+ESTRUTURA 1|950|2026-11-11|ESTRUTURA|480|240|240|-240|diverge_acima_60|par|4|trabalhou |n_batidas=2
+ESTRUTURA 2|989|2026-10-23|ESTRUTURA|721|567|567|-154|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|996|2026-10-28|ESTRUTURA|0|580|580|580|esp_zero_e6_trabalho|par|1|folga |n_batidas=2
+ESTRUTURA 3|996|2026-11-10|ESTRUTURA|443|1026|1116|583|diverge_acima_60|par|5|em_aberto |n_batidas=6
+ESTRUTURA 2|1044|2026-11-13|ESTRUTURA|204|135|339|-69|diverge_acima_60|par|4|em_aberto |n_batidas=4
+FIM_LISTA
+rc_sombra=0
+```
 
 ## 24/11 10:21 · sessao 0bcf3a448c61 · R1-REMEDE-2411 · sonda · origem=Code
 
@@ -955,18 +1016,4 @@ Usei o diff fornecido e o código da cópia, em leitura. Confirmação independe
 
 5. **Fila — relógio e ordem.** O comando `supra_juiz` conserva a leitura implícita de `now()` dentro de `dias_encerrados`, agora após a carga explicitada pelo diff. Retroativo passa `agora` da borda, mas ambos leem `localdate()` por linha. No cartório, o novo ramo segue o encerramento por fato/instante conforme L-073. A fila de 14:16 punha PAR-PELO-TURNO à frente. O aval posterior de 23:55 autoriza construção paralela e pousos separados. O V6 prevê mudar o teto previsto+4h, que ainda rege esta cópia. Ordem efetiva de pouso [nao verificado]. `app/ponto/management/commands/supra_juiz.py:122`, `app/ponto/management/commands/supra_juiz.py:235`, `app/ponto/management/commands/emitir_furo_retroativo.py:47`, `app/ponto/management/commands/emitir_furo_retroativo.py:113`, `app/ponto/turnos.py:2121`, `app/ponto/turnos.py:2148`, `app/docs/LEIS.md:100`, `app/docs/LEIS.md:150`, `app/docs/CORTES.md:630`, `app/docs/PROMPTS.md:2852`, `app/docs/PROMPTS.md:2863`.
 
-## 24/11 02:09 · sessao 53ef3fdd98b9 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia — retenção sem cobrança correspondente.** O novo `FURO_PARCIAL` passa a representar tanto marco apagado quanto despareamento sem `missing`. Ambos lavram `furo` pela mesma porta. A folha retém o segundo por `espelho_furo`, pois sua exceção exige uma pausa apagada. A emissão direta e a fábrica de perguntas, por sua vez, precisam de marco apagado nomeável. O vigia inclui o novo caso entre os furos cobrados e pode apurá-lo como `sem_cobranca_depois` mesmo após rejulgamento. A mudança afeta a elegibilidade do TXT, prévia e lista de retenção. Impacto em produção [nao verificado]. `app/ponto/supra_juiz.py:451–461,504–512`, `app/escala/models.py:1622–1627`, `app/ponto/services/cartorio.py:1916–1934,1953–1977,2032–2041`, `app/ponto/portas/celula.py:1096–1105,1126–1134`, `app/folha/export.py:968–972,1148–1155,1173,1285–1294`, `app/folha/previa.py:170–171`, `app/folha/fora_da_folha.py:120–121`, `app/chamados/services/fabrica_da_celula.py:52–74`, `app/ponto/services/furos_sem_cobranca.py:35,53–62,82–108,117–131`.
-
-2. **Bloqueia — `missing == 0` não equivale à lâmpada acesa.** A condição aceita coleção ausente/vazia e ignora entradas `None`. A própria montagem da ata pode lavrar `acesa=False` ou `None` se falta coluna para o marco do DNA. Esse caminho também permite que o novo código interaja com a L-033 apesar de a condição aparentar excluir todo marco apagado. Para todas as lâmpadas realmente acesas, retenção é comprovável, mas esse caso não satisfaz a premissa da exceção L-033. A mudança abre incompatibilidade com a L-088, que liga furo a marco não cumprido e pergunta em aberto, embora o corte específico mande a lavra acusar o despareamento. `app/ponto/supra_juiz.py:340–341,504–512`, `app/ponto/services/cartorio.py:685–728`, `app/docs/LEIS.md:81,120`.
-
-3. **Bloqueia — os leitores existentes reagem também sem nova pergunta.** O C6 lê um veredito acusador como vida nos degraus indicados, e c2 admite o código persistido como condição de emissão de uma pergunta elegível já viva, submetida aos demais gates. `REALIZADO_ZERO_COM_TURNO` pode coexistir com o novo furo no próprio fixture E com zero, e `furo` tem precedência sobre `discordante`. Assim, o dia pode sair da Pauta DP dos discordantes e a pauta existente pode ser fechada sem que o emissor de marco tenha aberto uma cobrança. `app/chamados/juizes.py:1539–1562`, `app/chamados/reconciliador.py:928–963,979–1004`, `app/ponto/supra_juiz.py:316–319,504–512`, `app/ponto/tests/test_a_tela_sem_par_acusa.py:34–36,51–53`, `app/escala/models.py:1622–1627`, `app/ponto/services/pautas_dos_discordantes.py:27–31,39,76–81,196–213`.
-
-4. **Fila — status, calendários e contadores.** Trabalho com `furo` vira `irregular` no D4 após o corte do relógio. Calendário, relatório de furos, painel e app passam a mostrar o novo estado, e o app traduz `irregular` em `alerta`. A palavra lateral do calendário ainda usa turno aberto/S órfã e pode dizer `Em aberto` no dia cheio mesmo se o D4 lavrou `ok`. L-002/L-061/L-099 amparam a divergência residual quando se pede a mesma resposta. Em dia insuficiente, `irregular` e `Em aberto` podem coexistir coerentemente. O C4 do afastado também lê o novo conjunto de protestos. `app/ponto/status_dia.py:30–32,68,79–91,154–161,273–289`, `app/colaboradores/services/calendario.py:595–616,635–640,748–763`, `app/ponto/services/dia_decidido.py:346–355,419–430`, `app/templates/colaboradores/partials/_calendario_grade.html:68,98–104`, `app/relatorios/furos.py:119–127`, `app/core/services/painel_op.py:325–336`, `app/api/views.py:1493–1514`, `app/escala/services/cadastro_realidade.py:591–623`, `app/docs/LEIS.md:60,95,122`.
-
-5. **Bloqueia — ordem e espúria.** O corte vigente coloca PAR-PELO-TURNO antes da A-TELA. A mesma cópia ainda traz teto fixo de 240 minutos em caminhos do pareador, enquanto o corte PAR-PELO-TURNO prevê cadastro por empresa e permite o teto antigo provisoriamente. Pouso anterior ou autorização posterior [nao verificado]. A exceção do cheio somente cala o novo ramo. A pergunta de espúrias consta em `SEM_JUIZ` e o fluxo de cluster exige ao menos duas órfãs e uma lâmpada apagada, portanto não trata pela regra demonstrada a E única do dia cheio com marcos acesos. `app/docs/CORTES.md:629–630`, `app/ponto/turnos.py:602,731,768`, `app/ponto/supra_juiz.py:499–512`, `app/core/juizes.py:1223–1225`, `app/ponto/services/cluster_espurio.py:15–36`.
-
-6. **Fila — alcance das demais leis e dos comandos.** L-039 preservada no status, que distingue `irregular` de falta. L-102/L-103 tratam de dia sem turno/valor pareado e o diff lê os minutos da grade. A prova de reconstrução de projeções do pouso, L-121, e de impacto em dinheiro pela L-094 e 7b [nao verificado]. `emitir_furo_retroativo` segue emitindo apenas em `FURO_SEM_COBRANCA`; `supra_juiz` usa o código novo para placar/exemplos, não no `--alarme` nem para decidir a escrita da retratação, que lê a lavra. `app/docs/LEIS.md:87,112,128–129,142`, `CLAUDE.md:413–429`, `app/ponto/status_dia.py:139–160`, `app/ponto/supra_juiz.py:257–259,504`, `app/ponto/management/commands/emitir_furo_retroativo.py:104–117`, `app/ponto/management/commands/supra_juiz.py:225–249,251–292,309–315`.
-
-_8044 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8045 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
