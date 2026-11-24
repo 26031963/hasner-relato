@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 18:41:32.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (33.3 MB). Acoes na janela: **876**.
+**Medido em 24/11/2026 18:47:34.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (33.5 MB). Acoes na janela: **887**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:44:54 | Bash | Check what is still alive | `pgrep -af "bash bin/codex_pergunta.sh" \| cut -c1-80; pgrep -af "suite.sh" \| head -3 \| cut -c1-100; ls ~/saas-hasner/logs/PONTA-PEQUENA-NA-BORDA/item3/verif2.r* 2>/dev/null` |
+| 18:44:42 | Bash | Record NOTURNO build status in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"NOTURNO-A v4 construida (wt-noturno-v4-175246, cura_v3_completa.patch): janela_he +40/-7 (marco_no_dia/marco_de_saida com dia), motor +15/-15, test_o280 B-P4a+gemeo invertidos, teste novo 6 casos; RED col1010 rc1 -> GREEN Ran 177 OK; --only ponto Ran 5399 OK; ruff ok; 0 except. DIFF comp 11 sombra: ...` |
+| 18:44:36 | Bash | Wait for NOTURNO Codex verifier | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; while kill -0 2353199 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $V/verif1.wrap.log; wc -l $V/verif1.r` |
+| 18:44:25 | Bash | Launch Codex pre-verifier on NOTURNO cure | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; grep -n "janela_he\\|motor_calculo_v2.py::_janela\\|L-084\\|L-093" app/docs/LEIS.md \| cut -c1-400 > $V/leis_sitios.txt; grep -n "janela_he\\|NOTURNO-A" app/docs/CORTES.md \| cut -c1-400 >> $V/leis_sitios.txt; wc -c $V/leis_sitios.txt cat > $V/verif1.q <<'EOF' Pre-verificacao (papel verificador) da cura NOTURNO-A-JANELA-NO-DIA-DO-TURNO, ...` |
+| 18:44:10 | Bash | Check patch size and wt state | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; wc -c $V/cura_v3_completa.patch $V/diff_comp11.txt; (cd ~/wt-noturno-v4-175246 && git status --short && git diff --stat \| tail -1)` |
+| 18:43:55 | Bash | Read how the juiz day map is built | `cd ~/saas-hasner/app; sed -n 2360,2400p ponto/motor_calculo_v2.py` |
+| 18:43:53 | Bash | Read L-085 text | `cd ~/saas-hasner/app; sed -n '/^\| *L-085/p;/L-085 /p' docs/LEIS.md \| head -3 \| cut -c1-600` |
+| 18:43:52 | Bash | Find where juiz day map is built and L-085 | `cd ~/saas-hasner/app; grep -n "_dia_turno_juiz_calc" ponto/motor_calculo_v2.py \| head; grep -n "L-085" docs/LEIS.md \| head -3` |
+| 18:42:10 | Bash | Wait for Codex verificador on apply47 | `cd ~/saas-hasner; Q=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47/verif1; while kill -0 2348090 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $Q.wrap.log; wc -l $Q.r` |
+| 18:41:59 | Bash | Launch Codex verificador on apply47 scripts | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47; Q=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47/verif1 cat > $Q.q <<'EOF' Verificacao (papel verificador) dos 3 scripts de apply em PROD do aval DXG-APPLY-47 (texto anexo). Scripts anexos: reversao47.py (leitura), apply47.py (troca pelas portas num atomic), pauta37.py (Pauta DP), mais o diff contra a sonda v4 que rodou na s ...` |
+| 18:41:45 | Bash | List apply47 artifacts and sizes | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47; ls -la $D \| head -20; wc -c $D/*.py $D/diff_vs_v4.txt` |
 | 18:35:04 | Bash | Record Codex aval review findings | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"REVISAO CODEX DO AVAL FERIADO-SEM-LIMITE-DO-SUPRIMIDO (rc 0, logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/aval.r, 59 linhas; a conferir arquivo:linha na construcao): 4 ramos de dobra sem helper (motor :2809, :3092-3114, :3268, :3350-3376) + 2 calculadores (calculador/regras.py:729-780, periodo.py:816-833); ...` |
 | 18:34:54 | Bash | Read Codex aval review | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b2gre1grt.output; cat logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/aval.r \| head -120` |
 | 18:32:13 | SendMessage |  | `-` |
