@@ -1,7 +1,56 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 00:32** · publicado em **24/11/2026 00:32** (UTC-3)
+> Ultima resposta processada: **24/11/2026 00:43** · publicado em **24/11/2026 00:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 00:43 · sessao f73cc7ae2c55 · RESOLVER-PASSA-NA-FRENTE · sonda · origem=Code
+
+```text
+sonda_leitura: sonda_fk2.py [def639c0d9aeadc2] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO respondidas q_vivas conversa=False: 1491 erros_c6: 0
+morta_c6 145
+('fk_do_dia', 'cel_dia_nao_admin') 1336
+('sem_fk', 'cel_dia_nao_admin') 10
+```
+
+O dado fornecido registra `erros_c6: 0`. Execução da sonda [nao verificado].
+
+- `morta_c6` — As 145 estão no grupo das mortas. O degrau que encerrou cada uma é [nao verificado].
+- `('fk_do_dia', 'cel_dia_nao_admin')` — **Degrau 1, resposta do colaborador.** Sem decisão de admin na célula vinculada, a pergunta segue viva quando `_resposta_concorda_com_a_luz(p)` retorna `False` ou `None`. O retorno individual é [nao verificado]. [app/chamados/models.py:3689](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:3689), [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511), [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524).
+- `('sem_fk', 'cel_dia_nao_admin')` — **Degrau 1, resposta do colaborador.** Sem `p.celula`, a leitura do marco retorna `None`, a concordância retorna `None` e a pergunta segue viva. [app/chamados/juizes.py:993](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:993), [app/chamados/juizes.py:1435](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1435), [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524).
+
+## 24/11 00:40 · sessao af828c423230 · RESOLVER-PASSA-NA-FRENTE · sonda · origem=Code
+
+## 1. Saída da sonda
+
+Transcrição do dado fornecido. `erros_c6` é **zero**. Execução em produção [nao verificado].
+
+```text
+sonda_leitura: sonda_semfk.py [dcb9515faf345b5d] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+UNIVERSO q_vivas conversa=False: 16148 erros_c6: 0
+morta_c6 3675
+('respondida', 'cel_do_dia_existe') 10
+('respondida', 'fk') 1336
+('sem_resposta', 'cel_do_dia_existe') 19
+('sem_resposta', 'fk') 11108
+```
+
+## 2. Resultado no C6 depois do Resolver dia
+
+O Resolver dia busca a célula por colaborador e data. Filtra as perguntas pelo C6 antes de carimbar `admin_decidiu` junto com `materializada_em`. Em seguida, se encontrou a célula, lavra o veredito com via `admin`. A gravação do carimbo deixa a FK como estava. [app/ponto/services/veredito_celula.py:30](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/ponto/services/veredito_celula.py:30) · [app/ponto/services/veredito_celula.py:193](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/ponto/services/veredito_celula.py:193) · [app/chamados/models.py:3347](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:3347) · [app/chamados/models.py:3496](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:3496) · [app/ponto/services/veredito_celula.py:352](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/ponto/services/veredito_celula.py:352)
+
+| Grupo | Resultado numa nova leitura do C6 |
+|---|---|
+| `('respondida', 'cel_do_dia_existe')` | **Viva**, se o C6 reconhecer a resposta e a FK continuar nula. O C6 procura o veredito em `p.celula`. Com a FK nula, a checagem do marco devolve `None` e o ramo da resposta retorna `True` antes de chegar ao carimbo. [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511) · [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524) · [app/chamados/juizes.py:1435](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1435) · [app/chamados/juizes.py:993](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:993) |
+| `('respondida', 'fk')` | **Morta** se a FK aponta para a célula que recebeu o veredito `admin`. O veredito faz o C6 passar pelo ramo da resposta e chegar ao encerramento por identidade. A correspondência entre a FK e a célula lavrada para cada registro está [nao verificado]. [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511) · [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524) · [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536) |
+| `('sem_resposta', 'cel_do_dia_existe')` | **Morta** se o C6 a lê como sem resposta. `admin_decidiu` com `materializada_em` encerra por identidade, mesmo com FK nula. [app/chamados/juizes.py:1516](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1516) · [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536) · [app/chamados/models.py:2782](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:2782) |
+| `('sem_resposta', 'fk')` | **Morta** se o C6 a lê como sem resposta. O encerramento por identidade vem antes da avaliação do veredito da célula. [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536) · [app/chamados/juizes.py:1546](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1546) |
+
+A mesma regra vale no caso sem FK e sem célula no dia, se o carimbo for gravado. Com resposta reconhecida pelo C6, fica **viva**. Sem resposta, fica **morta**. Contagens explícitas desses grupos na sonda [nao verificado]. [app/chamados/juizes.py:1511](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1511) · [app/chamados/juizes.py:1524](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1524) · [app/chamados/juizes.py:1536](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1536)
+
+A sonda agrupa pela coluna `respondida_em` e pelo texto via SQL. O C6 lê o instante da sequência de decisões e o texto da coluna. A saída traz as contagens da leitura inicial. A correspondência desses estados por registro e o resultado após o Resolver dia em produção ficam [nao verificado]. [app/chamados/juizes.py:1671](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1671) · [app/chamados/juizes.py:1494](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/juizes.py:1494) · [app/chamados/models.py:4449](/home/ronald/codex_ws/051e1b5b422bf27369862542f02b95e7829626c5/app/chamados/models.py:4449)
 
 ## 24/11 00:32 · sessao b9c5fc6eacb3 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
 
@@ -783,49 +832,4 @@ O acoplamento é com a grafia da atribuição. Se `_FLAG_SO` passar a usar aspas
 - **A7 morde.** O c3c carrega as duas abertas e falha na comparação da lista exata de PKs. Lista vazia também falha. O teste confere `todas_respondidas`, `pode_solicitar_correcao` e os textos no GET. O ramo HTML **Regularizar/Cobrar** e a carga do explicador para outro cartão ficam fora desse RED. `c01d53267/app/chamados/services/fio.py:256,259` · `app/chamados/tests/test_e4c_f5_82c3c_cartao_misto.py:217,228,230,231,233,234`
 - **PRONTO:** suíte `chamados` verde [nao verificado]. Número de cartões afetados na sonda da sombra [nao verificado]. A mordida acima foi conferida pelo código e pela comparação das cópias. A execução Django dos REDs [nao verificado]. [nao verificado]
 
-## 23/11 20:43 · sessao 5289855c4feb · PISTA-CAMADAS · verificador · origem=Code
-
-**REPROVA.** `PROVA3-labels` pode aceitar um recorte emitido pelo nosso lançador: o valor separado de `--exclude-tag` ocupa o lugar do rótulo que faltou. `bin/suite.sh:229`, `bin/suite.sh:372`, `bin/pista_certifica.sh:64`
-
-### 1. Falso verde e falso vermelho [nao verificado]
-
-- **Falso verde.** Passe as 12 LABELS da régua sem `relatorios` em `--only` e acrescente `-- --exclude-tag relatorios`. O `--seco` mostrou esses dois argumentos separados, e `argv_em_linha` preserva ambos. O certificador descarta `--exclude-tag` e conta `relatorios` como o 13º rótulo. Com as demais provas satisfeitas, o script devolveu `rc=0` e `CERTIFICA` na reprodução em memória. `Found − podados = Ran` confere a contagem do próprio recorte. `bin/regua.sh:23`, `bin/suite.sh:305`, `bin/suite.sh:372`, `app/core/tests/test_ambiente_do_run.py:30`, `bin/pista_certifica.sh:64`, `bin/pista_certifica.sh:71`
-- **Falso vermelho.** Com as 13 LABELS e `-- --verbosity 2 --timing`, o leitor conta `2` como rótulo extra e recusa. Valores separados de `--tag`, `--exclude-tag`, `-k` e `-v` sofrem o mesmo erro. `--settings config.settings.ci` também seria recusado pelo leitor. A porta local usa `--settings=config.settings.ci` e barra `--settings` em `EXTRA`. `--timing` e `--buffer` são ignorados na comparação de rótulos. O efeito de `--buffer` sobre a presença do `print` no log do run é [nao verificado]. `bin/suite.sh:229`, `bin/suite.sh:372`, `bin/pista_certifica.sh:64`, `app/core/tests/test_ambiente_do_run.py:56`
-- **Pista remota.** O contrato da cópia documenta `pede <sha> [--only <labels>] [--parallel N]` e situa o lançador fora do repo. O `argv` efetivo do `pede`, inclusive se ele permite reproduzir o falso verde acima, é [nao verificado]. `app/docs/BACKLOG.md:1994`, `app/docs/BACKLOG.md:2277`
-
-### 2. Quem escreve e quem lê
-
-- **`AMBIENTE argv=`** é escrito por `AmbienteDoRunTest.test_imprime_o_ambiente_do_run`, a partir de `sys.argv` depois de `test`. O certificador lê a linha única. O selo escreve a linha sintética. `app/core/tests/test_ambiente_do_run.py:30`, `app/core/tests/test_ambiente_do_run.py:56`, `bin/pista_certifica.sh:35`, `bin/pista_certifica.sh:63`, `bin/tests/test_pista_certifica.sh:42`
-- **`LABELS`** é declarada e usada pela régua. O certificador, a porta local e o selo leem a declaração. Também a leem os dois pre-push, o vigia, as réguas de relógio e calendário, o molde de autocura e o selo de fonte única. `bin/regua.sh:23`, `bin/regua.sh:168`, `bin/pista_certifica.sh:62`, `bin/suite.sh:194`, `bin/tests/test_pista_certifica.sh:29`, `bin/pre-push.sh:184`, `app/core/hooks/pre-push.sh:80`, `bin/vigia_arvore.sh:75`, `bin/regua_relogio.sh:27`, `bin/regua_calendario.sh:22`, `bin/molde_autocura/rodar.sh:25`, `bin/tests/test_labels_fonte_unica.sh:20`
-
-### 3. Selo
-
-- **Morde no recorte simples.** Na reprodução em memória, `core ponto` deu `rc=1` no original e `rc=0` com `CERTIFICA` no mutante `PROVA3-labels`. Rótulo extra e `core` repetido também deram `rc=1` no original. O selo deixa de fora o caso em que um valor de opção repõe o rótulo faltante. `bin/tests/test_pista_certifica.sh:68`, `bin/tests/test_pista_certifica.sh:93`, `bin/pista_certifica.sh:70`
-- **Vazio.** Um caso verde exige a linha `CERTIFICA sha=...`. Um caso vermelho individual pode passar com stdout vazio se receber `rc=1`. O comentário anuncia `argv` ausente, mas a função sempre escreve a linha e usa o `ARGV_INTEIRO` quando `ARGV_RUN` está vazio. Ausência e valor vazio deram `rc=1` na reprodução separada. A execução integral do selo é [nao verificado], pois ele cria arquivos temporários. `bin/tests/test_pista_certifica.sh:12`, `bin/tests/test_pista_certifica.sh:42`, `bin/tests/test_pista_certifica.sh:55`, `bin/tests/test_pista_certifica.sh:92`, `bin/pista_certifica.sh:69`
-
-## 23/11 20:29 · sessao 909fc9e96657 · PISTA-CAMADAS · verificador · origem=Code
-
-**REPROVA pela prova (2), no D2.** O fluxo documentado do chamador permite certificar `H` e pousar um commit `K` criado por `merge --no-ff`. O certificador volta verde quando `AMBIENTE sha=H` coincide com o argumento `H`, mesmo que o SHA publicado seja `K`. Essa lacuna é anterior ao delta. `bin/pista_certifica.sh:46–48,66–68` · `CLAUDE.md:326–333` · `bin/deploy.sh:430–436`.
-
-### P1–P3
-
-- **P1 fecha a releitura do mesmo caminho.** Há um `cat` por entrada. Depois, `head`, `tr` e `grep` usam as cópias privadas. Uma troca de arquivo entre `head` e `tr` já não mistura os dois recibos. A regravação durante o próprio `cat` ainda é possível. `bin/pista_certifica.sh:25–29,34–37,50–59`.
-- **P2 fechado.** `Ran 0` passa a checagem de contagem quando `Found - podados = 0`. As checagens de `rc=0` e `oom=0` continuam. `bin/pista_certifica.sh:56–64`.
-- **P3 parcial.** `rc=0` com saída totalmente vazia agora falha no selo. Como o teste junta stdout e stderr, `CERTIFICA` só no stderr ainda passa. O stub também devolveu `rc=0` para `docker image inspect -f '{{json .RootFS.Layers}}' saas-hasner-core:latest-errada`. O script real usa `saas-hasner-core:latest`. `bin/tests/test_pista_certifica.sh:13–20,51–56` · `bin/pista_certifica.sh:40–44,66–68`.
-
-### D1–D6
-
-- **D1 mantido para a troca descrita.** A referência da VM é medida na certificação. Se as novas camadas diferirem das gravadas no run, a prova recusa. Troca real da tag ou divergência entre a tag e as cascas em execução [não verificado]. `bin/pista_certifica.sh:40–44` · `bin/deploy.sh:324–329,356–360`.
-- **D2 descartado indevidamente.** A entrada concreta do chamador é pedir o run de `H`, chamar `bin/pista_certifica.sh "$H" "$log" "$espera"` e usar o verde para seguir com `git merge --no-ff --no-commit`, commit e deploy. A cópia registra esse par de SHAs no COMBOIO-E: job de `d3744c21c`, pouso de `433e2e57e`, com árvore igual e `cmp` 12/12. O `cmp` confirma os bytes, e os SHAs continuam distintos. A invocação do certificador v6b nesse pouso histórico [não verificado]. `app/docs/BACKLOG.md:2277` · `app/docs/RELATO.md:1795,1799` · `CLAUDE.md:326–333` · `bin/pista_certifica.sh:46–48`.
-- **D3 mantido.** Cortar depois da linha `Ran` pode omitir o `OK` textual. A prova (3) usa as contagens e o `rc` e OOM do recibo. `bin/pista_certifica.sh:50–64`.
-- **D4 mantido.** Listagem e poda aplicam o mesmo predicado por ocorrência. Duas ocorrências do mesmo ID entram duas vezes na listagem quando ambas são podadas. `app/core/runner_quarentena.py:27–38,58–69,84–95`.
-- **D5 mantido com ressalva.** `unica` rejeita dois resumos; um resumo único de outro processo ainda casaria. Uma entrada do nosso lançador que produza esse resumo sozinho [não verificado]. `bin/pista_certifica.sh:33–38,60–64`.
-- **D6 mantido.** O SHA do cabeçalho, junto com o ID, vincula o recibo usado para `rc` e OOM ao run da prova (3). `bin/pista_certifica.sh:50–59`.
-
-### Cópia, `mktemp` e `trap`
-
-A cópia ainda pode misturar recibos se dois `ssh pista espera <id> > espera` reutilizarem o mesmo arquivo durante o `cat`. Se o `cat` ler o prefixo `id=A sha=H ` e o segundo redirecionamento truncar e preencher o arquivo antes da leitura seguinte, o prefixo de A pode ficar com `rc=0 oom=0` de B. Com IDs de mesmo comprimento e o log de A, a prova (3) pode passar falsa. Esse reuso e esse intercalamento no chamador real [não verificado]. `bin/pista_certifica.sh:12–15,25–29,50–59`.
-
-O delta também passa a exigir espaço gravável para as cópias. Falha em `mktemp` ou em qualquer cópia dá `rc=2`. O `trap EXIT` preserva o código de saída do veredito. A execução integral do selo [não verificado]. `bin/pista_certifica.sh:27–29,66–72` · `bin/tests/test_pista_certifica.sh:9–13,23`.
-
-_8009 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8011 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
