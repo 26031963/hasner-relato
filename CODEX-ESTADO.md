@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 17:33** · publicado em **24/11/2026 17:33** (UTC-3)
+> Ultima resposta processada: **24/11/2026 17:38** · publicado em **24/11/2026 17:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 17:38 · sessao eedb3dbb224a · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
+
+# NOTURNO-A · mapa da competência 11/2026
+
+**A janela dá `trab > 0` a 7 dos 18 dias, somando 1.651,3 min trabalhados nos pares alterados. A cauda alcança 1 dos 18, `col174` em 15/11, e o par de 62,7 min some da lista de períodos do motor após a mudança.** Os 18 dias somam **4.433 min realizados, 73 h 53 min**, que arredondam para as **73,9 h** do filtro. `D:6–24`, `A:93–101`, `A:106`, `A:119–124`.
+
+`D` referencia as linhas da **saída colada** de `sonda_mapa18.py`, contadas desde `sonda_leitura`. `A` referencia as linhas do **`anexo_pares.txt` colado**, contadas desde `# PAR`. Cruzei por **colaborador + data de `_dia_de`**. A lavratura usa o mapa do motor quando disponível. `Realizado` vem da grade, limitado ao previsto do dia, e entra em campo próprio da lavratura. [dia_pago.py:109](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/services/dia_pago.py:109), `app/ponto/services/dia_pago.py:173–179,285–292,387–402`, `app/escala/utils.py:2052–2069`, L-095 em `app/docs/LEIS.md:113`.
+
+### Ramos e juízes
+
+- **Inversão.** O juiz do valor do par é `MotorBase.calcular_periodo`. A janela busca os marcos em `entrada.date()`, `marco_no_dia` põe o marco na data civil do instante, e o cálculo limita a duração negativa a zero. O dia da jornada vem de `turnos_do_colab`. L-097 para a janela e L-085 para o dia do turno. `app/core/juizes.py:215–224,1206–1208`, `app/docs/JUIZES.md:20–29`, `app/ponto/motor_calculo_v2.py:1528–1550,1752–1763,2759–2787`, `app/ponto/janela_he.py:20–30,92–103`, `app/docs/LEIS.md:115,117`.
+- **FT em D+1.** Nos quatro dias dessa classe, a `S` gravada como saída aparece como entrada do turno no `DIA`, e o `PAR` registra essa ponta em D+1. O mapa do motor só indexa batidas gravadas como `E` e recorre à data civil para chave ausente. Qual caminho de atribuição foi tomado em cada execução fica [nao verificado]. O zero do **par FT** tem a assinatura do bloqueio total sem previsto: a janela de pontas é pulada em folga e o bloqueio zera os minutos, colapsando a saída efetiva na entrada. Juízes `turnos_do_colab` e `MotorBase.calcular_periodo`, L-085, L-087 e L-097. `D:7–8,15,21`, `A:11,18–19,38,64`, `app/ponto/motor_calculo_v2.py:884–895,1440–1486,1522–1528,2400–2409,2445–2469`, `app/core/juizes.py:216,1207–1208`, `app/docs/LEIS.md:115,117,119`.
+- **Sem período.** A sonda anterior registrou essa condição em `col37` 14/11 e `col174` 24/10 e 01/11. A lavratura começa em zero e soma os períodos na data de `_dia_de`. `periodos_do_dia` é o juiz da ata, que pode substituir os períodos após conferir as pontas e as batidas. Turno aberto retorna com zero inicial e pode receber crédito de pares fechados. A guarda específica que produziu os dias sem período continua [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`, `app/ponto/motor_calculo_v2.py:632–688,2513–2560,2750–2755`, `app/core/juizes.py:219,1207–1208`, L-087 e L-095 em `app/docs/LEIS.md:113,119`.
+
+### Os 18 dias
+
+**JANELA** mostra os minutos trabalhados registrados em `MUDA` para a data da linha. `—` indica ausência de ganho demonstrado no anexo. O `DiaPago` pós-cura integral fica [nao verificado]. Em **CAUDA**, `—` indica que a chave está fora dos quatro movimentos fornecidos. `A:92–103,106–109`, `app/ponto/services/dia_pago.py:173–179`.
+
+| Colab | Data em 2026 | Realizado (min) | Par em `_dia_de` e motivo do zero | JANELA (min) | CAUDA |
+|---|---|---:|---|---:|---|
+| col37 | 14/11 | 241 | **Sem par.** Sem período documentado. O FT de **15/11**, 02:00:18–07:01:13, colapsou em 02:00:18. `D:7`, `A:38`, `app/docs/RELATO.md:124` | — | — |
+| col110 | 12/11 | 241 | **Sem par.** O FT de **13/11**, 01:59:07–07:00:02, colapsou em 01:59:07. `D:8`, `A:11` | — | — |
+| col113 | 30/10 | 242 | **INV**, 31/10 03:00:00–07:02:00. Efetivo **19:00 → 07:00**. `D:9`, `A:12` | **+242,0** `A:93` | — |
+| col113 | 01/11 | 241 | **INV**, 02/11 03:00:00–07:01:00. Efetivo **19:00 → 07:00**. `D:10`, `A:13` | **+241,0** `A:94` | — |
+| col174 | 24/10 | 145 | **Sem par.** Sem período documentado. O cruzamento pelas batidas encontra o INV de **25/10**, 02:32:15–04:57:35, efetivo **21:00 → 04:57:35**. O motivo da divergência de data fica [nao verificado]. `D:11`, `A:15`, `app/docs/RELATO.md:124` | —. O par de 25/10 fica **0,0**. `A:95` | — |
+| col174 | 26/10 | 142 | **Sem par.** A `E` de 26/10 às 02:27 aparece aberta no turno de 25/10. A cópia documenta que sua data varia com o recorte do pareamento. A causa do zero de 26/10 fica [nao verificado]. `D:12`, `A:2–89`, `app/docs/RELATO.md:74` | — | — |
+| col174 | 01/11 | 142 | **Sem par.** Sem período documentado. A guarda que deixou de entregar o turno iniciado em 02/11 às 02:47 fica [nao verificado]. `D:13`, `A:2–89`, `app/docs/RELATO.md:124` | — | — |
+| col174 | 15/11 | 63 | **Sem par** na lista `PAR`. O par **05:30:50–06:33:31** está em 15/11 no juiz e em **14/11 no motor**. O motor herda o dia do período fechado anterior quando o intervalo é de até 6 h, aqui cerca de 60 min. Juiz `turnos_do_colab`, L-085. `D:14`, `A:106`, `app/docs/BACKLOG.md:2199`, `app/ponto/motor_calculo_v2.py:2400–2423`, `app/core/juizes.py:216`, `app/docs/LEIS.md:117` | — | **Sim.** Juiz 15/11 → 14/11. O par de **62,7 min** some do motor após a mudança. `A:106,119–124` |
+| col200 | 29/10 | 180 | **Sem par.** O FT de **30/10**, 02:00:31–06:00:07, colapsou em 02:00:31 e aparece em **duas linhas idênticas** no anexo. `D:15`, `A:18–19` | — | — |
+| col200 | 02/11 | 180 | **INV**, 03/11 02:00:33–06:00:15. Efetivo **22:00 → 06:00**. `D:16`, `A:20` | **+239,7** `A:96` | — |
+| col218 | 14/11 | 103 | **INV**, 15/11 03:17:11–05:00:03. Efetivo **21:00 → 05:00**. `D:17`, `A:21` | **+102,9** `A:97` | — |
+| col296 | 02/11 | 345 | **INV**, 03/11 00:15:19–07:00:41. Efetivo **19:00 → 07:00**. `D:18`, `A:30` | **+405,4** `A:98` | — |
+| col382 | 10/11 | 418 | **INV**, 11/11 00:02:41–07:51:20. Efetivo **23:50 → 07:50**. `D:19`, `A:39` | **+417,7** `A:99` | — |
+| col673 | 21/10 | 3 | **INV**, 22/10 06:57:21–07:00:00. Efetivo **19:00 → 07:00**. `D:20`, `A:60` | **+2,6** `A:101` | — |
+| col727 | 10/11 | 307 | **Sem par.** O FT de **11/11**, 01:00:12–07:07:00, colapsou em 01:00:12. `D:21`, `A:64` | — | — |
+| col922 | 26/10 | 480 | **Sem par.** O juiz exibe turno com entrada às 07:00 no dia. A saída está truncada e o ramo do zero fica [nao verificado]. `D:22`, `A:2–89` | — | — |
+| col922 | 28/10 | 480 | **Sem par.** O INV de **29/10** 04:07:39–07:02:13 aparece na vizinhança do extrato, e o motor o atribui a **27/10** por herança. O ramo do zero de 28/10 fica [nao verificado]. `D:23`, `A:78`, `app/docs/RELATO.md:73`, `app/ponto/motor_calculo_v2.py:2400–2409` | —. O par atribuído a 27/10 fica **0,0**. `A:103` | — |
+| col922 | 03/11 | 480 | **Sem par.** O juiz exibe turno com entrada às 07:01 no dia. A saída está truncada e o ramo do zero fica [nao verificado]. `D:24`, `A:2–89` | — | — |
+
+**Efeito da cauda.** `col174` 15/11 é a única interseção com os 18 dias. Os outros movimentos são `col219` 14/11 e `col639` 04/09 e 10/09. Para `col174`, a sonda mostra os dois turnos sob 14/11 após a mudança e, nessa jornada, só o primeiro período (`18:31:37–04:30:15`). O par movido deixa de figurar no motor, portanto **0 dos 18 ganha trabalhado pelo par movido**. A substituição de períodos pela ata pode produzir esse desaparecimento, mas o acionamento dessa guarda no caso fica [nao verificado]. `A:106–109,119–124`, `app/docs/RELATO.md:11`, `app/ponto/motor_calculo_v2.py:632–688`, L-085 e L-087 em `app/docs/LEIS.md:117,119`.
+
+### Classe × dias × colaboradores × realizado
+
+Cada dia entra em uma classe. O total de colaboradores é distinto entre as classes, pois `col200` e `col174` aparecem em mais de uma. `D:7–24`.
+
+| Classe | Dias | Colabs | Horas realizadas | Base |
+|---|---:|---:|---:|---|
+| Inversão pela janela civil na data do dia | 7 | 6 | 25 h 32 min | `D:9–10,16–20`, `A:12–13,20–21,30,39,60` |
+| Par FT colapsado em D+1 | 4 | 4 | 16 h 09 min | `D:7–8,15,21`, `A:11,18–19,38,64` |
+| Sem período documentado, demais casos | 2 | 1 | 4 h 47 min | `D:11,13`, `app/docs/RELATO.md:124` |
+| Par atribuído à véspera, caso da cauda | 1 | 1 | 1 h 03 min | `D:14`, `A:106`, `app/docs/BACKLOG.md:2199` |
+| Ramo do zero [nao verificado] | 4 | 2 | 26 h 22 min | `D:12,22–24` |
+| **Total** | **18** | **11** | **73 h 53 min ≈ 73,9 h** | `D:6–24`, `app/docs/RELATO.md:19` |
 
 ## 24/11 17:33 · sessao 4bae713a934f · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
 
@@ -894,16 +948,4 @@ Para Q5, a regra detalhada exige os cinco campos no RELATO, incluindo como se es
 - Os selos de host que acoplam esse desenho são `test_trava_teste.sh` (chamadores, nome literal, serialização e rc 75), `test_suite_sh.sh` (porta canônica e passagem pela trava), `test_recursos_sourced.sh` (cpuset e criação/ajuste do contêiner) e `test_handoff_sessao.sh` (nome literal da trava usado pelo handoff). A régua roda a pasta de selos antes da suite. `bin/tests/test_trava_teste.sh:39-71,101-137`; `bin/tests/test_suite_sh.sh:48-65`; `bin/tests/test_recursos_sourced.sh:37-74`; `bin/tests/test_handoff_sessao.sh:116`; `bin/handoff_sessao.sh:248-262`; `bin/regua.sh:134-145`.
 - `pista_lock.sh` mantém um marcador de dono da pista separado. A certificação exclui Postgres do critério e o teste de ambiente registra sua versão. `bin/pista_lock.sh:2-14`; `bin/pista_certifica.sh:9-11`; `app/core/tests/test_ambiente_do_run.py:43-60`.
 
-## 24/11 13:35 · sessao c8a79ba7e4fb · - · - · origem=Ronald (tmux)
-
-**1. Mesmas saídas de origem, com critérios diferentes.** O rascunho baixa as saídas de `ssh pista log` e `ssh pista espera` e usa `Ran == Found - podados` e `oom=0`. O certificador documenta essas mesmas entradas. (`linha_de_base.sh.txt:42–56`, `bin/pista_certifica.sh:13–16,57–60,88–92`)
-
-- O rascunho pega o último `Found` e `Ran` que casam com prefixos amplos, conta podas com ID e aceita a primeira ocorrência numérica de `rc=` e `oom=`. O certificador exige ocorrências únicas de `Found N test(s).` e `Ran N test(s) in ...`, conta todas as linhas com o prefixo de poda e confere exatamente um `rc=0`, um `oom=0` e o vínculo do recibo com `AMBIENTE job=` e o SHA solicitado. (`linha_de_base.sh.txt:48–56`, `bin/pista_certifica.sh:34–39,51–60,88–92`)
-- O rascunho aceita `OK` com `rc=0` ou `FAILED` com `rc!='0'`. Se faltar `rc`, o valor vira `?` e satisfaz o ramo `FAILED`. O certificador decide pelo `rc=0` e pelas três provas, sem ler `OK` ou `FAILED`. (`linha_de_base.sh.txt:51–58`, `bin/pista_certifica.sh:41–60,84–100`)
-- O rascunho grava SHA e job recebidos pelo programa. O certificador verifica as camadas da imagem contra a VM, o SHA emitido pelo teste e os rótulos do `argv`. Assim, as contagens de um recorte podem produzir `inteira=sim` no rascunho. (`linha_de_base.sh.txt:44–58`, `bin/pista_certifica.sh:41–49,61–92`)
-
-**3. Fatias de jobs distintos entre VM e pista não certificam.** A frase é “os rotulos do `AMBIENTE argv=` sao os `LABELS` da regua (`bin/regua.sh`), cada um uma vez e nenhum a mais (um `pede --only` NAO certifica)”. O script exige uma linha `AMBIENTE argv=` completa, contagens únicas e recibo de um job e SHA. Concatenar os logs das fatias duplica os registros exigidos como únicos. O selo cobre o recorte `--only`. O contrato encaminha esse resultado como `lei:`. (`bin/pista_certifica.sh:6–8,34–39,51–60,70–92`, `bin/tests/test_pista_certifica.sh:92–97`, `contrato.txt:3`)
-
-Há ainda uma divergência de disparador. O anexo atribui `pede` à sessão, o comentário do rascunho o atribui ao deploy e o fim do deploy na cópia grava o carimbo e o histórico e emite `OK`, sem chamar `pede`. A identidade da cópia com o HEAD do hash informado fica [não verificado], pois a cópia não expõe metadados Git. (`contrato.txt:2`, `linha_de_base.sh.txt:4`, `bin/deploy.sh:430–449`)
-
-_8083 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8084 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
