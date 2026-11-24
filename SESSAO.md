@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 17:08:18.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (28.9 MB). Acoes na janela: **758**.
+**Medido em 24/11/2026 17:14:29.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (29.0 MB). Acoes na janela: **764**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:14:22 | Bash | Record 17:15 answers in docs | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' L=open('BACKLOG.md').read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| ESPURIA-TELA-RETRATAR-ORFA')][0] L.insert(i+1,'\| ESPURIA-TELA-RETRATADA-UM-JEITO \| **fila 2** fatia da ESPURIA-TELA (aval RESPOSTAS-REVISAO-ACHADOS 17:15 item 1): "um jeito so de mostrar a retratada nas 4 telas (Portaria 671: marcacao crua), antes do espelho da co ...` |
+| 17:14:11 | Bash | Save aval and locate ESPURIA-TELA rows | `cd ~/saas-hasner; cat > logs/AVAIS-1515/respostas_revisao_achados_1715.txt <<'EOF' aval Ronald: RESPOSTAS-REVISAO-ACHADOS (24/11 17:15) -- (1) DXG achado 5: aplica com a exibicao como esta, se o DIFF pelas portas passar; registrar como fatia da ESPURIA-TELA "um jeito so de mostrar a retratada nas 4 telas (Portaria 671: marcacao crua), antes do espelho da comp 11 ir a assinatura". (2) A-TELA 2 dias ...` |
+| 17:11:17 | Agent | DXG DIFF pelas portas na sombra | `Obra APPLY-DXG-PASSIVO-11-PORTA (repo /home/ronald/saas-hasner, Django em app/). Leia CLAUDE.md seções 0, 4, 6 e 7b (DINHEIRO) antes de agir. Tarefa: refazer o DIFF de frota na SOMBRA pelas PORTAS reais, nos 85 casos, e devolver números. É só medida: NADA em prod; NADA commitado (atomic + raise ao final). Aval (literal, logs/AVAIS-1515/apply_dxg_passivo_11_porta.txt): opção (a), por batida, nas 85 ...` |
+| 17:10:59 | Bash | Record DXG achados PAREI and check sombra | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() top=("PAREI: ! APPLY-DXG-PORTA-ACHADOS \| espera Ronald -- revisao Codex do aval 17:00 (logs/AVAIS-1515/revisao_dxg_1700/r.txt rc 0, conferido pela sessao): 5 achados. 1-4 sao CONDICOES DE EXECUCAO que o DIFF novo vai medir e o apply cumpre (nao mudam o aval): " "(1) registrar_batida pode devolver batida existente (dedup  ...` |
+| 17:10:44 | Bash | Inspect old DXG script and pergunta_origem writers | `cd ~/saas-hasner; wc -l logs/DECLARADO-X-GRAVADO-PASSIVO-11/dxg11_passivo.py; grep -n 'def \\|save(\\|atomic\\|sombra' logs/DECLARADO-X-GRAVADO-PASSIVO-11/dxg11_passivo.py \| head -40; head -2 logs/DECLARADO-X-GRAVADO-PASSIVO-11/lista.tsv; grep -rn 'pergunta_origem=' app --include=*.py \| grep -v tests \| head` |
+| 17:10:32 | Bash | Read DXG review result | `cd ~/saas-hasner; D=logs/AVAIS-1515/revisao_dxg_1700; tail -1 $D/wrap.log; sed -n '/ERROS ACHADOS/,$p' $D/r.txt; wc -l $D/r.txt` |
 | 17:06:30 | Bash | Wait for Codex review of DXG 17:00 aval | `cd ~/saas-hasner; D=logs/AVAIS-1515/revisao_dxg_1700; until grep -q 'rc=' $D/wrap.log 2>/dev/null && [ -s $D/r.txt ]; do /usr/bin/sleep 20; done; grep 'rc=' $D/wrap.log \| tail -1` |
 | 17:06:28 | TaskStop |  | `-` |
 | 17:06:27 | ToolSearch |  | `-` |
