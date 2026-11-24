@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 01:56:01.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (19.2 MB). Acoes na janela: **463**.
+**Medido em 24/11/2026 02:01:59.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (19.3 MB). Acoes na janela: **474**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:56:50 | Bash |  | `bash /tmp/claude-1001/-home-ronald-saas-hasner/89a6e205-b4a9-4b33-8895-b727c11c86b7/scratchpad/cadeia.sh; L=~/saas-hasner/logs/E4C-F1-B2b-F0/v2411; for f in red_v3_engolir red_v1_f9 green_foco_v3; do echo "== $f $(cat $L/$f.rc 2>/dev/null)"; grep -E '^(OK\|FAILED)($\| \()' $L/$f.log \| tail -1; grep -E '^Ran ' $L/$f.log \| tail -1; grep -E '^(FAIL\|ERROR):' $L/$f.log \| head -8; done; cat $L/aplic ...` |
+| 01:56:46 | Bash |  | `SP=/tmp/claude-1001/-home-ronald-saas-hasner/89a6e205-b4a9-4b33-8895-b727c11c86b7/scratchpad; L=~/saas-hasner/logs/E4C-F1-B2b-F0/v2411 cat > $SP/aplica_reconc.py <<'EOF' import ast p='/home/ronald/wt-f0-004802/app/chamados/reconciliador.py'; s=open(p).read() old_doc,old,new=ast.literal_eval(open('/tmp/claude-1001/-home-ronald-saas-hasner/89a6e205-b4a9-4b33-8895-b727c11c86b7/scratchpad/reconc_patch ...` |
+| 01:56:37 | Bash |  | `cd /home/ronald/wt-f0-004802/app; python3 - <<'EOF' p='chamados/reconciliador.py'; s=open(p).read() old_doc="leitura best-effort (`engolir`, savepoint proprio: a falha vira rastro e nao\n envenena o atomic de quem chamou)." assert s.count(old_doc)==1 old=''' with engolir('chamados.reconciliador', 'registrar_retencao', acao=acao, modelo=modelo, objeto_id=objeto_id): with transaction.atomic(): _ult  ...` |
+| 01:56:27 | Bash |  | `cd ~/saas-hasner; bin/trava_teste.sh --quem; sed -n 165,200p bin/suite.sh` |
+| 01:56:24 | Bash |  | `cd ~/saas-hasner; sed -n 1,60p bin/suite.sh \| grep -n "uso\\|--only\\|--teste\\|label" \| head; grep -n "_FLAG_SO=\\|--teste\\|TESTE_UNICO\\|chamados\.tests" bin/suite.sh \| head` |
+| 01:56:22 | Bash |  | `cd ~/saas-hasner/logs/E4C-F1-B2b-F0/v2411; ls; head -5 green_foco_v2.log; grep -l "" *.sh 2>/dev/null; cat *.cmd 2>/dev/null \| head` |
+| 01:56:19 | Bash |  | `cd /home/ronald/wt-f0-004802/app; python3 - <<'EOF' p='chamados/tests/test_e4c_b2b_f0_espinha.py'; s=open(p).read() old=s[s.index(" def test_falha_na_leitura_nao_derruba_o_ato(self):"):s.index(" def test_default_e_o_de_hoje(self):")] new=''' def test_falha_na_leitura_PROPAGA_como_o_ramo_de_hoje(self): """Sem `engolir` (LEI-AKITA 1, sessao 24/11 01:5x): a falha de leitura ou escrita do ramo `alvo`  ...` |
+| 01:56:10 | Bash |  | `cd ~/saas-hasner; grep -n "RESPOSTA-F0-2411-0050" -A3 app/docs/CORTES.md \| head -20; grep -n -i "segue\\|resto do ato\\|F4" logs/E4C-F1-B2b-F0/brief_2411.md \| head -20` |
+| 01:56:08 | Bash |  | `cd ~/saas-hasner/logs/E4C-F1-B2b-F0; ls; grep -rn -i "engolir\\|best-effort\\|derruba\\|envenen" --include=*.md --include=*.txt . \| head -20` |
+| 01:56:05 | Bash |  | `cd /home/ronald/wt-f0-004802/app; sed -n 450,520p chamados/tests/test_e4c_b2b_f0_espinha.py` |
+| 01:56:04 | Bash |  | `cd /home/ronald/wt-f0-004802/app; grep -n "engolir\\|alvo=\\|rastro\\|RECUSA_RETIDA" chamados/tests/test_e4c_b2b_f0_espinha.py \| head -40; git diff 327da9db7 --stat` |
 | 01:56:00 | Bash |  | `cd /home/ronald/wt-f0-004802/app; git log --oneline -3; sed -n 480,540p chamados/reconciliador.py; grep -n "def engolir" -A15 -r chamados/ \| head -30` |
 | 01:36:11 | Bash |  | `cd ~/saas-hasner/app; python3 - <<'EOF' p='docs/RELATO.md'; L=open(p).read().split('\n') i=1; assert L[i].startswith('PERGUNTA DE DESENHO NOTURNO-NAO-APURADO') old="Propriedade fixa violada (efetivo_entrada >= efetivo_saida), dono ESTRUTURA [hipotese]; censo de FROTA em curso (sonda_inv)." assert old in L[i] L[i]=L[i].replace(old,"(7) CENSO DE FROTA (sonda_inv2, sombra, 01/10-22/11, 16.167 pares f ...` |
 | 01:36:00 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho; tail -1 sonda_inv2.out; head -c 5000 sonda_inv2.r` |
