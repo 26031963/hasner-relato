@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 17:26:54.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (30.3 MB). Acoes na janela: **794**.
+**Medido em 24/11/2026 17:33:11.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (30.3 MB). Acoes na janela: **798**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:27:20 | Bash | Wait for Codex map to finish | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; while kill -0 2175157 2>/dev/null; do /usr/bin/sleep 20; done; tail -3 $D/mapa.wrap.log; wc -l $D/mapa.r 2>/dev/null` |
+| 17:27:19 | Bash | Update RELATO top and PROMPTS | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() old=s.split('\n',1)[0] assert old.startswith('PAREI: ! NOTURNO-A-CAUDA-NO-MOTOR') new=("RESPONDIDA por NOTURNO-A-ENCERRA-V3 (17:25; v3 encerrada, sem ! no motor, perguntas 1-3 sem resposta; patches e medidas ficam em logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v3/) -- era: "+old[len('PAREI: '):]+"\n" "ESPERANDO: Codex sonda map ...` |
+| 17:27:12 | Bash | Check whether Codex wrapper is running | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; ls -la $D; pgrep -af codex_pergunta \| head` |
+| 17:27:10 | Bash | Read wrapper log | `cd ~/saas-hasner; cat logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18/mapa.wrap.log \| tail -20` |
 | 17:26:49 | Bash | Launch Codex sonda for the 18-day map | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; CODEX_OBRA=NOTURNO-A-JANELA-NO-DIA-DO-TURNO CODEX_PAPEL=sonda CODEX_SONDA_ENVELOPE=$PWD/logs/NOTURNO-NAO-APURADO/redesenho/envelope.sh setsid nohup bin/codex_pergunta.sh --sonda $D/sonda_mapa18.py --anexo $D/../v3/medida_a_mudancas.txt --anexo app/docs/JUIZES.md --anexo $D/../v3/i_cauda_parado.patch $(git rev-parse HEAD) $D/mapa.q $ ...` |
 | 17:26:44 | Bash | Write Codex question for the map | `cd ~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cat > mapa.q <<'EOF' PAPEL: sonda + leitura. Obra NOTURNO-A-JANELA-NO-DIA-DO-TURNO, aval NOTURNO-A-ENCERRA-V3 (24/11 17:25): "mapa por leitura, dia a dia, dos 18 dias: por que horas_trabalhadas = 0 com batidas (sitio, juiz, lei), e quantos a cauda alcanca". Nada se cura. SOMBRA, READ ONLY. A sonda anexa (sonda_mapa18.py) lista os DiaPa ...` |
 | 17:26:33 | Bash | Write sonda for 18-day map | `mkdir -p ~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cd ~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cat > sonda_mapa18.py <<'EOF' # NOTURNO-A-ENCERRA-V3: mapa dos dias da comp 11 com horas_trabalhadas 0 e batida. SOMBRA, READ ONLY. from collections import defaultdict from datetime import datetime, time, timedelta from django.utils import timezone from ponto.models i ...` |

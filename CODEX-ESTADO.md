@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 17:10** · publicado em **24/11/2026 17:14** (UTC-3)
+> Ultima resposta processada: **24/11/2026 17:33** · publicado em **24/11/2026 17:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 17:33 · sessao 4bae713a934f · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
+
+## 1. Filtro
+
+**`realizado>0` reproduz exatamente o aval: 18 dias, 11 colaboradores e 73,9 h realizadas com `horas_trabalhadas = 0`.** É a linha `FILTRO realizado>0` do dado colado. A referência de 18 / 11 / 73,9 h também consta em `app/docs/RELATO.md:19`.
+
+O trecho colado contém **14 linhas `DIA` com `realizado>0`, de 9 colaboradores, somando 2.686 min (44 h 46 min)**. Faltam as linhas de 4 dias para fechar o mapa nominal. A identidade desses dias, as batidas e o resultado da cauda ficam [nao verificado]. A unidade do campo `realizado` é minuto (`app/ponto/services/dia_pago.py:285–292`).
+
+## 2. Mapa dos dias visíveis
+
+`realizado` vem da grade, que consulta `realizado_do_dia` e limita o valor ao previsto. `horas_trabalhadas` vem dos períodos que o motor entrega para a data da jornada. A grade pode registrar minutos positivos enquanto a rubrica do motor fica no zero inicial. A lavra também tem caminhos próprios para folga trabalhada e feriado trabalhado. `app/escala/utils.py:2052–2069`, `app/ponto/services/dia_pago.py:126–132`, `:167–179`, `:234–264`, `:387–402`, L-095 em `app/docs/LEIS.md:113`.
+
+Os horários e minutos abaixo são os da mensagem, sem arquivo e linha para o extrato. A correspondência com a execução original da sonda fica [nao verificado]. **Já em D** significa que o `Turno` exibido já aponta para a data da linha, véspera da entrada de madrugada. Pelo critério descrito no relato, esse par exibido já tem o destino pretendido. A coluna de cauda registra o que se pode ler antes de qualquer mudança. `app/docs/RELATO.md:11`, `app/ponto/turnos.py:285–309`.
+
+| Colab | Data em 2026 | Batidas no extrato | Realizado | Por que a rubrica está em zero | Cauda |
+|---|---|---|---:|---|---|
+| col113 | 21/10 | — | — | — | — |
+| col673 | 21/10 | 22/10 E06:57 S07:00 | 3 min | O caso documentado identifica a `E` como uma saída gravada como entrada, seguida da `S` materializada. O ramo que zerou o par de 3 min fica [nao verificado]. `app/docs/BACKLOG.md:1858`, L-087 em `app/docs/LEIS.md:119`. | Já em D. O caso documentado descreve uma entrada original ausente, sem primeiro par fechado para a regra da cauda. `app/docs/BACKLOG.md:1858`, `app/docs/RELATO.md:11`. |
+| col174 | 24/10 | 23/10 E21:12 · 24/10 S03:00 S04:00 E05:12 · 25/10 E02:32 S03:31 S04:57 | 145 min | **Sem período**, segundo a sonda anterior registrada na cópia. A guarda que deixou a data sem período fica [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`. | O segundo turno começa em 25/10 e já aparece com data 24/10. A saída desse turno está truncada no extrato. [nao verificado] |
+| col174 | 26/10 | 26/10 E02:27 · 27/10 E02:39 S03:40 S05:01 | 142 min | O extrato mostra a `E` de 26/10 aberta em 25/10 e um turno fechado de 27/10 atribuído a 26/10. A cópia registra divergência por recorte para a `E` de 26/10. O ramo que zerou o dia fica [nao verificado]. `app/docs/RELATO.md:74`. | Já em D para o fechado E02:39–S05:01. |
+| col200 | 29/10 | 28/10 E22:00 · 29/10 S02:00 E03:00 S06:00 · 30/10 S02:00 E03:00 S06:00 | 180 min | O turno completo de 28/10 pertence à véspera. O segundo turno começa em 30/10 com uma `S` exibida como entrada. A cópia documenta divergência entre leitores para a data. Ramo do zero [nao verificado]. `app/docs/BACKLOG.md:2199`. | O turno de 30/10 já aparece em D. A lista de pares movidos fica [nao verificado]. |
+| col113 | 30/10 | 31/10 S02:00 E03:00 S07:02 | 242 min | A `S` órfã é descartada pelo adaptador. O par E03:00–S07:02 aparece fechado, e o ramo que impediu sua contribuição fica [nao verificado]. `app/ponto/adaptador_motor.py:29–44`. | Já em D para o par fechado. |
+| col113 | 01/11 | 02/11 S02:01 E03:00 S07:01 | 241 min | A `S` órfã é descartada pelo adaptador. O par E03:00–S07:01 aparece fechado, e o ramo que impediu sua contribuição fica [nao verificado]. `app/ponto/adaptador_motor.py:29–44`. | Já em D para o par fechado. |
+| col174 | 01/11 | 31/10 E20:58 E21:00 · 01/11 S02:59 S04:01 E05:08 · 02/11 E02:47 S03:47 S05:09 | 142 min | **Sem período**, segundo a sonda anterior registrada na cópia. A guarda que deixou a data sem período fica [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`. | O turno fechado visível é de 31/10. O `Turno` seguinte está truncado antes da data. [nao verificado] |
+| col200 | 02/11 | 03/11 S02:00 E02:00 S03:02 S06:00 | 180 min | A primeira `S` é órfã e o turno seguinte está fechado. A cópia documenta divergência entre leitores para a data. Ramo do zero [nao verificado]. `app/ponto/adaptador_motor.py:29–44`, `app/docs/BACKLOG.md:2199`. | Já em D para o turno fechado. |
+| col296 | 02/11 | 03/11 E00:15 E01:29 S07:00 | 345 min | O `Turno` exibido abre às 00:15 e fecha às 07:00. O extrato deixa em aberto qual entrada o motor usou e quais foram as pontas efetivas. Ramo do zero [nao verificado]. `app/ponto/motor_calculo_v2.py:503–531`, `:632–645`. | Já em D para o turno exibido. |
+| col382 | 10/11 | 09/11 E23:48 · 10/11 S03:51 E04:50 S07:48 · 11/11 E00:02 S04:10 E05:01 S07:51 | 418 min | **Janela de HE ancorada no dia civil**, diagnóstico documentado para o período fechado 00:02–07:51, com trabalhado 0 e fora da janela maior que o par. O motor lê `entrada.date()`, monta o marco no dia da entrada e aplica `max(0, duracao)`. `app/docs/RELATO.md:124`, `app/ponto/motor_calculo_v2.py:1528`, `:2759–2787`, `app/ponto/janela_he.py:20–30`, L-097 em `app/docs/LEIS.md:115`. | O turno iniciado em 11/11 às 00:02 já aparece em D. A janela da cópia continua usando 11/11 para essa entrada. `app/ponto/motor_calculo_v2.py:1528`. |
+| col110 | 12/11 | 13/11 S01:59 E02:55 S07:00 | 241 min | O `Turno` exibido usa a `S` de 01:59 como entrada. As pontas que chegaram ao cálculo e o ramo do zero ficam [nao verificado]. `app/ponto/motor_calculo_v2.py:503–531`, `:632–645`. | Já em D para o turno exibido. |
+| col37 | 14/11 | 15/11 S02:00 E03:00 S07:01 | 241 min | **Sem período**, segundo a sonda anterior registrada na cópia. A guarda que deixou a data sem período fica [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`. | Já em D para o turno exibido. |
+| col218 | 14/11 | 13/11 E20:58 · 14/11 S02:27 E03:27 S05:00 · 15/11 S02:17 E03:17 S05:00 | 103 min | O turno anterior pertence a 13/11. Em 14/11, o extrato mostra uma `S` órfã e trunca a continuação. Ramo do zero [nao verificado]. `app/ponto/adaptador_motor.py:29–44`. | A data do par E03:17–S05:00 no resultado completo fica [nao verificado]. |
+| col174 | 15/11 | 14/11 E18:31 · 15/11 S04:30 E05:30 S06:33 | 63 min | **Indício de atribuição a 14/11.** A cópia documenta essa sequência e a divergência: o juiz deixa o segundo par em 15/11, e o motor o atribui a 14/11 pela herança de até 6 h. O caminho efetivo da rubrica nesta sonda fica [nao verificado]. `app/docs/BACKLOG.md:2199`, `app/ponto/motor_calculo_v2.py:2400–2409`, L-085 em `app/docs/LEIS.md:117`. | **15/11 → 14/11 pela regra descrita.** É o segundo par fechado. E05:30 e S06:33 estão depois do `hf=05:00` e dentro do envelope, que vai até 09:00 pelos marcos documentados. Resultado do patch [nao verificado]. `app/docs/BACKLOG.md:2199`, `app/docs/RELATO.md:11`, `app/ponto/turnos.py:66–82`, `:216–231`. |
+
+Os juízes registrados são `turnos_do_colab` para o dia do turno, `periodos_do_dia` para a ata e `MotorBase.calcular_periodo` para o valor do par. A L-085 rege a atribuição ao início da jornada. A L-087 rege o papel das batidas na ata. A L-097 rege a janela de HE. `app/core/juizes.py:215–224`, `:1206–1208`, `app/docs/JUIZES.md:20–29`, `app/docs/LEIS.md:115–119`.
+
+Os outros ramos pedidos existem na cópia. Turno aberto devolve o período com o zero inicial, com possibilidade de crédito posterior de pares fechados. O bloqueio sem previsto exige folga ou feriado, janela aplicável, previsto zero e ausência de autorização. A ata pode substituir os períodos do dia após passar pelas guardas de bordas e batidas. A execução desses ramos para os dias sem diagnóstico fica [nao verificado]. `app/ponto/motor_calculo_v2.py:213`, `:2750–2755`, `:2877–2882`, `:3215–3220`, `:2541–2560`, `:1440–1486`, `:632–688`.
+
+## 3. Alcance da cauda
+
+**Total alcançado nos 18 dias: [nao verificado]. Total que passa a `horas_trabalhadas > 0`: [nao verificado].** `i_cauda_parado.patch`, `medida_a_mudancas.txt` e `sonda_mapa18.py` não foram localizados na cópia. O caso `col174 15/11` satisfaz o critério escrito para remapear o `Turno`, mas isso não demonstra ganho na rubrica. A janela da cópia ainda parte de `entrada.date()`, e a data do juiz também alimenta a seleção de períodos pela ata e a atribuição usada na lavra. Assim, o “nenhum” informado para a medida fica sem confirmação por dia. `app/docs/RELATO.md:11`, `app/ponto/motor_calculo_v2.py:684–688`, `:1528`, `:2346–2356`, `:2400–2409`, `app/ponto/services/dia_pago.py:173–179`.
+
+## 4. Classe × dias × colaboradores × horas realizadas
+
+As classes documentadas abaixo vêm do relato de uma sonda anterior na cópia. Os minutos vêm das linhas visíveis do dado colado. Um colaborador pode aparecer em mais de uma classe. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:285–292`.
+
+| Classe | Dias | Colabs | Realizado |
+|---|---:|---:|---:|
+| Inversão pela janela civil, documentada | 1 | 1 | 6 h 58 min |
+| Sem período, documentado | 3 | 2 | 8 h 48 min |
+| Ramo do zero [nao verificado], com linha visível | 10 | 7 | 29 h |
+| **Subtotal visível** | **14** | **9** | **44 h 46 min** |
+| **Total informado por `realizado>0`** | **18** | **11** | **73,9 h** |
+
+**Traceback:** o trecho fornecido termina numa linha `DIA` truncada e não contém traceback para transcrever. A existência de traceback na execução original fica [nao verificado].
 
 ## 24/11 17:10 · sessao cd368da76119 · REVISAO-CODEX-VOLTA · leitura · origem=Code
 
@@ -852,59 +906,4 @@ Para Q5, a regra detalhada exige os cinco campos no RELATO, incluindo como se es
 
 Há ainda uma divergência de disparador. O anexo atribui `pede` à sessão, o comentário do rascunho o atribui ao deploy e o fim do deploy na cópia grava o carimbo e o histórico e emite `OK`, sem chamar `pede`. A identidade da cópia com o HEAD do hash informado fica [não verificado], pois a cópia não expõe metadados Git. (`contrato.txt:2`, `linha_de_base.sh.txt:4`, `bin/deploy.sh:430–449`)
 
-## 24/11 12:29 · sessao cb5d74dfa55b · PONTA-PEQUENA-NA-BORDA · leitura · origem=Code
-
-**Item 3 — `vigia_de_hora` é o ponto certo para emitir o evento de prazo no fluxo atual.** Confirmei no código do host e no placar do VIVO que o vigia roda a cada 10 minutos nas empresas 2, 3 e 4, consulta o juiz que já calcula o vencimento dos marcos e alcança células de ontem com teto após a meia-noite. O ponto de emissão precisa alcançar as células que o vigia hoje pula por já terem batidas suficientes. A porta de inserção já existe fora de `cartorio.py`. `app/config/crons.py:367` `app/config/crons.py:2162` `app/ponto/services/vigia_de_hora.py:46` `app/ponto/services/vigia_de_hora.py:126` `app/ponto/portas/celula.py:981` [placar.jsonl:310313](/home/ronald/saas-hasner/app/logs/placar.jsonl:310313)
-
-### 1. O que `rodar` faz hoje
-
-1. **Relógio e trava.** O comando lê `timezone.now()` em hora local e aceita `--agora` para ensaio. `rodar` deriva o dia civil local desse instante e tenta `pg_try_advisory_lock(7180000 + empresa)`. Se a trava estiver ocupada, retorna `em_curso=1`. Libera a trava no `finally`. O cron usa `--apply`, com as três empresas no mesmo minuto (`passo=0`). O papel vigente é `prazo`, conforme `PRAZO_DELEGA_A`, após a saída de `JUIZES_POR_VARREDURA`. `app/ponto/management/commands/vigia_de_hora.py:17` `app/ponto/management/commands/vigia_de_hora.py:23` `app/ponto/services/vigia_de_hora.py:98` `app/ponto/services/vigia_de_hora.py:137` `app/config/crons.py:17` `app/config/crons.py:367` `app/config/crons.py:2124` `app/config/crons.py:2162` `app/config/crons.py:2200`
-2. **Universo.** Carrega as `CelulaDia` da empresa com `trabalha=True` de hoje e de ontem. Lê em lote as chaves dos chamados vivos `batida_ausente` dessas datas. Exclui desligados e isentos e aplica `_ontem_em_janela` às células de ontem. `app/ponto/services/vigia_de_hora.py:15` `app/ponto/services/vigia_de_hora.py:112`
-3. **Ontem, inclusive na virada.** Aceita ontem quando há fim previsto e `fim_turno + TETO_MARCO_MIN >= meia-noite de hoje`. A célula segue enquanto `agora < fim + 2 tetos` ou o juiz ainda considerar o dia aberto em `agora - 2 tetos`. Assim, até um turno que termina às 23h30 entra se o seu último marco vence às 00h00. O VIVO registra passadas com `noturnas_de_ontem`. `app/ponto/services/vigia_de_hora.py:26` `app/ponto/services/vigia_de_hora.py:46` `app/escala/servico_jornada.py:69` `app/escala/servico_jornada.py:97` [vigia_de_hora.log:58634](/home/ronald/saas-hasner/logs/vigia_de_hora.log:58634)
-4. **Vencimento e escrita.** Para cada célula que passou pelos filtros, `marcos_vencidos` consulta o vínculo do dia e chama `marcos_com_teto`, que testa `instante_do_marco + TETO_MARCO_MIN <= agora`. Hoje o vigia usa apenas os vencidos e descarta os pendentes. Pula sem marco vencido e, sem cobrança viva, pula se a quantidade de batidas apuráveis desde três horas antes do primeiro marco já cobre os vencidos. O restante vai a `julgar_celula(..., teto_de_hoje=True)`. Com `--apply`, o juiz pode abrir ou reconciliar cobranças e lavrar veredito, ata, status e insumos pela porta da célula, incluindo o carimbo de precedência. **O vigia já lê o vencimento até em células inteiramente batidas, mas o julgamento é condicionado por esse atalho.** `app/ponto/services/cartorio.py:880` `app/ponto/services/cartorio.py:900` `app/ponto/services/vigia_de_hora.py:64` `app/ponto/services/vigia_de_hora.py:125` `app/ponto/services/cartorio.py:1577` `app/ponto/services/cartorio.py:1839` `app/ponto/services/cartorio.py:1898` `app/ponto/services/cartorio.py:2094` `app/ponto/portas/celula.py:1217`
-
-### 2. Quem escreve `EventoCelula`
-
-O único `INSERT` no código de produção está em `ponto/portas/celula.py::emitir_evento_celula`. Estes são os chamadores diretos encontrados. `app/ponto/portas/celula.py:981`
-
-| Origem | Arquivo:linha |
-|---|---|
-| `salvar_e_emitir`, no mesmo `atomic` do save | `app/ponto/portas/celula.py:993` |
-| `reverter_regeneracao_dia`, após restaurar o DNA | `app/ponto/portas/celula.py:854` `app/ponto/portas/celula.py:873` |
-| `ChamadoColaborador.abrir` e `.criar`, no nascimento de chamado de turno com célula | `app/chamados/models.py:1037` `app/chamados/models.py:1160` |
-| Signal de chamado que volta a `VIVOS` | `app/chamados/signals.py:189` `app/chamados/signals.py:203` |
-| `recompute_turnos`, quando um turno antes aberto fecha | `app/ponto/nucleo.py:57` `app/ponto/nucleo.py:86` |
-| `PerguntaDisputa.acordar_celulas`, chamado pelo signal e pelas portas que alteram perguntas em lote ou por `update` | `app/chamados/models.py:3561` `app/chamados/signals.py:252` `app/chamados/models.py:1742` `app/chamados/models.py:3285` `app/chamados/models.py:4575` `app/chamados/services/disputa_emissao.py:1715` `app/chamados/services/fio.py:1088` `app/chamados/services/fio.py:1200` `app/chamados/services/validacao.py:482` |
-| `semear_eventos_celula`, para chamados vivos e perguntas órfãs | `app/chamados/reconciliador.py:1433` `app/chamados/reconciliador.py:1446` |
-
-O evento é genérico. Guarda `celula_id`, `colaborador_id`, `data` e metadados da fila, sem tipo, payload ou instante do teto. Na rota de save, a condição exata é que `veredito` ou `ata` conste dos campos lavrados. As outras rotas podem emitir sem esse save. A fila tem índices parciais comuns e admite vários eventos por colab-dia. A semeadura evita repetir um pendente vivo da célula naquela operação. O consumidor atualiza processamento, tentativas e erro, e apaga os processados após sete dias. `app/escala/models.py:1856` `app/escala/migrations/0043_eventocelula.py:12` `app/ponto/portas/celula.py:977` `app/chamados/reconciliador.py:1345` `app/chamados/reconciliador.py:1423` `app/chamados/reconciliador.py:1527`
-
-### 3. Onde a ponta pequena é decidida hoje
-
-**O consumidor atual não decide ponta pequena.** O cron `consumir_eventos_celula` roda a cada minuto, sob trava por schema. Lê pendentes em lotes de até 500, agrupa por colaborador e executa os fluxos de chamados e perguntas. A fábrica relê as células atuais pelas datas do lote. Nenhum desses caminhos chama `recusar_ponta_pequena`. `app/config/crons.py:394` `app/chamados/management/commands/consumir_eventos_celula.py:17` `app/chamados/reconciliador.py:1351` `app/chamados/reconciliador.py:1451` `app/chamados/reconciliador.py:1492` `app/chamados/services/fabrica_da_celula.py:288`
-
-Quem chama a porta hoje é o comando `recusar_ponta_pequena --apply`, encadeado a `lavrar_he_pendente`. Para uma empresa ativa com limite habilitado, lê o retrato lavrado no dia, exige ausência de `DecisaoHE` vigente, célula com `veredito is not None` e lista vazia de pendentes em `marcos_vencidos(...)[1]`. Esse último teste é literalmente “sem pendentes”. `marcos_vencidos` também pode devolver duas listas vazias quando não há marcos. `app/config/crons.py:1576` `app/config/crons.py:1589` `app/ponto/management/commands/recusar_ponta_pequena.py:78` `app/ponto/management/commands/recusar_ponta_pequena.py:98` `app/ponto/management/commands/recusar_ponta_pequena.py:120` `app/ponto/management/commands/recusar_ponta_pequena.py:141` `app/ponto/services/cartorio.py:893` `app/ponto/services/cartorio.py:907`
-
-A porta recebe o **total do dia**, exige minutos positivos e usa `acima_do_limite`, que testa `minutos > limite`. Até o limite, grava `DecisaoHE` com `estado='nao'`, `origem='sistema'` e trilha. Preserva decisão vigente e pode reativar a mesma linha revogada. A unicidade `(colaborador, data)` é de `DecisaoHE`. No VIVO, a rodada de 24/11 às 06h47 registrou 183 recusas e hashes de `FechamentoMensal` idênticos. `app/ponto/services/he_pendente_lavrado.py:55` `app/ponto/portas/he.py:277` `app/ponto/portas/he.py:332` `app/ponto/portas/he.py:369` `app/ponto/portas/he.py:89` `app/ponto/models.py:1357` [ponta_pequena.log:228](/home/ronald/saas-hasner/logs/ponta_pequena.log:228)
-
-### 4. Ponto de emissão e alcance
-
-O ponto é a leitura de `marcos_vencidos` em `rodar`, **antes do atalho `acesas`**. Ali já é possível reconhecer o último marco vencido usando a resposta existente, com vencidos presentes e pendentes vazios. A inserção pode passar por `emitir_evento_celula` sem mudar veredito, ata ou `cartorio.py`. A passagem do tempo, sozinha, pode deixar a ata igual porque `_ata_ate_o_teto` só altera lâmpada apagada de marco pendente. A sonda na sombra registrou os 47 dias com último evento anterior ao teto, distribuídos em 37, 9 e 1 nas empresas 2, 3 e 4. `app/ponto/services/vigia_de_hora.py:125` `app/ponto/services/cartorio.py:883` `app/ponto/services/cartorio.py:925` `app/ponto/portas/celula.py:981` [sonda_relogio.out:3](/home/ronald/saas-hasner/logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.out:3)
-
-Entre os relógios existentes, `detectar_ausencias` roda a cada cinco minutos, porém seu portão é a cobrança de **entrada** enquanto o turno ainda está aberto. `processar_cartorio` percorre dias passados às 06h27. `supra_juiz` roda em horários fixos e consulta `dias_encerrados`, que responde sobre o encerramento do turno. `lavrar_teto_do_dia` registra pares separados pelo teto às 07h42. O limite do `vigia_de_hora` é o recorte de hoje e do ontem admitido por `_ontem_em_janela`. Rodá-lo no dia 24, sozinho, não revisita 21 e 22 no ensaio histórico. `app/config/crons.py:364` `app/ponto/management/commands/detectar_ausencias.py:461` `app/config/crons.py:616` `app/ponto/management/commands/processar_cartorio.py:49` `app/config/crons.py:599` `app/config/crons.py:2157` `app/config/crons.py:516` `app/ponto/services/vigia_de_hora.py:21` `app/ponto/services/vigia_de_hora.py:53`
-
-### 5. Quem mais acorda e quanto custa
-
-- **Efeito de um evento genérico.** O consumidor executa, por colaborador, rejunção, retratação de perguntas e chamados absolvidos, retratação por premissa morta, encerramento de órfãs e fecho por lastro. Nas datas do lote, a fábrica também pode abrir perguntas e chamados, desfazer carimbos ou encaminhar limbo à pauta do DP. Os leitores de fila encontrados são o monitor do próprio consumidor, a semeadura, os vigias `reconciliar_chamados`, `reconciliar_perguntas_orfas` e `fechar_cobranca_com_lastro`, além da fotografia de auditoria `foto_e4b` e da sonda avulsa da obra. Os vigias tratam a presença de pendente como sinal de que o consumidor ainda pode cuidar do caso. `app/chamados/reconciliador.py:1499` `app/chamados/services/fabrica_da_celula.py:199` `app/chamados/management/commands/consumir_eventos_celula.py:36` `app/chamados/reconciliador.py:1423` `app/chamados/management/commands/reconciliar_chamados.py:62` `app/chamados/reconciliador.py:1331` `app/ponto/services/lastro.py:413` `app/chamados/services/foto_e4b.py:269` [sonda_relogio.py:44](/home/ronald/saas-hasner/logs/PONTA-PEQUENA-NA-BORDA/sonda_relogio.py:44)
-- **Idempotência e competência exportada.** A trava do vigia evita sobreposição e a fila aceita inserts repetidos em rodadas sucessivas. Para cumprir duas passadas = um evento, a emissão precisa de uma garantia persistente pela chave `(colab, dia, teto)`, que distinga o vencimento dos eventos genéricos já existentes. Para a competência exportada, a autoridade disponível é `competencia_entregue`. A porta de recusa grava a decisão e a trilha, e o chamador fornece os minutos. Reusar somente o retrato diário também traz risco de decidir com minutos calculados antes da última batida. `app/ponto/services/vigia_de_hora.py:100` `app/ponto/portas/celula.py:990` `app/chamados/reconciliador.py:1544` `app/folha/export.py:556` `app/ponto/portas/he.py:315` `app/ponto/portas/he.py:369` `app/ponto/services/he_pendente_lavrado.py:193`
-- **Custo observado às 12h20 de 24/11.** O log compartilhado e a ordem de conclusão no placar dão a seguinte associação. O mínimo iterado soma `de_hoje + noturnas_de_ontem + fora`. A consulta também traz as células de ontem descartadas por `_ontem_em_janela`, que ficam fora dos contadores. `app/ponto/services/vigia_de_hora.py:21` `app/ponto/services/vigia_de_hora.py:118` `bin/cron_run.sh:11`
-
-| Empresa | Hoje + ontem que chegaram a `marcos_vencidos` | Mínimo iterado | Enviadas ao juiz | Duração |
-|---|---:|---:|---:|---:|
-| 2 | 282 + 1 | 307 | 44 | 11 s · [vigia:58656](/home/ronald/saas-hasner/logs/vigia_de_hora.log:58656) · [placar:310351](/home/ronald/saas-hasner/app/logs/placar.jsonl:310351) |
-| 3 | 54 + 1 | 59 | 10 | 7 s · [vigia:58654](/home/ronald/saas-hasner/logs/vigia_de_hora.log:58654) · [placar:310349](/home/ronald/saas-hasner/app/logs/placar.jsonl:310349) |
-| 4 | 12 + 0 | 18 | 3 | 4 s · [vigia:58653](/home/ronald/saas-hasner/logs/vigia_de_hora.log:58653) · [placar:310344](/home/ronald/saas-hasner/app/logs/placar.jsonl:310344) |
-
-**[nao verificado]** A contagem bruta das duas consultas por empresa ficou sem conferência direta no banco. Também seguem sem verificação os critérios de pronto da mudança: 47 decisões pelo novo evento na sombra, duas passadas produzindo um evento por chave e competência exportada intacta.
-
-_8082 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8083 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
