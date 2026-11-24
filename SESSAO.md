@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 19:37:54.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (35.7 MB). Acoes na janela: **916**.
+**Medido em 24/11/2026 19:44:08.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (35.9 MB). Acoes na janela: **926**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:42:57 | Bash | Record full suite verdict | `cd ~/saas-hasner; sed -i '1i NOTURNO-A v4 suite inteira (20:xx): rc=0, OK (skipped=42, expected failures=40), Ran 17822 (v4/suite_inteira.log). Nao certifica o pouso: a volta 3 (7a testemunha) muda a arvore e roda de novo.' app/docs/RELATO.md` |
+| 19:42:54 | Bash | Read full suite verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bb84rkgy0.output` |
+| 19:40:56 | Bash | Record NOTURNO verif2 in RELATO | `cd ~/saas-hasner; sed -i '1i NOTURNO-A verif2 (20:xx): Codex rc 0 -- catraca fecha (9->9 pareadores, 84->84), 13 pares explicados pela regra (7 recortes +1645,9 min, col327 L-093, col841 teto, 3 l084_par). ACHADO procedente: 7a testemunha porta_export.py:101-105 agrupa por data CIVIL de p.entrada (derivacao propria, LEI-AKITA 2), DiaPago por dia_da_jornada; a cura acende col113 30/10x31/10. Volta  ...` |
+| 19:40:52 | SendMessage |  | `-` |
+| 19:40:32 | Bash | Confirm 7th testemunha civil-date derivation | `cd ~/saas-hasner; git show HEAD:app/folha/porta_export.py \| sed -n 95,120p; echo ---; git show HEAD:app/folha/porta_export.py \| sed -n 685,700p` |
+| 19:40:21 | Bash | Read NOTURNO Codex verif2 | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; wc -l $V/verif2.r; cat $V/verif2.r` |
+| 19:40:19 | Bash | Check NOTURNO status; log v8 in RELATO | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; tail -1 $V/verif2.wrap.log; ls -la $V/suite_inteira.rc 2>&1; tail -3 $V/suite_inteira.log; sed -i '1i DXG-APPLY-33 v8 (20:xx): ensaio sombra VERDE A+B (33/33 com_registro pk novo, 0 push, 0 recusa, 09/10 igual nas 7, 20 DiaPago perdidos = col569 11-20/11 obsoletos, explicados pelo controle; 6 fechamento_recusado todos comp 11). DECIDIDO ...` |
+| 19:40:16 | Bash | Wait for DXG v8 verifier | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; while kill -0 2521321 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $D/verif2.wrap.log; wc -l $D/verif2.r` |
+| 19:40:04 | Bash | Launch Codex verif2 on DXG v8 | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; E=$D/ensaio_v8; cat $E/A_veredito.txt $E/B_veredito.txt $E/A_push_e_callbacks.txt $E/B_push_e_callbacks.txt $E/A_diapago_perdidos.tsv $E/A_fechamento_recusado.tsv $E/B_testemunha_final.tsv > $E/resumo_v8.txt; wc -c $E/resumo_v8.txt cat > $D/verif2.q <<'EOF' Verificador volta 2 dos scripts DXG-APPLY-33 (v8). Anexos: aval, sua re ...` |
+| 19:39:51 | Bash | Check v8 artifact sizes | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; wc -c $D/diff_v7_v8.txt $D/*.py $D/COMANDOS_PROD_NAO_EXECUTADOS.txt $D/ensaio_v8/ensaio_total_v8.out; ls $D/ensaio_v8/` |
 | 19:18:21 | Bash | Prepend verdict line to RELATO | `cd ~/saas-hasner; sed -i '1i DXG-APPLY-33 verif1 (19:3x): Codex REPROVA v7 p/ COMMIT (verif1.r 51 l, rc 0; amostra 5/5 conferida): FM11 integral recusa por dado alheio, DiaPago -20 sem explicacao, on_commit sem lista (retomada), trava fora da porta canonica, K6 x export concorrente, PUSH_FIM antes das ultimas leituras, portao da pauta sem trilha. Volta v8 com o agente a941c42; nada em prod.' app/d ...` |
 | 19:18:18 | Bash | Find DXG lines in RELATO | `cd ~/saas-hasner; grep -n "DXG-APPLY-33" app/docs/RELATO.md \| head -5` |
 | 19:18:16 | Bash | Record verifier verdict in RELATO | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; t=open(p).read() ln="- DXG-APPLY-33 verif1 (19:3x): Codex REPROVA v7 p/ COMMIT (verif1.r 51 l, rc 0; amostra 5/5 conferida): FM11 integral recusa por dado alheio, DiaPago -20 sem explicacao, on_commit sem lista (retomada), trava fora da porta canonica, K6 x export concorrente, PUSH_FIM antes das ultimas leituras, portao da pauta sem trilha ...` |

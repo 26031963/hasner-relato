@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 19:17** · publicado em **24/11/2026 19:19** (UTC-3)
+> Ultima resposta processada: **24/11/2026 19:43** · publicado em **24/11/2026 19:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 19:43 · sessao dac0c298b3a5 · - · - · origem=Ronald (tmux)
+
+**Callbacks.** O resumo mostra somente `_rodar`, com 86 chamadas no ensaio e 66 no COMMIT da sombra. A diferença é compatível com um controle por colaborador e duas agendas por troca. `_fechar` e os dois `_silenciar` estão autorizados no código. Execução deles no ensaio [nao verificado]. `resumo_v8.txt:7–16` · `apply33.py:355–379,437–450,476–503` · `app/ponto/registro_batida.py:176–181,287–302`
+
+A seleção por identidade do código, a recusa de `_retomar`, `_reavaliar`, `_reconciliar` e desconhecidos, e a preservação do sentinela reproduzem `foto_e4b`. `_rodar` acrescenta a escrita de FM e `DiaPago` pela porta de fechamento. `_silenciar` grava véu e trilha pela porta de arquivo. `_fechar` carimba perguntas e pode fechar disputa e gravar efeitos do fio. Se fechar, enfileira `_retomar`, que a v8 impede de rodar e usa para abortar o lote. O S144 síncrono carimba perguntas sem fabricar Batida. `apply33.py:355–379` · `app/chamados/services/foto_e4b.py:30–84` · `app/ponto/services/fechamento.py:1137–1149,1191–1202,1265–1296,1798–1824` · `app/chamados/services/silencio_isentos.py:20–58` · `app/chamados/services/arquivo.py:141–174` · `app/chamados/services/becos.py:38–73` · `app/chamados/signals.py:122–167` · `app/chamados/services/materializacao.py:2305–2326,2335–2356`
+
+A recusa `_retomar` é necessária porque a regularização pode chamar `delete` e `save` diretos em Batida. A confirmação concorrente grava `confirmada` e chama a materialização sem passar pela trava de Colaborador. As duas leituras da v8 pegam pendências que estejam visíveis naquele instante. Uma confirmação entre a última leitura e o commit pode escapar. `apply33.py:381–397,515–518` · `app/chamados/services/regularizacao_ext.py:52–66,122–164,211–225,348–357`
+
+**O gate WARNING+ tem um ponto cego concreto.** O coletor é instalado na raiz. O perfil SaaS estabelece `propagate=False` para `ponto`, também herdado pela sombra. `_rodar` engole exceções e loga em `ponto.services.fechamento`, assim como os erros de `DiaPago`. Uma falha de uma relavra redundante pode deixar o delta final intacto e o coletor vazio. O settings efetivo de cada execução [nao verificado]. `apply33.py:44–51,617–634` · `app/manage.py:7–12` · `app/config/settings/saas.py:175–183` · `app/config/settings/sombra.py:27,49–60` · `app/ponto/services/fechamento.py:1238–1241,1297–1308,1818–1821`
+
+**Batida de chão.** A ordem inicial está corrigida. Colaboradores por PK, disputas abertas, pais e vivos, 33 perguntas, depois 33 batidas antigas. O caminho de chão não pede a ordem no topo, mas pode esperar na inserção. A FK da nova Batida aponta ao Colaborador bloqueado em `FOR UPDATE`, que conflita com a verificação referencial. A cópia documenta FKs Django inicialmente diferidas. Nesse caso a espera aparece na confirmação da transação, inclusive no fim do `INSERT` em autocommit. Dedup/chave existente evita o insert. Uma corrida pela mesma chave pode terminar em erro de unicidade. O pós-save também pode esperar no turno, célula ou no reconciliador que pede Colaborador. O handler protege exceções de sua parte defensiva, enquanto o `INSERT` em `registrar_batida` pode propagar erro de banco. `apply33.py:420–435` · `app/chamados/models.py:2901–2967` · `app/ponto/models.py:22,102–108` · `bin/sombra_incremental.sh:65–66` · `app/ponto/registro_batida.py:129–181` · `app/ponto/signals.py:19–36,85–93,131–135,206–218` · `app/chamados/reconciliador.py:563–576,1581–1601` · `app/api/views_core.py:643–686`
+
+Não há janela comprovadamente segura. 91,9 s é da entrada na aquisição até a amostra final, seguida de impressão e commit. Configuração efetiva, batida concorrente, espera e timeout em PROD [nao verificado]. O `timeout=30` do Gunicorn `gthread` não é prova de teto por pedido. Para L-030, o retroativo deve ceder e a gravação do chão precisa ser exercitada com concorrência. `resumo_v8.txt:7–16` · `apply33.py:420–429,615–643` · `app/gunicorn.core.conf.py:1–6` · `app/folha/views.py:189–196` · `CLAUDE.md:142–145`
+
+**Efeito síncrono fora da lista.** Reconciliador da Batida pode rejeitar Justificativa e passar por `transicionar_com_pauta`, que escreve Pauta DP se houver recusa ancorada coletada. A lista `on_commit` não vê esse efeito. Ocorrência nas 33 [nao verificado]. `app/ponto/signals.py:206–218` · `app/chamados/reconciliador.py:602–616,1581–1601` · `app/chamados/services/fecho_runtime.py:118–169`
+
+## 24/11 19:43 · sessao f0071e2a4343 · - · - · origem=Ronald (tmux)
+
+- **Testemunha parcial.** A v8 exige PK nova como único plantio vivo, antiga retratada e minuto da coluna igual ao TSV. O helper recebe `a['decl']`, enquanto o juiz deriva outro slot, inclusive do intervalo fixo. O juiz pode absolver por identidade administrativa, plantio sem slot, retratação auditada ou outra batida. `classificar_pergunta` repete o mesmo booleano. Exemplo estático é a nova batida na declaração, um marco fixo a mais de 20 min e outra batida viva no marco. Exigir o ramo de prova do juiz pelo PK, com slot, tipo, fonte e resposta vigente. As dez divergências na coluna informativa do anexo podem incluir retratadas, pois a consulta bruta toma a primeira batida por timestamp. `apply33.py:525–532` · `app/chamados/juizes.py:240–284,368–423,729–755,802–866,1639–1648` · `app/chamados/services/materializacao.py:682–720` · `app/chamados/models.py:4468–4476` · `app/chamados/services/vigia_carimbo.py:65–75` · `resumo_v8.txt:43–76`.
+- **`extra` é a porta contratada.** Metadados estruturados do ato vão ao JSON de auditoria ao lado dos campos automáticos. As chaves DXG são disjuntas de `aprovada` e `retratada_em`, embora o merge permita sobreposição em outros usos. A mesma ação já é usada com a classe `passivo_s84_folga`. Leitores específicos identificados das chaves DXG são apply e pauta. A foto E4B captura todo o JSON genericamente. A tela de auditoria lê a linha e mostra a descrição, o relatório humano lê apenas as chaves próprias de outra ação. Outros leitores e uso em PROD [nao verificado]. `app/ponto/registro_batida.py:245–296` · `app/core/auditoria.py:8–24` · `app/core/observ.py:133–137` · `app/ponto/management/commands/passivo_disputa_retro.py:164–172` · `apply33.py:534–538` · `pauta33.py:55–70` · `app/chamados/services/foto_e4b.py:247–252,313–323` · `app/templates/core/log_auditoria.html:44–74` · `app/ponto/services/retratar_humano.py:91–101,222–245`.
+- **Pauta parcial.** A trilha é exigida no modo escrita. O filtro carece de `modelo='Batida'`, a antiga apenas precisa estar retratada, um SHA único basta, o lote é fixo, os pares são relidos sem trava e as 52 são validadas por contagem de grupo. A linha 50833 poderia ser trocada por outra em `cadastro707`. Nas 14, o cálculo é do banco e o texto usa horas do TSV. `abs(int(delta))` aceita até 60,999 s. O serviço inclui nome, matrícula e batidas no texto se houver espaço, e a aba expõe o conteúdo a usuário `is_staff`. `pauta33.py:30–39,55–98` · `app/pautas/services.py:163–188,304–331,411–441` · `app/pautas/views.py:16–19,27–48,61–67`.
+- **50833.** `BATIDA` e `CADASTRO` têm o mesmo destino na L-099. Escrever o dono medido é coerente, com `ESTRUTURA` fora. O dono do dia-colab é uma pergunta diferente da causa do defeito de código que grava o marco. O anexo resumo não mostra `DONO_707` nem insumos da leitura. O motivo concreto de `BATIDA` e a medição em PROD estão [nao verificado]. `app/docs/LEIS.md:122` · `app/docs/RELATO.md:23` · `app/ponto/management/commands/e6_oraculo.py:98–110,182–195` · `pauta33.py:83–98` · `dxg_apply_33_190x.txt:1`.
+- **Seis recusas.** A atribuição a `troca` é pela faixa global de PK, sem filtro de origem. A data é a célula atual, sem usar o dia do payload ou os fallbacks do juiz. O K6 no relatório é o da montagem da tabela. Os motivos descrevem recusas de fechamento de chamado e não entram na contagem de recusas da porta de batida. `apply33.py:410–422,571–574,615–628` · `app/chamados/models.py:416–449,830–837` · `app/chamados/juizes.py:89–129`.
 
 ## 24/11 19:17 · sessao 6df1da8ff62a · DECLARADO-X-GRAVADO-PASSIVO-11 · verificador · origem=Code
 
@@ -662,247 +686,4 @@ Li a cópia identificada como `669f84e2d5e0ab381a45383cd98544511073c40e`. O proc
 3. **ATELA — A referência termina antes de parte das guardas.** Tranca, veto e `reabrir` ficam depois da linha 1074. Uma recusa fora do trecho citado pode ser comportamento previsto, inclusive por concorrência. `app/chamados/models.py:1075`, `:1081`, `:1085`, `:1403`, `:1483`
 4. **ATELA — A “regra 0” citada para “registrar sem vez” não consta dos documentos examinados.** `CLAUDE.md:14`, `:275` · `app/docs/CORTES.md:639` · `app/docs/BACKLOG.md:1985` · `bin/trava_teste.sh:18`
 
-## 24/11 16:57 · sessao 6fb75020db7e · PONTA-PEQUENA-NA-BORDA · construtor · origem=Code
-
-Cura aplicada na worktree sobre `a6fa3a5d94a8f9f8f2ea1de9f05342314a4a74a4`. O diff passa em `git diff --check` e acrescenta **0 `except`**. `chamados/reconciliador.py:1388`, `ponto/services/ponta_pequena.py:83`, `ponto/services/vigia_de_hora.py:98`, `ponto/tests/test_ponta_pequena_prazo_evento.py:156`
-
-**Escolha (i)**  
-O consumidor julga cada dia no maior instante entre o início do consumo e o `criado_em` dos eventos daquele dia. O cálculo dos minutos usa o mesmo instante. `ponto/services/ponta_pequena.py:74`, `ponto/services/ponta_pequena.py:91`, `ponto/services/ponta_pequena.py:111`  
-O vigia exclui os mortos antes do `Max('criado_em')`, usando o mesmo filtro da contagem do outbox. `chamados/reconciliador.py:1388`, `ponto/services/vigia_de_hora.py:104`  
-A opção mantém a leitura de `DecisaoHE` vigente em `motivo_de_nao_decidir` e usa o juiz de encerramento já chamado pelos dois caminhos. `ponto/services/ponta_pequena.py:53`, `ponto/services/ponta_pequena.py:60`, `ponto/services/vigia_de_hora.py:111`
-
-### RED, GREEN e mutantes
-
-Os comandos Django pararam no `import django.core`, antes de executar os testes. **RED e GREEN integrados [nao verificado].** O resultado abaixo é da reprodução em memória, executada sobre as funções da cópia com juiz, ORM e portas simulados. `manage.py:11`, `ponto/services/ponta_pequena.py:83`, `ponto/services/vigia_de_hora.py:87`
-
-| Execução em memória | Saída observada |
-|---|---|
-| RED, antes da cura | `Ran 2 tests in 0.000s` · `FAILED (failures=2)`. Em (a), zero recusa e `prazo_ja_emitido=1`. Em (b), os contadores deram `(0, 1)` em vez de `(1, 0)`. `ponto/tests/test_ponta_pequena_prazo_evento.py:156`, `ponto/tests/test_ponta_pequena_prazo_evento.py:188` |
-| GREEN, com a cura | `Ran 2 tests in 0.000s` · `OK`. `ponto/services/ponta_pequena.py:111`, `ponto/services/vigia_de_hora.py:104` |
-| Mutante (a) | Trocar a atribuição por `agora_por_data[e.data] = agora` fez o caso (a) voltar a perder a recusa. `Ran 1 test in 0.000s` · `FAILED (failures=1)`. Teste integrado correspondente `test_RED_evento_pos_encerramento_com_consumidor_iniciado_antes`. `ponto/services/ponta_pequena.py:117`, `ponto/tests/test_ponta_pequena_prazo_evento.py:156` |
-| Mutante (b) | Remover `.exclude(filtro_evento_morto())` fez o caso (b) voltar a suprimir a emissão. `Ran 1 test in 0.000s` · `FAILED (failures=1)`. Teste integrado correspondente `test_RED_evento_morto_pos_encerramento_nao_suprime_prazo`. `ponto/services/vigia_de_hora.py:106`, `ponto/tests/test_ponta_pequena_prazo_evento.py:188` |
-
-Comandos para o Code rodar em `app/`. O GREEN inclui os dois módulos de `chamados.tests` encontrados com import direto. A certificação fica com o Code e o opus final. `config/settings/ci.py:6`, `chamados/tests/test_e4a2_disparar_e_vigia.py:503`, `chamados/tests/test_pergunta_do_dia_em_curso.py:326`, `docs/LEIS.md:147`
-
-```bash
-classe=ponto.tests.test_ponta_pequena_prazo_evento.DiurnoQueFechaDepoisDoRetratoTest
-a="$classe.test_RED_evento_pos_encerramento_com_consumidor_iniciado_antes"
-b="$classe.test_RED_evento_morto_pos_encerramento_nao_suprime_prazo"
-
-# RED com os testes e o código de negócio da base [nao verificado]
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput "$a" "$b"
-
-# GREEN com a cura
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput \
-  ponto.tests.test_ponta_pequena_prazo_evento \
-  ponto.tests.test_o214_ponta_pequena \
-  chamados.tests.test_e4a2_disparar_e_vigia \
-  chamados.tests.test_pergunta_do_dia_em_curso
-
-# Mutante (a) isolado
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput "$a"
-
-# Mutante (b) isolado
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput "$b"
-```
-
-### Leitores dos campos
-
-- **`EventoCelula.data`, `colaborador_id`, `criado_em`** — o consumidor ordena e agrupa o lote, a fábrica lê as datas, a ponta pequena calcula o instante por dia, o vigia agrega por par e a medição de idade lê o evento mais velho. A foto E4B lê todos os campos concretos. `chamados/reconciliador.py:1403`, `chamados/reconciliador.py:1486`, `chamados/services/fabrica_da_celula.py:297`, `ponto/services/ponta_pequena.py:117`, `ponto/services/vigia_de_hora.py:104`, `chamados/services/foto_e4b.py:247`, `chamados/services/foto_e4b.py:270`
-- **`EventoCelula.processado_em`, `tentativas`** — pendentes, mortos, supressão e retenção leem esses campos. O consumidor grava a baixa ou incrementa as tentativas. Os dois comandos de chamados leem as contagens resultantes. `chamados/reconciliador.py:1382`, `chamados/reconciliador.py:1388`, `chamados/reconciliador.py:1541`, `chamados/reconciliador.py:1556`, `ponto/services/vigia_de_hora.py:106`, `chamados/management/commands/consumir_eventos_celula.py:36`, `chamados/management/commands/reconciliar_chamados.py:113`
-- **`DecisaoHE.data`, `estado`, `origem`** — os testes conferem a recusa gravada pela porta existente. O pré-filtro, a porta, o lavrador, a Gestão de HE, o espelho, o motor e o portão do TXT consultam a decisão. `ponto/tests/test_ponta_pequena_prazo_evento.py:156`, `ponto/services/ponta_pequena.py:53`, `ponto/portas/he.py:352`, `ponto/portas/he.py:379`, `ponto/management/commands/lavrar_he_pendente.py:48`, `ponto/services/gestao_he.py:69`, `ponto/services/espelho.py:943`, `ponto/motor_calculo_v2.py:1397`, `folha/porta_export.py:686`
-
-Eventos que a versão anterior já baixou continuam elegíveis para a supressão enquanto estiverem retidos. A ocorrência desse estado em produção fica [nao verificado]. `chamados/reconciliador.py:1391`, `chamados/reconciliador.py:1556`, `ponto/services/vigia_de_hora.py:104`
-
-<details>
-<summary>Diff unificado aplicado na worktree</summary> [nao verificado]
-
-```diff
-diff --git a/app/chamados/reconciliador.py b/app/chamados/reconciliador.py
-index 2d4a68f90..ac458af42 100644
---- a/app/chamados/reconciliador.py
-+++ b/app/chamados/reconciliador.py
-@@ -1387,0 +1388,6 @@ def eventos_pendentes():
-+def filtro_evento_morto():
-+    """Evento sem baixa que esgotou as tentativas do outbox."""
-+    from django.db.models import Q
-+    return Q(processado_em__isnull=True, tentativas__gte=MAX_TENTATIVAS_EVENTO)
-+
-+
-@@ -1391 +1397 @@ def eventos_mortos():
--    return EventoCelula.objects.filter(processado_em__isnull=True, tentativas__gte=MAX_TENTATIVAS_EVENTO).count()
-+    return EventoCelula.objects.filter(filtro_evento_morto()).count()
-diff --git a/app/ponto/services/ponta_pequena.py b/app/ponto/services/ponta_pequena.py
-index 202a20337..81d08e240 100644
---- a/app/ponto/services/ponta_pequena.py
-+++ b/app/ponto/services/ponta_pequena.py
-@@ -12 +12 @@ AGORA o dono do RELOGIO e um so (`ponto/services/vigia_de_hora.py::rodar`, papel
--`ponto/turnos.py::dia_encerrado` diz que o dia acabou e nenhum evento do par nasceu DEPOIS disso, ele emite o
-+`ponto/turnos.py::dia_encerrado` diz que o dia acabou e nenhum evento nao morto do par nasceu DEPOIS disso, ele emite o
-@@ -70 +70 @@ def minutos_do_dia(colaborador, data, agora, *, cache=None):
--    guarda o espelho por (colab, competencia) dentro de um lote."""
-+    guarda o espelho por (colab, competencia, instante) dentro de um lote."""
-@@ -74 +74 @@ def minutos_do_dia(colaborador, data, agora, *, cache=None):
--    _k = (colaborador.pk, ini, fim)
-+    _k = (colaborador.pk, ini, fim, agora)
-@@ -83 +83 @@ def minutos_do_dia(colaborador, data, agora, *, cache=None):
--def decidir_dias(colaborador, datas, agora):
-+def decidir_dias(colaborador, datas, agora, *, agora_por_data=None):
-@@ -90,0 +91 @@ def decidir_dias(colaborador, datas, agora):
-+    agora_por_data = agora_por_data or {}
-@@ -92 +93,2 @@ def decidir_dias(colaborador, datas, agora):
--        _mot = motivo_de_nao_decidir(colaborador, data, agora, memo=memo)
-+        agora_do_dia = agora_por_data.get(data, agora)
-+        _mot = motivo_de_nao_decidir(colaborador, data, agora_do_dia, memo=memo)
-@@ -96 +98 @@ def decidir_dias(colaborador, datas, agora):
--        _m = minutos_do_dia(colaborador, data, agora, cache=cache)
-+        _m = minutos_do_dia(colaborador, data, agora_do_dia, cache=cache)
-@@ -112 +114,5 @@ def decidir_eventos(colaborador, lote, agora):
--    return decidir_dias(colaborador, [e.data for e in lote], agora)['recusados']
-+    # Um lote pode trazer evento criado depois do inicio do consumidor.
-+    agora_por_data = {}
-+    for e in lote:
-+        agora_por_data[e.data] = max(agora_por_data.get(e.data, agora), e.criado_em)
-+    return decidir_dias(colaborador, agora_por_data, agora, agora_por_data=agora_por_data)['recusados']
-diff --git a/app/ponto/services/vigia_de_hora.py b/app/ponto/services/vigia_de_hora.py
-index 9a47e4656..483145460 100644
---- a/app/ponto/services/vigia_de_hora.py
-+++ b/app/ponto/services/vigia_de_hora.py
-@@ -14 +14 @@ Event): este e o RELOGIO UNICO da casa para o fim do dia. Quando o juiz `ponto/t
--acabou e nenhum `EventoCelula` do par nasceu DEPOIS disso, `_emitir_no_prazo` emite UM pela porta unica
-+acabou e nenhum `EventoCelula` nao morto do par nasceu DEPOIS disso, `_emitir_no_prazo` emite UM pela porta unica
-@@ -90,2 +90,2 @@ def _emitir_no_prazo(cels, agora, tot):
--    IDEMPOTENCIA PELO FATO, nao por marca nova: o par ja tem evento nascido DEPOIS do encerramento
--    (`dia_encerrado(..., agora=criado_em do ultimo)`) -> nada a emitir, porque o consumidor que o le ja ve o dia acabado
-+    O par ja tem evento processado ou com tentativas sobrando, nascido DEPOIS do encerramento
-+    (`dia_encerrado(..., agora=criado_em do ultimo)`) -> nada a emitir: o consumidor julga a partir do carimbo do evento
-@@ -97,0 +98 @@ def _emitir_no_prazo(cels, agora, tot):
-+    from chamados.reconciliador import filtro_evento_morto
-@@ -104,0 +106 @@ def _emitir_no_prazo(cels, agora, tot):
-+        .exclude(filtro_evento_morto())
-diff --git a/app/ponto/tests/test_ponta_pequena_prazo_evento.py b/app/ponto/tests/test_ponta_pequena_prazo_evento.py
-index 41bbcae95..cc595faec 100644
---- a/app/ponto/tests/test_ponta_pequena_prazo_evento.py
-+++ b/app/ponto/tests/test_ponta_pequena_prazo_evento.py
-@@ -128 +128 @@ class DiurnoQueFechaDepoisDoRetratoTest(_Base):
--            self._celula_e_batidas(self.BATIDAS)
-+            cel = self._celula_e_batidas(self.BATIDAS)
-@@ -130,0 +131 @@ class DiurnoQueFechaDepoisDoRetratoTest(_Base):
-+        return cel
-@@ -154,0 +156,50 @@ class DiurnoQueFechaDepoisDoRetratoTest(_Base):
-+    def test_RED_evento_pos_encerramento_com_consumidor_iniciado_antes(self):
-+        from chamados import reconciliador
-+        from ponto.models import DecisaoHE
-+        from ponto.portas.celula import emitir_evento_celula
-+
-+        cel = self._dia_de_manha_consumido()
-+        antes = _instante(D, 18) - datetime.timedelta(seconds=10)
-+        depois = _instante(D, 18) + datetime.timedelta(seconds=10)
-+        ler_pendentes = reconciliador.eventos_pendentes
-+        evento = None
-+
-+        def ler_lote():
-+            nonlocal evento
-+            if evento is None:
-+                # O consumidor ja capturou seu instante. O evento entra na fila antes da leitura do lote.
-+                relogio.move_to(depois)
-+                evento = emitir_evento_celula(cel)
-+            return ler_pendentes()
-+
-+        with freeze_time(antes) as relogio, \
-+                mock.patch.object(reconciliador, 'eventos_pendentes', side_effect=ler_lote), \
-+                mock.patch('ponto.services.espelho.espelho_do_colab', return_value=_esp(D, 9)):
-+            out = reconciliador.consumir_eventos_celula()
-+        self.assertEqual(evento.criado_em, depois)
-+        evento.refresh_from_db()
-+        self.assertIsNotNone(evento.processado_em, out)
-+
-+        r = self._vigia(D, 18, 50)
-+        out_seguinte, _ = self._consumir(D, 18, 51)
-+        self.assertEqual([(x.data, x.estado, x.origem) for x in self._decisoes()],
-+                         [(D, DecisaoHE.NAO, DecisaoHE.ORIGEM_SISTEMA)], (out, r, out_seguinte))
-+
-+    def test_RED_evento_morto_pos_encerramento_nao_suprime_prazo(self):
-+        from chamados.reconciliador import MAX_TENTATIVAS_EVENTO, eventos_mortos
-+        from ponto.models import DecisaoHE
-+        from ponto.portas.celula import emitir_evento_celula
-+
-+        cel = self._dia_de_manha_consumido()
-+        with freeze_time(_instante(D, 18, 40)):
-+            morto = emitir_evento_celula(cel)
-+            morto.tentativas = MAX_TENTATIVAS_EVENTO
-+            morto.save(update_fields=['tentativas'])
-+        self.assertEqual(eventos_mortos(), 1)
-+
-+        r = self._vigia(D, 18, 50)
-+        self.assertEqual((r.get('prazo_eventos', 0), r.get('prazo_ja_emitido', 0)), (1, 0), r)
-+        out, _ = self._consumir(D, 18, 51)
-+        self.assertEqual([(x.data, x.estado, x.origem) for x in self._decisoes()],
-+                         [(D, DecisaoHE.NAO, DecisaoHE.ORIGEM_SISTEMA)], out)
-+
-```
-
-</details>
-
-## 24/11 16:51 · sessao e8deac470600 · A-TELA-DO-DIA-LE-UM-JUIZ · sonda · origem=Code
-
-Não localizei o `sonda.py` na cópia e não executei a sonda. Abaixo está a saída raspada integral fornecida no pedido. Uma nova execução e a saída de produção estão [nao verificado]. [nao verificado]
-
-```text
-sonda_leitura: sonda.py [a4d0026544e2e54a] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-== col456 2026-11-14 chamados=3
- ch=38964 mod=batida_ausente status=resolvido via=sistema resolvido_em=2026-11-14 22:20:24.178025+00:00 dia_do_fato=2026-11-14
-  G1 situacao=ativo
-  G2 trancada=False
-  G3 veto_da_regua=None
-  G4 recusa_da_reabertura=('premissa_regularizada', None)
- ch=39068 mod=turno_aberto status=aberto via= resolvido_em=None dia_do_fato=2026-11-14
-  G1 situacao=ativo
-  G2 trancada=False
-  G3 veto_da_regua=None
-  G4 recusa_da_reabertura=('transicao', None)
- ch=39102 mod=par_relampago status=aberto via= resolvido_em=None dia_do_fato=2026-11-14
-  G1 situacao=ativo
-  G2 trancada=False
-  G3 veto_da_regua=None
-  G4 recusa_da_reabertura=('transicao', None)
-== col788 2026-11-09 chamados=2
- ch=37980 mod=batida_ausente status=resolvido via=sistema resolvido_em=2026-11-10 01:20:17.589828+00:00 dia_do_fato=2026-11-09
-  G1 situacao=ativo
-  G2 trancada=False
-  G3 veto_da_regua=None
-  G4 recusa_da_reabertura=('premissa_regularizada', None)
- ch=38064 mod=turno_aberto status=em_analise via= resolvido_em=None dia_do_fato=2026-11-09
-  G1 situacao=ativo
-  G2 trancada=False
-  G3 veto_da_regua=None
-  G4 recusa_da_reabertura=('transicao', None)
-```
-
-### Primeira guarda por chamado
-
-Com os valores fornecidos, os cinco passam pelas quatro guardas iniciais, nesta ordem:
-
-1. `situacao` é `ativo`. `app/chamados/models.py:1071`
-2. `via_encerramento` é `sistema` ou vazio. `VIA_CASCADE` vale `cascade`. `app/chamados/models.py:1073`, `app/chamados/catalogo/motor.py:89`
-3. `_dia_em_competencia_trancada()` dá `False`. `app/chamados/models.py:1075`
-4. `_veto_da_regua()` dá `None`. `app/chamados/models.py:1081`, `app/chamados/models.py:1082`
-
-A quinta guarda é o retorno de `reabrir()`, que consulta `recusa_da_reabertura()`. A tabela aplica a ordem do código ao G4 fornecido para cada chamado. `app/chamados/models.py:1085`, `app/chamados/models.py:1384`, `app/chamados/models.py:1456`
-
-| Chamado | Primeira recusa com os valores da sonda | Se `abrir()` selecionar esse chamado no dedup |
-|---|---|---|
-| `38964` · `col456` · `2026-11-14` | `premissa_regularizada`. `app/chamados/models.py:1414`, `app/chamados/models.py:1416` | `resolvido` integra `ENCERRADOS`. `abrir()` chama `_renascer_por_premissa_viva`. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987` |
-| `39068` · `col456` · `2026-11-14` | `transicao`, se consultada. O motor recusa `REABRIR` a partir de `aberto`. `app/chamados/models.py:1424`, `app/chamados/catalogo/motor.py:113`, `app/chamados/catalogo/motor.py:161` | `aberto` fica fora de `ENCERRADOS`. `abrir()` devolve o existente sem chamar o método. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987`, `app/chamados/models.py:990` |
-| `39102` · `col456` · `2026-11-14` | `transicao`, se consultada. O motor recusa `REABRIR` a partir de `aberto`. `app/chamados/models.py:1424`, `app/chamados/catalogo/motor.py:113`, `app/chamados/catalogo/motor.py:161` | `aberto` fica fora de `ENCERRADOS`. `abrir()` devolve o existente sem chamar o método. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987`, `app/chamados/models.py:990` |
-| `37980` · `col788` · `2026-11-09` | `premissa_regularizada`. `app/chamados/models.py:1414`, `app/chamados/models.py:1416` | `resolvido` integra `ENCERRADOS`. `abrir()` chama `_renascer_por_premissa_viva`. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987` |
-| `38064` · `col788` · `2026-11-09` | `transicao`, se consultada. O motor recusa `REABRIR` a partir de `em_analise`. `app/chamados/models.py:1424`, `app/chamados/catalogo/motor.py:113`, `app/chamados/catalogo/motor.py:161` | `em_analise` fica fora de `ENCERRADOS`. `abrir()` devolve o existente sem chamar o método. `app/chamados/catalogo/motor.py:30`, `app/chamados/models.py:987`, `app/chamados/models.py:990` |
-
-### Caminho do emissor na cópia
-
-Para `batida_ausente`, o emissor `detectar_ausencias._abrir_chamado()` chama `ChamadoColaborador.abrir()` pela chave colaborador, módulo e `contexto_json__data_turno`. O ramo c2 do reconciliador, descrito na linha 1719 e chamado na linha 1757, usa a mesma chave. Em ambos, `abrir()` pega o primeiro resultado do filtro e só chama `_renascer_por_premissa_viva` se esse resultado estiver em `ENCERRADOS`. O c2 busca especificamente `batida_ausente`, portanto os dois `turno_aberto` e o `par_relampago` ficam fora da busca desse ramo. `app/ponto/management/commands/detectar_ausencias.py:29`, `app/ponto/management/commands/detectar_ausencias.py:694`, `app/chamados/reconciliador.py:957`, `app/chamados/reconciliador.py:1032`, `app/chamados/reconciliador.py:1719`, `app/chamados/reconciliador.py:1757`, `app/chamados/models.py:972`, `app/chamados/models.py:987`
-
-Para os dois dias, a execução efetiva do emissor ou do c2, o chamado selecionado pelo filtro e os `marcos_faltantes` passados à reabertura estão [nao verificado]. O código repassa esses marcos de `defaults` e os usa na checagem de `premissa_regularizada`. `app/chamados/models.py:989`, `app/chamados/models.py:1353`, `app/chamados/models.py:1415`
-
-_8097 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8099 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
