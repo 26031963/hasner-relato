@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 15:18:16.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (23.1 MB). Acoes na janela: **617**.
+**Medido em 24/11/2026 15:24:23.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (23.1 MB). Acoes na janela: **618**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:19:43 | Bash | Replace contract with V2 in docs, register side item | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| RESOLVER-PASSA-NA-FRENTE \|')][0] c=L[i].split('\|') c[4]=" CONTRATO-RESOLVER-REDUZIDO-V2-2411-1520 substitui o -1520 e todo aval anterior: motivo so com pergunta aberta; frase fixa no Log/nota/ato_motivo; historico do app ate o fim da comp; dia trancado recusa ...` |
 | 15:15:58 | Bash | Register reduced RESOLVER contract in docs | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| RESOLVER-PASSA-NA-FRENTE \|')][0] c=L[i].split('\|') c[4]=" CONTRATO-RESOLVER-REDUZIDO-2411-1520 substitui todo aval anterior: 4 itens (motivo obrigatorio; frase fixa no Log/nota/ato_motivo; app le celula do admin; dia trancado recusado na porta) em copia NOVA  ...` |
 | 15:15:52 | Bash | Inspect BACKLOG RESOLVER row columns | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| RESOLVER-PASSA-NA-FRENTE \|')]; assert len(i)==1; i=i[0] cols=L[i].split('\|'); print(len(cols)); print([c[:60] for c in cols]) EOF` |
 | 15:15:49 | Bash | Find RESOLVER line in BACKLOG | `cd ~/saas-hasner/app/docs; grep -n 'RESOLVER-PASSA-NA-FRENTE' BACKLOG.md \| head -5 \| cut -c1-200` |
