@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 18:53:40.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.5 MB). Acoes na janela: **896**.
+**Medido em 24/11/2026 18:59:53.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.6 MB). Acoes na janela: **897**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:59:24 | Bash | Write PAREI for DXG push decision at RELATO top | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"PAREI: ! DXG-47-PUSH-ENTRE-OS-ATOS \| espera Ronald -- volta 6 do apply47 (logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47/, diff_v6.txt, ensaio_v6/apply47_v6b_ensaio.out): ensaio na sombra 47 aplicadas, 0 recusa, 47/47 com_registro testemunhado pela batida NOVA, hash 09/10 igual nas 7, rubricas  ...` |
 | 18:52:04 | Bash | Registrar verif1 NOTURNO no RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"NOTURNO-A verif1 Codex (rc 0, v4/verif1.r 62 l.): NAO PRONTO -- procedente conferido: catraca core/tests/test_medida_turno_do_par.py:301 congela _janela_do_dia em [1528], a cura move para 1533 (seria vermelho na suite inteira; o construtor rodou so --only ponto). Tambem: chave do DIFF por turnos_do ...` |
 | 18:51:59 | SendMessage |  | `-` |
 | 18:51:47 | Bash | Confere catraca de linha citada pelo Codex | `cd ~/saas-hasner/app; sed -n 296,304p core/tests/test_medida_turno_do_par.py; sed -n 552,564p core/tests/test_medida_turno_do_par.py` |
