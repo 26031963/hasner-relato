@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 01:07:44.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (16.7 MB). Acoes na janela: **432**.
+**Medido em 24/11/2026 01:13:53.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (17.0 MB). Acoes na janela: **440**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:12:52 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; CODEX_SONDA_ENVELOPE=$D/envelope.sh CODEX_OBRA=NOTURNO-NAO-APURADO CODEX_PAPEL=sonda bash bin/codex_pergunta.sh --sonda $D/sonda_c1.py --anexo $D/mapa.r $(cat $D/hash.txt) $D/sonda_c1.q $D/sonda_c1.r > $D/sonda_c1.out 2>&1; echo rc=$? >> $D/sonda_c1.out` |
+| 01:12:49 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; awk '/^```python$/{f=1;next} /^```$/{if(f){f=0}} f' $D/mapa.r > $D/sonda_c1.py; wc -l $D/sonda_c1.py; python3 -m py_compile $D/sonda_c1.py && echo compila; cp logs/PAR-PELO-TURNO/envelope.sh $D/envelope.sh; sed -i 's/PAR-PELO-TURNO/NOTURNO-NAO-APURADO redesenho/' $D/envelope.sh cat > $D/sonda_c1.q <<'EOF' PAPEL: sonda (leitura). Obra NOTURNO- ...` |
+| 01:12:39 | Bash |  | `cd ~/saas-hasner; grep -n "NOME_DO_BANCO *=" app/config/settings/sombra.py; cat logs/PAR-PELO-TURNO/envelope.sh; grep -n "CODEX_SONDA_ENVELOPE" bin/codex_pergunta.sh \| head -3 \| cut -c1-200` |
+| 01:12:34 | Bash |  | `cd ~/saas-hasner; grep -n "\-\-rodar" bin/sombra.sh \| head -5 \| cut -c1-200; grep -n "NAME\\|DB_NAME" app/config/settings/sombra.py \| head -5; head -40 logs/PAR-PELO-TURNO/g3/g3.py \| grep -n "sombra\\|current_database" ; grep -rn "sombra.sh --rodar\\|sonda_leitura" logs/PAR-PELO-TURNO/g3/*.out logs/PAR-PELO-TURNO/envelope.sh 2>/dev/null \| head -3 \| cut -c1-200` |
+| 01:12:30 | Bash |  | `cd ~/saas-hasner/app; grep -n "um juiz so do par" docs/CORTES.md docs/BACKLOG.md \| cut -c1-300 \| head -3; grep -n "MOTOR-LE-O-TURNO" docs/BACKLOG.md \| head -2 \| cut -c1-400` |
+| 01:12:27 | Bash |  | `cd ~/saas-hasner/app; sed -n 214,224p core/juizes.py; echo ---; sed -n 489p docs/CORTES.md \| cut -c1-500; echo ---; sed -n 867,895p ponto/motor_calculo_v2.py; echo ---; sed -n 1192,1199p ponto/turnos.py; sed -n 1940,1944p ponto/turnos.py` |
+| 01:12:22 | Read |  | `/home/ronald/saas-hasner/logs/NOTURNO-NAO-APURADO/redesenho/mapa.r` |
+| 01:12:20 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/redesenho; tail -3 $D/mapa.out; wc -c $D/mapa.r; cat $D/mapa.r` |
 | 01:07:04 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' import json p='app/docs/CORTES.json'; d=json.load(open(p)) assert not any(x['id']=='RESPOSTA-DESENHO-RESOLVER-2411-0110' for x in d) d.append({'id':'RESPOSTA-DESENHO-RESOLVER-2411-0110','quando':'2026-11-24 01:10','estado':'registrado; construcao espera o pouso da F0 (mesmo arquivo app/chamados/models.py, LATERAIS proibe 2 construtores no mesmo arquivo)','fatia' ...` |
 | 01:06:52 | Bash |  | `cd ~/saas-hasner; tail -5 logs/RESOLVER-PASSA-NA-FRENTE/red_encerra.log \| cut -c1-200; sed -n 1p app/docs/RELATO.md \| cut -c1-200; grep -n "1.346\\|1346" app/docs/RELATO.md logs/RESOLVER-PASSA-NA-FRENTE/*.r \| head -3 \| cut -c1-250` |
 | 01:06:46 | Bash |  | `cd ~/saas-hasner; git -C /home/ronald/wt-f0-004802 show --stat --format= 4346eddae \| cut -c1-120; sed -n 1,200p logs/RESOLVER-PASSA-NA-FRENTE/brief_2411.md \| cut -c1-400 \| head -60` |
