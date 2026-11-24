@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 15:06:06.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (22.2 MB). Acoes na janela: **607**.
+**Medido em 24/11/2026 15:12:10.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (22.2 MB). Acoes na janela: **609**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:06:23 | Bash | Record RESOLVER closure in RELATO and PROMPTS | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() l=("RESOLVER-PASSA-NA-FRENTE: ENCERRADA por RESOLVER-PARA-E-MAPEIA-2411-1510 (15:1x): construtor da V2 parado (TaskStop + suite dele na fila morta antes de rodar), sem 4a volta nem opus, nada pousa. " "Copia /home/ronald/wt-resolver-d-024937 intacta em fbf5ba2a5 com o delta V2 NAO commitado (2 testes; snapshot logs/RESOLV ...` |
+| 15:06:12 | Bash | Launch Codex reading for the guard matrix | `cd ~/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE; cat > $D/matriz/q.txt <<'EOF' PAPEL: leitura. Obra RESOLVER-PASSA-NA-FRENTE (lei 2311-1306, corte 2411-0110). Hash fbf5ba2a5 (copia da obra; o diff da obra inteira contra a base 7a4e79eef vai anexo por ultimo). A obra foi ENCERRADA apos tres reprovacoes do verificador; nao ha cura a propor. Pede-se um MAPA. Anexos, em ordem: (1) resposta do verifi ...` |
 | 15:05:54 | Bash | Snapshot V2 delta and size the anexos | `cd ~/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE; mkdir -p $D/matriz; git -C /home/ronald/wt-resolver-d-024937 diff > $D/matriz/v2_nao_commitado.patch; git diff 7a4e79eef fbf5ba2a5 -- app ':!app/docs' > $D/matriz/obra_inteira.patch; wc -c $D/codex/v1.r $D/v0815/verif1.r $D/v0815/verif2.r $D/v0815/verif3.r $D/matriz/*.patch; grep -n -i '15/11.*4b\\|4b' app/docs/AVAIS.md \| head -3` |
 | 15:05:45 | Bash | Kill queued V2 suite and check copy state | `cd ~/saas-hasner; bin/trava_teste.sh --quem; for p in 1852477 1852475 1852315; do kill $p 2>/dev/null; done; sleep 2; ps -eo pid,args \| grep wt-resolver-d-024937 \| grep -v grep \| cut -c1-120; git -C /home/ronald/wt-resolver-d-024937 log -3 --oneline; git -C /home/ronald/wt-resolver-d-024937 status --porcelain \| head` |
 | 15:05:43 | TaskStop |  | `-` |
