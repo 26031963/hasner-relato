@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 18:47:34.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (33.5 MB). Acoes na janela: **887**.
+**Medido em 24/11/2026 18:53:40.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.5 MB). Acoes na janela: **896**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:52:04 | Bash | Registrar verif1 NOTURNO no RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"NOTURNO-A verif1 Codex (rc 0, v4/verif1.r 62 l.): NAO PRONTO -- procedente conferido: catraca core/tests/test_medida_turno_do_par.py:301 congela _janela_do_dia em [1528], a cura move para 1533 (seria vermelho na suite inteira; o construtor rodou so --only ponto). Tambem: chave do DIFF por turnos_do ...` |
+| 18:51:59 | SendMessage |  | `-` |
+| 18:51:47 | Bash | Confere catraca de linha citada pelo Codex | `cd ~/saas-hasner/app; sed -n 296,304p core/tests/test_medida_turno_do_par.py; sed -n 552,564p core/tests/test_medida_turno_do_par.py` |
+| 18:51:38 | Bash | Read NOTURNO Codex verifier result | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; tail -1 $V/verif1.wrap.log; wc -l $V/verif1.r; cut -c1-900 $V/verif1.r` |
+| 18:48:25 | Bash | Registrar reprovação do verif1 no RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"DXG-APPLY-47 verif1 Codex (rc 0, apply47/verif1.r 51 l.): REPROVA commit em prod -- conferido signals.py:131-135 + detectar_ausencias.py:775-786: retratar antes de registrar julga a celula sem a batida e pode disparar push_supervisao SINCRONO (sai mesmo no ensaio com rollback). Procedentes a confer ...` |
+| 18:48:20 | SendMessage |  | `-` |
+| 18:48:06 | ToolSearch |  | `-` |
+| 18:48:00 | Bash | Confere amostra do achado de push no rollback | `cd ~/saas-hasner/app; sed -n 1830,1845p ponto/services/cartorio.py; echo ----; sed -n 770,810p ponto/management/commands/detectar_ausencias.py; echo ----; sed -n 85,93p ponto/signals.py; sed -n 128,136p ponto/signals.py` |
+| 18:47:54 | Bash | Read Codex verifier result for apply47 | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47; tail -1 $D/verif1.wrap.log; wc -l $D/verif1.r; cat $D/verif1.r \| cut -c1-700` |
 | 18:44:54 | Bash | Check what is still alive | `pgrep -af "bash bin/codex_pergunta.sh" \| cut -c1-80; pgrep -af "suite.sh" \| head -3 \| cut -c1-100; ls ~/saas-hasner/logs/PONTA-PEQUENA-NA-BORDA/item3/verif2.r* 2>/dev/null` |
 | 18:44:42 | Bash | Record NOTURNO build status in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"NOTURNO-A v4 construida (wt-noturno-v4-175246, cura_v3_completa.patch): janela_he +40/-7 (marco_no_dia/marco_de_saida com dia), motor +15/-15, test_o280 B-P4a+gemeo invertidos, teste novo 6 casos; RED col1010 rc1 -> GREEN Ran 177 OK; --only ponto Ran 5399 OK; ruff ok; 0 except. DIFF comp 11 sombra: ...` |
 | 18:44:36 | Bash | Wait for NOTURNO Codex verifier | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; while kill -0 2353199 2>/dev/null; do /usr/bin/sleep 20; done; tail -1 $V/verif1.wrap.log; wc -l $V/verif1.r` |
