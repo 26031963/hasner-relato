@@ -10285,6 +10285,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**23/11 20:59:40 disjuntor (NEGOU ANEXO-ENXUTO)** -- agente principal -- Bash -- alvo sha1:ca9688c518 (2577 car., na trilha privada)
+
 **23/11 16:30:16 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:8652a264cf (41 car., na trilha privada)
 
 **23/11 16:22:53 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:aebb18173a (46 car., na trilha privada)
