@@ -1,3 +1,9 @@
+PAREI: censo-A-TELA-DO-DIA-LE-UM-JUIZ | espera Codex
+PAREI: censo-E4C-F1-B2b-F0 | espera Codex
+PAREI: censo-A-TELA-DO-DIA-LE-UM-JUIZ | espera Codex
+
+PAREI: censo-E4C-F1-B2b-F0 | espera Codex
+
 DESENHO PISTA-CAMADAS: lei=juiz unico pergunta=o certificador le os rotulos do run por lista FECHADA de opcoes neutras, fora dela nao certifica (aval PISTA-CAMADAS-POUSA-2311-2345, liberado por Ronald 'libera B3 PISTA-CAMADAS -- DESENHO: lei=juiz unico') bin/pista_certifica.sh:70
 NOTURNO-NAO-APURADO volta 5 REPROVADA pelo Codex verificador (verif5.r 23:44, procedente, triagem_v5.txt): a cauda desconta o envelope BRUTO do fechado (2x 30 min fora no proprio RED; 0x 60 trab/noturno na pausa; 0x noturno apos 05h), flag sem try/finally, relato com 3 origens de dia; volta 6 com o construtor a19377ec3fb725777
 ESPERANDO: suite de pouso PISTA-CAMADAS 67fa8dcf4 (raia wt-pista-camadas-161321) | pid=3698505 | arquivo=logs/PISTA-2-CERTIFICA/camadas/v6/suite_pouso_67fa8dcf4.log.rc
@@ -10293,6 +10299,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 **PERGUNTA DE LEI -- O DIA DA DEMISSAO E APURAVEL COMO FURO? A LEI ESCRITA NAO RESPONDE (10:0x).** Antes de abrir fatia nova fui atras do bug, que pela LEI-AKITA 6 vem primeiro. **NAO HA bug de universo no codigo de HOJE**, e duas leituras dizem isso: (a) `ponto/services/dia_pago.py:259-263` (O140) da linha a TODO dia de furo ainda que sem uma hora -- `_linha(d)` dentro de `for d in (_furos or ())` --, entao furo SEM linha nao existe no codigo de hoje; (b) o gravado da 09 tem **10.759 das 10.893 linhas com `furo_apurado` NULL**, que no idioma declarado na docstring de `lavrar` e `furos_do_motor=None`, *"nao perguntei"*: a 09 foi lavrada por chamador que ainda nao passava furo. E o CLAMP da borda (defeito 2 do `9632cdbd`) explica no maximo **1 dos 28**, porque 27 dos 28 dias TEM celula (`celula_trabalho_true=28`, `sem_celula=1`). Logo criar a linha que falta e **RELAVRAR a 09**, o PROIBIDO da L-092 -- nao e cura de universo, e por isso nao jumpa a fila como bug provado. O QUE SOBRA E PERGUNTA DE LEI, e eu nao a proponho (L-117): **19 dos 28 dias sao exatamente o dia da demissao, e a celula desse dia diz trabalho=True**. O seu corte de 19/10 `DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA` **nao responde**: ele e literal sobre `data_demissao` **ANTERIOR** a janela (*"sai do universo de derivacao"*), e aqui a demissao cai DENTRO da competencia. Se o dia da demissao e previsto, o furo e real e o dono e CADASTRO/BATIDA; se nao e, o motor chama furo **19 dias que nao existem** -- e ai o furo mente para todo desligado da frota, nao so na 09. A fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a linha esta no BACKLOG (`MOTOR-CHAMA-FURO-DIA-QUE-A-LAVRATURA-DA-09-NAO-COBRE`) e **nada se aplica na 09**.
 
 ## ALARMES DA ESTEIRA
+
+**23/11 23:52:52 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:5ef1b9e585 (41 car., na trilha privada)
+
+**23/11 23:52:41 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:49b45a2c0a (41 car., na trilha privada)
 
 **23/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
