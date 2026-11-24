@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 00:20:41.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (13.8 MB). Acoes na janela: **364**.
+**Medido em 24/11/2026 00:26:36.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (13.9 MB). Acoes na janela: **365**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:22:37 | Bash |  | `cd ~/saas-hasner; sed -n '/^(b)/p;/(b) B3/p' logs/AVAIS-1515/respostas_aos_devolvidos_1911_1335.txt \| head -3 git worktree remove /home/ronald/wt-b2b-f0-001357 && echo wt-removida python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n',1) lei=("lei: E4C-F1-B2b-F0 -- o corte RESPOSTAS-1335 (b) diz 'F6 conta 1 (a guarda)', mas o ponto RETIDA F9/F9b dentro de " "models.py::carimbar/car ...` |
 | 00:13:55 | Bash |  | `cd ~/saas-hasner; H=$(git rev-parse HEAD); D=logs/LATERAIS head -3 $D/casojv.q > $D/casojv2.q; sed -n '4p' $D/casojv.q >> $D/casojv2.q { head -2 $D/casojv.q; sed -n '5,6p' $D/casojv.q; } > $D/casojv3.q for n in 2 3; do setsid bash -c "CODEX_OBRA=LATERAIS-EM-PARALELO CODEX_PAPEL=leitura bash bin/codex_pergunta.sh --anexo app/docs/JUIZES.md $H $D/casojv$n.q $D/casojv$n.r > $D/casojv$n.out 2>&1" & do ...` |
 | 00:13:51 | Bash |  | `cd ~/saas-hasner; cat logs/LATERAIS/casojv.out; echo; cat logs/LATERAIS/casojv.q` |
 | 00:13:49 | Bash |  | `cd ~/saas-hasner; ls -la logs/LATERAIS/; kill -0 3744822 2>/dev/null && echo casojv-vivo \|\| echo casojv-fim` |
