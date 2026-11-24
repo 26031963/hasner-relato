@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 07:23:21.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **455**.
+**Medido em 24/11/2026 07:29:10.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **451**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -461,7 +461,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:37:11 | Bash |  | `cd /home/ronald/wt-f5-v7-153543/app; sed -n 300,325p chamados/services/fio.py; sed -n 400,416p chamados/services/fio.py; grep -n 'disputa_obj\\|reabert' templates/chamados/partials/modal_fio.html \| sed -n 1,40p \| cut -c1-150` |
 | 19:37:07 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/E4C-F5/v7/s82b/pouso/verif.r` |
 | 19:37:05 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/E4C-F5/v7/s82b/pouso/suite_inteira.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; tail -1 $L; grep -E '^(FAIL\|ERROR):' $L \| head; ls -la logs/E4C-F5/v7/s82b/pouso/verif.r 2>&1 \| tail -1` |
-| 19:26:43 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' L=open(p).read().split('\n') L.insert(1,"E4C-F5 8.2 SONDA DE FROTA (sombra, 19:1x; logs/E4C-F5/v7/s82b/sondas/{base,c3}.out, FIM, montador e juiz REAIS): universo 728 colabs com D (451 com D aberta), 9467 cartoes adm / 4221 col. BASE 06c3a2e88: cartao mostra D diferente da eleita pelo juiz em 11 (adm) / 5 (col) -> C3: 0 / 0. Dis ...` |
-| 19:26:36 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; for f in base c3; do echo == $f; sed -n '/^CONTAGENS/,/^FIM/p' $O/$f.out; done; grep -E '^A82' $O/base.out \| awk '{print $3}' \| sort -u \| wc -l; grep -c '^C ' $O/c3.out; grep -c '^DSC.*aberta=1' $O/c3.out` |
-| 19:26:32 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; grep -m2 -B1 '^NoneType' $O/base.out \| cut -c1-200; grep -E '^(UNIVERSO\|A82\|A_DIF\|C \|DSC)' $O/base.out \| head -30 \| cut -c1-220; echo ==C3; grep -E '^(UNIVERSO\|A82\|A_DIF\|C \|DSC\|lavra)' $O/c3.out \| head; grep -nE 'A82\|A_DIF\|^ *print' logs/sombra/sonda_fechadas.py \| head -20` |
-| 19:26:28 | Bash |  | `cd /home/ronald/saas-hasner; O=logs/E4C-F5/v7/s82b/sondas; cat $O/resumo.txt; for f in base c3 c4; do echo "== $f"; grep -m3 FIM $O/$f.out \| cut -c1-300; cut -d' ' -f1 $O/$f.out \| sort \| uniq -c \| sort -rn \| head -8; done` |
