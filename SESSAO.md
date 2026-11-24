@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 18:59:53.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.6 MB). Acoes na janela: **897**.
+**Medido em 24/11/2026 19:06:11.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (34.7 MB). Acoes na janela: **902**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:04:32 | Bash | Registrar NOTURNO volta 2 no RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(1,"NOTURNO-A volta 2 (cura_v4_completa.patch sha256-12 e73e0be21e5e): catraca _janela_do_dia 1528->1533 com RED (catraca_red.log rc1); mutantes executados M1 dia=None 6 falhas, M2 sem +1 4 falhas; DIFF comp 11 rechaveado pelo mapa do motor: 8402 pares nos 2 lados, 13 mudam, dia do juiz igual H/C nos 1 ...` |
+| 19:04:23 | Bash | Wait for NOTURNO core+ponto suite verdict | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; while [ ! -s $V/suite_core_ponto.rc ]; do /usr/bin/sleep 30; done; cat $V/suite_core_ponto.rc; grep -E '^(OK\|FAILED)($\| \()' $V/suite_core_ponto.log \| tail -1; grep '^Ran ' $V/suite_core_ponto.log \| tail -1; grep -E '^(FAIL\|ERROR):' $V/suite_core_ponto.log \| head` |
+| 19:04:21 | SendMessage |  | `-` |
+| 19:04:13 | Bash | Registrar aval DXG-APPLY-33 | `cd ~/saas-hasner; cat > logs/AVAIS-1515/dxg_apply_33_190x.txt <<'EOF' aval Ronald: DXG-APPLY-33 (24/11 19:0x) -- substitui inteiro o DXG-APPLY-47. Opcao (b): aplica em prod so as 33 que registram a nova antes de retratar (0 push), na ordem e com o gate do ensaio v6 (47/47 com_registro pela batida nova, hash 09/10 igual nas 7, 0 on_commit pendente). As 14 de \|declarada-gravada\|<=60 s NAO se aplic ...` |
+| 19:04:02 | Bash | Check NOTURNO core+ponto suite state | `cd ~/saas-hasner; V=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4; cat $V/suite_core_ponto.rc 2>/dev/null; tail -c 300 $V/suite_core_ponto.log; echo; bin/trava_teste.sh --quem; pgrep -af "suite.sh" \| grep -v pgrep \| cut -c1-150` |
 | 18:59:24 | Bash | Write PAREI for DXG push decision at RELATO top | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"PAREI: ! DXG-47-PUSH-ENTRE-OS-ATOS \| espera Ronald -- volta 6 do apply47 (logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply47/, diff_v6.txt, ensaio_v6/apply47_v6b_ensaio.out): ensaio na sombra 47 aplicadas, 0 recusa, 47/47 com_registro testemunhado pela batida NOVA, hash 09/10 igual nas 7, rubricas  ...` |
 | 18:52:04 | Bash | Registrar verif1 NOTURNO no RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"NOTURNO-A verif1 Codex (rc 0, v4/verif1.r 62 l.): NAO PRONTO -- procedente conferido: catraca core/tests/test_medida_turno_do_par.py:301 congela _janela_do_dia em [1528], a cura move para 1533 (seria vermelho na suite inteira; o construtor rodou so --only ponto). Tambem: chave do DIFF por turnos_do ...` |
 | 18:51:59 | SendMessage |  | `-` |
