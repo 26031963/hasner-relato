@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 10:52** · publicado em **24/11/2026 10:51** (UTC-3)
+> Ultima resposta processada: **24/11/2026 11:03** · publicado em **24/11/2026 11:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 11:03 · sessao d51b367827f3 · CHAMADO-PRESO-NA-REGENERACAO · sonda · origem=Code
+
+## Saída da sonda
+
+Transcrição literal do dado raspado fornecido. Uma nova execução em produção e a correspondência da cópia local com o hash informado ficaram [nao verificado].
+
+```text
+sonda_leitura: script.py [0f08b205cc56c7ae] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+IRMAO 37755 batida_ausente resolvido sistema 2026-11-24 08:53:52.546186-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:53:52.550116-03:00 estado_chamado 657 None status aberto -> resolvido via sistema
+IRMAO 36950 batida_ausente resolvido sistema 2026-11-24 08:53:58.983017-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:53:58.986773-03:00 estado_chamado 657 None status aberto -> resolvido via sistema
+IRMAO 36509 batida_ausente resolvido sistema 2026-11-24 08:54:08.627422-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:54:08.631020-03:00 estado_chamado 657 None status em_analise -> resolvido via sistema
+IRMAO 36125 batida_ausente resolvido sistema 2026-11-24 08:59:31.737533-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:59:31.741836-03:00 estado_chamado 657 None status aberto -> resolvido via sistema
+IRMAO 35721 batida_ausente resolvido sistema 2026-11-24 08:59:39.516072-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:59:39.519572-03:00 estado_chamado 657 None status aberto -> resolvido via sistema
+IRMAO 34898 par_relampago resolvido sistema 2026-11-24 08:59:48.979320-03:00 ['data_turno', 'duracao_min', 'par']
+   LOG 2026-11-24 08:59:48.983994-03:00 estado_chamado 657 None status aberto -> resolvido via sistema
+IRMAO 34719 batida_ausente resolvido sistema 2026-11-24 08:59:49.167854-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:59:49.172127-03:00 estado_chamado 657 None status em_analise -> resolvido via sistema
+IRMAO 34239 batida_ausente resolvido sistema 2026-11-24 08:59:55.152586-03:00 ['atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 08:59:55.156144-03:00 estado_chamado 657 None status em_analise -> resolvido via sistema
+IRMAO 33274 batida_ausente resolvido sistema 2026-11-24 09:00:01.255964-03:00 ['atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
+   LOG 2026-11-24 09:00:01.260303-03:00 estado_chamado 657 None status em_analise -> resolvido via sistema
+IRMAO 34248 batida_ausente resolvido sistema 2026-11-24 10:39:25.481156-03:00 ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes']
+   LOG 2026-11-24 10:39:25.484783-03:00 estado_chamado 657 None status em_analise -> resolvido via sistema
+JANELA_TOTAL 12
+JANELA_ACOES [('estado_chamado', 7), ('urgencia_escalada', 3), ('fechamento_recusado', 1), ('nascimento_chamado', 1)]
+   J 2026-11-24 08:59:31.741836-03:00 estado_chamado 36125 657 None status aberto -> resolvido via sistema
+   J 2026-11-24 08:59:39.519572-03:00 estado_chamado 35721 657 None status aberto -> resolvido via sistema
+   J 2026-11-24 08:59:48.983994-03:00 estado_chamado 34898 657 None status aberto -> resolvido via sistema
+   J 2026-11-24 08:59:49.172127-03:00 estado_chamado 34719 657 None status em_analise -> resolvido via sistema
+   J 2026-11-24 08:59:55.156144-03:00 estado_chamado 34239 657 None status em_analise -> resolvido via sistema
+   J 2026-11-24 09:00:01.260303-03:00 estado_chamado 33274 657 None status em_analise -> resolvido via sistema
+   J 2026-11-24 09:00:12.470016-03:00 estado_chamado 40763 None sistema:vigia_de_hora status aberto -> resolvido via sistema
+   J 2026-11-24 09:00:15.875421-03:00 urgencia_escalada 19356 None sistema:processar_alertas_avancados urgencia normal -> urgente (turno aberto 25h)
+   J 2026-11-24 09:00:18.282034-03:00 nascimento_chamado 40799 None sistema:vigia_de_hora nasceu aberto (batida_ausente) via abrir
+   J 2026-11-24 09:00:27.277151-03:00 urgencia_escalada 4923 None sistema:processar_alertas_avancados urgencia normal -> urgente (turno aberto 26h)
+   J 2026-11-24 09:00:27.936259-03:00 urgencia_escalada 7133 None sistema:processar_alertas_avancados urgencia normal -> urgente (turno aberto 24h)
+   J 2026-11-24 09:00:31.946015-03:00 fechamento_recusado 40780 None sistema:vigia_de_hora fechamento recusado: 1 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#61899) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 40589 2026-11-23 09:42:46.953007-03:00 fechamento_recusado fechamento recusado: 2 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#61522, #61523) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 40589 2026-11-23 09:36:16.839841-03:00 nascimento_chamado nasceu aberto (batida_ausente) via abrir
+SEIS 40588 2026-11-23 09:42:48.084008-03:00 fechamento_recusado fechamento recusado: 2 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#61520, #61521) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 40588 2026-11-23 09:36:14.980104-03:00 nascimento_chamado nasceu aberto (batida_ausente) via abrir
+SEIS 37336 2026-11-16 14:05:31.053330-03:00 fechamento_recusado fechamento recusado: 1 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#54538) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 37336 2026-11-06 10:30:24.379918-03:00 nascimento_chamado nasceu aberto (batida_ausente) via abrir
+SEIS 36687 2026-11-04 07:50:15.712731-03:00 fechamento_recusado fechamento recusado: 2 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#53534, #53584) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 36687 2026-11-04 07:41:08.545113-03:00 fechamento_recusado fechamento recusado: 3 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#53408, #53534, #53584) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 36687 2026-11-04 07:41:05.886969-03:00 fechamento_recusado fechamento recusado: 4 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#53408, #53534, #53580, #53584) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 36687 2026-11-03 08:30:26.192757-03:00 nascimento_chamado nasceu aberto (batida_ausente) via abrir
+SEIS 35243 2026-11-09 11:04:00.123771-03:00 fechamento_recusado fechamento recusado: 2 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#50720, #50749) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 35243 2026-10-27 12:30:32.934892-03:00 nascimento_chamado nasceu aberto (batida_ausente) via abrir
+SEIS 34070 2026-11-10 13:27:13.672651-03:00 fechamento_recusado fechamento recusado: 1 pergunta(s) VIVA(s) da competencia aberta ancorada(s) neste chamado (#49602) e nenhuma cobranca viva do mesmo colab-dia que as receba
+SEIS 34070 2026-10-24 08:04:24.866248-03:00 estado_chamado status resolvido -> em_analise via -
+SEIS 34070 2026-10-23 16:46:57.184404-03:00 estado_chamado status em_analise -> resolvido via sistema
+SEIS 34070 2026-10-23 12:30:17.614677-03:00 estado_chamado status resolvido -> em_analise via -
+SEIS 34070 2026-10-23 07:55:22.637748-03:00 estado_chamado status aberto -> resolvido via sistema
+FIM
+```
+
+## 1. Quem fechou os irmãos entre 08:55 e 09:05?
+
+**A função de transição é `ChamadoColaborador.reconciliar()`; o chamador é [nao verificado].** Os seis irmãos da janela têm `estado_chamado`, `usuario_id=657` e `ator=None`. No código da cópia, `reconciliar()` chama `_gravar_estado` sem passar um usuário e com a via `sistema`. Nesse caminho, o `657` vem do usuário autenticado da requisição. A descrição registra a via e o campo `ator` recebe a assinatura `sistema:<comando>` quando a escrita ocorre fora de uma requisição em `manage.py`. `app/chamados/models.py:674` `app/chamados/models.py:304` `app/chamados/catalogo/motor.py:95` `app/core/observ.py:22` `app/core/observ.py:108` `app/core/observ.py:134`
+
+O fechamento que traz `ator=sistema:vigia_de_hora` é o do **40763**, às 09:00:12. A configuração agenda `vigia_de_hora --apply` a cada 10 minutos. O comando chama `rodar()`, que chama `cartorio.julgar_celula()`. A origem exata da invocação em produção e o ramo que fechou o 40763 ficam [nao verificado]. `app/config/crons.py:367` `app/ponto/management/commands/vigia_de_hora.py:23` `app/ponto/services/vigia_de_hora.py:134`
+
+## 2. Qual filtro deixou de fora os seis chamados?
+
+**O filtro que atuou nessa janela é [nao verificado].** Para 40589, 40588, 37336, 36687, 35243 e 34070, a saída mostra recusas anteriores com a mensagem de `_gate_pergunta_viva()`. Esse gate retorna `False` quando há pergunta viva ancorada e pelo menos uma delas fica sem cobrança viva válida do mesmo colaborador-dia para recebê-la. Se essa condição ainda valia na janela, fica [nao verificado]. `app/chamados/models.py:408` `app/chamados/models.py:438` `app/chamados/models.py:708`
+
+Com os valores medidos na sombra, o filtro exato do fechador por lastro seria `if cel is None or marcos_acesos(ch, cel) is not True: continue`. `None` satisfaz essa condição. No 34070, a busca da lâmpada confere hora e tipo, então `12:00 S` não satisfaz `12:00 E`. A execução desse fechador para os seis na janela fica [nao verificado]. `app/ponto/services/lastro.py:395` `app/ponto/services/lastro.py:89` `app/ponto/services/lastro.py:174`
+
+O cartório tem um ramo que tenta `reconciliar()` para os chamados em `vivos` com `marcos_inexistentes(x, _ata_agora)`, usando a ata daquele julgamento. A própria guarda de premissa aceita `marcos_inexistentes(...) is True` e a guarda de pergunta viva ainda pode recusar o fechamento. Qual ata e quais perguntas foram avaliadas para esses seis na janela fica [nao verificado]. `app/ponto/services/cartorio.py:1464` `app/ponto/services/cartorio.py:1596` `app/chamados/models.py:1363` `app/chamados/models.py:708`
+
+## 3. Os irmãos fechados tinham `orfa_regeneracao`?
+
+Sim, em **cinco dos seis** irmãos fechados na janela, segundo as chaves impressas em `IRMAO`. A chave aparece em **36125, 35721, 34719, 34239 e 33274**, todos `batida_ausente`. Está ausente em **34898**, de `par_relampago`. No bloco inteiro, os três irmãos das 08:53–08:54 também trazem a chave, e o **34248**, das 10:39, não a traz. O contexto no instante exato de cada fechamento fica [nao verificado].
 
 ## 24/11 10:52 · sessao ea99ce1fa9b6 · CHAMADO-PRESO-NA-REGENERACAO · sonda · origem=Code
 
@@ -922,12 +1003,4 @@ Para cada uma das seis subclasses, os pares `[entrada, saida, efetivo_entrada, e
 
 Nesta execução, a ocorrência dessa divergência, a equivalência dos insumos, a data da lavra e a causa do eventual zero, inclusive se veio de uma lavra anterior à correção, ficam [nao verificado].
 
-## 24/11 02:20 · sessao 481b8b509dc8 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
-
-1. `UNIVERSO` e `emp_comp` — nenhuma linha fornecida no trecho da sonda. [nao verificado]
-2. `INV` — nenhuma linha fornecida no trecho da sonda. [nao verificado]
-3. Classes A, B e C — sem linhas `INV`, não há horários para calcular nem casos para classificar. [nao verificado]
-
-O trecho fornecido termina com um erro do Docker na montagem de `/app/logs` e `rc_sombra=125`. [nao verificado]
-
-_8050 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8051 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
