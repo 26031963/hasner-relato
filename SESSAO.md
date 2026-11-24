@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 07:52:16.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **443**.
+**Medido em 24/11/2026 07:57:59.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (21.2 MB). Acoes na janela: **440**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -450,6 +450,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:07:52 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' open('app/docs/PROMPTS.md','a').write("23/11 20:10 \| aval Ronald PISTA-CAMADAS-DESCONGELA-2311-2010: SUBSTITUI INTEIRO o ULTIMA-VOLTA-1812; pista 2 certifica pouso com 3 provas e so elas: (1) camadas da imagem = VM; (2) sha do commit no AMBIENTE = o que pousa; (3) Ran == Found - podados, rc 0, sem OOM; log e do NOSSO runner, nada de endu ...` |
 | 20:07:47 | Bash |  | `cd /home/ronald/saas-hasner; W=~/wt-pista-camadas-161321; wc -l bin/pista_certifica.sh $W/bin/pista_certifica.sh bin/tests/test_pista_certifica.sh $W/bin/tests/test_pista_certifica.sh; git -C $W diff --stat main...HEAD \| head -8; git -C $W diff --stat \| cat; grep -n 'PISTA-2-CERTIFICA\\|PISTA-CAMADAS' app/docs/BACKLOG.md \| cut -c1-160; grep -n 'PISTA-CAMADAS' app/docs/RELATO.md \| cut -c1-160 \ ...` |
 | 20:07:38 | Bash |  | `cd /home/ronald/saas-hasner; W=~/wt-pista-camadas-161321; git -C $W log --oneline -4; git -C $W status --porcelain \| head; ls logs/PISTA-2-CERTIFICA/camadas/v5/ \| head -20; git -C $W diff --stat main...HEAD \| tail -5` |
-| 19:55:48 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; B=open(p).read().split('\n') j=next(k for k,x in enumerate(B) if x.startswith('\| PAR-PELO-TURNO \|')) B[j]="\| PAR-PELO-TURNO \| MAO UNICA (ponto/ pareamento + Gestao de HE). Aval PAR-PELO-TURNO-V6-2311-1958 (SUBSTITUI INTEIRO o V5): antecipacao/prorrogacao = mesma jornada; (a) separador pausa x jornada por classe COMO ESTA;  ...` |
-| 19:55:42 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' import re # PROMPTS open('app/docs/PROMPTS.md','a').write("23/11 19:58 \| aval Ronald PAR-PELO-TURNO-V6-2311-1958: SUBSTITUI INTEIRO o V5-1730; antecipacao/prorrogacao = mesma jornada (apuracao classifica, Gestao de HE); (a) separador pausa x jornada como esta por classe (Base 3h, Partido 0, Plantao 8h; pausa da ATA sem teto); (b) teto previsto+4h (tu ...` |
-| 19:55:34 | Bash |  | `cd /home/ronald/saas-hasner; ls -la ~/dados_fernando/ \| head -20; grep -n 'PAR-PELO-TURNO' app/docs/BACKLOG.md \| cut -c1-200 \| head -5; grep -n '^lei: PAR-PELO-TURNO-V5' app/docs/RELATO.md \| cut -c1-80` |
