@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 00:50:08.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (15.4 MB). Acoes na janela: **397**.
+**Medido em 24/11/2026 00:55:59.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (15.5 MB). Acoes na janela: **399**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:55:59 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v6; tail -c 11600 $D/verif6.r` |
+| 00:55:57 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v6; tail -3 $D/verif6.out; wc -c $D/verif6.r; head -c 6000 $D/verif6.r` |
 | 00:47:36 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v6; CODEX_VOLTA=final CODEX_OBRA=NOTURNO-NAO-APURADO CODEX_PAPEL=verificador bash bin/codex_pergunta.sh --anexo logs/NOTURNO-NAO-APURADO/v5/verif5.r --anexo $D/leis.txt --anexo $D/JUIZES.md --anexo $D/delta_v5v6.diff b5d115a07cc8573970f4a1ad0d89ad03972de03f $D/verif6.q $D/verif6.r > $D/verif6.out 2>&1; echo rc=$? >> $D/verif6.out; tail -2 $D/verif6.out` |
 | 00:47:32 | Bash |  | `cd ~/saas-hasner; grep -n 'ilegivel' -B4 bin/codex_pergunta.sh \| head -20` |
 | 00:47:30 | Bash |  | `cd ~/saas-hasner; head -20 logs/NOTURNO-NAO-APURADO/v6/verif6.out` |
