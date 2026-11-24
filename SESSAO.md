@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 23/11/2026 23:33:08.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (10.1 MB). Acoes na janela: **283**.
+**Medido em 23/11/2026 23:39:01.** Transcript: `89a6e205-b4a9-4b33-8895-b727c11c86b7.jsonl` (11.1 MB). Acoes na janela: **292**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:37:59 | Bash |  | `cd ~/saas-hasner; kill -0 3690902 && echo vivo; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(0,'ESPERANDO: Codex verificador NOTURNO-NAO-APURADO volta 5 (1b62f9965) \| pid=3690902 \| arquivo=logs/NOTURNO-NAO-APURADO/v5/verif5.r') open(p,'w').write('\n'.join(L)) EOF head -1 app/docs/RELATO.md` |
+| 23:37:46 | Bash |  | `cd ~/saas-hasner; until ! kill -0 3690902 2>/dev/null; do /usr/bin/sleep 20; done; head -c 5000 logs/NOTURNO-NAO-APURADO/v5/verif5.r` |
+| 23:37:44 | Bash |  | `cd ~/saas-hasner; date '+%H:%M'; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('lei: GUARDA x REGEN')][0] L[i]='RESPONDIDA por RESPOSTA-LEI-GUARDA-X-REGEN-2311-2340 (23:40) -- (A): a guarda barra tudo, inclusive a porta REGEN e o retrato DiaPago; competencia guardada (06/07/08/09) so se move por ! do Ronald tirando a linha, depo ...` |
+| 23:37:18 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v5; cat > $D/verif5.q <<'EOF' PAPEL: verificador. OBRA: NOTURNO-NAO-APURADO item (1), voltas 4+5. Base 11ba9d4a2 (volta 3, que voce leu em verif4.r anexo); HEAD 1b62f9965. Anexos: verif4.r (sua leitura da volta 3), leis.txt (leis dos sitios tocados), JUIZES.md, e por ULTIMO delta_v4v5.diff (11ba9d4a2..1b62f9965). Avais que delimitam (literais): - NOTURN ...` |
+| 23:37:03 | Bash |  | `cd ~/saas-hasner; wc -c app/docs/JUIZES.md logs/NOTURNO-NAO-APURADO/v3/verif4.r logs/NOTURNO-NAO-APURADO/leis.txt 2>&1; ls logs/NOTURNO-NAO-APURADO/v3/ \| grep -iE 'verif\|contrato\|v3'; grep -n "NOTURNO-ITEM1-V3-CONTRATO\\|NOTURNO-ITEM1-CAUDA\\|NOTURNO-ITEM1-GUARDA" app/docs/PROMPTS.md \| cut -c1-400` |
+| 23:36:59 | Bash |  | `cd ~/saas-hasner/logs/NOTURNO-NAO-APURADO; ls -d */; head -c 2500 v3/verif4.q; echo ----; head -c 800 v3/verif4.r; head -2 v3/verif4.out` |
+| 23:36:56 | Bash |  | `cd ~/saas-hasner; ls -la --time-style=+%d/%H:%M logs/NOTURNO-NAO-APURADO/verif4.r; head -c 1200 logs/NOTURNO-NAO-APURADO/verif4.q; echo; head -c 600 logs/NOTURNO-NAO-APURADO/verif4.r; head -5 logs/NOTURNO-NAO-APURADO/verif4.out` |
+| 23:36:54 | Bash |  | `cd ~/saas-hasner; D=logs/NOTURNO-NAO-APURADO/v5; git -C ~/wt-noturno-aberto-162231 diff 11ba9d4a2 1b62f9965 > $D/delta_v4v5.diff; wc -c $D/delta_v4v5.diff; ls logs/NOTURNO-NAO-APURADO/ \| head -20; ls logs/NOTURNO-NAO-APURADO/v3 2>/dev/null \| grep -i verif` |
+| 23:36:51 | Bash |  | `cd ~/wt-noturno-aberto-162231; git log --oneline -3; git status --porcelain \| grep -v '^??' \| wc -l; L=~/saas-hasner/logs/NOTURNO-NAO-APURADO/v5; for f in foco ponto exportada6 vizinhos; do echo "$f: $(grep -E '^(OK\|FAILED)($\| \()' $L/$f.log \| tail -1) \| $(grep '^Ran' $L/$f.log \| tail -1)"; done; git diff 48ff09456 1b62f9965 -- app/core/tests/test_contract_juiz_batida.py app/ponto/tests/tes ...` |
 | 23:02:30 | Bash |  | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() line='''lei: GUARDA x REGEN (NOTURNO item 1, 23/11 23:1x) -- a GUARDA_COMPETENCIA barra tambem a porta REGEN-EM-EXPORTADA (regen_exportada.py:181 recalcular_fechamento_mes, :193 retratar_exportada barrada em dia_pago.py:451) e o retrato DiaPago (lavrar_dias_pagos.py:123): uma competencia na guarda (09 hoje; 06/07/08 com a ...` |
 | 23:02:25 | SendMessage |  | `-` |
 | 23:02:19 | Bash |  | `cd ~/wt-noturno-aberto-162231/app; sed -n 30,75p ponto/services/fechamento.py \| grep -nE "\(([0-9]+), 2026\)\|saida" \| cut -c1-220` |
