@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 15:30:37.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (23.5 MB). Acoes na janela: **641**.
+**Medido em 24/11/2026 15:36:46.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (23.5 MB). Acoes na janela: **642**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:30:38 | Bash | Record DESPACHO and CLASSE-D state in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() s="DESPACHO DXG-FRASE-E-PASSIVO-11-2411-1530: lista nominal + DIFF -> sonnet (motivo: o DIFF escreve na SOMBRA em atomic+raise e a lista e o universo do mesmo script, numa passada so) \| registro lei/BACKLOG -> sessao.\nCLASSE-D-NA-FRENTE-DA-E4D v2 COMMITADA e5438feee na wt-classed-084513: GREEN Ran 1313 OK rc 0 (v2/green ...` |
 | 15:30:33 | Agent | DXG passivo comp 11 lista + DIFF | `Voce mede (SO LEITURA em producao; escrita so na SOMBRA dentro de atomic + raise) o passivo DECLARADO-X-GRAVADO da competencia 11 no SaaS de ponto Django em /home/ronald/saas-hasner (codigo em app/). Antes de agir, leia /home/ronald/saas-hasner/CLAUDE.md, secoes 0, 4, 6 e 7b (DINHEIRO). AVAL (Ronald, DXG-FRASE-E-PASSIVO-11-2411-1530, item 2, literal): "lista nominal da comp 11 (batida gravada dife ...` |
 | 15:30:03 | Bash | Register DXG aval in RELATO, BACKLOG, PROMPTS | `cd ~/saas-hasner; mkdir -p logs/DECLARADO-X-GRAVADO-PASSIVO-11; cat > logs/AVAIS-1515/dxg_frase_e_passivo_11_2411_1530.txt <<'EOF' aval Ronald: DXG-FRASE-E-PASSIVO-11-2411-1530 -- (1) lei: DXG (frase) RESPONDIDA = (B) frase fixa da casa, com as duas horas: "A hora que voce informou (HH:MM) nao confere com o intervalo da sua escala. Confira e responda de novo."; o resto vale como o corte 12/11 15:0 ...` |
 | 15:29:51 | Bash | Look at existing DIFF tooling | `cd ~/saas-hasner; ls logs/AVAIS-1515/ \| tail -3; grep -n 'cobre' bin/sombra.sh \| head -8; ls bin \| grep -i diff \| head` |

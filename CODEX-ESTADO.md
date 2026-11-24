@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 15:13** · publicado em **24/11/2026 15:18** (UTC-3)
+> Ultima resposta processada: **24/11/2026 15:34** · publicado em **24/11/2026 15:36** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 15:34 · sessao 7e88035506f2 · CLASSE-D-NA-FRENTE-DA-E4D · verificador · origem=Code
+
+## Volta 2 — cura da triagem
+
+| Achado | Veredito | Evidência no delta |
+|---|---|---|
+| **A — carga e fim da janela da C5** | **CURADO** | C5 e C11 da lista usam `_fim_ate_ontem` e `_carga_do_cadastro`. A C5 passa o mesmo fim à carga e a `InsumosDoDono`. O teste de equivalência compara o dono. O RED específico confere os fins recebidos pela carga e pelo juiz e detecta o mutante de fim integral na competência corrente. `app/escala/services/cadastro_realidade.py:177–201,226–241,543–547,608–615` · `app/escala/tests/test_classe_d_c5_por_dia.py:119–131,142–183` |
+| **B — cadastro no alarme real** | **CURADO EM PARTE** | `censo` e `censo_alcance` passaram a aplicar o mesmo predicado sobre `Empresa.em_rollout`. O RED detecta a retirada do filtro pela contagem de chamados vivos e pelas células do fio morto. O recorte ainda pode disparar `cego`, e o RED deixa essa chave de fora. `app/chamados/services/vigia_fio.py:268–272,298–304,338–340,528–534` · `app/chamados/tests/test_o261_vigia_fio.py:169–184` · `app/chamados/management/commands/vigiar_fio_morto.py:85–88,210–211` |
+| **C — falha da C5 como lista sem resposta** | **CURADO** | `ListaDoAdmin` pede `falha_da_c5_sobe=True`. O `except` existente da lista relança a exceção, o `except` existente do vigia a registra, e o comando publica a contagem depois dos dois censos. Tela e PDF usam o valor padrão `False`. O teste força a exceção da C5 e confere a contagem no carregador. `app/escala/services/cadastro_realidade.py:910,1012–1019` · `app/chamados/services/vigia_fio.py:182–207` · `app/chamados/management/commands/vigiar_fio_morto.py:184–203` · `app/escala/views.py:521–529` · `app/escala/tests/test_classe_d_c5_por_dia.py:187–200` |
+
+**Sombra de B.** O antes/depois da emp1, no mesmo snapshot e com `agora` fixo, para `fio_morto`, `fio_morto_cobrando`, `fio_morto_com_alvo`, `dias_futuros_no_universo` e `cego` está **[nao verificado]**. O corte registra a decisão sobre a emp1. O valor efetivamente gravado no cadastro está **[nao verificado]**. `app/docs/CORTES.md:573`
+
+## O que o delta abre
+
+- **PROCEDENTE — o recorte pode criar alarme `cego`.** Se as únicas lâmpadas acesas estão em empresas excluídas, o recorte pode deixar o censo com zero lâmpadas. Em memória, com o corpo real de `censo`, o trecho anterior do diff e um chamado de ontem com porta viva, a lista de alarmes passou de `[]` para `['cego']`, tanto em frota quanto no recorte da empresa fora de operação. `--alarme` converte esse resultado em saída 2. O RED novo verifica cinco contadores, deixando `cego` de fora. `app/chamados/services/vigia_fio.py:298–304,338–345,385–392,444` · `app/chamados/management/commands/vigiar_fio_morto.py:87–88,210–211,302–303` · `app/chamados/tests/test_o261_vigia_fio.py:178–184`
+- **PROCEDENTE — mudou o universo do ensaio de materialização.** `materializar_passivo_validado --ensaiar` chama o mesmo `censo` antes e dentro da transação, depois do reparo. A parte `fio` do placar perde a cobertura de empresas fora de operação, inclusive sob recorte explícito. O comando continua passando o recorte original ao reparo e ao censo de carimbo. O efeito numérico no ensaio está **[nao verificado]**. `app/chamados/management/commands/materializar_passivo_validado.py:79–108,201–211` · `app/chamados/services/vigia_fio.py:298–304`
+- **PROCEDENTE — uma falha da C5 pode mudar o plano do backfill.** O carregador compartilhado ainda solicita a lista de todas as empresas visíveis da rodada, inclusive as fora de operação. Uma falha da C5 nesse universo pode deixar sem resposta um dia de outra empresa que a lista já atribuía ao admin. Esse dia pode voltar a `sem_porta`, rota que `backfill_fio_morto_e4b` usa para selecionar candidatos. O backfill ainda consulta a tarefa e revalida sob trava antes de executar pelas portas existentes. Efeito em produção **[nao verificado]**. `app/colaboradores/queries.py:78–87` · `app/chamados/services/vigia_fio.py:185–207,628–636,672–676` · `app/chamados/management/commands/backfill_fio_morto_e4b.py:76–79,313–338,378–399`
+- **PRE-EXISTENTE — relógio solto no ensaio.** `vigiar_fio_morto` passa o mesmo `agora` aos dois censos. O ensaio de materialização já chamava `censo_fio(empresas)` sem repassar seu instante de borda. Cada chamada avulsa pode ler `timezone.now()`. O delta preserva esse caminho. `app/chamados/management/commands/vigiar_fio_morto.py:176–190` · `app/chamados/management/commands/materializar_passivo_validado.py:85–108,201–206` · `app/chamados/services/vigia_fio.py:282–294`
+- **PRE-EXISTENTE — escrita de `em_rollout` também pelo Django Admin.** O formulário da aplicação usa a porta de estrutura. O `EmpresaAdmin` deixa editável o campo `em_rollout` pelo caminho genérico do admin. O delta acrescenta leitura do campo. `app/colaboradores/views.py:513,538–558` · `app/colaboradores/services/estrutura.py:13–22` · `app/colaboradores/admin.py:7–19` · `app/chamados/services/vigia_fio.py:268–272`
+- **NAO PROCEDENTE — segundo juiz, derivação paralela nova, novo escritor, mudança na ordem de trava ou `except` novo.** O corte de ontem delimita a consulta. A competência e o vínculo continuam vindo das autoridades registradas, e o dono continua vindo de `InsumosDoDono.dono`. Os novos trechos de carga e filtro fazem leituras, e o tratamento de C acrescenta um `raise` ao `except` existente. A carga da C11 segue depois da leitura das âncoras e dos pais. Os censos fazem consultas separadas ao cadastro com o mesmo predicado. Consistência sob alteração concorrente de `em_rollout` **[nao verificado]**. `app/core/juizes.py:243–248,310–314,1324–1325` · `app/escala/services/cadastro_realidade.py:177–201,226–241,537–547,1015–1019` · `app/ponto/management/commands/e6_oraculo.py:182–195` · `app/chamados/services/vigia_fio.py:268–272,298–304,528–534`
+
+## Quem escreve e quem lê
+
+| Campo ou função | Produtor, leitores e contrato |
+|---|---|
+| `_carga_do_cadastro` | Produz os dois mapas em memória. `_nunca_bateu` consome `cad`; `beco_em_lote` consome `cad` e `carga`. A unidade é colaborador × janela de dias de turno, com início e fim inclusivos. Células e vínculos usam esses limites, e `cad` responde por data. A Pauta DP passa a janela exportada inteira ao mesmo carregador. `app/escala/services/cadastro_realidade.py:184–201,231–241,466–472,543–571` · `app/escala/alimentacao.py:73–77,148–159` · `app/ponto/turnos.py:2960–2964` |
+| `_fim_ate_ontem` | Produz `min(fim, hoje - 1 dia)`. `_nunca_bateu` e `_folga_nao_definida_sem_porta` leem o resultado como fim **inclusivo**. `hoje` é o dia civil local da rodada, aplicado às datas dos turnos. A seleção inicial da C5 já usava ontem inclusivo. `app/escala/services/cadastro_realidade.py:162–169,177–181,226–231,603–615,929–930` |
+| `_em_operacao` | Produz a lista das empresas recebidas cujo booleano está ligado. `censo` fornece empresas do recorte ou da frota. `censo_alcance` fornece empresas visíveis, intersectadas com o recorte. Ambos usam o mesmo significado do campo, com universos de entrada próprios. A unidade é empresa, sem data de vigência. `app/chamados/services/vigia_fio.py:268–272,298–304,528–534` · `app/colaboradores/queries.py:78–87` |
+| `falha_da_c5_sobe` | `lista` declara `False`, `ListaDoAdmin._carregar` passa `True`, e o `except` da C5 lê o valor para decidir se relança. É um booleano por chamada da lista. `app/escala/services/cadastro_realidade.py:910,1015–1019` · `app/chamados/services/vigia_fio.py:185–200` |
+| `ListaDoAdmin.sem_resposta` | `__init__` abre o conjunto. `dia_do_admin` e `papel_do_dia` adicionam pares. A propriedade devolve o tamanho, lido por `censo` e pelo comando após ambos os censos. A unidade é **par distinto `(colaborador, dia do turno)` consultado sem resposta**, em ISO, por rodada. `dia_na_lista` e `colab_na_lista` podem devolver `None` sem incrementar por si. `app/chamados/services/vigia_fio.py:179–235,258–264,397–398,445,624–636,860–862` · `app/chamados/management/commands/vigiar_fio_morto.py:184–203` |
+| `Empresa.em_rollout` | **Escritores:** padrão `False` no modelo e na migração, formulário pela porta `criar_empresa`/`atualizar_empresa`, e Django Admin. **Leitores diretos:** `_em_operacao`, `colaboradores_em_operacao`, painel de chamados, painel situacional, checkbox da empresa, `furos_sem_cobranca`, `apurar_furos_diarios` e o selo de leitores. Todos leem o booleano atual de operação da empresa. Visibilidade, `ativa` e vínculo vigente entram como filtros adicionais onde aplicáveis. `app/colaboradores/models.py:40–45` · `app/colaboradores/migrations/0029_empresa_em_rollout.py:12–16` · `app/colaboradores/views.py:513,538–558,2630` · `app/colaboradores/services/estrutura.py:13–22` · `app/colaboradores/admin.py:7–19` · `app/chamados/services/vigia_fio.py:272` · `app/colaboradores/queries.py:62–65,78–87` · `app/chamados/services/painel.py:411` · `app/templates/colaboradores/empresa_form.html:34` · `app/ponto/services/furos_sem_cobranca.py:59` · `app/escala/management/commands/apurar_furos_diarios.py:9` · `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:51` |
+
+**Verificação.** Passaram 70 testes isolados, sem banco. A rodada mais ampla teve um erro de importação de Django e três falhas de asserção em testes de calendário e tarefa. A reprodução dessas falhas na volta 1, os REDs com ORM e a validação independente do hash Git estão **[nao verificado]**. O item D segue em fila. O selo existente compara a quantidade de consultas da C5 com 6 e 14 dias na fixture. Custo por dia de conflito e custo de frota **[nao verificado]**. `app/chamados/tests/test_e3_degrau_dono_e_porta.py:285,768,804` · `app/escala/tests/test_classe_d_c5_por_dia.py:207–226`
 
 ## 24/11 15:13 · sessao be92732345ee · - · - · origem=Ronald (tmux)
 
@@ -852,55 +886,4 @@ O cartório tem um ramo que tenta `reconciliar()` para os chamados em `vivos` co
 
 Sim, em **cinco dos seis** irmãos fechados na janela, segundo as chaves impressas em `IRMAO`. A chave aparece em **36125, 35721, 34719, 34239 e 33274**, todos `batida_ausente`. Está ausente em **34898**, de `par_relampago`. No bloco inteiro, os três irmãos das 08:53–08:54 também trazem a chave, e o **34248**, das 10:39, não a traz. O contexto no instante exato de cada fechamento fica [nao verificado].
 
-## 24/11 10:52 · sessao ea99ce1fa9b6 · CHAMADO-PRESO-NA-REGENERACAO · sonda · origem=Code
-
-Não localizei o `script.py` na cópia nem executei a sonda na sombra [nao verificado]. O lançador exige o arquivo e cria uma cópia temporária, o que viola a regra de só leitura. [bin/sonda_leitura.sh:71](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/bin/sonda_leitura.sh:71) [bin/sonda_leitura.sh:216](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/bin/sonda_leitura.sh:216)
-
-**Saída raspada fornecida, verbatim**
-
-```text
-sonda_leitura: script.py [bf7bfbe2913109f7] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-CH 40589 status aberto cat Ausencia sub Batida nao realizada celfk 122470 col 549 data 2026-11-22 modulo batida_ausente criado 2026-11-23 09:36:16.838601-03:00
-  cobrados [('11:00', 'S'), ('12:00', 'E')] chaves_ctx ['atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
-  cel 122470 veredito cobrado via cartorio regen 2026-11-23 12:42:46.737979+00:00 nregen 3 julgada 2026-11-23 12:42:46.839854+00:00
-  lampadas [('07:00', 'E', True, None), ('19:00', 'S', True, None)]
-  apagados [] inexist True acesos None
-CH 40588 status aberto cat Ausencia sub Batida nao realizada celfk 122468 col 549 data 2026-11-20 modulo batida_ausente criado 2026-11-23 09:36:14.978587-03:00
-  cobrados [('11:00', 'S'), ('12:00', 'E')] chaves_ctx ['atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
-  cel 122468 veredito cobrado via cartorio regen 2026-11-23 12:42:47.819535+00:00 nregen 3 julgada 2026-11-23 12:42:47.988730+00:00
-  lampadas [('07:00', 'E', True, None), ('19:00', 'S', True, None)]
-  apagados [] inexist True acesos None
-CH 37336 status aberto cat Ausencia sub Batida nao realizada celfk 129885 col 932 data 2026-11-06 modulo batida_ausente criado 2026-11-06 10:30:24.378583-03:00
-  cobrados [('10:00', 'E')] chaves_ctx ['atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
-  cel 129885 veredito cobrado via cartorio regen 2026-11-16 17:05:26.602427+00:00 nregen 1 julgada 2026-11-16 17:05:30.948640+00:00
-  lampadas [('07:00', 'E', True, None), ('19:00', 'S', True, None)]
-  apagados [] inexist True acesos None
-CH 36687 status aberto cat Ausencia sub Batida nao realizada celfk 130781 col 899 data 2026-11-03 modulo batida_ausente criado 2026-11-03 08:30:26.191567-03:00
-  cobrados [('08:00', 'E'), ('14:00', 'E')] chaves_ctx ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
-  cel 130781 veredito cobrado via cartorio regen 2026-11-04 10:50:15.360931+00:00 nregen 2 julgada 2026-11-05 10:12:09.623972+00:00
-  lampadas [('13:00', 'E', True, None), ('17:00', 'S', True, None), ('18:00', 'E', True, None), ('21:00', 'S', True, None)]
-  apagados [] inexist True acesos None
-CH 35243 status aberto cat Ausencia sub Batida nao realizada celfk 129565 col 872 data 2026-10-27 modulo batida_ausente criado 2026-10-27 12:30:32.933634-03:00
-  cobrados [('12:00', 'S'), ('13:00', 'E')] chaves_ctx ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
-  cel 129565 veredito cobrado via cartorio regen 2026-11-09 14:03:59.290694+00:00 nregen 1 julgada 2026-11-09 14:04:00.023146+00:00
-  lampadas [('07:00', 'E', True, None), ('19:00', 'S', True, None)]
-  apagados [] inexist True acesos None
-CH 34070 status em_analise cat Ausencia sub Batida nao realizada celfk 130026 col 941 data 2026-10-23 modulo batida_ausente criado 2026-10-23 07:15:11.389386-03:00
-  cobrados [('12:00', 'E')] chaves_ctx ['_marco_por', 'atraso_min', 'data_turno', 'horario_previsto', 'marcos_faltantes', 'orfa_regeneracao']
-  cel 130026 veredito cobrado via cartorio regen 2026-11-10 16:27:13.281724+00:00 nregen 1 julgada 2026-11-14 10:12:14.056259+00:00
-  lampadas [('08:00', 'E', True, None), ('12:00', 'S', True, None), ('13:00', 'E', True, None), ('17:00', 'S', True, None)]
-  apagados [] inexist True acesos None
-FIM
-```
-
-O cartório seleciona candidatos com `marcos_inexistentes=True` na ata do julgamento. Se a porta ler a mesma ata exibida, esse `True` satisfaz a guarda da premissa. Uma pergunta viva sem destino válido ainda pode impedir o fecho. A saída fornecida não traz o resultado de `reconciliaria()` nem os dados dessa guarda. [app/ponto/services/cartorio.py:1597](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/ponto/services/cartorio.py:1597) [app/chamados/models.py:804](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/chamados/models.py:804) [app/chamados/models.py:1363](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/chamados/models.py:1363) [app/chamados/models.py:429](/home/ronald/codex_ws/7a4e79eefb7bd2613e4826449b0b22a43401cfb5/app/chamados/models.py:429) [nao verificado]
-
-- **40589** — `marcos_inexistentes=True` porque `11:00 S` e `12:00 E` estão ausentes da ata (saída, linhas 4, 6 e 7). Recusa de `reconciliaria()` e condição que impediu o fecho [nao verificado].
-- **40588** — `marcos_inexistentes=True` porque `11:00 S` e `12:00 E` estão ausentes da ata (saída, linhas 9, 11 e 12). Recusa de `reconciliaria()` e condição que impediu o fecho [nao verificado].
-- **37336** — `marcos_inexistentes=True` porque `10:00 E` está ausente da ata (saída, linhas 14, 16 e 17). Recusa de `reconciliaria()` e condição que impediu o fecho [nao verificado].
-- **36687** — `marcos_inexistentes=True` porque `08:00 E` e `14:00 E` estão ausentes da ata (saída, linhas 19, 21 e 22). Recusa de `reconciliaria()` e condição que impediu o fecho [nao verificado].
-- **35243** — `marcos_inexistentes=True` porque `12:00 S` e `13:00 E` estão ausentes da ata (saída, linhas 24, 26 e 27). Recusa de `reconciliaria()` e condição que impediu o fecho [nao verificado].
-- **34070** — `marcos_inexistentes=True` porque o cobrado é `12:00 E` e a ata tem `12:00 S` (saída, linhas 29, 31 e 32). Recusa de `reconciliaria()` e condição que impediu o fecho [nao verificado].
-
-_8069 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8070 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
