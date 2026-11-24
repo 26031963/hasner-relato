@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 17:39:25.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (31.5 MB). Acoes na janela: **831**.
+**Medido em 24/11/2026 17:45:40.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (31.6 MB). Acoes na janela: **835**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:43:58 | Bash | Publish map in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') k=[n for n,l in enumerate(L) if l.startswith('ESPERANDO: Codex sonda mapa dos 18 dias')]; assert len(k)==1 L[k[0]]=("FECHADA 24/11 17:43 MAPA-18 NOTURNO-A (aval NOTURNO-A-ENCERRA-V3 17:25): 18 dias/11 colabs/73,9 h por classe na secao 'MAPA DOS 18 DIAS' no fim; a cauda alcanca 1 de 18 (col174 15/11) com ganho  ...` |
+| 17:43:43 | Bash | Locate RELATO sections and time | `cd ~/saas-hasner/app/docs; grep -n '^## ' RELATO.md \| head -5; grep -n '^ESPERANDO: Codex sonda mapa' RELATO.md \| cut -c1-60; date '+%d/%m %H:%M'` |
+| 17:43:38 | Bash | Sample-check Codex citations | `cd ~/saas-hasner/app; sed -n 1526,1530p ponto/motor_calculo_v2.py; echo ---; sed -n 26,31p ponto/janela_he.py; echo ---; sed -n 1440,1446p ponto/motor_calculo_v2.py; echo ---; sed -n 167,179p ponto/services/dia_pago.py` |
+| 17:43:33 | Bash | Read map result | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bchw3jbjn.output; wc -l $D/mapa2.r && cat $D/mapa2.r` |
 | 17:39:10 | Bash | Wait on the real wrapper pid | `while kill -0 2197692 2>/dev/null; do /usr/bin/sleep 20; done; D=~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; tail -1 $D/mapa2.wrap.log; ls $D \| grep mapa2` |
 | 17:39:08 | Bash | Fix pid in ESPERANDO | `cd ~/saas-hasner; sed -i "s/VOLTA 2 tentativa 2 (t1 rc=1 por arquivo de saida removido) \| pid=2197681/VOLTA 2 tentativa 2 (t1 rc=1 por arquivo de saida removido) \| pid=2197692/" app/docs/RELATO.md; grep -c 'pid=2197692' app/docs/RELATO.md` |
 | 17:39:05 | Bash | Check files and codex processes | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; ls -la $D \| grep mapa2; ls -t logs/codex \| head -3; pgrep -af codex_pergunta \| grep -v pgrep \| cut -c1-90` |
