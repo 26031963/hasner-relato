@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 14:35:53.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (21.8 MB). Acoes na janela: **590**.
+**Medido em 24/11/2026 14:42:01.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (21.9 MB). Acoes na janela: **595**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:38:43 | Bash | Record PAREI with sites at RELATO top | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() l=("PAREI: ! RESOLVER-ORDEM-DE-TRAVA-2411-1440 condicao 'o Resolver inteiro roda numa transacao so' NAO fecha \| espera Ronald (14:5x; conferido por mim no fbf5ba2a5). Sitios: " "(1) ponto/views.py:3521-3526 lote = 1 atomic POR DIA (veredito_celula.py:280), dia 1 commita antes do 2, view sem atomic e sem ATOMIC_REQUESTS - ...` |
+| 14:38:36 | Bash | Spot-check atomicity claims in RESOLVER copy | `cd /home/ronald/wt-resolver-d-024937/app; sed -n 3518,3550p ponto/views.py; echo ===; sed -n 278,282p ponto/services/veredito_celula.py; echo ===; sed -n 205,216p ponto/signals.py; grep -rn ATOMIC_REQUESTS config/ \| head -2` |
+| 14:36:41 | Bash | Mark design question answered in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() a='PERGUNTA DE DESENHO RESOLVER-PASSA-NA-FRENTE (13:4x;' assert s.count(a)==1 s=s.replace(a,'RESPONDIDA por RESOLVER-ORDEM-DE-TRAVA-2411-1440 (14:4x: opcao (a), ordem declarada no selo, todas as travas por tabela, condicao transacao unica senao PAREI com sitio; (b) so registro) -- era: PERGUNTA DE DESENHO RESOLVER-PASSA-N ...` |
+| 14:36:37 | Bash | Register aval in PROMPTS/BACKLOG and locate RELATO question | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='PROMPTS.md'; s=open(p).read().rstrip('\n') s+="\n24/11 14:4x \| aval Ronald RESOLVER-ORDEM-DE-TRAVA-2411-1440: desenho (a) -- ordem atual declarada no selo (todas as travas por tabela), padrao=Lock Ordering, condicao = Resolver inteiro numa transacao (deadlock aborta tudo) senao PAREI com sitio; (b) porta unica no reconciliador so registro. Estado: e ...` |
+| 14:36:32 | SendMessage |  | `-` |
 | 14:34:20 | Bash | Register PROGRAMA-ATESTADOS-O30 in BACKLOG and PROMPTS | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| PISTA-2-SO-CONDUTA \|')]; assert len(i)==1 assert not any(l.startswith('\| PROGRAMA-ATESTADOS-O30 \|') for l in L) L.insert(i[0]+1,"\| PROGRAMA-ATESTADOS-O30 \| SO REGISTRO (aval PROGRAMA-ATESTADOS-O30-2411-1440); nao constroi nem fura fila; comeca so com 'aval ...` |
 | 14:34:12 | Bash | Read column format of neighbor line | `cd ~/saas-hasner/app/docs; sed -n 2306p BACKLOG.md` |
 | 14:34:09 | Bash | Find ATESTADO-DADOS-NO-FORM in docs | `cd ~/saas-hasner/app/docs; grep -rln 'ATESTADO-DADOS-NO-FORM' . \| head; grep -rn 'ATESTADO-DADOS-NO-FORM' . \| cut -c1-200 \| head -3` |
