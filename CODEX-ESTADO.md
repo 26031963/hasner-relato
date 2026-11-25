@@ -1,7 +1,64 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 02:57** · publicado em **25/11/2026 02:59** (UTC-3)
+> Ultima resposta processada: **25/11/2026 04:57** · publicado em **25/11/2026 04:59** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 04:57 · sessao 1321c4345948 · WRAPPER-N-VAGAS · verificador · origem=Code
+
+BLOQUEIA
+
+D1 ainda tem modos de troca do registro que escapam da recusa controlada, e a barra final continua fazendo o provisionador consultar a gêmea errada. D3 corrige os dois caminhos, mas o selo só detecta regressão no CENSO. `bin/codex_admissao.py:142-190,260-263` · `bin/codex_pergunta.sh:493,499` · `bin/tests/test_codex_pergunta.sh:276-300,680-685`
+
+## 1–2. D1 — releitura sob as travas
+
+**NOVO — cura parcial da classe.** Qualquer diferença de bytes detectada sob os flocks impede o `os.replace`, inclusive se a releitura devolver `None`. O selo `prov_relida` injeta um registro v2 antes do primeiro flock e cobra rc 2, conteúdo novo ainda no nome e histórico vazio. O mutante que desliga a comparação alcança o arquivamento. O selo cobre a troca de conteúdo regular e deixa as falhas de abertura sem prova. `bin/codex_admissao.py:160-190` · `bin/tests/test_codex_n_vagas.sh:768-788,845`
+
+| Estado no momento da releitura, com as travas tomadas | Retorno, mensagem e estado |
+|---|---|
+| **NOVO — o helper devolve `None`** | **rc 2**, `ERRO <registro> mudou entre a leitura e as travas da vaga <k>: nao movido`. O JSON continua ausente, o histórico daquele registro fica intacto e os descritores da vaga e da gêmea, quando aberta, são fechados. `bin/codex_admissao.py:142-148,166-190` |
+| **NOVO — o nome virou symlink antes do `open`** | **rc 1 no CLI**, com traceback `OSError: [Errno 40] Too many levels of symbolic links`. O link permanece no nome e o alvo e o histórico ficam intactos. A exceção pula `os.close` das leases. O kernel as solta na saída do CLI. Se um chamador Python capturar a exceção e continuar vivo, os descritores ficam abertos. `bin/codex_admissao.py:142-148,166-190,260-271` |
+| **NOVO na releitura — o nome some entre `lexists` e `open`** | **rc 1 no CLI**, com traceback `FileNotFoundError`. O JSON fica ausente, sem arquivamento, e vale a mesma distinção entre saída do processo e exceção capturada. Se `None` vier já na **primeira** leitura, `b.strip()` levanta `AttributeError` antes de abrir as leases. `bin/codex_admissao.py:142-148,155-170,187-190,260-271` |
+
+**Desenho falho.** **NOVO**, a releitura pode bloquear com os flocks presos se o nome virar FIFO: a abertura carece de `O_NONBLOCK` e de validação do tipo pelo descritor. **PREEXISTENTE e ainda aberto no D1**, passar `…/logs/vagas/` faz `dirname(vdir)` procurar `…/logs/vagas/construtor.vaga`. Com `vaga.1` livre e a gêmea real presa, o provisionador pode arquivar o registro sem tomar a trava da gêmea. O delta também deixa `os.replace` operar pelo nome depois da comparação. Para escritores que respeitam a lease, a releitura fecha a janela original. Uma troca posterior por quem ignora a trava ainda pode mover o nome trocado. A ocorrência desses estados em produção é [não verificado]. `bin/codex_admissao.py:142-148,151-183,260-263` · `bin/tests/test_codex_n_vagas.sh:742-788`
+
+## 3. D2 — decisão sobre a gêmea legada
+
+**NOVO — cura a classe no retrato da admissão.** O titular emite `legado=1` quando conseguiu tomar `vaga.1` e encontrou a gêmea presa. O wrapper exclui k=1 de `_OUTRAS` nesse estado e recusa pela guarda própria antes de executar `_COMUM_PY`. O selo cobre gêmea vazia e gêmea com JSON copiado de uma obra disjunta. `bin/codex_admissao.py:207-233` · `bin/codex_pergunta.sh:529-559` · `bin/tests/test_codex_n_vagas.sh:790-805,842,874`
+
+| Estado na admissão | Resultado |
+|---|---|
+| **Só a gêmea presa**, com ou sem `vaga.1.json` residual de outro dono | Com capacidade disponível, **2 `PORTAO`** nos dois estados. Se os predicados anteriores passarem, sai o `COMUM-NAO-SEI` próprio da gêmea. Uma falha anterior de carga, janela, desligador ou saúde dá **2 `PORTAO`** com seu próprio motivo. Capacidade esgotada dá **75 `SEM_VAGA`** antes do portão. `bin/codex_admissao.py:209-233` · `bin/codex_pergunta.sh:524-559` |
+| **k=1 livre, gêmea livre, k=2 viva** | O titular escolhe k=1 e emite `legado=0`. Com N suficiente, o portão consulta a projeção da k=2 e admite se todos os predicados passarem e `_COMUM_PY` devolver `COMUM-NAO`. Caso contrário, **2 `PORTAO`**. Com **N=1**, dá **75 `SEM_VAGA`** pelo N+1. `bin/codex_admissao.py:207-233` · `bin/codex_pergunta.sh:535-559` · `bin/tests/test_codex_n_vagas.sh:251-257,362-367` |
+| **N=1, gêmea legada presa** | **PREEXISTENTE — 75 `SEM_VAGA`**. O titular fica sem k elegível e o wrapper sai antes de chamar `_portao`. `bin/codex_admissao.py:209-232` · `bin/codex_pergunta.sh:524-527` · `bin/tests/test_codex_n_vagas.sh:530-535` |
+
+A guarda roda **depois** do CENSO, que já pode gravar trilha, da criação de diretórios e da escolha da lease. Ela roda **antes** do JSON da vaga e de `abriu`. Na recusa, o trap fecha o pipe do titular, que libera a lease ao sair. **PREEXISTENTE, vizinho ainda aberto**: se k=1 troca de dono entre M4 e M6, `CONFERE` verifica a lease própria e a contagem corrente. A decisão do portão sobre o dono anterior segue valendo. `bin/disjuntor.py:2316-2319,2335-2348` · `bin/codex_pergunta.sh:425-428,486-493,508-526,555-575,771-793` · `bin/codex_admissao.py:95-120,234-239`
+
+## 4. D3 — leitores e significado de `PERGUNTA_R`
+
+**NOVO — cura a classe de releitura do alias original.** O único escritor da variável é `realpath -e "$PERGUNTA"` na linha 90. O argumento original ainda é usado no pré-teste `-r`. O valor resolvido tem o mesmo significado em todos os consumidores: caminho absoluto da pergunta. `bin/codex_pergunta.sh:86-90`
+
+- **CENSO e `_ARQS_PY` — NOVO.** Ambos recebem esse caminho e os anexos resolvidos em `_ANX`. O CENSO lê com abertura de arquivo regular, sem seguir symlink final. `_ARQS_PY` usa `open` comum para pergunta e anexos. `bin/codex_pergunta.sh:124-127,223-232,493,499` · `bin/disjuntor.py:191-194,2320-2330` · `bin/orcamento_contexto.py:68-81`
+- **Registro de insumos, log e prompt — PREEXISTENTE.** M4 recebe `PERGUNTA_R` e `_ANX` e grava caminho e SHA. M6 relê os caminhos do JSON. O log abre `PERGUNTA_R` para raspar a pergunta, e o prompt abre `PERGUNTA_R` e recebe o conteúdo raspado dos anexos lidos de `_ANX`. Dos argumentos originais dos anexos sai o rótulo pelo `basename`. O inventário da worktree recebe somente `WT` e `HASH` nos três pontos. `bin/codex_pergunta.sh:145-147,368-382,563,571,611-628,642-654,677-679,780,822`
+
+**Desenho falho PREEXISTENTE.** Caminho resolvido e bytes congelados são garantias distintas. CENSO, `_ARQS_PY` e M4 fazem leituras independentes, e o prompt é montado antes da conferência M6. Uma edição no próprio caminho resolvido pode fazer o CENSO julgar bytes diferentes dos registrados em M4. M6 só compara com o SHA de M4. **Lacuna no selo NOVO**: o mutante de `insumo_link` reverte apenas o argumento de CENSO e o fake só grava argv. No mesmo selo, importar o fake sai antes de oferecer `_briefs_do_censo`, `_ARQS_PY` pode ficar sem projeção e N=1 dispensa o portão no caso positivo. Reverter apenas `_ARQS_PY` a `$PERGUNTA` fica sem testemunha. `bin/codex_pergunta.sh:227-234,368-382,493-500,559,571,677-681,787-792` · `bin/tests/test_codex_pergunta.sh:79-107,276-300,680-685`
+
+## 5. Selos e achados menores
+
+- **PREEXISTENTE — `#V:comum` conserva mutante próprio.** A linha `comum|_recusa_portao|true|comum|comum:` testa colisão de arquivo real do cenário, com um vizinho disjunto que deve entrar. O `estado_alheio` passou para `#V:gemea_nao_sei`. `bin/tests/test_codex_n_vagas.sh:315-324,354-359,873-874`
+- **NOVO — o mutante de CENSO morre por argv.** A asserção nova detecta o caminho errado mesmo com rc 0 e Codex falso chamado. Os mutantes de D1 e D2 removem decisões. O executor de mutantes `#V` aceita qualquer falha com o rótulo esperado, inclusive a de texto, mas a neutralização da guarda D2 também permite prosseguir para a comparação sem a gêmea. A primeira asserção que matou cada mutante na execução informada é [não verificado]. `bin/tests/test_codex_pergunta.sh:291-300,685,703-705` · `bin/tests/test_codex_n_vagas.sh:197-201,842-845,874,910-915` · `bin/codex_pergunta.sh:535-557`
+- **Achados menores NOVOS de vacuidade parcial.** `prov_relida` exige rc e conteúdo, mas `ls ... 2>/dev/null` aceita histórico ilegível como vazio. O subcaso `gemea_so_json` pode passar pela recusa esperada mesmo se o `cp` falhar e a gêmea continuar vazia. `insumo_link` exige troca e captura, mas o novo teste de argv pode reaproveitar `censo_argv` de rodada anterior, pois o caso não o limpa. O selo já tem um mutante separado que cobra a execução do CENSO. `bin/tests/test_codex_n_vagas.sh:784-787,795-805` · `bin/tests/test_codex_pergunta.sh:83-85,238-248,276-300,670-671`
+- **M1 — NOVO, fecha a documentação pedida.** O cabeçalho agora descreve N pelo blob de `main`, lease, gêmea e prazo da meta. O caso `vagas_n_ambiente` já sela a precedência do blob. Vizinho **PREEXISTENTE**: o cabeçalho diz que nenhum caso lê relógio real, mas o shim só fixa `+%H%M` e delega os demais formatos a `/usr/bin/date`. `bin/tests/test_codex_n_vagas.sh:3-14,114-119,266-275`
+
+## 6. Checklist do delta
+
+| Item | Resultado |
+|---|---|
+| **Except e fallback** | **0** `except` explícitos novos e **0** `\|\| true` de execução novos. Há um retorno novo `None` quando `lexists` dá falso e um ramo novo de recusa explícita que reaproveita `livre=None`. São **0** novos `2>/dev/null` líquidos na produção e **4** nos selos: `grep`, `ls` e dois `sed`. O redirecionamento de `_ARQS_PY` é **PREEXISTENTE**. `bin/codex_admissao.py:142-148,170-190` · `bin/codex_pergunta.sh:499-500` · `bin/tests/test_codex_n_vagas.sh:785-787` · `bin/tests/test_codex_pergunta.sh:299-300` |
+| **Segundo escritor** | **PREEXISTENTE.** `_PROJ_PY` publica, inicia e fecha com a lease. `--provisiona` é o segundo caminho que muda o nome do JSON, fora de `meta.lock`, sob o flock de k e o da gêmea se encontrada. O delta altera a validação desse caminho. A unicidade operacional do pouso é [não verificado]. `bin/codex_pergunta.sh:328-387,414-427,502-503,571,787` · `bin/codex_admissao.py:123-139,166-190` |
+| **Relógio e ordem de trava** | **PREEXISTENTE.** A hora que decide o portão é lida sob meta e lease. M4 toma meta → vaga e libera meta antes do gate. M6 retoma meta com lease, slot e resposta, depois de liberar o gate. O provisionador usa vaga → gêmea com tentativas não bloqueantes e sem gate. O delta acrescenta I/O sob a lease no provisionador. `bin/codex_pergunta.sh:510-521,549-559,571-575,693-726,736-750,768-793` · `bin/codex_admissao.py:72-77,166-170` |
+| **Campo com dois significados** | **NOVO — `_OUTRAS` deixa de misturar** projeção e arquivo de lock. `legado=1` mantém o sentido de k=1 presa só pela gêmea no retrato M4. `PERGUNTA_R` mantém o sentido de caminho. O triestado local de `livre` é **PREEXISTENTE**, com um novo ramo usando `None` para recusar. `bin/codex_admissao.py:170-190,207-233` · `bin/codex_pergunta.sh:86-90,529-557` |
+
+A comparação usa o patch anexado e as linhas da cópia. As exceções de D1 foram conferidas em memória com I/O simulado. Os verdes informados e o hash Git da cópia são [não verificado].
 
 ## 25/11 02:57 · sessao fcf764eba105 · PONTA-PEQUENA-NA-BORDA · verificador · origem=Code
 
@@ -758,63 +815,4 @@ A Pauta entregue tem **17 linhas em sete colaboradores**, com **13 deltas da obr
 | Campo com dois significados | **Improcedente como campo novo.** `j['dia']` mantém o papel de dia resolvido da janela, com origem juiz ou fallback. O segundo retorno do helper distingue as duas origens. A diferença material entre mapa cru e dia mensal está no achado de derivação paralela. `app/ponto/motor_calculo_v2.py:1647–1653,2399–2409`; **v7** `app/ponto/motor_calculo_v2.py:936–951,1717–1724` |
 | `except` novo | **Zero no diff.** Contagem de produção **18 → 18** no motor, **0 → 0** em `janela_he`, **9 → 9** no fechamento e **13 → 13** em `porta_export`. **v7** `app/ponto/motor_calculo_v2.py:936–951,1542–1724,2814–2850,3283–3303`; **v7** `app/ponto/janela_he.py:20–130`; **v7** `app/ponto/services/fechamento.py:36–52`; **v7** `app/folha/porta_export.py:65–124`. |
 
-## 24/11 22:47 · sessao cb747efaacf2 · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
-
-Implementei os quatro bloqueios da volta 3. Conferi a sintaxe, os alvos dos 13 mutantes e os repins por AST. O diff adiciona **0 `except`**. A execução dos REDs, da suíte e dos mutantes fica com o Code, e a certificação com o Opus final. [nao verificado] [nao verificado]
-
-### Funções alteradas
-
-- **B1.** `supra_juiz.py::Command.handle` lê o veredito e os PKs lavrados para o placar de sem par. A retratação confere o PK cobrado antes de chamar a porta, e `ponto/supra_juiz.py::motivo_retratacao` nomeia esse PK no texto. [Comando](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/supra_juiz.py:205) · [Guarda da retratação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/supra_juiz.py:263) · [Texto](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:178)
-- **B1.** `emitir_furo_retroativo.py::Command.handle` lê o `FURO_PARCIAL` de sem par na ata e passa os marcos e a âncora a `_abrir_chamado`. `cartorio.py::_marcos_do_furo_parcial` dá a mesma forma aos marcos nos dois caminhos. Os comandos conservam o diagnóstico convencional com os sinais de sem par desativados. [Retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/emitir_furo_retroativo.py:94) · [Nomeação dos marcos](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/cartorio.py:2026) · [Placar convencional](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/supra_juiz.py:216)
-- **B2.** `ponto/supra_juiz.py::classificar_dia` e `furo_do_sem_par` compartilham o vocabulário do ramo existente. `cartorio.py::_julgar_colab_corpo` grava os PKs do tipo acusado. Quando o ramo acusa `E`, a `S` órfã fica fora da ata. [Classificador](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:550) · [Leitor da classificação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:80) · [Lavra](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/cartorio.py:1594)
-- **B3.** `lastro.py::sem_par_da_ata`, `_sem_par_acesos` e `julgar` conferem o PK e devolvem desconhecido para chave ausente ou lista inválida. `fechar_cobranca_com_lastro.py::Command.handle` imprime o contador de desconhecidos. A retenção continua vindo do veredito lavrado. [Lastro](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/lastro.py:81) · [Conferência no vigia](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/lastro.py:324) · [Contador](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/fechar_cobranca_com_lastro.py:69) · [Folha](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/folha/export.py:1273)
-- **B4.** `cartorio.py::sem_par_no_horizonte` consulta `competencia_entregue` com o mês e ano do fim de `janela_atual`. Uma competência entregue bloqueia o sinal. [Horizonte](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/cartorio.py:333)
-
-### REDs na base informada
-
-As falhas abaixo são as esperadas pela leitura do código. Resultados de execução [nao verificado].
-
-| Bloqueio | Teste e por que morde | [nao verificado]
-|---|---|
-| B1 | [Placar com pareador calado](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:64) perde o PK lavrado na base. [Chave ausente](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:73) acusa pelo pareamento atual. [Retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:82) descarta o `FURO_PARCIAL` e deixa de chamar o emissor. |
-| B1 | [Texto da retratação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:101) compara horas na base. [Guarda da retratação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:111) deixa a base tentar retratar um chamado cujo PK segue acusado. |
-| B2 | [Lavra com `E` e `S`](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:118) espera só a `E`. A base copia os dois PKs. |
-| B3 | [Ata → chamado → folha](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:127) exige o mesmo PK, `furo_real` no vigia e `espelho_furo` na folha. A base põe a cobrança em `sem_marco`. [Ata inválida ou ausente](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:142) apanha o `True` indevido para `[{}]`. [Outra entrada na ata](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:158) exige lastro quando apenas outro PK segue acusado. |
-| B4 | [Competência 11 entregue](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:165) usa o dia civil 21/10. A base ainda deixa o sinal passar depois do registro da entrega de novembro. |
-
-### Comandos para o Code
-
-O primeiro comando roda os selos. Cada chamada de `mutante` seleciona um teste e aplica uma mutação em memória. O resultado esperado de cada mutante é falha de assertiva. [Runner e seleções](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_mutantes.py:16) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
-  ponto.tests.test_a_tela_v3_sem_par
-
-mutante() {
-  A_TELA_V3_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
-    --settings=config.settings.ci \
-    --testrunner=ponto.tests.test_a_tela_v3_mutantes.Runner
-}
-
-mutante supra-sem-placar
-mutante supra-sinal-sem-ata
-mutante supra-sem-veredito
-mutante retro-sem-parcial
-mutante retro-sem-marcos
-mutante retro-sem-veredito
-mutante retratacao-por-hora
-mutante retratacao-sem-pk
-mutante lavra-todos
-mutante lastro-sem-par
-mutante lastro-lista-invalida
-mutante lastro-por-tipo
-mutante horizonte-so-mes
-```
-
-### Repins e escopo
-
-- `LINHAS_REGISTRADAS` coincide com o censo AST. Cartório `1299/1454 → 1302/1457`, mesmas expressões de adesão e recorte da janela. Supra `138/225 → 137/222` e retroativo `78/103 → 74/106`, mesmas leituras de adesão e contagem civil. [Cartório](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/core/tests/test_medida_turno_do_par.py:319) · [Supra](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/core/tests/test_medida_turno_do_par.py:297) · [Retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/core/tests/test_medida_turno_do_par.py:291)
-- `e4b_c12_ast.py` conserva `1514/1799/1819`, as mesmas três chamadas de `_gravar_estado` em `chamados/models.py`. Ajustei os dublês dos testes existentes para a consulta de entrega e o novo contador, com os asserts preservados. [C12](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/chamados/tests/e4b_c12_ast.py:25) · [Dublê de entrega](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_sem_par_acusa.py:239) · [Dublê do vigia](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_o231_lastro_mede_uma_vez.py:30)
-- A exibição **Em aberto** e a tolerância ficaram fora da edição. Não rodei Docker, banco ou suíte, nem fiz operações de Git, deploy ou crons. Hash da cópia e efeito em produção [nao verificado]. [Calendário](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/colaboradores/services/calendario.py:607) · [Espelho](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/espelho.py:485) · [PDF](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/relatorios/pdf_espelho.py:618) · [Tolerância](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:546) [nao verificado]
-
-_8125 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8126 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
