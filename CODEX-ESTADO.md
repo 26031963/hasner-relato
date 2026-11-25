@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 09:21** · publicado em **25/11/2026 09:22** (UTC-3)
+> Ultima resposta processada: **25/11/2026 09:29** · publicado em **25/11/2026 09:28** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 09:29 · sessao e4fdb5c28fba · WRAPPER-N-VAGAS · verificador · origem=Code
+
+BLOQUEIA
+
+**Desenho falho — NOVO.** Um `vaga.k.json` com os bytes `null` faz `--provisiona` devolver **rc 0 sem diagnóstico**. O `json.loads` devolve `None`, o mesmo valor usado para arquivo ausente ou em branco, e a guarda pula o registro. Na chamada seguinte, `abre` lê o mesmo `null`, recusa com rc 1 e o wrapper sai com **rc 3 `FALHA_TRILHA`**. Confirmei o primeiro caminho em memória, com o código da cópia. O selo cobre um objeto sem id, e deixa `null` passar sem testemunha. `bin/codex_admissao.py:163-173`, `bin/codex_pergunta.sh:342-361`, `bin/codex_pergunta.sh:571-575`, `bin/tests/test_codex_n_vagas.sh:743-764`.
+
+## 1. P1–P5 contra `61d04f529`
+
+| Item | Cura e selo | Estado vizinho |
+|---|---|---|
+| **P1 — parcial** | **NOVO.** Abre diretamente com `_RO`, trata o sumiço antes do `open` como ausência e verifica o tipo pelo fd. A remoção do arquivamento também tira as tentativas de flock desse caminho. `prov_io` cobre FIFO com prazo, symlink, pasta e JSON malformado. `bin/codex_admissao.py:45`, `bin/codex_admissao.py:140-173`, `bin/tests/test_codex_n_vagas.sh:766-785`. | **NOVO:** `null` passa, e uma falha de `fstat` deixa o fd aberto até a saída do processo. **PREEXISTENTE:** falha durante `read` ou JSON profundamente aninhado ainda pode escapar com traceback. `bin/codex_admissao.py:147-169`, `bin/codex_admissao.py:252-253`. |
+| **P2 — classe original eliminada** | **NOVO.** Saiu o cálculo do caminho da gêmea no provisionamento, então a barra final já não pode desviar aquela consulta. `normpath` também faz o caminho cujo último componente é um symlink ser recusado com barra final. O selo exige rc 2 e motivo `e symlink`. `bin/codex_admissao.py:123-140`, `bin/codex_admissao.py:159-173`, `bin/tests/test_codex_n_vagas.sh:786-791`, `bin/tests/test_codex_n_vagas.sh:866`. | **PREEXISTENTE:** a checagem olha o componente final e os acessos seguintes voltam a resolver o caminho. **NOVO:** a normalização lexical de `..` pode mudar o destino quando um componente anterior é symlink. `bin/codex_admissao.py:123-135`, `bin/codex_admissao.py:147`. |
+| **P3 — cura o furo do selo** | **NOVO selo, comportamento PREEXISTENTE.** O shim troca o link durante `--censo`, depois de `PERGUNTA_R` ser calculado. O mutante faz `_ARQS_PY` abrir o link trocado e incorporar o brief que declara o arquivo da obra A, ainda presa. O portão recusa e `_entra` exige rc 0 e captura do Codex. `bin/codex_pergunta.sh:86-90`, `bin/codex_pergunta.sh:227-232`, `bin/codex_pergunta.sh:494-501`, `bin/codex_pergunta.sh:556-560`, `bin/disjuntor.py:1632-1645`, `bin/tests/test_codex_n_vagas.sh:91`, `bin/tests/test_codex_n_vagas.sh:204-208`, `bin/tests/test_codex_n_vagas.sh:793-805`, `bin/tests/test_codex_n_vagas.sh:867`. | **PREEXISTENTE:** CENSO, `_ARQS_PY` e M4 leem em momentos diferentes. M6 compara com o hash de M4. Alterar os bytes no caminho já resolvido continua fora da prova. `bin/disjuntor.py:2320-2329`, `bin/codex_pergunta.sh:228-232`, `bin/codex_pergunta.sh:369-381`. |
+| **P4 — menor, parcial** | **NOVO.** Saiu o `ls` usado como prova de histórico vazio. O novo caso exige ausência de `historico/`. `gemea_so` passou a exigir vagas livres antes da montagem e sucesso no `flock` da gêmea. `bin/tests/test_codex_n_vagas.sh:756-757`, `bin/tests/test_codex_n_vagas.sh:809-825`. | **PREEXISTENTE:** `cp` ainda pode falhar e deixar o caso “gêmea com JSON” testar a gêmea vazia. `c_insumo_link` ainda pode ler `censo_argv` de uma rodada anterior com a mesma fixture. `c_censo`, em contraste, limpa o arquivo antes de rodar. **NOVO:** `[ ! -e ]` também aceita um symlink quebrado no nome `historico`. `bin/tests/test_codex_n_vagas.sh:757`, `bin/tests/test_codex_n_vagas.sh:821-825`, `bin/tests/test_codex_pergunta.sh:83-85`, `bin/tests/test_codex_pergunta.sh:238-247`, `bin/tests/test_codex_pergunta.sh:276-300`. |
+| **P5 — menor, PREEXISTENTE** | O cabeçalho continua dizendo que nenhum caso lê o relógio real. O shim só fixa `+%H%M`, `c_health` usa `date +%s` real, e a projeção usa `time.strftime` diretamente. `bin/tests/test_codex_n_vagas.sh:12-14`, `bin/tests/test_codex_n_vagas.sh:115-120`, `bin/tests/test_codex_n_vagas.sh:307-310`, `bin/codex_pergunta.sh:343`. | A janela do portão usa a hora na abertura conforme o desenho. O problema aqui é a afirmação do cabeçalho do selo. `bin/codex_pergunta.sh:542-553`, `bin/tests/test_codex_n_vagas.sh:12-14`. |
+
+## 2. Estados de `vaga.k.json`
+
+Os rc abaixo pressupõem provisionamento dos inodes bem-sucedido e nenhum outro registro anterior na varredura interrompendo a chamada. “Sem mensagem” significa sem diagnóstico **do registro**. A CLI ainda pode imprimir `criada` ou `ja existe` para os inodes. `bin/codex_admissao.py:123-140`, `bin/codex_admissao.py:159-173`.
+
+| Estado | rc e mensagem |
+|---|---|
+| Ausente | **0**, sem mensagem, inclusive se sumir antes do `open`. `bin/codex_admissao.py:147-149`, `bin/codex_admissao.py:163-173`. |
+| Vazio ou só espaços em branco | **0**, sem mensagem. `bin/codex_admissao.py:165-173`. |
+| JSON v2 com id legível | **0**, sem mensagem. A guarda valida a forma do id, independentemente da versão e dos demais campos. `bin/codex_admissao.py:35-42`, `bin/codex_admissao.py:165-173`. |
+| Objeto JSON sem id ou com id inválido | **2**, `ERRO <nome> sem id_chamada legivel: nada movido; o Code tira o registro do nome a mao`. `bin/codex_admissao.py:169-172`. |
+| Não JSON, ou bytes não UTF-8 | **2**, `ERRO <nome> ilegivel (<erro do JSON ou do UTF-8>)`, com o sufixo sobre o Code. `bin/codex_admissao.py:163-168`. |
+| Symlink | **2**, `ilegivel (<nome> nao abre como arquivo regular (<erro do SO>))`. `bin/codex_admissao.py:45`, `bin/codex_admissao.py:147-151`, `bin/codex_admissao.py:166-168`. |
+| FIFO ou pasta | **2**, `ilegivel (<nome> existe e nao e arquivo regular)`. Para o FIFO, `O_NONBLOCK` evita esperar um escritor. O fd é fechado antes da recusa. `bin/codex_admissao.py:45`, `bin/codex_admissao.py:147-156`, `bin/codex_admissao.py:166-168`. |
+| Sem permissão de leitura, se `open` devolver `EACCES` | **2**, `ilegivel (<nome> nao abre como arquivo regular (<erro do SO>))`. `bin/codex_admissao.py:147-151`, `bin/codex_admissao.py:166-168`. |
+| JSON que não é objeto | **2**, `sem id_chamada legivel`, para lista, string, número ou booleano que o parser consiga ler. **NOVO:** `null` dá **0** sem mensagem. `bin/codex_admissao.py:163-173`. |
+
+**Exceções e efeitos.** `OSError` em `fstat` ou `read` e `RecursionError` no parser escapam da recusa e chegam à CLI como traceback, rc 1. Confirmei `RecursionError` em memória e, com falha de `fstat` simulada, confirmei que o fd continua aberto. **NOVO:** a janela entre `open` e a transferência do fd para `fdopen`. **PREEXISTENTE:** erro de leitura ou de decodificação profunda escaping do tratamento, além de falhas em `makedirs` ou na montagem dos inodes antes da varredura. O `with` fecha o fd se `read` falhar depois de entrar no bloco. O provisionador pode **criar inodes de trava antes de recusar**. A varredura abre o registro só para leitura e não move nem apaga registro ou histórico. `bin/codex_admissao.py:45`, `bin/codex_admissao.py:123-173`, `bin/codex_admissao.py:242-253`.
+
+## 3. Escritores, leitores e selos
+
+- **NOVO:** `codex_admissao.py --provisiona` só lê os registros e não acessa `historico/`. A retirada manual pelo Code é o procedimento documentado. A execução e o estado das travas nesse ato de pouso ficam **[nao verificado]**. `bin/codex_admissao.py:20-25`, `bin/codex_admissao.py:140-173`.
+- **PREEXISTENTE:** em `codex_pergunta.sh`, `abre` lê o registro anterior e, com id legível, lê o destino de histórico se já existir, arquiva em `historico/<id>.json` e publica o novo. `inicia` e `fecha` leem e regravam o próprio registro após conferir o id. `_COMUM_PY` lê os registros das outras vagas ocupadas, excluída a k=1 presa só pela gêmea. O leitor de estado lê `vagas.log`. `bin/codex_pergunta.sh:302-319`, `bin/codex_pergunta.sh:334-388`, `bin/codex_pergunta.sh:533-558`, `bin/codex_vagas_estado.py:15-29`.
+- **PREEXISTENTE:** `abre` continua recusando objeto anterior sem id com **1 → 3 `FALHA_TRILHA`**, antes do arquivamento, da publicação e de `abriu`. O selo `historico_sem_id` exige rc 3, mensagem, ausência de `abriu` e preservação do registro. Nos caminhos e selos conferidos, a retirada passou a ser explicitamente manual. O comentário de M9 generaliza que o próximo dono arquiva, embora `abre` condicione isso ao id. `bin/codex_pergunta.sh:328-332`, `bin/codex_pergunta.sh:356-374`, `bin/codex_pergunta.sh:415-416`, `bin/codex_pergunta.sh:571-575`, `bin/tests/test_codex_n_vagas.sh:583-586`, `bin/tests/test_codex_n_vagas.sh:754-761`.
+- **NOVO — cobertura parcial de `prov_sem_id`.** Livre, ocupada e só gêmea exigem rc 2. Os dois `flock -n` seguem sem asserção de sucesso, e mensagem, hash e ausência de histórico só são conferidos após a rodada livre. O hash final verifica os bytes nesse ponto, sem provar o inode ou o estado após cada rodada. `bin/tests/test_codex_n_vagas.sh:745-763`.
+- **NOVO — os três mutantes mordem pelo rc.** `prov_recusa` ainda imprime a recusa, mas segue até rc 0. `prov_reg` deixa o FIFO sem escritor chegar à leitura, que devolve vazio. `prov_norm` deixa o caminho da fixture com barra final passar. Nos três casos, a asserção de rc falha independentemente do texto. O hash, a preservação do symlink e a ausência de histórico são checagens adicionais do selo. `bin/codex_admissao.py:123-127`, `bin/codex_admissao.py:147-173`, `bin/tests/test_codex_n_vagas.sh:748-757`, `bin/tests/test_codex_n_vagas.sh:769-790`, `bin/tests/test_codex_n_vagas.sh:864-866`.
+- **NOVO — remoção dos selos antigos.** `c_prov_relida`, `prov_arquiva`, `prov_relida`, `prov_livre` e `prov_gemea` saíram do código e das listas ativas. `hist_arquiva` permanece para o arquivamento legítimo de `abre`. O executor exige substituição aplicada, falha rotulada e contagem de executados igual à de declarados. `bin/tests/test_codex_n_vagas.sh:829-833`, `bin/tests/test_codex_n_vagas.sh:858-868`, `bin/tests/test_codex_n_vagas.sh:896-945`.
+
+## 4. Checklist
+
+- **Excepts e fallbacks — NOVO.** O delta acrescenta **3 `except` Python**, **0 `|| true`** e **1 novo `2>/dev/null`**, no `sha256sum` do selo. A linha de `_ARQS_PY` já descartava stderr e só ganhou a marca do mutante. O shim novo também deixa passar o status de `ln`, mas o caso exige prova da troca. `FileNotFoundError` vira ausência, inclusive se sumir um diretório pai. `(ValueError, UnicodeDecodeError)` tem redundância, pois `UnicodeDecodeError` já é `ValueError`. Também captura os `ValueError` produzidos pelo próprio leitor e os do parser que vão além de sintaxe, como o limite de dígitos de um inteiro JSON. `bin/codex_admissao.py:146-168`, `bin/codex_pergunta.sh:500-501`, `bin/tests/test_codex_n_vagas.sh:91-93`, `bin/tests/test_codex_n_vagas.sh:756`, `bin/tests/test_codex_n_vagas.sh:800-804`.
+- **Segundo escritor e ordem das travas.** **NOVO:** saiu o segundo escritor explícito do JSON no provisionador. A admissão mantém meta → tentativa não bloqueante de vaga e gêmea → publicação → solta meta → slot e resposta → meta em M6 → solta meta antes de `GO`. **PREEXISTENTE:** a publicação por nome continua exposta a um escritor que ignore a lease entre a leitura e `os.replace`. Há também uma borda na saída dos papéis de leitura: a reserva compara o caminho resolvido de `RESPOSTA`, enquanto a publicação pode substituir o nome original se ele for um symlink. A guarda do nome de saída contra symlink está no ramo construtor. `bin/codex_admissao.py:72-77`, `bin/codex_admissao.py:191-209`, `bin/codex_pergunta.sh:98-102`, `bin/codex_pergunta.sh:337-346`, `bin/codex_pergunta.sh:411-430`, `bin/codex_pergunta.sh:453-463`, `bin/codex_pergunta.sh:511-522`, `bin/codex_pergunta.sh:569-576`, `bin/codex_pergunta.sh:704-751`, `bin/codex_pergunta.sh:768-806`, `bin/codex_pergunta.sh:810-816`.
+- **Semântica, relógio e import.** **NOVO:** `a is None` mistura ausência de conteúdo com o valor JSON `null`. Nenhum campo persistido ou leitura de relógio foi acrescentado pelo delta. **PREEXISTENTE:** `id_chamada` conserva a função de identidade da chamada e chave do histórico. `hashlib` saiu de `codex_admissao.py` junto com o arquivamento por hash. No wrapper, segue usado no inventário e nos hashes dos insumos. `bin/codex_admissao.py:27-42`, `bin/codex_admissao.py:159-173`, `bin/codex_pergunta.sh:146-168`, `bin/codex_pergunta.sh:335-343`, `bin/codex_pergunta.sh:356-379`, `bin/codex_pergunta.sh:756-757`.
+- **Achado menor — NOVO.** Os comentários novos ainda atribuem a regra ao aval que o enunciado informa ter sido substituído. A ação descrita está de acordo com o desenho informado, mas a referência ficou antiga. `bin/codex_admissao.py:22-25`, `bin/codex_pergunta.sh:328-332`, `bin/tests/test_codex_n_vagas.sh:743-744`.
+
+Os três arquivos alterados batem com os blobs indicados no patch fornecido. A identidade do commit completo, a execução integral das suítes e o rearme de B3 ficam **[nao verificado]**. [nao verificado]
 
 ## 25/11 09:21 · sessao d12eaee004ef · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
 
@@ -863,95 +915,4 @@ sonda_leitura: sonda_retratadas.py [754713b38be06df3] no cpuset 4-7, lendo saas_
 
 Soma das três linhas fornecidas (`4 + 11 + 2`) → **`total = 17`** e **`sem_decisao = 17`**. [nao verificado] em produção.
 
-## 25/11 05:20 · sessao e7dc0e4eaea1 · TIPO-NA-FONTE · sonda · origem=Code
-
-### Transcrição integral
-
-`DADO RASPADO:1–66` do texto enviado, contando o cabeçalho da execução como linha 1. O formato desse cabeçalho consta em [bin/sonda_leitura.sh:221](/home/ronald/codex_ws/71efa33d78925687bd2f64b4c368b61e2f72837d/bin/sonda_leitura.sh:221).
-
-```text
-sonda_leitura: sonda_estoque.py [6b7d1ffa767635de] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
-
-empresa_pk=1 competencia=2026-09 ata_none=2 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1 ambas_descasadas=0 total=3
-empresa_pk=1 competencia=2026-10 ata_none=21 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=69 ambas_descasadas=0 total=90
-empresa_pk=1 competencia=2026-11 ata_none=4 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=58 ambas_descasadas=0 total=62
-empresa_pk=1 competencia=2026-12 ata_none=57 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3 ambas_descasadas=0 total=60
-empresa_pk=1 competencia=2027-01 ata_none=11 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=11
-empresa_pk=2 competencia=2024-01 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1600 ambas_descasadas=0 total=1600
-empresa_pk=2 competencia=2024-02 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2024-03 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2320 ambas_descasadas=0 total=2320
-empresa_pk=2 competencia=2024-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2024-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
-empresa_pk=2 competencia=2024-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2024-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
-empresa_pk=2 competencia=2024-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2024-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2024-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
-empresa_pk=2 competencia=2024-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2024-12 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
-empresa_pk=2 competencia=2025-01 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2025-02 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2025-03 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2240 ambas_descasadas=0 total=2240
-empresa_pk=2 competencia=2025-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2025-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
-empresa_pk=2 competencia=2025-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
-empresa_pk=2 competencia=2025-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2380 ambas_descasadas=0 total=2380
-empresa_pk=2 competencia=2025-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
-empresa_pk=2 competencia=2025-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
-empresa_pk=2 competencia=2025-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2370 ambas_descasadas=0 total=2370
-empresa_pk=2 competencia=2025-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
-empresa_pk=2 competencia=2025-12 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2370 ambas_descasadas=0 total=2370
-empresa_pk=2 competencia=2026-01 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
-empresa_pk=2 competencia=2026-02 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
-empresa_pk=2 competencia=2026-03 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2212 ambas_descasadas=0 total=2212
-empresa_pk=2 competencia=2026-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2588 ambas_descasadas=0 total=2588
-empresa_pk=2 competencia=2026-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1793 ambas_descasadas=0 total=1793
-empresa_pk=2 competencia=2026-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=995 ambas_descasadas=0 total=995
-empresa_pk=2 competencia=2026-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=160 ambas_descasadas=0 total=160
-empresa_pk=2 competencia=2026-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=12691 ambas_descasadas=0 total=12691
-empresa_pk=2 competencia=2026-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=13179 ambas_descasadas=0 total=13179
-empresa_pk=2 competencia=2026-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=13466 ambas_descasadas=0 total=13466
-empresa_pk=2 competencia=2026-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=14096 ambas_descasadas=0 total=14096
-empresa_pk=2 competencia=2026-12 ata_none=11676 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1628 ambas_descasadas=0 total=13304
-empresa_pk=2 competencia=2027-01 ata_none=779 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=779
-empresa_pk=2 competencia=2027-02 ata_none=31 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=31
-empresa_pk=2 competencia=2027-03 ata_none=28 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=28
-empresa_pk=2 competencia=2027-04 ata_none=31 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=31
-empresa_pk=2 competencia=2027-05 ata_none=30 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=30
-empresa_pk=2 competencia=2027-06 ata_none=31 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=31
-empresa_pk=2 competencia=2027-07 ata_none=16 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=16
-empresa_pk=3 competencia=2026-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=4 ambas_descasadas=0 total=4
-empresa_pk=3 competencia=2026-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=57 ambas_descasadas=0 total=57
-empresa_pk=3 competencia=2026-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3552 ambas_descasadas=0 total=3552
-empresa_pk=3 competencia=2026-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3530 ambas_descasadas=0 total=3530
-empresa_pk=3 competencia=2026-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3418 ambas_descasadas=0 total=3418
-empresa_pk=3 competencia=2026-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3565 ambas_descasadas=0 total=3565
-empresa_pk=3 competencia=2026-12 ata_none=2767 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=375 ambas_descasadas=0 total=3142
-empresa_pk=3 competencia=2027-01 ata_none=187 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=187
-empresa_pk=4 competencia=2026-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1 ambas_descasadas=0 total=1
-empresa_pk=4 competencia=2026-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=30 ambas_descasadas=0 total=30
-empresa_pk=4 competencia=2026-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=651 ambas_descasadas=0 total=651
-empresa_pk=4 competencia=2026-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=620 ambas_descasadas=0 total=620
-empresa_pk=4 competencia=2026-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=660 ambas_descasadas=0 total=660
-empresa_pk=4 competencia=2026-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=682 ambas_descasadas=0 total=682
-empresa_pk=4 competencia=2026-12 ata_none=554 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=76 ambas_descasadas=0 total=630
-empresa_pk=4 competencia=2027-01 ata_none=11 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=11
-```
-
-### Soma por forma na frota do dado raspado
-
-| Forma | Soma | Fonte |
-|---|---:|---|
-| `ata_none` | 16.236 | `DADO RASPADO:3–66` |
-| `sem_chaves` | 0 | `DADO RASPADO:3–66` |
-| `so_orfas` | 0 | `DADO RASPADO:3–66` |
-| `so_n_orfas` | 0 | `DADO RASPADO:3–66` |
-| `ambas_casadas` | 142.485 | `DADO RASPADO:3–66` |
-| `ambas_descasadas` | 0 | `DADO RASPADO:3–66` |
-| **Total** | **158.721** | `DADO RASPADO:3–66` |
-
-As 64 linhas de contagem fecham individualmente, e a soma por forma coincide com a soma da coluna `total`. `DADO RASPADO:3–66`.
-
-A regra de competência 21–20 em `sonda_estoque.py`, o código de saída da execução e a cobertura da frota em produção ficam [nao verificado].
-
-_8149 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8150 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
