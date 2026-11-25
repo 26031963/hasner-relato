@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 07:52:20.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.8 MB). Acoes na janela: **219**.
+**Medido em 25/11/2026 07:58:19.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.8 MB). Acoes na janela: **220**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:53:20 | Bash | Read push 2 result and remote | `cd ~/saas-hasner; cat logs/PUSH-2511/push2.rc; /bin/grep -E "RED\|FAIL\|error\|^Ran\|^OK" logs/PUSH-2511/push2.log \| tail -6 \| cut -c1-250; git fetch -q; git log --oneline -1 origin/main; git log --oneline -1 main` |
 | 07:32:50 | Bash | Check push and wrapper rerun progress | `cd ~/saas-hasner; cat logs/PUSH-2511/push2.rc 2>/dev/null; tail -2 logs/PUSH-2511/push2.log \| cut -c1-200; cat logs/WRAPPER-N-VAGAS/volta7/rc.txt` |
 | 07:25:32 | Bash | Read pergunta selo result | `cd ~/saas-hasner; cat logs/WRAPPER-N-VAGAS/volta7/rc.txt; tail -3 logs/WRAPPER-N-VAGAS/volta7/test_codex_pergunta.log` |
 | 07:24:34 | Bash | Rerun n_vagas selo after pergunta selo writes rc | `cd ~/wt-wrapper-n-vagas-125229; L=~/saas-hasner/logs/WRAPPER-N-VAGAS/volta7; until /bin/grep -q "^test_codex_pergunta rc=" $L/rc.txt 2>/dev/null; do /usr/bin/sleep 15; done; s=$(date +%s); timeout 3600 bash bin/tests/test_codex_n_vagas.sh > $L/test_codex_n_vagas.log 2>&1; echo "test_codex_n_vagas(rerun) rc=$? $(( $(date +%s)-s ))s" >> $L/rc.txt; cat $L/rc.txt` |
