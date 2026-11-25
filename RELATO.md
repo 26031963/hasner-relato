@@ -5883,6 +5883,21 @@ CONTRATO-DE-INSTRUMENTO CODEX-CUSTO-POR-OBRA v2 (aval 31/10 12:1x; v1 emendada p
 > **METODO DOS 658 (aval 22:3x item 5, para reproducao independente)**: consulta = `logs/o261/maria_A.py` (sha256 9ae578a37bb61077..., SO LEITURA, rodada por `bin/sonda_leitura.sh` -- usuario leitor, cpuset 4-7), saida `logs/o261/maria/A.out` e `logs/o261/maria.out` (ERROS=0); data-base 29/10/2026 16:57 (mtime da saida); codigo = arvore viva no commit `b00779dd` (o ultimo antes da rodada; o ar era o do deploy anterior, carimbado em `logs/deploy.stamp`); empresas visiveis [1, 2, 3, 4]; universo = dias que SEGURAM a folha por `folha/fora_da_folha.py::o_que_segura` (o juiz do export memoizado por empresa/competencia, MESMA funcao) = 1.700. CRITERIO DE ROTA REAL: porta FORTE = celula do dia com chamado em `chamados/services/painel.py::qs_na_fila` ('chamado_na_fila') ou pergunta validavel pelo admin ('pergunta_validavel'); PORTA_REAL do fio=colab = pergunta VIVA (`chamados/juizes.py::pergunta_viva`) que aparece em `perguntas_do_app` E cuja ancora `fio.py::chamado_que_lista` e chamado VIVO na fila; porta FRACA (cadastro_lista, plano_folgas) NAO conta. Resultado: 883 forte + 159 PORTA_REAL = 1.042 com rota; **SEM rota real = 1.700 - 1.042 = 658**. O F5 (`vigia_fio.censo_alcance`) reproduz este criterio por DIA retido (hoje 1.620 dias, 388 sem porta, 634 sem os 4 baldes de lei) e passa a reportar com o PAPEL do usuario que pode agir.
 - 20:2x BO-DISPUTA-SEM-PERGUNTA TRIAGEM mod7 (1a rodada COM banco dos 72 modulos sobre c01d53af4: Ran 639, FAILED failures=6 errors=2, rc=1, logs/BO-DISPUTA-SEM-PERGUNTA/mod7.log; medida em copias descartaveis ja removidas, tri_a.log e tri_b.log): (1) test_3b_reuso_746 2 errors = o teste pede disputa com motivo sem pergunta, que pela lei da obra nao nasce; com motivo que tem pergunta os 2 PASSAM; (2) RED_b = fixture cria a outra disputa aberta ANTES da dona; invertendo PASSA; (3) replay porta real = a Batida da fixture dispara os signals e abre outra disputa antes da chamada medida, que cai na agregacao (D2) e nao no nascimento; teste refeito + caso novo 'A aberta e canonica em B fechada'; (4) chokepoint FICA 150 x teto 145 e FICAM 224 x 219: +5 constante atribuido por DIFF de SQL contra a volta 2 (1 SAVEPOINT + 1 RELEASE + 1 SELECT de pergunta + 2 exists de disputa aberta no wrapper). Defeito de CODIGO provado: 0; aberto: item (3b) e a reducao das 5 queries. Construtor Codex volta c8 (delta, construtor8.q, CENSO fechado) lancado 20:19, pid do lancador em c8.log; sem opus ainda (5b, preverif unico e suite inteira vem antes).
 
+## O48-MEDE -- FECHAMENTO-ONLINE passos 1-5 no HEAD 160173bb1 + DIFF lido x gravado comp 11 (25/11 10:18, aval O48-MEDE-2511, so medida)
+LEI-AKITA: origem=n/a, testemunha=ponto/services/fechamento.py::fechamento_lido x FechamentoMensal, RED=n/a (medida), quem-mais-le=passos.r, juizes novos=0, padrao=n/a (medida)
+| passo | estado | o que falta |
+|---|---|---|
+| 1 K8 | FEITO nos sitios do K8 (janela_atual pelo corte) | defaults de mes CIVIL: relatorios/views.py:62-63/:134-139, folha/views.py:90-91 (+template exportar.html:38) |
+| 2 leitura | FEITO: fechamento_lido (fechamento.py:1772) somente_leitura, sem pk | prova dos 554 nao re-medida aqui (o DIFF abaixo e a medida de hoje) |
+| 3 por colab | PARCIAL: cartao, HE individual, painel, scores, aprovacao, foto E4b leem o lido | ficha 360 (colaboradores/services/detalhe.py:114-115) e fio (inteligencia/resumo.py:35) leem o GRAVADO; 2 tempos > 150 ms no registro |
+| 4 ensaio | PARCIAL: simular_folha --lido existe | bin/simular_folha.sh:73 ainda passa --recalcular |
+| 5 TXT | PARCIAL: rota principal (gerar_dominio_txt) le LIDO | regerar_txt, PDF validacao, vigia_txt, previa, raio-X, PDF retidos, TXT parcial leem GRAVADO; NAO VIRA antes do export da comp 11 (aval) |
+DIFF lido x gravado comp 11, prod so leitura (sonda_leitura, cpuset 4-7, 116 s), por rubrica (CAMPOS_HORAS):
+- EMP 2: 471/471 gravados, lido_None 0, colabs que divergem 0 | EMP 3: 114/114, 0 | EMP 4: 22/22, 0 -> **0/607, toda rubrica 0**
+- RESSALVA: medido DEPOIS da relavra P0-[nome] das 10:07 (8 colabs da comp 11 movidos por ela); o 0/607 e o estado pos-relavra, nao o de antes
+- PROVA: logs/O48-MEDE/diff_c11.out (sonda o48_diff_lido_gravado_c11.py sha f0fd621839e4); passos: logs/O48-MEDE/passos.r (Codex leitura, amostra 6/6 conferida: simular_folha.sh:73, relatorios/views.py:62, detalhe.py:115, folha/views.py:90, fechamento.py:1772, resumo.py:35)
+- INCOMPLETO: escritores do passo 5 (botao, por evento x5, regen exportada, scripts) seguem -- censo em passos.r, nada construido (aval: medir, sem construir)
+
 ## P0-[nome]-RELAVRA-10 -- comp 11, 10 colabs (25/11 10:07, aval P0-[nome]-2511 (1), DINHEIRO 1)
 LEI-AKITA: origem=ponto/services/fechamento.py::recalcular_fechamento_mes (funcao real), testemunha=FechamentoMensal/DiaPago, RED=n/a (apply), quem-mais-le=n/a, juizes novos=0, padrao=n/a (medida)
 - sombra 10:05: REVERSAO + ENSAIO: 10/10 moveram (classe a), idempotencia 2a passada 0, hash 09/10 igual, 0 nascido
@@ -12966,17 +12981,3 @@ Dias: inversao col113 30/10 01/11, col200 02/11, col218 14/11, col296 02/11, col
 CAUDA: 1 de 18 alcancada (col174 15/11), e piora (par some). A cura que da hora e a da JANELA (7 dias, 25h32 realizadas), que e motor_calculo_v2 = ! do Ronald; nao proposta aqui (aval proibe construtor).
 Amostra Code 3/3 conferida: motor:1528, janela_he.py:30, dia_pago.py:173-179. Achado lateral [nao verificado]: col200 tem 2 registros FT identicos em 30/10 (anexo_pares:18-19).
 INCOMPLETO: causa dos 4 dias "ramo do zero" (26h22, maior classe em horas) e a guarda dos 3 "sem periodo" -- sem aval para nova volta.
-
-## O48-MEDE -- FECHAMENTO-ONLINE passos 1-5 no HEAD 160173bb1 + DIFF lido x gravado comp 11 (25/11 10:18, aval O48-MEDE-2511, so medida)
-LEI-AKITA: origem=n/a, testemunha=ponto/services/fechamento.py::fechamento_lido x FechamentoMensal, RED=n/a (medida), quem-mais-le=passos.r, juizes novos=0, padrao=n/a (medida)
-| passo | estado | o que falta |
-|---|---|---|
-| 1 K8 | FEITO nos sitios do K8 (janela_atual pelo corte) | defaults de mes CIVIL: relatorios/views.py:62-63/:134-139, folha/views.py:90-91 (+template exportar.html:38) |
-| 2 leitura | FEITO: fechamento_lido (fechamento.py:1772) somente_leitura, sem pk | prova dos 554 nao re-medida aqui (o DIFF abaixo e a medida de hoje) |
-| 3 por colab | PARCIAL: cartao, HE individual, painel, scores, aprovacao, foto E4b leem o lido | ficha 360 (colaboradores/services/detalhe.py:114-115) e fio (inteligencia/resumo.py:35) leem o GRAVADO; 2 tempos > 150 ms no registro |
-| 4 ensaio | PARCIAL: simular_folha --lido existe | bin/simular_folha.sh:73 ainda passa --recalcular |
-| 5 TXT | PARCIAL: rota principal (gerar_dominio_txt) le LIDO | regerar_txt, PDF validacao, vigia_txt, previa, raio-X, PDF retidos, TXT parcial leem GRAVADO; NAO VIRA antes do export da comp 11 (aval) |
-DIFF lido x gravado comp 11, prod so leitura (sonda_leitura, cpuset 4-7, 116 s), por rubrica (CAMPOS_HORAS):
-- EMP 2: 471/471 gravados, lido_None 0, colabs que divergem 0 | EMP 3: 114/114, 0 | EMP 4: 22/22, 0 -> **0/607, toda rubrica 0**
-- PROVA: logs/O48-MEDE/diff_c11.out (sonda o48_diff_lido_gravado_c11.py sha f0fd621839e4); passos: logs/O48-MEDE/passos.r (Codex leitura, amostra 6/6 conferida: simular_folha.sh:73, relatorios/views.py:62, detalhe.py:115, folha/views.py:90, fechamento.py:1772, resumo.py:35)
-- INCOMPLETO: escritores do passo 5 (botao, por evento x5, regen exportada, scripts) seguem -- censo em passos.r, nada construido (aval: medir, sem construir)
