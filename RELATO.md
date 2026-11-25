@@ -12966,3 +12966,17 @@ Dias: inversao col113 30/10 01/11, col200 02/11, col218 14/11, col296 02/11, col
 CAUDA: 1 de 18 alcancada (col174 15/11), e piora (par some). A cura que da hora e a da JANELA (7 dias, 25h32 realizadas), que e motor_calculo_v2 = ! do Ronald; nao proposta aqui (aval proibe construtor).
 Amostra Code 3/3 conferida: motor:1528, janela_he.py:30, dia_pago.py:173-179. Achado lateral [nao verificado]: col200 tem 2 registros FT identicos em 30/10 (anexo_pares:18-19).
 INCOMPLETO: causa dos 4 dias "ramo do zero" (26h22, maior classe em horas) e a guarda dos 3 "sem periodo" -- sem aval para nova volta.
+
+## O48-MEDE -- FECHAMENTO-ONLINE passos 1-5 no HEAD 160173bb1 + DIFF lido x gravado comp 11 (25/11 10:18, aval O48-MEDE-2511, so medida)
+LEI-AKITA: origem=n/a, testemunha=ponto/services/fechamento.py::fechamento_lido x FechamentoMensal, RED=n/a (medida), quem-mais-le=passos.r, juizes novos=0, padrao=n/a (medida)
+| passo | estado | o que falta |
+|---|---|---|
+| 1 K8 | FEITO nos sitios do K8 (janela_atual pelo corte) | defaults de mes CIVIL: relatorios/views.py:62-63/:134-139, folha/views.py:90-91 (+template exportar.html:38) |
+| 2 leitura | FEITO: fechamento_lido (fechamento.py:1772) somente_leitura, sem pk | prova dos 554 nao re-medida aqui (o DIFF abaixo e a medida de hoje) |
+| 3 por colab | PARCIAL: cartao, HE individual, painel, scores, aprovacao, foto E4b leem o lido | ficha 360 (colaboradores/services/detalhe.py:114-115) e fio (inteligencia/resumo.py:35) leem o GRAVADO; 2 tempos > 150 ms no registro |
+| 4 ensaio | PARCIAL: simular_folha --lido existe | bin/simular_folha.sh:73 ainda passa --recalcular |
+| 5 TXT | PARCIAL: rota principal (gerar_dominio_txt) le LIDO | regerar_txt, PDF validacao, vigia_txt, previa, raio-X, PDF retidos, TXT parcial leem GRAVADO; NAO VIRA antes do export da comp 11 (aval) |
+DIFF lido x gravado comp 11, prod so leitura (sonda_leitura, cpuset 4-7, 116 s), por rubrica (CAMPOS_HORAS):
+- EMP 2: 471/471 gravados, lido_None 0, colabs que divergem 0 | EMP 3: 114/114, 0 | EMP 4: 22/22, 0 -> **0/607, toda rubrica 0**
+- PROVA: logs/O48-MEDE/diff_c11.out (sonda o48_diff_lido_gravado_c11.py sha f0fd621839e4); passos: logs/O48-MEDE/passos.r (Codex leitura, amostra 6/6 conferida: simular_folha.sh:73, relatorios/views.py:62, detalhe.py:115, folha/views.py:90, fechamento.py:1772, resumo.py:35)
+- INCOMPLETO: escritores do passo 5 (botao, por evento x5, regen exportada, scripts) seguem -- censo em passos.r, nada construido (aval: medir, sem construir)

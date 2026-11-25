@@ -1,7 +1,100 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 09:40** · publicado em **25/11/2026 09:40** (UTC-3)
+> Ultima resposta processada: **25/11/2026 10:16** · publicado em **25/11/2026 10:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 10:16 · sessao 37c06c5c456b · REG-EXTERNA-FATO-DE-CHAO · leitura · origem=Code
+
+Na cópia, a regularização externa já pula a guarda de competência na criação da batida. A divergência com o aval está no passo seguinte: o evento pode regravar `FechamentoMensal` e `DiaPago` em exportada e não gera Pauta DP de pago x devido. `app/chamados/services/regularizacao_ext.py:78` · `app/ponto/registro_batida.py:154` · `app/ponto/services/fechamento.py:1820`, `:1173`, `:1204`
+
+**Competência 11, quantidade de regularizações confirmadas sem materialização em produção:** [nao verificado]. **Correspondência da cópia com o hash informado:** [nao verificado], pois a cópia veio sem `.git`.
+
+## 1. Regularização externa e efeito depois da gravação
+
+- `materializar_regularizacao_externa` passa `autoridade_humana=False`, omite `fato_de_chao` e usa `origem='reg_externa'`. O default `None` vira `not autoridade_humana`, portanto **`True`**. `competencia_fechada` só é chamada com fato de chão efetivo `False`. Continuam valendo a confirmação, o bloqueio por disputa aberta, a deduplicação e a recusa por colisão de tipo oposto. `app/chamados/services/regularizacao_ext.py:52`, `:59`, `:71` · `app/ponto/registro_batida.py:118`, `:137`, `:154`, `:162` · `app/ponto/janelas.py:75`
+- Para uma batida **nova**, `registrar_batida` chama `_fechamento_por_evento`, que chama `recalcular_por_evento`. No `on_commit`, ele resolve a competência do instante da batida e chama `recalcular_fechamento_mes` para aquele colaborador, em modo de escrita. Exportação por si só gera aviso no log e o cálculo segue. O escritor atualiza os campos calculados do fechamento e chama `dia_pago.lavrar`, que substitui as linhas do recorte por versão. `app/ponto/registro_batida.py:170`, `:176`, `:195` · `app/ponto/services/fechamento.py:457`, `:548`, `:1173`, `:1204`, `:1820`, `:1837` · `app/ponto/services/dia_pago.py:359`
+- Há uma exceção expressa para **09/2026 e 10/2026**. `GUARDA_COMPETENCIA` exclui do recálculo de escrita os colaboradores das empresas que entregaram essas competências e tenta registrar `LogAuditoria` com ação `recalculo_barrado_guarda`. **11/2026 está fora desse mapa na cópia.** A guarda usa a entrega da empresa via K6. `app/ponto/services/fechamento.py:36`, `:53`, `:567`, `:1509`, `:1550`
+- O aviso de recálculo cita Pauta DP, mas o evento só chama o escritor do fechamento. Há uma Pauta DP **condicional pelo fechamento do chamado vinculado**: `transicionar_com_pauta` coleta recusas S143 e `_escrever_pautas` grava `pautas.models.Pauta` via `pautas.services.escrever` quando há recusa ancorável. Seu texto trata da reabertura recusada. O teste de regularização cobre essa emissão sem precisar criar batida. `app/ponto/services/fechamento.py:550`, `:1820` · `app/chamados/services/regularizacao_ext.py:202` · `app/chamados/services/fecho_runtime.py:58`, `:118`, `:139`, `:146` · `app/chamados/tests/test_e4b_c12_orm.py:95`, `:176`, `:201`
+
+## 2. Censo dos chamadores de produção
+
+A coluna de bloqueio vale para **criação nova**. A porta pode devolver batida existente antes da guarda. Na guarda, “fechada” significa `FechamentoMensal.status` `aprovado` ou `exportado`, na competência do instante pelo corte da empresa. `app/ponto/registro_batida.py:137`, `:144`, `:154` · `app/ponto/janelas.py:84`
+
+| Chamador direto | Caminho | `autoridade_humana` | `fato_de_chao` passado → efetivo | Bloqueia criação em fechada? |
+|---|---|---|---|---|
+| `api_bater_ponto` · `app/api/views.py:654` | Chão, API app/PWA | `False` | Omitido → `True` | Não |
+| `api_bater_ponto` · `app/api/views_core.py:645` | Chão, API app/PWA | `False` | Omitido → `True` | Não |
+| `ramo_registrar_es` · `app/ponto/services/triagem_batida.py:700` | Chão, PWA | `False` | Omitido → `True` | Não |
+| `_cria_batida` de `materializar_regularizacao_externa` · `app/chamados/services/regularizacao_ext.py:78` | Institucional, regularização externa | `False` | Omitido → `True` | Não |
+| `_materializar_resposta_hora` · `app/chamados/services/materializacao.py:1581` | Institucional, disputa | `False` | `False` → `False` | Sim |
+| `_materializar_resposta_data_hora` · `app/chamados/services/materializacao.py:1698` | Institucional, âncora de disputa | `False` | `False` → `False` | Sim |
+| `acao_aprovar_excecao` · `app/chamados/services/acoes_chamado.py:44` | Institucional, exceção aprovada pelo DP | `True` | Omitido → `False` | Sim |
+| `aprovar_justificativa_dp` · `app/ponto/services/justificativa.py:188` | Institucional, justificativa individual | `True` | Omitido → `False` | Sim |
+| `materializar_saida_dp` · `app/ponto/services/justificativa.py:481` | Institucional, saída retroativa pelo DP | `True` | Omitido → `False` | Sim |
+| `aprovar_lote_justificativas` · `app/ponto/views.py:1843` | Institucional, justificativas em lote | `True` | Omitido → `False` | Sim |
+| `veredito_celula` · `app/ponto/services/veredito_celula.py:328` | Institucional, admin resolve o dia | `True` | Omitido → `False` | Sim |
+
+As **11 chamadas acima** são os sítios diretos de produção encontrados. Fora da tabela, `testar_pwa` tem cinco chamadas de ensaio, todas com os defaults, e exige banco de ensaio antes de rodar. A retomada de regularização é indireta, pelo signal de fechamento de disputa. O backfill de disputa também chega indiretamente, pelo materializador. Para metades de intervalo em disputa existe ainda a guarda K6 da competência **entregue**, pelo dia do fato, antes da escrita. `app/ponto/management/commands/testar_pwa.py:38`, `:184`, `:198`, `:219`, `:228`, `:229` · `app/chamados/signals.py:123`, `:139` · `app/chamados/management/commands/backfill_fio_morto_e4b.py:169` · `app/chamados/services/materializacao.py:818`, `:825`, `:1976`
+
+## 3. REGEN-EM-EXPORTADA e pago x devido
+
+- **Porta de retificação:** `ponto.portas.regen_exportada.regenerar_em_exportada`. Exige autor staff e motivo, regenera células, chama o recálculo em escrita e chama `retratar_exportada` para `DiaPago`. Registra trilha e devolve `antes`, `depois` e hashes. A chamada de produção encontrada fica em `passivo_validado._trabalhar_o_par`, que chama `_pauta_da_competencia` quando o retorno indica mudança. Essa função escreve a Pauta DP com os dois números via `pautas.services.escrever`, que cria `Pauta`. `CLAUDE.md:418` · `app/ponto/portas/regen_exportada.py:87`, `:108`, `:179`, `:184`, `:193`, `:204`, `:221` · `app/chamados/services/passivo_validado.py:157`, `:197`, `:238`, `:499`, `:506` · `app/pautas/services.py:153`, `:180`
+- **Pago x devido com o gravado intacto:** a implementação existente está no comando `pauta_pago_x_devido_exportada`. `Command._medir` lê `valores_do_gravado` como pago, compara com `recalcular_fechamento_mes(..., somente_leitura=True)` como devido e consulta K6. `Command._escrever` confere o hash do fechamento e grava as pautas pelo serviço `escrever`. Esse é o comportamento que atende ao requisito de preservar o gravado. **A cópia não tem uma função de evento pronta que faça o fluxo completo:** o comando é catalogado como ato avulso, e `recalcular_por_evento` segue pelo recálculo em escrita. Também não há chamada de `regenerar_em_exportada` pelo evento de batida. `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:102`, `:107`, `:124`, `:130`, `:135`, `:152`, `:196`, `:207` · `app/config/crons.py:827` · `app/ponto/services/fechamento.py:1820` · `app/chamados/services/passivo_validado.py:499`
+
+## 4. Leitores do contrato de `fato_de_chao`
+
+- **A afirmação explícita que agrupa disputa e regularização** está no comentário de `registrar_batida`. A docstring da função descreve `autoridade_humana` para colisão. O materializador de disputa usa os dois `False` explícitos, e sua docstring da guarda descreve F6 no chokepoint. O `RELATO-ARQUIVO` reproduz a chamada da disputa e, junto com o `BACKLOG`, registra a leitura do ramo `if not fato_de_chao`. `app/ponto/registro_batida.py:119`, `:147` · `app/chamados/services/materializacao.py:845`, `:1581`, `:1698` · `app/docs/RELATO-ARQUIVO.md:3061`, `:12502` · `app/docs/BACKLOG.md:1455`
+- **Selos de comportamento:** `test_ajuste_retroativo_folha_fechada` cobra manual barrado, app liberado e disputa com `False` explícito barrada. `test_bug_par_projetado` e `test_marco_por_motivo` passam `False` em chamadas de disputa. Para a regularização externa, o selo O44 já cobra que o lote confirmado entre em competência trancada e em aprovada. O teste de colisão usa `reg_externa` com `autoridade_humana=False` e omite `fato_de_chao`. `app/ponto/tests/test_ajuste_retroativo_folha_fechada.py:28`, `:36`, `:56`, `:66` · `app/chamados/tests/test_bug_par_projetado.py:972`, `:977` · `app/chamados/tests/test_marco_por_motivo.py:190`, `:236` · `app/chamados/tests/test_reg_externa_fechado_e_trancado.py:1`, `:69`, `:78`, `:96` · `app/ponto/tests/test_registrar_batida.py:32`
+
+## 5. Escritores e leitores dos três campos
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `Batida.origem='reg_externa'` | `_cria_batida` fornece o literal e `registrar_batida` persiste. A trilha da criação também guarda a origem e o PK da regularização. `app/chamados/services/regularizacao_ext.py:78`, `:93` · `app/ponto/registro_batida.py:170`, `:176` | Os filtros pelo literal encontrados estão nos testes. Em produção, `procedencia` lê a origem das batidas fora de `app` e resolve o rótulo em `ORIGEM_CHOICES`; calendário, espelho e PDF consomem essa procedência. A origem também é exposta no admin, no detalhe da batida, no detalhe do colaborador, no espelho da API e na consulta do dia. `app/chamados/tests/test_regularizacao_externa.py:47`, `:98` · `app/chamados/tests/test_guard_disputa_reg_externa.py:38` · `app/chamados/tests/test_reg_externa_disputa_beco.py:137` · `app/ponto/models.py:19` · `app/ponto/services/procedencia_batida.py:39`, `:62`, `:80` · `app/colaboradores/services/calendario.py:650` · `app/ponto/services/espelho.py:769` · `app/relatorios/pdf_espelho.py:953` · `app/ponto/admin.py:13` · `app/core/views.py:994`, `:1019` · `app/colaboradores/services/detalhe.py:86` · `app/templates/colaboradores/detalhe.html:184` · `app/api/views.py:1472` · `app/ponto/services/dia_do_colab.py:59` |
+| `RegularizacaoItemBatida.batida_entrada` / `batida_saida` | O materializador atribui e salva os vínculos no ramo de adição, inclusive no par de intervalo. As duas FKs são anuláveis, com `SET_NULL` na exclusão da batida e sem relação reversa. `app/chamados/services/regularizacao_ext.py:167`, `:189` · `app/chamados/models.py:4653`, `:4657` | O próprio materializador lê os IDs para decidir se ainda precisa criar cada ponta. `app/chamados/services/regularizacao_ext.py:172`, `:176`, `:181`, `:185` |
+| `RegularizacaoExterna.materializada_em` | `materializar_regularizacao_externa` grava o instante junto de `status='materializada'` e `materializada_por`. `app/chamados/models.py:4606` · `app/chamados/services/regularizacao_ext.py:198` | `retomar_regularizacoes_confirmadas` consulta `status='confirmada', materializada_em__isnull=True` e é chamada no pós-commit do fecho de disputa. Os testes do beco leem o carimbo antes e depois da retomada. `app/chamados/services/regularizacao_ext.py:211`, `:219` · `app/chamados/signals.py:123`, `:134`, `:139` · `app/chamados/tests/test_reg_externa_disputa_beco.py:73`, `:135`, `:160` |
+
+## 25/11 10:15 · sessao 76e7d357572f · O48 · leitura · origem=Code
+
+**O48 — auditoria da cópia `160173bb15c45f134dbfcc75777f45a656b42079`.** A cópia não contém metadados Git. Usei `git grep --no-index` sobre os arquivos disponíveis. A correspondência exata da cópia com o hash e a execução em produção ficam **[nao verificado]**.
+
+| Passo | O que o plano pede | Estado no código | O que falta |
+|---|---|---|---|
+| **1 — K8** | Usar a chave da competência de hoje. `app/docs/FECHAMENTO-ONLINE.md:58` | **FEITO nos sítios registrados do K8.** O juiz é `janela_atual`, pelo corte da empresa. Os pontos de HE, painel, lista e botão de recálculo chamam o juiz. O universo usado pela lista e pelo recálculo também usa a janela da empresa. `app/core/juizes.py:344`, `app/core/juizes.py:663`, `app/core/juizes.py:702`, `app/ponto/janelas.py:60`, `app/ponto/views.py:605`, `app/ponto/views.py:817`, `app/ponto/views.py:944`, `app/ponto/views.py:1009`, `app/ponto/views.py:1099`, `app/ponto/views.py:1134`, `app/ponto/views.py:1264`, `app/ponto/services/fechamento.py:439`, `app/ponto/services/fechamento.py:563` | **Defaults civis ainda presentes no censo ampliado:** relatórios de horas e inconsistências consultam o fechamento usando o mês civil quando a URL omite mês/ano. O formulário do export também pré-seleciona o mês civil e envia a seleção ao gerar o TXT. `app/relatorios/views.py:62`, `app/relatorios/views.py:68`, `app/relatorios/views.py:134`, `app/relatorios/views.py:139`, `app/folha/views.py:90`, `app/templates/folha/exportar.html:38`, `app/folha/views.py:109` |
+| **2 — leitura** | Expor `fechamento_lido(colab, mes, ano)` sem salvar e provar paridade campo a campo para 554 colaboradores. `app/docs/FECHAMENTO-ONLINE.md:59` | **FEITO no código.** A porta chama a derivação compartilhada com `somente_leitura=True, retornar_objeto=True`. O ramo monta uma instância sem PK, usa a linha gravada como semente, deriva os campos e devolve o objeto. A lavra de `DiaPago` exige o modo de escrita ou uma flag adicional, ausente nessa porta. `app/ponto/services/fechamento.py:1772`, `app/ponto/services/fechamento.py:899`, `app/ponto/services/fechamento.py:1141`, `app/ponto/services/fechamento.py:1204` | **Prova dos 554 [nao verificado].** A cópia contém teste de paridade campo a campo logo após gravar uma fixture e teste de ausência de escrita SQL. `app/ponto/tests/test_o48_fechamento_lido.py:129`, `app/ponto/tests/test_o48_fechamento_lido.py:155` |
+| **3 — por colaborador** | Migrar os quatro leitores individuais e medir `DIFF=0` e até `0,15 s` por página. `app/docs/FECHAMENTO-ONLINE.md:60` | **PARCIAL no censo.** Os quatro nomeados migraram: cartão, apuração individual de HE, painel individual e cálculo de scores. A guarda de aprovação individual e a foto E4b também chamam `fechamento_lido`. `app/relatorios/cartao_pela_celula.py:73`, `app/folha/services/ranking_he.py:206`, `app/ponto/views.py:1021`, `app/inteligencia/management/commands/calcular_scores.py:91`, `app/ponto/views.py:1508`, `app/chamados/services/foto_e4b.py:328` | A **ficha 360°** e o **fio do colaborador** ainda exibem números gravados, detalhados abaixo. O anexo registra divergências entre gravado e lido em 07–09 e tempos de 68, 154 e 176 ms. Dois tempos excedem 150 ms. Medição nesta cópia **[nao verificado]**. `app/colaboradores/services/detalhe.py:115`, `app/inteligencia/resumo.py:35`, `app/docs/FECHAMENTO-ONLINE.md:60` |
+| **4 — ensaio** | Fazer `bin/simular_folha.sh` comparar leitura × leitura, com foto sem escrita no banco. `app/docs/FECHAMENTO-ONLINE.md:61` | **PARCIAL.** O comando Python tem `--lido`, injeta o lote lido no veredito, na montagem e nos retidos, e recusa comparar fotos de autoridades diferentes. O anexo relata `DIFF=0` entre duas fotos lidas. `app/folha/management/commands/simular_folha.py:130`, `app/folha/management/commands/simular_folha.py:133`, `app/folha/management/commands/simular_folha.py:152`, `app/folha/management/commands/simular_folha.py:182`, `app/docs/FECHAMENTO-ONLINE.md:61` | **Sim, o shell ainda passa `--recalcular`, na linha 73.** `par` chama essa mesma `foto` duas vezes. A foto mantém trava e `--cobre-competencia`, e o comparador do shell exige trava comum. `bin/simular_folha.sh:67`, `bin/simular_folha.sh:70`, `bin/simular_folha.sh:73`, `bin/simular_folha.sh:82`, `bin/simular_folha.sh:96` |
+| **5 — TXT** | Fazer o TXT ler online em lote e provar `DIFF=0` nas três empresas. `app/docs/FECHAMENTO-ONLINE.md:62` | **PARCIAL. O TXT da rota principal usa LIDO.** `gerar_dominio_txt` deriva uma vez por empresa e injeta a mesma lista em `classificar_export` e `montar_linhas_export`. No `export.py`, os dois aceitam a lista e consultam **GRAVADO** por padrão. Na rota principal, o gravado serve à guarda de existência e ao carimbo de aprovação. `app/folha/urls.py:14`, `app/folha/views.py:150`, `app/folha/views.py:165`, `app/folha/views.py:210`, `app/folha/views.py:214`, `app/folha/views.py:248`, `app/folha/views.py:270`, `app/folha/export.py:717`, `app/folha/export.py:783` | **Ainda usam GRAVADO:** regeração do TXT, PDF de validação, vigia do TXT, prévia, raio-X, PDF de retidos e TXT parcial de retificação. O registro histórico no código diz que duas empresas tiveram TXT idêntico e a terceira mudou **2 de 170 linhas**, embora o conjunto de entrada fosse idêntico. `DIFF=0` nas três nesta cópia **[nao verificado]**. `app/folha/management/commands/regerar_txt_dominio.py:85`, `app/folha/validacao_pdf.py:65`, `app/folha/services/vigia_txt.py:231`, `app/folha/views.py:351`, `app/folha/views.py:610`, `app/folha/views.py:879`, `app/chamados/management/commands/materializar_passivo_validado.py:291`, `app/folha/views.py:175` |
+
+### Passo 3 — quem ainda lê o gravado para exibir números
+
+| Escopo | Leitores |
+|---|---|
+| **Por colaborador — ficha 360°** | Consulta o fechamento da competência corrente e exibe horas extras, inconsistências e semanas com DSR perdido. `app/colaboradores/views.py:486`, `app/colaboradores/services/detalhe.py:114`, `app/colaboradores/services/detalhe.py:115`, `app/templates/colaboradores/detalhe.html:50`, `app/templates/colaboradores/detalhe.html:54`, `app/templates/colaboradores/detalhe.html:58` |
+| **Por colaborador — fio** | Consulta o histórico de fechamentos e exibe horas trabalhadas, extras e faltas. `app/chamados/views.py:688`, `app/inteligencia/resumo.py:35`, `app/templates/chamados/fio_colaborador.html:48` |
+| **FROTA — passo 6** | Fechamento do DP e endpoint de lotes, com horas e prontidão por pessoa. Relatórios de horas e inconsistências, com CSV. Ranking geral de HE e alertas de HE excessiva. `app/ponto/views.py:1108`, `app/ponto/views.py:1163`, `app/ponto/services/fechamento_lista.py:85`, `app/templates/ponto/_fech_linha.html:30`, `app/relatorios/views.py:68`, `app/relatorios/views.py:94`, `app/relatorios/views.py:139`, `app/relatorios/views.py:160`, `app/folha/services/ranking_he.py:112`, `app/folha/services/ranking_he.py:139`, `app/inteligencia/management/commands/gerar_alertas.py:132`, `app/inteligencia/management/commands/gerar_alertas.py:139` |
+| **FROTA — passo 6, via consulta compartilhada** | Dashboard do supervisor e painel, detalhamentos e PDF da Inteligência. A consulta compartilhada devolve `FechamentoMensal` persistido. `app/ponto/janelas.py:108`, `app/core/views.py:422`, `app/templates/core/dashboard_supervisor.html:115`, `app/inteligencia/views.py:112`, `app/inteligencia/views.py:359`, `app/inteligencia/views.py:373`, `app/inteligencia/views.py:387`, `app/inteligencia/views.py:401`, `app/inteligencia/views.py:520` |
+| **Instrumentos que mostram o gravado por pessoa** | O comparador cartão × TXT usa explicitamente o gravado como um dos lados. `vinculo_do_dia_divergentes --topo-x-coluna` e `e6_piso_autopsia` também mostram campos gravados. `app/relatorios/cartao_pela_celula.py:250`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:68`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:74`, `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:72`, `app/ponto/management/commands/e6_piso_autopsia.py:96`, `app/ponto/management/commands/e6_piso_autopsia.py:125` |
+
+### Passo 5 — quem ainda chama o recálculo para gravar
+
+| Caminho | Chamadas fora de testes | [nao verificado]
+|---|---|
+| **Botão e operação manual** | Botão do DP e comando `recalcular_fechamento --apply`. `app/ponto/views.py:1280`, `app/ponto/management/commands/recalcular_fechamento.py:110`, `app/ponto/management/commands/recalcular_fechamento.py:118` |
+| **Por evento** | O serviço chama o escritor no `on_commit`, para um colaborador na competência do fato. Os cinco pontos de entrada são batida, decisão de HE, porta da célula e dois ramos de validação de chamados. `app/ponto/services/fechamento.py:1822`, `app/ponto/services/fechamento.py:1823`, `app/ponto/services/fechamento.py:1837`, `app/ponto/registro_batida.py:198`, `app/ponto/portas/he.py:230`, `app/ponto/portas/celula.py:503`, `app/chamados/services/validacao.py:628`, `app/chamados/services/validacao.py:798` |
+| **Retificação e comandos com aplicação** | Regeneração em competência exportada, chamada pelo serviço do passivo. `aplicar_09_corte_b --aplicar` e `diff_reclassificar_partido --aplicar` também mantêm a escrita. `app/chamados/services/passivo_validado.py:501`, `app/ponto/portas/regen_exportada.py:184`, `app/ponto/management/commands/aplicar_09_corte_b.py:212`, `app/ponto/management/commands/aplicar_09_corte_b.py:274`, `app/ponto/management/commands/diff_reclassificar_partido.py:206`, `app/ponto/management/commands/diff_reclassificar_partido.py:213` |
+| **Scripts operacionais** | Aplicação O263 e relavraduras O118, O119 e O120. A execução em produção de cada script é **[nao verificado]**. `bin/aplicar_o263_comp10.py:51`, `bin/relavrar_o118_col221.py:53`, `bin/relavrar_o119_col221.py:52`, `bin/relavrar_o120_col221_09.py:74` |
+| **Ensaio com escrita** | `simular_folha --recalcular` exige banco de ensaio. O script R5 também chama o escritor e se declara ensaio na sombra. `app/folha/management/commands/simular_folha.py:109`, `app/folha/management/commands/simular_folha.py:123`, `bin/r5_idempotencia_frota.py:2`, `bin/r5_idempotencia_frota.py:117` |
+| **Ensaio com rollback** | `plano_b_no_dinheiro`, `folga_que_sumiu`, `desvio_o68b`, a sonda individual de `diff_reclassificar_partido` e `celula_veredito_velho`. Neste último, `--aplicar` desliga o recálculo. `app/ponto/management/commands/plano_b_no_dinheiro.py:109`, `app/ponto/management/commands/folga_que_sumiu.py:69`, `app/ponto/management/commands/desvio_o68b.py:93`, `app/ponto/management/commands/diff_reclassificar_partido.py:160`, `app/ponto/management/commands/celula_veredito_velho.py:94`, `app/ponto/management/commands/celula_veredito_velho.py:149`, `app/ponto/management/commands/celula_veredito_velho.py:157` |
+
+### Quem escreve e quem lê `FechamentoMensal`
+
+| Operação | Sítios |
+|---|---|
+| **Escrita de valores** | A allowlist da aplicação aponta para `ponto/services/fechamento.py`. O recálculo cria a linha, salva o fechamento aberto e atualiza os campos derivados dos demais status. A restauração pela porta também escreve campos. Dois scripts de reversão em `bin/` fazem `save` e `delete` diretamente. `app/core/portas.py:503`, `app/ponto/services/fechamento.py:907`, `app/ponto/services/fechamento.py:1157`, `app/ponto/services/fechamento.py:1173`, `app/ponto/services/fechamento.py:1405`, `bin/restore_o263_comp10.py:50`, `bin/restore_o263_comp10.py:53`, `bin/restore_relavratura_10_2026.py:81`, `bin/restore_relavratura_10_2026.py:84` |
+| **Escrita de estado e validade** | Aprovação e reabertura, individuais e em lote, reabertura do período e invalidação de `previsto_em` e `derivado_em`. A porta de limpeza exclui linhas em banco de ensaio. `app/ponto/services/fechamento.py:1345`, `app/ponto/services/fechamento.py:1353`, `app/ponto/services/fechamento.py:1359`, `app/ponto/services/fechamento.py:1367`, `app/ponto/services/fechamento.py:1465`, `app/ponto/services/fechamento.py:1626`, `app/ponto/services/fechamento.py:1669`, `app/ponto/services/fechamento.py:1781` |
+| **Leitura de existência, estado ou carimbo** | Cartão, HE individual e scores consultam existência. Painel individual consulta PK. Aprovação e reabertura consultam a linha do ato. A guarda de competência, os marcos, o checklist e o vigia de projeções consultam estado ou validade. `app/relatorios/cartao_pela_celula.py:71`, `app/folha/services/ranking_he.py:202`, `app/inteligencia/management/commands/calcular_scores.py:88`, `app/ponto/views.py:1018`, `app/ponto/views.py:1298`, `app/ponto/views.py:1439`, `app/ponto/views.py:1469`, `app/ponto/views.py:1498`, `app/ponto/janelas.py:86`, `app/ponto/services/fechamento.py:1546`, `app/ponto/management/commands/checklist_golive.py:117`, `app/ponto/services/fechamento.py:1709`. O `pre_fechamento` lê os marcos e pode escrever pauta. `app/folha/management/commands/pre_fechamento.py:59`, `app/folha/management/commands/pre_fechamento.py:74`, `app/folha/management/commands/pre_fechamento.py:110` |
+| **Outras leituras do gravado** | Além das telas e do TXT acima, a leitura online carrega a linha como semente. A porta do export compara o gravado com a lavra, o retrato lê causa e frescor, `DiaPago` lê a foto para retificação e existência, e os instrumentos de auditoria leem a foto para comparação. `app/ponto/services/fechamento.py:899`, `app/folha/porta_export.py:483`, `app/folha/porta_export.py:668`, `app/folha/retrato_folha.py:1167`, `app/folha/retrato_folha.py:1415`, `app/ponto/services/dia_pago.py:461`, `app/ponto/services/dia_pago.py:806`, `app/chamados/services/foto_e4b.py:290`, `app/ponto/portas/regen_exportada.py:71`, `app/ponto/portas/regen_exportada.py:81`, `app/ponto/management/commands/carimbo_gravado.py:53`, `app/ponto/services/diff_frota.py:62` |
 
 ## 25/11 09:40 · sessao 657d2f517304 · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · construtor · origem=Code
 
@@ -841,149 +934,4 @@ A_TELA_V8_VARIANTE=d5_pula_foto PYTHONDONTWRITEBYTECODE=1 python -B manage.py te
 A_TELA_V8_VARIANTE=nb_hash_antes_da_foto PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$alvo.test_nunca_bateu_entregue_preserva_foto_no_avulso_e_completa_status"
 ```
 
-## 25/11 07:02 · sessao 0d0075cf508f · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · sonda · origem=Code
-
-## Saída raspada fornecida
-
-```text
-sonda_leitura: sonda_estoque.py [7610d93fbc9e8e83] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-TOTAL_ESTOQUE_RETRATADO_PELO_CRON 71
-empresa competencia exportada total sem_decisao
-2 202607 False 3 3
-2 202608 True 17 17
-2 202609 True 4 4
-2 202610 False 11 11
-3 202606 False 1 1
-3 202607 True 26 26
-3 202608 False 3 3
-3 202611 False 2 2
-4 202606 True 3 3
-4 202607 True 1 1
-pk colab empresa data_local retratada_em(local) tem_decisao exportada
-44398 29 4 2026-06-17 30/07 00:13 False True
-44399 29 4 2026-06-17 30/07 00:13 False True
-60707 39 4 2026-06-19 09/08 23:56 False True
-44650 146 3 2026-06-20 30/07 00:13 False False
-45516 146 3 2026-06-22 30/07 00:13 False True
-44839 146 3 2026-06-22 30/07 00:13 False True
-45113 93 3 2026-06-23 30/07 00:13 False True
-45114 93 3 2026-06-23 30/07 00:13 False True
-45314 642 3 2026-06-24 09/08 23:56 False True
-45403 111 3 2026-06-24 30/07 00:01 False True
-45410 157 3 2026-06-24 30/07 00:01 False True
-45349 81 3 2026-06-24 09/08 23:56 False True
-45312 642 3 2026-06-24 09/08 23:56 False True
-45539 172 3 2026-06-25 30/07 00:13 False True
-45540 172 3 2026-06-25 30/07 00:13 False True
-45684 95 3 2026-06-25 30/07 00:01 False True
-45745 146 3 2026-06-26 30/07 00:13 False True
-45746 146 3 2026-06-26 30/07 00:13 False True
-45830 90 3 2026-06-26 30/07 00:13 False True
-45832 90 3 2026-06-26 30/07 00:13 False True
-46308 170 3 2026-06-27 30/07 00:01 False True
-46288 170 3 2026-06-29 30/07 00:01 False True
-47225 174 2 2026-07-01 09/08 23:56 False False
-47490 82 3 2026-07-02 30/07 00:01 False True
-48141 761 3 2026-07-06 30/07 00:13 False True
-48143 761 3 2026-07-06 30/07 00:13 False True
-48323 148 3 2026-07-07 30/07 00:01 False True
-59632 747 3 2026-07-13 09/08 23:56 False True
-49572 51 4 2026-07-14 30/07 00:01 False True
-50779 152 3 2026-07-17 30/07 00:13 False True
-50267 152 3 2026-07-17 30/07 00:13 False True
-50291 114 3 2026-07-17 09/08 23:56 False True
-50875 663 2 2026-07-20 30/07 00:13 False False
-50876 663 2 2026-07-20 30/07 00:13 False False
-51193 465 2 2026-07-21 30/07 00:13 False True
-51197 465 2 2026-07-21 30/07 00:13 False True
-51418 450 2 2026-07-21 29/07 23:44 False True
-51551 398 2 2026-07-21 29/07 23:44 False True
-53304 451 2 2026-07-23 30/07 00:13 False True
-53317 451 2 2026-07-23 30/07 00:13 False True
-53799 238 2 2026-07-24 30/07 00:13 False True
-53805 238 2 2026-07-24 30/07 00:13 False True
-53813 239 2 2026-07-24 30/07 00:13 False True
-53821 239 2 2026-07-24 30/07 00:13 False True
-54959 492 2 2026-07-25 29/07 23:44 False True
-58216 512 2 2026-07-29 29/07 23:44 False True
-59233 868 3 2026-07-30 31/07 06:55 False False
-59229 868 3 2026-07-30 31/07 06:55 False False
-60942 363 2 2026-08-01 02/08 06:55 False True
-60943 363 2 2026-08-01 02/08 06:55 False True
-61042 668 2 2026-08-01 03/08 06:55 False True
-61548 169 3 2026-08-02 09/08 23:56 False False
-65277 860 2 2026-08-05 06/08 06:55 False True
-65273 860 2 2026-08-05 06/08 06:55 False True
-97993 936 2 2026-09-11 12/09 06:26 False True
-98000 936 2 2026-09-11 12/09 06:26 False True
-104398 473 2 2026-09-18 19/09 06:26 False True
-104386 473 2 2026-09-18 19/09 06:26 False True
-111295 190 2 2026-09-26 15/10 02:23 False False
-112983 948 2 2026-09-28 29/09 06:26 False False
-112970 948 2 2026-09-28 29/09 06:26 False False
-113226 398 2 2026-09-29 30/09 06:26 False False
-113225 398 2 2026-09-29 30/09 06:26 False False
-115732 358 2 2026-10-01 03/10 06:26 False False
-115731 358 2 2026-10-01 03/10 06:26 False False
-123806 934 2 2026-10-10 11/10 06:26 False False
-128118 992 2 2026-10-15 16/10 06:26 False False
-128150 992 2 2026-10-15 16/10 06:26 False False
-129040 741 2 2026-10-16 17/10 06:26 False False
-141249 109 3 2026-10-29 30/10 06:26 False False
-141250 109 3 2026-10-29 30/10 06:26 False False
-rc_sombra=0
-```
-
-## Respostas
-
-Não encontrei `sonda_estoque.py` na cópia local e não reexecutei a sonda. A transação `READ ONLY` e o rollback da execução reportada ficam [nao verificado]. As referências `DADO RASPADO:linha` apontam para o bloco acima.
-
-1. **71 batidas**, conforme `TOTAL_ESTOQUE_RETRATADO_PELO_CRON`. `DADO RASPADO:3` · `app/ponto/management/commands/detectar_par_relampago.py:224`
-2. **51 em competências exportadas e 20 em abertas**, usando o mês do fim da janela de 21 a 20. `DADO RASPADO:5–14` · `app/ponto/janelas.py:10` · `app/folha/export.py:594`
-
-   | Empresa | Competência | Exportada | Aberta |
-   |---:|---:|---:|---:|
-   | 2 | 202607 | 0 | 3 |
-   | 2 | 202608 | 17 | 0 |
-   | 2 | 202609 | 4 | 0 |
-   | 2 | 202610 | 0 | 11 |
-   | 3 | 202606 | 0 | 1 |
-   | 3 | 202607 | 26 | 0 |
-   | 3 | 202608 | 0 | 3 |
-   | 3 | 202611 | 0 | 2 |
-   | 4 | 202606 | 3 | 0 |
-   | 4 | 202607 | 1 | 0 |
-   | **Total** | | **51** | **20** |
-
-3. **0 batidas com ato humano auditado posterior.** Todas as linhas detalhadas têm `tem_decisao=False`. `DADO RASPADO:15–86`
-4. **Nenhum `ERRO` ou traceback aparece no dado raspado.** A última linha é `rc_sombra=0`. `DADO RASPADO:1–87`
-
-## 25/11 06:49 · sessao b2c670b7bee4 · REGUA-TICKETS-SO-PADRAO-DE-FATIA · leitura · origem=Code
-
-**O contrato está incompleto.** Há um segundo script de pre-push que chama a `regua_tickets`, e o placar tem uma definição própria de citação. O filtro novo ainda aceita marcadores de prosa com dígito. A cópia veio sem `.git`, então o censo histórico e o resultado em `origin/main..HEAD` ficam como [nao verificado]. `app/core/hooks/pre-push.sh:7`, `app/core/placar_tickets.py:175–191`, `bin/regua_tickets.sh:81–85`.
-
-### 1. Quem chama e quem lê a saída
-
-- `bin/pre-push.sh` e `app/core/hooks/pre-push.sh` chamam `~/saas-hasner/bin/regua_tickets.sh` e convertem qualquer retorno diferente de zero em `exit 1`, com a saída textual seguindo para quem acompanha o push. A instalação prevista em `bin/hooks.sh` delega para `bin/pre-push.sh` da árvore do push, que por sua vez aponta a régua de tickets para `~/saas-hasner`. Qual wrapper estava instalado no host é [nao verificado]. `bin/pre-push.sh:5–11`, `app/core/hooks/pre-push.sh:5–8`, `bin/hooks.sh:63–70`.
-- `bin/regua.sh` chega à régua de tickets **pelo selo novo**, quando alcança o laço dos selos de host. O atalho `JA VERDE` sai antes desse laço. O selo compara o `rc` e usa a última linha da saída para diagnóstico quando há divergência. `bin/regua.sh:84–95`, `bin/regua.sh:128–145`, `bin/tests/test_regua_tickets_padrao_de_fatia.sh:25–30`.
-- Na cópia, não encontrei consumidor de `CITADOS` nem de `N citacao(oes)` fora da própria régua. O número é de **IDs distintos**. O contador que `bin/placar_code.sh` extrai é `parado_citado_em_commit_posterior`, produzido pelo placar a partir de uma leitura própria do Git. O `rc=1` da régua também pode significar tabela ou base ausente. O placar reprovado retorna `2` na régua e vira `1` no hook. `bin/regua_tickets.sh:28–38`, `bin/regua_tickets.sh:81–104`, `bin/tickets_placar.sh:54–55`, `bin/tickets_placar.sh:88–99`, `bin/placar_code.sh:44–53`, `bin/pre-push.sh:10`.
-
-### 2. O que o filtro ainda confunde com fatia
-
-- **Há dois casos históricos documentados** de prosa com dígito que a regra nova ainda extrai: `[FIO-C6-MORTA]` e `[FIO-DUP-C8]`. Eram marcadores de log citados no corpo de commits, e ambos já ganharam linha na tabela. São exemplos do falso positivo, mas ficam fora do conjunto **sem linha** da cópia. `app/docs/RELATO.md:5772`, `app/docs/TICKETS.md:148`, `app/docs/TICKETS.md:150`, `bin/regua_tickets.sh:81–96`.
-- No ensaio em memória, um literal solto como `[OK2]` ou um hash em maiúsculas como `[A1B2C3D]` foi cobrado. Um índice numérico como `[0]`, um acesso colado como `x[A2]` e uma lista com vírgula como `[OK2, AGORA]` ficaram de fora. A regra distingue essas formas pelo regex, sem identificar o sentido da citação. `bin/regua_tickets.sh:81–85`.
-- **Conferi 983 IDs distintos na tabela, 565 com dígito e 418 sem.** Os números históricos relatados implicam `730 − 376 = 354` IDs citados com dígito, antes de cruzar com a tabela. O total **com dígito e sem linha**, sua lista e a classificação entre prosa e fatias esquecidas ficam [nao verificado]. `bin/regua_tickets.sh:16–18`, `bin/regua_tickets.sh:81–96`.
-
-### 3. O que o selo prova
-
-- O selo copia a **régua real daquela árvore** a cada caso e a executa no repositório descartável. O placar é substituído por um stub verde. No ensaio em memória com a régua real e entradas simuladas, os três `MORDE` retornaram `1` por falta de linha, e `fatia_com_linha` retornou `0` com **2 citações**. A execução integral do selo com Git fica [nao verificado]. `bin/tests/test_regua_tickets_padrao_de_fatia.sh:12–30`, `bin/tests/test_regua_tickets_padrao_de_fatia.sh:37–43`, `bin/regua_tickets.sh:23–38`, `bin/regua_tickets.sh:93–104`.
-- **A asserção aceita a causa errada.** Base inexistente também satisfaz cada `MORDE` isoladamente. Se a base faltar em todos os casos, os positivos derrubam o selo. Já `fatia_com_linha` também fica verde com **zero citações extraídas**, pois só compara o `rc`. Uma falha de `git log` sem saída pode produzir esse verde. Os comandos de preparação e de criação do commit também seguem sem checagem explícita de retorno. `bin/tests/test_regua_tickets_padrao_de_fatia.sh:11–30`, `bin/tests/test_regua_tickets_padrao_de_fatia.sh:38–43`, `bin/regua_tickets.sh:23`, `bin/regua_tickets.sh:37–38`, `bin/regua_tickets.sh:81–104`.
-
-### 4. Onde a regra diverge
-
-- **O placar diz que usa o mesmo padrão, mas aplica outro.** Procura o ID de uma linha parada no assunto, sem exigir dígito e sem distinguir maiúsculas de minúsculas. A régua procura no assunto e no corpo e exige dígito. O próprio selo do placar exige que `[ALFA]` no assunto conte. Como o placar roda antes da extração da régua, uma divergência dele ainda pode barrar o push. `app/core/placar_tickets.py:175–191`, `app/core/tests/test_selo_placar_tickets.py:111–119`, `bin/regua_tickets.sh:28–38`, `bin/regua_tickets.sh:81–85`.
-- `CLAUDE.md` e a regra principal do `TICKETS.md` dão exemplos compatíveis com o filtro, sem declarar a exigência de dígito. O próprio `TICKETS.md` registra que a régua passou a cobrar `[SELO-VE-O-CASO-COMUM]` e `[GEOFENCE-VALIDAR-VOLTA]`, ambos agora descartados. O `BACKLOG.md` afirma que colchete de prosa não é fatia, distinção que o regex ainda não faz. `CLAUDE.md:3–6`, `app/docs/TICKETS.md:98–104`, `app/docs/TICKETS.md:591–594`, `app/docs/BACKLOG.md:1988`, `bin/regua_tickets.sh:81–85`.
-- `bin/regua.sh` apenas executa o selo pelo laço de host. `bin/tickets_rodape.sh` confere `origin/main`, o carimbo e a série T. O handoff chama de “rodapé” a verificação do topo feita pela régua de tickets, embora o hook confira o rodapé em uma chamada separada. `bin/regua.sh:128–145`, `bin/tickets_rodape.sh:20–35`, `bin/tickets_rodape.sh:84–95`, `app/docs/HANDOFF_SESSAO.md:66–67`, `bin/regua_tickets.sh:28–35`, `bin/pre-push.sh:10–11`.
-
-_8152 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8154 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
