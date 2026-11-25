@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 05:11:28.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (78.3 MB). Acoes na janela: **1332**.
+**Medido em 25/11/2026 05:17:43.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (78.3 MB). Acoes na janela: **1325**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1335,10 +1335,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:23:48 | Bash | Record DXG DIFF v1 result | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() old="ESPERANDO: DIFF DXG pelas portas na sombra" i=s.find(old); j=s.find('\n',i) s=s[:i]+("DXG DIFF pelas portas v1 (logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/, sombra 24/11, atomic+raise, rollback ok): aplicadas 84, recusada 1 (col516 pergunta 60060, colisao tipo-oposto <300s 20/11 01:05); linhas D x velho 4 (<=5); MAS E ...` |
 | 17:23:43 | SendMessage |  | `-` |
 | 17:23:35 | ToolSearch |  | `-` |
-| 17:17:10 | Bash | Record NOTURNO-A PAREI in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() top=("PAREI: ! NOTURNO-A-CAUDA-NO-MOTOR \| espera Ronald -- construtor v3 (wt-janela-turno-020503 @18826e297 = so repin ferias 8,0->10,0 h, DECIDIDO PELA LEI RAMO2(b)+aval 0830 item 5 \| contestavel; logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v3/): " "(i) a cura minima da cauda em turnos.py::_data_do_turno (patch v3/i_cauda_pa ...` |
-| 17:16:57 | Bash | Check col922 29/10 in NOTURNO-A v3 artifacts | `cd ~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v3; ls; grep -l '29/10\\|2026-10-29' * 2>/dev/null \| head; grep -h 'col922\\|922' *.txt 2>/dev/null \| head -10 \| cut -c1-250` |
-| 17:16:50 | Bash | Read rest of NOTURNO-A plan line | `cd ~/saas-hasner; sed -n 23p app/docs/RELATO.md \| cut -c600-3000; grep -n '18 dias\\|col922' app/docs/RELATO.md \| head -8 \| cut -c1-400` |
-| 17:16:48 | Bash | Find NOTURNO-A-RETOMA aval literal | `cd ~/saas-hasner; grep -rl 'NOTURNO-A-RETOMA' logs/AVAIS-1515/ app/docs/PROMPTS.md \| head; grep -n 'NOTURNO-A-RETOMA' app/docs/PROMPTS.md app/docs/RELATO.md \| head -5 \| cut -c1-600` |
-| 17:16:45 | Bash | Locate NOTURNO-A aval text | `cd ~/saas-hasner; ls logs/AVAIS-1515/ \| head -40; grep -il noturno logs/AVAIS-1515/*.txt \| head;` |
-| 17:14:22 | Bash | Record 17:15 answers in docs | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' L=open('BACKLOG.md').read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| ESPURIA-TELA-RETRATAR-ORFA')][0] L.insert(i+1,'\| ESPURIA-TELA-RETRATADA-UM-JEITO \| **fila 2** fatia da ESPURIA-TELA (aval RESPOSTAS-REVISAO-ACHADOS 17:15 item 1): "um jeito so de mostrar a retratada nas 4 telas (Portaria 671: marcacao crua), antes do espelho da co ...` |
-| 17:14:11 | Bash | Save aval and locate ESPURIA-TELA rows | `cd ~/saas-hasner; cat > logs/AVAIS-1515/respostas_revisao_achados_1715.txt <<'EOF' aval Ronald: RESPOSTAS-REVISAO-ACHADOS (24/11 17:15) -- (1) DXG achado 5: aplica com a exibicao como esta, se o DIFF pelas portas passar; registrar como fatia da ESPURIA-TELA "um jeito so de mostrar a retratada nas 4 telas (Portaria 671: marcacao crua), antes do espelho da comp 11 ir a assinatura". (2) A-TELA 2 dias ...` |
