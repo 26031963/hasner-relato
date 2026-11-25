@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 07:58:19.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.8 MB). Acoes na janela: **220**.
+**Medido em 25/11/2026 08:04:21.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.9 MB). Acoes na janela: **225**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:04:09 | Bash | Record wrapper state, PAREI CLEAR line, run handoff | `cd ~/saas-hasner; cat > logs/WRAPPER-N-VAGAS/volta7/estado.txt <<'EOF' WRAPPER-N-VAGAS volta 7 (08:10): NAO commitada na wt ~/wt-wrapper-n-vagas-125229 (diff vivo: codex_admissao.py, codex_pergunta.sh, test_codex_n_vagas.sh). test_codex_pergunta rc=0 (85 mutantes). test_codex_n_vagas rerun rc=1 em 2271s: mutantes #V 69/69 mortos, MAS 6 falhas no wrapper SEM mutante, todas do caso c_gemea_so (bin/t ...` |
+| 08:03:50 | Bash | Read gemea_so case and diffs touching it | `cd ~/wt-wrapper-n-vagas-125229; sed -n 800,818p bin/tests/test_codex_n_vagas.sh; git diff bin/codex_pergunta.sh; git diff bin/tests/test_codex_n_vagas.sh \| /bin/grep -n -i -E "gemea\|_entra\|_roda\b" \| head` |
+| 08:03:42 | Bash | Locate gemea_so case and volta 7 diff | `cd ~/wt-wrapper-n-vagas-125229; /bin/grep -n "gemea_so" bin/tests/test_codex_n_vagas.sh \| head -5; /bin/grep -n "sem registro legivel" bin/codex_admissao.py bin/codex_pergunta.sh \| head; git diff --stat; git diff bin/codex_admissao.py \| head -80` |
+| 08:03:34 | Bash | Show the 6 failures against original wrapper | `cd ~/saas-hasner; L=logs/WRAPPER-N-VAGAS/volta7/test_codex_n_vagas.log; /bin/grep -v Killed $L \| /bin/grep -v "^MORTO" \| head -30 \| cut -c1-300` |
+| 08:03:29 | Bash | Read n_vagas rerun result | `cd ~/saas-hasner; L=logs/WRAPPER-N-VAGAS/volta7; cat $L/rc.txt; /bin/grep -v Killed $L/test_codex_n_vagas.log \| tail -12 \| cut -c1-200` |
 | 07:53:20 | Bash | Read push 2 result and remote | `cd ~/saas-hasner; cat logs/PUSH-2511/push2.rc; /bin/grep -E "RED\|FAIL\|error\|^Ran\|^OK" logs/PUSH-2511/push2.log \| tail -6 \| cut -c1-250; git fetch -q; git log --oneline -1 origin/main; git log --oneline -1 main` |
 | 07:32:50 | Bash | Check push and wrapper rerun progress | `cd ~/saas-hasner; cat logs/PUSH-2511/push2.rc 2>/dev/null; tail -2 logs/PUSH-2511/push2.log \| cut -c1-200; cat logs/WRAPPER-N-VAGAS/volta7/rc.txt` |
 | 07:25:32 | Bash | Read pergunta selo result | `cd ~/saas-hasner; cat logs/WRAPPER-N-VAGAS/volta7/rc.txt; tail -3 logs/WRAPPER-N-VAGAS/volta7/test_codex_pergunta.log` |
