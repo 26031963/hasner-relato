@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 07:21:07.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.6 MB). Acoes na janela: **210**.
+**Medido em 25/11/2026 07:27:23.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.8 MB). Acoes na janela: **218**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:25:32 | Bash | Read pergunta selo result | `cd ~/saas-hasner; cat logs/WRAPPER-N-VAGAS/volta7/rc.txt; tail -3 logs/WRAPPER-N-VAGAS/volta7/test_codex_pergunta.log` |
+| 07:24:34 | Bash | Rerun n_vagas selo after pergunta selo writes rc | `cd ~/wt-wrapper-n-vagas-125229; L=~/saas-hasner/logs/WRAPPER-N-VAGAS/volta7; until /bin/grep -q "^test_codex_pergunta rc=" $L/rc.txt 2>/dev/null; do /usr/bin/sleep 15; done; s=$(date +%s); timeout 3600 bash bin/tests/test_codex_n_vagas.sh > $L/test_codex_n_vagas.log 2>&1; echo "test_codex_n_vagas(rerun) rc=$? $(( $(date +%s)-s ))s" >> $L/rc.txt; cat $L/rc.txt` |
+| 07:24:30 | TaskStop |  | `-` |
+| 07:24:25 | Bash | Rerun n_vagas selo with longer timeout after pergunta | `cd ~/wt-wrapper-n-vagas-125229; L=~/saas-hasner/logs/WRAPPER-N-VAGAS/volta7; while pgrep -f "test_codex_pergunta.sh" >/dev/null; do /usr/bin/sleep 15; done; cat $L/rc.txt; s=$(date +%s); timeout 3600 bash bin/tests/test_codex_n_vagas.sh > $L/test_codex_n_vagas.log 2>&1; echo "test_codex_n_vagas(rerun) rc=$? $(( $(date +%s)-s ))s" >> $L/rc.txt; cat $L/rc.txt` |
+| 07:24:15 | Bash | Check _RO flags and hung processes | `cd ~/wt-wrapper-n-vagas-125229; /bin/grep -n "_RO *=" bin/codex_admissao.py; ps -eo pid,etime,args \| /bin/grep -E "[c]odex_admissao\|[t]est_codex\|[m]kfifo" \| cut -c1-200` |
+| 07:24:08 | Bash | Compare previous volta selo logs | `cd ~/saas-hasner/logs/WRAPPER-N-VAGAS; ls -la --time-style=+%H:%M */test_codex_n_vagas.log 2>/dev/null \| tail -5; for f in */test_codex_n_vagas.log; do echo "$f: $(wc -l <$f) $(tail -1 $f \| cut -c1-150)"; done \| tail -5; ps -ef \| /bin/grep -c "[t]est_codex"` |
+| 07:24:03 | Bash | Inspect timed-out wrapper selo log | `cd ~/saas-hasner; L=logs/WRAPPER-N-VAGAS/volta7/test_codex_n_vagas.log; wc -l $L; /bin/grep -v Killed $L \| tail -15` |
+| 07:22:50 | Bash | Check wrapper selos and push progress | `cd ~/saas-hasner; cat logs/WRAPPER-N-VAGAS/volta7/rc.txt 2>/dev/null; cat logs/PUSH-2511/push2.rc 2>/dev/null; tail -2 logs/PUSH-2511/push2.log` |
 | 07:20:11 | Bash | Retry push after L-113 citation | `cd ~/saas-hasner; bash bin/push.sh > logs/PUSH-2511/push2.log 2>&1; echo "rc=$? $(date +%H:%M)" > logs/PUSH-2511/push2.rc; cat logs/PUSH-2511/push2.rc` |
 | 07:20:05 | Bash | Commit L-113 reading, rerun lei_protege_sitio selo | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() sec=("\n## MARCO PUSH-2511 -- leitura da L-113 sobre o sitio tocado no lote (25/11 07:2x)\n" "- portao `test_lei_protege_sitio` RED no push 07:19 (logs/PUSH-2511/push.log): 2870bfec2 (NOTURNO v8, ja no ar em 0d1e5ddf5) toca `ponto/services/fechamento.py::recalcular_fechamento_mes` sem citar L-113\n" "- LEITURA L-113 (LEIS ...` |
 | 07:19:38 | Bash | Read L-113 and the fechamento diff | `cd ~/saas-hasner; /bin/grep -n "^\| \*\*L-113" app/docs/LEIS.md \| cut -c1-900; git show 2870bfec2 -- app/ponto/services/fechamento.py \| head -60` |
