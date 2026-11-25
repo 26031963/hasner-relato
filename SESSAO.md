@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 12:59:24.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (34.1 MB). Acoes na janela: **840**.
+**Medido em 25/11/2026 13:05:53.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (34.2 MB). Acoes na janela: **844**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:05:04 | Agent | WRAPPER v10 construtor opus | `You are the construtor (escalated to opus after 9 Codex voltas) for the obra WRAPPER-N-VAGAS in the repo /home/ronald/saas-hasner. Read /home/ronald/saas-hasner/CLAUDE.md first (rules on construction in a copy, commits by heredoc, no new `except`, selos de host in bin/tests/). State: worktree /home/ronald/wt-wrapper-n-vagas-125229, branch wrapper-n-vagas, commit e4c344bed (volta 9) on top of d9d97 ...` |
+| 13:04:43 | Bash | Find WRAPPER worktree and verifier question | `cd ~/saas-hasner; git worktree list \| grep -i -E "vaga\|wrapper"; ls logs/WRAPPER-N-VAGAS/verif_v7/; head -30 logs/WRAPPER-N-VAGAS/verif_v7/q.txt 2>/dev/null` |
+| 13:04:37 | Bash | Check WRAPPER v14 selos results | `cd ~/saas-hasner/logs/WRAPPER-N-VAGAS; ls -t \| head; tail -n 3 v14_nvagas.log; tail -n 3 v14_pergunta.log; grep -c FALHA v14_nvagas.log` |
+| 13:04:29 | Bash | Read WRAPPER waiter and verificador output | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8qg9gvun.output; echo ===; head -60 logs/WRAPPER-N-VAGAS/verif_v7/r.txt` |
 | 12:58:23 | SendMessage |  | `-` |
 | 12:58:14 | Bash | Match agent to A-TELA wt | `cd /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/; for f in a28d79356aeb72393 a0db95020b242308e a0873933957f91ba2 a6c69914c5db4e39c ac749dd1f2dee0329; do echo "$f: $(grep -c 'wt-codex-a-tela-do-dia-le-um-juiz-081641' $f.output) $(stat -c %y $f.output\|cut -c12-16)"; done` |
 | 12:58:10 | Bash | Locate A-TELA agent output | `cd /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/; grep -l "A-TELA\\|a-tela-do-dia" a*.output 2>/dev/null \| head; ls -t a*.output \| head -20` |
