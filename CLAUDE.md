@@ -415,7 +415,10 @@ DINHEIRO (regra consolidada 31/10; funde, sem mudar o vigente, AUTORIZACAO PREVI
      hash antes/depois provado; (c) PROVA DE FROTA no RELATO DEPOIS, no MESMO marco (frota, nunca amostra -- L-110). DIFF
      antecipado NAO e exigido aqui. Trilha: PENDENTES "aplicado, revise"; DIFF que surpreende -> nao aplica, PENDENTES
      "PAROU: <motivo>", segue outra fatia.
-  2. COMPETENCIA EXPORTADA (L-092): o GRAVADO (`FechamentoMensal`) nao muda por caminho generico; e `!`. Quando move: DIFF de
+  2. COMPETENCIA EXPORTADA (L-092), SO A COM LINHA NA `GUARDA_COMPETENCIA` (`ponto/services/fechamento.py`, cadastrada a
+     mao; hoje 09 e 10 de 2026 -- aval DINHEIRO-2-x-L113-2511, 25/11): exportada SEM linha recalcula pela L-113 (caminho
+     generico, TXT novo substitui e o anterior fica guardado), com DIFF de impacto publicado ANTES de ato de frota e aviso
+     ao DP com os dois numeros (LEI-EXPORTADA-B-2511). Na GUARDADA: o GRAVADO (`FechamentoMensal`) nao muda por caminho generico; e `!`. Quando move: DIFF de
      frota publicado ANTES, reversao em `logs/`, prova depois, e SO pela porta REGEN-EM-EXPORTADA -- staff-only verificado na
      porta; trilha com quem, quando, motivo e hash do FechamentoMensal antes/depois; regenera as CELULAS do trecho e refaz o
      FechamentoMensal; TXT PARCIAL DE RETIFICACAO com hash publicado; diferenca pago x devido sai como Pauta DP com os dois
