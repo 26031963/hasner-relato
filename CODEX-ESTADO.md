@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 00:39** · publicado em **25/11/2026 00:42** (UTC-3)
+> Ultima resposta processada: **25/11/2026 01:46** · publicado em **25/11/2026 01:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 01:46 · sessao 515695e83614 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · censo · origem=Code
+
+## 1. Pares e colaboradores distintos
+
+As referências a `classe_naocruza.txt` numeram o anexo colado a partir da primeira linha de dados. A unidade da contagem é a chave `(comp, colab, entrada)`.
+
+| Comp | Pares distintos | Colabs distintos | Com saída explícita | Com `saida=None` | Fonte |
+|---|---:|---:|---:|---:|---|
+| 10 | 86 | 50 | 19 | 67 | `classe_naocruza.txt:1–172` |
+| 11 | 102 | 65 | 8 | 94 | `classe_naocruza.txt:173–376` |
+| Total | 188 | 93 | 27 | 161 | `classe_naocruza.txt:1–376` |
+
+## 2. Entrada pelo menos 180 min antes de `mE`
+
+**5 pares**, sendo **4 na comp 10** e **1 na comp 11**. A lista é igual nos dois lados. Todos os 5 têm `saida=None`. `classe_naocruza.txt:1–376`
+
+| Chave `(comp, colab, entrada)` | `mE − entrada` em h:mm:ss | HEAD | CURA | Fonte |
+|---|---:|---|---|---|
+| `(10, 502, 2026-10-14 06:59:53)` | 3:00:07 | `l084_par` | `l084_par` | `classe_naocruza.txt:22,108` |
+| `(10, 788, 2026-09-24 06:00:04)` | 7:59:56 | `recorte` | `recorte` | `classe_naocruza.txt:53,139` |
+| `(10, 788, 2026-09-30 05:17:43)` | 8:42:17 | `l084_par` | `l084_par` | `classe_naocruza.txt:54,140` |
+| `(10, 915, 2026-10-11 08:48:13)` | 5:51:47 | `l084_par` | `l084_par` | `classe_naocruza.txt:71,157` |
+| `(11, 82, 2026-10-31 06:57:12)` | 5:52:48 | `l084_par` | `l084_par` | `classe_naocruza.txt:247,349` |
+
+## 3. Trabalhado na CURA versus HEAD
+
+| Comp | Menor na CURA | Maior na CURA | Soma de `CURA − HEAD` em min | Fonte |
+|---|---:|---:|---:|---|
+| 10 | 0 | 0 | 0 | `classe_naocruza.txt:1–172` |
+| 11 | 1 | 0 | −65,0 | `classe_naocruza.txt:173–376` |
+
+A única redução é **`(11, 327, 2026-11-15 15:55:36)`**. O trabalhado cai de **429,6** para **364,6 min**, e o fora da janela sobe de **0,0** para **65,0 min**. `classe_naocruza.txt:195,297`
+
+## 4. Resultado da regra proposta
+
+**0 diferenças contra HEAD entre os 27 pares com saída explícita.** Na comp 10 são **0 de 19** e na comp 11 são **0 de 8**. Para as outras **161 chaves**, o trabalhado, o fora da janela e a diferença contra HEAD ficam **[nao verificado]**. O anexo traz `saida=None`, e o motor pode creditar a um período aberto trechos fechados cujos horários não aparecem nessa linha. `classe_naocruza.txt:1–376` · `app/ponto/motor_calculo_v2.py:2511–2526,2558–2579`
+
+Usei `saida − hf` no dia do turno e o limite inclusivo `>= 180` pedido, com o valor absoluto nas duas pontas conforme `_cadastro_nao_descreve`. A cópia usa `> 180`. Entre as 27 saídas explícitas, 26 satisfazem a L-084. No par do colab **327**, a entrada está **55 min 36 s depois** de `hi` e a saída está **65 min depois** de `hf`. A entrada segue inteira pela regra atual e a saída segue inteira pela regra proposta. Mantidos os demais insumos do cálculo, o par retorna aos **429,6 min trabalhados** e **0,0 min fora** do HEAD. Os valores abaixo usam a precisão publicada no anexo, sem novo arredondamento. `app/ponto/motor_calculo_v2.py:1564–1579,1946–1965,2775–2803` · `app/ponto/janela_he.py:125–136` · `classe_naocruza.txt:1–376`
+
+| Chave `(comp, colab, entrada)` | Trabalhado (min) | Fora da janela (min) | HEAD / CURA no anexo |
+|---|---:|---:|---|
+| `(10, 146, 2026-09-21 21:29:43)` | 540,7 | 0,0 | `classe_naocruza.txt:1,87` |
+| `(10, 146, 2026-09-22 21:29:43)` | 547,9 | 0,0 | `classe_naocruza.txt:2,88` |
+| `(10, 146, 2026-09-27 17:30:13)` | 779,9 | 0,0 | `classe_naocruza.txt:3,89` |
+| `(10, 146, 2026-09-28 21:30:41)` | 540,4 | 0,0 | `classe_naocruza.txt:4,90` |
+| `(10, 146, 2026-09-29 21:25:49)` | 544,6 | 0,0 | `classe_naocruza.txt:5,91` |
+| `(10, 146, 2026-10-05 21:35:00)` | 542,4 | 0,0 | `classe_naocruza.txt:6,92` |
+| `(10, 146, 2026-10-11 17:37:15)` | 773,0 | 0,0 | `classe_naocruza.txt:7,93` |
+| `(10, 146, 2026-10-13 21:31:41)` | 538,6 | 0,0 | `classe_naocruza.txt:8,94` |
+| `(10, 146, 2026-10-19 21:31:24)` | 538,8 | 0,0 | `classe_naocruza.txt:9,95` |
+| `(10, 348, 2026-09-26 18:43:52)` | 717,1 | 0,0 | `classe_naocruza.txt:14,100` |
+| `(10, 76, 2026-10-10 17:59:32)` | 778,6 | 0,0 | `classe_naocruza.txt:49,135` |
+| `(10, 76, 2026-10-12 18:37:57)` | 706,0 | 0,0 | `classe_naocruza.txt:50,136` |
+| `(10, 76, 2026-10-16 18:38:35)` | 767,5 | 0,0 | `classe_naocruza.txt:51,137` |
+| `(10, 76, 2026-10-18 18:33:58)` | 720,0 | 0,0 | `classe_naocruza.txt:52,138` |
+| `(10, 865, 2026-10-08 22:49:45)` | 434,2 | 0,0 | `classe_naocruza.txt:62,148` |
+| `(10, 865, 2026-10-09 22:50:15)` | 432,8 | 0,0 | `classe_naocruza.txt:63,149` |
+| `(10, 865, 2026-10-10 22:55:41)` | 434,7 | 0,0 | `classe_naocruza.txt:64,150` |
+| `(10, 865, 2026-10-11 23:24:53)` | 436,9 | 0,0 | `classe_naocruza.txt:65,151` |
+| `(10, 949, 2026-10-16 18:00:43)` | 386,0 | 0,0 | `classe_naocruza.txt:78,164` |
+| `(11, 146, 2026-10-27 21:30:21)` | 539,9 | 0,0 | `classe_naocruza.txt:180,282` |
+| `(11, 146, 2026-11-02 17:02:31)` | 810,2 | 0,0 | `classe_naocruza.txt:181,283` |
+| `(11, 146, 2026-11-08 17:30:59)` | 779,1 | 0,0 | `classe_naocruza.txt:182,284` |
+| `(11, 146, 2026-11-10 21:29:49)` | 541,5 | 0,0 | `classe_naocruza.txt:183,285` |
+| `(11, 146, 2026-11-16 21:31:12)` | 543,8 | 0,0 | `classe_naocruza.txt:184,286` |
+| `(11, 327, 2026-11-15 15:55:36)` | 429,6 | 0,0 | `classe_naocruza.txt:195,297` |
+| `(11, 865, 2026-11-08 19:51:12)` | 500,8 | 0,0 | `classe_naocruza.txt:248,350` |
+| `(11, 993, 2026-10-22 12:00:39)` | 719,5 | 0,0 | `classe_naocruza.txt:269,371` |
+
+## 5. Para onde vão os minutos e quem escreve e lê
+
+**A saída aceita entra em `efetivo_saida` e compõe `minutos_trabalhados`.** Se a jornada apurada gerar excedente pela régua do regime, o motor escreve também `minutos_extra` e as faixas correspondentes. Nos ramos diários usuais, os primeiros 120 min de HE vão para `minutos_extra_50` e o restante para `minutos_extra_100`. O turno partido com régua semanal lança o excedente semanal em 50%. Se o dia tiver dobra de feriado, o ramo próprio lança a duração em 100% e em `minutos_extra_100_feriado`. O anexo permite verificar o trabalhado e o fora da janela. A rubrica de HE de cada chave está **[nao verificado]**. `app/ponto/motor_calculo_v2.py:1747–1779,1850–1858,2775–2803,2828–2832,2854–2874,3100–3123,3163–3206,3429–3443`
+
+| Campo | Quem escreve | Quem lê |
+|---|---|---|
+| `efetivo_saida`, `minutos_trabalhados`, `minutos_fora_janela` | `_carimbar_segmento` grava as pontas efetivas. Os `calcular_periodo` gravam o trabalhado e somam o fora das duas pontas. `calcular_mes` também pode creditar os trechos fechados de um período aberto. `app/ponto/motor_calculo_v2.py:1850–1858,2565–2576,2801–2803,2912–2915,3275–3279` | `ResultadoMes.horas_trabalhadas` e o espelho leem o trabalhado. O teto L-093 soma trabalhado e fora da janela. O calculador lê os segmentos efetivos e agrega o fora por dia. `app/ponto/motor_calculo_v2.py:256–257,294–300,1203–1205` · `app/ponto/services/espelho.py:96–104` · `app/ponto/calculador/alimentacao.py:83–106` |
+| `minutos_extra`, `minutos_extra_50`, `minutos_extra_100` | Os motores escrevem o total e as faixas nos ramos de excedente ou dobra. A reapuração v3 também escreve esses campos a partir dos segmentos efetivos. `app/ponto/motor_calculo_v2.py:2828–2832,2866–2873,3172–3179,3436–3443` · `app/ponto/calculador/periodo.py:744–747,820–850` | O espelho lê o total por `p.horas_extra` e as faixas diretamente. `ResultadoMes` soma as faixas, o fechamento grava `horas_extras_*` e o TXT lê essas horas para emitir as rubricas. O motor também lê as faixas para o subconjunto de HE noturna e para o reflexo de DSR. `app/ponto/services/espelho.py:112–114` · `app/ponto/motor_calculo_v2.py:263–265,324–332,1029–1039,2652–2656` · `app/ponto/services/fechamento.py:927–933,1173–1182` · `app/folha/export.py:420–443` |
+| `DecisaoHE` | A porta `ponto/portas/he.py::_gravar` cria ou atualiza a decisão do dia, chamada pelo ato do admin ou pela recusa de ponta pequena do sistema. O modelo guarda os estados `autorizado` e `nao`. A porta do admin exige minutos fora positivos. `app/ponto/portas/he.py:44–86,186–208,369–371` · `app/ponto/models.py:1270–1288` | O motor carrega `DecisaoHE.objects.vigentes()` e usa `autorizado` no recorte. O espelho, a Gestão de HE e o portão do TXT consultam o estado vigente. A lavratura carrega as decisões vigentes para apurar a fila. `app/ponto/motor_calculo_v2.py:1414–1435,1660–1667,1705–1712,1749–1756` · `app/ponto/services/espelho.py:939–948` · `app/ponto/services/gestao_he.py:87–95,302–310` · `app/folha/porta_export.py:687–692` · `app/ponto/management/commands/lavrar_he_pendente.py:43–62` |
+| `he_fora_da_janela`, `he_estado`, `he_pendente` | O espelho monta `he_fora_da_janela` a partir das pontas marcadas na grade e dos relatos próprios do motor. Também preenche `he_estado` pela decisão vigente. O lavrador grava o retrato `he_pendente` em `MetricaSnapshot`. O portão do TXT monta sua lista `he_pendente` a partir do espelho e a inclui no carimbo. `app/ponto/services/espelho.py:734–763,787–794,939–948` · `app/ponto/services/he_pendente_lavrado.py:24,132–153,177–189` · `app/folha/porta_export.py:190–202,501,808–813` | Tela e PDF do espelho leem os avisos. Gestão de HE, seu PDF e o contador da Central leem o retrato. A fila do admin conta os dias com total fora **acima** do limite e sem decisão vigente. `app/templates/ponto/espelho.html:189` · `app/relatorios/pdf_espelho.py:931–932` · `app/ponto/views.py:820–829,948–970` · `app/ponto/services/gestao_he.py:302–310,488–505` · `app/ponto/portas/he.py:277–293` |
+
+**Uma saída aceita com `fora=0` gera zero pendência por essa ponta no motor.** Para saber se aparece algo na fila do admin, há uma leitura adicional: o espelho marca a última saída da grade pelo `delta`, pelo piso, pela extra declarada e pelo cadastro `saida_ativa`. Esse caminho pode publicar uma ponta mesmo com `minutos_fora_janela=0` no período. O espelho também pode receber uma ponta de entrada ou o relato de um dia inteiro sem previsto. O relato `l084_do_dia` fica em Cadastro x Realidade, pois o conversor de pontas exige uma causa de `janela de HE`. O estado da fila, da grade e das decisões para as chaves do anexo está **[nao verificado]**. `app/ponto/motor_calculo_v2.py:1636–1643,1747–1766` · `app/ponto/janela_he.py:227–263,309–325` · `app/ponto/services/espelho.py:734–763` · `app/ponto/services/he_pendente_lavrado.py:132–153`
+
+O registro vivo aponta `turnos_do_colab` para o dia do turno, `EscalaColaborador.marcos_do_dia` para os marcos, `turno_cruza_meia_noite` para a travessia e `MotorBase.calcular_periodo` para o valor do par. A consulta de cálculo e régua CCT consta no `JUIZES.md`. `app/core/juizes.py:215–224,1206–1208` · `app/docs/JUIZES.md:20–33`
 
 ## 25/11 00:39 · sessao 448883d66835 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · censo · origem=Code
 
@@ -767,12 +851,4 @@ Não há janela comprovadamente segura. 91,9 s é da entrada na aquisição até
 
 **Efeito síncrono fora da lista.** Reconciliador da Batida pode rejeitar Justificativa e passar por `transicionar_com_pauta`, que escreve Pauta DP se houver recusa ancorada coletada. A lista `on_commit` não vê esse efeito. Ocorrência nas 33 [nao verificado]. `app/ponto/signals.py:206–218` · `app/chamados/reconciliador.py:602–616,1581–1601` · `app/chamados/services/fecho_runtime.py:118–169`
 
-## 24/11 19:43 · sessao f0071e2a4343 · - · - · origem=Ronald (tmux)
-
-- **Testemunha parcial.** A v8 exige PK nova como único plantio vivo, antiga retratada e minuto da coluna igual ao TSV. O helper recebe `a['decl']`, enquanto o juiz deriva outro slot, inclusive do intervalo fixo. O juiz pode absolver por identidade administrativa, plantio sem slot, retratação auditada ou outra batida. `classificar_pergunta` repete o mesmo booleano. Exemplo estático é a nova batida na declaração, um marco fixo a mais de 20 min e outra batida viva no marco. Exigir o ramo de prova do juiz pelo PK, com slot, tipo, fonte e resposta vigente. As dez divergências na coluna informativa do anexo podem incluir retratadas, pois a consulta bruta toma a primeira batida por timestamp. `apply33.py:525–532` · `app/chamados/juizes.py:240–284,368–423,729–755,802–866,1639–1648` · `app/chamados/services/materializacao.py:682–720` · `app/chamados/models.py:4468–4476` · `app/chamados/services/vigia_carimbo.py:65–75` · `resumo_v8.txt:43–76`.
-- **`extra` é a porta contratada.** Metadados estruturados do ato vão ao JSON de auditoria ao lado dos campos automáticos. As chaves DXG são disjuntas de `aprovada` e `retratada_em`, embora o merge permita sobreposição em outros usos. A mesma ação já é usada com a classe `passivo_s84_folga`. Leitores específicos identificados das chaves DXG são apply e pauta. A foto E4B captura todo o JSON genericamente. A tela de auditoria lê a linha e mostra a descrição, o relatório humano lê apenas as chaves próprias de outra ação. Outros leitores e uso em PROD [nao verificado]. `app/ponto/registro_batida.py:245–296` · `app/core/auditoria.py:8–24` · `app/core/observ.py:133–137` · `app/ponto/management/commands/passivo_disputa_retro.py:164–172` · `apply33.py:534–538` · `pauta33.py:55–70` · `app/chamados/services/foto_e4b.py:247–252,313–323` · `app/templates/core/log_auditoria.html:44–74` · `app/ponto/services/retratar_humano.py:91–101,222–245`.
-- **Pauta parcial.** A trilha é exigida no modo escrita. O filtro carece de `modelo='Batida'`, a antiga apenas precisa estar retratada, um SHA único basta, o lote é fixo, os pares são relidos sem trava e as 52 são validadas por contagem de grupo. A linha 50833 poderia ser trocada por outra em `cadastro707`. Nas 14, o cálculo é do banco e o texto usa horas do TSV. `abs(int(delta))` aceita até 60,999 s. O serviço inclui nome, matrícula e batidas no texto se houver espaço, e a aba expõe o conteúdo a usuário `is_staff`. `pauta33.py:30–39,55–98` · `app/pautas/services.py:163–188,304–331,411–441` · `app/pautas/views.py:16–19,27–48,61–67`.
-- **50833.** `BATIDA` e `CADASTRO` têm o mesmo destino na L-099. Escrever o dono medido é coerente, com `ESTRUTURA` fora. O dono do dia-colab é uma pergunta diferente da causa do defeito de código que grava o marco. O anexo resumo não mostra `DONO_707` nem insumos da leitura. O motivo concreto de `BATIDA` e a medição em PROD estão [nao verificado]. `app/docs/LEIS.md:122` · `app/docs/RELATO.md:23` · `app/ponto/management/commands/e6_oraculo.py:98–110,182–195` · `pauta33.py:83–98` · `dxg_apply_33_190x.txt:1`.
-- **Seis recusas.** A atribuição a `troca` é pela faixa global de PK, sem filtro de origem. A data é a célula atual, sem usar o dia do payload ou os fallbacks do juiz. O K6 no relatório é o da montagem da tabela. Os motivos descrevem recusas de fechamento de chamado e não entram na contagem de recusas da porta de batida. `apply33.py:410–422,571–574,615–628` · `app/chamados/models.py:416–449,830–837` · `app/chamados/juizes.py:89–129`.
-
-_8117 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8118 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
