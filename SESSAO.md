@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 18:07:02.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (4.1 MB). Acoes na janela: **139**.
+**Medido em 25/11/2026 18:13:10.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (4.2 MB). Acoes na janela: **144**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:10:46 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:00 DESPACHO:')) L.insert(k+1,'RUNNER-POOL-V2 (1) medida 18:10: a pista 2 segue SERIAL -- 1 rodando (GUARDA-10-B 1125175447 desde 18:02) e 6 na fila (A4 1125175448 + 5 pedidos novos 18:09-18:10), nenhum na 2a vaga 2 min depois do roda.sh novo (18:08 ...` |
+| 18:10:40 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bdrbv1kon.output` |
+| 18:09:11 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' \| 25/11 18:0x \| RUNNER-POOL-E-N-VAGAS-V2-2511 \| SUBSTITUI o RUNNER-POOL-E-N-VAGAS-2511: pista 2 com 2 vagas concorrentes (roda.sh PISTA_VAGAS=2, Ronald 18:08); toda suite inteira pre-opus e de pouso vai a pista (ate 2), certificada pelo pista_certifica; VM so recorte/recusa/banco da VM; medir na 1a rodada dupla oom, tempo e free -g ...` |
+| 18:09:07 | Bash |  | `/usr/bin/sleep 90; date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'` |
+| 18:09:01 | Bash |  | `date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'; timeout 15 ssh pista free -g 2>&1 \| head -5` |
 | 18:02:19 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/vizinhos_v3.espera logs/GUARDA-10-B/catraca.espera; timeout 20 ssh pista estado \| grep -E '1125174946\|1125175019\|11251754'` |
 | 18:00:37 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('RUNNER-POOL-E-N-VAGAS-2511 (1)')) L.insert(k+1,'18:00 DESPACHO: WRAPPER-N-VAGAS v13 -> construtor opus (contrato fechado, logs/WRAPPER-N-VAGAS/v13/HANDBACK.md) \| A-TELA v18 -> construtor opus (secao 9 do contrato, logs/A-TELA-DO-DIA-LE-UM-JUIZ/v18/HA ...` |
 | 18:00:34 | Agent | A-TELA v18 construtor | `Voce e o construtor (opus) da v18 da obra A-TELA-DO-DIA-LE-UM-JUIZ no repo /home/ronald/saas-hasner (leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao). Codigo de NEGOCIO em ponto/ = MAO UNICA. Leia INTEIRO: /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ/CONTRATO-NOVO-RASCUNHO-2511.md -- a secao 9 (DECISAO, aval A-TELA-PROTESTOS-2511 do Ronald) manda: opcao B, out['pro ...` |
