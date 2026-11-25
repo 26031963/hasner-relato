@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 05:49:16.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1308**.
+**Medido em 25/11/2026 05:55:28.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1306**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1316,5 +1316,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:56:16 | Bash | Find marco_no_dia call in entrada_efetiva | `cd ~/saas-hasner/app; grep -n 'def entrada_efetiva' ponto/janela_he.py; awk '/def entrada_efetiva/{f=1} f&&/marco_no_dia/{print NR": "$0; exit}' ponto/janela_he.py` |
 | 17:56:14 | Bash | Confirm marco_no_dia path | `cd ~/saas-hasner/app; sed -n 1676,1710p ponto/motor_calculo_v2.py \| grep -n 'entrada_efetiva\\|hi' \| head -5; grep -n 'def entrada_efetiva' -A15 ponto/janela_he.py \| grep 'marco_no_dia'` |
 | 17:56:11 | Bash | Verify builder's claims | `cd ~/saas-hasner/app; grep -n 'def entrada_efetiva' -A12 ponto/janela_he.py \| grep -n 'marco_no_dia' ; grep -n "_entrada_efetiva\\|marco_no_dia\\|_ate_o_marco(entrada" ponto/motor_calculo_v2.py \| head; cat ../logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4/experimento_1528.patch \| grep '^[+-][^+-]'; grep -E '^(OK\|FAILED)' ../logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4/experimento_1528.log \| tail -1` |
-| 17:49:47 | Bash | Record DESPACHO line for v4 | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') k=[n for n,l in enumerate(L) if l.startswith('FECHADA 24/11 17:43 MAPA-18')][0] L.insert(k,"DESPACHO NOTURNO-A-CONTRATO-V4 (17:50): construtor (modelo da sessao, mao unica) em copia nova do HEAD, cura SO motor_calculo_v2.py:1528; RED pela regra; DIFF comp 11 na sombra dentro/fora dos 7 dias; comp 09/10 relator ...` |
-| 17:49:42 | Agent | NOTURNO-A v4 construtor :1528 | `Voce e o CONSTRUTOR da obra NOTURNO-A-JANELA-NO-DIA-DO-TURNO, contrato v4. Repo ~/saas-hasner (Django em app/). Leia ~/saas-hasner/CLAUDE.md INTEIRO antes de qualquer acao (regras da casa: LEI-AKITA, construir em copia, RED primeiro, nenhum except novo, nenhum juiz novo, nenhum script/cron/hook novo, arvore viva so por commit/deploy -- voce NAO commita nem deploya). AVAL (literal, logs/AVAIS-1515/ ...` |
