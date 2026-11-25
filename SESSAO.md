@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 06:07:53.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1294**.
+**Medido em 25/11/2026 06:14:06.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1292**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1302,5 +1302,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:17:37 | SendMessage |  | `-` |
 | 18:17:28 | Bash | Check construtor agent last output | `tail -c 1500 /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/a2bbb635ca31d28ac.output; echo; cd ~/wt-noturno-v4-175246 && git status --short \| head` |
 | 18:17:24 | SendMessage |  | `-` |
-| 18:09:16 | SendMessage |  | `-` |
-| 18:09:11 | Bash | Record DXG-55 PAREI | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"PAREI: ! DXG-55-NAO-FECHA-NO-SLOT \| espera Ronald -- DIFF das 55 na sombra (porta/v3_55/resumo.md, sombra.sh flock, atomic+raise, rollback ok; 55 aplicadas 0 recusadas): juiz classificar_pergunta DEPOIS = 47 com_registro + 8 plantio_fora_do_slot " "(5 ja fora e seguem: 51111 col873, 53142 col947,  ...` |
