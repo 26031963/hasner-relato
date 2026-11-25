@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 02:59:53.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (71.8 MB). Acoes na janela: **1273**.
+**Medido em 25/11/2026 03:06:13.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (71.8 MB). Acoes na janela: **1263**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1273,13 +1273,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:12:17 | Bash | Confirm Codex matrix wrapper is gone | `cd ~/saas-hasner; ps -eo pid,args \| grep -E 'codex_pergunta\|codex exec' \| grep -v grep \| cut -c1-160; ls logs/RESOLVER-PASSA-NA-FRENTE/matriz/` |
 | 15:12:14 | Bash | Stop the Codex matrix reading for RESOLVER | `cd ~/saas-hasner; pgrep -af 'matriz/q.txt' \| cut -c1-150; pkill -f 'matriz/q.txt'; sleep 2; pgrep -af 'codex' \| grep -i resolver \| cut -c1-150; pgrep -af 'matriz/q.txt' \| cut -c1-100; ls logs/RESOLVER-PASSA-NA-FRENTE/matriz/` |
 | 15:06:23 | Bash | Record RESOLVER closure in RELATO and PROMPTS | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() l=("RESOLVER-PASSA-NA-FRENTE: ENCERRADA por RESOLVER-PARA-E-MAPEIA-2411-1510 (15:1x): construtor da V2 parado (TaskStop + suite dele na fila morta antes de rodar), sem 4a volta nem opus, nada pousa. " "Copia /home/ronald/wt-resolver-d-024937 intacta em fbf5ba2a5 com o delta V2 NAO commitado (2 testes; snapshot logs/RESOLV ...` |
-| 15:06:12 | Bash | Launch Codex reading for the guard matrix | `cd ~/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE; cat > $D/matriz/q.txt <<'EOF' PAPEL: leitura. Obra RESOLVER-PASSA-NA-FRENTE (lei 2311-1306, corte 2411-0110). Hash fbf5ba2a5 (copia da obra; o diff da obra inteira contra a base 7a4e79eef vai anexo por ultimo). A obra foi ENCERRADA apos tres reprovacoes do verificador; nao ha cura a propor. Pede-se um MAPA. Anexos, em ordem: (1) resposta do verifi ...` |
-| 15:05:54 | Bash | Snapshot V2 delta and size the anexos | `cd ~/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE; mkdir -p $D/matriz; git -C /home/ronald/wt-resolver-d-024937 diff > $D/matriz/v2_nao_commitado.patch; git diff 7a4e79eef fbf5ba2a5 -- app ':!app/docs' > $D/matriz/obra_inteira.patch; wc -c $D/codex/v1.r $D/v0815/verif1.r $D/v0815/verif2.r $D/v0815/verif3.r $D/matriz/*.patch; grep -n -i '15/11.*4b\\|4b' app/docs/AVAIS.md \| head -3` |
-| 15:05:45 | Bash | Kill queued V2 suite and check copy state | `cd ~/saas-hasner; bin/trava_teste.sh --quem; for p in 1852477 1852475 1852315; do kill $p 2>/dev/null; done; sleep 2; ps -eo pid,args \| grep wt-resolver-d-024937 \| grep -v grep \| cut -c1-120; git -C /home/ronald/wt-resolver-d-024937 log -3 --oneline; git -C /home/ronald/wt-resolver-d-024937 status --porcelain \| head` |
-| 15:05:43 | TaskStop |  | `-` |
-| 15:05:40 | Bash | Find V2 builder's running processes | `ps -eo pid,etime,args \| grep -E 'wt-resolver-d-024937' \| grep -v grep \| cut -c1-200; docker ps --format '{{.Names}} {{.Command}}' \| grep -i resolver \| head` |
-| 15:05:38 | ToolSearch |  | `-` |
-| 15:04:01 | Bash | Record Codex verif3 result in RELATO | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() l="RESOLVER-PASSA-NA-FRENTE verif3 (Codex verificador fbf5ba2a5, rc 0, logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.r): REPROVADA. Procedentes (em parte): B-ii rollback/push sincrono antes do rollback, B-iii recorte P2, C dia_trancado com 2 significados, D trava tardia Disputa apos Pergunta + C6 sem instante, E tarefa nao_s ...` |
-| 15:03:56 | SendMessage |  | `-` |
-| 15:03:45 | Bash | Skim Codex verif3 verdicts | `cd ~/saas-hasner; grep -n -E 'PROCEDENTE\|PRE-EXISTENTE\|^#\|^\*\*\|^- \*\*' logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.r \| cut -c1-330 \| head -60` |
-| 15:03:42 | Bash | Check CLASSE-D mutantes and Codex verif3 status | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bv0ncoei5.output 2>/dev/null \| tail -12; echo ===; tail -3 logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.wrap.log; ls -la logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif3.r 2>/dev/null; bin/trava_teste.sh --quem` |
