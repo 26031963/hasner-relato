@@ -1,3 +1,4 @@
+lei: REG33 (13:58, DIFF publicado na secao REG33-COMP08-PELA-L113) -- reg 33 so materializa com a DisputaSupervisao #5910 (col601, aberta 28/09) FECHADA, ato humano; fechar a #5910 materializa o lote SOZINHO (signals.py:122-146) e muda o FM 08 exportado: NAO fechar a #5910 antes do aviso ao DP pousar. O item (23/07 E 19:00 S 07:00) vira turno de 24 h (+23,99 h) com a S no mesmo dia; o construtor mede se a S do item e do dia seguinte. A esteira segue.
 lei: LEI-EXPORTADA-B-2511 (13:4x) -- L-113 inteira vale; reg 33 (col601 comp 08) materializa e o gravado da 08 recalcula pelo caminho generico, DIFF no RELATO ANTES; toda exportada que mudar gera aviso ao DP com os dois numeros (censo do aviso em curso). wt-regext-124848 DESCARTADA (diff em logs/REG-EXTERNA-GUARDA-EXPORTADAS/descartada/, tar /tmp/wt-regext-124848.tgz).
 RESPONDIDA por FERIADO-C1-LEIS-2511 (13:4x): lei: FERIADO-SEM-LIMITE c1 (db88bc9b4, suite inteira verde, Ran 17881; opus final rodando; detalhe em logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c1/CASOS.md): 6 perguntas -- (1) S e o suprimido inteiro ou min(S,D) (so difere em D12F/N12S com D=0); (2) a HE que deixa de ser HE no noturno sai do fim da entrada; (3) 12x36: pausa entre pares nao conta como intra (F10h, ja era assim); (4) banco comercial: saldo_banco_horas sobe S nos dias de dobra -- fica ou congela?; (5) oraculo v3 calculador/regras.py da 540, o v2 agora 480; (6) 12x36 com intra do par maior que o trabalhado dele da 120 (regra: 100) -- passada por dia ou deixar ao cadastro? Dias reais: col243 15/11 436,3->420,0; col1046 20/11 479,7->419,7.
 SUPERADA por LEI-EXPORTADA-B-2511 (13:4x, L-113 inteira; guarda so 09/10; 06/07/08 nao pousam): LISTA REG-EXTERNA-GUARDA (aval LEI-REG-EXTERNA-GRAVADO-2511, ANTES de gravar; sonda Codex na SOMBRA rc 0 12:42, logs/REG-EXTERNA-GUARDA/r_censo.txt): 7 pares empresa x comp com ExportacaoDominio vigente, juiz `competencia_entregue` = vigentes>0 em 7/7 (0 divergencia). Linhas NOVAS do cadastro: (6,2026) -> emp4; (7,2026) -> emp3, emp4; (8,2026) -> emp2. Ja guardadas: (9,2026) emp2/3/4; (10,2026) existe no cadastro, mas a sombra nao tem export vigente da 10 [a conferir em prod].
@@ -13054,3 +13055,22 @@ Dias: inversao col113 30/10 01/11, col200 02/11, col218 14/11, col296 02/11, col
 CAUDA: 1 de 18 alcancada (col174 15/11), e piora (par some). A cura que da hora e a da JANELA (7 dias, 25h32 realizadas), que e motor_calculo_v2 = ! do Ronald; nao proposta aqui (aval proibe construtor).
 Amostra Code 3/3 conferida: motor:1528, janela_he.py:30, dia_pago.py:173-179. Achado lateral [nao verificado]: col200 tem 2 registros FT identicos em 30/10 (anexo_pares:18-19).
 INCOMPLETO: causa dos 4 dias "ramo do zero" (26h22, maior classe em horas) e a guarda dos 3 "sem periodo" -- sem aval para nova volta.
+
+## REG33-COMP08-PELA-L113 -- DIFF de impacto ANTES (25/11 13:58, aval LEI-EXPORTADA-B-2511, sombra, nada em prod)
+DESPACHO REG33: censo -> Codex (r1.txt rc 0 13:43) | DIFF na sombra + aviso ao DP -> opus construtor | leitura final -> opus
+Instrumento: `ponto/services/diff_frota.py::medir/somar`; mutacao = a porta REAL `materializar_regularizacao_externa(reg, reg.criada_por)` em atomic desfeito; sombra REFEITA 25/11 11:21, banco=sombra asserido; POS-ENSAIO lote confirmada, 0 batida reg_externa (nada persistiu).
+ESTADO: lote 33 confirmada 05/11, 1 item (23/07 E 19:00 S 07:00); DisputaSupervisao #5910 ABERTA desde 28/09 -> a porta RECUSA hoje (cenario A: efeito 0). K6: 08 exportada (export 19, hash 2b3ac743a578); (8,2026) fora da GUARDA_COMPETENCIA; FM 08 col601 pk 3787 aprovado.
+CENARIO B (hipotese: #5910 fechada no ensaio), so col601 (0 outros):
+| campo | GRAVADO | HOJE | NOVO | NOVO-GRAVADO | NOVO-HOJE |
+|---|---|---|---|---|---|
+| horas_trabalhadas | 153.49 | 165.44 | 189.43 | +35.94 | +23.99 |
+| horas_noturnas | 127.85 | 90.62 | 97.62 | -30.23 | +7.00 |
+| horas_intra_indenizada | 0 | 0 | 1.00 | +1.00 | +1.00 |
+| turnos_abertos | 1 | 1 | 0 | -1 | -1 |
+| inconsistencias | 4 | 1 | 0 | -4 | -1 |
+| minutos_realizados / dsr_ok / dsr_perdido | 9679/4/1 | 9856/5/0 | 9856/5/0 | +177/+1/-1 | 0 |
+Demais 16 campos 0 nos tres lados. O evento grava DERIVA + EFEITO (recalcula so colaborador_ids=[601]); 377 de 441 colabs da emp 2 tem deriva na 08, nao tocados.
+TXT: col601 tem 0 linhas no VIGENTE (fora, furo_espelho) e 0 em qualquer TXT novo -> o PAGO e "ausente do arquivo"; o aviso ao DP precisa dizer isso ao lado do DEVIDO do FM (TXT x TXT daria 0 x 0 e calaria).
+ACHADOS: (a) o +23,99 h e um turno de 24 h: a S do item cai em 23/07 07:00 (combine(item.data, hora_saida), sem virar o dia) e fecha o turno aberto desde 22/07 07:00 -- se o item quis o fim do plantao 19-07 (24/07 07:00), e semantica do dia da S (ESMERIL-SEMANTICA) -> vai ao construtor medir antes de qualquer materializacao; (b) BUG NO CAMINHO, `regularizacao_ext.py::_cria_batida` conta `criadas += 1` em dedup (placar 2, criada 1) -> COMPLEMENTO desta obra (LEI-AKITA 6); (c) materializar exige fechar a #5910 (ato humano no admin); (d) fechar a #5910 dispara `chamados/signals.py:122-146` -> o lote materializa sozinho e o FM 08 muda sem aviso ao DP: o aviso (passo B) tem de pousar ANTES.
+Saidas: `logs/REG33-COMP08-PELA-L113/diff_reg33.txt`, estado.out, diff_run.log, contexto.out; sondas `logs/sombra/reg33_*.py`.
+INCOMPLETO: passo B (aviso ao DP, escritor unico na origem) + (a) + (b); suite; Codex verificador; opus.
