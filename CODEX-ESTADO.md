@@ -1,7 +1,200 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 19:57** · publicado em **25/11/2026 19:57** (UTC-3)
+> Ultima resposta processada: **25/11/2026 19:57** · publicado em **25/11/2026 20:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 19:57 · sessao 12e9dc2dcbcb · PARCIAL-BORDA-SEMIABERTA · leitura · origem=Code
+
+O veredito gravado é **`fato_em_ausencia`**. Na sonda de col306, ausência `5775`, em `24/11/2026`, o juiz real retorna `dentro`. A única batida que satisfaz a comparação inclusiva é `15:54`, igual ao início do período. Resultado da sonda: **só na borda inicial**. O total da frota em PROD é [nao verificado]. `aval.txt:1` (anexo fornecido), [ponto/turnos.py:2651](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/turnos.py:2651), [escala/models.py:1630](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/models.py:1630).
+
+### Onde nasce, quem grava e quem lê
+
+- **Chamada.** `escala.utils._marcar_ausencias` seleciona a ausência aprovada pela cobertura `para='folha'`, com desempate pelo maior `(data, pk)`, e consulta `cobre_parte_do_dia`. Para a parcial, chama `periodo_da_parcial_no_dia(_aus_por_dia[d], horas_reais_do_dia(dia, deslocamentos.get(d)))`. O segundo argumento traz as batidas casadas e órfãs em minutos, com os deslocamentos da cadeia do turno para a madrugada. A comparação `ini <= m <= fim` está na linha 2658. A outra chamada da grade verifica marcos previstos para dispensa. `chamados.services.materializacao` também chama o juiz, com `()`, para verificar `sem_periodo`. [escala/utils.py:1198](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/utils.py:1198), [escala/utils.py:1245](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/utils.py:1245), [escala/utils.py:1260](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/utils.py:1260), [escala/utils.py:1763](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/utils.py:1763), [ponto/turnos.py:2533](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/turnos.py:2533), [ponto/turnos.py:2658](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/turnos.py:2658), [ponto/turnos.py:2663](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/turnos.py:2663), [ponto/turnos.py:2773](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/turnos.py:2773), [chamados/services/materializacao.py:86](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/chamados/services/materializacao.py:86).
+- **Veredito e escritor.** O cartório chama `classificar_dia`. O suprajuiz lê `periodo_parcial` e pode emitir `FATO_EM_AUSENCIA`, inclusive no ramo de batida sem par. `derivar_veredito` mapeia o código para `fato_em_ausencia` pela ordem de precedência. O cartório copia `cobertura_parcial` e `periodo_parcial` para a ata, chama `CelulaDia.lavrar_veredito` e persiste pela porta `carimbar`. [ponto/services/cartorio.py:1499](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:1499), [ponto/supra_juiz.py:392](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/supra_juiz.py:392), [ponto/supra_juiz.py:450](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/supra_juiz.py:450), [escala/models.py:1622](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/models.py:1622), [ponto/services/cartorio.py:784](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:784), [ponto/services/cartorio.py:1901](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:1901), [ponto/services/cartorio.py:1920](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:1920), [ponto/portas/celula.py:1231](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/portas/celula.py:1231).
+- **Leitores.** `grade_da_celula` repassa o veredito e o período lavrado. `parcial_so_lista` lê a cobertura e o período da ata. A tarefa do dia, o relatório da frota e a retenção da folha consomem o veredito. [escala/services/leitor_celula.py:424](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/services/leitor_celula.py:424), [escala/services/leitor_celula.py:433](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/services/leitor_celula.py:433), [ponto/services/cartorio.py:441](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:441), [chamados/services/tarefa_do_dia.py:363](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/chamados/services/tarefa_do_dia.py:363), [relatorios/dia_da_frota.py:54](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/relatorios/dia_da_frota.py:54), [folha/export.py:1273](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/folha/export.py:1273).
+
+### Script para `manage.py shell`
+
+O universo é todo `CelulaDia.veredito='fato_em_ausencia'`, sem recorte de data ou situação cadastral. A quebra usa a empresa atual do colaborador. Para as atas que registram parcial `dentro`, escolhi reexecutar a montagem unitária real do cartório com os insumos atuais. O observador captura a ausência, a lista de minutos e o retorno nessa chamada, antes de a grade poder mover órfãs. O ID impresso vem da ausência usada pelo juiz. O FK da célula é carimbado pela consulta de cobrança. [escala/models.py:1781](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/models.py:1781), [colaboradores/models.py:321](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/colaboradores/models.py:321), [ponto/services/cartorio.py:1184](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:1184), [ponto/services/cartorio.py:2087](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:2087), [escala/utils.py:1245](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/utils.py:1245), [escala/utils.py:2050](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/escala/utils.py:2050), [ponto/services/cartorio.py:1384](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:1384), [ponto/services/cartorio.py:1921](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:1921).
+
+A classificação de borda histórica exata fica [nao verificado]. A ata guarda o resultado agregado, e a janela original pode ter sido a do lote. O script mostra separadamente atas sem carimbo de período parcial, outros períodos lavrados e releituras divergentes. Uma hora ilegível sem interior conhecido também fica [nao verificado]. Use o bloco em um `manage.py shell` já aberto. A inicialização padrão do Django neste projeto prepara diretório e handlers de log em arquivo. [ponto/services/cartorio.py:748](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:748), [ponto/services/cartorio.py:784](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:784), [ponto/services/cartorio.py:975](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/services/cartorio.py:975), [ponto/turnos.py:2657](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/ponto/turnos.py:2657), [app/manage.py:9](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/manage.py:9), [config/settings/saas.py:118](/home/ronald/codex_ws/1fdc769869d022ce2ea9cdf3f758d5c0456824e7/app/config/settings/saas.py:118).
+
+```python
+import logging
+import sys
+from collections import Counter
+from datetime import date, datetime, time, timedelta
+from types import SimpleNamespace
+
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Empresa
+from escala import utils as grade
+from escala.models import CelulaDia
+from ponto import turnos
+
+VEREDITO = "fato_em_ausencia"
+CASO = (306, date(2026, 11, 24), 5775)
+BORDAS = ("so_inicio", "so_fim", "ambas")
+CATEGORIAS = BORDAS + (
+    "estritamente_dentro",
+    "outro_periodo_lavrado",
+    "sem_carimbo_parcial [nao verificado]",
+    "releitura_divergente [nao verificado]",
+    "hora_ilegivel [nao verificado]",
+)
+
+
+def capturar_periodo(colaborador, data, agora):
+    # Janela unitária do cartório, app/ponto/services/cartorio.py:1184-1203.
+    inicio = timezone.make_aware(datetime.combine(data - timedelta(days=1), time.min))
+    fim = timezone.make_aware(datetime.combine(data + timedelta(days=3), time.min))
+    batidas = list(turnos.batidas_apuraveis(
+        colaborador, inicio, fim - timedelta(microseconds=1)
+    ))
+
+    codigo_overlay = grade._marcar_ausencias.__code__
+    codigo_horas = turnos.horas_reais_do_dia.__code__
+    codigo_juiz = turnos.periodo_da_parcial_no_dia.__code__
+    horas = captura = None
+
+    def observar(frame, evento, retorno):
+        nonlocal horas, captura
+        if evento != "return" or frame.f_code not in (codigo_horas, codigo_juiz):
+            return
+        pai = frame.f_back
+        if pai is None or pai.f_code is not codigo_overlay or pai.f_locals["d"] != data:
+            return
+        # No legado, o segmento dono do dia vem antes do aquecimento do
+        # segmento seguinte, app/escala/utils.py:1000-1033.
+        if captura is not None:
+            return
+        if frame.f_code is codigo_horas:
+            horas = retorno
+        elif horas is not None and frame.f_locals["horas"] is horas:
+            # A lista dos marcos previstos é outra, app/escala/utils.py:1245,1260.
+            captura = (frame.f_locals["a"], tuple(horas), retorno)
+
+    perfil_anterior = sys.getprofile()
+    sys.setprofile(observar)
+    try:
+        grade.montar_grade_prevista_periodo(
+            colaborador, batidas, dias=2, ref=data + timedelta(days=1), agora=agora
+        )
+    finally:
+        sys.setprofile(perfil_anterior)
+    return captura
+
+
+def posicao(ausencia, minutos):
+    # Mesma unidade e virada do juiz, app/ponto/turnos.py:2653-2658.
+    ini = ausencia.hora_ini.hour * 60 + ausencia.hora_ini.minute
+    fim = ausencia.hora_fim.hour * 60 + ausencia.hora_fim.minute
+    if fim < ini:
+        fim += 1440
+    if any(m is not None and ini < m < fim for m in minutos):
+        return "estritamente_dentro"
+    if None in minutos:
+        return "hora_ilegivel [nao verificado]"
+    return {
+        (True, False): "so_inicio",
+        (False, True): "so_fim",
+        (True, True): "ambas",
+    }[(ini in minutos, fim in minutos)]
+
+
+def classificar(celula, agora):
+    # Carimbo agregado, app/ponto/services/cartorio.py:784-789.
+    ata = celula.ata or {}
+    periodo = ata.get("periodo_parcial")
+    if not ata.get("cobertura_parcial") or not periodo:
+        return "sem_carimbo_parcial [nao verificado]", None
+    if periodo != "dentro":
+        return "outro_periodo_lavrado", None
+
+    captura = capturar_periodo(celula.colaborador, celula.data, agora)
+    if captura is None:
+        return "releitura_divergente [nao verificado]", None
+    ausencia, minutos, resultado = captura
+    if resultado != "dentro":
+        return "releitura_divergente [nao verificado]", ausencia.pk
+    return posicao(ausencia, minutos), ausencia.pk
+
+
+def imprimir_placar(rotulo, contagem):
+    print(rotulo, "universo=", sum(contagem.values()),
+          "so_na_borda=", sum(contagem[k] for k in BORDAS),
+          {k: contagem[k] for k in CATEGORIAS})
+
+
+def censo():
+    # Sonda fornecida, aval.txt:1. Usa o mesmo conversor e o mesmo juiz.
+    ausencia_sonda = SimpleNamespace(hora_ini=time(15, 54), hora_fim=time(19))
+    horas_sonda = ("06:57", "13:43", "14:46", "15:54")
+    minutos = turnos.horas_reais_do_dia({
+        "celulas": [{"hora": hora} for hora in horas_sonda],
+    })
+    resultado = turnos.periodo_da_parcial_no_dia(ausencia_sonda, minutos)
+    if resultado != "dentro" or posicao(ausencia_sonda, minutos) != "so_inicio":
+        raise RuntimeError("A sonda fornecida divergiu de dentro / so_inicio")
+    print("SONDA_FORNECIDA", (CASO[0], CASO[1].isoformat(), CASO[2]), "so_inicio")
+
+    total = Counter()
+    exemplos_borda, exemplos_dentro = [], []
+    caso_prod = (None, "fora_do_universo [nao verificado]")
+
+    # Tenant e backend em app/tenants/cron.py:25 e app/config/settings/saas.py:83-94.
+    with schema_context("juliani"), transaction.atomic(durable=True):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cursor.execute("SELECT current_schema()")
+            if cursor.fetchone() != ("juliani",):
+                raise RuntimeError("O schema ativo diverge de juliani")
+
+        agora = timezone.localtime(timezone.now())
+        empresas = {
+            pk: Counter()
+            for pk in Empresa.objects.order_by("pk").values_list("pk", flat=True)
+        }
+        celulas = (
+            CelulaDia.objects.filter(veredito=VEREDITO)
+            .select_related("colaborador")
+            .order_by("colaborador_id", "data")
+        )
+        for celula in celulas.iterator(chunk_size=200):
+            classe, ausencia_id = classificar(celula, agora)
+            total[classe] += 1
+            empresas[celula.colaborador.empresa_id][classe] += 1
+            ids = (celula.colaborador_id, celula.data.isoformat(), ausencia_id)
+            if classe in BORDAS and len(exemplos_borda) < 5:
+                exemplos_borda.append(ids)
+            elif classe == "estritamente_dentro" and len(exemplos_dentro) < 5:
+                exemplos_dentro.append(ids)
+            if (celula.colaborador_id, celula.data) == CASO[:2]:
+                caso_prod = (ausencia_id, classe)
+
+    if not total:
+        print("UNIVERSO VAZIO")
+    imprimir_placar("FROTA", total)
+    for empresa_id, contagem in empresas.items():
+        imprimir_placar(f"EMPRESA {empresa_id}", contagem)
+    print("EXEMPLOS_SO_NA_BORDA", exemplos_borda)
+    print("EXEMPLOS_ESTRITAMENTE_DENTRO", exemplos_dentro[:5 - len(exemplos_borda)])
+    print("CASO_NO_REPLAY", (CASO[0], CASO[1].isoformat(), caso_prod[0]), caso_prod[1])
+    if caso_prod != (CASO[2], "so_inicio"):
+        print("CASO_ESPERADO", (CASO[0], CASO[1].isoformat(), CASO[2]),
+              "so_inicio [nao verificado no replay]")
+
+
+nivel_anterior = logging.root.manager.disable
+logging.disable(sys.maxsize)
+try:
+    censo()
+finally:
+    logging.disable(nivel_anterior)
+```
 
 ## 25/11 19:57 · sessao db299125f767 · E1-PREVISAO-24H · leitura · origem=Code
 
@@ -586,18 +779,4 @@ A lei escrita exige fonte única e unidade coerente, declara precedência da dec
 
 A sonda anexada registra 54.517 células, 296 admin, 192 admin com protesto vazio e 104 com protesto cheio. `cods`, divergência efetiva, cobertura da janela e tratamento de `None` versus `[]` **[nao verificado]**.
 
-## 25/11 16:35 · sessao f0c3266184a3 · - · - · origem=Ronald (tmux)
-
-| Achado | Evidência na cópia |
-|---|---|
-| A fábrica chega depois da inicial e da B5.3b, com o `write` síncrono no corpo e intercalado entre chamadas da fábrica. | `app/ponto/services/cartorio.py:989,1015–1069,1070–1075,1821,1870` |
-| A releitura roda o corpo inteiro com `forcar=False`, soma todos os julgamentos locais em `relidas_pos_emissao` e não chama fábrica. Não há função `_reler` ou fecho subsequente na cópia. | `app/ponto/services/cartorio.py:1100–1125` |
-| Em sonda em memória com o orquestrador real e efeitos simulados, falha do log no corpo deixou A carimbada e nenhuma fábrica chamada. Falha no primeiro `[PERGUNTA]` deixou A e B carimbadas e chamou apenas A. Primeira lavra de A na releitura deixou `julgadas=1`, `carimbadas=1`, `relidas_pos_emissao=2`, duas datas em `cods` e fábrica só de B. Resultado ORM e produção [nao verificado]. | `app/ponto/services/cartorio.py:989,1015,1070–1075,1100–1125,1126–1152` |
-| A fábrica distingue sem adesão, cadastro passado sem turno, motivos deduplicados e limbo entregue. Descarimbo antecede o desvio do limbo. Uma lista positiva mede motivos devolvidos, com caminhos de dedup e abstinência após seleção. | `app/chamados/services/fabrica_da_celula.py:105–157,160–231,251–285,354–373`; `app/chamados/services/disputa_emissao.py:321–479` |
-| Os dois portões de cobrança do corpo disparam o funil ou atualizam o espelho de marcos antes de lavrar. O funil pode vetar, nascer, reaproveitar, renascer ou agrupar, e tenta push e repasse depois da porta. O `stderr.write` no tratamento pode propagar. | `app/ponto/services/cartorio.py:1783–1841,1861–1923`; `app/ponto/management/commands/detectar_ausencias.py:544–807`; `app/chamados/models.py:968–1047` |
-| A fábrica pode acionar outro emissor de `batida_ausente` pela costura da pergunta órfã. C2 lê protestos gravados, pode chamar `julgar_celula` diretamente quando falta ata com lâmpadas e pode abrir ou reabrir cobrança antes da costura. Esse percurso não passa pelo acumulador de emissão do corpo. | `app/chamados/services/disputa_emissao.py:462–479`; `app/chamados/reconciliador.py:811–835,987–1080,1759–1770`; `app/ponto/services/cartorio.py:1838–1841,1876–1879,2021–2032` |
-| A lavra `save=False` produz trilha antes de `carimbar` salvar célula e Evento. O Evento do save, quando há ata ou veredito entre os campos, entra no mesmo `atomic`. A decisão admin preserva protestos gravados e pode mover ata/status. | `app/ponto/services/cartorio.py:1898–1923`; `app/ponto/portas/celula.py:981–1002,1097–1104,1127–1142,1218–1239` |
-| Os saves de Pergunta podem emitir outbox síncrono e agendar o fecho de beco. O save de Disputa fechada pode fechar pai, carimbar perguntas e agendar retomada de regularização. Callback pode rodar no primeiro commit externo aplicável, depois da porta local ou ainda dentro do fluxo do cartório. | `app/chamados/signals.py:19–51,91–167,189–218,229–259`; `app/chamados/services/becos.py:38–94`; `app/chamados/services/regularizacao_ext.py:71–83,122–206,211–227` |
-| Portas transitivas e campos verificados foram enviados ao agente principal, incluindo escrita de Chamado, Disputa, Pergunta, Decisão, Followup, Pauta, ContadorPauta, LogAuditoria, Justificativa, EventoCelula e efeitos condicionais de callbacks e notificações. | `app/chamados/models.py:240–265,292–325,1731–1749,2160–2168,2394–2411,3291–3309,3533–3543,4551–4562`; `app/chamados/services/nota.py:75–112`; `app/pautas/services.py:153–189,344–370`; `app/core/observ.py:94–139`; `app/ponto/services/justificativa.py:337–353`; `app/ponto/portas/celula.py:981–1002` |
-
-_8249 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8250 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
