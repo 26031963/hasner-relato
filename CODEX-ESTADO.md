@@ -1,7 +1,167 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 06:49** · publicado em **25/11/2026 06:50** (UTC-3)
+> Ultima resposta processada: **25/11/2026 07:02** · publicado em **25/11/2026 07:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 07:02 · sessao ee1e060c5ed2 · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
+
+Implementei a opção **(b)**. No horizonte do sem par, o mesmo K6 corta o sinal antes da leitura do pareador e preserva a foto que já tem veredito. A primeira lavra entregue classifica os demais insumos. A competência aberta continua levando o sinal ao classificador e à impressão. `ponto/services/cartorio.py:1229`, `:1248`, `:1258`, `:1515`, `:1607`.
+
+| Propriedade | Resultado pelo código |
+|---|---|
+| 1. Momento da entrega | A guarda preserva a célula com acusação e a célula com sinal inerte. **Zero saves de `impressao`**. No ramo normal, a guarda sai antes de calcular o hash e antes da lavra. O teste compara as linhas inteiras e vigia `CelulaDia.save`. `ponto/services/cartorio.py:1515`, `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:96`. |
+| 2. Impressão com um significado | O mesmo `_sp_julga` alimenta o hash e o classificador. O selo v7 verifica a leitura vazia na primeira lavra e no D5, mantém a igualdade da foto e exige que a repetição saia pela guarda, sem classificar, calcular hash ou consultar o leitor do sem par. `ponto/services/cartorio.py:1518`, `:1530`, `:1607`, `ponto/tests/test_a_tela_v7_impressao_um_significado.py:13`. |
+| 3. Lote seguido de dois avulsos | O teste exige zero saves de célula, ata idêntica, ausência de `precedencia` e zero chamados. A guarda incrementa `pulados_foto_entregue`, que barra a escrita de precedência no avulso. `ponto/services/cartorio.py:1515`, `:2229`, `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:123`. |
+| 4. TXT invalidado | Para a primeira lavra feita pela v8, a invalidação sem substituto desliga K6. O sinal volta à impressão, abre o julgamento e produz a acusação com o PK da batida. `folha/export.py:588`, `ponto/services/cartorio.py:1234`, `:1530`, `:1622`, `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:146`. |
+| 5. D5 | Com status ausente e carimbo v8 em dia, o teste exige `completaveis=1`, `completados=1` e fila zero. Na repetição exige `ja_lavrado=1`, fila zero e zero saves. A foto inteira volta ao estado original depois de repor o status. `ponto/services/cartorio.py:973`, `:1535`, `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:168`. |
+| 6. `nunca_bateu` | A primeira lavra usa o mesmo portão de leitura. A guarda da foto vem antes do pulo por hash no julgamento comum, e o D5 usa `imp0`. `ponto/services/cartorio.py:1374`, `:1381`, `:1389`, `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:198`. |
+
+**Limite para o Code.** O TXT guarda geração e invalidação. A célula guarda `julgada_em` e o hash dos insumos. O fato “estava entregue quando lavrou” fica sem registro explícito na célula. Para uma foto **já lavrada pela v7** com sinal bruto no hash e ata vazia, a propriedade **4** ainda pode cair por igualdade do hash após a invalidação. A propriedade **1** preserva essa foto enquanto K6 estiver vigente. Um status ausente num carimbo legado divergente também pode continuar na fila pelo contrato do D5. O diff preserva os carimbos legados. Incidência em produção **[nao verificado]**. `folha/models.py:82`, `:96`, `ponto/portas/celula.py:1227`, `ponto/services/cartorio.py:980`, `:1515`, `:1535`.
+
+**Censo de código**
+
+- Alterei `_julgar_colab_corpo`, com `_sem_par` e `_foto_entregue`, e retirei de `classificar_dia` o parâmetro `posicoes_sem_par`. Os únicos dois chamadores de `_retirar_sem_par_entregue` estavam no cartório. Apaguei o helper, as listas de posições, o teste `test_sinal_inerte_mantem_impressao_sem_consultar_entrega` e os adaptadores de base e mutantes v6/v7. Os casos de preservação dos demais protestos e de `nunca_bateu` seguem com asserções sobre a leitura anterior à classificação. `7e266931b:app/ponto/services/cartorio.py:1264`, `:1407`, `:1621`, `7e266931b:app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:188`, `ponto/supra_juiz.py:278`, `ponto/tests/test_a_tela_v6_sem_par_memoria.py:148`.
+- **`CelulaDia.impressao`** é gravada e comparada na porta `carimbar`, chamada pelas duas lavras. `desfazer_julgamento_da_futura` lê o campo para a trilha e o limpa. O cartório compara os hashes para o pulo e o D5. Outros leitores copiam ou comparam o valor gravado nos snapshots. `ponto/portas/celula.py:1149`, `:1186`, `:1202`, `:1227`, `ponto/services/cartorio.py:1377`, `:1439`, `:1535`, `:2039`, `ponto/management/commands/celula_veredito_velho.py:110`, `colaboradores/services/feriado_do_posto.py:428`, `chamados/services/foto_e4b.py:251`.
+- **`ata.sem_par`** é montada no cartório para a ata em curso e para a ata persistida pela porta. Leem a chave a guarda da foto e `lastro.sem_par_da_ata`, usado pelo lastro, pela emissão do cartório, pelo supra e pelo retroativo. `ponto/services/cartorio.py:818`, `:1262`, `:1629`, `:2017`, `:2111`, `ponto/portas/celula.py:1128`, `ponto/services/lastro.py:81`, `:221`, `ponto/management/commands/supra_juiz.py:209`, `ponto/management/commands/emitir_furo_retroativo.py:99`.
+
+O censo real confirmou **`[1321, 1477]`**, totais **9/81**, identidades, composição e `CLASSIFICAR`. Conferi a compilação em memória das fontes e dos cinco mutantes, com **zero `except` adicionados**. As duas chamadas de impressão e as duas de classificação conservaram os argumentos dos selos, salvo a retirada do parâmetro órfão. Execução ORM, morte dos mutantes e resultado dos seis selos **[nao verificado]**, para certificação pelo Code e pelo opus final. `core/medida_turno_do_par.py:448`, `core/tests/test_medida_turno_do_par.py:108`, `:321`, `ponto/services/cartorio.py:1374`, `:1390`, `:1524`, `:1596`.
+
+**Comandos para o Code**
+
+Na base, o caso 3 deve cair em `assertNotIn('precedencia', depois['ata'])` no primeiro avulso. O caso 4 deve cair em `assertGreater(avulso['julgadas'], 0)`. O seletor `base` carrega as funções do hash pedido em memória, com as entradas reais de lote e avulso. `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:42`, `:81`, `:140`, `:162`, `7e266931b:app/ponto/services/cartorio.py:1550`, `:2248`.
+
+```bash
+alvo=ponto.tests.test_a_tela_v8_entregue_nao_le_sem_par.EntregueNaoLeSemParTest
+avulso="$alvo.test_RED_lote_entregue_e_dois_avulsos_preservam_foto_sem_precedencia"
+txt="$alvo.test_RED_txt_invalidado_sem_substituto_reabre_o_julgamento"
+
+PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$alvo"
+A_TELA_V8_VARIANTE=base PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$avulso" "$txt"
+
+A_TELA_V8_VARIANTE=le_sem_par_entregue PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$avulso"
+A_TELA_V8_VARIANTE=foto_so_com_acusacao PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$avulso"
+A_TELA_V8_VARIANTE=aberta_sem_sinal PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$txt"
+A_TELA_V8_VARIANTE=d5_pula_foto PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$alvo.test_d5_entregue_com_sinal_lavra_um_status_ausente"
+A_TELA_V8_VARIANTE=nb_hash_antes_da_foto PYTHONDONTWRITEBYTECODE=1 python -B manage.py test "$alvo.test_nunca_bateu_entregue_preserva_foto_no_avulso_e_completa_status"
+```
+
+## 25/11 07:02 · sessao 0d0075cf508f · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · sonda · origem=Code
+
+## Saída raspada fornecida
+
+```text
+sonda_leitura: sonda_estoque.py [7610d93fbc9e8e83] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+TOTAL_ESTOQUE_RETRATADO_PELO_CRON 71
+empresa competencia exportada total sem_decisao
+2 202607 False 3 3
+2 202608 True 17 17
+2 202609 True 4 4
+2 202610 False 11 11
+3 202606 False 1 1
+3 202607 True 26 26
+3 202608 False 3 3
+3 202611 False 2 2
+4 202606 True 3 3
+4 202607 True 1 1
+pk colab empresa data_local retratada_em(local) tem_decisao exportada
+44398 29 4 2026-06-17 30/07 00:13 False True
+44399 29 4 2026-06-17 30/07 00:13 False True
+60707 39 4 2026-06-19 09/08 23:56 False True
+44650 146 3 2026-06-20 30/07 00:13 False False
+45516 146 3 2026-06-22 30/07 00:13 False True
+44839 146 3 2026-06-22 30/07 00:13 False True
+45113 93 3 2026-06-23 30/07 00:13 False True
+45114 93 3 2026-06-23 30/07 00:13 False True
+45314 642 3 2026-06-24 09/08 23:56 False True
+45403 111 3 2026-06-24 30/07 00:01 False True
+45410 157 3 2026-06-24 30/07 00:01 False True
+45349 81 3 2026-06-24 09/08 23:56 False True
+45312 642 3 2026-06-24 09/08 23:56 False True
+45539 172 3 2026-06-25 30/07 00:13 False True
+45540 172 3 2026-06-25 30/07 00:13 False True
+45684 95 3 2026-06-25 30/07 00:01 False True
+45745 146 3 2026-06-26 30/07 00:13 False True
+45746 146 3 2026-06-26 30/07 00:13 False True
+45830 90 3 2026-06-26 30/07 00:13 False True
+45832 90 3 2026-06-26 30/07 00:13 False True
+46308 170 3 2026-06-27 30/07 00:01 False True
+46288 170 3 2026-06-29 30/07 00:01 False True
+47225 174 2 2026-07-01 09/08 23:56 False False
+47490 82 3 2026-07-02 30/07 00:01 False True
+48141 761 3 2026-07-06 30/07 00:13 False True
+48143 761 3 2026-07-06 30/07 00:13 False True
+48323 148 3 2026-07-07 30/07 00:01 False True
+59632 747 3 2026-07-13 09/08 23:56 False True
+49572 51 4 2026-07-14 30/07 00:01 False True
+50779 152 3 2026-07-17 30/07 00:13 False True
+50267 152 3 2026-07-17 30/07 00:13 False True
+50291 114 3 2026-07-17 09/08 23:56 False True
+50875 663 2 2026-07-20 30/07 00:13 False False
+50876 663 2 2026-07-20 30/07 00:13 False False
+51193 465 2 2026-07-21 30/07 00:13 False True
+51197 465 2 2026-07-21 30/07 00:13 False True
+51418 450 2 2026-07-21 29/07 23:44 False True
+51551 398 2 2026-07-21 29/07 23:44 False True
+53304 451 2 2026-07-23 30/07 00:13 False True
+53317 451 2 2026-07-23 30/07 00:13 False True
+53799 238 2 2026-07-24 30/07 00:13 False True
+53805 238 2 2026-07-24 30/07 00:13 False True
+53813 239 2 2026-07-24 30/07 00:13 False True
+53821 239 2 2026-07-24 30/07 00:13 False True
+54959 492 2 2026-07-25 29/07 23:44 False True
+58216 512 2 2026-07-29 29/07 23:44 False True
+59233 868 3 2026-07-30 31/07 06:55 False False
+59229 868 3 2026-07-30 31/07 06:55 False False
+60942 363 2 2026-08-01 02/08 06:55 False True
+60943 363 2 2026-08-01 02/08 06:55 False True
+61042 668 2 2026-08-01 03/08 06:55 False True
+61548 169 3 2026-08-02 09/08 23:56 False False
+65277 860 2 2026-08-05 06/08 06:55 False True
+65273 860 2 2026-08-05 06/08 06:55 False True
+97993 936 2 2026-09-11 12/09 06:26 False True
+98000 936 2 2026-09-11 12/09 06:26 False True
+104398 473 2 2026-09-18 19/09 06:26 False True
+104386 473 2 2026-09-18 19/09 06:26 False True
+111295 190 2 2026-09-26 15/10 02:23 False False
+112983 948 2 2026-09-28 29/09 06:26 False False
+112970 948 2 2026-09-28 29/09 06:26 False False
+113226 398 2 2026-09-29 30/09 06:26 False False
+113225 398 2 2026-09-29 30/09 06:26 False False
+115732 358 2 2026-10-01 03/10 06:26 False False
+115731 358 2 2026-10-01 03/10 06:26 False False
+123806 934 2 2026-10-10 11/10 06:26 False False
+128118 992 2 2026-10-15 16/10 06:26 False False
+128150 992 2 2026-10-15 16/10 06:26 False False
+129040 741 2 2026-10-16 17/10 06:26 False False
+141249 109 3 2026-10-29 30/10 06:26 False False
+141250 109 3 2026-10-29 30/10 06:26 False False
+rc_sombra=0
+```
+
+## Respostas
+
+Não encontrei `sonda_estoque.py` na cópia local e não reexecutei a sonda. A transação `READ ONLY` e o rollback da execução reportada ficam [nao verificado]. As referências `DADO RASPADO:linha` apontam para o bloco acima.
+
+1. **71 batidas**, conforme `TOTAL_ESTOQUE_RETRATADO_PELO_CRON`. `DADO RASPADO:3` · `app/ponto/management/commands/detectar_par_relampago.py:224`
+2. **51 em competências exportadas e 20 em abertas**, usando o mês do fim da janela de 21 a 20. `DADO RASPADO:5–14` · `app/ponto/janelas.py:10` · `app/folha/export.py:594`
+
+   | Empresa | Competência | Exportada | Aberta |
+   |---:|---:|---:|---:|
+   | 2 | 202607 | 0 | 3 |
+   | 2 | 202608 | 17 | 0 |
+   | 2 | 202609 | 4 | 0 |
+   | 2 | 202610 | 0 | 11 |
+   | 3 | 202606 | 0 | 1 |
+   | 3 | 202607 | 26 | 0 |
+   | 3 | 202608 | 0 | 3 |
+   | 3 | 202611 | 0 | 2 |
+   | 4 | 202606 | 3 | 0 |
+   | 4 | 202607 | 1 | 0 |
+   | **Total** | | **51** | **20** |
+
+3. **0 batidas com ato humano auditado posterior.** Todas as linhas detalhadas têm `tem_decisao=False`. `DADO RASPADO:15–86`
+4. **Nenhum `ERRO` ou traceback aparece no dado raspado.** A última linha é `rc_sombra=0`. `DADO RASPADO:1–87`
 
 ## 25/11 06:49 · sessao b2c670b7bee4 · REGUA-TICKETS-SO-PADRAO-DE-FATIA · leitura · origem=Code
 
@@ -943,59 +1103,4 @@ A leitura estática aponta **cinco testes com nome RED, quatro discriminantes**.
 | **`Chamado.status_local`, dia do fato e `marcos_faltantes`** | O motor decide o estado. `abrir` grava no nascimento, e `_gravar_estado` nas transições, inclusive cancelamento e reabertura. O nomeador tira os marcos e a âncora da ata e do instante da batida. O emissor preenche o contexto via `abrir` e atualiza pela porta de contexto em `_espelhar_marcos`. `app/chamados/catalogo/motor.py:24`, `app/chamados/models.py:213`, `app/chamados/models.py:854`, `app/chamados/models.py:1004`, `app/chamados/models.py:1037`, `app/chamados/models.py:1514`, `app/ponto/services/cartorio.py:2095`, `app/ponto/management/commands/detectar_ausencias.py:545`, `app/ponto/management/commands/detectar_ausencias.py:709` | O retroativo agrupa pelo `dia_do_fato(fortes=True)`, que prefere `celula.data`, e filtra status pelo catálogo. Porta e emissor também leem status. Cartório, supra e vigia filtram vivos. Lastro, reabertura, entrada sincronizada e reconciliador leem os marcos ou o lastro correspondente. `app/chamados/juizes.py:89`, `app/ponto/management/commands/emitir_furo_retroativo.py:81`, `app/chamados/models.py:987`, `app/ponto/management/commands/detectar_ausencias.py:743`, `app/ponto/services/cartorio.py:1498`, `app/ponto/management/commands/supra_juiz.py:210`, `app/ponto/services/furos_sem_cobranca.py:67`, `app/ponto/services/lastro.py:75`, `app/chamados/models.py:1346`, `app/ponto/services/entrada_sincronizada.py:26`, `app/chamados/reconciliador.py:1517` |
 | **`emitidos`, `vetados`, `ja_existia`, `pulados`** | O retroativo inicializa e soma os três primeiros a partir da lista do dia e do retorno do emissor. O cartório inicializa e soma os seus próprios contadores, com `agrupados` separado. `app/ponto/management/commands/emitir_furo_retroativo.py:53`, `app/ponto/management/commands/emitir_furo_retroativo.py:154`, `app/ponto/services/cartorio.py:1510`, `app/ponto/services/cartorio.py:2127`, `app/ponto/services/cartorio.py:2146` | O `stdout` do retroativo e seus testes leem os contadores locais. No cartório, o resumo do lote lê os totais, `emitidos` aciona a releitura após emissão e a vigia de hora acumula `pulados` e `emitidos`. Consumidor externo do novo `vetados` do retroativo [nao verificado]. `app/ponto/management/commands/emitir_furo_retroativo.py:167`, `app/ponto/tests/test_a_tela_v3_sem_par.py:253`, `app/ponto/tests/test_a_tela_v3_sem_par.py:269`, `app/ponto/management/commands/processar_cartorio.py:66`, `app/ponto/services/cartorio.py:1135`, `app/ponto/services/vigia_de_hora.py:134` |
 
-## 25/11 00:34 · sessao 85b8a9fa8acd · PONTA-PEQUENA-NA-BORDA · verificador · origem=Code
-
-| Classe | Destino | Achado |
-|---|---|---|
-| OBSERVACAO | Fila | **1. O RED voltou a morder na primeira passada.** O consumidor captura 17:59:50 e o teste insere o evento às 18:00:10 antes de ler a fila. Se o julgamento voltar a usar 17:59:50, o fim previsto ainda não passou. O consumidor pode dar baixa com `ponta_pequena=0`, e a asserção falha antes de o vigia poder recuperar o dia. `app/chamados/reconciliador.py:1480–1486,1534–1549`, `app/ponto/turnos.py:2122–2130`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:157–193`. |
-| OBSERVACAO | Fila | **1. Outra regressão ainda passaria neste RED.** Um `max` único por colaborador daria o mesmo resultado no teste, que injeta um único evento para D. Num lote com duas datas, o evento mais recente de uma data poderia adiantar indevidamente o julgamento da outra. Também passaria usar 18:00:10 para o encerramento e 17:59:50 para medir os minutos, pois o espelho simulado devolve 9 em qualquer instante. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:162–189`, `app/ponto/services/ponta_pequena.py:92–105,110–118`, `app/ponto/services/he_pendente_lavrado.py:80–82`. |
-| OBSERVACAO | Fila | **2. As três asserções batem com a regra.** A saída às 18:00 completa o turno previsto, e o evento das 18:00:10 já encontra o dia encerrado. A entrada às 07:51 dá 9 minutos fora do marco das 08:00, dentro do limite cadastrado de 15. Pela O214, isso dá uma recusa por dia pelo sistema, registrada como `(D, NAO, SISTEMA, 9)` e contada uma vez em `ponta_pequena`. A decisão vigente encerra o prazo, então o vigia seguinte deve registrar zero emissões de prazo. O teste fornece os 9 minutos pelo espelho simulado. `app/docs/RELATO-ARQUIVO.md:32095–32098`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:50–53,61–65,119–124,162–193`, `app/chamados/reconciliador.py:1531–1535`, `app/ponto/services/ponta_pequena.py:53–54`, `app/ponto/services/vigia_de_hora.py:106–119`. |
-| OBSERVACAO | Fila | **3. A triagem procede para a alta tardia do limite.** Com 18 minutos e limite 15, o dia era do admin enquanto estava ao alcance do vigia. A alta para 20 depois desse alcance cria elegibilidade por mudança de cadastro. O aval citado delimita o gatilho do item 3 ao encerramento do turno. Sem novo evento para D, o consumidor não o reconsidera. Um retrato fresco ainda pode levar o cron a contar e alarmar esse dia em `dry_run`. O zero da sonda nas três empresas segue como critério de aceite, com resultado **[nao verificado]**. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:2–6,235–253`, `app/ponto/services/vigia_de_hora.py:22–30,53–66`, `app/chamados/reconciliador.py:1485–1494`, `app/ponto/management/commands/recusar_ponta_pequena.py:66–77,94–126`, `app/docs/PROMPTS.md:2876`. |
-| OBSERVACAO | Fila | **4. Zero `except` novos e zero removidos** no diff anexado. Execução dos testes e identidade Git dos hashes **[nao verificado]**. `delta_v4.diff:5`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:180–196`. |
-
-## 25/11 00:12 · sessao d99ed8f0df48 · PONTA-PEQUENA-NA-BORDA · verificador · origem=Code
-
-**Reprovo o item 3 nesta volta.** O delta fecha A e B para os dias que o vigia ainda alcança e fecha C(ii) para o registro da entrega. C(i) ainda produz dois eventos, com uma decisão e uma trilha de recusa no cenário testado. Os bloqueios são o dia elegível que sai do alcance sem recuperação automática e o RED do relógio que passou a aceitar uma regressão na primeira passada. `app/ponto/services/vigia_de_hora.py:33–66`, `app/ponto/services/vigia_de_hora.py:102–119`, `app/ponto/portas/he.py:351–391`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:176–187`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:253–279`.
-
-Veredito por leitura da cópia e dos anexos. Identidade Git dos hashes, execução dos testes na base e no delta, ocorrências e tempos em produção **[nao verificado]**. [nao verificado]
-
-### Tabela de achados
-
-| Classe | Destino | Achado |
-|---|---|---|
-| OBSERVACAO | Fila | **A fecha dentro do alcance.** A baixa antiga às 17:59:50 de um evento criado às 18:00:10 sai do `Max` porque `processado_em` está preenchido. A hora da baixa é irrelevante para o filtro. Sem decisão vigente, com o dia elegível e sem outro pendente pós-encerramento, o vigia emite de novo. Mortos também ficam fora. `app/chamados/reconciliador.py:1382–1391`, `app/ponto/services/vigia_de_hora.py:102–119`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:207–224`. |
-| OBSERVACAO | Fila | **B fecha para a decisão vigente.** Tanto a autorização quanto a recusa vigente encerram o prazo. Uma revogada fica fora de `vigentes()`. Se a ponta voltou a caber, a porta atualiza a mesma linha, limpa as três marcas de revogação e registra nova trilha. Com 18 min e limite subindo de 15 para 20 entre passadas, o consumidor relê o cadastro e pode recusar na passada seguinte. Uma mudança durante a própria medição ainda pode deixar a porta com o limite já capturado pelo consumidor. `app/ponto/models.py:1265–1267`, `app/ponto/services/ponta_pequena.py:49–54`, `app/ponto/services/ponta_pequena.py:89–105`, `app/chamados/reconciliador.py:1494–1500`, `app/ponto/portas/he.py:75–99`, `app/ponto/portas/he.py:351–390`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:226–251`. |
-| **PROCEDENTE** | **Bloqueia** | **Fora do alcance, um dia pode ficar sem decisão até chegar outro sinal.** Exemplo com o dado do teste: D encerra às 18h, tem 18 min, recebe baixa com limite 15 e passa a caber quando o limite sobe para 20 depois que D sai da janela de ontem. O vigia só busca hoje e ontem, e ontem ainda passa pelo corte de dois tetos. Sem pendente ou novo evento para D, o consumidor não o reconsidera. O cron de HE pode acusar o dia no retrato fresco, mas chama a porta em `dry_run=True`. A limitação de alcance é herdada e deixa um contraexemplo ao esperado zero do item 3. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:226–244`, `app/ponto/services/vigia_de_hora.py:22–30`, `app/ponto/services/vigia_de_hora.py:53–66`, `app/ponto/services/vigia_de_hora.py:157–180`, `app/chamados/reconciliador.py:1485–1493`, `app/ponto/management/commands/recusar_ponta_pequena.py:66–76`, `app/ponto/management/commands/recusar_ponta_pequena.py:94–126`, `app/config/crons.py:1586–1591`. |
-| **PROCEDENTE** | Fila | **Reemissão com fatos estáveis.** O vigia verifica as condições para medir HE. O consumidor só depois descobre `sem ponta` ou `acima do limite` e dá baixa. Se a fila drenar entre passadas, o próximo vigia pode repetir a emissão em cada rodada até o dia sair do alcance ou ganhar decisão. O próprio RED de B exige uma reemissão com 18 min e limite ainda em 15. Também há novas consultas por par e, para um pendente elegível, uma segunda chamada ao juiz de encerramento, agora com o carimbo do evento. Volume e custo em produção **[nao verificado]**. `app/ponto/services/vigia_de_hora.py:102–119`, `app/ponto/services/ponta_pequena.py:49–62`, `app/ponto/services/ponta_pequena.py:94–105`, `app/chamados/reconciliador.py:1534–1549`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:226–237`. |
-| OBSERVACAO | Fila | **C(i) continua aberta na emissão.** A lavra pode entrar entre a consulta e o `INSERT` do prazo. No teste, uma chamada intercalada por mock faz a lavra gravar seu evento e o vigia gravar outro. Com `limite=1`, são dois lotes, uma medição, **1 `DecisaoHE` e 1 `LogAuditoria` da ação `recusar_ponta_pequena`** no caminho normal. O segundo lote relê a decisão vigente. A unicidade protege a linha, e a trilha é best-effort. É **caracterização** da idempotência já presente na base pelo diff anexado. A passagem na base foi informada na pergunta, com execução independente **[nao verificado]**. `app/ponto/services/vigia_de_hora.py:102–119`, `app/ponto/portas/celula.py:994–1002`, `app/chamados/reconciliador.py:1485–1500`, `app/ponto/services/ponta_pequena.py:53–54`, `app/ponto/models.py:1356–1358`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:253–279`, `app/core/observ.py:94–98`, `app/core/observ.py:124–139`. |
-| OBSERVACAO | Fila | **C(ii) fecha para a entrega que K6 reconhece.** Em `READ COMMITTED`, se a escrita de `ExportacaoDominio` chegou primeiro, a porta espera e relê K6 depois da conclusão daquela transação. Se a porta chegou primeiro, o `INSERT` ou `UPDATE` de exportação espera até o fim da transação da HE. A trava de tabela cobre também a primeira entrega, quando ainda inexiste linha para travar. A montagem dos bytes do TXT e a consulta inicial do consumidor ficam antes dessa seção. Isolamento efetivo em produção **[nao verificado]**. `app/ponto/services/ponta_pequena.py:94–105`, `app/ponto/portas/he.py:365–391`, `app/folha/models.py:153–187`, `app/folha/views.py:270–302`, `app/config/settings/saas.py:83–93`. |
-| **PROCEDENTE** | **Bloqueia** | **O RED antigo do relógio perdeu a mordida na primeira passada.** Ele verifica a baixa do evento após a primeira chamada e só exige a decisão depois de rodar vigia e consumidor de novo. Se o `max` por dia regredir para o `agora` inicial, a primeira passada pode dar baixa com o turno ainda aberto. A recuperação de A agora reemite e a última asserção ainda pode passar. O teste continua provando recuperação eventual, mas deixa passar a regressão no julgamento do primeiro lote. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:157–187`, `app/ponto/services/ponta_pequena.py:93–105`, `app/ponto/services/ponta_pequena.py:110–118`, `app/ponto/services/vigia_de_hora.py:102–119`. |
-| OBSERVACAO | Fila | **Os REDs novos de A/B e de C(ii) distinguem os defeitos por leitura.** Em A e B, a primeira reemissão exigida falharia na base porque o `Max` incluía a baixa pós-encerramento. Em B isso ocorre **antes** da subida do limite. O teste de exportação durante a medição caracteriza a releitura de K6 que a base já fazia. O teste concorrente é o RED da trava: depois de K6 negativo, outra conexão tenta `ROW EXCLUSIVE NOWAIT`, deve receber `55P03`, e consegue registrar depois da saída da porta. Na base, a tentativa poderia registrar e a asserção de `55P03` falharia. O teste força a trava conflitante antes do `INSERT`. A espera real do POST fica **[nao verificado]**. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:207–251`, `app/ponto/tests/test_ponta_pequena_prazo_evento.py:310–371`, `app/ponto/portas/he.py:365–391`, diff anexado. |
-
-### Trava da exportação e predicado protegido
-
-| Classe | Destino | Achado |
-|---|---|---|
-| OBSERVACAO | Fila | **Escritores e ordem.** A HE faz `select_for_update` da **linha `DecisaoHE` do par**, se existir, e depois pede `SHARE` em `ExportacaoDominio`. A geração normal monta o TXT, aprova fechamentos em lote quando cabe, grava a trilha de geração e chama `registrar`, que faz `exists()` e `INSERT`. A substituição via `regerar_txt_dominio --aplicar` chama `registrar` e em seguida `velho.invalidar`, que faz `UPDATE` e auditoria. A substituição tem dois atos de banco no comando. Nos caminhos encontrados, o escritor de exportação não pede `select_for_update` de `DecisaoHE` depois de escrever a exportação. A ordem inversa e um ciclo de deadlock entre esses caminhos ficam **[nao verificado]**. `app/ponto/portas/he.py:351–375`, `app/folha/views.py:248–254`, `app/folha/views.py:270–302`, `app/folha/models.py:143–188`, `app/folha/management/commands/regerar_txt_dominio.py:116–124`. |
-| OBSERVACAO | Fila | **Duração e escopo.** A trava dura até o fim da transação externa. Depois de adquiri-la, a porta roda K6 sem memo, retorna se entregue ou persiste a decisão e tenta gravar a auditoria. K6 pode materializar o histórico da tripla, incluindo o conteúdo, e consultar novamente as chaves e os carimbos para anotar vigência. Espelho e baixa do outbox ficam fora. `dry_run` pula `SHARE`, mas ainda pode travar a linha de decisão e ler K6. O cron do consumidor usa advisory lock por schema para exclusividade e tem um `atomic` próprio para a baixa. Cada chamada de recusa tem sua transação, sem `atomic` externo cobrindo vários dias ou colaboradores. `app/ponto/portas/he.py:296–297`, `app/ponto/portas/he.py:351–391`, `app/folha/export.py:580–594`, `app/folha/models.py:209–225`, `app/core/observ.py:124–139`, `app/chamados/management/commands/consumir_eventos_celula.py:17–31`, `app/chamados/reconciliador.py:1360–1379`, `app/chamados/reconciliador.py:1506–1549`. |
-| OBSERVACAO | Fila | **Efeito no TXT durante o cron.** O POST pode montar o arquivo e ficar esperando no `INSERT`, antes de devolver o download. A contenção cruza empresas e competências da mesma tabela física. Na configuração SaaS da cópia, `folha` é app de tenant. Se a exportação estiver escrevendo primeiro, a HE pode esperar segurando a linha de decisão quando ela existe. Os 45 s do consumidor são checados depois do lote e não limitam uma espera de SQL. Frequência, duração e timeout efetivo em produção **[nao verificado]**. `app/folha/views.py:270–312`, `app/folha/models.py:174–187`, `app/ponto/portas/he.py:351–375`, `app/config/settings/saas.py:34–49`, `app/config/crons.py:367–368`, `app/config/crons.py:393–394`, `app/chamados/reconciliador.py:1345–1347`, `app/chamados/reconciliador.py:1554–1556`. |
-| OBSERVACAO | Fila | **K6 lê exatamente a tabela travada.** `competencia_do_dia_entregue` calcula a competência pelo dia do turno e corte da empresa e chama `folha.export.competencia_entregue`. K6 escolhe a linha mais recente por `(gerado_em, pk)` e exige `invalidada_em IS NULL` nela. `FechamentoMensal.status` alimenta o marco de aprovação, `PeriodoFechado` alimenta o de tranca e a publicação de holerite participa de K9. A guarda `he_pendente_trava_export` é condição do portão do TXT. Todos ficam fora do `SHARE` e do predicado K6 da HE, assim como o próprio cadastro do corte. `app/ponto/portas/he.py:369–376`, `app/chamados/services/vigia_fio.py:789–811`, `app/ponto/janelas.py:36–63`, `app/folha/export.py:580–594`, `app/folha/export.py:617–625`, `app/folha/models.py:209–225`, `app/ponto/services/fechamento.py:1464–1480`, `app/ponto/services/fechamento.py:1518–1541`, `app/folha/porta_export.py:676–691`. |
-
-### Checklist estrutural
-
-| Classe | Destino | Achado |
-|---|---|---|
-| OBSERVACAO | Fila | **Juiz, escritor e fonte única.** O delta reaproveita as guardas de `motivo_de_nao_decidir`, o juiz registrado de encerramento, K6, `vigentes()` e o seletor de pendentes do consumidor. As duas consultas de encerramento usam a mesma função com instantes distintos. Os `INSERT`s do outbox continuam na porta da célula e a escrita da decisão continua em `_gravar`. A regra de minutos segue compartilhada com o retrato. O selo AST de `prazo` verifica o comando e o corpo declarado de `rodar`, exigindo `marcos_vencidos`. Ele não testa `_emitir_no_prazo`, o instante do primeiro lote ou a trava da HE. `app/docs/JUIZES.md:35–42`, `app/core/juizes.py:243`, `app/core/juizes.py:342`, `app/ponto/services/vigia_de_hora.py:96–118`, `app/ponto/services/ponta_pequena.py:39–80`, `app/ponto/portas/celula.py:981–1002`, `app/ponto/portas/he.py:388–390`, `app/config/crons.py:2162–2163`, `bin/tests/test_papel_prazo_nao_deriva.sh:269–297`. |
-| OBSERVACAO | Fila | **Relógio, semântica e exceções.** O diff acrescenta **0 `except`** e remove **0**. A falha da porta continua caindo no retry existente. O vigia recebe `agora` da borda, e o ORM ainda carimba `criado_em` no `INSERT`. Com `--apply --agora` adiantado, o evento pode carregar uma criação anterior ao encerramento simulado. `processado_em` tem o valor capturado no início da passada e indica baixa. A decisão vigente é lida à parte. `criado_em` continua sendo a hora de qualquer sinal e fornece o instante para julgar se **um pendente** já pode acordar a HE. `prazo_ja_emitido` passa a contar esse pendente, e `prazo_aberto` só conta quando o turno aberto é o primeiro veto. `app/ponto/management/commands/vigia_de_hora.py:23–30`, `app/escala/models.py:1872–1875`, `app/chamados/reconciliador.py:1480`, `app/chamados/reconciliador.py:1536–1549`, `app/ponto/services/ponta_pequena.py:49–62`, `app/ponto/services/vigia_de_hora.py:102–119`, diff anexado. |
-
-### Quem escreve e quem lê
-
-| Campo ou valor | Escrita | Leitura |
-|---|---|---|
-| `EventoCelula.processado_em`, `tentativas`, `erro` | Modelo inicia em `NULL`, `0` e vazio. Consumidor grava a baixa com o `agora` inicial ou incrementa `tentativas` e grava `erro` na falha. `app/escala/models.py:1873–1875`, `app/chamados/reconciliador.py:1480`, `app/chamados/reconciliador.py:1540–1549`. | Fila viva, mortos, semeadura e vigia consultam baixa/tentativas pelo seletor correspondente. Retenção lê baixa. Foto forense lê os três campos. `app/chamados/reconciliador.py:1382–1404`, `app/chamados/reconciliador.py:1436–1452`, `app/chamados/reconciliador.py:1556`, `app/ponto/services/vigia_de_hora.py:102–104`, `app/chamados/services/foto_e4b.py:247–252`, `app/chamados/services/foto_e4b.py:270–271`. |
-| `EventoCelula.criado_em`, `celula_id`, `colaborador_id`, `data` | A porta copia IDs e dia da célula, e o ORM carimba a criação. Entram pela porta lavra, reversão, recompute, chamados/perguntas, semeadura e prazo. `app/escala/models.py:1862–1872`, `app/ponto/portas/celula.py:873`, `app/ponto/portas/celula.py:981–1002`, `app/chamados/reconciliador.py:1439–1452`, `app/ponto/services/vigia_de_hora.py:117–119`. | Consumidor ordena por criação/PK e agrupa por colaborador. Fábrica relê a célula atual pela data. HE usa criação no `max` por dia. Vigia usa o `Max` dos pendentes por par. Idade da fila usa o carimbo mais antigo. Semeadura consulta `celula_id`. `app/chamados/reconciliador.py:1400–1404`, `app/chamados/reconciliador.py:1436–1452`, `app/chamados/reconciliador.py:1485–1494`, `app/chamados/services/fabrica_da_celula.py:288–301`, `app/ponto/services/ponta_pequena.py:110–118`, `app/ponto/services/vigia_de_hora.py:102–114`. |
-| `DecisaoHE` e vigência | `_gravar` cria ou atualiza estado, minutos, motivo, autor e origem para o ato humano e o do sistema. `_marcar_revogada` grava as marcas de revogação, e `_gravar` as limpa ao redecidir. O ORM carimba criação e atualização. A trilha passa por `core.observ.evento`. `app/ponto/portas/he.py:44–99`, `app/ponto/portas/he.py:195–208`, `app/ponto/portas/he.py:388–390`, `app/ponto/portas/he.py:415–431`, `app/ponto/models.py:1316–1317`, `app/core/observ.py:133–138`. | `vigentes()` lê `revogada_em IS NULL`. A guarda compartilhada serve ao vigia e ao consumidor. A porta trava a linha crua e consulta o mesmo seletor. Motor, retrato, gestão de HE, espelho e portão do TXT leem vigentes diretamente ou pelo mapa de estado. `app/ponto/models.py:1265–1267`, `app/ponto/services/ponta_pequena.py:53–54`, `app/ponto/portas/he.py:130–148`, `app/ponto/portas/he.py:351–352`, `app/ponto/motor_calculo_v2.py:1397–1418`, `app/ponto/management/commands/lavrar_he_pendente.py:48–60`, `app/ponto/services/gestao_he.py:87–95`, `app/ponto/services/espelho.py:936–944`, `app/folha/porta_export.py:676–691`. |
-| `ExportacaoDominio` | `registrar` grava empresa, mês, ano, autor, nome, conteúdo, hash, linhas e reexportação. O ORM grava `gerado_em`. `invalidar` grava instante, motivo e ponteiro da substituta. `app/folha/models.py:75–102`, `app/folha/models.py:143–188`. | K6 e o anotador leem a tripla, `(gerado_em, pk)` e a invalidação da linha escolhida. `registrar` também lê a existência histórica para marcar reexportação. Histórico, downloads TXT/PDF, Haiku, vigia do TXT e regerador leem o acervo ou seus metadados. `app/folha/export.py:580–594`, `app/folha/models.py:174–187`, `app/folha/models.py:203–225`, `app/folha/views.py:535–552`, `app/folha/views.py:569–584`, `app/folha/views.py:839–856`, `app/folha/haiku_export.py:40–75`, `app/folha/services/vigia_txt.py:200–223`, `app/folha/management/commands/regerar_txt_dominio.py:69–81`. |
-| Cadastro, célula, instantes e minutos | Cadastro de empresa fornece limite e corte. Porta do colaborador grava situação. Portas da célula gravam `trabalha` e `veredito`. Comando do vigia e consumidor fornecem `agora`. O consumidor deriva o maior instante por data, e o espelho fornece os minutos pela soma do dia. `app/colaboradores/admin.py:7–19`, `app/colaboradores/views.py:515–557`, `app/colaboradores/services/colaborador.py:126–138`, `app/ponto/portas/celula.py:293–306`, `app/ponto/portas/celula.py:1127–1135`, `app/ponto/management/commands/vigia_de_hora.py:23–28`, `app/chamados/reconciliador.py:1480`, `app/ponto/services/ponta_pequena.py:110–118`, `app/ponto/services/he_pendente_lavrado.py:55–86`. | Vigia seleciona dias de trabalho. Guarda comum lê limite, situação e veredito. Janela e K6 leem o corte pelo dia do turno. O juiz recebe `agora` da passada ou o carimbo do pendente. O consumidor passa os minutos e o limite à porta, que grava os minutos como foto da decisão. `app/ponto/services/vigia_de_hora.py:22–30`, `app/ponto/services/vigia_de_hora.py:106–115`, `app/ponto/services/ponta_pequena.py:49–62`, `app/ponto/services/ponta_pequena.py:73–105`, `app/ponto/janelas.py:36–63`, `app/ponto/portas/he.py:388–390`. |
-
-_8133 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8135 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
