@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 20:15:23.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (11.2 MB). Acoes na janela: **353**.
+**Medido em 25/11/2026 20:21:29.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (11.2 MB). Acoes na janela: **354**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:15:42 | Bash |  | `cd /home/ronald/saas-hasner; ssh pista estado 2>&1 \| grep -E '5903\|0135'; ls logs/WRAPPER-N-VAGAS/v13/*.fim 2>/dev/null \| tail -3; ls -la logs/WRAPPER-N-VAGAS/v13/HANDBACK.md 2>&1 \| cut -c1-120` |
 | 20:07:06 | Bash |  | `cd /home/ronald/saas-hasner; echo "aval Ronald: WRAPPER-V13-SELO-DESTACADO-2511 (25/11 20:1x) -- morte v13 19:20 nao foi OOM; Killed sao do test_codex_n_vagas.sh:199 (titular morto), Terminated cortou a rodada presa ao agente. Construtor novo roda toda rodada de selo destacada (setsid + log + .fim em logs/WRAPPER-N-VAGAS/v13/), le depois; HANDBACK da v13 a cada marco." > logs/AVAIS-1515/WRAPPER-V1 ...` |
 | 20:07:00 | SendMessage |  | `-` |
 | 20:06:55 | ToolSearch |  | `-` |
