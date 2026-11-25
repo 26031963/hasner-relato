@@ -1,7 +1,112 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 05:17** · publicado em **25/11/2026 05:17** (UTC-3)
+> Ultima resposta processada: **25/11/2026 05:21** · publicado em **25/11/2026 05:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 05:21 · sessao 7293b1f4cbd9 · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · sonda · origem=Code
+
+Transcrição integral do trecho fornecido [nao verificado] em produção.
+
+```text
+sonda_leitura: sonda_retratadas.py [754713b38be06df3] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+2 202609 4 4
+2 202610 11 11
+3 202611 2 2
+```
+
+Soma das três linhas fornecidas (`4 + 11 + 2`) → **`total = 17`** e **`sem_decisao = 17`**. [nao verificado] em produção.
+
+## 25/11 05:20 · sessao e7dc0e4eaea1 · TIPO-NA-FONTE · sonda · origem=Code
+
+### Transcrição integral
+
+`DADO RASPADO:1–66` do texto enviado, contando o cabeçalho da execução como linha 1. O formato desse cabeçalho consta em [bin/sonda_leitura.sh:221](/home/ronald/codex_ws/71efa33d78925687bd2f64b4c368b61e2f72837d/bin/sonda_leitura.sh:221).
+
+```text
+sonda_leitura: sonda_estoque.py [6b7d1ffa767635de] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+empresa_pk=1 competencia=2026-09 ata_none=2 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1 ambas_descasadas=0 total=3
+empresa_pk=1 competencia=2026-10 ata_none=21 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=69 ambas_descasadas=0 total=90
+empresa_pk=1 competencia=2026-11 ata_none=4 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=58 ambas_descasadas=0 total=62
+empresa_pk=1 competencia=2026-12 ata_none=57 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3 ambas_descasadas=0 total=60
+empresa_pk=1 competencia=2027-01 ata_none=11 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=11
+empresa_pk=2 competencia=2024-01 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1600 ambas_descasadas=0 total=1600
+empresa_pk=2 competencia=2024-02 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2024-03 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2320 ambas_descasadas=0 total=2320
+empresa_pk=2 competencia=2024-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2024-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
+empresa_pk=2 competencia=2024-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2024-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
+empresa_pk=2 competencia=2024-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2024-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2024-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
+empresa_pk=2 competencia=2024-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2024-12 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
+empresa_pk=2 competencia=2025-01 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2025-02 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2025-03 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2240 ambas_descasadas=0 total=2240
+empresa_pk=2 competencia=2025-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2025-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2400 ambas_descasadas=0 total=2400
+empresa_pk=2 competencia=2025-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2480 ambas_descasadas=0 total=2480
+empresa_pk=2 competencia=2025-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2380 ambas_descasadas=0 total=2380
+empresa_pk=2 competencia=2025-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
+empresa_pk=2 competencia=2025-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
+empresa_pk=2 competencia=2025-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2370 ambas_descasadas=0 total=2370
+empresa_pk=2 competencia=2025-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
+empresa_pk=2 competencia=2025-12 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2370 ambas_descasadas=0 total=2370
+empresa_pk=2 competencia=2026-01 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
+empresa_pk=2 competencia=2026-02 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2449 ambas_descasadas=0 total=2449
+empresa_pk=2 competencia=2026-03 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2212 ambas_descasadas=0 total=2212
+empresa_pk=2 competencia=2026-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=2588 ambas_descasadas=0 total=2588
+empresa_pk=2 competencia=2026-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1793 ambas_descasadas=0 total=1793
+empresa_pk=2 competencia=2026-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=995 ambas_descasadas=0 total=995
+empresa_pk=2 competencia=2026-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=160 ambas_descasadas=0 total=160
+empresa_pk=2 competencia=2026-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=12691 ambas_descasadas=0 total=12691
+empresa_pk=2 competencia=2026-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=13179 ambas_descasadas=0 total=13179
+empresa_pk=2 competencia=2026-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=13466 ambas_descasadas=0 total=13466
+empresa_pk=2 competencia=2026-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=14096 ambas_descasadas=0 total=14096
+empresa_pk=2 competencia=2026-12 ata_none=11676 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1628 ambas_descasadas=0 total=13304
+empresa_pk=2 competencia=2027-01 ata_none=779 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=779
+empresa_pk=2 competencia=2027-02 ata_none=31 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=31
+empresa_pk=2 competencia=2027-03 ata_none=28 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=28
+empresa_pk=2 competencia=2027-04 ata_none=31 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=31
+empresa_pk=2 competencia=2027-05 ata_none=30 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=30
+empresa_pk=2 competencia=2027-06 ata_none=31 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=31
+empresa_pk=2 competencia=2027-07 ata_none=16 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=16
+empresa_pk=3 competencia=2026-06 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=4 ambas_descasadas=0 total=4
+empresa_pk=3 competencia=2026-07 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=57 ambas_descasadas=0 total=57
+empresa_pk=3 competencia=2026-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3552 ambas_descasadas=0 total=3552
+empresa_pk=3 competencia=2026-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3530 ambas_descasadas=0 total=3530
+empresa_pk=3 competencia=2026-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3418 ambas_descasadas=0 total=3418
+empresa_pk=3 competencia=2026-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=3565 ambas_descasadas=0 total=3565
+empresa_pk=3 competencia=2026-12 ata_none=2767 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=375 ambas_descasadas=0 total=3142
+empresa_pk=3 competencia=2027-01 ata_none=187 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=187
+empresa_pk=4 competencia=2026-04 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=1 ambas_descasadas=0 total=1
+empresa_pk=4 competencia=2026-05 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=30 ambas_descasadas=0 total=30
+empresa_pk=4 competencia=2026-08 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=651 ambas_descasadas=0 total=651
+empresa_pk=4 competencia=2026-09 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=620 ambas_descasadas=0 total=620
+empresa_pk=4 competencia=2026-10 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=660 ambas_descasadas=0 total=660
+empresa_pk=4 competencia=2026-11 ata_none=0 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=682 ambas_descasadas=0 total=682
+empresa_pk=4 competencia=2026-12 ata_none=554 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=76 ambas_descasadas=0 total=630
+empresa_pk=4 competencia=2027-01 ata_none=11 sem_chaves=0 so_orfas=0 so_n_orfas=0 ambas_casadas=0 ambas_descasadas=0 total=11
+```
+
+### Soma por forma na frota do dado raspado
+
+| Forma | Soma | Fonte |
+|---|---:|---|
+| `ata_none` | 16.236 | `DADO RASPADO:3–66` |
+| `sem_chaves` | 0 | `DADO RASPADO:3–66` |
+| `so_orfas` | 0 | `DADO RASPADO:3–66` |
+| `so_n_orfas` | 0 | `DADO RASPADO:3–66` |
+| `ambas_casadas` | 142.485 | `DADO RASPADO:3–66` |
+| `ambas_descasadas` | 0 | `DADO RASPADO:3–66` |
+| **Total** | **158.721** | `DADO RASPADO:3–66` |
+
+As 64 linhas de contagem fecham individualmente, e a soma por forma coincide com a soma da coluna `total`. `DADO RASPADO:3–66`.
+
+A regra de competência 21–20 em `sonda_estoque.py`, o código de saída da execução e a cobertura da frota em produção ficam [nao verificado].
 
 ## 25/11 05:17 · sessao f7f8eae2d55d · TIPO-NA-FONTE · leitura · origem=Code
 
@@ -870,90 +975,4 @@ Execução dos REDs, dos mutantes e da suíte [nao verificado]. [nao verificado]
 - **Ata antiga sem a chave.** Para o lastro, ausência ou formato inválido dá `None`. `[]` dá lastro para o PK antigo quando há lâmpadas e nenhuma pendente. Nos comandos de diagnóstico e emissão, `None` e `[]` seguem o mesmo ramo convencional. Uma célula antiga com impressão igual pode continuar sem a chave. `app/ponto/services/lastro.py:81`, `app/ponto/services/lastro.py:91`, `app/ponto/management/commands/supra_juiz.py:209`, `app/ponto/management/commands/emitir_furo_retroativo.py:95`, `app/ponto/services/cartorio.py:1508`
 - **Chamado já retratado por motivo antigo.** O `supra_juiz` seleciona `VIVOS`, portanto não reescreve a nota do chamado resolvido. Para um novo sem par lavrado nesse dia, o retroativo para na existência do chamado antigo e não consulta a porta de renascimento. O cartório chega à porta com a lista nova quando pode emitir, e a porta avalia a premissa pelos marcos pedidos. O relato da cópia registra chamados vivos de turno nos dois dias citados, o que também barra a emissão pelo retroativo. A situação atual desses casos [nao verificado]. `app/ponto/management/commands/supra_juiz.py:211`, `app/ponto/management/commands/emitir_furo_retroativo.py:81`, `app/ponto/management/commands/emitir_furo_retroativo.py:153`, `app/ponto/services/cartorio.py:1967`, `app/chamados/models.py:987`, `app/chamados/models.py:1346`, `app/docs/RELATO.md:4`
 
-## 24/11 23:31 · sessao cd1f6d7a644a · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · verificador · origem=Code
-
-**Volta 4, v8 — aval pendente.** O delta alinha o dia usado para classificar a folga trabalhada com o dia usado para gravá-la no `DiaPago`. A v8 anexada ainda deixa a **catraca de linhas vermelha**. A sonda em memória confirmou que o registro conserva as duas derivações civis removidas, `944` e `956`, e espera `_so_a_data` em `1578`, quando a linha passa a `1582`. A contagem por função fica igual, pois `recalcular_fechamento_mes` ainda contém outras derivações que o censo conta. `app/ponto/services/fechamento.py:935,947,1569` (base), `app/core/medida_turno_do_par.py:48–51,197–226`, `app/core/tests/test_medida_turno_do_par.py:327–329,560–564` e o registro de `LINHAS_REGISTRADAS` no patch completo v8.
-
-Usei as linhas da cópia para o código comum e marquei **v8** nas referências ao patch. A identidade Git da cópia, a execução da suíte Django e os efeitos em produção estão [nao verificado]. [nao verificado]
-
-## 1. Quem escreve e quem lê o dia
-
-**Escritores.** `MotorBase._turnos_do_juiz` chama `turnos_de_batidas`. `_dia_do_turno` indexa `data_turno` pelo instante localizado das batidas de tipo gravado `E`. `MotorBase.calcular_mes` publica esse mapa cru em `_dia_turno_juiz_calc`, aplica a herança por gap de 0 a 6 h e registra o dia resultante por `id(periodo)` antes de separar `periodos` e `periodos_ft`. `_aplicar_teto_pontualidade` publica esse segundo mapa em `resultado.dia_da_jornada`. `app/ponto/motor_calculo_v2.py:867–895,1068–1077,2342–2356,2391–2409,2457–2494,2718–2721`.
-
-**Sobrescritas e composição.** O Turno Partido remonta o dia pelo juiz, com fallback civil da entrada crua, para **normais e FT**. Seu `update` pode sobrescrever o dia herdado para o mesmo `id`. O Comercial remonta o dia só dos **normais** e preserva o dia herdado dos FT ao mesclar. `apurar_por_fatia` concatena os mesmos objetos e mescla os mapas por identidade. `app/ponto/motor_calculo_v2.py:2921–2959,3192–3196,3325–3330,3508–3509,1073–1075`, `app/ponto/services/fechamento.py:286–316`.
-
-| Leitor | Dia que usa |
-|---|---|
-| **Motor v2, classificação inicial e bloqueio** | A entrada em `periodos_ft` e a consulta de escala certa no bloqueio sem previsto usam `data_jornada` **após a herança**. A dobra e o alerta **por período** do 12×36 e do Comercial usam o mapa cru do juiz, pela entrada crua, com fallback na data civil local dessa entrada. Isso pode alcançar um objeto que depois entra em FT. A dobra mensal do Comercial e do Turno Partido percorre só `resultado.periodos`. `app/ponto/motor_calculo_v2.py:1440–1469,2445–2494,3081–3097,3325–3359`, **v8** `app/ponto/motor_calculo_v2.py:936–951,2814–2845,3283–3303`. |
-| **Fechamento, partição de FT** | `_certa` recebe `_dia_de(p, resultado.dia_da_jornada)`. A mesma leitura fornece a data de `escala_vigente` e de `feriado_vira_folga`. O mensal e as duas lavras recebem a partição resultante por identidade. **v8** `app/ponto/services/fechamento.py:940–963`. `app/ponto/services/fechamento.py:951–985,1200–1217,1277–1288` (base). |
-| **`DiaPago.lavrar`** | `_dia_de` agrupa por `id(p)` no mapa para períodos normais, FT com escala certa, FT em feriado e FT sem escala certa. O dia resultante vira `DiaPago.data`. `retratar_exportada` trabalha com datas da grade e linhas já gravadas. `app/ponto/services/dia_pago.py:109–132,173–183,234–267,340–360,446–487`. |
-| **Calculador v3 e S5** | V3 e S5 leem o mapa por `id(p)` e deixam de agrupar períodos sem dia. S5 usa o dia agrupado para vínculo, escala certa e folga-feriado. A dobra da releitura v3 recebe o mesmo dia para o grupo de trabalho normal. `app/ponto/calculador/alimentacao.py:73–92,193–207,239–263,449–525`, `app/ponto/calculador/periodo.py:596–614,776–779,816–844`. |
-| **Folha, TXT e sétima testemunha** | O TXT lê as rubricas do mensal, inclusive dos objetos recalculados em leitura no fluxo de geração. A sétima testemunha usa `_dia_de` com o mapa, mudança já presente no v7 anexado, e compara **horas trabalhadas por dia** com `DiaPago`. `app/folha/views.py:209–214,264–270`, `app/folha/export.py:402–446,713–738`, **v8** `app/folha/porta_export.py:69,103–124`. |
-| **Tela, app, PDF e holerite** | Espelho, app e PDF leem o pago pela data gravada em `DiaPago`. Para montar os cartões ao vivo, espelho e app usam o dia do juiz da batida de entrada. **O resumo ao vivo do espelho ainda usa a data civil da entrada** para incluir FT no recorte da competência. O PDF chama a mesma soma sem esse recorte civil. O holerite lista documentos por competência e entrega o PDF armazenado. `app/ponto/services/dia_pago.py:854–856,890–898`, `app/ponto/services/espelho.py:81–98,435–474,819–831`, `app/api/views.py:1444–1455,1475–1485,1537–1559`, `app/relatorios/pdf_espelho.py:498–515,835–862`, `app/holerite/views.py:1286–1300,1445–1459`. |
-| **Outros leitores civis** | O O85 ainda agrupa **horas órfãs pagas** pela data civil da entrada e entrega esse agrupamento à lavra. O laço aceita as duas listas, mas o motor desse ramo roda sem template nem vínculo, logo não produz FT pelas condições atuais. O `diff_calculador` usa um índice por instante derivado do mapa mensal e cai no civil quando esse índice não responde. É diagnóstico. `app/ponto/services/fechamento.py:817–842`, `app/ponto/motor_calculo_v2.py:2323–2339,2359–2365,2445–2494,3640–3645`, `app/ponto/services/dia_pago.py:269–272`, `app/ponto/management/commands/diff_calculador.py:211–225,235–244,263–268`. |
-
-## 2. Quando o mapa falta
-
-- **No fluxo normal, todo FT sai com chave.** A tela e o comando de recálculo chamam o mesmo serviço, que monta motores por fatia. Todo período admitido no resultado recebe `id → dia`, inclusive o aberto. Uma falta no **mapa cru** já vira um dia no mapa mensal por fallback civil ou por herança. Intermitente herda o mês do `MotorBase` pelo 12×36 e tem guarda contra tratar convocação como folga do vínculo. Turno Partido primeiro chama o base, depois mescla também seus FT. `app/ponto/views.py:1280–1281`, `app/ponto/management/commands/recalcular_fechamento.py:118–120`, `app/ponto/services/fechamento.py:278–316,735–756`, `app/ponto/motor_calculo_v2.py:2399–2409,2445–2494,2718–2721,2907–2910,2951–2959,3560–3581`.
-- **O atributo pode faltar no resultado composto vazio.** `ResultadoMes` nasce sem declarar `dia_da_jornada`. A composição só cria o atributo ao receber um mapa não vazio. Sem FT, a v8 não avalia o acesso direto. Com FT e atributo ausente, situação que exigiria falha na publicação ou quebra do contrato dos resultados, a v8 levanta `AttributeError` antes de chamar `_dia_de`. O `except` preexistente registra o erro e pula o colaborador. A chamada da lavra usa `getattr(..., None)` e, se alcançada, aceita essa ausência. `app/ponto/motor_calculo_v2.py:268–290,1068–1077`, `app/ponto/services/fechamento.py:180–182,311–316,1214–1217,1287,1303–1308`, **v8** `app/ponto/services/fechamento.py:947–960`.
-- **Com atributo presente**, `None`, mapa vazio, chave ausente ou valor `None` fazem fechamento e lavra usarem a mesma **data civil local da entrada**. Sem entrada, o helper devolve `None` e a lavra pula a linha. O motor constrói seus períodos a partir de uma entrada. Ocorrência de FT sem mapa mensal ou sem chave na v8 [nao verificado]. `app/ponto/services/dia_pago.py:126–132,234–263`, `app/ponto/motor_calculo_v2.py:2400–2409,2457–2460,2750–2755,3215–3220`, **v8** `app/ponto/services/fechamento.py:947–960`.
-
-## 3. Importação e juiz registrado
-
-**É o mesmo dono.** O import privado novo dá outro nome à mesma função. O outro importador de produção no patch completo é `folha/porta_export.py`, desde o v7. Na cópia, o teste O116 importa o helper para testar mapa presente, chave ausente e entrada ausente. O registro vivo nomeia o **turno da batida**, a **existência de feriado** e a **dobra por ciclo**. A pergunta sobre quais horas de um turno que cruza a meia-noite contam como feriado está em `SEM_JUIZ`. Nem a tabela anexa nem o registro vivo têm entrada própria para **“dia do período pago”**. **v8** `app/ponto/services/fechamento.py:946–948`, `app/folha/porta_export.py:69,103–110`. `app/ponto/services/dia_pago.py:109–132`, `app/ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py:58–81`, `app/docs/JUIZES.md:10–15,114–130`, `app/core/juizes.py:173,196,216,310–316,357–364`.
-
-## 4. Mordida dos testes [nao verificado]
-
-Reproduzi em memória as condições do selo AST e sondei os ramos de feriado com o dia do juiz e as pontas fixados. No Comercial, incluí o trecho que zera e recompõe HE100 por dia. O resultado abaixo é dessas sondas. A execução das fixtures completas está [nao verificado]. `app/ponto/motor_calculo_v2.py:3325–3383`, **v8** `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:216–311`, `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:30–69`.
-
-| Caso | Derruba | Sobrevive ao caso |
-|---|---|---|
-| **12×36, feriado no turno** | Dobra por período no civil, **240 → 0**. Data civil só no texto do alerta, **02/11 → 03/11**. | Trocar só a consulta `feriado = eh_feriado(...)` para o civil. O `if` da dobra correta ainda escreve a rubrica e o alerta. **v8** `app/ponto/motor_calculo_v2.py:2814–2845`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:212–215,286–305`. |
-| **12×36, feriado só civil** | `eh_feriado` no civil cria alerta indevido com HE100 ainda em **0**. Dobra no civil cria **103** de HE100. | Formatar a data dos alertas pelo civil, pois nesse caso nenhum alerta deve sair. **v8** `app/ponto/motor_calculo_v2.py:2814–2845`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:207–211,286–302`. |
-| **Comercial, feriado no turno** | Dobra do **laço diário** no civil, **240 → 0**. Alerta do par com data civil também cai, pois introduz **03/11** no conjunto de datas. | Dobra **só por período** no civil. Ela cai de **240 → 0** antes do mensal, que recompõe **240**. O alerta “PREVISTO” do par e o alerta da dobra diária nomeiam ambos **02/11**, e o teste aceita esse conjunto. `app/ponto/motor_calculo_v2.py:3331–3364`, **v8** `app/ponto/motor_calculo_v2.py:3283–3300`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:216–223,286–308`. |
-| **Comercial, feriado só civil** | `eh_feriado` do par no civil cria alerta indevido com **103 trabalhados e 0 HE100**. A dobra do par no civil também cai pelo alerta que sobra após o reset mensal. | Formatar só a data de alertas pelo civil. Sem alerta neste caso, a mutação passa. `app/ponto/motor_calculo_v2.py:3331–3383`, **v8** `app/ponto/motor_calculo_v2.py:3283–3300`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:224–230,286–311`. |
-| **AST de `_certa`** | Voltar ao civil, passar `_dia_turno_juiz_calc` diretamente ou chamar `_dia_de(p)` sem mapa. O mapa cru também tem chaves incompatíveis com `id(p)`. | `outro.dia_da_jornada` ou passar o período errado. O selo confere o nome do atributo e a aridade, sem conferir o objeto de origem nem o primeiro argumento. `app/ponto/motor_calculo_v2.py:884–895`, `app/ponto/services/dia_pago.py:126–132`, **v8** `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:22–49`. |
-| **AST de `_ft_feriado`** | Trocar a atribuição de `_d_f` para a data de `p.saida`, passar o mapa cru diretamente ou omitir o mapa. | Buscar o **vínculo** pela data de `p.saida` em `_ev_fer` e continuar passando `_d_f` a `feriado_vira_folga`. Também passa calcular `_d_f` com `_ft_certa[0]` em toda iteração. **v8** `app/ponto/services/fechamento.py:957–963`, `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:51–69`. |
-
-Assim, os dois casos Comercial juntos pegam a volta da dobra por período ao civil, pelo **alerta** do caso só civil. Os selos AST pegam as regressões diretas e deixam passar regressões de fluxo de dados, inclusive o mapa publicado com conteúdo errado. Nenhum dos testes novos exercita a sequência FT → classificação no fechamento → linha `DiaPago`. **v8** `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:279–311`, `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:16–69`.
-
-## 5–6. Classes de reprovação e pendências da volta 3
-
-| Classe | Veredito |
-|---|---|
-| **Segundo juiz registrado** | **Improcedente no delta.** A v8 acrescenta um leitor do helper existente e conserva os predicados de escala certa, vínculo e feriado. **v8** `app/ponto/services/fechamento.py:940–963`. `app/escala/services/escala_certa.py:49–51`, `app/escala/servico_jornada.py:15–38`, `app/escala/models.py:1384–1406`. |
-| **Segundo escritor fora da porta** | **Procedente e preexistente.** `restaurar_fechamento` atualiza rubricas sem consultar a guarda. Os três scripts de restauração escrevem `DiaPago` diretamente. `lavrar` também não consulta a guarda por conta própria, e suas duas chamadas de produção identificadas vêm do recálculo, depois do filtro. O lote geral ainda pode incluir empresa inativa que a consulta da guarda exclui. O delta v7→v8 não amplia esses caminhos. `app/ponto/services/fechamento.py:428–445,539–575,1200–1217,1277–1288,1358–1396,1507–1515`, `app/ponto/services/dia_pago.py:359–360`, `bin/restore_o263_comp10.py:54–56`, `bin/restore_relavratura_10_2026.py:84–86`, `bin/restore_badge_linha_09_10.py:59–63`. |
-| **Relógio e ordem de trava** | **Sem novo sítio no delta.** `_dia_de` recebe um instante existente. A guarda segue antes das escritas e os carimbos do escritor já liam `timezone.now()`. A consulta da guarda e as escritas continuam em pontos distintos. Uma trava compartilhada com a exportação em execução concorrente está [nao verificado]. `app/ponto/services/dia_pago.py:126–132`, `app/ponto/services/fechamento.py:539–575,898–900,1137–1168,1191–1217`, **v8** `app/ponto/services/fechamento.py:940–963`. |
-| **Derivação paralela** | **Curada na partição FT, ainda procedente no motor.** Mapa cru e dia após gap já podiam divergir no v7. O Turno Partido ainda pode sobrescrever o dia após a classificação inicial. Há um efeito possível na v8: a promoção a HE100 feriado passa a usar o dia da lavra e soma `minutos_extra_100_noturna` que o 12×36 ou Comercial pode ter calculado sob o dia cru. A divergência de origem continua preexistente. Uma ocorrência desse efeito na frota está [nao verificado]. `app/ponto/motor_calculo_v2.py:1007–1022,2403–2409,2445–2461,2951–2959`, `app/ponto/services/fechamento.py:954–964`, `app/ponto/services/dia_pago.py:244–253`, **v8** `app/ponto/motor_calculo_v2.py:2814–2855,3283–3308`, `app/ponto/services/fechamento.py:957–960`. |
-| **Selo/RED e pré-requisito** | **Procedente para a catraca desatualizada.** Os novos testes têm mordida parcial, conforme a tabela. As linhas esperadas do fechamento precisam corresponder ao próprio patch para a catraca passar. Pouso real, publicação da Pauta DP, ordem dos atos e preservação dos gravados após a v8 estão [nao verificado]. `app/core/tests/test_medida_turno_do_par.py:560–564`, **v8** `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:30–69` e registro de `LINHAS_REGISTRADAS` no patch completo. |
-| **Campo com dois significados e `except` novo** | **Nenhum campo novo e zero `except` adicionado no delta.** O fechamento continua com **9 → 9** handlers na sonda AST. A distinção relevante é entre os dois mapas que já existiam, um por instante de batida e outro por identidade do período. A novidade de borda é o acesso direto ao atributo dinâmico na classificação. `app/ponto/motor_calculo_v2.py:884–895,1068–1077,2457–2461`, `app/ponto/services/fechamento.py:100–108,1303–1308`, **v8** `app/ponto/services/fechamento.py:940–963`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:216–311`, `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:1–69`. |
-
-## 24/11 23:28 · sessao 00d4b2ec9141 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · leitura · origem=Code
-
-**A conta fecha em 0,00 min no HEAD e 38,25 min na cura.** `_julgar_pontualidade` grava **117,71** no par 1 nas duas árvores. O passe diário da L-093 reescreve o campo usando `trab + fora` dos dois pares. O par 2 já pertence à jornada de **13/11** no HEAD. A troca é na **data da janela**, de 14/11 para 13/11, e altera **dois** insumos do teto: `trab` e `fora`. `c841_diff.txt:1–2`, `c841_head.txt:6–9`, `c841_cura.txt:7–10`, `app/ponto/motor_calculo_v2.py:2217–2226,1186–1196` (HEAD), `app/ponto/motor_calculo_v2.py:2233–2242,1203–1213` (v8).
-
-### Quem escreve o campo
-
-1. **L-084 e tolerância.** Com as batidas cruas do par 1, a entrada está **7,0869167 min antes** das 19:00 e a saída está **117,7136167 min antes** das 07:00. A L-084 exige que **ambas** as distâncias absolutas superem 180 min. `aplicar_tolerancia` usa **10 min por marcação** e devolve o desvio integral quando ele passa do limite. Os **5 min** aparecem na constante `TOLERANCIA_MINUTOS` e na docstring, enquanto a comparação executada usa `TOLERANCIA_CONFORMIDADE_MIN = 10`. O retorno é `(0, 117,71361666666667)` para o par 1 e `(0, 0)` para o par 2 nos dois anexos. `_julgar_pontualidade` grava `round(117,71361666666667, 2) = 117,71`. `c841_head.txt:8–9`, `c841_cura.txt:9–10`, `app/ponto/motor_calculo_v2.py:47–61,1931–1952,1970–1976,1988–2010,2217–2226` (HEAD), `app/ponto/motor_calculo_v2.py:47–61,1947–1968,1986–1992,2004–2026,2233–2242` (v8).
-2. **Intervalo e passe do dia.** A saída do par 1 às `05:02:17.183` fica a **242,2863833 min** do início de intervalo às 01:00, fora do raio de 90 min que permitiria tratar essa saída como ida à pausa. O passe O73 pula o dia quando `hii` e `hfi` existem. Os **60 min** entram no **previsto líquido**, `720 − 60 = 660`. O `trab` observado do par 1 é a duração efetiva integral de `19:00 → 05:02:17.183`, **602,2863833 min**, o que dá **0 min de intra real deduzido** desse par. A última escrita é a do teto diário em `_aplicar_teto_pontualidade`. `c841_head.txt:4,6`, `c841_cura.txt:5,7`, `app/escala/regua_defesa.py:395,445–459`, `app/escala/utils.py:2276–2285,2302–2331`, `app/ponto/motor_calculo_v2.py:2172–2176,2697–2718,2761–2787` (HEAD), `app/ponto/motor_calculo_v2.py:2188–2192,2713–2734,2777–2803` (v8).
-
-### A conta do teto, em minutos
-
-O passe agrupa por **dia da jornada**. Ele calcula `teto = max(0, previsto − Σ(trab + fora))` e, como **117,71** é toda a pontualidade a reduzir neste caso, grava `round(117,71 × (teto / 117,71), 2)`. `c841_diff.txt:1–2`, `c841_head.txt:8–9`, `c841_cura.txt:9–10`, `app/ponto/motor_calculo_v2.py:1080–1086,1170–1196` (HEAD), `app/ponto/motor_calculo_v2.py:1097–1103,1187–1213` (v8).
-
-| Insumo ou resultado | HEAD | Cura v8 | Fonte |
-|---|---:|---:|---|
-| Previsto líquido de 13/11 | 660 | 660 | `c841_head.txt:4`, `c841_cura.txt:5`, `app/escala/utils.py:2280–2331` |
-| Par 1, `trab + fora` | `602,2863833333333 + 7,086916666666666 = 609,3733` | `609,3733` | `c841_head.txt:6`, `c841_cura.txt:7` |
-| Par 2, `trab + fora` | `0 + 732,37895 = 732,37895` | `6,474183333333333 + 5,904766666666666 = 12,37895` | `c841_head.txt:7`, `c841_cura.txt:8` |
-| Soma do dia | `1.341,75225` | `621,75225` | `app/ponto/motor_calculo_v2.py:1186–1187` (HEAD), `:1203–1204` (v8) |
-| Teto da L-093 | `max(0, −681,75225) = 0` | `max(0, 38,24775) = 38,24775` | `app/ponto/motor_calculo_v2.py:1188` (HEAD), `:1205` (v8) |
-| Escrita final no par 1 | `round(117,71 × 0, 2) = 0,00` | `round(117,71 × (38,24775 / 117,71), 2) = 38,25` | `app/ponto/motor_calculo_v2.py:1191–1196` (HEAD), `:1208–1213` (v8) |
-
-O **gap** de `05:02:17.183 → 06:53:31.549` é **111,23943333333334 min**. Na cura, a mesma conta pode ser escrita como **`111,23943333333334 − 60 − 7,086916666666666 − 5,904766666666666 = 38,24775`**. Os dois últimos termos são a chegada antes das 19:00 e a saída após as 07:00. O gap aparece nessa reexpressão da conta. No código ele também serve à herança do dia da jornada, pois está dentro de 6 h. `c841_cura.txt:5,7–8`, `app/ponto/motor_calculo_v2.py:1186–1188,2403–2408` (HEAD), `app/ponto/motor_calculo_v2.py:1203–1205,2419–2424` (v8).
-
-**O que muda entre as árvores.** No HEAD, o marco de entrada do par 2 cai às **19:00 de 14/11**, **726,4741833 min depois** da batida de entrada. O efetivo fica invertido, `trab` cai a zero, e `fora` soma esses **726,4741833** aos **5,9047667** da saída. Na cura, o marco cai às **19:00 de 13/11**: a entrada real passa a contar e o recorte da saída continua às **07:00 de 14/11**. Assim, `trab` sobe **6,4741833**, `fora` cai **726,4741833**, e a soma usada pelo teto cai **exatamente 720 min**. Se só `trab` mudasse, o resultado seguiria **0,00**. Se só `fora` mudasse, daria **44,72**. `c841_head.txt:7`, `c841_cura.txt:8`, `c841_diff.txt:2`, `app/ponto/janela_he.py:94–103` (HEAD), `app/ponto/janela_he.py:127–136` (v8), `app/ponto/motor_calculo_v2.py:1528,2759–2787,1186–1196` (HEAD), `app/ponto/motor_calculo_v2.py:949–951,1549,1716–1722,2775–2803,1203–1213` (v8).
-
-A reconstrução reproduz os dois valores ao centésimo. A sonda registra as chamadas de tolerância e os campos finais. O valor interno de `_previsto_min`, as guardas do passe e a origem de cada ocorrência dos `cxr=2` do DIFF ficam **[nao verificado]** como telemetria da execução. A linha `2217` impressa na sonda corresponde ao HEAD; no texto pós-patch v8, a chamada está na `2233`. A revisão exata da árvore que gerou `c841_cura.txt` fica **[nao verificado]**. `sonda_c841.py:19–22,37–44`, `c841_cura.txt:2,9–10`, `c841_diff.txt:3`, `app/ponto/services/espelho.py:1187–1194`, `app/ponto/motor_calculo_v2.py:2217` (HEAD), `app/ponto/motor_calculo_v2.py:2233` (v8).
-
-_8129 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8131 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
