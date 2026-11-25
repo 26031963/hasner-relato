@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 16:31:33.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (45.4 MB). Acoes na janela: **1074**.
+**Medido em 25/11/2026 16:38:20.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (45.5 MB). Acoes na janela: **1082**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:38:07 | Bash | Read FERIADO c3 and PAR c6 evidence | `cd ~/saas-hasner; F=logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3; cat $F/green1.rc $F/green2.rc $F/iso_435.rc $F/sonda1.rc $F/sonda2.rc; for f in green1 green2 iso_435; do grep -E '^(OK\|FAILED)($\| \()' $F/$f.log \| tail -1; done; head -20 $F/CASOS.md \| cut -c1-200; tail -20 logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6/entrega.md \| cut -c1-200; cat logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6/alvo.rc logs/PAR-R ...` |
+| 16:38:02 | Bash | Gather FERIADO c3 and PAR c6 state for handoff | `cd ~/saas-hasner; ls logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/ \| head -30; echo ---; ls logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6b/ logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6 2>/dev/null \| head -30; cd /home/ronald/wt-par-c3-ok-112401 && git log --oneline -3 && git status --porcelain \| head; cd /home/ronald/wt-feriado-c3-154803 && git log --oneline -2 && git status --porcelain \| head` |
+| 16:37:58 | SendMessage |  | `-` |
+| 16:37:56 | TaskStop |  | `-` |
+| 16:37:56 | TaskStop |  | `-` |
+| 16:37:55 | TaskStop |  | `-` |
+| 16:37:52 | Bash | Find log paths of detached jobs | `cd ~/saas-hasner; for p in 2881657 2888044; do tr '\0' ' ' < /proc/$p/cmdline \| grep -oE "> *logs/[^ ]*" ; echo; done; for p in 1662588 2907551; do tr '\0' ' ' < /proc/$p/cmdline \| grep -oE "eval.{0,250}"; echo; done` |
+| 16:37:48 | Bash | Save aval and list jobs of FERIADO, PAR, A4 | `cd ~/saas-hasner; echo "aval Ronald: CLEAR-AGORA-2511 (25/11 16:3x) -- encerrar ja os agentes que so vigiam (Aguardando diagnostico V1, Polling c6b): o job deles segue solto e a sessao nova le o log. O construtor A4 (opus): se entregar em ate 5 min, recolhe; senao encerra -- a wt e os commits dele ficam e a sessao nova relanca. Gerar o handoff com cada obra viva, a volta, o job solto e o log de ca ...` |
 | 16:30:39 | Bash | Check why map launch exited | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/mapa; cat $D/rc; cat $D/wrap.log \| tail -5` |
 | 16:30:21 | Bash | Launch Codex cartorio map, record state | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ; cat > $D/mapa/q.txt <<'EOF' OBRA A-TELA-DO-DIA-LE-UM-JUIZ -- MAPA DO CARTORIO (aval HIGIENE-ANTES-DO-COMPACT-2511 item 3: a v17 reprovou, nao abre v18; sai o mapa e a obra volta com contrato novo). Leia o codigo do HEAD (o hash da chamada), NAO o diff da v17. Anexos: as duas ultimas respostas do verificador (v16, v17), a triagem v17, a sonda de pr ...` |
 | 16:30:00 | Bash | Size A-TELA attachments for map question | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ; mkdir -p $D/mapa; wc -c $D/v17/r_verif.txt $D/v16/r_verif.txt $D/v17/triagem_verif17.txt $D/v17/r_sonda.txt $D/v17/diff_v17.txt app/docs/JUIZES.md 2>&1 \| tail -7; ls $D \| head -30` |
