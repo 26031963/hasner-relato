@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 23:56** · publicado em **24/11/2026 23:58** (UTC-3)
+> Ultima resposta processada: **25/11/2026 00:07** · publicado em **25/11/2026 00:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 00:07 · sessao 6261fc602395 · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
+
+**B4′ — `sem_par_no_horizonte` e `_julgar_colab_corpo`.** O horizonte recorta o sinal pela competência. K6 é consultado antes da impressão, pelo mês e ano do fim da janela. Em competência entregue, o lote pula a célula se houver sinal atual ou acusação gravada na ata. Isso protege tanto contra pôr quanto contra retirar a acusação. As demais células seguem o mesmo caminho nos dois estados de K6. [Horizonte](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/services/cartorio.py:332) · [Guarda K6](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/services/cartorio.py:1245) · [Portão do lote](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/services/cartorio.py:1509)
+
+**B1′ — `emitir_furo_retroativo.Command.handle`.** Para o furo lavrado na ata, só chamado `VIVOS` do dia barra a emissão. O resolvido deixa os marcos lavrados chegarem à porta, que decide o renascimento. O filtro convencional continua barrando pela lista inteira. Retornos `VETO_*` incrementam `vetados`, e os demais retornos incrementam `emitidos`. [Filtro do retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/management/commands/emitir_furo_retroativo.py:154) · [Porta de renascimento](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/chamados/models.py:987) · [Contadores](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/management/commands/emitir_furo_retroativo.py:160)
+
+- **REDs B4′.** Mesmo turno de 21/10 na competência 11, com K6 `False → True`, preserva impressão, ata, veredito e protestos após o lote. Há casos adicionais para a ata anterior à regra e para a acusação gravada cujo sinal atual sumiu. [Transição de K6](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/tests/test_a_tela_v3_sem_par.py:177) · [Ata anterior](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/tests/test_a_tela_v3_sem_par.py:204) · [Sinal que sumiu](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/tests/test_a_tela_v3_sem_par.py:224)
+- **REDs B1′.** O resolvido deixa passar o PK e a âncora lavrados. O vivo ainda barra. `VETO_REGUA` resulta em `vetados=1` e `emitidos=0`. [Resolvido e vivo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/tests/test_a_tela_v3_sem_par.py:238) · [Veto](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/tests/test_a_tela_v3_sem_par.py:264)
+- **Catraca.** As mesmas expressões do cartório foram repinadas de `1302/1457` para `1314/1472`. [LINHAS_REGISTRADAS](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/core/tests/test_medida_turno_do_par.py:319)
+
+Comandos para o Code, com um mutante em memória por bloqueio. [Runner](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-000128/app/ponto/tests/test_a_tela_v4_mutantes.py:13)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python manage.py test --settings=config.settings.ci ponto.tests.test_a_tela_v3_sem_par.SemParV3Test core.tests.test_medida_turno_do_par
+
+PYTHONDONTWRITEBYTECODE=1 A_TELA_V4_MUTANTE=b4-sem-portao python manage.py test --settings=config.settings.ci --testrunner=ponto.tests.test_a_tela_v4_mutantes.Runner
+
+PYTHONDONTWRITEBYTECODE=1 A_TELA_V4_MUTANTE=b1-retroativo-v3 python manage.py test --settings=config.settings.ci --testrunner=ponto.tests.test_a_tela_v4_mutantes.Runner
+```
+
+Execução dos REDs, dos mutantes e da suíte [nao verificado]. [nao verificado]
 
 ## 24/11 23:56 · sessao 8dbb409d8b7c · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
 
@@ -763,14 +785,4 @@ Nos 13 pares, toda mudança registrada de `efE` fica na mesma data civil, portan
 
 **Col218 merece menção separada.** O delta contém +102,8 de HE100 de feriado. A recuperação de duração permite a rubrica, mas a regra L-085 para classificá-la depende de qual agregador correu e dos feriados. Os métodos por período ainda consultam `e.date()` em 15/11, enquanto agregadores por dia e a releitura usam o dia da jornada. O dia do juiz no diff é 14/11. A origem exata e o efeito na folha estão [nao verificado]. `diff_comp11_v2.txt:14`, `app/docs/LEIS.md:117`, `app/ponto/motor_calculo_v2.py:2809–2813`, `:3081–3102`, `:3264–3272`, `:3325–3359`, `app/ponto/calculador/periodo.py:825–834`
 
-## 24/11 19:12 · sessao f48f9d563b41 · - · - · origem=Ronald (tmux)
-
-**Há um descompasso novo por par que o vigia pode materializar em divergência diária.** `espelho_x_dia_pago` refaz o cálculo e agrupa pela data civil da entrada. O `DiaPago` usa `resultado.dia_da_jornada`. Para col113 de 31/10, o par ganha 240 min com turno em 30/10. Se a lavratura usar 30/10, são +240 min no dia 30 na lavratura e no dia 31 no vigia, contra contribuição zero no HEAD. A chave final da lavra pode herdar o dia do período anterior. A soma por dia, a lavratura efetiva e a inclusão no universo do TXT são [nao verificado]. O contador aparece no carimbo e fica fora de `falhas` da porta. `diff_comp11_v2.txt:10`, `app/ponto/motor_calculo_v2.py:2400–2408`, `app/ponto/services/fechamento.py:1201–1217`, `app/ponto/services/dia_pago.py:109–132,173–178`, `app/folha/porta_export.py:74–78,101–118,687–700,722,794`
-
-**Col174.** O desacordo de datas já existia. A cura passou a tomar uma decisão financeira diferente usando 25/10, com 145,3 min recuperados e `l084_par`; o wrapper continua dando 24/10. O espelho posiciona o card pelo wrapper indiretamente e lê a rubrica pela lavratura. Onde o novo valor apareceu, e se surgiu um riscado ou alerta incompatível, [nao verificado]. `diff_comp11_v2.txt:12,23,25–26`, `app/ponto/services/espelho.py:457–474,819–831`, `app/ponto/janela_he.py:194–230,277–315`
-
-**Zona 5 e S5.** A S5 reconstrói marcos de pontualidade pelo dia da jornada e lavra a versão `oraculo`; espelho e PDF usam a versão `motor`. Em col841 há uma hipótese mais específica envolvendo `_julgar_pontualidade`. O texto registra a antecipada antes do teto e só desaparece se o teto zerar. Se esse for o caminho na sonda, a cura pode trazer de volta o texto de 117 min ao lado da rubrica de 38,2 min. Tipo de motor, valor pré-teto e alertas efetivamente exibidos [nao verificado]. `app/ponto/calculador/alimentacao.py:239–240,260–301`, `app/ponto/services/fechamento.py:1242–1252,1294`, `app/ponto/services/dia_pago.py:833–856`, `app/ponto/motor_calculo_v2.py:1186–1201,2217–2231,3063–3080`, `app/templates/ponto/espelho.html:293–304`, `diff_comp11_v2.txt:19–20`
-
-**Vigias restantes.** Pareador/célula, vigia de hora e vigia de plantio consultam turnos, ata, marcos ou a data da pergunta. `vigiar_motor_autoridade` é sensível ao delta, pois compara trabalhado com cobertura dos turnos e aplica limiar de 15 min no agregado por colaborador. Saídas HEAD/CURA e mudança de classificação [nao verificado]. `app/ponto/services/vigia_pareador_celula.py:93–112`, `app/ponto/services/vigia_de_hora.py:44–79`, `app/ponto/management/commands/vigia_plantio_overnight.py:73–94`, `app/ponto/management/commands/vigiar_motor_autoridade.py:28–32,54–95`
-
-_8112 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8113 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
