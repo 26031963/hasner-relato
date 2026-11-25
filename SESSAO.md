@@ -6,10 +6,29 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 16:18:10.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (43.9 MB). Acoes na janela: **1045**.
+**Medido em 25/11/2026 16:24:50.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (45.2 MB). Acoes na janela: **1064**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:21:10 | Bash | Update E1 state in obras file and RELATO, regenerate handoff | `cd ~/saas-hasner; cat logs/E1-PREVISAO-24H/wts.env; sed -i 's#^- E1-PREVISAO-24H .*#- E1-PREVISAO-24H \| v2d (raia/e1-previsao-v2 e95f832ff) \| SEM agente (entregou 16:3x) \| wts.env gravado -> red_green.sh roda na FILA-DA-TRAVA \| depois triagem do RED/GREEN, opus (3+ voltas Codex = escalona), juiz-novo selo verde so com gerar_cortes no pouso; script col206 c09 ensaiado (logs/sombra/e1prev_relavr ...` |
+| 16:21:02 | Bash | Write live-obras handoff file | `cd ~/saas-hasner; cat > logs/OBRAS-VIVAS-2511-1630.md <<'EOF' # OBRAS VIVAS 25/11 16:30 (HIGIENE-ANTES-DO-COMPACT-2511 item 2) -- obra \| volta \| quem \| o que espera \| onde - A4-ESPELHO-AUSENCIA-ABERTA \| v3 (B3 liberado ERRO-BOBO, LIBERA-B3-A4-2511) \| agente a9858ebb4b06787b3 \| builder v3: devolve sha + delta_v3.diff + comando da suite inteira \| merge = suite verde v3 + opus SO no delta + S ...` |
+| 16:20:45 | Bash | Read handoff RELATO-top parser | `cd ~/saas-hasner; sed -n 85,135p bin/handoff_sessao.sh` |
+| 16:20:36 | Bash | Inspect generated handoff and its sources | `cd ~/saas-hasner; sed -n 1,55p app/docs/HANDOFF-SESSAO.md \| cut -c1-160; grep -n "RELATO\\|vivo\\|agente" bin/handoff_sessao.sh \| head -20` |
+| 16:20:29 | Bash | Save WRAPPER handback, RELATO line, regenerate handoff | `cd ~/saas-hasner; cat > logs/WRAPPER-N-VAGAS/HANDBACK-1625.md <<'EOF' WRAPPER-N-VAGAS volta 12 handback 16:2x (agente a2cb7479c3f8589a8 encerrado por HIGIENE-ANTES-DO-COMPACT-2511) - wt /home/ronald/wt-wrapper-n-vagas-125229 (branch wrapper-n-vagas), HEAD e3bea1ed8 verde; 3 arquivos modificados NAO commitados (bin/codex_pergunta.sh, bin/tests/test_codex_n_vagas.sh, bin/tests/test_codex_pergunta.sh ...` |
+| 16:20:20 | TaskStop |  | `-` |
+| 16:20:11 | Bash | Save DXG handback, record closure in RELATO | `cd ~/saas-hasner; cat > logs/DXG-V11K/HANDBACK-1621.md <<'EOF' DXG v11k handback 16:2x (agente ac1f9f2689a0825ce encerrado por HIGIENE-ANTES-DO-COMPACT-2511) - roda.sh pid 2448962 (setsid) vivo; fim = logs/DXG-V11K/fim; progresso logs/DXG-V11K/trilha (41 etapas); veredito no logs/dxg-v11k-<F>.out (rc_do_lancador sempre 0) - 17/41 conforme ate 16:19 (AB, 8 RED v11j, GREEN O0/OL/EC/LF/RB/CV/PZ) - re ...` |
+| 16:20:02 | TaskStop |  | `-` |
+| 16:19:22 | Bash | Read DXG agent's latest output and trilha | `tail -c 3000 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/ac1f9f2689a0825ce.output; echo; tail -15 ~/saas-hasner/logs/DXG-V11K/trilha` |
+| 16:19:18 | SendMessage |  | `-` |
+| 16:19:16 | SendMessage |  | `-` |
+| 16:19:04 | Bash | Check WRAPPER v19 producer and DXG roda.sh detachment | `cd ~/saas-hasner; ps -eo pid,pgid,sid,etime,args \| grep -E "WRAPPER-N-VAGAS\|wt-wrapper\|v19" \| grep -v grep \| cut -c1-180; ls -la logs/WRAPPER-N-VAGAS/ \| grep v19; ps -o pid,sid,etime,args -p 2448962 \| cat` |
+| 16:18:54 | Bash | Record hygiene actions; check trava queue chain | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() s=("HIGIENE-ANTES-DO-COMPACT-2511 (16:3x): ENCERRADO agente REG33 comp08 construtor (esperava redv2.done, volta superada pela v4/redv3 que correm na FILA-DA-TRAVA-2511) + 3 shells de espera dele. " "PRE-APROVADO a: cancelada a cadeia FERIADO c2 (pid 1217071) antes do b_full (volta superada pela c3; b_only na VM deu os MES ...` |
+| 16:18:51 | SendMessage |  | `-` |
+| 16:18:40 | Bash | Read FERIADO c2 local results; cancel queued full suite | `cd ~/saas-hasner/logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2; cat b_only.rc b_mutA.rc b_mutB.rc b_redc2a.rc; grep -E '^(OK\|FAILED)($\| \()' b_only.log \| tail -1; grep -E '^(FAIL\|ERROR):' b_only.log \| cut -c1-120; wc -c b_full.log; pkill -TERM -g 1217071; sleep 2; ps -p 1217071 -o pid= \| wc -l` |
+| 16:18:34 | Bash | Check FERIADO c2 chain and test lock holder | `cd ~/saas-hasner; ps -o pid,pgid,etime,args -p 1217071 \| cat; ls -t logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2/ \| head -5; bin/trava_teste.sh --quem; docker ps --format '{{.Names}} {{.RunningFor}} {{.Command}}' \| head` |
+| 16:18:19 | Bash | Kill superseded REG33 waiters, check chain | `kill 1487060 1527639 1910550 2>/dev/null; sleep 1; ps -p 1487060,1527639,1910550 -o pid= \| wc -l; ls ~/saas-hasner/logs/REG33-COMP08-PELA-L113/ \| grep -E "done\|log$" \| tail; tail -3 ~/saas-hasner/logs/FILA-DA-TRAVA-2511.trilha` |
+| 16:18:17 | TaskStop |  | `-` |
+| 16:18:13 | ToolSearch |  | `-` |
 | 16:18:08 | Bash | Identify long-running waiting shells | `for p in 1487060 1527639 1910550 2470802 2487184; do echo "== $p"; tr '\0' ' ' < /proc/$p/cmdline \| grep -oE "until.{0,200}\|eval.{0,200}" \| head -c 300; echo; done` |
 | 16:18:00 | Bash | Check background jobs of WRAPPER, DXG, REG33 | `cd ~/saas-hasner; ps -eo pid,pgid,sid,etime,args \| grep -E "WRAPPER\|DXG-V11\|v11k\|REG33\|wt-reg33" \| grep -v grep \| cut -c1-200 \| head -20; ls -t logs/WRAPPER-N-VAGAS \| head -8` |
 | 16:17:51 | ListAgents |  | `-` |
