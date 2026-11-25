@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 18:31:40.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.2 MB). Acoes na janela: **159**.
+**Medido em 25/11/2026 18:37:47.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.4 MB). Acoes na janela: **168**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:33:24 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:00 DESPACHO:')) L.insert(k+1,'18:3x WRAPPER-N-VAGAS v13: 1o construtor parado pelo DISJUNTOR B1 (tokens 30 min sem arquivo novo na copia) -> TaskStop; copia wt-wrapper-v13-180046 HEAD 65794ce69 = so o merge do main 160173bb1; rascunhos das curas sa ...` |
+| 18:33:19 | Agent | WRAPPER v13 construtor 2 | `Voce e o construtor (opus) da volta 13 da obra WRAPPER-N-VAGAS no repo /home/ronald/saas-hasner (leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes). Obra de INSTRUMENTO (bin/), pouso proprio, nada de app/. Voce CONTINUA o trabalho de um construtor anterior que foi parado pelo disjuntor B1 (bin/disjuntor.py: agente com copia wt-* que gasta tokens 30 min sem arquivo novo na copia tem as ferramen ...` |
+| 18:33:02 | Bash |  | `cd /home/ronald/saas-hasner; d=logs/WRAPPER-N-VAGAS/v13/rascunhos; mkdir -p $d; cp /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad/new/{codex_admissao.py,codex_pergunta.sh,codex_vagas_estado.py,gerar_estado.py,test_codex_n_vagas.sh,test_codex_pergunta.sh} $d/; sha256sum $d/* \| cut -c1-12,65-; grep -n 'except' $d/gerar_estado.py $d/codex_vagas_estado.py \| ...` |
+| 18:32:57 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/v13/; ls -la /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad/new/; git -C /home/ronald/wt-wrapper-v13-180046 log --oneline -1; git -C /home/ronald/wt-wrapper-v13-180046 status --porcelain \| head` |
+| 18:32:55 | TaskStop |  | `-` |
+| 18:32:54 | ToolSearch |  | `-` |
+| 18:32:50 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/disjuntor.py; sed -n 1,30p logs/disjuntor/contrato.txt 2>/dev/null` |
+| 18:32:48 | Bash |  | `cd /home/ronald/saas-hasner; grep -n -i 'B1' bin/disjuntor.py \| head -20; grep -rn -i 'B1 ' app/docs/CORTES.md \| grep -i disjuntor \| head -5` |
+| 18:32:44 | Bash |  | `cd /home/ronald/saas-hasner; grep -n -i -A6 '"B1"\\|B1 *=\\|def .*b1' bin/disjuntor.py \| head -50; tail -5 logs/disjuntor*.log 2>/dev/null \| tail -8` |
 | 18:28:17 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('E1-SAI-DA-VM-2511 (18:18)')) L[k]=L[k]+' \| 18:28 FIM na VM sem cancelar: logs/E1-PREVISAO-24H/red.log "Ran 15721 tests in 4218s" FAILED (failures=11, errors=26) -- run da copia wt-e1prev-red2 (RED), triagem do construtor da E1; trava da VM passou a m ...` |
 | 18:28:12 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bfny76a6u.output` |
 | 18:24:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; /usr/bin/sleep 240; date +%H:%M:%S; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' red.log \| tail -2; grep -oE '^[.sxEF]+' red.log \| tr -d '\n' \| wc -c; ps -p 2875414 -o pid=,etime=; /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>&1 \| head -3` |
