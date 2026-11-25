@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 13:58:00.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (37.3 MB). Acoes na janela: **903**.
+**Medido em 25/11/2026 14:04:32.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (37.5 MB). Acoes na janela: **912**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:04:14 | TaskStop |  | `-` |
+| 14:00:10 | Bash | Wait for E1 Codex census | `cd ~/saas-hasner; until [ -f logs/E1-PREVISAO-24H/r1.rc ]; do /usr/bin/sleep 30; done; cat logs/E1-PREVISAO-24H/r1.rc; wc -c logs/E1-PREVISAO-24H/r1.txt` |
+| 13:59:51 | Bash | Launch Codex census for E1-PREVISAO-24H | `cd ~/saas-hasner; D=logs/E1-PREVISAO-24H; mkdir -p $D; cat > $D/q1.txt <<'EOF' PAPEL: censo da obra E1-PREVISAO-24H. Leia o codigo; nao proponha lei nova. Contexto (dado, nao hipotese a confirmar): TipoEscala pk 297/298/302 sao 12x36 com horario semanal cuja saida vem antes do intervalo; as celulas geradas deles tem previsto > 24 h. 1. Quem ESCREVE os marcos de TipoEscala (entrada, saida, inicio/f ...` |
+| 13:59:37 | Bash | Add E1-PREVISAO-24H item to BACKLOG | `cd ~/saas-hasner; grep -n "REG33-COMP08-PELA-L113" app/docs/BACKLOG.md \| head -2; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read() anc=[l for l in s.split('\n') if l.startswith('\| REG33-COMP08-PELA-L113')] assert len(anc)==1, len(anc) row="\| E1-PREVISAO-24H \| fatia do O54 E1 PREVISAO INTEGRA (aval E1-PREVISAO-24H-2511, logs/AVAIS-1515/E1-PREVISAO-24H-2511.txt; MAO UNICA): (1) porta  ...` |
+| 13:59:30 | Bash | Record the E1 aval and locate BACKLOG rows | `cd ~/saas-hasner; cat > logs/AVAIS-1515/E1-PREVISAO-24H-2511.txt <<'EOF' aval Ronald: E1-PREVISAO-24H-2511 (25/11 14:0x) -- fatia do O54 E1 PREVISAO INTEGRA (porta: 0 dia com previsao invalida). Fato: TipoEscala 297/298/302 (12x36 com horario semanal, saida antes do intervalo) geram celula com previsto > 24 h; 3602 celulas na frota, comp 11 = col675 (16 dias) e col137 (3). (1) a porta do TipoEscal ...` |
+| 13:58:51 | SendMessage |  | `-` |
+| 13:58:42 | Bash | Publish reg 33 DIFF section and top line in RELATO | `cd ~/saas-hasner; cat >> app/docs/RELATO.md <<'EOF' ## REG33-COMP08-PELA-L113 -- DIFF de impacto ANTES (25/11 13:58, aval LEI-EXPORTADA-B-2511, sombra, nada em prod) DESPACHO REG33: censo -> Codex (r1.txt rc 0 13:43) \| DIFF na sombra + aviso ao DP -> opus construtor \| leitura final -> opus Instrumento: `ponto/services/diff_frota.py::medir/somar`; mutacao = a porta REAL `materializar_regularizaca ...` |
+| 13:58:22 | Bash | Find where newest RELATO sections go | `cd ~/saas-hasner; grep -n "^## " app/docs/RELATO.md \| awk -F: '$1<5908' \| tail -5; sed -n 5900,5908p app/docs/RELATO.md \| cut -c1-160; sed -n 1,4p app/docs/RELATO.md \| cut -c1-200` |
+| 13:58:17 | Bash | Read reg 33 DIFF and RELATO headings | `cd ~/saas-hasner; wc -l logs/REG33-COMP08-PELA-L113/diff_reg33.txt; head -60 logs/REG33-COMP08-PELA-L113/diff_reg33.txt; grep -n "^## \\|^### " app/docs/RELATO.md \| head -5; date +%H:%M` |
 | 13:55:57 | SendMessage |  | `-` |
 | 13:51:24 | SendMessage |  | `-` |
 | 13:51:20 | SendMessage |  | `-` |
