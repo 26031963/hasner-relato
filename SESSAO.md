@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 21:47:04.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (38.5 MB). Acoes na janela: **843**.
+**Medido em 24/11/2026 21:53:20.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (38.5 MB). Acoes na janela: **839**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -849,7 +849,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:14:22 | Bash | Locate R1 termometro definition and logs | `cd /home/ronald/saas-hasner; /bin/grep -n "R1" app/core/placar_estrutural.py \| head -20; ls -t logs \| /bin/grep -i "r1\\|termom\\|espelho" \| head; /bin/grep -n "TERMOMETRO\\|termometro" app/docs/PLACAR*.md app/docs/ESTADO.md 2>/dev/null \| head -5` |
 | 10:01:26 | Bash | Wait for A-TELA test chain to finish | `cd /home/ronald/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915; until [ -f $D/corrida.fim ]; do /usr/bin/sleep 20; done; for f in red_sem_par_cobra green mutante_m1 mutante_m2 mutante_m3 recorte; do echo "== $f: $(/bin/grep -E '^(OK\|FAILED)($\| \()' $D/$f.log \| tail -1) \| $(/bin/grep '^Ran' $D/$f.log \| tail -1) \| $(/bin/grep '^rc=' $D/$f.log \| tail -1)"; done; R=logs/RESOLVER-PASSA-NA-FR ...` |
 | 10:01:21 | Bash | Record A-TELA delivery and col348 lei in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l=("lei: A-TELA col348 (09:5x, aval RESPOSTAS-ATELA-E-VINTE-2411-0915 item 1 'col348 entra no mesmo caso') -- a premissa nao fecha: col348 e vinculo INTERMITENTE (ec 306), os 21 dias tem CelulaDia.trabalha=False, as lampadas apagadas sao slots posicionais I3/I4 (plantao 12h fim de semana/feriado sem intervalo), ...` |
-| 09:50:32 | Bash | Record Codex triage in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l="RESOLVER Codex verificador v1 REPROVOU (09:4x, logs/RESOLVER-PASSA-NA-FRENTE/v0815/verif1.r, rc 0; amostra 3/3 conferida views.py:3520/3533, models.py:3373): procedentes P1 POST sem a elegibilidade da oferta, P2 reconcilia dias recusados no lote misto, P3 oferta ignora C20, P4 relogio por pergunta, P5 histor ...` |
-| 09:50:28 | SendMessage |  | `-` |
-| 09:50:07 | Bash | Confer Codex citations in RESOLVER copy | `cd ~/wt-resolver-d-024937/app; sed -n 3505,3540p ponto/views.py; echo ----; sed -n 90,100p colaboradores/services/calendario.py; echo ----; sed -n 245,256p ponto/services/veredito_celula.py; /bin/grep -n "_tz.now()\\|timezone.now()" chamados/models.py \| awk -F: '$1>3340 && $1<3400'` |
-| 09:49:59 | Bash | Read Codex verificador answer | `cd /home/ronald/saas-hasner; D=logs/RESOLVER-PASSA-NA-FRENTE/v0815; wc -l $D/verif1.r; cut -c1-600 $D/verif1.r` |
