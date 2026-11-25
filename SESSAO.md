@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 21:16:45.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (37.3 MB). Acoes na janela: **852**.
+**Medido em 24/11/2026 21:22:46.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (37.4 MB). Acoes na janela: **853**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:17:16 | Bash | Write PAREI ! in RELATO top | `cd ~/saas-hasner; sed -i '1i PAREI: ! NOTURNO-A-FERIADO-E-COMP10 \| espera Ronald -- volta 4 medida na sombra (logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4/v6/m_resumo_v6.txt; patch v6 sha256-12 f7d047247fea, B3 curado: teste B-P4c morde, --only ponto rc 0 Ran 5400). (1) FERIADO: a dobra le e.date() (motor:2796/2809/3264/3268), L-085 manda o dia do inicio; na cura da comp 11 ha 2 pares fora da regra d ...` |
 | 21:10:42 | Bash | Wait for both Codex calls | `cd ~/saas-hasner; while pgrep -f "bash bin/codex_pergunta.sh" >/dev/null; do /usr/bin/sleep 30; done; tail -1 logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/verif3.wrap.log; tail -1 logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4/v5/postmortem.wrap.log` |
 | 21:10:34 | Bash | Launch Codex verif3 on DXG v9 | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; cat > $D/v9_resumo.txt <<'EOF' RESUMO DO CONSTRUTOR v9 (DXG-APPLY-33-POR-COLAB), ensaio na sombra - 28 das 33 perguntas trocam. 516 e 1044 (5 perguntas: 49126 51234 52761 59060 59061) sao barrados pela testemunha 6(d): o tipo da pergunta (E) nao bate com o tipo do slot do juiz (S); o juiz diz com_registro pelo ramo 1, que ignor ...` |
 | 21:10:17 | Bash | Size v9 artifacts for Codex anexos | `cd ~/saas-hasner; D=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; wc -c $D/diff_v8_v9.txt $D/ensaio_v9/T_ATOMIC_tabela.tsv $D/COMANDOS_PROD_NAO_EXECUTADOS.txt $D/verif2.r; ls $D/ensaio_v9/ \| head -40` |
