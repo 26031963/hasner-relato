@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 12:39:49.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (31.5 MB). Acoes na janela: **802**.
+**Medido em 25/11/2026 12:46:24.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (31.8 MB). Acoes na janela: **809**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:46:20 | Bash | Launch Codex verificador on DXG v11g | `cd ~/saas-hasner; D=logs/DXG-V11G/verif; mkdir -p $D; B=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11g; cat > $D/opus_v11f_procedentes.txt <<'EOF' Verificador final (opus) REPROVOU a v11f -- procedentes conferidos pela sessao: 1. COMANDOS copiavam o apply33.py da raiz (01:44), nao a v11f. 2. O atomic de CONTROLE (apply33.py:515-536 na v11f) ficava fora do teto: t_controle medido e nunca co ...` |
+| 12:46:03 | Bash | Find v11f review file | `cd ~/saas-hasner; ls logs/DXG-V11F; grep -rl "t_controle\\|REPROVA" logs/DXG-V11F logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/*.md 2>/dev/null \| head` |
+| 12:45:58 | Bash | Find v11f opus verdict file | `cd ~/saas-hasner; ls -dt logs/*V11F* logs/DXG* 2>/dev/null \| head; find logs -maxdepth 3 -newer logs/dxg-v11f-sobre-relavra.out -name "*.txt" -path "*DXG*" 2>/dev/null \| head; find logs -maxdepth 4 -name "*opus*" -newer logs/dxg-v11f-sobre-relavra.out \| head` |
+| 12:45:53 | Bash | Locate v11g deliverables and v11f opus review | `cd ~/saas-hasner; B=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; ls $B/v11g/ \| head -30; ls -t logs/DXG-V11F* logs/DXG-V11G 2>/dev/null \| head -20; grep -rl "REPROVA" logs/DXG-V11F* 2>/dev/null \| head` |
+| 12:40:11 | Bash | Add A-TELA design question to RELATO top | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() add='PERGUNTA DE DESENHO A-TELA v13 (12:5x, nao devolve turno; nao segura o pouso da v13): caso inverso medido (sonda v13/sonda_inversa.log rc 0) -- TXT invalidado ENTRE as passadas: ato 1 sai com emitidos_na_releitura=1 (vigia esperado 0) e DIA furo/FURO_PARCIAL; ato 2 converge sem nova emissao. Fechar dentro do ato exige ...` |
+| 12:40:08 | Bash | Wait for A-TELA v13 selos rerun verdict | `cd ~/saas-hasner; until grep -qE '^(OK\|FAILED)($\| \()' logs/A-TELA-DO-DIA-LE-UM-JUIZ/v13/green_selos.log 2>/dev/null; do /usr/bin/sleep 30; done; grep -E '^(OK\|FAILED)($\| \()' logs/A-TELA-DO-DIA-LE-UM-JUIZ/v13/green_selos.log \| tail -1; grep '^Ran ' logs/A-TELA-DO-DIA-LE-UM-JUIZ/v13/green_selos.log \| tail -1` |
+| 12:39:50 | Bash | Wait for PAR c4 mut.rc | `cd ~/saas-hasner; until [ -f logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c4/mut.rc ]; do /usr/bin/sleep 30; done; cat logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c4/*.rc` |
 | 12:39:10 | SendMessage |  | `-` |
 | 12:39:08 | SendMessage |  | `-` |
 | 12:39:05 | Bash | Wait for FERIADO suite_full2 verdict | `cd ~/saas-hasner; until [ -f logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c1/suite_full2.rc ]; do /usr/bin/sleep 30; done; cat logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c1/suite_full2.rc; grep -E '^(OK\|FAILED)($\| \()' logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c1/suite_full2.log \| tail -1; grep '^Ran ' logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c1/suite_full2.log \| tail -1` |

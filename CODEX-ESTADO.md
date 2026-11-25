@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 12:37** · publicado em **25/11/2026 12:39** (UTC-3)
+> Ultima resposta processada: **25/11/2026 12:41** · publicado em **25/11/2026 12:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 12:41 · sessao e818de047fc1 · REG-EXTERNA-GUARDA-EXPORTADAS · sonda · origem=Code
+
+A lista final é **`(6, 2026)`, `(7, 2026)` e `(8, 2026)`**. São três linhas no cadastro, com efeito sobre quatro pares empresa–competência da sonda. **A REGEN-EM-EXPORTADA também bate na guarda do fechamento e na do retrato.** `app/ponto/services/fechamento.py:36–53,548–584`, `app/ponto/portas/regen_exportada.py:174–193`, `app/ponto/services/dia_pago.py:449–460` e sonda abaixo.
+
+A execução de `--sonda` ocorre no wrapper antes de o Codex receber a saída raspada. Reproduzo o bloco fornecido. Nova execução nesta cópia [nao verificado]. `bin/codex_pergunta.sh:15–21,323–335,353–360`.
+
+```text
+---- DADO RASPADO (sonda/anexos) ----
+sonda_leitura: sonda_exportadas.py [1c0a0a580217c09c] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+PARES_COM_EXPORTACAO 7
+EXP	emp=2	08/2026	juiz_exportada=True	marco=paga	linhas=2	vigentes=2	guardada_hoje=False	colabs_empresa=761	empresa=J.A Juliani Eireli
+EXP	emp=2	09/2026	juiz_exportada=True	marco=paga	linhas=4	vigentes=1	guardada_hoje=True	colabs_empresa=761	empresa=J.A Juliani Eireli
+EXP	emp=3	07/2026	juiz_exportada=True	marco=trancada	linhas=1	vigentes=1	guardada_hoje=False	colabs_empresa=165	empresa=Juliani Segurança Patrimonial
+EXP	emp=3	09/2026	juiz_exportada=True	marco=paga	linhas=2	vigentes=1	guardada_hoje=True	colabs_empresa=165	empresa=Juliani Segurança Patrimonial
+EXP	emp=4	06/2026	juiz_exportada=True	marco=trancada	linhas=12	vigentes=12	guardada_hoje=False	colabs_empresa=34	empresa=R. A. de [nome] [nome] - G3 Force
+EXP	emp=4	07/2026	juiz_exportada=True	marco=trancada	linhas=3	vigentes=3	guardada_hoje=False	colabs_empresa=34	empresa=R. A. de [nome] [nome] - G3 Force
+EXP	emp=4	09/2026	juiz_exportada=True	marco=paga	linhas=2	vigentes=1	guardada_hoje=True	colabs_empresa=34	empresa=R. A. de [nome] [nome] - G3 Force
+FIM_SONDA
+== anexo: lei_reg_externa_gravado_2511.txt ==
+aval Ronald: LEI-REG-EXTERNA-GRAVADO-2511 (25/11 12:2x) -- opcao (a), AMPLIADA: a GUARDA_COMPETENCIA (cadastro, molde das linhas (9,2026) e (10,2026)) passa a cobrir TODA competencia com ExportacaoDominio vigente, por empresa, medida na frota -- nao so a 08. E o que a DINHEIRO 2 ja manda: gravado de exportada nao muda por caminho generico. A reg 33 (col601, comp 08) materializa a batida e a diferenca vai como Pauta DP pela porta REGEN-EM-EXPORTADA; a reg 53 (comp 09) ja esta guardada. Corrigir junto o comentario de autorizacao_he_periodo.py:28-31 (2o leitor que nao migrou). Lista das competencias guardadas no RELATO antes de gravar. Segue a fila; PAREI so em lei ou !
+---- FIM DO DADO ----
+```
+
+## 1. Cadastro e divergência
+
+Numeração da saída a partir de `PARES_COM_EXPORTACAO` como linha 1.
+
+| Nova linha | Empresas alcançadas nos pares fornecidos | Linhas da saída |
+|---|---|---|
+| `(6, 2026)` | 4 | 6 |
+| `(7, 2026)` | 3 e 4 | 4 e 7 |
+| `(8, 2026)` | 2 | 2 |
+
+**Zero divergências entre `juiz_exportada` e `vigentes > 0`**. Os sete pares têm `True` e contagem positiva. A 09 já está guardada nas empresas 2, 3 e 4 da saída. A 10 já consta no cadastro da cópia. Exportação vigente da 10 na frota [nao verificado]. Sonda fornecida, linhas 2–8, e `app/ponto/services/fechamento.py:36–52`.
+
+A origem das contagens `vigentes=2`, `12` e `3` [nao verificado]. O juiz do código escolhe o registro mais recente por empresa, mês e ano, com desempate por PK, e exige que esse registro esteja sem invalidação. Isso basta para o booleano usado pela guarda. `app/folha/models.py:192–225`, `app/folha/export.py:580–594`, `app/ponto/services/fechamento.py:1509–1528,1545–1551`.
+
+## 2. Chamadores e efeitos
+
+A guarda exclui do universo de escrita os colaboradores das empresas exportadoras abrangidas pela chamada. Quando há alvos excluídos, emite `WARNING` e tenta gravar `recalculo_barrado_guarda`. A exclusão segue mesmo se a auditoria falhar. Uma chamada de escrita com todos os alvos excluídos retorna `0`. Leitura pura passa, e `somente_leitura=True` com `lavrar_dias_pagos=True` entra na guarda por escrever `DiaPago`. O aviso antigo de “EXPORTADA recalculado” sai **antes** da exclusão, por isso sozinho não prova uma escrita. `app/ponto/services/fechamento.py:548–584,626–628,1204–1214,1315–1324`.
+
+| Caminho | Resultado com a linha nova para uma empresa que exportou |
+|---|---|
+| **Evento de batida** | A batida é criada e `_fechamento_por_evento` agenda o recálculo por colaborador no `on_commit`. O recálculo é barrado com trilha, a batida fica gravada e o callback ainda pode registrar o `info` de evento porque ignora a contagem retornada. `app/ponto/registro_batida.py:170–203`, `app/ponto/services/fechamento.py:1820–1840`. |
+| **Botão Recalcular** | O POST chama o escritor com mês, ano e empresa. A tela continua respondendo `ok=True`, com zero processados se todo o escopo foi barrado ou com a contagem dos demais em um escopo misto. A guarda deixa a trilha e não gera erro de servidor. `app/templates/ponto/fechamento.html:87`, `app/ponto/views.py:1253–1281`, `app/ponto/services/fechamento.py:567–584,1315–1324`. |
+| **Comando `recalcular_fechamento`** | Sem `--apply`, faz a foto. Com `--apply`, sofre a exclusão e imprime `processados` e o contador acumulado da guarda. `--motivo-exportada` fornece texto para o aviso e a chamada segue sujeita à guarda. `app/ponto/management/commands/recalcular_fechamento.py:99–135`, `app/ponto/services/fechamento.py:548–584`. |
+| **Regen de vínculo, edição e reversão de célula** | O regen ordinário já pula os dias protegidos pela guarda de célula. Se houver células tocadas e `recalculo=True`, agenda um evento por competência tocada. Quando `apesar_da_lavra` permite mexer na célula, o recálculo financeiro ainda é barrado com trilha e a mudança da célula permanece. O teste da reversão na 09 cobre essa combinação. `app/ponto/portas/celula.py:218–221,284–288,390–401,490–507,683–684,844–847,891–896`, `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:205–220`. |
+| **Reconciliador e cartório** | O reconciliador da batida trata perguntas e chamados, o comando `reconciliar_chamados` conta pendências, e `processar_cartorio` chama `julgar_colab` para lavrar a célula. Nesses pontos o recálculo financeiro não é chamado diretamente. Há caminho indireto quando um fechamento de disputa materializa batida ou retoma regularização. Aí o evento da batida sofre o bloqueio financeiro. O comando `celula_veredito_velho` tem chamada direta depois do julgamento e pode concluir a relavratura da célula com o recálculo barrado. `app/ponto/signals.py:131–140,206–218`, `app/chamados/reconciliador.py:414–416,1560–1590`, `app/chamados/management/commands/reconciliar_chamados.py:34–52,89–116`, `app/chamados/signals.py:122–165`, `app/chamados/services/materializacao.py:1580–1588,1697–1710`, `app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/services/cartorio.py:1898–1923`, `app/ponto/management/commands/celula_veredito_velho.py:134–162`. |
+| **Materialização de regularização externa** | Na inclusão, a batida `reg_externa` passa por `registrar_batida`. Se o materializador concluir, grava o lote como `materializada`. A nova linha barra a escrita de FM e `DiaPago` no callback do commit, com trilha. O retorno do materializador é determinado pelas batidas e pelos erros do lote. `app/chamados/services/regularizacao_ext.py:52–83,167–208`, `app/ponto/registro_batida.py:176–198`, `app/ponto/services/fechamento.py:567–584,1820–1840`. |
+| **Autorização de HE** | `confirmar` chama `_ato`, que usa `autorizar_em_lote` → `decidir_he`. A decisão nova é gravada e o evento é agendado. A pauta do período é escrita no próprio ato quando `exportada` e `autorizados` são verdadeiros. Com a linha nova, o callback pós-commit barra a relavratura com trilha. Na prévia, o rollback descarta as decisões, a pauta e os callbacks. `app/ponto/services/autorizacao_he_periodo.py:113–118,271–323,330–357`, `app/ponto/portas/he.py:206–230,614`, `app/ponto/services/fechamento.py:567–584,1820–1840`. |
+| **Retrato de `DiaPago` e `lavrar_dias_pagos`** | O comando encaminha empresas exportadoras para `retratar_exportada`. Com a linha nova, cada retrato retorna `barrado_pela_guarda=True` e zero linhas criadas ou atualizadas, com tentativa de auditoria em `DiaPago`. O comando soma esses zeros e ainda conta os colaboradores alvo, pois não lê a chave de bloqueio. `app/ponto/services/dia_pago.py:449–461`, `app/ponto/management/commands/lavrar_dias_pagos.py:104–139`. |
+
+**REGEN-EM-EXPORTADA existe** em `regenerar_em_exportada`, exige `is_staff` e motivo de pelo menos dez caracteres. **Na 09 e na 10, com exportação reconhecida, ela não atravessa a guarda financeira.** `apesar_da_lavra` abre a guarda da célula. Em seguida, a porta chama o recálculo passando `motivo_exportada` e chama o retrato. Ambos barram a escrita. A porta ignora os dois retornos e ainda pode concluir com células regeneradas, auditoria `regen_em_exportada` e `mudou=False`, sem levantar por causa do bloqueio. Esse será também o efeito em 06, 07 e 08 nas empresas alcançadas. `app/ponto/portas/regen_exportada.py:87–119,174–225`, `app/ponto/portas/celula.py:218–221`, `app/ponto/services/fechamento.py:36–52,457–460,548–584`, `app/ponto/services/dia_pago.py:449–460`.
+
+O chamador em código é o reparo de passivo validado. Ele usa `mudou` para escolher entre a Pauta DP com os dois valores e a pauta de **sem movimento**. Como o bloqueio da guarda não vira `RegenRecusada`, ele pode confirmar o plantio e cair em sem movimento, sem a pauta de diferença esperada. `app/chamados/management/commands/materializar_passivo_validado.py:104–113`, `app/chamados/services/passivo_validado.py:390–440,490–516,248–277`.
+
+## 3. Testes que dependem de escrever em exportada [nao verificado]
+
+Vereditos previstos por leitura das fixtures e das asserções. Execução dos testes nesta sessão [nao verificado]. [nao verificado]
+
+| Competência | Teste e asserção afetada | [nao verificado]
+|---|---|
+| **08/2026** | `test_MORDE_competencia_exportada_RECALCULA_e_grava` exige pelo menos um processado e FM criado. `test_a_casca_da_tela_RECALCULA_em_exportada` exige FM criado pelo POST. Com a linha nova, falham as asserções de processamento ou gravação. `app/ponto/tests/test_o80_selo_l092.py:58–59,82–87,98–108,216–234`. |
+| **08/2026** | `test_RED_devido_que_convergiu_ao_pago_diz_que_a_pauta_ficou_velha` usa recálculo real após exportar para fazer o gravado convergir e exige `sem_movimento=2`. A escrita barrada conserva a divergência montada na fixture. `app/pautas/tests/test_pauta_pago_x_devido_exportada.py:57–71,328–342`. |
+| **07/2026** | No passivo validado, `test_UMA_pauta_DP_por_colab_e_competencia_EXPORTADA_que_MUDOU_idempotente` exige a pauta de retificação com filha. `test_a_PAUTA_DP_leva_os_DOIS_NUMEROS_pago_x_devido_e_nao_so_o_hash` exige campos alterados. `test_a_PAUTA_DP_diz_sob_QUAL_REGUA_o_gravado_foi_PAGO_e_le_a_AUTORIDADE` busca a cabeça de retificação pelo marcador. Com a guarda, o ramo de sem movimento tem marcador próprio. O teste que só exige os dois hashes e a auditoria da porta não exige que os hashes difiram. `app/chamados/tests/test_o317_passivo_pela_porta.py:43–50,156–168,223–244,428–457,624–637,679–706`, `app/chamados/services/passivo_validado.py:49–53,263–277,505–516`. |
+| **11/2026** | Há dois controles fora de 09/10 que exigem gravado modificado, a reversão com `apesar_da_lavra` e a reversão via `aplicar_col900`. Ambos exigem hash diferente e `DiaPago` atualizado. A lista medida de novas linhas termina na 08, portanto esses controles continuam fora da guarda. Sonda fornecida, linhas 2–8, e `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:109–115,132–155,185–203`. |
+
+## 4. Comentários
+
+- **`autorizacao_he_periodo.py:28–31`** diz que o serviço não julga a exportação, que `recalcular_por_evento` recusa mover o gravado e que o ato apenas rotula `exportada=True`. A atribuição da recusa já está desatualizada. O evento agenda e chama o escritor, que exclui os alvos da guarda. Hoje uma exportada fora do cadastro pode ser relavrada. Com as novas linhas, o congelamento passa a valer nos quatro pares encontrados, e a autorização continua gravando a decisão e emitindo Pauta DP quando cabível. `app/ponto/services/autorizacao_he_periodo.py:28–34,286–302`, `app/ponto/portas/he.py:206–230`, `app/ponto/services/fechamento.py:548–584,1820–1840`.
+- **`registro_batida.py:147–153`** distingue `autoridade_humana` para colisão de `fato_de_chao` para a guarda de competência **da batida**. Diz que disputa ou regularização devem passar `fato_de_chao=False` e que a batida de chão passa. A frase sobre regularização já diverge do caminho de inclusão atual. O chamador omite `fato_de_chao` e passa `autoridade_humana=False`, de modo que o default vira `True`. A inclusão continua sujeita às regras de duplicata e colisão. O que passa a ser falso nos pares novos é que gravar a batida também atualiza o FM via evento. `app/ponto/registro_batida.py:131–181`, `app/chamados/services/regularizacao_ext.py:71–89,115–122`, `app/ponto/services/fechamento.py:567–584,1820–1840`.
+
+## 5. Reg 33, col601, competência 08
+
+O modelo da operação é **`chamados.RegularizacaoExterna`**, com itens `RegularizacaoItemBatida`. O anexo identifica a reg 33 como sendo da col601, comp 08. A linha de banco `pk=33`, empresa, itens, timestamps, status e via efetivamente usada [nao verificado]. `app/chamados/models.py:4584–4607,4641–4645` e `lei_reg_externa_gravado_2511.txt:1` fornecido.
+
+Para **uma batida nova**, o caminho é confirmação no web ou na API → `confirmar_e_materializar` → `materializar_regularizacao_externa` → `_cria_batida` → `registrar_batida`. Há também retomada após fechar disputa, para lotes confirmados ainda pendentes. `app/chamados/views_regularizacao.py:216–226`, `app/api/views.py:3011–3027`, `app/api/views_core.py:1303–1318`, `app/chamados/services/regularizacao_ext.py:71–83,122–123,167–189,211–225,348–357`, `app/chamados/signals.py:122–146`.
+
+O ponto do recálculo é **`app/ponto/services/fechamento.py:1823`**. Depois de criar a batida, `registro_batida.py:176–198` entrega o timestamp ao evento. O callback registrado em `fechamento.py:1837` roda após o commit da transação que gravou a batida, resolve a competência pela data local e pelo fim da janela da empresa e chama `recalcular_fechamento_mes(8, 2026, colaborador_ids=[601])` **se o timestamp resolver para a 08**. Com a linha da 08 e empresa reconhecida como exportadora, esse callback deixa a trilha de bloqueio. O materializador não encaminha a reg para a REGEN-EM-EXPORTADA, e a porta de regen não produz sozinha a Pauta DP com os dois números. O encaminhamento efetivo da diferença da reg 33 à Pauta DP [nao verificado]. `app/ponto/services/fechamento.py:567–584,1580–1617,1820–1840`, `app/ponto/services/dia_pago.py:702–719`, `app/chamados/services/regularizacao_ext.py:192–208`, `app/ponto/portas/regen_exportada.py:193–225`, `app/chamados/services/passivo_validado.py:499–516`.
 
 ## 25/11 12:37 · sessao d9e98dd873e0 · WRAPPER-N-VAGAS · verificador · origem=Code
 
@@ -653,17 +734,4 @@ col1046 dia=2026-11-20 motor=MotorComercial tipo_escala=MC - 6X1 · 6x1 · 15:00
 rc_sombra=0
 ```
 
-## 25/11 11:04 · sessao 4d61b8551db8 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · sonda · origem=Code
-
-| Dia | Motor | Lista do par | `trab` | `intra_ind` | `extra` | `e100` | `e100fer` | `e100not` | `previsto` | `declarado` | Fonte |
-|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
-| col243 · 15/11/2026 | `MotorComercial` | `resultado.periodos` | 436.3 | 16.3 | 436.3 | 436.3 | 436.3 | 0.0 | 420 | 60 | DADO RASPADO:3–6 |
-| col1046 · 20/11/2026 | `MotorComercial` | `resultado.periodos` | 479.7 | 60.0 | 479.7 | 479.7 | 479.7 | 61.4 | 420 | 60 | DADO RASPADO:8–11 |
-
-**Ramo que gravou os valores finais nos dois pares.** Em `MotorComercial.calcular_mes`, o motor zera as extras individuais de `resultado.periodos`. Em seguida, o ramo `if trab_dia > 0 and self._feriado_dobra_no_dia(dia)` atribui `minutos_trabalhados` do próprio par a `extra`, `extra_100` e `extra_100_feriado` e chama `_aplicar_he_noturna`. O primeiro alerta de dobra é emitido em `calcular_periodo`, e o segundo no recálculo diário. [app/ponto/motor_calculo_v2.py:3349](/home/ronald/codex_ws/160173bb15c45f134dbfcc75777f45a656b42079/app/ponto/motor_calculo_v2.py:3349), [app/ponto/motor_calculo_v2.py:3370](/home/ronald/codex_ws/160173bb15c45f134dbfcc75777f45a656b42079/app/ponto/motor_calculo_v2.py:3370), [app/ponto/motor_calculo_v2.py:3288](/home/ronald/codex_ws/160173bb15c45f134dbfcc75777f45a656b42079/app/ponto/motor_calculo_v2.py:3288)
-
-**Promoção `_ft_feriado`.** A sonda imprime `feriado_vira_folga=False` para os dois dias. O fechamento parte de `resultado.periodos_ft` e exige `feriado_vira_folga(...)` verdadeiro para incluir um par em `_ft_feriado`. DADO RASPADO:4,9. [app/ponto/services/fechamento.py:942](/home/ronald/codex_ws/160173bb15c45f134dbfcc75777f45a656b42079/app/ponto/services/fechamento.py:942), [app/ponto/services/fechamento.py:962](/home/ronald/codex_ws/160173bb15c45f134dbfcc75777f45a656b42079/app/ponto/services/fechamento.py:962)
-
-A sonda reportou `rc_sombra=0`. DADO RASPADO:13. Hash Git da cópia [nao verificado].
-
-_8190 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8191 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
