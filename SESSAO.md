@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 21:59:38.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (38.5 MB). Acoes na janela: **839**.
+**Medido em 24/11/2026 22:05:58.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (38.5 MB). Acoes na janela: **837**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -847,5 +847,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 10:14:28 | Bash | Inspect previous R1 remede recipe | `cd /home/ronald/saas-hasner/logs; cat r1remede/partes.sh r1remede/envelope.sh r1remede/cadeia3.sh; ls r1remede/p1 r1remede1811 \| head -30; wc -l r1remede/p1/script.py; /bin/grep -n "sem_previsao\\|impar\\|ímpar" r1remede/p1/script.py \| head` |
 | 10:14:25 | Bash | Read R1 entry and existing remede logs | `cd /home/ronald/saas-hasner; sed -n 118,140p app/core/placar_estrutural.py \| cut -c1-900; ls -la logs/r1remede1811 logs/r1remede 2>&1 \| head -30` |
 | 10:14:22 | Bash | Locate R1 termometro definition and logs | `cd /home/ronald/saas-hasner; /bin/grep -n "R1" app/core/placar_estrutural.py \| head -20; ls -t logs \| /bin/grep -i "r1\\|termom\\|espelho" \| head; /bin/grep -n "TERMOMETRO\\|termometro" app/docs/PLACAR*.md app/docs/ESTADO.md 2>/dev/null \| head -5` |
-| 10:01:26 | Bash | Wait for A-TELA test chain to finish | `cd /home/ronald/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v0915; until [ -f $D/corrida.fim ]; do /usr/bin/sleep 20; done; for f in red_sem_par_cobra green mutante_m1 mutante_m2 mutante_m3 recorte; do echo "== $f: $(/bin/grep -E '^(OK\|FAILED)($\| \()' $D/$f.log \| tail -1) \| $(/bin/grep '^Ran' $D/$f.log \| tail -1) \| $(/bin/grep '^rc=' $D/$f.log \| tail -1)"; done; R=logs/RESOLVER-PASSA-NA-FR ...` |
-| 10:01:21 | Bash | Record A-TELA delivery and col348 lei in RELATO | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l=("lei: A-TELA col348 (09:5x, aval RESPOSTAS-ATELA-E-VINTE-2411-0915 item 1 'col348 entra no mesmo caso') -- a premissa nao fecha: col348 e vinculo INTERMITENTE (ec 306), os 21 dias tem CelulaDia.trabalha=False, as lampadas apagadas sao slots posicionais I3/I4 (plantao 12h fim de semana/feriado sem intervalo), ...` |
