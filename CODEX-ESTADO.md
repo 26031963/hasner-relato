@@ -1,7 +1,43 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 18:49** · publicado em **25/11/2026 18:50** (UTC-3)
+> Ultima resposta processada: **25/11/2026 19:14** · publicado em **25/11/2026 19:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 19:14 · sessao fe0e826240c7 · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
+
+1. **NAO.** Na cópia examinada, `_julgar_colab_corpo` é o único chamador direto de `_dia_novo_no_ato`. Os três carregadores que executam o corpo real carregam também o helper. Em `bin/`, a busca encontrou inspeção de AST, como a de `leitores_de_chave.py`, e nenhum carregador adicional desse corpo. [cartorio.py:1297](/home/ronald/codex_ws/cfab64bc1b871ad9ebf870e7ca8a20a901966d00/app/ponto/services/cartorio.py:1297), [cartorio.py:1931](/home/ronald/codex_ws/cfab64bc1b871ad9ebf870e7ca8a20a901966d00/app/ponto/services/cartorio.py:1931), [bin/leitores_de_chave.py:67](/home/ronald/codex_ws/cfab64bc1b871ad9ebf870e7ca8a20a901966d00/bin/leitores_de_chave.py:67).
+
+   | Extrator executável | Conjunto extraído de `cartorio.py` |
+   |---|---|
+   | `app/ponto/tests/test_e3_nb_impressao_memoria.py:173` | `_julgar_colab_corpo`, `_dia_novo_no_ato`, `impressao_insumos`, `sem_adesao_no_horizonte`, `_cob_parcial_da_impressao`, `dispensar_por_ausencia`, `HORIZONTE_SEM_ADESAO`, `DISPENSA_POR_JUSTIFICATIVA`. |
+   | `app/ponto/tests/x1_mutantes.py:23`, `:100` | `_julgar_colab_corpo`, `_dia_novo_no_ato`, `impressao_insumos`, `sem_adesao_no_horizonte`, `HORIZONTE_SEM_ADESAO`. O modo `--sem-banco` usa o carregador da linha anterior (`:77`). |
+   | `app/chamados/tests/test_e3_pos_suite_sem_banco.py:135`, `:153`, `:174` | `impressao_insumos`, `sem_adesao_no_horizonte`, `_dia_novo_no_ato`, `_julgar_colab_corpo`. `literais()` carrega seis atribuições e o teste retém `HORIZONTE_SEM_ADESAO`. As outras cinco são `_MOTIVO_REJEICAO_NAO_PROTESTO`, `TEXTO_REJEICAO_NO_FECHO`, `PISO_EMISSAO`, `DISPENSA_POR_JUSTIFICATIVA` e `TETO_MARCO_MIN` (`app/chamados/tests/test_e3_tarefa_admin_sem_banco.py:55`, `app/ponto/services/cartorio.py:42`, `:45`, `:298`, `:316`, `:796`, `:880`). |
+   | `app/chamados/tests/test_e4b_c4_tranca_memoria.py:34`, `:138`, `:142` | `em_julgamento`, `colaborador_deste_julgamento`, `julgar_colab`. O invólucro recebe um corpo dublado que encerra a execução com `RuntimeError`. |
+   | `app/chamados/tests/e4c_f5_voltaA_mutantes.py:17`, `:64` | `chamados_que_falam_de_batida`, recompilada no mutante `k24` com cópia dos globais originais. |
+   | `app/ponto/tests/test_o219_versao_da_regra.py:246` | O laço de validação de `REGRA_VERSOES`. A inspeção de `_julgar_colab_corpo` no mesmo arquivo só percorre a AST (`:217`). |
+
+   Com a importação de justificativas dublada, a E3 do ponto passou **24/24** e o caso S2/S3 de chamados passou **1/1**. Retirar somente o helper do carregador do ponto reproduziu **22 `NameError`**. Em execução direta, as duas suítes E3 ainda encontraram erros de importação de Django idênticos com o delta e com sua reversão em memória. O caso da tranca também passou com a borda dublada. `app/ponto/tests/test_e3_nb_impressao_memoria.py:173`, `app/chamados/tests/test_e3_pos_suite_sem_banco.py:174`, `app/ponto/services/cartorio.py:982`, `:1160`, `app/core/fmt.py:8`, `app/chamados/services/trava_do_colaborador.py:9`, `app/chamados/tests/test_e4b_c4_tranca_memoria.py:142`.
+
+2. **PROCEDENTE.** O spy intercepta a B5.3b no mesmo global de módulo que `julgar_colab` usa na primeira passada. `_julga()` chama `julgar_celula` com `forcar=True`, e `julgar_celula` repassa esse argumento a `julgar_colab`. O `wraps` executa o corpo original em cada chamada registrada. `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:245`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:294`, `app/ponto/services/cartorio.py:1015`, `:1048`, `:2113`.
+
+   - **O congelamento cobre a fixture de classe.** O RED6 deriva diretamente de `TestCase`, instala a função emprestada como `classmethod` da própria classe e aplica `@freeze_time` à classe inteira. O decorador envolve `setUpClass`, que chama `setUpTestData`; é ali que a fixture lê `timezone.localdate()`. O instante literal coincide com o da O261. `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:232`, `:238`, `app/ponto/tests/test_o261_cobrado_le_o_fio.py:217`, `:243`, `:258`, `app/colaboradores/tests/test_ui_painel_mostra_o_app_orm.py:56`, `app/requirements.txt:43`. Execução do RED6 com Django, Freezegun e ORM [nao verificado].
+   - **O corte `[1:]` distingue as passadas.** A primeira já recebe `True`; depois dela, a B5.3b recebe `True` com o `out` principal e a O222 recebe `False` com `_conv`. Na sonda com o invólucro real e o corpo dublado, as duas rotas juntas registraram `[True, True, False]`. Com apenas a O222 após a primeira, registraram `[True, False]`, e a asserção rejeitou essa sequência. `app/ponto/services/cartorio.py:1002`, `:1015`, `:1048`, `:1105`, `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:249`.
+
+3. **NAO.** O delta muda o que os testes carregam e observam. Os escritores e os significados em produção seguem os do código abaixo. A autoridade do julgamento do dia continua em `julgar_celula`, e a lavra segue pela porta da célula. `app/docs/MAPA.md:26`, `app/docs/JUIZES.md:123`, `:133`, `app/ponto/portas/celula.py:1069`.
+
+   | Campo ou valor | Quem escreve e quem lê |
+   |---|---|
+   | `out['reconciliados']` | `julgar_colab` soma os fechos adiados e o corpo soma os fechos de seus três ramos. O RED6 exige pelo menos um e o vigia agrega o total. `app/ponto/services/cartorio.py:1040`, `:1594`, `:1613`, `:1628`, `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:247`, `app/ponto/services/vigia_de_hora.py:183`. |
+   | `out['julgadas']`, `out['carimbadas']`, `out['nunca_bateu']` | `contadores()` começa em zero. O corpo conta por data após classificar, após `carimbar` devolver campos, ou após as guardas do ramo sem adesão, respectivamente. O RED6 lê os dois primeiros. `processar_cartorio` e o script O118 leem os três, e o vigia agrega `julgadas`. `app/ponto/services/cartorio.py:2022`, `:1517`, `:1350`, `:1931`, `:1297`, `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:251`, `app/ponto/management/commands/processar_cartorio.py:67`, `bin/rejulgar_o118_col221.py:26`, `app/ponto/services/vigia_de_hora.py:183`. |
+   | `_dias_do_ato`, `cods`, `out['protestos']` | `_dia_novo_no_ato` mantém os conjuntos por contador. O corpo escreve `cods`; a fábrica lê suas datas. No fim, `julgar_colab` une essas datas às de `_dias_do_ato['nunca_bateu']`, conta as células com coluna `protestos` cheia e limpa o estado do ato. O comando e o vigia leem o total. `app/ponto/services/cartorio.py:1938`, `:1519`, `:1061`, `:1124`, `:1129`, `app/ponto/management/commands/processar_cartorio.py:67`, `app/ponto/services/vigia_de_hora.py:183`. |
+   | `CelulaDia.protestos`, `veredito`, `veredito_via` | `lavrar_veredito` escreve os campos e preserva a coluna quando prevalece a decisão do admin. `julgar_colab` lê a coluna para a contagem. A folha lê o veredito e a coluna para a retenção. `app/ponto/portas/celula.py:1097`, `:1111`, `:1129`, `app/ponto/services/cartorio.py:1125`, `app/folha/export.py:1273`, `:1286`. |
+   | `forcar`, `call_count`, `call_args_list`, instante congelado | A fixture e o invólucro fornecem `forcar`; o corpo o lê na guarda de impressão. O spy registra as chamadas e o RED6 lê o registro. O decorador fornece o instante que a fixture consulta pelo relógio do Django. `app/ponto/tests/test_o261_cobrado_le_o_fio.py:258`, `:296`, `app/ponto/services/cartorio.py:1048`, `:1106`, `:1294`, `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:232`, `:245`, `:249`. |
+
+   **Fila preexistente.** A O222 mescla `cods` e soma `_conv['julgadas']` em `relidas_pos_emissao`; `julgadas` e `carimbadas` da releitura ficam fora dos totais principais. Continuam pendentes os mutantes do RED5 que incluem dias sem adesão pulados e dos DRY que contam coluna cheia apenas via admin. O RED5 zera os carimbos e força o ato; os DRY cobrem admin com coluna cheia e cartório com coluna vazia. Execução desses mutantes [nao verificado]. `app/ponto/services/cartorio.py:1105`, `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:172`, `:187`, `:205`, `:217`, `app/ponto/tests/test_bateria_lavratura.py:1140`.
+
+4. **NAO.** O delta fornecido se limita aos três carregadores de teste e ao RED6. As adições carregam o helper existente, fixam o instante e observam as chamadas. Nenhuma introduz `except`, fallback, juiz novo ou relógio solto, e nenhuma toca `ponto/motor_calculo_v2.py`. Os quatro blobs locais conferem com os pós-delta do anexo. `app/chamados/tests/test_e3_pos_suite_sem_banco.py:174`, `app/ponto/tests/test_e3_nb_impressao_memoria.py:173`, `app/ponto/tests/x1_mutantes.py:100`, `app/ponto/tests/test_a_tela_v18_protestos_gravado.py:232`, `:245`, `app/docs/JUIZES.md:29`. Identidade Git do commit na cópia e efeitos em produção [nao verificado].
+
+VEREDITO: APROVA
 
 ## 25/11 18:49 · sessao e2a9e6323440 · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
 
@@ -829,73 +865,4 @@ Na cópia, encontrei **um teste que exigia a chave da 10**, removido pelo diff, 
 
 Isso é o comportamento correto para a medida escrita. O aval declara falsa **a premissa histórica da 10**. Para uma linha futura, o contador comprova apenas a falta atual de exportação vigente no seu escopo. Uma regra que autorize ou proíba cadastrar antecipadamente **[não verificado]**. `app/ponto/services/fechamento.py:43`, `:57`, `:63`
 
-## 25/11 16:02 · sessao e5d2050a0fb0 · A4-ESPELHO-AUSENCIA-ABERTA · verificador · origem=Code
-
-**Preverificação de `9dd35d78a`.** Os achados 1 a 3 fecham no código. O padrão do achado 4 corresponde ao que a mudança faz, com a ressalva sobre o corpo do commit abaixo. Há uma pendência de escopo literal: a assinatura mudou na linha **218 da base**, fora dos dois intervalos do aval. `aval_escopo.txt:1`, [app/ponto/services/dia_decidido.py:218](/home/ronald/codex_ws/9dd35d78ae77372c25e825b4beeb0ac56dd82994/app/ponto/services/dia_decidido.py:218), `CLAUDE.md:37`.
-
-## 1. Achados do opus final v2
-
-| Achado | Situação em `9dd35d78a` |
-|---|---|
-| **1. Terceiro vocabulário** | **Fechado no código.** `do_dia` busca a frase em `ESPERA[status]` e `palavra_do_dia` junta o nome do tipo à frase recebida. `ESPERA` já existia na base e é o mapa curto. O crachá HTML e o `status_display` da API leem a forma longa de `STATUS_CHOICES` por `get_status_display()`. A testemunha direta da palavra curta é `ESPERA`. `app/ponto/services/dia_decidido.py:146,249,270,475–478`, `app/ponto/models.py:701–702`, `app/templates/ponto/espelho.html:191`, `app/api/views.py:1880`. |
-| **2. Mudança no Histórico e no lote** | **Fechado.** O delta v3 retira `status=a.status` da chamada que o opus reprovou. Comparada à base `160173bb1`, a função inteira `linha_do_tempo` é idêntica byte a byte. O sufixo duplicado da versão reprovada some e volta o rótulo da base. `160173bb1/app/ponto/services/dia_decidido.py:616–677`, `app/ponto/services/dia_decidido.py:624–685`. |
-| **3. `startswith` deixava o sufixo livre** | **Fechado.** Os dois casos agora usam `assertEqual` sobre o rótulo completo, incluindo o tipo, o prefixo e o sufixo entre parênteses. `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:70–87`. |
-| **4. Padrão declarado** | **Fechado quanto à correspondência com o código.** A palavra curta do dia passa a ler a fonte já usada pelo Histórico. Isso é uso de fonte única para esse texto. A linha LEI-AKITA efetivamente gravada no corpo do commit está **[nao verificado]**. `app/ponto/services/dia_decidido.py:146–149,475–478,672–673`, `app/docs/GLOSSARIO.md:11,19`, `CLAUDE.md:62–70`. |
-
-## 2. Quem escreve, quem lê e o que sai
-
-| Campo ou retorno | Escritor e leitores |
-|---|---|
-| `Ausencia.status` | `criar_ausencia` grava o estado inicial calculado por `estado_inicial` ou o estado explícito recebido pela porta. `mudar_estado` grava as transições e a trilha. A rejeição de derivadas de férias tem porta própria com trilha, já existente. No fluxo auditado, o espelho filtra pelo estado, `do_dia` lê a chave do mapa, `veredito_do_lancamento` identifica o pedido aberto, o HTML lê `esta_aberta` e `get_status_display()`, e a API e o CSV também expõem o código cru. `app/ponto/services/ausencia.py:475–486,529–562,926–944,969–998,1484–1507`, `app/ponto/services/espelho.py:896–898`, `app/ponto/services/dia_decidido.py:478,505–508,580`, `app/templates/ponto/espelho.html:191`, `app/api/views.py:1879–1880`, `app/ponto/services/atestados_lote.py:118–128`. |
-| `ESPERA` e kwarg `espera` | `dia_decidido.py` declara o mapa literal. Na base, `linha_do_tempo` já lia o mapa. No final, `do_dia` também o lê e preenche `espera`. `palavra_do_dia` lê o kwarg no ramo `PENDENTE`. `160173bb1/app/ponto/services/dia_decidido.py:146–149,663–664`, `app/ponto/services/dia_decidido.py:146–149,217–218,259–272,475–478,672–673`. |
-| Retorno `PENDENTE` e `palavra_dia` | `palavra_do_dia` devolve a string. `do_dia` coloca a string em `palavra`, conserva o veredito `v`, põe a cor de `PENDENTE` e deixa os campos de decisão em `None`. `aplicar_palavra_do_dia` grava `palavra_dia` no dict do espelho. O PDF reaplica a mesma função no recorte pedido e imprime a palavra em Obs. `api_espelho_v2` copia e serializa o campo com e sem batidas. `app/ponto/services/dia_decidido.py:259–272,472–479`, `app/ponto/services/espelho.py:341–346,1327–1331`, `app/relatorios/pdf_espelho.py:596–602,636–638,923–924`, `app/api/views.py:1361,1387–1395,1548,1611`, `app/docs/LEIS.md:85`. |
-| `rotulo` e `situacao` | `cartao_do_dia` monta o rótulo inicial. Para o pedido aberto, `linha_do_tempo` o substitui pelo prefixo legado mais o sufixo de `ESPERA`. O painel imprime `h.rotulo` na guia Histórico e no título do anexo. `atestados_lote.linhas` repassa o rótulo e `csv_bytes` o escreve na coluna **`situacao`**, ao lado da coluna **`status`** com o código cru. A exposição desse CSV por uma rota na cópia está **[nao verificado]**. `app/ponto/services/dia_decidido.py:570–584,668–684`, `app/ponto/views.py:2042–2061`, `app/templates/ponto/partials/painel_ausencia.html:198,228`, `app/ponto/services/atestados_lote.py:54–64,118–128`. |
-
-Para um **atestado** que chega ao ramo aberto, com os pares sempre na ordem `aguardando_documento` / `aguardando_decisao`:
-
-| Saída | Base `160173bb1` | `9dd35d78a` | Código |
-|---|---|---|---|
-| `palavra_dia` no dict do espelho, Obs do PDF e `/api/espelho/v2/` | `Atestado aguardando decisao` / `Atestado aguardando decisao` | `Atestado aguardando documento` / `Atestado aguardando decisao do DP` | `160173bb1/app/ponto/services/dia_decidido.py:264,465–470`, `app/ponto/services/dia_decidido.py:146–149,270–272,475–478`, `app/relatorios/tests/test_a4_pdf_espera_da_ausencia.py:32–47`, `app/api/views.py:1394,1548,1611`. |
-| Crachá visível no espelho HTML | `Atestado` / `Atestado` | `Atestado (Aguardando documento do colaborador)` / `Atestado (Aguardando decisao do DP)` | `160173bb1/app/templates/ponto/espelho.html:191`, `app/templates/ponto/espelho.html:191`, `app/ponto/models.py:701–702,710–720`. |
-| `/api/ausencias/`, `status_display` | `aguardando_documento` / `aguardando_decisao` | `Aguardando documento do colaborador` / `Aguardando decisao do DP` | `160173bb1/app/api/views.py:1879–1880`, `app/api/views.py:1879–1880`, `app/ponto/models.py:701–702`. |
-| Histórico, `rotulo`, e CSV, `situacao` | `Atestado aguardando decisao (aguardando documento)` / `Atestado aguardando decisao (aguardando decisao do DP)` | Os mesmos dois textos | `160173bb1/app/ponto/services/dia_decidido.py:264,663–664`, `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:84,87`, `app/ponto/services/atestados_lote.py:118–128`. |
-| Código cru em `status` da API e do CSV | `aguardando_documento` / `aguardando_decisao` | Os mesmos dois códigos | `app/api/views.py:1879`, `app/ponto/services/dia_decidido.py:580`, `app/ponto/services/atestados_lote.py:128`. |
-
-A grade do calendário também escreve sua chave `palavra_dia`, mas chama `do_dia` sem `pendente` nas duas cópias. Para esses estados, a palavra da grade segue o restante do veredito do dia e o chip tem seu próprio rótulo de tipo. `app/colaboradores/services/calendario.py:738–757`, `app/templates/colaboradores/partials/_calendario_grade.html:97–98`, `app/ponto/services/dia_decidido.py:442–443,473–494`.
-
-## 3. Diff contra a base e aval
-
-O diff de `dia_decidido.py` tem três pontos. A linha **218** ganha `espera=None` e fica **fora do aval literal**. A linha **264** da base vira **264–272** no final, no corpo do ramo `PENDENTE`. A linha **469** da base vira **477–478** no final, na chamada de `do_dia`. Estes dois últimos pontos caem nos intervalos autorizados quando medidos na base. A antiga linha **663**, atual **672**, é idêntica na comparação base → final. `aval_escopo.txt:1`, `160173bb1/app/ponto/services/dia_decidido.py:218,264,469,663`, `app/ponto/services/dia_decidido.py:218,264–272,477–478,672`, `CLAUDE.md:37–38`.
-
-## 4. Quem omite `espera` e qual seria a alternativa
-
-O único chamador de produção que chega a `palavra_do_dia(PENDENTE, ...)` sem `espera` é `linha_do_tempo`, via `veredito_do_lancamento`. Ele tem o `a.status` e o usa na mesma expressão, para o sufixo. É **compatibilidade deliberada com o prefixo histórico**. Na composição da palavra do dia, um estado sem entrada no mapa levanta antes da chamada ao formatador. As outras chamadas sem `espera` recebem os vereditos de `veredito_do_dia` ou `veredito_de`, cujos retornos excluem `PENDENTE`. `app/ponto/services/dia_decidido.py:405–439,475–478,493,497–508,518–554,668–673`.
-
-Um desenho possível preservaria a assinatura e o ramo legado de `palavra_do_dia` e daria a `do_dia` um formatador com `espera` obrigatória. Ambos reutilizariam a mesma resolução do nome do tipo. Isso preservaria `linha_do_tempo` e dispensaria o valor opcional, mas extrair a resolução do nome tocaria as linhas **249–251**, também fora do aval literal. `app/ponto/services/dia_decidido.py:249–251,259–272,475–478,672–673`, `aval_escopo.txt:1`.
-
-## 5. Alcance do `KeyError`
-
-**Nenhum caminho de produção da cópia chega ao índice com estado fora de `ESPERA`.** `montar_dias` obtém a ausência de `cobertura_ausencia_periodo(para='cobranca')` e só a põe em `_pendente_do_dia` se o estado estiver em `ABERTAS`. As duas chaves de `ESPERA` coincidem com `ABERTAS`. `aplicar_palavra_do_dia` passa esse objeto a `do_dia`, tanto na primeira montagem do espelho quanto na reaplicação do PDF. A API consome o espelho. O outro chamador direto, o calendário, usa `pendente=None`. O teste injeta um objeto com estado `None`, `pendente` ou `aprovada` diretamente em `do_dia` e exige `KeyError`. `app/ponto/services/espelho.py:596–604,335–344,896–898,1327`, `app/ponto/services/ausencia.py:912`, `app/ponto/services/dia_decidido.py:146–149,442–443,473–478`, `app/relatorios/pdf_espelho.py:636–638`, `app/api/views.py:1361`, `app/colaboradores/services/calendario.py:748–753`, `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:48–53`.
-
-## 6. Selos fora do delta v3
-
-**Nenhum localizado** que fixe a palavra exata `aguardando decisao` sem ` do DP`. O teste antigo que fixava a frase exata é `test_palavra_parcial_e_pendente.py` e foi atualizado no v3. Fora do v3, o selo do PDF exige `aguardando` e ausência de `abon`. O teste de autoria exige `aguardando` e trilha vazia. O teste da API para ausência aberta cobra `ausencia_pendente`, o vocabulário de `status` e a ausência de falta. `app/ponto/tests/test_palavra_parcial_e_pendente.py:76–81`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:47–56`, `app/ponto/tests/test_espelho_decidiu_icone.py:81–85`, `app/api/tests/test_espelho_app_ausencia_pendente_aditivo.py:27–32`.
-
-## 7. Mordida dos testes [nao verificado]
-
-Em uma checagem em memória com as funções da cópia e dependências simuladas, as sete asserções do módulo de palavra e Histórico passaram no original. Os resultados abaixo são dessa checagem. A execução da suíte Django inteira para `9dd35d78a` está **[nao verificado]**. `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:30–87`.
-
-| Mutante | Resultado |
-|---|---|
-| **(a)** Ignorar `espera` e sempre dizer `aguardando decisao` | **4 falhas**. As duas igualdades, a distinção entre estados e a chamada direta com `espera` pegam. `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:38–46,55–57`. |
-| **(b)** Trocar o prefixo sem `espera` para `<Tipo> pendente` | **2 falhas**, uma por estado no Histórico. Um acréscimo só depois de ` (` no retorno intermediário escaparia, porque `linha_do_tempo` recorta esse trecho. `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:81–87`, `app/ponto/services/dia_decidido.py:672`. |
-| **(c)** Devolver só `espera`, perdendo o nome do tipo | **3 falhas** na checagem. O teste do coletor do PDF também exige `Atestado` nas duas frases exatas. `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:38–43,55–57`, `app/relatorios/tests/test_a4_pdf_espera_da_ausencia.py:36–47`. |
-| Copiar `ESPERA` para um dict literal dentro de `do_dia` | **0 falhas**. A cópia preserva as duas frases e o `KeyError`, então as asserções de saída aceitam uma derivação paralela. `app/ponto/services/dia_decidido.py:146–149,478`, `app/ponto/tests/test_a4_palavra_espera_da_ausencia.py:38–57,81–87`. |
-
-## 8. Classes de reprovação e padrão
-
-No delta de produção, **nenhum juiz, escritor de estado, relógio, trava ou `except` novo**. A pergunta sobre ausência aberta continua registrada em `ABERTAS`, o novo lookup lê o mapa existente e o retorno mantém `veredito` e `palavra` como campos distintos. O `KeyError` é uma falha nova para entrada inválida direta, com o alcance descrito no item 5. A lacuna dos testes é estrutural: eles mordem as regressões de texto, mas deixam passar a cópia do mapa. Pouso, ordem dos pré-requisitos, RED registrado e smoke nas duas cascas para este hash estão **[nao verificado]**. `app/core/juizes.py:258–264`, `app/ponto/services/dia_decidido.py:217–218,264–272,472–479`, `app/api/views.py:1061,1880`, `app/templates/ponto/espelho.html:191`, `app/templates/ponto/partials/painel_ausencia.html:274`, `CLAUDE.md:383–393`.
-
-**`fonte unica` descreve a reutilização da fonte da frase curta.** O estado vem de `Ausencia.status`, a classificação aberta vem de `ABERTAS`, o texto longo vem de `STATUS_CHOICES` e a palavra curta lê `ESPERA`. O mapa curto é uma projeção literal preexistente, sem geração automática a partir das choices. O diff adota essa fonte para mais um consumidor. O exemplo de *Aggregate Root* do glossário é `CelulaDia`, fora da mudança. `app/ponto/models.py:690–705,809–810`, `app/ponto/services/ausencia.py:912`, `app/ponto/services/dia_decidido.py:144–149,475–478,672–673`, `app/docs/GLOSSARIO.md:11`.
-
-_8237 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8238 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
