@@ -1,7 +1,66 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 22:25** · publicado em **24/11/2026 22:24** (UTC-3)
+> Ultima resposta processada: **24/11/2026 22:47** · publicado em **24/11/2026 22:49** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 22:47 · sessao cb747efaacf2 · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
+
+Implementei os quatro bloqueios da volta 3. Conferi a sintaxe, os alvos dos 13 mutantes e os repins por AST. O diff adiciona **0 `except`**. A execução dos REDs, da suíte e dos mutantes fica com o Code, e a certificação com o Opus final. [nao verificado] [nao verificado]
+
+### Funções alteradas
+
+- **B1.** `supra_juiz.py::Command.handle` lê o veredito e os PKs lavrados para o placar de sem par. A retratação confere o PK cobrado antes de chamar a porta, e `ponto/supra_juiz.py::motivo_retratacao` nomeia esse PK no texto. [Comando](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/supra_juiz.py:205) · [Guarda da retratação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/supra_juiz.py:263) · [Texto](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:178)
+- **B1.** `emitir_furo_retroativo.py::Command.handle` lê o `FURO_PARCIAL` de sem par na ata e passa os marcos e a âncora a `_abrir_chamado`. `cartorio.py::_marcos_do_furo_parcial` dá a mesma forma aos marcos nos dois caminhos. Os comandos conservam o diagnóstico convencional com os sinais de sem par desativados. [Retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/emitir_furo_retroativo.py:94) · [Nomeação dos marcos](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/cartorio.py:2026) · [Placar convencional](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/supra_juiz.py:216)
+- **B2.** `ponto/supra_juiz.py::classificar_dia` e `furo_do_sem_par` compartilham o vocabulário do ramo existente. `cartorio.py::_julgar_colab_corpo` grava os PKs do tipo acusado. Quando o ramo acusa `E`, a `S` órfã fica fora da ata. [Classificador](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:550) · [Leitor da classificação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:80) · [Lavra](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/cartorio.py:1594)
+- **B3.** `lastro.py::sem_par_da_ata`, `_sem_par_acesos` e `julgar` conferem o PK e devolvem desconhecido para chave ausente ou lista inválida. `fechar_cobranca_com_lastro.py::Command.handle` imprime o contador de desconhecidos. A retenção continua vindo do veredito lavrado. [Lastro](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/lastro.py:81) · [Conferência no vigia](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/lastro.py:324) · [Contador](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/management/commands/fechar_cobranca_com_lastro.py:69) · [Folha](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/folha/export.py:1273)
+- **B4.** `cartorio.py::sem_par_no_horizonte` consulta `competencia_entregue` com o mês e ano do fim de `janela_atual`. Uma competência entregue bloqueia o sinal. [Horizonte](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/cartorio.py:333)
+
+### REDs na base informada
+
+As falhas abaixo são as esperadas pela leitura do código. Resultados de execução [nao verificado].
+
+| Bloqueio | Teste e por que morde | [nao verificado]
+|---|---|
+| B1 | [Placar com pareador calado](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:64) perde o PK lavrado na base. [Chave ausente](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:73) acusa pelo pareamento atual. [Retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:82) descarta o `FURO_PARCIAL` e deixa de chamar o emissor. |
+| B1 | [Texto da retratação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:101) compara horas na base. [Guarda da retratação](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:111) deixa a base tentar retratar um chamado cujo PK segue acusado. |
+| B2 | [Lavra com `E` e `S`](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:118) espera só a `E`. A base copia os dois PKs. |
+| B3 | [Ata → chamado → folha](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:127) exige o mesmo PK, `furo_real` no vigia e `espelho_furo` na folha. A base põe a cobrança em `sem_marco`. [Ata inválida ou ausente](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:142) apanha o `True` indevido para `[{}]`. [Outra entrada na ata](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:158) exige lastro quando apenas outro PK segue acusado. |
+| B4 | [Competência 11 entregue](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_sem_par.py:165) usa o dia civil 21/10. A base ainda deixa o sinal passar depois do registro da entrega de novembro. |
+
+### Comandos para o Code
+
+O primeiro comando roda os selos. Cada chamada de `mutante` seleciona um teste e aplica uma mutação em memória. O resultado esperado de cada mutante é falha de assertiva. [Runner e seleções](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_v3_mutantes.py:16) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
+  ponto.tests.test_a_tela_v3_sem_par
+
+mutante() {
+  A_TELA_V3_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
+    --settings=config.settings.ci \
+    --testrunner=ponto.tests.test_a_tela_v3_mutantes.Runner
+}
+
+mutante supra-sem-placar
+mutante supra-sinal-sem-ata
+mutante supra-sem-veredito
+mutante retro-sem-parcial
+mutante retro-sem-marcos
+mutante retro-sem-veredito
+mutante retratacao-por-hora
+mutante retratacao-sem-pk
+mutante lavra-todos
+mutante lastro-sem-par
+mutante lastro-lista-invalida
+mutante lastro-por-tipo
+mutante horizonte-so-mes
+```
+
+### Repins e escopo
+
+- `LINHAS_REGISTRADAS` coincide com o censo AST. Cartório `1299/1454 → 1302/1457`, mesmas expressões de adesão e recorte da janela. Supra `138/225 → 137/222` e retroativo `78/103 → 74/106`, mesmas leituras de adesão e contagem civil. [Cartório](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/core/tests/test_medida_turno_do_par.py:319) · [Supra](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/core/tests/test_medida_turno_do_par.py:297) · [Retroativo](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/core/tests/test_medida_turno_do_par.py:291)
+- `e4b_c12_ast.py` conserva `1514/1799/1819`, as mesmas três chamadas de `_gravar_estado` em `chamados/models.py`. Ajustei os dublês dos testes existentes para a consulta de entrega e o novo contador, com os asserts preservados. [C12](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/chamados/tests/e4b_c12_ast.py:25) · [Dublê de entrega](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_a_tela_sem_par_acusa.py:239) · [Dublê do vigia](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/tests/test_o231_lastro_mede_uma_vez.py:30)
+- A exibição **Em aberto** e a tolerância ficaram fora da edição. Não rodei Docker, banco ou suíte, nem fiz operações de Git, deploy ou crons. Hash da cópia e efeito em produção [nao verificado]. [Calendário](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/colaboradores/services/calendario.py:607) · [Espelho](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/services/espelho.py:485) · [PDF](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/relatorios/pdf_espelho.py:618) · [Tolerância](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-223322/app/ponto/supra_juiz.py:546) [nao verificado]
 
 ## 24/11 22:25 · sessao e7a707fb151d · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
 
@@ -700,12 +759,4 @@ Em D, `sem período` consta nominalmente para col37 em `app/docs/RELATO.md:124`.
 
 Juízes de trabalho/previsto, dia de turno e cálculo do par em `app/core/juizes.py:192–193`, `:216`, `:1207–1208`. L-095, L-097 e L-085 em `app/docs/LEIS.md:113`, `:115`, `:117`.
 
-## 24/11 17:41 · sessao af6440bfabc1 · - · - · origem=Ronald (tmux)
-
-- **col174 24/10 e 01/11.** A sonda anterior documenta `sem_periodo` nas duas datas. A guarda responsável fica [nao verificado]. O par E25/10 02:32–S04:57 que aparece nas batidas do recorte de 24/10 pertence a 25/10 pela chave `_dia_de` e continua com 0,0 min no `MUDA`. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:126–132,167–179`, `anexo_pares.txt:15,95`.
-- **col174 26/10.** Sem `PAR` para a chave. A `E` de 26/10 às 02:27 aparece aberta no turno de 25/10. O outro turno é atribuído a 26/10 e abre em 27/10. A cópia documenta a divergência por recorte para a primeira `E`. A causa do zero em 26/10 fica [nao verificado]. `saída de sonda_mapa18.py:12`, `app/docs/RELATO.md:74`, `app/docs/BACKLOG.md:2199`.
-- **col922 26/10, 28/10 e 03/11.** Sem `PAR` nas três chaves. As batidas de 29/10 E04:07–S07:02 aparecem no recorte de 28/10, mas o anexo atribui esse par a 27/10, com 0,0 min também no `MUDA`. O relato menciona o leitor que faltava migrar no caso de 29/10. A causa dos três zeros fica [nao verificado]. `saída de sonda_mapa18.py:22–24`, `anexo_pares.txt:76–78,103`, `app/docs/RELATO.md:19`.
-- **Juízes e leis.** `turnos_do_colab` decide a data do turno pela L-085. `periodos_do_dia` decide a ata pela L-087. `MotorBase.calcular_periodo` decide o valor do par. A lavratura parte de zero e agrega o período pela chave da jornada sob a L-095. `app/core/juizes.py:215–224,1206–1208`, `app/docs/JUIZES.md:20–29`, `app/docs/LEIS.md:113,117,119`, `app/ponto/services/dia_pago.py:126–132,167–179`.
-- **Escopo da coluna JANELA.** Nos seis dias acima, o `MUDA` não demonstra ganho na respectiva chave. O valor final de `DiaPago` após a cura fica [nao verificado]. `anexo_pares.txt:91–103`. As referências ao dado colado contam da linha `# PAR` e do primeiro `sonda_leitura`, respectivamente.
-
-_8105 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8106 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
