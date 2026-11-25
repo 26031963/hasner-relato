@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 06:01:42.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1299**.
+**Medido em 25/11/2026 06:07:53.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1294**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1304,8 +1304,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:17:24 | SendMessage |  | `-` |
 | 18:09:16 | SendMessage |  | `-` |
 | 18:09:11 | Bash | Record DXG-55 PAREI | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"PAREI: ! DXG-55-NAO-FECHA-NO-SLOT \| espera Ronald -- DIFF das 55 na sombra (porta/v3_55/resumo.md, sombra.sh flock, atomic+raise, rollback ok; 55 aplicadas 0 recusadas): juiz classificar_pergunta DEPOIS = 47 com_registro + 8 plantio_fora_do_slot " "(5 ja fora e seguem: 51111 col873, 53142 col947,  ...` |
-| 18:03:49 | Bash | Record replaced NOTURNO aval | `cd ~/saas-hasner; cat > logs/AVAIS-1515/noturno_a_v4_amplia_b_1805.txt <<'EOF' aval Ronald: NOTURNO-A-V4-AMPLIA (24/11 18:05) -- substitui inteiro o NOTURNO-A-CONTRATO-V4. ! no motor e no janela_he onde for preciso para que o marco caia no dia do turno que o juiz ja da (L-085); a regra da janela segue morando so no janela_he. PRONTO: DIFF da comp 11 inteira na sombra; "muda" = qualquer rubrica, tr ...` |
-| 18:03:45 | SendMessage |  | `-` |
-| 18:03:32 | Bash | Record equivalent DXG aval | `cd ~/saas-hasner; cat > logs/AVAIS-1515/dxg_apply_dentro_do_slot_1805.txt <<'EOF' aval Ronald: DXG-APPLY-DENTRO-DO-SLOT (24/11 18:05) -- substitui inteiro o DXG-APPLY-66. ! aplicar pelas portas so as trocas que ficam dentro do slot do juiz depois da troca (a tua medida: 55); as demais vao a lista do admin, sem mudar hora. DIFF do subconjunto na sombra antes; comps 09/10 hash igual; reversao em log ...` |
-| 18:01:50 | Bash | Record DESPACHO line | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"DESPACHO DXG-APPLY-55 + NOTURNO-A-V4-AMPLIA (18:05): DXG -> agente do DIFF v2 refaz na sombra so as 55 (porta/v3_55/), prepara reversao e acha a porta da lista do admin para as 29; apply em prod so depois do DIFF lido \| NOTURNO-A -> construtor na wt-noturno-v4-175246, cura janela_he.py:94 + motor  ...` |
-| 18:01:46 | SendMessage |  | `-` |
