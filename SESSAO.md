@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 24/11/2026 22:18:22.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (39.1 MB). Acoes na janela: **850**.
+**Medido em 24/11/2026 22:24:38.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (39.9 MB). Acoes na janela: **852**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:19:53 | Bash | Supersede BASE_MOVE decision line, record v11 | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; t=open(p).read() o='DECIDIDO (PARADA 5, cura mais restritiva + DINHEIRO 1 "DIFF que surpreende nao aplica"): gate por classe BASE_MOVE_SEM_TROCA -> pauta; volta v10b no agente, depois Codex verif4.' assert t.count(o)==1 t=t.replace(o,'SUPERADA 22:4x: o gate BASE_MOVE_SEM_TROCA (v11) barra 15 de 18 colabs -> passam 4 de 33 perguntas (o "28  ...` |
+| 22:19:46 | SendMessage |  | `-` |
 | 22:17:43 | Bash | Record A-TELA pouso and ESPURIA reading in RELATO | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; t=open(p).read() t=('A-TELA pouso (22:2x): suite inteira VM na wt-atela @ eaad96c53 FAILED 1 de Ran 17853 (21:38-22:15) = so a catraca test_medida_turno_do_par (cartorio::_julgar_colab_corpo B1 1285/1440 -> 1299/1454, mesmo codigo conferido contra e6733e7f2, +14 da v2c). Merge do main na raia dc84c9012 (merge-tree limpo, B3 livre), repin d ...` |
 | 22:17:37 | Bash | Wait for A-TELA Codex final verifier | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/pouso; until grep -q 'rc=' $D/verif_final.wrap.log; do /usr/bin/sleep 20; done; tail -1 $D/verif_final.wrap.log; head -c 1500 $D/verif_final.r` |
 | 22:17:18 | Bash | Launch Codex final verifier for A-TELA | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/pouso; cat > $D/verif_final.q <<'EOF' Papel: verificador (pre-pouso) da obra A-TELA-DO-DIA-LE-UM-JUIZ. Arvore = este hash (main 16630e80c + a obra). Diff anexo = main..obra (por ultimo). Sem hipotese: responda o que encontrar, com arquivo:linha; aprove ou reprove com a lista de bloqueios. Objetivo declarado da obra: o marco "batida sem par" do dia  ...` |
