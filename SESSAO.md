@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 01:13:19.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (57.2 MB). Acoes na janela: **983**.
+**Medido em 25/11/2026 01:19:42.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (57.3 MB). Acoes na janela: **988**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:15:15 | Bash | Patch selo for religa and run RED | `cd $(cat ~/saas-hasner/logs/B4-RELIGA/wt.txt); python3 - <<'EOF' p='bin/tests/test_disjuntor.sh'; s=open(p).read() def rep(a,b): global s assert s.count(a)==1, a[:60]; s=s.replace(a,b) rep('''RB="$_tmp/religada"; mkdir -p "$RB/bin"''','''RB="$_tmp/desligada"; mkdir -p "$RB/bin"''') rep('''python3 - "$RB/bin/disjuntor.py" <<'PYL' \|\| _falha religa "a linha B4_FREIO_DE_COTA = False sumiu de bin/dis ...` |
+| 01:14:59 | Bash | Read selo religa sections | `cd $(cat ~/saas-hasner/logs/B4-RELIGA/wt.txt); sed -n 1612,1630p bin/tests/test_disjuntor.sh; sed -n 1660,1680p bin/tests/test_disjuntor.sh` |
+| 01:14:53 | Bash | Create B4-RELIGA copy and locate selo hooks | `cd ~/saas-hasner; W=/home/ronald/wt-b4-religa-$(date +%H%M%S); git worktree add --detach $W HEAD 2>&1\|tail -1; echo $W; mkdir -p logs/B4-RELIGA; echo $W > logs/B4-RELIGA/wt.txt; grep -n "_religa\\|RB=\\|RB/bin\\|religada" $W/bin/tests/test_disjuntor.sh` |
+| 01:14:41 | Bash | Read selo changes of B4-SEM-FREIO | `cd ~/saas-hasner; git show 3bd4482c0 -- bin/tests/test_disjuntor.sh` |
+| 01:14:37 | Bash | Read B4-SEM-FREIO commit to revert | `cd ~/saas-hasner; git show 3bd4482c0 --stat \| tail -8; git show 3bd4482c0 -- bin/ \| head -80` |
+| 01:14:02 | Bash | Wait for sombra bloco to finish | `cd ~/saas-hasner; until [ -s logs/COMP11-RELAVRA-FROTA/sombra_bloco_2511.fim ]; do /usr/bin/sleep 30; done; cat logs/COMP11-RELAVRA-FROTA/sombra_bloco_2511.fim \| tail -3` |
+| 01:13:58 | Bash | Check sombra bloco progress | `cd ~/saas-hasner; ls -la logs/COMP11-RELAVRA-FROTA/sombra_bloco_2511.*; tail -2 logs/COMP11-RELAVRA-FROTA/sombra_bloco_2511.out; date +%H:%M` |
 | 01:12:34 | Bash | Wait for pista and certify PONTA pouso merge | `cd ~/saas-hasner; D=logs/PONTA-PEQUENA-NA-BORDA/item3/v4/pouso; mkdir -p $D; f=$(git -C $(cat logs/PONTA-PEQUENA-NA-BORDA/item3/v4/pouso_wt.txt) rev-parse HEAD); ssh pista espera 1125011230_233c541f > $D/pista_espera.txt 2>&1; ssh pista log 1125011230_233c541f 100000 > $D/pista.log 2>&1; bin/pista_certifica.sh $f $D/pista.log $D/pista_espera.txt > $D/certifica.out 2>&1; echo "certifica_rc=$?" >> $ ...` |
 | 01:12:29 | Bash | Commit pouso merge in copy and request pista suite | `cd $(cat ~/saas-hasner/logs/PONTA-PEQUENA-NA-BORDA/item3/v4/pouso_wt.txt); M=~/saas-hasner/logs/PONTA-PEQUENA-NA-BORDA/item3/v4/msg_pouso.txt; cat > $M <<'EOF' POUSO PONTA-PEQUENA-NA-BORDA: merge de 42b84d0ee -- a recusa da ponta pequena alcanca a competencia anterior nao exportada e o prazo do dia vira evento (o vigia emite quando dia_encerrado fecha, o consumidor recusa) Itens 2 e 3 da obra (5 c ...` |
 | 01:12:20 | Bash | Read LEI-AKITA lines of PONTA chain | `cd ~/saas-hasner; for c in e7d35b9db a6fa3a5d9 816995fb5; do git log -1 --format=%B $c \| grep "^LEI-AKITA" \| cut -c1-1200; echo; done; git log --oneline HEAD..42b84d0ee \| wc -l` |
@@ -991,5 +998,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:26:30 | Bash | Read pista_certifica and look at pista host | `cd ~/saas-hasner; sed -n 1,80p bin/pista_certifica.sh; ssh -o BatchMode=yes -o ConnectTimeout=5 pista 'hostname; ls; ls bin 2>/dev/null \| head -30' 2>&1 \| head -50` |
 | 13:26:28 | Bash | Read pista_lock and find pista dispatch scripts | `cd ~/saas-hasner; sed -n 1,60p bin/pista_lock.sh; grep -rn -l 'ssh pista' bin \| head; ls bin \| grep -i -E 'pede\|espera\|remot'` |
 | 13:26:26 | Bash | Survey pista 2 tooling | `cd ~/saas-hasner; date +%H:%M; ls bin \| grep -i -E 'pista\|fila\|trava\|suite'; grep -n -i 'pista' bin/suite.sh \| head -20` |
-| 13:14:57 | SendMessage |  | `-` |
-| 13:14:50 | Bash | Read CLASSE-D green verdict | `cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b35k38kcs.output; cd ~/saas-hasner/logs/CLASSE-D-NA-FRENTE-DA-E4D/v2; ls; head -5 green.log` |
