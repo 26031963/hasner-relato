@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 03:18:49.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (72.1 MB). Acoes na janela: **1280**.
+**Medido em 25/11/2026 03:25:09.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (72.1 MB). Acoes na janela: **1279**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1289,4 +1289,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:27:45 | Bash | Read prior DXG sonda result and script | `cd ~/saas-hasner/logs/DECLARADO-X-GRAVADO; head -c 3500 sonda.r; echo; echo ====; wc -l sonda_itens_2_6.py; sed -n 1,60p sonda_itens_2_6.py` |
 | 15:27:41 | Bash | Survey existing DXG measurements and corte | `cd ~/saas-hasner; ls -t logs/DECLARADO-X-GRAVADO/ \| head -30; ls logs/RAIA-INTERVALO/dxg/ 2>/dev/null \| head; grep -rl 'col707\\|707' logs/DECLARADO-X-GRAVADO/ 2>/dev/null \| head; cat logs/AVAIS-1212/declarado_x_gravado.txt 2>/dev/null \| head -40` |
 | 15:27:36 | Bash | Find DXG / DECLARADO-X-GRAVADO context | `cd ~/saas-hasner/app/docs; grep -n -E 'DXG\|DECLARADO-X-GRAVADO' BACKLOG.md RELATO.md CORTES.md PROMPTS.md \| cut -c1-400 \| head -30` |
-| 15:19:43 | Bash | Replace contract with V2 in docs, register side item | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='BACKLOG.md'; L=open(p).read().split('\n') i=[k for k,l in enumerate(L) if l.startswith('\| RESOLVER-PASSA-NA-FRENTE \|')][0] c=L[i].split('\|') c[4]=" CONTRATO-RESOLVER-REDUZIDO-V2-2411-1520 substitui o -1520 e todo aval anterior: motivo so com pergunta aberta; frase fixa no Log/nota/ato_motivo; historico do app ate o fim da comp; dia trancado recusa ...` |
