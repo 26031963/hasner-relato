@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 17:42:15.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (3.7 MB). Acoes na janela: **108**.
+**Medido em 25/11/2026 17:48:25.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (3.7 MB). Acoes na janela: **110**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:48:21 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'quem\\|fila\\|--' bin/trava_teste.sh \| head -30; ps -eo pid,etime,args \| grep -E 'suite.sh\|trava_teste' \| grep -v grep \| cut -c1-300` |
+| 17:48:17 | Bash |  | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem 2>&1 \| head -20; ls logs/trava* logs/fila* 2>/dev/null \| head; grep -rn 'refs/pista' bin/*.sh 2>/dev/null \| head -5; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/pista-pede-sha-completo.md` |
 | 17:33:03 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') assert L[0].startswith('lei: E4D-ESTOQUE-INSTANTE') x='RESPONDIDA por E4D-ESTOQUE-INSTANTE-2511 (17:3x, opcao B: estoque recebe a hora da migracao, a mesma para todas, marca origem=estoque; ato_em proibido como instante de entrada; nao relavra; constroi a partir das 18:00) -- era: '+L.pop(0) k=next(i ...` |
 | 17:32:54 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '42' logs/E4D-MATRIZ/BRIEF-CONSTRUTOR-2511.md \| head -8 \| cut -c1-250` |
 | 17:32:51 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/E4D-MATRIZ \| head; grep -n 'BRIEF-CONSTRUTOR-2511' app/docs/RELATO.md \| cut -c1-300` |
