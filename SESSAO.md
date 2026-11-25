@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 01:19:42.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (57.3 MB). Acoes na janela: **988**.
+**Medido em 25/11/2026 01:26:09.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (57.3 MB). Acoes na janela: **989**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:20:38 | Bash | Flip B4 brake on and run GREEN selo | `cd $(cat ~/saas-hasner/logs/B4-RELIGA/wt.txt); python3 - <<'EOF' p='bin/disjuntor.py'; s=open(p).read() a='''B4_FREIO_DE_COTA = False # aval Ronald B4-SEM-FREIO-DE-COTA (25/11 00:1x): a cota semanal NAO freia Agent nem Codex -- # so AVISO (`AVISO B4-SEM-FREIO-DE-COTA` na trilha); a ESCADA pela PALAVRA dele segue. # REVERSAO do aval: religar o B4 = True NESTA linha (o mecanismo abaixo fica inteiro) ...` |
 | 01:15:15 | Bash | Patch selo for religa and run RED | `cd $(cat ~/saas-hasner/logs/B4-RELIGA/wt.txt); python3 - <<'EOF' p='bin/tests/test_disjuntor.sh'; s=open(p).read() def rep(a,b): global s assert s.count(a)==1, a[:60]; s=s.replace(a,b) rep('''RB="$_tmp/religada"; mkdir -p "$RB/bin"''','''RB="$_tmp/desligada"; mkdir -p "$RB/bin"''') rep('''python3 - "$RB/bin/disjuntor.py" <<'PYL' \|\| _falha religa "a linha B4_FREIO_DE_COTA = False sumiu de bin/dis ...` |
 | 01:14:59 | Bash | Read selo religa sections | `cd $(cat ~/saas-hasner/logs/B4-RELIGA/wt.txt); sed -n 1612,1630p bin/tests/test_disjuntor.sh; sed -n 1660,1680p bin/tests/test_disjuntor.sh` |
 | 01:14:53 | Bash | Create B4-RELIGA copy and locate selo hooks | `cd ~/saas-hasner; W=/home/ronald/wt-b4-religa-$(date +%H%M%S); git worktree add --detach $W HEAD 2>&1\|tail -1; echo $W; mkdir -p logs/B4-RELIGA; echo $W > logs/B4-RELIGA/wt.txt; grep -n "_religa\\|RB=\\|RB/bin\\|religada" $W/bin/tests/test_disjuntor.sh` |
