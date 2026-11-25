@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 12:57** · publicado em **25/11/2026 12:59** (UTC-3)
+> Ultima resposta processada: **25/11/2026 13:08** · publicado em **25/11/2026 13:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 13:08 · sessao 4dcf1fbd2122 · A4-ESPELHO-AUSENCIA-ABERTA · verificador · origem=Code
+
+**Veredito sobre `1fde33f1a` (`160173bb1` como base).** A cura do crachá e do `status_display` procede. Eu devolveria a alegação de paridade entre oferta e POST. O GET pode oferecer anexo para uma ausência aberta de férias, e o POST a recusa com `409`. O POST também aceita substituir um anexo existente nos dois estados abertos, quando o GET omite a oferta. A incidência desses casos em produção, a execução dos RED/GREEN, a suíte e o pouso ficam [nao verificado]. `app/templates/ponto/espelho.html:191`, `app/api/views.py:1061`, `app/api/views.py:1880`, `app/api/views.py:3142`, `app/ponto/services/ausencia.py:92`, `app/ponto/services/ausencia.py:1015`.
+
+## 1. Quem escreve, quem lê e o que cada leitura significa
+
+| Campo | Quem escreve ou define | Quem lê e com que sentido |
+|---|---|---|
+| `Ausencia.status` | `criar_ausencia` grava o estado inicial ou o estado explícito. `mudar_estado` grava as transições. `rejeitar_ausencias_de_ferias` grava `rejeitada` pela origem de férias, chamado por `executar_cancelamento_admin`. O modelo fornece o default e a migração 0057 lê e regrava o legado. O Django Admin é somente leitura. `app/ponto/services/ausencia.py:483`, `app/ponto/services/ausencia.py:969`, `app/ponto/services/ausencia.py:1488`, `app/ferias/services.py:673`, `app/ponto/models.py:809`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/ponto/admin.py:37`. | O campo responde pelo **estado do lançamento**. Abertura, dono da espera, cobertura para cobrança, cobertura para folha e efeito do tipo são perguntas distintas. `ABERTAS` inclui as duas esperas, folha exige `aprovada`, cobrança exclui `rejeitada` e a coluna Efeito pode mostrar `ABONA` para uma aberta. Logo, a presença do registro, sua cor e o efeito do tipo têm leituras diferentes. `app/ponto/services/ausencia.py:912`, `app/ponto/services/ausencia.py:926`, `app/ponto/turnos.py:2528`, `app/ponto/services/dia_decidido.py:488`, `app/ponto/services/dia_decidido.py:502`, `app/ponto/tests/test_ausencia_efeito_pelo_estado.py:164`. |
+| `Ausencia.esta_aberta` | Propriedade calculada. A autoridade registrada é `ABERTAS`, à qual ela delega. `app/ponto/models.py:710`, `app/core/juizes.py:264`, `app/docs/JUIZES.md:59`. | O crachá exibe a espera, o GET combina abertura com ausência de anexo, a Auditoria interpreta o carimbo e o drawer já usava a propriedade para as ações. O POST lê `ABERTAS` diretamente. Todos usam a mesma definição de **aberta**. `app/templates/ponto/espelho.html:191`, `app/api/views.py:1061`, `app/templates/ponto/partials/painel_ausencia.html:274`, `app/templates/ponto/partials/painel_ausencia.html:320`, `app/api/views.py:3111`. |
+| `Ausencia.get_status_display` | Método de apresentação gerado a partir das `choices` do campo. A fonte dos quatro textos é `STATUS_CHOICES`. `app/ponto/models.py:690`, `app/ponto/models.py:809`. | Leem o GET de ausências, o crachá, o cabeçalho e os irmãos do drawer, os painéis de fechamento e justificativa e a linha do tempo como fallback. Esta última tem texto curto próprio para as esperas. O vigia do fio também lê `STATUS_CHOICES` diretamente. Todos apresentam **estado**, com variação de redação. `app/api/views.py:1880`, `app/templates/ponto/espelho.html:191`, `app/templates/ponto/partials/painel_ausencia.html:24`, `app/templates/ponto/partials/painel_ausencia.html:112`, `app/templates/ponto/partials/painel_fechamento.html:56`, `app/templates/ponto/partials/painel_justificativa.html:43`, `app/ponto/services/dia_decidido.py:144`, `app/ponto/services/dia_decidido.py:659`, `app/chamados/services/vigia_fio.py:259`. |
+| `Ausencia.documento` | `criar_ausencia`, `anexar_documento` e `_reabrir`. O POST do colaborador, o reenvio e a tela do DP chamam essas portas. `app/ponto/services/ausencia.py:492`, `app/ponto/services/ausencia.py:1015`, `app/ponto/services/ausencia.py:1298`, `app/api/views.py:1852`, `app/api/views.py:3141`, `app/ponto/views.py:2182`. | O GET, o reenvio, a decisão de estado, a abertura do chamado, as guardas de aprovação, a projeção do dia e o vigia consultam o arquivo **da própria linha**. O download e o drawer consultam a **raiz**. A lista aceita documento próprio ou da raiz. O lote lê o arquivo da linha selecionada. Logo, `not a.documento` e “o intervalo está sem comprovante” podem divergir. `app/api/views.py:1061`, `app/api/views.py:1855`, `app/ponto/services/ausencia.py:689`, `app/ponto/services/ausencia.py:754`, `app/ponto/services/ausencia.py:822`, `app/ponto/services/dia_decidido.py:545`, `app/ponto/services/vigia_ausencia.py:112`, `app/ponto/views.py:2146`, `app/templates/ponto/partials/painel_ausencia.html:72`, `app/templates/ponto/ausencias.html:168`, `app/ponto/services/atestados_lote.py:157`, `app/ponto/models.py:777`. |
+| `Ausencia.aprovado_por` / `Ausencia.aprovada_em` | A criação aprovada carimba ambos. `decidir` recebe e grava cada valor fornecido. `Ausencia.save` preenche a data vazia ao salvar em estado decidido. A reabertura preserva os dois campos. `app/ponto/services/ausencia.py:489`, `app/ponto/services/ausencia.py:1088`, `app/ponto/models.py:878`, `app/ponto/services/ausencia.py:1320`. | A Auditoria lê ambos. `quem_quando` lê ambos e pode recorrer ao autor e à data do lançamento. O fecho do chamado lê o autor, o vigia procura aprovadas sem autor e o cartório usa a data como sinal temporal. Em aberta reaberta, o par é histórico. Em decidida, a Auditoria o apresenta como carimbo da decisão, sujeito à ressalva do lote na pergunta 8. `app/templates/ponto/partials/painel_ausencia.html:273`, `app/ponto/services/dia_decidido.py:549`, `app/ponto/services/ausencia.py:839`, `app/ponto/services/vigia_ausencia.py:121`, `app/ponto/services/cartorio.py:401`. |
+| `dia['ausencia']` do espelho | `montar_dias` escreve `Ausencia` ou `None` a partir da cobertura para **cobrança**. Em sobreposição, vence a maior `(data, pk)` entre as elegíveis. `app/ponto/services/espelho.py:593`, `app/ponto/services/espelho.py:863`, `app/ponto/turnos.py:2773`, `app/ponto/turnos.py:2801`. | O HTML usa a chave para admitir a linha e montar o crachá. A autópsia E6 testa sua presença. O PDF consome `palavra_dia` para a coluna Obs. `dia['ausencia']` do calendário é outro objeto, um dict de apresentação. A chave do espelho significa **lançamento selecionado para cobrança**, sem atestar abono ou decisão. `app/templates/ponto/espelho.html:165`, `app/templates/ponto/espelho.html:191`, `app/ponto/management/commands/e6_piso_autopsia.py:110`, `app/relatorios/pdf_espelho.py:923`, `app/colaboradores/services/calendario.py:700`. |
+
+Os demais leitores de `status` identificados incluem a lista, o drawer e as ações em lote e individuais do DP, o espelho nativo, a mensageria, a tarefa do dia, o silêncio e a materialização de chamados, o cartório, a precedência, a folha, os relatórios e a Inteligência. Mensageria seleciona especificamente a fila de decisão do DP. O espelho nativo e o silêncio consultam as duas esperas. A tarefa do dia distingue o dono. `app/ponto/views.py:2128`, `app/ponto/views.py:2280`, `app/ponto/views.py:2394`, `app/ponto/views.py:2435`, `app/ponto/views.py:2777`, `app/ponto/views.py:2844`, `app/api/views.py:1585`, `app/api/views_mensageria.py:747`, `app/api/views_mensageria.py:1036`, `app/chamados/services/tarefa_do_dia.py:185`, `app/chamados/services/tarefa_do_dia.py:315`, `app/chamados/services/silencio_ausencia.py:78`, `app/chamados/services/materializacao.py:1148`, `app/chamados/services/materializacao.py:1228`, `app/ponto/services/cartorio.py:818`, `app/ponto/precedencia.py:273`, `app/folha/export.py:88`, `app/ponto/services/fechamento.py:671`, `app/relatorios/views.py:197`, `app/ponto/services/atestados_lote.py:62`, `app/inteligencia/resumo.py:42`.
+
+## 2. Literais fora de `STATUS_CHOICES`
+
+- **`Ausencia.status` em produção:** `nao achei` comparação executável remanescente com `pendente` ou outro literal fora das quatro escolhas. A migração histórica 0057 lê `pendente` e o restaura na reversão. A lista traduz `?status=pendente` para `ABERTAS`. `PENDENTE` em `dia_decidido` é um veredito de apresentação. `app/ponto/models.py:690`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/ponto/migrations/0057_a4_backfill_pendente.py:58`, `app/ponto/views.py:2268`, `app/ponto/views.py:2280`, `app/ponto/services/dia_decidido.py:41`, `app/ponto/services/dia_decidido.py:259`.
+- **Fixtures de `Ausencia` fora do diff que ainda gravam `pendente`:** `app/api/tests/test_api_mensageria_pessoa.py:34`, `app/api/tests/test_api_mensageria_pessoa.py:38`, `app/colaboradores/tests/test_calendario_hoje_nao_e_falta.py:157`, `app/folha/tests/test_export_8932.py:58`, `app/folha/tests/test_integracao.py:95`, `app/relatorios/test_espelho_ferias.py:63`, `app/relatorios/tests/test_palavra_do_dia.py:195`, `app/ponto/tests/test_afastado_hoje.py:59`, `app/ponto/tests/test_anexar_documento.py:49`, `app/ponto/tests/test_anexar_ui_colab.py:34`, `app/ponto/tests/test_aus_salvar_erro.py:32`, `app/ponto/tests/test_ausencia_coerencia.py:28`, `app/ponto/tests/test_ausencias_vigentes.py:27`, `app/ponto/tests/test_camada2_parcial.py:25`, `app/ponto/tests/test_caracterizacao_espelho.py:49`, `app/ponto/tests/test_chamado_ausencia_botao.py:34`, `app/ponto/tests/test_decisao_carimba.py:18`, `app/ponto/tests/test_editar_minutos.py:35`, `app/ponto/tests/test_gate_anexo_desconta.py:23`, `app/ponto/tests/test_p1_minutos_falta.py:44`, `app/ponto/tests/test_p1_minutos_falta.py:52`, `app/ponto/tests/test_p1_minutos_falta.py:60`, `app/ponto/tests/test_p1_minutos_falta.py:98`, `app/ponto/tests/test_p1_minutos_falta.py:114`, `app/ponto/tests/test_p1_minutos_falta.py:126`, `app/ponto/tests/test_selo_b5s_desempate_ausencia.py:48`, `app/ponto/tests/test_tripwire_situacao_afastado.py:124`, `app/ponto/tests/test_tripwire_situacao_afastado.py:164`.
+- **Dublês que passam o mesmo valor:** absorção da tarefa do dia, impressão de insumos e suprajuiz. `app/chamados/tests/test_e3_portas_tarefa.py:676`, `app/chamados/tests/test_e3_portas_tarefa.py:697`, `app/chamados/tests/test_e3_portas_tarefa.py:734`, `app/ponto/tests/test_selo_b5u_nunca_bateu_ve_ausencia.py:47`, `app/ponto/tests/test_supra_juiz.py:78`.
+- **Outros modelos ou projeções:** `Justificativa` (`app/ponto/models.py:131`, `app/ponto/views.py:1737`, `app/api/views.py:2118`), `SolicitacaoFerias` (`app/ferias/views.py:41`, `app/ferias/views.py:802`), `SolicitacaoBeneficio` (`app/colaboradores/views.py:1745`, `app/colaboradores/views.py:2069`, `app/colaboradores/views.py:2103`), `Beneficio` (`app/api/views.py:2300`, onde `pendente` também está fora das choices **desse** modelo, `app/colaboradores/models.py:729`), projeção de `PerguntaDisputa` (`app/chamados/models.py:2889`), `ImportacaoAEJ` e `OrdemSubstituicao.push_status` (`app/ponto/models.py:200`, `app/ponto/models.py:1119`), lote e envio de holerite (`app/holerite/models.py:45`, `app/holerite/models.py:236`) e outbox de mensageria (`mensageria/nucleo/management/commands/enviar_outbox.py:37`).
+
+## 3. `anexo_pendente` × porta de documento
+
+Na tabela, “com documento” significa arquivo na própria linha. O cenário é uma ausência própria, de tipo diferente de `ferias`, com chamado `ausencia_colab` visível e vinculado, e um POST com arquivo recebido inteiro. `app/api/views.py:1003`, `app/api/views.py:1048`, `app/api/views.py:3102`, `app/api/views.py:3116`, `app/ponto/services/ausencia.py:92`.
+
+| Estado | Sem documento — GET / POST | Com documento — GET / POST |
+|---|---|---|
+| `aguardando_documento` | Oferece / aceita e passa para `aguardando_decisao` | Omite / aceita substituir e passa para `aguardando_decisao` |
+| `aguardando_decisao` | Oferece / aceita e mantém estado | Omite / aceita substituir e mantém estado |
+| `aprovada` | Omite / `409` | Omite / `409` |
+| `rejeitada` | Omite / `409` | Omite / `409` |
+
+A matriz vem da guarda do GET, da guarda de estado do POST e da gravação do anexo. `app/api/views.py:1061`, `app/api/views.py:3111`, `app/api/views.py:3166`, `app/ponto/services/ausencia.py:1015`, `app/ponto/services/ausencia.py:1033`.
+
+- **Oferece e recusa:** uma linha `ferias` aberta sem arquivo que chegue ao GET com chamado elegível passa pelo predicado e recebe `409 ferias_derivada` no POST, com ou sem vínculo a agendamento. Também há `400` por corpo incompleto ou sem arquivo. A existência dessa combinação de férias no dado real fica [nao verificado]. `app/api/views.py:1048`, `app/api/views.py:3122`, `app/api/views.py:3142`, `app/ponto/services/ausencia.py:92`.
+- **Aceita sem oferecer:** os dois abertos com arquivo já gravado e os abertos próprios sem chamado elegível no GET. O POST consulta a ausência pelo ID e colaborador, sem exigir chamado. `app/api/views.py:1003`, `app/api/views.py:1048`, `app/api/views.py:3102`, `app/ponto/services/ausencia.py:1015`.
+
+## 4. Texto e cascas
+
+| Estado | Crachá do espelho em `base.html` e `base_app.html`, exemplo `atestado` | Auditoria do drawer, se houver `aprovado_por` |
+|---|---|---|
+| `aguardando_documento` | `Atestado (Aguardando documento do colaborador)` | `Decisão anterior (reaberta): <nome>` |
+| `aguardando_decisao` | `Atestado (Aguardando decisao do DP)` | `Decisão anterior (reaberta): <nome>` |
+| `aprovada` | `Atestado` | `Decidido por: <nome>` |
+| `rejeitada` | Sem crachá para essa ausência, excluída da cobertura | `Decidido por: <nome>` |
+
+A grafia vem das escolhas. Na Auditoria, o nome cai para o username e a linha `Em` usa `aprovada_em` em hora local. Sem `aprovado_por`, o bloco da decisão inteiro fica oculto, mesmo com data preenchida. `app/ponto/models.py:701`, `app/templates/ponto/espelho.html:191`, `app/ponto/turnos.py:2535`, `app/templates/ponto/partials/painel_ausencia.html:270`.
+
+O espelho é um único template que estende `base_tpl`, selecionado pelo modo app. O drawer é um partial AJAX renderizado pela própria view. Seu consumidor encontrado é `ponto/ausencias.html`, que estende `base.html`. Para outro template que inclua ou estenda diretamente qualquer um dos dois arquivos, `nao achei`. O calendário inclui o ícone vizinho `_decidiu_icone.html` e tem crachá próprio. `app/templates/ponto/espelho.html:1`, `app/ponto/views.py:211`, `app/core/context_processors.py:194`, `app/core/utils.py:71`, `app/ponto/views.py:2095`, `app/templates/ponto/ausencias.html:1`, `app/templates/ponto/ausencias.html:217`, `app/templates/ponto/ausencias.html:228`, `app/templates/colaboradores/partials/_calendario_grade.html:97`, `app/templates/colaboradores/partials/_calendario_grade.html:109`.
+
+## 5. Checklist de reprovação
+
+| Classe | Resultado da leitura do diff |
+|---|---|
+| Segundo juiz e derivação paralela | `nao achei` novo juiz de abertura, mapa de `status_display` ou derivação de efeito. Os sítios alterados leem `ABERTAS` pela propriedade e as escolhas pelo método. A oferta e a elegibilidade do POST continuam sendo dois predicados com guardas diferentes, conforme a pergunta 3. `app/core/juizes.py:264`, `app/ponto/models.py:719`, `app/api/views.py:1061`, `app/api/views.py:1880`, `app/api/views.py:3142`, `app/templates/ponto/espelho.html:191`. |
+| Segundo escritor, ordem de trava, `except`, `ponto/`, regra de dia ou efeito | `nao achei` novo escritor de produção, nova trava ou mudança de julgamento do dia. A contagem de `^+.*except` é **0**. Em `app/ponto/` há apenas o teste novo, que faz escritas de fixture em ORM. O restante do diff é apresentação e testes. `app/api/views.py:1061`, `app/api/views.py:1880`, `app/templates/ponto/espelho.html:191`, `app/templates/ponto/partials/painel_ausencia.html:274`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:55`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:111`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:47`. |
+| Relógio | `nao achei` `timezone.now()` novo. O teste do espelho congela o instante, o drawer usa um carimbo fixo, e a fixture antiga da API mantém o `date.today()` preexistente. O novo teste da API usa uma data de ausência fixa, mas o chamado é criado e consultado na janela corrente da aplicação. `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:30`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:41`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:137`, `app/api/tests/test_api_chamado_anexo_pendente.py:34`, `app/api/tests/test_a4_ausencia_aberta_api.py:23`, `app/api/tests/test_a4_ausencia_aberta_api.py:42`, `app/chamados/services/janela_colab.py:40`, `app/chamados/services/janela_colab.py:67`. |
+| Pouso antes do pré-requisito | O contrato dos quatro estados, a migração e a porta de upload já estão na base. Aplicação das migrações, ordem real de pouso e smoke [nao verificado]. `app/ponto/migrations/0056_a4_default_estado.py:14`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/api/views.py:3106`. |
+| Campo com dois significados | O diff corrige a leitura do carimbo histórico na reaberta. Permanecem a diferença entre arquivo da linha e comprovante do intervalo, e a diferença entre ausência selecionada para cobrança e cobertura de folha. `app/templates/ponto/partials/painel_ausencia.html:273`, `app/ponto/views.py:2146`, `app/ponto/services/espelho.py:593`. |
+| RED que morde | Pela leitura, reverter apenas a lógica e manter o marcador faz falhar os positivos de espera no HTML, de oferta, de `status_display` e de Auditoria. Reverter também `data-aus-cracha` faz o teste HTML falhar antes pelo contador de crachás. O teste do PDF protege uma lei anterior e não deve ficar vermelho só com a reversão da cura de tela. Execução do mutante [nao verificado]. `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:35`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:70`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:89`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:151`, `app/api/tests/test_a4_ausencia_aberta_api.py:57`, `app/api/tests/test_a4_ausencia_aberta_api.py:81`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:47`. |
+| Teste que pode passar vazio | Os negativos da API verificam só `[]` após filtrar por oferta. Passam se o chamado esperado sumir do payload. Os novos testes da oferta fazem GET, sem seguir a URL com POST. No drawer, `aguardando_documento` só verifica que `Decidido por` sumiu. A remoção da linha histórica nesse estado passa. `app/api/tests/test_a4_ausencia_aberta_api.py:51`, `app/api/tests/test_a4_ausencia_aberta_api.py:69`, `app/ponto/tests/test_a4_espelho_ausencia_aberta.py:151`. |
+
+## 6. Lei do selo do PDF
+
+**Preserva a lei de apresentação e melhora a fixture.** A docstring original protegia que só aprovada cobre o dia. A O8 manda mostrar o pedido aberto e preservar o veredito. O novo teste exige `aguardando` e rejeita `abon` com um estado real. Ele pega o erro original se uma espera voltar a sair como `Férias (abonado)`. A frase “só APROVADA rotula” no comentário do helper ficou desatualizada. `app/relatorios/tests/test_rotulo_ausencia_pdf.py:25`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:47`, `app/ponto/services/dia_decidido.py:259`, `app/ponto/services/dia_decidido.py:453`.
+
+O selo ainda verifica só a palavra, em uma espera. Um `veredito_dia` incorretamente `ABONADO` com a palavra `aguardando` passaria. O teste vizinho que verifica diretamente o veredito ainda usa a fixture morta. `app/relatorios/tests/test_rotulo_ausencia_pdf.py:31`, `app/relatorios/tests/test_rotulo_ausencia_pdf.py:52`, `app/relatorios/tests/test_palavra_do_dia.py:195`.
+
+## 7. LEI-AKITA e o padrão
+
+`Parallel Change / Expand-Contract` é um termo válido e descreve o contexto histórico. A 0055 introduz as escolhas com default legado, a 0056 muda o default e a 0057 faz o backfill. Este commit executa **migração tardia de leitores**. A linha do commit identifica o padrão geral e omite o nome da fase, que o plano pede declarar. Pelo mecanismo usado aqui, a obra também é uma adoção de fonte única para abertura e texto de estado. `app/docs/GLOSSARIO.md:11`, `app/docs/GLOSSARIO.md:19`, `app/docs/PLANO-PADROES.md:88`, `app/ponto/migrations/0055_a4_estados_com_porta.py:19`, `app/ponto/migrations/0056_a4_default_estado.py:14`, `app/ponto/
+
+[truncado em 20000 de 21645 caracteres]
 
 ## 25/11 12:57 · sessao 58c22cc6fbac · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
 
@@ -760,45 +837,4 @@ A sonda registra #33932 fechado via admin, destinado à célula #137166 e cobran
 
 O `{"?":1}` é a representação do histograma após sanitização. As três chaves de texto viram a mesma chave `?`, com uma contagem sobrevivente. O `{}` anterior representa zero IDs novos em chamado, disputa, decisão e pergunta. [v11/apply33.py:39](/home/ronald/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11/apply33.py:39), [v11/apply33.py:202](/home/ronald/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11/apply33.py:202), [v11/apply33.py:221](/home/ronald/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11/apply33.py:221), [v11b/apply33.py:592](/home/ronald/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11b/apply33.py:592)
 
-## 25/11 11:09 · sessao de270221efe1 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · sonda · origem=Code
-
-```
-sonda_leitura: sonda3.py [e0942613c6ef9b42] no cpuset 4-7, lendo sombra como leitor (LEITURA)
-
-col243 dia=2026-11-15 motor=MotorComercial tipo_escala=6x1·07h-15h · 6x1 · 07:00-15:00 feriado_em_dobra=True eh_feriado=True dobra_no_dia=True
-  vinculo=953 feriado_vira_folga=False previsto=420 declarado=60
-/usr/local/lib/python3.13/site-packages/django/db/models/fields/__init__.py:1612: RuntimeWarning: DateTimeField Batida.timestamp received a naive datetime (2026-11-14 00:00:00) while time zone support is active.
-  warnings.warn(
-/usr/local/lib/python3.13/site-packages/django/db/models/fields/__init__.py:1612: RuntimeWarning: DateTimeField Batida.timestamp received a naive datetime (2026-11-16 00:00:00) while time zone support is active.
-  warnings.warn(
-  batida 2026-11-14 06:49:00 tipo=E
-  batida 2026-11-14 11:02:21 tipo=S
-  batida 2026-11-14 11:55:45 tipo=E
-  batida 2026-11-14 15:05:58 tipo=S
-  batida 2026-11-15 06:51:14 tipo=E
-  batida 2026-11-15 11:14:00 tipo=S
-  batida 2026-11-15 11:57:40 tipo=E
-  batida 2026-11-15 15:39:35 tipo=S
-  periodos ent=2026-11-14 06:49:00 sai=2026-11-14 15:05:58 trab=426.6 intra_ind=0.0 intra_desc=53.4 extra=0.0 e50=0.0 e100=0.0 e100fer=0.0 e100not=0.0 not=0.0 alertas=[]
-  periodos ent=2026-11-15 06:51:14 sai=2026-11-15 15:39:35 trab=436.3 intra_ind=16.3 intra_desc=43.7 extra=436.3 e50=0.0 e100=436.3 e100fer=436.3 e100not=0.0 not=0.0 alertas=['Intrajornada suprimida — 16min pagos como hora extra (Art.71 §4 CLT / ', 'Feriado em 15/11/2026 — todas as 7.3h pagas em dobro (Sumula 146 TST).', 'Feriado em 15/11/2026 — todas as 7.3h pagas em dobro (Sumula 146 TST).']
-  mes: he100=13.83 he100fer=13.83 intra=1.492421388888889 mapa_len=26
-col1046 dia=2026-11-20 motor=MotorComercial tipo_escala=MC - 6X1 · 6x1 · 15:00-23:00 feriado_em_dobra=True eh_feriado=True dobra_no_dia=True
-  vinculo=1599 feriado_vira_folga=False previsto=420 declarado=60
-/usr/local/lib/python3.13/site-packages/django/db/models/fields/__init__.py:1612: RuntimeWarning: DateTimeField Batida.timestamp received a naive datetime (2026-11-19 00:00:00) while time zone support is active.
-  warnings.warn(
-/usr/local/lib/python3.13/site-packages/django/db/models/fields/__init__.py:1612: RuntimeWarning: DateTimeField Batida.timestamp received a naive datetime (2026-11-21 00:00:00) while time zone support is active.
-  warnings.warn(
-  batida 2026-11-19 14:56:05 tipo=E
-  batida 2026-11-19 19:49:49 tipo=S
-  batida 2026-11-19 20:37:32 tipo=E
-  batida 2026-11-19 23:01:31 tipo=S
-  batida 2026-11-20 15:00:18 tipo=E
-  batida 2026-11-20 19:09:51 tipo=S
-  batida 2026-11-20 23:01:22 tipo=S
-  periodos ent=2026-11-19 14:56:05 sai=2026-11-19 23:01:31 trab=432.3 intra_ind=12.3 intra_desc=47.7 extra=0.0 e50=0.0 e100=0.0 e100fer=0.0 e100not=0.0 not=0.0 alertas=['Intrajornada suprimida — 12min pagos como hora extra (Art.71 §4 CLT / ']
-  periodos ent=2026-11-20 15:00:18 sai=2026-11-20 23:01:22 trab=479.7 intra_ind=60.0 intra_desc=0.0 extra=479.7 e50=0.0 e100=479.7 e100fer=479.7 e100not=61.4 not=0.0 alertas=['Intrajornada suprimida — 60min pagos como hora extra (Art.71 §4 CLT / ', 'Feriado em 20/11/2026 — todas as 8.0h pagas em dobro (Sumula 146 TST).', 'Feriado em 20/11/2026 — todas as 8.0h pagas em dobro (Sumula 146 TST).']
-  mes: he100=7.99 he100fer=7.99 intra=1.2046883333333334 mapa_len=2
-rc_sombra=0
-```
-
-_8193 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8194 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
