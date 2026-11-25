@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 05:36:32.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1326**.
+**Medido em 25/11/2026 05:42:47.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1318**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 05:36:36 | Bash | Register prompt, mark queue exhausted, regenerate handoff | `cd ~/saas-hasner; echo "\| 25/11 05:3x \| SEGUE-A-FILA (repetido) \| ja recebido 05:02, estado: ORDEM VIVA SEM ITEM ANDAVEL (B3 x3 no MERGE, TIPO atras da A-TELA por ata_do_dia, PAR com 2 lei:), onde RELATO topo \|" >> app/docs/PROMPTS.md python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert not any(l.startswith('ORDEM VIVA SEM ITEM ANDAVEL (05:3x') for l in L) L.insert(0," ...` |
 | 05:36:29 | Bash | Read PROMPTS tail and time | `cd ~/saas-hasner; tail -3 app/docs/PROMPTS.md \| cut -c1-300; date +%H:%M` |
 | 05:36:23 | Bash | Check state of other live-order items | `cd ~/saas-hasner; for k in BUG-ENC-CELULAS-FORMA E3-RESTO-R3 "F1 nova" O95 VINCULO-LINHA-DO-TEMPO; do grep -m1 "^\| $k" app/docs/BACKLOG.md \| awk -F'\|' '{print $2 " :: " substr($4,1,250) " :: " substr($5,1,120)}'; done` |
 | 05:36:18 | Bash | Read the live order row | `cd ~/saas-hasner; grep -n "^\| ORDEM-VIVA-1511-NOITE" app/docs/BACKLOG.md \| cut -c1-2500` |
@@ -1327,12 +1328,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:43:43 | Bash | Locate RELATO sections and time | `cd ~/saas-hasner/app/docs; grep -n '^## ' RELATO.md \| head -5; grep -n '^ESPERANDO: Codex sonda mapa' RELATO.md \| cut -c1-60; date '+%d/%m %H:%M'` |
 | 17:43:38 | Bash | Sample-check Codex citations | `cd ~/saas-hasner/app; sed -n 1526,1530p ponto/motor_calculo_v2.py; echo ---; sed -n 26,31p ponto/janela_he.py; echo ---; sed -n 1440,1446p ponto/motor_calculo_v2.py; echo ---; sed -n 167,179p ponto/services/dia_pago.py` |
 | 17:43:33 | Bash | Read map result | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bchw3jbjn.output; wc -l $D/mapa2.r && cat $D/mapa2.r` |
-| 17:39:10 | Bash | Wait on the real wrapper pid | `while kill -0 2197692 2>/dev/null; do /usr/bin/sleep 20; done; D=~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; tail -1 $D/mapa2.wrap.log; ls $D \| grep mapa2` |
-| 17:39:08 | Bash | Fix pid in ESPERANDO | `cd ~/saas-hasner; sed -i "s/VOLTA 2 tentativa 2 (t1 rc=1 por arquivo de saida removido) \| pid=2197681/VOLTA 2 tentativa 2 (t1 rc=1 por arquivo de saida removido) \| pid=2197692/" app/docs/RELATO.md; grep -c 'pid=2197692' app/docs/RELATO.md` |
-| 17:39:05 | Bash | Check files and codex processes | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; ls -la $D \| grep mapa2; ls -t logs/codex \| head -3; pgrep -af codex_pergunta \| grep -v pgrep \| cut -c1-90` |
-| 17:39:02 | Bash | Inspect wrapper log | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; tail -15 $D/mapa2.wrap.log` |
-| 17:39:01 | Bash | Read map volta 2 result | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/b9q9jqesc.output; wc -l $D/mapa2.r && cat $D/mapa2.r` |
-| 17:38:55 | Bash | Wait for map volta 2 attempt 2 | `while kill -0 2197681 2>/dev/null; do /usr/bin/sleep 20; done; D=~/saas-hasner/logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; tail -1 $D/mapa2.wrap.log; ls $D \| grep mapa2` |
-| 17:38:49 | Bash | Relaunch map volta 2 once | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; pgrep -af 'codex_pergunta.sh' \| grep -v pgrep \| cut -c1-80; mv $D/mapa2.wrap.log $D/mapa2.wrap.log.dup; mv $D/mapa2.wrap.log.vivo $D/mapa2.wrap.log.t1; rm -f $D/mapa2.r.lock; CODEX_OBRA=NOTURNO-A-JANELA-NO-DIA-DO-TURNO CODEX_PAPEL=sonda CODEX_SONDA_ENVELOPE=$PWD/logs/NOTURNO-NAO-APURADO/redesenho/envelope.sh setsid nohup bin/codex ...` |
-| 17:38:42 | Bash | Read map volta 2 result | `cd ~/saas-hasner; D=logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/mapa18; cat /tmp/claude-1001/-home-ronald-saas-hasner/2e269e95-e4b0-4d3c-ad88-afa58d6897e8/tasks/bj5ehxy7n.output; ls $D \| grep mapa2; wc -l $D/mapa2.r 2>/dev/null && cat $D/mapa2.r` |
-| 17:38:14 | Bash | Record DXG v2 PAREI at RELATO top | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; s=open(p).read() i=s.find("DXG DIFF pelas portas v1"); j=s.find('\n',i) assert i>=0 novo=("PAREI: ! DXG-APPLY-JUIZ-DO-SLOT \| espera Ronald -- DIFF DXG pelas portas v2 (sombra 24/11, atomic+raise, rollback ok; logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/v2/resumo.md): " "criterio LITERAL do aval PASSA (D x velho = 4 linhas: 2 col707 excluid ...` |
