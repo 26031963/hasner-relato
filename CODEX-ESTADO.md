@@ -1,7 +1,86 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 09:33** · publicado em **25/11/2026 09:34** (UTC-3)
+> Ultima resposta processada: **25/11/2026 09:40** · publicado em **25/11/2026 09:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 09:40 · sessao 657d2f517304 · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · construtor · origem=Code
+
+**C2 implementada na cópia da base `323820a5351872172af7c32f6db659bd6ae64f0f`.** Cadastro x Realidade agora oferece **Ratificar retratação**, **Restaurar batida** e **Manter as duas**. As três portas exigem staff com `regularizar_batida`, empresa visível, identidade conferida sob trava e motivo. A decisão grava usuário, antes, depois e motivo, encerra só aquele sinal e recusa o replay sem nova trilha. `app/ponto/views.py:3478`, `app/ponto/services/par_relampago_na_lista.py:88`, `:98`, `:172`, `:195`, `:219`, `app/templates/escala/cadastro_x_realidade.html:32`.
+
+- A lavra usa `PerguntaDisputa.trava_na_ordem`. O estoque relê a batida, a trilha e as decisões após a trava, e consulta K6 na mesma transação da lavra. Usei uma trava por **empresa**, pois a competência é determinada após a releitura. A geração do TXT pela tela e pelo comando de regeração usa a mesma trava antes de ler os dados da entrega. `app/ponto/services/par_relampago_na_lista.py:68`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:18`, `app/folha/export.py:556`, `app/folha/views.py:147`, `app/folha/management/commands/regerar_txt_dominio.py:65`.
+- Ratificar conserva o carimbo e vincula a trilha original. Restaurar usa `registro_batida.anotar` e aciona o `post_save` existente. K6 barra os dois atos históricos em competência entregue com a mensagem da Pauta DP. Manter registra os dois PKs e conserva as batidas, inclusive em entregue. A porta humana de desfazer conserva a guarda dos sete dias. `app/ponto/services/par_relampago_na_lista.py:172`, `:195`, `:219`, `app/ponto/signals.py:31`, `:131`, `app/ponto/services/retratar_humano.py:190`.
+- C13 conta em `por_assinatura['C13']` por pessoas e ocorrências, e em `colabs_listados` por pessoas. Uma C13 isolada soma zero em `colabs_do_cadastro`. O vigia recebe o dia e o dono `BATIDA` pela mesma projeção da lista. Se o juiz já lavrou dono para aquele dia por outra assinatura, a precedência existente resolve. `app/escala/services/cadastro_realidade.py:419`, `:1110`, `:1139`, `:1155`, `:1217`, `:1228`, `app/chamados/services/vigia_fio.py:185`.
+
+### Dia do turno
+
+A autoridade registrada é **`turnos_do_colab` (_T1)**. O relâmpago usa `Turno.data_turno` e o embutido lê o mesmo dia por PK em `dia_das_batidas`. Para a histórica, a consulta normal exclui a retratada e devolve `None`. A c2 reapresenta **só a marca identificada pela trilha**, em memória, ao mesmo pareador. Na virada da fixture, a saída civil de **21/07** cai em agosto com corte 21, enquanto o turno de **20/07** cai em julho. `marcos_turno` descreve a jornada prevista atravessando a meia-noite e `dia_do_turno_da_celula` requer uma célula já identificada. O estoque e os atos históricos usam a resposta de _T1 com a marca reapresentada. `app/core/juizes.py:216`, `app/ponto/management/commands/detectar_par_relampago.py:74`, `:183`, `app/ponto/turnos.py:1869`, `:1922`, `:2944`, `:2958`, `app/escala/servico_jornada.py:69`, `app/ponto/turnos.py:2972`, `app/ponto/janelas.py:60`, `app/ponto/tests/test_revisar_par_relampago.py:334`.
+
+A deduplicação continua preservando o primeiro snapshot da identidade. A existência de snapshots c1 já gravados com data civil e o resultado da reapresentação para cada batida do estoque real estão **[nao verificado]**. `app/ponto/services/par_relampago_na_lista.py:70`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:43`.
+
+### RED e mutantes para o Code
+
+| Regra | Asserção esperada na base |
+|---|---|
+| A1 | A chamada a `trava_na_ordem(colab_id)` falta. `app/ponto/tests/test_revisar_par_relampago.py:313` |
+| A2 | O snapshot deveria ficar ausente quando a entrega entra depois da primeira leitura. A segunda prova exige a recusa da batida restaurada e da trilha com decisão posterior. `app/ponto/tests/test_lavrar_estoque_par_relampago.py:102`, `:121` |
+| A3 | A histórica falha na linha de julho aberta e o embutido falha na lista de pares do dia 20. O relâmpago de travessia já usa dia do turno na base e morde `dia_civil_relampago`. `app/ponto/tests/test_revisar_par_relampago.py:334`, `:350`, `:379` |
+| A4 | O contador de cadastro deveria ser zero. A asserção seguinte exige `(True, 'BATIDA')` no vigia. `app/ponto/tests/test_revisar_par_relampago.py:320` |
+| A5 | Na base dada o argv já vem corrigido. Reintroduzir `--retratar` quebra a asserção de saída `APPLY` após `call_command` receber os argumentos posicionais. `app/config/crons.py:605`, `app/ponto/tests/test_par_relampago_pelo_turno.py:117` |
+| B1–B3 | Na base faltam os botões e o POST dá 404. Os mutantes isolam permissão, staff, motivo, empresa, identidade, K6, replay, encerramento e falha de trilha. Os testes também inserem a entrega entre leitura e trava e verificam a ordem da trava nos dois caminhos de geração de TXT. `app/ponto/tests/test_revisar_par_relampago.py:131`, `:180`, `:211`, `:225`, `:234`, `:255`, `:263`, `:290`, `app/ponto/tests/par_relampago_mutantes.py:88` |
+
+Comandos para o Code, a partir de `app/`. O primeiro roda os REDs e as regressões do par. O laço invoca cada um dos 27 mutantes novos. `app/ponto/tests/par_relampago_mutantes.py:88`, `:192`.
+
+```bash
+DJANGO_SETTINGS_MODULE=config.settings.ci PYTHONDONTWRITEBYTECODE=1 \
+  python3 manage.py test \
+  ponto.tests.test_revisar_par_relampago \
+  ponto.tests.test_lavrar_estoque_par_relampago \
+  ponto.tests.test_par_relampago_pelo_turno \
+  ponto.tests.test_par_relampago_v3
+
+for m in \
+  trava_direta estoque_k6_antes_da_trava estoque_batida_velha \
+  dia_civil_relampago dia_civil_embutido dia_civil_historica \
+  c13_no_cadastro c13_fora_do_vigia argv_retratar \
+  sem_staff sem_permissao sem_motivo sem_empresa_visivel sem_identidade \
+  reabre_replay decidido_continua_na_lista \
+  ratifica_entregue restaura_entregue mantem_ainda_entregue_recusa \
+  admin_sem_trava_de_entrega txt_sem_trava_de_entrega regerar_sem_trava_de_entrega \
+  ratifica_mexe_na_batida ratifica_sem_vinculo_com_cron \
+  restaura_fora_da_porta restaura_sem_rollback_da_trilha manter_trilha_perde_um_pk
+do
+  DJANGO_SETTINGS_MODULE=config.settings.ci PYTHONDONTWRITEBYTECODE=1 \
+    python3 -m ponto.tests.par_relampago_mutantes "$m" || exit
+done
+```
+
+A checagem estática confirmou alvo único e sintaxe válida para os **42 mutantes** do arquivo, `git diff --check` limpo e **zero `except` acrescentado**. A expansão isolada da entrada do detector produziu `--schema=juliani --dias 2 --apply`. A expansão da agenda inteira da base levantou `CronNaoCabe` em `sombra.sh`, que mede 87 min e exigiria 03:56 com piso 04:05. O selo trabalha com a entrada real do detector. Execução dos REDs, morte dos mutantes, suíte e certificação pelo Code e opus final **[nao verificado]**. `app/ponto/tests/par_relampago_mutantes.py:34`, `:192`, `app/ponto/tests/test_par_relampago_pelo_turno.py:117`, `app/config/crons.py:271`, `:350`, `:605`.
+
+### Catraca e textos
+
+O censo real de `core.medida_turno_do_par.censo('.')` retornou **9 pareadores e 81 derivações**. A tabela protegida `LINHAS_REGISTRADAS` precisa dos seguintes valores. `app/core/medida_turno_do_par.py:448`, `app/core/tests/test_medida_turno_do_par.py:108`, `:562`.
+
+| Linha da tabela | Valor medido |
+|---|---|
+| `app/core/tests/test_medida_turno_do_par.py:253` | `[245]` |
+| `app/core/tests/test_medida_turno_do_par.py:288` | `[116, 140, 234]` |
+| `app/core/tests/test_medida_turno_do_par.py:292` | `[184]` |
+| `app/core/tests/test_medida_turno_do_par.py:321` | `[1232, 1385]` |
+| `app/core/tests/test_medida_turno_do_par.py:338` | `[2988]` |
+| `app/core/tests/test_medida_turno_do_par.py:339` | `[2965]` |
+| `app/core/tests/test_medida_turno_do_par.py:340` | `[2225]` |
+
+A6 atualizada nos seis textos pedidos. Ficaram para o Code os comentários protegidos de `app/config/crons.py:2003` e `:2158`, onde a ação vigente deve dizer **lavra C13**, e a referência protegida em `app/ponto/motor_calculo_v2.py:1155–1163`. O mapa gerado ainda diz `RETRATA` em `app/docs/MAPA-JUIZES.md:27`, enquanto a fonte já diz `LAVRA` em `app/core/juizes.py:1226`. `app/docs/CRONS.md:32`, `app/colaboradores/services/situacional.py:102`, `app/ponto/services/cartorio.py:1189`, `app/ponto/calculador/nucleo.py:50`, `app/ponto/management/commands/e6_oraculo.py:12`, `app/core/placar_estrutural.py:535`.
+
+### Inventário
+
+- **Funções criadas em produção:** `trilhas_do_cron`, `situacao_historica`, `_decisoes`, `_identidade`, `_detalhe_da_decisao`, `_sinal_travado`, `_historica_do_sinal`, `_entregue`, `_estado` e as três portas de ato no serviço C13, mais `Command._classificar`, `travar_entrega` e `decidir_par_relampago`. `app/ponto/services/par_relampago_na_lista.py:18`, `:98`, `:140`, `:172`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:19`, `app/folha/export.py:556`, `app/ponto/views.py:3478`.
+- **Funções alteradas em produção:** `lavrar`, `pendentes`, `varrer_pares_embutidos`, `turnos_do_colab`, `dia_das_batidas`, `dia_do_turno_da_batida`, os `handle` de estoque e regeração, `_par_relampago`, `lista`, `cadastro_x_realidade` e `gerar_dominio_txt`. Nenhuma função de produção apagada. `app/ponto/services/par_relampago_na_lista.py:57`, `:88`, `app/ponto/management/commands/detectar_par_relampago.py:153`, `app/ponto/turnos.py:1850`, `:2915`, `:2958`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:53`, `app/folha/management/commands/regerar_txt_dominio.py:43`, `app/escala/services/cadastro_realidade.py:406`, `:932`, `app/escala/views.py:512`, `app/folha/views.py:103`.
+- **Snapshot `par_relampago`:** `lavrar` escreve pelos dois ramos do detector e pelo estoque. `pendentes` lê para a lista e `_sinal_travado` lê no ato. `metricas.serie` também oferece leitura genérica por chave. `app/ponto/services/par_relampago_na_lista.py:57`, `:88`, `:98`, `app/ponto/management/commands/detectar_par_relampago.py:236`, `:243`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:50`, `app/escala/services/cadastro_realidade.py:406`, `app/inteligencia/metricas.py:62`.
+- **`Batida.retratada_em`:** `anotar` persiste o campo. `retratar_batida` carimba por decisão humana, geofence e passivo S84. `desfazer` e `restaurar_retratacao_cron` limpam o campo pelos seus atos próprios. Leem o estado o serviço C13, o pareador, o universo apurável, o motor, os dedups, os flips, o reconciliador e o calendário. Cartório e veredito lavrado também leem o instante do carimbo. `app/ponto/registro_batida.py:255`, `:294`, `app/ponto/services/retratar_humano.py:179`, `:207`, `app/chamados/services/acoes_chamado.py:277`, `app/ponto/management/commands/passivo_disputa_retro.py:164`, `app/ponto/services/par_relampago_na_lista.py:28`, `:207`, `:228`, `app/ponto/turnos.py:1869`, `:2905`, `app/ponto/motor_calculo_v2.py:671`, `app/api/views.py:676`, `app/api/views_core.py:667`, `app/ponto/services/flip_auto.py:229`, `app/ponto/services/flip_batida.py:15`, `app/chamados/reconciliador.py:217`, `app/colaboradores/services/calendario.py:269`, `app/ponto/services/cartorio.py:399`, `app/chamados/veredito_lavrado.py:180`.
+- **Trilhas novas:** ratificar e manter chamam `core.observ.evento`. Restaurar chega ao mesmo escritor via `anotar` e confere a presença da trilha antes do commit. Leem as novas decisões `pendentes`, `_sinal_travado`, a classificação histórica e o painel genérico de auditoria. `app/ponto/services/par_relampago_na_lista.py:24`, `:88`, `:125`, `:186`, `:207`, `:231`, `app/ponto/registro_batida.py:245`, `app/core/observ.py:94`, `app/core/views.py:697`.
+
+**Lei pendente do recorte.** O aval fornecido dá 71 casos e encaminha as exportadas à Pauta DP. A pergunta condicional é como encaminhar um caso se a sombra revelar ausência de fonte legítima de pago ou devido e o DP exigir ambos. Incidência por caso, tabela em sombra e hashes das exportadas **[nao verificado]**. `respostas_2511_0815.txt:3`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:130`.
 
 ## 25/11 09:33 · sessao e20c54d9e8d7 · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
 
@@ -907,64 +986,4 @@ Não encontrei `sonda_estoque.py` na cópia local e não reexecutei a sonda. A t
 - `CLAUDE.md` e a regra principal do `TICKETS.md` dão exemplos compatíveis com o filtro, sem declarar a exigência de dígito. O próprio `TICKETS.md` registra que a régua passou a cobrar `[SELO-VE-O-CASO-COMUM]` e `[GEOFENCE-VALIDAR-VOLTA]`, ambos agora descartados. O `BACKLOG.md` afirma que colchete de prosa não é fatia, distinção que o regex ainda não faz. `CLAUDE.md:3–6`, `app/docs/TICKETS.md:98–104`, `app/docs/TICKETS.md:591–594`, `app/docs/BACKLOG.md:1988`, `bin/regua_tickets.sh:81–85`.
 - `bin/regua.sh` apenas executa o selo pelo laço de host. `bin/tickets_rodape.sh` confere `origin/main`, o carimbo e a série T. O handoff chama de “rodapé” a verificação do topo feita pela régua de tickets, embora o hook confira o rodapé em uma chamada separada. `bin/regua.sh:128–145`, `bin/tickets_rodape.sh:20–35`, `bin/tickets_rodape.sh:84–95`, `app/docs/HANDOFF_SESSAO.md:66–67`, `bin/regua_tickets.sh:28–35`, `bin/pre-push.sh:10–11`.
 
-## 25/11 06:46 · sessao 1c654b1dd0de · A-TELA-DO-DIA-LE-UM-JUIZ · verificador · origem=Code
-
-**Parecer da v7 em `7e266931b`: PROCEDENTE, reprova.** A primeira lavra em lote passou a usar a mesma impressão bruta das leituras seguintes. A mudança abriu uma regressão no **avulso**: o pulo por impressão igual deixa `pulados_foto_entregue=0`, e `julgar_celula` pode escrever `ata.precedencia` numa foto entregue que a v6 preservava. Há também um pulo indevido após revogação do TXT e uma linha desatualizada na catraca do merge. [cartorio.py:1546](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/ponto/services/cartorio.py:1546) · [cartorio.py:2248](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/ponto/services/cartorio.py:2248) · [export.py:588](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/folha/export.py:588) · [test_medida_turno_do_par.py:321](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/core/tests/test_medida_turno_do_par.py:321)
-
-### 1. Escritores, leitores e significado
-
-| Sítio | Uso de `CelulaDia.impressao` |
-|---|---|
-| `carimbar` | Único gravador de um hash encontrado. Compara o valor anterior com o argumento para evitar um save e persiste o valor recebido. Os dois chamadores são a lavra normal e `nunca_bateu`. `app/ponto/portas/celula.py:1218`, `app/ponto/portas/celula.py:1227`, `app/ponto/services/cartorio.py:1449`, `app/ponto/services/cartorio.py:2056` |
-| `desfazer_julgamento_da_futura` | Lê o valor para a trilha e o limpa para `None` na mesma porta, na operação de desfazer o julgamento futuro. Preserva o julgamento de admin. `app/ponto/portas/celula.py:1149`, `app/ponto/portas/celula.py:1186`, `app/ponto/portas/celula.py:1192`, `app/ponto/portas/celula.py:1202` |
-| Cartório e D5 | As duas comparações com hash recalculado estão no corpo do cartório, uma por ramo. `_completar_status` recebe o dia se o carimbo estiver em dia; lê o status e o veredito, sem recalcular a impressão. `app/ponto/services/cartorio.py:1381`, `app/ponto/services/cartorio.py:1535`, `app/ponto/services/cartorio.py:1546`, `app/ponto/services/cartorio.py:973` |
-| `processar_cartorio` e `lavrar_status_competencia` | Delegam a `julgar_colab` e publicam os contadores. A importação de `impressao_insumos` em `processar_cartorio` fica sem chamada própria. `app/ponto/management/commands/processar_cartorio.py:20`, `app/ponto/management/commands/processar_cartorio.py:65`, `app/ponto/management/commands/lavrar_status_competencia.py:56` |
-| `celula_veredito_velho` e `snapshot_o118_col221` | Copiam o valor gravado para o snapshot de reversão. O primeiro também chama `julgar_colab(forcar=True)` quando percorre as células para relavrar. O segundo só descreve a reversão no JSON. `app/ponto/management/commands/celula_veredito_velho.py:104`, `app/ponto/management/commands/celula_veredito_velho.py:144`, `bin/snapshot_o118_col221.py:15`, `bin/snapshot_o118_col221.py:25` |
-| `feriado_do_posto` e `foto_e4b` | Comparam fotos antes/depois pelo valor gravado. O primeiro inclui `impressao` na lista explícita de campos. O segundo inclui todos os campos concretos e usa a diferença na cerca da competência. `app/colaboradores/services/feriado_do_posto.py:428`, `app/colaboradores/services/feriado_do_posto.py:451`, `app/chamados/services/foto_e4b.py:116`, `app/chamados/services/foto_e4b.py:145`, `app/chamados/services/foto_e4b.py:247`, `app/chamados/services/foto_e4b.py:269` |
-
-A impressão normal é SHA-256 das batidas apuráveis da janela de três dias (`pk`, tipo, instante), status da cobertura, chamados (`pk`, `status_local`), versão do DNA e marcos, mais as parcelas aplicáveis de veto, teto, versão da regra, turno em curso, quantidade de cobranças com fio, cobertura parcial, isenção e sem par. `nunca_bateu` usa listas vazias de batidas e chamados, cobertura/DNA/regra/isenção e, quando cabe, a marca de sem adesão. O estado de K6 fica fora do hash. `app/ponto/services/cartorio.py:513`, `app/ponto/services/cartorio.py:522`, `app/ponto/services/cartorio.py:566`, `app/ponto/services/cartorio.py:574`, `app/ponto/services/cartorio.py:590`, `app/ponto/services/cartorio.py:1381`, `app/ponto/services/cartorio.py:1484`, `app/ponto/services/cartorio.py:1535`
-
-Para **novas gravações**, o sem par é bruto em relação a K6: `E`, `S` ou `ES` do pareador, já recortado pelo horizonte e pelo turno encerrado. O mesmo `imp` é conferido e entregue à porta. Fora do cartório, encontrei zero comparações com um hash reconstruído por outra fórmula. A ressalva é o estoque: um carimbo filtrado da v6 continua gravado com os bytes antigos enquanto a guarda impedir sua relavra. Existência e volume desse estoque em produção **[nao verificado]**. `app/ponto/supra_juiz.py:101`, `app/ponto/supra_juiz.py:129`, `app/ponto/services/cartorio.py:1229`, `app/ponto/services/cartorio.py:1535`, `app/ponto/services/cartorio.py:1621`, `app/ponto/services/cartorio.py:2056`
-
-### 2. Segunda e terceira passadas com os mesmos fatos
-
-| Ramo | Resultado na 2ª e na 3ª passada |
-|---|---|
-| Normal em lote, aberta ou entregue, primeira lavra pela v7 | Se a primeira lavra completou e os insumos ficaram iguais, ambas dão `pulados=1`, sem classificar ou carimbar. Na entregue recém-lavrada com o sem par barrado, `pulados_foto_entregue=0` nas duas. Com `--forcar`, o caso que gera protesto de sem par volta à guarda e conta a foto. `app/ponto/services/cartorio.py:1546`, `app/ponto/services/cartorio.py:1608`, `app/ponto/services/cartorio.py:1621`, `app/ponto/tests/test_a_tela_v3_sem_par.py:247` |
-| Entregue, foto anterior com acusação em `ata.sem_par` | Ambas preservam a foto. No normal, a guarda vem antes do hash. Em `nunca_bateu`, a igualdade pode dar `pulados=1` antes de chegar à guarda. `app/ponto/services/cartorio.py:1255`, `app/ponto/services/cartorio.py:1384`, `app/ponto/services/cartorio.py:1526` |
-| Entregue, foto sem acusação, impressão divergente e protesto atual de sem par | Ambas classificam, K6 protege a foto, e ambas dão `pulados_foto_entregue=1`. Como o hash fica antigo, D5 com status ausente dá `status_fila_cartorio=1` nas duas. Vale para a impressão v6 filtrada e também para uma foto anterior a um sinal novo que a guarda barrou. **A fila permanente ainda é possível.** `app/ponto/services/cartorio.py:983`, `app/ponto/services/cartorio.py:1546`, `app/ponto/services/cartorio.py:1621`, `app/ponto/services/cartorio.py:2056` |
-| `nunca_bateu`, aberta ou entregue | Sem batida apurável, o pareador tem zero sinais. A primeira lavra usa `imp0`; ambas as repetições pulam com o mesmo `imp0`. A primeira batida apurável desloca a célula para o ramo normal, que recusa considerar em dia um veredito `nunca_bateu`. `app/ponto/turnos.py:1867`, `app/ponto/services/cartorio.py:1326`, `app/ponto/services/cartorio.py:1381`, `app/ponto/services/cartorio.py:1449`, `app/ponto/services/cartorio.py:1546` |
-| D5, aberta ou entregue | Status já presente dá `status_ja_lavrado=1`, mesmo com hash velho. Status ausente e carimbo atual dá `status_completaveis=1` em cada dry-run. Com `apply`, a primeira conclusão bem-sucedida conta `completaveis=1` e `completados=1`, e as seguintes contam `ja_lavrado=1`. Status ausente com carimbo velho, ou sem dia de grade no ramo normal, continua na fila. D5 sai antes do classificador e das passadas internas. `app/ponto/services/cartorio.py:980`, `app/ponto/services/cartorio.py:1050`, `app/ponto/services/cartorio.py:1385`, `app/ponto/services/cartorio.py:1547` |
-| Retroativo | Antes do horizonte `2026-11`, o sem par fica fora do hash e o pulo segue a comparação dos demais insumos. Já `emitir_furo_retroativo` é outro fluxo: relê a acusação da ata ou procura o furo comum com ambos os sinais em `False`. Em cada repetição, se o chamado da acusação está vivo, conta `ja_existia`; se a primeira tentativa foi vetada e os fatos seguiram iguais, pode tentar novamente. O comando não carimba a célula. `app/ponto/services/cartorio.py:316`, `app/ponto/services/cartorio.py:332`, `app/ponto/management/commands/emitir_furo_retroativo.py:98`, `app/ponto/management/commands/emitir_furo_retroativo.py:111`, `app/ponto/management/commands/emitir_furo_retroativo.py:157` |
-
-A segunda passada interna de reconciliação é forçada. A releitura pós-emissão volta ao mesmo corpo sem `forcar` e pode julgar de novo se chamado ou fio mudou. O RED novo chama o corpo diretamente e deixa essas duas costuras fora da execução. `app/ponto/services/cartorio.py:1079`, `app/ponto/services/cartorio.py:1135`, `app/ponto/services/cartorio.py:1148`, `app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:145`
-
-### 3. K6 e integridade da foto entregue
-
-- **K6 continua barrando o protesto quando o julgamento é alcançado.** O classificador marca a posição que produziu; K6 retira esse item. Sem foto prévia, os demais códigos seguem à lavra e a ata fica sem a acusação retirada. Com foto prévia e protesto atual acionável, o corpo preserva a foto. Um sinal que passa de vazio para `E`, `S` ou `ES` muda o hash e chega a esse ponto, salvo proteção anterior pela própria foto. Sinal inerte, como sobra num dia já cumprido, não gera posição. `app/ponto/supra_juiz.py:550`, `app/ponto/services/cartorio.py:1255`, `app/ponto/services/cartorio.py:1264`, `app/ponto/services/cartorio.py:1535`, `app/ponto/services/cartorio.py:1621`, `app/ponto/services/cartorio.py:1637`
-- **Igualdade pode esconder mudança de K6.** Primeira lavra entregue com `E` acionável grava `concorde`, `ata.sem_par=[]` e hash com `E`. Se o TXT vigente é invalidado sem substituto, a mesma entrada continua gerando o mesmo hash e a foto vazia de acusação passa pela primeira guarda. A passada normal pula antes de consultar K6. Na sonda, obtive `pulados=1`, zero classificações e zero consultas a K6 após trocar a resposta para aberta. A mesma entrada, aberta desde a primeira lavra, deu `furo` com **o mesmo hash**. `app/folha/models.py:143`, `app/folha/export.py:588`, `app/ponto/services/cartorio.py:1260`, `app/ponto/services/cartorio.py:1546`, `app/ponto/services/cartorio.py:1621`
-- **A foto entregue pode mudar no avulso, com os mesmos fatos e o TXT ainda vigente.** Reproduzi primeira lavra em lote seguida de duas chamadas avulsas. Na v6, ambas contaram `pulados_foto_entregue=1`, com zero saves adicionais. Na v7, ambas deram `pulados=1` e `pulados_foto_entregue=0`. A primeira avulsa acrescentou `ata.precedencia` e pediu um save; a segunda manteve essa alteração. A porta real de precedência dispara o caminho do outbox quando a ata muda. O teste ORM existente cobre uma foto **com** acusação e chamada **forçada**, caso em que a guarda ainda funciona. `app/ponto/services/cartorio.py:1546`, `app/ponto/services/cartorio.py:2200`, `app/ponto/services/cartorio.py:2248`, `app/ponto/portas/celula.py:978`, `app/ponto/portas/celula.py:994`, `app/ponto/portas/celula.py:1242`, `app/ponto/tests/test_a_tela_v3_sem_par.py:282`
-
-### 4. Idempotência, trilha e duplicatas
-
-Na sonda sequencial do corpo, usei as funções de lavra, carimbo e status extraídas da cópia, com persistência, trilha, outbox e bordas dublados. Em normal e `nunca_bateu`, tanto aberta quanto entregue, três passadas deram **o mesmo estado após a primeira, um save, uma chamada de trilha `veredito_celula` e uma chamada de outbox**. Para a entregue nova com protesto barrado, `pulados_foto_entregue` caiu de `0,1,1` na v6 para `0,0,0` na v7. Na sonda de D5 com status removido, a primeira aplicação gravou só status/rótulo, com trilha própria, e a seguinte contou `ja_lavrado`. O avulso após o lote é a exceção de estado descrita acima. Total de linhas persistidas, zero duplicatas de chamado e comportamento concorrente em banco **[nao verificado]**. `app/ponto/services/cartorio.py:980`, `app/ponto/services/cartorio.py:1388`, `app/ponto/services/cartorio.py:1550`, `app/ponto/portas/celula.py:994`, `app/ponto/portas/celula.py:1113`, `app/ponto/portas/celula.py:1136`, `app/ponto/portas/celula.py:1227`
-
-### 5. RED, mutantes e testes adaptados [nao verificado]
-
-- **33 testes de memória passaram.** O RED v7 e os testes de memória v6/E3 executam corpos reais extraídos por AST com dublês. A v7 usa D5 real em dry-run, com pareador, K6, grade, lavra, persistência e emissão fora do caminho real de integração. O teste adaptado em `test_a_tela_v3_sem_par.py` importa o cartório real e entra pelo comando Django, com o emissor dublado. Sua execução ORM **[nao verificado]**. `app/ponto/tests/test_e3_nb_impressao_memoria.py:56`, `app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:87`, `app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:120`, `app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:50`, `app/ponto/tests/test_a_tela_v3_sem_par.py:6`, `app/ponto/tests/test_a_tela_v3_sem_par.py:246`
-- Os dois REDs falharam por `AssertionError` contra o `cartorio.py` da cópia v6, carregado diretamente. Os **3 mutantes v7** falharam por asserção, em `2/1/1` casos respectivamente. Os **6 mutantes v6 adaptados** falharam por asserção. No E3, **7 mutantes** falharam por asserção e o legado `classificacao_antes_guarda` ainda falha na montagem com `ValueError: substring not found`. O caso v6 de sem par em `nunca_bateu` injeta essa combinação pelo dublê. `app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:13`, `app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:50`, `app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:19`, `app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:202`, `app/ponto/tests/test_e3_nb_impressao_memoria.py:76`
-- Houve **troca de expectativa**. A v6 exigia hash filtrado; a adaptação exige `E` e preserva as asserções de veredito, ata, protestos e consulta a K6. O teste ORM trocou `pulados_foto_entregue=1` na segunda rodada normal por `pulados=1` e foto `0`, acrescentou uma rodada forçada com foto `1` e confere a igualdade do estado depois de cada uma. O E3 adicionou dependências ao dublê e preservou as asserções. A lacuna é a sequência **lote → avulso sem força**, além da mudança de vigência de K6. `app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:160`, `app/ponto/tests/test_a_tela_v3_sem_par.py:247`, `app/ponto/tests/test_a_tela_v3_sem_par.py:261`, `app/ponto/tests/test_e3_nb_impressao_memoria.py:130`, `app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:61`
-
-### 6. Classes de reprovação
-
-No delta fornecido, contei **0 `except` adicionados e 0 removidos**. Encontrei zero segundo juiz, segundo escritor fora da porta, relógio novo fora da borda, derivação paralela do sinal, mudança de ordem de trava ou fallback novo. O delta mantém o sinal do pareador, K6 e a porta existentes, e retira o adiamento local de `imp`. O `except` do avulso já existia. A ordem real de pouso em relação ao pré-requisito do corte **[nao verificado]**. `app/ponto/services/cartorio.py:1229`, `app/ponto/services/cartorio.py:1245`, `app/ponto/services/cartorio.py:1535`, `app/ponto/services/cartorio.py:1621`, `app/ponto/services/cartorio.py:2056`, `app/ponto/services/cartorio.py:2248`, `app/docs/CORTES.md:640`
-
-A incompatibilidade do campo persiste para carimbos legados. Para novas gravações, a falha é usar igualdade de **insumos brutos** como prova de que ainda vale uma decisão que dependeu de K6. Os selos estruturais O219, FND, F1C4-3, O261 e E3 passaram nas asserções extraídas. O mutante legado E3 continua sem atingir a asserção, e os REDs da v7 deixam passar a regressão avulsa. `app/ponto/services/cartorio.py:1535`, `app/ponto/services/cartorio.py:1621`, `app/ponto/tests/test_o219_versao_da_regra.py:224`, `app/ponto/tests/test_fnd_pergunta_a_juiza.py:137`, `app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:218`, `app/ponto/tests/test_tripwire_o261_gate_le_o_fio.py:61`, `app/ponto/tests/test_e3_isento_na_impressao.py:122`, `app/ponto/tests/test_e3_nb_impressao_memoria.py:76`
-
-### 7. Resolução do conflito no merge
-
-**Incoerente.** Rodei o censo real sobre a cópia. A catraca registra `[1328, 1492]` para B1 em `_julgar_colab_corpo`, mas a adesão está na `1328` e o recorte de batidas na **`1487`**. A `1492` hoje abre o ramo `teto_de_hoje`. Essa foi a única divergência no mapa de linhas. As identidades, as contagens `9/81`, a composição e `CLASSIFICAR` conferiram. [test_medida_turno_do_par.py:321](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/core/tests/test_medida_turno_do_par.py:321) · [test_medida_turno_do_par.py:562](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/core/tests/test_medida_turno_do_par.py:562) · [cartorio.py:1487](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/ponto/services/cartorio.py:1487) · [medida_turno_do_par.py:448](/home/ronald/codex_ws/7e266931b89d634a1d7262cc32d3ad9568d748b8/app/core/medida_turno_do_par.py:448)
-
-Os quatro arquivos do delta têm os hashes de blob do anexo na cópia. A ancestralidade Git do merge, a suíte Django integral e a incidência em produção dos casos reproduzidos ficam **[nao verificado]**. [nao verificado]
-
-_8151 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8152 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
