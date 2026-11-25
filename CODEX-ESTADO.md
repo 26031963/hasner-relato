@@ -1,7 +1,15 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 17:01** · publicado em **25/11/2026 17:05** (UTC-3)
+> Ultima resposta processada: **25/11/2026 17:08** · publicado em **25/11/2026 17:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 17:08 · sessao 3745ac9f17f3 · GUARDA-10-B · sonda · origem=Code
+
+Sim. A empresa 4 tem FechamentoMensal e DiaPago motor na competência 10/2026. (sonda/anexos:3, sonda/anexos:4)  
+Empresa 1 — FechamentoMensal 4, DiaPago motor 49. (sonda/anexos:3, sonda/anexos:4)  
+Empresa 3 — FechamentoMensal 119, DiaPago motor 2102. (sonda/anexos:3, sonda/anexos:4)  
+Empresa 4 — FechamentoMensal 23, DiaPago motor 450. (sonda/anexos:3, sonda/anexos:4)  
+Empresa 2 — FechamentoMensal 478, DiaPago motor 8817. (sonda/anexos:3, sonda/anexos:4)
 
 ## 25/11 17:01 · sessao 95387b5714a4 · WRAPPER-N-VAGAS · verificador · origem=Code
 
@@ -972,14 +980,4 @@ O gancho escreve na **mesma conexão**, depois do primeiro `T_ATOMIC` e depois d
 
 **Lista da reprovação:** falta o relato individual na prova final, a guarda mantém derivação paralela, a prova de rollback pode omitir efeitos do próprio apply e a instrução de parada do passo 3 contradiz o resultado válido demonstrado por CM. A validação dos bytes e o alcance efetivo do cabeçalho no reverter ficam [nao verificado]. `v11j/apply33.py:167–190,218–236,916–957`; `v11j/pauta33.py:114–142`; `v11j/COMANDOS_PROD_NAO_EXECUTADOS.txt:19–21,36–42,61,98,110–112`; `evidencia.txt:154–167`.
 
-## 25/11 15:17 · sessao 45141f2c880e · REG33-COMP08-PELA-L113 · verificador · origem=Code
-
-1. **As curas do delta fecham os achados citados.** `order_by('pk')` remove o JOIN da ordenação padrão e `values_list('pk')` mantém a PK do FM no `SELECT FOR UPDATE OF self`. Se a foto veio vazia e outro toque criou o FM, `created=False` força a releitura. Em `somente_leitura`, `_` é `False` e a trava fica fora do caminho. No ramo de escrita, a captura vem logo após o `get_or_create`, antes da reatribuição de `_` no cálculo de crédito. `app/ponto/models.py:484`, `app/ponto/services/fechamento.py:905` (base), `:916–920`, `:1023`, `:1151–1176` (v4). O literal `ausente (fora do arquivo)` foi corrigido e o PAGO achado ganhou a ressalva da matrícula atual. O item cabe no teto de 500, com limite conservador de 273 caracteres incluindo prefixo de continuação e soma de registros repetidos. `app/folha/services/aviso_exportada.py:42–47,60–68` (v4), `app/folha/export.py:247–252`, `app/folha/services/vigia_txt.py:82–89`, `app/pautas/services.py:123–142`.
-
-2. **Morde as duas remoções.** Sem reler o hash, ficam duas chamadas e a asserção exige três. Sem reler os valores, a filha mostra `1.5 → 0` e a asserção exige `0.7 → 0`. O mock usa uma conexão e parte de FM existente, já aprovado. Ficam sem cobertura a trava e seu alcance no PostgreSQL, a foto inicial vazia e o `save()` de instância aberta obsoleta. `app/folha/tests/test_l113_aviso_dp_exportada_mudou.py:46–49,264–292` (v4), `app/ponto/services/fechamento.py:1173–1184` (v4). Execução [nao verificado].
-
-3. **Sim.** Se o TXT se torna vigente entre a consulta K6 e a escrita, `_vigiar_exportada` fica falso e a mudança passa sem aviso. No lote global há a mesma omissão para empresa inativa que entra no universo da escrita, pois a consulta de exportadas filtra `ativa=True`. O aval D2 [nao verificado]. `app/folha/models.py:174–188`, `app/ponto/services/fechamento.py:445–454,548,1520–1528` (base), `:890,1231–1234` (v4). Também procede o residual de atomicidade. Em autocommit, o `get_or_create` deixa a linha com defaults se a pauta falhar. Se o retry produzir o mesmo hash, segue sem aviso. `app/ponto/services/fechamento.py:916–920,1165,1231–1234` (v4), `app/folha/services/aviso_exportada.py:90–95` (v4). Ocorrência em produção [nao verificado].
-
-4. **0 `except` adicionados** no diff v4 inteiro. O `except IntegrityError` mostrado é contexto de código existente. `app/chamados/services/regularizacao_ext.py:190` (base).
-
-_8233 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8234 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
