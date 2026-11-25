@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 14:44:33.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (40.0 MB). Acoes na janela: **947**.
+**Medido em 25/11/2026 14:51:13.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (40.1 MB). Acoes na janela: **949**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:46:20 | Bash | Wait for FERIADO c2 verifier, probe and suite | `cd ~/saas-hasner/logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2; until [ -e verif2.rc ] && [ -e sondaC_pai.rc ] && [ -e sondaC_cura.rc ] && [ -e b_full.rc ]; do /usr/bin/sleep 60; done; cat verif2.rc sondaC_pai.rc sondaC_cura.rc b_*.rc; tail -3 sondaC_pai.out sondaC_cura.out` |
+| 14:46:14 | Bash | Check FERIADO c2 pending result files | `cd ~/saas-hasner/logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2; ls *.rc 2>/dev/null; cat verif2.rc 2>/dev/null` |
 | 14:42:43 | Bash | Log DRY3 result in RELATO | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l="DXG-APPLY-33 r1 (14:4x): DRY3 em PROD com manifesto novo 06cb46a9 -- 20 colabs, 16 ENSAIO_OK, 4 BARRADO (502 foto, 516 push, 876 fora do lote, 1044 testemunha), T max 9.03 s, WARNING 0; MAS rollback_ok=false (apply33.py:854 compara tabela INTEIRA com PROD vivo). Escritor do FM 10 emp2 = supervisor u657 validar-lote 14: ...` |
 | 14:42:38 | Agent | DXG apply33 v11j instrument fix | `You are the builder of instrument version v11j of the DXG-APPLY-33 apply. Repo /home/ronald/saas-hasner; read CLAUDE.md sections 0, 3, 6 and 7b (CODEX items 1, 4, 5) first. Base: logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11i/ (apply33.py, reversao33.py, pauta33.py, COMANDOS_PROD_NAO_EXECUTADOS.txt, opus_final in logs/DXG-V11I/opus_final.txt). Build v11j in a NEW sibling dir .../apply33/v1 ...` |
 | 14:41:58 | Bash | Find which rollback component differed | `cd ~/saas-hasner; grep -n "CONTAGENS\\|FM_DEPOIS\\|SNAP" logs/apply33_prod_r1_DRY3.out \| cut -c1-400 \| head; grep -n "C_DEPOIS =\\|FM_DEPOIS =\\|C_ANTES =\\|FM_ANTES =\\|def contagens\\|def snap_chamados\\|def fm_foto" logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11i/apply33.py` |
