@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 19:20:42.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (7.1 MB). Acoes na janela: **228**.
+**Medido em 25/11/2026 19:26:46.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (8.1 MB). Acoes na janela: **240**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:26:44 | Bash |  | `cd /home/ronald/saas-hasner; git merge --no-ff --no-commit wt-ui-a4-espelho-ausencia-aberta 2>&1 \| tail -3; ls .git/MERGE_HEAD && git diff --cached --stat \| tail -3; git diff --cached HEAD --quiet fe0d48b36 -- app/api app/ponto app/relatorios app/templates; git diff fe0d48b36 --cached --stat -- app/api app/ponto app/relatorios app/templates \| tail -1; echo tree_eq_rc=$?` |
+| 19:26:41 | Bash |  | `cd /home/ronald/saas-hasner; git merge-base HEAD fe0d48b36; git log --oneline 160173bb1..fe0d48b36 \| head; git branch --contains fe0d48b36 \| head -3; ls logs/A4-ESPELHO-AUSENCIA-ABERTA/ \| head -30; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.certifica 2>/dev/null \| tail -5` |
+| 19:26:33 | Bash |  | `tail -c 3000 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/ad3fba33bfc0a794a.output` |
+| 19:26:31 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/A4-SMOKE-DEPOIS-2511.txt <<'EOF' aval Ronald: A4-SMOKE-DEPOIS-2511 (25/11 19:2x) -- A4-ESPELHO-AUSENCIA-ABERTA: o smoke de clique vem DEPOIS do pouso (template so entra no ar no merge, L-107) e e feito pelo [nome]. Segue merge --no-ff + deploy --sem-migrate agora; logo depois o Code grava em logs/A4-ESPELHO-AUSENCIA-ABERTA/smoke_fernando.md a li ...` |
+| 19:26:20 | Bash |  | `cd /home/ronald/saas-hasner; git log -1 --format=%B 9dd35d78a \| grep 'LEI-AKITA'; sed -n 1997p app/docs/BACKLOG.md \| awk -F'\|' '{print NF; print $4}' \| cut -c1-400` |
+| 19:26:18 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'A4-ESPELHO' app/docs/BACKLOG.md \| cut -c1-250 \| head -5; grep -n 'OBRA' bin/commit_msg.sh \| head -8; git log -1 --format=%B fe0d48b36 \| grep -n 'LEI-AKITA'` |
+| 19:26:15 | Bash |  | `cd /home/ronald/saas-hasner; git log -1 --oneline; git fetch -q origin; git log -1 --oneline origin/main; git diff --name-only 160173bb1 fe0d48b36; git status --porcelain \| grep -v '^??'; ls -la .git/MERGE_HEAD 2>&1 \| tail -1; grep -n 'certif\\|pista' bin/deploy.sh \| head` |
+| 19:22:35 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') L.insert(29,'ESPERANDO: pista_certifica_par A-TELA v18 (suite inteira pre-opus 1125191517_b8382895) \| pid=3944785 -- e E1 pid=3847558; construtores GUARDA-10-B VIGIA-SECO e WRAPPER v13 vivos; CLEAR-RAPIDO armado: no 1o fim de marco so handoff + PAREI ! CLEAR (com vivo, o CLEAR espera).') open(r,'w') ...` |
+| 19:22:31 | Bash |  | `cd /home/ronald/saas-hasner; pgrep -af 'pista_certifica_par.sh' \| grep -v pgrep` |
+| 19:22:24 | SendMessage |  | `-` |
+| 19:22:19 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='logs/GUARDA-10-B/brief_vigia_seco.md' s=open(p).read() i=s.index('## CENSO') s=s[:i]+'''## CENSO Fonte: censo CODEX (CODEX_PAPEL=censo, rc 0, 19:22) logs/GUARDA-10-B/censo_vigia.r sobre f226e77c1 (aval GUARDA-10-B-CENSO-2511); amostra conferida pela sessao: recalcular_fechamento.py:123/:156/:162, aplicar_janela_he_total.py:145, fechamento.py:54-64. ...` |
+| 19:22:08 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b96uri5af.output; cat logs/GUARDA-10-B/censo_vigia.r` |
 | 19:18:45 | Bash |  | `cd /home/ronald/saas-hasner; until [ -s logs/GUARDA-10-B/censo_vigia.r ] \|\| ! kill -0 3955505 2>/dev/null; do /usr/bin/sleep 20; done; date +%H:%M; tail -2 logs/GUARDA-10-B/censo_vigia.wrap; wc -l logs/GUARDA-10-B/censo_vigia.r` |
 | 19:18:43 | Bash |  | `cd /home/ronald/saas-hasner; ls -l logs/GUARDA-10-B/censo_vigia.* ; tail -3 logs/GUARDA-10-B/censo_vigia.wrap` |
 | 19:17:58 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') L.insert(29,'PAREI: censo-GUARDA-10-B \| espera Codex -- aval GUARDA-10-B-CENSO-2511 (19:2x): o ## CENSO do brief_vigia_seco.md foi escrito pela SESSAO por git grep (fecha a FORMA do disjuntor, nao o papel: censo e do Codex, DESPACHO). Falha minha. Corrigido: censo Codex lancado 19:3x (logs/GUARDA-10 ...` |
