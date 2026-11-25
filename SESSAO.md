@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 18:43:54.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.5 MB). Acoes na janela: **172**.
+**Medido em 25/11/2026 18:50:00.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.6 MB). Acoes na janela: **181**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:46:56 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:5x A4 m2')) L.insert(k+1,'18:5x GUARDA-10-B CERTIFICADA na pista: 1125175447 f226e77c1 rc 0 Ran 17872 OK oom=0 (18:02:15-18:29:52, 1579 s de teste); pista_certifica rc=0 (logs/GUARDA-10-B/pouso.certifica). Opus final lancado (logs/GUARDA-10-B/opus_ ...` |
+| 18:46:50 | Bash |  | `cd /home/ronald/saas-hasner; timeout 30 ssh pista espera 1125180940_fc522947 2>&1 \| head -2; timeout 30 ssh pista espera 1125182125_411ecbc2 2>&1 \| head -2` |
+| 18:46:47 | Agent | Opus final GUARDA-10-B | `LEITURA FINAL (opus final, CLAUDE.md secao CODEX 5c) da obra GUARDA-10-B no repo /home/ronald/saas-hasner. Somente leitura. Voce nao viu a construcao. Diff a julgar: `git diff 160173bb1 f226e77c1` (salvo em logs/GUARDA-10-B/diff_final.diff; 4 commits b5d0d35a3, af86c660a, 401c3d52d, f226e77c1; leia as mensagens com `git log 160173bb1..f226e77c1`). Main = 160173bb1 (merge-base), entao o merge e lim ...` |
+| 18:46:35 | Bash |  | `cd /home/ronald/saas-hasner; d=logs/GUARDA-10-B; git diff 160173bb1 f226e77c1 > $d/diff_final.diff; wc -l $d/diff_final.diff; ls $d \| grep -E 'verif\|triagem\|opus\|red_'; head -30 $d/PRE-APPLY-CHECKLIST.md` |
+| 18:46:32 | Bash |  | `cd /home/ronald/saas-hasner; git rev-parse --short HEAD; git merge-base HEAD f226e77c1 \| cut -c1-9; git log --oneline 160173bb1..f226e77c1 \| head; git diff --stat $(git merge-base HEAD f226e77c1) f226e77c1 \| tail -3; timeout 30 ssh pista log 1125180940_fc522947 30 2>&1 \| grep -E 'oom\|inicio\|^Ran' ; ls logs/GUARDA-10-B/ \| head -40` |
+| 18:46:26 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/GUARDA-10-B/pouso.espera logs/GUARDA-10-B/pouso.certifica 2>&1 \| tail -12; timeout 20 ssh pista estado \| grep -E '1125175447\|1125180940'` |
+| 18:46:22 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:4x A-TELA v18')) L.insert(k+1,'18:5x A4 m2 (VM, trava): rc 1 FAILED (failures=2) Ran 89 -> o mutante m2 MORDE; 3/3 mutantes da v3 mordem. Copias a4red/a4m1/a4m2/a4m3 removidas (0 container nelas). A4 espera a suite de pouso na pista (1125181431) pa ...` |
+| 18:46:16 | Bash |  | `cd /home/ronald/saas-hasner; docker ps --format '{{.Names}} {{.Mounts}}' 2>/dev/null \| grep -c 'a4m\\|a4red'; for d in a4red-155532 a4m1-155532 a4m2-155532 a4m3-160255; do git worktree list \| grep -q "/$d " && git worktree remove --force /home/ronald/$d \|\| rm -rf /home/ronald/$d; ls -d /home/ronald/$d 2>&1 \| tail -1; done` |
+| 18:46:13 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6udq64zu.output; grep -E '^Ran ' logs/A4-ESPELHO-AUSENCIA-ABERTA/mutante_v3_m2.log \| tail -1` |
 | 18:41:12 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:3x WRAPPER-N-VAGAS v13')) L.insert(k+1,'18:4x A-TELA v18: wt-atela-v18-180430 commit 25ad014fb; RED pista 1125180940 rc 1 (10 fail), GREEN 1125182125 525 OK rc 0, 7/7 mutantes mordem; Codex final REPROVA. DECIDIDO PELA LEI A-TELA-PROTESTOS-2511 (se ...` |
 | 18:41:07 | SendMessage |  | `-` |
 | 18:40:56 | Bash |  | `cd /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ; sed -n 80,98p CONTRATO-NOVO-RASCUNHO-2511.md; grep -n -i 'v17\\|23 commit\\|cadeia' v18/HANDBACK.md \| head` |
