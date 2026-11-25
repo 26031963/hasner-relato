@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 07:09:05.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (6.6 MB). Acoes na janela: **192**.
+**Medido em 25/11/2026 07:15:03.** Transcript: `8adee201-fd93-4dd9-928f-111a0c57530f.jsonl` (7.2 MB). Acoes na janela: **194**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:12:42 | Bash | Read the v8 construtor brief properties | `cd ~/saas-hasner; sed -n 1,60p logs/A-TELA-DO-DIA-LE-UM-JUIZ/v8/construtor_v8.q` |
+| 07:12:25 | Bash | Read A-TELA v8 verificador report | `cd ~/saas-hasner; cat logs/A-TELA-DO-DIA-LE-UM-JUIZ/v8/verif8.r` |
 | 07:06:56 | Bash | Remove RED/mutant copies, record proof summary | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v8; for f in wt_red wt_mut; do w=$(cat $D/$f.txt); git worktree remove --force $w 2>&1 \| tail -1; [ -e $w ] && echo "sobrou $w" ; done; git worktree prune; echo "RED base 7e266931b+teste: 4/5 FAIL por assercao, 0 ERROR (red.log) \| GREEN 7f9a20167: Ran 215 OK (green.log) \| MUTANTES 5/5 mortos por FAIL, 0 ERROR (mut.log)" > $D/provas.txt` |
 | 07:06:43 | Bash | Read mutant run results per class | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v8; cat $D/rcs.txt; L=$D/mut.log; /bin/grep -E "^Ran \|^(OK\|FAILED)($\| \()" $L \| tail -2; /bin/grep -E "^(FAIL\|ERROR):" $L \| sed -E 's/.*\.(Mut_[a-z_0-9]+)\.(test_[A-Za-z_0-9]+)\).*/\1 \2/' \| sort \| uniq -c; /bin/grep -c "^ERROR:" $L` |
 | 07:06:22 | Bash | Read GREEN verdict | `cd ~/saas-hasner; L=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v8/green.log; /bin/grep -E "^Ran \|^Found" $L \| tail -2; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1` |
