@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 14:51:13.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (40.1 MB). Acoes na janela: **949**.
+**Medido em 25/11/2026 14:58:00.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (40.2 MB). Acoes na janela: **951**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:57:25 | SendMessage |  | `-` |
+| 14:57:19 | Bash | Publish E1 DIFF and decisions in RELATO | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() top=("DECIDIDO PELA LEI secao 4 (motor_calculo_v2 inviolavel) + LEI-AKITA 2 (todo leitor le o mesmo numero): E1 dia com previsao_invalida RETIDO sai de previsto/abono/falta/DSR, mas o REALIZADO fica (V2 medido tirava 899/1557/1441 min do realizado com horas_trabalhadas do motor parado = soma quebrada, A3) \| contestavel;  ...` |
 | 14:46:20 | Bash | Wait for FERIADO c2 verifier, probe and suite | `cd ~/saas-hasner/logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2; until [ -e verif2.rc ] && [ -e sondaC_pai.rc ] && [ -e sondaC_cura.rc ] && [ -e b_full.rc ]; do /usr/bin/sleep 60; done; cat verif2.rc sondaC_pai.rc sondaC_cura.rc b_*.rc; tail -3 sondaC_pai.out sondaC_cura.out` |
 | 14:46:14 | Bash | Check FERIADO c2 pending result files | `cd ~/saas-hasner/logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2; ls *.rc 2>/dev/null; cat verif2.rc 2>/dev/null` |
 | 14:42:43 | Bash | Log DRY3 result in RELATO | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l="DXG-APPLY-33 r1 (14:4x): DRY3 em PROD com manifesto novo 06cb46a9 -- 20 colabs, 16 ENSAIO_OK, 4 BARRADO (502 foto, 516 push, 876 fora do lote, 1044 testemunha), T max 9.03 s, WARNING 0; MAS rollback_ok=false (apply33.py:854 compara tabela INTEIRA com PROD vivo). Escritor do FM 10 emp2 = supervisor u657 validar-lote 14: ...` |
