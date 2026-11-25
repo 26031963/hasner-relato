@@ -6,10 +6,22 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 16:11:35.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (43.6 MB). Acoes na janela: **1033**.
+**Medido em 25/11/2026 16:18:10.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (43.9 MB). Acoes na janela: **1045**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:18:08 | Bash | Identify long-running waiting shells | `for p in 1487060 1527639 1910550 2470802 2487184; do echo "== $p"; tr '\0' ' ' < /proc/$p/cmdline \| grep -oE "until.{0,200}\|eval.{0,200}" \| head -c 300; echo; done` |
+| 16:18:00 | Bash | Check background jobs of WRAPPER, DXG, REG33 | `cd ~/saas-hasner; ps -eo pid,pgid,sid,etime,args \| grep -E "WRAPPER\|DXG-V11\|v11k\|REG33\|wt-reg33" \| grep -v grep \| cut -c1-200 \| head -20; ls -t logs/WRAPPER-N-VAGAS \| head -8` |
+| 16:17:51 | ListAgents |  | `-` |
+| 16:17:51 | Bash | Save hygiene aval | `cd ~/saas-hasner; echo "aval Ronald: HIGIENE-ANTES-DO-COMPACT-2511 (25/11 16:2x) -- antes do compact: (1) encerrar todo agente parado ha mais de 1 h ou de volta superada (inclusive 'Escrevendo v12_msg.txt' 3h12 e 'Carregando ferramentas' 1h34), uma linha no RELATO por agente encerrado; (2) gerar o handoff com cada obra viva e a volta dela. (3) A-TELA: se a v17 reprovar, NAO abre v18 -- sai o mapa  ...` |
+| 16:15:24 | Bash | Record A-TELA v16 decision and cancel in RELATO | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() s=("A-TELA-DO-DIA-LE-UM-JUIZ v16 (16:2x): Codex v16 REPROVA 3 (1 fragilidade do selo preexistente -> fila; 2 write que levanta no corpo deixa lavra sem fabrica, classe preexistente em 10 sitios e estendida a K6/fecho; 3 regressao de soma da fabrica). " "DECIDIDO (PARADA 5, cura mais restritiva): o ato nao escreve log ante ...` |
+| 16:15:18 | SendMessage |  | `-` |
+| 16:15:06 | Bash | Cancel superseded A-TELA v16 queued run | `cd ~/saas-hasner; ps -o pid,pgid,sid,args -p 2609164 \| cat; pg=$(ps -o pgid= -p 2609164 \| tr -d ' '); pkill -TERM -g $pg; /usr/bin/sleep 3; ps -eo pid,args \| grep "A-TELA-DO-DIA-LE-UM-JUIZ/v16" \| grep -v grep \| head; bin/trava_teste.sh --quem` |
+| 16:14:57 | SendMessage |  | `-` |
+| 16:14:50 | Bash | Write ERRO-BOBO release line and PROMPTS row | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a='PERGUNTA DE DESENHO A4-ESPELHO-AUSENCIA-ABERTA' assert s.count(a)==1 s=s.replace(a,'RESPONDIDA por LIBERA-B3-A4-2511 (16:1x) -- '+a[:9].lower()+a[9:],1) s=("ERRO-BOBO A4-ESPELHO-AUSENCIA-ABERTA: aval LIBERA-B3-A4-2511 (Ronald 25/11 16:1x, 'libera B3 ... ERRO-BOBO', logs/AVAIS-1515/LIBERA-B3-A4-2511.txt) -- os 4 achados ...` |
+| 16:14:41 | Bash | Read where B3 top lines come from | `cd ~/saas-hasner; sed -n 1015,1035p bin/disjuntor.py` |
+| 16:14:37 | Bash | Find B3 release line source | `cd ~/saas-hasner; grep -n "linhas_libera_b3(" bin/*.py \| head; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/b3-so-libera-com-aval-explicito.md \| head -20` |
+| 16:14:29 | Bash | Save B3 release aval, read how disjuntor reads releases | `cd ~/saas-hasner; echo "aval Ronald: LIBERA-B3-A4-2511 (25/11 16:1x) -- libera B3 A4-ESPELHO-AUSENCIA-ABERTA -- ERRO-BOBO. Os 4 achados do opus 16:0x se curam na v3 como DECIDIDO PELA LEI: a frase le ESPERA (um vocabulario so); linha_do_tempo (dia_decidido.py:671) intocada, Historico e CSV sem a duplicacao; teste confere o texto INTEIRO, nao startswith; padrao declarado = o que o diff realiza. CON ...` |
 | 15:54:30 | Agent | A-TELA v16 builder | `You are the BUILDER of round v16 of the obra A-TELA-DO-DIA-LE-UM-JUIZ (repo /home/ronald/saas-hasner, Django in app/). Read /home/ronald/saas-hasner/CLAUDE.md in full before acting (LEI-AKITA, MAO UNICA, CODEX 5(a)/(b)). State of v15, all in logs/A-TELA-DO-DIA-LE-UM-JUIZ/v15/: entrega.md (what changed, the census, the copies), roda.sh, rc.txt. Results: - selos.rc=75 = the GREEN of the 8 labels did ...` |
 | 15:54:16 | Bash | Read A-TELA v15 run script and delivery | `cd ~/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ/v15; cat roda.sh \| head -30; head -20 entrega.md` |
 | 15:54:10 | Bash | Read A-TELA v15 results | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bg3bjxo8y.output; cd ~/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ/v15; ls; cat roda.fim; wc -l r_verif.txt` |
