@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 00:48:25.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (57.0 MB). Acoes na janela: **1011**.
+**Medido em 25/11/2026 00:54:34.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (57.0 MB). Acoes na janela: **1003**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1013,11 +1013,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 13:06:13 | Bash | Check TIPO leftovers and locate parent obra rows | `cd ~/saas-hasner; ps -eo pid,args \| grep wt-tipo-fim \| grep -v grep \| cut -c1-160; docker ps --format '{{.Names}} {{.Mounts}}' \| grep -i tipo-fim; (cd /home/ronald/wt-tipo-fim-124156; git log --oneline -1; git status --porcelain \| head); echo ---; grep -n -E '^\\| (RAZAO-DA-SOBRA\|TIPO-NA-FONTE\|ESCRITOR-UNICO-DE-CHAMADO\|PONTA-PEQUENA-CASO\|PONTA-PEQUENA-CLASSE\|CHAMADO-PRESO[A-Z-]*\|TIPO-NO ...` |
 | 13:06:07 | Bash | Find PAR-RELAMPAGO law in docs | `cd ~/saas-hasner; grep -rn 'PAR-RELAMPAGO-A-LISTA-DO-ADMIN' app/docs/*.md app/docs/*.json 2>/dev/null \| cut -c1-400 \| head -8` |
 | 13:06:06 | TaskStop |  | `-` |
-| 12:53:23 | SendMessage |  | `-` |
-| 12:50:41 | Bash | Update PONTA-PEQUENA-CLASSE BACKLOG state | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n'); i=832 c=L[i].split('\|'); c[3]=' construindo: item 2 e7d35b9db REPROVADO Codex v1 (K6 na porta, gatilho dia_encerrado) entra com item 3 opcao (1) (aval PONTA-ITEM3-OPCAO1-2411-1250); copia wt-ponta-110734 ' L[i]='\|'.join(c); open(p,'w').write('\n'.join(L)) EOF sed -n 833p app/docs/BACKLOG.md \| cut -c1-80` |
-| 12:50:37 | Bash | Inspect PONTA-PEQUENA-CLASSE row columns | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; L=open(p).read().split('\n'); i=832 c=L[i].split('\|'); print(len(c)); print([x[:60] for x in c]) EOF` |
-| 12:50:35 | Bash | Find PONTA rows in BACKLOG | `cd ~/saas-hasner; grep -n 'PONTA' app/docs/BACKLOG.md \| cut -c1-140` |
-| 12:50:32 | Bash | Record prompt and find BACKLOG row | `cd ~/saas-hasner; echo "24/11 12:50 \| aval Ronald PONTA-ITEM3-OPCAO1-2411-1250: item 3 = opcao (1), vigia_de_hora segura a celula de ontem ate a aberta expirar (dia_encerrado, sem margem escrita), item 2 junto (K6 na porta, gatilho dia_encerrado). Estado: construtor retomado na wt-ponta-110734; BACKLOG linha PONTA-PEQUENA-NA-BORDA" >> app/docs/PROMPTS.md; grep -n 'PONTA-PEQUENA-NA-BORDA' app/docs ...` |
-| 12:50:28 | Bash | Mark design question answered in RELATO | `cd ~/saas-hasner; sed -i '1s/^PERGUNTA DE DESENHO PONTA-PEQUENA-NA-BORDA item 3/RESPONDIDA por PONTA-ITEM3-OPCAO1-2411-1250 (opcao (1); construtor retomado 12:5x) -- era: PERGUNTA DE DESENHO PONTA-PEQUENA-NA-BORDA item 3/' app/docs/RELATO.md; tail -n 3 app/docs/PROMPTS.md \| cut -c1-200` |
-| 12:50:26 | SendMessage |  | `-` |
-| 12:50:16 | Bash | Read vigia_de_hora window code cited in aval | `cd ~/saas-hasner; sed -n 20,60p app/ponto/services/vigia_de_hora.py` |
