@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 04:34:22.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (75.4 MB). Acoes na janela: **1334**.
+**Medido em 25/11/2026 04:40:32.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (75.4 MB). Acoes na janela: **1327**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1337,10 +1337,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:42:41 | Bash | Inspect CORTES.json structure | `cd ~/saas-hasner/app/docs; python3 -c " import json;d=json.load(open('CORTES.json'));print(type(d), list(d.keys())[:5] if isinstance(d,dict) else len(d)) x=d if isinstance(d,list) else d[list(d.keys())[-1]] import pprint; pprint.pprint(x[-2:] if isinstance(x,list) else x, width=200)" \| tail -40` |
 | 16:42:35 | Bash | Read acao_corrigir_resposta | `cd ~/saas-hasner/app; sed -n 330,420p chamados/services/acoes_disputa.py` |
 | 16:42:28 | Bash | Check the 4 excluded batidas against list and colisions | `cd ~/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11; awk -F'\t' '($2==707 && $4=="2026-10-27") \|\| ($2==301 && ($4=="2026-11-03"\|\|$4=="2026-11-04"\|\|$4=="2026-11-07")) {print $2,$4,$5,$6,$7,$9,$10}' lista.tsv; echo ---K; head -1 diff.tsv \| cut -c1-300; grep -P '^K\t' diff.tsv \| cut -f1-6 \| head -20` |
-| 16:40:31 | Bash | Check whether timestamp is an annotatable field | `cd ~/saas-hasner/app; grep -n 'CAMPOS_ANOTAVEIS' -A6 ponto/registro_batida.py \| head -12` |
-| 16:40:30 | Bash | Read anotar porta in chokepoint | `cd ~/saas-hasner/app; sed -n 231,300p ponto/registro_batida.py` |
-| 16:40:28 | Bash | Find chokepoint porta for changing batida time | `cd ~/saas-hasner/app; grep -n '^def \\|^ def ' ponto/registro_batida.py \| head -40; grep -rn 'def .*corrig\\|def .*ajust.*hora\\|def .*mover_batida\\|def .*retificar' ponto/*.py ponto/services/*.py chamados/services/*.py \| head -20` |
-| 16:40:23 | Bash | Inspect how DXG script writes batida | `cd ~/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11; grep -n 'def \\|save\\|atomic\\|raise\\|timestamp *=\\|registro_batida\\|import' dxg11_passivo.py \| head -80; head -3 lista.tsv; grep -c . lista.tsv` |
-| 16:40:19 | Bash | Read DXG passivo summary and script size | `cd ~/saas-hasner/logs/DECLARADO-X-GRAVADO-PASSIVO-11; ls -la; cat resumo.md \| head -80; wc -l dxg11_passivo.py` |
-| 16:40:14 | Bash | Save aval and locate CORTES source | `cd ~/saas-hasner; cat > logs/AVAIS-1515/apply_dxg_passivo_11.txt <<'EOF' aval Ronald: ! APPLY-DXG-PASSIVO-11 -- aplicar a hora declarada nos 86 da lista (101 menos os 15 em colisao) MENOS 4 batidas: col707 27/10 e col301 03/11, 04/11, 07/11. Essas 4 nao mudam de hora: saem para a lista do admin como CADASTRO (escala antiga / declarada 23:00 com cara de fim de jornada). Antes do apply: conferir na  ...` |
-| 16:35:13 | Bash | Register INTERVALO V2 aval replacing 1630 | `cd ~/saas-hasner; cat > logs/AVAIS-1515/intervalo_pre_assinalado_contrato_v2.txt <<'EOF' aval Ronald: INTERVALO-PRE-ASSINALADO-CONTRATO-V2 substitui o INTERVALO-PRE-ASSINALADO-CONTRATO-2411-1630 inteiro. Objetivo: escala com intervalo cadastrado e dia sem batida de intervalo = deduz o intervalo cadastrado da jornada, indenizacao intrajornada 0, nenhuma cobranca ao colab (L-031/L-032, pre-assinalac ...` |
