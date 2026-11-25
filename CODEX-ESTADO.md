@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 20:25** · publicado em **25/11/2026 20:27** (UTC-3)
+> Ultima resposta processada: **25/11/2026 20:44** · publicado em **25/11/2026 20:45** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 20:44 · sessao 3ff6f4edfc36 · WRAPPER-N-VAGAS · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 25/11 20:25 · sessao cdd477938fd6 · PARCIAL-BORDA-SEMIABERTA · verificador · origem=Code
 
@@ -854,12 +858,4 @@ A unidade efetiva de `carimbadas` é o retorno não vazio de `carimbar` nas pass
 
 [truncado em 20000 de 20752 caracteres]
 
-## 25/11 17:08 · sessao 3745ac9f17f3 · GUARDA-10-B · sonda · origem=Code
-
-Sim. A empresa 4 tem FechamentoMensal e DiaPago motor na competência 10/2026. (sonda/anexos:3, sonda/anexos:4)  
-Empresa 1 — FechamentoMensal 4, DiaPago motor 49. (sonda/anexos:3, sonda/anexos:4)  
-Empresa 3 — FechamentoMensal 119, DiaPago motor 2102. (sonda/anexos:3, sonda/anexos:4)  
-Empresa 4 — FechamentoMensal 23, DiaPago motor 450. (sonda/anexos:3, sonda/anexos:4)  
-Empresa 2 — FechamentoMensal 478, DiaPago motor 8817. (sonda/anexos:3, sonda/anexos:4)
-
-_8253 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8254 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
