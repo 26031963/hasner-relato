@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 13:44:42.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (36.1 MB). Acoes na janela: **893**.
+**Medido em 25/11/2026 13:51:29.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (37.2 MB). Acoes na janela: **902**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 13:51:24 | SendMessage |  | `-` |
+| 13:51:20 | SendMessage |  | `-` |
+| 13:50:29 | SendMessage |  | `-` |
+| 13:50:13 | Bash | Check cited admission lines in the wt | `cd /home/ronald/wt-wrapper-n-vagas-125229; sed -n 110,160p bin/codex_admissao.py; sed -n 465,475p bin/codex_pergunta.sh` |
+| 13:50:07 | Bash | Read WRAPPER verifier verdict | `cd ~/saas-hasner; cat logs/WRAPPER-N-VAGAS/verif_v10/r.rc; cat logs/WRAPPER-N-VAGAS/verif_v10/r.txt` |
+| 13:45:03 | SendMessage |  | `-` |
+| 13:45:01 | Bash | Wait for WRAPPER Codex verifier verdict | `cd ~/saas-hasner; until [ -f logs/WRAPPER-N-VAGAS/verif_v10/r.rc ]; do /usr/bin/sleep 30; done; cat logs/WRAPPER-N-VAGAS/verif_v10/r.rc; head -c 1500 logs/WRAPPER-N-VAGAS/verif_v10/r.txt` |
+| 13:44:56 | Bash | Check A4 suite and verifier progress | `cd ~/saas-hasner/logs/A4-ESPELHO-AUSENCIA-ABERTA; tail -c 400 suite_inteira.log; echo; ls -la --time-style=+%T suite_inteira.log r_verif_escopo.txt* green_escopo.rc; cat green_escopo.rc; date +%T` |
+| 13:44:51 | Bash | Check WRAPPER verdict and A4/WRAPPER deliveries | `cd ~/saas-hasner; cat logs/WRAPPER-N-VAGAS/verif_v10/r.rc 2>/dev/null; ls -t logs/A4-ESPELHO*/ 2>/dev/null \| head; ls -dt logs/A4* \| head -3; ls -t logs/WRAPPER-N-VAGAS/v10/ 2>/dev/null \| head` |
 | 13:44:40 | Agent | REG33 comp08 construtor opus | `You are the builder for obra REG33-COMP08-PELA-L113 in /home/ronald/saas-hasner. Read CLAUDE.md sections 0, 3, 4, 6 and 7b (DINHEIRO was just rewritten: item 2 now holds only for competencias WITH a row in GUARDA_COMPETENCIA). You build and measure; you do NOT commit to main, merge, deploy, or apply anything in PROD. AVALS (read literally): logs/AVAIS-1515/LEI-EXPORTADA-B-2511.txt and logs/AVAIS-1 ...` |
 | 13:44:11 | Bash | Read Codex reg 33 census answer | `cd ~/saas-hasner/logs/REG33-COMP08-PELA-L113; cat r1.rc; cat r1.txt` |
 | 13:44:10 | Bash | Wait for A-TELA v14 suite and Codex verdict | `cd ~/saas-hasner; V=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v14; until [ -f $V/roda_b.fim ] && [ -f $V/r_verif.rc ]; do /usr/bin/sleep 30; done; cat $V/rc_b.txt $V/r_verif.rc` |
