@@ -1,4 +1,3 @@
-PAREI: censo-FERIADO-SEM-LIMITE-DO-SUPRIMIDO | espera Codex
 DESPACHO MEDE-PRE-EXPORT-2511 (10:5x): (1) universo PAR-PELO-TURNO/INTERVALO V2 -> Codex sonda na sombra, conduzida por sonnet (motivo: montar sonda reusando logs/PAR-PELO-TURNO e a medida 2411-1630) | (2) mesa 4 chamados -> sonnet (motivo: sonda que ESCREVE na sombra em atomic+raise) | tabelas transcritas aqui pela sessao
 DESPACHO QUEIMA-ATE-1800 (10:5x): FERIADO censo -> Codex (slot 2), construtor opus depois do CENSO | E4d matriz -> Codex leitura, conduzido por sonnet (motivo: montar pergunta + conferir amostra) | DXG apply33 cura + colab 516 -> agente modelo da sessao (instrumento em logs/, sonda so pelo Codex) | A-TELA v12 (memo K6 por passada, verif11 item 3 procedente) -> Codex construtor slot 3 | PAR c3 (11 procedentes do verif_c2) -> Codex construtor na fila da vaga
 
