@@ -1,7 +1,51 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 04:57** · publicado em **25/11/2026 04:59** (UTC-3)
+> Ultima resposta processada: **25/11/2026 05:00** · publicado em **25/11/2026 05:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 05:00 · sessao cfc9ed5ea57c · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
+
+A v7 dá a `CelulaDia.impressao` um único significado: **hash dos insumos do julgamento, com o sinal bruto de sem par que chega ao classificador**. Na primeira lavra entregue, K6 retira o protesto antes de compor a ata e o veredito. Com os mesmos fatos, o D5 conta `status_completaveis=1` e a passada normal conta `pulados=1`, sem chamar o classificador. [escala/models.py:1752](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/escala/models.py:1752) · [cartorio.py:1535](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1535) · [cartorio.py:1621](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1621) · [test v7:44](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:44)
+
+**Escrita e leitura**
+
+- A função de produção alterada foi `_julgar_colab_corpo`. Incorporei a chamada de `_impressao_normal` no ramo normal. `_sem_par_da_impressao` codifica o mesmo par de sinais que vai ao classificador. O valor calculado antes do julgamento serve à comparação normal, ao D5 e ao `carimbar` da lavra. Essa ordem permite verificar o carimbo antes de classificar. [cartorio.py:1239](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1239) · [cartorio.py:1535](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1535) · [cartorio.py:1546](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1546) · [cartorio.py:1619](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1619) · [cartorio.py:2056](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:2056)
+- `nunca_bateu` entra quando a busca pela primeira batida apurável da vida volta vazia. Nesse ramo o sinal bruto está ausente, e `imp0` serve tanto à comparação normal e ao D5 quanto à lavra. `_completar_status` recebe a grade quando a comparação indica carimbo em dia. [cartorio.py:1326](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1326) · [cartorio.py:1380](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1380) · [cartorio.py:1449](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1449) · [cartorio.py:973](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:973)
+- A porta `carimbar` compara e persiste o valor. Os leitores de diagnóstico e de fotografia usam o campo gravado em seus instantâneos. [celula.py:1227](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/portas/celula.py:1227) · [celula.py:1231](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/portas/celula.py:1231) · [celula_veredito_velho.py:110](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/management/commands/celula_veredito_velho.py:110) · [feriado_do_posto.py:428](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/colaboradores/services/feriado_do_posto.py:428) · [foto_e4b.py:247](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/chamados/services/foto_e4b.py:247)
+
+**RED e mutantes**
+
+- Na v6, o primeiro RED cai em `status_completaveis == 1`: obteve `0`, com `status_fila_cartorio=1`. O segundo cai em `pulados == 1`: obteve `0`, com `pulados_foto_entregue=1`. Ambos passaram na v7. [test v7:56](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:56) · [test v7:66](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:66)
+- Os três mutantes da v7 falharam nessas asserções. Os dois mutantes adaptados da v6 falharam na asserção do sinal bruto e na igualdade da foto, respectivamente. [test v7:13](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:13) · [test v6:26](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:26) · [test v6:165](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:165) · [test v6:184](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:184)
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+v7=ponto.tests.test_a_tela_v7_impressao_um_significado
+v6=ponto.tests.test_a_tela_v6_sem_par_memoria.SemParUmaVez
+
+A_TELA_V7_BASE=1 python3 -B -m unittest "$v7" -v
+python3 -B -m unittest "$v7" -v
+A_TELA_V7_MUTANTE=lavra_sem_sinal python3 -B -m unittest "$v7.ImpressaoUmSignificadoTest.test_d5_sem_status_com_carimbo_em_dia" -v
+A_TELA_V7_MUTANTE=d5_sem_sinal python3 -B -m unittest "$v7.ImpressaoUmSignificadoTest.test_d5_sem_status_com_carimbo_em_dia" -v
+A_TELA_V7_MUTANTE=pulo_normal_sem_sinal python3 -B -m unittest "$v7.ImpressaoUmSignificadoTest.test_segunda_passada_pula_sem_classificar" -v
+A_TELA_V6_MUTANTE=omite_sinal_bruto python3 -B -m unittest "$v6.test_primeira_lavra_imprime_o_sinal_bruto" -v
+A_TELA_V6_MUTANTE=perde_foto python3 -B -m unittest "$v6.test_foto_anterior_continua_com_contador_proprio" -v
+```
+
+**Seis selos e cobertura preservada**
+
+| Selo | Por que passa |
+|---|---|
+| O219 | O AST contém duas chamadas de `impressao_insumos`, ambas com `regra=_regra_do_dia(...)`. [test_o219:224](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_o219_versao_da_regra.py:224) |
+| FND | O censo encontra quatro chamadas de produção, todas com `**_cadastro(...)`. [test_fnd:137](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_fnd_pergunta_a_juiza.py:137) |
+| F1C4-3 | Os dois ramos passam `com_insumo_dia_sem_trabalho(...)` como primeiro argumento. Os dois comandos usam `grade_da_celula`. [test_f1c4_3:215](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:215) |
+| O261 | Todas as chamadas de produção passam `cobrancas_vivas=`. [test_o261:61](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_tripwire_o261_gate_le_o_fio.py:61) |
+| E3 | As duas chamadas de hash passam `isento=_isento`. [test_e3:122](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_e3_isento_na_impressao.py:122) |
+| E3 `nunca_bateu` | O pulo e o D5 saem antes de classificar ou carregar. A passagem forçada classifica uma vez. Completei os dublês de importação do teste em memória e as asserções originais selecionadas passaram. [test_e3_nb:153](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_e3_nb_impressao_memoria.py:153) · [test_e3_nb:250](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_e3_nb_impressao_memoria.py:250) | [nao verificado]
+
+Os testes B4 da v5 cobrem foto intacta e contador próprio. No caso da primeira lavra entregue, acrescentei a passagem forçada para manter a asserção `pulados_foto_entregue=1` quando a guarda atua, e a segunda passagem comum agora exige `pulados=1`. Os controles em memória da v6 passaram e cobrem primeira lavra sem acusação, competência aberta, foto anterior, sinal inerte e preservação dos demais protestos. [test v5:183](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v3_sem_par.py:183) · [test v5:233](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v3_sem_par.py:233) · [test v6:156](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v6_sem_par_memoria.py:156) [nao verificado]
+
+**Limite verificado em memória.** Uma foto gravada pela v6 com hash filtrado ainda diverge na leitura pela v7. Nessa sonda, o D5 contou `status_fila_cartorio=1` e a passada normal preservou a foto com `pulados_foto_entregue=1`. A existência de fotos assim em produção e a certificação pelo Code e pelo Opus estão [nao verificado]. [test v7:18](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/tests/test_a_tela_v7_impressao_um_significado.py:18) · [cartorio.py:1546](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1546) · [cartorio.py:1621](/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-045353/app/ponto/services/cartorio.py:1621)
 
 ## 25/11 04:57 · sessao 1321c4345948 · WRAPPER-N-VAGAS · verificador · origem=Code
 
@@ -743,76 +787,4 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_ponta_pequena_prazo se
 
 **INCOMPLETO.** RED/GREEN e mutantes integrados no PostgreSQL, Ruff, suíte inteira, sonda dos 47 dias com hash de `FechamentoMensal`, impacto em fila e contenção da trava, certificação pelo Code e Opus final. [nao verificado] [nao verificado]
 
-## 24/11 23:06 · sessao 2eda483336e5 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · verificador · origem=Code
-
-**Volta 3, v7 — aval pendente.** B1 migra os quatro sítios por período, mas o fechamento ainda usa a data civil para separar feriado de folga trabalhada. B2 protege o evento com colaborador identificado, mas o recálculo geral deixa empresa inativa fora da consulta à guarda. B3 cobre a regressão monetária do 12×36, com mutantes sobreviventes nos outros sítios. B4 bateu no censo em memória. Os 22 movimentos dos anexos incluem janela e pontualidade. `cura_v7_completa.patch` → `app/ponto/motor_calculo_v2.py:2814–2828,3283–3288`; `app/ponto/services/fechamento.py:428–445,539–575,932–964,1496–1515`; `app/core/medida_turno_do_par.py:336–454`; `diff_comp10_v7.txt:22–35`; `diff_comp11_v7.txt:22–39`.
-
-As linhas abaixo são da cópia, salvo onde marquei **v7**. Conferi o delta do censo e executei sondas isoladas em memória. A execução da suíte Django do v7 e a identidade Git da cópia estão [nao verificado]. [nao verificado]
-
-### 1. Quem escreve, quem lê e onde o feriado ainda usa a data civil
-
-| Sítio | Achado |
-|---|---|
-| Escrita do mapa | `_turnos_do_juiz` chama `turnos_de_batidas`. `_dia_do_turno` indexa `t.data_turno` pelo instante localizado de cada batida com tipo gravado `E`. `MotorBase.calcular_mes` monta o mapa, empresta-o temporariamente ao filtro de marcos e escreve `_dia_turno_juiz_calc` antes do laço dos pares. `app/ponto/motor_calculo_v2.py:867–895,682–687,2342–2356,2391–2403` |
-| Leituras diretas no v7 | `_dia_do_turno_do_par` lê o mapa e devolve `(dia_resolvido, dia_do_juiz_ou_None)`. Seus chamadores são `_janela_do_dia`, `Motor12x36.calcular_periodo` e `MotorComercial.calcular_periodo`. Os leitores diretos `_dt_b` da L-084 do dia e o campo `'dia'` do relato também continuam. **v7** `app/ponto/motor_calculo_v2.py:936–951,1549,1599,2013,2814–2828,3283–3288` |
-| Motor por dia e v3 | O Comercial e o TurnoPartido agrupam pelo mapa do juiz, com fallback na **entrada crua**. O v3 usa `resultado.dia_da_jornada`, agrupa por identidade do período e chama o mesmo predicado de dobra. A S5 passa o dia agrupado a `regras.do_dia`. O bloqueio sem previsto do motor também consulta o `data_jornada` recebido do laço. `app/ponto/motor_calculo_v2.py:2931–2959,3081–3092,3325–3350,1440–1456,2457–2461`; `app/ponto/calculador/periodo.py:594–596,824–844`; `app/ponto/calculador/alimentacao.py:73–83,514–525`; `app/ponto/calculador/regras.py:288–291,348–351,776–789` |
-| Fechamento e folha | **Procedente.** O fechamento ainda usa `localtime(p.entrada).date()` para aferir escala certa e para consultar `feriado_vira_folga`. É a data civil da **entrada crua**, mesmo que o par tenha sido recortado. Isso pode mudar a rubrica entre folga e HE100 feriado. O mensal e `DiaPago` recebem a mesma classificação, e `DiaPago` a coloca no dia de `resultado.dia_da_jornada`. A S5 consulta a folga-feriado pelo dia agrupado. O TXT consome a rubrica mensal. **v7** `app/ponto/services/fechamento.py:943–973`; `app/ponto/services/fechamento.py:1201–1217`; `app/ponto/services/dia_pago.py:233–258`; `app/ponto/calculador/alimentacao.py:514–525`; `app/folha/export.py:402–423,732` |
-
-**PAGO × EXIBIDO.** A coluna paga do espelho lê `DiaPago`, portanto reflete a rubrica lavrada. Já a apuração ao vivo pode divergir do gravado. A Pauta prova essa diferença mensal nos casos listados e a geração do TXT pode usar objetos recalculados em leitura. A sétima testemunha do v7 passa a agrupar com o mesmo `_dia_de` da lavratura, corrigindo a troca de dia apontada na volta 2. Ela compara **horas trabalhadas**, sem testar a classificação HE100 feriado. A divergência efetivamente exibida, a paridade agregada da comp 11 e os totais do vigia no v7 estão [nao verificado]. `app/ponto/services/espelho.py:819–831`; `app/folha/views.py:209–214`; **v7** `app/folha/porta_export.py:103–124`; `app/ponto/services/dia_pago.py:109–132,890–898`; `pauta_comp10_lista.tsv:4–21`.
-
-### 2. Fallback e chave crua
-
-**Borda declarada, com ocorrência na frota.** O fallback roda quando o atributo não existe, o mapa está vazio ou o instante cru localizado não tem resposta. Na janela, a folga retorna antes da consulta. O M3 registra mapa presente e chave ausente fora da folga em **31** pares da 10 e **32** da 11, sem caso de mapa ausente entre as chamadas observadas. Há **um** sem turno do juiz na 10 e **zero** na 11. Nos casos comparáveis, a data civil crua coincidiu com a do juiz externo. O DEGR zero cobre apenas chave ausente com trabalho positivo e **mudança de data** entre cru e efetivo. **v7** `app/ponto/motor_calculo_v2.py:936–951,1542–1549`; `diff_comp10_v7.txt:55–62`; `diff_comp11_v7.txt:64–75`.
-
-**A chave pode faltar mesmo com mapa presente.** A ata pode dar papel de entrada a uma batida que o mapa, alimentado pelo tipo gravado `E`, não indexou. A janela também pode mudar a **hora** efetiva sem mudar a data, perdendo a chave se alguém consultar pelo instante recortado. Os três chamadores do v7 consultam pelo cru. A causa individual dos 63 misses está [nao verificado]. Há ainda uma derivação anterior que sobrevive: o laço mensal pode herdar o dia do período anterior pelo gap de até 6 h, depois de ler o mapa. A dobra por período lê o mapa cru, enquanto `DiaPago` e v3 podem receber o dia herdado. Isso permite respostas diferentes quando juiz e herança discordam. `app/ponto/motor_calculo_v2.py:480–506,884–895,2399–2409,2457–2461`; **v7** `app/ponto/motor_calculo_v2.py:1717–1724,2814,3283`.
-
-### 3. B2 — alcance da guarda e escritores fora dela
-
-**O evento comum está coberto.** `recalcular_por_evento` passa o colaborador ao recálculo após o commit. A guarda passa a excluir a empresa com TXT vigente antes de criar ou atualizar o mensal e antes de lavrar `DiaPago`, inclusive no modo `somente_leitura=True, lavrar_dias_pagos=True`. `retratar_exportada` tem consulta própria à mesma guarda. O critério é TXT vigente, ainda que a linha mensal esteja `aberto`. `app/ponto/services/fechamento.py:539–575,898–900,1137–1168,1191–1217,1496–1539,1798–1824`; `app/ponto/services/dia_pago.py:446–461`; `pauta_comp10_lista.tsv:4–21`; **v7** `app/ponto/services/fechamento.py:43–51`.
-
-**O lote geral tem um furo de escopo.** Sem empresa nem colaboradores nomeados, `empresas_exportadas_no_escopo` consulta somente empresas ativas. `universo_da_competencia` pode incluir colaboradores de empresa inativa. Uma empresa inativa com TXT vigente pode, portanto, chegar ao escritor pelo comando geral de recálculo. A ocorrência na 10 está [nao verificado]. `app/ponto/services/fechamento.py:428–445,539–565,1507–1515`; `app/ponto/management/commands/recalcular_fechamento.py:78–81,99–120`.
-
-| Escritor sem consulta própria à guarda | Alcance |
-|---|---|
-| `restaurar_fechamento` | Atualiza os campos pedidos, incluindo rubricas. Chamadores operacionais aceitam mês/ano e podem alcançar a 10. `app/ponto/services/fechamento.py:1358–1396`; `app/ponto/management/commands/aplicar_09_corte_b.py:155–175,220–222,257–268`; `app/ponto/management/commands/aplicar_09_he_intra.py:62–75,136–152`; `app/ponto/management/commands/desvio_o68b.py:38–49,184–199`; `app/ponto/management/commands/diff_reclassificar_partido.py:33–35,213–226` |
-| `dia_pago.lavrar` | Apaga e recria as linhas. As duas chamadas de produção encontradas vêm do recálculo, depois da guarda nesse fluxo. `app/ponto/services/dia_pago.py:135,345–361`; `app/ponto/services/fechamento.py:1191–1203,1277–1296` |
-| Restaurações diretas de `DiaPago` | Três scripts operacionais apagam e reinserem linhas do pago da 10 fora dessa porta. `bin/restore_o263_comp10.py:25,54–56`; `bin/restore_relavratura_10_2026.py:33,85–86`; `bin/restore_badge_linha_09_10.py:39–63` |
-| Escritas de estado e ensaio | Aprovação/reabertura e invalidação escrevem estado ou carimbo. A aprovação individual usa `save()` inteiro. `apurar_furo_da_exportada` escreve furo e carimbo. `apagar_em_ensaio` tem sua própria restrição de banco. `app/ponto/services/fechamento.py:1323–1355,1449–1452,1607–1656,1764–1768`; `app/ponto/services/dia_pago.py:645–675` |
-
-A Pauta entregue tem **17 linhas em sete colaboradores**, com **13 deltas da obra** em trabalhadas/noturnas e quatro faltas com delta da obra zero. Em col868, tanto trabalhadas quanto noturnas já divergiam entre gravado e motor HEAD. Os anexos mostram **14 hashes mensais intactos** nas sondas. A publicação em Pauta DP e a integridade das linhas `DiaPago` da 09/10 estão [nao verificado]. `pauta_comp10_lista.tsv:1–21`; `diff_comp10_v7.txt:6–21`; `diff_comp11_v7.txt:6–21`; `app/ponto/management/commands/lavrar_dias_pagos.py:54–76`.
-
-### 4. Causa dos 22 movimentos
-
-| Competência e pares | Causa sustentada |
-|---|---|
-| **10 — oito recortes.** col174, col218, col37 ×2, col382, col515 ×2 e col973 | A entrada prevista volta à véspera, com saída prevista preservada. Mudam duração, fora e rubricas derivadas da duração. `diff_comp10_v7.txt:27–33,35` |
-| **10 — col868** | O dia do juiz permanece 10/10. O marco de saída vai a D+1, a L-084 passa a recusar o cadastro para o par e volta o cru. A comp 10 inteira tem zero delta em HE100 feriado. `diff_comp10_v7.txt:34,59–62` |
-| **11 — sete recortes de madrugada.** col113 ×2, col200, col218, col296, col382 e col673 | A janela passa a usar a entrada prevista da véspera. **Col200** combina a recuperação de 239,4 min com a dobra pelo feriado do dia 02/11. **Col218** recupera 102,8 min trabalhados, com HE100 feriado zero em HEAD e v7. Os 102,8 min de HE100 feriado citados no commit como ponto de partida intermediário estão [nao verificado] nesse A/B. `diff_comp11_v7.txt:28–29,31–33,35–36,70–72` | [nao verificado]
-| **11 — col1010, col174 e col922** | A saída prevista passa a D+1 e a L-084 por par devolve o cru. As três linhas conservam o dia do juiz. `diff_comp11_v7.txt:27,30,39`; **v7** `app/ponto/motor_calculo_v2.py:1561–1584` |
-| **11 — col327** | Turno e feriado continuam em 15/11. O marco de saída volta a 23h do próprio dia e recorta 65 min. A HE100 feriado cai junto com a duração, de 429,6 para 364,6. `diff_comp11_v7.txt:34,72`; **v7** `app/ponto/janela_he.py:41–59` |
-| **11 — col841, dois pares** | O segundo muda pela janela. O primeiro conserva os marcos e ganha 38,2 min de saída antecipada, efeito compatível com o teto diário da L-093. Os insumos do rateio efetivamente usado estão [nao verificado]. `diff_comp11_v7.txt:37–38`; `app/ponto/motor_calculo_v2.py:1170–1201` |
-
-**O critério literal de uma única regra de feriado falha.** A L-085 explica a origem comum do dia, e os anexos mostram efeitos da janela, da L-084 e da L-093. Os dois deltas HEAD × v7 de HE100 feriado são **col200 e col327**. O zero de cauda do anexo vale para esses dois deltas, enquanto o segundo par de col841 muda pela janela. M2′ é zero no universo perguntado, com **7** pares fora da pergunta na 10 e **29** na 11. `app/docs/LEIS.md:117`; `diff_comp10_v7.txt:48,57–60`; `diff_comp11_v7.txt:37–38,57,66–75`.
-
-### 5. Mordida dos testes e B4 [nao verificado]
-
-- **12×36 por período.** Os dois casos de dobra e F10d/F10e pegam a volta de `_feriado_dobra_no_dia` ao civil. O gêmeo F10h exige 660 em vez de 570, enquanto o F10h pinado ainda falha pela prorrogação, 390 contra 480. O mutante isolado em `eh_feriado` preservou os valores dessas asserções na sonda de período e mudou o alerta no caso de feriado só civil. Falta asserção desse alerta. **v7** `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:189–277`; **v7** `app/ponto/tests/test_o280_bateria_da_lei.py:1554–1632`; **v7** `app/ponto/motor_calculo_v2.py:2814–2850`.
-- **Comercial. Equivalência refutada.** A validação da base comercial restringe as horas escalares, e a validação de `horarios_por_dia` aceita marcos noturnos. Na sonda em memória, um `MotorComercial` com template 08–17 e DNA 22–06 recebeu **02/11** para o par de **03/11 02–06**. Com esse mapa no cálculo por período, trocar só o dia da dobra mudou **240 → 0**. Trocar só `eh_feriado`, com a dobra desligada, retirou o alerta. O mensal recompõe as rubricas dos períodos normais, o que pode mascarar o primeiro mutante numa asserção só mensal. A presença desse cadastro na frota está [nao verificado]. `app/escala/models.py:326–368,667–705`; `app/escala/utils.py:84–108`; `app/ponto/turnos.py:285–309,1295–1302`; `app/ponto/motor_calculo_v2.py:867–895,3325–3364,3596,3691–3692`; **v7** `app/ponto/motor_calculo_v2.py:3283–3303`.
-- **Demais selos.** `GuardaDa10Test` cobre o evento, o mensal e a trilha com e sem a chave. A reversão com flag que regrava foi movida para a 11, e a preservação com flag continua exercitada na 09. `test_contract_juiz_batida` conta ajudantes e portas. B-P4a cobre a âncora e B-P4c o portão do par invertido. São asserções de caminhos diferentes dos quatro sítios de feriado. Os logs de mutação citados no commit estão [nao verificado]. **v7** `app/ponto/tests/test_guarda_da_10_retoma_2117.py:20–60`; **v7** `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:132–209`; `app/ponto/tests/test_reverter_regen_recalcula_dinheiro.py:197–212`; **v7** `app/ponto/tests/test_contract_juiz_batida.py:315–338`; **v7** `app/ponto/tests/test_o280_bateria_da_lei.py:4894–5027`; `app/ponto/calculador/periodo.py:699–703`.
-- **B4 confere no recorte estático.** Reconstituí em memória as mudanças relevantes ao instrumento. Pareadores **9 → 9**, derivações **84 → 81**, B1 **81 → 78**, com composição e lista a classificar iguais. Saem quatro funções do B1 e entra o helper na linha **951**. Conferem também o gap **2424**, a folha **544** e os offsets do fechamento. `app/core/medida_turno_do_par.py:336–454`; `app/core/tests/test_medida_turno_do_par.py:544–573`; **v7** `app/core/tests/test_medida_turno_do_par.py:105–109,256–346`.
-
-### 6. Classes de reprovação
-
-| Classe | Veredito |
-|---|---|
-| Segundo juiz registrado | **Improcedente como novidade.** O helper lê o mapa do juiz registrado e `marco_de_saida` chama o predicado registrado de virada. `app/core/juizes.py:196,216`; **v7** `app/ponto/motor_calculo_v2.py:936–951`; **v7** `app/ponto/janela_he.py:41–59` |
-| Segundo escritor fora da porta | **Procedente como caminho preexistente.** Há restaurações diretas de `DiaPago` e restauração de rubricas mensais sem a guarda. O hunk de B2 acrescenta cadastro à porta existente. `bin/restore_relavratura_10_2026.py:85–86`; `app/ponto/services/fechamento.py:1358–1396`; **v7** `app/ponto/services/fechamento.py:43–51` |
-| Relógio fora da borda | **Improcedente no delta.** Os trechos novos de produção leem instantes recebidos e fazem aritmética de datas. **v7** `app/ponto/motor_calculo_v2.py:936–951`; **v7** `app/ponto/janela_he.py:20–63` |
-| Derivação paralela | **Procedente.** Sobrevivem a data civil de `_ft_feriado` e a diferença entre o mapa cru e o dia mensal após herança por gap. `app/ponto/services/fechamento.py:932–964`; `app/ponto/motor_calculo_v2.py:2399–2409,2457–2461` |
-| Selo/RED sem mordida | **Procedente** para `eh_feriado` isolado e para a cobertura Comercial nos testes entregues. O RED de HE100 do 12×36 e o da guarda do evento têm asserções que distinguem a regressão. **v7** `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:189–277`; **v7** `app/ponto/tests/test_guarda_da_10_retoma_2117.py:47–60`; **v7** `app/ponto/motor_calculo_v2.py:2814–2850,3283–3303` |
-| Ordem de trava | **Improcedente como inversão no delta.** L-084 vem antes do clipe e a guarda antecede as escritas do lote. A leitura do estado de exportação ocorre antes da escrita, sem trava comum demonstrada entre exportação e recálculo. Concorrência efetiva [nao verificado]. **v7** `app/ponto/motor_calculo_v2.py:1561–1584,1717–1724`; `app/ponto/services/fechamento.py:539–575,898–900,1137–1217` |
-| Pouso antes do pré-requisito | Pouso, publicação e ordem real dos atos [nao verificado]. O anexo prova a lista em leitura e os hashes do mensal nas sondas. `pauta_comp10_lista.tsv:1–3`; `diff_comp10_v7.txt:6–21` | [nao verificado]
-| Campo com dois significados | **Improcedente como campo novo.** `j['dia']` mantém o papel de dia resolvido da janela, com origem juiz ou fallback. O segundo retorno do helper distingue as duas origens. A diferença material entre mapa cru e dia mensal está no achado de derivação paralela. `app/ponto/motor_calculo_v2.py:1647–1653,2399–2409`; **v7** `app/ponto/motor_calculo_v2.py:936–951,1717–1724` |
-| `except` novo | **Zero no diff.** Contagem de produção **18 → 18** no motor, **0 → 0** em `janela_he`, **9 → 9** no fechamento e **13 → 13** em `porta_export`. **v7** `app/ponto/motor_calculo_v2.py:936–951,1542–1724,2814–2850,3283–3303`; **v7** `app/ponto/janela_he.py:20–130`; **v7** `app/ponto/services/fechamento.py:36–52`; **v7** `app/folha/porta_export.py:65–124`. |
-
-_8126 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8127 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
