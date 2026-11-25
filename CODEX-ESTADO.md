@@ -1,7 +1,116 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 09:11** · publicado em **25/11/2026 09:16** (UTC-3)
+> Ultima resposta processada: **25/11/2026 09:21** · publicado em **25/11/2026 09:22** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 09:21 · sessao d12eaee004ef · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
+
+Volta 10 construída sobre `78d1bf4c3`. Os dois REDs de P3 e o antes/depois da porta estão entregues para o Code. Rodei 33 testes direcionados sem banco e os dois mutantes de K6 falharam nas asserções esperadas. A execução ORM, a medição em sombra e a certificação pelo Code e pelo opus final ficam [nao verificado]. `ponto/tests/test_a_tela_v6_sem_par_memoria.py:122,133` · `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:164,194`
+
+| Item | Entrega |
+|---|---|
+| **P3** | `julgar_celula` relê `ata` depois do julgamento. O primeiro RED intercala uma relavra entre essa releitura e a escrita de precedência. Na base, a igualdade das `lampadas` cai na linha **190**. O segundo intercala a precedência depois de a lavra montar a ata e antes de gravá-la. Na base, `.get('precedencia')` devolve `None` na linha **214**. Os dois mecanismos foram reproduzidos em memória com as funções da porta. A execução dos `TestCase` fica [nao verificado]. `ponto/services/cartorio.py:2205,2213` · `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:164,190,194,214` |
+| **P5** | `_carimbar_isencao` e a abertura do teste passam a descrever a regra vigente. Removi o patch K6 do teste puro de horizonte e o `ata={}` do dublê em dry. Esse caminho monta `_ata_nb` a partir da grade e segue pelo `continue` ou pelo `return`, com a lavra atrás de `if apply_`. O caso do dublê passou. Três outros testes desse módulo reproduziram na base o erro de importação de `django.db.transaction` no ensaio sem Django. `ponto/services/cartorio.py:608,632,1357,1371,1375,1430` · `ponto/tests/test_a_tela_sem_par_acusa.py:1,234` · `chamados/tests/test_e3_pos_suite_sem_banco.py:72,92,103,139,164,177` · `chamados/services/trava_do_colaborador.py:9` |
+| **P7(a)** | O teste registra um TXT com conteúdo pela porta `registrar`, usa FM `aberto` e `DiaPago`, julga e executa `consumir_eventos_celula` dentro da captura de callbacks. Exige a baixa do evento novo e igualdade do FM, do `DiaPago` e do conteúdo e SHA-256 históricos. A remontagem ganha o colaborador antes retido e uma linha, e imprime os dois hashes como `IMPACTO`. Resultado ORM [nao verificado]. `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:38,101,133,143,152` · `folha/models.py:174` · `folha/export.py:687,1273,1296` · `config/crons.py:394` |
+| **P7(b)** | `_fato_novo_na_entregue` usa `registrar_batida`. No avulso, o signal julga na hora. No lote, a passada explícita julga o fato. O teste exige `motivo='batida'`, FM com o carimbo anterior antes do callback e `atualizado_em == AGORA` depois, pelo caminho preexistente da L-113/E5. A impressão inclui a batida nova com o sinal sem par desligado. Resultado ORM [nao verificado]. `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:279,289,308,311` · `ponto/registro_batida.py:176,195` · `ponto/services/fechamento.py:1173,1820,1837` |
+| **P8** | `_julgar_colab_corpo._entregue` chama `competencia_do_dia_entregue` com o memo por competência do fim da janela. Os selos existentes de aberta, entregue, impressão e D5 passaram em memória. Os casos ORM de zero saves, recarimbo inerte e D5 continuam na suíte [nao verificado]. `ponto/services/cartorio.py:1246,1251` · `chamados/services/vigia_fio.py:830,836` · `ponto/tests/test_a_tela_v7_impressao_um_significado.py:24,38` · `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:216,233,365` |
+
+**Catraca.** O censo real retornou `('ponto/services/cartorio.py::_julgar_colab_corpo', 'B1'): [1311, 1464]`. A catraca passou 35 testes com esse valor injetado em memória. O Code troca `[1316, 1469]` na linha 321. O diff acrescenta **zero `except`**. `core/medida_turno_do_par.py:448` · `core/tests/test_medida_turno_do_par.py:321,563` · `ponto/services/cartorio.py:1311,1464,2215`
+
+### P3 · Antes/depois literal para o Code
+
+Em `carimbar_precedencia`, a leitura simples resolve a repetição idempotente. Quando há escrita, a releitura travada e o save ficam no mesmo `atomic`, e a única chave alterada no JSON é `precedencia`. No sentido inverso, a lavra conserva essa chave a partir da linha travada no instante da persistência. A comparação de idempotência em memória de `lavrar_veredito` continua em `ponto/portas/celula.py:1090`. Os trechos abaixo são para `ponto/portas/celula.py:994,1084,1103,1135,1238,1246`.
+
+```diff
+@@ salvar_e_emitir
+-def salvar_e_emitir(cel, campos, *, lavrados=None):
++def salvar_e_emitir(cel, campos, *, lavrados=None, preservar_chaves=()):
+@@
+     with transaction.atomic():
++        if preservar_chaves and 'ata' in campos:
++            from escala.models import CelulaDia
++            atual = (CelulaDia.objects.select_for_update(no_key=True)
++                     .values_list('ata', flat=True).get(pk=cel.pk)) or {}
++            for chave in preservar_chaves:
++                cel.ata.pop(chave, None)
++                if chave in atual:
++                    cel.ata[chave] = atual[chave]
+         cel.save(update_fields=campos)
+@@ lavrar_veredito
+     _ata = []
++    _preservar = ()
+     _nova = None
+     if ata is not None:
++        _preservar = tuple(k for k in CHAVES_DA_ATA_DE_OUTRA_OPERACAO if k not in ata)
+@@
+-                salvar_e_emitir(cel, _ata + _st)  # O-OUTBOX (3): quem le a ata (marcos_pendentes) e o consumidor
++                salvar_e_emitir(cel, _ata + _st, preservar_chaves=_preservar)
+@@
+     if save:
+-        salvar_e_emitir(cel, campos)
++        salvar_e_emitir(cel, campos, preservar_chaves=_preservar)
+@@ carimbar
+-    salvar_e_emitir(cel, campos, lavrados=lavrados)
++    salvar_e_emitir(cel, campos, lavrados=lavrados, preservar_chaves=CHAVES_DA_ATA_DE_OUTRA_OPERACAO)
+@@ carimbar_precedencia
+     precedencia = json.loads(json.dumps(precedencia))
++    if salvar:
++        from django.db import transaction
++        from escala.models import CelulaDia
++        atas = CelulaDia.objects.values_list('ata', flat=True)
++        cel.ata = atas.get(pk=cel.pk)
++        if (cel.ata or {}).get('precedencia') == precedencia:
++            return []
++        with transaction.atomic():
++            cel.ata = atas.select_for_update(no_key=True).get(pk=cel.pk)
++            campos = carimbar_precedencia(cel, precedencia, salvar=False)
++            if campos:
++                salvar_e_emitir(cel, campos)
++            return campos
+     if (cel.ata or {}).get('precedencia') == precedencia:
+         return []
+     ata = dict(cel.ata or {})
+     ata['precedencia'] = precedencia
+     cel.ata = ata
+-    if salvar:
+-        salvar_e_emitir(cel, ['ata'])  # O-OUTBOX: a ata acorda o consumidor (marcos_pendentes le a ata)
+     return ['ata']
+```
+
+**Ordem de trava**
+
+- **Lote e avulso.** A lavra normal e `nunca_bateu` montam a ata em memória com `save=False` e chegam a `carimbar → salvar_e_emitir`. O lote percorre os dias em ordem de data, inclusive na segunda passada. No avulso, a precedência vem depois do julgamento e usa o próprio `atomic` curto. Nos dois escritores, `FOR NO KEY UPDATE` trava somente a `CelulaDia` por PK, imediatamente antes do `UPDATE` que já travava essa linha. Depois do save há só o `INSERT` de `EventoCelula`, cujos IDs são inteiros sem FK. A trava proposta, portanto, fica no mesmo ponto da ordem de escrita. `ponto/management/commands/processar_cartorio.py:61` · `ponto/services/cartorio.py:1083,1404,1426,2004,2024,2205,2214` · `ponto/portas/celula.py:991,999,1238,1253` · `escala/models.py:1868`
+- **Escritas diretas e atos vizinhos.** A lavra direta com ata entra no mesmo `atomic`. D5 e o veredito direto do admin gravam sem ata. O ato do admin já começa com Colaborador. Os fechamentos do fio seguem Colaborador → Disputa → Chamado → Pergunta nos seus atomics. `editar_dia` trava a célula na edição, e a troca de plantão trava Ausências por PK antes de editar células em ordem de `(colaborador_id, data)`. O desfazimento de futura segue o `UPDATE` de DNA e apaga a ata inteira no seu `atomic`. A proposta mantém essas aquisições nos pontos existentes e não estende o `atomic` ao julgamento nem ao fechamento do fio. Bloqueios em sessões PostgreSQL concorrentes [nao verificado]. `ponto/portas/celula.py:225,265,310,642,643,714,719,735,854,865,1103,1135,1191,1204` · `ponto/services/cartorio.py:987,1067,1681` · `ponto/services/veredito_celula.py:229,231,357` · `chamados/reconciliador.py:673,691` · `chamados/models.py:2945,2954,2967,2971`
+
+### Comandos para o Code
+
+Os dois primeiros comandos são os REDs antes da mudança na porta e viram testes de regressão depois dela. O terceiro roda também P7(a), P7(b), a discriminante e D5. Execução ORM [nao verificado]. `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:101,164,194,216,315,365` · `config/settings/ci.py:6`
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+v8=ponto.tests.test_a_tela_v8_entregue_nao_le_sem_par
+python3 -B manage.py test "$v8.EntregueNaoLeSemParTest.test_RED_precedencia_conserva_ata_lavrada_depois_do_avulso" --settings=config.settings.ci --noinput
+python3 -B manage.py test "$v8.EntregueNaoLeSemParTest.test_RED_lavra_conserva_precedencia_carimbada_depois_da_leitura" --settings=config.settings.ci --noinput
+python3 -B manage.py test "$v8" --settings=config.settings.ci --noinput
+```
+
+Os mutantes de P3 restauram em memória um escritor da base por vez. Em P7, omitir o consumidor deve cair na baixa do evento, alterar qualquer um dos quatro dados históricos deve cair na igualdade do gravado e omitir o recálculo deve cair no carimbo do FM. Os dois mutantes de P8 já deram uma falha de asserção cada. Mutantes ORM [nao verificado]. `ponto/tests/a_tela_v10_mutantes.py:16,28,45,69` · `ponto/tests/test_a_tela_v8_entregue_nao_le_sem_par.py:143,144,190,214,311`
+
+```bash
+mutar() { PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.a_tela_v10_mutantes "$1"; }
+mutar precedencia-velha
+mutar lavra-velha
+mutar sem-consumidor
+mutar muda-fm
+mutar muda-dia-pago
+mutar muda-conteudo
+mutar muda-hash
+mutar sem-recalculo
+mutar sem-k6
+mutar inverte-k6
+```
+
+**Lei e pouso.** Nenhuma pergunta nova nesta volta. A Pauta DP segue pelo PASSIVO após o pouso. A retomada por regularização externa e P6 são itens das suas filas. A passada das 06:27 segue pelo mesmo `julgar_colab`. Estoque por empresa e competência, hashes da árvore final em sombra com o consumidor dentro do rollback e ocorrência da cascata em produção [nao verificado]. `chamados/reconciliador.py:843,847` · `chamados/signals.py:122,146` · `chamados/services/regularizacao_ext.py:78` · `config/crons.py:616,1418,2148`
 
 ## 25/11 09:11 · sessao 8513ff6f5c2f · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · verificador · origem=Code
 
@@ -845,117 +954,4 @@ As 64 linhas de contagem fecham individualmente, e a soma por forma coincide com
 
 A regra de competência 21–20 em `sonda_estoque.py`, o código de saída da execução e a cobertura da frota em produção ficam [nao verificado].
 
-## 25/11 05:17 · sessao f7f8eae2d55d · TIPO-NA-FONTE · leitura · origem=Code
-
-# TIPO-NA-FONTE item 3 — retomada 2
-
-Na cópia identificada como `71efa33d7`, encontrei **14 leituras cruas em 10 arquivos de `app/`**, **uma leitura adicional em `bin/`** e **zero chamadas aos acessores da volta 5c**. A grade tem **34 leituras** pelo critério do pré-desenho, uma a mais que as 33 da volta 5c. A leitura adicional calcula `n_orfas` a partir da lista da grade no cartório. (`app/escala/services/leitor_celula.py:187`, `app/ponto/services/cartorio.py:760`, `bin/snapshot_o118_col221.py:32`, `12e424d5f/app/ponto/services/cartorio.py:772`)
-
-O corte vigente fixa duas formas, **NAO LAVRADA** e **LAVRADA com lista e contagem juntas**, nesta ordem de implantação: **escritor único → estoque migrado → leitores pela porta → tripwire**. O registro de 18/11 ainda lista os estados legados do desenho anterior e exige DIFF de frota por leitor igual a zero. Estoque atual e DIFF de frota: **[nao verificado]**. (`app/docs/PROMPTS.md:2929`, `app/docs/PLANO-PADROES.md:50`, `app/docs/BACKLOG.md:1974`)
-
-A comparação abaixo usa os snapshots locais `78994522d`, `12e424d5f` e `7621a973f`. Os hashes dos blobs da base e da volta 5c conferem com os IDs do diff anexado. A cópia recebida veio sem `.git`, portanto a identidade do commit por `git rev-parse` e a ancestralidade são **[nao verificado]**.
-
-## 1. Censo AST e aplicação da volta 5c
-
-O censo usa o AST de `bin/leitores_de_chave.py`, que segue aliases, desembrulha `values_list` e aceita parâmetros com proveniência declarada. Conferi também os literais em Python fora de `app/`. A unidade é a operação AST, inclusive quando duas operações ocupam a mesma linha. Chaves dinâmicas, fluxo de ramos e leituras implícitas dentro de cópias de dict têm limites de cobertura documentados. Completude além do reconhecimento estático: **[nao verificado]**. (`bin/leitores_de_chave.py:20`, `bin/leitores_de_chave.py:53`, `bin/leitores_de_chave.py:65`)
-
-| Leitor | Receptor e leituras cruas hoje |
-|---|---|
-| `_celula_furada` | `ata.get('orfas')` e `ata.get('n_orfas')`, sobre ata gravada ou projetada do julgamento em curso. `app/chamados/juizes.py:473`, `app/chamados/juizes.py:559` |
-| `_plantio_preenche_furo_na_data` | `ata.get('orfas')`, a partir de `cel.ata`. `app/chamados/services/materializacao.py:454`, `app/chamados/services/materializacao.py:463` |
-| `_orfas_da_ata` | `ata.get('orfas')` e `ata.get('n_orfas')`, sobre o dict recebido de `grade_da_celula`. `app/escala/services/leitor_celula.py:187`, `app/escala/services/leitor_celula.py:190`, `app/escala/services/leitor_celula.py:420` |
-| `periodos_do_dia` | `ata.get('orfas')`, sobre ata gravada ou célula sintética da grade. `app/ponto/juiz_batida.py:165`, `app/escala/utils.py:1909`, `app/ponto/turnos.py:1633` |
-| `medir_sobra_com_tipo_trocado` | `ata.get('orfas')`, repassada a `sobra_na_borda`. `app/ponto/management/commands/tripwire_celulas.py:264`, `app/ponto/management/commands/tripwire_celulas.py:165` |
-| `insumos_da_ata` | `a.get('n_orfas')`, com `a` ligado ao parâmetro `ata`. `app/ponto/services/cartorio.py:851`, `app/ponto/services/cartorio.py:857` |
-| `_leitura_da_celula` | `ata.get('orfas')` para validar a lista e `ata['orfas']` para iterar. `app/ponto/services/cluster_espurio.py:29`, `app/ponto/services/cluster_espurio.py:31` |
-| `assinaturas_do_colab` | `(x.ata or {}).get('orfas')`, usada na carga e na assinatura A5. `app/ponto/services/esmeril_espelho.py:130`, `app/ponto/services/esmeril_espelho.py:143` |
-| `censo` do vigia | `a.get('n_orfas')` decide se lê `a.get('orfas')`. `ata` vem da tupla de `values_list` e `a` é seu alias normalizado. `app/ponto/services/vigia_pareador_celula.py:69`, `app/ponto/services/vigia_pareador_celula.py:74` |
-| `orfas_e_isencao_da_ata` | `ata.get('orfas')`, para o conjunto por dia. `app/relatorios/cartao_pela_celula.py:287`, `app/relatorios/cartao_pela_celula.py:288` |
-| Módulo `snapshot_o118_col221` | `(c['ata'] or {}).get('orfas')`. A ata foi transportada para cada item de `cels`. O módulo também grava o arquivo do snapshot, por isso a conferência foi pelo código. `bin/snapshot_o118_col221.py:18`, `bin/snapshot_o118_col221.py:30`, `bin/snapshot_o118_col221.py:32` |
-
-**Comparação com o pré-desenho.** Em `app/`, são **10 leituras de `orfas` e 4 de `n_orfas`**, em 12 posições. Na volta 5c eram **12 chamadas aos acessores em 10 arquivos**. As duas diferenças de unidade estão no cluster, onde duas leituras cruas viravam uma chamada, e em `_celula_furada`, onde duas leituras viravam uma. O script de `bin/` já existia na volta 5c e ficava fora do universo de `app/`. (`app/ponto/services/cluster_espurio.py:29`, `app/chamados/juizes.py:559`, `12e424d5f/app/ponto/services/cluster_espurio.py:31`, `12e424d5f/app/chamados/juizes.py:511`, `12e424d5f/bin/snapshot_o118_col221.py:32`, `app/docs/RELATO.md:3749`)
-
-**Grade e saída-dia.** O total de 34 conta `.get` e subscript em leitura. Contando também o teste de presença `'orfas' in dia` no supra, são **35 operações AST no HEAD e 34 na volta 5c**. Os dois usos do contador agregado do Esmeril e o mapa lido por `cadastro_realidade` pertencem ao retrato do Esmeril. (`app/ponto/supra_juiz.py:527`, `12e424d5f/app/ponto/supra_juiz.py:514`, `app/ponto/services/esmeril_espelho.py:236`, `app/escala/services/cadastro_realidade.py:1032`)
-
-| Arquivo | Leituras da grade no HEAD |
-|---|---|
-| `app/colaboradores/services/calendario.py` | `:409`, `:410` |
-| `app/escala/orfa_classe.py` | `:58` |
-| `app/escala/services/furos_diarios.py` | `:22` |
-| `app/escala/utils.py` | `:810`, `:813`, `:814`, `:1054`, `:1121`, `:1843`, `:1845`, `:1848`, `:1849`, `:1905`, `:1906`, `:1979`, `:1984` |
-| `app/folha/causas.py` | `:43`, `:100` |
-| `app/ponto/management/commands/detectar_par_relampago.py` | `:140` |
-| `app/ponto/management/commands/propor_reorganizacao.py` | `:104` |
-| `app/ponto/propositor.py` | `:39` |
-| `app/ponto/services/bordas_realizado.py` | `:49` |
-| `app/ponto/services/cartorio.py` | `:754`, `:760`, `:763`, `:1454` |
-| `app/ponto/services/simular_dia.py` | `:12` |
-| `app/ponto/status_dia.py` | `:188` |
-| `app/ponto/supra_juiz.py` | `:392`, `:527` |
-| `app/ponto/turnos.py` | `:2684` |
-| `app/relatorios/pdf_espelho.py` | `:477`, `:552` |
-
-### Os 23 arquivos do diff
-
-**Limpo** abaixo significa que o hunk passou na checagem textual em memória. Na inserção de import de `chamados/juizes.py`, o patch textual falha e a comparação de três vias resolve. Em materialização, esmeril e no teste de medida, a comparação de três vias também acusa conflito. As referências abaixo identificam os trechos comparados. (`app/chamados/juizes.py:1`, `app/chamados/services/materializacao.py:463`, `app/ponto/services/esmeril_espelho.py:130`, `app/core/tests/test_medida_turno_do_par.py:248`)
-
-| Arquivo | Delta `78994522d` → HEAD e encaixe dos hunks |
-|---|---|
-| `app/chamados/juizes.py` | O módulo ganhou imports e o tipo de resultado de slot. Mudaram `_dia_do_contexto_fraco`, `_slot_esperado` e `_pergunta_materializada_de_fato`. Mudaram também janela viva, chave de memo, tranca avulsa e em lote, memos por estampa, projeção temporal, vitalidade, juiz de resposta e suas faces SQL, alimentadores de fila/porta, consultas de irmãs e disputas, e o contador O168. `_celula_furada` conserva o corpo da base. **Import inicial colide textualmente. Hunk do leitor limpo.** `app/chamados/juizes.py:2`, `:143`, `:347`, `:360`, `:633`, `:712`, `:869`, `:1023`, `:1054`, `:1155`, `:1221`, `:1471`, `:1494`, `:1604`, `:1639`, `:1661`, `:1690`, `:1723`, `:1787`, `:1850`, `:2175`, `:2518`, `:2567`, `:2690`, `:559` |
-| `app/chamados/services/materializacao.py` | `_plantio_preenche_furo_na_data` ganhou `pergunta=`, eleição da célula pelo dono/data do fato e conversão de slots e marcas para o eixo do turno. No restante, o delta agrupa vizinhas/irmãs/BUG-PAR, declarado × gravado e K6, estado de aplicação, materialização de ausência e resposta, anuência, plantio da irmã e travas/releitura do lote. **Import limpo. Hunk do leitor colide** no contexto que hoje faz o cálculo do eixo. `app/chamados/services/materializacao.py:95`, `:139`, `:182`, `:262`, `:309`, `:418`, `:447`, `:463`, `:465`, `:738`, `:802`, `:879`, `:1009`, `:1211`, `:1374`, `:1403`, `:1667`, `:1754`, `:1817`, `:1951`, `:2179`, `:2198`, `:2234`, `:2305` |
-| `app/config/settings/ci.py` | Igual à base. **Limpo** para a troca do runner e a configuração da catraca daquela volta. `app/config/settings/ci.py:40` |
-| `app/core/tests/test_medida_turno_do_par.py` | A composição e os registros do módulo avançaram. **Inclusão dos seis nomes da porta em `COMPOSICAO_REGISTRADA` limpa. Cinco hunks de `LINHAS_REGISTRADAS` colidem**, cobrindo pareadores, juízes de chamados, materialização, grade, cartório e esmeril. `app/core/tests/test_medida_turno_do_par.py:104`, `:248`, `:257`, `:272`, `:282`, `:319`, `:323` |
-| `app/core/tests/test_quarentena.py` | `PodarSuiteTest` ganhou prova do log dos podados. **Limpo** o hunk do teste de herança do runner. `app/core/tests/test_quarentena.py:61`, `:145` |
-| `app/escala/apps.py` | Igual à base. **Limpo** em `EscalaConfig.ready`. `app/escala/apps.py:8` |
-| `app/escala/runner_ata_ci.py` | Arquivo novo na volta 5c, caminho livre no HEAD. **Adição limpa** de `RunnerAtaVigiada.run_suite`. `12e424d5f/app/escala/runner_ata_ci.py:9` |
-| `app/escala/services/ata.py` | Arquivo novo na volta 5c, caminho livre no HEAD. **Adição limpa** da porta antiga, dos acessores, do censo e da catraca. O corte vigente define o contrato a implementar. `12e424d5f/app/escala/services/ata.py:108`, `:220`, `:266`, `:347`, `app/docs/PROMPTS.md:2929` |
-| `app/escala/services/ata_ci.py` | Arquivo novo na volta 5c, caminho livre no HEAD. **Adição limpa** do descriptor e do hook da suíte. `12e424d5f/app/escala/services/ata_ci.py:13`, `:31`, `:49` |
-| `app/escala/services/leitor_celula.py` | Igual à base. **Três hunks limpos**, no import, em `n_ok_lavrado` e em `_orfas_da_ata`. `app/escala/services/leitor_celula.py:11`, `:85`, `:180` |
-| `app/escala/tests/test_tipo_item3_selo_classe_fallback.py` | Arquivo novo na volta 5c, caminho livre no HEAD. **Adição limpa** do selo de fallback da volta reprovada. `12e424d5f/app/escala/tests/test_tipo_item3_selo_classe_fallback.py:116`, `app/docs/RELATO.md:3757` |
-| `app/escala/tests/test_tipo_item3_v5_expand.py` | Arquivo novo na volta 5c, caminho livre no HEAD. **Adição limpa** dos testes de Expand, inclusive expectativas do campo paralelo retirado pelo aval A. `12e424d5f/app/escala/tests/test_tipo_item3_v5_expand.py:78`, `:205`, `app/docs/RELATO.md:3750` |
-| `app/escala/utils.py` | Entrou `_protegida_da_guarda`, usada por `_alinhar_por_papel` e `_match_marcos` para preservar o marco próprio fora da rajada. **Seis hunks limpos**, no import, em `_celula_do_marco`, nos dois ramos de `_match_marcos` e nos dois montadores da grade. A ata sintética só com lista continua em `:1906`. `app/escala/utils.py:502`, `:589`, `:660`, `:810`, `:1843`, `:1906` |
-| `app/folha/previa.py` | `montar_previa` carrega decisões e `_material` consulta o juiz de resposta. **Dois hunks limpos**, no import e no teste `dict` de `montar_previa`. `app/folha/previa.py:66`, `:83`, `:139` |
-| `app/folha/validacao_pdf.py` | Igual à base. **Dois hunks limpos**, no import e em `referencia_do_espelho`. `app/folha/validacao_pdf.py:19`, `:47` |
-| `app/ponto/juiz_batida.py` | `intervalo_cadastrado` ganhou o dia do turno e `periodos_do_dia` ganhou os ramos para duração prevista, DNA sem modo e dia sem pausa. **Dois hunks limpos**, no import e na leitura de órfãs. `app/ponto/juiz_batida.py:106`, `:129`, `:165`, `:307`, `:325` |
-| `app/ponto/management/commands/tripwire_celulas.py` | Igual à base. **Cinco hunks limpos**, no import, na peneira, na extração de `_hoje` e nos dois trechos de `Command.handle`. `app/ponto/management/commands/tripwire_celulas.py:8`, `:264`, `:350`, `:357`, `:411` |
-| `app/ponto/portas/celula.py` | Desde a base, regenerações passaram a limpar julgamento de futura com trilha. Mudaram também edição, troca, reversão, geração de período e a documentação de emissão. **Três hunks limpos**, em `celula_como_o_julgamento_deixa`, `lavrar_veredito` e `carimbar_precedencia`. `app/ponto/portas/celula.py:112`, `:404`, `:579`, `:688`, `:765`, `:803`, `:899`, `:981`, `:1040`, `:1090`, `:1161`, `:1249` |
-| `app/ponto/services/cartorio.py` | `chamados_que_falam_de_batida` passou a carregar decisões. `julgar_colab` e `_julgar_colab_corpo` juntaram fecho, rejeição e ocorrência no mesmo ato. `_protesta` passou a consultar o juiz de dia sem trabalho com a ata desta lavra, e `_tem_resposta_do_colab` passou ao juiz L-130. **Quatro hunks limpos**, no import, nos dois trechos de `ata_do_dia` e em `insumos_da_ata`. `app/ponto/services/cartorio.py:48`, `:144`, `:748`, `:834`, `:1030`, `:1492`, `:1574`, `:1687` |
-| `app/ponto/services/cluster_espurio.py` | Igual à base. **Limpo** em `_leitura_da_celula`. `app/ponto/services/cluster_espurio.py:27` |
-| `app/ponto/services/esmeril_espelho.py` | `assinaturas_do_colab` passou a medir `len(_orfas)` na mesma passagem de A5. `anomalias_da_frota` publica a carga e o início da janela. **Import limpo. Hunk do leitor colide** na atribuição e iteração novas. `app/ponto/services/esmeril_espelho.py:79`, `:130`, `:143`, `:224`, `:236` |
-| `app/ponto/services/vigia_pareador_celula.py` | Igual à base. **Dois hunks limpos** em `censo`. `app/ponto/services/vigia_pareador_celula.py:54`, `:73` |
-| `app/relatorios/cartao_pela_celula.py` | `folha_manda` passou a aceitar `agora` da borda e repassá-lo ao turno vivo e ao corte do dia. **Dois hunks limpos**, no import e em `orfas_e_isencao_da_ata`. `app/relatorios/cartao_pela_celula.py:288`, `:296`, `:398`, `:412` |
-
-**`ponto/portas/celula.py` desde `7621a973f`.** O snapshot já contém `desfazer_julgamento_da_futura`. O delta até a cópia atual passa `hoje` de `regenerar_celulas_vinculo` a `_o_chao_do_dia_mudou`, acrescenta a guarda `so_se_folga` sob trava em `editar_dia`, compartilha `agora` entre os dois lados de `trocar_plantao`, condiciona o `UPDATE` de `reverter_regeneracao_dia` à foto original e documenta o emissor do vigia. Os três trechos de transporte tocados pela volta 5c ficaram iguais aos de `7621a973f`. (`7621a973f/app/ponto/portas/celula.py:1124`, `app/ponto/portas/celula.py:392`, `:404`, `:644`, `:688`, `:855`, `:988`, `:1040`, `:1090`, `:1249`)
-
-## 2. Escritores e montagens de ata
-
-| Sítio | Forma que produz |
-|---|---|
-| `ata_do_dia` | **Ambas casadas**, inclusive `[]` e `0` quando a lista da grade está vazia. É a origem dos dois valores na ata do cartório. `app/ponto/services/cartorio.py:748`, `:760`, `:763` |
-| `montar_grade_prevista_periodo_por_turno` | **Só lista**, inclusive vazia, na cópia de `CelulaDia` entregue ao pareador. Para dias de padding fora da montagem, reutiliza a célula com a ata que veio do banco. `app/escala/utils.py:1892`, `:1895`, `:1898`, `:1906`, `:1909` |
-| `_julgar_colab_corpo` | No julgamento corrente e no ramo normal de gravação, monta **ambas** via `ata_do_dia`. No ramo `nunca_bateu`, monta **ambas** se tem dia da grade ou passa `None` à lavra. O `None` de entrada deixa a ata anterior sem substituição. `app/ponto/services/cartorio.py:1279`, `:1320`, `:1464`, `:1899`, `app/ponto/portas/celula.py:1085` |
-| `dispensar_por_ausencia` e `_ata_ate_o_teto` | Preservam a forma de entrada. O primeiro altera lâmpadas e `n_missing` na mesma ata. O segundo pode montar uma cópia com lâmpadas e `n_missing` atualizados. `app/ponto/services/cartorio.py:820`, `:830`, `:925`, `:935` |
-| `celula_como_o_julgamento_deixa` e `lavrar_veredito` | Copiam a forma recebida. A primeira operação projeta em memória. A segunda grava quando a ata muda e preserva a chave `precedencia` de outra operação. `app/ponto/portas/celula.py:1035`, `:1040`, `:1090`, `:1101`, `:1128` |
-| `carimbar_precedencia` | Preserva as chaves presentes. Com `ata=None`, monta um dict de precedência com **nenhuma** das duas chaves. `app/ponto/portas/celula.py:1247`, `:1249`, `:1251` |
-| `desfazer_julgamento_da_futura` | Grava **`None`** para a ata entre os campos limpos. Conserva o julgamento quando a via é de admin. `app/ponto/portas/celula.py:1149`, `:1192`, `:1202` |
-
-O AST reconheceu **dois produtores dos valores de órfãs** no HEAD, o cartório e a grade, com três escritas literais. Não apareceu produtor de **só contagem** nesse censo. Os demais sítios acima transportam ou limpam o envelope. (`bin/leitores_de_chave.py:22`, `app/ponto/services/cartorio.py:760`, `app/ponto/services/cartorio.py:763`, `app/escala/utils.py:1906`, `app/ponto/portas/celula.py:1090`, `app/ponto/portas/celula.py:1202`)
-
-## 3. Matriz dos leitores no HEAD
-
-`L` é a lista fornecida e `n` a contagem fornecida. A coluna `{}` é o dict literalmente vazio. Uma ata sem as duas chaves que contenha lâmpadas pode passar por guardas que `{}` não passa. Nas colunas com uma ou duas chaves, valem as guardas da última coluna. **↓** marca quando `None` vira vazio, zero ou uma resposta negativa equivalente para órfãs. (`app/chamados/juizes.py:542`, `:554`, `app/chamados/services/materializacao.py:454`, `:457`, `app/ponto/management/commands/tripwire_celulas.py:258`, `:261`)
-
-| Leitor | `None` | `{}` | Só lista | Só contagem | Ambas descasadas | Ambas casadas | Guardas e efeito |
-|---|---|---|---|---|---|---|---|
-| `_celula_furada` | `None` | `None` | Testa verdade de `L` | Testa verdade de `n` | Testa `L or n` | Testa `L or n` | Primeiro julga ausência e dia sem trabalho. Sem `lampadas`, retorna `None`. Uma lâmpada apagada basta. Órfã só prende com régua confiável. `app/chamados/juizes.py:525`, `:542`, `:554`, `:559`, `:565` |
-| Materialização | Pula a célula | Pula a célula | Acrescenta as `HH:MM` válidas à lista de marcas | Sem marcas de órfãs | Usa `L` | Usa `L` | Exige dia de trabalho e lâmpadas. Sem outra célula que comprove o furo, sai `False`. A captura de erro também retorna `False`. `app/chamados/services/materializacao.py:454`, `:457`, `:463`, `:474`, `:477` |
-| `_orfas_da_ata` | **↓ `[]` via grade** | `[]` | Converte elementos verdadeiros em `str` | `['?'] * int(n or 0)` | Prefere a lista filtrada, usa `n` se ela esvaziar | Prefere a lista filtrada, usa `n` se ela esvaziar | Chamado diretamente com `None`, levanta em `.get`. `grade_da_celula` entrega `{}`. `app/escala/services/leitor_celula.py:187`, `:190`, `:379`, `:420` |
-| Juiz de batida | **↓ `[]`** | `[]` | `[str(h) for h in L]` | `[]` | Usa `L` | Usa `L` | Qualquer ata que não seja `dict` vira `{}`. As órfãs entram separadas no resultado. `app/ponto/juiz_batida.py:161`, `:165`, `:168` |
-| Tripwire de bordas | Pula, fora do universo | Pula, fora do universo | Peneira `L` | Peneira recebe `None` e usa `[]` | Peneira usa `L or []` | Peneira usa `L or []` | Exige ata verdadeira e dois marcos. A peneira filtra horas e a etapa posterior confirma pelo instante da batida. `app/ponto/management/commands/tripwire_celulas.py:165`, `:258`, `:261`, `:264`, `:283` |
-| `insumos_da_ata` | **↓ `(False, False)`** | `(False, False)` | `(False, False)` | `n` verdadeiro → `(None, None)`, senão `(False, False)` | Mesma regra de `n` | Mesma regra de `n` | As quatro últimas colunas descrevem o ramo sem lâmpadas. Com lâmpadas, resolve pelos marcos do DNA e pelo estado das lâmpadas. `app/ponto/services/cartorio.py:851`, `:857`, `:860`, `:873` |
-| Cluster | `None`, não medido | `None`, não medido | Mede se `L` e `lampadas` forem listas | `None`, não medido | Mesma regra de tipos da lista | Mesma regra de tipos da lista | Dia sem trabalho retorna `()` antes. Com insumo, retorna assinatura quando há rajada de até 15 min e lâmpada apagada. Demais dias medidos retornam `()`. `app/ponto/services/cluster_espurio.py:25`, `:29`, `:31`, `:36`, `:37` |
-| Esmeril | **↓ zero na carga e nada para A5** | Zero na carga e nada para A5 | Soma `len(L)` e classifica as horas | Zero na carga e nada para A5 | Usa `L` | Usa `L` | A via `so_escala` sai antes. A5 conta horas em faixas de meia hora e publica faixas com três ou mais ocorrências. `app/ponto/services
-
-[truncado em 20000 de 31146 caracteres]
-
-_8148 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8149 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

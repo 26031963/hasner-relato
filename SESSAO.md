@@ -6,10 +6,18 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 09:16:34.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (6.3 MB). Acoes na janela: **168**.
+**Medido em 25/11/2026 09:22:34.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (7.2 MB). Acoes na janela: **176**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:22:25 | Bash | Read v10 mutants module, WRAPPER r4 tail | `W=/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-081641/app; cat $W/ponto/tests/a_tela_v10_mutantes.py \| head -90; cd ~/saas-hasner; ls -t logs/WRAPPER-N-VAGAS/volta7/ \| head; tail -5 logs/WRAPPER-N-VAGAS/volta7/test_codex_n_vagas.r4.log` |
+| 09:22:20 | Bash | Read RED/mutant run mold | `cd ~/saas-hasner; cat logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c1/roda.sh; echo ====; cat logs/A-TELA-DO-DIA-LE-UM-JUIZ/v9/rcs.txt; head -c 600 logs/A-TELA-DO-DIA-LE-UM-JUIZ/v9/mutantes.json; ps -p 2445454 -o pid,etime,cmd \| cut -c1-120` |
+| 09:22:16 | Bash | Check c2 launch and find RED molds | `cd ~/saas-hasner; cat logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c2/wrapper.out 2>/dev/null \| head -3; ls logs/A-TELA-DO-DIA-LE-UM-JUIZ/; ls logs/A-TELA-DO-DIA-LE-UM-JUIZ/v9 \| head -30; ls logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c1/*.sh` |
+| 09:22:05 | Bash | Apply P3 porta patch and catraca line | `W=/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-081641/app; python3 - $W <<'EOF' import sys,ast,os W=sys.argv[1] def patch(p,pares): s=open(p).read() for a,b in pares: assert s.count(a)==1,(p,a[:60],s.count(a)); s=s.replace(a,b,1) ast.parse(s); open(p,'w').write(s) P=W+'/ponto/portas/celula.py' patch(P,[ ("""def salvar_e_emitir(cel, campos, *, lavrados=None): \"\"\"O save da celula e o evento ent ...` |
+| 09:21:40 | Bash | Read porta functions to patch | `W=/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-081641/app; sed -n 990,1010p $W/ponto/portas/celula.py; echo ...; sed -n 1076,1140p $W/ponto/portas/celula.py; echo ...; sed -n 1232,1256p $W/ponto/portas/celula.py` |
+| 09:21:36 | Bash | Check constant and porta function sites | `W=/home/ronald/wt-codex-a-tela-do-dia-le-um-juiz-081641/app; grep -n "CHAVES_DA_ATA_DE_OUTRA_OPERACAO" -r $W --include=*.py \| head; grep -n "^def salvar_e_emitir\\|^def lavrar_veredito\\|^def carimbar\b\\|^def carimbar(\\|^def carimbar_precedencia" $W/ponto/portas/celula.py; sed -n 318,323p $W/core/tests/test_medida_turno_do_par.py; git -C $W/.. status --porcelain \| head -12` |
+| 09:21:26 | Bash | Read v10 construtor answer | `cd ~/saas-hasner; cat logs/A-TELA-DO-DIA-LE-UM-JUIZ/v10/construtor_v10.r` |
+| 09:21:22 | Bash | Check v10 construtor result | `cd ~/saas-hasner; D=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v10; cat $D/r.rc; ls $D; tail -3 $D/*.out 2>/dev/null \| cut -c1-200; wc -l $D/construtor_v10.r; cat $D/construtor_v10.r.inventario 2>/dev/null \| head` |
 | 09:14:20 | Bash | Read CLEAR memory rule | `cat ~/.claude/projects/-home-ronald-saas-hasner/memory/parei-clear-so-sem-vivo.md` |
 | 09:13:56 | Bash | Verify waiter pid | `ps -p 2754281 -o pid,etime,cmd \| cut -c1-120` |
 | 09:13:50 | Bash | Update RELATO with PAR c1 verdict | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[5].startswith('ESPERANDO: verificador Codex PAR-RELAMPAGO c1') L[5]=('PAR-RELAMPAGO c1 REPROVADA pelo verificador Codex (09:11, verif_c1.r); conferidos por arquivo:linha e procedentes: argv do cron com --retratar (crons.py:605), estoque sem casa B6.1, trava fora de trava_na_ordem (par_relampago_na_lis ...` |
