@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 21:15** · publicado em **24/11/2026 21:16** (UTC-3)
+> Ultima resposta processada: **24/11/2026 22:14** · publicado em **24/11/2026 22:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 22:14 · sessao 8f5956217934 · ESPURIA-TELA-RETRATAR-ORFA-ABRE · leitura · origem=Code
+
+O menu da espúria está suprimido no template. O ramo `b.orfa` desenha o ícone e o horário, e os dois formulários ficam no `else`. As portas de inverter e retratar aceitam uma batida órfã que passe pelas respectivas guardas. Para expor essas ações no calendário do perfil, a correção cabe no template. [app/templates/colaboradores/partials/_calendario_grade.html:127] [app/ponto/views.py:3439] [app/ponto/views.py:3453] [app/ponto/services/flip_batida.py:10] [app/ponto/services/retratar_humano.py:150]
+
+### 1. Onde o menu é renderizado
+
+- A ficha do colaborador carrega por HTMX `GET /colaboradores/<cid>/calendario/`. A view `calendario_ponto` exige login e `ver_cadastro`, chama `contexto_calendario` e, se o usuário tem `regularizar_batida`, acrescenta `pode_veredito=True`, `motivos_retratacao` e `volta_url`. O fragmento `calendario_partial.html` inclui `_calendario_grade.html`. [app/templates/colaboradores/detalhe.html:207] [app/templates/colaboradores/detalhe.html:215] [app/config/urls.py:26] [app/colaboradores/urls.py:24] [app/colaboradores/views.py:1975] [app/colaboradores/views.py:1990] [app/colaboradores/views.py:2000] [app/colaboradores/views.py:2010] [app/templates/colaboradores/calendario_partial.html:67]
+- O bloco de horários abre com `dia.batidas or dia.retratadas`. Para cada item de `dia.batidas`, `{% if b.orfa %}` toma o ramo do ícone e do horário. Só dentro do `else`, com `pode_veredito`, o horário vira `<summary>` do `<details data-popover-acao>` com os dois formulários. Essa é a condição que exclui a espúria. [app/templates/colaboradores/partials/_calendario_grade.html:124] [app/templates/colaboradores/partials/_calendario_grade.html:127]
+- A gaveta de diagnóstico inclui a mesma grade e passa `pode_veredito` pela mesma permissão. O contexto da gaveta omite `motivos_retratacao`, então ali o formulário de retratar já fica apenas com a opção vazia. [app/colaboradores/views.py:2986] [app/colaboradores/services/drawer.py:122] [app/colaboradores/services/drawer.py:133] [app/colaboradores/services/drawer.py:142] [app/templates/colaboradores/partials/_drawer_diagnostico.html:35] [app/templates/colaboradores/partials/_calendario_grade.html:127]
+
+### 2. Portas e guardas
+
+| Ação | POST e view | Guarda efetiva |
+|---|---|---|
+| Inverter tipo | `/ponto/batida/<id>/flip/` → `ponto:flip_batida` → `flip_batida_view` → `flip_tipo` | Exige `regularizar_batida`. O serviço recusa batida retratada, ato sem autor/request, competência com fechamento `aprovado` ou `exportado` e tipo fora de `E`/`S`. A busca é por PK e a orfandade fica fora das guardas. [app/config/urls.py:29] [app/ponto/urls.py:60] [app/ponto/views.py:3439] [app/ponto/services/flip_batida.py:10] [app/ponto/janelas.py:75] |
+| Não foi trabalho | `/ponto/batida/<id>/retratar/` → `ponto:retratar_batida` → `retratar_batida_view` → `retratar_humano.retratar` | Exige `regularizar_batida`, usuário identificado e `motivo_id` válido e ativo. `observacao` é opcional. Com motivo válido, uma batida já retratada retorna sucesso idempotente. A busca é por PK e as guardas da retratação não consultam orfandade nem competência. [app/ponto/urls.py:62] [app/ponto/views.py:3453] [app/ponto/services/retratar_humano.py:131] [app/ponto/services/retratar_humano.py:163] [app/ponto/registro_batida.py:287] |
+
+### 3. Quem escreve e lê a marca
+
+- O dado persistido é `CelulaDia.ata['orfas']`, com horários `HH:MM`. O pareamento identifica as sobras, o cartório monta a ata a partir das batidas apuráveis e `lavrar_veredito` grava a ata na célula. `grade_da_celula` lê essa lista. `contexto_calendario` cruza dia e mês com o `HH:MM` local e atribui `b.orfa = True` em memória. O template lê esse atributo, e `juiz_batida.periodos_do_dia` também lê a lista da ata. [app/escala/utils.py:622] [app/escala/utils.py:1824] [app/ponto/services/cartorio.py:748] [app/ponto/services/cartorio.py:1198] [app/ponto/services/cartorio.py:1898] [app/escala/models.py:1789] [app/escala/services/leitor_celula.py:187] [app/escala/services/leitor_celula.py:420] [app/colaboradores/services/calendario.py:409] [app/colaboradores/services/calendario.py:654] [app/templates/colaboradores/partials/_calendario_grade.html:127] [app/ponto/juiz_batida.py:153]
+- **Inverter** grava `tipo` e trilha. O `save` aciona o rejulgamento da ata, que pode continuar classificando o horário como órfão conforme o pareamento. **Retratar** grava `aprovada=False`, `retratada_em` e trilha. A batida sai das apuráveis, a ata é refeita sem ela quando o cartório julga, e a marcação continua na tela, riscada em `dia.retratadas`. Em ambos os casos a orfandade é recalculada na ata, sem escrita direta de `b.orfa` pelas portas. [app/ponto/services/flip_batida.py:25] [app/ponto/registro_batida.py:272] [app/ponto/registro_batida.py:287] [app/ponto/signals.py:131] [app/ponto/turnos.py:2896] [app/ponto/services/cartorio.py:1198] [app/colaboradores/services/calendario.py:268] [app/templates/colaboradores/partials/_calendario_grade.html:127]
+
+### 4. O que encerra chamado, pergunta e disputa
+
+- **Mesmo gatilho para batida normal e órfã.** O `save(update_fields=...)` dispara `post_save(Batida)`. A ordem é núcleo recompõe turnos → cartório chama `julgar_celula` para a data local e a véspera → `reconciliar_chamados_colab` lê o resultado. O cartório tem guardas para célula ausente, data futura e turno de hoje ainda em curso. [app/ponto/registro_batida.py:272] [app/ponto/signals.py:34] [app/ponto/signals.py:85] [app/ponto/signals.py:108] [app/ponto/signals.py:131] [app/ponto/signals.py:206] [app/ponto/services/cartorio.py:2059] [app/ponto/tests/test_c3_ordem_dos_receivers_da_batida.py:93]
+- **Chamado.** O reconciliador reavalia a premissa e chama a unidade de retratação do chamado quando ela cai. `ChamadoColaborador.reconciliar()` ainda passa pelas guardas de premissa, conversa e pergunta viva. Se o chamado for de `cluster_batida_espuria`, o próprio cartório chama `cluster_espurio.reconciliar_colab` após a lavra. Esse serviço lê a ata do dia do chamado e tenta resolver pelo mesmo `ch.reconciliar()` quando a assinatura desaparece. A assinatura exige pelo menos duas órfãs a até 15 minutos entre si e pelo menos um marco apagado. [app/chamados/reconciliador.py:1568] [app/chamados/reconciliador.py:1581] [app/chamados/reconciliador.py:602] [app/chamados/models.py:661] [app/chamados/models.py:690] [app/ponto/services/cartorio.py:1056] [app/ponto/services/cluster_espurio.py:15] [app/ponto/services/cluster_espurio.py:53] [app/ponto/services/cluster_espurio.py:176]
+- **Pergunta e disputa.** O reconciliador pode carimbar `celula_absolveu` quando a célula absolve e `pergunta_viva` permite. O `post_save` do chamado resolvido também chama `resolver_perguntas_por_chamado_resolvido`, que consulta o mesmo juiz e protege respostas ainda sem materialização. A disputa fecha por `DisputaSupervisao.fechar()` quando não sobra pergunta viva nem resposta sem veredito. O `post_save` da disputa tenta reconciliar o chamado-pai. A lavra também pode emitir `EventoCelula`, cujo consumidor roda essas verificações e o fechamento de perguntas de saída/entrada sem destino pelo marco correspondente. Portanto, retratar a batida dispara a reavaliação. O fechamento dos três registros depende do que a nova ata e os juízes concluírem. [app/chamados/reconciliador.py:695] [app/chamados/reconciliador.py:715] [app/chamados/reconciliador.py:765] [app/chamados/signals.py:91] [app/chamados/services/disputa_emissao.py:2087] [app/chamados/services/disputa_emissao.py:2221] [app/chamados/models.py:2047] [app/chamados/signals.py:19] [app/ponto/portas/celula.py:993] [app/chamados/reconciliador.py:1498]
+
+### 5. Testes e RED mínimo [nao verificado]
+
+| Cobertura encontrada | Arquivo e classe |
+|---|---|
+| Menu normal no HTML real. O smoke confere a URL de retratar pelo PK e mede o popover aberto. O segundo teste cobra o acionamento pelo horário e os dois botões dentro do painel. | `app/core/tests/test_smoke_retratar_1366.py::SmokeRetratar1366` [app/core/tests/test_smoke_retratar_1366.py:115] [app/core/tests/test_smoke_retratar_1366.py:138] [app/core/tests/test_smoke_retratar_1366.py:171]. `app/core/tests/test_selo_espelho_sinais.py::EspelhoSinaisSoNaExcecao` [app/core/tests/test_selo_espelho_sinais.py:40] [app/core/tests/test_selo_espelho_sinais.py:76] [app/core/tests/test_selo_espelho_sinais.py:114]. |
+| Espúria no **contexto**. As classes provam que a batida aparece com `orfa=True`. Cobertura do **menu** da espúria [não verificado]. | `app/colaboradores/tests/test_calendario_orfa.py::CalendarioMarcaOrfaTest` [app/colaboradores/tests/test_calendario_orfa.py:34] [app/colaboradores/tests/test_calendario_orfa.py:92]. `app/colaboradores/tests/test_calendario_orfa.py::CalendarioLeOrfaDaAtaTest` [app/colaboradores/tests/test_calendario_orfa.py:108] [app/colaboradores/tests/test_calendario_orfa.py:160]. |
+| Batida já retratada e fecho de cluster. Um teste cobra o link de desfazer. O outro altera `retratada_em` na fixture, roda o cartório e cobra o fecho do chamado. | `app/ponto/tests/test_porta_retratar_batida.py::PortaRetratarBatida` [app/ponto/tests/test_porta_retratar_batida.py:32] [app/ponto/tests/test_porta_retratar_batida.py:223]. `app/ponto/tests/test_varredura_cluster_evento.py::ClusterPeloEventoTest` [app/ponto/tests/test_varredura_cluster_evento.py:22] [app/ponto/tests/test_varredura_cluster_evento.py:50]. |
+
+**RED mínimo proposto.** Reaproveitar a fixture da órfã das `08:07`, fazer o GET do calendário com `regularizar_batida` e exigir que o `<details>` do horário contenha os dois `form[action]` para **o PK da órfã**, mantendo o ícone. Usar uma batida casada da mesma fixture como controle. Pela leitura do template, hoje falha na busca dos formulários da órfã, pois o ramo dela só emite ícone e hora. Execução do RED [não verificado]. [app/colaboradores/tests/test_calendario_orfa.py:133] [app/core/tests/test_smoke_retratar_1366.py:147] [app/templates/colaboradores/partials/_calendario_grade.html:127]
+
+### 6. Qual casca
+
+A grade com o menu está na ficha do supervisor, que estende **`base.html`**. O calendário e a gaveta são fragmentos renderizados diretamente. Já `/ponto/espelho/`, inclusive com `?colab=`, renderiza `ponto/espelho.html`, que escolhe `base.html` ou `base_app.html` por `base_tpl`. O bloco de batidas desse espelho usa marcações informativas e apresenta as órfãs como horários separados. [app/templates/colaboradores/detalhe.html:1] [app/colaboradores/views.py:2010] [app/colaboradores/views.py:2991] [app/colaboradores/tests/test_chip_ausencia_duas_linhas.py:442] [app/ponto/urls.py:10] [app/ponto/views.py:118] [app/ponto/views.py:211] [app/templates/ponto/espelho.html:1] [app/templates/ponto/espelho.html:230] [app/core/context_processors.py:194]
+
+### 7. Contraexemplos e comportamento atual
+
+| Batida | O que o código faz hoje |
+|---|---|
+| **Retratada** | Fica fora de `dia.batidas` e aparece riscada em `dia.retratadas`. A única ação desse ramo é desfazer, quando a permissão e o prazo da retratação humana permitem. O serviço de flip também recusa. [app/colaboradores/services/calendario.py:268] [app/colaboradores/services/calendario.py:654] [app/templates/colaboradores/partials/_calendario_grade.html:127] [app/ponto/services/retratar_humano.py:67] [app/ponto/services/flip_batida.py:15] |
+| **Já invertida** | Continua elegível ao menu se cair no ramo comum. `flip_info` acrescenta o selo da trilha e `flip_tipo` permite outra inversão se as guardas atuais passarem. [app/colaboradores/services/calendario.py:674] [app/templates/colaboradores/partials/_calendario_grade.html:127] [app/ponto/services/flip_batida.py:15] |
+| **De regularização** | `reg_externa` identifica a origem e alimenta o selo de procedência. A origem, por si só, deixa a batida elegível ao mesmo menu e às mesmas guardas. [app/chamados/services/regularizacao_ext.py:71] [app/ponto/services/procedencia_batida.py:54] [app/templates/colaboradores/partials/_calendario_grade.html:127] [app/ponto/services/flip_batida.py:15] [app/ponto/services/retratar_humano.py:163] |
+| **De competência paga/exportada** | O menu pode aparecer. O flip barra pelo `FechamentoMensal` individual em `aprovado` ou `exportado`. A retratação grava a batida sem consultar essa trava e solicita recálculo por evento após o commit. A cerca de competência entregue incide sobre a escrita do fio da pergunta. [app/templates/colaboradores/partials/_calendario_grade.html:127] [app/ponto/janelas.py:75] [app/ponto/services/flip_batida.py:21] [app/ponto/registro_batida.py:287] [app/ponto/services/fechamento.py:1798] [app/chamados/services/disputa_emissao.py:1999] | [nao verificado]
+
+**Casos reais.** O backlog cita `38732` como **chamado** do colab `969`, em 12/11. A associação com a batida `#38732` do colab `1824`, e o estado da batida `#40785`, da disputa `8389` e da pergunta `61916`, ficam [não verificado]. [app/docs/BACKLOG.md:2067]
 
 ## 24/11 21:15 · sessao cc5bdceb78b0 · DXG-APPLY-33-POR-COLAB · verificador · origem=Code
 
@@ -614,58 +667,4 @@ Em `main`, o juiz deixava esse par em 15/11, mas a herança de até 6 h do motor
 
 A substituição de períodos do dia pela ata explica como o par **pode** sumir após mudar de data. O mapa do juiz já está disponível quando a ata elimina os períodos desse dia e inclui o seu período. A execução das guardas no `CASO 174` fica [nao verificado]. `app/ponto/motor_calculo_v2.py:2346–2356`, `app/ponto/motor_calculo_v2.py:632–645`, `app/ponto/motor_calculo_v2.py:669–688`.
 
-## 24/11 17:38 · sessao eedb3dbb224a · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
-
-# NOTURNO-A · mapa da competência 11/2026
-
-**A janela dá `trab > 0` a 7 dos 18 dias, somando 1.651,3 min trabalhados nos pares alterados. A cauda alcança 1 dos 18, `col174` em 15/11, e o par de 62,7 min some da lista de períodos do motor após a mudança.** Os 18 dias somam **4.433 min realizados, 73 h 53 min**, que arredondam para as **73,9 h** do filtro. `D:6–24`, `A:93–101`, `A:106`, `A:119–124`.
-
-`D` referencia as linhas da **saída colada** de `sonda_mapa18.py`, contadas desde `sonda_leitura`. `A` referencia as linhas do **`anexo_pares.txt` colado**, contadas desde `# PAR`. Cruzei por **colaborador + data de `_dia_de`**. A lavratura usa o mapa do motor quando disponível. `Realizado` vem da grade, limitado ao previsto do dia, e entra em campo próprio da lavratura. [dia_pago.py:109](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/services/dia_pago.py:109), `app/ponto/services/dia_pago.py:173–179,285–292,387–402`, `app/escala/utils.py:2052–2069`, L-095 em `app/docs/LEIS.md:113`.
-
-### Ramos e juízes
-
-- **Inversão.** O juiz do valor do par é `MotorBase.calcular_periodo`. A janela busca os marcos em `entrada.date()`, `marco_no_dia` põe o marco na data civil do instante, e o cálculo limita a duração negativa a zero. O dia da jornada vem de `turnos_do_colab`. L-097 para a janela e L-085 para o dia do turno. `app/core/juizes.py:215–224,1206–1208`, `app/docs/JUIZES.md:20–29`, `app/ponto/motor_calculo_v2.py:1528–1550,1752–1763,2759–2787`, `app/ponto/janela_he.py:20–30,92–103`, `app/docs/LEIS.md:115,117`.
-- **FT em D+1.** Nos quatro dias dessa classe, a `S` gravada como saída aparece como entrada do turno no `DIA`, e o `PAR` registra essa ponta em D+1. O mapa do motor só indexa batidas gravadas como `E` e recorre à data civil para chave ausente. Qual caminho de atribuição foi tomado em cada execução fica [nao verificado]. O zero do **par FT** tem a assinatura do bloqueio total sem previsto: a janela de pontas é pulada em folga e o bloqueio zera os minutos, colapsando a saída efetiva na entrada. Juízes `turnos_do_colab` e `MotorBase.calcular_periodo`, L-085, L-087 e L-097. `D:7–8,15,21`, `A:11,18–19,38,64`, `app/ponto/motor_calculo_v2.py:884–895,1440–1486,1522–1528,2400–2409,2445–2469`, `app/core/juizes.py:216,1207–1208`, `app/docs/LEIS.md:115,117,119`.
-- **Sem período.** A sonda anterior registrou essa condição em `col37` 14/11 e `col174` 24/10 e 01/11. A lavratura começa em zero e soma os períodos na data de `_dia_de`. `periodos_do_dia` é o juiz da ata, que pode substituir os períodos após conferir as pontas e as batidas. Turno aberto retorna com zero inicial e pode receber crédito de pares fechados. A guarda específica que produziu os dias sem período continua [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`, `app/ponto/motor_calculo_v2.py:632–688,2513–2560,2750–2755`, `app/core/juizes.py:219,1207–1208`, L-087 e L-095 em `app/docs/LEIS.md:113,119`.
-
-### Os 18 dias
-
-**JANELA** mostra os minutos trabalhados registrados em `MUDA` para a data da linha. `—` indica ausência de ganho demonstrado no anexo. O `DiaPago` pós-cura integral fica [nao verificado]. Em **CAUDA**, `—` indica que a chave está fora dos quatro movimentos fornecidos. `A:92–103,106–109`, `app/ponto/services/dia_pago.py:173–179`.
-
-| Colab | Data em 2026 | Realizado (min) | Par em `_dia_de` e motivo do zero | JANELA (min) | CAUDA |
-|---|---|---:|---|---:|---|
-| col37 | 14/11 | 241 | **Sem par.** Sem período documentado. O FT de **15/11**, 02:00:18–07:01:13, colapsou em 02:00:18. `D:7`, `A:38`, `app/docs/RELATO.md:124` | — | — |
-| col110 | 12/11 | 241 | **Sem par.** O FT de **13/11**, 01:59:07–07:00:02, colapsou em 01:59:07. `D:8`, `A:11` | — | — |
-| col113 | 30/10 | 242 | **INV**, 31/10 03:00:00–07:02:00. Efetivo **19:00 → 07:00**. `D:9`, `A:12` | **+242,0** `A:93` | — |
-| col113 | 01/11 | 241 | **INV**, 02/11 03:00:00–07:01:00. Efetivo **19:00 → 07:00**. `D:10`, `A:13` | **+241,0** `A:94` | — |
-| col174 | 24/10 | 145 | **Sem par.** Sem período documentado. O cruzamento pelas batidas encontra o INV de **25/10**, 02:32:15–04:57:35, efetivo **21:00 → 04:57:35**. O motivo da divergência de data fica [nao verificado]. `D:11`, `A:15`, `app/docs/RELATO.md:124` | —. O par de 25/10 fica **0,0**. `A:95` | — |
-| col174 | 26/10 | 142 | **Sem par.** A `E` de 26/10 às 02:27 aparece aberta no turno de 25/10. A cópia documenta que sua data varia com o recorte do pareamento. A causa do zero de 26/10 fica [nao verificado]. `D:12`, `A:2–89`, `app/docs/RELATO.md:74` | — | — |
-| col174 | 01/11 | 142 | **Sem par.** Sem período documentado. A guarda que deixou de entregar o turno iniciado em 02/11 às 02:47 fica [nao verificado]. `D:13`, `A:2–89`, `app/docs/RELATO.md:124` | — | — |
-| col174 | 15/11 | 63 | **Sem par** na lista `PAR`. O par **05:30:50–06:33:31** está em 15/11 no juiz e em **14/11 no motor**. O motor herda o dia do período fechado anterior quando o intervalo é de até 6 h, aqui cerca de 60 min. Juiz `turnos_do_colab`, L-085. `D:14`, `A:106`, `app/docs/BACKLOG.md:2199`, `app/ponto/motor_calculo_v2.py:2400–2423`, `app/core/juizes.py:216`, `app/docs/LEIS.md:117` | — | **Sim.** Juiz 15/11 → 14/11. O par de **62,7 min** some do motor após a mudança. `A:106,119–124` |
-| col200 | 29/10 | 180 | **Sem par.** O FT de **30/10**, 02:00:31–06:00:07, colapsou em 02:00:31 e aparece em **duas linhas idênticas** no anexo. `D:15`, `A:18–19` | — | — |
-| col200 | 02/11 | 180 | **INV**, 03/11 02:00:33–06:00:15. Efetivo **22:00 → 06:00**. `D:16`, `A:20` | **+239,7** `A:96` | — |
-| col218 | 14/11 | 103 | **INV**, 15/11 03:17:11–05:00:03. Efetivo **21:00 → 05:00**. `D:17`, `A:21` | **+102,9** `A:97` | — |
-| col296 | 02/11 | 345 | **INV**, 03/11 00:15:19–07:00:41. Efetivo **19:00 → 07:00**. `D:18`, `A:30` | **+405,4** `A:98` | — |
-| col382 | 10/11 | 418 | **INV**, 11/11 00:02:41–07:51:20. Efetivo **23:50 → 07:50**. `D:19`, `A:39` | **+417,7** `A:99` | — |
-| col673 | 21/10 | 3 | **INV**, 22/10 06:57:21–07:00:00. Efetivo **19:00 → 07:00**. `D:20`, `A:60` | **+2,6** `A:101` | — |
-| col727 | 10/11 | 307 | **Sem par.** O FT de **11/11**, 01:00:12–07:07:00, colapsou em 01:00:12. `D:21`, `A:64` | — | — |
-| col922 | 26/10 | 480 | **Sem par.** O juiz exibe turno com entrada às 07:00 no dia. A saída está truncada e o ramo do zero fica [nao verificado]. `D:22`, `A:2–89` | — | — |
-| col922 | 28/10 | 480 | **Sem par.** O INV de **29/10** 04:07:39–07:02:13 aparece na vizinhança do extrato, e o motor o atribui a **27/10** por herança. O ramo do zero de 28/10 fica [nao verificado]. `D:23`, `A:78`, `app/docs/RELATO.md:73`, `app/ponto/motor_calculo_v2.py:2400–2409` | —. O par atribuído a 27/10 fica **0,0**. `A:103` | — |
-| col922 | 03/11 | 480 | **Sem par.** O juiz exibe turno com entrada às 07:01 no dia. A saída está truncada e o ramo do zero fica [nao verificado]. `D:24`, `A:2–89` | — | — |
-
-**Efeito da cauda.** `col174` 15/11 é a única interseção com os 18 dias. Os outros movimentos são `col219` 14/11 e `col639` 04/09 e 10/09. Para `col174`, a sonda mostra os dois turnos sob 14/11 após a mudança e, nessa jornada, só o primeiro período (`18:31:37–04:30:15`). O par movido deixa de figurar no motor, portanto **0 dos 18 ganha trabalhado pelo par movido**. A substituição de períodos pela ata pode produzir esse desaparecimento, mas o acionamento dessa guarda no caso fica [nao verificado]. `A:106–109,119–124`, `app/docs/RELATO.md:11`, `app/ponto/motor_calculo_v2.py:632–688`, L-085 e L-087 em `app/docs/LEIS.md:117,119`.
-
-### Classe × dias × colaboradores × realizado
-
-Cada dia entra em uma classe. O total de colaboradores é distinto entre as classes, pois `col200` e `col174` aparecem em mais de uma. `D:7–24`.
-
-| Classe | Dias | Colabs | Horas realizadas | Base |
-|---|---:|---:|---:|---|
-| Inversão pela janela civil na data do dia | 7 | 6 | 25 h 32 min | `D:9–10,16–20`, `A:12–13,20–21,30,39,60` |
-| Par FT colapsado em D+1 | 4 | 4 | 16 h 09 min | `D:7–8,15,21`, `A:11,18–19,38,64` |
-| Sem período documentado, demais casos | 2 | 1 | 4 h 47 min | `D:11,13`, `app/docs/RELATO.md:124` |
-| Par atribuído à véspera, caso da cauda | 1 | 1 | 1 h 03 min | `D:14`, `A:106`, `app/docs/BACKLOG.md:2199` |
-| Ramo do zero [nao verificado] | 4 | 2 | 26 h 22 min | `D:12,22–24` |
-| **Total** | **18** | **11** | **73 h 53 min ≈ 73,9 h** | `D:6–24`, `app/docs/RELATO.md:19` |
-
-_8103 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8104 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
