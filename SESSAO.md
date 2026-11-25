@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 15:04:41.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (40.3 MB). Acoes na janela: **952**.
+**Medido em 25/11/2026 15:11:26.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (40.3 MB). Acoes na janela: **953**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:11:22 | Bash | Check PAR c5 suite status | `cd ~/saas-hasner/logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c5; ls -la suite.rc 2>&1; tail -3 suite.log` |
 | 14:58:20 | Bash | Wait for PAR c5 whole-suite verdict | `cd ~/saas-hasner/logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c5; until [ -e suite.rc ]; do /usr/bin/sleep 60; done; cat suite.rc; grep -E '^(OK\|FAILED)($\| \()' suite.log \| tail -1; grep '^Ran ' suite.log \| tail -1; grep -E '^(FAIL\|ERROR):' suite.log \| head` |
 | 14:57:25 | SendMessage |  | `-` |
 | 14:57:19 | Bash | Publish E1 DIFF and decisions in RELATO | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() top=("DECIDIDO PELA LEI secao 4 (motor_calculo_v2 inviolavel) + LEI-AKITA 2 (todo leitor le o mesmo numero): E1 dia com previsao_invalida RETIDO sai de previsto/abono/falta/DSR, mas o REALIZADO fica (V2 medido tirava 899/1557/1441 min do realizado com horas_trabalhadas do motor parado = soma quebrada, A3) \| contestavel;  ...` |
