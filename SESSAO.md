@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 14:17:34.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (38.6 MB). Acoes na janela: **921**.
+**Medido em 25/11/2026 14:24:18.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (38.7 MB). Acoes na janela: **924**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:18:42 | Bash | Write DXG PAREI line at RELATO top | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l="PAREI: ! DXG-APPLY-33 r1 -- aviso a quem exporta a comp 11 \| espera Ronald (14:4x) -- opus final APROVOU a v11i SO para a r1 (logs/DXG-V11I/opus_final.txt: sha256 21/21, 0 except, PIPESTATUS em todo passo, teto max 5,85 s); r2 bloqueada ate A3/C/A6. O passo 0 do COMANDOS exige avisar quem exporta (nao ha porta entre e ...` |
+| 14:18:27 | Bash | Read DXG avals and PROD commands header | `cd ~/saas-hasner/logs; cat AVAIS-1515/dxg_apply_33_por_colab_204x.txt AVAIS-1515/dxg_876_e_recusa_2511.txt; sed -n 1,30p DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11i/COMANDOS_PROD_NAO_EXECUTADOS.txt` |
+| 14:18:23 | Bash | Save opus final; read DXG aval | `cd ~/saas-hasner/logs; cat > DXG-V11I/opus_final.txt <<'EOF' OPUS FINAL DXG-APPLY-33-POR-COLAB v11i (25/11 ~14:3x, verificador a2536, gravado pela sessao) APROVADO -- escopo SO a r1. r2 bloqueada ate A3, C e A6 curados e re-verificados; PARADO na r1 = PAREI (COMANDOS:66-68), nunca r2 no mesmo ato. 1 A3-COMP12 (bloqueia r2) apply33.py:570 relavra so alvos[0]['decl'] no JA_APLICADO; r1 tem 0 JA_APLI ...` |
 | 14:09:05 | Bash | Wait for A-TELA v15 jobs and verifier | `cd ~/saas-hasner/logs; until [ -e A-TELA-DO-DIA-LE-UM-JUIZ/v15/roda.fim ] && [ -e A-TELA-DO-DIA-LE-UM-JUIZ/v15/r_verif.rc ]; do /usr/bin/sleep 60; done; cat A-TELA-DO-DIA-LE-UM-JUIZ/v15/rc.txt A-TELA-DO-DIA-LE-UM-JUIZ/v15/r_verif.rc; head -5 A-TELA-DO-DIA-LE-UM-JUIZ/v15/r_verif.txt` |
 | 14:08:59 | Agent | DXG v11i opus final verificador | `Obra DXG-APPLY-33-POR-COLAB, v11i. You are the FINAL reader (opus final) before an apply in PROD of a one-shot instrument (apply33 + reverter33 + COMANDOS) under the aval logs/AVAIS-1515/DXG-APPLY-33-POR-COLAB*.txt (read it literally) and DXG-876-E-RECUSA-2511. Repo /home/ronald/saas-hasner; read CLAUDE.md section 0 and 7b DINHEIRO. Material: - v11i folder: logs/DECLARADO-X-GRAVADO-PASSIVO-11/port ...` |
 | 14:08:47 | Bash | Check A4 and A-TELA jobs alive | `pgrep -af "cadeia_v2\|roda.sh\|lanca_verif15" \| grep -v pgrep \| head` |
