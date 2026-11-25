@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 18:37:47.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.4 MB). Acoes na janela: **168**.
+**Medido em 25/11/2026 18:43:54.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.5 MB). Acoes na janela: **172**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:41:12 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:3x WRAPPER-N-VAGAS v13')) L.insert(k+1,'18:4x A-TELA v18: wt-atela-v18-180430 commit 25ad014fb; RED pista 1125180940 rc 1 (10 fail), GREEN 1125182125 525 OK rc 0, 7/7 mutantes mordem; Codex final REPROVA. DECIDIDO PELA LEI A-TELA-PROTESTOS-2511 (se ...` |
+| 18:41:07 | SendMessage |  | `-` |
+| 18:40:56 | Bash |  | `cd /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ; sed -n 80,98p CONTRATO-NOVO-RASCUNHO-2511.md; grep -n -i 'v17\\|23 commit\\|cadeia' v18/HANDBACK.md \| head` |
+| 18:40:44 | Bash |  | `cd /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ; grep -n -A4 'K5' CONTRATO-NOVO-RASCUNHO-2511.md \| head -30; grep -n -A25 '^## *9' CONTRATO-NOVO-RASCUNHO-2511.md \| head -40` |
 | 18:33:24 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:00 DESPACHO:')) L.insert(k+1,'18:3x WRAPPER-N-VAGAS v13: 1o construtor parado pelo DISJUNTOR B1 (tokens 30 min sem arquivo novo na copia) -> TaskStop; copia wt-wrapper-v13-180046 HEAD 65794ce69 = so o merge do main 160173bb1; rascunhos das curas sa ...` |
 | 18:33:19 | Agent | WRAPPER v13 construtor 2 | `Voce e o construtor (opus) da volta 13 da obra WRAPPER-N-VAGAS no repo /home/ronald/saas-hasner (leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes). Obra de INSTRUMENTO (bin/), pouso proprio, nada de app/. Voce CONTINUA o trabalho de um construtor anterior que foi parado pelo disjuntor B1 (bin/disjuntor.py: agente com copia wt-* que gasta tokens 30 min sem arquivo novo na copia tem as ferramen ...` |
 | 18:33:02 | Bash |  | `cd /home/ronald/saas-hasner; d=logs/WRAPPER-N-VAGAS/v13/rascunhos; mkdir -p $d; cp /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad/new/{codex_admissao.py,codex_pergunta.sh,codex_vagas_estado.py,gerar_estado.py,test_codex_n_vagas.sh,test_codex_pergunta.sh} $d/; sha256sum $d/* \| cut -c1-12,65-; grep -n 'except' $d/gerar_estado.py $d/codex_vagas_estado.py \| ...` |
