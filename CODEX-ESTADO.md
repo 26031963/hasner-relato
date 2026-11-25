@@ -1,7 +1,63 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 09:11** · publicado em **25/11/2026 09:10** (UTC-3)
+> Ultima resposta processada: **25/11/2026 09:11** · publicado em **25/11/2026 09:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 09:11 · sessao 8513ff6f5c2f · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · verificador · origem=Code
+
+**REPROVA a c1.** O cron das 06:26 ainda passa `--retratar` e falha antes de lavrar. O comando de estoque está sem registro no pipeline, e a lavra toma a trava de `Colaborador` fora da porta obrigatória. Além disso, o estoque volta à tela como aviso sem ação de revisão, e a classificação por K6 pode ficar desatualizada entre a consulta e a gravação. [`app/config/crons.py:605`, `app/ponto/management/commands/detectar_par_relampago.py:198–203`, `app/chamados/tests/test_contract_crons.py:211–228`, `app/ponto/services/par_relampago_na_lista.py:11–27`, `app/escala/services/cadastro_realidade.py:760–761`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:43–66`]
+
+Conferi em memória o parser, o contrato B6.1 e a catraca AST de travas. Os três apontaram as falhas acima. Os arquivos alterados conferem com os hashes de conteúdo do diff fornecido. Commit e base `160173bb1` via Git, suíte Django, mutantes executados e estado de produção [nao verificado]. [`app/config/crons.py:605`, `app/ponto/management/commands/detectar_par_relampago.py:198–203`, `app/chamados/tests/test_contract_crons.py:214–228`, `app/chamados/tests/test_e1_v7_catracas.py:385–390`]
+
+### 1. Quem escreve, quem lê e com qual significado
+
+| Campo ou valor | Escritores, leitores e contrato |
+|---|---|
+| `MetricaSnapshot` de `par_relampago` | O detector, nos ramos `relampago` e `embutido`, e o estoque, no ramo `historica`, chamam o mesmo escritor, `lavrar`. Ele grava `chave='par_relampago'`, `escopo='colab'`, `escopo_id=colab_id`, `data_ini=data_ref=dia`, `numerador` como **quantidade de sinais** e `detalhe.itens` com `ramo`, `batida_pks` ordenados e `trilha_pk` no histórico. São dois PKs por sinal novo e um PK de batida mais o da trilha por sinal histórico. `denominador` fica em `0`, `valor` em `NULL`, e o ORM carimba `calculado_em`. O replay procura a identidade em todas as datas da pessoa e preserva o primeiro registro inteiro. `pendentes()` lê escopo, pessoa, data e itens, incluindo todos os sinais lavrados. `metricas.serie` é leitor genérico por chave e escopo, enquanto `metricas.calcular` exige chave registrada. Uso específico dessa série para `par_relampago` [nao verificado]. [`app/ponto/management/commands/detectar_par_relampago.py:226–240`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:59–66`, `app/ponto/services/par_relampago_na_lista.py:7–49`, `app/inteligencia/models.py:81–106`, `app/inteligencia/metricas.py:36–67`] |
+| `Batida.retratada_em` | É o **instante da retratação**. A porta `retratar_batida` grava o instante e `aprovada=False` via `anotar`. O detector antigo chamava essa porta, assim como ainda fazem a retratação humana, a recusa de geofence e o passivo S84. A porta humana de desfazer grava `NULL` e `aprovada=True` via `anotar`. Os comandos da c1 apenas leem a batida. `batidas_apuraveis`, o pareador, o motor, os dedups e os flips usam a presença do carimbo para excluir a marca. O estoque usa a presença como condição de entrada. O cartório usa o instante em `(desde, até]`, o veredito lavrado toma o maior instante até o limite inclusivo, e a porta humana usa o prazo de sete dias com limite inclusivo. O calendário lê o cru para exibir a marca riscada e a agrupa pelo dia civil. [`app/ponto/models.py:62–73`, `app/ponto/registro_batida.py:128–146,255–301`, `app/ponto/management/commands/detectar_par_relampago.py:126–128`, `app/ponto/services/retratar_humano.py:35–77,173–209`, `app/chamados/services/acoes_chamado.py:277–279`, `app/ponto/management/commands/passivo_disputa_retro.py:161–170`, `app/ponto/turnos.py:1867–1871,2877–2904`, `app/ponto/motor_calculo_v2.py:667–672`, `app/api/views.py:676`, `app/api/views_core.py:667`, `app/ponto/services/flip_batida.py:10–16`, `app/ponto/services/cartorio.py:376–399`, `app/chamados/veredito_lavrado.py:163–182`, `app/colaboradores/services/calendario.py:254–284`] |
+| `Batida.timestamp`, `tipo`, `origem`, `aprovada` | A porta de registro grava colaborador, instante, tipo e origem. O modelo dá `aprovada=True` por padrão, a aprovação offline muda o crivo, e o flip muda o tipo pela porta. O detector lê essas marcas para selecionar candidatos. `timestamp` é o instante da marcação, distinto de `retratada_em`. O detector compara até **10 minutos** inclusive e trunca para minutos inteiros ao imprimir o dry. O embutido tem teto de **360 segundos** inclusive e lê origem `disputa*` para excluir marca plantada. O pareador lê **60 segundos** inclusive como piso, e o motor continua lendo os **360 segundos** na guarda de pontualidade. A janela de turnos é inclusiva em dias. O recorte geométrico do embutido é `[j0, j1)` em instantes. [`app/ponto/registro_batida.py:170–180`, `app/ponto/models.py:22–24,45,62–73`, `app/ponto/views.py:490–494`, `app/ponto/services/flip_batida.py:25–33`, `app/ponto/management/commands/detectar_par_relampago.py:11–15,41–56,107–123,164–187`, `app/ponto/turnos.py:117–131,1850–1852`, `app/ponto/motor_calculo_v2.py:1163–1173`] |
+| `LogAuditoria` do recorte | `anotar` remete a `registrar_log` e `core.observ.evento` insere a linha. O estoque recebe **PKs de trilha**, exige `modelo='Batida'`, `acao='retratar_par_relampago'`, `usuario IS NULL` e `objeto_id` preenchido. Usa `objeto_id` como PK da marca e `(criado_em, pk)` para comparar posterioridade estrita. A lista de verbos vem da porta humana de retratar/desfazer, da aprovação offline, do flip e da recusa de geofence. O estoque ignora `ator` e o JSON antes/depois. `usuario` usa `SET_NULL`, portanto a nulidade por si só é evidência insuficiente da autoria; a busca de decisão posterior também aceita os verbos listados sem conferir ator e deixa de fora `veredito_flip`, usado por Resolver dia. Fora do estoque, a auditoria genérica lê as linhas e a porta de desfazer usa a **última trilha**, por instante e PK, para verificar autoria do ato. [`app/ponto/registro_batida.py:245–283`, `app/core/auditoria.py:8–25`, `app/core/observ.py:94–138`, `app/core/models.py:295–307`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:29–51`, `app/ponto/services/retratar_humano.py:30–53,179–185,207–209`, `app/ponto/views.py:490–494`, `app/ponto/services/flip_batida.py:10–33`, `app/chamados/services/acoes_chamado.py:277–279`, `app/ponto/services/veredito_celula.py:317–325`, `app/core/views.py:697–745`] |
+| Retorno de `cadastro_realidade.lista` | A C13 traz `colab_id`, `ramo`, `data_ref` em ISO, `batida_pks`, `trilha_pk` no histórico, `codigo`, `detalhe`, rótulo, `dono='BATIDA'`, `ocorrencias=1`, `acao` e `url=None`. `linhas` alimenta HTML e PDF, com a carga de órfãs já lavrada e os dados do vínculo atual. `por_assinatura` conta pessoas distintas e sinais, e a etiqueta HTML mostra pessoas. `postos` alimenta o vigia e os fechadores de C7/C8. O vigia lê `data` e `dono_do_dia` por `dias_na_lista`, então **uma C13 sozinha aparece na tela e fica invisível para o vigia como dia na mesa do admin**. A rota exige `ver_escala` e a lista filtra pela empresa atual visível. [`app/escala/services/cadastro_realidade.py:135,406–419,760–761,833–851,1044–1071,1098–1155,1224–1244,1277–1290`, `app/escala/views.py:511–529`, `app/templates/escala/cadastro_x_realidade.html:20–31`, `app/chamados/services/vigia_fio.py:185–216`, `app/escala/management/commands/fechar_avisos_regua_na_lista.py:27–34`, `app/ponto/management/commands/fechar_chamados_vinculo_na_lista.py:31–42`] |
+
+**A divergência de dia é concreta.** No mesmo `data_ref`, `relampago` grava o dia do turno, `embutido` grava o dia civil da primeira marca e `historica` grava o dia civil da marca retratada com `TruncDate`. A deduplicação preserva a data que chegou primeiro. Na meia-noite do corte, dia do turno e dia civil podem cair em competências diferentes. A configuração declara `America/Sao_Paulo` e `USE_TZ=True`. O dia civil é compatível com a competência que a porta antiga de retratação mandava recalcular a partir de `timestamp`. Já o juiz de dia do turno devolve `None` para uma marca retratada. A incidência dessa divergência nos 71 casos [nao verificado]. [`app/ponto/management/commands/detectar_par_relampago.py:41–78,178–191,226–240`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:36–38,54–59`, `app/ponto/services/par_relampago_na_lista.py:15–34`, `app/config/settings/base.py:93–95`, `app/ponto/registro_batida.py:195–198,294–301`, `app/ponto/services/fechamento.py:1571–1583,1811–1823`, `app/ponto/turnos.py:45–54,2948–2957`, `app/ponto/janelas.py:10–33`]
+
+### 2. Classes de reprovação
+
+| Classe | Estado e prova |
+|---|---|
+| Segundo juiz registrado | **Ausente** para completude, fechamento do dia e K6. Os dois ramos pedem `par_completo`, que compõe turnos e dias encerrados. O estoque pede K6. A simulação do embutido continua usando a grade para testar a candidatura. [`app/docs/JUIZES.md:20–42`, `app/core/juizes.py:243–248,342`, `app/ponto/turnos.py:2185–2219`, `app/ponto/management/commands/detectar_par_relampago.py:82–104,141–150,175–187,222–240`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:54–66`] |
+| Segundo escritor fora da porta | **Ausente** para o sinal e para `Batida.retratada_em` na c1. Os dois comandos convergem em `lavrar` para a chave nova. O escritor de batida continua em `registro_batida.anotar`. A trava tem uma violação própria, abaixo. [`app/ponto/management/commands/detectar_par_relampago.py:226–240`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:59–66`, `app/ponto/services/par_relampago_na_lista.py:11–40`, `app/ponto/registro_batida.py:255–301`] |
+| Relógio fora da borda | **Ausente** no julgamento novo. O detector captura `agora` no `handle` e passa o mesmo instante à janela e à simulação. O estoque usa o dia da marcação e a ordem da trilha. `calculado_em` é carimbo de persistência. [`app/ponto/management/commands/detectar_par_relampago.py:204–240`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:36–59`, `app/inteligencia/models.py:96`] |
+| Derivação paralela | **Ausente** para K6 e a janela da competência. `competencia_do_fato` delega a `competencias_do_intervalo` e `janela_atual`, com corte da empresa e mês/ano do fim da janela. **Presente** na obtenção do dia civil do estoque. `TruncDate` repete em SQL a normalização já existente para o `timestamp`, e o embutido escolhe dia civil mesmo depois de consultar a autoridade de turno. [`app/folha/export.py:556–594`, `app/ponto/services/fechamento.py:1571–1617`, `app/ponto/services/dia_pago.py:702–719`, `app/ponto/janelas.py:10–63`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:36–38,54–56`, `app/ponto/management/commands/detectar_par_relampago.py:178–187`] |
+| Selo ou RED sem mordida | **Presente nas lacunas.** O selo do cron verifica papel e autoridade, deixando passar seu argv real. O teste K6 muda a entrega entre dry e apply, deixando descoberta a corrida dentro do apply. O teste de tela usa um par novo. A catraca de dia procura `.date()` e `timestamp__date`, deixando escapar `TruncDate`. Há asserções de replay, preservação de batida/trilha e leitura da lista, além dos mutantes escritos. A execução destes e o RED histórico [nao verificado]. [`app/ponto/tests/test_par_relampago_pelo_turno.py:83–112`, `app/ponto/tests/test_lavrar_estoque_par_relampago.py:60–107`, `app/ponto/tests/test_par_relampago_v3.py:94–134`, `app/ponto/tests/test_contract_no_batida_date.py:156–205,231–244`, `app/ponto/tests/par_relampago_mutantes.py:25–79,100–121`] |
+| Ordem de trava | **Presente.** `lavrar` chama `Colaborador.objects.select_for_update()` diretamente, e a catraca exige a porta `PerguntaDisputa.trava_na_ordem`. Separadamente, o estoque lê batida, decisões e K6 antes do `atomic` da lavra. A exportação pode ser registrada nesse intervalo e o C13 histórico ainda ser gravado como aberto. A trava atual serializa a deduplicação dos sinais da pessoa. [`app/ponto/services/par_relampago_na_lista.py:11–40`, `app/chamados/models.py:2891–2909,2933–2941`, `app/chamados/tests/test_e1_v7_catracas.py:385–390`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:37–66`, `app/folha/models.py:174–188`] |
+| Pouso antes do pré-requisito | **Presente como impedimento ao pouso.** A autoridade `par_completo` já está registrada e é consultada. O ponto de entrada agendado está quebrado, o estoque viola B6.1 e a revisão humana foi explicitamente deixada para c2. Pouso efetivo e suíte certificada [nao verificado]. [`app/core/juizes.py:244–248`, `app/config/crons.py:605,758–769`, `app/chamados/tests/test_contract_crons.py:211–228`, `app/ponto/services/par_relampago_na_lista.py:44–49`, `CLAUDE.md:326–335,383–393`] |
+| Campo com dois significados | **Presente.** `data_ref` mistura dia do turno e dia civil. Outro efeito visível é `colabs_do_cadastro`: uma C13 isolada acrescenta uma pessoa ao contador que HTML e PDF rotulam como “estado impossível no cadastro”, embora a própria assinatura diga `BATIDA`. [`app/ponto/services/par_relampago_na_lista.py:19–34`, `app/ponto/management/commands/detectar_par_relampago.py:74–78,178–191`, `app/escala/services/cadastro_realidade.py:135,1098–1109,1147–1151,1270–1271`, `app/templates/escala/cadastro_x_realidade.html:8`] |
+
+### 3. Batidas já retratadas
+
+O comando **preserva a retratação e a trilha original**. No `--apply`, um caso elegível e classificado como aberto ganha C13 com o dia, o PK da batida e o PK da trilha. O admin vê “Aguardando revisão do admin”, sem link de decisão. `pendentes()` continua devolvendo o sinal após qualquer ato externo. A porta de desfazer existente aceita a última retratação da própria porta humana, dentro de sete dias, e recusa a do cron. Resolver dia pode registrar outra marca, sem restaurar aquela marca nem encerrar o sinal. [`app/ponto/management/commands/lavrar_estoque_par_relampago.py:43–66`, `app/escala/services/cadastro_realidade.py:406–419,760–761`, `app/ponto/services/par_relampago_na_lista.py:44–49`, `app/ponto/services/retratar_humano.py:42–53,173–175,190–210`, `app/ponto/services/veredito_celula.py:317–335`]
+
+Isso **cumpre a volta visual à lista**. A parte operacional do aval segue incompleta: a obra registrada prevê que o admin decida pela tela e que manter as marcas seja um ato com trilha que encerra o par. O item 2 estende às 54 a regra das 17. [`respostas_2511_0815.txt:3`, `app/docs/BACKLOG.md:2308`, `app/escala/services/cadastro_realidade.py:760–761`, `app/ponto/services/par_relampago_na_lista.py:44–49`]
+
+### 4. Exportadas e TXT
+
+Quando K6 responde entregue, o estoque **só soma e imprime** empresa, competência, PK da batida e PK da trilha. A saída pode instruir a Pauta DP. A c1 deixa a criação da pauta para o encaminhamento. Em todo o comando, a única escrita de negócio é em `MetricaSnapshot` no ramo aberto com `--apply`. `FechamentoMensal`, `DiaPago`, `ExportacaoDominio` e `CelulaDia` ficam intactos por esse caminho. [`app/ponto/management/commands/lavrar_estoque_par_relampago.py:54–74`, `app/ponto/services/par_relampago_na_lista.py:24–40`, `app/ponto/tests/test_lavrar_estoque_par_relampago.py:60–89`]
+
+O detector pode lavrar C13 em dia de competência exportada. **A inserção do sinal isolado não move a remontagem do TXT.** A lista consome o snapshot, o montador usa os insumos da folha, e a via de baixar o entregue lê `ExportacaoDominio.conteudo`. Hash anterior/posterior e efeito em produção [nao verificado]. [`app/ponto/management/commands/detectar_par_relampago.py:204–240`, `app/ponto/services/par_relampago_na_lista.py:31–49`, `app/folha/export.py:631–679,690–745`, `app/folha/views.py:569–584`, `app/folha/management/commands/regerar_txt_dominio.py:85–122`]
+
+### 5. Órfãos e referências ao caminho antigo
+
+- Os quatro auxiliares removidos têm lápide, e o selo de instante deixou de nomear os dois alvos removidos. Os testes que ainda fabricam `retratar_par_relampago` exercitam a porta de batida, a recusa de desfazer ou a leitura do estoque histórico. São consumidores legítimos do legado. O catálogo e `_par_integro` também continuam lendo chamados antigos pelo contexto `HH:MM`, em janela civil `[j0,j1)`, com tratamento de marca retratada ou flip. O tripwire ainda chama `pares_relampago`, que segue vivo. [`app/ponto/management/commands/detectar_par_relampago.py:126–128`, `app/escala/tests/test_selo_grade_pede_o_instante.py:23–34`, `app/ponto/tests/test_porta_batida.py:66–75`, `app/ponto/tests/test_porta_retratar_batida.py:157–169`, `app/ponto/tests/test_lavrar_estoque_par_relampago.py:42–53`, `app/chamados/catalogo/modulos.py:113`, `app/chamados/catalogo/premissa.py:53–56`, `app/chamados/reconciliador.py:182–224,295`, `app/ponto/management/commands/tripwire_celulas.py:251,293`]
+- Sobram o **chamador quebrado** no cron e descrições vencidas em `CRONS.md`, no comentário de `PRAZO_DELEGA_A`, em `situacional`, `cartorio`, `calculador/nucleo`, `e6_oraculo` e no motor. O contador vivo de juízes por varredura já exclui o detector. O placar ainda descreve o caminho anterior, e o registro `SEM_JUIZ['batida']` ainda diz “decide e RETRATA”. `PENDENTES['batida']` está vazio. [`app/config/crons.py:605,2065–2073,2152–2156`, `app/docs/CRONS.md:32`, `app/colaboradores/services/situacional.py:102`, `app/ponto/services/cartorio.py:1189`, `app/ponto/calculador/nucleo.py:50–51`, `app/ponto/management/commands/e6_oraculo.py:12`, `app/ponto/motor_calculo_v2.py:1155–1163`, `app/core/placar_estrutural.py:535–541`, `app/core/juizes.py:1223–1227,1286`]
+
+### 6. O que falta para o pouso [nao verificado]
+
+1. Corrigir o argv do cron, registrar o estoque como comando manual e testar a chamada com os argumentos gerados por `config/crons.py`. Atualizar o registro e as instruções operacionais que ainda descrevem retratação. [`app/config/crons.py:605,758–769,1895–1912`, `app/chamados/tests/test_contract_crons.py:211–228`, `app/docs/CRONS.md:32`, `app/core/juizes.py:1223–1227`]
+2. Passar pela porta de trava e fechar a corrida entre classificação e lavra. Fixar o contrato de dia para cada origem e provar a virada da meia-noite no corte da empresa. Fazer C13, o vigia e os contadores concordarem sobre dia e dono. [`app/chamados/models.py:2891–2909`, `app/ponto/services/par_relampago_na_lista.py:19–40`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:36–66`, `app/ponto/janelas.py:10–33`, `app/escala/services/cadastro_realidade.py:1098–1151,1224–1244`]
+3. Entregar a decisão humana com trilha e encerramento do sinal, incluindo o histórico. Provar na rota real a revisão da C13 histórica e a proteção da competência entregue. [`app/docs/BACKLOG.md:2308`, `app/escala/services/cadastro_realidade.py:760–761`, `app/ponto/services/par_relampago_na_lista.py:44–49`, `app/ponto/tests/test_par_relampago_v3.py:107–134`, `app/ponto/tests/test_lavrar_estoque_par_relampago.py:91–98`]
+4. Conferir em sombra o recorte e a saída por empresa/competência antes do apply, com encaminhamento das exportadas à Pauta DP. O anexo dá **71 no total** e, nas **54** adicionais, **7 abertas e 47 exportadas**. Os 71 PKs, a divisão das 17 iniciais no dado fornecido, a tabela completa desta volta e o encaminhamento efetuado [nao verificado]. [`respostas_2511_0815.txt:3`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:14–19,29–35,59–74`]
+5. Depois das correções, repetir a verificação, evidenciar os REDs e mutantes pertinentes, obter a suíte inteira verde da árvore exata e passar pelo opus final após a suíte, como exige a obra de mão única e concorrência. [`CLAUDE.md:194–197,326–335,383–393`] [nao verificado]
 
 ## 25/11 09:11 · sessao c4de17738369 · - · - · origem=Ronald (tmux)
 
@@ -902,143 +958,4 @@ O AST reconheceu **dois produtores dos valores de órfãs** no HEAD, o cartório
 
 [truncado em 20000 de 31146 caracteres]
 
-## 25/11 05:15 · sessao 86f69f846fb0 · PAR-RELAMPAGO-A-LISTA-DO-ADMIN · leitura · origem=Code
-
-## Pré-desenho — PAR-RELAMPAGO-A-LISTA-DO-ADMIN
-
-**Tirar `--retratar` do cron interrompe a retratação automática, mas entrega apenas parte dos sinais a outra tela.** Com `--apply` sozinho, o detector abre chamados de supervisão para os pares do primeiro ramo. A varredura dos pares embutidos fica desligada. A entrega à lista **Cadastro x Realidade** precisa de um escritor e de um leitor explícitos. `app/config/crons.py:605` · `app/ponto/management/commands/detectar_par_relampago.py:352–401` · `app/escala/views.py:511–529`
-
-A análise usa os arquivos da cópia e os anexos transcritos na mensagem. A identidade Git do HEAD, a execução dos crons em produção, a publicação das 142 na UI e os números da sonda proposta ficam [nao verificado].
-
-### 1. Retratação por código hoje
-
-| Caminho | O que faz | Prova |
-|---|---|---|
-| `detectar_par_relampago --apply --retratar`, primeiro ramo | `pares_relampago` recolhe turnos curtos e pares sob o carimbo de degenerado. `handle` exige `par_completo`. `_alvo_retratavel` carrega aprovadas de D−1 a D+1, aplica a guarda de procedência e de 360 s e chama `escolher_retratavel`. A exclusão simulada de **uma** batida tem de ser a única a melhorar o vetor e deixá-lo em `(0,0,0,0)`. Havendo alvo, `_retratar` grava e o ramo pula a abertura de chamado. | `app/ponto/management/commands/detectar_par_relampago.py:63–126,158–248,352–368` |
-| Mesmo comando, segundo ramo | `varrer_pares_embutidos` examina adjacentes aprovadas de tipos opostos, exige `par_completo` e simula retirar **as duas**. Se mais de um par passa no mesmo dia, escolhe o mais tardio pelo timestamp da primeira batida. As duas chamadas de `_retratar` estão em `399–400`. | `app/ponto/management/commands/detectar_par_relampago.py:251–314,389–401` |
-| Flags | Sem `--apply`, ambos os ramos ficam em DRY. `--so-retratar` implica `--retratar` e, com `--apply`, suprime a abertura de chamado quando falta alvo individual. `--apply` sozinho percorre o primeiro ramo e abre ou recupera chamado. | `app/ponto/management/commands/detectar_par_relampago.py:320–334,352–401` |
-| Cron | Diário, `06:26`, `--dias 2 --apply --retratar`, log `par_relampago.log`, estágio `cobranca`, dependência declarada `reconciliar_grade`. | `app/config/crons.py:605` |
-
-`_retratar` chama `registro_batida.retratar_batida` com `acao='retratar_par_relampago'` e sem `request` ou ator humano. A porta retorna cedo se a batida já estiver retratada. Caso contrário, grava `aprovada=False` e `retratada_em`, anota a trilha de `Batida` pelo PK e chama a porta de recálculo por evento. `app/ponto/management/commands/detectar_par_relampago.py:217–226` · `app/ponto/registro_batida.py:245–252,272–302` · `app/ponto/services/fechamento.py:1798–1827`
-
-A busca por chamadas de `retratar_batida`, escritas de `retratada_em` e ações de auditoria encontrou também estes caminhos. `app/ponto/registro_batida.py:287–302` · `app/ponto/services/retratar_humano.py:179–209` · `app/chamados/services/acoes_chamado.py:251–289` · `app/ponto/management/commands/passivo_disputa_retro.py:154–172` · `app/ponto/management/commands/diff_passivo_s84.py:75–88`
-
-- **`passivo_disputa_retro --apply`** seleciona em lote batidas plantadas pelo fluxo S84, sem pergunta de origem, em folga e dentro do escopo. Chama a porta com `retratar_passivo_s84`, sem decisão individual, por ato avulso sob aval documentado. `app/ponto/management/commands/passivo_disputa_retro.py:60–76,116–172` · `app/config/crons.py:852–868`
-- **`diff_passivo_s84`** chama a mesma porta com a mesma ação, dentro do ensaio que força rollback. É uma escrita durante a transação de medição. `app/ponto/management/commands/diff_passivo_s84.py:75–91` · `app/ponto/services/diff_frota.py:70–92`
-- **Retratação pelo admin e recusa de geofence** chegam por decisões humanas com motivo. O `--so-retratar` homônimo de `reconciliar_grade` atua sobre `ChamadoColaborador`. O serviço de cluster também abre e fecha chamados. `app/ponto/views.py:3453–3462` · `app/ponto/services/retratar_humano.py:160–185` · `app/chamados/views.py:544–545` · `app/chamados/services/fio.py:669–682` · `app/chamados/services/acoes_chamado.py:251–286` · `app/ponto/management/commands/reconciliar_grade.py:72,250–254,298–316` · `app/ponto/services/cluster_espurio.py:176–216`
-
-### 2. Lista do admin e destino das 142
-
-- **A lista em código é Cadastro x Realidade.** A rota `cadastro-x-realidade/` exige `ver_escala`, chama `cadastro_realidade.lista` com as empresas visíveis e renderiza `escala/cadastro_x_realidade.html`. O vigia do fio também chama essa composição em `ListaDoAdmin`. A tela reúne dados de cadastro lidos na hora e lavras em `MetricaSnapshot`. O cron `esmeril_espelho --apply` escreve a lavra principal por `gravar_lavra`, lida por `ler_lavra`. C8 é um precedente de ponta a ponta para a obra: `detectar_vinculo_divergente --lavrar` → `vinculo_na_lista.lavrar` → `MetricaSnapshot` → `_vinculo_divergente` → tela. `app/escala/urls.py:14–19` · `app/escala/views.py:511–529` · `app/chamados/services/vigia_fio.py:166–195` · `app/config/crons.py:640` · `app/ponto/management/commands/esmeril_espelho.py:15–17` · `app/ponto/services/esmeril_espelho.py:321–329,342–375` · `app/ponto/management/commands/detectar_vinculo_divergente.py:32–52` · `app/ponto/services/vinculo_na_lista.py:112–136` · `app/escala/services/cadastro_realidade.py:393–402,910–935`
-- **A ação segue o dono.** Nas assinaturas por dia, BATIDA leva à regularização da batida e CADASTRO à porta da assinatura, como vínculo, template, fio ou plano de folgas. O calendário oferece inversão e retratação com motivo por marcação. A aplicação de proposta de escala é um POST de gestor e usa a proposta guardada na lavra. `app/escala/services/cadastro_realidade.py:744–805,1053–1081` · `app/templates/colaboradores/partials/_calendario_grade.html:127` · `app/ponto/views.py:3439–3462` · `app/escala/views.py:475–508`
-- **O destino atual do detector é o Painel de Gestão de Chamados.** `ChamadoColaborador.abrir` grava ou recupera um chamado por colaborador, módulo `par_relampago` e dia, com categoria `batida_espuria`, área `supervisao` e JSON com `data_turno`, duas horas `HH:MM` e `duracao_min`. O painel do DP/gestor lê o modelo e aplica os filtros da fila. O chamado guarda horas, sem os PKs das batidas. O reconciliador devolve indeterminado quando a hora falta ou é ambígua, e considera morta a premissa se encontra membro retratado ou os dois tipos iguais. O mapa de disputa deixa `par_relampago` sem motivo atendido. `app/ponto/management/commands/detectar_par_relampago.py:368–386` · `app/chamados/models.py:899–909,1037,4127–4133` · `app/chamados/views.py:720–737,768` · `app/chamados/services/painel.py:96–132,300–331` · `app/templates/chamados/partials/_lista_chamados.html:30–65` · `app/chamados/reconciliador.py:183–224,295–296`
-- **As 142 são `PerguntaDisputa`.** O destino registrado pelo aval é a lista do admin sob o rótulo “respondida pelo sistema sem o colab”, com `respondida_em` preservado, sem reabertura no app e com `col331/#22394` fora das 142. O RELATO aponta o inventário nominal em `logs/E3-LEITORES/e3_10/app/lista_142_historico_para_pendentes.txt`. A publicação na tela e o arquivo apontado estão [nao verificado]. A cura de novas escritas está nas portas `responder_automaticamente` e `_nascer`, que recusam o par ilegal. `app/docs/BACKLOG.md:2294` · `app/docs/PROMPTS.md:2253` · `app/docs/RELATO.md:3869` · `app/chamados/models.py:2678,3114–3118` · `app/chamados/services/disputa_emissao.py:1720–1738`
-
-**Desenho proposto:** publicar o sinal BATIDA em Cadastro x Realidade, com os dois PKs e a data do fato, ligado à regularização. Conferir a cobertura dos dois ramos antes de retirar as flags. O segundo ramo hoje só existe com retratação habilitada, e o primeiro só publica chamado quando não toma o atalho de escrita. O anexo S1 informa 24 pares E/S até 60 s, com 20 replays `E` e quatro `S`. Esse recorte traz horários e replays. O tipo enviado no primeiro toque, o ramo original, o cruzamento por PK com as retratações e a decisão humana por batida ficam [nao verificado]. `app/docs/BACKLOG.md:2297` · `app/escala/services/cadastro_realidade.py:792–803` · `app/ponto/management/commands/detectar_par_relampago.py:352–401`
-
-### 3. Órfãos pela L-111
-
-| Símbolo ou trecho | Chamadores de produção encontrados e efeito da retirada |
-|---|---|
-| `_retratar` e o par de chamadas `399–400` | `Command.handle:363,399–400` são os três sítios. A função e as três chamadas saem com a escrita automática. `app/ponto/management/commands/detectar_par_relampago.py:217–226,362–365,389–401` |
-| `_alvo_retratavel` e `escolher_retratavel` | `handle:355` é o chamador de `_alvo_retratavel`, que chama `escolher_retratavel` em `214`. `_melhora_estrita` só é chamada por `escolher_retratavel`. `app/ponto/management/commands/detectar_par_relampago.py:154–155,199–214,229–248,352–355` |
-| `motivo_para_nao_retratar`, `_score_geometria` e o ramo embutido | A guarda tem dois chamadores, `_alvo_retratavel` e `par_embutido_retratavel`. O score atende `escolher_retratavel` e `_par_embutido_retratavel_geometria`. A cadeia embutida só é acionada em produção por `handle:392`. Se a publicação reaproveitar parte da detecção embutida, o critério que tiver leitor continua vivo. `app/ponto/management/commands/detectar_par_relampago.py:129–155,199–214,229–314,389–392` |
-| `--so-retratar` | No detector, entra nas guardas de `333–334` e `366–367`. A entrada de cron encontrada usa `--retratar`. A outra flag homônima pertence ao reconciliador de chamados. `app/ponto/management/commands/detectar_par_relampago.py:320–334,366–367` · `app/config/crons.py:605` · `app/ponto/management/commands/reconciliar_grade.py:72,250–254,303–316` |
-
-**Testes.** Os de seleção v3/v4 e os de procedência, teto e costura do retratador dependem das funções acima. O teste de par pelo turno chama a varredura e o DRY de `--retratar`, mas também cobre separadamente o juiz e o papel do cron. A retirada pela L-111 alcança os testes dos sítios extintos. Há cobertura independente para piso de 60 s, pontualidade de 360 s, exclusão de retratadas do cartório, relavratura da porta e recusa de desfazer estoque do cron. `app/docs/LEIS.md:137` · `app/ponto/tests/test_par_relampago_v3.py:48–91` · `app/ponto/tests/test_guardas_par_relampago.py:48–107,129–245` · `app/ponto/tests/test_par_relampago_pelo_turno.py:53–92` · `app/ponto/tests/test_o316_par_de_um_minuto_nao_e_par.py:59–155,171–249` · `app/ponto/tests/test_par_relampago_nao_se_julga.py:43–92` · `app/ponto/tests/test_selo_b5d_retratada_fora_do_juizo.py:75–106` · `app/ponto/tests/test_retratacao_relavra_o_dia.py:24–40` · `app/ponto/tests/test_porta_retratar_batida.py:157–169`
-
-**Papel e referências vivas.** `crons.py:1997–2021` conserva o histórico da escrita e da migração incompleta. A declaração efetiva já está em `PRAZO_DELEGA_A`, com `par_completo`, e o comando já saiu de `JUIZES_POR_VARREDURA`. O contador lê o papel efetivo. A nota de `SEM_JUIZ['batida']`, o texto do placar e a descrição dos dois ramos pedem atualização. O registro de **par completo** tem leitor no detector, `pares_relampago` também é chamado por `tripwire_celulas`, e as constantes de 60 e 360 s têm leitores em `turnos.py` e no motor. `app/config/crons.py:1997–2021,2065–2073,2152–2156,2197–2200,2382–2391` · `app/core/juizes.py:244–248,1223–1226` · `app/core/placar_estrutural.py:529–540` · `app/ponto/management/commands/tripwire_celulas.py:251,287–296` · `app/ponto/turnos.py:117–131` · `app/ponto/motor_calculo_v2.py:1146–1159`
-
-### 4. Dependentes do cron
-
-| Cron | Dependência no corpo |
-|---|---|
-| `reconciliar_vinculo` | O cron usa `--alarme`. O serviço lê as últimas batidas com coordenadas do colaborador e compara com o posto. A consulta inclui retratadas e independe da retirada do par. `app/config/crons.py:489` · `app/ponto/management/commands/reconciliar_vinculo.py:25–62` · `app/ponto/services/geofence.py:40–67` |
-| `verificar_nucleo` | Compara `TurnoMaterializado` com a geometria ao vivo. A consulta ao vivo exclui retratadas, e a reconstrução da tabela materializada usa o mesmo `turnos_do_colab`. Conservar batidas pode mudar os turnos comparados. O verificador testa a igualdade das duas leituras. `app/config/crons.py:544` · `app/ponto/management/commands/verificar_nucleo.py:16–41` · `app/ponto/turnos.py:1850–1871` · `app/ponto/nucleo.py:40–59` |
-| `detectar_vinculo_divergente` | Lê GPS por janela e calcula evidência de vínculo. A consulta inclui retratadas. `--lavrar` publica C8. `app/config/crons.py:597` · `app/ponto/management/commands/detectar_vinculo_divergente.py:32–52` · `app/ponto/services/vinculo_na_lista.py:32–57,112–123` |
-| `flip_automatico` | É o dependente que pode voltar a **agir** sobre um membro preservado. `avaliar_fila` consulta dia encerrado, pula retratadas no alvo e nos candidatos à simulação e, se o veredito permitir, o cron chama `flip_tipo`. A porta também recusa retratada. O efeito concreto depende do candidato, da grade e das demais guardas. `app/config/crons.py:707` · `app/ponto/services/flip_auto.py:223–245,268–310` · `app/ponto/management/commands/flip_automatico.py:32–68` · `app/ponto/services/flip_batida.py:10–33` |
-
-### 5. Apuração, dinheiro e sonda
-
-`batidas_apuraveis` seleciona por `retratada_em IS NULL`. Ao cessar a escrita automática, o membro que seria excluído permanece disponível na respectiva janela. O estoque já carimbado continua fora por esse mesmo predicado. `app/ponto/turnos.py:2877–2904` · `app/ponto/registro_batida.py:287–301`
-
-- **Motor e fechamento:** o fechamento carrega as apuráveis, passa as batidas ao motor por fatia e grava os resultados. A retratação hoje também dispara o recálculo daquele colaborador na competência do fato. `app/ponto/services/fechamento.py:279–290,628–633,749–755,1137–1165,1798–1824`
-- **Cartório:** as apuráveis alimentam grade, ata e veredito. A batida preservada pode ocupar um marco ou ficar órfã, alterando as lâmpadas e o julgamento. `app/ponto/services/cartorio.py:1184–1207,1498–1504,1899–1906` · `app/ponto/tests/test_selo_b5d_retratada_fora_do_juizo.py:75–106`
-- **Espelho e PDF:** a apuração ao vivo usa as apuráveis. A linha de pago lê `DiaPago`. No calendário, as marcas retratadas já aparecem em separado, riscadas. `app/ponto/services/espelho.py:819–831,1055–1058,1198–1202` · `app/relatorios/pdf_espelho.py:267–272,418–420,901–910` · `app/colaboradores/services/calendario.py:268–284,652–673` · `app/templates/colaboradores/partials/_calendario_grade.html:127`
-- **Export:** `classificar_export` lê apuráveis diretamente nas guardas de férias com batida e de fechamento zerado com duas ou mais marcas. A porta compara espelho e `DiaPago` com fechamento. O TXT monta as rubricas a partir dos fechamentos selecionados. O efeito no arquivo depende da nova apuração, da elegibilidade e da geração. `app/folha/export.py:485–504,902–924,439–451,711–739` · `app/folha/porta_export.py:326–335,455–476` · `app/folha/views.py:264–270`
-
-**O delta diário depende do novo pareamento.** Um E→S de até 60 s que tentaria fechar um turno cai na guarda de par degenerado. No ramo principal, a S vira órfã e a E segue aberta para uma saída posterior. Se as marcas mudarem uma borda ou pausa de outro turno, muda o intervalo líquido daquele turno. Acima do piso, um microturno fechado pode contribuir com sua duração efetiva. O motor aplica a janela de HE às pontas, desconta pausas e calcula o excedente conforme previsto, ciclo, folga e feriado. Um período aberto ou de até 360 s também pode zerar **atraso e saída antecipada** do dia pelo teto de pontualidade. O valor e o sinal do delta dos 24 pares estão [nao verificado]. `app/ponto/turnos.py:117–131,1482–1502,707–768` · `app/ponto/motor_calculo_v2.py:1131–1159,1752–1763,2470–2510,2750–2787,2807–2854` · `app/ponto/janela_he.py:76–103,117–153`
-
-**Sonda em texto, para shell Django no tenant com credencial leitora.** Conta o estoque ainda retratado cuja última ação de retratação é `retratar_par_relampago`, com `retratada_em` nos últimos 90 dias. Agrupa pela data local da **batida**, no recorte 21→20 pedido, e pelo PK da empresa atual do colaborador. `sem_decisao` significa sem ato humano posterior auditado diretamente no PK da batida. Decisões só no dia, no chamado ou sem trilha por batida ficam [nao verificado]. Em particular, o clique de retratar uma batida já retratada retorna antes de gravar novo ato. Saída numérica em ordem `empresa_pk AAAAMM total sem_decisao`. `app/ponto/janelas.py:10–33,60–63` · `app/ponto/turnos.py:45–48` · `app/ponto/models.py:22–24,62–71` · `app/colaboradores/models.py:321` · `app/core/models.py:285–307` · `app/ponto/services/retratar_humano.py:30–32,173–185,207–209` · `app/ponto/services/flip_batida.py:10–33` · `app/ponto/services/veredito_celula.py:322` · `app/chamados/services/acoes_chamado.py:224–231,277–288`
-
-```python
-from collections import defaultdict
-from datetime import timedelta
-
-from django.db.models import Exists, OuterRef, Subquery
-from django.utils import timezone
-
-from core.models import LogAuditoria
-from ponto.janelas import janela_atual
-from ponto.models import Batida
-from ponto.services.retratar_humano import ACAO, ACAO_DESFAZER
-from ponto.turnos import data_local
-
-agora = timezone.now()
-acao_par = "retratar_par_relampago"
-acao_geo = "recusar_batida_fora_do_posto"
-
-trilha = LogAuditoria.objects.filter(
-    modelo="Batida",
-    objeto_id=OuterRef("pk"),
-    criado_em__lte=agora,
-)
-ultima_retratacao = (
-    trilha.filter(acao__in=(acao_par, "retratar_passivo_s84", ACAO, acao_geo))
-    .order_by("-criado_em", "-pk")
-    .values("acao")[:1]
-)
-ato_humano = trilha.filter(
-    criado_em__gte=OuterRef("retratada_em"),
-    usuario__isnull=False,
-    acao__in=(ACAO, ACAO_DESFAZER, acao_geo, "flip_tipo_batida", "veredito_flip"),
-)
-
-estoque = (
-    Batida.objects.filter(
-        retratada_em__gte=agora - timedelta(days=90),
-        retratada_em__lte=agora,
-    )
-    .alias(ultima_retratacao=Subquery(ultima_retratacao))
-    .filter(ultima_retratacao=acao_par)
-    .annotate(tem_decisao=Exists(ato_humano))
-    .order_by()
-    .values_list("colaborador__empresa_id", "timestamp", "tem_decisao")
-)
-
-grupos = defaultdict(lambda: [0, 0])
-for empresa_pk, timestamp, tem_decisao in estoque.iterator(chunk_size=2000):
-    _, fim = janela_atual(data_local(timestamp))
-    contagens = grupos[empresa_pk, fim.year * 100 + fim.month]
-    contagens[0] += 1
-    contagens[1] += int(not tem_decisao)
-
-for (empresa_pk, competencia), (total, sem_decisao) in sorted(grupos.items()):
-    print(empresa_pk, competencia, total, sem_decisao)
-```
-
-### 6. Estoque já retratado
-
-**O admin não consegue desfazer pela tela a retratação do cron.** O calendário mostra o botão quando há permissão e prazo. A rota POST chama `retratar_humano.desfazer`, que exige que a **última trilha da batida** tenha ação `retratar_batida_admin` e que a marca esteja dentro dos sete dias. O teste injeta `retratar_par_relampago` e verifica a recusa e a preservação do carimbo. O Django Admin de `Batida` é somente leitura. `app/colaboradores/services/calendario.py:268–284` · `app/templates/colaboradores/partials/_calendario_grade.html:127` · `app/ponto/urls.py:62–63` · `app/ponto/views.py:3465–3473` · `app/ponto/services/retratar_humano.py:30–53,190–209` · `app/ponto/tests/test_porta_retratar_batida.py:157–169` · `app/ponto/admin.py:9–15`
-
-### 7. Arquivos em comum
-
-| Arquivo | Cruzamento com a obra |
-|---|---|
-| `app/ponto/services/cartorio.py` | Comentário da sequência detector → cartório a atualizar. Regressão em grade, ata e veredito com a marca preservada. `app/ponto/services/cartorio.py:1184–1207,1498–1504,1899–1906` |
-| `app/chamados/models.py` | Porta do chamado do ramo atual e mapa de motivos que documenta o par. A eventual retirada desse emissor pede revisão da referência e preservação do tratamento do acervo de chamados. `app/chamados/models.py:899–909,1037,4127–4133` · `app/chamados/reconciliador.py:183–224` |
-| `app/ponto/supra_juiz.py` | Regressão indireta. `class
-
-[truncado em 20000 de 22279 caracteres]
-
-_8147 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8148 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
