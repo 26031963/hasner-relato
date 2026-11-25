@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 18:25:30.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.1 MB). Acoes na janela: **157**.
+**Medido em 25/11/2026 18:31:40.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (5.2 MB). Acoes na janela: **159**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:28:17 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('E1-SAI-DA-VM-2511 (18:18)')) L[k]=L[k]+' \| 18:28 FIM na VM sem cancelar: logs/E1-PREVISAO-24H/red.log "Ran 15721 tests in 4218s" FAILED (failures=11, errors=26) -- run da copia wt-e1prev-red2 (RED), triagem do construtor da E1; trava da VM passou a m ...` |
+| 18:28:12 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bfny76a6u.output` |
 | 18:24:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; /usr/bin/sleep 240; date +%H:%M:%S; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' red.log \| tail -2; grep -oE '^[.sxEF]+' red.log \| tr -d '\n' \| wc -c; ps -p 2875414 -o pid=,etime=; /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>&1 \| head -3` |
 | 18:24:04 | Bash |  | `cd /home/ronald/saas-hasner/logs; for f in $(grep -l -E '^Ran 15[0-9]{3} tests' --include='*.log' -r . 2>/dev/null \| head -40); do p=$(grep -c 'parallel' $f); n=$(grep -oE '^[.sxEF]+' $f \| tr -d '\n' \| wc -c); r=$(grep -E '^Ran ' $f\|tail -1); echo "$n \| $r \| $(stat -c %y $f\|cut -c1-16) \| $f"; done 2>/dev/null \| sort -t'\|' -k3 \| tail -12` |
 | 18:23:54 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b7n80kkwh.output; cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; grep -oE '^[.sxEF]+' red.log \| tr -d '\n' \| wc -c` |
