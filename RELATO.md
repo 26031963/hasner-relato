@@ -5893,7 +5893,9 @@ LEI-AKITA: origem=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11b/apply33
 - PROVA: harness (scratchpad/prova) caso 516 BARRADO + 920 ausente -> `FIM_FALHA_DECLARADA PARADO; NAO_RODOU [920]`; lote completo v11 x v11b byte a byte igual. Limite: o laco nao e exercitado
 - 516 no ensaio 01:36: BARRADO na troca da pergunta 49126, push_total=3, 0 nascido; o `break` deixou 14 colabs sem rodar
 - dono 22/10 do 516: BATIDA pela leitura (S 22:59 orfa; par 01:00-07:01 cai em 23/10 por turnos.py:1295-1298, conferido); `dono()` real NAO rodou -> INCOMPLETO
-INCOMPLETO: causa das 3 push (hipotese: chamado #33932 fechado via admin renasce no estado intermediario e repassa a disputa #5583) -> Codex leitura DXG-516-PUSH; o proximo ensaio para no 516 de novo sem essa cura, e a sombra do dump de hoje e anterior a relavra de 10:07 (pede --refazer --dump-agora)
+- causa das 3 push (Codex leitura rc 0 11:13, logs/DXG-516-PUSH/r.txt; Code conferiu apply33 v11b:194-205,614,684-686): a troca E 01:00 -> E 00:00 re-julga 22/10, o #33932 fechado pelo admin RENASCE por fato novo (deliberado, aval REABRIR-PERGUNTA-A-PREMISSA) e o repasse reusa a disputa #5583 -> push_supervisao + push_colaborador + FCM; o interceptador ENGOLE (nunca entrega). O gate do colab barrou CERTO; o defeito era o lote: `PUSH['n'] != 0` global fazia PARADO+break, contra o aval DXG-APPLY-33-POR-COLAB ("colab que falhar o gate nao comita e vai a Pauta DP, o que passou fica")
+- cura v11c (bug no caminho, instrumento): push interceptado DENTRO de colab BARRADO e motivo, nao vazamento; o lote para so por push fora de colab barrado. diff logs/.../apply33/v11c/diff_v11b_v11c.txt, 0 except
+- em curso: sombra --refazer --dump-agora (pos relavra 10:07) + ensaio dxg-v11c-sobre-relavra (logs/DXG-V11C/rcs.txt); veredito pela linha FIM_
 
 ## MEDE-PRE-EXPORT-2511 (1) UNIVERSO comp 11 (25/11 11:0x, so medida, sombra, sha 160173bb1)
 Comp 11 = 21/10-20/11, emp 2/3/4, 960 colabs, errors 0, col950 fora; Codex sonda rc 0 com os mesmos numeros. Arquivos logs/MEDE-PRE-EXPORT-2511/universo/ (TABELA.md, universo.tsv por colab_id).
