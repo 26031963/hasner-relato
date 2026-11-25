@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **24/11/2026 20:58** · publicado em **24/11/2026 20:58** (UTC-3)
+> Ultima resposta processada: **24/11/2026 21:15** · publicado em **24/11/2026 21:16** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 24/11 21:15 · sessao cc5bdceb78b0 · DXG-APPLY-33-POR-COLAB · verificador · origem=Code
+
+**REPROVA a v9 para COMMIT em PROD.** A trava inicial passou a ser por colaborador, e o gate passou a conferir o valor final projetado de `DiaPago`. Ainda há bloqueios no teto efetivo da trava e na recepção da batida de chão, na testemunha final, no efeito financeiro da relavra e no roteiro que pode chegar à pauta com a prova final divergente. A reversão pós-commit também segue incompleta. `apply33.py:448–456,503–566,656–675` · `app/docs/LEIS.md:78` · `COMANDOS_PROD_NAO_EXECUTADOS.txt:17–21`
+
+As referências a `apply33.py`, `pauta33.py` e `reversao33.py` usam as linhas da v9 no diff fornecido. A presença dos scripts completos na cópia e o estado efetivo de PROD estão [nao verificado].
+
+### 1. Achados da verif2, item por item
+
+| Achado | Resultado na v9 |
+|---|---|
+| Testemunha pelo PK novo | **Parcial.** Usa o slot real, exige o tipo correto, a nova como único plantio vivo e como única batida viva daquele tipo em ±20 min. O teste roda por troca e o gate do colaborador não o repete para todas as perguntas ao final. O juiz devolve classe ou booleano, sem identificar o ramo que aceitou. `apply33.py:503–529` · `app/chamados/juizes.py:729–755,802–863` · `app/chamados/services/vigia_carimbo.py:65–79` |
+| `on_commit` por lista | **Mantido, com escopo parcial.** A lista usa identidade do código, drena a cauda e deixa a sentinela. Os callbacks autorizados carregam argumentos da chamada, e a lista não valida colaborador, competência ou motivo capturados. `apply33.py:326–346,473–502,520–524` · `app/chamados/signals.py:229–240,269–308` · `app/ponto/services/fechamento.py:1807–1824` |
+| K6 e export | **Parcial.** A 11 tem releitura sob trava e no fim do gate. A 12 tem guarda antes da troca e fica fora das releituras finais de export. A corrida entre ler a folha e registrar o TXT permanece. `apply33.py:347–364,479–484,519–555,656–662` · `app/folha/views.py:209–214,264–302` |
+| Hash, manifesto e identidade | **Parcial.** O apply exige `global` e os 20 arquivos, confere SHA, banco/schema e FM 09/10, e confronta a projeção sob trava. O confronto cobre Batidas antigas, FM e `DiaPago`. Perguntas, decisões e demais seções da foto ficam fora dele. `apply33.py:366–384,459–466` · `reversao33.py:69–97` |
+| Reversão | **Parcial.** Há foto e trilha por colaborador, mas a foto vem de consultas separadas e a marca-d’água global não identifica o escritor. O passo 7 manda retratar a nova. Isoladamente, isso deixa a antiga retratada e não restaura `DiaPago` nem os efeitos da cascata. Restauração integral ensaiada [nao verificado]. `reversao33.py:72–114` · `apply33.py:494–498,534–538` · `COMANDOS_PROD_NAO_EXECUTADOS.txt:21` · `app/ponto/registro_batida.py:287–302` |
+| Regularização | **Parcial.** A guarda por colaborador e a recusa de `_retomar` reduzem o risco interno. A confirmação concorrente ainda grava o status sem a mesma trava e pode alcançar `save` ou `delete` direto de Batida. `apply33.py:326–355,459,519–524` · `app/chamados/services/regularizacao_ext.py:122–164,348–357` |
+| PII | **Aberto.** O apply imprime mensagens cruas, inclusive `WARNING+`, e propaga o motivo do barrado ao veredito e à pauta. Há logger do recálculo que inclui nome. A reversão grava linhas completas com `0600`. A porta de pauta de dia pode acrescentar nome, matrícula e batidas, e a aba departamental é acessível por `is_staff`. Conteúdo e acesso efetivos em PROD [nao verificado]. `apply33.py:569–572,639–655` · `pauta33.py:60–63,132–133` · `reversao33.py:80–96,109–114` · `app/ponto/services/fechamento.py:1303–1308` · `app/pautas/services.py:163–185,304–331,411–441` · `app/pautas/views.py:16–19,27–48` |
+| Push até a saída | **Parcial.** Há contador no gate e conferência após cada ato. O interceptor tem alcance no processo. O `pg_notify` usa SQL próprio e o consumidor de `EventoCelula` roda à parte. `apply33.py:399–402,519–525,581–597` · `app/ponto/realtime.py:22–43` · `app/config/crons.py:393–394` |
+| FM 11 e efeitos fora do colaborador | **Parcial.** Melhorou a comparação de valores do alvo. Para FM e `DiaPago` fora dele, o gate usa contagens. Mudanças de valor com a mesma contagem podem passar. A cascata síncrona e o consumidor da outbox continuam com efeitos além desses comparadores. `apply33.py:465–468,526–553` · `app/ponto/signals.py:206–218` · `app/chamados/reconciliador.py:1548–1603` · `app/config/crons.py:393–394` |
+| Portão da pauta e L-099 | **Parcial.** Fixa os 52 PKs, inclusive 50833, exclui 60060 e usa segundos fracionários no gate das 14. Ainda imprime as horas do TSV. Relê trilha e pares, mas para a antiga testa existência e retratação sem conferir o PK esperado do TSV. O dono medido para 50833 nesta rodada está [nao verificado]. `pauta33.py:34–63,79–112,125–137` · `app/docs/LEIS.md:122` |
+| Ordem de trava e batida de chão | **Ordem corrigida na entrada. Risco de chão aberto.** O `FOR UPDATE` do `Colaborador` pode bloquear a trava referencial da FK de uma nova Batida. Os signals síncronos também podem disputar linhas. O dado traz tempos do lote, sem uma prova em duas conexões pela entrada real do aparelho. `apply33.py:448–456` · `app/chamados/models.py:2933–2967` · `app/ponto/models.py:22` · `app/ponto/signals.py:206–218` · `app/api/views_core.py:643–686` · `T_ATOMIC_tabela.tsv:1–22` |
+| Gate de base, `WARNING+` e recusas | **Parcial.** A projeção exclui `FM.observacao`, fechando a divergência conhecida de máscara. Drift real ainda barra o colaborador. O coletor passou a cobrir `ponto` com `propagate=False`, mas a checagem ocorre antes das últimas leituras e do `check_constraints`. `fechamento_recusado` é filtrado por chamado do colaborador e comparado ao ensaio, podendo ser diferente de zero. Uma recusa da porta de Batida derruba o ato. `apply33.py:51–59,286–324,404–423,486–491,519–555` · `bin/sombra_regras_pessoais.py:110` · `app/config/settings/saas.py:169–183` |
+
+O `extra` continua no contrato da porta. `colab`, `manifesto_sha` e `nova_batida` entram como metadados de `valor_depois` e são conferidos na releitura da trilha. `apply33.py:494–498,534–538` · `pauta33.py:83–98` · `app/ponto/registro_batida.py:255–296`
+
+### 2 e 3. Atomic, locks, rollback e teto
+
+- **Em execução de topo**, o apply pede `trava_na_ordem([cid], ...)`, depois trava as Batidas antigas daquele ato. A trava canônica é de linha. O registro dela é uma sentinela `on_commit` sem efeito, removida no rollback ou esvaziada no commit. O advisory lock explícito da pauta é transacional e pertence ao comando posterior. **Sob um `atomic` externo**, a saída bem-sucedida do bloco interno é saída de savepoint. As travas e sentinelas dos aprovados ficam até o fim da transação externa. A fase B foi executada dessa forma e B/C/D não demonstram liberação entre commits reais. `apply33.py:448–456,519–524,564–583` · `app/chamados/models.py:2933–2967` · `app/chamados/services/trava_do_colaborador.py:16–31,54–64` · `pauta33.py:79–81` · `v9_resumo.txt:5–7,11`
+- **Falha do gate dentro do bloco desfaz as escritas da mesma conexão feitas naquele ato**, incluindo Batida, `DiaPago`, Pergunta e trilha. Os callbacks drenados manualmente rodam dentro do bloco, e os ainda enfileirados daquele ato são descartados no rollback. Em execução de topo, commits anteriores ficam. Essa garantia cobre as escritas transacionais. A entrega externa por outros caminhos e o resultado de perda de conexão durante o `COMMIT` estão [nao verificado]. O `except DatabaseError` registra `BARRADO` sem distinguir o ponto da falha. `apply33.py:326–346,448–502,519–576` · `app/chamados/services/trava_do_colaborador.py:19–21` · `app/core/observ.py:124–137` · `app/ponto/realtime.py:22–43`
+- **Os 10 s são uma checagem depois da espera ou do trabalho.** Se a checagem disparar dentro do `atomic` em COMMIT, desfaz o colaborador inteiro. Ela não interrompe uma query bloqueada, a própria aquisição da trava ou um commit lento. Em sucesso, `T_ATOMIC` para antes da saída do bloco e antes do relatório opcional, que roda dentro dele. O controle do ensaio tem atomic próprio e tempo separado. O máximo informado foi 8,61 s para 876, na fase B. O tempo real de retenção e o comportamento da batida de chão sob contenção estão [nao verificado]. `apply33.py:282–286,431–456,503–566,603–609,668–675` · `T_ATOMIC_tabela.tsv:15,22` · `v9_resumo.txt:4–5,11` · `app/docs/LEIS.md:78`
+
+### 4. As 20 linhas de `DiaPago`
+
+**É alteração no dinheiro diário gravado, reproduzida pela relavra sem troca.** A fase B reporta 73.972 → 73.952 linhas, zero nascidas e FM e `CelulaDia` sem mudança. O escritor apaga e recria o conjunto da competência e versão. As rubricas das 20 linhas, o valor líquido e o impacto no TXT ou no pagamento estão [nao verificado]. `v9_resumo.txt:5` · `app/ponto/models.py:281–308` · `app/ponto/services/dia_pago.py:335–360`
+
+**O esperado cobre o efeito líquido por chave e por valor projetado.** O gate compara os hashes do mapa antes e depois e as listas de chaves perdidas, nascidas e alteradas. Para cada perda, exige uma explicação não nula no arquivo do ensaio. A etiqueta `relavra_sem_troca` vem da presença da chave no conjunto de perdas do controle. O COMMIT não refaz esse controle e não compara os valores de `base → controle → troca`. O delta também não tem SHA vinculado ao manifesto no roteiro. `apply33.py:286–324,385–390,431–442,539–552` · `COMANDOS_PROD_NAO_EXECUTADOS.txt:9–14` [nao verificado]
+
+**O cabimento dessas 20 baixas no aval está [nao verificado].** O aval autoriza as trocas com gate por colaborador e prova de frota posterior. A regra de dinheiro condiciona a relavratura em aberta à reversão anterior, à integridade da exportada e à prova de frota. A reprodução no controle demonstra que a troca é dispensável para reproduzir a baixa. Falta demonstrar a correção financeira das baixas e a prova exigida. `dxg_apply_33_por_colab_204x.txt:1` · `v9_resumo.txt:5` · `CLAUDE.md:413–417` · `COMANDOS_PROD_NAO_EXECUTADOS.txt:20`
+
+### 5. Testemunha e motivo na pauta
+
+O resumo atribui a 516 e 1044 os cinco PKs `49126`, `51234`, `52761`, `59060` e `59061`, com tipo `E` e slot `S`. O apply registra o primeiro motivo de falha do colaborador. A pauta usa esse motivo para todas as perguntas dele e acrescenta o tipo de cada linha. A porta persiste até 500 caracteres. O resumo reporta 57 criadas e 57 `JA_EXISTE` na segunda rodada. O conteúdo integral das notas persistidas está [nao verificado]. `v9_resumo.txt:2–3` · `apply33.py:503–517,569–572,639–647` · `pauta33.py:55–63,132–133` · `app/pautas/services.py:163–185`
+
+A regra de tipo e slot generaliza para qualquer alvo avaliado, sem exceção por PK. O utilitário valida a lista fixa dos 33. A testemunha elimina o contraexemplo da v8 em que a nova ficava fora do slot real. Ainda permite que o juiz aceite antes pelo ramo administrativo. Também pode perder a unicidade depois de uma troca posterior do mesmo colaborador, quando as janelas se sobrepõem e só a nova posterior cai na janela da primeira. O gate final não refaz a testemunha, e a prova pós-commit só reconta `com_registro` nas aplicadas. Ocorrência desses casos na sombra ou em PROD [nao verificado]. `apply33.py:503–529,656–662` · `pauta33.py:49–63` · `app/chamados/juizes.py:368–423,729–755,802–813`
+
+### 6. Roteiro de PROD
+
+- **Falha de processo encadeada corretamente.** Em Bash, com `pipefail` ativo e execução da sequência no mesmo shell, a falha no `docker cp`, reversão, apply ou pauta DRY interrompe antes do passo seguinte. O comentário sobre o status está errado: `pipefail` retorna o status não zero mais à direita. Se `tee` falhar depois de um commit, a pauta para e os commits já feitos permanecem. `COMANDOS_PROD_NAO_EXECUTADOS.txt:2–19` · `apply33.py:564–583` [nao verificado]
+- **Falha da prova final pode chegar à pauta com rc 0.** O apply imprime hash 09/10 divergente, `com_registro` abaixo do total ou export da 11 encontrado. Nenhum desses três resultados finais alimenta `_erro`. O `veredito_colabs.json` já foi escrito como completo antes dessas leituras. A pauta refaz a classe das aplicadas, mas não confere o hash final nem o export. A prova declarada combina alvos e hash de FM, sem demonstrar os efeitos de frota além disso. `apply33.py:638–675` · `pauta33.py:55–63,79–99` · `COMANDOS_PROD_NAO_EXECUTADOS.txt:15–20` · `CLAUDE.md:413–417` [nao verificado]
+- **Protocolo e SHA.** O roteiro manda avisar quem exporta e registrar abertura e término no RELATO. São passos manuais. Um TXT iniciado antes da abertura ainda pode ser registrado após a última sonda. O apply verifica o SHA do manifesto e de cada arquivo. A pauta compara o SHA informado com o veredito e a trilha, sem recalcular o manifesto. Cumprimento do protocolo em PROD [nao verificado]. `COMANDOS_PROD_NAO_EXECUTADOS.txt:4–6,9–20` · `apply33.py:366–384,656–662` · `pauta33.py:41–63,83–89` · `app/folha/views.py:209–214,264–302`
+
+### 7. Classes de reprovação
+
+| Classe | Resultado |
+|---|---|
+| Porta, verbo ou juiz novo | O diff usa `registrar_batida`, `retratar_batida`, `pautas.services.escrever` e `retratar_passivo_s84`. A v9 acrescenta uma condição de aceite do lote sobre o slot do juiz existente. `apply33.py:485–517` · `pauta33.py:3–5,112–137` · `app/pautas/services.py:152–188` · `app/chamados/juizes.py:360–423` |
+| Save direto ou `except` que engole | A troca explícita usa as portas. O caminho concorrente de regularização conserva `save` e `delete` diretos. A v9 captura `DatabaseError`, anota o motivo e segue. As rotinas existentes de lavra e reconciliação ainda capturam exceções, com cobertura parcial pelo coletor. `apply33.py:485–502,519–525,567–576` · `app/chamados/services/regularizacao_ext.py:122–164` · `app/ponto/services/fechamento.py:1238–1241,1297–1308,1818–1827` |
+| Competência exportada tocada | A guarda dos instantes cobre 11/12 antes da escrita. A 12 é aceita em `COMP_OK` mesmo sem instante de troca nela. A corrida do TXT e a verificação de FM 09/10 após a saída do ato deixam brechas. Competência exportada efetivamente tocada em PROD [nao verificado]. `apply33.py:306–324,479–484,529–555,581–592` · `app/folha/views.py:209–214,264–302` |
+| Relógio fora da borda | O report usa `AGORA`, mas a testemunha e a releitura pós-commit chamam o juiz sem injetar `hoje` ou `agora`. O juiz pode ler o dia corrente e cada relavra toma seu próprio instante. O efeito sobre os resultados fornecidos está [nao verificado]. `apply33.py:503–517,559–566,656–662` · `app/chamados/juizes.py:633–643,729–750` · `app/ponto/services/fechamento.py:614–616,1807–1810` · `app/docs/PLANO-PADROES.md:97–103` |
+| PII na saída | O caminho de saída permanece aberto por logs, exceções e pelo motivo repassado à pauta. A proteção `0600` da foto restringe o arquivo, e o dado raspado não demonstra o conteúdo das saídas de PROD. `apply33.py:569–572,639–655` · `pauta33.py:132–133` · `reversao33.py:109–114` · `app/ponto/services/fechamento.py:1303–1308` · [nao verificado] |
 
 ## 24/11 20:58 · sessao 9d3b0e34f543 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · censo · origem=Code
 
@@ -607,58 +668,4 @@ Cada dia entra em uma classe. O total de colaboradores é distinto entre as clas
 | Ramo do zero [nao verificado] | 4 | 2 | 26 h 22 min | `D:12,22–24` |
 | **Total** | **18** | **11** | **73 h 53 min ≈ 73,9 h** | `D:6–24`, `app/docs/RELATO.md:19` |
 
-## 24/11 17:33 · sessao 4bae713a934f · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · sonda · origem=Code
-
-## 1. Filtro
-
-**`realizado>0` reproduz exatamente o aval: 18 dias, 11 colaboradores e 73,9 h realizadas com `horas_trabalhadas = 0`.** É a linha `FILTRO realizado>0` do dado colado. A referência de 18 / 11 / 73,9 h também consta em `app/docs/RELATO.md:19`.
-
-O trecho colado contém **14 linhas `DIA` com `realizado>0`, de 9 colaboradores, somando 2.686 min (44 h 46 min)**. Faltam as linhas de 4 dias para fechar o mapa nominal. A identidade desses dias, as batidas e o resultado da cauda ficam [nao verificado]. A unidade do campo `realizado` é minuto (`app/ponto/services/dia_pago.py:285–292`).
-
-## 2. Mapa dos dias visíveis
-
-`realizado` vem da grade, que consulta `realizado_do_dia` e limita o valor ao previsto. `horas_trabalhadas` vem dos períodos que o motor entrega para a data da jornada. A grade pode registrar minutos positivos enquanto a rubrica do motor fica no zero inicial. A lavra também tem caminhos próprios para folga trabalhada e feriado trabalhado. `app/escala/utils.py:2052–2069`, `app/ponto/services/dia_pago.py:126–132`, `:167–179`, `:234–264`, `:387–402`, L-095 em `app/docs/LEIS.md:113`.
-
-Os horários e minutos abaixo são os da mensagem, sem arquivo e linha para o extrato. A correspondência com a execução original da sonda fica [nao verificado]. **Já em D** significa que o `Turno` exibido já aponta para a data da linha, véspera da entrada de madrugada. Pelo critério descrito no relato, esse par exibido já tem o destino pretendido. A coluna de cauda registra o que se pode ler antes de qualquer mudança. `app/docs/RELATO.md:11`, `app/ponto/turnos.py:285–309`.
-
-| Colab | Data em 2026 | Batidas no extrato | Realizado | Por que a rubrica está em zero | Cauda |
-|---|---|---|---:|---|---|
-| col113 | 21/10 | — | — | — | — |
-| col673 | 21/10 | 22/10 E06:57 S07:00 | 3 min | O caso documentado identifica a `E` como uma saída gravada como entrada, seguida da `S` materializada. O ramo que zerou o par de 3 min fica [nao verificado]. `app/docs/BACKLOG.md:1858`, L-087 em `app/docs/LEIS.md:119`. | Já em D. O caso documentado descreve uma entrada original ausente, sem primeiro par fechado para a regra da cauda. `app/docs/BACKLOG.md:1858`, `app/docs/RELATO.md:11`. |
-| col174 | 24/10 | 23/10 E21:12 · 24/10 S03:00 S04:00 E05:12 · 25/10 E02:32 S03:31 S04:57 | 145 min | **Sem período**, segundo a sonda anterior registrada na cópia. A guarda que deixou a data sem período fica [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`. | O segundo turno começa em 25/10 e já aparece com data 24/10. A saída desse turno está truncada no extrato. [nao verificado] |
-| col174 | 26/10 | 26/10 E02:27 · 27/10 E02:39 S03:40 S05:01 | 142 min | O extrato mostra a `E` de 26/10 aberta em 25/10 e um turno fechado de 27/10 atribuído a 26/10. A cópia registra divergência por recorte para a `E` de 26/10. O ramo que zerou o dia fica [nao verificado]. `app/docs/RELATO.md:74`. | Já em D para o fechado E02:39–S05:01. |
-| col200 | 29/10 | 28/10 E22:00 · 29/10 S02:00 E03:00 S06:00 · 30/10 S02:00 E03:00 S06:00 | 180 min | O turno completo de 28/10 pertence à véspera. O segundo turno começa em 30/10 com uma `S` exibida como entrada. A cópia documenta divergência entre leitores para a data. Ramo do zero [nao verificado]. `app/docs/BACKLOG.md:2199`. | O turno de 30/10 já aparece em D. A lista de pares movidos fica [nao verificado]. |
-| col113 | 30/10 | 31/10 S02:00 E03:00 S07:02 | 242 min | A `S` órfã é descartada pelo adaptador. O par E03:00–S07:02 aparece fechado, e o ramo que impediu sua contribuição fica [nao verificado]. `app/ponto/adaptador_motor.py:29–44`. | Já em D para o par fechado. |
-| col113 | 01/11 | 02/11 S02:01 E03:00 S07:01 | 241 min | A `S` órfã é descartada pelo adaptador. O par E03:00–S07:01 aparece fechado, e o ramo que impediu sua contribuição fica [nao verificado]. `app/ponto/adaptador_motor.py:29–44`. | Já em D para o par fechado. |
-| col174 | 01/11 | 31/10 E20:58 E21:00 · 01/11 S02:59 S04:01 E05:08 · 02/11 E02:47 S03:47 S05:09 | 142 min | **Sem período**, segundo a sonda anterior registrada na cópia. A guarda que deixou a data sem período fica [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`. | O turno fechado visível é de 31/10. O `Turno` seguinte está truncado antes da data. [nao verificado] |
-| col200 | 02/11 | 03/11 S02:00 E02:00 S03:02 S06:00 | 180 min | A primeira `S` é órfã e o turno seguinte está fechado. A cópia documenta divergência entre leitores para a data. Ramo do zero [nao verificado]. `app/ponto/adaptador_motor.py:29–44`, `app/docs/BACKLOG.md:2199`. | Já em D para o turno fechado. |
-| col296 | 02/11 | 03/11 E00:15 E01:29 S07:00 | 345 min | O `Turno` exibido abre às 00:15 e fecha às 07:00. O extrato deixa em aberto qual entrada o motor usou e quais foram as pontas efetivas. Ramo do zero [nao verificado]. `app/ponto/motor_calculo_v2.py:503–531`, `:632–645`. | Já em D para o turno exibido. |
-| col382 | 10/11 | 09/11 E23:48 · 10/11 S03:51 E04:50 S07:48 · 11/11 E00:02 S04:10 E05:01 S07:51 | 418 min | **Janela de HE ancorada no dia civil**, diagnóstico documentado para o período fechado 00:02–07:51, com trabalhado 0 e fora da janela maior que o par. O motor lê `entrada.date()`, monta o marco no dia da entrada e aplica `max(0, duracao)`. `app/docs/RELATO.md:124`, `app/ponto/motor_calculo_v2.py:1528`, `:2759–2787`, `app/ponto/janela_he.py:20–30`, L-097 em `app/docs/LEIS.md:115`. | O turno iniciado em 11/11 às 00:02 já aparece em D. A janela da cópia continua usando 11/11 para essa entrada. `app/ponto/motor_calculo_v2.py:1528`. |
-| col110 | 12/11 | 13/11 S01:59 E02:55 S07:00 | 241 min | O `Turno` exibido usa a `S` de 01:59 como entrada. As pontas que chegaram ao cálculo e o ramo do zero ficam [nao verificado]. `app/ponto/motor_calculo_v2.py:503–531`, `:632–645`. | Já em D para o turno exibido. |
-| col37 | 14/11 | 15/11 S02:00 E03:00 S07:01 | 241 min | **Sem período**, segundo a sonda anterior registrada na cópia. A guarda que deixou a data sem período fica [nao verificado]. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:167–179`. | Já em D para o turno exibido. |
-| col218 | 14/11 | 13/11 E20:58 · 14/11 S02:27 E03:27 S05:00 · 15/11 S02:17 E03:17 S05:00 | 103 min | O turno anterior pertence a 13/11. Em 14/11, o extrato mostra uma `S` órfã e trunca a continuação. Ramo do zero [nao verificado]. `app/ponto/adaptador_motor.py:29–44`. | A data do par E03:17–S05:00 no resultado completo fica [nao verificado]. |
-| col174 | 15/11 | 14/11 E18:31 · 15/11 S04:30 E05:30 S06:33 | 63 min | **Indício de atribuição a 14/11.** A cópia documenta essa sequência e a divergência: o juiz deixa o segundo par em 15/11, e o motor o atribui a 14/11 pela herança de até 6 h. O caminho efetivo da rubrica nesta sonda fica [nao verificado]. `app/docs/BACKLOG.md:2199`, `app/ponto/motor_calculo_v2.py:2400–2409`, L-085 em `app/docs/LEIS.md:117`. | **15/11 → 14/11 pela regra descrita.** É o segundo par fechado. E05:30 e S06:33 estão depois do `hf=05:00` e dentro do envelope, que vai até 09:00 pelos marcos documentados. Resultado do patch [nao verificado]. `app/docs/BACKLOG.md:2199`, `app/docs/RELATO.md:11`, `app/ponto/turnos.py:66–82`, `:216–231`. |
-
-Os juízes registrados são `turnos_do_colab` para o dia do turno, `periodos_do_dia` para a ata e `MotorBase.calcular_periodo` para o valor do par. A L-085 rege a atribuição ao início da jornada. A L-087 rege o papel das batidas na ata. A L-097 rege a janela de HE. `app/core/juizes.py:215–224`, `:1206–1208`, `app/docs/JUIZES.md:20–29`, `app/docs/LEIS.md:115–119`.
-
-Os outros ramos pedidos existem na cópia. Turno aberto devolve o período com o zero inicial, com possibilidade de crédito posterior de pares fechados. O bloqueio sem previsto exige folga ou feriado, janela aplicável, previsto zero e ausência de autorização. A ata pode substituir os períodos do dia após passar pelas guardas de bordas e batidas. A execução desses ramos para os dias sem diagnóstico fica [nao verificado]. `app/ponto/motor_calculo_v2.py:213`, `:2750–2755`, `:2877–2882`, `:3215–3220`, `:2541–2560`, `:1440–1486`, `:632–688`.
-
-## 3. Alcance da cauda
-
-**Total alcançado nos 18 dias: [nao verificado]. Total que passa a `horas_trabalhadas > 0`: [nao verificado].** `i_cauda_parado.patch`, `medida_a_mudancas.txt` e `sonda_mapa18.py` não foram localizados na cópia. O caso `col174 15/11` satisfaz o critério escrito para remapear o `Turno`, mas isso não demonstra ganho na rubrica. A janela da cópia ainda parte de `entrada.date()`, e a data do juiz também alimenta a seleção de períodos pela ata e a atribuição usada na lavra. Assim, o “nenhum” informado para a medida fica sem confirmação por dia. `app/docs/RELATO.md:11`, `app/ponto/motor_calculo_v2.py:684–688`, `:1528`, `:2346–2356`, `:2400–2409`, `app/ponto/services/dia_pago.py:173–179`.
-
-## 4. Classe × dias × colaboradores × horas realizadas
-
-As classes documentadas abaixo vêm do relato de uma sonda anterior na cópia. Os minutos vêm das linhas visíveis do dado colado. Um colaborador pode aparecer em mais de uma classe. `app/docs/RELATO.md:124`, `app/ponto/services/dia_pago.py:285–292`.
-
-| Classe | Dias | Colabs | Realizado |
-|---|---:|---:|---:|
-| Inversão pela janela civil, documentada | 1 | 1 | 6 h 58 min |
-| Sem período, documentado | 3 | 2 | 8 h 48 min |
-| Ramo do zero [nao verificado], com linha visível | 10 | 7 | 29 h |
-| **Subtotal visível** | **14** | **9** | **44 h 46 min** |
-| **Total informado por `realizado>0`** | **18** | **11** | **73,9 h** |
-
-**Traceback:** o trecho fornecido termina numa linha `DIA` truncada e não contém traceback para transcrever. A existência de traceback na execução original fica [nao verificado].
-
-_8102 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8103 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
