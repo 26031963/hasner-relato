@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 16:58:29.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (1.3 MB). Acoes na janela: **44**.
+**Medido em 25/11/2026 17:05:01.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (2.2 MB). Acoes na janela: **53**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:05:00 | Bash |  | `cd /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad 2>/dev/null \|\| mkdir -p /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad; cd /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad; cat > sp.sh <<'EOF' trap 'echo "trap rc=$?" >&2' EXIT coproc T { exit 0; } /usr/bin/sleep 0.3 ex ...` |
+| 17:04:51 | Bash |  | `cd /home/ronald/wt-wrapper-n-vagas-125229; sed -n 700,760p bin/codex_pergunta.sh; grep -n '_saida()\\|_resultado()' bin/codex_pergunta.sh` |
+| 17:04:45 | Bash |  | `cd /home/ronald/wt-wrapper-n-vagas-125229; grep -n 'CONFERE\\|"GO"\\|echo GO\\|trap ' bin/codex_pergunta.sh \| head -20; tail -3 /home/ronald/saas-hasner/logs/GUARDA-10-B/full.log \| cut -c1-200` |
+| 17:04:35 | Bash |  | `date '+%d/%m %H:%M'; tail -c 2500 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/a9858ebb4b06787b3.output; echo; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bfkoi2crl.output; ls -la logs/GUARDA-10-B/ \| tail -5` |
+| 17:04:21 | Bash |  | `cd /home/ronald/wt-wrapper-n-vagas-125229; sed -n 255,300p bin/codex_pergunta.sh; echo ....; sed -n 350,365p bin/codex_pergunta.sh` |
+| 17:04:12 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/WRAPPER-N-VAGAS/verif_v11/triagem_v11.txt \| cut -c1-400; echo ----; cat logs/WRAPPER-N-VAGAS/verif_v11/aval_modelo.txt` |
+| 17:01:57 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/WRAPPER-N-VAGAS/verif_v12/r.rc; wc -l logs/WRAPPER-N-VAGAS/verif_v12/r.txt; cat logs/WRAPPER-N-VAGAS/verif_v12/r.txt \| cut -c1-600` |
+| 17:01:17 | Bash |  | `cd /home/ronald/saas-hasner; git show HEAD:app/docs/BACKLOG.md \| sed -n 2116p \| cut -c1-160; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') assert not any('BRIEF-CONSTRUTOR-2511' in l for l in L) L.insert(1,'lei: E4D-ESTOQUE-INSTANTE (17:0x, QUEIMA-FINAL-1800-2511 item 1) -- que INSTANTE DE ENTRADA recebem as DP ja gravadas (estoque) do caso 42 da matriz E4d: resp 9 + "nad ...` |
+| 17:01:08 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 5p app/docs/PLANO-PADROES.md \| cut -c1-300; sed -n 2116p app/docs/BACKLOG.md \| cut -c1-200; head -12 logs/E4D-MATRIZ/BRIEF-CONSTRUTOR-2511.md \| cut -c1-250` |
 | 16:56:19 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=[i for i,l in enumerate(L) if l.startswith('A-TELA CONTRATO-NOVO-RASCUNHO-2511')][0] L.insert(k+1,'WRAPPER-N-VAGAS volta 12 (16:5x, WRAPPER-PRIMEIRO-2511): v19 VERDE sob carga (load ~11-15, suite GUARDA concorrente) -- test_codex_n_vagas 45 casos + 68 mutantes rc 0, test_codex_pergunta 85 mutantes  ...` |
 | 16:56:13 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/WRAPPER-N-VAGAS/verif_v12/r.rc ]; do /usr/bin/sleep 20; done; cat logs/WRAPPER-N-VAGAS/verif_v12/r.rc; head -30 logs/WRAPPER-N-VAGAS/verif_v12/r.txt` |
 | 16:55:54 | Bash |  | `cd /home/ronald/saas-hasner; V=logs/WRAPPER-N-VAGAS/verif_v12; setsid bash -c "CODEX_OBRA=WRAPPER-N-VAGAS CODEX_PAPEL=verificador bin/codex_pergunta.sh --anexo logs/WRAPPER-N-VAGAS/verif_v11/aval_modelo.txt --anexo $V/r_v11.txt --anexo logs/WRAPPER-N-VAGAS/verif_v11/triagem_v11.txt --anexo $V/delta_v11_v12.diff 37b4a957a $V/q.txt $V/r.txt > $V/wrap.log 2>&1; echo rc=\$? > $V/r.rc" < /dev/null > /d ...` |
