@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 12:07:15.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (28.7 MB). Acoes na janela: **734**.
+**Medido em 25/11/2026 12:13:38.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (28.8 MB). Acoes na janela: **737**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:08:59 | Bash | Record v11f result and escalation in RELATO | `cd ~/saas-hasner; python3 - <<'PY' p='app/docs/RELATO.md'; s=open(p).read() a='Codex verificador v11e em curso (logs/DXG-V11E/verif/r.txt)' assert s.count(a)==1 b=("verif v11e REPROVA rc 0 11:55 (procedentes: nan no teto, delta fora do esperado no break de hash, relatorio lendo R[t] e nao t_saida, COMMIT dentro de atomic externo vira savepoint) -> v11f: recusa teto invalido e COMMIT sob atomic ext ...` |
+| 12:08:53 | Agent | DXG v11f opus verificador | `Obra DXG-APPLY-33-POR-COLAB (instrumento de apply de dinheiro em competencia 11 NAO exportada, roda em PROD pelo `bin/sombra.sh`-like protocolo em logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/COMANDOS_PROD_NAO_EXECUTADOS.txt). Voce e o verificador OPUS por escalonamento (mais de 3 voltas Codex; CLAUDE.md /home/ronald/saas-hasner/CLAUDE.md secao 7b CODEX item 5(d)). Somente leitura. Nao rode n ...` |
+| 12:08:34 | Bash | Check phase C order around stop and load | `cd ~/saas-hasner; O=logs/dxg-v11f-sobre-relavra.out; sed -n 3000,3012p $O \| cut -c1-200; grep -nP "^T_ATOMIC\t113" $O \| cut -c1-160; uptime` |
 | 12:01:50 | Bash | Rerun n-vagas selo after except removal | `cd /home/ronald/wt-wrapper-n-vagas-125229 && L=~/saas-hasner/logs/WRAPPER-N-VAGAS; (bash bin/tests/test_codex_n_vagas.sh > $L/v13_nvagas.log 2>&1; echo "rc=$? $(date +%T)" >> $L/v13_nvagas.log); tail -2 $L/v13_nvagas.log` |
 | 12:01:39 | Bash | See where v11f stopped and the 876 timings | `cd ~/saas-hasner; O=logs/dxg-v11f-sobre-relavra.out; grep -nP "^M\tPARADO\|^########\|Traceback\|Error\|_Falha" $O \| cut -c1-250 \| head -20; grep -P "^T_ATOMIC\t876" $O \| cut -c1-250` |
 | 12:01:35 | Bash | Find remaining except and read v11f result | `cd /home/ronald/wt-wrapper-n-vagas-125229 && git diff \| grep -n "^+.*except"; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/byh067jil.output \| cut -c1-200` |
