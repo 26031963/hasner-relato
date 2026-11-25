@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 12:00:49.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (28.6 MB). Acoes na janela: **723**.
+**Medido em 25/11/2026 12:07:15.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (28.7 MB). Acoes na janela: **734**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:01:50 | Bash | Rerun n-vagas selo after except removal | `cd /home/ronald/wt-wrapper-n-vagas-125229 && L=~/saas-hasner/logs/WRAPPER-N-VAGAS; (bash bin/tests/test_codex_n_vagas.sh > $L/v13_nvagas.log 2>&1; echo "rc=$? $(date +%T)" >> $L/v13_nvagas.log); tail -2 $L/v13_nvagas.log` |
+| 12:01:39 | Bash | See where v11f stopped and the 876 timings | `cd ~/saas-hasner; O=logs/dxg-v11f-sobre-relavra.out; grep -nP "^M\tPARADO\|^########\|Traceback\|Error\|_Falha" $O \| cut -c1-250 \| head -20; grep -P "^T_ATOMIC\t876" $O \| cut -c1-250` |
+| 12:01:35 | Bash | Find remaining except and read v11f result | `cd /home/ronald/wt-wrapper-n-vagas-125229 && git diff \| grep -n "^+.*except"; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/byh067jil.output \| cut -c1-200` |
+| 12:01:31 | Bash | Remove new except from _abre_wt | `cd /home/ronald/wt-wrapper-n-vagas-125229 && python3 - <<'PY' p='bin/codex_admissao.py'; s=open(p).read() a=''' """fd do DIRETORIO da wt (a lease "uma chamada por wt"); ValueError se nao e diretorio.""" try: return os.open(wt, os.O_RDONLY \| os.O_DIRECTORY \| os.O_CLOEXEC) except OSError as e: raise ValueError("wt %s nao abriu como diretorio (%s)" % (wt, e.strerror)) from None ''' b=''' """fd do D ...` |
+| 12:01:24 | Bash | View except context in codex_admissao diff | `cd /home/ronald/wt-wrapper-n-vagas-125229 && git diff bin/codex_admissao.py \| sed -n 40,90p` |
+| 12:01:22 | Bash | Locate the added except line | `cd /home/ronald/wt-wrapper-n-vagas-125229 && git diff \| grep -n "^+.*except"` |
+| 12:01:19 | Bash | Inspect WRAPPER wt diff before commit | `cd /home/ronald/wt-wrapper-n-vagas-125229 && git diff --stat && git diff \| grep -c "^+.*except"; grep -n "provisiona" CLAUDE.md \| head` |
+| 12:01:15 | Bash | Read verif v6 verdict header | `cd ~/saas-hasner/logs/WRAPPER-N-VAGAS; head -5 verif_v6/r.txt \| cut -c1-600; cat verif_v6/r.rc; ls -t \| head -12` |
+| 12:01:11 | Bash | Read verif v6 verdict for context | `cd ~/saas-hasner/logs/WRAPPER-N-VAGAS; ls verif_v6; tail -30 verif_v6/r.txt 2>/dev/null \| cut -c1-300; ls \| grep -i triag` |
+| 12:01:07 | Bash | Check WRAPPER wt state and past verif rounds | `cd /home/ronald/wt-wrapper-n-vagas-125229 && git log --oneline -3 && git status --porcelain \| head; ls ~/saas-hasner/logs/WRAPPER-N-VAGAS/ \| grep -i verif \| tail -5` |
+| 12:01:03 | Bash | Read WRAPPER v12 selo result | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bynbr1g29.output; tail -5 ~/saas-hasner/logs/WRAPPER-N-VAGAS/v12_nvagas.log \| cut -c1-250` |
 | 11:56:30 | Bash | Wait for v11f ensaio verdict | `cd ~/saas-hasner; D=logs/DXG-V11F; until [ -f $D/fim ]; do /usr/bin/sleep 30; done; cat $D/rcs.txt; O=logs/dxg-v11f-sobre-relavra.out; grep -cP "^M\tPARADO" $O; grep -E "^(M\s)?FIM_\|Recusa\|Traceback" $O \| sort \| uniq -c \| head; grep -P "^T_ATOMIC\t" $O \| awk -F'\t' '{print $4}' \| sort \| uniq -c; grep -P "^M\tT_ATOMIC_MAX" $O` |
 | 11:56:26 | Bash | Finish v11f and launch its sombra ensaio | `cd ~/saas-hasner; P=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; python3 - $P/v11f/apply33.py <<'PY' import sys;p=sys.argv[1];s=open(p).read() a="t_controle=(round(RES[c].get('t_controle', 0), 2) if c in RES else None)," assert s.count(a)==1; s=s.replace(a,a+" t_saida=(round(RES[c].get('t_saida') or 0, 2) if c in RES else None),",1); open(p,'w').write(s) PY python3 -m py_compile $P/v11f/appl ...` |
 | 11:56:19 | Bash | Build DXG v11f addressing v11e procedentes | `cd ~/saas-hasner; P=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33; mkdir -p $P/v11f; cp $P/v11e/apply33.py $P/v11f/apply33.py; cp logs/sombra/apply33_ensaio_total.py $P/v11f/apply33_ensaio_total.py; sed -n 36,40p $P/v11f/apply33.py; python3 - $P/v11f <<'PY' import sys; d=sys.argv[1] def patch(p, pares): s=open(p).read() for a,b in pares: assert s.count(a)==1,(p,a[:70]); s=s.replace(a,b,1) open ...` |
