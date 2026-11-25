@@ -5887,6 +5887,38 @@ CONTRATO-DE-INSTRUMENTO CODEX-CUSTO-POR-OBRA v2 (aval 31/10 12:1x; v1 emendada p
 > **METODO DOS 658 (aval 22:3x item 5, para reproducao independente)**: consulta = `logs/o261/maria_A.py` (sha256 9ae578a37bb61077..., SO LEITURA, rodada por `bin/sonda_leitura.sh` -- usuario leitor, cpuset 4-7), saida `logs/o261/maria/A.out` e `logs/o261/maria.out` (ERROS=0); data-base 29/10/2026 16:57 (mtime da saida); codigo = arvore viva no commit `b00779dd` (o ultimo antes da rodada; o ar era o do deploy anterior, carimbado em `logs/deploy.stamp`); empresas visiveis [1, 2, 3, 4]; universo = dias que SEGURAM a folha por `folha/fora_da_folha.py::o_que_segura` (o juiz do export memoizado por empresa/competencia, MESMA funcao) = 1.700. CRITERIO DE ROTA REAL: porta FORTE = celula do dia com chamado em `chamados/services/painel.py::qs_na_fila` ('chamado_na_fila') ou pergunta validavel pelo admin ('pergunta_validavel'); PORTA_REAL do fio=colab = pergunta VIVA (`chamados/juizes.py::pergunta_viva`) que aparece em `perguntas_do_app` E cuja ancora `fio.py::chamado_que_lista` e chamado VIVO na fila; porta FRACA (cadastro_lista, plano_folgas) NAO conta. Resultado: 883 forte + 159 PORTA_REAL = 1.042 com rota; **SEM rota real = 1.700 - 1.042 = 658**. O F5 (`vigia_fio.censo_alcance`) reproduz este criterio por DIA retido (hoje 1.620 dias, 388 sem porta, 634 sem os 4 baldes de lei) e passa a reportar com o PAPEL do usuario que pode agir.
 - 20:2x BO-DISPUTA-SEM-PERGUNTA TRIAGEM mod7 (1a rodada COM banco dos 72 modulos sobre c01d53af4: Ran 639, FAILED failures=6 errors=2, rc=1, logs/BO-DISPUTA-SEM-PERGUNTA/mod7.log; medida em copias descartaveis ja removidas, tri_a.log e tri_b.log): (1) test_3b_reuso_746 2 errors = o teste pede disputa com motivo sem pergunta, que pela lei da obra nao nasce; com motivo que tem pergunta os 2 PASSAM; (2) RED_b = fixture cria a outra disputa aberta ANTES da dona; invertendo PASSA; (3) replay porta real = a Batida da fixture dispara os signals e abre outra disputa antes da chamada medida, que cai na agregacao (D2) e nao no nascimento; teste refeito + caso novo 'A aberta e canonica em B fechada'; (4) chokepoint FICA 150 x teto 145 e FICAM 224 x 219: +5 constante atribuido por DIFF de SQL contra a volta 2 (1 SAVEPOINT + 1 RELEASE + 1 SELECT de pergunta + 2 exists de disputa aberta no wrapper). Defeito de CODIGO provado: 0; aberto: item (3b) e a reducao das 5 queries. Construtor Codex volta c8 (delta, construtor8.q, CENSO fechado) lancado 20:19, pid do lancador em c8.log; sem opus ainda (5b, preverif unico e suite inteira vem antes).
 
+## DXG-APPLY-33 instrumento v11b + colab 516 (25/11 11:1x, aval QUEIMA-ATE-1800 (3), instrumento em logs/, nada em prod)
+LEI-AKITA: origem=logs/DECLARADO-X-GRAVADO-PASSIVO-11/porta/apply33/v11b/apply33.py::estado_colab, testemunha=RES do laco, RED=harness v11 KeyError 920 / v11b NAO_RODOU, quem-mais-le=driver le so DELTA (passou/barrado), juizes novos=0, padrao=n/a (instrumento)
+- cura: leitor unico `estado_colab` (status DECLARADO NAO_RODOU, t=None) em vez de RES[c] fora do laco (ex-KeyError :709); motivo de push sai `Rot(k)` e nao `{"?":1}` (bug no caminho). md5 bf4b7ed0; 0 except (Code conferiu diff e :702-705)
+- PROVA: harness (scratchpad/prova) caso 516 BARRADO + 920 ausente -> `FIM_FALHA_DECLARADA PARADO; NAO_RODOU [920]`; lote completo v11 x v11b byte a byte igual. Limite: o laco nao e exercitado
+- 516 no ensaio 01:36: BARRADO na troca da pergunta 49126, push_total=3, 0 nascido; o `break` deixou 14 colabs sem rodar
+- dono 22/10 do 516: BATIDA pela leitura (S 22:59 orfa; par 01:00-07:01 cai em 23/10 por turnos.py:1295-1298, conferido); `dono()` real NAO rodou -> INCOMPLETO
+INCOMPLETO: causa das 3 push (hipotese: chamado #33932 fechado via admin renasce no estado intermediario e repassa a disputa #5583) -> Codex leitura DXG-516-PUSH; o proximo ensaio para no 516 de novo sem essa cura, e a sombra do dump de hoje e anterior a relavra de 10:07 (pede --refazer --dump-agora)
+
+## MEDE-PRE-EXPORT-2511 (1) UNIVERSO comp 11 (25/11 11:0x, so medida, sombra, sha 160173bb1)
+Comp 11 = 21/10-20/11, emp 2/3/4, 960 colabs, errors 0, col950 fora; Codex sonda rc 0 com os mesmos numeros. Arquivos logs/MEDE-PRE-EXPORT-2511/universo/ (TABELA.md, universo.tsv por colab_id).
+| regra (colab-dias / colabs) | emp 2 | emp 3 | emp 4 | total |
+|---|---|---|---|---|
+| PAR-PELO-TURNO teto previsto+4h (HJ-026) | 5/5 | 9/3 | 0/0 | 14 / 8 |
+| INTERVALO V2 B1 (cadastrado, nada batido) = o que MUDA | 595/164 | 141/28 | 24/7 | 760 / 199 |
+| INTERVALO V2 B2 (batido < cadastrado) = CONTROLE ("segue como hoje" no aval) | 1244/218 | 260/45 | 80/12 | 1584 / 275 |
+PROVA: 9 colab-dias abertos a mao pela mesma porta (3 por regra), 9/9 batem o predicado. Escopo: o predicado e o LITERAL do aval, sem o qualificador "diurno" e sem o corte "o motor indeniza hoje" da medida de 24/11 16:30 (B1 207/74, cujo script nao foi achado): B1 760 e TETO pelo predicado; o numero que move e o do DIFF da obra na sombra, antes do pouso.
+Contra-exemplo para o construtor da INTERVALO V2: turno que comeca depois da pausa (col1051 19/11, S 12:13 orfa) cai em B1 pelo predicado -- o RED deve dizer o que a regra faz nesse dia.
+(2) MESA DE VALIDACAO (sombra dump 25/11, POST real pela porta do botao em atomic+raise, 26 opcoes, 0 excecao, 26/26 snapshot identico apos rollback; logs/MEDE-PRE-EXPORT-2511/mesa/TABELA.md):
+| chamado / dia | opcao | Batida existente | Batida criada | depois |
+|---|---|---|---|---|
+| 37336 06/11 | Validar / Corrigir 07:05 | fica (so `pergunta_origem` na E 06:54) | nenhuma | resolvido; toast do Corrigir diz "gravado no espelho" sem batida |
+| 37336 | Rejeitar / Regularizar | nada | nenhuma | volta ao colab / recusado |
+| 35243 27/10 | Validar (50720 ou 50749) | intocada | S 12:00 + E 13:00 (`disputa_s84_retro`) | resolvido |
+| 35243 | Corrigir 07:05 em 50720 | intocada | S 12:00 + E 13:00, NAO 07:05 | resolvido |
+| 35243 | Corrigir 07:05 em 50749 | nada | nenhuma | recusado implausivel, chamado aberto |
+| 34070 23/10 | Validar / Corrigir 13:20 | nada | nenhuma | pergunta validada (`paridade_recusada`), chamado em_analise |
+| 36687 03/11 | Aplicar correcao / Apagar (cegas) | nada | nenhuma | "Nada a fazer." (sem tratador) |
+| 36687 | Resolver dia: Trabalhou / Falta / Atestado | nada | nenhuma (Ausencia nas 2 ultimas) | resolvido, perguntas `admin_decidiu` |
+Nenhuma opcao SUBSTITUI nem RETRATA batida. Portas: chamados/views.py:870 -> fio.py:621; acoes_disputa.py:21,454 -> validacao.py:697; materializacao.py:1581 -> registro_batida.py:176; validacao.py:902; fio.py:797; ponto/views.py:3491 -> veredito_celula.py:216.
+PROVA: Code conferiu modal_fio.html:190,197 x `git grep` (sem tratador em .py, cai em fio.py:897). Surpresas -> fila MESA-BOTOES-CEGOS-SEM-TRATADOR e MESA-VALIDA-SEM-BATIDA (BACKLOG). Nao medidos: "Cobrar este dia", "Iniciar disputa" de orfaos, 24 dos 25 tipos de Justificado.
+INCOMPLETO: horas e dinheiro por regra saem do DIFF de cada obra (PAR-PELO-TURNO, INTERVALO V2).
+
 ## O48-MEDE -- FECHAMENTO-ONLINE passos 1-5 no HEAD 160173bb1 + DIFF lido x gravado comp 11 (25/11 10:18, aval O48-MEDE-2511, so medida)
 LEI-AKITA: origem=n/a, testemunha=ponto/services/fechamento.py::fechamento_lido x FechamentoMensal, RED=n/a (medida), quem-mais-le=passos.r, juizes novos=0, padrao=n/a (medida)
 | passo | estado | o que falta |
