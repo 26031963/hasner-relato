@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 14:04:32.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (37.5 MB). Acoes na janela: **912**.
+**Medido em 25/11/2026 14:11:02.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (38.6 MB). Acoes na janela: **921**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 14:09:05 | Bash | Wait for A-TELA v15 jobs and verifier | `cd ~/saas-hasner/logs; until [ -e A-TELA-DO-DIA-LE-UM-JUIZ/v15/roda.fim ] && [ -e A-TELA-DO-DIA-LE-UM-JUIZ/v15/r_verif.rc ]; do /usr/bin/sleep 60; done; cat A-TELA-DO-DIA-LE-UM-JUIZ/v15/rc.txt A-TELA-DO-DIA-LE-UM-JUIZ/v15/r_verif.rc; head -5 A-TELA-DO-DIA-LE-UM-JUIZ/v15/r_verif.txt` |
+| 14:08:59 | Agent | DXG v11i opus final verificador | `Obra DXG-APPLY-33-POR-COLAB, v11i. You are the FINAL reader (opus final) before an apply in PROD of a one-shot instrument (apply33 + reverter33 + COMANDOS) under the aval logs/AVAIS-1515/DXG-APPLY-33-POR-COLAB*.txt (read it literally) and DXG-876-E-RECUSA-2511. Repo /home/ronald/saas-hasner; read CLAUDE.md section 0 and 7b DINHEIRO. Material: - v11i folder: logs/DECLARADO-X-GRAVADO-PASSIVO-11/port ...` |
+| 14:08:47 | Bash | Check A4 and A-TELA jobs alive | `pgrep -af "cadeia_v2\|roda.sh\|lanca_verif15" \| grep -v pgrep \| head` |
+| 14:08:41 | Bash | Check A4 state and pista holder | `cd ~/saas-hasner/logs; cat A4-ESPELHO-AUSENCIA-ABERTA/suite_inteira.log A4-ESPELHO-AUSENCIA-ABERTA/green_escopo_v2.rc A4-ESPELHO-AUSENCIA-ABERTA/green_escopo_v2.log; cat A4-ESPELHO-AUSENCIA-ABERTA/cadeia_v2.sh; ls A4-ESPELHO-AUSENCIA-ABERTA/*entrega* 2>&1; ~/saas-hasner/bin/trava_teste.sh --quem` |
+| 14:08:34 | Bash | List A-TELA v15 and A4 log files | `cd ~/saas-hasner/logs; ls -la A-TELA-DO-DIA-LE-UM-JUIZ/v15/ \| tail -30; echo ---; ls -lat A4-ESPELHO-AUSENCIA-ABERTA/ \| head -15` |
+| 14:05:56 | Agent | E1-PREVISAO-24H construtor opus | `You are the builder for obra E1-PREVISAO-24H in /home/ronald/saas-hasner. Read CLAUDE.md sections 0, 3, 4, 4a, 6 and 7b first. MAO UNICA (it touches escala/celula). You build and measure; you do NOT commit to main, merge, deploy or apply anything in PROD. AVAL (read literally): logs/AVAIS-1515/E1-PREVISAO-24H-2511.txt. TipoEscala 297/298/302 (12x36 with a weekly schedule, exit before the break) ge ...` |
+| 14:05:39 | Bash | Add E1 lei questions to RELATO top | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() l="lei: E1-PREVISAO-24H (14:1x, censo Codex logs/E1-PREVISAO-24H/r1.txt conferido em escala/utils.py:330-350 e core/juizes.py) -- (i) NAO existe juiz para 'o dia tem previsao valida?' (JUIZ ANTES DO SITIO): o veredito PREVISAO INVALIDA do aval (2) pede a frase `corte Ronald: juiz <nome> nasce` (proposta: um predicado so,  ...` |
+| 14:05:27 | Bash | Spot-check Codex citations for E1 | `cd ~/saas-hasner/app; sed -n 330,350p escala/utils.py; sed -n 225,229p core/juizes.py; grep -n "previsao_valida\\|previsao_invalida" -r --include=*.py . \| head` |
+| 14:05:13 | Bash | Read E1 Codex census | `cd ~/saas-hasner; cat logs/E1-PREVISAO-24H/r1.rc; cat logs/E1-PREVISAO-24H/r1.txt` |
 | 14:04:14 | TaskStop |  | `-` |
 | 14:00:10 | Bash | Wait for E1 Codex census | `cd ~/saas-hasner; until [ -f logs/E1-PREVISAO-24H/r1.rc ]; do /usr/bin/sleep 30; done; cat logs/E1-PREVISAO-24H/r1.rc; wc -c logs/E1-PREVISAO-24H/r1.txt` |
 | 13:59:51 | Bash | Launch Codex census for E1-PREVISAO-24H | `cd ~/saas-hasner; D=logs/E1-PREVISAO-24H; mkdir -p $D; cat > $D/q1.txt <<'EOF' PAPEL: censo da obra E1-PREVISAO-24H. Leia o codigo; nao proponha lei nova. Contexto (dado, nao hipotese a confirmar): TipoEscala pk 297/298/302 sao 12x36 com horario semanal cuja saida vem antes do intervalo; as celulas geradas deles tem previsto > 24 h. 1. Quem ESCREVE os marcos de TipoEscala (entrada, saida, inicio/f ...` |
