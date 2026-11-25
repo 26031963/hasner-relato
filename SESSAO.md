@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 11:14:52.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (25.9 MB). Acoes na janela: **661**.
+**Medido em 25/11/2026 11:21:16.** Transcript: `9467e263-41b6-411b-acdc-9efea57cd242.jsonl` (26.0 MB). Acoes na janela: **662**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 11:21:14 | Bash | Read failure output of sombra refresh | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b0qv900k9.output; tail -15 logs/DXG-V11C/refazer.log` |
 | 11:14:39 | Bash | Wait for sombra refresh and DXG v11c ensaio | `cd ~/saas-hasner; until [ -f logs/DXG-V11C/fim ]; do /usr/bin/sleep 30; done; cat logs/DXG-V11C/rcs.txt; grep -h "^FIM_\\|PARADO\\|BARRADO" logs/dxg-v11c-sobre-relavra.out 2>/dev/null \| head -20; tail -3 logs/DXG-V11C/rodar.log` |
 | 11:14:36 | Bash | Record 516 cause and v11c in RELATO | `cd ~/saas-hasner; python3 - <<'EOPY' p='app/docs/RELATO.md'; s=open(p).read() a="INCOMPLETO: causa das 3 push (hipotese: chamado #33932 fechado via admin renasce no estado intermediario e repassa a disputa #5583) -> Codex leitura DXG-516-PUSH; o proximo ensaio para no 516 de novo sem essa cura, e a sombra do dump de hoje e anterior a relavra de 10:07 (pede --refazer --dump-agora)\n" assert s.count ...` |
 | 11:14:25 | Bash | Refresh sombra and rerun DXG ensaio with v11c | `cd ~/saas-hasner; mkdir -p logs/DXG-V11C; cat > logs/DXG-V11C/roda.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner; D=logs/DXG-V11C bin/sombra.sh --refazer --dump-agora > $D/refazer.log 2>&1; echo "refazer rc=$? $(date +%T)" >> $D/rcs.txt bin/sombra.sh --conferir >> $D/refazer.log 2>&1 \|\| { echo "conferir FALHOU $(date +%T)" >> $D/rcs.txt; touch $D/fim; exit 1; } cp logs/DECLARADO-X-GRAVADO-P ...` |
