@@ -1,7 +1,88 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 01:58** · publicado em **25/11/2026 02:03** (UTC-3)
+> Ultima resposta processada: **25/11/2026 02:38** · publicado em **25/11/2026 02:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 02:38 · sessao 2d04f1524f51 · PONTA-PEQUENA-NA-BORDA · verificador · origem=Code
+
+**BLOQUEIA a v5.** A supressão resolve a reemissão com cadastro e batidas fixos, mas também bloqueia o prazo de um dia que o consumidor baixou sem medir a ponta. Além disso, a consulta com `agora=criado_em` usa a escala e as batidas atuais e pode classificar como pós-encerramento um evento que nasceu e foi baixado antes do fim previsto na época. `app/ponto/services/vigia_de_hora.py:107–124`, `app/ponto/services/ponta_pequena.py:94–118`, `app/ponto/turnos.py:1867–1893,2101–2105`.
+
+### 1. Quem escreve, quem lê e o que é morto
+
+- **Escrita.** `emitir_evento_celula` faz o INSERT e o ORM preenche `criado_em` por `auto_now_add`. O consumidor grava `processado_em` na baixa, incrementa `tentativas` e grava `erro` se o lote do colaborador falhar, e deixa a linha como está se adiar. `app/ponto/portas/celula.py:981–1002`, `app/escala/models.py:1869–1875`, `app/chamados/reconciliador.py:1539–1549`.
+- **Leitura.** O consumidor ordena por `criado_em` e a ponta pequena usa o campo para fixar o instante por dia. O monitor da fila lê o mais antigo, o vigia da v5 lê o máximo por par e a foto E4B captura todos os campos. `eventos_pendentes`, `eventos_mortos` e o vigia da v5 leem o estado da fila. `app/chamados/reconciliador.py:1382–1404,1480–1486`, `app/ponto/services/ponta_pequena.py:110–118`, `app/ponto/services/vigia_de_hora.py:100–109`, `app/chamados/services/foto_e4b.py:247–252,269–271`.
+- **Morto** é especificamente `processado_em IS NULL` com `tentativas >= 5`. Esse evento fica fora dos próximos lotes. Um **baixado** também fica fora dos lotes, mas passa no `exclude(filtro_evento_morto())`. A quinta falha pode fazer o vigia reemitir se o dia ainda for elegível e só restarem mortos ou eventos anteriores ao encerramento. Se a falha persistir, o ciclo pode se repetir com novos IDs. A baixa normal preserva a linha. A limpeza apaga baixados após sete dias, quando o dia já está fora da janela usual do vigia, que consulta hoje e ontem. `app/chamados/reconciliador.py:1343–1347,1382–1397,1540–1556`, `app/ponto/services/vigia_de_hora.py:22–30,107–124`.
+
+### 2. O que o consumidor efetivamente julga
+
+Com limite ligado, **sim**. Para cada data do lote, `decidir_eventos` usa `max(agora_do_início, maior criado_em daquela data)` e passa esse instante à elegibilidade e à medição. A origem do evento não filtra essa chamada. Lavra, nascimento de chamado de turno, recompute e pergunta chegam pela mesma porta. `app/chamados/reconciliador.py:1480–1495,1529–1535`, `app/ponto/services/ponta_pequena.py:83–118`, `app/ponto/portas/celula.py:981–991`.
+
+**Contraexemplo com o consumidor atual.** Um evento de lavra nasce às 18:40, com o dia encerrado e `limite_decisao_he_min=0`. `decidir_eventos` retorna antes de olhar as datas do lote e o consumidor pode dar baixa normalmente. Se o admin liga o limite para 15 antes da próxima rodada, uma ponta de 9 minutos fica elegível. O save da empresa segue o caminho normal do cadastro, e, sem outro sinal para o par, a v5 conta `prazo_ja_emitido` pelo evento baixado e pula a emissão. `app/ponto/services/ponta_pequena.py:49–62,110–118`, `app/chamados/reconciliador.py:1534–1549`, `app/colaboradores/admin.py:7–19`, `app/colaboradores/models.py:82–89,172–175`, `app/ponto/services/vigia_de_hora.py:107–124`.
+
+A mesma regressão aparece no cenário que o delta retirou do RED da v4: **18 minutos com limite 15**, baixa sem decisão, depois **limite 20**. A v4 exigia nova emissão e recusa. A v5 suprime pelo evento anterior. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:247–253` **na v4**, trecho removido no anexo, `app/ponto/services/ponta_pequena.py:98–106`, `app/ponto/services/vigia_de_hora.py:113–124`.
+
+### 3. Monotonicidade e leitura do passado
+
+**Com os insumos fixos, sim.** Avançar `agora` só pode expirar uma aberta e ultrapassar o fim previsto. **Entre leituras do banco, a resposta pode mudar para o mesmo `u`.** O juiz carrega as batidas apuráveis da janela sem corte em `u` e lê vínculo e DNA atuais. A edição humana pode substituir o DNA, e a regeneração pode reescrevê-lo para uma célula gerada. `app/ponto/turnos.py:1867–1893,2005–2018,2101–2130`, `app/escala/models.py:1128–1144`, `app/ponto/portas/celula.py:289–311,641–664`.
+
+Exemplo pelo código, com as batidas já pareadas: às **17:30**, o fim previsto é **18:00**, então o consumidor pode baixar o evento pelo ramo de dia aberto sem medir HE. Depois, o cadastro encurta o fim para **17:00**. A mesma chamada com `u=17:30` agora dá encerrado. A propagação de template tem caminho com `recalculo=False`, que grava o DNA e pula o rejulgamento imediato. Se não houver nova lavra ou outro sinal para o par, o vigia pode suprimir pelo evento antigo. `app/ponto/turnos.py:2121–2130`, `app/ponto/services/ponta_pequena.py:60–61,93–98`, `app/escala/services/cadastro_tipo.py:339–364`, `app/ponto/portas/celula.py:305–311,467–479,535–547`, `app/ponto/services/vigia_de_hora.py:118–124`.
+
+### 4. Qual teste cai [nao verificado]
+
+| Variante | Teste e primeira asserção que a distingue | [nao verificado]
+|---|---|
+| **v4**, supressão só por pendente | `test_RED_baixa_SEM_decisao_nascida_com_o_dia_encerrado_nao_reemite`. Às 18:50 espera `(0, 1)` e a v4 volta a emitir, `(1, 0)`. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:234–248`. |
+| Incluir **mortos**, mantendo o corte por encerramento | `test_RED_evento_morto_pos_encerramento_nao_suprime_prazo`. Espera `(1, 0)` e o mutante suprime, `(0, 1)`. Esse teste já existia no contexto do delta. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:200–216`. |
+| Aceitar evento **anterior ao encerramento** | `test_RED_baixa_nascida_ANTES_do_encerramento_reemite_e_decide`. O evento das 17:58 já foi baixado às 17:59. Às 18:40 o teste exige uma emissão e o mutante dá zero. Um mutante que aceite literalmente qualquer evento também cai aqui. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:218–232`. |
+
+### 5. Classes de reprovação no delta
+
+- **Campo com dois significados.** `criado_em` registra o INSERT e a v5 usa esse mesmo carimbo como evidência de que o prazo foi ou será julgado sob os insumos relevantes. Os retornos antecipados do consumidor e a releitura do cadastro quebram essa inferência. `app/escala/models.py:1869–1875`, `app/ponto/services/vigia_de_hora.py:90–96,107–121`, `app/ponto/services/ponta_pequena.py:93–118`.
+- **RED sem mordida na guarda que anuncia.** `test_RED_decisao_vigente_suprime` mantém um evento pós-encerramento já baixado. Se só a guarda de decisão vigente do vigia for ignorada, a deduplicação pelo evento ainda produz o zero que o teste cobra. O RED da baixa sem decisão também não exige que o espelho tenha sido chamado naquela passada. O teste separado de acima do limite exige essa chamada. `app/ponto/tests/test_ponta_pequena_prazo_evento.py:234–257,294–299`, `app/ponto/services/vigia_de_hora.py:113–121`.
+- O delta reutiliza o juiz registrado e o filtro do outbox. O INSERT continua na mesma porta e no mesmo `atomic`. A troca da consulta não acrescenta outro juiz, escritor, leitura de relógio, derivação dos marcos, aquisição explícita de trava ou `except`. `app/core/juizes.py:243`, `app/chamados/reconciliador.py:1388–1391`, `app/ponto/services/vigia_de_hora.py:97–124,145–149`.
+
+Conferi os dois arquivos pelos hashes de conteúdo do anexo e exercitei as variantes em memória com dependências simuladas. Execução da suíte Django, confirmação do commit-base `b8f12a692` e ocorrência dos contraexemplos em produção: [nao verificado].
+
+## 25/11 02:37 · sessao 3f247a62fe22 · A-TELA-DO-DIA-LE-UM-JUIZ · construtor · origem=Code
+
+Implementei a volta 6 com **uma classificação por ramo do cartório**. `classificar_dia` identifica a posição do protesto que o próprio ramo do sem par acrescentou, inclusive quando o código é `PREVISTO_COM_DIA_INDEFINIDO`. `_julgar_colab_corpo`, por `_retirar_sem_par_entregue`, consulta a entrega só quando existe esse protesto e retira exatamente aquela ocorrência antes da lavra. Isso preserva os demais protestos e dispensa o segundo julgamento da v5. [`ponto/supra_juiz.py:551`] [`ponto/services/cartorio.py:1264`] [`ponto/services/cartorio.py:1398`] [`ponto/services/cartorio.py:1614`]
+
+Na primeira lavra com sinal, `_impressao_normal` imprime uma vez, com o sinal efetivo. Para uma foto existente, o cartório conserva a checagem de idempotência e incrementa `pulados_foto_entregue` quando a guarda impede a relavra. As linhas 1328 e 1492 do censo ficaram nas posições exigidas pela catraca. [`ponto/services/cartorio.py:1465`] [`ponto/services/cartorio.py:1531`] [`ponto/services/cartorio.py:1546`] [`ponto/services/cartorio.py:1627`] [`core/tests/test_medida_turno_do_par.py:319`]
+
+**Seis selos**
+
+As seis asserções passaram em checagem de AST isolada, com os métodos originais dos selos. A certificação da suite pelo Code e pelo Opus final fica **[nao verificado]**. [`ponto/tests/test_o219_versao_da_regra.py:224`] [`ponto/tests/test_e3_isento_na_impressao.py:122`] [`ponto/tests/test_fnd_pergunta_a_juiza.py:137`] [`ponto/tests/test_f1c4_3_supra_pergunta_ao_juiz.py:218`] [`ponto/tests/test_tripwire_o261_gate_le_o_fio.py:61`]
+
+- **O219, dois selos, e E3**. Há duas chamadas de `impressao_insumos` no corpo. Ambas passam `regra=_regra_do_dia(...)` e `isento=_isento` explicitamente. [`ponto/services/cartorio.py:1380`] [`ponto/services/cartorio.py:1466`]
+- **FND, F1C4-3 e O261**. As duas chamadas do cartório passam `**_cadastro(...)` literal, recebem o dia diretamente de `com_insumo_dia_sem_trabalho(...)` e declaram `cobrancas_vivas=`. O censo FND mantém quatro chamadas de produção. [`ponto/services/cartorio.py:1398`] [`ponto/services/cartorio.py:1614`] [`ponto/tests/test_fnd_pergunta_a_juiza.py:171`]
+
+**RED e mutantes**
+
+Na base `650392522`, o RED falhou com `2 != 1`. Na cópia, os sete casos em memória passaram e cada um dos seis mutantes falhou na asserção prevista. Os comandos carregam a base e os mutantes em memória. [`ponto/tests/test_a_tela_v6_sem_par_memoria.py:19`] [`ponto/tests/test_a_tela_v6_sem_par_memoria.py:41`] [`ponto/tests/test_a_tela_v6_sem_par_memoria.py:150`]
+
+```bash
+alvo=ponto.tests.test_a_tela_v6_sem_par_memoria.SemParUmaVez
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest "$alvo"
+A_TELA_V6_BASE=1 PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest \
+  "$alvo.test_RED_primeira_lavra_classifica_uma_vez"
+
+mutante() {
+  A_TELA_V6_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest "$alvo.$2"
+}
+
+mutante ignora_entrega test_aberta_lavra_o_sem_par_e_imprime_o_sinal
+mutante consulta_sinal_inerte test_sinal_inerte_mantem_impressao_sem_consultar_entrega
+mutante imprime_sinal_barrado test_primeira_lavra_imprime_o_sinal_efetivo
+mutante perde_foto test_foto_anterior_continua_com_contador_proprio
+mutante marca_posicao_errada test_entregue_preserva_outro_protesto_e_retira_o_do_sem_par
+mutante pula_guarda_no_nunca_bateu test_nunca_bateu_filtra_antes_de_derivar_veredito
+```
+
+**Cobertura da v5**
+
+- Os casos B4 cobrem foto intacta, foto anterior à regra, primeira lavra sem acusação, contador na segunda passada, complemento de status, chamada avulsa e desaparecimento do sinal. [`ponto/tests/test_a_tela_v3_sem_par.py:183`] [`ponto/tests/test_a_tela_v3_sem_par.py:210`] [`ponto/tests/test_a_tela_v3_sem_par.py:233`] [`ponto/tests/test_a_tela_v3_sem_par.py:262`] [`ponto/tests/test_a_tela_v3_sem_par.py:277`] [`ponto/tests/test_a_tela_v3_sem_par.py:289`]
+- Os controles anteriores cobrem dia cheio, impressão com sinal e precedência do marco apagado. A execução Django/ORM desses testes fica **[nao verificado]**. [`ponto/tests/test_a_tela_sem_par_acusa.py:194`] [`ponto/tests/test_a_tela_sem_par_acusa.py:202`] [`ponto/tests/test_a_tela_sem_par_v2.py:143`]
 
 ## 25/11 01:58 · sessao 072ba9965760 · DXG-APPLY-33-POR-COLAB · leitura · origem=Code
 
@@ -793,53 +874,4 @@ A regra de tipo e slot generaliza para qualquer alvo avaliado, sem exceção por
 | Relógio fora da borda | O report usa `AGORA`, mas a testemunha e a releitura pós-commit chamam o juiz sem injetar `hoje` ou `agora`. O juiz pode ler o dia corrente e cada relavra toma seu próprio instante. O efeito sobre os resultados fornecidos está [nao verificado]. `apply33.py:503–517,559–566,656–662` · `app/chamados/juizes.py:633–643,729–750` · `app/ponto/services/fechamento.py:614–616,1807–1810` · `app/docs/PLANO-PADROES.md:97–103` |
 | PII na saída | O caminho de saída permanece aberto por logs, exceções e pelo motivo repassado à pauta. A proteção `0600` da foto restringe o arquivo, e o dado raspado não demonstra o conteúdo das saídas de PROD. `apply33.py:569–572,639–655` · `pauta33.py:132–133` · `reversao33.py:109–114` · `app/ponto/services/fechamento.py:1303–1308` · [nao verificado] |
 
-## 24/11 20:58 · sessao 9d3b0e34f543 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · censo · origem=Code
-
-**B1 e B3 são (a). B2 e B4 são (e).** As referências aos anexos contam a primeira linha de conteúdo como linha 1, sem o marcador `== anexo ==`. A cópia ainda mostra a âncora civil anterior à cura. Os resultados atribuídos à v5 vêm dos anexos. [motor_calculo_v2.py:1528](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/motor_calculo_v2.py:1528)
-
-| Bloqueio | Classe | Pergunta e resposta |
-|---|---|---|
-| **B1 — Dobra de feriado pela data civil** | **(a) O Codex não viu, com o tema presente** | A pergunta pede o censo de quem lê os valores alterados e pergunta se todos supõem o “MESMO significado de ‘dia’” (`verif1.q:2`). A resposta mapeia as pontas efetivas e a duração (`verif1.r:12`). Na volta 3, deixa o efeito nas “rubricas de folga ou feriado” como `[nao verificado]` (`verif3.r:24`). Ficou sem apontar que a duração recuperada pela janela entra na dobra, que usa `e.date()`, enquanto a L-085 atribui o feriado ao dia de início. O Opus registra **0 → 102,8 min** nas rubricas de HE100 de col218 (`opus_final.r:2`). A triagem pôs em fila os leitores de `fechamento.py:839/935/947` (`triagem_fila.txt:8`). A dobra apontada pelo Opus fica no motor. [motor_calculo_v2.py:2759](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/motor_calculo_v2.py:2759), [motor_calculo_v2.py:2809](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/motor_calculo_v2.py:2809), [motor_calculo_v2.py:3268](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/motor_calculo_v2.py:3268), [LEIS.md:117](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/docs/LEIS.md:117) |
-| **B2 — Competência 10 sem medida nem guarda** | **(e) Não perguntado** | A pergunta mais próxima cita `fechamento.py:839/935/947` e delimita “muda de valor na comp 11 só por causa da cura?” (`verif3.q:6`). A resposta trata de órfãos, folga e feriado nesse recorte (`verif3.r:24`). A medição da comp 10 e a guarda da relavra por evento ficaram fora das perguntas (`verif1.q:1–8`, `verif2.q:1–5`, `verif3.q:1–7`). O código permite identificar o risco em leitura estática. O evento chama o escritor da competência do fato e a guarda cadastrada na cópia cobre só a 09. O Opus lista pares candidatos na 10 e registra que a classe de col327 ficou sem medida. O impacto efetivo na 10 após deploy fica `[nao verificado]` (`opus_final.r:3`). [fechamento.py:36](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/services/fechamento.py:36), [fechamento.py:560](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/services/fechamento.py:560), [fechamento.py:1809](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/services/fechamento.py:1809) |
-| **B3 — Perda de cobertura do portão `efetivo_invertido`** | **(a) O Codex não viu, com o tema presente** | A pergunta é direta: “As inversões do test_o280 (B-P4a e gêmeo) mordem a volta?” (`verif1.q:7`). A resposta diz que mordem a volta da âncora civil e registra “zero invertidos” e “teto total de 510” (`verif1.r:50`). Ela identificou as novas expectativas e deixou passar duas perdas: o teste anterior exigia `efetivo_invertido == 1`, e conferir só a soma de 510 permite que a divisão entre atraso e antecipada varie. O Opus relata que o B-P4a era o único teste a levar o contador acima de zero. A exclusividade na suíte v5 fica `[nao verificado]` de forma independente (`opus_final.r:4`). [periodo.py:699](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/calculador/periodo.py:699), [test_o280_bateria_da_lei.py:4935](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/tests/test_o280_bateria_da_lei.py:4935), [test_o280_bateria_da_lei.py:4951](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/app/ponto/tests/test_o280_bateria_da_lei.py:4951) |
-| **B4 — Reversão da comp 11 e linha LEI-AKITA/padrão** | **(e) Não perguntado** | O trecho mais próximo pergunta “O RED morde [...]? E o caso cobre o que mudou?” (`verif3.q:4`). A resposta relata a mutação civil e deixa a “paridade após uma nova lavra” como `[nao verificado]` (`verif3.r:13`). Nenhuma das três perguntas pede o snapshot de reversão ou a linha do commit (`verif1.q:1–8`, `verif2.q:1–5`, `verif3.q:1–7`). O checklist da cópia prevê ambas as checagens. A ausência dos artefatos é o achado do Opus (`opus_final.r:5`). A existência do snapshot e o corpo do commit v5 ficam `[nao verificado]` de forma independente. [verificador.md:9](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/.claude/agents/verificador.md:9), [verificador.md:16](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/.claude/agents/verificador.md:16), [CLAUDE.md:62](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/CLAUDE.md:62), [CLAUDE.md:413](/home/ronald/codex_ws/16630e80ca2d370740c30618ec3d0948efa3d27c/CLAUDE.md:413) |
-
-## 24/11 20:22 · sessao d3a1d1afaa09 · NOTURNO-A-JANELA-NO-DIA-DO-TURNO · verificador · origem=Code
-
-### 1. Fonte da 7ª testemunha
-
-**Sim.** A v5 e a lavratura usam o mesmo campo produzido pelo motor, `resultado.dia_da_jornada`, e a mesma função, `_dia_de`. O argumento da lavratura está em `fechamento.py:1217`. O fallback também é compartilhado. Sem entrada, `_dia_de` devolve `None`. Com entrada, usa a chave `id(p)` do mapa e, se faltar mapa ou valor para a chave, usa `timezone.localtime(p.entrada).date()`. A testemunha recalcula em uma chamada própria, com `fim + 1 dia`, e compara com a lavra gravada. `app/folha/porta_export.py:73–77,106–124`, `app/ponto/services/fechamento.py:1201–1217`, `app/ponto/services/dia_pago.py:109–132,173–178`
-
-### 2. Catraca e selos
-
-**O registro bate com o censo AST das duas cópias.** Derivações **84 → 83**, B1 **81 → 80**, B2 **194 → 193**, pareadores **9 → 9**. Sai apenas `dias_fora_do_dia_pago`, na antiga linha 104. Entre os itens mantidos, só `medir` muda de **538 → 544**. `_janela_do_dia:1533` já é a linha real no v4. Composição, identidades, linhas e a lista de classificação fecham no registro v5. `app/core/medida_turno_do_par.py:394–444`, `app/core/tests/test_medida_turno_do_par.py:105–106,286,302–304,507–574`, `app/folha/porta_export.py:544`
-
-Os **35 testes da catraca** passaram em memória com `unittest`. O selo de host do MAPA-JUIZES passou com **6 famílias e 76 referências**. O ESTADO lê o censo no ato. Outro selo de contagem incorreto entre os examinados, nenhum. A suíte Django completa fica [nao verificado]. `app/core/tests/test_medida_turno_do_par.py:94–102,502–574`, `bin/tests/test_mapa_juizes.sh:21–66`, `bin/turno_do_par_estado.py:24–43,54–70`
-
-### 3. RED
-
-**Morde a volta à data civil.** Executei as funções reais em memória, com um par de 416,4 min e a lavra fornecida à testemunha. A v5 devolveu `([], None)`. A v4 e a v5 com a mutação civil devolveram duas divergências: **10/09 com 0,00 × 6,94 h** e **11/09 com 6,94 × 0,00 h**. A fixture fixa o dia pago em 10/09, cria as batidas em 11/09 e exige minutos positivos. Ela cobre a troca de chave, sem usar o mapa para escolher o dia esperado. A execução da fixture Django completa e a paridade após uma nova lavra ficam [nao verificado]. `app/folha/tests/test_porta_do_export.py:361–422`, `app/folha/porta_export.py:106–125`, `922.txt:150`
-
-### 4. Col922
-
-**Fila para o desacordo 29/10 × 27/10.** A janela usa o dia do turno. O mapa da jornada pode herdar o dia do par anterior quando o intervalo entre os pares é de até seis horas. Aqui, de 28/10 às 23:06 até 29/10 às 04:07 são **5h01**. O mapa aponta **27/10** em HEAD e v5, e a testemunha v5 e a lavratura atribuem os minutos pela mesma chave. `app/ponto/motor_calculo_v2.py:1532–1534,2403–2408,2460`, `app/ponto/services/dia_pago.py:173–178`, `app/folha/porta_export.py:106–111`, `922.txt:9–12,98–101`
-
-**A diferença frente ao gravado é real.** Com a chave da jornada aplicada aos dois lados da comparação, em HEAD os pares de 27/10 somam **20,79 h**, iguais ao `DiaPago`. A cura recupera **174,6 min**, levando o recálculo a **23,70 h**, com a lavra do anexo ainda em **20,79 h**. São **+2,91 h** detectadas contra o gravado. A linha monetária exibida lê o próprio `DiaPago`. A paridade após nova lavra e as saídas dos demais vigias ficam [nao verificado]. A 7ª testemunha publica essa diferença fora das falhas automáticas do TXT. `922.txt:9–12,27–29,98–101,116–118`, `div_head.txt:93`, `div_v4.txt:104–106`, `div_v5.txt:100`, `app/ponto/services/espelho.py:819–831`, `app/templates/ponto/espelho.html:270–276`, `app/folha/porta_export.py:693–706,768–770`
-
-### 5. Quem mais lê e o saldo da frota
-
-- **V4 → v5:** entre os leitores listados, só a 7ª testemunha troca a chave. `medir:544` ainda usa `.date()` no fuso do objeto. No caminho do motor v2, `PeriodoCalculo.entrada` já passa por `localizar`, com `America/Sao_Paulo` na configuração base. A linha 544, por si, não impõe UTC. O invariante soma trabalhado, HE e intra, e só testa o teto quando HE e intra são positivos. Mudança no alerta da comp 11 [nao verificado]. `app/folha/porta_export.py:540–569,603–607`, `app/ponto/motor_calculo_v2.py:28,73–79,2751,2878,3216`, `app/config/settings/base.py:93–95`
-- **HEAD → cura da janela:** o subtotal de `espelho:84` absorve os minutos novos se receber os pares da sonda dentro do recorte. `espelho:440` conta períodos e abertos, sem usar os minutos. O topo da competência ainda pode assumir os totais gravados. O efeito efetivo na tela, no atraso após crédito parcial, no subtotal de órfãos e nas rubricas de folga ou feriado fica [nao verificado]. Os anexos não trazem os resultados desses leitores. `app/ponto/services/espelho.py:82–98,435–455,1315–1320`, `app/relatorios/cartao_pela_celula.py:320–346`, `app/ponto/services/credito_parcial.py:32–61`, `app/ponto/services/fechamento.py:827–843,933–955,994–1001`, `922.txt:5–21,94–110`
-- **Os números batem.** HEAD tem **109** linhas, v4 **121** e v5 **113**. HEAD × v5 tem **101 linhas idênticas, +12 e −8**. Por chave `(colab, dia)`, são **+11, −7 e uma linha alterada**, col922 em 27/10. V4 × v5 tem **104 linhas idênticas, +9 e −17**. Os movimentos são compatíveis com reagrupar pela jornada e só publicar dias cuja diferença passa de **0,02 h**. Em col382, por exemplo, o excedente de **6,94 h** sai de 11/11 e aparece em 10/11, o dia do mapa na sonda. `div_head.txt:1–109`, `div_v4.txt:1–121`, `div_v5.txt:1–113`, `922.txt:61–62,150–151`, `app/folha/porta_export.py:106–124`
-
-### 6. Classes do delta
-
-| Classe | Veredito |
-|---|---|
-| 2º juiz | **Zero novos.** A testemunha lê o mapa e compara com a lavra. `app/folha/porta_export.py:73–77,106–125` |
-| Derivação paralela | **Uma removida** na 7ª testemunha. O agrupamento por data em `medir:544` segue como leitor distinto. `div_v4.txt:51`, `div_v5.txt:49`, `app/folha/porta_export.py:106–111,540–550` |
-| Selo sem mordida | **O RED novo morde** a regressão civil na execução isolada. `app/folha/tests/test_porta_do_export.py:397–422` |
-| Campo com dois significados | **Zero novos.** `j['dia']` continua sendo o dia resolvido da janela, com origem no juiz ou no fallback civil. `resultado.dia_da_jornada` pode carregar a herança usada na atribuição da jornada. `app/ponto/motor_calculo_v2.py:1532–1534,1644–1651,2403–2408,2460` |
-| `except` novo | **Zero.** O AST de `porta_export.py` deu **13 → 13**, e os dois tratamentos da testemunha continuam nos mesmos ramos. `app/folha/porta_export.py:76–99`, `delta_v4_v5.diff`, destinos `app/folha/porta_export.py:65–111` e `app/folha/tests/test_porta_do_export.py:361–423` |
-
-_8120 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8122 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
