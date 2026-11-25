@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 05:55:28.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1306**.
+**Medido em 25/11/2026 06:01:42.** Transcript: `2e269e95-e4b0-4d3c-ad88-afa58d6897e8.jsonl` (80.0 MB). Acoes na janela: **1299**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -1309,10 +1309,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:03:32 | Bash | Record equivalent DXG aval | `cd ~/saas-hasner; cat > logs/AVAIS-1515/dxg_apply_dentro_do_slot_1805.txt <<'EOF' aval Ronald: DXG-APPLY-DENTRO-DO-SLOT (24/11 18:05) -- substitui inteiro o DXG-APPLY-66. ! aplicar pelas portas so as trocas que ficam dentro do slot do juiz depois da troca (a tua medida: 55); as demais vao a lista do admin, sem mudar hora. DIFF do subconjunto na sombra antes; comps 09/10 hash igual; reversao em log ...` |
 | 18:01:50 | Bash | Record DESPACHO line | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') L.insert(0,"DESPACHO DXG-APPLY-55 + NOTURNO-A-V4-AMPLIA (18:05): DXG -> agente do DIFF v2 refaz na sombra so as 55 (porta/v3_55/), prepara reversao e acha a porta da lista do admin para as 29; apply em prod so depois do DIFF lido \| NOTURNO-A -> construtor na wt-noturno-v4-175246, cura janela_he.py:94 + motor  ...` |
 | 18:01:46 | SendMessage |  | `-` |
-| 18:01:35 | SendMessage |  | `-` |
-| 18:01:21 | Bash | Record NOTURNO amplia aval | `cd ~/saas-hasner; cat > logs/AVAIS-1515/noturno_a_v4_amplia_1805.txt <<'EOF' aval Ronald: NOTURNO-A-V4-AMPLIA (24/11 18:05) -- ! ampliado: o marco passa a cair no dia do turno que o juiz ja da (L-085), em janela_he.py:94 e motor_calculo_v2 :1541-1560; a regra segue morando so no janela_he. PRONTO: DIFF da comp 11 inteira na sombra; "muda" = qualquer rubrica, trabalhado ou minuto fora da janela; po ...` |
-| 18:01:12 | Bash | Record aval and build 55/29 lists | `cd ~/saas-hasner; cat > logs/AVAIS-1515/dxg_apply_55_1805.txt <<'EOF' aval Ronald: DXG-APPLY-55 (24/11 18:05) -- substitui inteiro o DXG-APPLY-66. ! aplicar pelas portas so as 55 que ficam dentro do slot do juiz depois da troca; as 11 que seguem fora e as 18 que sairiam vao a lista do admin (29), sem mudar hora. DIFF do subconjunto na sombra antes; comps 09/10 hash igual; reversao em logs/; prova  ...` |
-| 17:56:30 | Bash | Record NOTURNO-A v4 PAREI | `cd ~/saas-hasner/app/docs; python3 - <<'EOF' p='RELATO.md'; L=open(p).read().split('\n') k=[n for n,l in enumerate(L) if l.startswith('DESPACHO NOTURNO-A-CONTRATO-V4')][0] L[k]=("PAREI: ! NOTURNO-A-V4-1528-NAO-ALCANCA \| espera Ronald -- aval NOTURNO-A-CONTRATO-V4 (17:50) limita o ! a motor_calculo_v2.py:1528, e ali `dia` so escolhe o CADASTRO do dia (hi/hf, empresa, decisao de HE); " "a data em q ...` |
-| 17:56:16 | Bash | Find marco_no_dia call in entrada_efetiva | `cd ~/saas-hasner/app; grep -n 'def entrada_efetiva' ponto/janela_he.py; awk '/def entrada_efetiva/{f=1} f&&/marco_no_dia/{print NR": "$0; exit}' ponto/janela_he.py` |
-| 17:56:14 | Bash | Confirm marco_no_dia path | `cd ~/saas-hasner/app; sed -n 1676,1710p ponto/motor_calculo_v2.py \| grep -n 'entrada_efetiva\\|hi' \| head -5; grep -n 'def entrada_efetiva' -A15 ponto/janela_he.py \| grep 'marco_no_dia'` |
-| 17:56:11 | Bash | Verify builder's claims | `cd ~/saas-hasner/app; grep -n 'def entrada_efetiva' -A12 ponto/janela_he.py \| grep -n 'marco_no_dia' ; grep -n "_entrada_efetiva\\|marco_no_dia\\|_ate_o_marco(entrada" ponto/motor_calculo_v2.py \| head; cat ../logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4/experimento_1528.patch \| grep '^[+-][^+-]'; grep -E '^(OK\|FAILED)' ../logs/NOTURNO-A-JANELA-NO-DIA-DO-TURNO/v4/experimento_1528.log \| tail -1` |
