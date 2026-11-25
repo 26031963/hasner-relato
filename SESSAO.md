@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 17:17:36.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (2.7 MB). Acoes na janela: **91**.
+**Medido em 25/11/2026 17:23:45.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (2.8 MB). Acoes na janela: **96**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:19:11 | Bash |  | `s=$(( $(date -d '18:00' +%s) - $(date +%s) )); [ $s -gt 0 ] && /usr/bin/sleep $s; date '+%H:%M'` |
+| 17:19:08 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/WRAPPER-N-VAGAS/v13; cat > logs/WRAPPER-N-VAGAS/v13/brief.md <<'EOF' # WRAPPER-N-VAGAS volta 13 -- brief do construtor (opus), sai as 18:00 (QUEIMA-FINAL-1800-2511) Obra: WRAPPER-N-VAGAS (instrumento; pouso proprio; aval WRAPPER-PRIMEIRO-2511 + WRAPPER-MODELO-DE-AMEACA-2511 em logs/WRAPPER-N-VAGAS/verif_v11/aval_modelo.txt). Regra do aval, literal: dentro ...` |
+| 17:18:43 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/WRAPPER-N-VAGAS/HANDBACK-1625.md \| head -40 \| cut -c1-250` |
+| 17:18:38 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/WRAPPER-N-VAGAS/opus_v12; cat > logs/WRAPPER-N-VAGAS/opus_v12/veredito.md <<'EOF' # opus verificador (escalonamento CODEX 5(d)) sobre a volta 12 -- 25/11 17:1x -- REPROVA Diff real da obra: ab351aa9b..37b4a957a (merge-base; 13 arquivos +1788/-56). 160173bb1..37b4a957a desfaz 308 commits do main. 1. Triagem v12: os 3 NOVO-DENTRO procedem. "mesma wt" NAO e  ...` |
+| 17:18:13 | Bash |  | `date '+%H:%M'; cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/ \| tail -5; git -C /home/ronald/wt-wrapper-n-vagas-125229 merge-base HEAD 160173bb1` |
 | 17:15:05 | Bash |  | `cd /home/ronald/saas-hasner; bin/suite.sh --dir /home/ronald/wt-guarda10b-154425 --only "core.tests.test_medida_turno_do_par" > logs/GUARDA-10-B/catraca.log 2>&1; echo "rc=$?" >> logs/GUARDA-10-B/catraca.log; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/GUARDA-10-B/catraca.log \| tail -3` |
 | 17:14:59 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'only' bin/suite.sh \| head -8; bin/trava_teste.sh --quem` |
 | 17:14:55 | Bash |  | `cd /home/ronald/wt-guarda10b-154425/app; python3 - <<'EOF' import re p='core/tests/test_medida_turno_do_par.py' s=open(p).read() def fix(m): nums=[int(x) for x in m.group(2).split(',')] nums=[n+11 if n>40 else n for n in nums] return m.group(1)+', '.join(map(str,nums))+']' s2,n=re.subn(r"(\('ponto/services/fechamento\.py::[a-z_]+', 'B1'\): \[)([0-9, ]+)\]",fix,s) print(n) open(p,'w').write(s2) EOF ...` |
