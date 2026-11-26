@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 08:06:16.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **587**.
+**Medido em 26/11/2026 08:12:27.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **582**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -592,8 +592,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:25:54 | Bash |  | `cd /home/ronald/saas-hasner; wc -c logs/PARCIAL-BORDA-SEMIABERTA/verif1.r; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(1,'lei: PARCIAL-BORDA marco PREVISTO na borda (20:4x) -- o juiz periodo_da_parcial_no_dia tambem decide a DISPENSA do marco previsto (escala/utils.py:1253-1261, comentario :1249 "bordas inclusivas"); semiaberta pura faz E 13:00/S 17:00 de period ...` |
 | 20:25:47 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1244,1262p app/escala/utils.py; ls -la logs/PARCIAL-BORDA-SEMIABERTA/codex/ 2>/dev/null \| tail -5; ls logs/PARCIAL-BORDA-SEMIABERTA/ \| head -40` |
 | 20:15:42 | Bash |  | `cd /home/ronald/saas-hasner; ssh pista estado 2>&1 \| grep -E '5903\|0135'; ls logs/WRAPPER-N-VAGAS/v13/*.fim 2>/dev/null \| tail -3; ls -la logs/WRAPPER-N-VAGAS/v13/HANDBACK.md 2>&1 \| cut -c1-120` |
-| 20:07:06 | Bash |  | `cd /home/ronald/saas-hasner; echo "aval Ronald: WRAPPER-V13-SELO-DESTACADO-2511 (25/11 20:1x) -- morte v13 19:20 nao foi OOM; Killed sao do test_codex_n_vagas.sh:199 (titular morto), Terminated cortou a rodada presa ao agente. Construtor novo roda toda rodada de selo destacada (setsid + log + .fim em logs/WRAPPER-N-VAGAS/v13/), le depois; HANDBACK da v13 a cada marco." > logs/AVAIS-1515/WRAPPER-V1 ...` |
-| 20:07:00 | SendMessage |  | `-` |
-| 20:06:55 | ToolSearch |  | `-` |
-| 20:06:44 | Bash |  | `cd /home/ronald/saas-hasner; sleep 3; pgrep -f 'pista_certifica_par.sh 1125195218' \|\| echo watcher_saiu; tail -2 logs/GUARDA-10-B/vs_pouso/pouso.certifica 2>/dev/null; echo "\| 25/11 20:0x \| PISTA-CANCELA-SOBRA-2511 \| ssh pista cancela 1125195218_c5ad6261 (rodada so da GUARDA superada pelo comboio) para liberar a vaga 2 \| GUARDA-10-B \|" >> app/docs/PROMPTS.md; python3 - <<'EOF' p='app/docs/R ...` |
-| 20:06:30 | Bash |  | `cd /home/ronald/saas-hasner; echo "aval Ronald: PISTA-CANCELA-SOBRA-2511 (25/11 20:0x) -- ssh pista cancela 1125195218_c5ad6261 (rodada so da GUARDA, superada pelo comboio 1125200135); cancelar ja para liberar a vaga 2." > logs/AVAIS-1515/PISTA-CANCELA-SOBRA-2511.txt; ssh pista cancela 1125195218_c5ad6261 2>&1 \| tail -3; echo rc=$?; sleep 5; ssh pista estado 2>&1 \| grep -E '5218\|5903\|0135'` |
