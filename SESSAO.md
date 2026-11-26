@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 09:34:45.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (10.1 MB). Acoes na janela: **282**.
+**Medido em 26/11/2026 09:41:04.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (10.1 MB). Acoes na janela: **283**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:38:03 | Bash | Attribute ssh calls to selos | `cd /home/ronald/wt-suite-rota-092914; SP=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/spy; for t in test_suite_motivo test_suite_sh test_suite_uma_vez_por_arvore test_montagem_vem_do_arvore_do_push; do rm -f $SP/calls; PATH=$SP:$PATH timeout 600 bash bin/tests/$t.sh >/dev/null 2>&1; echo "$t $(wc -l < $SP/calls 2>/dev/null \|\| echo 0)"; done; grep -rln ...` |
 | 09:31:39 | Bash | Run neighbor selos with spy ssh | `cd /home/ronald/wt-suite-rota-092914; SP=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/spy; mkdir -p $SP; printf '#!/usr/bin/env bash\necho "$*" >> %s/calls\nexit 255\n' $SP > $SP/ssh; chmod +x $SP/ssh; rm -f $SP/calls; for t in test_suite_motivo test_suite_sh test_suite_uma_vez_por_arvore test_montagem_vem_do_arvore_do_push test_suite_roteia_pista; do P ...` |
 | 09:31:22 | Bash | Make copy tests real and rerun | `cd /home/ronald/wt-suite-rota-092914; sed -i "s\| printf 'x = 1\\\\n' > \"\$1/app/appA/tests/test_x.py\"\| printf 'def test_a():\\\\n pass\\\\n' > \"\$1/app/appA/tests/test_x.py\"\|; s\|printf 'x = 1\\\\n' > \"\$1/app/appB/tests/test_y.py\"\|printf 'def test_b():\\\\n pass\\\\n' > \"\$1/app/appB/tests/test_y.py\"\|" bin/tests/test_suite_roteia_pista.sh; grep -n "test_[xy].py" bin/tests/test_suite_ ...` |
 | 09:31:15 | Bash | Read full-suite guard logic | `cd /home/ronald/wt-suite-rota-092914; grep -n "_suite_inteira" -B2 -A25 bin/suite.sh \| sed -n 1,60p` |
