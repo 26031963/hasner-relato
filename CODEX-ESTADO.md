@@ -1,7 +1,132 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 17:25** · publicado em **26/11/2026 17:25** (UTC-3)
+> Ultima resposta processada: **26/11/2026 17:30** · publicado em **26/11/2026 17:31** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 17:30 · sessao 0d996969111a · O30-F3-CONSTRUIR · construtor · origem=Code
+
+A c10 está na cópia. `_foto_no_pdf` chama `original.load()` dentro do `with Image.open` e do `try` existente. `_reabrir` emite o aviso de possível anexo órfão quando há falha após gravar o anexo e a conexão ainda está em `atomic` externo. [atestados_lote.py:147] [ausencia.py:1434]
+
+### RED → GREEN
+
+Execute em `app/` com `PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 <caso>`. `green_c10` passou os quatro testes focados. O módulo de contrato passou 33 testes locais, excluído o PDF real. `selos` passou 14. A certificação fica com o Code e o opus final. [mutantes_atestado_f3.py:373] [test_atestado_f3_contrato.py:1] [nao verificado]
+
+| Caso | Resultado local |
+|---|---|
+| `red_c9_pdf_try` | RED na base c9 pela ausência de `original.load()`. [test_atestado_f3_contrato.py:228] |
+| `c10_pdf_sem_load_transpose_fora_do_try` | RED com `OSError: truncado` escapando no teste simulado. [mutantes_atestado_f3.py:120] [test_atestado_f3_contrato.py:801] | [nao verificado]
+| `c10_pdf_thumbnail_no_try` | RED no selo AST quando `thumbnail` entra no `try`. [mutantes_atestado_f3.py:126] [test_atestado_f3_contrato.py:228] |
+| `c10_pdf_marca_duplicada` e `c9_pdf_engole_sem_contar` | RED com duas marcas no primeiro mutante e rodapé `0` para uma marca no segundo. [mutantes_atestado_f3.py:131] [test_atestado_f3_contrato.py:809] |
+| `red_c9_reabrir_aviso_sucesso` e `c10_reabrir_aviso_no_finally` | RED no `assertNoLogs` pelo aviso após sucesso. [mutantes_atestado_f3.py:93] [mutantes_atestado_f3.py:134] [test_atestado_f3_contrato.py:503] |
+| `c10_reabrir_sem_aviso_na_falha` | RED no `assertLogs` pela ausência do aviso na falha. [mutantes_atestado_f3.py:137] [test_atestado_f3_contrato.py:515] |
+
+**PDF real [nao verificado].** `green_c10_pdf_real` e `c10_pdf_real_sem_load_transpose_fora_do_try` pararam no import de `PIL` nesta cópia. Os dois comandos ficam para o container da suíte. O teste gera um JPEG, corta os bytes pela metade, exige que `Image.open` abra e que `load()` levante `OSError`, e confere uma marca `ANEXO ILEGIVEL #21`, rodapé `1` e a foto boa no PDF. [test_atestado_f3_contrato.py:821] [mutantes_atestado_f3.py:123] [mutantes_atestado_f3.py:389] [nao verificado]
+
+### Diff e censo
+
+`git diff --name-only 1e4723516 -- app/` listou os quatro arquivos abaixo. `git diff --check` passou. A contagem é por AST, de `1e4723516` para c10. [test_atestado_f3_contrato.py:49]
+
+| Arquivo | `ExceptHandler` | `with suppress` |
+|---|---:|---:|
+| `app/ponto/services/atestados_lote.py` [atestados_lote.py:147] | 3 → 3 | 0 → 0 |
+| `app/ponto/services/ausencia.py` [ausencia.py:1434] | 13 → 13 | 0 → 0 |
+| `app/ponto/tests/mutantes_atestado_f3.py` [mutantes_atestado_f3.py:119] | 0 → 0 | 0 → 0 |
+| `app/ponto/tests/test_atestado_f3_contrato.py` [test_atestado_f3_contrato.py:228] | 0 → 0 | 0 → 0 |
+
+- **Leitores.** A rota do PDF chega a `views_atestado.lote_atestados`, que chama `pdf_bytes`. O lote lê o documento e os seis campos. `views.py` serve o documento da raiz, o painel exibe o anexo e os campos, e `anexar_atestado` coleta os valores do formulário. [relatorios/urls.py:17] [views_atestado.py:136] [atestados_lote.py:161] [atestados_lote.py:205] [views.py:2147] [painel_ausencia.html:71] [painel_ausencia.html:95] [views_atestado.py:29]
+- **Escritores.** A catraca identifica `criar_ausencia` e `_gravar_dados_atestado` como os escritores dos seis campos. `_reabrir` grava documento, descrição e prazo e delega a transição de estado a `mudar_estado`. `anexar_documento` grava o documento e chama a porta dos seis campos. `_apagar_anexo_escrito_agora` executa a remoção. [test_atestado_f3_contrato.py:74] [test_atestado_f3_contrato.py:169] [ausencia.py:317] [ausencia.py:567] [ausencia.py:1114] [ausencia.py:1411] [ausencia.py:241]
+- **Fora do escopo.** B1b, B2a, B2c, B5 e INSS seguem em fila, assim como o possível órfão no rollback posterior do `atomic` externo, o nome anterior defasado, a corrida entre `.exists()` e `storage.delete`, o erro em `documento.open('rb')` e a cópia via `DadosAtestadoForm.base_fields`. Banco e produção ficam [nao verificado]. [views.py:2569] [ausencia.py:256] [ausencia.py:262] [atestados_lote.py:171] [forms.py:13]
+
+**Mensagem de commit sugerida** [atestados_lote.py:149] [ausencia.py:1434] [nao verificado]
+
+```text
+OBRA: O30-F3-CONSTRUIR
+LEI-AKITA: padrao=escritor unico
+
+Explicita a decodificação no PDF e limita o aviso de órfão à falha da reabertura.
+```
+
+## 26/11 17:26 · sessao 2ad7899ff274 · ABONO-X-SAIDA-ANTECIPADA · verificador · origem=Code
+
+**Veredito da volta c1e — reprova.** O diff do motor respeita os sítios autorizados, mas a parcial e o pareador podem dar dias diferentes ao mesmo intervalo. A lista também pode publicar `0/30` para uma ausência que já abateu 30 minutos na jornada. A ordem de invalidação pode inverter a aquisição das travas de fechamento. `app/ponto/services/credito_parcial.py:100–114` · `app/ponto/turnos.py:257–260,1310–1314` · `app/ponto/motor_calculo_v2.py:1237–1293` · `app/ponto/services/ausencia.py:183–205` · `app/ponto/services/fechamento.py:1672–1680`
+
+Os oito blobs da cópia conferem com os índices finais do diff anexado. A cópia veio sem metadados Git, portanto a identidade do objeto do commit e a sequência dos commits ficam **[nao verificado]**. Os contraexemplos abaixo são de código ou de execução sintética em memória. Incidência em produção **[nao verificado]**. [nao verificado]
+
+### 1. Escopo do `!` — nada
+
+No diff fornecido, o motor muda em dois sítios, `_minutos_da_ponta_cobertos` e o bloco da parcial em `_aplicar_teto_pontualidade`. `_parciais_do_dia` já consulta a porta cujo significado mudou. Seu corpo ficou igual no diff. `app/ponto/motor_calculo_v2.py:453–485,1222–1305,1344–1361`
+
+### 2. Escritores, leitores e unidades — média
+
+| Campo ou retorno | Quem escreve e quem lê |
+|---|---|
+| Chave de `parciais_com_ponta_por_dia` | `credito_parcial` primeiro reúne ausências pela data civil `a.data`, depois escreve `{dia_da_jornada: [Ausencia]}`. O motor lê `.get(dia)` e memoiza por `(colaborador, dia)`. `rubricas_por_dia` lê `.get(k)` e passa a lista ao contexto do teto. Os testes também leem a chave diretamente. `app/ponto/services/credito_parcial.py:15–32,62–81` · `app/ponto/motor_calculo_v2.py:1344–1361` · `app/ponto/calculador/alimentacao.py:510–539` · `app/ponto/calculador/regras.py:117–127` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:380–392` |
+| `dia`, `ini_min`, `fim_min`, `adiante` | O teto agrupa pelo mapa recebido e passa `dia` como a **data da jornada**. As pontas são minutos de relógio desde a meia-noite local desse dia, com fração pelos segundos das batidas. O leitor `_minutos_da_ponta_cobertos` traduz cada minuto para a meia-noite civil de `a.data` e consulta o juiz do período por meio de `batida_dentro_da_parcial`. As chamadas efetivas usam `adiante=0`, por default. A simulação da lista usa `1`, em **dias civis**, traduzido em 1.440 minutos. Os demais chamadores diretos são os testes. `app/ponto/motor_calculo_v2.py:453–485,1132–1138,1233–1277` · `app/ponto/turnos.py:2683–2692,2714–2723` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:438–467` |
+| `dia`, `causa` | O teto grava a data da jornada e o texto da causa. Nesse ramo a data também coincide com `a.data` por exigência da guarda. A deduplicação lê `dia`. E6 projeta o campo em conjunto de dias. A lavra grava `data` ISO, recorta a competência e conta `causa`. `janela_he` e o resumo do espelho filtram por causa. O fechamento concatena o item inteiro. Os diffs leem a lista, com o problema de classificação do item 6. `app/ponto/motor_calculo_v2.py:1267–1293` · `app/ponto/management/commands/e6_oraculo.py:162–172` · `app/ponto/services/cxr_na_lista.py:84–127,168–187` · `app/ponto/janela_he.py:324–329` · `app/ponto/services/espelho.py:748–755,1295–1297` · `app/ponto/services/fechamento.py:116–117,314–317` |
+| `ausencia_id`, `ponta`, `periodo`, os dois `abate_*_min` | O teto grava o PK da ausência, a rubrica da ponta, `HH:MM-HH:MM` do cadastro e dois inteiros em minutos de relógio. A deduplicação lê PK e ponta. A lavra copia os cinco campos, preservando os inteiros, e `_cxr_do_motor` os converte em texto. HTML e PDF leem `detalhe`. O calculador também transporta o item em `Rubricas.detalhe['cadastro_x_realidade']`. `DiaPago.lavrar` consome as rubricas, sem copiar esse detalhe. Os testes leem os campos no resultado e na lavra e verificam o texto da C12. `app/ponto/motor_calculo_v2.py:1285–1293` · `app/ponto/services/cxr_na_lista.py:32–47,87–92` · `app/escala/services/cadastro_realidade.py:455–469,1323–1332` · `app/templates/escala/cadastro_x_realidade.html:31` · `app/ponto/calculador/regras.py:281–285,865–884` · `app/ponto/services/dia_pago.py:322–333` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:307–334` |
+| Retorno de `vespera_do_cadastro` | A função extrai `(hi, hf)` do DNA da véspera ou das duas bordas do template, ou devolve `None`. São horários locais de cadastro. Os dois leitores são `_vespera`, que passa a resposta a `_mk`/`_data_do_turno`, e `dia_da_jornada_da_parcial`, que passa a resposta diretamente a `_data_do_turno`. O juiz transforma as bordas em comparações com instantes. `app/ponto/turnos.py:216–231,248–260,300–338,1310–1314,1501–1508` · `app/ponto/services/credito_parcial.py:102–114` |
+| Retorno de `dia_da_jornada_da_parcial` | `_data_do_turno` escreve a resposta, uma `date` local igual ao dia civil do início ou à véspera. O mapa de parciais usa essa data como chave. `_acordar_projecao` usa a menor data entre ela e a borda civil para invalidar o intervalo. O teste da véspera lê o retorno diretamente. `app/ponto/turnos.py:300–324` · `app/ponto/services/credito_parcial.py:74–80,100–114` · `app/ponto/services/ausencia.py:192–205` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:380–392` |
+
+**Fuso e significado.** A medição da ponta usa o fuso fixo de `settings.TIME_ZONE`. A construção dos instantes e o juiz usam o fuso corrente do Django. O padrão é `America/Sao_Paulo`. A igualdade depende do fuso ativo ser o mesmo. Os dois nomes de abatimento sugerem efeito monetário, mas os números medem sobreposição bruta, conforme o item 9. `app/ponto/motor_calculo_v2.py:28,73–79,1236–1255,1273–1292` · `app/ponto/services/credito_parcial.py:109–114` · `app/ponto/turnos.py:45–48,314` · `app/config/settings/base.py:93–95`
+
+### 3. Juiz e carga — alta
+
+**A decisão do dia é toda de `_data_do_turno`.** O adaptador monta início e fim e devolve diretamente a resposta do juiz. Ele próprio repete a conversão `HH:MM` e a virada `fim < início`, que já existem no juiz do período. A decisão de dia continua única. A derivação da virada tem duas implementações. `app/ponto/services/credito_parcial.py:108–114` · `app/ponto/turnos.py:300–324,2683–2689` · `app/core/juizes.py:216,266–277`
+
+**A carga pode mudar a resposta.** A parcial carrega o vínculo do dia civil e lê o DNA direto numa janela em torno desse dia. `_turnos_do_juiz` usa o template recebido ou o da instância e o mapa de células da janela ou da fatia. `turnos_de_batidas` ainda copia as batidas e marca ecos. Com template `19:00–07:00`, sem DNA na janela curta e com DNA apenas em outro dia da janela longa, `01:00–03:00` pode cair na véspera pela carga curta e no dia civil pela longa. O mapa longo é não vazio e, sem a chave da véspera, devolve `None`. Uma troca de vínculo na borda também pode mudar o template e a decisão de consultar DNA. `app/ponto/services/credito_parcial.py:100–107` · `app/ponto/motor_calculo_v2.py:902–917` · `app/escala/utils.py:84–108` · `app/ponto/turnos.py:257–260,300–324,1529–1547,1846–1859` · `app/ponto/services/fechamento.py:291–311`
+
+**A diferença de fatos também muda o dia.** O pareador veta a véspera quando já atribuiu a ela um turno encerrado naquele dia. O teste existente fixa `16:00–20:00` em D e `03:00–07:30` em D+1, com template `19:00–10:00`, e mantém o segundo par em D+1. Uma parcial sintética com os horários do segundo par, sob o mesmo template e sem DNA, recebe D pela consulta direta de cadastro. `app/ponto/turnos.py:216–231,314–324,1268–1278,1310–1314` · `app/ponto/services/credito_parcial.py:107–114` · `app/ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py:33–36`
+
+### 4. Extração de `_vespera` — nada
+
+Para o pareador, a extração preserva referência pela entrada ou saída, cálculo da véspera local, veto pelo turno já pareado e os mesmos dois ramos de cadastro. `_bm_all` continua chegando com os valores vazios retirados. Mapa presente sem a véspera continua devolvendo `None`. `app/ponto/turnos.py:248–260,1233–1239,1268–1278,1310–1314` · `app/ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py:33–45`
+
+### 5. Chave dos leitores e bordas da competência — alta
+
+- **O mapa novo resolve as duas bordas dentro do seu próprio contrato.** Lê datas civis até `fim+1`, depois filtra pela jornada. `ini` atribuída a `ini−1` sai do recorte corrente e pode entrar no anterior. `fim+1` atribuída a `fim` entra no recorte corrente. A parcial entra em uma chave, e o crédito de atraso exclui as parciais com período. Isso evita dupla contagem entre o teto e esse crédito. A aprovação invalida a competência da jornada e a civil, zerando o carimbo existente. `app/ponto/services/credito_parcial.py:46–50,62–81` · `app/ponto/turnos.py:300–324` · `app/ponto/services/ausencia.py:186–205,1133–1134` · `app/ponto/services/fechamento.py:1672–1680`
+- **Motor e calculador pedem a mesma espécie de chave, mas o motor pode mudar seu valor entre passadas.** A base pode herdar o dia por um gap de até seis horas. Partido e comercial montam outro mapa a partir do juiz, e o calculador usa o mapa final. Se só o dia mudar, `_pontas_parcial` pode pular o novo julgamento porque guarda apenas atraso e saída. Assim, o abatimento pode ficar da primeira chave enquanto o período passa a outra. `app/ponto/motor_calculo_v2.py:1125–1127,1237–1241,1338–1342,2558–2567,3093–3104,3357,3488–3490,3671` · `app/ponto/calculador/alimentacao.py:239–262,510–539`
+- **Grade, espelho e PDF ainda têm leituras civis da parcial com período.** A grade procura a cobertura por `a.data`, então pode classificar batidas e dispensar marcos na linha D+1 enquanto o teto abate a ponta em D. A ata recebe essa classificação. O ícone e a cobertura do espelho ficam na linha civil, e o E6 pula a linha marcada com ausência. No PDF, `efeitos_da_ausencia` soma `a.minutos` na data civil no resumo bruto, que pode ser substituído pelo gravado. O fechamento e o `DiaPago` também recebem o abono da grade, calculado como previsto menos coberto na linha de ausência. São efeitos que podem cair em duas competências. Isso, por si, não prova desconto abatido duas vezes. `app/ponto/turnos.py:2849–2851,2868–2879` · `app/escala/utils.py:1230–1233,1246–1252,1272–1295` · `app/ponto/services/cartorio.py:782–790` · `app/ponto/services/espelho.py:593–602,863–890` · `app/ponto/management/commands/e6_oraculo.py:339–341` · `app/ponto/services/efeito_ausencia.py:46–50` · `app/relatorios/pdf_espelho.py:332–336,479,628` · `app/relatorios/cartao_pela_celula.py:320–346` · `app/ponto/services/fechamento.py:1084–1088` · `app/ponto/services/dia_pago.py:386–401`
+- **`DiaPago` pode gravar atraso residual fora da competência da jornada.** O fechamento recebe a pontualidade já abatida, mas `atraso_por_dia` agrupa pelo dia civil da entrada. `DiaPago` usa esse mapa para atraso e o dia da jornada para saída. Uma entrada de madrugada atribuída pelo motor à véspera pode, assim, deixar atraso residual em `fim+1` numa linha gravada para a competência de `fim`. A gravação aceita a chave sem recortar de novo. O oráculo de rubricas usa a jornada e substitui valores por suas próprias chaves. `app/ponto/services/fechamento.py:1018–1026,1224–1241,1293–1312` · `app/ponto/services/credito_parcial.py:117–131` · `app/ponto/services/dia_pago.py:173–195,322–330,340–360`
+
+### 6. Publicação e leitores da lista — alta
+
+- **Pode publicar parcial que já abateu.** `_pontas` nasce no laço de cada par. Reproduzi em memória uma jornada com dois pares e parcial D `06:30–19:30`. Ela eliminou 30 minutos de atraso do primeiro par e gerou `0/30` na saída antecipada do segundo. O filtro vê somente o segundo par quando decide publicar. Também há omissão pelo filtro: se o juiz mandar a parcial datada D para D−1, o laço de D nunca a examina para o relato de D. `app/ponto/motor_calculo_v2.py:1237–1293` · `app/ponto/services/credito_parcial.py:74–80` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:344–351,380–392`
+- **A mesma instância deduplica por `(dia, ausência, ponta)`, mantendo o primeiro número.** Uma passada posterior pode reescrever a ponta, como faz a Zona 5, sem atualizar ou retirar a linha publicada na primeira. A composição concatena as listas das fatias. Na lavra, só dicionários inteiramente iguais são deduplicados. Duplicação efetiva entre fatias em produção **[nao verificado]**. O calculador usa seu próprio contexto e devolve o relato em `Rubricas.detalhe`. Já a rota de `Censo.cxr` chama a pontualidade sem `parciais=`. `app/ponto/motor_calculo_v2.py:1282–1293,2442,2877–2878,3235–3242,3357,3671` · `app/ponto/services/fechamento.py:314–317` · `app/ponto/services/cxr_na_lista.py:107–113` · `app/ponto/calculador/regras.py:281–285,865–876` · `app/ponto/calculador/periodo.py:474–477,786–793`
+- **Os leitores aceitam a forma nova com efeitos diferentes.** `janela_he` e o resumo de HE do espelho excluem a nova causa corretamente. E6 e `cxr_lavrado` projetam presença por dia. O dono continua sendo decidido por dia, e `BATIDA` pode vencer a presença na lista. A C12 preserva os dois números, mas a legenda afirma que o horário real ficou longe do cadastrado e a ação encaminha para template ou vínculo, embora o item descreva a data da ausência. `app/ponto/janela_he.py:324–329` · `app/ponto/services/espelho.py:1295–1297,1330–1331` · `app/ponto/management/commands/e6_oraculo.py:98–110,162–172,182–195` · `app/ponto/services/cxr_na_lista.py:168–187` · `app/escala/services/cadastro_realidade.py:133–134,455–469,783–787,1105–1123`
+- **Os dois diffs classificados como L-084 ficam semanticamente errados.** `diff_janela_he` conta qualquer item como fora da janela pela L-084. `diff_reclassificar_partido` conta qualquer item como dia-colab que deixou de gerar desconto pela L-084 e pode imprimir deltas `None` quando a amostra é o item novo. `app/ponto/management/commands/diff_janela_he.py:63–70,131–134` · `app/ponto/management/commands/diff_reclassificar_partido.py:186–190,259–273`
+
+### 7. Classes de reprovação
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz registrado | **Nada para o dia.** O adaptador chama `_data_do_turno`. A diferença está na carga. `app/docs/JUIZES.md:10–12,19–25` · `app/core/juizes.py:216` · `app/ponto/services/credito_parcial.py:100–114` |
+| Segundo escritor fora da porta | **Nada.** O período segue escrito por `decidir`, a invalidação segue pela porta existente e a C12 segue gravada pela lavra existente. `app/ponto/services/ausencia.py:1061–1064,1089–1091,1111–1114,1133–1134` · `app/ponto/services/fechamento.py:1672–1680` · `app/ponto/services/cxr_na_lista.py:145–152` |
+| Relógio fora da borda | **Nada novo.** A leitura de `localdate()` da linha em aberto antecede o diff. O comando continua lendo `agora` na borda. `app/ponto/services/ausencia.py:189–193` · `app/ponto/management/commands/lavrar_cxr_do_motor.py:27–32` |
+| Derivação paralela | **Alta.** Há segunda carga de template/DNA e repetição da virada do período. A invalidação também usa um universo mais largo que o teto: basta ter as duas horas. Uma edição pode preservar essas horas ao mudar tipo, minutos ou vigência, e invalidar a véspera para linha que o teto já exclui. `app/ponto/services/credito_parcial.py:29–31,74–80,100–114` · `app/ponto/turnos.py:2683–2689` · `app/ponto/services/ausencia.py:193–205,656–680` |
+| Selo/RED sem mordida | **Média.** A catraca morde composição, sítios e linhas, dentro de seus critérios léxicos. Ela não prova igualdade de carga nem a decisão publicada. Os testes de comportamento mordem a forma simples, com as lacunas do item 8. `app/core/tests/test_medida_turno_do_par.py:548–585` · `app/core/medida_turno_do_par.py:32–55` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:299–392` |
+| Ordem de trava | **Alta.** Na edição de uma parcial de 21/10, de horário diurno para `01:00–03:00` da jornada de 20/10, o laço invalida primeiro a competência 11 pelo estado anterior, depois a 10 pelo novo intervalo, no mesmo `atomic`. O caminho de revisão de batida pode tomar as mesmas competências na ordem 10 → 11. Há inversão possível se ambos alcançarem as mesmas linhas. Ocorrência de deadlock **[nao verificado]**. `app/ponto/views.py:2835–2847` · `app/ponto/services/ausencia.py:183–205,1089–1091,1133–1134` · `app/ponto/services/fechamento.py:1623,1672–1680,1854–1876` · `app/ponto/services/dia_pago.py:702–719` |
+| Pouso antes do pré-requisito | **[nao verificado].** A árvore declara suite inteira antes do opus e condições para reconstrução das projeções. O material fornecido não comprova execução, publicação do impacto ou pouso. `CLAUDE.md:392–402,418–437` · `app/docs/LEIS.md:142` |
+| Campo com dois significados | **Alta.** Os campos `abate_*` medem sobreposição bruta por par, mas o texto da C12 os apresenta como abatimento. O atraso residual também conserva uma chave civil ao lado da chave de jornada usada para saída. `app/ponto/motor_calculo_v2.py:1237–1293,1306–1337` · `app/escala/services/cadastro_realidade.py:455–459` · `app/ponto/services/dia_pago.py:173–195` |
+| `except`, `suppress` ou fallback | **Nada novo de captura.** A extração mantém a escolha anterior entre DNA e template no pareador. A parcial passa a usar esse ramo de template com a sua própria carga. A diferença observável é a do item 3. `app/ponto/turnos.py:248–260,1310–1314` · `app/ponto/services/credito_parcial.py:100–114` |
+
+### 8. Mordida dos testes — média [nao verificado]
+
+| Teste novo | O que pegaria | [nao verificado]
+|---|---|
+| D+1 `01:00–03:00` | Perda da parcial por recorte civil, chave errada ou falta da tradução de 1.440 minutos. Exige saída residual 240 nas quatro leituras e lista vazia para a parcial. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:79–112,136–141,299–302` |
+| D `01:00–03:00` | Abatimento indevido em D+1, perda ou repetição do item nesse cenário, ou perda de dono, PK e números entre motor, lavra e formatador. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:304–334` |
+| D `02:00–01:30` e D `06:30–19:30` | O primeiro pega publicação de parcial que já cobre a saída. O segundo pega uma guarda que olha a saída mas ignora abatimento do atraso **no mesmo par**. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:336–351` |
+| Aprovação em 21/10 | Pega a volta da invalidação apenas civil. Verifica os dois carimbos nulos, sem verificar relavratura, rubricas nas duas competências ou concorrência. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:353–373` |
+| Controle D `23:00–03:00` e véspera com turno | O primeiro pega quebra da virada e falso C12 no período que já cobre 120 minutos. O segundo pega chave fixa por `a.data` ou abandono da véspera do DNA. O segundo consulta juiz e mapa, sem comparar um pareamento real na mesma carga. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:375–392` |
+| Dois testes puros novos | Isolam a tradução de D+1 e distinguem o `0` como datada do `120` com `adiante=1`. Os testes adjacentes verificam chamada e uso da resposta do juiz, bordas e segundos. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:446–501` |
+
+**Contraexemplos faltantes.** Dois pares da mesma jornada, segunda passada que muda a ponta ou o dia, DNA fora da janela curta, troca de vínculo no corte, redatação que muda o dia no juiz, cobertura já dada por outra parcial e teto aritmético que reduz o ganho. Também falta cruzar a borda 20/21 pelas duas apurações e conferir a C12 na lista e na rota. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:299–423` · `app/ponto/motor_calculo_v2.py:1237–1337,3235–3242` · `app/ponto/services/credito_parcial.py:74–114` · `app/escala/views.py:521–537`
+
+Em memória, passaram os **35 testes da catraca** com a adaptação documentada para `unittest`, e os **10 testes puros da ponta** com as funções reais extraídas da cópia. Os testes de integração com banco, a suite inteira e os REDs históricos ficam **[nao verificado]**. `app/core/tests/test_medida_turno_do_par.py:28–41,548–567` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:426–501`
+
+### 9. Significado dos
+
+[truncado em 20000 de 22099 caracteres]
 
 ## 26/11 17:25 · sessao 4d122d1eb77b · - · - · origem=Ronald (tmux)
 
@@ -716,172 +841,4 @@ Os dez mutantes deram **RC=1 e ERROR=0**. Os nove primeiros deram uma falha cada
 
 O delta reaproveita o juiz de turno, o juiz de vínculo e o escritor mensal. A derivação paralela nova está **na sonda**, que repete a detecção de PK em múltiplos turnos sobre a saída do juiz. Há uma lacuna no RED da sonda: fiz também o mutante **sempre diferente**, e ele sobreviveu porque o teste só tem vínculos diferentes. O delta não acrescenta leitura de relógio nem campo persistido de data. O fallback civil do mapa, a guarda civil e o relógio do flip já existiam. A falha de trava é a janela do bloqueio 2. `app/ponto/registro_batida.py:328` `app/ponto/services/fechamento.py:1837` `app/ponto/tests/sonda_pk_multiplas_f4b.txt:16` `app/ponto/tests/sonda_pk_multiplas_f4b.txt:33` `app/ponto/tests/sonda_pk_multiplas_f4b.txt:42` `app/ponto/turnos.py:1864` `app/ponto/turnos.py:2952` `app/ponto/tests/test_juiz_unico_eventos.py:381` `app/ponto/janelas.py:84` `app/ponto/services/flip_batida.py:38`
 
-## 26/11 16:31 · sessao 77fd9b3ef9fd · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
-
-**BLOQUEIA.** O oráculo perde a parte da pausa que cai antes do marco quando a pausa atravessa esse marco. Em um par sintético, os dois motores indenizam **40 min** e o oráculo indeniza **60 min**, com os mesmos **760 min trabalhados**. Os dois selos AST também deixam passar formas de escrita que seus contratos dizem cobrir. [app/ponto/motor_calculo_v2.py:1977–1985, 2883–2902, 3370–3388] [app/ponto/calculador/alimentacao.py:136–173, 534–539] [app/ponto/calculador/nucleo.py:146–153] [app/ponto/tests/test_ramo2b_c2_base_da_he.py:447–482] [app/ponto/tests/test_contract_juiz_batida.py:363–385]
-
-Usei a cópia e o diff fornecido. As sondas de aritmética e AST foram feitas em memória, sem alterações de arquivos. A cópia está sem metadados Git para confirmar o hash de forma independente. Suite integral, incidência em produção e estado do pouso **[nao verificado]**. [nao verificado]
-
-## 1. Dia sem cauda
-
-**NAO PROCEDE.** No motor, `_s_he == s` faz `_intra_base` receber exatamente `intra_real`. A subtração que mudou continua com os mesmos operandos, o piso recebe a mesma duração, a impressão do trabalhado é a mesma e a HE recebe a mesma base e o mesmo suprimido. `_gravar_base_da_he` continua gravando os três `None`, agora pela porta. O bloqueio de HE100 continua limpando a tripla e zerando as rubricas. [app/ponto/motor_calculo_v2.py:1516–1531, 1841–1859, 2871–2902, 2955–2966, 3352–3388, 3416–3426]
-
-**NAO PROCEDE.** No oráculo, a alimentação envia os dois kwargs como `None`. Daí `_trab_he == trab` e `_pausa_he == float(pausa_min or 0)`. O piso volta à expressão anterior, `previsto or (trab + pausa)`, o suprimido conserva a mesma conta e a HE conserva o mesmo limite. Trabalhado continua saindo de `trab / 60`. Isso demonstra igualdade antes/depois em cada caminho. [app/ponto/calculador/alimentacao.py:534–539] [app/ponto/calculador/regras.py:604–616, 741–751, 756–789]
-
-## 2. Art. 71 com cauda
-
-Para os exemplos abaixo, os intervalos já chegaram à porta do motor como intervalos do par. Usei E 19:00, S 08:20, marco 07:00, previsto 660 e intervalo cadastrado/declarado de 60. O piso recebe **660** nos três exemplos. Os **720 min brutos** são a duração da base do par. O teste do aval chama `calcular_periodo` diretamente e entrega o período pronto ao oráculo. Ele documenta que, no cenário ensaiado com quatro batidas, o pareador separa a pausa colada à borda em dois pares. [app/ponto/motor_calculo_v2.py:1920–1927, 2871–2888, 3352–3377] [app/ponto/calculador/regras.py:767–789] [app/ponto/tests/test_ramo2b_c2_base_da_he.py:265–277, 298–331] [nao verificado]
-
-| Pausa recebida | Gozo para o Art. 71, motores / oráculo | Resultado em minutos |
-|---|---:|---|
-| Só na cauda, 07:20–07:40 | 0 / 0 | **NAO PROCEDE** no caso do aval. No 12x36 e no oráculo, HE **0**, intra **60**, cauda trabalhada **60**, trabalhado **780**. O Comercial também dá intra **60** nesse par. [app/ponto/tests/test_ramo2b_c2_base_da_he.py:298–331] [app/ponto/motor_calculo_v2.py:3370–3388] |
-| Uma interna à base, 00:10–00:30, e outra na cauda, 07:20–07:40 | 20 / 20 | **NAO PROCEDE** para essas pausas. Base líquida **700**, intra **40** e trabalhado **760**. Os dois segmentos que cercam a pausa interna sobrevivem ao recorte. [app/ponto/motor_calculo_v2.py:2883–2902, 3370–3388] [app/ponto/calculador/alimentacao.py:136–173] [app/ponto/calculador/nucleo.py:146–153] |
-| Uma pausa ocupa base e cauda, 06:40–07:20 | **20 / 0** | **BLOQUEIA.** Base líquida **700** e trabalhado **760** nos dois caminhos. Intra **40** nos dois motores e **60** no oráculo. O motor recorta o intervalo em 07:00. O oráculo descarta o segmento que recomeça às 07:20 e, sem um segmento seguinte na base, o núcleo perde os 20 min de pausa. [app/ponto/motor_calculo_v2.py:1977–1985, 2883–2902, 3370–3388] [app/ponto/calculador/alimentacao.py:166–173, 464–469, 534–539] [app/ponto/calculador/nucleo.py:146–153] [app/ponto/calculador/regras.py:780–785] |
-
-**BLOQUEIA também a afirmação de que o fallback sem previsto mede sempre a mesma duração.** Com `trabalha=None`, o previsto devolve 0 e a alimentação ainda encaminha o dia como trabalho. No exemplo da pausa que atravessa o marco, com previsto 0, o motor entrega **720** brutos e o oráculo reconstrói **700 + 0 = 700**. A tabela do piso é compartilhada. O insumo diverge. [app/escala/models.py:1098–1107] [app/escala/utils.py:2314–2323] [app/ponto/calculador/alimentacao.py:449–460, 534–541] [app/ponto/motor_calculo_v2.py:1920–1927, 2883–2889, 3370–3377] [app/ponto/calculador/regras.py:569–572, 767–780]
-
-**FILA.** Há duas diferenças anteriores nos trechos preservados pelo diff. Com base bruta **360,5**, sem pausa e cadastro de intra **0**, o `int()` do motor dá piso e intra **15** e o oráculo dá **60**. A fixture `SEM_PREVISTO_3605` deixa o cadastro no default **60**, que mascara a diferença no mínimo efetivo. Ela afirma o piso-base e a intra do oráculo. Além disso, com base bruta **380**, pausa na base **30** e mínimo **60**, o 12x36 habilita a intra pela base bruta e paga **30**. O Comercial e o oráculo usam a base líquida **350** no gatilho de 6 h e pagam **0**. [app/ponto/motor_calculo_v2.py:1920–1927, 2877–2900, 3367–3386] [app/escala/models.py:17–21, 110] [app/ponto/juiz_batida.py:139–150] [app/ponto/tests/test_ramo2b_c2_base_da_he.py:136–150, 334–350] [app/ponto/calculador/regras.py:767–785]
-
-**[nao verificado]** O item (3) de `INTERVALO-LEIS-1-4-2611` não veio transcrito. A cópia confirma que intervalo livre é `modo='duracao'` e que o realizado não deduz intervalo livre sem batida. O recorte novo no motor recebe os intervalos já julgados e não consulta esse modo. [app/escala/models.py:243–250] [app/ponto/turnos.py:707–718, 756–766] [app/ponto/motor_calculo_v2.py:2873–2891, 3362–3377]
-
-## 3. Escritor único e selo da tripla
-
-**NAO PROCEDE** como acusação de um segundo escritor explícito em produção na cópia. A varredura da aplicação encontrou seis alvos, todos na porta, incluindo os três da atribuição encadeada. Os três construtores de produção passam só `entrada` e `saida`, e a dataclass inicializa os campos com `None`. Não localizei chamada de produção que preencha a tripla por kwargs, `replace`, `copy`, `setattr` ou `__dict__`. [app/ponto/motor_calculo_v2.py:207–211, 244–246, 1842–1846, 2859, 2998, 3340] [app/ponto/tests/test_ramo2b_c2_base_da_he.py:434–482]
-
-**BLOQUEIA** como garantia de escritor único. A sonda em memória confirmou o alcance abaixo. O `ValueError` da porta só protege chamadas que chegam a ela. O próprio arquivo de teste tem construtores que preenchem um campo isolado. [app/ponto/motor_calculo_v2.py:1830–1846] [app/ponto/tests/test_ramo2b_c2_base_da_he.py:447–465, 484–511, 524, 557] [nao verificado]
-
-| Forma | O selo pega? |
-|---|---|
-| `p.campo = …`, atribuição encadeada, aumentada, anotada ou desempacotada com atributo | Sim. [app/ponto/tests/test_ramo2b_c2_base_da_he.py:447–460] |
-| `setattr(p, 'campo', …)` | Sim, com nome literal e chamada direta a `setattr`. Nome em variável, alias e `object.__setattr__` passam. [app/ponto/tests/test_ramo2b_c2_base_da_he.py:461–465] |
-| `PeriodoCalculo(..., campo=…)`, `dataclasses.replace(p, campo=…)`, `copy.copy`/`deepcopy`, `p.__dict__['campo'] = …` ou `.update(...)` | Passam. A cópia simples propaga o estado que recebeu, inclusive uma tripla parcial. [app/ponto/tests/test_ramo2b_c2_base_da_he.py:447–465] [app/ponto/motor_calculo_v2.py:207–246] |
-
-## 4. Crédito do dia aberto
-
-**NAO PROCEDE** para mudança no ganho numérico lido hoje. `_ganho_noturno_da_base_da_he` diferencia `0.0` de `None`: zero explícito vale zero, `None` consulta `legais - relógio`. No período aberto, os dois contadores nascem em zero, `calcular_periodo` retorna antes de calcular noturnas e o crédito só copia trabalhado, fora da janela e a tripla. A soma do Partido `legais` recebe zero por qualquer das duas formas nesse portador. [app/ponto/motor_calculo_v2.py:213–215, 287–293, 2645–2668, 2858–2863, 2997–3001, 3261–3268, 3339–3344]
-
-**FILA** para a semântica do portador. No R3, a base é a **soma** dos pares creditados, a saída é o marco do **último** par creditado com cauda e o ganho é zero **do portador aberto**. Em um par fechado, os três valores descrevem o mesmo trecho. `alimentacao` não lê o ganho e ignora a tripla do aberto antes de chegar ao recorte. `periodo.reler` também pula o aberto sem carimbo. Assim, o crédito numérico do motor não reaparece pela leitura de segmentos do oráculo. O teste declara que falta fixture de R3 com cauda. Alcance desse ramo com batidas reais **[nao verificado]**. [app/ponto/motor_calculo_v2.py:1848–1859, 2645–2668] [app/ponto/calculador/alimentacao.py:82–97, 118–122, 168–173] [app/ponto/calculador/periodo.py:648–651] [app/ponto/tests/test_ramo2b_c2_base_da_he.py:353–366] [nao verificado]
-
-## 5. Selo da impressão de `minutos_trabalhados`
-
-**BLOQUEIA.** Hoje o predicado encontra as impressões nas linhas `2901`, `3016` e `3387`. Ele morde se nenhuma impressão reconhecida restar, ou se a forma exata `periodo.minutos_trabalhados = max(0, X)`, com `X` um nome, aparecer em outro método síncrono direto de uma classe de topo do mesmo arquivo. Enquanto outra impressão válida permanecer, passam a extração de uma das três para função de módulo, método `async`, função aninhada sob `calcular_periodo`, alvo com outro nome ou `max(0, expressão)` com segundo argumento diferente de um nome. [app/ponto/motor_calculo_v2.py:2901, 3016, 3387] [app/ponto/tests/test_contract_juiz_batida.py:361–385]
-
-**BLOQUEIA** pela regressão demonstrável frente ao literal anterior. Em outro método direto, `outro = periodo.minutos_trabalhados = max(0, duracao)` continha o literal antigo e era detectado. O novo exige um só alvo e deixa passar. A melhoria real é aceitar `_liq` ou `X` no lugar de `duracao`. A asserção continua verificando apenas o conjunto de nomes dos métodos, então perder uma das três ocorrências pode ficar verde. [app/core/juizes.py:1247–1255] [app/ponto/tests/test_contract_juiz_batida.py:354–385] [nao verificado]
-
-## 6. Complemento do censo
-
-| Campo ou valor | Quem escreve e quem lê |
-|---|---|
-| `PeriodoCalculo.minutos_base_da_he` | A porta grava minutos líquidos de relógio até o marco. `_gravar_base_da_he` recebe a medida dos três motores. O leitor `_trabalhado_da_base_da_he` usa o trabalhado integral quando recebe `None`. Consumidores: R3, soma diária e semanal do Partido, seu intervalo sem previsto e sua dobra, soma e dobra do Comercial e testemunha da folha. [app/ponto/motor_calculo_v2.py:280–284, 1842–1859, 2653, 2902, 3017, 3070, 3119–3120, 3223–3227, 3293–3298, 3388, 3463, 3488–3492] [app/folha/porta_export.py:339–358] |
-| `saida_da_base_da_he` e `ganho_noturno_da_base_da_he` | A mesma porta grava o instante do recorte e o ganho `legais - relógio`, em minutos. HE100 limpa a tripla e R3 lê a saída do par e grava a tripla do portador. A saída é lida para a ponta da HE noturna e para os segmentos da base, também por `periodo.reler`. O ganho tem leitura direta em `_ganho_noturno_da_base_da_he` e consumo na régua `legais`. [app/ponto/motor_calculo_v2.py:287–293, 1519, 1842–1859, 2654–2668, 3261–3268] [app/ponto/calculador/alimentacao.py:106–117, 168–173] [app/ponto/calculador/periodo.py:745–756] |
-| `pausa_min`, `minutos_base_da_he` do oráculo e `pausa_base_da_he_min` | `segmentos_do_motor` produz os segmentos integrais e recortados por **dia da jornada**. `minutos_do_oraculo` soma os segmentos e mede pausa pelos vãos. `rubricas_por_dia` passa os minutos trabalhados do dia, a pausa integral `v.pausas` e, só com cauda, os dois valores de `vb`. `do_dia` usa a pausa integral no detalhe e no ramo de folga, e usa a pausa/base recortadas no piso, suprimido, limite da HE e dobra do fluxo normal. **BLOQUEIA:** o kwarg homônimo `minutos_base_da_he` é uma soma diária recomposta, enquanto o campo do período é uma medida por par. `vb.pausas` também pode incluir um vão entre pares distintos do mesmo dia ou perder a pausa que termina no recorte. [app/ponto/calculador/alimentacao.py:78–88, 136–173, 464–469, 534–554] [app/ponto/calculador/nucleo.py:133–154] [app/ponto/calculador/regras.py:604–616, 658–660, 741–751, 756–798] |
-| `intra_real`, `_intra_base`, `intra_descontada`, `minutos_intrajornada_indenizada` | `intra_real` desconta o par integral; `_intra_base` desconta a base e abate o mínimo. `intra_descontada` grava o desconto integral, que a alimentação lê para abrir os segmentos. A indenização é escrita pelo 12x36, Comercial e Partido, zerada no bloqueio HE100 e também reescrita por `periodo.reler`. Leitores: limite de HE, resultado mensal, espelho, lavra diária e testemunha da folha. A lavra do oráculo recebe `horas_intra_indenizada` de `do_dia`, já dividida por 60. [app/ponto/motor_calculo_v2.py:398, 1520–1524, 1881–1899, 2883–2900, 3120–3127, 3370–3386] [app/ponto/calculador/alimentacao.py:133–148] [app/ponto/calculador/periodo.py:757–759] [app/ponto/services/espelho.py:104] [app/ponto/services/dia_pago.py:173–186, 223–225, 322–330] [app/ponto/services/fechamento.py:1293–1318] [app/folha/porta_export.py:348–351] |
-| `periodo.minutos_trabalhados`, `minutos_fora_janela` e previsto/declarado | Os motores imprimem o total líquido do par. R3 escreve o agregado no aberto. HE100 transfere o trabalhado para fora da janela e zera o trabalhado. `periodo.reler` também escreve trabalhado. Leitores incluem o fallback da base, resultado mensal, teto L-093, espelho, fechamento, lavra e folha. A L-093 usa trabalhado **mais** fora da janela. Os callbacks da folha agora capturam colaborador e células por default e são chamados sincronicamente com a mesma chave civil de antes. [app/ponto/motor_calculo_v2.py:269, 284, 324–328, 1231–1234, 1516–1524, 2651–2660, 2901–2904, 3016–3017, 3387–3390] [app/ponto/calculador/periodo.py:757] [app/ponto/services/espelho.py:136] [app/ponto/services/fechamento.py:978–1007] [app/ponto/services/dia_pago.py:173–186] [app/folha/porta_export.py:339–363, 585–591, 713–721] |
-
-**FILA no censo.** A folha agrupa a testemunha de HE por `entrada.date()`, enquanto a alimentação usa o mapa do dia da jornada. Para o piso, os dois motores ainda passam `e` e `_previsto_do_dia` usa a data civil desse instante. Há também duas âncoras para o mesmo split de HE noturna: `_aplicar_he_noturna` entrega a saída batida e a alimentação entrega o marco da base. Essas diferenças estão em trechos preservados pelo delta. [app/folha/porta_export.py:319–328, 339–357] [app/ponto/calculador/alimentacao.py:78–88, 106–115] [app/ponto/motor_calculo_v2.py:1052–1063, 1272, 2884, 3377] [app/ponto/calculador/regras.py:840–849]
-
-## 7. Classes do anexo
-
-| Classe | Triagem |
-|---|---|
-| 1. Segundo juiz | **FILA** para `periodo.reler`, que segue calculando e reescrevendo valores do par. Encontrei a definição e os testes, sem chamada de produção na cópia. A L-111 mantém esse sítio no censo. A autoridade registrada do par segue em `MotorBase.calcular_periodo`. A derivação ativa alterada entra no bloqueio da classe 4. [app/core/juizes.py:1214–1216] [app/ponto/calculador/periodo.py:543, 745–759] [app/docs/LEIS.md:137] | [nao verificado]
-| 2. Segundo escritor fora da porta | **NAO PROCEDE** para um segundo escritor explícito da tripla ou uma nova impressão fora de `calcular_periodo` na cópia. O crédito, o reset e a releitura são escritas de outras formas já presentes. [app/ponto/motor_calculo_v2.py:1519–1524, 1842–1846, 2659, 2901, 3016, 3387] [app/ponto/calculador/periodo.py:757] |
-| 3. Relógio fora da borda | **NAO PROCEDE** para leitura nova. **FILA** para `date.today()` já existente em `intervalo_cadastrado`, chamado sem dia pelo motor e pela alimentação. [app/ponto/juiz_batida.py:126–130] [app/ponto/motor_calculo_v2.py:859–860] [app/ponto/calculador/alimentacao.py:422, 518] |
-| 4. Derivação paralela | **BLOQUEIA.** Soma de intervalos recortados e soma de vãos entre segmentos recortados dão gozos diferentes. O fallback sem previsto herda a divergência. [app/ponto/motor_calculo_v2.py:1977–1985, 2005–2007] [app/ponto/calculador/nucleo.py:146–153] [app/ponto/calculador/regras.py:767–780] |
-| 5. Selo sem mordida | **BLOQUEIA.** O primeiro não detecta os caminhos de escrita acima. O segundo perde inclusive a atribuição encadeada que o literal anterior detectava. [app/ponto/tests/test_ramo2b_c2_base_da_he.py:447–482] [app/ponto/tests/test_contract_juiz_batida.py:363–385] |
-| 6. Ordem de trava | **NAO PROCEDE** no delta fornecido. A guarda da tripla vem antes das atribuições e os callbacks da folha preservam a chamada durante a medição. [app/ponto/motor_calculo_v2.py:1838–1846] [app/folha/porta_export.py:353–363, 585–591] |
-| 7. Pouso antes do pré-requisito | **NAO PROCEDE** como achado no código do delta. O repositório exige verificação e suite integral antes do opus final. Execução desses pré-requisitos e pouso efetivo **[nao verificado]**. [CLAUDE.md:389–402] | [nao verificado]
-| 8. Campo com dois significados | **BLOQUEIA** para gozo da base. O oráculo usa o vão entre segmentos como se fosse a pausa julgada dentro da base. **FILA** para o portador agregado do R3 e para as âncoras de dia e saída listadas no censo. [app/ponto/calculador/nucleo.py:146–153] [app/ponto/calculador/alimentacao.py:168–173, 534–539] [app/ponto/motor_calculo_v2.py:2653–2668, 2883–2891] |
-| 9. `except` novo | **NAO PROCEDE.** Zero `except` acrescentados no diff fornecido. As novas guardas levantam `ValueError`. [app/ponto/motor_calculo_v2.py:1838–1840] [app/ponto/calculador/regras.py:613–615] |
-
-## 26/11 16:27 · sessao 64c900ca5ed0 · O30-F3-CONSTRUIR · construtor · origem=Code
-
-Implementei a c8 em cinco arquivos sobre `538cb39c0`. O patch está na cópia e pode ser lido com `git -C .. diff 538cb39c0 -- app/`. Os 24 contratos locais sem banco passaram. A integração Django e a suíte da sessão ficam **[nao verificado]**. `ponto/tests/test_atestado_f3_contrato.py:1`, `manage.py:11`
-
-### Cura e RED → GREEN
-
-| Caso | Resultado |
-|---|---|
-| `test_gaveta_filha_legada_sem_inputs_de_atestado` | Na sonda local, a c7 renderizou os seis inputs. A c8 exibiu a nota com o registro da referência e usou `raiz.documento` no rótulo. `c8_fieldset_na_filha` voltou a falhar por asserção. `templates/ponto/partials/painel_ausencia.html:93`, `ponto/tests/test_atestado_f3.py:157` |
-| `test_filha_legada_anexa_so_o_arquivo` | Na sonda, o formulário da c7 levou a view a devolver 409. Com o formulário da c8, a view seguiu até a resposta de sucesso e o serviço chamou o save do documento, com zero eventos `dados_atestado_editados` no mock. O teste integrado segue o `action` renderizado e confere o arquivo e a trilha persistidos **[nao verificado]**. `ponto/views_atestado.py:38`, `ponto/tests/test_atestado_f3.py:163` |
-| `test_censo_mencao_atestado_fecha_na_catraca` | A fonte da cópia passou na catraca literal. Os três mutantes falharam por asserção na c7 e na c8. O mutante do dicionário foi injetado dentro de um leitor já inventariado e também caiu. `ponto/tests/test_atestado_f3_contrato.py:91`, `ponto/tests/test_atestado_f3_contrato.py:142`, `ponto/tests/test_atestado_f3_contrato.py:254` |
-| `test_reabrir_compensa_arquivo_quando_a_saida_do_atomic_falha` | A c7 e `c8_try_dentro_do_atomic` falharam por deixar `corrigido.pdf` no storage simulado. A c8 removeu o arquivo novo, preservou o antigo e propagou a mesma exceção. `ponto/services/ausencia.py:1398`, `ponto/tests/test_atestado_f3_contrato.py:373` |
-| `test_reabrir_sem_dados_nao_apaga_arquivo_commitado` | Verde na c7 e na c8. A falha em `mudar_estado` propagou e o arquivo salvo permaneceu no storage simulado. `ponto/tests/test_atestado_f3_contrato.py:391` |
-
-A sonda da gaveta renderizou o trecho do formulário com Jinja e executou o corpo da view e o serviço com colaboradores em memória. Os comandos integrados abaixo pararam no import de `django.core` nesta cópia. A morte integrada de `c8_fieldset_na_filha` fica **[nao verificado]**. `manage.py:11`, `ponto/tests/mutantes_atestado_f3.py:265`
-
-### Comandos
-
-A partir de `app/`, GREEN dos contratos locais, RED histórico da reabertura e mutantes em memória. `ponto/tests/mutantes_atestado_f3.py:72`, `ponto/tests/mutantes_atestado_f3.py:301`, `ponto/tests/test_atestado_f3_contrato.py:261`
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v ponto.tests.test_atestado_f3_contrato
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 red_c7_reabrir_saida_atomic
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c8_try_dentro_do_atomic
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c8_append_update_fields
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c8_save_base_update_fields
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c8_update_por_dict
-```
-
-Na pista do Code, RED histórico dos dois casos da gaveta, GREEN e mutante do fieldset. `ponto/tests/mutantes_atestado_f3.py:71`, `ponto/tests/mutantes_atestado_f3.py:177`, `ponto/tests/test_atestado_f3.py:157`
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 red_c7_gaveta_filha --integracao
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  ponto.tests.test_atestado_f3.AtestadoF3Test.test_gaveta_filha_legada_sem_inputs_de_atestado \
-  ponto.tests.test_atestado_f3.AtestadoF3Test.test_filha_legada_anexa_so_o_arquivo \
-  --settings=config.settings.ci
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c8_fieldset_na_filha --integracao
-```
-
-### Auditoria c314c099f → c8
-
-A contagem AST por arquivo, incluindo testes, deu **zero `ExceptHandler` novos e zero `with suppress(...)` executáveis novos**. Em `_reabrir`, a comparação AST confirmou a troca de posição entre `try` e `with` e a renomeação para `compensar_arquivo`. A ordem das escritas e a trilha foram preservadas. O delta c7 → c8 também passou em `git diff --check` e na conferência de `minutos`, `data_fim` e `dias_corridos`. `ponto/services/ausencia.py:1102`, `ponto/services/ausencia.py:1398`, `ponto/services/ausencia.py:1420`
-
-| Arquivo | `ExceptHandler` base → c8 |
-|---|---:|
-| `core/observ.py:90` | 1 → 1 |
-| `ponto/admin.py:1` | 0 → 0 |
-| `ponto/forms.py:1` | 0 → 0 |
-| `ponto/migrations/0079_ausencia_atestado_dados.py:1` | 0 → 0 |
-| `ponto/models.py:877` | 1 → 1 |
-| `ponto/services/atestados_lote.py:243`, `ponto/services/atestados_lote.py:251` | 2 → 2 |
-| `ponto/services/ausencia.py:258`, `ponto/services/ausencia.py:1420` | 13 → 13 |
-| `ponto/services/dia_decidido.py:1` | 0 → 0 |
-| `ponto/tests/mutantes_atestado_f3.py:1` | 0 → 0 |
-| `ponto/tests/test_atestado_f3.py:1` | 0 → 0 |
-| `ponto/tests/test_atestado_f3_contrato.py:1` | 0 → 0 |
-| `ponto/tests/test_atestados_lote.py:1` | 0 → 0 |
-| `ponto/views_atestado.py:1` | 0 → 0 |
-| `relatorios/urls.py:1` | 0 → 0 |
-
-Saída final de `git -C .. diff --name-only c314c099f -- app/`. A lista inclui os arquivos herdados da c7.
-
-```text
-app/core/observ.py
-app/ponto/admin.py
-app/ponto/forms.py
-app/ponto/migrations/0079_ausencia_atestado_dados.py
-app/ponto/models.py
-app/ponto/services/atestados_lote.py
-app/ponto/services/ausencia.py
-app/ponto/services/dia_decidido.py
-app/ponto/tests/mutantes_atestado_f3.py
-app/ponto/tests/test_atestado_f3.py
-app/ponto/tests/test_atestado_f3_contrato.py
-app/ponto/tests/test_atestados_lote.py
-app/ponto/views_atestado.py
-app/relatorios/urls.py
-app/templates/ponto/ausencias.html
-app/templates/ponto/partials/painel_ausencia.html
-app/templates/relatorios/atestados_lote.html
-```
-
-### Fora da c8
-
-- **O30-REFERENCIA-LEGADO** cobre a divergência entre entrega e upload da filha nas outras portas. `ponto/views.py:2146`, `ponto/views.py:2165`, `api/views.py:3140`
-- **FILA do save integral** e strings construídas em execução são limites declarados do censo. `ponto/tests/test_atestado_f3_contrato.py:158`
-- **Leitura de anexo, PDF ilegível e derivação de fim** seguem nas filas do anexo. `ponto/services/ausencia.py:788`, `ponto/services/atestados_lote.py:164`, `ponto/management/commands/curar_ausencia_sem_fim.py:29`
-- **Máscara, selo da sombra, MAPA, ARQUITETURA, RELATO e BACKLOG** ficam com a sessão conforme o anexo. Execução e pouso **[nao verificado]**. `bin/sombra_regras_pessoais.py:161`, `docs/MAPA.md:236`
-
-_8437 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8439 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

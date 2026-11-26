@@ -1,3 +1,9 @@
+DIA-DA-BATIDA F4c (17:29): verif1 Codex REPROVADO + opus escalonado SEGUE-CONSTRUTOR (logs/DIA-DA-BATIDA-JUIZ-UNICO/F4c/verif1/opus/r.md, amostra registro_batida.py:326-346 conferida) -> PUXADA DIA-DA-BATIDA-JUIZ-UNICO F4d -> vaga 2 (brief_f4d.md, 4 itens: trava em regularizacao_ext:122, sem _proteger na leitura viva, INFO processados=, comentario do cron).
+lei: B2-CHAO-F4c -- evento de batida de chao (registrar/anotar, L-030 obriga engolir) cujo juiz de dia falhou: zero recalculos; quem deve o recalculo (recalcular_fechamento fora do cron, crons.py:1148-1155; vigia/cron novo exige corte). Frequencia NAO MEDIDA.
+O30-F3 c10 (17:25): recusa do censo era o brief_c10 sem `## CENSO` (disjuntor.py::censo_do_brief); corrigido -> PUXADA O30-F3-CONSTRUIR c10 -> vaga 1.
+ABONO c1e r2 (17:26): Codex REPROVA (carga da parcial x pareador, 0/30 publicado, ordem de invalidacao 11->10) -> 4a volta, [nome] ao opus (CODEX 5(d)).
+PAREI: censo-DIA-DA-BATIDA-JUIZ-UNICO | espera Codex
+
 PAREI: censo-O30-F3-CONSTRUIR | espera Codex
 
 PRE-APROVADO (a) (17:17): cancelada a pista 1126163526_38a3f0b9 da SUITE-ROTEIA (candidato 38a3f0b91 sobre a base velha da PORTA, superado pelo main de65d64f4); candidato refeito sozinho apos o pouso da PORTA.
@@ -10872,6 +10878,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 **PERGUNTA DE LEI -- O DIA DA DEMISSAO E APURAVEL COMO FURO? A LEI ESCRITA NAO RESPONDE (10:0x).** Antes de abrir fatia nova fui atras do bug, que pela LEI-AKITA 6 vem primeiro. **NAO HA bug de universo no codigo de HOJE**, e duas leituras dizem isso: (a) `ponto/services/dia_pago.py:259-263` (O140) da linha a TODO dia de furo ainda que sem uma hora -- `_linha(d)` dentro de `for d in (_furos or ())` --, entao furo SEM linha nao existe no codigo de hoje; (b) o gravado da 09 tem **10.759 das 10.893 linhas com `furo_apurado` NULL**, que no idioma declarado na docstring de `lavrar` e `furos_do_motor=None`, *"nao perguntei"*: a 09 foi lavrada por chamador que ainda nao passava furo. E o CLAMP da borda (defeito 2 do `9632cdbd`) explica no maximo **1 dos 28**, porque 27 dos 28 dias TEM celula (`celula_trabalho_true=28`, `sem_celula=1`). Logo criar a linha que falta e **RELAVRAR a 09**, o PROIBIDO da L-092 -- nao e cura de universo, e por isso nao jumpa a fila como bug provado. O QUE SOBRA E PERGUNTA DE LEI, e eu nao a proponho (L-117): **19 dos 28 dias sao exatamente o dia da demissao, e a celula desse dia diz trabalho=True**. O seu corte de 19/10 `DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA` **nao responde**: ele e literal sobre `data_demissao` **ANTERIOR** a janela (*"sai do universo de derivacao"*), e aqui a demissao cai DENTRO da competencia. Se o dia da demissao e previsto, o furo e real e o dono e CADASTRO/BATIDA; se nao e, o motor chama furo **19 dias que nao existem** -- e ai o furo mente para todo desligado da frota, nao so na 09. A fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a linha esta no BACKLOG (`MOTOR-CHAMA-FURO-DIA-QUE-A-LAVRATURA-DA-09-NAO-COBRE`) e **nada se aplica na 09**.
 
 ## ALARMES DA ESTEIRA
+
+**26/11 17:26:54 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:478b40d6d1 (50 car., na trilha privada)
 
 **26/11 17:24:59 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:f98c90765b (42 car., na trilha privada)
 
