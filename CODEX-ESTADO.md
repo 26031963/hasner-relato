@@ -1,7 +1,193 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 00:44** · publicado em **26/11/2026 00:46** (UTC-3)
+> Ultima resposta processada: **26/11/2026 00:52** · publicado em **26/11/2026 00:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 00:52 · sessao 7fd7cd13849e · CADEIA-20-PASSO-1 · leitura · origem=Code
+
+# Dossiê de leitura — CADEIA-20-PASSO-1
+
+**Base proposta para o construtor: o main após os pousos de E1 v4 e PAR c7, com a raia como referência de código e de REDs.** A raia prova a costura grade → juiz → ata → tela/PDF. Ainda perde a identidade e o instante completo na escrita da ata, publica dois conceitos diferentes de “zero” e não incorpora as mudanças de parcial, protestos e projeção de perguntas do main. Restam **6 perguntas de lei** na leitura abaixo. [Raia `app/escala/utils.py:2117–2118`, `app/escala/orfa_classe.py:56–85`, `app/ponto/services/cartorio.py:962–1056`; main `app/escala/utils.py:1174–1196,1271–1282`, `app/ponto/services/cartorio.py:1115–1131,1693–1700`; `avais.txt:39`]
+
+**Referências.** `R` é a cópia local indicada como `a4a9b6bfe`. `M` é o main indicado como `c314c099f`, citado pelo mapa e pelo diff fornecidos. Os anexos são citados pela posição no texto fornecido, ou pela seção quando indicado. A cópia local veio sem metadados Git. A identidade dos objetos Git, o `merge-tree`, os logs brutos e a execução dos REDs ficam [nao verificado]. A conferência local foi de código e da saída da catraca AST, em modo somente leitura. [`raia_log.txt:1–16`; `conflitos_raia_x_main.txt:1–6`; `mapa_contrato_c314.txt`, abertura; R `app/escala/tests/test_cadeia20_selo_orfas.py:197–222`]
+
+## 1. Mapa curto
+
+### (a) Já faz?
+
+| Entrega | Estado |
+|---|---|
+| **Juiz** | A raia substitui `classificar_orfas` por `razao_da_sobra` e registra o corte. Para uma ligação válida, aplica dia sem trabalho → rajada → papel do pareador. CxR é uma marca `True`/`False`/`None`. `SEM_BATIDA`, `BATIDA_AMBIGUA` e `SEM_PAPEL` saem no campo `falha`, com `razao=None`. O residual explícito do aval 2320 está ausente do juiz da raia. [R `app/escala/orfa_classe.py:3–29,37–85`, `app/core/juizes.py:1327–1333`, `app/docs/CORTES.md:563`; `avais.txt:19,22`] |
+| **Fonte e lavra** | A grade por turno mantém `(HH:MM, instante)` por ocorrência e linha, inclusive na retirada de uma ponta reconciliada. O cartório usa o pareador já carregado e lê CxR da lavra existente. Há ligação por instante com distinção de PK entre candidatos do pareador, mas o PK saiu de `locs` e a ata final serializa `hora`, `razao`, `falha` e `escala_nao_descreve`. O consumidor persistido ainda não recebe identidade nem segundos. O caminho legado do dispatcher não fornece o pacote da razão. [R `app/escala/utils.py:1343–1360,1723–1759,1843–1871,2034–2051,2084–2085,2117–2137`, `app/escala/orfa_classe.py:32–65,82–85`, `app/ponto/services/cartorio.py:962–1001`] |
+| **Leitores** | `sobras_da_ata` entrega hora, frase ou estado ao espelho. A grade da célula publica `sobras` ao lado de `orfas`. PDF e template leem a projeção. O PDF ainda agrega horas em um conjunto de toda a janela para suprimir turno aberto e usa `Counter` por `HH:MM` para marcar batidas. Calendário, supra, chamados, causas da folha e vigias ainda têm acessos crus. `cluster_espurio` compartilha o predicado de rajada, mas continua lendo horas e lâmpadas. [R `app/escala/services/leitor_celula.py:193–223,453–454`, `app/ponto/services/espelho.py:703–710,862`, `app/relatorios/pdf_espelho.py:176–180,478,514,595,874`, `app/templates/ponto/espelho.html:151,249`, `app/colaboradores/services/calendario.py:409–410`, `app/ponto/supra_juiz.py:392,527`, `app/chamados/juizes.py:514`, `app/folha/causas.py:43,100`, `app/ponto/services/cluster_espurio.py:29–36`] |
+| **Contadores** | `medir_razoes_sobras` mede ocorrências, falhas, chaves ausentes e desalinhamento por ata. `atas_no_horizonte_sem_razao` mede atas com estrutura incompleta no horizonte v5 e aceita entrada com `falha` explícita. Assim, **0 atas incompletas é compatível com 2 ocorrências sem razão**. A catraca local deu **5 Python, 0 HTML**, com teto 5/0 para exibição. A publicação do `sobras_sem_razao` exigido no placar e no HAIKU [nao verificado]. [R `app/ponto/services/cartorio.py:1004–1056,2117–2133`, `app/ponto/management/commands/processar_cartorio.py:75–82`, `app/escala/tests/test_cadeia20_selo_orfas.py:9–15,99–107,197–222`; `relato_linhas.txt:35–37`; `avais.txt:10,24`] |
+
+**Para o PRONTO**, faltam prova de identidade persistida e leitura concordante, `sobras_sem_razao=0` por ocorrência, efeito em folha/retenção na base de pouso, idempotência na mesma base, os REDs que reproduzem as divergências atuais e o fechamento do desenho A. A suite de **17.069** verdes é da v2n `7efb46e8e`. Na volta 3, o relato registra **370 testes, 2 falhas** em `test_cartao_marca_espuria`, com **14/14 mutantes mortos**. O caso sem célula perde a fonte de sobras da grade para a exibição e a guarda de turno aberto do PDF. A frequência desse caso na frota, o `CHECK-DE-TELA` contra a referência, o verificador final com 0 BLOQUEIA, a Pista 2 verde da candidata, o opus e o `SMOKE DELE` estão [nao verificado]. [`avais.txt:23–24,29–33,39`; `relato_linhas.txt:35–42`; R `app/ponto/services/espelho.py:703–710`, `app/relatorios/pdf_espelho.py:478,514`]
+
+### (b) Atravessa o quê?
+
+`Batida` apurável → vínculo/DNA e linha dona na grade → testemunho de `turnos_do_colab`/`parear_turnos` e CxR lavrado → `razao_da_sobra` → cartório → `CelulaDia.lavrar_veredito`/`carimbar` → `salvar_e_emitir`/`EventoCelula` → `leitor_celula`, espelho e PDF. Durante o ato, supra e emissão recebem a ata em memória **antes** do ponto onde a raia hoje acrescenta as razões. A razão comum durante o próprio ato é, portanto, lacuna da raia. [R `app/ponto/turnos.py:2876–2903`, `app/escala/utils.py:1321–1337,1915–1936,2117–2118`, `app/ponto/services/cartorio.py:67–77,1090–1096,1579–1583,1607,2012–2037`, `app/ponto/portas/celula.py:957,1049–1067,1194–1202`, `app/escala/services/leitor_celula.py:193–223`]
+
+O desenho A atravessa ainda o fecho C6, o veto de competência `_K6`, E2, fábrica, emissor, repasse, signals e consumidor do outbox. O censo histórico contou **64 sítios** e **36 registros** em `eb1e49c1e`, com **61** entradas iniciadas fora do cartório, **27** sítios alcançáveis de `on_commit` e **33** por signal ou fila. O recenso pós-F5 previsto no aval, com o rol completo e testemunha por sítio, está [nao verificado]. [`relato_linhas.txt:6–9`; `RASCUNHO_BRIEF.md:1,8–33`; `avais.txt:26–33`; R `app/chamados/services/fio.py:1358–1440`, `app/chamados/reconciliador.py:1366–1427`, `app/ponto/services/cartorio.py:1132–1177`]
+
+### (c) Quanto se usa?
+
+| Rodada e fonte | Resultado registrado |
+|---|---|
+| **B1, comp. 11**, `logs/QUEIMA-1911/B1/sonda_b1v2.out` | **1.307** sobras, incluindo **15** da empresa de teste. A função antiga real, chamada com ata reconstruída, devolveu **660** `folga_desmentida`, **540** `geometria`, **105** `indefinida`, **2** `eco_cluster`. Pareador: **655** pares fechados, **453** pausas, **136** abertos, **36** sem batida pelo minuto, **20** saídas sem entrada, **7** ambíguas pelo minuto. Entre as 453, **110** com `_intra_ata`, **343** outras. [R `app/docs/RELATO.md:253`] |
+| **Resposta 2320**, `logs/CADEIA-20/passo1/sonda.r`, `pronto.md`, `sonda3.py` | Mesmo total de **1.307**, com **456** jornada adicional, **453** pausa com origem incompleta, **199** cadastro, **136** abertos, **36** sem batida pelo minuto, **20** saídas sem entrada, **7** ambíguas e **0** residual. Pareador × ata: **455 dias / 655 sobras**, inclusive col81 01/11, 18:31. Na inversa, **333 dias / 336 batidas** com luz acesa e avulsas no pareador, com **6.454** `ATA_DESALINHADA` fora da comparação. Col87 e col975 na lista CxR. [R `app/docs/RELATO.md:244,253–254`] |
+| **Etapa A**, `logs/CADEIA-20/passo1/brief.md` | Em **outra foto**, **47/47** aparentes “sem batida” estavam vivas no dia civil seguinte. `sem_papel=0/25.664` batidas. Cadastro literal dos nominais incompleto. A causa das **2** falhas da v3 precisa de testemunha própria. [R `app/docs/RELATO.md:135`; `relato_linhas.txt:35–37`] |
+| **v2l e v2m**, `logs/CADEIA-20-PASSO-1/v2l/dinheiro_{main,copia}.out`, `logs/cadeia20_copia_2m.out` | v2l: **618** colaboradores, **0** diferenças de folha, **0** em **4.380** retenções, **19** células mudando na segunda passada em cada árvore. v2m: **18.333** células, **618** colaboradores, **1.172/1.172** sobras com razão, **0** células mudando na segunda passada. [R `app/docs/RELATO.md:3–6,16`; `relato_linhas.txt:44–45`] |
+| **v3 `a4a9b6bfe` × base `eb1e49c1e`**, `logs/CADEIA-20-PASSO-1/v3/medidas/{main,copia}.out`, `cartao_diff.txt`, `dia_diff.txt` | **34.667** células v5. **2.233** sobras = **2.231** com razão + **2** `SEM_BATIDA`; **0** desalinhamentos e **0** atas incompletas em três empresas × duas passadas. Hash de `FechamentoMensal`/`ExportacaoDominio` igual antes/depois, mas **80/2.412** cartões diferiram, **5** mudaram resumo e, na comp. 09, **63** cartões mudaram a lista de sobras em **101** dias. O aval 2325 registrou a opção de pousar após PRONTO e opus, com Pauta DP dos quatro. Essa medição é contra a base antiga. [`relato_linhas.txt:33–37`] |
+| **Desenho A**, `logs/cadeia20_matriz_p1_clausula.out`, `logs/cadeia20_ficha_1545{,_b,_c}.out` e `logs/CADEIA-20-PASSO-1/ficha_1545/roda.porta` | **18** recusas na função real `_decisao_do_fechamento`, em **3 células × 2 relógios × 3 etapas**, pela mesma cláusula. No braço encerrado, **9, 5, 0** células mudaram de foto após o corpo inicial nas três rodadas. No braço `cruza`, a terceira rodada ainda alcançou a célula **129134** e **31 escritas da fábrica**. A expiração do turno retira `enc=0` da impressão e explica a possibilidade de relavra. A atribuição das 31 escritas a cada etapa [nao verificado]. [`relato_linhas.txt:8–15`; R `app/chamados/models.py:676–705`, `app/ponto/services/cartorio.py:1141,1168–1177,1540–1557`] |
+| **Sondas laterais 5(i)/(ii)**, `logs/RAIA-ESPURIAS/auditoria_1811/{s5i,s5ii}.r` | DXG: **14 plantadas / 13 pessoas**, todas a **62–180 min** da batida real, fora de ±60 min. A função atual do lote respondeu `b_conversa` nas **14**. O caminho histórico que as gravou [nao verificado]. Dedup: **38** pares opostos adjacentes em **24.695** batidas, repartidos **9 / 7 / 22** nas três faixas medidas, e **1/38** colisão na função real. O anexo traz exemplos de aparelho/app, mas a tabela completa por aparelho e versão [nao verificado]. [R `app/docs/RELATO.md:247,299,308,316`; `avais.txt:11–13`] |
+
+**Sonda proposta, como texto.** O núcleo abaixo é para a cópia da raia, com credencial de leitura da sombra e `SONDA_AGORA` fixado para a foto. Mede a resposta real do juiz e da lavra **em memória**, a coincidência de instantes no insumo, conflitos de CxR e os estados já gravados. O recorte da competência é por empresa e o contexto do cartório preserva a janela do lote. A sonda não foi executada [nao verificado]. [R `app/folha/export.py:47`, `app/ponto/management/commands/processar_cartorio.py:47–69`, `app/ponto/services/cartorio.py:962–1056,1273,1298–1317`, `app/ponto/services/cxr_na_lista.py:165–185`]
+
+```python
+# Corpo para o shell Django da sombra, com SONDA_AGORA em ISO 8601 com fuso.
+from collections import Counter
+from datetime import datetime, time, timedelta
+from os import environ
+import json
+
+from django.db import connection, transaction
+from django.utils import timezone
+from escala.models import CelulaDia
+from escala.utils import montar_grade_prevista_periodo
+from folha.export import janela_competencia
+from ponto.services import cartorio
+from ponto.services.cxr_na_lista import cxr_lavrado
+from ponto.services.vigia_pareador_celula import censo
+from ponto.turnos import batidas_apuraveis
+
+agora = datetime.fromisoformat(environ["SONDA_AGORA"])
+hoje = timezone.localtime(agora).date()
+um = timedelta(days=1)
+
+def meia_noite(dia):
+    return timezone.make_aware(datetime.combine(dia, time.min))
+
+totais = Counter()
+with transaction.atomic():
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+    cxr = cxr_lavrado()
+    cels = list(
+        CelulaDia.objects.filter(data__lt=hoje)
+        .select_related("colaborador__empresa")
+        .order_by("colaborador_id", "data")
+    )
+
+    from itertools import groupby
+
+    for _, grupo in groupby(cels, key=lambda cel: cel.colaborador_id):
+        lote = list(grupo)
+        colab = lote[0].colaborador
+        ini, fim = janela_competencia(colab.empresa, 11, 2026)
+        alvo = [cel for cel in lote if ini <= cel.data <= fim]
+        if not alvo:
+            continue
+
+        d0, d1 = lote[0].data, lote[-1].data
+        ref = d1 + um
+        batidas = list(batidas_apuraveis(
+            colab, meia_noite(d0 - um),
+            meia_noite(d1 + 3 * um) - timedelta(microseconds=1),
+        ))
+        por_instante = Counter(b.timestamp for b in batidas if b.tipo in ("E", "S"))
+        grade = montar_grade_prevista_periodo(
+            colab, batidas, dias=(d1 - d0).days + 2, ref=ref, agora=agora,
+        )
+        insumos = grade["insumos_razao_sobras"]
+        medida = cartorio.medir_razoes_sobras(alvo)
+        for chave in ("sobras_total", "com_razao", "sem_razao", "orfas_sem_chave",
+                      "celulas_desalinhadas", "sem_razao_sem_falha"):
+            totais["gravado", chave] += medida[chave]
+        totais["gravado", "atas_incompletas"] += cartorio.atas_no_horizonte_sem_razao(alvo)[0]
+
+        for cel in alvo:
+            dia = grade["dias"][(ref - cel.data).days]
+            ata = cartorio.ata_do_dia(dia, grade["marcos"], dna=cel.dna)
+            cartorio._lavrar_razoes_sobras(ata, cel, cel.data, insumos, cxr, colab)
+            pares = insumos["instantes"].get(cel.data, [])
+            totais["memoria", "sobras"] += len(ata["orfas"])
+            totais["memoria", "ordem_ou_multiplicidade_diverge"] += (
+                [h for h, _ in pares] != ata["orfas"]
+            )
+            totais["memoria", "instante_com_varios_registros"] += sum(
+                por_instante[ts] > 1 for _, ts in pares
+            )
+            for entrada in ata["razoes_orfas"]:
+                chave = entrada["razao"] or entrada["falha"]
+                totais["razao_ou_falha", str(chave)] += 1
+                totais["cruzamento_cxr", str((chave, entrada["escala_nao_descreve"]))] += 1
+
+    vigia = censo(11, 2026)
+    print(json.dumps({
+        "contagens": [[*k, v] for k, v in sorted(totais.items())],
+        "pareador_x_ata": len(vigia["casos"]),
+        "universo_vigia": vigia["universo"],
+        "cego": vigia["cego"],
+    }, ensure_ascii=False))
+```
+
+**Complementos de leitura da sonda.** Para medir o main, use a grade real de `c314` e a função antiga sobre o insumo reconstruído, com a metodologia B1. Compare com a raia na **mesma** foto e publique dois universos, ata existente e grade remontada. Para separar a origem das **453** pausas, conte em execução a linha que atribui `_intra_dur`/`_intra_ata` à batida **por segmento** e agregue por PK no resultado da grade. A foto final do carimbo não permite essa separação. Para dinheiro, idempotência e desenho A, a sonda somente leitura compara fotos já preparadas por rodada/etapa na sombra. Em cada foto, chama `reconciliaria()` para a decisão de fecho sem escrita e lê a trilha existente para contar o que efetivamente escreveu. Sem as fotos intermediárias, o escritor das 31 mudanças e o contrafactual de rollback continuam [nao verificado]. Os contadores específicos de cada escolha estão em §9. [R `app/docs/RELATO.md:225,244,253`, `app/ponto/turnos.py:415–416,456–457,486,1317–1318,1370,1413,1477–1478,1984–2004`, `app/chamados/models.py:670–705`; `relato_linhas.txt:8,18,21`]
+
+## 2. Estado da raia × main
+
+**Recomeçar a integração no main, reaproveitando o juiz, o contrato de transporte e os REDs por hunk após conferir as autoridades vigentes.** Os seis conflitos são textuais segundo o anexo. Há mudanças semânticas também em arquivos que passaram pelo `merge-tree`. Um rebase que apenas zere conflitos não demonstra preservação dessas mudanças. [`conflitos_raia_x_main.txt:1–6`; `raia_log.txt:1–16`; R `app/escala/orfa_classe.py:37–85`; M `app/ponto/turnos.py:2192–2215,2663–2728`]
+
+| Sítio | Conflito e consequência |
+|---|---|
+| **`app/ponto/services/cartorio.py`** | **Conflito 5.** O main move `protestos` para a coluna final gravada por dia julgado no ato, inclusive `nunca_bateu`, e deduplica `julgadas`, `carimbadas` e `nunca_bateu` entre passadas. `carimbadas` depende do que a porta de fato gravou. Também faz prefetch das decisões, consulta `DecisaoPergunta.composta` e só descarrega o log após a precedência no caminho normal. A janela estável da segunda passada e a lavra da razão da raia precisam encaixar nessas mudanças. O `_tz.now()` na guarda, mesmo com `agora` informado, continua visível em ambos os recortes. [M `app/ponto/services/cartorio.py:141–149,1101–1131,1295–1302,1343–1352,1515–1522,1693–1700,1926–1946,2016–2023,2105–2134`; R `app/ponto/services/cartorio.py:1152–1164,1264–1273,2012–2037,2196–2205`; `conflitos_raia_x_main.txt:5`] |
+| **`app/escala/utils.py`** | **Conflito 4.** O main transporta a direção de **cada sobra da linha** em todos os produtores para julgar cobertura parcial, inclusive legado, pontas sem coluna e conservação civil. A raia transporta índice/instante no builder por turno. O encaixe precisa preservar, na mesma ocorrência, linha, instante, identidade e direção para a parcial, inclusive ao reconciliar uma ponta. A direção da parcial tem efeito próprio na borda. [M `app/escala/utils.py:595–682,770–828,1174–1196,1271–1282,1744–1782,1867–1902`; R `app/escala/utils.py:595,1723–1759,1843–1887,2034–2051,2084–2086`; `conflitos_raia_x_main.txt:4`] |
+| **`app/ponto/turnos.py`** | **Sem conflito listado, com mudança semântica.** O main substitui `horas_reais_do_dia` por `batidas_reais_do_dia`, retém o minuto mostrado e usa a cadeia para o deslocamento noturno em dias. `batida_dentro_da_parcial` lê a direção: S no início e E no fim ficam fora, E no início e S no fim ficam dentro. Marco previsto continua inclusivo. O main também extrai `preparar_par_completo_da_janela`. A contribuição da raia é o coletor opcional de avulsas nas cascas por segmento, com a chamada de `parear_turnos` preservada. [M `app/ponto/turnos.py:2189–2215,2641–2728`; R `app/ponto/turnos.py:1850,1920–1923,1984–2006`; `conflitos_raia_x_main.txt:1–6`] |
+| **Catraca de linhas, registro e harness** | **Conflitos 1, 2, 3 e 6.** Reconciliar `LINHAS_REGISTRADAS` com a árvore resultante, incorporar no `CORTES.json` a entrada do juiz e conferir o `CORTES.md` gerado. Reaplicar o harness de `nunca_bateu` à interface final e manter as mordidas, inclusive a injeção da borda de lavra. O conteúdo concorrente do main nesses quatro conflitos [nao verificado]. [R `app/core/tests/test_medida_turno_do_par.py:247,559`, `app/docs/CORTES.json:2125–2126`, `app/docs/CORTES.md:563`, `app/ponto/tests/test_e3_nb_impressao_memoria.py:168–174`, `bin/gerar_cortes.py:23–24`; `conflitos_raia_x_main.txt:1–3,6`] |
+| **Espelho, PDF e template** | O main lê o estado vigente de HE na janela e imprime o rótulo, com mudanças de apresentação da ausência no template. O transplante da razão da sobra precisa conviver com esses dados de tela e com a igualdade cartão/espelho. [M `app/ponto/services/espelho.py:784–798,930–950`, `app/relatorios/pdf_espelho.py:935–945`, `app/templates/ponto/espelho.html:186–194`; R `app/docs/LEIS.md:85`] |
+
+## 3. Censo de escritores e leitores
+
+**escritores:**
+
+- **Grade, em memória.** Produz e altera `orfas` no casamento, no legado, nas pontas de override, no intervalo sem coluna e na conservação. Overlay e recorte limpam a lista. A reconciliação tira a ocorrência que voltou a marco. A cópia da ata para alimentar o pareador é em memória. A raia migrou o transporte de instantes no caminho por turno e a remoção em conjunto. [R `app/escala/utils.py:630–637,674–682,779–828,972–987,1028–1064,1174,1239,1274–1279,1723–1785,1829–1887,1923–1936,2034–2051,2084–2086`; M `app/escala/utils.py:628–681,770–828,1744–1808,1867–1902`]
+- **Cartório, campos da ata.** `ata_do_dia` escreve `orfas` e `n_orfas`. `_lavrar_razoes_sobras`, só na raia, escreve `razoes_orfas` nos ramos normal e sem adesão. A porta exi
+
+[truncado em 20000 de 59911 caracteres]
+
+## 26/11 00:52 · sessao 8a3a0355f6bf · O30-F3-CONSTRUIR · construtor · origem=Code
+
+Implementei a O30-F3 na cópia. O RED reproduzido sobre `a845dca16` acusou os seis argumentos ausentes nas três portas e a falta da flag de privacidade do CSV. Na cópia alterada, os seis testes sem banco passaram. O diff tem saldo de **zero `except` novos**. `ponto/tests/mutantes_atestado_f3.py:91` · `ponto/tests/test_atestado_f3_contrato.py:79` · `ponto/services/ausencia.py:1120`
+
+### Cura e decisões
+
+- **Porta.** `criar_ausencia`, `editar_ausencia_registro` e `anexar_documento` aceitam os seis campos opcionais. Campo omitido conserva o valor. O anexo e seus dados usam a raiz do intervalo. A trilha registra o ator e os campos alterados, sem copiar os valores médicos. A validação aceita emissão futura. `ponto/services/ausencia.py:269,282,291,315,678,1080` · `ponto/forms.py:13`
+- **Drawer.** O formulário multipart aceita salvar os dados com ou sem arquivo. O POST exige `editar_ausencias` e `ver_ausencias` e devolve 403 na recusa. A leitura usa a permissão do anexo. `templates/ponto/partials/painel_ausencia.html:90` · `ponto/views_atestado.py:24` · `ponto/views.py:2095`
+- **Lote.** A tela filtra por período ou competência, colaborador, empresa e termos do nome, com busca sem acentos. O PDF incorpora JPG e PNG e oferece **abrir anexo** para HEIC e PDF. A seção **Sem documento** usa `previa()['faltando']`. Quem tem apenas `ver_relatorios` recebe CSV e PDF sem dados médicos nem anexos. O ZIP exige `ver_ausencias`. `templates/ponto/ausencias.html:42` · `templates/relatorios/atestados_lote.html:6` · `relatorios/urls.py:16` · `ponto/views_atestado.py:45,70,89` · `ponto/services/atestados_lote.py:53,128,174` · `ponto/services/dia_decidido.py:624`
+- **N provisório = 20 registros**, incluindo os sem documento. Escolhi recusar acima de N antes de abrir arquivos, com orientação para reduzir o recorte. O ZIP de 20 anexos sintéticos de 1 MB em memória levou **0,373 s**, ou **0,019 s por registro**. A medida de PDF por atestado e o tempo de resposta sob `gthread` ficam **[nao verificado]**. `ponto/services/atestados_lote.py:24` · `ponto/views_atestado.py:115` · `ponto/tests/test_atestado_f3_contrato.py:166` · `ponto/tests/test_atestado_f3.py:246` · `gunicorn.conf.py:19`
+
+### Comandos a partir de `app/`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 base
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_atestado_f3_contrato
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto.tests.test_atestado_f3 --settings=config.settings.ci
+```
+
+Os três primeiros mutantes abaixo falharam na asserção esperada. Os sete de integração ficam **[nao verificado]**. O comando Django parou no import de `django.core`, antes de acessar o banco. A suíte, o smoke no navegador, a medida do PDF e a certificação Code/Opus final ficam **[nao verificado]**. `ponto/tests/mutantes_atestado_f3.py:21,73` · `ponto/tests/test_atestado_f3.py:77,134,162,181,205,217,233,246` · `manage.py:11`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 gravacao
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 cid_csv
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 escritor_externo
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 editar
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 cid_pdf
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 foto
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 link
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 sem_documento
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 empresa
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 limite
+```
 
 ## 26/11 00:44 · sessao 9f889a65ec6f · DIA-DA-BATIDA-JUIZ-UNICO · leitura · origem=Code
 
@@ -643,70 +829,4 @@ Cada célula mostra **`he100 / he100_not`**. Em **A**, saturei cada par sozinho 
 
 - **SEM ACHADO — L-110 e `CASOS`.** Os números novos são reproduzíveis pelo aval aplicado às batidas e ao cadastro. `confere` compara com literais e usa `CASOS` para a mensagem. O dict concorda com FN1 (`540 / 420`), FN2 (`110 / 110`) e FD6 (`100`, com os pares de 400 e 120). A entrada de FD6 deixa a noturna zero implícita, enquanto o teste a cobra. A ordem efetiva de escrita dos casos e de execução das sondas fica **[nao verificado]**. (`app/docs/LEIS.md:136`, `app/ponto/tests/test_o280_bateria_da_lei.py:323`, `app/ponto/tests/test_o280_bateria_da_lei.py:1308`, `app/ponto/tests/test_o280_bateria_da_lei.py:6192`, `app/ponto/tests/test_o280_bateria_da_lei.py:6209`, `app/ponto/tests/test_o280_bateria_da_lei.py:6226`)
 
-## 25/11 22:19 · sessao a93a996f78b0 · PARCIAL-BORDA-SEMIABERTA · verificador · origem=Code
-
-**Volta 3 — item 6 aprovado.** O delta preserva as duas direções na colisão, e o caso 11 falha quando M5 apaga o minuto. Ficou uma pendência no próprio delta: a primeira linha da docstring de `direcoes_da_linha` ainda declara retorno escalar. `app/escala/utils.py:1177,1184–1191` · `app/ponto/turnos.py:2716–2728` · `app/ponto/tests/test_parcial_borda_v2_direcao.py:281–290`
-
-1. **Uma direção por ocorrência.** As duas saídas de `_match_marcos` registram a órfã e seu par a partir dos mesmos índices. No builder por turno, ponta ou intervalo sem coluna acrescentam os dois juntos. A conservação também acrescenta os dois juntos e só percorre batidas ainda não consumidas. Assim, para as órfãs que chegam ao extrator por esses caminhos, cada item da lista de direções é consumido uma vez por chamada. Duas ocorrências com o mesmo `HH:MM` preservam as duas direções, embora a saída não leve ID nem segundos para distinguir as batidas. `app/escala/utils.py:630–637,642–644,675–681,810–822,1765–1781,1865–1889` · `app/ponto/turnos.py:2725–2728`
-
-   **Contagens diferentes.** Antes de `_marcar_ausencias`, a folga lançada pode limpar **todas** as órfãs e deixar os pares registrados. Nesse caso, o extrator ignora a sobra. Não há remoção unitária nesse trecho. Se o extrator receber mais órfãs do que pares para um minuto, emite `None` para cada ocorrência sem par. Isso foi conferido em memória com três órfãs e dois pares. Nos builders inspecionados, as inserções em paralelo preservam a contagem até a limpeza integral. `app/escala/utils.py:817–827,1167–1173,1254–1259,1295–1303,1881–1900` · `app/ponto/turnos.py:2716–2728`
-
-2. **Cópia e chamadas.** O extrator cria um dicionário novo e uma lista nova por minuto. Conferi duas chamadas com o mesmo dia e mapa: devolveram o mesmo resultado e preservaram a entrada. Em produção, o único ponto de chamada na cópia é o ramo parcial de `_marcar_ausencias`, uma vez por linha em cada passada. O legacy pode remontar uma data de aquecimento em outro segmento, com um mapa novo. `app/ponto/turnos.py:2716–2728` · `app/escala/utils.py:771–774,826–827,1020–1042,1245–1278,1899–1900`
-
-3. **Escritores e leitores.** `direcoes_da_linha` escreve `{HH:MM: [E|S|None, ...]}`. O builder de um vínculo e o builder por turno chamam a função e montam o mapa externo por data. `_marcar_ausencias` seleciona o mapa da linha com `.get(d)` e `batidas_reais_do_dia` consome as listas. O caso 11 é o outro chamador de `direcoes_da_linha`, em teste. Os usos executáveis concordam. A docstring em `app/escala/utils.py:1177` ainda diz `{'HH:MM': 'E'|'S'}` e o próprio corpo da docstring já descreve a lista. `app/escala/utils.py:826–827,1176–1191,1217–1218,1277–1278,1899–1900` · `app/ponto/turnos.py:2707–2709,2716–2728` · `app/ponto/tests/test_parcial_borda_v2_direcao.py:284–290`
-
-4. **M1–M5.** Executei os corpos dos testes unitários em memória, com as funções da cópia. O caso 11 passou no código atual e falhou na primeira asserção com M5: saíram dois `None` e, ao consultar o juiz separadamente, o resultado foi `dentro`. M1 fez falhar os casos 1, 2, 6 e 7. M2 fez falhar os casos 3 e 6. M3 e M4 continuam aplicáveis e foram conferidos em isolamento: M3 mudou `15:54 S` para `15:55 S` e virou `dentro`. M4 trocou a `S` da linha pela `E` da data civil e também virou `dentro`. A execução ponta a ponta dos testes Django de M3 e M4 fica [não verificado]. `app/ponto/tests/test_parcial_borda_v2_direcao.py:60–96,183–194,215–225,252–290` · `app/escala/utils.py:325–327,638–681` · `app/ponto/turnos.py:2651–2660,2682–2691,2721–2727`
-
-5. **Classes de reprovação.** No delta fornecido, a mudança executável agrupa e consome direções. Ela não acrescenta juiz, escritor de carimbo, relógio, derivação de cobertura ou `except`. A grade continua julgando e carimbando, o cartório lavra e o leitor transporta. O mapa tem um significado em execução, com a divergência documental do item 3. O `else None` implementa direção desconhecida quando falta um par, e o juiz mantém a inclusão nesse caso, conforme “o resto como hoje”. M5 confirma que a colisão com pares presentes já não cai nesse caminho. `app/escala/utils.py:1188–1191,1235–1242,1271–1294` · `app/ponto/turnos.py:2674–2691,2715–2728` · `app/docs/CORTES.md:647` · `app/ponto/services/cartorio.py:782–790` · `app/escala/services/leitor_celula.py:429–436`
-
-6. **Voltas anteriores.** O achado (a) segue coberto pelos testes das duas rotas de grade, e o item 6 pela mordida de M5. O (g) foi corrigido em `leitor_celula`. A mesma atribuição antiga ainda aparece em `app/chamados/juizes.py:484` e `app/docs/JUIZES.md:70–72`, fora do delta fornecido. A identificação exata de (b), (c) e (d), e o registro deles para o opus, ficam [não verificado]. `app/ponto/tests/test_parcial_borda_v2_direcao.py:263–290` · `app/escala/services/leitor_celula.py:429–436`
-
-A cópia não tem `.git`, então a comparação usou o delta anexado. O hash e o pai por Git, a ocorrência em produção e o impacto na frota ficam [não verificado].
-
-## 25/11 22:14 · sessao cd1a32dc7431 · PARCIAL-BORDA-SEMIABERTA · verificador · origem=Code
-
-**Volta 2 — reprovo o delta pelo fallback na colisão de duas órfãs da mesma linha.** A contaminação por data civil da volta 1 foi corrigida nos dois builders. O novo agrupamento, porém, descarta dois tipos conhecidos quando as órfãs têm o mesmo `HH:MM` e direções opostas. Reproduzi uma regressão no agregado para um período que o serviço aceita e cujos limites caem no mesmo minuto. `app/escala/utils.py:827`, `app/escala/utils.py:1186`, `app/escala/utils.py:1898`, `app/ponto/turnos.py:2653`, `app/ponto/turnos.py:2725`, `app/ponto/services/ausencia.py:1039`.
-
-### 1. Produtores e remoções antes de `_marcar_ausencias`
-
-**Sim. Cada órfã presente na chamada tem um par bruto registrado sob a data da sua linha.** O censo abaixo distingue o registro do par da redução posterior a uma direção por minuto. `app/escala/utils.py:793`, `app/escala/utils.py:818`, `app/escala/utils.py:1186`, `app/escala/utils.py:1243`, `app/escala/utils.py:1805`, `app/escala/utils.py:1880`, `app/escala/utils.py:1883`.
-
-| Caminho | O que acontece com a órfã |
-|---|---|
-| Legacy, montagem do vínculo | Linha de folga nasce vazia. Linha de trabalho recebe as órfãs do DP e registra os pares em `_tipos_orfas[d]`. O alinhamento por papel fica desativado nessa chamada. `app/escala/utils.py:606`, `app/escala/utils.py:774`, `app/escala/utils.py:793`, `app/escala/utils.py:806`. |
-| Legacy, conservação | Sobra vira órfã pela data civil da própria batida. Essa data escolhe a linha e também a chave do par. `app/escala/utils.py:810`, `app/escala/utils.py:814`, `app/escala/utils.py:817`. |
-| Legacy, segmentos de vínculo | Com vínculo, a chamada interna já julga o segmento sob `d1 - j`. A união transporta `orfas` e `periodo_parcial` e remapeia as colunas. Sem vínculo, o overlay recebe `orfas=[]`. `app/escala/utils.py:1022`, `app/escala/utils.py:1036`, `app/escala/utils.py:1038`, `app/escala/utils.py:1050`, `app/escala/utils.py:1063`. |
-| Por turno, alinhamento definitivo | Tanto o ramo por papel quanto o DP registram os pares em `_to`. Ponta sem coluna e intervalo sem slot `I` acrescentam a hora e o `tipo_real` da mesma célula. Lista e pares ficam sob o mesmo `d`. `app/escala/utils.py:630`, `app/escala/utils.py:676`, `app/escala/utils.py:1744`, `app/escala/utils.py:1763`, `app/escala/utils.py:1769`, `app/escala/utils.py:1803`. |
-| Por turno, intermitente e linhas vazias | O intermitente monta células e inicializa `orfas_por_data[d]` vazio. Linhas sem células também nascem com `orfas=[]`. As sobras chegam à conservação comum. `app/escala/utils.py:1585`, `app/escala/utils.py:1605`, `app/escala/utils.py:1646`, `app/escala/utils.py:1848`, `app/escala/utils.py:1863`. |
-| Por turno, conservação | Sobra comum e sobra de intervalo sem slot registram o par da mesma tupla `locs[_k]` sob a chave que escolheu a linha. Com slot `I`, a sobra vira célula com `tipo_real`. `app/escala/utils.py:1863`, `app/escala/utils.py:1867`, `app/escala/utils.py:1874`, `app/escala/utils.py:1879`. |
-| Ambos, ordenação e folga lançada | A ordenação preserva as ocorrências. `_aplicar_folgas_foto` zera a lista inteira e deixa os pares no mapa local. O extrator percorre a lista já vazia, então esses pares ficam sem efeito. `app/escala/utils.py:820`, `app/escala/utils.py:1167`, `app/escala/utils.py:1885`, `app/escala/utils.py:1893`, `app/ponto/turnos.py:2725`. |
-
-Dentro do overlay, falta aprovada, ausência integral e justificativa aprovada também podem limpar órfãs. A reconciliação por turno remove uma órfã depois do overlay. `app/escala/utils.py:1252`, `app/escala/utils.py:1293`, `app/escala/utils.py:1296`, `app/escala/utils.py:1897`, `app/escala/utils.py:2089`.
-
-### 2–4. Proveniência, chamadores e semântica
-
-- **O par bruto tem o tipo da própria batida.** No DP, `B` e `BT` vêm do mesmo `cand` e usam o mesmo `j`, inclusive quando o cluster-guard devolve a batida às órfãs. No ramo por papel, hora e tipo usam o mesmo `_k` de `_ks_orfas`. Na célula desfeita, `hora` e `tipo_real` vieram da mesma chamada de `_celula_do_marco`. O remapeamento do intervalo muda `papel` e `intervalo`, preservando `tipo_real`. `app/escala/utils.py:642`, `app/escala/utils.py:657`, `app/escala/utils.py:675`, `app/escala/utils.py:629`, `app/escala/utils.py:325`, `app/escala/utils.py:1764`, `app/escala/utils.py:1772`.
-- **Os demais chamadores conservam o comportamento.** Detector, Zona 5, `marco_ocupado_pela_batida`, dry-run e testes diretos omitem o argumento. As duas escritas da lista opcional exigem `tipos_orfas is not None`. O dry-run passa uma cópia de `consumed` e usa `_orf2` para a seleção preliminar de intervalos. A lista `_to` só nasce na chamada definitiva. `app/chamados/detector_anomalias.py:212`, `app/ponto/motor_calculo_v2.py:3081`, `app/escala/utils.py:427`, `app/escala/utils.py:595`, `app/escala/utils.py:633`, `app/escala/utils.py:677`, `app/escala/utils.py:1692`, `app/escala/utils.py:1744`, `app/escala/tests/test_contract_cluster_marco.py:64`, `app/escala/tests/test_cirineu_nao_desfaz_o_papel.py:21`, `app/escala/tests/test_juiz_do_par_ata_casa_pelo_turno.py:314`, `app/escala/tests/test_grade_tipo_real.py:14`.
-- **Escritores e leitores.** Os builders e `_match_marcos` alimentam `_tipos_orfas`. Cada builder lê o mapa local e chama `direcoes_da_linha` com os pares de uma linha. O helper escreve a projeção `{HH:MM: tipo}`. `_marcar_ausencias` recebe `{data_da_linha: projeção}`, calcula `d = ref - i` e passa `.get(d)` a `batidas_reais_do_dia`, que lê a projeção pelo `HH:MM` truncado. A data civil entra na conservação, onde é também a data da linha escolhida. O ponto de perda de identidade é a projeção de várias ocorrências para uma chave `HH:MM`. `app/escala/utils.py:793`, `app/escala/utils.py:814`, `app/escala/utils.py:827`, `app/escala/utils.py:1176`, `app/escala/utils.py:1243`, `app/escala/utils.py:1276`, `app/escala/utils.py:1805`, `app/escala/utils.py:1867`, `app/escala/utils.py:1898`, `app/ponto/turnos.py:2725`.
-
-### 5. Mordida do RED
-
-**Sim, o mutante morde no recorte executado em memória.** Usei as batidas da fixture, o alinhador e o juiz da cópia e o mapa civil do pai, com os dois formatos de `locs`. Na linha D, `S 23:45` de D−1 sobrou, `E 00:05` e `S 08:00` ocuparam os marcos, e `E 23:45:40` de D ocupou a entrada de D+1. O agregado deu `fora` com o delta e `dentro` com o mapa civil. `assertIn('23:45', ...)` sozinho prova presença do minuto. A identidade da batida foi confirmada pelo alinhamento, e é o `assertEqual(..., 'fora')` que morde. Execução dos `TestCase` completos e da suíte [nao verificado]. `app/ponto/tests/test_parcial_borda_v2_direcao.py:220`, `app/ponto/tests/test_parcial_borda_v2_direcao.py:253`, `app/ponto/tests/test_parcial_borda_v2_direcao.py:260`, `app/escala/utils.py:638`, `app/escala/utils.py:676`, `fa25e055b/app/escala/utils.py:1177`.
-
-### 6. Classes de reprovação
-
-- **Fallback que altera o resultado.** Reproduzi uma linha `00:00–23:50` com duas órfãs `23:45`, uma `S` de D−1 e uma `E` de D, e com os marcos ocupados por `E 00:05` e `S 23:50`. Para a parcial `23:45:01–23:45:59`, ambos os limites viram o minuto `23:45`. Com os dois tipos originais, o juiz exclui a `S` no início e a `E` no fim e devolve `fora`. O mapa civil do pai também dá `fora` nesse caso. O delta agrupa as duas órfãs, omite a chave e faz ambas chegarem como `None`, devolvendo `dentro`. O serviço compara as horas completas e aceita limites distintos dentro do mesmo minuto. As duas rotas de tela examinadas exigem `%H:%M`. Ocorrência em produção [nao verificado]. `app/escala/utils.py:642`, `app/escala/utils.py:676`, `app/escala/utils.py:1186`, `app/ponto/turnos.py:2653`, `app/ponto/turnos.py:2682`, `app/ponto/turnos.py:2725`, `app/ponto/services/ausencia.py:1039`, `app/ponto/services/ausencia.py:1068`, `app/ponto/services/ausencia.py:1101`, `app/ponto/views.py:2801`, `app/ponto/views.py:2845`, `fa25e055b/app/escala/utils.py:1177`.
-- **Demais classes.** O delta transporta a direção da fonte que produziu cada órfã. O alinhamento, o raio de atribuição e os juízes registrados conservam o corpo executável relevante. As novas escritas são em listas e mapas locais. Os trechos alterados acrescentam zero leitura de relógio, zero `except` e zero gravação de batida ou ausência. A dispensa continua chamando o juiz inclusivo no marco `missing`. `app/escala/utils.py:630`, `app/escala/utils.py:638`, `app/escala/utils.py:676`, `app/escala/utils.py:793`, `app/escala/utils.py:1275`, `app/escala/utils.py:1286`, `app/escala/utils.py:1744`, `app/escala/utils.py:1879`, `app/core/juizes.py:269`, `app/ponto/turnos.py:2651`.
-
-### 7. Triagem
-
-- **(b) Procede para este delta.** O pai direto já julgava antes da reconciliação, que exige `missing` e depois remove a órfã. Antecipar a reconciliação pode preencher a célula que a dispensa examinaria. A ordem na base `64c2923b3` com `horas_reais_do_dia` [nao verificado]. `fa25e055b/app/escala/utils.py:1880`, `fa25e055b/app/escala/utils.py:2031`, `fa25e055b/app/escala/utils.py:2071`, `app/escala/utils.py:1286`.
-- **(c) Procede como efeito do código.** `periodo_parcial` entra na impressão. A mudança tira a célula do caminho de reaproveitamento pela impressão, e o fluxo normal com `apply_` passa pela porta de lavra. A medição de **1 dia em 23** para esta volta e qualquer relavra em produção [nao verificado]. `app/ponto/services/cartorio.py:483`, `app/ponto/services/cartorio.py:551`, `app/ponto/services/cartorio.py:1433`, `app/ponto/services/cartorio.py:1444`, `app/ponto/services/cartorio.py:1906`, `app/ponto/services/cartorio.py:1931`.
-- **(d) Procede para este delta.** No pai direto, `01:30` como órfã já entrava como `90`. O ajuste de dia via deslocamento era aplicado às células. O comportamento do extrator na base `64c2923b3` [nao verificado]. `fa25e055b/app/ponto/turnos.py:2622`, `fa25e055b/app/ponto/turnos.py:2717`, `fa25e055b/app/ponto/turnos.py:2724`.
-- **(g) Correção parcial.** O cartório agora cita o juiz certo para `periodo_parcial`. O leitor também corrige essa referência, mas ainda atribui à grade `ausencia_explica_o_dia_inteiro`, quando a chamada efetiva para o carimbo é `cobre_parte_do_dia`. O comentário “O juiz é o MESMO das batidas” permanece no bloco de dispensa, conforme a restrição do aval. `app/ponto/services/cartorio.py:421`, `app/ponto/services/cartorio.py:788`, `app/escala/services/leitor_celula.py:429`, `app/escala/utils.py:1211`, `app/escala/utils.py:1228`, `app/escala/utils.py:1280`.
-
-### 8. Frase de corte
-
-**O delta preservou os dois arquivos de cortes byte a byte.** A frase está no JSON fonte e no Markdown gerado dele. A expressão de nascimento do juiz também já constava no registro, na docstring do juiz e no cabeçalho do teste. Portanto, a frase tem ocorrências fora do derivado. `app/docs/CORTES.json:2459`, `app/docs/CORTES.md:647`, `bin/gerar_cortes.py:23`, `app/core/juizes.py:274`, `app/ponto/turnos.py:2666`, `app/ponto/tests/test_parcial_borda_v2_direcao.py:4`.
-
-_8281 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8283 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

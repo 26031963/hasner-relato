@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/11/2026 00:46:36.**
+**Medido em 26/11/2026 00:52:49.**
 
 | | |
 |---|---|
@@ -22,343 +22,343 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **wt-a-tela-base-estoque-084311** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.7 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-a-tela-base-estoque-084311.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-a-tela-v9-mut-083244** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 8 arquivo(s) sujo(s), commit a frente ha **17.7 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 8 arquivo(s) sujo(s), commit a frente ha **17.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-a-tela-v9-mut-083244.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-a-tela-v9-red-083244** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **17.7 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **17.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-a-tela-v9-red-083244.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-004739** (`(detached)`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 10 arquivo(s) sujo(s), commit a frente ha **26.5 h** (passou das 6 h da L-105)
+  - 9 commit(s) a frente do `main`, 10 arquivo(s) sujo(s), commit a frente ha **26.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-004739.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-suite-093459** (`(detached)`) -- **SEM AGENTE**
-  - 20 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.2 h** (passou das 6 h da L-105)
+  - 20 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **15.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-suite-093459.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v12-ok-110234** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v12-ok-110234.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v12-red-110234** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v12-red-110234.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-m1data-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-m1data-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-m2colab-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-m2colab-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-m3set-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-m3set-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-m4rele-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-m4rele-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-m5ini-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-m5ini-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-qdump-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 10 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 10 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-qdump-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-red16-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 8 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 8 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-red16-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v16-verde-160132** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v16-verde-160132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v18-mut-181024** (`(detached)`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.9 h**
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.0 h**
   - sem declaracao em `logs/raias/wt-atela-v18-mut-181024.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v18-red-180715** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **6.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v18-red-180715.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v3mut-225006** (`(detached)`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 10 arquivo(s) sujo(s), commit a frente ha **26.5 h** (passou das 6 h da L-105)
+  - 9 commit(s) a frente do `main`, 10 arquivo(s) sujo(s), commit a frente ha **26.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v3mut-225006.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v3red-224948** (`(detached)`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **26.5 h** (passou das 6 h da L-105)
+  - 9 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **26.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v3red-224948.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v4base-000815** (`(detached)`) -- **SEM AGENTE**
-  - 10 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **25.0 h** (passou das 6 h da L-105)
+  - 10 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **25.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v4base-000815.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v5-004534** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **23.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **23.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v5-004534.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-atela-v6-023907** (`(detached)`) -- **SEM AGENTE**
-  - 13 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.1 h** (passou das 6 h da L-105)
+  - 13 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-atela-v6-023907.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-b2-r4b-002812** (`raia/wt-b2-r4b-002812`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **191.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **191.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-b2-r4b-002812.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-bug-enc-pouso-223206** (`raia/bug-enc-pouso-1115`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **242.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **242.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-bug-enc-pouso-223206.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cadeia-medida-d-025832** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **148.4 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **148.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cadeia-medida-d-025832.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-catraca-dec-151606** (`raia-catraca-dec-151606`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **344.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **345.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-catraca-dec-151606.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-cirineu-c4-contador-085632** (`raia/cirineu-c4-contador-085632`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **182.6 h** (passou das 6 h da L-105)
+  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **182.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-cirineu-c4-contador-085632.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-a-tela-do-dia-le-um-juiz-000128** (`(detached)`) -- **SEM AGENTE**
-  - 11 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **24.2 h** (passou das 6 h da L-105)
+  - 11 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **24.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-a-tela-do-dia-le-um-juiz-000128.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-a-tela-do-dia-le-um-juiz-022741** (`(detached)`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **23.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 3 arquivo(s) sujo(s), commit a frente ha **23.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-a-tela-do-dia-le-um-juiz-022741.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-a-tela-do-dia-le-um-juiz-045353** (`(detached)`) -- **SEM AGENTE**
-  - 14 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.8 h** (passou das 6 h da L-105)
+  - 14 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **19.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-a-tela-do-dia-le-um-juiz-045353.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-a-tela-do-dia-le-um-juiz-065038** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.7 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **17.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-a-tela-do-dia-le-um-juiz-065038.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-a-tela-do-dia-le-um-juiz-081641** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 8 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 8 arquivo(s) sujo(s), commit a frente ha **14.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-a-tela-do-dia-le-um-juiz-081641.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-a-tela-do-dia-le-um-juiz-223322** (`(detached)`) -- **SEM AGENTE**
-  - 10 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **25.0 h** (passou das 6 h da L-105)
+  - 10 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **25.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-a-tela-do-dia-le-um-juiz-223322.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-bo-disputa-sem-pergunta-183316** (`bodisp-c25-183316`) -- **SEM AGENTE**
-  - 30 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **269.7 h** (passou das 6 h da L-105)
+  - 30 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **269.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-bo-disputa-sem-pergunta-183316.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-bo-disputa-sem-pergunta-221357** (`raia/bo-disputa-221357`) -- **SEM AGENTE**
-  - 24 commit(s) a frente do `main`, 13 arquivo(s) sujo(s), commit a frente ha **359.0 h** (passou das 6 h da L-105)
+  - 24 commit(s) a frente do `main`, 13 arquivo(s) sujo(s), commit a frente ha **359.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-bo-disputa-sem-pergunta-221357.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-cadeia-20-passo-1-112113** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **148.4 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **148.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-cadeia-20-passo-1-112113.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-cirineu-nao-desfaz-o-papel-181941** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **198.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **198.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-cirineu-nao-desfaz-o-papel-181941.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-e3-resto-r3-221106** (`e3-resto-r3-c17-221106`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **241.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **241.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-e3-resto-r3-221106.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-feriado-sem-limite-do-suprimido-003136** (`(detached)`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 4 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-codex-feriado-sem-limite-do-suprimido-003136.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-justificativa-paga-o-periodo-220358** (`(detached)`) -- **SEM AGENTE**
-  - 23 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **258.2 h** (passou das 6 h da L-105)
+  - 23 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **258.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-justificativa-paga-o-periodo-220358.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-lastro-faixa-sem-default-215253** (`(detached)`) -- **SEM AGENTE**
-  - 16 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **320.7 h** (passou das 6 h da L-105)
+  - 16 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **320.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-lastro-faixa-sem-default-215253.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-lastro-redesenho-164050** (`raia/lastro-redesenho-164050`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.1 h** (passou das 6 h da L-105)
+  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **320.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-lastro-redesenho-164050.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-o30-f3-construir-003422** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 11 arquivo(s) sujo(s), commit a frente ha **0.2 h**
+  - 1 commit(s) a frente do `main`, 12 arquivo(s) sujo(s), commit a frente ha **0.3 h**
   - sem declaracao em `logs/raias/wt-codex-o30-f3-construir-003422.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-par-relampago-a-lista-do-admin-083701** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 20 arquivo(s) sujo(s), commit a frente ha **14.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 20 arquivo(s) sujo(s), commit a frente ha **14.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-par-relampago-a-lista-do-admin-083701.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-pauta-sem-turno-prefixo-reservado-030404** (`(detached)`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **376.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **376.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-pauta-sem-turno-prefixo-reservado-030404.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-tipo-na-fonte-184856** (`raia/tipo-item3-v2`) -- **SEM AGENTE**
-  - 13 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **301.2 h** (passou das 6 h da L-105)
+  - 13 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **301.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-tipo-na-fonte-184856.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-triagem-offline-red-headless-101137** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **326.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **326.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex-triagem-offline-red-headless-101137.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex2raias-090624** (`codex2raias-090624`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **393.7 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **393.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-codex2raias-090624.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-1811-121757** (`raia/comboio-1811-121757`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **180.5 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **180.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-1811-121757.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-1911-004256** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **168.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **168.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-1911-004256.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-1911-b-011045** (`(detached)`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **167.6 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **167.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-1911-b-011045.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-b-1811-123606** (`raia/comboio-b-1811-123606`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **180.1 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **180.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-b-1811-123606.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-d-080440** (`raia/comboio-d-1911-080440`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **160.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **160.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio-d-080440.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio-fp-235329** (`comboio-fp-235329`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.0 h**
   - sem declaracao em `logs/raias/wt-comboio-fp-235329.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comboio3-024507** (`comboio-vaga2-v3-024507`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **70.0 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **70.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comboio3-024507.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-comp-paga-101739** (`(detached)`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **253.6 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **253.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-comp-paga-101739.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-contador-codex-090249** (`contador-codex-1711`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **206.6 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **206.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-contador-codex-090249.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-deploy-exclusao-061631** (`deploy-exclusao-061631`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **400.9 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **401.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-deploy-exclusao-061631.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-e1prev-145735** (`raia/e1-previsao-24h`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **9.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **9.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-e1prev-145735.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-e1prev-v2-154416** (`raia/e1-previsao-v2`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.4 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **8.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-e1prev-v2-154416.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-e1prev-v3-211130** (`e1prev-v3-211130`) -- **SEM AGENTE**
-  - 11 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.6 h**
+  - 11 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **0.7 h**
   - sem declaracao em `logs/raias/wt-e1prev-v3-211130.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-e3-mesclada-121238** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **300.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **300.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-e3-mesclada-121238.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-e4c-f2-103933** (`e4c-f2-103933`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **253.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **253.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-e4c-f2-103933.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-escala-c7-021338** (`raia/escala-c7-021338`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **166.5 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **166.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-escala-c7-021338.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-eval-contador-112226** (`raia/eval-contador-112226`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **181.3 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **181.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-eval-contador-112226.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f2-073854** (`f2-construtor-073854`) -- **SEM AGENTE**
-  - 10 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **202.5 h** (passou das 6 h da L-105)
+  - 10 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **202.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f2-073854.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f2-p2-152531** (`f2-p2-contract-152531`) -- **SEM AGENTE**
-  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **201.0 h** (passou das 6 h da L-105)
+  - 12 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **201.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f2-p2-152531.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f5-82-c4-181843** (`f5-82-c4-181843`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **54.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f5-82-c4-181843.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f5-item1-112345** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **109.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **109.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f5-item1-112345.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f6f7-sobre-main-173528** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **175.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **175.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f6f7-sobre-main-173528.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f6f7c14-sobre-main-202317** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **172.4 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **172.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f6f7c14-sobre-main-202317.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f6f7c15-sobre-main-203238** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **172.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **172.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f6f7c15-sobre-main-203238.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-f6f7c16-sobre-main-213517** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **171.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **171.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-f6f7c16-sobre-main-213517.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-feriado-092818** (`raia/feriado-escala-092818`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **302.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 9 arquivo(s) sujo(s), commit a frente ha **302.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-feriado-092818.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-feriado-c1-110206** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **12.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-feriado-c1-110206.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-feriado-c2-125523** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **10.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-feriado-c2-125523.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-feriado-c3-154803** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.0 h**
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **2.1 h**
   - sem declaracao em `logs/raias/wt-feriado-c3-154803.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-feriado-c3red-224145** (`(detached)`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **2.1 h**
+  - 2 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **2.2 h**
   - sem declaracao em `logs/raias/wt-feriado-c3red-224145.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-feriado1609-110424** (`raia/wt-feriado1609-110424`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **245.2 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **245.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-feriado1609-110424.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-frac5-cura-100047** (`(detached)`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **274.7 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **274.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-frac5-cura-100047.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-instr-travas-002004** (`(detached)`) -- **SEM AGENTE**
-  - 22 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **280.3 h** (passou das 6 h da L-105)
+  - 22 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **280.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-instr-travas-002004.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-janela-turno-020503** (`(detached)`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.5 h** (passou das 6 h da L-105)
+  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **31.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-janela-turno-020503.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-lote7-ausencia-100250** (`(detached)`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **253.4 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **253.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-lote7-ausencia-100250.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-noturno-aberto-162231** (`noturno-item1-v3`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **48.1 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **48.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-noturno-aberto-162231.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-noturno-pouso-034944** (`(detached)`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **20.9 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **21.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-noturno-pouso-034944.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-o10d-023001** (`o10d-023001`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **211.0 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **211.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-o10d-023001.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-par-c2-mut-094134** (`(detached)`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 24 arquivo(s) sujo(s), commit a frente ha **15.6 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 24 arquivo(s) sujo(s), commit a frente ha **15.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-par-c2-mut-094134.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-par-c2-red-094134** (`(detached)`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **15.6 h** (passou das 6 h da L-105)
+  - 2 commit(s) a frente do `main`, 5 arquivo(s) sujo(s), commit a frente ha **15.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-par-c2-red-094134.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-par-c3-ok-112401** (`raia/par-c6-162025`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 17 arquivo(s) sujo(s), commit a frente ha **1.6 h**
+  - 5 commit(s) a frente do `main`, 17 arquivo(s) sujo(s), commit a frente ha **1.7 h**
   - sem declaracao em `logs/raias/wt-par-c3-ok-112401.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-par-rebase-060915** (`par-rebase-060915`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.6 h** (passou das 6 h da L-105)
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **402.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-par-rebase-060915.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-parcial-borda-200435** (`parcial-borda-semiaberta`) -- **SEM AGENTE**
-  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.6 h**
+  - 2 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.7 h**
   - sem declaracao em `logs/raias/wt-parcial-borda-200435.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ponta-mut-jadec-024306** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.1 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **22.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-ponta-mut-jadec-024306.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ponta-pouso-011206** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **23.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **23.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-ponta-pouso-011206.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-porta-pouso-185744** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **197.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **197.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-porta-pouso-185744.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-pouso-ausencia-215637** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **218.8 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **218.9 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pouso-ausencia-215637.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-pouso-ausencia-230733** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **217.6 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **217.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pouso-ausencia-230733.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-pouso-classed-152903** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **33.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **33.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pouso-classed-152903.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-pouso-classed-v3-162549** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.3 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **32.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-pouso-classed-v3-162549.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-pouso-parcial-000141** (`pouso-parcial-000141`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.7 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.8 h**
   - sem declaracao em `logs/raias/wt-pouso-parcial-000141.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-quarentena-svv-151703** (`raia/quarentena-svv-151703`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.2 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.3 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-quarentena-svv-151703.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-relavra11-113556** (`(detached)`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **252.4 h** (passou das 6 h da L-105)
+  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **252.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-relavra11-113556.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-resolver-d-024937** (`(detached)`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **35.3 h** (passou das 6 h da L-105)
+  - 7 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **35.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-resolver-d-024937.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-saida-noturna-135512** (`raia/saida-noturna-135512`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **321.6 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-saida-noturna-135512.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-selo-espera-084620** (`selo-espera-cego-fixture`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **352.0 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **352.1 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-selo-espera-084620.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-selos-canon-i3-113049** (`(detached)`) -- **SEM AGENTE**
-  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **394.3 h** (passou das 6 h da L-105)
+  - 3 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **394.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-selos-canon-i3-113049.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-silencio-2810-0915** (`silencio-vencido-2810`) -- **SEM AGENTE**
-  - 11 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **672.4 h** (passou das 6 h da L-105)
+  - 11 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **672.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-silencio-2810-0915.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-sonda-ambiente-121311** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **84.5 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **84.7 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-sonda-ambiente-121311.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-sonda-sem-grant-075803** (`(detached)`) -- **SEM AGENTE**
-  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **395.3 h** (passou das 6 h da L-105)
+  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **395.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-sonda-sem-grant-075803.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-torneira-21-100237** (`raia/torneira-21-100237`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **182.7 h** (passou das 6 h da L-105)
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **182.8 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-torneira-21-100237.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-travas-m5-095844** (`(detached)`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **108.4 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **108.5 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-travas-m5-095844.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-travas-m7-124154** (`(detached)`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **106.9 h** (passou das 6 h da L-105)
+  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **107.0 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-travas-m7-124154.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-travas-m7b-145117** (`(detached)`) -- **SEM AGENTE**
-  - 8 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **104.1 h** (passou das 6 h da L-105)
+  - 8 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **104.2 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-travas-m7b-145117.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-vigia-tmux-132928** (`raia/vigia-tmux-132928`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **55.3 h** (passou das 6 h da L-105)
+  - 4 commit(s) a frente do `main`, 4 arquivo(s) sujo(s), commit a frente ha **55.4 h** (passou das 6 h da L-105)
   - sem declaracao em `logs/raias/wt-vigia-tmux-132928.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **74 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-b4-religa-011453, wt-b4-sem-freio-001609, wt-b4-sem-freio-v2-020839, wt-bug-par-red-134433, wt-c4-m15-200427, wt-c4-m90-200427, wt-c4-red-200427, wt-codex-chamado-preso-classe-112213, wt-codex-cirineu-nao-desfaz-o-papel-195940, wt-codex-cortes-f2-f9-1611-095601, wt-codex-cortes-f2-f9-1611-122527, wt-codex-e4c-f5-constroi-083923, wt-codex-e4c-f5-constroi-111415, wt-codex-e4c-f6f7-213751, wt-codex-e4c-f6f7-220647, wt-codex-e4c-f9-223418, wt-codex-escala-nao-descreve-212957, wt-codex-ui-setas-classe-172120, wt-e3-mig-171026, wt-e4b-pouso-065207, wt-e4c-f2-p2-head-090247, wt-e4c-f6f7-m7-b66587, wt-e4c-f6f7-mut-8542d4, wt-e4c-f6f7-mut-a7b96a, wt-e4c-f9-mut-191952, wt-e4c-f9-mut-223714, wt-e4c-f9-red-191952, wt-ensaio-coerencia-100453, wt-espuria-red-091633, wt-f5-4c1-main-135208, wt-f5-a1-ens-100503, wt-f5-a1c-ens-123923, wt-f5-a1c-ens2-131959, wt-f5-c5-023436, wt-f5-chkf-copia-021731, wt-f5-chkf-main-021731, wt-f5-contrato-v1-140439, wt-f5-s143-134613, wt-f5-v5-red-093845, wt-f5-vB-base-235632, wt-f5-vB-copia-235346, wt-f5-vC2-copia-014604, wt-f5-vC2-mede-014604, wt-hj090-v6m-204526, wt-med-f5-33-172615, wt-med-f5-33-172615b, wt-merge-e4b-214239, wt-mut-12v2-175203, wt-mut-f5-33-171231, wt-mut-feriado-2b-171453, wt-noturno-headprobe-022554, wt-noturno-v10-013216, wt-noturno-v4-175246, wt-noturno-v5-194318, wt-par-c1-mut-085405, wt-par-c1-red-085405, wt-parcial-borda-v2red-220828, wt-parcial-borda-v2red3-221601, wt-pista-red6d-204010, wt-ponta-red2-165740, wt-ponta-v3base-000326, wt-ponta-v5red-022949, wt-porta-v6-red-202009, wt-reg33-135856, wt-reg33-redv2-142702, wt-reg33-redv3-150604, wt-residuo-red-081610, wt-resolver-003418, wt-resolver-c-024045, wt-sonda-sentinela-172903, wt-tipo-fim-124156, wt-ui, wt-ui-espuria-red-225248, wt-v3
 
@@ -368,33 +368,33 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ## Obras interrompidas (L-119)
 
-- **SILENCIO-VENCIDO-VOLTA** -- interrompida por `QUARENTENA-DO-COLAB`, desde **29/10 00:19** (672.5 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **SILENCIO-VENCIDO-VOLTA** -- interrompida por `QUARENTENA-DO-COLAB`, desde **29/10 00:19** (672.6 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA pouso de QUARENTENA-DO-COLAB; base SILENCIO-VENCIDO-VOLTA@7e8648704 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11
-- **QUARENTENA-DO-COLAB** -- interrompida por `OPUS-REPROVOU`, desde **29/10 00:19** (672.5 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **QUARENTENA-DO-COLAB** -- interrompida por `OPUS-REPROVOU`, desde **29/10 00:19** (672.6 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Claude-desenho; DESTRAVA desenho; base wt-quarentena-svv-151703@c9a2a3846 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); reapli
-- **PADRAO-DE-CIMA** -- interrompida por `PDC-DESENHO`, desde **31/10 22:01** (602.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **PADRAO-DE-CIMA** -- interrompida por `PDC-DESENHO`, desde **31/10 22:01** (602.9 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Claude-desenho; DESTRAVA desenho; base PADRAO-DE-CIMA@7635c1c8a (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); decisao de desen
-- **COBPARC-FILA-RELOGIO** -- interrompida por `ESTACIONADA-POR-AVAL`, desde **02/11 10:49** (566.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **COBPARC-FILA-RELOGIO** -- interrompida por `ESTACIONADA-POR-AVAL`, desde **02/11 10:49** (566.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base COBPARC-FILA-RELOGIO@ab828ddcf (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); mutantes_v4 + suite + o
 - **BUG-ENC-CELULAS-FORMA** -- interrompida por `F2 em 01/11 16:19 falta: via singular, selos, suite e impacto (vaga devolvida a F2); raia wt-e4carga-155931, ref refs/rescaldo/1211/wt-e4carga-155931 @a2cd7981d, arquivos fora S7 em logs/rescaldo/1211/censo.r (RESCALDO-DAS-RAIAS-1211). fila 1 (bug, fura)`, idade **nao medivel** (a celula nao diz `em DD/MM HH:MM`) -- **VOLTOU**: a obra FECHOU
   - falta: via singular, selos, suite e impacto (vaga devolvida a F2); raia wt-e4carga-155931, ref refs/rescaldo/1211/wt-e4carga-155931 @a2cd7981d, arq
-- **V3-RETOMA-PERIODOS-DA-CELULA** -- interrompida por `P5-MOTOR`, desde **31/10 22:03** (602.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **V3-RETOMA-PERIODOS-DA-CELULA** -- interrompida por `P5-MOTOR`, desde **31/10 22:03** (602.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA lei período não guardado na célula; base V3-RETOMA-PERIODOS-DA-CELULA@c71b1038b (lista unica GRADE-MESTRA, RESCALDO-CO
-- **V3-RETOMA-FILA** -- interrompida por `POUSO-DA-V3`, desde **31/10 13:01** (611.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **V3-RETOMA-FILA** -- interrompida por `POUSO-DA-V3`, desde **31/10 13:01** (611.9 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA pouso de V3; base V3-RETOMA-FILA@0448d88f1 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); pouso da V3; raia wt-d
-- **SUITE-POR-IMPACTO** -- interrompida por `PRONTO-5`, desde **04/11 22:44** (506.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **SUITE-POR-IMPACTO** -- interrompida por `PRONTO-5`, desde **04/11 22:44** (506.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA ! aval PRONTO-5; base SUITE-POR-IMPACTO@2d91d5905 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); mapa/replay d
-- **CODEX-CONTEXTO-DA-CASA** -- interrompida por `CONSTRUTORES-EM-VOO`, desde **30/10 18:10** (630.6 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **CODEX-CONTEXTO-DA-CASA** -- interrompida por `CONSTRUTORES-EM-VOO`, desde **30/10 18:10** (630.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base CODEX-CONTEXTO-DA-CASA@4435ec647 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); briefs dos construtor
-- **O275** -- interrompida por `FORMA-A-X-FORMA-B`, desde **15/10 19:46** (989.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **O275** -- interrompida por `FORMA-A-X-FORMA-B`, desde **15/10 19:46** (989.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA lei FORMA A x FORMA B; base O275@32c8c259e (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); corte entre FORMA A
-- **LASTRO-DEGRAU-2** -- interrompida por `CENSO-DE-LEITORES`, desde **29/10 13:02** (659.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **LASTRO-DEGRAU-2** -- interrompida por `CENSO-DE-LEITORES`, desde **29/10 13:02** (659.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base LASTRO-DEGRAU-2@de6097212 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); cura anterior no construtor
-- **V3-E1** -- interrompida por `MOTIVO-NAO-SEI`, desde **31/10 00:29** (624.3 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **V3-E1** -- interrompida por `MOTIVO-NAO-SEI`, desde **31/10 00:29** (624.4 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA lei V3-E1 C06/C16/24x48; base V3-E1@2430fcc5b (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); motivo: nao sei (
-- **O10-C** -- interrompida por `SOLO-LISTA-DO-ADMIN`, desde **06/11 17:02** (463.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **O10-C** -- interrompida por `SOLO-LISTA-DO-ADMIN`, desde **06/11 17:02** (463.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base O10-C@a40577fba (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); volta 2 com lista do admin e porta de
-- **OTIMIZA-1** -- interrompida por `SUITE-POR-IMPACTO`, desde **04/11 22:44** (506.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **OTIMIZA-1** -- interrompida por `SUITE-POR-IMPACTO`, desde **04/11 22:44** (506.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA pouso de SUITE-POR-IMPACTO; base OTIMIZA-1@2d91d5905 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); suite, repla
 
 **interrompidas_mais_de_24h: 13** (esperado 0) -- abertas: 13 de 14 registradas; topo da ORDEM VIVA: `ORDEM-VIVA-1511-NOITE`
@@ -407,7 +407,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - universo antigo / regressao: `fio_morto` 225 (esperado 0), `fio_morto_cobrando` 225, e de hoje pra frente 0, que nao conta (o teto e do `cartorio.julgar_celula`, nao deste leitor)
 - **FORA DO ESPERADO** (carimbo inteiro): `cadastro_sem_turno` mediu 1 e o carimbo espera 0, `ferias_ausencia_sem_agendamento` mediu 59 e o carimbo espera 0, `ferias_concedidos_maior` mediu 1 e o carimbo espera 0, `ferias_dia_sem_ausencia` mediu 5 e o carimbo espera 0, `fio_morto` mediu 225 e o carimbo espera 0, `fio_morto_alcance` mediu 26 e o carimbo espera 0, `fio_morto_cobrando` mediu 225 e o carimbo espera 0, `fio_morto_com_alvo` mediu 1 e o carimbo espera 0, `materializada_viva` mediu 12 e o carimbo espera 0, `validada_projetada_sem_linha` mediu 15130 e o carimbo espera 0
-- medido em **2026-11-25T06:49:49.218029-03:00** (17.9 h), dia julgado **2026-11-25**, banco `saas_hasner`
+- medido em **2026-11-25T06:49:49.218029-03:00** (18.0 h), dia julgado **2026-11-25**, banco `saas_hasner`
 - a rodada ALARMOU: `fio_morto`, `fio_morto_cobrando`, `fio_morto_com_alvo`
 
 ## Resolver dia recusado hoje
@@ -418,17 +418,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ## Codex (limite)
 
-**codex recusado por limite: 0 nas ultimas 24 h** (total 12, ultima 2026-11-14 07:39:09) -- fonte `logs/codex/limite.log`, escrito por `bin/codex_pergunta.sh` (rc LIMITE = 75; o Code segue pelo sonnet). chamadas ao Codex nas ultimas 24 h por papel: leitura 20, censo 8, verificador 67, sonda 19, construtor 12. ultimas 5 chamadas (hora, obra, papel, rc): 2026-11-26 00:33:05 RAZAO-DA-SOBRA leitura rc=0; 2026-11-26 00:36:13 O30-F3-CONSTRUIR construtor rc=em curso; 2026-11-26 00:39:22 FERIADO-SEM-LIMITE-DO-SUPRIMIDO construtor rc=em curso; 2026-11-26 00:42:03 CADEIA-20-PASSO-1 leitura rc=em curso; 2026-11-26 00:45:02 DIA-DA-BATIDA-JUIZ-UNICO leitura rc=em curso. uso semanal do plano `pro`: janela principal 26.0% usado (semanal).
+**codex recusado por limite: 0 nas ultimas 24 h** (total 12, ultima 2026-11-14 07:39:09) -- fonte `logs/codex/limite.log`, escrito por `bin/codex_pergunta.sh` (rc LIMITE = 75; o Code segue pelo sonnet). chamadas ao Codex nas ultimas 24 h por papel: leitura 20, censo 8, verificador 67, sonda 19, construtor 12. ultimas 5 chamadas (hora, obra, papel, rc): 2026-11-26 00:33:05 RAZAO-DA-SOBRA leitura rc=0; 2026-11-26 00:36:13 O30-F3-CONSTRUIR construtor rc=0; 2026-11-26 00:39:22 FERIADO-SEM-LIMITE-DO-SUPRIMIDO construtor rc=em curso; 2026-11-26 00:42:03 CADEIA-20-PASSO-1 leitura rc=em curso; 2026-11-26 00:45:02 DIA-DA-BATIDA-JUIZ-UNICO leitura rc=em curso. uso semanal do plano `pro`: janela principal 27.0% usado (semanal).
 
-vagas do construtor Codex nas ultimas 24h: **3** abertura(s) (vaga 1: 2, vaga 2: 1); aberta(s) sem fechamento: **2** (trilha sem par, nunca ocupada: quem diz presa e o flock) -- 26/11 00:36 O30-F3-CONSTRUIR vaga 1; 26/11 00:39 FERIADO-SEM-LIMITE-DO-SUPRIMIDO vaga 2
+vagas do construtor Codex nas ultimas 24h: **3** abertura(s) (vaga 1: 2, vaga 2: 1); aberta(s) sem fechamento: **1** (trilha sem par, nunca ocupada: quem diz presa e o flock) -- 26/11 00:39 FERIADO-SEM-LIMITE-DO-SUPRIMIDO vaga 2
 
 ## Orcamento de contexto
 
-contexto: 14% (claude-opus-5-5, janela 1000000 declarada: skill claude-api, tabela Current Models (cache 2026-10-06); 140117 tokens, gatilho 150965) | desde o clear: 0.1h, 0 marcos | CLEAR atendido 1 x seguiu sem clear 4
+contexto: 14% (claude-opus-5-5, janela 1000000 declarada: skill claude-api, tabela Current Models (cache 2026-10-06); 140117 tokens, gatilho 150965) | desde o clear: 0.2h, 0 marcos | CLEAR atendido 1 x seguiu sem clear 4
 
 ## Disjuntores (DISJUNTOR-E-CLEAR-RAPIDO)
 
-disparos 24 h (esperado 0): B1=5, B2=0, B3=4, B4=1, B4-CODEX=0, ANEXO-ENXUTO=6 | negacoes 24 h: 28 (sem linha no RELATO, esperado 0: 0) | verificador final sem obra lida (esperado 0): 7 (historico anterior a cura: 6, obras no RELATO) | B3 liberado 24 h: desenho=4, erro-bobo=0 | contexto principal no ultimo Stop: 140117 tokens (Stop 00:45) | espera PAREI ! CLEAR -> /clear: sem CLEAR atendido em 24 h | cache lido 2026-11-26: 21M tokens (ref 30/10 = 390M) | cota 7d: 7% | pisos: pos-compact 101930 (2026-11-26 00:42:59), pos-clear 77607 (2026-11-25 16:45:21) | gatilho C1: 150965 (piso pos-compact 101930 (2026-11-26 00:42:59), teto 200000) | Codex tokens por chamada hoje: construtor 1 chamadas, soma 1.5M, media 1.53M, leitura 3 chamadas, soma 11.4M, media 3.80M, verificador 1 chamadas, soma 7.8M, media 7.84M | Codex orcamento: usado hoje 26.0 pp x orcamento 26.8 pp/dia (semana 26%, dentro) | placar MAIS-CODEX (5): ao Codex 24 h (inicios no wrapper, inclui rc 3/4): leitura 20, censo 8, verificador 67, sonda 19, construtor 12, outro 0 | agentes Claude 24 h por modelo/tipo: opus/claude 6, opus/general-purpose 27, opus/verificador 16, sonnet/general-purpose 7 (motivo de cada desvio: nao lido -- incompleto) | tentativas de construtor sem censo aprovado nas 24 h (esperado 0; tentativa = `ini` construtor do chamadas.log, iniciada no wrapper, nao prova que o Codex rodou; sem CENSO APROVADO do wrapper da mesma obra+pid+hash ate 600 s antes; + Agent que passou o hook com a chave desligada): 0 | tentativas de construtor com censo aprovado nas 24 h (ini casado + Agent APROVADO): 31 | aprovacoes do censo nas 24 h (linhas CENSO APROVADO da trilha; uma linha cobre todos os briefs da abertura; nao e abertura): 31 | aberturas negadas por censo nas 24 h: 9 | horas entre a 1a negativa por censo de uma obra e a aprovacao seguinte do brief dela (uniao dos intervalos NEGOU -> APROVADO, 24 h): 0.5 h
+disparos 24 h (esperado 0): B1=5, B2=0, B3=4, B4=1, B4-CODEX=0, ANEXO-ENXUTO=6 | negacoes 24 h: 28 (sem linha no RELATO, esperado 0: 0) | verificador final sem obra lida (esperado 0): 7 (historico anterior a cura: 6, obras no RELATO) | B3 liberado 24 h: desenho=4, erro-bobo=0 | contexto principal no ultimo Stop: 140117 tokens (Stop 00:45) | espera PAREI ! CLEAR -> /clear: sem CLEAR atendido em 24 h | cache lido 2026-11-26: 24M tokens (ref 30/10 = 390M) | cota 7d: 7% | pisos: pos-compact 101930 (2026-11-26 00:42:59), pos-clear 77607 (2026-11-25 16:45:21) | gatilho C1: 150965 (piso pos-compact 101930 (2026-11-26 00:42:59), teto 200000) | Codex tokens por chamada hoje: construtor 2 chamadas, soma 7.7M, media 3.87M, leitura 3 chamadas, soma 11.4M, media 3.80M, verificador 1 chamadas, soma 7.8M, media 7.84M | Codex orcamento: usado hoje 27.0 pp x orcamento 26.8 pp/dia (semana 27%, ACIMA: so a volta FINAL) | placar MAIS-CODEX (5): ao Codex 24 h (inicios no wrapper, inclui rc 3/4): leitura 20, censo 8, verificador 67, sonda 19, construtor 12, outro 0 | agentes Claude 24 h por modelo/tipo: opus/claude 6, opus/general-purpose 26, opus/verificador 16, sonnet/general-purpose 7 (motivo de cada desvio: nao lido -- incompleto) | tentativas de construtor sem censo aprovado nas 24 h (esperado 0; tentativa = `ini` construtor do chamadas.log, iniciada no wrapper, nao prova que o Codex rodou; sem CENSO APROVADO do wrapper da mesma obra+pid+hash ate 600 s antes; + Agent que passou o hook com a chave desligada): 0 | tentativas de construtor com censo aprovado nas 24 h (ini casado + Agent APROVADO): 31 | aprovacoes do censo nas 24 h (linhas CENSO APROVADO da trilha; uma linha cobre todos os briefs da abertura; nao e abertura): 31 | aberturas negadas por censo nas 24 h: 9 | horas entre a 1a negativa por censo de uma obra e a aprovacao seguinte do brief dela (uniao dos intervalos NEGOU -> APROVADO, 24 h): 0.5 h
 
 ## Leitores com derivacao propria do dia (PROGRAMA-CELULA-E-O-DIA)
 
@@ -558,6 +558,9 @@ e8beeddb9 O topo do TICKETS fechado no ato do push (O112)
 
 ```
  M CLAUDE.md
+ M app/docs/BACKLOG.md
+ M app/docs/CORTES.json
+ M app/docs/CORTES.md
  M app/docs/HANDOFF-SESSAO.md
  M app/docs/PROMPTS.md
  M app/docs/RELATO.md
@@ -656,42 +659,42 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
+      1949  | PWA-OFFLINE-APP-SHELL | **fila 2** (aval 05/11 15:1x, bug provado): sw.js nao guarda a navegacao (/ e /ponto/bater/ nunca
+            no cache; offline net::ERR_FAILED), recarga 5 min sem rede, fila do pwa.js sem identidade do colab. MUDA 1-7; RED 1,3,4,5 co
+            m sw.js real; PRONTO = suite, Codex, opus, deploy, smoke 2 cascas (L-072), iPhone modo aviao. | LEI RESPONDIDA 05/11 16:1x (
+            corte: App Shell nasce no GLOSSARIO no commit da obra; armadilha HTML de usuario em cache; fila offline com identidade na me
+            sma obra); espera vaga de construtor (teto 2: SNC2 + C20-O169) | aberta | 05/11 16:1x |
+      1950  | CONFIG-RAIZ-INERTE-EM-APP | instrumento, SO LEITURA (aval 05/11 16:1x): (1) pousos desde 30/10 16:30 com obra em B3 aberto
+             (2) Stop 2x raiz + ~/.claude/settings.json (3) tempo disjuntor.py pretool (4) B3 na virada + SessionStart por compact; tabe
+            la no RELATO; restart na raiz e dele, depois de 06/11 18:46 | DESPACHO Codex (1)(2)(4), shell (3); tabela no RELATO 16:4x (1
+             pouso com B3 aberto: 97bcb01c; pretool 53-83 ms) | lida; restart na raiz pendente dele | 05/11 16:1x |
+      1951  | CODEX-PRE-DESENHO-PILOTO | instrumento de pista, piloto (aval 05/11 16:2x): PD-<obra> censo antes do construtor nas 4 obra
+            s do CONTRATO-20; autopsia na 2a reprovacao (H12+H06 ja: v1/v2/v3 reprovadas). Contrato no RELATO 16:2x. ANTECIPA 16:4x: 8 o
+            bras (+O261-3 PEP, OTIMIZA-3, PWA-APP-SHELL, PASSE), PD de todas lancado 16:4x em a0269430 (12/12 rc=0 ate 16:52); PD-TRIAGE
+            M-CHAT 17:1x: PEP=candidata 1, O168 denominador qs_na_fila, FIO MUDO 5 atos, BO G1/G3-G6 no RELATO; tabela ao fim das 8 | ab
+            erto |
+  ⎿  Updated app/docs/PROMPTS.md +1
+      3002  | 26/11 00:29 | ESPURIAS-DESENHO-NOITE-2611 | recebido; logs/AVAIS-1515/ESPURIAS-DESENHO-NOITE-2611.txt |
+      3003  | 26/11 00:37 | ESPURIAS-DOSSIE-NOITE-2611 | recebido, substitui ESPURIAS-DESENHO-NOITE-2611; logs/AVAIS-1515/ESPURIAS-DOSSI
+            E-NOITE-2611.txt |
+      3004  | 26/11 00:39 | DOSSIE-ANTES-DO-CONSTRUTOR-2611 | conduta: construtor MAO UNICA so abre com logs/<OBRA>/DOSSIE/; linha no CL
+            AUDE.md 7b; medida 03/12 = reprovacoes por desenho antes x depois; logs/AVAIS-1515/DOSSIE-ANTES-DO-CONSTRUTOR-2611.txt |
+      3005 +| 26/11 00:5x | BATERIA-4O-PARAMETRO-2611 | corte, so registrar: CORTES.json/md, meta da linha BATERIA do placar_estrutural
+           +(4 familias de dinheiro), BACKLOG BATERIA-DINHEIRO sem vez; logs/AVAIS-1515/BATERIA-4O-PARAMETRO-2611.txt |
+  ⎿  Allowed by auto mode
 
-● O dossiê do DIA-DA-BATIDA está quase completo, mas sobrou uma pergunta de lei para você. Ela não bloqueia a obra.
+● O CORTES, o BACKLOG e o PROMPTS estão gravados. Falta a meta no placar. Como core/placar_estrutural.py é código, a troca vai numa cópia do
+  HEAD e o selo do placar roda nela.
 
-  Pergunta de lei 1 (col673, 22/10 06:57:21). É a batida da madrugada sem entrada anterior. O app a gravou como entrada porque não havia turno
-  aberto, mas ela era a saída do plantão. Qual regra decide se uma batida assim é entrada ou saída?
-  - (a) A sequência das batidas, como faz hoje proximo_tipo_de (core/juizes.py:217).
-  - (b) O marco de saída da escala do dia anterior.
-  - (c) Só a ata que testemunha o papel (L-087).
+● Running 1 shell command…
 
-  Nenhuma lei registrada escolhe entre escala e sequência quando não há testemunho. A frase do caso, "tipo e turno pela sequencia, nao pela
-  escala", não deixa claro qual é a regra. A obra só troca o dia da batida e não mexe no tipo, então anda sem essa resposta.
-
-  DIA-DA-BATIDA
-  - Já existe: o juiz do dia (turnos.py:2992), e parte dos leitores já pergunta a ele.
-  - Ainda usam a data civil: a trava de férias do TXT (export.py:500), a materialização (materializacao.py:448) e o detector de par relâmpago
-    (detectar_par_relampago.py:303).
-  - Decididas pela lei: as outras 5 perguntas, por L-085 com L-073, L-038, NOTURNO-A e L-113. Você pode contestar.
-  - Conferência: amostra de 5 arquivo:linha confere no HEAD.
-  - Rodando: a volta 2 do Codex, com contrato, matriz de testes RED, fatias, ementa do construtor e sonda de frota.
-
-  RAZAO-DA-SOBRA: a leitura Codex do dossiê sobre a raia antiga (a4a9b6bfe) ainda está rodando.
-
-  Também em segundo plano:
-  - os construtores O30 c1 e FERIADO c4b;
-  - a medição da rodada com 2 vagas, que decido por volta de 01:40;
-  - os jobs de E1 v4 e PAR c7.
-
-  Acordo pelo esperador quando o primeiro terminar.
-
-✻ Churned for 1m 36s · done 12:45 AM · 4 shells still running
-
+✶ Orbiting… (1m 23s · ↓ 6.4k tokens)
+                                                                                                                        5% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ❯ 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ctx 140k 7d 7%
-  ⏵⏵ auto mode on · 4 shells · ↓ to manage
+  ctx 159k 7d 7%
+  ⏵⏵ auto mode on · 4 shells · esc to interrupt · ↓ to manage
 
   ● main
   ◯ general-purpose  waiting on 1 shell · E1 v4 construtor · since 12:20 AM
