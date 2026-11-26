@@ -10931,6 +10931,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 20:29:02 disjuntor (NEGOU B3-MERGE)** -- agente principal -- Bash -- alvo sha1:284cbe0d92 (308 car., na trilha privada)
+
 **26/11 19:29:30 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:f98c90765b (42 car., na trilha privada)
 
 **26/11 18:49:32 disjuntor (NEGOU B1)** -- agente a67f53558650381df -- Bash -- alvo sha1:0843c01872 (137 car., na trilha privada)
@@ -13597,3 +13599,5 @@ AGENTE-NO-MODELO-NA-FONTE v6 entregue 20:01: 86a57f55b (wt-v5-modelo-fonte-18564
 PUXADA SUITE-ROTEIA-F2 -> construtor opus 20:01 (vaga liberada pela v6; brief_c1.md).
 ABONO-X-SAIDA-ANTECIPADA suite inteira c1g VERDE 20:07 (Ran 18058, OK skipped=42 xf=39, 3 podados; suite_c1g/suite.log). Mutantes da c1f INVALIDOS (controle ctl rc 3: nao nasceu) -> refeitos ctl+M1a..M6 sobre fcff30cec (c1g/mut.sh, fim em c1g/mut.rc).
 SUITE-ROTEIA-F2 c1 entregue 1f4b92cff (RED rc1/GREEN rc0, 41 mutantes; Codex verif 1 volta 0 procedente). Candidato 75ba1fb99 = F2 sobre o candidato da v6 a0b0defe (merge-tree limpo), pista job 1126201342_75ba1fb9 20:14; pousa depois da v6.
+AGENTE-NO-MODELO v6: test_codex_n_vagas rc 124 TAMBEM na base b0cf0c2cd (20:25, logs/AGENTE-NO-MODELO-V5/base_test_codex_n_vagas.log) -> timeout pre-existente, nao bloqueia (lista); certificacao do candidato a0b0defe segue na pista.
+POUSO AGENTE-NO-MODELO-NA-FONTE v6 NO AR 20:29: 78cb8aee4 (merge --no-ff de 86a57f55b, tree 815c32833 == certificado a0b0defe; pista 1126200141 CERTIFICA rc 0 Ran 18080 oom 0); deploy --sem-migrate OK (3 cascas). Lista no BACKLOG (test_codex_n_vagas rc 124 tambem na base). F2 candidato 75ba1fb99 segue valido pelo tree 865239309.

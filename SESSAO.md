@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 20:23:11.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (93.7 MB). Acoes na janela: **2491**.
+**Medido em 26/11/2026 20:29:58.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (94.0 MB). Acoes na janela: **2509**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:29:57 | Bash | Mostra as colunas da linha v5 | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read().split('\n') for i,l in enumerate(s): if l.startswith('\| AGENTE-NO-MODELO-V5 '): c=l.split(' \| '); print(len(c)); [print(j,x[:70]) for j,x in enumerate(c)] # estado = penultima celula antes da data k=len(c)-2 if c[-1].strip()=='&mdash; \|' else len(c)-2 EOF` |
+| 20:29:53 | Bash | Procura a linha da obra no BACKLOG | `cd ~/saas-hasner; grep -n 'AGENTE-NO-MODELO' app/docs/BACKLOG.md \| cut -c1-140 \| head` |
+| 20:29:51 | Bash | Registra o pouso e lê a linha do BACKLOG | `cd ~/saas-hasner; H=$(date +%H:%M); echo "POUSO AGENTE-NO-MODELO-NA-FONTE v6 NO AR $H: 78cb8aee4 (merge --no-ff de 86a57f55b, tree 815c32833 == certificado a0b0defe; pista 1126200141 CERTIFICA rc 0 Ran 18080 oom 0); deploy --sem-migrate OK (3 cascas). Lista no BACKLOG (test_codex_n_vagas rc 124 tambem na base). F2 candidato 75ba1fb99 segue valido pelo tree 865239309." >> app/docs/RELATO.md; python ...` |
+| 20:29:44 | Bash | Reaplica os docs vivos | `cd ~/saas-hasner; D=$(cat scratchpad/pouso_v6_dir.txt); git apply --3way $D/docs.patch; echo apply_rc=$?; git reset -q -- app/docs; git status --porcelain \| grep -v '^??'` |
+| 20:29:25 | Bash | Faz o deploy do pouso da v6 | `cd ~/saas-hasner; bin/deploy.sh --sem-migrate > logs/AGENTE-NO-MODELO-V5/pouso/deploy.log 2>&1; echo deploy_rc=$?; tail -8 logs/AGENTE-NO-MODELO-V5/pouso/deploy.log` |
+| 20:29:20 | Bash | Commita o pouso da v6 | `cd ~/saas-hasner; D=$(cat scratchpad/pouso_v6_dir.txt); git commit -q -F $D/msg.txt; echo commit_rc=$?; git log -1 --format='%h %T %s' \| cut -c1-120` |
+| 20:29:15 | Bash | Merge sem commit e confere o tree | `cd ~/saas-hasner; D=$(cat scratchpad/pouso_v6_dir.txt); git checkout -- app/docs && git merge --no-ff --no-commit 86a57f55bec8b5b47493bfd931e5a3084d7a7891; echo merge_rc=$?; cat .git/MERGE_HEAD; git write-tree` |
+| 20:29:11 | Bash | Guarda os docs e a mensagem do candidato | `cd ~/saas-hasner; git status --porcelain \| grep -v '^??'; D=logs/pouso_v6_$(date +%H%M%S); mkdir -p $D; git diff -- app/docs > $D/docs.patch; tar -czf $D/docs.tgz app/docs; echo $D > scratchpad/pouso_v6_dir.txt; git log -1 --format=%B a0b0defecfca9dd4907312e2d072b810a2d79859 > $D/msg.txt; ls -la $D` |
+| 20:29:02 | Bash | Guarda os docs e avança o main para o certificado | `cd ~/saas-hasner; D=logs/pouso_v6_$(date +%H%M%S); mkdir -p $D; git diff -- app/docs > $D/docs.patch; tar -czf $D/docs.tgz app/docs; echo $D > scratchpad/pouso_v6_dir.txt; git checkout -- app/docs && git merge --ff-only a0b0defecfca9dd4907312e2d072b810a2d79859 && git log -1 --format='%H %T' && echo MERGE_OK` |
+| 20:28:53 | Bash | Lê a certificação da v6 e o estado do main | `cd ~/saas-hasner; cat logs/AGENTE-NO-MODELO-V5/pouso/certifica.out \| tail -6; git rev-parse HEAD; git log -1 --format='%P %T' a0b0defecfca9dd4907312e2d072b810a2d79859; git status --porcelain \| grep -v '^??'; git log -1 --format=%B a0b0defe \| head -3; git log -1 --format=%B a0b0defe \| grep -E '^(OBRA\|LEI-AKITA\|Co-Authored)' \| cut -c1-80` |
+| 20:28:45 | Bash | Lê o despertar e confere v6 e O30 | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqoptypxl.output; cd ~/saas-hasner; cat logs/AGENTE-NO-MODELO-V5/pouso/certifica.rc 2>/dev/null; ls -t logs/O30-F3-CONSTRUIR/ \| head -3` |
+| 20:28:20 | Bash | Relança a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 20:28:16 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b5w4guhc7.output` |
+| 20:25:28 | Bash | Registra e relança a espera | `cd ~/saas-hasner; echo "AGENTE-NO-MODELO v6: test_codex_n_vagas rc 124 TAMBEM na base b0cf0c2cd ($(date +%H:%M), logs/AGENTE-NO-MODELO-V5/base_test_codex_n_vagas.log) -> timeout pre-existente, nao bloqueia (lista); certificacao do candidato a0b0defe segue na pista." >> app/docs/RELATO.md; bash ~/saas-hasner/logs/espera_unica.sh` |
+| 20:25:22 | Bash | Lê o despertar e os rc da v6 | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/br80w31t8.output; cd ~/saas-hasner; cat logs/AGENTE-NO-MODELO-V5/pouso/certifica.rc logs/AGENTE-NO-MODELO-V5/base_n_vagas.rc 2>&1` |
+| 20:24:57 | Bash | Relança a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 20:24:54 | Bash | Confere o controle dos mutantes | `cd ~/saas-hasner; L=logs/ABONO-X-SAIDA-ANTECIPADA/c1g; ls -la --time-style=+%H:%M $L \| tail -6; tail -2 $L/mutctl.log \| cut -c1-200; bin/trava_teste.sh --quem 2>&1 \| tail -2` |
+| 20:24:50 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bwtxmolni.output` |
 | 20:19:35 | Bash | Confere pista e mutantes, e relança a espera | `cd ~/saas-hasner; ssh -n pista estado 2>&1 \| grep -E 'rodando\|na fila'; ls logs/ABONO-X-SAIDA-ANTECIPADA/c1g/ \| grep rc; bash ~/saas-hasner/logs/espera_unica.sh` |
 | 20:19:31 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6ehq2pxz.output` |
 | 20:17:03 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
