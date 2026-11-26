@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 09:47:25.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (10.2 MB). Acoes na janela: **292**.
+**Medido em 26/11/2026 09:53:46.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (10.3 MB). Acoes na janela: **295**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 09:53:17 | Bash | Check rm guard selo on live tree | `cd /home/ronald/saas-hasner; timeout 300 bash bin/tests/test_rm_com_guarda.sh 2>&1 \| tail -2; git log --oneline -1 -- bin/tests/test_codex_n_vagas.sh` |
+| 09:53:09 | Bash | Inspect rm guard and handoff failures | `S=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad; cat $S/spy/test_rm_com_guarda.log \| head -12; cd /home/ronald/wt-clear-noite-091944; bash bin/tests/test_handoff_sessao.sh 2>&1 \| tail -4; W=/home/ronald/wt-suite-rota-092914; bash bin/tests/test_handoff_sessao.sh >/dev/null 2>&1; cd $W && bash bin/tests/test_handoff_sessao.sh 2>&1 \| tail -2` |
+| 09:53:01 | Bash | Read selo verdicts | `S=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad; tail -2 $S/disj2.log; grep -v "rc=0" $S/vizinhos_clear.log; grep -c rc=0 $S/vizinhos_clear.log; grep -i "falha\\|vermelho" $S/spy/test_rm_com_guarda.log \| head -5` |
 | 09:45:11 | Bash | Isolate motivo selo and measure others | `cd /home/ronald/wt-suite-rota-092914; python3 - <<'E' p='bin/tests/test_suite_motivo.sh'; s=open(p).read() a='''chmod +x "$T/fakebin/docker"; export PATH="$T/fakebin:$PATH"''' assert s.count(a)==1 s=s.replace(a,'''# DUBLE do ssh (SUITE-ROTEIA-PARA-PISTA-2611): copia limpa com --dir vai a pista 2; este selo mede a guarda de motivo e # a trava da VM, entao a pista do duble nunca responde (ping falha ...` |
 | 09:45:01 | Bash | Run neighbor hook selos in copy | `cd /home/ronald/wt-clear-noite-091944; O=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/vizinhos_clear.log; : > $O; for t in $(grep -ln "hook_stop_fila1" bin/tests/test_*.sh \| grep -v "test_disjuntor\\|test_orcamento_contexto"); do timeout 900 bash $t >/dev/null 2>&1; echo "$t rc=$?" >> $O; done; echo FIM >> $O` |
 | 09:44:53 | Bash | List selos calling hook_stop | `cd /home/ronald/wt-clear-noite-091944; grep -ln "hook_stop_fila1" bin/tests/*.sh \| grep -v "test_disjuntor\\|test_orcamento_contexto"` |
