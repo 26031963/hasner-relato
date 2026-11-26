@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 13:51** · publicado em **26/11/2026 13:54** (UTC-3)
+> Ultima resposta processada: **26/11/2026 14:11** · publicado em **26/11/2026 14:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 14:11 · sessao 129f79cc07a9 · E1-PREVISAO-24H · construtor · origem=Code
+
+**E1-PREVISAO-24H entregue na cópia, em diff.** As duas faltas do fixture passam por `criar_ausencia`, com as asserções do art. 130 preservadas em 30 dias/5 faltas e 24 dias/6 faltas. O diff ficou restrito a testes e ao executor de prova, com zero testes removidos e zero `except` adicionados. [ferias/tests.py:54](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ferias/tests.py:54) [ponto/tests/prova_e1_previsao_24h.py:78](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/prova_e1_previsao_24h.py:78) [nao verificado]
+
+Os três casos comerciais usam vínculo e célula com duas pausas. O RED local executou o motor com vínculos em memória, sem ORM. Os quatro testes invertidos falharam por asserção contra `558de6bd4` e contra o mutante `limite-pelos-marcos`.
+
+| Caso | Cópia | Base e mutante pelos marcos |
+|---|---:|---:|
+| [Acima da tolerância](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/test_comercial_he_marcos.py:74) | 30 min HE50 | 0 min |
+| [Comercial diurno](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/test_motor_comercial_dia_do_turno.py:82) | 50 min HE50 | 30 min |
+| [Comercial extra 50](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/test_motor.py:1026) | 90 min HE50 | 60 min |
+| [Selo AST](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/test_turno_meia_noite_comercial.py:19) | Passou | Acusou a chamada antiga | [nao verificado]
+
+O mutante `desconta-tolerancia` produziu 20, 40 e 80 min e derrubou as três asserções numéricas. As duas catracas de `Ausencia` passaram na cópia e falharam com o fixture antigo reapresentado em memória. [ponto/tests/prova_e1_previsao_24h.py:47](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/prova_e1_previsao_24h.py:47) [ponto/tests/prova_e1_previsao_24h.py:93](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/tests/prova_e1_previsao_24h.py:93)
+
+**Comandos para o Code**, a partir de `app/` no ambiente de CI. O recorte `escala ferias ponto` foi conferido com `--seco`. O GREEN com banco de ensaio, a execução integrada do RED e dos mutantes e o comparativo de frota da competência 11 seguem [nao verificado]. [bin/suite.sh:300](/home/ronald/wt-codex-e1-previsao-24h-083708/bin/suite.sh:300) [bin/suite.sh:367](/home/ronald/wt-codex-e1-previsao-24h-083708/bin/suite.sh:367) [nao verificado]
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+set -o pipefail
+
+bash ../bin/suite.sh --only "escala ferias ponto" \
+  --dir /home/ronald/wt-codex-e1-previsao-24h-083708
+
+prova() {
+  bash ../bin/trava_teste.sh -- python3 -m ponto.tests.prova_e1_previsao_24h "$@"
+}
+
+git show 558de6bd4:app/ponto/motor_calculo_v2.py | prova red-base
+git show 558de6bd4:app/ponto/motor_calculo_v2.py | prova limite-pelos-marcos
+prova desconta-tolerancia
+git show 7e9a95f38c2806d211cfd1d96af164e7fb99aa1a:app/ferias/tests.py |
+  prova ausencia-fora-da-porta
+```
+
+`LEI-AKITA: origem=testes (caracterização invertida), testemunha=_jornada_do_dia/_previsto_do_dia (grade), RED=4 invertidos contra 558de6bd4 em memória, quem-mais-le=MotorComercial e os quatro selos para HE, PeriodoAquisitivo.faltas_periodo para o art. 130, juizes novos=0, padrao=Architecture Conformance Test`. [ponto/motor_calculo_v2.py:1279](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ponto/motor_calculo_v2.py:1279) [ferias/models.py:144](/home/ronald/wt-codex-e1-previsao-24h-083708/app/ferias/models.py:144) [docs/GLOSSARIO.md:15](/home/ronald/wt-codex-e1-previsao-24h-083708/app/docs/GLOSSARIO.md:15)
 
 ## 26/11 13:51 · sessao 76a1af74edf3 · SUITE-ROTEIA-PARA-PISTA · verificador · origem=Code
 
@@ -627,128 +664,4 @@ O diff acrescenta duas traduções para 404 em handlers existentes e um teste qu
 
 **REPROVADO.** O reenvio que a notificação orienta pode ser barrado antes da reabertura. O app e o vigia ainda leem o arquivo da filha como se fosse o do lançamento. A guarda nova replica a classificação de decidida e o selo deixa passar um resolvedor paralelo escrito com ternário. `app/ponto/views.py:2892`, `app/ponto/services/ausencia.py:1486`, `app/api/views.py:1061`, `app/ponto/services/vigia_ausencia.py:117`, `app/ponto/services/ausencia.py:331`, `app/core/juizes.py:264`, `app/ponto/tests/test_atestado_f3_contrato.py:482`
 
-## 26/11 11:26 · sessao c9357fee11e2 · DIA-DA-BATIDA-JUIZ-UNICO · leitura · origem=Code
-
-- A sonda chama `ponto.turnos.turnos_do_colab`, a entrada pública usada pelo esmeril do espelho. Ela delega ao pareador que aplica o pad por segmento de vínculo. [app/ponto/services/esmeril_espelho.py:102](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/esmeril_espelho.py:102) · [app/ponto/turnos.py:1850](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1850) · [app/ponto/turnos.py:1980](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1980)
-- O universo vem de `batidas_apuraveis` pela data civil. A duplicidade é medida dentro da lista de turnos de cada competência e inclui PKs que o pareador trouxe do pad. O total deduplica PKs entre competências. [app/ponto/turnos.py:2921](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:2921) · [app/ponto/turnos.py:1997](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1997)
-- A classe mista indica que a PK aparece em turno incompleto e em par fechado. A sonda consulta `vinculo_do_dia` pela `data_turno` com a mesma carga do pareador. `sem_vinculo` indica que falta pelo menos um vínculo e que a sonda encontrou menos de dois vínculos distintos. [app/ponto/turnos.py:312](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:312) · [app/ponto/turnos.py:1889](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1889) · [app/ponto/turnos.py:1965](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1965)
-- Erros que saem da função pública fazem a sonda falhar. A função real já captura internamente erros de `periodos_do_dia`. Execução e números na sombra [nao verificado]. [app/ponto/turnos.py:1632](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1632)
-
-```python
-from collections import Counter, defaultdict
-from datetime import datetime, time, timedelta
-
-from django.db import connection, transaction
-from django.db.models import Count
-from django.utils import timezone
-
-from escala.alimentacao import celulas_do_periodo, escalas_do_periodo, vinculo_do_dia
-from ponto.janelas import periodo_apuracao
-from ponto.turnos import batidas_apuraveis, janela_com_pad, turnos_do_colab
-
-
-CLASSES = ("(i)_orfa", "(ii)_par_fechado", "(i)+(ii)_mista")
-VINCULOS = ("igual", "diferente", "sem_vinculo")
-
-
-def medir_competencia(mes, exemplos):
-    ini, fim = periodo_apuracao(mes, 2026, dia_corte=21)
-    inicio = timezone.make_aware(datetime.combine(ini, time.min))
-    limite = timezone.make_aware(datetime.combine(fim + timedelta(days=1), time.min))
-    universo = dict(
-        batidas_apuraveis(None, ini=inicio)
-        .filter(timestamp__lt=limite)
-        .values_list("colaborador_id")
-        .annotate(n=Count("pk"))
-        .order_by("colaborador_id")
-    )
-    pad_ini, pad_fim = janela_com_pad(ini, fim)
-    afetados = set()
-    pks = set()
-    contagem = Counter()
-
-    for cid in universo:
-        por_pk = defaultdict(list)
-        for turno in turnos_do_colab(cid, ini, fim):
-            for pk, batida in {b.pk: b for b in turno.batidas}.items():
-                por_pk[pk].append((turno, batida.timestamp))
-
-        repetidas = {pk: itens for pk, itens in por_pk.items() if len(itens) > 1}
-        if not repetidas:
-            continue
-
-        afetados.add(cid)
-        celulas = celulas_do_periodo([cid], pad_ini, pad_fim)
-        escalas = escalas_do_periodo(
-            cid, pad_ini, fim, mais=[c.escala_geradora_id for c in celulas.values()]
-        )
-        escalas.sort(key=lambda e: e.data_inicio)
-        dias = {t.data_turno for itens in repetidas.values() for t, _ in itens}
-        dono_por_dia = {
-            dia: getattr(vinculo_do_dia(cid, dia, escalas, celulas=celulas), "pk", None)
-            for dia in dias
-        }
-
-        for pk, itens in sorted(repetidas.items()):
-            pks.add(pk)
-            fechados = sum(t.entrada is not None and t.saida is not None for t, _ in itens)
-            if fechados == 0:
-                classe = "(i)_orfa"
-            elif fechados == len(itens):
-                classe = "(ii)_par_fechado"
-            else:
-                classe = "(i)+(ii)_mista"
-
-            donos = {dono_por_dia[t.data_turno] for t, _ in itens}
-            if len(donos - {None}) > 1:
-                vinculo = "diferente"
-            elif None in donos:
-                vinculo = "sem_vinculo"
-            else:
-                vinculo = "igual"
-            contagem[classe, vinculo] += 1
-
-            if len(exemplos) < 15 and pk not in exemplos:
-                instante = timezone.localtime(itens[0][1]).isoformat()
-                dias_turno = ",".join(sorted(t.data_turno.isoformat() for t, _ in itens))
-                exemplos[pk] = f"col{cid:03d} {pk} {instante} turnos=[{dias_turno}]"
-
-    total_batidas = sum(universo.values())
-    print(
-        f"competencia={mes:02d}/2026 janela={ini}..{fim} "
-        f"universo_colabs={len(universo)} universo_batidas={total_batidas} "
-        f"colabs_afetados={len(afetados)} pks_multiplas={len(pks)}"
-    )
-    for classe in CLASSES:
-        valores = " ".join(f"{v}={contagem[classe, v]}" for v in VINCULOS)
-        print(f"  classe={classe} {valores}")
-
-    return set(universo), total_batidas, afetados, pks
-
-
-def sondar():
-    exemplos = {}
-    with transaction.atomic(), connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-        cursor.execute("SELECT current_database(), current_schema()")
-        if cursor.fetchone() != ("sombra", "juliani"):
-            raise RuntimeError("A sonda exige o banco sombra e o schema juliani.")
-
-        universo_10, batidas_10, afetados_10, pks_10 = medir_competencia(10, exemplos)
-        universo_11, batidas_11, afetados_11, pks_11 = medir_competencia(11, exemplos)
-
-    print(
-        f"total universo_colabs={len(universo_10 | universo_11)} "
-        f"universo_batidas={batidas_10 + batidas_11} "
-        f"colabs_afetados={len(afetados_10 | afetados_11)} "
-        f"pks_multiplas={len(pks_10 | pks_11)}"
-    )
-    for exemplo in exemplos.values():
-        print(exemplo)
-    print("SONDA_FIM ok")
-
-
-sondar()
-```
-
-_8373 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8374 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
