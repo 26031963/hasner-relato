@@ -1,7 +1,30 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 22:45** · publicado em **25/11/2026 22:46** (UTC-3)
+> Ultima resposta processada: **25/11/2026 23:16** · publicado em **25/11/2026 23:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 23:16 · sessao 98551753d668 · A4-ESPELHO-AUSENCIA-ABERTA · sonda · origem=Code
+
+**Saída raspada integral, conforme fornecida.** Não localizei `sonda_auditavel.py` na cópia. A reexecução em produção e a integridade da saída original ficam [nao verificado].
+
+```text
+sonda_leitura: sonda_auditavel.py [c9ddb5f1459a625f] no cpuset 4-7, lendo saas_hasner como leitor (LEITURA)
+
+universo ausencias abertas de colab ativo = 81
+em competencia fechada (aprovado/exportado) = 4
+  com disputa aberta (impedido) = 2
+  SEM impedimento (candidatos) = 2
+  colab_id=482 empresa_id=2 tipo=falta data=2026-07-21 data_fim=None status=aguardando_decisao competencia=08/2026 fechada='competencia 08/2026 aprovado -- reabra antes de ajustar' palavra='Falta aguardando decisao do DP'
+  colab_id=642 empresa_id=3 tipo=outros data=2026-06-22 data_fim=None status=aguardando_decisao competencia=07/2026 fechada='competencia 07/2026 aprovado -- reabra antes de ajustar' palavra='outros aguardando decisao do DP'
+```
+
+**Mesmo predicado de impedimento?** [nao verificado] para a sonda. A saída diz “disputa aberta”, mas não mostra a consulta. O PDF chama `motor_bloqueado_por_disputa(colab)`, que procura uma `DisputaSupervisao` daquele colaborador com `fechada_em IS NULL`, sem filtro de dia, mês ou ano. Se encontrar, levanta `ValueError`. `app/relatorios/pdf_espelho.py:1085`, `app/ponto/services/disputa.py:29`, `app/chamados/services/disputa_emissao.py:34`.
+
+**Outros bloqueios?** Disputa é o único bloqueio de negócio explícito que o gerador passa a `pdf_base.py`, que executa os bloqueios recebidos. O serviço individual chama o gerador diretamente. A mensagem “reabra antes de ajustar” vem da guarda de escrita em competência aprovada ou exportada. Na emissão, a presença do fechamento serve para escolher a fonte dos totais, com caminho também para quando ele falta. `app/relatorios/pdf_espelho.py:1106`, `app/relatorios/pdf_base.py:127`, `app/relatorios/services.py:70`, `app/ponto/janelas.py:75`, `app/relatorios/cartao_pela_celula.py:69`, `app/relatorios/cartao_pela_celula.py:321`.
+
+As views exigem login e a ação `ver_relatorios`, validam mês/ano e o alvo do pedido. Para anexar, o chamado precisa ter colaborador vinculado. Com início e fim explícitos, avulso e lote seguem pelo PDF informacional e recusam data final posterior a ontem. O lote mensal tenta o auditável e, em caso de exceção, tenta o informacional. A emissão auditável também depende de gravar `RegistroPDFAuditavel`. Emissão bem-sucedida para os dois candidatos [nao verificado]. `app/relatorios/views.py:15`, `app/relatorios/views.py:970`, `app/relatorios/views.py:1049`, `app/relatorios/views.py:1090`, `app/relatorios/views.py:1102`, `app/relatorios/views.py:1151`, `app/relatorios/views.py:1176`, `app/relatorios/services.py:34`, `app/relatorios/services.py:235`, `app/relatorios/pdf_base.py:152`.
+
+**Mesma competência para o dia?** Sim, pela regra da cópia. A guarda identifica a competência pelo mês e ano do fim de `janela_atual(dia, empresa)`. O PDF recebe esse mês e ano e reconstrói a mesma janela pelo corte da empresa. Assim, pelas competências do dado raspado, o pedido **08/2026** para `482` cobre **21/07/2026**, e o pedido **07/2026** para `642` cobre **22/06/2026**. Os cortes efetivos cadastrados e os PDFs emitidos em produção ficam [nao verificado]. `app/ponto/janelas.py:10`, `app/ponto/janelas.py:24`, `app/ponto/janelas.py:54`, `app/ponto/janelas.py:84`, `app/relatorios/pdf_espelho.py:654`, `app/relatorios/cartao_pela_celula.py:21`, `app/folha/export.py:47`.
 
 ## 25/11 22:45 · sessao 9c7d80e28bf2 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · verificador · origem=Code
 
@@ -929,9 +952,4 @@ As funções reais, executadas em memória com a sonda fornecida, devolveram os 
 - **`test_MORDE_sitio_novo_e_lista_velha_ficam_vermelhos` — SELO DE CONTRATO.** A sentinela injeta `regua_para` sobre o censo real, que já traz `medir` como nova entrada. O mesmo registro em `HOJE` resolve a falha e conserva as duas provas. A inclusão em memória passou nos sete testes do módulo. `app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:358`, `app/escala/tests/test_semselo5_ativo_nao_responde_por_dia.py:418`.
 - **`test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit` — SELO DE CONTRATO.** Os hunks de `utils.py`, `cartorio.py` e `fechamento.py` deslocaram as linhas de sete entradas já registradas, preservando as identidades e as contagens de 9 e 81. Por exemplo, o A1 de `_alinhar_por_papel` passou de `529` a `627`. Depois das curas de código, extrair com `core.medida_turno_do_par.censo("app")` e atualizar `LINHAS_REGISTRADAS` no mesmo commit, pela projeção usada na asserção. `app/escala/utils.py:627`, `app/core/medida_turno_do_par.py:448`, `app/core/tests/test_medida_turno_do_par.py:251`, `app/core/tests/test_medida_turno_do_par.py:563`.
 
-## 25/11 19:55 · sessao 980129d350e6 · - · - · origem=Ronald (tmux)
-
-- `test_MORDE_grade_marca_o_dia_zera_previsto_e_guarda_realizado` — **CAUSADO PELO DIFF**, hunk do novo arquivo `@@ -0,0 +1,380 @@`. O teste lê `d['data']` no builder cujo contrato é `dias[i] = ref - i` e cujo dia identifica a posição com `label`. Ajustar a asserção de identidade para `d['label'] == 'Qua 30/09'` e preservar as verificações de marca, previsto zero e realizado de 210 min. A execução das asserções seguintes é [nao verificado]. `app/escala/tests/test_e1_previsao_do_dia_valida.py:200–220`, `app/escala/utils.py:1400,1878–1891,1916–1926`, `app/ponto/services/cartorio.py:1209–1213`.
-- `test_MORDE_dia_marcado_sai_do_previsto_e_da_falta` — **CAUSADO PELO DIFF**, hunk do novo arquivo `@@ -0,0 +1,380 @@`. A fixture não cria ausência aprovada que desconta, única fonte de `horas_falta`, de modo que os dois totais são zero. Na asserção de origem, usar `coletar_furos` do fechamento para exigir `DIA` no gêmeo válido e ausência no inválido, preservando a marca na ata e os deltas de um dia e 480 min. Isso cobre o hunk `fechamento.py @@ -737,7 +738,10 @@`, que exclui o dia recusado dos previstos entregues ao motor. A execução do teste assim corrigido é [nao verificado]. `app/escala/tests/test_e1_previsao_do_dia_valida.py:331–362`, `app/folha/export.py:87–92,125–143`, `app/ponto/services/fechamento.py:743–753,886–888,1020,1135–1147`, `app/ponto/motor_calculo_v2.py:2611–2627`.
-
-_8264 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8265 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
