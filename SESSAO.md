@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 05:11:56.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **851**.
+**Medido em 26/11/2026 05:18:06.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **844**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -854,10 +854,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:18:43 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/WRAPPER-N-VAGAS/HANDBACK-1625.md \| head -40 \| cut -c1-250` |
 | 17:18:38 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/WRAPPER-N-VAGAS/opus_v12; cat > logs/WRAPPER-N-VAGAS/opus_v12/veredito.md <<'EOF' # opus verificador (escalonamento CODEX 5(d)) sobre a volta 12 -- 25/11 17:1x -- REPROVA Diff real da obra: ab351aa9b..37b4a957a (merge-base; 13 arquivos +1788/-56). 160173bb1..37b4a957a desfaz 308 commits do main. 1. Triagem v12: os 3 NOVO-DENTRO procedem. "mesma wt" NAO e  ...` |
 | 17:18:13 | Bash |  | `date '+%H:%M'; cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/ \| tail -5; git -C /home/ronald/wt-wrapper-n-vagas-125229 merge-base HEAD 160173bb1` |
-| 17:15:05 | Bash |  | `cd /home/ronald/saas-hasner; bin/suite.sh --dir /home/ronald/wt-guarda10b-154425 --only "core.tests.test_medida_turno_do_par" > logs/GUARDA-10-B/catraca.log 2>&1; echo "rc=$?" >> logs/GUARDA-10-B/catraca.log; grep -E '^(OK\|FAILED)($\| \()\|^Ran \|^rc=' logs/GUARDA-10-B/catraca.log \| tail -3` |
-| 17:14:59 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'only' bin/suite.sh \| head -8; bin/trava_teste.sh --quem` |
-| 17:14:55 | Bash |  | `cd /home/ronald/wt-guarda10b-154425/app; python3 - <<'EOF' import re p='core/tests/test_medida_turno_do_par.py' s=open(p).read() def fix(m): nums=[int(x) for x in m.group(2).split(',')] nums=[n+11 if n>40 else n for n in nums] return m.group(1)+', '.join(map(str,nums))+']' s2,n=re.subn(r"(\('ponto/services/fechamento\.py::[a-z_]+', 'B1'\): \[)([0-9, ]+)\]",fix,s) print(n) open(p,'w').write(s2) EOF ...` |
-| 17:14:46 | Bash |  | `cd /home/ronald/wt-guarda10b-154425/app; grep -n 'def _so_a_data' ponto/services/fechamento.py; git -C .. show 160173bb1:app/ponto/services/fechamento.py \| grep -n 'def _so_a_data'; git -C .. diff 160173bb1 -- app/ponto/services/fechamento.py \| grep '^@@'` |
-| 17:14:41 | Bash |  | `cd /home/ronald/wt-guarda10b-154425/app; grep -n "fechamento.py" core/tests/test_medida_turno_do_par.py \| head; sed -n 540,575p core/tests/test_medida_turno_do_par.py` |
-| 17:14:34 | Bash |  | `cd /home/ronald/saas-hasner; n=$(grep -n '^FAIL: test_CATRACA_linhas_reais' logs/GUARDA-10-B/full.log \| cut -d: -f1); sed -n "$n,$((n+30))p" logs/GUARDA-10-B/full.log \| cut -c1-300` |
-| 17:14:30 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bfkoi2crl.output; cd /home/ronald/saas-hasner; grep -E '^(ERROR\|FAIL):' logs/GUARDA-10-B/full.log \| head -20` |
