@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 06:38:56.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **767**.
+**Medido em 26/11/2026 06:45:10.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **763**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -773,7 +773,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:46:22 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:4x A-TELA v18')) L.insert(k+1,'18:5x A4 m2 (VM, trava): rc 1 FAILED (failures=2) Ran 89 -> o mutante m2 MORDE; 3/3 mutantes da v3 mordem. Copias a4red/a4m1/a4m2/a4m3 removidas (0 container nelas). A4 espera a suite de pouso na pista (1125181431) pa ...` |
 | 18:46:16 | Bash |  | `cd /home/ronald/saas-hasner; docker ps --format '{{.Names}} {{.Mounts}}' 2>/dev/null \| grep -c 'a4m\\|a4red'; for d in a4red-155532 a4m1-155532 a4m2-155532 a4m3-160255; do git worktree list \| grep -q "/$d " && git worktree remove --force /home/ronald/$d \|\| rm -rf /home/ronald/$d; ls -d /home/ronald/$d 2>&1 \| tail -1; done` |
 | 18:46:13 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6udq64zu.output; grep -E '^Ran ' logs/A4-ESPELHO-AUSENCIA-ABERTA/mutante_v3_m2.log \| tail -1` |
-| 18:41:12 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:3x WRAPPER-N-VAGAS v13')) L.insert(k+1,'18:4x A-TELA v18: wt-atela-v18-180430 commit 25ad014fb; RED pista 1125180940 rc 1 (10 fail), GREEN 1125182125 525 OK rc 0, 7/7 mutantes mordem; Codex final REPROVA. DECIDIDO PELA LEI A-TELA-PROTESTOS-2511 (se ...` |
-| 18:41:07 | SendMessage |  | `-` |
-| 18:40:56 | Bash |  | `cd /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ; sed -n 80,98p CONTRATO-NOVO-RASCUNHO-2511.md; grep -n -i 'v17\\|23 commit\\|cadeia' v18/HANDBACK.md \| head` |
-| 18:40:44 | Bash |  | `cd /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ; grep -n -A4 'K5' CONTRATO-NOVO-RASCUNHO-2511.md \| head -30; grep -n -A25 '^## *9' CONTRATO-NOVO-RASCUNHO-2511.md \| head -40` |
