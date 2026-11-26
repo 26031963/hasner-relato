@@ -2572,6 +2572,7 @@
 | E4C-COMBOIOS-LEITURA | LEITURA (aval 17/11 20:4x, logs/AVAIS-1515/e4c_comboios_leitura_1711_204x.txt; padrao=n/a (leitura)): F3..F9 x arquivos, cruzamento entre si e com B2/F2 P2 | FECHADA 17/11 20:4x: logs/ESPINHA-BRIEFS/comboios.r; so F6<->F7 cruzam (chamados/views.py); A/B/C nao se sustenta; adotar = aval novo | 17/11 20:4x |
 | CURA-DE-FASE-NO-OP-APOS-FALHA | ESMERIL (achado do construtor CURA-DE-FASE, Codex verif1 'linha de fila'): 2a passagem so chega ao NO_OP pela celula regenerada; regeneracao do passado em except que engole (alimentacao.py:269, vinculo.py:328) -- falha deixa a juiza em None e a linha volta a porta | registrada | 17/11 20:4x |
 | CURA-DE-FASE-REVERSAO-POR-MINUTO | ESMERIL (achado do construtor CURA-DE-FASE): nome da reversao de _curar tem precisao de minuto e abre em 'w' antes do NO_OP (censo_fase_12x36.py:397) -- duas corridas no mesmo minuto sobrescrevem a 1a reversao | registrada | 17/11 20:4x |
+| DISJUNTOR-CENSO-SO-BRIEF-VIVO | INSTRUMENTO, aval CLEAR-BRIEF-ARQUIVA-2611 (26/11 10:0x), REGISTRAR sem construir: o DISJUNTOR CENSO (bin/disjuntor.py::censo_do_brief e o varredor de logs/<OBRA>/brief*.md) le todo brief da pasta e recusa por brief superado -- passa a ler so o brief VIVO; CONTRATO de 5 linhas antes | REGISTRADA 10:0x; caso: brief_v1.md do CLEAR recusou a volta 2 (arquivado em logs/CLEAR-NAO-PARA-A-NOITE/v1/) | -- | 26/11 |
 <!-- OBRAS:FIM -->
 
 ## Contagem por portao
