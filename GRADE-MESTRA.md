@@ -550,19 +550,27 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 
 | fatia do balde | papel | onde esta | fonte |
 |---|---|---|---|
-| O30-F3-CONSTRUIR | TRONCO | EM VOO (c7 538cb39c0, verificador volta 7) | logs/O30-F3-CONSTRUIR/ |
+| O30-F3-CONSTRUIR | TRONCO | EM VOO (c8 construtor Codex, opus escalonado 5(d)) | logs/O30-F3-CONSTRUIR/ |
 | O22 | complemento | BACKLOG | BACKLOG:1435 |
-| RC1-1 | complemento | ? (censo localiza) | ? |
+| RC1-1 | complemento | BACKLOG (RC1-1-AUSENCIA-SEM-COMPROVANTE) | BACKLOG:759 |
 | AUSENCIA-UMA-VIGENTE | complemento | GRADE:274 | BACKLOG:2104 |
 | POSICAO-FALTAS-E-AUSENCIAS | complemento | GRADE:181 | BACKLOG:1182 |
 | LANCAR-AUSENCIA-AFASTA-DESLIGADO | complemento | GRADE:142 | BACKLOG:801 |
-| API-NAO-TEM-PORTA-DE-ANEXAR | complemento | ? (censo localiza) | ? |
+| API-NAO-TEM-PORTA-DE-ANEXAR | complemento | BACKLOG (API-NAO-TEM-PORTA-DE-ANEXAR-EM-AUSENCIA-EXISTENTE) | BACKLOG:1218 |
 | UI-ANEXO-AUSENCIA | complemento | GRADE:1551 | BACKLOG:1281 |
 | CONTADOR-AUSENCIA-X-VEREDITO | ponteiro (fica na espinha) | GRADE:686 | BACKLOG:1647 |
-| COBPARC-AUSENCIA | ponteiro (fica na espinha) | ? (censo localiza) | ? |
-| E4D-F5-ITEM-93 | ponteiro (fica no E4d) | ? (censo localiza) | ? |
+| COBPARC-AUSENCIA | ponteiro (fica na espinha) | GRADE:663 (COBPARC-AUSENCIA-CALA-DOIS-JUIZES) | BACKLOG:908 |
+| E4D-F5-ITEM-93 | ponteiro (fica no E4d) | BACKLOG (E4D-F5-ITEM-93-AUSENCIA-REJEITADA) | BACKLOG:2179 |
 
-Censo Codex leitura (toda obra que toca Ausencia no BACKLOG/GRADE): logs/BALDE-AUSENCIA/censo/r.txt -- lista e diferenca entram aqui quando o rc cair.
+| ANEXO-ORFAO-REABRIR-SOB-ATOMIC | ponteiro (censo; mesmo sitio do tronco, c8 item 3) | BACKLOG | BACKLOG:881 |
+| ATESTADO-DADOS-NO-FORM | ponteiro (censo; seis campos do tronco) | BACKLOG | BACKLOG:1281 |
+| HX-TIPO-REAL-DOC | ponteiro (censo; raiz do documento) | BACKLOG | BACKLOG:1281 |
+| BO-ATESTADO-409-MUDO | ponteiro (censo) | GRADE:1327 | BACKLOG:1636 |
+| BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR / REENVIO-SILENCIOSO | ponteiro (censo) | GRADE:188 | BACKLOG:117, BACKLOG:1223 |
+| ANEXOS-ORFAOS-DE-AUSENCIA-RECUSADA-NAO-TEM-DONO | ponteiro (censo; anexo do tronco) | BACKLOG | BACKLOG:2941 |
+| O30-ATESTADOS-MAPA-2511 | ponteiro (censo; mapa do programa) | BACKLOG | BACKLOG:2372 |
+
+Censo Codex leitura (rc 0 16:19, logs/BALDE-AUSENCIA/censo/r.txt, copia f69a1cebf): ~250 linhas de BACKLOG/GRADE tocam Ausencia; os 12 ids do aval localizados (secao "Os 12 IDs consultados"). Diferenca censo x balde: os 7 acima sao do sitio do TRONCO (anexo, seis campos, raiz do documento) e entram como ponteiro; o resto (HJ-091*, COBPARC-*, JUSTIFICATIVA-*, FERIAS-*, TELA-*/PORT-* do censo de sitios, H12H06-*, E4D-*, O10-*...) LE Ausencia por outro dominio (ferias, cobertura parcial, justificativa, tela) e FICA ONDE ESTA, lista literal na secao "Diferenca" do r.txt. Diferenca nao classificada = 0. Nenhuma linha movida nem reescrita (aval: so registro).
 
 ## COMPLEMENTOS por obra-mae (passada 2, 548; nao contam no placar -- a mae carrega)
 
