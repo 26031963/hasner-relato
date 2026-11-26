@@ -1,7 +1,142 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 11:39** · publicado em **26/11/2026 11:40** (UTC-3)
+> Ultima resposta processada: **26/11/2026 11:43** · publicado em **26/11/2026 11:47** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 11:43 · sessao 9765fa36b75c · UI-RESCISAO · leitura · origem=Code
+
+## 0. Perguntas de lei
+
+**As três perguntas do censo1 sobrevivem.** Caem as partes já decididas sobre agendamento, fonte dos números, leitura do espelho e encaminhamento ao Domínio. Restam os avos de férias, a projeção do aviso e o tratamento de DSR e banco no acerto parcial. A conferência compara o censo1 anexado com os arquivos da cópia. A cópia não contém `.git`, então a correspondência com `558de6bd4bba318bac4130a14936946e218f885d`, o diff contra `7621a973f` e o estado atual de produção ficam **[nao verificado]**. `CLAUDE.md:275–280`, `CLAUDE.md:412`, `app/docs/RELATO.md:3973`
+
+1. **Férias proporcionais.** Quais avos e frações entram até o desligamento e qual efeito a projeção do aviso tem sobre esse direito? O código responde o saldo integral do aquisitivo. O backlog registra que a apuração de proporcionais e avos até a data saiu do piloto. Faltam medir os desligamentos com ciclo incompleto, sem ciclo cobrindo a data e com gozo na data, e cotejar com demonstrativos de acerto que tragam os avos concedidos. Numeradores e demonstrativos **[nao verificado]**. `app/ferias/models.py:94–105`, `app/ferias/models.py:219–220`, `app/docs/BACKLOG.md:1179`
+2. **Aviso prévio.** Como registrar trabalhado e indenizado e qual data cada modalidade projeta para os direitos? **Cai a parte sobre agendamento.** A porta aceita data futura até hoje + 90 dias, inclusive, mantém o estado durante a espera e efetiva na data pelo cron. A referência à Lei 12.506 fundamenta o teto, e a porta recebe data e motivo. Faltam medir a frequência do agendamento registrado e obter a modalidade e as datas do aviso e do acerto para cotejo. Modalidades, projeções e respectivos totais **[nao verificado]**. `app/colaboradores/services/desligamento.py:17–19`, `app/colaboradores/services/desligamento.py:35–78`, `app/colaboradores/services/desligamento.py:102–126`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37–57`
+3. **DSR e banco de horas na competência parcial.** Qual reflexo de DSR pertence ao acerto e como liquidar ou baixar crédito e débito de banco? **Caem a escolha do canal e o rateio pela tela.** H12 encaminha as verbas ao módulo próprio do Domínio. `DiaPago` põe reflexo e banco no ajuste indivisível da competência e exclui esse ajuste da leitura por intervalo. Faltam medir ajustes ausentes, zerados, positivos e negativos, por competência e marco de exportação, e cotejar com as rubricas e baixas do acerto. Valores do acerto **[nao verificado]**. `app/folha/export.py:54–60`, `app/folha/export.py:453–460`, `app/folha/export.py:856–871`, `app/ponto/services/dia_pago.py:752–769`
+
+### Filtro LEI-SO-QUANDO-NOVA
+
+| Lei ou corte candidato | Veredito para as perguntas |
+|---|---|
+| **LEI-AKITA 2 / L-002**, L-001, L-007 e L-011, juiz único, escritor único e testemunha lê | **Respondem** quem decide, quem grava e quem lê. A tela usa autoridades existentes, o ato usa as portas, e um juiz novo exige corte. **Não respondem** a fórmula, a modalidade ou a destinação das verbas em 1–3. `app/docs/LEIS.md:59–65`, `app/docs/LEIS.md:69`, `app/docs/GLOSSARIO.md:11–12`, `CLAUDE.md:74–76` |
+| **Célula soberana**, L-020, L-024, L-025, L-030, L-060/061, `CLAUDE.md` §4 e §4a | **Respondem** a origem de jornada, previsto, batidas e veredito, e o papel do cron e dos consumidores. **Não respondem** quantos avos, qual projeção ou qual verba sai do ajuste. Os vetos atuais de férias e desligado na porta da batida constam como exceções ainda presentes. `app/docs/LEIS.md:71–78`, `app/docs/LEIS.md:94–95`, `app/docs/LEIS.md:168`, `CLAUDE.md:142–174`, `app/api/views_core.py:389–397` |
+| L-021, L-112, Lei 12.506 citada na porta e `aviso_home_office` | **Respondem** a validade da vigência, o início declarado, o horizonte de agendamento e o efeito abonado do lançamento de aviso em home office. **Não respondem** a projeção de direitos ou a modalidade indenizada da pergunta 2. `app/docs/LEIS.md:72`, `app/docs/LEIS.md:157`, `app/colaboradores/services/desligamento.py:17–19`, `app/colaboradores/services/desligamento.py:52–78`, `app/ponto/catalogo/ausencias.py:104` |
+| CLT arts. 130/131, 134, 135 e 137 nos sítios locais, O157, L-039/088/089 e corte de fracionamento | **Respondem** o insumo de faltas decididas, as faixas de direito integral, o vencimento, o aviso de gozo e as frações de **gozo**. O157 responde que o art. 130 deve considerar falta e suspensão, excluindo atraso e saída antecipada. **Não respondem** a fração de mês que gera avo nem o efeito do aviso da dispensa nas perguntas 1–2. `app/ferias/models.py:52–62`, `app/ferias/models.py:144–150`, `app/ferias/situacao.py:192–265`, `app/docs/BACKLOG.md:1434`, `app/docs/BACKLOG.md:1541`, `app/docs/CORTES.md:520`, `app/docs/LEIS.md:87`, `app/docs/LEIS.md:120–121` |
+| L-006, L-034/035/036 e `CLAUDE.md` §6b | **Respondem** de qual cadastro vem a régua aplicável e regras de jornada e adicional. **Não respondem** avos, projeção ou acerto parcial. A aplicação de qualquer convenção ao universo raspado **[nao verificado]**. `app/docs/LEIS.md:64`, `app/docs/LEIS.md:82–84`, `CLAUDE.md:210–238`, `app/core/regua_cct.py:297` |
+| L-026/090, L-037/038, L-085, L-095 e O58/O59 | **Respondem** a janela de competência, a atribuição ao início da jornada, a origem das rubricas e a leitura do documento emitido. **Não respondem** avos, projeção nem a liquidação de um ajuste sem dia. A auditoria de L-085 registra divergências, inclusive no motor comercial. `app/docs/LEIS.md:77`, `app/docs/LEIS.md:85–86`, `app/docs/LEIS.md:113`, `app/docs/LEIS.md:117`, `app/docs/LEIS.md:123`, `app/docs/LEIS.md:178`, `app/docs/BACKLOG.md:1473–1474` |
+| Lei 605/1949, Súmula 172, CLT art. 59 §2 e H12 | **Respondem** como o motor apura reflexo regular de HE e banco comercial, por que o reflexo fica a cargo do Domínio no TXT mensal e por onde saem as verbas rescisórias. **Não respondem** quais valores o acerto parcial deve aceitar ou baixar. `app/ponto/motor_calculo_v2.py:2581–2607`, `app/ponto/motor_calculo_v2.py:2645–2669`, `app/ponto/motor_calculo_v2.py:3445–3475`, `app/folha/export.py:453–460`, `app/folha/export.py:856–871` |
+| L-050/051/052, L-092, L-113 e o corte L-113 × DINHEIRO 2 de 25/11 | **Respondem** a fronteira de chamados, a história da tranca e o tratamento do gravado e do TXT. A proteção do gravado contra recálculo genérico vale na guarda cadastrada, que lista 09/2026. Fora dela se aplica L-113, com trilha, versão anterior preservada, DIFF antes de ato de frota e aviso DP quando a exportada muda. **Não respondem** verba rescisória da pergunta 3. `app/docs/LEIS.md:91–93`, `app/docs/LEIS.md:125`, `app/docs/LEIS.md:155–156`, `CLAUDE.md:428–433`, `app/ponto/services/fechamento.py:36–49`, `app/ponto/services/fechamento.py:578–581` |
+| `CORTES.md` DESLIGADO-FORA-DA-JANELA, JUIZ-ESTA-DESLIGADO e os cortes de DSR regular | **Respondem** a aposentadoria de linha fora da janela, o estado de desligado e efeitos de fatos na apuração regular. **Não respondem** projeção de aviso nem acerto de DSR/banco. `app/docs/CORTES.md:80`, `app/docs/CORTES.md:352`, `app/docs/CORTES.md:473`, `app/docs/CORTES.md:479`, `app/docs/CORTES.md:496`, `app/docs/CORTES.md:517`, `app/docs/CORTES.md:558` |
+| COMPLEMENTO-DESLIGAR-1311, O50, DESLIGAR-LIQUIDA-TUDO, NAO-REABRE, LEI-DESLIGADO-NAO-TRAVA e L-130 | **Respondem** a composição do ato, o alcance em vínculos, perguntas e fios, a exceção humana à reabertura, o que é resposta válida e o destino informativo dos dias do desligado. **Não respondem** as verbas das três perguntas. `app/docs/RELATO.md:3981–3982`, `app/docs/BACKLOG.md:731–733`, `app/docs/BACKLOG.md:1461–1462`, `app/docs/BACKLOG.md:1474–1475`, `app/docs/LEIS.md:151` |
+| `CLAUDE.md` §7b, L-003/110/117 e precedente CORTES-F2-F9 | **Respondem** o filtro: usar a lei escrita quando ela resolve, medir na fonte quando há juiz, e deixar explícito o residual que exige decisão. **Não respondem** os três residuais. `CLAUDE.md:252–280`, `CLAUDE.md:412`, `app/docs/LEIS.md:61`, `app/docs/LEIS.md:136`, `app/docs/LEIS.md:138`, `app/docs/CORTES.md:565` |
+
+### Sonda de leitura para as três perguntas
+
+Trecho para um shell Django já no tenant da amostra, com datas civis explícitas. Retorna agregados. Para a pergunta 1, mede ciclo e gozo no corte. Para a 2, mede a marca de agendamento e o prazo registrado, inclusive para quem já efetivou. Para a 3, mede a linha de ajuste lavrada e o marco da competência. As modalidades e os valores oficiais do acerto precisam vir de um demonstrativo raspado correspondente. Registros cuja reativação limpou `data_demissao` ficam fora desse universo. A sonda ficou **[nao verificado]** em execução. `app/colaboradores/models.py:323–325`, `app/colaboradores/models.py:577–584`, `app/colaboradores/services/desligamento.py:107–117`, `app/colaboradores/services/desligamento.py:241–247`, `app/ferias/services.py:49–70`, `app/ferias/models.py:65–105`, `app/ponto/models.py:311–323`, `app/ponto/services/fechamento.py:1542–1568`
+
+```python
+from collections import Counter
+
+from django.db import connection, transaction
+
+from colaboradores.models import Colaborador, HistoricoVinculo
+from colaboradores.services.desligamento import esta_desligado
+from ferias.models import PeriodoAquisitivo, status_de_periodo
+from ferias.services import em_gozo_hoje
+from ponto.janelas import janela_atual
+from ponto.models import DiaPago
+from ponto.services.fechamento import marcos_da_competencia
+
+
+def faixa_horas(valor):
+    if valor > 0:
+        return "positivo"
+    if valor < 0:
+        return "negativo"
+    return "zero"
+
+
+def sondar(empresa_id, de, ate, hoje):
+    contagem = Counter()
+    horas = Counter()
+
+    with transaction.atomic(durable=True):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION READ ONLY")
+
+        colabs = Colaborador.objects.filter(
+            empresa_id=empresa_id, data_demissao__range=(de, ate)
+        ).select_related("empresa").order_by("pk")
+
+        for colab in colabs.iterator(chunk_size=500):
+            dia = colab.data_demissao
+            efetivado = esta_desligado(colab)
+            estado = "efetivado" if efetivado else (
+                "agendado" if dia > hoje else "data_vencida_sem_efetivacao"
+            )
+            contagem["cadastro", estado] += 1
+
+            agendamento = HistoricoVinculo.objects.filter(
+                colaborador=colab, motivo="desligamento", data=dia,
+                obs__startswith="AGENDADO (aviso previo):",
+            ).order_by("-criado_em", "-pk").first()
+            contagem["aviso_rastreavel", estado, agendamento is not None] += 1
+            if agendamento is not None:
+                from django.utils.timezone import localtime
+                prazo = (dia - localtime(agendamento.criado_em).date()).days
+                contagem["prazo_registrado_dias", estado, prazo] += 1
+
+            if not efetivado:
+                continue
+
+            ciclos = list(PeriodoAquisitivo.objects.filter(
+                colaborador=colab, data_inicio__lte=dia, data_fim__gte=dia
+            ))
+            contagem["ciclos_cobrindo_data", len(ciclos)] += 1
+            contagem["em_gozo_na_data", em_gozo_hoje(dia, colab).exists()] += 1
+            for ciclo in ciclos:
+                contagem["status_ciclo_no_corte", status_de_periodo(ciclo, dia)] += 1
+                contagem["dias_civis_desde_inicio", (dia - ciclo.data_inicio).days] += 1
+
+            inicio, fim = janela_atual(dia, colab.empresa)
+            marco = marcos_da_competencia(empresa_id, fim.month, fim.year)["marco"]
+            grupo = ("parcial" if dia < fim else "fim_da_janela", marco)
+            contagem["inicio_da_janela", inicio.day] += 1
+            ajuste = DiaPago.objects.filter(
+                colaborador=colab, mes=fim.month, ano=fim.year,
+                tipo=DiaPago.TIPO_AJUSTE, versao="motor",
+            ).values_list("horas_reflexo_dsr", "saldo_banco_horas").first()
+            if ajuste is None:
+                contagem["ajuste_ausente", *grupo] += 1
+                continue
+            for rubrica, valor in zip(("reflexo_dsr", "banco"), ajuste):
+                chave = (rubrica, *grupo, faixa_horas(valor))
+                contagem[chave] += 1
+                horas[chave] += valor
+
+    print(dict(contagem))
+    print({chave: round(valor, 2) for chave, valor in horas.items()})
+```
+
+## 1. Mapa curto
+
+**A tela existe em partes.** O cadastro executa desligamento e reativação, a folha mostra a saída pelo módulo próprio, e o drawer tem Espelho e Férias. A posição do desligamento também teve um piloto documentado, limitado a dias lavrados e ao diagnóstico da folha. Sua integração nesta cópia **[nao verificado]**. O ato único com dossiê histórico continua registrado como UI-RESCISAO. `app/templates/colaboradores/editar.html:268–288`, `app/templates/colaboradores/partials/painel_colaborador.html:27–46`, `app/folha/export.py:866–871`, `app/docs/BACKLOG.md:1181`, `app/docs/BACKLOG.md:1475`, `app/docs/RELATO.md:6579–6584`
+
+| Porta do censo1 | Estado na cópia e mudança comprovada |
+|---|---|
+| **1. Espelho 21 → desligamento** | **EXISTE** PDF livre informacional, com duas pontas inclusivas. Avulso e entrada web do lote recusam fim hoje/futuro pelo mesmo juiz. No avulso, a diferença máxima entre datas é 180 dias. O gerador do lote aceita seleção explícita, e a seleção padrão do lote de folha é ativo/afastado/férias. Retorna caderno, pulados, quantidade, informacionais e sem movimento. **FALTA** livre com trilha e arquivo por emissão. **Esclarecimento:** o auditável parametriza mês/ano e resolve o corte da empresa. O bloqueio explícito nesse caminho é disputa aberta do colaborador, inclusive fora do intervalo. A exigência de competência fechada consta no plano, e a checagem correspondente nesse caminho **[nao verificado]**. `app/relatorios/services.py:13–46`, `app/relatorios/services.py:101–105`, `app/relatorios/services.py:165–264`, `app/relatorios/views.py:1065–1099`, `app/relatorios/views.py:1183–1188`, `app/relatorios/lote_espelho.py:205`, `app/relatorios/pdf_espelho.py:287`, `app/relatorios/pdf_espelho.py:602`, `app/relatorios/pdf_espelho.py:654–663`, `app/relatorios/pdf_espelho.py:1077–1116`, `app/relatorios/pdf_base.py:127–136`, `app/docs/RELATORIOS-PLANO.md:192–194` |
+| **2. DiaPago** | **EXISTE.** Escrita por competência/versão, com dia e ajuste. Intervalo inclui início e fim, exclui ajuste e distingue sem lavratura de sem apuração. Precisão sobre o censo1: a escrita usa o mapa do dia da jornada quando disponível e recorre à data local da entrada quando o mapa falta. `app/ponto/models.py:293–345`, `app/ponto/services/dia_pago.py:109–135`, `app/ponto/services/dia_pago.py:348–360`, `app/ponto/services/dia_pago.py:405`, `app/ponto/services/dia_pago.py:538–563`, `app/ponto/services/dia_pago.py:592`, `app/ponto/services/dia_pago.py:671–673`, `app/ponto/services/dia_pago.py:752–856` |
+| **3. Ausências** | **EXISTE.** `ausencias_vigentes` lê sobreposição em todos os status, com tipos declarados para fim aberto. Para folha, aprovadas. Para cobrança, exclui rejeitadas. A cobertura diária é inclusiva e desempata por maior `(data, pk)`. A linha do tempo de decisões tem outra porta, inclui rejeição e recebe o recorte no leitor. `app/ponto/turnos.py:2540–2568`, `app/ponto/turnos.py:2796–2829`, `app/ponto/turnos.py:3207–3230`, `app/ponto/services/dia_decidido.py:587`, `app/ponto/services/dia_decidido.py:624`, `app/ponto/services/atestados_lote.py:46–64` |
+| **4. Férias** | **MUDOU.** Criação e edição agora compartilham `datas_do_ciclo`, com aniversário, fim menos um dia, concessão mais um ano e tratamento de 29/2. Cai a divergência `+364/+365` citada no backlog. Criação continua gerando ciclos até hoje. **EXISTE** saldo integral. **DIVERGE** o uso de status gravado versus juiz, a soma de `situacao_de_ferias` inclui positivos fora dos adquiridos anunciados, e o filtro do art. 130 continua no literal `falta`. **FALTA** fonte de proporcionais/avos, registrada no backlog. `app/ferias/views.py:139–179`, `app/ferias/services.py:256–270`, `app/ferias/services.py:805–851`, `app/ferias/test_hj090_volta3.py:316–322`, `app/ferias/models.py:144–150`, `app/ferias/models.py:219–220`, `app/ferias/situacao.py:138–169`, `app/ferias/situacao.py:300–302`, `app/inteligencia/views.py:13–21`, `app/docs/BACKLOG.md:1179`, `app/docs/BACKLOG.md:1475`, `app/docs/BACKLOG.md:1541` |
+| **5. Informativo de rescisão** | **MUDOU. EXISTE** `esta_desligado`, saída vazia do retentor para desligado e `informativo_rescisao` com a mesma lista de dias em campo próprio. O retrato e `o_que_segura` já leem esse dado. O Raio-X tem derivação própria registrada em fila. `app/colaboradores/services/desligamento.py:23–32`, `app/folha/export.py:1197–1229`, `app/folha/fora_da_folha.py:296–305`, `app/folha/retrato_folha.py:1260–1289`, `app/docs/BACKLOG.md:737` |
+| **6. Registro do PDF** | **EXISTE** escrita da trilha auditável, verificação por hash e download quando o PDF foi anexado a um followup. O registro guarda metadados e filtros JSON. **FALTA** nele o arquivo ou ponteiro e as duas datas normalizadas. Leitor de dossiê por colaborador/período **[nao verificado]**. `app/relatorios/models.py:30–65`, `app/relatorios/pdf_base.py:137–180`, `app/chamados/views.py:1186–1222`, `app/relatorios/services.py:70–96`, `app/relatorios/views.py:1020–1044` |
+| **7. Motivo de exportação** | **EXISTE** `rescisao_modulo_proprio`, `status='fora'`, com encaminhamento ao Domínio. Raio-X, retrato, lista de fechamento, relatório e mensageria leem ou rotulam esse motivo. A ressalva fica fora da conta de bloqueio. `app/folha/export.py:866–871`, `app/folha/views.py:615`, `app/folha/retrato_folha.py:33`, `app/folha/retrato_folha.py:89`, `app/ponto/services/fechamento_lista.py:25–37`, `app/relatorios/views.py:1661–1669`, `mensageria/nucleo/ferramentas.py:1196`, `mensageria/nucleo/ferramentas.py:1246–1289` |
+| **8. H12** | **EXISTE**, como no censo1. A data `<= fim da janela` dá saída pela rescisão, inclusive se for anterior ao início. O predicado independe do estado, então também pode ser verdadeiro para data agendada dentro da janela. Classificador e resumo usam o mesmo predicado. Prontidão usa outra pergunta, com data `< início` no caso de denominador zero. `app/folha/export.py:54–60`, `app/folha/export.py:782–788`, `app/folha/export.py:815`, `app/folha/export.py:1051–1087`, `app/ponto/services/fechamento_lista.py:103–109` |
+| **9. Ato do desligamento** | **EXISTE** juiz, executor, cron e reativação. **DIVERGE** o aviso de bloqueio imediato do agendado. **MUDOU** a regeneração de células futuras geradas existentes, que passou a alcançar datas `> hoje` sem teto, com recorte a partir da borda alterada. O wrapper ainda oferece apenas vínculos ativos e recusa início posterior à demissão. A cascata ainda pula respostas sem veredito e pode deixar o chamado ancorado aberto. `app/colaboradores/services/desligamento.py:35–78`, `app/colaboradores/services/desligamento.py:102–215`, `app/colaboradores/views.py:1443–1476`, `app/templates/colaboradores/editar.html:272`, `app/colaboradores/services/vinculo.py:623–666`, `app/colaboradores/services/vinculo.py:857–867`, `app/ponto/services/cadastro_futuro.py:8–25`, `app/ponto/services/cadastro_futuro.py:44–59`, `app/config/crons.py:440` |
+| **10. Ficha corrida e F2** | **EXISTEM** ficha de serviço, histórico de chamados e drawer com superfícies separadas. A ficha atual lê vínculo, trocas, horas e pendências. O histórico de chamados recorta por idade de criação dos eventos e das ausências. O histórico do drawer de ausências aponta o aquisitivo atual ou mais recente, sem recortar nele a lista. A quinta aba e a F2 de faltas e ausências decididas pelo aquisitivo estão documentadas. Dossiê unificado nessa aba **[nao verificado]**. `app/colaboradores/services/ficha.py:99–173`, `app/colaboradores/services/ficha.py:235–250`, `app/chamados/services/historico.py:120–145`, `app/ponto/views.py:2035–2064`, `app/docs/ADVERTENCIA-FICHA.md:65–88`, `app/docs/BACKLOG.md:1434` |
+
+## 2. Cen
+
+[truncado em 20000 de 53327 caracteres]
 
 ## 26/11 11:39 · sessao a21029860268 · - · - · origem=Ronald (tmux)
 
@@ -1230,256 +1365,4 @@ python3 -m ponto.tests.mutantes_atestado_f3 red_c3_d1                    # 2 FAI
 python3 -m ponto.tests.mutantes_atestado_f3 red_c3_d5                    # 2 FAIL
 ```
 
-## 26/11 11:00 · sessao 48cb3acf6f01 · R1-SEM-DONO-2611 · leitura · origem=Code
-
-```python
-import json
-from collections import Counter
-from datetime import date
-
-from django.apps import apps
-from django.conf import settings
-from django.db import connection, transaction
-from django.utils import timezone
-
-from ponto.janelas import janela_fechamento
-from ponto.management.commands.e6_oraculo import (
-    InsumosDoDono,
-    batida_fora_de_turno,
-    diferenca_e_a_janela_declarada,
-    minutos_do_espelho,
-)
-from ponto.services.espelho import espelho_do_colab
-from ponto.supra_juiz import cadastro_do_dia_carregado
-
-
-NV = "[nao verificado]"
-MES, ANO = 11, 2026
-
-# PUBLICADO.md, cabeçalho e §1, identifica a foto de referência como sombra de 26/11. [nao verificado]
-# A data da referência é usada como hoje. A hora original e a identidade da
-# foto conectada ficam [nao verificado] até serem informadas pela sessão.
-# app/ponto/management/commands/e6_oraculo.py:284-297
-HOJE = date(2026, 11, 26)
-AGORA_DA_RODADA = None  # datetime com fuso, se a sessão tiver o instante original
-FOTO_LIDA = NV         # identificador do dump, se a sessão o tiver
-
-# PUBLICADO.md §3 traz as classes das 18 chaves. Os deltas inteiros dessas [nao verificado]
-# chaves estão [nao verificado]. As referências abaixo são as citadas no anexo.
-# Para col200 e col382, PUBLICADO.md §2 traz espelho × piso–teto. O comando [nao verificado]
-# arredonda o delta separadamente dos operandos.
-# app/ponto/management/commands/e6_oraculo.py:362-363,401-404
-DELTA_PUBLICADO = {
-    (112, "2026-10-21"): NV,  # depois_c11.txt:14
-    (112, "2026-10-22"): NV,  # depois_c11.txt:15
-    (200, "2026-11-03"): NV,  # depois_c11.txt:23
-    (382, "2026-11-11"): NV,  # depois_c11.txt:36
-    (114, "2026-11-08"): NV,  # depois_c11.txt:18-19
-    (252, "2026-11-18"): NV,  # depois_c11.txt:26-32
-    (252, "2026-11-19"): NV,  # depois_c11.txt:26-32
-    (884, "2026-11-08"): NV,  # depois_c11.txt:41
-    (922, "2026-11-01"): NV,  # depois_c11.txt:43-46
-    (922, "2026-11-04"): NV,  # depois_c11.txt:43-46
-    (302, "2026-11-20"): NV,  # depois_c11.txt:34
-    (996, "2026-10-28"): NV,  # depois_c11.txt:47
-    (114, "2026-11-15"): NV,  # depois_c11.txt:18-19
-    (130, "2026-10-29"): NV,  # depois_c11.txt:20
-    (220, "2026-11-10"): NV,  # depois_c11.txt:25
-    (874, "2026-10-22"): NV,  # depois_c11.txt:40
-    (989, "2026-10-23"): NV,  # depois_c11.txt:43-46
-    (996, "2026-11-10"): NV,  # depois_c11.txt:48-49
-}
-DONO_PUBLICADO = "ESTRUTURA"  # PUBLICADO.md §1, §3 e r.md, censo das 18 chaves [nao verificado]
-
-
-def sonda():
-    assert len(DELTA_PUBLICADO) == 18
-
-    # app/config/settings/sombra.py:13-14,29,49-60
-    # bin/sombra_mascara.py:32-38
-    assert getattr(settings, "HASNER_SOMBRA", False) is True
-    assert settings.DATABASES["default"]["NAME"] == "sombra"
-    assert connection.settings_dict["NAME"] == "sombra"
-    assert connection.schema_name == "juliani"
-    assert not connection.in_atomic_block and connection.get_autocommit()
-
-    # app/ponto/management/commands/e6_oraculo.py:284-297
-    # CLAUDE.md:147-148
-    agora = timezone.localtime(AGORA_DA_RODADA or timezone.now())
-    origem_agora = (
-        "informado pela sessão" if AGORA_DA_RODADA is not None else "execução da sonda"
-    )
-
-    Colaborador = apps.get_model("colaboradores", "Colaborador")
-    FechamentoMensal = apps.get_model("ponto", "FechamentoMensal")
-    pks = {pk for pk, _ in DELTA_PUBLICADO}
-    linhas = []
-
-    with transaction.atomic():
-        # app/chamados/tests/cef_c3_sonda.py:16-22
-        # bin/sombra_db.sh:45-47
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-            cursor.execute("SELECT current_database(), current_schema(), pg_current_snapshot()::text")
-            banco, schema, snapshot_mvcc = cursor.fetchone()
-        assert banco == "sombra" and schema == "juliani"
-
-        # Universo de empresas ativas e fechamentos da competência.
-        # app/ponto/management/commands/e6_oraculo.py:292-305,314
-        colabs = Colaborador.objects.select_related("empresa").in_bulk(pks)
-        fechamentos = set(
-            FechamentoMensal.objects.filter(
-                mes=MES, ano=ANO, colaborador_id__in=pks
-            ).values_list("colaborador_id", flat=True)
-        )
-
-        por_colab = {}
-        for pk, colab in colabs.items():
-            # Mesmas chamadas e mesmo objeto espelho passado ao carregador.
-            # app/ponto/management/commands/e6_oraculo.py:303-320,327-330
-            ini, fim = janela_fechamento(MES, ANO, colab.empresa)
-            espelho = espelho_do_colab(colab, HOJE, ini, fim, agora=agora)
-            ins = InsumosDoDono(colab, ini, fim, HOJE, espelho=espelho, agora=agora)
-            dias_espelho = {
-                str(linha.get("data"))[:10]: linha for linha in (espelho.get("dias") or [])
-            }
-            por_colab[pk] = (ins, dias_espelho)
-
-        for (pk, k), publicado in DELTA_PUBLICADO.items(): [nao verificado]
-            dia = date.fromisoformat(k)
-            colab = colabs.get(pk)
-            ins, dias_espelho = por_colab.get(pk, (None, {}))
-            de = dias_espelho.get(k)
-            campos = de if de is not None else {}
-
-            # app/ponto/services/espelho.py:801,829-837,863-874
-            # app/ponto/management/commands/e6_oraculo.py:236-239,263-269,339-363
-            isencao = campos.get("isencao")
-            ausencia = campos.get("ausencia") is not None if de is not None else None
-            leitura_espelho = minutos_do_espelho(de)
-            m_esp, _ = leitura_espelho
-            veredito = ins.oraculo if ins is not None else None
-            piso = veredito.minutos.get(k, 0.0) if veredito is not None else None
-            teto = veredito.envelope.get(k, 0.0) if veredito is not None else None
-            delta = piso - m_esp if piso is not None and m_esp is not None else None
-            guarda = diferenca_e_a_janela_declarada(delta, de) if delta is not None else None
-            delta_inteiro = round(delta) if delta is not None else None
-
-            # app/ponto/management/commands/e6_oraculo.py:98-110,149-154,156-212,393-404
-            # app/ponto/supra_juiz.py:179-191
-            horas = veredito.horas.get(k, []) if veredito is not None else None
-            cadastro = dict.fromkeys((
-                "folga_nao_definida",
-                "sem_vinculo_no_dia",
-                "sem_vinculo_em_dia_de_trabalho",
-            ))
-            entrada_solta = paridade = fase = cxr = dono = None
-            if ins is not None:
-                cadastro = cadastro_do_dia_carregado(pk, dia)
-                entrada_solta = batida_fora_de_turno(colab, dia, ins.turnos())
-                paridade = "impar" if len(horas) % 2 else "par"
-                fase = k in ins.fase()
-                cxr = k in ins.cxr()
-                dono = ins.dono(dia)
-
-            # Saídas do laço do R1, na ordem do command. A sonda também lê
-            # os campos de diagnóstico das chaves que ficam fora da lista.
-            # app/ponto/management/commands/e6_oraculo.py:303-305,331-378
-            exclusao = None
-            if colab is None:
-                exclusao = "colaborador_ausente"
-            elif not colab.empresa.ativa:
-                exclusao = "empresa_inativa"
-            elif pk not in fechamentos:
-                exclusao = "sem_fechamento_da_competencia"
-            elif not ins.ini <= dia <= ins.fim:
-                exclusao = "fora_da_janela_de_fechamento"
-            elif de is None:
-                exclusao = "dia_sem_linha_no_espelho"
-            elif isencao or ausencia:
-                exclusao = "dia_isento_ou_ausencia"
-            elif m_esp is None:
-                exclusao = "dia_sem_lavratura_no_espelho"
-            elif m_esp == 0 and piso == 0:
-                exclusao = "dia_sem_trabalho_ambos"
-            elif guarda:
-                exclusao = "esp_desconta_janela_declarada"
-            elif abs(delta) <= 10:
-                exclusao = "bate_ate_10min"
-
-            chave = f"col{pk} {k}"
-            linhas.append({
-                "chave": chave,
-                "linha_no_espelho": de is not None,
-                "isencao": isencao,
-                "ausencia_presente": ausencia,
-                "minutos_realizados": campos.get("minutos_realizados"),
-                "pago_h": campos.get("pago_h"),
-                "minutos_do_espelho": leitura_espelho,
-                "piso_min": piso,
-                "teto_min": teto,
-                "horas": horas,
-                "brutas": veredito.brutas.get(k, 0) if veredito is not None else None,
-                "impares": k in veredito.impares if veredito is not None else None,
-                "cortes": k in veredito.cortes if veredito is not None else None,
-                "realizado_janela_descontada": campos.get("realizado_janela_descontada"),
-                "guarda_janela": guarda,
-                "delta_antes_de_arredondar_min": delta,
-                "delta_arredondado_min": delta_inteiro,
-                "delta_publicado_min": publicado, [nao verificado]
-                "delta_bate_publicado": (
-                    delta_inteiro == publicado [nao verificado]
-                    if delta_inteiro is not None and publicado != NV else NV [nao verificado]
-                ),
-                **cadastro,
-                "entrada_solta_apuravel": entrada_solta,
-                "paridade_de_horas": paridade,
-                "fase_deslocada_as_of": fase,
-                "em_cadastro_x_realidade": cxr,
-                "ins_dono": dono,
-                "dono_r1": dono if exclusao is None else None,
-                "exclusao_r1": exclusao,
-            })
-
-    assert len(linhas) == len({linha["chave"] for linha in linhas}) == 18
-    for linha in linhas:
-        print(json.dumps(linha, ensure_ascii=False, allow_nan=False))
-
-    # O R1 conta dono nas divergências que passaram pelo laço.
-    # app/ponto/management/commands/e6_oraculo.py:364-381,427-439
-    contagem = Counter(linha["dono_r1"] for linha in linhas if linha["exclusao_r1"] is None)
-    print(json.dumps({
-        "chaves_conferidas": len(linhas),
-        "banco": banco,
-        "schema": schema,
-        "snapshot_mvcc": snapshot_mvcc,
-        "foto_lida": FOTO_LIDA,
-        "foto_de_referencia": "sombra de 26/11/2026 (PUBLICADO.md, cabeçalho)", [nao verificado]
-        "hoje": HOJE.isoformat(),
-        "agora_local": agora.isoformat(),
-        "origem_agora": origem_agora,
-        "contagem_por_dono": {
-            dono: contagem[dono] for dono in ("ESTRUTURA", "CADASTRO", "BATIDA")
-        },
-        "chaves_fora_do_r1": [
-            {"chave": linha["chave"], "motivo": linha["exclusao_r1"]}
-            for linha in linhas if linha["exclusao_r1"] is not None
-        ],
-        "chaves_com_dono_diferente_do_publicado": [
-            linha["chave"] for linha in linhas
-            if linha["exclusao_r1"] is None and linha["dono_r1"] != DONO_PUBLICADO
-        ],
-        "chaves_cujo_delta_nao_bate_o_publicado": [
-            linha["chave"] for linha in linhas if linha["delta_bate_publicado"] is False
-        ],
-        "chaves_com_confronto_do_delta_nao_verificado": [
-            linha["chave"] for linha in linhas if linha["delta_bate_publicado"] == NV
-        ],
-    }, ensure_ascii=False, allow_nan=False))
-
-
-# Execução na sombra [nao verificado].
-sonda()
-```
-
-_8359 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8360 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

@@ -66,7 +66,7 @@ lista — ela e o que esta EM PE._
 | **O55** | PLACAR-COM-IDADE-RELATIVA | nao comecado |
 | **O56** | PRE-PUSH-TESTA-A-ARVORE, NAO O COMMIT | nao comecado |
 | **O57** | COMMIT-CARREGA-O-INDICE | **livre** |
-| **O58** | ESPELHO-COM-HASH-POR-PERIODO-LIVRE | espera aval |
+| **O58** | PUXADA pela UI-RESCISAO (DEPENDENCIA-PUXA, aval UI-RESCISAO-DOSSIE-2611): pre-requisito =  | espera aval |
 | **O59** | ABSORVIDA pela UI-RESCISAO (COMPLEMENTO-DESLIGAR-1311 13/11) | **livre na parte de leitura; o hash herd |
 | **O60** | ESPELHO-VERDADE-E3-COMPLETA | HEAD x novo = CURA |
 | **O61** | CANCELADA 27/09 09:4x pelo corte "competencia paga fora do sistema" | espera `!` |
