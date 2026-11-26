@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 07:28:40.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **670**.
+**Medido em 26/11/2026 07:34:50.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **665**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -675,8 +675,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:52:42 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/PARCIAL-BORDA-SEMIABERTA; mkdir -p $D; cp logs/AVAIS-1515/PARCIAL-BORDA-SEMIABERTA-2511.txt $D/aval.txt; cat > $D/frota_script.q <<'EOF' OBRA PARCIAL-BORDA-SEMIABERTA, papel leitura. Aval anexo (aval.txt). Antes de qualquer cura, a sessao precisa MEDIR NA FROTA (todas as empresas, schema juliani, PROD somente leitura) quantas celulas no estado `fato_em_ausencia` ...` |
 | 19:52:25 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/GUARDA-10-B/vs_pouso; setsid bash logs/pista_certifica_par.sh 1125195218_c5ad6261 c5ad62618e13df6264bf63a15cd117b006b5fda3 logs/GUARDA-10-B/vs_pouso > /dev/null 2>&1 < /dev/null & sleep 3; pgrep -af 'pista_certifica_par.sh 1125195218' \| grep -v pgrep; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') L.insert(29,'19:5x GUARDA-10-B VIG ...` |
 | 19:52:17 | Bash |  | `cd /home/ronald/saas-hasner; S=c5ad62618e13df6264bf63a15cd117b006b5fda3; git cat-file -t $S && git update-ref refs/pista/$S $S && ssh pista pede $S 2>&1 \| tail -3; ssh pista estado 2>&1 \| tail -6` |
-| 19:29:43 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') L.insert(29,'19:3x POUSO A4-ESPELHO-AUSENCIA-ABERTA (aval A4-SMOKE-DEPOIS-2511): merge 1fdc76986 (arvore de codigo = fe0d48b36 certificada, diff 0) + deploy --sem-migrate rc 0 (DEPLOY_SEM_SOMBRA: sombra 25/11 REFEITA sem --bloco, diff so leitura de exibicao; trilha logs/deploy_sem_sombra.log). Smoke  ...` |
-| 19:29:34 | Bash |  | `cd /home/ronald/saas-hasner; D=logs/A4-ESPELHO-AUSENCIA-ABERTA; cat > $D/smoke_fernando.md <<'EOF' # SMOKE A4-ESPELHO-AUSENCIA-ABERTA -- [nome] (aval A4-SMOKE-DEPOIS-2511) No ar desde 25/11 19:3x (merge 1fdc76986, deploy rc 0). Exemplos da sonda de PROD 19:29 (logs/A4-ESPELHO-AUSENCIA-ABERTA/sonda_smoke.r; 77 atestados e 7 declaracoes abertas). \| # \| tela \| colab \| dia \| frase esperada (exa ...` |
-| 19:29:19 | Bash |  | `cd /home/ronald/saas-hasner; grep -n "colaborador\\|request.GET" app/ponto/views.py \| grep -n "def espelho_ponto" ; awk '/def espelho_ponto/{f=1} f' app/ponto/views.py \| grep -m5 -n "GET.get"; grep -rn "path('ponto/'\\|include('ponto.urls')" app/config/urls*.py \| head -2` |
-| 19:29:16 | Bash |  | `cd /home/ronald/saas-hasner; grep -rn "espelho" app/ponto/urls.py \| head -5; grep -n "palavra_dia" app/api/views.py \| head -3; grep -n "painel_ausencia" -r app/templates \| head -3` |
-| 19:28:42 | Bash |  | `cd /home/ronald/saas-hasner; for i in $(seq 1 50); do grep -q '4003257 fim' logs/codex/chamadas.log && break; /usr/bin/sleep 6; done; tail -1 logs/codex/chamadas.log \| cut -c1-120; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/sonda_smoke.r 2>/dev/null \| head -40` |
