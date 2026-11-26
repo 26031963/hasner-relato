@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 07:10:01.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **728**.
+**Medido em 26/11/2026 07:16:14.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **722**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -732,9 +732,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:16:22 | Bash |  | `cd /home/ronald/wt-guarda10b-154425; sed -n 1140,1160p app/config/crons.py; git grep -n "recalcular_fechamento" -- bin \| head` |
 | 19:16:21 | Bash |  | `cd /home/ronald/wt-guarda10b-154425; git grep -n "_vigia_guarda\\|guarda_sem_export" -- app \| grep -v '/tests/'; git grep -n "'recalcular_fechamento'" -- app bin \| grep -v '/tests/' ; ls /home/ronald/saas-hasner/logs/GUARDA-10-B/ \| grep -i brief` |
 | 19:16:18 | Agent | GUARDA-10-B vigia seco construtor | `Voce e o CONSTRUTOR da obra GUARDA-10-B, volta de cura do opus final, no repo /home/ronald/saas-hasner. Leia CLAUDE.md (secoes 0, 3, 4, 7b) antes de agir. Aval que manda (literal): logs/AVAIS-1515/GUARDA-10-B-VIGIA-SECO-2511.txt. O que o opus reprovou: logs/GUARDA-10-B/opus_final.md. COPIA: /home/ronald/wt-guarda10b-154425 (HEAD f226e77c1, limpa, base main 160173bb1). Escreva SO nela, cedo (o disj ...` |
-| 19:15:58 | Bash |  | `w=/home/ronald/wt-guarda10b-154425; grep -n '_vigia_guarda\\|apply' $w/app/ponto/management/commands/recalcular_fechamento.py \| head -20; ls $w/app/ponto/tests/test_guarda_10_b.py && sed -n 60,100p $w/app/ponto/tests/test_guarda_10_b.py; ls -d $w/app/{staticfiles,.ruff_cache,.hypothesis,.mypy_cache,logs,media} 2>&1 \| head` |
-| 19:15:56 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/AVAIS-1515; cat > logs/AVAIS-1515/GUARDA-10-B-VIGIA-SECO-2511.txt <<'EOF' aval Ronald: GUARDA-10-B-VIGIA-SECO-2511 (25/11 19:2x) -- libera B3 GUARDA-10-B -- DESENHO: lei=lampada 4a. Resposta ao opus final (logs/GUARDA-10-B/opus_final.md): opcao (b) -- o vigia (_vigia_guarda, recalcular_fechamento.py:156) roda SO no DRY; no --apply nao levanta nem interrom ...` |
-| 19:15:41 | Bash |  | `cd /home/ronald/saas-hasner; ls -lt logs/E4D-CONTRATO logs/E4D-ENSAIO logs/E4D-MATRIZ \| head -20; grep -n 'E4D-CONTRATO-ROTA-B\\|E4D' app/docs/BACKLOG.md \| head -5 \| cut -c1-400` |
-| 19:15:38 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'E4D\\|E4d' app/docs/RELATO.md \| tail -6 \| cut -c1-400; grep -n 'E4D-ESTOQUE' app/docs/PROMPTS.md \| tail -2 \| cut -c1-600; ls -d logs/*E4* 2>/dev/null` |
-| 19:15:17 | Bash |  | `cd /home/ronald/saas-hasner; s=$(git rev-parse b8382895c); git log -1 --oneline $s; git -C /home/ronald/wt-atela-v18-180430 status --porcelain \| grep -v '^??' \| head -3; git update-ref refs/pista/$s $s; d=logs/A-TELA-DO-DIA-LE-UM-JUIZ/v18; timeout 30 ssh pista pede $s > $d/pouso.pista 2>&1; cat $d/pouso.pista; id=$(cat $d/pouso.pista); setsid bash logs/pista_certifica_par.sh $id $s $d > /dev/nul ...` |
-| 19:13:32 | Bash |  | `cd /home/ronald/saas-hasner; d=logs/A4-ESPELHO-AUSENCIA-ABERTA; cat > $d/opus_final_v3.txt <<'EOF' APROVADO -- LEITURA FINAL A4-ESPELHO-AUSENCIA-ABERTA (opus verificador 25/11 19:1x, diff 160173bb1..fe0d48b36; texto gravado pela sessao) 4 achados do opus v2 fechados (ESPERA[status] dia_decidido.py:478; linha_do_tempo sem hunk; assertEqual exatos; padrao=fonte unica). Classes zero: 2o juiz, 2o escr ...` |
