@@ -6,10 +6,27 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 21:10:19.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (13.3 MB). Acoes na janela: **424**.
+**Medido em 25/11/2026 21:16:24.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (14.3 MB). Acoes na janela: **441**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:11:57 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/PUSH-2511-NOITE/pasta.fim ]; do /usr/bin/sleep 20; done; cat logs/PUSH-2511-NOITE/pasta.fim logs/PUSH-2511-NOITE/pasta.log` |
+| 21:11:54 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/PUSH-2511-NOITE; setsid bash -c 'cd /home/ronald/saas-hasner; for s in bin/tests/test_*.sh; do bash "$s" >/dev/null 2>&1 \|\| echo "RED $s"; done > logs/PUSH-2511-NOITE/pasta.log 2>&1; echo rc=$? $(date +%H:%M) > logs/PUSH-2511-NOITE/pasta.fim' </dev/null >/dev/null 2>&1 & sleep 1; pgrep -f 'PUSH-2511-NOITE/pasta' \| head -2` |
+| 21:11:46 | Bash |  | `cd /home/ronald/saas-hasner; for c in "bin/regua_tickets.sh" "bin/tickets_rodape.sh --conferir" "bin/tests/test_lei_protege_sitio.sh" "bin/index_vs_arvore.sh --conferir" "bin/regua_rotas_mensageria.sh" "python3 bin/gerar_haiku_dentes.py --conferir"; do out=$(bash -c "$c" 2>&1); echo "rc=$? :: $c :: $(echo "$out"\|tail -2\|tr '\n' ' '\|cut -c1-250)"; done` |
+| 21:11:41 | Bash |  | `cd /home/ronald/saas-hasner; head -20 logs/PUSH-2511/push2.log; tail -8 logs/PUSH-2511/push2.log; cat logs/PUSH-2511/push2.rc` |
+| 21:11:39 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/PUSH-2511; cat logs/PUSH-2511/*.sh 2>/dev/null \| head -30; tail -5 logs/PUSH-2511/*.log 2>/dev/null \| head -30` |
+| 21:11:37 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'PUSH-2511\\|push.sh' app/docs/RELATO.md \| head -6 \| cut -c1-400; ls -t logs \| grep -i push \| head` |
+| 21:11:35 | Bash |  | `cd /home/ronald/saas-hasner; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/pasta-de-selos-antes-do-push.md; grep -n 'push' app/docs/RELATO.md \| grep -iE 'pista\|pre-push\|PUSH-2511' \| head -8 \| cut -c1-300` |
+| 21:11:32 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 60,200p bin/pre-push.sh \| grep -vE '^\s*#' \| head -90` |
+| 21:11:30 | Bash |  | `cd /home/ronald/saas-hasner; grep -nE 'pista\|certifica\|PULA\|skip\|exit 0' bin/pre-push.sh \| head -30; wc -l bin/pre-push.sh` |
+| 21:11:26 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,60p bin/pre-push.sh \| grep -nE 'pista\|suite\|regua\|PORTAO\|portao' \| head -30` |
+| 21:11:25 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,40p bin/push.sh` |
+| 21:11:21 | Bash |  | `cd /home/ronald/saas-hasner; tail -5 logs/WRAPPER-N-VAGAS/v13/selo_n_vagas4.log; ls -la --time-style=+%H:%M logs/WRAPPER-N-VAGAS/v13/selo_n_vagas4.log; ps -eo pid,etime,args \| grep -E 'selo\|test_codex' \| grep -v grep \| head` |
+| 21:11:18 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/WRAPPER-N-VAGAS/v13/ \| grep -E 'fim\|selo'; for f in logs/WRAPPER-N-VAGAS/v13/selo_*4*.fim; do echo "== $f"; cat "$f"; done` |
+| 21:11:16 | Agent | E1 v3 construtor | `Voce e o CONSTRUTOR da obra E1-PREVISAO-24H v3 no repo /home/ronald/saas-hasner (SaaS de ponto CLT, Django em app/). Leia PRIMEIRO, inteiros: /home/ronald/saas-hasner/CLAUDE.md e o brief logs/E1-PREVISAO-24H/brief_v3.md (caminho completo /home/ronald/saas-hasner/logs/E1-PREVISAO-24H/brief_v3.md). O brief tem o ## CENSO (leitores, escritores, decisoes, perguntas de lei cortadas) e a ## TAREFA com o ...` |
+| 21:11:09 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read().split('\n') assert s[0].startswith('PAREI: censo-E1-PREVISAO-24H') and s[1].startswith('PAREI: censo-E1-PREVISAO-24H') s[0]='lei: E1-PREVISAO-24H intermitente (21:2x, censo r_censo_v3 sec.6 item 4) -- o previsto do intermitente derivado do REALIZADO pode passar de 1440 e a grade o m ...` |
+| 21:10:50 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1654,1700p bin/disjuntor.py; sed -n 1,6p app/docs/RELATO.md \| cut -c1-250` |
+| 21:10:23 | Bash |  | `cd /home/ronald/saas-hasner; mkdir -p logs/E1-PREVISAO-24H/v3; cat > logs/E1-PREVISAO-24H/brief_v3.md <<'EOF' # E1-PREVISAO-24H v3 -- brief do construtor (avais E1-PREVISAO-24H-2511, E1-PREVISAO-LEIS-2511, E1-DESENHO-2511, E1-COL206-COMP09-2511; logs/AVAIS-1515/) ## CENSO Fonte: logs/E1-PREVISAO-24H/r_censo_v3.txt (Codex censo, hash e95f832ff, 25/11 21:1x). Amostra conferida pela sessao antes do u ...` |
 | 21:10:02 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '_CORTADA_RE\s*=\\|_ROTULO_RE\s*=\\|_PERGUNTAS_RE\s*=\\|_ITEM_RE\s*=\\|_REF_RE\s*=\\|_CENSO_TIT_RE\s*=' bin/disjuntor.py; grep -A3 -n '_CORTADA_RE\s*=' bin/disjuntor.py \| head -5` |
 | 21:09:48 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/AVAIS-1515/ \| grep -i e1; for f in logs/AVAIS-1515/*E1*; do echo "== $f"; cat "$f"; done 2>/dev/null \| head -80` |
 | 21:09:42 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b2uf7hdj2.output; cat logs/E1-PREVISAO-24H/r_censo_v3.txt` |
