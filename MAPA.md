@@ -84,7 +84,7 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
 |---|---|---|---|---|---|---|---|
 | celula/precedencia | 10/0 | 0 | 0 | 0 | 0 | 3 | 2 |
 | turno/marcos | 15/0 | 0 | 0 | 0 | 0 | 3 | 1 |
-| ausencia/ferias | 16/0 | 0 | 0 | 0 | 0 | 6 | 4 |
+| ausencia/ferias | 17/0 | 0 | 0 | 0 | 0 | 6 | 4 |
 | chamado | 24/0 | 0 | 0 | 0 | 0 | 3 | 13 |
 | feriado/prazo | 6/2 | 11 | 8 | 2 | 1 | 4 | 1 |
 | fechamento | 9/0 | 0 | 0 | 0 | 0 | 5 | 1 |
@@ -140,7 +140,8 @@ core/tests/test_selo_diagrama_do_codigo.py regenera os dois e compara.
   - o lancamento colide com outro fato (recusar)? -> `ponto/precedencia.py::veto_de_lancamento` · registro 0
   - a ausencia exige documento, e em que prazo? -> `ponto/services/ausencia.py::estado_inicial` · registro 0
   - a ausencia esta aberta ou decidida? -> `ponto/services/ausencia.py::ABERTAS` · registro 0
-  - a batida do dia esta dentro do periodo que a ausencia parcial declara? -> `ponto/turnos.py::periodo_da_parcial_no_dia` · registro 0
+  - o marco previsto do dia cai no periodo que a ausencia parcial declara (dispensado)? -> `ponto/turnos.py::periodo_da_parcial_no_dia` · registro 0
+  - a batida do dia esta dentro do periodo que a ausencia parcial declara? -> `ponto/turnos.py::batida_dentro_da_parcial` · registro 0
   - o colaborador esta de ferias hoje? -> `ferias/services.py::em_gozo_hoje` · registro 0
   - o colaborador esta afastado hoje? -> `ponto/turnos.py::afastado_hoje` · registro 0
   - o colaborador esta desligado? -> `colaboradores/services/desligamento.py::esta_desligado` · registro 0

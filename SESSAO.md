@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 00:21:34.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (23.5 MB). Acoes na janela: **727**.
+**Medido em 26/11/2026 00:27:49.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (24.6 MB). Acoes na janela: **737**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:27:46 | Bash |  | `cd /home/ronald/saas-hasner; git show 3420bc23f:app/escala/utils.py \| sed -n 1260,1330p \| grep -n '_batidas_reais\\|_batida_na_parcial\\|_parcial\b\\|if ' \| head -20` |
+| 00:27:42 | Bash |  | `cd /home/ronald/saas-hasner; git show 3420bc23f:app/escala/utils.py \| sed -n 1195,1260p` |
+| 00:27:38 | Bash |  | `cd /home/ronald/saas-hasner; git diff a96850e42 3420bc23f --stat \| tail -3; git diff a96850e42 3420bc23f --name-only -- app/docs; git diff a96850e42 3420bc23f -- app/ponto/turnos.py \| head -150; git grep -n 'batidas_reais_do_dia' 3420bc23f -- app \| grep -v tests \| head` |
+| 00:27:34 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,200p logs/sombra/parcial_borda_v2_ata.py \| head -80; grep -n 'truncad\\|batidas_reais_do_dia' app/docs/RELATO.md \| tail -5` |
+| 00:25:38 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/A-TELA-DO-DIA-LE-UM-JUIZ/v12/lanca.sh; echo ----; sed -n 1,60p logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2/verif2.r` |
+| 00:25:33 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/ logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c2 logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3; grep -l 'CODEX_PAPEL=construtor' -r logs/*/ 2>/dev/null \| head -5; ls -d ~/wt-codex-* 2>/dev/null` |
+| 00:25:17 | Bash |  | `cd /home/ronald/wt-feriado-c3-154803/app; sed -n 727,765p ponto/motor_calculo_v2.py; echo ----; sed -n 1860,1905p ponto/motor_calculo_v2.py; echo ---; sed -n 135,160p ponto/services/dia_pago.py` |
+| 00:25:10 | Bash |  | `cd /home/ronald/wt-feriado-c3-154803/app; sed -n 268,290p ponto/services/dia_pago.py; echo ----; sed -n 940,982p ponto/services/fechamento.py; echo ----; grep -n 'def dobra_sem_o_suprimido_por_par\\|def dobra_da_folga_feriado\\|def _dobra_sem_o_suprimido' -r ponto/ \| head` |
+| 00:25:05 | Read |  | `/home/ronald/saas-hasner/logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c4/origem.r` |
+| 00:25:01 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/COMBOIO-FP/pista.fim; tail -1 logs/COMBOIO-FP/pista.certifica; ssh pista estado \| head -3; ls -la logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c4/; tail -2 logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c4/origem.out` |
 | 00:02:42 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/opus_final.md <<'EOF' (opus final FERIADO 26/11 00:0x, verificador somente leitura; transcrito pela sessao) REPROVADO 1. BLOQUEIO noturna da promocao da folga-feriado: fechamento.py:978-980 e dia_pago.py:281 tiram HE100 POR DIA (dobra_da_folga_feriado sem noturno=) e copiam minutos_extra_100_noturna POR PAR do motor; laco p ...` |
 | 00:02:32 | Bash |  | `cd /home/ronald/saas-hasner; echo "$(date +%H:%M) O30-F3 MAPA CURTO FEITO (Codex leitura rc 0, logs/O30-F3-CONSTRUIR/mapa.r, 52 linhas; amostra a conferir antes do brief): F1 ja tem drawer painel_ausencia + filtros (de/ate, colab, tipo, status, efeito; empresa so no relatorio de atestados), servico atestados_lote.py com previa + CSV + ZIP (sem PDF, sem rota na barra), PDF do Historico e HTML; docu ...` |
 | 00:02:24 | Read |  | `/home/ronald/saas-hasner/logs/O30-F3-CONSTRUIR/mapa.r` |

@@ -75,7 +75,7 @@ esperam migrar -- a lista so encolhe).
 | a ausencia esta aberta ou decidida? | `ponto/services/ausencia.py::ABERTAS` |
 | a ausencia exige documento, e em que prazo? | `ponto/services/ausencia.py::estado_inicial` |
 | a ausencia paga, desconta ou suprime o dia? | `ponto/catalogo/ausencias.py::efeito_vigente` |
-| a batida do dia esta dentro do periodo que a ausencia parcial declara? | `ponto/turnos.py::periodo_da_parcial_no_dia` |
+| a batida do dia esta dentro do periodo que a ausencia parcial declara? | `ponto/turnos.py::batida_dentro_da_parcial` |
 | ha 3 ou mais lancamentos medicos na competencia? | `ponto/services/alertas_ausencia.py::resumo_atestados` |
 | o aviso de 30 dias foi dado (art.135)? | `ferias/situacao.py::DIAS_AVISO_PREVIO` |
 | o colaborador esta afastado hoje? | `ponto/turnos.py::afastado_hoje` |
@@ -83,6 +83,7 @@ esperam migrar -- a lista so encolhe).
 | o colaborador esta desligado? | `colaboradores/services/desligamento.py::esta_desligado` |
 | o fracionamento e valido (art.134)? | `ferias/models.py::AgendamentoFerias.clean` |
 | o lancamento colide com outro fato (recusar)? | `ponto/precedencia.py::veto_de_lancamento` |
+| o marco previsto do dia cai no periodo que a ausencia parcial declara (dispensado)? | `ponto/turnos.py::periodo_da_parcial_no_dia` |
 | o periodo venceu ou esta vencendo (art.137)? | `ferias/models.py::status_de_periodo` |
 | qual o saldo do periodo aquisitivo? | `ferias/models.py::PeriodoAquisitivo.dias_saldo` |
 | quanto a ausencia dura, e o tipo e valido? | `ponto/catalogo/ausencias.py::fim_de` |
@@ -148,7 +149,7 @@ esperam migrar -- a lista so encolhe).
 - **o que e dia util?** -- nenhuma: seg-sex sem feriado nem escala (VT, VA, janela comercial do escalonamento)
 - **que horas do turno que cruza a meia-noite contam como feriado?** -- nenhuma: tudo pela data local da ENTRADA (turno partido pelo dia da jornada); 191 vinculos ativos cruzam a meia-noite em 14/09 -- PARADO S6-BORDA-DO-FERIADO
 
-**PENDENTES nesta familia**: 12 leitor(es) com regra propria, esperando migrar.
+**PENDENTES nesta familia**: 11 leitor(es) com regra propria, esperando migrar.
 
 ## Familia `tela`
 
@@ -188,10 +189,10 @@ esperam migrar -- a lista so encolhe).
 | `turno/marcos` | 15 | 0 | 0 |
 | `celula/precedencia` | 10 | 0 | 0 |
 | `escala` | 2 | 0 | 0 |
-| `ausencia/ferias` | 16 | 0 | 0 |
+| `ausencia/ferias` | 17 | 0 | 0 |
 | `chamado` | 24 | 0 | 0 |
 | `fechamento` | 9 | 0 | 0 |
-| `feriado/prazo` | 6 | 2 | 12 |
+| `feriado/prazo` | 6 | 2 | 11 |
 | `tela` | 11 | 1 | 109 |
 | `portas` | 1 | 0 | 124 |
-| **total** | **99** | **5** | **245** |
+| **total** | **100** | **5** | **244** |
