@@ -1,7 +1,96 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 18:32** · publicado em **26/11/2026 18:33** (UTC-3)
+> Ultima resposta processada: **26/11/2026 18:39** · publicado em **26/11/2026 18:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 18:39 · sessao f74e1a36534d · O30-F3-CONSTRUIR · construtor · origem=Code
+
+**O30 F3 · c13 — cura aplicada na cópia.** [nao verificado]
+
+- **Trava.** `_gravar_dados_atestado` usa o gerente nomeado `Ausencia.objects`. A releitura continua sob `select_for_update(of=('self',))`, antes do veto de referência e do `UPDATE`. A catraca resolve o gerente pelo import do modelo, no mesmo padrão da trava de `Ausencia` já usada no serviço. `ponto/services/ausencia.py:311-329`, `ponto/services/ausencia.py:1619-1626`, `chamados/tests/test_e1_v7_catracas.py:99-132`.
+- **Seis campos.** Mantive médico, CRM, UF, CID, emissão e dias em `anexar_documento`. O contrato atribui a escrita à porta de anexar/salvar, e o POST já envia os campos por `**dados`. A ligação ao gravador já existia na c12 via `locals()`. Tornei explícito o repasse ao validador nas três portas apontadas pelo esmeril: criação, edição e anexo. O validador continua distinguindo campo omitido de valor enviado. O anexo chama o gravador dentro da transação quando há dados. `docs/BACKLOG.md:1441`, `ponto/views_atestado.py:31-50`, `ponto/services/ausencia.py:272-299`, `ponto/services/ausencia.py:424`, `ponto/services/ausencia.py:725`, `ponto/services/ausencia.py:1108-1138`. O brief/c11v separado ficou [nao verificado].
+
+**Chamadores e leitores**
+
+- O `rg` encontrou quatro chamadores de produção de `anexar_documento`. O formulário F3 envia os metadados e o arquivo opcional. A tela de ausência e as duas rotas da API enviam o arquivo. `ponto/views_atestado.py:50`, `ponto/views.py:2184`, `api/views.py:1857`, `api/views.py:3143`.
+- O drawer lê os seis campos e mostra o documento do registro raiz. O CSV e o PDF leem os seis quando há permissão de anexo. O chamador de `pdf_bytes` é `lote_atestados` em `ponto/views_atestado.py:136`. O PDF, o ZIP e a rota de visualização leem o arquivo. `ponto/views.py:2100-2109`, `templates/ponto/partials/painel_ausencia.html:71-131`, `ponto/services/atestados_lote.py:104-128`, `ponto/services/atestados_lote.py:142-178`, `ponto/services/atestados_lote.py:202-211`, `ponto/services/atestados_lote.py:249-261`, `ponto/views.py:2138-2159`.
+- Os seis campos entram no `INSERT` de `criar_ausencia` ou no `UPDATE` de `_gravar_dados_atestado`. O teste de censo confere esses dois escritores. `_reabrir` chama o gravador e trata documento, descrição, estado e prazo. A compensação do arquivo passa por `_apagar_anexo_escrito_agora`. `ponto/services/ausencia.py:329-336`, `ponto/services/ausencia.py:581`, `ponto/services/ausencia.py:653-656`, `ponto/services/ausencia.py:1429-1463`, `ponto/services/ausencia.py:242-265`, `ponto/tests/test_atestado_f3_contrato.py:295-303`.
+
+**RED e resultado local**
+
+- A catraca existente deu RED com `?type` na c12. Com a cura, passaram os 9 testes da classe de trava usando `unittest.TestCase` como substituto do `SimpleTestCase` para carregar a análise estática. `chamados/tests/test_e1_v7_catracas.py:385-390`.
+- Passaram 25 testes de contrato e porta sem banco. Reforcei o teste de anexo existente para executar o validador real com formulário simulado e conferir os seis valores no `UPDATE`, a releitura sob trava e a trilha. Retirar o repasse ao gravador dá RED na asserção de escrita. Restaurar `locals()` faz a tabela de símbolos apontar os 18 parâmetros sem referência explícita. `ponto/tests/test_atestado_f3_contrato.py:374-382`, `ponto/tests/test_atestado_f3_contrato.py:612-631`, `ponto/services/ausencia.py:424`, `ponto/services/ausencia.py:725`, `ponto/services/ausencia.py:1124`.
+- O RED do Vulture consta no anexo fornecido. Vulture na c13, suite inteira e banco [nao verificado]. A certificação fica com o Code e o opus final. `core/tests/test_contract_esmeril.py:26-29`.
+
+**Comandos dos mutantes**
+
+Execute cada bloco na raiz de `app`. Os três deram código de saída `1` e operam em memória. `chamados/tests/test_e1_v7_catracas.py:90`, `ponto/services/ausencia.py:317`, `ponto/tests/test_atestado_f3_contrato.py:612`.
+
+**Trava por `type(ausencia)`** — RED com `?type`. `chamados/tests/test_e1_v7_catracas.py:111-132`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import sys
+import unittest
+from pathlib import Path
+from types import SimpleNamespace
+
+sys.modules['django.test'] = SimpleNamespace(SimpleTestCase=unittest.TestCase)
+from chamados.tests.test_e1_v7_catracas import travas_fora
+
+path = Path('ponto/services/ausencia.py')
+fonte = path.read_text()
+alvo = 'gerente = Ausencia.objects\n    ausencia.refresh_from_db'
+assert fonte.count(alvo) == 1
+mutante = fonte.replace(alvo, 'gerente = type(ausencia).objects\n    ausencia.refresh_from_db')
+achados = travas_fora(mutante, str(path))
+assert achados == [], achados
+PY
+```
+
+**Volta de `locals()` nas três portas** — RED com 18 parâmetros sem referência explícita. `ponto/services/ausencia.py:424`, `ponto/services/ausencia.py:725`, `ponto/services/ausencia.py:1124`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import re
+from pathlib import Path
+from symtable import symtable
+
+path = Path('ponto/services/ausencia.py')
+mutante, trocas = re.subn(
+    r'_dados_atestado_validados\(_EntradaAtestado\(\n[^\n]+\n    \)\._asdict\(\)\)',
+    '_dados_atestado_validados(locals())',
+    path.read_text(),
+)
+assert trocas == 3
+mortos = [
+    (f.get_name(), nome)
+    for f in symtable(mutante, str(path), 'exec').get_children()
+    if f.get_type() == 'function'
+    for nome in f.get_parameters()
+    if nome.startswith('atestado_') and not f.lookup(nome).is_referenced()
+]
+assert mortos == [], mortos
+PY
+```
+
+**Anexo descarta os seis dados validados** — RED porque a escrita dos campos deixa de ocorrer. `ponto/services/ausencia.py:1133`, `ponto/tests/test_atestado_f3_contrato.py:621-622`.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import inspect
+import unittest
+from ponto.tests.test_atestado_f3_contrato import AtestadoF3PortaSemBancoTest, ausencia
+
+fonte = inspect.getsource(ausencia.anexar_documento)
+alvo = '_gravar_dados_atestado(ausencia, dados_atestado, por)'
+assert fonte.count(alvo) == 1
+exec(fonte.replace(alvo, '_gravar_dados_atestado(ausencia, {}, por)'), vars(ausencia))
+teste = AtestadoF3PortaSemBancoTest('test_anexa_arquivo_e_seis_na_mesma_linha') [nao verificado]
+resultado = unittest.TextTestRunner().run(teste) [nao verificado]
+raise SystemExit(not resultado.wasSuccessful())
+PY
+```
 
 ## 26/11 18:32 · sessao bdb349ee95c8 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
 
@@ -2024,61 +2113,4 @@ O `suppress` do arquivo de mutantes está numa string usada para gerar uma varia
 - **Selo/RED sem mordida:** **nada** entre os casos novos registrados. A lacuna da flag fixa permanece na cobertura simulada, conforme o contraexemplo do item 4. `app/ponto/tests/mutantes_atestado_f3.py:96,124,404` · `app/ponto/tests/test_atestado_f3_contrato.py:368,444,529`
 - **`except` ou fallback novo:** **nada**. O `except Exception` continua no ramo de compensação. O `finally` externo passa a emitir o aviso existente também quando uma `BaseException` escapa. `app/ponto/services/ausencia.py:1436,1441,1442,1444`
 
-## 26/11 17:41 · sessao 2871c389c64e · DIA-DA-BATIDA-JUIZ-UNICO · verificador · origem=Code
-
-## Veredito — REPROVADO
-
-1. **B1 corrige o ciclo apontado na F4c entre regularização e `apagar`, mas a ordem ainda falha em caminhos alcançáveis.** A regularização pode travar uma Pergunta no `post_save` e depois adquirir a trava de um Chamado no encerramento do lote. A nova trava do Colaborador também fecha um ciclo com o flip automático sobre a mesma Batida. `app/chamados/services/regularizacao_ext.py:122–123,153–157,203–207` · `app/chamados/reconciliador.py:673–694` · `app/chamados/models.py:773–777` · `app/ponto/management/commands/flip_automatico.py:62–68`
-2. **A cura de B2 está no código. Falta confirmar o RED executável.** Nesta cópia, tanto o teste da versão atual quanto o mutante pararam no import de `django.db`. O mutante retornou `RC=2`, `FAIL=0`, `ERROR=1`. Sua queda por asserção fica **[nao verificado]**. `app/ponto/registro_batida.py:328–341` · `app/ponto/tests/test_juiz_unico_eventos.py:318–360` · `app/ponto/tests/juiz_unico_eventos_mutantes.py:225–232`
-
-## Curas e mutantes
-
-| Item | Sítio e teste que morde | Resultado na cópia | [nao verificado]
-|---|---|---|
-| **B1** | Trava no topo de `app/chamados/services/regularizacao_ext.py:122–124`. O teste espiona a ordem de entrada no `atomic`, trava, leitura de itens e escrita em `app/ponto/tests/test_juiz_unico_eventos.py:409–432`. | Verde na fonte atual. `f4d-b1-sem-trava` cai com **RC 1**, duas falhas por asserção, em `corrigir` e `remover`. `app/ponto/tests/juiz_unico_eventos_mutantes.py:123–125` · `app/ponto/tests/test_juiz_unico_eventos.py:431` |
-| **B2** | O juiz está antes do `delete`, fora da proteção e do savepoint interno. O teste exige o mesmo `DatabaseError`, linha e PK preservados, zero trilha, agendamento, savepoint e commit, e um rollback. `app/ponto/registro_batida.py:333–341` · `app/ponto/tests/test_juiz_unico_eventos.py:318–360` | `f4d-b2-protecao-e-savepoint` restaura o bloco que engole a exceção exigida pelo teste. A execução parou antes dessa asserção. **[nao verificado]** `app/ponto/tests/juiz_unico_eventos_mutantes.py:126–134` · `app/ponto/tests/test_juiz_unico_eventos.py:333,351` |
-| **B3** | INFO passou a carregar `processados=%d`. O teste exige `processados=0` e uma só chamada para dois dias da mesma competência. `app/ponto/services/fechamento.py:1841–1845` · `app/ponto/tests/test_juiz_unico_eventos.py:474–483` | Verde na fonte atual. `f4d-b3-info-antigo` cai com **RC 1** na mensagem. O RED de K3, que exige nova tentativa quando uma exceção sobe ao callback, também cai com **RC 1**. `app/ponto/tests/juiz_unico_eventos_mutantes.py:135–141,171–175` · `app/ponto/tests/test_juiz_unico_eventos.py:462–483` |
-| **E5** | A promessa do cron saiu do comentário. A configuração da cópia declara que `recalcular_fechamento` fica sem cron. `app/ponto/registro_batida.py:192–194` · `app/config/crons.py:1148–1155` | Verde na fonte atual. `f4d-e5-comentario-antigo` cai com **RC 1** na asserção sobre o comentário. `app/ponto/tests/juiz_unico_eventos_mutantes.py:142–146,206–210` · `app/ponto/tests/test_juiz_unico_eventos.py:485–489` |
-
-## B1 — Ordem dentro do `atomic`
-
-- **Sim, é a primeira aquisição de trava de linha daquele `atomic`.** Com os argumentos usados, `trava_na_ordem` pede só o Colaborador. No par original, regularização e `apagar` agora pedem o mesmo Colaborador antes de escrever ou travar a Batida. A consulta que veta disputa aberta ainda roda antes da trava. Uma abertura concorrente pode passar entre a consulta e a aquisição, e o materializador segue sem reler. `app/chamados/services/regularizacao_ext.py:59–66,122–124` · `app/chamados/models.py:2901–2902,2933–2967` · `app/ponto/registro_batida.py:328–336` · `app/chamados/services/disputa_emissao.py:530–542,601–606`
-- **Sequência interna.** `corrigir` faz `UPDATE` direto. `adicionar` delega o `INSERT` a `registrar_batida`. Os dois passam pelo `post_save`, que pode travar Disputas, Chamados e Perguntas via reconciliador. `remover` faz `delete` direto e aciona núcleo e cartório pelo `post_delete`. No fim, `transicionar_com_pauta(..., ato=reg.chamado.encerrar)` tenta travar explicitamente o Chamado do lote. Se o `post_save` já travou uma Pergunta e o Chamado do lote era terminal e estava fora do conjunto travado, a aquisição nova é **Pergunta → Chamado**. O teste de B1 usa escritas simuladas e `chamado_id=None`. `app/chamados/services/regularizacao_ext.py:73–83,133–157,203–207` · `app/ponto/registro_batida.py:178–182` · `app/ponto/signals.py:53–55,148–150,216–225` · `app/chamados/reconciliador.py:673–694` · `app/chamados/services/fecho_runtime.py:157–168` · `app/chamados/models.py:773–777,1785–1793,2952–2966` · `app/ponto/tests/test_juiz_unico_eventos.py:417–432`
-- **Contraexemplo com dois atos.** T1, `flip_automatico --apply`, abre o `atomic` e atualiza a Batida B via `flip_tipo` → `anotar`. T2, a regularização, trava o Colaborador C e espera B ao tentar corrigir a mesma linha. T1 entra no reconciliador pelo `post_save` e espera C se houver pergunta elegível. Uma pergunta de disputa já fechada satisfaz o seletor, portanto esse cenário é compatível com a guarda da regularização. O ciclo é **T1 segura B e espera C, T2 segura C e espera B**. Execução em PostgreSQL e ocorrência em produção **[nao verificado]**. `app/ponto/management/commands/flip_automatico.py:62–68` · `app/ponto/services/flip_batida.py:25–33` · `app/ponto/registro_batida.py:281–287` · `app/ponto/signals.py:216–225` · `app/chamados/reconciliador.py:673–679,740–762,1580` · `app/chamados/services/regularizacao_ext.py:59–66,122–123,153–157`
-- **Há também um ciclo possível com batida de chão.** A regularização segura C em `FOR UPDATE`. O app pode reservar no `INSERT` a chave única `(C, timestamp)` e esperar o `KEY SHARE` do FK em C. Se a regularização tenta corrigir outra Batida para esse mesmo instante, espera a chave ocupada pelo app. A hora válida do aparelho pode coincidir com a hora corrigida. Execução desse ciclo e efeito em produção **[nao verificado]**. `app/chamados/models.py:2938–2941` · `app/chamados/services/regularizacao_ext.py:122–123,144–157` · `app/api/views_core.py:492–495,643–659` · `app/api/hora_do_aparelho.py:135–146` · `app/ponto/registro_batida.py:178–180` · `app/ponto/models.py:22,102–106` · `app/colaboradores/tests/test_feriado_matriz_p3_trava.py:5–10`
-
-## B2 — Chamadores e exceção
-
-- **Produção.** O único chamador encontrado é o POST administrativo `rejeitar` de `batidas_offline_pendentes`, protegido por `ver_painel_situacional`. O `except Batida.DoesNotExist` cobre a consulta inicial. O erro do juiz sai da view antes da resposta de sucesso. Esse ato é a rejeição administrativa de marca offline, e nenhum chamador de chão foi encontrado para `apagar`. A resposta HTTP observada em produção é **[nao verificado]**. `app/ponto/urls.py:78` · `app/ponto/views.py:452–456,467–482,496–500` · `app/docs/LEIS.md:78`
-- **Testes.** O chamador em `test_juiz_unico_eventos.py:352` captura `DatabaseError` com `assertRaises`. Os demais deixam uma exceção inesperada falhar o teste. `app/ponto/tests/test_juiz_unico_eventos.py:273,305,314,351–352,368,401` · `app/ponto/tests/test_porta_batida.py:80–81`
-- **Limite da proteção.** Se a leitura viva falha, o erro sai do `atomic` antes do `delete`, da trilha e da limpeza do PK. Depois do `delete`, a união dos dias e o agendamento continuam sob `_proteger_fechamento_por_evento`. O callback roda em `on_commit` e conserva seus `except`. O `delete` e seus receivers ficam fora desse guard. `app/ponto/registro_batida.py:197–204,328–343` · `app/ponto/services/fechamento.py:1830–1856`
-
-## B3 — Retorno e log
-
-Com os dois defaults `False`, **todo retorno normal é `int`**. O contador começa em `0`, é incrementado com `1` e é o único retorno desse modo. Universo vazio, guarda que exclui o colaborador ou exceção por colaborador antes do incremento podem deixar `0`. O dicionário pertence ao modo leitura. O `%d` recebe o contador em argumentos separados do formato, com a competência já marcada. Falhas internas de `DiaPago` ainda podem coexistir com `processados=1`, e o `except` mensal registra PK e nome quando falha no nível do colaborador. `app/ponto/services/fechamento.py:468–471,574–584,636–639,1152–1160,1262–1265,1321–1335,1841–1845`
-
-## AST — `except` e `suppress`
-
-Nenhum novo. Contagem de `ast.ExceptHandler` e chamadas a `suppress`, da base do delta para a cópia. Em B2 saiu um **uso** de `_proteger_fechamento_por_evento`, cujo `except` segue atendendo os outros usos. `app/ponto/registro_batida.py:197–212,333–340` · `app/ponto/tests/juiz_unico_eventos_mutantes.py:126–134`
-
-| Arquivo | `except` | `suppress` |
-|---|---:|---:|
-| `app/chamados/services/regularizacao_ext.py:104,112,158,191` | 4 → 4 | 0 → 0 |
-| `app/ponto/registro_batida.py:18,200` | 2 → 2 | 0 → 0 |
-| `app/ponto/services/fechamento.py:594,1105,1111,1262,1321,1327,1685,1846,1854` | 9 → 9 | 0 → 0 |
-| `app/ponto/tests/juiz_unico_eventos_mutantes.py:82,189` | 0 → 0 | 0 → 0 |
-| `app/ponto/tests/test_juiz_unico_eventos.py:318–360` | 0 → 0 | 1 → 0 |
-
-## Classes e escritores/leitores do delta
-
-**Ordem de trava** é a classe que reprova. O selo de B1 morde a remoção da chamada local, com alcance limitado aos dois ramos simulados. A escrita direta de correção e remoção fora da porta já existia. A correção de tipo e horário está registrada como classe 9. O delta reutiliza o juiz de evento, a competência do fato e o escritor mensal, sem introduzir relógio ou derivação paralela. `processados` tem um significado de contagem, mesmo com várias causas possíveis para zero. `app/ponto/tests/test_juiz_unico_eventos.py:409–432` · `app/chamados/services/regularizacao_ext.py:133–157` · `app/core/portas.py:98–105` · `app/docs/CORTES.md:441` · `app/ponto/registro_batida.py:333–340` · `app/ponto/services/fechamento.py:637,1326–1335,1830–1845`
-
-| Campo ou valor | Quem escreve e quem lê |
-|---|---|
-| `RegularizacaoExterna.colaborador_id` e sentinela da trava | `criar_regularizacao_externa` grava o FK. Guarda, criação de Batida, trilha e nova trava leem a relação ou seu ID. `trava_na_ordem` registra a aquisição na conexão, lida por `colaboradores_travados` e `estampa_das_travas`. `app/chamados/services/regularizacao_ext.py:59–65,73–82,98,123,238–241` · `app/chamados/models.py:2938–2941,4592–4595` · `app/chamados/services/trava_do_colaborador.py:26–28,37–64,72–79` |
-| `Batida.pk`, `colaborador_id`, `timestamp`, `tipo` | O `create` da porta gera a linha e o PK. A correção externa também grava `timestamp` e `tipo`. A view lê a marca para a trilha. `apagar` guarda o PK, relê a linha e entrega a marca viva ao juiz. Após sucesso, limpa o PK da instância recebida. `app/ponto/registro_batida.py:172–182,318–343` · `app/chamados/services/regularizacao_ext.py:151–157` · `app/ponto/views.py:474–489` · `app/ponto/turnos.py:3037–3047` |
-| `.dias`, `dias_vivos`, `_dias_exclusao`, `dias_da_jornada` | `julgar_evento_da_batida` produz `.dias`. `apagar` guarda os dias vivos. O núcleo escreve `_dias_exclusao` no `post_delete`, e o cartório lê ou preenche pelo mesmo juiz. A porta une os dias e o callback consome a união, inclusive vazia. `app/ponto/turnos.py:3034–3057` · `app/ponto/signals.py:19–25,53–55,113–122,148–150` · `app/ponto/registro_batida.py:333–340` · `app/ponto/services/fechamento.py:1830–1841` |
-| `motivo`, competência e `processados` | `apagar` fornece `motivo='exclusao'`. O resolvedor fornece mês e ano para a deduplicação, a chamada mensal e o log. O escritor mensal produz a contagem, lida agora pelo INFO e já lida pela tela e pelo comando. `app/ponto/registro_batida.py:340` · `app/ponto/services/fechamento.py:1618–1628,637,1326–1335,1830–1850` · `app/ponto/views.py:1280–1281` · `app/ponto/management/commands/recalcular_fechamento.py:130–134` |
-| Texto de E5 | O comentário da porta é lido pelo teste via `Path.read_text`. O mutante injeta a versão antiga nessa leitura. `app/ponto/registro_batida.py:187–196` · `app/ponto/tests/test_juiz_unico_eventos.py:485–489` · `app/ponto/tests/juiz_unico_eventos_mutantes.py:142–146,206–210` |
-
-_8466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8467 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
