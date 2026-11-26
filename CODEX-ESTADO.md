@@ -1,7 +1,47 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 23:34** · publicado em **25/11/2026 23:36** (UTC-3)
+> Ultima resposta processada: **26/11/2026 00:06** · publicado em **26/11/2026 00:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 00:06 · sessao 2afae052afd5 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · leitura · origem=Code
+
+**Achado confirmado por leitura.** No caso proposto, a folga-feriado promovida leva **360 min (6,00 h) de HE100 noturna** ao `FechamentoMensal` e ao `DiaPago`. O feriado em dobra calculado pelo comercial leva **420 min (7,00 h)**. Os dois caminhos dão **450 min (7,50 h) de HE100 de feriado**. A diferença está em quais minutos absorvem os 60 min de suprimido. `app/ponto/motor_calculo_v2.py:727–763,1885–1901,3474–3495` · `app/ponto/services/fechamento.py:970–981` · `app/ponto/services/dia_pago.py:272–287`
+
+Usei a cópia indicada como `67dd8957e`. O `git rev-parse HEAD` falhou por falta de metadados Git no diretório, então a identidade do commit fica **[nao verificado]**. O exemplo abaixo é uma derivação para os dois pares fechados no mesmo dia de jornada, com os minutos trabalhados e o suprimido informados. Ocorrência em produção, valores gravados e TXT efetivamente emitido ficam **[nao verificado]**.
+
+## 1. Do motor ao mensal, ao dia e ao TXT
+
+| Caminho | Como sai o número do exemplo |
+|---|---|
+| **Folga-feriado promovida** | O comercial chama `_dobra_sem_o_suprimido([periodo])` ainda no cálculo individual. No par `22:00–05:00`, a dobra cheia tem 420 min noturnos. Como esse par sozinho tem zero minutos diurnos, os 60 min de suprimido baixam sua HE100 e sua HE100 noturna para **360**. O motor põe os pares de folga em `periodos_ft`. Tanto o laço base da dobra diária quanto o recálculo diário comercial percorrem `resultado.periodos`. `app/ponto/motor_calculo_v2.py:2549–2565,2573–2599,2676–2684,3386–3396,3447–3479,1885–1901` |
+| **Promoção no mensal e no dia** | O fechamento filtra `periodos_ft` por escala certa e `feriado_vira_folga`. `dobra_da_folga_feriado` agrupa os pares pelo dia da jornada e chama `dobra_sem_o_suprimido_por_par(_ps)` sem `noturno=`. A conta trata todos os minutos como diurnos e devolve **90 + 360 = 450** de HE100. Os dois escritores somam separadamente o `minutos_extra_100_noturna` que veio dos pares, **0 + 360 = 360**. O mensal persiste essa soma e passa os mesmos pares e o mapa de dias à lavra do `DiaPago`. `app/ponto/services/fechamento.py:942–981,1177–1186,1217–1234` · `app/ponto/services/dia_pago.py:148–158,272–287,369–389` · `app/ponto/motor_calculo_v2.py:740–763` |
+| **Feriado trabalhado em dobra** | No recálculo comercial, os dois pares de `resultado.periodos` chegam juntos a `_dobra_sem_o_suprimido`. A função mede o subconjunto noturno sobre a **dobra cheia**, passa o mapa a `dobra_sem_o_suprimido_por_par` e grava as duas parcelas. Os 60 min saem do par diurno `17:00–18:30`. Ficam **30 + 420 = 450** de HE100, dos quais **420** noturnos. `ResultadoMes.horas_extra_100_noturna` soma `periodos` para o mensal, e `lavrar` soma os mesmos campos por dia. `app/ponto/motor_calculo_v2.py:342–344,727–763,1885–1901,3447–3479` · `app/ponto/services/fechamento.py:927–933` · `app/ponto/services/dia_pago.py:199–212` |
+
+**TXT Domínio.** A montagem lê do `FechamentoMensal` os eventos `hora_extra_feriado_diurna` com o total da HE100 de feriado e `adicional_noturno` com `horas_noturnas`, que agrega os minutos noturnos legais dos períodos normais e de folga. A lista de eventos omite o subconjunto `horas_extras_100_noturna`. Assim, isoladamente, a diferença **360 → 420** fica nos campos de apuração. No exemplo, os dois caminhos entregam **7,50 h** ao evento de feriado, sujeito à elegibilidade e à rubrica configurada. `app/ponto/motor_calculo_v2.py:321` · `app/ponto/services/fechamento.py:927–933,971–981` · `app/folha/export.py:420–448,714–739` · `app/folha/views.py:267–287`
+
+## 2. Origem única e o que já está disponível
+
+**A origem da regra é `dobra_sem_o_suprimido_por_par`, no motor.** Ela recebe a noturna da dobra cheia e executa a ordem do item 2, diurnos do próprio par, diurnos dos outros pares do dia e, se ainda houver suprimido, noturnos. `_dobra_sem_o_suprimido` já usa essa regra e grava o subconjunto limitado à HE100 restante. **Para a promoção, o ponto comum é `dobra_da_folga_feriado`.** Ali cabe produzir total e subconjunto juntos por dia, com mensal e `lavrar` lendo o mesmo resultado. Para o caso comercial descrito, isso cabe nos serviços com os dados já publicados, sem alterar `motor_calculo_v2.py`. O insumo é a noturna de relógio do par inteiro, **420**, antes de repartir o suprimido. O `minutos_extra_100_noturna` que chega à promoção já traz o corte individual. `app/ponto/motor_calculo_v2.py:727–763,1039–1061,1582–1583,1744–1746,1788–1790,1885–1901,3359–3393` · `app/ponto/services/dia_pago.py:135–158,272–281` · `app/ponto/services/fechamento.py:970–981`
+
+| O que a cópia expõe | Onde |
+|---|---|
+| `resultado.periodos`, `resultado.periodos_ft` e `resultado.dia_da_jornada`, um mapa `id(periodo) → data` que inclui os pares de folga. A composição concatena os períodos e mescla o mapa das fatias. | `app/ponto/motor_calculo_v2.py:274–275,1129–1131,2563–2565,2597–2599,2843` · `app/ponto/services/fechamento.py:105–109,303–325` |
+| Por par, `minutos_trabalhados`, `minutos_intrajornada_indenizada`, `minutos_noturnos_relogio` e `minutos_noturnos_legais`. O relógio já incorpora a prorrogação aplicada pelo motor e o desconto dos intervalos noturnos. A conversão para hora reduzida entra no campo legal. | `app/ponto/motor_calculo_v2.py:213–235,1039–1061` |
+| Por par, `minutos_extra`, `minutos_extra_100`, `minutos_extra_100_feriado`, `minutos_extra_100_noturna`, `entrada`/`saida`, `efetivo_entrada`/`efetivo_saida`, `intervalos_do_motor` e `intra_descontada`. O resultado mensal oferece a soma da HE100 noturna de `periodos`. O valor diário da promoção é montado nos serviços. | `app/ponto/motor_calculo_v2.py:210–252,342–344,1939–1947` · `app/ponto/services/dia_pago.py:148–158,272–287` |
+
+## 3. Leitores fora dos testes [nao verificado]
+
+| Leitor | Número que lê |
+|---|---|
+| **Espelho, PDF e drill** | `pago_do_dia` lê `detalhe['folga_feriado_min']`, que na lavra do motor soma o **trabalhado** da folga-feriado. São **510 min (8,50 h)** no exemplo. O serviço do espelho publica `pago_h`, usado na coluna Realizado do PDF e no drill. As rubricas da tela e do PDF mostram HE100 **total** e horas noturnas **legais**. `app/ponto/services/dia_pago.py:286–287,918–927,943–957` · `app/ponto/services/espelho.py:823–831` · `app/templates/ponto/espelho.html:278–288` · `app/relatorios/pdf_espelho.py:844–847,901–914,979–984` · `app/relatorios/services.py:136–143` |
+| **API do espelho** | `horas_do_dia` usa o mesmo `pago_do_dia` quando há linha lavrada. A API entrega `horas_trabalhadas` com arredondamento de uma casa e `dia_pago_lavrada`. Sem linha, usa o trabalhado do período recebido. O campo do payload é de horas trabalhadas. `app/api/views.py:1450–1455,1537–1559` · `app/ponto/services/espelho.py:120–136` |
+| **Holerite** | O aplicativo lê e entrega o PDF importado. O conteúdo efetivo de um holerite do Domínio e sua correspondência com este caso ficam **[nao verificado]**. `app/holerite/motor.py:84–98` · `app/holerite/views.py:1445–1459` |
+| **Vigias da exportação** | `dias_fora_do_dia_pago` compara trabalhado dos períodos, incluindo folgas, com `pago_do_dia`. `fechamento_x_soma_dias_pagos` compara o subconjunto mensal `horas_extras_100_noturna` com a soma do mesmo campo no `DiaPago`. Como os dois escritores recebem 360 no exemplo, essa comparação pode concordar com o valor errado. `app/ponto/calculador/nucleo.py:393–401` · `app/folha/porta_export.py:88–124,431–438,496–512` · `app/ponto/services/dia_pago.py:34–44,579–592` |
+| **Diagnóstico e censo** | `desvio_o68b` lê diretamente `minutos_extra_100_noturna` dos períodos normais, com `ft=False`. `simular_folha` lê o campo mensal em horas no retrato de retidos. `medida_leitor_do_dia` usa o nome do atributo no detector AST, sem ler valores de ponto. O calculador também produz `folga_feriado_min` a partir de `_certa` na trilha `oraculo`. `app/ponto/management/commands/desvio_o68b.py:81–86,114–128` · `app/folha/management/commands/simular_folha.py:59–61,74–84` · `app/core/medida_leitor_do_dia.py:47–53,70–90` · `app/ponto/calculador/regras.py:679–688` · `app/ponto/services/fechamento.py:1294–1311` |
+
+## 4. Chave do vigia `minuto_em_duas_rubricas_do_dia`
+
+**Confirmado.** `medir` pega apenas `resultado.periodos`, usa `_p.entrada.date()` como chave e consulta previsto e intervalo declarado nessa mesma data. O motor agrupa a dobra diária pelo dia do turno. No laço base usa `_dia_do_turno_do_par`, que consulta a entrada localizada no mapa do juiz e recorre à data local quando falta a chave. No comercial usa o mapa de `data_turno` com o mesmo tipo de fallback. Um segundo par que começa em D+1 e pertence ao turno de D pode cair em dois grupos no vigia e em um no motor. Esse vigia compara **HE total** com o teto após a intra e deixa `periodos_ft` fora da verificação. `app/folha/porta_export.py:340–355,579–592` · `app/ponto/motor_calculo_v2.py:923–934,975–990,2676–2684,3447–3469`
 
 ## 25/11 23:34 · sessao eca448b541b0 · O30-F3-CONSTRUIR · leitura · origem=Code
 
@@ -1020,14 +1060,4 @@ finally:
 
 **Verificação pendente.** A suíte inteira após as curas e uma execução da revisão base no mesmo ambiente e relógio são [nao verificado]. Para provar pré-existência de um teste já presente na base, é preciso reproduzir a mesma falha nessa revisão sob essas condições. [nao verificado]
 
-## 25/11 19:55 · sessao f7d727364eb8 · - · - · origem=Ronald (tmux)
-
-O caminho de leitura é `batidas_apuraveis` → `montar_grade_prevista_periodo` → `_marcar_ausencias`. Para reexecutar a montagem unitária de uma célula do dia `d`, o Cartório usa batidas de `d−1` à meia-noite até `d+3` à meia-noite menos 1 μs, `ref=d+1`, `dias=2` e o instante `agora`. A célula está em `grade['dias'][1]`. `app/ponto/services/cartorio.py:1184-1207`, `app/escala/utils.py:2095-2101`.
-
-O objeto `a` vem de `cobertura_ausencia_periodo(..., para='folha')`, com aprovação e desempate pelo maior `(data, pk)`. `CelulaDia.ausencia_id` vem da consulta para cobrança, que pode escolher outra ausência. `app/escala/utils.py:1198-1202`, `app/ponto/turnos.py:2528-2537`, `app/ponto/turnos.py:2752-2804`, `app/ponto/services/cartorio.py:1384`, `app/ponto/services/cartorio.py:1921`.
-
-Dois wrappers em memória, restaurados via `try/finally`, capturam os argumentos exatos. O de `horas_reais_do_dia` mantém o último par `(dia, lista)`. O de `periodo_da_parcial_no_dia` delega ao original e anexa ao dicionário `dia` os argumentos e o resultado somente se `horas is lista`. A identidade exclui a chamada que usa `[offset]` para dispensar marcos. O builder por turno devolve o dia original e o legado propaga suas chaves com `**sd`. Capturar no ponto da chamada também preserva a posição original de batidas órfãs, que podem ser remanejadas depois. `app/escala/utils.py:1245-1261`, `app/escala/utils.py:1054`, `app/escala/utils.py:1859`, `app/escala/utils.py:2050-2051`, `app/escala/utils.py:2082`.
-
-O universo vem de `CelulaDia.veredito='fato_em_ausencia'`. A ata confirma `cobertura_parcial` e `periodo_parcial`, mas a reconstrução dos mesmos argumentos históricos é [nao verificado]. A decisão de recontar sob insumos atuais deve ser explícita. Um `None` sem outra batida estritamente interior torna a exclusividade de borda [nao verificado]. `app/escala/models.py:1762-1789`, `app/ponto/services/cartorio.py:754-789`, `app/ponto/turnos.py:2651-2684`.
-
-_8267 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8268 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

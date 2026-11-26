@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 00:02:32.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (23.5 MB). Acoes na janela: **726**.
+**Medido em 26/11/2026 00:09:01.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (23.5 MB). Acoes na janela: **727**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:02:42 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/opus_final.md <<'EOF' (opus final FERIADO 26/11 00:0x, verificador somente leitura; transcrito pela sessao) REPROVADO 1. BLOQUEIO noturna da promocao da folga-feriado: fechamento.py:978-980 e dia_pago.py:281 tiram HE100 POR DIA (dobra_da_folga_feriado sem noturno=) e copiam minutos_extra_100_noturna POR PAR do motor; laco p ...` |
 | 00:02:32 | Bash |  | `cd /home/ronald/saas-hasner; echo "$(date +%H:%M) O30-F3 MAPA CURTO FEITO (Codex leitura rc 0, logs/O30-F3-CONSTRUIR/mapa.r, 52 linhas; amostra a conferir antes do brief): F1 ja tem drawer painel_ausencia + filtros (de/ate, colab, tipo, status, efeito; empresa so no relatorio de atestados), servico atestados_lote.py com previa + CSV + ZIP (sem PDF, sem rota na barra), PDF do Historico e HTML; docu ...` |
 | 00:02:24 | Read |  | `/home/ronald/saas-hasner/logs/O30-F3-CONSTRUIR/mapa.r` |
 | 00:02:22 | Bash |  | `cd /home/ronald/saas-hasner; wc -l logs/O30-F3-CONSTRUIR/mapa.r; tail -3 logs/O30-F3-CONSTRUIR/mapa.out` |
