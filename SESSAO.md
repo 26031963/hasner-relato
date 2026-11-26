@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 06:51:24.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **747**.
+**Medido em 26/11/2026 06:57:41.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **746**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -756,4 +756,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:06:38 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; c(){ grep -oE '^[.sxEF]+' green.log \| tr -d '\n' \| wc -c; }; grep -m1 Found green.log; ps -o args= -p 3545944 \| grep -oE -- '--parallel[= ][0-9]+'; a=$(c); /usr/bin/sleep 60; b=$(c); echo "$a -> $b /min"; git -C /home/ronald/wt-e1prev-v2-154416 log -1 --oneline; git -C /home/ronald/wt-e1prev-v2-154416 status --porcelain \| grep -v '^??' \| head  ...` |
 | 19:06:34 | Bash |  | `ps -o pid,etime,args -p 3545944 \| cut -c1-300; ls -l /proc/3545944/fd/1 2>/dev/null; docker inspect great_shockley --format '{{range .Mounts}}{{.Source}} {{end}}' \| tr ' ' '\n' \| grep -v '^$' \| head -4; cat /home/ronald/saas-hasner/logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.espera \| head -3` |
 | 19:06:30 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; bin/trava_teste.sh --quem 2>&1 \| head -3; timeout 20 ssh pista estado \| grep -E 'rodando\|fila\|1125181431'; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.certifica 2>&1 \| tail -2; pgrep -af '^bash logs/pista_certifica_par.sh'; docker ps --format '{{.Names}} {{.RunningFor}}' \| grep -v -E '^saas_\|juliani_db\|sombra_db\|caddy' \| head` |
-| 18:51:30 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' s=open(r).read() a='log da sonda "ExportacaoDominio 10/2026 = 0" citado antes do apply; DIFF da emp4 na lista ao DP (sonda_emp4: emp4 tem FechamentoMensal da 10).' b='"ExportacaoDominio 10/2026 = 0": logs/GUARDA-10-B/sombra_run.log:5 (`por empresa={}`, sombra do dump de PROD 25/11, lavra md5 059af97f) -- citado; DIFF ao DP cobre ...` |
