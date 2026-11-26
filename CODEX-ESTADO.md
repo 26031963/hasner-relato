@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 20:38** · publicado em **26/11/2026 20:43** (UTC-3)
+> Ultima resposta processada: **26/11/2026 20:49** · publicado em **26/11/2026 20:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 20:49 · sessao cda0fb238f36 · ABONO-X-SAIDA-ANTECIPADA · construtor · origem=Code
+
+O RED novo passou sem mutação e falhou por `AssertionError` com `ps[-1:]` e `ps[:1]`. A única edição foi no arquivo de testes. [ponto/tests/test_abono_c1f_lista_da_jornada.py:30](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:30) [nao verificado]
+
+### Por que o M1b sobreviveu
+
+- O 12x36 obtém os períodos do pareador. O pareador ordena as batidas por timestamp, o adaptador mantém a ordem dos turnos, e `calcular_mes` acrescenta os períodos a `resultado.periodos` nessa sequência. No teto, `ps` é o grupo de períodos da jornada `dia`, montado de `resultado.periodos` com `dia_por_periodo[id(p)]` e `append`, preservando a ordem recebida. [ponto/motor_calculo_v2.py:2917](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:2917) [ponto/turnos.py:1232](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:1232) [ponto/adaptador_motor.py:29](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/adaptador_motor.py:29) [ponto/motor_calculo_v2.py:2672](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:2672) [ponto/motor_calculo_v2.py:1132](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1132)
+- Na fixture antiga, `22:00–22:30` é absorvido como intrajornada. O turno físico aparece **uma vez** em `ps`, de `D 19:30` a `D+1 01:00`. Conferi o pareamento e o teto em memória. `ps[-1]` carrega as duas pontas brutas, saída antecipada `D+1 01:00–07:00` e atraso `D 19:00–19:30`. Assim, `ps[-1:]` conserva a ponta que a parcial já cobre e a lista fica vazia. [RED antigo:92](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:92) [ponto/turnos.py:468](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:468) [ponto/motor_calculo_v2.py:1245](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1245) [ponto/motor_calculo_v2.py:1297](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1297)
+- A fixture antiga tem uma segunda barreira. Redatada para D+1, a parcial `06:30–19:30` termina depois do envelope da jornada de D, que fecha às `11:00` de D+1. O juiz a atribui a D+1, e o motor descarta a candidata. [ponto/turnos.py:78](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:78) [ponto/turnos.py:316](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:316) [ponto/motor_calculo_v2.py:1300](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1300)
+
+### RED novo e os três runs
+
+O teste entrega dois períodos fechados sintéticos ao teto, com o mesmo dia de jornada. A parcial `D 06:30–10:00` cobre 30 minutos de atraso como datada e cobriria 30 minutos de saída se redatada. Cada subteste monta períodos novos e muda a posição da ponta coberta. A asserção exige lista vazia nas duas ordens. [RED novo:32](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:32) [asserção:58](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:58) [nao verificado]
+
+| Run | Saída observada |
+|---|---|
+| Sem mutação | `Ran 1 test in 0.032s` · `OK` · `rc=0` |
+| `ps[-1:]` | `periodo_coberto='primeiro'` · `AssertionError` · `FAILED (failures=1)` · `rc=1` |
+| `ps[:1]` | `periodo_coberto='ultimo'` · `AssertionError` · `FAILED (failures=1)` · `rc=1` |
+
+Os dois vermelhos falharam na asserção da lista, com uma linha indevida de `saida antecipada`, `cobre_como_datada_min=0` e `cobriria_datada_no_dia_seguinte_min=30`. [asserção:58](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:58) [ponto/motor_calculo_v2.py:1314](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1314)
+
+O comando abaixo rodou o teste com `unittest` e adaptadores em memória para Django e `freezegun`, que faltam no Python local. O teto, o juiz de datas e os mutantes rodaram com o código da árvore. A execução na suíte Django fica com o Code. [requirements.txt:13](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/requirements.txt:13) [requirements.txt:43](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/requirements.txt:43) [nao verificado na suíte Django] [nao verificado]
+
+```bash
+for fatia in '' '[-1:]' '[:1]'; do
+  printf '\nfatia=%s\n' "${fatia:-controle}"
+  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$fatia" <<'PY'
+import sys
+import unittest
+from datetime import datetime
+from pathlib import Path
+from types import ModuleType, SimpleNamespace
+from unittest.mock import patch
+from zoneinfo import ZoneInfo
+
+def modulo(nome, **atributos):
+    m = ModuleType(nome)
+    vars(m).update(atributos)
+    sys.modules[nome] = m
+    return m
+
+fuso = ZoneInfo('America/Sao_Paulo')
+tz = modulo('django.utils.timezone',
+            make_aware=lambda dt: dt.replace(tzinfo=fuso),
+            localtime=lambda dt: dt.astimezone(fuso),
+            localdate=lambda dt: dt.astimezone(fuso).date(),
+            is_naive=lambda dt: dt.utcoffset() is None)
+modulo('django')
+modulo('django.utils', timezone=tz)
+modulo('django.conf', settings=SimpleNamespace(TIME_ZONE=fuso.key))
+modulo('django.core')
+modulo('django.core.management')
+modulo('django.core.management.base', BaseCommand=object)
+modulo('django.test', TestCase=unittest.TestCase, SimpleTestCase=unittest.TestCase)
+
+def freeze_time(texto):
+    instante = datetime.fromisoformat(texto).replace(tzinfo=ZoneInfo('UTC'))
+    class Relogio(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return instante.replace(tzinfo=None) if tz is None else instante.astimezone(tz)
+    return patch('datetime.datetime', Relogio)
+
+modulo('freezegun', freeze_time=freeze_time)
+from ponto import motor_calculo_v2 as motor
+
+fatia = sys.argv[1]
+if fatia:
+    arquivo = Path(motor.__file__)
+    fonte = arquivo.read_text(encoding='utf-8')
+    alvo = "for p in ps for _q in (getattr(p, '_pontas_brutas_parcial'"
+    assert fonte.count(alvo) == 1
+    mutado = fonte.replace(alvo, alvo.replace('ps for', f'ps{fatia} for'), 1)
+    exec(compile(mutado, str(arquivo), 'exec'), vars(motor))
+
+label = ('ponto.tests.test_abono_c1f_lista_da_jornada.ListaDaJornadaNoTetoTest.'
+         'test_RED_a_lista_considera_a_ponta_coberta_em_qualquer_periodo')
+unittest.main(module=None, argv=['unittest', '-v', label])
+PY
+  printf 'rc=%s\n' "$?"
+done
+```
 
 ## 26/11 20:38 · sessao 5c6e8d4a6356 · O30-F3-CONSTRUIR · verificador · origem=Code
 
@@ -2130,85 +2214,4 @@ diff --git a/app/ponto/tests/test_atestado_f3_contrato.py b/app/ponto/tests/test
 +
 ```
 
-## 26/11 17:49 · sessao 6385f2c074c3 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-A c2h ficou na cópia com a bateria de saída, os mutantes em memória e as duas entradas da catraca atualizadas. O GREEN completo ficou bloqueado por dois pontos da base: o cálculo direto do Partido devolve minutos brutos com pausa interna, e a catraca integral ainda tem **13 registros de linha divergentes**, após corrigir os dois pedidos. [Partido](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/motor_calculo_v2.py:2997) · [Catraca](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/core/tests/test_medida_turno_do_par.py:567)
-
-| Item | Entrega | RED | GREEN local |
-|---|---|---|---|
-| 1. Catraca | `[530]` → `[531]` nas duas entradas pedidas. [Pareadores](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/core/tests/test_medida_turno_do_par.py:261) · [Derivações](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/core/tests/test_medida_turno_do_par.py:351) | O teste integral falhou por asserção na base. | As duas entradas conferem com o AST. A catraca integral ainda acusa 2 registros em `pareadores` e 11 em `derivacoes_de_dia`. | [nao verificado]
-| 2. Bateria | Oito casos com valores fixados pela regra para 12x36 e Comercial, mais dois controles do Partido com intervalo entre períodos. [Grade](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/test_ramo2b_c2h_saida.py:32) · [Controles](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/test_ramo2b_c2h_saida.py:123) | `deed2fe72` deu 8 falhas por asserção. | 18 subcasos passaram em memória. O diagnóstico da grade com pausa interna no Partido deu 8 falhas. |
-| 3. Selos P2/P3 | Docstrings registram os limites de `vars()`, `copy` com `setattr` e apelidos de `max`, e apontam para a bateria. [P2](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/test_ramo2b_c2_base_da_he.py:627) · [P3](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/test_contract_juiz_batida.py:377) | Os mutantes P2/P3 falharam na bateria. | 13 testes dos selos passaram em memória. | [nao verificado]
-| 4. Commit | Corpo abaixo. A proibição de `git commit` prevaleceu. | — | SHA de commit novo [nao verificado]. | [nao verificado]
-
-### Comandos e saídas
-
-Medição da linha pedida, a partir de `app/`. Resultado `pareadores [531]` e `derivacoes_de_dia [531]`. [Censo AST](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/core/medida_turno_do_par.py:448) · [Chamada medida](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/motor_calculo_v2.py:531)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-from core.medida_turno_do_par import censo
-medida = censo('.')
-for grupo in ('pareadores', 'derivacoes_de_dia'):
-    print(grupo, next(i['linhas'] for i in medida[grupo]['itens'] if
-                      i['chave'] == 'ponto/motor_calculo_v2.py::turnos_via_autoridade'
-                      and i.get('sitio') == 'porta_parear_turnos'))
-PY
-```
-
-Para cada linha abaixo, execute o comando indicado após `export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.base`. As saídas foram medidas localmente pela função `rodar`, com `unittest` e dublês de infraestrutura em memória porque `django.test` estava indisponível. A suíte Django do Code e o Opus final ficam [nao verificado]. [Executor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/ramo2b_c2h_mutantes.py:57) [nao verificado]
-
-| Comando | Saída local |
-|---|---|
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes red_deed2fe72` | rc 1, 8 asserções. No cruzamento, o oráculo devolveu `(700, 0, 60, 760)` e a regra esperava `(700, 20, 40, 760)`. |
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes green` | rc 0, 2 testes, 18 subcasos. | [nao verificado]
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes sem_ponta` | rc 1, 8 asserções. Reproduziu a perda dos 20 min de gozo. |
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes copy_setattr` | rc 1, 8 asserções. Base **1**, esperada **700** no cruzamento. |
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes teto_max` | rc 1, 16 asserções. Trabalhado **800**, esperado **760** no cruzamento. |
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes inclui_cauda` | rc 1, 5 asserções. Base **760**, esperada **680** na pausa anterior ao marco. |
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes perde_fim_no_marco` | rc 1, 2 asserções. Gozo **0**, esperado **20** na pausa que termina no marco. |
-| `python3 -B -m ponto.tests.ramo2b_c2h_mutantes partido_interno` | rc 1, 8 asserções. No cruzamento, o Partido devolveu `(720, 0, 0, 800)` e a regra esperava `(700, 20, 40, 760)`. |
-
-Todas as variantes registraram zero erros de execução. A tupla segue a ordem `(base, gozo, intra, trabalhado)`. A contagem AST deu **0 `ExceptHandler` novos** nos cinco arquivos do delta. [Asserções da bateria](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/test_ramo2b_c2h_saida.py:94) · [Injeções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/tests/ramo2b_c2h_mutantes.py:23)
-
-```text
-$ git -C .. rev-parse HEAD
-c193310ebb5ccd111ec99d59af06e144461224ca
-$ git -C .. diff --exit-code deed2fe72 -- app/ponto/motor_calculo_v2.py
-```
-
-O diff do motor saiu vazio, rc 0. [Porta da tripla](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306/app/ponto/motor_calculo_v2.py:1830)
-
-### Corpo preparado para o commit [nao verificado]
-
-```text
-RAMO2-B c2h: mede a saida da base da HE e registra a linha da catraca
-
-OBRA: RAMO2-B-EM-TURNO-QUE-CRUZA
-BASE: c193310ebb5ccd111ec99d59af06e144461224ca
-
-Regra: RAMO2-B-C2-RESPOSTA-PAUSA-2611 (L-032, L-031, L-097).
-A bateria fixa base, gozo, intra e trabalhado pela geometria do turno
-e confere a tripla None nos periodos sem cauda.
-Catraca de linhas: porta_parear_turnos na linha 531, em dois registros.
-Selos AST P2/P3: limites documentados e mutantes medidos na saida.
-
-LEI-AKITA:
-origem=ponto/calculador/alimentacao.py:173-178
-testemunha=ponto/calculador/nucleo.py:146-153, segmentos e batidas
-RED=ponto/tests/test_ramo2b_c2h_saida.py:115, com alimentacao de deed2fe72
-quem-mais-le=ponto/calculador/alimentacao.py:106-117,168-173,469-475,539-554
-  (rubricas_por_dia -> ponto/calculador/regras.py::do_dia:584-616,767-789);
-  ponto/services/fechamento.py:1291-1300;
-  ponto/management/commands/diff_calculador.py:414-424;
-  ponto/calculador/periodo.py:745-759; folha/porta_export.py:339-358
-juizes novos=0
-padrao=juiz unico
-
-fora do marco: PAUSA-NA-BORDA-DO-PAR (fatia propria)
-
-Pendencias medidas: 13 registros de linha herdados na catraca integral
-e 8 contraexemplos da grade de pausa interna no calcular_periodo do Partido.
-```
-
-_8471 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8472 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
