@@ -1,7 +1,43 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 01:19** · publicado em **26/11/2026 01:23** (UTC-3)
+> Ultima resposta processada: **26/11/2026 08:42** · publicado em **26/11/2026 08:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 08:42 · sessao a20deb4d80b3 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · construtor · origem=Code
+
+Implementei **K2 e K3**. **K1 segue bloqueado na zona inviolável do motor.** [fechamento.py:973](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/services/fechamento.py:973) · [porta_export.py:340](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/folha/porta_export.py:340) · [motor_calculo_v2.py:3092](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/motor_calculo_v2.py:3092)
+
+- **K1 — equivalência das vias.** O RED com o motor real obteve **440 min na dobra regular e 470 min na promoção**. O ponto para autorização do Ronald é `motor_calculo_v2.py:3092–3095`. A conta do suprimido percorre apenas `resultado.periodos` e grava no segundo par em `:3127`. Para reutilizar essa mesma conta, o motor precisa aplicá-la aos pares de folga antes de entregar o resultado. O RED roda por comando explícito. O mutante fica pendente com a cura. [Teste:391](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:391) · [Motor:3092](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/motor_calculo_v2.py:3092) · [Motor:3127](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/motor_calculo_v2.py:3127) [nao verificado]
+- **K2 — igualdade exata.** O RED reproduziu **1,07 h × 1,06 h**. FM e DiaPago agora usam a mesma distribuição diária e a mesma soma em minutos antes do arredondamento mensal. A comparação é exata no centésimo para as três rubricas HE100, nas vias regular e promovida. Em memória, ambas deram **1,07 h**, e o comparador acusou as três rubricas ao alterar a lavra para **1,06 h**. Os dois mutantes reproduziram a divergência de soma e a omissão do comparador, respectivamente. [Teste:351](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:351) · [DiaPago:173](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/services/dia_pago.py:173) · [Comparador:510](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/folha/porta_export.py:510) [nao verificado]
+- **K3 — vigia no limite.** O RED acusava **331,3 min de HE para teto de 330,3 min**. O feriado em dobra voltou à soma da base e passa no limite de **+1 min**. O controle com **331,4 min** acusa. O mutante que reaplica a acumulação incremental ao feriado ressuscitou o falso positivo, e o mutante do dia comum suprimiu a acusação esperada nesse ramo. [Vigia:340](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/folha/porta_export.py:340) · [Testes:421](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:421) [nao verificado]
+
+**Comandos para o Code**, com `DJANGO_SETTINGS_MODULE` do ensaio já configurado. [Runner:80](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/tests/mutantes_feriado_sem_limite_do_suprimido.py:80)
+
+```bash
+obra() { PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.mutantes_feriado_sem_limite_do_suprimido "$1"; }
+
+obra red-k1
+obra red-k2
+obra k2-soma-em-horas
+obra k2-tolerancia-he100
+obra red-k3
+obra k3-acumulacao-no-feriado
+obra soma-reordenada
+obra mensal-le-par
+obra lavra-le-par
+```
+
+**Catraca**, linha registrada → linha atual, conferida pelo detector. [Registro:287](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/core/tests/test_medida_turno_do_par.py:287)
+
+| Sítio | Linha |
+|---|---:|
+| [porta_export.py `medir`](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/folha/porta_export.py:594) | 586 → 594 |
+| [dia_pago.py `_dia_de`](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/services/dia_pago.py:134) | 132 → 134 |
+| [fechamento.py `_so_a_data`](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/services/fechamento.py:1588) | 1592 → 1588 |
+
+Ficaram na fila o agrupamento civil e a cobertura de `periodos_ft` pelo vigia, o oráculo, a regra do TXT para 12x36 e G0.6. [Vigia:591](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/folha/porta_export.py:591) · [Oráculo:679](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/calculador/regras.py:679) · [TXT:420](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/folha/export.py:420) · [G0.6:323](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:323)
+
+Conferi os casos em memória, com ORM simulado no K2. A suíte Django, a certificação e o efeito sobre competências já lavradas ficam **[nao verificado]**. [nao verificado]
 
 ## 26/11 01:19 · sessao 859e73b64e12 · O30-F3-CONSTRUIR · construtor · origem=Code
 
@@ -1058,31 +1094,4 @@ A atribuição civil cobre especificamente as residuais da S133. O casador tamb�
 
 O `_dedup_dez_min` remove uma batida do mesmo tipo que a última sobrevivente, a menos de dez **minutos**. E e S a dez segundos passam. A mordida por minuto está em `papel_por_minuto_da_ata`, que se abstém com luz ambígua ou batidas internas duplicadas no minuto. A raia corrigiu seu RED para E `21:00:10` e S `21:00:40`, depois de o ensaio com duas E perder uma na dedup. `MINUTO_AMBIGUO` e `MINUTO_SEM_BATIDA` são decisões técnicas registradas para a sonda por minuto. O rótulo normativo de uma ocorrência capturada na fonte com identidade individual permanece [não verificado]. [app/escala/utils.py:1371](/home/ronald/codex_ws/c314c099f3f447dbb628557c9ada9906183f1182/app/escala/utils.py:1371), [app/ponto/turnos.py:1604](/home/ronald/codex_ws/c314c099f3f447dbb628557c9ada9906183f1182/app/ponto/turnos.py:1604), [app/ponto/turnos.py:1734](/home/ronald/codex_ws/c314c099f3f447dbb628557c9ada9906183f1182/app/ponto/turnos.py:1734), [app/docs/RELATO.md:2123](/home/ronald/codex_ws/c314c099f3f447dbb628557c9ada9906183f1182/app/docs/RELATO.md:2123), [app/docs/RELATO.md:2306](/home/ronald/codex_ws/c314c099f3f447dbb628557c9ada9906183f1182/app/docs/RELATO.md:2306).
 
-## 26/11 00:35 · sessao 976d138a04b3 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · construtor · origem=Code
-
-**G0 vermelho em `67dd895e`.** Com `S=0`, o motor real devolveu **240 min de HE100 noturna** e **270 min de noturno de relógio** no comercial com entrada antecipada e saída após o marco. A asserção de igualdade por par caiu. A entrega ficou restrita ao [teste G0](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-003136/app/ponto/tests/test_feriado_dobra_noturna_g0.py:96). C1–C4 e os mutantes ficaram pendentes pelo portão.
-
-| Caso | HE100 noturna (min) | Noturno de relógio (min) | Caso no teste | [nao verificado]
-|---|---:|---:|---|
-| Comercial 02:00–07:00, prorrogação ligada | 300 | 300 | `ponto/tests/test_feriado_dobra_noturna_g0.py:61` |
-| Comercial 02:00–07:00, prorrogação desligada | 180 | 180 | `ponto/tests/test_feriado_dobra_noturna_g0.py:63` |
-| 12x36 19:00–07:00, pausa 01:00–02:00, hora reduzida afastada | 360 | 360 | `ponto/tests/test_feriado_dobra_noturna_g0.py:65` |
-| Partido, pares 21:00–00:00 e 03:00–07:00, prorrogação ligada | 120 / 240 | 120 / 240 | `ponto/tests/test_feriado_dobra_noturna_g0.py:67` |
-| Comercial 00:10–05:00, entrada efetiva 00:30 | 270 | 270 | `ponto/tests/test_feriado_dobra_noturna_g0.py:69` |
-| Comercial 00:10–05:30, par efetivo 00:30–05:00 | **240** | **270** | `ponto/tests/test_feriado_dobra_noturna_g0.py:71` |
-
-O **relógio** usa as pontas efetivas e desconta os intervalos. Os pontos de entrada são `ponto/motor_calculo_v2.py:2917` no 12x36, `:3023` no partido e `:3382` no comercial. A escrita passa por `:1039–1061`. No caso divergente, o relógio mede **00:30–05:00**, dando 270 min.
-
-O **split da dobra** recebe entrada e saída registradas e usa o trabalhado como extensão da HE100. No caso divergente, recua 270 min da saída registrada às 05:30, chega a **01:00** e conta até **05:00**, dando 240 min com a prorrogação desligada. O cálculo está em `ponto/motor_calculo_v2.py:392–406,440–448,1068–1076,1885–1901`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings_test \
-  python3 manage.py test ponto.tests.test_feriado_dobra_noturna_g0 -v 2
-```
-
-O comando parou na importação de `django.core` nesta cópia. A tabela foi medida com `get_motor` e `calcular_mes` reais, usando um adaptador em memória para as importações do Django e a função original do piso de intervalo. A execução pela suíte Django fica **[nao verificado]**. `manage.py:11`, `escala/models.py:6`, `ponto/tests/test_feriado_dobra_noturna_g0.py:76–96`
-
-- **Diff:** só o teste G0, com zero `except` novos. Catraca de `folha/porta_export.py::medir` **583 → 583**. `ponto/tests/test_feriado_dobra_noturna_g0.py:43`, `core/tests/test_medida_turno_do_par.py:287`, `folha/porta_export.py:583`
-- **Lei:** nenhuma pergunta nova identificada. O bloqueio é a equivalência entre os dois campos com `S=0`, antes da decisão de quais minutos absorvem o suprimido. Ocorrência em produção **[nao verificado]**. `ponto/tests/test_feriado_dobra_noturna_g0.py:84–96`, `ponto/motor_calculo_v2.py:1885–1901`
-
-_8292 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8293 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
