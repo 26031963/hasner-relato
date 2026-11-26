@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 22:46:08.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (18.7 MB). Acoes na janela: **574**.
+**Medido em 25/11/2026 22:52:25.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (18.8 MB). Acoes na janela: **578**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:46:40 | SendMessage |  | `-` |
+| 22:46:33 | Bash |  | `cd /home/ronald/saas-hasner; bash -n bin/codex_pergunta.sh && echo sintaxe_ok; python3 -I bin/codex_vagas_estado.py 2>&1 \| tail -5; git show main:bin/codex_vagas.conf` |
+| 22:46:13 | Bash |  | `cd /home/ronald/saas-hasner; DEPLOY_SEM_SOMBRA="pouso de INSTRUMENTO WRAPPER-N-VAGAS a8623781e: so bin/ + CLAUDE.md/LEIS.md/docs, 0 arquivo de app/ servido; o ensaio da sombra nao mede bin/" timeout 580 bash bin/deploy.sh --sem-migrate 2>&1 \| tail -14` |
+| 22:46:08 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 83,92p bin/deploy.sh` |
 | 22:46:05 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'SEM_SOMBRA_MOTIVO=' bin/deploy.sh \| head` |
 | 22:46:03 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 55,80p bin/deploy.sh; sed -n 150,170p bin/deploy.sh` |
 | 22:45:58 | Bash |  | `cd /home/ronald/saas-hasner; timeout 580 bash bin/deploy.sh --sem-migrate --sem-sombra "pouso de INSTRUMENTO WRAPPER-N-VAGAS a8623781e: so bin/ + CLAUDE.md/LEIS.md/docs, 0 arquivo de app/ servido; ensaio da sombra nao mede bin/" 2>&1 \| tail -12` |
