@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 20:52:05.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (11.4 MB). Acoes na janela: **360**.
+**Medido em 25/11/2026 20:58:09.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (11.5 MB). Acoes na janela: **364**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:57:04 | Bash |  | `cd /home/ronald/saas-hasner; for f in CLAUDE.md app/docs/LEIS.md; do diff <(git show 7eab25d39:$f) $f \| cut -c1-200; done; cat /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad/pouso_files.txt` |
+| 20:57:00 | Bash |  | `cd /home/ronald/saas-hasner; git log -1 --format=%h HEAD; git merge-base --is-ancestor HEAD 7eab25d39 && echo ancestor_ok; git diff --name-only HEAD 7eab25d39 \| tee /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad/pouso_files.txt \| grep -E 'migrations\|docs/\|CLAUDE' ; echo ---; git diff --name-only HEAD 7eab25d39 \| wc -l; for f in CLAUDE.md app/docs/LEI ...` |
+| 20:56:51 | Bash |  | `cd /home/ronald/saas-hasner; for d in logs/A-TELA-DO-DIA-LE-UM-JUIZ/v18_comboio logs/GUARDA-10-B/vs_comboio; do echo "== $d"; ls $d; tail -5 $d/pouso.certifica 2>&1; done; pgrep -af pista_certifica_par \| head` |
+| 20:56:47 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') L.insert(1,'PERGUNTA DE DESENHO WRAPPER-N-VAGAS v13 (21:0x): Codex v13_1 item 4 -- N baixado ENTRE o CONFERE e o GO de uma chamada B: B lanca acima do N NOVO (o comentario do wrapper chama de drenagem: admitida antes segue). Pelo CONTRATO FECHADO "mais de N executores" = falha ABERTA = segura o pous ...` |
 | 20:26:48 | Bash |  | `cd /home/ronald/saas-hasner; ssh pista estado 2>&1 \| grep -E '5903\|0135'; cat logs/A-TELA-DO-DIA-LE-UM-JUIZ/v18_comboio/pouso.certifica logs/GUARDA-10-B/vs_comboio/pouso.certifica 2>&1 \| tail -4` |
 | 20:26:36 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('lei: PARCIAL-BORDA') L[1]+=' Opcao (a) move DINHEIRO (marco sem dispensa apaga lampada -> motor_calculo_v2.py:660-669 / dia_pago.py:386, pelo Codex, a conferir): MAO UNICA, DIFF de frota da folha antes do pouso; (b) nao move.' open(p,'w').write('\n'.join(L)) EOF echo ok` |
 | 20:26:01 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; L=open(p).read().split('\n') assert L[1].startswith('lei: PARCIAL-BORDA') L[1]+=' Pre-verificador Codex chegou (verif1.r, 20:4x): REPROVA POR ESCOPO, o mesmo ponto (procedente); + 2 itens que a lei tambem responde: precisao em MINUTO (15:54:30 com periodo 15:54 vira fora -- a lei e por minuto ou por instante?) e fixtures da int ...` |
