@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 06:01:37.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **797**.
+**Medido em 26/11/2026 06:07:49.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **796**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -806,4 +806,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:09:11 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' \| 25/11 18:0x \| RUNNER-POOL-E-N-VAGAS-V2-2511 \| SUBSTITUI o RUNNER-POOL-E-N-VAGAS-2511: pista 2 com 2 vagas concorrentes (roda.sh PISTA_VAGAS=2, Ronald 18:08); toda suite inteira pre-opus e de pouso vai a pista (ate 2), certificada pelo pista_certifica; VM so recorte/recusa/banco da VM; medir na 1a rodada dupla oom, tempo e free -g ...` |
 | 18:09:07 | Bash |  | `/usr/bin/sleep 90; date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'` |
 | 18:09:01 | Bash |  | `date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'; timeout 15 ssh pista free -g 2>&1 \| head -5` |
-| 18:02:19 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/vizinhos_v3.espera logs/GUARDA-10-B/catraca.espera; timeout 20 ssh pista estado \| grep -E '1125174946\|1125175019\|11251754'` |
