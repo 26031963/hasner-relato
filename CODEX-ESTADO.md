@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 14:25** · publicado em **26/11/2026 14:26** (UTC-3)
+> Ultima resposta processada: **26/11/2026 14:33** · publicado em **26/11/2026 14:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 14:33 · sessao e299d7b10ce3 · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
+
+A F4 está na cópia sobre `305230b86569147451ce246101a651c17d4d6541`. O [diff F4](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/F4.diff:1) inclui os testes e o executor de mutantes untracked. O patch passou em `git apply --check --reverse` contra a árvore entregue. `F4.diff:727`
+
+- A publicação volta a preservar os turnos da troca de vínculo. O contador lê `turnos_do_colab` e devolve as PKs que aparecem em mais de um turno da janela. `ponto/turnos.py:1850`, `ponto/turnos.py:1864`, `ponto/turnos.py:3022`
+- `anotar` copia a marca antes do `setattr`. `apagar` julga com a marca viva e agenda o fechamento depois do `delete`. O callback trata a falha de cada competência dentro do laço. `ponto/signals.py:8`, `ponto/registro_batida.py:275`, `ponto/registro_batida.py:318`, `ponto/services/fechamento.py:1831`
+- O C6 usa o cache da entrada pública `CargaDaJanela.turnos` e recorta por `data_turno`. Em `celulas=`, o mapa fornecido substitui as células do banco dentro do pad declarado. Fora dele vale a carga histórica. `chamados/services/carga_pergunta_viva.py:161`, `ponto/turnos.py:3005`, `ponto/turnos.py:3110`
+
+## RED → GREEN e mutantes
+
+Antes da cura, os sete REDs produziram **8 falhas de asserção e 0 erros**. O R-F4-1 tem dois subcasos. Com a cura, os sete passaram. Cada mutante voltou a derrubar seu RED com `rc=1` e `ERROR=0`. `ponto/tests/juiz_unico_eventos_mutantes.py:15`, `ponto/tests/juiz_unico_eventos_mutantes.py:94`
+
+| RED | Saída vermelha na base | GREEN e mutante |
+|---|---|---|
+| R-F4-1 | Saiu só o turno de 24/10. Faltaram o par `(1, 2)` de 23/10 e, no outro caso, a órfã `(1,)` de 23/10. | Os dois casos preservam os turnos e o contador lista a PK da saída. `m1` repõe o filtro e derruba os dois subcasos. `ponto/tests/test_juiz_unico_eventos.py:209` |
+| R-F4-2 | `Lists differ: [{'pk': 2}] != []` | O julgamento inclui 23 e 25/10, com zero consultas `filter(pk=...)`. `m2` repõe o `pre_save`. `ponto/tests/test_juiz_unico_eventos.py:239` |
+| R-F4-3 | `Expected 'mock' to have been called once. Called 0 times.` | A exclusão agenda `10/2026` após o `delete`. `m3` tira o agendamento. `ponto/tests/test_juiz_unico_eventos.py:249` |
+| R-F4-4 | `[(10, 2026)] != [(10, 2026), (11, 2026)]` | Novembro roda após a falha em outubro. `m4` recoloca o `try` fora do laço. `ponto/tests/test_juiz_unico_eventos.py:268` |
+| R-F4-5 | `[(datetime.date(2026, 10, 24), (1,), True)] != []` | C6 e leitura singular concordam nas três janelas. `m5` restaura o pareamento recortado do C6. `ponto/tests/test_juiz_unico_eventos.py:281` |
+| R-F4-6 | A célula gravada de 25/10 apareceu apesar da chave ausente. Em 21/10, fora do pad, entrou a célula fornecida. | 25/10 fica sem célula e 21/10 mantém a gravada. `m6` restaura a sobreposição. `ponto/tests/test_juiz_unico_eventos.py:294` |
+| R-F4-7 | `Expected '_carregar_dias_das_batidas' to have been called once. Called 0 times.` | O C6 usa uma carga para três chamadas públicas. `m7` desliga o cache e produz `Called 3 times`. O C8b também voltou a chamar a entrada pública diretamente. `ponto/tests/test_juiz_unico_eventos.py:305`, `chamados/tests/test_e3_c8b_sem_banco.py:524` |
+
+Comandos a partir de `app/`. `ponto/tests/juiz_unico_eventos_mutantes.py:81`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_juiz_unico_eventos chamados.tests.test_e3_c8b_sem_banco
+
+rodar_f4() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.juiz_unico_eventos_mutantes "$1"
+}
+
+rodar_f4 base
+rodar_f4 m1
+rodar_f4 m2
+rodar_f4 m3
+rodar_f4 m4
+rodar_f4 m5
+rodar_f4 m6
+rodar_f4 m7
+```
+
+A execução de eventos e C8b teve **42 testes verdes**. No conjunto de 51 testes com C8c, a única falha foi `78 not greater than or equal to 81`, do registro congelado. Os dois mutantes B5-j reancorados morreram por asserção. O mutante legado `acesa_expoe_admin` deu `AttributeError` por falta de `resposta_mantem_validacao` no dublê, erro reproduzido com as fontes de teste da base. O teste do admin do chokepoint ficou [nao verificado] por falta de `django.contrib` no ambiente local. `chamados/tests/test_e3_c8c_sem_banco.py:33`, `chamados/tests/test_e3_c8c_sem_banco.py:151`, `chamados/tests/e3_c8c_mutantes.py:40`, `ponto/tests/test_chokepoint_batida_gate.py:76`
+
+## Censo e catraca da sessão
+
+- **`except`**. O diff tem uma linha de handler removida e uma adicionada, ambas do mesmo handler movido. A contagem AST dos arquivos alterados, inclusive testes, ficou **18 → 18**. `F4.diff:299`, `F4.diff:303` [nao verificado]
+- **`_carregar_batidas`**. A F3 tinha um chamador de produção, o C6 em `chamados/services/carga_pergunta_viva.py:173` da base. A F4 tem zero. Saíram o método, `_ultima_de`, seus dublês e as duas entradas obsoletas do selo de data civil. O único teste sustentador retirado foi `test_carregar_batidas_uma_vez_sem_executar_pareador`, antes em `chamados/tests/test_e3_c8b_sem_banco.py:522`, substituído pelo teste público de cache. `F4.diff:341`, `F4.diff:698`, `chamados/tests/test_e3_c8b_sem_banco.py:524`
+- **Registro congelado → F3 medida → F4 medida**. Pareadores **9 → 9 → 9**, derivações **81 → 78 → 78**, B1 **78 → 75 → 75**. Na composição entram `marcos_dna_periodo`, `_carregar_dias_das_batidas`, `_dia_das_batidas_puro` e `batidas_apuraveis`. Sai `escalas_do_periodo`. `core/tests/test_medida_turno_do_par.py:108`, `core/medida_turno_do_par.py:448`, `escala/utils.py:84`, `escala/alimentacao.py:163`, `ponto/turnos.py:2871`, `ponto/turnos.py:2952`, `ponto/turnos.py:2964`
+
+| Sítio B1 | Linha congelada → F3 → F4 |
+|---|---|
+| `ponto/registro_batida.py::_casa_marco_proprio` | 43 → 43 → 44. `core/tests/test_medida_turno_do_par.py:314`, `ponto/registro_batida.py:44` |
+| `ponto/registro_batida.py::_janela_oposto` | 28 → 28 → 29. `core/tests/test_medida_turno_do_par.py:315`, `ponto/registro_batida.py:29` |
+| `ponto/signals.py::_dias_batida` | 111 → fora de B1 → fora de B1. `core/tests/test_medida_turno_do_par.py:336`, `ponto/signals.py:113` |
+| `ponto/signals.py::_recompute_around` | 23 → fora de B1 → fora de B1. `core/tests/test_medida_turno_do_par.py:337`, `ponto/signals.py:19` |
+| `ponto/turnos.py::_carregar_dias_das_batidas` | 3026 → fora de B1, linha 2979 na composição → linha 2990 na composição. `core/tests/test_medida_turno_do_par.py:338`, `ponto/turnos.py:2990` |
+| `ponto/turnos.py::dia_do_turno_da_batida` | 2989 → 2929 → 2940. `core/tests/test_medida_turno_do_par.py:339`, `ponto/turnos.py:2940` |
+| `ponto/turnos.py::par_completo` | 2217 → 2156 → 2167. `core/tests/test_medida_turno_do_par.py:340`, `ponto/turnos.py:2167` |
+
+## Sonda em texto para o envelope do Code
+
+A sonda usa todos os colaboradores visíveis ao envelope, o corte da empresa e a função real. Além das duas competências isoladas, mede a janela conjunta para capturar PKs cuja dupla reivindicação só aparece ao atravessar o corte. Resultado da frota [nao verificado]. `colaboradores/models.py:321`, `ponto/janelas.py:54`, `ponto/turnos.py:1864`
+
+```python
+import json
+
+from colaboradores.models import Colaborador
+from ponto.janelas import janela_fechamento
+from ponto.turnos import contador_pk_multipla_reivindicacao
+
+ano = 2026
+totais = dict.fromkeys(("comp10", "comp11", "conjunta", "so_na_virada"), 0)
+colabs_medidos = 0
+colabs_com_reivindicacao = 0
+
+colabs = Colaborador.objects.select_related("empresa").order_by("pk")
+for colab in colabs.iterator(chunk_size=200):
+    ini10, fim10 = janela_fechamento(10, ano, colab.empresa)
+    ini11, fim11 = janela_fechamento(11, ano, colab.empresa)
+    pks10 = contador_pk_multipla_reivindicacao(colab, ini10, fim10)
+    pks11 = contador_pk_multipla_reivindicacao(colab, ini11, fim11)
+    conjunta = contador_pk_multipla_reivindicacao(colab, ini10, fim11)
+    grupos = {
+        "comp10": pks10,
+        "comp11": pks11,
+        "conjunta": conjunta,
+        "so_na_virada": conjunta - (pks10 | pks11),
+    }
+    colabs_medidos += 1
+    colabs_com_reivindicacao += bool(conjunta)
+    for nome, pks in grupos.items():
+        totais[nome] += len(pks)
+    print(json.dumps({
+        "colab_pk": colab.pk,
+        "pks": {nome: sorted(pks) for nome, pks in grupos.items()},
+    }))
+
+print(json.dumps({
+    "colabs_medidos": colabs_medidos,
+    "colabs_com_reivindicacao": colabs_com_reivindicacao,
+    "totais_pks": totais,
+}))
+```
+
+Ficaram fora da F4 a decisão de lei sobre o segmento dono da PK, a guarda civil e o flip, e a equivalência entre competência agendada e competência em que o motor mensal paga os goldens. A atualização da catraca protegida cabe à sessão. SQL, latência, concorrência em produção e certificação pelo Code e pelo Opus [nao verificado]. `ponto/turnos.py:1927`, `ponto/janelas.py:75`, `ponto/services/flip_batida.py:22`, `ponto/motor_calculo_v2.py:867`, `ponto/services/fechamento.py:1241`, `core/tests/test_medida_turno_do_par.py:508`
 
 ## 26/11 14:25 · sessao b0019c9a18f1 · PORTA-CONFERE-TRAVA · verificador · origem=Code
 
@@ -612,139 +718,4 @@ O único chamador operacional localizado em `bin/` é a volta intermediária. El
 - `pede` foi documentado como ID nu em uma reprovação anterior. O parser deve reconhecer a forma comprovada pela sessão, e `espera` autenticar ID, SHA e rc contra o log integral. A interface antiga anuncia apenas `--only`/`--parallel` e há relato explícito de que não recebe `-k`. Se a pista não representar argv, semântica de `--espera` ou `REGUA_DB` da chamada, fica na VM com motivo. Estado e interface atuais do serviço [nao verificado]. [app/docs/RELATO.md:508,577,604,925] [app/docs/BACKLOG.md:2344] [bin/pista_certifica.sh:14–16,53–60] [bin/suite.sh:169–181,227–248,336–341,367–373] [nao verificado]
 - O rc bruto 3 do processo é mapeado a 1 na VM, preservando 3 para run que não nasceu. A VM atualmente deixa rc 75 do comando passar, por isso a classificação remota precisa olhar a fase e a admissão, pois a volta trata 75 como “sem vez”. Perda de recibo após admissão possível requer reconciliação do ID e ausência de execução duplicada. [bin/suite.sh:145–153] [bin/trava_teste.sh:35–42] [bin/volta_intermediaria.sh:36–46] [app/docs/RELATO.md:603,925] [nao verificado]
 
-## 26/11 11:43 · sessao 9765fa36b75c · UI-RESCISAO · leitura · origem=Code
-
-## 0. Perguntas de lei
-
-**As três perguntas do censo1 sobrevivem.** Caem as partes já decididas sobre agendamento, fonte dos números, leitura do espelho e encaminhamento ao Domínio. Restam os avos de férias, a projeção do aviso e o tratamento de DSR e banco no acerto parcial. A conferência compara o censo1 anexado com os arquivos da cópia. A cópia não contém `.git`, então a correspondência com `558de6bd4bba318bac4130a14936946e218f885d`, o diff contra `7621a973f` e o estado atual de produção ficam **[nao verificado]**. `CLAUDE.md:275–280`, `CLAUDE.md:412`, `app/docs/RELATO.md:3973`
-
-1. **Férias proporcionais.** Quais avos e frações entram até o desligamento e qual efeito a projeção do aviso tem sobre esse direito? O código responde o saldo integral do aquisitivo. O backlog registra que a apuração de proporcionais e avos até a data saiu do piloto. Faltam medir os desligamentos com ciclo incompleto, sem ciclo cobrindo a data e com gozo na data, e cotejar com demonstrativos de acerto que tragam os avos concedidos. Numeradores e demonstrativos **[nao verificado]**. `app/ferias/models.py:94–105`, `app/ferias/models.py:219–220`, `app/docs/BACKLOG.md:1179`
-2. **Aviso prévio.** Como registrar trabalhado e indenizado e qual data cada modalidade projeta para os direitos? **Cai a parte sobre agendamento.** A porta aceita data futura até hoje + 90 dias, inclusive, mantém o estado durante a espera e efetiva na data pelo cron. A referência à Lei 12.506 fundamenta o teto, e a porta recebe data e motivo. Faltam medir a frequência do agendamento registrado e obter a modalidade e as datas do aviso e do acerto para cotejo. Modalidades, projeções e respectivos totais **[nao verificado]**. `app/colaboradores/services/desligamento.py:17–19`, `app/colaboradores/services/desligamento.py:35–78`, `app/colaboradores/services/desligamento.py:102–126`, `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:37–57`
-3. **DSR e banco de horas na competência parcial.** Qual reflexo de DSR pertence ao acerto e como liquidar ou baixar crédito e débito de banco? **Caem a escolha do canal e o rateio pela tela.** H12 encaminha as verbas ao módulo próprio do Domínio. `DiaPago` põe reflexo e banco no ajuste indivisível da competência e exclui esse ajuste da leitura por intervalo. Faltam medir ajustes ausentes, zerados, positivos e negativos, por competência e marco de exportação, e cotejar com as rubricas e baixas do acerto. Valores do acerto **[nao verificado]**. `app/folha/export.py:54–60`, `app/folha/export.py:453–460`, `app/folha/export.py:856–871`, `app/ponto/services/dia_pago.py:752–769`
-
-### Filtro LEI-SO-QUANDO-NOVA
-
-| Lei ou corte candidato | Veredito para as perguntas |
-|---|---|
-| **LEI-AKITA 2 / L-002**, L-001, L-007 e L-011, juiz único, escritor único e testemunha lê | **Respondem** quem decide, quem grava e quem lê. A tela usa autoridades existentes, o ato usa as portas, e um juiz novo exige corte. **Não respondem** a fórmula, a modalidade ou a destinação das verbas em 1–3. `app/docs/LEIS.md:59–65`, `app/docs/LEIS.md:69`, `app/docs/GLOSSARIO.md:11–12`, `CLAUDE.md:74–76` |
-| **Célula soberana**, L-020, L-024, L-025, L-030, L-060/061, `CLAUDE.md` §4 e §4a | **Respondem** a origem de jornada, previsto, batidas e veredito, e o papel do cron e dos consumidores. **Não respondem** quantos avos, qual projeção ou qual verba sai do ajuste. Os vetos atuais de férias e desligado na porta da batida constam como exceções ainda presentes. `app/docs/LEIS.md:71–78`, `app/docs/LEIS.md:94–95`, `app/docs/LEIS.md:168`, `CLAUDE.md:142–174`, `app/api/views_core.py:389–397` |
-| L-021, L-112, Lei 12.506 citada na porta e `aviso_home_office` | **Respondem** a validade da vigência, o início declarado, o horizonte de agendamento e o efeito abonado do lançamento de aviso em home office. **Não respondem** a projeção de direitos ou a modalidade indenizada da pergunta 2. `app/docs/LEIS.md:72`, `app/docs/LEIS.md:157`, `app/colaboradores/services/desligamento.py:17–19`, `app/colaboradores/services/desligamento.py:52–78`, `app/ponto/catalogo/ausencias.py:104` |
-| CLT arts. 130/131, 134, 135 e 137 nos sítios locais, O157, L-039/088/089 e corte de fracionamento | **Respondem** o insumo de faltas decididas, as faixas de direito integral, o vencimento, o aviso de gozo e as frações de **gozo**. O157 responde que o art. 130 deve considerar falta e suspensão, excluindo atraso e saída antecipada. **Não respondem** a fração de mês que gera avo nem o efeito do aviso da dispensa nas perguntas 1–2. `app/ferias/models.py:52–62`, `app/ferias/models.py:144–150`, `app/ferias/situacao.py:192–265`, `app/docs/BACKLOG.md:1434`, `app/docs/BACKLOG.md:1541`, `app/docs/CORTES.md:520`, `app/docs/LEIS.md:87`, `app/docs/LEIS.md:120–121` |
-| L-006, L-034/035/036 e `CLAUDE.md` §6b | **Respondem** de qual cadastro vem a régua aplicável e regras de jornada e adicional. **Não respondem** avos, projeção ou acerto parcial. A aplicação de qualquer convenção ao universo raspado **[nao verificado]**. `app/docs/LEIS.md:64`, `app/docs/LEIS.md:82–84`, `CLAUDE.md:210–238`, `app/core/regua_cct.py:297` |
-| L-026/090, L-037/038, L-085, L-095 e O58/O59 | **Respondem** a janela de competência, a atribuição ao início da jornada, a origem das rubricas e a leitura do documento emitido. **Não respondem** avos, projeção nem a liquidação de um ajuste sem dia. A auditoria de L-085 registra divergências, inclusive no motor comercial. `app/docs/LEIS.md:77`, `app/docs/LEIS.md:85–86`, `app/docs/LEIS.md:113`, `app/docs/LEIS.md:117`, `app/docs/LEIS.md:123`, `app/docs/LEIS.md:178`, `app/docs/BACKLOG.md:1473–1474` |
-| Lei 605/1949, Súmula 172, CLT art. 59 §2 e H12 | **Respondem** como o motor apura reflexo regular de HE e banco comercial, por que o reflexo fica a cargo do Domínio no TXT mensal e por onde saem as verbas rescisórias. **Não respondem** quais valores o acerto parcial deve aceitar ou baixar. `app/ponto/motor_calculo_v2.py:2581–2607`, `app/ponto/motor_calculo_v2.py:2645–2669`, `app/ponto/motor_calculo_v2.py:3445–3475`, `app/folha/export.py:453–460`, `app/folha/export.py:856–871` |
-| L-050/051/052, L-092, L-113 e o corte L-113 × DINHEIRO 2 de 25/11 | **Respondem** a fronteira de chamados, a história da tranca e o tratamento do gravado e do TXT. A proteção do gravado contra recálculo genérico vale na guarda cadastrada, que lista 09/2026. Fora dela se aplica L-113, com trilha, versão anterior preservada, DIFF antes de ato de frota e aviso DP quando a exportada muda. **Não respondem** verba rescisória da pergunta 3. `app/docs/LEIS.md:91–93`, `app/docs/LEIS.md:125`, `app/docs/LEIS.md:155–156`, `CLAUDE.md:428–433`, `app/ponto/services/fechamento.py:36–49`, `app/ponto/services/fechamento.py:578–581` |
-| `CORTES.md` DESLIGADO-FORA-DA-JANELA, JUIZ-ESTA-DESLIGADO e os cortes de DSR regular | **Respondem** a aposentadoria de linha fora da janela, o estado de desligado e efeitos de fatos na apuração regular. **Não respondem** projeção de aviso nem acerto de DSR/banco. `app/docs/CORTES.md:80`, `app/docs/CORTES.md:352`, `app/docs/CORTES.md:473`, `app/docs/CORTES.md:479`, `app/docs/CORTES.md:496`, `app/docs/CORTES.md:517`, `app/docs/CORTES.md:558` |
-| COMPLEMENTO-DESLIGAR-1311, O50, DESLIGAR-LIQUIDA-TUDO, NAO-REABRE, LEI-DESLIGADO-NAO-TRAVA e L-130 | **Respondem** a composição do ato, o alcance em vínculos, perguntas e fios, a exceção humana à reabertura, o que é resposta válida e o destino informativo dos dias do desligado. **Não respondem** as verbas das três perguntas. `app/docs/RELATO.md:3981–3982`, `app/docs/BACKLOG.md:731–733`, `app/docs/BACKLOG.md:1461–1462`, `app/docs/BACKLOG.md:1474–1475`, `app/docs/LEIS.md:151` |
-| `CLAUDE.md` §7b, L-003/110/117 e precedente CORTES-F2-F9 | **Respondem** o filtro: usar a lei escrita quando ela resolve, medir na fonte quando há juiz, e deixar explícito o residual que exige decisão. **Não respondem** os três residuais. `CLAUDE.md:252–280`, `CLAUDE.md:412`, `app/docs/LEIS.md:61`, `app/docs/LEIS.md:136`, `app/docs/LEIS.md:138`, `app/docs/CORTES.md:565` |
-
-### Sonda de leitura para as três perguntas
-
-Trecho para um shell Django já no tenant da amostra, com datas civis explícitas. Retorna agregados. Para a pergunta 1, mede ciclo e gozo no corte. Para a 2, mede a marca de agendamento e o prazo registrado, inclusive para quem já efetivou. Para a 3, mede a linha de ajuste lavrada e o marco da competência. As modalidades e os valores oficiais do acerto precisam vir de um demonstrativo raspado correspondente. Registros cuja reativação limpou `data_demissao` ficam fora desse universo. A sonda ficou **[nao verificado]** em execução. `app/colaboradores/models.py:323–325`, `app/colaboradores/models.py:577–584`, `app/colaboradores/services/desligamento.py:107–117`, `app/colaboradores/services/desligamento.py:241–247`, `app/ferias/services.py:49–70`, `app/ferias/models.py:65–105`, `app/ponto/models.py:311–323`, `app/ponto/services/fechamento.py:1542–1568`
-
-```python
-from collections import Counter
-
-from django.db import connection, transaction
-
-from colaboradores.models import Colaborador, HistoricoVinculo
-from colaboradores.services.desligamento import esta_desligado
-from ferias.models import PeriodoAquisitivo, status_de_periodo
-from ferias.services import em_gozo_hoje
-from ponto.janelas import janela_atual
-from ponto.models import DiaPago
-from ponto.services.fechamento import marcos_da_competencia
-
-
-def faixa_horas(valor):
-    if valor > 0:
-        return "positivo"
-    if valor < 0:
-        return "negativo"
-    return "zero"
-
-
-def sondar(empresa_id, de, ate, hoje):
-    contagem = Counter()
-    horas = Counter()
-
-    with transaction.atomic(durable=True):
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION READ ONLY")
-
-        colabs = Colaborador.objects.filter(
-            empresa_id=empresa_id, data_demissao__range=(de, ate)
-        ).select_related("empresa").order_by("pk")
-
-        for colab in colabs.iterator(chunk_size=500):
-            dia = colab.data_demissao
-            efetivado = esta_desligado(colab)
-            estado = "efetivado" if efetivado else (
-                "agendado" if dia > hoje else "data_vencida_sem_efetivacao"
-            )
-            contagem["cadastro", estado] += 1
-
-            agendamento = HistoricoVinculo.objects.filter(
-                colaborador=colab, motivo="desligamento", data=dia,
-                obs__startswith="AGENDADO (aviso previo):",
-            ).order_by("-criado_em", "-pk").first()
-            contagem["aviso_rastreavel", estado, agendamento is not None] += 1
-            if agendamento is not None:
-                from django.utils.timezone import localtime
-                prazo = (dia - localtime(agendamento.criado_em).date()).days
-                contagem["prazo_registrado_dias", estado, prazo] += 1
-
-            if not efetivado:
-                continue
-
-            ciclos = list(PeriodoAquisitivo.objects.filter(
-                colaborador=colab, data_inicio__lte=dia, data_fim__gte=dia
-            ))
-            contagem["ciclos_cobrindo_data", len(ciclos)] += 1
-            contagem["em_gozo_na_data", em_gozo_hoje(dia, colab).exists()] += 1
-            for ciclo in ciclos:
-                contagem["status_ciclo_no_corte", status_de_periodo(ciclo, dia)] += 1
-                contagem["dias_civis_desde_inicio", (dia - ciclo.data_inicio).days] += 1
-
-            inicio, fim = janela_atual(dia, colab.empresa)
-            marco = marcos_da_competencia(empresa_id, fim.month, fim.year)["marco"]
-            grupo = ("parcial" if dia < fim else "fim_da_janela", marco)
-            contagem["inicio_da_janela", inicio.day] += 1
-            ajuste = DiaPago.objects.filter(
-                colaborador=colab, mes=fim.month, ano=fim.year,
-                tipo=DiaPago.TIPO_AJUSTE, versao="motor",
-            ).values_list("horas_reflexo_dsr", "saldo_banco_horas").first()
-            if ajuste is None:
-                contagem["ajuste_ausente", *grupo] += 1
-                continue
-            for rubrica, valor in zip(("reflexo_dsr", "banco"), ajuste):
-                chave = (rubrica, *grupo, faixa_horas(valor))
-                contagem[chave] += 1
-                horas[chave] += valor
-
-    print(dict(contagem))
-    print({chave: round(valor, 2) for chave, valor in horas.items()})
-```
-
-## 1. Mapa curto
-
-**A tela existe em partes.** O cadastro executa desligamento e reativação, a folha mostra a saída pelo módulo próprio, e o drawer tem Espelho e Férias. A posição do desligamento também teve um piloto documentado, limitado a dias lavrados e ao diagnóstico da folha. Sua integração nesta cópia **[nao verificado]**. O ato único com dossiê histórico continua registrado como UI-RESCISAO. `app/templates/colaboradores/editar.html:268–288`, `app/templates/colaboradores/partials/painel_colaborador.html:27–46`, `app/folha/export.py:866–871`, `app/docs/BACKLOG.md:1181`, `app/docs/BACKLOG.md:1475`, `app/docs/RELATO.md:6579–6584`
-
-| Porta do censo1 | Estado na cópia e mudança comprovada |
-|---|---|
-| **1. Espelho 21 → desligamento** | **EXISTE** PDF livre informacional, com duas pontas inclusivas. Avulso e entrada web do lote recusam fim hoje/futuro pelo mesmo juiz. No avulso, a diferença máxima entre datas é 180 dias. O gerador do lote aceita seleção explícita, e a seleção padrão do lote de folha é ativo/afastado/férias. Retorna caderno, pulados, quantidade, informacionais e sem movimento. **FALTA** livre com trilha e arquivo por emissão. **Esclarecimento:** o auditável parametriza mês/ano e resolve o corte da empresa. O bloqueio explícito nesse caminho é disputa aberta do colaborador, inclusive fora do intervalo. A exigência de competência fechada consta no plano, e a checagem correspondente nesse caminho **[nao verificado]**. `app/relatorios/services.py:13–46`, `app/relatorios/services.py:101–105`, `app/relatorios/services.py:165–264`, `app/relatorios/views.py:1065–1099`, `app/relatorios/views.py:1183–1188`, `app/relatorios/lote_espelho.py:205`, `app/relatorios/pdf_espelho.py:287`, `app/relatorios/pdf_espelho.py:602`, `app/relatorios/pdf_espelho.py:654–663`, `app/relatorios/pdf_espelho.py:1077–1116`, `app/relatorios/pdf_base.py:127–136`, `app/docs/RELATORIOS-PLANO.md:192–194` |
-| **2. DiaPago** | **EXISTE.** Escrita por competência/versão, com dia e ajuste. Intervalo inclui início e fim, exclui ajuste e distingue sem lavratura de sem apuração. Precisão sobre o censo1: a escrita usa o mapa do dia da jornada quando disponível e recorre à data local da entrada quando o mapa falta. `app/ponto/models.py:293–345`, `app/ponto/services/dia_pago.py:109–135`, `app/ponto/services/dia_pago.py:348–360`, `app/ponto/services/dia_pago.py:405`, `app/ponto/services/dia_pago.py:538–563`, `app/ponto/services/dia_pago.py:592`, `app/ponto/services/dia_pago.py:671–673`, `app/ponto/services/dia_pago.py:752–856` |
-| **3. Ausências** | **EXISTE.** `ausencias_vigentes` lê sobreposição em todos os status, com tipos declarados para fim aberto. Para folha, aprovadas. Para cobrança, exclui rejeitadas. A cobertura diária é inclusiva e desempata por maior `(data, pk)`. A linha do tempo de decisões tem outra porta, inclui rejeição e recebe o recorte no leitor. `app/ponto/turnos.py:2540–2568`, `app/ponto/turnos.py:2796–2829`, `app/ponto/turnos.py:3207–3230`, `app/ponto/services/dia_decidido.py:587`, `app/ponto/services/dia_decidido.py:624`, `app/ponto/services/atestados_lote.py:46–64` |
-| **4. Férias** | **MUDOU.** Criação e edição agora compartilham `datas_do_ciclo`, com aniversário, fim menos um dia, concessão mais um ano e tratamento de 29/2. Cai a divergência `+364/+365` citada no backlog. Criação continua gerando ciclos até hoje. **EXISTE** saldo integral. **DIVERGE** o uso de status gravado versus juiz, a soma de `situacao_de_ferias` inclui positivos fora dos adquiridos anunciados, e o filtro do art. 130 continua no literal `falta`. **FALTA** fonte de proporcionais/avos, registrada no backlog. `app/ferias/views.py:139–179`, `app/ferias/services.py:256–270`, `app/ferias/services.py:805–851`, `app/ferias/test_hj090_volta3.py:316–322`, `app/ferias/models.py:144–150`, `app/ferias/models.py:219–220`, `app/ferias/situacao.py:138–169`, `app/ferias/situacao.py:300–302`, `app/inteligencia/views.py:13–21`, `app/docs/BACKLOG.md:1179`, `app/docs/BACKLOG.md:1475`, `app/docs/BACKLOG.md:1541` |
-| **5. Informativo de rescisão** | **MUDOU. EXISTE** `esta_desligado`, saída vazia do retentor para desligado e `informativo_rescisao` com a mesma lista de dias em campo próprio. O retrato e `o_que_segura` já leem esse dado. O Raio-X tem derivação própria registrada em fila. `app/colaboradores/services/desligamento.py:23–32`, `app/folha/export.py:1197–1229`, `app/folha/fora_da_folha.py:296–305`, `app/folha/retrato_folha.py:1260–1289`, `app/docs/BACKLOG.md:737` |
-| **6. Registro do PDF** | **EXISTE** escrita da trilha auditável, verificação por hash e download quando o PDF foi anexado a um followup. O registro guarda metadados e filtros JSON. **FALTA** nele o arquivo ou ponteiro e as duas datas normalizadas. Leitor de dossiê por colaborador/período **[nao verificado]**. `app/relatorios/models.py:30–65`, `app/relatorios/pdf_base.py:137–180`, `app/chamados/views.py:1186–1222`, `app/relatorios/services.py:70–96`, `app/relatorios/views.py:1020–1044` |
-| **7. Motivo de exportação** | **EXISTE** `rescisao_modulo_proprio`, `status='fora'`, com encaminhamento ao Domínio. Raio-X, retrato, lista de fechamento, relatório e mensageria leem ou rotulam esse motivo. A ressalva fica fora da conta de bloqueio. `app/folha/export.py:866–871`, `app/folha/views.py:615`, `app/folha/retrato_folha.py:33`, `app/folha/retrato_folha.py:89`, `app/ponto/services/fechamento_lista.py:25–37`, `app/relatorios/views.py:1661–1669`, `mensageria/nucleo/ferramentas.py:1196`, `mensageria/nucleo/ferramentas.py:1246–1289` |
-| **8. H12** | **EXISTE**, como no censo1. A data `<= fim da janela` dá saída pela rescisão, inclusive se for anterior ao início. O predicado independe do estado, então também pode ser verdadeiro para data agendada dentro da janela. Classificador e resumo usam o mesmo predicado. Prontidão usa outra pergunta, com data `< início` no caso de denominador zero. `app/folha/export.py:54–60`, `app/folha/export.py:782–788`, `app/folha/export.py:815`, `app/folha/export.py:1051–1087`, `app/ponto/services/fechamento_lista.py:103–109` |
-| **9. Ato do desligamento** | **EXISTE** juiz, executor, cron e reativação. **DIVERGE** o aviso de bloqueio imediato do agendado. **MUDOU** a regeneração de células futuras geradas existentes, que passou a alcançar datas `> hoje` sem teto, com recorte a partir da borda alterada. O wrapper ainda oferece apenas vínculos ativos e recusa início posterior à demissão. A cascata ainda pula respostas sem veredito e pode deixar o chamado ancorado aberto. `app/colaboradores/services/desligamento.py:35–78`, `app/colaboradores/services/desligamento.py:102–215`, `app/colaboradores/views.py:1443–1476`, `app/templates/colaboradores/editar.html:272`, `app/colaboradores/services/vinculo.py:623–666`, `app/colaboradores/services/vinculo.py:857–867`, `app/ponto/services/cadastro_futuro.py:8–25`, `app/ponto/services/cadastro_futuro.py:44–59`, `app/config/crons.py:440` |
-| **10. Ficha corrida e F2** | **EXISTEM** ficha de serviço, histórico de chamados e drawer com superfícies separadas. A ficha atual lê vínculo, trocas, horas e pendências. O histórico de chamados recorta por idade de criação dos eventos e das ausências. O histórico do drawer de ausências aponta o aquisitivo atual ou mais recente, sem recortar nele a lista. A quinta aba e a F2 de faltas e ausências decididas pelo aquisitivo estão documentadas. Dossiê unificado nessa aba **[nao verificado]**. `app/colaboradores/services/ficha.py:99–173`, `app/colaboradores/services/ficha.py:235–250`, `app/chamados/services/historico.py:120–145`, `app/ponto/views.py:2035–2064`, `app/docs/ADVERTENCIA-FICHA.md:65–88`, `app/docs/BACKLOG.md:1434` |
-
-## 2. Cen
-
-[truncado em 20000 de 53327 caracteres]
-
-_8379 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8380 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
