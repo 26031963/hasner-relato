@@ -24,7 +24,7 @@ esperam migrar -- a lista so encolhe).
 **SEM JUIZ declarado** (2):
 
 - **a batida e espuria (cluster)?** -- nao migrada: `detectar_cluster_espurio --apply` e o cluster-guard de `escala/utils.py` decidem em sitios diferentes
-- **o par e relampago?** -- nao migrada: `detectar_par_relampago` decide e RETRATA; nenhum outro leitor pergunta
+- **o par e relampago?** -- nao migrada: `detectar_par_relampago` lavra C13 em competencia aberta e relata a exportada para a Pauta DP. `tripwire_celulas` le `pares_relampago`.
 
 ## Familia `turno/marcos`
 

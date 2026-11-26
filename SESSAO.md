@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 12:41:07.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (36.0 MB). Acoes na janela: **959**.
+**Medido em 26/11/2026 12:47:52.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (36.2 MB). Acoes na janela: **968**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:47:40 | Bash | Linha LEI-AKITA da obra | `cd /home/ronald/saas-hasner; git log -1 --format=%B d37c65808 \| /bin/grep -E "LEI-AKITA\|OBRA:" \| head -3; git log -1 --format=%B dce3fc67e \| /bin/grep -E "LEI-AKITA" \| head -2` |
+| 12:47:33 | Bash | Resolve pelo certificado e cmp | `cd /home/ronald/saas-hasner; git checkout d37c65808 -- app/core/tests/test_medida_turno_do_par.py && git add app/core/tests/test_medida_turno_do_par.py; echo "diff index x certificado:"; git diff --cached --stat d37c65808 \| tail -3; echo "tree idx=$(git write-tree) cert=$(git rev-parse d37c65808^{tree})"; for f in $(git diff --name-only 558de6bd4 d37c65808); do cmp -s "$f" "/home/ronald/wt-par-po ...` |
+| 12:47:24 | Bash | Merge --no-ff --no-commit do PAR | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem 2>&1\|tail -2; pgrep -fa "git push\|pre-push" \| head -3; git merge --no-ff --no-commit dce3fc67e 2>&1 \| tail -8; echo "MERGE_HEAD=$(cat .git/MERGE_HEAD 2>/dev/null)"; git diff --name-only --diff-filter=U` |
+| 12:47:15 | Bash | Portões do deploy em modo seco | `cd /home/ronald/saas-hasner; /bin/grep -n "conferir" bin/deploy.sh \| head -8; timeout 120 bin/deploy.sh --conferir 2>&1 \| tail -15` |
+| 12:47:05 | Bash | Diff real do merge certificado | `cd /home/ronald/saas-hasner; git diff --stat 558de6bd4 d37c65808 \| tail -40; git diff --name-only 558de6bd4 d37c65808 \| grep -E "migrations\|app/docs\|static/js\|base"` |
+| 12:46:59 | Bash | Confere base e diff do PAR | `cd /home/ronald/saas-hasner; git log -1 --format=%h; git -C /home/ronald/wt-par-pouso-112430 log -3 --format='%h %p %s' \| cut -c1-120; git diff --stat 558de6bd4 dce3fc67e \| tail -25; git status --porcelain \| grep -v '^??'` |
+| 12:43:56 | Bash | Aplica o V2 no brief e registros | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); D=logs/B4-CODEX-VIRA-AVISO cat > logs/AVAIS-1515/B4-CODEX-VIRA-AVISO-2611-V2.txt <<'EOF' aval Ronald: B4-CODEX-VIRA-AVISO-2611-V2 (26/11 12:45) -- SUBSTITUI INTEIRO o B4-CODEX-VIRA-AVISO-2611. OBJETIVO: o teto DIARIO do B4-CODEX (bin/disjuntor.py:1613-1617) deixa de negar e vira AVISO; e a conta do aviso passa a bater com o painel do Codex: hoje o EST ...` |
+| 12:43:35 | Bash | Lê orcamento_do_dia | `cd /home/ronald/saas-hasner; sed -n 125,184p bin/codex_limite_estado.py` |
+| 12:43:31 | Bash | Lê a conta do orçamento do Codex | `cd /home/ronald/saas-hasner; /bin/grep -n "def \\|usado_hoje\\|usado_ini_dia\\|dias_ate_reset\\|reset" bin/codex_limite_estado.py \| head -40` |
 | 12:38:01 | Bash | Registra aval B4, brief e fila | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); D=logs/B4-CODEX-VIRA-AVISO; mkdir -p $D cat > logs/AVAIS-1515/B4-CODEX-VIRA-AVISO-2611.txt <<'EOF' aval Ronald: B4-CODEX-VIRA-AVISO-2611 (26/11 12:40) -- OBJETIVO: o teto DIARIO do B4-CODEX (bin/disjuntor.py:1613-1617, so a volta FINAL acima do orcamento) deixa de negar: vira AVISO (linha no RELATO e no ESTADO com usado x orcamento), todos os papeis s ...` |
 | 12:37:34 | Bash | Lê o B4-CODEX no disjuntor | `cd /home/ronald/saas-hasner; sed -n 1560,1660p bin/disjuntor.py; /bin/grep -n "B4\\|orcamento" bin/tests/test_disjuntor.sh \| head -30` |
 | 12:36:47 | Bash | Registra estado ABONO e E1 no RELATO | `cd /home/ronald/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys h=sys.argv[1]; r='app/docs/RELATO.md'; t=open(r).read() l=(f"ABONO-X-SAIDA-ANTECIPADA c1 {h}: cura em /home/ronald/wt-abono-c1-112106 (ad6865660). RED pista 9/13 FAIL e RED2 11/23. GREEN2 34 OK, 4 mutantes mortos. Suite final na fila da trava: logs/ABONO-X-SAIDA-ANTECIPADA/c1/suite_final.log(.rc). " "FORA DO LITERAL d ...` |
