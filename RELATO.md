@@ -10659,6 +10659,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 00:11:39 disjuntor (NEGOU ANEXO-ENXUTO)** -- agente a165174f9f4a03dba -- Bash -- alvo sha1:3351b4d9fc (551 car., na trilha privada)
+
 **25/11 23:29:26 disjuntor (NEGOU ANEXO-ENXUTO)** -- agente principal -- Bash -- alvo sha1:0e490a5086 (1696 car., na trilha privada)
 
 **25/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
