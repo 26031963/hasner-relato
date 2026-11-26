@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 05:55:24.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **800**.
+**Medido em 26/11/2026 06:01:37.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **797**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -807,6 +807,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:09:07 | Bash |  | `/usr/bin/sleep 90; date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'` |
 | 18:09:01 | Bash |  | `date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'; timeout 15 ssh pista free -g 2>&1 \| head -5` |
 | 18:02:19 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/vizinhos_v3.espera logs/GUARDA-10-B/catraca.espera; timeout 20 ssh pista estado \| grep -E '1125174946\|1125175019\|11251754'` |
-| 18:00:37 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('RUNNER-POOL-E-N-VAGAS-2511 (1)')) L.insert(k+1,'18:00 DESPACHO: WRAPPER-N-VAGAS v13 -> construtor opus (contrato fechado, logs/WRAPPER-N-VAGAS/v13/HANDBACK.md) \| A-TELA v18 -> construtor opus (secao 9 do contrato, logs/A-TELA-DO-DIA-LE-UM-JUIZ/v18/HA ...` |
-| 18:00:34 | Agent | A-TELA v18 construtor | `Voce e o construtor (opus) da v18 da obra A-TELA-DO-DIA-LE-UM-JUIZ no repo /home/ronald/saas-hasner (leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao). Codigo de NEGOCIO em ponto/ = MAO UNICA. Leia INTEIRO: /home/ronald/saas-hasner/logs/A-TELA-DO-DIA-LE-UM-JUIZ/CONTRATO-NOVO-RASCUNHO-2511.md -- a secao 9 (DECISAO, aval A-TELA-PROTESTOS-2511 do Ronald) manda: opcao B, out['pro ...` |
-| 18:00:21 | Agent | WRAPPER v13 construtor | `Voce e o construtor (opus) da volta 13 da obra WRAPPER-N-VAGAS no repo /home/ronald/saas-hasner (leia /home/ronald/saas-hasner/CLAUDE.md inteiro antes de qualquer acao). Obra de INSTRUMENTO (bin/), pouso proprio, nada de app/. Leia INTEIROS, nesta ordem: 1. /home/ronald/saas-hasner/logs/WRAPPER-N-VAGAS/v13/brief.md -- inclusive a secao final "CONTRATO FECHADO", que manda sobre o resto. 2. /home/ro ...` |
