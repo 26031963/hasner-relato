@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 22:13:57.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (15.9 MB). Acoes na janela: **499**.
+**Medido em 25/11/2026 22:20:23.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (16.0 MB). Acoes na janela: **500**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:15:49 | Bash |  | `cd /home/ronald/saas-hasner; echo 'aval Ronald: REGISTRA-PREPUSH-PELA-PISTA-2511 (25/11 22:1x) -- REGISTRAR como fatia da PISTA-ESCOLHE-SOZINHA, sem construir agora: o pre-push roda a suite inteira na VM (trava de 21:51 em diante, push dos 20 commits) mesmo quando a arvore ja foi certificada na pista (comboio 4bac7b0f9, diferenca so app/docs/ do marco). Desenho: o pre-push aceita o certificado da  ...` |
 | 21:47:02 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/PUSH-2511-NOITE/push.rc ]; do /usr/bin/sleep 30; done; cat logs/PUSH-2511-NOITE/push.rc; tail -6 logs/PUSH-2511-NOITE/push.log` |
 | 21:47:01 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read().split('\n') k=[i for i,l in enumerate(s) if l.startswith('PUSH-2511-NOITE (21:4x)')][0] s.insert(k+1,'WRAPPER v13 volta 4 (21:5x): selo cheio 4 VERMELHO, 2 mutantes vivos (adm:sessao, que o Codex v13_1 item 7 tinha previsto; adm:gemea_passa, caso morreu no cenario "executor de B morreu junto", c ...` |
 | 21:46:53 | Bash |  | `L=/home/ronald/saas-hasner/logs/WRAPPER-N-VAGAS/v13; setsid bash -c "cd /home/ronald/wt-wrapper-v13-180046 && bash bin/tests/test_codex_n_vagas.sh > $L/selo_n_vagas5.log 2>&1; echo rc=\$? \$(date +%H:%M) > $L/selo_n_vagas5.fim; bash bin/tests/test_codex_pergunta.sh > $L/selo_pergunta5.log 2>&1; echo rc=\$? \$(date +%H:%M) > $L/selo_pergunta5.fim" </dev/null >/dev/null 2>&1 & sleep 2; pgrep -f 'tes ...` |

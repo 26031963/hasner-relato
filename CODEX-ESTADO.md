@@ -1,7 +1,27 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **25/11/2026 22:14** · publicado em **25/11/2026 22:13** (UTC-3)
+> Ultima resposta processada: **25/11/2026 22:19** · publicado em **25/11/2026 22:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 25/11 22:19 · sessao a93a996f78b0 · PARCIAL-BORDA-SEMIABERTA · verificador · origem=Code
+
+**Volta 3 — item 6 aprovado.** O delta preserva as duas direções na colisão, e o caso 11 falha quando M5 apaga o minuto. Ficou uma pendência no próprio delta: a primeira linha da docstring de `direcoes_da_linha` ainda declara retorno escalar. `app/escala/utils.py:1177,1184–1191` · `app/ponto/turnos.py:2716–2728` · `app/ponto/tests/test_parcial_borda_v2_direcao.py:281–290`
+
+1. **Uma direção por ocorrência.** As duas saídas de `_match_marcos` registram a órfã e seu par a partir dos mesmos índices. No builder por turno, ponta ou intervalo sem coluna acrescentam os dois juntos. A conservação também acrescenta os dois juntos e só percorre batidas ainda não consumidas. Assim, para as órfãs que chegam ao extrator por esses caminhos, cada item da lista de direções é consumido uma vez por chamada. Duas ocorrências com o mesmo `HH:MM` preservam as duas direções, embora a saída não leve ID nem segundos para distinguir as batidas. `app/escala/utils.py:630–637,642–644,675–681,810–822,1765–1781,1865–1889` · `app/ponto/turnos.py:2725–2728`
+
+   **Contagens diferentes.** Antes de `_marcar_ausencias`, a folga lançada pode limpar **todas** as órfãs e deixar os pares registrados. Nesse caso, o extrator ignora a sobra. Não há remoção unitária nesse trecho. Se o extrator receber mais órfãs do que pares para um minuto, emite `None` para cada ocorrência sem par. Isso foi conferido em memória com três órfãs e dois pares. Nos builders inspecionados, as inserções em paralelo preservam a contagem até a limpeza integral. `app/escala/utils.py:817–827,1167–1173,1254–1259,1295–1303,1881–1900` · `app/ponto/turnos.py:2716–2728`
+
+2. **Cópia e chamadas.** O extrator cria um dicionário novo e uma lista nova por minuto. Conferi duas chamadas com o mesmo dia e mapa: devolveram o mesmo resultado e preservaram a entrada. Em produção, o único ponto de chamada na cópia é o ramo parcial de `_marcar_ausencias`, uma vez por linha em cada passada. O legacy pode remontar uma data de aquecimento em outro segmento, com um mapa novo. `app/ponto/turnos.py:2716–2728` · `app/escala/utils.py:771–774,826–827,1020–1042,1245–1278,1899–1900`
+
+3. **Escritores e leitores.** `direcoes_da_linha` escreve `{HH:MM: [E|S|None, ...]}`. O builder de um vínculo e o builder por turno chamam a função e montam o mapa externo por data. `_marcar_ausencias` seleciona o mapa da linha com `.get(d)` e `batidas_reais_do_dia` consome as listas. O caso 11 é o outro chamador de `direcoes_da_linha`, em teste. Os usos executáveis concordam. A docstring em `app/escala/utils.py:1177` ainda diz `{'HH:MM': 'E'|'S'}` e o próprio corpo da docstring já descreve a lista. `app/escala/utils.py:826–827,1176–1191,1217–1218,1277–1278,1899–1900` · `app/ponto/turnos.py:2707–2709,2716–2728` · `app/ponto/tests/test_parcial_borda_v2_direcao.py:284–290`
+
+4. **M1–M5.** Executei os corpos dos testes unitários em memória, com as funções da cópia. O caso 11 passou no código atual e falhou na primeira asserção com M5: saíram dois `None` e, ao consultar o juiz separadamente, o resultado foi `dentro`. M1 fez falhar os casos 1, 2, 6 e 7. M2 fez falhar os casos 3 e 6. M3 e M4 continuam aplicáveis e foram conferidos em isolamento: M3 mudou `15:54 S` para `15:55 S` e virou `dentro`. M4 trocou a `S` da linha pela `E` da data civil e também virou `dentro`. A execução ponta a ponta dos testes Django de M3 e M4 fica [não verificado]. `app/ponto/tests/test_parcial_borda_v2_direcao.py:60–96,183–194,215–225,252–290` · `app/escala/utils.py:325–327,638–681` · `app/ponto/turnos.py:2651–2660,2682–2691,2721–2727`
+
+5. **Classes de reprovação.** No delta fornecido, a mudança executável agrupa e consome direções. Ela não acrescenta juiz, escritor de carimbo, relógio, derivação de cobertura ou `except`. A grade continua julgando e carimbando, o cartório lavra e o leitor transporta. O mapa tem um significado em execução, com a divergência documental do item 3. O `else None` implementa direção desconhecida quando falta um par, e o juiz mantém a inclusão nesse caso, conforme “o resto como hoje”. M5 confirma que a colisão com pares presentes já não cai nesse caminho. `app/escala/utils.py:1188–1191,1235–1242,1271–1294` · `app/ponto/turnos.py:2674–2691,2715–2728` · `app/docs/CORTES.md:647` · `app/ponto/services/cartorio.py:782–790` · `app/escala/services/leitor_celula.py:429–436`
+
+6. **Voltas anteriores.** O achado (a) segue coberto pelos testes das duas rotas de grade, e o item 6 pela mordida de M5. O (g) foi corrigido em `leitor_celula`. A mesma atribuição antiga ainda aparece em `app/chamados/juizes.py:484` e `app/docs/JUIZES.md:70–72`, fora do delta fornecido. A identificação exata de (b), (c) e (d), e o registro deles para o opus, ficam [não verificado]. `app/ponto/tests/test_parcial_borda_v2_direcao.py:263–290` · `app/escala/services/leitor_celula.py:429–436`
+
+A cópia não tem `.git`, então a comparação usou o delta anexado. O hash e o pai por Git, a ocorrência em produção e o impacto na frota ficam [não verificado].
 
 ## 25/11 22:14 · sessao cd1a32dc7431 · PARCIAL-BORDA-SEMIABERTA · verificador · origem=Code
 
@@ -854,12 +874,4 @@ As funções reais, executadas em memória com a sonda fornecida, devolveram os 
 
 Reproduzi os dois erros da cópia e os dois testes passaram com os ajustes aplicados em memória, sob bloqueio de escrita no processo. `app/chamados/tests/test_e3_c8b_sem_banco.py:211`, `app/ponto/tests/test_cadastro_futuro_c3.py:128`.
 
-## 25/11 19:54 · sessao aae1b974ab2a · - · - · origem=Ronald (tmux)
-
-O universo é `CelulaDia.objects.filter(veredito='fato_em_ausencia')`, com uma célula por colaborador/data. Agrupamento pelo `empresa_id` cadastral, empregado pela própria consulta de frota. `app/escala/models.py:1769`, `app/escala/models.py:1781`, `app/escala/models.py:1844`, `app/colaboradores/models.py:321`, `app/relatorios/dia_da_frota.py:34-37`.
-
-A reprodução fiel dos argumentos de uma nova execução usa `batidas_apuraveis`, o dispatcher de grade e um observador `sys.setprofile` temporário sobre o retorno de `horas_reais_do_dia` quando chamada por `_marcar_ausencias`. O retorno contém os minutos recebidos pelo juiz e o frame chamador fornece `_aus_por_dia[d]`. A grade terminada pode divergir da entrada usada pelo juiz porque a reconciliação de órfãs ocorre depois. `app/ponto/services/cartorio.py:1184-1203`, `app/escala/utils.py:1199`, `app/escala/utils.py:1245`, `app/escala/utils.py:1974-2051`, `app/escala/utils.py:2095-2101`, `app/ponto/turnos.py:2663-2684`.
-
-A ata preserva a categoria agregada, as luzes e as horas de órfãs. A seleção histórica exata de janela e os argumentos originais permanecem `[nao verificado]`. O FK da célula tem origem na consulta de cobrança. A ausência que alimenta o juiz tem origem na cobertura de folha. `app/ponto/services/cartorio.py:748-789`, `app/ponto/services/cartorio.py:975-978`, `app/ponto/services/cartorio.py:1384`, `app/ponto/services/cartorio.py:1921`, `app/escala/utils.py:1199`.
-
-_8262 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8263 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
