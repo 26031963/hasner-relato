@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 01:13** · publicado em **26/11/2026 01:17** (UTC-3)
+> Ultima resposta processada: **26/11/2026 01:19** · publicado em **26/11/2026 01:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 01:19 · sessao 859e73b64e12 · O30-F3-CONSTRUIR · construtor · origem=Code
+
+**O30-F3 c2 entregue na cópia sobre `52821ca5b`.** Os 21 testes sem banco passaram. Os quatro REDs reproduziram as falhas na c1 com `rc=1`, e os 23 mutantes executados localmente falharam como esperado. O diff adiciona zero ocorrências de `except`. A suíte do Code, a certificação do opus, a integração com PostgreSQL e o comportamento em produção ficam [nao verificado]. `ponto/tests/test_atestado_f3_contrato.py:87`, `ponto/tests/mutantes_atestado_f3.py:27`, `ponto/services/ausencia.py:1401`, `ponto/services/atestados_lote.py:160`
+
+| Bloqueio | Correção e decisão |
+|---|---|
+| **B1** | Criar/reabrir, editar e anexar travam raiz → filha. A edição relê a linha antes de derivar minutos e estado. Arquivo e metadados ficam na referência que a entrega abre. A troca de um arquivo aprovado exige atuar na própria raiz. O reenvio do app preserva o comprovante já recebido. `ponto/services/ausencia.py:283`, `:452`, `:502`, `:684`, `:842`, `:1086`, `:1387`, `ponto/views_atestado.py:42`, `ponto/tests/test_atestado_f3.py:106` |
+| **B2** | `rederivar_fim` grava só os campos derivados e o carimbo de atualização. A falha da trilha dos seis campos aborta a transação. O selo detecta o `save()` integral real, e a prova do histórico verifica a chamada à função compartilhada. `ponto/services/ausencia.py:300`, `:1860`, `core/observ.py:94`, `ponto/tests/test_atestado_f3_contrato.py:134`, `:158`, `:171`, `ponto/tests/test_atestados_lote.py:13` |
+| **B3** | “Sem documento” consulta `estado_inicial`. O teto conta os tipos que o catálogo marca como médicos. Arquivo sumido ou foto recusada pelo Pillow rende “Anexo indisponível”. HEIC e PDF recebem o link protegido. Na sonda com seleção simulada, um atestado e 21 férias deram HTTP 400 na c1 e no mutante, e HTTP 200 na c2, nos três formatos. `core/juizes.py:263`, `ponto/services/atestados_lote.py:28`, `:154`, `:171`, `ponto/views_atestado.py:119`, `ponto/tests/test_atestado_f3.py:288` |
+| **B4** | O admin oculta os seis campos de todos os perfis. A mídia normaliza o caminho e exige `ver_ausencias` e vínculo com uma ausência no schema da requisição. `ponto/admin.py:39`, `core/media_protegida.py:8`, `ponto/tests/test_atestado_f3_contrato.py:411` |
+
+**Comandos de reprodução**, a partir de `app/`. Os seletores e testes-alvo estão em `ponto/tests/mutantes_atestado_f3.py:27`.
+
+```bash
+f3() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 "$1"; }
+
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_atestado_f3_contrato
+
+f3 c1_b1
+f3 filha_substitui_aprovado
+f3 reabrir_separa_arquivo
+f3 trava_invertida
+f3 editar_sem_releitura
+f3 anexar_ignora_filha
+f3 reabrir_le_filha
+f3 gate_le_filha
+f3 reenvio_regrava_upload
+f3 reenvio_tenta_trocar_aprovado
+
+f3 c1_b2
+f3 save_integral
+f3 trilha_facultativa
+f3 evento_engole_obrigatorio
+f3 historico_sem_delegacao
+
+f3 c1_b3
+f3 lote_flag_crua
+f3 lote_ferias
+f3 pdf_sem_storage
+f3 pdf_imagem_recusada
+
+f3 c1_b4
+f3 admin_expoe_seis
+f3 midia_staff
+f3 midia_sem_normalizacao
+f3 midia_sem_vinculo
+```
+
+**PDF com 20 atestados** [nao verificado]. O comando de medição parou ao importar `django.core`. O tempo do PDF real e o `f3 lote_ferias` com o ORM ficam para a régua do Code. `manage.py:11`, `ponto/tests/test_atestado_f3.py:288`, `:330`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  ponto.tests.test_atestado_f3.AtestadoF3MedidaTest --settings=config.settings.ci
+```
+
+**Ficou fora.** Relógio na borda, semântica de vigência, competência geral, fuso de `decidido_em`, JSON de reversão E4b e efeito da trilha na reversão H06. `ponto/services/atestados_lote.py:34`, `:48`, `:149`, `ponto/views_atestado.py:103`, `chamados/management/commands/backfill_fio_morto_e4b.py:355`, `ponto/management/commands/rederivar_minutos_h06_comp11.py:152`
+
+**Máscara para a sessão.** Acrescentar em `VAZIO` e `NULO`, respectivamente. As duas regras gravam `''` e `None`. `bin/sombra_regras_pessoais.py:49`, `:70`, `bin/sombra_mascara_pessoal.py:17`, `ponto/models.py:787`
+
+```python
+    ('ponto', 'Ausencia'): ('atestado_medico', 'atestado_crm', 'atestado_crm_uf', 'atestado_cid'),
+    ('ponto', 'Ausencia'): ('atestado_emissao', 'atestado_dias'),
+```
 
 ## 26/11 01:13 · sessao 0fff049b4d8a · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
 
@@ -1021,62 +1085,4 @@ O comando parou na importação de `django.core` nesta cópia. A tabela foi medi
 - **Diff:** só o teste G0, com zero `except` novos. Catraca de `folha/porta_export.py::medir` **583 → 583**. `ponto/tests/test_feriado_dobra_noturna_g0.py:43`, `core/tests/test_medida_turno_do_par.py:287`, `folha/porta_export.py:583`
 - **Lei:** nenhuma pergunta nova identificada. O bloqueio é a equivalência entre os dois campos com `S=0`, antes da decisão de quais minutos absorvem o suprimido. Ocorrência em produção **[nao verificado]**. `ponto/tests/test_feriado_dobra_noturna_g0.py:84–96`, `ponto/motor_calculo_v2.py:1885–1901`
 
-## 26/11 00:19 · sessao ebc57ed4744e · E1-PREVISAO-24H · verificador · origem=Code
-
-**E1-PREVISAO-24H v4 — [bloqueia].** O motor comercial ainda produz **60 min de HE50** num dia que o juiz recusa. Uma falta aprovada nesse dia pode sair com **0 h no fechamento e nenhuma data no TXT**, enquanto o cartão continua dizendo **“Falta (desconta 8h)”**. Se o dia estiver sem célula, o próprio fechamento pode manter as 8 h. São contraexemplos do código, com ocorrência e impacto em produção [nao verificado]. `app/ponto/motor_calculo_v2.py:3422` `app/ponto/motor_calculo_v2.py:3438` `app/folha/export.py:143` `app/ponto/services/dia_decidido.py:549` `app/escala/utils.py:473`
-
-Conferi o HEAD `570f3191e89abc913933460a1f1df1496ed69996` na cópia `wt-e1prev-v3-211130` e os sete arquivos do delta contra `3dac548ca`. A verificação foi só leitura. Executei em memória os cinco goldens o219, a seleção de vínculo e a aritmética comercial com períodos já pareados. Suíte Django, RED e mutantes integrados, volume de frota, TXT emitido e valores pagos [nao verificado]. `app/ponto/tests/test_o219_versao_da_regra.py:98` `app/escala/alimentacao.py:228` `app/ponto/motor_calculo_v2.py:3362`
-
-### 1. [bloqueia] Escritores, leitores e significado dos valores
-
-| Valor | Quem escreve, quem lê e onde o significado diverge |
-|---|---|
-| `previstas_do_periodo` | `previstas_do_periodo` escreve o `set[date]`, por pessoa nos chamadores, com as duas pontas inclusivas, piso da operação e vigência do vínculo. O espelho, o PDF e `diff_espelho_alimentacao` leem o retorno. Espelho e PDF injetam o conjunto da janela em cada motor. O PDF também soma o previsto dessas datas. Exemplo com dois vínculos e um dia sem geradora no achado 2. `app/escala/alimentacao.py:389` `app/escala/alimentacao.py:408` `app/ponto/services/espelho.py:1105` `app/ponto/services/espelho.py:1151` `app/relatorios/pdf_espelho.py:372` `app/relatorios/pdf_espelho.py:397` `app/relatorios/pdf_espelho.py:457` `app/ponto/management/commands/diff_espelho_alimentacao.py:103` `app/ponto/management/commands/diff_espelho_alimentacao.py:117` |
-| Cursor de `_montar_motor` | O fechamento cria o conjunto e o preenche entre as duas pontas inclusivas de cada **fatia que roda**, antes de construir seu motor. O motor copia o acumulado naquele momento. A inclusão significa dia obrigatório para furo, abono do motor e DSR, e também é lida na classificação de folga semanal. O calculador aceita o mesmo insumo pela interface de folga. `set()` é uma resposta vazia. `None` aciona a lógica sem lista. O motor-base cruza pelo dia da jornada com reserva na data local da entrada. O segundo cálculo de DSR comercial usa diretamente a data local da entrada, de modo que um par iniciado em D+1 e atribuído à jornada D pode entrar em dias diferentes entre os dois cálculos. `app/ponto/services/fechamento.py:726` `app/ponto/services/fechamento.py:752` `app/ponto/services/fechamento.py:769` `app/ponto/motor_calculo_v2.py:799` `app/ponto/motor_calculo_v2.py:969` `app/ponto/motor_calculo_v2.py:2592` `app/ponto/motor_calculo_v2.py:2611` `app/ponto/motor_calculo_v2.py:3485` `app/ponto/motor_calculo_v2.py:3497` `app/ponto/calculador/regras.py:359` `app/ponto/calculador/regras.py:394` |
-| `previnv:1` e impressão | A grade escreve o **detalhe**. Os dois ramos do cartório projetam a presença em `bool`, por pessoa e dia da célula. `impressao_insumos` acrescenta o literal antes do SHA-256. Os ramos `nunca_bateu` e normal comparam o **hash**, inclusive para completar status. A porta `carimbar` compara novamente para idempotência e grava `CelulaDia.impressao`. `celula_veredito_velho` serializa o gravado. O comando `processar_cartorio` apenas reexporta a função. Duas geometrias recusadas podem ter detalhes distintos com a mesma impressão. `app/escala/utils.py:2230` `app/ponto/services/cartorio.py:1225` `app/ponto/services/cartorio.py:582` `app/ponto/services/cartorio.py:1308` `app/ponto/services/cartorio.py:1458` `app/ponto/services/cartorio.py:1463` `app/ponto/portas/celula.py:1228` `app/ponto/portas/celula.py:1232` `app/ponto/management/commands/celula_veredito_velho.py:110` `app/ponto/management/commands/processar_cartorio.py:20` |
-| `dias_de_previsao_invalida` | A função escreve em memória `{(cid, CelulaDia.data): (tipo_escala_id, detalhe)}`, com janela inclusiva. O vigia conta chaves e agrupa templates. `_dias_recusados_pela_previsao` chama com uma pessoa e projeta apenas datas para os dois leitores de falta. A fotografia do vigia passa por `medir` e pelo comando de lavra. Ausência da chave também pode significar ausência de célula. `app/escala/utils.py:449` `app/escala/utils.py:473` `app/escala/utils.py:482` `app/folha/export.py:156` `app/escala/services/previsao_invalida.py:41` `app/escala/management/commands/lavrar_previsto_cego.py:44` |
-| Overlay de falta | A grade por turno escreve `prev_inv_por_data[d_entrada]`. `_marcar_ausencias` lê esse mapa e a ausência vencedora da cobertura de folha. Para o literal `falta` num dia recusado, pula a escrita de `tipo_dia='falta'`, `falta_aprovada=True`, `ausencia_id` e a limpeza das células e órfãs. A grade publica a marca mais adiante. Os dois chamadores legados omitem o mapa. `tipo_dia` passa à ata e à grade leitora, e é consumido pelo status e pelo ramo sem adesão. A chave `falta_aprovada` é consultada no teste novo, que a coleta sem afirmá-la. Exemplo de significado diferente: um código de ausência cadastrado com efeito `DESCONTA`, diferente de `falta`, entra no filtro do TXT e dos minutos, mas o overlay o trata como `ausencia`. Cadastro efetivo desse tipo em produção [nao verificado]. `app/escala/utils.py:938` `app/escala/utils.py:1139` `app/escala/utils.py:1319` `app/escala/utils.py:1344` `app/escala/utils.py:1763` `app/escala/utils.py:1992` `app/escala/utils.py:2230` `app/ponto/services/cartorio.py:766` `app/ponto/services/cartorio.py:1292` `app/escala/services/leitor_celula.py:397` `app/ponto/status_dia.py:139` `app/escala/tests/test_e1_v4_juiz_unico.py:297` `app/ponto/models.py:581` `app/ponto/catalogo/ausencias.py:331` |
-| `minutos_de_falta_por_dia` e `datas_falta_janela` | `folha/export.py` escreve duas respostas. O mapa soma minutos, inclusive fracionários, por data e rateia pelo tamanho do **registro inteiro** antes de retirar o dia recusado. O fechamento soma, divide por 60 e passa o mesmo mapa às lavras `motor` e `oraculo` de `DiaPago`. A lista ordenada conserva ocorrências repetidas e datas com zero minutos. `datas_falta` adapta a janela da competência para o TXT, a homologação e os dois totais do cartão. `folha_manda` lê a função de janela livre e converte em conjunto para subtrair dos furos. Um registro aprovado de 0 min pode render uma data no TXT e 0 h no fechamento. Em sobreposição, a lista pode contar duas ocorrências, o mapa soma as duas e o overlay escolhe a mais recente. As bordas são inclusivas. A expansão parte de `Ausencia.data/data_fim`, sem reatribuição de madrugada. Uma falta lançada em D+1 pode escapar da marca do plantão iniciado em D. `app/folha/export.py:113` `app/folha/export.py:140` `app/folha/export.py:173` `app/folha/export.py:194` `app/folha/export.py:202` `app/folha/export.py:235` `app/folha/export.py:757` `app/folha/export.py:1030` `app/ponto/services/fechamento.py:903` `app/ponto/services/fechamento.py:1241` `app/ponto/services/fechamento.py:1317` `app/ponto/services/dia_pago.py:274` `app/relatorios/cartao_pela_celula.py:92` `app/relatorios/cartao_pela_celula.py:167` `app/relatorios/cartao_pela_celula.py:374` `app/ponto/turnos.py:2799` `app/ponto/turnos.py:2807` |
-
-### 2. [bloqueia] O predicado de dono coincide. As fatias ainda podem divergir
-
-Para a mesma pessoa, a mesma lista de vínculos e o mesmo mapa, `responde_pelo_dia` equivale a aceitar `esc` se `_dono_do_dia[data]` está ausente ou vale `esc.pk`. Sem célula, sem geradora ou com célula de outra pessoa na chave dessa outra pessoa, o predicado aceita todos e `_dono_do_dia` fica sem entrada. Com geradora válida, só aceita essa geradora. Com geradora ausente da lista ou fora da vigência, a juíza devolve `None`, o mapa fica sem entrada e o predicado volta a aceitar todos. A escolha de uma única escala é outra resposta. Sem geradora, `vinculo_do_dia` escolhe entre as vigências. Reproduzi em memória dois vínculos sobrepostos em que a juíza escolhe B e `responde_pelo_dia` aceita A e B. `app/escala/alimentacao.py:269` `app/escala/alimentacao.py:279` `app/escala/alimentacao.py:285` `app/escala/alimentacao.py:420` `app/ponto/services/fechamento.py:209`
-
-**Contraexemplo entre caminhos.** A, inválido, é geradora em 29/09 e 01/10. B, válido, tem seu primeiro dia atribuído em 02/10. Ambos cobrem 30/09, dia sem geradora, sem batida e sem justificativa. A fatia de A atravessa 30/09. A de B começa em 02/10, pois 30/09 tem dois vínculos cobrindo e não entra em `_sem_dono_meus`. O cursor de A recusa 30/09. Tela e PDF incluem 30/09 por B ao percorrer a vigência inteira e entregam o conjunto ao motor da fatia de A. O motor pode apontar furo de 30/09 e perder o DSR dessa semana onde o fechamento não aponta esse furo. `app/ponto/services/fechamento.py:229` `app/ponto/services/fechamento.py:243` `app/ponto/services/fechamento.py:258` `app/ponto/services/fechamento.py:758` `app/escala/alimentacao.py:390` `app/ponto/services/espelho.py:1151` `app/relatorios/pdf_espelho.py:397` `app/ponto/motor_calculo_v2.py:2611`
-
-### 3. [bloqueia] O desconto do mesmo dia tem respostas diferentes
-
-Use uma célula `trabalha=True`, previsão `07:30–11:00` com pausa `12:00–13:00` e falta aprovada de 480 min. O caso está na fixture da v4. L-061 e LEI-AKITA 2 cobram a leitura da mesma autoridade. `app/escala/tests/test_e1_previsao_do_dia_valida.py:194` `app/escala/tests/test_e1_v4_juiz_unico.py:300` `app/docs/LEIS.md:95` `CLAUDE.md:20`
-
-| Leitor | Resposta para esse dia |
-|---|---|
-| TXT `falta_diurna`, homologação, fechamento e `DiaPago` | Filtram pela recusa viva, via mapa do vigia. A data sai do TXT e a parcela de 480 min sai do fechamento recém calculado e das duas lavras diárias. A geração do TXT ainda depende da admissão no lote, da porta e da rubrica. `app/folha/export.py:143` `app/folha/export.py:197` `app/folha/export.py:757` `app/folha/export.py:1030` `app/folha/views.py:130` `app/ponto/services/fechamento.py:903` `app/ponto/services/fechamento.py:1036` `app/ponto/services/dia_pago.py:274` |
-| Totais do cartão, PDF e espelho | A lista de faltas decididas é filtrada ao vivo. As horas vêm do fechamento ou do `DiaPago` gravado. Após invalidar o cadastro, o mesmo resumo pode mostrar **0 dias e 8 h** até a relavra. Após corrigir, pode mostrar **1 dia e 0 h**. Onde os totais da folha não sobrescrevem o resumo, as chaves `dias_falta` e `horas_falta` vêm do **furo do motor**. `app/relatorios/cartao_pela_celula.py:92` `app/relatorios/cartao_pela_celula.py:115` `app/relatorios/cartao_pela_celula.py:167` `app/relatorios/cartao_pela_celula.py:185` `app/relatorios/cartao_pela_celula.py:374` `app/relatorios/pdf_espelho.py:461` `app/relatorios/pdf_espelho.py:471` `app/relatorios/pdf_espelho.py:628` |
-| Linha do cartão, tela, calendário e app | A palavra usa a cobertura aprovada, o efeito do catálogo e os minutos brutos da `Ausencia`. O PDF imprime **“Falta (desconta 8h)”** na observação, e o app recebe a palavra do espelho. O HTML do espelho exibe o chip da ausência e o status do dia. O calendário também leva a palavra ao tooltip. Histórico, painel de ausência e CSV seguem mostrando o lançamento. Esses caminhos não aplicam a recusa ao desconto exibido. `app/ponto/services/espelho.py:341` `app/ponto/services/espelho.py:890` `app/ponto/services/dia_decidido.py:254` `app/ponto/services/dia_decidido.py:482` `app/ponto/services/dia_decidido.py:549` `app/relatorios/pdf_espelho.py:923` `app/api/views.py:1394` `app/templates/ponto/espelho.html:191` `app/colaboradores/services/calendario.py:733` `app/templates/colaboradores/partials/_calendario_grade.html:97` `app/ponto/views.py:2042` `app/ponto/services/atestados_lote.py:118` |
-| Holerite, férias e assiduidade | O holerite persiste e entrega o PDF recebido. Reprocessamento no Domínio e desconto efetivamente pago [nao verificado]. Férias contam registros aprovados de `falta` pela data inicial, sem o juiz. Cinco faltas válidas mais uma inválida podem reduzir o direito de **30 para 24 dias**. O resumo de inteligência conta ausências do catálogo ao vivo, e o score de assiduidade usa ausências aprovadas não abonadas. O score de pontualidade lê `horas_falta` gravado. `app/holerite/views.py:1193` `app/holerite/views.py:1406` `app/holerite/views.py:1454` `app/ferias/models.py:52` `app/ferias/models.py:144` `app/ferias/services.py:405` `app/inteligencia/resumo.py:39` `app/inteligencia/management/commands/calcular_scores.py:8` `app/inteligencia/management/commands/calcular_scores.py:24` |
-| Abonos e descontos parciais | O abono integral do motor depende dos obrigatórios. A projeção diária lê a marca lavrada e deixa o abono zerado, com o realizado preservado. Já o crédito parcial e o subtotal parcial do PDF leem a ausência aprovada sem a marca. Um atestado parcial de 60 min ainda pode aparecer no subtotal do PDF. No fechamento só abate crédito se houver atraso para absorvê-lo. `datas_abonadas` mantém contagem bruta e `eventos_do_fechamento` não emite a 8932. A 8069 sai da soma de atraso e saída antecipada do fechamento. `app/ponto/motor_calculo_v2.py:2622` `app/ponto/services/dia_pago.py:395` `app/ponto/services/credito_parcial.py:26` `app/ponto/services/credito_parcial.py:57` `app/ponto/services/efeito_ausencia.py:46` `app/relatorios/pdf_espelho.py:478` `app/folha/export.py:218` `app/folha/export.py:466` |
-
-### 4. [bloqueia] O mapa conserva o universo do vigia. A grade tem outro alcance
-
-- **Mesma contagem no vigia**, para a mesma entrada de colaboradores e janela. A v4 preserva consulta, seleção do vínculo e condição de recusa. Agrupar o novo dict conserva uma entrada por célula porque `(colaborador, data)` é único. A medição do vigia continua limitada aos ativos não isentos de empresas ativas e ainda mede templates em uma passagem própria. Contagem em produção [nao verificado]. `3dac548ca:app/escala/utils.py:450` `app/escala/utils.py:449` `app/escala/utils.py:470` `app/escala/models.py:1862` `app/escala/services/previsao_invalida.py:33` `app/escala/services/previsao_invalida.py:46`
-- **Sem célula há furo de dinheiro.** Um vínculo 6x1 vigente, dia útil e template inválido podem produzir `previsao_invalida` na grade viva, que admite o dia pela aritmética do vínculo. O dict só percorre células. Uma falta aprovada de 480 min fica em **8 h no fechamento e uma data candidata à 8792**, se a pessoa passar pelas demais travas do TXT. A retenção pode acusar `sem_celula` e barrar o arquivo. `app/escala/models.py:1123` `app/escala/models.py:1392` `app/escala/utils.py:473` `app/escala/utils.py:1744` `app/escala/utils.py:2230` `app/folha/export.py:143` `app/folha/export.py:197` `app/folha/export.py:1288` `app/ponto/services/fechamento.py:904`
-- **`trabalha=None` entra no mapa** quando a geometria é inválida e há vínculo. Vigia e grade excluem `False`. O cursor e `previstas_do_periodo` exigem valor verdadeiro, então excluem o `None` até com geometria válida, com potencial efeito em furo e DSR. Para o dia `None` reconhecidamente inválido, a falta de 480 é filtrada pelo mapa. No sentido inverso, uma `FolgaDia` lançada pode fazer a grade terminar em `folga`, sem publicar a marca, embora o vigia ainda conte a célula `True` inválida e o filtro retire os 480 min. `app/escala/models.py:1713` `app/escala/utils.py:473` `app/escala/utils.py:1280` `app/escala/utils.py:1744` `app/escala/utils.py:2225` `app/escala/alimentacao.py:404` `app/ponto/services/fechamento.py:759`
-- **`>1440` só no escalar.** O mapa não passa `previsto_min`. No caminho ordinário, porém, os minutos são a soma de segmentos E→S disjuntos da mesma cadeia crescente. Se a soma passa de 1440, a extensão da cadeia também passa e a geometria já recusa. No intermitente, a pré-passagem tem teto de 20 h e o previsto derivado do realizado pula o teto escalar. Um `previsto_min=1441` injetado após a geometria evidencia a lacuna de contrato, pois o overlay roda antes da checagem escalar. Um caso real alcançável e seu efeito em dinheiro [nao verificado]. `app/escala/utils.py:330` `app/escala/utils.py:392` `app/escala/utils.py:431` `app/escala/utils.py:1676` `app/escala/utils.py:1779` `app/escala/utils.py:1992` `app/escala/utils.py:2212` `app/escala/utils.py:2228`
-
-### 5. [bloqueia] A impressão respeita o horizonte. O desconto vivo atravessa o corte
-
-Os cinco goldens o219 deram byte a byte o mesmo resultado em memória. `previnv=True` só altera o hash com `regra >= 4`. A versão usa a competência da empresa, com regra 4 a partir de 10/2026. Em competência anterior, com os demais insumos iguais e a célula já carimbada, a nova marca sozinha não provoca relavra. Isso corresponde à foto da L-124. Fato novo, mudança de outro insumo, `forcar` ou ausência de carimbo ainda podem levar à lavra. `app/ponto/tests/test_o219_versao_da_regra.py:47` `app/ponto/tests/test_o219_versao_da_regra.py:98` `app/ponto/services/cartorio.py:160` `app/ponto/services/cartorio.py:292` `app/ponto/services/cartorio.py:582` `app/ponto/services/cartorio.py:1313` `app/ponto/services/cartorio.py:1467` `app/docs/LEIS.md:145`
-
-**Contraexemplo de horizonte.** Em `09/2026`, uma célula já julgada, sem marcos congelados, pode conservar a ata e o hash enquanto a falta de 480 min desaparece da lista viva e do recálculo de leitura. Os filtros de falta e o overlay não consultam `versao_para`. A guarda de setembro protege a escrita no escopo de empresas que exportaram, enquanto o gerador de TXT chama o recálculo em leitura. A preservação da foto da célula, portanto, não protege todos os leitores do passado. Dentro do horizonte, trocar a saída de `11:00` por `10:00` com pausa `12:00–13:00` mantém o bit de recusa. Se os outros insumos coincidirem, a ata pode conservar o detalhe antigo. O builder legado também fica sem o bit. `app/ponto/services/cartorio.py:804` `app/ponto/services/cartorio.py:1308` `app/ponto/services/cartorio.py:1458` `app/escala/utils.py:1344` `app/escala/utils.py:2247` `app/folha/export.py:143` `app/folha/export.py:197` `app/ponto/services/fechamento.py:559` `app/ponto/services/fechamento.py:578` `app/folha/views.py:209`
-
-### 6. [bloqueia] Item (3) refutado no motor e no fechamento
-
-**HE comercial.** Num dia útil comum, com janela de HE desativada, vínculo `tipo_base='comercial'`, célula `trabalha=True` e template `07:30–11:00`, pausa `12:00–13:00`, o juiz recusa a saída encadeada a **1.650 min** da entrada. Dado o par fechado apurado `07:30–11:00`, o comercial conta **210 min** trabalhados, subtrai a pausa bruta do limite diário e obtém **150 min** de teto. A jornada curta não gera intra suprimida para devolver ao teto. Resultado **60 min de HE50**, que o fechamento copia como **1,00 h**. Conferi esse cálculo em memória com o par já apurado. Pareamento integrado e inclusão real no TXT [nao verificado]. `app/escala/utils.py:396` `app/escala/utils.py:1761` `app/ponto/motor_calculo_v2.py:3258` `app/ponto/motor_calculo_v2.py:3264` `app/ponto/motor_calculo_v2.py:3422` `app/ponto/motor_calculo_v2.py:3438` `app/ponto/services/fechamento.py:948` `app/folha/export.py:458`
-
-O 12x36 comum zera a HE ordinária quando o previsto chega a zero. A dobra de feriado tem guarda própria, e o turno partido com régua `legais` ainda aplica o teto de 480 min. Na régua semanal do partido, **2.760 min** em cinco dias úteis podem pôr **120 min de HE50** no último dia, mesmo se esse for o inválido. O banco comercial também pode manter o dia inválido na proporção da semana, pois pergunta `eh_dia_trabalho`. `app/ponto/motor_calculo_v2.py:2828` `app/ponto/motor_calculo_v2.py:2854` `app/ponto/motor_calculo_v2.py:3151` `app/ponto/motor_calculo_v2.py:3188` `app/ponto/motor_calculo_v2.py:3205` `app/ponto/motor_calculo_v2.py:3469` `app/ponto/services/fechamento.py:1140`
-
-**Atraso, saída e falta têm guardas distintas.** Quando o previsto do m
-
-[truncado em 20000 de 30951 caracteres]
-
-_8291 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8292 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
