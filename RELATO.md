@@ -1,3 +1,5 @@
+PAREI: censo-O30-F3-CONSTRUIR | espera Codex
+
 ABONO-PARCIAL-TETO sonda TXT da 11 na sombra (18:36, script Codex v2 logs/sombra/abono_teto_txt11_v2.py, READ ONLY + rollback; saida logs/abono_teto_txt11_v2.out): TXT_RUBRICAS_MUDADAS=0 COLABS_TXT=0, TXT_IGUAL=1 nas emp 2/3/4 -> o teto NAO mexe no TXT da 11. Mexe so no abono do dia pago: 13 dias, 11 colabs, 2048 min (o dossie dizia 8 colabs/1555 min; universo medido hoje, comp ref 26/11 18:32). DECIDIDO PELO AVAL ABONO-PARCIAL-TETO-2611-1810: vai a fila atras do c1f. Achado lateral: emp2 LAYOUT erros=2 (reg10 matricula nao-numerica) nos dois lados -- o TXT da 11 da emp2 seria recusado na view (folha/views.py:282-288); dono L-099 = CADASTRO (codigo_dominio), lista do admin, nao codigo.
 COMBOIO CLEAR+VIGIA selos de host (18:34): test_disjuntor rc 0, test_orcamento_contexto rc 0, test_hook_esperando_com_prova rc 2 -- 5 casos alarme-* com ModuleNotFoundError disco_estado. Origem: VIGIA v3 (dc9111362) pos `import disco_estado` em bin/alarme_sessao_ociosa.py:137 e a arvore falsa do selo copia lista fixa (bin/tests/test_hook_esperando_com_prova.sh:199) sem disco_estado.py; ja vermelho no VIGIA sozinho. MAO DUPLA (prod importa da propria pasta): nao bloqueia o pouso (POUSA-COM-LISTA-2611-1825 item 1); cura = disco_estado.py na lista de copia, commit de instrumento logo apos o pouso do VIGIA e antes do push.
 DECIDIDO PELA LEI CLAUDE.md 7b RAIAS 3 ("agente nunca espera -- polling e da sessao principal"): pergunta 1 do dossie v5 (logs/AGENTE-NO-MODELO-V5/DOSSIE/r.md:153) -> a excecao sonnet (rc 75/falha do Codex) cobre so leitura/censo/sonda, NUNCA espera; espera fica sempre na sessao | contestavel. Reversao: o disjuntor aceita Agent de espera sob DESPACHO rc 75. Prova: RED da recusa no construtor v5.
@@ -10929,6 +10931,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 19:29:30 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:f98c90765b (42 car., na trilha privada)
+
 **26/11 18:49:32 disjuntor (NEGOU B1)** -- agente a67f53558650381df -- Bash -- alvo sha1:0843c01872 (137 car., na trilha privada)
 
 **26/11 18:30:03 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:f98c90765b (42 car., na trilha privada)
@@ -13581,3 +13585,6 @@ DESPACHO FERIADO-c4: origem do bloqueio 1 (motor x fechamento/dia_pago, precisa 
 O30-F3 c13 suite inteira VERDE (19:18; wt-codex-o30-f3-construir-010143 9435bee97): Found 17991, podados 3, Ran 17988 OK, rc 0 (logs/O30-F3-CONSTRUIR/suite_c13). Opus final lancado (laudo em logs/O30-F3-CONSTRUIR/opus_final_c13.md). merge-tree sobre 2bdf699ce limpo (comum so app/docs/MAPA.md, gerado); main andou 120 arquivos app/ desde c314c099f -> candidato de merge vai a pista DEPOIS do pouso SUITE-ROTEIA (uma certificacao so).
 ABONO c1g rc 3 (19:17): a copia mudou durante a espera (commit fcff30cec); relancado com a copia limpa.
 CLEAR v4c selos.rc 16 (19:19): pasta de selos de host rodada na wt-clear-v4-143522 (anterior ao pouso b4798cbf4), volta SUPERADA pelo POUSA-COM-LISTA (v4b pousou como estava); falhas sao da classe pasta-em-worktree (hook/logs/.claude ausentes) e nao certificam nada. A pasta vale no pre-push do main; test_placar_grade le a GRADE-MESTRA viva (suja) -- conferir antes do push.
+O30-F3 opus final c13 REPROVADO (19:2x; logs/O30-F3-CONSTRUIR/opus_final_c13.md, amostra conferida: sombra_regras_pessoais.py:161-164, views_atestado.py:55-58/:76, urls.py:72 + views.py:2165 + core/juizes.py:1097, ausencia.py:1454-1463): 4 bloqueios -- (1) seis atestado_* sem mascara na sombra, (2) filtro universal nao feito/busca propria, (3) porta antiga de anexo orfa (L-111), (4) anexo orfao sob atomic externo com selo invertido. Fila do laudo vai ao BACKLOG.
+O30-F3 c14a (sessao, bin/ proibido ao Codex) a9544280c na wt: PADRAO_PESSOAL + atestado; VAZIO crm/crm_uf/cid, NULO emissao/dias, TEXTO medico. RED achadas_fora=6 -> GREEN 0 (inventario_pessoal_dos_modelos.py na copia, cobertas=166).
+PUXADA O30-F3 c14 -> vaga 1 (19:30): Codex construtor nos bloqueios 2-4 (brief_c14.md com CENSO); core/juizes.py:1097 fica com a sessao depois. Duas recusas PRE_CHECK antes (sem ## CENSO; app/logs vazio da suite na wt).
