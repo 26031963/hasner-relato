@@ -1,7 +1,264 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 18:09** · publicado em **26/11/2026 18:12** (UTC-3)
+> Ultima resposta processada: **26/11/2026 18:14** · publicado em **26/11/2026 18:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 18:14 · sessao 9b9e10f2cc46 · ABONO-PARCIAL-TETO · leitura · origem=Code
+
+# Dossiê ABONO-PARCIAL-TETO
+
+**Na cópia, reduzir apenas o abono de `por_dia_da_grade` muda `FechamentoMensal.minutos_abonados` e `DiaPago.minutos_abonados`. O efeito chega ao espelho, ao cartão e à prontidão. Nenhuma rubrica do TXT lê esse campo, e a classificação de entrada no TXT também prescinde dele.** A 8069 lê atraso e saída antecipada, calculados antes e por outra origem. O DIFF da sombra ainda é necessário para decidir a posição da fatia na fila pelo critério do aval. [app/ponto/services/fechamento.py:1018–1027,1084–1092,1236] [app/relatorios/cartao_pela_celula.py:118,186–190] [app/folha/export.py:439–461,739–755,977–991,1084–1089] [nao verificado]
+
+## 1. Mapa do dia parcial
+
+- **Hoje**, `por_dia_da_grade` lê `data`, `tipo_dia`, `minutos_previstos` e `minutos_realizados` da grade. Para `tipo_dia='ausencia'`, abona **previsto − min(realizado, previsto)**. Sem realizado, abona todo o previsto. A função devolve três mapas em minutos, na ordem abono, previsto e realizado. O abatimento residual é dedutível desses mapas. A função deixa `Ausencia.minutos`, `hora_ini`, `hora_fim`, `cobertura_parcial` e `periodo_parcial` fora da conta. [app/ponto/services/dia_pago.py:364–402]
+- **Quem decide se é parcial** é `cobre_parte_do_dia`. Ele consulta os tipos que aceitam horas no catálogo vigente e exige registro de um só dia com `0 < minutos < 480`. O `480` classifica o cadastro. O previsto efetivo do dia vem da grade. `ausencia_explica_o_dia_inteiro` compõe esse juiz com a exclusão de `falta`. Para escolher qual ausência cobre o dia para folha, `cobertura_ausencia_periodo(para='folha')` considera aprovadas e, na sobreposição, vence a mais recente por `(data, pk)`. [app/ponto/turnos.py:2548–2557,2614–2639,2751–2758,2816–2839,2850–2868] [app/escala/services/leitor_celula.py:397–423]
+- **Onde já se aplica o período.** A grade pergunta ao juiz da parcial e carimba `cobertura_parcial`. Para dispensar um **marco previsto**, pergunta a `periodo_da_parcial_no_dia`, com bordas inclusivas. Para uma **batida real**, pergunta a `batida_dentro_da_parcial`: S no início e E no fim ficam fora, E no início e S no fim ficam dentro. O cartório lavra os carimbos e `dispensar_por_ausencia` os consome para a dispensa integral. Para a parcial, a grade já dispensou os marcos cobertos. `ausencia_parcial_cobra_o_resto` lê o carimbo e mantém a cobrança de marcos fora do período, ressalvada a folga. [app/escala/utils.py:1229–1233,1272–1295] [app/ponto/turnos.py:2653–2711] [app/ponto/services/cartorio.py:785–790,816–831] [app/chamados/juizes.py:477–505]
+- **Onde já se limita dinheiro pelo período.** `_minutos_da_ponta_cobertos` consulta o juiz da batida para contar a interseção com a ponta de atraso ou de saída antecipada. O teto do motor aplica esse abatimento e depois a L-093. O calculador reutiliza o mesmo teto. A parcial paga sem período segue pelo crédito de atraso no próprio dia. Esse percurso e o abono diário da grade têm saídas diferentes. [app/ponto/motor_calculo_v2.py:453–477,1214–1265] [app/ponto/calculador/alimentacao.py:511–539] [app/ponto/calculador/regras.py:115–126,276–282] [app/ponto/services/credito_parcial.py:35–70,91–102]
+
+## 2. Censo dos escritores e leitores até o TXT
+
+| Papel | Caminho na cópia |
+|---|---|
+| **Apuração e escrita mensal** | `grade_do_fechamento` → `grade_da_celula` → `recalcular_fechamento_mes` → `por_dia_da_grade` → soma em `FechamentoMensal.minutos_abonados`. O recálculo devolve o objeto em leitura ou persiste por `save`/`update`. [app/folha/export.py:329–338] [app/ponto/services/fechamento.py:1037–1038,1084–1088,1152–1168,1184–1209] |
+| **Escrita diária** | O recálculo entrega `abono_por_dia` a `dia_pago.lavrar`, nas versões `motor` e `oraculo`. `lavrar` escreve `DiaPago.minutos_abonados` pelo mapa e substitui as linhas da versão. A falta diária chega por outro mapa, `faltas_por_dia`. [app/ponto/services/fechamento.py:1229–1237,1250–1261,1301–1312] [app/ponto/services/dia_pago.py:274–292,345–360] |
+| **Escrita no retrato de exportada** | `retratar_exportada` chama a mesma função e atualiza ou cria linhas de `DiaPago` com os campos de grade. As entradas são `lavrar_dias_pagos` e `regen_exportada`. Uma alteração aplicada indiscriminadamente à função comum alcançaria esse percurso. [app/ponto/services/dia_pago.py:443–464,469–497,533–545] [app/ponto/management/commands/lavrar_dias_pagos.py:123] [app/ponto/portas/regen_exportada.py:184–193] | [nao verificado]
+| **Espelho e cartão** | `totais_da_folha` lê o fechamento em memória e converte o abono em horas. No ramo de lavratura, lê `soma_da_competencia` em minutos e `dias_com_abono` pelo número de linhas positivas. `folha_manda` aplica os totais ao resumo usado pelo espelho e pelo PDF. [app/relatorios/cartao_pela_celula.py:69–76,118,141–143,186–190,340–346] [app/ponto/services/dia_pago.py:550–563,687–699] [app/ponto/services/espelho.py:1317–1332] [app/relatorios/pdf_espelho.py:628] |
+| **Prontidão e conferência** | `prontidao` usa `(realizado + abono) / previsto` no snapshot. O fallback tem uma conta própria que soma todo o previsto de `ausencia`. A lista de fechamento e `simular_folha` leem a prontidão. O vigia `porta_export` compara a soma de `DiaPago` com o fechamento e, para o caso exportado, chama diretamente `por_dia_da_grade` em `_gravado_x_grade`. Essa conferência de abono entra no diagnóstico publicado da porta. [app/folha/export.py:1054–1089,1104–1121] [app/ponto/services/fechamento_lista.py:79–91] [app/folha/management/commands/simular_folha.py:72–88] [app/folha/porta_export.py:128–151,457–473,693–703,785–799] | [nao verificado]
+| **Entrada e montagem do TXT** | `gerar_dominio_txt` chama o recálculo em leitura, passa os mesmos objetos a `classificar_export` e `montar_linhas_export`, formata o conteúdo e registra a exportação. A classificação consulta rescisão, código, férias com batida, cadastro, pendências de espelho e homologação. A montagem lê os eventos do fechamento e as datas de falta decidida. [app/folha/views.py:214–222,272–288,302–307] [app/folha/export.py:723–755,839–855,875–891,911–991] |
+
+| Rubrica ou efeito | De onde sai o número |
+|---|---|
+| **8069 — horas de faltas parciais** | `resultado.horas_atraso` com o crédito aplicável do próprio dia, mais `resultado.horas_saida_antecipada` → campos do fechamento → `rubrica_atraso_parcial` → `atraso_diurno` → registro 10. [app/ponto/services/fechamento.py:1018–1026] [app/folha/export.py:383–399,449–452,739–748] |
+| **8792 — falta em dias** | `datas_falta` → catálogo `descontam_vigentes` → ausências aprovadas → total de datas no registro 10 e uma data por registro 11. `FechamentoMensal.horas_falta` também tem origem própria, em `minutos_de_falta_por_dia`. [app/folha/export.py:71–92,125–143,169–185,215–220,749–753] [app/ponto/services/fechamento.py:893–895,1027] |
+| **DSR** | O motor julga a semana com dias obrigatórios, trabalho e justificativas. O fechamento recebe semanas e reflexo do resultado. O exportador omite o reflexo de DSR da lista de eventos. [app/ponto/motor_calculo_v2.py:2706–2746] [app/ponto/services/fechamento.py:713–721,1124–1127] [app/folha/export.py:453–461] |
+| **Abono da grade** | A lista de eventos e o bloco de faltas esgotam a montagem. `minutos_abonados` aparece na prontidão e nos leitores acima, sem rubrica correspondente no TXT. [app/folha/export.py:439–461,739–755,1084–1089] |
+
+O DIFF de aceite deve comparar **quem entra**, **linhas por rubrica** e **dias alterados**, na mesma sombra e com a mesma data de referência. A simulação em modo `lido` já usa o recálculo e os montadores reais. O resultado dos oito da 11, qualquer resultado da 12 e o zero fora do alvo estão **[nao verificado]**. [app/folha/management/commands/simular_folha.py:112–134] [app/folha/export.py:699–755]
+
+## 3. Leis herdadas e referências corrigidas
+
+| Lei ou corte | Aplicação à fatia |
+|---|---|
+| **“Abono parcial = cobra o resto”**, L-061 e L-088 | Nesta cópia, a frase está em `RELATO.md:10494`, e o código aplica o corte aos marcos fora do período. L-061 manda ler a lâmpada lavrada. L-088 distingue furo em aberto de falta. A referência `RELATO:10512` do anexo aponta, nesta cópia, para a descrição do ensaio. [app/docs/RELATO.md:10493–10513] [app/docs/LEIS.md:95,120] [app/chamados/juizes.py:477–505] |
+| **ABONADO de 27/10**, L-093 e L-095 | Ausência aprovada que explica o dia inteiro e tem efeito `ABONA` zera a pontualidade. Para parcial, o aval remete aos minutos de juiz existente. O registro do corte e do pouso está em `RELATO.md:7233` e `:7650–7654`. `:7251` trata de saída órfã. [app/docs/RELATO.md:7233,7251,7650–7654] [app/docs/LEIS.md:111,113] [app/ponto/turnos.py:2751–2773] | [nao verificado]
+| **L-006, L-024, L-085, L-089 e L-090** | Período vem do cadastro do DP. Previsto vem da grade. Jornada pertence ao dia de início. Sem dia previsto, o atestado não gera valor. Janela de competência sai do corte por empresa. [app/docs/LEIS.md:64,75,117,121,123] [app/docs/CORTES.md:462,466,473,477] |
+| **L-039, L-092, L-110, L-113 e L-121** | Falta exige decisão. O RED usa a regra aplicada ao cadastro e às batidas. O pouso reconstrói as projeções da competência aberta. Para esta fatia, o aval exclui a exportada, inclusive diante da regra geral posterior sobre recálculo fora da guarda. [app/docs/LEIS.md:87,125,136,142,155–156] [nao verificado] | [nao verificado]
+| **Resultado do grep documental** | Para as cinco expressões pedidas, `LEIS.md` aponta `dia_pago` na L-095, `CORTES.md` aponta o corte de 27/10 e `RELATO.md` traz a regra, o pouso e a conta da grade. `DOSSIES.md` deu zero ocorrências literais e registra, por termos correlatos, L-095, um juiz por pergunta e o crivo do TXT. [app/docs/LEIS.md:113,177] [app/docs/CORTES.md:455,462–477,648] [app/docs/RELATO.md:3582,7233,7650–7654,10493–10494] [app/docs/DOSSIES.md:67–71,118–122] | [nao verificado]
+
+**Padrão da cura: `juiz unico / escritor unico` e `celula soberana / fonte unica`.** A grade e a ata entregam a classificação do dia. O período é consultado pelo juiz existente. O mesmo mapa de abono alimenta o fechamento e a lavratura diária. A grade consumida pelo fechamento hoje transporta a classificação `cobertura_parcial` e a resposta categórica `periodo_parcial`. Um valor de cobertura em minutos precisa de insumo além desse rótulo. [app/docs/GLOSSARIO.md:11–12,26] [app/docs/PLANO-PADROES.md:11,55–62] [app/escala/services/leitor_celula.py:418–436] [app/ponto/services/fechamento.py:1084–1088,1236–1237]
+
+## 4. Contrato de entrada
+
+- **Fonte e unidade.** `Ausencia.data` identifica o dia do cadastro. `hora_ini`/`hora_fim` declaram o período aprovado ou editado pela porta do DP. `minutos` participa da classificação de parcial e do crédito legado sem período. A duração válida para o teto vem das horas cadastradas, em minutos, intersectadas com a jornada líquida prevista. [app/ponto/models.py:745–771] [app/ponto/services/ausencia.py:1039–1054,1068–1081] [app/ponto/turnos.py:2622–2639] [app/escala/utils.py:2322–2374]
+- **Universo.** O censo lista parciais aprovadas de **21/10 a 20/11/2026** e de **21/11 a 20/12/2026**. Para atribuir a diferença do mapa ao caso, usar a vencedora `para='folha'`, efeito `ABONA`, dia parcial na ata e período declarado. `SUPRIME`, `DESCONTA`, ausência integral, justificativa de outra origem e parcial sem período ficam fora da mudança desta fatia. Competência entregue fica fora do efeito da cura. A sonda identifica esses limites sem alterar o cadastro. [app/ponto/janelas.py:10–21,36–57] [app/ponto/turnos.py:2548–2557,2622–2639,2816–2839] [app/ponto/services/credito_parcial.py:15–59] [app/ponto/services/fechamento.py:680–721] [app/folha/export.py:565–603] [app/docs/BACKLOG.md:2146] [nao verificado]
+- **Escala.** Usar o dia da célula e o vínculo que a gerou, com marcos e pausas do DNA. A cauda de um turno iniciado em D continua em D. Em parcial `23:00–02:00` cadastrada em D, o fim fica em `1440 + 120`. Um período inteiro na madrugada, como `01:00–03:00`, é o caso distinto registrado para a obra de pontualidade. O relato registra a resposta de data civil para o cadastro. A cópia consultada resolve a vigência do crédito de ponta por `a.data`. [app/escala/servico_jornada.py:25–66] [app/escala/models.py:1109–1144,1177–1212] [app/escala/utils.py:330–363] [app/ponto/turnos.py:2664–2676] [app/ponto/services/credito_parcial.py:23–32] [app/docs/RELATO.md:50] [app/docs/LEIS.md:117]
+
+## 5. Matriz RED
+
+Valores sintéticos em minutos. Nos casos diurnos, a jornada padrão é **08:00–12:00 e 13:00–17:00**, com 480 min previstos. **Saldo descoberto** é o previsto que ficou sem trabalho e sem abono. Os casos de furo seguem a decisão existente de cobrança. A emissão de desconto no TXT tem o contrato da seção 2. [app/docs/LEIS.md:75,87,111,120,136] [app/docs/CORTES.md:455] [app/ponto/services/dia_pago.py:393–401] [app/escala/utils.py:1280–1295] [app/folha/export.py:439–461,749–753]
+
+| Cadastro + batidas | Abono hoje → abono esperado | Saldo descoberto pela regra |
+|---|---:|---|
+| Parcial **09:00–11:00**, 120 cadastrados, sem batidas | **480 → 120** | **360**. [app/ponto/services/dia_pago.py:393–396] [app/escala/utils.py:1280–1295] |
+| Mesma parcial, par **13:00–17:00** | **240 → 120** | **120**. Com todos os blocos do resto trabalhados, realizado **360**, abono **120**, saldo **0**. [app/ponto/services/dia_pago.py:393–401] [app/docs/CORTES.md:455] |
+| Mesma parcial, par **08:00–10:00**, sendo 60 min trabalhados dentro da parcial | **360 → 60** | **300**. O trecho de **09:00–10:00** já foi realizado. Esse caso distingue cobertura do trecho ainda faltante de um simples `min(abono_atual, duração)`. A batida no período também passa pelo juiz de fato em ausência. [app/ponto/services/dia_pago.py:375–384,393–401] [app/docs/CORTES.md:455] [app/ponto/turnos.py:2683–2711] |
+| Jornada curta **08:00–12:00**, parcial **08:00–12:00**, `minutos=240`, sem batidas | **240 → 240** | **0**. O registro continua parcial pelo juiz, com cobertura de toda a jornada efetiva. [app/ponto/turnos.py:2619–2639] [app/ponto/services/dia_pago.py:393–396] |
+| Parcial **18:00–19:00**, sem batidas | **480 → 0** | **480**. Período inteiramente fora da jornada. [app/ponto/services/dia_pago.py:393–396] [app/escala/utils.py:1283–1295] [app/ponto/motor_calculo_v2.py:453–477] |
+| Turno **20/11 19:00–21/11 07:00**, pausa **00:00–01:00**, parcial **23:00–02:00**, sem batidas | **660 → 120** | **540**, todos no dia 20/11 da comp 11. O período tem duração de 180, com 60 de pausa. [app/docs/CORTES.md:473] [app/docs/LEIS.md:117] [app/ponto/turnos.py:2664–2676] [app/escala/utils.py:330–363,2359–2374] |
+| Dia com previsto **0**, parcial válida, sem batidas | **0 → 0** | **0**. Uma célula ausente ou indeterminada é um caso de leitura distinto. [app/docs/LEIS.md:121] [app/escala/services/leitor_celula.py:390–412] [app/ponto/services/dia_pago.py:387–401] |
+| Ausência integral `ABONA`, 480 previstos, sem batidas | **480 → 480** | **0**. Preservar também o tratamento integral da pontualidade. [app/ponto/services/dia_pago.py:393–396] [app/ponto/turnos.py:2751–2773] [app/docs/RELATO.md:7233] |
+| Saída bruta **120 min** às **15:00**, parcial aprovada **15:00–16:00**, 360 min de realizado | **120 → 60** | **60**. `_minutos_da_ponta_cobertos` já abate **60** da ponta no motor. A S das 15:00 encosta no início da parcial e fica fora para efeito de batida real. O RED deve conferir que a 8069 continua com a ponta residual que o motor apurou, sem segundo crédito. [app/ponto/turnos.py:2683–2711] [app/ponto/motor_calculo_v2.py:453–477,1214–1247] [app/ponto/services/credito_parcial.py:35–50] [app/folha/export.py:449–452] |
+
+## 6. Arquivos e obras em voo
+
+| Arquivo | Alcance e conflito |
+|---|---|
+| `app/ponto/services/dia_pago.py` | Alvo direto de `por_dia_da_grade`. **Conflito de arquivo com c1f pelo escopo informado**. O diff de c1f e o conflito de linhas estão **[nao verificado]**. A mesma função atende ao retrato de exportada, que precisa conservar o percurso vigente para esta fatia. [app/ponto/services/dia_pago.py:364–402,405–464] |
+| `app/ponto/services/fechamento.py` e, conforme o insumo escolhido, `app/escala/services/leitor_celula.py` | Pontos de ligação se o cálculo precisar receber a cobertura temporal. O fechamento já tem a ausência vencedora e o leitor transporta os carimbos. O desenho de passagem desse insumo cabe ao construtor. [app/ponto/services/fechamento.py:700–721,1037–1088] [app/escala/services/leitor_celula.py:429–436] |
+| `app/ponto/turnos.py` | Dependência de leitura dos juízes. Consumir as autoridades existentes evita conflito direto de arquivo com **PAR-PELO-TURNO** e **DIA-DA-BATIDA** nesse desenho. Há dependência comportamental na atribuição do realizado e da cauda do turno. Os diffs das raias estão **[nao verificado]**. [app/ponto/turnos.py:2622–2711,2971–3028] [app/docs/BACKLOG.md:1864,2027] [app/docs/RELATO.md:187] |
+| `app/folha/export.py` e CxR | `export.py` é ponto de conferência do TXT. O fallback de prontidão é um consumidor paralelo já identificado na obra-mãe. O escopo informado de CxR em c1f está **[nao verificado]**. [app/folha/export.py:739–755,1104–1121] [app/docs/BACKLOG.md:2146] [app/docs/RELATO.md:3582] |
+
+## 7. Sonda de leitura
+
+O texto abaixo chama a função real sobre a grade da célula e lista cada cadastro parcial aprovado. `min_periodo` mede a duração declarada e `min_no_previsto` mede a interseção com os blocos líquidos da escala. `None` sinaliza medida indeterminada, inclusive se a geometria disponível divergir do previsto lavrado. `min_excesso_geometrico` é quanto o abono de hoje excede **até** o teto geométrico, útil para localizar os casos. O RED com trabalho dentro do período exige ainda localizar os minutos realizados. [app/escala/services/leitor_celula.py:350–364,390–436] [app/escala/utils.py:330–363,2322–2374] [app/ponto/services/dia_pago.py:364–402] [app/ponto/motor_calculo_v2.py:453–477]
+
+**Alvo informado da 11: 8 colabs, 1.555 min**, `col327`, `col242`, `col298`, `col288`, `col222`, `col885`, `col827` e `col258`. O anexo dá o alvo agregado. A natureza exata dos 1.555 min, os valores por dia e o resultado da 12 estão **[nao verificado]**.
+
+O payload usa consultas de leitura e imprime identificadores `colNNN`, datas, horários, valores e indicadores. Validei a sintaxe em memória e conferi três bordas noturnas e a fórmula atual com entrada sintética. A execução Django na sombra está **[nao verificado]**. O envelope é para execução posterior autorizada. Ele próprio grava credencial, estado técnico e trilha, e ficou sem execução nesta leitura. [app/ponto/turnos.py:2653–2711] [app/ponto/services/dia_pago.py:386–402] [bin/sonda_leitura.sh:121–143,147–193,216–240,245–251]
+
+```python
+from datetime import datetime, time
+from itertools import groupby
+
+from escala.services.leitor_celula import grade_da_celula
+from escala.servico_jornada import escala_vigente
+from escala.utils import cadeia_do_dia
+from folha.export import competencia_entregue
+from ponto.catalogo.ausencias import ABONA, parciais_vigentes
+from ponto.janelas import janela_fechamento, periodo_apuracao
+from ponto.models import Ausencia
+from ponto.motor_calculo_v2 import _minutos_da_ponta_cobertos
+from ponto.services.dia_pago import por_dia_da_grade
+from ponto.turnos import cobre_parte_do_dia, cobertura_ausencia_periodo
+
+
+def minutos_no_previsto(ausencia, colab, previsto):
+    if previsto in (None, 0):
+        return previsto
+    dia = ausencia.data
+    escala = escala_vigente(colab, dia)
+    if escala is None or escala.tipo_escala is None:
+        return None
+    marcos = escala.marcos_do_dia(dia)
+    pausas = escala.pausas_do_dia(dia)
+    if not pausas and marcos[2] and marcos[3]:
+        pausas = (marcos[2:],)
+    zero = datetime.combine(dia, time.min)
+    instantes = [
+        (instante.replace(tzinfo=None) - zero).total_seconds() / 60
+        for _, instante in cadeia_do_dia(dia, marcos, pausas)
+    ]
+    blocos = list(zip(instantes[::2], instantes[1::2]))
+    if sum(fim - ini for ini, fim in blocos) != previsto:
+     
+
+[truncado em 20000 de 24470 caracteres]
+
+## 26/11 18:13 · sessao 6fdedc20fe78 · PAUSA-INTERNA-NO-PARTIDO · leitura · origem=Code
+
+**Totais da competência 11/2026 para as empresas 2, 3 e 4: [nao verificado].** A sonda chama `recalcular_fechamento_mes` com os mesmos argumentos de leitura usados pela geração do TXT. O fechamento carrega as células em lote, atribui o mapa a `motor.celulas_alimentadas` e chama `calcular_mes` por fatia. `app/folha/views.py:214-219` · `app/ponto/services/fechamento.py:624-626,744-775,297-311`
+
+A interceptação fica na entrada de `MotorTurnoPartido.calcular_periodo`, antes do recorte pela janela. Ela soma os minutos **por chamada com `intervalos`**, incluindo a chamada de crédito de turno aberto, e conta cada par colaborador–dia uma vez no `TOTAL`. `UNIVERSO dias` conta os pares colaborador–dia das fatias efetivamente apuradas pelo Partido, incluindo dias sem batida e os dias atribuídos aos períodos pelo motor. `app/ponto/motor_calculo_v2.py:2570-2574,2627-2667,2993-3013,3677-3684` · `app/ponto/services/fechamento.py:283-311`
+
+Com universo vazio, o Python imprime `UNIVERSO VAZIO` e sai com código 1. Nesta cópia, o `echo` depois do pipeline mascara o código de saída no comando externo `bin/sombra.sh --rodar`. `bin/sombra.sh:45,490-493`
+
+```python
+### SCRIPT
+import logging
+import sys
+from collections import defaultdict
+from datetime import date, timedelta
+from traceback import extract_tb
+from unittest.mock import patch
+
+from django.db import connection, transaction
+
+from ponto.janelas import janela_fechamento
+from ponto.motor_calculo_v2 import MotorBase, MotorTurnoPartido
+from ponto.services import fechamento
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+JANELA = (date(2026, 10, 21), date(2026, 11, 20))
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+class FalhaRegistrada(BaseException):
+    pass
+
+
+def interceptar_log(_logger, registro):
+    # O fechamento registra o nome e segue em app/ponto/services/fechamento.py:1327-1332.
+    # Interrompe antes de os handlers formatarem ou gravarem o registro.
+    if registro.levelno >= logging.ERROR:
+        erro = registro.exc_info[1] if registro.exc_info else sys.exception()
+        tipo = type(erro).__name__ if erro is not None else "ERROR"
+        raise FalhaRegistrada(
+            f"{registro.pathname}:{registro.lineno} {tipo}"
+        ) from None
+
+
+def em_minutos(duracao):
+    return f"{duracao / timedelta(minutes=1):.9f}".rstrip("0").rstrip(".")
+
+
+def main():
+    universo = set()
+    pausas_por_dia = defaultdict(timedelta)
+    calcular_mes = MotorTurnoPartido.calcular_mes
+    calcular_periodo = MotorTurnoPartido.calcular_periodo
+    codigo_fatia = fechamento.apurar_por_fatia.__code__
+    codigo_mes_base = MotorBase.calcular_mes.__code__
+
+    def observar_mes(motor, *args, **kwargs):
+        # Cobertura e colaborador do fechamento em app/ponto/services/fechamento.py:283-311.
+        origem = sys._getframe(1)
+        if origem.f_code is not codigo_fatia or motor.celulas_alimentadas is None:
+            raise RuntimeError("Partido fora da fatia alimentada do fechamento")
+        dados = origem.f_locals
+        colaborador_id = kwargs["colaborador_id"]
+        universo.update((colaborador_id, dia) for dia in dados["_dias_da_fatia"])
+        return calcular_mes(motor, *args, **kwargs)
+
+    def observar_periodo(motor, entrada, saida, intervalos=()):
+        # Dia da jornada em app/ponto/motor_calculo_v2.py:2570-2574.
+        # No crédito de aberto, o dia é _d_a em :2627-2667 do mesmo arquivo.
+        origem = sys._getframe(1)
+        if origem.f_code is not codigo_mes_base:
+            raise RuntimeError("Chamada inesperada de calcular_periodo do Partido")
+        dados = origem.f_locals
+        dia = dados["_d_a"] if "_pares_a" in dados else dados["data_jornada"]
+        if not JANELA[0] <= dia <= JANELA[1]:
+            raise RuntimeError("Dia de jornada fora da janela da sonda")
+        chave = (dados["colaborador_id"], dia)
+        universo.add(chave)
+        if intervalos:
+            pausas_por_dia[chave] += sum(
+                (fim - inicio for inicio, fim in intervalos), timedelta()
+            )
+        return calcular_periodo(motor, entrada, saida, intervalos)
+
+    try:
+        with (
+            patch.object(logging.Logger, "handle", interceptar_log),
+            patch.object(MotorTurnoPartido, "calcular_mes", observar_mes),
+            patch.object(MotorTurnoPartido, "calcular_periodo", observar_periodo),
+            transaction.atomic(durable=True),
+        ):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            for empresa_id in EMPRESAS:
+                if janela_fechamento(MES, ANO, empresa_id) != JANELA:
+                    raise RuntimeError(f"Janela divergente na empresa {empresa_id}")
+                fechamento.recalcular_fechamento_mes(
+                    MES,
+                    ANO,
+                    empresa_id=empresa_id,
+                    somente_leitura=True,
+                    retornar_objeto=True,
+                    lavrar_dias_pagos=False,
+                )
+            raise ReverterSonda()
+    except ReverterSonda:
+        pass
+    except Exception as erro:
+        # Preserva o local da falha sem publicar a mensagem original.
+        local = extract_tb(erro.__traceback__)[-1]
+        raise RuntimeError(
+            f"{local.filename}:{local.lineno} {type(erro).__name__}"
+        ) from None
+
+    if not universo:
+        print("UNIVERSO VAZIO", flush=True)
+        raise SystemExit(1)
+
+    for (colaborador_id, dia), duracao in sorted(pausas_por_dia.items()):
+        print(f"col{colaborador_id:03d} {dia.isoformat()} minutos={em_minutos(duracao)}")
+
+    colabs_partido = len({cid for cid, _ in universo})
+    colabs_afetados = len({cid for cid, _ in pausas_por_dia})
+    total = em_minutos(sum(pausas_por_dia.values(), timedelta()))
+    print(f"UNIVERSO colabs_partido={colabs_partido} dias={len(universo)}")
+    print(f"TOTAL dia_colab={len(pausas_por_dia)} colabs={colabs_afetados} minutos={total}")
+
+
+main()
+### FIM
+```
 
 ## 26/11 18:09 · sessao 56e47cebcda0 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
 
@@ -839,85 +1096,4 @@ AST c9 → c10 conforme o delta informado e a contagem da cópia, em `ExceptHand
 - **Origem e leitura do PDF.** `Ausencia.documento` é `FileField` em `app/ponto/models.py:777`, escrito pela criação em `app/ponto/services/ausencia.py:571–572,608,640–641`, pelo anexo em `app/ponto/services/ausencia.py:1118–1120` e pela reabertura em `app/ponto/services/ausencia.py:1413–1421`. `dia_decidido` produz o booleano da linha em `app/ponto/services/dia_decidido.py:679–687`. O PDF lê o booleano, o `FileField`, seu nome, storage e bytes em `app/ponto/services/atestados_lote.py:168–175,210–214`. O tipo sai de `app/ponto/services/ausencia.py:789–817`, a foto sai de `app/ponto/services/atestados_lote.py:148–158`, e o renderizador consome foto, marca e contador em `app/ponto/services/atestados_lote.py:211–234`. O endpoint consome o PDF em `app/ponto/views_atestado.py:134–148`. A rota do link lê o arquivo em `app/ponto/views.py:2144–2161`.
 - Os quatro testes de `green_c10` e os treze de `green_c9` passaram com o executor somente em memória de `app/ponto/tests/mutantes_atestado_f3.py:350–370,385–390,410–419`. O RED histórico autenticado por Git e a execução com Pillow real [nao verificado].
 
-## 26/11 17:34 · sessao 0457b6427136 · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
-
-**B2-chão fica como pergunta de lei.** A proteção do julgamento em `registrar` e `anotar` ficou fora da F4d. [registro_batida.py:207](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/registro_batida.py:207)
-
-O diff está na cópia sobre `57aa0cb1b`. A execução local da suíte teve **25 testes sem falha e 1 erro de importação**. O RED→GREEN de B2 com o `atomic` real do Django e a conexão dublada ficou **[nao verificado]**. [test_juiz_unico_eventos.py:318](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/test_juiz_unico_eventos.py:318)
-
-| Item | Cura | RED → GREEN e mutante |
-|---|---|---|
-| B1 | `trava_na_ordem` é a primeira instrução do `atomic`, antes de ler os itens e de corrigir ou remover a Batida. [regularizacao_ext.py:122](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/chamados/services/regularizacao_ext.py:122) | Faltou `call.travar_colaborador(1)` nos dois ramos da base. Ambos passaram na cópia. Mutante com RC 1, `FAIL=2 ERROR=0`. [teste:409](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/test_juiz_unico_eventos.py:409) | [nao verificado]
-| B2 | A leitura viva roda no `atomic` externo, antes do `delete` e da trilha. A proteção do recálculo fica depois do `delete`. [registro_batida.py:328](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/registro_batida.py:328) | Teste invertido. Na base, na cópia e no mutante, o teste parou em `ModuleNotFoundError: No module named 'django.db'`. A sonda em memória com `sqlite3.DatabaseError` e `nullcontext`, sem conexão, observou na base `retorno=1, pks=[1], trilha=1` e na cópia `erro=DatabaseError, pks=[1, 2], trilha=0`. [teste:318](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/test_juiz_unico_eventos.py:318) | [nao verificado]
-| B3 | O INFO registra a contagem devolvida pelo escritor. A prosa de K3 descreve a exceção que sobe ao callback. [fechamento.py:1817](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/services/fechamento.py:1817), [fechamento.py:1841](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/services/fechamento.py:1841) | `'processados=0' not found` na base. A cópia registrou `processados=0` em INFO com uma chamada ao escritor para dois dias da mesma competência. Mutante com RC 1, `FAIL=1 ERROR=0`. [teste:474](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/test_juiz_unico_eventos.py:474) | [nao verificado]
-| E5 | Saiu do comentário a promessa de recálculo pelo cron. [registro_batida.py:192](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/registro_batida.py:192), [crons.py:1148](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/config/crons.py:1148) | `'cron da madrugada rega o gravado' unexpectedly found` na base. O teste passou na cópia. Mutante com RC 1, `FAIL=1 ERROR=0`. [teste:485](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/test_juiz_unico_eventos.py:485) | [nao verificado]
-
-Comandos da suíte, do RED contra a base literal e dos mutantes, a partir de `app/`. O mutante histórico `f4b-a-sem-protecao` cobre a reintrodução apenas do savepoint e também parou no import de `django.db`. [juiz_unico_eventos_mutantes.py:121](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/juiz_unico_eventos_mutantes.py:121) [nao verificado]
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-python3 -m unittest ponto.tests.test_juiz_unico_eventos
-python3 -m ponto.tests.juiz_unico_eventos_mutantes f4d-base
-python3 -m ponto.tests.juiz_unico_eventos_mutantes f4d-b1-sem-trava
-python3 -m ponto.tests.juiz_unico_eventos_mutantes f4d-b2-protecao-e-savepoint
-python3 -m ponto.tests.juiz_unico_eventos_mutantes f4b-a-sem-protecao
-python3 -m ponto.tests.juiz_unico_eventos_mutantes f4d-b3-info-antigo
-python3 -m ponto.tests.juiz_unico_eventos_mutantes f4d-e5-comentario-antigo
-```
-
-**Contagem no diff contra a base:** `0` `except` novos e `0` `with suppress(...)` novos. A inversão de B2 removeu o `suppress` preexistente no teste. [test_juiz_unico_eventos.py:348](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/tests/test_juiz_unico_eventos.py:348) [nao verificado]
-
-**Fora da volta:** a fila do opus sobre o escritor mensal, a corrida entre aprovar e rejeitar e a escrita direta de Batida pela regularização. Ocorrência e impacto em produção **[nao verificado]**. [fechamento.py:1326](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/services/fechamento.py:1326), [views.py:475](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/ponto/views.py:475), [regularizacao_ext.py:137](/home/ronald/wt-codex-dia-da-batida-juiz-unico-103044/app/chamados/services/regularizacao_ext.py:137)
-
-**Mensagem sugerida**
-
-```text
-OBRA: DIA-DA-BATIDA-JUIZ-UNICO — F4d
-
-LEI-AKITA: padrao=juiz unico, juizes novos=0
-```
-
-## 26/11 17:30 · sessao 0d996969111a · O30-F3-CONSTRUIR · construtor · origem=Code
-
-A c10 está na cópia. `_foto_no_pdf` chama `original.load()` dentro do `with Image.open` e do `try` existente. `_reabrir` emite o aviso de possível anexo órfão quando há falha após gravar o anexo e a conexão ainda está em `atomic` externo. [atestados_lote.py:147] [ausencia.py:1434]
-
-### RED → GREEN
-
-Execute em `app/` com `PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 <caso>`. `green_c10` passou os quatro testes focados. O módulo de contrato passou 33 testes locais, excluído o PDF real. `selos` passou 14. A certificação fica com o Code e o opus final. [mutantes_atestado_f3.py:373] [test_atestado_f3_contrato.py:1] [nao verificado]
-
-| Caso | Resultado local |
-|---|---|
-| `red_c9_pdf_try` | RED na base c9 pela ausência de `original.load()`. [test_atestado_f3_contrato.py:228] |
-| `c10_pdf_sem_load_transpose_fora_do_try` | RED com `OSError: truncado` escapando no teste simulado. [mutantes_atestado_f3.py:120] [test_atestado_f3_contrato.py:801] | [nao verificado]
-| `c10_pdf_thumbnail_no_try` | RED no selo AST quando `thumbnail` entra no `try`. [mutantes_atestado_f3.py:126] [test_atestado_f3_contrato.py:228] |
-| `c10_pdf_marca_duplicada` e `c9_pdf_engole_sem_contar` | RED com duas marcas no primeiro mutante e rodapé `0` para uma marca no segundo. [mutantes_atestado_f3.py:131] [test_atestado_f3_contrato.py:809] |
-| `red_c9_reabrir_aviso_sucesso` e `c10_reabrir_aviso_no_finally` | RED no `assertNoLogs` pelo aviso após sucesso. [mutantes_atestado_f3.py:93] [mutantes_atestado_f3.py:134] [test_atestado_f3_contrato.py:503] |
-| `c10_reabrir_sem_aviso_na_falha` | RED no `assertLogs` pela ausência do aviso na falha. [mutantes_atestado_f3.py:137] [test_atestado_f3_contrato.py:515] |
-
-**PDF real [nao verificado].** `green_c10_pdf_real` e `c10_pdf_real_sem_load_transpose_fora_do_try` pararam no import de `PIL` nesta cópia. Os dois comandos ficam para o container da suíte. O teste gera um JPEG, corta os bytes pela metade, exige que `Image.open` abra e que `load()` levante `OSError`, e confere uma marca `ANEXO ILEGIVEL #21`, rodapé `1` e a foto boa no PDF. [test_atestado_f3_contrato.py:821] [mutantes_atestado_f3.py:123] [mutantes_atestado_f3.py:389] [nao verificado]
-
-### Diff e censo
-
-`git diff --name-only 1e4723516 -- app/` listou os quatro arquivos abaixo. `git diff --check` passou. A contagem é por AST, de `1e4723516` para c10. [test_atestado_f3_contrato.py:49]
-
-| Arquivo | `ExceptHandler` | `with suppress` |
-|---|---:|---:|
-| `app/ponto/services/atestados_lote.py` [atestados_lote.py:147] | 3 → 3 | 0 → 0 |
-| `app/ponto/services/ausencia.py` [ausencia.py:1434] | 13 → 13 | 0 → 0 |
-| `app/ponto/tests/mutantes_atestado_f3.py` [mutantes_atestado_f3.py:119] | 0 → 0 | 0 → 0 |
-| `app/ponto/tests/test_atestado_f3_contrato.py` [test_atestado_f3_contrato.py:228] | 0 → 0 | 0 → 0 |
-
-- **Leitores.** A rota do PDF chega a `views_atestado.lote_atestados`, que chama `pdf_bytes`. O lote lê o documento e os seis campos. `views.py` serve o documento da raiz, o painel exibe o anexo e os campos, e `anexar_atestado` coleta os valores do formulário. [relatorios/urls.py:17] [views_atestado.py:136] [atestados_lote.py:161] [atestados_lote.py:205] [views.py:2147] [painel_ausencia.html:71] [painel_ausencia.html:95] [views_atestado.py:29]
-- **Escritores.** A catraca identifica `criar_ausencia` e `_gravar_dados_atestado` como os escritores dos seis campos. `_reabrir` grava documento, descrição e prazo e delega a transição de estado a `mudar_estado`. `anexar_documento` grava o documento e chama a porta dos seis campos. `_apagar_anexo_escrito_agora` executa a remoção. [test_atestado_f3_contrato.py:74] [test_atestado_f3_contrato.py:169] [ausencia.py:317] [ausencia.py:567] [ausencia.py:1114] [ausencia.py:1411] [ausencia.py:241]
-- **Fora do escopo.** B1b, B2a, B2c, B5 e INSS seguem em fila, assim como o possível órfão no rollback posterior do `atomic` externo, o nome anterior defasado, a corrida entre `.exists()` e `storage.delete`, o erro em `documento.open('rb')` e a cópia via `DadosAtestadoForm.base_fields`. Banco e produção ficam [nao verificado]. [views.py:2569] [ausencia.py:256] [ausencia.py:262] [atestados_lote.py:171] [forms.py:13]
-
-**Mensagem de commit sugerida** [atestados_lote.py:149] [ausencia.py:1434] [nao verificado]
-
-```text
-OBRA: O30-F3-CONSTRUIR
-LEI-AKITA: padrao=escritor unico
-
-Explicita a decodificação no PDF e limita o aviso de órfão à falha da reabertura.
-```
-
-_8458 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8460 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
