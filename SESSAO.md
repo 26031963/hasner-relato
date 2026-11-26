@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 19:49:44.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (92.0 MB). Acoes na janela: **2437**.
+**Medido em 26/11/2026 19:56:49.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (92.1 MB). Acoes na janela: **2442**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:56:48 | Bash | Relança a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 19:56:44 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bemoh6cwz.output` |
+| 19:51:31 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
+| 19:51:30 | Bash | Relança a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 19:51:27 | Bash | Lê o despertar e a suíte do ABONO | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bkou10bj3.output; cd ~/saas-hasner; tail -c 300 logs/ABONO-X-SAIDA-ANTECIPADA/suite_c1g/suite.log; date +%H:%M` |
 | 19:46:13 | Bash | Atualiza BACKLOG e RELATO e relança a espera | `cd ~/saas-hasner; sed -i 's/\| SUITE-ROTEIA-F2 \| \(.*\) \| dossie (Codex censo) \| 26\/11 \|/\| SUITE-ROTEIA-F2 \| \1 \| dossie fechado 19:45 (logs\/SUITE-ROTEIA-F2\/DOSSIE\/r.md, 0 lei), brief_c1 pronto; travada por: vaga de construtor (E4C c2 e v6) \| 26\/11 \|/' app/docs/BACKLOG.md; grep -c 'brief_c1 pronto' app/docs/BACKLOG.md; echo "SUITE-ROTEIA-F2 dossie fechado $(date +%H:%M) (r.md, pergun ...` |
 | 19:46:07 | Bash | Escreve o brief do construtor da F2 | `cd ~/saas-hasner; D=logs/SUITE-ROTEIA-F2; cat > $D/brief_c1.md <<'EOF' # SUITE-ROTEIA-F2 c1 -- construtor opus (bin/ e proibido ao Codex; aval AGENTE-NO-MODELO-NA-FONTE v6 item 1) Aval literal: logs/AVAIS-1515/SUITE-ROTEIA-F2-2611-1940.txt. Dossie: logs/SUITE-ROTEIA-F2/DOSSIE/r.md (Codex censo, amostra :497-501 e :440-442 conferida pela sessao). MAO DUPLA (instrumento), pousa com lista. Copia: `gi ...` |
 | 19:45:49 | Bash | Confere amostra do censo em suite.sh | `cd ~/saas-hasner; sed -n 436,444p bin/suite.sh; sed -n 494,506p bin/suite.sh` |
