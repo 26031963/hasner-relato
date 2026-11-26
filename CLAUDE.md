@@ -362,9 +362,18 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
      mexer em config do Code, cron novo.
      CONSTRUTOR (L-126, CODEX-CONSTRUTOR-NEGOCIO): copia propria `--construtor ~/wt-codex-<obra>-NNNNNN`, escrita so em
      `<wt>/app`, inventario no fim (varredura de FS) proibido ou falho = rc 3 (guarda no wrapper); descartar a wt e CONDUTA do
-     Code (o wrapper nao remove a wt). O wrapper guarda 1 Codex construtor por vez por repositorio (vaga
-     `logs/construtor.vaga`, flock); o opus final (PROPORCIONAL, PRINCIPIO) e o "1 opus" do teto MODO-PADRAO-POS-RESET sao
-     CONDUTA: o wrapper nao os guarda.
+     Code (o wrapper nao remove a wt) e SO pelo comando da `.recusa`, `flock -n <wt> git -C <vivo> worktree remove --force <wt>`
+     (lease da wt presa por outra chamada = recusa), EXCETO rc 3 motivo=LEASE_PERDIDA (titular da lease sem prova de vida):
+     nada se usa e a wt NAO se remove, outra chamada pode estar nela. O wrapper guarda ate N Codex construtores por repositorio, N = `vagas_codex` do blob
+     `bin/codex_vagas.conf` de `refs/heads/main` (universo das vagas 1..3; o codigo RECUSA vagas_codex acima de 2 ate a medida -- teto `bin/codex_admissao.py::TETO_ANTES_DA_MEDIDA`, na abertura e no CONFERE, aval WRAPPER-N-VAGAS-ENTRA-V2; o ambiente nao conta). LEASE (M-LEASE): a vaga k e o flock do kernel em
+     `logs/vagas/vaga.k` (inodes registrados UMA vez pelo Code no ato do pouso, com trilha -- aval WRAPPER-N-VAGAS-ENTRA-V2; o wrapper nunca os cria), segurado pelo
+     titular `bin/codex_admissao.py` e passado so ao executor (codex e descendentes) por pass_fds; `vaga.k.json` e projecao,
+     PID/boot sao diagnostico; `logs/construtor.vaga` legado e a gemea da k=1. Admissao pela meta-trava `logs/vagas/meta.lock`
+     (prazo `meta_timeout_s`, nunca espera vaga); sem vaga = 75 SEM_VAGA; toda saida termina com
+     `CODEX_RESULTADO rc=<rc> motivo=<MOTIVO>`; com outra vaga viva so entra quem passa o PORTAO lido na abertura (load5 < nproc-2, fora de 06:00-07:30, media do
+     dia do ldavg-5 <= 7, /health/ do saas_core 200 em 5 s); UMA chamada por wt (o titular segura tambem flock no diretorio da wt; presa = 2 MESMA_WT); arquivo em comum entre wts diferentes e conduta do Code (RAIAS item 1) e o merge acusa no pouso (L-107); trilha
+     `logs/codex/vagas.log`, leitor `bin/codex_vagas_estado.py`, selo `bin/tests/test_codex_n_vagas.sh`; o opus
+     final (PROPORCIONAL, PRINCIPIO) e o "1 opus" do teto MODO-PADRAO-POS-RESET sao CONDUTA: o wrapper nao os guarda.
   2. DESPACHO. Todo aval, laudo ou BO e DECOMPOSTO antes de qualquer trabalho, 1 linha no RELATO:
      `DESPACHO <id>: a,b -> Codex | c -> sonnet | d -> opus`. CODEX (primeiro, sempre) = leitura de codigo, rastrear classe,
      censo pela regra, quem-mais-le, autopsia de escritor/leitor, contra-exemplo, sonda de prod (contagem, censo de frota,
