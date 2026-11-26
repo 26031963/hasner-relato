@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 21:35:11.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (14.7 MB). Acoes na janela: **465**.
+**Medido em 25/11/2026 21:41:34.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (14.7 MB). Acoes na janela: **467**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:40:42 | Bash |  | `cd /home/ronald/saas-hasner; for s in test_atomicidade_da_porta test_esmeril_chamado_censo test_esmeril_turno_censo test_hora_da_secao_nao_e_futura test_leis_indice test_placar_conta_o_retido_do_lastro test_placar_grade test_rm_com_guarda test_selo_espera_processo_morde; do echo "=== $s"; timeout 300 bash bin/tests/$s.sh 2>&1 \| tail -4 \| cut -c1-300; done` |
+| 21:40:39 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/PUSH-2511-NOITE/pasta.fim logs/PUSH-2511-NOITE/pasta.log` |
 | 21:27:19 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read().split('\n') k=[i for i,l in enumerate(s) if l.startswith('PARCIAL-BORDA v2 (21:3x)')][0] s.insert(k+1,'ORDEM-VAGAS-NOITE-2511 (21:3x): vagas de construtor CHEIAS (2/2: E1-PREVISAO-24H v3, PARCIAL-BORDA v2, ambos lancados 21:1x-21:3x por avais de hoje); a proxima vaga vai a (1) FERIADO-SEM-LIMITE ...` |
 | 21:27:12 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1997p app/docs/BACKLOG.md \| cut -c400-1200; cat logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/CASOS.md \| head -60; cat logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/v1diag.log` |
 | 21:27:10 | Bash |  | `cd /home/ronald/saas-hasner; ls -la --time-style=+%d/%H:%M logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3 \| head -30; find logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO -name 'CASOS.md' -o -name 'HANDBACK*' \| head; grep -n '^\| FERIADO-SEM-LIMITE' app/docs/BACKLOG.md \| cut -c1-400` |
