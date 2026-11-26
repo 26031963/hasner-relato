@@ -1,7 +1,204 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 11:18** · publicado em **26/11/2026 11:19** (UTC-3)
+> Ultima resposta processada: **26/11/2026 11:26** · publicado em **26/11/2026 11:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 11:26 · sessao c9357fee11e2 · DIA-DA-BATIDA-JUIZ-UNICO · leitura · origem=Code
+
+- A sonda chama `ponto.turnos.turnos_do_colab`, a entrada pública usada pelo esmeril do espelho. Ela delega ao pareador que aplica o pad por segmento de vínculo. [app/ponto/services/esmeril_espelho.py:102](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/esmeril_espelho.py:102) · [app/ponto/turnos.py:1850](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1850) · [app/ponto/turnos.py:1980](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1980)
+- O universo vem de `batidas_apuraveis` pela data civil. A duplicidade é medida dentro da lista de turnos de cada competência e inclui PKs que o pareador trouxe do pad. O total deduplica PKs entre competências. [app/ponto/turnos.py:2921](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:2921) · [app/ponto/turnos.py:1997](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1997)
+- A classe mista indica que a PK aparece em turno incompleto e em par fechado. A sonda consulta `vinculo_do_dia` pela `data_turno` com a mesma carga do pareador. `sem_vinculo` indica que falta pelo menos um vínculo e que a sonda encontrou menos de dois vínculos distintos. [app/ponto/turnos.py:312](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:312) · [app/ponto/turnos.py:1889](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1889) · [app/ponto/turnos.py:1965](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1965)
+- Erros que saem da função pública fazem a sonda falhar. A função real já captura internamente erros de `periodos_do_dia`. Execução e números na sombra [nao verificado]. [app/ponto/turnos.py:1632](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1632)
+
+```python
+from collections import Counter, defaultdict
+from datetime import datetime, time, timedelta
+
+from django.db import connection, transaction
+from django.db.models import Count
+from django.utils import timezone
+
+from escala.alimentacao import celulas_do_periodo, escalas_do_periodo, vinculo_do_dia
+from ponto.janelas import periodo_apuracao
+from ponto.turnos import batidas_apuraveis, janela_com_pad, turnos_do_colab
+
+
+CLASSES = ("(i)_orfa", "(ii)_par_fechado", "(i)+(ii)_mista")
+VINCULOS = ("igual", "diferente", "sem_vinculo")
+
+
+def medir_competencia(mes, exemplos):
+    ini, fim = periodo_apuracao(mes, 2026, dia_corte=21)
+    inicio = timezone.make_aware(datetime.combine(ini, time.min))
+    limite = timezone.make_aware(datetime.combine(fim + timedelta(days=1), time.min))
+    universo = dict(
+        batidas_apuraveis(None, ini=inicio)
+        .filter(timestamp__lt=limite)
+        .values_list("colaborador_id")
+        .annotate(n=Count("pk"))
+        .order_by("colaborador_id")
+    )
+    pad_ini, pad_fim = janela_com_pad(ini, fim)
+    afetados = set()
+    pks = set()
+    contagem = Counter()
+
+    for cid in universo:
+        por_pk = defaultdict(list)
+        for turno in turnos_do_colab(cid, ini, fim):
+            for pk, batida in {b.pk: b for b in turno.batidas}.items():
+                por_pk[pk].append((turno, batida.timestamp))
+
+        repetidas = {pk: itens for pk, itens in por_pk.items() if len(itens) > 1}
+        if not repetidas:
+            continue
+
+        afetados.add(cid)
+        celulas = celulas_do_periodo([cid], pad_ini, pad_fim)
+        escalas = escalas_do_periodo(
+            cid, pad_ini, fim, mais=[c.escala_geradora_id for c in celulas.values()]
+        )
+        escalas.sort(key=lambda e: e.data_inicio)
+        dias = {t.data_turno for itens in repetidas.values() for t, _ in itens}
+        dono_por_dia = {
+            dia: getattr(vinculo_do_dia(cid, dia, escalas, celulas=celulas), "pk", None)
+            for dia in dias
+        }
+
+        for pk, itens in sorted(repetidas.items()):
+            pks.add(pk)
+            fechados = sum(t.entrada is not None and t.saida is not None for t, _ in itens)
+            if fechados == 0:
+                classe = "(i)_orfa"
+            elif fechados == len(itens):
+                classe = "(ii)_par_fechado"
+            else:
+                classe = "(i)+(ii)_mista"
+
+            donos = {dono_por_dia[t.data_turno] for t, _ in itens}
+            if len(donos - {None}) > 1:
+                vinculo = "diferente"
+            elif None in donos:
+                vinculo = "sem_vinculo"
+            else:
+                vinculo = "igual"
+            contagem[classe, vinculo] += 1
+
+            if len(exemplos) < 15 and pk not in exemplos:
+                instante = timezone.localtime(itens[0][1]).isoformat()
+                dias_turno = ",".join(sorted(t.data_turno.isoformat() for t, _ in itens))
+                exemplos[pk] = f"col{cid:03d} {pk} {instante} turnos=[{dias_turno}]"
+
+    total_batidas = sum(universo.values())
+    print(
+        f"competencia={mes:02d}/2026 janela={ini}..{fim} "
+        f"universo_colabs={len(universo)} universo_batidas={total_batidas} "
+        f"colabs_afetados={len(afetados)} pks_multiplas={len(pks)}"
+    )
+    for classe in CLASSES:
+        valores = " ".join(f"{v}={contagem[classe, v]}" for v in VINCULOS)
+        print(f"  classe={classe} {valores}")
+
+    return set(universo), total_batidas, afetados, pks
+
+
+def sondar():
+    exemplos = {}
+    with transaction.atomic(), connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+        cursor.execute("SELECT current_database(), current_schema()")
+        if cursor.fetchone() != ("sombra", "juliani"):
+            raise RuntimeError("A sonda exige o banco sombra e o schema juliani.")
+
+        universo_10, batidas_10, afetados_10, pks_10 = medir_competencia(10, exemplos)
+        universo_11, batidas_11, afetados_11, pks_11 = medir_competencia(11, exemplos)
+
+    print(
+        f"total universo_colabs={len(universo_10 | universo_11)} "
+        f"universo_batidas={batidas_10 + batidas_11} "
+        f"colabs_afetados={len(afetados_10 | afetados_11)} "
+        f"pks_multiplas={len(pks_10 | pks_11)}"
+    )
+    for exemplo in exemplos.values():
+        print(exemplo)
+    print("SONDA_FIM ok")
+
+
+sondar()
+```
+
+## 26/11 11:22 · sessao 2c7d729085fe · R1-SEM-DONO-2611 · leitura · origem=Code
+
+**Seis chaves auditadas, zero chaves com zeragem demonstrada por uma obra.** A sonda mostra os dois lados do delta nas seis chaves. O vínculo com o CSV dos 38 dias do R1 e a atribuição dos outros dias ficam **[nao verificado]**. A numeração abaixo começa na primeira linha do anexo `sonda.out`, incluindo a linha em branco. `sonda.out:1,3,30,50,64,87,105,135`
+
+## 1 e 2. Mecanismo demonstrado e obra dona
+
+Nas seis chaves, `selecionado` aponta para `minutos_realizados`. O espelho publica o total do juiz de turnos, e o E6 recebe só os instantes e soma pares por posição na data da primeira batida de cada trecho. O R1 deixa de listar diferenças de até 10 min, mesmo quando o delta aritmético é diferente de zero. `sonda.out:30,50,64,87,105,135` · [espelho.py:689](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/espelho.py:689) · [espelho.py:801](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/espelho.py:801) · [e6_oraculo.py:149](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/management/commands/e6_oraculo.py:149) · [e6_oraculo.py:362](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/management/commands/e6_oraculo.py:362) · [nucleo.py:235](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:235)
+
+| Chave | O que a sonda mostra | Obra dona e sítio da divergência |
+|---|---|---|
+| **col114 15/11** | **C, pausa posicional no E6.** `pares` deixa um vão de 59,54 min entre 15:05 e 16:05. As duas batidas internas têm tipos `E,S`, `papel_ata=null` e `intra_dur=true`. O juiz devolve `pausas=[]`, `fim_contado=18:17`, `janela_descontada=0` e 499 min. `delta_arredondado=-59`. `sonda.out:26,30,31` | **sem dono.** `_pares_marcados` exige autoridade da ata ou a sequência gravada `S→E` para esse par interno. O realizado fica com o vão inteiro. A obra de intervalo pré-assinalado muda o motor, e a ch​ave tem `intervalo_declarado=[null,null]`. [turnos.py:875](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:875) · [turnos.py:756](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:756) · [BACKLOG.md:2554](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2554) · `sonda.out:30` |
+| **col130 29/10** | **A + B + C.** O E6 soma dois `pares` em 29/10. O juiz, também em 29/10, tem `fim_contado=01:31` e desconta 60 min de 395. A batida de 07:06, que fecha o segundo par do E6, entra no juiz em 30/10 como `E`, `aberto=true` e vale 0. Repor os 60 deixa **+276,91 min**. `sonda.out:48,50,51,53` | **sem dono.** A diferença nasce do pareamento por posição do E6 contra o fechamento do juiz e a janela do realizado. O backlog cita **30/10** para a obra da saída de madrugada. Nessa foto, mover sozinho o turno aberto de 07:06 para 29/10 soma 0. O fechamento desse turno pela obra está **[nao verificado]**. [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [turnos.py:733](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:733) · [BACKLOG.md:2093](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2093) · `sonda.out:50–55` |
+| **col220 10/11** | **A + B + C.** O E6 usa `21:54→03:35` e `04:31→06:00`. No juiz, 03:35 tem `papel_ata=E` e fica interna, 04:31 é `fim_contado`, e 06:00 abre um turno de 0 min em 11/11. A janela tira 60 de 397. Repor os 60 deixa **+33,42 min**. `sonda.out:62,64,65,67` | **sem dono.** A divergência nasce do pareamento e da janela. A troca de dia na lavra alcança o período aberto de 06:00, cujo `minutos_trabalhados=0`. A janela de HE do motor atua em outro cálculo. [turnos.py:1310](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1310) · [turnos.py:756](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:756) · [dia_pago.py:126](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/dia_pago.py:126) · [motor_calculo_v2.py:1545](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/motor_calculo_v2.py:1545) · `sonda.out:68,69` |
+| **col874 22/10** | **B + A + C.** O E6 põe a batida de 10:00 de 22/10 no `dia_e6=21/10`, emparelhando duas `E`. Em 22/10 só soma `15:45→22:07`. O juiz usa `10:00→22:07`, com `janela_descontada=60`, chegando a 667. Repor os 60 amplia a diferença para **−344,18 min**. `sonda.out:75–78,83,84,87,88` | **sem dono.** A origem é o trecho que `minutos_do_oraculo` chaveia em 21/10 e soma por posição, combinado com a janela que o realizado tira em 22/10. Uma cura que apenas mude a chave do par de duas `E` preserva a geometria divergente. [nucleo.py:235](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:235) · [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [turnos.py:760](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:760) · `sonda.out:83,84,88` |
+| **col989 23/10** | **A + B.** O E6 forma `08:32→17:59`, de 567,37 min, entre dois cortes. No juiz, 08:32 fecha o turno de 22/10 e 17:59 abre o de 23/10, que fecha às 06:00 de 24/10 e soma 721 min. O `periodo_motor` do cartão de 23/10 tem as mesmas bordas do juiz. `sonda.out:100–108` | **sem dono.** A origem é o corte e o pareamento posicional do E6. Usar no piso o par observado do juiz daria 720,771 min e um delta de **−0,229 min**, dentro da faixa do R1. A adoção desse par pela obra do E6 nesta chave está **[nao verificado]**. [nucleo.py:215](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:215) · [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [GRADE-MESTRA.md:303](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/GRADE-MESTRA.md:303) · `sonda.out:105,106` |
+| **col996 10/11** | **A + B, com corte por vão no E6.** `fronteira_anterior` mostra vão de 858,92 min, gap de 326,03 min e quatro pontas. O E6 abre outro trecho e soma `21:16→06:59` na chave de 10/11. No juiz, 21:16 é uma `S` sem entrada e vale 0, e 06:59 é entrada em 11/11. A pausa diurna de 90 min sai dos dois lados. `sonda.out:130,131,135–139` | **sem dono.** O corte por vão e a soma por posição do E6 produzem o par de 583,49 min. Retirar esse par do piso deixaria **−0,107 min**, dentro da faixa do R1. O registro da obra do E6 inclui a família do corte por vão. A mudança que retira este par está **[nao verificado]**. [nucleo.py:215](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:215) · [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [BACKLOG.md:823](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:823) · [GRADE-MESTRA.md:303](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/GRADE-MESTRA.md:303) · `sonda.out:130,131,135` |
+
+**D, diferença entre o que soma e o que aparece nos cartões.** A sonda mostra `dia_cartao` diferente de `dia_mapa` em col130 e col220, ambos em períodos de 0 min. Em col996, a saída órfã também vale 0. A contribuição de D para qualquer dos seis deltas fica **[nao verificado]**. `sonda.out:55,69,137,141,142` · [espelho.py:465](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/espelho.py:465)
+
+**HJ-026.** `PAR-PELO-TURNO` muda a rejeição pelo teto `previsto + 4 h`. Os fechamentos observados e os turnos sem uma ponta da tabela não mostram essa rejeição como causa. O corte de 14 h observado em col996 vem do E6. [BACKLOG.md:2020](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2020) · [turnos.py:66](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:66) · [turnos.py:1447](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1447) · [nucleo.py:215](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:215) · `sonda.out:31,51,53,65,67,88,106,131,136,137`
+
+## 3. Dias ESTRUTURA que zeram por obra
+
+| Obra | Chaves que zera | Contagem comprovada |
+|---|---|---:|
+| Nenhuma estabelecida | Zeragem por obra **[nao verificado]** nas seis chaves. `sonda.out:30,50,64,87,105,135` | **0** |
+
+## 4. Linhas do quadro
+
+**Nenhuma entre as zeragens comprovadas.** O backlog vincula `PAR-PELO-TURNO` a **HJ-026** e descreve as mudanças de **NOTURNO-A** e **INTERVALO**, mas nenhuma dessas obras tem uma chave atribuída na tabela. A equivalência entre `ORACULO-E6-43-DEFEITOS` e a linha **oráculo 93** está **[nao verificado]**. [BACKLOG.md:1989](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:1989) · [BACKLOG.md:2020](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2020) · [BACKLOG.md:2554](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2554) · [GRADE-MESTRA.md:303](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/GRADE-MESTRA.md:303)
+
+## 26/11 11:21 · sessao ad3079f9cb3c · O30-F3-CONSTRUIR · construtor · origem=Code
+
+C6 implementada na cópia sobre `aa32babb3299b8dd53812225c4934d87fd8022ba`. [Base dos REDs](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:20)
+
+- **C6-1.** A cadeia `A → B → C` recebe 404 no drawer, na entrega do anexo, na aprovação, na rejeição e na lista. A lista devolve 404 se a cadeia estiver no resultado. Para vínculos válidos, o template recebe a raiz da view. O selo AST derruba a reintrodução de `documento_referencia or` em uma view. [Resolvedor](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:291) · [Lista](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2347) · [Template](/home/ronald/wt-codex-o30-f3-construir-010143/app/templates/ponto/ausencias.html:168) · [Teste e selo](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:399) [nao verificado]
+- **C6-2.** Uma guarda, chamada na criação com referência, no anexo e na reabertura, protege o arquivo existente se a raiz ou qualquer filha estiver aprovada ou rejeitada. O RED reproduz a filha aberta tentando substituir o arquivo de uma raiz rejeitada. [Guarda](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:327) · [Casos de substituição](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:574)
+- **C6-3.** O dry-run chama `derivar_data_fim`, assim como `rederivar_fim`. Ao trocar o retorno do derivador no teste, a c5 ainda imprime `07/09/2026` e a c6 imprime `13/09/2026`. [Prévia](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/management/commands/curar_ausencia_sem_fim.py:37) · [Aplicação](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1939) · [Teste](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:629) [nao verificado]
+
+**Verificação local.** Os REDs contra c5 deram **8, 6 e 1 falhas por asserção**, respectivamente. O GREEN passou **55 testes sem banco**. Os 12 mutantes C6 e os dois seletores históricos ajustados deram `FAIL` por asserção, `rc=1`, zero `ERROR`. O `diff --check` passou. Contagem AST nos Python alterados, incluindo testes e runner: `except` 81 → 81 e `suppress` 0 → 0. [REDs](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:93) · [Mutantes](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:267) · [Tratamento HTTP](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2837) [nao verificado]
+
+**Diff e comandos**, a partir de `app/`. [Runner](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:424)
+
+```bash
+git --no-optional-locks diff aa32babb3299b8dd53812225c4934d87fd8022ba -- .
+git --no-optional-locks diff --check aa32babb3299b8dd53812225c4934d87fd8022ba -- .
+
+export PYTHONDONTWRITEBYTECODE=1
+python3 -m ponto.tests.mutantes_atestado_f3 red_c5_c6_1
+python3 -m ponto.tests.mutantes_atestado_f3 red_c5_c6_2
+python3 -m ponto.tests.mutantes_atestado_f3 red_c5_c6_3
+python3 -m unittest -q ponto.tests.test_atestado_f3_contrato
+
+python3 -m ponto.tests.mutantes_atestado_f3 c6_view_reintroduz_or
+python3 -m ponto.tests.mutantes_atestado_f3 c6_servir_pula_validacao
+python3 -m ponto.tests.mutantes_atestado_f3 c6_lista_pula_validacao
+python3 -m ponto.tests.mutantes_atestado_f3 c6_rejeitar_reintroduz_or
+python3 -m ponto.tests.mutantes_atestado_f3 c6_aprovar_reintroduz_or
+python3 -m ponto.tests.mutantes_atestado_f3 c6_template_le_elo
+python3 -m ponto.tests.mutantes_atestado_f3 c6_anexo_raiz_so_aprovada
+python3 -m ponto.tests.mutantes_atestado_f3 c6_anexo_ignora_irmas
+python3 -m ponto.tests.mutantes_atestado_f3 c6_anexo_libera_na_raiz
+python3 -m ponto.tests.mutantes_atestado_f3 c6_reabrir_pula_guarda
+python3 -m ponto.tests.mutantes_atestado_f3 c6_insert_pula_guarda
+python3 -m ponto.tests.mutantes_atestado_f3 c6_previa_formula_propria
+python3 -m ponto.tests.mutantes_atestado_f3 filha_substitui_aprovado
+python3 -m ponto.tests.mutantes_atestado_f3 d2_so_linha_pedida
+```
+
+**Fora da volta.** De acordo com a exclusão da janela K6 × exportação, dos relógios residuais e do `elif` e da ordem do `Ausencia.save`. A gravação c5 continua entregando o fim conferido ao `Ausencia.save`. [K6 e gravação](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1949) · [Exportação](/home/ronald/wt-codex-o30-f3-construir-010143/app/folha/models.py:174) · [Relógio da projeção](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:191) · [Modelo](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/models.py:892)
+
+Produção, efeito financeiro real, renderização com Django e suíte com banco [nao verificado]. Certificação a cargo do Code e do Opus final. [nao verificado]
 
 ## 26/11 11:18 · sessao 6e7da3f50006 · CLEAR-NAO-PARA-A-NOITE · verificador · origem=Code
 
@@ -1922,285 +2119,4 @@ Na cópia, `CORTES.md:462` e `:473` são de **27/10**. O corte **JUSTIFICATIVA-C
 
 A identidade da cópia com o hash informado e os valores efetivamente emitidos em TXT entregue ficam [nao verificado].
 
-## 26/11 10:41 · sessao e840e4e72b81 · CLEAR-NAO-PARA-A-NOITE · verificador · origem=Code
-
-Os cinco arquivos da cópia conferem com os hashes de conteúdo do lado novo do diff. A identidade Git de `HEAD` e do pai, a execução integral dos selos e o comportamento em produção ficam **[nao verificado]**. Conferi a sintaxe dos dois selos e reproduzi em memória os contraexemplos de handoff repetido, retorno com handoff antigo, fallback de CLEAR e contador com linha truncada. O selo integral cria e apaga arquivos. `bin/tests/test_orcamento_contexto.sh:32`, `bin/tests/test_orcamento_contexto.sh:611`, `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1250`, `bin/disjuntor.py:2121`.
-
-## Achados da v1.r
-
-| Achado | O que a volta 2 resolve |
-|---|---|
-| Janela de 23:00 a 08:00 ou 30 min sem resposta | **Em parte.** A janela continua incluindo 23:00 e excluindo 08:00, agora com selo nas quatro bordas. De dia continua exigindo **mais de** 30 min desde a fala selecionada, sem verificar se ela responde a uma pergunta. `bin/orcamento_contexto.py:89`, `bin/orcamento_contexto.py:113`, `bin/tests/test_orcamento_contexto.sh:516`. |
-| Disparo diurno atravessava a entrada da noite em silêncio | **Resolve o caminho apontado.** Com topo neutro e sem handoff elegível, há anúncio próprio uma vez. Com handoff elegível, sai o recado de fim de marco. Com `PAREI` no topo ou DIFF/apply detectado, esses ramos têm prioridade. O AVISO efetivamente escrito no RELATO fica **[nao verificado]**. `bin/hook_stop_fila1.py:1082`, `bin/hook_stop_fila1.py:1101`, `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1118`. |
-| Instrução de handoff faltava nas entradas tardias e só havia um recado de fim de marco | **Em parte.** As entradas agora pedem o handoff e o recado se repete a cada `mtime` elegível. O hook usa o `mtime` do arquivo como prova de marco, inclusive quando o mesmo arquivo ainda satisfaz o corte. `bin/hook_stop_fila1.py:929`, `bin/hook_stop_fila1.py:1070`, `bin/hook_stop_fila1.py:1106`, `bin/hook_stop_fila1.py:1110`. |
-| Troca de `PAREI` e fim de marco passavam antes da guarda de DIFF/apply | **Em parte.** A guarda agora precede os dois. Com a trava detectada, há um `siga` próprio para concluir o ato, que também carrega a instrução de handoff e AVISO. A sondagem libera a trava antes da decisão e da emissão. `bin/hook_stop_fila1.py:1089`, `bin/hook_stop_fila1.py:1096`, `bin/disjuntor.py:410`, `bin/hook_stop_fila1.py:1439`. |
-| Retorno diurno perdia novo pedido por causa de `fim_visto` e herdava o tempo de espera | **Em parte.** O retorno limpa `fim_visto` e `clear_parei_desde`, e com topo neutro um handoff elegível volta a provocar o pedido. O caminho direto de `PAREI` pode reaproveitar handoff diurno, e uma leitura inconclusiva também dispara a transição de volta. `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1131`, `bin/hook_stop_fila1.py:1161`, `bin/hook_stop_fila1.py:1184`, `bin/orcamento_contexto.py:95`. |
-| Dois classificadores de fala e duas aberturas da trilha do orçamento no mesmo laço | **Resolve.** ESCADA e janela usam `ultima_fala`. `ATENDIDO` e `CLEAR-NOITE` são lidos na mesma abertura em `disjuntor.ler`. A ESCADA passa a aceitar `enqueue` como entrada, inclusive se houver `remove` posterior. `bin/disjuntor.py:1342`, `bin/disjuntor.py:1394`, `bin/disjuntor.py:1409`, `bin/orcamento_contexto.py:105`, `bin/disjuntor.py:2115`. |
-| Classificação das linhas de transcript | **Em parte.** Slash e eco bash iniciados por `<`, `enqueue` vazio e `enqueue` de sidechain ficam excluídos. Imagem sem texto e resposta representada por `tool_result` ainda ficam excluídas. Um `enqueue` válido seguido de `remove` continua valendo por regra explícita. O formato real dessas entradas fica **[nao verificado]**. `bin/disjuntor.py:1342`, `bin/disjuntor.py:1348`, `bin/disjuntor.py:1355`, `bin/disjuntor.py:1360`, `bin/tests/fixtures/orcamento_transcript.jsonl:1`. |
-| Transcript ilegível ou sem instante e contenção de exceções | **Em parte.** `OSError` e última fala reconhecida sem instante dão `None` de dia. JSON truncado ainda é pulado e pode deixar uma fala antiga decidir a ausência. A janela horária ainda decide antes de ler o arquivo. `bin/orcamento_contexto.py:99`, `bin/orcamento_contexto.py:106`, `bin/disjuntor.py:1376`, `bin/hook_stop_fila1.py:1234`. |
-| Zero ambíguo, futuro aceito e rótulo do contador | **Em parte.** `OSError` e data inválida numa linha reconhecida agora renderizam `nao sei`, o futuro é excluído e o rótulo diz “recados”. Linha curta ou com o evento fora da terceira coluna ainda pode virar zero. A trilha ainda grava hora local sem offset, interpretada como local pelo leitor. O fuso efetivo dos processos em produção fica **[nao verificado]**. `bin/disjuntor.py:2121`, `bin/disjuntor.py:2134`, `bin/disjuntor.py:2153`, `bin/disjuntor.py:2421`, `bin/hook_stop_fila1.py:887`. |
-| Selo aceitava dia vazio, `siga` repetido e 08:00 dentro da noite | **Resolve esses três buracos.** O caso diurno exige a frase inteira, o caso `PAREI` exige o `ALLOW` comum no segundo Stop e o caso de borda exige `None` às 08:00 com fala recente. `test_disjuntor.sh` agora acrescenta fala recente e fixa a hora para os casos diurnos. Outras lacunas do selo constam abaixo. `bin/tests/test_orcamento_contexto.sh:519`, `bin/tests/test_orcamento_contexto.sh:529`, `bin/tests/test_orcamento_contexto.sh:598`, `bin/tests/test_disjuntor.sh:87`. |
-| Registro no 7b, `PROMPTS.md` e config | **Não resolve a entrega documental.** O 7b da cópia contém a regra geral anterior e `PROMPTS.md` termina sem o registro deste aval. O diff fornecido preserva a config, que já chama o handoff no `PreCompact`. `CLAUDE.md:343`, `app/docs/PROMPTS.md:3005`, `.claude/settings.json:14`, `.claude/settings.json:25`. |
-
-## 1. Escritores, leitores e ESMERIL-SEMÂNTICA
-
-O escritor em operação é `_orcamento_travado`, no Stop. Ele roda sob a trava do estado, salva por `os.replace` e depois apenda os eventos. O disjuntor lê `ultima_medida` do mesmo JSON, sem consumir esses campos. Os selos semeiam `clear_parei_desde` diretamente para simular espera. `bin/hook_stop_fila1.py:903`, `bin/hook_stop_fila1.py:972`, `bin/disjuntor.py:2165`, `bin/tests/test_orcamento_contexto.sh:197`, `bin/tests/test_disjuntor.sh:212`.
-
-| Campo | Escrita, leitura e significado |
-|---|---|
-| `noite` | O Stop grava `True` ao armar ou processar disparo na janela. Lê na saída da janela. Marca que o disparo esteve na conduta sem Ronald, por horário ou ausência. `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1087`, `bin/hook_stop_fila1.py:1222`. |
-| `noite_anunciada` | O Stop grava no disparo noturno, no fim de marco ou no anúncio de entrada. Lê para suprimir o anúncio de entrada. É um registro de recado emitido por esses ramos. A troca de `PAREI` e o aviso de DIFF também carregam a instrução e deixam o campo intacto. `bin/hook_stop_fila1.py:1093`, `bin/hook_stop_fila1.py:1103`, `bin/hook_stop_fila1.py:1112`, `bin/hook_stop_fila1.py:1118`, `bin/hook_stop_fila1.py:1222`. |
-| `noite_clear_visto` | O ramo de `PAREI` noturno lê e grava `True` ao **pedir** a troca. Suprime outro pedido no mesmo trecho noturno, mesmo se o topo mudar e depois voltar a `PAREI`. `bin/hook_stop_fila1.py:1077`, `bin/hook_stop_fila1.py:1101`. |
-| `adiado_noite` | O ramo DIFF lê e grava a string do motivo para suprimir repetição. Apaga na primeira observação fora desse ramo. A string identifica o motivo, sem identificar o ato que tomou a trava. `bin/hook_stop_fila1.py:1089`, `bin/hook_stop_fila1.py:1092`, `bin/hook_stop_fila1.py:1100`. |
-| `fim_visto` | O ramo diurno lê e grava `True` quando **pede** `PAREI` após handoff elegível. A flag prova emissão do pedido. `bin/hook_stop_fila1.py:1184`. |
-| `fim_dia_em` | O ramo diurno grava o epoch `agora` junto com `fim_visto`. A noite lê no corte de handoff e a volta incorpora em `handoff_min`. É o instante do Stop que pediu a linha. O caminho diurno que recebe o par diretamente libera sem gravá-lo. `bin/hook_stop_fila1.py:1076`, `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1161`, `bin/hook_stop_fila1.py:1186`. |
-| `handoff_min` | A noite e o adiamento diurno gravam `agora`. A volta grava o máximo com `fim_dia_em`. Os leitores são fim noturno, par diurno e fim diurno. A unidade continua epoch em segundos, com limite inferior inclusivo sobre `st_mtime`. As escritas usam o instante dos Stops. `bin/hook_stop_fila1.py:929`, `bin/hook_stop_fila1.py:1076`, `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1131`, `bin/hook_stop_fila1.py:1147`, `bin/hook_stop_fila1.py:1184`. |
-| `clear_parei_desde` | O ramo diurno grava o primeiro Stop com o par apto a liberar e zera em adiamento. O mesmo ramo lê para expirar e o fechamento do ciclo lê para medir o clear. O sentido é o início da espera válida pelo `/clear`. `bin/hook_stop_fila1.py:1032`, `bin/hook_stop_fila1.py:1129`, `bin/hook_stop_fila1.py:1147`, `bin/hook_stop_fila1.py:1161`. |
-| `sem_handoff_visto` | O ramo diurno lê e grava ao emitir a primeira cobrança de handoff para `PAREI` sem o par. Marca a cobrança emitida. `bin/hook_stop_fila1.py:1131`, `bin/hook_stop_fila1.py:1135`. |
-| `adiado` | O ramo diurno lê e grava o motivo textual da guarda, DIFF/apply ou agente de fundo, para suprimir recado repetido pelo mesmo motivo. `bin/hook_stop_fila1.py:936`, `bin/hook_stop_fila1.py:1145`. |
-
-Na volta, o Stop remove todos esses campos salvo `handoff_min`, que atualiza. O marco novo descarta o disparo inteiro. As unidades dos campos de tempo são coerentes. As ambiguidades procedentes são usar o instante do pedido como testemunha do handoff consumido, usar `mtime` como identidade de marco e tratar o `None` de presença **ou** leitura inconclusiva como “Ronald presente de novo”. `bin/hook_stop_fila1.py:1046`, `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1186`, `bin/orcamento_contexto.py:95`.
-
-## 2. Juízes em `bin/`
-
-Há um classificador de fala, `disjuntor._fala_do_ronald`, e um juiz de janela, `orcamento_contexto.janela_sem_ronald`. Os outros leitores de `type == 'user'` encontrados usam a linha para identificar o prompt inicial do verificador B3 ou o comando `/clear` para o piso. O leitor de `queue-operation` para fala é o classificador compartilhado. `bin/disjuntor.py:649`, `bin/disjuntor.py:1342`, `bin/disjuntor.py:1350`, `bin/orcamento_contexto.py:95`, `bin/orcamento_contexto.py:289`.
-
-A centralização mudou dois critérios da janela. A cauda cai de 4 MiB para 2.000.000 bytes e “última” passa do maior timestamp para a última fala na ordem do arquivo. Em memória, uma linha de 1 min atrás seguida no arquivo por outra de 40 min abriu ausência. O próprio selo também contém o `user` sintético `Async agent launched successfully...`, que o leitor de agentes identifica como retorno do harness e o juiz de fala aceita como texto. Sem timestamp, essa entrada sobrepõe a fala anterior e dá `None` na janela diurna. Ocorrência desses formatos em produção **[nao verificado]**. `bin/orcamento_contexto.py:65`, `bin/disjuntor.py:469`, `bin/disjuntor.py:1352`, `bin/disjuntor.py:1370`, `bin/disjuntor.py:1376`, `bin/orcamento_contexto.py:111`, `bin/tests/test_disjuntor.sh:235`.
-
-## 3. Repetição, trava e liberação
-
-- **Repetição confirmada para o mesmo handoff.** O Stop aceita `mtime >= corte` e grava o seu próprio `agora` como próximo corte. Um `mtime` igual ao corte pode ser aceito de novo. Um `mtime` no futuro gerou dois `siga` consecutivos em memória, sem escrita nova de handoff. O cursor avançou nos dois Stops, mas o marco e o recado eram os mesmos. `bin/hook_stop_fila1.py:929`, `bin/hook_stop_fila1.py:999`, `bin/hook_stop_fila1.py:1110`.
-- **Sai `siga` com `sombra.lock` tomada.** É o recado específico para concluir o ato em curso. Ele proíbe abrir outro DIFF/apply e inclui instrução de handoff e AVISO. Há também uma corrida para o recado normal, pois a guarda solta o `flock` compartilhado antes de salvar e imprimir. `bin/hook_stop_fila1.py:1070`, `bin/hook_stop_fila1.py:1091`, `bin/hook_stop_fila1.py:1114`, `bin/disjuntor.py:421`, `bin/hook_stop_fila1.py:1439`.
-- **O Stop pode encerrar de noite.** Quando o orçamento retorna `None`, o fluxo comum pode dar `ALLOW` silencioso. O ramo noturno normal não dá `CLEAR-LIBERA`. Já o fallback de exceção dá `CLEAR-LIBERA` com `PAREI`, handoff recente e guarda livre, sem consultar a janela. Reproduzi esse fallback em memória. `bin/hook_stop_fila1.py:132`, `bin/hook_stop_fila1.py:1125`, `bin/hook_stop_fila1.py:1234`, `bin/hook_stop_fila1.py:1250`, `bin/hook_stop_fila1.py:1436`, `bin/hook_stop_fila1.py:1480`.
-
-## 4. Transições e aval
-
-| Transição | Saída e aderência |
-|---|---|
-| Dia → noite, disparo ativo e topo neutro | **Atende no fluxo nominal.** Sem handoff elegível, um `siga` pede handoff e AVISO. Com handoff elegível, o recado assume fim de marco. Depois, sem novidade, segue o caminho comum. `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1118`, `bin/hook_stop_fila1.py:1480`. |
-| Noite → dia, retorno | **Parcial.** Registra `CLEAR-VOLTA`, limpa as marcas anteriores e, com topo neutro, volta a pedir `PAREI` quando o handoff é elegível. O corte usa os Stops anteriores, portanto um handoff anterior à fala de retorno pode qualificar. Transcript inconclusivo também aciona a volta. Uma fala dentro de 23:00–08:00 mantém a regra horária. `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1184`, `bin/orcamento_contexto.py:95`. |
-| DIFF/apply começa e acaba de noite | **Parcial.** Se o Stop observa a trava tomada, sai um `siga` de conclusão e os seguintes caem no fluxo comum enquanto o motivo persiste. Ao observar a trava livre, apaga `adiado_noite` e reavalia topo, handoff e anúncio. Dois atos separados por uma folga que nenhum Stop observou compartilham a supressão. A corrida da sondagem impede garantir a ordem até a emissão. `bin/hook_stop_fila1.py:1089`, `bin/hook_stop_fila1.py:1100`, `bin/disjuntor.py:421`. |
-| `PAREI` de dia atravessa para a noite | **Parcial.** Com a guarda livre, sai `siga` pedindo a troca por AVISO. Reproduzi em memória a sequência em que o par já havia liberado de dia pela rota direta, sem `fim_dia_em`. Após a troca, o mesmo handoff produziu um falso fim de marco noturno. Se o `PAREI` persistir até a volta, o mesmo par pode liberar de dia novamente. `bin/hook_stop_fila1.py:1076`, `bin/hook_stop_fila1.py:1101`, `bin/hook_stop_fila1.py:1110`, `bin/hook_stop_fila1.py:1131`, `bin/hook_stop_fila1.py:1161`. |
-| Disparo pendente entra à noite | **Atende quando os impedimentos cessam.** Com DIFF/apply ou outro impedimento reconhecido, mantém `PENDENTE`. No primeiro Stop elegível, pode armar mesmo com a medida abaixo do limiar e sai `siga` de AVISO, handoff e fila. `bin/hook_stop_fila1.py:1194`, `bin/hook_stop_fila1.py:1205`, `bin/hook_stop_fila1.py:1218`. |
-| Marco de `/clear` novo à noite | **Fecha o ciclo antigo.** A classificação `ATENDIDO` ou `SEGUIU` ocorre antes da janela. Se carregou `clear_parei_desde` de dia, o intervalo inclui o tempo noturno e pode registrar clear tardio. Com novo gatilho elegível, arma outro ciclo noturno no mesmo Stop. Sem gatilho, segue o fluxo comum. O registro comprova que o hook observou o marco. A execução do handoff antes do ato fica **[nao verificado]**. `bin/hook_stop_fila1.py:1025`, `bin/hook_stop_fila1.py:1059`, `bin/hook_stop_fila1.py:1198`, `bin/hook_stop_fila1.py:1221`. |
-
-## 5. `disjuntor.ler`
-
-- **`nao sei` é parcial.** `OSError` e uma linha reconhecida como `CLEAR-NOITE` com data inválida viram `None`. `lixo hora CLEAR-NOITE`, com três palavras, é descartada antes da validação e deu `0` na sonda em memória. Uma trilha existente e legível sem eventos na janela também dá zero. `FileNotFoundError` indica caminho ausente no momento da leitura, inclusive se a trilha tiver sido removida. `bin/disjuntor.py:2113`, `bin/disjuntor.py:2121`, `bin/disjuntor.py:2153`, `bin/disjuntor.py:2422`.
-- **Há teto superior.** A janela implementada é `[agora − 86400, agora]`. O código inclui a borda inferior que o comentário descreve como exclusiva. `bin/disjuntor.py:2105`, `bin/disjuntor.py:2111`, `bin/disjuntor.py:2132`.
-- **A `TRILHA` principal preserva os filtros e contagens para arquivo estável**, inclusive o tratamento de erro e a aceitação de linhas futuras. A mudança unifica as quatro leituras desse laço. O censo ainda abre `TRILHA` separadamente para outra medida. `bin/disjuntor.py:2115`, `bin/disjuntor.py:2124`, `bin/disjuntor.py:2136`, `bin/disjuntor.py:2155`, `bin/disjuntor.py:2237`.
-
-## 6. Mordida do selo, seção 7
-
-| Caso | O que derruba e o que ainda passa |
-|---|---|
-| **(a) Fala e janela** | Derruba rejeitar `enqueue` válido e incluir 08:00 na noite. Uma cópia do juiz com outro nome e os mesmos resultados passa. A fala digitada da amostra fica atrás do `enqueue`. `bin/tests/test_orcamento_contexto.sh:494`, `bin/tests/test_orcamento_contexto.sh:497`, `bin/tests/test_orcamento_contexto.sh:509`, `bin/tests/test_orcamento_contexto.sh:519`. |
-| **(b) Dia** | Derruba saída vazia, frase alterada e evento `CLEAR-NOITE` diurno. O zero numérico do contador fica sem medição neste caso. `bin/tests/test_orcamento_contexto.sh:529`, `bin/tests/test_orcamento_contexto.sh:542`. |
-| **(c) Disparo e contador** | Derruba remover o handoff da mensagem, contar o futuro ou transformar em número o erro de leitura amostrado. Remover o corte inferior ou ignorar a linha truncada de três palavras passa. `bin/tests/test_orcamento_contexto.sh:534`, `bin/tests/test_orcamento_contexto.sh:549`, `bin/disjuntor.py:2121`. |
-| **(d) Marcos e volta** | Derruba perder um dos dois recados ou repetir no Stop intermediário da amostra. Passa reaproveitar um mesmo `mtime` futuro. O assert da volta também aceita a mensagem diurna sem o `PAREI` no sufixo, pois confere só o prefixo. `bin/tests/test_orcamento_contexto.sh:560`, `bin/tests/test_orcamento_contexto.sh:573`. |
-| **(d2) Dia → noite → dia** | Derruba silêncio de entrada, anúncio repetido e `fim_visto` antigo impedindo a volta com handoff novo. Remover o AVISO do fim do anúncio ainda passa pelo prefixo exigido. `bin/tests/test_orcamento_contexto.sh:576`, `bin/tests/test_orcamento_contexto.sh:584`. |
-| **(g) DIFF/apply** | Derruba troca de `PAREI` sob trava e repetição do recado de DIFF. Um mutante que aplica a guarda noturna **só se `_eh_clear(linha)`** passa, pois o teste sempre põe `PAREI` no topo durante a trava. Com topo neutro e handoff elegível, esse mutante dá `siga` de fim de marco sob trava. `bin/tests/test_orcamento_contexto.sh:586`, `bin/tests/test_orcamento_contexto.sh:596`, `bin/hook_stop_fila1.py:1091`, `bin/hook_stop_fila1.py:1110`. |
-| **(e) `PAREI` noturno** | O mutante `if True` chega ao hook selecionado por `local H` e cai no passo 2 se repetir a troca. O caso não exercita o fallback de exceção nem o `PAREI` reaparecendo após topo neutro. O `siga-aviso` do selo vem do `ALLOW` na trilha. `bin/tests/test_orcamento_contexto.sh:112`, `bin/tests/test_orcamento_contexto.sh:598`, `bin/tests/test_orcamento_contexto.sh:614`, `bin/tests/_saida_do_stop.sh:13`, `bin/hook_stop_fila1.py:1250`. |
-| **(f) Ausência de dia** | Derruba remover a ausência diurna ou usar a última linha do assistente como fala. A troca de `>` por `>=` no limiar de 30 min passa pelos valores amostrados. `bin/tests/test_orcamento_contexto.sh:513`, `bin/tests/test_orcamento_contexto.sh:623`, `bin/orcamento_contexto.py:113`. |
-
-## 7. Classes de reprovação
-
-**Procedem** mordida incompleta do selo, ambiguidade na transição de retorno e prova insuficiente do pré-requisito de handoff. A ordem local da guarda melhorou, mas a trava de DIFF/apply fica livre entre sondagem e emissão. Pouso ou deploy efetivo **[nao verificado]**. `bin/tests/test_orcamento_contexto.sh:586`, `bin/hook_stop_fila1.py:1071`, `bin/hook_stop_fila1.py:1110`, `bin/disjuntor.py:421`, `bin/hook_stop_fila1.py:1439`.
-
-**Não procedem no diff** segundo juiz registrado, segundo escritor dos campos fora da porta ou relógio novo fora da borda. A derivação paralela da fala e a abertura duplicada de `orcamento.log` dentro de `disjuntor.ler` foram removidas. O timestamp do append co
-
-[truncado em 20000 de 21557 caracteres]
-
-## 26/11 10:40 · sessao 03ce12260be3 · O327 · leitura · origem=Code
-
-```sh
-#!/bin/sh
-# Executar na raiz da copia. Entrada do manage.py em app/manage.py:7–18.
-# Execucao na sombra e correspondencia com as 93 recusas do relato [nao verificado].
-cd app || exit 1
-
-exec python -B -c '
-import logging
-import os
-import sys
-from collections import Counter
-from contextlib import ExitStack
-from unittest.mock import patch
-
-
-def sonda():
-    from django.conf import settings
-    from django.db import connection, transaction
-    from django_tenants.utils import schema_context
-    from ponto.calculador import alimentacao
-    from ponto.services import dia_pago, fechamento
-
-    mes, ano = 11, 2026
-    # Banco e host literais em app/config/settings/sombra.py:29,47–51,60.
-    # Schema juliani em app/config/settings/sombra.py:13–14.
-    assert settings.HASNER_SOMBRA is True
-    assert connection.settings_dict["NAME"] == "sombra"
-    assert connection.settings_dict["HOST"] == "sombra_db"
-    assert (mes, ano) not in fechamento.GUARDA_COMPETENCIA  # app/ponto/services/fechamento.py:36–50,578–595
-
-    codigo_rubricas = alimentacao.rubricas_por_dia.__code__
-    observadas = {}
-    visitas = Counter()
-    linhas = []
-
-    def observar_rubricas(frame, evento, retorno):
-        if evento != "return" or frame.f_code is not codigo_rubricas or not isinstance(retorno, dict):
-            return
-
-        locais = frame.f_locals
-        pk = locais["c"].pk
-        visitas[pk] += 1
-
-        # Le os itens e bloqueios da chamada real. app/ponto/calculador/alimentacao.py:449,467–475,514–533
-        inicio, fim = locais["ini"], locais["fim"]
-        itens = locais["_itens"]
-        n_minutos = len(locais["v"].minutos)
-        bloqueados_na_janela = locais["_bloq"]
-        bloqueados_publicados = {
-            item["dia"]
-            for item in (getattr(locais["resultado"], "dias_sem_previsto_fora_da_janela", None) or ())
-            if item.get("dia") is not None
-        }
-        n_adicionados = len(itens) - n_minutos
-
-        # 0 = com rubricas, sem bloqueado acrescentado aos itens
-        # 1 = itens vazios: v.minutos vazio e zero bloqueados na janela
-        # 2 = itens presentes, todos fora da janela
-        # 3 = com rubricas e pelo menos um bloqueado acrescentado aos itens
-        if retorno:
-            ramo = 3 if n_adicionados else 0
-        else:
-            ramo = 2 if itens else 1
-
-        dias = (
-            (fim - inicio).days + 1 - len(retorno),
-            len(retorno),
-            n_minutos,
-            len(itens) - len(retorno),
-            len(bloqueados_na_janela),
-            len(bloqueados_publicados - bloqueados_na_janela),
-            n_adicionados,
-        )
-        observadas[pk] = (retorno, ramo, dias)
-
-    def interceptar_lavra(colab, mes_lavra, ano_lavra, *, versao, rubricas=None, **dados):
-        # Intercepta as duas chamadas. app/ponto/services/fechamento.py:1223–1261,1301–1320
-        if versao == "motor":
-            return 0
-
-        assert versao == "oraculo" and (mes_lavra, ano_lavra) == (mes, ano)
-        retorno, ramo, dias = observadas[colab.pk]
-        assert rubricas is retorno
-
-        # Avalia a guarda pura com os quatro mapas recebidos.
-        # app/ponto/services/dia_pago.py:50–76,135–141,312–321
-        sem_dono = set()
-        if rubricas is not None:
-            donos = dia_pago._DONOS_DECLARADOS(
-                rubricas,
-                dados["faltas_por_dia"],
-                dados["abono_por_dia"],
-                dados["previsto_por_dia"],
-                dados["realizado_por_dia"],
-                dados.get("do_motor", ()),
-            )
-            sem_dono = set(dia_pago.CAMPOS_DIA) - donos
-
-        linhas.append((colab.pk, ramo, len(sem_dono), dias))
-        return 0
-
-    with schema_context("juliani"), transaction.atomic():
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-            cursor.execute("SELECT current_database(), current_schema()")
-            assert cursor.fetchone() == ("sombra", "juliani")
-
-        # app/ponto/services/fechamento.py:448–465
-        universo = set(fechamento.universo_da_competencia(mes, ano).values_list("pk", flat=True))
-        assert universo
-
-        with ExitStack() as controles:
-            controles.enter_context(patch.object(dia_pago, "lavrar", new=interceptar_lavra))
-            controles.callback(sys.setprofile, sys.getprofile())
-            sys.setprofile(observar_rubricas)
-            # O fechamento monta os insumos e chama rubricas_por_dia.
-            # app/ponto/services/fechamento.py:896–921,1152–1168,1215–1225,1289–1300
-            leitura = fechamento.recalcular_fechamento_mes(
-                mes, ano, somente_leitura=True, lavrar_dias_pagos=True,
-            )
-
-        assert set(leitura) == universo
-        assert visitas == Counter({pk: 1 for pk in universo})
-        assert len(linhas) == len(universo)
-        assert {pk for pk, _, _, _ in linhas} == universo
-
-    # colNNN usa o PK, conforme a convencao de app/ponto/management/commands/censo_fase_12x36.py:263.
-    # Linha individual: colNNN ramo campos_sem_dono, seguida das sete contagens de dias.
-    # Dias: sem rubrica na janela, com rubrica, em v.minutos, itens fora da janela,
-    # bloqueados na janela, bloqueados fora da janela, bloqueados acrescentados aos itens.
-    for pk, ramo, campos, dias in sorted(linhas):
-        print(f"col{pk:03d}", ramo, campos, *dias)
-
-    # Total: 0 universo processados recusados recusados_com_11_campos.
-    print(0, len(universo), len(linhas),
-          sum(campos > 0 for _, _, campos, _ in linhas),
-          sum(campos == 11 for _, _, campos, _ in linhas))
-
-    # Por ramo: 1 ramo colaboradores recusados recusados_com_11_campos,
-    # seguido das somas das sete contagens de dias na mesma ordem.
-    for ramo in range(4):
-        grupo = [(campos, dias) for _, r, campos, dias in linhas if r == ramo]
-        print(1, ramo, len(grupo),
-              sum(campos > 0 for campos, _ in grupo),
-              sum(campos == 11 for campos, _ in grupo),
-              *(sum(dias[i] for _, dias in grupo) for i in range(7)))
-
-
-# Evita a criacao do diretorio e a abertura dos arquivos de log no bootstrap.
-# app/config/settings/sombra.py:27 e app/config/settings/saas.py:118–119,136–143,160–167
-os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.sombra"
-logging.disable(sys.maxsize)
-with patch.object(os, "makedirs"):
-    from config.settings import sombra
-sombra.LOGGING_CONFIG = None
-
-from manage import main
-
-sys.argv = [
-    "manage.py", "shell", "--settings=config.settings.sombra",
-    "--no-imports", "--verbosity=0",
-    "--command=from __main__ import sonda\nsonda()",
-]
-main()
-'
-```
-
-## 26/11 10:39 · sessao b12082e302b7 · - · - · origem=Ronald (tmux)
-
-A seção 7 corrige a mordida contra 08:00 inclusivo, saída diurna vazia e repetição da troca de `PAREI` pela mutação `if True`. O último caso testa o arquivo mutado porque a variável local `H` fica visível à chamada de `_roda` pelo escopo dinâmico do Bash. O teste final de liberação diurna reutiliza a árvore do mutante e chama o hook original. `bin/tests/test_orcamento_contexto.sh:112`, `:519`, `:529`, `:598`, `:617`, `:620`.
-
-| Caso | Mordida e lacuna |
-|---|---|
-| (a) | Cobra `enqueue` válido, filtros, arquivo ausente e limites horários. Rejeitar todo `user` cujo conteúdo seja lista passa, pois a lista da fixture contém `tool_result` e é negativa. Um juiz duplicado sob outro nome também passa se produzir os mesmos resultados no exemplo. `bin/tests/test_orcamento_contexto.sh:494`, `:497`, `:502`, `:509`, `:519`. |
-| (b) | Compara o recado diurno inteiro e a ausência de `CLEAR-NOITE`. O zero numérico diurno ainda fica sem assert. `bin/tests/test_orcamento_contexto.sh:529`, `:532`, `:541`. |
-| (c) | Exige handoff, AVISO, evento, contagem, teto futuro, `None` com erro de abertura e timestamp inválido em linha com quatro tokens. Passa remover o corte inferior ou devolver zero para linha truncada com três tokens. `bin/tests/test_orcamento_contexto.sh:534`, `:549`, `:553`, `:555`, `bin/disjuntor.py:2121`. |
-| (d) | Cobra dois marcos noturnos separados por um ALLOW comum, o evento de volta e a reabertura diurna. Os asserts de prefixo aceitam item incorreto no fim do recado e omissão do pedido literal de `PAREI` no recado diurno. `bin/tests/test_orcamento_contexto.sh:560`, `:563`, `:568`, `:573`. |
-| (d2) | Cobra anúncio na entrada, ausência de repetição e novo fim diurno. O assert do anúncio termina no comando de handoff e aceita a omissão de AVISO e continuidade da fila. `bin/tests/test_orcamento_contexto.sh:576`, `:578`, `:580`, `:583`. |
-| (g) | Cobra prioridade do recado da trava com topo `PAREI`, ausência de repetição durante a mesma tomada e troca quando ela solta. Não separa topo neutro com handoff novo nem disparo pendente. A primeira resposta é explicitamente um `siga` com a trava tomada. `bin/tests/test_orcamento_contexto.sh:586`, `:589`, `:590`, `:593`, `:596`. |
-| (e) | Cobra troca, depois ALLOW comum, ausência de `CLEAR-LIBERA` e queda precisa do `if True` no segundo passo. Deixa de fora falha contida e nova escrita do `PAREI` na mesma noite. `bin/tests/test_orcamento_contexto.sh:598`, `:604`, `:617`. |
-| (f) | Cobra ausência de dia apesar do último assistente recente. Trocar `>` por `>=` no limite de 30 min passa com exemplos de 25 e 40 min. `bin/tests/test_orcamento_contexto.sh:514`, `:623`, `:631`, `bin/orcamento_contexto.py:114`. |
-
-O helper converte um ALLOW real, sem saída do hook, em `siga-aviso` a partir da trilha. `bin/tests/_saida_do_stop.sh:13`, `:15`, `bin/hook_stop_fila1.py:1480`. O selo do disjuntor restaura fala recente sintética e hora diurna padrão para C1 e ajusta âncoras dos dois mutantes da Escada. `bin/tests/test_disjuntor.sh:87`, `:98`, `:121`, `:129`, `:1723`. A sintaxe dos dois scripts passou em `bash -n`. Execução completa **[nao verificado]**, pois os scripts escrevem e apagam arquivos. `bin/tests/test_orcamento_contexto.sh:32`, `:551`, `:611`.
-
-Em memória, `disjuntor.ler` devolveu `0` para trilha ausente, vazia, somente futura e linha `lixo hora CLEAR-NOITE` truncada. Devolveu `None` para `OSError` e a mesma linha com um quarto token. Contou a linha exatamente em `agora-86400` e exatamente em `agora`. `bin/disjuntor.py:2105`, `:2113`, `:2121`, `:2125`, `:2132`, `:2134`, `:2153`. Os contadores da `TRILHA` mantêm a semântica com arquivo estável. `_censo_24h` ainda reabre `TRILHA` para a contagem própria. `bin/disjuntor.py:2136`, `:2161`, `:2192`, `:2237`.
-
-Em memória, o leitor de presença ainda declarou ausência com assistente datado de 40 min antes seguido de linha `user` truncada. Também declarou ausência com fala de 5 s antes seguida no arquivo por fala de 40 min antes. Última fala reconhecida sem timestamp e fala exatamente aos 30 min retornaram `None`. O leitor novo toma a última fala pela ordem do arquivo e reduz a janela lida de 4 MiB para 2.000.000 bytes em relação à v1. `bin/disjuntor.py:1370`, `:1376`, `:1391`, `bin/orcamento_contexto.py:65`, `:111`, `:118`.
-
-O recado novo de DIFF/apply inclui instrução de handoff e AVISO no topo com a trava tomada. O script de handoff relata a trava e prossegue até escrever `HANDOFF-SESSAO.md`. `bin/hook_stop_fila1.py:1070`, `:1091`, `:1097`, `bin/handoff_sessao.sh:18`, `:251`, `:318`, `:327`.
-
-_8351 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8354 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
