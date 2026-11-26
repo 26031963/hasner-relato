@@ -322,10 +322,24 @@ RAIAS E POUSO (PISTA, 31/10; funde FILA-2-EM-RAIA-PROPRIA, POUSO-EM-COMBOIO e SU
      arvore principal JA ESTA NO AR (secao 2), e tira-lo e `!` (voltar arquivo de prod).
   2. JUIZ ANTES DO SITIO. Fatia que toca pergunta SEM juiz em `core/juizes.py` comeca declarando o juiz: predicado ja unico e
      MEDIDO = frase no CORTES.md (PARADA item 5); predicado NOVO = pergunta no topo ANTES de curar qualquer sitio.
-  3. AGENTES. Agente nasce para CONSTRUIR ou VERIFICAR e termina quando entrega; nunca espera -- polling e da sessao
-     principal, em shell de fundo; entrega dependente de suite = comando + caminho do log. Modelo pelo papel no ato de abrir,
-     sem settings: construir cura de negocio e verificador = modelo da sessao; leitura de log = sonnet; o resto da leitura e
-     sonda = regra CODEX. Agente ocioso ou relendo log de obra fechada e encerrado no ato.
+  3. AGENTES (AGENTE-NO-MODELO-NA-FONTE, aval 26/11 v6; recusa no hook `bin/disjuntor.py::agente_nega`, instrumento,
+     nao juiz de dominio; selo `bin/tests/test_agente_no_modelo.sh`). Agente nasce para CONSTRUIR ou VERIFICAR e termina quando entrega; o pedido
+     declara a linha `PAPEL: construir` ou `PAPEL: verificar` (a LEITURA FINAL do verificador vale como verificar) e passa
+     `model` explicito igual ao da sessao (o agente com `model: inherit`, o verificador, pode omitir). Construtor opus so
+     com copia `wt-*` e linha `ARQUIVOS:` que toque models, migrations, motor, core/juizes.py, crons.py ou bin/ (CODEX
+     item 2). Leitura, censo,
+     sonda e espera em subagente sao recusadas: use bin/codex_pergunta.sh (excecao: CODEX item 2). Entrega dependente de
+     suite = comando + caminho do log. Agente ocioso ou relendo log de obra fechada e encerrado no ato. ESPERA DA SESSAO =
+     UMA so, que acorda no PRIMEIRO rc novo de QUALQUER obra viva (`logs/*/**/*.rc` mais novo que o inicio da espera) ou
+     em 5 min, o que vier antes; ao acordar, colhe tudo o que chegou e despacha vaga livre (Codex e pista 2) antes de
+     esperar de novo. Espera por alvo unico proibida (laco sobre um resultado de obra -- `.rc`, `.r`, `.log`, vercodex,
+     `pista estado` --, `ssh pista espera` sem `> arquivo`; o recibo `ssh pista espera <id> > arquivo` do
+     `bin/pista_certifica.sh` e coleta, e o arquivo de sinal de cron das secoes 2 e 6 nao e obra): a forma, num so comando
+     da raiz do repo, e `bin/disjuntor.py::ESPERA_UNICA` (`M=$(mktemp); timeout 300 bash -c "until find logs -mindepth 2
+     -name '*.rc' -newer $M | grep -q .; do /usr/bin/sleep 5; done"; find logs -mindepth 2 -name '*.rc' -newer $M`),
+     com teto de 5 min por espera, recusa em `espera_nega`. Nunca polling por turno: o 3o comando de consulta de estado do
+     mesmo alvo em 10 min e recusado com "faca uma espera bloqueante" (`bin/disjuntor.py::polling_nega`; contam
+     tail/cat/ls/grep de `.rc`/`.log`, vercodex e `ssh pista estado`).
   4. SUITE UMA VEZ POR ARVORE. A arvore que a suite certificou e a que POUSA: entre veredito e merge nenhum `.py` muda (nem na
      copia nem na principal); antes do commit, `cmp` arquivo a arquivo contra a copia, citado no corpo do commit. Raia pronta
      PERGUNTA (`git worktree list` + `git status --porcelain`) se a outra fica pronta em ate 30 min: sim -> UMA copia main +
@@ -380,10 +394,13 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
   2. DESPACHO. Todo aval, laudo ou BO e DECOMPOSTO antes de qualquer trabalho, 1 linha no RELATO:
      `DESPACHO <id>: a,b -> Codex | c -> sonnet | d -> opus`. CODEX (primeiro, sempre) = leitura de codigo, rastrear classe,
      censo pela regra, quem-mais-le, autopsia de escritor/leitor, contra-exemplo, sonda de prod (contagem, censo de frota,
-     caso de colab, conferencia de laudo), pre-verificacao de diff. SONNET (`haiku` se so contar/grep) = leitura de LOG;
-     e leitura/sonda SO com rc LIMITE (75) ou falha do Codex, sonda que escreve na sombra (atomic+raise), ou motivo na
-     linha do DESPACHO -- sem motivo, o verificador reprova. OPUS (modelo da sessao) = construir cura de negocio e a
-     leitura final. Sessao principal nao faz sonda, DIFF de leitura nem contagem inline. Construtor que acha divergencia
+     caso de colab, conferencia de laudo), pre-verificacao de diff, leitura de LOG, REDs e briefs. Codex construtor e o
+     PADRAO para todo app/ que bin/codex_pergunta.sh permite; o OPUS (modelo da sessao) constroi SO o que o wrapper proibe
+     (codex_pergunta.sh:646: models, migrations, motor, core/juizes.py, crons.py, bin/ -- tags da lista PROIBIDOS do
+     `_INVENTARIO_PY`, `bin/disjuntor.py::OPUS_CONSTROI_TAGS`) e, fora disso, so verifica e carimba (a leitura final). SONNET em
+     subagente SO para leitura, censo ou sonda com rc LIMITE (75) ou falha do Codex: `model: sonnet`, `PAPEL: <papel>`, a
+     obra no pedido e a linha `DESPACHO <obra>: ... -> sonnet` citando rc 75 ou falha do Codex no RELATO; espera em
+     subagente nunca. Sessao principal nao faz sonda, DIFF de leitura nem contagem inline. Construtor que acha divergencia
      ("por que X difere") investiga no maximo 10 min, despacha e segue construindo ou espera em shell de fundo. Itens
      independentes saem em paralelo ate o teto 6 -- teto so MEDIDO (CPU/load da VM e /health/ do saas_core na rajada).
      VAGA-NUNCA-OCIOSA (aval 26/11 14:32, permanente): vaga de construtor Codex livre puxa NA HORA a proxima obra da ORDEM VIVA

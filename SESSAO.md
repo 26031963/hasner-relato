@@ -6,10 +6,13 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 20:16:25.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (93.6 MB). Acoes na janela: **2488**.
+**Medido em 26/11/2026 20:23:11.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (93.7 MB). Acoes na janela: **2491**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 20:19:35 | Bash | Confere pista e mutantes, e relança a espera | `cd ~/saas-hasner; ssh -n pista estado 2>&1 \| grep -E 'rodando\|na fila'; ls logs/ABONO-X-SAIDA-ANTECIPADA/c1g/ \| grep rc; bash ~/saas-hasner/logs/espera_unica.sh` |
+| 20:19:31 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6ehq2pxz.output` |
+| 20:17:03 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
 | 20:15:50 | Bash | Lê o despertar anterior e os rc dos mutantes | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/boyjvjjqc.output; cd ~/saas-hasner; for f in logs/ABONO-X-SAIDA-ANTECIPADA/c1g/mut*.log.rc; do echo "$f $(cut -c1-3 $f)"; done` |
 | 20:14:46 | Bash | Indexa a memória | `echo '- [Linha do BACKLOG: contar colunas antes](backlog-linha-conta-colunas-antes.md) — indice negativo fixo apagou data e descricao em 26/11; imprimir len(c) ao editar' >> /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/MEMORY.md` |
 | 20:14:45 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/backlog-linha-conta-colunas-antes.md` |
