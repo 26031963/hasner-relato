@@ -1,7 +1,82 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 18:00** · publicado em **26/11/2026 18:05** (UTC-3)
+> Ultima resposta processada: **26/11/2026 18:09** · publicado em **26/11/2026 18:12** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 18:09 · sessao 56e47cebcda0 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
+
+Entreguei 45 testes novos, um por caso de 01 a 46, com a exclusão do 33. A leitura estática indica **24 REDs de asserção, 10 REDs de interface e 11 guardas**. Os dois arquivos compilaram em memória, as 11 mutações encontraram âncoras únicas e a contagem literal de `except` nos arquivos novos foi **0**. Execução no main, estado da produção e certificação pelo Code e pelo opus final: [nao verificado]. [Matriz de testes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:213) · [Runner de mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:10) [nao verificado]
+
+Usei os nomes de negócio do brief em `snake_case` onde a assinatura ainda precisa ser definida. Os encaixes de apply e reversão, do selo com lápide e da carga do estoque na migração são propostas de teste. A integração com as interfaces finais está [nao verificado]. [Selo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:167) · [Reversão](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:261) · [Estoque](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:461) [nao verificado]
+
+### Matriz por leitura estática
+
+**A** é falha esperada por asserção. **I** é falha esperada por interface ausente. **Guarda** indica passagem esperada na base e falha esperada com o mutante da docstring. A coluna de teste indica a linha de `chamados/tests/test_e4d_matriz_reds.py`. Execução dos casos [nao verificado].
+
+| Caso | Teste | Classe | Motivo na cópia | [nao verificado]
+|---|---|---|---|
+| 01 | `test_caso_01_backfill_resposta_sem_evento` :213 | A | `registrar` acorda a célula após inserir a resposta histórica. `chamados/models.py:4562` · `chamados/models.py:4575` |
+| 02 | `test_caso_02_backfill_legado_sem_inferir_absorcao` :230 | A | A validação histórica entra pela porta que acorda a célula. `chamados/models.py:4404` · `chamados/models.py:4575` |
+| 03 | `test_caso_03_absorcao_historica_sem_validacao_retroativa` :245 | A | O seletor oferece `VALIDACAO` ao encontrar V sem linha correspondente, inclusive com `ABSORCAO` física. `chamados/models.py:4393` · `chamados/models.py:4404` |
+| 04 | `test_caso_04_reversao_separavel_por_competencia` :261 | I | Falta a operação de apply de R/V com manifesto e reversão por competência. `chamados/management/commands/backfill_decisoes_pergunta.py:193` · `chamados/models.py:4262` |
+| 05 | `test_caso_05_absorcao_e_validacao_antes_de_v_m_no_mesmo_atomic` :931 | A | O carimbo vem primeiro e o ramo grava somente `ABSORCAO`. `chamados/services/materializacao.py:1104` · `chamados/services/materializacao.py:1125` |
+| 06 | `test_caso_06_celula_absolve_pela_via_listada` :544 | I | A via carimba M e falta a lista que declara seu escritor e sua lápide. `chamados/reconciliador.py:699` · `chamados/tests/test_e4d_matriz_reds.py:167` |
+| 07 | `test_caso_07_backfill_celula_absolveu_fica_como_estava` :301 | I | O caso cobra o selo para o M histórico preservado. `chamados/models.py:4390` · `chamados/tests/test_e4d_matriz_reds.py:167` |
+| 08 | `test_caso_08_exportada_so_trilha_txt_e_gravado_iguais` :312 | I | Falta o apply autorizado de trilha com prova dos dois hashes. O comando atual registra a parada. `chamados/management/commands/backfill_decisoes_pergunta.py:459` · `chamados/management/commands/backfill_decisoes_pergunta.py:514` |
+| 09 | `test_caso_09_resolvedor_validar_registra_antes_de_v` :564 | A | O resolvedor carimba V sem `VALIDACAO` física. `chamados/services/disputa_emissao.py:2118` |
+| 10 | `test_caso_10_resolvedor_responder_registra_so_com_texto` :584 | A | O ramo carimba R e grava auditoria lateral sem `RESPOSTA` física. `chamados/services/disputa_emissao.py:2192` |
+| 11 | `test_caso_11_reabertura_vazia_com_retry_do_mesmo_pedido` :346 | I | A porta carece de `id_do_pedido` e o filtro atual pula a pendente vazia. `chamados/services/disputa_emissao.py:1628` · `chamados/services/disputa_emissao.py:1709` |
+| 12 | `test_caso_12_proteger_autoria_e_marcar_autoria_historica_nula` :369 | A | As FKs de V, M e das autorias da DP usam `SET_NULL`. `chamados/models.py:3765` · `chamados/models.py:3785` · `chamados/models.py:4307` |
+| 13 | `test_caso_13_autor_inativo_preserva_validacao_e_refresh_recusa` :605 | Guarda | A porta desativa o acesso e o refresh verifica `is_active`. `core/credenciais.py:110` · `api/views.py:96` |
+| 14 | `test_caso_14_saneamento_alveja_so_resposta_historica` :389 | I | `SANEAMENTO` está ausente dos choices. A porta guarda a resposta legada e limpa pelo lote. `chamados/models.py:4289` · `chamados/services/validacao.py:470` |
+| 15 | `test_caso_15_saneamento_rele_competencia_entregue_sob_trava` :630 | Guarda | A porta relê a elegibilidade sob trava e a entrega barra a escrita. `chamados/services/validacao.py:436` · `chamados/services/validacao.py:464` |
+| 16 | `test_caso_16_registrar_recusa_resposta_futura_sem_efeito` :414 | A | `registrar` insere a resposta sem comparar `ato_em` com o relógio atual. `chamados/models.py:4522` · `chamados/models.py:4562` |
+| 17 | `test_caso_17_save_sem_pk_recusa_futuro_e_preserva_selo_ast` :425 | A | `save` veta PK preenchida e permite a inserção direta da instância nova. `chamados/models.py:4366` |
+| 18 | `test_caso_18_estoque_futuro_compensa_no_horizonte_comum` :437 | A | A tarefa corta a sequência no horizonte, enquanto a composta reduz a compensação futura. `chamados/services/tarefa_do_dia.py:389` · `chamados/models.py:4447` |
+| 19 | `test_caso_19_resposta_humana_vence_automatica_no_empate` :654 | Guarda | O automático relê o texto sob a trava e preserva a resposta humana. `chamados/services/disputa_emissao.py:1741` |
+| 20 | `test_caso_20_recusa_para_so_q_e_preserva_irma_ja_absorvida` :954 | A | A passagem pode absorver Q depois que a recusa humana já limpou sua resposta. `chamados/services/materializacao.py:1087` · `chamados/services/materializacao.py:1125` |
+| 21 | `test_caso_21_recusa_rele_validacao_sob_trava` :671 | Guarda | A segunda guarda retorna `ja_validada` antes do motivo e da recusa. `chamados/services/validacao.py:951` · `chamados/services/validacao.py:974` |
+| 22 | `test_caso_22_validacao_rele_reabertura_sob_trava` :682 | Guarda | A releitura depois da trava detecta a falta da resposta. `chamados/services/validacao.py:742` · `chamados/services/validacao.py:755` |
+| 23 | `test_caso_23_correcao_rele_validacao_sob_trava` :697 | Guarda | A validação fresca barra a correção antes da nota. `chamados/services/acoes_disputa.py:418` · `chamados/services/acoes_disputa.py:428` |
+| 24 | `test_caso_24_ancora_fora_deixa_dependente_sem_cobranca` :992 | Guarda | O veto `sem_grupo_recuperavel` desfaz o carimbo tentado e a passagem grava a ocorrência. `chamados/services/materializacao.py:1115` · `chamados/services/materializacao.py:1139` |
+| 25 | `test_caso_25_ausencia_rejeitada_acha_irma_pelo_ato` :1019 | A | O seletor exige âncora `hora` pela projeção e perde o vínculo físico com o escape `escolha`. `chamados/services/materializacao.py:1195` |
+| 26 | `test_caso_26_sem_absorcao_preserva_legado_e_encaminha_admin` :1046 | A | A coincidência de colunas inclui Q na devolução. O leitor da lista do admin também está pendente. `chamados/services/materializacao.py:1195` · `chamados/services/materializacao.py:1263` · `chamados/tests/test_e4d_matriz_reds.py:1062` |
+| 27 | `test_caso_27_fantasma_trava_rele_julga_e_escreve` :712 | Guarda | A trava do dono precede a releitura, o juízo e o carimbo. `chamados/reconciliador.py:1264` |
+| 28 | `test_caso_28_espelho_trava_rele_e_reabre_ato_que_perde_h4` :742 | A | A seleção atual exclui `declaracao`. O ramo admitido abre `atomic` e grava a via sem a trava do dono e sem `REABERTURA`. `chamados/management/commands/encerrar_perguntas_com_fato.py:41` · `chamados/management/commands/encerrar_perguntas_com_fato.py:64` |
+| 29 | `test_caso_29_perda_de_lastro_reabre_por_ato` :775 | A | A porta descarimba e grava auditoria lateral sem `REABERTURA`. `chamados/services/relavra_via.py:244` |
+| 30 | `test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta` :1069 | A | SQL, API, modal e raio-x ainda leem o par cru em seus sítios de consumo. `chamados/juizes.py:1671` · `api/views.py:1163` · `templates/chamados/partials/modal_fio.html:219` · `chamados/services/raiox.py:135` |
+| 31 | `test_caso_31_nascimento_da_raiz_listado_com_lapide` :1120 | I | A raiz é criada diretamente e falta o selo dos escritores declarados. `chamados/services/disputa_emissao.py:601` · `chamados/tests/test_e4d_matriz_reds.py:167` |
+| 32 | `test_caso_32_nascimento_da_filha_listado_com_rvm_vazios` :1136 | I | A filha nasce pela porta existente e falta a declaração dos campos de identidade e do escritor. `chamados/services/disputa_emissao.py:851` · `chamados/models.py:3291` |
+| 34 | `test_caso_34_silencio_antes_de_m_e_fecho_pela_raiz` :1152 | A | M é gravado antes de `SILENCIO`. `chamados/models.py:2148` |
+| 35 | `test_caso_35_reabre_a_mais_recente_e_desempata_por_pk` :1167 | A | A seleção procura disputa aberta e cria outra quando a busca fica vazia. `chamados/services/disputa_emissao.py:539` · `chamados/services/disputa_emissao.py:601` |
+| 36 | `test_caso_36_tranca_retirada_da_fila_por_leitura` :1199 | Guarda | C6 lê a tranca e o encerrador retira o caso da fila sem carimbar a filha. `chamados/juizes.py:1494` · `chamados/services/competencia_trancada.py:202` |
+| 37 | `test_caso_37_destranca_passivo_preserva_resposta_pela_via_listada` :1218 | I | O descarimbo preserva R e falta a declaração do escritor e da lápide. `chamados/models.py:3664` · `chamados/tests/test_e4d_matriz_reds.py:167` |
+| 38 | `test_caso_38_desligamento_registra_silencio_antes_de_m` :1237 | A | A cascata usa o fecho que grava M antes de `SILENCIO`. `colaboradores/services/desligamento.py:167` · `chamados/models.py:2148` |
+| 39 | `test_caso_39_validacao_antes_da_coluna_e_sustenta_plantio` :794 | A | A porta salva V antes da `VALIDACAO` física. `chamados/services/validacao.py:170` |
+| 40 | `test_caso_40_recusa_antes_do_motivo_e_da_limpeza` :815 | A | `recusa_motivo` é salvo antes da `RECUSA` física. `chamados/services/validacao.py:995` |
+| 41 | `test_caso_41_correcao_subsiste_apos_recusa_do_plantio` :833 | A | A correção salva R antes da `RESPOSTA`. O caso também cobra `RESULTADO` com o motivo do plantio. `chamados/services/disputa_emissao.py:1562` · `chamados/services/acoes_disputa.py:454` |
+| 42 | `test_caso_42_entrada_historica_preserva_lavra_e_marcos` :461 | I | Faltam o instante de entrada e a carga do estoque. Os marcos atuais agregam R/M pelas colunas. `chamados/models.py:4305` · `chamados/veredito_lavrado.py:201` |
+| 43 | `test_caso_43_fecho_repetido_mantem_ato_e_trilha_unicos` :1264 | Guarda | O mesmo fecho retorna antes de repetir o ato ou a trilha. `chamados/models.py:2081` |
+| 44 | `test_caso_44_retry_do_mesmo_payload_de_backfill` :493 | A | Reapresentar a lista preparada passa novamente pelo `bulk_create`. `chamados/models.py:4551` · `chamados/models.py:4562` |
+| 45 | `test_caso_45_vigia_compara_valor_e_sustentacao_fisica` :510 | A | O vigia compara presença e a leitura pode sintetizar uma validação da coluna. `chamados/services/vigia_ato_x_coluna.py:8` · `chamados/models.py:4404` |
+| 46 | `test_caso_46_prontidao_mantem_480_previstos_com_novo_realizado` :1281 | Guarda | A prontidão soma os previstos da grade e usa o realizado no numerador. `folha/export.py:1095` · `folha/export.py:1111` |
+
+**Caso 20.** A caracterização que cai com a cura é `RespostaAposAbsorcaoTest.test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa`. Ela exige absorção física de Q após a recusa e nova resposta barrada pelo H4. O novo teste exige Q pendente, preserva a irmã já absorvida e verifica que a passagem alcança a irmã seguinte. [Teste antigo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364) · [Teste novo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:954) [nao verificado]
+
+### Comandos para a sessão no main
+
+O primeiro comando roda a matriz. Para isolar um caso, acrescente `-k test_caso_NN_`. O laço executa uma invocação por mutante e seleciona sua guarda correspondente. Resultado dessas execuções [nao verificado]. [Entrada do Django](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/manage.py:7) · [Seleção dos mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:61)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4d_matriz_reds --parallel 1
+
+for caso in 13 15 19 21 22 23 24 27 36 43 46; do
+  E4D_MUTANTE="$caso" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    chamados.tests.test_e4d_matriz_reds --parallel 1 -k "test_caso_${caso}_" \
+    --testrunner=chamados.tests.e4d_matriz_mutantes.RunnerMutanteE4D
+done
+```
 
 ## 26/11 18:00 · sessao 062718fdff71 · CLEAR-NAO-PARA-A-NOITE · verificador · origem=Code
 
@@ -845,86 +920,4 @@ LEI-AKITA: padrao=escritor unico
 Explicita a decodificação no PDF e limita o aviso de órfão à falha da reabertura.
 ```
 
-## 26/11 17:26 · sessao 2ad7899ff274 · ABONO-X-SAIDA-ANTECIPADA · verificador · origem=Code
-
-**Veredito da volta c1e — reprova.** O diff do motor respeita os sítios autorizados, mas a parcial e o pareador podem dar dias diferentes ao mesmo intervalo. A lista também pode publicar `0/30` para uma ausência que já abateu 30 minutos na jornada. A ordem de invalidação pode inverter a aquisição das travas de fechamento. `app/ponto/services/credito_parcial.py:100–114` · `app/ponto/turnos.py:257–260,1310–1314` · `app/ponto/motor_calculo_v2.py:1237–1293` · `app/ponto/services/ausencia.py:183–205` · `app/ponto/services/fechamento.py:1672–1680`
-
-Os oito blobs da cópia conferem com os índices finais do diff anexado. A cópia veio sem metadados Git, portanto a identidade do objeto do commit e a sequência dos commits ficam **[nao verificado]**. Os contraexemplos abaixo são de código ou de execução sintética em memória. Incidência em produção **[nao verificado]**. [nao verificado]
-
-### 1. Escopo do `!` — nada
-
-No diff fornecido, o motor muda em dois sítios, `_minutos_da_ponta_cobertos` e o bloco da parcial em `_aplicar_teto_pontualidade`. `_parciais_do_dia` já consulta a porta cujo significado mudou. Seu corpo ficou igual no diff. `app/ponto/motor_calculo_v2.py:453–485,1222–1305,1344–1361`
-
-### 2. Escritores, leitores e unidades — média
-
-| Campo ou retorno | Quem escreve e quem lê |
-|---|---|
-| Chave de `parciais_com_ponta_por_dia` | `credito_parcial` primeiro reúne ausências pela data civil `a.data`, depois escreve `{dia_da_jornada: [Ausencia]}`. O motor lê `.get(dia)` e memoiza por `(colaborador, dia)`. `rubricas_por_dia` lê `.get(k)` e passa a lista ao contexto do teto. Os testes também leem a chave diretamente. `app/ponto/services/credito_parcial.py:15–32,62–81` · `app/ponto/motor_calculo_v2.py:1344–1361` · `app/ponto/calculador/alimentacao.py:510–539` · `app/ponto/calculador/regras.py:117–127` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:380–392` |
-| `dia`, `ini_min`, `fim_min`, `adiante` | O teto agrupa pelo mapa recebido e passa `dia` como a **data da jornada**. As pontas são minutos de relógio desde a meia-noite local desse dia, com fração pelos segundos das batidas. O leitor `_minutos_da_ponta_cobertos` traduz cada minuto para a meia-noite civil de `a.data` e consulta o juiz do período por meio de `batida_dentro_da_parcial`. As chamadas efetivas usam `adiante=0`, por default. A simulação da lista usa `1`, em **dias civis**, traduzido em 1.440 minutos. Os demais chamadores diretos são os testes. `app/ponto/motor_calculo_v2.py:453–485,1132–1138,1233–1277` · `app/ponto/turnos.py:2683–2692,2714–2723` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:438–467` |
-| `dia`, `causa` | O teto grava a data da jornada e o texto da causa. Nesse ramo a data também coincide com `a.data` por exigência da guarda. A deduplicação lê `dia`. E6 projeta o campo em conjunto de dias. A lavra grava `data` ISO, recorta a competência e conta `causa`. `janela_he` e o resumo do espelho filtram por causa. O fechamento concatena o item inteiro. Os diffs leem a lista, com o problema de classificação do item 6. `app/ponto/motor_calculo_v2.py:1267–1293` · `app/ponto/management/commands/e6_oraculo.py:162–172` · `app/ponto/services/cxr_na_lista.py:84–127,168–187` · `app/ponto/janela_he.py:324–329` · `app/ponto/services/espelho.py:748–755,1295–1297` · `app/ponto/services/fechamento.py:116–117,314–317` |
-| `ausencia_id`, `ponta`, `periodo`, os dois `abate_*_min` | O teto grava o PK da ausência, a rubrica da ponta, `HH:MM-HH:MM` do cadastro e dois inteiros em minutos de relógio. A deduplicação lê PK e ponta. A lavra copia os cinco campos, preservando os inteiros, e `_cxr_do_motor` os converte em texto. HTML e PDF leem `detalhe`. O calculador também transporta o item em `Rubricas.detalhe['cadastro_x_realidade']`. `DiaPago.lavrar` consome as rubricas, sem copiar esse detalhe. Os testes leem os campos no resultado e na lavra e verificam o texto da C12. `app/ponto/motor_calculo_v2.py:1285–1293` · `app/ponto/services/cxr_na_lista.py:32–47,87–92` · `app/escala/services/cadastro_realidade.py:455–469,1323–1332` · `app/templates/escala/cadastro_x_realidade.html:31` · `app/ponto/calculador/regras.py:281–285,865–884` · `app/ponto/services/dia_pago.py:322–333` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:307–334` |
-| Retorno de `vespera_do_cadastro` | A função extrai `(hi, hf)` do DNA da véspera ou das duas bordas do template, ou devolve `None`. São horários locais de cadastro. Os dois leitores são `_vespera`, que passa a resposta a `_mk`/`_data_do_turno`, e `dia_da_jornada_da_parcial`, que passa a resposta diretamente a `_data_do_turno`. O juiz transforma as bordas em comparações com instantes. `app/ponto/turnos.py:216–231,248–260,300–338,1310–1314,1501–1508` · `app/ponto/services/credito_parcial.py:102–114` |
-| Retorno de `dia_da_jornada_da_parcial` | `_data_do_turno` escreve a resposta, uma `date` local igual ao dia civil do início ou à véspera. O mapa de parciais usa essa data como chave. `_acordar_projecao` usa a menor data entre ela e a borda civil para invalidar o intervalo. O teste da véspera lê o retorno diretamente. `app/ponto/turnos.py:300–324` · `app/ponto/services/credito_parcial.py:74–80,100–114` · `app/ponto/services/ausencia.py:192–205` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:380–392` |
-
-**Fuso e significado.** A medição da ponta usa o fuso fixo de `settings.TIME_ZONE`. A construção dos instantes e o juiz usam o fuso corrente do Django. O padrão é `America/Sao_Paulo`. A igualdade depende do fuso ativo ser o mesmo. Os dois nomes de abatimento sugerem efeito monetário, mas os números medem sobreposição bruta, conforme o item 9. `app/ponto/motor_calculo_v2.py:28,73–79,1236–1255,1273–1292` · `app/ponto/services/credito_parcial.py:109–114` · `app/ponto/turnos.py:45–48,314` · `app/config/settings/base.py:93–95`
-
-### 3. Juiz e carga — alta
-
-**A decisão do dia é toda de `_data_do_turno`.** O adaptador monta início e fim e devolve diretamente a resposta do juiz. Ele próprio repete a conversão `HH:MM` e a virada `fim < início`, que já existem no juiz do período. A decisão de dia continua única. A derivação da virada tem duas implementações. `app/ponto/services/credito_parcial.py:108–114` · `app/ponto/turnos.py:300–324,2683–2689` · `app/core/juizes.py:216,266–277`
-
-**A carga pode mudar a resposta.** A parcial carrega o vínculo do dia civil e lê o DNA direto numa janela em torno desse dia. `_turnos_do_juiz` usa o template recebido ou o da instância e o mapa de células da janela ou da fatia. `turnos_de_batidas` ainda copia as batidas e marca ecos. Com template `19:00–07:00`, sem DNA na janela curta e com DNA apenas em outro dia da janela longa, `01:00–03:00` pode cair na véspera pela carga curta e no dia civil pela longa. O mapa longo é não vazio e, sem a chave da véspera, devolve `None`. Uma troca de vínculo na borda também pode mudar o template e a decisão de consultar DNA. `app/ponto/services/credito_parcial.py:100–107` · `app/ponto/motor_calculo_v2.py:902–917` · `app/escala/utils.py:84–108` · `app/ponto/turnos.py:257–260,300–324,1529–1547,1846–1859` · `app/ponto/services/fechamento.py:291–311`
-
-**A diferença de fatos também muda o dia.** O pareador veta a véspera quando já atribuiu a ela um turno encerrado naquele dia. O teste existente fixa `16:00–20:00` em D e `03:00–07:30` em D+1, com template `19:00–10:00`, e mantém o segundo par em D+1. Uma parcial sintética com os horários do segundo par, sob o mesmo template e sem DNA, recebe D pela consulta direta de cadastro. `app/ponto/turnos.py:216–231,314–324,1268–1278,1310–1314` · `app/ponto/services/credito_parcial.py:107–114` · `app/ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py:33–36`
-
-### 4. Extração de `_vespera` — nada
-
-Para o pareador, a extração preserva referência pela entrada ou saída, cálculo da véspera local, veto pelo turno já pareado e os mesmos dois ramos de cadastro. `_bm_all` continua chegando com os valores vazios retirados. Mapa presente sem a véspera continua devolvendo `None`. `app/ponto/turnos.py:248–260,1233–1239,1268–1278,1310–1314` · `app/ponto/tests/test_turno_da_madrugada_pertence_a_vespera.py:33–45`
-
-### 5. Chave dos leitores e bordas da competência — alta
-
-- **O mapa novo resolve as duas bordas dentro do seu próprio contrato.** Lê datas civis até `fim+1`, depois filtra pela jornada. `ini` atribuída a `ini−1` sai do recorte corrente e pode entrar no anterior. `fim+1` atribuída a `fim` entra no recorte corrente. A parcial entra em uma chave, e o crédito de atraso exclui as parciais com período. Isso evita dupla contagem entre o teto e esse crédito. A aprovação invalida a competência da jornada e a civil, zerando o carimbo existente. `app/ponto/services/credito_parcial.py:46–50,62–81` · `app/ponto/turnos.py:300–324` · `app/ponto/services/ausencia.py:186–205,1133–1134` · `app/ponto/services/fechamento.py:1672–1680`
-- **Motor e calculador pedem a mesma espécie de chave, mas o motor pode mudar seu valor entre passadas.** A base pode herdar o dia por um gap de até seis horas. Partido e comercial montam outro mapa a partir do juiz, e o calculador usa o mapa final. Se só o dia mudar, `_pontas_parcial` pode pular o novo julgamento porque guarda apenas atraso e saída. Assim, o abatimento pode ficar da primeira chave enquanto o período passa a outra. `app/ponto/motor_calculo_v2.py:1125–1127,1237–1241,1338–1342,2558–2567,3093–3104,3357,3488–3490,3671` · `app/ponto/calculador/alimentacao.py:239–262,510–539`
-- **Grade, espelho e PDF ainda têm leituras civis da parcial com período.** A grade procura a cobertura por `a.data`, então pode classificar batidas e dispensar marcos na linha D+1 enquanto o teto abate a ponta em D. A ata recebe essa classificação. O ícone e a cobertura do espelho ficam na linha civil, e o E6 pula a linha marcada com ausência. No PDF, `efeitos_da_ausencia` soma `a.minutos` na data civil no resumo bruto, que pode ser substituído pelo gravado. O fechamento e o `DiaPago` também recebem o abono da grade, calculado como previsto menos coberto na linha de ausência. São efeitos que podem cair em duas competências. Isso, por si, não prova desconto abatido duas vezes. `app/ponto/turnos.py:2849–2851,2868–2879` · `app/escala/utils.py:1230–1233,1246–1252,1272–1295` · `app/ponto/services/cartorio.py:782–790` · `app/ponto/services/espelho.py:593–602,863–890` · `app/ponto/management/commands/e6_oraculo.py:339–341` · `app/ponto/services/efeito_ausencia.py:46–50` · `app/relatorios/pdf_espelho.py:332–336,479,628` · `app/relatorios/cartao_pela_celula.py:320–346` · `app/ponto/services/fechamento.py:1084–1088` · `app/ponto/services/dia_pago.py:386–401`
-- **`DiaPago` pode gravar atraso residual fora da competência da jornada.** O fechamento recebe a pontualidade já abatida, mas `atraso_por_dia` agrupa pelo dia civil da entrada. `DiaPago` usa esse mapa para atraso e o dia da jornada para saída. Uma entrada de madrugada atribuída pelo motor à véspera pode, assim, deixar atraso residual em `fim+1` numa linha gravada para a competência de `fim`. A gravação aceita a chave sem recortar de novo. O oráculo de rubricas usa a jornada e substitui valores por suas próprias chaves. `app/ponto/services/fechamento.py:1018–1026,1224–1241,1293–1312` · `app/ponto/services/credito_parcial.py:117–131` · `app/ponto/services/dia_pago.py:173–195,322–330,340–360`
-
-### 6. Publicação e leitores da lista — alta
-
-- **Pode publicar parcial que já abateu.** `_pontas` nasce no laço de cada par. Reproduzi em memória uma jornada com dois pares e parcial D `06:30–19:30`. Ela eliminou 30 minutos de atraso do primeiro par e gerou `0/30` na saída antecipada do segundo. O filtro vê somente o segundo par quando decide publicar. Também há omissão pelo filtro: se o juiz mandar a parcial datada D para D−1, o laço de D nunca a examina para o relato de D. `app/ponto/motor_calculo_v2.py:1237–1293` · `app/ponto/services/credito_parcial.py:74–80` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:344–351,380–392`
-- **A mesma instância deduplica por `(dia, ausência, ponta)`, mantendo o primeiro número.** Uma passada posterior pode reescrever a ponta, como faz a Zona 5, sem atualizar ou retirar a linha publicada na primeira. A composição concatena as listas das fatias. Na lavra, só dicionários inteiramente iguais são deduplicados. Duplicação efetiva entre fatias em produção **[nao verificado]**. O calculador usa seu próprio contexto e devolve o relato em `Rubricas.detalhe`. Já a rota de `Censo.cxr` chama a pontualidade sem `parciais=`. `app/ponto/motor_calculo_v2.py:1282–1293,2442,2877–2878,3235–3242,3357,3671` · `app/ponto/services/fechamento.py:314–317` · `app/ponto/services/cxr_na_lista.py:107–113` · `app/ponto/calculador/regras.py:281–285,865–876` · `app/ponto/calculador/periodo.py:474–477,786–793`
-- **Os leitores aceitam a forma nova com efeitos diferentes.** `janela_he` e o resumo de HE do espelho excluem a nova causa corretamente. E6 e `cxr_lavrado` projetam presença por dia. O dono continua sendo decidido por dia, e `BATIDA` pode vencer a presença na lista. A C12 preserva os dois números, mas a legenda afirma que o horário real ficou longe do cadastrado e a ação encaminha para template ou vínculo, embora o item descreva a data da ausência. `app/ponto/janela_he.py:324–329` · `app/ponto/services/espelho.py:1295–1297,1330–1331` · `app/ponto/management/commands/e6_oraculo.py:98–110,162–172,182–195` · `app/ponto/services/cxr_na_lista.py:168–187` · `app/escala/services/cadastro_realidade.py:133–134,455–469,783–787,1105–1123`
-- **Os dois diffs classificados como L-084 ficam semanticamente errados.** `diff_janela_he` conta qualquer item como fora da janela pela L-084. `diff_reclassificar_partido` conta qualquer item como dia-colab que deixou de gerar desconto pela L-084 e pode imprimir deltas `None` quando a amostra é o item novo. `app/ponto/management/commands/diff_janela_he.py:63–70,131–134` · `app/ponto/management/commands/diff_reclassificar_partido.py:186–190,259–273`
-
-### 7. Classes de reprovação
-
-| Classe | Resultado |
-|---|---|
-| Segundo juiz registrado | **Nada para o dia.** O adaptador chama `_data_do_turno`. A diferença está na carga. `app/docs/JUIZES.md:10–12,19–25` · `app/core/juizes.py:216` · `app/ponto/services/credito_parcial.py:100–114` |
-| Segundo escritor fora da porta | **Nada.** O período segue escrito por `decidir`, a invalidação segue pela porta existente e a C12 segue gravada pela lavra existente. `app/ponto/services/ausencia.py:1061–1064,1089–1091,1111–1114,1133–1134` · `app/ponto/services/fechamento.py:1672–1680` · `app/ponto/services/cxr_na_lista.py:145–152` |
-| Relógio fora da borda | **Nada novo.** A leitura de `localdate()` da linha em aberto antecede o diff. O comando continua lendo `agora` na borda. `app/ponto/services/ausencia.py:189–193` · `app/ponto/management/commands/lavrar_cxr_do_motor.py:27–32` |
-| Derivação paralela | **Alta.** Há segunda carga de template/DNA e repetição da virada do período. A invalidação também usa um universo mais largo que o teto: basta ter as duas horas. Uma edição pode preservar essas horas ao mudar tipo, minutos ou vigência, e invalidar a véspera para linha que o teto já exclui. `app/ponto/services/credito_parcial.py:29–31,74–80,100–114` · `app/ponto/turnos.py:2683–2689` · `app/ponto/services/ausencia.py:193–205,656–680` |
-| Selo/RED sem mordida | **Média.** A catraca morde composição, sítios e linhas, dentro de seus critérios léxicos. Ela não prova igualdade de carga nem a decisão publicada. Os testes de comportamento mordem a forma simples, com as lacunas do item 8. `app/core/tests/test_medida_turno_do_par.py:548–585` · `app/core/medida_turno_do_par.py:32–55` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:299–392` |
-| Ordem de trava | **Alta.** Na edição de uma parcial de 21/10, de horário diurno para `01:00–03:00` da jornada de 20/10, o laço invalida primeiro a competência 11 pelo estado anterior, depois a 10 pelo novo intervalo, no mesmo `atomic`. O caminho de revisão de batida pode tomar as mesmas competências na ordem 10 → 11. Há inversão possível se ambos alcançarem as mesmas linhas. Ocorrência de deadlock **[nao verificado]**. `app/ponto/views.py:2835–2847` · `app/ponto/services/ausencia.py:183–205,1089–1091,1133–1134` · `app/ponto/services/fechamento.py:1623,1672–1680,1854–1876` · `app/ponto/services/dia_pago.py:702–719` |
-| Pouso antes do pré-requisito | **[nao verificado].** A árvore declara suite inteira antes do opus e condições para reconstrução das projeções. O material fornecido não comprova execução, publicação do impacto ou pouso. `CLAUDE.md:392–402,418–437` · `app/docs/LEIS.md:142` |
-| Campo com dois significados | **Alta.** Os campos `abate_*` medem sobreposição bruta por par, mas o texto da C12 os apresenta como abatimento. O atraso residual também conserva uma chave civil ao lado da chave de jornada usada para saída. `app/ponto/motor_calculo_v2.py:1237–1293,1306–1337` · `app/escala/services/cadastro_realidade.py:455–459` · `app/ponto/services/dia_pago.py:173–195` |
-| `except`, `suppress` ou fallback | **Nada novo de captura.** A extração mantém a escolha anterior entre DNA e template no pareador. A parcial passa a usar esse ramo de template com a sua própria carga. A diferença observável é a do item 3. `app/ponto/turnos.py:248–260,1310–1314` · `app/ponto/services/credito_parcial.py:100–114` |
-
-### 8. Mordida dos testes — média [nao verificado]
-
-| Teste novo | O que pegaria | [nao verificado]
-|---|---|
-| D+1 `01:00–03:00` | Perda da parcial por recorte civil, chave errada ou falta da tradução de 1.440 minutos. Exige saída residual 240 nas quatro leituras e lista vazia para a parcial. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:79–112,136–141,299–302` |
-| D `01:00–03:00` | Abatimento indevido em D+1, perda ou repetição do item nesse cenário, ou perda de dono, PK e números entre motor, lavra e formatador. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:304–334` |
-| D `02:00–01:30` e D `06:30–19:30` | O primeiro pega publicação de parcial que já cobre a saída. O segundo pega uma guarda que olha a saída mas ignora abatimento do atraso **no mesmo par**. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:336–351` |
-| Aprovação em 21/10 | Pega a volta da invalidação apenas civil. Verifica os dois carimbos nulos, sem verificar relavratura, rubricas nas duas competências ou concorrência. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:353–373` |
-| Controle D `23:00–03:00` e véspera com turno | O primeiro pega quebra da virada e falso C12 no período que já cobre 120 minutos. O segundo pega chave fixa por `a.data` ou abandono da véspera do DNA. O segundo consulta juiz e mapa, sem comparar um pareamento real na mesma carga. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:375–392` |
-| Dois testes puros novos | Isolam a tradução de D+1 e distinguem o `0` como datada do `120` com `adiante=1`. Os testes adjacentes verificam chamada e uso da resposta do juiz, bordas e segundos. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:446–501` |
-
-**Contraexemplos faltantes.** Dois pares da mesma jornada, segunda passada que muda a ponta ou o dia, DNA fora da janela curta, troca de vínculo no corte, redatação que muda o dia no juiz, cobertura já dada por outra parcial e teto aritmético que reduz o ganho. Também falta cruzar a borda 20/21 pelas duas apurações e conferir a C12 na lista e na rota. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:299–423` · `app/ponto/motor_calculo_v2.py:1237–1337,3235–3242` · `app/ponto/services/credito_parcial.py:74–114` · `app/escala/views.py:521–537`
-
-Em memória, passaram os **35 testes da catraca** com a adaptação documentada para `unittest`, e os **10 testes puros da ponta** com as funções reais extraídas da cópia. Os testes de integração com banco, a suite inteira e os REDs históricos ficam **[nao verificado]**. `app/core/tests/test_medida_turno_do_par.py:28–41,548–567` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:426–501`
-
-### 9. Significado dos
-
-[truncado em 20000 de 22099 caracteres]
-
-_8457 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8458 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
