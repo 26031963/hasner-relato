@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 21:22:30.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (14.6 MB). Acoes na janela: **460**.
+**Medido em 25/11/2026 21:28:46.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (14.7 MB). Acoes na janela: **465**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 21:27:19 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md' s=open(p,encoding='utf-8').read().split('\n') k=[i for i,l in enumerate(s) if l.startswith('PARCIAL-BORDA v2 (21:3x)')][0] s.insert(k+1,'ORDEM-VAGAS-NOITE-2511 (21:3x): vagas de construtor CHEIAS (2/2: E1-PREVISAO-24H v3, PARCIAL-BORDA v2, ambos lancados 21:1x-21:3x por avais de hoje); a proxima vaga vai a (1) FERIADO-SEM-LIMITE ...` |
+| 21:27:12 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1997p app/docs/BACKLOG.md \| cut -c400-1200; cat logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/CASOS.md \| head -60; cat logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3/v1diag.log` |
+| 21:27:10 | Bash |  | `cd /home/ronald/saas-hasner; ls -la --time-style=+%d/%H:%M logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/c3 \| head -30; find logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO -name 'CASOS.md' -o -name 'HANDBACK*' \| head; grep -n '^\| FERIADO-SEM-LIMITE' app/docs/BACKLOG.md \| cut -c1-400` |
+| 21:27:06 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/ \| head -40; for f in logs/FERIADO-SEM-LIMITE-DO-SUPRIMIDO/brief*.md logs/E4D-MATRIZ/brief*.md; do echo "$f $(python3 -c " import sys;sys.path.insert(0,'bin');import disjuntor as d;print(repr(d.censo_do_brief('$f')))")"; done` |
+| 21:27:04 | Bash |  | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/ORDEM-VAGAS-NOITE-2511.txt <<'EOF' aval Ronald: ORDEM-VAGAS-NOITE-2511 (25/11 21:3x) -- proximas vagas de construtor, nesta ordem, sem BO furando (so bug de dinheiro em prod): (1) FERIADO-SEM-LIMITE-DO-SUPRIMIDO c3 (espinha, ja aberta, retoma pelo CASOS.md); (2) E4d pelo BRIEF-CONSTRUTOR-2511 (logs/E4D-MATRIZ/) com E4D-MATRIZ-RESPOSTAS e E4D-ESTOQ ...` |
 | 21:20:32 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' s=open(p,encoding='utf-8').read().split('\n') k=[i for i,l in enumerate(s) if l.startswith('\| PARCIAL-BORDA-SEMIABERTA \|')][0] s[k]='\| PARCIAL-BORDA-SEMIABERTA \| fatia da COBERTURA-PARCIAL-PERIODO (L-006), aval PARCIAL-BORDA-V2-2511 (substitui o SEMIABERTA-2511): juiz batida_dentro_da_parcial nasce, batida decide pela direc ...` |
 | 21:20:27 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md' s=open(p,encoding='utf-8').read().split('\n') def idx(pref): return [k for k,l in enumerate(s) if l.startswith(pref)][0] k=idx('\| A4-FILA-DO-OPUS \|') s.insert(k+1,'\| A4-FILA-TEXTO \| fila da A4, aval A4-FILA-TEXTO-2511 (smoke web APROVADO pelo [nome], col82 25/11 e col631 04/06): (1) conferir que "Atestado (Aguardando deci ...` |
 | 21:20:19 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '^\| A4-' app/docs/BACKLOG.md \| cut -c1-90 \| head; grep -n '^\| E1-PREVISAO' app/docs/BACKLOG.md \| cut -c1-90` |
