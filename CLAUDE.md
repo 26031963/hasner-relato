@@ -365,7 +365,7 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
      Code (o wrapper nao remove a wt) e SO pelo comando da `.recusa`, `flock -n <wt> git -C <vivo> worktree remove --force <wt>`
      (lease da wt presa por outra chamada = recusa), EXCETO rc 3 motivo=LEASE_PERDIDA (titular da lease sem prova de vida):
      nada se usa e a wt NAO se remove, outra chamada pode estar nela. O wrapper guarda ate N Codex construtores por repositorio, N = `vagas_codex` do blob
-     `bin/codex_vagas.conf` de `refs/heads/main` (universo das vagas 1..3; o codigo RECUSA vagas_codex acima de 2 ate a medida -- teto `bin/codex_admissao.py::TETO_ANTES_DA_MEDIDA`, na abertura e no CONFERE, aval WRAPPER-N-VAGAS-ENTRA-V2; o ambiente nao conta). LEASE (M-LEASE): a vaga k e o flock do kernel em
+     `bin/codex_vagas.conf` de `refs/heads/main` (universo das vagas 1..3; o codigo RECUSA vagas_codex acima do teto `bin/codex_admissao.py::TETO_ANTES_DA_MEDIDA` (3 pelo corte CODEX-3-JA-E-4-DEPOIS-2611; era 2 pelo WRAPPER-N-VAGAS-ENTRA-V2), na abertura e no CONFERE; 4 = obra N4, universo 1..N; o ambiente nao conta). LEASE (M-LEASE): a vaga k e o flock do kernel em
      `logs/vagas/vaga.k` (inodes registrados UMA vez pelo Code no ato do pouso, com trilha -- aval WRAPPER-N-VAGAS-ENTRA-V2; o wrapper nunca os cria), segurado pelo
      titular `bin/codex_admissao.py` e passado so ao executor (codex e descendentes) por pass_fds; `vaga.k.json` e projecao,
      PID/boot sao diagnostico; `logs/construtor.vaga` legado e a gemea da k=1. Admissao pela meta-trava `logs/vagas/meta.lock`
@@ -383,6 +383,11 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
      leitura final. Sessao principal nao faz sonda, DIFF de leitura nem contagem inline. Construtor que acha divergencia
      ("por que X difere") investiga no maximo 10 min, despacha e segue construindo ou espera em shell de fundo. Itens
      independentes saem em paralelo ate o teto 6 -- teto so MEDIDO (CPU/load da VM e /health/ do saas_core na rajada).
+     VAGA-NUNCA-OCIOSA (aval 26/11 14:32, permanente): vaga de construtor Codex livre puxa NA HORA a proxima obra da ORDEM VIVA
+     com dossie/brief pronto (DOSSIE-ANTES-DO-CONSTRUTOR) e pre-requisito pousado (DEPENDENCIA-PUXA); obra sem dossie ganha
+     Codex censo/leitura na mesma hora; o Code so verifica e pousa. WIP = vagas_codex + agentes do Code; acima disso a obra
+     espera com dossie pronto, sem construtor. Linha `PUXADA <obra> -> vaga k` no RELATO a cada puxada; ESTADO conta os
+     minutos de vaga ociosa com obra pronta (esperado 0). PROIBIDO obra fora da ORDEM VIVA, construir sem dossie, tocar voo.
   3. PERGUNTA. Sem a hipotese de quem pergunta ("confirme que X" = o verificador reprova); premissa da intencao vai como
      PERGUNTA, nunca como dado. Volta 1 e FINAL perguntam, alem do checklist, QUEM ESCREVE e QUEM LE cada campo/valor que
      o diff le ou grava (arquivo:linha), com app/docs/JUIZES.md anexo; voltas do meio podem ser so o delta.
