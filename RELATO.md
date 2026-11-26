@@ -1,6 +1,5 @@
-PAREI: censo-FAXINA-E-N4 | espera Codex
-
-PAREI: censo-RAMO2-B-EM-TURNO-QUE-CRUZA | espera Codex
+RESPONDIDA por FAXINA-SEM-AGENTE-2611 (13:42): censo-FAXINA-E-N4 nao e mais parada -- a faxina roda como script destacado (logs/FAXINA-2611/faxina_v2.py, pid 306374), sem Agent e sem censo; o N4 anda na wt-n3-125628 como instrumento.
+RESPONDIDA por RAMO2-MOTOR-TETO-2611 (13:26): censo-RAMO2-B-EM-TURNO-QUE-CRUZA superado -- dossie da RAMO2-B fechado, construtor c1 em voo (agente aa5bd3f9bd66317fe).
 
 AVISO DISCO 13:11 (aval VIGIA-DISCO-V2-2611, limiar 75%): / em 80% (df 13:11: 250G de 328G, livre 65G); o volume do Postgres de prod (saas-hasner_saas_pg_data) mora no MESMO /. 368 worktrees ~40G, faxina em curso (FAXINA-E-N4, agente; lista em logs/FAXINA-2611/LISTA.md). A 85% vira a parada de DISCO. Retencao por produtor em construcao (copia wt-vigia-disco-131538); a regra literal do /tmp do Code alcanca 0,15G de 35G: 18G estao num scratchpad de sessao, fora do aval.
 RESPONDIDA por FAXINA-E-N4-V2-2611 (13:40; item 1 NAO feito pela conferencia dele 13:34, 37+86 paradas): FAXINA-E-N4-2611 item (1) PARCIAL 13:24: sairam 236 copias (225 worktrees + 11 planas identicas ao git archive do sha), 71 tags arquivo/* (rev-parse conferido), sujo de 55 em /tmp/faxina-2611; worktrees registradas 368 -> 141; ficaram 375 wt-* (obra viva ou duvida: 204 copias sem sha-base); 4 falharam por arquivo de root. ERRO do agente: entrou em ~/codex_ws antes da mudanca de escopo e deixou 7 hashes PARCIAIS (o wrapper os reusaria quebrados); a sessao removeu os 7 inteiros (regeneraveis por git archive, ultimo uso 29/10-25/11, nenhum processo vivo). Lista: logs/FAXINA-2611/LISTA.md.
