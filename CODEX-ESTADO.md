@@ -1,7 +1,284 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 10:42** · publicado em **26/11/2026 10:45** (UTC-3)
+> Ultima resposta processada: **26/11/2026 10:47** · publicado em **26/11/2026 10:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 10:47 · sessao 3af52882fa76 · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
+
+Implementei a F3 na cópia `a4d3675c7a187493c006eb291ee40580a3ea7a77`. Os cinco REDs falharam na base por asserção. Na cura, os oito testes em memória passaram, incluindo troca de vínculo, retratação e mudança de competência. Os três mutantes voltaram a falhar por asserção. A certificação fica com o Code e o opus final. `ponto/tests/test_juiz_unico_eventos.py:61`
+
+## Cura
+
+- `turnos_do_colab`, `dia_das_batidas` e `CargaDaJanela` usam o carregador histórico da F2. O mapa inclui as PKs de cada turno apresentado, inclusive a saída de 25/10 quando a janela termina em 23/10. Se dois segmentos reivindicam a mesma PK em dias diferentes, vale a precedência que o mapa F2 já aplicava. A publicação de turnos respeita essa atribuição. `ponto/turnos.py:1850` `ponto/turnos.py:2891` `ponto/turnos.py:2941` `ponto/turnos.py:3007` `ponto/turnos.py:3119`
+- O juiz compara a geometria antes e depois do evento. O núcleo reaproveita os turnos julgados, e o cartório e o fechamento reaproveitam os dias afetados pelo `save`. A exclusão reintroduz a marca em memória para julgar a versão anterior. O fechamento usa o corte da empresa e chama o recálculo uma vez por competência afetada, após o commit. `ponto/turnos.py:3025` `ponto/signals.py:20` `ponto/signals.py:30` `ponto/signals.py:124` `ponto/nucleo.py:40` `ponto/registro_batida.py:195` `ponto/registro_batida.py:303` `ponto/services/fechamento.py:1831`
+- A contagem AST ficou em **zero `except` novos**, incluindo testes. No chokepoint, o diff se limita às chamadas e à preparação do agendamento. Os selos permitidos foram reancorados na carga histórica. `ponto/registro_batida.py:174` `ponto/registro_batida.py:195` `ponto/registro_batida.py:303` `ponto/tests/test_contract_no_batida_date.py:447` `ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:178` `ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:195` `chamados/tests/test_e3_c8b_sem_banco.py:522` `chamados/tests/test_e3_c8c_sem_banco.py:104`
+
+## RED → GREEN
+
+| Caso | Saída na base | Resultado na cura |
+|---|---|---|
+| R4 · par de 24h10 | `Items in the second set but not the first: datetime.date(2026, 10, 23)` | A saída aparece no turno de 23/10 em `[23/10, 23/10]` e na competência 10. O mapa e o lote concordam. `ponto/tests/test_juiz_unico_eventos.py:137` |
+| R4 · saídas órfãs | `datetime.date(2026, 10, 24) != datetime.date(2026, 10, 25) : PK 6` | A PK 6 recebe 25/10 em `[25/10, 25/10]`, `[24/10, 26/10]` e na competência 11. `ponto/tests/test_juiz_unico_eventos.py:156` |
+| R5a · `post_save` | Cartório chamou `[24/10, 25/10]`. O núcleo iniciou em `23/10`, com âncora civil. | O cartório julga 23/10 e o núcleo ancora a recomputação na jornada de 23/10. `ponto/tests/test_juiz_unico_eventos.py:172` |
+| R5a · `post_delete` | As mesmas duas asserções falharam após remover a saída. | O julgamento anterior à exclusão recupera a jornada de 23/10. `ponto/tests/test_juiz_unico_eventos.py:178` |
+| R5b · corte em 24/10 | `Expected: recalcular_fechamento_mes(10, 2026, ...)` / `Actual: recalcular_fechamento_mes(11, 2026, ...)` | Agenda 10/2026. O caso adicional com mudança de dono agenda 10 e 11, e a retratação agenda a competência anterior. `ponto/tests/test_juiz_unico_eventos.py:196` `ponto/tests/test_juiz_unico_eventos.py:202` `ponto/tests/test_juiz_unico_eventos.py:211` |
+
+O comando da cura retornou `Ran 8 tests` e `OK`. Os dublês cobrem ORM, despacho, gravação do núcleo e execução agendada do fechamento. `ponto/tests/test_juiz_unico_eventos.py:61`
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest -v ponto.tests.test_juiz_unico_eventos
+```
+
+## Mutantes
+
+`f3 base` retornou `rc=1`, com 10 falhas nos cinco casos. `f3 recorte` retornou `rc=1`, com cinco falhas de R4. `f3 signal` retornou `rc=1`, com quatro falhas de R5a. `f3 evento` retornou `rc=1`, com duas falhas de R5b. O comando aplica cada substituição somente em memória. `ponto/tests/test_juiz_unico_eventos.py:153` `ponto/tests/test_juiz_unico_eventos.py:172` `ponto/tests/test_juiz_unico_eventos.py:196`
+
+```sh
+f3() {
+  F3_MODO="$1" PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import ast
+import os
+import subprocess
+import unittest
+from importlib.machinery import SourceFileLoader
+from pathlib import Path
+from unittest.mock import patch
+
+modo = os.environ["F3_MODO"]
+raiz = Path.cwd()
+base_hash = "a4d3675c7a187493c006eb291ee40580a3ea7a77"
+turnos = "ponto/turnos.py"
+signal = "ponto/signals.py"
+registro = "ponto/registro_batida.py"
+fechamento = "ponto/services/fechamento.py"
+
+def base(arquivo):
+    return subprocess.check_output(["git", "show", base_hash + ":app/" + arquivo], text=True)
+
+def trocar(fonte, antes, depois):
+    assert fonte.count(antes) == 1, antes
+    return fonte.replace(antes, depois, 1)
+
+def casca(fonte):
+    no = next(n for n in ast.parse(fonte).body if getattr(n, "name", "") == "turnos_do_colab")
+    return ast.get_source_segment(fonte, no)
+
+r4 = ["r4_par_24h10", "r4_saidas_orfas"]
+r5a = ["r5a_save", "r5a_delete"]
+if modo == "base":
+    fontes = {f: base(f) for f in (turnos, signal, registro, fechamento)}
+    casos = r4 + r5a + ["r5b_evento"]
+elif modo == "recorte":
+    s = Path(turnos).read_text()
+    fontes = {turnos: trocar(s, casca(s), casca(base(turnos)))}
+    casos = r4
+elif modo == "signal":
+    s = Path(signal).read_text()
+    s = trocar(s, "        if dias:\n            recompute_turnos",
+               "        from ponto.turnos import data_local\n"
+               "        dias = (data_local(batida.timestamp),)\n"
+               "        if dias:\n            recompute_turnos")
+    s = trocar(s, "    ontem = datetime.timedelta(days=1)",
+               "    from ponto.turnos import data_local\n"
+               "    dias = (data_local(batida.timestamp),)\n"
+               "    ontem = datetime.timedelta(days=1)")
+    fontes, casos = {signal: s}, r5a
+else:
+    assert modo == "evento"
+    s = Path(registro).read_text()
+    fontes = {registro: trocar(s, "dias_da_jornada=dias_do_salvamento(batida, criada=criada)",
+                               "dias_da_jornada=None")}
+    casos = ["r5b_evento", "r5b_mudanca_do_dono_agenda_duas_competencias"]
+
+fontes = {raiz / f: s.encode() for f, s in fontes.items()}
+ler_real = SourceFileLoader.get_data
+
+def ler(loader, caminho):
+    p = Path(caminho)
+    return fontes[p] if p in fontes else ler_real(loader, caminho)
+
+prefixo = "ponto.tests.test_juiz_unico_eventos.JuizUnicoEventosTest.test_"
+with patch.object(SourceFileLoader, "get_data", ler):
+    suite = unittest.defaultTestLoader.loadTestsFromNames([prefixo + c for c in casos]) [nao verificado]
+    raise SystemExit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
+PY
+}
+
+f3 base
+f3 recorte
+f3 signal
+f3 evento
+```
+
+## Custo e catraca
+
+- **Por chamada singular**, a estimativa estática é **4–5 consultas** com marcas na janela e **1** quando o pad está vazio. A leitura de marcas percorre o histórico apurável. Em lote, turnos e mapa dividem **3–4 consultas históricas** e reutilizam o vínculo da ata já lido. Chamadas singulares independentes abrem cargas independentes. `ponto/turnos.py:2953` `ponto/turnos.py:2987` `ponto/turnos.py:3070` `ponto/turnos.py:3119` `escala/alimentacao.py:148`
+- **Por `save`**, o caminho normal dos receivers faz uma carga histórica compartilhada. Criação, retratação e edição de insumo podem executar dois pareamentos sobre essa carga. Edição de insumo em PK existente, ou `save` completo dessa PK, acrescenta **1 consulta** para ler a versão anterior. O núcleo reaproveita a geometria. Cada dia adicional julgado pode aumentar o custo do cartório. SQL efetivo, latência e teto do chokepoint ficam **[nao verificado]**. `ponto/signals.py:20` `ponto/signals.py:30` `ponto/signals.py:124` `ponto/turnos.py:3025` `ponto/nucleo.py:40` `ponto/tests/test_selo_chokepoint_escrita.py:343`
+- **Catraca protegida.** O censo passou de **81 → 78 derivações**, com **9 pareadores**. B1 passou de **78 → 75**. `_recompute_around:23` e `_dias_batida:111` saem. `_carregar_dias_das_batidas:3026 → 2979` entra na composição do juiz e sai de B1. `dia_do_turno_da_batida:2989 → 2929` e `par_completo:2217 → 2156` continuam em B1. A composição ganha `_carregar_dias_das_batidas`, `_dia_das_batidas_puro`, `batidas_apuraveis` e `marcos_dna_periodo`, e perde `escalas_do_periodo`. O registro congelado ainda acusa o delta. `core/tests/test_medida_turno_do_par.py:108` `core/tests/test_medida_turno_do_par.py:110` `core/tests/test_medida_turno_do_par.py:336` `core/tests/test_medida_turno_do_par.py:508` `ponto/turnos.py:2979`
+
+## Impacto nos 51 sítios
+
+Há mudança observada na resposta da autoridade que esses sítios consultam. O espelho usa essa resposta para as datas de saídas órfãs, a API usa para agrupar turnos por dia, e o núcleo usa para materializar `data_turno`. A mudança efetiva de cada saída consumidora nas competências 10 e 11 está **[nao verificado]**. `ponto/tests/test_juiz_unico_eventos.py:137` `ponto/services/espelho.py:628` `api/views.py:1447` `ponto/nucleo.py:47`
+
+A varredura encontrou 50 chamadas diretas ou por alias, além do registro `_T1`. Sítios expostos à mudança de resposta:
+
+- **API e autoridade** — `api/views.py:1447`, `core/juizes.py:216`.
+- **Chamados** — `chamados/detector_anomalias.py:157`, `chamados/juizes.py:447,2303`, `chamados/models.py:1378`, `chamados/management/commands/migrar_data_evento_dia_do_turno.py:145`, `chamados/services/disputa_emissao.py:722`, `chamados/services/materializacao.py:399,513`.
+- **Colaboradores e escala** — `colaboradores/services/drawer.py:47`, `colaboradores/services/feriado_do_posto.py:473`, `escala/detector_proposta.py:65`, `escala/regua_defesa.py:361`, `escala/services/escala_auto.py:87`, `escala/services/impacto_troca.py:18`, `escala/servico_jornada.py:249,403`, `escala/utils.py:1627,1952`.
+- **Ponto** — `ponto/nucleo.py:48`, `ponto/turno_leitura.py:89,95`, `ponto/turnos.py:780,2043,2101,2131,3185`, `ponto/views.py:396,1613,3356`, `ponto/services/bordas_realizado.py:66`, `ponto/services/esmeril_espelho.py:102`, `ponto/services/espelho.py:628`, `ponto/services/passivo_s84.py:82`, `ponto/services/regularizacao.py:61`, `ponto/services/teto_na_lista.py:68`, `ponto/services/triagem_batida.py:553`, `ponto/services/vigia_pareador_celula.py:97`.
+- **Comandos e relatórios** — `ponto/management/commands/censo_fase_12x36.py:180`, `ponto/management/commands/detectar_ausencias.py:337`, `ponto/management/commands/detectar_par_relampago.py:101`, `ponto/management/commands/dna_x_batida_real.py:69`, `ponto/management/commands/e6_oraculo.py:159`, `ponto/management/commands/emitir_turno_aberto_retroativo.py:88`, `ponto/management/commands/marcar_abandono_provisorio.py:46`, `ponto/management/commands/verificar_nucleo.py:29`, `ponto/management/commands/vigia_plantio_overnight.py:38`, `relatorios/management/commands/vinculo_do_dia_divergentes.py:124`, `relatorios/pdf_espelho.py:213,451`.
+
+## Sonda de sombra para o Code
+
+Executar o texto no shell Django do envelope de sombra com `PYTHONDONTWRITEBYTECODE=1`. A sonda chama as duas versões reais de `turnos_do_colab`, usa o corte de cada empresa e captura em memória o lote que `recompute_turnos` entregaria ao ORM. A comparação inclui as linhas já gravadas na sombra e usa multiplicidade. A sintaxe foi conferida. Resultado da execução na sombra **[nao verificado]**. `ponto/janelas.py:55` `ponto/turnos.py:1850` `ponto/nucleo.py:40` `ponto/models.py:1208`
+
+```python
+from collections import Counter, defaultdict
+import json
+import subprocess
+from unittest.mock import patch
+
+from colaboradores.models import Colaborador
+from ponto import nucleo, turnos
+from ponto.janelas import janela_fechamento
+from ponto.models import TurnoMaterializado
+
+hash_base = "a4d3675c7a187493c006eb291ee40580a3ea7a77"
+fonte = subprocess.check_output(["git", "show", hash_base + ":app/ponto/turnos.py"])
+base = {"__name__": "ponto.turnos_base_f3", "__package__": "ponto"}
+exec(compile(fonte, "ponto/turnos.py@" + hash_base, "exec"), base)
+campos = ("data_turno", "entrada_id", "saida_id", "aberto",
+          "cross_meianoite", "dt_fim_previsto")
+
+def foto(juiz, colab, ini, fim):
+    pares = juiz(colab, ini, fim)
+    dias = defaultdict(set)
+    for turno in pares:
+        for batida in turno.batidas:
+            dias[batida.pk].add(turno.data_turno)
+    rows = []
+    with patch.object(nucleo, "_apagar_recorte_devolvendo_abertos", return_value=set()), \
+         patch.object(TurnoMaterializado.objects, "bulk_create", side_effect=rows.extend):
+        nucleo.recompute_turnos(colab, ini, fim, turnos=pares)
+    return dias, Counter(tuple(getattr(row, f) for f in campos) for row in rows)
+
+def emitir(**linha):
+    print(json.dumps(linha, default=str, sort_keys=True))
+
+def contagem(linhas):
+    return [{"dados": dados, "n": n} for dados, n in sorted(linhas.items(), key=str)]
+
+totais = {m: Counter() for m in (10, 11)}
+for c in Colaborador.objects.select_related("empresa").order_by("pk").iterator(chunk_size=200):
+    fotos, dias_base, dias_cura = {}, defaultdict(set), defaultdict(set)
+    for m in totais:
+        ini, fim = janela_fechamento(m, 2026, c.empresa)
+        pk_base, mat_base = foto(base["turnos_do_colab"], c, ini, fim)
+        pk_cura, mat_cura = foto(turnos.turnos_do_colab, c, ini, fim)
+        for pk in pk_base:
+            dias_base[pk].update(pk_base[pk])
+        for pk in pk_cura:
+            dias_cura[pk].update(pk_cura[pk])
+        fotos[m] = ini, fim, pk_base, pk_cura, mat_base, mat_cura
+
+    for m, (ini, fim, pk_base, pk_cura, mat_base, mat_cura) in fotos.items():
+        for pk in sorted(pk_base.keys() | pk_cura.keys()):
+            if dias_base[pk] != dias_cura[pk]:
+                totais[m]["pks"] += 1
+                emitir(comp=m, colab=c.pk, pk=pk, base=sorted(dias_base[pk]),
+                       cura=sorted(dias_cura[pk]))
+        gravado = Counter(TurnoMaterializado.objects.filter(
+            colaborador=c, data_turno__range=(ini, fim)).values_list(*campos))
+        if mat_base != mat_cura or gravado != mat_cura:
+            saiu, entrou = mat_base - mat_cura, mat_cura - mat_base
+            totais[m].update(saidas_base_cura=sum(saiu.values()),
+                             entradas_base_cura=sum(entrou.values()))
+            emitir(comp=m, colab=c.pk, tipo="materializacao", sai=contagem(saiu),
+                   entra=contagem(entrou), sai_do_gravado=contagem(gravado - mat_cura),
+                   entra_no_gravado=contagem(mat_cura - gravado))
+
+for m, total in totais.items():
+    emitir(comp=m, total=dict(total))
+```
+
+**Fora da F3.** O C6 de chamados ainda chama o corpo puro com seu recorte próprio. O mapa interno do motor mensal segue em sua porta. A suíte Django com banco, os valores lavrados em produção e o comportamento sob concorrência estão **[nao verificado]**. `chamados/services/carga_pergunta_viva.py:165` `ponto/motor_calculo_v2.py:867` `ponto/services/fechamento.py:1241`
+
+## 26/11 10:46 · sessao 78751ae7cf11 · ORDEM-PELO-R1 · leitura · origem=Code
+
+**`MOTOR-LE-O-TURNO` tem o maior escopo nominal, com 12 dos 38 dias ESTRUTURA da comp. 11.** O mapa fecha em **19 chaves com uma obra identificada, 1 chave com duas candidatas e 18 SEM DONO**. Quantos dias cada obra efetivamente zera no R1 de 26/11 está **[nao verificado]**. O E6 pode deixar de listar uma chave por acordo de minutos, mudança de dono ou saída da comparação. `depois_c11.txt:12–49` [BACKLOG.md:2234](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2234) [e6_oraculo.py:331](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/management/commands/e6_oraculo.py:331)
+
+## 1. Dia → obra e prova
+
+Os caminhos `depois_c11.txt` são as referências do PUBLICADO fornecido. A fonte escolhida pelo E6 para o valor do espelho em cada chave está **[nao verificado]**. O comando prioriza `minutos_realizados`, usa `pago_h` quando o primeiro campo é nulo e publica a classe a partir dos valores comparados. `app/ponto/management/commands/e6_oraculo.py:263–269,342–372,401–404,450–451`
+
+**Provas de código usadas na tabela**
+
+- **Chave do turno.** O BACKLOG enumera “11 dia-colab em que oraculo E pareador dao [] e o espelho tem 103..418 min” e registra separadamente “col841 2026-11-16”. O E6 chama `minutos_do_oraculo(ts)` sem pares e agrupa pela data civil do primeiro instante do trecho. O espelho carrega `turnos_do_colab` e soma pela `data_turno`. A leitura r4 localizou esses caminhos e deixou a causa individual dos 11 **[nao verificado]**. `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:2198,2203,13103–13114` `app/ponto/management/commands/e6_oraculo.py:149–154,350` `app/ponto/calculador/nucleo.py:235–247` `app/ponto/services/espelho.py:625–628,689–690,801` `app/ponto/turnos.py:719–721,733–771`
+- **Pausa curta.** A linha **`EV-NA-BRECHA-1611`** registra **`ORACULO-E6-43-DEFEITOS`** na GRADE. O RELATO nomeia “pausa abaixo do piso com intervalo pre-assinalado L-032” para col252 e dá as cinco datas. O E6 soma os pares por posição e deixa o vão entre pares fora da soma. O realizado do espelho exige 15 minutos para reconhecer a pausa batida e, na ausência de pausa reconhecida, desconta a janela fixa declarada quando ela se aplica. O E6 ainda tem uma guarda para excluir a diferença explicada pela janela declarada. O valor dessa guarda por chave na rodada de 26/11 está **[nao verificado]**. `app/docs/BACKLOG.md:823` `app/docs/GRADE-MESTRA.md:303` `app/docs/RELATO.md:2355,2390,3096` `app/ponto/calculador/nucleo.py:243–253` `app/ponto/turnos.py:499,542–546,756–771` `app/ponto/management/commands/e6_oraculo.py:236–239,350–358`
+- **Janela de HE.** A linha **`NOTURNO-A-JANELA-NO-DIA-DO-TURNO`** diz “janela de HE ancora no dia do turno”. O motor ancora os marcos nesse dia e aplica a L-084 às pontas cruas. O RELATO documenta os deltas dos pares de col922 e col1010. O efeito sobre a fonte do valor ou a transição de dono no R1 está **[nao verificado]**. `app/docs/BACKLOG.md:1989` `app/docs/RELATO.md:205` `app/ponto/motor_calculo_v2.py:1543–1588` `app/ponto/janela_he.py:41–61` `app/ponto/management/commands/e6_oraculo.py:162–172,182–195,263–269`
+
+| Dia de 2026 | Classe do PUBLICADO | Obra | Prova | [nao verificado]
+|---|---|---|---|
+| col37 14/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. Caso nominal. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:13114` |
+| col110 12/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. Caso nominal. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:13111` |
+| col113 30/10 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A NOTURNO-A também tem teste nominal da janela do par na madrugada de 31/10. O efeito desse teste sobre o zero do E6 está **[nao verificado]**. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234,1989` `app/docs/RELATO.md:13112` `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:61–69` |
+| col113 01/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A NOTURNO-A também registra inversão da janela em medição de DiaPago. O vínculo dessa medição com o zero do E6 está **[nao verificado]**. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234,1989` `app/docs/RELATO.md:13113,13200–13207` |
+| col200 29/10 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. O mapa de DiaPago também registra folga trabalhada gravada em D+1. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:13103,13204–13207` `app/ponto/motor_calculo_v2.py:2416–2424` |
+| col200 02/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A NOTURNO-A também registra inversão da janela em medição de DiaPago. Efeito sobre o zero do E6 **[nao verificado]**. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234,1989` `app/docs/RELATO.md:13104,13200–13207` |
+| col218 14/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A NOTURNO-A também registra inversão da janela em medição de DiaPago. Efeito sobre o zero do E6 **[nao verificado]**. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234,1989` `app/docs/RELATO.md:13105,13200–13207` |
+| col296 02/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A NOTURNO-A também registra inversão da janela em medição de DiaPago. Efeito sobre o zero do E6 **[nao verificado]**. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234,1989` `app/docs/RELATO.md:13106,13200–13207` |
+| col302 20/11 | `e6_zero_esp_trabalho` | **SEM DONO** | Classe publicada. Causa e obra por chave **[nao verificado]**. `depois_c11.txt:34` `app/ponto/management/commands/e6_oraculo.py:350–372` |
+| col382 10/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A NOTURNO-A também tem teste nominal da janela do par civil de 11/11, atribuído a 10/11. Efeito sobre o zero do E6 **[nao verificado]**. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234,1989` `app/docs/RELATO.md:13107` `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:70–77` |
+| col516 23/10 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. A sonda anterior registra saída órfã às 07:01. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:13108` |
+| col727 10/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Chave do turno. O mapa de DiaPago também registra folga trabalhada gravada em D+1. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:13109,13204–13207` `app/ponto/motor_calculo_v2.py:2416–2424` |
+| col841 16/11 | `e6_zero_esp_trabalho` | `MOTOR-LE-O-TURNO` | Caso nominal da chave do dia. O pareador cru deu BATIDA na sonda v3. A v3b com `turnos_do_colab` manteve ESTRUTURA. `depois_c11.txt:12–39` `app/docs/BACKLOG.md:2234` `app/docs/RELATO.md:2157,2203,13110` `app/ponto/management/commands/e6_oraculo.py:98–110,182–195` |
+| col996 28/10 | `esp_zero_e6_trabalho` | **SEM DONO** | `O54`, etapa `E1-sem-previsao`, acompanha o contador. A causa do zero nesta chave está **[nao verificado]**. `depois_c11.txt:47` `app/docs/BACKLOG.md:1469,1303` `app/core/espelho_verdade.py:60–61` `app/ponto/management/commands/e6_oraculo.py:263–269,370–372` |
+| col114 08/11 | `diverge_10_60` | **SEM DONO** | Citado entre os dias de intervalo na sonda anterior. Mecanismo específico e obra **[nao verificado]**. `depois_c11.txt:18–19` `app/docs/RELATO.md:13118–13119` |
+| col114 15/11 | `diverge_10_60` | **SEM DONO** | Classe publicada. Causa e obra **[nao verificado]**. `depois_c11.txt:18–19` `app/ponto/management/commands/e6_oraculo.py:362–372` |
+| col252 09/11 | `diverge_10_60` | `ORACULO-E6-43-DEFEITOS`, registrado em `EV-NA-BRECHA-1611` | Pausa curta nominal. `depois_c11.txt:26–32` `app/docs/BACKLOG.md:823` `app/docs/RELATO.md:2355,2390,3096` |
+| col252 10/11 | `diverge_10_60` | `ORACULO-E6-43-DEFEITOS`, registrado em `EV-NA-BRECHA-1611` | Pausa curta nominal. `depois_c11.txt:26–32` `app/docs/BACKLOG.md:823` `app/docs/RELATO.md:2355,2390,3096` |
+| col252 11/11 | `diverge_10_60` | `ORACULO-E6-43-DEFEITOS`, registrado em `EV-NA-BRECHA-1611` | Pausa curta nominal. `depois_c11.txt:26–32` `app/docs/BACKLOG.md:823` `app/docs/RELATO.md:2355,2390,3096` |
+| col252 13/11 | `diverge_10_60` | `ORACULO-E6-43-DEFEITOS`, registrado em `EV-NA-BRECHA-1611` | Pausa curta nominal. `depois_c11.txt:26–32` `app/docs/BACKLOG.md:823` `app/docs/RELATO.md:2355,2390,3096` |
+| col252 17/11 | `diverge_10_60` | `ORACULO-E6-43-DEFEITOS`, registrado em `EV-NA-BRECHA-1611` | Pausa curta nominal. `depois_c11.txt:26–32` `app/docs/BACKLOG.md:823` `app/docs/RELATO.md:2355,2390,3096` |
+| col252 18/11 | `diverge_10_60` | **SEM DONO** | Pausa curta nesta data **[nao verificado]**. `depois_c11.txt:26–32` `app/docs/RELATO.md:2390,3096` |
+| col252 19/11 | `diverge_10_60` | **SEM DONO** | Pausa curta nesta data **[nao verificado]**. `depois_c11.txt:26–32` `app/docs/RELATO.md:2390,3096` |
+| col884 08/11 | `diverge_10_60` | **SEM DONO** | A chave aparece em “sem nome” e no recorte de intervalo. Causa e obra **[nao verificado]**. `depois_c11.txt:41` `app/docs/RELATO.md:3097,13118–13119` |
+| col112 21/10 | `diverge_acima_60` | **SEM DONO** | A sonda registra pares diferentes entre E6 e pareador cru na chave. A inclusão nominal na família de madrugada do oráculo está **[nao verificado]**. `depois_c11.txt:14–15` `app/docs/RELATO.md:13115–13117` `app/docs/GRADE-MESTRA.md:303` `app/ponto/calculador/nucleo.py:235–247` |
+| col112 22/10 | `diverge_acima_60` | **SEM DONO** | A sonda registra pares diferentes entre E6 e pareador cru na chave. A inclusão nominal na família de madrugada do oráculo está **[nao verificado]**. `depois_c11.txt:14–15` `app/docs/RELATO.md:13115–13117` `app/docs/GRADE-MESTRA.md:303` `app/ponto/calculador/nucleo.py:235–247` |
+| col130 29/10 | `diverge_acima_60` | **SEM DONO** | A leitura anterior deixou col130 fora do envelope. Causa e obra **[nao verificado]**. `depois_c11.txt:20` `app/docs/RELATO.md:2926` |
+| col200 03/11 | `diverge_acima_60` | **SEM DONO** | A NOTURNO-A documenta um par civil de 03/11 cujo turno é de 02/11. Há também uma colisão nominal de batidas às 02:00. O nexo de qualquer um dos achados, ou da relavra, com o delta de 03/11 está **[nao verificado]**. `depois_c11.txt:23` `app/docs/RELATO.md:189,2360` `app/docs/BACKLOG.md:2304` `app/ponto/motor_calculo_v2.py:936–951` `app/ponto/registro_batida.py:118–127` |
+| col220 10/11 | `diverge_acima_60` | **SEM DONO** | A leitura anterior deixou col220 fora do envelope. Causa e obra **[nao verificado]**. `depois_c11.txt:25` `app/docs/RELATO.md:2926` |
+| col382 11/11 | `diverge_acima_60` | **SEM DONO** | O teste da NOTURNO-A atribui o par civil de 11/11 ao turno de 10/11. `P0-[nome]-RELAVRA-10` cita o colaborador. Efeito sobre a chave R1 de 11/11 **[nao verificado]**. `depois_c11.txt:36` `app/docs/BACKLOG.md:2303–2304` `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:70–77` |
+| col874 22/10 | `diverge_acima_60` | **SEM DONO** | Classe publicada. Causa e obra **[nao verificado]**. `depois_c11.txt:40` `app/ponto/management/commands/e6_oraculo.py:362–372` |
+| col922 29/10 | `diverge_acima_60` | **Duas candidatas** `NOTURNO-A-JANELA-NO-DIA-DO-TURNO` e `MOTOR-LE-O-TURNO` | **NOTURNO-A** cobre o par cru liberado pela L-084, `+174,6` min no motor frente a `−175` no R1. **MOTOR-LE-O-TURNO** cobre o mapa de dia, com 29/10 no juiz e 27/10 no resultado do motor para o par documentado. A contribuição de cada caminho ao delta R1 está **[nao verificado]**. `depois_c11.txt:43` `app/docs/BACKLOG.md:1989,1996,2234` `app/docs/RELATO.md:194,205,290` `app/ponto/motor_calculo_v2.py:1543–1588,2416–2424` `app/ponto/services/dia_pago.py:126–132` |
+| col922 01/11 | `diverge_acima_60` | **SEM DONO**. Candidata `O54`, etapa `E3-geometria`, investigada em `EV-NA-BRECHA-1611` | “realizado soma turno que a tela nao exibe”, registrado **a confirmar**. O código soma turnos do juiz e monta os cartões por outro caminho, a partir dos períodos do motor. Nexo com o delta R1 **[nao verificado]**. `depois_c11.txt:43–46` `app/docs/BACKLOG.md:823,1469,2529` `app/docs/RELATO.md:2926,3097` `app/ponto/services/espelho.py:435–436,464–474,689–690,801` `app/templates/ponto/espelho.html:194` |
+| col922 04/11 | `diverge_acima_60` | **SEM DONO**. Candidata `O54`, etapa `E3-geometria`, investigada em `EV-NA-BRECHA-1611` | Mesmo diagnóstico nominal de soma e exibição, **a confirmar**. Nexo com o delta R1 **[nao verificado]**. `depois_c11.txt:43–46` `app/docs/BACKLOG.md:823,1469,2529` `app/docs/RELATO.md:2926,3097` `app/ponto/services/espelho.py:435–436,464–474,689–690,801` `app/templates/ponto/espelho.html:194` |
+| col989 23/10 | `diverge_acima_60` | **SEM DONO** | Classe publicada. Causa e obra **[nao verificado]**. `depois_c11.txt:43–46` `app/ponto/management/commands/e6_oraculo.py:362–372` |
+| col996 10/11 | `diverge_acima_60` | **SEM DONO** | Classe publicada. Causa e obra **[nao verificado]**. `depois_c11.txt:48–49` `app/ponto/management/commands/e6_oraculo.py:362–372` |
+| col1010 05/11 | `diverge_acima_60` | `NOTURNO-A-JANELA-NO-DIA-DO-TURNO` | Janela de HE. O teste nominal põe a saída prevista em D+1 e conta cru o par da madrugada. O DIFF mede `+294,8` min no motor e o R1 mostra `−295`. `depois_c11.txt:49` `app/docs/BACKLOG.md:1989` `app/docs/RELATO.md:205` `app/ponto/janela_he.py:41–61` `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:93–107` |
+| col909 11/11 | `diverge_acima_60/FORA` | `ORACULO-E6-43-DEFEITOS`, registrado em `EV-NA-BRECHA-1611` | Família “corte por vao”. O anexo traz `CORTE_do_oraculo` e `−586` min. O núcleo marca o corte que deixa um trecho ímpar e soma só os pares fechados. A chave também consta na lista BATIDA de `HJ-092`. O nexo desse segundo registro com o delta, e o delta após corrigir o corte, estão **[nao verificado]**. `depois_c11.txt:42` `app/docs/BACKLOG.md:797,823` `app/docs/GRADE-MESTRA.md:303` `app/docs/RELATO.md:3936` `app/ponto/calculador/nucleo.py:215–225,236–247` `app/ponto/management/commands/e6_oraculo.py:393–404` |
+
+Nos cinco dias de col252, `[nome]-NAO-DESFAZ-O-PAPEL` e `[nome]-NA-IMPRESSAO` também aparecem no registro da **guarda da rajada e do marco vazio na ata**. O RELATO deixa o resíduo D1 em pergunta de desenho. O efeito dessas obras no delta do E6 está **[nao verificado]**. `app/docs/BACKLOG.md:2538,2558,2560` `app/docs/RELATO.md:2355,2390`
+
+## 2. Por obra, estado e pré-requisitos
+
+| ID exato | Dias ESTRUTURA no escopo e dias que zera | Estado e pré-requisitos registrados |
+|---|---|---|
+| `MOTOR-LE-O-TURNO` | **12 nominais** da classe `e6_zero_esp_trabalho`. Também candidata para a chave compartilhada col922 29/10. Zera **[nao verificado]**. `app/docs/BACKLOG.md:1996,2234` `app/docs/RELATO.md:2157,2198` | **Registrada**, fila 1 após E2 pousar com E3. O instrumento anterior à Fatia 1 consta como pousado. A ordem de código é Fatia 1 **PAR**, depois Fatia 2 **DIA**, com motor e `DiaPago` lendo o par e o dia da autoridade do turno. O BACKLOG exige RED pela regra antes, DIFF 10/11 por dono e Pauta DP para exportada. `app/docs/BACKLOG.md:2234–2235` `app/docs/GRADE-MESTRA.md:105` `app/core/juizes.py:748` `app/ponto/motor_calculo_v2.py:867–884,2416–2424` `app/ponto/services/dia_pago.py:109–132` |
+| `ORACULO-E6-43-DEFEITOS` | **6 cobertos pela família documentada**, cinco de pausa de col252 e o corte de col909. Zera **[nao verificado]**. `app/docs/BACKLOG.md:823` `app/docs/GRADE-MESTRA.md:303` `app/docs/RELATO.md:2390,3096` `depois_c11.txt:42` | **Registrada** na GRADE como instrumento. O ID da linha que a registra no BACKLOG é `EV-NA-BRECHA-1611`. O pré-requisito declarado é `CONTRATO-DE-INSTRUMENTO` quando chegar a vez. Os pontos de cálculo são o agrupamento e a soma posicional para a pausa, e o corte por vão para col909. `app/docs/BACKLOG.md:823` `app/docs/GRADE-MESTRA.md:303` `app/ponto/calculador/nucleo.py:215–225,235–253` |
+| `NOTURNO-A-JANELA-NO-DIA-DO-TURNO` | **1 chave exclusiva do mecanismo**, col1010 05/11, e **1 compartilhada**, col922 29/10. Zera **[nao verificado]**. `depois_c11.txt:43,49` `app/docs/RELATO.md:194,205` | **No ar** conforme BACKLOG. O escopo autorizado é a âncora da janela na comp. 11 em diante. O cálculo usa o mapa do juiz, o marco de saída em D+1 quando aplicável e a L-084 nas pontas cruas. O BACKLOG registra dependência de `MOTOR-LE-O-TURNO` para B-I28/v0815_7. A atualização do gravado depende de relavra por evento ou botão. `app/docs/BACKLOG.md:1989` `app/docs/RELATO.md:143,270` `app/ponto/motor_calculo_v2.py:936–951,1543–1588` `app/ponto/janela_he.py:41–61` |
+| `EV-NA-BRECHA-1611` e `O54` | **2 candidaturas sem dono confirmado**, col922 01/11 e 04/11. `EV-NA-BRECHA-1611` é a leitura da soma e da exibição. `O54`, etapa `E3-geometria`, é a fatia apontada pelo diagnóstico. Zera **[nao verificado]**. `app/docs/BACKLOG.md:823,1469,2529` `app/docs/RELATO.md:3097` | **EV registrada como leitura**, com i1/i2/i3b aguardando `todos.fim` da PREPARA na linha. **O54 em curso** na linha do programa, com portas sequenciais. O registro de código marca a entrega histórica de `E3-geometria` como feita pela `O65`. A pendência nominal é confirmar, nas duas chaves, o turno que entra na soma e qual período chega ao cartão. `app/docs/BACKLOG.md:823,1469,1481` `app/core/espelho_verdade.py:67–78` `app/docs/RELATO.md:2926,3097` `app/ponto/services/espelho.py:464–474,689–690,801` |
+| `R1-SEM-DONO-2611` | **18 chaves da comp. 11 neste mapa**, agrupadas abaixo. Zera **[nao verificado]**. `depois_c11.txt:12–49` | **Registrada**, investigação por família, sem vaga, conforme o BACKLOG fornecido e o PUBLICADO §5. Linha desse ID na cópia **[nao verificado]**. Pré-requisito de código por família **[nao verificado]**. | [nao verificado]
+
+**Pré-requisitos da vaga.** O anexo BACKLOG põe a ordem após o voo e os pré-requisitos de E4d. A linha local de `ORDEM-PELO-R1-2611` está **[nao verificado]**. Na cópia, `E4C-F5-INSTANTE` e `PORTA-CONFERE-TRAVA` estão registrados antes da E4d, e `E4D-CONTRATO-ROTA-B` registra a matriz respondida e o brief como próximo passo. `app/docs/BACKLOG.md:830,1985,2155` `app/docs/RELATO.md:98,13237`
+
+## 3. SEM DONO por classe
+
+- **`e6_zero_esp_trabalho` — 1.** col302 20/11. `depois_c11.txt:34` `app/docs/BACKLOG.md:2234`
+- **`esp_zero_e6_trabalho` — 1.** col996 28/10. `depois_c11.txt:47` `app/core/espelho_verdade.py:60–61`
+- **`diverge_10_60` — 5.** col114 08/11 e 15/11, col252 18/11 e 19/11, col884 08/11. `depois_c11.txt:18–19,26–32,41` `app/docs/RELATO.md:2390,3097,13118`
+- **`diverge_acima_60` — 11.** col112 21/10 e 22/10, col130 29/10, col200 03/11, col220 10/11, col382 11/11, col874 22/10, col922 01/11 e 04/11, col989 23/10, col996 10/11. `depois_c11.txt:14–15,20,23,25,36,40,43–46,48–49` `app/docs/RELATO.md:189,2926,3097,13115–13117`
+- **`diverge_acima_60/FORA` — 0 SEM DONO.** A única chave, col909 11/11, tem o corte documentado. `depois_c11.txt:42` `app/docs/GRADE-MESTRA.md:303` `app/ponto/calculador/nucleo.py:215–225`
 
 ## 26/11 10:42 · sessao 16453a22ec76 · ABONO-X-SAIDA-ANTECIPADA · leitura · origem=Code
 
@@ -918,50 +1195,4 @@ Comparei as cópias existentes com seu ancestral comum ao HEAD e li os dois arqu
 
 10. **nota | A catraca e o R6 batem com a cópia.** O B1 está em `_carregar_dias_das_batidas:3026` e `dia_do_turno_da_batida:2989`, com identidade e linhas registradas. Rodei em memória os **35 testes** da catraca, com **9 pareadores e 81 derivações**, os **10 testes** do contrato de projeção civil e o selo R6. Todos passaram. O R6 da cópia publica **18/20 verdes, 20 declaradas**, e a célula de juiz único segue vermelha pelo registro de dívida. Os quatro arquivos do diff batem com os blobs de destino do anexo. Hash do commit HEAD, suíte com banco e contagens F2 das competências 10 e 11 [nao verificado]. `app/core/tests/test_medida_turno_do_par.py:108`, `app/core/tests/test_medida_turno_do_par.py:238`, `app/core/tests/test_medida_turno_do_par.py:338`, `app/core/tests/test_medida_turno_do_par.py:546`, `app/core/tests/test_medida_turno_do_par.py:562`, `app/ponto/tests/test_contract_no_batida_date.py:650`, `app/core/tests/test_selo_r6_frase_do_juiz.py:20`, `app/core/placar_estrutural.py:443`, `app/core/contratos_estruturais.py:225`
 
-## 26/11 10:21 · sessao d7fbb66af7a6 · DIA-DA-BATIDA-JUIZ-UNICO · sonda · origem=Code
-
-```text
-rc_sombra=125
-```
-
-No dado fornecido, o Docker falhou ao montar `/app/staticfiles` antes de iniciar a sonda. O envelope executa o script dentro do contêiner e propaga o código de saída. [bin/sonda_leitura.sh:235](/home/ronald/codex_ws/a4d3675c7a187493c006eb291ee40580a3ea7a77/bin/sonda_leitura.sh:235)
-
-Não repeti a execução porque o envelope cria um arquivo temporário e acrescenta uma linha ao log. [bin/sonda_leitura.sh:216](/home/ronald/codex_ws/a4d3675c7a187493c006eb291ee40580a3ea7a77/bin/sonda_leitura.sh:216) [bin/sonda_leitura.sh:248](/home/ronald/codex_ws/a4d3675c7a187493c006eb291ee40580a3ea7a77/bin/sonda_leitura.sh:248)
-
-`universo_colabs`, `pks_na_comp`, `pks_com_dia_diferente`, `colabs_afetados`, `delta`, `top_colabs` e `exemplos` da F2: [nao verificado]. Se o número novo é 0: [nao verificado].
-
-## 26/11 10:18 · sessao 9f2e3f3e9784 · E1-PREVISAO-24H · verificador · origem=Code
-
-1. **bloqueia | Férias ainda contam a falta recusada.** `faltas_periodo` continua contando direto as ausências aprovadas de tipo `'falta'`, sem consultar o mapa da previsão. No caso novo de cinco válidas e uma inválida, a consulta conta seis, e `aplicar_art130` resolve 24 dias onde o teste exige 30. A sincronização do período também consome esse resultado e pode gravá-lo em `dias_direito`. `app/ferias/models.py:52–57,143–150`, `app/ferias/services.py:382–399,405–412`, `app/ferias/tests.py:53–78`.
-
-2. **nota | Todas as linhas alteradas no motor estão no bloco do limite diário do `MotorComercial`.** Inventário do hunk fornecido. `app/ponto/motor_calculo_v2.py:3404–3413`.
-
-   - **Base 3404–3407:** removidos os comentários sobre o limite por marcos e a inicialização pelo padrão de 480 min. **Base 3408–3414:** removida a seleção de `_md_m2` pelo vínculo ou template. **Base 3415–3418:** removidas a chamada aos marcos e a captura da exceção. **Base 3419–3427:** removidos a guarda de meia-noite e o cálculo do span menos a primeira pausa. **Base 3428:** substituído o comentário sobre intrajornada. Todas eram linhas do limite diário. `diff.diff`, hunk `-3401,31 +3401,15`.
-   - **Cópia 3404–3408:** comentários sobre a fonte e a medição. **3409:** o limite passa a ler `_jornada_do_dia(dia)`. **3410–3411:** se o previsto é zero, pula a apuração de excedente desse dia. **3412:** comentário sobre a intrajornada. A subtração de `3413` é contexto preservado. O reset por período já ocorre dentro do motor, antes de recalcular o dia. O fechamento lê os totais resultantes, e os hunks de espelho e calendário mexem na palavra. `app/ponto/motor_calculo_v2.py:3348–3358,3404–3427`, `app/ponto/services/fechamento.py:948–953`, `app/ponto/services/espelho.py:889–892`, `app/colaboradores/services/calendario.py:750–756`.
-
-3. **bloqueia | A leitura da grade tem um ramo que escapa ao aval literal.** Com resposta da grade, a cadeia é `MotorComercial → _jornada_do_dia → _previsto_do_dia → minutos_previstos_do_dia → previsao_invalida_do_vinculo → previsao_do_dia_valida`. A decisão de validade continua no juiz registrado. Porém, colaborador ausente, linha não encontrada ou exceção na consulta devolvem `None`, e `_jornada_do_dia` passa ao `self.jornada_minutos` do template. A porta e o fallback já existiam, mas o hunk os torna alcançáveis no limite diário comercial. O fechamento fornece `colaborador_id`, o que cobre a ausência do argumento. Ocorrências dos demais ramos na frota [nao verificado]. `app/core/juizes.py:213–217`, `app/ponto/motor_calculo_v2.py:810,1244–1294,3409`, `app/escala/utils.py:407–432,2472–2512`, `app/ponto/services/fechamento.py:306–311`.
-
-4. **nota | Quem produz e quem lê o previsto e a HE.** A porta de célula grava DNA, `trabalha` e geradora. O fechamento alimenta o motor com células em lote. Espelho e PDF também alimentam folgas. O motor atribui o colaborador e memoiza o previsto por dia. Um acerto do memo custa zero consultas nessa leitura. Em dia ainda não memoizado, há uma consulta de colaborador e uma de vínculos, mais as consultas que a falta de alimentação exigir. O fechamento fornece células, mas nesse ponto não fornece folgas nem a lista de vínculos à função do previsto. Custo incremental medido [nao verificado]. `app/ponto/portas/celula.py:293–306,655–659`, `app/ponto/services/fechamento.py:777–781`, `app/ponto/services/espelho.py:1169–1170`, `app/relatorios/pdf_espelho.py:405–407`, `app/ponto/motor_calculo_v2.py:848,1249–1277,2296`, `app/escala/utils.py:2354,2395–2399,2472–2485`.
-   
-   `MotorComercial` escreve `PeriodoCalculo.minutos_extra_50/100` por período. O split noturno, o banco e o DSR leem esses minutos. `ResultadoMes.horas_extra_50/100` são propriedades que somam `periodos` e dividem por 60. Leitores diretos incluem o fechamento, a sonda, a autorização de HE e o diagnóstico de extrato. O fechamento persiste as horas mensais e entrega os períodos à porta `dia_pago.lavrar`, que grava as horas diárias. TXT, cartão, relatórios e ranking leem essas projeções. A restauração histórica de HE também passa pela porta `restaurar_fechamento`. `app/ponto/motor_calculo_v2.py:324–344,1024–1038,3374–3381,3420–3427,3448–3459,3491–3505`, `app/ponto/services/fechamento.py:948–953,1173–1225,1237–1242`, `app/scripts/sonda_e1_comercial.py:82–86`, `app/ponto/services/autorizacao_he_periodo.py:46–48`, `app/relatorios/management/commands/diff_extrato_parcial.py:68–74`, `app/ponto/services/dia_pago.py:180–186,360`, `app/folha/export.py:427–455`, `app/relatorios/cartao_pela_celula.py:94–95,177–180`, `app/relatorios/views.py:529–530`, `app/folha/services/ranking_he.py:139–150`, `app/ponto/management/commands/aplicar_09_he_intra.py:137–152`.
-
-5. **nota | BUG-HE-INTRA-DOBRADA, no ramo do limite diário.** O comercial grava o suprimido em `minutos_intrajornada_indenizada`. `_limite_com_suprimido` acrescenta ao teto `min(suprimido indenizado, intervalo declarado)` antes de subtrair o teto do trabalhado. Subir o teto reduz a HE. A indenização continua na rubrica própria do fechamento, do `DiaPago` e do TXT. Com 660 min previstos, 720 min trabalhados e 60 min suprimidos e declarados, saem zero HE e 60 min de intra. O helper também é chamado nos ramos de 12x36, turno partido e comercial por período. `app/ponto/motor_calculo_v2.py:1324–1352,1781–1819,2859,3163,3261–3275,3304,3413`, `app/ponto/services/fechamento.py:1037`, `app/ponto/services/dia_pago.py:186,225`, `app/folha/export.py:455`, `app/ponto/tests/test_he_intra_dobrada.py:77–104`.
-
-6. **fila | Bordas de unidade e data.** A grade desconta **todas** as pausas, enquanto `intervalo_declarado_do_dia`, que limita quanto volta ao teto, lê só a primeira. A troca torna essa diferença relevante para o comercial com duas pausas. O vigia usa o mesmo valor da primeira pausa, portanto esse selo não distingue os dois valores. A dobra de feriado grava HE100 e sai antes do novo limite, inclusive antes da guarda de zero. Há ainda leitores por data civil da entrada no banco semanal, no DSR e no crédito de atraso, enquanto o teto diário e a sonda usam o dia atribuído à jornada. Efeito dessas bordas na frota [nao verificado]. `app/escala/utils.py:2434–2443,2507–2540`, `app/folha/porta_export.py:564–571`, `app/ponto/motor_calculo_v2.py:3342–3350,3370–3396,3409–3413,3448–3452,3491–3499`, `app/ponto/services/credito_parcial.py:34–49`, `app/scripts/sonda_e1_comercial.py:64–68`.
-
-7. **nota | Quem escreve e quem lê a falta e `sem_celula`.** As portas de ausência criam, editam e decidem o registro. `Ausencia.save` deriva `minutos` quando uma falta aprovada chega sem valor. O filtro novo lê `versao_para` pela competência da empresa e cruza as datas com `dias_de_previsao_invalida`. Esse mapa só percorre células existentes elegíveis e delega a validade ao juiz. Em setembro, `versao_para` devolve regra 1, e o filtro exige regra 4. `app/ponto/services/ausencia.py:262,614,1057`, `app/ponto/models.py:878–897`, `app/escala/utils.py:456–498`, `app/ponto/services/cartorio.py:160,276–295`.
-   
-   - **Minutos e datas:** `folha.export` expande e rateia a ausência, depois filtra. O mapa de minutos alimenta `FechamentoMensal.horas_falta` e `DiaPago`; o de datas alimenta TXT, gates de exportação e a lista de faltas decididas do cartão. `app/folha/export.py:63–70,95–145,148–192,747–749,1020`, `app/ponto/services/fechamento.py:902–904,1036,1241`, `app/relatorios/cartao_pela_celula.py:373–374`.
-   - **Overlay e palavra:** `_marcar_ausencias` escreve `tipo_dia`, `falta_aprovada` e `ausencia_id`. A palavra passa pela cobertura filtrada no espelho e no calendário, por `do_dia → rotulo_de → palavra_do_dia`, e chega ao PDF e à API. O valor da frase ainda vem de `Ausencia.minutos` do registro inteiro, enquanto a folha rateia por dia. `app/escala/utils.py:1365–1399`, `app/ponto/services/dia_decidido.py:254–256,442–451,494–497,554–566`, `app/ponto/services/espelho.py:334–346,889–892`, `app/colaboradores/services/calendario.py:570–571,751–760`, `app/relatorios/pdf_espelho.py:923–924`, `app/api/views.py:1394`.
-   - **Assiduidade e crédito:** o comando lê a data inicial dos registros de ausência, filtra as faltas aprovadas recusadas e grava `ScoreColaborador`, lido pelas telas de inteligência. `creditos_por_dia` usa o mesmo mapa para créditos de ausências pagas parciais. Seus leitores incluem **o desconto de atraso do fechamento e do `DiaPago`**, além do subtotal do PDF. O teste novo cobre o mapa e o subtotal de uma declaração, sem aferir o desconto do fechamento. `app/inteligencia/management/commands/calcular_scores.py:7–21,98–119`, `app/inteligencia/views.py:328–352`, `app/ponto/services/credito_parcial.py:15–31`, `app/ponto/services/fechamento.py:1027–1035,1241–1242`, `app/ponto/services/dia_pago.py:189–193`, `app/ponto/services/efeito_ausencia.py:46,60`, `app/relatorios/pdf_espelho.py:336,479`, `app/escala/tests/test_e1_v5_leitores.py:46–53`.
-   - **`sem_celula`:** `_dias_sem_decisao` produz o motivo quando falta célula em dia passado com vínculo, dentro das guardas da porta. Também usa o motivo para célula existente sem veredito. Leem-no a classificação do export, a prévia, Fora da Folha e o vigia de pausa. O teste fixa o caso de cadastro inválido sem célula, com mapa vazio, retenção `sem_celula` e os 480 min ainda no mapa de falta. `app/folha/export.py:975,1212–1220,1267–1287,1310–1322`, `app/folha/previa.py:170–171`, `app/folha/fora_da_folha.py:120–121`, `app/folha/services/vigia_pausa.py:125`, `app/escala/tests/test_e1_v5_leitores.py:82–99`.
-
-8. **bloqueia | REDs, mutantes e ordem da trava.** Confirmei por importação local, sem banco, que o módulo escolhido pelo executor falha com `NameError: DATABASES is not defined` antes dos testes. O comando documentado também chama a suíte direto, sem a trava da L-074 para o banco compartilhado. Os asserts comerciais agora exigem `MotorComercial`, cobrem as duas batidas inválidas e preservam o contraexemplo válido com 2 h de HE50 e 1 h de HE100. Há asserts para `falta_aprovada`, transição, rateio e regra 1. Mordida executada na base, mutantes detectados e suíte inteira verde [nao verificado]. `app/scripts/test_e1_v5_variantes.py:1–6,30–73,118–125`, `app/config/settings_test.py:2–4`, `app/docs/LEIS.md:101`, `bin/suite.sh:343–373`, `app/escala/tests/test_e1_v4_juiz_unico.py:152–195,224–241,312–379`, `app/escala/tests/test_e1_v5_leitores.py:55–79`.
-
-9. **nota | Segundo escritor e relógio.** Os hunks de produção acrescentam leituras e projeções em memória. Os campos persistidos continuam chegando pelas portas citadas. A sonda captura `agora` na entrada e o congela nas duas passadas, com a transação `REPEATABLE READ, READ ONLY` configurada antes das consultas. O filtro por competência recebe a data, sem relógio próprio. A retenção já tinha o default de `localdate()` quando o chamador omite `hoje`. `app/escala/utils.py:486–498`, `app/ponto/services/cartorio.py:276–295`, `app/ponto/services/fechamento.py:1164–1227`, `app/folha/export.py:1238–1246`, `app/scripts/sonda_e1_comercial.py:89–103`.
-
-10. **bloqueia | A sonda mede o motor real. O zero informado pertence ao recorte dela.** As duas passadas chamam `recalcular_fechamento_mes(..., somente_leitura=True)`. A segunda enxerta só o bloco do limite em memória sobre a base. A sonda usa as propriedades reais de `ResultadoMes` e o juiz de dono do E6. Ela compara HE50/HE100 dos `periodos` comerciais na competência 11, por dia de jornada. O denominador inclui dias em que a fatia comercial responde mesmo sem período. A classificação chama `previsao_invalida_do_vinculo` e trata todo `None` como válido. Isso inclui casos sem previsão a julgar, e sua lista de recusados pode incluir template inválido sem célula, que fica fora do mapa de retenção V3. Assim, o código comprova o recorte de **HE diária bruta do motor**, sem comprovar equivalência exata com a população de dias efetivamente válidos do aval nem com as rubricas finais do fechamento. `app/scripts/sonda_e1_comercial.py:27–43,51–86,97–135`, `app/escala/alimentacao.py:411–424`, `app/escala/utils.py:391,407–432,473–483`, `app/ponto/services/fechamento.py:948–996`, `app/ponto/management/commands/e6_oraculo.py:182–195`.
-    
-    O dado fornecido informa `dias_validos=5314` e `validos_com_HE_diferente=0`. A cópia cita a medição no comentário do hunk. A saída por rubrica dos inválidos, a execução da sonda de intermitentes, o vínculo dos resultados ao hash e a publicação antes do pouso estão [nao verificado]. A sonda comercial exige o bloco antigo para reproduzir a comparação, e o procedimento exige suíte inteira verde antes do Opus final. **Veredito do pré-verificador: PAREI.** `app/ponto/motor_calculo_v2.py:3404–3408`, `app/scripts/sonda_e1_comercial.py:27–37,126–135`, `app/scripts/sonda_e1_intermitente.py:66–107`, `CLAUDE.md:392–402`.
-
-_8335 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8337 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
