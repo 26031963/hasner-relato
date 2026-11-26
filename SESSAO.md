@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 06:14:01.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **791**.
+**Medido em 26/11/2026 06:20:13.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **781**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -791,13 +791,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:24:10 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; /usr/bin/sleep 240; date +%H:%M:%S; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' red.log \| tail -2; grep -oE '^[.sxEF]+' red.log \| tr -d '\n' \| wc -c; ps -p 2875414 -o pid=,etime=; /home/ronald/saas-hasner/bin/trava_teste.sh --quem 2>&1 \| head -3` |
 | 18:24:04 | Bash |  | `cd /home/ronald/saas-hasner/logs; for f in $(grep -l -E '^Ran 15[0-9]{3} tests' --include='*.log' -r . 2>/dev/null \| head -40); do p=$(grep -c 'parallel' $f); n=$(grep -oE '^[.sxEF]+' $f \| tr -d '\n' \| wc -c); r=$(grep -E '^Ran ' $f\|tail -1); echo "$n \| $r \| $(stat -c %y $f\|cut -c1-16) \| $f"; done 2>/dev/null \| sort -t'\|' -k3 \| tail -12` |
 | 18:23:54 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b7n80kkwh.output; cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; grep -oE '^[.sxEF]+' red.log \| tr -d '\n' \| wc -c` |
-| 18:18:56 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('PISTA-VAGA-2-DESTRAVA-2511')) L.insert(k,'E1-SAI-DA-VM-2511 (18:18): progresso medido no logs/E1-PREVISAO-24H/red.log (--parallel 1, Found 15723): marcas de teste no inicio de linha = 15.889 (>= o universo; conta aproximada, a prosa do log mistura pon ...` |
-| 18:18:51 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; /usr/bin/sleep 300; date +%H:%M:%S; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' red.log \| tail -2; tail -c 200 red.log; echo; ps -p 2875414 -o pid=,etime=` |
-| 18:18:47 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; c(){ grep -oE '^[.sxEF]+' red.log \| tr -d '\n' \| wc -c; }; a=$(c); echo "$(date +%H:%M:%S) inicio-de-linha=$a"; grep -n -m1 -E '^\.' red.log \| cut -c1-40; sed -n 4,9p red.log \| cut -c1-120` |
-| 18:18:37 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; awk '{n=length($0); if(n>200) print NR, n, substr($0,1,60)}' red.log \| head; wc -l red.log; grep -n -m5 'Found\\|Ran ' red.log; sed -n '1,3p' /home/ronald/saas-hasner/logs/E1-PREVISAO-24H/progresso.txt 2>/dev/null \| cut -c1-200` |
-| 18:17:34 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; f(){ grep -v -E '^(AMBIENTE\|Found\|System\|Creating\|Cloning\|Using\|Operations\| \|Running\|Synchroniz\|Installing)' red.log \| tr -cd '.sxEF' \| wc -c; }; a=$(f); t0=$(date +%s); echo "$(date +%H:%M:%S) n=$a"; /usr/bin/sleep 60; b=$(f); t1=$(date +%s); echo "$(date +%H:%M:%S) n=$b"; stat -c '%y' red.log; ps -o lstart= -p 2875414; ls -l --time-st ...` |
-| 18:17:27 | Bash |  | `cd /home/ronald/saas-hasner/logs/E1-PREVISAO-24H; ls -t \| head -12; grep -m3 -E 'Found\|AMBIENTE' red.log \| cut -c1-300; wc -c red.log; tail -c 400 red.log` |
-| 18:17:24 | Bash |  | `ls -l /proc/2875414/fd/1 /proc/2875414/fd/2 2>&1; ls -la /home/ronald/wt-e1prev-red2-160024 \| head; cat /home/ronald/wt-e1prev-red2-160024/*.sha 2>/dev/null` |
-| 18:15:00 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('RUNNER-POOL-V2 (1) medida 18:10')) L[k]='RESPONDIDA por PISTA-VAGA-2-DESTRAVA-2511 (18:1x: o job A4 das 17:54 rodava o roda.sh antigo) -- era: '+L[k] L.insert(k,'PISTA-VAGA-2-DESTRAVA-2511 (18:14): A4 1125175448 cancelado e repedido fe0d48b36 = 112518 ...` |
-| 18:14:54 | Bash |  | `pgrep -af '^bash logs/pista_certifica_par.sh'` |
-| 18:14:30 | Bash |  | `cd /home/ronald/saas-hasner; timeout 20 ssh pista cancela 1125175448_fe0d48b3; echo rc=$?; pkill -f '^bash logs/pista_certifica_par.sh 1125175448' ; a=$(git rev-parse fe0d48b36); timeout 30 ssh pista pede $a > logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.pista 2>&1; id=$(cat logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.pista); echo $id; setsid bash logs/pista_certifica_par.sh $id $a logs/A4-ESPELHO-AUSENCIA-ABE ...` |
