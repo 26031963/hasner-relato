@@ -3,7 +3,7 @@
 _Gerado por `bin/relato.sh` (timer de 5 min). **Sem nome e sem CPF**: passa pela mesma raspagem do
 RELATO, com a lista de nomes do banco como autoridade._
 
-**Medido em 26/11/2026 15:44:33.**
+**Medido em 26/11/2026 15:51:09.**
 
 | | |
 |---|---|
@@ -22,82 +22,85 @@ RELATO, com a lista de nomes do banco como autoridade._
 ## Raias
 
 - **wt-abono-c1-112106** (`(detached)`) -- **SEM AGENTE**
-  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 5 commit(s) a frente do `main`, 2 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-abono-c1-112106.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-abono-c1d-medhead-154140** (`(detached)`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.0 h**
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **1.1 h**
   - sem declaracao em `logs/raias/wt-abono-c1d-medhead-154140.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
+- **wt-abono-c1d-red-155013** (`(detached)`) -- **SEM AGENTE**
+  - 5 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - sem declaracao em `logs/raias/wt-abono-c1d-red-155013.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-clear-noite-091944** (`(detached)`) -- **SEM AGENTE**
-  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **4.4 h**
+  - 4 commit(s) a frente do `main`, 1 arquivo(s) sujo(s), commit a frente ha **4.5 h**
   - sem declaracao em `logs/raias/wt-clear-noite-091944.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-clear-v4-143522** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.7 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.8 h**
   - sem declaracao em `logs/raias/wt-clear-v4-143522.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-dia-da-batida-juiz-unico-100254** (`(detached)`) -- **SEM AGENTE**
-  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.5 h**
+  - 6 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.6 h**
   - sem declaracao em `logs/raias/wt-codex-dia-da-batida-juiz-unico-100254.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-dia-da-batida-juiz-unico-103044** (`(detached)`) -- **SEM AGENTE**
-  - 8 commit(s) a frente do `main`, 7 arquivo(s) sujo(s), commit a frente ha **0.4 h**
+  - 8 commit(s) a frente do `main`, 7 arquivo(s) sujo(s), commit a frente ha **0.5 h**
   - sem declaracao em `logs/raias/wt-codex-dia-da-batida-juiz-unico-103044.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-e1-previsao-24h-083708** (`e1prev-v5-083708`) -- **SEM AGENTE**
-  - 15 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **5.0 h**
+  - 15 commit(s) a frente do `main`, 6 arquivo(s) sujo(s), commit a frente ha **5.1 h**
   - sem declaracao em `logs/raias/wt-codex-e1-previsao-24h-083708.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-feriado-sem-limite-do-suprimido-003136** (`(detached)`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.7 h**
+  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **5.8 h**
   - sem declaracao em `logs/raias/wt-codex-feriado-sem-limite-do-suprimido-003136.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-codex-o30-f3-construir-010143** (`(detached)`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 22 arquivo(s) sujo(s), commit a frente ha **4.4 h**
+  - 7 commit(s) a frente do `main`, 22 arquivo(s) sujo(s), commit a frente ha **4.5 h**
   - sem declaracao em `logs/raias/wt-codex-o30-f3-construir-010143.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-par-pouso-112430** (`par-pouso-112431`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.3 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **4.4 h**
   - sem declaracao em `logs/raias/wt-par-pouso-112430.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-porta-trava-c1-110132** (`porta-trava-c1-110132`) -- **SEM AGENTE**
-  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
+  - 9 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.2 h**
   - sem declaracao em `logs/raias/wt-porta-trava-c1-110132.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-ramo2b-c1-133041** (`ramo2b-c1-133041`) -- **SEM AGENTE**
-  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.0 h**
+  - 7 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.1 h**
   - sem declaracao em `logs/raias/wt-ramo2b-c1-133041.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-suite-roteia-123641** (`(detached)`) -- **SEM AGENTE**
-  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.8 h**
+  - 8 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
   - sem declaracao em `logs/raias/wt-suite-roteia-123641.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
 - **wt-vigia-disco-131538** (`(detached)`) -- **SEM AGENTE**
-  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **0.9 h**
+  - 1 commit(s) a frente do `main`, 0 arquivo(s) sujo(s), commit a frente ha **1.0 h**
   - sem declaracao em `logs/raias/wt-vigia-disco-131538.agente`: o item 4 do RAIAS-ANDAM-JA cobra linha de motivo no RELATO (lei, `!` ou pista)
-- **9 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-abono-c1-mut1-122606, wt-abono-c1-mut2-122606, wt-abono-c1-mut3-122606, wt-abono-c1-mut4-122606, wt-abono-c1d-medbase-154140, wt-codex3-143142, wt-n3-125628, wt-n4-152223, wt-suite-rota-092914
+- **10 outras worktrees** com arquivo sujo, ZERO commit a frente do `main` e sem declaracao -- copia, nao raia: wt-abono-c1-mut1-122606, wt-abono-c1-mut2-122606, wt-abono-c1-mut3-122606, wt-abono-c1-mut4-122606, wt-abono-c1d-medbase-154140, wt-agente-modelo-154504, wt-codex3-143142, wt-n3-125628, wt-n4-152223, wt-suite-rota-092914
 
-**sem agente: 14** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 0** -- uniao medida: 23
+**sem agente: 15** (raia com commit a frente e sem declaracao, esperado 0) -- **a frente do main ha mais de 6 h: 0** -- uniao medida: 25
 
 > Raia sem agente por mais de um marco pede linha de motivo no RELATO -- lei, `!` ou pista (item 4 do aval).
 
 ## Obras interrompidas (L-119)
 
-- **SILENCIO-VENCIDO-VOLTA** -- interrompida por `QUARENTENA-DO-COLAB`, desde **29/10 00:19** (687.4 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **SILENCIO-VENCIDO-VOLTA** -- interrompida por `QUARENTENA-DO-COLAB`, desde **29/10 00:19** (687.5 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA pouso de QUARENTENA-DO-COLAB; base SILENCIO-VENCIDO-VOLTA@7e8648704 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11
-- **QUARENTENA-DO-COLAB** -- interrompida por `OPUS-REPROVOU`, desde **29/10 00:19** (687.4 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **QUARENTENA-DO-COLAB** -- interrompida por `OPUS-REPROVOU`, desde **29/10 00:19** (687.5 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Claude-desenho; DESTRAVA desenho; base wt-quarentena-svv-151703@c9a2a3846 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); reapli
-- **PADRAO-DE-CIMA** -- interrompida por `PDC-DESENHO`, desde **31/10 22:01** (617.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **PADRAO-DE-CIMA** -- interrompida por `PDC-DESENHO`, desde **31/10 22:01** (617.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Claude-desenho; DESTRAVA desenho; base PADRAO-DE-CIMA@7635c1c8a (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); decisao de desen
-- **COBPARC-FILA-RELOGIO** -- interrompida por `ESTACIONADA-POR-AVAL`, desde **02/11 10:49** (580.9 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **COBPARC-FILA-RELOGIO** -- interrompida por `ESTACIONADA-POR-AVAL`, desde **02/11 10:49** (581.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base COBPARC-FILA-RELOGIO@ab828ddcf (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); mutantes_v4 + suite + o
 - **BUG-ENC-CELULAS-FORMA** -- interrompida por `F2 em 01/11 16:19 falta: via singular, selos, suite e impacto (vaga devolvida a F2); raia wt-e4carga-155931, ref refs/rescaldo/1211/wt-e4carga-155931 @a2cd7981d, arquivos fora S7 em logs/rescaldo/1211/censo.r (RESCALDO-DAS-RAIAS-1211). fila 1 (bug, fura)`, idade **nao medivel** (a celula nao diz `em DD/MM HH:MM`) -- **VOLTOU**: a obra FECHOU
   - falta: via singular, selos, suite e impacto (vaga devolvida a F2); raia wt-e4carga-155931, ref refs/rescaldo/1211/wt-e4carga-155931 @a2cd7981d, arq
-- **V3-RETOMA-PERIODOS-DA-CELULA** -- interrompida por `P5-MOTOR`, desde **31/10 22:03** (617.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **V3-RETOMA-PERIODOS-DA-CELULA** -- interrompida por `P5-MOTOR`, desde **31/10 22:03** (617.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA lei período não guardado na célula; base V3-RETOMA-PERIODOS-DA-CELULA@c71b1038b (lista unica GRADE-MESTRA, RESCALDO-CO
-- **V3-RETOMA-FILA** -- interrompida por `POUSO-DA-V3`, desde **31/10 13:01** (626.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **V3-RETOMA-FILA** -- interrompida por `POUSO-DA-V3`, desde **31/10 13:01** (626.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA pouso de V3; base V3-RETOMA-FILA@0448d88f1 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); pouso da V3; raia wt-d
-- **SUITE-POR-IMPACTO** -- interrompida por `PRONTO-5`, desde **04/11 22:44** (521.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **SUITE-POR-IMPACTO** -- interrompida por `PRONTO-5`, desde **04/11 22:44** (521.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA ! aval PRONTO-5; base SUITE-POR-IMPACTO@2d91d5905 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); mapa/replay d
-- **CODEX-CONTEXTO-DA-CASA** -- interrompida por `CONSTRUTORES-EM-VOO`, desde **30/10 18:10** (645.6 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **CODEX-CONTEXTO-DA-CASA** -- interrompida por `CONSTRUTORES-EM-VOO`, desde **30/10 18:10** (645.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base CODEX-CONTEXTO-DA-CASA@4435ec647 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); briefs dos construtor
-- **O275** -- interrompida por `FORMA-A-X-FORMA-B`, desde **15/10 19:46** (1004.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **O275** -- interrompida por `FORMA-A-X-FORMA-B`, desde **15/10 19:46** (1004.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA lei FORMA A x FORMA B; base O275@32c8c259e (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); corte entre FORMA A
-- **LASTRO-DEGRAU-2** -- interrompida por `CENSO-DE-LEITORES`, desde **29/10 13:02** (674.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **LASTRO-DEGRAU-2** -- interrompida por `CENSO-DE-LEITORES`, desde **29/10 13:02** (674.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base LASTRO-DEGRAU-2@de6097212 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); cura anterior no construtor
-- **V3-E1** -- interrompida por `MOTIVO-NAO-SEI`, desde **31/10 00:29** (639.3 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **V3-E1** -- interrompida por `MOTIVO-NAO-SEI`, desde **31/10 00:29** (639.4 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Ronald; DESTRAVA lei V3-E1 C06/C16/24x48; base V3-E1@2430fcc5b (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); motivo: nao sei (
-- **O10-C** -- interrompida por `SOLO-LISTA-DO-ADMIN`, desde **06/11 17:02** (478.7 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **O10-C** -- interrompida por `SOLO-LISTA-DO-ADMIN`, desde **06/11 17:02** (478.8 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA nada; base O10-C@a40577fba (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); volta 2 com lista do admin e porta de
-- **OTIMIZA-1** -- interrompida por `SUITE-POR-IMPACTO`, desde **04/11 22:44** (521.0 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
+- **OTIMIZA-1** -- interrompida por `SUITE-POR-IMPACTO`, desde **04/11 22:44** (521.1 h) -- **passou das 24 h da L-119** -- **AINDA FORA DA ORDEM VIVA**
   - falta: DONO Code; DESTRAVA pouso de SUITE-POR-IMPACTO; base OTIMIZA-1@2d91d5905 (lista unica GRADE-MESTRA, RESCALDO-CORTE-1511 15/11); suite, repla
 
 **interrompidas_mais_de_24h: 13** (esperado 0) -- abertas: 13 de 14 registradas; topo da ORDEM VIVA: `ORDEM-VIVA-1511-NOITE`
@@ -110,7 +113,7 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 - universo antigo / regressao: `fio_morto` 226 (esperado 0), `fio_morto_cobrando` 226, e de hoje pra frente 0, que nao conta (o teto e do `cartorio.julgar_celula`, nao deste leitor)
 - **FORA DO ESPERADO** (carimbo inteiro): `cadastro_sem_turno` mediu 1 e o carimbo espera 0, `ferias_ausencia_sem_agendamento` mediu 59 e o carimbo espera 0, `ferias_concedidos_maior` mediu 1 e o carimbo espera 0, `ferias_dia_sem_ausencia` mediu 5 e o carimbo espera 0, `fio_morto` mediu 226 e o carimbo espera 0, `fio_morto_alcance` mediu 32 e o carimbo espera 0, `fio_morto_cobrando` mediu 226 e o carimbo espera 0, `fio_morto_com_alvo` mediu 1 e o carimbo espera 0, `materializada_viva` mediu 16 e o carimbo espera 0, `validada_projetada_sem_linha` mediu 15139 e o carimbo espera 0
-- medido em **2026-11-26T06:49:32.098047-03:00** (8.9 h), dia julgado **2026-11-26**, banco `saas_hasner`
+- medido em **2026-11-26T06:49:32.098047-03:00** (9.0 h), dia julgado **2026-11-26**, banco `saas_hasner`
 - a rodada ALARMOU: `fio_morto`, `fio_morto_cobrando`, `fio_morto_com_alvo`
 
 ## Resolver dia recusado hoje
@@ -121,17 +124,17 @@ RELATO, com a lista de nomes do banco como autoridade._
 
 ## Codex (limite)
 
-**codex recusado por limite: 0 nas ultimas 24 h** (total 12, ultima 2026-11-14 07:39:09) -- fonte `logs/codex/limite.log`, escrito por `bin/codex_pergunta.sh` (rc LIMITE = 75; o Code segue pelo sonnet). chamadas ao Codex nas ultimas 24 h por papel: leitura 30, censo 11, verificador 64, sonda 11, construtor 18. ultimas 5 chamadas (hora, obra, papel, rc): 2026-11-26 15:34:12 DIA-DA-BATIDA-JUIZ-UNICO construtor rc=em curso; 2026-11-26 15:34:46 PORTA-CONFERE-TRAVA verificador rc=0; 2026-11-26 15:38:30 R1-NOTURNO-DOIS-CASOS censo rc=em curso; 2026-11-26 15:41:05 E1-PREVISAO-24H verificador rc=em curso; 2026-11-26 15:42:53 PORTA-CONFERE-TRAVA verificador rc=em curso. uso semanal do plano `pro`: janela principal 37.0% usado (semanal).
+**codex recusado por limite: 0 nas ultimas 24 h** (total 12, ultima 2026-11-14 07:39:09) -- fonte `logs/codex/limite.log`, escrito por `bin/codex_pergunta.sh` (rc LIMITE = 75; o Code segue pelo sonnet). chamadas ao Codex nas ultimas 24 h por papel: leitura 30, censo 10, verificador 64, sonda 11, construtor 18. ultimas 5 chamadas (hora, obra, papel, rc): 2026-11-26 15:34:12 DIA-DA-BATIDA-JUIZ-UNICO construtor rc=0; 2026-11-26 15:34:46 PORTA-CONFERE-TRAVA verificador rc=0; 2026-11-26 15:38:30 R1-NOTURNO-DOIS-CASOS censo rc=0; 2026-11-26 15:41:05 E1-PREVISAO-24H verificador rc=em curso; 2026-11-26 15:42:53 PORTA-CONFERE-TRAVA verificador rc=0. uso semanal do plano `pro`: janela principal 37.0% usado (semanal).
 
-vagas do construtor Codex nas ultimas 24h: **18** abertura(s) (vaga 1: 13, vaga 2: 5); aberta(s) sem fechamento: **1** (trilha sem par, nunca ocupada: quem diz presa e o flock) -- 26/11 15:34 DIA-DA-BATIDA-JUIZ-UNICO vaga 1
+vagas do construtor Codex nas ultimas 24h: **18** abertura(s) (vaga 1: 13, vaga 2: 5); aberta(s) sem fechamento: **0** (trilha sem par, nunca ocupada: quem diz presa e o flock)
 
 ## Orcamento de contexto
 
-contexto: 16% (claude-opus-5-5, janela 1000000 declarada: skill claude-api, tabela Current Models (cache 2026-10-06); 156434 tokens, gatilho 151825) | desde o clear: 0.0h, 0 marcos | CLEAR atendido 1 x seguiu sem clear 4
+contexto: 16% (claude-opus-5-5, janela 1000000 declarada: skill claude-api, tabela Current Models (cache 2026-10-06); 162849 tokens, gatilho 151825) | desde o clear: 0.0h, 0 marcos | CLEAR atendido 1 x seguiu sem clear 4
 
 ## Disjuntores (DISJUNTOR-E-CLEAR-RAPIDO)
 
-disparos 24 h (esperado 0): B1=5, B2=0, B3=5, B4=0, B4-CODEX=0, ANEXO-ENXUTO=8 | negacoes 24 h: 34 (sem linha no RELATO, esperado 0: 0) | verificador final sem obra lida (esperado 0): 7 (historico anterior a cura: 6, obras no RELATO) | B3 liberado 24 h: desenho=2, erro-bobo=0 | contexto principal no ultimo Stop: 156434 tokens (Stop 15:43) | espera PAREI ! CLEAR -> /clear: sem CLEAR atendido em 24 h | cache lido 2026-11-26: 525M tokens (ref 30/10 = 390M) | cota 7d: 21% | pisos: pos-compact 103650 (2026-11-26 15:40:21), pos-clear 77607 (2026-11-25 16:45:21) | gatilho C1: 151825 (piso pos-compact 103650 (2026-11-26 15:40:21), teto 200000) | Codex tokens por chamada hoje: censo 6 chamadas, soma 27.4M, media 4.57M, construtor 17 chamadas, soma 90.7M, media 5.34M, leitura 26 chamadas, soma 78.8M, media 3.03M, sonda 5 chamadas, soma 0.9M, media 0.17M, verificador 36 chamadas, soma 93.8M, media 2.61M | Codex orcamento: usado hoje 37.0 pp x orcamento 26.8 pp/dia (semana 37%, ACIMA: so a volta FINAL) | placar MAIS-CODEX (5): ao Codex 24 h (inicios no wrapper, inclui rc 3/4): leitura 30, censo 11, verificador 64, sonda 11, construtor 18, outro 0 | agentes Claude 24 h por modelo/tipo: ?/fork 4, opus/claude 5, opus/general-purpose 37, opus/verificador 15, sonnet/general-purpose 17 (motivo de cada desvio: nao lido -- incompleto) | tentativas de construtor sem censo aprovado nas 24 h (esperado 0; tentativa = `ini` construtor do chamadas.log, iniciada no wrapper, nao prova que o Codex rodou; sem CENSO APROVADO do wrapper da mesma obra+pid+hash ate 600 s antes; + Agent que passou o hook com a chave desligada): 0 | tentativas de construtor com censo aprovado nas 24 h (ini casado + Agent APROVADO): 50 | aprovacoes do censo nas 24 h (linhas CENSO APROVADO da trilha; uma linha cobre todos os briefs da abertura; nao e abertura): 54 | aberturas negadas por censo nas 24 h: 19 | horas entre a 1a negativa por censo de uma obra e a aprovacao seguinte do brief dela (uniao dos intervalos NEGOU -> APROVADO, 24 h): 0.3 h
+disparos 24 h (esperado 0): B1=5, B2=0, B3=5, B4=0, B4-CODEX=0, ANEXO-ENXUTO=8 | negacoes 24 h: 34 (sem linha no RELATO, esperado 0: 0) | verificador final sem obra lida (esperado 0): 7 (historico anterior a cura: 6, obras no RELATO) | B3 liberado 24 h: desenho=2, erro-bobo=0 | contexto principal no ultimo Stop: 162849 tokens (Stop 15:45) | espera PAREI ! CLEAR -> /clear: sem CLEAR atendido em 24 h | cache lido 2026-11-26: 537M tokens (ref 30/10 = 390M) | cota 7d: 21% | pisos: pos-compact 103650 (2026-11-26 15:45:09), pos-clear 77607 (2026-11-25 16:45:21) | gatilho C1: 151825 (piso pos-compact 103650 (2026-11-26 15:45:09), teto 200000) | Codex tokens por chamada hoje: censo 7 chamadas, soma 29.6M, media 4.23M, construtor 18 chamadas, soma 93.4M, media 5.19M, leitura 26 chamadas, soma 78.8M, media 3.03M, sonda 5 chamadas, soma 0.9M, media 0.17M, verificador 37 chamadas, soma 95.0M, media 2.57M | Codex orcamento: usado hoje 37.0 pp x orcamento 26.8 pp/dia (semana 37%, ACIMA: so a volta FINAL) | placar MAIS-CODEX (5): ao Codex 24 h (inicios no wrapper, inclui rc 3/4): leitura 30, censo 10, verificador 64, sonda 11, construtor 18, outro 0 | agentes Claude 24 h por modelo/tipo: ?/fork 4, opus/claude 5, opus/general-purpose 37, opus/verificador 15, sonnet/general-purpose 17 (motivo de cada desvio: nao lido -- incompleto) | tentativas de construtor sem censo aprovado nas 24 h (esperado 0; tentativa = `ini` construtor do chamadas.log, iniciada no wrapper, nao prova que o Codex rodou; sem CENSO APROVADO do wrapper da mesma obra+pid+hash ate 600 s antes; + Agent que passou o hook com a chave desligada): 0 | tentativas de construtor com censo aprovado nas 24 h (ini casado + Agent APROVADO): 48 | aprovacoes do censo nas 24 h (linhas CENSO APROVADO da trilha; uma linha cobre todos os briefs da abertura; nao e abertura): 52 | aberturas negadas por censo nas 24 h: 19 | horas entre a 1a negativa por censo de uma obra e a aprovacao seguinte do brief dela (uniao dos intervalos NEGOU -> APROVADO, 24 h): 0.3 h
 
 ## Leitores com derivacao propria do dia (PROGRAMA-CELULA-E-O-DIA)
 
@@ -359,44 +362,44 @@ _Fonte de cada numero em `core/placar_estrutural.py` (campo `fonte`): o placar d
 ## painel da sessao (ultimas 40 linhas)
 
 ```
-  ⎿  Backgrounded agent (↓ to manage · ctrl+o to expand)
+    todo Agent de construir ou verificar sai com model explícito. Ficou registrado no RELATO.
 
-● Agent "RAMO2-B c2 construtor" finished · 1h 21m 19s
+✻ Waiting for 7 background agents to finish
 
-● Bash(cd ~/saas-hasner; python3 - <<'EOF'
-      p='app/docs/RELATO.md'; t=open(p).read().split('\n')…)
-  ⎿  ok
-  ⎿  (file diff unavailable for this command; 1 file changed in this repository while it ran, by it or by other commands)
-  ⎿  Allowed by auto mode
+› Message from @verificador (ctrl+o to expand)
 
-● A RAMO2-B c2 parou no limite de 3 voltas do Codex. O construtor curou os 5 achados procedentes. O último commit da cópia é o 6b6fb10e5, e ele
-  foi direto ao opus pelo 5(d) sem passar por nenhuma volta Codex.
+● O opus aprovou a c1f. Rodo os selos da obra na cópia antes de pedir a liberação do B3:
 
-  - Verde que já tenho: o da VM, com 295 testes e rc 0. A pista estava cheia e a linha "ROTA VM" com o motivo está no handback. Os 9 mutantes
-    mordem.
-  - O que o opus está lendo agora:
-    - O achado que reprovou a última volta Codex: com pausa de 20 min dentro da base, o motor indeniza 40 min do intervalo e o oráculo, 0. O
-      motor testa o gatilho das 6 h do intervalo pela base bruta e o oráculo, pela líquida. O construtor diz que essa divergência já existia
-      antes da obra.
-    - Uma pergunta de desenho com dinheiro: na pausa na cauda com intervalo declarado de 60 min, antes saía HE 0 e intervalo 60; com a c2 sai
-      HE50 de 20 e intervalo 40. O opus confere se alguma lei escrita responde. Se nenhuma responder, isso vai ao topo do RELATO como lei:, com
-      os números.
-    - Um campo com três escritores e um segundo significado (minutos_base_da_he).
-  - Recorte na pista: está rodando, e coloquei um esperador nele.
+● Roda os selos da SUITE-ROTEIA na cópia · 4m 46s
+  ⎿  $ cd ~/wt-suite-roteia-123641; git status --porcelain | head; for s in test_suite_rota_pista test_suite_sh test_suite_motivo; do timeout
+     600 bash bin/tests/$s.sh > /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/$s.log 2>&1; echo "$s
+     rc=$?"; tail -2 /tmp/cl… (4m 45s · 6 lines)
+     (ctrl+b ctrl+b (twice) to run in background)
 
-  A c3 só abre depois que a c2 pousar. Registrei tudo no RELATO.
-                                                                                                                        6% until auto-compact
+› Message from @general-purpose (ctrl+o to expand)
+› Message from @verificador (ctrl+o to expand)
+
+❯ aval Ronald: CODEX-E-PISTA-SEM-AVAL-2611-1525 v3 (SUBSTITUI INTEIRO o v2) -- igual ao v2 em (1) SUITE-ROTEIA pousa, (2) N4 pela conf sem
+  numero no CLAUDE.md com monitor de rajada e cura do test_rm_com_guarda, (3) hook bloqueia so nas 3 condicoes com teto 3/hora; cumpre
+  VAGA-NUNCA-OCIOSA-2611 e COLHE-F4-E-PRONTA-NA-FONTE-2611-1520 sem mudar nada deles. ACRESCENTA so a definicao de "colhido", que nenhum aval
+  tinha: um rc conta como colhido quando o RELATO cita a pasta ou a obra dele com hora igual ou posterior ao rc (hoje o vercodex, criterio
+  "nada escrito depois", marca 5 de 5 como sem colher e os 5 estao no RELATO). A definicao mora numa funcao so em bin/, lida pelo hook e pelo
+  ~/vercodex.py. PROIBIDO: instrumento novo, numero de vagas no CLAUDE.md, dois criterios de colhido. PRONTO: vercodex mostra RC SEM COLHER =
+  0 com os 5 de hoje; selo com RED de cada condicao, do teto anti-laco e do falso positivo de hoje. Segue a fila; PAREI so em lei ou !
+  ⎿  Queued · ctrl+x ctrl+s to send now
+
+✶ Kerfuffling… (4m 53s · ↓ 527 tokens)
+                                                                                                                        1% until auto-compact
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯ 
+❯ Press up to edit queued messages
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ctx 156k 7d 21%
-  ⏵⏵ auto mode on · 9 background tasks · ↓ to manage
+  ctx 165k 7d 21%
+  ⏵⏵ auto mode on · 12 background tasks · esc to interrupt · ↓ to manage
 
   ● main
-  ◯ general-purpose  Verificando __pycache__ em chamados                                                            41m 23s · ↓ 117.9k tokens
-  ◯ fork             Conferindo rc dos selos do N4                                                                  13m 36s · ↓ 136.2k tokens
-  ◯ general-purpose  Pedindo execução RED na pista                                                                     9m 0s · ↓ 99.0k tokens
-  ◯ general-purpose  Esperando fim da prova RED/mutantes                                                              5m 8s · ↓ 127.9k tokens
-  ◯ verificador      Mapeando guardas de erro em suite.sh                                                             4m 9s · ↓ 132.3k tokens
-  ↓ 1 more
+  ◯ general-purpose  waiting on 1 shell · PORTA-CONFERE c2d construtor · since 3:44 PM
+  ◯ fork             Rodando caso drena em test_codex_n_vagas                                                       20m 11s · ↓ 115.6k tokens
+  ◯ general-purpose  Rodando RED em test_contract_juiz_batida.py                                                    15m 36s · ↓ 124.9k tokens
+  ◯ general-purpose  Esperando o verificador Codex (r.rc)                                                           11m 43s · ↓ 130.3k tokens
+  ◯ general-purpose  Adicionando caso RED a test_disjuntor.sh                                                        5m 58s · ↓ 132.0k tokens
 ```
