@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 04:40:58.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **930**.
+**Medido em 26/11/2026 04:47:14.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **917**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -927,16 +927,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:48:44 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/WRAPPER-N-VAGAS; cat $L/v19_verde.sh; echo ---; cat $L/v19_nvagas.log; ps --ppid 2705719 -o pid,etime,cmd; uptime` |
 | 16:48:39 | Bash |  | `cd /home/ronald/saas-hasner; L=logs/WRAPPER-N-VAGAS; ls -la $L/v19_verde.fim $L/v19_*.log $L/v19_sha.txt 2>&1; cat $L/v19_verde.fim; tail -3 $L/v19_nvagas.log; tail -3 $L/v19_pergunta.log; ps -p 2705719 -o pid,etime,cmd; cd /home/ronald/wt-wrapper-n-vagas-125229 && git log --oneline -3 && git status --porcelain && sha256sum -c ~/saas-hasner/$L/v19_sha.txt; grep -rl WRAPPER-MODELO-DE-AMEACA ~/saas- ...` |
 | 16:48:34 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/WRAPPER-N-VAGAS/HANDBACK-1625.md; date +%H:%M` |
-| 16:45:10 | Bash |  | `cd /home/ronald/saas-hasner; ls scratchpad/; sed -n 1,40p scratchpad/gate10_hash09.py` |
-| 16:45:08 | Bash |  | `cd /home/ronald/saas-hasner; ls bin/restore_relavratura_10_2026.py logs/gate10_hash09.py; sed -n 1,40p logs/gate10_hash09.py; git check-ignore -v app/logs/x logs/x` |
-| 16:44:53 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 60,71p bin/snapshot_relavratura_10_2026.py; git log --oneline -3 -- bin/snapshot_relavratura_10_2026.py; ls bin/ \| grep -i "restore_10\\|snapshot"; grep -rn "snapshot_relavratura_10" app/docs/RELATO*.md \| tail -3 \| cut -c1-300` |
-| 16:44:49 | Bash |  | `cd /home/ronald/saas-hasner; sed -n 1,60p bin/snapshot_relavratura_10_2026.py; wc -l bin/snapshot_relavratura_10_2026.py` |
-| 16:44:44 | Bash |  | `cd /home/ronald/wt-guarda10b-154425/app; grep -n "DiaPago\\|dia_pago" ponto/services/fechamento.py \| head -20; grep -rn "reversao\\|DiaPago" /home/ronald/saas-hasner/logs/GUARDA-10-B/verif2.r \| head -10` |
-| 16:44:41 | Bash |  | `cd /home/ronald/saas-hasner; git grep -ln "reversao" -- 'app/*/management/commands/*.py' 'bin/*' \| head; ls logs/GUARDA-10-B/ \| grep -i rever; grep -n "DiaPago" logs/GUARDA-10-B/triagem_v1.txt \| head -5` |
-| 16:44:35 | Bash |  | `cd /home/ronald/wt-guarda10b-154425; sed -n 108,200p app/ponto/management/commands/recalcular_fechamento.py` |
-| 16:44:30 | Bash |  | `cd /home/ronald/wt-guarda10b-154425; git diff main...HEAD -- app/ponto/services/fechamento.py app/ponto/management/commands/recalcular_fechamento.py; sed -n 1,80p app/ponto/management/commands/recalcular_fechamento.py` |
-| 16:44:25 | Bash |  | `cd /home/ronald/saas-hasner; until [ -f logs/GUARDA-10-B/cadeia3.fim ]; do /usr/bin/sleep 30; done; cat logs/GUARDA-10-B/full.rc; grep -E '^(OK\|FAILED)($\| \()' logs/GUARDA-10-B/full.log \| tail -1; grep '^Ran ' logs/GUARDA-10-B/full.log \| tail -1` |
-| 16:44:20 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; python3 - <<'EOF' p='app/docs/PROMPTS.md' s=open(p).read() assert 'GUARDA-10-LISTA-DP-2511' not in s s=s.rstrip('\n')+'\n\| 25/11 16:4x \| GUARDA-10-LISTA-DP-2511 \| comp 10 paga a mao: PAGO fora do sistema, nao se inventa; lista ao DP = DIFF do recalculo da 10 pela L-113 (antes x depois, por colab e por rubrica) com o devido; escritor = o DIFF do DINHEIRO ...` |
-| 16:43:11 | Bash |  | `cd /home/ronald/saas-hasner; timeout 60 grep -rl --include=*.py "FIM-GUARDA10B" /tmp/claude-1001 /home/ronald/wt-guarda10b-154425 /home/ronald/saas-hasner/logs 2>/dev/null \| head` |
-| 16:43:06 | Bash |  | `cd /home/ronald/saas-hasner; grep -o "sombra.sh[^\"']*GUARDA[^\"']*" /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/br52qeylj.output \| head -3; grep -rl "FIM-GUARDA10B" /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/ 2>/dev/null \| head; tail -3 app/docs/PROMPTS.md \| cut -c1-200` |
-| 16:41:00 | Bash |  | `cd /home/ronald/saas-hasner; grep -rln "FIM-GUARDA10B" logs/GUARDA-10-B/ /tmp/claude-1001 2>/dev/null \| head; ls logs/GUARDA-10-B/*.py 2>/dev/null; find / -name "*.py" -newer logs/GUARDA-10-B/diff.patch -path "*guarda*" 2>/dev/null \| grep -v proc \| head; tail -3 app/docs/PROMPTS.md \| cut -c1-200` |
