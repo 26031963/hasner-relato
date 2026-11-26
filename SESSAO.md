@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 12:27:49.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (34.8 MB). Acoes na janela: **938**.
+**Medido em 26/11/2026 12:34:22.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (34.9 MB). Acoes na janela: **944**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:34:16 | Bash | Lê a sonda de estoque existente | `cd /home/ronald/saas-hasner/logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN; head -c 2500 sonda_estoque.r; echo; ls -la sonda_estoque.r; head -30 sonda_estoque.py` |
+| 12:34:10 | Bash | Insumos para o pacote do PAR | `cd /home/ronald/saas-hasner; ls logs/NOTURNO-A-APPLY-10/ logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/ \| head -50; tail -30 logs/par_relampago.log \| cut -c1-200` |
+| 12:34:00 | Bash | Confere que a linha DESENHO é reconhecida | `cd /home/ronald/saas-hasner/bin; python3 -c " import disjuntor as d ls=open('../app/docs/RELATO.md').read().splitlines()[:3] print(d.linhas_libera_b3('PAR-RELAMPAGO-A-LISTA-DO-ADMIN', ls, raiz='/home/ronald/saas-hasner'))" \| cut -c1-120` |
+| 12:33:56 | Bash | Grava aval, DESENHO e fila dos achados | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/PAR-B3-E-BATERIA-RAIZ-2611.txt <<'EOF' aval Ronald: PAR-B3-E-BATERIA-RAIZ-2611 (26/11 12:35) -- (A) libera B3 PAR-RELAMPAGO-A-LISTA-DO-ADMIN -- DESENHO: lei=juiz unico (PAR-RELAMPAGO-A-LISTA-DO-ADMIN 13/11: par relampago vai a lista do admin, o cron nao retrata sozinho); antes do merge, o pacote FOCO-COMP11: reversao em logs/, DIFF de impacto de f ...` |
+| 12:33:41 | Bash | Como valida o sítio da linha | `cd /home/ronald/saas-hasner; sed -n '/def _sitios_validos/,/^def /p' bin/disjuntor.py \| head -30` |
+| 12:33:26 | Bash | Lê regras de liberação do B3 | `cd /home/ronald/saas-hasner; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/b3-so-libera-com-aval-explicito.md ~/.claude/projects/-home-ronald-saas-hasner/memory/b3-nunca-escrevo-desenho.md \| sed -n 1,40p; sed -n '/def linhas_libera_b3/,/^def /p' bin/disjuntor.py \| head -40` |
 | 12:27:26 | Bash | Tabela col922 no RELATO e HOMOLOGA | `cd /home/ronald/saas-hasner; cp logs/RAMO2-CRUZA/COL922-2611/TABELA.md logs/RAMO2-CRUZA/HOMOLOGA-2611/col922_medida.md; python3 - <<'EOF' r='app/docs/RELATO.md'; t=open(r).read() l=("MEDIDA col922 RAMO2-CRUZA (2) 12:4x (aval RAMO2-CRUZA-E-COL922-2611; SOMBRA, READ ONLY, funcoes reais; logs/RAMO2-CRUZA/COL922-2611/sonda_col922.out; sem cura): " "motor=espelho=DiaPago(motor) em todas as rubricas; x  ...` |
 | 12:27:08 | Bash | Confere batidas e pares da sonda | `cd /home/ronald/saas-hasner/logs/RAMO2-CRUZA/COL922-2611; /bin/grep -n "^BAT\\|^PER\\|^ORACULO\\|^CEL\\|^DIA " sonda_col922.out \| cut -c1-230 \| head -60` |
 | 12:26:43 | Bash | Relança dossiê Codex corretamente | `cd /home/ronald/saas-hasner; D=logs/RAMO2-CRUZA/DOSSIE-2611; rm -f $D/r.rc; H=$(cat $D/hash) (CODEX_OBRA=RAMO2-B-EM-TURNO-QUE-CRUZA CODEX_PAPEL=leitura setsid bin/codex_pergunta.sh --anexo $D/aval.txt $H $D/q.md $D/r.md > $D/wrapper.out 2>&1; echo "rc=$?" > $D/r.rc) >/dev/null 2>&1 & /usr/bin/sleep 20; tail -3 $D/wrapper.out \| cut -c1-200; ls $D` |

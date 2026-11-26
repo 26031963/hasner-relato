@@ -1,7 +1,71 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 12:13** · publicado em **26/11/2026 12:14** (UTC-3)
+> Ultima resposta processada: **26/11/2026 12:31** · publicado em **26/11/2026 12:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 12:31 · sessao b63a03da369c · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
+
+# Dossiê — RAMO2-B-EM-TURNO-QUE-CRUZA
+
+**O corte nasce em `app/ponto/janela_he.py::saida_efetiva`. A perda de trabalhado acontece em `app/ponto/motor_calculo_v2.py`, quando os calculadores medem a duração até a saída recortada.** A L-097 emendada manda contar o trecho após o marco no trabalhado e no noturno, com a HE classificada pela janela e encaminhada à Gestão. [janela_he.py:183](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/janela_he.py:183) · [motor_calculo_v2.py:2775](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/motor_calculo_v2.py:2775) · [LEIS.md:115](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/LEIS.md:115)
+
+## 1. Texto dos cortes e mapa do cálculo
+
+- **RESPOSTA-LEI-NOTURNO-RAMO2-2311-1735**, trecho literal do registro na cópia: “LEI (b) trecho apos a janela conta como trabalho, L-097 so classifica HE, noturno sobre o mesmo trecho”. `app/docs/PROMPTS.md:2846`
+- **RESPOSTAS-1-11-V2-2411-0830, itens 5 e 7**, trecho literal do registro conjunto na cópia: “nenhum par perde trabalhado pela ancora, trecho/par apos o marco de saida conta (trabalho e noturno), HE classificada no recortado/Gestao, fora_janela sai”. `app/docs/PROMPTS.md:2869`
+- A emenda está incorporada na L-097. O `RELATO` registra a reafirmação pelo NOTURNO-A-DUAS-RESPOSTAS e a consequência para o teto de pontualidade. O texto original integral dos dois avais e a redação individual dos itens 5 e 7 em `logs/AVAIS-1515` estão **[nao verificado]**. `app/docs/LEIS.md:115`, `app/docs/RELATO.md:161`, `app/docs/RELATO.md:334`, `app/docs/PROMPTS.md:2928`
+
+`MotorBase._janela_do_dia` lê o dia **D** que o juiz atribuiu ao par e resolve o marco de saída. `marco_de_saida` usa `hf` em **D** para o turno que não cruza e em **D+1** para o que cruza. `_janela_do_par` chama `_saida_efetiva`, que passa esse marco à função pura quando a janela de saída se aplica e o dia não está autorizado. `app/ponto/motor_calculo_v2.py:936`, `app/ponto/motor_calculo_v2.py:1549`, `app/ponto/motor_calculo_v2.py:1567`, `app/ponto/motor_calculo_v2.py:1747`, `app/ponto/motor_calculo_v2.py:1768`, `app/ponto/janela_he.py:54`
+
+A preservação já existe **para turno que não cruza com saída na virada ou depois dela**. A condição `marco_saida < virada <= saida` devolve a saída real e zero minutos de saída em `fora_janela`. Se a saída tardia fica no próprio D, o corte ainda acontece. No turno que cruza, o marco já está em D+1, então a condição falha e a função devolve a saída recortada quando a sobra passa do piso. O motor usa essa saída para a duração e para o noturno. `app/ponto/janela_he.py:183`, `app/ponto/janela_he.py:196`, `app/ponto/motor_calculo_v2.py:2775`, `app/ponto/motor_calculo_v2.py:2801`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:318`
+
+**Col1010, 05/11/2026.** O aval transcrito dá **+26,2 min de trabalhado esperados**. A fixture da cópia mostra o mecanismo com horários inteiros: turno 18h–06h, saída às 06h26 do dia 06, marco às 06h00 e expectativa antiga de **720 trabalhados e 28 fora**, sendo 26 de saída e 2 de entrada. O outro par, 01h04–05h59, já conta integralmente na fixture pela L-084. Os segundos das batidas, a decisão de HE vigente e o delta de produção por rubrica estão **[nao verificado]**. `aval.txt:1` (anexo transcrito), `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:52`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:93`
+
+## 2. Censo de escritores e leitores
+
+| Campo ou projeção | Escritores e leitores no caminho do dia |
+|---|---|
+| `PeriodoCalculo.minutos_trabalhados`, noturno e `minutos_fora_janela` | Escrevem `calcular_periodo` de 12x36, Partido e Comercial. Plantão delega ao 12x36. `_carimbar_segmento` publica as pontas efetivas e os intervalos. O crédito de pares fechados em dia com turno aberto e o bloqueio de dia sem previsto também escrevem trabalhado e fora. Leem `ResultadoMes`, a lavra, o resumo de espelho/PDF e o teto da L-093. `app/ponto/motor_calculo_v2.py:1850`, `:2801`, `:2912`, `:3275`, `:3554`, `:2575`, `:1488`, `:296`, `:1203` · `app/ponto/services/dia_pago.py:178` · `app/ponto/services/espelho.py:97` · `app/relatorios/pdf_espelho.py:502` |
+| `PeriodoCalculo.minutos_extra_50/100` | O 12x36 escreve no período. O Partido e o Comercial também zeram e reclassificam no mês, inclusive a dobra. Leem os agregados mensais, a lavra, o split noturno da HE, o reflexo de DSR e o banco do Comercial. A régua legal do Partido também usa o ganho de hora noturna reduzida para classificar HE. `app/ponto/motor_calculo_v2.py:2828`, `:2866`, `:2953`, `:3117`, `:3155`, `:3172`, `:3206`, `:3353`, `:3375`, `:3436`, `:324`, `:1031`, `:3473`, `:3507` · `app/ponto/services/dia_pago.py:180` |
+| `DiaPago`, fechamento e espelho | O fechamento grava os agregados e chama `dia_pago.lavrar` para `motor` e `oraculo`. O oráculo recebe `efetivo_entrada/saida`, intervalos, fora e pontas de HE do motor. `regras.do_dia` apura as rubricas com esses insumos. A chamada de janela fica no motor; o `import` de `saida_efetiva` em `regras.py` está sem uso. Espelho, PDF, app e calendário leem a projeção lavrada. O TXT lê as rubricas mensais. `minutos_realizados` da grade tem cálculo próprio e teto no previsto. `app/ponto/services/fechamento.py:922`, `:940`, `:1225`, `:1291` · `app/ponto/services/dia_pago.py:330`, `:359`, `:394`, `:833`, `:898`, `:914` · `app/ponto/calculador/alimentacao.py:83`, `:449`, `:514` · `app/ponto/calculador/regras.py:31`, `:744`, `:773`, `:845` · `app/ponto/services/espelho.py:823` · `app/relatorios/pdf_espelho.py:901` · `app/api/views.py:1452` · `app/colaboradores/services/calendario.py:689` · `app/folha/export.py:420` |
+| Pendência de HE e decisão do admin | `marcar_pontas_fora` lê o `delta` da primeira entrada e da última saída da grade, aplica piso e extra declarada e marca a ponta. `montar_dias` publica `he_fora_da_janela` e acrescenta pontas ausentes da grade que o motor publicou no relato. Tela, PDF, retrato da Gestão e portão leem essa lista. O calendário também chama o marcador. A porta `decidir_he` grava a decisão por dia via `_gravar` e dispara a relavratura. A Gestão e o portão leem o estado vigente. Com a trava ligada, o portão bloqueia dia acima do limite e sem decisão. `app/ponto/janela_he.py:241`, `:262`, `:324` · `app/ponto/services/espelho.py:741`, `:754`, `:790`, `:939` · `app/templates/ponto/espelho.html:189` · `app/relatorios/pdf_espelho.py:932` · `app/colaboradores/services/calendario.py:421` · `app/ponto/services/he_pendente_lavrado.py:138`, `:183` · `app/ponto/views.py:950` · `app/ponto/portas/he.py:44`, `:206`, `:229` · `app/ponto/services/gestao_he.py:92` · `app/folha/porta_export.py:205`, `:687`, `:864` |
+
+## 3. Leis herdadas dos sítios
+
+- **Janela e dia do turno.** L-097 protege `entrada_efetiva`, `saida_efetiva`, `_janela_do_par`, `decidir_he` e `porta_export.medir`. L-085 fixa o dia do início, inclusive para a cauda e o feriado. L-084 dispensa a janela quando as duas pontas estão longe dos marcos conforme a régua. O corte NOTURNO-A registra a âncora no dia do juiz e o escopo do `!` daquela obra. `app/docs/LEIS.md:115`, `:116`, `:117` · `app/docs/CORTES.md:646`
+- **Pontualidade e rubricas.** Pela L-093, o teto considera tempo efetivamente trabalhado. Como `_aplicar_teto_pontualidade` soma `trabalhado + fora_janela`, a cauda incorporada ao trabalhado sai dessa parcela de `fora_janela`. A dobra continua regida pelo dia do turno e pelo cadastro do ciclo, conforme a emenda da L-086. `app/docs/LEIS.md:111`, `:118` · `app/docs/RELATO.md:334` · `app/ponto/motor_calculo_v2.py:1203`, `:934`
+- **Lavratura e testemunhas.** L-001 põe a cura na origem, L-002 manda a testemunha ler a autoridade, L-095 rege a lavratura e L-037/L-038 vinculam o PDF ao espelho. O texto do PDF ainda diz “nao conta” para a ponta de saída, e o aviso da tela ainda diz que a jornada conta do marco. São leitores afetados pela emenda. `app/docs/LEIS.md:59`, `:60`, `:85`, `:86`, `:113` · `app/docs/CORTES.md:341` · `app/relatorios/pdf_espelho.py:944` · `app/templates/ponto/espelho.html:189`
+
+## 4. Sítio da cura e limite do aval
+
+**A origem da decisão de recortar fica fora do motor, em `janela_he.py::saida_efetiva`. O acoplamento que precisa ser desfeito fica também no motor.** Pelo contrato atual, devolver a saída real com sobra positiva faz o chamador preservar a sobra em `minutos_fora_janela`, que o teto soma ao trabalhado. Devolver a saída real com sobra zero elimina o recorte também da base que alimenta a HE. A cura integral precisa manter as duas bases coerentes até a lavratura. `marcar_pontas_fora` é origem da marcação na grade, e a lavra e o espelho recebem valores já produzidos pelo cálculo. `app/ponto/janela_he.py:183`, `:199`, `:262` · `app/ponto/motor_calculo_v2.py:1757`, `:1766`, `:2801`, `:2828`, `:2859`, `:2964`, `:3350`, `:1203` · `app/ponto/services/dia_pago.py:178`
+
+**O aval desta obra exige `!` para tocar `motor_calculo_v2.py` e proíbe tocar competência exportada.** O `!` registrado no CORTES é da NOTURNO-A, com escopo explícito na âncora. `aval.txt:1` (anexo transcrito) · `CLAUDE.md:143` · `app/docs/CORTES.md:646`
+
+## 5. Matriz para os REDs
+
+Casos de regra para dia comum, par válido, janela de saída vigente, piso zero e sem extra fixa. **D** é o dia do turno. A posição da saída é comparada com o marco já datado. “Com pendência” indica ponta elegível à Gestão e ausência de decisão vigente. `app/docs/LEIS.md:115`, `:117`, `:136` · `app/ponto/janela_he.py:54`, `:196` · `app/ponto/services/gestao_he.py:98` · `app/folha/porta_export.py:205`
+
+| RED | Turno e posição da saída | Pendência | Resultado pela lei |
+|---|---|---|---|
+| 1 | Não cruza, marco em D, saída até o marco | Sem | Saída real no trabalhado e no noturno aplicável. Zero ponta de saída. `app/docs/LEIS.md:115` · `app/ponto/janela_he.py:178` |
+| 2 | Não cruza, marco em D, saída até o marco | Só de entrada | Mesmo resultado para a saída. A pendência de entrada permanece pela sua regra. `app/docs/LEIS.md:115` · `app/ponto/janela_he.py:125`, `:251` |
+| 3 | Não cruza, saída depois do marco | De saída | Preservar a cauda no trabalhado e no noturno aplicável. HE pela base recortada e pela Gestão. A cauda sai de `minutos_fora_janela`. Exercitar a saída ainda em D e em D+1. `app/docs/PROMPTS.md:2869` · `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:337` |
+| 4 | Não cruza, saída depois do marco | Sem, decisão vigente | Preservar o mesmo trabalhado da saída com `Não` ou `Autorizado`. `Não` mantém a classificação recortada e registra ciência. `Autorizado` libera a janela para a apuração aplicável. `app/docs/LEIS.md:115` · `app/ponto/motor_calculo_v2.py:1708`, `:1755` |
+| 5 | Cruza, marco em D+1, saída até o marco | Sem | Contar até a saída real, inclusive na madrugada antes do marco. Zero ponta de saída. `app/docs/LEIS.md:115`, `:117` · `app/ponto/janela_he.py:54`, `:178` |
+| 6 | Cruza, marco em D+1, saída até o marco | Só de entrada | Mesmo resultado para a saída. A janela e a pendência de entrada seguem a regra própria. `app/docs/LEIS.md:115` · `app/ponto/janela_he.py:125`, `:251` |
+| 7 | Cruza, saída depois do marco em D+1 | De saída | Preservar a cauda no trabalhado e no noturno aplicável. HE pela base recortada e pela Gestão. Conferir que a mesma cauda sai de `minutos_fora_janela` e chega ao `DiaPago`. É o RED da classe de col1010. `app/docs/PROMPTS.md:2869` · `app/docs/RELATO.md:334` · `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:93` |
+| 8 | Cruza, saída depois do marco em D+1 | Sem, decisão vigente | A cauda conta uma vez com `Não` ou `Autorizado`. Conferir a classificação recortada no primeiro e a apuração com autorização no segundo. `app/docs/LEIS.md:115` · `app/ponto/motor_calculo_v2.py:1755` |
+
+Os REDs acima são especificações por leitura. O resultado de execução está **[nao verificado]**.
+
+## 6. Padrão
+
+**`padrao=juiz unico` — Single Writer Principle no GLOSSARIO.** A classificação da janela tem uma autoridade, e a decisão do admin tem a porta existente. No pouso, a L-121 aplica o padrão complementar de **projeções reconstruíveis (CQRS)** à competência aberta, com DIFF e reversão. `app/docs/GLOSSARIO.md:12`, `:25` · `app/docs/PLANO-PADROES.md:28`, `:53`, `:61`
+
+## 7. Perguntas de lei
+
+**0 para a classe do aval.** Os cortes respondem o pertencimento do par, o trabalhado, o noturno e a classificação de HE. O ponto pendente para construção é a autorização de escopo por arquivo. `app/docs/LEIS.md:115`, `:117` · `app/docs/PROMPTS.md:2869` · `aval.txt:1` (anexo transcrito)
 
 ## 26/11 12:13 · sessao 0afee0d210dd · SUITE-ROTEIA-PARA-PISTA · leitura · origem=Code
 
@@ -832,280 +896,4 @@ with schema_context("juliani"), transaction.atomic(durable=True):
 
 [truncado em 20000 de 21177 caracteres]
 
-## 26/11 11:08 · sessao 86c45000af0e · R1-SEM-DONO-2611 · leitura · origem=Code
-
-Nas seis chaves, o E6 selecionou `minutos_realizados` e calculou **piso − realizado**. O teto é a soma dos vãos dos trechos e só entra na classificação de faixa quando há trecho ímpar. As seis chaves têm `impares=false`, `guarda_janela=false` e dono `ESTRUTURA`. A correspondência com os deltas publicados do R1 e a identidade da foto lida estão **[nao verificado]**. `SONDA1/roda.out:15–21` · `app/ponto/management/commands/e6_oraculo.py:263–269,339–404` · `app/ponto/calculador/nucleo.py:235–254`
-
-## 1. Ramos que produziram os seis deltas
-
-O E6 recebeu os instantes apuráveis em hora local, sem `pares` nem `envelopes`. Nesse ramo, `brutas` conta por data civil, `horas` agrupa pela data da primeira batida do trecho, o piso soma os pares por posição e o teto soma `última − primeira` de cada trecho. No espelho, o realizado agrupa pelo `data_turno` do juiz. Um carimbo de 60 confirma a passagem pelo ramo de desconto da janela declarada. Um carimbo de zero deixa em aberto qual ramo do realizado forneceu o saldo. `app/ponto/management/commands/e6_oraculo.py:149–154` · `app/ponto/calculador/nucleo.py:157–159,178–254` · `app/ponto/services/espelho.py:625–628,689–690,801,835–837` · `app/ponto/turnos.py:719–771`
-
-| Dia de 2026 | Realizado · brutas · piso / teto · delta em min | O que fecha pelo dado e o que falta medir |
-|---|---|---|
-| **col114 15/11** | **499 · 4 · 439,847646 / 499,385183 · −59,152354 → −59** | O E6 tem um trecho com dois pares, `09:58→15:05` e `16:05→18:17`. Teto menos piso dá **59,537537 min**. O realizado coincide com as bordas `09:58→18:17` truncadas ao minuto e traz janela **0**. As bordas efetivamente escolhidas e o reconhecimento de `15:05→16:05` como pausa pelo juiz estão **[nao verificado]**. Ler `data_turno`, `_fim_fechado`, a pausa valorizada e `borda_posicional`. `SONDA1/roda.out:15` · `app/ponto/calculador/nucleo.py:235–254` · `app/ponto/turnos.py:542–546,605–622,719–771` |
-| **col130 29/10** | **335 · 1 · 671,905433 / 729,936250 · +336,905433 → +337** | O E6 soma `18:56→00:33` e `01:31→07:06` no trecho chaveado em **29/10**. Três pontas são de 30/10. O espelho descontou **60** de janela. Repondo esses 60, o realizado fica em 395 e sobra uma diferença de **276,905433 min** para o piso. A atribuição e o fim contado de cada turno em 29 e 30/10 estão **[nao verificado]**. `SONDA1/roda.out:16` · `app/ponto/calculador/nucleo.py:235–254` · `app/ponto/turnos.py:285–324,733–771` |
-| **col220 10/11** | **337 · 1 · 430,420683 / 486,063217 · +93,420683 → +93** | O E6 soma `21:54→03:35` e `04:31→06:00` no trecho chaveado em **10/11**. Três pontas são de 11/11. O espelho descontou **60** de janela. Repondo esses 60, o realizado fica em 397 e sobra **33,420683 min** para o piso. O papel da ata para `03:35`, `04:31` e `06:00`, o fim contado e o dia de cada turno estão **[nao verificado]**. `SONDA1/roda.out:17` · `app/ponto/calculador/nucleo.py:235–254` · `app/ponto/turnos.py:609–622,733–771,1940–1944` |
-| **col874 22/10** | **667 · 3 · 382,822567 / 382,822567 · −284,177433 → −284** | O E6 soma apenas `15:45→22:07` na chave de 22/10. A terceira batida civil foi agrupada em chave anterior. O espelho descontou **60** de janela e ainda computou 667, acima da duração do único par do E6 na chave. O destino da terceira batida, as bordas que entraram nos 667 e a contribuição de cada turno estão **[nao verificado]**. `SONDA1/roda.out:18` · `app/ponto/calculador/nucleo.py:215–247` · `app/ponto/turnos.py:719–771` |
-| **col989 23/10** | **721 · 2 · 567,370050 / 567,370050 · −153,629950 → −154** | O E6 soma um único par, `08:32→17:59`. O realizado com janela **0** excede em **153,629950 min** todo o trecho do E6. As mesmas duas bordas contadas uma vez não produzem 721. A borda efetiva, eventual turno adicional e sua presença nos cartões estão **[nao verificado]**. `SONDA1/roda.out:19` · `app/ponto/calculador/nucleo.py:235–247` · `app/ponto/turnos.py:719–771` · `app/ponto/services/espelho.py:465–474,778–801` |
-| **col996 10/11** | **443 · 5 · 1026,385217 / 1116,385217 · +583,385217 → +583** | O E6 abre dois trechos na mesma chave. O primeiro soma `06:57→13:00` e `14:30→15:50`, com vão interno de **90 min**. A batida de `21:16` entra **mais de 14 h** após `06:57`, com gap de cerca de **5 h 26** desde `15:50`. Assim, o corte vem do **vão total** com quatro pontas, o que explica `cortes=false`. O segundo trecho soma `21:16→06:59` na chave de **10/11**. O delta tem a ordem de grandeza desse par inteiro. As pontas efetivamente contadas nos 443 e o destino do par noturno no juiz estão **[nao verificado]**. `SONDA1/roda.out:20` · `app/ponto/calculador/nucleo.py:215–254` · `app/ponto/turnos.py:719–771` |
-
-## 2. Encaixe nas obras
-
-- **Pausa.** Col114 15/11 tem o contraste aritmético da família **C**. Em col130, col220 e col874, **C** aparece no ramo do espelho como desconto comprovado de 60, com diferença residual em todos os três. A L-032 e o corte de **14/09** regem a pausa valorizada e a janela declarada. `INTERVALO-PRE-ASSINALADO-CONTRATO` V2 trata a dedução no motor e a intrajornada pela L-031/L-032. A aplicação dessa obra aos deltas está **[nao verificado]**. `SONDA1/roda.out:15–18` · `app/docs/LEIS.md:79–80` · `app/ponto/turnos.py:707–717,756–771` · `app/docs/BACKLOG.md:2554`
-- **Dia e pareamento.** Col130, col220, col874 e col996 mostram o problema de **comparar chaves civis e de turno**, família **B**, com a chave do E6 demonstrada e a do juiz **[nao verificado]**. Para col996, o **corte por vão** do lado E6 também tem família expressamente registrada em `ORACULO-E6-43-DEFEITOS`. A L-085 rege o dia do plantão. `MOTOR-LE-O-TURNO-DIA-DO-PAR` trata a herança de 0–6 h na lavra/FT. `NOTURNO-A-JANELA-NO-DIA-DO-TURNO-2411-0210` trata a âncora da janela de HE pela L-085/L-097. `PAR-PELO-TURNO-V6-2311-1958` trata a separação da jornada pelo teto `previsto + 4 h` do pareador. O corte comprovado de col996 é o **vão de 14 h do E6**. O nexo de cada delta com essas obras do motor ou do pareador está **[nao verificado]**. `SONDA1/roda.out:16–18,20` · `app/docs/LEIS.md:115–117,154` · `app/docs/GRADE-MESTRA.md:303` · `app/docs/BACKLOG.md:1989,1991,2020` · `app/docs/CORTES.md:646` · `app/ponto/calculador/nucleo.py:215–224` · `app/ponto/motor_calculo_v2.py:1545–1567,2415–2429`
-- **Geometria, previsão e abono.** Col989 tem separação de geometria a apurar, família **A**. O encaixe em **D** depende de encontrar a diferença entre os turnos somados e os cartões. A **L-115** é o corte aplicável se aparecer borda posicional após pausa fechada. `O327` trata falha de lavratura do oráculo de folha, `E1-PREVISAO-24H` trata previsão inválida e `ABONADO-COM-SAIDA-ANTECIPADA` trata desconto de pontualidade em dia coberto pelo abono, pelo corte `ABONADO-COM-SAIDA-NA-ZONA-INVIOLAVEL`. Esses três mecanismos estão **[nao verificado]** nas seis chaves. Em todas elas, a fonte selecionada foi o realizado. `SONDA1/roda.out:15–20` · `app/docs/LEIS.md:71,93,153` · `app/docs/BACKLOG.md:1793,1837,2006` · `app/docs/RELATO.md:7039` · `app/ponto/services/espelho.py:465–474,689–690,778–801`
-
-## 3. Sonda única de leitura
-
-O bloco é autocontido dentro de um Django já inicializado em sombra. Usa a janela visual do espelho para o juiz de turno declarado em `core/juizes.py`, e imprime o alvo e as datas vizinhas. Fixei `hoje` e `agora` nos valores do rodapé fornecido. A execução e a equivalência da foto estão **[nao verificado]**. O bloco não chama o wrapper que prepara credenciais e grava trilha. `SONDA1/roda.out:21` · `app/config/settings/sombra.py:49–60` · `app/core/juizes.py:215–216` · `app/ponto/services/espelho.py:625–649,1298–1302,1330–1332` · `bin/sonda_leitura.sh:126–142,235–250`
-
-```python
-import datetime as dt
-import json
-import logging
-import sys
-from contextlib import ExitStack
-
-sys.dont_write_bytecode = True
-
-from django.conf import settings
-from django.db import connection, transaction
-from django.utils import timezone
-from django_tenants.utils import schema_context
-
-from colaboradores.models import Colaborador
-from escala.alimentacao import celulas_do_periodo, escalas_do_periodo, vinculo_do_dia
-from ponto import turnos as juiz
-from ponto.calculador.nucleo import minutos_do_oraculo
-from ponto.janelas import janela_fechamento
-from ponto.management.commands.e6_oraculo import (
-    InsumosDoDono,
-    diferenca_e_a_janela_declarada,
-    minutos_do_espelho,
-)
-from ponto.services.dia_pago import _dia_de
-from ponto.services.espelho import espelho_do_colab
-
-assert getattr(settings, "HASNER_SOMBRA", False) is True
-assert not connection.in_atomic_block
-
-ALVOS = (
-    (114, "2026-11-15"), (130, "2026-10-29"), (220, "2026-11-10"),
-    (874, "2026-10-22"), (989, "2026-10-23"), (996, "2026-11-10"),
-)
-HOJE = dt.date(2026, 11, 26)
-AGORA = dt.datetime.fromisoformat("2026-11-26T11:01:55.389818-03:00")
-UM_DIA = dt.timedelta(days=1)
-
-
-def emitir(**dados):
-    print(json.dumps(dados, ensure_ascii=True, default=str))
-
-
-def local(instante):
-    return timezone.localtime(instante).isoformat() if instante is not None else None
-
-
-def meia_noite(data):
-    return timezone.make_aware(dt.datetime.combine(data, dt.time.min))
-
-
-def min_entre(inicio, fim):
-    return (fim - inicio).total_seconds() / 60
-
-
-def medir(c, alvo):
-    chave = f"col{c.pk} {alvo}"
-    dias = (alvo - UM_DIA, alvo, alvo + UM_DIA)
-    ini, fim = janela_fechamento(11, 2026, c.empresa)
-    esp = espelho_do_colab(c, HOJE, ini, fim, agora=AGORA)
-    vis_ini, vis_fim = esp["data_ini"], esp["data_fim"]
-    linhas = {d["data"]: d for d in esp["dias"]}
-    traco = {}
-
-    # Observa os trechos e o papel efetivos, sem refazer o corte ou o pareamento.
-    def observar(frame, evento, retorno):
-        if evento != "return":
-            return
-        if frame.f_code is minutos_do_oraculo.__code__:
-            traco["trechos"] = frame.f_locals["turnos"]
-        if frame.f_code is juiz._turnos_do_colab_puro.__code__:
-            traco["papel"] = frame.f_locals["_papel"]
-            traco["batidas_juiz"] = frame.f_locals["bs"]
-
-    with ExitStack() as restaurar:
-        restaurar.callback(sys.setprofile, sys.getprofile())
-        sys.setprofile(observar)
-        ins = InsumosDoDono(c, ini, fim, HOJE, espelho=esp, agora=AGORA)
-        turnos = juiz.turnos_do_colab(c, vis_ini, vis_fim)
-
-    v = ins.oraculo
-    apelidos = {}
-    ecos = {b.pk for b in traco["batidas_juiz"] if getattr(b, "_eco_flush", False)}
-
-    def batida(b):
-        if b is None:
-            return None
-        return {
-            "id": apelidos.setdefault(b.pk, f"b{len(apelidos) + 1}"),
-            "instante_local": local(b.timestamp),
-            "tipo": b.tipo,
-            "papel_ata": juiz._papel_da_ata(b, traco["papel"]),
-            "eco_flush": b.pk in ecos,
-            "is_intervalo": b.is_intervalo,
-            "intra_dur": bool(getattr(b, "_intra_dur", False)),
-            "intra_declarado": bool(getattr(b, "_intra_declarado", False)),
-        }
-
-    emitir(chave=chave, competencia=(ini, fim), janela_visual=(vis_ini, vis_fim))
-    brutas = juiz.batidas_apuraveis(
-        c, meia_noite(alvo - 2 * UM_DIA), meia_noite(alvo + 3 * UM_DIA)
-    )
-    for b in brutas:
-        emitir(chave=chave, batida_apuravel=batida(b))
-
-    anterior = None
-    for trecho in traco["trechos"]:
-        if any(t.date() in dias for t in trecho):
-            pares = list(zip(trecho[::2], trecho[1::2]))
-            emitir(
-                chave=chave, dia_e6=trecho[0].date(),
-                instantes=[local(t) for t in trecho],
-                pares=[(local(a), local(z), min_entre(a, z)) for a, z in pares],
-                piso_trecho=sum(min_entre(a, z) for a, z in pares),
-                teto_trecho=min_entre(trecho[0], trecho[-1]),
-                fronteira_anterior=None if anterior is None else {
-                    "n_pontas": len(anterior),
-                    "gap_min": min_entre(anterior[-1], trecho[0]),
-                    "vao_min": min_entre(anterior[0], trecho[0]),
-                },
-            )
-        anterior = trecho
-
-    celulas = celulas_do_periodo(
-        [c.pk], min(vis_ini, dias[0]), max(vis_fim, dias[-1])
-    )
-    cels_vis = {k: cel for k, cel in celulas.items() if vis_ini <= k[1] <= vis_fim}
-    geradoras = {cel.escala_geradora_id for cel in cels_vis.values() if cel.escala_geradora_id}
-    escalas = sorted(
-        escalas_do_periodo(c, vis_ini, vis_fim, mais=geradoras),
-        key=lambda ec: ec.data_inicio,
-    )
-
-    for dia in dias:
-        k = dia.isoformat()
-        cel = celulas.get((c.pk, dia))
-        de = linhas.get(dia)
-        emit_cel = None if cel is None else {
-            "trabalha": cel.trabalha, "veredito": cel.veredito,
-            "marcos": (cel.dna or {}).get("marcos"), "dna": cel.dna,
-        }
-        ec = vinculo_do_dia(c.pk, dia, escalas, cels_vis) if de is not None else None
-        te = ec.tipo_escala if ec is not None else None
-        livre = bool(te and te._intervalo_livre())
-        intervalo = ec.intervalo_do_dia(dia, celulas=cels_vis) if te else (None, None)
-        do_dia = [t for t in turnos if t.data_turno == dia]
-        real = juiz.realizado_dos_turnos(do_dia, dia, livre=livre, intervalo=intervalo)
-        pos = juiz._borda_posicional(do_dia)
-        selecionado = minutos_do_espelho(de)
-        piso = v.minutos.get(k, 0.0)
-        delta = None if selecionado[0] is None else piso - selecionado[0]
-        emitir(
-            chave=chave, dia=dia, celula=emit_cel,
-            vinculo_id=ec.pk if ec is not None else None,
-            livre=livre, intervalo_declarado=intervalo,
-            realizado_juiz=real._asdict() if de is not None else None,
-            borda_L115=None if pos is None else {
-                "entrada": batida(pos[0].entrada), "saida": batida(pos[1]),
-                "pausa": [batida(b) for b in pos[2]],
-            },
-            espelho=None if de is None else {
-                **{campo: de.get(campo) for campo in (
-                    "minutos_realizados", "pago_h", "realizado_janela_descontada",
-                    "realizado_sem_turno", "realizado_aberto", "isencao", "veredito_dia",
-                )},
-                "ausencia_presente": de.get("ausencia") is not None,
-                "cobertura_folha_presente": de.get("_cobertura_folha") is not None,
-            },
-            selecionado=selecionado, piso=piso, teto=v.envelope.get(k, 0.0),
-            pausa_e6=v.pausas.get(k, 0.0), horas=v.horas.get(k, []),
-            brutas=v.brutas.get(k, 0), impar=k in v.impares, corte=k in v.cortes,
-            delta=delta, delta_arredondado=round(delta) if delta is not None else None,
-            guarda_janela=(delta is not None and diferenca_e_a_janela_declarada(delta, de)),
-        )
-
-        for t in do_dia:
-            isolado = None
-            if de is not None and pos is None:
-                isolado = juiz.realizado_dos_turnos(
-                    [t], dia, livre=livre, intervalo=intervalo
-                )._asdict()
-            emitir(
-                chave=chave, data_turno=t.data_turno, aberto=t.aberto,
-                cruza_meia_noite=t.cross_meianoite,
-                entrada=batida(t.entrada), saida=batida(t.saida),
-                fim_contado=batida(juiz._fim_fechado(t)),
-                batidas_turno=[batida(b) for b in t.batidas],
-                pausas=[(local(a), local(z)) for a, z in juiz.intervalos_do_turno(t)],
-                abaixo_do_piso=[
-                    (local(a), local(z)) for a, z in juiz.pausas_abaixo_do_piso(t)
-                ],
-                realizado_turno_isolado=isolado,
-            )
-
-    resultado = esp["resultado"]
-    mapa = getattr(resultado, "dia_da_jornada", None) or {}
-    dia_cartao = {id(p): d for d, linha in linhas.items() for p in linha["turnos"]}
-    for ft, periodos in ((False, resultado.periodos), (True, resultado.periodos_ft)):
-        for p in periodos:
-            d_cartao = dia_cartao.get(id(p))
-            d_mapa = mapa.get(id(p))
-            d_civil = timezone.localtime(p.entrada).date()
-            if {d_cartao, d_mapa, d_civil}.intersection(dias):
-                emitir(
-                    chave=chave, periodo_motor={
-                        "ft": ft, "dia_cartao": d_cartao, "dia_mapa": d_mapa,
-                        "dia_para_lavra": _dia_de(p, mapa),
-                        "entrada": local(p.entrada), "saida": local(p.saida),
-                        "efetivo_entrada": local(p.efetivo_entrada),
-                        "efetivo_saida": local(p.efetivo_saida),
-                        "minutos_trabalhados": p.minutos_trabalhados,
-                        "minutos_fora_janela": p.minutos_fora_janela,
-                        "intra_descontada": p.intra_descontada,
-                    },
-                )
-
-
-with schema_context("juliani"), transaction.atomic(), ExitStack() as restaurar:
-    restaurar.callback(logging.disable, logging.root.manager.disable)
-    logging.disable(logging.CRITICAL)
-    with connection.cursor() as cursor:
-        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY")
-        cursor.execute(
-            "SELECT current_database(), current_schema(), "
-            "current_setting('transaction_isolation'), "
-            "current_setting('transaction_read_only'), txid_current_snapshot()::text"
-        )
-        banco, schema, isolamento, leitura, snapshot = cursor.fetchone()
-    assert (banco, schema, isolamento, leitura) == ("sombra", "juliani", "repeatable read", "on")
-    emitir(banco=banco, schema=schema, snapshot=snapshot, hoje=HOJE, agora=local(AGORA))
-    for pk, data in ALVOS:
-        medir(Colaborador.objects.select_related("empresa").get(pk=pk), dt.date.fromisoformat(data))
-```
-
-## 4. Dia → mecanismo → obra → total dos 18
-
-| Dia | Mecanismo demonstrado ou localizado | Obra dona | Quantos dos 18 a obra zera, somando o mapa |
-|---|---|---|---|
-| **col114 15/11** | **C**, diferença entre piso e vão interno com janela do espelho zero. Origem da valorização **[nao verificado]**. `SONDA1/roda.out:15` · `app/ponto/turnos.py:719–771` | **[nao verificado]** | **[nao verificado]** |
-| **col130 29/10** | **B** na chave do E6 e **C** no desconto de 60. Origem do saldo **[nao verificado]**. `SONDA1/roda.out:16` · `app/ponto/calculador/nucleo.py:235–247` · `app/ponto/turnos.py:760–771` | **[nao verificado]** | **[nao verificado]** |
-| **col220 10/11** | **B** na chave do E6 e **C** no desconto de 60. Origem do saldo **[nao verificado]**. `SONDA1/roda.out:17` · `app/ponto/calculador/nucleo.py:235–247` · `app/ponto/turnos.py:760–771` | **[nao verificado]** | **[nao verificado]** |
-| **col874 22/10** | **B** na migração de uma batida civil no E6 e **C** no desconto de 60. Geometria que completa o saldo **[nao verificado]**. `SONDA1/roda.out:18` · `app/ponto/calculador/nucleo.py:235–247` · `app/ponto/turnos.py:719–771` | **[nao verificado]** | **[nao verificado]** |
-| **col989 23/10** | **A**, o par do E6 sozinho não fecha os 721 min. Participação de **D** **[nao verificado]**. `SONDA1/roda.out:19` · `app/ponto/turnos.py:719–771` · `app/ponto/services/espelho.py:465–474,778–801` | **[nao verificado]** | **[nao verificado]** |
-| **col996 10/11** | **B** e corte por vão com dois trechos na chave do E6. `SONDA1/roda.out:20` · `app/ponto/calculador/nucleo.py:215–247` | `ORACULO-E6-43-DEFEITOS` registra o ramo do instrumento. Obra que resolve este delta **[nao verificado]**. `app/docs/GRADE-MESTRA.md:303` | O mapa relaciona **2 A**, **2 B** e **2 candidatas C** ao instrumento. Esta sonda acrescenta **1 ocorrência do ramo de corte**. Total que a obra zera **[nao verificado]**. `DOSSIE/r.md:27–34` · `SONDA1/roda.out:20` |
-
-Nenhuma das seis chaves sustenta abrir **classe nova** com este dado. Para uma classe que a sonda venha a demonstrar, o padrão depende do produtor divergente. O GLOSSÁRIO dá **Single Source of Truth / um juiz por pergunta** para par, dia ou pausa julgados em fontes distintas, **CQRS com projeções reconstruíveis** quando a divergência está na projeção, e **Architecture Conformance Test** para selar o result
-
-[truncado em 20000 de 20282 caracteres]
-
-_8364 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8365 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
