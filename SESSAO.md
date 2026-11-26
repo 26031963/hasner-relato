@@ -6,10 +6,11 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 01:11:34.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **934**.
+**Medido em 26/11/2026 01:17:47.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **935**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:14:17 | Bash |  | `cd /home/ronald/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bny3nr01v.output \| head -2; cat logs/DIA-DA-BATIDA-JUIZ-UNICO/F1/r.rc logs/O30-F3-CONSTRUIR/c2.rc 2>/dev/null` |
 | 01:06:49 | Bash |  | `cd /home/ronald/saas-hasner; cat >> logs/E1-PREVISAO-24H/v4/HANDBACK.md <<'EOF' ## RESSALVAS DO RELATO FINAL DO AGENTE (26/11 ~01:1x, transcrito pela sessao; valem mais que o texto acima) - 570f3191e NAO pousa: item 5 entrou, item 3 nao (comercial no dia invalido: falta 480 cai e HE e paga; cura so no motor_calculo_v2 -> PERGUNTA DE DESENHO). - fatias.log rc 0 Ran 15624: NAO CONFERIDO se comecou d ...` |
 | 01:06:10 | Bash |  | `cd /home/ronald/saas-hasner; DEPLOY_SEM_SOMBRA="01:1x, portao cego 00-04 (sombra de 25/11 verde diverge=0); diff = texto da meta BATERIA em core/placar_estrutural.py + docs, sem modelo nem regra" timeout 590 bin/deploy.sh --sem-migrate 2>&1 \| tail -12` |
 | 01:06:06 | Bash |  | `cd /home/ronald/saas-hasner; /bin/grep -n -E "sem-sombra\|SEM_SOMBRA" bin/deploy.sh \| head -20` |

@@ -1,7 +1,236 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 01:03** · publicado em **26/11/2026 01:05** (UTC-3)
+> Ultima resposta processada: **26/11/2026 01:13** · publicado em **26/11/2026 01:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 01:13 · sessao 0fff049b4d8a · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
+
+A adesão pós-vínculo agora usa o dia que `dia_das_batidas` atribui a cada PK. A consulta inclui um dia em cada ponta e aplica os dois limites inclusivos do chamado ao resultado do juiz. Sem dois limites, verifica se há batida apurável na vida do colaborador. O fechamento continua por `transicionar_com_pauta` e `pai.reconciliar`. [colaboradores/services/pos_vinculo.py:37] [ponto/turnos.py:2972]
+
+Dei baixa nas duas chaves ORM da linha 41 da base. A catraca agora compara arquivo, função, expressão AST e ocorrência, com classe, motivo e dono por sítio. A varredura estática passou com **252 sítios registrados, 102 classificados como J**. A célula `turno/marcos × um juiz por pergunta` está vermelha e a dívida J integra o selo que bloqueia o verde. Conferi **zero novos `except`** nos quatro trechos alterados, incluindo testes. [ponto/tests/test_contract_no_batida_date.py:145] [ponto/tests/test_contract_no_batida_date.py:507] [ponto/tests/test_contract_no_batida_date.py:546] [core/contratos_estruturais.py:225] [core/tests/test_selo_contratos_estruturais.py:81] [nao verificado]
+
+### RED e GREEN
+
+Executei o comando RED antes de alterar o serviço e o comando GREEN depois. Ambos pararam ao importar `django.core`, antes da conexão. **RED e GREEN em banco de testes, suíte do Code e confirmação independente do hash** [nao verificado]. [manage.py:11] [nao verificado]
+
+Em memória, o pareador e o mapa reais atribuíram as duas PKs a **25/10** nos pares **19:00–07:00** e **23:58–00:03**, com 43.200 e 300 segundos brutos. Com persistência e porta simuladas, a seleção civil fechou o pai da folga nos dois casos e a cura devolveu `0` e o manteve vivo. O teste ORM também exige o controle de 25/10 com gate apto, uma só nota após a repetição, exclusão da retratada e o ramo sem dois limites. [ponto/turnos.py:1192] [ponto/turnos.py:3010] [ponto/tests/test_x1_folga_sem_adesao.py:439] [nao verificado]
+
+Comandos para o envelope do Code, a partir de `app/`. [config/settings/ci.py:6] [ponto/tests/test_x1_folga_sem_adesao.py:473]
+
+```bash
+A=ponto.tests.test_x1_folga_sem_adesao.FecharAdesaoDiaDoTurnoTest
+C=ponto.tests.test_contract_no_batida_date.ContractNoBatidaDateTest
+t() { PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci "$@"; }
+
+# RED na base com o teste novo aplicado [nao verificado]
+t "$A.test_1900_a_0700_nao_fecha_adesao_da_folga" \
+  "$A.test_2358_a_0003_nao_fecha_adesao_da_folga"
+
+# GREEN com a cura
+t ponto.tests.test_x1_folga_sem_adesao "$C" \
+  core.tests.test_selo_contratos_estruturais colaboradores.tests.test_pos_vinculo
+```
+
+### Mutantes
+
+Os oito casos de mutação da catraca passaram em memória com `unittest.TestCase`. Forçar a célula a verde fez falhar a asserção de dívida. [ponto/tests/test_contract_no_batida_date.py:554] [ponto/tests/test_contract_no_batida_date.py:651] [nao verificado]
+
+```bash
+t "$C.test_mutante_novo_em_funcao_registrada"
+t "$C.test_mutante_registro_obsoleto_na_mesma_funcao"
+t "$C.test_mutante_localdate_terminal_com_apelido_de_modulo"
+t "$C.test_mutante_localdate_importado_e_renomeado_em_escopo_local"
+t "$C.test_mutante_localtime_e_instante_em_variavel_derivada"
+t "$C.test_mutante_data_local_com_apelido"
+t "$C.test_mutante_lookup_relacional_em_dict_e_keyword"
+t "$C.test_mutante_retorno_das_duas_chaves_da_adesao"
+```
+
+Os cinco mutantes do serviço foram exercitados com persistência simulada. Os comandos abaixo aplicam cada mutação em memória e devem falhar na asserção indicada quando rodados pelo Code. O resultado ORM dos mutantes está [nao verificado]. [colaboradores/services/pos_vinculo.py:39] [ponto/tests/test_x1_folga_sem_adesao.py:469]
+
+```bash
+mutar() {
+  MUTANTE_ADESAO="$1" DJANGO_SETTINGS_MODULE=config.settings.ci \
+    PYTHONDONTWRITEBYTECODE=1 python3 -B - "$2" <<'PY'
+import os
+import sys
+from pathlib import Path
+
+import django
+from django.core.management import call_command
+
+django.setup()
+mutante = os.environ['MUTANTE_ADESAO']
+
+if mutante == 'verde': [nao verificado]
+    from core.contratos_estruturais import celula
+    celula('turno/marcos', 'um juiz por pergunta')['verde'] = True [nao verificado]
+else:
+    from colaboradores.services import pos_vinculo as pos
+    filtro = 'any(inicio <= dia <= fim for dia in dias.values())'
+    antes, depois = {
+        'civil': (filtro, 'batidas_apuraveis(colaborador).filter('
+                          'timestamp__date__gte=per[0], timestamp__date__lte=per[1]).exists()'),
+        'sem_vespera': ('inicio - um, fim + um', 'inicio, fim + um'),
+        'sem_recorte': (filtro, 'bool(dias)'),
+        'limites_exclusivos': ('inicio <= dia <= fim', 'inicio < dia < fim'),
+        'sem_vida': ('tem_batida = batidas_apuraveis(colaborador).exists()', 'tem_batida = False'),
+    }[mutante]
+    fonte = Path(pos.__file__).read_text(encoding='utf-8')
+    assert fonte.count(antes) == 1
+    exec(compile(fonte.replace(antes, depois), pos.__file__, 'exec'), vars(pos))
+
+call_command('test', sys.argv[1])
+PY
+}
+mutar civil "$A.test_1900_a_0700_nao_fecha_adesao_da_folga"
+mutar sem_vespera "$A.test_2358_a_0003_nao_fecha_adesao_da_folga"
+mutar sem_recorte "$A.test_1900_a_0700_nao_fecha_adesao_da_folga"
+mutar limites_exclusivos "$A.test_dia_do_trabalho_fecha_uma_vez"
+mutar sem_vida "$A.test_sem_dois_limites_a_presenca_e_na_vida"
+mutar verde "$C.test_celula_vermelha_enquanto_houver_divida" [nao verificado]
+```
+
+### Sonda de leitura da competência 10/2026
+
+O recorte usa o corte de cada empresa. A sonda conta PKs e dias-colaborador distintos quando o dia civil ou o dia atribuído cai na competência. Para cada pai vivo com janela sobreposta ou com uma marca nesse recorte, compara a decisão sobre o **período integral gravado** e usa `reconciliaria()` para estimar transições. O snapshot manual evita o ramo de trava que o gate usa dentro de `atomic()`. **Contagens e transições da competência 10** [nao verificado]. [ponto/janelas.py:54] [colaboradores/services/pos_vinculo.py:37] [chamados/models.py:678] [chamados/models.py:761] [docs/BACKLOG.md:1858]
+
+```bash
+# Envelope do Code em app/, com SONDA_SCHEMA, SONDA_DB_USUARIO e SONDA_DB_SENHA.
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+import json
+import os
+from collections import Counter
+from datetime import date, timedelta
+
+import django
+from django.conf import settings
+from config.settings import base
+
+shared = ['django_tenants', 'tenants', *(
+    app for app in base.INSTALLED_APPS if app.startswith(('django.contrib.', 'rest_framework'))
+)]
+tenant = [
+    app for app in base.INSTALLED_APPS
+    if app not in shared or app in {'django.contrib.auth', 'django.contrib.contenttypes'}
+] + ['api']
+cfg = {k: getattr(base, k) for k in dir(base) if k.isupper()}
+cfg.update(
+    DEBUG=False, LOGGING_CONFIG=None,
+    SHARED_APPS=shared, TENANT_APPS=tenant,
+    INSTALLED_APPS=list(dict.fromkeys(shared + tenant)),
+    DATABASE_ROUTERS=['django_tenants.routers.TenantSyncRouter'],
+    TENANT_MODEL='tenants.Cliente', TENANT_DOMAIN_MODEL='tenants.Domain',
+    EMAIL_BACKEND='django.core.mail.backends.dummy.EmailBackend',
+    VAPID_PUBLIC_KEY='', VAPID_PRIVATE_KEY='', GLPI_APP_TOKEN='',
+    DATABASES={'default': {
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'HOST': 'sombra_db', 'PORT': '5432', 'NAME': 'sombra',
+        'USER': os.environ['SONDA_DB_USUARIO'],
+        'PASSWORD': os.environ['SONDA_DB_SENHA'],
+        'OPTIONS': {'options': '-c default_transaction_read_only=on'},
+    }},
+)
+settings.configure(**cfg)
+django.setup()
+
+from django.db import connection
+from django.utils import timezone
+from django_tenants.utils import schema_context
+from chamados.catalogo.motor import VIVOS
+from chamados.models import ChamadoColaborador
+from ponto.janelas import janela_fechamento
+from ponto.turnos import batidas_apuraveis, dia_das_batidas
+from tenants.models import Cliente
+
+UM = timedelta(days=1)
+grupos = ('antes', 'depois', 'saem', 'entram', 'muda_dia', 'sem_dia')
+pks = {g: set() for g in grupos}
+civis = {g: set() for g in grupos}
+jornadas = {g: set() for g in grupos}
+transicoes = Counter(dict.fromkeys(('ambos', 'so_antes', 'so_depois', 'nenhum'), 0))
+pais = Counter(dict.fromkeys(('no_recorte', 'sem_dois_limites', 'gate_recusou'), 0))
+
+schema = os.environ['SONDA_SCHEMA']
+with connection.cursor() as cur:
+    cur.execute(
+        'SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY'
+    )
+connection.set_autocommit(False)
+try:
+    with connection.cursor() as cur:
+        cur.execute("SELECT current_database(), current_setting('transaction_read_only'), "
+                    "current_setting('transaction_isolation')")
+        if cur.fetchone() != ('sombra', 'on', 'repeatable read') or connection.in_atomic_block:
+            raise RuntimeError('snapshot de leitura da sombra indisponível')
+    if schema == 'public' or not Cliente.objects.filter(schema_name=schema).exists():
+        raise ValueError('schema de ensaio inválido')
+
+    with schema_context(schema), timezone.override(settings.TIME_ZONE):
+        estoque = ChamadoColaborador.objects.filter(
+            modulo_origem='sem_previsao_escala', subcategoria='nunca_bateu',
+            status_local__in=VIVOS,
+        ).select_related('colaborador__empresa')
+        for pai in estoque:
+            periodo = (pai.contexto_json or {}).get('periodo') or []
+            if len(periodo) != 2:
+                pais['sem_dois_limites'] += 1
+                continue
+            ini, fim = map(date.fromisoformat, periodo)
+            colab = pai.colaborador
+            a, z = janela_fechamento(10, 2026, colab.empresa)
+            vivas = batidas_apuraveis(colab)
+            antes = set(vivas.filter(timestamp__date__gte=ini, timestamp__date__lte=fim)
+                        .values_list('pk', flat=True))
+            mapa = dia_das_batidas(colab, ini - UM, fim + UM)
+            depois = {pk for pk, dia in mapa.items() if ini <= dia <= fim}
+
+            no_recorte = max(ini, a) <= min(fim, z)
+            for pk, ts in vivas.filter(pk__in=antes | depois).values_list('pk', 'timestamp'):
+                civil, dia = timezone.localdate(ts), mapa.get(pk)
+                if not (a <= civil <= z or (dia is not None and a <= dia <= z)):
+                    continue
+                no_recorte = True
+                em_antes, em_depois = pk in antes, pk in depois
+                for grupo, conta in (
+                    ('antes', em_antes), ('depois', em_depois),
+                    ('saem', em_antes and not em_depois),
+                    ('entram', em_depois and not em_antes),
+                    ('muda_dia', dia is not None and civil != dia),
+                    ('sem_dia', dia is None),
+                ):
+                    if conta:
+                        pks[grupo].add(pk)
+                        civis[grupo].add((colab.pk, civil))
+                        if dia is not None:
+                            jornadas[grupo].add((colab.pk, dia))
+            if no_recorte:
+                pais['no_recorte'] += 1
+                candidato = bool(antes or depois)
+                apto = candidato and pai.reconciliaria()
+                pais['gate_recusou'] += int(candidato and not apto)
+                assinatura = (bool(antes) and apto, bool(depois) and apto)
+                transicoes[{(True, True): 'ambos', (True, False): 'so_antes',
+                            (False, True): 'so_depois', (False, False): 'nenhum'}[assinatura]] += 1
+finally:
+    connection.rollback()
+    connection.close()
+
+print(json.dumps({
+    'competencia': '10/2026',
+    'pais': pais,
+    'transicoes_por_pai': transicoes,
+    'transicoes_antes': transicoes['ambos'] + transicoes['so_antes'],
+    'transicoes_depois': transicoes['ambos'] + transicoes['so_depois'],
+    'marcas': {
+        g: {'batidas': len(pks[g]), 'dias_colab_civil': len(civis[g]),
+            'dias_colab_jornada': len(jornadas[g]),
+            'dias_colab_uniao': len(civis[g] | jornadas[g])}
+        for g in grupos
+    },
+}, ensure_ascii=False, sort_keys=True))
+PY
+```
 
 ## 26/11 01:03 · sessao 4737c85695ab · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · verificador · origem=Code
 
@@ -850,18 +1079,4 @@ O 12x36 comum zera a HE ordinária quando o previsto chega a zero. A dobra de fe
 
 [truncado em 20000 de 30951 caracteres]
 
-## 26/11 00:17 · sessao 3119b32d6fae · - · - · origem=Ronald (tmux)
-
-1. **[bloqueia] O comercial apura HE no dia inválido.** Com base `comercial`, dia útil sem feriado, janela de HE desligada e par fechado `07:30–11:00`, a pausa cadastrada `12:00–13:00` leva a saída prevista encadeada a 1.650 min e o juiz recusa. O comercial mensal calcula outro limite, `210 − 60 = 150 min`. Como não há intra suprimida nessa duração, grava **60 min de HE50** sobre 210 trabalhados. O fechamento copia **1 h de HE50**. Executei o juiz e o trecho mensal isolado com o par fechado injetado. Integração com banco e ocorrência em produção [nao verificado]. [app/escala/utils.py:396] [app/ponto/motor_calculo_v2.py:1801] [app/ponto/motor_calculo_v2.py:3264] [app/ponto/motor_calculo_v2.py:3407] [app/ponto/motor_calculo_v2.py:3436] [app/ponto/services/fechamento.py:949] [nao verificado]
-
-2. **[bloqueia] O zero do previsto tem alcance parcial no motor.** Ele zera atraso e saída antecipada dos períodos normais quando o teto consulta a mesma data e recebe zero. No 12x36, também zera a HE ordinária quando o previsto consultado é zero. Persistem a dobra por feriado em ciclo que dobra, o teto legal de 480 no turno partido e a HE semanal que soma inclusive trabalho em dia inválido. Exemplo semanal de código, 2.760 min trabalhados em cinco dias e último dia inválido. Os 120 min de HE50 são lançados no último dia. [app/ponto/motor_calculo_v2.py:934] [app/ponto/motor_calculo_v2.py:1187] [app/ponto/motor_calculo_v2.py:1205] [app/ponto/motor_calculo_v2.py:1465] [app/ponto/motor_calculo_v2.py:2828] [app/ponto/motor_calculo_v2.py:2854] [app/ponto/motor_calculo_v2.py:3147] [app/ponto/motor_calculo_v2.py:3188]
-
-3. **[bloqueia] A falta apurada e a falta decidida têm portas distintas.** Se o cursor exclui a data, o motor a exclui de furo e DSR. O fechamento calcula `horas_falta` pelo mapa de ausências aprovadas. Uma data inválida sem célula sai do conjunto obrigatório do cursor, mas os 480 min aprovados continuam no mapa de faltas e a data continua elegível para o evento `falta_diurna`. [app/ponto/services/fechamento.py:758] [app/ponto/motor_calculo_v2.py:2611] [app/escala/utils.py:473] [app/folha/export.py:140] [app/folha/export.py:194] [app/folha/export.py:757] [app/ponto/services/fechamento.py:903]
-
-4. **[fila] O teste chamado comercial usa o motor de base `12x36`.** A fixture declara ciclo `6x1`, o modelo fornece `tipo_base='12x36'` e a fábrica seleciona `Motor12x36ComEscala`. Alterar o limite mensal comercial para 480 fixos escaparia ao teste. No teste 12x36, aceitar qualquer feriado na dobra escaparia ao caso de quarta-feira comum. O valor trabalhado esperado é copiado da própria tela, portanto uma perda simétrica que conserve valor positivo também passa. O controle válido aceita qualquer HE positiva e não morde zerar HE100 enquanto HE50 permanecer. [app/escala/tests/test_e1_previsao_do_dia_valida.py:70] [app/escala/models.py:170] [app/ponto/motor_calculo_v2.py:3677] [app/escala/tests/test_e1_v4_juiz_unico.py:152] [app/escala/tests/test_e1_v4_juiz_unico.py:185] [app/escala/tests/test_e1_v4_juiz_unico.py:208] [app/escala/tests/test_e1_v4_juiz_unico.py:226] [nao verificado]
-
-5. **[bloqueia] Mesmo filtro de dono, universos de data diferentes.** A inválido gera 29/09 e 01/10, B válido gera 02/10, ambos cobrem 30/09 e 30/09 está sem geradora. A fatia de A passa pelo dia do meio, rejeita-o, e B só roda em 02/10. Tela e PDF incluem 30/09 pelo vínculo B antes de fatiar e entregam o conjunto completo ao motor de A, que pode contar o furo. [app/escala/alimentacao.py:389] [app/escala/alimentacao.py:420] [app/ponto/services/fechamento.py:225] [app/ponto/services/fechamento.py:244] [app/ponto/services/fechamento.py:758] [app/ponto/services/espelho.py:1105] [app/ponto/services/espelho.py:1151] [app/relatorios/pdf_espelho.py:372] [app/relatorios/pdf_espelho.py:397] [app/ponto/motor_calculo_v2.py:2616]
-
-6. **[nota] O escalar `>1440` não fornece um segundo caso concreto no builder corrente.** Para não intermitente, o escalar soma segmentos disjuntos da cadeia crescente. Se a soma passa de 1.440, a última borda da mesma cadeia já passa de 1.440 e a geometria recusa. No intermitente, a pré-passagem está limitada a 20 h e o previsto derivado do realizado pula a guarda escalar. Um caso escalar artificial isolado escaparia ao mapa e ao overlay anterior à guarda final. Ocorrência desse caso no caminho real [nao verificado]. [app/escala/utils.py:330] [app/escala/utils.py:1676] [app/escala/utils.py:1757] [app/escala/utils.py:1779] [app/escala/utils.py:1992] [app/escala/utils.py:2212]
-
-_8290 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8291 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
