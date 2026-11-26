@@ -1,7 +1,525 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 18:23** · publicado em **26/11/2026 18:26** (UTC-3)
+> Ultima resposta processada: **26/11/2026 18:32** · publicado em **26/11/2026 18:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 18:32 · sessao bdb349ee95c8 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
+
+Corrigi as cinco montagens de ausência e fiz o caso 18 falhar por `AssertionError` quando o vigia omite `ato_futuro`. A edição ficou em [chamados/tests/test_e4d_matriz_reds.py](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:245).
+
+| Caso | Causa → conserto | Por que ainda morde |
+|---|---|---|
+| 03 | `registrado_por_id` nulo → `registrado_por=self.admin`. O model exige a FK em `ponto/models.py:811`. | Exige preservar a absorção e seus vínculos, sem criar validação retroativa nem alterar a projeção ou os eventos. `chamados/tests/test_e4d_matriz_reds.py:251–260` |
+| 28 | `registrado_por_id` nulo → `registrado_por=self.admin`. `ponto/models.py:811` | Exige trocar a via pelo fato do espelho, registrar `REABERTURA` ao perder a absorção e reler sob a trava antes da escrita. `chamados/tests/test_e4d_matriz_reds.py:751–777` |
+| 29 | `registrado_por_id` nulo → `registrado_por=self.admin`. `ponto/models.py:811` | Exige gravar `REABERTURA` antes de limpar `materializada_em`, com instante e autor conferidos. `chamados/tests/test_e4d_matriz_reds.py:784–797` |
+| 25 | `pendente` fora das choices → `aguardando_documento`, estado do atestado sem anexo que admite rejeição. `ponto/models.py:690–710`, `ponto/services/ausencia.py:914–916,926–944` | Exige que a rejeição localize a irmã pelo ato de absorção, reabra a disputa e registre a trilha. `chamados/tests/test_e4d_matriz_reds.py:1032–1050` |
+| 26 | `pendente` fora das choices → `aguardando_documento`, pelo mesmo estado inicial do atestado sem anexo. `ponto/models.py:690–710`, `ponto/services/ausencia.py:926–944` | Exige preservar a projeção e a sequência de atos do legado e encaminhar a irmã ao admin como `sem_vinculo`. `chamados/tests/test_e4d_matriz_reds.py:1060–1072` |
+| 18 | O relatório atual omite `ato_futuro` → `assertIn` exige a chave antes da asserção original de `numero == 0`. `chamados/services/vigia_ato_x_coluna.py:21–25`, `chamados/tests/test_e4d_matriz_reds.py:460–462` | A chave ausente e a contagem `1` falharam com `AssertionError` na execução isolada. As checagens dos dois horizontes continuam em `chamados/tests/test_e4d_matriz_reds.py:445–459`. |
+| 14 | O anexo mostra `AttributeError` em `DP.SANEAMENTO`, uma API ausente. Caso mantido. `chamados/models.py:4326–4337`, `chamados/tests/test_e4d_matriz_reds.py:390–392` | A primeira leitura já exige `DP.SANEAMENTO`. As asserções seguintes exigem que o saneamento alcance a resposta histórica e preserve a posterior. `chamados/tests/test_e4d_matriz_reds.py:390–413` |
+
+**Mutantes.** O comando abaixo verifica os três retornos da FK ausente e os dois retornos de `pendente` por inspeção estática. Também executa as asserções finais do caso 18 com o relatório atual, com `numero=1` e com o controle `numero=0`. Os sete mutantes foram detectados. Cada argumento seleciona um mutante. `ponto/models.py:690,811`, `chamados/tests/test_e4d_matriz_reds.py:251,460,751,784,1032,1060`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - 03 28 29 25 26 18-chave 18-numero <<'PY'
+import ast
+import sys
+from pathlib import Path
+from types import SimpleNamespace
+from unittest import TestCase
+
+def ler(path):
+    return ast.parse(Path(path).read_text())
+
+path = 'chamados/tests/test_e4d_matriz_reds.py'
+arvore = ler(path)
+compile(arvore, path, 'exec')
+casos = {n.name.split('_')[2]: n for n in ast.walk(arvore)
+         if isinstance(n, ast.FunctionDef) and n.name.startswith('test_caso_')}
+modelo = next(n for n in ler('ponto/models.py').body
+              if isinstance(n, ast.ClassDef) and n.name == 'Ausencia')
+campos = {n.targets[0].id: n.value for n in modelo.body
+          if isinstance(n, ast.Assign) and isinstance(n.targets[0], ast.Name)}
+escolhas = dict(ast.literal_eval(campos['STATUS_CHOICES']))
+fk = {k.arg: k.value for k in campos['registrado_por'].keywords}
+assert not ast.literal_eval(fk.get('null', ast.Constant(False)))
+
+ns = {}
+vigia = ler('chamados/services/vigia_ato_x_coluna.py')
+exec(compile(ast.Module(vigia.body[2:], []), 'vigia_ato_x_coluna.py', 'exec'), ns)
+qs = SimpleNamespace(prefetch_related=lambda *_: qs, iterator=lambda **_: iter(()))
+atual = ns['contar'](qs)
+codigo = compile(ast.Module(casos['18'].body[-3:], []), 'caso18', 'exec')
+teste = TestCase() [nao verificado]
+teste.alvo = lambda p: p [nao verificado]
+
+def verificar(relatorio):
+    exec(codigo, {'self': teste, 'p': None, 'contar': lambda _: relatorio}) [nao verificado]
+
+verificar(dict(atual, ato_futuro={'numero': 0}))
+for mutante in sys.argv[1:]:
+    if mutante.startswith('18-'):
+        with teste.assertRaises(AssertionError): [nao verificado]
+            verificar(atual if mutante == '18-chave' else dict(atual, ato_futuro={'numero': 1}))
+    else:
+        chamada = next(n.value for n in casos[mutante].body
+                       if isinstance(n, ast.Assign) and n.targets[0].id == 'a')
+        args = {k.arg: k.value for k in chamada.keywords}
+        if mutante in ('25', '26'):
+            assert ast.literal_eval(args['status']) in escolhas
+            args['status'] = ast.Constant('pendente')
+            assert ast.literal_eval(args['status']) not in escolhas
+        else:
+            assert ast.unparse(args.pop('registrado_por')) == 'self.admin'
+            assert 'registrado_por' not in args
+    print(f'{mutante} detectado')
+PY
+```
+
+**Comando para o Code**, no ambiente de testes. Resultado da matriz completa e ponto exato de falha dos cinco casos de ausência [nao verificado]. `manage.py:9–18` [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4d_matriz_reds
+```
+
+## 26/11 18:31 · sessao e5b2aecf07cc · ABONO-PARCIAL-TETO · leitura · origem=Code
+
+1. **A máscara da cópia preserva `codigo_dominio`, `matricula_hasner`, `matricula_nexti` e `EmpresaIntegracao.codigo_no_sistema`.** O refazimento completo roda as duas máscaras. O incremental repõe quatro tabelas de ponto e escala e roda a máscara pessoal. Os campos de matrícula e de integração ficam fora das atualizações das duas máscaras. [bin/sombra.sh:196-207,255-275] [bin/sombra_incremental.sh:32-38,50-68] [bin/sombra_mascara.py:51-90] [bin/sombra_mascara_pessoal.py:16-65] [bin/sombra_regras_pessoais.py:48-158] [app/colaboradores/models.py:302-314] [app/folha/models.py:232-236]
+
+   A matrícula do registro 10 vem de `Colaborador.codigo_dominio`. O código da empresa vem de `EmpresaIntegracao.codigo_no_sistema`. O `zfill(10)` preenche até dez caracteres e preserva códigos mais longos. O registro 11 contém a data e o sufixo fixo `1`. A máscara pessoal também reescreve o conteúdo de exportações já gravadas em `ExportacaoDominio.conteudo`. As linhas sob teste são montadas de novo a partir dos fechamentos recalculados. [app/folha/export.py:23-45,215-221,699-755] [bin/sombra_regras_pessoais.py:102-105] [logs/sombra/abono_parcial_teto_txt11.py:200-221]
+
+2. **O traceback aponta para A se o arquivo executado corresponde ao anexo.** Contando a linha vazia inicial, os quatro quadros batem com o anexo e a linha 271 é a chamada de A. A empresa, o tipo do erro e a recusa efetiva em produção ficam [nao verificado]. A view recusa o TXT quando recebe erros desse mesmo validador. [sombra1.out:29-34] [logs/sombra/abono_parcial_teto_txt11.py:218,271-272,355,368] [app/folha/views.py:272-288]
+
+   A versão abaixo compara o TXT serializado e, quando o layout é inválido, recupera os campos do registro 10 pelas larguras usadas na própria montagem. Isso mantém a comparação por rubrica mesmo com matrícula longa ou não numérica. Conferi a compilação e exercitei esses casos com as funções de exportação da cópia e dados sintéticos. A execução na sombra está [nao verificado]. [app/folha/export.py:34-45,215-255,266-307,525-539,733-755]
+
+```python
+### SCRIPT
+# Sonda ABONO-PARCIAL-TETO para logs/sombra/<script.py>. [bin/sombra.sh:477-492]
+# Execução na sombra e valores dos oito alvos [nao verificado].
+# O Python sai com rc 1 em universo vazio. Para propagar esse rc ao shell,
+# use bash -e bin/sombra.sh --rodar <script.py>. A porta termina com echo
+# após a pipeline e ativa pipefail. [bin/sombra.sh:45,483-493]
+
+import logging
+import sys
+from collections import Counter, defaultdict
+from datetime import datetime, time
+from traceback import extract_tb
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Empresa
+from escala.servico_jornada import escala_vigente
+from escala.utils import cadeia_do_dia
+from folha import export
+from ponto.catalogo.ausencias import ABONA, parciais_vigentes
+from ponto.models import Ausencia
+from ponto.motor_calculo_v2 import _minutos_da_ponta_cobertos
+from ponto.services import dia_pago, fechamento
+from ponto.services.credito_parcial import abater_no_proprio_dia
+from ponto.turnos import cobre_parte_do_dia
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+ALVOS = {327, 242, 298, 288, 222, 885, 827, 258}  # Anexo fornecido [nao verificado].
+NV = "[nao verificado]"
+REF_TXT = "[app/folha/export.py:34-45,215-255,699-755]"
+REF_ABONO = "[app/ponto/services/dia_pago.py:285-292,364-402]"
+REF_DIA = (
+    "[app/escala/services/leitor_celula.py:390-436] "
+    "[app/ponto/services/fechamento.py:893-895,1018-1027,1139-1151] "
+    "[app/ponto/services/dia_pago.py:173-195,274-292] "
+    "[app/folha/export.py:169-185,383-399,449-452,749-755]"
+)
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+class FalhaSonda(RuntimeError):
+    pass
+
+
+def col(cid):
+    return f"col{cid:03d}"
+
+
+def log_sem_dados(_logger, registro):
+    # A mensagem original do fechamento pode conter identificação pessoal.
+    # [app/ponto/services/fechamento.py:1327-1332]
+    if registro.levelno >= logging.ERROR:
+        erro = registro.exc_info[1] if registro.exc_info else sys.exception()
+        tipo = type(erro).__name__ if erro is not None else "ERROR"
+        raise FalhaSonda(f"{registro.pathname}:{registro.lineno} {tipo}") from None
+
+
+def teto_no_previsto(colab, dia, ausencia, previsto, celulas):
+    # A cadeia usa o vínculo da célula, todos os blocos líquidos e o dia
+    # de início do turno. [app/escala/servico_jornada.py:25-66]
+    # [app/escala/models.py:1109-1144,1177-1213] [app/escala/utils.py:65-81,330-363,2345-2374]
+    if previsto == 0:
+        return 0
+    escala = escala_vigente(colab, dia, celulas=celulas)
+    if escala is None or escala.tipo_escala is None:
+        raise FalhaSonda(f"{col(colab.pk)} {dia} vínculo indeterminado [app/escala/servico_jornada.py:49-66]")
+    marcos = escala.marcos_do_dia(dia, celulas=celulas)
+    pausas = escala.pausas_do_dia(dia, celulas=celulas)
+    if not pausas and marcos[2] and marcos[3]:
+        pausas = (marcos[2:],)
+    zero = datetime.combine(dia, time.min)
+    instantes = [
+        (instante.replace(tzinfo=None) - zero).total_seconds() / 60
+        for _, instante in cadeia_do_dia(dia, marcos, pausas)
+    ]
+    blocos = list(zip(instantes[::2], instantes[1::2]))
+    if not blocos or sum(fim - ini for ini, fim in blocos) != previsto:
+        raise FalhaSonda(
+            f"{col(colab.pk)} {dia} geometria diverge do previsto da grade "
+            "[app/escala/utils.py:353-363] [app/escala/services/leitor_celula.py:397-423]"
+        )
+    # O juiz de cobertura é batida_dentro_da_parcial, chamado por
+    # _minutos_da_ponta_cobertos. [app/ponto/motor_calculo_v2.py:453-477]
+    # [app/ponto/turnos.py:2653-2711]
+    return sum(_minutos_da_ponta_cobertos((ausencia,), ini, fim) for ini, fim in blocos)
+
+
+def imprimir_layout(empresa_id, lado, erros):
+    # Os diagnósticos podem trazer repr da linha e sua matrícula.
+    # [app/folha/export.py:266-307]
+    contagem = Counter(erro.partition(":")[0].partition(" len")[0] for erro in erros)
+    tipos = ",".join(f"{tipo}={n}" for tipo, n in sorted(contagem.items())) or "-"
+    print(f"LAYOUT empresa={empresa_id} lado={lado} erros={len(erros)} tipos={tipos}",
+          "[app/folha/export.py:266-307]", flush=True)
+    if lado == "A" and erros:
+        print(f"LAYOUT_A_RECUSA_NA_VIEW empresa={empresa_id}",
+              "[app/folha/views.py:282-288]", flush=True)
+
+
+def ler_txt(linhas, itens, fechs, entra, campos_10=None):
+    # Matrícula usada apenas dentro da empresa para associar o registro ao ID.
+    # Preserva multiplicidade, valor cru e datas filhas. [app/folha/export.py:215-255,725-753]
+    por_matricula = defaultdict(list)
+    for item in itens:
+        cid = item["colaborador_id"]
+        if cid in entra and fechs[cid].status in export.STATUS_NO_TXT:
+            por_matricula[item["codigo_dominio"].zfill(10)].append(cid)
+
+    registros = defaultdict(list)
+    pai = None
+    for linha in linhas:
+        if campos_10 is not None and linha.startswith("10"):
+            # Com layout inválido, recupera o campo cru pela largura
+            # efetiva dos argumentos do montador. [app/folha/export.py:34-45]
+            mat, rubrica, inicio_valor, fim_valor = next(campos_10)
+            parte = {
+                "reg": "10", "matricula": mat, "rubrica": rubrica,
+                "valor": int(linha[inicio_valor:fim_valor]),
+            }
+        else:
+            parte = export.partes_da_linha(linha)
+        if parte is None or (parte["reg"] == "11" and pai is None):
+            raise FalhaSonda("Registro inválido [app/folha/export.py:215-255]")
+        if parte["reg"] == "10":
+            ids = por_matricula[parte["matricula"]]
+            if len(ids) != 1:
+                raise FalhaSonda("Autoria ambígua do registro 10 [app/folha/export.py:725-748]")
+            pai = (parte["valor"], [])
+            registros[(ids[0], parte["rubrica"])].append(pai)
+        else:
+            pai[1].append(parte["data"])
+    return {
+        chave: tuple(sorted((valor, tuple(sorted(datas))) for valor, datas in linhas))
+        for chave, linhas in registros.items()
+    }
+
+
+def medir(empresa, lado, aplicar_teto, cadastradas):
+    foto = SimpleNamespace(abonos={}, tetos={}, dias={}, furos={})
+    recalcular = fechamento.recalcular_fechamento_mes
+    grade_original = export.grade_do_fechamento
+    por_dia_original = dia_pago.por_dia_da_grade
+
+    def observar_grade(fech):
+        grade = grade_original(fech)
+        origem = sys._getframe(1)
+        cid = fech.colaborador_id
+        if origem.f_code is not recalcular.__code__ or cid not in cadastradas:
+            return grade
+
+        # Retém os insumos da mesma passada. Saída usa o dia da jornada da
+        # lavratura e atraso usa o crédito do próprio dia.
+        # [app/ponto/services/fechamento.py:893-895,1018-1038,1225-1241]
+        # [app/ponto/services/dia_pago.py:109-132,173-195,274-277]
+        local = origem.f_locals
+        resultado = local["resultado"]
+        saidas = defaultdict(float)
+        for p in resultado.periodos:
+            dia = dia_pago._dia_de(p, resultado.dia_da_jornada)
+            saidas[dia] += p.minutos_saida_antecipada or 0
+
+        for linha in grade["dias"]:
+            dia = linha["data"]
+            if dia not in cadastradas[cid]:
+                continue
+            esperado = linha["tipo_dia"] not in {"sem_celula", "indefinido"}
+            atraso, _ = abater_no_proprio_dia(
+                {dia: local["_atrasos_dia"].get(dia, 0)}, local["_creditos_dia"]
+            )
+            foto.dias[cid, dia] = (
+                linha["minutos_previstos"] if esperado else None,
+                linha["minutos_realizados"] if esperado else None,
+                atraso / 60,
+                saidas[dia] / 60,
+                local["_faltas_por_dia"].get(dia, 0) / 60,
+                getattr(local["_cob_folha"].get(dia), "pk", None),
+            )
+        return grade
+
+    def envolver_por_dia(grade):
+        abono, previsto, realizado = por_dia_original(grade)
+        origem = sys._getframe(1)
+        if origem.f_code is not recalcular.__code__:
+            return abono, previsto, realizado
+
+        # B aplica min(abono de A, cobertura do período dentro do previsto)
+        # em toda a frota elegível. A cobertura vencedora já veio do fechamento.
+        # [app/ponto/services/fechamento.py:700-718,1084-1088]
+        # [app/ponto/turnos.py:2622-2639,2816-2839]
+        local = origem.f_locals
+        colab = local["colab"]
+        if aplicar_teto:
+            abono = dict(abono)
+            for linha in grade["dias"]:
+                dia = linha["data"]
+                if dia not in abono or not linha.get("cobertura_parcial"):
+                    continue
+                a = local["_cob_folha"].get(dia)
+                if (
+                    a is None or a.efeito != ABONA
+                    or not cobre_parte_do_dia(a, local["_parciais"])
+                    or a.hora_ini is None or a.hora_fim is None or a.hora_ini == a.hora_fim
+                ):
+                    continue
+                teto = teto_no_previsto(colab, dia, a, previsto[dia], local["_cels_lote"])
+                foto.tetos[colab.pk, dia] = teto
+                abono[dia] = min(abono[dia], teto)
+
+        foto.abonos.update({(colab.pk, dia): valor for dia, valor in abono.items()})
+        return abono, previsto, realizado
+
+    # Preserva a resposta esperada _GradeSemCelula e deixa subir as demais
+    # exceções capturadas pelo fechamento. [app/ponto/services/fechamento.py:1067-1069,1105-1123,1327-1332]
+    with (
+        patch.object(fechamento, "Exception", fechamento._GradeSemCelula, create=True),
+        patch.object(export, "grade_do_fechamento", observar_grade),
+        patch.object(dia_pago, "por_dia_da_grade", envolver_por_dia),
+    ):
+        fechs = recalcular(
+            MES, ANO, empresa_id=empresa.pk, somente_leitura=True,
+            retornar_objeto=True, lavrar_dias_pagos=False, coletar_furos=foto.furos,
+        )
+
+    # Caminho lido de simular_folha e serialização real da porta do TXT.
+    # [app/folha/management/commands/simular_folha.py:124-134] [app/folha/views.py:272-288]
+    objetos = list(fechs.values())
+    itens = export.classificar_export(empresa, MES, ANO, fechamentos=objetos)
+    montar_linha_10 = export.montar_linha_10
+    campos_10 = []
+
+    def observar_linha_10(matricula, comp, rubrica, tipo, valor, cod_sistema):
+        linha = montar_linha_10(matricula, comp, rubrica, tipo, valor, cod_sistema)
+        # A ordem é a mesma em que as linhas 10 entram no TXT, inclusive
+        # nos blocos de faltas. [app/folha/export.py:34-45,215-221,733-755]
+        mat = str(matricula).zfill(10)
+        rub = str(rubrica).zfill(4)
+        inicio_valor = len(f"10{mat}{comp}{rub}11")
+        fim_valor = -len(str(cod_sistema).zfill(10))
+        campos_10.append((mat, rub, inicio_valor, fim_valor))
+        return linha
+
+    with patch.object(export, "montar_linha_10", observar_linha_10):
+        linhas, foto.entra = export.montar_linhas_export(
+            empresa, MES, ANO, itens=itens, fechamentos=objetos,
+        )
+    erros_layout = export.validar_layout_dominio(linhas)
+    imprimir_layout(empresa.pk, lado, erros_layout)
+    foto.txt = export.conteudo_do_txt(linhas)
+    if erros_layout:
+        foto.registros = ler_txt(linhas, itens, fechs, foto.entra, iter(campos_10))
+    else:
+        foto.registros = ler_txt(foto.txt.splitlines(), itens, fechs, foto.entra)
+    return foto
+
+
+def campos_do_dia(foto, cid, dia, lado):
+    chave = cid, dia
+    previsto, realizado, atraso, saida, falta, _ = foto.dias.get(chave, (None,) * 6)
+    abono = foto.abonos.get(chave, 0) if previsto is not None else None
+    r8069 = foto.registros.get((cid, "8069"), ())
+    r8792 = foto.registros.get((cid, "8792"), ())
+    campos = {
+        "previsto_min": previsto,
+        "realizado_min": realizado,
+        "abono_min": abono,
+        "horas_atraso": atraso,
+        "horas_saida_antecipada": saida,
+        "horas_falta": falta,
+        "horas_base_8069_dia": export.rubrica_atraso_parcial(atraso, saida)
+        if atraso is not None else None,
+        "8069_txt_comp_valor_cru": tuple(valor for valor, _ in r8069),
+        "8792_txt_data": int(any(dia.strftime("%Y%m%d") in datas for _, datas in r8792)),
+        "furo_motor": int(dia in foto.furos[cid]) if cid in foto.furos else None,
+        "entra_juiz_txt": int(cid in foto.entra),
+    }
+    return " ".join(f"{campo}_{lado}={NV if valor is None else valor}" for campo, valor in campos.items())
+
+
+def medir_e_imprimir(agora):
+    empresas = list(Empresa.objects.filter(ativa=True, pk__in=EMPRESAS).order_by("pk"))
+    if empresas and {e.pk for e in empresas} != set(EMPRESAS):
+        raise FalhaSonda("Escopo incompleto de empresas ativas [app/folha/management/commands/simular_folha.py:112-119]")
+
+    medidas = []
+    tipos = parciais_vigentes()
+    for empresa in empresas:
+        janela = export.janela_competencia(empresa, MES, ANO)
+        entregue = export.competencia_entregue(empresa.pk, MES, ANO)
+        cadastradas = {}
+        faltas = {}
+        # O cadastro dos oito alimenta o relatório. O wrapper usa a cobertura
+        # do fechamento para todos os colaboradores. [app/ponto/turnos.py:2622-2639,2816-2839]
+        for a in Ausencia.objects.filter(
+            colaborador__empresa=empresa, colaborador_id__in=ALVOS,
+            status="aprovada", tipo__in=tipos, data__range=janela,
+        ).select_related("colaborador").order_by("colaborador_id", "data", "pk"):
+            if cobre_parte_do_dia(a, tipos):
+                cid = a.colaborador_id
+                cadastradas.setdefault(cid, {}).setdefault(a.data, []).append(a)
+                if cid not in faltas:
+                    faltas[cid] = set(export.datas_falta(a.colaborador, empresa, MES, ANO))
+
+        a = medir(empresa, "A", False, cadastradas)
+        b = medir(empresa, "B", not entregue, cadastradas)
+        medidas.append((empresa.pk, janela, entregue, cadastradas, faltas, a, b))
+
+    # Universo = dias com parcial elegível na grade de competência em aberto.
+    # [app/folha/export.py:565-603] [app/ponto/services/dia_pago.py:386-402]
+    if not any(b.tetos for _, _, _, _, _, _, b in medidas):
+        print("UNIVERSO VAZIO", flush=True)
+        raise SystemExit(1)
+
+    print(f"REFERENCIA={timezone.localtime(agora).isoformat()} COMP=11/2026",
+          "[app/ponto/services/fechamento.py:634-642] [app/folha/export.py:1240-1247]")
+    n_rubricas = 0
+    colabs_txt = set()
+    dias_abono = {}
+    alvos_com_cadastro = set()
+
+    for empresa_id, janela, entregue, cadastradas, faltas, a, b in medidas:
+        print(f"EMPRESA={empresa_id} JANELA={janela[0]}/{janela[1]} ENTREGUE={int(entregue)} "
+              f"DIAS_ELEGIVEIS={len(b.tetos)} TXT_IGUAL={int(a.txt == b.txt)}",
+              "[app/folha/export.py:47-51,525-539,565-603]", REF_ABONO)
+        ids_a = {cid for cid, _ in a.registros}
+        ids_b = {cid for cid, _ in b.registros}
+        for regra, antes, depois in (("JUIZ_TXT", a.entra, b.entra), ("TXT", ids_a, ids_b)):
+            for cid in sorted(depois - antes):
+                print(f"ENTRA_{regra} {col(cid)}", REF_TXT)
+            for cid in sorted(antes - depois):
+                print(f"SAI_{regra} {col(cid)}", REF_TXT)
+        colabs_txt.update(ids_a ^ ids_b)
+
+        # Uma mudança por (colaborador, código). Os valores são os do campo
+        # cru do reg. 10 e cada tupla carrega as datas dos reg. 11. [app/folha/export.py:34-45,224-255]
+        for chave in sorted(a.registros.keys() | b.registros.keys()):
+            va, vb = a.registros.get(chave, ()), b.registros.get(chave, ())
+            if va != vb:
+                cid, codigo = chave
+                n_rubricas += 1
+                colabs_txt.add(cid)
+                rotulo = codigo if codigo.isdigit() else NV
+                print(f"RUBRICA {rotulo} {col(cid)} VALOR_A={va} VALOR_B={vb}", REF_TXT)
+
+        if a.abonos.keys() != b.abonos.keys():
+            raise FalhaSonda(f"Dias do mapa A/B divergentes na empresa {empresa_id} {REF_ABONO}")
+        for cid, dia in sorted(a.abonos):
+            va, vb = a.abonos[cid, dia], b.abonos[cid, dia]
+            if va != vb:
+                dias_abono[cid, dia] = va - vb
+                print(f"DIA_PAGO_ABONO {col(cid)} {dia} ABONO_A={va:g} ABONO_B={vb:g}", REF_ABONO)
+
+        for cid, dias in sorted(cadastradas.items()):
+            alvos_com_cadastro.add(cid)
+            for dia, registros in sorted(dias.items()):
+                chave = cid, dia
+                vencedora = a.dias.get(chave, (None,) * 6)[-1]
+                periodos = [
+                    (
+                        r.hora_ini.strftime("%H:%M") if r.hora_ini is not None else "-",
+                        r.hora_fim.strftime("%H:%M") if r.hora_fim is not None else "-",
+                        "*" if r.pk == vencedora else "",
+                    )
+                    for r in registros
+                ]
+                print(f"ALVO {col(cid)} {dia} PERIODOS={periodos} "
+                      f"TETO_MIN={b.tetos.get(chave, '-')} FALTA_DECIDIDA={int(dia in faltas[cid])}",
+                      campos_do_dia(a, cid, dia, "A"), campos_do_dia(b, cid, dia, "B"),
+                      REF_DIA, "[app/ponto/models.py:745-771] [app/ponto/turnos.py:2816-2839]")
+
+    for cid in sorted(ALVOS - alvos_com_cadastro):
+        print(f"ALVO {col(cid)} DIA_PARCIAL={NV} [app/ponto/turnos.py:2622-2639]")
+
+    # MINUTOS_ABONO soma A - B nos dias alterados. [app/ponto/services/dia_pago.py:285-292,364-402]
+    print(f"TXT_RUBRICAS_MUDADAS={n_rubricas} COLABS_TXT={len(colabs_txt)} "
+          f"DIAS_ABONO_MUDADOS={len(dias_abono)} COLABS_ABONO={len({cid for cid, _ in dias_abono})} "
+          f"MINUTOS_ABONO={sum(dias_abono.values()):g}", flush=True)
+
+
+def main():
+    try:
+        with patch.object(logging.Logger, "handle", log_sem_dados), transaction.atomic(durable=True):
+            with connection.curs
+
+[truncado em 20000 de 20814 caracteres]
+
+## 26/11 18:30 · sessao 1d13e2de582a · AGENTE-NO-MODELO-V5 · censo · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 26/11 18:27 · sessao 6c8069e0e778 · VIGIA-DISCO · verificador · origem=Code
+
+# VIGIA-DISCO v3b · `360dd8ebd`
+
+## Os quatro itens da volta
+
+1. **Janela fonte → `unlink`: parcial.** O segundo exame pega a troca ou o crescimento durante `citado()`. Mas `_fonte_intacta` lê o `lstat` **antes** de varrer `/proc`. Em memória, troquei o inode durante a varredura e o helper retornou `True`. O `unlink` seguinte opera no nome, que já aponta para outro inode. O destino também ficou sem prova de identidade: se `.gz` some durante `citado()`, a função pode remover a fonte e retornar `True`. Se `.gz` é substituído e a operação recusa, o `finally` pode apagar o substituto. Os casos novos exercitam troca e crescimento da **fonte durante `citado()`**. `bin/retencao_disco.py:115`, `bin/retencao_disco.py:432`, `bin/retencao_disco.py:478`, `bin/retencao_disco.py:486`, `bin/retencao_disco.py:491`, `bin/tests/test_disco_estado.sh:242`
+
+2. **Reconferência da cópia: ordem corrigida, remoção ainda sem a mesma prova do plano.** A cópia reprovada na segunda conferência volta ao nome antes de qualquer `chmod`, e o comando novo só altera diretórios. Depois desse ponto, `find` e `rm` podem falhar parcialmente. O retorno pode ser `False` com nome e permissões já alterados, contrariando a docstring. Além disso, a releitura protege o hash exato, embora o plano também proteja **qualquer hash da mesma obra**. Um `.rm.<sha>` preexistente pula tanto os filtros de atividade do plano quanto a releitura da cauda. Conferi em memória que esse ramo chega ao `rm` sem consultar a cauda. `bin/retencao_disco.py:208`, `bin/retencao_disco.py:221`, `bin/retencao_disco.py:302`, `bin/retencao_disco.py:312`, `bin/retencao_disco.py:321`, `bin/tests/test_disco_estado.sh:382`
+
+3. **Limites do handoff e do alarme: os dois casos da linha 41 foram cobertos, mas os recortes ainda divergem.** Reproduzi dois casos em memória. Com `  ## M` indentado, o handoff encerra a lista comum após `strip()`, mas ainda publica como vigente um `DISCO-VIGIA` abaixo desse título. Com `## M` cru dentro das primeiras 40 linhas, o filtro deixa passar o `PAREI` histórico do disco e o alarme pode contar essa linha como parada da sessão. O código anterior excluía esse formato em toda a janela de 40 linhas. `bin/tests/test_disco_estado.sh:639`, `bin/tests/test_disco_estado.sh:658`, `bin/disco_estado.py:381`, `bin/disco_estado.py:400`, `bin/handoff_sessao.sh:100`, `bin/handoff_sessao.sh:110`, `bin/alarme_sessao_ociosa.py:129`, `bin/alarme_sessao_ociosa.py:141`, `2d0601d9b:bin/alarme_sessao_ociosa.py:139`
+
+4. **Esquema de `chamadas.log`: parser e chave compartilhados, contrato de leitura incompleto.** `fim` com sete campos ou de outra obra deixa de fechar o `ini` na retenção. Porém, o parser aceita hash de cinco caracteres e data fora do formato antes validado pela retenção. A leitura inicial exige `\n` para avançar o cursor. A cauda aceita um `fim` sem `\n` e com duração vazia se os nove campos já apareceram. Reproduzi esses casos em memória. Também reproduzi o truncamento herdado entre `getsize` e `open`: a cauda retorna `set()`, que autoriza seguir como se nenhuma chamada tivesse chegado. `bin/codex_limite_estado.py:49`, `bin/retencao_disco.py:160`, `bin/retencao_disco.py:169`, `bin/retencao_disco.py:183`, `bin/retencao_disco.py:317`, `bin/tests/test_disco_estado.sh:334`, `bin/tests/test_disco_estado.sh:422`, `2d0601d9b:bin/retencao_disco.py:140`, `2d0601d9b:bin/retencao_disco.py:164`
+
+## Escritores, leitores e significado do estado
+
+| Estado | Escrita, leitura e acordo semântico |
+|---|---|
+| **`chamadas.log`** | `codex_pergunta.sh` apenda `hora`, `obra`, `papel`, os 12 primeiros caracteres do SHA, PID do shell e `ini`/`fim`. `ini` registra tentativa antes de rodar o Codex e traz pergunta raspada. `fim` traz `thread_id` ou `-`, código de saída, duração em segundos desde `T0C` e motivo opcional. O parser descarta pergunta e motivo. O ESTADO lê horário, obra, papel e `rc`. CODEX-ESTADO e a contagem de tokens casam pelo `thread_id`. O censo do disjuntor lê obra, hash, PID, papel e hora do `ini`. O selo de vagas lê também `rc` e motivo diretamente. `dur` fica na projeção de `fins`, sem consumidor de produção localizado. `bin/codex_pergunta.sh:116`, `bin/codex_pergunta.sh:560`, `bin/codex_pergunta.sh:568`, `bin/codex_pergunta.sh:592`, `bin/codex_pergunta.sh:608`, `bin/codex_limite_estado.py:54`, `bin/codex_limite_estado.py:76`, `bin/codex_limite_estado.py:95`, `bin/codex_limite_estado.py:105`, `bin/codex_limite_estado.py:198`, `bin/gerar_estado.py:277`, `bin/gerar_codex_estado.py:176`, `bin/disjuntor.py:2225`, `bin/tests/test_codex_n_vagas.sh:1008` |
+| **Hora, chave e atividade das chamadas** | A hora gravada é civil, com precisão de segundos e sem fuso. O ESTADO usa `now()` local e inclui a borda de 24 h, inclusive horários futuros. O censo converte para epoch no fuso local e exige `corte <= t <= agora`. A retenção usa epoch em segundos com `+12 h` conservadoras e protege idade `<= 48 h`. Também há duas interpretações de chamada encerrada: a projeção do ESTADO guarda o último `fim` por chave, mesmo se anterior a um novo `ini` com a mesma chave. A retenção processa na ordem do arquivo e exige PID vivo para considerar o `ini` aberto. `bin/codex_pergunta.sh:570`, `bin/codex_pergunta.sh:608`, `bin/codex_limite_estado.py:59`, `bin/codex_limite_estado.py:76`, `bin/codex_limite_estado.py:84`, `bin/codex_limite_estado.py:95`, `bin/disjuntor.py:2232`, `bin/retencao_disco.py:132`, `bin/retencao_disco.py:146`, `bin/retencao_disco.py:164`, `bin/retencao_disco.py:227` |
+| **`uso`, `obras_do`, `uso_obra`, `abertos`, `fim`** | `ler_chamadas` produz máximos de epoch por hash e obra, conjunto de obras por hash, hashes abertos e cursor em **bytes** para o primeiro byte não consumido. O plano usa os quatro primeiros. A passada repassa `fim` como `desde`, e `seek(desde)` inclui esse byte na releitura. `fim` no dicionário é deslocamento, enquanto `fim` no TSV é o tipo do evento. A releitura devolve apenas hashes. O wrapper pode escrever em `CODEX_LOGD`, enquanto a passada fixa `raiz/logs/codex/chamadas.log`. O alinhamento desses caminhos em produção é [nao verificado]. `bin/codex_pergunta.sh:142`, `bin/retencao_disco.py:160`, `bin/retencao_disco.py:176`, `bin/retencao_disco.py:187`, `bin/retencao_disco.py:226`, `bin/retencao_disco.py:549` |
+| **RELATO e HANDOFF** | `linha_topo` produz `AVISO` ou `PAREI: ! DISCO-VIGIA` conforme nível e percentuais. `no_topo_disco` usa o gravador e a trava de diretório de `esteira_vigia`, compartilhados com os escritores de alarme e censo. `gerar_cortes.py` também regrava o RELATO diretamente, fora dessa porta, de forma herdada. O Stop lê faixa de censo e duas linhas úteis. B3 lê essa janela e o `mtime`. O handoff delega os vereditos ao Stop e tem recorte próprio para a listagem. O alarme decide ociosidade sobre 40 linhas e delega ao Stop a prova do censo. `handoff_sessao.sh` grava o HANDOFF, `SessionStart` lê o texto e o Stop lê seu `mtime`. `bin/disco_estado.py:413`, `bin/disco_estado.py:447`, `bin/disco_estado.py:475`, `app/core/esteira_vigia.py:843`, `app/core/esteira_vigia.py:892`, `bin/disjuntor.py:329`, `bin/gerar_cortes.py:117`, `bin/gerar_cortes.py:136`, `bin/hook_stop_fila1.py:462`, `bin/disjuntor.py:765`, `bin/handoff_sessao.sh:124`, `bin/handoff_sessao.sh:328`, `bin/alarme_sessao_ociosa.py:129`, `bin/alarme_sessao_ociosa.py:144`, `.claude/settings.json:40`, `.claude/settings.json:53`, `bin/hook_stop_fila1.py:929` |
+| **Cópia, fonte, `.gz` e metadados** | O wrapper publica a cópia com nome de SHA inteiro e retira escrita. A retenção compara nomes e blobs com o Git, lê `cwd` e FDs de `/proc`, renomeia para `.rm.<sha>`, altera permissões e remove. Na compressão, o sistema de arquivos fornece dispositivo, inode, links, tamanho em bytes e `mtime_ns`. A retenção compara esses valores, lê a assinatura e as citações em `app/docs`, grava o gzip, preserva `atime`/`mtime` do arquivo em nanossegundos e usa segundos inteiros no cabeçalho gzip. `citado=True` impede a retirada da fonte. `bin/codex_pergunta.sh:604`, `bin/codex_pergunta.sh:611`, `bin/retencao_disco.py:241`, `bin/retencao_disco.py:264`, `bin/retencao_disco.py:294`, `bin/retencao_disco.py:302`, `bin/retencao_disco.py:366`, `bin/retencao_disco.py:387`, `bin/retencao_disco.py:432`, `bin/retencao_disco.py:462`, `bin/retencao_disco.py:477`, `bin/retencao_disco.py:560` |
+| **Travas e `retencao.tsv`** | A ordem observável é `relato.lock` → `disco.lock` → diretório do RELATO no gravador. Não encontrei inversão introduzida nesta volta. Há um atalho herdado: `trava()` aceita `VIGIA_DISCO_TRAVA` igual ao caminho como prova de posse. Na trilha, a retenção grava epoch em segundos e tuplas de produtor, ação, `n`, bytes. `resumo` lê a última passada. Nos produtores, `n` é contagem. Em `df`, é percentual, com `-1` para falta de medida. O topo pode imprimir `-1%` como medição e a fotografia do ESTADO também recebe a trilha. `bin/relato.sh:27`, `bin/relato.sh:44`, `bin/retencao_disco.py:631`, `bin/retencao_disco.py:504`, `bin/retencao_disco.py:530`, `bin/retencao_disco.py:571`, `bin/retencao_disco.py:612`, `bin/retencao_disco.py:660`, `bin/disco_estado.py:284`, `bin/disco_estado.py:405`, `bin/disco_estado.py:428`, `bin/disco_estado.py:501`, `app/core/esteira_vigia.py:846` |
+
+## Selos, fallbacks e código retirado
+
+- **Selo vizinho ainda quebrado.** `test_hook_esperando_com_prova.sh` já copia `hook_stop_fila1.py`, mas omite `disco_estado.py` da árvore em que chama `_tem_parei()`. O import obrigatório já existia na base. A consequência está demonstrada no fixture, e a régua reprova se um selo de host sair com erro. O `rc` de uma rodada real e o bloqueio direto pelo `pre-push.sh` são [nao verificado]. `bin/tests/test_hook_esperando_com_prova.sh:199`, `bin/tests/test_hook_esperando_com_prova.sh:225`, `bin/tests/test_hook_esperando_com_prova.sh:259`, `bin/alarme_sessao_ociosa.py:125`, `2d0601d9b:bin/alarme_sessao_ociosa.py:137`, `bin/regua.sh:138`, `bin/pre-push.sh:13`
+- **Mordida e erros.** Conferi em memória que as 70 substituições alteram texto e que as versões Python resultantes compilam. Isso verifica as âncoras. `ws_ordem` introduz `chmod -R` **antes** da reconferência. O caso do hardlink já recusa nessa conferência, portanto ele não prova a proteção contra `chmod -R` **depois** dela. O diff reaproveita o `except ValueError` do parser e mantém o fallback de import opcional do handoff. No alarme, o import obrigatório passa a ocorrer antes de abrir o RELATO. RED original, mordida em execução, selo inteiro e números do log vivo são [nao verificado]. `bin/tests/test_disco_estado.sh:395`, `bin/tests/test_disco_estado.sh:718`, `bin/tests/test_disco_estado.sh:725`, `bin/tests/test_disco_estado.sh:800`, `bin/codex_limite_estado.py:58`, `bin/handoff_sessao.sh:91`, `bin/alarme_sessao_ociosa.py:125`
+- **L-111 e leitores restantes.** A busca pelos símbolos removidos `DATA_HORA`, `HASH12` e `ws_data` retornou zero referências exatas em `bin/`, `.claude/` e `app/`. `_epoch_tardio` permanece com um chamador, que passa `datetime`. `LINHA_TOPO` continua em uso pelo helper e pelo selo. Quanto ao arquivo removido em execução, `pista_certifica.sh` ainda exige o caminho do log e procura `AMBIENTE sha=` no texto cru. A guarda da retenção protege citações encontradas em `app/docs`. Se algum log efetivamente elegível ainda serve de entrada ao certificador é [nao verificado]. `2d0601d9b:bin/retencao_disco.py:82`, `2d0601d9b:bin/tests/test_disco_estado.sh:703`, `bin/retencao_disco.py:146`, `bin/retencao_disco.py:163`, `bin/disco_estado.py:378`, `bin/disco_estado.py:392`, `bin/tests/test_disco_estado.sh:648`, `bin/pista_certifica.sh:22`, `bin/pista_certifica.sh:48`, `bin/retencao_disco.py:415`
+
+**REPROVA — (1) retirada da fonte sem revalidar fonte e destino na borda (`bin/retencao_disco.py:432`, `bin/retencao_disco.py:486`), (2) remoção de cópia com prova de atividade incompleta (`bin/retencao_disco.py:221`, `bin/retencao_disco.py:317`), (3) recortes divergentes do RELATO (`bin/disco_estado.py:381`, `bin/handoff_sessao.sh:110`, `bin/alarme_sessao_ociosa.py:141`), (4) formato e cauda de chamadas sem validação comum (`bin/codex_limite_estado.py:54`, `bin/retencao_disco.py:160`, `bin/retencao_disco.py:185`), (5) selo vizinho com dependência ausente e mordida incompleta no `chmod` pós-reconferência (`bin/tests/test_hook_esperando_com_prova.sh:199`, `bin/tests/test_disco_estado.sh:800`).**
 
 ## 26/11 18:23 · sessao 99bdbf42b5a2 · PAUSA-INTERNA-NO-PARTIDO · leitura · origem=Code
 
@@ -1563,118 +2081,4 @@ Nenhum novo. Contagem de `ast.ExceptHandler` e chamadas a `suppress`, da base do
 | `motivo`, competência e `processados` | `apagar` fornece `motivo='exclusao'`. O resolvedor fornece mês e ano para a deduplicação, a chamada mensal e o log. O escritor mensal produz a contagem, lida agora pelo INFO e já lida pela tela e pelo comando. `app/ponto/registro_batida.py:340` · `app/ponto/services/fechamento.py:1618–1628,637,1326–1335,1830–1850` · `app/ponto/views.py:1280–1281` · `app/ponto/management/commands/recalcular_fechamento.py:130–134` |
 | Texto de E5 | O comentário da porta é lido pelo teste via `Path.read_text`. O mutante injeta a versão antiga nessa leitura. `app/ponto/registro_batida.py:187–196` · `app/ponto/tests/test_juiz_unico_eventos.py:485–489` · `app/ponto/tests/juiz_unico_eventos_mutantes.py:142–146,206–210` |
 
-## 26/11 17:40 · sessao 85c92057ec44 · O30-F3-CONSTRUIR · construtor · origem=Code
-
-A c11 está aplicada na cópia. `_reabrir` agora avisa sobre possível anexo órfão se a execução falhar após gravar o upload sob `atomic` externo, inclusive por `KeyboardInterrupt`. A marca de sucesso é definida após a saída do `with`, e o teste de sucesso exige silêncio. O selo AST de `_foto_no_pdf` exige um único tratador com `(UnidentifiedImageError, OSError)`. [ausencia.py:1435](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1435) · [test_atestado_f3_contrato.py:241](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:241) · [test_atestado_f3_contrato.py:509](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:509) [nao verificado]
-
-Da pasta `app/`, os comandos da tabela usam o executor de mutantes em memória. [mutantes_atestado_f3.py:365](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:365)
-
-```bash
-f3() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 "$@"
-}
-```
-
-| Item | RED | GREEN | Mutantes |
-|---|---|---|---|
-| 1. Aviso em `_reabrir` | `f3 red_c10_reabrir_keyboard_interrupt` falhou na base com `assertLogs`, rc 1. [Teste:524](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:524) | `f3 green_c11` passou os 12 testes, incluindo `KeyboardInterrupt`, `RuntimeError` e sucesso sob `atomic` externo, rc 0. [Executor:404](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:404) | `f3 c11_reabrir_sem_marca_de_sucesso` caiu em `assertNoLogs`. `f3 c11_reabrir_sem_finally` caiu em `assertLogs`. Ambos rc 1. [Mutantes:125](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:125) | [nao verificado]
-| 2. Tipo do tratador do PDF | `f3 c11_pdf_handler_amplo` passou com o selo c10 antes do reforço, rc 0. [Mutante:131](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:131) | `f3 green_c11` passou com o par de exceções especificado, rc 0. [Teste:241](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:241) | `f3 c11_pdf_handler_amplo` caiu na asserção que exige a tupla, rc 1. [Teste:244](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:244) | [nao verificado]
-
-**Contagem AST c10 → c11**
-
-| Arquivo | `ExceptHandler` | `suppress` |
-|---|---:|---:|
-| [ponto/services/ausencia.py:1436](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1436) | 13 → 13 | 0 → 0 |
-| [ponto/services/atestados_lote.py:151](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/atestados_lote.py:151) | 3 → 3 | 0 → 0 |
-| [ponto/tests/test_atestado_f3_contrato.py:528](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:528) | 0 → 0 | 0 → 0 |
-| [ponto/tests/mutantes_atestado_f3.py:117](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:117) | 0 → 0 | 0 → 0 |
-
-O chamador do PDF de lote é `lote_atestados`, em `ponto/views_atestado.py`. Pillow e PDF reais ficam para a suíte da obra [nao verificado]. [views_atestado.py:136](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views_atestado.py:136) · [test_atestado_f3_contrato.py:832](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:832)
-
-**SHA.** O `HEAD` continua em `119aaa8bf8870c7eef8bbe3ecd76f703992b994e`. A entrega ficou no diff da cópia porque as regras vedam `git commit` e a operação escreveria fora de `app/`. SHA de commit c11 [nao verificado]. [mutantes_atestado_f3.py:25](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:25)
-
-## 26/11 17:39 · sessao 65c5ec36379d · - · - · origem=Ronald (tmux)
-
-**B1 corrige o ciclo original entre regularização e `apagar`, mas ainda há inversão de trava.** A nova chamada é a primeira instrução do atomic da materialização e trava apenas o Colaborador. A exclusão do DP também começa pelo Colaborador antes da Batida. O teste passou na cópia e o mutante caiu com RC 1, dois `FAIL` e zero `ERROR`. O teste usa mocks de trava e escrita, cobre corrigir e remover e passa `chamado_id=None`. `app/chamados/services/regularizacao_ext.py:122-124`, `app/chamados/models.py:2901-2902,2938-2967`, `app/ponto/registro_batida.py:328-336`, `app/ponto/tests/test_juiz_unico_eventos.py:409-432`, `app/ponto/tests/juiz_unico_eventos_mutantes.py:123-125`.
-
-**Contraexemplo com dois atos.** O `flip_automatico --apply` entra no atomic e `flip_tipo` chama `anotar`, cujo UPDATE segura a Batida B. A regularização concorrente do mesmo Colaborador C segura C pelo delta e espera B ao corrigir. O `post_save` do flip chama o reconciliador, que tenta C quando há pergunta elegível. Uma pergunta de disputa já fechada satisfaz essa condição sem acionar a guarda de disputa aberta. A agenda da cópia contém esse comando. Ocorrência em produção [nao verificado]. `app/config/crons.py:707`, `app/ponto/management/commands/flip_automatico.py:51-68`, `app/ponto/services/flip_batida.py:21-32`, `app/ponto/registro_batida.py:264-287`, `app/chamados/services/regularizacao_ext.py:59-66,122-123,153-157`, `app/ponto/signals.py:216-225`, `app/chamados/reconciliador.py:651-653,673-694,740-762,1580`.
-
-**Dentro do atomic.** Corrigir e adicionar executam `post_save` e podem travar o universo Disputa/Chamado/Pergunta no reconciliador. Remover executa os `post_delete` do núcleo e do cartório. O `transicionar_com_pauta` executa o `encerrar` do chamado do lote, que pede C, D abertas e o próprio Ch antes de decidir. Se o `post_save` já travou uma P e o chamado do lote é terminal e está fora dos destinos previamente travados, `encerrar` pode adquirir esse Ch pela primeira vez depois de P. A posse de C serializa esse exemplo com atos que também respeitam C primeiro. `app/chamados/services/regularizacao_ext.py:78-83,138,157,207`, `app/ponto/registro_batida.py:172-182`, `app/ponto/signals.py:53-55,141-150,216-225`, `app/chamados/reconciliador.py:686-694`, `app/chamados/services/fecho_runtime.py:157-168`, `app/chamados/models.py:773-777,1785-1793,2943-2966`, `app/chamados/catalogo/motor.py:24-31`, `app/chamados/services/acoes_chamado.py:322-329`.
-
-A guarda de disputa ocorre antes da nova trava. Outro ato pode abrir D sob C entre a leitura da guarda e a aquisição de C pela regularização, que prossegue sem reler. Isso já existia no trecho do anexo. `app/chamados/services/regularizacao_ext.py:59-66,122-124`, `app/chamados/services/disputa_emissao.py:530-542,601-606`.
-
-O `colaborador_id` novo é o FK gravado na criação do lote. A chamada também registra um sentinela de trava na fila da conexão, lido pelas portas que exigem ou identificam a trava corrente. `app/chamados/models.py:4592-4595,2939-2941`, `app/chamados/services/regularizacao_ext.py:238-241`, `app/chamados/services/trava_do_colaborador.py:26-28,37-64,72-80`.
-
-O teste e o mutante B2 pararam no import de `django.db` no ambiente somente leitura. O mutante saiu RC 2 com `FAIL=0 ERROR=1`. Queda por asserção [nao verificado]. `app/ponto/tests/test_juiz_unico_eventos.py:333`, `app/ponto/tests/juiz_unico_eventos_mutantes.py:228-232`.
-
-## 26/11 17:39 · sessao 715c4520f925 · - · - · origem=Ronald (tmux)
-
-**B2 curado no código.** `apagar` trava e relê a batida, chama o juiz antes do `delete` e deixa o `DatabaseError` sair do `atomic`. A falha interrompe o ato antes do delete, agendamento, trilha e limpeza do PK. O agendamento pós-delete mantém `_proteger_fechamento_por_evento`; o recálculo roda no `on_commit` e conserva seus `except`. [app/ponto/registro_batida.py:318–343] [app/ponto/registro_batida.py:197–204] [app/ponto/services/fechamento.py:1830–1856]
-
-- O único caller de produção encontrado é o POST `rejeitar` da tela offline. O `except Batida.DoesNotExist` cobre a consulta inicial. A exceção de `apagar` sai da view e impede a resposta `ok=True`. É um ato administrativo protegido por `ver_painel_situacional`, permissão que também pode alcançar supervisão e TI. Resposta HTTP observada em produção [nao verificado]. [app/ponto/urls.py:78] [app/ponto/views.py:452–456,467–482,496–500] [app/colaboradores/mixins.py:322–331,355–377] [app/docs/LEIS.md:78]
-- Callers de teste em `test_porta_batida.py:80,81` deixam exceções subir. Em `test_juiz_unico_eventos.py:273,305,314,368,401` também. O caller de `:352` captura com `assertRaises(DatabaseError)`, afirma identidade, preservação das linhas e PK, zero trilha/savepoint/commit/on_commit e um rollback. O teste e o mutante `f4d-b2-protecao-e-savepoint` pararam no import de `django.db` nesta cópia. O mutante anunciou `FAIL=0 ERROR=1`, RC 2. A mordida em execução permanece [nao verificado]. Por inspeção, o mutante engole a exceção que o `assertRaises` exige. [app/ponto/tests/test_porta_batida.py:77–83] [app/ponto/tests/test_juiz_unico_eventos.py:318–360] [app/ponto/tests/juiz_unico_eventos_mutantes.py:126–134,225–232] [nao verificado]
-
-**Contraexemplo adicional para B1.** T1 regulariza e mantém `FOR UPDATE` no colaborador C. T2 bate pelo app no mesmo instante que T1 vai registrar ou usar como novo horário de uma correção. T2 chega primeiro ao INSERT de Batida e reserva a chave única `(C, timestamp)`, depois pede `FOR KEY SHARE` de C pelo FK. T1 chega ao INSERT ou UPDATE sobre a mesma chave e aguarda T2. O código aceita a mesma chave temporal nas duas portas. O conflito `FOR UPDATE` × `KEY SHARE` está documentado no teste equivalente de Posto/FK. Execução do ciclo específico de Batida e ocorrência em produção [nao verificado]. [app/chamados/services/regularizacao_ext.py:73–83,122–123,144–157] [app/chamados/models.py:2939] [app/api/views_core.py:483–495,643–659] [app/api/hora_do_aparelho.py:135–146] [app/ponto/registro_batida.py:133–148,178–180] [app/ponto/models.py:22,102–108] [app/colaboradores/tests/test_feriado_matriz_p3_trava.py:5–10] [nao verificado]
-
-## 26/11 17:36 · sessao 2d4c89ae68b2 · O30-F3-CONSTRUIR · verificador · origem=Code
-
-**REPROVADO no pré-verificador c10.**
-
-1. **Falta a prova com Pillow e PDF reais do item 1.** O verde e o mutante real pararam no `import PIL`. A queda do mutante com mock foi confirmada. O resultado com as dependências reais fica [nao verificado]. `test_atestado_f3_contrato.py:821-850` · `mutantes_atestado_f3.py:120-125,387-390` [nao verificado]
-2. **A c10 perdeu o aviso em uma falha ocorrida dentro da própria reabertura.** Com upload já gravado, `KeyboardInterrupt` em `mudar_estado` sob `atomic` externo gerou o aviso na c9 reconstruída e saiu em silêncio na c10. Reproduzi em memória. Considerei essa saída excepcional parte de “falha loga”, porque ela ocorre antes do retorno e também pode deixar o anexo órfão. `ausencia.py:1413-1428,1434-1445` · `mutantes_atestado_f3.py:134-136`
-
-Os quatro blobs da cópia conferem com o `delta.patch` fornecido. Os dois arquivos de serviço reconstruídos em memória também conferem com os blobs c9 do patch, e os dois REDs correspondentes falharam nas asserções esperadas. A confirmação dos hashes de **commit** e a ocorrência dos contraexemplos em produção ficam [nao verificado]. `mutantes_atestado_f3.py:92-93,391-395` · `test_atestado_f3_contrato.py:228-240,503-507` [nao verificado]
-
-### 1. Os quatro itens do Opus
-
-| Item | Sítio e teste que morde | Resultado | [nao verificado]
-|---|---|---|
-| 1. `load()` explícito e JPEG truncado | `atestados_lote.py:147-152` · `test_atestado_f3_contrato.py:801-815,821-850` | Código e teste real presentes. O mutante composto sem `load()` e com transposição fora do `try` caiu no mock com `OSError: truncado`. Retirar **só** o `load()` deixou o teste comportamental verde e derrubou o selo AST. A transposição do mock também chama `load()`. Mutante real [nao verificado]. `mutantes_atestado_f3.py:108-125` · `test_atestado_f3_contrato.py:239-240,763-765` | [nao verificado]
-| 2. Corpo exato do `try` | `atestados_lote.py:147-158` · `test_atestado_f3_contrato.py:228-240` | Curado. `thumbnail` dentro do `try` derrubou a igualdade AST. `mutantes_atestado_f3.py:126-130` |
-| 3. Uma marca e rodapé igual | `atestados_lote.py:201-214,225-232` · `test_atestado_f3_contrato.py:809-815,844-850` | Curado. A marca duplicada caiu com `2 != 1`. O mutante que zera o incremento também caiu, com rodapé `0` para uma marca. `mutantes_atestado_f3.py:131-133,140-142` |
-| 4. Aviso na falha sob `atomic` externo | `ausencia.py:1434-1445` · `test_atestado_f3_contrato.py:503-538` | Curado para `Exception`. O mutante que repõe o `finally` caiu em `assertNoLogs`, e o que remove o aviso caiu em `assertLogs`. A saída por `BaseException` ficou sem aviso, conforme o bloqueio 2. `mutantes_atestado_f3.py:134-139` |
-
-### 2. `_foto_no_pdf` e o rodapé
-
-- O tratador cobre `Image.open`, a entrada e a saída do `with`, `original.load()` e `exif_transpose`, para `UnidentifiedImageError` e `OSError`. `thumbnail`, `save`, a construção da imagem do PDF e a abertura do documento no storage ficam fora. `atestados_lote.py:147-158,168-175`
-- **Um anexo inacessível ainda pode derrubar o lote.** Contraexemplo reproduzido com mock: `exists()` devolve `True` e `documento.open('rb')` levanta `FileNotFoundError`, como na janela em que o arquivo some entre as chamadas. A exceção chega à montagem do PDF. Se `exists()` já devolve `False`, sai `Anexo indisponível`, com incremento zero. `atestados_lote.py:168-178,210-216` · `views_atestado.py:134-138`
-- **Uma imagem decodificada pode virar `ILEGIVEL`.** No contraexemplo em memória, `load()` e a transposição completam, mas a saída do `with` levanta `OSError`. O resultado foi uma marca, rodapé `1` e nenhuma imagem embutida. Um anexo de tipo desconhecido segue como link, inclusive quando a leitura do cabeçalho falha e devolve `(None, None)`. `atestados_lote.py:147-152,171-178,211-214` · `ausencia.py:796-817`
-- **O rodapé conta exatamente as marcas geradas pelo ramo `anexo is None`**, uma por passagem, e repete o total em cada página. Uma busca textual tem outro universo: `atestado_medico='ANEXO ILEGIVEL'` imprime a expressão no texto clínico mesmo com uma foto boa e rodapé `0`. `atestados_lote.py:201-214,225-232` · `forms.py:13-15`
-
-### 3. `_reabrir` e o rollback do chamador
-
-O aviso específico exige uma `Exception` que chegue ao tratador, upload detectado e `conexao.in_atomic_block` ainda verdadeiro. Sem atomic externo, o ramo tenta compensar e emite outro aviso. Em sucesso, `_reabrir` devolve a instância com `_criada=False` e `_reaberta=True`, sem emitir o aviso de órfão. `ausencia.py:1406-1421,1434-1445`
-
-**Contraexemplo reproduzido em memória:** o chamador abre um atomic, recebe o retorno de `_reabrir` e só então levanta `RuntimeError`. O rollback restaura a referência anterior no banco simulado. A instância em memória ainda aponta para o nome novo, e o arquivo novo fica no storage. Sem outra referência ou compensação do chamador, sobra um órfão sem aviso de `_reabrir`. O teste de sucesso c10 para antes desse rollback. `ausencia.py:1413-1421,1434-1445` · `test_atestado_f3_contrato.py:409-431,503-513` [nao verificado]
-
-**INSS tem os dois caminhos.** Se a falha vem depois do retorno, a view lê o nome restaurado e tenta compensar. Se `_reabrir` levanta antes de devolver, a atribuição de `ausencia` nunca completa, e a view pula essa limpeza. Para `Exception` com upload detectado, fica o aviso da porta. `views.py:2563-2579,2588-2601` · `ausencia.py:249-264,1434-1442`
-
-### 4. Contagem AST c9 → c10
-
-| Arquivo | `ExceptHandler` | `suppress` |
-|---|---:|---:|
-| `atestados_lote.py:151,263,271` | 3 → 3 | 0 → 0 |
-| `ausencia.py:266,605,611,643,807,845,1132,1307,1345,1434,1511,1560,1818` | 13 → 13 | 0 → 0 |
-| `mutantes_atestado_f3.py:101-139,192-196,350-370` | 0 → 0 | 0 → 0 |
-| `test_atestado_f3_contrato.py:51-72,228-240,503-538,801-850` | 0 → 0 | 0 → 0 |
-
-O `finally` externo saiu. O `finally` interno que registra a gravação do upload continua. Em `mutantes_atestado_f3.py`, `suppress` aparece como texto de mutante. `ausencia.py:1416-1421,1434-1445` · `mutantes_atestado_f3.py:192-196`
-
-### 5. Classes já reprovadas
-
-- **Sem ocorrência nova no delta** de segundo juiz, segundo escritor fora da porta, relógio fora da borda, derivação paralela, ordem de trava ou campo persistido com dois significados. A classificação segue em `tipo_real_documento`, a reabertura segue usando `estado_inicial` e `mudar_estado`, e a trava da gravação dos seis campos segue na mesma função. `atestados_lote.py:147-175` · `ausencia.py:301-324,796-817,1403-1433`
-- **Selo/RED:** os mutantes pedidos que puderam rodar morderam. O selo novo tem uma lacuna verificável: trocar o tipo do handler por `except Exception` deixou verdes o selo do corpo, o censo de tratadores e o teste de decode com mock. O selo compara o corpo, e o censo conta tratadores. A c10 efetivamente entregue conserva o par de exceções. `atestados_lote.py:151` · `test_atestado_f3_contrato.py:51-72,222-240,801-815` [nao verificado]
-
-### 6. Quem escreve e quem lê
-
-| Campo ou valor | Quem escreve ou produz | Quem lê ou consome |
-|---|---|---|
-| `Ausencia.documento`, nome e bytes | Upload entra pela view. `criar_ausencia`, `anexar_documento` e `_reabrir` passam o documento ao `save` do `FileField`. `views.py:2525-2538` · `models.py:777-781` · `ausencia.py:571-572,638-642,1118-1120,1413-1421` | Histórico lê a presença. PDF lê nome, disponibilidade e bytes. ZIP lê o original. A rota de anexo abre o documento da raiz. Reabertura e compensação leem o nome e suas referências. `dia_decidido.py:679-687` · `atestados_lote.py:168-175,249-261` · `views.py:2146-2161` · `ausencia.py:249-264,1405` |
-| `linha['ausencia']`, `linha['documento']`, `registro.pk`, `pode_ver_anexo` | O ORM fornece a ausência e o ID. `linha_do_tempo` monta a linha e a flag booleana. A view calcula a permissão. `atestados_lote.py:36-49,58-63` · `dia_decidido.py:679-687` · `views_atestado.py:99-105` | PDF usa o ID no resumo, link e marca, e as duas flags para decidir se lê o anexo. A reabertura usa o mesmo ID no aviso. `atestados_lote.py:176-178,190-216` · `ausencia.py:1437-1441` |
-| `arquivo`, `tipo`, `original`, `foto`, retorno `None` | `_anexo_no_pdf` abre o stream. `tipo_real_documento` fornece o tipo pelos bytes. Pillow abre, carrega e transpõe. `_foto_no_pdf` produz a imagem ou `None`. `atestados_lote.py:147-158,168-175` · `ausencia.py:789-817` | `_foto_no_pdf` usa o tipo para escolher JPEG ou PNG. `_anexo_no_pdf` propaga `None`. `pdf_bytes` lê esse valor para gerar a marca e incrementar o contador. `atestados_lote.py:153-158,172-175,210-216` |
-| Marca, `anexos_ilegiveis` e bytes do PDF | `pdf_bytes` produz a marca e incrementa no mesmo ramo. O rodapé imprime o total. `atestados_lote.py:201-214,225-234` | ReportLab consome os blocos e o callback. A view envia os bytes. Os testes leem a marca, a imagem e o rodapé. `atestados_lote.py:231-234` · `views_atestado.py:134-150` · `test_atestado_f3_contrato.py:809-815,844-850` | [nao verificado]
-| `banco`, `in_atomic_block`, `_committed`, `_nome_antes`, `anexo_gravado` | O router fornece o alias. A conexão acompanha o atomic. O `save` do `FileField` grava o upload, e `_reabrir` captura o nome anterior e a dupla `(storage, nome gravado)`. `ausencia.py:1405-1421` · `views.py:2569-2579` | `_reabrir` lê a dupla e o estado da conexão para escolher compensação ou aviso. A compensação lê o nome anterior e consulta as referências ao nome gravado. `ausencia.py:249-264,1434-1442` |
-| Aviso e flags de retorno | `_reabrir` emite o aviso pelo logger `ponto` e marca a instância no caminho de sucesso. `ausencia.py:49,1439-1445` | A configuração SaaS encaminha o logger ao handler. Os testes capturam o aviso e leem `_reaberta`. A API e `garantir_ausencia` leem `_criada`. `saas.py:160-166,181` · `test_atestado_f3_contrato.py:503-538` · `api/views.py:1852-1858` · `ausencia.py:690-691` |
-| Seis campos `atestado_*` e `documento_referencia_id` | O formulário fornece os seis valores. A criação grava no INSERT. Edição, anexação e reabertura passam pelo gravador comum. O vínculo é declarado no modelo. `forms.py:13-22` · `views_atestado.py:31-50` · `ausencia.py:301-324,567,640-642,744-746,1114-1115,1409-1411` · `models.py:815-819` | O gravador lê os valores atuais e a referência para recusar a gravação na filha. PDF, CSV e painel leem os seis campos. O vínculo também é lido pela rota que serve o anexo. `ausencia.py:292-324` · `atestados_lote.py:104-108,122-138,205-209` · `painel_ausencia.html:100-131` · `views.py:2146-2149` |
-
-_8462 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8466 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
