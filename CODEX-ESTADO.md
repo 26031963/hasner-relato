@@ -1,7 +1,46 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 18:39** · publicado em **26/11/2026 18:40** (UTC-3)
+> Ultima resposta processada: **26/11/2026 19:42** · publicado em **26/11/2026 19:42** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 19:42 · sessao 7f12eaf2ecd3 · O30-F3-CONSTRUIR · construtor · origem=Code
+
+## O30-F3-CONSTRUIR · c14
+
+- **B2 — Filtro universal.** O lote usa `q`, `de_data` e `ate_data` pelo filtro da casa, como o drawer de Holerite. A busca própria saiu e o `q` passou a usar `qs_colaborador`, a mesma busca da consulta de férias. O seletor usa `empresas_visiveis`. Prévia, CSV, ZIP e PDF partem do mesmo recorte, que inclui os lançamentos que cruzam o início do período. [ponto/views_atestado.py:56](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views_atestado.py:56) · [ponto/views_atestado.py:93](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views_atestado.py:93) · [holerite/views.py:407](/home/ronald/wt-codex-o30-f3-construir-010143/app/holerite/views.py:407) · [api/views_mensageria.py:799](/home/ronald/wt-codex-o30-f3-construir-010143/app/api/views_mensageria.py:799) · [colaboradores/queries.py:78](/home/ronald/wt-codex-o30-f3-construir-010143/app/colaboradores/queries.py:78) [nao verificado]
+- **B3 — Porta órfã.** View e rota retiradas, com lápide de uma linha em cada local. O grep abaixo encontrou zero chamadores de produção na cópia. O painel posta em `relatorios:anexar_atestado`. Os testes de anexo após aprovação e de recusa em férias derivadas passaram a exercitar essa porta. A referência de inventário está em `core/juizes.py:1097`, atrelada à retirada pela sessão. [ponto/views.py:2165](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2165) · [ponto/urls.py:72](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/urls.py:72) · [templates/ponto/partials/painel_ausencia.html:91](/home/ronald/wt-codex-o30-f3-construir-010143/app/templates/ponto/partials/painel_ausencia.html:91) · [ponto/tests/test_atestado_f3.py:238](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3.py:238) · [ponto/tests/test_hj091_ferias_derivadas.py:472](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_hj091_ferias_derivadas.py:472) · [core/juizes.py:1097](/home/ronald/wt-codex-o30-f3-construir-010143/app/core/juizes.py:1097)
+- **B4 — Anexo sob `atomic` externo.** A reabertura com upload usa um savepoint para desfazer o `UPDATE` antes de consultar as referências e remover o órfão. A compensação da tela INSS usa a mesma consulta se a falha ocorre depois que a reabertura retorna. Se a conexão ainda exige rollback, a reabertura preserva o arquivo e registra o aviso. A asserção de zero órfão foi restaurada. A reversão manual também chama `_reabrir`. A cura usa `finally`, sem `except` novo. [ponto/services/ausencia.py:242](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:242) · [ponto/services/ausencia.py:1429](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1429) · [ponto/services/ausencia.py:1456](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1456) · [ponto/views.py:2568](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2568) · [ponto/views.py:2731](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2731) · [ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:179](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:179)
+
+## RED e mutantes
+
+Antes das respectivas curas, os RED sem banco falharam porque o dropdown incluía duas empresas excluídas pela fonte de UI, `COL27` não encontrava a pessoa, a porta antiga ainda existia, a reabertura deixava o upload após a falha e a compensação INSS apagava um arquivo referenciado por outra linha. Depois da cura, os 24 testes focados passaram. Os oito mutantes retornaram `rc=1` por falha de asserção. [ponto/tests/test_atestado_f3_contrato.py:552](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:552) · [ponto/tests/test_atestado_f3_contrato.py:601](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:601) · [ponto/tests/test_atestado_f3_contrato.py:778](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:778) · [ponto/tests/mutantes_atestado_f3_c14.py:16](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3_c14.py:16) [nao verificado]
+
+```bash
+rg -n 'anexar_documento_ausencia|anexar-documento/' templates static api
+rg -n 'anexar_documento_ausencia|anexar-documento/' . -g '!**/tests/**' -g '!**/migrations/**'
+
+export PYTHONDONTWRITEBYTECODE=1
+T=ponto.tests.test_atestado_f3_contrato
+python3 -m unittest \
+  "$T.AtestadoF3LoteSemBancoTest.test_RED_dropdown_usa_o_universo_de_empresas_visiveis" \
+  "$T.AtestadoF3LoteSemBancoTest.test_RED_busca_q_tem_o_mesmo_resultado_da_busca_da_casa" \
+  "$T.AtestadoF3LoteSemBancoTest.test_RED_porta_http_antiga_foi_retirada" \
+  "$T.AtestadoF3PortaSemBancoTest.test_RED_reabrir_compensa_apos_falha_em_atomic_externo" \
+  "$T.AtestadoF3PortaSemBancoTest.test_RED_reabertura_com_upload_sem_metadados_usa_savepoint_externo" \
+  "$T.AtestadoF3PortaSemBancoTest.test_RED_inss_preserva_anexo_referenciado_apos_falha_no_atomic_da_tela"
+
+mutante() { python3 -m ponto.tests.mutantes_atestado_f3_c14 "$1"; }
+mutante empresas
+mutante busca
+mutante periodo
+mutante porta_antiga
+mutante sem_savepoint
+mutante so_avisa
+mutante ignora_referencia
+mutante inss_apaga_referenciado
+```
+
+A rodada completa do módulo sem banco teve 41 testes concluídos e um erro de importação por falta de Pillow. O RED com Django no lançamento INSS, a suíte do Code e o parecer final do Opus estão **[nao verificado]**. [ponto/tests/test_atestado_f3_contrato.py:1015](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:1015) · [ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:182](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:182) [nao verificado]
 
 ## 26/11 18:39 · sessao f74e1a36534d · O30-F3-CONSTRUIR · construtor · origem=Code
 
@@ -2050,67 +2089,4 @@ A asserção legada de col129 exige o par separado e conflita com o fecho da V6 
 
 PAR-RELÂMPAGO consta como pousada. DIA F4c consta no relatório da cópia, e o delta de F4d está [nao verificado]. `app/docs/RELATO.md:18`, `app/docs/RELATO.md:112`.
 
-## 26/11 17:46 · sessao 9da75a87c3a9 · O30-F3-CONSTRUIR · verificador · origem=Code
-
-**O30-F3-CONSTRUIR c11 — bloqueio 2 curado.** O RED de `KeyboardInterrupt` falhou por falta do aviso com o blob c10 reconstruído em memória e passou com a c11. Os três blobs alterados e suas reconstruções c10 conferem com o delta fornecido. A cópia veio sem `.git`. A identidade dos commits e o comportamento em produção ficam [nao verificado]. `app/ponto/services/ausencia.py:1435,1442,1444` · `app/ponto/tests/test_atestado_f3_contrato.py:524,539` · `app/ponto/tests/mutantes_atestado_f3.py:96,408`
-
-### 1. Saídas de `_reabrir`
-
-| Saída | Resultado na c11 |
-|---|---|
-| Sucesso | **nada**. `concluiu` vira `True` depois da saída normal do `with`. A função marca `_criada=False` e `_reaberta=True` e devolve a instância. `app/ponto/services/ausencia.py:1435,1443,1446` |
-| `Exception` ou `BaseException` com upload detectado e atomic externo ainda ativo | Emite um aviso de possível órfão e deixa a exceção subir. A compensação fica fora desse caminho. Os testes de `RuntimeError` e `KeyboardInterrupt` conferem a identidade da exceção, o aviso exato e a ausência de consulta ou exclusão. `app/ponto/services/ausencia.py:1436,1441,1443` · `app/ponto/tests/test_atestado_f3_contrato.py:521,524,538,542` |
-| Retorno antecipado | **nada** na árvore. O único `return` fica depois do `finally`. Injetei em memória um `return` logo após o upload e ele emitiu o aviso sob atomic externo, pois ainda pulava `concluiu = True`. `app/ponto/services/ausencia.py:1422,1435,1443,1448` |
-| Falha antes do upload, ausência de upload ou documento já `_committed` | **nada**. `anexo_gravado` só recebe valor se o documento passar de pendente a `_committed` durante o `save`. `app/ponto/services/ausencia.py:1408,1412,1416,1421` |
-| Falha no `save` do `FileField` | Se a falha vier **depois** da transição para `_committed`, o `finally` interno captura `(storage, nome)`, inclusive para `BaseException`. Se o storage deixar um arquivo e falhar **antes** dessa confirmação, a porta fica sem sinal e o aviso deixa de sair. Reproduzi os dois caminhos em memória. A ocorrência com o storage de produção fica [nao verificado]. `app/ponto/services/ausencia.py:1416,1418,1421,1443` · `app/ponto/tests/test_atestado_f3_contrato.py:551,555` |
-| Falha ao sair do `with` | `concluiu` ainda está `False`. Com upload detectado, o estado da conexão **após** a saída do `with` decide o caminho. Simulei falhas na saída com e sem atomic externo. `app/ponto/services/ausencia.py:1411,1435,1437,1443` · `app/ponto/tests/test_atestado_f3_contrato.py:439,444` |
-
-**Sem atomic externo, a compensação continua igual à c10.** Com `Exception` e upload detectado, a porta tenta apagar o nome novo, preserva o nome anterior e qualquer nome ainda referenciado, registra `anexo_apagado` e relança. Uma `BaseException` fora de `Exception` continua subindo sem compensação nem aviso quando a conexão está fora de atomic. `app/ponto/services/ausencia.py:249,256,262,266,1436,1443`
-
-O aviso sinaliza **risco**. Sob atomic externo, ele pode sair mesmo que o arquivo acabe referenciado, pois a porta não consulta referências nesse caminho. Se o chamador fizer rollback **depois** de `_reabrir` devolver, a porta já encerrou sem aviso. A view de INSS tenta compensar esse segundo caso quando recebe a instância e a falha posterior é uma `Exception`. `app/ponto/services/ausencia.py:1437,1443,1448` · `app/ponto/views.py:2569,2572,2588,2590,2596`
-
-### 2. Quem escreve e quem lê
-
-| Valor | Escritor, leitores e significado |
-|---|---|
-| `concluiu` | `_reabrir` escreve `False` antes do `try` e `True` depois do `with`. Só o `finally` lê. Significa que o fluxo local chegou ao fim do bloco protegido. O estado final da transação do chamador fica fora desse sinal. `app/ponto/services/ausencia.py:1409,1435,1443,1448` |
-| `anexo_gravado` | `_reabrir` inicializa com `None` e o `finally` interno registra `(storage, nome)` pela transição de `_committed`. O `except`, o `finally` externo, os dois avisos e o compensador consomem esse mesmo fato. O compensador consulta separadamente se o nome ainda tem referência. `app/ponto/services/ausencia.py:1408,1416,1421,1437,1443,249,262` |
-| `conexao.in_atomic_block` | Em produção, a porta obtém a conexão do alias escolhido pelo router e lê o atributo do Django depois do `with`. O escritor interno do atributo no Django fica [nao verificado] nesta cópia. O teste escreve `False` na fixture e `True` nos casos com atomic externo. Os leitores da porta tratam o valor como “a conexão ainda está dentro de um atomic neste ponto”. `app/ponto/services/ausencia.py:1406,1411,1437,1443` · `app/ponto/tests/test_atestado_f3_contrato.py:368,511,529` |
-| Aviso | `_reabrir` escreve no logger `ponto`. A configuração SaaS encaminha o `WARNING` ao `pontofile`. O contrato lê o texto exato e o teste de integração procura a mensagem com ID e nome. Ambos esperam um aviso de possível órfão. Consumo operacional em produção [nao verificado]. `app/ponto/services/ausencia.py:49,1444` · `app/config/settings/saas.py:131,160,181` · `app/ponto/tests/test_atestado_f3_contrato.py:546` · `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:164,183` |
-
-### 3. Selo do `Image.open`
-
-As cinco trocas falharam em memória. O selo exige um único tratador, do tipo AST `Tuple`, e compara a tupla inteira com `(UnidentifiedImageError, OSError)`. `app/ponto/tests/test_atestado_f3_contrato.py:228,238,241,244,246`
-
-| Troca | Efeito e ponto da queda |
-|---|---|
-| `except Exception` | Também converte erros como `ValueError` em `None`. Cai em `assertIsInstance`, pois é `ast.Name`. `app/ponto/services/atestados_lote.py:147,151` · `app/ponto/tests/test_atestado_f3_contrato.py:244` |
-| `except BaseException` | Também converte `KeyboardInterrupt` e `SystemExit` em `None`. Cai no mesmo `assertIsInstance`. `app/ponto/services/atestados_lote.py:147,151` · `app/ponto/tests/test_atestado_f3_contrato.py:244,525` |
-| `except OSError` | Captura `OSError` e suas subclasses. No mock, isso inclui `UnidentifiedImageError`. A hierarquia no Pillow real fica [nao verificado]. Cai em `assertIsInstance`. `app/ponto/tests/test_atestado_f3_contrato.py:244,792` |
-| Tupla reordenada | Captura os mesmos tipos. Cai na igualdade AST pela ordem dos elementos. `app/ponto/services/atestados_lote.py:151` · `app/ponto/tests/test_atestado_f3_contrato.py:245,246` |
-| Tupla com tipo a mais | Com `ValueError` a mais, também converte esse erro em `None`. Cai na igualdade AST pelo elemento adicional. `app/ponto/services/atestados_lote.py:151` · `app/ponto/tests/test_atestado_f3_contrato.py:245,246` |
-
-### 4. REDs, mutantes e mocks
-
-- **Mordem.** `green_c11` passou nos 12 testes. O RED histórico e `c11_reabrir_sem_finally` caíram por falta de aviso. `c11_reabrir_sem_marca_de_sucesso` caiu por aviso indevido no sucesso. `c11_pdf_handler_amplo` caiu no selo AST. O mutante adaptado `c8_try_dentro_do_atomic` também caiu, pois deixou o arquivo novo após a falha na saída do `with`. `app/ponto/tests/mutantes_atestado_f3.py:96,124,291,404,423` · `app/ponto/tests/test_atestado_f3_contrato.py:244,456,512,539`
-- **O mock de transação deixa passar uma regressão concreta.** Mover a leitura de `in_atomic_block` para dentro do `with` e reutilizar o valor nos dois ramos passou nos 12 testes. Com um contexto simulado que muda a flag de `False` para `True` na entrada e volta a `False` ao sair, o mutante emitiu o aviso de atomic externo e deixou o arquivo. A c11 compensou. A fixture padrão e o teste de falha na saída mantêm a flag fixa. `app/ponto/services/ausencia.py:1411,1437,1443` · `app/ponto/tests/test_atestado_f3_contrato.py:368,444,529`
-- **O mock de decode ainda encobre a remoção isolada de `original.load()`.** A transposição simulada chama `load()`. Confirmei o teste comportamental verde e o selo AST vermelho para essa mutação. O verde e o mutante com PDF real pararam no `import PIL`, então o bloqueio 1 do laudo continua [nao verificado]. `app/ponto/tests/test_atestado_f3_contrato.py:235,239,774,812,832` · `app/ponto/tests/mutantes_atestado_f3.py:138,406`
-
-### 5. Contagem AST c10 → c11
-
-| Arquivo | `ExceptHandler` | Chamadas a `suppress` |
-|---|---:|---:|
-| `app/ponto/services/ausencia.py:266,1436,1821` | 13 → 13 | 0 → 0 |
-| `app/ponto/services/atestados_lote.py:151,263,271` | 3 → 3 | 0 → 0 |
-| `app/ponto/tests/test_atestado_f3_contrato.py:51,62,64,241,527` | 0 → 0 | 0 → 0 |
-| `app/ponto/tests/mutantes_atestado_f3.py:124,207,291` | 0 → 0 | 0 → 0 |
-
-O `suppress` do arquivo de mutantes está numa string usada para gerar uma variante. A contagem acima é do AST do arquivo. `app/ponto/tests/mutantes_atestado_f3.py:207,209`
-
-### 6. Classes já reprovadas
-
-- **2º juiz, 2º escritor fora da porta, relógio fora da borda, derivação paralela, ordem de trava e campo com dois significados:** **nada** novo no delta. Os pontos de decisão, gravação, relógio e trava permanecem nos mesmos caminhos. `app/ponto/services/ausencia.py:301,306,317,1403,1412,1418,1427,1432,1435` · `app/ponto/services/atestados_lote.py:172`
-- **Selo/RED sem mordida:** **nada** entre os casos novos registrados. A lacuna da flag fixa permanece na cobertura simulada, conforme o contraexemplo do item 4. `app/ponto/tests/mutantes_atestado_f3.py:96,124,404` · `app/ponto/tests/test_atestado_f3_contrato.py:368,444,529`
-- **`except` ou fallback novo:** **nada**. O `except Exception` continua no ramo de compensação. O `finally` externo passa a emitir o aviso existente também quando uma `BaseException` escapa. `app/ponto/services/ausencia.py:1436,1441,1442,1444`
-
-_8467 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8468 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
