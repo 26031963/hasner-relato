@@ -1,7 +1,60 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 14:57** · publicado em **26/11/2026 14:59** (UTC-3)
+> Ultima resposta processada: **26/11/2026 15:02** · publicado em **26/11/2026 15:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 15:02 · sessao 71da7aacce9e · SUITE-ROTEIA-PARA-PISTA · verificador · origem=Code
+
+Os cinco bloqueantes da volta 2 foram fechados nos cenários que ela apontou. A sonda em memória confirmou os efeitos esperados dos 11 mutantes novos. Ainda há regressões que mudariam o rc ou a ida à VM e passariam pelos casos atuais. `bin/suite.sh:442–495`, `bin/tests/test_suite_rota_pista.sh:297–303`, `bin/tests/test_suite_rota_pista.sh:331–343`, `bin/tests/test_suite_rota_pista.sh:400–413`.
+
+`bash -n` passou nos dois scripts. A sonda usou o trecho de decisão e as respostas do SSH falso, sem criar arquivos. Execução integral do selo, confirmação do hash por Git e comportamento em produção [nao verificado]. [nao verificado]
+
+### 1. Bloqueantes da volta 2
+
+| Bloqueante | Estado no delta |
+|---|---|
+| Aceite de `pede` sem casos adversos | **FECHADO.** Sem ID e com rc 1, o caso exige uma ida à trava. Com ID válido e rc 255, exige rc 0 sem trava. A combinação rc 0 sem ID segue na seção 4. `bin/suite.sh:442–447`, `bin/tests/test_suite_rota_pista.sh:54–59`, `bin/tests/test_suite_rota_pista.sh:341–342`. |
+| Saídas de `espera` sem asserção discriminante | **FECHADO.** `outro_id` exige três chamadas mesmo com `imagem=`. `recusa_cab_ran` exige uma chamada com rc 71. Os dois mutantes mudam a contagem e preservam o rc 71. `bin/suite.sh:455–468`, `bin/tests/test_suite_rota_pista.sh:331`, `bin/tests/test_suite_rota_pista.sh:343`, `bin/tests/test_suite_rota_pista.sh:400–402`. |
+| Vetos a `Ran` e veredito na recusa nua | **FECHADO.** Cada caso traz um único sinal de execução e exige infra 71 sem trava. Retirar o veto correspondente leva à VM. `bin/suite.sh:463–468`, `bin/tests/test_suite_rota_pista.sh:105–106`, `bin/tests/test_suite_rota_pista.sh:335–336`, `bin/tests/test_suite_rota_pista.sh:403–404`. |
+| `FAILED` com rc 0 | **FECHADO.** O recibo curto passa pela comparação com o log. O `FAILED` com `Ran 2` reprova especificamente na prova de sucesso. `bin/suite.sh:483–489`, `bin/tests/test_suite_rota_pista.sh:107`, `bin/tests/test_suite_rota_pista.sh:119`, `bin/tests/test_suite_rota_pista.sh:337`, `bin/tests/test_suite_rota_pista.sh:405`. |
+| Conversões de 3 e 75 | **FECHADO.** Cada fixture chega à própria conversão. A asserção exige rc 1 e acusa o valor bruto quando se retira a conversão. `bin/suite.sh:487–495`, `bin/tests/test_suite_rota_pista.sh:108`, `bin/tests/test_suite_rota_pista.sh:338–339`, `bin/tests/test_suite_rota_pista.sh:406–407`. |
+
+### 2. Guardas atingidas e acusação dos mutantes
+
+| Modo | Caminho no vivo e efeito da mutação |
+|---|---|
+| `pede_sem_id` | A validação do ID rejeita o pedido e vai à VM antes de `espera`. `pede_sem_id_aceito` deixa o rc 1 furar a validação. A asserção acusa zero idas à trava em vez de uma. `bin/suite.sh:442–446`, `bin/tests/test_suite_rota_pista.sh:55–56`, `bin/tests/test_suite_rota_pista.sh:175`, `bin/tests/test_suite_rota_pista.sh:408–409`. |
+| `pede_rc255` | O ID válido passa pela validação, o rc 255 gera aviso e o caminho normal termina em 0. `pede_rc_manda` veta o aceite e chama a trava. A mensagem da asserção diz “depois do aceite”, embora o mutante tenha desviado na própria guarda de aceite. `bin/suite.sh:442–449`, `bin/suite.sh:483–495`, `bin/tests/test_suite_rota_pista.sh:57–59`, `bin/tests/test_suite_rota_pista.sh:255–258`, `bin/tests/test_suite_rota_pista.sh:410–411`. |
+| `recusa_nua_so_ran` | Sem cabeçalho, o rc 71 chega ao veto por `Ran` e termina em infra 71. `recusa_nua_ignora_ran` remove esse veto e a asserção acusa a ida à trava. `bin/suite.sh:460–468`, `bin/tests/test_suite_rota_pista.sh:105`, `bin/tests/test_suite_rota_pista.sh:246–250`, `bin/tests/test_suite_rota_pista.sh:403`. |
+| `recusa_nua_so_ver` | Percorre o mesmo ramo, com veto pelo `OK` isolado. `recusa_nua_ignora_veredito` leva à trava e é acusado por essa ida. `bin/suite.sh:460–468`, `bin/tests/test_suite_rota_pista.sh:106`, `bin/tests/test_suite_rota_pista.sh:246–250`, `bin/tests/test_suite_rota_pista.sh:404`. |
+| `rc0_failed` | Cabeçalho e rc conferem, `oom=0` passa e o recibo sem `Ran` ou veredito passa pela comparação. A prova de rc 0 veta `FAILED`. `rc0_com_qualquer_veredito` aceita o `FAILED` e a asserção acusa rc 0 em vez de 71. `bin/suite.sh:470–489`, `bin/tests/test_suite_rota_pista.sh:107`, `bin/tests/test_suite_rota_pista.sh:119`, `bin/tests/test_suite_rota_pista.sh:246`, `bin/tests/test_suite_rota_pista.sh:405`. |
+| `rc3` e `rc75` | Cada status de `espera` coincide com o do recibo. O log passa, a prova exclusiva de rc 0 é pulada e a conversão devolve 1. `rc3_passa_cru` e `rc75_passa_cru` são acusados pelos respectivos rc 3 e 75. `bin/suite.sh:470–495`, `bin/tests/test_suite_rota_pista.sh:108`, `bin/tests/test_suite_rota_pista.sh:123–124`, `bin/tests/test_suite_rota_pista.sh:256`, `bin/tests/test_suite_rota_pista.sh:406–407`. |
+
+Os quatro mutantes restantes também são acusados pelo efeito que introduzem. `espera_sai_sem_cabecalho` reduz as chamadas de três para uma e `espera_71_sem_break` aumenta de uma para três. `foto_sem_aviso` perde a linha exata exigida na cópia suja e `foto_avisada_na_limpa` imprime a linha que o caso limpo veta. `bin/suite.sh:450`, `bin/suite.sh:455–460`, `bin/tests/test_suite_rota_pista.sh:145–146`, `bin/tests/test_suite_rota_pista.sh:167`, `bin/tests/test_suite_rota_pista.sh:238`, `bin/tests/test_suite_rota_pista.sh:400–402`, `bin/tests/test_suite_rota_pista.sh:412–413`.
+
+### 3. Equivalência de `_linha_com`
+
+Para os motivos literais usados no selo e saída textual, as duas versões exigem prefixo e motivo na mesma linha. Como função genérica, o `awk` procura o trecho só depois do prefixo e `-v` interpreta escapes. O `grep -F` anterior procurava o trecho literal na linha filtrada inteira. `bin/tests/test_suite_rota_pista.sh:142–143`, `bin/tests/test_suite_rota_pista.sh:172–176`, `bin/tests/test_suite_rota_pista.sh:242–250`, `bin/tests/test_suite_rota_pista.sh:321–348`.
+
+Sim, pode aprovar a linha de outro job. Com `ERRO-INFRA PISTA: job=outro recibo incompleto` e `ERRO-INFRA PISTA: job=certo outro motivo`, a busca por `recibo incompleto` retorna 0. A busca anterior também aprovaria, pois o filtro só fixa `job=` e verifica qualquer linha que contenha o motivo. `bin/tests/test_suite_rota_pista.sh:142–143`, `bin/tests/test_suite_rota_pista.sh:248–250`.
+
+### 4. Decisões ainda sem caso discriminante de rc ou rota
+
+- **ID obrigatório mesmo com rc 0.** Aceitar `rc=0` como alternativa a um ID válido preserva os casos atuais. Na sonda com rc 0 e sem ID, a mutação trocou a ida à VM por infra 71. `bin/suite.sh:442–446`, `bin/tests/test_suite_rota_pista.sh:54–59`.
+- **Escolha do último candidato.** Faltam respostas com dois IDs válidos, dois cabeçalhos do mesmo job com rc distintos ou dois `Ran` ou vereditos que produzam provas diferentes. Escolher o primeiro pode mudar o job esperado, a comparação ou o rc final. `bin/suite.sh:443`, `bin/suite.sh:457`, `bin/suite.sh:463–471`, `bin/suite.sh:483–489`, `bin/tests/test_suite_rota_pista.sh:54–124`.
+- **Recuperação de `espera` após rc 255.** `cai` e `recusa255` repetem a falha e seus casos deixam passar um `break` no primeiro 255. Com 255 seguido de recibo válido, a sonda mudou de rc 0 para 71 ao inserir esse `break`. `bin/suite.sh:455–468`, `bin/tests/test_suite_rota_pista.sh:67–69`, `bin/tests/test_suite_rota_pista.sh:189–196`, `bin/tests/test_suite_rota_pista.sh:276–277`.
+- **Veto por `id=` malformado na recusa nua.** O caso existente traz o ID bem formado de outro job. Exigir um ID bem formado no veto deixa passar `id=malformado` com rc 71 e troca infra pela VM. `bin/suite.sh:465–468`, `bin/tests/test_suite_rota_pista.sh:93`, `bin/tests/test_suite_rota_pista.sh:109–110`, `bin/tests/test_suite_rota_pista.sh:329`.
+- **`oom=0` obrigatório e único.** Aceitar `imagem=` sem `oom=` ou deduplicar dois `oom=0` passaria pelos casos atuais. `oom2` traz dois valores diferentes. Cada alteração troca 71 por 0 no cenário ausente correspondente. `bin/suite.sh:474–476`, `bin/tests/test_suite_rota_pista.sh:73–76`, `bin/tests/test_suite_rota_pista.sh:280–281`.
+- **Prova válida com `OK (...)` ou `Ran 1 test`.** Exigir `OK` exato ou aceitar só o plural preserva os casos atuais. Cada restrição indevida troca 0 por 71 no cenário correspondente. O `OK (skipped=1)` atual aparece em um caso que já exige divergência. `bin/suite.sh:483–489`, `bin/tests/test_suite_rota_pista.sh:118–124`, `bin/tests/test_suite_rota_pista.sh:323–325`.
+- **Preservação de outros rc do job.** Uma conversão ampla para 1 de todo rc diferente de 0 e 71 passaria pelos valores exercitados. Na sonda com recibo completo e rc 2, ela trocou 2 por 1. `bin/suite.sh:487–495`, `bin/tests/test_suite_rota_pista.sh:79–84`, `bin/tests/test_suite_rota_pista.sh:108`, `bin/tests/test_suite_rota_pista.sh:299–307`.
+
+### 5. Status de erro no selo
+
+O delta não adiciona `except` nem `|| true`. A troca das buscas de motivo por `_linha_com` elimina a perda do status do filtro interno. Na sonda, o `awk` devolveu rc 2 diante de erro de leitura mesmo depois de achar uma linha correspondente, e os dois chamadores tratam status diferente de zero como falha. `bin/tests/test_suite_rota_pista.sh:142–143`, `bin/tests/test_suite_rota_pista.sh:176`, `bin/tests/test_suite_rota_pista.sh:249–250`, `bin/tests/test_suite_rota_pista.sh:400–413`.
+
+Há uma nova asserção que engole erro. O `grep -q '^ROTA FOTO' ... && ...` da cópia limpa deixa `ok` inalterado tanto quando a linha está ausente quanto quando a leitura falha. No SSH falso, a condição nova após o `echo` do ID também substitui o status do `echo`. O vivo ainda decide a partir do ID capturado. Ocorrência dessas falhas durante o selo [nao verificado]. `bin/tests/test_suite_rota_pista.sh:58–59`, `bin/tests/test_suite_rota_pista.sh:165–170`, `bin/suite.sh:442–447`.
+
+VEREDITO: REPROVADO (aceite com rc 0 sem ID e seleção do último candidato `bin/suite.sh:442–457`, recuperação de `espera` após 255 `bin/suite.sh:455–468`, veto a `id=` malformado `bin/suite.sh:465–468`, presença e unicidade de `oom=0` `bin/suite.sh:474–476`, formatos válidos da prova de sucesso `bin/suite.sh:483–489`, preservação de outros rc `bin/suite.sh:493–495`, erro de leitura aceito na asserção de ausência de `ROTA FOTO` `bin/tests/test_suite_rota_pista.sh:167`).
 
 ## 26/11 14:57 · sessao d705682ab028 · VIGIA-DISCO · verificador · origem=Code
 
@@ -874,68 +927,4 @@ Entreguei ao agente principal as matrizes auditadas por leitura. O recorte de es
 
 As divergências comprovadas pela leitura incluem a fase 12x36 sem foto, o limite de HE comercial com duas pausas, a seleção do motor pelo rótulo, a edição de calendário em uso, a previsão inválida que gera desconto, o período de férias vencido listado como vencendo, a justificativa aprovada que deixa de completar um turno curto e o registro legado de falta sem jornada exportado em 8792. Nenhum teste foi executado e nenhuma conclusão sobre ocorrência em produção foi inferida. [nao verificado]
 
-## 26/11 12:31 · sessao b63a03da369c · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
-
-# Dossiê — RAMO2-B-EM-TURNO-QUE-CRUZA
-
-**O corte nasce em `app/ponto/janela_he.py::saida_efetiva`. A perda de trabalhado acontece em `app/ponto/motor_calculo_v2.py`, quando os calculadores medem a duração até a saída recortada.** A L-097 emendada manda contar o trecho após o marco no trabalhado e no noturno, com a HE classificada pela janela e encaminhada à Gestão. [janela_he.py:183](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/janela_he.py:183) · [motor_calculo_v2.py:2775](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/motor_calculo_v2.py:2775) · [LEIS.md:115](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/LEIS.md:115)
-
-## 1. Texto dos cortes e mapa do cálculo
-
-- **RESPOSTA-LEI-NOTURNO-RAMO2-2311-1735**, trecho literal do registro na cópia: “LEI (b) trecho apos a janela conta como trabalho, L-097 so classifica HE, noturno sobre o mesmo trecho”. `app/docs/PROMPTS.md:2846`
-- **RESPOSTAS-1-11-V2-2411-0830, itens 5 e 7**, trecho literal do registro conjunto na cópia: “nenhum par perde trabalhado pela ancora, trecho/par apos o marco de saida conta (trabalho e noturno), HE classificada no recortado/Gestao, fora_janela sai”. `app/docs/PROMPTS.md:2869`
-- A emenda está incorporada na L-097. O `RELATO` registra a reafirmação pelo NOTURNO-A-DUAS-RESPOSTAS e a consequência para o teto de pontualidade. O texto original integral dos dois avais e a redação individual dos itens 5 e 7 em `logs/AVAIS-1515` estão **[nao verificado]**. `app/docs/LEIS.md:115`, `app/docs/RELATO.md:161`, `app/docs/RELATO.md:334`, `app/docs/PROMPTS.md:2928`
-
-`MotorBase._janela_do_dia` lê o dia **D** que o juiz atribuiu ao par e resolve o marco de saída. `marco_de_saida` usa `hf` em **D** para o turno que não cruza e em **D+1** para o que cruza. `_janela_do_par` chama `_saida_efetiva`, que passa esse marco à função pura quando a janela de saída se aplica e o dia não está autorizado. `app/ponto/motor_calculo_v2.py:936`, `app/ponto/motor_calculo_v2.py:1549`, `app/ponto/motor_calculo_v2.py:1567`, `app/ponto/motor_calculo_v2.py:1747`, `app/ponto/motor_calculo_v2.py:1768`, `app/ponto/janela_he.py:54`
-
-A preservação já existe **para turno que não cruza com saída na virada ou depois dela**. A condição `marco_saida < virada <= saida` devolve a saída real e zero minutos de saída em `fora_janela`. Se a saída tardia fica no próprio D, o corte ainda acontece. No turno que cruza, o marco já está em D+1, então a condição falha e a função devolve a saída recortada quando a sobra passa do piso. O motor usa essa saída para a duração e para o noturno. `app/ponto/janela_he.py:183`, `app/ponto/janela_he.py:196`, `app/ponto/motor_calculo_v2.py:2775`, `app/ponto/motor_calculo_v2.py:2801`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:318`
-
-**Col1010, 05/11/2026.** O aval transcrito dá **+26,2 min de trabalhado esperados**. A fixture da cópia mostra o mecanismo com horários inteiros: turno 18h–06h, saída às 06h26 do dia 06, marco às 06h00 e expectativa antiga de **720 trabalhados e 28 fora**, sendo 26 de saída e 2 de entrada. O outro par, 01h04–05h59, já conta integralmente na fixture pela L-084. Os segundos das batidas, a decisão de HE vigente e o delta de produção por rubrica estão **[nao verificado]**. `aval.txt:1` (anexo transcrito), `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:52`, `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:93`
-
-## 2. Censo de escritores e leitores
-
-| Campo ou projeção | Escritores e leitores no caminho do dia |
-|---|---|
-| `PeriodoCalculo.minutos_trabalhados`, noturno e `minutos_fora_janela` | Escrevem `calcular_periodo` de 12x36, Partido e Comercial. Plantão delega ao 12x36. `_carimbar_segmento` publica as pontas efetivas e os intervalos. O crédito de pares fechados em dia com turno aberto e o bloqueio de dia sem previsto também escrevem trabalhado e fora. Leem `ResultadoMes`, a lavra, o resumo de espelho/PDF e o teto da L-093. `app/ponto/motor_calculo_v2.py:1850`, `:2801`, `:2912`, `:3275`, `:3554`, `:2575`, `:1488`, `:296`, `:1203` · `app/ponto/services/dia_pago.py:178` · `app/ponto/services/espelho.py:97` · `app/relatorios/pdf_espelho.py:502` |
-| `PeriodoCalculo.minutos_extra_50/100` | O 12x36 escreve no período. O Partido e o Comercial também zeram e reclassificam no mês, inclusive a dobra. Leem os agregados mensais, a lavra, o split noturno da HE, o reflexo de DSR e o banco do Comercial. A régua legal do Partido também usa o ganho de hora noturna reduzida para classificar HE. `app/ponto/motor_calculo_v2.py:2828`, `:2866`, `:2953`, `:3117`, `:3155`, `:3172`, `:3206`, `:3353`, `:3375`, `:3436`, `:324`, `:1031`, `:3473`, `:3507` · `app/ponto/services/dia_pago.py:180` |
-| `DiaPago`, fechamento e espelho | O fechamento grava os agregados e chama `dia_pago.lavrar` para `motor` e `oraculo`. O oráculo recebe `efetivo_entrada/saida`, intervalos, fora e pontas de HE do motor. `regras.do_dia` apura as rubricas com esses insumos. A chamada de janela fica no motor; o `import` de `saida_efetiva` em `regras.py` está sem uso. Espelho, PDF, app e calendário leem a projeção lavrada. O TXT lê as rubricas mensais. `minutos_realizados` da grade tem cálculo próprio e teto no previsto. `app/ponto/services/fechamento.py:922`, `:940`, `:1225`, `:1291` · `app/ponto/services/dia_pago.py:330`, `:359`, `:394`, `:833`, `:898`, `:914` · `app/ponto/calculador/alimentacao.py:83`, `:449`, `:514` · `app/ponto/calculador/regras.py:31`, `:744`, `:773`, `:845` · `app/ponto/services/espelho.py:823` · `app/relatorios/pdf_espelho.py:901` · `app/api/views.py:1452` · `app/colaboradores/services/calendario.py:689` · `app/folha/export.py:420` |
-| Pendência de HE e decisão do admin | `marcar_pontas_fora` lê o `delta` da primeira entrada e da última saída da grade, aplica piso e extra declarada e marca a ponta. `montar_dias` publica `he_fora_da_janela` e acrescenta pontas ausentes da grade que o motor publicou no relato. Tela, PDF, retrato da Gestão e portão leem essa lista. O calendário também chama o marcador. A porta `decidir_he` grava a decisão por dia via `_gravar` e dispara a relavratura. A Gestão e o portão leem o estado vigente. Com a trava ligada, o portão bloqueia dia acima do limite e sem decisão. `app/ponto/janela_he.py:241`, `:262`, `:324` · `app/ponto/services/espelho.py:741`, `:754`, `:790`, `:939` · `app/templates/ponto/espelho.html:189` · `app/relatorios/pdf_espelho.py:932` · `app/colaboradores/services/calendario.py:421` · `app/ponto/services/he_pendente_lavrado.py:138`, `:183` · `app/ponto/views.py:950` · `app/ponto/portas/he.py:44`, `:206`, `:229` · `app/ponto/services/gestao_he.py:92` · `app/folha/porta_export.py:205`, `:687`, `:864` |
-
-## 3. Leis herdadas dos sítios
-
-- **Janela e dia do turno.** L-097 protege `entrada_efetiva`, `saida_efetiva`, `_janela_do_par`, `decidir_he` e `porta_export.medir`. L-085 fixa o dia do início, inclusive para a cauda e o feriado. L-084 dispensa a janela quando as duas pontas estão longe dos marcos conforme a régua. O corte NOTURNO-A registra a âncora no dia do juiz e o escopo do `!` daquela obra. `app/docs/LEIS.md:115`, `:116`, `:117` · `app/docs/CORTES.md:646`
-- **Pontualidade e rubricas.** Pela L-093, o teto considera tempo efetivamente trabalhado. Como `_aplicar_teto_pontualidade` soma `trabalhado + fora_janela`, a cauda incorporada ao trabalhado sai dessa parcela de `fora_janela`. A dobra continua regida pelo dia do turno e pelo cadastro do ciclo, conforme a emenda da L-086. `app/docs/LEIS.md:111`, `:118` · `app/docs/RELATO.md:334` · `app/ponto/motor_calculo_v2.py:1203`, `:934`
-- **Lavratura e testemunhas.** L-001 põe a cura na origem, L-002 manda a testemunha ler a autoridade, L-095 rege a lavratura e L-037/L-038 vinculam o PDF ao espelho. O texto do PDF ainda diz “nao conta” para a ponta de saída, e o aviso da tela ainda diz que a jornada conta do marco. São leitores afetados pela emenda. `app/docs/LEIS.md:59`, `:60`, `:85`, `:86`, `:113` · `app/docs/CORTES.md:341` · `app/relatorios/pdf_espelho.py:944` · `app/templates/ponto/espelho.html:189`
-
-## 4. Sítio da cura e limite do aval
-
-**A origem da decisão de recortar fica fora do motor, em `janela_he.py::saida_efetiva`. O acoplamento que precisa ser desfeito fica também no motor.** Pelo contrato atual, devolver a saída real com sobra positiva faz o chamador preservar a sobra em `minutos_fora_janela`, que o teto soma ao trabalhado. Devolver a saída real com sobra zero elimina o recorte também da base que alimenta a HE. A cura integral precisa manter as duas bases coerentes até a lavratura. `marcar_pontas_fora` é origem da marcação na grade, e a lavra e o espelho recebem valores já produzidos pelo cálculo. `app/ponto/janela_he.py:183`, `:199`, `:262` · `app/ponto/motor_calculo_v2.py:1757`, `:1766`, `:2801`, `:2828`, `:2859`, `:2964`, `:3350`, `:1203` · `app/ponto/services/dia_pago.py:178`
-
-**O aval desta obra exige `!` para tocar `motor_calculo_v2.py` e proíbe tocar competência exportada.** O `!` registrado no CORTES é da NOTURNO-A, com escopo explícito na âncora. `aval.txt:1` (anexo transcrito) · `CLAUDE.md:143` · `app/docs/CORTES.md:646`
-
-## 5. Matriz para os REDs
-
-Casos de regra para dia comum, par válido, janela de saída vigente, piso zero e sem extra fixa. **D** é o dia do turno. A posição da saída é comparada com o marco já datado. “Com pendência” indica ponta elegível à Gestão e ausência de decisão vigente. `app/docs/LEIS.md:115`, `:117`, `:136` · `app/ponto/janela_he.py:54`, `:196` · `app/ponto/services/gestao_he.py:98` · `app/folha/porta_export.py:205`
-
-| RED | Turno e posição da saída | Pendência | Resultado pela lei |
-|---|---|---|---|
-| 1 | Não cruza, marco em D, saída até o marco | Sem | Saída real no trabalhado e no noturno aplicável. Zero ponta de saída. `app/docs/LEIS.md:115` · `app/ponto/janela_he.py:178` |
-| 2 | Não cruza, marco em D, saída até o marco | Só de entrada | Mesmo resultado para a saída. A pendência de entrada permanece pela sua regra. `app/docs/LEIS.md:115` · `app/ponto/janela_he.py:125`, `:251` |
-| 3 | Não cruza, saída depois do marco | De saída | Preservar a cauda no trabalhado e no noturno aplicável. HE pela base recortada e pela Gestão. A cauda sai de `minutos_fora_janela`. Exercitar a saída ainda em D e em D+1. `app/docs/PROMPTS.md:2869` · `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:337` |
-| 4 | Não cruza, saída depois do marco | Sem, decisão vigente | Preservar o mesmo trabalhado da saída com `Não` ou `Autorizado`. `Não` mantém a classificação recortada e registra ciência. `Autorizado` libera a janela para a apuração aplicável. `app/docs/LEIS.md:115` · `app/ponto/motor_calculo_v2.py:1708`, `:1755` |
-| 5 | Cruza, marco em D+1, saída até o marco | Sem | Contar até a saída real, inclusive na madrugada antes do marco. Zero ponta de saída. `app/docs/LEIS.md:115`, `:117` · `app/ponto/janela_he.py:54`, `:178` |
-| 6 | Cruza, marco em D+1, saída até o marco | Só de entrada | Mesmo resultado para a saída. A janela e a pendência de entrada seguem a regra própria. `app/docs/LEIS.md:115` · `app/ponto/janela_he.py:125`, `:251` |
-| 7 | Cruza, saída depois do marco em D+1 | De saída | Preservar a cauda no trabalhado e no noturno aplicável. HE pela base recortada e pela Gestão. Conferir que a mesma cauda sai de `minutos_fora_janela` e chega ao `DiaPago`. É o RED da classe de col1010. `app/docs/PROMPTS.md:2869` · `app/docs/RELATO.md:334` · `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:93` |
-| 8 | Cruza, saída depois do marco em D+1 | Sem, decisão vigente | A cauda conta uma vez com `Não` ou `Autorizado`. Conferir a classificação recortada no primeiro e a apuração com autorização no segundo. `app/docs/LEIS.md:115` · `app/ponto/motor_calculo_v2.py:1755` |
-
-Os REDs acima são especificações por leitura. O resultado de execução está **[nao verificado]**.
-
-## 6. Padrão
-
-**`padrao=juiz unico` — Single Writer Principle no GLOSSARIO.** A classificação da janela tem uma autoridade, e a decisão do admin tem a porta existente. No pouso, a L-121 aplica o padrão complementar de **projeções reconstruíveis (CQRS)** à competência aberta, com DIFF e reversão. `app/docs/GLOSSARIO.md:12`, `:25` · `app/docs/PLANO-PADROES.md:28`, `:53`, `:61`
-
-## 7. Perguntas de lei
-
-**0 para a classe do aval.** Os cortes respondem o pertencimento do par, o trabalhado, o noturno e a classificação de HE. O ponto pendente para construção é a autorização de escopo por arquivo. `app/docs/LEIS.md:115`, `:117` · `app/docs/PROMPTS.md:2869` · `aval.txt:1` (anexo transcrito)
-
-_8384 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8385 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
