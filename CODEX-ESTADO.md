@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 16:17** · publicado em **26/11/2026 16:17** (UTC-3)
+> Ultima resposta processada: **26/11/2026 16:19** · publicado em **26/11/2026 16:24** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 16:19 · sessao ecf858e9c86e · BALDE-AUSENCIA · leitura · origem=Code
+
+## BALDE-AUSENCIA — censo
+
+`B` = [app/docs/BACKLOG.md](/home/ronald/codex_ws/f69a1cebfd6ca1c664d5b256da7c4cef2a8809bb/app/docs/BACKLOG.md:1), `G` = [app/docs/GRADE-MESTRA.md](/home/ronald/codex_ws/f69a1cebfd6ca1c664d5b256da7c4cef2a8809bb/app/docs/GRADE-MESTRA.md:1) e `D:+linha` = linha do lado novo do `backlog_vivo.diff` fornecido. As referências `B` e `G` são as linhas físicas da cópia. O blob de `B` coincide com o `6b4b9718c` do cabeçalho do diff. A associação independente da cópia ao commit completo e os estados atuais de produção ficam **[nao verificado]**.
+
+No modelo, a data inicial é `Ausencia.data`; o fim é `data_fim`. A raiz do documento é o próprio registro ou o registro apontado por `documento_referencia`. A rota da API para anexar a uma ausência existente aparece na cópia. `app/ponto/models.py:750`, `app/ponto/models.py:751`, `app/ponto/models.py:801`, `app/ponto/views.py:2147`, `app/api/urls.py:83`.
+
+| ID exato | Arquivo:linha | Estado escrito | O que faz | Campo ou porta de Ausência |
+|---|---|---|---|---|
+| `HJ-091-REJEITADA-SOBREVIVE-A-JANELA` | B:734 | aberta, lei pendente | Verifica se uma rejeição sobrevive quando um dia sai da janela de férias e volta. | `status`, `agendamento_ferias`, `apagar_ausencias_de_ferias` |
+| `HJ-091-FILA-1` | B:747 | FILA 14/11 | Corrige a referência ao leitor efetivo do cartório na trilha da HJ-091. | Ausência de férias e leitor da projeção |
+| `HJ-091-FILA-2` | B:748 | FILA 14/11 | Trata as cópias da tupla de estados que materializam dias de férias. | `STATUS_QUE_ESPELHAM`, `espelhar_ferias` |
+| `HJ-091-FILA-3` | B:749 | FILA 14/11 | Expõe o acervo indicado por dois vigias antes do backfill da HJ-091. | Backfill do vínculo entre ausência de férias e agendamento |
+| `HJ-091-FILA-4` | B:750 | FILA 14/11 | Confere se cada achado B.2–B.6 da HJ-091 ganhou linha. | Triagem do espelhamento de férias |
+| `HJ-091-LISTA` | B:751 | PAREI registrado, depois NO AR e FECHADA | Pula três ausências no backfill e as encaminha ao DP com trilha. | `agendamento_ferias`, `status=aprovada` |
+| `HJ-091-OPUS3-FILA` | B:752 | aberta | Registra lacunas de prova da rejeição, da janela e do comando de vinculação. | `espelhar_ferias`, `vincular_ausencias_ferias` |
+| `COERENCIA-POR-FAMILIA` | B:753 | EM CURSO | Publica o censo dos juízes por família, incluindo ausência e férias. | Juízes de ausência/férias |
+| `RC1-1-AUSENCIA-SEM-COMPROVANTE` | B:759 | REGISTRADA, sem construtor | Alinha o texto ao recebimento da ausência ainda sem comprovante. | `documento`, `aguardando_documento`, porta de entrada |
+| `JUSTIFICATIVA-PELA-SOMA` | B:773, B:774 | EM CURSO na linha própria, substituída em B:774 | Limita a combinação de período abonado e trabalhado ao previsto e encaminha o excesso ao admin. | Cobertura parcial, minutos abonados |
+| `JUSTIFICATIVA-COMPLETA-ATE-O-PREVISTO` | B:774 | recorte, DIFF e verificador em voo | Abona o saldo entre o previsto e o trabalhado, com excedente encaminhado ao admin. | Abono parcial, previsto e trabalhado |
+| `HJ-093` | B:799, G:1405 | B **CONFIRMADA**. G **REGISTRADA (classe confirmada)** | Confirma a classe de realizado zerado apesar de justificativa aprovada e marcos dispensados. | Abono do período, dispensa na célula |
+| `LANCAR-AUSENCIA-AFASTA-DESLIGADO` | B:801, G:142 | B **DECISAO DE DESENHO**. G **REGISTRADA** | Faz o POST de lançamento recusar colaborador desligado. | `lancar_ausencia`, `Colaborador.situacao` |
+| `RECUSA-DO-ADMIN-DIZ-O-QUE-FAZER` | B:816, G:490 | B **FILA 2 — registrada**. G **REGISTRADA** | Explica ao admin o motivo da recusa e os fatos da ausência sobreposta. | Criar, editar, aprovar, `AusenciaInvalida` |
+| `AUSENCIA-EFEITO-PELO-ESTADO` | B:840, B:851 | **LEITURA DEVOLVIDA**, depois **NO AR** e **FECHADA** | Faz lista, chips e filtro exibirem o efeito do registro conforme a decisão. | `Ausencia.status`, `veredito_de`, coluna Efeito |
+| `ANEXO-ORFAO-REABRIR-SOB-ATOMIC` | B:877 | fila | Trata erro de banco engolido pelo `post_save` durante a reabertura. | `_reabrir`, anexo e transação da ausência |
+| `COMENTARIO-PONTO-VIEWS-2480` | B:879 | fila | Corrige o comentário antigo que contradiz o contrato A14. | Decisão de ausência na view, `app/ponto/views.py:2475` |
+| `REVERTER-AFASTADO-SEM-TRAVA` | B:881 | fila | Faz a reversão conferir o afastamento sob trava para preservar INSS lançado no intervalo. | `afastado_hoje`, reversão da situação |
+| `LOTE7-ATOMIC-ENGOLIR-SEM-SAVEPOINT` | B:882 | fila | Trata o erro transacional que pode desfazer a decisão e apresentar mensagem enganosa. | `decidir`, `rejeitar_ausencias_de_ferias` |
+| `LOTE7-RELOGIO-LINHA-SEM-FIM` | B:883 | fila | Registra a releitura do relógio e do fechamento para cada ausência em aberto. | `data_fim` nulo, `_acordar_projecao` |
+| `BO-ADMIN-2710` | B:889, G:150 | B **medindo**. G **REGISTRADA (medição histórica)** | Mede e encaminha achados do admin sobre justificativa, dia coberto e retenção. | Parcial e `fato_em_ausencia` |
+| `HJ-005-U1` | B:889 | sem obra, censo | Pede reconciliação do caso em que a ingestão acusa e retém o dia por fato em ausência. | `fato_em_ausencia`, cobertura na célula |
+| `COBERTURA-PARCIAL-UM-JUIZ` | B:898, G:39, G:132 | B **NO AR**, **REABERTA**, **PAREI**. G **PARADA**, perspectiva **FEITA** | Unifica o julgamento do trecho declarado e do restante do dia. | Cobertura parcial, abono, `fato_em_ausencia` |
+| `ATA-DEFASADA-COMP09` | B:899, G:641 | B **medido**, itens devolvidos ao PAREI. G **PARADA** | Separa o efeito da correção de cobertura parcial do efeito de rejulgar atas antigas. | Ata e veredito no DIFF COBPARC |
+| `GRADE-POS-POUSO` | B:901, G:756 | B **aberto**. G **REGISTRADA** | Confere o pós-deploy e a colisão de versão da regra com COBPARC. | `REGRA_VERSOES` da cobertura parcial | [nao verificado]
+| `COBPARC-CONTROLE` | B:902, G:646 | B **PAREI COBPARC-DET-NAO-EXPLICA**. G **PARADA** | Compara a cura de parciais a um grupo de controle para isolar chamados adicionais. | Efeito da cobertura parcial na ata e nos chamados |
+| `COBPARC-ATA-DEFASADA-09` | B:903, G:643 | B **aberta**. G **REGISTRADA** | Investiga divergências na competência exportada que o controle de COBPARC já reproduz. | Ata de cobertura e Pauta DP |
+| `COBPARC-AUSENCIA-CALA-DOIS-JUIZES` | B:904, G:644 | B **aberta, depois da COBPARC**. G **REGISTRADA** | Alinha materialização e juiz da cobrança para uma parcial sem horário. | `periodo_da_parcial_no_dia`, `ausencia_explica_o_dia_inteiro` |
+| `COBPARC-FUROS-LEITOR-PARCIAL` | B:905, G:653 | B **aberta, depois da COBPARC**. G **REGISTRADA** | Faz os leitores de furos enxergarem os marcos ainda exigíveis. | Cobertura parcial da célula |
+| `REJULGAR-61-COBPARC` | B:913, G:657 | B **fila 1**, `!` para exportadas. G **PARADA** | Rejulga atas antigas sem o carimbo de parcial sem período. | `sem_periodo`, `ausencia_explica_o_dia_inteiro` |
+| `JUSTIFICATIVA-ADMIN-FORA-DA-PORTA` | B:927, G:1400 | registrada | Faz a aprovação administrativa passar pelo ato que encerra a origem e atualiza os efeitos. | `Justificativa.status=aprovada`, abono e fechamento |
+| `PARCIAL-NA-PORTA` | B:970, G:656 | B **registrada, fila 1, SEM construir**. G **REGISTRADA** | Impede o nascimento de pergunta de cobrança para parcial que deve ir à lista. | `parcial_so_lista`, porta de emissão |
+| `COBPARC-FILA-ROTULO` | B:971 | **NO AR** (a)(b), **FECHADA** (c) | Corrige rótulo e contagem de marcos dispensados e encaminha o portão a outra fatia. | `coberto_por_ausencia`, dispensa, parcial sem período |
+| `COBPARC-ROTULO-FILA-V2` | B:972, G:655 | B **registrada, fila 1**. G **REGISTRADA** | Trata leitores de dispensa, rótulo e retenção que ainda divergem. | `DISPENSA_POR_JUSTIFICATIVA`, cobertura para folha e cobrança |
+| `COBPARC-PORTAO-PARCIAL-JUIZ-UNICO` | B:973, G:654 | registrada | Unifica a pergunta sobre cobrar o restante do dia em sete sítios. | `tipo_dia`, predicado de parcial |
+| `COBPARC-FILA-RELOGIO` | B:974, G:649, G:1787 | B **INTERROMPIDA**. G **INTERROMPIDA**, **PARADA — provas pendentes** | Usa o mesmo instante para reconhecer fato novo nos leitores de COBPARC. | Rejulgamento da cobertura parcial e retenção |
+| `COBPARC-FILA-MATERIALIZACAO` | B:975, G:648 | B **registrada, fila 1**. G **REGISTRADA** | Faz a materialização ler da ata a decisão sobre a cobertura. | `_coberto_por_ausencia`, `sem_periodo` |
+| `COBPARC-FILA-CENSO-V7` | B:976, G:647 | B **registrada, fila 1**. G **REGISTRADA** | Levanta os leitores restantes que precisam da regra única. | Veredito, furo e realizado de dia parcialmente coberto |
+| `COBPARC-FILA-V8-PARCIAL-DEMISSAO` | B:977, G:650 | B **registrada, fila 1**. G **REGISTRADA** | Confere a parcial com período no dia da demissão sem batida. | Período parcial, grade, cartório e export |
+| `COBPARC-FILA-V8-VOCABULARIO` | B:978, G:652 | B **registrada, fila 1**. G **REGISTRADA** | Distingue o tipo cadastrado `justificativa` de uma justificativa aprovada. | `TipoAusencia.codigo`, `dispensada`, `justificado` |
+| `COBPARC-FILA-V8-PARCIAL-JUSTIF` | B:979, G:651 | B **registrada, construtor parado**. G **PARADA** | Corrige a cobrança do restante quando parcial e justificativa aprovada coincidem. | `FURO_SEM_COBRANCA`, cobertura parcial |
+| `COBPARC-FILA-H10-PARCIAIS-09` | B:980, G:597 | B **aberta**. G **REGISTRADA** | Trata parciais antigas da 09 por fato novo ou pela porta de regeneração. | Regra da parcial em competência exportada |
+| `COBPARC-FILA-H10-COL926` | B:981, G:596 | B **aberta**. G **REGISTRADA** | Encaminha ao DP o caso retirado do pouso da cobertura parcial. | Pauta DP do resíduo COBPARC | [nao verificado]
+| `O261-E-CELULA-20-UM-DONO` | B:1006, G:992 | B **F0 FECHADA, F1/F2 NO AR, F3 PARADA**. G **PARADA** | Prova que a impressão da célula inclui os insumos que mudam o julgamento. | Ausências e coberturas no `impressao_insumos` |
+| `DST-2A-CLAUSULA-A-MAO` | B:1051 | aberta | Registra a cláusula de dia sem trabalho duplicada fora do juiz. | `ausencia_parcial_cobra_o_resto` |
+| `E3-GRADE-SUBTIPO-FOLGA` | B:1053, G:944 | B **aberta**. G **REGISTRADA** | Preserva a faixa A2 de folga compensatória ou feriado-folga na grade. | Subtipos achatados em `ausencia` |
+| `EMIS-LEITORES-RESTANTES` | B:1056, G:968 | **PARADA** | Migra três leitores para o juiz comum de dia sem trabalho. | `dia_sem_trabalho`, efeito da cobertura parcial |
+| `BACKFILL-UNICO` | B:1075, G:52 | B **registrada, sem construir**. G **REGISTRADA**, perspectiva **PENDENTE REAL** | Centraliza correções históricas, incluindo as parciais da 09. | Backfill de cobertura, fato novo e regeneração |
+| `COBPARC-B-CAUSA-NO-MOTOR` | B:1101, G:645 | B **fila**. G **PARADA (aguarda autorização)** | Faz o motor fornecer a causa para encaminhar parciais sem período ao admin. | `sem_periodo`, lista do admin |
+| `F1C4-3-EMISSORES-FILA` | B:1103, G:970 | B **aberta**. G **REGISTRADA** | Registra divergências de emissores, incluindo a classificação da parcial no supra. | Parcial como dia de cobrança |
+| `E2-D3-JUSTIFICATIVA-APROVADA` | B:1123, G:940 | registrada | Inclui a aprovação na impressão que aciona o rejulgamento. | Justificativa aprovada, cobertura da célula |
+| `POSICAO-FALTAS-E-AUSENCIAS` | B:1178, G:181 | B **registrada**, saiu do piloto. G **REGISTRADA** | Reúne faltas e ausências tipadas em uma fonte para o espelho. | `datas_falta_janela`, `cobertura_ausencia_periodo`, `ausencias_do_periodo` |
+| `BO2910-ESTRUTURA` | B:1187, G:183 | registrada | No item 05, exige período quando a tela aprova ou edita uma parcial. | Período na aprovação e edição |
+| `JUSTIFICATIVA-ENCERRA-ORIGEM` | B:1202, G:187 | G **REGISTRADA (parte no ar; cinco casos retidos)** | Faz a aprovação encerrar a cobrança de origem que ainda afeta a célula. | Aprovação da justificativa, `chamado_origem` |
+| `BO-INSS-NUNCA-BATEU` | B:1211 | NO AR | Faz o ramo sem adesão derivar o veredito pela cobertura já calculada. | `ausencia_cobre`, `cobertura_parcial`, `nunca_bateu` |
+| `API-NAO-TEM-PORTA-DE-ANEXAR-EM-AUSENCIA-EXISTENTE` | B:1214 | FECHADA por medida | Registra a tentativa de anexar pelo POST de criação e o fecho após localizar a rota de anexo. | `api_ausencia_documento`, documento de registro existente |
+| `BO-INSS-LEITORES-QUE-NAO-MIGRARAM` | B:1215, G:642 | B **FECHADA**, com resíduo em fila. G **REGISTRADA (cura no ar; seis resíduos sem causa)** | Faz os dois leitores consumirem o mesmo carimbo de cobertura parcial. | `grade_da_celula`, `cobre_parte_do_dia` |
+| `SEM-CELULA-NA-JANELA-INTEIRA` | B:1217 | FECHADA pela SEM-CELULA-11 | Identifica a janela sem célula dos afastados e encaminha o resíduo sem vínculo. | Afastamento e geração de célula |
+| `BO-ATESTADO-ANDROID-ERRO-AO-ENVIAR` | B:1219, G:188 | B **item (2) NO AR**, galeria **FECHADA**. G **REGISTRADA (parte no ar)** | Trata falhas de envio e reenvio de atestado e prevê gravar arquivo e linha no mesmo ato. | POST `/api/ausencias/`, arquivo e registro |
+| `REENVIO-SILENCIOSO` | B:1219, G:188 | lido 16/11, construção só com aval novo | Investiga o comportamento do reenvio no ramo de ausência já recebida. | `api/views.py`, reenvio do atestado |
+| `UI-GRADE-CALENDARIO` | B:1249 | FECHADA | Ajusta o cartão do calendário para mostrar rótulos longos, inclusive atestado. | Rótulo de atestado na célula |
+| `ABONO-NO-AR-NAO-FECHOU` | B:1254, G:797 | B **09 FECHADA**. G **PARADA (09 fechada; pendência de autorização)** | Faz a lavratura exportada reproduzir o abono diário do fechamento gravado. | Abono no `DiaPago` e no `FechamentoMensal` |
+| `ESMERIL-MECANICO` | B:1263 | FECHADA | Censa leitores e escritores fora da autoridade, incluindo a família ausência/férias. | Portas da família ausência/férias |
+| `UI-ANEXO-AUSENCIA` | B:1277, G:1551 | B **registrada**, item (2) **BLOQUEADO**. G **PARADA** | Desenha o anexo pelo conteúdo e prevê conversão de HEIC preservando o original. | `tipo_real_documento`, `anexar_documento_ausencia`, endpoint do app |
+| `HX-TIPO-REAL-DOC` | B:1277, app/ponto/services/ausencia.py:709, app/api/views.py:1792 | detector já existente, conforme a célula de B:1277 | Identifica o tipo do documento pelos bytes para o painel e a normalização do upload. | Tipo real do `documento` |
+| `COL369-TRES-RESTANTES` | B:1284, G:195 | B **ABERTO**. G **REGISTRADA** | No item 3, investiga divergência entre trabalhado e realizado sob uma ausência. | Ausência com intervalo, `DiaPago.minutos_realizados` |
+| `O218` | B:1344, G:66, G:132 | B **fila 1**. G **REGISTRADA**, perspectiva **FEITA** | Certifica cenários de lavratura, incluindo ausência sobre folga. | Ata e veredito com ausência |
+| `BUG-8792` | B:1355, G:799 | B **complemento da O140**, nada construído. G **REGISTRADA** | Faz o export ler as faltas julgadas para o dia. | `Ausencia`, `datas_falta_janela`, rubrica 8792 |
+| `O124` | B:1361 | FECHADA, NO AR | Faz alertas e relatório usarem o indicador cadastral de atestado médico. | `TipoAusencia.medico` |
+| `O108` | B:1373, G:1652 | B **DIFF publicado**, espera `!`. G **PARADA** | Alimenta espelho e PDF com os mesmos efeitos de ausência para furos e abonos. | `efeitos_da_ausencia`, `datas_justificadas`, `dias_abono` | [nao verificado]
+| `O8` | B:1391, G:502 | B **FECHADA** para parcial e pendente, rejeitada registrada. G **REGISTRADA** com o mesmo residual | Mostra no PDF os rótulos dos registros parciais e pendentes. | `rotulo_ausencia`, `cobertura_ausencia_periodo`, `status` |
+| `O9` | B:1392, G:905 | B **PASSO 1 FECHADO**, aguarda pista. G **REGISTRADA**, restante pendente | Faz o PDF ler a fonte do espelho e incorpora os casos de rótulo do O8. | Rótulo e cobertura de ausência no espelho/PDF |
+| `O10` | B:1393, G:204, app/ponto/portas/celula.py:688 | B **CENSO REFEITO**, complemento registrado. G **REGISTRADA** | Confirma troca de plantão mediante as duas cartas anexadas. | Duas `Ausencia`, `data`, `data_fim`, `documento`, `trocar_plantao` |
+| `LOTE-1-PENDENTES` | B:1409, G:206 | B **item (1) FEITO**, restante espera `!`. G **PARADA** | No item 3, pede ao DP a data final da ausência e prevê retratar as cobranças contra ela. | `data_fim`, porta de retratação |
+| `S5b-4-REGRAS` | B:1418, G:807 | B **4 regras no repo, 5 de 6 observáveis FEITOS**. G **PARADA** | No abono, leva ao calculador a leitura da ausência aprovada. | `horas_abono`, ligação com `Ausencia` aprovada |
+| `O19` | B:1428, G:1587 | B **lado servidor no ar**, app espera `!`. G **FECHADA 16/11 SUPERADA** | Explica falhas no envio de atestado com foto pelo Android. | `api_ausencias`, upload de documento |
+| `O21` | B:1430 | FECHADA, no ar | Exibe a decisão e o efeito do dia em grade, cartão e app. | Catálogo, `status`, rótulo de ausência rejeitada |
+| `O22` | B:1431 | FECHADA, construída | Reverte uma rejeição com motivo e trilha para permitir novo tratamento do registro. | `reverter_rejeicao`, `status`, documento |
+| `AUSENCIA-REJEITADA-VALE` | B:1431 | contador de frota mediu 0, conforme a célula do O22 | Verifica se ausência rejeitada produz cobertura indevida. | `status=rejeitada`, cobertura do dia |
+| `F1` | B:1433, G:1548 | B **FECHADA — SUPERADO pelo O30 F3**. G **REGISTRADA (fechada por absorção)** | Lista atestados por período e reúne as imagens em PDF. | Anexos de atestado |
+| `F2` | B:1434, G:503 | B **portão 8/22**. G **PARADA (portão contratual)** | Mostra ausências e faltas decididas para o período aquisitivo. | Tipos e efeito das ausências na projeção de férias |
+| `O25` | B:1436 | FECHADA, no ar | Preserva no espelho e no PDF os dias anteriores à primeira batida, inclusive os abonados. | Veredito e ausência antes da primeira batida |
+| `O28` | B:1439, G:208 | B **espera o `!`**. G **PARADA** | Faz a saída antecipada descontar os minutos e explica o efeito. | Tipo `saida_antecipada`, catálogo de ausências |
+| `O29` | B:1440, G:1550 | B **FECHADA — SUPERADO pelo O30**. G **REGISTRADA (fechada por absorção)** | Reúne documentos de atestado por colaborador ou empresa. | `Ausencia.documento`, `exige_doc` |
+| `O30` | B:1441, B:2352, G:504 | B **F1 FEITA**, vale depois dispensado pelo programa. G **PARADA** na fonte da grade | Define o drawer, o histórico e a exportação em lote. | `tipo`, `data`, `data_fim`, `status`, `documento`, `minutos` |
+| `O30 F1` (`F1 DRAWER` na célula) | B:1441, G:504 | B **FEITA, no ar**. G **F1 no ar** | Abre formulário, auditoria e miniatura clicável no drawer. | Formulário de ausência e miniatura do documento |
+| `O30 F2` (`F2 HISTORICO` na célula) | B:1441, B:1547, B:2352, G:504 | B registra espera pelo vale, abertura pelo vale e depois dispensa pelo programa. G **PARADA** na fonte da grade | Exibe a linha do tempo com período, efeito, decisão e miniatura. | `data_fim`, `status`, `palavra_do_dia`, documento |
+| `O30 F3` (`F3 ATESTADOS LOTE` na célula) / `O30-F3-CONSTRUIR` | B:1441, B:2352, B:2353, G:504 | B **ABERTA** na construção e formato fechado no programa. G **PARADA** na fonte da grade | Exporta PDF com fotos, ZIP e CSV, com seção de ausências sem documento. | `Ausencia.documento`, `exige_doc`, filtros e campos do atestado |
+| `ATESTADO-DADOS-NO-FORM` | B:1277, B:1441, B:2352, B:2353 | complemento registrado, com schema na sessão conforme B:2353 | Acrescenta campos opcionais do atestado ao formulário e ao lote. | Médico, CRM-UF, CID, emissão, dias, porta de anexar/salvar |
+| `O35` | B:1446, G:923 | B **RED ALCANCADO**, contratos pendentes. G **REGISTRADA** | Na F3, trata os três pendentes do contrato do juiz da ausência. | `PENDENTES_AUSENCIA`, leitores de efeito e vigência |
+| `O52` | B:1467, G:889 | B **a definir**, não começado. G **REGISTRADA** | Faz o rótulo de treino em folga ler a célula e a ata. | Ausência tipo Treino, efeito abonado |
+| `O54` | B:1469, G:72 | G **REGISTRADA (programa parcial)**, perspectiva **PENDENTE REAL** | Incorpora O52 e usa ausência e abono nos casos de paridade do espelho. | Veredito, cobertura parcial e abono |
+| `UI-RESCISAO` | B:1475, D:+1480, G:506 | B **REGISTRADA, nao construir**. D **DOSSIE FECHADO**, construção após TXT da 11. G **REGISTRADA** | Reúne portas de liquidação e mantém em fila a edição de 
+
+[truncado em 20000 de 56132 caracteres]
 
 ## 26/11 16:17 · sessao 054bc30074a5 · E1-PREVISAO-24H · verificador · origem=Code
 
@@ -775,14 +881,4 @@ V2-d tem exemplo sintético de valor novo errado no `DiaPago(oraculo)`. Num 12x3
 
 **Veredito final — REPROVA.** A parcial inteiramente na madrugada pode perder todo o abatimento, a pontualidade do turno partido pode divergir entre motor e oráculo e o juiz direcional nomeado no aval ficou fora da chamada. `app/ponto/motor_calculo_v2.py:465–477,1225–1247,3189–3196`, `app/ponto/turnos.py:2664–2711`, `app/ponto/calculador/regras.py:269–285`.
 
-## 26/11 15:33 · sessao 979e48dc5887 · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia.** O oráculo usa o mesmo teto do motor para parcial com período. No caso sem período, `DiaPago` motor aplica o crédito de 17/09 e o oráculo sobrescreve o atraso com a rubrica anterior a esse crédito. A fixture de 30 minutos afirma zero no FechamentoMensal e no `DiaPago` motor, e 30 no motor direto, sem afirmar o resultado do `DiaPago` oráculo. Pela leitura do código, o oráculo também fica em 30. `app/ponto/calculador/regras.py:115,281,865–872`, `app/ponto/services/dia_pago.py:188–195,322–330`, `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:226–232`.
-
-2. **Bloqueia.** A geração normal de TXT injeta o fechamento calculado online. O PDF de validação do export chama a mesma montagem com o fechamento gravado. O resumo do espelho também pode ler o online, enquanto suas linhas diárias leem `DiaPago` gravado. Se o novo cálculo mudar uma ponta antes da nova lavra, há duas respostas durante a transição. A ocorrência dos desvios em produção é [nao verificado]. `app/folha/views.py:214–219,269–275,892–898`, `app/folha/validacao_pdf.py:58–69`, `app/folha/export.py:399,449–452,726–748`, `app/relatorios/cartao_pela_celula.py:69–76,320–346`, `app/ponto/services/espelho.py:420–424,823–831`.
-
-3. **Nota.** `creditos_por_dia` é lido diretamente pelo fechamento, que soma os períodos com desconto na origem, deduz o crédito remanescente, grava o mensal e passa os mesmos períodos e mapas à lavratura motor. `lavrar` também é a porta de persistência do oráculo. A ausência vem da porta `decidir`, e a consulta da folha filtra aprovadas. O leitor de ponto da tela, o PDF de espelho, o calendário e o extrato parcial recebem os números lavrados nos respectivos recortes. `app/ponto/services/ausencia.py:1051–1081,1087–1104`, `app/ponto/turnos.py:2548–2572`, `app/ponto/services/credito_parcial.py:15–70,73–102`, `app/ponto/services/fechamento.py:1018–1026,1161–1168,1184–1196,1224–1241,1289–1320`, `app/ponto/services/dia_pago.py:173–195,345–360,752,784–789,901–918`, `app/templates/ponto/espelho.html:52–53,290–294`, `app/relatorios/pdf_espelho.py:783–784,910–914`, `app/colaboradores/services/calendario.py:689,720–723`, `app/relatorios/views.py:481–487,531`.
-
-4. **Fila.** A v3 `periodo.reler` sobrescreve as pontas usando a mesma regra sem alimentar `parciais`. Chamador de produção [nao verificado]. No PDF de período livre, o resumo agrega o resultado do motor e ainda leva `a.minutos` das parciais pagas para o indicador separado de horas abonadas. Esse indicador pode diferir do total derivado da grade e não reaplica crédito na 8069. `app/ponto/calculador/periodo.py:434–477,786–813`, `app/relatorios/pdf_espelho.py:336,479,501–503,624–628`, `app/ponto/services/efeito_ausencia.py:35–64`, `app/ponto/services/dia_pago.py:386–398`.
-
-_8416 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8417 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
