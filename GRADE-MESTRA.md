@@ -545,6 +545,25 @@ Fora da grade: obras com estado terminal anterior a 13/11 sem reabertura (exclui
 | AEJ-GERADOR | ? (requisito legal nao cortado) | Gerador do AEJ (Portaria 671) a partir do que existe de AEJ/AFD. | - | Codex leitura aej_leitura.r; requisito legal do Ronald antes do desenho | ......... | REGISTRADA | BACKLOG:2340 |
 
 
+## BALDE AUSENCIA (aval BALDE-AUSENCIA-2611-1610; so registro, nada em voo interrompido)
+> Mae: PROGRAMA-ATESTADOS-O30 (BACKLOG:2371). TRONCO = curas estruturais da O30-F3 (escritor unico de `data_fim` e raiz do documento pelo `Ausencia.save`). Cabecalho fora da forma do placar de proposito: estas linhas nao contam obra nova; cada fatia segue contada onde ja esta.
+
+| fatia do balde | papel | onde esta | fonte |
+|---|---|---|---|
+| O30-F3-CONSTRUIR | TRONCO | EM VOO (c7 538cb39c0, verificador volta 7) | logs/O30-F3-CONSTRUIR/ |
+| O22 | complemento | BACKLOG | BACKLOG:1435 |
+| RC1-1 | complemento | ? (censo localiza) | ? |
+| AUSENCIA-UMA-VIGENTE | complemento | GRADE:274 | BACKLOG:2104 |
+| POSICAO-FALTAS-E-AUSENCIAS | complemento | GRADE:181 | BACKLOG:1182 |
+| LANCAR-AUSENCIA-AFASTA-DESLIGADO | complemento | GRADE:142 | BACKLOG:801 |
+| API-NAO-TEM-PORTA-DE-ANEXAR | complemento | ? (censo localiza) | ? |
+| UI-ANEXO-AUSENCIA | complemento | GRADE:1551 | BACKLOG:1281 |
+| CONTADOR-AUSENCIA-X-VEREDITO | ponteiro (fica na espinha) | GRADE:686 | BACKLOG:1647 |
+| COBPARC-AUSENCIA | ponteiro (fica na espinha) | ? (censo localiza) | ? |
+| E4D-F5-ITEM-93 | ponteiro (fica no E4d) | ? (censo localiza) | ? |
+
+Censo Codex leitura (toda obra que toca Ausencia no BACKLOG/GRADE): logs/BALDE-AUSENCIA/censo/r.txt -- lista e diferenca entram aqui quando o rc cair.
+
 ## COMPLEMENTOS por obra-mae (passada 2, 548; nao contam no placar -- a mae carrega)
 
 > Veredito da 2a passada (logs/GRADE-MESTRA/passada2/passada2b.tsv, aval SEXTA-NOITE-1311 item 6). Nada sai do BACKLOG; baixa e decidida no chat.
