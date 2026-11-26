@@ -1,7 +1,253 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 10:02** · publicado em **26/11/2026 10:06** (UTC-3)
+> Ultima resposta processada: **26/11/2026 10:13** · publicado em **26/11/2026 10:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 10:13 · sessao 2246d4b83412 · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
+
+A cura está em `ponto/turnos.py:3013`. A chamada avulsa e `CargaDaJanela` alimentam o mesmo pareador com o histórico apurável do colaborador. O pad da janela pedida seleciona as PKs apresentadas. O adaptador unitário continua consultando o mesmo mapa por PK. `ponto/turnos.py:1923`, `ponto/turnos.py:2951`, `ponto/turnos.py:2983`, `ponto/turnos.py:3154`
+
+Usei o histórico completo porque uma sequência de saídas órfãs pode propagar a decisão da véspera por vários dias. Retirei o parâmetro `turnos=` da chamada avulsa, pois ele admitia turnos já recortados pelo chamador. A catraca de projeções civis perdeu os dois lookups removidos e passou a registrar a projeção civil no carregador. **Zero `except` novos**, incluindo os testes. `ponto/turnos.py:1253`, `ponto/turnos.py:1295`, `ponto/turnos.py:2951`, `ponto/turnos.py:3026`, `ponto/tests/test_contract_no_batida_date.py:472`, `ponto/tests/test_dia_das_batidas_estavel_na_janela.py:51`
+
+### RED → GREEN em memória
+
+| Caso | Base | Cura |
+|---|---|---|
+| Par de 24h10 sem marcos | A saída recebia **25/10** nas duas janelas curtas e **23/10** nas demais. | **23/10** nas quatro janelas e na consulta unitária. `ponto/tests/test_dia_das_batidas_estavel_na_janela.py:61` |
+| Série de saídas órfãs | A última saída recebia **24/10** em `D−1..D+1` e **25/10** nas demais. | **25/10** nas quatro janelas e na consulta unitária. `ponto/tests/test_dia_das_batidas_estavel_na_janela.py:66` |
+| Virada comum | **24/10** nas janelas do controle. | Conservou **24/10**, inclusive para a saída apresentada no pad à direita. `ponto/tests/test_dia_das_batidas_estavel_na_janela.py:74` |
+
+Os três casos passaram com o pareador real e a carga simulada em memória. A paridade compara o **mapa inteiro** do lote com o da casca. Restaurar a casca F1 derrubou os dois REDs, restaurar o lote F1 derrubou a paridade nos dois, publicar só o dia civil derrubou o par de 24h10 e remover o recorte vazou três PKs no caso das órfãs. Django com banco e a suíte do Code ficam [nao verificado]. `ponto/tests/test_dia_das_batidas_estavel_na_janela.py:51`, `ponto/tests/test_dia_das_batidas_estavel_na_janela.py:72`
+
+### Comandos para o Code
+
+`BASE_TURNOS` aponta para `ponto/turnos.py` da cópia em `8837e24587cf521da533c2d579db3fd1f7c0ad41`. Os mutantes abaixo atuam em memória. `ponto/turnos.py:2951`, `ponto/turnos.py:3001`, `ponto/turnos.py:3013`, `ponto/turnos.py:3154`
+
+```bash
+modulo=ponto.tests.test_dia_das_batidas_estavel_na_janela
+classe="$modulo.DiaDaBatidaEstavelNaJanelaTest"
+par="$classe.test_par_de_24h10_sem_marcos_tem_um_dia_so"
+orfas="$classe.test_serie_de_saidas_orfas_tem_um_dia_so"
+
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test "$modulo"
+
+mutante() {
+    MUTANTE="$1" BASE_TURNOS="${BASE_TURNOS:?}" PYTHONDONTWRITEBYTECODE=1 \
+        python3 -B - "${@:2}" <<'PY'
+import inspect
+import os
+import runpy
+import sys
+
+import django
+from django.core.management import execute_from_command_line
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.saas")
+django.setup()
+from ponto import turnos
+
+modo = os.environ["MUTANTE"]
+if modo in {"borda", "lote"}:
+    base = runpy.run_path(os.environ["BASE_TURNOS"])
+    nome = {"borda": "dia_das_batidas", "lote": "CargaDaJanela"}[modo]
+    setattr(turnos, nome, base[nome])
+elif modo == "civil":
+    turnos._dia_das_batidas_puro = lambda turnos, dias_civis: dict(dias_civis)
+elif modo == "sem_pad":
+    fonte = inspect.getsource(turnos._carregar_dias_das_batidas)
+    alvo = "if pad_ini <= dia <= pad_fim"
+    assert fonte.count(alvo) == 1
+    exec(fonte.replace(alvo, "if True"), vars(turnos))
+else:
+    raise ValueError(modo)
+
+execute_from_command_line(["manage.py", "test", *sys.argv[1:]])
+PY
+}
+
+mutante borda "$par" "$orfas"
+mutante lote "$par" "$orfas"
+mutante civil "$par"
+mutante sem_pad "$orfas"
+```
+
+### Catraca e custo
+
+- **Catraca protegida:** duas asserções falharam na verificação estática. `REGISTRO` precisa trocar `_dia_das_batidas_puro` por `_carregar_dias_das_batidas` no sítio B1. Em `LINHAS_REGISTRADAS`, `ponto/turnos.py:3020` → `ponto/turnos.py:3026` para esse sítio, e `ponto/turnos.py:2998` → `ponto/turnos.py:2989` para `dia_do_turno_da_batida`. Os totais continuam em 9 pareadores e 81 derivações. O arquivo protegido ficou fora da edição. `core/tests/test_medida_turno_do_par.py:108`, `core/tests/test_medida_turno_do_par.py:556`, `core/tests/test_medida_turno_do_par.py:563`
+- **Casca no signal:** zero consultas a mais por chamada, pela leitura do código. A F1 fazia 5–8. A cura faz **4–5** com PK apresentada, ou **1** quando o recorte está vazio. São batidas, células, candidatos, vínculo da ata e uma leitura condicional de geradoras. A carga já fornece DNA e última batida. O signal continua chamando por pai. `ponto/turnos.py:3020`, `ponto/turnos.py:3033`, `ponto/turnos.py:3040`, `ponto/turnos.py:3054`, `escala/alimentacao.py:147`, `colaboradores/services/pos_vinculo.py:37`, `ponto/signals.py:232`
+- **Lote:** a primeira consulta do mapa acrescenta à construção do lote 3–4 leituras históricas, ou 1 se nenhum colaborador tiver PK apresentada. As consultas seguintes ao mapa reutilizam a carga. O histórico inteiro aumenta o volume potencial de leitura por pai. Latência, volume real e contagem SQL executada ficam [nao verificado]. `ponto/turnos.py:3020`, `ponto/turnos.py:3040`, `ponto/turnos.py:3154`
+
+### Sonda para o envelope
+
+A sonda usa as funções reais da base e da cura sobre o mesmo snapshot. Conta uma PK na competência se o dia civil ou o dia publicado por uma das versões estiver nela. A posição usa o dia civil, distinguindo as bordas internas do pad. Execução na sombra e contagens ficam [nao verificado]. `ponto/janelas.py:54`, `ponto/turnos.py:1834`, `ponto/turnos.py:2921`, `ponto/turnos.py:2951`
+
+```python
+import os
+import runpy
+from collections import Counter, defaultdict
+
+from django.db import connection, transaction
+
+from colaboradores.models import Colaborador, Empresa
+from ponto.janelas import janela_fechamento
+from ponto.turnos import batidas_apuraveis, data_local, dia_das_batidas, janela_com_pad
+
+base = runpy.run_path(os.environ["BASE_TURNOS"])["dia_das_batidas"]
+meses = (10, 11)
+contagens = {mes: Counter() for mes in meses}
+colabs_afetados = {mes: set() for mes in meses}
+deltas = {mes: Counter() for mes in meses}
+amostras = {mes: [] for mes in meses}
+pks_afetadas = set()
+
+
+def posicao(dia, ini, fim):
+    if dia < ini:
+        return "pad_ini"
+    if dia == ini:
+        return "borda_ini"
+    if dia < fim:
+        return "miolo"
+    if dia == fim:
+        return "borda_fim"
+    return "pad_fim"
+
+
+with transaction.atomic():
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+    janelas = {
+        (empresa.pk, mes): janela_fechamento(mes, 2026, empresa)
+        for empresa in Empresa.objects.only("pk", "dia_inicio_competencia")
+        for mes in meses
+    }
+    if janelas:
+        pads = [janela_com_pad(*janela) for janela in janelas.values()]
+        menor = min(inicio for inicio, _ in pads)
+        maior = max(fim for _, fim in pads)
+        civis = defaultdict(dict)
+        for cid, pk, ts in (
+            batidas_apuraveis(None)
+            .filter(timestamp__date__range=(menor, maior))
+            .order_by()
+            .values_list("colaborador_id", "pk", "timestamp")
+            .iterator()
+        ):
+            civis[cid][pk] = data_local(ts)
+
+        colabs = (
+            Colaborador.objects.filter(pk__in=civis)
+            .only("pk", "empresa_id").order_by("pk")
+        )
+        for numero, colab in enumerate(colabs, 1):
+            alias = f"col{numero}"
+            for mes in meses:
+                ini, fim = janelas[colab.empresa_id, mes]
+                pad_ini, pad_fim = janela_com_pad(ini, fim)
+                dias = civis[colab.pk]
+                if not any(pad_ini <= dia <= pad_fim for dia in dias.values()):
+                    continue
+                antes = base(colab, ini, fim)
+                depois = dia_das_batidas(colab, ini, fim)
+                assert antes.keys() == depois.keys(), (mes, alias, "universo de PKs divergente")
+
+                tem_pk = False
+                for pk, dia_base in sorted(antes.items()):
+                    dia_cura, civil = depois[pk], dias[pk]
+                    if not any(ini <= d <= fim for d in (civil, dia_base, dia_cura)):
+                        continue
+                    tem_pk = True
+                    contagens[mes]["pks_na_comp"] += 1
+                    if dia_base == dia_cura:
+                        continue
+                    contagens[mes]["pks_com_dia_diferente"] += 1
+                    colabs_afetados[mes].add(alias)
+                    pks_afetadas.add(pk)
+                    pos = posicao(civil, ini, fim)
+                    deltas[mes][(dia_cura - dia_base).days, pos] += 1
+                    if len(amostras[mes]) < 15:
+                        amostras[mes].append((alias, pk, civil, dia_base, dia_cura, pos))
+                contagens[mes]["universo_colabs"] += int(tem_pk)
+
+for mes in meses:
+    c = contagens[mes]
+    print(
+        f"comp={mes:02d}/2026 universo_colabs={c['universo_colabs']} "
+        f"pks_na_comp={c['pks_na_comp']} "
+        f"pks_com_dia_diferente={c['pks_com_dia_diferente']} "
+        f"colabs_afetados={len(colabs_afetados[mes])}"
+    )
+    print("delta_dias x posicao (cura - base)", dict(sorted(deltas[mes].items())))
+    for col, pk, civil, antes, depois, pos in amostras[mes]:
+        print(f"{col} pk={pk} civil={civil} base={antes} cura={depois} pos={pos}")
+
+print("total_pks_distintas_com_dia_diferente", len(pks_afetadas))
+print("total_colabs_distintos_afetados", len(set.union(*colabs_afetados.values())))
+```
+
+Ficaram fora da F2 o selo R6, a regra de fechamento por estoque no cron e o tratamento de períodos inválidos na adesão. A certificação cabe ao Code e ao opus final [nao verificado]. `core/tests/test_selo_r6_frase_do_juiz.py:20`, `chamados/services/adesao.py:143`, `colaboradores/services/pos_vinculo.py:38`
+
+## 26/11 10:09 · sessao c9043d84b0a1 · R1-REMEDE-2611 · sonda · origem=Code
+
+No trecho fornecido, o único retorno exibido é `rc_sombra=0`. A execução em produção está [nao verificado].
+
+```text
+sonda_leitura: script.py [c1b407550bdf8a63] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+AUTORIDADE {'dia_sem_lavratura_no_espelho': 9203, 'dias_comparados': 7815, 'bate_ate_10min': 7446, 'dia_batida_impar': 411, 'diverge_acima_60': 279, 'dono_BATIDA': 254, 'impar_que_DIVERGE': 261, 'impar_no_conjunto_do_dia': 257, 'impar_dentro_da_faixa': 218, 'dia_isento_ou_ausencia': 1708, 'e6_zero_esp_trabalho': 27, 'dono_CADASTRO': 77, 'esp_zero_e6_trabalho': 41, 'impar_FORA_da_faixa': 43, 'dia_sem_trabalho_ambos': 150, 'impar_que_BATE': 150, 'dono_ESTRUTURA': 38, 'esp_desconta_janela_declarada': 282, 'diverge_10_60': 22, 'impar_SO_POR_CORTE_do_oraculo': 4}
+AUTORIDADE erros no espelho: 0
+AUTORIDADE BATE (ate 10 min): 95.3% de 7815 dias comparados
+AUTORIDADE dos que divergem: 218 dentro da faixa piso..teto (indecidivel sem DNA), 43 FORA da faixa (contraditorio)
+AUTORIDADE paridade de quem: 257 com contagem impar no conjunto do dia (falta OU sobra batida), 4 partidos SO pelo corte do proprio oraculo
+AUTORIDADE ESTRUTURA    38 dia-colab     159.1 h   23 colabs   o sistema se contradiz ou calcula errado DADO o cadastro -- fila 1
+AUTORIDADE CADASTRO     77 dia-colab     305.6 h   33 colabs   o DNA nao descreve as batidas -- lista do admin, nao codigo
+AUTORIDADE BATIDA      254 dia-colab    1401.7 h  126 colabs   falta ou sobra batida -- lista do admin, nao codigo
+AUTORIDADE SOMA        369   <- tem de ser igual a soma das classes (369)
+AUTORIDADE colabs com divergencia: 160
+CSV_POR_DONO {'BATIDA': 254, 'CADASTRO': 77, 'ESTRUTURA': 38} TOTAL 369
+CSV_PARIDADE {('IMPAR', 'BATIDA'): 205, ('par', 'CADASTRO'): 22, ('IMPAR', 'CADASTRO'): 55, ('par', 'ESTRUTURA'): 37, ('par', 'BATIDA'): 49, ('IMPAR', 'ESTRUTURA'): 1}
+CAB emp|colab|dia|dono_da_divergencia|esp_min|piso_min|teto_min|dif|classe|paridade|dono_da_paridade|veredito
+ESTRUTURA 4|37|2026-11-14|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|110|2026-11-12|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|112|2026-10-21|ESTRUTURA|546|838|838|292|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|112|2026-10-22|ESTRUTURA|541|835|835|294|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|113|2026-10-30|ESTRUTURA|242|0|0|-242|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|113|2026-11-01|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|114|2026-11-08|ESTRUTURA|439|429|499|-10|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 3|114|2026-11-15|ESTRUTURA|499|440|499|-59|diverge_10_60|par|4|feriado |n_batidas=4
+ESTRUTURA 3|130|2026-10-29|ESTRUTURA|335|672|730|337|diverge_acima_60|par|1|trabalhou |n_batidas=4
+ESTRUTURA 2|200|2026-10-29|ESTRUTURA|180|0|0|-180|e6_zero_esp_trabalho|par|3|em_aberto |n_batidas=0
+ESTRUTURA 2|200|2026-11-02|ESTRUTURA|180|0|0|-180|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|200|2026-11-03|ESTRUTURA|420|598|720|178|diverge_acima_60|par|5|trabalhou |n_batidas=8
+ESTRUTURA 2|218|2026-11-14|ESTRUTURA|103|0|0|-103|e6_zero_esp_trabalho|par|3|em_aberto |n_batidas=0
+ESTRUTURA 2|220|2026-11-10|ESTRUTURA|337|430|486|93|diverge_acima_60|par|1|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-09|ESTRUTURA|551|597|610|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-10|ESTRUTURA|551|598|611|47|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-11|ESTRUTURA|550|598|611|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-13|ESTRUTURA|551|597|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-17|ESTRUTURA|553|598|612|45|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-18|ESTRUTURA|550|596|610|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-11-19|ESTRUTURA|554|599|613|45|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|296|2026-11-02|ESTRUTURA|345|0|0|-345|e6_zero_esp_trabalho|par|0|trabalhou |n_batidas=0
+ESTRUTURA 2|302|2026-11-20|ESTRUTURA|296|0|0|-296|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|382|2026-11-10|ESTRUTURA|418|0|0|-418|e6_zero_esp_trabalho|par|3|trabalhou |n_batidas=0
+ESTRUTURA 2|382|2026-11-11|ESTRUTURA|437|854|949|417|diverge_acima_60|par|5|trabalhou |n_batidas=8
+ESTRUTURA 2|516|2026-10-23|ESTRUTURA|361|0|0|-361|e6_zero_esp_trabalho|par|2|folga |n_batidas=0
+ESTRUTURA 2|727|2026-11-10|ESTRUTURA|307|0|0|-307|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|841|2026-11-16|ESTRUTURA|178|0|0|-178|e6_zero_esp_trabalho|par|2|folga |n_batidas=0
+ESTRUTURA 2|874|2026-10-22|ESTRUTURA|667|383|383|-284|diverge_acima_60|par|3|trabalhou |n_batidas=2
+ESTRUTURA 2|884|2026-11-08|ESTRUTURA|679|699|739|20|diverge_10_60|par|4|rejeitado |n_batidas=4
+ESTRUTURA 3|909|2026-11-11|ESTRUTURA|831|245|374|-586|diverge_acima_60/FORA|IMPAR|CORTE_do_oraculo|em_aberto |n_batidas=4
+ESTRUTURA 2|922|2026-10-29|ESTRUTURA|577|402|478|-175|diverge_acima_60|par|3|trabalhou |n_batidas=4
+ESTRUTURA 2|922|2026-11-01|ESTRUTURA|1382|68|68|-1314|diverge_acima_60|par|4|trabalhou |n_batidas=2
+ESTRUTURA 2|922|2026-11-04|ESTRUTURA|676|458|458|-218|diverge_acima_60|par|3|trabalhou |n_batidas=2
+ESTRUTURA 2|989|2026-10-23|ESTRUTURA|721|567|567|-154|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|996|2026-10-28|ESTRUTURA|0|580|580|580|esp_zero_e6_trabalho|par|1|folga |n_batidas=2
+ESTRUTURA 3|996|2026-11-10|ESTRUTURA|443|1026|1116|583|diverge_acima_60|par|5|em_aberto |n_batidas=6
+ESTRUTURA 2|1010|2026-11-05|ESTRUTURA|982|687|747|-295|diverge_acima_60|par|3|trabalhou |n_batidas=4
+FIM_LISTA
+rc_sombra=0
+```
 
 ## 26/11 10:02 · sessao c70107422e81 · R1-REMEDE-2611 · sonda · origem=Code
 
@@ -1129,297 +1375,4 @@ Ficaram na fila o agrupamento civil e a cobertura de `periodos_ft` pelo vigia, o
 
 Conferi os casos em memória, com ORM simulado no K2. A suíte Django, a certificação e o efeito sobre competências já lavradas ficam **[nao verificado]**. [nao verificado]
 
-## 26/11 01:19 · sessao 859e73b64e12 · O30-F3-CONSTRUIR · construtor · origem=Code
-
-**O30-F3 c2 entregue na cópia sobre `52821ca5b`.** Os 21 testes sem banco passaram. Os quatro REDs reproduziram as falhas na c1 com `rc=1`, e os 23 mutantes executados localmente falharam como esperado. O diff adiciona zero ocorrências de `except`. A suíte do Code, a certificação do opus, a integração com PostgreSQL e o comportamento em produção ficam [nao verificado]. `ponto/tests/test_atestado_f3_contrato.py:87`, `ponto/tests/mutantes_atestado_f3.py:27`, `ponto/services/ausencia.py:1401`, `ponto/services/atestados_lote.py:160`
-
-| Bloqueio | Correção e decisão |
-|---|---|
-| **B1** | Criar/reabrir, editar e anexar travam raiz → filha. A edição relê a linha antes de derivar minutos e estado. Arquivo e metadados ficam na referência que a entrega abre. A troca de um arquivo aprovado exige atuar na própria raiz. O reenvio do app preserva o comprovante já recebido. `ponto/services/ausencia.py:283`, `:452`, `:502`, `:684`, `:842`, `:1086`, `:1387`, `ponto/views_atestado.py:42`, `ponto/tests/test_atestado_f3.py:106` |
-| **B2** | `rederivar_fim` grava só os campos derivados e o carimbo de atualização. A falha da trilha dos seis campos aborta a transação. O selo detecta o `save()` integral real, e a prova do histórico verifica a chamada à função compartilhada. `ponto/services/ausencia.py:300`, `:1860`, `core/observ.py:94`, `ponto/tests/test_atestado_f3_contrato.py:134`, `:158`, `:171`, `ponto/tests/test_atestados_lote.py:13` |
-| **B3** | “Sem documento” consulta `estado_inicial`. O teto conta os tipos que o catálogo marca como médicos. Arquivo sumido ou foto recusada pelo Pillow rende “Anexo indisponível”. HEIC e PDF recebem o link protegido. Na sonda com seleção simulada, um atestado e 21 férias deram HTTP 400 na c1 e no mutante, e HTTP 200 na c2, nos três formatos. `core/juizes.py:263`, `ponto/services/atestados_lote.py:28`, `:154`, `:171`, `ponto/views_atestado.py:119`, `ponto/tests/test_atestado_f3.py:288` |
-| **B4** | O admin oculta os seis campos de todos os perfis. A mídia normaliza o caminho e exige `ver_ausencias` e vínculo com uma ausência no schema da requisição. `ponto/admin.py:39`, `core/media_protegida.py:8`, `ponto/tests/test_atestado_f3_contrato.py:411` |
-
-**Comandos de reprodução**, a partir de `app/`. Os seletores e testes-alvo estão em `ponto/tests/mutantes_atestado_f3.py:27`.
-
-```bash
-f3() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 "$1"; }
-
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest ponto.tests.test_atestado_f3_contrato
-
-f3 c1_b1
-f3 filha_substitui_aprovado
-f3 reabrir_separa_arquivo
-f3 trava_invertida
-f3 editar_sem_releitura
-f3 anexar_ignora_filha
-f3 reabrir_le_filha
-f3 gate_le_filha
-f3 reenvio_regrava_upload
-f3 reenvio_tenta_trocar_aprovado
-
-f3 c1_b2
-f3 save_integral
-f3 trilha_facultativa
-f3 evento_engole_obrigatorio
-f3 historico_sem_delegacao
-
-f3 c1_b3
-f3 lote_flag_crua
-f3 lote_ferias
-f3 pdf_sem_storage
-f3 pdf_imagem_recusada
-
-f3 c1_b4
-f3 admin_expoe_seis
-f3 midia_staff
-f3 midia_sem_normalizacao
-f3 midia_sem_vinculo
-```
-
-**PDF com 20 atestados** [nao verificado]. O comando de medição parou ao importar `django.core`. O tempo do PDF real e o `f3 lote_ferias` com o ORM ficam para a régua do Code. `manage.py:11`, `ponto/tests/test_atestado_f3.py:288`, `:330`
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  ponto.tests.test_atestado_f3.AtestadoF3MedidaTest --settings=config.settings.ci
-```
-
-**Ficou fora.** Relógio na borda, semântica de vigência, competência geral, fuso de `decidido_em`, JSON de reversão E4b e efeito da trilha na reversão H06. `ponto/services/atestados_lote.py:34`, `:48`, `:149`, `ponto/views_atestado.py:103`, `chamados/management/commands/backfill_fio_morto_e4b.py:355`, `ponto/management/commands/rederivar_minutos_h06_comp11.py:152`
-
-**Máscara para a sessão.** Acrescentar em `VAZIO` e `NULO`, respectivamente. As duas regras gravam `''` e `None`. `bin/sombra_regras_pessoais.py:49`, `:70`, `bin/sombra_mascara_pessoal.py:17`, `ponto/models.py:787`
-
-```python
-    ('ponto', 'Ausencia'): ('atestado_medico', 'atestado_crm', 'atestado_crm_uf', 'atestado_cid'),
-    ('ponto', 'Ausencia'): ('atestado_emissao', 'atestado_dias'),
-```
-
-## 26/11 01:13 · sessao 0fff049b4d8a · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
-
-A adesão pós-vínculo agora usa o dia que `dia_das_batidas` atribui a cada PK. A consulta inclui um dia em cada ponta e aplica os dois limites inclusivos do chamado ao resultado do juiz. Sem dois limites, verifica se há batida apurável na vida do colaborador. O fechamento continua por `transicionar_com_pauta` e `pai.reconciliar`. [colaboradores/services/pos_vinculo.py:37] [ponto/turnos.py:2972]
-
-Dei baixa nas duas chaves ORM da linha 41 da base. A catraca agora compara arquivo, função, expressão AST e ocorrência, com classe, motivo e dono por sítio. A varredura estática passou com **252 sítios registrados, 102 classificados como J**. A célula `turno/marcos × um juiz por pergunta` está vermelha e a dívida J integra o selo que bloqueia o verde. Conferi **zero novos `except`** nos quatro trechos alterados, incluindo testes. [ponto/tests/test_contract_no_batida_date.py:145] [ponto/tests/test_contract_no_batida_date.py:507] [ponto/tests/test_contract_no_batida_date.py:546] [core/contratos_estruturais.py:225] [core/tests/test_selo_contratos_estruturais.py:81] [nao verificado]
-
-### RED e GREEN
-
-Executei o comando RED antes de alterar o serviço e o comando GREEN depois. Ambos pararam ao importar `django.core`, antes da conexão. **RED e GREEN em banco de testes, suíte do Code e confirmação independente do hash** [nao verificado]. [manage.py:11] [nao verificado]
-
-Em memória, o pareador e o mapa reais atribuíram as duas PKs a **25/10** nos pares **19:00–07:00** e **23:58–00:03**, com 43.200 e 300 segundos brutos. Com persistência e porta simuladas, a seleção civil fechou o pai da folga nos dois casos e a cura devolveu `0` e o manteve vivo. O teste ORM também exige o controle de 25/10 com gate apto, uma só nota após a repetição, exclusão da retratada e o ramo sem dois limites. [ponto/turnos.py:1192] [ponto/turnos.py:3010] [ponto/tests/test_x1_folga_sem_adesao.py:439] [nao verificado]
-
-Comandos para o envelope do Code, a partir de `app/`. [config/settings/ci.py:6] [ponto/tests/test_x1_folga_sem_adesao.py:473]
-
-```bash
-A=ponto.tests.test_x1_folga_sem_adesao.FecharAdesaoDiaDoTurnoTest
-C=ponto.tests.test_contract_no_batida_date.ContractNoBatidaDateTest
-t() { PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci "$@"; }
-
-# RED na base com o teste novo aplicado [nao verificado]
-t "$A.test_1900_a_0700_nao_fecha_adesao_da_folga" \
-  "$A.test_2358_a_0003_nao_fecha_adesao_da_folga"
-
-# GREEN com a cura
-t ponto.tests.test_x1_folga_sem_adesao "$C" \
-  core.tests.test_selo_contratos_estruturais colaboradores.tests.test_pos_vinculo
-```
-
-### Mutantes
-
-Os oito casos de mutação da catraca passaram em memória com `unittest.TestCase`. Forçar a célula a verde fez falhar a asserção de dívida. [ponto/tests/test_contract_no_batida_date.py:554] [ponto/tests/test_contract_no_batida_date.py:651] [nao verificado]
-
-```bash
-t "$C.test_mutante_novo_em_funcao_registrada"
-t "$C.test_mutante_registro_obsoleto_na_mesma_funcao"
-t "$C.test_mutante_localdate_terminal_com_apelido_de_modulo"
-t "$C.test_mutante_localdate_importado_e_renomeado_em_escopo_local"
-t "$C.test_mutante_localtime_e_instante_em_variavel_derivada"
-t "$C.test_mutante_data_local_com_apelido"
-t "$C.test_mutante_lookup_relacional_em_dict_e_keyword"
-t "$C.test_mutante_retorno_das_duas_chaves_da_adesao"
-```
-
-Os cinco mutantes do serviço foram exercitados com persistência simulada. Os comandos abaixo aplicam cada mutação em memória e devem falhar na asserção indicada quando rodados pelo Code. O resultado ORM dos mutantes está [nao verificado]. [colaboradores/services/pos_vinculo.py:39] [ponto/tests/test_x1_folga_sem_adesao.py:469]
-
-```bash
-mutar() {
-  MUTANTE_ADESAO="$1" DJANGO_SETTINGS_MODULE=config.settings.ci \
-    PYTHONDONTWRITEBYTECODE=1 python3 -B - "$2" <<'PY'
-import os
-import sys
-from pathlib import Path
-
-import django
-from django.core.management import call_command
-
-django.setup()
-mutante = os.environ['MUTANTE_ADESAO']
-
-if mutante == 'verde': [nao verificado]
-    from core.contratos_estruturais import celula
-    celula('turno/marcos', 'um juiz por pergunta')['verde'] = True [nao verificado]
-else:
-    from colaboradores.services import pos_vinculo as pos
-    filtro = 'any(inicio <= dia <= fim for dia in dias.values())'
-    antes, depois = {
-        'civil': (filtro, 'batidas_apuraveis(colaborador).filter('
-                          'timestamp__date__gte=per[0], timestamp__date__lte=per[1]).exists()'),
-        'sem_vespera': ('inicio - um, fim + um', 'inicio, fim + um'),
-        'sem_recorte': (filtro, 'bool(dias)'),
-        'limites_exclusivos': ('inicio <= dia <= fim', 'inicio < dia < fim'),
-        'sem_vida': ('tem_batida = batidas_apuraveis(colaborador).exists()', 'tem_batida = False'),
-    }[mutante]
-    fonte = Path(pos.__file__).read_text(encoding='utf-8')
-    assert fonte.count(antes) == 1
-    exec(compile(fonte.replace(antes, depois), pos.__file__, 'exec'), vars(pos))
-
-call_command('test', sys.argv[1])
-PY
-}
-mutar civil "$A.test_1900_a_0700_nao_fecha_adesao_da_folga"
-mutar sem_vespera "$A.test_2358_a_0003_nao_fecha_adesao_da_folga"
-mutar sem_recorte "$A.test_1900_a_0700_nao_fecha_adesao_da_folga"
-mutar limites_exclusivos "$A.test_dia_do_trabalho_fecha_uma_vez"
-mutar sem_vida "$A.test_sem_dois_limites_a_presenca_e_na_vida"
-mutar verde "$C.test_celula_vermelha_enquanto_houver_divida" [nao verificado]
-```
-
-### Sonda de leitura da competência 10/2026
-
-O recorte usa o corte de cada empresa. A sonda conta PKs e dias-colaborador distintos quando o dia civil ou o dia atribuído cai na competência. Para cada pai vivo com janela sobreposta ou com uma marca nesse recorte, compara a decisão sobre o **período integral gravado** e usa `reconciliaria()` para estimar transições. O snapshot manual evita o ramo de trava que o gate usa dentro de `atomic()`. **Contagens e transições da competência 10** [nao verificado]. [ponto/janelas.py:54] [colaboradores/services/pos_vinculo.py:37] [chamados/models.py:678] [chamados/models.py:761] [docs/BACKLOG.md:1858]
-
-```bash
-# Envelope do Code em app/, com SONDA_SCHEMA, SONDA_DB_USUARIO e SONDA_DB_SENHA.
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-import json
-import os
-from collections import Counter
-from datetime import date, timedelta
-
-import django
-from django.conf import settings
-from config.settings import base
-
-shared = ['django_tenants', 'tenants', *(
-    app for app in base.INSTALLED_APPS if app.startswith(('django.contrib.', 'rest_framework'))
-)]
-tenant = [
-    app for app in base.INSTALLED_APPS
-    if app not in shared or app in {'django.contrib.auth', 'django.contrib.contenttypes'}
-] + ['api']
-cfg = {k: getattr(base, k) for k in dir(base) if k.isupper()}
-cfg.update(
-    DEBUG=False, LOGGING_CONFIG=None,
-    SHARED_APPS=shared, TENANT_APPS=tenant,
-    INSTALLED_APPS=list(dict.fromkeys(shared + tenant)),
-    DATABASE_ROUTERS=['django_tenants.routers.TenantSyncRouter'],
-    TENANT_MODEL='tenants.Cliente', TENANT_DOMAIN_MODEL='tenants.Domain',
-    EMAIL_BACKEND='django.core.mail.backends.dummy.EmailBackend',
-    VAPID_PUBLIC_KEY='', VAPID_PRIVATE_KEY='', GLPI_APP_TOKEN='',
-    DATABASES={'default': {
-        'ENGINE': 'django_tenants.postgresql_backend',
-        'HOST': 'sombra_db', 'PORT': '5432', 'NAME': 'sombra',
-        'USER': os.environ['SONDA_DB_USUARIO'],
-        'PASSWORD': os.environ['SONDA_DB_SENHA'],
-        'OPTIONS': {'options': '-c default_transaction_read_only=on'},
-    }},
-)
-settings.configure(**cfg)
-django.setup()
-
-from django.db import connection
-from django.utils import timezone
-from django_tenants.utils import schema_context
-from chamados.catalogo.motor import VIVOS
-from chamados.models import ChamadoColaborador
-from ponto.janelas import janela_fechamento
-from ponto.turnos import batidas_apuraveis, dia_das_batidas
-from tenants.models import Cliente
-
-UM = timedelta(days=1)
-grupos = ('antes', 'depois', 'saem', 'entram', 'muda_dia', 'sem_dia')
-pks = {g: set() for g in grupos}
-civis = {g: set() for g in grupos}
-jornadas = {g: set() for g in grupos}
-transicoes = Counter(dict.fromkeys(('ambos', 'so_antes', 'so_depois', 'nenhum'), 0))
-pais = Counter(dict.fromkeys(('no_recorte', 'sem_dois_limites', 'gate_recusou'), 0))
-
-schema = os.environ['SONDA_SCHEMA']
-with connection.cursor() as cur:
-    cur.execute(
-        'SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY'
-    )
-connection.set_autocommit(False)
-try:
-    with connection.cursor() as cur:
-        cur.execute("SELECT current_database(), current_setting('transaction_read_only'), "
-                    "current_setting('transaction_isolation')")
-        if cur.fetchone() != ('sombra', 'on', 'repeatable read') or connection.in_atomic_block:
-            raise RuntimeError('snapshot de leitura da sombra indisponível')
-    if schema == 'public' or not Cliente.objects.filter(schema_name=schema).exists():
-        raise ValueError('schema de ensaio inválido')
-
-    with schema_context(schema), timezone.override(settings.TIME_ZONE):
-        estoque = ChamadoColaborador.objects.filter(
-            modulo_origem='sem_previsao_escala', subcategoria='nunca_bateu',
-            status_local__in=VIVOS,
-        ).select_related('colaborador__empresa')
-        for pai in estoque:
-            periodo = (pai.contexto_json or {}).get('periodo') or []
-            if len(periodo) != 2:
-                pais['sem_dois_limites'] += 1
-                continue
-            ini, fim = map(date.fromisoformat, periodo)
-            colab = pai.colaborador
-            a, z = janela_fechamento(10, 2026, colab.empresa)
-            vivas = batidas_apuraveis(colab)
-            antes = set(vivas.filter(timestamp__date__gte=ini, timestamp__date__lte=fim)
-                        .values_list('pk', flat=True))
-            mapa = dia_das_batidas(colab, ini - UM, fim + UM)
-            depois = {pk for pk, dia in mapa.items() if ini <= dia <= fim}
-
-            no_recorte = max(ini, a) <= min(fim, z)
-            for pk, ts in vivas.filter(pk__in=antes | depois).values_list('pk', 'timestamp'):
-                civil, dia = timezone.localdate(ts), mapa.get(pk)
-                if not (a <= civil <= z or (dia is not None and a <= dia <= z)):
-                    continue
-                no_recorte = True
-                em_antes, em_depois = pk in antes, pk in depois
-                for grupo, conta in (
-                    ('antes', em_antes), ('depois', em_depois),
-                    ('saem', em_antes and not em_depois),
-                    ('entram', em_depois and not em_antes),
-                    ('muda_dia', dia is not None and civil != dia),
-                    ('sem_dia', dia is None),
-                ):
-                    if conta:
-                        pks[grupo].add(pk)
-                        civis[grupo].add((colab.pk, civil))
-                        if dia is not None:
-                            jornadas[grupo].add((colab.pk, dia))
-            if no_recorte:
-                pais['no_recorte'] += 1
-                candidato = bool(antes or depois)
-                apto = candidato and pai.reconciliaria()
-                pais['gate_recusou'] += int(candidato and not apto)
-                assinatura = (bool(antes) and apto, bool(depois) and apto)
-                transicoes[{(True, True): 'ambos', (True, False): 'so_antes',
-                            (False, True): 'so_depois', (False, False): 'nenhum'}[assinatura]] += 1
-finally:
-    connection.rollback()
-    connection.close()
-
-print(json.dumps({
-    'competencia': '10/2026',
-    'pais': pais,
-    'transicoes_por_pai': transicoes,
-    'transicoes_antes': transicoes['ambos'] + transicoes['so_antes'],
-    'transicoes_depois': transicoes['ambos'] + transicoes['so_depois'],
-    'marcas': {
-        g: {'batidas': len(pks[g]), 'dias_colab_civil': len(civis[g]),
-            'dias_colab_jornada': len(jornadas[g]),
-            'dias_colab_uniao': len(civis[g] | jornadas[g])}
-        for g in grupos
-    },
-}, ensure_ascii=False, sort_keys=True))
-PY
-```
-
-_8310 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8312 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
