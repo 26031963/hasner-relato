@@ -6,10 +6,25 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 23:05:15.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (18.9 MB). Acoes na janela: **589**.
+**Medido em 25/11/2026 23:11:44.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (19.2 MB). Acoes na janela: **604**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 23:11:32 | Bash |  | `cd /home/ronald/saas-hasner; ssh pista cancela 1125225426_3dac548c 2>&1\|tail -1; sed -n 1,31p logs/E1-PREVISAO-24H/v3/verif4.r \| cut -c1-900` |
+| 23:11:25 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/E1-PREVISAO-24H/brief_v3.md \| cut -c1-300 \| head -80` |
+| 23:11:25 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/E1-PREVISAO-24H/v3/ \| head -50; ls logs/E1-PREVISAO-24H/ \| grep -i brief` |
+| 23:11:09 | Bash |  | `cd /home/ronald/saas-hasner; tail -40 logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6/entrega.md \| cut -c1-300; git -C /home/ronald/wt-par-c3-ok-112401 status --porcelain \| head; git -C /home/ronald/wt-par-c3-ok-112401 log --oneline -3` |
+| 23:11:03 | Bash |  | `cd /home/ronald/saas-hasner; grep -n -i -A6 'PAR' logs/OBRAS-VIVAS-2511-1630.md \| head -30 \| cut -c1-300; cat logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6b/alvo.log` |
+| 23:10:59 | Bash |  | `cd /home/ronald/saas-hasner/logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN; ls -la c6b c6 \| head -30; cat c6b/alvo.rc c6b/mut.rc; head -30 c6b/msg_commit.txt; grep -n 'c6b' /home/ronald/saas-hasner/app/docs/RELATO.md \| cut -c1-300 \| tail -5` |
+| 23:10:54 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' p='app/docs/RELATO.md'; s=open(p).read() a=[l for l in s.split('\n') if l.startswith('POUSO WRAPPER-N-VAGAS v13 22:4x')]; assert len(a)==1 n="WRAPPER-LIGA-N2-2511 23:10: vagas_codex=1->2 (bin/codex_vagas.conf, commit deste marco). BASE antes da rajada (logs/WRAPPER-N-VAGAS/n2/base.txt): load 8.99/6.52/6.98 nproc 8 (suites de VM vivas), free 11 GB disp ...` |
+| 23:10:36 | Bash |  | `cd /home/ronald/saas-hasner; cat > bin/codex_rajada_mede.sh <<'EOF' EOF rm bin/codex_rajada_mede.sh; d=logs/WRAPPER-N-VAGAS/n2; for i in 1 2 3; do /usr/bin/time -f '%e s' timeout 10 bash bin/codex_health.sh 2>&1 \| tail -2 \| tr '\n' ' '; echo; done \| tee -a $d/base.txt; ps -eo args \| grep -c '[d]ocker run.*suite\\|[m]anage.py test'` |
+| 23:10:32 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'curl\\|health' bin/codex_health.sh \| head -5` |
+| 23:10:28 | Bash |  | `cd /home/ronald/saas-hasner; ls logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN/c6b \| head; sed -i 's/^vagas_codex=1$/vagas_codex=2/' bin/codex_vagas.conf; cat bin/codex_vagas.conf; d=logs/WRAPPER-N-VAGAS/n2; mkdir -p $d; { date '+%F %T'; cat /proc/loadavg; nproc; free -g \| head -2; for i in 1 2 3; do curl -s -o /dev/null -w '%{http_code} %{time_total}\n' --max-time 5 -H 'Host: juliani.hasner.com.br' http:/ ...` |
+| 23:10:23 | Bash |  | `cd /home/ronald/saas-hasner; ls -t logs/PAR-RELAMPAGO-A-LISTA-DO-ADMIN \| head; cat >> app/docs/PROMPTS.md <<'EOF' \| 25/11 23:1x \| WRAPPER-LIGA-N2-2511 \| ligar N=2 (codex_vagas.conf versionado), medir 1a rajada com 2 construtores Codex (load, /health/ + tempo, free -g); limpo 1 h -> N=3; sujo -> N=1 + linha no RELATO; vaga nova pela ORDEM-VAGAS-NOITE \| WRAPPER-N-VAGAS \| \| 25/11 23:1x \| E1-D ...` |
+| 23:10:11 | Bash |  | `cd /home/ronald/saas-hasner; ls -dt logs/PAR-RELAMPAGO* \| head -3; ls -t logs/PAR-RELAMPAGO-PELO-TURNO 2>/dev/null \| head -15; grep -n '^\| PAR-RELAMPAGO' app/docs/BACKLOG.md \| cut -c1-600` |
+| 23:09:55 | Bash |  | `cd /home/ronald/saas-hasner; wc -l logs/E4D-MATRIZ/BRIEF-CONSTRUTOR-2511.md; head -60 logs/E4D-MATRIZ/BRIEF-CONSTRUTOR-2511.md \| cut -c1-250` |
+| 23:09:51 | Bash |  | `cd /home/ronald/saas-hasner; grep -n '^\| E4D\\|^\| E4d' app/docs/BACKLOG.md \| cut -c1-500; ls -t logs/E4D-MATRIZ \| head; ls -t logs/E4D-CONTRATO \| head` |
+| 23:09:48 | Bash |  | `cd /home/ronald/saas-hasner; date +%H:%M; tail -3 app/docs/PROMPTS.md \| cut -c1-200; ls -d logs/E4* 2>/dev/null; grep -n 'E4d' app/docs/BACKLOG.md \| head -5 \| cut -c1-300` |
 | 22:54:45 | Bash |  | `cd /home/ronald/saas-hasner; d=logs/E1-PREVISAO-24H/v3; id=1125225426_3dac548c; ssh pista espera $id > $d/pista_$id.espera 2>&1; echo "rc=$?" >> $d/pista_$id.espera; ssh pista log $id 100000000 > $d/pista_$id.log 2>&1; date +%T > $d/pista_$id.fim; tail -3 $d/pista_$id.espera; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' $d/pista_$id.log \| tail -2` |
 | 22:54:23 | Bash |  | `cd /home/ronald/saas-hasner; ssh pista cancela 1125222803_de479e03 2>&1 \| tail -2; f=$(git -C /home/ronald/wt-e1prev-v3-211130 rev-parse HEAD); git update-ref refs/pista/$f $f; ssh pista pede $f 2>&1 \| tail -2; /usr/bin/sleep 15; ssh pista estado 2>&1 \| grep -E 'rodando\|fila'` |
 | 22:54:16 | Bash |  | `ssh pista estado 2>&1 \| grep -E 'rodando\|fila\|11252228'; ssh pista ajuda 2>&1 \| head -20` |
