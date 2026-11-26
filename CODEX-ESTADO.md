@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 11:43** · publicado em **26/11/2026 11:47** (UTC-3)
+> Ultima resposta processada: **26/11/2026 12:13** · publicado em **26/11/2026 12:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 12:13 · sessao 0afee0d210dd · SUITE-ROTEIA-PARA-PISTA · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 26/11 12:13 · sessao 8c908102f452 · - · - · origem=Ronald (tmux)
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 26/11 12:12 · sessao df4617291765 · - · - · origem=Ronald (tmux)
+
+**Prova que morde.** Exercitar `suite.sh` real com Git de fixture e doubles de SSH, Docker e trava. Um recorte remoto deve publicar o SHA correto, fazer um `pede`, receber ID nu, esperar e buscar o log do mesmo ID, preservar o rc e ter zero chamadas à VM. Ping indisponível, espera estimada acima de 30 min e negativa inequívoca `71` devem produzir uma execução VM com motivo. Depois do aceite, vermelho remoto, perda de conexão e rc ambíguo jamais devem executar VM. O mutante `rota_pista_so_carimba` imprime a rota, omite o `pede` e roda na VM. O mesmo juiz tem de matá-lo pelos efeitos. A fixture precisa reproduzir o ID nu de `pede`, que derrubou M7b quando o selo simulava `id= sha=`, e usar o recibo estruturado apenas em `espera`. O glob da régua inclui `test_*.sh`. `app/docs/RELATO.md:577,603–604,676,2262`, `bin/pista_certifica.sh:13–16`, `bin/tests/test_pista_certifica.sh:48–52`, `bin/regua.sh:138`.
+
+**Selos existentes.** `test_suite_sh.sh` mantém comando canônico e garantias da VM, com eventual ajuste de âncoras e mensagem. `test_suite_motivo.sh` e `test_rm_com_guarda.sh` precisam de fixture que escolha VM deterministicamente quando exercitam comportamento local e de correção de qualquer âncora deslocada. `test_pista_certifica.sh` preserva prova e o literal `_FLAG_SO` que o certificador lê. `test_volta_intermediaria_rc.sh` mantém o contrato de rc. `test_suite_uma_vez_por_arvore.sh` protege hash/régua/pre-push. `test_trava_teste.sh`, `test_montagem_vem_do_arvore_do_push.sh`, `test_labels_fonte_unica.sh` e `test_segredo_fora_do_argv.sh` continuam a guardar as respectivas invariantes locais. `bin/tests/test_suite_sh.sh:25–87,128–137`, `bin/tests/test_suite_motivo.sh:23–53,176–249,284–343`, `bin/tests/test_rm_com_guarda.sh:103–225,229–429`, `bin/pista_certifica.sh:67–70`, `bin/tests/test_pista_certifica.sh:63–99`, `bin/tests/test_volta_intermediaria_rc.sh:17–46`, `bin/tests/test_suite_uma_vez_por_arvore.sh:26,57–82`, `bin/tests/test_trava_teste.sh:40–64,117–137`, `bin/tests/test_montagem_vem_do_arvore_do_push.sh:35–65,67–125`, `bin/tests/test_labels_fonte_unica.sh:20–45`, `bin/tests/test_segredo_fora_do_argv.sh:23–48`.
+
+**Medição.** A trava atual registra em `/tmp/juliani_db_test.lock.quem` só a aquisição do detentor e depois `livre desde`; em timeout registra o limite e retorna 75. `logs/trava_teste.hist`, com pedido/início/fim, está desenhado e aberto. Comandos de leitura pela sessão `date -Is`, `bash bin/trava_teste.sh --quem`, `ssh -o BatchMode=yes -o ConnectTimeout=5 pista estado` e `rg -n '^MEDIDA-SUITE|^POUSO PARCIAL-BORDA' app/docs/RELATO.md`. Contar IDs aceitos distintos no intervalo, atribuir espera VM a pedido→início quando houver os dois carimbos e usar a mesma unidade/janela antes e depois. O RELATO registra ao menos o job `1126000153` em 26/11. Totais, retenção e esperas sem trilha [nao verificado]. `bin/trava_teste.sh:21–42`, `app/docs/BACKLOG.md:944,2344,2957`, `app/docs/RELATO.md:13,2356,2751,3051,3054–3055,5755,12377`.
+
+**Snapshot e concorrência.** Índice temporário isola staging, enquanto objetos e refs entram no Git comum. Capturar adições, alterações, exclusões e modos, com fonte íntegra e estável. Segregar as refs próprias dos commits descartáveis e guardar até o consumo terminal confirmado, retirando por comparação de SHA sem GC na rota. A revalidação atual da VM pode aceitar suja→suja porque compara classificação e SHA vazio. O remoto responde só pelo snapshot fechado. `staticfiles` é ignorado e a VM exige estáticos utilizáveis no bind `:ro`, mais cinco tmpfs para caches/logs/media. Prova equivalente na pista [nao verificado]. As duas vagas documentadas e observadas são concorrência de jobs, distinta de `--parallel` 1–8 dentro da suíte. Calcular ETA pelo primeiro slot que se libera considerando a fila, usar estado como estimativa e preservar o isolamento por job, cuja implementação [nao verificado]. `bin/arvore_hash.sh:13–16,22–28`, `app/docs/RELATO.md:108,111,1616,1651,2762`, `app/docs/BACKLOG.md:2344–2345`, `bin/suite.sh:108–143,172–175`, `bin/arvore_do_push.sh:31–56,80–81,104–118`, `app/docs/PROMPTS.md:2977`.
+
+## 26/11 12:11 · sessao a273e5b5e6ab · - · - · origem=Ronald (tmux)
+
+O único chamador operacional localizado em `bin/` é a volta intermediária. Ela passa `--dir --volta --espera "${VOLTA_ESPERA:-3600}"`. O helper preenche `ONLY` depois, enquanto combinar `--volta` e `--only` explícitos dá rc 2. O contrato deve definir a rota pela seleção efetiva para alcançar a volta intermediária. [bin/volta_intermediaria.sh:33] [bin/suite.sh:197–216] [nao verificado]
+
+- A volta captura stdout e stderr em `<saida>.log`, usa `<saida>.porque` e `<saida>.disjuntor.log`, termina o log com `rc=`, `tempo_s=` e `fim=` e sinaliza em `<saida>.fim`. Seu próprio veredito vem dos códigos de processo. Falha de Ruff/disjuntor ou outro rc de teste dá vermelho, rc 75 significa sem vez e rc 3 significa que a suíte não rodou. `Ran` e `OK/FAILED` continuam disponíveis para a leitura humana do log. [bin/volta_intermediaria.sh:17–53] [nao verificado]
+- Chamadas diretas da sessão e os comandos entregues pelos agentes usam o stdout/stderr da porta com a captura existente. A sessão principal espera em fundo e o agente entrega comando e caminho do log. Há exemplos com `--only` e com filtros `-v` e `-k`, uma inteira em cópia pela VM e uma validação `--seco`. [CLAUDE.md:95–105] [app/docs/PISTA.md:58–62] [app/docs/RELATO.md:804,814,1576,1614] [app/docs/PROMPTS.md:2343]
+- `.claude/settings.json` aponta para hooks e statusline externos, e o verificador de `.claude/agents/` é leitura sem suíte. Os chamadores de teste são `test_suite_motivo.sh` pelas chamadas indiretas de `_roda`, e `test_rm_com_guarda.sh` pelas inteiras de pouso diretas/indiretas. `test_volta_intermediaria_rc.sh` invoca a volta real com dublê do `suite.sh`. [.claude/settings.json:2–77] [.claude/agents/verificador.md:7] [bin/tests/test_suite_motivo.sh:53,147,196–226] [bin/tests/test_rm_com_guarda.sh:145–187,234–256,313–339] [bin/tests/test_volta_intermediaria_rc.sh:12–20]
+- A conduta requer `Ran N`, o último `OK/FAILED` com fronteira e o rc do processo. Prefixar as linhas remotas, devolver apenas o recibo de `espera`, truncar o log ou misturar dois runs põe essa leitura em risco. Os parsers automáticos da régua, pre-push, vigia, isolamento e moldes atuam sobre seus próprios logs. [CLAUDE.md:119–123] [app/docs/LEIS.md:101] [bin/regua.sh:165–179] [bin/pre-push.sh:130–151] [bin/vigia_arvore.sh:76–90,105–107,131–136] [bin/vigia_veredito.sh:10–15] [bin/isolamento.sh:25–34] [bin/molde_autocura/cadeia.sh:52] [bin/molde_autocura/esteira.sh:15] [bin/molde_fatia/cadeia.sh:55] [bin/molde_fatia/esteira.sh:16] [bin/molde_fatia/rodar.sh:31,48] [nao verificado]
+- `AMBIENTE argv=` sai do próprio teste de `core` quando selecionado e representa cada argumento em uma palavra. `pista_certifica.sh` usa o campo para a inteira de pouso, rejeita recorte, importa `_FLAG_SO` diretamente de `suite.sh` e recebe preenchimento do recibo em arquivo separado. Preservar o log original e o formato de `_FLAG_SO`. [app/core/tests/test_ambiente_do_run.py:30–56] [bin/pista_certifica.sh:13–17,61–92] [CLAUDE.md:126] [nao verificado]
+- `pede` foi documentado como ID nu em uma reprovação anterior. O parser deve reconhecer a forma comprovada pela sessão, e `espera` autenticar ID, SHA e rc contra o log integral. A interface antiga anuncia apenas `--only`/`--parallel` e há relato explícito de que não recebe `-k`. Se a pista não representar argv, semântica de `--espera` ou `REGUA_DB` da chamada, fica na VM com motivo. Estado e interface atuais do serviço [nao verificado]. [app/docs/RELATO.md:508,577,604,925] [app/docs/BACKLOG.md:2344] [bin/pista_certifica.sh:14–16,53–60] [bin/suite.sh:169–181,227–248,336–341,367–373] [nao verificado]
+- O rc bruto 3 do processo é mapeado a 1 na VM, preservando 3 para run que não nasceu. A VM atualmente deixa rc 75 do comando passar, por isso a classificação remota precisa olhar a fase e a admissão, pois a volta trata 75 como “sem vez”. Perda de recibo após admissão possível requer reconciliação do ID e ausência de execução duplicada. [bin/suite.sh:145–153] [bin/trava_teste.sh:35–42] [bin/volta_intermediaria.sh:36–46] [app/docs/RELATO.md:603,925] [nao verificado]
 
 ## 26/11 11:43 · sessao 9765fa36b75c · UI-RESCISAO · leitura · origem=Code
 
@@ -1078,291 +1108,4 @@ Nenhuma das seis chaves sustenta abrir **classe nova** com este dado. Para uma c
 
 [truncado em 20000 de 20282 caracteres]
 
-## 26/11 11:07 · sessao 35915bcc7391 · DIA-DA-BATIDA-JUIZ-UNICO · verificador · origem=Code
-
-1. **bloqueia | Verif2-4 procedente. Cura parcial na origem.** A casca, o mapa por PK e `CargaDaJanela` passam a usar a carga histórica comum. Com os mesmos insumos, cada turno publicado concorda com o mapa em todas as suas PKs, e o mapa inclui a saída de 25/10 quando apresenta o turno de 23/10. A igualdade foi obtida também descartando turnos inteiros quando uma de suas PKs recebe outro dia. Isso muda a geometria entregue pelo juiz registrado, além de unificar a carga. `app/core/juizes.py:216`, `app/ponto/turnos.py:1850`, `app/ponto/turnos.py:2941`, `app/ponto/turnos.py:3007`, `app/ponto/turnos.py:3119`
-
-2. **bloqueia | L-085 na virada de vínculo e de competência.** Reproduzido em memória com o pareador real, sem ata/DNA. Vínculo 19h–07h até 23/10, vínculo 08h–17h a partir de 24/10, corte em 24/10 e uma única S em 24/10 às 07h. O segmento noturno põe a órfã em **23/10**, dentro da jornada da véspera. O diurno reivindica a mesma PK em **24/10**. O mapa conserva a última atribuição e a F3 elimina a órfã de 23/10 da lista publicada. Na criação dessa marca, o cartório recebe 23 e 24 por vizinhança, o núcleo não gera a linha de 23 e o evento agenda **somente 11/2026**. Também reproduzi a perda de um **par fechado** com vínculo 08h–17h até 23/10, 19h–07h com pausa 22h–23h desde 24/10, E em 23/10 às 22h e S em 24/10 às 21h. A F3 publica só a órfã de 24/10, embora a E continue no mapa em 23/10. `app/docs/LEIS.md:117`, `app/ponto/turnos.py:285`, `app/ponto/turnos.py:1916`, `app/ponto/turnos.py:2949`, `app/ponto/turnos.py:3007`, `app/ponto/turnos.py:3025`, `app/ponto/signals.py:124`, `app/ponto/nucleo.py:48`, `app/ponto/services/fechamento.py:1832`, `app/ponto/janelas.py:24`
-
-3. **bloqueia | Verif2-5a procedente. A âncora civil saiu do signal, mas o resultado ainda depende da publicação do item 2.** No caminho normal, o núcleo compara a versão anterior com a gravada, reaproveita os turnos atuais e guarda os dias para o cartório. No `post_delete`, o juiz reinsere a marca em memória para montar a versão anterior. A vizinhança do cartório passa a ser a véspera de cada dia afetado mais o próprio dia. Há uma regressão separada no `pre_save`: o novo `SELECT` da versão anterior fica fora das proteções dos receivers. Com falha injetada nessa consulta, a exceção escapou antes do `save` de `anotar`. `app/ponto/signals.py:20`, `app/ponto/signals.py:27`, `app/ponto/signals.py:30`, `app/ponto/signals.py:124`, `app/ponto/signals.py:153`, `app/ponto/signals.py:160`, `app/ponto/turnos.py:3025`, `app/ponto/registro_batida.py:276`
-
-4. **bloqueia | Verif2-5b procedente. Criação e retratação migraram. Exclusão e falha parcial ficam abertas.** Na criação e na retratação, a porta passa os dias julgados ao fechamento, que usa o corte da empresa e deduplica as competências no callback pós-commit. Outro caso reproduzido em memória, com um único vínculo 19h–07h e corte em 24/10, é uma S órfã `offline_pendente` de 24/10 às 07h. Ela é apurável e pertence a **23/10, competência 10**. Rejeitá-la pela rota real dispara núcleo e cartório, mas `apagar` não agenda fechamento. A guarda da criação institucional e do flip ainda consulta **11/2026** pelo instante civil. Num segundo ensaio, com dias 23 e 24 no callback, injetei falha no recálculo de outubro. Novembro nem foi tentado, pois o `try` envolve o laço inteiro. `app/ponto/registro_batida.py:158`, `app/ponto/registro_batida.py:174`, `app/ponto/registro_batida.py:195`, `app/ponto/registro_batida.py:303`, `app/ponto/registro_batida.py:307`, `app/ponto/views.py:475`, `app/ponto/views.py:496`, `app/ponto/turnos.py:2863`, `app/ponto/services/flip_batida.py:21`, `app/ponto/janelas.py:84`, `app/ponto/services/fechamento.py:1832`
-
-5. **bloqueia | Dois caminhos ainda atribuem o dia fora da carga da autoridade.** **C6** chama o mesmo corpo puro com outro recorte. Reproduzi com vínculo 19h–07h, E em 25/10 às 05h e S em 26/10 às 06h. Para `[24/10,24/10]`, o C6 vê só a E e apresenta turno aberto de 24/10. A carga histórica vê a S, fecha em 25/10 e deixa a janela do dia 24 sem aquele turno. Com corte 25, a divergência atravessa as competências 10 e 11. **Motor mensal** também mantém carga e atribuição próprias. Lê só um dia de margem, pareia com `turnos_de_batidas`, indexa a entrada pelo instante e usa a data civil quando falta a chave. Com corte 24, a carga da competência 10 sequer vê a S de 25/10 do golden de 24h10. **`fechamento.py:1241`** repassa o mapa do motor à lavratura. O segundo derivador está a montante dessa linha. Efeito final na lavra [nao verificado]. `app/chamados/services/carga_pergunta_viva.py:165`, `app/chamados/services/carga_pergunta_viva.py:173`, `app/chamados/juizes.py:447`, `app/escala/servico_jornada.py:403`, `app/ponto/services/fechamento.py:641`, `app/ponto/motor_calculo_v2.py:867`, `app/ponto/motor_calculo_v2.py:884`, `app/ponto/motor_calculo_v2.py:2961`, `app/ponto/services/fechamento.py:1241`, `app/ponto/services/dia_pago.py:173`
-
-6. **bloqueia | O insumo explícito `celulas=` ainda permite respostas diferentes.** A casca singular recebe atas frescas da montagem da grade. Mapa, lote e evento usam células gravadas. Além disso, a F3 sobrepõe apenas as chaves fornecidas, preservando a célula do banco quando a chave falta, inclusive dentro da janela fornecida. O contrato existente dá outro sentido à chave ausente: a célula não existe naquele dia. Isso deixa dois conjuntos de insumos para a pergunta que deveria ter resposta única. `app/ponto/turnos.py:1850`, `app/ponto/turnos.py:2909`, `app/ponto/turnos.py:2987`, `app/ponto/turnos.py:3025`, `app/ponto/turnos.py:3119`, `app/escala/utils.py:1934`, `app/escala/utils.py:1952`, `app/escala/alimentacao.py:14`, `app/escala/alimentacao.py:240`
-
-7. **bloqueia | REDs, mutantes e catraca.** Os dez arquivos locais conferem com os blobs-base do anexo. O SHA do commit [nao verificado]. O `test_juiz_unico_eventos.py` citado no relato está ausente da árvore e do diff entregue. Os cinco REDs, oito GREENs e três mortes por asserção relatados [nao verificado]. Em memória, executei o censo real com as funções relevantes da F3 reconstruídas. **9 → 9 pareadores, 81 → 78 derivações e B1 78 → 75.** As asserções reais de número e composição falharam contra a catraca protegida. Saem `signals.py:23` e `:111`. A carga `turnos.py:3026 → :2979` entra na composição e sai de B1. `dia_do_turno_da_batida` continua em B1, `:2989 → :2929`, assim como `par_completo`, `:2217 → :2156`. A composição ganha `_carregar_dias_das_batidas`, `_dia_das_batidas_puro`, `batidas_apuraveis` e `marcos_dna_periodo`, e perde `escalas_do_periodo`. O R6 ainda declara **18/20**, com a célula de juiz único vermelha. `app/core/tests/test_medida_turno_do_par.py:108`, `app/core/tests/test_medida_turno_do_par.py:338`, `app/core/tests/test_medida_turno_do_par.py:508`, `app/core/tests/test_medida_turno_do_par.py:546`, `app/core/tests/test_medida_turno_do_par.py:562`, `app/core/placar_estrutural.py:443`, `app/core/contratos_estruturais.py:225`
-
-8. **bloqueia | O selo perdeu a mordida no carregador que o C6 ainda usa.** Isolei a troca em memória e rodei o verificador AST real. Ao substituir `batidas_apuraveis(None)` por `Batida.objects`, ele acusa **1** ocorrência no histórico e **0** no recorte do C6. Na base acusava **1** no recorte. Os dois mutantes reancorados cobrem o histórico. O C8b também passou de duas chamadas à entrada pública `turnos` para duas chamadas diretas ao carregador recortado, deixando sem aquela asserção o cache da entrada pública. `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:132`, `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:195`, `app/chamados/tests/test_e3_c8c_sem_banco.py:104`, `app/chamados/tests/test_e3_c8b_sem_banco.py:522`, `app/chamados/services/carga_pergunta_viva.py:173`, `app/ponto/turnos.py:3119`
-
-9. **nota | Escritores, leitores e ordem de trava.**
-
-   - **`Turno.data_turno`.** `_mk` publica a resposta de `_data_do_turno`. O mapa a copia e `recompute_turnos` a materializa. C6 e motor também chegam ao pareador pelos caminhos do item 5. `app/ponto/turnos.py:285`, `app/ponto/turnos.py:312`, `app/ponto/turnos.py:2949`, `app/ponto/nucleo.py:48`, `app/chamados/services/carga_pergunta_viva.py:182`, `app/ponto/motor_calculo_v2.py:882`
-   - **`TurnoMaterializado.data_turno`.** `recompute_turnos` é o escritor direto localizado. Faz `DELETE` do recorte e `bulk_create` em `atomic`. Os gravadores de batida continuam em `registro_batida.py`; o diff ali altera o agendamento. A exclusão indireta por FK é herdada. Leem a materialização a seleção de turno atual e o painel, o reconciliador, o juiz da via do chamado, o flip, os alertas e os comandos de auditoria. `app/core/portas.py:103`, `app/core/portas.py:118`, `app/ponto/registro_batida.py:170`, `app/ponto/registro_batida.py:276`, `app/ponto/nucleo.py:54`, `app/ponto/nucleo.py:61`, `app/ponto/nucleo.py:84`, `app/ponto/models.py:1214`, `app/ponto/selecao_periodo.py:270`, `app/core/services/painel_op.py:222`, `app/chamados/reconciliador.py:97`, `app/chamados/reconciliador.py:174`, `app/chamados/juizes.py:1939`, `app/ponto/services/flip_batida.py:37`, `app/ponto/management/commands/processar_alertas_turno.py:76`, `app/ponto/management/commands/processar_alertas_turno.py:172`, `app/ponto/management/commands/processar_alertas_avancados.py:58`, `app/ponto/management/commands/verificar_nucleo.py:24`, `app/chamados/management/commands/auditar_invariantes_chamados.py:229`, `app/chamados/management/commands/auditar_invariantes_chamados.py:342`, `app/chamados/management/commands/auditar_invariantes_chamados.py:610`, `app/chamados/management/commands/auditar_invariantes_chamados.py:990`
-   - **Mapa `{pk: dia}` e competência.** `_dia_das_batidas_puro` publica o mapa. Leem o adaptador unitário, a API, o espelho e seu PDF, o painel, a adesão, férias, o vigia e a comparação antes/depois do evento. `julgamento_do_salvamento` grava os dias no objeto em memória. Cartório e porta de batida os leem, e o callback do fechamento os converte em pares mês/ano e chama o recálculo. HE, veredito de célula e validação de chamados seguem passando a data de seus fatos. `app/ponto/turnos.py:2929`, `app/ponto/turnos.py:2941`, `app/ponto/turnos.py:3025`, `app/ponto/turnos.py:3050`, `app/api/views.py:1444`, `app/api/views.py:2042`, `app/ponto/services/espelho.py:465`, `app/relatorios/pdf_espelho.py:596`, `app/core/services/painel_op.py:330`, `app/colaboradores/services/pos_vinculo.py:43`, `app/ferias/management/commands/listar_ferias_com_batida.py:54`, `app/ponto/management/commands/vigia_plantio_overnight.py:87`, `app/ponto/signals.py:124`, `app/ponto/registro_batida.py:198`, `app/ponto/services/fechamento.py:1832`, `app/ponto/portas/he.py:230`, `app/ponto/portas/celula.py:503`, `app/chamados/services/validacao.py:628`, `app/chamados/services/validacao.py:798`
-   - **Ordem.** Núcleo → cartório → reconciliador, com a ordem de trava Colaborador → Disputa → Chamado → Pergunta. O novo `SELECT` é simples. O núcleo monta as linhas antes do `atomic` de substituição, sem serializar a fotografia por colaborador. Resultado de saves/retratações concorrentes [nao verificado]. `app/ponto/signals.py:20`, `app/ponto/signals.py:50`, `app/ponto/signals.py:153`, `app/ponto/signals.py:228`, `app/ponto/nucleo.py:45`, `app/ponto/nucleo.py:61`, `app/chamados/models.py:2939`, `app/chamados/models.py:2948`, `app/chamados/models.py:2961`, `app/chamados/models.py:2965`
-
-10. **nota | Os 51 sítios do censo.** Confirmei **50 chamadas em produção**, incluindo aliases, mais o registro `_T1`. `_TT2` é outro ponteiro no registro para a mesma função. As chamadas abaixo recebem a nova resposta da autoridade. Mudança efetiva de cada um dos 50 consumidores na frota, PKs e linhas materializadas nas competências 10 e 11 [nao verificado]. A reprodução do item 2 demonstra mudança no valor retornado e na entrada da materialização. `app/core/juizes.py:216`, `app/core/juizes.py:748`, `app/ponto/turnos.py:1850`, `app/ponto/turnos.py:3007`, `app/ponto/nucleo.py:48`
-
-   - **API e chamados.** `app/api/views.py:1447`, `app/chamados/detector_anomalias.py:157`, `app/chamados/juizes.py:447`, `app/chamados/juizes.py:2303`, `app/chamados/models.py:1378`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:145`, `app/chamados/services/disputa_emissao.py:722`, `app/chamados/services/materializacao.py:399`, `app/chamados/services/materializacao.py:513`
-   - **Colaboradores e escala.** `app/colaboradores/services/drawer.py:47`, `app/colaboradores/services/feriado_do_posto.py:473`, `app/escala/detector_proposta.py:65`, `app/escala/regua_defesa.py:361`, `app/escala/services/escala_auto.py:87`, `app/escala/services/impacto_troca.py:18`, `app/escala/servico_jornada.py:249`, `app/escala/servico_jornada.py:403`, `app/escala/utils.py:1627`, `app/escala/utils.py:1952`
-   - **Ponto.** `app/ponto/nucleo.py:48`, `app/ponto/turno_leitura.py:89`, `app/ponto/turno_leitura.py:95`, `app/ponto/turnos.py:780`, `app/ponto/turnos.py:2043`, `app/ponto/turnos.py:2101`, `app/ponto/turnos.py:2131`, `app/ponto/turnos.py:3191`, `app/ponto/views.py:396`, `app/ponto/views.py:1613`, `app/ponto/views.py:3356`, `app/ponto/services/bordas_realizado.py:66`, `app/ponto/services/esmeril_espelho.py:102`, `app/ponto/services/espelho.py:628`, `app/ponto/services/passivo_s84.py:82`, `app/ponto/services/regularizacao.py:61`, `app/ponto/services/teto_na_lista.py:68`, `app/ponto/services/triagem_batida.py:553`, `app/ponto/services/vigia_pareador_celula.py:97`
-   - **Comandos e relatórios.** `app/ponto/management/commands/censo_fase_12x36.py:180`, `app/ponto/management/commands/detectar_ausencias.py:337`, `app/ponto/management/commands/detectar_par_relampago.py:101`, `app/ponto/management/commands/dna_x_batida_real.py:69`, `app/ponto/management/commands/e6_oraculo.py:159`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88`, `app/ponto/management/commands/marcar_abandono_provisorio.py:46`, `app/ponto/management/commands/verificar_nucleo.py:29`, `app/ponto/management/commands/vigia_plantio_overnight.py:38`, `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:124`, `app/relatorios/pdf_espelho.py:213`, `app/relatorios/pdf_espelho.py:451`
-
-11. **nota | Tipos, bordas, relógio e `except`.** `Batida.timestamp` é instante. `Turno.data_turno` e a coluna materializada são datas de jornada. O mapa conserva a exceção herdada: uma PK sem turno reclamante recebe dia civil. `contexto_json['data_turno']` da batida fora de escala e `Justificativa.data_turno` continuam carregando dia civil nos fluxos citados pelo verif2. A competência e o pad de apresentação incluem as duas datas-limite. O segmento pareia por intervalo de instantes semiaberto. O diff acrescenta **zero `except`** e nenhuma leitura direta de relógio no novo carregador. Permanecem o `date.today()` no cadastro do intervalo e as leituras de relógio dentro do cartório. Efeito de `date.today()` sobre `Turno.data_turno` [nao verificado]. `app/ponto/models.py:23`, `app/ponto/models.py:1215`, `app/ponto/turnos.py:1919`, `app/ponto/turnos.py:2941`, `app/ponto/turnos.py:3007`, `app/ponto/janelas.py:10`, `app/api/views.py:717`, `app/api/views_core.py:711`, `app/ponto/services/regularizacao.py:73`, `app/ponto/services/fechamento.py:680`, `app/ponto/signals.py:30`, `app/ponto/registro_batida.py:195`, `app/ponto/services/fechamento.py:1832`, `app/ponto/juiz_batida.py:129`, `app/ponto/juiz_batida.py:274`, `app/ponto/services/cartorio.py:2084`, `app/ponto/services/cartorio.py:2105`
-
-12. **fila | Verif2-7 e 9 seguem procedentes.** Adesão reativa compara o dia do mapa aos limites inclusivos do pai. O cron aceita qualquer batida apurável do colaborador. Quanto ao custo, a leitura estática dá **4–5 consultas** na casca histórica com marcas no pad, **1** com pad vazio e **3–4 adicionais** no lote com a ata já carregada. O caminho normal do `save` compartilha uma carga histórica entre os três consumidores do evento, pode parear duas versões e acrescenta um `SELECT` para capturar a versão anterior quando aplicável. O cartório e a adesão ainda podem abrir cargas próprias. SQL efetivo, teto do chokepoint, latência e impacto em produção [nao verificado]. `app/colaboradores/services/pos_vinculo.py:37`, `app/chamados/services/adesao.py:143`, `app/escala/management/commands/apurar_furos_diarios.py:17`, `app/ponto/turnos.py:2953`, `app/ponto/turnos.py:2987`, `app/ponto/turnos.py:3119`, `app/escala/alimentacao.py:148`, `app/ponto/signals.py:20`, `app/ponto/signals.py:124`, `app/ponto/services/cartorio.py:1149`, `app/ponto/tests/test_selo_chokepoint_escrita.py:343`
-
-**Veredito final — REPROVA.** A F3 perde geometria na troca de vínculo, mantém respostas paralelas em C6 e no motor mensal, deixa uma exclusão apurável sem evento de fechamento e falha na catraca congelada. `app/ponto/turnos.py:3007`, `app/chamados/services/carga_pergunta_viva.py:165`, `app/ponto/motor_calculo_v2.py:867`, `app/ponto/registro_batida.py:307`, `app/core/tests/test_medida_turno_do_par.py:508`
-
-## 26/11 11:06 · sessao f9d3e5e1594c · - · - · origem=Ronald (tmux)
-
-1. **Bloqueia | A sobreposição de segmentos ainda desloca a órfã da véspera.** Reproduzi em memória com o pareador e `vinculo_do_dia` reais. Vínculo noturno 19h–07h até 23/10, diurno 08h–17h desde 24/10, corte 24, sem DNA nem ata, e uma única S em 24/10 às 07h. O segmento noturno atribui a S a 23/10. O diurno atribui a mesma PK a 24/10, sobrescreve o mapa e o filtro F3 descarta o turno de 23/10. Na criação, o cartório visita 23 e 24 pela regra de vizinhança, o núcleo recebe só o turno de 24 e o evento agenda 11/2026. Produção [nao verificado]. `app/ponto/turnos.py:285–298`, `app/ponto/turnos.py:1253–1302`, `app/ponto/turnos.py:1977–2002`, `app/ponto/turnos.py:3001–3009` na base e hunk F3 `+2950`, `app/ponto/signals.py:124`, `app/ponto/services/fechamento.py:1831`, `app/ponto/janelas.py:10–33`.
-
-2. **Bloqueia | C6 conserva outro caminho para o mesmo veredito.** O lote chama o corpo puro com batidas do próprio recorte. O avulso chama `turnos_do_colab`. Reproduzi com 19h–07h, E em 25/10 às 05h e S em 26/10 às 06h, corte 25. O histórico fecha o par em 25/10, competência 11. O recorte C6 `[24/10,24/10]` enxerga só a entrada e devolve aberto em 24/10, competência 10. A diferença chega a `_turno_tem_saida` e `classificar_falta`. `app/chamados/services/carga_pergunta_viva.py:165–184`, `app/chamados/services/tarefa_do_dia.py:630`, `app/chamados/juizes.py:447–449`, `app/escala/servico_jornada.py:249–259`, `app/escala/servico_jornada.py:403–415`, `app/ponto/turnos.py:285–309`, `app/ponto/turnos.py:1492–1498`.
-
-3. **Bloqueia | A lavra ainda recebe o dia derivado no motor.** O motor usa a carga de batidas limitada a ±1 dia da competência, deduplica e monta mapa por instante de entrada e tipo gravado. Na falta da chave usa o civil. Para o par de 24h10 com E em 23/10 e S em 25/10, corte 24, o evento pode agendar outubro enquanto o cálculo de outubro sequer carrega a S. `fechamento.py:1241` e `:1311` repassam a resposta do motor à lavra. Resultado final do gravado [nao verificado]. `app/ponto/services/fechamento.py:641–653`, `app/ponto/motor_calculo_v2.py:867–894`, `app/ponto/motor_calculo_v2.py:2961`, `app/ponto/motor_calculo_v2.py:3346`, `app/ponto/services/fechamento.py:1241`, `app/ponto/services/fechamento.py:1311`, `app/ponto/services/dia_pago.py:126–132`, `app/ponto/services/dia_pago.py:173–177`.
-
-4. **Nota | Escritores diretos e censo.** O censo AST da base localizou escrita de `Batida` apenas em `app/ponto/registro_batida.py:170,176,274,311,355`. O núcleo cria `TurnoMaterializado` e apaga o recorte via SQL na porta, com exclusão indireta herdada pelas FKs `CASCADE`. A varredura conferiu 50 chamadas diretas ou por alias, mais `_T1`. Calendário, status e painel também são consumidores via lote. Variação efetiva dos consumidores em produção [nao verificado]. `app/ponto/nucleo.py:48`, `app/ponto/nucleo.py:59`, `app/ponto/nucleo.py:80`, `app/ponto/models.py:1214`, `app/ponto/models.py:1217`, `app/ponto/models.py:1219`, `app/core/portas.py:118`, `app/core/juizes.py:216`, `app/colaboradores/services/calendario.py:252`, `app/ponto/status_dia.py:273`, `app/core/services/painel_op.py:327–333`.
-
-5. **Fila | A guarda do chokepoint interpreta a competência pelo timestamp civil.** Para uma S órfã de 24/10 às 07h num vínculo noturno estável 19h–07h, corte 24, o pareador devolve 23/10 e o novo evento agenda 10/2026. A guarda das gravações institucionais e do flip consulta 11/2026 pelo civil. É um caminho herdado fora da autorização de alteração do chokepoint nesta fatia. `app/ponto/turnos.py:285–298`, `app/ponto/janelas.py:75–86`, `app/ponto/registro_batida.py:147–162`, `app/ponto/services/flip_batida.py:21–24`, `app/chamados/services/materializacao.py:857–859`.
-
-## 26/11 11:03 · sessao f3d1e6c7b2e6 · O327-C11-93 · leitura · origem=Code
-
-Na competência **11/2026**, o anexo registra **10 cortes** nos sete PKs. Pelo dia do **mapa interno do motor**, **3** estão dentro da competência e **7** estão fora. Os três de dentro são do `col900` e têm `par_fechado_positivo=false`. A atribuição desses cortes pela chamada direta a `turnos_do_colab` e a perda de minutos trabalhados estão [nao verificado]. `cortados.jsonl:1–7`, `DONO-2611/r.md` (sonda, `ler_motor`), `app/ponto/motor_calculo_v2.py:2362–2365`.
-
-### Quem decide o dia e por que corta
-
-1. **O juiz decide `data_turno`.** `core/juizes.py` aponta para `ponto.turnos.turnos_do_colab`. Essa função lê batidas, células e vínculos, pareia por segmentos de vínculo e devolve os turnos pelo `data_turno`. Na regra da madrugada, `_data_do_turno` pode atribuir o turno à véspera se os marcos indicarem cruzamento de meia-noite e, havendo saída, ela couber no envelope da jornada da véspera. `app/core/juizes.py:214–216`, `app/ponto/turnos.py:1850–1920,1961–2002,216–231,285–324`.
-2. **O `MotorBase` decide o `data_jornada` usado no corte.** Ele monta seu mapa com `turnos_de_batidas`, usando as batidas daquela fatia, e indexa `data_turno` pelo instante localizado das `E`. O laço começa com esse dia ou, sem chave, com a data civil da entrada. Se houve saída no período anterior e o intervalo até a entrada atual está entre **0 e 6 horas, inclusive**, `_prev_dj` prevalece. O estado do período anterior é atualizado antes da guarda, inclusive quando esse período é cortado. `app/ponto/motor_calculo_v2.py:867–895,2362–2373,2397–2398,2415–2448`.
-3. **A guarda aplica os limites da fatia.** O fechamento recorta a fatia pela competência, vigência, início da operação e dias atribuídos pelo vínculo. A entrada do motor aceita batidas da véspera e do dia seguinte. Depois de montar os períodos, o motor executa `continue` se `data_jornada < data_ini` ou `data_jornada > data_fim`, antes de calcular e registrar o período em `dia_da_jornada`. Nos dez cortes do anexo, `dia_usado` coincide com `dia_juiz` do mapa interno. A herança como causa dos cortes observados está [nao verificado]. `app/ponto/services/fechamento.py:204–230,244–311`, `app/ponto/motor_calculo_v2.py:2445–2448,2473–2476,1090–1092`, `cortados.jsonl:1–7`.
-
-### Dono pela L-085 e pela L-099
-
-| Classe solicitada | Dono e leitura do anexo |
-|---|---|
-| **Dia do juiz dentro da competência e período cortado** | **ESTRUTURA**, no critério do corte. Pelo mapa interno, são **3 ocorrências**, em `28/10`, `15/11` e `16/11`, todas do `col900` e sem par fechado positivo. O `BATIDA` de `28/10` é o dono da divergência diária registrada pelo E6. `cortados.jsonl:6`, `app/docs/LEIS.md:117,122`, `app/ponto/management/commands/e6_oraculo.py:98–110,182–195`. |
-| **Dia do juiz fora da competência** | **Corte legítimo, sem dono de divergência na 11.** A jornada pertence à competência que contém seu dia de início. Pelo mapa interno, são **7 ocorrências**, seis em `20/10` e uma em `21/11`. `cortados.jsonl:1–7`, `app/docs/LEIS.md:117,122`, `app/ponto/janelas.py:54–57`. |
-
-A sonda abaixo observa os dois `continue` no fechamento em modo de leitura. Ela consulta `turnos_do_colab` com dias de borda e procura o instante exato da entrada entre as batidas dos turnos devolvidos. Quando o juiz devolve zero ou mais de um dia para o instante, a linha e o total registram `[nao verificado]`. A execução da sonda e a confirmação independente do hash estão [nao verificado]. `app/ponto/services/fechamento.py:468–475,1152–1160,1215–1225`, `app/ponto/motor_calculo_v2.py:2445–2448`, `app/ponto/turnos.py:1834–1852,1997–2002`.
-
-```python
-import sys
-
-_pyc_anterior = sys.dont_write_bytecode
-sys.dont_write_bytecode = True
-try:
-    import json
-    import logging
-    from collections import Counter, defaultdict
-    from contextlib import ExitStack
-
-    from django.conf import settings
-    from django.db import connection, transaction
-    from django.utils import timezone
-
-    from colaboradores.models import Colaborador
-    from ponto.janelas import janela_fechamento
-    from ponto.motor_calculo_v2 import MotorBase, localizar
-    from ponto.services import fechamento
-    from ponto.turnos import janela_com_pad, turnos_do_colab
-
-    def sonda():
-        mes, ano = 11, 2026
-        pks = (90, 274, 704, 755, 761, 900, 984)  # cortados.jsonl:1–7
-        desconhecido = "[nao verificado]"
-
-        # app/config/settings/sombra.py:13–14,47–51,60
-        if (
-            getattr(settings, "HASNER_SOMBRA", False) is not True
-            or connection.settings_dict["NAME"] != "sombra"
-            or connection.settings_dict["HOST"] != "sombra_db"
-            or getattr(connection, "schema_name", None) != "juliani"
-        ):
-            raise RuntimeError("Abra o shell da sombra no schema juliani.")
-
-        codigo_fechamento = fechamento.recalcular_fechamento_mes.__code__
-        codigo_fatia = fechamento.apurar_por_fatia.__code__
-        codigo_motor = MotorBase.calcular_mes.__code__
-        cortes = defaultdict(list)
-
-        def ler_motor(frame, evento, argumento):
-            # app/ponto/motor_calculo_v2.py:2415–2448
-            if evento == "line" and frame.f_lineno in (2446, 2448):
-                local = frame.f_locals
-                vinculo = local["escala_colaborador"]
-                entrada = localizar(local["entrada"])
-                cortes[local["colaborador_id"]].append({
-                    "entrada": entrada,
-                    "saida": localizar(local["saida"]),
-                    "data_turno_mapa_do_motor": local["_dia_turno_juiz"].get(entrada),
-                    "dia_da_jornada_motor": local["data_jornada"],
-                    "fatia": {
-                        "inicio": local["data_ini"],
-                        "fim": local["data_fim"],
-                        "vinculo_id": vinculo.pk,
-                        "vinculo_inicio": vinculo.data_inicio,
-                        "vinculo_fim": vinculo.data_fim,
-                    },
-                    "linha_do_corte": frame.f_lineno,
-                })
-            return ler_motor
-
-        def rastrear(frame, evento, argumento):
-            if evento != "call" or frame.f_code is not codigo_motor:
-                return None
-
-            # app/ponto/services/fechamento.py:306–311,774–775,847
-            # As subclasses podem chamar MotorBase por super().
-            pai = frame.f_back
-            while pai is not None and pai.f_code is not codigo_fechamento:
-                if pai.f_code is codigo_fatia:
-                    if pai.f_back is not None and pai.f_back.f_code is codigo_fechamento:
-                        return ler_motor
-                    return None
-                pai = pai.f_back
-            return None
-
-        saidas = []
-        totais = Counter(
-            perda_estrutural_l085=0,
-            corte_legitimo=0,
-            dia_do_juiz_nao_verificado=0,
-        )
-        pares_fechados_positivos_dentro = 0
-
-        with ExitStack() as sessao:
-            sessao.callback(logging.disable, logging.root.manager.disable)
-            logging.disable(sys.maxsize)
-            sessao.enter_context(transaction.atomic(durable=True))
-
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY"
-                )
-                cursor.execute("SELECT current_database(), current_schema()")
-                if cursor.fetchone() != ("sombra", "juliani"):
-                    raise RuntimeError("Banco ou schema fora da sombra esperada.")
-
-            colabs = Colaborador.objects.select_related("empresa").in_bulk(pks)
-            faltantes = sorted(set(pks).difference(colabs))
-            if faltantes:
-                raise RuntimeError(f"PKs ausentes na sombra: {faltantes}")
-
-            # app/ponto/services/fechamento.py:559–560,1152–1160,1215–1225
-            with ExitStack() as observacao:
-                observacao.callback(sys.settrace, sys.gettrace())
-                sys.settrace(rastrear)
-                leituras = fechamento.recalcular_fechamento_mes(
-                    mes, ano, colaborador_ids=pks,
-                    somente_leitura=True, lavrar_dias_pagos=False,
-                )
-
-            faltantes = sorted(set(pks).difference(leituras))
-            if faltantes:
-                raise RuntimeError(f"Fechamento de leitura sem retorno para: {faltantes}")
-
-            for pk in pks:
-                colab = colabs[pk]
-                inicio, fim = janela_fechamento(mes, ano, colab.empresa)
-                cortes_pk = cortes.get(pk, ())
-                dias_por_instante = defaultdict(set)
-
-                if cortes_pk:
-                    # app/ponto/turnos.py:1834–1852,1997–2002
-                    juiz_inicio, juiz_fim = janela_com_pad(inicio, fim)
-                    for turno in turnos_do_colab(colab, juiz_inicio, juiz_fim):
-                        if turno.data_turno is not None:
-                            for batida in turno.batidas:
-                                instante = localizar(batida.timestamp)
-                                dias_por_instante[instante].add(turno.data_turno)
-
-                for corte in cortes_pk:
-                    entrada, saida = corte["entrada"], corte["saida"]
-                    dias = sorted(dias_por_instante.get(entrada, ()))
-                    dia_juiz = dias[0] if len(dias) == 1 else None
-                    dentro = inicio <= dia_juiz <= fim if dia_juiz is not None else None
-                    par_fechado_positivo = saida is not None and saida > entrada
-
-                    # app/docs/LEIS.md:117,122
-                    if dentro is None:
-                        classe = "dia_do_juiz_nao_verificado"
-                        dono = desconhecido
-                    elif dentro:
-                        classe = "perda_estrutural_l085"
-                        dono = "ESTRUTURA"
-                        pares_fechados_positivos_dentro += int(par_fechado_positivo)
-                    else:
-                        classe = "corte_legitimo"
-                        dono = None
-                    totais[classe] += 1
-
-                    saidas.append({
-                        **corte,
-                        "pk": pk,
-                        "entrada": timezone.localtime(entrada).isoformat(),
-                        "saida": timezone.localtime(saida).isoformat() if saida is not None else None,
-                        "data_turno_juiz": dia_juiz if dia_juiz is not None else desconhecido,
-                        "datas_turno_candidatas": dias,
-                        "janela_fechamento": [inicio, fim],
-                        "dia_juiz_dentro_da_competencia": dentro,
-                        "par_fechado_positivo": par_fechado_positivo,
-                        "classe_do_corte": classe,
-                        "dono_do_corte_l099": dono,
-                    })
-
-                if not cortes_pk:
-                    saidas.append({
-                        "pk": pk,
-                        "janela_fechamento": [inicio, fim],
-                        "n_periodos_cortados": 0,
-                    })
-
-        for linha in saidas:
-            print(json.dumps(linha, default=str, sort_keys=True))
-        print(json.dumps({
-            "competencia": "2026-11",
-            "total_pks": len(pks),
-            "total_periodos_cortados": sum(totais.values()),
-            "por_classe": dict(totais),
-            "pares_fechados_positivos_dentro": pares_fechados_positivos_dentro,
-        }, sort_keys=True))
-
-    sonda()
-finally:
-    sys.dont_write_bytecode = _pyc_anterior
-```
-
-## 26/11 11:02 · sessao c8a671674d30 · O30-F3-CONSTRUIR · construtor · origem=Code
-
-A cura c5 está na cópia sobre `8d48f1f35393dcd86345b5c866bfd4978d668181`. `rederivar_fim` calcula o fim uma vez, confere o intervalo e entrega a mesma data ao `Ausencia.save`. O modelo deriva minutos, dias corridos e carimbo. O teste executa o `save` do modelo com persistência em memória e confirma **1.440 minutos** pela R8 (`0 + 480 + 480 + 480`). [ausencia.py:1915](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1915) · [models.py:892](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/models.py:892) · [test_atestado_f3_contrato.py:735](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:735)
-
-- **L-111.** Removi `_fixar_raiz_documento`, seus dois chamadores e `d1_fixar_aceita_filha`. A lápide ficou junto à trava que resolve a raiz. [ausencia.py:296](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:296) · [mutantes_atestado_f3.py:198](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:198)
-- **Painel.** A view chama `raiz_documento` uma vez. O template usa a raiz recebida no contexto. Removi a tag e sua biblioteca. [views.py:2095](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2095) · [painel_ausencia.html:71](/home/ronald/wt-codex-o30-f3-construir-010143/app/templates/ponto/partials/painel_ausencia.html:71)
-- **Verificação local.** Passaram 46 testes de contrato sem banco e 11 testes do selo de escritores com `unittest.TestCase` no lugar de `SimpleTestCase`. Alinhei também o teste de integração de três dias à R8. Integração com banco, renderização real do painel e produção [nao verificado]. A certificação cabe ao Code e ao Opus. [test_atestado_f3_contrato.py:241](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:241) · [test_lote7_selo_escritor_acorda.py:296](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_lote7_selo_escritor_acorda.py:296) · [test_lote7_fato_de_ausencia_acorda_projecao.py:618](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:618) · [LEIS.md:147](/home/ronald/wt-codex-o30-f3-construir-010143/app/docs/LEIS.md:147) [nao verificado]
-
-### Diff, RED e mutantes
-
-O diff passou em `git diff --check`. Cada `FAIL` abaixo saiu com `rc=1` por asserção e zero `ERROR`. O RED histórico `red_c2_c3` deu `ERROR` de importação também ao executar o runner da base c4. [mutantes_atestado_f3.py:66](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:66) · [mutantes_atestado_f3.py:216](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:216) · [atestados_lote.py:19](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/atestados_lote.py:19) [nao verificado]
-
-```bash
-git diff 8d48f1f35393dcd86345b5c866bfd4978d668181 -- .
-
-export PYTHONDONTWRITEBYTECODE=1
-python3 -m unittest -q ponto.tests.test_atestado_f3_contrato
-python3 -m ponto.tests.mutantes_atestado_f3 red_c4                       # 5 FAIL
-python3 -m ponto.tests.mutantes_atestado_f3 d5_ignora_fim_cercado         # FAIL: 28/09 no lugar de 26/09
-python3 -m ponto.tests.mutantes_atestado_f3 c5_minutos_usam_fim_anterior  # FAIL: 0 != 1440
-python3 -m ponto.tests.mutantes_atestado_f3 c5_rederivar_save_base       # FAIL: selo AST
-python3 -m ponto.tests.mutantes_atestado_f3 c5_rederivar_timezone_now    # FAIL: selo AST
-python3 -m ponto.tests.mutantes_atestado_f3 c5_regrava_referencia         # FAIL: selo da escrita da referência
-python3 -m ponto.tests.mutantes_atestado_f3 c5_painel_recalcula_raiz      # FAIL: selo do template
-python3 -m ponto.tests.mutantes_atestado_f3 save_integral                 # FAIL: selo de escritor único
-python3 -m ponto.tests.mutantes_atestado_f3 d4_append                    # FAIL: selo de escritor único
-python3 -m ponto.tests.mutantes_atestado_f3 d4_atribuicao_em_ramo         # FAIL: selo de escritor único
-python3 -m ponto.tests.mutantes_atestado_f3 red_c3_d1                    # 2 FAIL
-python3 -m ponto.tests.mutantes_atestado_f3 red_c3_d5                    # 2 FAIL
-```
-
-_8360 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8364 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
