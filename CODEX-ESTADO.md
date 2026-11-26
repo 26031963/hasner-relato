@@ -1,7 +1,613 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 18:14** · publicado em **26/11/2026 18:19** (UTC-3)
+> Ultima resposta processada: **26/11/2026 18:23** · publicado em **26/11/2026 18:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 18:23 · sessao 99bdbf42b5a2 · PAUSA-INTERNA-NO-PARTIDO · leitura · origem=Code
+
+**1. A fábrica usada pelo fechamento é `core.regua_cct.get_motor_cct`.** `recalcular_fechamento_mes` chama a fábrica em `_montar_motor`, uma vez por fatia, com o colaborador, o primeiro dia da fatia e `esc.tipo_escala`. A fábrica delega a escolha da classe a `ponto.motor_calculo_v2.get_motor`. [app/ponto/services/fechamento.py:299](app/ponto/services/fechamento.py:299) [app/ponto/services/fechamento.py:744](app/ponto/services/fechamento.py:744) [app/ponto/services/fechamento.py:754](app/ponto/services/fechamento.py:754) [app/core/regua_cct.py:428](app/core/regua_cct.py:428) [app/core/regua_cct.py:457](app/core/regua_cct.py:457) [app/core/regua_cct.py:479](app/core/regua_cct.py:479)
+
+**Sim, pode devolver `MotorTurnoPartido`.** O cadastro é o `TipoEscala` do `EscalaColaborador` da fatia. A base `turno_partido` aponta para `MotorTurnoPartido`. A chave legada `turno_partido_noturno` aponta para a subclasse `MotorTurnoPartidoNoturno`. O ciclo `intermitente` tem prioridade. Quando o template Partido tem início e fim, a fábrica exige um vão cadastrado superior a 120 minutos. Se o vão for menor, igual a 120 ou faltar um dos marcos do intervalo, a fábrica escolhe `Motor12x36ComEscala` se o turno cruzar a meia-noite, ou `MotorComercial` nos demais casos. Se faltar o início ou o fim do turno, vale o mapeamento da base. [app/escala/models.py:50](app/escala/models.py:50) [app/escala/models.py:874](app/escala/models.py:874) [app/ponto/motor_calculo_v2.py:3677](app/ponto/motor_calculo_v2.py:3677) [app/ponto/motor_calculo_v2.py:3710](app/ponto/motor_calculo_v2.py:3710) [app/ponto/motor_calculo_v2.py:3764](app/ponto/motor_calculo_v2.py:3764) [app/ponto/motor_calculo_v2.py:3804](app/ponto/motor_calculo_v2.py:3804) [app/escala/servico_jornada.py:104](app/escala/servico_jornada.py:104) [app/escala/servico_jornada.py:152](app/escala/servico_jornada.py:152)
+
+**2. A sonda conta cada colaborador uma vez por classe.** Quem troca de classe na janela pode aparecer em mais de uma linha `MOTOR`. A contagem prévia usa o recorte de fatias do fechamento e inclui a chamada para dias com batida fora das fatias quando o fechamento a faria. Essa chamada passa `tipo_escala=None` e recebe `Motor12x36`. A sonda conta o Partido noturno na própria classe e o inclui no universo Partido. [app/ponto/services/fechamento.py:225](app/ponto/services/fechamento.py:225) [app/ponto/services/fechamento.py:283](app/ponto/services/fechamento.py:283) [app/ponto/services/fechamento.py:812](app/ponto/services/fechamento.py:812) [app/ponto/services/fechamento.py:837](app/ponto/services/fechamento.py:837) [app/ponto/motor_calculo_v2.py:3757](app/ponto/motor_calculo_v2.py:3757) [app/ponto/motor_calculo_v2.py:3677](app/ponto/motor_calculo_v2.py:3677)
+
+No recálculo, a sonda intercepta a fábrica e observa `calcular_periodo` na instância Partido que ela devolveu. `UNIVERSO dias` conta pares únicos de colaborador e dia. `TOTAL` soma os intervalos recebidos por `calcular_periodo`, antes do recorte que o motor faz na janela efetiva. A saída anterior trouxe `UNIVERSO VAZIO`. A causa daquela saída e os totais da competência 11/2026 seguem [nao verificado]. `sombra.out:4` [app/ponto/services/fechamento.py:287](app/ponto/services/fechamento.py:287) [app/ponto/motor_calculo_v2.py:2571](app/ponto/motor_calculo_v2.py:2571) [app/ponto/motor_calculo_v2.py:2666](app/ponto/motor_calculo_v2.py:2666) [app/ponto/motor_calculo_v2.py:3007](app/ponto/motor_calculo_v2.py:3007)
+
+Para propagar o código de falha até o shell chamador, use `bash -e bin/sombra.sh --rodar pausa_interna_partido_c11_escolha.py`. A chamada direta pode devolver o status do `echo` final. A transação `READ ONLY` é da sonda. O wrapper repõe a lavra no banco da sombra antes de iniciar o Python. [bin/sombra.sh:45](bin/sombra.sh:45) [bin/sombra.sh:157](bin/sombra.sh:157) [bin/sombra.sh:483](bin/sombra.sh:483)
+
+### SCRIPT
+
+```python
+import logging
+import sys
+from collections import defaultdict
+from datetime import date, datetime, time, timedelta
+from traceback import extract_tb
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from core import regua_cct
+from escala.alimentacao import celulas_do_periodo, escalas_do_periodo
+from ponto.janelas import janela_fechamento, periodo_apuracao
+from ponto.motor_calculo_v2 import MOTOR_POR_BASE, MotorBase, MotorTurnoPartido, ResultadoMes
+from ponto.services import fechamento
+from ponto.turnos import batidas_apuraveis, data_local
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+INI, FIM = date(2026, 10, 21), date(2026, 11, 20)
+UM_DIA = timedelta(days=1)
+UM_MINUTO = timedelta(minutes=1)
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+class FalhaSonda(BaseException):
+    pass
+
+
+def interceptar_log(_logger, registro):
+    # app/ponto/services/fechamento.py:1327-1332 e app/core/regua_cct.py:442-448.
+    if registro.levelno >= logging.ERROR:
+        erro = registro.exc_info[1] if registro.exc_info else sys.exception()
+        tipo = type(erro).__name__ if erro is not None else "ERROR"
+        raise FalhaSonda(f"{registro.pathname}:{registro.lineno} {tipo}") from None
+
+
+def contar_escolhas():
+    previstas = defaultdict(set)
+    env_ini = periodo_apuracao(MES, ANO, 2)[0]
+    env_fim = periodo_apuracao(MES, ANO, 28)[1]
+    busca_ini = timezone.make_aware(datetime.combine(INI, time.min)) - UM_DIA
+    busca_fim = timezone.make_aware(datetime.combine(FIM, time(23, 59, 59))) + UM_DIA
+    for empresa_id in EMPRESAS:
+        if janela_fechamento(MES, ANO, empresa_id) != (INI, FIM):
+            raise FalhaSonda("app/ponto/janelas.py:54 janela divergente")
+
+        # app/ponto/services/fechamento.py:574,603-626,639-653.
+        colabs = list(fechamento.universo_da_competencia(MES, ANO, empresa_id)
+                      .select_related("posto__praca", "empresa"))
+        celulas_por_colab = defaultdict(dict)
+        for (cid, dia), celula in celulas_do_periodo(
+            [colab.pk for colab in colabs], env_ini, env_fim
+        ).items():
+            celulas_por_colab[cid][(cid, dia)] = celula
+
+        for colab in colabs:
+            cid = colab.pk
+            celulas = celulas_por_colab[cid]
+
+            # app/ponto/services/fechamento.py:673-678.
+            geradoras = {
+                celula.escala_geradora_id
+                for (_, dia), celula in celulas.items()
+                if INI <= dia <= FIM and celula.escala_geradora_id
+            }
+            escalas = sorted(
+                escalas_do_periodo(cid, INI, FIM, mais=geradoras),
+                key=lambda esc: esc.data_inicio,
+            )
+
+            def montar(esc, fatia_ini, _fatia_fim, *, colab=colab):
+                # A classe depende de tipo_escala. app/ponto/motor_calculo_v2.py:3754-3812.
+                motor = regua_cct.get_motor_cct(colab, fatia_ini, tipo_escala=esc.tipo_escala)
+                previstas[type(motor)].add(colab.pk)
+
+                # O resultado vazio permite percorrer as fatias sem calcular a folha.
+                # app/ponto/services/fechamento.py:299-335.
+                motor.calcular_mes = lambda *args, **kwargs: ResultadoMes(
+                    colaborador_id=kwargs["colaborador_id"]
+                )
+                return motor
+
+            # As fatias são selecionadas por vínculo e célula.
+            # app/ponto/services/fechamento.py:208-289.
+            apuracao = fechamento.apurar_por_fatia(colab, INI, FIM, (), escalas, celulas, montar)
+
+            # app/ponto/services/fechamento.py:812-840.
+            if escalas and len(apuracao.dias_cobertos) < (FIM - INI).days + 1:
+                dias_orfaos = set()
+                batidas = batidas_apuraveis(colab, busca_ini, busca_fim)
+                for ts in batidas.values_list("timestamp", flat=True):
+                    dia = data_local(ts)
+                    if dia is not None and INI <= dia <= FIM and dia not in apuracao.dias_cobertos:
+                        dias_orfaos.add(dia)
+                if dias_orfaos:
+                    motor = regua_cct.get_motor_cct(colab, min(dias_orfaos), tipo_escala=None)
+                    previstas[type(motor)].add(cid)
+    return previstas
+
+
+def recalcular(previstas):
+    fabrica = regua_cct.get_motor_cct
+    codigo_fatia = fechamento.apurar_por_fatia.__code__
+    codigo_recalculo = fechamento.recalcular_fechamento_mes.__code__
+    codigo_mes_base = MotorBase.calcular_mes.__code__
+    observadas = defaultdict(set)
+    universo = set()
+    pausas = defaultdict(timedelta)
+
+    def observar_fabrica(colab, competencia, **kwargs):
+        motor = fabrica(colab, competencia, **kwargs)
+        origem = sys._getframe(1)
+        fatia = origem.f_back
+
+        # Imports locais em app/ponto/services/fechamento.py:755-761 e :837-840.
+        e_fatia = (
+            origem.f_code.co_name == "_montar_motor"
+            and fatia is not None
+            and fatia.f_code is codigo_fatia
+            and fatia.f_back is not None
+            and fatia.f_back.f_code is codigo_recalculo
+        )
+        if not (e_fatia or origem.f_code is codigo_recalculo):
+            return motor
+
+        cid = colab.pk
+        observadas[type(motor)].add(cid)
+        if isinstance(motor, MotorTurnoPartido):
+            if not e_fatia:
+                raise FalhaSonda("app/ponto/services/fechamento.py:838 Partido fora da fatia")
+            universo.update((cid, dia) for dia in fatia.f_locals["_dias_da_fatia"])
+            calcular_periodo = motor.calcular_periodo
+
+            def observar_periodo(entrada, saida, intervalos=()):
+                origem_periodo = sys._getframe(1)
+                dados = origem_periodo.f_locals
+                if origem_periodo.f_code is not codigo_mes_base or dados["colaborador_id"] != cid:
+                    raise FalhaSonda(
+                        "app/ponto/motor_calculo_v2.py:2378 origem de periodo divergente"
+                    )
+
+                # Dia da jornada regular ou do crédito de aberto.
+                # app/ponto/motor_calculo_v2.py:2571-2573 e :2632-2667.
+                dia = dados["_d_a"] if "_pares_a" in dados else dados["data_jornada"]
+                if not INI <= dia <= FIM:
+                    raise FalhaSonda("app/ponto/motor_calculo_v2.py:2542 dia fora da janela")
+                chave = (cid, dia)
+                universo.add(chave)
+                if intervalos:
+                    pausas[chave] += sum((fim - ini for ini, fim in intervalos), timedelta())
+                return calcular_periodo(entrada, saida, intervalos)
+
+            motor.calcular_periodo = observar_periodo
+        return motor
+
+    with patch.object(regua_cct, "get_motor_cct", observar_fabrica):
+        for empresa_id in EMPRESAS:
+            # app/ponto/services/fechamento.py:468-471,559-560,1215.
+            fechamento.recalcular_fechamento_mes(
+                MES, ANO, empresa_id=empresa_id,
+                somente_leitura=True, retornar_objeto=True, lavrar_dias_pagos=False,
+            )
+
+    if observadas != previstas or not universo:
+        raise FalhaSonda("app/ponto/services/fechamento.py:756 escolhas ou cobertura divergentes")
+    return universo, pausas
+
+
+def em_minutos(duracao):
+    return f"{duracao / UM_MINUTO:.9f}".rstrip("0").rstrip(".")
+
+
+def main():
+    try:
+        with patch.object(logging.Logger, "handle", interceptar_log), transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            previstas = contar_escolhas()
+            classes = set(MOTOR_POR_BASE.values()) | previstas.keys()
+            for classe in sorted(classes, key=lambda cls: cls.__name__):
+                print(
+                    f"MOTOR classe={classe.__name__} colabs={len(previstas.get(classe, ()))}",
+                    flush=True,
+                )
+
+            tem_partido = any(issubclass(classe, MotorTurnoPartido) for classe in previstas)
+            if tem_partido:
+                universo, pausas = recalcular(previstas)
+            raise ReverterSonda()
+    except ReverterSonda:
+        pass
+    except Exception as erro:
+        local = extract_tb(erro.__traceback__)[-1]
+        raise FalhaSonda(f"{local.filename}:{local.lineno} {type(erro).__name__}") from None
+
+    if not tem_partido:
+        print("PARTIDO_ZERO_PELA_ESCOLHA", flush=True)
+        return
+
+    for (cid, dia), duracao in sorted(pausas.items()):
+        print(f"col{cid:03d} {dia.isoformat()} minutos={em_minutos(duracao)}")
+    print(f"UNIVERSO colabs_partido={len({cid for cid, _ in universo})} dias={len(universo)}")
+    total = em_minutos(sum(pausas.values(), timedelta()))
+    print(f"TOTAL dia_colab={len(pausas)} colabs={len({cid for cid, _ in pausas})} minutos={total}")
+
+
+main()
+```
+
+### FIM
+
+## 26/11 18:21 · sessao b8838c37c92a · ABONO-PARCIAL-TETO · leitura · origem=Code
+
+### SCRIPT
+
+```python
+# Sonda ABONO-PARCIAL-TETO para logs/sombra/<script.py>. [bin/sombra.sh:477-492]
+# Execução na sombra e valores dos oito alvos [nao verificado].
+# O Python sai com rc 1 em universo vazio. Para propagar esse rc ao shell,
+# use bash -e bin/sombra.sh --rodar <script.py>. A porta termina com echo
+# após a pipeline e ativa pipefail. [bin/sombra.sh:45,483-493]
+
+import logging
+import sys
+from collections import defaultdict
+from datetime import datetime, time
+from traceback import extract_tb
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Empresa
+from escala.servico_jornada import escala_vigente
+from escala.utils import cadeia_do_dia
+from folha import export
+from ponto.catalogo.ausencias import ABONA, parciais_vigentes
+from ponto.models import Ausencia
+from ponto.motor_calculo_v2 import _minutos_da_ponta_cobertos
+from ponto.services import dia_pago, fechamento
+from ponto.services.credito_parcial import abater_no_proprio_dia
+from ponto.turnos import cobre_parte_do_dia
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+ALVOS = {327, 242, 298, 288, 222, 885, 827, 258}  # Anexo fornecido [nao verificado].
+NV = "[nao verificado]"
+REF_TXT = "[app/folha/export.py:215-255,699-755]"
+REF_ABONO = "[app/ponto/services/dia_pago.py:285-292,364-402]"
+REF_DIA = (
+    "[app/escala/services/leitor_celula.py:390-436] "
+    "[app/ponto/services/fechamento.py:893-895,1018-1027,1139-1151] "
+    "[app/ponto/services/dia_pago.py:173-195,274-292] "
+    "[app/folha/export.py:169-185,383-399,449-452,749-755]"
+)
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+class FalhaSonda(RuntimeError):
+    pass
+
+
+def col(cid):
+    return f"col{cid:03d}"
+
+
+def log_sem_dados(_logger, registro):
+    # A mensagem original do fechamento pode conter identificação pessoal.
+    # [app/ponto/services/fechamento.py:1327-1332]
+    if registro.levelno >= logging.ERROR:
+        erro = registro.exc_info[1] if registro.exc_info else sys.exception()
+        tipo = type(erro).__name__ if erro is not None else "ERROR"
+        raise FalhaSonda(f"{registro.pathname}:{registro.lineno} {tipo}") from None
+
+
+def teto_no_previsto(colab, dia, ausencia, previsto, celulas):
+    # A cadeia usa o vínculo da célula, todos os blocos líquidos e o dia
+    # de início do turno. [app/escala/servico_jornada.py:25-66]
+    # [app/escala/models.py:1109-1144,1177-1213] [app/escala/utils.py:65-81,330-363,2345-2374]
+    if previsto == 0:
+        return 0
+    escala = escala_vigente(colab, dia, celulas=celulas)
+    if escala is None or escala.tipo_escala is None:
+        raise FalhaSonda(f"{col(colab.pk)} {dia} vínculo indeterminado [app/escala/servico_jornada.py:49-66]")
+    marcos = escala.marcos_do_dia(dia, celulas=celulas)
+    pausas = escala.pausas_do_dia(dia, celulas=celulas)
+    if not pausas and marcos[2] and marcos[3]:
+        pausas = (marcos[2:],)
+    zero = datetime.combine(dia, time.min)
+    instantes = [
+        (instante.replace(tzinfo=None) - zero).total_seconds() / 60
+        for _, instante in cadeia_do_dia(dia, marcos, pausas)
+    ]
+    blocos = list(zip(instantes[::2], instantes[1::2]))
+    if not blocos or sum(fim - ini for ini, fim in blocos) != previsto:
+        raise FalhaSonda(
+            f"{col(colab.pk)} {dia} geometria diverge do previsto da grade "
+            "[app/escala/utils.py:353-363] [app/escala/services/leitor_celula.py:397-423]"
+        )
+    # O juiz de cobertura é batida_dentro_da_parcial, chamado por
+    # _minutos_da_ponta_cobertos. [app/ponto/motor_calculo_v2.py:453-477]
+    # [app/ponto/turnos.py:2653-2711]
+    return sum(_minutos_da_ponta_cobertos((ausencia,), ini, fim) for ini, fim in blocos)
+
+
+def ler_txt(conteudo, itens, fechs, entra):
+    # Matrícula usada apenas dentro da empresa para associar o registro ao ID.
+    # Preserva multiplicidade, valor cru e datas filhas. [app/folha/export.py:215-255,725-753]
+    por_matricula = defaultdict(list)
+    for item in itens:
+        cid = item["colaborador_id"]
+        if cid in entra and fechs[cid].status in export.STATUS_NO_TXT:
+            por_matricula[item["codigo_dominio"].zfill(10)].append(cid)
+
+    registros = defaultdict(list)
+    pai = None
+    for linha in conteudo.splitlines():
+        parte = export.partes_da_linha(linha)
+        if parte is None or (parte["reg"] == "11" and pai is None):
+            raise FalhaSonda("Registro inválido [app/folha/export.py:215-255]")
+        if parte["reg"] == "10":
+            ids = por_matricula[parte["matricula"]]
+            if len(ids) != 1:
+                raise FalhaSonda("Autoria ambígua do registro 10 [app/folha/export.py:725-748]")
+            pai = (parte["valor"], [])
+            registros[(ids[0], parte["rubrica"])].append(pai)
+        else:
+            pai[1].append(parte["data"])
+    return {
+        chave: tuple(sorted((valor, tuple(sorted(datas))) for valor, datas in linhas))
+        for chave, linhas in registros.items()
+    }
+
+
+def medir(empresa, aplicar_teto, cadastradas):
+    foto = SimpleNamespace(abonos={}, tetos={}, dias={}, furos={})
+    recalcular = fechamento.recalcular_fechamento_mes
+    grade_original = export.grade_do_fechamento
+    por_dia_original = dia_pago.por_dia_da_grade
+
+    def observar_grade(fech):
+        grade = grade_original(fech)
+        origem = sys._getframe(1)
+        cid = fech.colaborador_id
+        if origem.f_code is not recalcular.__code__ or cid not in cadastradas:
+            return grade
+
+        # Retém os insumos da mesma passada. Saída usa o dia da jornada da
+        # lavratura e atraso usa o crédito do próprio dia.
+        # [app/ponto/services/fechamento.py:893-895,1018-1038,1225-1241]
+        # [app/ponto/services/dia_pago.py:109-132,173-195,274-277]
+        local = origem.f_locals
+        resultado = local["resultado"]
+        saidas = defaultdict(float)
+        for p in resultado.periodos:
+            dia = dia_pago._dia_de(p, resultado.dia_da_jornada)
+            saidas[dia] += p.minutos_saida_antecipada or 0
+
+        for linha in grade["dias"]:
+            dia = linha["data"]
+            if dia not in cadastradas[cid]:
+                continue
+            esperado = linha["tipo_dia"] not in {"sem_celula", "indefinido"}
+            atraso, _ = abater_no_proprio_dia(
+                {dia: local["_atrasos_dia"].get(dia, 0)}, local["_creditos_dia"]
+            )
+            foto.dias[cid, dia] = (
+                linha["minutos_previstos"] if esperado else None,
+                linha["minutos_realizados"] if esperado else None,
+                atraso / 60,
+                saidas[dia] / 60,
+                local["_faltas_por_dia"].get(dia, 0) / 60,
+                getattr(local["_cob_folha"].get(dia), "pk", None),
+            )
+        return grade
+
+    def envolver_por_dia(grade):
+        abono, previsto, realizado = por_dia_original(grade)
+        origem = sys._getframe(1)
+        if origem.f_code is not recalcular.__code__:
+            return abono, previsto, realizado
+
+        # B aplica min(abono de A, cobertura do período dentro do previsto)
+        # em toda a frota elegível. A cobertura vencedora já veio do fechamento.
+        # [app/ponto/services/fechamento.py:700-718,1084-1088]
+        # [app/ponto/turnos.py:2622-2639,2816-2839]
+        local = origem.f_locals
+        colab = local["colab"]
+        if aplicar_teto:
+            abono = dict(abono)
+            for linha in grade["dias"]:
+                dia = linha["data"]
+                if dia not in abono or not linha.get("cobertura_parcial"):
+                    continue
+                a = local["_cob_folha"].get(dia)
+                if (
+                    a is None or a.efeito != ABONA
+                    or not cobre_parte_do_dia(a, local["_parciais"])
+                    or a.hora_ini is None or a.hora_fim is None or a.hora_ini == a.hora_fim
+                ):
+                    continue
+                teto = teto_no_previsto(colab, dia, a, previsto[dia], local["_cels_lote"])
+                foto.tetos[colab.pk, dia] = teto
+                abono[dia] = min(abono[dia], teto)
+
+        foto.abonos.update({(colab.pk, dia): valor for dia, valor in abono.items()})
+        return abono, previsto, realizado
+
+    # Preserva a resposta esperada _GradeSemCelula e deixa subir as demais
+    # exceções capturadas pelo fechamento. [app/ponto/services/fechamento.py:1067-1069,1105-1123,1327-1332]
+    with (
+        patch.object(fechamento, "Exception", fechamento._GradeSemCelula, create=True),
+        patch.object(export, "grade_do_fechamento", observar_grade),
+        patch.object(dia_pago, "por_dia_da_grade", envolver_por_dia),
+    ):
+        fechs = recalcular(
+            MES, ANO, empresa_id=empresa.pk, somente_leitura=True,
+            retornar_objeto=True, lavrar_dias_pagos=False, coletar_furos=foto.furos,
+        )
+
+    # Caminho lido de simular_folha e serialização real da porta do TXT.
+    # [app/folha/management/commands/simular_folha.py:124-134] [app/folha/views.py:272-288]
+    objetos = list(fechs.values())
+    itens = export.classificar_export(empresa, MES, ANO, fechamentos=objetos)
+    linhas, foto.entra = export.montar_linhas_export(
+        empresa, MES, ANO, itens=itens, fechamentos=objetos,
+    )
+    if export.validar_layout_dominio(linhas):
+        raise FalhaSonda("Layout inválido [app/folha/export.py:266-307]")
+    foto.txt = export.conteudo_do_txt(linhas)
+    foto.registros = ler_txt(foto.txt, itens, fechs, foto.entra)
+    return foto
+
+
+def campos_do_dia(foto, cid, dia, lado):
+    chave = cid, dia
+    previsto, realizado, atraso, saida, falta, _ = foto.dias.get(chave, (None,) * 6)
+    abono = foto.abonos.get(chave, 0) if previsto is not None else None
+    r8069 = foto.registros.get((cid, "8069"), ())
+    r8792 = foto.registros.get((cid, "8792"), ())
+    campos = {
+        "previsto_min": previsto,
+        "realizado_min": realizado,
+        "abono_min": abono,
+        "horas_atraso": atraso,
+        "horas_saida_antecipada": saida,
+        "horas_falta": falta,
+        "horas_base_8069_dia": export.rubrica_atraso_parcial(atraso, saida)
+        if atraso is not None else None,
+        "8069_txt_comp_valor_cru": tuple(valor for valor, _ in r8069),
+        "8792_txt_data": int(any(dia.strftime("%Y%m%d") in datas for _, datas in r8792)),
+        "furo_motor": int(dia in foto.furos[cid]) if cid in foto.furos else None,
+        "entra_juiz_txt": int(cid in foto.entra),
+    }
+    return " ".join(f"{campo}_{lado}={NV if valor is None else valor}" for campo, valor in campos.items())
+
+
+def medir_e_imprimir(agora):
+    empresas = list(Empresa.objects.filter(ativa=True, pk__in=EMPRESAS).order_by("pk"))
+    if empresas and {e.pk for e in empresas} != set(EMPRESAS):
+        raise FalhaSonda("Escopo incompleto de empresas ativas [app/folha/management/commands/simular_folha.py:112-119]")
+
+    medidas = []
+    tipos = parciais_vigentes()
+    for empresa in empresas:
+        janela = export.janela_competencia(empresa, MES, ANO)
+        entregue = export.competencia_entregue(empresa.pk, MES, ANO)
+        cadastradas = {}
+        faltas = {}
+        # O cadastro dos oito alimenta o relatório. O wrapper usa a cobertura
+        # do fechamento para todos os colaboradores. [app/ponto/turnos.py:2622-2639,2816-2839]
+        for a in Ausencia.objects.filter(
+            colaborador__empresa=empresa, colaborador_id__in=ALVOS,
+            status="aprovada", tipo__in=tipos, data__range=janela,
+        ).select_related("colaborador").order_by("colaborador_id", "data", "pk"):
+            if cobre_parte_do_dia(a, tipos):
+                cid = a.colaborador_id
+                cadastradas.setdefault(cid, {}).setdefault(a.data, []).append(a)
+                if cid not in faltas:
+                    faltas[cid] = set(export.datas_falta(a.colaborador, empresa, MES, ANO))
+
+        a = medir(empresa, False, cadastradas)
+        b = medir(empresa, not entregue, cadastradas)
+        medidas.append((empresa.pk, janela, entregue, cadastradas, faltas, a, b))
+
+    # Universo = dias com parcial elegível na grade de competência em aberto.
+    # [app/folha/export.py:565-603] [app/ponto/services/dia_pago.py:386-402]
+    if not any(b.tetos for _, _, _, _, _, _, b in medidas):
+        print("UNIVERSO VAZIO", flush=True)
+        raise SystemExit(1)
+
+    print(f"REFERENCIA={timezone.localtime(agora).isoformat()} COMP=11/2026",
+          "[app/ponto/services/fechamento.py:634-642] [app/folha/export.py:1240-1247]")
+    n_rubricas = 0
+    colabs_txt = set()
+    dias_abono = {}
+    alvos_com_cadastro = set()
+
+    for empresa_id, janela, entregue, cadastradas, faltas, a, b in medidas:
+        print(f"EMPRESA={empresa_id} JANELA={janela[0]}/{janela[1]} ENTREGUE={int(entregue)} "
+              f"DIAS_ELEGIVEIS={len(b.tetos)} TXT_IGUAL={int(a.txt == b.txt)}",
+              "[app/folha/export.py:47-51,525-539,565-603]", REF_ABONO)
+        ids_a = {cid for cid, _ in a.registros}
+        ids_b = {cid for cid, _ in b.registros}
+        for regra, antes, depois in (("JUIZ_TXT", a.entra, b.entra), ("TXT", ids_a, ids_b)):
+            for cid in sorted(depois - antes):
+                print(f"ENTRA_{regra} {col(cid)}", REF_TXT)
+            for cid in sorted(antes - depois):
+                print(f"SAI_{regra} {col(cid)}", REF_TXT)
+        colabs_txt.update(ids_a ^ ids_b)
+
+        # Uma mudança por (colaborador, código). Os valores são os do campo
+        # cru do reg. 10 e cada tupla carrega as datas dos reg. 11. [app/folha/export.py:34-45,224-255]
+        for chave in sorted(a.registros.keys() | b.registros.keys()):
+            va, vb = a.registros.get(chave, ()), b.registros.get(chave, ())
+            if va != vb:
+                cid, codigo = chave
+                n_rubricas += 1
+                colabs_txt.add(cid)
+                print(f"RUBRICA {codigo} {col(cid)} VALOR_A={va} VALOR_B={vb}", REF_TXT)
+
+        if a.abonos.keys() != b.abonos.keys():
+            raise FalhaSonda(f"Dias do mapa A/B divergentes na empresa {empresa_id} {REF_ABONO}")
+        for cid, dia in sorted(a.abonos):
+            va, vb = a.abonos[cid, dia], b.abonos[cid, dia]
+            if va != vb:
+                dias_abono[cid, dia] = va - vb
+                print(f"DIA_PAGO_ABONO {col(cid)} {dia} ABONO_A={va:g} ABONO_B={vb:g}", REF_ABONO)
+
+        for cid, dias in sorted(cadastradas.items()):
+            alvos_com_cadastro.add(cid)
+            for dia, registros in sorted(dias.items()):
+                chave = cid, dia
+                vencedora = a.dias.get(chave, (None,) * 6)[-1]
+                periodos = [
+                    (
+                        r.hora_ini.strftime("%H:%M") if r.hora_ini is not None else "-",
+                        r.hora_fim.strftime("%H:%M") if r.hora_fim is not None else "-",
+                        "*" if r.pk == vencedora else "",
+                    )
+                    for r in registros
+                ]
+                print(f"ALVO {col(cid)} {dia} PERIODOS={periodos} "
+                      f"TETO_MIN={b.tetos.get(chave, '-')} FALTA_DECIDIDA={int(dia in faltas[cid])}",
+                      campos_do_dia(a, cid, dia, "A"), campos_do_dia(b, cid, dia, "B"),
+                      REF_DIA, "[app/ponto/models.py:745-771] [app/ponto/turnos.py:2816-2839]")
+
+    for cid in sorted(ALVOS - alvos_com_cadastro):
+        print(f"ALVO {col(cid)} DIA_PARCIAL={NV} [app/ponto/turnos.py:2622-2639]")
+
+    # MINUTOS_ABONO soma A - B nos dias alterados. [app/ponto/services/dia_pago.py:285-292,364-402]
+    print(f"TXT_RUBRICAS_MUDADAS={n_rubricas} COLABS_TXT={len(colabs_txt)} "
+          f"DIAS_ABONO_MUDADOS={len(dias_abono)} COLABS_ABONO={len({cid for cid, _ in dias_abono})} "
+          f"MINUTOS_ABONO={sum(dias_abono.values()):g}", flush=True)
+
+
+def main():
+    try:
+        with patch.object(logging.Logger, "handle", log_sem_dados), transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            if connection.schema_name != "juliani":
+                raise FalhaSonda("Schema esperado juliani [bin/sombra.sh:490-491]")
+            agora = timezone.now()
+            with patch.object(timezone, "now", new=lambda: agora):
+                medir_e_imprimir(agora)
+            raise ReverterSonda()
+    except ReverterSonda:
+        return
+    except FalhaSonda:
+        raise
+    except Exception as erro:
+        # Mantém a falha fatal e publica apenas tipo e origem.
+        # [app/ponto/services/fechamento.py:1327-1332]
+        origem = extract_tb(erro.__traceback__)[-1]
+        raise FalhaSonda(f"{origem.filename}:{origem.lineno} {type(erro).__name__}") from None
+
+
+main()
+```
+
+### FIM
 
 ## 26/11 18:14 · sessao 9b9e10f2cc46 · ABONO-PARCIAL-TETO · leitura · origem=Code
 
@@ -1071,29 +1677,4 @@ O `finally` externo saiu. O `finally` interno que registra a gravação do uploa
 | Aviso e flags de retorno | `_reabrir` emite o aviso pelo logger `ponto` e marca a instância no caminho de sucesso. `ausencia.py:49,1439-1445` | A configuração SaaS encaminha o logger ao handler. Os testes capturam o aviso e leem `_reaberta`. A API e `garantir_ausencia` leem `_criada`. `saas.py:160-166,181` · `test_atestado_f3_contrato.py:503-538` · `api/views.py:1852-1858` · `ausencia.py:690-691` |
 | Seis campos `atestado_*` e `documento_referencia_id` | O formulário fornece os seis valores. A criação grava no INSERT. Edição, anexação e reabertura passam pelo gravador comum. O vínculo é declarado no modelo. `forms.py:13-22` · `views_atestado.py:31-50` · `ausencia.py:301-324,567,640-642,744-746,1114-1115,1409-1411` · `models.py:815-819` | O gravador lê os valores atuais e a referência para recusar a gravação na filha. PDF, CSV e painel leem os seis campos. O vínculo também é lido pela rota que serve o anexo. `ausencia.py:292-324` · `atestados_lote.py:104-108,122-138,205-209` · `painel_ausencia.html:100-131` · `views.py:2146-2149` |
 
-## 26/11 17:35 · sessao 593de0114757 · - · - · origem=Ronald (tmux)
-
-A quarta cura funciona para `Exception` dentro de `_reabrir` quando houve upload e a conexão continua em `atomic`. Os dois mutantes c10 do aviso caíram nos asserts de sucesso e falha, respectivamente. O `green_c10` passou os quatro testes. `app/ponto/services/ausencia.py:1413-1445`, `app/ponto/tests/test_atestado_f3_contrato.py:503-538`, `app/ponto/tests/mutantes_atestado_f3.py:134-139,387-388`.
-
-**Regressão nova.** Injetei `KeyboardInterrupt` em `mudar_estado` após o upload, com rollback externo simulado. O novo arquivo ficou sem referência e sem aviso na c10. O mesmo caso, com o `finally` da c9 restaurado em memória, emitiu o aviso. A diferença vem do alcance de `except Exception`. Alcance em produção [nao verificado]. `app/ponto/services/ausencia.py:1417-1442`, `app/ponto/tests/test_atestado_f3_contrato.py:409-431`, `app/ponto/tests/mutantes_atestado_f3.py:134-136`.
-
-**Rollback posterior.** Também reproduzi em memória o retorno bem-sucedido seguido de exceção no chamador. O rollback restaura a referência antiga. A instância devolvida ainda aponta ao nome novo e tem `_reaberta=True`. Sem compensação do chamador, o novo arquivo fica sem referência e sem aviso. No caminho INSS, o chamador tenta compensar se recebeu a instância antes de falhar. Se `_reabrir` falhou antes do retorno, `ausencia` continua `None` e essa compensação é pulada. `app/ponto/services/ausencia.py:1413-1445`, `app/ponto/views.py:2564-2601`.
-
-**Selo do “só”.** Removi em memória apenas `and conexao.in_atomic_block` do aviso. Os oito testes V1 passaram mesmo com avisos falsos em falhas sem `atomic` externo. Os testes novos mordem o aviso no sucesso externo e sua falta na falha externa. `app/ponto/services/ausencia.py:1435-1441`, `app/ponto/tests/test_atestado_f3_contrato.py:433-451,503-556`, `app/ponto/tests/mutantes_atestado_f3.py:67-74`.
-
-**Leituras e escritas.** O upload chega pela porta de criação ou reversão. `_reabrir` lê o nome antigo e o alias do router, obtém a conexão, grava `documento` e observa a mudança de `_committed` para guardar `(storage, name)`. O `except` lê a tupla, `in_atomic_block` e o `pk`. O auxiliar lê a referência SQL e usa o storage para compensar. O logger `ponto` emite o aviso, e o handler SaaS o direciona a `ponto.log`. `_criada` é lido por `garantir_ausencia` e pela API. `_reaberta` é lido pelos testes. `app/ponto/services/ausencia.py:49,241-264,470-476,511-512,690-691,1384-1445`, `app/ponto/models.py:777-780`, `app/config/settings/saas.py:160-166,181`, `app/api/views.py:1852`, `app/ponto/tests/test_atestado_f3_contrato.py:510,535-537`.
-
-AST c9 → c10 conforme o delta informado e a contagem da cópia, em `ExceptHandler/suppress`. `atestados_lote.py` 3/0 → 3/0. `ausencia.py` 13/0 → 13/0. `mutantes_atestado_f3.py` e `test_atestado_f3_contrato.py` 0/0 → 0/0. O `finally` removido é o externo. `app/ponto/services/atestados_lote.py:151,263,271`, `app/ponto/services/ausencia.py:266,605,611,643,807,845,1132,1307,1345,1434,1511,1560,1818`, `app/ponto/tests/mutantes_atestado_f3.py:99-139,350-419`, `app/ponto/tests/test_atestado_f3_contrato.py:51-72,228-240,503-538,801-850`.
-
-## 26/11 17:35 · sessao 867e29256908 · - · - · origem=Ronald (tmux)
-
-- **Load explícito** em `app/ponto/services/atestados_lote.py:147–152`. O teste sem dependências `app/ponto/tests/test_atestado_f3_contrato.py:801–815` derrubou o mutante composto de `app/ponto/tests/mutantes_atestado_f3.py:108–125` com `OSError: truncado`. Remover só `load()` derrubou o selo estrutural na linha 239, enquanto o teste funcional ficou verde porque o mock de `exif_transpose` também chama `load()` na linha 764. O teste real e seu mutante pararam no import de PIL na linha 822. Comportamento com Pillow real [nao verificado].
-- **Escopo do try** confirmado em `app/ponto/services/atestados_lote.py:147–158`. O `with` inclui a entrada e a saída do contexto, além de `Image.open`, `load` e `exif_transpose`. O teste em `app/ponto/tests/test_atestado_f3_contrato.py:228–240` derrubou `c10_pdf_thumbnail_no_try` de `app/ponto/tests/mutantes_atestado_f3.py:126–129`. Trocar o tipo da exceção por `Exception` sobreviveu a esse selo, ao censo de tratadores e ao PDF simulado. O selo confere o corpo e a quantidade de tratadores em `app/ponto/tests/test_atestado_f3_contrato.py:51–72,222–240`.
-- **Paridade marcador e rodapé** em `app/ponto/services/atestados_lote.py:201,210–214,225–232`. O teste em `app/ponto/tests/test_atestado_f3_contrato.py:810–815` derrubou a marca duplicada e o incremento zero de `app/ponto/tests/mutantes_atestado_f3.py:131–142`. Cada parágrafo de falha tem um incremento. Um campo `atestado_medico` contendo `ANEXO ILEGIVEL` produz a ocorrência textual com total zero, como demonstrado no PDF simulado. O campo é texto livre em `app/ponto/forms.py:14` e entra em `app/ponto/services/atestados_lote.py:207–214`.
-- **Contraexemplos do PDF** executados em memória com o helper de `app/ponto/tests/test_atestado_f3_contrato.py:747–790`. `exists=True`, seguido de `FileNotFoundError` no `documento.open`, aborta o lote em `app/ponto/services/atestados_lote.py:169–175,211`. Uma imagem cujo `load` e cuja transposição terminam com sucesso ainda vira `ILEGIVEL` se a saída do contexto de `Image.open` lançar `OSError` em `app/ponto/services/atestados_lote.py:147–152,174–175,211–214`. `exists=False` imprime `Anexo indisponível`, e tipo desconhecido segue para link em `app/ponto/services/atestados_lote.py:169–178`, com detecção em `app/ponto/services/ausencia.py:789–817`.
-- **Aviso da reabertura** em `app/ponto/services/ausencia.py:1434–1445`. Os testes de `app/ponto/tests/test_atestado_f3_contrato.py:503–538` derrubaram os mutantes de aviso no `finally` e de aviso removido definidos em `app/ponto/tests/mutantes_atestado_f3.py:134–138`. Um chamador pode receber o objeto reaberto e depois reverter o banco, deixando o novo arquivo sem referência e sem aviso dessa função. A view INSS tem compensação própria para exceção após o retorno, mas não consegue fazê-la quando `_reabrir` levanta antes da atribuição. `app/ponto/services/ausencia.py:1412–1421,1434–1445`, `app/ponto/views.py:2564–2579,2588–2601`. O teste de integração preexistente cobre o segundo caso em `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:164–186`, execução com banco [nao verificado].
-- **AST** em c9→c10, pelo delta fornecido e AST da cópia. `app/ponto/services/atestados_lote.py:151,263,271` tem 3→3 handlers. `app/ponto/services/ausencia.py:266,605,611,643,807,845,1132,1307,1345,1434,1511,1560,1818` tem 13→13. `app/ponto/tests/mutantes_atestado_f3.py:119` e `app/ponto/tests/test_atestado_f3_contrato.py:221` têm 0→0. Zero `suppress` nos quatro.
-- **Origem e leitura do PDF.** `Ausencia.documento` é `FileField` em `app/ponto/models.py:777`, escrito pela criação em `app/ponto/services/ausencia.py:571–572,608,640–641`, pelo anexo em `app/ponto/services/ausencia.py:1118–1120` e pela reabertura em `app/ponto/services/ausencia.py:1413–1421`. `dia_decidido` produz o booleano da linha em `app/ponto/services/dia_decidido.py:679–687`. O PDF lê o booleano, o `FileField`, seu nome, storage e bytes em `app/ponto/services/atestados_lote.py:168–175,210–214`. O tipo sai de `app/ponto/services/ausencia.py:789–817`, a foto sai de `app/ponto/services/atestados_lote.py:148–158`, e o renderizador consome foto, marca e contador em `app/ponto/services/atestados_lote.py:211–234`. O endpoint consome o PDF em `app/ponto/views_atestado.py:134–148`. A rota do link lê o arquivo em `app/ponto/views.py:2144–2161`.
-- Os quatro testes de `green_c10` e os treze de `green_c9` passaram com o executor somente em memória de `app/ponto/tests/mutantes_atestado_f3.py:350–370,385–390,410–419`. O RED histórico autenticado por Git e a execução com Pillow real [nao verificado].
-
-_8460 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8462 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
