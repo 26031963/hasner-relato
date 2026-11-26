@@ -6,10 +6,21 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 25/11/2026 22:52:25.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (18.8 MB). Acoes na janela: **578**.
+**Medido em 25/11/2026 22:58:47.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (18.9 MB). Acoes na janela: **589**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 22:54:45 | Bash |  | `cd /home/ronald/saas-hasner; d=logs/E1-PREVISAO-24H/v3; id=1125225426_3dac548c; ssh pista espera $id > $d/pista_$id.espera 2>&1; echo "rc=$?" >> $d/pista_$id.espera; ssh pista log $id 100000000 > $d/pista_$id.log 2>&1; date +%T > $d/pista_$id.fim; tail -3 $d/pista_$id.espera; grep -E '^(OK\|FAILED)($\| \()\|^Ran ' $d/pista_$id.log \| tail -2` |
+| 22:54:23 | Bash |  | `cd /home/ronald/saas-hasner; ssh pista cancela 1125222803_de479e03 2>&1 \| tail -2; f=$(git -C /home/ronald/wt-e1prev-v3-211130 rev-parse HEAD); git update-ref refs/pista/$f $f; ssh pista pede $f 2>&1 \| tail -2; /usr/bin/sleep 15; ssh pista estado 2>&1 \| grep -E 'rodando\|fila'` |
+| 22:54:16 | Bash |  | `ssh pista estado 2>&1 \| grep -E 'rodando\|fila\|11252228'; ssh pista ajuda 2>&1 \| head -20` |
+| 22:54:11 | Bash |  | `ssh pista estado 2>&1 \| tail -8; ssh pista 2>&1 \| head -15` |
+| 22:54:08 | Bash |  | `cd /home/ronald/wt-e1prev-v3-211130; cat > /tmp/claude-1001/-home-ronald-saas-hasner/b5a17eeb-1664-43db-843b-d5a40018d689/scratchpad/e1_catraca_msg.txt <<'EOF' E1-PREVISAO-24H v3d: a catraca de linhas registra o deslocamento de +5 do guarda do intermitente em escala/utils.py OBRA: E1-PREVISAO-24H O guarda de de479e03d (5 linhas em previsao_invalida_do_vinculo, utils.py:417-421) desloca os 4 sitios ...` |
+| 22:53:59 | Bash |  | `cd /home/ronald/wt-e1prev-v3-211130/app; python3 - <<'EOF' import re p='core/tests/test_medida_turno_do_par.py'; L=open(p).read().split('\n') n=0 for i in range(252,288): if "('escala/utils.py::" in L[i] and '): [' in L[i]: a,b=L[i].rsplit('): [',1); nums,rest=b.split(']',1) new=', '.join(str(int(x)+5 if int(x)>=419 else int(x)) for x in nums.split(',')) L[i]=a+'): ['+new+']'+rest; n+=1; print(L[i ...` |
+| 22:53:54 | Bash |  | `cd /home/ronald/wt-e1prev-v3-211130/app; awk 'NR>=253 && NR<=352' core/tests/test_medida_turno_do_par.py \| grep -n "escala/utils.py" \| cut -c1-200; awk 'NR>=253 && NR<=352 && /^[A-Z_]+ =/' core/tests/test_medida_turno_do_par.py` |
+| 22:53:49 | Bash |  | `cd /home/ronald/wt-e1prev-v3-211130; git diff d6b0937b2..de479e03d -- app/escala/utils.py \| grep '^@@'; grep -n "escala/utils.py" app/core/tests/test_medida_turno_do_par.py \| head -40 \| cut -c1-160` |
+| 22:53:43 | Bash |  | `cd /home/ronald/wt-e1prev-v3-211130/app; sed -n 520,568p core/tests/test_medida_turno_do_par.py \| cut -c1-200; git -C .. status --porcelain \| head` |
+| 22:53:39 | Bash |  | `cd /home/ronald/saas-hasner; grep -n -A25 '^FAIL: test_CATRACA_linhas' logs/E1-PREVISAO-24H/v3/recortes_de479e03d.log \| tail -18 \| cut -c1-250` |
+| 22:53:35 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bptn34dx0.output` |
 | 22:46:40 | SendMessage |  | `-` |
 | 22:46:33 | Bash |  | `cd /home/ronald/saas-hasner; bash -n bin/codex_pergunta.sh && echo sintaxe_ok; python3 -I bin/codex_vagas_estado.py 2>&1 \| tail -5; git show main:bin/codex_vagas.conf` |
 | 22:46:13 | Bash |  | `cd /home/ronald/saas-hasner; DEPLOY_SEM_SOMBRA="pouso de INSTRUMENTO WRAPPER-N-VAGAS a8623781e: so bin/ + CLAUDE.md/LEIS.md/docs, 0 arquivo de app/ servido; o ensaio da sombra nao mede bin/" timeout 580 bash bin/deploy.sh --sem-migrate 2>&1 \| tail -14` |
