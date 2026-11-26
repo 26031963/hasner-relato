@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 19:42:44.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (92.0 MB). Acoes na janela: **2432**.
+**Medido em 26/11/2026 19:49:44.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (92.0 MB). Acoes na janela: **2437**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:46:13 | Bash | Atualiza BACKLOG e RELATO e relança a espera | `cd ~/saas-hasner; sed -i 's/\| SUITE-ROTEIA-F2 \| \(.*\) \| dossie (Codex censo) \| 26\/11 \|/\| SUITE-ROTEIA-F2 \| \1 \| dossie fechado 19:45 (logs\/SUITE-ROTEIA-F2\/DOSSIE\/r.md, 0 lei), brief_c1 pronto; travada por: vaga de construtor (E4C c2 e v6) \| 26\/11 \|/' app/docs/BACKLOG.md; grep -c 'brief_c1 pronto' app/docs/BACKLOG.md; echo "SUITE-ROTEIA-F2 dossie fechado $(date +%H:%M) (r.md, pergun ...` |
+| 19:46:07 | Bash | Escreve o brief do construtor da F2 | `cd ~/saas-hasner; D=logs/SUITE-ROTEIA-F2; cat > $D/brief_c1.md <<'EOF' # SUITE-ROTEIA-F2 c1 -- construtor opus (bin/ e proibido ao Codex; aval AGENTE-NO-MODELO-NA-FONTE v6 item 1) Aval literal: logs/AVAIS-1515/SUITE-ROTEIA-F2-2611-1940.txt. Dossie: logs/SUITE-ROTEIA-F2/DOSSIE/r.md (Codex censo, amostra :497-501 e :440-442 conferida pela sessao). MAO DUPLA (instrumento), pousa com lista. Copia: `gi ...` |
+| 19:45:49 | Bash | Confere amostra do censo em suite.sh | `cd ~/saas-hasner; sed -n 436,444p bin/suite.sh; sed -n 494,506p bin/suite.sh` |
+| 19:45:45 | Bash | Lê a resposta do censo | `cd ~/saas-hasner; wc -l logs/SUITE-ROTEIA-F2/DOSSIE/r.md; cat logs/SUITE-ROTEIA-F2/DOSSIE/r.md` |
+| 19:45:42 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bwcyggzcz.output` |
 | 19:42:22 | Bash | Registra despacho e contrato e relança a espera | `cd ~/saas-hasner; cat >> app/docs/RELATO.md <<EOF DESPACHO SUITE-ROTEIA-F2 ($(date +%H:%M)): mapa+censo+leis -> Codex censo (slot 2, logs/SUITE-ROTEIA-F2/DOSSIE/q.md) \| construir bin/suite.sh + selo -> opus (bin/ proibido ao Codex, v6) quando abrir vaga de construtor (teto 2: E4C c2 e v6 em voo) \| pre-verificacao -> Codex. CONTRATO SUITE-ROTEIA-F2 (extensao do CONTRATO v2 da ROTA): quem chama =  ...` |
 | 19:42:01 | Bash | Lança o Codex censo do dossiê da F2 | `cd ~/saas-hasner; D=logs/SUITE-ROTEIA-F2/DOSSIE; mkdir -p $D; cat > $D/q.md <<'EOF' Papel: censo (leitura). Obra SUITE-ROTEIA-F2, hash b0cf0c2cd. Portugues, arquivo:linha em toda afirmacao. Contexto (aval literal SUITE-ROTEIA-F2-2611-1940): "A suite INTEIRA com --dir <copia> e --motivo "pre-opus <OBRA>" passa a ir a pista 2 pela mesma ROTA (foto da copia em refs/pista/<sha>, pede/espera, veredito  ...` |
 | 19:41:44 | Bash | Registra o aval F2 e confere vagas Codex | `cd ~/saas-hasner; cat > logs/AVAIS-1515/SUITE-ROTEIA-F2-2611-1940.txt <<'EOF' aval Ronald: SUITE-ROTEIA-F2-2611-1940, fatia 2 da SUITE-ROTEIA-PARA-PISTA. A suite INTEIRA com --dir <copia> e --motivo "pre-opus <OBRA>" passa a ir a pista 2 pela mesma ROTA (foto da copia em refs/pista/<sha>, pede/espera, veredito do job); continuam na VM: o pouso (pista_certifica intocado), chamada sem --dir (arvore  ...` |
