@@ -1,7 +1,59 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 09:35** · publicado em **26/11/2026 09:34** (UTC-3)
+> Ultima resposta processada: **26/11/2026 10:02** · publicado em **26/11/2026 10:06** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 10:02 · sessao c70107422e81 · R1-REMEDE-2611 · sonda · origem=Code
+
+No trecho fornecido, não há `rc_sombra` diferente de 0. A última linha registra `rc_sombra=0`. A execução em produção está [nao verificado].
+
+```text
+sonda_leitura: script.py [3474291c37ec5740] no cpuset 4-7, lendo sombra como leitor (LEITURA)
+
+AUTORIDADE {'dia_sem_lavratura_no_espelho': 10686, 'dias_comparados': 7544, 'bate_ate_10min': 7232, 'dia_isento_ou_ausencia': 1882, 'dia_batida_impar': 354, 'impar_que_BATE': 148, 'esp_zero_e6_trabalho': 36, 'dono_BATIDA': 210, 'diverge_acima_60': 226, 'impar_que_DIVERGE': 206, 'impar_no_conjunto_do_dia': 205, 'impar_FORA_da_faixa': 34, 'impar_dentro_da_faixa': 172, 'dono_CADASTRO': 74, 'e6_zero_esp_trabalho': 20, 'dia_sem_trabalho_ambos': 151, 'esp_desconta_janela_declarada': 257, 'dono_ESTRUTURA': 28, 'diverge_10_60': 30, 'impar_SO_POR_CORTE_do_oraculo': 1}
+AUTORIDADE erros no espelho: 0
+AUTORIDADE BATE (ate 10 min): 95.9% de 7544 dias comparados
+AUTORIDADE dos que divergem: 172 dentro da faixa piso..teto (indecidivel sem DNA), 34 FORA da faixa (contraditorio)
+AUTORIDADE paridade de quem: 205 com contagem impar no conjunto do dia (falta OU sobra batida), 1 partidos SO pelo corte do proprio oraculo
+AUTORIDADE ESTRUTURA    28 dia-colab     105.9 h   17 colabs   o sistema se contradiz ou calcula errado DADO o cadastro -- fila 1
+AUTORIDADE CADASTRO     74 dia-colab     288.5 h   30 colabs   o DNA nao descreve as batidas -- lista do admin, nao codigo
+AUTORIDADE BATIDA      210 dia-colab     992.6 h  119 colabs   falta ou sobra batida -- lista do admin, nao codigo
+AUTORIDADE SOMA        312   <- tem de ser igual a soma das classes (312)
+AUTORIDADE colabs com divergencia: 148
+CSV_POR_DONO {'BATIDA': 210, 'CADASTRO': 74, 'ESTRUTURA': 28} TOTAL 312
+CSV_PARIDADE {('par', 'BATIDA'): 43, ('IMPAR', 'BATIDA'): 167, ('IMPAR', 'CADASTRO'): 39, ('par', 'CADASTRO'): 35, ('par', 'ESTRUTURA'): 28}
+CAB emp|colab|dia|dono_da_divergencia|esp_min|piso_min|teto_min|dif|classe|paridade|dono_da_paridade|veredito
+ESTRUTURA 4|37|2026-10-05|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 4|37|2026-10-09|ESTRUTURA|241|0|0|-241|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|129|2026-10-12|ESTRUTURA|0|779|779|779|esp_zero_e6_trabalho|par|2|em_aberto |n_batidas=2
+ESTRUTURA 2|218|2026-10-15|ESTRUTURA|105|0|0|-105|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|252|2026-09-23|ESTRUTURA|548|594|608|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-09-24|ESTRUTURA|552|598|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-09-25|ESTRUTURA|556|604|616|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-09-28|ESTRUTURA|535|581|595|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-01|ESTRUTURA|545|590|605|45|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-02|ESTRUTURA|545|593|606|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-06|ESTRUTURA|551|597|611|46|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|252|2026-10-09|ESTRUTURA|544|592|604|48|diverge_10_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|348|2026-10-11|ESTRUTURA|0|665|665|665|esp_zero_e6_trabalho|par|1|folga |n_batidas=2
+ESTRUTURA 2|369|2026-10-12|ESTRUTURA|476|416|476|-60|diverge_10_60|par|4|feriado |n_batidas=4
+ESTRUTURA 2|382|2026-09-21|ESTRUTURA|403|792|956|389|diverge_acima_60|par|5|trabalhou |n_batidas=8
+ESTRUTURA 2|382|2026-09-30|ESTRUTURA|364|0|0|-364|e6_zero_esp_trabalho|par|2|trabalhou |n_batidas=0
+ESTRUTURA 2|451|2026-09-23|ESTRUTURA|707|718|718|11|diverge_10_60|par|2|em_aberto |n_batidas=2
+ESTRUTURA 2|451|2026-09-25|ESTRUTURA|705|718|718|13|diverge_10_60|par|2|em_aberto |n_batidas=2
+ESTRUTURA 2|478|2026-09-25|ESTRUTURA|719|8|8|-711|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 3|515|2026-10-09|ESTRUTURA|244|0|0|-244|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 3|515|2026-10-11|ESTRUTURA|245|0|0|-245|e6_zero_esp_trabalho|par|0|em_aberto |n_batidas=0
+ESTRUTURA 2|723|2026-10-08|ESTRUTURA|440|345|500|-95|diverge_acima_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 3|746|2026-09-24|ESTRUTURA|289|193|350|-96|diverge_acima_60|par|4|trabalhou |n_batidas=4
+ESTRUTURA 2|841|2026-10-20|ESTRUTURA|681|522|701|-159|diverge_acima_60|par|4|em_aberto |n_batidas=4
+ESTRUTURA 2|854|2026-10-04|ESTRUTURA|718|7|7|-711|diverge_acima_60|par|2|trabalhou |n_batidas=2
+ESTRUTURA 2|864|2026-10-12|ESTRUTURA|509|449|509|-60|diverge_10_60|par|4|feriado |n_batidas=4
+ESTRUTURA 3|868|2026-09-22|ESTRUTURA|0|679|733|679|esp_zero_e6_trabalho|par|1|em_aberto |n_batidas=4
+ESTRUTURA 3|876|2026-09-21|ESTRUTURA|550|665|722|115|diverge_acima_60|par|1|em_aberto |n_batidas=4
+FIM_LISTA
+rc_sombra=0
+```
 
 ## 26/11 09:35 · sessao 59b1208b1fda · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · construtor · origem=Code
 
@@ -1370,74 +1422,4 @@ print(json.dumps({
 PY
 ```
 
-## 26/11 01:03 · sessao 4737c85695ab · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · verificador · origem=Code
-
-**Parecer 5a — eu não daria o aval à c4b.** A promoção passa a usar o mesmo cálculo da dobra para os pares que recebe. O motor ainda entrega suprimido diferente nas duas vias do turno partido. Também reproduzi em memória duas divergências de fronteira: a igualdade mensal com a soma dos dias falha por 0,01 h e o ajuste do vigia do dia comum muda uma acusação em feriado. `app/ponto/motor_calculo_v2.py:3020–3024,3092–3129`; `app/ponto/services/fechamento.py:975–984` (c4b); `app/ponto/services/dia_pago.py:282–297` (c4b); `app/folha/porta_export.py:340–358` (c4b).
-
-Usei a cópia e o diff fornecido, em somente leitura. Executei as contas puras em memória com Python 3.12. A execução Django, a comparação com os objetos Git `67dd8957e` e `160173bb1` e os efeitos em produção ficam **[não verificado]**. As referências marcadas **c4b** usam a numeração do anexo.
-
-## 1. Quem escreve e quem lê
-
-| Campo ou valor | Escritor e leitores |
-|---|---|
-| **Trabalhado, suprimido e limite comum**, em minutos | 12x36 e comercial lavram trabalhado e suprimido por par. O turno partido escreve o suprimido entre pares no fechamento do motor. `_limite_com_suprimido` lê o suprimido e devolve ao limite comum só até o intervalo declarado. A dobra lê o suprimido inteiro, descontado até o trabalhado do dia. `app/ponto/motor_calculo_v2.py:1840–1858,2884–2910,3092–3129,3359–3378,746–763`. |
-| **HE100, HE100 feriado e HE100 noturna do motor**, em minutos | `_dobra_sem_o_suprimido` escreve `minutos_extra`, `minutos_extra_100`, `minutos_extra_100_feriado`, `hora_extra_100` e `minutos_extra_100_noturna` nos pares. `_aplicar_he_noturna` escreve o split intermediário e o split da HE comum. `ResultadoMes` e `lavrar` leem as rubricas dos pares regulares. `app/ponto/motor_calculo_v2.py:298–344,1063–1078,1885–1908`; `app/ponto/services/dia_pago.py:199–212`. |
-| **Split da promoção e flag de prorrogação** | `get_motor_cct` monta a régua e o motor guarda `prorrogacao_noturna_pos5h`. `apurar_por_fatia` captura a flag do motor que julgou cada par de folga. A porta lê a flag por `id(p)`, as pontas registradas, o trabalhado, o suprimido e os intervalos carimbados pelo motor. Devolve `(HE100, HE100 noturna)` em minutos. Mensal e lavra recebem o mesmo mapa, sem nova consulta à CCT. `app/core/regua_cct.py:449–479`; `app/ponto/motor_calculo_v2.py:797–801,1939–1947`; `app/ponto/services/fechamento.py:302–334,975–984,1222–1227,1299–1304` (c4b); `app/ponto/services/dia_pago.py:135–168` (c4b). |
-| **FechamentoMensal e DiaPago** | O fechamento soma a promoção em `horas_extras`, `horas_extras_100`, `horas_extras_100_feriado` e `horas_extras_100_noturna`, em horas com duas casas. `lavrar` grava as três HE100 como horas `FloatField`. `detalhe.folga_feriado_min` guarda o **trabalhado bruto da promoção** em minutos e `pago_do_dia` o converte em horas para tela, PDF, app e conferência da porta. A partição tira os promovidos de `horas_folga_trabalhada` e de `ft_sem_escala`. `app/ponto/services/fechamento.py:961–1001` (c4b), `1154–1186`; `app/ponto/services/dia_pago.py:282–298` (c4b), `374–389,921–927`; `app/ponto/models.py:325–337,412–425`; `app/folha/porta_export.py:106–124`. |
-| **`porta_export`** | `fechamento_x_soma_dias_pagos` lê o mensal e agrega a lavra por campo, inclusive os três HE100. `minuto_em_duas_rubricas` lê HE, intra, trabalhado e a marca de dobra nos pares regulares. No ramo comum consulta previsto e intervalo declarado. `medir` acrescenta colab e dia e publica a lista. Os limiares são `0,015 h` para FM × DiaPago e `+1 min` para dupla rubrica. `app/ponto/services/dia_pago.py:34–44,579–592`; `app/folha/porta_export.py:245,431–438,496–512,579–592,715–724`; `app/folha/porta_export.py:340–358` (c4b). |
-
-**Segundo escritor fora da porta — ausente nas rubricas auditadas.** `restaurar_fechamento` aceita valores de restauração pela porta do mensal. O retrato de exportada atualiza os três campos de grade. O oráculo tem derivação própria e grava outra `versao` pela mesma `lavrar`. `app/ponto/services/fechamento.py:1375–1414,1260–1313`; `app/ponto/services/dia_pago.py:341–389,434–467,544–574`; `app/ponto/models.py:319–323`.
-
-## 2. Classes de reprovação e selos
-
-- **Segundo juiz registrado — ausente no diff.** A promoção usa `_dia_de`, que prioriza o mapa do motor, e o predicado existente `feriado_vira_folga`. Já existem decisões paralelas no vigia por data civil e na supressão de feriado do TXT para 12x36. Esta última está registrada em `PENDENTES`. `app/docs/JUIZES.md:114–119`; `app/core/juizes.py:310–315,495–498`; `app/ponto/services/dia_pago.py:109–132`; `app/ponto/services/fechamento.py:963–969` (c4b); `app/folha/porta_export.py:579–590`; `app/folha/export.py:420–423`.
-- **Relógio fora da borda — ausente no trecho novo.** A flag vem do motor da fatia. `_dia_de` usa o instante da entrada como degradação quando falta o mapa. As leituras de `now()` do fechamento já existiam. O diff acrescenta zero `except`. `app/ponto/services/fechamento.py:302–334` (c4b), `623–625,1154–1206`; `app/ponto/services/dia_pago.py:126–132`.
-- **Derivação paralela — presente em parte.** A função de janela e a distribuição do suprimido têm um corpo cada no motor. A promoção replica o `min(noturna_cheia, HE100_do_par)` e monta a chamada de split com HE50 zero. O motor faz o mesmo teto em sua escrita e a casca dele recebe também o campo HE50 do par. O oráculo continua com outra derivação, usando o trabalhado da folga na HE100. `app/ponto/motor_calculo_v2.py:409–451,727–763,1070–1078,1885–1901`; `app/ponto/services/dia_pago.py:149–168` (c4b); `app/ponto/calculador/regras.py:679–712`.
-- **Dois significados — unidades distintas, fronteira de dia divergente no vigia.** `folga_feriado_min` é trabalhado bruto, HE100 é líquida do suprimido e HE100 noturna é um subconjunto em minutos de relógio. `horas_noturnas` usa minutos legais. Com corte 21, entram os dias de jornada de 21 a 20, **ambos inclusivos**. À meia-noite a janela noturna reparte duração em trechos contíguos sem duplicar o instante, e o feriado da dobra pertence ao dia do início do turno. O vigia agrupa pela data da entrada e pode separar a cauda ou descartá-la na borda da competência. `app/ponto/models.py:319–337`; `app/ponto/services/dia_pago.py:249–251,283–297` (c4b); `app/ponto/janelas.py:10–33`; `app/ponto/motor_calculo_v2.py:89–118,953–989,1039–1061,2505–2537`; `app/folha/porta_export.py:579–592`.
-
-**Mordida dos mutantes.** A tabela indica o efeito na asserção-alvo. Conferi a aritmética isolada. A execução dos nove processos Django fica **[não verificado]**. `app/ponto/tests/mutantes_feriado_sem_limite_do_suprimido.py:22–84` (c4b).
-
-| Mutante | O que a asserção pega |
-|---|---|
-| `mensal-le-par`, `lavra-le-par` | Opus cai de 420 para 360 min de HE100 noturna no mensal ou na lavra, respectivamente. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:239–255` (c4b). |
-| `sem-noturno`, `dia-civil` | FN2 dá `120/0` em vez de `120/120` de HE100/noturna. O segundo mutante perde o diurno disponível do par com entrada no dia civil seguinte. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:289–303` (c4b). |
-| `sem-limite`, `relogio` | FD6 dá `100/120` em vez de `100/100`. G0.6 dá `270/270` em vez de `270/240`. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:300–318` (c4b). |
-| `ultima-fatia`, `sem-intervalos` | A primeira fatia perde 120 min noturnos pela flag errada. A segunda ganha 60 min ao ignorar a pausa. O mensal esperado de 11 h noturnas vira 9 h ou 12 h, respectivamente. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:319–345` (c4b). |
-| `soma-reordenada` | Reproduzido. Com HE `170,3`, a soma incremental acusa e o `sum` compensado devolve `None`. O mesmo hunk muda também o ramo **feriado**: trabalhados `(120; 120,2; 120,1)`, HE `(120; 120,1; 91,2)` e intra `30` no último par. A base devolve `None`, a c4b acusa `331,3` contra teto publicado `330,3`. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:348–361` (c4b); `app/folha/porta_export.py:340–355`, `340–358` (c4b). |
-
-O V1 verifica que o espelho foi consultado, que a chamada mutada recebeu `noturno=` e que a acusação contém `540/480`. O controle exige HE100 feriado de 8 h e lista vazia. A assinatura `_antiga(periodos, noturno=None)` **já está na cópia**. O diff acrescenta `autospec` e a prova da chamada. O V1 cobre a dobra regular. Uma promoção errada que sobe o mesmo valor a FM e DiaPago pode passar pelos dois vigias, pois o comparador vê igualdade e a dupla rubrica só visita `periodos`. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:247–281,417–439` (último intervalo c4b); `app/folha/porta_export.py:496–512,579–592`.
-
-**Lacunas que deixam código errado passar.** A bateria nova aceitaria agrupar todos os promovidos da competência num único lote: os casos com suprimido usam um dia e o teste de duas fatias usa `S=0` nos dois dias. A maioria dos REDs substitui `calcular_mes` e injeta `S` pronto, o que deixa passar a diferença real do turno partido abaixo. Contra a lógica da base, Opus, FN2, FD6 e três pares discriminam a cura, enquanto G0.6 e duas fatias com `S=0` são controles. O runner `base` devolve só o resultado global da suíte, sem conferir a causa de cada falha. `app/ponto/tests/test_feriado_sem_limite_do_suprimido.py:239–345` (c4b); `app/ponto/tests/mutantes_feriado_sem_limite_do_suprimido.py:63–84` (c4b).
-
-## 3. O noturno do dia muda?
-
-**O adicional noturno do dia fica igual com os mesmos pares julgados.** O motor continua preenchendo `minutos_noturnos_relogio` e `minutos_noturnos_legais` pelas pontas efetivas. FM e DiaPago continuam lendo o legal em `horas_noturnas`. O diff move a **HE100 noturna** da promoção. Quando acabam os diurnos, a HE100 noturna pode cair em relação à dobra cheia. Num par `22:00–05:00`, com 420 min trabalhados e `S=60`, ficam 360 min de HE100 noturna, 420 min de relógio e 480 min legais com o fator padrão. `app/ponto/motor_calculo_v2.py:44–46,319–321,740–763,1039–1061`; `app/ponto/services/fechamento.py:927`; `app/ponto/services/dia_pago.py:249–251,149–168` (porta em c4b).
-
-O G0 anexo fixa **HE100 noturna / relógio**, em minutos, em `300/300`, `180/180`, `360/360`, `120/120 + 240/240`, `270/270` e `240/270`. No sexto caso, a saída registrada `05:30` faz o split recuar 270 min até `01:00`. As pontas efetivas do relógio são `00:30–05:00`. No F11c, o cálculo conserva 9,00 h de HE100, 1,00 h de HE100 noturna e 1,14 h de adicional noturno. Execução dos testes completos **[não verificado]**. `app/ponto/tests/test_feriado_dobra_noturna_g0.py:44–95` (c4b); `app/ponto/motor_calculo_v2.py:392–406,435–451,1039–1061,1068–1076`; `app/ponto/tests/test_o280_bateria_da_lei.py:1801–1823`.
-
-## 4. Censo de leitores e efeito
-
-- **Chamadores diretos das interfaces alteradas.** O fechamento é o único chamador de produção da porta da promoção e entrega o mapa às duas chamadas de `lavrar`. Espelho e PDF também chamam `apurar_por_fatia`, leem o resultado e os carimbos e ignoram a flag nova. O resultado bruto que recebem fica igual. `app/ponto/services/fechamento.py:975–984,1222–1227,1299–1304` (c4b); `app/ponto/services/espelho.py:1199–1202`; `app/relatorios/pdf_espelho.py:417–423`.
-- **Espelho, PDF, calendário, app e cartão.** As rubricas diárias exibidas vêm de `DiaPago`, via `rubricas_do_dia` e `pago_do_dia`. A projeção inclui HE100 total e adicional noturno, sem coluna de HE100 noturna. Espelho e PDF ainda apuram o motor para geometria e resumo de períodos livres. O cartão de competência também consulta o fechamento online. `app/ponto/services/dia_pago.py:921–957`; `app/ponto/services/espelho.py:823–831,1200–1216,1315–1320`; `app/relatorios/pdf_espelho.py:844–856,901–914`; `app/colaboradores/services/calendario.py:688–698`; `app/api/views.py:1450–1457`; `app/relatorios/cartao_pela_celula.py:70–101,142–179`.
-- **TXT e holerite.** O TXT lê FM e emite o adicional por `horas_noturnas`. A HE100 noturna fica sem evento próprio. Há uma decisão de emissão própria para 12x36, por ciclo e régua do fim da competência, enquanto o motor lê a régua do começo de cada fatia. O holerite entrega o PDF armazenado. Alteração de valor no holerite externo **[não verificado]**. `app/folha/export.py:341–380,420–448,714–739`; `app/ponto/services/fechamento.py:733–750`; `app/holerite/views.py:1445–1459`.
-- **Painel e leitores online.** `fechamento_lido` reapura pela mesma porta em modo leitura. O painel mostra total de extras e adicional noturno, e o ranking mostra HE100 e HE100 feriado. Nenhum desses recortes exibe a parcela que muda no Opus. A foto de auditoria lê todos os campos concretos e pode registrar a mudança. O comparador da porta lê explicitamente a parcela alterada e pode continuar com lista vazia quando os dois lados mudam juntos. `app/ponto/services/fechamento.py:1752–1778`; `app/ponto/views.py:1018–1036`; `app/templates/ponto/partials/painel_fechamento.html:33–34`; `app/folha/services/ranking_he.py:137–152,206–229`; `app/chamados/services/foto_e4b.py:324–333`; `app/folha/porta_export.py:496–512`.
-
-## 5. Casos fora do golden
-
-| Caso | Resultado pela cópia e pelo diff |
-|---|---|
-| **12x36 noturno que cruza a meia-noite** | Feriado no início do plantão `19:00–07:00`, pausa `01:00–02:00`, prorrogação desligada e hora reduzida afastada. São 660 min trabalhados e 360 noturnos. Com dobra habilitada, HE100/noturna `660/360`. Com a régua simples, HE100 **feriado** `0`. O ciclo 12x36 está fora da promoção `feriado_vira_folga`. `app/ponto/motor_calculo_v2.py:2884–2955,3743,3813–3822`; `app/core/regua_cct.py:467–479`; `app/escala/models.py:28–34,1400–1406`. |
-| **Feriado no dia 20 ou 21** | Corte 21, plantão `20/11 19:00 → 21/11 07:00`. Com dobra habilitada e feriado só em **20/11**, a dobra inteira pertence a novembro. Com feriado só em **21/11**, esse plantão dá zero HE100 feriado. Um plantão que comece em **21/11** pertence a dezembro. O selo existente verifica a atribuição única do 20→21 para horas trabalhadas. `app/ponto/janelas.py:10–33`; `app/ponto/motor_calculo_v2.py:953–973,2529–2537`; `app/ponto/tests/test_dupla_contagem_dia20.py:30–44`. |
-| **Suprimido parcial no turno partido** | Use o desenho já testado `10:00–14:00` e `14:30–18:20`, com mínimo de 60 min e os dois pares reconhecidos como no selo. Em feriado regular em dobra, o laço grava `S=30`, portanto `470−30 = 440` min de HE100. Se o vínculo folga no feriado e os dois pares chegam em `periodos_ft`, o mesmo laço os omite e o cálculo por par do partido não escreve `S`. A promoção recebe `S=0` e paga **470 min**. A divergência está na alimentação da porta. `app/ponto/tests/test_motor_partido_intervalo_pelo_juiz.py:23–39,62–63`; `app/ponto/motor_calculo_v2.py:2550–2599,3004–3024,3092–3129,3219–3225`; `app/ponto/services/fechamento.py:947–984` (c4b). |
-| **Intermitente** | O controle existente usa `21/04`, `07:00–19:00`. São 12 h trabalhadas, HE100 e HE100 feriado zero, inclusive com `feriado_em_dobra=True`. O motor injeta conjunto de feriados vazio e o vínculo intermitente passa fora da classificação de folga trabalhada. `app/ponto/tests/test_s6_intermitente_feriado.py:54–56,115–142`; `app/ponto/motor_calculo_v2.py:1019–1023,2466–2470,2550–2558,3689–3701`. |
-| **FM × soma DiaPago com segundos** | Dois feriados promovidos com `S=0`, cada um começando às 22:00, com saídas às `22:30:18` e `22:33:36`. Para HE100 e HE100 noturna, arredondar `sum([30,3; 33,6])/60` dá **1,07 h** e somar as horas lavradas e arredondar dá **1,06 h**, reproduzido em memória. A tolerância de `0,015 h` deixa a diferença passar. `app/ponto/services/fechamento.py:975–984` (c4b); `app/ponto/services/dia_pago.py:282–292` (c4b), `579–592`; `app/folha/porta_export.py:245,496–512`. |
-
-## 6. Bloqueia × fila
-
-- **Bloqueia a equivalência das vias reais** — o turno partido com pausa parcial paga 440 min na dobra regular e 470 min na promoção quando o motor envia os pares a `periodos_ft`. `app/ponto/motor_calculo_v2.py:2597–2599,3092–3129,3219–3225`; `app/ponto/services/fechamento.py:975–984` (c4b).
-- **Bloqueia C2(g) como igualdade exata** — o exemplo com segundos dá FM `1,07 h` e soma `1,06 h`, com o comparador verde. `app/ponto/services/fechamento.py:975–984` (c4b); `app/ponto/services/dia_pago.py:579–592`; `app/folha/porta_export.py:245,496–512`.
-- **Bloqueia o ajuste do vigia no escopo de dia comum** — a ordem nova também muda o veredito de feriado no limite de 1 min. `app/folha/porta_export.py:340–355`, `340–358` (c4b).
-- **Fila** — vigia por data da entrada e sem `periodos_ft`, oráculo com outra derivação, TXT com regra de 12x36 no fim da competência e divergência G0.6 de split × relógio. `app/folha/porta_export.py:579–592`; `app/ponto/calculador/regras.py:679–712`; `app/folha/export.py:341–380,420–423`; `app/ponto/motor_calculo_v2.py:392–406,1039–1076`.
-- **Catraca** — o anexo desloca `medir` 583→586, `_so_a_data` 1586→1592, `apurar_por_fatia` 213→215 e `recalcular_fechamento_mes` `[664,666,672,692,763,802,848,860]`→`[669,671,677,697,768,807,853,865]`. Execução **[não verificado]**. `app/core/tests/test_medida_turno_do_par.py:287,329–331,563`.
-
-_8309 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8310 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
