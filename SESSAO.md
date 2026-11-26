@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 05:43:01.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **827**.
+**Medido em 26/11/2026 05:49:12.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **817**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -827,13 +827,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 17:49:29 | Bash |  | `cd /home/ronald/saas-hasner; cat logs/A4-ESPELHO-AUSENCIA-ABERTA/cadeia_v3.sh \| cut -c1-220` |
 | 17:49:21 | Bash |  | `grep -n 'pista' /home/ronald/saas-hasner/logs/E1-PREVISAO-24H/depois_green.sh \| head -8 \| cut -c1-250` |
 | 17:49:16 | Bash |  | `timeout 20 ssh pista log 1125151639_435bb31d 1000000 2>/dev/null \| head -5 \| cut -c1-300; grep -rln 'ssh pista pede' /home/ronald/saas-hasner/logs --include=*.sh 2>/dev/null \| head -3` |
-| 17:49:11 | Bash |  | `timeout 20 ssh pista log 1125151639_435bb31d 400 2>/dev/null \| grep -m3 -E 'AMBIENTE\|argv\|only'; grep -rn 'pede .*--only' /home/ronald/saas-hasner/logs/*/*.sh 2>/dev/null \| head -3 \| cut -c1-250` |
-| 17:49:03 | Bash |  | `timeout 20 ssh pista estado 2>&1 \| tail -8; timeout 10 ssh pista 2>&1 \| head -15` |
-| 17:48:59 | Bash |  | `cd /home/ronald/saas-hasner; grep -rhoE 'ssh pista [a-z]+ [^`"\|]{0,120}' app/docs/RELATO*.md app/docs/INFRA.md bin/*.sh 2>/dev/null \| sort \| uniq -c \| sort -rn \| head -12` |
-| 17:48:52 | Bash |  | `cd /home/ronald/saas-hasner/logs/A4-ESPELHO-AUSENCIA-ABERTA; for f in green_v3b mutante_v3_m1 mutante_v3_m2 mutante_v3_m3 red_v3 vizinhos; do echo "$f rc=$(cat $f.rc 2>/dev/null) $(grep -E '^(OK\|FAILED)($\| \()' $f.log 2>/dev/null \| tail -1)"; done; tail -2 ruff_v3b.log; grep -n 'pede' /home/ronald/saas-hasner/bin/pista*.sh /home/ronald/saas-hasner/app/docs/INFRA.md 2>/dev/null \| head -8 \| cut ...` |
-| 17:48:42 | Bash |  | `cd /home/ronald/saas-hasner; for w in wt-e1prev-red2-160024 wt-guarda10b-154425 wt-ui-a4esp-122757 wt-par-c3-ok-112401; do echo "== $w $(git -C ~/$w rev-parse HEAD) dirty=$(git -C ~/$w status --porcelain --untracked-files=no \| wc -l)"; git -C ~/$w status --porcelain --untracked-files=no \| head -3; done; ls logs/A4-ESPELHO-AUSENCIA-ABERTA/ \| grep -E 'v3\|\.rc\|fim'; cat logs/PAR-RELAMPAGO-A-LIST ...` |
-| 17:48:34 | Bash |  | `cd /home/ronald/saas-hasner; ps -o args= -p 2881657; ps -o args= -p 3224418 \| cut -c1-300; ps -eo pid,etime,args \| grep trava_teste \| grep -v grep \| cut -c1-200` |
-| 17:48:30 | Bash |  | `cd /home/ronald/saas-hasner; ps -o args= -p 3224433 \| cut -c1-400; echo; pstree -p 2881657 \| head -5; ps -ef \| grep -E 'wt-par-c3-ok' \| grep -v grep \| cut -c1-250 \| head` |
-| 17:48:26 | Bash |  | `cd /home/ronald/saas-hasner; for p in $(pgrep -f 'trava_teste.sh -- '); do echo "== $p $(ps -o etime= -p $p) $(ps -o args= -p $p \| grep -o 'na-vez [^ ]*')"; done; ps -eo pid,etime,args \| grep -E 'suite.sh --dir' \| grep -v -e grep -e 'na-vez' \| awk '{print $1,$2,$5,$6,$7,$8,$9,$10,$11,$12}' \| sort -u -k3` |
-| 17:48:21 | Bash |  | `cd /home/ronald/saas-hasner; grep -n 'quem\\|fila\\|--' bin/trava_teste.sh \| head -30; ps -eo pid,etime,args \| grep -E 'suite.sh\|trava_teste' \| grep -v grep \| cut -c1-300` |
-| 17:48:17 | Bash |  | `cd /home/ronald/saas-hasner; bin/trava_teste.sh --quem 2>&1 \| head -20; ls logs/trava* logs/fila* 2>/dev/null \| head; grep -rn 'refs/pista' bin/*.sh 2>/dev/null \| head -5; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/pista-pede-sha-completo.md` |
