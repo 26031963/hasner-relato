@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 12:00:55.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (32.2 MB). Acoes na janela: **893**.
+**Medido em 26/11/2026 12:07:41.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (32.3 MB). Acoes na janela: **897**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 12:01:44 | SendMessage |  | `-` |
+| 12:01:42 | SendMessage |  | `-` |
+| 12:01:40 | Bash | Registra vereditos da pista | `cd /home/ronald/saas-hasner; echo "mut-comercial-zero-vira-he PISTA job 1126115932_46f26ec9 rc=1 veredito=[FAILED (failures=2)] Ran 4 (morto; log logs/AVAIS-1515/pista_1126115932_46f26ec9.log)" >> logs/E1-PREVISAO-24H/v7/runs_resumo_pista.txt python3 - <<'EOF' r='app/docs/RELATO.md'; t=open(r).read(); o='-> job 1126115932_46f26ec9 (fila). ' assert t.count(o)==1 t=t.replace(o,o+'VEREDITOS 12:01 (lo ...` |
+| 12:01:30 | Bash | Le vereditos da pista | `cd /home/ronald/saas-hasner/logs/AVAIS-1515; for j in 1126115931_2c96cc10 1126115932_26299393 1126115932_46f26ec9; do echo "== $j"; head -1 pista_$j.espera; grep -E '^(OK\|FAILED)($\| \()' pista_$j.log \| tail -1; grep -E '^Ran ' pista_$j.log\|tail -1; grep -E "^(FAIL\|ERROR):" pista_$j.log \| head -12 \| cut -c1-200; done` |
 | 12:00:13 | Bash | Espera os tres jobs da pista | `for j in 1126115931_2c96cc10 1126115932_26299393 1126115932_46f26ec9; do (ssh pista espera $j > /home/ronald/saas-hasner/logs/AVAIS-1515/pista_$j.espera 2>&1; ssh pista log $j 1000000 > /home/ronald/saas-hasner/logs/AVAIS-1515/pista_$j.log 2>&1) & done; wait; head -1 /home/ronald/saas-hasner/logs/AVAIS-1515/pista_*.espera` |
 | 12:00:12 | Bash | Descongela SUITE-ROTEIA no BACKLOG | `cd /home/ronald/saas-hasner; python3 - <<'EOF' b='app/docs/BACKLOG.md'; s=open(b).read(); o='\| SUITE-ROTEIA-PARA-PISTA \| registrada (aval SUITE-ROTEIA-PARA-PISTA-2611, 26/11 09:1x):' assert s.count(o)==1 s=s.replace(o,'\| SUITE-ROTEIA-PARA-PISTA \| registrada (aval SUITE-ROTEIA-PARA-PISTA-2611, 26/11 09:1x); DESCONGELADA pelo TRAVA-VM-DESAFOGA-2611 (2): cura de gargalo, excecao do FOCO-COMP11 it ...` |
 | 12:00:07 | Bash | Registra aval e linha VOLTA-NA-PISTA | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/TRAVA-VM-DESAFOGA-2611.txt <<'EOF' aval Ronald: TRAVA-VM-DESAFOGA-2611 (26/11 12:0x) -- (1) AGORA, decisao tecnica: os testes de copia que esperam a trava da VM (ABONO c1 red1, PORTA-CONFERE-TRAVA c1, E1 v7 item3) vao a pista 2 por ssh pista (2 vagas, banco test_<id>), sem esperar a suite do PAR; a suite de pouso do PAR em voo NAO e cancelada. (2) ...` |
