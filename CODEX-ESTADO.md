@@ -1,7 +1,243 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 15:37** · publicado em **26/11/2026 15:38** (UTC-3)
+> Ultima resposta processada: **26/11/2026 15:44** · publicado em **26/11/2026 15:44** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 15:44 · sessao 917901aeffc4 · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
+
+## F4b na cópia `a8c3da7e9`
+
+- **A.** `apagar` julga a marca viva sob a proteção já usada pelo fechamento. O `delete` roda fora dessa proteção. Depois, o fechamento recebe a união ordenada dos dias da marca viva e do `post_delete`. Na virada de 20→21/11, agenda **11/2026 e 12/2026**. No controle 19h→07h, agenda **só 11/2026**. Com `RuntimeError` injetado no julgamento da marca viva, a exclusão e a trilha acontecem, sai um `WARNING` e os dias do `post_delete` chegam ao fechamento. `ponto/registro_batida.py:198` `ponto/registro_batida.py:319` `ponto/signals.py:23` `ponto/tests/test_juiz_unico_eventos.py:291` `ponto/tests/test_juiz_unico_eventos.py:301` `ponto/tests/test_juiz_unico_eventos.py:308`
+- **B.** O warning identifica a competência resolvida no formato `%02d/%s`. Se a resolução do dia falha, o warning registra a causa sem carregar a competência do dia anterior. O teste confirma que o próximo recálculo roda. Reancorei também o selo E5 na chamada por `dia` e na proteção compartilhada. `ponto/services/fechamento.py:1831` `ponto/tests/test_juiz_unico_eventos.py:349` `ponto/tests/test_e5_evento_mantem_o_gravado.py:50` `ponto/tests/test_e5_evento_mantem_o_gravado.py:88`
+- **C.** A sonda chama `turnos_do_colab` nas janelas conjuntas **10+11** e **11+12** de 2026, pelo corte de cada empresa. Imprime uma linha por PK com múltiplas reivindicações, os tipos dos turnos, a comparação dos vínculos, o universo de cada janela e `SONDA_FIM`. A fixture em memória encontrou uma colisão em cada janela. Resultado da frota **[nao verificado]**. `ponto/tests/sonda_pk_multiplas_f4b.txt:17` `ponto/tests/sonda_pk_multiplas_f4b.txt:46` `ponto/tests/test_juiz_unico_eventos.py:365`
+- **D.** A catraca registra pareadores **9→9**, derivações **81→78** e B1 **78→75**. Na composição, saiu `escalas_do_periodo` e entraram `marcos_dna_periodo`, `_carregar_dias_das_batidas`, `_dia_das_batidas_puro` e `batidas_apuraveis`. `core/tests/test_medida_turno_do_par.py:111` `core/tests/test_medida_turno_do_par.py:113` `ponto/turnos.py:2990`
+
+**Handlers `except` adicionados: 0.** A contagem AST do delta foi **12→12**, com `registro_batida.py` em **2→2** e `fechamento.py` em **9→9**. `ponto/registro_batida.py:16` `ponto/registro_batida.py:198` `ponto/services/fechamento.py:1846` `core/tests/test_medida_turno_do_par.py:875`
+
+### D — linhas do congelado antigo ao atual
+
+| Sítio | Linha antiga → atual |
+|---|---|
+| `_janela_oposto` | 28 → `ponto/registro_batida.py:30` |
+| `_casa_marco_proprio` | 43 → `ponto/registro_batida.py:45` |
+| `_dias_batida` | 111 → cálculo civil removido, leitura do julgamento em `ponto/signals.py:113` |
+| `_recompute_around` | 23 → cálculo civil removido, chamada ao juiz em `ponto/signals.py:24` |
+| `_carregar_dias_das_batidas` | 3026 → `ponto/turnos.py:2990`, agora dentro da composição |
+| `dia_do_turno_da_batida` | 2989 → `ponto/turnos.py:2940` |
+| `par_completo` | 2217 → `ponto/turnos.py:2167` |
+
+### RED → GREEN
+
+| Caso | Saída vermelha | Resultado na cópia |
+|---|---|---|
+| A — virada | `[(12, 2026)] != [(11, 2026), (12, 2026)]` | As duas competências. `ponto/tests/test_juiz_unico_eventos.py:291` |
+| A — julgamento levanta | `o julgamento vivo barrou o delete` | Delete, trilha, warning e as duas competências. `ponto/tests/test_juiz_unico_eventos.py:308` |
+| A — dias de um lado só | `Called 0 times` ao descartar os dias vivos. `Called 2 times` ao aceitar dias antigos do `post_delete`. | Uma chamada para 11/2026. `ponto/tests/test_juiz_unico_eventos.py:331` |
+| B — warning | `'competencia=10/2026' not found`. No mutante sem reinicialização, a mesma competência aparece indevidamente no warning da resolução seguinte. | Competência correta e recálculo seguinte executado. `ponto/tests/test_juiz_unico_eventos.py:349` |
+| C — sonda | A janela partida omite as duas linhas `PK`. Os mutantes de classificação trocam `par_fechado` por `outro` e `vinculo_diferente` por `vinculo_igual`. | As duas linhas `PK`, os universos esperados e `SONDA_FIM`. `ponto/tests/test_juiz_unico_eventos.py:365` |
+| D — congelado antigo | `78 not greater than or equal to 81`, `composicao mudou` e `linhas mudaram` | Os 35 testes da catraca passaram no modo local que usa `unittest.TestCase`. `core/tests/test_medida_turno_do_par.py:501` `ponto/tests/juiz_unico_eventos_mutantes.py:131` |
+
+**Comandos executados** a partir de `app/`. O conjunto de eventos teve **20 testes verdes**. Cada mutante individual F4b deu `rc=1`, `FAIL=1`, `ERROR=0`. `f4b-base` e `f4b-d-congelado-antigo` deram `rc=1`, `FAIL=3`, `ERROR=0` cada. O `m3` legado foi reancorado, e `m1` a `m7` também falharam por asserção, com `ERROR=0`. `ponto/tests/test_juiz_unico_eventos.py:85` `ponto/tests/juiz_unico_eventos_mutantes.py:28` `ponto/tests/juiz_unico_eventos_mutantes.py:79` `ponto/tests/juiz_unico_eventos_mutantes.py:167`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B -m unittest ponto.tests.test_juiz_unico_eventos
+
+mutante() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.juiz_unico_eventos_mutantes "$1"
+}
+
+mutante f4b-base
+mutante f4b-a-so-vivos
+mutante f4b-a-so-pos-delete
+mutante f4b-a-sem-protecao
+mutante f4b-a-dias-antigos
+mutante f4b-b-sem-competencia
+mutante f4b-b-competencia-anterior
+mutante f4b-c-janela-partida
+mutante f4b-c-sem-par-fechado
+mutante f4b-c-vinculo-sempre-igual
+mutante f4b-d-congelado-antigo
+mutante catraca
+
+for caso in m1 m2 m3 m4 m5 m6 m7; do
+  mutante "$caso"
+done
+```
+
+**Ficou fora da volta.** A decisão sobre o dono de uma PK com múltiplas reivindicações, a guarda civil, o flip e a equivalência com a lavra mensal. Execução na sombra, concorrência em banco, efeito no gravado e certificação pelo Code e pelo Opus **[nao verificado]**. `ponto/turnos.py:1864` `ponto/turnos.py:2952` `ponto/janelas.py:75` `ponto/services/flip_batida.py:10` `ponto/services/fechamento.py:1241`
+
+### Sonda C inteira
+
+Texto para o envelope da sombra. `batidas` e `colabs` contam as batidas apuráveis no intervalo civil da janela. `colabs_julgados` inclui também candidatos com batidas no entorno que o carregador do juiz considera. `ponto/tests/sonda_pk_multiplas_f4b.txt:46` `ponto/turnos.py:2977` `ponto/turnos.py:2991`
+
+```python
+from collections import defaultdict
+from datetime import datetime, time, timedelta
+
+from django.utils import timezone
+
+from colaboradores.models import Empresa
+from escala.alimentacao import celulas_do_periodo, escalas_do_periodo, vinculo_do_dia
+from ponto.janelas import janela_fechamento
+from ponto.turnos import batidas_apuraveis, janela_com_pad, turnos_do_colab
+
+
+def meia_noite(dia):
+    return timezone.make_aware(datetime.combine(dia, time.min))
+
+
+def medir_colab(janela, cid, ini, fim):
+    por_pk = defaultdict(list)
+    for turno in turnos_do_colab(cid, ini, fim):
+        for pk in {b.pk for b in turno.batidas}:
+            por_pk[pk].append(turno)
+    multiplas = {pk: ts for pk, ts in por_pk.items() if len(ts) > 1}
+    if not multiplas:
+        return
+
+    celulas = celulas_do_periodo([cid], ini, fim)
+    vinculos = escalas_do_periodo(cid, ini, fim, mais=[c.escala_geradora_id for c in celulas.values()])
+    por_dia = {}
+    for pk, turnos in sorted(multiplas.items()):
+        reivindicacoes = []
+        for t in turnos:
+            dia = t.data_turno
+            if dia not in por_dia:
+                dono = vinculo_do_dia(cid, dia, vinculos, celulas=celulas)
+                por_dia[dia] = getattr(dono, 'pk', None)
+            if t.entrada is None and t.saida is not None:
+                tipo = 'saida_orfa'
+            elif t.entrada is not None and t.saida is not None and not t.aberto:
+                tipo = 'par_fechado'
+            else:
+                tipo = 'outro'
+            reivindicacoes.append((dia.isoformat(), tipo, por_dia[dia]))
+        vinculo = 'vinculo_igual' if len({v for _, _, v in reivindicacoes}) == 1 else 'vinculo_diferente'
+        print('PK', janela, f'col{cid}', pk, vinculo, reivindicacoes)
+
+
+for primeira, ultima in ((10, 11), (11, 12)):
+    janela = f'{primeira:02d}+{ultima:02d}/2026'
+    batidas = 0
+    com_batida, julgados = set(), set()
+    for empresa in Empresa.objects.order_by('pk'):
+        ini = janela_fechamento(primeira, 2026, empresa)[0]
+        fim = janela_fechamento(ultima, 2026, empresa)[1]
+        pad_ini, pad_fim = janela_com_pad(ini, fim)
+        inicio, limite = meia_noite(ini), meia_noite(fim + timedelta(days=1))
+        linhas = batidas_apuraveis(None, meia_noite(pad_ini)).filter(
+            colaborador__empresa_id=empresa.pk, timestamp__lt=meia_noite(pad_fim + timedelta(days=1)),
+        ).order_by().values_list('colaborador_id', 'timestamp')
+        candidatos = set()
+        for cid, timestamp in linhas:
+            candidatos.add(cid)
+            if inicio <= timestamp < limite:
+                batidas += 1
+                com_batida.add(cid)
+        julgados.update(candidatos)
+        for cid in sorted(candidatos):
+            medir_colab(janela, cid, ini, fim)
+    print(f'UNIVERSO {janela} batidas={batidas} colabs={len(com_batida)} colabs_julgados={len(julgados)}')
+print('SONDA_FIM')
+```
+
+## 26/11 15:39 · sessao 405a00e7360c · PORTA-CONFERE-TRAVA · verificador · origem=Code
+
+**Parecer do delta.** O achado **9.1 está corrigido na porta da disputa**. O achado **6 está corrigido para o mutante original**, mas o selo ainda deixa passar um mutante que muda os vereditos de C20 e C6 com uma estampa no formato real. [app/chamados/models.py:2090](/home/ronald/codex_ws/2c1e9bd93a1d3a8291394acc06e56ffbb9304de3/app/chamados/models.py:2090), [app/chamados/tests/test_estampa_nao_decide.py:95](/home/ronald/codex_ws/2c1e9bd93a1d3a8291394acc06e56ffbb9304de3/app/chamados/tests/test_estampa_nao_decide.py:95), [app/chamados/tests/test_estampa_nao_decide.py:221](/home/ronald/codex_ws/2c1e9bd93a1d3a8291394acc06e56ffbb9304de3/app/chamados/tests/test_estampa_nao_decide.py:221), [app/chamados/services/trava_do_colaborador.py:49](/home/ronald/codex_ws/2c1e9bd93a1d3a8291394acc06e56ffbb9304de3/app/chamados/services/trava_do_colaborador.py:49).
+
+Os quatro blobs da cópia conferem com os IDs pós-diff do anexo `delta.patch:2`, `delta.patch:18`, `delta.patch:89` e `delta.patch:102`. Identidade e ancestralidade do commit completo, execução dos testes Django com banco e ocorrências em produção ficam **[nao verificado]**. [nao verificado]
+
+### 1. Quem escreve e quem lê `competencia`
+
+- **Quem monta.** `encerrar` é o único chamador de produção encontrado que fornece a tupla. Ele monta `(r['empresa_id'], mes, ano)` com a empresa do lote. `fechar` exige a tupla para `competencia_trancada`, proíbe nos demais motivos e substitui localmente seus três componentes por `int(x)`. O desligamento e o wrapper administrativo omitem o argumento. `app/chamados/services/competencia_trancada.py:232`, `app/chamados/models.py:2082`, `app/chamados/models.py:2090`, `app/colaboradores/services/desligamento.py:167`, `app/chamados/models.py:2217`.
+- **Quem lê.** `_competencia_autoriza` desempacota a tupla, compara a empresa com a FK do dono e, se coincidir, passa os três inteiros ao K4. A mesma guarda roda antes da trava e depois da releitura do dono. O fechamento grava motivo e resolução. O teste de idempotência usa autor, resolução e motivo. A tupla não participa dessas gravações nem da idempotência. `app/chamados/models.py:2094`, `app/chamados/models.py:2110`, `app/chamados/models.py:2147`, `app/chamados/models.py:2167`, `app/chamados/models.py:2175`, `app/chamados/models.py:2199`, `app/ponto/services/fechamento.py:1497`.
+- **Tipos que chegam.** A aprovação repassa o ID textual do POST, inclusive texto numérico com espaços. `None` e `''` não disparam a tranca. Mês e ano já passaram pelos sanitizadores. O comando usa `type=int` para a empresa e `int()` para mês e ano. Nos chamadores encontrados, nenhum passa `bool`, instância `Empresa` ou componente `None` à porta. Texto inválido como `'A'` encontra primeiro o filtro ORM da aprovação. `app/ponto/views.py:1289`, `app/ponto/views.py:1296`, `app/ponto/views.py:1394`, `app/core/sanitiza.py:11`, `app/chamados/management/commands/encerrar_por_competencia_trancada.py:13`, `app/chamados/services/competencia_trancada.py:305`.
+- **O que a porta aceita.** `' 4 '` vira `4` e preserva o ID. Numa chamada direta, `True` vira `1`, `False` vira `0`, `4.9` vira `4` e `'1_0'` vira `10`. `'A'` levanta `ValueError`, e um componente `None` ou uma instância `Empresa` levanta `TypeError`. O comentário “valor que nao e inteiro levanta” excede o que a coerção faz. A conversão também roda antes da checagem de disputa já fechada. `app/chamados/models.py:2085`, `app/chamados/models.py:2090`, `app/chamados/models.py:2094`, `app/colaboradores/models.py:40`.
+
+### 2. Achado 9.1 e os outros usos do ID
+
+| Sítio | Efeito |
+|---|---|
+| **Disputa no POST síncrono** | **9.1 fechado.** O ID `'4'` segue da tela até `encerrar` nos lotes de até 100 ações. A porta passa a comparar `4 == 4`, consulta K4 e, se as demais guardas liberarem, fecha e soma um em `aplicadas`. `app/ponto/views.py:1395`, `app/ponto/services/fechamento.py:1452`, `app/chamados/services/competencia_trancada.py:46`, `app/chamados/services/competencia_trancada.py:310`, `app/chamados/models.py:2090`, `app/chamados/models.py:2112`, `app/chamados/services/competencia_trancada.py:232`. |
+| **`medir`** | Para `'4'` e `4`, a seleção por empresa usa filtros ORM sobre IDs numéricos. O valor bruto ainda sai em `r['empresa_id']`. A igualdade Python no laço de chamados compara **mês e ano**, que já chegam inteiros da tela e do comando. Uma chamada direta a `medir` com mês ou ano textual falharia antes, no `'%02d/%d'`. `app/chamados/services/competencia_trancada.py:89`, `app/chamados/services/competencia_trancada.py:95`, `app/chamados/services/competencia_trancada.py:109`, `app/chamados/services/competencia_trancada.py:119`, `app/ponto/services/fechamento.py:1494`, `app/config/settings/base.py:104`. |
+| **Trilha do chamado** | O JSON recebe `"empresa_id": "4"` pelo POST e `"empresa_id": 4` pelo comando. Essa diferença de tipo fica no payload de auditoria. Efeito em algum leitor desse payload **[nao verificado]**. `app/chamados/services/competencia_trancada.py:215`, `app/core/observ.py:133`, `app/core/models.py:301`. |
+| **Pauta do DP** | `'4'` e `4` produzem a mesma âncora `4:2026-10`. Já `'04'` e `' 4 '` selecionam o mesmo ID, mas produzem âncoras diferentes. Se o lote chegar à pauta com respostas para encaminhar, a busca por âncora exata pode deixar de reaproveitar a pauta viva da forma canônica. O texto de resolução da disputa também interpola o ID bruto. `app/ponto/views.py:1296`, `app/chamados/services/competencia_trancada.py:232`, `app/chamados/services/competencia_trancada.py:236`, `app/chamados/services/competencia_trancada.py:246`, `app/pautas/services.py:180`. |
+
+### 3. R6 e a propriedade
+
+**O mutante da volta 1 fica vermelho nos dois.** Executei os cinco métodos do selo AST em memória. A cópia passou e o censo encontrou cinco funções que chamam a estampa. Ao trocar o retorno da estampa vazia pelo dicionário com `None` literal, R6 acusou o mutante. Com os corpos de C20 e C6 e leituras simuladas, a primeira asserção da propriedade também falhou. O mutante deu `([False, False], [True, True])` com estampa vazia, quando o teste exige `([True, False], [False, True])`. `app/chamados/tests/test_estampa_nao_decide.py:95`, `app/chamados/tests/test_estampa_nao_decide.py:125`, `app/chamados/tests/test_estampa_nao_decide.py:173`, `app/chamados/tests/test_estampa_nao_decide.py:218`, `app/chamados/juizes.py:1125`, `app/chamados/juizes.py:1507`.
+
+**Um mutante que passa nos dois.** Inserido logo após `_e = _estampa_da_trava()` em `_memo_da_tranca`, este trecho deixa o restante da função intacto. `app/chamados/juizes.py:1204`.
+
+```python
+    estampa = _e
+    if any(isinstance(item, tuple) for item in estampa):
+        sem_periodo = None
+        return {('tranca', colab.empresa_id, 10, 2026): sem_periodo}
+```
+
+O AST devolveu `[]`. R5 permite a atribuição e não segue o segundo nome. R6 vê um nome no valor do dicionário. A propriedade passou em memória com as duas estampas do teste, `frozenset()` e `frozenset({pk})`. Ao substituir a segunda por `frozenset({(pk, 1)})`, no formato produzido pelo registro real, o mutante mudou o dia trancado de `True` para `False` em C20 e de `False` para `True` em C6, com a mesma linha de tranca simulada. `app/chamados/tests/test_estampa_nao_decide.py:74`, `app/chamados/tests/test_estampa_nao_decide.py:95`, `app/chamados/tests/test_estampa_nao_decide.py:103`, `app/chamados/tests/test_estampa_nao_decide.py:221`, `app/chamados/services/trava_do_colaborador.py:49`, `app/chamados/juizes.py:1125`, `app/chamados/juizes.py:1507`.
+
+**A fixture monta os dois estados.** O apoio cria perguntas datadas pela porta real e exige `criada=True`. A empresa tem corte 21, a pergunta de 14/10 cai na competência 10/2026 e a de 15/09 cai na 09/2026. As duas são mudas e só existe `PeriodoFechado` para outubro. Cada `_julgar` busca instâncias novas para C20 e volta a buscá-las para C6, então o memo por instância começa frio. A FK da empresa já vem carregada. A fixture não entra nos ramos de memo de request, consulta ou lote, nem exercita a troca de estampa sobre memo previamente aquecido. `app/chamados/tests/cortes_f2_f9_apoio.py:31`, `app/chamados/tests/cortes_f2_f9_apoio.py:38`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:35`, `app/ponto/janelas.py:24`, `app/chamados/tests/test_estampa_nao_decide.py:198`, `app/chamados/tests/test_estampa_nao_decide.py:206`, `app/chamados/juizes.py:939`, `app/chamados/juizes.py:1193`.
+
+### 4. Mordida dos REDs novos
+
+| Teste | Removendo só a normalização | [nao verificado]
+|---|---|
+| **Lote com empresa textual** | Falha. `encerrar` recebe a string, a porta a compara à FK inteira e recusa. No cenário isolado, o par fica `('', 0)` em vez de `('competencia_trancada', 1)`. O teste entra por `encerrar`, abaixo do POST e do disparo. `app/chamados/tests/test_porta_confere_trava_c2d.py:96`, `app/chamados/services/competencia_trancada.py:232`, `app/chamados/models.py:2112`. |
+| **Porta direta com empresa textual** | Falha com `(False, '')`. A igualdade da empresa falha antes de K4, então este RED também morde a coerção da empresa. O mês textual não está isolado e o ano já é inteiro. `app/chamados/tests/test_porta_confere_trava_c2d.py:60`, `app/chamados/tests/test_porta_confere_trava_c2d.py:103`, `app/chamados/models.py:2112`. |
+| **Entrada `'A'` exige `ValueError`** | Falha porque a porta passa a retornar `False` sem levantar. Reproduzi os três resultados em memória com os corpos de `fechar` e `encerrar` e dependências simuladas. Os três têm mordida contra a remoção integral. `app/chamados/tests/test_porta_confere_trava_c2d.py:141`, `app/chamados/models.py:2090`, `app/chamados/models.py:2120`, `app/chamados/models.py:2147`. |
+
+### 5. Classes de reprovação no delta
+
+- **Segundo juiz, segundo escritor e derivação paralela.** A mudança de produção é a coerção local da chave. A autorização segue consultando K4, as perguntas seguem no C6 e o fechamento segue no mesmo `save` e evento. A derivação da janela continua fora da normalização. `app/chamados/models.py:2085`, `app/chamados/models.py:2110`, `app/chamados/models.py:2132`, `app/chamados/models.py:2199`, `app/chamados/services/competencia_trancada.py:99`.
+- **Relógio fora da borda.** A coerção é anterior às guardas e só lê os argumentos. O relógio da gravação continua sob a trava. A janela preexistente para reabertura entre a última leitura favorável e o `save` permanece. `app/chamados/models.py:2090`, `app/chamados/models.py:2151`, `app/chamados/models.py:2175`, `app/chamados/models.py:2199`, `app/ponto/services/fechamento.py:1461`.
+- **Selo ou RED sem mordida.** Os REDs novos mordem a retirada da coerção da empresa. O teste antigo de transferência agora documenta corretamente que a divergência de empresa recusa antes do C6. O RED da pergunta nova continua a isolar o C6. A lacuna do selo é o mutante acima, que passa mesmo alterando ambos os vereditos com a estampa real. `app/chamados/tests/test_porta_confere_trava_c2d.py:96`, `app/chamados/tests/test_porta_confere_trava_c2.py:123`, `app/chamados/tests/test_porta_confere_trava_c2d.py:123`, `app/chamados/tests/test_estampa_nao_decide.py:221`, `app/chamados/services/trava_do_colaborador.py:49`.
+- **Campo com dois significados e `except` novo.** A tupla conserva o sentido de autorização da empresa do lote. A FK continua a identificar o dono. A diferença residual está na representação bruta usada pela trilha e pela pauta. O delta acrescenta uma fonte de `ValueError` ou `TypeError` na entrada, sem novo `except`. No disparo síncrono, o `engolir` preexistente continua envolvendo o lote. `app/chamados/services/competencia_trancada.py:215`, `app/chamados/services/competencia_trancada.py:232`, `app/chamados/services/competencia_trancada.py:246`, `app/chamados/models.py:2082`, `app/chamados/models.py:2112`, `app/ponto/services/fechamento.py:1449`.
+
+## 26/11 15:39 · sessao c69f9bdbb478 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
+
+**Veredito da volta 3 — reprova o c2d.** O caso de 350 minutos sem pausa foi corrigido. Com pausa dentro da base, o 12x36 testa a duração **bruta** do par e o oráculo testa a soma **líquida** do dia. A diferença pode chegar à lavratura do `DiaPago` do oráculo. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:239-250` · `app/ponto/motor_calculo_v2.py:2842-2875` · `app/ponto/calculador/regras.py:768-777` · `app/ponto/services/fechamento.py:1289-1319`
+
+Conferi a cópia e executei trechos isolados em memória com insumos sintéticos. Comparação independente com os objetos Git históricos, suíte Django e ocorrência em produção [nao verificado]. [nao verificado]
+
+## 1. Dia sem cauda, escritores e leitores
+
+**Em dia sem cauda, o c2d preserva os valores.** O chamador passa `None`, então `_trab_he == trab` e a troca do predicado é equivalente. O ramo de folga continua com seu próprio gatilho sobre `trab`. No ramo comum, `suprimido` alimenta tanto a indenização quanto o limite da HE. `app/ponto/calculador/alimentacao.py:530-534` · `app/ponto/calculador/regras.py:604-608,733-743,768-781`
+
+**Quem escreve o argumento de `do_dia` é `rubricas_por_dia`.** A alimentação lê `saida_da_base_da_he` do período, recorta os segmentos nesse instante e soma os minutos pelo núcleo. Passa essa soma apenas nos dias marcados com cauda. O campo homônimo do `PeriodoCalculo` tem default `None` e três sítios de escrita no motor: `_gravar_base_da_he`, o reset do bloqueio e o crédito do dia aberto. A alimentação do oráculo usa o instante de corte, sem ler esse escalar. `app/ponto/calculador/alimentacao.py:164-169,460-465,530-534` · `app/ponto/calculador/nucleo.py:140-154` · `app/ponto/motor_calculo_v2.py:243,1518,1828-1841,2627-2643`
+
+**Leitores da rubrica na cópia:**
+
+- **Resultado fresco.** `diff_calculador` lê o mapa por rubrica para comparar e somar. `recalcular_fechamento_mes` passa o mapa a `dia_pago.lavrar`, que substitui o valor da rubrica e grava a versão `oraculo` a partir de 10/2026. `app/ponto/management/commands/diff_calculador.py:417-424,501-542` · `app/ponto/services/fechamento.py:1289-1319` · `app/ponto/services/dia_pago.py:322-330,345-360`
+- **Valor lavrado.** A auditoria `foto_e4b` lê todos os campos concretos das duas versões. Os leitores parametrizados de `DiaPago` usam `motor` por padrão, inclusive no calendário e no cartão. A 7ª testemunha lê a intra do período do motor, e o TXT lê o `FechamentoMensal`, também alimentado pelo motor. `app/chamados/services/foto_e4b.py:247-252,289` · `app/ponto/services/dia_pago.py:550-563,833-856,914-926` · `app/colaboradores/services/calendario.py:319,689` · `app/relatorios/cartao_pela_celula.py:142-143,180` · `app/folha/porta_export.py:348-351,615` · `app/ponto/services/fechamento.py:1028` · `app/folha/export.py:448`
+- **Testes que leem a chave diretamente.** `app/ponto/tests/test_calculador_regras.py:30,37,44,56,104,118,133,139,310` · `app/ponto/tests/test_s5b_vinculo_do_dia_efeito.py:129-130` · `app/ponto/tests/test_s5b_regra_pontualidade.py:440` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:247-249`
+
+## 2. Gatilho das seis horas
+
+- **Pausa na base.** 12x36 de 17h às 05h, entrada 22h50, saída 06h10 e pausa de 01h00 a 01h20 já reconhecida dentro do par. Base bruta **370**, base líquida **350**, integral líquido **420**. Com mínimo de 60, o motor dispara e indeniza **40 min**. O c2d dá **0**. O predicado da volta 2, sobre 420, dava **40 min**. `app/ponto/motor_calculo_v2.py:2842-2875` · `app/ponto/calculador/alimentacao.py:129-169,530-535` · `app/ponto/calculador/regras.py:757-775`
+- **Pausa só na cauda.** Com os mesmos horários e a pausa às 05h20–05h40 dentro do par, a base bruta e líquida é **370**, o integral líquido é **420** e ambos dão **40 min**. O teste existente de pausa na cauda exercita diretamente o motor. O pareamento de quatro batidas pode pôr o segundo par em D+1. `app/ponto/motor_calculo_v2.py:2850-2875` · `app/ponto/calculador/alimentacao.py:129-169` · `app/ponto/calculador/regras.py:768-773` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:253-274`
+- **Sem previsto.** Com marco às 05h, entrada 22h59min30s, saída 06h, sem pausa e sem mínimo próprio de cadastro ou perfil, ambos disparam com base **360,5**. O motor converte a base bruta em `int(360,5)` para o piso e indeniza **15 min**. O oráculo aplica o piso aos **420,5** integrais e indeniza **60 min**. `trabalha=None` com marcos permite previsto zero sem a classificação de folga. Ocorrência em produção [nao verificado]. `app/ponto/motor_calculo_v2.py:1573-1597,1902-1909,2523-2539,2846-2860` · `app/escala/models.py:6-21,1105-1107,1135-1144` · `app/escala/utils.py:2319-2325` · `app/ponto/calculador/regras.py:757-773`
+
+O Comercial testa a base líquida **por par**. O Partido apura supressão **por vão** reconhecido pelo juiz e pode indenizar sem passar por um `> 360` explícito. A equivalência do caso sem pausa do 12x36 é mais estreita que a afirmação do teste. `app/ponto/motor_calculo_v2.py:3060-3100,3340-3358` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:239-250`
+
+## 3. Pendências da volta 2 e dinheiro gravável
+
+| Item | Decisão sob o escopo pedido |
+|---|---|
+| **v2-c — pausa na borda** | Procede manter aberta a correção geral do segmentador. A consequência no turno que cruza está **dentro do escopo da verificação**. Com entrada efetiva 19h e pausa recortada para 19h–19h15, `_ini < _a` perde os 15 minutos e o erro passa à base. A TRIAGEM registra a divergência integral em e216. Um erro novo contra e216 decorrente só desse caso [nao verificado]. `app/ponto/motor_calculo_v2.py:1959-1967,2850-2875` · `app/ponto/calculador/alimentacao.py:132-169` |
+| **v2-d — âncora do split noturno** | Procede manter aberta a alteração de `_aplicar_he_noturna` sob a proibição do brief. A âncora do motor é bruta. No oráculo, a saída efetiva passou a ser a batida quando há cauda. Isso permite **uma perda nova no split lavrado do oráculo**, demonstrada abaixo. `app/ponto/motor_calculo_v2.py:1051-1066,1795-1807` · `app/ponto/calculador/alimentacao.py:88,106-113` · `app/ponto/calculador/regras.py:830-845` |
+| **v2-e — cortesia** | Procede deixar a política em aberto. Com piso 20, uma saída 15 min após o marco volta inteira antes de a c2 construir a base distinta. Esses 15 podem virar HE50 quando são excedente sobre o previsto e superam a tolerância. O c2d recebe esse dia como sem cauda recortada. `app/ponto/janela_he.py:192-200` · `app/ponto/motor_calculo_v2.py:1795-1807,2933-2944` · `app/ponto/calculador/alimentacao.py:164-169,530-534` |
+| **v2-f — selos do Partido** | Procede o achado, e há espaço para fechar a cobertura dentro do escopo. A fixture de `legais` continua com HE zero se o ganho correto for calculado pelo helper e ignorado no excedente. A semanal espera HE e alerta zero, valores que também passam se o bloco inteiro for pulado. São lacunas de teste. Mutantes executados e efeito real [nao verificado]. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:194-201,277-298` · `app/ponto/motor_calculo_v2.py:3230-3249,3264-3288` |
+| **v2-g — piso sem previsto** | Procede manter aberto como divergência do turno que cruza. O exemplo de **15 × 60** separa o piso do gatilho. Com o corte antigo no marco descrito na TRIAGEM, o oráculo ainda via **360,5** e já chegaria ao piso 60 nesse exemplo. Regressão nova contra e216 por esse piso [nao verificado]. `app/ponto/motor_calculo_v2.py:1771-1774,1902-1909,2854-2860` · `app/ponto/calculador/regras.py:757-773` |
+
+**O caso novo gravável é v2-d, no `DiaPago(oraculo)` da c2.** Exemplo sintético: 12x36 de 19h às 05h, 15 min de extra fixa declarada antes da entrada, sem pausa declarada e sem prorrogação noturna. Com entrada 18h45 e saída 05h30, a base é **615**, o previsto é **600** e a HE50 é **15 min**. Pela âncora efetiva de e216 descrita na TRIAGEM, o split do oráculo seria **15 min** em 04h45–05h00. Com a âncora atual em 05h30, dá **0**. A lavratura em competência aberta pode portanto gravar **0 em vez de 0,25 h** nessa rubrica. O TXT usa a HE total e o adicional noturno. Gravação efetiva em produção [nao verificado]. `app/ponto/janela_he.py:85-104,125-136` · `app/ponto/motor_calculo_v2.py:82-118,436-478,1058-1062,1795-1807,1881,2933-2948` · `app/ponto/calculador/alimentacao.py:106-113` · `app/ponto/services/fechamento.py:1289-1319` · `app/ponto/services/dia_pago.py:322-330,345-360` · `app/folha/export.py:424-448`
+
+## 4. Classes de reprovação no delta
+
+- **Derivação paralela e grandezas trocadas.** O c2d passa a usar para o Art.71 a base líquida recomposta pelo oráculo. O 12x36 decide com a duração bruta por par. O campo continua representando minutos líquidos de HE, mas passa a servir como substituto de uma duração bruta no gatilho. O juiz formal da geometria permanece o mesmo. `app/ponto/calculador/alimentacao.py:164-169,460-465` · `app/ponto/calculador/regras.py:604-608,768-773` · `app/ponto/motor_calculo_v2.py:1804-1807,2846-2875` · `app/core/juizes.py:221-224`
+- **Selo sem mordida de ponta a ponta.** O teste textual detecta a remoção dos literais. Uma chamada inalcançável ainda satisfaz a asserção. Trocar `- min(...)` por `+ min(...)` também conserva o texto e passa nos casos do helper, que usam declarado zero. Hoje `medir` chama, acumula e conta a testemunha. O teste funcional dos 350/420 tem mordida contra a reversão do gatilho naquele caso. `app/folha/tests/test_porta_do_export.py:105-145` · `app/folha/porta_export.py:358,587-591,713-721` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:239-250,344-361`
+- **Escritor, relógio e granularidade.** O delta apresentado só altera o gatilho e os testes. O relógio de `medir` segue na borda. A c2 já traz o reset e o crédito aberto fora do helper. No crédito aberto, o escalar guarda a soma de pares fechados no período-sentinela, enquanto a saída-base e o ganho ficam sem carimbo. A porta lê o escalar, e o oráculo trata o sentinela como aberto. Essa diferença de granularidade é anterior ao c2d. `app/ponto/calculador/regras.py:768-773` · `app/folha/porta_export.py:339-351,371,391` · `app/ponto/motor_calculo_v2.py:1518,1828-1841,2627-2646` · `app/ponto/calculador/alimentacao.py:88-96,114-118`
 
 ## 26/11 15:37 · sessao eb90364c8c09 · - · - · origem=Ronald (tmux)
 
@@ -644,190 +880,4 @@ Validei a sintaxe Bash e confirmei em memória que as **51** substituições alt
 - **Porta, relógio, campo e exceção.** Os regravadores fora da porta têm a corrida descrita acima. O relógio da idade vem dos leitores, com o caso futuro aceito. Em `retencao.tsv`, `n` varia entre contagem e percentual, e `-1` significa falha de `df`. Confirmei que o topo renderiza essa falha como `-1%`. O novo leitor traz um caminho de exceção que aborta o ESTADO, e o `finally` da passada ainda depende de `df()` e da escrita da trilha funcionarem. `bin/deploy_agendado.sh:37` `bin/gerar_cortes.py:117` `bin/disco_estado.py:358` `bin/disco_estado.py:381` `bin/retencao_disco.py:489` `bin/retencao_disco.py:560` `bin/gerar_estado.py:320`
 - **Pouso antes do pré-requisito.** L-105 exige pouso próprio do instrumento. O selo entra na régua de host. Em runtime, o timer chama `--aplicar` antes de gerar o ESTADO e antes de conferir a prova do RELATO. A separação efetiva do pouso, a régua verde anterior ao primeiro apply e o estado da unit instalada ficam `[nao verificado]`. `app/docs/LEIS.md:131` `bin/regua.sh:138` `bin/hasner-relato.service:15` `bin/relato.sh:44` `bin/relato.sh:49` `bin/relato.sh:65`
 
-## 26/11 14:53 · sessao 5fa1f7a9e10d · SUITE-ROTEIA-PARA-PISTA · verificador · origem=Code
-
-Conferi a sintaxe e fiz uma sonda em memória com o trecho de decisão da cópia, as respostas do SSH falso e as 11 substituições novas. A sonda simulou `pede`, a trava e os marcadores de tentativa, sem criar arquivos. Execução integral do selo, confirmação do hash por Git e comportamento em produção [nao verificado]. `bin/suite.sh:442–495`, `bin/tests/test_suite_rota_pista.sh:20`, `bin/tests/test_suite_rota_pista.sh:93–117`, `bin/tests/test_suite_rota_pista.sh:362–372`.
-
-## 1. Lacunas do veredito da volta 1
-
-| Lacuna | Estado no delta |
-|---|---|
-| `id` e SHA do recibo sem isolamento | **FECHADO.** Cada caso troca um campo e cada mutante afrouxa esse campo sozinho. `bin/suite.sh:457`, `bin/tests/test_suite_rota_pista.sh:93–96`, `bin/tests/test_suite_rota_pista.sh:362–363`. |
-| Veto a `imagem=` sem cabeçalho | **FECHADO.** `recusa_nua_img` isola `imagem=` com rc 71. Retirar o veto leva à trava. `bin/suite.sh:466–468`, `bin/tests/test_suite_rota_pista.sh:97`, `bin/tests/test_suite_rota_pista.sh:364`. |
-| Vetos a `Ran` e veredito com cabeçalho | **FECHADO.** Cada caso traz cabeçalho válido, rc 71 e só um dos dois sinais. Cada remoção leva à trava. `bin/suite.sh:471–474`, `bin/tests/test_suite_rota_pista.sh:98–99`, `bin/tests/test_suite_rota_pista.sh:365–366`. |
-| Recibo incompleto mascarado por OOM | **FECHADO.** `parcial` exige o motivo `recibo incompleto`. Sem a guarda, o rc continua 71 e o motivo muda para OOM, o que reprova o caso. `bin/suite.sh:474–476`, `bin/tests/test_suite_rota_pista.sh:297`, `bin/tests/test_suite_rota_pista.sh:367`. |
-| Tentativas de `espera` sem asserção | **PARCIAL.** O selo cobra três chamadas no parcial persistente e duas na recuperação. Ainda pode passar com saída prematura diante de `imagem=` sem cabeçalho válido ou com tentativas extras após rc 71. `bin/suite.sh:455–461`, `bin/tests/test_suite_rota_pista.sh:297`, `bin/tests/test_suite_rota_pista.sh:312–319`, `bin/tests/test_suite_rota_pista.sh:369–370`. |
-| Repetição e falha final de `log` | **FECHADO.** `log_volta` exige sucesso na segunda chamada. `log_cai` exige três chamadas, rc 71, zero idas à trava e o motivo de falha do log. `bin/suite.sh:477–482`, `bin/tests/test_suite_rota_pista.sh:230–247`, `bin/tests/test_suite_rota_pista.sh:320–321`, `bin/tests/test_suite_rota_pista.sh:371–372`. |
-
-## 2. Guardas atingidas e estado entre chamadas
-
-| Modo | Caminho no vivo |
-|---|---|
-| `outro_id` | Rejeita o cabeçalho pelo `id` em `bin/suite.sh:457`. Após três `espera`, sai por `espera sem o recibo`, rc 71. `bin/suite.sh:465–468`, `bin/tests/test_suite_rota_pista.sh:93–94`. |
-| `outro_sha` | Mesmo caminho, com rejeição pelo SHA em `bin/suite.sh:457`. `bin/suite.sh:465–468`, `bin/tests/test_suite_rota_pista.sh:95–96`. |
-| `recusa_nua_img` | Passa pelos termos de rc 71 e ausência de `Ran` e veredito. O termo de `imagem=` veta a VM e o ramo devolve 71. `bin/suite.sh:460`, `bin/suite.sh:465–468`, `bin/tests/test_suite_rota_pista.sh:97`. |
-| `recusa_cab_ran` | Passa pela igualdade dos rc. `Ran` veta a VM em `bin/suite.sh:473`, e a guarda seguinte devolve `recibo incompleto`. `bin/suite.sh:471–474`, `bin/tests/test_suite_rota_pista.sh:98`. |
-| `recusa_cab_ver` | Passa pela igualdade dos rc e pelo termo de ausência de `Ran`. `FAILED` veta a VM em `bin/suite.sh:473`, e a guarda seguinte devolve `recibo incompleto`. `bin/suite.sh:464`, `bin/suite.sh:471–474`, `bin/tests/test_suite_rota_pista.sh:99`. |
-| `parcial_volta` | O primeiro cabeçalho passa no parser, mas falta `imagem=`. O segundo recibo encerra a espera e o log válido leva a rc 0. `bin/suite.sh:455–461`, `bin/suite.sh:474–495`, `bin/tests/test_suite_rota_pista.sh:100–102`, `bin/tests/test_suite_rota_pista.sh:319`. |
-| `log_cai` | Passa pelo recibo completo e pelo OOM. Os três `log` devolvem 255, chegando à guarda final de log. `bin/suite.sh:474–482`, `bin/tests/test_suite_rota_pista.sh:105–109`, `bin/tests/test_suite_rota_pista.sh:320`. |
-| `log_volta` | Passa pelo recibo. O primeiro `log` devolve 255, o segundo devolve a prova válida e a suíte sai com rc 0. `bin/suite.sh:477–495`, `bin/tests/test_suite_rota_pista.sh:105–117`, `bin/tests/test_suite_rota_pista.sh:321`. |
-
-Os marcadores persistem entre chamadas da mesma rodada. `_roda` remove `espera.n`, `log.n` e `ssh.chamadas` antes de cada caso, e `_mutante` monta uma árvore própria para cada mutação. O status do `rm` fica sem checagem. `bin/tests/test_suite_rota_pista.sh:40–42`, `bin/tests/test_suite_rota_pista.sh:100–110`, `bin/tests/test_suite_rota_pista.sh:129–132`, `bin/tests/test_suite_rota_pista.sh:327–333`.
-
-## 3. O que acusa cada mutante
-
-A sonda reproduziu o efeito esperado dos 11 mutantes. O executor exige que o caso falhe e que sua saída contenha o diagnóstico configurado. A exclusividade da causa depende de quão específica é essa mensagem. `bin/tests/test_suite_rota_pista.sh:327–334`, `bin/tests/test_suite_rota_pista.sh:362–372`.
-
-| Mutante | O que acusa e quão específico é |
-|---|---|
-| `id_do_recibo_frouxo` | `rc 0 (esperado 71)`. O recibo com `id` alheio passa e termina verde. O rc também acusaria outra aceitação indevida. `bin/suite.sh:457`, `bin/tests/test_suite_rota_pista.sh:234`, `bin/tests/test_suite_rota_pista.sh:362`. |
-| `sha_do_recibo_frouxo` | `rc 0 (esperado 71)`, agora com SHA alheio e `id` certo. Mesma limitação do diagnóstico por rc. `bin/suite.sh:457`, `bin/tests/test_suite_rota_pista.sh:234`, `bin/tests/test_suite_rota_pista.sh:363`. |
-| `recusa_nua_com_imagem` | A trava acusa a ida à VM ao retirar o veto de `imagem=`. Outra ida indevida à VM emitiria a mesma mensagem. `bin/suite.sh:466–467`, `bin/tests/test_suite_rota_pista.sh:235`, `bin/tests/test_suite_rota_pista.sh:364`. |
-| `recusa_cab_com_ran` | A trava acusa a retirada do veto de `Ran`. A mensagem identifica a ida à VM, sem identificar a guarda que a permitiu. `bin/suite.sh:473`, `bin/tests/test_suite_rota_pista.sh:235`, `bin/tests/test_suite_rota_pista.sh:365`. |
-| `recusa_cab_com_veredito` | A trava acusa a retirada do veto de veredito, com a mesma limitação. `bin/suite.sh:473`, `bin/tests/test_suite_rota_pista.sh:235`, `bin/tests/test_suite_rota_pista.sh:366`. |
-| `incompleto_mascarado` | O rc segue 71 e o motivo vira OOM. A mensagem exigida só confirma a ausência de `recibo incompleto`, então outro erro de infra também poderia acusá-lo. `bin/suite.sh:474–476`, `bin/tests/test_suite_rota_pista.sh:237–238`, `bin/tests/test_suite_rota_pista.sh:367`. |
-| `veredito_so_do_recibo` | `curto` chega à comparação com veredito vazio e recebe 71 por divergência. O executor cobra apenas o rc 71, que outra falha de infra também produziria. `bin/suite.sh:485–486`, `bin/tests/test_suite_rota_pista.sh:75–76`, `bin/tests/test_suite_rota_pista.sh:244`, `bin/tests/test_suite_rota_pista.sh:368`. |
-| `espera_uma_vez` | Para com o primeiro recibo parcial. Falham o rc e a contagem de `espera`, mas o executor exige só `rc 71 (esperado 0)`. `bin/suite.sh:459`, `bin/suite.sh:474`, `bin/tests/test_suite_rota_pista.sh:319`, `bin/tests/test_suite_rota_pista.sh:369`. |
-| `espera_sem_teto` | Acusação direta pela quarta chamada de `espera`. A substituição da primeira ocorrência muda o teto de três para quatro. `bin/suite.sh:455`, `bin/suite.sh:477`, `bin/tests/test_suite_rota_pista.sh:329`, `bin/tests/test_suite_rota_pista.sh:370`. |
-| `log_sem_nova_tentativa` | Para no primeiro rc 255. Falham o rc e a contagem de `log`, mas o executor exige só `rc 71 (esperado 0)`. `bin/suite.sh:479–482`, `bin/tests/test_suite_rota_pista.sh:321`, `bin/tests/test_suite_rota_pista.sh:371`. |
-| `log_falho_aceito` | Faz três chamadas e cai na comparação com log vazio, ainda com rc 71. O executor exige a ausência do motivo de falha de log, que outro erro de infra também poderia produzir. `bin/suite.sh:482–486`, `bin/tests/test_suite_rota_pista.sh:237–238`, `bin/tests/test_suite_rota_pista.sh:372`. |
-
-## 4. Decisões ainda sem caso discriminante
-
-- **Aceite de `pede`.** Falta resposta sem `id` válido para cobrar a ida à VM antes do aceite. Falta também `id` válido com rc SSH diferente de zero para cobrar que o aceite prevaleça. O SSH falso normalmente emite um `id` válido com rc 0. `bin/suite.sh:442–449`, `bin/tests/test_suite_rota_pista.sh:54–57`, `bin/tests/test_suite_rota_pista.sh:141–158`.
-- **Saída do laço de `espera`.** Retirar a exigência de cabeçalho válido do `break` reduz `outro_id` e `outro_sha` de três chamadas para uma, com o mesmo erro final. Retirar o `break` por 71 aumenta as recusas incompletas de uma para três chamadas, com a mesma decisão final. Os casos afetados ficam fora das asserções de contagem de `espera`. `bin/suite.sh:459–461`, `bin/tests/test_suite_rota_pista.sh:297`, `bin/tests/test_suite_rota_pista.sh:308–319`.
-- **Recusa nua com um único sinal de execução.** O fixture traz `Ran` e `OK` juntos. Ignorar qualquer um isoladamente mantém o veto. Faltam `Ran` sozinho e veredito sozinho nesse ramo. `bin/suite.sh:463–468`, `bin/tests/test_suite_rota_pista.sh:91–104`, `bin/tests/test_suite_rota_pista.sh:360`.
-- **Prova de sucesso com rc 0.** `sem_ok` cobre veredito vazio. Aceitar qualquer veredito presente ainda passaria pelos casos, pois falta log `FAILED` com rc 0 e recibo curto. `bin/suite.sh:484–489`, `bin/tests/test_suite_rota_pista.sh:81–90`, `bin/tests/test_suite_rota_pista.sh:112–116`, `bin/tests/test_suite_rota_pista.sh:305`.
-- **Normalização de 3 e 75.** Nenhum dos dois valores chega a `final`. Remover qualquer uma das conversões para 1 preserva os resultados dos casos atuais. `bin/suite.sh:493–495`, `bin/tests/test_suite_rota_pista.sh:65–106`, `bin/tests/test_suite_rota_pista.sh:262–288`.
-- **Variações de seleção e diagnóstico.** Faltam dois candidatos válidos no mesmo fluxo para distinguir a escolha do último `id`, cabeçalho, `Ran` ou veredito. As contagens também deixam passar mudanças nas pausas entre chamadas, e o caso de foto cobra `ROTA PISTA` com o SHA da foto, deixando a emissão de `ROTA FOTO` sem asserção. `bin/suite.sh:443`, `bin/suite.sh:450`, `bin/suite.sh:457–464`, `bin/suite.sh:480–484`, `bin/tests/test_suite_rota_pista.sh:54–117`, `bin/tests/test_suite_rota_pista.sh:135–136`, `bin/tests/test_suite_rota_pista.sh:226`.
-
-## 5. Status de erro no selo
-
-O delta introduz uma perda de status nas duas buscas de motivo. `grep -E` roda dentro de `$(...)` e a decisão fica com o `grep -qF` externo. Uma saída interna vazia reprova os motivos usados. Se o filtro interno emitir uma linha correspondente e depois falhar, o status externo pode aprovar a busca. Ocorrência desse erro [nao verificado]. Os `touch` novos também têm status ignorado, mas, com o marcador ausente, sua falha impediria a recuperação e reprovaria o caso. Não há `except` ou `|| true` novo no caminho do vivo. Os dois `true ||` novos são substituições deliberadas nos mutantes. `bin/tests/test_suite_rota_pista.sh:101`, `bin/tests/test_suite_rota_pista.sh:110`, `bin/tests/test_suite_rota_pista.sh:165`, `bin/tests/test_suite_rota_pista.sh:237–238`, `bin/tests/test_suite_rota_pista.sh:319–321`, `bin/tests/test_suite_rota_pista.sh:367`, `bin/tests/test_suite_rota_pista.sh:372`.
-
-VEREDITO: REPROVADO (aceite de `pede` sem casos adversos `bin/suite.sh:442–447`, saídas de `espera` sem asserção discriminante `bin/suite.sh:459–460`, vetos a `Ran` e veredito sem isolamento na recusa nua `bin/suite.sh:466`, `FAILED` com rc 0 sem caso `bin/suite.sh:487–489`, conversões de 3 e 75 sem casos `bin/suite.sh:493`).
-
-## 26/11 14:43 · sessao c6291250d013 · PORTA-CONFERE-TRAVA · verificador · origem=Code
-
-# PORTA-CONFERE-TRAVA c2 — pré-verificação
-
-A c2 corrige os dois casos do diff: o mapa rejeita o CID registrado sem linha, e a disputa com pergunta muda que o C6 dá por viva retorna `False` e fica fora de `aplicadas`. Ainda há dois problemas no lote: ele pode atribuir a A um fechamento autorizado pela tranca de B, e uma resposta sem veredito que reaparece entre as leituras pode interromper o restante do lote. `app/chamados/services/trava_do_colaborador.py:93–103`, `app/chamados/models.py:2098–2116`, `app/chamados/models.py:2139–2154`, `app/chamados/services/competencia_trancada.py:221–235`
-
-Conferi em só leitura os nove arquivos alterados contra os hashes de blob dos anexos. A identidade do commit inteiro, o pouso, a execução dos testes e a ocorrência dos cenários em produção ficam [nao verificado]. [nao verificado]
-
-## 1–2. Quem escreve, quem lê e o que o retorno significa
-
-| Contrato | Escritor e leitores de produção |
-|---|---|
-| **`DisputaSupervisao.fechar(..., FECHOU_COMPETENCIA_TRANCADA)`** | `fechar` devolve `True` depois do save e da chamada de auditoria. Devolve `False` por pergunta viva na guarda barata ou na guarda sob a trava, por repetição idêntica sobre a instância já fechada ou por encontrar o fechamento de outro ato na releitura. Resposta sem veredito levanta `ValueError` antes do ramo de `False`. O único chamador localizado com esse motivo é `encerrar`, que agora lê o booleano. `False` significa que **esta chamada** não fechou. `app/chamados/models.py:2082–2125`, `app/chamados/models.py:2139–2154`, `app/chamados/models.py:2175–2184`, `app/chamados/services/competencia_trancada.py:221–232` |
-| **`r['aplicadas']`** | `encerrar` inicializa em zero e soma uma unidade por chamado cuja transição retornou sucesso e por disputa cujo `fechar` retornou `True`. `acoes` vem da medição inicial. O comando imprime os dois em linhas distintas. `disparar_no_ato` descarta o dicionário no caminho síncrono e retorna `no_ato`. No caminho assíncrono, lança o mesmo comando. A pauta tem chave própria. `app/chamados/services/competencia_trancada.py:184–193`, `app/chamados/services/competencia_trancada.py:206–235`, `app/chamados/services/competencia_trancada.py:302–329`, `app/chamados/management/commands/encerrar_por_competencia_trancada.py:29–43` |
-| **Mapa de `donos_relidos_sob_a_trava`** | O escritor é a releitura `select_related('empresa').in_bulk` após a conferência do registro. Os únicos consumidores diretos localizados são `empresa_relida_na_instancia` e o ramo de FK fria de `entregar_dono_relido`, ambos por indexação. A primeira função troca a Empresa na instância existente. O ramo frio entrega o colaborador inteiro relido. `app/chamados/services/trava_do_colaborador.py:85–122` |
-| **`ColaboradorNaoTravado`** | É `RuntimeError`, levantado por falta de registro ou por linha ausente depois de o registro passar. Os consumidores que chamam somente `exigir_colaboradores_travados` continuam conferindo presença no registro: descarimbo em lote, `DecisaoPergunta.registrar`, retratação por célula, foto E4B, resposta humana, reabertura para correção, resposta automática e carimbo pela trilha. `app/chamados/services/trava_do_colaborador.py:69–103`, `app/chamados/models.py:3623–3625`, `app/chamados/models.py:4575–4585`, `app/chamados/reconciliador.py:673–683`, `app/chamados/services/foto_e4b.py:214–225`, `app/chamados/services/disputa_emissao.py:1486–1494`, `app/chamados/services/disputa_emissao.py:1667–1679`, `app/chamados/services/disputa_emissao.py:1740–1748`, `app/chamados/services/disputa_emissao.py:1780–1786` |
-
-Os receptores de produção da exceção pela **releitura** são estes:
-
-- **`fechar`** propaga. `encerrar` também propaga. Na chamada síncrona de `trancar_periodo`, `engolir` registra o erro. Pelo comando, `encerrar` está fora do `try` que trata o formato da competência. Há tratamentos genéricos existentes em outros caminhos de `fechar`, como o reconciliador de órfãs e a entrada sincronizada. `app/chamados/models.py:2139–2143`, `app/chamados/services/competencia_trancada.py:221–235`, `app/ponto/services/fechamento.py:1444–1453`, `app/core/observ.py:85–91`, `app/chamados/management/commands/encerrar_por_competencia_trancada.py:19–29`, `app/chamados/reconciliador.py:1301–1319`, `app/ponto/services/entrada_sincronizada.py:59–66`
-- **Órfãs pela lâmpada** propaga da releitura para `consumir_eventos_celula`, que registra a falha, incrementa tentativas e deixa os eventos pendentes. **Costura** propaga para o nascimento/reuso ou para `reapontar_resolvedora`. **Absorção por ausência** trata `_Reprovada`, e o **plantio de validadas** trata `AtoDoPlantioMudou` antes da entrega. Esses tratamentos específicos não capturam `ColaboradorNaoTravado`. Não localizei `except` nominal para ela. `app/chamados/reconciliador.py:1265–1278`, `app/chamados/reconciliador.py:1525–1556`, `app/chamados/services/fio.py:920–928`, `app/chamados/services/fio.py:1064–1073`, `app/chamados/models.py:3272–3276`, `app/chamados/services/materializacao.py:1074–1079`, `app/chamados/services/materializacao.py:1136–1138`, `app/chamados/services/materializacao.py:2280–2298`
-
-**Mudança de comportamento.** Antes, o único chamador com esse motivo tratava “`fechar` retornou” como “fechou”, pelo incremento incondicional mostrado no diff. Agora usa a mesma definição de sucesso da porta. O caminho antigo aceitava a pergunta viva muda para esse motivo, portanto não havia exceção desse caso para o chamador esperar. Para os outros motivos, a nova condição por C6 não muda a decisão. Há consumidores antigos que ignoram o `False` já existente: a materialização marca `disputa_fechada=True`, e o upload de foto pode anunciar o autofechamento. A mudança de tipo da exceção na releitura alcança qualquer motivo que chegue à entrega do dono. `app/chamados/services/competencia_trancada.py:227–232`, `app/chamados/models.py:2108–2125`, `app/chamados/models.py:2143–2154`, `app/chamados/services/materializacao.py:2157–2162`, `app/api/foto_recebida.py:125–129`
-
-## 3. CID legitimamente ausente
-
-Não encontrei chamador que **seguia** no caso alterado. Os dois caminhos de entrega já indexavam o mapa pelo CID. Para uma linha ausente que chegasse até lá, o diff troca `KeyError` por `ColaboradorNaoTravado`. Em `fechar`, uma disputa apagada pode falhar antes, no `refresh_from_db`. No plantio, uma pergunta que saiu do conjunto travado é detectada antes, como `AtoDoPlantioMudou`. Nas órfãs, o consumidor pula o colaborador ausente na primeira busca, mas há uma janela entre colher os PKs e reler o colaborador, pois a releitura vem antes do `p is None`. Um apagamento concorrente nessa janela mudaria o tipo da falha, que já interrompia aquele colaborador. Uma rota de produção que faça esse apagamento fica [nao verificado]. `app/chamados/services/trava_do_colaborador.py:98–122`, `app/chamados/models.py:2139–2143`, `app/chamados/services/materializacao.py:2207–2216`, `app/chamados/services/materializacao.py:2280–2289`, `app/chamados/reconciliador.py:1265–1278`, `app/chamados/reconciliador.py:1505–1507`
-
-`None` é descartado tanto pela trava quanto pelo mapa, e a FK da disputa é obrigatória. Em SaaS, `Colaborador` e `chamados` pertencem ao schema do tenant, e a releitura consulta somente o PK nesse schema. Um número de outro schema ausente aqui cairia no erro de linha ausente. Um PK coincidente encontraria a linha local. Não localizei um chamador de entrega que receba legitimamente um CID de outro tenant. `app/chamados/models.py:1910–1914`, `app/chamados/models.py:2940–2956`, `app/chamados/services/trava_do_colaborador.py:93–103`, `app/config/settings/saas.py:34–40`, `app/config/settings/saas.py:68`, `app/config/settings/saas.py:85–93`
-
-## 4. Comentários e docstrings
-
-- **`fechar` e `encerrar`.** As duas avaliações do C6 e a contagem condicionada estão descritas corretamente. A frase “pergunta viva → `False`” precisa da ressalva de que resposta sem veredito levanta primeiro. “Nada escrito” vale para a recusa desta chamada a `fechar`. O lote já pode ter encerrado chamados. “Não carimba a muda” vale para o corpo da porta e para a via `competencia_trancada`. Lida como garantia sobre a cadeia inteira, a frase é falsa: o save dispara S144, que pode gravar `juiz_aprovou` em pergunta sem carimbo com lastro. A ressalva inclui a pergunta entregue da A9d: nesse caminho o lote não ativa a cerca nem o coletor, e os vetos são condicionais a esses contextos. `app/chamados/models.py:2064–2067`, `app/chamados/models.py:2098–2154`, `app/chamados/models.py:2160–2179`, `app/chamados/services/competencia_trancada.py:202–232`, `app/chamados/signals.py:149–167`, `app/chamados/services/materializacao.py:2342–2364`, `app/chamados/services/fio.py:1549–1551`, `app/chamados/services/fio.py:1635–1649`, `app/docs/CORTES.md:601`
-- **Registro e mapa.** O sentinela guarda o CID solicitado, e os dois leitores nomeados consultam a mesma fila sem SQL. “TODO cid pedido” precisa dizer **todo CID não nulo**. A docstring de `colaboradores_travados` também continua dizendo que devolve PKs efetivamente travados, embora o RED prove que o registro inclui um PK sem linha. A semântica efetiva de rollback e savepoints em PostgreSQL fica [nao verificado]. `app/chamados/models.py:2940–2956`, `app/chamados/services/trava_do_colaborador.py:19–25`, `app/chamados/services/trava_do_colaborador.py:39–66`, `app/chamados/services/trava_do_colaborador.py:85–103`, `app/chamados/tests/test_porta_confere_trava_c2.py:38–49`
-- **C20 e entrega da Empresa.** Conferem a precedência da FK em cache, o ramo frio da entrega e a leitura da estampa na escolha do memo. Isso cobre os comentários de `fechar`, costura, absorção e plantio. Na costura, a entrega só roda com destino persistido, dentro de `atomic`, e com disputa. A equivalência histórica de todas as queries no caso unitário e as referências «aberto 1/8», «topo do RELATO» e seções do laudo anterior ficam [nao verificado]. `app/chamados/juizes.py:1045–1051`, `app/chamados/juizes.py:1083–1128`, `app/chamados/juizes.py:1157–1179`, `app/chamados/juizes.py:1184–1207`, `app/chamados/services/trava_do_colaborador.py:106–122`, `app/chamados/models.py:2140–2143`, `app/chamados/services/fio.py:917–941`, `app/chamados/services/materializacao.py:1075–1084`, `app/chamados/services/materializacao.py:2286–2299`
-- **Órfãs e selos.** Uma transação independente por item dá uma nova estampa. Sob uma transação externa, a entrada do mesmo CID é reaproveitada, como no `TestCase` do n1. Portanto “cada item abre a sua aquisição” vale com essa condição, e “fora de request a instância é dona do memo” tem a ressalva de uma consulta explícita ativa. O comentário novo da espia está correto. O nome do teste ainda promete ausência de consulta ao registro inteiro, mas a espia cobre apenas `colaboradores_travados`. `app/chamados/reconciliador.py:1265–1279`, `app/chamados/services/trava_do_colaborador.py:47–66`, `app/chamados/juizes.py:1184–1207`, `app/chamados/tests/test_pergunta_no_app.py:106`, `app/chamados/tests/test_n1_perguntas_do_app.py:24`, `app/chamados/tests/test_n1_perguntas_do_app.py:204`, `app/chamados/tests/test_n1_perguntas_do_app.py:288–301`, `app/chamados/tests/test_porta_confere_trava.py:185–201`
-
-## 5. Mordida dos REDs
-
-Análise estática das reversões abaixo. Execução com banco [nao verificado].
-
-| RED | O que falha se a cura sair |
-|---|---|
-| **Mapa com CID ausente** | A fixture confere que o CID inexistente foi registrado junto com um válido. Sem a guarda de ausentes, volta o mapa parcial e o `assertRaises` falha. `app/chamados/tests/test_porta_confere_trava_c2.py:34–49`, `app/chamados/services/trava_do_colaborador.py:98–103` |
-| **Dois entregadores** | Sem a guarda, a primeira indexação levanta `KeyError`, e a segunda teria o mesmo resultado se examinada isoladamente. Na reversão integral, a primeira falha interrompe o teste antes da segunda. `app/chamados/tests/test_porta_confere_trava_c2.py:51–62`, `app/chamados/services/trava_do_colaborador.py:98–103`, `app/chamados/services/trava_do_colaborador.py:106–122` |
-| **Mudança entre `pode_fechar` e `fechar`** | A espia muda a Empresa e chama o `fechar` real. Sem a recusa, falha o estado esperado da disputa. Mantendo a recusa e revertendo só a contagem, falha `aplicadas == 0`. `app/chamados/tests/test_porta_confere_trava_c2.py:91–121`, `app/chamados/models.py:2108–2116`, `app/chamados/services/competencia_trancada.py:227–232` |
-| **Mudança no instante da trava** | `_interposto` move antes da primeira aquisição real e a asserção exige que o gancho rodou. Morde a entrega da Empresa relida e a recusa sob a trava. Só a guarda barata deixa passar o estado visto em A. `app/chamados/tests/test_porta_confere_trava_c2.py:123–132`, `app/chamados/tests/test_f5_v3_guarda_sob_trava.py:37–46`, `app/chamados/models.py:2132–2154` |
-| **Porta direta com pergunta viva** | Sem a condição nova, o estado e a trilha esperados falham. O RED **não isola o retorno barato**: se sair só `return False` antes do `atomic`, a recusa sob a trava ainda pode produzir a mesma tripla. `app/chamados/tests/test_porta_confere_trava_c2.py:134–139`, `app/chamados/models.py:2108–2127`, `app/chamados/models.py:2151–2154` |
-
-Os cinco distinguem a reversão integral da cura que exercitam. Nenhum testa reabertura concorrente de `PeriodoFechado`, troca para B também trancada, ou uma resposta sem veredito no meio de um lote. O controle positivo tem uma muda, sem pai, e verifica motivo, contador e trilha. Ele não exercita o carimbo S144 com lastro. `app/chamados/tests/test_porta_confere_trava_c2.py:80–89`, `app/chamados/tests/test_porta_confere_trava_c2.py:114–150`, `app/chamados/tests/test_e4c_f5_voltaC_lotes.py:30–48`, `app/chamados/services/materializacao.py:2342–2356`
-
-## 6. Classes de reprovação
-
-| Classe | Resultado |
-|---|---|
-| **Segundo juiz / derivação paralela** | A guarda usa C6 e o juiz registrado de resposta sem veredito. C7 e `_guardas` já compunham esses dois resultados para suas respectivas perguntas. A c2 acrescenta a decisão da porta pelo motivo sobre a lista C6 já calculada. `app/core/juizes.py:297–314`, `app/chamados/models.py:2047–2053`, `app/chamados/models.py:2098–2122` |
-| **Segundo escritor** | O save do fechamento segue em `fechar`. As portas de reabertura limpam os campos. `encerrar` escreve seu contador e usa a porta para o estado da disputa. S144 permanece uma escrita indireta de pergunta pelo carimbador existente. `app/chamados/models.py:2175–2183`, `app/chamados/models.py:2395–2407`, `app/chamados/models.py:2419–2423`, `app/chamados/services/competencia_trancada.py:227–232`, `app/chamados/services/materializacao.py:2342–2356` |
-| **Relógio fora da borda** | O relógio de `fechada_em` segue dentro da trava. A absorção já usava um `agora` de passagem anterior à trava por irmã e tem guarda explícita para resposta posterior a ele. A c2 não move essas leituras. `app/chamados/models.py:2151–2179`, `app/chamados/services/materializacao.py:1047–1079`, `app/chamados/services/materializacao.py:1089–1108` |
-| **Selo sem mordida / ordem de trava** | Há a lacuna da guarda barata e o alcance estreito da espia descritos acima. As novas saídas pulam aquisições ou escritas, e a nova conferência do mapa faz leitura simples. A sequência de aquisição continua Colaborador → Disputa → Chamado → Pergunta. Ausência de deadlock em execução [nao verificado]. `app/chamados/tests/test_porta_confere_trava.py:190–201`, `app/chamados/tests/test_porta_confere_trava_c2.py:134–139`, `app/chamados/models.py:2123–2154`, `app/chamados/models.py:2953–2982`, `app/chamados/services/trava_do_colaborador.py:93–103` |
-| **Pouso antes do pré-requisito** | O corte exige PORTA depois da F5, e a cópia contém a releitura sob trava e o memo por estampa. A ordem efetiva dos pousos e a entrega da proteção A9d ficam [nao verificado]. `app/docs/CORTES.md:601`, `app/docs/CORTES.md:639`, `app/chamados/models.py:2132–2153`, `app/chamados/juizes.py:1196–1207` |
-| **Campo com dois significados / `except` novo** | `aplicadas` conta atos feitos nesta chamada. `False` cobre recusa e no-op, ambos sem novo fechamento por esta chamada. `ColaboradorNaoTravado` passa a ter duas causas diagnósticas, distinguidas na mensagem. O diff acrescenta um `raise` e nenhum `except`. `app/chamados/services/competencia_trancada.py:188–193`, `app/chamados/services/competencia_trancada.py:206–235`, `app/chamados/models.py:2082–2088`, `app/chamados/models.py:2123–2125`, `app/chamados/models.py:2144–2153`, `app/chamados/services/trava_do_colaborador.py:74–103` |
-
-## 7. Contraexemplos que sobrevivem
-
-1. **A e B trancadas, atribuição à empresa errada.** `medir(A)` seleciona a disputa. Depois da seleção, a edição de cadastro grava B para o colaborador. Sob a trava, `fechar` recebe B e o C20 usa a tranca de B. Se ela também cala a muda, o fechamento passa e conta em `encerrar(A)`, com a resolução dizendo que a tranca era de A. A porta recebe o motivo e o texto, sem receber a empresa e competência esperadas como dados de autorização. A edição de cadastro é uma rota concreta para a troca. `transferir_posto` tem um gate que bloqueia disputa aberta. `app/chamados/services/competencia_trancada.py:119–121`, `app/chamados/services/competencia_trancada.py:174–184`, `app/chamados/services/competencia_trancada.py:221–232`, `app/chamados/models.py:2055`, `app/chamados/models.py:2140–2154`, `app/chamados/juizes.py:1123–1129`, `app/colaboradores/views.py:1258–1262`, `app/colaboradores/views.py:1335–1365`, `app/colaboradores/views.py:1391–1395`, `app/colaboradores/mixins.py:303–313`
-2. **Lote misto, resposta sem veredito reaparece.** Em A trancada, uma resposta sem veredito fica fora da guarda normal e entra na seleção de pauta. Depois de `pode_fechar`, o cadastro muda para B aberta. Na releitura, a resposta entra em `_pend` e levanta `ValueError` antes da nova recusa por C6. As disputas seguintes ficam sem processamento e a criação da pauta ao fim do lote não é alcançada. No comando, as unidades anteriores podem já ter sido gravadas em seus próprios `atomic`. `app/chamados/models.py:2038–2053`, `app/chamados/models.py:2098–2114`, `app/chamados/models.py:2139–2153`, `app/chamados/services/competencia_trancada.py:122–139`, `app/chamados/services/competencia_trancada.py:206–235`, `app/chamados/management/commands/encerrar_por_competencia_trancada.py:19–29`
-3. **Reabertura após a última leitura do C20.** A trava do colaborador continua de pé, mas `periodo_trancado` lê `PeriodoFechado` sem travar a linha, e o ato de reabrir grava essa linha sem passar pela trava do colaborador. Se a reabertura gravar depois da guarda e antes do save da disputa, uma muda sem outro lastro pode voltar a ficar viva e a disputa ainda fechar. Para uma disputa sem pai e sem carimbo histórico da tranca, o serviço de reabertura não encontra chamado ou pergunta a restaurar e não reabre a disputa. O app põe a pergunta viva de disputa fechada no histórico. `app/chamados/models.py:2151–2179`, `app/ponto/services/fechamento.py:1456–1476`, `app/ponto/services/fechamento.py:1488–1494`, `app/chamados/services/competencia_trancada.py:273–299`, `app/chamados/juizes.py:1496–1505`, `app/chamados/juizes.py:1577–1578`, `app/chamados/services/pergunta_no_app.py:80–92`
-
-Também tracei o caso de **pergunta nova muda**. A emissão pode agregar pergunta a uma disputa existente e o nascimento passa pela trava do colaborador. Se a pergunta entrar antes da releitura e o C6 a der viva, a c2 retorna `False` antes do save e segue para o próximo item. Esse intercalamento está coberto pelo código, embora não tenha RED próprio na c2. `app/chamados/services/disputa_emissao.py:673–696`, `app/chamados/services/disputa_emissao.py:448–454`, `app/chamados/models.py:3134–3139`, `app/chamados/models.py:2098–2125`, `app/chamados/models.py:2151–2154`, `app/chamados/services/competencia_trancada.py:221–232`
-
-## 26/11 14:42 · sessao c7ba7283a19e · SUITE-ROTEIA-PARA-PISTA · verificador · origem=Code
-
-Os sete casos novos chegam às guardas que pretendem testar. A sonda em memória, com os trechos da cópia e as substituições exatas do selo, confirmou os sete desvios esperados. Ainda há termos de segurança sem caso discriminante e uma guarda cuja remoção fica mascarada pela seguinte. Os selos completos criam arquivos temporários, portanto a execução integral, a confirmação do hash por Git e o comportamento em produção ficam [nao verificado]. `bin/tests/test_suite_rota_pista.sh:20`, `bin/tests/test_suite_rota_pista.sh:85`, `bin/tests/test_suite_rota_pista.sh:320`, `bin/tests/test_suite_sh.sh:94`.
-
-## 1. Guardas e mutantes
-
-Nos casos `infra` novos, o vivo precisa devolver 71, evitar a trava e imprimir o motivo fornecido. No mutante, o caso precisa falhar e emitir o diagnóstico esperado em `$5`. Para as quatro regras de log, esse diagnóstico é `rc 0 (esperado 71)`. O motivo da guarda é conferido no vivo. Para as três regras de recusa nua, o diagnóstico do mutante cobra a presença ou ausência da ida à trava. `bin/tests/test_suite_rota_pista.sh:146`, `bin/tests/test_suite_rota_pista.sh:215`, `bin/tests/test_suite_rota_pista.sh:289`, `bin/tests/test_suite_rota_pista.sh:293`.
-
-| Guarda | Modo do SSH falso e caso | O que acusa o mutante |
-|---|---|---|
-| `bin/suite.sh:457` e `bin/suite.sh:465` — cabeçalho do job pedido | `outro` traz id **e** SHA alheios. `bin/tests/test_suite_rota_pista.sh:69`, `bin/tests/test_suite_rota_pista.sh:275` | `veredito_de_outro_job` afrouxa os dois campos juntos e dá rc 0. O rc acusa o mutante. Se apenas um campo for afrouxado, o outro ainda barra o recibo. `bin/tests/test_suite_rota_pista.sh:219`, `bin/tests/test_suite_rota_pista.sh:313` |
-| `bin/suite.sh:466` — sem cabeçalho, exigir rc 71 | `cai` devolve 255 sem cabeçalho, `Ran` ou `imagem=`. `bin/tests/test_suite_rota_pista.sh:65`, `bin/tests/test_suite_rota_pista.sh:163` | Apagar o termo faria `cai` ir à VM, o que o caso acusa pela trava e por `ROTA VM`. O selo tem mutante de fallback para esse caso, sem mutação isolada de `erc=71`. `bin/tests/test_suite_rota_pista.sh:167`, `bin/tests/test_suite_rota_pista.sh:305`, `bin/tests/test_suite_rota_pista.sh:324` |
-| `bin/suite.sh:467` — a recusa nua volta à VM | `recusa_nua`, rc 71 com saída vazia. `bin/tests/test_suite_rota_pista.sh:91`, `bin/tests/test_suite_rota_pista.sh:285` | `recusa_nua_vira_infra` cai no ramo de infra. A asserção acusa `esperado 1 ida a trava, veio 0`. O vivo também cobra `sem recibo nem Ran` na linha `ROTA VM`. `bin/tests/test_suite_rota_pista.sh:149`, `bin/tests/test_suite_rota_pista.sh:324` |
-| `bin/suite.sh:466` — sem cabeçalho, exigir ausência de `Ran` e veredito | `recusa_nua_ran` traz `Ran 2` **e** `OK`, com rc 71. `bin/tests/test_suite_rota_pista.sh:92`, `bin/tests/test_suite_rota_pista.sh:286` | `recusa_nua_com_ran` apaga o termo inteiro e é acusado por `caiu na VM depois do aceite`. Uma alteração que preserve apenas uma das duas verificações ainda rejeita esse fixture. `bin/tests/test_suite_rota_pista.sh:220`, `bin/tests/test_suite_rota_pista.sh:326` |
-| `bin/suite.sh:466` — sem cabeçalho válido, vetar qualquer linha `id=` | `recusa_outro_id` traz só o cabeçalho alheio e rc 71. `bin/tests/test_suite_rota_pista.sh:93`, `bin/tests/test_suite_rota_pista.sh:287` | `recusa_nua_de_outro_id` apaga o veto e é acusado por `caiu na VM depois do aceite`. `bin/tests/test_suite_rota_pista.sh:220`, `bin/tests/test_suite_rota_pista.sh:327` |
-| `bin/suite.sh:471` — rc do SSH igual ao do cabeçalho | `recusa255`, cabeçalho 71 e SSH 255. `bin/tests/test_suite_rota_pista.sh:67`, `bin/tests/test_suite_rota_pista.sh:273` | `recusa_qualquer_71` deixa o 71 do cabeçalho prevalecer e é acusado pela ida à VM. O vivo usa a asserção genérica de infra. `bin/tests/test_suite_rota_pista.sh:215`, `bin/tests/test_suite_rota_pista.sh:310` |
-| `bin/suite.sh:473` — recusa com cabeçalho válido | `recusa` vai à VM. `recusa_img` tem cabeçalho válido e `imagem=`, prossegue ao log e devolve 71. `bin/tests/test_suite_rota_pista.sh:66`, `bin/tests/test_suite_rota_pista.sh:79`, `bin/tests/test_suite_rota_pista.sh:247`, `bin/tests/test_suite_rota_pista.sh:278` | `recusa_com_imagem` apaga a condição sobre `imagem=` e é acusado pela trava. Os termos de ausência de `Ran` e veredito só são atingidos com valores vazios. `bin/tests/test_suite_rota_pista.sh:230`, `bin/tests/test_suite_rota_pista.sh:316` |
-| `bin/suite.sh:474` e `bin/suite.sh:475` — recibo completo e exatamente um `oom=0` | `parcial` falta `imagem=`. `oom1` tem `oom=1`. `oom2` tem `oom=0 oom=1`. `bin/tests/test_suite_rota_pista.sh:68`, `bin/tests/test_suite_rota_pista.sh:71`, `bin/tests/test_suite_rota_pista.sh:251` | Apagar `:474` deixa `parcial` passar no selo porque a guarda de OOM também devolve 71 e o caso aceita o motivo genérico. `oom_ignorado` é acusado por `oom1` com `rc 0 (esperado 71)`. `bin/tests/test_suite_rota_pista.sh:215`, `bin/tests/test_suite_rota_pista.sh:312`, `bin/tests/test_suite_rota_pista.sh:314` |
-| `bin/suite.sh:485` — `Ran` e veredito do recibo concordam com o log quando presentes | `ran_diverge`: 3 no recibo e 2 no log, ambos `OK`. `ver_diverge`: `Ran 2` nos dois, `OK` no recibo e `OK (skipped=1)` no log. `bin/tests/test_suite_rota_pista.sh:85`, `bin/tests/test_suite_rota_pista.sh:100`, `bin/tests/test_suite_rota_pista.sh:104`, `bin/tests/test_suite_rota_pista.sh:280` | Cada mutante libera só sua comparação e chega a rc 0. `curto` exercita as duas permissões por campo ausente. `ran_so_do_recibo` acusa a retirada da permissão para `Ran` vazio. A retirada isolada da permissão para veredito vazio também faria `curto` falhar, mas o selo só registra o mutante de `Ran`. `bin/tests/test_suite_rota_pista.sh:75`, `bin/tests/test_suite_rota_pista.sh:263`, `bin/tests/test_suite_rota_pista.sh:315`, `bin/tests/test_suite_rota_pista.sh:320` |
-| `bin/suite.sh:487` e `bin/suite.sh:488` — rc 0 requer `OK*` e `Ran` positivo | `sem_ok` tem `Ran 2` sem veredito. `ran0` tem `OK` com `Ran 0`. Ambos trazem recibo curto. `curto` cobre a prova válida e `vermelho` cobre `jrc != 0`. `bin/tests/test_suite_rota_pista.sh:81`, `bin/tests/test_suite_rota_pista.sh:89`, `bin/tests/test_suite_rota_pista.sh:101`, `bin/tests/test_suite_rota_pista.sh:248`, `bin/tests/test_suite_rota_pista.sh:263`, `bin/tests/test_suite_rota_pista.sh:282` | Cada remoção libera rc 0 no seu caso. O outro requisito fica satisfeito, e o recibo curto deixa as comparações de `:485` passarem. `bin/tests/test_suite_rota_pista.sh:219`, `bin/tests/test_suite_rota_pista.sh:322`, `bin/suite.sh:485` |
-
-As lacunas que afetam o veredito:
-
-- **`imagem=` no ramo sem cabeçalho.** Nenhum caso chega ao termo `[ -z "$completo" ]` com rc 71, sem `Ran` ou veredito, e com `imagem=` presente. `outro` tem `imagem=`, mas rc 0 interrompe a avaliação antes. Na sonda, um `espera` com apenas `imagem=` e rc 71 deu infra no vivo e marcou VM ao apagar esse termo. `bin/suite.sh:466`, `bin/tests/test_suite_rota_pista.sh:69`, `bin/tests/test_suite_rota_pista.sh:91`.
-- **`Ran` e veredito na recusa com cabeçalho.** Faltam entradas com cabeçalho válido, rc 71 e sem `imagem=`, com só `Ran` ou só veredito. Cada entrada muda de infra para VM ao apagar seu termo na sonda. `recusa_nua_ran` termina no ramo anterior, e `recusa_img` para a avaliação no termo de `imagem=`. `bin/suite.sh:465`, `bin/suite.sh:473`, `bin/tests/test_suite_rota_pista.sh:66`, `bin/tests/test_suite_rota_pista.sh:79`, `bin/tests/test_suite_rota_pista.sh:92`.
-- **Tentativas e falha do log.** Em `espera`, os casos cobrem saída imediata por recibo completo, saída por rc 71 e repetição por recibo parcial ou ausência de cabeçalho. As asserções contam `espera` e `log` com mínimo de uma chamada no caso feliz. Falta conferir o número de tentativas ou uma recuperação após resposta parcial. Todo `log` alcançado no selo devolve 0 de primeira, deixando sem caso a repetição por `lrc != 0` e o `ERRO-INFRA` final de log. `bin/suite.sh:455`, `bin/suite.sh:477`, `bin/suite.sh:482`, `bin/tests/test_suite_rota_pista.sh:98`, `bin/tests/test_suite_rota_pista.sh:134`, `bin/tests/test_suite_rota_pista.sh:251`.
-
-## 2. Fidelidade do SSH falso
-
-Os quatro casos de log usam o cabeçalho e `imagem=… oom=0` que o parser procura. Os dois de divergência trazem `Ran` e veredito no recibo. Os dois de prova insuficiente os omitem do recibo para que a decisão venha do log. O parser reconhece `OK (skipped=1)` e o compara como linha inteira, então a divergência de veredito ocorre em `:485`. Os três casos de recusa chegam a `:465` com o cabeçalho válido ausente, como planejado. O formato básico de duas linhas também consta no certificador da cópia. `bin/pista_certifica.sh:13`, `bin/suite.sh:457`, `bin/suite.sh:463`, `bin/suite.sh:465`, `bin/suite.sh:483`, `bin/tests/test_suite_rota_pista.sh:85`, `bin/tests/test_suite_rota_pista.sh:98`.
-
-## 3. `pipefail` em `test_suite_sh.sh`
-
-Nenhum pipeline restante depende de um consumidor fechar o pipe cedo no caminho normal. Em `:52` e nos casos `MORDE`, `_bloco_passa_pela_porta` drena a entrada com `cat` antes do `grep -q`. Os pipelines de contagem drenam com `wc -l`. Nos onze greps alterados, `printf '%s\n' "$CORPO"` e `<<< "$CORPO"` entregam o mesmo conteúdo seguido de uma quebra de linha, inclusive para valor vazio. As opções e padrões, inclusive `-x` e `-P`, foram preservados. `bin/tests/test_suite_sh.sh:41`, `bin/tests/test_suite_sh.sh:52`, `bin/tests/test_suite_sh.sh:61`, `bin/tests/test_suite_sh.sh:68`, `bin/tests/test_suite_sh.sh:75`, `bin/tests/test_suite_sh.sh:80`, `bin/tests/test_suite_sh.sh:88`, `bin/tests/test_suite_sh.sh:123`, `bin/tests/test_suite_sh.sh:136`.
-
-## 4. Escritores e leitores
-
-Todos os endereços deste quadro são de `bin/tests/test_suite_rota_pista.sh`.
-
-| Dado | Quem escreve | Quem lê |
-|---|---|---|
-| `SELO_PISTA` | O selo limpa o ambiente herdado em `:17`. `_caso_vm`, `_caso_vermelho`, `_caso_cai`, `_caso_infra` e `_caso_rc` passam o modo em `:148`, `:157`, `:165`, `:218` e `:228`. | O SSH falso lê em `:43`, com padrão `ok`. |
-| `$a/out` | `_roda` redireciona o stdout da suíte em `:120`. | `_caso_ok` em `:139–143`, `_caso_vm` em `:150` e `:152`, `_caso_vermelho` em `:160`, `_caso_cai` em `:168–169`, `_caso_foto` em `:211`, `_caso_infra` em `:221–223`, `_caso_rc` em `:231`, `_caso_pouso` em `:238` e `_julga` em `:246`. | [nao verificado]
-| `$a/rc` | `_roda` grava `$?` imediatamente após a suíte em `:120`. | `_caso_ok`, `_caso_vermelho`, `_caso_cai`, `_caso_volta`, `_caso_nao_roteia`, `_caso_foto`, `_caso_infra` e `_caso_rc`, em `:131`, `:158`, `:166`, `:175`, `:185`, `:198`, `:219` e `:229`. | [nao verificado]
-| `ssh.chamadas` | `_roda` limpa em `:119`. O SSH falso acrescenta uma linha por chamada em `:40–42`. | `_caso_ok` em `:132–137`, `_caso_vm` em `:151`, `_caso_volta` em `:176`, `_caso_nao_roteia` em `:183–187` e `_caso_pouso` em `:237`. `_n` conta em `:122`. |
-| Terceiro argumento de `_caso_infra` | Os seis wrappers de infra novos fornecem o trecho literal em `:280–283` e `:286–287`. | `_caso_infra` verifica se foi fornecido, busca o literal numa linha `ERRO-INFRA PISTA: job=` e o imprime no diagnóstico em `:222–223`. |
-
-## 5. Erro engolido no delta
-
-O delta não introduz `except`, `|| true` ou fallback que converta falha em aprovação. O motivo é opcional nos chamadores antigos. Quando fornecido, uma falha da busca fixa `ok=1`. Há um risco na direção oposta em `_caso_infra`: a busca nova usa `grep | grep -q` com `pipefail`, assim como a busca preexistente de `_caso_vm`. Na sonda, uma linha correspondente deu 0 e um fluxo longo de linhas correspondentes deu 141 no primeiro `grep`. Esse fluxo longo é sintético. Nos caminhos novos exercitados, `_rota_infra` escreve uma linha de infra em stdout. `bin/tests/test_suite_rota_pista.sh:15`, `bin/tests/test_suite_rota_pista.sh:150`, `bin/tests/test_suite_rota_pista.sh:215`, `bin/tests/test_suite_rota_pista.sh:250`, `bin/suite.sh:345`.
-
-VEREDITO: REPROVADO (`id` e SHA sem isolamento em `bin/suite.sh:457`, veto a `imagem=` sem cabeçalho sem caso em `bin/suite.sh:466`, vetos a `Ran` e veredito com cabeçalho sem casos em `bin/suite.sh:473`, guarda de recibo incompleto mascarada em `bin/suite.sh:474`, tentativas de `espera` sem asserção em `bin/suite.sh:455` e falha de `log` sem caso em `bin/suite.sh:477` e `bin/suite.sh:482`).
-
-_8400 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8403 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
