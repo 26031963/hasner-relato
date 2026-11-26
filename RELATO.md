@@ -10659,6 +10659,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**25/11 23:29:26 disjuntor (NEGOU ANEXO-ENXUTO)** -- agente principal -- Bash -- alvo sha1:0e490a5086 (1696 car., na trilha privada)
+
 **25/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **25/11 22:23:14 disjuntor (NEGOU B1)** -- agente a06d508ab4487bb6e -- Bash -- alvo sha1:d22cbca3ff (243 car., na trilha privada)
@@ -13213,3 +13215,6 @@ INCOMPLETO: passo B (aviso ao DP, escritor unico na origem) + (a) + (b); suite; 
 23:23 PARCIAL c5 3420bc23f (sobra S133 com _data_civil unica; catraca casa: diff vazio no catraca_diff, ruff OK) -> pista 1125232217_3420bc23. DECIDIDO PELA LEI escopo literal do PARCIAL-BORDA-V2-2511: "nada relavra" e do item (1), dispensa do MARCO PREVISTO (intocada, medida); a ata do col274 04/10 relavra porque o FATO_EM_AUSENCIA e lampada dela -- e o que o aval manda mudar | contestavel. Prova pedida: sonda sonnet na sombra (atomic+raise) mede ata/lampadas/chamados/perguntas dos 23 dias, main x c5 (logs/pb2_ata_*.out).
 DESPACHO PARCIAL-ATA: sonda que escreve na sombra (atomic+raise) -> sonnet | opus final -> depois da pista e da sonda
 23:24 PARCIAL-ATA PROVA (sombra, atomic+raise, ROLLBACK OK, 0 Traceback; conferido diff das linhas A): 23 dias, 1 difere = col274 04/10, veredito fato_em_ausencia -> concorde, lampada FATO_EM_AUSENCIA sai, na ata so periodo_parcial dentro->fora; chamados/perguntas/decisoes +0 nos 23 nas duas arvores; FM/DiaPago 0 (pb2_fm). Aval 'so fato_em_ausencia muda' FECHA. Resta: pista c5 + opus final. (logs/pb2_ata_main.out x pb2_ata_c5.out; wt ganhou app/media vazio p/ montagem)
+23:29 O30-F3-CONSTRUIR-2511 recebido. DESPACHO O30-F3: mapa curto (F1 hoje, escritores/leitores de Ausencia.documento, porta de salvar ausencia, formulario do admin, permissao do anexo) -> Codex leitura | campos do atestado em ponto/models.py + migration -> sessao/opus (models.py nao vai ao Codex) | construtor F3 + form -> Codex vaga extra (E4d nao cabe no papel construtor: pre-requisitos abertos; schema) | opus final -> depois da pista (schema = PROPORCIONAL exige).
+23:29 O30-F3 mapa curto -> Codex leitura volta 1 (logs/O30-F3-CONSTRUIR/mapa.q, slot 1, hash a96850e42). Pistas FERIADO c3 e PARCIAL c5 rodando desde 23:20/23:22.
+23:30 O30-F3-CONSTRUIR-V2-2511 recebido (substitui -2511; muda so a vez). Conferencia da vaga AGORA (decisao tecnica, contestavel): E4d bloqueada por pre-requisito (E4C-F5-INSTANTE, PORTA-CONFERE-TRAVA); FERIADO c3 e PARCIAL c5 na pista, sem construcao; PAR c7 e E1 v4 com construtor opus vivo (motor/porta de celula, fora do papel Codex); DST-L1 em PERGUNTA DE DESENHO (juiz novo); DIA-DA-BATIDA espera rejulgamento [nome]; RAZAO-DA-SOBRA em desenho. Nenhuma pode usar a vaga Codex construtor -> O30 pode ocupa-la depois do mapa; reconferir ANTES de abrir o construtor.
