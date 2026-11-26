@@ -1,7 +1,124 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 13:32** · publicado em **26/11/2026 13:34** (UTC-3)
+> Ultima resposta processada: **26/11/2026 13:51** · publicado em **26/11/2026 13:54** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 13:51 · sessao 76a1af74edf3 · SUITE-ROTEIA-PARA-PISTA · verificador · origem=Code
+
+Os blobs de `bin/suite.sh` e `bin/tests/test_suite_rota_pista.sh` na cópia batem com o diff fornecido e passam em `bash -n`. Conferi as decisões com Git e SSH dublados em memória. A relação de parentesco entre os commits, a execução integral do selo e a ocorrência dos cenários em produção ficam [nao verificado].
+
+## 1. Achados da volta 2 em `380136bd6`
+
+| Achado | Estado | Evidência |
+|---|---|---|
+| a) Vermelho falso com recibo de duas linhas | **FECHADO** | Com `imagem=… oom=0`, o recibo sem `Ran` ou veredito passa à leitura do log. Os casos `curto` e `curto_verm` devolvem `0` e `1`, respectivamente. `bin/suite.sh:474–495` `bin/tests/test_suite_rota_pista.sh:73–87,233–234` |
+| a) Verde falso | **PARCIAL** | `oom=1` isolado agora dá infra. `imagem= oom=0`, `oom=0 oom=1` na mesma linha e log com job/SHA diferentes ainda podem dar `0`. `bin/suite.sh:456–458,475–495` |
+| a) VM depois do aceite | **PARCIAL** | Com cabeçalho válido, rc `71` e `imagem=… oom=0`, segue ao log. Com rc `71` e resposta vazia, ou só com o cabeçalho correto, segue à VM sem consultar o log. O selo ainda exige a VM no segundo caso. `bin/suite.sh:449–478,497–500,554–560` `bin/tests/test_suite_rota_pista.sh:66,77–78,226,235` |
+| b) Index e diretório de trabalho | **PARCIAL** | O vazamento de staged fora de `app/` foi **FECHADO** na árvore publicada: ela parte de `base` e recebe só a subárvore `app/`. A guarda de esparso depende de ler `true` na configuração. O atalho para `HEAD` continua possível se o status vier sem a alteração física. `bin/suite.sh:367–376,416–439` `bin/tests/test_suite_rota_pista.sh:175–185` |
+| b) Árvore física e montagem | **PARCIAL** | A presença de `.gitmodules` desvia para a VM. A guarda não inspeciona gitlinks no index e a foto segue sendo uma árvore Git, sem diretórios vazios. O bind e as sobreposições de `staticfiles` e tmpfs continuam no caminho da VM. `bin/suite.sh:373–376,420–431,514–520,554–560` `bin/arvore_do_push.sh:50–55,80–82` |
+| b) Edição durante a sondagem | **ABERTO** | O status é colhido antes de `ping` e `estado`. A decisão posterior reutiliza esse status e pode publicar o `HEAD` anterior à edição. `bin/suite.sh:358,367–381,420,439–442` |
+| e) SIGPIPE e falha do filtro | **PARCIAL** | O SIGPIPE de `printf \| grep -q` na prova de `imagem=` foi **FECHADO** com here-string. O filtro de sujeira continua decidindo pelo texto vazio, inclusive se o filtro falhar sem saída. `bin/suite.sh:35,420,453–458` |
+| e) Transporte na admissão e no histórico | **ABERTO** | `pede` com id e diagnóstico no stderr ainda pode cair na VM antes de imprimir `job=`. O histórico ainda usa o cabeçalho capturado sem testar o status do pipeline. `bin/suite.sh:400–406,439–449` |
+| e) Falhas da foto e limpeza | **ABERTO** quanto à limpeza do selo. A cadeia da foto encaminha falha à VM com motivo e a limpeza de `idx` avisa em caso de falha. No selo, `return $ok` ainda pode encobrir falha da limpeza do caso. `bin/suite.sh:422–437` `bin/tests/test_suite_rota_pista.sh:194–195` |
+
+## 2. Entradas que mudam a decisão
+
+- **Verde falso por log trocado.** `pede` devolve `J` e sai `ROTA PISTA: job=J`. `espera J` devolve cabeçalho de `J/SHA`, `rc=0` e `imagem=x oom=0`. `log J` retorna `0` com `AMBIENTE job=K`, outro SHA, `Ran 2 tests in 0.5s` e `OK`. A rota devolve `0` porque lê o resumo e não compara os carimbos de identidade. O certificador faz essas comparações no caminho do pouso. `bin/suite.sh:449,455–458,477–495` `bin/pista_certifica.sh:47–56`
+- **Verde falso por OOM.** Mesmo cabeçalho, seguido de `imagem=x oom=0 oom=1`, com log verde. O `grep -oE` consome o espaço depois do primeiro token, perde o segundo e entrega só `oom=0` à comparação. Confirmei rc `0` na sonda, também com `imagem= oom=0`. `bin/suite.sh:458,475–476,487–495`
+- **Vermelho falso na volta.** Recibo válido com `rc=0` e `oom=0`. O stdout de `log J` traz `Ran 2 tests in 0.5s` e `OK`, mas o stderr acrescenta `FAILED (failures=1)` e o SSH sai `0`. Com `2>&1`, o último veredito vira `FAILED`, a rota devolve infra `71` e `volta_intermediaria.sh` marca vermelho. O inverso também passou na sonda: stdout vazio e `Ran`/`OK` só no stderr deram `0`. `bin/suite.sh:477–489` `bin/volta_intermediaria.sh:33–40`
+- **VM depois de `ROTA PISTA: job=`.** `espera J` sai `71` com resposta vazia, ou com cabeçalho correto `rc=71` sem `imagem=` nem `Ran`. A primeira tentativa encerra o laço. A rota marca `ROTA VM` e segue à trava, mesmo se o log que ficou sem consulta contiver `Ran` e `FAILED`. Até `FAILED` no próprio recibo, sem `imagem=` nem `Ran`, deixa passar o segundo ramo. `bin/suite.sh:344,449–478,497–500,554–560`
+- **Verde sobre foto desatualizada.** `app/` está limpo quando `status` roda. Durante `ping`, um teste já existente em `app/` é editado para falhar. A rota ainda aponta `refs/pista/` para o `HEAD` anterior e pede esse SHA. Se o log desse SHA trouxer `Ran` positivo e `OK`, a suíte devolve `0` sobre o conteúdo anterior. Um status que omita um arquivo ausente ou editado produz o mesmo atalho se a guarda de esparso não disparar. `bin/suite.sh:358,367–381,420,439–449,487–495`
+
+## 3. Escritores e leitores
+
+| Valor | Quem escreve e quem lê |
+|---|---|
+| `apt` | `git write-tree --prefix=app/` lê `$idx/index` e a atribuição captura o SHA em `apt`. `git read-tree --prefix=app/ "$apt"` o consome. `bin/suite.sh:425–430` |
+| `$idx/foto` | `read-tree "$base"` cria o index. `git rm --cached` lê e remove o `app/` de base. `read-tree --prefix` insere o `app/` da cópia. `write-tree` lê o resultado, que `commit-tree` recebe em `tree`. `bin/suite.sh:428–436` |
+| `completo` | O laço zera a variável a cada `espera`. O `grep '^imagem='` a promove para `1`. O laço lê para encerrar tentativas, e as guardas leem para distinguir recusa e recibo incompleto. `bin/suite.sh:455–474` |
+| `ver_r` | `grep` e `tail` escrevem o último `OK`/`FAILED` do recibo. A comparação com `ver_l` lê o valor quando presente. `bin/suite.sh:464,483–486` |
+| `ran_r` | `grep -oE` e `tail` escrevem o último prefixo `Ran N test(s) in `. As duas guardas de recusa e a comparação com `ran_l` leem. `bin/suite.sh:463–474,483–486` |
+| OOM | O contrato atribui `oom=N` ao lançador remoto. A implementação do escritor em produção fica [nao verificado]. O dublê escreve `oom=1` e `oom=0`. A rota lê as linhas `imagem=` de `esp` e compara a saída normalizada com `oom=0`. O certificador também lê o campo, com contagem de ocorrências. `bin/pista_certifica.sh:13–16,51–60` `bin/tests/test_suite_rota_pista.sh:71–78` `bin/suite.sh:475–476` |
+
+## 4. Mutantes e lacunas do selo
+
+| Mutante | Mordida |
+|---|---|
+| `oom_ignorado` | **Sim.** Com `oom=1`, troca infra `71` por `0`. A asserção exige essa diferença de rc. `bin/suite.sh:475–476` `bin/tests/test_suite_rota_pista.sh:71–72,197–202,246,275` |
+| `ran_so_do_recibo` | **Sim.** Torna obrigatória a igualdade de `Ran`, inclusive quando o recibo omite o campo. `curto` troca `0` por `71`. `bin/suite.sh:483–489` `bin/tests/test_suite_rota_pista.sh:73–74,205–211,247,276` |
+| `recusa_com_imagem` | **Sim.** Retira o teste de `completo` no ramo com cabeçalho. `recusa_img` passa a chamar a trava, que é a falha exigida. `bin/suite.sh:470–478,497–500` `bin/tests/test_suite_rota_pista.sh:77–78,205–211,248,277–278` |
+| `foto_leva_o_index_inteiro` | **Sim.** O último `write-tree` volta a ler `$idx/index`. O fixture adiciona `raiz.env` fora de `app/` e a asserção acusa sua presença na árvore publicada. Conferi a troca de index com Git dublado. `bin/suite.sh:425–431` `bin/tests/test_suite_rota_pista.sh:175–185,279–280` |
+
+Faltam casos para `.gitmodules`, checkout esparso e falha da consulta a `core.sparseCheckout`, para `--espera 00001`, e para `71` sem cabeçalho mas com `imagem=`. Também faltam OOM ausente ou conflitante, log com corpo de outro job e divergência isolada de `Ran` ou de veredito. O selo verifica o **id do comando** `log`, e o dublê escolhe o **corpo** pelo modo. `bin/suite.sh:373–376,390–394,465–489` `bin/tests/test_suite_rota_pista.sh:45–87,108–119,220–239`
+
+## 5. Erros absorvidos na decisão
+
+- O delta não acrescenta `except` nem `|| true` literal. Acrescenta dois caminhos que absorvem falha: `git config --bool` com erro e saída vazia passa pela guarda de esparso, e `sed` com erro e saída vazia converte `--espera 00020` em teto `0`. Na sonda, uma estimativa de `10 s` seguiu para a VM com esse teto. `bin/suite.sh:373–376,390–394,412–414`
+- Os extratores de `Ran` e veredito do recibo não distinguem erro de filtro de campo ausente. Quando o resultado fica vazio, a comparação com o log passa. A cadeia da foto agrega as falhas em `tree=''` e segue para a VM com diagnóstico. `bin/suite.sh:425–437,463–464,483–489`
+
+VEREDITO: REPROVADO (VM após aceite com recibo inconclusivo `bin/suite.sh:455–474,497–500`, verde com log de outro job e veredito contaminado por stderr `bin/suite.sh:477–495`, OOM conflitante aceito `bin/suite.sh:475–476`, foto desatualizada e falha silenciosa da guarda de esparso `bin/suite.sh:367–381,420–439`, admissão ambígua desviada à VM `bin/suite.sh:439–449`).
+
+## 26/11 13:49 · sessao 07006fba3b47 · VIGIA-DISCO · verificador · origem=Code
+
+**VIGIA-DISCO — REPROVADO.** A retenção pode remover um DIFF protegido dentro de uma cópia por hash e pode truncar um arquivo de `app/media` por meio do destino temporário do gzip. O alarme chega ao ESTADO, mas o diff não o põe no topo do RELATO. `AVAL.txt:1`, `bin/retencao_disco.py:134-155`, `bin/retencao_disco.py:235-245`, `bin/relato.sh:41-46`, `bin/relato.sh:122-127`.
+
+A conferência foi em leitura, pela cópia e pelo diff anexado. O commit completo, a execução do selo inteiro e qualquer efeito em produção ficam **[nao verificado]**. [nao verificado]
+
+### 1. PROIBIDO do aval
+
+- **Remoção recursiva.** Uma cópia elegível em `~/codex_ws/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/` leva junto `app/docs/FIO-E0-V4-E4B-c4-v2.diff`. Esse DIFF existe na cópia e é citado como fonte. A retenção examina o caminho do diretório de 40 hex e depois remove a árvore inteira. Pela mesma rota, `logs/REVERSAO/rollback.sql`, `logs/HOMOLOGA/aceite.log`, `logs/prova/teste.log`, `logs/sombra/dumps/public_agora.dump` ou `app/media/foto.jpg` saem **se estiverem dentro** do diretório elegível. A presença desses arquivos em cópias de produção é [nao verificado]. `app/docs/FIO-E0-V4-E4B-c4-v2.diff:1`, `app/docs/FIO-E0-V4-E4B-c4-v2.txt:167-169`, `bin/retencao_disco.py:134-155`.
+- **Nome e citação.** Uma prova de reversão chamada `logs/entrega/ensaio.log`, com mais de 14 dias e a assinatura de suíte, vira `.gz` se não houver FD detectado nem citação literal reconhecida. `app/docs/obras/fecho.md` pode citar o caminho inteiro e ainda assim ficar fora da busca. Mesmo em `app/docs/fecho.md`, um link para `logs/entrega/ensaio%20final.log` não protege `logs/entrega/ensaio final.log`. O filtro compara substrings do caminho e lê apenas os `.md` diretamente em `app/docs/`. `bin/retencao_disco.py:52-58`, `bin/retencao_disco.py:200-231`.
+- **Symlink.** Um link no próprio `.log` é recusado. Já um `logs/entrega/ensaio.log.gz.parcial` preexistente apontando para `app/media/foto.jpg` pode truncar a foto ao abrir o gzip em `wb`, se o log for elegível e o alvo for gravável. O mesmo vale para um arquivo do banco acessível e gravável pelo processo. A rotina também aceita a própria raiz `logs` como symlink e aplica o filtro ao caminho relativo aparente. A topologia e as permissões de produção são [nao verificado]. `bin/retencao_disco.py:216-244`.
+- **Log aberto.** Um FD só protege o `.log` se o caminho exato aparecer na varredura inicial de `/proc`. Um FD aberto depois da coleta, ilegível ao usuário ou aberto por outro nome do mesmo inode pode escapar. O gzip então remove o nome original. O dump usual da sombra, `logs/sombra/dumps/public_agora.dump`, fica fora do filtro de `.log` e tem componentes protegidos. `bin/retencao_disco.py:72-84`, `bin/retencao_disco.py:216-244`, `bin/retencao_disco.py:270-295`, `bin/sombra.sh:239-245`.
+
+### 2. `~/codex_ws` e `chamadas.log`
+
+A regra implementada mantém uma cópia se o hash teve `ini` ou `fim` há **menos de 48 h**, se alguma obra que já usou aquele prefixo teve uma chamada nesse intervalo, se o `mtime` do diretório é recente, se o nome é um `HEAD` listado ou se o hash inteiro aparece no `argv` ou `cwd` coletado. Exatamente 48 h já perde a proteção por idade. “Obra viva” aqui significa **obra com chamada recente nessa trilha**. Um log legível vazio ou com todas as linhas descartadas produz mapas vazios e permite remoção. `bin/retencao_disco.py:99-146`.
+
+O escritor é `bin/codex_pergunta.sh`. O destino padrão é `$R/logs/codex/chamadas.log`, com override `CODEX_LOGD`. As seis colunas comuns batem com o leitor: data/hora, obra, papel, hash12, PID e `ini`/`fim`, separadas por TAB. O `ini` acrescenta a pergunta raspada. O `fim` acrescenta ID de sessão, rc, duração e, no construtor, motivo. A retenção usa data, obra, hash12 e evento. O `date` grava `YYYY-MM-DD HH:MM:SS` sem offset e `mktime` interpreta no fuso local do leitor. A compatibilidade de horário depende do mesmo fuso efetivo na escrita e na leitura. O fuso dos processos em produção é [nao verificado]. `bin/codex_pergunta.sh:142`, `bin/codex_pergunta.sh:560-582`, `bin/codex_pergunta.sh:604-609`, `bin/retencao_disco.py:94-117`, `bin/retencao_disco.py:278-280`.
+
+**Pode sair em uso.** Um wrapper chamado com `main` pode começar após as coletas de processos e chamadas, reutilizar um `$WS` velho e perdê-lo quando a retenção executar o plano já montado. O PID do log não é usado para provar vida. Para worktree, o código protege os `HEAD`s do repo consultado no instante da listagem. Uma worktree registrada dentro de `codex_ws/<hash-velho>` cujo `HEAD` já mudou pode ter o diretório inteiro removido, mesmo se seu `cwd` estiver ali, desde que as demais guardas também falhem. A presença real dessa topologia é [nao verificado]. `bin/codex_pergunta.sh:98-116`, `bin/codex_pergunta.sh:604-617`, `bin/codex_pergunta.sh:792-795`, `bin/retencao_disco.py:87-90`, `bin/retencao_disco.py:113-155`, `bin/retencao_disco.py:274-295`.
+
+### 3. `/tmp/claude-1001`
+
+**Pode sair saída de shell ou agente vivo.** Por exemplo, `/tmp/claude-1001/proj/sessao/tasks/job.output` fica elegível se todos os itens imediatos de `tasks/` tiverem `mtime` de pelo menos 24 h e a coleta não vir nenhum FD com caminho sob a sessão. Um agente vivo e ocioso, ou um shell que fechou o arquivo e voltará a abri-lo, satisfaz essas condições. A regra não consulta evento de encerramento nem PID da sessão. Exatamente 24 h já qualifica. O caminho efetivo deriva de `os.getuid()` e o UID da execução em produção é [nao verificado]. `bin/retencao_disco.py:80-84`, `bin/retencao_disco.py:160-184`, `bin/retencao_disco.py:270-295`, `bin/retencao_disco.py:342-345`.
+
+### 4. Compactação e leitores
+
+- **`~/.codex`** — a regra alcança `sessions/**/*.jsonl` com `mtime` estritamente acima de sete dias, sujeito aos filtros de nome, symlink e FD. O gzip apaga o nome original. `gerar_codex_estado.py` enumera e lê apenas `*.jsonl`. `codex_limite_estado.py` também seleciona `.jsonl` para ler `rate_limits`. Uma sessão compactada desaparece dessas buscas. `bin/retencao_disco.py:189-197`, `bin/retencao_disco.py:235-245`, `bin/retencao_disco.py:282`, `bin/gerar_codex_estado.py:77-84`, `bin/codex_limite_estado.py:99-110`.
+- **`logs/`** — “log de suíte” é um `.log` legível, com `mtime` estritamente acima de 14 dias e a sequência de bytes `AMBIENTE sha=` em qualquer posição nos primeiros 256 KiB, sujeito às guardas. O marcador real vem de `AmbienteDoRunTest`; a retenção aceita até um trecho copiado com essa sequência. `pista_certifica.sh` exige que o caminho recebido exista e o abre pelo nome fornecido. Se receber um `logs/entrega/ensaio.log` elegível já compactado, falha na entrada, sem buscar `.gz`. `app/core/tests/test_ambiente_do_run.py:43-56`, `bin/retencao_disco.py:47-52`, `bin/retencao_disco.py:211-244`, `bin/pista_certifica.sh:22-30`, `bin/pista_certifica.sh:34-49`.
+
+### 5. Docker
+
+O comando exato é `timeout 300 docker builder prune -f --filter until=168h`. Ele pede poda do cache de build, com filtro de 168 horas e sem `--all`. O diff não chama remoção de volume nem de imagem em uso. Para volumes usa `timeout 60 docker volume ls -qf dangling=true`, conta os IDs e descarta a lista. `.esteira` tem tamanho medido. A execução e o efeito do daemon em produção são [nao verificado]. `bin/retencao_disco.py:48`, `bin/retencao_disco.py:258-267`, `bin/retencao_disco.py:301-314`.
+
+### 6. ESTADO, topo do RELATO e Stop
+
+`disco_estado.linha()` monta `**DISCO: AVISO (>= 75%)**` ou `**DISCO: PAREI: ! DISCO (>= 85%)**`. `gerar_estado.py` chama o medidor e insere o resultado em `## Disco`. O `relato.sh` executa a retenção **antes** da primeira medida, descarta o stdout do medidor e publica o RELATO a partir do arquivo da sessão. Portanto o diff entrega o bloco no ESTADO e deixa sem escritor o aviso no topo do RELATO, inclusive a linha com medidas antes e depois. Usa o timer existente. A foto de 80% consta do aval. A calibração simultânea em produção é [nao verificado]. `AVAL.txt:1`, `bin/disco_estado.py:271-292`, `bin/gerar_estado.py:320-321`, `bin/gerar_estado.py:336-338`, `bin/relato.sh:41-46`, `bin/relato.sh:122-127`, `bin/hasner-relato.timer:4-8`, `bin/hasner-relato.service:12-15`.
+
+O Stop lê `app/docs/RELATO.md` e exige `PAREI:` no início da primeira linha útil, `!`, correspondência com o ID inteiro do item em curso e nenhum outro item andável para liberar pela porta de PAREI. A frase emitida começa com `**DISCO:` e falha já no prefixo. Mesmo `PAREI: ! DISCO` cru precisaria satisfazer a regra do item em curso. O handoff lê o topo do mesmo arquivo, lista linhas que começam com `PAREI`, `lei:` ou `!:` após normalização e consulta os dois vereditos do hook. A fila pendente, por si só, atualmente gera `ALLOW AVISO`. `bin/hook_stop_fila1.py:32`, `bin/hook_stop_fila1.py:408-416`, `bin/hook_stop_fila1.py:462-499`, `bin/hook_stop_fila1.py:1221-1234`, `bin/hook_stop_fila1.py:1249-1265`, `bin/hook_stop_fila1.py:1287-1302`, `bin/hook_stop_fila1.py:1368-1369`, `bin/hook_stop_fila1.py:1391-1407`, `bin/handoff_sessao.sh:85-123`.
+
+### 7. Selo
+
+- **Mutante que passa vazio:** `ws_sem_trilha` remove a guarda de `None`. O caso estoura `TypeError` ao desempacotar `chamadas`, antes de chamar `ok()`. Confirmei esse caminho em memória. `morde` aceita qualquer rc não zero e imprime a contagem de `FALHA` sem exigir que seja positiva. Assim, `morde ws_sem_trilha (0 caso(s) caem)` passa. `bin/tests/test_disco_estado.sh:97-100`, `bin/tests/test_disco_estado.sh:132-156`, `bin/retencao_disco.py:128-132`.
+- **Calibração sem mordida:** os `df` simulados dão 80% e 90% exatos e fazem `total = usado + livre`. Trocar arredondamento para cima por truncamento, ou usar `total` como denominador, preservaria essas verificações. O selo também deixa de fora o `df` real, a publicação do alarme, o reconhecimento pelo Stop e a remoção recursiva de um artefato protegido no `codex_ws`. `bin/tests/test_disco_estado.sh:34-51`, `bin/tests/test_disco_estado.sh:53-100`, `bin/disco_estado.py:52-78`.
+- **Relógio e máquina:** o caso B injeta a idade, FDs, processos e `docker=False`. Ainda consulta o relógio real para o teto e executa `git worktree list` na raiz temporária, usando o Git do ambiente. A chamada testada desativa Docker, e os casos do medidor usam funções injetadas para `df` e Postgres. Não há chamada de rede nesses casos. `bin/tests/test_disco_estado.sh:42-51`, `bin/tests/test_disco_estado.sh:78-80`, `bin/retencao_disco.py:120-125`, `bin/retencao_disco.py:270-304`.
+
+### 8. Arquivos de `logs/disco/`
+
+| Arquivo | Quem escreve e quem lê | Campos |
+|---|---|---|
+| `df.tsv` | `disco_estado.ler(gravar=True)` apenda. `_ler_trilha()` lê para `ler()`, chamado pelo medidor e pelo gerador do ESTADO. `bin/disco_estado.py:199-231`, `bin/disco_estado.py:313-317`, `bin/gerar_estado.py:320-321`. | Epoch em segundos, usado e livre em KiB, percentual inteiro da raiz. A tendência lê apenas epoch e usado. `bin/disco_estado.py:199-208`, `bin/disco_estado.py:226-231`. |
+| `consumidores.tsv` e `consumidores.tsv.tmp` | `_gravar_carimbo()` escreve `.tmp` e o renomeia para o definitivo. `_ler_carimbo()` lê o definitivo, usado por `ler()` no medidor e no ESTADO. `bin/disco_estado.py:168-194`, `bin/disco_estado.py:218-225`, `bin/gerar_estado.py:320-321`. | Cabeçalho `epoch, parcial`, seguido de `categoria, KiB`. Atualiza com idade **≥ 3600 s** quando roda com gravação. A conversão Docker tem um erro para `B`, que já entra dividido por 1024 e recebe outro fator `1000/1024`. A unidade `KB` está na tabela, mas o corte do sufixo deixa o `K` no número. `bin/disco_estado.py:119-135`, `bin/disco_estado.py:168-194`, `bin/disco_estado.py:222-225`. |
+| `retencao.tsv` | `retencao_disco.main()` chama `_trilha()` ao aplicar. `resumo()` lê para `--carimbo` e para `disco_estado.ler()`. `bin/retencao_disco.py:250-255`, `bin/retencao_disco.py:318-348`, `bin/disco_estado.py:232-244`. | `epoch, produtor, ação, n, bytes`. Para gzip, `bytes` é o espaço ocupado **antes** da ação. Para Docker é o total extraído do stdout. Para `.esteira` é tamanho medido. `n` é contagem de alvos ou, em `volumes_orfaos`, contagem de volumes, com `-1` se a medição falhou. `bin/retencao_disco.py:66-69`, `bin/retencao_disco.py:258-266`, `bin/retencao_disco.py:287-314`. |
+
+Os TSVs usam epoch em segundos, sem representação de fuso local. Os limiares são **inclusivos sobre o percentual já arredondado para cima** e vale o maior percentual medido entre raiz e Postgres. Assim, 74,1% já dá AVISO, e 84,1% já dá PAREI. `bin/disco_estado.py:52-57`, `bin/disco_estado.py:81-91`, `bin/disco_estado.py:211-235`, `bin/retencao_disco.py:344-348`.
+
+### 9. Classes de reprovação
+
+- **Escrita fora da porta e ordem de trava.** `relato.sh` pega `relato.lock` antes da retenção. Os dois CLIs também permitem escrever diretamente, sem essa trava. O carimbo da retenção é lido antes da passada e apendado depois, então duas invocações diretas podem decidir aplicar juntas. A retenção monta planos a partir de snapshots e age sem trava compartilhada com o wrapper ou revalidação antes de remover. Uma inversão entre duas travas distintas é [nao verificado]. `bin/relato.sh:27`, `bin/relato.sh:41-44`, `bin/retencao_disco.py:270-295`, `bin/retencao_disco.py:335-354`, `bin/disco_estado.py:313-317`.
+- **Relógio fora da borda e derivação paralela.** A retenção lê `time.time()` dentro de `passada()` para o teto, mesmo com `agora` injetado. O teto é checado entre alvos, depois de montar todos os planos, e o prune tem outros 300 s. O gerador do ESTADO refaz os dois `df` depois da CLI que já mediu e apendou. Assim, “medida anterior” pode ser a amostra da mesma rodada, com delta de `0 min`. A retenção também introduz um parser de `chamadas.log` paralelo ao de `codex_limite_estado.py`. `bin/retencao_disco.py:99-117`, `bin/retencao_disco.py:270-309`, `bin/disco_estado.py:211-238`, `bin/disco_estado.py:251-255`, `bin/gerar_estado.py:320-322`, `bin/relato.sh:43-46`, `bin/codex_limite_estado.py:49-68`.
+- **Selo sem mordida e exceções.** `ws_sem_trilha` conta uma exceção como mordida. O diff acrescenta pontos de falha sem contenção, como uma data `2026-02-30`, que passa no regex e levanta `ValueError`, ou uma linha de cinco campos em `retencao.tsv` com `n` inválido. Nesse último caso, `resumo()` pode derrubar também a geração do ESTADO, e `relato.sh` sai nesse passo. Já `rmtree(ignore_errors=True)` pode deixar uma árvore parcialmente removida em `.rm.<hash>`, fora do próximo plano. `bin/tests/test_disco_estado.sh:142-156`, `bin/retencao_disco.py:94-113`, `bin/retencao_disco.py:134-155`, `bin/retencao_disco.py:318-332`, `bin/disco_estado.py:238-244`, `bin/gerar_estado.py:317-322`, `bin/relato.sh:46`.
 
 ## 26/11 13:32 · sessao 0e410d870cbc · SUITE-ROTEIA-PARA-PISTA · verificador · origem=Code
 
@@ -634,77 +751,4 @@ def sondar():
 sondar()
 ```
 
-## 26/11 11:22 · sessao 2c7d729085fe · R1-SEM-DONO-2611 · leitura · origem=Code
-
-**Seis chaves auditadas, zero chaves com zeragem demonstrada por uma obra.** A sonda mostra os dois lados do delta nas seis chaves. O vínculo com o CSV dos 38 dias do R1 e a atribuição dos outros dias ficam **[nao verificado]**. A numeração abaixo começa na primeira linha do anexo `sonda.out`, incluindo a linha em branco. `sonda.out:1,3,30,50,64,87,105,135`
-
-## 1 e 2. Mecanismo demonstrado e obra dona
-
-Nas seis chaves, `selecionado` aponta para `minutos_realizados`. O espelho publica o total do juiz de turnos, e o E6 recebe só os instantes e soma pares por posição na data da primeira batida de cada trecho. O R1 deixa de listar diferenças de até 10 min, mesmo quando o delta aritmético é diferente de zero. `sonda.out:30,50,64,87,105,135` · [espelho.py:689](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/espelho.py:689) · [espelho.py:801](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/espelho.py:801) · [e6_oraculo.py:149](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/management/commands/e6_oraculo.py:149) · [e6_oraculo.py:362](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/management/commands/e6_oraculo.py:362) · [nucleo.py:235](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:235)
-
-| Chave | O que a sonda mostra | Obra dona e sítio da divergência |
-|---|---|---|
-| **col114 15/11** | **C, pausa posicional no E6.** `pares` deixa um vão de 59,54 min entre 15:05 e 16:05. As duas batidas internas têm tipos `E,S`, `papel_ata=null` e `intra_dur=true`. O juiz devolve `pausas=[]`, `fim_contado=18:17`, `janela_descontada=0` e 499 min. `delta_arredondado=-59`. `sonda.out:26,30,31` | **sem dono.** `_pares_marcados` exige autoridade da ata ou a sequência gravada `S→E` para esse par interno. O realizado fica com o vão inteiro. A obra de intervalo pré-assinalado muda o motor, e a ch​ave tem `intervalo_declarado=[null,null]`. [turnos.py:875](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:875) · [turnos.py:756](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:756) · [BACKLOG.md:2554](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2554) · `sonda.out:30` |
-| **col130 29/10** | **A + B + C.** O E6 soma dois `pares` em 29/10. O juiz, também em 29/10, tem `fim_contado=01:31` e desconta 60 min de 395. A batida de 07:06, que fecha o segundo par do E6, entra no juiz em 30/10 como `E`, `aberto=true` e vale 0. Repor os 60 deixa **+276,91 min**. `sonda.out:48,50,51,53` | **sem dono.** A diferença nasce do pareamento por posição do E6 contra o fechamento do juiz e a janela do realizado. O backlog cita **30/10** para a obra da saída de madrugada. Nessa foto, mover sozinho o turno aberto de 07:06 para 29/10 soma 0. O fechamento desse turno pela obra está **[nao verificado]**. [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [turnos.py:733](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:733) · [BACKLOG.md:2093](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2093) · `sonda.out:50–55` |
-| **col220 10/11** | **A + B + C.** O E6 usa `21:54→03:35` e `04:31→06:00`. No juiz, 03:35 tem `papel_ata=E` e fica interna, 04:31 é `fim_contado`, e 06:00 abre um turno de 0 min em 11/11. A janela tira 60 de 397. Repor os 60 deixa **+33,42 min**. `sonda.out:62,64,65,67` | **sem dono.** A divergência nasce do pareamento e da janela. A troca de dia na lavra alcança o período aberto de 06:00, cujo `minutos_trabalhados=0`. A janela de HE do motor atua em outro cálculo. [turnos.py:1310](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1310) · [turnos.py:756](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:756) · [dia_pago.py:126](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/dia_pago.py:126) · [motor_calculo_v2.py:1545](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/motor_calculo_v2.py:1545) · `sonda.out:68,69` |
-| **col874 22/10** | **B + A + C.** O E6 põe a batida de 10:00 de 22/10 no `dia_e6=21/10`, emparelhando duas `E`. Em 22/10 só soma `15:45→22:07`. O juiz usa `10:00→22:07`, com `janela_descontada=60`, chegando a 667. Repor os 60 amplia a diferença para **−344,18 min**. `sonda.out:75–78,83,84,87,88` | **sem dono.** A origem é o trecho que `minutos_do_oraculo` chaveia em 21/10 e soma por posição, combinado com a janela que o realizado tira em 22/10. Uma cura que apenas mude a chave do par de duas `E` preserva a geometria divergente. [nucleo.py:235](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:235) · [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [turnos.py:760](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:760) · `sonda.out:83,84,88` |
-| **col989 23/10** | **A + B.** O E6 forma `08:32→17:59`, de 567,37 min, entre dois cortes. No juiz, 08:32 fecha o turno de 22/10 e 17:59 abre o de 23/10, que fecha às 06:00 de 24/10 e soma 721 min. O `periodo_motor` do cartão de 23/10 tem as mesmas bordas do juiz. `sonda.out:100–108` | **sem dono.** A origem é o corte e o pareamento posicional do E6. Usar no piso o par observado do juiz daria 720,771 min e um delta de **−0,229 min**, dentro da faixa do R1. A adoção desse par pela obra do E6 nesta chave está **[nao verificado]**. [nucleo.py:215](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:215) · [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [GRADE-MESTRA.md:303](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/GRADE-MESTRA.md:303) · `sonda.out:105,106` |
-| **col996 10/11** | **A + B, com corte por vão no E6.** `fronteira_anterior` mostra vão de 858,92 min, gap de 326,03 min e quatro pontas. O E6 abre outro trecho e soma `21:16→06:59` na chave de 10/11. No juiz, 21:16 é uma `S` sem entrada e vale 0, e 06:59 é entrada em 11/11. A pausa diurna de 90 min sai dos dois lados. `sonda.out:130,131,135–139` | **sem dono.** O corte por vão e a soma por posição do E6 produzem o par de 583,49 min. Retirar esse par do piso deixaria **−0,107 min**, dentro da faixa do R1. O registro da obra do E6 inclui a família do corte por vão. A mudança que retira este par está **[nao verificado]**. [nucleo.py:215](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:215) · [nucleo.py:245](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:245) · [BACKLOG.md:823](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:823) · [GRADE-MESTRA.md:303](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/GRADE-MESTRA.md:303) · `sonda.out:130,131,135` |
-
-**D, diferença entre o que soma e o que aparece nos cartões.** A sonda mostra `dia_cartao` diferente de `dia_mapa` em col130 e col220, ambos em períodos de 0 min. Em col996, a saída órfã também vale 0. A contribuição de D para qualquer dos seis deltas fica **[nao verificado]**. `sonda.out:55,69,137,141,142` · [espelho.py:465](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/services/espelho.py:465)
-
-**HJ-026.** `PAR-PELO-TURNO` muda a rejeição pelo teto `previsto + 4 h`. Os fechamentos observados e os turnos sem uma ponta da tabela não mostram essa rejeição como causa. O corte de 14 h observado em col996 vem do E6. [BACKLOG.md:2020](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2020) · [turnos.py:66](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:66) · [turnos.py:1447](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/turnos.py:1447) · [nucleo.py:215](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/ponto/calculador/nucleo.py:215) · `sonda.out:31,51,53,65,67,88,106,131,136,137`
-
-## 3. Dias ESTRUTURA que zeram por obra
-
-| Obra | Chaves que zera | Contagem comprovada |
-|---|---|---:|
-| Nenhuma estabelecida | Zeragem por obra **[nao verificado]** nas seis chaves. `sonda.out:30,50,64,87,105,135` | **0** |
-
-## 4. Linhas do quadro
-
-**Nenhuma entre as zeragens comprovadas.** O backlog vincula `PAR-PELO-TURNO` a **HJ-026** e descreve as mudanças de **NOTURNO-A** e **INTERVALO**, mas nenhuma dessas obras tem uma chave atribuída na tabela. A equivalência entre `ORACULO-E6-43-DEFEITOS` e a linha **oráculo 93** está **[nao verificado]**. [BACKLOG.md:1989](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:1989) · [BACKLOG.md:2020](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2020) · [BACKLOG.md:2554](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/BACKLOG.md:2554) · [GRADE-MESTRA.md:303](/home/ronald/codex_ws/558de6bd4bba318bac4130a14936946e218f885d/app/docs/GRADE-MESTRA.md:303)
-
-## 26/11 11:21 · sessao ad3079f9cb3c · O30-F3-CONSTRUIR · construtor · origem=Code
-
-C6 implementada na cópia sobre `aa32babb3299b8dd53812225c4934d87fd8022ba`. [Base dos REDs](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:20)
-
-- **C6-1.** A cadeia `A → B → C` recebe 404 no drawer, na entrega do anexo, na aprovação, na rejeição e na lista. A lista devolve 404 se a cadeia estiver no resultado. Para vínculos válidos, o template recebe a raiz da view. O selo AST derruba a reintrodução de `documento_referencia or` em uma view. [Resolvedor](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:291) · [Lista](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2347) · [Template](/home/ronald/wt-codex-o30-f3-construir-010143/app/templates/ponto/ausencias.html:168) · [Teste e selo](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:399) [nao verificado]
-- **C6-2.** Uma guarda, chamada na criação com referência, no anexo e na reabertura, protege o arquivo existente se a raiz ou qualquer filha estiver aprovada ou rejeitada. O RED reproduz a filha aberta tentando substituir o arquivo de uma raiz rejeitada. [Guarda](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:327) · [Casos de substituição](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:574)
-- **C6-3.** O dry-run chama `derivar_data_fim`, assim como `rederivar_fim`. Ao trocar o retorno do derivador no teste, a c5 ainda imprime `07/09/2026` e a c6 imprime `13/09/2026`. [Prévia](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/management/commands/curar_ausencia_sem_fim.py:37) · [Aplicação](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1939) · [Teste](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:629) [nao verificado]
-
-**Verificação local.** Os REDs contra c5 deram **8, 6 e 1 falhas por asserção**, respectivamente. O GREEN passou **55 testes sem banco**. Os 12 mutantes C6 e os dois seletores históricos ajustados deram `FAIL` por asserção, `rc=1`, zero `ERROR`. O `diff --check` passou. Contagem AST nos Python alterados, incluindo testes e runner: `except` 81 → 81 e `suppress` 0 → 0. [REDs](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:93) · [Mutantes](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:267) · [Tratamento HTTP](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2837) [nao verificado]
-
-**Diff e comandos**, a partir de `app/`. [Runner](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3.py:424)
-
-```bash
-git --no-optional-locks diff aa32babb3299b8dd53812225c4934d87fd8022ba -- .
-git --no-optional-locks diff --check aa32babb3299b8dd53812225c4934d87fd8022ba -- .
-
-export PYTHONDONTWRITEBYTECODE=1
-python3 -m ponto.tests.mutantes_atestado_f3 red_c5_c6_1
-python3 -m ponto.tests.mutantes_atestado_f3 red_c5_c6_2
-python3 -m ponto.tests.mutantes_atestado_f3 red_c5_c6_3
-python3 -m unittest -q ponto.tests.test_atestado_f3_contrato
-
-python3 -m ponto.tests.mutantes_atestado_f3 c6_view_reintroduz_or
-python3 -m ponto.tests.mutantes_atestado_f3 c6_servir_pula_validacao
-python3 -m ponto.tests.mutantes_atestado_f3 c6_lista_pula_validacao
-python3 -m ponto.tests.mutantes_atestado_f3 c6_rejeitar_reintroduz_or
-python3 -m ponto.tests.mutantes_atestado_f3 c6_aprovar_reintroduz_or
-python3 -m ponto.tests.mutantes_atestado_f3 c6_template_le_elo
-python3 -m ponto.tests.mutantes_atestado_f3 c6_anexo_raiz_so_aprovada
-python3 -m ponto.tests.mutantes_atestado_f3 c6_anexo_ignora_irmas
-python3 -m ponto.tests.mutantes_atestado_f3 c6_anexo_libera_na_raiz
-python3 -m ponto.tests.mutantes_atestado_f3 c6_reabrir_pula_guarda
-python3 -m ponto.tests.mutantes_atestado_f3 c6_insert_pula_guarda
-python3 -m ponto.tests.mutantes_atestado_f3 c6_previa_formula_propria
-python3 -m ponto.tests.mutantes_atestado_f3 filha_substitui_aprovado
-python3 -m ponto.tests.mutantes_atestado_f3 d2_so_linha_pedida
-```
-
-**Fora da volta.** De acordo com a exclusão da janela K6 × exportação, dos relógios residuais e do `elif` e da ordem do `Ausencia.save`. A gravação c5 continua entregando o fim conferido ao `Ausencia.save`. [K6 e gravação](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1949) · [Exportação](/home/ronald/wt-codex-o30-f3-construir-010143/app/folha/models.py:174) · [Relógio da projeção](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:191) · [Modelo](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/models.py:892)
-
-Produção, efeito financeiro real, renderização com Django e suíte com banco [nao verificado]. Certificação a cargo do Code e do Opus final. [nao verificado]
-
-_8371 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8373 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
