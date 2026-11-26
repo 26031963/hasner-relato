@@ -10929,6 +10929,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 18:49:32 disjuntor (NEGOU B1)** -- agente a67f53558650381df -- Bash -- alvo sha1:0843c01872 (137 car., na trilha privada)
+
 **26/11 18:30:03 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:f98c90765b (42 car., na trilha privada)
 
 **26/11 18:18:31 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:0778e54b43 (51 car., na trilha privada)
@@ -13569,3 +13571,7 @@ DESPACHO FERIADO-c4: origem do bloqueio 1 (motor x fechamento/dia_pago, precisa 
 00:02 O30-F3 MAPA CURTO FEITO (Codex leitura rc 0, logs/O30-F3-CONSTRUIR/mapa.r, 52 linhas; amostra a conferir antes do brief): F1 ja tem drawer painel_ausencia + filtros (de/ate, colab, tipo, status, efeito; empresa so no relatorio de atestados), servico atestados_lote.py com previa + CSV + ZIP (sem PDF, sem rota na barra), PDF do Historico e HTML; documento: 3 escritores pela porta do servico (criar_ausencia, editar_ausencia_registro, anexar_documento), ver = tem_acao ver_ausencias; nenhum campo de CID/CRM/medico/emissao existe; HEIC detectado por ftyp, servido cru; ReportLab 4.5 com Image (molde core/relatorio_pdf.py). Vaga: espera a origem do FERIADO c4 (se nao tocar motor, FERIADO entra na vaga Codex antes da O30, aval V2).
 00:28 CORRECAO da linha DECIDIDO 'minuto exibido' acima: NAO e 'para toda celula' -- batidas_reais_do_dia tem 1 chamador (escala/utils.py:1279 no 3420bc23f, dentro de 'if _parcial:' de _marcar_ausencias); o universo da sonda (23 dias com cobertura_parcial) E o universo do efeito; impacto 0 alem do col274 vale para a frota. Raia x merge-base 64c2923b3 nao toca BACKLOG/PROMPTS/RELATO/HANDOFF (so CORTES/MAPA/ARQUITETURA); deploy --conferir: 0 conflito, 0 migration.
 - 18:49 ABONO c1f green2 VERMELHO (19 failures, Ran 7110): causa = slot `_pontas_brutas_parcial` ausente em `calculador/regras.py::_PeriodoPontualidade` (motor:1262 grava). c1g fcff30cec na wt-codex-abono-x-saida-antecipada-184735; RED dos 3 modulos em logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.log; depois suite inteira + mutantes.
+- 18:49 E4D-MATRIZ REDs fix1 d43b0dfe0 (wt-codex-e4d-contrato-rota-b-174640): Ran 45, 36 vermelhos por API/comportamento ausente, 0 de fixture, 9 guardas de mutante verdes. Pronto para o construtor depois da E4C-F5-INSTANTE.
+- 18:51 E4C-F5-INSTANTE c1: construtor opus parado pelo B1 sem escrita; desenho salvo em logs/E4C-F5-INSTANTE/c1/desenho_c1.md; c2 aberto (opus: models/migrations sao proibidos ao Codex) na wt-e4c-f5-instante-181816, RED primeiro.
+- 18:55:05 POUSO CLEAR-NAO-PARA-A-NOITE v4b b4798cbf4 (tree 3aadf2161 = certificado b0a5c5f44) + deploy --sem-migrate rc 0; pista: comboio a48492200 Found 18083, podados 3, Ran 18080, rc 0, oom 0 (logs/CLEAR-NAO-PARA-A-NOITE/comboio/certifica.out). Lista do pre-verificador no BACKLOG da obra (POUSA-COM-LISTA).
+- 18:55:38 POUSO VIGIA-DISCO v3 c335fc504 (tree 33322897a = certificado a48492200) + deploy --sem-migrate rc 0. Lista no BACKLOG da obra. Proximo: selo test_hook_esperando_com_prova.sh sem disco_estado.py (LISTA +1), depois v5.
