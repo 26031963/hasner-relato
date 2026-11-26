@@ -6,7 +6,7 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 26/11/2026 06:07:49.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **796**.
+**Medido em 26/11/2026 06:14:01.** Transcript: `b5a17eeb-1664-43db-843b-d5a40018d689.jsonl` (31.6 MB). Acoes na janela: **791**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
@@ -801,8 +801,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 18:15:00 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('RUNNER-POOL-V2 (1) medida 18:10')) L[k]='RESPONDIDA por PISTA-VAGA-2-DESTRAVA-2511 (18:1x: o job A4 das 17:54 rodava o roda.sh antigo) -- era: '+L[k] L.insert(k,'PISTA-VAGA-2-DESTRAVA-2511 (18:14): A4 1125175448 cancelado e repedido fe0d48b36 = 112518 ...` |
 | 18:14:54 | Bash |  | `pgrep -af '^bash logs/pista_certifica_par.sh'` |
 | 18:14:30 | Bash |  | `cd /home/ronald/saas-hasner; timeout 20 ssh pista cancela 1125175448_fe0d48b3; echo rc=$?; pkill -f '^bash logs/pista_certifica_par.sh 1125175448' ; a=$(git rev-parse fe0d48b36); timeout 30 ssh pista pede $a > logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.pista 2>&1; id=$(cat logs/A4-ESPELHO-AUSENCIA-ABERTA/pouso.pista); echo $id; setsid bash logs/pista_certifica_par.sh $id $a logs/A4-ESPELHO-AUSENCIA-ABE ...` |
-| 18:10:46 | Bash |  | `cd /home/ronald/saas-hasner; python3 - <<'EOF' r='app/docs/RELATO.md' L=open(r).read().split('\n') k=next(i for i,l in enumerate(L) if l.startswith('18:00 DESPACHO:')) L.insert(k+1,'RUNNER-POOL-V2 (1) medida 18:10: a pista 2 segue SERIAL -- 1 rodando (GUARDA-10-B 1125175447 desde 18:02) e 6 na fila (A4 1125175448 + 5 pedidos novos 18:09-18:10), nenhum na 2a vaga 2 min depois do roda.sh novo (18:08 ...` |
-| 18:10:40 | Bash |  | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bdrbv1kon.output` |
-| 18:09:11 | Bash |  | `cd /home/ronald/saas-hasner; cat >> app/docs/PROMPTS.md <<'EOF' \| 25/11 18:0x \| RUNNER-POOL-E-N-VAGAS-V2-2511 \| SUBSTITUI o RUNNER-POOL-E-N-VAGAS-2511: pista 2 com 2 vagas concorrentes (roda.sh PISTA_VAGAS=2, Ronald 18:08); toda suite inteira pre-opus e de pouso vai a pista (ate 2), certificada pelo pista_certifica; VM so recorte/recusa/banco da VM; medir na 1a rodada dupla oom, tempo e free -g ...` |
-| 18:09:07 | Bash |  | `/usr/bin/sleep 90; date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'` |
-| 18:09:01 | Bash |  | `date +%H:%M; timeout 20 ssh pista estado \| grep -E 'rodando\|fila'; timeout 15 ssh pista free -g 2>&1 \| head -5` |
