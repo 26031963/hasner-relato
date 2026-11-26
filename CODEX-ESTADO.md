@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 16:58** · publicado em **26/11/2026 16:58** (UTC-3)
+> Ultima resposta processada: **26/11/2026 17:09** · publicado em **26/11/2026 17:11** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 17:09 · sessao 2db3d8ae1bea · O30-F3-CONSTRUIR · construtor · origem=Code
+
+**O30-F3-CONSTRUIR c9 entregue como diff local sobre `7ccdc8068`.** A regra da volta proíbe `git commit` e escrita em `.git`. O HEAD permanece na base.
+
+- **PDF do lote.** O único `except` novo cobre `Image.open` e a decodificação. O bloco registra `ANEXO ILEGIVEL #<pk>`, o lote segue e o rodapé mostra `anexos ilegiveis: N`, inclusive zero. O chamador é `lote_atestados`. `app/ponto/services/atestados_lote.py:142`, `app/ponto/services/atestados_lote.py:209`, `app/ponto/services/atestados_lote.py:224`, `app/ponto/views_atestado.py:136`
+- **Reabertura.** A porta captura o nome que o `FieldFile` gravou nesta chamada. Após a falha, a compensação exclui apenas esse nome, após consultar as referências de `Ausencia` fora do `atomic`. Em `atomic` externo, preserva o arquivo e registra o nome como possível órfão. Atualizei o teste de integração para esse contrato e o selo vizinho para reconhecer a exclusão no storage. `app/ponto/services/ausencia.py:241`, `app/ponto/services/ausencia.py:1413`, `app/ponto/services/ausencia.py:1435`, `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:164`, `app/ponto/tests/test_lote7_selo_escritor_acorda.py:282`
+- **Escritor único.** O censo passou a contar a importação da coleção por alias. Os dois mutantes em memória falharam por asserção no sítio injetado, um com `update(**dict.fromkeys(...))` e outro com `setattr` via alias de módulo. `app/ponto/tests/test_atestado_f3_contrato.py:130`, `app/ponto/tests/test_atestado_f3_contrato.py:165`, `app/ponto/tests/test_atestado_f3_contrato.py:284`
+
+### RED → GREEN
+
+Comandos a partir de `app/`. `green_c9` passou em **13 testes** e `selos` em **14 testes** locais. `app/ponto/tests/mutantes_atestado_f3.py:85`, `app/ponto/tests/mutantes_atestado_f3.py:342`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 red_c8_pdf_decode
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 red_c8_reabrir_fatos
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 red_c8_censo_alias
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 green_c9
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 selos
+```
+
+- **PDF:** a c8 propagou `OSError: truncado`. Na c9, o teste local verificou a linha com o ID, a inclusão da foto boa e o contador. O mutante que deixou o contador em zero caiu na asserção `0 != 1`. `app/ponto/tests/test_atestado_f3_contrato.py:784`
+- **Reabertura:** na c8, falharam `on_commit` após confirmação, nome antigo defasado, rollback externo sem log, falha dentro de `atomic` externo e referência por outra ausência. A compensação antes do commit já passava e continuou passando. `app/ponto/tests/test_atestado_f3_contrato.py:419`, `app/ponto/tests/test_atestado_f3_contrato.py:439`, `app/ponto/tests/test_atestado_f3_contrato.py:456`, `app/ponto/tests/test_atestado_f3_contrato.py:474`, `app/ponto/tests/test_atestado_f3_contrato.py:489`, `app/ponto/tests/test_atestado_f3_contrato.py:501`
+- **Alias:** na c8, o `from ... import ... as ...` escapava. O acesso por atributo do alias de módulo já era detectado. Na c9, ambos são rejeitados. `app/ponto/tests/test_atestado_f3_contrato.py:165`, `app/ponto/tests/test_atestado_f3_contrato.py:284`
+
+Os nove mutantes abaixo retornaram **rc 1 por asserção**. `app/ponto/tests/mutantes_atestado_f3.py:62`, `app/ponto/tests/mutantes_atestado_f3.py:101`
+
+```bash
+for caso in \
+  c9_pdf_engole_sem_contar \
+  c9_reabrir_ignora_referencia \
+  c9_reabrir_confunde_nome_com_upload \
+  c9_reabrir_apaga_em_atomic_externo \
+  c9_reabrir_nao_loga_orfao \
+  c9_reabrir_nao_compensa \
+  c9_selo_confunde_delete_do_storage \
+  c9_import_alias_fromkeys \
+  c9_modulo_alias_setattr
+do
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 "$caso"
+done
+```
+
+**PDF real [nao verificado].** O teste gera dois JPEGs de entrada, extrai o texto do PDF e confere a única imagem embutida. Os três comandos pararam na importação do Pillow no ambiente local. A integração com banco e a certificação da sessão ficam [nao verificado]. `app/ponto/tests/test_atestado_f3_contrato.py:801`, `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:164`
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 red_c8_pdf_real
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 green_c9_pdf_real
+PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c9_pdf_engole_sem_contar_real
+```
+
+### Delta e contagem AST
+
+Saída de `git -C .. diff --name-only 7ccdc8068 -- app/`, com a contagem de `ExceptHandler` anexada. `with suppress` ficou em **0 → 0** em todos os arquivos.
+
+| Arquivo | c8 → c9 |
+|---|---:|
+| `app/ponto/services/atestados_lote.py` | 2 → 3 |
+| `app/ponto/services/ausencia.py` | 13 → 13 |
+| `app/ponto/tests/mutantes_atestado_f3.py` | 0 → 0 |
+| `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py` | 1 → 1 |
+| `app/ponto/tests/test_atestado_f3_contrato.py` | 0 → 0 |
+| `app/ponto/tests/test_lote7_selo_escritor_acorda.py` | 0 → 0 |
+
+**Fora do delta:** MAPA, ARQUITETURA, máscara da sombra, RELATO e BACKLOG seguem com a sessão. B1b/B2c, B2a, B5 e INSS seguem em fila. `app/templates/ponto/partials/painel_ausencia.html:71`, `app/ponto/services/ausencia.py:694`, `app/ponto/services/ausencia.py:1861`, `app/ponto/views.py:2596`
+
+```text
+O30-F3 c9: PDF tolera imagem ilegível, reabertura compensa por referência e selo cobre aliases
+
+OBRA: O30-F3-CONSTRUIR
+LEI-AKITA: origem=ponto/services/ausencia.py:1388, testemunha=ponto/services/ausencia.py:262, RED=ponto/tests/mutantes_atestado_f3.py:85, quem-mais-le=ponto/views_atestado.py:136, juizes novos=0, padrao=escritor unico
+```
 
 ## 26/11 16:58 · sessao 4a17fc90a9db · DIA-DA-BATIDA-JUIZ-UNICO · construtor · origem=Code
 
@@ -869,91 +941,4 @@ Dois efeitos adicionais confirmados por leitura:
 - O avulso escaneia duas vezes todo o mapa de células a cada dia. Fechamento e motor passam o mapa integral da frota. Antes a consulta unitária lia a chave diretamente. `app/escala/utils.py:46`, `app/escala/utils.py:97`, `app/escala/utils.py:424`, `app/ponto/services/fechamento.py:625`, `app/ponto/services/fechamento.py:760`, `app/ponto/services/fechamento.py:779`, `app/escala/models.py:1147`.
 - A falta zero corrigida recupera 480 no mapa que alimenta fechamento/lavratura, mas a palavra do cartão e do app ainda lê o `Ausencia.minutos` bruto. Para intervalo gravado de 960, perde-se a mesma correspondência entre valor do registro e valor diário rateado. `app/folha/export.py:118`, `app/folha/export.py:145`, `app/ponto/services/fechamento.py:902`, `app/ponto/services/dia_decidido.py:496`, `app/ponto/services/dia_decidido.py:554`.
 
-## 26/11 16:10 · sessao 40b32edbd6d6 · O30-F3-CONSTRUIR · verificador · origem=Code
-
-**REPROVADO — O30-F3-CONSTRUIR, volta 7.** O drawer recusa o envio de um arquivo sozinho numa filha legada. Outras portas aceitam o arquivo na filha, mas a URL da filha entrega o da referência ou retorna 404. Dois `save()` integrais podem sobrescrever os seis campos fora da escrita auditada, e a redução altera os minutos produzidos por `rederivar_fim` em relação à c6. `app/ponto/views_atestado.py:38–50`, `app/ponto/views.py:2146–2159`, `app/ponto/services/ausencia.py:736–738,1104–1121,1842–1854`, `app/ponto/tests/test_lote7_fato_de_ausencia_acorda_projecao.py:623–634`
-
-Conferi os 22 hashes de arquivo do lado c7 do diff fornecido contra a cópia. O histórico Git, a comparação integral com `c314c099f`, os REDs históricos e a suíte com banco ficaram **[nao verificado]**. A cópia de leitura é produzida por `git archive`. `bin/codex_pergunta.sh:28`, `CLAUDE.md:354–358`, `app/ponto/tests/mutantes_atestado_f3.py:262–265`
-
-## 1. PROCEDE — ficaram achados da c6 sem cura
-
-| Achado do opus / verif6 | Resultado na origem |
-|---|---|
-| **BUG 113, rejeitada com arquivo não reabria** | **CURADO.** `criar_ausencia` volta a `_reabrir` na mesma linha. A guarda que barrava a troca saiu. Arquivo e seis campos entram nessa linha, e `mudar_estado` faz a transição. Os dois casos sem banco passaram. O teste original com banco ficou [nao verificado]. `app/ponto/services/ausencia.py:462–504,1393–1427`, `app/ponto/tests/test_atestado_f3_contrato.py:312–336`, `app/ponto/tests/test_a4_estados_com_porta.py:324–339` |
-| **C6-1, leitores resolviam a referência por conta própria** | **NÃO CURADO** para o legado. Painel, entrega, aprovação, rejeição e célula da lista voltaram a escolher a referência localmente. O 404 da lista inteira por causa da validação de cadeia foi **CURADO EM OUTRO SÍTIO**, pela retirada da validação da lista. A proteção de cadeia também saiu da entrega. `app/ponto/views.py:2102,2147,2342–2348,2786,2862`, `app/templates/ponto/ausencias.html:168–171` |
-| **C6-2, duas regras de substituição do arquivo compartilhado** | **CURADO EM OUTRO SÍTIO.** A porta deixou de trocar o arquivo da referência e de mover o estado das irmãs. A troca passa a ser local. A entrega pela FK ainda pode apontar para outro arquivo. `app/ponto/services/ausencia.py:1104–1121,1393–1412`, `app/ponto/views.py:2147–2159` |
-| **App, vigia, cartão/espelho, chamado e troca liam a filha** | **CURADO EM OUTRO SÍTIO** nas linhas sem FK, pela volta da escrita local. **NÃO CURADO** nas filhas legadas. Esses leitores seguem olhando a coluna local enquanto o drawer e a entrega seguem a referência. O chamador produtivo da troca ficou [nao verificado]. `app/api/views.py:1061`, `app/ponto/services/vigia_ausencia.py:117,217`, `app/ponto/services/dia_decidido.py:555`, `app/ponto/services/espelho.py:661`, `app/ponto/services/ausencia.py:875,892,901`, `app/ponto/portas/celula.py:726,746`, `app/ponto/views.py:2102,2147` |
-| **Tupla `decididas` duplicava `ABERTAS`** | **CURADO.** A guarda saiu e a API usa o juiz registrado. `app/core/juizes.py:264`, `app/ponto/services/ausencia.py:991,1084–1129`, `app/api/views.py:3111–3114` |
-| **Selo do resolvedor deixava ternário passar** | **CURADO EM OUTRO SÍTIO.** Saíram o resolvedor e o selo que o acompanhava. O contrato restante cobre escrita dos seis campos. As escolhas locais da FK continuam nos leitores acima. `app/ponto/tests/test_atestado_f3_contrato.py:198–220`, `app/ponto/views.py:2102,2147,2786,2862` |
-| **C6-3, prévia derivava o fim por conta própria** | **NÃO CURADO.** O dry-run voltou a somar `dias_corridos - 1`. A aplicação usa a derivação de `Ausencia.save()`. A redução reintroduziu a duplicação que a volta 6 havia retirado. `app/ponto/management/commands/curar_ausencia_sem_fim.py:29–50`, `app/ponto/models.py:917–932`, `app/ponto/services/ausencia.py:199–211,1842–1854` |
-| **Botão PDF, censo de recusa e catraca do turno** | **CURADO** para o botão e a catraca. **CURADO** para a chamada que faltava ao registrador da recusa. A trilha completa continua pendente no item 4. Os três selos selecionados passaram. `app/templates/relatorios/atestados_lote.html:20–21`, `app/relatorios/urls.py:17`, `app/ponto/views_atestado.py:41–45`, `app/ponto/views.py:3411`, `app/core/tests/test_medida_turno_do_par.py:342`, `app/ponto/tests/mutantes_atestado_f3.py:38–44,260–261` |
-| **Dois selos do diagrama** | **NÃO CURADO.** O `ARQUITETURA.mmd` bateu na checagem isolada. O censo estático das rotas pela regra do gerador deu **170 portas / 150 sem `registrar_log`**. O `MAPA.md` publica **169 / 149**. A nova porta POST explica o acréscimo. O segundo selo exige que a restauração volte a `rc=0`. A execução integrada dos dois ficou [nao verificado]. `app/docs/MAPA.md:236`, `app/relatorios/urls.py:18`, `app/ponto/views_atestado.py:24–50`, `app/core/portas_da_tela.py:53–55,103–125`, `app/core/management/commands/gerar_diagrama.py:839–844,911–930`, `app/core/tests/test_selo_diagrama_do_codigo.py:85–98` |
-
-## 2. PROCEDE — censo de escritores e leitores
-
-### Os seis campos
-
-Os seis têm o mesmo caminho de persistência. A view coleta as chaves presentes no POST. A porta valida, inclui os valores no INSERT ou relê as colunas sob trava para o UPDATE. Edição, anexo e reabertura chamam o mesmo gravador. `app/ponto/views_atestado.py:31–50`, `app/ponto/services/ausencia.py:264–281,293–325,559,633–634,703,737,1100–1105,1399`
-
-| Campo | Declaração e entrada | Leitura no drawer |
-|---|---|---|
-| `atestado_medico` | `app/ponto/models.py:787`, `app/ponto/forms.py:14` | `app/templates/ponto/partials/painel_ausencia.html:99,123` |
-| `atestado_crm` | `app/ponto/models.py:789`, `app/ponto/forms.py:15` | `app/templates/ponto/partials/painel_ausencia.html:102,124` |
-| `atestado_crm_uf` | `app/ponto/models.py:790`, `app/ponto/forms.py:16` | `app/templates/ponto/partials/painel_ausencia.html:105,124` |
-| `atestado_cid` | `app/ponto/models.py:791`, `app/ponto/forms.py:20` | `app/templates/ponto/partials/painel_ausencia.html:108,125` |
-| `atestado_emissao` | `app/ponto/models.py:793`, `app/ponto/forms.py:21` | `app/templates/ponto/partials/painel_ausencia.html:111,126` |
-| `atestado_dias` | `app/ponto/models.py:794`, `app/ponto/forms.py:22` | `app/templates/ponto/partials/painel_ausencia.html:114,127` |
-
-- **Outros leitores dos seis.** CSV e PDF leem as seis colunas pela mesma função, sob `ver_ausencias`. ZIP lê o arquivo. O `AusenciaAdmin` exclui as seis também da lista de campos somente leitura. `atestado_medico` na API é um alias de **tipo**. `app/ponto/services/atestados_lote.py:9–12,104–108,122–138,199–205,230–242`, `app/ponto/views_atestado.py:99–106,134–144`, `app/ponto/admin.py:38–53`, `app/api/views.py:1772`
-- **Escrita efetiva fora do gravador.** A edição geral chama `save()` integral, inclusive quando o POST da edição omite todos os seis. A cura de fim também salva a instância inteira. Uma instância carregada antes de outro usuário gravar o atestado pode repor os valores antigos. `rederivar_fim` está fora das portas de atestado declaradas no modelo. `app/ponto/views.py:2973–2982`, `app/ponto/services/ausencia.py:293–296,736–738,1847–1850`, `app/ponto/models.py:782–786,892–932`
-- **Outro leitor e escritor, na sombra.** O dump integral restaura a tabela com todas as colunas. O incremental faz `select *` e `COPY`. As seis passam sem regra de máscara e sem que o selo por nome as detecte, inclusive CID. A checagem dos seis nomes contra o inventário e a expressão foi feita em memória. Existência de valores preenchidos e cópia efetiva em produção [nao verificado]. `bin/sombra.sh:202–207,243–260,266–276`, `bin/sombra_incremental.sh:36,55–76`, `bin/sombra_regras_pessoais.py:49–78,109,161–164`, `bin/sombra_mascara_pessoal.py:16–26,44–65`, `bin/sombra_selo_pessoal.py:25–36`
-
-### `documento_referencia` e `documento`
-
-- **FK, escritores.** A 0021 cria a coluna e o modelo declara `SET_NULL` na exclusão da referência. Os saves integrais de edição e cura também podem regravá-la. A varredura encontrou atribuições explícitas nas fixtures, como a do teste de 409 e a de cobertura parcial. `app/ponto/migrations/0021_ausencia_documento_referencia_and_more.py:15–21`, `app/ponto/models.py:815–819`, `app/ponto/services/ausencia.py:738,1849`, `app/ponto/tests/test_atestado_f3.py:98–104`, `app/escala/tests/test_cobertura_parcial_periodo.py:365`
-- **FK, leitores.** Painel, entrega, aprovação e rejeição escolhem `a.documento_referencia or a`. A célula da lista escolhe separadamente e dá prioridade ao arquivo local. O drawer mostra o ID vinculado. A porta usa a FK na recusa, e a seleção normal do histórico e do lote exclui filhas. O admin genérico lê a FK para exibição. **Há, portanto, resolução local em cinco sítios.** `app/ponto/views.py:2102–2105,2147,2786–2788,2862–2864`, `app/templates/ponto/ausencias.html:168–171`, `app/templates/ponto/partials/painel_ausencia.html:162`, `app/ponto/services/ausencia.py:284–302`, `app/ponto/services/dia_decidido.py:624–630`, `app/ponto/services/atestados_lote.py:36–44`, `app/core/admin.py:46–50,68–73`, `app/ponto/admin.py:38–53`
-- **Arquivo, escritores.** O anexo do lançamento é `Ausencia.documento`. Os pontos de gravação são INSERT, `anexar_documento` e `_reabrir`, além da regravação pelos saves integrais. A limpeza compensatória chama `delete(save=False)` no storage. O formulário web avulso, o POST de reenvio e o upload próprio chamam a porta. O app e o PWA também entregam arquivo na criação. `app/ponto/models.py:777–781`, `app/ponto/services/ausencia.py:241–258,563–564,630–636,738,1108–1118,1402–1404,1849`, `app/ponto/views.py:2165–2185,2707–2713`, `app/ponto/views_atestado.py:47–50`, `app/api/views.py:1824–1831,1852–1858,3140–3146`
-- **Arquivo, leitores.** Além das telas e da entrega acima, leem a coluna o atalho do app e o reenvio, a limpeza da view de lançamento, a tipagem do modelo, os gates e o chamado de ausência, cartão/espelho/histórico, o vigia, o comando de rejulgamento, a troca de plantão, o lote e o backfill 0057. O chamado no PWA lê a projeção `tem_documento`. `app/api/views.py:1061–1066,1855,3158,3166`, `app/ponto/views.py:2596–2600`, `app/ponto/models.py:869–883`, `app/ponto/services/ausencia.py:251,630,768,833,853,875,892,901,1101,1393–1395`, `app/ponto/services/dia_decidido.py:477,555,671,685`, `app/ponto/services/espelho.py:661`, `app/ponto/services/vigia_ausencia.py:115–117,215–217`, `app/ponto/management/commands/rejulgar_status_por_tipo.py:28,37`, `app/ponto/portas/celula.py:726,746`, `app/ponto/services/atestados_lote.py:73–74,93,135,164–173,204–205,230–253`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35–43`, `app/templates/chamados/partials/_card_atendimento.html:65–70`
-
-### `status` da ausência reaberta
-
-- **Escritores.** `criar_ausencia` insere o estado inicial ou o explícito. `_reabrir` escolhe o destino pelo anexo local e chama `mudar_estado`, que grava estado e trilha. Decisão, anexo, vencimento e rejulgamento usam essa transição. O cancelamento de férias tem sua própria escrita, a migration 0057 tem backfill e reversão, e os dois saves integrais também podem regravar `status`. `_reaberta` é um atributo transitório. `_criada` é o que a API consulta para responder `ja_recebido`. `app/ponto/services/ausencia.py:545–559,633,738,766–771,1048–1077,1120,1181,1273,1393–1427,1592–1600,1849`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35–43,63–65`, `app/api/views.py:1852–1858`
-- **Leitores na porta e nas telas.** Seleção de rejeitada ou viva, transição, confirmação e vigência no serviço. Na UI, painel, filtros/lista, decisões individuais e em lote e retorno da reversão. Na API, upload, listagem e mensageria. Histórico e exportações do lote também imprimem o estado. `app/ponto/services/ausencia.py:457,463,659,662,766,769,918,924,942,1048,1119,1233–1237,1261,1369,1586,1650`, `app/ponto/models.py:711–741,896,901`, `app/ponto/views.py:2128,2270–2299,2394,2435,2471,2475,2726,2762,2777,2789,2844,2861,2865,2906,2909,3021`, `app/templates/ponto/ausencias.html:177–179`, `app/templates/ponto/partials/painel_ausencia.html:24,147,309,328,345,355`, `app/api/views.py:1061,1583–1587,1879–1880,3112–3114`, `app/api/views_mensageria.py:702,747,750,1036,1077`, `app/ponto/services/dia_decidido.py:478,506,519,539,580,677`, `app/ponto/services/atestados_lote.py:48,134,190`
-- **Leitores a jusante.** Cobertura, precedência, cartório, espelho, vigias, relatórios, folha, chamados, feriados/férias e comandos de passivo consomem a classificação ou filtram os estados. A cópia integral da sombra inclui `status` e seu checksum incremental o lê explicitamente. `app/ponto/turnos.py:2534–2536,2892,3204`, `app/ponto/precedencia.py:274`, `app/ponto/services/cartorio.py:819,1288,1303,1433,1510`, `app/ponto/services/espelho.py:898`, `app/ponto/services/vigia_ausencia.py:59,108–121,216–219`, `app/ponto/services/vigia_ausencia_veredito.py:47–54`, `app/ponto/signals.py:250–272`, `app/relatorios/views.py:197,283`, `app/folha/export.py:87–91`, `app/inteligencia/resumo.py:42`, `app/ferias/services.py:147`, `app/chamados/juizes.py:1936`, `app/chamados/services/materializacao.py:1148,1228,1260`, `app/chamados/services/silencio_ausencia.py:78,94`, `app/chamados/services/tarefa_do_dia.py:185`, `app/chamados/services/vigia_fio.py:259–260`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:29`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:122,142,146`, `app/ponto/management/commands/rejulgar_status_por_tipo.py:25–37`, `bin/sombra_incremental.sh:36,74–76`
-
-## 3. NÃO PROCEDE — dependência quebrada pela redução
-
-A varredura estática não encontrou chamador produtivo dos nomes e kwargs retirados. As rotas do app, do upload web e da entrega apontam para as views presentes. O drawer recebe `a`, `raiz` e `irmaos`. A lista usa `a` e a FK. O único chamador produtivo localizado de `rederivar_fim` usa a assinatura atual. O comando mantém `--apply` e o H06 importa a porta de edição existente. Resolução integrada das URLs e clientes externos [nao verificado]. `app/api/urls.py:82–83`, `app/ponto/urls.py:69–73`, `app/relatorios/urls.py:16–18`, `app/ponto/views.py:2102–2110`, `app/templates/ponto/ausencias.html:168–171`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:23–24,46–50`, `app/ponto/management/commands/rederivar_minutos_h06_comp11.py:133,169`, `app/ponto/services/ausencia.py:1084,1842`
-
-`core/censo_escritas.py` voltou à assinatura sem `detalhar_saves`, compatível com os chamadores localizados. `core/media_protegida.py` voltou a autorizar staff e a negar atestado ao colaborador comum nessa URL. O PDF usa a rota protegida de ausência. A igualdade byte a byte desses arquivos com a base ficou [nao verificado]. `app/core/censo_escritas.py:451,489`, `app/ponto/tests/test_atestado_f3_contrato.py:110–113`, `app/core/media_protegida.py:9–17,35–47`, `app/ponto/services/atestados_lote.py:171–173`
-
-## 4. PROCEDE — a recusa do drawer barra um upload legítimo
-
-| Fluxo | Resultado |
-|---|---|
-| **Aprovada reenviada no POST de criação do app** | **NÃO PROCEDE** para `registro_com_referencia`. O app passa apenas o arquivo à porta e recebe o mesmo ID com `ja_recebido`. Com arquivo local, preserva-o. Sem arquivo local, tenta anexar na existente. `app/api/views.py:1824–1831,1852–1858`, `app/ponto/services/ausencia.py:454–460,1099–1107` |
-| **Filha aberta de raiz rejeitada, upload próprio do colaborador** | **NÃO PROCEDE** para o 409 da FK. A API confere o estado da filha e passa somente `documento`. **PROCEDE** o defeito na entrega. O upload pode retornar sucesso, mas a URL abre o arquivo da raiz ou devolve 404. O PWA também envia só `documento`. `app/api/views.py:3102–3114,3140–3166`, `app/ponto/services/ausencia.py:1104–1121`, `app/ponto/views.py:2146–2159`, `app/templates/chamados/partials/_card_atendimento.html:65–70` |
-| **Upload pelo drawer do DP em filha legada** | **PROCEDE.** Os seis inputs nomeados seguem habilitados. Mesmo vazios, entram em `dados` pela presença da chave e disparam 409 antes da leitura de `FILES`. Reproduzi o POST em memória com o corpo da view e a guarda real. O endpoint web antigo continua recebendo arquivo sozinho. `app/templates/ponto/partials/painel_ausencia.html:89–118`, `app/ponto/views_atestado.py:29–50`, `app/ponto/services/ausencia.py:284–290`, `app/ponto/views.py:2165–2185` |
-
-**Trilha incompleta.** O 409 explícito chama `registrar` com usuário do request, objeto e motivo. O logger não tem `antes` nem `depois`, que a LEI-AKITA 7 exige. O teste substitui `registrar` por um mock. A porta ainda pode levantar a recusa na checagem sob trava, depois do pré-teste da view, e a chamada dessa porta não converte essa exceção em 409. Ocorrência em produção [nao verificado]. `CLAUDE.md:32–34`, `app/ponto/views_atestado.py:38–50`, `app/core/recusa_critica.py:70–86`, `app/ponto/services/ausencia.py:298–302`, `app/ponto/tests/test_atestado_f3.py:108–115`
-
-Os anexos informam duas linhas com FK. Estado, arquivo disponível, uso do drawer e ocorrências reais de 409 nessas duas linhas [nao verificado].
-
-## 5. PROCEDE — o PDF tem falha sem resposta específica
-
-- **Rota e formatos.** A rota própria fixa `formato='pdf'`. O partial envia os filtros por GET. JPEG e PNG são selecionados pelos bytes do cabeçalho, os demais tipos recebem `abrir anexo`, e `exists=False` gera `Anexo indisponível`. Filtro inválido e limite excedido têm mensagem no HTML. `app/relatorios/urls.py:17`, `app/templates/relatorios/atestados_lote.html:6–21,29–31`, `app/templates/core/_btn_pdf.html:38–42`, `app/ponto/views_atestado.py:103–132`, `app/ponto/services/atestados_lote.py:164–173`
-- **Falha aberta e falha engolida.** `OSError` do Pillow e falha de `open()` depois do `exists()` abortam o lote antes da resposta PDF. Já falhas de `tell`, `read` ou `seek` no juiz de tipo viram `(None, None)`. O PDF então mostra `abrir anexo` como para formato desconhecido. A entrega usa o mesmo juiz e pode seguir para `FileResponse` com o cursor sem restauração. Tela efetiva do 500 e comportamento do arquivo no navegador [nao verificado]. `app/ponto/services/atestados_lote.py:142–173,204–214`, `app/ponto/services/ausencia.py:788–809`, `app/ponto/views_atestado.py:134–150`, `app/ponto/views.py:2153–2162`
-- **Relógio. NÃO PROCEDE no caminho da janela do PDF.** A view lê `localdate()` uma vez e entrega mês/ano ao serviço. O catálogo tem relógio monotônico para TTL. Os relógios de prazo, projeção e sinal do cartório continuam no serviço geral. `app/ponto/views_atestado.py:110–124`, `app/ponto/services/atestados_lote.py:21–33`, `app/ponto/janelas.py:54–57`, `app/ponto/catalogo/ausencias.py:267–281`, `app/ponto/services/ausencia.py:191–193,551,1415`, `app/ponto/signals.py:115–147`
-
-## 6. PROCEDE — classes que ainda reprovam
-
-| Classe | Veredito |
-|---|---|
-| **Segundo juiz de aberta/decidida** | **NÃO PROCEDE** no delta. A duplicação saiu. A classificação da API consulta `ABERTAS` e a exigência de documento do lote delega a `estado_inicial`. `app/docs/JUIZES.md:59–60`, `app/core/juizes.py:263–264`, `app/api/views.py:3111–3114`, `app/ponto/services/atestados_lote.py:15–18` |
-| **Segundo escritor** | **PROCEDE.** Os saves integrais da edição e da cura alcançam os seis campos sem passar pela atualização auditada. A edição comum e a cura fornecem dois chamadores produtivos para esse contraexemplo. `app/ponto/views.py:2973–2982`, `app/ponto/management/commands/curar_ausencia_sem_fim.py:46–50`, `app/ponto/services/ausencia.py:293–325,736–738,1847–1850` |
-| **Derivação paralela** | **PROCEDE.** A fórmula do fim reapareceu na prévia. Prévia, derivador e `save()` voltam a ter expressões próprias. `app/ponto/management/commands/curar_ausencia_sem_fim.py:38`, `app/ponto/services/ausencia.py:199–211`, `app/ponto/models.py:917–931` |
-| **Selo/RED sem mordida** | **PROCEDE.** O selo dos seis passou, mas em memória deixou passar `save()` integral, `save_base()` integral e `update_fields` montado por `append`. O mutante externo injeta um `update(atestado_cid=...)` literal, a forma que o selo reconhece. O censo de re
-
-[truncado em 20000 de 27222 caracteres]
-
-_8431 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8432 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
