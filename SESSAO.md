@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 18:33:02.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (234.2 MB). Acoes na janela: **1990**.
+**Medido em 27/11/2026 18:40:03.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (234.2 MB). Acoes na janela: **1987**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:37:30 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 18:37:26 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b2r1xgjty.output; date +%H:%M` |
 | 18:32:21 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 18:32:18 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqblh44s6.output; date +%H:%M` |
 | 18:27:13 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -1995,8 +1997,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:44:43 | Bash | Arquivos mudados e porta por dia | `cd ~/saas-hasner; git diff --name-status 59600163c..c57f01232 -- app/ponto; grep -rn "def espelho_do_colab" app/ponto \| head -3` |
 | 06:44:37 | Bash | Testes modificados e porta por dia | `cd ~/saas-hasner; git diff --name-status 59600163c..c57f01232 -- app/ponto/tests app/ponto; cat logs/RAMO2-CRUZA/c2q/suite.rc 2>/dev/null; grep -n "def espelho_do_colab\\|def dias_do_colab" -r app/ponto/*.py app/ponto/services/*.py \| head` |
 | 06:42:46 | Bash | Resultado da espera | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bruspe9l5.output; cat logs/RAMO2-CRUZA/DIFF-FROTA/cls.rc logs/RAMO2-CRUZA/c2q/suite.rc 2>/dev/null; grep -v "objects imported\\|^$\\|lavra_de_prod\\|sombra --rodar" logs/RAMO2-CRUZA/DIFF-FROTA/cls.log 2>/dev/null \| head -60` |
-| 06:37:57 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 06:37:52 | Bash | Classifica movers por motor na sombra | `cd ~/saas-hasner; for m in 11 12; do cat > logs/sombra/ramo2cls_obra_$m.py <<EOF # RAMO2-B-EM-TURNO-QUE-CRUZA DIFF-FROTA: classe de motor por colab (SO LEITURA, somente_leitura=True em atomic com rollback). comp=$m/2026 import json from django.db import transaction import ponto.motor_calculo_v2 as mv from ponto.services.fechamento import recalcular_fechamento_mes MES=$m; ANO=2026 classes = {} def  ...` |
-| 06:37:32 | Bash | Assinatura de calcular_mes e chamador | `cd ~/saas-hasner; grep -n " def calcular_mes" app/ponto/motor_calculo_v2.py \| head; grep -n "\.calcular_mes(" app/ponto/services/fechamento.py \| head -5` |
-| 06:37:24 | Bash | Como apontar a sonda Codex à sombra | `cd ~/saas-hasner; cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/codex-sonda-default-e-prod.md \| sed -n 1,30p; grep -n "CODEX_SONDA_ENVELOPE" bin/codex_pergunta.sh \| head -5` |
-| 06:37:12 | Bash | Resultado da espera | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b52q4run6.output; cat logs/RAMO2-CRUZA/DIFF-FROTA/diff.rc logs/RAMO2-CRUZA/c2q/suite.rc 2>/dev/null; cat logs/RAMO2-CRUZA/DIFF-FROTA/resumo.txt 2>/dev/null` |
