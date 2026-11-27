@@ -1,7 +1,80 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 01:06** · publicado em **27/11/2026 01:13** (UTC-3)
+> Ultima resposta processada: **27/11/2026 01:19** · publicado em **27/11/2026 01:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 01:19 · sessao e5b196ca57e5 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+Ajustei os três registros da catraca em `core/tests/test_medida_turno_do_par.py`. **GREEN local: 35 de 35 testes em memória**, usando `unittest.TestCase` no lugar de `django.test.SimpleTestCase`. A suíte do Code e o Opus final estão [nao verificado]. `core/tests/test_medida_turno_do_par.py:28`, `:194`, `:251`, `:425`
+
+As três divergências vieram da obra no merge `3b594ce1f`. No main `59600163c`, os três registros coincidiam com o censo da própria revisão. `core/medida_turno_do_par.py:336`, `:448`
+
+| Falha | Causa | Cura | GREEN local |
+|---|---|---|---|
+| `test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit` | O merge deslocou ocorrências do motor, incluindo `909 → 937` e `2521 → 2601`, e moveu a ocorrência da folha de `medir:544` no main para `he_acima_do_teto_por_dia:344`. `ponto/motor_calculo_v2.py:937`, `:2601`; `folha/porta_export.py:344` | Atualizei as linhas medidas nas duas listas e registrei a obra em um comentário de uma linha. `core/tests/test_medida_turno_do_par.py:251`, `:288`, `:304`, `:348` | Passou. `core/tests/test_medida_turno_do_par.py:565` |
+| `test_CATRACA_numeros_exatos_e_registro_no_mesmo_commit` | A chamada `_p.entrada.date()` passou de `medir` para `he_acima_do_teto_por_dia`, trocando a identidade B1. `folha/porta_export.py:344`, `:587`; `core/medida_turno_do_par.py:217` | Registrei a troca de identidade. Os contadores conferem em **9 pareadores e 81 derivações de dia**. `core/tests/test_medida_turno_do_par.py:108`, `:194` | Passou. `core/tests/test_medida_turno_do_par.py:558` |
+| `test_a_classificar_publicado_sem_entrar_como_criterio_amplo` | Em `medir`, a data do ato ainda é medida como B2. Com a saída da ocorrência B1, `medir` aparece em `B2_menos_B1`. `folha/porta_export.py:391`; `core/medida_turno_do_par.py:223`, `:432` | Registrei `medir` em `CLASSIFICAR['B2_menos_B1']`. `core/tests/test_medida_turno_do_par.py:425` | Passou. `core/tests/test_medida_turno_do_par.py:571` |
+
+**`except` novos: 0.** A comparação AST encontrou o mesmo `except` antes e depois. O diff ficou restrito aos três registros e ao comentário no arquivo de teste. `core/tests/test_medida_turno_do_par.py:194`, `:251`, `:425`, `:668`
+
+### RED e mutantes
+
+A partir de `app/`, a função abaixo restaura em memória os valores da base `03bc04e5b`. O RED reproduz as três falhas. Cada mutante restaura um único registro e derruba somente a asserção correspondente. `core/tests/test_medida_turno_do_par.py:558`, `:565`, `:571`
+
+```bash
+catraca() {
+  GIT_OPTIONAL_LOCKS=0 PYTHONDONTWRITEBYTECODE=1 python3 -B - "$1" <<'PY'
+import ast
+import pathlib
+import subprocess
+import sys
+import types
+import unittest
+
+path = pathlib.Path('core/tests/test_medida_turno_do_par.py')
+suite = types.ModuleType('suite_turno') [nao verificado]
+suite.__file__ = str(path.resolve()) [nao verificado]
+source = path.read_text().replace('from django.test import SimpleTestCase',
+                                  'from unittest import TestCase as SimpleTestCase')
+exec(compile(source, str(path), 'exec'), suite.__dict__) [nao verificado]
+mode = sys.argv[1]
+records = ('LINHAS_REGISTRADAS', 'REGISTRO', 'CLASSIFICAR')
+assert mode in ('green', 'red', *records)
+if mode != 'green':
+    baseline = subprocess.check_output(
+        ['git', 'show', f'03bc04e5b:app/{path}'], text=True)
+    selected = records if mode == 'red' else (mode,)
+    for node in ast.parse(baseline).body:
+        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
+            name = node.targets[0].id
+            if name in selected:
+                setattr(suite, name, ast.literal_eval(node.value)) [nao verificado]
+result = unittest.TextTestRunner(verbosity=1).run(
+    unittest.defaultTestLoader.loadTestsFromModule(suite)) [nao verificado]
+raise SystemExit(not result.wasSuccessful())
+PY
+}
+```
+
+| Comando | Resultado local |
+|---|---|
+| `catraca green` | rc 0, 35 testes passaram. `core/tests/test_medida_turno_do_par.py:503` |
+| `catraca red` | rc 1, três falhas de asserção. `core/tests/test_medida_turno_do_par.py:558`, `:565`, `:571` |
+| `catraca LINHAS_REGISTRADAS` | rc 1, somente a asserção de linhas. `core/tests/test_medida_turno_do_par.py:565` |
+| `catraca REGISTRO` | rc 1, somente a asserção de identidade. `core/tests/test_medida_turno_do_par.py:558` |
+| `catraca CLASSIFICAR` | rc 1, somente a asserção de publicação. `core/tests/test_medida_turno_do_par.py:571` |
+
+### Recorte do Code
+
+Comando do anexo c2j, a partir da raiz da cópia. Execução [nao verificado].
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh \
+  --dir /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 \
+  --only "ponto.tests.test_ramo2b_c2_base_da_he ponto.tests.test_ramo2b_c2h_saida ponto.tests.test_ramo2b_turno_que_cruza ponto.tests.test_contract_juiz_batida ponto.tests.test_janela_he_saida ponto.tests.test_o146_extra_declarada_da_escala ponto.tests.test_o280_bateria_da_lei core.tests.test_medida_turno_do_par folha.tests.test_porta_do_export"
+```
+
+**LEI-AKITA** `padrao=juiz unico` · `juizes novos=0` · `docs/LEIS.md:60` · `core/tests/test_medida_turno_do_par.py:251`
 
 ## 27/11 01:06 · sessao 42b6cdad486f · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -909,63 +982,4 @@ Nenhum desses leitores usa o número como posição no wrapper. O disjuntor proc
 
 Os cinco blobs da cópia conferem com o lado novo de `delta.patch`. Nos quatro arquivos já existentes, reverter em memória as trocas de referência reproduziu também os blobs do lado antigo. A identidade do commit completo e a execução integral da suíte **[nao verificado]**. [nao verificado]
 
-## 26/11 22:24 · sessao b7e6d82fdbe5 · PAR-PELO-TURNO · verificador · origem=Code
-
-# REPROVADO — PAR-PELO-TURNO c1v3
-
-O diff muda a **classe de pares** no pareador compartilhado. O laço principal, O68b e O95 passam pelo mesmo construtor de `Turno`, e o teto diário vira C9 no par aceito. A classe ainda tem contraexemplos: o dia do mesmo PK varia conforme a janela consultada, um par de 25 h pode sumir na borda da janela, e um par recuperado pode gerar HE sem decisão da Gestão. Os dois testes financeiros também param no `setUpTestData` antes de verificar qualquer dessas garantias. [app/ponto/turnos.py:296](/home/ronald/codex_ws/e392cbff8757548b2712efe11e4ba07d7c885190/app/ponto/turnos.py:296) · `app/ponto/turnos.py:1089`, `:1176`, `:1490`, `:1847`, `:1991`, `:3044` · `app/ponto/motor_calculo_v2.py:1847`, `:2963` · `app/ponto/tests/test_par_pelo_turno.py:422` · `app/escala/models.py:26`
-
-## 1. Cumprimento do brief
-
-| Item | Resultado |
-|---|---|
-| **1. RED na base** | **Parcial.** Reproduzi em memória 23 testes com 33 falhas de asserção na base, contando subcasos, e 23 verdes na candidata. Há mordidas separadas para fecho principal, dia herdado, 26 h, O68b, O95 e C9 no par fechado. O executor volta apenas `turnos.py` à base e roda a classe pura. A ordem cronológica entre escrever os gabaritos e fazer a cura, assim como a execução Django do RED, ficam [nao verificado]. `app/ponto/tests/test_par_pelo_turno.py:74`, `:120`, `:165`, `:186`, `:200`, `:211`, `:631` |
-| **2. Cura na origem** | **Parcial na classe.** As três rotas convergem em `_mk`, que usa o DNA de `data_turno` para C9. A comparação admite exatamente 26 h e recusa acima disso entre as pontas. O68b carrega o veto da absorção e O95 mantém a prova de fato encerrado. A carga de batidas continua limitada a `fim + 1`, e a extensão da guarda da véspera depende da presença dos marcos civis do dia seguinte. `app/ponto/turnos.py:282`, `:311`, `:1087`, `:1166`, `:1176`, `:1490`, `:1847`, `:1988` |
-| **3. C9 e apuração pelas portas atuais** | **Parcial.** O evento usa as pontas do par fechado, confere o dia e deduplica por dia e PKs. A lavra conserva chave, competência, vínculo e dono do e6. Tela e PDF de Cadastro x Realidade recebem o texto compatível com as fotos. A prova de cópias funciona, mas reutilizar as mesmas instâncias em outro pareamento pode apagar a C9 de um resultado já entregue. O teste de `intervalo2` cobre um par simples sem pausas batidas. O teste persistido de HE para antes das asserções. `app/ponto/turnos.py:175`, `:189`, `:1306` · `app/ponto/services/teto_na_lista.py:51`, `:61`, `:94` · `app/escala/services/cadastro_realidade.py:425`, `:1321` · `app/ponto/tests/test_par_pelo_turno.py:186`, `:306`, `:422`, `:441` |
-| **4. GREEN e composição** | **Incompleto.** O código troca explicitamente os contratos legados de col129, col879, A6 e da recusa posicional. O selo do dono `BATIDA` ganha um furo real. O verde da suíte Django e a composição com E1 ficam [nao verificado]. F4c/F4d/F4e são dispensadas como pré-requisito pelo brief, e a candidata ainda apresenta a divergência de dia por PK na borda. O teste da exportada não aciona o veto financeiro. `app/ponto/tests/test_col129_par_separado_pelo_teto.py:43` · `app/ponto/tests/test_h_portao_teto_do_dia.py:23` · `app/ponto/tests/test_o280_bateria_da_lei.py:2225` · `app/ponto/tests/test_saida_pela_posicao_entre_turnos.py:286` · `app/ponto/tests/test_col129_teto_vira_lista.py:226` · `app/docs/RELATO.md:14`, `:18` · `app/ponto/tests/test_par_pelo_turno.py:107`, `:507` |
-| **5. Mutantes** | **Parcial.** Os 17 mutantes entregues caíram por asserção na reprodução em memória. Uma variante adicional, Partido de 0 h para 3 h, deixa os 23 testes puros verdes. A fixture usa uma pausa de 4 h, que ambos os limites separam. A mutação entregue de classe troca apenas 3 h e 8 h. O resultado na suíte Django real fica [nao verificado]. `app/ponto/tests/test_par_pelo_turno.py:263`, `:273`, `:584`, `:608` · `app/ponto/motor_calculo_v2.py:2976` |
-| **6. Laudo e sombra** | **Incompleto.** Há 11 fixtures G1, cada uma com as duas pontas fornecidas diretamente como E/S. A de 02/11 usa `17:31 → 06:30`. O ensaio de 15h59 de antecipação é separado e sintético. Das oito chaves dominicais da competência 11, a matriz traz sete e deixa de fora col155 em 08/11. As sequências completas, os papéis das batidas intermediárias dos outros 18 casos, o `DiaPago` por rubrica e o antes × depois em sombra ficam [nao verificado]. `app/ponto/tests/test_par_pelo_turno.py:49`, `:66`, `:87`, `:252`, `:383` · `app/docs/BACKLOG.md:745`, `:2027` · `app/docs/RELATO.md:542` |
-
-A matriz pura também cobre pausa de 60 min no 12x36, duas luzes `Xi` com 181 min, igualdade no teto diário e excesso por 1 segundo, 26 h exatas e excesso por 1 segundo, furo, degenerado e exclusão do período na competência seguinte. A contraprova de jornadas distintas usa um vão de 10h56 e espera três jornadas pela regra de classe da V6. A identificação das jornadas completas do feriado nominal e um separador universal de 11 h ficam [nao verificado]. `app/ponto/tests/test_par_pelo_turno.py:155`, `:165`, `:237`, `:252`, `:283`, `:294`, `:365` · `app/docs/PROMPTS.md:2852`
-
-Os números históricos têm universos distintos. O recorte de PAR na competência 11 registra **14 dias-colaborador em 8 colaboradores**, empresas 2/3/4, no universo de 960. **760/199** e **1.584/275** são B1 e B2 de INTERVALO V2. A mesa de quatro chamados tem 26 opções. A unidade, o predicado e o universo de **142** ficam [nao verificado]. `app/docs/RELATO.md:6225`, `:6229`, `:6230`, `:6231`, `:6234`
-
-## 2. Checklist do pré-verificador
-
-| Checagem | Resultado |
-|---|---|
-| **Segundo juiz registrado** | **Sim, para o predicado da L-084.** O juiz de geometria segue registrado em `turnos_do_colab` e o novo `_mk` é interno ao pareador. Mas a emissão de C9 decide se as duas pontas estão afastadas por distância circular ao marco mais próximo. O motor julga a L-084 ancorando os marcos no dia do turno. Com DNA `21:30–05:42` e `00:30 E → 20:00 S` no próprio dia, reproduzi C9 no pareador e exclusão da janela pela L-084 no motor. Compartilhar os 180 min ainda permite dois vereditos. `app/docs/JUIZES.md:20`, `:29` · `app/core/juizes.py:216` · `app/ponto/turnos.py:170`, `:326` · `app/ponto/motor_calculo_v2.py:1664`, `:1673`, `:2046` · `app/ponto/janela_he.py:41` |
-| **Segundo escritor fora da porta** | **Nenhum novo em produção no diff.** `_mk` escreve o `Turno` e carimba a instância da saída. `lavrar_teto_do_dia --apply` continua usando o escritor existente de `MetricaSnapshot`. O `DecisaoHE.objects.create` do teste semeia uma decisão direto no modelo e deixa a porta real de decisão fora do ensaio. `app/ponto/turnos.py:175`, `:322` · `app/ponto/management/commands/lavrar_teto_do_dia.py:27` · `app/ponto/services/teto_na_lista.py:91` · `app/ponto/tests/test_par_pelo_turno.py:460` · `app/ponto/portas/he.py:159` |
-| **Relógio fora da borda** | **Nenhum novo no fluxo de produção.** A nova comparação converte o `timestamp` recebido. O comando já amostra `localdate()` e `medir` já amostra `now()` para o dono. Essa dupla amostragem é anterior ao diff. `app/ponto/turnos.py:287`, `:312` · `app/ponto/management/commands/lavrar_teto_do_dia.py:22` · `app/ponto/services/teto_na_lista.py:32`, `:55` |
-| **Derivação paralela de dia, teto ou previsto** | **Sim, para o dia e sua aplicação.** Casca e mapa por entrada usam os parâmetros padrão do pareador. A rota de períodos injeta a classe e, quando disponível, os papéis da ata. No exemplo de pausa de 4 h, confirmei um turno no Plantão e dois com a alimentação padrão. Além disso, a janela de HE lê o dia do juiz, mas o cálculo 12x36 consulta o previsto pela data de `e`. O teto C9 continua com uma fórmula, o **vão bruto** dos marcos mais 4 h. O previsto financeiro é **líquido** e tem juiz próprio. `app/ponto/turnos.py:67`, `:1188`, `:1535`, `:2005` · `app/ponto/motor_calculo_v2.py:527`, `:909`, `:1341`, `:1646`, `:2951`, `:3629` · `app/escala/utils.py:2284` |
-| **Selo ou RED sem mordida** | **Sim.** Os dois testes financeiros usam `TipoEscala.CICLO_12X36`. A classe declara `CICLO_12x36`, então ambos param antes das asserções. Mesmo corrigida a fixture, o teste de exportada chama leitura pura de 10 e 11. Retirar o veto de escrita da guarda deixa esse teste verde. O teste da borda só compara os dois PKs quando espera C9, pulando justamente a janela que começa em 21. Os 17 mutantes exatos mordem no ensaio puro quando aplicados. Em `manage.py test`, o bloco que os aplica não roda. A execução mutada em Django fica [nao verificado]. `app/ponto/tests/test_par_pelo_turno.py:107`, `:422`, `:507`, `:608`, `:623` · `app/escala/models.py:26` · `app/ponto/services/fechamento.py:559`, `:580`, `:1783` |
-| **Ordem de trava** | **Nenhuma inversão introduzida.** As três rotas alteradas operam em memória. O caminho do TXT conserva `atomic` e a trava da empresa antes da abertura da porta. O teste financeiro não passa por essa trava. `app/ponto/turnos.py:296`, `:1499` · `app/folha/views.py:103`, `:134` · `app/folha/export.py:556` · `app/ponto/tests/test_par_pelo_turno.py:507` |
-| **Pouso antes do pré-requisito** | **Violação de pouso [nao verificado].** F4c/F4d/F4e têm dispensa expressa no brief. A fila anterior põe FERIADO antes de PAR e há registro de FERIADO ainda em tratamento. O pouso efetivo, a composição e a certificação da candidata ficam [nao verificado]. `app/docs/RELATO.md:18`, `:184` · `app/docs/BACKLOG.md:2027` · `CLAUDE.md:427` |
-| **ESMERIL-SEMÂNTICA** | **Viola.** Na fixture `E 20/10 16:00 → S 21/10 05:00`, reproduzi o PK da saída com dia **20** na janela que inclui o turno e dia **21** na janela iniciada em 21. O filtro exclui o turno antes de o mapa por PK preencher a data civil. A consulta individual usa uma janela que inclui o dia 20. A borda das **26 h** é inclusiva no fecho, mas a carga termina em `fim+1`: `E 20/10 23:30 → S 22/10 00:30` fecha em **25 h** no pareador e fica aberto na janela encerrada em 20. `cross_meianoite` compara a data civil da saída com `data_turno`, e há leitor que só considera `data_turno` e `data_turno+1`. Portanto, os leitores não usam todos o mesmo significado de dia da saída. `app/ponto/turnos.py:313`, `:321`, `:1847`, `:1988`, `:2008`, `:3024`, `:3042`, `:3140` · `app/escala/servico_jornada.py:254` · `app/ponto/services/fechamento.py:651` |
-| **`except` novo** | **Nenhum no diff.** O `except` de `medir` permanece no corpo existente. Os novos ramos do pareador retornam ou seguem por condição. `app/ponto/services/teto_na_lista.py:48`, `:71` · `app/ponto/turnos.py:296`, `:1087`, `:1176`, `:1450` |
-| **HE automática** | **Sim, há caminho de crédito sem decisão.** Com o par recuperado `17:30 → 06:30`, previsto de 492 min e nenhuma decisão, reproduzi no motor **288 min de HE** com a janela desativada e **48 min de HE** com apenas a janela de saída desativada. Com ambas ativas, a mesma prova deu **288 min fora da janela e zero HE**. O diff torna o par disponível aos ramos existentes que devolvem as pontas intactas e calculam o excedente. Crédito efetivo em `DiaPago` ou TXT de produção fica [nao verificado]. `app/ponto/turnos.py:1490` · `app/ponto/motor_calculo_v2.py:1647`, `:1802`, `:1847`, `:2872`, `:2951`, `:2963` · `app/ponto/tests/test_par_pelo_turno.py:323` |
-
-Há ainda uma perda reproduzível de **C9 já publicada em memória**. O primeiro pareamento de `17:30 → 06:30` com DNA devolve uma C9. Reparear os mesmos objetos sem DNA deixa o primeiro resultado sem C9, porque ele conserva a referência à saída e o segundo pareamento apaga seu carimbo. O teste de reprocessamento relê cada resultado antes de iniciar a próxima chamada. Ocorrência em produção [nao verificado]. `app/ponto/turnos.py:175`, `:189`, `:322`, `:1306` · `app/ponto/tests/test_par_pelo_turno.py:186`
-
-## 3. Quem escreve e quem lê
-
-| Campo ou valor | Escritor ou fonte | Leitores fora e dentro do diff |
-|---|---|---|
-| **`Batida.pk`, `timestamp`, `tipo`, `is_intervalo`, `retratada_em`** | Registro, anotação e retratação pela porta. `app/ponto/registro_batida.py:118`, `:171`, `:255`, `:274`, `:287` | `batidas_apuraveis`, casca e lote, ordenação e classificação do pareador, espelho por PK. `app/ponto/turnos.py:1213`, `:1328`, `:1868`, `:2941`, `:3000`, `:3108` · `app/ponto/services/espelho.py:465` |
-| **DNA, vínculo, marcos, `intervalo2`, papéis E/S/X/Xi** | `montar_dna` e a porta da célula gravam DNA e geradora. Cartório lavra a ata. `vinculo_do_dia` e `marcos_do_dia` fornecem os insumos. `app/ponto/management/commands/gerar_celulas.py:73` · `app/ponto/portas/celula.py:290`, `:306`, `:641` · `app/ponto/services/cartorio.py:1906` · `app/escala/alimentacao.py:228` · `app/escala/models.py:1109` | `marcos_dna_periodo`, template, casca/lote e motor montam a alimentação. `papel_por_minuto_da_ata` consulta `periodos_do_dia`, e o laço escreve `_papel_ata`, `_intra_ata` e `_intra_declarado`. A geometria das pausas é lida por `_pares_marcados` e pelo adaptador. `app/escala/utils.py:84` · `app/ponto/turnos.py:1312`, `:1504`, `:1565`, `:1997`, `:3123`, `:798` · `app/ponto/motor_calculo_v2.py:494`, `:527` · `app/ponto/adaptador_motor.py:29` |
-| **Envelope, piso, teto diário e previsto** | `ENVELOPE_FECHO_S`, `DURACAO_ECO_SEG`, `AUT_*` e `_teto_da_jornada`. O previsto financeiro sai de `minutos_previstos_do_dia`. `app/ponto/turnos.py:56`, `:67`, `:117` · `app/ponto/management/commands/detectar_par_relampago.py:13` · `app/ponto/motor_calculo_v2.py:755`, `:2976`, `:3629` · `app/escala/utils.py:2284` | Fecho principal e pós-fechos, O195 pelo relógio ancorado no `hi`, C9 por duração entre pontas e motor para excedente. `_eco_flush`, `_intra_dur`, `_par_degenerado_com` e `absorcao_recusada` são marcas de trabalho do pareamento. `app/ponto/turnos.py:163`, `:211`, `:311`, `:344`, `:385`, `:1083`, `:1174`, `:1355`, `:1450` · `app/ponto/motor_calculo_v2.py:1317`, `:2951` |
-| **`Turno.data_turno`, `entrada`, `saida`, `batidas`, `aberto`, `cross_meianoite`** | `_data_do_turno` decide o dia e `_mk` publica o turno. `recompute_turnos` grava dia, pontas e flags em `TurnoMaterializado`. `app/ponto/turnos.py:230`, `:296`, `:322` · `app/ponto/nucleo.py:47`, `:59` | Realizado, encerramento, par completo, órfãs, grade, reconciliador, espelho e PDF. `app/ponto/turnos.py:216`, `:774`, `:2112`, `:2201` · `app/escala/utils.py:1952` · `app/chamados/reconciliador.py:97` · `app/chamados/juizes.py:2310` · `app/ponto/services/espelho.py:628`, `:631` · `app/relatorios/pdf_espelho.py:213`, `:451`, `:622` |
-| **Dia da batida por PK e dia do período por instante** | `_dia_das_batidas_puro` publica o mapa por PK. O motor publica o mapa por instante de entrada e associa o período ao dia da jornada. `app/ponto/turnos.py:3034` · `app/ponto/motor_calculo_v2.py:911`, `:2461`, `:2489` | Consulta individual, lote, API, espelho, disputa, motor, `DiaPago`. O PDF usa os dias montados pelo espelho para exibição. `app/ponto/turnos.py:3024`, `:3140` · `app/api/views.py:1444` · `app/chamados/services/disputa_emissao.py:283` · `app/ponto/services/espelho.py:465` · `app/relatorios/pdf_espelho.py:596` · `app/ponto/motor_calculo_v2.py:976`, `:2542` · `app/ponto/services/dia_pago.py:109` |
-| **C9, PKs, horários, vão, teto, dia, competência, vínculo/template, dono e contadores** | O carimbo nasce no par. O leitor publica pontas e minutos. `medir` atribui competência pela janela da empresa, resolve vínculo e consulta o dono do e6. `lavrar` grava a foto pela chave histórica. `app/ponto/turnos.py:166`, `:178`, `:197` · `app/ponto/services/teto_na_lista.py:51`, `:61`, `:75`, `:94` · `app/ponto/management/commands/e6_oraculo.py:182` | `lavrar_teto_do_dia` lê medição e publica com `--apply`. `ultimo_lavrado` alimenta Cadastro x Realidade, resolução de dono, ação, HTML e PDF. `app/ponto/management/commands/lavrar_teto_do_dia.py:22` · `app/ponto/services/teto_na_lista.py:101` · `app/escala/services/cadastro_realidade.py:425`, `:732`, `:1011`, `:1200`, `:1244`, `:1321` · `app/escala/views.py:525` · `app/templates/escala/cadastro_x_realidade.html:31` |
-| **Pontas efetivas, HE pendente e decisão vigente** | Cadastro da empresa e extra declarada alimentam a janela. Motor produz pontas efetivas e relato. Espelho escreve `he_fora_da_janela`. `apurar` monta a pendência e `lavrar` grava a foto. A porta de HE grava e revoga decisões. `app/colaboradores/models.py:58`, `:101`, `:117` · `app/escala/models.py:1221` · `app/ponto/motor_calculo_v2.py:1757`, `:1781`, `:1865` · `app/ponto/services/espelho.py:790` · `app/ponto/services/he_pendente_lavrado.py:138`, `:183` · `app/ponto/portas/he.py:44`, `:394` | Motor lê decisão vigente para clipar. Gestão lê foto e estado. Folha, HTML e PDF leem a projeção do espelho. `app/ponto/motor_calculo_v2.py:1521`, `:1764` · `app/ponto/services/gestao_he.py:93`, `:428`, `:493` · `app/folha/porta_export.py:190` · `app/templates/ponto/espelho.html:189` · `app/relatorios/pdf_espelho.py:932` |
-| **Períodos, rubricas, `FechamentoMensal`, `DiaPago` e TXT** | Adaptador publica intervalos e períodos para o motor. Fechamento usa o resultado por fatia e grava o mensal. `dia_pago.lavrar` materializa por dia. Folha monta eventos/linhas e registra o TXT. `app/ponto/adaptador_motor.py:29` · `app/ponto/motor_calculo_v2.py:536`, `:557` · `app/ponto/services/fechamento.py:306`, `:1168`, `:1184`, `:1241` · `app/ponto/services/dia_pago.py:359` · `app/folha/export.py:402`, `:739` · `app/folha/models.py:174` | Fechamento, espelho, PDF, calendário, vigia da folha, classificação/exportação e histórico. `app/ponto/services/fechamento.py:1783` · `app/ponto/services/espelho.py:628` · `app/relatorios/pdf_espelho.py:492`, `:598` · `app/folha/porta_export.py:74`, `:428` · `app/folha/export.py:565`, `:640`, `:699`, `:774` · `app/folha/views.py:304`, `:580` |
-
-## 4. Competência exportada
-
-**Sim, o cálculo em leitura pode mudar para uma competência que tem linha na guarda.** A guarda contém **09/2026**. `fechamento_lido` chama `recalcular_fechamento_mes` em leitura pura, modo em que `_exportadas` fica vazio e o filtro da guarda não se aplica. A conta chega ao motor e ao pareador alterado. A geração de TXT também puxa esse cálculo em leitura antes de classificar e montar as linhas. Um novo TXT dependeria de acionar a porta existente. Mudança real de rubrica ou de TXT da 09 fica [nao verificado]. `app/ponto/services/fechamento.py:36`, `:306`, `:559`, `:580`, `:1783` · `app/ponto/motor_calculo_v2.py:530` · `app/folha/views.py:134`, `:214`, `:275`, `:304`
-
-**O recálculo gravador da competência guardada continua excluindo os colaboradores das empresas que entregaram a competência pelo K6.** `retratar_exportada` também aplica esse veto. Fora da guarda, o recálculo genérico da exportada pode gravar. Há ainda um comando anterior ao diff que colhe furos em leitura e, quando aplicado, pode preencher `DiaPago.furo_apurado` onde estava nulo. Nenhuma dessas garantias de escrita foi exercitada pelo teste da obra, que cria uma exportação de **10/2026**, fora da guarda, e chama somente leitura. `app/ponto/services/fechamento.py:43`, `:559`, `:580`, `:1215`, `:1561` · `app/ponto/services/dia_pago.py:451`, `:645`, `:671` · `app/ponto/management/commands/apurar_furo_da_exportada.py:109`, `:131` · `app/ponto/tests/test_par_pelo_turno.py:483`, `:507` · `app/docs/LEIS.md:156`
-
-**Bloqueadores do veredito:** dia por PK dependente da janela e carga incompatível com todo o envelope de 26 h, divergência entre os julgamentos da L-084, HE sem decisão em caminhos alcançados pelo novo fecho, perda de C9 por reutilização de instância, testes financeiros que não chegam às asserções e prova incompleta do laudo e da exportada. `app/ponto/turnos.py:170`, `:1306`, `:1847`, `:3044` · `app/ponto/motor_calculo_v2.py:1673`, `:1847`, `:2963` · `app/ponto/tests/test_par_pelo_turno.py:49`, `:422`, `:507` · `app/docs/BACKLOG.md:2027`
-
-_8524 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8525 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
