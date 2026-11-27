@@ -1,7 +1,263 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 01:31** · publicado em **27/11/2026 01:34** (UTC-3)
+> Ultima resposta processada: **27/11/2026 01:38** · publicado em **27/11/2026 01:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 01:38 · sessao 9e97b3f580bf · O30-F3-CONSTRUIR · leitura · origem=Code
+
+**O `--rodar` grava na sombra antes de chamar o script.** Ele repõe dois `MetricaSnapshot` e grava logs no host. O rollback do Python cobre a 0079 e a execução do relatório. Para cumprir zero escrita persistente na execução inteira, a sessão precisa chamar diretamente o mesmo container e `tenant_command`, com a saída em stdout. [`bin/sombra.sh:136`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:136), [`bin/sombra.sh:151`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:151), [`bin/sombra.sh:182`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:182), [`bin/sombra.sh:483`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:483)
+
+1. **Chamadas reais.** A view é `relatorios.views.atestados_lote`, na linha 346 da F3 e 345 do main `59600163c`. Ambas exigem usuário autenticado com `ver_relatorios`, `ver_folha` e `ver_ausencias`. A view seleciona uma empresa visível, usa `janela()` e `linhas()` com os tipos médicos do catálogo e, por padrão, só `aprovada`. O script invoca a view real para obter as linhas e a prévia, passa competência 11/2026 e verifica as duas datas. A view usa `request.user`. O PK do usuário histórico ficou [nao verificado]. `USUARIO_PK` permite fixá-lo nas duas execuções. O padrão do script é o superusuário ativo de menor PK. [F3 `app/relatorios/views.py:20`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:20), [F3 `app/relatorios/views.py:345`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:345), [F3 `app/relatorios/views.py:382`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:382), [main `app/relatorios/views.py:344`](/home/ronald/saas-hasner/app/relatorios/views.py:344), [main `app/relatorios/views.py:376`](/home/ronald/saas-hasner/app/relatorios/views.py:376)
+
+   | | F3 | Main |
+   |---|---|---|
+   | Prévia | `previa(linhas)` — `app/ponto/services/atestados_lote.py:64`, `app/relatorios/views.py:404` | `previa(linhas)` — `app/ponto/services/atestados_lote.py:69`, `app/relatorios/views.py:395` |
+   | CSV | `csv_bytes(linhas, pode_ver_anexo=True)` — `app/ponto/services/atestados_lote.py:109`, `app/relatorios/views.py:392` | `csv_bytes(linhas)` — `app/ponto/services/atestados_lote.py:107`, `app/relatorios/views.py:386` |
+   | ZIP | `zip_bytes(linhas)` — `app/ponto/services/atestados_lote.py:235`, `app/relatorios/views.py:398` | `zip_bytes(linhas)` — `app/ponto/services/atestados_lote.py:135`, `app/relatorios/views.py:389` |
+
+2. **Registro e documento.** Nas duas versões, um registro é um lançamento raiz selecionado, contado uma vez na prévia e exportado como uma linha de dados do CSV. `com_documento` conta essas linhas quando `bool(ausencia.documento)` é verdadeiro. O inteiro devolvido pelo ZIP conta entradas gravadas após a leitura do anexo. Uma falha de leitura acrescenta uma entrada `.FALTANDO.txt` sem incrementar esse inteiro. A F3 aplica `_q_cobertura` antes de montar a linha do tempo, incluindo o caso de tipos de intervalo aberto. O main monta a linha do tempo por colaborador e usa `data_fim or data` no filtro posterior. [F3 `app/ponto/services/dia_decidido.py:624`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:624), [F3 `app/ponto/services/dia_decidido.py:679`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:679), [F3 `app/ponto/services/atestados_lote.py:35`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:35), [F3 `app/ponto/turnos.py:2842`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/turnos.py:2842), [main `app/ponto/services/atestados_lote.py:46`](/home/ronald/saas-hasner/app/ponto/services/atestados_lote.py:46), [main `app/ponto/services/dia_decidido.py:645`](/home/ronald/saas-hasner/app/ponto/services/dia_decidido.py:645), [main `app/ponto/services/dia_decidido.py:675`](/home/ronald/saas-hasner/app/ponto/services/dia_decidido.py:675)
+
+3. **Mídia vazia.** O ZIP precisa abrir e ler o arquivo. O nome vem da matrícula, data inicial, tipo e extensão de `documento.name`. Com matrícula ausente, o ZIP usa o PK do colaborador e o CSV deixa a matrícula em branco. O script troca apenas o storage do `FileField` durante a medição. Cada caminho não vazio carregado do banco recebe bytes fixos em memória. Isso mede quantas entradas o ZIP real produz com leitura bem-sucedida e quais nomes ele emite. A disponibilidade dos arquivos originais em produção ficou [nao verificado]. [F3 `app/ponto/services/atestados_lote.py:83`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:83), [F3 `app/ponto/services/atestados_lote.py:124`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:124), [F3 `app/ponto/services/atestados_lote.py:247`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:247), [main `app/ponto/services/atestados_lote.py:88`](/home/ronald/saas-hasner/app/ponto/services/atestados_lote.py:88), [main `app/ponto/services/atestados_lote.py:147`](/home/ronald/saas-hasner/app/ponto/services/atestados_lote.py:147)
+
+4. **0079.** Na F3, o queryset carrega instâncias completas de `Ausencia`, então o `SELECT` já precisa das seis colunas. O CSV autorizado também lê os seis atributos. Se faltarem todas as colunas, o script exige que o plano pendente seja apenas a 0079 e executa as operações dessa migration pelo `schema_editor`, sem inserir no histórico de migrations. A única captura é a sentinela fora do `atomic()`. O main segue pelo mesmo script sem aplicar a 0079. [F3 `app/ponto/services/atestados_lote.py:35`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:35), [F3 `app/ponto/services/atestados_lote.py:102`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:102), [F3 `app/ponto/models.py:787`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/models.py:787), [F3 `app/ponto/migrations/0079_ausencia_atestado_dados.py:8`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/migrations/0079_ausencia_atestado_dados.py:8)
+
+5. **Saída.** O casamento usa apenas as linhas `tem_documento=sim` do CSV e remove só a extensão final do nome do ZIP. Uma chave ambígua ou um sufixo de colisão aparece na conferência. O SHA-256 usa todas as chaves do CSV em ordem lexicográfica, incluindo repetições. `contagens_prod_conferem` compara com os números informados. A execução do script ficou [nao verificado]. [F3 `app/ponto/services/atestados_lote.py:121`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:121), [F3 `app/ponto/services/atestados_lote.py:251`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:251), [`logs/O30-F3-CONSTRUIR/smoke_sombra/q.txt:10`](/home/ronald/saas-hasner/logs/O30-F3-CONSTRUIR/smoke_sombra/q.txt:10)
+
+```python
+import csv
+import hashlib
+import json
+import warnings
+from collections import Counter
+from datetime import date, datetime
+from inspect import signature
+from io import BytesIO, StringIO
+from os.path import splitext
+from unittest.mock import patch
+from zipfile import ZipFile
+
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
+from django.core.files.storage import Storage
+from django.db import connection, transaction
+from django.db.migrations.executor import MigrationExecutor
+from django.template.response import TemplateResponse
+from django.test import RequestFactory
+
+from ponto.models import Ausencia
+from ponto.services import atestados_lote as lote
+from relatorios import views
+
+
+USUARIO_PK = None
+ESPERADO_PROD = {2: (119, 116), 3: (7, 7), 4: (4, 4)}
+JANELA_ESPERADA = (date(2026, 10, 21), date(2026, 11, 20))
+MIGRACAO = ("ponto", "0079_ausencia_atestado_dados")
+
+CSV_COM_PERMISSAO = "pode_ver_anexo" in signature(lote.csv_bytes).parameters
+
+
+class DesfazerEnsaio(Exception):
+    pass
+
+
+class MidiaEmMemoria(Storage):
+    def _open(self, name, mode="rb"):
+        if not name or mode != "rb":
+            raise FileNotFoundError("Caminho vazio ou modo de abertura inválido.")
+        return ContentFile(b"sonda de atestados em lote\n", name=name)
+
+
+def preparar_0079():
+    campos = {
+        campo.column
+        for campo in Ausencia._meta.local_fields
+        if campo.name.startswith("atestado_")
+    }
+    if not campos:
+        return
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_schema = current_schema() AND table_name = %s
+            """,
+            [Ausencia._meta.db_table],
+        )
+        presentes = {nome for (nome,) in cursor.fetchall()}
+
+    faltam = campos - presentes
+    if not faltam:
+        return
+    if faltam != campos:
+        raise RuntimeError("As colunas da 0079 estão parcialmente presentes.")
+
+    executor = MigrationExecutor(connection)
+    migration = executor.loader.graph.nodes[MIGRACAO]
+    if executor.migration_plan([MIGRACAO]) != [(migration, False)]:
+        raise RuntimeError("O plano pendente precisa conter apenas a aplicação da 0079.")
+
+    estado_anterior = executor.loader.project_state([MIGRACAO], at_end=False)
+    with connection.schema_editor(atomic=False) as editor:
+        migration.apply(estado_anterior, editor)
+
+
+def usuario_da_view():
+    usuarios = get_user_model().objects.filter(is_active=True)
+    if USUARIO_PK is None:
+        usuario = usuarios.filter(is_superuser=True).order_by("pk").first()
+    else:
+        usuario = usuarios.filter(pk=USUARIO_PK).first()
+    if usuario is None:
+        raise RuntimeError("Usuário ativo da contraprova indisponível.")
+    return usuario
+
+
+def contar_repeticoes(contador):
+    return sum(quantidade - 1 for quantidade in contador.values())
+
+
+def medir_empresa(empresa, usuario):
+    request = RequestFactory().get(
+        "/relatorios/atestados/lote/",
+        {"empresa": empresa, "mes": 11, "ano": 2026},
+    )
+    request.user = usuario
+
+    # Captura o contexto da view real sem renderizar o HTML.
+    with patch.object(views, "render", new=TemplateResponse):
+        resposta = views.atestados_lote(request)
+
+    if not isinstance(resposta, TemplateResponse) or resposta.status_code != 200:
+        raise RuntimeError("A view não autorizou a consulta do lote.")
+
+    contexto = resposta.context_data
+    if "previa" not in contexto:
+        raise RuntimeError("Empresa indisponível no filtro da view.")
+    if (contexto["ini"], contexto["fim"]) != JANELA_ESPERADA:
+        raise RuntimeError("A janela da empresa diverge da competência da contraprova.")
+
+    linhas = contexto["linhas"]
+    previa = contexto["previa"]
+    if CSV_COM_PERMISSAO:
+        csv_real = lote.csv_bytes(linhas, pode_ver_anexo=True)
+    else:
+        csv_real = lote.csv_bytes(linhas)
+
+    # O aviso da biblioteca inclui o nome. A duplicata é contada abaixo.
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message=r"^Duplicate name:", category=UserWarning)
+        zip_real, documentos_zip = lote.zip_bytes(linhas)
+
+    leitor = csv.DictReader(StringIO(csv_real.decode("utf-8-sig"), newline=""), delimiter=";")
+    chaves_csv = []
+    chaves_docs_csv = Counter()
+    chaves_vazias_csv = 0
+    chaves_vazias_docs_csv = 0
+
+    for linha in leitor:
+        matricula, data_csv, tipo = linha["matricula"], linha["data"], linha["tipo"]
+        data_iso = (
+            datetime.strptime(data_csv, "%d/%m/%Y").date().isoformat()
+            if data_csv.strip() else ""
+        )
+        chave = f"{matricula}_{data_iso}_{tipo}"
+        vazia = not all(parte.strip() for parte in (matricula, data_iso, tipo))
+        chaves_csv.append(chave)
+        chaves_vazias_csv += vazia
+
+        if linha["tem_documento"] == "sim":
+            chaves_docs_csv[chave] += 1
+            chaves_vazias_docs_csv += vazia
+
+    with ZipFile(BytesIO(zip_real)) as arquivo_zip:
+        nomes = arquivo_zip.namelist()
+
+    nomes_vazios = sum(not nome.strip() for nome in nomes)
+    nomes_duplicados = contar_repeticoes(Counter(nomes))
+    chaves_zip = Counter(splitext(nome)[0] for nome in nomes)
+    chaves_duplicadas_zip = contar_repeticoes(chaves_zip)
+    chaves_duplicadas_docs_csv = contar_repeticoes(chaves_docs_csv)
+    marcadores_faltando = sum(nome.endswith(".FALTANDO.txt") for nome in nomes)
+    documentos_csv = sum(chaves_docs_csv.values())
+
+    registros_conferem = previa["total"] == len(chaves_csv)
+    documentos_conferem = (
+        previa["com_documento"] == documentos_csv == documentos_zip == len(nomes)
+        and marcadores_faltando == 0
+    )
+    zip_csv_1_a_1 = (
+        registros_conferem
+        and documentos_conferem
+        and chaves_docs_csv == chaves_zip
+        and chaves_vazias_docs_csv == chaves_duplicadas_docs_csv == 0
+        and nomes_vazios == nomes_duplicados == chaves_duplicadas_zip == 0
+    )
+    chaves_serializadas = json.dumps(
+        sorted(chaves_csv), ensure_ascii=False, separators=(",", ":")
+    ).encode("utf-8")
+
+    return {
+        "empresa": empresa,
+        "registros_previa": previa["total"],
+        "registros_csv": len(chaves_csv),
+        "documentos_previa": previa["com_documento"],
+        "documentos_csv": documentos_csv,
+        "documentos_zip": documentos_zip,
+        "entradas_zip": len(nomes),
+        "marcadores_faltando_zip": marcadores_faltando,
+        "nomes_vazios_zip": nomes_vazios,
+        "nomes_duplicados_zip": nomes_duplicados,
+        "chaves_duplicadas_zip": chaves_duplicadas_zip,
+        "chaves_vazias_csv": chaves_vazias_csv,
+        "chaves_duplicadas_csv": contar_repeticoes(Counter(chaves_csv)),
+        "chaves_vazias_csv_com_documento": chaves_vazias_docs_csv,
+        "chaves_duplicadas_csv_com_documento": chaves_duplicadas_docs_csv,
+        "registros_previa_csv_conferem": registros_conferem,
+        "documentos_previa_csv_zip_conferem": documentos_conferem,
+        "zip_csv_1_a_1": zip_csv_1_a_1,
+        "contagens_prod_conferem": (
+            registros_conferem
+            and documentos_conferem
+            and (previa["total"], documentos_zip) == ESPERADO_PROD[empresa]
+        ),
+        "sha256_chaves_csv": hashlib.sha256(chaves_serializadas).hexdigest(),
+    }
+
+
+def medir():
+    if (
+        settings.SETTINGS_MODULE != "config.settings.sombra"
+        or connection.vendor != "postgresql"
+        or connection.settings_dict["HOST"] != "sombra_db"
+        or not connection.features.can_rollback_ddl
+    ):
+        raise RuntimeError("A medição exige PostgreSQL da sombra com DDL reversível.")
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT current_database(), current_schema()")
+        if cursor.fetchone() != ("sombra", "juliani"):
+            raise RuntimeError("Banco ou schema diferente do alvo da contraprova.")
+
+    preparar_0079()
+    usuario = usuario_da_view()
+
+    campo_documento = Ausencia._meta.get_field("documento")
+    with patch.object(campo_documento, "storage", new=MidiaEmMemoria()):
+        return [medir_empresa(empresa, usuario) for empresa in ESPERADO_PROD]
+
+
+try:
+    with transaction.atomic(durable=True):
+        resultados = medir()
+        raise DesfazerEnsaio
+except DesfazerEnsaio:
+    for resultado in resultados:
+        print(json.dumps(resultado, sort_keys=True))
+```
 
 ## 27/11 01:31 · sessao d67b8bc0162f · E4C-F5-INSTANTE · construtor · origem=Code
 
@@ -848,63 +1104,4 @@ Os três blobs da cópia conferem com o lado novo do patch. A identidade do comm
 
 **REPROVADO — (2) o portão ainda pode esperar indefinidamente se o processo resistir a `TERM`; (4) a L-126 ainda omite o pre-mortem e `DEFAULT DENY` e acrescenta referências de implementação.** `bin/deploy.sh:189`, `bin/deploy.sh:196`, `app/docs/LEIS.md:147`, `app/docs/CORTES.json:2475`.
 
-## 26/11 22:52 · sessao a535fb3809bc · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-### 1. Cobertura e caminhos de publicação
-
-O portão cobre o Django do `saas_core`, inclusive `tenants`, quando a casca usa `config.settings.saas`. O comando roda sem rótulo de app e sem `--settings`. O `manage.py` usa `saas` por padrão, preservando um `DJANGO_SETTINGS_MODULE` já definido. Nesse perfil, `INSTALLED_APPS` reúne os apps compartilhados e os de tenant, com `tenants` entre os compartilhados. O ambiente efetivo do container em produção é **[nao verificado]**. [bin/deploy.sh:189] [app/manage.py:9] [app/config/settings/saas.py:22] [app/config/settings/saas.py:53] [nao verificado]
-
-Se “TODO app em prod” inclui `mensageria`, a cobertura é parcial. Seu Django separado instala `nucleo` e o deploy só lhe pergunta `migrate --check`, que cobre migrations ainda por aplicar. Um drift apenas nos models de `nucleo` fica fora do novo portão, inclusive no HUP conjunto. O boot de `mensageria` também tem seu próprio `migrate` no Compose. [mensageria/manage.py:4] [mensageria/config/settings.py:6] [bin/deploy.sh:189] [bin/deploy.sh:206] [bin/deploy.sh:375] [docker-compose.mensageria.yml:20] [nao verificado]
-
-| Caminho | Efeito do portão |
-|---|---|
-| Normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia`, `--reload-agendado` | Todos precisam passar pela mesma guarda antes do HUP. As flags afetam outros ramos do deploy. [bin/deploy.sh:56] [bin/deploy.sh:82] [bin/deploy.sh:195] [bin/deploy.sh:224] [bin/deploy.sh:375] | [nao verificado]
-| `--restart` | A mesma guarda vem antes do restart e, portanto, antes do migrate de boot de `mensageria` disparado por ele. [bin/deploy.sh:195] [bin/deploy.sh:358] [docker-compose.mensageria.yml:20] | [nao verificado]
-| `--conferir` | Executa a checagem, imprime `DRIFT` e pode sair `0` com `DRIFT=1`. Sai antes de apply, restart ou HUP. [bin/deploy.sh:189] [bin/deploy.sh:195] [bin/deploy.sh:253] | [nao verificado]
-| Cron das 03:30 | A declaração chama `deploy.sh --reload-agendado`, passando pela mesma guarda. O crontab instalado é **[nao verificado]**. [app/config/crons.py:326] [bin/deploy.sh:195] [bin/selo_reciclagem.sh:70] | [nao verificado]
-
-A pista ainda pode certificar sem `tenants`. O certificador cobra as labels da régua, que omitem `tenants`. O pre-push roda o teste separado e o c4 acrescenta a recusa no deploy. Recriação via Compose é um caminho de infraestrutura externo ao script. Seu uso em produção é **[nao verificado]**. [bin/pista_certifica.sh:67] [bin/pista_certifica.sh:85] [bin/regua.sh:23] [bin/pre-push.sh:198] [bin/deploy.sh:20] [bin/deploy.sh:189] [nao verificado]
-
-### 2. Ordem e falha operacional
-
-Dentro do `deploy.sh`, o portão vem antes dos `migrate --check` e `--plan`, do apply do core, do restart e do HUP. Guardas anteriores podem encerrar o script mais cedo. Qualquer retorno diferente de zero do primeiro `docker exec` vira `DRIFT=1`. Nos modos de publicação, o segundo `exec` só produz diagnóstico e `falhou` encerra com `1`, mesmo se essa segunda chamada voltar verde. A mensagem atribui a recusa a migration faltante também em caso de falha operacional. [bin/deploy.sh:101] [bin/deploy.sh:146] [bin/deploy.sh:189] [bin/deploy.sh:200] [bin/deploy.sh:210] [bin/deploy.sh:221] [bin/deploy.sh:331] [bin/deploy.sh:358] [bin/deploy.sh:375] [bin/deploy.sh:92] [nao verificado]
-
-Uma casca fora ou um timeout que devolva código de erro aciona a recusa. As duas chamadas do portão estão sem limite de tempo próprio. Se uma ficar pendurada, o script fica esperando antes do apply e do reload. Em memória, retornos fictícios `125` e `124` deram `rc=1`, zero apply e zero HUP. Casca fora e timeout reais são **[nao verificado]**. [bin/deploy.sh:189] [bin/deploy.sh:196] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:88] [nao verificado]
-
-### 3. Mordida do selo
-
-O fake registra a chamada e casa `*makemigrations*--check*` primeiro no ramo `exec`, antes dos padrões de migrate e do `*) exit 0`. O caso 25 exige recusa com motivo, zero apply e zero HUP. O 26 exige recusa, zero apply e zero HUP em `--sem-migrate`. [bin/tests/test_deploy_portoes_antes_do_migrate.sh:83] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:88] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235]
-
-**Os dois casos passam com o portão deslocado para depois do apply e antes do HUP.** Reproduzi em memória os trechos do deploy e o despacho do fake. Ambos continuaram com `rc=1`, zero apply e zero HUP. O caso 25 deixa `FAKE_PEND_CORE` no default `0` e o 26 usa um modo que recusa pendência sem aplicar. Com `FAKE_DRIFT=1` **e** `FAKE_PEND_CORE=1` no modo normal, a ordem atual fez zero apply e a deslocada fez um apply antes de recusar. O caso 3 também deixa essa lacuna, pois sua ordem só compara auth, sombra e prova de casca com o apply. [bin/tests/test_deploy_portoes_antes_do_migrate.sh:88] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:116] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:131] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:147] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [bin/deploy.sh:220] [bin/deploy.sh:331] [nao verificado]
-
-### 4. Emenda da L-126
-
-| Cláusula do aval | Onde aparece na L-126 |
-|---|---|
-| Identificação do aval e pre-mortem com `DEFAULT DENY` cumprido | ID e data abrem a emenda. Pre-mortem e `DEFAULT DENY` constam do registro literal do aval. A emenda omite ambos. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
-| Wrapper libera motor e `models.py` sem migration. Permanecem proibidos migrations, `bin/`, crons e `core/juizes.py` | Na abertura da emenda e nos quatro caminhos enumerados na restrição ao construtor Opus. O inventário do wrapper contém os quatro. [app/docs/LEIS.md:147] [bin/codex_pergunta.sh:162] |
-| Toda obra segue Codex → Opus único, só confere e carimba → DIFF da competência na sombra → pista → pouso → HOM do [nome] | A sequência está inteira na emenda, com “nenhum passo sai”. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] | [nao verificado]
-| Teto de um construtor Opus, só para o que segue proibido ao Codex | A emenda traz “teto 1 vivo” e a restrição. “NAO herda obra de motor/models por reprovacao” explicita a consequência dessas duas cláusulas diante do repasse geral na segunda reprovação. **O alcance da autorização é o mesmo.** [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
-| Vale já para ABONO c1h, ABONO-PARCIAL-TETO e E4C-F5 c2 | As três obras estão nomeadas na emenda. [app/docs/LEIS.md:147] |
-| Proibido pousar motor sem DIFF, tocar competência exportada e Codex gerar migration | Pouso sem DIFF e geração de migration estão no fim da emenda. Competência exportada já está no `PROIBIDO ao construtor` da mesma linha. [app/docs/LEIS.md:147] | [nao verificado]
-| Pronto com construtor Codex em `chamadas.log` nas obras de motor e no máximo um subagente Opus de construção vivo | A emenda traz o teto, mas omite o registro exigido em `chamadas.log` como critério de pronto. Seu cumprimento efetivo é **[nao verificado]**. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
-| Segue a fila. `PAREI` só em lei ou `!` | A regra geral da L-126 preserva a ordem da fila. A condição de `PAREI` fica fora da emenda. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
-
-Os dois testes Django e o portão do deploy são detalhes de implementação acrescentados à emenda. A referência `:646` fica no aval literal, conforme o descarte informado. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] [app/docs/CORTES.md:651] [nao verificado]
-
-### 5. Quem escreve e quem lê
-
-| Campo ou valor | Escritor → leitor |
-|---|---|
-| `MODO`, `SO_CONFERIR` | O chamador fornece `$1`. O deploy grava `MODO` e inicializa `SO_CONFERIR=0`, passando a `1` só com `--conferir`. Leitores de `SO_CONFERIR` são as guardas de auth/sombra, drift e mensageria, o ramo de pendência e a saída de conferência. [bin/deploy.sh:56] [bin/deploy.sh:126] [bin/deploy.sh:195] [bin/deploy.sh:216] [bin/deploy.sh:222] [bin/deploy.sh:253] | [nao verificado]
-| Settings, flags, retorno e `DRIFT` | `manage.py` fornece o default de settings e o deploy fornece `--check --dry-run --noinput`. O primeiro `docker exec` entrega o status à condição. Só o deploy atribui `DRIFT=0/1`. O `echo` e a guarda leem esse valor. [app/manage.py:9] [bin/deploy.sh:189] [bin/deploy.sh:194] | [nao verificado]
-| Diagnóstico e `falhou` | O segundo `exec` fornece a saída a `tail` e `sed`. O próprio script define `falhou`, que lê o motivo, imprime e sai `1`. Também o chamam as guardas de árvore, cron, auth, sombra, pendências, prova de casca, reciclagem, apply, reload e provas finais. O selo captura saída e status. A cadeia de fatia usa ambos no reload da cópia. [bin/deploy.sh:92] [bin/deploy.sh:101] [bin/deploy.sh:112] [bin/deploy.sh:147] [bin/deploy.sh:164] [bin/deploy.sh:196] [bin/deploy.sh:216] [bin/deploy.sh:313] [bin/deploy.sh:321] [bin/deploy.sh:332] [bin/deploy.sh:358] [bin/deploy.sh:375] [bin/deploy.sh:388] [bin/deploy.sh:398] [bin/deploy.sh:434] [bin/deploy.sh:441] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:114] [bin/molde_fatia/cadeia.sh:48] | [nao verificado]
-| `FAKE_DRIFT`, `RC`, `SAIDA`, `N_MIG`, `N_HUP`, `FALHAS` | Os casos 25/26 põem `FAKE_DRIFT=1` no ambiente de `roda`. O fake lê o valor, usa `0` por padrão e grava os argumentos em `docker.log`. `roda` captura status e saída e lê o log para contar apply e HUP. Os dois casos leem status e contagens. Só o 25 lê `SAIDA`. `_erro` incrementa `FALHAS` e o final do selo lê o total. [bin/tests/test_deploy_portoes_antes_do_migrate.sh:59] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:83] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:114] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:243] |
-| `max_length`, `antes`, `saida`, `SystemExit` e operação | Models e migrations declaram `evento=50` e `nome=120`. Os dois testes fornecem app, model, campo e operação esperada. O helper lê o valor original, cria `StringIO` **antes** da mutação, soma `7` e restaura no `finally`. `makemigrations` lê os metadados e fornece saída e código. O helper exige código `1` e o texto esperado no buffer. [app/folha/models.py:47] [app/folha/migrations/0009_evento_he100_rubrica_200.py:27] [app/tenants/models.py:16] [app/tenants/migrations/0001_initial.py:21] [app/core/tests/test_model_sem_migration_pendente.py:26] [app/core/tests/test_model_sem_migration_pendente.py:45] [app/tenants/test_model_sem_migration_pendente.py:19] | [nao verificado]
-| L-126 e trilha de pronto | A emenda grava a regra em `LEIS.md`. O selo do índice lê o mapeamento do ID e a estrutura da linha. O wrapper grava `ini` e `fim` em `chamadas.log`. O leitor de estado extrai obra, papel e resultado e conta os inícios por papel. O teto Opus é conduta declarada. [app/docs/LEIS.md:147] [app/docs/LEIS.md:423] [bin/tests/test_leis_indice.sh:25] [bin/tests/test_leis_indice.sh:43] [bin/codex_pergunta.sh:568] [bin/codex_pergunta.sh:606] [bin/codex_limite_estado.py:49] [bin/codex_limite_estado.py:71] [CLAUDE.md:397] |
-
-Os quatro blobs da cópia conferem com o lado novo do patch fornecido. A identidade do commit completo, os logs relatados e a execução integral dos selos são **[nao verificado]**. [bin/deploy.sh:189] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [app/core/tests/test_model_sem_migration_pendente.py:28] [app/docs/LEIS.md:147] [nao verificado]
-
-**REPROVADO — (3) os casos 25/26 passam com o portão depois do apply. (4) A L-126 omite o critério de pronto em `chamadas.log` e a condição de `PAREI`.** [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [bin/deploy.sh:331] [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] [nao verificado]
-
-_8530 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8531 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
