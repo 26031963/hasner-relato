@@ -1,7 +1,38 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 08:54** · publicado em **27/11/2026 08:57** (UTC-3)
+> Ultima resposta processada: **27/11/2026 09:03** · publicado em **27/11/2026 09:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 09:03 · sessao 3569bcc00a47 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
+
+## 1. Caso 14
+
+O RED é `MatrizHistoricoTest.test_caso_14_l130_preserva_historico_e_a_nova_resposta`. A fixture começa com `respondida_em=T0`, texto vazio e duas linhas `RESPOSTA`, uma antiga com `07:00` e outra vazia. Depois de chamar a porta L-130, o teste exige `[RESPOSTA, RESPOSTA, REABERTURA]`, preserva a foto das duas linhas antigas, confere a projeção vazia e verifica que uma nova resposta `09:00` fica vigente. [test_e4d_matriz_reds.py:644](/home/ronald/codex_ws/4e9ae2ddd8125dba58277ceb719022587d6036da/app/chamados/tests/test_e4d_matriz_reds.py:644)
+
+**A asserção da linha 654 diverge da opção (A).** Ela deve exigir que a terceira linha seja um ato próprio `SANEAMENTO` e que seu campo próprio de lei contenha `L-130`. As verificações de preservação do histórico, limpeza e nova resposta continuam valendo. A cópia registra a decisão de usar campo próprio, mas o modelo ainda carece desse ato e desse campo. O nome do campo é **[nao verificado]**. `ato_motivo` é texto da trilha e `da_ressuscitacao` é a marca de `REABERTURA` da ressuscitação. `app/chamados/tests/test_e4d_matriz_reds.py:654–661` · `app/docs/PROMPTS.md:2950` · `app/docs/BACKLOG.md:2163` · `app/chamados/models.py:4326–4365`
+
+## 2. Colisão com o c1 RED4
+
+**Sim, no contrato descrito pela E4D.** A docstring remete a `C1:234–254` para uma `REABERTURA` marcada e seu efeito na tarefa. O aval transcrito exige `SANEAMENTO` para a mesma devolução L-130. O ponto comum é `devolver_instante_sem_texto_l130`, em `app/chamados/services/validacao.py`. A colisão é sobre o valor de **`DecisaoPergunta.ato`**, definido em `app/chamados/models.py`. A projeção que a porta limpa é **`PerguntaDisputa.respondida_em`**, junto com `resposta_colab`. Hoje a porta registra a foto `RESPOSTA` se faltar, limpa o par e grava auditoria. As asserções literais do c1 RED4 e o nome do campo da marca da E4C são **[nao verificado]**. `app/chamados/tests/test_e4d_matriz_reds.py:644–656` · `app/docs/RELATO.md:172` · `app/docs/RELATO.md:2346` · `app/chamados/services/validacao.py:444–490` · `app/chamados/models.py:4344–4349,3658–3660`
+
+## 3. Arquivos em comum e casos independentes
+
+| Arquivo no pedido da E4C | Dependência da E4D |
+|---|---|
+| `app/chamados/models.py` | **Precisa mudar.** Aloja o tipo e os campos de `DecisaoPergunta`, seu redutor e a porta `registrar`. O caso 14 requer o ato próprio. Os casos 16 e 17 também exercitam diretamente `registrar` e `save`. `app/chamados/models.py:4326–4365,4405–4408,4493–4504,4590–4623` · `app/chamados/tests/test_e4d_matriz_reds.py:663–699` |
+| `0057` e `0058` de `app/chamados/migrations/` | **Dependência de esquema, sem edição dessas duas demonstrada.** A cópia usa o nome da `0057` na fixture e reconhece `entrada_em` e `entrada_origem`. O caso 42 depende dessa distinção temporal e o 45 da partição novo/estoque. O conteúdo das duas migrações é **[nao verificado]**. `app/chamados/tests/test_e4d_matriz_reds.py:181–194,238–243,788–807,832–869` · `app/docs/PROMPTS.md:2974` |
+| `app/ponto/validacao.py` | **O caminho correspondente na E4D é `app/chamados/services/validacao.py`.** Precisa mudar na devolução L-130 e nas portas que hoje salvam validação ou motivo da recusa diretamente. `app/chamados/services/validacao.py:164–178,444–490,992–1000` · `app/core/portas.py:396–403` |
+| `app/chamados/disputa_emissao.py` | **O caminho correspondente é `app/chamados/services/disputa_emissao.py`.** Precisa mudar na rota completa. Hoje a resposta humana salva a projeção antes de registrar o ato, e a reabertura vazia do caso 11 exige alterar a seleção e a identidade do pedido nessa porta. `app/chamados/services/disputa_emissao.py:1529–1567,1695–1715` · `app/chamados/tests/test_e4d_matriz_reds.py:570–606` |
+
+**Casos com caminho de construção fora desses arquivos**, pelo predicado dos REDs da cópia:
+
+- **06, 07, 27 e 37** — asserções de exceção e selo em `app/core/portas.py`, usando as portas atuais de carimbo, retroativo e descarimbo. Os testes exigem zero ato novo nesses recortes. `app/chamados/tests/test_e4d_matriz_reds.py:305–349,526–538,898–916,1126–1165,1830–1853`
+- **25 e 26** — seleção pela absorção e encaminhamento do legado em `materializacao.py`. O 25 já tem a porta de reabertura e a trilha da raiz disponíveis. `app/chamados/services/materializacao.py:1179–1212,1230–1285` · `app/chamados/tests/test_e4d_matriz_reds.py:1545–1613`
+- **28** — trava, releitura e compensação no comando do espelho. A gravação da via já tem porta própria e a `REABERTURA` já é um tipo registrado. `app/chamados/management/commands/encerrar_perguntas_com_fato.py:64–77` · `app/chamados/models.py:3662–3671,4326–4337` · `app/chamados/tests/test_e4d_matriz_reds.py:1167–1224`
+
+**Guardas que já podem ser preservadas sem editar esses arquivos** — **13, 15, 19, 21, 22, 23, 24, 36, 43 e 46**. Para o **30**, API, modal e raio-x podem ser trabalhados à parte, mas o fechamento da face SQL pelo mesmo ato é **[nao verificado]** sem mexer na autoridade compartilhada. O **33** está fora da E4D no brief registrado. `app/chamados/tests/e4d_matriz_mutantes.py:48–97` · `app/chamados/tests/test_e4d_matriz_reds.py:1647–1663` · `app/chamados/juizes.py:1676–1681,1863–1868` · `app/chamados/models.py:4506–4515` · `app/docs/RELATO.md:292`
+
+A lista indica independência técnica por leitura. A ordem de pouso registrada continua E4C-F5-INSTANTE → E4D. Identidade Git do hash, execução dos testes e estado de produção **[nao verificado]**. `app/docs/RELATO.md:67`
 
 ## 27/11 08:54 · sessao 0d97a1b1fe83 · CODEX-CONSTROI-MOTOR · leitura · origem=Code
 
@@ -1569,123 +1600,4 @@ Linha dos mutantes para `bin/suite.sh`. [Classes](chamados/tests/e4d_matriz_muta
 | [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:496) | Caso 32 sob `freeze_time(T1)` do `setUp`. [Caso 32](chamados/tests/test_e4d_matriz_reds.py:1718) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
 | `localdate()` e `date.today()` | Zero ocorrências nos dois arquivos. [REDs](chamados/tests/test_e4d_matriz_reds.py:1) [Mutantes](chamados/tests/e4d_matriz_mutantes.py:1) |
 
-## 27/11 03:47 · sessao 501893001208 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-O diff da fix5 está nos dois arquivos autorizados. A compilação e o `git diff --check` passaram. Em ensaios isolados, o selo AST rejeitou a escrita injetada do caso 07 e o teste da fixture rejeitou a omissão de `entrada_em`. A suíte Django e as mordidas em execução ficam **[nao verificado]**. [REDs](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1) [Mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:1) [nao verificado]
-
-## Diff e decisões
-
-```bash
-GIT_OPTIONAL_LOCKS=0 git diff -- \
-  chamados/tests/test_e4d_matriz_reds.py \
-  chamados/tests/e4d_matriz_mutantes.py
-```
-
-- O caso 14 e os casos 01/02/42/44/45 ficaram idênticos ao HEAD. `marco_do_estoque` também ficou intacto. Um assert incondicional ali anteciparia a falha dos casos 04/07/08/18 para a ausência da 0057 e esconderia os contratos desta volta. [Fixture de estoque](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:238) [Caso 14](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:644)
-- Os REDs 04 e 08 propõem as interfaces `--dir-reversao`/`--reverter` e `--so-trilha-exportada`/`--aval`. O 04 usa um JSON por competência com foto e SHA-256. Essas interfaces e o formato do JSON são decisões do teste, com encaixe em produção **[nao verificado]**. O parser da base declara apenas `--aplicar`. [Comando atual](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/backfill_decisoes_pergunta.py:455) [Reversão](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:459) [Exportada](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:540) [nao verificado]
-- Os nomes `pedido_id`, `autoria_desconhecida`, `pergunta_sem_absorcao_encaminhada_admin` e `perguntas_sem_absorcao_na_lista_do_admin` são contratos propostos pelos REDs. O selo lê `PORTAS` e exige uma lápide com entidade, via, arquivo, função e motivo no próprio registro. O scanner cobre escritas com via literal e a observação SQL cobre as rotas exercitadas. A cobertura exaustiva de escritores **[nao verificado]**. [Pedido](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:570) [Autoria](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:628) [Admin](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1579) [Selo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:305)
-- O ensaio isolado revelou um `TypeError` ao desmontar a troca de `__code__` no runner. Corrigi a restauração em `finally` e conferi que a função original volta após o mutante. [Runner](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:15)
-
-## Caso → o que exige → mutante → morde?
-
-`NV` significa **[nao verificado] na suíte**. A coluna registra o resultado observado, e os comandos abaixo identificam cada variante. [nao verificado]
-
-| Caso | O que exige | Mutante | Morde? |
-|---|---|---|---|
-| 04 | Foto e hash próprios. Reverter B primeiro preserva A, o ato preexistente e a vizinha. [RED:459](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:459) | Reverte a outra competência junto | NV |
-| 05 | `ABSORCAO` e `VALIDACAO` físicas antes de V/M, no mesmo atomic, pelas duas entradas. [RED:1395](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1395) | Segundo escritor de M no módulo e no alias | NV |
-| 06/07 | Carimbo de célula pela exceção com lápide. Backfill preserva a foto e mantém zero ato novo e zero evento. [06:898](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:898) [07:526](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:526) | Reescreve carimbo, injeta escritor AST, fabrica conclusão | AST sim, com lápide sintética em memória. Suíte NV | [nao verificado]
-| 08 | Via autorizada insere R e V na trilha. Hashes do TXT e do gravado iguais, zero escrita de coluna e zero evento. [RED:540](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:540) | Escreve uma coluna da exportada | NV |
-| 09/10 | Ato físico precede a escrita de V/R. Resposta com texto, M pela exceção com lápide. [09:918](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:918) [10:959](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:959) | Segundo escritor de V/R ou M fora da porta | NV |
-| 11/12 | Mesmo pedido preserva as linhas, pedido distinto grava por pergunta. FK protege e autoria histórica desconhecida tem marca explícita. [11:570](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:570) [12:608](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:608) | Descarta vazia, dá chave nova ao retry, volta `SET_NULL` ou omite a marca | NV |
-| 18 | Compensador futuro restaurado, horizonte comum e recusa de ato futuro no `registrar`. Controles do I23 incluem `REABERTURA` e `RECUSA` com recuo do relógio. [Restore:701](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:701) [Registrar:766](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:766) | C6 antecipa, I23 zera fixo ou `registrar` aceita futuro | NV |
-| 20 | Recusa para só Q, preserva irmãs e distingue dois pedidos na mesma ausência. [RED:1440](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1440) | Ignora empate ou reutiliza pedido da ausência | NV |
-| 26 | Preserva R/V/M e DP. Registra Q e a apresenta na lista do admin. [RED:1579](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1579) | Devolve sem vínculo ou preserva sem encaminhar | NV |
-| 27/28 | Releitura sob trava, com dia e célula atuais no fantasma. No espelho, resultado revogado preserva a pergunta, e H4 derrubado ganha `REABERTURA`. M exige lápide. [27:1126](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1126) [28:1167](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1167) | Instância antiga, só FK fresca, primeiro espelho, omissão da compensação ou escrita fora da porta | NV |
-| 30 | Texto `09:00` em ambas as fontes. Instante do ato na ordem SQL, API, modal e crédito do raio-x. [RED:1617](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1617) | Um leitor por vez usa o instante cru | NV |
-| 31/32 | Nascimento da raiz e do chamado pelas portas declaradas. Filha vazia na abertura direta e na emissão. [31:1683](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1683) [32:1717](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1717) | Escrita de mesmo valor fora da porta ou nascimento com V | NV |
-| 36/37 | Consulta fresca vê a tranca e preserva a irmã de outra competência. Destranca preserva R e aplica M pela exceção com lápide. [36:1793](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1793) [37:1829](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1829) | Ignora tranca, regrava R ou destranca fora da porta | NV |
-| Item 9 | `fato()` explicita `entrada_em` pelo relógio congelado quando o campo existe e preserva o instante dado pelo caller. [RED:377](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:377) | Omite a entrada e deixa o default agir | Sim, com relógio simulado em memória. Suíte NV | [nao verificado]
-
-## Item 10 — conferência do verificador v2
-
-| Caso | Veredito e motivo |
-|---|---|
-| 09 | **PROCEDENTE.** A rota carimba V sem registrar `VALIDACAO`. O recorte anterior só conferia o ato no primeiro ramo e deixava M sem selo. [Resolvedor:2118](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/disputa_emissao.py:2118) [RED:918](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:918) |
-| 10 | **PROCEDENTE.** O ramo carimba R e emite `fecho_sem_credor`; esse log não é uma `RESPOSTA` física. A via de M também precisava de selo. [Resolvedor:2192](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/disputa_emissao.py:2192) [RED:959](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:959) |
-| 11 | **PROCEDENTE.** A assinatura atual não recebe identidade do pedido e o filtro do lote exclui vazias. Uma chamada isolada não prova idempotência. [Porta:1628](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/disputa_emissao.py:1628) [Filtro:1695](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/disputa_emissao.py:1695) |
-| 12 | **PROCEDENTE.** As quatro FKs já eram isoladas no teste. O modelo ainda usa `SET_NULL` e o teste anterior deixava passar autoria histórica nula sem marca. [Projeção:3804](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/models.py:3804) [Trilha:4347](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/models.py:4347) [RED:628](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:628) | [nao verificado]
-| 20 | **PROCEDENTE.** A materialização reaproveita a ausência do mesmo tipo. Conferir só a FK da ausência deixa passar uma chave fixa para pedidos distintos. [Materialização:1037](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/materializacao.py:1037) [RED:1451](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1451) |
-| 26 | **PROCEDENTE.** A devolução retorna cedo sem itens e reabre os selecionados pelo caminho atual. Só conferir a foto deixava passar a omissão do registro e da lista. [Materialização:1239](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/materializacao.py:1239) [RED:1579](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1579) |
-| 27 | **PROCEDENTE como lacuna do teste.** O reconciliador relê a pergunta sob trava. A fixture anterior distinguia apenas a FK, enquanto o juiz também usa o dia. [Releitura:1265](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/reconciliador.py:1265) [Juiz:1182](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/reconciliador.py:1182) | [nao verificado]
-| 28 | **PROCEDENTE.** `declaracao` fica fora de `SEM_HISTORIA`. O novo controle elegível com H4 chega à etapa que precisa de trava e compensação, e o espelho que muda de resposta exige releitura efetiva. [Seletor:31](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/encerrar_perguntas_com_fato.py:31) [RED:1167](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1167) |
-| 36 | **PROCEDENTE como lacuna do teste.** `_pv_memo` depende da instância e do instante. A consulta nova isola a regra da tranca. A causa dinâmica da falha da pista antiga fica **[nao verificado]**. [Memo:931](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/juizes.py:931) [RED:1793](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1793) | [nao verificado]
-
-## Comandos para a pista do Code
-
-O runner recebe a variante por `E4D_MUTANTE`. Os comandos usam a configuração CI de PostgreSQL e os seletores dos REDs. [Runner](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:547) [Configuração CI](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/config/settings/ci.py:6)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
-  chamados.tests.test_e4d_matriz_reds
-
-m() {
-  PYTHONDONTWRITEBYTECODE=1 E4D_MUTANTE="$1" python3 manage.py test \
-    --settings=config.settings.ci \
-    --testrunner=chamados.tests.e4d_matriz_mutantes.RunnerMutanteE4D \
-    "chamados.tests.test_e4d_matriz_reds.$2"
-}
-
-h() { m "$1" "MatrizHistoricoTest.$2"; }
-p() { m "$1" "MatrizPortasTest.$2"; }
-a() { m "$1" "MatrizAusenciaTest.$2"; }
-r() { m "$1" "MatrizRaizELeitoresTest.$2"; }
-
-h 04_reverte_a_outra_competencia test_caso_04_aplica_fotos_separadas_por_competencia
-a 05_segundo_escritor_m test_caso_05_absorcao_e_validacao_antes_de_v_m_no_mesmo_atomic
-p 06_carimbo_reescrito test_caso_06_celula_absolve_so_com_carimbo
-h 07_escritor_ast_fora_da_porta test_caso_07_backfill_celula_absolveu_fica_como_estava
-h 07_fabrica_conclusao test_caso_07_backfill_celula_absolveu_fica_como_estava
-h 08_regrava_exportada test_caso_08_exportada_veta_apply_comum_e_preserva_txt_e_gravado
-p 09_segundo_escritor_v test_caso_09_resolvedor_validar_registra_antes_de_v
-p 09_m_fora_da_porta test_caso_09_resolvedor_validar_registra_antes_de_v
-p 10_segundo_escritor_r test_caso_10_resolvedor_responder_registra_so_com_texto
-p 10_m_fora_da_porta test_caso_10_resolvedor_responder_registra_so_com_texto
-h 11_descarta_reabertura_vazia test_caso_11_reabertura_vazia_grava_ato_sem_projetar
-h 11_retry_ganha_novo_pedido test_caso_11_reabertura_vazia_grava_ato_sem_projetar
-h 12_autor_da_foto_set_null test_caso_12_proteger_cada_referencia_de_autoria
-h 12_oculta_autoria_desconhecida test_caso_12_backfill_marca_autoria_desconhecida
-h 18_c6_julga_compensacao_cedo test_caso_18_estoque_futuro_compensa_no_horizonte_comum
-h 18_i23_zero_fixo test_caso_18_estoque_futuro_compensa_no_horizonte_comum
-h 18_registrar_aceita_compensador_futuro test_caso_18_registrar_recusa_compensador_futuro
-a 20_ignora_recusa_no_empate test_caso_20_recusa_para_so_q_e_preserva_irma_ja_absorvida
-a 20_reusa_pedido_da_ausencia test_caso_20_pedidos_distintos_na_mesma_ausencia
-a 26_devolve_sem_vinculo test_caso_26_sem_absorcao_preserva_legado
-a 26_preserva_sem_encaminhar test_caso_26_sem_absorcao_preserva_legado
-p 27_julga_instancia_antiga test_caso_27_fantasma_trava_rele_julga_e_escreve
-p 27_rele_so_a_celula test_caso_27_fantasma_trava_rele_julga_e_escreve
-p 27_fantasma_fora_da_porta test_caso_27_fantasma_trava_rele_julga_e_escreve
-p 28_via_sem_compensacao test_caso_28_espelho_trava_rele_e_reabre_ato_que_perde_h4
-p 28_usa_o_primeiro_espelho test_caso_28_espelho_trava_rele_e_reabre_ato_que_perde_h4
-p 28_via_fora_da_porta test_caso_28_espelho_trava_rele_e_reabre_ato_que_perde_h4
-r 30_fila_pelo_carimbo_cru test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta
-r 30_api_pelo_par_cru test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta
-r 30_modal_pelo_par_cru test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta
-r 30_raiox_pelo_carimbo_cru test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta
-r 31_raiz_fora_da_porta test_caso_31_nascimento_da_raiz_e_do_chamado
-r 31_chamado_fora_da_porta test_caso_31_nascimento_da_raiz_e_do_chamado
-r 32_raiz_fora_da_porta test_caso_32_nascimento_da_filha_com_rvm_vazios
-r 32_filha_nasce_com_v test_caso_32_nascimento_da_filha_com_rvm_vazios
-r 36_ignora_tranca test_caso_36_tranca_retirada_da_fila_por_leitura
-r 37_destranque_fora_da_porta test_caso_37_destranca_passivo_preserva_resposta
-r 37_regrava_r_no_destranque test_caso_37_destranca_passivo_preserva_resposta
-m fixture_omite_entrada_congelada FixtureMatrizTest.test_fato_explica_entrada_quando_o_campo_existe
-```
-
-## Perguntas de lei
-
-1. **Caso 14.** Para o meio-par histórico de L-130, qual ato prevalece entre `SANEAMENTO` e `REABERTURA`? O teste continua congelado. `opus.md:19` · [RED:644](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:644) [nao verificado]
-2. **Caso 18.** O zero para compensadores de restore deve sair no próprio I23 ou em um contador separado? O RED usa I23 e preserva o controle da `REABERTURA` legítima que fica adiantada após recuo do relógio. [I23 atual](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/auditar_invariantes_chamados.py:1122) [Caracterização F5](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:319)
-3. **Caso 28.** A presença de H4 vigente e de fato novo confirmado sob trava torna elegível uma pergunta com via `declaracao`? O RED preserva o cenário original e também exercita `legado_sem_lastro`, que já entra no seletor. [Seletor:36](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/encerrar_perguntas_com_fato.py:36) [RED:1167](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1167)
-
-_8587 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8588 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
