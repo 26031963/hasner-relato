@@ -1,7 +1,54 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 03:47** · publicado em **27/11/2026 03:47** (UTC-3)
+> Ultima resposta processada: **27/11/2026 03:57** · publicado em **27/11/2026 04:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 03:57 · sessao 0684ef753980 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
+
+# construtor.r
+
+**Caso 30.** O cartão recente usa `DIA - timedelta(days=1)`, o que distingue a chave `pergunta_unica_por_marco` e preserva o motivo do alvo. [Fixture](chamados/tests/test_e4d_matriz_reds.py:1640) [Restrição](chamados/models.py:3944)  
+A resposta recente continua um minuto depois da resposta do alvo. As asserções de SQL, API, modal e raio-x são as mesmas. [Asserções](chamados/tests/test_e4d_matriz_reds.py:1642)
+
+Na base, a fila SQL exige `respondida_em` preenchido. A asserção esperada compara a fila que perde o alvo com `[p.pk, recente.pk]`. A falha após a correção fica **[nao verificado]** na suíte do Code. [Filtro SQL](chamados/juizes.py:1676) [Fila](chamados/juizes.py:1863) [Asserção](chamados/tests/test_e4d_matriz_reds.py:1647)
+
+## Diff
+
+| Arquivo | Inserções | Remoções |
+|---|---:|---:|
+| [e4d_matriz_mutantes.py](chamados/tests/e4d_matriz_mutantes.py:551) | 148 | 18 |
+| [test_e4d_matriz_reds.py](chamados/tests/test_e4d_matriz_reds.py:1640) | 2 | 1 |
+| **Total** | **150** | **19** |
+
+`git diff --check` e a compilação em memória passaram. O diff acrescenta **0 `except`**. A comparação com a base confirmou que a única mudança nos REDs é a chamada da fixture do caso 30. [Fixture](chamados/tests/test_e4d_matriz_reds.py:1640) [Arnês](chamados/tests/e4d_matriz_mutantes.py:551)
+
+## Seletores para o Code
+
+O arnês expõe as **39 variantes da lista da fix5**, incluindo a da fixture. As outras 31 definições preexistentes ficaram fora do seletor desta volta. Cada classe roda controle, mutação com restauração registrada em `addCleanup` e novo controle. O conjunto de falhas é comparado por método e, no caso 30, por subteste de leitor. O ensaio sintético conferiu essa comparação e a restauração. As mordidas na suíte ficam **[nao verificado]**. [Arnês](chamados/tests/e4d_matriz_mutantes.py:551) [Classes](chamados/tests/e4d_matriz_mutantes.py:607) [Leitores](chamados/tests/e4d_matriz_mutantes.py:662)
+
+RED do caso 30. [Teste](chamados/tests/test_e4d_matriz_reds.py:1617)
+
+```bash
+bin/suite.sh --only "chamados.tests.test_e4d_matriz_reds.MatrizRaizELeitoresTest.test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta"
+```
+
+Linha dos mutantes para `bin/suite.sh`. [Classes](chamados/tests/e4d_matriz_mutantes.py:607)
+
+```bash
+--only "chamados.tests.e4d_matriz_mutantes.M04ReverteOutraCompetencia chamados.tests.e4d_matriz_mutantes.M05SegundoEscritorM chamados.tests.e4d_matriz_mutantes.M06CarimboReescrito chamados.tests.e4d_matriz_mutantes.M07EscritorAstForaDaPorta chamados.tests.e4d_matriz_mutantes.M07FabricaConclusao chamados.tests.e4d_matriz_mutantes.M08RegravaExportada chamados.tests.e4d_matriz_mutantes.M09SegundoEscritorV chamados.tests.e4d_matriz_mutantes.M09MaterializaForaDaPorta chamados.tests.e4d_matriz_mutantes.M10SegundoEscritorR chamados.tests.e4d_matriz_mutantes.M10MaterializaForaDaPorta chamados.tests.e4d_matriz_mutantes.M11DescartaReaberturaVazia chamados.tests.e4d_matriz_mutantes.M11RetryGanhaNovoPedido chamados.tests.e4d_matriz_mutantes.M12AutorDaFotoSetNull chamados.tests.e4d_matriz_mutantes.M12OcultaAutoriaDesconhecida chamados.tests.e4d_matriz_mutantes.M18C6JulgaCompensacaoCedo chamados.tests.e4d_matriz_mutantes.M18I23ZeroFixo chamados.tests.e4d_matriz_mutantes.M18RegistrarAceitaCompensadorFuturo chamados.tests.e4d_matriz_mutantes.M20IgnoraRecusaNoEmpate chamados.tests.e4d_matriz_mutantes.M20ReusaPedidoDaAusencia chamados.tests.e4d_matriz_mutantes.M26DevolveSemVinculo chamados.tests.e4d_matriz_mutantes.M26PreservaSemEncaminhar chamados.tests.e4d_matriz_mutantes.M27JulgaInstanciaAntiga chamados.tests.e4d_matriz_mutantes.M27ReleSoACelula chamados.tests.e4d_matriz_mutantes.M27FantasmaForaDaPorta chamados.tests.e4d_matriz_mutantes.M28ViaSemCompensacao chamados.tests.e4d_matriz_mutantes.M28UsaPrimeiroEspelho chamados.tests.e4d_matriz_mutantes.M28ViaForaDaPorta chamados.tests.e4d_matriz_mutantes.M30FilaPeloCarimboCru chamados.tests.e4d_matriz_mutantes.M30ApiPeloParCru chamados.tests.e4d_matriz_mutantes.M30ModalPeloParCru chamados.tests.e4d_matriz_mutantes.M30RaioxPeloCarimboCru chamados.tests.e4d_matriz_mutantes.M31RaizForaDaPorta chamados.tests.e4d_matriz_mutantes.M31ChamadoForaDaPorta chamados.tests.e4d_matriz_mutantes.M32RaizForaDaPorta chamados.tests.e4d_matriz_mutantes.M32FilhaNasceComV chamados.tests.e4d_matriz_mutantes.M36IgnoraTranca chamados.tests.e4d_matriz_mutantes.M37DestranqueForaDaPorta chamados.tests.e4d_matriz_mutantes.M37RegravaRNoDestranque chamados.tests.e4d_matriz_mutantes.MFixtureOmiteEntradaCongelada"
+```
+
+## Censo de relógio
+
+| Ocorrência | Cobertura |
+|---|---|
+| [`timezone.now()` nos REDs](chamados/tests/test_e4d_matriz_reds.py:185) | `freeze_time(T1)` no `setUp`. O teste isolado da fixture usa `freeze_time(T2)`. [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) [Fixture](chamados/tests/test_e4d_matriz_reds.py:385) |
+| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:130) | String de mutação que aponta para a leitura da fixture. [Fixture](chamados/tests/test_e4d_matriz_reds.py:185) |
+| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:302) | Variante fora do seletor da fix5. Seu alvo, caso 16, herda `freeze_time(T1)`. [Caso 16](chamados/tests/test_e4d_matriz_reds.py:663) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
+| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:334) | Caso 18 sob `freeze_time(T1)`, com `freeze_time(T2)` no controle que aceita o ato. [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) [Controle T2](chamados/tests/test_e4d_matriz_reds.py:783) |
+| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:475) | Variante fora do seletor da fix5. Seu alvo, caso 31, herda `freeze_time(T1)`. [Caso 31](chamados/tests/test_e4d_matriz_reds.py:1684) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
+| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:496) | Caso 32 sob `freeze_time(T1)` do `setUp`. [Caso 32](chamados/tests/test_e4d_matriz_reds.py:1718) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
+| `localdate()` e `date.today()` | Zero ocorrências nos dois arquivos. [REDs](chamados/tests/test_e4d_matriz_reds.py:1) [Mutantes](chamados/tests/e4d_matriz_mutantes.py:1) |
 
 ## 27/11 03:47 · sessao 501893001208 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
 
@@ -876,23 +923,4 @@ mutante_e4d 05_segundo_escritor_m
 mutante_e4d 27_julga_instancia_antiga
 ```
 
-## 27/11 02:37 · sessao a1bc05e461b2 · CODEX-CONSTROI-MOTOR · censo · origem=Code
-
-### Auditoria de quem perguntou
-
-A volta 10 perguntou expressamente quem escreve e quem lê a cerca e os REDs. Também pediu três mutações isoladas da pergunta. Para a admissão do Opus, o pedido apresentou a triagem do achado 4 da v9 e perguntou se bastava tocar **um** caminho da lista. A citação usada nessa pergunta ainda incluía `models` e `motor`, que já tinham saído da redação vigente. `q.txt:2–4` · `CLAUDE.md:325–330`
-
-Os pares `q.txt` e `r.txt` de `verif1` a `verif10` estão indisponíveis no caminho indicado da cópia. A tabela classifica **a volta 10 pelos anexos raspados**, com linhas contadas a partir do início de cada anexo. As classes para a obra inteira e a triagem das voltas anteriores ficam [nao verificado]. `CLAUDE.md:434–438`
-
-| Achado | Classe na volta 10 | Evidência |
-|---|---|---|
-| **A — Construtor pode alterar a cerca e os REDs** | **(a) Tema presente, achado não visto** | A pergunta pediu **“QUEM ESCREVE e QUEM LE”** a função e os REDs. A resposta apontou `labels_locais()` como produtora e descreveu as mutações em memória dos testes. Ficou sem resposta quem pode editar os arquivos. O deploy importa a função diretamente, e os caminhos da função e dos REDs ficam fora dos padrões de `PROIBIDOS`. `q.txt:4` · `r.txt:25–27` · `bin/deploy.sh:194–196` · `bin/codex_pergunta.sh:162–176` |
-| **B — `MIGRATION_MODULES` fora da guarda de caminho** | **(e) Não perguntado na v10** | **“Ha outro chamador de `call_command`”** pediu o censo de chamadas. A resposta identificou **“a única chamada Python”**. O pedido ficou sem a pergunta sobre quem controla a configuração que o Django usa para localizar migrations. `#G:p_migr` só reconhece o componente `migrations`, e a escrita em settings fica fora dessa guarda. O efeito completo no deploy está relatado no anexo. `q.txt:2–5` · `r.txt:29` · `bin/codex_pergunta.sh:162–176,223–233` · `opus.md:4` |
-| **C — Referência `:644` errada** | **(e) Não perguntado na v10** | **“O descarte procede pela letra?”** tratava do requisito de tocar um caminho. **“O `any(...)` implementa essa condição”** foi a resposta. O checklist também citou **“selo sem mordida”**, limitado ao delta, e a resposta examinou os REDs da cerca. A referência foi mantida em `:644`, onde está `REGRAS`. `PROIBIDO` está em `:645`, e o selo exige a presença da string `:644`. `q.txt:3,5` · `r.txt:17,33` · `CLAUDE.md:403` · `bin/codex_pergunta.sh:644–645` · `bin/tests/test_agente_no_modelo.sh:286–288` |
-| **D — `models/` vedado ao Codex e insuficiente para admitir Opus** | **(e) Não perguntado na v10** | **“O texto exige que toque UM”** perguntou quantos caminhos bastavam. A resposta confirmou **“pelo menos um caminho”** da lista vigente. Ficou sem pergunta a cobertura dos dois lados para `models/`. `p_models_pkg` barra o Codex e está ausente de `OPUS_CONSTROI_TAGS`. Assim, um pedido Opus cujo `ARQUIVOS:` só toque `models/` é recusado. `q.txt:3` · `r.txt:17–19` · `bin/codex_pergunta.sh:166` · `bin/disjuntor.py:1961,2036–2039,2105–2112` |
-
-O descarte documentado na v10 é o da exigência de tocar todos os caminhos. Ele não sustenta **(b)** para A–D. Os quatro achados têm evidência legível no código, então a ausência de banco ou logs de produção não os põe em **(c)**. `q.txt:3,6` · `r.txt:17–19` · `opus.md:3–6` · `CLAUDE.md:431–438`
-
-**MODO-COMUM [nao verificado].** O Opus final registrou A–D. Para propor a linha de classe **(d)**, falta evidência de que Codex e Opus já tinham deixado passar o mesmo achado. `opus.md:1–6` · `CLAUDE.md:434–442`
-
-_8568 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8569 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
