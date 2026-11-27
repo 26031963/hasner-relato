@@ -1,7 +1,104 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 12:07** · publicado em **27/11/2026 12:07** (UTC-3)
+> Ultima resposta processada: **27/11/2026 12:12** · publicado em **27/11/2026 12:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 12:12 · sessao d4acb9eb4d2e · FERIADO-UM-JUIZ · sonda · origem=Code
+
+## FERIADO-UM-JUIZ — competência 11/2026
+
+**Confere: 75 dias de 42 colaboradores. Todos os 75 saíram como hora comum. Pela regra proposta, 67 dias de 35 colaboradores passariam a HE100 feriado, somando 449,74 h.** `extrato:3–78`
+
+As referências `extrato:N` apontam para o dado raspado da mensagem, contando `sonda_leitura` como linha 1. A apuração usa a saída fornecida. Reexecução na sombra e conferência independente com a lista do admin [nao verificado].
+
+### (a) e (b) — Universo e classificação atual
+
+| Empresa | Dias | Colaboradores | Dias com `he100fer=0` e `sem_escala_h > 0` | Horas comuns | Fonte |
+|---|---:|---:|---:|---:|---|
+| 2 | 65 | 37 | 65 | 459,75 h | `extrato:3–67` |
+| 3 | 10 | 5 | 10 | 74,20 h | `extrato:68–77` |
+| **Total** | **75** | **42** | **75** | **533,95 h** | `extrato:3–78` |
+
+**Nenhum dia foge do padrão.** Em todas as linhas `DIA`, `ht = sem_escala_h`, `he100 = he100fer = folga = 0` e `folga_feriado_min = None`. No código atual, a seleção para HE100 feriado parte de `_ft_certa`. Os períodos sem escala certa entram em `horas_trabalhadas` tanto no fechamento quanto na lavra diária. `extrato:3–77` · [fechamento.py:958](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:958) · [fechamento.py:970](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:970) · [fechamento.py:1004](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1004) · [dia_pago.py:259](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/dia_pago.py:259)
+
+### (c) — Impacto da regra proposta
+
+| Empresa | Dias que mudariam | Colaboradores afetados | Horas que passariam a HE100 feriado | Dias que ficam | `12x36` | `intermitente` | Ciclo `None` | Fonte |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| 2 | 57 | 30 | 375,54 h | 8 | 5 | 3 | 0 | `extrato:3–67` |
+| 3 | 10 | 5 | 74,20 h | 0 | 0 | 0 | 0 | `extrato:68–77` |
+| **Total** | **67** | **35** | **449,74 h** | **8** | **5** | **3** | **0** | `extrato:3–77` |
+
+A projeção aplica `dobra_do_ciclo=True` e `ciclo != intermitente` e soma o `sem_escala_h` exibido, já arredondado por dia. Os 67 dias elegíveis são todos `6x1`. O total calculado a partir dos minutos originais e o novo fechamento mensal ficam [nao verificado]. `extrato:3–77` · [regras.py:312](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/calculador/regras.py:312) · [motor_calculo_v2.py:3740](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/motor_calculo_v2.py:3740)
+
+Os únicos IDs sem dias que mudariam são da empresa 2. Em `12x36`, ficam **366, 415, 788, 1031 e 1035**, com um dia cada. Em `intermitente`, ficam **830** com dois dias e **975** com um dia, embora o extrato traga `dobra_do_ciclo=True` para os três dias. `extrato:14,20,29,36–37,52,64–65`
+
+### (d) — FECH atual por colaborador
+
+Valores mensais em horas. Os IDs **727** e **788** já têm `he100fer` positivo no mês, e os dias sondados desses dois IDs têm `he100fer=0`. `extrato:24,29,90,93`
+
+| Empresa | ID | `ht` | `he100` | `he100fer` | `folga` | Fonte |
+|---|---:|---:|---:|---:|---:|---|
+| 2 | 43 | 184,06 | 0,00 | 0,00 | 0,00 | `extrato:79` |
+| 2 | 203 | 182,34 | 0,00 | 0,00 | 0,00 | `extrato:80` |
+| 2 | 206 | 170,16 | 0,00 | 0,00 | 0,00 | `extrato:81` |
+| 2 | 207 | 169,23 | 0,00 | 0,00 | 0,00 | `extrato:82` |
+| 2 | 278 | 178,12 | 0,00 | 0,00 | 0,00 | `extrato:83` |
+| 2 | 366 | 65,85 | 0,00 | 0,00 | 0,00 | `extrato:84` |
+| 2 | 369 | 179,55 | 0,00 | 0,00 | 0,00 | `extrato:85` |
+| 2 | 384 | 192,04 | 0,00 | 0,00 | 0,00 | `extrato:86` |
+| 2 | 415 | 179,90 | 0,00 | 0,00 | 0,00 | `extrato:87` |
+| 2 | 583 | 153,08 | 0,00 | 0,00 | 0,00 | `extrato:88` |
+| 2 | 622 | 143,48 | 0,00 | 0,00 | 0,00 | `extrato:89` |
+| 2 | 727 | 167,77 | 7,05 | 7,05 | 0,00 | `extrato:90` |
+| 2 | 735 | 164,36 | 0,00 | 0,00 | 0,00 | `extrato:91` |
+| 2 | 784 | 173,02 | 0,00 | 0,00 | 0,00 | `extrato:92` |
+| 2 | 788 | 153,65 | 14,23 | 14,23 | 0,00 | `extrato:93` |
+| 2 | 789 | 161,32 | 0,00 | 0,00 | 0,00 | `extrato:94` |
+| 2 | 822 | 170,30 | 0,00 | 0,00 | 0,00 | `extrato:95` |
+| 2 | 830 | 117,08 | 0,00 | 0,00 | 0,00 | `extrato:96` |
+| 2 | 899 | 169,79 | 0,00 | 0,00 | 0,00 | `extrato:97` |
+| 2 | 903 | 184,17 | 0,00 | 0,00 | 0,00 | `extrato:98` |
+| 2 | 924 | 120,57 | 0,00 | 0,00 | 0,00 | `extrato:99` |
+| 2 | 944 | 158,02 | 0,00 | 0,00 | 0,00 | `extrato:100` |
+| 2 | 961 | 184,11 | 0,00 | 0,00 | 0,00 | `extrato:101` |
+| 2 | 962 | 179,47 | 0,00 | 0,00 | 0,00 | `extrato:102` |
+| 2 | 967 | 81,98 | 0,00 | 0,00 | 0,00 | `extrato:103` |
+| 2 | 968 | 172,80 | 0,00 | 0,00 | 0,00 | `extrato:104` |
+| 2 | 975 | 32,87 | 0,00 | 0,00 | 0,00 | `extrato:105` |
+| 2 | 988 | 213,94 | 3,04 | 0,00 | 0,00 | `extrato:106` |
+| 2 | 990 | 179,52 | 0,00 | 0,00 | 0,00 | `extrato:107` |
+| 2 | 991 | 167,69 | 0,00 | 0,00 | 0,00 | `extrato:108` |
+| 2 | 1000 | 145,13 | 0,00 | 0,00 | 0,00 | `extrato:109` |
+| 2 | 1023 | 62,94 | 0,00 | 0,00 | 0,00 | `extrato:110` |
+| 2 | 1026 | 95,85 | 0,00 | 0,00 | 0,00 | `extrato:111` |
+| 2 | 1031 | 71,52 | 0,00 | 0,00 | 0,00 | `extrato:112` |
+| 2 | 1035 | 67,94 | 0,00 | 0,00 | 0,00 | `extrato:113` |
+| 2 | 1036 | 73,09 | 0,00 | 0,00 | 0,00 | `extrato:114` |
+| 2 | 1050 | 8,32 | 0,00 | 0,00 | 0,00 | `extrato:115` |
+| 3 | 82 | 196,97 | 0,00 | 0,00 | 0,00 | `extrato:116` |
+| 3 | 114 | 163,38 | 0,00 | 0,00 | 0,00 | `extrato:117` |
+| 3 | 749 | 141,63 | 0,00 | 0,00 | 0,00 | `extrato:118` |
+| 3 | 911 | 180,50 | 0,00 | 0,00 | 0,00 | `extrato:119` |
+| 3 | 1024 | 103,97 | 0,00 | 0,00 | 0,00 | `extrato:120` |
+
+## 27/11 12:08 · sessao 4f65f40651ed · FERIADO-BOTAO-CORTADO · leitura · origem=Code
+
+**a. As quatro falhas têm a mesma causa:** o JS mede o gatilho na viewport, mas aplica `left/top` em um painel `fixed` cujo ancestral muda a referência dessas coordenadas. (`popover-acao.js:38,44,75`)
+
+- **Página, nas duas cascas:** gatilho em `(788,97; 580)`, painel em `(802; 445)`. O painel cabe inteiro e **sobrepõe** o gatilho. A distância registrada é **0 px** e a sonda rejeita a sobreposição. O `backdrop-filter` de `.hx-shell` muda a referência do painel. (`smoke_falhas.txt:41,97`, `test_smoke_clique_feriado_vira_trabalho.py:119`, `base.html:335`, `base_app.html:93`, `hasner-ponto.css:283`)
+- **Drawer, nas duas cascas:** gatilho em `(890,28; 576)`, painel em `(1156; 243)`. A distância é **197,82 px** e a direita do painel ultrapassa a viewport em **20 px**, o que também derruba o teste de recorte. O `translateX(0)` mantém o drawer como referência do painel mesmo depois de aberto. (`smoke_falhas.txt:74,130`, `_drawer_generico.html:3,15,16`) [nao verificado]
+
+**b. O defeito de posicionamento antecede o c1.** O c1 mudou a posição e a quebra de linha do gatilho e separou a rolagem das marcações. A geometria pré-c1 em execução é [não verificado]. Os outros usos são **Resolver dia** e **Inverter tipo/Retratar batida**, na grade do perfil, no Espelho do drawer e na fita do diagnóstico. Eles têm o mesmo risco sob esses ancestrais. Ocorrência em produção [não verificado]. (`diff_c1.patch`, `_feriado_vira_trabalho.html:5`, `_calendario_grade.html:127,135`, `detalhe.html:215`, `_drawer_generico.html:140`, `_drawer_diagnostico.html:35`)
+
+O smoke de **Excluir feriado** passa pelo `hxConfirm` do cadastro e verifica POST, exclusão e auditoria. Ele não mede proximidade. (`feriado_form.html:52`, `test_smoke_clique_excluir_feriado.py:54,110`)
+
+**c. Cabem duas curas, com o mesmo predicado.**
+
+- **Template/CSS, só no feriado:** botão `popovertarget` e formulário `popover` na camada superior, com âncora CSS e inversão de posição. Preserva os outros popovers. Exige adaptar a sonda do `summary`. Compatibilidade nos navegadores usados [não verificado]. (`_calendario_grade.html:131`, `_feriado_vira_trabalho.html:5`, `test_smoke_clique_feriado_vira_trabalho.py:228`)
+- **JS:** compensar a origem do painel medida em `left:0; top:0`. É a menor mudança para os deslocamentos observados. O painel continua sujeito ao recorte do ancestral, e uma mudança compartilhada alcança os demais popovers. (`popover-acao.js:44,53,75`, `_drawer_generico.html:3`)
+
+**d. Sim, 16 px é razoável para a abertura normal.** O JS prevê **2 px** abaixo ou acima do gatilho, com ajuste horizontal. O fallback que cola o painel no topo pode fugir desse limite. (`popover-acao.js:55,64,70`)
 
 ## 27/11 12:07 · sessao 914f194adfe1 · ORFAS-VOLTOU · sonda · origem=Code
 
@@ -1266,92 +1363,4 @@ ensaio_motor partido_he
 ensaio_motor partido_dobra
 ```
 
-## 27/11 11:15 · sessao 50281f6e60fe · RC-SEM-PROXIMA · verificador · origem=Code
-
-## REPROVADO
-
-### 1. MÉDIA — R1 curado na origem para remoção ou troca após a visita, com nova regressão de leitura
-
-`_obras_vivas` captura mtime com `fstat` e lê o texto pelo mesmo descritor. `sem_colher` extrai o `rc=` do texto já capturado. Nas sondas em memória, a c2 perdeu a saída após remoção e misturou `10:00` com `rc=7` após troca. A c3 preservou `10:00 rc=1` nos dois casos. `caso_leitura_removido` e `caso_leitura_trocado` exigem essa linha e rc `3`. Os mutantes `le-tarde-removido` e `le-tarde-trocado` reintroduzem a abertura tardia e caíram nas sondas. [bin/rc_sem_colher.py:90–100](/home/ronald/codex_ws/1e824c3f77f507fdc1a0ee18f7ac268e18d1b3d9/bin/rc_sem_colher.py:90), `bin/rc_sem_colher.py:103–116`, `bin/tests/test_rc_sem_colher.sh:152–156,179–183,212–218,349–350`.
-
-A c3 abre **todo** `.rc` regular antes de filtrar idade e escolher o mais novo. Na sonda, um `.rc` vencido com `PermissionError` derrubou a chamada inteira, enquanto a c2 listou o órfão válido. O mesmo ocorreu com um `.rc` colhido e ilegível que a c2 listava em `SEM PROXIMA`, classe que dispensa seu conteúdo. O selo cobre remoção e troca **após** a leitura e erro de diretório. Esses dois casos de erro de arquivo ficam descobertos. `c2:bin/rc_sem_colher.py:77–91,97–106,124–138`, `bin/rc_sem_colher.py:84–100,137–152,176–187`, `bin/tests/test_rc_sem_colher.sh:179–183,212–218,257–260,297`.
-
-### 2. MÉDIA — R2 curado na origem, com selo no juiz e lacuna no leitor
-
-O juiz imprime uma linha final opcional a partir de `len(colher)`, `len(proxima)` e `min_idade`, usando as próprias listas que acabou de emitir. `caso_resumo` exige uma linha de órfão, três de parada, um único resumo final, `min_idade` correto e ausência de resumo na chamada sem a flag. `caso_resumo_vazio` exige os dois zeros com rc `0`. Os mutantes `resumo-trocado`, `resumo-soma`, `resumo-sem-min-idade` e `resumo-mudo-no-zero` caíram nas sondas em memória. `bin/rc_sem_colher.py:156–187`, `bin/tests/test_rc_sem_colher.sh:228–240,353–356`.
-
-O `vercodex.diff` chama `--min-idade 900 --resumo` e incorpora ao cabeçalho a última linha `RESUMO ` tal como veio. O limite de 15 linhas e 120 caracteres vale para os detalhes. Confirmei com uma resposta simulada contendo uma linha de detalhe e resumo `7/21`. O leitor imprimiu `7/21`. Para rc `0` e `3`, imprime cabeçalho e detalhes. Para outro rc, imprime também a última linha do stderr, ou `(stderr vazio)`. Se faltar resumo, imprime `SEM RESUMO do juiz`, inclusive com rc `0` ou `3`. Esse bloco não propaga o rc do juiz. O selo do juiz continuaria verde se o vercodex perdesse as flags ou voltasse a contar linhas. `vercodex.py:165–176` no anexo `vercodex.diff`, `bin/tests/test_rc_sem_colher.sh:64,228–240,353–356`.
-
-### 3. ALTA — R3 corrige a colisão original, mas ainda lista com 10 segundos reais em DST
-
-A função gera um instante por dia civil, no dia do `.rc` e no seguinte, com `mktime(..., tm_isdst=-1)`. Aplica o piso inclusivo do início do minuto do `.rc` e o teto inclusivo de `agora`, e escolhe o maior instante restante. A listagem exige **mais de 900 s desde o fim** do minuto escolhido. `caso_dia_da_marca` passou de rc `3` na c2 para rc `0` vazio na c3. `caso_dia_da_marca_ontem` manteve rc `3` às `00:06:01`. Os mutantes `marca-mais-antiga` e `marca-sem-teto` caíram, respectivamente, nesses casos. `bin/rc_sem_colher.py:119–129,143–152`, `bin/tests/test_rc_sem_colher.sh:157–163,220–226,351–352`.
-
-- **Dois dias civis com menos de 24 h reais.** Em `America/New_York`, `.rc` em `07/03/2026 23:50`, marca real em `09/03 00:10:10` e `agora` às `00:10:20`. O `.rc` tinha `84.020 s` e passou pelo corte. O juiz inferiu `08/03 00:10` e o `main` retornou rc `3` após **10 s reais**. Um `.rc` com mais de `86.400 s` reais fica fora já na passagem pela árvore. [bin/rc_sem_colher.py:77–95](/home/ronald/codex_ws/1e824c3f77f507fdc1a0ee18f7ac268e18d1b3d9/bin/rc_sem_colher.py:77), `bin/rc_sem_colher.py:119–129,146–152`.
-- **Hora repetida e todas as marcas `None`.** Em processos novos com `America/New_York`, em `01/11/2026`, um `.rc` às `00:50` e uma marca às `01:10:10 -0500` deram listagem após **10 s**, porque a candidata foi `01:10 -0400`. Com `.rc` às `01:00 -0500` e a mesma marca, a primeira ocorrência caiu abaixo do piso e o dia seguinte passou do teto. A parada real de **20 min** sumiu das duas listas. É coerente deixar o prazo indeterminado quando faltam candidatas. Aqui faltou representar uma ocorrência válida, e `sem_colher` já excluiu a obra pela chave da marca. `bin/rc_sem_colher.py:106–115,119–129,141–151`.
-- **Virada comum e mtime futuro.** `.rc` às `23:50` e marca às `00:10` do dia seguinte funcionam. Se a marca entra perto do fim da janela de 24 h, o `.rc` pode vencer antes de o prazo amadurecer. A colisão das `23:50` também pode ocultar uma marca realmente antiga quando a candidata de hoje acaba de entrar no teto. Já um `rc_m` futuro pode ganhar a seleção: com piso futuro recebe `None`, e no mesmo minuto ainda fica aquém do prazo. `bin/rc_sem_colher.py:77–95,108–115,119–129,146–152`, `bin/tests/test_rc_sem_colher.sh:97–104,157–163`.
-
-### 4. BAIXA — O selo novo do resumo usa relógio de parede
-
-O instrumento lê `time.time()` uma vez no `main` e passa o mesmo `agora` à varredura e às duas classificações. `_cenario` injeta instantes fixos. Já `caso_resumo` e `caso_resumo_vazio` usam `_arvore_proxima`, que lê `date +%s`, e chamam o juiz, que consulta o relógio novamente. O caso misto faz três chamadas em instantes distintos. `bin/rc_sem_colher.py:173–179`, `bin/tests/test_rc_sem_colher.sh:64–82,122–131,167–170,228–240`.
-
-## Escritores, leitores e compatibilidade
-
-| Valor | Caminho |
-|---|---|
-| Tupla `(ob, d, rc_m, rc_p, rc_txt, outro)` | `_obras_vivas` monta e emite. `main` materializa uma vez. `sem_colher` usa os seis campos. `sem_proxima` usa os outros cinco e descarta `_txt`. Esses são os consumidores encontrados na cópia. `bin/rc_sem_colher.py:74–115,132–142,176–179`. |
-| `rc=` do `.rc` | `codex_pergunta.sh::_saida` grava o valor e publica por `mv`. `_obras_vivas` lê até 200 caracteres. `_rc_de` procura `rc=(\d+)`, depois o primeiro grupo de dígitos, ou devolve `?`. `sem_colher` entrega o valor a `main`, que imprime `rc=…`. `bin/codex_pergunta.sh:565–574`, `bin/rc_sem_colher.py:64–67,90–95,108–115,180–181`. |
-| `RESUMO` e rc do processo | `main` escreve o resumo quando solicitado. `--min-idade` filtra só `SEM COLHER`. O vercodex proposto lê a linha pronta. `ESPERA_UNICA` chama sem flags, deixa passar stdout, entra no laço com rc `0`, pula com `3` e termina com sucesso para ambos. O `find` final também pode imprimir caminhos. `espera_nega` examina o comando Bash. `bin/rc_sem_colher.py:108–115,166–187`, `bin/disjuntor.py:1963–1969,2157–2174`, `vercodex.py:165–174` no anexo. |
-
-**Saída sem `--resumo`, byte a byte:** a constante `ESPERA_UNICA` e os formatos das duas linhas ficaram iguais. A sonda mista comum deu stdout idêntico entre c2 e c3. A igualdade geral é falsa: no caso das `23:50`, a c2 emitiu `SEM PROXIMA` e pulou o laço, enquanto a c3 teve stdout vazio no juiz e entrou no laço. Confirmei esse desvio com o Bash da espera e dependências simuladas. `bin/disjuntor.py:1967–1969`, `c2:bin/rc_sem_colher.py:164–169`, `bin/rc_sem_colher.py:180–187`, `bin/tests/test_rc_sem_colher.sh:157–163,220–226`.
-
-**Esmeril final.** Contagem de `^\+.*except`: **0** no `diff.patch` e **0** no `vercodex.diff`. O `except Exception` é contexto. A classificação e as contas ficam no juiz. Dentro dele, o parser puro roda duas vezes sobre o mesmo texto e o predicado de folga aparece nas duas listas. As sondas foram em memória e `bash -n` passou. RED/GREEN integrais, `test_disjuntor.sh`, Ruff, instalação do vercodex e ocorrência desses cenários em produção ficam [nao verificado]. `bin/rc_sem_colher.py:48–61,106–115,135–150,173–187`, `bin/tests/test_rc_sem_colher.sh:35–37,297–314`, `vercodex.py:167–176` no anexo.
-
-## 27/11 11:11 · sessao c71da07a488e · E4C-F5-INSTANTE · verificador · origem=Code
-
-## APROVADO — ver3 do E4C-F5-INSTANTE
-
-A volta cura P3 na origem e fecha a lacuna de trava na auditoria pós-rollback. O teste multiempresa confirma a regra de estoque já presente na cura2. O item 6 continua fora desta volta. [materializacao.py:846](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:846) · [validacao.py:833](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:833) · [test_e4c_f5_c4_red.py:932](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:932) · [test_e4c_f5_c4_red.py:634](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:634)
-
-### Procedentes do ver2
-
-1. **MÉDIA · P3 curado na origem.** Os dois caminhos de veto passam `unica=True` pelo ponto comum `trilha_do_veto_k6`. O escritor procura uma linha com a mesma identidade e só insere se ela faltar. O RED original exige estado preservado e uma linha após duas validações. O RED fora de request repete o mesmo usuário e comando e exige uma linha, além de exigir uma linha distinta para outro comando. **M44** desliga a opção no chamador e **M46** a ignora no escritor. Ambos atingem a contagem do segundo RED. A cura evita novas duplicatas e reaproveita uma linha se já houver histórico igual. [materializacao.py:846](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:846) · [observ.py:138](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:138) · [test_e4c_f5_c4_red.py:1055](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1055) · [e4c_f5_c4red2_mutantes.py:757](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/e4c_f5_c4red2_mutantes.py:757)
-2. **MÉDIA · Pós-rollback curado na origem.** O novo `atomic` toma a mesma trava do dono pela porta existente e relê a pergunta antes de auditar. O RED força o veto tardio em duas tentativas, exige uma linha, confere a foto após o rollback e exige o dono registrado nas duas recusas. **M45** remove a aquisição. A mordida vem da asserção do sentinela, mesmo que a contagem ainda dê um em execução serial. O teste retira previamente os sentinelas da fixture e simula o momento da leitura do K6. Uma disputa real entre conexões nesse ramo fica **[nao verificado]**. [validacao.py:833](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:833) · [test_e4c_f5_c4_red.py:1087](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1087) · [test_f5_v3_guarda_sob_trava.py:28](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_f5_v3_guarda_sob_trava.py:28) · [e4c_f5_c4red2_mutantes.py:762](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/e4c_f5_c4red2_mutantes.py:762)
-3. **BAIXA · Multiempresa é controle.** A ordem do teste é Empresa A → dono A → Empresa B → dono B. A regra herdada já recusa B por vir depois do **primeiro** dono do lote. O teste exige a mensagem específica e as duas fotos intactas. **M40** continua ligado ao RED de uma Empresa e um dono. O controle multiempresa veio sem mutante próprio. [test_e4c_f5_c4_red.py:932](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:932) · [export.py:602](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/folha/export.py:602) · [e4c_f5_c4red2_mutantes.py:724](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/e4c_f5_c4red2_mutantes.py:724)
-4. **BAIXA · M16 conserva a mordida.** Cada passagem de materialização e passivo ganha seu savepoint revertido. As asserções ainda exigem uma trilha nova com fotos e motivo para cada metade. M16 apaga fotos e descrição e derruba a asserção de conteúdo nos quatro subcasos. O teste sem banco já substitui a função inteira de trilha e continua provando o encaminhamento de uma tentativa. [test_e4c_f5_c4_red.py:1017](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1017) · [test_e4c_f5_c4_red.py:1170](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1170) · [e4c_f5_c4red2_mutantes.py:254](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/e4c_f5_c4red2_mutantes.py:254) · [e4c_f5_c4red2_mutantes.py:475](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/e4c_f5_c4red2_mutantes.py:475) · [test_bug_par_sem_banco.py:153](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_bug_par_sem_banco.py:153)
-
-### Campos de `evento(unica=True)`
-
-`evento` escreve todos os campos pelo mesmo `create`. A consulta de duplicata lê os oito campos de uma cópia de `registro`. A tabela aponta quem fornece cada valor e onde a trilha é lida no recorte. [observ.py:138](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:138)
-
-| Campo | Quem fornece | Leitor da trilha |
-|---|---|---|
-| `acao` | `trilha_do_veto_k6` fornece `veto_competencia_do_fato`. [materializacao.py:858](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:858) | RED seleciona a ação. [test_e4c_f5_c4_red.py:1065](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1065) |
-| `modelo` | A trilha fornece `PerguntaDisputa`. [materializacao.py:858](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:858) | `_trilha` seleciona o modelo. [test_e4c_f5_c4_red.py:1014](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1014) |
-| `objeto_id` | A trilha passa `p.pk`. [materializacao.py:858](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:858) | `_trilha` seleciona o PK. [test_e4c_f5_c4_red.py:1014](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1014) |
-| `descricao` | A guarda produz o motivo e a trilha passa `texto[:500]`. [materializacao.py:826](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:826) · [materializacao.py:858](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:858) | `_ver_trilha` verifica o motivo e a tela o exibe. [test_e4c_f5_c4_red.py:1025](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1025) · [log_auditoria.html:73](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/templates/core/log_auditoria.html:73) |
-| `valor_antes` | A trilha monta a foto do texto e dos três instantes. [materializacao.py:854](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:854) | RED pós-rollback compara a foto. [test_e4c_f5_c4_red.py:1119](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1119) |
-| `valor_depois` | A trilha passa `dict(foto)`. [materializacao.py:859](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:859) | O mesmo RED exige igualdade com a foto anterior. [test_e4c_f5_c4_red.py:1119](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1119) |
-| `usuario` | `evento` usa o autor explícito com PK ou, se o argumento `ator` for `None`, o usuário autenticado da request. Sem autor resolvido com PK, grava nulo. [observ.py:113](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:113) | `_trilha` seleciona `self.admin` e a tela filtra pela FK. [test_e4c_f5_c4_red.py:1014](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1014) · [views.py:705](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/views.py:705) |
-| `ator` | `evento` grava `sistema:<comando>` quando reconhece o processo fora de request, inclusive com usuário explícito. Em request ou sem comando reconhecido, o campo fica nulo. [observ.py:22](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:22) · [observ.py:113](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:113) | O RED distingue os dois comandos pelo campo `ator`. [test_e4c_f5_c4_red.py:1081](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1081) |
-
-**Mesma autoria no filtro e no `create`, sim.** `usuario` e `ator` são resolvidos uma vez. Deixar `ip` fora da identidade é coerente com o veto por pergunta, motivo, fotos e autoria. Uma repetição por outro IP reutiliza a linha encontrada e conserva o IP dela. `unica` é opt-in e a trilha K6 é o único chamador que o ativa na cópia. Os demais, inclusive `evento_kw` e `registrar_log`, seguem direto ao `create` com os valores resolvidos. [observ.py:94](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:94) · [observ.py:113](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:113) · [observ.py:138](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:138) · [observ.py:157](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:157) · [auditoria.py:22](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/auditoria.py:22)
-
-**JSONField.** No Django fixado pela cópia, `create` com `None` simples numa `JSONField(null=True)` grava **SQL NULL**. `campo__isnull=True` casa esse valor. Um `null` dentro do dicionário continua sendo parte do JSON comparado por igualdade. A trilha K6 sempre passa dois dicionários, então seus REDs deixam o ramo de `None` no campo inteiro sem exercício. SQL efetivamente emitido **[nao verificado]**. [requirements.txt:13](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/requirements.txt:13) · [models.py:300](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/models.py:300) · [observ.py:143](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:143) · [materializacao.py:854](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:854)
-
-### Travas em todos os caminhos da trilha
-
-- **`validacao.py:242`, antes do carimbo.** A recusa de `:797` roda dentro do `atomic` que já chamou `travar_o_ato_do_plantio`. Essa função toma o dono pela `trava_na_ordem`. [validacao.py:242](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:242) · [validacao.py:755](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:755) · [validacao.py:795](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:795) · [materializacao.py:2223](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:2223)
-- **`validacao.py:242`, depois do rollback.** O rollback elimina a aquisição e o sentinela feitos naquele bloco. Uma trava já detida pelo `atomic` externo sobrevive, como pode ocorrer na validação em lote. O novo bloco usa a porta reentrante e relê a pergunta. Há precedente de `trava_na_ordem(colab_id)` só para proteger consulta de identidade e escrita em `lavrar`. [validacao.py:833](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:833) · [trava_do_colaborador.py:16](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/trava_do_colaborador.py:16) · [validacao.py:1172](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:1172) · [par_relampago_na_lista.py:116](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/ponto/services/par_relampago_na_lista.py:116)
-- **`materializacao.py:2004`.** O laço da disputa toma a trava antes da unidade. O passivo `reparar` toma a trava antes de `_trabalhar_o_par` → `_plantar_o_dia` → `_materializar_uma`. A validação chega à mesma unidade pela tentativa do par ou pela metade avulsa sob a trava de `:758`. A chamada recursiva para a irmã ocorre dentro do ato da principal, sob o mesmo dono. O RED do passivo chama `_plantar_o_dia` diretamente e prova conteúdo da trilha, enquanto a aquisição da trava no caminho de produção se verifica em `reparar`. [materializacao.py:2004](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:2004) · [materializacao.py:2301](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:2301) · [passivo_validado.py:393](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/passivo_validado.py:393) · [passivo_validado.py:491](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/passivo_validado.py:491) · [passivo_validado.py:585](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/passivo_validado.py:585) · [validacao.py:687](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:687) · [validacao.py:826](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:826) · [materializacao.py:1841](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:1841) · [test_e4c_f5_c4_red.py:1182](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1182)
-
-**Empresa antes do dono.** Nenhuma das duas entradas de `_recusa_da_entrega` exige a trava da Empresa. A primeira já tem o dono e chega com a decisão da guarda. A segunda toma só o dono e reutiliza o veto obtido antes do rollback. A exigência explícita de Empresa antes do dono pertence ao registro de **estoque**, que confere a ordem antes do K6. Assim, nos caminhos da recusa, a ausência da trava da Empresa é compatível com o contrato da trilha. A trava do dono serializa consulta e inserção da auditoria. O motivo do veto tardio continua sendo o da tentativa anterior ao rollback, enquanto a foto vem da releitura posterior. [validacao.py:237](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:237) · [validacao.py:795](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:795) · [validacao.py:833](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/validacao.py:833) · [models.py:4873](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:4873) · [models.py:4892](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:4892)
-
-### Esmeril
-
-5. **BAIXA · Semântica e autoria.** O parâmetro `ator` recebe o autor humano, enquanto a coluna `ator` identifica o processo. Essa diferença é herdada e o filtro usa as duas colunas já resolvidas. Também seguem herdados `data_evento` como dia do turno ou dia civil da conversa e `entrada_em` como instante de inserção do ato ou marco convencional do estoque. [observ.py:113](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:113) · [models.py:3086](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:3086) · [models.py:3097](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:3097) · [models.py:4402](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:4402)
-6. **BAIXA · Alcance dos selos.** M44 e M46 provam que a dedupe é usada. O RED fora de request varia o comando e mantém sempre o mesmo usuário, portanto a retirada isolada de `usuario` do filtro escaparia desse teste. M45 prova a presença da trava pelo registro transacional. M20 continua apontando para o RED já vermelho do item 6, onde o `post_save` e `DecisaoPergunta.registrar` chegam ao mesmo emissor. [test_e4c_f5_c4_red.py:1068](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1068) · [test_e4c_f5_c4_red.py:1106](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:1106) · [e4c_f5_c4red2_mutantes.py:489](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/e4c_f5_c4red2_mutantes.py:489) · [signals.py:253](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/signals.py:253) · [models.py:4791](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:4791)
-7. **BAIXA · Relógio, derivação, escritor e `except`.** O delta usa os instantes da pergunta na foto e o `criado_em` já definido no modelo. Os testes novos usam o congelamento da classe. Segue herdado `carimbar` chamar `pergunta_viva(self)` sem passar o relógio que resolveu, com possibilidade de `localdate()` no degrau da janela. K6 segue no juiz registrado. A identidade da trilha deriva do mesmo `registro` que alimenta o único `create`. No diff fornecido, **`^\+.*except` = 0**. A captura existente continua em `engolir`. [materializacao.py:854](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/services/materializacao.py:854) · [models.py:307](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/models.py:307) · [test_e4c_f5_c4_red.py:68](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/tests/test_e4c_f5_c4_red.py:68) · [models.py:3460](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:3460) · [models.py:3496](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/models.py:3496) · [juizes.py:642](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/chamados/juizes.py:642) · [juizes.py:350](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/juizes.py:350) · [observ.py:85](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:85) · [observ.py:138](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:138)
-
-O veredito é técnico, sobre o delta fornecido. A alteração em `core/observ.py` extrapola a lista dos briefs 3 e 3b anexados. O aval específico da 3c, a reprodução independente dos números da pista e a ocorrência em produção ficam **[nao verificado]**. [observ.py:94](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:94)
-
-_8650 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8652 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
