@@ -1,7 +1,367 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 19:40** · publicado em **27/11/2026 19:39** (UTC-3)
+> Ultima resposta processada: **27/11/2026 19:43** · publicado em **27/11/2026 19:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 19:43 · sessao 95e2e50649cb · FIM-DE-SEMANA-JA · leitura · origem=Code
+
+```python
+import logging
+from datetime import timedelta
+
+from django.conf import settings
+from django.db import connection
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+if getattr(settings, "HASNER_SOMBRA", False) is not True:
+    raise SystemExit("PAREI: HASNER_SOMBRA ausente")
+db = connection.settings_dict
+if (db["NAME"], db["HOST"]) != ("sombra", "sombra_db"):
+    raise SystemExit("PAREI: conexao fora da Sombra")
+if connection.in_atomic_block or not connection.get_autocommit():
+    raise SystemExit("PAREI: a sonda exige transacao propria")
+
+from django.contrib.auth.models import User
+
+from chamados.catalogo.motor import VIVOS
+from chamados.juizes import (
+    FIO_SEM_PORTA,
+    _dia_de_turno_da_pergunta,
+    competencia_do_chamado,
+    dia_do_fato,
+    pergunta_viva,
+)
+from chamados.models import ChamadoColaborador, DisputaSupervisao, PerguntaDisputa
+from chamados.reconciliador import (
+    _absolvido_pela_celula,
+    _chamados_de_turno_vivos,
+    _veredito_premissa,
+    eventos_pendentes,
+    retencao_da_retratacao,
+)
+from chamados.services.painel import qs_na_fila
+from colaboradores.models import Empresa
+from colaboradores.services.desligamento import esta_desligado
+from folha.fora_da_folha import _carga, _fio_da_porta, _porta, dias_que_seguram
+from folha.retrato_folha import _balde
+from ponto.janelas import janela_fechamento
+from ponto.services.lastro import com_lastro_sem_evento, julgar as julgar_lastro
+from ponto.supra_juiz import perguntas_que_seguram_csf
+
+EMPRESA_ID = 2
+MES, ANO = 11, 2026
+AGORA = timezone.now()
+HOJE = timezone.localdate(AGORA)
+
+OBRAS = {
+    "C1": "INVENTARIO-CLASSES-ACHADOS-1720",  # Atribuicao para triagem [nao verificado].
+    "C2": "JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO",  # Aval, item (2), e obras_donas.txt.
+    "C3": "RECONCILIAR-SEM-GATILHO",  # obras_donas.txt.
+    "C4": "JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO",  # Atribuicao para triagem [nao verificado].
+    "C5": "DESLIGADO-PORTA-DO-CHAMADO",  # obras_donas.txt.
+}
+
+
+def data_ou_traco(data):
+    return data.isoformat() if data is not None else "-"
+
+
+def id_ou_traco(pk):
+    return str(pk) if pk is not None else "-"
+
+
+def listar_c1(empresa, inicio, fim):
+    # Universo e motivo do TXT, dias e motivos do retentor, fio da tarefa.
+    # app/folha/export.py:774,1185
+    # app/folha/fora_da_folha.py:70,86,125,257
+    # app/folha/retrato_folha.py:89,186
+    universo = dias_que_seguram(empresa, MES, ANO, hoje=HOJE)
+    colabs_com_dias = [
+        universo["colabs"][cid]
+        for cid, (_, dias) in universo["dias"].items()
+        if dias
+    ]
+    carga = _carga(colabs_com_dias, inicio, fim, AGORA) if colabs_com_dias else None
+
+    for item in sorted(universo["itens"], key=lambda item: item["colaborador_id"]):
+        if _balde(item) != "bloqueado":
+            continue
+        cid = item["colaborador_id"]
+        motivo = item["motivo"]
+        if motivo != "furo_espelho":
+            for dia in item.get("dias_ferias_com_batida") or (None,):
+                if dia is None or inicio <= dia <= fim:
+                    yield cid, None, None, dia, None, f"motivo={motivo} aval=-"
+            continue
+
+        _, dias = universo["dias"][cid]
+        if not dias:
+            yield cid, None, None, None, None, "motivo=furo_espelho sem_dia aval=-"
+        for retencao in dias:
+            dia = retencao["data"]
+            if not inicio <= dia <= fim:
+                continue
+            porta = _porta(universo["colabs"][cid], dia, carga)
+            fio = _fio_da_porta(porta)
+            marcas = []
+            if fio in (FIO_SEM_PORTA, "nao_sei"):
+                marcas.append("fio_ninguem_nao_sei")
+            if retencao["veredito"] in ("discordante", "cobranca_indevida"):
+                marcas.append(retencao["veredito"])
+            fila = (porta or {}).get("fila") or ()
+            fio_exibido = "ninguem" if fio == FIO_SEM_PORTA else fio
+            detalhe = (
+                f"motivo={retencao['motivo']} fio={fio_exibido} "
+                f"aval={','.join(marcas) or '-'}"
+            )
+            yield cid, next(iter(fila), None), None, dia, None, detalhe
+
+
+def dia_da_pergunta(pergunta):
+    # C6 separa dia do turno de conversa. O degrau de disputa usa a celula
+    # para a pergunta legada sem data. app/chamados/juizes.py:58,339
+    dia = _dia_de_turno_da_pergunta(pergunta)
+    if dia is None and not pergunta.conversa and pergunta.celula_id:
+        return pergunta.celula.data
+    return dia
+
+
+def listar_c2(chamados, inicio, fim):
+    for ch, dia_chamado in chamados.values():
+        # A guarda do fechamento humano usa C6 no pos-estado.
+        # app/chamados/models.py:160,174,332,368
+        candidatas = {p.pk: (p, "ancora") for p in ch._vivas_ancoradas("fechado")}
+        # A conversa do pai pode barrar a reconciliacao, inclusive pelo destino.
+        # app/chamados/models.py:705,718 e app/ponto/supra_juiz.py:561
+        if not ch._gate_conversa_do_pai(registrar=False):
+            extras = PerguntaDisputa.objects.filter(
+                pk__in=perguntas_que_seguram_csf(ch)
+            ).select_related(
+                "disputa__colaborador", "chamado_destino", "celula"
+            ).prefetch_related("decisoes")
+            for p in extras:
+                candidatas.setdefault(p.pk, (p, "conversa_pai"))
+        if not candidatas:
+            continue
+
+        # So o recorte de exibicao da tela. O C6 ja decide a vida da pergunta.
+        # app/chamados/views.py:219,262,359,550
+        # app/chamados/services/acoes_chamado.py:345
+        # app/templates/chamados/detalhe_local.html:296
+        disputa_na_tela = None
+        if ch.ticket_id_glpi is None:
+            disputa_na_tela = ch.disputa_origem.filter(
+                fechada_em__isnull=True
+            ).values_list("pk", flat=True).first()
+
+        for pk in sorted(candidatas):
+            pergunta, guarda = candidatas[pk]
+            disputa = pergunta.disputa
+            if disputa.colaborador.empresa_id != EMPRESA_ID:
+                continue
+            if disputa.pk == disputa_na_tela or not pergunta_viva(pergunta, hoje=HOJE):
+                continue
+            dia = dia_da_pergunta(pergunta) or dia_chamado
+            if dia is None or inicio <= dia <= fim:
+                yield (
+                    ch.colaborador_id, ch.pk, disputa.pk, dia,
+                    timezone.localtime(disputa.aberta_em).date(),
+                    f"pergunta={pk} guarda={guarda}",
+                )
+
+
+def listar_c3(base, chamados, inicio, fim):
+    # Leitura seca da mesma decisao de reconciliar: app/chamados/models.py:661,677,683.
+    # Tres caminhos do consumidor: app/chamados/reconciliador.py:1518,1522,1533.
+    pendentes = list(eventos_pendentes().values_list("colaborador_id", "celula_id"))
+    colabs_com_evento = {cid for cid, _ in pendentes}
+    celulas_com_evento = {celula_id for _, celula_id in pendentes}
+    achados = {}
+
+    # Mesmo universo do vigia de premissa morta.
+    # app/chamados/management/commands/reconciliar_chamados.py:59
+    for ch, _ in chamados.values():
+        if ch.colaborador_id in colabs_com_evento:
+            continue
+        veredito = _veredito_premissa(ch)
+        if veredito is None or veredito.viva:
+            continue
+        if retencao_da_retratacao(ch) is None and ch.reconciliaria():
+            achados[ch.pk] = veredito.motivo
+
+    # Vigia da celula, com as guardas secas da porta de retratacao.
+    # app/chamados/reconciliador.py:440,558,1083,1140,1414
+    for ch in _chamados_de_turno_vivos().filter(pk__in=chamados):
+        if ch.pk in achados:
+            continue
+        absolvido = _absolvido_pela_celula(ch)
+        if absolvido is None:
+            continue
+        dia, celula = absolvido
+        if inicio <= dia <= fim and celula.pk not in celulas_com_evento:
+            if retencao_da_retratacao(ch) is None and ch.reconciliaria():
+                achados[ch.pk] = "celula_absolveu_sem_evento"
+
+    # O proprio vigia chama reconciliaria() em julgar_lastro.
+    # app/ponto/services/lastro.py:196,316,412
+    fila = qs_na_fila(_base=base.filter(pk__in=chamados), agora=AGORA)
+    for ch, _, dia in com_lastro_sem_evento(julgar_lastro(base=fila)):
+        if inicio <= dia <= fim:
+            achados.setdefault(ch.pk, "lastro_sem_evento")
+
+    for pk, motivo in sorted(achados.items()):
+        ch, dia = chamados[pk]
+        yield (
+            ch.colaborador_id, pk, None, dia,
+            timezone.localtime(ch.criado_em).date(), motivo,
+        )
+
+
+def listar_c4(inicio, fim):
+    # SEM-JUIZ para >30 dias civis. Consulta mais proxima usa aberta_em
+    # e fechada_em, com limiar de 7 dias.
+    # app/chamados/management/commands/auditar_disputas.py:132
+    # app/chamados/models.py:1930,1997
+    disputas = DisputaSupervisao.objects.filter(
+        colaborador__empresa_id=EMPRESA_ID,
+        fechada_em__isnull=True,
+        aberta_em__date__lt=HOJE - timedelta(days=30),
+    ).select_related("chamado__celula").prefetch_related("perguntas__celula").order_by("pk")
+
+    for disputa in disputas:
+        datas = {
+            dia for pergunta in disputa.perguntas.all()
+            if (dia := dia_da_pergunta(pergunta)) is not None
+        }
+        if not datas and disputa.chamado_id:
+            dia_chamado = dia_do_fato(disputa.chamado, fortes=True)
+            if dia_chamado is not None:
+                datas.add(dia_chamado)
+        na_competencia = [dia for dia in datas if inicio <= dia <= fim]
+        if datas and not na_competencia:
+            continue
+        desde = timezone.localtime(disputa.aberta_em).date()
+        yield (
+            disputa.colaborador_id, disputa.chamado_id, disputa.pk,
+            min(na_competencia, default=None), desde,
+            f"SEM-JUIZ idade_dias={(HOJE - desde).days}",
+        )
+
+
+def listar_c5(chamados):
+    # app/colaboradores/services/desligamento.py:23,191
+    for ch, dia in chamados.values():
+        if esta_desligado(ch.colaborador):
+            s89 = " s89=1" if ch.modulo_origem == "desligamento_revisao" else ""
+            yield (
+                ch.colaborador_id, ch.pk, None, dia,
+                timezone.localtime(ch.criado_em).date(),
+                f"estado={ch.status_local}{s89}",
+            )
+
+
+def colher():
+    with schema_context("juliani"):
+        # Transacao manual READ ONLY e rollback. Dentro de atomic(), ate a
+        # leitura seca adquire SELECT FOR UPDATE. app/chamados/models.py:761,773
+        connection.set_autocommit(False)
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+
+            # O leitor da tranca chega a get_user_sistema(), que tem caminho
+            # de criacao. Exigir a conta na mesma foto garante o caminho de
+            # leitura. app/chamados/juizes.py:1321 e app/core/utils.py:6
+            if not User.objects.filter(username="sistema").exists():
+                raise SystemExit("PAREI: usuario de sistema ausente na Sombra")
+
+            empresa = Empresa.objects.get(pk=EMPRESA_ID)
+            inicio, fim = janela_fechamento(MES, ANO, empresa)  # app/ponto/janelas.py:54
+            base = ChamadoColaborador.objects.filter(
+                colaborador__empresa_id=EMPRESA_ID,
+                status_local__in=VIVOS,
+            ).select_related("colaborador__empresa", "celula").order_by("pk")
+
+            chamados = {}
+            for ch in base:
+                competencia = competencia_do_chamado(ch)  # app/chamados/juizes.py:2536
+                dia = competencia.dia if competencia is not None else None
+                if dia is None or inicio <= dia <= fim:
+                    chamados[ch.pk] = (ch, dia)
+
+            return {
+                "C1": list(listar_c1(empresa, inicio, fim)),
+                "C2": list(listar_c2(chamados, inicio, fim)),
+                "C3": list(listar_c3(base, chamados, inicio, fim)),
+                "C4": list(listar_c4(inicio, fim)),
+                "C5": list(listar_c5(chamados)),
+            }
+        finally:
+            connection.rollback()
+            connection.set_autocommit(True)
+
+
+def medir():
+    fabrica_anterior = logging.getLogRecordFactory()
+
+    def log_da_sonda(*args, **kwargs):
+        registro = fabrica_anterior(*args, **kwargs)
+        erro = registro.exc_info[0] if registro.exc_info else None
+        if erro or registro.levelno >= logging.ERROR:
+            tipo = erro.__name__ if erro else "erro registrado"
+            raise SystemExit(
+                f"PAREI: {tipo} em {registro.filename}:{registro.lineno}"
+            )
+        # Impede que avisos do codigo chamado imprimam contexto livre ou
+        # escrevam nos handlers de arquivo. app/config/settings/saas.py:119
+        registro.levelno = logging.NOTSET - 1
+        return registro
+
+    # Alguns leitores registram a excecao e devolvem um valor conservador.
+    # Aqui a excecao registrada encerra a medicao. app/chamados/juizes.py:1577
+    # app/colaboradores/services/calendario.py:162 e app/core/observ.py:73
+    logging.setLogRecordFactory(log_da_sonda)
+    try:
+        return colher()
+    except Exception as erro:
+        ponto = erro.__traceback__
+        while ponto.tb_next is not None:
+            ponto = ponto.tb_next
+        arquivo = ponto.tb_frame.f_code.co_filename.rsplit("/", 1)[-1]
+        raise SystemExit(
+            f"PAREI: {type(erro).__name__} em {arquivo}:{ponto.tb_lineno}"
+        ) from None
+    finally:
+        logging.setLogRecordFactory(fabrica_anterior)
+
+
+print(f"S0|HOJE|{HOJE.isoformat()}")
+resultado = medir()
+for classe, itens in resultado.items():
+    for cid, chamado, disputa, dia, desde, detalhe in itens:
+        detalhe = " ".join(detalhe.replace("|", "/").split())
+        print(
+            f"S0|classe={classe}|colab=col{cid}|chamado={id_ou_traco(chamado)}"
+            f"|disputa={id_ou_traco(disputa)}|dia={data_ou_traco(dia)}"
+            f"|desde={data_ou_traco(desde)}|obra={OBRAS[classe]}|det={detalhe}"
+        )
+for classe, itens in resultado.items():
+    print(f"S0|TOTAL|classe={classe}|n={len(itens)}|colabs={len({item[0] for item in itens})}")
+print("S0|FIM")
+```
+
+| Classe | Função real | Universo e unidade de `n` | Obra dona | O que ainda pode dar falso positivo |
+|---|---|---|---|---|
+| C1 | `classificar_export` decide o TXT, `motivos_retencao_celula` devolve o motivo por dia e a tarefa publica o fio que `o_que_segura` lê. A aprovação usa a saída `travas_aprovacao` do mesmo juiz. `app/folha/export.py:774`, `app/folha/export.py:1185`, `app/folha/fora_da_folha.py:86`, `app/folha/fora_da_folha.py:257`, `app/ponto/views.py:1317` | Bloqueados do Retrato entre os fechamentos gravados da empresa 2 na competência. Uma linha por pessoa e dia retido, ou uma linha por pessoa quando a fonte só devolve o motivo. `aval=` identifica cada um dos três grupos pedidos. `app/folha/export.py:791`, `app/folha/retrato_folha.py:89`, `app/folha/retrato_folha.py:1197`, `app/folha/retrato_folha.py:178` | `INVENTARIO-CLASSES-ACHADOS-1720` para triagem [nao verificado] | O total inclui motivos operacionais como cadastro. Uma pessoa marcada também pode ter dias com ação humana disponível. `app/folha/export.py:881`, `app/folha/fora_da_folha.py:94` |
+| C2 | `pergunta_viva`, `_vivas_ancoradas` na guarda humana e `perguntas_que_seguram_csf` na guarda de conversa do pai. `app/chamados/juizes.py:911`, `app/chamados/models.py:174`, `app/chamados/models.py:332`, `app/chamados/models.py:718`, `app/ponto/supra_juiz.py:561` | Um par chamado vivo × pergunta bloqueadora viva. Para gestor, o detalhe local mostra as vivas da primeira disputa aberta cujo `chamado` é o próprio item. O detalhe GLPI renderiza a timeline. `app/chamados/services/acoes_chamado.py:345`, `app/templates/chamados/detalhe_local.html:296`, `app/chamados/views.py:262`, `app/templates/chamados/detalhe.html:69` | `JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO`. A fatia do dia mudado está em `PERGUNTA-VIVA-NAO-MORRE-NO-DIA-MUDADO`. `obras_donas.txt:3` | A guarda humana pode barrar enquanto a porta automática consegue reatar a pergunta. O fio de atendimento também pode mostrá-la sob o chamado-destino. `app/chamados/models.py:393`, `app/chamados/models.py:429`, `app/chamados/services/fio.py:97` |
+| C3 | `ChamadoColaborador.reconciliaria()` consulta a mesma decisão de `reconciliar()`. Os candidatos vêm dos vigias de premissa, célula e lastro. `app/chamados/models.py:661`, `app/chamados/models.py:677`, `app/chamados/management/commands/reconciliar_chamados.py:64`, `app/chamados/reconciliador.py:1414`, `app/ponto/services/lastro.py:412` | Um chamado vivo por PK, com premissa morta sem evento pendente do colaborador, absolvição sem evento da célula, ou lastro na fila fora do alcance do evento. `app/chamados/management/commands/reconciliar_chamados.py:59`, `app/chamados/reconciliador.py:1414`, `app/ponto/services/lastro.py:412` | `RECONCILIAR-SEM-GATILHO`. `obras_donas.txt:1` | A foto mede a fila atual. O histórico de chamadas do reconciliador está [nao verificado]. A cerca de competência entregue ainda pode vetar a retratação no ato. `app/chamados/reconciliador.py:558` |
+| C4 | **SEM-JUIZ** para o limiar solicitado. A auditoria mais próxima consulta `fechada_em` e `aberta_em` com corte de sete dias. `DisputaSupervisao.pode_fechar` julga o fechamento pela vida das perguntas e por resposta sem veredito. `app/chamados/management/commands/auditar_disputas.py:132`, `app/chamados/models.py:1997`, `app/chamados/models.py:2047` | Uma disputa aberta com mais de 30 dias civis desde `aberta_em`. Em disputa com vários dias, imprime o primeiro dia da competência. Usa o dia forte do chamado vinculado quando as perguntas carecem de dia. `app/chamados/models.py:1930`, `app/chamados/juizes.py:58`, `app/chamados/juizes.py:89`, `app/chamados/services/disputa_emissao.py:174` | `JUIZ-PERGUNTA-VIVA-MUDA-SEM-FATO` para triagem [nao verificado] | A disputa pode estar aguardando ação legítima. Uma reabertura conserva `aberta_em`, então a idade impressa é a da abertura original. `app/chamados/models.py:2047`, `app/chamados/models.py:2419`, `app/chamados/models.py:2443` |
+| C5 | `esta_desligado`, registrado como juiz do estado. `app/colaboradores/services/desligamento.py:23`, `app/core/juizes.py:283` | Um chamado em `VIVOS` por PK. O catálogo inclui `registrado`. A sonda identifica a revisão S89 com `s89=1`. `app/chamados/catalogo/motor.py:24`, `app/colaboradores/services/desligamento.py:191` | `DESLIGADO-PORTA-DO-CHAMADO`. `obras_donas.txt:4` | O S89 nasce para auditoria, e a guarda vigente pode conservar um chamado com pergunta viva aguardando veredito. `app/colaboradores/services/desligamento.py:168`, `app/colaboradores/services/desligamento.py:191` |
+
+A janela vem de `janela_fechamento`. Nos chamados, `competencia_do_chamado` escolhe o fato datado mais recente. Os vivos sem dia entram no recorte da empresa. Em C3 e C5, `desde` é a criação do chamado. Em C2 e C4, é a abertura da disputa. `colabs` contabiliza os PKs distintos nas linhas da classe. `app/ponto/janelas.py:54`, `app/chamados/juizes.py:2536`, `app/chamados/models.py:79`, `app/chamados/models.py:1930`
+
+O saldo dos 17 e dos 112, a inclusão de `col824` / chamado `23501` / disputa `5271`, a execução da sonda e a correspondência Git da cópia ao hash informado estão [nao verificado].
 
 ## 27/11 19:40 · sessao c85881a0f8bd · - · - · origem=Ronald (tmux)
 
@@ -462,60 +822,4 @@ A janela civil também fica fora da leitura dos totais mensais em `folha_manda`,
 | 6. Export 59-A | **Obra c4 (`6d568d221`).** A montagem e a homologação passaram a chamar `eventos_do_fechamento_da_competencia`, que lê a cláusula uma vez por chamada histórica. O selo conta ocorrências textuais no módulo e agora encontra uma. Reancorar `src` nos dois chamadores, seguindo a delegação, preserva as duas asserções e a leitura da cláusula. `folha/export.py:388–394,753,1026`, `folha/tests/test_export_59a.py:58–63`. |
 | 7. Smoke Chromium | **Infraestrutura.** O diff c1–c5 deixa intactos o smoke, as rotas, as views e os templates que renderizam lista e painel. O anexo registra o timeout de 120 s antes da asserção sobre o POST. `ponto/views_tipos_ausencia.py:37–48`, `ponto/tests/test_smoke_clique_tipo_ausencia.py:97–101,150–154`. A causa específica do timeout fica [nao verificado]. |
 
-## 27/11 17:28 · sessao 864f9e07d63c · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
-
-A volta c1 está aplicada na cópia. Os 15 REDs originais estão intactos. As fontes alteradas e os 11 mutantes compilaram em memória. Execução com banco, falha por asserção dos mutantes e certificação pelo Code e pelo Opus final seguem [nao verificado]. [RED original](chamados/tests/test_desligado_porta_do_chamado.py:123) · [Executor dos mutantes](chamados/tests/desligado_porta_do_chamado_mutantes.py:100)
-
-### Arquivos alterados
-
-- `colaboradores/services/desligamento.py` grava S89 no `LogAuditoria` com data, motivo, autor e instante. A cascata envia todas as disputas abertas à porta `desligamento` antes de encerrar os chamados. [Cascata e auditoria](colaboradores/services/desligamento.py:150)
-- `chamados/services/acoes_chamado.py` e `chamados/views_arquivar.py` passam às portas o `motivo_reabertura` do próprio POST e o autor. `chamados/views.py` e `templates/chamados/detalhe_local.html` oferecem o campo ao gestor autorizado e mostram ao DP a resposta preservada. [Troca de status](chamados/services/acoes_chamado.py:322) · [Desarquivar](chamados/views_arquivar.py:63) · [View](chamados/views.py:550) · [Template](templates/chamados/detalhe_local.html:374)
-- `auditar_invariantes_chamados.py` mede todo o universo `VIVOS`. A última entrada em estado vivo com motivo e autor identifica o estoque humano. O contador de recusas soma as trilhas dos dois verbos com `motivo='desligado'` e exclui o veto do dia. [Vigia](chamados/management/commands/auditar_invariantes_chamados.py:659)
-- `test_desligar_guards.py` atualiza as duas expectativas indicadas com referência ao aval. Os dois arquivos novos exercitam as bordas e aplicam os mutantes no import. [Guardas](colaboradores/tests/test_desligar_guards.py:73) · [REDs adicionais](chamados/tests/test_desligado_porta_do_chamado_bordas.py:11) · [Mutantes](chamados/tests/desligado_porta_do_chamado_mutantes.py:18)
-
-### Expectativa para os 15 REDs
-
-| Quantidade | Dependência |
-|---:|---|
-| 1 | **c1**. S89 vira histórico e o chamado antigo é preservado. [R6 S89](chamados/tests/test_desligado_porta_do_chamado.py:300) |
-| 8 | **c1 + integração**. Os três R4, o R5 de troca de status, as duas perguntas do R6 e os dois testes do vigia. [R4](chamados/tests/test_desligado_porta_do_chamado.py:206) · [R5](chamados/tests/test_desligado_porta_do_chamado.py:284) · [R6](chamados/tests/test_desligado_porta_do_chamado.py:353) · [Vigia](chamados/tests/test_desligado_porta_do_chamado.py:409) |
-| 6 | **`models.py`**. R1, os dois R2, R3, R5 com `humano=True` isolado e a releitura concorrente. [R1 a R3](chamados/tests/test_desligado_porta_do_chamado.py:123) · [R5 direto](chamados/tests/test_desligado_porta_do_chamado.py:270) · [Concorrência](chamados/tests/test_desligado_porta_do_chamado.py:391) |
-
-### Contrato para o outro construtor
-
-- **`PerguntaDisputa`** precisa de `VIA_DESLIGAMENTO: str = 'desligamento'`, em `VIAS` e `VIAS_QUE_VENCEM_A_RESPOSTA`, fora de `VIAS_FORA_DO_FATO`. A porta existente `DisputaSupervisao.fechar(..., motivo=FECHOU_DESLIGAMENTO)` deve carimbar mudas e respondidas sem veredito antes de gravar o fecho, preservando a resposta e a trilha de atos. O juiz existente `_pergunta_materializada_de_fato` precisa devolver `False` para essa via, inclusive em `escolha`. [Choices](chamados/models.py:2821) · [Porta](chamados/models.py:2055) · [Juiz](chamados/juizes.py:712)
-- **`ChamadoColaborador`** precisa de `transicionar(self, novo_status, user, *, motivo_reabertura: str = '')` e `reabrir(self, *, marcos=None, humano=False, motivo_reabertura: str = '', autor: User | None = None) -> bool`. A transição manual sinaliza recusa via `ValueError`, e `reabrir` devolve `False`. O motivo próprio e o autor identificado habilitam a exceção humana, sujeita às demais recusas, inclusive agrupamento. Em `estado_chamado`, gravar `valor_depois.motivo_reabertura` e atribuir `usuario` ao autor da reabertura. A proteção em `ressuscitar_perguntas()` precisa cobrir também a segunda chamada de desarquivar. [Transição](chamados/models.py:140) · [Trilha](chamados/models.py:304) · [Recusas](chamados/models.py:1384) · [Desarquivar](chamados/views_arquivar.py:81)
-- **Guardas das portas**. `criar`, `abrir` e a reabertura devem consultar `esta_desligado` com o cadastro relido sob trava. As trilhas `nascimento_recusado` e `reabertura_recusada` precisam de `valor_depois` com `motivo='desligado'`, `porta`, `colaborador` e `modulo_origem`, em JSON. [Abrir](chamados/models.py:899) · [Criar](chamados/models.py:1113) · [Reabrir](chamados/models.py:1428) · [Leitura do vigia](chamados/management/commands/auditar_invariantes_chamados.py:691)
-
-Há expectativas antigas fora das duas asserções autorizadas que entram em conflito com o aval. [C7](chamados/tests/test_c7_red_minimos.py:230) · [F1](chamados/tests/test_o261e_f1_porta_encerramento.py:346) · [E4B C12](chamados/tests/test_e4b_c12_orm.py:175)
-
-### Comandos para o Code
-
-[Settings de CI](config/settings/ci.py:6) · [Seleção do RED por mutante](chamados/tests/desligado_porta_do_chamado_mutantes.py:18)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
-  chamados.tests.test_desligado_porta_do_chamado \
-  chamados.tests.test_desligado_porta_do_chamado_bordas \
-  colaboradores.tests.test_desligar_guards \
-  --settings=config.settings.ci --noinput
-
-mutante() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B -m \
-    chamados.tests.desligado_porta_do_chamado_mutantes "$1"
-}
-
-mutante s89_sem_historico
-mutante s89_tenta_nascer
-mutante pula_respondida
-mutante detalhe_sem_motivo
-mutante arquivo_sem_motivo
-mutante detalhe_oculta_motivo
-mutante detalhe_oculta_resposta
-mutante vigia_so_cobranca
-mutante vigia_soma_humano
-mutante vigia_conta_veto
-mutante vigia_so_nascimento
-```
-
-_8763 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8764 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
