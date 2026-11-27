@@ -10939,6 +10939,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 22:41:34 disjuntor (NEGOU B1)** -- agente a4d908690c51839f9 -- Bash -- alvo sha1:1e324d18f2 (224 car., na trilha privada)
+
 **26/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **26/11 22:32:16 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:e7c7bfc9fe (317 car., na trilha privada)
@@ -13693,5 +13695,10 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 22:27 superado CODEX-CONSTROI-MOTOR 22 (22:22 suite c1 cancelada antes do container, pids da propria sessao; a c2 roda de novo)
 - 22:31 colhido PAR-PELO-TURNO 1 (22:23 volta c1v3: Ran 3310, 2 FAIL -- contract_no_batida_date em turnos.py, col129 dono BATIDA [] -- vao ao brief c1v4)
 - 22:31 colhido PAR-PELO-TURNO 0 (22:24 verif1 c1v3 Codex REPROVADO: dia por PK pela janela, C9 por reuso de instancia, C9 x L-084, testes financeiros sem mordida (CICLO_12X36), exportada 10 fora da guarda; HE so com janela desligada no cadastro)
+- 22:42 colhido CODEX-CONSTROI-MOTOR verif2/r.rc (22:34 verif2 Codex REPROVADO: tenants fora da cerca, mordida com qualquer SystemExit, :646 abreviado em 5 sitios; c3 58f0790eb cura os 3 + L-126 emendada; any() do misto descartado com motivo ao opus; verif3 e suite3 lancados 22:40)
+- 22:42 colhido ABONO-X-SAIDA-ANTECIPADA c1i/green2.log.rc (22:41 green2 da copia c1i sem commit: Ran 60, 8 FAIL todos 2a/2b e lista por instante, saida (0,0) -- a fixture de 2 periodos zera o dia no HEAD sem parcial, RED 2a/2b invalido; itens 1 e 7 verdes; zero vai ao Codex leitura, construtor depois do pouso do CCM)
+- 22:44 colhido O30-F3-CONSTRUIR suite_c17/suite.rc (22:40 suite de pouso c17 na pista: Ran 18148, FAILED 4 -- ruff B023 test_atestado_f3_contrato.py:667, catraca LINHAS_REGISTRADAS, ARQUITETURA.mmd x2; c17 nao pousa)
+- 22:44 O30-F3 c18: merge de 861789efb sobre o main 59600163c CONFLITA com o O30-LOTE-MINIMA no ar (rota atestados_lote em relatorios/urls.py, add/add atestados_lote.html): dois lotes = derivacao paralela. DESPACHO O30-F3-CONSTRUIR c18: comparar os dois lotes -> Codex leitura (logs/O30-F3-CONSTRUIR/c18/q.txt) | construir c18 (lote unico + 3 curas mecanicas) -> Codex construtor depois | verificar -> Codex + opus. Merge abortado na copia /home/ronald/wt-codex-o30f3-c18-224306.
+- 22:44 DESPACHO ABONO-X-SAIDA-ANTECIPADA c1j: por que o HEAD zera o dia de 2 periodos sem parcial -> Codex leitura (logs/ABONO-X-SAIDA-ANTECIPADA/c1j/q.txt) | construir c1j (fixture pela regra, criar_ausencia atomico, catraca, mutante item 6) -> Codex construtor DEPOIS do pouso do CCM (mexe no motor) | WIP c1i salvo em c1j/wip_c1i.patch; copia RED wt-c1i-red-220436 descartada (diff em c1i/copia_red/). Item 4 (grade civil, escala/utils.py::_marcar_ausencias) = PERGUNTA DE DESENHO do agente, a triar.
 - 22:31 PUXADA PAR-PELO-TURNO -> vaga 2 (c1v4, base 3ccd18cfa = main + c1v3, brief logs/PAR-PELO-TURNO/c1v4/brief.md)
 - 22:31 DESPACHO CODEX-CONSTROI-MOTOR c2: verif2 Codex (delta) -> vaga 1 | suite c2 -> pista job 1126222811_22c28ce8 (sha 22c28ce8e = c2 + main)
