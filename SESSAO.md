@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 16:37:02.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (223.5 MB). Acoes na janela: **1906**.
+**Medido em 27/11/2026 16:43:50.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (223.7 MB). Acoes na janela: **1916**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:43:48 | Bash | Limpa a cópia do FERIADO e lança a c5 no Codex | `W=/home/ronald/wt-codex-feriado-um-juiz-152427/app; docker run --rm -v $W:/w alpine sh -c 'rmdir /w/.hypothesis /w/logs /w/media /w/.mypy_cache /w/staticfiles /w/.ruff_cache' ; find $W -maxdepth 1 -type d -empty -user root \| wc -l cd ~/saas-hasner; Q=logs/FERIADO-UM-JUIZ/c5; mkdir -p $Q; cp logs/FERIADO-UM-JUIZ/ver4/r.md $Q/ver4_r.md; cp logs/AVAIS-1515/FERIADO-UM-JUIZ-2711-1210.txt logs/AVAIS-15 ...` |
+| 16:43:28 | Bash | Confere a cópia do FERIADO antes da c5 | `W=/home/ronald/wt-codex-feriado-um-juiz-152427; git -C $W status --porcelain --ignored \| head; git -C $W log --oneline -1 \| cut -c1-80; find $W -maxdepth 2 -type d -empty -user root` |
+| 16:43:20 | Bash | Lê o resto do ver4 e confere o achado 6 na cópia | `cd ~/saas-hasner; sed -n 30,51p logs/FERIADO-UM-JUIZ/ver4/r.md \| cut -c1-700; W=/home/ronald/wt-codex-feriado-um-juiz-152427/app; sed -n 418,432p $W/ponto/calculador/regras.py; sed -n 46,71p $W/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py` |
+| 16:43:12 | Bash | Lê a resposta do verificador ver4 do FERIADO | `cd ~/saas-hasner; wc -l logs/FERIADO-UM-JUIZ/ver4/r.md; head -c 5000 logs/FERIADO-UM-JUIZ/ver4/r.md` |
+| 16:43:08 | Bash | Lê a espera, os mutantes e o ver4 | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bk6lc9624.output; cd ~/saas-hasner/logs; for f in FERIADO-BOTAO-CORTADO/m12/*.r; do echo "$f $(cat $f)"; done; cat FERIADO-UM-JUIZ/ver4/r.rc 2>/dev/null` |
+| 16:38:37 | Bash | Escreve no topo do RELATO a linha ESPERANDO com o pid | `cd ~/saas-hasner; sed -i "11a ESPERANDO: bin/codex_pergunta.sh CODEX-CONSTROI-MOTOR P4 \| pid=3433107 -- CLEAR espera os vivos (corte VIGIA-CONGELA-2311-1810: PAREI ! CLEAR so com nada rodando); vivos $(date +%H:%M): agente opus CCM cura15, Codex P4, mutantes m12 do BOTAO (4 de 7), ver4 FERIADO" app/docs/RELATO.md; sed -n 12p app/docs/RELATO.md \| cut -c1-120` |
+| 16:38:32 | Bash | Lê o topo do RELATO e confere o pid do Codex do P4 | `cd ~/saas-hasner; sed -n 1,14p app/docs/RELATO.md \| cut -c1-160; ps -p 3433107 -o pid=,etime=` |
+| 16:38:27 | Bash | Lê a memória sobre o CLEAR com trabalho vivo | `cat ~/.claude/projects/-home-ronald-saas-hasner/memory/parei-clear-so-sem-vivo.md` |
+| 16:38:14 | Bash | Regera o handoff da sessão | `cd ~/saas-hasner; bash bin/handoff_sessao.sh >/dev/null 2>&1; echo rc=$?; wc -l app/docs/HANDOFF-SESSAO.md` |
+| 16:38:02 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 16:37:59 | Bash | Registra a colheita do CCM e os despachos | `cd ~/saas-hasner; H=$(date +%H:%M); cat >> app/docs/RELATO.md <<EOF - $H colhido CODEX-CONSTROI-MOTOR cura14 (agente opus, commit 0e0497a1c na wt-ccm-recusa-090424): 7 de 8 procedentes curados com RED na base e mutante (P1,P2,P3,P5 2/3,P6,P7,P8), 0 except; NAO pronto -- vizinho test_suite_uma_vez_por_arvore rc 2 por esta cura (contagem de texto x _carimba unico), fixture de test_rm_com_guarda sem  ...` |
+| 16:37:53 | SendMessage |  | `-` |
+| 16:37:26 | Bash | Refaz a cópia do P4 com o nome que o wrapper exige e relança | `cd ~/saas-hasner; git -C /home/ronald/wt-ccm-recusa-090424 worktree remove /home/ronald/wt-codex-ccm-p4-163705 && T=$(date +%H%M%S \| cut -c1-6); W=/home/ronald/wt-codex-codex-constroi-motor-$T; git -C /home/ronald/wt-ccm-recusa-090424 worktree add -q --detach $W 0e0497a1c && git -C $W log --oneline -1 \| cut -c1-12; Q=logs/CODEX-CONSTROI-MOTOR/p4; sed -i "s#/home/ronald/wt-codex-ccm-p4-163705#$W# ...` |
+| 16:37:05 | Bash | Lança o Codex construtor no P4 do CCM numa cópia própria | `cd ~/saas-hasner; T=$(date +%H%M%S); W=/home/ronald/wt-codex-ccm-p4-$T; git -C /home/ronald/wt-ccm-recusa-090424 worktree add -q --detach $W 0e0497a1c && git -C $W log --oneline -1; Q=logs/CODEX-CONSTROI-MOTOR/p4; mkdir -p $Q; cp logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md $Q/q.md; cat > $Q/lanca.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner; Q=$Q CODEX_OBRA=CODEX-CONSTROI-MOTOR CODEX_PA ...` |
 | 16:36:57 | Bash | Confere se o brief do P4 pede arquivo proibido ao Codex | `cd ~/saas-hasner; /bin/grep -nE 'models\|migrations\|motor_calculo\|juizes.py\|crons.py\|bin/' logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md \| head; head -15 logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md` |
 | 16:36:52 | Bash | Confere vagas Codex, o brief do P4 e a wt do CCM | `cd ~/saas-hasner; python3 bin/codex_vagas_estado.py 2>&1 \| tail -5; ls logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md; wc -l logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md; git -C /home/ronald/wt-ccm-recusa-090424 log --oneline -2; git -C /home/ronald/wt-ccm-recusa-090424 status --porcelain \| head` |
 | 16:35:14 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -1912,7 +1926,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:53:13 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b90w72z0g.output` |
 | 04:48:08 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 04:48:04 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/btwfn4mw8.output` |
-| 04:43:00 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 04:42:55 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bf69oxu3n.output` |
-| 04:37:49 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 04:37:45 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b7q4ag92m.output` |

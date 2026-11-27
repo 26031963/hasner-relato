@@ -1,7 +1,23 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 16:23** · publicado em **27/11/2026 16:23** (UTC-3)
+> Ultima resposta processada: **27/11/2026 16:43** · publicado em **27/11/2026 16:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 16:43 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
+
+A compensação agora precede a persistência, e o sucesso exige retorno zero de Git e deploy. O teste cobre separadamente os dois códigos de falha e os respectivos avisos. [core/esteira_vigia.py:1339] [core/tests/test_vigia_ccm.py:189] [nao verificado]
+
+A gravação do estado ainda precede os avisos. Se ela lançar `OSError`, a compensação terá sido tentada, mas Pauta e RELATO podem ficar sem registro. [core/esteira_vigia.py:823] [core/esteira_vigia.py:1347]
+
+## 27/11 16:42 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
+
+O pré-verificador confirmou por AST 25 `ExceptHandler` na base e na cura, um único argv do CCM e a leitura de relógio já existente. A guarda prévia retorna antes de Git, deploy e gravação. [core/esteira_vigia.py:749] [core/esteira_vigia.py:1304] [core/esteira_vigia.py:1322] [nao verificado]
+
+`deve_reverter` lê `ultimo_revert` para aplicar o teto. A recusa prévia preserva o valor carregado. Quando a tentativa chega ao reteste, `passada` pode sobrescrever o carimbo novo ao regravar o estado lido antes de chamar `auto_revert`. [core/esteira_vigia.py:1076] [core/esteira_vigia.py:1338] [core/esteira_vigia.py:1542] [core/esteira_vigia.py:1630] [core/esteira_vigia.py:1651]
+
+Na recusa tardia, uma falha na gravação do estado pode impedir o rollback. Os retornos do Git e do deploy compensatórios ficam sem conferência, permitindo anunciar `revert desfeito` se um dos comandos falhar. [core/esteira_vigia.py:823] [core/esteira_vigia.py:1339] [core/esteira_vigia.py:1341] [nao verificado]
+
+O diff cobre os efeitos pedidos nos três selos. A execução na Pista e a mordida dinâmica seguem [nao verificado]. [core/tests/test_vigia_ccm.py:144] [core/tests/test_vigia_ccm.py:160] [core/tests/test_vigia_ccm.py:170]
 
 ## 27/11 16:23 · sessao df030164fcae · FERIADO-BOTAO-CORTADO · construtor · origem=Code
 
@@ -936,32 +952,4 @@ mutante "$fol13" '        self.assertEqual(primeiro.content, segundo.content)' \
   $'        segundo.content += b\'\\n\'\n        self.assertEqual(primeiro.content, segundo.content)'
 ```
 
-## 27/11 15:10 · sessao 2e975728d169 · - · - · origem=Ronald (tmux)
-
-Auditei os 40 itens de `RETRATO-DOIS-RELOGIOS` a `O320` e mais 22 de `EMPRESA-ID-ISDIGIT` ao fim do anexo. Enviei as linhas e os ajustes de consolidação ao agente principal. A cópia já tem o caminho da saída tardia de `O232` e a correção de pontualidade de `O73b`. [app/escala/utils.py:1999] [app/escala/tests/test_saida_valida_cross_meia_noite.py:80] [app/ponto/motor_calculo_v2.py:2822]
-
-Estado de produção e identificação Git da cópia [nao verificado].
-
-## 27/11 15:09 · sessao f553e73e9590 · - · - · origem=Ronald (tmux)
-
-O HEAD de `/home/ronald/saas-hasner` é `59600163ccc9cffb8f3ae148beede7cd7866ae86`. Os arquivos A/B e os dois envelopes na cópia de leitura coincidem byte a byte com os blobs do commit. A resolução do hash pelo wrapper está em `bin/codex_pergunta.sh:116`.
-
-**A.** Para cada `Empresa.objects.get(pk=eid)`, chame `folha.porta_export.medir(empresa, 11, 2026)`. A janela vem de `janela_fechamento(11, 2026, empresa)`, cujo resultado com corte 21 é `21/10/2026–20/11/2026`. O marco pode ser lido com `marco_da_competencia(eid, 11, 2026)`. `app/folha/porta_export.py:319`, `app/folha/porta_export.py:343`, `app/ponto/janelas.py:10`, `app/ponto/janelas.py:54`, `app/ponto/services/fechamento.py:1577`.
-
-| Par | Função e resultado |
-|---|---|
-| Tela × PDF | `medir` compara `espelho_do_colab(c, hoje, ini, fim, agora=instante)` com `_coletar_dados_espelho_mes(c, 11, 2026, agora=instante)`. Chave `tela_x_pdf`. `app/folha/porta_export.py:482`, `app/folha/porta_export.py:502`, `app/folha/porta_export.py:699`. |
-| Cartão × TXT | `medir` chama `cartao_x_txt_divergentes`. O comando mede todas as empresas ativas e chama `relatorios.cartao_pela_celula.divergencia(colab, 11, 2026, resumo)`. Para contagem por empresa, rode o comando com `ids=True` e `agora` ISO fixo, capture a saída em `StringIO` e associe os IDs `colN` à empresa pelo ORM. `app/folha/porta_export.py:670`, `app/folha/porta_export.py:732`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:20`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:51`, `app/relatorios/management/commands/cartao_x_txt_divergentes.py:68`, `app/relatorios/cartao_pela_celula.py:216`. |
-| Espelho × DiaPago | `dias_fora_do_dia_pago(colab, 11, 2026, ini, fim, versao='motor', dp_por_dia=None)`, chamada por `medir`; chaves `espelho_x_dia_pago` e `espelho_x_dia_pago_nao_medido`. `app/folha/porta_export.py:26`, `app/folha/porta_export.py:603`, `app/folha/porta_export.py:703`. |
-| Fechamento × soma do DiaPago | `_medir_dia_pago(c, fech, badge=None)`, interna a `medir`, usa `soma_da_competencia(c, 11, 2026, versao='motor')`. Chaves `fechamento_x_soma_dias_pagos` e `colabs_sem_lavratura`. `app/folha/porta_export.py:384`, `app/folha/porta_export.py:457`, `app/folha/porta_export.py:664`, `app/ponto/services/dia_pago.py:550`. |
-| Topo × soma das linhas | `medir` compara `total_relogio` com a soma de `minutos_realizados` dos dias dentro da janela, chave `topo_x_coluna`. `app/folha/porta_export.py:515`, `app/folha/porta_export.py:699`. |
-| App × tela | `AppLeATelaTest.test_MORDE_o_endpoint_nao_remonta_a_palavra_do_dia()` e `test_MORDE_o_endpoint_LE_o_espelho()` verificam a AST de `api_espelho_v2` para todos os recortes. `app/api/tests/test_r4_par6_app_le_a_tela.py:53`, `app/api/views.py:1361`. |
-| Linhas × badge | `linha_x_badge(colab, 11, 2026, badge, soma=None)` usa o `resumo` do espelho e a soma das linhas. Chaves `linha_x_badge_divergentes`, `linha_x_badge_na_exportada` e `linha_x_badge_nao_medido`. `app/folha/porta_export.py:258`, `app/folha/porta_export.py:449`, `app/folha/porta_export.py:717`. |
-
-`calendario_x_espelho` é uma chave de compatibilidade vazia, pois a pergunta foi incorporada a `espelho_x_dia_pago`. O selo CLI chama `vigiar_abertos`, `assumir` e `concluir`. `concluir` chama `lavrar`, que persiste `MetricaSnapshot` em `update_or_create`. A sonda usa apenas `medir` e os leitores. `app/folha/porta_export.py:608`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:76`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:197`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:219`, `app/folha/porta_export.py:785`, `app/folha/porta_export.py:1279`.
-
-**B.** R5 so com escrita: fica fora (proibido medida nova). O script está fixado na comp 10. Executa duas passadas de `processar_cartorio(apply=True)` e `recalcular_fechamento_mes()`, com critério `foto3 == foto2`. O cartório carimba `CelulaDia` e pode emitir chamados. O recálculo grava `FechamentoMensal`. O dry do cartório omite `--apply` e lê a fila histórica `data < hoje`. O recálculo dispõe de `somente_leitura=True, lavrar_dias_pagos=False`. Os dois modos de leitura preservam o estado da primeira passagem e, por isso, não verificam o critério do R5. `bin/r5_idempotencia_frota.sh:24`, `bin/r5_idempotencia_frota.py:26`, `bin/r5_idempotencia_frota.py:104`, `bin/r5_idempotencia_frota.py:124`, `app/ponto/management/commands/processar_cartorio.py:25`, `app/ponto/management/commands/processar_cartorio.py:49`, `app/ponto/services/cartorio.py:1122`, `app/ponto/services/cartorio.py:1883`, `app/ponto/services/cartorio.py:1905`, `app/ponto/services/fechamento.py:468`, `app/ponto/services/fechamento.py:1168`, `app/ponto/services/fechamento.py:1215`.
-
-**F.** O wrapper chama um executável por `CODEX_SONDA_ENVELOPE`, com o caminho da sonda como único argumento. O executável existente `/home/ronald/saas-hasner/logs/FILA-CODEX-1811/sondas/envelope_sombra.sh:3` usa `exec` com `--sombra` e preserva o RC. `SONDA_ARVORE=<cópia conferida>/app` fixa os blobs montados. O Python deve capturar somente a exceção sentinela de rollback, fora do `atomic()`, pois RC diferente de zero faz o wrapper rejeitar a saída. O envelope faz escritas administrativas de role/GRANT e de arquivos durante a preparação. Eu apenas li o código. `bin/codex_pergunta.sh:627`, `bin/sonda_leitura.sh:66`, `bin/sonda_leitura.sh:126`, `bin/sonda_leitura.sh:140`, `bin/sonda_leitura.sh:157`, `bin/sonda_leitura.sh:232`, `bin/sonda_leitura.sh:239`.
-
-_8727 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8729 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
