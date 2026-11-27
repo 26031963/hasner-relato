@@ -10966,6 +10966,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 11:11:50 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:fb685dcfc7 (211 car., na trilha privada)
+
 **27/11 10:14:28 disjuntor (NEGOU MODELO)** -- agente principal -- Agent claude -- alvo sha1:eeace05a92 (34 car., na trilha privada)
 
 **27/11 09:47:34 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:efad1bf53b (39 car., na trilha privada)
@@ -14276,3 +14278,25 @@ LEI-AKITA: origem=porta do botao (retratar_humano.retratar -> registro_batida.re
 - 10:58 colhido RC-SEM-PROXIMA c2/ver/r.rc (10:55 rc 0): REPROVADO -- R1 _rc_txt le o .rc depois da passagem (rc_sem_colher.py:55-59,106; conferido), R2 contagem por classe no vercodex sem RED (vai ao juiz: --resumo), R3 prazo de 15 min pela data inferida (_instante_da_marca :110-118; conferido); descartados preexistentes da c1 (chave sem dia, TMPDIR, date +%s) a lista do que falta. DESPACHO c3 -> opus construtor (vaga pelo SO-DOIS-ALIVIOS-v2), pedido logs/RC-SEM-PROXIMA/c3/pedido.md.
 - 11:03 colhido E4C-F5-INSTANTE cura3c/g3.rc (11:02 rc 1): pista job 1127105626_8ea46953, Ran 578, FAILED 1 = so o RED do item 6 (test_RED_uma_resposta_publica_emite_uma_vez_para_a_celula, vermelho de proposito, PERGUNTA DE DESENHO); os demais verdes, inclusive os REDs novos do item 13 e core.tests de trilha. Mutantes seguem -> cura3c/mut.rc.
 - 11:05 colhido ORFAS-VOLTOU l2/r.rc (11:04 rc 0): autopsia A1-A4 por leitura com arquivo:linha (reate ramo (a) exige historico resolvido/fechado com contexto_json.data_turno = dia -- FK para a celula nao basta, reconciliador.py:1711-1779; S128 so carimba por chamado_destino=chamado mais ancora e fecho sem credor, disputa_emissao.py:2030-2193; celula indefinida pode seguir por cadastro/cobertura, cartorio.py:1418-1516). Vigia lido no log, nao recalculado: reconciliador.log 11:00 'orfas reataveis' 3735 (MEDIDA, fora da soma do alarme, rc nunca 2 por ele); invariantes.log 07:23 I8 VIOL 3181 (sem contribuir ao rc 2); perguntas_orfas.log 06:36 sem_evento=0 -- o alarme NAO vai a lugar nenhum: numero publicado em stdout, sem leitor. DESPACHO l2 sonda -> Codex --sonda (logs/ORFAS-VOLTOU/l2/r2.rc).
+- 11:06 colhido E4C-F5-INSTANTE cura3c/mut.rc (11:04 rc 1): pista job 1127110252_8ea46953, 46 mutantes, 45 mordem (M44/M45/M46 inclusive); FAIL so M20EmissaoDupla, que alveja o RED do item 6 ja vermelho (igual a cura2). DESPACHO ver3 -> Codex verificador (delta ad10296c4..8ea46953e) logs/E4C-F5-INSTANTE/ver3/r.rc.
+
+### ORFAS-VOLTOU v2 -- autopsia e classes (11:10, aval ORFAS-VOLTOU-v2-2711-1050)
+LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_reatavies/lavra do cartorio pela funcao real (sonda leitura, REPEATABLE READ READ ONLY), RED=n/a, quem-mais-le=reconciliador.log/invariantes.log, juizes novos=0, padrao=n/a (medida)
+- colhido ORFAS-VOLTOU l2/r2.rc (11:09 rc 0). Prova: sonda pelo envelope, `FIM 1895 1895` (classes somam o universo, 0 erro); resposta logs/ORFAS-VOLTOU/l2/r2.md; amostra conferida pela sessao: reconciliador.py:1778-1779 (`len(hist) != 1 -> False`), supra_juiz.py:39/351 (PREVISTO_COM_DIA_INDEFINIDO = defeito de CADASTRO).
+- Universo hoje: 1895 perguntas / 184 colabs / 658 celulas (481 com chamado, 177 sem); indefinida 347, furo 175, nunca_bateu 51, outros 85. Aval mediu 1890/183/657: +5 perguntas = estoque andou entre as duas leituras (causa [nao verificado], sem PK da diferenca).
+- Classes (103 da sonda, agrupadas por PORTA, somam 1895):
+  - 1176 reate (a) com celula indefinida -> lavra do cartorio; dado -> lista do admin (L-099, dono CADASTRO/BATIDA).
+  - 212 vivas fora do reate -> retratacao pela celula (cartorio) quando absolver; senao lista do admin.
+  - 189 reate (a) historico vazio, c1 recusa -> c2 (chave/protestos/vetos) ou fecho pela lampada (orfao_14h, saida_sem_entrada).
+  - 149 reate (a) veto NUNCA_BATEU -> lista do admin, entrada C5.
+  - 140 reate (a) historico esvaziado pelo C6 -> c2 ou fecho pela lampada.
+  - 11 sem FK de celula + 1 (classe 79) -> nenhuma porta automatica demonstrada: candidata ESTRUTURA.
+  - 8 reate (b) destino vivo -> reapontar_resolvedora (fio.py:1040-1073).
+  - 5 disputa fechada com pergunta viva -> nenhuma porta automatica: candidata ESTRUTURA.
+  - 2 C6 morta e celula concorde -> retratar_perguntas_absolvidas_por_celula; 2 veto FOLGA -> evento da lavra.
+- Caso do BO (colab pk 502, celulas 123535/541/547/553): as 16 perguntas foram auditadas 0,2 a 8 h DEPOIS do resolvido_em do chamado do dia (36329/37532/38788/39854). Reate: ramo (a), historico esvaziado pelo C6 (pergunta viva), c1 recusa (intervalo pelo motivo; saida/orfao pelo C6), c2 so ve protesto PREVISTO_COM_DIA_INDEFINIDO, fora de PROTESTOS_QUE_COBRAM -> False em reconciliador.py:1779. S128: sem chamado_destino; fecho sem credor pula viva pelo C6. Celula indefinida porque o suprajuiz lavra PREVISTO_COM_DIA_INDEFINIDO (sem vinculo/ancora do dia) = CADASTRO: resolver o chamado nao cura a premissa.
+- PORTA DO CASO LITERAL: CADASTRO do dia (escala/vinculo dos 4 dias) pela lista do admin; depois disso a lavra do cartorio rejulga a celula e o reate/C6 fecham as perguntas. Escrever escala/vinculo e `!` (PARADA item 2) e cura por codigo e PROIBIDA (L-099): nada foi escrito em prod.
+- Vigia (lido, nao recalculado): reconciliador.log 11:00 'orfas reataveis' 3735 (MEDIDA fora da soma do ALARME, reconciliar_chamados.py:115-124); invariantes.log 07:23 I8 VIOL 3181 sem contribuir ao rc; colab 502 = 38 reataveis pela funcao real. O alarme nao vai a ninguem: o numero sai so no log.
+- INCOMPLETO: (i) 17 perguntas sem porta automatica (5 disputa fechada, 12 sem FK) -> candidatas ESTRUTURA, linha de fila; (ii) dono L-099 por linha nao medido (e6_oraculo.py::dono_da_divergencia nao rodou na sonda); (iii) a medida das 1895 sem leitor de alarme -> fila; (iv) caso literal espera o cadastro dos 4 dias (admin/Ronald).
+- 11:10 colhido RC-SEM-PROXIMA c3 (agente opus, 1e824c3f7 na wt-rc-sem-proxima-092448): R1 conteudo do .rc pelo mesmo descritor do mtime, R2 --resumo contado pelo juiz, R3 marca na ocorrencia mais recente <= agora; selo green.log rc 0 (mutantes caem), disjuntor OK, ruff OK, except 0 (conferido no diff). DESPACHO ver3 -> Codex verificador logs/RC-SEM-PROXIMA/ver3/r.rc.
+- 11:11 colhido ORFAS-VOLTOU l2/r2.rc (11:09 rc 0): autopsia e classes na secao acima (FIM 1895 1895).
