@@ -1,7 +1,289 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 19:43** · publicado em **27/11/2026 19:46** (UTC-3)
+> Ultima resposta processada: **27/11/2026 19:53** · publicado em **27/11/2026 19:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 19:53 · sessao 8a3bae80d8c7 · - · - · origem=Ronald (tmux)
+
+**C3: 0 é o total relatado no enunciado [nao verificado].** A causa do zero e a identidade dos 112 também ficam [nao verificado]. A sonda descarta candidatos por evento, retenção e fechamento, mas só emite aprovados. O vigia da premissa conserva um contador separado de recusados e retidos. `app/chamados/management/commands/reconciliar_chamados.py:62`, `app/chamados/management/commands/reconciliar_chamados.py:76`, `app/chamados/management/commands/reconciliar_chamados.py:107`.
+
+**Consulta de inventário proposta.** No universo `VIVOS` da empresa e janela da sonda, fazer união por PK de chamado de três leituras antes dos descartes:
+
+- `_veredito_premissa(ch)` com veredito morto. Registrar o fato coletado, módulo, subcategoria e motivo. `app/chamados/reconciliador.py:248`.
+- `_absolvido_pela_celula(ch)` no universo de `_chamados_de_turno_vivos()`. Registrar dia e célula. `absolvidos_sem_evento()` serve de comparação, pois exclui pendente pela célula, sem aplicar as guardas da sonda. `app/chamados/reconciliador.py:1140`, `app/chamados/reconciliador.py:1344`, `app/chamados/reconciliador.py:1414`.
+- Uniões dos baldes `com_lastro` e `retido_pelo_fechamento` de `julgar`, anotando todos os marcos acesos versus lastro por tolerância sem lâmpada. A comparação deve expor que `qs_na_fila` deixa fora `registrado` e silenciado. `app/ponto/services/lastro.py:239`, `app/ponto/services/lastro.py:249`, `app/ponto/services/lastro.py:288`, `app/ponto/services/lastro.py:316`, `app/chamados/services/painel.py:188`.
+
+Por linha, projetar PK/colab/dia, todos os motivos, retenção, primeira guarda que impede fechar e evento pendente por colab e por célula ou dia, com idade, tentativas e erro. Um evento de outro dia **pode cobrir o caso**, pois o consumidor agrupa por colab e chama os três leitores do colaborador inteiro. Pode também atrasar/falhar e não fecha lastro por tolerância sem lâmpada. `app/chamados/reconciliador.py:1389`, `app/chamados/reconciliador.py:1493`, `app/chamados/reconciliador.py:1518`, `app/chamados/reconciliador.py:1522`, `app/chamados/reconciliador.py:1533`, `app/chamados/reconciliador.py:1547`, `app/ponto/services/lastro.py:394`, `app/ponto/services/lastro.py:412`. `reconciliaria()` espelha a decisão seca da transição de sistema. A retratação completa também pode recusar pela cerca de competência entregue. `app/chamados/models.py:677`, `app/chamados/models.py:691`, `app/chamados/reconciliador.py:588`.
+
+- **HASNER condicional** nos aptos por premissa morta, célula que absolveu ou lastro sem cobertura efetiva, incluindo tolerância sem lâmpada, e nas recusas que escondem o motivo ou deixam a pergunta sem ação alcançável. Linhas/colabs [nao verificado]. `app/chamados/management/commands/reconciliar_chamados.py:19`, `app/chamados/reconciliador.py:1140`, `app/ponto/services/lastro.py:412`, `app/chamados/models.py:429`.
+- **PRODUÇÃO condicional** quando a resposta de irmã ou a conversa ainda exige decisão humana e o gestor alcança **Validar** ou **Rejeitar**. Contagem [nao verificado]. `app/chamados/reconciliador.py:440`, `app/chamados/models.py:718`, `app/templates/chamados/partials/_pergunta_card.html:100`, `app/templates/chamados/partials/_pergunta_card.html:117`, `app/chamados/views.py:483`, `app/chamados/views.py:506`. Evento pendente que cobre candidato é fila do sistema. Premissa de folha ainda viva exige leitura do caso pela autoridade do dia antes de chamar de BO. `app/chamados/reconciliador.py:1518`, `app/chamados/models.py:828`.
+
+**Fatia mínima de medição** proposta para `RECONCILIAR-SEM-GATILHO`, com mão dupla, no leitor `app/chamados/management/commands/reconciliar_chamados.py:62`. RED com um candidato e pendente de outro dia e outro candidato com guarda humana exige ambos no inventário, nenhum falso alarme de falta de gatilho e nenhuma escrita. Os selos existentes verificam alarme e retenção em `app/chamados/tests/test_jv3_reconciliar_vira_vigia.py:194` e `app/chamados/tests/test_jv3_reconciliar_vira_vigia.py:212`.
+
+**Fatia de correção condicional** pela mesma obra se o inventário confirmar ausência de produtor. Emitir pela porta existente no ato que mata a premissa. Para óbito só pelo relógio, a extensão mínima candidata é o produtor de prazo hoje limitado à decisão de HE, com exceção de mão por tocar ponto/célula. RED vence prazo sem batida nova, produz evento e fecha só o apto, com segunda passagem idempotente. `app/ponto/services/vigia_de_hora.py:87`, `app/ponto/services/vigia_de_hora.py:113`, `app/ponto/portas/celula.py:981`, `app/chamados/reconciliador.py:1522`. Para lastro por tolerância, o teste existente mostra que o evento por si já é insuficiente, então o fechamento segue condicionado à prova da célula. `app/ponto/tests/test_lastro_parte2_fecho_no_evento.py:234`, `app/ponto/services/lastro.py:394`.
+
+## 27/11 19:47 · sessao de9bb18c8ace · FIM-DE-SEMANA-JA · leitura · origem=Code
+
+```python
+import logging
+import sys
+from copy import copy
+from datetime import datetime, time, timedelta
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+# modelo_sonda_S1.py, guardas de topo. app/config/settings/sombra.py:47–60.
+if getattr(settings, "HASNER_SOMBRA", False) is not True:
+    raise SystemExit(1)
+db = connection.settings_dict
+if (db["NAME"], db["HOST"]) != ("sombra", "sombra_db"):
+    raise SystemExit(1)
+if connection.in_atomic_block or not connection.get_autocommit():
+    raise SystemExit(1)
+
+from colaboradores.models import Empresa
+from escala.alimentacao import celulas_do_periodo, escalas_do_periodo, vinculo_do_dia
+from escala.models import CelulaDia, TipoEscala
+from escala.services.leitor_celula import grade_da_celula
+from ponto import turnos
+from ponto.janelas import janela_fechamento, periodo_apuracao
+from ponto.motor_calculo_v2 import ResultadoMes, get_motor, turnos_via_autoridade
+from ponto.precedencia import folga_lancada_do_dia, folgas_lancadas_do_periodo
+from ponto.services.fechamento import apurar_por_fatia, universo_da_competencia
+
+EMPRESA_ID, MES, ANO = 2, 11, 2026
+UM_DIA = timedelta(days=1)
+
+
+class HoraDePausaDoTemplate(time):
+    """Identifica, apenas na segunda passada, as horas vindas do template."""
+
+
+def fecha_sem_pausa_do_template(pareador, batidas, opcoes, aberto, saida):
+    # _ivm continua preenchido. Só a distância à pausa do template para
+    # esta batida fica indisponível. app/ponto/turnos.py:1217–1251,1349–1376.
+    pausas = tuple(
+        HoraDePausaDoTemplate(
+            h.hour, h.minute, h.second, h.microsecond, h.tzinfo, fold=h.fold
+        )
+        for h in opcoes["marcos_intervalo"]
+    )
+    distancia_real = turnos._dist_marco
+
+    def distancia(instante, marcos):
+        if instante == saida.timestamp and any(
+            isinstance(marco, HoraDePausaDoTemplate) for marco in marcos
+        ):
+            return None
+        return distancia_real(instante, marcos)
+
+    opcoes_sem_pausa = dict(opcoes, marcos_intervalo=pausas)
+    with patch.object(turnos, "_dist_marco", distancia):
+        alternativo = pareador([copy(b) for b in batidas], **opcoes_sem_pausa)
+
+    return any(
+        par.data_turno == aberto.data_turno
+        and par.entrada is not None
+        and par.entrada.pk == aberto.entrada.pk
+        and par.saida is not None
+        and par.saida.pk == saida.pk
+        and not par.aberto
+        for par in alternativo
+    )
+
+
+def medir_c6(colab, ini, fim, escalas, celulas, alvos):
+    if not alvos:
+        return set()
+
+    # Os mesmos limites inclusivos do fechamento. O recorte por vigência
+    # fica com apurar_por_fatia. app/ponto/services/fechamento.py:264–282,641–653.
+    inicio_busca = timezone.make_aware(datetime.combine(ini - UM_DIA, time.min))
+    fim_busca = timezone.make_aware(
+        datetime.combine(fim + UM_DIA, time(23, 59, 59))
+    )
+    batidas = list(turnos.batidas_apuraveis(colab, inicio_busca, fim_busca))
+    if not batidas:
+        return set()
+
+    achados = set()
+    pareador = turnos.parear_turnos
+
+    def montar_motor(escala, _ini_fatia, _fim_fatia):
+        motor = get_motor(tipo_escala=escala.tipo_escala)
+        motor.celulas_alimentadas = celulas
+
+        def ler_pareamento(
+            batidas_fatia, ini_fatia, fim_fatia, *,
+            tipo_escala, escala_colaborador, colaborador_id
+        ):
+            motor._ec = escala_colaborador
+            limpas = motor.remover_duplicatas(motor._copia_de_trabalho(batidas_fatia))
+
+            def comparar(entrada_do_pareador, **opcoes):
+                if not opcoes.get("marcos_intervalo"):
+                    return pareador(entrada_do_pareador, **opcoes)
+
+                # O pareador carimba as instâncias. Guarde as entradas
+                # antes da primeira passada. app/ponto/turnos.py:1356–1376.
+                antes = [copy(b) for b in entrada_do_pareador]
+                normal = pareador(entrada_do_pareador, **opcoes)
+                for par in normal:
+                    dia = par.data_turno
+                    if not par.aberto or par.entrada is None or not par.batidas:
+                        continue
+                    if dia is None or not ini_fatia <= dia <= fim_fatia:
+                        continue
+                    if alvos.get(dia) != escala_colaborador.pk or dia in achados:
+                        continue
+                    saida = par.batidas[-1]
+                    papel = getattr(saida, "_papel_ata", None) or saida.tipo
+                    if (
+                        papel == "S"
+                        and getattr(saida, "_intra_dur", False)
+                        and not getattr(saida, "_intra_ata", False)
+                        and not saida.is_intervalo
+                        and fecha_sem_pausa_do_template(
+                            pareador, antes, opcoes, par, saida
+                        )
+                    ):
+                        achados.add(dia)
+                return normal
+
+            # A fatia chama esta leitura, que usa a geometria do motor.
+            # app/ponto/services/fechamento.py:298–311.
+            # app/ponto/motor_calculo_v2.py:480–533,2421–2422,2463–2467.
+            with patch.object(turnos, "parear_turnos", comparar):
+                turnos_via_autoridade(motor, limpas)
+            return ResultadoMes(colaborador_id=colaborador_id)
+
+        motor.calcular_mes = ler_pareamento
+        return motor
+
+    apuracao = apurar_por_fatia(colab, ini, fim, batidas, escalas, celulas, montar_motor)
+    return achados & apuracao.dias_cobertos
+
+
+def medir_c7(colab, ini, fim, celulas_por_dia, folgas_12x36):
+    if not folgas_12x36:
+        return set()
+
+    # A mesma cobertura aprovada que alimenta _marcar_ausencias.
+    # app/escala/utils.py:1229–1233,1252–1265.
+    cobertura = turnos.cobertura_ausencia_periodo(colab, ini, fim, para="folha")
+    atestados_em_folga = {
+        dia for dia in folgas_12x36
+        if dia in cobertura and cobertura[dia].tipo == "atestado"
+    }
+    if not atestados_em_folga:
+        return set()
+
+    grade = grade_da_celula(colab, ini, fim, celulas=celulas_por_dia)
+    return {
+        linha["data"] for linha in grade["dias"]
+        if linha["data"] in atestados_em_folga and linha["tipo_dia"] == "ausencia"
+    }
+
+
+def medir_frota():
+    empresa = Empresa.objects.get(pk=EMPRESA_ID)
+    ini, fim = janela_fechamento(MES, ANO, empresa)
+    # O mesmo envelope de células do fechamento. As datas contadas
+    # continuam restritas a ini..fim. app/ponto/services/fechamento.py:603–626.
+    env_ini = periodo_apuracao(MES, ANO, 2)[0]
+    env_fim = periodo_apuracao(MES, ANO, 28)[1]
+    chaves_pausa = {chave for par in CelulaDia.PARES_PAUSA_DNA for chave in par}
+    frota = universo_da_competencia(MES, ANO, empresa_id=empresa.pk).order_by("pk")
+    achados = {"C6": set(), "C7": set()}
+
+    for colab in frota.iterator(chunk_size=200):
+        celulas = celulas_do_periodo([colab.pk], env_ini, env_fim)
+        por_dia = {dia: cel for (_, dia), cel in celulas.items() if ini <= dia <= fim}
+        if not por_dia:
+            continue
+
+        geradoras = {cel.escala_geradora_id for cel in por_dia.values()}
+        escalas = sorted(
+            escalas_do_periodo(colab.pk, ini, fim, mais=geradoras),
+            key=lambda escala: escala.data_inicio,
+        )
+        folgas_lancadas = folgas_lancadas_do_periodo(colab, ini, fim)
+        alvos_c6 = {}
+        folgas_12x36 = set()
+
+        for dia, celula in por_dia.items():
+            vinculo = vinculo_do_dia(colab.pk, dia, escalas, celulas=celulas)
+            if vinculo is None:
+                continue
+
+            previsto = vinculo.eh_dia_trabalho(dia, celulas=celulas)
+            if previsto is False and vinculo.tipo_escala.tipo_ciclo == TipoEscala.CICLO_12x36:
+                folgas_12x36.add(dia)
+
+            if not celula.dna:
+                continue
+            marcos = celula.dna.get("marcos") or {}
+            if any(marcos.get(chave) for chave in chaves_pausa):
+                continue
+            if (
+                dia.weekday() == 6
+                or previsto is False
+                or folga_lancada_do_dia(folgas_lancadas.get(dia), vinculo) is not None
+            ):
+                alvos_c6[dia] = vinculo.pk
+
+        achados["C6"].update(
+            (colab.pk, dia)
+            for dia in medir_c6(colab, ini, fim, escalas, celulas, alvos_c6)
+        )
+        achados["C7"].update(
+            (colab.pk, dia)
+            for dia in medir_c7(colab, ini, fim, por_dia, folgas_12x36)
+        )
+
+    return achados
+
+
+nivel_anterior = logging.root.manager.disable
+logging.disable(sys.maxsize)
+try:
+    with schema_context("juliani"), transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+
+        # As chamadas são de leitura. A transação própria termina em rollback.
+        # modelo_sonda_S1.py. app/ponto/turnos.py:1192–1199.
+        # app/escala/services/leitor_celula.py:350–364.
+        achados = medir_frota()
+        transaction.set_rollback(True)
+except Exception:
+    # Falha encerra a sonda antes de imprimir, sem expor dados da exceção.
+    raise SystemExit(1) from None
+finally:
+    logging.disable(nivel_anterior)
+
+# As duas obras constam como "sem obra" no anexo T2_secB.md:7–8.
+detalhes = {"C6": "saida_absorvida_pelo_template", "C7": "atestado_em_folga_12x36"}
+for classe, pares in achados.items():
+    for pk, dia in sorted(pares):
+        print(
+            f"S0|classe={classe}|colab=col{pk}|chamado=-|disputa=-|"
+            f"dia={dia.isoformat()}|desde=-|obra=sem obra|det={detalhes[classe]}"
+        )
+    print(f"S0|TOTAL|classe={classe}|n={len(pares)}|colabs={len({pk for pk, _ in pares})}")
+print("S0|FIM")
+```
+
+| Classe | Função real (arquivo:linha) | Critério | Universo | Falso positivo possível |
+|---|---|---|---|---|
+| C6 · ESC-12 | `batidas_apuraveis` e `parear_turnos` (`app/ponto/turnos.py:2941`, `:1192`), via `apurar_por_fatia` (`app/ponto/services/fechamento.py:152`) e `turnos_via_autoridade` (`app/ponto/motor_calculo_v2.py:480`). | No retorno final, o turno está aberto e a última batida tem papel de saída e carimbo de pausa, sem marca explícita na batida ou na ata. Na segunda passada, só se retira a influência dos marcos de pausa do template naquele instante. A mesma entrada e a mesma saída, por PK, têm de fechar no mesmo `data_turno`. (`app/ponto/turnos.py:1217–1251`, `:1310–1376`, `:1487–1502`) | Frota do fechamento da empresa 2 em 11/2026. Batidas da janela da empresa com um dia de margem em cada ponta e recorte real por vigência. Conta uma vez por colaborador e dia de jornada com vínculo, célula com DNA presente e sem nenhum marco de pausa, em domingo, folga prevista ou folga lançada válida. O DSR entra por esse recorte de domingo e folga. (`app/ponto/janelas.py:54–57`, `app/ponto/services/fechamento.py:264–290`, `:459–465`, `:641–653`, `app/escala/models.py:1080–1107`, `:1663`, `app/ponto/precedencia.py:212–239`) | Uma saída real para pausa cuja volta e saída final ficaram sem registro pode fechar no contrafactual. A intenção da batida é [nao verificado]. |
+| C7 · AUS-03 | `grade_da_celula` (`app/escala/services/leitor_celula.py:350`), `cobertura_ausencia_periodo` (`app/ponto/turnos.py:2816`), `vinculo_do_dia` (`app/escala/alimentacao.py:228`) e `eh_dia_trabalho` (`app/escala/models.py:1080`). | A leitura da célula devolve `tipo_dia == "ausencia"`, a cobertura aprovada vencedora tem o tipo `atestado`, e o vínculo 12x36 responde `False` para trabalho previsto. (`app/escala/services/leitor_celula.py:397–418`, `app/ponto/turnos.py:2548–2556`, `:2833–2839`, `app/ponto/catalogo/ausencias.py:92–95`, `app/escala/models.py:1098–1107`) | Mesma frota e janela. Uma ocorrência por colaborador e dia na grade lida da célula lavrada. (`app/ponto/services/fechamento.py:459–465`, `app/ponto/janelas.py:54–57`, `app/escala/services/leitor_celula.py:377–398`) | Uma ata antiga pode conservar o rótulo de outra ausência enquanto a cobertura atual aponta para o atestado. A ata transporta `tipo_dia`, e a cobertura é consultada à parte. (`app/ponto/services/cartorio.py:749–791`, `app/ponto/turnos.py:2833–2839`) |
+
+A conferência foi feita no código da cópia fornecida. A identidade do HEAD pelo hash informado, a execução da sonda e os totais da frota ficam [nao verificado].
 
 ## 27/11 19:43 · sessao 95e2e50649cb · FIM-DE-SEMANA-JA · leitura · origem=Code
 
@@ -809,17 +1091,4 @@ A fixture usa 12x36, corte de competência 21 e uma requisição pelo mês civil
 
 A janela civil também fica fora da leitura dos totais mensais em `folha_manda`, que exige coincidência com a janela da competência. O SQL agregado do anexo não sustenta editar essa rota ou criar mutante de performance por hipótese. [cartao_pela_celula.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/relatorios/cartao_pela_celula.py:27) [cartao_pela_celula.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/relatorios/cartao_pela_celula.py:324)
 
-## 27/11 17:30 · sessao 7bd752f6e54c · - · - · origem=Ronald (tmux)
-
-- **Falha 4, da c4.** A partição histórica envia folga com escala incerta para horas comuns, e a fixture c1 chama a competência 10. A promoção vale desde a 11. O motor retorna antes do zeramento para folga com escala incerta. A cura é exercitar a competência 11 com célula, feriado e batidas sob relógio congelado, mantendo as três asserções. `ponto/calculador/regras.py:393`, `ponto/tests/test_he100_dia_sem_previsto.py:189`, `folha/export.py:385`, `ponto/motor_calculo_v2.py:1579`.
-- **Falha 5, da c4.** O resultado do primeiro motor já traz zero de dobra do 12x36. O novo modo classificado dá precedência a esse resultado, enquanto C3b altera a flag apenas na segunda instância. A fixture de setembro deve pedir `feriado_classificado=False`, assim o teste continua exercitando os três valores da flag no leitor histórico, com as asserções originais. `ponto/calculador/alimentacao.py:519`, `ponto/calculador/alimentacao.py:584`, `ponto/tests/test_o280_bateria_da_lei.py:1230`, `ponto/tests/test_o280_bateria_da_lei.py:3113`.
-- **Perf, observação adicional.** A rota do selo abre o mês civil de setembro. A chamada à autoridade usa `competencia=None` e a borda c5 fica inativa. A janela é livre para `folha_manda`, que por isso pula os totais do fechamento. O carregador de feriados anterior à obra já usa lote. Atribuir as 79 queries a um trecho específico depende de uma medição com SQL ou de uma comparação com a base [nao verificado]. `core/tests/test_selo_performance.py:281`, `core/tests/test_selo_performance.py:409`, `colaboradores/services/calendario.py:194`, `colaboradores/services/calendario.py:602`, `ponto/services/fechamento.py:228`, `relatorios/cartao_pela_celula.py:325`, `core/feriados.py:150`.
-
-## 27/11 17:28 · sessao 6115f41195e9 · - · - · origem=Ronald (tmux)
-
-| Falha | Classificação e evidência |
-|---|---|
-| 6. Export 59-A | **Obra c4 (`6d568d221`).** A montagem e a homologação passaram a chamar `eventos_do_fechamento_da_competencia`, que lê a cláusula uma vez por chamada histórica. O selo conta ocorrências textuais no módulo e agora encontra uma. Reancorar `src` nos dois chamadores, seguindo a delegação, preserva as duas asserções e a leitura da cláusula. `folha/export.py:388–394,753,1026`, `folha/tests/test_export_59a.py:58–63`. |
-| 7. Smoke Chromium | **Infraestrutura.** O diff c1–c5 deixa intactos o smoke, as rotas, as views e os templates que renderizam lista e painel. O anexo registra o timeout de 120 s antes da asserção sobre o POST. `ponto/views_tipos_ausencia.py:37–48`, `ponto/tests/test_smoke_clique_tipo_ausencia.py:97–101,150–154`. A causa específica do timeout fica [nao verificado]. |
-
-_8764 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8766 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
