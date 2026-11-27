@@ -1,3 +1,5 @@
+PAREI: censo-O30-LOTE-MINIMA | espera Codex
+
 PERGUNTA DE DESENHO O30-F3-CONSTRUIR (21:07, c16 logs/O30-F3-CONSTRUIR/construtor_c16.r): achado D do verif9 PROCEDENTE, conferido ausencia.py:669 (o finally so apaga o anexo se a porta NAO concluiu; atomic do CHAMADOR desfeito depois do retorno deixa o arquivo no storage sem linha). Duas curas, nenhuma na forma da casa: (a) upload em transaction.on_commit -- rollback descarta o callback, mas muda o contrato que le o arquivo durante a projecao e deixa linha confirmada sem arquivo se o storage falhar; (b) varredor de orfaos (instrumento novo, contrato de 5 linhas). REDs de D prontos (mutantes_atestado_f3_c14.py:127,157, rc 1 pela assercao). Dinheiro: 0 (anexo, nao rubrica). B3 segura so o MERGE; C curado segue ao verificador.
 
 censo-O30-F3-CONSTRUIR RESPONDIDA por CENSO fechado 19:30 (c14 na vaga 1)
@@ -10933,6 +10935,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 21:22:52 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:062653ada2 (41 car., na trilha privada)
+
 **26/11 20:29:02 disjuntor (NEGOU B3-MERGE)** -- agente principal -- Bash -- alvo sha1:284cbe0d92 (308 car., na trilha privada)
 
 **26/11 19:29:30 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:f98c90765b (42 car., na trilha privada)
@@ -13640,3 +13644,14 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 21:16 DESPACHO O30-LOTE-MINIMA: dossie (mapa+censo, mao dupla: so relatorios/ e templates/, le ponto/services/atestados_lote.py do main) -> Codex leitura logs/O30-LOTE-MINIMA/DOSSIE; construtor -> Codex. V6 c2: verif v2 -> Codex; suite pre-opus -> pista 1126211523_6941dba2.
 - 21:18 colhido E4D-MATRIZ reds/fix1/run.rc (18:46 rc 1): marca canonica (a da 20:57 tinha prefixo e a c2 do juiz so aceita a marca no inicio da linha); colheita e despacho ja feitos 20:57.
 - 21:18 colhido ABONO-PARCIAL-TETO sonda_txt2/sombra.rc (18:36 rc 0): marca canonica, idem; leitura ja feita 20:57.
+- 21:23 colhido DIA-DA-BATIDA-JUIZ-UNICO F4e/r2.rc (21:19 rc 0): construtor Codex entregou F4e (flip trava Colaborador e rele Batida; regularizacao antecipa Disputa/Chamado sob a trava; except 11->11 por AST, nao conferido ainda). Pendente opus: FOR NO KEY UPDATE na porta (chamados/models.py:2938) -- RED do INSERT x correcao esperado vermelho ate la. RED/mutantes relancados na pista 1126212008_2c3d7fa8 (red.sh).
+- 21:23 DESPACHO CUSTO-DE-COORDENACAO: dossie (freios de cota, CENSO, B3, censo de recusas 48 h) -> Codex leitura logs/CUSTO-DE-COORDENACAO/DOSSIE sobre 6941dba24; construtor -> opus (bin/, CODEX item 2) depois do pouso do V6 (arquivo em comum bin/disjuntor.py).
+- 21:22 colhido V6-LISTA-ORFAS codex_v2.rc (21:20 rc 0): v2 confirma as 5 curas da c2; REPROVA por (a) chmod/touch -a em .rc velho acorda a espera cedo (acordar cedo, sem perda: a sessao colhe e o juiz nao relista o marcado), (b) com bash -e o rc 3 do juiz encerra antes do find (a sessao nao roda com -e), (c) FIFO anunciado pelo find, (d) mutante de rename poderia sobreviver (o selo rodou e ele caiu). Nenhum perde rc ou grava errado: instrumento mao dupla -> LISTA da obra (POUSA-COM-LISTA-2611-1825), sem nova volta.
+- 21:22 colhido ABONO-X-SAIDA-ANTECIPADA suite_c1h/suite.rc (21:20 rc 0): suite inteira pre-opus c1h 90b161ba3 VERDE, Ran 18059 OK (skipped=42, expected failures=39). Mutantes ctl/M1b/M1c ainda rodando (c1h/mut.sh pid 2321020); opus final depois deles.
+- 21:23 colhido O30-LOTE-MINIMA DOSSIE/r.rc (21:20 rc 0): servico atestados_lote.py ja no HEAD sem tela; 4 perguntas -> DECIDIDO (PARADA 5, contestavel): rota relatorios:atestados_lote + link em atestados.html (sem card, IndexEnxuto 13); acesso _requer_staff+ver_folha+ver_ausencias (mais restritiva; DP/TI tem as duas, mixins.py:366); empresa obrigatoria, colabs de qualquer situacao; janela() da empresa (L-090); tipos = TIPOS_MEDICOS do cadastro, status padrao aprovada.
+- 21:23 superado O30-LOTE-MINIMA c1/construtor_precheck.rc (21:22 rc 2): PRE_CHECK do CENSO de forma (brief fora de logs/<OBRA>/brief*.md); refeito em logs/O30-LOTE-MINIMA/brief_c1.md, CENSO fechado.
+- 21:23 PUXADA O30-LOTE-MINIMA -> vaga 1 (Codex construtor, wt-codex-o30-lote-minima-212251 sobre a6e4ed534, brief_c1.md)
+- 21:23 colhido ABONO-X-SAIDA-ANTECIPADA c1h/mutM1b.log.rc (21:21 rc 1): M1b MORDIDO (Ran 55 FAILED failures=1, test_RED_a_lista_considera_a_ponta_coberta_em_qualquer_periodo periodo_coberto=primeiro). M1c rodando (c1h/mut.sh).
+- 21:25 colhido ABONO-X-SAIDA-ANTECIPADA c1h/mut.rc (21:21 rc fim): ctl VERDE (Ran 55 OK), M1b e M1c MORDIDOS (FAILED failures=1 cada). Proximo: pre-verificador Codex c1e..c1h (diff d06bf4acf..90b161ba3, 10 arquivos, motor incluso) em c1h/verif -> opus final -> suite na arvore do merge (merge-tree limpo; a wt nasceu em d06bf4acf, o main andou) -> pouso.
+- 21:25 colhido DIA-DA-BATIDA-JUIZ-UNICO F4e/red.rc (21:22 rc 1): Ran 6, failures=2 errors=1 -- insert x correcao 40P01 (FOR KEY SHARE do FK x FOR UPDATE no Colaborador: o esperado ate o FOR NO KEY UPDATE do opus), guarda_rele (disputa nao gravada) e flip sem espera observada, sem causa provada ainda. PUXA DIA-DA-BATIDA-JUIZ-UNICO -> vaga de construtor opus: travada por vaga (teto 2: opus E4C c3 + Codex O30-LOTE-MINIMA).
+- 21:25 PUXA CUSTO-DE-COORDENACAO -> V6-LISTA-ORFAS: arquivo em comum bin/disjuntor.py; travada por pre-requisito (V6 na pista 1126211523) e vaga (teto 2).
