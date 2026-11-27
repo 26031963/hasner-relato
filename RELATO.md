@@ -10982,6 +10982,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 16:18:42 disjuntor (NEGOU ESPERA)** -- agente principal -- Bash -- alvo sha1:ee8183ee50 (576 car., na trilha privada)
+
 **27/11 16:06:14 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:3edebbbe40 (117 car., na trilha privada)
 
 **27/11 15:48:11 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:5cc8c13fa1 (170 car., na trilha privada)
@@ -14535,3 +14537,7 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 16:13 nota Ronald (CCM ja na vaga opus) cumprida: PUXADA CODEX-CONSTROI-MOTOR cura14 -> vaga opus (retomada sobre wt-ccm-recusa-090424, c13 2c2f212fc + cura14 nao commitada, nada descartado); agente opus construtor, so bin/; o procedente 4 (app/core/esteira_vigia.py) sai como brief ao Codex construtor em logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md. Vaga opus livre desde o handback da RAMO2-B c2v (15:25) -- 50 min ociosa, falha minha. Depois: RAMO2-HERANCA-VAO (! concedido 16:10).
 - 16:16 colhido FERIADO-BOTAO-CORTADO c10/r.rc (16:15 rc 0): marcacoes no fim da area rolavel do feriado com acao (layout mes), celula 132 px, sonda/assercao/esperados intocados, 0 except; commit 366cc74d5. Recorte VM s11 (6 modulos) + 6 mutantes m11 em copias wt-mut11-botao-*-161614 (env do mutante fixado na copia, suite.sh nao repassa env) -> logs/FERIADO-BOTAO-CORTADO/s11/s.rc, m11/m11.rc
 - 16:17 PRE-APROVADO (a): cancelada na pista a inteira g9 (job 1127154909_c44771b4, c8) do FERIADO-BOTAO-CORTADO, superada pela c10 366cc74d5; a inteira da c10 vai depois do s11+m11 verdes
+- 16:19 colhido FERIADO-BOTAO-CORTADO s11/s.rc (16:17 rc 1, VM): Ran 22, FAILED (failures=4) -- pagina da ficha real agora passa (c10 curou 17:00); REGRESSAO no drawer 1366 das duas cascas, altura curta lateral/sem espaco: 'Gatilho presente, mas invisivel ou encoberto' (summary 268x104 numa celula de 132). Cadeia m11 dos mutantes da c10 parada por mim (superada; so historico-sem-guarda tinha comecado, sem .r). DESPACHO c11 -> Codex construtor (slot 1), q logs/FERIADO-BOTAO-CORTADO/c11/q.md.
+- 16:19 FERIADO-UM-JUIZ c4/g: 2a tentativa caiu de novo em ROTA VM (estimativa 2661 s > 1800: RAMO2 r7 rodando desde 14:53 + PAR c1v14); cancelada por mim (grupo + container reverent_volhard), log g_vm_cancelada2.log. A 1a tentativa das 16:16 foi recusada pelo suite.sh (copia mudou: pastas app/logs e app/media da corrida cancelada sumiram na espera). Relanco quando a fila da pista descer.
+- 16:23 colhido FERIADO-BOTAO-CORTADO c11/r.rc (16:23 rc 0): gatilho acima da regiao rolavel (isolation + z-index 1/0), mutante novo drawer-sem-empilhamento-da-acao, 0 except; commit 71b1d55a2. Recorte VM s12 (6 modulos) + 7 mutantes m12 -> logs/FERIADO-BOTAO-CORTADO/s12/s.rc, m12/m12.rc
+- 16:24 colhido FERIADO-BOTAO-CORTADO s12/s.rc (16:24 rc 0): Found 22 / Ran 22 / OK -- drawer 1366 das duas cascas volta a passar com a pagina da c10; mutantes m12 seguem na VM -> m12/m12.rc

@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 16:16** · publicado em **27/11/2026 16:16** (UTC-3)
+> Ultima resposta processada: **27/11/2026 16:23** · publicado em **27/11/2026 16:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 16:23 · sessao df030164fcae · FERIADO-BOTAO-CORTADO · construtor · origem=Code
+
+A c11 põe o gatilho do feriado acima da região rolável na ordem de pintura da célula. O template isola o empilhamento da célula mensal e usa `z-index:1` na ação e `z-index:0` na região. A célula segue com 132 px, e as marcações continuam no fim da região rolável, como na c10. A guarda B1 do histórico permanece no JS. [_calendario_grade.html:68](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:68) · [Ação e região:95](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:95) · [Ordem das marcações:132](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:132) · [Guarda B1:27](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:27)
+
+Os **104 px** vêm da sonda. Ela posiciona a ação sobre o conteúdo da célula para deixar pouco espaço vertical no drawer de 128 px. No s11, o retângulo cabe na célula e na viewport, mas a sonda também exige que o centro receba o clique. A correção trata a sobreposição com a grade rolável da c10. Qual elemento recebeu o clique no s11 é **[não verificado]**. [Posicionamento:277](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:277) · [Medição:291](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:291)
+
+O **RED** é o próprio teste que acusou as quatro falhas do s11. O mutante novo `drawer-sem-empilhamento-da-acao` volta `isolation` e `z-index` a `auto` só no drawer, repondo o empilhamento da c10. A revisão estática confirmou que a sonda, as asserções, os esperados e os mutantes anteriores são idênticos aos da c10. Contagem no diff **0 `except`, 0 `catch`**. [Mutante:78](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:78) · [Teste RED:550](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:550) [nao verificado]
+
+**Recorte para a sessão na VM**, com o smoke de clique e histórico, a renderização da grade e os selos do popover. [Uso de `--only`:13275](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/docs/RELATO.md:13275)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --only "core.tests.test_smoke_clique_feriado_vira_trabalho colaboradores.tests.test_feriado_botao_cortado core.tests.test_selo_popover_acao"
+```
+
+**Comando do mutante** no ambiente de testes da VM. [Seleção do mutante:550](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:550) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 SMOKE_FERIADO_MUTANTE=drawer-sem-empilhamento-da-acao \
+  python manage.py test --settings=config.settings.ci --noinput \
+  core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest.test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas
+```
+
+Resultado da c11 em Chromium e falha do mutante pelo motivo esperado **[não verificado]**. A certificação fica com a suite e o opus final. [nao verificado]
 
 ## 27/11 16:16 · sessao b845a7dd5be1 · FERIADO-UM-JUIZ · verificador · origem=Code
 
@@ -940,14 +964,4 @@ O HEAD de `/home/ronald/saas-hasner` é `59600163ccc9cffb8f3ae148beede7cd7866ae8
 
 **F.** O wrapper chama um executável por `CODEX_SONDA_ENVELOPE`, com o caminho da sonda como único argumento. O executável existente `/home/ronald/saas-hasner/logs/FILA-CODEX-1811/sondas/envelope_sombra.sh:3` usa `exec` com `--sombra` e preserva o RC. `SONDA_ARVORE=<cópia conferida>/app` fixa os blobs montados. O Python deve capturar somente a exceção sentinela de rollback, fora do `atomic()`, pois RC diferente de zero faz o wrapper rejeitar a saída. O envelope faz escritas administrativas de role/GRANT e de arquivos durante a preparação. Eu apenas li o código. `bin/codex_pergunta.sh:627`, `bin/sonda_leitura.sh:66`, `bin/sonda_leitura.sh:126`, `bin/sonda_leitura.sh:140`, `bin/sonda_leitura.sh:157`, `bin/sonda_leitura.sh:232`, `bin/sonda_leitura.sh:239`.
 
-## 27/11 15:09 · sessao 3656640e4966 · - · - · origem=Ronald (tmux)
-
-- **Becos de disputa.** O contador usa `chamados.services.becos.classificar(disputa)` e retorna `FECHAVEL`, `BARRADA` ou `None`. O comando chama `get_user_sistema()` mesmo em dry ou `--alarme`, e esse helper usa `get_or_create`. A sonda deve usar o classificador diretamente. O `--alarme` do cron sai com RC 2 para qualquer `FECHAVEL`. `--apply` chama a porta de escrita `fechar_beco`. [app/chamados/services/becos.py:25](app/chamados/services/becos.py#L25), [app/chamados/management/commands/fechar_becos_disputa.py:27](app/chamados/management/commands/fechar_becos_disputa.py#L27), [app/core/utils.py:18](app/core/utils.py#L18), [app/config/crons.py:663](app/config/crons.py#L663)
-- **Órfãs da lâmpada.** `chamados.reconciliador.orfas_pela_lampada_sem_evento(agora=REF, colaborador_ids=ids)` devolve os IDs completos. O recorte da competência pode filtrar esses IDs por `PerguntaDisputa.data_evento`. O comando sem argumentos de alarme conta em dry e `--alarme` sai com RC 2 se houver achados. `perguntas_orfas_reatavies(colab)` mede separadamente o universo elegível e pode receber o filtro de data no queryset. [app/chamados/reconciliador.py:1325](app/chamados/reconciliador.py#L1325), [app/ponto/management/commands/reconciliar_perguntas_orfas.py:24](app/ponto/management/commands/reconciliar_perguntas_orfas.py#L24), [app/chamados/reconciliador.py:1640](app/chamados/reconciliador.py#L1640)
-- **Fio sem caminho.** `censo_alcance(empresas=[empresa], hoje=HOJE, agora=REF, limite=0)` usa a tarefa publicada e retorna todos os `sem_porta` mesmo com limite zero, com competência, causa e detalhe em cada linha. A sonda pode contar os `sem_porta` da `11/2026` por causa e detalhe. O vigia mede empresas visíveis em operação e competências que `competencias_a_lavrar` seleciona. O comando de frota grava carimbo em disco. `contador_fio_mudo(hoje=HOJE, agora=REF, ini=INI, fim=FIM, empresas=[empresa.pk])` mede os motivos devidos sem pergunta viva. `motivos_que_o_evento_deixou(cel, HOJE, REF, memo=memo)` mede o que o julgamento da célula deixou de emitir. [app/chamados/services/vigia_fio.py:524](app/chamados/services/vigia_fio.py#L524), [app/chamados/services/vigia_fio.py:622](app/chamados/services/vigia_fio.py#L622), [app/chamados/management/commands/vigiar_fio_morto.py:131](app/chamados/management/commands/vigiar_fio_morto.py#L131), [app/chamados/management/commands/disparar_perguntas_competencia.py:77](app/chamados/management/commands/disparar_perguntas_competencia.py#L77), [app/chamados/services/fabrica_da_celula.py:234](app/chamados/services/fabrica_da_celula.py#L234)
-- **E6.** O comando `e6_oraculo --mes 11 --ano 2026 --hoje 2026-11-27`, sem CSV, certifica o espelho da frota e exige `FechamentoMensal` para selecionar colaboradores. O comando captura falha do espelho e segue. Para apor a classe a um dia já achado pelo vigia, existe precedente em `RELATO`, com `InsumosDoDono(colab, INI, FIM, HOJE, agora=REF).dono(dia)` como leitor por colaborador. [app/ponto/management/commands/e6_oraculo.py:128](app/ponto/management/commands/e6_oraculo.py#L128), [app/ponto/management/commands/e6_oraculo.py:182](app/ponto/management/commands/e6_oraculo.py#L182), [app/ponto/management/commands/e6_oraculo.py:276](app/ponto/management/commands/e6_oraculo.py#L276), [app/docs/RELATO.md:5549](app/docs/RELATO.md#L5549)
-- **RC de órfãs de obra.** `bin/rc_sem_colher.py::sem_colher(raiz, relato_txt, agora=None, min_idade=0)` lê logs de obras das últimas 24 h. RC 0 indica lista vazia, RC 3 indica achados e RC 1 indica falha de leitura. Sua unidade é obra e arquivo `.rc`. [bin/rc_sem_colher.py:2](bin/rc_sem_colher.py#L2), [bin/rc_sem_colher.py:50](bin/rc_sem_colher.py#L50)
-
-O envelope padrão de `codex_pergunta.sh --sonda` chama `sonda_leitura.sh` sem `--sombra`. Há um `CODEX_SONDA_ENVELOPE` de sombra documentado no `RELATO`. A saída só segue se o envelope retorna zero, logo a sonda precisa suprimir exclusivamente a exceção deliberada de rollback **fora** do `atomic`. `SET TRANSACTION READ ONLY` antes de consultar e a pré-carga `tranca_em_lote(sistema_pk=User.objects.values_list('pk', flat=True).get(username='sistema'))` evitam o `get_or_create` nas leituras da tranca. [bin/codex_pergunta.sh:623](bin/codex_pergunta.sh#L623), [bin/sonda_leitura.sh:93](bin/sonda_leitura.sh#L93), [app/docs/RELATO.md:2735](app/docs/RELATO.md#L2735), [app/chamados/juizes.py:1254](app/chamados/juizes.py#L1254), [app/chamados/juizes.py:1321](app/chamados/juizes.py#L1321)
-
-_8726 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8727 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
