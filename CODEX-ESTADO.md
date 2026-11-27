@@ -1,7 +1,185 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 10:55** · publicado em **27/11/2026 10:57** (UTC-3)
+> Ultima resposta processada: **27/11/2026 11:04** · publicado em **27/11/2026 11:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 11:04 · sessao 8f2663b90aab · ORFAS-VOLTOU · leitura · origem=Code
+
+## A1. Ramo e recusas do reate
+
+**Um chamado `resolvido` na célula fica fora da derivação de destino vivo.** Se `_derivar_chamado_destino` encontrar outro destino vivo elegível, a pergunta segue pelo **(b)**. Se devolver `None`, segue pelo **(a)**. A derivação procura chamados vivos do colaborador da disputa, exclui `disputa_supervisao`, exige que o chamado atenda o motivo, descarta chamado já ocupado por pergunta do mesmo motivo com `materializada_em IS NULL` e compara os dias quando ambos são conhecidos. Havendo vários candidatos, tenta desempatar pela entrada do turno aberto e pelo estágio do chamado. Com zero ou mais de um candidato ao final, devolve `None`. `app/chamados/services/disputa_emissao.py:97–163,191–245` `app/chamados/reconciliador.py:1711–1714,1821–1826`
+
+| Motivo | Histórico no alcance O261(C), com C6 morta | Histórico fora do alcance O261(C) | Histórico vazio |
+|---|---|---|---|
+| `orfao_14h` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | O mapa legado precisa devolver `orfao_14h`. | Tenta c1 e, se recusar, c2. |
+| `saida_sem_entrada` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | A categoria precisa mapear para `saida_sem_entrada`, sem uma subcategoria mapeada que prevaleça. | Tenta c1 e, se recusar, c2. |
+| `intervalo_saida` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | Os mapas legados não têm esse valor. | c1 recusa pelo motivo. c2 exige alcance O261(C) e C6 viva. |
+| `intervalo_volta` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | Os mapas legados não têm esse valor. | c1 recusa pelo motivo. c2 exige alcance O261(C) e C6 viva. |
+
+Fontes da tabela. `app/chamados/juizes.py:2331–2342` `app/chamados/models.py:4133–4170` `app/chamados/reconciliador.py:333,362–375,838–880,918–932,1028–1031,1748–1779`
+
+- **(a), seleção do histórico.** Sem data na pergunta e sem data no contexto do motivo, sai `False` na linha 1725. O histórico exige o mesmo colaborador, status `resolvido` ou `fechado`, `contexto_json.data_turno` igual ao dia e categoria diferente de `disputa_supervisao`. Uma FK para a célula, sozinha, não satisfaz essa consulta. No alcance O261(C), C6 viva esvazia o histórico. Dia inválido ou ausente, competência entregue ou dia trancado levam à seleção legada. Com mais de um candidato, sai `False` na linha 1779. Com zero, sai pela mesma linha se c1 e c2 recusarem. `app/chamados/reconciliador.py:857–871,1711–1779`
+- **(a), c1.** `lavrar_sem_turno_aberto` recusa motivo fora dos dois permitidos, resposta presente pelo juiz, materialização já preenchida, turno aberto no núcleo ou C6 viva. Também recusa se `carimbar` falhar pelo estado fora do fato, C6 viva após aplicar o carimbo em memória, par ato/coluna inválido `(False, True)` ou retenção ativa. O sucesso do c1 pode deixar a FK nula. `app/chamados/reconciliador.py:333,362–417,1774–1775` `app/chamados/models.py:3460–3519` `app/chamados/services/fio.py:1620–1632`
+- **(a), c2.** `reemitir_chamado_do_dia` recusa motivo fora dos quatro, dia ausente ou inválido, colaborador fora de `ativo`, isenção aplicável, ausência que cobre, veto de `celula_veta_cobranca` ou veto de `EMITIR` pelo motor. Sem um `batida_ausente` vivo na chave do c2, também pode recusar por horizonte, ausência de protesto que cobra, `parcial_so_lista` ou veto da régua. Os dois intervalos ainda exigem `_viva_em_competencia_aberta`. Depois disso, sai `False` se `abrir` devolver `None`, se devolver chamado fora de `VIVOS` ou se a costura recusar. `app/chamados/reconciliador.py:874–880,930–1080`
+- **(a), recusas dentro de `abrir`.** Um nascimento pode devolver `None` por absolvição pela célula ou veto da régua. Na reutilização de encerrado, `abrir` devolve o objeto mesmo se o renascimento recusar. Esse renascimento verifica situação ativa, via `cascade`, tranca e régua, depois passa por `reabrir`, que também verifica fechamento administrativo sem fato novo, premissa regularizada, agrupamento, irmão vivo e transição permitida. Se o objeto continuar encerrado, o c2 recusa na linha 1062. `app/chamados/models.py:972–998,1025–1037,1068–1090,1403–1426` `app/chamados/reconciliador.py:1055–1062`
+- **Costura, nos dois ramos.** `reapontar_resolvedora` recusa destino de outro colaborador. `resolvedora_valida` pode recusar quando o juiz não reconhece o episódio como fato do turno, a ponte A2 alcança mais de um dia ou há divergência comprovada entre o dia do fato e o do chamado. Para dias adjacentes, aceita a travessia de meia-noite confirmada ou indeterminada. A guarda seguinte relê o destino e recusa se ele estiver terminal, a competência estiver comprovadamente aberta e a pergunta permanecer viva com o destino aplicado em memória. Se a costura também estiver datando uma pergunta, há recusas adicionais para conversa, dia do fato inválido e colisão que a porta não pode resolver. Esse último grupo fica fora do universo datado do aval. `app/chamados/services/fio.py:916–947,1017–1073,1098–1133,1911–1924,1946–2005` `app/chamados/juizes.py:2440–2498`
+- **Saídas da costura.** Com histórico único, a recusa da costura sai `False` na linha 1804. Se a cerca vetar alguma escrita atingida pela costura ou pelo S128, desfaz o ato e sai `False` na linha 1815. Se a costura passar e o S128 retornar normalmente, o reate pode devolver `True` com zero perguntas carimbadas. No **(b)**, a recusa da mesma costura sai `False` na linha 1825. `app/chamados/reconciliador.py:1800–1826` `app/chamados/services/fio.py:1470–1480,1536–1561,1564–1592`
+
+**Por que pode nascer solta.** A emissão pode gravar a pergunta sem destino quando a derivação devolve `None`. A tentativa imediata de reate exige pergunta recém-criada, FK ainda nula e motivo do grupo do dia. A fábrica deduplica pelo fato já representado, inclusive se a linha estiver solta. O estoque elegível volta ao reate pelo laço do colaborador, acionado por batida ou pela saída de `VIVOS` de um filho listado por pai vivo. Para as 16 perguntas do aval, a condição de nascimento, o ramo efetivamente executado e a recusa concreta estão [nao verificado]. `app/chamados/services/disputa_emissao.py:402–478` `app/chamados/services/fabrica_da_celula.py:138–157` `app/chamados/reconciliador.py:1674–1685` `app/ponto/signals.py:211–223` `app/chamados/signals.py:351–371`
+
+## A2. O que o S128 alcança
+
+**O S128 pode alcançar uma pergunta com FK nula pelo fecho sem credor.** O filtro por FK vale para o primeiro laço. Há três leituras relevantes em `resolver_perguntas_por_chamado_resolvido`. `app/chamados/services/disputa_emissao.py:2038–2042,2071–2084,2155–2193`
+
+1. **Carimbo pelo destino.** O ORM exige exatamente `chamado_destino=chamado`, `materializada_em__isnull=True` e `disputa__fechada_em__isnull=True`. O laço pula pergunta em voo, viva pelo C6, de dia trancado ou respondida pelo juiz sem materialização de fato. As restantes só contam se `carimbar(...)` aceitar. Não há filtro inicial por data de criação nem por `validada_em`. Se o chamado tiver via `competencia_trancada`, o S128 retorna zero antes dos laços. `app/chamados/services/disputa_emissao.py:2030–2042,2087–2122`
+2. **Âncora para reabertura.** `_ancoradas()` pode incluir FK nula se `disputa.chamado_id == chamado.pk` e a pergunta estiver sem validação pelo ato. Esse laço tenta devolver um credor à pergunta viva sem resposta. `app/chamados/models.py:349–366` `app/chamados/services/disputa_emissao.py:1924–1948,2071–2084`
+3. **Fecho sem credor.** A varredura inclui todas as disputas abertas do colaborador do chamado. Pula a disputa se o pai estiver em `VIVOS` ou se qualquer pergunta tiver destino em `VIVOS`. Entre as restantes, examina perguntas com `materializada_em is None` e `DecisaoPergunta.composta(q).validada_em is None`, inclusive com FK nula. Pula as em voo e as vivas pelo C6, depois tenta `carimbar`. A disputa só fecha se não houver pergunta em voo e `pode_fechar()` aceitar. `app/chamados/services/disputa_emissao.py:2155–2193,2213–2226` `app/chamados/models.py:2047–2053`
+
+**Gatilho principal.** `resolve_perguntas_ao_resolver` é `post_save` síncrono de `ChamadoColaborador`, com savepoint próprio. Exige status resultante em `ENCERRADOS` e save que escreveu status. Isso inclui criação, `update_fields` contendo `status_local` mesmo com valor igual, ou save integral em que o valor difere do `pre_save`. Um `QuerySet.update()` não emite esse sinal. Também há chamadas diretas na retratação e no reate histórico, no fecho de beco acionado após commit de `PerguntaDisputa`, e nos caminhos de aplicação manual de `fechar_becos_disputa` e `reconciliar_fantasmas`. Os agendamentos desses dois comandos usam `--alarme`. `app/chamados/signals.py:76–119,180–186,229–240` `app/chamados/reconciliador.py:602–616,1800–1807` `app/chamados/services/becos.py:38–61,80–94` `app/chamados/management/commands/fechar_becos_disputa.py:22–30,52–57` `app/ponto/management/commands/reconciliar_fantasmas.py:144–153,264–288` `app/config/crons.py:392,663`
+
+Uma pergunta criada depois do save de encerramento estava ausente daquela execução. Uma pergunta com FK nula fica fora do laço por destino enquanto permanecer assim, mesmo se já existia no fechamento. O fecho sem credor ainda pode alcançá-la em outra chamada, sujeito aos predicados acima. Para as quatro células, a ordem dos eventos e o motivo específico de o S128 não ter carimbado as perguntas estão [nao verificado]. `app/chamados/signals.py:91–119` `app/chamados/services/disputa_emissao.py:2038–2042,2155–2193`
+
+## A3. Por que a célula pode continuar `indefinida`
+
+O escritor operacional do par é `ponto.portas.celula.lavrar_veredito`. `CelulaDia.lavrar_veredito` delega a essa porta. O cartório e a decisão do admin chegam por ela, com precedência para o admin. A mesma porta de célula também contém a operação que apaga a lavra do cartório ao regenerar uma célula futura. O `lavrar_veredito=True` passado por S128 a `PerguntaDisputa.carimbar` grava o veredito **da pergunta**. `app/escala/models.py:1832–1841` `app/ponto/portas/celula.py:1007–1024,1069–1142,1145–1150,1161–1204` `app/ponto/services/veredito_celula.py:357` `app/chamados/models.py:3502–3514`
+
+A lavra da célula pode ocorrer com perguntas abertas ou sem lavra própria. O cartório classifica os insumos do dia, entre eles a quantidade de cobranças vivas com fio, e passa os códigos à lavra. `indefinida` vem de `PREVISTO_COM_DIA_INDEFINIDO`, `FASE_NAO_DECLARADA_COM_PREVISTO` ou `PARCIAL_SEM_PERIODO` quando nenhum código de maior precedência vence. Resolver o chamado pode mudar o insumo de cobrança e ainda deixar presente o motivo de cadastro ou de cobertura que produz `indefinida`. A própria `indefinida` integra `VEREDITOS_ACUSAM` e pode manter a pergunta viva quando o C6 chega à leitura da célula. `app/ponto/services/cartorio.py:1418–1423,1498–1516,1905–1913` `app/escala/models.py:1622–1643,1780–1782` `app/ponto/supra_juiz.py:346–372,392–402,450–469` `app/chamados/juizes.py:1499–1518,1551–1567`
+
+**O gatilho de rejulgamento existe.** Na criação ou mudança de status, `_cartorio_post_save_chamado` tenta `julgar_celula` quando consegue o dia por `dia_do_fato(..., fortes=True)` e o cartório não está em julgamento. O lote `processar_cartorio` também chama o juiz para células passadas. Uma impressão igual pode pular a lavra. A impressão inclui PK e status dos chamados que o cartório lê, recortados pelos módulos de furo e pela chave de data do catálogo. Qual gatilho faltou nas quatro células, ou se houve rejulgamento que manteve o mesmo veredito, está [nao verificado]. `app/chamados/signals.py:180–218` `app/ponto/services/cartorio.py:131–157,490–503,1432–1448,2078–2115` `app/ponto/management/commands/processar_cartorio.py:45–65` `app/config/crons.py:616`
+
+## A4. O que os vigias publicam
+
+| Vigia | Universo e destino |
+|---|---|
+| `reconciliar_chamados --alarme` | A linha **`orfas reataveis`** soma `perguntas_orfas_reatavies(c).count()` pelos colaboradores do tenant. O seletor exige destino e materialização nulos, disputa aberta e um dos quatro motivos. Inclui colaboradores com evento pendente e dispensa C6, corte de data, via vazia e validação nula. Sai em stdout a cada 15 minutos em `logs/reconciliador.log`. O estoque fica fora da soma de alarme. Quando os outros contadores da soma disparam, o comando escreve em stderr e sai com RC 2. `app/chamados/reconciliador.py:1637–1661` `app/chamados/management/commands/reconciliar_chamados.py:57–62,89–124` `app/config/crons.py:395,1913–1917` |
+| `auditar_invariantes_chamados --html` | **I8/I8o** partem de FK nula, colaborador ativo, motivo na união de `MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET` com os quatro do dia, e C6 viva. A consulta base não exige disputa aberta, data mínima, via vazia, validação ou materialização nulas. `_piso_i8_sem_entrada_no_contexto` põe em I8o quem tem dois ou mais candidatos e nenhum com `entrada_timestamp`. Os candidatos casam por `contexto_json.data_turno` ou `celula.data`, mesmo colaborador e motivo atendido, com exclusão de `disputa_supervisao` e sem filtro de status. O restante é I8. O cron das 07:18 publica em stdout para `logs/invariantes.log` e escreve `/app/media/invariantes_chamados.html`. I8o tem o tamanho do piso na descrição e `0` na coluna de violações. A contraprova pode acrescentar texto à descrição. RC 2 depende de F1/F2, sem contribuição de I8 ou I8o. `app/chamados/models.py:4126,4169–4170` `app/chamados/management/commands/auditar_invariantes_chamados.py:51–110,818–831,860–872,1866–1889` `app/config/crons.py:542–543,1913–1917` |
+
+`cron_run.sh` redireciona a execução pelo cron e grava duração e RC em `app/logs/placar.jsonl`. `pipeline_placar.medidos` lê esse RC e contabiliza o `2` como alarme de negócio. A pauta para TI do próprio runner trata RC diferente de `0` e `2`. Leitor automático das linhas de estoque ou de I8/I8o, leitor humano efetivo, silêncio dos logs desde 29/09 e números atuais dos vigias estão [nao verificado]. `app/config/crons.py:747,1515–1518,1913–1917` `bin/cron_run.sh:2–13,19–38` `app/core/management/commands/pipeline_placar.py:61–82,110–137`
+
+## B. Sonda de leitura
+
+O aval informa **1.890 perguntas, 183 colaboradores e 657 células**, com quatro perguntas soltas por célula nos quatro casos. As contagens por classe e os dados individuais ainda estão [nao verificado]. `aval_v2.txt:1`
+
+A sonda cruza os dois seletores reais, o C6, o ramo que a seleção atual indica, o estado dos chamados do dia e o veredito da célula. Para mostrar chamados do dia, usa `dia_do_fato(..., fortes=True)`. Para diagnosticar o histórico do reate, usa a chave `contexto_json.data_turno` exigida por aquele ramo. `juiz_aceitou` mede apenas `resolvedora_valida`. A execução da costura, do c1, do c2 e da cerca fica [nao verificado]. `app/chamados/juizes.py:89–130,2414–2498` `app/chamados/reconciliador.py:1166–1176,1640–1661,1711–1826`
+
+`PerguntaDisputa` não tem `criada_em`. A sonda lê apenas PK e instante da auditoria `pergunta_emitida`, gravada depois da inserção e em regime best-effort. `emissao_antes` e `emissao_depois` comparam esse registro com `resolvido_em`. Um registro posterior deixa o instante exato da inserção [nao verificado]. `ChamadoColaborador` usa `resolvido_em`, preservado na passagem de `resolvido` para `fechado`. Quando disponível, a sonda mostra também o carimbo da transição auditada para `fechado`. `app/chamados/migrations/0014_perguntadisputa.py:16–29` `app/chamados/models.py:62–80,254–261,304–308,3330–3348` `app/core/models.py:295–307` `app/core/observ.py:94–105`
+
+Em B4, os totais de frota ficam dentro dos respectivos `handle`. A sonda imprime essa indisponibilidade e chama o seletor real para o número no recorte `--colab` das células-alvo. O Python usa transação `REPEATABLE READ, READ ONLY`. O envelope já seleciona `juliani` e tem escritas administrativas próprias, incluindo credencial, permissões quando aplicáveis, arquivo temporário e trilha. A sintaxe Python foi conferida em memória. A execução com o ORM da aplicação e em produção está [nao verificado]. `app/chamados/management/commands/reconciliar_chamados.py:57–58,97–98` `app/chamados/management/commands/auditar_invariantes_chamados.py:860–872` `app/chamados/tests/cef_c3_sonda.py:16–22` `bin/sonda_leitura.sh:115–143,153–181,216–240,245–251`
+
+```python
+from collections import Counter, defaultdict
+from datetime import date
+import logging
+
+from django.db import connection, transaction
+from django.db.models import BooleanField, Case, Exists, OuterRef, Q, Value, When
+from django.utils import timezone
+
+from chamados.catalogo.motor import ENCERRADOS, VIVOS
+from chamados.juizes import dia_do_fato, motivos_atendidos, pergunta_viva, resolvedora_valida
+from chamados.models import (
+    MAPA_CATEGORIA_PARA_MOTIVO_DISPUTA,
+    MAPA_SUBCATEGORIA_PARA_MOTIVO_DISPUTA,
+    ChamadoColaborador,
+    PerguntaDisputa,
+)
+from chamados.reconciliador import (
+    _dia_fora_do_alcance_c,
+    _orfas_abertas,
+    perguntas_orfas_reatavies,
+)
+from chamados.services.disputa_emissao import _derivar_chamado_destino
+from core.models import LogAuditoria
+from core.observ import engolidos
+from escala.models import CelulaDia
+from ponto.marcos import celula_veta_cobranca
+
+INICIO = date(2026, 10, 21)
+CASOS = (123535, 123541, 123547, 123553)
+AVAL = (1890, 183, 657)
+NV = "[nao verificado]"
+
+
+def local(instante):
+    return timezone.localtime(instante).isoformat() if instante is not None else None
+
+
+def cronologia(emissao, chamado):
+    if chamado.resolvido_em is None:
+        return "sem_resolvido_em"
+    if emissao is None:
+        return "sem_trilha_de_emissao"
+    if emissao < chamado.resolvido_em:
+        return "emissao_antes"
+    if emissao > chamado.resolvido_em:
+        return "emissao_depois"
+    return "mesmo_instante"
+
+
+def ramo_de_hoje(p, viva, historicos):
+    # Seleção inline de reatar_pergunta_orfa para data_evento preenchida.
+    # app/chamados/reconciliador.py:1711–1779,1821–1826
+    if not p.no_reate:
+        return "fora_do_laco", None
+    colab = p.disputa.colaborador
+    vivo, _ = _derivar_chamado_destino(p.disputa, p.motivo, data_pergunta=p.data_evento)
+    if vivo is not None:
+        ok, _ = resolvedora_valida(vivo, p)
+        return "b_derivou_vivo", "juiz_aceitou" if ok else "juiz_recusou"
+
+    encerrados = historicos.get((colab.pk, p.data_evento.isoformat()), ())
+    if encerrados and not _dia_fora_do_alcance_c(p, colab, p.data_evento):
+        if viva:
+            veto = celula_veta_cobranca(colab.pk, p.data_evento)
+            return "a_historico_esvaziado_pelo_C6", veto
+        candidatos = [
+            c for c in encerrados
+            if p.motivo in motivos_atendidos(c.categoria, c.subcategoria)
+        ]
+    else:
+        candidatos = []
+        for c in encerrados:
+            sub = (c.subcategoria or "").lower().strip()
+            cat = (c.categoria or "").lower().strip()
+            motivo = (
+                MAPA_SUBCATEGORIA_PARA_MOTIVO_DISPUTA.get(sub)
+                or MAPA_CATEGORIA_PARA_MOTIVO_DISPUTA.get(cat)
+            )
+            if motivo == p.motivo:
+                candidatos.append(c)
+
+    if len(candidatos) > 1:
+        return "a_historico_multiplo", None
+    if len(candidatos) == 1:
+        ok, _ = resolvedora_valida(candidatos[0], p)
+        return "a_historico_unico", "juiz_aceitou" if ok else "juiz_recusou"
+    return "a_historico_vazio", celula_veta_cobranca(colab.pk, p.data_evento)
+
+
+def estado_do_dia(chamados):
+    estados = set()
+    for chamado in chamados:
+        if chamado.status_local in VIVOS:
+            estados.add("vivo")
+        elif chamado.status_local in ENCERRADOS:
+            estados.add("resolvido_fechado")
+        else:
+            estados.add("outro_status")
+    return "+".join(sorted(estados)) or "sem_chamado"
+
+
+def sondar():
+    filtro = Q(
+        data_evento__gte=INICIO,
+        chamado_destino__isnull=True,
+        via_resolucao="",
+        validada_em__isnull=True,
+        materializada_em__isnull=True,
+    )
+    perguntas = list(
+        PerguntaDisputa.objects.filter(filtro 
+
+[truncado em 20000 de 28111 caracteres]
 
 ## 27/11 10:55 · sessao 77187f8251ee · RC-SEM-PROXIMA · verificador · origem=Code
 
@@ -1200,74 +1378,4 @@ Cada célula mostra **dias / batidas**. Fonte da contagem: os `DIA.sobras_ids` t
 
 [truncado em 20000 de 20597 caracteres]
 
-## 27/11 10:08 · sessao 5706d8bf958d · RAZAO-DA-SOBRA · construtor · origem=Code
-
-**reds1 entregue na cópia.** São 37 testes de comportamento e controle, mais 15 mutantes em memória. A checagem estática confirmou sintaxe válida, 10 âncoras presentes uma vez e 5 ausentes. O diff consiste nos seis módulos de teste abaixo. [Fonte](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:1) · [Lavra](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:1) · [Leitores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_leitores.py:1) · [Repasse](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:1) · [E2 e fábrica](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_e2_fabrica.py:1) · [Mutantes](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:1) [nao verificado]
-
-**Veredito da suite e linhas de `red.log` [nao verificado].** A rota da Pista 2 usa SSH, cria um commit de foto para a cópia suja e grava `refs/pista`. Essas operações esbarram nas restrições da volta. A rota alternativa também escreve um env-file. O comando autorizado para quem puder executar está no fim. [suite.sh](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:324) · [SSH](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:378) · [Foto e ref](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:420) · [Rota alternativa](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:509) [nao verificado]
-
-### REDs e controles
-
-Os motivos abaixo vêm da leitura da base. O resultado de cada asserção em execução segue **[nao verificado]**.
-
-| Resposta ou volta | Caso e motivo esperado na base |
-|---|---|
-| R1 | Oposta a 8 s, borda inclusiva de 10 s e residual a 11 s. Falha explícita `autoridade escala.orfa_classe.razao_da_sobra ausente na base`. A classe legada opera por minuto. [RED](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:74) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/orfa_classe.py:53) |
-| R2 | Duas sobras no mesmo minuto em foto antiga. Falhas independentes `autoridade escala.services.leitor_celula.sobras_da_ata ausente na base` e `autoridade ponto.services.cartorio.medir_razoes_sobras ausente na base`. O leitor atual entrega horas. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:140) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/services/leitor_celula.py:180) |
-| R3 | O callback autônomo de isenção segue executando com TXT vigente. O mutante estende `_K6` ao callback e cobra a perda do silêncio. [Controle](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:190) · [Mutante](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:174) |
-| R4 | Um admitido e um vetado. O teste exige agregado com um item e trilha da recusa por item. A base grava os dois IDs antes de processar as perguntas. [RED](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:130) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/services/disputa_emissao.py:1117) | [nao verificado]
-| R5 / A emissor | Origem aberta e alvo efetivo entregue. O teste observa a resolução do dia dentro de `_nascer`, os `INSERT`s, os emitidos e a releitura do chamador. A base executa `save(force_insert=True)` e a guarda B2 do `save` incide em alterações. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:72) · [Nascimento](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/models.py:3333) · [Guarda](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/models.py:3847) | [nao verificado]
-| R6 | O residual é provocado depois do `carimbar` real. O teste exige rollback ao `SAVEPOINT`, contagens iguais em todas as tabelas detectadas na escrita e vizinha intacta. A base chama o corpo e a precedência sem a cerca desse ato. [RED](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:271) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:2112) | [nao verificado]
-| V1 | Identidades distintas no mesmo instante, segundos no mesmo minuto, duas linhas na meia-noite e CxR com par adicional. A fonte atual reduz o insumo a instante, tipo e marca de intervalo e entrega sobras em `HH:MM`. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:166) · [Entrada](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/utils.py:1367) · [Saída](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/utils.py:1883) |
-| V2 | Primeira ata para o supra, persistência, retirada da ocorrência na reconciliação, duas relavras e contadores. A base lavra horas e contagem, retira por minuto e omite os contadores de razão. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:60) · [Ata](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:749) · [Reconciliação](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/utils.py:2093) · [Contadores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:2021) |
-| V3 | Mesma ocorrência e razão na tela, PDF, supra e insumos de chamados e folha. O selo cobra leituras pela porta. A base ainda leva a hora crua ao template e compara por hora no PDF. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_leitores.py:74) · [Template](/home/ronald/wt-codex-razao-da-sobra-094857/app/templates/ponto/espelho.html:242) · [PDF](/home/ronald/wt-codex-razao-da-sobra-094857/app/relatorios/pdf_espelho.py:607) |
-| A cartório | Margem de meia-noite, 10:00 com ambiente 10:02, C6 no gate e no tripwire, primeira lavra C6 `0→1` sem subir emitidos e veto antes da escrita. A base consulta o relógio ambiente no avulso e chama C6 sem `agora` no caminho compartilhado. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:28) · [Avulso](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:2083) · [C6](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/models.py:368) |
-| A E2 e fábrica | Duas candidatas, TXT em um dia, carimbo do admitido, fecho adiado da vetada e veto antes do descarimbo. A base percorre as candidatas do E2 por colaborador e chama o descarimbo antes da guarda de limbo. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_e2_fabrica.py:65) · [E2](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/reconciliador.py:681) · [Fábrica](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/services/fabrica_da_celula.py:206) |
-
-Os controles escritos cobrem saída residual a 11 s, pausa L-032, foto histórica, ordem C → D → Ch → P, callback autônomo, dia sem ata, lista vazia, leitor alimentado com zero consultas e efeito zero em dinheiro, causa e retenção. **Verde em suite [nao verificado].** [Fonte](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:106) · [Repasse](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:143) · [Fábrica](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_e2_fabrica.py:128) · [Lavra](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:135) · [Leitores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_leitores.py:170) [nao verificado]
-
-Os testes assumem `batida_id`, `instante` e `razao` no registro de ocorrência, além das chaves `minutos_ambiguos` e `sobras_por_razao` nos contadores. A forma final dessas interfaces, a cobertura da borda 36, o toque em viewport real, o teto total de consultas da lavra e a publicação no placar e no HAIKU seguem **[nao verificado]**. O brief transcrito foi a referência disponível. A leitura integral do dossiê §6/§8 na cópia segue **[nao verificado]**. [Ocorrência e conferência](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:153) · [Contadores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:101) [nao verificado]
-
-### Mutantes
-
-Cada rótulo abaixo é argumento de `rodar_mutante`. **Presente** indica âncora única conferida estaticamente, com mordida **[nao verificado]**. **Skip** indica âncora ausente na base e mensagem `espera a cura RAZAO-DA-SOBRA`. [Executor](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:28)
-
-| Rótulo | Âncora | RED | Estado |
-|---|---|---|---|
-| `CatracaMutantesRazaoSobraTest.test_leitor_cru` | `_marcos_faltantes`, chamada a `grade_da_celula` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:62) | V3 catraca | Presente | [nao verificado]
-| `CatracaMutantesRazaoSobraTest.test_relogio_solto_no_gate_avulso` | `julgar_celula`, `agora < _fim` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:73) | A1 10:00/10:02 | Skip | [nao verificado]
-| `LavraMutantesRazaoSobraTest.test_falta_de_razao_aparece_no_contador` | `julgar_celula`, `return out` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:89) | V2 `sobras_sem_razao=0` | Presente | [nao verificado]
-| `LavraMutantesRazaoSobraTest.test_soma_por_razao_perde_uma_sobra` | `julgar_celula`, `return out` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:96) | V2 soma igual a `n_orfas` | Presente | [nao verificado]
-| `LavraMutantesRazaoSobraTest.test_correcao_so_no_cron` | `julgar_celula`, guarda `competencia_do_dia_entregue` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:106) | A1 veto no avulso | Skip | [nao verificado]
-| `LavraMutantesRazaoSobraTest.test_relogio_so_no_gate` | `_gravar_estado`, `_vivas_entre(..., agora=agora)` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:113) | A1 C6 no tripwire | Skip | [nao verificado]
-| `LavraMutantesRazaoSobraTest.test_relogio_perdido_na_escrita` | `_julgar_colab_corpo`, `carimbar(..., agora=agora)` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:122) | A1 instante persistido | Presente | [nao verificado]
-| `LavraMutantesRazaoSobraTest.test_parei_residual_libera_savepoint` | `executar_sob_cerca`, `raise` após veto anotado [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:129) | R6 escrita parcial | Presente | [nao verificado]
-| `E2MutantesRazaoSobraTest.test_veta_colaborador_inteiro` | `retratar_perguntas_absolvidas_por_celula`, `if not frescas` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:146) | A2 carimbo da admitida | Presente | [nao verificado]
-| `E2MutantesRazaoSobraTest.test_guarda_so_depois_do_descarimbo` | `perguntar_pela_celula`, guarda de entrega antes do descarimbo [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:156) | A2 veto antes da escrita | Skip | [nao verificado]
-| `E2MutantesRazaoSobraTest.test_inventa_zero_de_lista_vazia` | `julgar_colab`, registro `[PERGUNTA]` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:164) | A2 preserva emissão confirmada | Presente | [nao verificado]
-| `RepasseMutantesRazaoSobraTest.test_k6_estendido_a_signal_on_commit_autonomo` | `_isentos_post_save_chamado`, `silenciar_do_colab(colab_id)` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:174) | R3 alcance | Presente | [nao verificado]
-| `RepasseMutantesRazaoSobraTest.test_filtra_o_dia_antes_de_nascer` | `criar_disputa_a_partir_de_chamados_orfaos`, import de `_dtc_i` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:185) | R5 duas candidatas chegam a `_nascer` | Presente | [nao verificado]
-| `RepasseMutantesRazaoSobraTest.test_insere_antes_do_veto` | `_nascer`, `vigiar_escrita_de_perguntas([p])` antes do `save` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:195) | R5 `INSERT` só para admitido | Skip | [nao verificado]
-| `RepasseMutantesRazaoSobraTest.test_veta_o_lote_inteiro` | `criar_disputa_a_partir_de_chamados_orfaos`, seleção `_intervalo` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:203) | R5 retorno de sucesso | Presente | [nao verificado]
-
-### Comandos
-
-A partir da raiz da cópia, com autorização para a rota da Pista 2 e com o diretório de log disponível. Destino `logs/RAZAO-DA-SOBRA/reds1/red.log`. [Contrato da suite](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:22)
-
-```bash
-copia=/home/ronald/wt-codex-razao-da-sobra-094857
-cd "$copia"
-
-PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --dir "$copia" \
-  --only "escala.tests.test_razao_sobra_fonte ponto.tests.test_razao_sobra_lavra ponto.tests.test_razao_sobra_leitores chamados.tests.test_razao_sobra_e2_fabrica chamados.tests.test_razao_sobra_repasse chamados.tests.test_razao_sobra_mutantes" \
-  --parallel 1 > logs/RAZAO-DA-SOBRA/reds1/red.log
-
-rodar_mutante() {
-  PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --dir "$copia" \
-    --only "chamados.tests.test_razao_sobra_mutantes.$1" --parallel 1
-}
-```
-
-A certificação continua com Code e opus final. **`red.log` e veredito [nao verificado].**
-
-_8628 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8629 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
