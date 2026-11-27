@@ -1,7 +1,17 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 19:02** · publicado em **27/11/2026 19:07** (UTC-3)
+> Ultima resposta processada: **27/11/2026 19:24** · publicado em **27/11/2026 19:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 19:24 · sessao 9b527bad8734 · FERIADO-UM-JUIZ · construtor · origem=Code
+
+Implementei a c10. A recusa do oráculo reverte o savepoint da sombra. No BUG-144, o mensal e o DiaPago motor preservaram **5,95 h**, com retorno **1**. A guarda exige procedência por dia, inclusive quando há saída antecipada e zero horas trabalhadas. [fechamento.py:1295](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/fechamento.py:1295) · [dia_pago.py:316](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/dia_pago.py:316) · [R1:340](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:340)
+
+O vigia lê `recusas_oraculo` em `/app/logs/ponto.log` na configuração SaaS. O esperado é **0**. Cada recusa registra colaborador, motivo e total acumulado. [fechamento.py:1328](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/fechamento.py:1328) · [saas.py:160](/home/ronald/wt-codex-feriado-um-juiz-152427/app/config/settings/saas.py:160)
+
+Os **9 testes** ficaram vermelhos contra `597fdc40d` e passaram com a cura. Os **7 comandos de mutação** reproduziram as falhas esperadas, os **41 estruturais** passaram e a contagem de `except` ficou igual. O relato traz os comandos e as asserções antiga e nova de R4. [r.md:17](/home/ronald/wt-codex-feriado-um-juiz-152427/app/r.md:17)
+
+Também alinhei o teste ORM c5 da própria obra. Execução ORM, suíte integral e produção **[nao verificado]**. A certificação fica com Code e Opus. [teste ORM:462](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz_porta.py:462) [nao verificado]
 
 ## 27/11 19:02 · sessao d36c9265c821 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
 
@@ -586,23 +596,4 @@ Os casos A e B vêm do recibo. As demais linhas definem controles com cadastro d
 4. Usar todas as rubricas canônicas diárias de `DiaPago` versão `motor` e grade em minutos, mais a linha sem dia de DSR e banco e a testemunha mensal dos campos canônicos de `FechamentoMensal`. Períodos normais, folga certa, folga-feriado e folga sem escala podem guardar trabalho em campos distintos. Preservar os splits de HE como colunas sem somá-los novamente. `app/ponto/services/dia_pago.py:33–47,173–186,235–267,285–292,340–360,867–908`, `app/ponto/management/commands/aplicar_09_corte_b.py:67–74`.
 5. Apurar o efeito `NOVO − HOJE` nos dois motores e declarar `HOJE − GRAVADO` e `NOVO − GRAVADO` no mensal. `diff_frota.medir` parte apenas de FM, `somar` omite chaves sem os dois lados e usa limiar de 0,01. Portanto sua saída mensal isolada não demonstra a condição diária. `recalcular_fechamento_mes(somente_leitura=True)` devolve o fechamento, e `lavrar_dias_pagos=True` entra em escrita. A lavra diária real recebe o mesmo `resultado` e `dia_da_jornada`. `app/ponto/services/diff_frota.py:7–22,45–89,101–135`, `app/ponto/services/fechamento.py:553–560,1152–1160,1215–1241`. Se a prova também contiver `DIFF_FOLHA`, validar TXT e retidos, observando que `simular_folha` escolhe a competência corrente pela data de referência da empresa. `app/folha/management/commands/simular_folha.py:43–51,113–131,202–225`. Frotas, deltas, status atual de exportação e resultado pela porta oficial são [nao verificado].
 
-## 27/11 17:07 · sessao cf282caa47fc · - · - · origem=Ronald (tmux)
-
-Na cópia, a herança está em `app/ponto/motor_calculo_v2.py:2489–2545`. A referência do aval a `~2610–2640` aponta, nesta cópia, para outra etapa, o crédito de pares fechados ao turno aberto. `app/ponto/motor_calculo_v2.py:2608–2640`
-
-- O juiz produz `Turno.data_turno` pelo início e pelo envelope da véspera. O motor monta o mapa de entrada localizada para esse dia, entrega-o ao pareador e usa a data civil quando a chave falta. `app/ponto/turnos.py:248–324`, `app/ponto/motor_calculo_v2.py:894–922`, `app/ponto/motor_calculo_v2.py:2459–2469`, `app/ponto/motor_calculo_v2.py:2513–2517`
-- Um vão de 0 a 6 h inclusive entre saída anterior e entrada atual sobrescreve esse dia com `_prev_dj`. O motor guarda o dia já herdado e a saída real, ou `None` se aberto, antes de excluir pares fora de `[data_ini, data_fim]`. A herança pode propagar em cadeia e atravessar a borda da janela pela ordem dessas operações. `app/ponto/motor_calculo_v2.py:2518–2545`
-- No caso A, as 5 h entre 22:00 e 03:00 fazem o par de 480 min cair em D−1. Ambos os pares ficam fora da janela iniciada em D. No caso B, o par 20/11 22:00 → 21/11 06:00 vale 480 min no dia 20. As 5 h até 11:00 fazem o segundo par de 480 min cair também no dia 20. Out mantém ambos e nov descarta ambos. O recibo registra `{}`, `{20/11: 960}`, `{}` e o aval pede os 480 min no dono de cada par de 8 h. `app/ponto/motor_calculo_v2.py:2516–2545`, `recibo_c2v.md` item 7 fornecido, `aval.txt` fornecido.
-
-| Estrutura | Escritores e leitores |
-|---|---|
-| Dia cru e turnos do juiz | `_turnos_do_juiz` e `_dia_do_turno` escrevem a resposta e a instância guarda o mapa e os turnos. Leitores incluem filtro da ata, janela L-097, bordas L-084, dobra por par e crédito BO-B. `app/ponto/motor_calculo_v2.py:711–714`, `:894–922`, `:2509–2510`, `:963–978`, `:1640–1654`, `:1696–1706`, `:2110`, `:2630–2637`, `:2911`, `:3380` |
-| Herança e dia que leva o par | `_prev_fim`, `_prev_dj` são estado local. `data_jornada` filtra competência, julga folga, alimenta `_folga_do_par` e `_dia_jornada_por_periodo[id(periodo)]`. A janela e o bloqueio sem previsto leem `_folga_do_par`. O mapa local alimenta BO-B, presença para DSR/falta, O73 e teto de pontualidade. `app/ponto/motor_calculo_v2.py:2494–2545`, `:2558–2574`, `:1562`, `:1640`, `:2627–2637`, `:2689–2724`, `:2804–2831` |
-| Dono para a soma | A chave é ID do objeto de período, com um dia para sua quantidade. O teto expõe o mapa no resultado, Partido também escreve diretamente e fechamento mescla as fatias. DiaPago, exportação, DIFF e calculador leem. Reflexo DSR no base ainda consulta data civil. `app/ponto/motor_calculo_v2.py:1117–1128`, `:3071–3075`, `:2749–2758`, `app/ponto/services/fechamento.py:314–336`, `app/ponto/services/dia_pago.py:109–132`, `:173–186`, `:234–267`, `app/folha/porta_export.py:106–117`, `app/ponto/calculador/alimentacao.py:73–92`, `:193–201`, `:239–260`, `app/ponto/calculador/periodo.py:596–615`, `app/ponto/management/commands/diff_calculador.py:214`, `:253`, `:268` |
-| `minutos_trabalhados` | Inicializa em zero, três corpos calculam, bloqueio sem previsto move os minutos para fora e zera, BO-B pode creditar primeiro aberto, calculador V3 reescreve na releitura. Totais, teto, alerta FT, crédito, overrides, DiaPago, fechamento, espelho, exportação e DIFF leem. `app/ponto/motor_calculo_v2.py:213`, `:257`, `:296`, `:300`, `:1276`, `:1585–1590`, `:2602`, `:2666–2677`, `:2898`, `:3009`, `:3061`, `:3110`, `:3214–3218`, `:3372`, `:3447`, `:3472–3476`, `app/ponto/calculador/periodo.py:739–745`, `app/ponto/services/fechamento.py:922–923`, `:959–1009`, `app/ponto/services/espelho.py:136`, `app/ponto/services/dia_pago.py:178`, `:239`, `:249`, `:264`, `app/folha/porta_export.py:111`, `:550`, `app/ponto/management/commands/diff_calculador.py:253`, `:268` |
-
-12x36, 12x36ComEscala, Plantão e Intermitente herdam o método mensal. Plantão reusa o cálculo por período do 12x36. Partido e Comercial chamam a base e reagrupam os pares sobreviventes pelo dia cru do juiz. PartidoNoturno herda Partido. `app/ponto/motor_calculo_v2.py:2843–2863`, `:2975`, `:3015–3061`, `:3315`, `:3425–3447`, `:3628–3652`, `:3657–3698`
-
-Selos existentes cobrem jornada própria que excede o envelope da véspera, entrada atrasada depois da meia-noite, os dois lados da borda em segundos, volta real do intervalo e a guarda de saída anterior real. `app/ponto/tests/test_o93_dia_da_jornada.py:55–117`
-
-_8758 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8759 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
