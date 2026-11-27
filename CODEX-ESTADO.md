@@ -1,7 +1,230 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 11:52** · publicado em **27/11/2026 11:53** (UTC-3)
+> Ultima resposta processada: **27/11/2026 11:59** · publicado em **27/11/2026 12:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 11:59 · sessao ba05ad29f6be · ORFAS-VOLTOU · leitura · origem=Code
+
+## 1. TXT do Domínio — competência 11/2026
+
+**A pergunta órfã aberta, por si só, não tira colaborador ou dia, não altera rubrica ou horas e não bloqueia a geração. A célula pode tirar o colaborador inteiro.** O POST calcula `FechamentoMensal` em memória, classifica e monta com os mesmos objetos. A foto gravada ainda serve de guarda para abrir a geração e de alvo do carimbo de aprovação. O `DiaPago` gravado entra na conferência da porta, sem alimentar as linhas do TXT. `app/folha/views.py:132–173,214–219,249–288` `app/folha/porta_export.py:319–341,392–398,693–706,1364–1398`
+
+- **Retenção.** `classificar_export → motivos_retencao_espelho → motivos_retencao_celula → _dias_sem_decisao` lê veredito, protestos, vínculo e, na exceção da pausa, ata/DNA. `indefinida`, `furo` e `nunca_bateu` acusam. Aplicados o recorte e as dispensas, um dia que retém põe o colaborador inteiro em `fora/furo_espelho`. A guarda de cadastro zero também consulta a existência de células para explicar a retenção. `app/escala/models.py:1780–1786` `app/folha/export.py:945–982,1157–1182,1214–1222,1244–1316`
+- **Apuração e emissão.** O fechamento alimenta o motor com célula/ata, batidas apuráveis, escalas e ausências. Também lê a grade da célula para os totais de previsto, abono e realizado e chama o mesmo retentor. A montagem traduz os totais mensais pelo catálogo e lê ausências aprovadas para o bloco datado de faltas. Nenhum desses caminhos consulta `PerguntaDisputa` ou o estado da disputa. A conferência do POST lê o carimbo da porta. O caminho de badge que consulta chamados por célula é de modo gestor, enquanto o medidor chama o espelho no modo padrão. `app/ponto/services/fechamento.py:617–659,762–776,1037–1092` `app/ponto/motor_calculo_v2.py:638–675` `app/folha/export.py:71–87,169–185,402–461,720–755` `app/folha/porta_export.py:482–502,1423–1437` `app/ponto/services/espelho.py:613–621,1230`
+- **Medida honesta.** Presença do colaborador é matrícula em `reg10` efetivamente emitido. Presença de data é `reg11` ligado ao `reg10` do bloco de faltas. Ausência de `reg11` deixa a contribuição daquele dia às rubricas mensais **[nao verificado]**. Para o contrafactual, fechar só a pergunta, mantendo os insumos, tem **efeito direto zero por leitura do código**. Validar uma resposta ou decidir o dia pode plantar batida, aprovar ausência ou mudar a célula. O efeito desse ato exige definir o desfecho e rodar o DIFF antes/depois em sombra com escrita. Função pura que reproduza esse ato até o TXT **[nao verificado]**. `app/folha/export.py:215–255,734–755,977–982` `app/chamados/services/validacao.py:777–805` `app/chamados/services/materializacao.py:1584–1592` `app/ponto/services/veredito_celula.py:324–357`
+
+O anexo registra **1.895 perguntas, 184 colaboradores, 658 células e 12 perguntas sem FK de célula**. A sonda refaz o mesmo filtro e mede o estoque que encontrar na sombra. Identidade com as 658 originais, totais por empresa e resultado do TXT **[nao verificado]**. A coluna `celulas_retendo` conta causas lidas no retentor quando `furo_espelho` é o motivo efetivo. As colunas de presença contam células, inclusive quando várias pertencem ao mesmo colaborador. `autopsia_v2.md:3–4` `r2.md:3–17` `app/folha/export.py:977–982,1202–1204,1268–1271`
+
+### Rascunho da sonda
+
+Rodar via stdin no `manage.py tenant_command shell --schema=juliani --settings=config.settings.sombra`. O comentário inicial dá o arranque sem configurar os handlers de arquivo. O código lê o estado da porta sem dispará-la e mostra a montagem em memória mesmo se a porta estiver fechada. Execução da sonda **[nao verificado]**. `bin/sonda_leitura.sh:235–241` `app/config/settings/saas.py:118–143,160–184` `app/config/settings/sombra.py:27–50` `app/folha/porta_export.py:1360–1398,1423–1437`
+
+```python
+# Do diretório app/, com /app/logs já existente, passar este bloco por stdin:
+# python -B -c 'import os,runpy; from django.conf import settings; os.path.isdir("/app/logs") or __import__("sys").exit("[nao verificado]"); os.environ["DJANGO_SETTINGS_MODULE"]="config.settings.sombra"; settings.LOGGING_CONFIG=None; runpy.run_path("manage.py",run_name="__main__")' tenant_command shell --schema=juliani --settings=config.settings.sombra
+
+from collections import Counter, defaultdict
+from datetime import date
+import logging
+
+from django.db import connection, transaction
+from chamados.models import PerguntaDisputa
+from colaboradores.models import Empresa
+from core.observ import engolidos
+from escala.models import CelulaDia
+from folha.export import (
+    STATUS_NO_TXT, classificar_export, codigo_no_sistema_dominio,
+    conteudo_do_txt, janela_competencia, montar_linhas_export,
+    motivos_retencao_celula, partes_da_linha, validar_layout_dominio,
+)
+from folha.porta_export import estado_da_porta
+from ponto.models import FechamentoMensal
+from ponto.services.fechamento import (
+    recalcular_fechamento_mes, universo_da_competencia,
+)
+
+COMP = (11, 2026)
+EMPRESAS = (2, 3, 4)
+NV = "[nao verificado]"
+CAMPOS = (
+    "celulas", "colabs_com_celula", "colab_no_txt", "colab_fora_txt",
+    "colab_nv", "fora_janela", "reg11", "sem_reg11_colab_no_txt",
+    "sem_reg11_colab_fora_txt", "dia_nv", "celulas_retendo",
+    "rubrica_horas_efeito_direto", "contrafactual_material_nv",
+)
+
+
+class ContadorDeAvisos(logging.Handler):
+    def __init__(self):
+        super().__init__(logging.WARNING)
+        self.total = 0
+
+    def emit(self, record):
+        self.total += 1
+
+
+def medir_empresa(empresa, celulas):
+    ini, fim = janela_competencia(empresa, *COMP)
+    n = Counter(celulas=len(celulas),
+                colabs_com_celula=len({colab for _, colab, _ in celulas}),
+                contrafactual_material_nv=len(celulas))
+    porta = estado_da_porta(empresa, *COMP)["codigo"]
+    tem_gravado = FechamentoMensal.objects.filter(
+        colaborador__empresa=empresa, mes=COMP[0], ano=COMP[1],
+        status__in=STATUS_NO_TXT,
+    ).exists()
+
+    matriculas, datas, retendo = {}, defaultdict(set), set()
+    try:
+        codigo_no_sistema_dominio(empresa)
+    except ValueError:
+        montagem = "sem_integracao"
+    else:
+        fechs = recalcular_fechamento_mes(
+            *COMP, empresa_id=empresa.pk, somente_leitura=True,
+            lavrar_dias_pagos=False, retornar_objeto=True,
+        )
+        esperados = universo_da_competencia(*COMP, empresa.pk).values_list("pk", flat=True)
+        if fechs.keys() != set(esperados):
+            raise RuntimeError("universo_fechamento_incompleto")
+
+        itens = classificar_export(empresa, *COMP, fechamentos=list(fechs.values()))
+        linhas, elegiveis = montar_linhas_export(
+            empresa, *COMP, itens=itens, fechamentos=list(fechs.values()),
+        )
+        montagem = "layout_invalido" if validar_layout_dominio(linhas) else (
+            "valido" if linhas else "sem_linhas"
+        )
+        if montagem != "layout_invalido":
+            for colab in elegiveis:
+                fech = fechs[colab]
+                if fech.status in STATUS_NO_TXT:
+                    matriculas[colab] = fech.colaborador.codigo_dominio.strip().zfill(10)
+            atual = None
+            for linha in conteudo_do_txt(linhas).splitlines():
+                parte = partes_da_linha(linha)
+                if parte is None:
+                    raise RuntimeError("linha_ilegivel")
+                if parte["reg"] == "10":
+                    atual = parte["matricula"]
+                    datas.setdefault(atual, set())
+                elif atual is not None:
+                    datas[atual].add(parte["data"])
+                else:
+                    raise RuntimeError("reg11_sem_reg10")
+
+        alvos = {colab for _, colab, _ in celulas}
+        for item in itens:
+            colab = item["colaborador_id"]
+            if colab in alvos and item["motivo"] == "furo_espelho":
+                _, dias = motivos_retencao_celula(
+                    fechs[colab].colaborador, ini, fim, com_dias=True,
+                )
+                retendo.update(d["celula_id"] for d in dias)
+
+    donos = Counter(matriculas.values())
+    for pk, colab, dia in celulas:
+        mat = matriculas.get(colab)
+        incerto = montagem in ("sem_integracao", "layout_invalido") or (
+            mat in datas and donos[mat] > 1
+        )
+        presente = not incerto and mat in datas
+        n["colab_nv" if incerto else "colab_no_txt" if presente else "colab_fora_txt"] += 1
+        n["celulas_retendo"] += pk in retendo
+
+        if not ini <= dia <= fim:
+            n["fora_janela"] += 1
+        elif incerto:
+            n["dia_nv"] += 1
+        elif not presente:
+            n["sem_reg11_colab_fora_txt"] += 1
+        elif dia.strftime("%Y%m%d") in datas[mat]:
+            n["reg11"] += 1
+        else:
+            n["sem_reg11_colab_no_txt"] += 1
+
+    if n["celulas"] != sum(n[k] for k in CAMPOS[2:5]):
+        raise RuntimeError("soma_colab")
+    if n["celulas"] != sum(n[k] for k in CAMPOS[5:10]):
+        raise RuntimeError("soma_dia")
+    return n, (porta, int(tem_gravado), montagem)
+
+
+def sondar():
+    cfg = connection.settings_dict
+    if (cfg["NAME"], cfg["HOST"], connection.schema_name) != (
+        "sombra", "sombra_db", "juliani",
+    ) or not connection.get_autocommit() or connection.in_atomic_block:
+        raise RuntimeError("envelope")
+
+    with transaction.atomic():
+        with connection.cursor() as cur:
+            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cur.execute(
+                "SELECT current_database(), current_schema(), "
+                "current_setting('transaction_isolation'), "
+                "current_setting('transaction_read_only')"
+            )
+            if cur.fetchone() != ("sombra", "juliani", "repeatable read", "on"):
+                raise RuntimeError("envelope_sql")
+
+        perguntas = PerguntaDisputa.objects.filter(
+            data_evento__gte=date(2026, 10, 21), chamado_destino__isnull=True,
+            via_resolucao="", validada_em__isnull=True, materializada_em__isnull=True,
+        ).order_by()
+        com_fk = perguntas.filter(celula_id__isnull=False)
+        por_empresa = defaultdict(list)
+        for pk, emp, colab, dia in CelulaDia.objects.filter(
+            pk__in=com_fk.values("celula_id"),
+        ).values_list("pk", "colaborador__empresa_id", "colaborador_id", "data"):
+            por_empresa[emp].append((pk, colab, dia))
+
+        universo = (perguntas.count(),
+                    perguntas.values("colaborador_id").distinct().count(),
+                    sum(map(len, por_empresa.values())),
+                    perguntas.filter(celula_id__isnull=True).count())
+        saida = [
+            ("universo_perguntas_colabs_celulas_sem_fk", universo),
+            ("referencia_anexo", (1895, 184, 658, 12)),
+            ("colunas", CAMPOS),
+        ]
+        total = Counter()
+        for emp_id in EMPRESAS:
+            n, estado = medir_empresa(Empresa.objects.get(pk=emp_id), por_empresa[emp_id])
+            total.update(n)
+            saida.append((emp_id, tuple(n[k] for k in CAMPOS), estado))
+        fora = sum(len(v) for emp, v in por_empresa.items() if emp not in EMPRESAS)
+        if total["celulas"] + fora != universo[2]:
+            raise RuntimeError("soma_universo")
+        return saida + [("total_234", tuple(total[k] for k in CAMPOS)),
+                        ("celulas_fora_234", fora)]
+
+
+raiz = logging.getLogger()
+handlers, nivel = raiz.handlers[:], raiz.level
+avisos = ContadorDeAvisos()
+raiz.handlers = [avisos]
+raiz.setLevel(logging.WARNING)
+antes = engolidos()
+try:
+    saida = sondar()
+    if avisos.total or engolidos() != antes:
+        raise RuntimeError("leitura_incompleta")
+except Exception:
+    raise SystemExit(f"SONDA_INCOMPLETA {NV}") from None
+finally:
+    raiz.handlers, raiz.level = handlers, nivel
+
+for registro in saida:
+    print(*registro)
+print("CONTRAFACTUAL_MATERIAL", NV)
+```
+
+## 2. Onde mora o número
+
+- **Autoridade.** `perguntas_orfas_reatavies(colab)` define o universo elegível. O comando soma esse queryset por colaborador e publica a medida fora da soma que dá RC 2. Quem tenta o reate de fato é `reatar_pergunta_orfa`. O cron encaminha a saída a `logs/reconciliador.log` a cada 15 minutos. **3.735 às 11h** é a leitura do anexo. Valor atual **[nao verificado]**. `app/chamados/reconciliador.py:1640–1695` `app/chamados/management/commands/reconciliar_chamados.py:57–58,97–98,115–124` `app/config/crons.py:395,1913–1917` `autopsia_v2.md:17`
+- **Publicação.** `app/core/placar_estrutural.py::placar()` lê `RESULTADOS` em memória. Para esta medida, hoje ele **nem chama a função real nem lê o log**. O placar estrutural que chega ao leitor é o do **`ESTADO.md`**, gerado em `bin/gerar_estado.py` e publicado junto com o RELATO por `bin/relato.sh`. `app/core/esteira_vigia.py` fornece o escritor e a trava do RELATO. `hook_stop_fila1` lê as duas linhas operacionais do topo. `handoff_sessao.sh` escreve o handoff e hoje exibe o R6 e a linha de disco. O `PLACAR.md` publicado à parte deriva da GRADE-MESTRA. `app/core/placar_estrutural.py:627–654` `bin/gerar_estado.py:60–104,408–414` `bin/relato.sh:48–49,112,125–130,147–158` `app/core/esteira_vigia.py:815–892` `bin/hook_stop_fila1.py:446–484` `bin/handoff_sessao.sh:85–123,195–218,328–337`
+- **Encaixe mínimo — fila de `bin/`.** Ler uma vez a última linha válida emitida pelo vigia da frota e publicar a mesma frase no `ESTADO.md` e no topo visível do RELATO, abaixo das duas linhas operacionais, pelo mecanismo de publicação usado pelo disco. O handoff pode ler essa projeção. O comando continua sendo o único produtor do total. A linha atual do contador sai sem hora própria, então o leitor só deve publicar um horário se puder vinculá-lo à mesma rodada. Essa ligação no log fornecido **[nao verificado]**. `app/docs/LEIS.md:60–61` `app/chamados/management/commands/reconciliar_chamados.py:97–98,115` `bin/cron_run.sh:7–13` `bin/disco_estado.py:25–33,413–453` `bin/gerar_estado.py:320–326` `aval.txt:1`
 
 ## 27/11 11:52 · sessao a6f52086aa3d · FERIADO-NAO-PREVISTO-L086 · sonda · origem=Code
 
@@ -1374,23 +1597,4 @@ Nenhum dos seis mutantes novos passou nas sondas em memória. `caso_proxima_vazi
 2. **P2 tem correção proposta sem RED no leitor.** O selo fica verde se a contagem antiga ou a chamada sem `--min-idade 900` voltar no vercodex. `CLAUDE.md:28–29` · `bin/tests/test_rc_sem_colher.sh:202,243–248,271` · `vercodex.py:165–174` (anexo)
 3. **A promessa de 15 minutos reais excede o que a marca prova.** A borda `899/900/901` morde para a data inferida. A colisão de dia ainda permite listar após 10 segundos reais. `bin/rc_sem_colher.py:13–17,110–118,130–138` · `bin/tests/test_rc_sem_colher.sh:182–186,286`
 
-## 27/11 10:55 · sessao 6d8bb13e8944 · E4C-F5-INSTANTE · construtor · origem=Code
-
-Implementei a cura3c na cópia. A deduplicação do veto K6 agora usa a autoria resolvida pelo próprio escritor da trilha. [observ.py:113](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:113) · [materializacao.py:858](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:858)
-
-- `core/observ.py::evento` ganhou `unica=False`. Quando ativado, retorna a linha existente com a mesma ação, modelo, objeto, descrição, fotos, usuário e ator, quando o campo está disponível. A consulta e a criação usam o mesmo `engolir` e o mesmo savepoint. A docstring atribui a serialização ao chamador, pela trava do dono. [observ.py:94](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:94) · [observ.py:127](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:127) · [observ.py:138](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:138)
-- `chamados/services/materializacao.py::trilha_do_veto_k6` monta a foto e chama `evento(..., unica=True)`. A busca na cópia confirmou que esse é o único chamador de `evento` que passa `unica`. [materializacao.py:846](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:846)
-- `chamados/tests/test_e4c_f5_c4_red.py::Item13PorPKTest.test_RED_item13_veto_repetido_fora_de_request_deduplica_por_usuario_e_ator` usa relógio congelado e autor explícito. Exige uma linha para o comando que já havia vetado e uma única linha para o comando que veta duas vezes. Pela leitura do código, a cura3b produziria zero linhas para o segundo comando, e cada mutante produziria duas. A execução está **[nao verificado]**. [test_e4c_f5_c4_red.py:983](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:983) · [test_e4c_f5_c4_red.py:1068](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1068)
-- `chamados/tests/e4c_f5_c4red2_mutantes.py::veto_sem_deduplicacao` faz o M44 trocar `unica=True` por `unica=False` na trilha. `evento_ignora_unica` faz o M46 pular a consulta no escritor. Ambos apontam para a mesma asserção do RED novo. [e4c_f5_c4red2_mutantes.py:757](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:757) · [e4c_f5_c4red2_mutantes.py:768](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:768)
-
-O diff inteiro da cópia contra `0ba8b22b7b486543caaced318666c264a03b1e81` teve **0** linhas em `^\+.*except`. A sintaxe dos quatro arquivos e o ponto único de aplicação de cada mutante foram verificados estaticamente. A suite e as mordidas ficam **[nao verificado]**.
-
-**Comandos para o Code**
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_c4_red.Item13PorPKTest.test_RED_item13_veto_repetido_fora_de_request_deduplica_por_usuario_e_ator
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M44VetoSemDeduplicacao.test_mordida
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M46EventoIgnoraUnica.test_mordida
-```
-
-_8646 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8647 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
