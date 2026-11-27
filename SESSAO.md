@@ -6,10 +6,19 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 01:47:38.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (131.6 MB). Acoes na janela: **2448**.
+**Medido em 27/11/2026 01:54:22.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (131.7 MB). Acoes na janela: **2457**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 01:54:17 | Bash | Cruza arquivos com o CCM e lê o fim do veredito | `cd ~/saas-hasner; git -C ~/wt-codex-motor-221052 diff --name-only 59600163c HEAD \| sort > /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/ccm.txt; wc -l < /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/ccm.txt; grep -E "periodo.py\|porta_export\|alimentacao\|test_ramo2b\|test_porta_do_export\|test_o280\|motor_cal ...` |
+| 01:54:02 | Bash | Lê o veredito do verificador c2l | `cd ~/saas-hasner; R=logs/RAMO2-CRUZA/c2l/verif1/r.txt; wc -c $R; grep -n -iE "APROVADO\|REPROVADO" $R \| tail -3; head -c 5000 $R` |
+| 01:53:59 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/brbrl52o1.output` |
+| 01:52:03 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 01:52:00 | Bash | Marca a PAR no RELATO | `cd ~/saas-hasner; echo "- $(date +%H:%M) colhido PAR-PELO-TURNO c1v5a2/viz.rc (01:51 rc=0): ponto folha relatorios na pista (job 1127014342_5b5d5f97) Ran 6935 OK (skipped=7, expected failures=23) -- as 2 regressoes da c1v5a curadas; itens 2-4 na c1v5b depois do CCM (travada por: CCM motor). Vagas 2 e 3 livres: toda obra da ordem travada por CCM (motor/models/bin) ou E4C-F5 (E4d)" >> app/docs/RELAT ...` |
+| 01:51:54 | Bash | Veredito do recorte da PAR | `cd ~/saas-hasner; L=logs/PAR-PELO-TURNO/c1v5a2/viz.log; grep -E '^Ran \|^(OK\|FAILED)($\| \()' $L \| tail -2; grep -E 'RECIBO\|ROTA PISTA' $L \| tail -2` |
+| 01:51:51 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bc3hwnjxp.output` |
+| 01:51:04 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 01:51:01 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bcpnymr4z.output` |
 | 01:45:57 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 01:45:49 | Bash | Confere a partida do verificador | `sleep 5; cd ~/saas-hasner; tail -2 logs/RAMO2-CRUZA/c2l/verif1/wrapper.out; python3 bin/rc_sem_colher.py; echo rc=$?` |
 | 01:45:46 | Bash | Lança o verificador da c2l | `cd ~/saas-hasner; D=logs/RAMO2-CRUZA/c2l/verif1; cat > $D/q.txt <<'EOF' PAPEL: verificador (pre-verificador 5(a) da obra RAMO2-B-EM-TURNO-QUE-CRUZA, volta c2l). Copia do HEAD 913460075 = c2k (7f954d921) + c2l. A c2l cura, FORA do motor, os achados A1-A4 do verificador c2k/verif1 (anexo r da c2k). Anexos: brief c2l, resposta do verificador c2k, leis dos sitios, JUIZES.md, diff 7f954d921..913460075  ...` |
