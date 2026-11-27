@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 08:14:01.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (152.3 MB). Acoes na janela: **1759**.
+**Medido em 27/11/2026 08:20:35.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (153.5 MB). Acoes na janela: **1753**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 08:20:18 | Bash | Confere itens do opus no código | `cd /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto; sed -n '793,797p;3800,3808p;3862,3870p' motor_calculo_v2.py; echo ---; sed -n '3668,3680p;3708,3727p' motor_calculo_v2.py; echo ---; git diff 59600163c -- calculador/alimentacao.py calculador/periodo.py \| head -60` |
+| 08:20:06 | Bash | Registra o aval e vê estado das obras | `cd ~/saas-hasner; A=logs/AVAIS-1515/LEIS-MADRUGADA-2711-0825.txt; cat > $A <<'EOF' aval Ronald: LEIS-MADRUGADA-2711-0825 -- respostas pela lei escrita (contestavel, cada uma vira linha DECIDIDO no RELATO): (1) ! PAR-PELO-TURNO-4B-MOTOR: DADO. O 4b e o motor sobrescrevendo o dia do juiz (motor_calculo_v2.py:2516-2521), contra a lei do juiz unico do dia (MOTOR-LE-O-TURNO): a cura entra na PAR, volta ...` |
+| 08:19:47 | Bash | Estado das obras travadas | `cd ~/saas-hasner; date +%H:%M; head -14 app/docs/RELATO.md \| cut -c1-260; tail -3 app/docs/PROMPTS.md \| cut -c1-200; grep -n "E4C-F5\\|E4D-MATRIZ\\|PAR-PELO-TURNO" app/docs/BACKLOG.md \| cut -c1-220 \| head` |
+| 08:14:21 | Agent | Opus final RAMO2-B | `PAPEL: verificar OBRA: RAMO2-B-EM-TURNO-QUE-CRUZA (leitura final / opus final, mao unica, motor). Leia e siga o pedido em /home/ronald/saas-hasner/logs/RAMO2-CRUZA/c2r/opus/pedido.md. A arvore certificada e a copia /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 no HEAD eb2019f99 (base main 59600163c); suite inteira verde em logs/RAMO2-CRUZA/c2s/suite.log (Ran 18160 OK). Diff inteiro em lo ...` |
+| 08:14:17 | Bash | Registra suíte verde | `cd ~/saas-hasner; sed -i '1s#.*#ESPERANDO: agente verificador opus final RAMO2-B c2s \| pid=0 \| arquivo=logs/RAMO2-CRUZA/c2r/opus/opus.md#' app/docs/RELATO.md; echo "- $(date +%H:%M) colhido RAMO2-B c2s/suite.rc (08:14 rc=0): suite inteira VERDE Ran 18160 OK, sha eb2019f99, oom=0 (smokes chromium da c2r eram infra). PUXADA opus final (pedido logs/RAMO2-CRUZA/c2r/opus/pedido.md)." >> app/docs/RELA ...` |
+| 08:14:12 | Bash | Veredito da suíte c2s | `cd ~/saas-hasner; L=logs/RAMO2-CRUZA/c2s/suite.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep "^Ran " $L \| tail -1; grep "RECIBO PISTA" $L \| head -2` |
+| 08:14:07 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bl1rjetwv.output` |
 | 08:13:49 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
 | 08:13:44 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b5ke5f7kf.output` |
 | 08:08:39 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -1756,16 +1763,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 20:24:57 | Bash | Relança a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 20:24:54 | Bash | Confere o controle dos mutantes | `cd ~/saas-hasner; L=logs/ABONO-X-SAIDA-ANTECIPADA/c1g; ls -la --time-style=+%H:%M $L \| tail -6; tail -2 $L/mutctl.log \| cut -c1-200; bin/trava_teste.sh --quem 2>&1 \| tail -2` |
 | 20:24:50 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bwtxmolni.output` |
-| 20:19:35 | Bash | Confere pista e mutantes, e relança a espera | `cd ~/saas-hasner; ssh -n pista estado 2>&1 \| grep -E 'rodando\|na fila'; ls logs/ABONO-X-SAIDA-ANTECIPADA/c1g/ \| grep rc; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 20:19:31 | Bash | Lê o despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b6ehq2pxz.output` |
-| 20:17:03 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
-| 20:15:50 | Bash | Lê o despertar anterior e os rc dos mutantes | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/boyjvjjqc.output; cd ~/saas-hasner; for f in logs/ABONO-X-SAIDA-ANTECIPADA/c1g/mut*.log.rc; do echo "$f $(cut -c1-3 $f)"; done` |
-| 20:14:46 | Bash | Indexa a memória | `echo '- [Linha do BACKLOG: contar colunas antes](backlog-linha-conta-colunas-antes.md) — indice negativo fixo apagou data e descricao em 26/11; imprimir len(c) ao editar' >> /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/MEMORY.md` |
-| 20:14:45 | Write |  | `/home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/backlog-linha-conta-colunas-antes.md` |
-| 20:14:38 | Bash | Restaura a descrição e põe o novo texto no estado | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read().split('\n') D="INSTRUMENTO, aval SUITE-ROTEIA-F2-2611-1940: inteira --dir com --motivo pre-opus vai a pista 2 pela ROTA; pouso/sem --dir/--seco/ROTA VM ficam; selo caso inteira-pre-opus-com-dir + mutante que devolve a VM morre. bin/ = opus constroi (v6)." for i,l in enumerate(s): if l.startswith('\| SUITE-ROTEIA-F2 '): c ...` |
-| 20:14:33 | Bash | Busca a descrição original no transcript | `cd ~/saas-hasner; grep -o '\| SUITE-ROTEIA-F2 \| [^\|]*\|' /home/ronald/.claude/projects/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl \| sort -u \| head -5` |
-| 20:14:26 | Bash | Mostra as colunas da linha | `cd ~/saas-hasner; grep '^\| SUITE-ROTEIA-F2 ' app/docs/BACKLOG.md \| awk -F' \\\| ' '{print NF; for(i=1;i<=NF;i++) print i": "substr($i,1,80)}'; tar -tzf $(cat scratchpad/pouso_sr_dir.txt 2>/dev/null)/docs.tgz 2>/dev/null \| head -2` |
-| 20:14:22 | Bash | Confere a linha da F2 no BACKLOG | `cd ~/saas-hasner; grep -c '^\| SUITE-ROTEIA-F2 ' app/docs/BACKLOG.md; grep '^\| SUITE-ROTEIA-F2 ' app/docs/BACKLOG.md \| cut -c1-160` |
-| 20:14:19 | Bash | Põe a lista da F2 no BACKLOG e relança a espera | `cd ~/saas-hasner; python3 - <<'EOF' p='app/docs/BACKLOG.md'; s=open(p).read().split('\n') for i,l in enumerate(s): if l.startswith('\| SUITE-ROTEIA-F2 '): c=l.split(' \| '); c[-3]="c1 1f4b92cff (RED rc1/GREEN rc0); candidato 75ba1fb99 sobre v6, pista 1126201342. LISTA: inteira por --only/--volta pre-opus entra na rota (desenho); job pre-opus como evidencia de pista_certifica (certificador intocado ...` |
-| 20:14:12 | Bash | Procura os dois jobs na pista | `cd ~/saas-hasner; ssh -n pista estado 2>&1 \| grep -E '1126200141\|1126201342\|roda\|fila' \| head` |
-| 20:14:07 | Bash | Confere o estado da pista | `cd ~/saas-hasner; ssh -n pista estado 2>&1 \| tail -6; pgrep -f 'SUITE-ROTEIA-F2/pouso/certifica.sh' \| head -2` |
