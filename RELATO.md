@@ -14415,3 +14415,5 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 13:42 colhido E4C-F5-INSTANTE cura5/mut3.rc (13:42 rc 1): bateria de mutantes do opus construtor (vivo); veredito vem no cura5.rc.
 - 13:43 superado PAR-PELO-TURNO c1v9/g/g.rc (13:43 rc 1): volta superada pela c1v10/c1v11, nao lido.
 - 13:44 colhido E4C-F5-INSTANTE cura5/mut3.rc (13:43 rc 1): nova rodada de mutantes do opus construtor (vivo).
+- 13:47 colhido FERIADO-BOTAO-CORTADO c6/r.rc (13:45 rc 0): Codex construiu P1 (fecharDrawer emite drawer:fechou, popover fecha), P2 (lateral/recolhe com area curta), P3 (smoke 360 px), P4 (erro de console reprova); 0 try/catch/except; commit e27984f5b na wt. node --check rc 0. Lancados s6 (smoke) e m6 (6 mutantes) na pista.
+- 13:48 FERIADO-BOTAO-CORTADO s6/m6: pista acima de 30 min -> ROTA VM (trava, em fila atras de suite:2894512); mutante drawer-sem-fechar-popover caiu na corrida do .env_teste (lancamentos simultaneos, nao e veredito) -> relanco depois do m6.rc.

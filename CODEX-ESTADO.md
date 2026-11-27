@@ -1,7 +1,41 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 13:35** · publicado em **27/11/2026 13:37** (UTC-3)
+> Ultima resposta processada: **27/11/2026 13:45** · publicado em **27/11/2026 13:51** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 13:45 · sessao de8d2d4045a1 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
+
+**FERIADO-BOTAO-CORTADO c6 implementada na cópia.** A certificação fica com Code e opus. O smoke completo no Chromium e o ensaio do dia 20 em produção ficam [nao verificado].
+
+| Item | Cura e resultado local |
+|---|---|
+| **P1 · Fechamento direto** | `fecharDrawer()` emite `drawer:fechou`. O popover recebe o evento e reutiliza `fecha()` para recolocar o painel no pai original e deixar o foco fora do drawer. Na simulação V8, a c5 deixou o painel no `body`. A c6 fechou e devolveu o nó. Os dois mutantes reproduziram, respectivamente, o painel solto e o foco no gatilho do drawer fechado. `app/templates/core/_drawer_generico.html:71`, `app/static/js/popover-acao.js:140`, `app/static/js/popover-acao.js:168`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:343` |
+| **P2 · Altura curta** | `posiciona()` tenta a lateral quando o espaço vertical livre só comporta a borda e o padding. Se a lateral comporta a largura calculada, o painel abre com rolagem interna. Se também falta espaço lateral, o componente recolhe o painel. Na simulação, a c5 sobrepôs o gatilho em 10 px. A c6 abriu ao lado, com 2 px de separação, e recolheu o painel no caso sem espaço. Um mutante restaurou os 10 px de sobreposição e o outro abriu até `x=1676` numa área útil que terminava em `x=1358`. `app/static/js/popover-acao.js:45`, `app/static/js/popover-acao.js:106`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:230` |
+| **P3 · 360 px** | O smoke exige viewport interna de 360 px, painel inteiro, ancorado e submit atingível na página e no drawer das duas cascas. Na simulação, c5 e c6 mantiveram a borda direita em `x=328`. O mutante levou a borda a `x=524`. Os quatro cenários no Chromium ficam [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:53`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:457`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:472` |
+| **P4 · Console** | Com a medição válida e um erro injetado, as asserções extraídas da c5 passaram indevidamente. As da c6 passaram com console limpo e falharam com `Erro de console durante o smoke` após a injeção. O ensaio usa os estáticos da cópia e desativa o bootstrap PWA somente no HTML de teste em `file://`. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:39`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:354`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:407`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:485`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:513` |
+
+Os pontos de teste alterados são `_serve_popover_js()` por meio da tabela de mutantes e `test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas()` com a sonda ampliada. O predicado de oferta e os `132px` foram preservados. A checagem do diff contou **0 `try/catch` novos e 0 `except` novos**. A sintaxe do JS passou no V8. `node --check` retornou rc 127 por falta do executável, e o `manage.py` parou no import de `django.core`. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:72`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:391`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:408`, `app/colaboradores/services/calendario.py:791`, `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/colaboradores/partials/_calendario_grade.html:96`, `app/manage.py:11`
+
+**Reprodução na régua do Code**, a partir de `app/`. Rodadas completas [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:408`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:426`
+
+```bash
+smoke() {
+  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
+    SMOKE_FERIADO_MUTANTE="${1:-}" \
+    python3 manage.py test core.tests.test_smoke_clique_feriado_vira_trabalho
+}
+
+smoke
+smoke drawer-sem-fechar-popover
+smoke drawer-devolve-foco
+smoke painel-sem-lateral
+smoke painel-abre-sem-espaco
+smoke painel-fora-360
+smoke erro-console
+node --check static/js/popover-acao.js
+```
+
+**Fila P3.** Tornar a ficha real utilizável a 360 px. A grade `420px 1fr` com vão de `12px` põe o calendário na segunda coluna. A linha de fila deve medir o gatilho do dia 20 após o carregamento HTMX da ficha. O selo textual de inclusão do script também segue na fila. `app/templates/colaboradores/detalhe.html:87`, `app/templates/colaboradores/detalhe.html:201`, `app/templates/colaboradores/detalhe.html:213`, `app/core/tests/test_selo_popover_acao.py:97`
 
 ## 27/11 13:35 · sessao 0b290d3bc790 · FERIADO-BOTAO-CORTADO · verificador · origem=Code
 
@@ -809,11 +843,4 @@ O smoke de **Excluir feriado** passa pelo `hxConfirm` do cadastro e verifica POS
 
 **d. Sim, 16 px é razoável para a abertura normal.** O JS prevê **2 px** abaixo ou acima do gatilho, com ajuste horizontal. O fallback que cola o painel no topo pode fugir desse limite. (`popover-acao.js:55,64,70`)
 
-## 27/11 12:07 · sessao 914f194adfe1 · ORFAS-VOLTOU · sonda · origem=Code
-
-- **Defeito.** A sonda mostrou dois `reg10`, das rubricas `0025` e `0243`, com `00000VIGIA` no campo `matric`. O layout exige que os dez caracteres desse campo passem em `isdigit()`. As letras explicam os dois erros `reg10 campo matric nao-numerico`. [app/folha/export.py:272](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:272)
-- **Escritor e fonte.** `montar_linhas_export` lê `fech.colaborador.codigo_dominio` na linha 737. O `strip().zfill(10)` preenche com zeros e preserva as letras. No mapa exemplificado na cópia, `0025` é adicional noturno e `0243` é intrajornada, ambos emitidos pela chamada a `montar_linha_10` na linha 747. O serializador grava a matrícula na linha 45. O mapa ativo da empresa 2 na sondagem é [nao verificado]. [app/folha/export.py:737](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:737) [app/folha/export.py:747](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:747) [app/folha/export.py:45](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:45) [app/folha/tests/test_sm1_monster_export.py:75](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/tests/test_sm1_monster_export.py:75)
-- **Dono pela L-099: CADASTRO.** O valor inválido vem do campo cadastral `Colaborador.codigo_dominio`. `classificar_export` só verifica se esse campo está vazio, então a exigência de matrícula numérica é aplicada na validação do TXT. `dono_da_divergencia` julga divergências de dia por colaborador e fica fora desse caminho. Quem gravou o valor é [nao verificado]. [CLAUDE.md:183](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/CLAUDE.md:183) [app/colaboradores/models.py:311](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/colaboradores/models.py:311) [app/folha/export.py:881](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:881) [app/ponto/management/commands/e6_oraculo.py:53](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/e6_oraculo.py:53)
-- **TXT real de 11/2026, empresa 2.** Com o `sem_medicao` visto na sombra, o clique solicita a conferência e a porta segura a geração até ficar `pronta`. Mesmo com a porta pronta, basta que a montagem real reproduza uma dessas linhas para `gerar_dominio_txt` recusar por falha de layout, antes de entregar ou registrar o arquivo. A porta recalcula os fechamentos antes de montar. O estado da porta real hoje, as linhas que esse recálculo produziria e o resultado efetivo da tentativa ficam [nao verificado]. [app/folha/porta_export.py:817](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:817) [app/folha/porta_export.py:1423](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:1423) [app/folha/views.py:135](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:135) [app/folha/views.py:214](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:214) [app/folha/views.py:275](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:275) [app/folha/views.py:282](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:282)
-
-_8669 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
