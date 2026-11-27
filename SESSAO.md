@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 00:19:30.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (126.3 MB). Acoes na janela: **2463**.
+**Medido em 27/11/2026 00:26:19.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (126.4 MB). Acoes na janela: **2457**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 00:23:51 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 00:23:47 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b9ptrrszx.output` |
 | 00:18:42 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 00:18:39 | Bash | Estado dos selos da c10 e da suíte O30 | `cd ~/saas-hasner; ls logs/CODEX-CONSTROI-MOTOR/c10/; wc -l < logs/CODEX-CONSTROI-MOTOR/c10/selos/resumo.txt 2>/dev/null; tail -2 logs/O30-F3-CONSTRUIR/suite_c19/suite.log \| cut -c1-200` |
 | 00:18:36 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bv90rldxj.output` |
@@ -2465,11 +2467,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 12:27:08 | Bash | Confere batidas e pares da sonda | `cd /home/ronald/saas-hasner/logs/RAMO2-CRUZA/COL922-2611; /bin/grep -n "^BAT\\|^PER\\|^ORACULO\\|^CEL\\|^DIA " sonda_col922.out \| cut -c1-230 \| head -60` |
 | 12:26:43 | Bash | Relança dossiê Codex corretamente | `cd /home/ronald/saas-hasner; D=logs/RAMO2-CRUZA/DOSSIE-2611; rm -f $D/r.rc; H=$(cat $D/hash) (CODEX_OBRA=RAMO2-B-EM-TURNO-QUE-CRUZA CODEX_PAPEL=leitura setsid bin/codex_pergunta.sh --anexo $D/aval.txt $H $D/q.md $D/r.md > $D/wrapper.out 2>&1; echo "rc=$?" > $D/r.rc) >/dev/null 2>&1 & /usr/bin/sleep 20; tail -3 $D/wrapper.out \| cut -c1-200; ls $D` |
 | 12:26:37 | Bash | Vê por que o wrapper saiu | `cd /home/ronald/saas-hasner; cat logs/RAMO2-CRUZA/DOSSIE-2611/r.rc; head -20 logs/RAMO2-CRUZA/DOSSIE-2611/wrapper.out \| cut -c1-200; sed -n 1,30p bin/codex_pergunta.sh \| /bin/grep -n "uso\\|Uso\\|<" \| head` |
-| 12:26:17 | Bash | Confere arranque do Codex | `cd /home/ronald/saas-hasner; /usr/bin/sleep 15; cat logs/RAMO2-CRUZA/DOSSIE-2611/wrapper.out \| tail -5; ls logs/RAMO2-CRUZA/DOSSIE-2611/` |
-| 12:26:13 | Bash | Lança dossiê Codex da RAMO2 | `cd /home/ronald/saas-hasner; D=logs/RAMO2-CRUZA/DOSSIE-2611; mkdir -p $D; cp logs/AVAIS-1515/RAMO2-CRUZA-E-COL922-2611.txt $D/aval.txt cat > $D/q.md <<'EOF' DOSSIE (DOSSIE-ANTES-DO-CONSTRUTOR) da obra RAMO2-B-EM-TURNO-QUE-CRUZA. Papel leitura/censo. Responda em portugues, com arquivo:linha em toda afirmacao. Aval anexo (aval.txt). Lei citada: RESPOSTA-LEI-NOTURNO-RAMO2-2311-1735 e RESPOSTAS-1-11-V ...` |
-| 12:25:57 | Bash | BACKLOG e DESPACHO do novo aval | `cd /home/ronald/saas-hasner; mkdir -p logs/RAMO2-CRUZA/HOMOLOGA-2611; python3 - <<'EOF' b='app/docs/BACKLOG.md'; ls=open(b).read().splitlines(True) i=[k for k,l in enumerate(ls) if l.startswith('\| R1-NOTURNO-DOIS-CASOS \|')]; assert len(i)==1 ls.insert(i[0]+1,"\| RAMO2-B-EM-TURNO-QUE-CRUZA \| MAO UNICA. DECIDIDO PELA LEI RESPOSTA-LEI-NOTURNO-RAMO2-2311-1735 + RESPOSTAS-1-11-V2-2411-0830 itens 5/7 ...` |
-| 12:25:48 | Agent | Mede col922 em 3 dias | `Escreva em portugues. Esta e uma tarefa de MEDIDA, so de leitura, e segue o aval Ronald RAMO2-CRUZA-E-COL922-2611, item (2). O texto do aval esta em /home/ronald/saas-hasner/logs/AVAIS-1515/RAMO2-CRUZA-E-COL922-2611.txt. Objetivo: medir o col922 nos dias 25/10/2026, 27/10/2026 e 02/11/2026 (competencia 11, que vai de 21/10 a 20/11) pelas funcoes reais. Para cada dia e cada rubrica (trabalhado, not ...` |
-| 12:25:28 | Bash | Ve o envelope de sonda | `cd /home/ronald/saas-hasner; /bin/grep -n "sonda_casos" logs/sonda_leitura.log \| tail -3 \| cut -c1-300; sed -n 1,40p bin/sonda_leitura.sh \| cut -c1-200` |
-| 12:24:39 | Bash | Como a sonda anterior rodou | `cd /home/ronald/saas-hasner; /bin/grep -rln "sonda_casos.py" logs/ scratchpad/ 2>/dev/null \| head; /bin/grep -n "sonda_casos" app/docs/RELATO.md \| cut -c1-300 \| head -3; tail -c 2500 logs/R1-NOTURNO-DOIS-CASOS/sonda_casos.py` |
-| 12:24:34 | Bash | Ve linha RAMO2 e sonda existente | `cd /home/ronald/saas-hasner; /bin/grep -n "RAMO2" app/docs/BACKLOG.md \| cut -c1-250 \| head -8; head -c 3000 logs/R1-NOTURNO-DOIS-CASOS/sonda_casos.py; echo; /bin/grep -n "sombra\\|ENVELOPE\\|docker" logs/R1-NOTURNO-DOIS-CASOS/CASOS.md \| head -8 \| cut -c1-200` |
-| 12:24:30 | Bash | Grava aval e procura insumos | `cd /home/ronald/saas-hasner; cat > logs/AVAIS-1515/RAMO2-CRUZA-E-COL922-2611.txt <<'EOF' aval Ronald: RAMO2-CRUZA-E-COL922-2611 (26/11 12:30) -- OBJETIVO: (1) RAMO2-B-EM-TURNO-QUE-CRUZA sai de "sem lei": DECIDIDO PELA LEI RESPOSTA-LEI-NOTURNO-RAMO2-2311-1735 + RESPOSTAS-1-11-V2-2411-0830 itens 5/7 -- nenhum par perde trabalhado pela ancora, tambem no turno que cruza; a L-097 so classifica a HE (pe ...` |
