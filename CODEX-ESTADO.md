@@ -1,7 +1,429 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 08:29** · publicado em **27/11/2026 08:33** (UTC-3)
+> Ultima resposta processada: **27/11/2026 08:41** · publicado em **27/11/2026 08:43** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 08:41 · sessao 60054934ae3a · SONDA-ESPURIAS-TXT11 · leitura · origem=Code
+
+1. **Como tirar a batida e reler o dia.** A porta da casa é `ponto.registro_batida.retratar_batida`. Ela preenche `retratada_em`, põe `aprovada=False` e agenda o recálculo para `on_commit`. `turnos.batidas_apuraveis` exclui a marca pelo `retratada_em` preenchido. Na sonda, B altera temporariamente só esse campo nos IDs da s1. Isso permite executar a mesma sequência explícita em A e B, sem disparar em B os julgamentos por batida ligados ao `save`. [app/ponto/registro_batida.py:255-301] [app/ponto/turnos.py:2941-2968] [app/ponto/signals.py:20-36,108-117,136-145] [app/ponto/services/fechamento.py:1822-1848]
+
+   A sequência é `nucleo.recompute_turnos` → `cartorio.julgar_colab(apply_=True, forcar=True)` → `recalcular_fechamento_mes(somente_leitura=True, retornar_objeto=True, lavrar_dias_pagos=False)` → `classificar_export` → `montar_linhas_export` → `validar_layout_dominio` → `conteudo_do_txt`. O cartório relavra a ata e o veredito das células existentes. O fechamento usa as batidas e as células na apuração, e o export lê a célula para decidir retenção. A seleção da s1 é feita uma vez antes das passadas. O script acompanha o PK até a sobra emitida pela grade, preservando marcas distintas no mesmo minuto e marcas atribuídas a um turno que cruza a meia-noite. [app/ponto/nucleo.py:40-67] [app/ponto/services/cartorio.py:959-981,1187-1209,1905-1932] [app/ponto/services/fechamento.py:624-653,762-775,1037-1038,1152-1160] [app/folha/views.py:214-219,272-288] [app/folha/export.py:977-983,1256-1305] [app/escala/utils.py:623-681,1747-1782,1863-1902,2057-2094]
+
+2. **O ensaio precisa de `READ WRITE`.** O núcleo escreve `TurnoMaterializado`, e o cartório escreve ata, veredito, trilha e outbox. O recálculo em memória e a montagem do TXT são os do molde. A aprovação em `FechamentoMensal` e o registro em `ExportacaoDominio` pertencem à view HTTP. A sonda usa `atomic(durable=True)` com erro sentinela no fim, e confere contagens e impressões das linhas antes e depois, inclusive nas duas tabelas da view. As sequências são reiniciadas dentro de cada savepoint para que a conferência também cubra seus valores. Execução e reversão na sombra [nao verificado]. [app/ponto/nucleo.py:57-66] [app/ponto/portas/celula.py:981-1002,1133-1140,1218-1239] [app/core/observ.py:124-138] [app/ponto/services/fechamento.py:1152-1168,1215-1225] [app/folha/views.py:253-263,292-307]
+
+3. **Determinismo é medido.** A1, A2, B1 e B2 partem do mesmo estado, com o mesmo relógio, e são comparados byte a byte. Há ordenações sem desempate por PK no universo do fechamento e na leitura das batidas. A igualdade efetiva de cada lado é [nao verificado]. `BASE`, em stderr, compara A1 ao TXT produzido antes de relavrar. Se der `False`, o teto publicado mede o efeito das sobras entre as duas passadas relavradas, e a diferença do TXT corrente fica explícita. [app/ponto/services/fechamento.py:459-465,634-639] [app/ponto/turnos.py:2961-2968] [app/folha/export.py:525-539,725-755] [nao verificado]
+
+`TXT_RUBRICAS_MUDADAS` conta pares `(colab_id, rubrica)` com diferença nos registros 10/11, como no molde. `RUBRICA` soma por código e mostra `B − A`. Horas saem dos centésimos do TXT convertidos em minutos. Faltas usam os minutos das datas filhas pelo mapa de faltas da casa. Uma troca de datas ou deltas que se anulam pode aumentar a contagem sem gerar uma linha `RUBRICA`. As até 20 linhas `COLAB` são um limite global. As medidas das empresas 2, 3 e 4 estão [nao verificado]. [app/folha/export.py:34-45,95-143,215-255,733-755]
+
+### SCRIPT
+
+```python
+import logging
+import sys
+from collections import defaultdict
+from contextlib import redirect_stderr, redirect_stdout
+from datetime import date, datetime, time, timedelta
+from decimal import Decimal
+from io import StringIO
+from traceback import extract_tb
+from types import SimpleNamespace
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from chamados import fcm_utils, push_utils [nao verificado]
+from chamados.models import (
+    ChamadoColaborador, DecisaoPergunta, DisputaSupervisao,
+    FollowupChamado, PerguntaDisputa,
+)
+from colaboradores.models import Colaborador, Empresa
+from core.models import LogAuditoria
+from escala import utils as grade
+from escala.models import CelulaDia, EventoCelula
+from escala.orfa_classe import classificar_orfas
+from folha import export
+from folha.models import ExportacaoDominio
+from ponto import turnos
+from ponto.management.commands.detectar_ausencias import Command as Emissor
+from ponto.models import (
+    Batida, DiaPago, FechamentoMensal, Justificativa, TurnoMaterializado,
+)
+from ponto.nucleo import recompute_turnos
+from ponto.services import cartorio, fechamento
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+JANELA = (date(2026, 10, 21), date(2026, 11, 20))
+REF_S1 = "[app/escala/orfa_classe.py:53-78] [app/escala/utils.py:972-979,2138-2144]"
+REF_TXT = "[app/folha/export.py:34-45,215-255,725-755]"
+REF_FALTA = "[app/folha/export.py:95-143,215-221]"
+REF_SOMBRA = "[app/config/settings/sombra.py:47-65] [bin/sombra.sh:78-80,490-491]"
+MODELOS = (
+    Batida, CelulaDia, TurnoMaterializado, FechamentoMensal, DiaPago,
+    ExportacaoDominio, LogAuditoria, EventoCelula, ChamadoColaborador,
+    Justificativa, DisputaSupervisao, PerguntaDisputa, DecisaoPergunta,
+    FollowupChamado,
+)
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+class FalhaSonda(RuntimeError):
+    pass
+
+
+class HoraComId(str):
+    pass
+
+
+class InstanteComId(datetime):
+    def strftime(self, formato):
+        hora = super().strftime(formato)
+        if formato == "%H:%M" and hasattr(self, "batida_id"):
+            hora = HoraComId(hora)
+            hora.batida_id = self.batida_id
+        return hora
+
+
+def log_sem_dados(_logger, registro):
+    if registro.levelno >= logging.ERROR:
+        erro = registro.exc_info[1] if registro.exc_info else sys.exception()
+        tipo = type(erro).__name__ if erro is not None else "ERROR"
+        raise FalhaSonda(f"{registro.pathname}:{registro.lineno} {tipo}") from None
+
+
+def alvos_da_s1(empresa, agora):
+    ini, fim = export.janela_competencia(empresa, MES, ANO)
+    if (ini, fim) != JANELA:
+        raise FalhaSonda(
+            f"Janela fora do aval empresa={empresa.pk} "
+            "[app/folha/export.py:47-51] [app/ponto/janelas.py:54-57]"
+        )
+    primeiro = timezone.make_aware(datetime.combine(ini - timedelta(days=1), time.min))
+    ultimo = timezone.make_aware(datetime.combine(fim + timedelta(days=3), time.min))
+    ultimo -= timedelta(microseconds=1)
+    ref = fim + timedelta(days=1)
+    dias = (ref - ini).days + 1
+    alvos = {}
+
+    localtime_real = timezone.localtime
+    pessoas = Colaborador.objects.filter(empresa=empresa).order_by("pk")
+    with (
+        patch.object(grade, "Exception", (), create=True),
+        patch.object(turnos, "Exception", (), create=True),
+    ):
+        for colab in pessoas.iterator(chunk_size=200):
+            batidas = list(turnos.batidas_apuraveis(colab, primeiro, ultimo))
+            if not batidas:
+                continue
+
+            kwargs = dict(dias=dias, ref=ref, agora=agora)
+            linhas = grade.montar_grade_prevista_periodo(colab, batidas, **kwargs)["dias"]
+            if len(linhas) != dias:
+                raise FalhaSonda(f"Grade fora da janela colab_id={colab.pk} {REF_S1}")
+            classes = [classificar_orfas(linha) for linha in linhas[1:]]
+            if not any(classes):
+                continue
+
+            # Só transporta a identidade. Os datetime e HH:MM mantêm seus valores.
+            # [app/escala/utils.py:314-327,699-705,1367-1385,1766-1782,1882-1891]
+            por_objeto = {id(b.timestamp): b.pk for b in batidas}
+
+            def localtime_com_id(value=None, timezone=None):
+                instante = localtime_real(value, timezone)
+                pk = por_objeto.get(id(value))
+                if pk is None or sys._getframe(1).f_globals is not vars(grade):
+                    return instante
+                marcado = InstanteComId(
+                    instante.year, instante.month, instante.day,
+                    instante.hour, instante.minute, instante.second,
+                    instante.microsecond, tzinfo=instante.tzinfo, fold=instante.fold,
+                )
+                marcado.batida_id = pk
+                return marcado
+
+            with patch.object(timezone, "localtime", localtime_com_id):
+                marcadas = grade.montar_grade_prevista_periodo(
+                    colab, batidas, **kwargs,
+                )["dias"]
+
+            ids = set()
+            for linha, marcada, classificacao in zip(
+                linhas[1:], marcadas[1:], classes, strict=True,
+            ):
+                horas = marcada.get("orfas") or []
+                if horas != (linha.get("orfas") or []):
+                    raise FalhaSonda(f"Instrumentação mudou a grade colab_id={colab.pk} {REF_S1}")
+                for hora in horas:
+                    if hora in classificacao:
+                        pk = getattr(hora, "batida_id", None)
+                        if pk is None:
+                            raise FalhaSonda(f"Sobra sem identidade colab_id={colab.pk} {REF_S1}")
+                        ids.add(pk)
+            alvos[colab.pk] = ids
+
+    return alvos
+
+
+def reler_celulas(empresa, alvo_colabs, agora):
+    ini, fim = turnos.janela_com_pad(*JANELA)
+    hoje = timezone.localdate(agora)
+    emissor = Emissor(stdout=StringIO(), stderr=StringIO())
+    pessoas = Colaborador.objects.filter(
+        empresa=empresa, pk__in=alvo_colabs,
+    ).order_by("pk")
+    for colab in pessoas:
+        recompute_turnos(colab, ini, fim)
+        celulas = list(CelulaDia.objects.filter(
+            colaborador=colab, data__range=(ini, fim), data__lt=hoje,
+        ).order_by("data"))
+        if celulas:
+            cartorio.julgar_colab(
+                colab, celulas, hoje=hoje, agora=agora, apply_=True,
+                emissor=emissor, out=cartorio.contadores(), forcar=True,
+            )
+
+
+def medir_txt(empresa):
+    with patch.object(fechamento, "Exception", fechamento._GradeSemCelula, create=True):
+        fechs = fechamento.recalcular_fechamento_mes(
+            MES, ANO, empresa_id=empresa.pk, somente_leitura=True,
+            retornar_objeto=True, lavrar_dias_pagos=False,
+        )
+    objetos = list(fechs.values())
+    itens = export.classificar_export(empresa, MES, ANO, fechamentos=objetos)
+
+    montar = export.montar_linha_10
+    campos = []
+
+    def observar_linha_10(matricula, comp, rubrica, tipo, valor, cod_sistema):
+        linha = montar(matricula, comp, rubrica, tipo, valor, cod_sistema)
+        mat = str(matricula).zfill(10)
+        cod = str(rubrica).zfill(4)
+        inicio = len(f"10{mat}{comp}{cod}11")
+        fim = -len(str(cod_sistema).zfill(10))
+        campos.append((mat, cod, tipo, inicio, fim))
+        return linha
+
+    with patch.object(export, "montar_linha_10", observar_linha_10):
+        linhas, entra = export.montar_linhas_export(
+            empresa, MES, ANO, itens=itens, fechamentos=objetos,
+        )
+    erros = export.validar_layout_dominio(linhas)
+    txt = export.conteudo_do_txt(linhas)
+
+    por_matricula = defaultdict(list)
+    for item in itens:
+        cid = item["colaborador_id"]
+        if cid in entra and fechs[cid].status in export.STATUS_NO_TXT:
+            por_matricula[item["codigo_dominio"].zfill(10)].append(cid)
+
+    grupos = defaultdict(list)
+    pais = iter(campos)
+    pai = None
+    for linha in txt.splitlines():
+        parte = export.partes_da_linha(linha)
+        if linha.startswith("10"):
+            mat, cod, tipo, inicio, fim = next(pais)
+            if erros:
+                cru = int(linha[inicio:fim])
+            else:
+                if parte is None or (parte["matricula"], parte["rubrica"]) != (mat, cod):
+                    raise FalhaSonda(f"Registro 10 não confere {REF_TXT}")
+                cru = parte["valor"]
+            ids = por_matricula[mat]
+            if len(ids) != 1 or not (cod.isascii() and cod.isdigit()):
+                raise FalhaSonda(f"Autoria ou rubrica indeterminada {REF_TXT}")
+            pai = (tipo, cru, [])
+            grupos[ids[0], cod].append(pai)
+        elif pai is not None and parte is not None and parte["reg"] == "11":
+            pai[2].append(parte["data"])
+        else:
+            raise FalhaSonda(f"Registro filho inválido {REF_TXT}")
+    if next(pais, None) is not None:
+        raise FalhaSonda(f"Registro 10 sem linha no TXT {REF_TXT}")
+
+    registros = {}
+    minutos = {}
+    faltas = {}
+    for (cid, cod), grupo in grupos.items():
+        chave = (cid, cod)
+        registros[chave] = tuple(sorted(
+            (cru, tuple(sorted(datas))) for _, cru, datas in grupo
+        ))
+        total = Decimal(0)
+        for tipo, cru, datas in grupo:
+            if tipo != "dias":
+                total += Decimal(cru) * Decimal("0.6")
+                continue
+            if not datas:
+                raise FalhaSonda(f"Rubrica em dias sem datas filhas colab_id={cid} {REF_FALTA}")
+            if cid not in faltas:
+                mapa = export.minutos_de_falta_por_dia(fechs[cid].colaborador, *JANELA)
+                faltas[cid] = {d.strftime("%Y%m%d"): Decimal(str(m)) for d, m in mapa.items()}
+            for dia in sorted(set(datas)):
+                total += faltas[cid][dia]
+        minutos[chave] = total
+
+    return SimpleNamespace(txt=txt.encode("utf-8"), registros=registros,
+                           minutos=minutos, erros_layout=len(erros))
+
+
+def sequencias():
+    # O banco da sombra é PostgreSQL 17. [bin/sombra_db.sh:45]
+    quote = connection.ops.quote_name
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT n.nspname, c.relname, s.seqincrement, s.seqmin, s.seqmax, s.seqcycle
+            FROM pg_catalog.pg_sequence s
+            JOIN pg_catalog.pg_class c ON c.oid = s.seqrelid
+            JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname IN (%s, %s)
+            ORDER BY n.nspname, c.relname
+            """,
+            ("juliani", "public"),
+        )
+        saida = {}
+        for schema, nome, passo, minimo, maximo, ciclo in cursor.fetchall():
+            tabela = f"{quote(schema)}.{quote(nome)}"
+            cursor.execute(f"SELECT last_value, is_called FROM {tabela}")
+            valor, chamado = cursor.fetchone()
+            saida[tabela] = (valor, chamado, passo, minimo, maximo, ciclo)
+    return saida
+
+
+def reiniciar_no_savepoint(estado):
+    with connection.cursor() as cursor:
+        for nome, (valor, chamado, passo, minimo, maximo, ciclo) in estado.items():
+            proximo = valor + passo if chamado else valor
+            if ciclo and proximo > maximo:
+                proximo = minimo
+            if ciclo and proximo < minimo:
+                proximo = maximo
+            cursor.execute(f"ALTER SEQUENCE {nome} RESTART WITH {int(proximo)}")
+
+
+def estado_das_linhas():
+    quote = connection.ops.quote_name
+    schema = quote(connection.schema_name)
+    estado = {}
+    with connection.cursor() as cursor:
+        for modelo in MODELOS:
+            tabela = quote(modelo._meta.db_table)
+            pk = quote(modelo._meta.pk.column)
+            cursor.execute(
+                f"""
+                SELECT count(*),
+                       md5(coalesce(string_agg(md5(to_jsonb(t)::text), '' ORDER BY t.{pk}), ''))
+                FROM {schema}.{tabela} AS t
+                """
+            )
+            estado[modelo.__name__] = cursor.fetchone()
+    return estado
+
+
+def rodada(empresa, colabs, pks, agora, estado_sequencias):
+    with transaction.atomic():
+        reiniciar_no_savepoint(estado_sequencias)
+        if pks:
+            marcas = turnos.batidas_apuraveis(None).filter(
+                colaborador__empresa=empresa, pk__in=pks,
+            )
+            # Perturbação de sombra antes da relavratura comum.
+            # [app/ponto/turnos.py:2941-2968] [app/ponto/signals.py:34-36,136-140,211-220]
+            tiradas = marcas.update(retratada_em=agora)
+            if tiradas != len(pks) or marcas.exists():
+                raise FalhaSonda("Retirada incompleta [app/ponto/turnos.py:2960-2968]")
+        reler_celulas(empresa, colabs, agora)
+        foto = medir_txt(empresa)
+        transaction.set_rollback(True)
+    return foto
+
+
+def linhas_da_medida(empresa_id, a, a2, b, tiradas):
+    zero = Decimal(0)
+    mudadas = set()
+    total_a, total_b = defaultdict(Decimal), defaultdict(Decimal)
+    detalhes = []
+    for chave in sorted(a.registros.keys() | b.registros.keys()):
+        cid, cod = chave
+        ma, mb = a.minutos.get(chave, zero), b.minutos.get(chave, zero)
+        total_a[cod] += ma
+        total_b[cod] += mb
+        if a.registros.get(chave) != b.registros.get(chave):
+            mudadas.add(chave)
+            if ma != mb:
+                detalhes.append(
+                    f"COLAB empresa={empresa_id} colab_id={cid} rubrica={cod} delta_min={mb - ma:f}"
+                )
+        elif ma != mb:
+            raise FalhaSonda(f"Unidade ambígua para registros iguais colab_id={cid} {REF_TXT}")
+
+    linhas = [
+        f"TETO empresa={empresa_id} TXT_RUBRICAS_MUDADAS={len(mudadas)} "
+        f"COLABS_TXT={len({cid for cid, _ in mudadas})} BATIDAS_TIRADAS={tiradas}"
+    ]
+    for cod in sorted(total_a.keys() | total_b.keys()):
+        ma, mb = total_a[cod], total_b[cod]
+        if ma != mb:
+            linhas.append(
+                f"RUBRICA empresa={empresa_id} rubrica={cod} "
+                f"min_A={ma:f} min_B={mb:f} delta_min={mb - ma:f}"
+            )
+    linhas.append(f"IDEMP empresa={empresa_id} A1==A2={a.txt == a2.txt}")
+    return linhas, detalhes
+
+
+def main():
+    if (
+        not getattr(settings, "HASNER_SOMBRA", False)
+        or connection.settings_dict["HOST"] != "sombra_db"
+        or connection.settings_dict["NAME"] != "sombra"
+        or connection.schema_name != "juliani"
+    ):
+        raise FalhaSonda(f"Conexão fora da sombra {REF_SOMBRA}")
+
+    saida, detalhes, diagnosticos = [], [], []
+    try:
+        with patch.object(logging.Logger, "handle", log_sem_dados), transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ WRITE")
+                cursor.execute("SELECT current_database(), current_schema()")
+                if cursor.fetchone() != ("sombra", "juliani"):
+                    raise FalhaSonda(f"Banco ou schema fora da sombra {REF_SOMBRA}")
+
+            antes = estado_das_linhas()
+            seq_antes = sequencias()
+            agora = timezone.now()
+            empresas = list(Empresa.objects.filter(pk__in=EMPRESAS).order_by("pk"))
+            if tuple(e.pk for e in empresas) != EMPRESAS:
+                raise FalhaSonda("Escopo incompleto de empresas [app/colaboradores/models.py:40]")
+
+            # Silencia os transportes. As portas de cálculo, cartório e TXT seguem reais.
+            # [app/chamados/push_utils.py:12-18,89-111] [nao verificado]
+            # [app/chamados/services/disputa_emissao.py:1887-1906]
+            with (
+                patch.object(timezone, "now", new=lambda: agora),
+                patch.object(push_utils, "_enviar_push_usuario", return_value={"ok": False}), [nao verificado]
+                patch.object(fcm_utils, "push_fcm_colaborador", return_value=False), [nao verificado]
+                redirect_stdout(StringIO()),
+                redirect_stderr(StringIO()),
+            ):
+                for empresa in empresas:
+                    alvos = alvos_da_s1(empresa, agora)
+                    pks = {pk for ids in alvos.values() for pk in ids}
+                    original = medir_txt(empresa)
+                    a1 = rodada(empresa, alvos, set(), agora, seq_antes)
+                    a2 = rodada(empresa, alvos, set(), agora, seq_antes)
+                    b1 = rodada(empresa, alvos, pks, agora, seq_antes)
+                   
+
+[truncado em 20000 de 21750 caracteres]
 
 ## 27/11 08:29 · sessao 1814e0d2b981 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -1303,14 +1725,4 @@ O que depende da lei é marcar como nova a **escrita** retroativa ou a limpeza s
 
 [truncado em 20000 de 25432 caracteres]
 
-## 27/11 03:15 · sessao f80556b9c6d3 · - · - · origem=Ronald (tmux)
-
-As 51 falhas anexadas correspondem a 29 métodos. Classifiquei 39 como asserções pertinentes ao contrato ou a uma de suas partes, 11 como falhas por outro motivo ou sem evidência da condição alegada e uma dependente de o I23 ser o contador que a regra pretende mudar. Resultados individuais dos outros 16 métodos e execução dos mutantes [nao verificado]. `app/chamados/tests/test_e4d_matriz_reds.py:263–1570`
-
-- **39 pertinentes.** 01, 02 e 03×2 exercitam criação ou supressão esperada de atos, embora os erros de 01/02 e do controle 03 antecedam a verificação de eventos. 11 demonstra falta da reabertura inicial. 12×4 isola cada FK. 16 e 17×3 demonstram falta de veto à inserção. 18/C6 e 18/modal divergem do horizonte em T1. 42 isola a mudança da lavra em sua leitura de marcos, com a projeção já alterada. 45×4 demonstra divergência de autor, lastro, texto novo e FK nula. Também pertinentes 05, 09, 10, 20×2, 25, 26, 29, 30×4, 34, 35, 38, 39, 40 e 41×2. `app/chamados/tests/test_e4d_matriz_reds.py:264–326,402–436,457–564,589–632,673–723,945–1036,1114–1189,1220–1314,1364–1418,1476–1505`
-- **11 falhas por outro motivo ou insuficientes para o contrato alegado.** 04 mede aplicação e deixou reversão/foto/hash por competência de fora. 14 exige `REABERTURA` no lugar de `SANEAMENTO`. 44 falha na primeira chamada e a segunda enumeraria um novo acervo, condição que permite passar com a porta ainda duplicando o mesmo payload. 28 cai no seletor que exclui `declaracao` antes da releitura. 36 reaproveita a mesma instância e o mesmo `agora` antes e depois de trancar. `_pv_memo` pode retornar o `True` anterior mesmo com uma consulta nova funcionando. A causa dinâmica fica [nao verificado]. As seis falhas restantes do 45 param na chave `estoque` ausente, incluindo quatro zeros reconciliados. Elas evidenciam a forma de retorno incompatível com c4. O valor histórico do texto, quando a chave vier, continua por demonstrar. `app/chamados/tests/test_e4d_matriz_reds.py:328–360,438–455,566–587,613–640,903–943,1434–1447` · `app/chamados/management/commands/encerrar_perguntas_com_fato.py:31–44` · `app/chamados/juizes.py:899–952` · `app/chamados/services/vigia_ato_x_coluna.py:21–25` · `e4c_c4_red_48b24c39c.py:603–608`
-- **18/I23.** O contador vigente conta explicitamente compensadores adiantados pelo último ato. A falha `1 != 0` mede esse comportamento. Que o I23 seja a interface do `ato_futuro` da E4D [nao verificado]. Isentar toda `REABERTURA` e contar só `RECUSA` passa no teste com seu controle atual. `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1134` · `app/chamados/tests/test_e4d_matriz_reds.py:495–520,536–543`
-- **Modal.** O cartão ausente produz `''`, mas o teste exige o texto não vazio da pergunta antes de aceitar ausência de resposta. O recorte é do cartão inteiro e a busca pega a primeira resposta. Uma pergunta homônima no mesmo cartão pode satisfazer a presença e esconder a falta da pergunta observada em T2. No 30, a pista mostra o bloco real exibindo `08:00` sem data, consistente com a leitura crua. O mutante do modal recebe `request=req` e tem assinatura de dois argumentos, portanto pode morrer com `TypeError` antes da asserção. `app/chamados/tests/test_e4d_matriz_reds.py:123–127,208–220,522–534,1288–1314` · `app/templates/chamados/partials/modal_fio.html:157–160,217–220` · `app/chamados/tests/e4d_matriz_mutantes.py:303–315`
-- **Mordida.** Em análise AST pura e sem escrita, o censo atribuiu o `bulk_create` com alias `DP` e deixou `Model.save(pergunta.decisoes.model(...))` sem entidade. O teste filtra fora essa segunda forma. O observador SQL só reconhece o PK em predicados específicos de `id`; uma regravação pelos campos de disputa ou célula pode escapar. A pilha contendo `registrar` também admite dois escritores executados sob a mesma chamada. `app/core/censo_escritas.py:364–430,469–484` · `app/chamados/tests/test_e4d_matriz_reds.py:92–109,222–236,488–493,1129–1137`
-
-_8580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8581 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
