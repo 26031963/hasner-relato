@@ -1,7 +1,43 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 18:13** · publicado em **27/11/2026 18:19** (UTC-3)
+> Ultima resposta processada: **27/11/2026 18:20** · publicado em **27/11/2026 18:26** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 18:20 · sessao 07e6fd3fdca8 · FERIADO-UM-JUIZ · verificador · origem=Code
+
+# REPROVADO
+
+1. **A nova guarda do oráculo pode reverter um recálculo válido.** Reproduzi em memória um dia de trabalho 6x1 comercial, com escala 07h–15h, janela de HE ativa e batidas 06h–06h30. O motor recorta a entrada para 07h, apura zero trabalhado e conserva **420 min de saída antecipada**. O oráculo descarta o segmento invertido e devolve `{}`. A guarda inclui saída antecipada entre as rubricas que disparam a recusa. Com a lavra anterior, o recálculo devolveu `1` e gravou as duas versões. Com a atual, devolveu `0` e preservou o mensal e as duas lavras anteriores. A revisão recebeu `RuntimeError` com causa `ValueError`. A ocorrência na frota está [nao verificado]. `app/ponto/motor_calculo_v2.py:1813`, `app/ponto/motor_calculo_v2.py:3337`, `app/ponto/motor_calculo_v2.py:3423`, `app/ponto/calculador/alimentacao.py:114`, `app/ponto/calculador/alimentacao.py:512`, `app/ponto/services/dia_pago.py:259`, `app/ponto/services/dia_pago.py:316`, `app/ponto/services/dia_pago.py:868`, `app/ponto/services/fechamento.py:1329`
+2. **A revisão quebrou uma asserção existente da suíte.** O teste `test_MORDE_restaurar_historica_reusa_anotar_e_post_save_com_trilha` compara os `kwargs` completos das duas competências e espera apenas `colaborador_ids`. Executei em memória a asserção original contra as chamadas da função atual. Ela falha nas duas por causa de `propagar_falha=True`. A execução do teste ORM completo está [nao verificado]. `app/ponto/tests/test_revisar_par_relampago.py:153`, `app/ponto/tests/test_revisar_par_relampago.py:163`, `app/ponto/services/fechamento.py:1892`
+
+## Ver5, itens 2 e 3
+
+- **2, contagem e revisão curadas.** As duas capturas marcam rollback e guardam a exceção. `processados` só sobe depois da saída do `atomic` e quando nenhuma lavra falhou. O teste injeta falha em cada versão, confere o estado anterior e exige retorno `0`. Na revisão, exige também a exceção e a reversão da batida e da trilha. `app/ponto/services/fechamento.py:926`, `app/ponto/services/fechamento.py:1273`, `app/ponto/services/fechamento.py:1329`, `app/ponto/tests/test_feriado_um_juiz.py:43`, `app/ponto/tests/test_feriado_um_juiz.py:217`
+- **3, o caso de 4 h sem procedência está curado.** O RED exige `ValueError` antes do `delete` e do `bulk_create`. O controle com zero pares e mapa vazio ainda grava o ajuste. O bloqueio 1 deste laudo é um caso adicional, em que o próprio produtor do mapa devolve `{}`. `app/ponto/tests/test_feriado_um_juiz.py:234`, `app/ponto/tests/test_feriado_um_juiz.py:250`, `app/ponto/services/dia_pago.py:316`
+- **Mordida executada.** Foram 44 controles, com uma falha esperada na borda, e 41 testes estruturais verdes. Contra os arquivos da cópia `7706835c4`, os quatro REDs deram cinco falhas de asserção, duas delas nos subcasos da revisão. Os sete mutantes novos sem banco morderam: os dois de contagem devolveram `1`, os três de propagação deixaram de levantar, o de mapa vazio deixou de recusar e o de interpretar zero como falha abortou a restauração fora do universo. Os três mutantes c5 reancorados também morderam. Para outubro, executei o mutante na partição em memória: **5,5 h comuns → 5,5 h de HE100 feriado**. A ponta ORM desse teste, a suíte inteira e o blob intermediário `a8eec39b` estão [nao verificado]. `app/ponto/tests/feriado_um_juiz_mutantes.py:86`, `app/ponto/tests/feriado_um_juiz_mutantes.py:126`, `app/ponto/tests/feriado_um_juiz_mutantes.py:267`, `app/ponto/tests/feriado_um_juiz_mutantes.py:367`, `app/ponto/tests/feriado_um_juiz_mutantes.py:459`, `app/ponto/tests/test_he100_dia_sem_previsto.py:234`
+
+## Base `59600163c`
+
+Conferi os conteúdos dos arquivos na cópia local da base. A classificação **4a/4b/4c procede**. A identidade do commit pelo Git está [nao verificado]. [nao verificado]
+
+| Item | Evidência na base |
+|---|---|
+| **4a — soma** | O mensal já arredondava as horas regulares antes de somar a FT incerta e arredondar de novo. Com 241 min em cada parcela, dá **8,04 h** no mensal e **8,03 h** na soma dos dias, arredondada ao final. `59600163c:app/ponto/services/fechamento.py:922`, `59600163c:app/ponto/services/fechamento.py:1007`, `59600163c:app/ponto/services/dia_pago.py:178`, `59600163c:app/ponto/services/dia_pago.py:264`, `59600163c:app/ponto/services/dia_pago.py:550` |
+| **4b — estado após relavra** | A base já apagava e recriava as linhas do colaborador, competência e versão. `lavrado_em` já era `auto_now=True`. `59600163c:app/ponto/services/dia_pago.py:359`, `59600163c:app/ponto/models.py:380` |
+| **4c — fotografia do TXT** | O POST já recalculava em leitura, classificava os objetos destacados e os entregava à montagem. O TXT já podia refletir uma apuração posterior à gravada. `59600163c:app/folha/views.py:214`, `59600163c:app/folha/views.py:275` |
+
+## Chamadores e efeitos
+
+- **`propagar_falha`.** O padrão é `False`. O único chamador que passa `True` é `recalcular_na_revisao`, que descarta o retorno. O serviço lê a opção após o `atomic` e no `except` externo. Um universo vazio retorna `0` e a restauração segue. A porta de `par_relampago_na_lista` envolve batida, trilha e recálculos da revisão no mesmo `atomic`, sob Empresa → Colaborador → Batida. A reabertura da porta de export vem depois. O RED em memória cobre as duas falhas de lavra e o caso fora do universo. `app/ponto/services/fechamento.py:510`, `app/ponto/services/fechamento.py:619`, `app/ponto/services/fechamento.py:1335`, `app/ponto/services/fechamento.py:1884`, `app/ponto/registro_batida.py:317`, `app/ponto/services/par_relampago_na_lista.py:172`, `app/ponto/services/par_relampago_na_lista.py:479`, `app/ponto/tests/test_feriado_um_juiz.py:49`
+- **Outros erros agora abortam a revisão.** A opção alcança qualquer exceção que chegue ao `except` externo, inclusive de `get_or_create`, `save`, `update` ou saída do `atomic`. Antes o serviço registrava e seguia. As capturas internas de grade e causa continuam degradando os campos. Erros de apuração anteriores ao `try` já escapavam. A view de revisão chama a porta sem capturar o `RuntimeError`. `7706835c4:app/ponto/services/fechamento.py:1342`, `app/ponto/services/fechamento.py:819`, `app/ponto/services/fechamento.py:969`, `app/ponto/services/fechamento.py:1117`, `app/ponto/services/fechamento.py:1179`, `app/ponto/services/fechamento.py:1196`, `app/ponto/services/fechamento.py:1339`, `app/ponto/views.py:3497`
+- **Quem lê o retorno.** A tela, o comando de recálculo e os scripts de relavra consomem a contagem menor quando há rollback. O recálculo por evento descarta o retorno e continua após o log da lavra. Em leitura, o retorno segue sendo um mapa por colaborador, consumido por fechamento lido, TXT, simulação, Pauta DP, DIFF de frota, apuração de furos e backfill. No backfill, a entrada é posta no mapa **antes** da lavra. Reproduzi o comando subjacente devolvendo um colaborador lido com ambas as lavras revertidas. `app/ponto/views.py:1280`, `app/ponto/management/commands/recalcular_fechamento.py:130`, `bin/relavrar_o119_col221.py:52`, `app/ponto/services/fechamento.py:1846`, `app/ponto/services/fechamento.py:1170`, `app/ponto/services/fechamento.py:1348`, `app/ponto/services/fechamento.py:1798`, `app/folha/views.py:215`, `app/folha/management/commands/simular_folha.py:130`, `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:135`, `app/ponto/services/diff_frota.py:84`, `app/ponto/management/commands/apurar_furo_da_exportada.py:111`, `app/ponto/management/commands/lavrar_dias_pagos.py:104`
+- **Quem fornece `{}` com minutos.** No código da cópia, o chamador de produção é a segunda lavra de `recalcular_fechamento_mes`, da 10/2026 em diante, via `_rub_o`. A primeira lavra usa o padrão `rubricas=None`. O comando de recálculo e o backfill de aberta chegam à segunda lavra. O backfill de exportada usa `retratar_exportada`. Os mapas de atraso, órfãos, faltas, grade e o ajuste entram depois da checagem, então valores vindos só desses insumos preservam o caminho de mapa vazio. `app/ponto/services/fechamento.py:1235`, `app/ponto/services/fechamento.py:1295`, `app/ponto/services/fechamento.py:1320`, `app/ponto/services/dia_pago.py:135`, `app/ponto/services/dia_pago.py:259`, `app/ponto/services/dia_pago.py:352`, `app/ponto/management/commands/lavrar_dias_pagos.py:104`, `app/ponto/management/commands/lavrar_dias_pagos.py:123`
+
+## Classes de reprovação e histórico
+
+- **Segundo juiz, segundo escritor, relógio, derivação paralela, trava e campo com dois significados.** Nenhuma dessas classes foi introduzida no delta. A dobra continua no juiz registrado, a gravação segue pelas portas existentes, a guarda consulta rubricas já acumuladas e o caminho de revisão mantém a ordem de trava. O c8 elimina a interpretação ambígua de `0` como falha. O problema de teste encontrado é a asserção desatualizada do bloqueio 2. `app/core/juizes.py:318`, `app/ponto/services/dia_pago.py:259`, `app/ponto/services/dia_pago.py:365`, `app/ponto/services/fechamento.py:679`, `app/ponto/services/fechamento.py:1335`, `app/ponto/services/fechamento.py:1892`, `app/ponto/services/par_relampago_na_lista.py:172`, `app/ponto/tests/test_revisar_par_relampago.py:163`
+- **Borda e pouso.** A borda 20/21 com troca 6x1 → 12x36 continua perdendo 4 h em memória nos dois cenários. A falha veio da asserção do `expectedFailure`. Pela triagem, segue na fila do motor. Pouso, ordem E1 → K1, medição dos 75 dias/42 colabs, corte dos intermitentes, apply, reversão, antes × depois e DIFF do TXT 11 estão [nao verificado]. `app/ponto/tests/test_feriado_um_juiz.py:728`, `app/ponto/motor_calculo_v2.py:2513`, `triagem_ver5.txt:1`, `app/docs/RELATO.md:252`, `app/docs/PROMPTS.md:3016`, `FERIADO-UM-JUIZ-2711-1210.txt:1`
+- **`except` e S5b.** **0 cláusulas adicionadas, 0 removidas**, tanto no diff literal quanto por AST, inclusive nos testes. Mudou o corpo dos três handlers existentes. O comentário encurtado preserva o aval, a vigência desde a 10, a chave por versão, a porta única e a ordem em relação à S3. Saíram a afirmação histórica geral de que nenhum leitor lia `oraculo` e o exemplo da porta irmã rejeitada. O contrato e o isolamento por versão continuam expressos. `diff.txt:1`, `7706835c4:app/ponto/services/fechamento.py:1278`, `app/ponto/services/fechamento.py:1273`, `app/ponto/services/fechamento.py:1279`, `app/ponto/services/fechamento.py:1329`, `app/ponto/services/dia_pago.py:365`, `app/ponto/models.py:386`
 
 ## 27/11 18:13 · sessao ba609a2fce97 · FERIADO-UM-JUIZ · construtor · origem=Code
 
@@ -710,44 +746,4 @@ git diff --no-index /dev/null ponto/tests/test_par_pelo_turno_c1v15.py
 git diff --no-index /dev/null ponto/tests/par_pelo_turno_c1v15_verificacao.py
 ```
 
-## 27/11 16:57 · sessao f39976049fa4 · FERIADO-UM-JUIZ · construtor · origem=Code
-
-Implementei a c5 na cópia. O controle passou com **40 testes sem banco e 41 estruturais**. Os 10 mutantes da c5 passaram no controle e falharam como previsto quando aplicada a mutação. `ponto/tests/feriado_um_juiz_mutantes.py:47`, `:283`, `:337`
-
-- **Achado 6 — selos.** Atualizei os cinco endereços da catraca e comparei as expressões B1 com as registradas na c3. A partição agora grava o dia corrigido no mapa e o relê com `_dia_de` antes de consultar a certeza da escala e a cláusula da rubrica. Carreguei as fontes da c4 em memória e reproduzi as três falhas por asserção. Os três selos passaram na c5. `core/tests/test_medida_turno_do_par.py:289`, `:329`, `:565`, `ponto/calculador/regras.py:425`, `ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:58`
-- **Achado 4 — competência e ciclo.** A borda consulta o juiz do feriado nos dois dias do corte. O RED mostrou que a c4 pôs as 4 h comuns do dia 21 na competência 11. Na c5, a 11 recebe as 4 h de feriado do dia 20 e a 12 recebe as 4 h comuns do dia 21. Na troca 6x1 → 12x36, o RED mostrou 4 h indevidas de HE100 feriado na véspera. Na c5, cada dia recebe 4 h comuns. Os dois casos rodaram com as mesmas batidas na c4 e na c5. `ponto/services/fechamento.py:155`, `ponto/calculador/regras.py:410`, `ponto/tests/test_feriado_um_juiz.py:607`, `:618`
-- **Achado 5 — três gravações.** Um `atomic` por colaborador cobre a criação ou atualização do mensal e as duas lavras. As capturas existentes marcam rollback. Em memória, a falha injetada na segunda lavra deixou mensal e primeira lavra atualizados na c4. Na c5, os três voltaram aos valores anteriores. A falha na primeira lavra também foi testada. A competência sem pares consegue gravar o ajuste do oráculo com rubricas vazias. **`except` no diff lógico: 0 adicionados e 0 removidos**, conferidos por AST e `git diff -w`. `ponto/services/fechamento.py:928`, `:1276`, `:1340`, `ponto/calculador/alimentacao.py:360`, `ponto/services/dia_pago.py:311`, `ponto/tests/test_feriado_um_juiz.py:43`, `:147`
-
-**Comandos em `app/`** — `base_c4` reproduz quatro falhas por asserção. O executor retorna `0` quando encontra o resultado esperado. `ponto/tests/feriado_um_juiz_mutantes.py:337`
-
-```bash
-prova() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.feriado_um_juiz_mutantes "$1"
-}
-
-prova base_c4
-prova controle
-prova estruturais
-
-prova c5_endereco_folha_antigo
-prova c5_dia_sem_leitura_da_lavra
-
-prova c5_so_feriado_depois_do_corte
-prova c5_dobra_pela_fatia_de_origem
-prova c5_12x36_lavrado_na_vespera
-
-prova c5_gravacoes_sem_atomic_comum
-prova c5_motor_sem_sinal_de_rollback
-prova c5_oraculo_sem_sinal_de_rollback
-prova c5_exige_mapa_sem_pares
-prova c5_recusa_lavra_sem_rubricas
-```
-
-**Recorte para a sessão na VM.** O teste Django cobre mensal aberto e aprovado, com falha no `bulk_create` do oráculo. Execução com banco, recorte na VM, suíte inteira e parecer do Opus [nao verificado]. `ponto/tests/test_feriado_um_juiz_porta.py:462`, `docs/RELATO.md:1841`, `docs/LEIS.md:147`
-
-```bash
-bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
-  --only "ponto core folha relatorios"
-```
-
-_8754 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8755 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
