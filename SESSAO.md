@@ -6,10 +6,20 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 15:53:13.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (218.6 MB). Acoes na janela: **1834**.
+**Medido em 27/11/2026 15:59:57.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (219.9 MB). Acoes na janela: **1833**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:55:49 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 15:55:48 | Bash | Corrige o slot na linha do RELATO | `cd ~/saas-hasner; sed -i 's/\| PUXADA FERIADO-BOTAO-CORTADO -> vaga 3$/\| PUXADA FERIADO-BOTAO-CORTADO -> vaga 3 (admitida no slot 2, pid 3228814)/' app/docs/RELATO.md; tail -1 app/docs/RELATO.md` |
+| 15:55:24 | Bash | Confere se a c9 foi admitida | `cd ~/saas-hasner; /usr/bin/sleep 20; cat logs/FERIADO-BOTAO-CORTADO/c9/r.rc 2>/dev/null; tail -3 logs/FERIADO-BOTAO-CORTADO/c9/wrapper.out` |
+| 15:55:19 | Bash | Lança a c9 do BOTÃO e registra | `cd ~/saas-hasner; D=logs/FERIADO-BOTAO-CORTADO/c9; cp logs/FERIADO-BOTAO-CORTADO/ver2/aval_desktop.txt $D/; sed -i 's#--anexo \$Q/ver2_r.md#--anexo $Q/aval_desktop.txt --anexo $Q/ver2_r.md#' $D/lanca.sh; grep -c aval_desktop $D/lanca.sh; setsid $D/lanca.sh >/dev/null 2>&1 < /dev/null & sleep 1; H=$(date +%H:%M); cat >> app/docs/RELATO.md <<EOF - $H colhido FERIADO-BOTAO-CORTADO ver2/r.rc (15:54 rc ...` |
+| 15:55:12 | Bash | Confere o brief, a wt e as vagas | `cd ~/saas-hasner; D=logs/FERIADO-BOTAO-CORTADO/c9; ls $D; ls logs/FERIADO-BOTAO-CORTADO/ver2/; W=/home/ronald/wt-codex-feriado-botao-cortado-112417; git -C $W status --porcelain \| head; find $W -name __pycache__ \| head -2; python3 bin/codex_vagas_estado.py 2>&1 \| tail -5; cat /proc/loadavg` |
+| 15:55:05 | Bash | Escreve o brief c9 do BOTÃO | `cd ~/saas-hasner; B=logs/FERIADO-BOTAO-CORTADO; D=$B/c9; mkdir -p $D; W=/home/ronald/wt-codex-feriado-botao-cortado-112417; cp $B/ver2/r.md $D/ver2_r.md; cp $B/ver2/FERIADO-BOTAO-CORTADO-2711-1120.txt $B/ver2/FERIADO-BOTAO-CORTADO-PAINEL-2711-1220.txt $D/ cat > $D/q.md <<'EOF' # FERIADO-BOTAO-CORTADO c9 -- papel construtor, sobre c8 c44771b4a Pronto do aval BOTAO-POUSA-DESKTOP-2711-1510: painel an ...` |
+| 15:54:49 | Bash | Confere os dois bloqueios do verificador | `W=/home/ronald/wt-codex-feriado-botao-cortado-112417/app; sed -n 95,170p $W/static/js/popover-acao.js \| grep -n "addEventListener\\|__\\|window\.\\|function\\|htmx" \| head -20; sed -n 17,21p $W/templates/base.html; sed -n 85,90p $W/templates/colaboradores/detalhe.html` |
+| 15:54:44 | Bash | Lê o resto do verificador | `cd ~/saas-hasner; tail -c 6400 logs/FERIADO-BOTAO-CORTADO/ver2/r.md` |
+| 15:54:40 | Bash | Lê o verificador do BOTÃO | `cd ~/saas-hasner; wc -c logs/FERIADO-BOTAO-CORTADO/ver2/r.md; cat logs/FERIADO-BOTAO-CORTADO/ver2/r.md \| head -c 10000` |
+| 15:54:36 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bstlh00of.output` |
 | 15:50:37 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 15:50:37 | Bash | Registra a colheita do C3 | `cd ~/saas-hasner; H=$(date +%H:%M); echo "- $H colhido INVENTARIO C3/suite/s.rc (15:48 rc 1, VM, 4 modulos sobre 39cac5b51): FAILED (failures=17, skipped=46), Ran 50 -- 10 casos vermelhos = classes (AUS-03, AUS-05 agora julga [stub curado], CMP-02/03/04/12/13/14, ESC-12, FOL-14), 46 skip de lei; lista em logs/INVENTARIO/C3/suite/vermelhos.txt. Vai a lista.md com a etiqueta (nascente) de cada caso. ...` |
 | 15:50:31 | Bash | Compara vermelhos C2 x C3 | `cd ~/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad; grep -E '^(FAIL\|ERROR):' $S/c3s.txt \| sed 's/ (.*//' \| sort -u > logs/INVENTARIO/C3/suite/vermelhos.txt; diff <(sed 's/ (.*//' logs/INVENTARIO/c2_vermelhos.txt 2>/dev/null \| sort -u) logs/INVENTARIO/C3/suite/vermelhos.txt \| head -20; ls logs/INVENTARIO/` |
@@ -1833,14 +1843,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:00:02 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 04:00:01 | Bash | Lê selo relógio | `cd ~/saas-hasner; grep -E '^Found\|^Ran \|^(OK\|FAILED)($\| \()' logs/E4D-MATRIZ/reds/fix6/relogio.log \| tail -3; echo "- $(date +%H:%M) colhido E4D-MATRIZ reds/fix6/relogio.rc (03:59 rc=0): selo do relogio VERDE na copia da E4D." >> app/docs/RELATO.md` |
 | 03:59:58 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bke43527h.output` |
-| 03:59:48 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 03:59:47 | Bash | Registra colheita | `cd ~/saas-hasner; echo "- $(date +%H:%M) colhido E4D-MATRIZ reds/fix6/red_base.rc (03:59 rc=1): 49 testes, 84 falhas, 0 ERROR; caso 30 falha nos 4 leitores (SQL/API/modal/raio-x) pela ASSERCAO (fila perde o alvo: [81] != [79, 81]) = motivo certo (aval PICKLE-CASO30 cumprido). Selo do relogio e mutantes correndo." >> app/docs/RELATO.md` |
-| 03:59:39 | Bash | Lê RED fix6 | `cd ~/saas-hasner; L=logs/E4D-MATRIZ/reds/fix6/red.log; grep -E '^Ran \|^(OK\|FAILED)($\| \()' $L \| tail -2; grep -cE '^ERROR:' $L; awk '/^(FAIL\|ERROR): test_caso_30/{f=1} f&&/^[A-Za-z.]*Error/{print; exit}' $L; grep -E '^(FAIL\|ERROR): test_caso_30' $L` |
-| 03:59:35 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bjhwcrw4t.output` |
-| 03:58:20 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 03:58:19 | Bash | Commita fix6 e lança runs | `cd /home/ronald/wt-codex-e4d-contrato-rota-b-174640 && git add app/chamados/tests/test_e4d_matriz_reds.py app/chamados/tests/e4d_matriz_mutantes.py && git commit -q -F - <<'EOF' E4D-MATRIZ fix6: fixture do caso 30 (dia distinto) e mutantes no arnes por classe OBRA: E4D-CONTRATO-ROTA-B Caso 30 caia em IntegrityError pergunta_unica_por_marco na fixture (aval PICKLE-CASO30); o cartao recente vai a DI ...` |
-| 03:58:05 | Bash | Lê entrega fix6 | `cd ~/saas-hasner; D=logs/E4D-MATRIZ/reds/fix6; wc -c $D/construtor.r; cat $D/construtor.r \| head -120; W=/home/ronald/wt-codex-e4d-contrato-rota-b-174640; git -C $W diff --stat; git -C $W diff \| grep -E '^\+.*(except\|timezone\.now\(\)\|localdate\(\)\|date\.today\(\))'` |
-| 03:58:01 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bq6gez5wz.output` |
-| 03:57:19 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 03:57:13 | Bash | Vê obras para vagas livres | `cd ~/saas-hasner; grep -nE "^\\| *(E1-PREVISAO\|ABONO-C1\|ABONO-PARCIAL-TETO\|O30-F3)" app/docs/BACKLOG.md \| cut -c1-400; ls -d logs/E1-PREVISAO* logs/ABONO* logs/O30* 2>/dev/null` |
-| 03:57:05 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b5rspdit2.output` |
