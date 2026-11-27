@@ -1,4 +1,4 @@
-PAREI: censo-CODEX-CONSTROI-MOTOR | espera Codex
+PAREI: censo-CODEX-CONSTROI-MOTOR | espera agente opus construtor c11 (CCM; vaga opus, aval CCM-C11-LISTA-POSITIVA-v2-2711-0250)
 
 AVISO: CLEAR devido desde 02:53
 lei: E4C-F5-INSTANTE A (03:26, logs/E4C-F5-INSTANTE/c4red4/opus_triagem/opus.md) -- as 3 portas (carimbar, _carimbar_validacao, responder_pergunta_disputa_core) promovem sozinhas, na 1a escrita, o passivo anterior ao marco a estoque com entrada_em=marco, ou estoque fica so no --aplicar com aval (models.py:4392-4396, lote misto recusado :4768)? Hoje gravam origem=ato. B (depende de A): em competencia ENTREGUE a 1a escrita com passivo recusa o ato inteiro ou grava so o ato novo (hoje grava)? C: B novo (passivo depois do marco) gravado como ato zera o alarme (c1 Q02 exige) ou lava o B novo? REDs c4:444-490 estacionados com skip nomeado; o resto segue.
