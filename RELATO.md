@@ -10954,6 +10954,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
 **27/11 02:55:55 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:e5fa970c26 (40 car., na trilha privada)
 
 **27/11 02:01:19 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:b098dfc336 (246 car., na trilha privada)
@@ -13864,3 +13866,6 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 03:26 triagem opus E4D (5(d)) -> logs/E4D-MATRIZ/reds/opus_triagem/opus.md: REPROVADO/NAO CONVERGE so pelo caso 14 (lei no topo 03:24, conferida nos dois avals) e pelo schema da E4C (01/02/42/44/45 esperam o pouso dela); 18, 30, 42 e 0057/0058 DECIDIDO PELA LEI (resp. 5/9 de 25/11, item 1 de 26/11, RESPOSTAS-F5 1c) | contestavel. PUXADA E4D-CONTRATO-ROTA-B -> vaga 1 (fix5, itens 2-7, 9, 10).
 - 03:26 triagem opus E4C (5(d)) -> logs/E4C-F5-INSTANTE/c4red4/opus_triagem/opus.md: CONVERGE; 10 procedentes (amostra conferida: P2 models.py:4772/:4776; lei A models.py:4392-4396), 8 descartados com prova; leis A/B/C e pergunta de desenho (trava da Empresa) no topo 03:26. PUXADA E4C-F5-INSTANTE -> vaga 2 (c4red5 = brief final + fixture do caso 18 por restore).
 - 03:26 OBRAS VIVAS: CCM c11 opus construtor | E4D fix5 (Codex v1) | E4C c4red5 (Codex v2) | RAMO2-B c2o PUXA vaga opus construtor | PAR travada (! 4b, lei 4c, RAMO2) | vaga 3 livre.
+- 03:38 colhido E4C-F5-INSTANTE c4red5/r.rc (03:37 rc=0): construtor 2 arquivos de teste, +329/-164, 0 except/suppress/relogio novo, 3 skips nomeados (lei A, B, 1); commit 5a124fabd na copia; RED base + 14 mutantes de base verde lancados (c4red5/red.log, mut.log).
+- 03:41 colhido E4C-F5-INSTANTE c4red5/red.rc (03:40 rc=1): RED base 52 testes, 28 FAIL, 3 skip (leis A/B/1); 26 FAIL sao REDs nomeados; 2 CONTROLES vermelhos = defeito de teste: entrada_em comparado a transaction_timestamp (campo e db_default=Now(), 0,67 s de diferenca) e item13 fm=exportado (DECIDIDO PELA LEI ponto/janelas.py::competencia_fechada:87, guarda F6/O44 barra FM exportado | contestavel). Mutantes 14: 12 mordem, M21 (conjunto esperado nomeia subcaso, mordida no pai) e M32 (controle vermelho) nao. PUXADA E4C-F5-INSTANTE -> vaga 2 (c4red6, so os 3).
+- 03:41 OBRAS VIVAS: CCM c11 opus construtor | E4D fix5 (Codex v1) | E4C c4red6 (Codex v2) | RAMO2-B c2o PUXA vaga opus | PAR travada | vaga 3 livre (sem obra com dossie pronto fora das travadas).

@@ -1,7 +1,57 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 03:16** · publicado em **27/11/2026 03:19** (UTC-3)
+> Ultima resposta processada: **27/11/2026 03:37** · publicado em **27/11/2026 03:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 03:37 · sessao 55eda9ce28c0 · E4C-F5-INSTANTE · construtor · origem=Code
+
+Apliquei a c4red5 nos dois arquivos de teste. O diff passa em `git diff --check`, os dois módulos compilam em memória e as asserções do item 10 são idênticas às do HEAD. O ensaio isolado do arnês aceitou o conjunto exato e rejeitou a falta de um subcaso. [REDs](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:301) · [Arnês](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:26) [nao verificado]
+
+**PRONTO 9(a–c) [nao verificado].** Com a restrição de acesso ao banco, ficam pendentes o log dos REDs no HEAD, o verde da c1 e os ciclos verde → mordida → verde na pista do Code. [Configuração da pista](/home/ronald/wt-codex-e4c-f5-instante-012038/app/config/settings/ci.py:6) [nao verificado]
+
+| Item | Teste | Mutante | Morde? | [nao verificado]
+|---|---|---|---|
+| 1 | Foto da recusa dentro das transações do [estoque](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:338) e do [worker](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:801) | [M30 × 2, M27](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:569) | [nao verificado] |
+| 2 | PK e ato nos REDs de [fronteira, reprojeção e conversa](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:355). Mensagens integrais na [elegibilidade](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:434). | [M07, M09, M11](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:440) | [nao verificado] |
+| 3 | Três escritores sem trava prévia da Empresa. O ato novo confere autor, motivo e instante da transação. [Controle vivo e skips A/B](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:464) | [M26](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:503) | Estacionado pela lei A |
+| 4 | Dois PKs com B novo, um PK de estoque e skip da lei 1. [Comparador e leitores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:613) | [M12a, M12b, M13](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:460) | [nao verificado] |
+| 5 | Alarme e placar em subcasos próprios. [Asserções](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:673) | [M12a no contador, M12b nas duas saídas](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:460) | [nao verificado] |
+| 6 | Identidade da candidata e instante futuro na coluna em memória. [Horizonte](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:233) | [M31](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:597) | [nao verificado] |
+| 7 | [TXT invalidado com FM aberto e exportado](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:899) e [devolução via `validar_pergunta` após recusa por paridade](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:986) | [M32](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:616), [M29](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:535) | [nao verificado] |
+| 8 | [Conjunto exato por `str(teste)`](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:51). A ordem das travas fica como [pré-condição da fixture](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:790). | [M07 exige dois subcasos, M11 exige sete](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:440). M14 e M25 removidos. | Conjunto exato conferido no ensaio isolado. Mordidas [nao verificado]. | [nao verificado]
+| 9 | REDs, c1 e controles antes e depois de cada mutação. [Ciclo do arnês](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:46) | Comandos abaixo | [nao verificado] |
+| 10 | Validação futura semeada como estoque restaurado. [Asserções da tarefa](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:301) | [M28](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:517) | [nao verificado] |
+
+**Diff e comandos para a pista do Code**
+
+```bash
+git --no-optional-locks --no-pager diff -- \
+  chamados/tests/test_e4c_f5_c4_red.py \
+  chamados/tests/e4c_f5_c4red2_mutantes.py
+
+export PYTHONDONTWRITEBYTECODE=1
+python3 manage.py test --settings=config.settings.ci -v 2 \
+  chamados.tests.test_e4c_f5_c4_red
+python3 manage.py test --settings=config.settings.ci -v 2 \
+  chamados.tests.test_e4c_f5_instante_c1
+
+mordida() {
+  python3 manage.py test --settings=config.settings.ci -v 2 \
+    "chamados.tests.e4c_f5_c4red2_mutantes.$1.test_mordida"
+}
+
+# PRONTO 9(c), mais M32 no controle de TXT invalidado
+for mutante in \
+  M08QualquerResposta M11Elegibilidade M12aVigia M12bAlarme \
+  M13Dry M21Empate0058 M24RelogioAposEspera M27K6LidoAntesDaTrava \
+  M28CompensadorCru M29DevolucaoApagaResposta \
+  M30EstoqueSemAtomic M30WorkerSemAtomic M31FotoRelida M32FMExportadoBarra
+do
+  mordida "$mutante"
+done
+```
+
+Na cura, a mesma função recebe `M01DuasValidacoes`, `M02IgnoraResposta`, `M03FotoDaLavra`, `M04ValidacaoFutura`, `M07ValidacaoNoMarco`, `M09Conversa`, `M10Proveniencia`, `M15SoFM`, `M16TrilhaVazia`, `M17AlteraTXT`, `M18AlteraBatida`, `M19RecusaFutura`, `M20EmissaoDupla`, `M22SoValidacaoNaIrma` e `M23SoCandidata`. `mordida M26FotoViraAto` fica para depois da decisão da lei A. [Labels das contraprovas](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:425)
 
 ## 27/11 03:16 · sessao 196363bf4456 · E4D-CONTRATO-ROTA-B · verificador · origem=Code
 
@@ -724,16 +774,4 @@ Conferi os casos em leitura. A execução e a mordida dos mutantes ficam [não v
 
 Execução dos testes e mordida dos mutantes [nao verificado]. [nao verificado]
 
-## 27/11 02:32 · sessao 43c32c8f4f58 · - · - · origem=Ronald (tmux)
-
-Leitura concluída. Execução dos testes e dos mutantes [nao verificado]. [nao verificado]
-
-- **01/02/04/07/44** têm entrada existente em `call_command('backfill_decisoes_pergunta', aplicar=True)`. Hoje o comando só publica a projeção sem linha no DRY e aplica colisões e silêncios. Isso permite cobrar o efeito ausente de R/V em 01/02/04/44 e observar a preservação de `celula_absolveu` em 07. As datas históricas devem preceder o `applied` da 0057. Na c4, a fixture comum fixa esse marco em 2026-01-01. `chamados/management/commands/backfill_decisoes_pergunta.py:459,489,631` · `chamados/tests/cortes_f2_f9_apoio.py@c154a8d4e:36,61`
-- **01** deve verificar silêncio no caminho do estoque. A c4 já verifica proveniência e o evento único da resposta normal. `chamados/tests/test_e4c_f5_c4_red.py@c154a8d4e:401,495` · `chamados/models.py@c154a8d4e:4755`
-- **02/03** devem preservar a foto completa dos atos anteriores. O controle do 03 restaura R após REABERTURA compensadora e exige V apenas nesse cartão. `chamados/models.py:4437,4533` · `docs/PROMPTS.md:2806`
-- **11** dá RED pela ausência de REABERTURA na pergunta vazia usando a assinatura atual. **12** pede usuários independentes para as quatro FKs. `chamados/services/disputa_emissao.py:1628,1703` · `chamados/models.py:3804,3824,4347,4352`
-- **14 — lei:** a sessão prioriza `REABERTURA` marcada da c4. A exigência E4D de `SANEAMENTO` em campo próprio e preservação de outra resposta no empate ou posterior pede decisão explícita sobre seleção do ato atingido. `docs/PROMPTS.md:2950` · `docs/LEIS.md:151` · `chamados/tests/test_e4c_f5_instante_c1.py@c154a8d4e:234` · `chamados/services/validacao.py@c154a8d4e:476`
-- **42** usa a referência da migração real e testa o resíduo pela porta pública de resposta, com lavra em T1 e nova resposta efetivamente projetada com tempo de negócio anterior a T1. Hoje `marcos_do_lote` lê o `respondida_em` sobrescrito. O selo F3 veda consultar DP diretamente nesse leitor. `chamados/tests/test_e4c_f5_c4_red.py@c154a8d4e:914` · `chamados/services/disputa_emissao.py:1529,1562` · `chamados/veredito_lavrado.py:205` · `chamados/tests/test_f3_lavra_foto_sem_decisao.py:312` · `docs/CORTES.md:609,610`
-- **Lei/desenho:** por qual entrada se reverte exatamente um lote de uma competência em 04, transporta-se o `!` e comprova-se hash real do gravado em 08, identifica-se o pedido em 11 e lê-se autoria explicitamente desconhecida em 12? A via comum de 08 segue a recusa da c4. `chamados/management/commands/backfill_decisoes_pergunta.py:459,514` · `ponto/portas/regen_exportada.py:62` · `chamados/tests/test_e4c_f5_c4_red.py@c154a8d4e:419` · `chamados/services/disputa_emissao.py:1628` · `chamados/models.py:4347`
-
-_8563 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8564 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
