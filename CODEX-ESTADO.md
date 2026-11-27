@@ -1,7 +1,443 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 10:17** · publicado em **27/11/2026 10:20** (UTC-3)
+> Ultima resposta processada: **27/11/2026 10:24** · publicado em **27/11/2026 10:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 10:24 · sessao 1bca4d244636 · CASO-LITERAL-14 · leitura · origem=Code
+
+```python
+import json
+import logging
+import re
+from datetime import datetime, timedelta
+from difflib import unified_diff
+from inspect import getclosurevars
+
+from django.contrib.auth import get_user_model
+from django.db import connection, transaction
+from django.db.models import Q
+from django.test import TestCase
+from django.utils import timezone
+
+from chamados.catalogo.motor import COBRANCA
+from chamados.models import ChamadoColaborador, PerguntaDisputa
+from colaboradores.mixins import tem_acao
+from colaboradores.models import Empresa
+from folha import export
+from ponto.models import Batida, FechamentoMensal
+from ponto.services import fechamento, retratar_humano
+from ponto.services.par_relampago_na_lista import travar_batidas_do_sinal
+
+# Executar no shell de `tenant_command shell --schema=juliani`.
+# Escopo autorizado em aval.txt:1. Alvo em r_f1b.md:22 e r_f1b.md:41.
+# HEAD Git, versão instalada, dados atuais de produção e execução [nao verificado].
+MODO = "ensaio"
+USUARIO_ID = None
+MOTIVO_ID = None
+
+ALVO = 159844
+ANTERIOR = 159843
+COLAB_ID = 1036
+EMPRESA_ID = 2
+COMPETENCIA = (11, 2026)
+HORA_LOCAL = datetime(2026, 11, 19, 18, 4, 22)
+OBSERVACAO = (
+    "CASO-LITERAL-14-v2-2711-0955: toque excedente 1 s apos 159843 "
+    "(classe b, fase 1)"
+)
+
+# Campos consumidos na montagem e classificação do TXT.
+# app/folha/export.py:402, :699, :774, :977 e :1310
+CAMPOS_TXT = (
+    "colaborador_id", "mes", "ano", "status", "horas_trabalhadas",
+    "turnos_abertos", "inconsistencias", "horas_extras_50",
+    "horas_extras_100", "horas_extras_100_feriado", "horas_folga_trabalhada",
+    "horas_noturnas", "horas_intra_indenizada", "horas_atraso",
+    "horas_saida_antecipada",
+)
+
+
+def exigir(condicao, mensagem):
+    if not condicao:
+        raise ValueError(mensagem)
+
+
+def imprimir_json(rotulo, dado):
+    print(rotulo, json.dumps(dado, default=str, ensure_ascii=False, sort_keys=True))
+
+
+def rotulo_publicavel(texto):
+    # Os rótulos solicitados vêm de cadastros com texto livre.
+    # app/ponto/models.py:641. Conteúdo desses cadastros [nao verificado].
+    if re.search(r"@|\b(?:\d{11}|\d{3}\.\d{3}\.\d{3}-\d{2})\b", texto):
+        return "[oculto]"
+    return texto
+
+
+def referencias_no_contexto(campo):
+    # IDs em contexto, incluindo a forma textual do acervo.
+    # app/chamados/models.py:1919, :3914
+    # app/chamados/juizes.py:131
+    # app/chamados/services/disputa_emissao.py:59
+    # app/chamados/services/acoes_chamado.py:244
+    ids = (ALVO, str(ALVO))
+    return (
+        Q(**{f"{campo}__batida_id__in": ids})
+        | Q(**{f"{campo}__ultima_batida__id__in": ids})
+        | Q(**{f"{campo}__entrada_sem_saida__entrada_id__in": ids})
+        | Q(**{f"{campo}__ocorrencias__contains": [{"batida_id": ALVO}]})
+        | Q(**{f"{campo}__ocorrencias__contains": [{"batida_id": str(ALVO)}]})
+    )
+
+
+def guardas(travar):
+    # A ordem Empresa -> Colaborador -> Batidas vem da porta existente.
+    # app/ponto/services/par_relampago_na_lista.py:172
+    # app/folha/export.py:556 e app/folha/views.py:134
+    if travar:
+        exigir(Empresa.objects.filter(pk=EMPRESA_ID).exists(),
+               "Empresa 2 ausente. app/colaboradores/models.py:40")
+        marcas = travar_batidas_do_sinal(COLAB_ID, (ALVO, ANTERIOR), {EMPRESA_ID})
+    else:
+        marcas = Batida.objects.filter(pk__in=(ALVO, ANTERIOR))
+
+    por_id = {marca.pk: marca for marca in marcas}
+    batida = por_id.get(ALVO)
+    exigir(batida is not None, "Batida 159844 ausente do escopo. app/ponto/models.py:8")
+    exigir(batida.colaborador_id == COLAB_ID,
+           "Colaborador divergente. app/ponto/models.py:22")
+    exigir(batida.colaborador.empresa_id == EMPRESA_ID,
+           "Empresa divergente. app/colaboradores/models.py:321")
+    exigir(timezone.localtime(batida.timestamp).replace(tzinfo=None) == HORA_LOCAL,
+           "Timestamp local divergente. app/ponto/models.py:23 e app/config/settings/base.py:93")
+    exigir(batida.tipo == "S", "Tipo divergente. app/ponto/models.py:24")
+    exigir(batida.retratada_em is None, "Batida já retratada. app/ponto/models.py:67")
+    exigir(batida.aprovada_por_id is None, "Batida aprovada por admin. app/ponto/models.py:68")
+
+    anterior = por_id.get(ANTERIOR)
+    exigir(
+        anterior is not None
+        and anterior.colaborador_id == COLAB_ID
+        and anterior.tipo == "E"
+        and anterior.timestamp == batida.timestamp - timedelta(seconds=1)
+        and anterior.retratada_em is None,
+        "Batida anterior divergente. r_f1b.md:22 e app/ponto/models.py:22–24,67",
+    )
+
+    # .viva delega ao juiz da pergunta. A abertura da disputa usa fechada_em.
+    # app/chamados/models.py:1997, :2751, :3792 e :3812
+    # app/chamados/juizes.py:911 e app/ponto/models.py:40
+    perguntas = PerguntaDisputa.objects.filter(disputa__fechada_em__isnull=True).filter(
+        Q(batida_origem_id=ALVO)
+        | Q(batidas_plantadas__pk=ALVO)
+        | referencias_no_contexto("disputa__contexto")
+        | referencias_no_contexto("disputa__chamado__contexto_json")
+        | referencias_no_contexto("chamado_destino__contexto_json")
+    ).distinct()
+    exigir(not any(pergunta.viva for pergunta in perguntas),
+           "Pergunta aberta ligada à batida. app/chamados/models.py:3792")
+
+    # COBRANCA contém os estados aberto e em_analise.
+    # app/chamados/catalogo/motor.py:29 e app/chamados/models.py:59, :1923, :3812
+    chamados = ChamadoColaborador.objects.filter(status_local__in=COBRANCA).filter(
+        referencias_no_contexto("contexto_json")
+        | referencias_no_contexto("disputa_origem__contexto")
+        | Q(disputa_origem__perguntas__batida_origem_id=ALVO)
+        | Q(perguntas_que_resolvem__batida_origem_id=ALVO)
+        | Q(disputa_origem__perguntas__batidas_plantadas__pk=ALVO)
+        | Q(perguntas_que_resolvem__batidas_plantadas__pk=ALVO)
+    )
+    exigir(not chamados.exists(), "Chamado aberto ligado à batida. app/chamados/catalogo/motor.py:29")
+
+    # competencia_do_fato usa a janela da empresa. O juiz de “exportada”
+    # é competencia_entregue, também chamado por marcos_da_competencia.
+    # app/ponto/services/fechamento.py:1626, :1561 e :36
+    # app/ponto/services/dia_pago.py:702 e app/folha/export.py:565
+    comp = fechamento.competencia_do_fato(batida.colaborador, batida.timestamp)
+    exigir(comp == COMPETENCIA, "Competência divergente. app/ponto/services/fechamento.py:1626")
+    exigir(not export.competencia_entregue(EMPRESA_ID, *comp),
+           "Competência exportada. app/folha/export.py:565")
+    exigir(comp not in fechamento.GUARDA_COMPETENCIA,
+           "Competência consta na guarda. app/ponto/services/fechamento.py:36")
+    return batida
+
+
+def listar():
+    # As duas consultas usam os critérios da porta.
+    # app/ponto/services/retratar_humano.py:108, :118, :127 e :162
+    # app/colaboradores/mixins.py:322 e app/config/settings/saas.py:34
+    motivos = {motivo.pk: motivo for motivo in retratar_humano.motivos_ativos()}
+    usuarios = {
+        usuario.pk: usuario
+        for usuario in get_user_model().objects.only(
+            "id", "username", "is_active", "is_superuser"
+        ).order_by("pk")
+        if tem_acao(usuario, retratar_humano.ACAO_EXIGIDA)
+    }
+    imprimir_json("MOTIVOS_ATIVOS", [(pk, rotulo_publicavel(m.nome)) for pk, m in motivos.items()])
+    imprimir_json("USUARIOS_REGULARIZAR_BATIDA",
+                  [(pk, rotulo_publicavel(u.username)) for pk, u in usuarios.items()])
+    return motivos, usuarios
+
+
+def fotografia(rotulo, batida, apos_retratacao=None):
+    # values() fotografa as colunas, com IDs nas FKs. Preserva as chaves dos
+    # campos de texto livre e do caminho da foto, ocultando valores preenchidos.
+    # app/ponto/models.py:22–95
+    dados_batida = Batida.objects.filter(pk=batida.pk).values().first()
+    exigir(dados_batida is not None, "Batida ausente na fotografia. app/ponto/models.py:8")
+    for campo in ("terminal", "tipo_registro", "justificativa", "foto"):
+        if dados_batida[campo]:
+            dados_batida[campo] = "[oculto]"
+
+    colab = batida.colaborador
+    empresa = colab.empresa
+    mes, ano = COMPETENCIA
+    gravado = FechamentoMensal.objects.filter(
+        colaborador_id=colab.pk, mes=mes, ano=ano,
+    ).values("id", "derivado_em", *CAMPOS_TXT).first()
+    if apos_retratacao is not None:
+        exigir(dados_batida["retratada_em"] == apos_retratacao and not dados_batida["aprovada"],
+               "Estado após a retratação divergente. app/ponto/registro_batida.py:294")
+        # O callback contém falhas. O carimbo confirma a lavra do fechamento.
+        # app/ponto/services/fechamento.py:1167, :1213 e :1842
+        exigir(gravado and gravado["derivado_em"] and gravado["derivado_em"] >= apos_retratacao,
+               "Lavra do fechamento sem confirmação. app/ponto/services/fechamento.py:1167,1213")
+
+    # A view entrega o fechamento lido ao classificador e ao montador. O
+    # recorte na entrada mantém os registros 11 junto às rubricas do colab.
+    # app/folha/views.py:214, :219 e :275
+    # app/ponto/services/fechamento.py:468 e app/folha/export.py:215, :699
+    lido = fechamento.recalcular_fechamento_mes(
+        mes, ano, empresa_id=empresa.pk, colaborador_ids=[colab.pk],
+        somente_leitura=True, retornar_objeto=True,
+    ).get(colab.pk)
+    exigir(lido is not None, "Fechamento lido indisponível. app/ponto/services/fechamento.py:1333")
+    itens = export.classificar_export(empresa, mes, ano, fechamentos=[lido])
+    linhas, _ = export.montar_linhas_export(
+        empresa, mes, ano, itens=itens, fechamentos=[lido],
+    )
+    # Validação e conteúdo da view. Hash sobre os bytes UTF-8 com CRLF do TXT.
+    # app/folha/views.py:282 e app/folha/export.py:266, :525 e :542
+    exigir(not export.validar_layout_dominio(linhas), "Layout inválido. app/folha/export.py:266")
+    sha256 = export.hash_do_txt(export.conteudo_do_txt(linhas))
+
+    # As rubricas e seus insumos vêm dos mesmos leitores da montagem.
+    # app/folha/export.py:184, :341, :363, :402, :739 e :993
+    ciclo = export._ciclo_do_colab(colab, mes, ano)
+    dobra = export.feriado_12x36_em_dobra(colab, mes, ano)
+    eventos = dict(export.eventos_do_fechamento(lido, tipo_ciclo=ciclo, feriado_12x36_em_dobra=dobra))
+    rubricas = export._rubricas_map(empresa)
+    insumos_rubricas = {}
+    for evento in (*eventos, "falta_diurna"):
+        rubrica = rubricas.get(evento)
+        insumos_rubricas[evento] = (
+            None if rubrica is None else {
+                "id": rubrica.pk,
+                "empresa_id": rubrica.empresa_id,
+                "codigo_fopag": rotulo_publicavel(rubrica.codigo_fopag),
+                "tipo": rotulo_publicavel(rubrica.tipo),
+            }
+        )
+
+    imprimir_json(f"{rotulo} BATIDA", dados_batida)
+    imprimir_json(f"{rotulo} FECHAMENTO_GRAVADO", gravado)
+    imprimir_json(f"{rotulo} FECHAMENTO_LIDO", {campo: getattr(lido, campo) for campo in CAMPOS_TXT})
+    imprimir_json(f"{rotulo} CLASSIFICACAO", [
+        {campo: item[campo] for campo in ("colaborador_id", "status", "motivo", "travas_aprovacao")}
+        for item in itens
+    ])
+    imprimir_json(f"{rotulo} RUBRICAS", {
+        "tipo_ciclo": ciclo,
+        "feriado_12x36_em_dobra": dobra,
+        "eventos": eventos,
+        "datas_falta": export.datas_falta(colab, empresa, mes, ano),
+        "mapeamento": insumos_rubricas,
+    })
+    print(f"{rotulo} TXT linhas={len(linhas)} sha256={sha256}")
+    for linha in linhas:
+        print(linha)
+    return linhas
+
+
+def retratar_e_capturar_evento(batida, usuario, motivo):
+    # Botão -> rota -> view -> retratar -> retratar_batida -> fechamento por evento.
+    # app/templates/colaboradores/partials/_calendario_grade.html:127
+    # app/ponto/urls.py:62, app/ponto/views.py:3453
+    # app/ponto/services/retratar_humano.py:146
+    # app/ponto/registro_batida.py:195, :287 e :301
+    # captureOnCommitCallbacks coleta os callbacks reais sem executá-los.
+    # app/chamados/tests/test_e2_celula_regenerada_reavalia.py:227
+    with TestCase.captureOnCommitCallbacks(execute=False) as callbacks:
+        ok, _ = retratar_humano.retratar(
+            batida, motivo=motivo, observacao=OBSERVACAO, ator=usuario,
+        )
+        exigir(ok, "Porta recusou a retratação. app/ponto/services/retratar_humano.py:146")
+
+    eventos = []
+    for callback in callbacks:
+        if (
+            getattr(callback, "__module__", None) == fechamento.__name__
+            and getattr(callback, "__qualname__", None) == "recalcular_por_evento.<locals>._rodar"
+        ):
+            contexto = getclosurevars(callback).nonlocals
+            if (
+                contexto["motivo"] == "retratacao"
+                and contexto["colaborador"].pk == COLAB_ID
+                and contexto["quando"] == batida.timestamp
+            ):
+                eventos.append(callback)
+    exigir(len(eventos) == 1, "Evento da retratação sem confirmação. app/ponto/services/fechamento.py:1822")
+
+    batida.refresh_from_db()
+    exigir(batida.retratada_em is not None and not batida.aprovada,
+           "Retratação sem confirmação. app/ponto/registro_batida.py:294")
+    prazo = retratar_humano.prazo_de_desfazer(batida)
+    exigir(prazo is not None, "Trilha de reversão ausente. app/ponto/services/retratar_humano.py:38")
+    return eventos[0], prazo
+
+
+def comparar(batida, antes):
+    depois = fotografia("DEPOIS", batida, apos_retratacao=batida.retratada_em)
+    diff = list(unified_diff(antes, depois, fromfile="antes", tofile="depois", lineterm=""))
+    print("DIFF TXT")
+    for linha in diff:
+        print(linha)
+    # diff_linhas soma as linhas removidas e adicionadas, sem os cabeçalhos.
+    return sum(linha.startswith(("-", "+")) for linha in diff[2:])
+
+
+def imprimir_reversao(usuario_id, prazo):
+    # O comando é Python para o mesmo shell juliani. Janela de 7 dias da trilha.
+    # app/ponto/views.py:3465 e app/ponto/services/retratar_humano.py:28, :38 e :186
+    print(f"REVERSAO prazo_dias={retrar_dias()} prazo_local={timezone.localtime(prazo).isoformat()}")
+    print(
+        "from django.contrib.auth import get_user_model; "
+        "from ponto.models import Batida; "
+        "from ponto.services import retratar_humano; "
+        f"print(retratar_humano.desfazer(Batida.objects.get(pk={ALVO}), "
+        f"ator=get_user_model().objects.get(pk={usuario_id})))"
+    )
+
+
+def retrar_dias():
+    # app/ponto/services/retratar_humano.py:28
+    return retratar_humano.DIAS_PARA_DESFAZER
+
+
+def fim(retratada, diff_linhas):
+    print(f"FIM modo={MODO} retratada={retratada} diff_linhas={diff_linhas}", flush=True)
+
+
+def executar():
+    exigir(MODO in ("ensaio", "aplicar"), "MODO inválido. aval.txt:1")
+    exigir(getattr(connection, "schema_name", None) == "juliani",
+           "Schema divergente. app/config/settings/saas.py:22")
+    exigir(transaction.get_autocommit() and not connection.in_atomic_block,
+           "Use o shell fora de outra transação. app/ponto/services/fechamento.py:1848")
+
+    ids_definidos = USUARIO_ID is not None and MOTIVO_ID is not None
+    if MODO == "ensaio" and not ids_definidos:
+        guardas(travar=False)
+        listar()
+        fim("nao", 0)
+        return
+
+    diff_ensaio = None
+    try:
+        with transaction.atomic(durable=True):
+            batida = guardas(travar=True)
+            motivos, usuarios = listar()
+            exigir(type(USUARIO_ID) is int and USUARIO_ID in usuarios,
+                   "USUARIO_ID sem permissão. app/ponto/services/retratar_humano.py:127")
+            exigir(type(MOTIVO_ID) is int and MOTIVO_ID in motivos,
+                   "MOTIVO_ID ausente ou inativo. app/ponto/services/retratar_humano.py:162")
+
+            antes = fotografia("ANTES", batida)
+            evento, prazo = retratar_e_capturar_evento(
+                batida, usuarios[USUARIO_ID], motivos[MOTIVO_ID],
+            )
+            # O botão agenda _rodar em on_commit. A execução é síncrona após
+            # o commit externo, na mesma conexão. O ensaio chama esse callback [nao verificado]
+            # dentro do atomic, cuja reversão descarta os callbacks pendentes.
+            # app/ponto/services/fechamento.py:1822–1851
+            if MODO == "ensaio":
+                evento()
+                diff = comparar(batida, antes)
+                imprimir_reversao(USUARIO_ID, prazo)
+                diff_ensaio = diff
+                raise ValueError("Rollback intencional do ensaio. app/ponto/services/fechamento.py:1848")
+    finally:
+        if diff_ensaio is not None:
+            fim("nao", diff_ensaio)
+
+    # O commit já executou o callback antes da fotografia em modo aplicar. [nao verificado]
+    # Em caso de falha na fotografia após o commit, a reversão ainda é impressa. [nao verificado]
+    # app/ponto/services/fechamento.py:1848 e app/ponto/services/retratar_humano.py:186
+    try:
+        diff = comparar(batida, antes)
+    finally:
+        imprimir_reversao(USUARIO_ID, prazo)
+    fim("sim", diff)
+
+
+# A configuração SaaS envia mensagens a streams e arquivos. O motor inclui
+# nome em mensagens de erro. Silencia o logging Python durante esta execução,
+# com restauração ao sair. A trilha ORM passa pela porta de auditoria.
+# app/config/settings/saas.py:119–183, app/ponto/services/fechamento.py:1327
+# app/ponto/registro_batida.py:245 e app/core/observ.py:133
+nivel_anterior = logging.root.manager.disable
+logging.disable(logging.CRITICAL)
+try:
+    executar()
+finally:
+    logging.disable(nivel_anterior)
+```
+
+## 27/11 10:21 · sessao e678aeb86a9e · RC-SEM-PROXIMA · verificador · origem=Code
+
+**REPROVADO.** O candidato preserva a lista `RC SEM COLHER` quando a árvore, o RELATO e o instante são fixos. A interface mudou: a mesma obra pode aparecer nas duas listas numa única chamada, e o `~/vercodex.py` conta `RC SEM PROXIMA` como `RC SEM COLHER`. O prazo também pode disparar antes de completados 15 minutos reais. `bin/rc_sem_colher.py:89–113,116–163` · `/home/ronald/vercodex.py:163–171`
+
+### 1. A lista `SEM COLHER` é idêntica?
+
+**Para a mesma árvore, o mesmo RELATO e o mesmo `agora`, sim.** A regex aceita as mesmas linhas e `marcas()` devolve as mesmas chaves `(obra, caminho, HH:MM do rc)`. A seleção do `.rc`, a janela de 24 h, `--min-idade`, a folga, a leitura do código e a ordenação foram preservadas. A comparação com o anterior está no `diff.txt` anexo, hunks `-22`, `-47`, `-73` e `-101`. `bin/rc_sem_colher.py:26–56,63–102`
+
+**Alta — o resultado observado do comando muda.** Com uma única obra colhida e parada, antes eram zero linhas e rc `0`. Agora sai `RC SEM PROXIMA` e rc `3`. Além disso, se a primeira passagem imprime um órfão e um diretório fica ilegível antes da segunda, a nova chamada termina com rc `1` depois de emitir a linha. A anterior terminaria com rc `3`. Reproduzi os dois resultados em memória. `bin/rc_sem_colher.py:59–73,153–163` · `diff.txt`, hunk `-101`
+
+**Alta — as duas listas podem descrever estados incompatíveis.** Com `a.rc` colhido às 10:01 e `b.rc` mais novo e sem marca, a primeira passagem lista `b.rc`. Se `b.rc` some entre as passagens, a segunda lista `a.rc` como `SEM PROXIMA`. Reproduzi as duas linhas para a mesma obra na mesma chamada. O RELATO é lido uma vez, mas o índice de marcas, a varredura e o relógio são refeitos. `bin/rc_sem_colher.py:36–49,89–102,116–135,153–163`
+
+### 2. Contraexemplos de `SEM PROXIMA`
+
+| Gravidade | Critério | Contraexemplo |
+|---|---|---|
+| Média | Forma da marca | Uma colheita registrada como `colhido OBRA-X r.rc (10:00)` sem o prefixo `- HH:MM `, ou citada no meio da linha, deixa a obra parada fora de `SEM PROXIMA`. Ela pode aparecer como `SEM COLHER`. É o efeito previsto pela gramática preservada. `bin/rc_sem_colher.py:30–49,95–101,125–130` |
+| Alta | Marca do rc mais novo | `a.rc` foi colhido e chegou um `b.rc` sem marca. Só `b.rc` é avaliado e, se elegível, sai em `SEM COLHER`. Já se `a.rc` for refeito no **mesmo caminho e minuto**, o novo resultado herda a marca antiga e pode sair em `SEM PROXIMA` sem ter sido colhido. Uma marca de outro dia com a mesma chave também colide. Em empate exato de mtime, fica o primeiro `.rc` visitado. `bin/rc_sem_colher.py:36–49,72–85,95–101,125–132` |
+| Alta | `superado` e marcas múltiplas | Qualquer `superado` da mesma chave veta a saída, inclusive um antigo que colidiu com um rc refeito. O inverso também ocorre: `superado a.rc` deixa passar `b.rc` com `colhido`, mesmo que `b.rc` seja só um artefato posterior de uma obra já encerrada. Entre vários `colhido`, vence o maior horário inferido. Para rc às 10:00, uma marca válida às 10:01 e outra linha às 09:59 para a mesma chave fazem a segunda virar “amanhã” e esconder a obra parada. `bin/rc_sem_colher.py:36–43,105–113,125–134` |
+| Alta | Escrita depois do rc | Um brief escrito **exatamente 5 s** depois do `.rc` ainda deixa a obra na lista. Um brief criado com mtime preservado ou um link simbólico também pode passar despercebido. No sentido inverso, um simples `touch` num arquivo regular da obra mais de 5 s depois do rc tira uma obra que continua parada. Um brief real escrito mais de 5 s depois do rc, ainda antes da marca, tira a obra conforme o caso do selo. `bin/rc_sem_colher.py:72–85,122–124` · `bin/tests/test_rc_sem_colher.sh:60–72` |
+| Média | Escrita do juiz ou da espera | O juiz lê o RELATO, consulta a árvore e escreve em stdout. A espera cria a marca com `mktemp` e imprime os caminhos achados. Se `TMPDIR` estiver dentro da obra, ou a sessão redirecionar a saída para `logs/OBRA-X/espera.log`, o próprio arquivo de controle pode tirar a obra da lista. A ocorrência desses arranjos em produção é [nao verificado]. `bin/rc_sem_colher.py:52–56,72–85,153–163` · `bin/disjuntor.py:1967–1969` |
+| Alta | 15 minutos, meia-noite e fração | Com rc às `10:00:30.7`, colheita às `10:00:59` e consulta às `10:15:01`, o juiz lista com **14 min 02 s** reais de espera. Ele usa `10:00:00` como instante da marca. A fração do mtime foi tratada corretamente para manter o mesmo minuto, e `23:50 → 00:10` funciona num dia de 24 h. Ainda assim, um rc de ontem às `23:50:59.9` e uma marca de hoje às `23:50:10` podem ser associados ao minuto de ontem enquanto o rc ainda está na janela de 24 h. Num dia com mudança de offset, somar `86400` também pode cair em outra hora local. `bin/rc_sem_colher.py:65–85,105–113,131–134` · `bin/tests/test_rc_sem_colher.sh:88–102` |
+
+### 3. Quem escreve e quem lê
+
+| Componente | Contrato observado |
+|---|---|
+| Produtores | O wrapper do Codex escreve o `.rc` da chamada do construtor em temporário e publica por `mv`. A sessão colhe e registra a marca no RELATO. O juiz usa o mtime do arquivo e o texto da marca, não o `fim=` gravado no `.rc`. `bin/codex_pergunta.sh:565–574` · `CLAUDE.md:332–337` · `app/docs/RELATO.md:13639–13646` · `bin/rc_sem_colher.py:78–85,125–132` |
+| `ESPERA_UNICA` | Lê `$?`, repassa stdout e pula o laço com rc `3` de qualquer lista. A espera termina com rc `0` para rc `0` ou `3` do juiz e ainda pode imprimir caminhos do `find` final. Já dentro do laço, só observa `.rc` por `-cnewer`. Uma marca que completa 15 minutos durante a espera não a acorda por si só, e o juiz não é chamado de novo ao sair. `bin/disjuntor.py:1963–1969` |
+| `espera_nega` e PreToolUse | Leem o **texto do comando Bash**. Verificam forma do laço, `find` e teto. A forma com o juiz retirado também passa, como confirmei em memória. O caso `caso_forma` exige a presença do juiz por uma asserção adicional. `.claude/settings.json:62–69` · `bin/disjuntor.py:2157–2174,2217–2228` · `bin/tests/test_rc_sem_colher.sh:160–162` |
+| Stop e handoff | O Stop usa a prova do RELATO, as decisões do disjuntor e a fila. O handoff importa o Stop para ler fila, travas e `PAREI`, e grava `HANDOFF-SESSAO.md`. Esses caminhos não consomem stdout ou rc de `rc_sem_colher.py`. `.claude/settings.json:3–29` · `bin/hook_stop_fila1.py:1305–1329,1458–1501` · `bin/handoff_sessao.sh:17–21,44–78,124–145,292–338` |
+| `~/vercodex.py` | **Alta — contagem errada no código local explicitamente nomeado.** Captura stdout e rc, conta toda linha não vazia sob `RC SEM COLHER` e exibe até 15 linhas. Três `SEM PROXIMA` viram `RC SEM COLHER: 3`, mesmo com zero órfãos. A chamada observada também não passa `--min-idade 900`, embora o contrato da cópia o documente. A versão efetivamente usada no pouso é [nao verificado]. `/home/ronald/vercodex.py:5,163–171` · `app/docs/RELATO.md:13639–13642` |
+| `logs/espera_unica.sh` e outros | O script é citado no RELATO e `logs/` é ignorado. Seu conteúdo e seu tratamento do stdout e do rc são [nao verificado]. O selo da cópia lê o juiz diretamente e usa a forma de `ESPERA_UNICA`. Outros consumidores externos são [nao verificado]. `app/docs/RELATO.md:13598` · `.gitignore:53–54` · `bin/tests/test_rc_sem_colher.sh:55,75–108,143–144` |
+
+### 4. Selo e RED
+
+- **Os seis mutantes novos mordem nas verificações em memória.** `proxima-desligada` perde rc `3` mesmo imprimindo as três linhas. Os mutantes de etapa, idade e `superado` incluem respectivamente `OBRA-LANCADA`, `OBRA-RECENTE` e `OBRA-ENCERRADA`. Os de virada e fração erram a diferença de segundos esperada. `bin/tests/test_rc_sem_colher.sh:57–102,197–210`
+- **O RED funcional das três obras cai pelo motivo certo no comportamento anterior mostrado no anexo.** O juiz antigo dá rc `0` e stdout vazio para as três colhidas. Os três casos de exclusão também ficam vermelhos, mas porque falta o controle positivo exigido por `_proxima_fora`. Os casos de meia-noite e fração cairiam por ausência de `_instante_da_marca`. A espera antiga entra no laço e não imprime `SEM PROXIMA`. `diff.txt`, hunks `-83` e `-101` · `bin/tests/test_rc_sem_colher.sh:75–108` · `bin/disjuntor.py:1967–1969`
+- **Média — cobertura vazia e relógio.** `caso_proxima_vazia` fica verde com a funcionalidade ausente, inclusive no comportamento antigo. Tem três obras de exclusão e serve como controle negativo. `caso_proxima_espera` exige uma linha real, rc `0` e menos de 3 s, mas não tem mutante novo próprio. A fixture usa horas relativas com margens amplas e a meia-noite comum está coberta pelo cálculo. O selo não exercita `900`/`901` s nem os segundos desconhecidos da marca. A medição de `<3 s` usa `date +%s` e pode falhar por atraso de execução ou ajuste do relógio. `bin/tests/test_rc_sem_colher.sh:57–108,197–210`
+- Fiz as sondas em memória porque o selo integral cria, altera e apaga arquivos. **Verde integral, RED executado no commit `59600163c` e pouso pela pista** ficam [nao verificado]. As três obras do selo são fixtures. Seu estado em produção fica [nao verificado]. `bin/tests/test_rc_sem_colher.sh:26–28,57–73,165–182` · `aval.txt:1`
+
+### 5. Classes já reprovadas
+
+O diff mantém um executável, uma regex de marca e um seletor de rc. Não acrescenta `except` ao juiz. A derivação em paralelo aparece **na execução**: duas passagens sobre a mesma fonte, com o predicado da folga repetido e dois `time.time()` internos em vez de um instante comum capturado na borda. O campo `HH:MM` também tem dois usos: identifica o minuto exibido e vira um instante com segundos `00` para decidir o prazo. A dupla observação e a antecipação do prazo têm contraexemplos reproduzidos acima. `bin/rc_sem_colher.py:30–49,59–102,105–135,138–167`
 
 ## 27/11 10:17 · sessao 60ded10607a8 · CASO-LITERAL-14 · sonda · origem=Code
 
@@ -1390,90 +1826,4 @@ Conferi os 13 arquivos tocados pelos identificadores de conteúdo do diff fornec
 
 - **Baixa — a checagem de trava confere presença.** O registro de `Empresa` é um conjunto, sem ordem de aquisição. As fixtures tomam `Empresa` antes do `Colaborador`. A porta passaria pela mesma conferência se um chamador futuro invertesse a ordem e já detivesse ambas. [export.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/folha/export.py:588) · [models.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/models.py:4767) · [test_e4c_f5_c4_red.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/tests/test_e4c_f5_c4_red.py:713)
 
-## 27/11 09:25 · sessao 9c24fac33fc6 · PAR-PELO-TURNO · construtor · origem=Code
-
-A c1v7 registra `batidas_apuraveis_na_janela` como autoridade e mantém a dívida em **1 chamada**. O censo compara nomes exatos nos imports e nas chamadas. A checagem com e sem alias confirmou que os dois nomes não casam por prefixo em nenhum sentido. (`relatorios/tests/test_pdf_nao_calcula.py:38,49,70,77`, `relatorios/pdf_espelho.py:281`)
-
-```diff
-diff --git a/app/relatorios/tests/test_pdf_nao_calcula.py b/app/relatorios/tests/test_pdf_nao_calcula.py
---- a/app/relatorios/tests/test_pdf_nao_calcula.py
-+++ b/app/relatorios/tests/test_pdf_nao_calcula.py
-@@ -37,0 +38 @@ AUTORIDADES = frozenset({
-+    'batidas_apuraveis_na_janela',
-@@ -48 +49 @@ DIVIDA = {
--    ('pdf_espelho.py', 'batidas_apuraveis'): 1,
-+    ('pdf_espelho.py', 'batidas_apuraveis_na_janela'): 1,
-```
-
-**Contagem de `except` no diff** `+0 -0`. (`relatorios/tests/test_pdf_nao_calcula.py:38,49`)
-
-**Prova local**. A execução direta parou com `ModuleNotFoundError: No module named 'django.test'`. Execução com Django [nao verificado]. Com `unittest.TestCase` em memória, o RED original acusou a entrada antiga como podre e os cinco testes passaram após a cura. (`relatorios/tests/test_pdf_nao_calcula.py:28,94,114`)
-
-**Censo AST de `pdf_espelho.py`**, com as linhas das chamadas. (`relatorios/tests/test_pdf_nao_calcula.py:63`, `relatorios/pdf_espelho.py:213,281,347,358,427,444,450`)
-
-```text
-Antes   celulas_do_periodo [347], folgas_do_periodo [358], turnos_do_colab [213, 444],
-        calcular_mes [427], minutos_previstos_do_dia [450]
-Depois  celulas_do_periodo [347], folgas_do_periodo [358], turnos_do_colab [213, 444],
-        batidas_apuraveis_na_janela [281], calcular_mes [427], minutos_previstos_do_dia [450]
-```
-
-| Comando de prova | Resultado |
-|---|---|
-| `rodar_selo antes` | RED, entrada antiga podre. `relatorios/tests/test_pdf_nao_calcula.py:114` |
-| `rodar_selo depois` | Cinco testes passaram com `unittest.TestCase`. `relatorios/tests/test_pdf_nao_calcula.py:94` |
-| `rodar_selo sem_autoridade` | RED, a chamada some do censo e a entrada do embrulho fica podre. `relatorios/tests/test_pdf_nao_calcula.py:77,114` |
-| `rodar_selo chave_antiga` | RED, a chave antiga fica podre e o embrulho aparece como cálculo novo. `relatorios/tests/test_pdf_nao_calcula.py:101,114` |
-| `rodar_selo chamada_duplicada` | RED, duas chamadas para uma declarada. `relatorios/tests/test_pdf_nao_calcula.py:106` |
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v relatorios.tests.test_pdf_nao_calcula
-
-rodar_selo() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$1" <<'PY'
-import ast
-from pathlib import Path
-import sys
-import unittest
-
-selo = Path("relatorios/tests/test_pdf_nao_calcula.py")
-pdf = Path("relatorios/pdf_espelho.py").read_text(encoding="utf-8")
-arvore = ast.parse(selo.read_text(encoding="utf-8"))
-arvore.body = [
-    no for no in arvore.body
-    if not (isinstance(no, ast.ImportFrom) and no.module == "django.test")
-]
-ns = {"__file__": str(selo), "SimpleTestCase": unittest.TestCase}
-exec(compile(arvore, str(selo), "exec"), ns)
-
-modo = sys.argv[1]
-antiga = "batidas_apuraveis"
-nova = "batidas_apuraveis_na_janela"
-chave = ("pdf_espelho.py", nova)
-if modo in ("antes", "sem_autoridade"):
-    ns["AUTORIDADES"] -= {nova}
-if modo in ("antes", "chave_antiga"):
-    ns["DIVIDA"][("pdf_espelho.py", antiga)] = ns["DIVIDA"].pop(chave)
-if modo == "chamada_duplicada":
-    linha = next(l for l in pdf.splitlines(keepends=True) if "list(" + nova + "(" in l)
-    censo = ns["censo"]
-    ns["censo"] = lambda fonte: censo(
-        fonte.replace(linha, linha * 2, 1) if fonte == pdf else fonte
-    )
-
-print("Censo PDF:", ns["censo"](pdf), flush=True)
-suite = unittest.defaultTestLoader.loadTestsFromTestCase(ns["PdfNaoCalculaTest"]) [nao verificado]
-raise SystemExit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
-PY
-}
-```
-
-## 27/11 09:22 · sessao e0dac6bc0611 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-Registrei as portas de `celula_absolveu`, `fantasma` e `competencia_trancada` para os casos **06, 07, 27 e 37**. O diff de código tem **30 inserções e zero `except` novos**. [core/portas.py](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/core/portas.py:396) · [Diff stat](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:37)
-
-**25, 26 e 28 ficaram parados** pela regra do censo. Os leitores ou escritores dos campos envolvidos estão em `chamados/models.py` e `chamados/services/disputa_emissao.py`, arquivos proibidos nesta volta. [Censo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:20)
-
-Na verificação isolada do selo, os quatro recortes falharam na base, passaram com as declarações e voltaram a falhar sob os mutantes. A execução completa em Django/PostgreSQL fica com o Code **[nao verificado]**. O recibo contém o diagnóstico dos sete REDs, a linha `--only` e o comando de cada mutante. [construtor.r](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:5) · [Comandos](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:48)
-
-_8611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8613 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
