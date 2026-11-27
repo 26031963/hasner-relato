@@ -1,7 +1,28 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 09:12** · publicado em **27/11/2026 09:17** (UTC-3)
+> Ultima resposta processada: **27/11/2026 09:22** · publicado em **27/11/2026 09:23** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 09:22 · sessao e0dac6bc0611 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
+
+Registrei as portas de `celula_absolveu`, `fantasma` e `competencia_trancada` para os casos **06, 07, 27 e 37**. O diff de código tem **30 inserções e zero `except` novos**. [core/portas.py](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/core/portas.py:396) · [Diff stat](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:37)
+
+**25, 26 e 28 ficaram parados** pela regra do censo. Os leitores ou escritores dos campos envolvidos estão em `chamados/models.py` e `chamados/services/disputa_emissao.py`, arquivos proibidos nesta volta. [Censo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:20)
+
+Na verificação isolada do selo, os quatro recortes falharam na base, passaram com as declarações e voltaram a falhar sob os mutantes. A execução completa em Django/PostgreSQL fica com o Code **[nao verificado]**. O recibo contém o diagnóstico dos sete REDs, a linha `--only` e o comando de cada mutante. [construtor.r](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:5) · [Comandos](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:48)
+
+## 27/11 09:21 · sessao 217e2dcf82a3 · PAR-PELO-TURNO · construtor · origem=Code
+
+**PAR-PELO-TURNO c1v6 aplicada na cópia indicada.** O recorte em memória passou **95 testes**, incluindo composição de fatias e vizinhos. O diff passou em `git diff --check` e acrescentou **zero `except`**. [Comandos e vereditos](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:29) · [Auditoria e diff](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:146) [nao verificado]
+
+- **Na base**, 1a, 2, 3a, 3b, 3d, 4a e 4c falharam pelos motivos esperados. Em 4c, a marca de `fim+2` derrubava `sem_movimento` e mudava o saldo de `0,00 h` para `−193,60 h`. Com a cura, os dois braços deram `0,00 h` e `sem_movimento=True`. [Evidência da base e da cura](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:6)
+- **1b, 5 e 6** passaram na base. Os mutantes os fizeram falhar ao trazer as marcas de col297 para a janela errada, esvaziar a ata e retirar a C9. No total, **15 mutantes falharam por asserção** e o alias que preserva a ata passou. A evidência traz o comando de cada um. [Comandos dos mutantes](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:43) [nao verificado]
+
+**Pendências para a certificação**
+
+- A suíte Django da obra, composição e vizinhos parou na importação de `django.core`. Os testes completos de PDF e fechamento ficam **[nao verificado]**. [Comando e erro](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:123) [nao verificado]
+- Em **3a**, `test_MORDE_a_divida_so_ENCOLHE_e_nao_apodrece` falha porque o inventário ainda exige a chamada direta a `batidas_apuraveis`. O PDF passou a usar `batidas_apuraveis_na_janela`. A asserção existente segue como estava. [Selo do PDF](/home/ronald/wt-codex-par-pelo-turno-010806/app/relatorios/tests/test_pdf_nao_calcula.py:107) · [Carga do PDF](/home/ronald/wt-codex-par-pelo-turno-010806/app/relatorios/pdf_espelho.py:280) [nao verificado]
+- **3c e 4b** ficaram fora da volta conforme o recorte. Em **6**, o ensaio sintético deu um par de **782 min**, teto de **732 min** e uma C9. O laudo nominal do col155 em 08/11 e o impacto de frota por rubrica ficam **[nao verificado]**. [Itens em aberto](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:137)
 
 ## 27/11 09:12 · sessao bd73245393ec · CODEX-CONSTROI-MOTOR · construtor · origem=Code
 
@@ -1516,155 +1537,4 @@ Há duas diferenças relevantes. O 12x36 com horário cadastrado usa `Motor12x36
 2. O split de HE noturna do Partido pode usar a cauda excluída para posicionar HE devida antes do marco. A c2p cobre o ganho na base, mas o caso com HE positiva segue sem selo nessa volta. `motor_calculo_v2.py:1094–1109,1967–1971` · `test_ramo2b_c2_base_da_he.py:378–403`
 3. A c2p apresenta o destino da cauda como conclusão direta do aval. O texto sustenta preservar o Partido, mas a equivalência com o comportamento de `59600163c` permanece **[nao verificado]**. `PROMPTS.md:3087` · `LEIS.md:115` · `test_ramo2b_c2_base_da_he.py:4–6`
 
-## 27/11 05:56 · sessao 527ddadb4b26 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-Corrigi as expectativas dos dois casos do Partido e acrescentei um RED com segundos para o 12x36 e o Comercial. O `diff --stat` registra apenas o arquivo de testes autorizado. [Testes revisados](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:222) [nao verificado]
-
-| Caso | Antes | Depois |
-|---|---|---|
-| `SEMANA_FLOAT`, Partido | Trabalhava `34160/60 = 569,333…` min, com base de `31961/60 = 532,683…` min. | Trabalhado e base medem `05:00:00 − 20:07:19 = 31961/60` min. Fora da janela ficam `(34160 − 31961)/60 = 36,65` min, medidos de `05:00:00` a `05:36:39`. [Asserção](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:222) |
-| `PARTIDO_LEGAIS`, 6x1 | Esperava `(221, 240)` trabalhados, 240 noturnos de relógio no P2 e HE zero. | Trabalhado `(221, 180)`, com 60 min fora no P2. A cl. 38-d é do 12x36. No Partido, 180 min noturnos dão `180 × 60/52,5 = 1440/7` min legais, com ganho de `180/7`. O vão gozado de 180 min dá suprimido zero. O excedente é `221 + 180 + 180/7 − min(420, 480) = 47/7` min, dentro da tolerância de 10, portanto **HE zero**. [Conta e asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:378) · [Cl. 38-d](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/docs/LEIS.md:84) |
-| 12x36 e Comercial que cruzam | A asserção de trabalhado bruto estava no caso do Partido. | O novo RED usa os marcos da fixture de 19h–07h e injeta a janela. A batida `19:07:19 → 07:36:39` dá `44960/60` min trabalhados, zero fora e base de `42761/60` min. Reconstruir a base por `44960/60 − 2199/60` dá um float diferente nos dois motores. [RED](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:438) |
-
-A sonda Python sem banco reproduziu as duas falhas antigas. Com cadastro e fuso fornecidos em memória, os três casos revisados passaram e os cinco mutantes abaixo falharam por asserção. Execução com as fixtures Django e certificação pelo Code e pelo Opus final [nao verificado]. [Partido semanal](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:222) · [Partido legais](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:378) · [12x36 e Comercial](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:438)
-
-```text
-$ git -C /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 diff --stat
- app/ponto/tests/test_ramo2b_c2_base_da_he.py | 87 ++++++++++++++++++++--------
- 1 file changed, 63 insertions(+), 24 deletions(-)
-```
-
-**Recorte para a sessão**, a partir de `app` e com `DJANGO_SETTINGS_MODULE` apontando para as configurações de teste. [Entrada do Django](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/manage.py:7) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  --settings="${DJANGO_SETTINGS_MODULE:?defina o settings de teste da sessao}" \ [nao verificado]
-  ponto.tests.test_ramo2b_c2_base_da_he \
-  ponto.tests.test_ramo2b_c2l_red_motor \
-  ponto.tests.test_ramo2b_c2h_saida
-```
-
-**Comandos dos mutantes**, na mesma sessão. As substituições usam o executor em memória da cópia. [Executor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2l_mutantes.py:12)
-
-```bash
-muta_c2p() {
-  DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:?defina o settings de teste da sessao}" \ [nao verificado]
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$1" <<'PY'
-import sys
-from unittest.mock import patch
-
-import django
-from django.conf import settings
-from django.test.utils import get_runner
-
-django.setup()
-
-from ponto import motor_calculo_v2 as m
-from ponto.tests.ramo2b_c2l_mutantes import _mutar
-
-raiz = 'ponto.tests.test_ramo2b_c2_base_da_he.'
-partido = raiz + 'Ramo2bC2BaseDaHeTest.'
-semana = partido + 'test_RED_partido_semana_float_trabalha_ate_o_marco_e_classifica_a_cauda_fora'
-legais = partido + 'test_RED_partido_legais_ganho_noturno_da_cauda_fora_da_base'
-cruza = raiz + 'BaseDaHeMedidaNoMarcoTest.test_RED_12x36_e_comercial_trabalham_o_bruto_e_medem_a_base_no_marco'
-campo = 'CAUDA_DO_TURNO_QUE_CRUZA_NO_TRABALHADO'
-ganho = m._ganho_noturno_da_base_da_he
-
-variantes = {
-    'partido_inclui_cauda': (patch.object(m.MotorTurnoPartido, campo, True), [semana, legais]),
-    'cruza_corta_cauda': (patch.object(m.MotorBase, campo, False), [cruza]),
-    'base_por_subtracao': (patch.object(m.MotorBase, '_gravar_base_da_he', _mutar(
-        m.MotorBase._gravar_base_da_he, 'periodo, base_min, s_he, float(_leg)',
-        'periodo, periodo.minutos_trabalhados - (s - s_he).total_seconds() / 60, s_he, float(_leg)',
-        metodo=True)), [cruza]),
-    'partido_noturno_bruto': (patch.object(m.MotorTurnoPartido, 'calcular_periodo', _mutar(
-        m.MotorTurnoPartido.calcular_periodo, 'self._escrever_noturnas(periodo, e, s, intervalos)',
-        'self._escrever_noturnas(periodo, e, periodo.saida, intervalos)', metodo=True)), [legais]),
-    'partido_he_inclui_ganho_da_cauda': (patch.object(
-        m, '_ganho_noturno_da_base_da_he',
-        side_effect=lambda p: ganho(p) + p.minutos_fora_janela / 7), [legais]),
-}
-
-mutacao, alvos = variantes[sys.argv[1]]
-with mutacao:
-    falhas = get_runner(settings)(verbosity=2).run_tests(alvos)
-raise SystemExit(int(bool(falhas)))
-PY
-}
-
-muta_c2p partido_inclui_cauda
-muta_c2p cruza_corta_cauda
-muta_c2p base_por_subtracao
-muta_c2p partido_noturno_bruto
-muta_c2p partido_he_inclui_ganho_da_cauda
-```
-
-## 27/11 05:43 · sessao 68521b7293d6 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-# REPROVADO
-
-A c12 substitui a lista manual por uma regra geral que protege os testes **existentes na base**. A regra impede as edições apontadas no placar e no diagrama, mas deixa leitores operacionais descobrirem, lerem e executarem testes novos. O cruzamento com o brief comprova presença textual do caminho. A autorização do caminho pelo brief e o `!` do motor continuam sem vínculo executável demonstrado. `bin/codex_pergunta.sh:232–241,555–565` · `bin/regua.sh:138–145,165–169` · `bin/tests/test_relato_guarda_pedido_de_patch.sh:143–163` · `CLAUDE.md:145–146,274–277`
-
-## 1. Achados da c11 e situação na c12
-
-| Achado | Classificação e resultado |
-|---|---|
-| Edição do BUG116, do A16 e dos testes reservados | **Procedente. Cura de classe para testes presentes na base.** Saiu `RESERVADOS`. A mesma guarda recusa a edição ou remoção de qualquer teste existente que caiba na forma permitida. Dos sete nomes antigos, seis continuam recusados por existência. O sétimo, o antigo teste da cerca, pode nascer de novo. A matriz trocou esse caso por `bin/cerca_schema.py`, que já cai nas proibições de host. `bin/codex_pergunta.sh:167–177,236–241` · `bin/tests/test_codex_lista_positiva.sh:97–100,108–109,125–137,151–152` · `mapa_delta_c12.md:2–10` |
-| Seleção dinâmica pelo vigia e pela régua | **Procedente. Classe aberta.** A decisão do wrapper usa presença na base, enquanto os consumidores usam a árvore que montaram para rodar e os IDs encontrados nas saídas. O caminho antigo do teste padrão de reversão fica protegido. A seleção por ID continua aberta a testes novos. A interpolação de IDs em `sh -c` e a execução direta de Docker no reteste também permanecem como achados independentes. `bin/codex_pergunta.sh:236–241` · `app/core/esteira_vigia.py:725–762,1301–1317,1352–1363` · `bin/vigia_arvore.sh:75–88` |
-| Flag escolhida pelo chamador, vínculo com o brief e `!` do motor | **Procedente. Cura de classe para menção literal, parcial para autorização.** Cada flag é checada pela mesma regra. A escolha do modo continua no argv, e a presença do caminho em texto não comprova o `!`. A referência de L-126 aos testes apagados continua como questão de desenho prevista no brief. `bin/codex_pergunta.sh:89–100,498,555–565` · `app/docs/LEIS.md:147` · `CLAUDE.md:145–146,274–277` · `brief_c12.md:18–19,30–31` |
-| Matriz, helper e lacunas do mapa | **Procedente. Cura de classe no helper, cobertura parcial no mapa.** A mesma asserção agora cobra caminho e resultado em todos os chamadores de `_inv_recusa`. Permanecem, entre outros, a fixture de homônimo com `crons_pkg` em vez de `crons`, as lacunas para `base.py`, `signals.py`, `gunicorn.core.conf.py`, `quarentena_lista.py`, o artefato do diagrama e os casos cruzados com caminhos autorizados. A rodada `SO_CASOS` continua saindo com `3` quando tem zero falhas e termina antes dos mutantes. `bin/tests/_codex_construtor_cenario.sh:88–100` · `bin/tests/test_codex_lista_positiva.sh:85–142,165–190` · `app/core/management/commands/crons.py:23` · `bin/selo_reciclagem.sh:40–46` |
-| Interseções de models e motor autorizados | **Procedente. Continuam abertas.** `tenants/models.py` nomeado continua alcançando o provisionamento por `auto_create_schema`. A migration histórica continua importando `colaboradores.models`. `core/models.py` continua na janela de auth. O controle do motor prova aceitação e `TOCADO`, sem consultar retorno ou carimbo do elo. Efeitos de alterações específicas em produção [nao verificado]. `bin/codex_pergunta.sh:234–241,555–563` · `app/tenants/models.py:14–21` · `app/tenants/services.py:1–13` · `app/colaboradores/migrations/0004_colaborador_data_demissao_alter_colaborador_cpf_and_more.py:3,25` · `bin/auth_sitios.txt:17` · `bin/tests/test_codex_lista_positiva.sh:165–177` · `bin/cron_run.sh:11–25` |
-| `api`, deploy e custódia da cerca | **Procedente. Cura de origem herdada da c11.** O SaaS inclui `api`, a pergunta entrega os labels locais ao Django e M2 cobra código `1` com a operação esperada. A fonte fica em `bin/`, e o deploy publica conforme o retorno do primeiro `shell -c`. O portão de migrations pendentes consulta outra pergunta. A variante com `MIGRATION_MODULES` e as execuções efetivas em produção ficam [nao verificado]. `app/config/settings/saas.py:47–53` · `bin/cerca_schema.py:18–36` · `bin/deploy.sh:185–217` · `bin/tests/test_cerca_schema.sh:70–98` |
-| Referências ao wrapper, item C | **Procedente. Cura parcial.** Conferi em memória o verificador atual e as sete substituições. A cópia passou e as sete falharam pela regra esperada. Seguem duas referências numéricas em `PENDENTE`, a extração em runtime pelo delimitador `PROIBIDOS = [` e a possibilidade de trocar uma citação por outra âncora válida sem acusar a troca de destino naquele sítio. `bin/tests/test_ref_codex_pergunta.sh:24–96,106–124` · `bin/retencao_disco.py:152–154` · `bin/tests/test_rc_sem_colher.sh:14` · `bin/disjuntor.py:2025–2041` |
-| Pacote `models/` e despacho, item D | **Procedente. Cura de classe herdada da c11.** O wrapper define a regex, o disjuntor lê essa mesma regex e o selo mantém o caso de brief contendo apenas o pacote e o mutante que retira a tag. Em brief misto, um caminho elegível satisfaz o `any` da admissão do agente. `bin/codex_pergunta.sh:170–175` · `bin/disjuntor.py:1963,2025–2041,2104–2115` · `bin/tests/test_agente_no_modelo.sh:140–146,289–293,360–362` |
-| Selos verdes, HUP e rodada em produção | **Procedente como pendência de evidência.** A régua chama os selos de host e o selo de HUP copia a cerca real para sua fixture. Os anexos trazem as matrizes. Os nove selos completos no hash, os logs dos REDs históricos, o Opus final e a execução em produção ficam [nao verificado]. `bin/regua.sh:138–145` · `bin/tests/test_deploy_reload_gracioso.sh:32–61,109–125` · `brief_c12.md:32–35` |
-
-## 2. Contraexemplo de teste novo [nao verificado]
-
-**Procedente.** Com `app/core/models.py` na flag e na pergunta, a criação de `app/core/tests/test_model_sem_migration_pendente.py` passa. O anexo registra `rc 0` e ausência na base. Conferi a ausência na cópia e reproduzi em memória o predicado do inventário com essa entrada ausente. Um `unittest.TestCase` comum nesse módulo entra na descoberta de `core` pela régua. O selo de host de RELATO já abre o arquivo pelo glob `app/*/tests/*.py`, antes mesmo de verificar seu conteúdo. Depois de incluído no `HEAD` da cópia, o mesmo arquivo entra como label em `suite.sh --volta`, cujo seletor lê o fonte por AST. `matriz_sem_flag.txt:7–10` · `bin/codex_pergunta.sh:164–166,203–209,236–241,555–565` · `bin/regua.sh:23,138–145,165–169` · `app/core/runner_quarentena.py:72–85` · `bin/tests/test_relato_guarda_pedido_de_patch.sh:143–163` · `bin/vizinhos_da_volta.py:25–45,92–95,116–129` · `bin/suite.sh:198–216,441–445`
-
-- **Procedente para os dois leitores fixos na base dada.** O placar executa a classe do BUG116 por nome e seu contrato pula `tests/` na varredura. O bloco A16 abre um caminho fixo e lê duas constantes por AST. A regra impede editar os dois arquivos existentes. O antigo nome da cerca volta ao universo de testes, enquanto o deploy carrega o corpo de `bin/cerca_schema.py`. `bin/placar_code.sh:137–144` · `app/core/tests/test_bug116_credencial_deixa_trilha.py:156–170` · `app/core/management/commands/gerar_diagrama.py:132–157` · `bin/deploy.sh:194–209`
-- **Procedente para o vigia, conforme a árvore.** Se um teste novo falhar na cura, `_isolar` já pode selecionar seu ID, mas o módulo está ausente de `orig/app` daquela fatia. O resultado do reteste ainda entra na classificação `fatia` ou `arvore`. Depois do pouso o módulo pode integrar o `orig` seguinte. O vigia da árvore também retesta IDs na árvore viva, e a reversão os usa se o módulo continuar presente na árvore pós-revert. Acionamento concreto em produção [nao verificado]. `bin/molde_fatia/rodar.sh:9–14,43–51` · `app/core/esteira_vigia.py:725–762,1301–1317,1352–1363` · `bin/vigia_arvore.sh:101–106,128–149`
-
-## 3. Cruzamento flag × brief
-
-**Procedente como checagem literal.** Para cada valor de `--lista-positiva`, o wrapper valida a forma, exige que `HASH:caminho` seja `blob` e executa `grep -qF -- "$_p" "$PERGUNTA_R"`. `PERGUNTA_R` é o `realpath` do argumento posicional `<arquivo_pergunta>`. Só `grep` com `rc 0` passa. A recusa sai antes do Codex, com diagnóstico textual e `CODEX_RESULTADO rc=2 motivo=PRE_CHECK`. `bin/codex_pergunta.sh:89–104,353–360,431–433,555–565,809–817`
-
-**Procedente a lacuna de autorização.** Em memória, passaram `<!-- app/core/models.py -->`, `./app/core/models.py` e `app/core/models.py.bak`. O caminho literal pode ser prefixo de uma menção maior, estar em comentário ou aparecer numa instrução de proibição. Já uma menção só em outro anexo fica fora desse `grep`, embora o censo leia anexos e pergunta, e o prompt receba ambos. A validação também é uma leitura anterior ao hash de admissão. O hash posterior e a revalidação conferem o arquivo, enquanto a montagem do prompt relê o caminho e não guarda os bytes do `grep`. Alteração concorrente efetiva e argv da obra real [nao verificado]. `bin/codex_pergunta.sh:306–319,498,558–576,657–689,791–804` · `bin/disjuntor.py:2693–2729`
-
-## 4. O que os selos provam
-
-| Selo | Classificação e alcance |
-|---|---|
-| **F1 / F1-M** | **Procedente para o payload, duvidoso para execução pelo deploy.** `_f1` avalia as atribuições extraídas do deploy e executa o payload silencioso no shell Django do selo. Cobra `0` na casa e `1` com M1. A ausência da chamada deixa a definição e elimina o efeito esperado. A linha que despacha Docker é reconhecida por texto e fica fora do trecho executado pelo selo. F1 aceita qualquer `rc 1` no M1 e F1-M aceita qualquer falha de `_f1`. O M1 independente é mais específico porque cobra também a operação. `bin/tests/test_cerca_schema.sh:46–56,70–89,100–129` · `bin/deploy.sh:197–209` |
-| **30 / 30-M** | **Procedente para estrutura, duvidoso para execução.** A cópia do deploy chega ao Docker falso. O AST exige `def` de topo e chamada direta posterior. Em memória, o predicado deu `0` para o payload atual, `1` com só a definição e `0` com saída antecipada antes da chamada. O falso devolve seu rc configurado independentemente do AST. O 30-M aceita contagem zero sem conferir `RC=0` nem que o payload mutado chegou à casca. `bin/tests/test_deploy_portoes_antes_do_migrate.sh:97–111,134–152,283–295` |
-| **F2** | **Procedente.** Saiu `\|\| true`. `grep` com `1` é verde, `0` acusa ocorrência e qualquer outro rc é vermelho. O alcance é textual, para a grafia buscada em `.py`. Prova de custódia por AST ou de todas as formas de definição [nao verificado]. `bin/tests/test_cerca_schema.sh:131–142` |
-| **`_inv_recusa`** | **Procedente.** Cobra `PROIBIDO`, campo 2 igual ao caminho, motivo por substring no campo 3, rc, `.rc`, ausência de `.id` e prefixo `CODEX_RESULTADO rc=3 `. O primeiro mutante troca o caminho **esperado** pelo helper. O segundo apaga o marcador da saída. São provas do leitor da asserção. O marcador é aceito sem conferir `motivo=INVENTARIO` ou unicidade. `bin/tests/_codex_construtor_cenario.sh:88–100` · `bin/tests/test_codex_lista_positiva.sh:193–202` |
-| **Sete entradas de `p_teste_existe`** | **Procedente para a guarda, com um limite.** São sete casos aplicados à mesma mutação. Sem a guarda, as seis entradas de edição perdem a recusa ou seu motivo. O caso de remoção ainda recusa por `pos_apagado` e morde pela ausência de `teste ja existe na base`. Assim, seu RED prova o motivo específico e a remoção já era recusada. O contador geral aceita qualquer `FALHA` emitida pelo caso. `bin/codex_pergunta.sh:236–241` · `bin/tests/test_codex_lista_positiva.sh:108–109,125–137,151–152,208–214,232–249` |
-| **Mutante `pos_brief`** | **Procedente.** Troca `_recusa2` por `true` no sítio da guarda. A fixture usa caminho válido e existente com pergunta sem o literal. Cobra `rc 2`, diagnóstico, marcador e ausência da captura do Codex falso. Sua prova termina na ausência total da menção. `bin/tests/test_codex_lista_positiva.sh:62–68,159–164,221–249` · `bin/tests/_codex_construtor_cenario.sh:44–54,74–86` |
-
-**Duvidoso como RED histórico.** F1-M e 30-M são mutações reconstruídas do deploy. O deploy já enviava a chamada na c11. A troca do caso `cerca_reds` por `cerca_bin` também muda a entrada e a autoridade sob teste. Esses resultados não substituem os logs `RED.*.0b3939987.log` pedidos pelo brief [nao verificado]. `bin/deploy.sh:194–209` · `bin/tests/test_cerca_schema.sh:120–129` · `bin/tests/test_deploy_portoes_antes_do_migrate.sh:287–295` · `bin/tests/test_codex_lista_positiva.sh:97–100` · `brief_c12.md:11–17,32–35`
-
-## 5. Escritores, leitores e autoridades
-
-| Dado ou artefato | Escritor, leitor e classificação |
-|---|---|
-| `HASH`, `arvore`, `pastas` | **Procedente.** O chamador fornece `REF`. O wrapper resolve o commit, exige `HEAD == HASH` e constrói `arvore` e `pastas` do `git ls-tree` da worktree ligada. O mesmo inventário usa esse mapa para comparar modo/blob, detectar remoção e classificar a existência do teste. `cat-file -t` consulta o mesmo commit para outra pergunta, a elegibilidade dos caminhos da flag. `bin/codex_pergunta.sh:100–117,186–225,236–241,555–568,791–797,835–840` |
-| `POSITIVA`, `_POSRX`, `_POSV`, `POS`, `APPS`, `RESERVADOS` | **Procedente.** O chamador escreve as flags, Bash acumula, valida e serializa, o cabeçalho lê `_POSV` e o inventário final deriva `POS` e `APPS`. Já havia duas concessões no mesmo argumento, edição literal e autorização do app para testes. Sai o escritor da lista manual `RESERVADOS` e entra a consulta de existência no inventário. `bin/codex_pergunta.sh:89–95,161–171,236–241,555–565,670–676,835–836` |
-| Pergunta, anexos, `_grc`, `insumos`, `CAB` | **Procedente.** O produtor da pergunta e dos anexos fornece arquivos ao wrapper. `grep` escreve o resultado em `_grc`, consumido pela validação. O censo lê pergunta e anexos e julga os briefs da obra. `_PROJ_PY` grava e confere os hashes. O wrapper monta `CAB`, e o executor o recebe como stdin. São leituras independentes de menção, censo, integridade e prompt. O produtor efetivo do brief da chamada real fica [nao verificado]. `bin/codex_pergunta.sh:89–104,306–319,498,558–576,657–691,798–817` · `bin/disjuntor.py:1872–1901,2693–2729` |
-| `.inventario`, `.recusa`, `.rc`, `.id`, `CODEX_RESULTADO` | **Procedente.** O wrapper emite os artefatos. O helper agora lê o caminho e o motivo de `.recusa`, o `.rc`, a ausência de `.id` e o marcador em `$T/saida`. O coletor de `.rc` segue lendo o recibo do wrapper. O delta muda as asserções do selo, preservando a origem dos sinais. `bin/codex_pergunta.sh:353–360,591–608,767–773,835–860` · `bin/tests/_codex_construtor_cenario.sh:75–100` · `bin/rc_sem_colher.py:65–77` |
-| Fixtures, `PQ`, `POS_DEF`, `RESV`, `MATRIZ`, `MATRIZ_BASE`, `SEM_FLAG`, `MUTANTES` | **Procedente.** O selo positivo escreve a pergunta de fixture e os casos. O cenário compartilhado lê `PQ` e passa o arquivo ao wrapper. `_pos` escreve o rc observado e o motivo esperado em `MATRIZ`, que o selo imprime e filtra para `MATRIZ_BASE`. `SEM_FLAG` recebe os rc do ramo comum. A tabela `MUTANTES` dirige alterações em cópias do wrapper e o selo lê os diagnósticos resultantes. O selo legado usa o mesmo helper. `bin/tests/test_codex_lista_positiva.sh:36–82,180–255` · `bin/tests/_codex_construtor_cenario.sh:1–11,28–36,74–100` · `bin/tests/test_codex_pergunta.sh:73–74,312–354,444–451` |
-| Cerca, cópias de deploy, `payload_cerca.py`, `CERCA_EXECUTA`, `N_CERCA`, `dono`/`grc` e leitor de referências | **Procedente.** Deploy e selo leem `bin/cerca_schema.py`. F1 monta e roda seu payload, e 30 captura o último argumento do Docker falso em `payload_cerca.py`. O AST escreve `CERCA_EXECUTA` no log e o selo conta em `N_CERCA`. O rótulo passou a contar forma de chamada e sua mensagem ainda fala em origem do texto. F2 lê a saída e o rc do `grep`. O selo de referências lê os arquivos em bytes com decodificação `replace`. Há duas derivações de prova nos selos, F1 por execução e 30 por forma. Segundo juiz de drift ou segundo escritor de domínio acrescentado [nao verificado]. A pergunta continua delegada ao Django, conforme a regra de autoridade de `JUIZES.md`. `bin/deploy.sh:197–212` · `bin/cerca_schema.py:26–36` · `bin/tests/test_cerca_schema.sh:100–142` · `bin/tests/test_deploy_portoes_antes_do_migrate.sh:71–78,97–107,150–152,283–297` · `bin/tests/test_ref_codex_pergunta.sh:58–70` · `app/docs/JUIZES.md:7–15,29–34` · `CLAUDE.md:180–182` |
-
-## 6. `except`, relógio e travas
-
-- **Procedente.** No delta fornecido `c11 → c12`, contei **0 `except` acrescentados e 1 removido**. A remoção é o `except (UnicodeDecodeError, IsADirectoryError)` do selo de referências. O `except Exception` do inventário é anterior à c12. A contagem literal pedida para `1fc9ab682..HEAD` fica [nao verificado], pois a cópia veio sem metadados Git e o patch anexo começa na c11. `bin/tests/test_ref_codex_pergunta.sh:58–70` · `bin/codex_pergunta.sh:196–228` · `brief_c12.md:20–21`
-- **Duvidoso como mudança de relógio ou inversão de trava.** O delta acrescenta execução de payload com timeout no selo e nenhuma consulta nova à hora. O `grep` entra com meta e lease já tomadas. O wrapper solta a meta antes de esperar slot e resposta, readquire para revalidar e solta antes do `GO`. O inventário final continua seguido da prova de vida da lease. `bin/tests/test_cerca_schema.sh:46–52,103–116` · `bin/codex_pergunta.sh:511–525,546–549,555–580,741–762,777–817,835–840`
-
-## 7. Matriz sem flag
-
-**Procedente como exposição anterior à c12.** O anexo registra **43/58** aceitos no universo c12 e **42/56** para o universo c11 reconstituído, incluindo o caso antigo medido à parte. A c12 alterou a guarda dentro de `if POS`. O modo comum segue pelas proibições gerais e pelas guardas específicas de motor e `models.py`. O mapa c10 já documentava `app/config/crons_duracao.json` como gravável pelo construtor comum. A exposição do JSON é consistente com a regra original documentada em L-126. A contagem exata e a árvore do commit imediatamente anterior ao CCM ficam [nao verificado]. `matriz_sem_flag.txt:1–11` · `mapa.md:28` · `bin/codex_pergunta.sh:171–184,232–242` · `bin/tests/test_codex_lista_positiva.sh:71–79,183–187` · `app/docs/LEIS.md:147`
-
-**Procedente o alcance do JSON sobre a agenda.** `bin/crons_duracao.py` grava `dur_s`, `config/crons.py` incorpora os valores, e os horários de `sombra.sh` e `noturno.py` os consomem por `inicio_derivado`. A sonda comprova aceitação da fixture pelo wrapper. Pouso dessa alteração, crontab instalado e efeito operacional ficam [nao verificado]. `bin/crons_duracao.py:77–99` · `app/config/crons.py:146–160,245–278,350–352,594–595` · `bin/crons.sh:17–40` · `matriz_sem_flag.txt:7–10`
-
-_8590 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8592 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
