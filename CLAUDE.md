@@ -97,9 +97,9 @@ bash ~/saas-hasner/bin/suite.sh --motivo "pre-opus <OBRA>"
 A FORMA DEIXOU DE SER PROSA E VIROU ARQUIVO (O182, corte pela lei existente 04/10 05:5x). (historia: LAPIDES.md#lap-03) Agora `bin/suite.sh` compoe recursos + `teste_envfile` + LABELS lido da regua + montagem +
 trava, e nao ha como rodar a suite inteira destravada sem escrever um comando novo A MAO.
 `--only "ponto core"` recorta (na arvore viva SEGUE pela trava, de proposito), `--dir <copia>` roda contra COPIA
-(e com recorte -- `--only` ou `--volta` -- VAI A PISTA 2 sozinho, `ROTA PISTA: job=<id> sha=<40>`; pista fora ou fila
+(com recorte -- `--only` ou `--volta` -- ou com a INTEIRA `--motivo "pre-opus <OBRA>"` VAI A PISTA 2 sozinho, `ROTA PISTA: job=<id> sha=<40>`; pista fora ou fila
 acima de 30 min = `ROTA VM: <motivo>` pela trava; depois do aceite nunca cai na VM: falha de transporte = `ERRO-INFRA PISTA`
-rc 71; inteira, `--seco`, pouso, pre-push e sombra ficam na VM; selo `bin/tests/test_suite_rota_pista.sh`),
+rc 71; a inteira `pouso`, `--seco`, chamada sem `--dir`, `REGUA_DB`, flag depois de `--`, pre-push e sombra ficam na VM; selo `bin/tests/test_suite_rota_pista.sh`),
 `--parallel N` (1 a 8; teto do aval PISTA-2-CERTIFICA-EM-8, `auto` recusado) e `--espera <segundos>` repassam, `-- <resto>` leva so flag da lista fechada de `bin/suite.sh`.
 INTEIRA SO COM MOTIVO (aval TRAVA-MENOS-FILA-COM-SELO 11/11): sem `--only`/`--volta`, ou com um recorte que cubra todo app
 das LABELS, `--motivo "pre-opus <OBRA>"` ou `--motivo "pouso <OBRA>"`, senao rc 2; volta do meio = `bin/volta_intermediaria.sh`
@@ -136,7 +136,7 @@ UM run por vez no juliani_db_test - push conta como run; colisao gera errors fal
 `bin/trava_teste.sh --quem`. E ele responde CHAMADOR, nao pista: `livre` quer dizer "ninguem pediu a
 vez", nunca "nao ha suite rodando" -- foi esse o O182.
 A PORTA DEFAULTA PARA A ARVORE VIVA; contra COPIA (worktree, `git archive`, raia) use `--dir <copia>`,
-que pede a montagem a porta unica. Sem ela a copia roda uma arvore INCOMPLETA: `app/staticfiles/` e
+que pede a montagem a porta unica (na VM; a rota da pista 2 acima monta na pista). Sem ela a copia roda uma arvore INCOMPLETA: `app/staticfiles/` e
 .gitignore, e todo selo que RENDERIZA pagina da RED falso (7 selos, medido 4x). A lista do que falta tem
 UM escritor -- `bin/arvore_do_push.sh --montagem <dir>` --, e `--dir` e quem a consulta por voce. Ele devolve o
 `-v` do staticfiles E os tres `--tmpfs` de cache; sem os tmpfs o container escreve `.ruff_cache`/`.hypothesis`/

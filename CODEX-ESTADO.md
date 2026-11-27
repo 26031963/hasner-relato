@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 20:49** · publicado em **26/11/2026 20:50** (UTC-3)
+> Ultima resposta processada: **26/11/2026 20:58** · publicado em **26/11/2026 20:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 20:58 · sessao 47bc69f79b9b · O30-F3-CONSTRUIR · verificador · origem=Code
+
+## Achados A–D
+
+| Achado | Cura | Evidência |
+|---|---|---|
+| **A · Período decidido duas vezes** | **Curado na classe do lote.** A seleção usa `_q_cobertura`, o mesmo predicado SQL do juiz registrado, e a view deixou de reaplicar datas. As duas pontas são inclusivas. Um tipo em aberto com fim nulo e início anterior entra. Um avulso com fim nulo iniciado antes fica fora. Um intervalo que termina em `ini` entra. O lote conserva seu universo de lançamentos-raiz, inclusive rejeitados quando o status fica sem filtro. | `app/core/juizes.py:261`, `app/ponto/turnos.py:2817`, `app/ponto/turnos.py:2822`, `app/ponto/services/atestados_lote.py:36`, `app/ponto/views_atestado.py:110`, `app/ponto/services/dia_decidido.py:624` |
+| **B · `q` e limite** | **Curado na classe do predicado e do contador.** O lote chama `filtro.aplicar` para nome ou CPF e só então limita os lançamentos que passaram pelos filtros. A igualdade entre telas vale para a mesma pessoa, com os mesmos dados e um `q` válido no lote. Os universos das telas e a validação da entrada diferem. | `app/ponto/views_atestado.py:57`, `app/ponto/views_atestado.py:68`, `app/ponto/views_atestado.py:94`, `app/ponto/views_atestado.py:116`, `app/core/filtro.py:146`, `app/core/filtro.py:200` |
+| **C · Teste migrado** | **Curado em parte.** O trecho quebrado voltou ao método que define `painel` e `url`. O POST pós-aprovação usa DP comum, com permissões do grupo do setor, e verifica o estado e os bytes persistidos. O novo GET usa `status='pendente'`, estado extinto. Para um atestado sem documento, o backfill usa `aguardando_documento`. A condição do formulário independe do status, então o teste pode passar com a fixture inválida. | `app/ponto/tests/test_atestado_f3.py:84`, `app/ponto/tests/test_atestado_f3.py:227`, `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_atestado_f3.py:274`, `app/colaboradores/signals.py:24`, `app/colaboradores/mixins.py:363`, `app/ponto/models.py:690`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/templates/ponto/partials/painel_ausencia.html:89` |
+| **D · Órfão antes do retorno do INSERT** | **Curado para falhas que propagam antes do retorno e deixam a conexão consultável.** Com upload e atomic externo, o savepoint abrange INSERT, trilha e projeção. O `finally` roda depois que o savepoint sai. O INSERT também passou a consultar referências antes de apagar. **A classe continua aberta** quando a transação do chamador desfaz a linha depois do retorno. | `app/ponto/services/ausencia.py:638`, `app/ponto/services/ausencia.py:648`, `app/ponto/services/ausencia.py:666`, `app/ponto/services/ausencia.py:669`, `app/ponto/services/ausencia.py:263`, `app/ponto/views.py:2547` |
+
+## Checklist do pré-verificador
+
+| Item | O diff viola? |
+|---|---|
+| Segundo juiz que duplica juiz registrado | **Não.** O lote delega a interseção ao predicado do juiz registrado e mantém a janela de competência em `janela_fechamento`. `app/docs/JUIZES.md:58`, `app/core/juizes.py:261`, `app/ponto/services/atestados_lote.py:21`, `app/ponto/services/atestados_lote.py:36` |
+| Segundo escritor fora da porta | **Não.** O INSERT continua em `criar_ausencia`. A limpeza continua no helper do serviço e a trilha segue por `core.observ.evento`. `app/ponto/services/ausencia.py:242`, `app/ponto/services/ausencia.py:648`, `app/ponto/services/ausencia.py:656`, `app/core/observ.py:94` |
+| Relógio fora da borda | **Não introduz.** O lote lê `localdate()` na view. A chamada à projeção mudou de posição dentro da transação e conserva a leitura de relógio já existente no cálculo do teto. `app/ponto/views_atestado.py:94`, `app/ponto/services/ausencia.py:179`, `app/ponto/services/ausencia.py:191`, `app/ponto/services/ausencia.py:666` |
+| Derivação paralela de fonte única | **Não.** O período tem uma decisão de inclusão, `q` tem um predicado, e a contagem usa a consulta que alimenta a montagem. O `pk__in` transporta o resultado de `q` para o SQL. `app/ponto/services/atestados_lote.py:41`, `app/ponto/views_atestado.py:74`, `app/ponto/views_atestado.py:116`, `app/ponto/services/atestados_lote.py:65` |
+| Selo ou RED sem mordida | **Sim, na garantia completa de C e D.** Os **13 alvos sem banco passaram** e os **16 mutantes falharam por asserção**. O selo AST de C ainda passou quando retirei o POST do teste aprovado e troquei a fixture pendente por aprovada, em memória. Os REDs de D cobrem falha antes do retorno e callback simulado após commit, deixando descoberto o rollback do chamador depois do retorno. `app/ponto/tests/mutantes_atestado_f3_c14.py:19`, `app/ponto/tests/mutantes_atestado_f3_c14.py:105`, `app/ponto/tests/test_atestado_f3_contrato.py:629`, `app/ponto/tests/test_atestado_f3_contrato.py:685`, `app/ponto/tests/test_atestado_f3_contrato.py:1053` |
+| Ordem de trava | **Não identifiquei inversão introduzida.** No INSS, a guarda trava Colaborador antes da escrita de Ausência. O savepoint entra dentro dessa ordem e a compensação consulta com `exists()`. `app/ponto/views.py:2547`, `app/colaboradores/services/colaborador.py:84`, `app/ponto/services/ausencia.py:648`, `app/ponto/services/ausencia.py:263` |
+| Campo com dois significados | **Sim em C.** A fixture grava `pendente` como estado persistido. O filtro da lista ainda usa essa palavra como apelido para os dois estados abertos. Para datas, o lote alinhou seu recorte ao juiz, mas outros leitores ainda dão tratamentos distintos a fim nulo, e as três telas aplicam o período a fatos diferentes. O censo abaixo identifica esses usos. `app/ponto/tests/test_atestado_f3.py:274`, `app/ponto/models.py:690`, `app/ponto/views.py:2248`, `app/ponto/services/dia_decidido.py:609`, `app/holerite/views.py:409`, `app/folha/views_retrato.py:216` |
+| `except` novo | **Não.** O `except Exception` do INSERT já existia no hunk fornecido. A c15 acrescenta `try/finally` e faz a exceção posterior ao INSERT subir pelo tratador existente. `app/ponto/services/ausencia.py:646`, `app/ponto/services/ausencia.py:669`, `app/ponto/services/ausencia.py:674` |
+
+## Quem escreve e quem lê
+
+| Campo ou valor | Escritores, leitores e significado |
+|---|---|
+| **`q`, `nome`, `cpf`, PK** | O formulário do lote e o componente universal escrevem `q`. `filtro.ler` apara e converte para maiúsculas. O cadastro cria e edita nome e CPF, e o modelo normaliza CPF no `save`. Lote e Holerite leem `colab.nome/cpf`. Retrato copia os mesmos campos para `_nome/_cpf`. `aplicar` busca substring no nome em maiúsculas ou no CPF armazenado, com acentos e pontuação significativos. `colNN` e matrícula perderam o tratamento especial do buscador de âncoras, que segue em sua porta própria. `app/templates/relatorios/atestados_lote.html:6`, `app/templates/core/_filtro_campos.html:100`, `app/core/filtro.py:68`, `app/core/filtro.py:146`, `app/core/filtro.py:200`, `app/colaboradores/views.py:1205`, `app/colaboradores/views.py:1327`, `app/colaboradores/models.py:418`, `app/folha/views_retrato.py:64`, `app/folha/views_retrato.py:113`, `app/core/busca.py:115`, `app/core/views.py:89` |
+| **`empresa`, `colaborador`, `mes`, `ano`, `de_data`, `ate_data`, `ini/fim`** | O GET escreve as seleções. O formulário valida a empresa por `empresas_visiveis` e oferece colaboradores por nome. A view preenche mês e ano ausentes a partir da data civil local. A competência usa o corte da empresa selecionada, da empresa do colaborador escolhido ou o padrão. O cadastro da empresa grava o dia de corte. O calendário universal também escreve `de_data/ate_data`. `ler` descarta ponta inválida e ordena pontas invertidas. O lote passa datas inclusivas ao SQL, usando `date.min/max` para a ponta ausente, e passa as pontas informadas ao template. Holerite usa os mesmos limites inclusivos sobre o **dia civil local do aviso ou da publicação**. Retrato conta **datas gravadas por pessoa** nos limites inclusivos e conserva as pessoas na lista. `app/ponto/views_atestado.py:56`, `app/ponto/views_atestado.py:94`, `app/colaboradores/queries.py:78`, `app/colaboradores/views.py:518`, `app/ponto/janelas.py:10`, `app/ponto/janelas.py:36`, `app/templates/core/_filtro_campos.html:43`, `app/core/filtro.py:78`, `app/core/filtro.py:98`, `app/core/filtro.py:118`, `app/templates/relatorios/atestados_lote.html:33`, `app/holerite/views.py:409`, `app/holerite/views.py:565`, `app/folha/views_retrato.py:225`, `app/folha/retrato_folha.py:1343` |
+| **`Ausencia.data`, `data_fim`, `dias_corridos`, `minutos`, `tipo`, `status`** | Criação e edição gravam o início do lançamento e derivam o fim inclusivo. API e PWA convertem fim informado em dias corridos com `+1`. O modelo valida o intervalo e ajusta dias corridos, e a transição de estado persiste as derivações do `save`. `minutos` é duração em minutos, com zero usado como entrada de dia inteiro. O juiz interpreta fim nulo com o tipo, o fechamento lê a cobertura e a folha lê dias pelo juiz. Histórico e exportação do lote exibem datas e dias do lançamento inteiro. Há divergência herdada para fim nulo: `decididos_do_periodo` expande só o dia inicial, enquanto a cobertura estende tipos em aberto. `app/ponto/services/ausencia.py:200`, `app/ponto/services/ausencia.py:215`, `app/ponto/services/ausencia.py:575`, `app/ponto/services/ausencia.py:744`, `app/ponto/services/ausencia.py:1075`, `app/ponto/models.py:892`, `app/api/views.py:1808`, `app/ponto/views.py:2681`, `app/ponto/turnos.py:2830`, `app/ponto/services/fechamento.py:658`, `app/folha/export.py:65`, `app/ponto/services/dia_decidido.py:609`, `app/ponto/services/dia_decidido.py:678`, `app/ponto/services/atestados_lote.py:125` |
+| **`registros_na_janela`, `tipos`, `status`, `LIMITE_LOTE`, `formato`** | Os dois chamadores diretos encontrados são `lote_atestados` e `atestados_lote.linhas`. O primeiro passa tipos médicos do catálogo e não restringe por status. O segundo encaminha `tipos/status` e entrega a seleção à linha do tempo. O drawer lê a mesma montagem por `linha_do_tempo(colab)`, sem passar por `registros_na_janela`. `LIMITE_LOTE=20` conta **lançamentos selecionados**, e a view lê até 21 para detectar excesso. O formulário envia CSV/ZIP ou usa a rota PDF. A mesma lista alimenta os formatos e a prévia. `app/ponto/services/atestados_lote.py:7`, `app/ponto/services/atestados_lote.py:36`, `app/ponto/services/atestados_lote.py:51`, `app/ponto/catalogo/ausencias.py:366`, `app/ponto/views_atestado.py:83`, `app/ponto/views_atestado.py:116`, `app/ponto/views.py:2035`, `app/relatorios/urls.py:16`, `app/templates/relatorios/atestados_lote.html:20` |
+| **Upload, `documento`, `documento_referencia`, `storage/name`** | **Três portas de produção localizadas passam upload ao caminho de INSERT**: lançamento DP/INSS, submissão PWA e POST da API. Elas leem `FILES['documento']` e entregam o upload a `criar_ausencia`, que também pode reabrir uma linha ou devolver uma existente. O `FileField` escreve os bytes no storage e guarda a chave na coluna. O painel, o endpoint de anexo da API e o reenvio também chegam a `anexar_documento`, que faz UPDATE. Edição e rederivação usam save integral. O download e o painel resolvem a raiz pela FK legada. Histórico, lista, PDF, ZIP, vigia, API e porta da célula leem a presença, a chave ou os bytes. A compensação usa `_committed` do `FieldFile` como sinal da escrita no storage e `documento=nome` para ver se há referência no banco. `app/ponto/views.py:2504`, `app/ponto/views.py:2550`, `app/ponto/views.py:2627`, `app/ponto/views.py:2683`, `app/api/views.py:1779`, `app/api/views.py:1824`, `app/api/views.py:1852`, `app/api/views.py:3115`, `app/ponto/views_atestado.py:48`, `app/ponto/services/ausencia.py:525`, `app/ponto/services/ausencia.py:585`, `app/ponto/services/ausencia.py:759`, `app/ponto/services/ausencia.py:1133`, `app/ponto/services/ausencia.py:1431`, `app/ponto/services/ausencia.py:1886`, `app/ponto/models.py:777`, `app/ponto/models.py:815`, `app/ponto/views.py:2102`, `app/ponto/views.py:2147`, `app/templates/ponto/ausencias.html:168`, `app/ponto/services/dia_decidido.py:628`, `app/ponto/services/atestados_lote.py:167`, `app/ponto/services/atestados_lote.py:249`, `app/ponto/services/vigia_ausencia.py:117`, `app/ponto/portas/celula.py:726`, `app/ponto/services/ausencia.py:263` |
+| **Trilha, projeção e retorno do INSERT** | `criar_ausencia` lê PK, tipo, nome, datas, estado, minutos, origens, ator e IP para `evento`, que grava `LogAuditoria`. Os seis campos médicos entram no INSERT e têm UPDATE pela porta de atestado. A trilha desses campos guarda os nomes alterados. Painel, CSV e PDF leem seus valores. `_insumo_da_folha` relê tipo, datas, minutos e horas parciais para a invalidação da projeção. `_criada` é escrito no serviço e lido pela API e por `garantir_ausencia`. `app/ponto/services/ausencia.py:121`, `app/ponto/services/ausencia.py:135`, `app/ponto/services/ausencia.py:329`, `app/ponto/services/ausencia.py:339`, `app/ponto/services/ausencia.py:581`, `app/ponto/services/ausencia.py:656`, `app/ponto/services/ausencia.py:701`, `app/core/observ.py:136`, `app/core/views.py:686`, `app/templates/ponto/partials/painel_ausencia.html:124`, `app/ponto/services/atestados_lote.py:103`, `app/ponto/services/fechamento.py:1672`, `app/api/views.py:1852` |
+
+## Universo de `q` e destino do upload
+
+**O conjunto de pessoas pode diferir.** O lote inicia em `Colaborador.objects.all()`, aplica empresa e pessoa se informadas e percorre os candidatos com `iterator()`. Materializa os resultados de `q` e os PKs antes do limite de lançamentos. O Holerite parte dos vínculos da empresa na competência e acrescenta titulares de holerites daquela empresa. O Retrato parte das linhas gravadas das empresas e da competência, enriquecidas com o cadastro atual. Assim, um colaborador pode casar com `q` nas três telas e só aparecer no lote se tiver um lançamento selecionado. O lote também rejeita `q` normalizado acima de 200 caracteres com HTTP 400. Holerite e Retrato passam o termo normalizado direto a `aplicar`. Custo em produção [nao verificado]. `app/ponto/views_atestado.py:57`, `app/ponto/views_atestado.py:68`, `app/ponto/views_atestado.py:94`, `app/ponto/views_atestado.py:116`, `app/holerite/matriz.py:79`, `app/holerite/views.py:250`, `app/holerite/views.py:433`, `app/folha/views_retrato.py:194`, `app/folha/views_retrato.py:216`
+
+**Pode sobrar órfão depois do retorno.** Reproduzi em memória `criar_ausencia` retornando com linha e arquivo presentes, seguido de rollback do atomic do chamador. A referência sumiu e o arquivo ficou. `concluiu=True` fecha a compensação antes de o chamador terminar. A view INSS cobre `Exception` após receber a instância e sair do atomic da tela. Um `BaseException` após o retorno passa fora desse tratador. Uma falha de consulta ou de exclusão também pode deixar o arquivo. `app/ponto/tests/test_atestado_f3_contrato.py:608`, `app/ponto/tests/test_atestado_f3_contrato.py:647`, `app/ponto/services/ausencia.py:667`, `app/ponto/services/ausencia.py:690`, `app/ponto/views.py:2567`, `app/ponto/services/ausencia.py:263`
+
+**Uma referência já visível protege o arquivo no `finally` novo.** O RED de `on_commit` simula uma exceção depois do commit e verifica que o arquivo continua presente. A proteção termina no alcance da consulta. `exists()` e `storage.delete()` são operações separadas, então uma referência concorrente confirmada entre elas pode perder o arquivo. No SaaS, a consulta usa o schema corrente e o storage configurado é de filesystem. O UPDATE legado de `anexar_documento`, fora do hunk, ainda tem um ramo que apaga por nome sem consultar referências. Ocorrência desses cenários em produção [nao verificado]. `app/ponto/tests/test_atestado_f3_contrato.py:685`, `app/ponto/services/ausencia.py:259`, `app/ponto/services/ausencia.py:1127`, `app/ponto/services/ausencia.py:1147`, `app/config/settings/saas.py:83`, `app/config/settings/saas.py:109`
+
+## Veredito final — REPROVADO
+
+1. **C:** o GET de pendente usa um estado extinto, e o selo AST aceita a perda do POST e da fixture pendente. `app/ponto/tests/test_atestado_f3.py:274`, `app/ponto/models.py:690`, `app/ponto/tests/test_atestado_f3_contrato.py:1053`
+2. **D:** há órfão reproduzido em memória quando o atomic externo desfaz a linha depois do retorno, e a exclusão tem uma janela entre verificar a referência e apagar. `app/ponto/services/ausencia.py:667`, `app/ponto/services/ausencia.py:690`, `app/ponto/services/ausencia.py:263`
+3. **Prova de pouso:** rodei 47 contratos sem banco. Houve 46 passes e um erro de ambiente por falta de `PIL`. A execução dos REDs antes da cura, os testes HTTP com banco e a suíte integral verde ficam [nao verificado]. `app/ponto/tests/test_atestado_f3_contrato.py:1243`, `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_atestado_f3.py:284`, `CLAUDE.md:398`
+
+## 26/11 20:51 · sessao 404fd9d1ab17 · O30-F3-CONSTRUIR · construtor · origem=Code
+
+**C15 aplicada aos quatro achados.** Os sete alvos sem banco falharam na base pelos motivos abaixo e passaram após a cura. Os oito mutantes acrescentados e os oito já presentes falharam por asserção, todos com `rc=1`. [Contratos do lote](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:896) · [Contratos do INSERT](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:630) · [Mutantes](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3_c14.py:19) [nao verificado]
+
+### O que mudou e quem consome
+
+- **A · Período.** O lote usa `_q_cobertura` uma vez, no SQL. Entra o tipo em aberto iniciado antes da janela com `data_fim` nula. Fica fora o tipo avulso nas mesmas datas. A borda `data_fim == de_data` entra. O mesmo predicado é lido por `cobertura_ausencia_periodo` e `CargaDaJanela.cobertura`. Prévia, CSV, PDF e ZIP recebem o mesmo recorte. `ponto/services/atestados_lote.py:36`, `ponto/turnos.py:2817`, `ponto/turnos.py:3142`, `ponto/views_atestado.py:110`, `ponto/views_atestado.py:124`
+- **B · Busca e limite.** `q` usa `filtro.aplicar`, como no Holerite e no Retrato, e o campo diz **Nome ou CPF**. O limite é aplicado ao resultado dos filtros de pessoa, empresa, período e tipo médico. A Busca de Âncoras continua consumindo `qs_colaborador` na sua própria porta. `ponto/views_atestado.py:57`, `ponto/views_atestado.py:68`, `ponto/views_atestado.py:116`, `core/filtro.py:200`, `holerite/views.py:407`, `folha/views_retrato.py:226`, `core/busca.py:151`
+- **C · Painel.** Retirei o GET que recebia uma resposta HTTP e devolvi o POST de metadados ao teste de permissão. O POST de arquivo pós-aprovação e o GET do formulário da pendente usam um DP comum, vinculado ao grupo semeado pelo `Setor`. O formulário posta em `relatorios:anexar_atestado`. `ponto/tests/test_atestado_f3.py:85`, `ponto/tests/test_atestado_f3.py:243`, `ponto/tests/test_atestado_f3.py:255`, `ponto/tests/test_atestado_f3.py:274`, `colaboradores/signals.py:10`, `templates/ponto/partials/painel_ausencia.html:90`
+- **D · INSERT.** Com upload pendente sob `atomic` externo, um savepoint cobre o INSERT, o evento e a projeção. Depois da saída do savepoint, o `finally` compensa o upload efetivamente gravado. A falha no INSERT e a falha antes do retorno usam a mesma consulta de referência, no alias da escrita. O `except` existente mantém a tradução da constraint. Além do lançamento INSS, chamam a criação o PWA, a API, a materialização de chamados, o veredito de célula, a checagem de ausência e o espelho de férias. `ponto/services/ausencia.py:637`, `ponto/services/ausencia.py:668`, `ponto/services/ausencia.py:263`, `ponto/views.py:2550`, `ponto/views.py:2683`, `api/views.py:1824`, `chamados/services/materializacao.py:998`, `chamados/services/materializacao.py:1037`, `ponto/services/veredito_celula.py:342`, `ponto/services/checar_ausencia.py:46`, `ponto/services/ausencia.py:1524`
+
+### REDs e comandos
+
+Os comandos abaixo usam `L=AtestadoF3LoteSemBancoTest` e `P=AtestadoF3PortaSemBancoTest`. O executor aplica os mutantes em memória. `ponto/tests/test_atestado_f3_contrato.py:349`, `ponto/tests/test_atestado_f3_contrato.py:862`, `ponto/tests/mutantes_atestado_f3_c14.py:105`
+
+```bash
+L=AtestadoF3LoteSemBancoTest
+P=AtestadoF3PortaSemBancoTest
+red() { PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v "ponto.tests.test_atestado_f3_contrato.$1"; }
+mut() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3_c14 "$1"; }
+```
+
+| Falha observada antes da cura | Comando do RED | Comando do mutante |
+|---|---|---|
+| **A** · Sumiu a ausência em aberto. `ponto/tests/test_atestado_f3_contrato.py:990` | `red "$L.test_RED_periodo_usa_cobertura_com_nulos_e_borda_inclusiva"` | `mut periodo_sem_aberto` |
+| **A** · A view reaplicou as datas. `ponto/tests/test_atestado_f3_contrato.py:1072` | `red "$L.test_rota_pdf_recebe_os_filtros_do_formulario"` | `mut periodo` |
+| **B** · `COL27` selecionou pelo PK em vez do texto no nome. `ponto/tests/test_atestado_f3_contrato.py:896` | `red "$L.test_RED_busca_q_tem_o_mesmo_resultado_do_filtro_universal"` | `mut busca_por_ancora` |
+| **B** · O lote respondeu 400 por limite quando o filtro universal deixava um registro. `ponto/tests/test_atestado_f3_contrato.py:931` | `red "$L.test_RED_limite_conta_depois_da_busca_q"` | `mut limite_antes_q` |
+| **C** · A checagem estrutural encontrou dois GETs na aprovada e nenhum teste da pendente. Os mutantes também cobrem a troca do DP pelo superusuário. `ponto/tests/test_atestado_f3_contrato.py:1053` | `red "$L.test_RED_migracao_do_formulario_do_painel_preserva_a_cobertura"` | `mut painel_bloco_morto` · `mut painel_sem_pendente` · `mut painel_com_superusuario` |
+| **D** · A linha sofreu rollback e o arquivo sobrou nas falhas injetadas no evento, na leitura do insumo e no despertar da projeção. `ponto/tests/test_atestado_f3_contrato.py:630` | `red "$P.test_RED_inss_remove_anexo_se_insert_falha_antes_de_retornar"` | `mut insert_sem_savepoint_do_ato` |
+| **D** · O arquivo foi apagado apesar da referência após o commit simulado. `ponto/tests/test_atestado_f3_contrato.py:685` | `red "$P.test_RED_insert_preserva_anexo_referenciado_quando_on_commit_levanta"` | `mut insert_apaga_referenciado` |
+
+A execução dos contratos sem banco teve **46 testes aprovados e um erro por falta de `PIL`** no PDF real. A checagem de tratadores passou sem `except` novo. A execução Django com ORM, storage e RBAC reais fica **[nao verificado]**, assim como a ocorrência em produção. A certificação fica com o Code e o opus final. `ponto/tests/test_atestado_f3_contrato.py:1244`, `ponto/tests/test_atestado_f3_contrato.py:222`, `ponto/tests/test_atestado_f3.py:255`, `ponto/tests/test_atestado_f3.py:284`
 
 ## 26/11 20:49 · sessao cda0fb238f36 · ABONO-X-SAIDA-ANTECIPADA · construtor · origem=Code
 
@@ -2054,164 +2137,4 @@ Nenhum `except` novo e nenhum `with suppress(...)` novo, inclusive nos testes. S
 Nenhuma pergunta nova nesta volta. B2-chão segue na fila herdada, para a linha `lei:` no topo do RELATO. `app/docs/LEIS.md:78` · `app/ponto/registro_batida.py:197–212,264–297`.
 ```
 
-## 26/11 17:52 · sessao 7d57a27180df · PAR-PELO-TURNO · leitura · origem=Code
-
-# PAR-PELO-TURNO c1 v2 -- brief do construtor (base de65d64f4)
-
-## CENSO
-
-leitores:
-
-- Teto e dia no juiz. `app/ponto/turnos.py:63::_teto_s_da_jornada` e `app/ponto/turnos.py:1434::parear_turnos` leem o cálculo do teto. `app/ponto/turnos.py:230::_cabe_na_jornada_da_vespera`, `app/ponto/turnos.py:1086::_fechar_aberto_com_saida_seguinte` e `app/ponto/turnos.py:1177::_fechar_aberto_na_pausa_sem_volta` leem a saída numérica. `app/ponto/turnos.py:298::_data_do_turno` e `app/ponto/turnos.py:302::_data_do_turno` leem a guarda da véspera. `app/ponto/turnos.py:318::_mk` lê o dia. `app/ponto/turnos.py:1501::parear_turnos` e `app/ponto/turnos.py:1502::parear_turnos` leem os pós-fechos.
-- `parear_turnos`, 13 chamadas diretas de execução. `app/ponto/turnos.py:1535::turnos_de_batidas`, `app/ponto/turnos.py:2005::_turnos_do_colab_puro`, `app/ponto/turnos.py:2315::_turno_aberto_puro`, `app/ponto/motor_calculo_v2.py:530::turnos_via_autoridade`, `app/chamados/services/fila_por_causa.py:197::particionar`, `app/escala/services/meio_periodo.py:168::observado_meio_periodo`, `app/escala/services/semana_do_posto.py:120::_bateram`, `app/ponto/management/commands/reconciliar_fantasmas.py:99::_completude`, `app/ponto/services/diagnostico_escala.py:142::diagnostico_escala`, `app/ponto/services/lastro.py:268::julgar`, `app/ponto/services/piso_intervalo.py:48::pares_abaixo_do_piso`, `app/ponto/services/triagem_batida.py:178::triagem_bater_ponto`, `app/ponto/utils_turno_orfao.py:31::detectar_bloqueio_turno_orfao`.
-- `turnos_de_batidas`, quatro chamadas. `app/ponto/motor_calculo_v2.py:909::_turnos_do_juiz`, `app/escala/services/propositor.py:117::_dias_batidos`, `app/escala/services/propositor.py:152::_horario_mediano`, `app/escala/services/propositor.py:522::propostas`.
-- `_turnos_do_colab_puro`, três chamadas. `app/ponto/turnos.py:1928::turnos_do_colab`, `app/ponto/turnos.py:3125::CargaDaJanela.turnos`, `app/chamados/services/carga_pergunta_viva.py:182::turnos`.
-- `turnos_do_colab`, 51 chamadas nos seis itens a seguir. API e chamados. `app/api/views.py:1447::api_espelho_v2`, `app/chamados/detector_anomalias.py:157::detectar_batida_fora_escala`, `app/chamados/juizes.py:447::_turno_tem_saida`, `app/chamados/juizes.py:2303::_turno_cruza_meia_noite`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:145::classificar`, `app/chamados/models.py:1378::premissa_regularizada`, `app/chamados/services/disputa_emissao.py:722::_orfao_resolvido_cross_meianoite`, `app/chamados/services/materializacao.py:399::_achar_batida_origem`, `app/chamados/services/materializacao.py:513::turnos_sem_par`.
-- Colaboradores e escala. `app/colaboradores/services/drawer.py:47::contexto_drawer`, `app/colaboradores/services/feriado_do_posto.py:473::_classificar_previa`, `app/escala/detector_proposta.py:65::medir_padrao`, `app/escala/regua_defesa.py:361::turnos_longos_suspeitos`, `app/escala/services/escala_auto.py:87::propostas_do_vinculo`, `app/escala/services/impacto_troca.py:18::_trabalhados`, `app/escala/servico_jornada.py:249::_turno_noturno_completo`, `app/escala/servico_jornada.py:403::classificar_falta`, `app/escala/utils.py:1627::montar_grade_prevista_periodo_por_turno`, `app/escala/utils.py:1952::montar_grade_prevista_periodo_por_turno`.
-- Comandos de ponto. `app/ponto/management/commands/censo_fase_12x36.py:180::handle`, `app/ponto/management/commands/detectar_ausencias.py:337::handle`, `app/ponto/management/commands/detectar_par_relampago.py:56::pares_relampago`, `app/ponto/management/commands/dna_x_batida_real.py:69::handle`, `app/ponto/management/commands/e6_oraculo.py:159::InsumosDoDono.turnos`, `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:88::handle`, `app/ponto/management/commands/marcar_abandono_provisorio.py:46::handle`, `app/ponto/management/commands/verificar_nucleo.py:29::handle`, `app/ponto/management/commands/vigia_plantio_overnight.py:38::batidas_plantadas_no_dia_errado`.
-- Núcleo e serviços de ponto. `app/ponto/nucleo.py:47::recompute_turnos`, `app/ponto/services/bordas_realizado.py:66::bordas_do_realizado`, `app/ponto/services/esmeril_espelho.py:102::assinaturas_do_colab`, `app/ponto/services/espelho.py:628::montar_dias`, `app/ponto/services/passivo_s84.py:82::classificar`, `app/ponto/services/regularizacao.py:61::regularizar_turno_orfao`, `app/ponto/services/teto_na_lista.py:68::medir`, `app/ponto/services/triagem_batida.py:553::_autoresolve_f2_f4`, `app/ponto/services/vigia_pareador_celula.py:97::censo`.
-- Leitura do turno. `app/ponto/turno_leitura.py:89::turno_invariante`, `app/ponto/turno_leitura.py:95::turno_invariante`, `app/ponto/turnos.py:780::realizado_do_dia`, `app/ponto/turnos.py:2112::dia_encerrado_motivo`, `app/ponto/turnos.py:2170::dias_encerrados`, `app/ponto/turnos.py:2201::par_completo_da_janela`, `app/ponto/turnos.py:2998::dia_das_batidas`, `app/ponto/turnos.py:3193::batidas_do_dia_turno`.
-- Telas e relatórios. `app/ponto/views.py:396::turnos_abertos`, `app/ponto/views.py:1613::_abrir_justificativa_fluxo`, `app/ponto/views.py:3356::regularizar_retorno`, `app/relatorios/management/commands/vinculo_do_dia_divergentes.py:124::handle`, `app/relatorios/pdf_espelho.py:213::_coletar_dados_espelho`, `app/relatorios/pdf_espelho.py:451::_coletar_dados_espelho`.
-- Lote de turnos. `app/colaboradores/services/calendario.py:252::contexto_calendario`, `app/ponto/status_dia.py:273::status_dos_dias_lavrados`, `app/ponto/turnos.py:3135::CargaDaJanela.dias_encerrados`, `app/ponto/turnos.py:3139::CargaDaJanela.dia_das_batidas`. As cargas de turno dos chamados e do juiz do dono também são lidas em `app/chamados/juizes.py:448::_turno_tem_saida`, `app/escala/servico_jornada.py:252::_turno_noturno_completo`, `app/escala/servico_jornada.py:404::classificar_falta` e `app/ponto/management/commands/e6_oraculo.py:185::InsumosDoDono.dono`.
-- Dia por PK. `app/ponto/turnos.py:3004::dia_das_batidas` e `app/ponto/turnos.py:3140::CargaDaJanela.dia_das_batidas` leem o mesmo corpo. Chamadas do mapa em `app/api/views.py:1444::api_espelho_v2`, `app/api/views.py:2042::api_justificativas`, `app/core/services/painel_op.py:330::_d4_em_lote`, `app/ferias/management/commands/listar_ferias_com_batida.py:54::handle`, `app/ponto/management/commands/vigia_plantio_overnight.py:87::batidas_fora_do_turno_da_pergunta`, `app/ponto/services/espelho.py:465::montar_dias` e `app/ponto/turnos.py:3024::dia_do_turno_da_batida`.
-- Dia de uma batida. `app/api/views.py:750::api_bater_ponto`, `app/api/views_core.py:744::api_bater_ponto`, `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:160::classificar`, `app/chamados/services/disputa_emissao.py:76::_data_furo_da_grade`, `app/chamados/services/disputa_emissao.py:283::perguntar_entradas_pendentes`, `app/chamados/services/disputa_emissao.py:400::gerar_perguntas_disputa`, `app/chamados/services/fio.py:1822::_dia_do_fato`, `app/chamados/services/foto_e4b.py:283::foto_do_colaborador`, `app/escala/servico_jornada.py:509::resolver_data_evento`, `app/ponto/management/commands/lavrar_estoque_par_relampago.py:58::_classificar`, `app/ponto/services/par_relampago_na_lista.py:101::_origem_pelo_vinculo_na_data`, `app/ponto/services/par_relampago_na_lista.py:326::verbos_do_sinal`, `app/ponto/services/triagem_batida.py:729::ramo_registrar_es`.
-- Batidas do dia e sobras. `app/chamados/models.py:1377::premissa_regularizada`, `app/chamados/services/disputa_emissao.py:831::_tem_base`, `app/escala/servico_jornada.py:531::procedencia_fina`, `app/ponto/services/flip_auto.py:104::classificar_pares` leem `batidas_do_dia_turno`. `app/colaboradores/services/calendario.py:612::contexto_calendario`, `app/ponto/services/espelho.py:631::montar_dias` e `app/relatorios/pdf_espelho.py:622::_coletar_dados_espelho` leem `datas_saida_orfa`.
-- Apuração. `app/ponto/adaptador_motor.py:29::periodos_de_turnos` lê o turno, as pontas e o intervalo julgado. `app/ponto/motor_calculo_v2.py:557::_periodos_via_autoridade` lê a geometria e `app/ponto/motor_calculo_v2.py:558::_periodos_via_autoridade` entrega o trio a `_periodos_pelo_marco`. Os quatro leitores são `app/ponto/motor_calculo_v2.py:2861::montar_periodos`, `app/ponto/motor_calculo_v2.py:2991::montar_periodos`, `app/ponto/motor_calculo_v2.py:3329::montar_periodos` e `app/ponto/motor_calculo_v2.py:3649::montar_periodos`. O mapa por entrada passa por `app/ponto/motor_calculo_v2.py:916::_dia_do_turno` e é lido em `app/ponto/motor_calculo_v2.py:2461::calcular_mes`, `app/ponto/motor_calculo_v2.py:3038::calcular_mes` e `app/ponto/motor_calculo_v2.py:3442::calcular_mes`. A janela de HE já usa o dia do juiz para ancorar os marcos. `app/ponto/motor_calculo_v2.py:1664::_janela_do_dia`.
-- C9. `app/ponto/turnos.py:178::_declara_separado_pelo_teto` lê o primeiro carimbo e `app/ponto/turnos.py:198::pares_separados_pelo_teto` e `app/ponto/turnos.py:203::pares_separados_pelo_teto` leem geometria e carimbo. `app/ponto/services/teto_na_lista.py:68::medir` lê os eventos. `app/ponto/management/commands/lavrar_teto_do_dia.py:28::handle` lê a medição e `app/ponto/services/teto_na_lista.py:123::ultimo_lavrado` lê a foto. A projeção passa por `app/escala/services/cadastro_realidade.py:434::_teto_do_dia`, `app/escala/services/cadastro_realidade.py:772::acao`, `app/escala/services/cadastro_realidade.py:1016::lista`, `app/escala/services/cadastro_realidade.py:1086::lista`, `app/escala/services/cadastro_realidade.py:1202::um_dono_por_dia` e `app/escala/services/cadastro_realidade.py:1249::dias_na_lista`. Tela e PDF passam por `app/escala/views.py:525::cadastro_x_realidade` e `app/escala/views.py:527::cadastro_x_realidade`. O HTML lê assinatura e detalhe em `app/templates/escala/cadastro_x_realidade.html:31`.
-- HE. `app/ponto/services/espelho.py:734::montar_dias` lê as pontas e o relato do motor e `app/ponto/services/espelho.py:939::montar_dias` e `app/ponto/services/espelho.py:946::montar_dias` leem a projeção. Outros leitores de `he_fora_da_janela` são `app/ponto/services/he_pendente_lavrado.py:68::minutos_fora_do_dia`, `app/ponto/services/he_pendente_lavrado.py:138::apurar`, `app/folha/porta_export.py:190::pendencias_he_da_janela`, `app/ponto/views.py:180::espelho_ponto`, `app/relatorios/pdf_espelho.py:932::_build_story` e `app/templates/ponto/espelho.html:189`. Leem o retrato `app/ponto/views.py:820::gestao_he_pdf`, `app/ponto/views.py:950::gestao_he`, `app/ponto/services/gestao_he.py:428::itens_sem_decisao`, `app/ponto/services/gestao_he.py:493::pendentes_na_central`, `app/ponto/services/he_pendente_lavrado.py:249::fotos_paradas`, `app/ponto/services/he_pendente_lavrado.py:254::fotos_paradas` e `app/ponto/management/commands/recusar_ponta_pequena.py:66::handle`. Leem a decisão vigente `app/ponto/services/gestao_he.py:93::estado_por_dia`, `app/ponto/services/gestao_he.py:123::_decisoes`, `app/ponto/management/commands/lavrar_he_pendente.py:48::handle`, `app/ponto/portas/he.py:148::_vigente` e `app/ponto/motor_calculo_v2.py:1521::_decisoes_he`.
-- Censo de execução por chamada direta e leitores das projeções identificadas, incluindo comandos. Referências conferidas na cópia indicada. Identidade Git de HEAD, despacho por reflexão, consumidores externos e execução em produção [nao verificado].
-
-escritores:
-
-- `app/ponto/turnos.py:82::_teto_da_jornada` produz `previsto + 4 h` e a indicação de teto do dia. `app/ponto/turnos.py:1433::parear_turnos` fornece o envelope de 26 h ao fecho principal. `app/ponto/turnos.py:180::_declara_separado_pelo_teto` escreve o carimbo transitório de C9, hoje chamado por `app/ponto/turnos.py:1452::parear_turnos`.
-- `app/ponto/turnos.py:285::_data_do_turno` determina o dia e `app/ponto/turnos.py:323::_mk` escreve o `Turno`. `app/ponto/turnos.py:1096::_fechar_aberto_com_saida_seguinte` e `app/ponto/turnos.py:1186::_fechar_aberto_na_pausa_sem_volta` completam a geometria por `_replace` e carregam o `data_turno` recebido. `app/ponto/turnos.py:3042::_dia_das_batidas_puro` publica o mapa por PK e `app/ponto/turnos.py:3044::_dia_das_batidas_puro` preenche o dia das marcas sem turno que as reivindique.
-- `app/ponto/turnos.py:210::pares_separados_pelo_teto` produz dia, pontas, marcos, teto e vão da C9. `app/ponto/services/teto_na_lista.py:78::medir` escreve o item com a competência daquele dia e o dono de `app/ponto/management/commands/e6_oraculo.py:182::InsumosDoDono.dono`. `app/ponto/services/teto_na_lista.py:96::medir` produz totais e rótulo. `app/ponto/services/teto_na_lista.py:113::lavrar` escreve `MetricaSnapshot`. `app/escala/services/cadastro_realidade.py:105` declara a descrição C9, `app/escala/services/cadastro_realidade.py:435::_teto_do_dia` produz a assinatura e `app/escala/services/cadastro_realidade.py:1233::um_dono_por_dia` propaga o dono julgado quando as assinaturas divergem.
-- Fronteiras de entrada. `app/ponto/registro_batida.py:118::registrar_batida` e `app/ponto/registro_batida.py:255::anotar` escrevem a batida e suas anotações. `app/escala/alimentacao.py:228::vinculo_do_dia` e `app/escala/utils.py:84::marcos_dna_periodo` fornecem vínculo e DNA. `app/ponto/turnos.py:1565::papel_por_minuto_da_ata` produz E/S/X/Xi. `app/ponto/turnos.py:344::_marca_ecos_flush`, `app/ponto/turnos.py:415::_marca_intra_duracao` e `app/ponto/turnos.py:1315::parear_turnos` escrevem carimbos de trabalho em memória. A apuração seleciona batidas vivas em `app/ponto/turnos.py:1868::turnos_do_colab` e `app/ponto/turnos.py:2941::batidas_apuraveis`.
-- Fronteiras de saída. `app/ponto/services/espelho.py:790::montar_dias` escreve `he_fora_da_janela`. `app/ponto/services/he_pendente_lavrado.py:138::apurar` monta a pendência e `app/ponto/services/he_pendente_lavrado.py:183::lavrar` grava o retrato. `app/ponto/portas/he.py:44::_gravar` e `app/ponto/portas/he.py:394::_marcar_revogada` escrevem decisão e revogação. `app/ponto/services/dia_pago.py:360::lavrar` e `app/ponto/services/fechamento.py:1168::recalcular_fechamento_mes` são escritores do gravado financeiro.
-
-decisoes:
-
-- **Lei 1:** a órfã de madrugada absorvida pela jornada da véspera herda o **dia da véspera**, inclusive na borda de competência. A jornada pertence ao dia de início, L-085. Fecho e dia saem do **mesmo juiz**. `app/docs/PROMPTS.md:3025`, `app/docs/RELATO.md:170`, `app/docs/LEIS.md:117`.
-- **V6, padrão juiz único.** Antecipação e prorrogação da mesma jornada preservam o intervalo efetivo e seguem para a apuração vigente. `previsto + 4 h` vira motivo de C9 quando seria o único corte de um par válido. O limite absoluto de fecho é 26 h. A classificação de pausa continua pela classe, Base 3 h, Partido 0 e Plantão 8 h, com as duas luzes `Xi` da ata fora do teto da pausa inferida. A janela de HE e a Gestão existentes classificam e publicam a pendência. `app/docs/PROMPTS.md:2852`, `app/ponto/motor_calculo_v2.py:755`, `app/ponto/motor_calculo_v2.py:2976`, `app/ponto/motor_calculo_v2.py:3629`, `app/ponto/turnos.py:1572`, `app/docs/LEIS.md:115`.
-- **Fora desta obra.** Cadastro de duração da V2, alerta de interjornada, confirmação por ocorrência, porta nova, alterações nas batidas originais ou retratadas, reclassificação geral do dia civil, caso col673, desempate de PK entre dois turnos na troca de vínculo, autorização automática de HE, crédito duplicado e qualquer escrita financeira de competência exportada. A guarda de absorção de pausa continua em seu contrato próprio. `app/docs/PROMPTS.md:2823`, `app/docs/PROMPTS.md:2852`, `app/docs/BACKLOG.md:1864`, `app/docs/BACKLOG.md:2029`, `app/docs/RELATO.md:18`, `app/ponto/turnos.py:1349`, `app/ponto/tests/test_col129_par_separado_pelo_teto.py:116`.
-
-perguntas de lei: 0
-
-## ARQUIVOS
-
-Lista fechada para o construtor. A escolha inclui a descrição pública do comando C9 e autoriza, nos testes legados nomeados, somente a substituição explícita de contratos superados pela V6 ou a preservação do controle com uma fixture que realmente o exerça. `app/docs/PROMPTS.md:2852`, `app/docs/LEIS.md:136`, `app/ponto/management/commands/lavrar_teto_do_dia.py:20`.
-
-- `app/ponto/turnos.py` — juiz do fecho e do dia, guarda de 26 h, carimbo do par válido e leitura de C9. Os três pontos de fecho e a atribuição de véspera entram na prova. `app/ponto/turnos.py:216`, `app/ponto/turnos.py:285`, `app/ponto/turnos.py:1084`, `app/ponto/turnos.py:1170`, `app/ponto/turnos.py:1430`.
-- `app/ponto/services/teto_na_lista.py` — consumir o evento do juiz e corrigir a descrição da lavra. Preservar chave, dono, horários, vão, teto e competência derivada de `data_turno`. `app/ponto/services/teto_na_lista.py:25`, `app/ponto/services/teto_na_lista.py:68`, `app/ponto/services/teto_na_lista.py:100`.
-- `app/escala/services/cadastro_realidade.py` — adequar texto e detalhe C9 para fotos antigas e novas. O texto comum é que o vão real ultrapassou o teto do dia e coube no envelope de 26 h. `app/escala/services/cadastro_realidade.py:105`, `app/escala/services/cadastro_realidade.py:430`.
-- `app/ponto/management/commands/lavrar_teto_do_dia.py` — adequar docstring e `help` da C9. A execução segue a medição e a lavra existentes. `app/ponto/management/commands/lavrar_teto_do_dia.py:2`, `app/ponto/management/commands/lavrar_teto_do_dia.py:20`, `app/ponto/management/commands/lavrar_teto_do_dia.py:26`.
-- `app/ponto/tests/test_par_pelo_turno.py` — arquivo novo proposto para os REDs, os controles e a integração da matriz. `app/docs/LEIS.md:136`, `app/docs/BACKLOG.md:2027`.
-- `app/ponto/tests/test_col129_par_separado_pelo_teto.py` — a asserção de dois turnos de col129 contradiz literalmente a V6. Preservar o gabarito de horário, dia, vão, teto, contagem e identidade por PK. No caso F, uma cópia condicionada a `t.aberto` perde a mordida quando o turno fecha. Preservar a contraprova da absorção do caso G. `app/ponto/tests/test_col129_par_separado_pelo_teto.py:61`, `app/ponto/tests/test_col129_par_separado_pelo_teto.py:65`, `app/ponto/tests/test_col129_par_separado_pelo_teto.py:106`, `app/ponto/tests/test_col129_par_separado_pelo_teto.py:116`.
-- `app/ponto/tests/test_h_portao_teto_do_dia.py`, `app/ponto/tests/test_o280_bateria_da_lei.py` e `app/ponto/tests/test_saida_pela_posicao_entre_turnos.py` — revisar somente os contratos em que a recusa dependia do teto diário antigo. Col879 requer prova do papel das batidas da própria fixture. O pino A6 exige zero por `1.020 > 960`. O selo de posição recusa a candidata pela guarda antiga. Conservar as recusas por jornada distinta, falta de prova, pausa em curso, degenerado e envelope absoluto. `app/ponto/tests/test_h_portao_teto_do_dia.py:32`, `app/ponto/tests/test_o280_bateria_da_lei.py:2226`, `app/ponto/tests/test_saida_pela_posicao_entre_turnos.py:177`, `app/ponto/tests/test_saida_pela_posicao_entre_turnos.py:286`.
-- `app/ponto/tests/test_col129_teto_vira_lista.py` — preservar contagem, idempotência, minutos e porta pelo dono. O legado que exige `BATIDA` por causa do furo precisa de um furo legítimo para continuar provando essa porta. No par recuperado, a referência é o resultado do juiz do dono. `app/ponto/tests/test_col129_teto_vira_lista.py:72`, `app/ponto/tests/test_col129_teto_vira_lista.py:155`, `app/ponto/tests/test_col129_teto_vira_lista.py:209`, `app/ponto/services/teto_na_lista.py:86`.
-
-Obras e correções do mapa da base.
-
-- **DIA-DA-BATIDA-JUIZ-UNICO F4c/F4d** compartilha `app/ponto/turnos.py` conforme o escopo informado. O ponto de encontro é a alimentação de `turnos_do_colab`, a resposta na casca e em lote e o dia por PK em janelas sobrepostas. A F4b está registrada e a F4c consta aguardando o portão de carga. Diff exato da F4c/F4d e estado da F4d [nao verificado]. Conferir a composição na árvore candidata com o mesmo PK no dia 20 pela casca, pelo lote e pela consulta individual. `app/docs/RELATO.md:18`, `app/docs/RELATO.md:34`, `app/ponto/turnos.py:1850`, `app/ponto/turnos.py:2998`, `app/ponto/turnos.py:3024`, `app/ponto/turnos.py:3140`.
-- **E1-PREVISAO-24H** cruza `app/escala/services/cadastro_realidade.py` no agregador da lista. A cópia E1a acrescenta a assinatura de previsão inválida e disputa o código C13 já
-
-[truncado em 20000 de 38663 caracteres]
-
-## 26/11 17:50 · sessao 227df873e3ce · O30-F3-CONSTRUIR · construtor · origem=Code
-
-**O30-F3-CONSTRUIR c12.** O RED novo passou na cópia da c11 (`rc 0`) e falhou com o mutante (`rc 1`). A falha ocorreu na asserção que exige que só o arquivo anterior permaneça. O mutante deixou o arquivo novo no storage simulado. `app/ponto/tests/test_atestado_f3_contrato.py:459,485` · `app/ponto/tests/mutantes_atestado_f3.py:421,443`
-
-### Testes [nao verificado]
-
-- `test_RED_reabrir_compensa_apos_sair_do_atomic_local` simula `False → True → False`, provoca um `RuntimeError` após o upload e confere a propagação da mesma exceção, a exclusão do arquivo novo, a preservação do anterior e o registro de `anexo_apagado=True` como único aviso. `app/ponto/tests/test_atestado_f3_contrato.py:459–490`
-- `green_c11` passou nos 12 testes do seletor local. A certificação do Code e do Opus final está [nao verificado]. `app/ponto/tests/mutantes_atestado_f3.py:419–420`
-
-O diff contém só os dois arquivos de teste, com **zero `except` novos**. O mutante lê `in_atomic_block` na entrada do `with` e reutiliza o valor nos dois ramos. A substituição de `ausencia.py` ocorre em memória. `app/ponto/tests/test_atestado_f3_contrato.py:459` · `app/ponto/tests/mutantes_atestado_f3.py:309,378,443`
-
-No censo, `lote_atestados` chama `pdf_bytes` no ramo `pdf`. A rota de PDF aponta para essa view. `app/ponto/views_atestado.py:99,135–137` · `app/relatorios/urls.py:17`
-
-### Comandos do par green e mutante
-
-A partir de `app/`, o primeiro comando deve sair com `0` e o segundo com `1`. `app/ponto/tests/mutantes_atestado_f3.py:421,443,456`
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 green_c12
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3 c12_reabrir_le_atomic_dentro_do_with
-```
-
-### Diff
-
-```diff
-diff --git a/app/ponto/tests/mutantes_atestado_f3.py b/app/ponto/tests/mutantes_atestado_f3.py
---- a/app/ponto/tests/mutantes_atestado_f3.py
-+++ b/app/ponto/tests/mutantes_atestado_f3.py
-@@ -62,0 +63 @@
-+SAIDA_ATOMIC_LOCAL = PORTA + 'test_RED_reabrir_compensa_apos_sair_do_atomic_local'
-@@ -307,0 +309,14 @@
-+def mutar_leitura_do_atomic(fonte):
-+    entrada = '        with transaction.atomic(using=banco) if dados_atestado else nullcontext():\n'
-+    compensacao = 'if anexo_gravado and not conexao.in_atomic_block:'
-+    for antes, depois in (
-+        (entrada, entrada + '            em_atomic = conexao.in_atomic_block\n'),
-+        (compensacao, compensacao.replace('conexao.in_atomic_block', 'em_atomic')),
-+        (CONDICAO_AVISO_ORFAO, CONDICAO_AVISO_ORFAO.replace('conexao.in_atomic_block', 'em_atomic')),
-+    ):
-+        if fonte.count(antes) != 1:
-+            raise SystemExit(f'Seletor deve aparecer uma vez em {AUSENCIA}: {antes.strip()}')
-+        fonte = fonte.replace(antes, depois, 1)
-+    return fonte
-+
-+
-@@ -389 +404 @@
--             'green_c11',
-+             'green_c11', 'green_c12',
-@@ -391 +406 @@
--             'c8_try_dentro_do_atomic')
-+             'c8_try_dentro_do_atomic', 'c12_reabrir_le_atomic_dentro_do_with')
-@@ -405,0 +421,2 @@
-+    elif nome == 'green_c12':
-+        fontes, testes = {}, (SAIDA_ATOMIC_LOCAL,) [nao verificado]
-@@ -425,0 +443,3 @@
-+    elif nome == 'c12_reabrir_le_atomic_dentro_do_with':
-+        caminho = APP / AUSENCIA
-+        fontes, testes = {caminho: mutar_leitura_do_atomic(caminho.read_text(encoding='utf-8'))}, (SAIDA_ATOMIC_LOCAL,) [nao verificado]
-diff --git a/app/ponto/tests/test_atestado_f3_contrato.py b/app/ponto/tests/test_atestado_f3_contrato.py
---- a/app/ponto/tests/test_atestado_f3_contrato.py
-+++ b/app/ponto/tests/test_atestado_f3_contrato.py
-@@ -458,0 +459,33 @@
-+    def test_RED_reabrir_compensa_apos_sair_do_atomic_local(self):
-+        self._preparar_storage_da_reabertura()
-+        falha = RuntimeError('falha após gravar o arquivo no atomic local')
-+
-+        @contextmanager
-+        def atomic(**kwargs):
-+            self.conexao.in_atomic_block = True
-+            try:
-+                yield
-+            finally:
-+                self.referencias[self.registro.pk] = self.nome_antigo
-+                self.conexao.in_atomic_block = False
-+
-+        def falhar_apos_upload(*args, **kwargs):
-+            self.assertTrue(self.conexao.in_atomic_block)
-+            self.assertIn(self.nome_novo, self.arquivos)
-+            raise falha
-+
-+        with patch.object(self.transacao, 'atomic', atomic), \
-+                patch.object(ausencia, 'mudar_estado', side_effect=falhar_apos_upload), \
-+                self.assertLogs(ausencia.logger, level='WARNING') as logs, \
-+                self.assertRaises(RuntimeError) as erro:
-+            ausencia._reabrir(self.registro, self.documento, dados_atestado=CAMPOS)
-+
-+        self.assertIs(erro.exception, falha)
-+        self.assertFalse(self.conexao.in_atomic_block)
-+        self.assertEqual(self.arquivos, {self.nome_antigo})
-+        self.documento.storage.delete.assert_called_once_with(name=self.nome_novo)
-+        self.assertEqual(logs.output, [
-+            f'WARNING:ponto:falha na reabertura: ausencia={self.registro.pk} '
-+            f'nome={self.nome_novo} anexo_apagado=True',
-+        ])
-+
-```
-
-_8472 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8474 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
