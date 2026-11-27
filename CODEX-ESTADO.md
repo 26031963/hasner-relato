@@ -1,7 +1,66 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 16:43** · publicado em **27/11/2026 16:43** (UTC-3)
+> Ultima resposta processada: **27/11/2026 16:45** · publicado em **27/11/2026 16:50** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 16:45 · sessao d019348cce5d · CODEX-CONSTROI-MOTOR · construtor · origem=Code
+
+Implementei a cura14/P4 em `core/esteira_vigia.py` e `core/tests/test_vigia_ccm.py`. O mesmo juiz CCM atende a guarda prévia e o reteste. Se a guarda recusa, o vigia avisa Pauta e RELATO com a primeira linha do juiz e retorna antes de Git, deploy e gravação de `ultimo_revert`. [esteira_vigia.py:748](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:748) [esteira_vigia.py:1320](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1320)
+
+Na recusa tardia, o vigia tenta desfazer o revert. O deploy compensatório só roda se o Git retornar zero, e `revert desfeito` exige sucesso dos dois comandos. Uma falha em qualquer etapa aparece na Pauta e no RELATO, com teste para cada caso. A guarda depende de `_rodar_testes` devolver `None`, o que ocorre depois de escrever o log de recusa. [esteira_vigia.py:1339](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1339) [test_vigia_ccm.py:189](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:189) [esteira_vigia.py:753](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:753) [nao verificado]
+
+**Pré-verificação.** O diff passou em `git diff --check`. A base, a cura e os três mutantes compilam, com 25 `ExceptHandler` e um único `argv` do CCM. A guarda usa o `agora` já recebido. `deve_reverter` lê `ultimo_revert` para aplicar o teto. `passada` regrava o estado que leu antes de chamar `auto_revert`, então preserva o valor carregado na recusa prévia e pode sobrescrever um carimbo novo se a tentativa chegou ao reteste. [esteira_vigia.py:749](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:749) [esteira_vigia.py:1076](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1076) [esteira_vigia.py:1319](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1319) [esteira_vigia.py:1548](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1548) [esteira_vigia.py:1657](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1657) [LEIS.md:97](/home/ronald/wt-codex-codex-constroi-motor-163727/app/docs/LEIS.md:97) [nao verificado]
+
+**Pista pendente.** O ambiente disponível é a VM. A Pista exige rede e `logs/CODEX-CONSTROI-MOTOR/cura14/red_p4.log` está em caminho ignorado. O log ficou pendente. O RED na base, o verde na cura e a mordida dos mutantes seguem [nao verificado]. A certificação cabe ao Code e ao opus final. [/etc/hostname:1](/etc/hostname:1) [CLAUDE.md:129](/home/ronald/wt-codex-codex-constroi-motor-163727/CLAUDE.md:129) [.gitignore:53](/home/ronald/wt-codex-codex-constroi-motor-163727/.gitignore:53) [LEIS.md:147](/home/ronald/wt-codex-codex-constroi-motor-163727/app/docs/LEIS.md:147)
+
+### Comandos para o Code na Pista
+
+Rodar a partir de `app/`, no ambiente de teste da Pista. A função carrega a variante em memória e usa os testes da cópia. Os alvos dos mutantes correspondem às três asserções pedidas. [manage.py:7](/home/ronald/wt-codex-codex-constroi-motor-163727/app/manage.py:7) [test_vigia_ccm.py:146](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:146) [test_vigia_ccm.py:162](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:162) [test_vigia_ccm.py:172](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:172) [nao verificado]
+
+```bash
+set -o pipefail
+vigia=core/esteira_vigia.py
+classe=core.tests.test_vigia_ccm.AutoRevertCCMTest
+recusa="$classe.test_auto_revert_juiz_recusa_antes_do_revert"
+ordem="$classe.test_auto_revert_ordem_juiz_antes_do_git"
+desfaz="$classe.test_auto_revert_reteste_recusado_desfaz"
+
+p4() {
+    PYTHONDONTWRITEBYTECODE=1 python3 -c '
+import sys
+from core import esteira_vigia as vigia
+from manage import main
+
+exec(compile(sys.stdin.read(), vigia.__file__, "exec"), vars(vigia))
+sys.argv[0] = "manage.py"
+main()
+' test --settings=config.settings.ci --noinput -v 2 "$@"
+}
+
+# RED na base. Capturar esta saída em logs/CODEX-CONSTROI-MOTOR/cura14/red_p4.log.
+git show 0e0497a1ce54c3de18be24660cf8a35ec9de6680:app/core/esteira_vigia.py \
+    | p4 "$recusa" "$ordem" "$desfaz"
+
+# Cura.
+p4 core.tests.test_vigia_ccm < "$vigia"
+
+# juiz_depois_do_revert
+sed -e '/^    # O revert restaura/,/^        return .sem revert: reteste seria recusado/{H;d;}' \
+    -e '/^        return .revert nao aplicou./G' "$vigia" \
+    | p4 "$recusa" "$ordem"
+
+# recusa_segue
+sed '/^def auto_revert(/,/^def explicar_vermelho(/s/^    if juiz.returncode != 0:$/    if False:/' \
+    "$vigia" | p4 "$recusa"
+
+# none_mantem_revert
+sed "/^    desfecho_recusa = None$/,/^    memoria\[/s/^        if subprocess.run(.*'HEAD'.*returncode != 0:$/        if False:/" \
+    "$vigia" | p4 "$desfaz"
+```
+
+## 27/11 16:44 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
+
+A recusa tardia apura o resultado da compensação, emite Pauta e RELATO e então grava `ultimo_revert`. [core/esteira_vigia.py:1339] [core/esteira_vigia.py:1347] [core/esteira_vigia.py:1350]
 
 ## 27/11 16:43 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
 
@@ -769,187 +828,4 @@ Inventário dos **179 IDs fornecidos**. São 158 linhas do bloco principal e 21 
 
 [truncado em 20000 de 75137 caracteres]
 
-## 27/11 15:15 · sessao 878f619f0872 · INVENTARIO-PELA-REGRA · leitura · origem=Code
-
-Conferi o HEAD `59600163ccc9cffb8f3ae148beede7cd7866ae86` e comparei os arquivos citados com os blobs desse commit. A sonda está abaixo. Os números da comp 11 e o cadastro atual da Sombra ficam **[nao verificado]** até a execução pelo envelope. [bin/codex_pergunta.sh:88](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/codex_pergunta.sh:88) [bin/codex_pergunta.sh:611](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/codex_pergunta.sh:611)
-
-## A. R4
-
-Para cada `Empresa` de PK 2, 3 e 4, a entrada de leitura é `folha.porta_export.medir(empresa, 11, 2026)`. A janela vem de `janela_fechamento(11, 2026, empresa)`. A sonda confere o intervalo de **21/10 a 20/11/2026** e imprime o marco lido do banco para cada empresa. [app/core/placar_estrutural.py:214](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/core/placar_estrutural.py:214) [app/folha/porta_export.py:319](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:319) [app/ponto/janelas.py:54](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/janelas.py:54) [app/ponto/services/fechamento.py:1577](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1577)
-
-| Par | Função que mede |
-|---|---|
-| Tela × PDF | `medir` compara `espelho_do_colab(c, hoje, ini, fim, agora=ref)` e `_coletar_dados_espelho_mes(c, 11, 2026, agora=ref)`. Retorno `tela_x_pdf`. [app/folha/porta_export.py:482](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:482) [app/folha/porta_export.py:502](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:502) |
-| Cartão × TXT | `relatorios.cartao_pela_celula.divergencia(c, 11, 2026, resumo)`, chamado por `cartao_x_txt_divergentes`. O retorno de `medir` é da frota da competência. Para obter os números por empresa, a sonda cruza os IDs divergentes emitidos pelo comando com `Colaborador.empresa_id`. [app/relatorios/cartao_pela_celula.py:216](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/relatorios/cartao_pela_celula.py:216) [app/relatorios/management/commands/cartao_x_txt_divergentes.py:68](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/relatorios/management/commands/cartao_x_txt_divergentes.py:68) [app/folha/porta_export.py:732](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:732) |
-| Espelho × DiaPago | `dias_fora_do_dia_pago(c, 11, 2026, ini, fim, versao='motor', dp_por_dia=None)`. Retornos `espelho_x_dia_pago` e `espelho_x_dia_pago_nao_medido`. [app/folha/porta_export.py:26](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:26) [app/folha/porta_export.py:603](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:603) |
-| Fechamento × soma do DiaPago | `_medir_dia_pago(c, fech, badge=None)`, interna a `medir`, usa `soma_da_competencia(c, 11, 2026, versao='motor')`. Retorno `fechamento_x_soma_dias_pagos`. O universo inclui quem tem fechamento ou lavratura, inclusive fora do TXT. [app/folha/porta_export.py:384](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:384) [app/folha/porta_export.py:457](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:457) [app/folha/porta_export.py:653](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:653) [app/ponto/services/dia_pago.py:550](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/dia_pago.py:550) |
-| Topo × soma das linhas | `medir` compara `total_relogio` com a soma de `minutos_realizados` dos dias da janela. Retorno `topo_x_coluna`. [app/folha/porta_export.py:515](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:515) |
-| App × tela | `AppLeATelaTest.test_MORDE_o_endpoint_nao_remonta_a_palavra_do_dia()` e `test_MORDE_o_endpoint_LE_o_espelho()`. É um selo AST do código, aplicável às três empresas. [app/api/tests/test_r4_par6_app_le_a_tela.py:53](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/api/tests/test_r4_par6_app_le_a_tela.py:53) |
-| Linhas do DiaPago × badge | `linha_x_badge(c, 11, 2026, badge, soma=None)`, com `badge` igual ao resumo do espelho. Mede noturnas, atraso e trabalhadas mais folga quando a fonte do badge é `folha`. Os retornos distinguem divergência, exportada e motivo de ausência de medição. [app/folha/porta_export.py:251](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:251) [app/folha/porta_export.py:449](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:449) [app/folha/porta_export.py:717](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:717) |
-
-`medir` é a entrada de leitura. O CLI `selo_leitores_no_mesmo_numero` vigia e assume tentativas, depois chama `concluir`, que grava o carimbo por `lavrar` em `MetricaSnapshot.objects.update_or_create`. A chave `calendario_x_espelho` é de compatibilidade e vem sempre vazia. [app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:76](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:76) [app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:197](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:197) [app/folha/porta_export.py:1279](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:1279) [app/folha/porta_export.py:785](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:785) [app/folha/porta_export.py:608](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:608)
-
-## B. R5
-
-**R5 so com escrita: fica fora (proibido medida nova)**. O `.sh` chama o Python fixado em **10/2026**. Cada passada aplica o cartório e grava o recálculo. A prova compara a foto após a primeira escrita com a foto após a segunda. O dry do cartório, sem `--apply`, julga a fila `data < hoje`. Duas leituras dessa fila observam o mesmo estado e deixam a transição exigida pelo R5 sem prova. [bin/r5_idempotencia_frota.sh:24](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/r5_idempotencia_frota.sh:24) [bin/r5_idempotencia_frota.py:26](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/r5_idempotencia_frota.py:26) [bin/r5_idempotencia_frota.py:104](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/r5_idempotencia_frota.py:104) [bin/r5_idempotencia_frota.py:124](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/r5_idempotencia_frota.py:124) [app/ponto/management/commands/processar_cartorio.py:25](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/processar_cartorio.py:25) [app/ponto/services/cartorio.py:1905](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/cartorio.py:1905) [app/ponto/services/fechamento.py:1168](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1168)
-
-## C. Becos, órfãs e dias sem caminho
-
-- **Beco de disputa.** `chamados.services.becos.classificar(disputa)` devolve `fechavel`, `barrada` ou `None`. O cron usa `--alarme`, com RC 2 se houver fecháveis. Até em dry o comando executa `get_user_sistema()`, que pode fazer `INSERT` via `get_or_create`. A sonda chama diretamente o classificador e usa `dia_do_fato(chamado)` para o recorte. Becos sem dia apurável aparecem em linha própria. [app/config/crons.py:663](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/config/crons.py:663) [app/chamados/management/commands/fechar_becos_disputa.py:27](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/management/commands/fechar_becos_disputa.py:27) [app/core/utils.py:18](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/core/utils.py:18) [app/chamados/services/becos.py:25](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/services/becos.py:25) [app/chamados/juizes.py:89](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/juizes.py:89)
-- **Dia retido sem caminho.** `censo_alcance(empresas=[empresa], hoje=hoje, agora=ref, limite=0)` é o leitor do `vigiar_fio_morto` que devolve todos os `sem_porta`, mesmo com limite zero. A sonda conta por causa, detalhe e papel em `11/2026` e indica quando a competência está fora do universo do vigia. A execução de frota do CLI grava carimbo em disco. [app/config/crons.py:1746](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/config/crons.py:1746) [app/chamados/services/vigia_fio.py:524](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/services/vigia_fio.py:524) [app/chamados/services/vigia_fio.py:622](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/services/vigia_fio.py:622) [app/chamados/management/commands/vigiar_fio_morto.py:131](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/management/commands/vigiar_fio_morto.py:131)
-- **Fio mudo e emissão que faltou.** `contador_fio_mudo(hoje=hoje, agora=ref, ini=ini, fim=fim, empresas=[eid])` mede motivos devidos sem pergunta viva. `motivos_que_o_evento_deixou(cel, hoje, ref, memo=memo)` mede o que faltou emitir na célula. Ambos são leitores. O `--alarme` do cron dá RC 2 pelo segundo contador. [app/config/crons.py:1548](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/config/crons.py:1548) [app/chamados/management/commands/disparar_perguntas_competencia.py:77](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/management/commands/disparar_perguntas_competencia.py:77) [app/chamados/management/commands/disparar_perguntas_competencia.py:221](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/management/commands/disparar_perguntas_competencia.py:221) [app/chamados/services/fabrica_da_celula.py:234](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/services/fabrica_da_celula.py:234)
-- **Órfãs e RC.** `orfas_pela_lampada_sem_evento(agora=ref, colaborador_ids=ids)` devolve os IDs que o evento devia ter encerrado. `reconciliar_perguntas_orfas` é leitura e `--alarme` dá RC 2 se houver achado. No `reconciliar_chamados`, `perguntas_orfas_reatavies(colab)` devolve um queryset do universo elegível, que fica fora da soma de alarme do RC. A sonda recorta os dois por `data_evento`. [app/config/crons.py:1551](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/config/crons.py:1551) [app/chamados/reconciliador.py:1325](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/reconciliador.py:1325) [app/ponto/management/commands/reconciliar_perguntas_orfas.py:24](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/reconciliar_perguntas_orfas.py:24) [app/chamados/reconciliador.py:1640](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/reconciliador.py:1640) [app/chamados/management/commands/reconciliar_chamados.py:97](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/management/commands/reconciliar_chamados.py:97)
-- **E6.** `e6_oraculo --mes 11 --ano 2026 --hoje 2026-11-27` é leitura sem `--csv`. Mede divergência do espelho por dia-colaborador, com dono atribuído por `InsumosDoDono.dono(dia)`. O comando percorre a frota ativa com fechamento. A sonda usa as colunas `emp`, `dono_da_divergencia` e `classe` do CSV oficial em memória para imprimir o resultado por empresa. Se o comando reportar erro de espelho, a sonda levanta exceção. [app/ponto/management/commands/e6_oraculo.py:182](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/e6_oraculo.py:182) [app/ponto/management/commands/e6_oraculo.py:276](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/e6_oraculo.py:276) [app/ponto/management/commands/e6_oraculo.py:303](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/e6_oraculo.py:303) [app/ponto/management/commands/e6_oraculo.py:442](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/e6_oraculo.py:442)
-
-## D. Layout do TXT e cadastro L-099
-
-A view obtém os objetos com `recalcular_fechamento_mes(11, 2026, empresa_id=e.pk, somente_leitura=True, retornar_objeto=True)`. Passa esses mesmos objetos a `classificar_export` e a `montar_linhas_export(empresa, mes, ano, itens=itens, fechamentos=fechs)`. O primeiro valor devolvido pela montagem é `linhas`, que entra em `validar_layout_dominio(linhas)`. A aprovação em lote e o registro de `ExportacaoDominio` ficam no caminho da view. [app/folha/views.py:214](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:214) [app/folha/views.py:253](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:253) [app/folha/views.py:275](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:275) [app/folha/views.py:282](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:282) [app/folha/views.py:304](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:304)
-
-A sonda avalia todo o universo da competência e valida o TXT montado para quem a regra admite. Quando há erro, remonta os blocos por colaborador com a mesma função, preserva o bloco da rubrica `8792` com seus registros `11` e confere que linhas e erros recompostos coincidem com os da empresa. Cada achado fica em **CADASTRO L-099**, com `colaborador_id`, regra e campo. A mensagem bruta do validador pode conter a linha inteira e fica em memória. [CLAUDE.md:183](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/CLAUDE.md:183) [app/folha/export.py:266](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:266) [app/folha/export.py:699](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:699) [app/folha/export.py:725](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:725)
-
-## E. Feriado municipal da comp 12
-
-A data localizada é **10/12/2026, Aniversário de Londrina/PR**. O teste cadastra esse feriado e uma leitura anterior da Sombra registra 10/12 como feriado por posto na comp 12. A presença no cadastro atual da Sombra está **[nao verificado]**. [app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:39](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:39) [app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:62](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/tests/test_jv1_volta2_lugar_e_ciclo.py:62) [lista anterior da Sombra](/home/ronald/saas-hasner/logs/FERIADO-POR-POSTO/pouso_lista_v2/lista.out:50)
-
-O cadastro é `core.models.Feriado`, tabela `core_feriado`. A consulta abaixo filtra `abrangencia='municipal'` e `data__range=(21/11/2026, 20/12/2026)` e ordena por UF, município e data. Por empresa, o cruzamento é com `Posto.praca` e `Posto.municipio`, usando `core.feriados.alcanca` para aplicar a regra de UF e município. [app/core/models.py:5](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/core/models.py:5) [bin/sombra_regras_pessoais.py:194](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sombra_regras_pessoais.py:194) [app/colaboradores/models.py:230](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/colaboradores/models.py:230) [app/core/feriados.py:57](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/core/feriados.py:57)
-
-## F. Sonda Python
-
-Para `bin/codex_pergunta.sh --sonda`, o caminho em `CODEX_SONDA_ENVELOPE` é o **adaptador de Sombra existente**, `/home/ronald/saas-hasner/logs/FILA-CODEX-1811/sondas/envelope_sombra.sh`. O padrão do wrapper passa só o arquivo Python e cai em produção. `SONDA_ARVORE` deve apontar para o `app/` da cópia conferida, pois é esse caminho que o envelope monta no contêiner. O envelope prepara role, grants e arquivos próprios, por isso esta entrega ficou em leitura de código e checagem em memória. [bin/codex_pergunta.sh:623](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/codex_pergunta.sh:623) [adaptador da Sombra](/home/ronald/saas-hasner/logs/FILA-CODEX-1811/sondas/envelope_sombra.sh:3) [bin/sonda_leitura.sh:93](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:93) [bin/sonda_leitura.sh:126](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:126) [bin/sonda_leitura.sh:153](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:153) [bin/sonda_leitura.sh:232](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:232)
-
-Fixei o relógio da medição em **27/11/2026 às 15:15, São Paulo**. O cabeçalho imprime também a hora real de execução. O `raise` final provoca rollback, e só essa sentinela é suprimida depois da saída do `atomic()`, para o wrapper aceitar o stdout. A sintaxe e exemplos dos rótulos do layout foram checados em memória. A execução Django permanece **[nao verificado]**. [app/ponto/services/fechamento.py:634](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:634) [app/chamados/tests/cef_c3_sonda.py:22](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/tests/cef_c3_sonda.py:22) [bin/codex_pergunta.sh:629](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/codex_pergunta.sh:629)
-
-```python
-import logging
-import re
-import sys
-from collections import Counter, defaultdict
-from contextlib import contextmanager, nullcontext, suppress
-from csv import DictReader
-from datetime import date, datetime, timezone as utc
-from io import StringIO
-from unittest.mock import patch
-from zoneinfo import ZoneInfo
-
-from django.contrib.auth.models import User
-from django.core.management import call_command
-from django.db import connection, transaction
-from django.db.models import Exists, OuterRef
-from django.utils import timezone
-
-from api.tests.test_r4_par6_app_le_a_tela import AppLeATelaTest
-from chamados.juizes import dia_do_fato, tranca_em_lote
-from chamados.management.commands.disparar_perguntas_competencia import contador_fio_mudo
-from chamados.models import DisputaSupervisao, PerguntaDisputa
-from chamados.reconciliador import orfas_pela_lampada_sem_evento, perguntas_orfas_reatavies
-from chamados.services import becos
-from chamados.services.fabrica_da_celula import motivos_que_o_evento_deixou
-from chamados.services.vigia_fio import censo_alcance
-from colaboradores.models import Colaborador, Empresa, Posto
-from core.feriados import alcanca
-from core.models import Feriado
-from escala.models import CelulaDia
-from folha.export import classificar_export, montar_linhas_export, validar_layout_dominio
-from folha.porta_export import medir
-from ponto.janelas import janela_fechamento
-from ponto.management.commands import e6_oraculo
-from ponto.services.fechamento import (
-    marco_da_competencia, recalcular_fechamento_mes, universo_da_competencia,
-)
-
-HEAD = "59600163ccc9cffb8f3ae148beede7cd7866ae86"
-EMPRESAS = (2, 3, 4)
-MES, ANO = 11, 2026
-INI, FIM = date(2026, 10, 21), date(2026, 11, 20)
-JANELA_12 = (date(2026, 11, 21), date(2026, 12, 20))
-FUSO = ZoneInfo("America/Sao_Paulo")
-REF = datetime(2026, 11, 27, 15, 15, tzinfo=FUSO)
-HOJE = REF.date()
-
-
-class F
-
-[truncado em 20000 de 31363 caracteres]
-
-## 27/11 15:11 · sessao 05e8003882ed · INVENTARIO-PELA-REGRA · construtor · origem=Code
-
-Corrigi as cinco medições nos três módulos da bateria. A sintaxe dos módulos foi verificada. O recorte Django e os mutantes na pista do Code ficam [nao verificado].
-
-### Diff por caso
-
-- **ESC-11** cobra 630 min trabalhados e 150 min de extra total, com 120 em HE50 e 30 em HE100 de dia normal. O excedente é `HE total − teto = 30`, conforme o corte HE100-RUBRICA. [test_inventario_escala.py:327](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:327)
-- **AUS-05** deixa o modelo derivar `instancia_marco` para `batida_ausente`. A pergunta segue aberta, com 480 min previstos, furo apurado e zero falta. [test_inventario_ausencia.py:103](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:103)
-- **FOL-03** mapeia e homologa `9902` em `folga_trabalhada_diurna`. Confere os 240 min no fechamento antes de comparar o delta do TXT, que continua exigindo zero em HE50 e HE100 de feriado. [test_inventario_folha.py:56](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:56) · [test_inventario_folha.py:164](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:164)
-- **FOL-13** usa 60 min de HE50 autorizada com rubrica homologada. Faz dois POSTs idênticos, exige dois downloads 200, confere a presença dos 60 min e compara bytes e totais por rubrica. [test_inventario_folha.py:53](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:53) · [test_inventario_folha.py:309](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:309)
-
-**ESC-12, AUS-03 e FOL-14** estão idênticos à base. [test_inventario_escala.py:335](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:335) · [test_inventario_ausencia.py:61](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:61) · [test_inventario_folha.py:330](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:330)
-
-### Recorte para o Code
-
-Da raiz de `app`, na pista de teste do Code. O settings `ci` lê `DB_HOST` e `REGUA_DB` da pista. [config/settings/ci.py:6](/home/ronald/wt-codex-inventario-pela-regra-143921/app/config/settings/ci.py:6) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci --noinput \
-  ponto.tests.test_inventario_escala \
-  ponto.tests.test_inventario_ausencia \
-  folha.tests.test_inventario_folha
-```
-
-### RED e mutantes
-
-No RED isolado de **ESC-11**, as asserções aceitaram `120/30`. Transferir os 30 min para HE50 derrubou as duas asserções por faixa. Calcular `HE50 − teto` derrubou a do excedente com `0 != 30`. A execução integrada desses mutantes e dos demais fica [nao verificado]. [test_inventario_escala.py:328](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:328)
-
-Os comandos abaixo aplicam uma substituição em memória por processo e rodam o caso correspondente. [ESC-11:327](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:327) · [AUS-05:103](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:103) · [FOL-03:56](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:56) · [FOL-13:309](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:309)
-
-```bash
-mutante() {
-  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python3 - "$@" <<'PY'
-import importlib
-import sys
-from pathlib import Path
-
-import django
-from django.core.management import execute_from_command_line
-
-rotulo, antes, depois = sys.argv[1:]
-django.setup()
-modulo = importlib.import_module(rotulo.rsplit('.', 2)[0])
-arquivo = Path(modulo.__file__)
-fonte = arquivo.read_text(encoding='utf-8')
-assert fonte.count(antes) == 1, (arquivo, antes)
-exec(compile(fonte.replace(antes, depois, 1), str(arquivo), 'exec'), vars(modulo))
-execute_from_command_line(['manage.py', 'test', '--noinput', rotulo])
-PY
-}
-
-esc11=ponto.tests.test_inventario_escala.InventarioEscalaTest.test_ESC_11_extra_integral_acima_de_duas_horas
-aus05=ponto.tests.test_inventario_ausencia.InventarioAusenciaTest.test_AUS_05_uma_batida_com_pergunta_em_aberto
-fol03=folha.tests.test_inventario_folha.InventarioFolhaTest.test_FOL_03_dsr_trabalhado_em_rubrica_propria
-fol13=folha.tests.test_inventario_folha.InventarioFolhaTest.test_FOL_13_gerar_duas_vezes_mesmos_bytes_e_totais
-
-# M1 — ESC-11: deslocar a HE100 para HE50, preservando o total.
-mutante "$esc11" '        # HE100-RUBRICA' \
-  $'        for periodo in resultado.periodos:\n            periodo.minutos_extra_50 += periodo.minutos_extra_100\n            periodo.minutos_extra_100 = 0\n        # HE100-RUBRICA'
-
-# M2 — ESC-11: medir o excedente só pela HE50.
-mutante "$esc11" 'extra_total - teto' 'resultado.horas_extra_50 * 60 - teto'
-
-# M3 — AUS-05: forçar "fim" na pergunta genérica.
-mutante "$aus05" $'            data_evento=data,\n        )' \
-  $'            data_evento=data, instancia_marco=\'fim\',\n        )'
-
-# M4 — FOL-03: voltar a mapear 9902 para o evento antigo.
-mutante "$fol03" "'folga_trabalhada_diurna': DSR_TRABALHADO" \
-  "'dsr_trabalhado_diurno': DSR_TRABALHADO"
-
-# M5 — FOL-13: retirar da massa o evento exportável.
-mutante "$fol13" \
-  $'colab = self.massa_comercial({data: (\'08:00\', \'12:00\', \'13:00\', \'18:00\')})\n        self.autorizar(colab, data, 60)\n        self.fechar(colab, 11)' \
-  $'colab = self.massa_comercial({data: COMERCIAL})\n        self.fechar(colab, 11)'
-
-# M6 — FOL-13: alterar os bytes do segundo download após conferir o 200.
-mutante "$fol13" '        self.assertEqual(primeiro.content, segundo.content)' \
-  $'        segundo.content += b\'\\n\'\n        self.assertEqual(primeiro.content, segundo.content)'
-```
-
-_8729 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8731 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
