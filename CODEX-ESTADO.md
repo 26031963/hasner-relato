@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 21:56** · publicado em **26/11/2026 21:58** (UTC-3)
+> Ultima resposta processada: **26/11/2026 22:11** · publicado em **26/11/2026 22:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 22:11 · sessao e24ab4526417 · PAR-PELO-TURNO · construtor · origem=Code
+
+Implementei a V6 na cópia `12371397820d9d829aef046cd16ba8a20d14207a`. O fecho principal, o O68b e o O95 usam o mesmo construtor de `Turno`. O teto diário sinaliza C9 no par fechado, com as duas pontas e o DNA do dia julgado. As 26 h continuam sendo o limite absoluto. A guarda de absorção e a exigência de fato encerrado continuam valendo. [ponto/turnos.py:296](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:296) [ponto/turnos.py:1086](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:1086) [ponto/turnos.py:1175](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:1175) [ponto/turnos.py:1451](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:1451)
+
+### RED e GREEN locais
+
+Na base, a matriz pura rodou **23 testes com 33 falhas de asserção**, contando subcasos. Na candidata, **169 testes passaram em memória**, incluindo a catraca. A execução usou o código real com a infraestrutura Django simulada. Neste host, `django.test` está ausente. A suite Django, a Gestão de HE persistida e os hashes da exportada estão **[nao verificado]**. [ponto/tests/test_par_pelo_turno.py:49](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:49) [core/tests/test_medida_turno_do_par.py:562](/home/ronald/wt-codex-par-pelo-turno-215214/app/core/tests/test_medida_turno_do_par.py:562) [ponto/tests/test_par_pelo_turno.py:441](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:441) [ponto/tests/test_par_pelo_turno.py:471](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:471) [nao verificado]
+
+| RED | O que a asserção encontrou na base |
+|---|---|
+| Fecho principal | `E aberta + S órfã` antes do pós-fecho. [Teste:74](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:74) | [nao verificado]
+| Borda 20→21 | O PK da saída ficou no dia 21. Na candidata, os dois PKs ficam no dia 20 e a janela seguinte recebe zero períodos desse par. [Teste:96](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:96) | [nao verificado]
+| Dia herdado | O par de 400 min fechou no dia civil 21. A C9 do caso de 450 min veio vazia. [Teste:120](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:120) [Teste:132](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:132) | [nao verificado]
+| Limite absoluto | Fecharam pares de `26 h + 1 s` e de `27 h`. O O95 também fechou acima de 26 h. [Teste:165](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:165) [Teste:225](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:225) | [nao verificado]
+| O68b e O95 | Os pares válidos acima do teto diário continuaram abertos. [Teste:200](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:200) [Teste:211](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:211) | [nao verificado]
+| Fecho com C9 | A leitura de C9 nos turnos fechados veio vazia. A candidata devolve uma ocorrência mesmo com cópias e repetição do par. [Teste:186](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:186) | [nao verificado]
+
+O motor recebeu o par inteiro. Com a janela ativa e sem decisão, a prova mediu **240 min de chegada e 48 min de saída** para autorização. A contraprova de competência mediu **420 min de relógio, 480 min legais no dia de início e zero na competência seguinte**. [ponto/tests/test_par_pelo_turno.py:323](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:323) [ponto/tests/test_par_pelo_turno.py:365](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:365)
+
+### Leitores que recebem valores diferentes
+
+- `turnos_do_colab`, `turnos_de_batidas` e `CargaDaJanela.turnos` recebem o par fechado. O mapa por PK passa a atribuir a saída ao dia de início quando o turno está presente na janela. Realizado, encerramento, par completo e saída órfã leem essa geometria. [ponto/turnos.py:1517](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:1517) [ponto/turnos.py:1931](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:1931) [ponto/turnos.py:3034](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:3034) [ponto/turnos.py:3112](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:3112) [ponto/turnos.py:707](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:707) [ponto/turnos.py:2141](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:2141) [ponto/turnos.py:2193](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:2193) [ponto/turnos.py:216](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:216)
+- O adaptador passa a entregar duas pontas ao motor. A janela de HE lê o dia do juiz. A C9 passa a vir do par fechado e mantém a chave da lavra, a competência e o dono julgado. Tela e PDF leem a descrição atualizada. [ponto/adaptador_motor.py:29](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/adaptador_motor.py:29) [ponto/motor_calculo_v2.py:1645](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/motor_calculo_v2.py:1645) [ponto/services/teto_na_lista.py:8](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/services/teto_na_lista.py:8) [ponto/services/teto_na_lista.py:51](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/services/teto_na_lista.py:51) [escala/services/cadastro_realidade.py:425](/home/ronald/wt-codex-par-pelo-turno-215214/app/escala/services/cadastro_realidade.py:425)
+
+Os contratos legados substituídos ficaram explícitos nos testes. Col129 fecha com C9 e conserva os PKs em cópias. Col879 mantém a primeira entrada aberta e fecha a segunda com a única saída disponível. A6 fecha `1.020 min` e sinaliza o teto de `960 min`. O controle posicional recusa `26 h + 40 s`. A porta de dono `BATIDA` usa uma entrada realmente sem saída. [Col129:39](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_col129_par_separado_pelo_teto.py:39) [Col879:23](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_h_portao_teto_do_dia.py:23) [A6:2225](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_o280_bateria_da_lei.py:2225) [Posição:286](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_saida_pela_posicao_entre_turnos.py:286) [Dono:226](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_col129_teto_vira_lista.py:226) [nao verificado]
+
+### Laudo e sombra
+
+Os **11 casos G1** estão na matriz com dia, PK e papel `E/S` de cada ponta. Nas fixtures, passaram de aberto e órfã para **um fechado no dia de início, uma C9 e zero órfãs do par**. O feriado nominal de 02/11 usa `17:31 → 06:30`, conforme o laudo. A antecipação de `15h59` está em um ensaio sintético próprio. O oitavo domingo, col155 em 08/11, aparece na série histórica e seus PKs seguem **[nao verificado]**. [Matriz:49](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:49) [Feriado:87](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:87) [Laudo:57](/home/ronald/dados_fernando/Hasner_Noturno_Diagnostico_Independente_29_Casos_23-11-2026.md:57) [docs/BACKLOG.md:745](/home/ronald/wt-codex-par-pelo-turno-215214/app/docs/BACKLOG.md:745)
+
+Os casos **001–018** têm observações históricas de papéis deslocados, pausas, trechos creditados no dia seguinte e furos. O laudo pede batidas intermediárias e históricos de DNA e ATA para fechar esses casos. A reprodução integral desses 18, o `DiaPago` por rubrica e o DIFF de sombra da competência 11 seguem **[nao verificado]**. O censo histórico da competência 11 registra **14 dias-colaborador em 8 colaboradores**, universo de **960** nas empresas 2/3/4. Os números **760/199** e **1.584/275** pertencem ao INTERVALO V2. A unidade e o predicado de **142** seguem **[nao verificado]**. [Laudo:71](/home/ronald/dados_fernando/Hasner_Noturno_Diagnostico_Independente_29_Casos_23-11-2026.md:71) [Laudo:218](/home/ronald/dados_fernando/Hasner_Noturno_Diagnostico_Independente_29_Casos_23-11-2026.md:218) [docs/RELATO.md:6225](/home/ronald/wt-codex-par-pelo-turno-215214/app/docs/RELATO.md:6225)
+
+A composição com F4c/F4d/F4e e E1 ficou para as respectivas árvores. Na base desta obra, a janela iniciada em 21 exclui o turno do dia 20, e um PK sem turno naquela resposta usa o dia civil. O ensaio de borda cobre essa janela para ausência de período e cobre as janelas que incluem o dia 20 para a identidade dos PKs. [ponto/turnos.py:2005](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:2005) [ponto/turnos.py:3044](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/turnos.py:3044) [Matriz:96](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:96)
+
+### Comandos para Code
+
+Os **17 mutantes** falharam com `rc=1` por asserção na execução em memória. O executor aplica cada alteração somente ao módulo carregado no processo. Cada nome aponta para o teste que o matou. [ponto/tests/test_par_pelo_turno.py:519](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:519) [ponto/tests/test_par_pelo_turno.py:608](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:608) [nao verificado]
+
+```bash
+ppt() {
+  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings_test \
+    python3 -B -m ponto.tests.test_par_pelo_turno "$1"
+}
+
+ppt base
+ppt corte_principal
+ppt corte_o68b
+ppt corte_o95
+ppt c9_perdida
+ppt c9_duplicada
+ppt c9_recusado
+ppt igualdade
+ppt teto_maior_que_26h
+ppt pos_fecho_sem_26h
+ppt hora_civil
+ppt dna_civil
+ppt vespera_indiscriminada
+ppt troca_classes
+ppt perda_xi
+ppt degenerado
+ppt recredito_noite
+ppt absorcao_sem_veto
+```
+
+Para a rodada Django em ambiente de ensaio, incluindo os testes persistidos. [config/settings_test.py:1](/home/ronald/wt-codex-par-pelo-turno-215214/app/config/settings_test.py:1) [Matriz financeira:402](/home/ronald/wt-codex-par-pelo-turno-215214/app/ponto/tests/test_par_pelo_turno.py:402) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
+  --settings=config.settings_test \
+  ponto.tests.test_par_pelo_turno \
+  ponto.tests.test_col129_par_separado_pelo_teto \
+  ponto.tests.test_col129_teto_vira_lista \
+  ponto.tests.test_h_portao_teto_do_dia \
+  ponto.tests.test_saida_pela_posicao_entre_turnos \
+  ponto.tests.test_o280_bateria_da_lei.AbsurdoTest.test_A6_v6_o_par_de_1020_fecha_com_c9_de_teto_960 \
+  ponto.tests.test_o195_dia_do_turno_por_envelope \
+  ponto.tests.test_o68b_fecha_aberto_com_saida_seguinte \
+  ponto.tests.test_o95_pausa_so_absorve_quem_voltou \
+  ponto.tests.test_teto_da_absorcao \
+  ponto.tests.test_par_relampago_pelo_turno \
+  ponto.tests.test_dupla_contagem_dia20 \
+  core.tests.test_medida_turno_do_par
+```
 
 ## 26/11 21:56 · sessao fee83291e6b5 · - · - · origem=Ronald (tmux)
 
@@ -554,89 +638,4 @@ Conferi que os dez arquivos da cópia batem com os hashes de conteúdo pós-diff
 - No anexo, 0 `except` novos e 0 leituras explícitas novas de relógio. O caminho ampliado executa a leitura preexistente de `now()` no `UPDATE` para competências adicionais. A criação ou mudança dos horários persistidos segue pela porta `decidir`. Os avais específicos citados pelo usuário não foram localizados na cópia de CLAUDE/CORTES. A exigência de aval explícito é verificável. [app/ponto/services/ausencia.py:193] [app/ponto/services/ausencia.py:1064] [app/ponto/services/ausencia.py:1115] [app/ponto/services/fechamento.py:1680] [CLAUDE.md:143] [nao verificado]
 - Executei o censo AST puro em modo sem escrita. Em 782 módulos, 9 pareadores, 81 derivações e zero ilegíveis. Identidades, composição, classificação e `LINHAS_REGISTRADAS` coincidem com os literais. Essa igualdade fixa sítios sintáticos e permite as divergências de insumo acima. [app/core/medida_turno_do_par.py:26] [app/core/tests/test_medida_turno_do_par.py:509] [app/core/tests/test_medida_turno_do_par.py:549] [app/core/tests/test_medida_turno_do_par.py:565] [nao verificado]
 
-## 26/11 21:27 · sessao 84388375dc3c · CUSTO-DE-COORDENACAO · leitura · origem=Code
-
-# CUSTO-DE-COORDENAÇÃO — mapa e censo
-
-Os arquivos centrais conferem com os blobs de `6941dba240f47f4170bae0292a097c15dd81d0b6`, V6-LISTA-ORFAS c2. A análise dos selos foi estática, pois eles montam árvores temporárias e alteram cópias. A contagem de 48 horas usa o log do repositório vivo. [Registro do hash](/home/ronald/saas-hasner/logs/CUSTO-DE-COORDENACAO/DOSSIE/wrapper.out:1) · `bin/tests/test_disjuntor.sh:1622` · `bin/tests/test_disjuntor.sh:1641` · [disjuntor.log](/home/ronald/saas-hasner/logs/sessao/disjuntor.log:1328)
-
-## 1. Freios de cota e avisos
-
-**Nesta árvore, `B4_FREIO_DE_COTA = False`.** O percentual semanal do Claude produz aviso, a ESCADA por mensagem humana continua ativa e o B4-CODEX pula a leitura do orçamento na decisão. B2 já saiu. `bin/disjuntor.py:144` · `bin/disjuntor.py:1413` · `bin/disjuntor.py:1446` · `bin/disjuntor.py:1464` · `bin/disjuntor.py:1642`
-
-| Freio | Entrada, decisão e estado |
-|---|---|
-| **B2, histórico** | O Stop escrevia `BLOCK fila 1 com item aberto` em `logs/hook_stop_fila1.log` e chamava `b2_decide`, exceto em espera. Mais de 3 desses `siga` em 3.600 s, sem DIFF/apply e sem commit ou arquivo novo nas worktrees, **liberavam** o Stop. A leitura de progresso usava Git e mtime, com exclusões para docs, logs e placar de crons. O próprio disjuntor gravava `b2.ultimo` em `disjuntor_estado.json` para espaçar os registros de disparo. A SIMPLIFICA de 22/11 retirou o bloqueio da fila, B2 e o teto por HEAD. O teto tinha o seu próprio `logs/hook_stop_fila1.json`. `80b548997^:bin/hook_stop_fila1.py:35` · `80b548997^:bin/hook_stop_fila1.py:1404` · `80b548997^:bin/hook_stop_fila1.py:1449` · `49bab94dd^:bin/disjuntor.py:1255` · `49bab94dd^:bin/disjuntor.py:1288` · `bin/hook_stop_fila1.py:1338` · `bin/hook_stop_fila1.py:1512` |
-| **B4, 75%** | `.claude/settings.json` chama `pretool`. No ramo `Agent`, depois de CENSO e MODELO, `b4_decide` pergunta primeiro à ESCADA. Com o freio habilitado, de `75%` inclusive até `85%` exclusivo, recusa todo Agent novo se faltarem **mais de 3 h** para o reset, inclusive Agent para obra em curso. Na faixa escreve `B4-FAIXA … -> passa/nega`. Hoje, com cota legível `>=75%`, escreve o aviso e deixa o Agent passar pelo B4 de cota. O próprio `_pretool` grava `b4.negou_desde` em `disjuntor_estado.json` na primeira negativa da sequência e limpa o registro quando o Agent passa pelo B4. `.claude/settings.json:62` · `bin/disjuntor.py:1426` · `bin/disjuntor.py:1446` · `bin/disjuntor.py:1455` · `bin/disjuntor.py:2263` · `bin/disjuntor.py:2274` |
-| **ESCADA, 85% ou palavra** | `escada()` atende a `>=85%` Claude com o freio habilitado ou à última fala humana começando por `^\W*escada\b`, com `re.I`. A fala vem dos últimos 4 MiB do transcript principal, incluindo mensagem enfileirada e excluindo resultados de ferramenta, metadados, resumo de compact e avisos do harness. Uma fala humana posterior que não começa com a palavra encerra a ESCADA manual. O PreToolUse recusa Agent novo. No Stop, `b4_stop` adia enquanto há DIFF/apply, grava `b4_para.desde`, dá um `siga` bloqueante para fechar o marco e pede handoff + `PAREI: ! COTA | espera Ronald`. Libera pelo par quando o mtime do handoff é `>= desde`. Nas demais voltas devolve lembrete. Hoje a palavra é o gatilho ativo. `bin/disjuntor.py:152` · `bin/disjuntor.py:1342` · `bin/disjuntor.py:1365` · `bin/disjuntor.py:1413` · `bin/disjuntor.py:1471` · `bin/hook_stop_fila1.py:954` · `bin/hook_stop_fila1.py:1305` · `bin/hook_stop_fila1.py:1471` |
-| **B4-CODEX** | O ramo Bash do PreToolUse chama `codex_decide` para as invocações reconhecidas do wrapper. A primeira negada recusa o comando. Com o freio habilitado e medida disponível, `>85%` de Codex recusa mesmo a final fora da ESCADA. Dentro da ESCADA cai essa reserva semanal e continua a regra diária. Acima do orçamento diário, qualquer papel em volta diferente de `final` é recusado. `contrato` tem recado próprio, `sem Codex: orcamento`. Cada invocação leva suas próprias atribuições, com `meio` como padrão. Hoje a porta ainda examina ANEXO-ENXUTO e pula os predicados de cota. `bin/disjuntor.py:1496` · `bin/disjuntor.py:1597` · `bin/disjuntor.py:1620` · `bin/disjuntor.py:1635` · `bin/disjuntor.py:2240` |
-
-**Quem escreve as fontes**
-
-- **Claude.** O harness chama `statusline_cota.py` pela `statusLine` do projeto. O script recebe `rate_limits.seven_day.used_percentage` e `resets_at` no stdin e substitui atomicamente `logs/sessao/cota.json` quando os dois são números finitos. Sem medida nova válida, a anterior fica no arquivo. `ler_cota_e_reset` lê `seven_day_pct` e `seven_day_resets_at` e só os usa antes do reset. O estado de transição `b4` e `b4_para` é outro arquivo, `logs/sessao/disjuntor_estado.json`, escrito pelo próprio disjuntor com `_com_estado`, sob flock e com `os.replace`. `.claude/settings.json:74` · `bin/statusline_cota.py:26` · `bin/statusline_cota.py:40` · `bin/statusline_cota.py:47` · `bin/disjuntor.py:124` · `bin/disjuntor.py:340` · `bin/disjuntor.py:1320`
-- **Codex.** `codex_limite_estado` lê os JSONL de sessão do Codex em `CODEX_SESSIONS_DIR` ou `~/.codex/sessions`, usando `payload.rate_limits.primary`, janela de `10080` min. Os registros são da execução do Codex, que o wrapper invoca. A conta é refeita a cada leitura: `(100 − usado no primeiro registro do dia) / dias do início do dia até o reset`, comparada com `último − primeiro`, em pontos percentuais. Se o reset mudou no dia, a base passa a zero. O wrapper também escreve `chamadas.log` e `limite.log`, fontes de outros contadores. `bin/codex_limite_estado.py:127` · `bin/codex_limite_estado.py:131` · `bin/codex_limite_estado.py:165` · `bin/codex_pergunta.sh:561` · `bin/codex_pergunta.sh:781` · `bin/codex_pergunta.sh:793` · `bin/codex_pergunta.sh:837`
-- **Contexto.** O Stop escreve `logs/sessao/orcamento_estado.json` em `_orc_salva`. O ESTADO de disjuntores usa dali `ultima_medida` para `contexto principal no ultimo Stop`. As decisões de cota leem as fontes acima. `bin/hook_stop_fila1.py:861` · `bin/hook_stop_fila1.py:912` · `bin/hook_stop_fila1.py:1105` · `bin/disjuntor.py:2430` · `bin/disjuntor.py:2683`
-
-**Avisos já existentes.** O PreToolUse escreve `AVISO B4-SEM-FREIO-DE-COTA: cota 7d … (faltam … h para o reset semanal): o Agent passa; o Ronald providencia` em `disjuntor.log`. O Stop escreve `AVISO lembrete B4: …` na sua própria trilha. O ESTADO, via `gerar_estado.py` → `disjuntor.ler/linha`, publica **`cota 7d: …`** pela leitura direta de `cota.json` e **`Codex orcamento: …`** pelo orçamento recalculado dos JSONL. A frase do placar Codex ainda pode dizer `ACIMA: so a volta FINAL` com o freio desligado. O agregador de eventos do ESTADO lê `NEGOU`, `FALHA`, `DISJUNTOR` e `LIBERA` da trilha do disjuntor. Já o handoff imprime **`cota vigente: …`** a partir do último `**aval \`COTA-` em `PROMPTS.md`. O handoff gerado mostra `COTA-40PCT`. `bin/disjuntor.py:1446` · `bin/disjuntor.py:2387` · `bin/disjuntor.py:2443` · `bin/disjuntor.py:2456` · `bin/disjuntor.py:2650` · `bin/disjuntor.py:2682` · `bin/hook_stop_fila1.py:33` · `bin/hook_stop_fila1.py:1519` · `bin/gerar_estado.py:294` · `bin/gerar_estado.py:368` · `bin/handoff_sessao.sh:244` · `app/docs/HANDOFF-SESSAO.md:39`
-
-### Selos e dependências dos freios
-
-O selo religa `B4_FREIO_DE_COTA` numa cópia para todos os casos salvo `b4_sem_freio`. A mesma âncora textual é exigida na preparação dos mutantes, inclusive de casos B1, B3 e CHAVE. Ela é uma dependência do executor do selo inteiro. `bin/tests/test_disjuntor.sh:1621` · `bin/tests/test_disjuntor.sh:1625` · `bin/tests/test_disjuntor.sh:1638` · `bin/tests/test_disjuntor.sh:1671`
-
-| Freio | Caso, mutantes e literal cobrado |
-|---|---|
-| **B2** | O caso histórico `b2` cobrava quarto `siga` libera, terceiro segue bloqueando, arquivo novo impede disparo e `BLOCK` de outras portas fica fora da contagem. `b2-off-by-one` e `P15-todo-block` saíram com ele. O literal vem de `DISJUNTOR-E-CLEAR-RAPIDO` de 30/10 22:5x. `49bab94dd^:bin/tests/test_disjuntor.sh:295` · `49bab94dd^:bin/tests/test_disjuntor.sh:1650` · `49bab94dd^:bin/tests/test_disjuntor.sh:1817` · `bin/tests/test_disjuntor.sh:309` · `app/docs/PROMPTS.md:1695` |
-| **B4 75%** | `b4` e `b4_reset` cobram 74,9/75, Agent da obra em curso, reset perto/longe, `B4-FAIXA`, cota vencida/NaN e falha de estado. Mutantes `b4-75-volta-a-excecao`, `b4-reset-sempre-passa`, `b4-reset-nunca-passa`, `b4-reset-ignora-escada`, `P17-75-exclusivo`, `P5-diff-cala-tudo`, os dois `P6-nan-*`, `P7-tipo-solto` e `P13-estado-vira-vazio`. Os literais são 75% inclusivo, todo Agent novo e folga de 3 h. `bin/tests/test_disjuntor.sh:444` · `bin/tests/test_disjuntor.sh:497` · `bin/tests/test_disjuntor.sh:1713` · `bin/tests/test_disjuntor.sh:1721` · `bin/tests/test_disjuntor.sh:1897` · `bin/tests/test_disjuntor.sh:1922` · `bin/tests/test_disjuntor.sh:1935` · `app/docs/PROMPTS.md:1700` · `app/docs/PROMPTS.md:2568` |
-| **ESCADA** | `b4` cobra 84,9/85, `siga`, lembrete e o par topo + handoff. `b4_reset` cobra a precedência sobre a folga. `escada_palavra` cobra início da fala, exclusão de harness e `tool_result` e encerramento na fala seguinte. Mutantes `escada-sem-cota`, `P17-85-exclusivo`, `escada-sem-palavra`, `escada-qualquer-lugar`, `escada-le-harness`, `escada-le-tool-result`. `desligado` usa ESCADA medida para provar a CHAVE no Stop. `bin/tests/test_disjuntor.sh:454` · `bin/tests/test_disjuntor.sh:478` · `bin/tests/test_disjuntor.sh:507` · `bin/tests/test_disjuntor.sh:521` · `bin/tests/test_disjuntor.sh:631` · `bin/tests/test_disjuntor.sh:1718` · `bin/tests/test_disjuntor.sh:1724` · `bin/tests/test_disjuntor.sh:1936` · `app/docs/PROMPTS.md:1700` |
-| **B4-CODEX** | `codex` cobra final sobre orçamento, contrato sem Codex, qualquer papel, `>85%` estrito e ESCADA real. Mutantes `codex-final-cortada`, `codex-sem-orcamento`, `codex-sem-85`, `codex-85-inclusivo`, `codex-85-pela-marca`, `contrato-com-codex`, `P3-escada-fura-orcamento`, `P4-so-verificador`, `P11-fifo-prende` e `P17-passa-por-excecao`. O mesmo caso contém provas de parser e ANEXO-ENXUTO, incluindo `anexo-cheio-passa`, `marca-solta`, `P16-*` e as variações de sintaxe do Bash. `bin/tests/test_disjuntor.sh:567` · `bin/tests/test_disjuntor.sh:592` · `bin/tests/test_disjuntor.sh:1703` · `bin/tests/test_disjuntor.sh:1739` · `bin/tests/test_disjuntor.sh:1893` · `bin/tests/test_disjuntor.sh:1916` · `bin/tests/test_disjuntor.sh:1926` · `bin/tests/test_disjuntor.sh:1937` · `app/docs/PROMPTS.md:1700` |
-
-`b4_sem_freio` cobra a política vigente com os mutantes `b4-freio-religado`, `b4-aviso-calado` e `b4-codex-com-freio`. `trilha_relato` usa a negativa B4 como estímulo para provar a trilha comum de recusas, inclusive `P8-*`, `P9-*` e `P10-*`. `test_agente_no_modelo.sh` lê o `CLAUDE.md` e cobra outra divergência: 3ª consulta em 10 min, espera única de 5 min, forma do comando, papéis, modelo e lista de proibidos do wrapper. As asserções de cota estão no selo do disjuntor, com valores e frases escritos nos casos. `bin/tests/test_disjuntor.sh:551` · `bin/tests/test_disjuntor.sh:662` · `bin/tests/test_disjuntor.sh:1683` · `bin/tests/test_disjuntor.sh:1903` · `bin/tests/test_agente_no_modelo.sh:255` · `bin/tests/test_agente_no_modelo.sh:330` · `CLAUDE.md:332` · `CLAUDE.md:398`
-
-## 2. CENSO de construtor
-
-1. **Entradas.** `main_pretool` → `pretool` → `_pretool` envia a `_censo_nega` o prompt de `Agent` cujo subtipo esteja fora de `SO_LEITURA` e que cite caminho absoluto reconhecido por `COPIA_RE`, com trecho final `wt-*`. No Codex, o wrapper lê `CODEX_OBRA` do ambiente e chama `--censo` → `main_censo` → `_censo_nega` antes da vaga, com a raiz viva, PID, hash, pergunta, nomes **e conteúdo** dos anexos. A redação do erro sugere a mesma invocação, mas a via wrapper também aceita a variável exportada. `bin/disjuntor.py:155` · `bin/disjuntor.py:2263` · `bin/disjuntor.py:2303` · `bin/disjuntor.py:2691` · `bin/disjuntor.py:2707` · `bin/codex_pergunta.sh:118` · `bin/codex_pergunta.sh:421` · `bin/codex_pergunta.sh:482` · `bin/tests/test_censo_antes_da_vaga.sh:264`
-2. **Obra e fila.** `_obra_de` busca o primeiro token válido pelas âncoras `\bobras?\b[\s:*`_]*` e `\bleitura\b[^\n]{0,80}?\bda\s+[*`_]*`, ambas `re.I`. `_obra_lida` revalida a caixa do ID. O token aceita ID hifenizado ou letras+dígitos, com cauda qualificadora quando aplicável. A forma de pasta/PAREI é `[A-Za-z0-9-]+`, e o wrapper exige `[A-Z0-9-]+`. `_fila1_viva` lê `BACKLOG.md`, exige `<!-- OBRAS:INICIO -->` e usa os IDs andáveis do hook. Uma célula com token exato e sem outra candidata dá **dentro**. Nenhuma célula nomeando o ID dá **fora**. Prefixo parcial, caixa divergente que ainda nomeia o ID, cauda conflitante ou múltiplas candidatas podem dar **não sei** conforme a comparação de token inteiro nos dois sentidos. `bin/disjuntor.py:162` · `bin/disjuntor.py:174` · `bin/disjuntor.py:607` · `bin/disjuntor.py:621` · `bin/disjuntor.py:1797` · `bin/disjuntor.py:1828` · `bin/disjuntor.py:1846` · `bin/hook_stop_fila1.py:106` · `bin/hook_stop_fila1.py:227` · `bin/codex_pergunta.sh:421`
-3. **Brief.** A citação é opcional. `_briefs_do_censo` une **todos** os `logs/<OBRA>/brief*.md` da pasta com **todos** os citados na abertura. A regex de citação é mostrada abaixo. O coletor resolve `realpath`, deduplica e exige que o avô do caminho resolvido seja `RAIZ/logs`. Um brief antigo ainda no glob, ou um citado ruim ao lado de um bom, pode recusar a volta. `bin/disjuntor.py:1681` · `bin/disjuntor.py:1754` · `bin/disjuntor.py:1773` · `bin/disjuntor.py:1781` · `bin/tests/test_censo_antes_da_vaga.sh:272`
-
-   ```regex
-   (?<![\w.-])((?:/[^\s"'`]*/)?logs/[A-Za-z0-9._-]+/brief[A-Za-z0-9._-]*\.md)
-   ```
-
-4. **Juízo.** `censo_do_brief` lê a primeira seção reconhecida por `^(#{1,6})\s*CENSO\b`, até título de nível igual ou superior. `leitores` e `escritores` precisam, cada qual, de ao menos uma ocorrência de `[A-Za-z0-9_./-]+\.[A-Za-z0-9]+:\d+` no campo ou em item associado. O predicado é textual: basta casar a forma, inclusive com linha `0`. As decisões precisam de texto. Depois de `strip()`, a linha de perguntas precisa casar uma única vez com `^perguntas de lei: (\d+)$`. A contagem usa itens iniciados por `-`, `*`, `N.` ou `N)`. Cada pergunta tem de terminar em `\?\s+cortada por Ronald \S+\s*$`. O juiz testa a presença do marcador de corte e a forma da referência em texto, sem abrir o aval ou o sítio citado. `bin/disjuntor.py:1670` · `bin/disjuntor.py:1696` · `bin/disjuntor.py:1717` · `bin/disjuntor.py:1739`
-5. **Entre voltas.** O juiz relê BACKLOG e briefs. `oks` só guarda aprovações pendentes na chamada atual do hook, publicadas se o Agent passar todas as portas. O wrapper registra `APROVADO`, `FORA` ou `DESLIGADO` com obra, PID e hash. As negativas com ID válido deixam `NEGOU` e tentam escrever idempotentemente `PAREI: censo-<OBRA> | espera Codex` na faixa do RELATO acima das duas linhas do painel/B3. O Stop verifica essa espera pela existência do wrapper vivo da mesma obra, com papel `censo` ou `leitura`. O ESTADO casa um único `ini` por aprovação do wrapper, por obra/PID/hash e até 600 s, e mede a união dos intervalos negativa → aprovação. `bin/disjuntor.py:306` · `bin/disjuntor.py:1872` · `bin/disjuntor.py:2207` · `bin/disjuntor.py:2320` · `bin/disjuntor.py:2461` · `bin/disjuntor.py:2483` · `bin/disjuntor.py:2698` · `bin/hook_stop_fila1.py:725` · `bin/codex_pergunta.sh:609`
-
-### Recusas possíveis
-
-As falhas de brief entram no motivo externo `DISJUNTOR CENSO: construtor de <obra> sem CENSO fechado (<motivos>)`. O juiz retorna o primeiro defeito de cada brief, e a porta agrega os motivos dos vários briefs e caminhos fora da raiz. `bin/disjuntor.py:1686` · `bin/disjuntor.py:1696` · `bin/disjuntor.py:1887` · `bin/disjuntor.py:1902`
-
-| Texto do motivo | Predicado |
-|---|---|
-| `CENSO recusado: argumentos ilegiveis (...)` | Forma da CLI. Obra ausente ou opção desconhecida/sem valor. `bin/disjuntor.py:2738` · `bin/disjuntor.py:2760` |
-| `CENSO recusado: obra ilegivel (...)` | Forma do ID passado a `main_censo`. O wrapper também tem `CODEX_OBRA obrigatoria (id da obra); chamada sem obra e recusada` e `CODEX_OBRA so com [A-Z0-9-] (vira nome de arquivo e de wt)`. `bin/disjuntor.py:2700` · `bin/codex_pergunta.sh:119` · `bin/codex_pergunta.sh:421` |
-| `abertura de construtor (Agent) sem obra legivel` | Forma da abertura. Agent com cópia e `_obra_de` sem identificação válida. `bin/disjuntor.py:1824` · `bin/disjuntor.py:2263` |
-| `sem CENSO possivel -- obra da fila 1 fora da forma do censo (...)` | Pertence à fila, mas a identidade não cabe na forma do caminho/PAREI. `bin/disjuntor.py:1880` |
-| `sem CENSO fechado (nao sei: <via> <tipo>: <erro>)` | Fonte ou pertencimento indeterminável: BACKLOG ausente, ilegível ou sem marcador, célula ambígua, pergunta/anexo ilegível ou exceção do juiz. `bin/disjuntor.py:1797` · `bin/disjuntor.py:1811` · `bin/disjuntor.py:1868` · `bin/disjuntor.py:1907` · `bin/disjuntor.py:2707` |
-| `brief fora de RAIZ/logs/<dir>/ (...)` / `nenhum brief … nem citado na abertura` / `brief ilegivel (<nome>: <tipo>)` | Localização ou leitura: caminho escapa do confinamento, nenhuma fonte descoberta, ou `OSError` ao abrir um brief. `bin/disjuntor.py:1698` · `bin/disjuntor.py:1754` · `bin/disjuntor.py:1887` |
-| `sem bloco CENSO (titulo \`## CENSO\`)` | Forma do título ausente. `bin/disjuntor.py:1703` |
-| `linha \`perguntas de lei: N\` fora da forma literal ou repetida (...)` | Rótulo reconhecido cuja linha falha na regex literal ou aparece pela segunda vez. `bin/disjuntor.py:1721` |
-| `CENSO sem leitores com arquivo:linha` / `CENSO sem escritores com arquivo:linha` | Forma das referências. Nenhum casamento no campo correspondente. `bin/disjuntor.py:1739` |
-| `CENSO sem DECISOES listadas` | Conteúdo mínimo. Campo vazio ou ausente. `bin/disjuntor.py:1742` |
-| `CENSO sem a linha literal \`perguntas de lei: N\`` | Forma. Nenhuma linha literal reconhecida. `bin/disjuntor.py:1744` |
-| `` `perguntas de lei: N` com M pergunta(s) listada(s) logo abaixo `` | Consistência entre o número declarado e os itens coletados. `bin/disjuntor.py:1746` |
-| `pergunta de lei sem \`cortada por Ronald <aval>\`: …` | Forma do fecho em qualquer item da lista. `bin/disjuntor.py:1748` |
-| `nao sei se a chamada abre construtor (pretool …) -- nega (NAO SEI = nega)` / `nao sei se a chamada abre construtor (…) -- nega` / `nao sei se o Agent abre construtor (disjuntor.py nao carregou: …) -- nega (NAO SEI = nega)` | Falhas da borda. Classificação ilegível com indício de Agent/cópia no payload cru, exceção no próprio tratamento, ou guarda anterior aos imports. A guarda de import emite `deny` diretamente. `bin/disjuntor.py:67` · `bin/disjuntor.py:89` · `bin/disjuntor.py:1924` · `bin/disjuntor.py:2324` |
-| `construtor: CENSO da obra … recusado (disjuntor.py --censo rc=…; PAREI censo-… no topo do RELATO) (rc 2; Codex nao chamado)` | Invólucro do wrapper para qualquer RC diferente de zero no CLI. A gravação do PAREI fica a cargo do tratamento da negativa no disjuntor. `bin/codex_pergunta.sh:344` · `bin/codex_pergunta.sh:482` · `bin/disjuntor.py:2728` |
-
-### Últimas 48 horas
-
-De **24/11/2026 21:21:08** a **26/11/2026 21:21:08**, horário de São Paulo, contei **32 linhas `NEGOU DISJUNTOR CENSO:`** no log vivo, **20 Agent e 12 wrapper**. São **33 ocorrências de motivo** porque a linha 1167 registra dois. A contagem é dos motivos visíveis: a trilha limita o detalhe a 300 caracteres. Os erros de CLI que só saem em stderr ficam fora deste total. `bin/disjuntor.py:198` · `bin/disjuntor.py:2700` · `bin/disjuntor.py:2760` · [primeira recusa na janela](/home/ronald/saas-hasner/logs/sessao/disjuntor.log:1028) · [última recusa na janela](/home/ronald/saas-hasner/logs/sessao/disjuntor.log:1316)
-
-| Motivo visível | Nº | `logs/sessao/disjuntor.log`, linhas |
-|---|---:|---|
-| Sem bloco CENSO | 11 | 1128, 1165, 1167, 1169, 1180, 1216, 1227, 1247, 1277, 1308, 1316 |
-| Nenhum brief | 10 | 1028, 1034, 1050, 1110, 1125, 1148, 1206, 1211, 1220, 1289 |
-| Literal de perguntas fora da forma/re
-
-[truncado em 20000 de 31649 caracteres]
-
-_8501 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8502 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
