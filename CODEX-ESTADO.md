@@ -1,7 +1,20 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 06:59** · publicado em **27/11/2026 07:03** (UTC-3)
+> Ultima resposta processada: **27/11/2026 07:41** · publicado em **27/11/2026 07:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 07:41 · sessao 2b9617406233 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+```diff
+diff --git a/app/ponto/tests/test_ramo2b_c2l_red_motor.py b/app/ponto/tests/test_ramo2b_c2l_red_motor.py
+--- a/app/ponto/tests/test_ramo2b_c2l_red_motor.py
++++ b/app/ponto/tests/test_ramo2b_c2l_red_motor.py
+@@ -9 +9 @@
+-from folha.tests.test_porta_do_export import _medir_com_espelho
++from ponto.tests.test_ramo2b_porta_7a_testemunha import _medir_com_espelho
+```
+
+O `rg` encontrou uma referência indireta ao caminho antigo em `app/ponto/tests/ramo2b_c2l_mutantes.py:57`. O script passa esse caminho ao carregador de testes em `app/ponto/tests/ramo2b_c2l_mutantes.py:77`, e a classe está em `app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43`. O diff se limita ao import solicitado.
 
 ## 27/11 06:59 · sessao 684d56ff6bd6 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -1145,73 +1158,4 @@ Dois mutantes têm defeito verificável por leitura. O do 05 troca um atributo d
 - **Conflitos e lacunas C4.** O C4 anexado concorda com o horizonte da tarefa do 18, mas grava `VALIDACAO` futura como ato novo pelo helper no relógio anterior. A lei A7 recusa fato futuro e o RED16 só exercita `RESPOSTA`. No 14, o RED atual exige `REABERTURA` como a caracterização C1 da mesma revisão, em contradição com a lei de `SANEAMENTO` em choice próprio. No 30, retirar C6 removeu o conflito direto entre asserções com a caracterização da composta. Uma troca global da fonte do texto ainda derruba essa caracterização. `app/chamados/tests/test_e4c_f5_c4_red.py@48b24c39c:297–314` · `app/chamados/tests/test_e4d_matriz_reds.py:438–470,1298–1314` · `app/chamados/tests/test_e4c_f5_instante_c1.py@48b24c39c:234–248` · `app/chamados/tests/test_e4c_f5_opus_models.py:59–69,77–90` · `app/docs/PROMPTS.md:2873,2950`.
 - **Estoque C4.** Os 01/02/04/44 atuais não exigem o instante de entrada e a marca do backfill. Antecipar os carimbos ao marco elimina a oposição à recusa do estoque novo, e retentar o comando é operação distinta de ter duplicata no mesmo payload. O 08 coincide com o veto comum C4 depois de suprimir a via autorizada. O 42 compara marcos e lavra, deixando migração e entrada sem prova, embora C4 prove a fronteira inclusiva e preserve `marco+1µs`. Se “hora da migração” for a execução da 0058, C4 guarda a hora da 0057 e preserva uma linha que já existia quando a 0058 executou. A identidade dessas duas horas [nao verificado]. Acrescentar SELECT direto em DP a `marcos_do_lote` quebra o selo F3. `app/chamados/tests/test_e4d_matriz_reds.py:264–295,328–359,375–399,545–587` · `app/chamados/tests/test_e4c_f5_c4_red.py@48b24c39c:345–376,436–442,478–504,953–978` · `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py@48b24c39c:9–20` · `app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:312–322` · `app/docs/PROMPTS.md:2974`.
 
-## 27/11 03:04 · sessao 5e9d4a43e848 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-O helper agora renderiza o modal com `contexto_parcial_fio`, um `RequestFactory` e `self.admin`. A leitura fica restrita ao cartão `fio-ticket-<pk>`. O caso 18, único outro consumidor do helper, ganhou o vínculo entre disputa e chamado exigido pelo montador. As asserções continuam iguais. [test_e4d_matriz_reds.py:208](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:208) [test_e4d_matriz_reds.py:495](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:495) [test_e4d_matriz_reds.py:534](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:534)
-
-A abertura do modal usa `modal_fio_colaborador` e `_resp_modal_full`. O re-render após reabrir usa `contexto_parcial_fio`, caminho escolhido para o helper. Ambos chamam `montar_chamados_fio(..., com_explicacao=True)` e renderizam o mesmo template. O montador ancora a pergunta do caso 30 pelo `chamado_destino`. [views.py:869](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:869) [views.py:890](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:890) [views.py:928](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:928) [views.py:1394](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:1394) [fio.py:117](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/fio.py:117) [fio.py:582](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/fio.py:582)
-
-**RED do caso 30.** Pela leitura do código, a asserção do modal deve receber `('08:00', '·')` e esperar `('09:00', '· 20/10 10:05')`. O contexto real fornece `folha_julga_pontualidade`, e o template ainda imprime o texto e o instante das colunas alteradas pela fixture. A sintaxe e os três mutantes foram checados em memória. Resultado na suite serial [nao verificado]. [fio.py:599](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/fio.py:599) [modal_fio.html:217](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/templates/chamados/partials/modal_fio.html:217) [test_e4d_matriz_reds.py:1293](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1293) [test_e4d_matriz_reds.py:1311](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1311) [nao verificado]
-
-### Diff
-
-```diff
---- a/app/chamados/tests/test_e4d_matriz_reds.py
-+++ b/app/chamados/tests/test_e4d_matriz_reds.py
-@@ -208,10 +208,13 @@
-     def resposta_no_modal(self, ch, p):
--        ch.disputa_obj = p.disputa
--        ch.perguntas_disputa = [p]
-+        from chamados.services.fio import contexto_parcial_fio
-+
-+        req = RequestFactory().get('/')
-+        req.user = self.admin
-         with timezone.override('UTC'):
--            html = render_to_string('chamados/partials/modal_fio.html', {
--                'chamados': [ch], 'colaborador': self.colab, 'pode_agir_map': {ch.pk: True},
--            })
-+            contexto = contexto_parcial_fio(req, self.colab)
-+            html = render_to_string('chamados/partials/modal_fio.html', contexto, request=req)
-+        inicio_cartao = '<div id="fio-ticket-'
-+        html = html.partition(f'{inicio_cartao}{ch.pk}"')[2].partition(inicio_cartao)[0]
-         self.assertIn(p.pergunta, html)
-         bloco = re.search(r'<strong>Resposta:</strong>\s*([^<]*)\s*<span[^>]+>([^<]*)</span>', html)
-         return (bloco[1].strip(), bloco[2].strip()) if bloco else (None, None)
-@@ -502,9 +505,10 @@
-         marco = self.marco_do_estoque()
-         ch = self.chamado()
-         cel = self.celula(trabalha=True, veredito='concorde', veredito_via='cartorio',
-                           dna={'marcos': {'hf': '19:00'}},
-                           ata={'lampadas': [{'tipo': 'S', 'hora': '19:00', 'acesa': True, 'luz': '19:00'}]})
--        p = self.cartao(destino=ch, respondida_em=T0, resposta_colab='08:00',
-+        raiz = self.disputa(chamado=ch, motivos=['orfao_14h'])
-+        p = self.cartao(disputa=raiz, destino=ch, respondida_em=T0, resposta_colab='08:00',
-                         validada_em=T2, validada_por=self.admin, celula=cel)
-         self.fato_restaurado(p, DP.RESPOSTA, marco, texto='08:00')
-         estoque = self.fato_restaurado(p, DP.VALIDACAO, marco, em=T2, texto='08:00', autor=self.admin)
-```
-
-### Suite serial para o Code [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4d-contrato-rota-b-174640 --only "chamados.tests.test_e4d_matriz_reds" --parallel 1
-```
-
-### Mutantes
-
-Da raiz da cópia, aplique cada comando separadamente sobre o diff limpo. Na checagem em memória, M1 voltou a perder a chave, M2 leu a resposta do cartão vizinho e M3 perdeu o vínculo da fixture com o chamado. [test_e4d_matriz_reds.py:214](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:214) [test_e4d_matriz_reds.py:216](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:216) [test_e4d_matriz_reds.py:510](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:510)
-
-```bash
-f=app/chamados/tests/test_e4d_matriz_reds.py
-
-# M1 — retirar a chave antes de renderizar
-sed -i '214a\            del contexto["folha_julga_pontualidade"]' "$f"
-
-# M2 — ler o HTML inteiro do fio
-sed -i '216,217d' "$f"
-
-# M3 — desvincular a disputa do caso 18
-sed -i '510s/chamado=ch, //' "$f"
-```
-
-_8577 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8578 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
