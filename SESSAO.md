@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 07:09:57.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (151.9 MB). Acoes na janela: **1846**.
+**Medido em 27/11/2026 07:16:36.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (151.9 MB). Acoes na janela: **1830**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:14:24 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
+| 07:14:20 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/be9lp92y8.output` |
 | 07:09:14 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM DESENHO \| RAMO2-B c2r suite inteira pista \| E1 DESENHO B3 \| ABONO c1k travada por motor \| E4C/E4D/PAR travadas"; bash ~/saas-hasner/logs/espera_unica.sh` |
 | 07:09:09 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bbvzmvnbz.output` |
 | 07:04:03 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM DESENHO \| RAMO2-B c2r suite inteira pista (opus final pronto em c2r/opus/pedido.md) \| E1 DESENHO B3 \| ABONO c1k travada por motor \| E4C/E4D/PAR travadas"; bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -1838,21 +1840,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:17:57 | Bash | Relança o c1g e lê o estado da O30 | `cd ~/saas-hasner; rm -f logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.rc; setsid bash logs/ABONO-X-SAIDA-ANTECIPADA/c1g/roda.sh >/dev/null 2>&1 < /dev/null & sleep 2; pgrep -f 'c1g/roda.sh' \| head -2; ls logs/O30-F3-CONSTRUIR/ \| tail -25; grep -nE '^\\| O30-F3-CONSTRUIR' app/docs/BACKLOG.md \| cut -c1-600` |
 | 19:17:51 | Bash | Lê os vereditos da O30 c13 e do c1g | `cd ~/saas-hasner; L=logs/O30-F3-CONSTRUIR/suite_c13/suite.log; grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep -c QUARENTENA-PODADO $L; echo ---; cat logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.log \| tail -20; cat logs/ABONO-X-SAIDA-ANTECIPADA/c1g/roda.sh` |
 | 19:17:45 | Bash | Lê o motivo do despertar | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b28va3j32.output` |
-| 19:15:27 | Bash | Espera única: primeiro rc novo ou 5 min | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 19:15:23 | Bash | Vê se o NameError também aparece na suíte certificada do main | `cd ~/saas-hasner; for f in $(ls -t logs/CLEAR-NAO-PARA-A-NOITE/comboio/*.log 2>/dev/null \| head -3); do echo "$f $(grep -c "NameError: name 'timezone'" $f)"; done` |
-| 19:15:18 | Bash | Confere o import na cópia real da c13 | `W=/home/ronald/wt-codex-o30-f3-construir-010143; grep -nE '^from django.utils import timezone' $W/app/chamados/juizes.py; git -C $W log --oneline -1; git -C ~/saas-hasner merge-base --is-ancestor $(git -C $W rev-parse HEAD) HEAD && echo ancestral; git -C $W diff --stat HEAD~1 -- app/chamados/juizes.py \| tail -1` |
-| 19:15:14 | Bash | Lê o roda.sh da c13 | `cd ~/saas-hasner; cat logs/O30-F3-CONSTRUIR/suite_c13/roda.sh \| head -20` |
-| 19:15:11 | Bash | Acha a cópia que a suíte c13 roda | `cd ~/saas-hasner; head -5 logs/O30-F3-CONSTRUIR/suite_c13/suite.log \| cut -c1-300; grep -m1 'AMBIENTE' logs/O30-F3-CONSTRUIR/suite_c13/suite.log \| cut -c1-300; ls logs/O30-F3-CONSTRUIR/suite_c13/` |
-| 19:15:07 | Bash | Confere o import na cópia da O30 | `cd ~/saas-hasner; W=$(cat logs/O30-F3-CONSTRUIR/wt.txt 2>/dev/null \|\| ls -d /home/ronald/wt-*o30* 2>/dev/null \| tail -1); echo "wt=$W"; grep -nE '^from django.utils import timezone' $W/app/chamados/juizes.py; git -C $W log --oneline -1; grep -rn "NameError: name 'timezone'" logs/O30-F3-CONSTRUIR/suite_c13/suite.log \| wc -l; grep -B3 "janela_viva_indisponivel" logs/O30-F3-CONSTRUIR/suite_c13/su ...` |
-| 19:15:01 | Bash | Lê as últimas linhas da RAMO2 no RELATO | `cd ~/saas-hasner; grep -n 'RAMO2' app/docs/RELATO.md \| tail -8 \| cut -c1-260` |
-| 19:14:58 | Bash | Procura o sha e o estado da RAMO2 c2 | `cd ~/saas-hasner; grep -n 'RAMO2' app/docs/RELATO.md \| awk -F: '$1>600' \| cut -c1-300 \| tail -6; git -C /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306 log --oneline -4 2>/dev/null; git -C /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-163306 status --porcelain \| head -5` |
-| 19:14:53 | Bash | Lê o ponto atual da RAMO2 c2i | `cd ~/saas-hasner; ls -t logs/RAMO2-CRUZA/c2i/ \| head; tail -15 logs/RAMO2-CRUZA/c2i_construtor.md \| cut -c1-250` |
-| 19:14:50 | Bash | Procura o estado da RAMO2 c2 | `cd ~/saas-hasner; ls logs/RAMO2-CRUZA/ 2>/dev/null \| tail -20; grep -n 'RAMO2' app/docs/RELATO.md \| tail -5 \| cut -c1-250` |
-| 19:14:48 | Bash | Lê o resto do estado da RAMO2 e a pasta | `cd ~/saas-hasner; sed -n 2159p app/docs/BACKLOG.md \| cut -c330-1400; ls logs/RAMO2-B-EM-TURNO-QUE-CRUZA/ 2>/dev/null \| tail -12` |
-| 19:14:43 | Bash | Lê o estado das obras candidatas à vaga | `cd ~/saas-hasner; grep -nE '^\\| (RAMO2\|ABONO-PARCIAL-TETO\|F4E\|E4D\|PAUSA-INTERNA)' app/docs/BACKLOG.md \| cut -c1-330` |
-| 19:14:37 | Bash | Confere o import de timezone no main | `cd ~/saas-hasner; git show HEAD:app/chamados/juizes.py \| grep -nE '^from django.utils import\|^import\|^from django' \| head; git show HEAD:app/chamados/juizes.py \| sed -n 630,645p; git grep -n 'timezone' HEAD -- app/chamados/juizes.py \| head -5; git log --oneline -2 -- app/chamados/juizes.py` |
-| 19:14:32 | Bash | Lê o contexto do NameError | `cd ~/saas-hasner; L=logs/O30-F3-CONSTRUIR/suite_c13/suite.log; grep -n "NameError: name 'timezone'" $L \| head -2; n=$(grep -n "NameError: name 'timezone'" $L \| head -1 \| cut -d: -f1); sed -n "$((n-30)),$((n))p" $L \| cut -c1-180` |
-| 19:14:27 | Bash | Procura o job e a origem do NameError na O30 | `cd ~/saas-hasner; ssh -n pista estado 2>&1 \| grep -E '1126190836\|rodando\|fila' \| head; L=logs/O30-F3-CONSTRUIR/suite_c13/suite.log; grep -c 'NameError' $L; grep -B12 "NameError: name 'timezone'" $L \| grep 'File "/app' \| sort \| uniq -c \| head -5` |
-| 19:14:20 | Bash | Lê o NameError e o estado da pista | `cd ~/saas-hasner; L=logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.log; wc -l $L; grep -nE '^(ERROR\|FAIL):\|^Ran\|^OK\|^FAILED\|NameError' $L \| head; grep -B8 'NameError' $L \| grep 'File "/app' \| tail -3; ssh -n pista estado 2>&1 \| tail -5` |
-| 19:14:15 | Bash | Colhe o estado das vagas, da pista e das suítes | `cd ~/saas-hasner; python3 bin/codex_vagas_estado.py 2>&1 \| tail -6; ssh -n pista rodando 2>&1 \| tail -3; tail -c 300 logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.log; echo; tail -c 200 logs/O30-F3-CONSTRUIR/suite_c13/suite.log` |
-| 19:14:10 | Bash | Lê o que acordou a espera | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bnwn6ifrj.output` |
