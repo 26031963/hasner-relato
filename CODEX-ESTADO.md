@@ -1,7 +1,105 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 02:58** · publicado em **27/11/2026 03:00** (UTC-3)
+> Ultima resposta processada: **27/11/2026 03:04** · publicado em **27/11/2026 03:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 03:04 · sessao 5e9d4a43e848 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
+
+O helper agora renderiza o modal com `contexto_parcial_fio`, um `RequestFactory` e `self.admin`. A leitura fica restrita ao cartão `fio-ticket-<pk>`. O caso 18, único outro consumidor do helper, ganhou o vínculo entre disputa e chamado exigido pelo montador. As asserções continuam iguais. [test_e4d_matriz_reds.py:208](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:208) [test_e4d_matriz_reds.py:495](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:495) [test_e4d_matriz_reds.py:534](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:534)
+
+A abertura do modal usa `modal_fio_colaborador` e `_resp_modal_full`. O re-render após reabrir usa `contexto_parcial_fio`, caminho escolhido para o helper. Ambos chamam `montar_chamados_fio(..., com_explicacao=True)` e renderizam o mesmo template. O montador ancora a pergunta do caso 30 pelo `chamado_destino`. [views.py:869](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:869) [views.py:890](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:890) [views.py:928](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:928) [views.py:1394](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/views.py:1394) [fio.py:117](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/fio.py:117) [fio.py:582](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/fio.py:582)
+
+**RED do caso 30.** Pela leitura do código, a asserção do modal deve receber `('08:00', '·')` e esperar `('09:00', '· 20/10 10:05')`. O contexto real fornece `folha_julga_pontualidade`, e o template ainda imprime o texto e o instante das colunas alteradas pela fixture. A sintaxe e os três mutantes foram checados em memória. Resultado na suite serial [nao verificado]. [fio.py:599](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/fio.py:599) [modal_fio.html:217](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/templates/chamados/partials/modal_fio.html:217) [test_e4d_matriz_reds.py:1293](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1293) [test_e4d_matriz_reds.py:1311](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1311) [nao verificado]
+
+### Diff
+
+```diff
+--- a/app/chamados/tests/test_e4d_matriz_reds.py
++++ b/app/chamados/tests/test_e4d_matriz_reds.py
+@@ -208,10 +208,13 @@
+     def resposta_no_modal(self, ch, p):
+-        ch.disputa_obj = p.disputa
+-        ch.perguntas_disputa = [p]
++        from chamados.services.fio import contexto_parcial_fio
++
++        req = RequestFactory().get('/')
++        req.user = self.admin
+         with timezone.override('UTC'):
+-            html = render_to_string('chamados/partials/modal_fio.html', {
+-                'chamados': [ch], 'colaborador': self.colab, 'pode_agir_map': {ch.pk: True},
+-            })
++            contexto = contexto_parcial_fio(req, self.colab)
++            html = render_to_string('chamados/partials/modal_fio.html', contexto, request=req)
++        inicio_cartao = '<div id="fio-ticket-'
++        html = html.partition(f'{inicio_cartao}{ch.pk}"')[2].partition(inicio_cartao)[0]
+         self.assertIn(p.pergunta, html)
+         bloco = re.search(r'<strong>Resposta:</strong>\s*([^<]*)\s*<span[^>]+>([^<]*)</span>', html)
+         return (bloco[1].strip(), bloco[2].strip()) if bloco else (None, None)
+@@ -502,9 +505,10 @@
+         marco = self.marco_do_estoque()
+         ch = self.chamado()
+         cel = self.celula(trabalha=True, veredito='concorde', veredito_via='cartorio',
+                           dna={'marcos': {'hf': '19:00'}},
+                           ata={'lampadas': [{'tipo': 'S', 'hora': '19:00', 'acesa': True, 'luz': '19:00'}]})
+-        p = self.cartao(destino=ch, respondida_em=T0, resposta_colab='08:00',
++        raiz = self.disputa(chamado=ch, motivos=['orfao_14h'])
++        p = self.cartao(disputa=raiz, destino=ch, respondida_em=T0, resposta_colab='08:00',
+                         validada_em=T2, validada_por=self.admin, celula=cel)
+         self.fato_restaurado(p, DP.RESPOSTA, marco, texto='08:00')
+         estoque = self.fato_restaurado(p, DP.VALIDACAO, marco, em=T2, texto='08:00', autor=self.admin)
+```
+
+### Suite serial para o Code [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4d-contrato-rota-b-174640 --only "chamados.tests.test_e4d_matriz_reds" --parallel 1
+```
+
+### Mutantes
+
+Da raiz da cópia, aplique cada comando separadamente sobre o diff limpo. Na checagem em memória, M1 voltou a perder a chave, M2 leu a resposta do cartão vizinho e M3 perdeu o vínculo da fixture com o chamado. [test_e4d_matriz_reds.py:214](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:214) [test_e4d_matriz_reds.py:216](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:216) [test_e4d_matriz_reds.py:510](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:510)
+
+```bash
+f=app/chamados/tests/test_e4d_matriz_reds.py
+
+# M1 — retirar a chave antes de renderizar
+sed -i '214a\            del contexto["folha_julga_pontualidade"]' "$f"
+
+# M2 — ler o HTML inteiro do fio
+sed -i '216,217d' "$f"
+
+# M3 — desvincular a disputa do caso 18
+sed -i '510s/chamado=ch, //' "$f"
+```
+
+## 27/11 03:02 · sessao 6aa002de3fc5 · E4C-F5-INSTANTE · construtor · origem=Code
+
+Apliquei o BRIEF c4red4 nos dois arquivos de teste. A conferência estática encontrou 15 REDs ativos, um skip e 27 seletores de mutantes. O diff passou em `git diff --check`, tem zero `except` e zero `suppress` adicionados e deixa o c1 intocado. As falhas no HEAD, o verde do c1 e as mordidas com PostgreSQL seguem **[nao verificado]**. [RED](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1) · [Arnés](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:26) · [c1](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_instante_c1.py:83) [nao verificado]
+
+1. Estacionei o falso zero com o skip `lei: registro da escrita da coluna -- E4C c4red3 opus5d item 3`. Os casos históricos e a precedência de ato novo no vigia e no DRY ficaram em controles próprios. [Controles e skip](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:551)
+2. Removi `b_nascida` e retirei M06 da bateria ativa pela mesma dependência da lei. [Acervo estacionado](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:575) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:421)
+3. A concorrência ficou como controle do chamador, na ordem `travar_entrega → trava_na_ordem → registrar`. A fixture observa a espera com `Event` e `pg_locks`, sob prazo monotônico. M27 injeta a leitura de K6 antes da trava. [Fixture](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:650) · [M27](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:402)
+4. A resposta futura virou controle da razão e da ação públicas da tarefa. M05 saiu. [Face pública](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:276) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:430)
+5. Os escritores exigem uma foto `ESTOQUE` com `entrada_em=MARCO` e um ato novo. O carimbo em competência entregue exige `ValueError` com `ENTREGUE`, foto integral preservada, `validada_em` anterior e zero linhas gravadas. [Carimbo e escritores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:444)
+6. A foto após resposta compensada é aplicada diretamente. Para o motivo adulterado, usei a mensagem integral de `_conferir_estoque` para linha que não reproduz a coluna. O HEAD ainda exclui `ato_motivo` da chave comparada. [Testes](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:379) · [Chave e mensagem](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/models.py:4784) [nao verificado]
+7. O arnés roda controle, mutação e controle após restaurar, com fixtures independentes. Só conta a falha na asserção nomeada. Os patches são locais ao caso, M23 restaura em `finally` e os cenários de inserção ficam em transações isoladas. Exercitei o arnés com `unittest` sintético, incluindo sobrevivente, asserção errada e restauração. [Arnés](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:26) · [M23](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:326) · [Isolamento por subteste](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:420)
+
+**Comandos para o Code**, a partir de `app/`. O laço roda cada mutante por seu seletor, sobre a cura, com os dois controles. [Configuração de CI](/home/ronald/wt-codex-e4c-f5-instante-012038/app/config/settings/ci.py:6) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:421)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_c4_red --settings=config.settings.ci --verbosity=2
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_instante_c1 --settings=config.settings.ci --verbosity=2
+
+for classe in $(sed -nE 's/^(M[0-9]+[[:alnum:]]+) = contraprova\($/\1/p' \
+  chamados/tests/e4c_f5_c4red2_mutantes.py); do
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    "chamados.tests.e4c_f5_c4red2_mutantes.${classe}.test_mordida" \
+    --settings=config.settings.ci --verbosity=2
+done
+```
 
 ## 27/11 02:58 · sessao 99acdd48db17 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -621,78 +719,4 @@ O `c4` específico está [nao verificado]. O registro disponível só identifica
 
 **Retificação da contagem inicial:** 18 ocorrências no histórico, com 13 certas e 5 erradas pela tabela. São seis ERROR e doze FAIL. [nao verificado para reexecução]
 
-## 27/11 02:24 · sessao e42b5417b2db · - · - · origem=Ronald (tmux)
-
-### Raiz e leitores
-
-`T` = `app/chamados/tests/test_e4d_matriz_reds.py`.
-
-| Ocorrência | Classificação e contraexemplo |
-|---|---|
-| 30 SQL | **Errado.** A fixture injeta divergência fora de `registrar`, sem passar pelo projetor. A consulta pede as colunas cruas. Migrar os leitores para o ato e projetar toda escrita feita pela porta ainda devolve `(10:00,08:00)` nessa consulta sintética. `T:116–121,1087–1095`, `app/chamados/juizes.py:1676–1681` |
-| 30 C6 | **Certo.** A leitura entrega o instante do ato com texto da coluna. A cura superficial pode trocar o texto localmente e continuar servindo estado divergente por outros chamadores. `T:1096–1097`, `app/chamados/juizes.py:1476–1496`, `app/chamados/models.py:4507–4519` |
-| 30 API | **Certo.** O payload expõe os dois valores crus e o display do ato. A seleção real pode continuar errada, pois o teste fornece a coleção via mock. `T:1098–1107`, `app/api/views.py:1161–1165` |
-| 30 modal | **Errado.** A fixture não fornece `disputa_obj` nem `pode_agir_map`. O bloco fica oculto mesmo com a fonte do par corrigida. `T:160–165,1108–1109`, `app/templates/chamados/partials/modal_fio.html:123,157–158,217–220`, `app/chamados/services/fio.py:348–362,603` |
-| 30 raio-x | **Certo.** A tupla entregue ao juiz contém R cru. Um seletor real errado fica coberto pelo mock de `q_vivas`. O retorno do raio-x contém IDs, e o spy observa o par intermediário. `T:1110–1117`, `app/chamados/services/raiox.py:135–158` |
-| 31 | **Errado.** A lista é exigida pelo brief, a API `DP.lista_de_excecoes` e seu dicionário são inventados. Autoinscrever os três escritores observados deixaria caminhos manuais e campos do chamado fora do selo. `T:167–178,1127–1141` |
-| 32 | **Errado.** Mesmo erro de API. O selo ainda exige listar `tipo_resposta` da filha em `raiz`, quando o brief descreve a exceção de D/chamado. Um escritor que cria duas filhas após dois pedidos passa, pois a fixture faz um pedido. `T:167–178,1143–1157` |
-| 34 | **Certo.** M sai antes de `SILENCIO`. Inserir o ato e em seguida escrever M diretamente deixa o teste verde. A fixture sem chamado-pai permite perder a cascata inteira. `T:1159–1172`, `app/chamados/models.py:2184–2207`, `app/chamados/signals.py:19–46` |
-| 35 | **Certo.** Elege PK diverso. O teste distingue recência e empate. Selecionar a disputa mais recente de todo o colaborador sem restringir ao mesmo chamado passa nesta fixture de um chamado. `T:1174–1204`, `app/chamados/services/disputa_emissao.py:539–542,582–605`, `app/docs/CORTES.md:618` |
-| 37 | **Errado.** A função de leitura da lista é inventada. Listar só a escrita de `materializada_em` passa mesmo deixando a via e a autoria fora do selo. `T:167–178,1225–1242` |
-| 38 | **Certo.** Detecta SILÊNCIO depois de M. Antecipar o ato e carimbar M diretamente passa. A fixture também não tem chamado-pai para acusar falta de cascata. `T:1244–1269`, `app/chamados/models.py:2184–2207`, `app/chamados/signals.py:29–46` |
-
-As guardas **36, 43 e 46** têm observáveis úteis. 36 mede C6 antes/depois, R/V/M, atos e batidas. Remover a chamada ao encerrador de competência ou fechar o pai indevidamente passa, pois a guarda observa a filha. 43 exige mesmos PKs de ato e trilha. Reescrever M/F com os mesmos valores ou repetir uma trilha de outro tipo passa. 46 mede a independência de previsto na face por grade e confirma a batida, mas insere o novo realizado na ata à mão. Não propagar o realizado no plantio ou corromper o denominador da face com snapshot passa. `T:1206–1223,1271–1286,1288–1321`, `app/ponto/services/fechamento.py:1446–1453`, `app/folha/export.py:1054–1089,1104–1116`
-
-### Escopo, contagem e c4
-
-O delta dos dois commits E4D, `eb76e7be7..d43b0dfe0`, tem só dois arquivos novos de teste e zero ocorrências de `except`. O delta pedido `de65d64f4..d43b0dfe0` inclui 68 arquivos e um token `except` em docstring, zero cláusulas novas. Os demais arquivos são do merge herdado PORTA-CONFERE-TRAVA. `app/chamados/tests/test_e4d_matriz_reds.py:1`, `app/chamados/tests/e4d_matriz_mutantes.py:1`, `app/chamados/tests/_ato_da_fixture.py:9`, `app/chamados/models.py:4590–4623`
-
-A pista lista 24 métodos com falhas e 12 com erros. Sete entradas adicionais são falhas de subtestes de 18, 30 e 45. Há nove métodos sem ocorrência transcrita, 13, 15, 19, 22, 24, 27, 36, 43 e 46. O status individual na execução fica [nao verificado]. `T:438–462,513–537,1076–1117`, `falhas.txt` [nao verificado quanto a linhas locais]
-
-No commit c4 RED `2baf51086`, `DecisaoPergunta` usa `entrada_origem` (`ato` ou `estoque`), `entrada_em` (`Now()` do banco para novos, marco 0057 para estoque) e `marco_do_estoque`. A 0058 marca por `entrada_em <= applied` e preserva os pós-marco. E4D 01/02/44 exigem `origem='backfill'` e relógio Python, 42 inventa `marcar_estoque` e `instante_de_entrada`. A intenção da Opção B é compatível com a 0058 para o estoque existente. A interface e o relógio exigidos pelo teste divergem. `app/chamados/models.py@2baf51086:4392–4406,4580–4586,4761–4786`, `app/chamados/migrations/0057_decisao_entrada_do_ato.py@2baf51086:16–32`, `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py@2baf51086:9–20`, `T:222–243,464–494,499–511`
-
-45 pode estender o comparador de instante a valores mantendo classes e corte novo/estoque de c4. O teste E4D permite substituí-los por um contador genérico. 08 exige um caminho autorizado e só de trilha, compatível com preservar a recusa K6 no caminho comum de c4. 30/C6 muda deliberadamente a autoridade do texto exigida nas caracterizações F5 presentes em c4. `T:313–345,513–537,1096–1097`, `app/chamados/tests/test_e4c_f5_c4_red.py@2baf51086:144–181,234–275`, `app/chamados/services/vigia_ato_x_coluna.py@2baf51086:11–34`, `app/chamados/tests/test_e4c_f5_opus_models.py:58–73`, `app/chamados/tests/test_e4c_f5_volta2_juizes.py:80–103`, `app/docs/BACKLOG.md:2163`
-
-## 27/11 02:21 · sessao b0bdba18d7a0 · E4C-F5-INSTANTE · construtor · origem=Code
-
-Refiz a c4red2 em dois arquivos sob `chamados/tests/`. A checagem estática conferiu a sintaxe, as docstrings dos 22 testes e os alvos dos 29 mutantes. `git diff --check` passou. A execução dos REDs na base, a mordida dos mutantes, o verde após a cura e a compatibilidade executada com a c1 ficam [nao verificado]. [Testes](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1) · [Mutantes](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:399) [nao verificado]
-
-### Teste → mutante visado → lei [nao verificado]
-
-| Teste | Mutante visado | Lei ou corte | [nao verificado]
-|---|---|---|
-| [Par do carimbo](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:68) | `M01DuasValidacoes` só confere com duas validações. `M02IgnoraResposta` ignora `respondida_em`, inclusive na pergunta sem validação. | LEIS-1-4 resposta 2, L-110 |
-| [Falhas das fotos](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:100) | `M03FotoDaLavra` restaura o trio do carimbo e deixa a validação candidata na instância. O teste injeta separadamente falhas na foto da projeção e da lavra. | L-007, O261-E-F2-FILA item 3 | [nao verificado]
-| [Irmã divergente](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:155) · [Releitura e relógio da absorção](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:168) | `M22SoValidacaoNaIrma` ignora a resposta. `M23SoCandidata` ignora o par persistido. `M24RelogioAposEspera` troca o relógio comum pelo instante após a espera. | LEIS-1-4 resposta 2, L-002, L-007, RESPOSTAS-2011-1135 |
-| [Validação futura](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:230) · [Resposta futura](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:257) · [Compensação](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:280) | `M04ValidacaoFutura` e `M05RespostaFutura` vazam cada ato pendente à decisão pública. `M28CompensadorCru` adianta a devolução ao usar o relógio cru. | L-073, E2/0514, F5-CONTRATO-V2 item 3 |
-| [Porta no marco e depois](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:320) · [Correspondência por ato e instante](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:342) | `M07ValidacaoNoMarco` deixa entrar `VALIDACAO` nova. `M08QualquerResposta` barra uma foto elegível porque já houve outra resposta, compensada. As recusas de novidade e reprojeção têm motivos distintos. | LEIS-1-4 respostas 1–2, L-110 |
-| [Conversa civil](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:370) · [Proveniência](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:385) · [Elegibilidade da foto](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:403) | `M09Conversa` admite o próprio dia civil da abertura. `M10Proveniencia` aceita “validado pelo DP”. `M11Elegibilidade` aceita o rótulo de estoque sem conferir o payload inteiro nem o K6. | FIO-E1/B2, L-007, L-092, LEIS-1-4 resposta 1 |
-| [Origem nos escritores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:434) · [Emissão por célula](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:479) | `M26FotoViraAto` reclassifica a foto anterior como ato novo. `M20EmissaoDupla` acorda a mesma célula duas vezes. | Q0.2, L-007, L-111, O-OUTBOX DA PERGUNTA |
-| [Falso zero no comparador, vigia, alarme e DRY](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:559) | `M06DatasDaColuna` esconde escrita retrodatada, limpeza pós-marco e `b` nova em disputa antiga. `M12Vigia` e `M13Dry` dão precedência ao estoque quando o PK tem dois campos `a`. | LEIS-1-4 respostas 1–2, L-110, L-114 |
-| [Estoque primeiro](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:668) · [Entrega primeiro](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:695) | `M14OrdemDaTrava` pega Colaborador antes de Empresa. `M25ConflitoErrado` produz `55P03` no Colaborador. `M27EntregaPrimeiro` deixa o estoque passar enquanto a entrega segura a Empresa. | L-092, K6, [ordem Empresa → Colaborador](/home/ronald/wt-codex-e4c-f5-instante-012038/app/folha/export.py:556) |
-| [Validação com FM aberto](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:773) · [Materialização e passivo](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:804) · [Recusa e devolução](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:836) | `M15SoFM` substitui K6 pelo status do FM. `M16TrilhaVazia` guarda PK e autor sem conteúdo. `M17AlteraTXT` e `M18AlteraBatida` alteram o gravado com o hash do FM intacto. `M19RecusaFutura` desloca o instante da recusa. `M29DevolucaoApagaResposta` limpa a resposta ao devolver apenas a validação. | CORTE-BUG-PAR-FORA163, L-007, L-092, L-113, L-130 |
-| [Empate e reexecução da 0058](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:901) | `M21Empate0058` troca `<=` por `<`. O controle repete o `UPDATE` com uma linha já marcada. | LEIS-1-4 resposta 1, L-110, [0058](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:16) |
-
-### Perguntas de lei que sobram
-
-- **Qual registro prova quando cada coluna mudou ou foi limpa?** O comparador atual recebe o instante da coluna e a origem da linha. O caso novo exige reconhecer uma escrita posterior com instante retrodatado ou nulo. O controle positivo da c1, congelado em 13/11 com marco em 01/11, continua no recorte para rejeitar a heurística baseada na abertura da disputa. A fonte durável por campo fica [nao verificado]. [Comparador](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/models.py:4589) · [Controle c1](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_instante_c1.py:78)
-- **Payload de proveniência falsa deve ser recusado ou reconstruído? O carimbo recebeu aval para aplicar estoque automaticamente?** O teste aceita recusa ou reconstrução fiel. Para o carimbo, aceita aplicação íntegra ou recusa seguida de aplicação explícita e nova tentativa. O literal do aval para escolher uma dessas formas fica [nao verificado]. [Proveniência](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:385) · [Origem](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:434) [nao verificado]
-- **Um ato de fato pode nascer no futuro? Como reparar uma 0058 anterior se um `UPDATE` amplo já tiver sobrescrito a origem e o instante de entrada?** O caso temporal cobra o efeito público no horizonte. O da 0058 caracteriza o empate e a reexecução com uma linha já marcada. A autorização de reparo e o que ocorreu no deploy ficam [nao verificado]. [Backlog E4d](/home/ronald/wt-codex-e4c-f5-instante-012038/app/docs/BACKLOG.md:2171) · [Reversão da 0058](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:29) [nao verificado]
-
-### Comandos para o Code
-
-O recorte inclui a c1 para conferir a fixture de estoque e a devolução especial da L-130. Os mutantes têm um rótulo individual. Execute `morde <rótulo da tabela>` para cada um, depois do verde sem mutante. [Recorte da suíte](/home/ronald/wt-codex-e4c-f5-instante-012038/bin/suite.sh:25) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:399) · [L-130 na c1](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_instante_c1.py:234) [nao verificado]
-
-```bash
-wt=/home/ronald/wt-codex-e4c-f5-instante-012038
-PYTHONDONTWRITEBYTECODE=1 "$wt/bin/suite.sh" --dir "$wt" --parallel 1 \ [nao verificado]
-  --only "chamados.tests.test_e4c_f5_c4_red chamados.tests.test_e4c_f5_instante_c1"
-
-morde() {
-  PYTHONDONTWRITEBYTECODE=1 "$wt/bin/suite.sh" --dir "$wt" --parallel 1 \ [nao verificado]
-    --only "chamados.tests.e4c_f5_c4red2_mutantes.$1.test_mordida"
-}
-morde M01DuasValidacoes
-```
-
-_8556 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8558 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
