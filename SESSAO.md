@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 18:26:00.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (234.1 MB). Acoes na janela: **2000**.
+**Medido em 27/11/2026 18:33:02.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (234.2 MB). Acoes na janela: **1990**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 18:32:21 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 18:32:18 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqblh44s6.output; date +%H:%M` |
+| 18:27:13 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 18:27:10 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/brtnziqm1.output; date +%H:%M` |
 | 18:22:05 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 18:21:59 | Bash | Religa a coleta do GREEN2 e registra | `cd ~/saas-hasner; D=logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x; cat > $D/coleta_green2.sh <<'EOF' #!/bin/bash cd /home/ronald/saas-hasner; D=logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x ssh -o BatchMode=yes -o ConnectTimeout=5 -o ServerAliveInterval=30 -o ServerAliveCountMax=6 pista espera 1127171915_fa236b21 > $D/green2_espera.txt 2>&1 < /dev/null echo "rc=$? $(date +%H:%M:%S)" > $D/green2.rc EOF setsid bash $D/ ...` |
 | 18:21:50 | Bash | Lista processos de suíte e pista vivos | `pgrep -af 'suite.sh\|pista' \| /bin/grep -v pgrep \| cut -c1-160` |
@@ -1996,17 +2000,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 06:37:32 | Bash | Assinatura de calcular_mes e chamador | `cd ~/saas-hasner; grep -n " def calcular_mes" app/ponto/motor_calculo_v2.py \| head; grep -n "\.calcular_mes(" app/ponto/services/fechamento.py \| head -5` |
 | 06:37:24 | Bash | Como apontar a sonda Codex à sombra | `cd ~/saas-hasner; cat /home/ronald/.claude/projects/-home-ronald-saas-hasner/memory/codex-sonda-default-e-prod.md \| sed -n 1,30p; grep -n "CODEX_SONDA_ENVELOPE" bin/codex_pergunta.sh \| head -5` |
 | 06:37:12 | Bash | Resultado da espera | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b52q4run6.output; cat logs/RAMO2-CRUZA/DIFF-FROTA/diff.rc logs/RAMO2-CRUZA/c2q/suite.rc 2>/dev/null; cat logs/RAMO2-CRUZA/DIFF-FROTA/resumo.txt 2>/dev/null` |
-| 06:32:43 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 06:32:38 | Bash | Resultado da espera | `cd ~/saas-hasner; cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8ehi58iq.output; cat logs/RAMO2-CRUZA/DIFF-FROTA/diff.rc logs/RAMO2-CRUZA/c2q/suite.rc 2>/dev/null; tail -5 logs/RAMO2-CRUZA/DIFF-FROTA/diff.log` |
-| 06:27:31 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM DESENHO \| RAMO2-B suite inteira na pista + DIFF frota na sombra \| E4C/E4D/PAR travadas"; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 06:27:26 | Bash | Lança DIFF de frota na sombra | `cd ~/saas-hasner; D=logs/RAMO2-CRUZA/DIFF-FROTA; mkdir -p $D; cat > $D/lanca_diff.sh <<'EOF' #!/bin/bash # DIFF de frota RAMO2-B na SOMBRA (so leitura, rollback). ANTES = main 59600163c; DEPOIS = obra c57f01232. cd /home/ronald/saas-hasner; D=logs/RAMO2-CRUZA/DIFF-FROTA; S=$(date +%H%M%S) A=/home/ronald/diff-ramo2-main-$S; B=/home/ronald/diff-ramo2-obra-$S git worktree add -q --detach $A 59600163c ...` |
-| 06:27:10 | Bash | Sombra cobre as competências 11 e 12? | `cd ~/saas-hasner; bin/sombra.sh --cobre 2026-10-21 2026-12-20; echo rc=$?` |
-| 06:27:05 | Bash | Gera scripts do DIFF | `cd ~/saas-hasner; T=logs/sombra/abonodiff_d06_12.py; for r in main obra; do for m in 11 12; do sed -e "s/ROT = 'd06'; MES=12/ROT = '$r'; MES=$m/" -e "s#/sombra/abonodiff_#/sombra/ramo2diff_#" -e "1s/.*/# RAMO2-B-EM-TURNO-QUE-CRUZA DIFF-FROTA: SO LEITURA (somente_leitura=True em atomic com rollback). rotulo=$r comp=$m\/2026/" $T > logs/sombra/ramo2diff_${r}_$m.py; done; done; grep -n "ROT =\\|ramo2 ...` |
-| 06:26:56 | Bash | Assinatura do MotorBase | `cd ~/saas-hasner; grep -n " def __init__" app/ponto/motor_calculo_v2.py \| head -3; L=$(grep -n "^class MotorBase" app/ponto/motor_calculo_v2.py \| cut -d: -f1); awk -v l=$L 'NR>l && /def __init__/{print NR": "$0; for(i=0;i<6;i++){getline; print}; exit}' app/ponto/motor_calculo_v2.py` |
-| 06:26:47 | Bash | Como identificar colabs do Partido | `cd ~/saas-hasner; head -40 logs/sombra/partido_escolha_c11.py` |
-| 06:26:35 | Bash | Lê script de DIFF anterior | `cd ~/saas-hasner; cat logs/ABONO-X-SAIDA-ANTECIPADA/c1d/diff_frota_d06.sh; echo ====; cat logs/sombra/abonodiff_d06_12.py \| head -60` |
-| 06:26:30 | Bash | Script do DIFF de frota anterior | `cd ~/saas-hasner; grep -ln "somente_leitura=True" logs/sombra/*.py \| xargs ls -t \| head -5; grep -rn "antes_11.json\\|SOMBRA_ARVORE" logs/ABONO-X-SAIDA-ANTECIPADA/ 2>/dev/null \| grep -v "DIFF-FROTA/.*json:" \| head -5` |
-| 06:26:25 | Bash | Modelo de DIFF de frota existente | `cd ~/saas-hasner; ls logs/ABONO-X-SAIDA-ANTECIPADA/DIFF-FROTA/; head -30 logs/ABONO-X-SAIDA-ANTECIPADA/DIFF-FROTA/DIFF.md; ls logs/sombra/ \| grep -i "diff\\|frota" \| tail -10` |
-| 06:26:17 | Bash | Como --rodar escolhe a árvore | `cd ~/saas-hasner; sed -n 1,40p bin/sombra.sh \| grep -n "rodar\\|DIR\\|copia\\|dir" ; sed -n 483,493p bin/sombra.sh; grep -rln "sombra.sh --rodar" logs/*/DIFF* logs/*/*/lanca*diff* 2>/dev/null \| head -5` |
-| 06:26:12 | Bash | Opções do sombra.sh | `cd ~/saas-hasner; grep -n "^ *--[a-z-]*)" bin/sombra.sh \| head -30; grep -n "cobre" bin/sombra.sh \| head -15` |
-| 06:26:07 | Bash | Lança suíte inteira RAMO2-B | `cd ~/saas-hasner; D=logs/RAMO2-CRUZA/c2q; W=/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946; cat > $D/lanca_suite.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner bash bin/suite.sh --dir $W --motivo "pre-opus RAMO2-B-EM-TURNO-QUE-CRUZA" > $D/suite.log 2>&1; echo "rc=\$? \$(date '+%H:%M:%S')" > $D/suite.rc EOF setsid bash $D/lanca_suite.sh </dev/null >/dev/null 2>&1 & cat >> app/docs/RELATO ...` |
