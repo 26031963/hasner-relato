@@ -1,7 +1,263 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 21:30** · publicado em **26/11/2026 21:31** (UTC-3)
+> Ultima resposta processada: **26/11/2026 21:37** · publicado em **26/11/2026 21:38** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 21:37 · sessao d27d69e1cfe2 · O30-LOTE-MINIMA · verificador · origem=Code
+
+REPROVO
+
+A tela aceita **período invertido** e pode exportar lançamentos nesse intervalo. O padrão rotulado **“Atual”** diverge da competência vigente depois do corte da empresa. A catraca de linhas de `core/tests` também falhou na cópia. `app/relatorios/views.py:369–392`, `app/ponto/services/atestados_lote.py:32–63`, `app/templates/relatorios/atestados_lote.html:26–29`, `app/core/tests/test_medida_turno_do_par.py:346,562–566`
+
+### 1. Escritores, leitores e significado dos campos
+
+| Campo ou valor | Escritor e leitor |
+|---|---|
+| `empresa`, `mes`, `ano`, `de`, `ate`, `status`, `formato` | O formulário e os links geram a querystring. A view lê o GET, converte IDs e competência com `core.sanitiza`, valida as datas e passa a janela, os tipos e o status ao serviço. O serviço produz linhas, contagens e bytes. O template lê o contexto e a view escreve o `Content-Disposition`. `app/templates/relatorios/atestados_lote.html:9–54`, `app/core/sanitiza.py:11–35`, `app/relatorios/views.py:337–396` |
+| `Empresa.pk`, `ativa`, `cnpj`, `razao_social`, `nome_fantasia`, `dia_inicio_competencia` | O formulário de empresa passa os campos à porta de estrutura, que cria e atualiza o cadastro. `empresas_visiveis` filtra por atividade e CNPJ e ordena por razão social. A tela usa o PK e exibe fantasia ou razão social. O CSV usa a razão social. O juiz de janela lê o corte. `app/colaboradores/views.py:504–557`, `app/colaboradores/services/estrutura.py:13–28`, `app/colaboradores/queries.py:78–87`, `app/colaboradores/models.py:164–165`, `app/templates/relatorios/atestados_lote.html:12–16`, `app/ponto/services/atestados_lote.py:123–125`, `app/ponto/janelas.py:36–57` |
+| `Colaborador.pk`, `empresa_id`, `nome`, `matricula_hasner` | Admissão, edição e transferência gravam o cadastro pela porta de colaborador. `Colaborador.save` atribui a matrícula quando ausente. A view consulta pela empresa atual, a linha do tempo consulta pelo colaborador, a prévia e o CSV exibem nome e matrícula, e o ZIP usa matrícula com fallback para PK. `app/colaboradores/views.py:1203–1209,1333–1335,1362–1365,1413–1428`, `app/colaboradores/services/colaborador.py:152–161,204–206`, `app/colaboradores/models.py:427–439`, `app/relatorios/views.py:379`, `app/ponto/services/dia_decidido.py:645–651`, `app/templates/relatorios/atestados_lote.html:74–75`, `app/ponto/services/atestados_lote.py:95–98,123–125` |
+| `Ausencia.pk`, `colaborador`, `tipo`, `data`, `data_fim`, `dias_corridos`, `minutos`, `descricao` | `criar_ausencia` grava o lançamento e `editar_ausencia_registro` altera os campos editáveis. `Ausencia.save` deriva a duração do intervalo e pode derivar o fim. `linha_do_tempo` projeta o lançamento, o lote recorta e ordena por data e PK, e a prévia, o CSV e o ZIP consomem essa projeção. A descrição é carregada pela linha do tempo, mas fica fora das três saídas. `app/ponto/services/ausencia.py:483–493,529–562,648–659`, `app/ponto/models.py:899–918`, `app/ponto/services/dia_decidido.py:674–684`, `app/ponto/services/atestados_lote.py:54–65,95–98,118–131`, `app/templates/relatorios/atestados_lote.html:72–95` |
+| `status`, `registrado_por`, `aprovado_por`, `aprovada_em`, `criado_em` | A criação grava o estado inicial e o registrador. `mudar_estado` e `decidir` gravam transição e decisão. O modelo carimba criação e supre o instante de estados decisórios. A prévia mostra o status legível, e o CSV imprime o código e a trilha projetada. `decidido_por` pode ser o registrador, cujo username pode ser CPF pela porta de admissão. `app/ponto/services/ausencia.py:473–493,975–988,1084–1104`, `app/ponto/models.py:823–824,878–883`, `app/ponto/services/dia_decidido.py:558–584`, `app/templates/relatorios/atestados_lote.html:79–81`, `app/ponto/services/atestados_lote.py:118–131`, `app/colaboradores/views.py:1199–1201` |
+| `documento`, `documento_referencia`, `TipoAusencia.codigo`, `nome`, `ativo`, `medico`, `efeito`, `exige_documento` | Criação, anexação e reabertura podem gravar o documento. A linha do tempo lê só a raiz e projeta a presença da referência de arquivo. O ZIP abre o arquivo referenciado. A UI grava o cadastro de tipos pela porta de ausência. O catálogo lê os tipos ativos e abastece filtro médico, rótulo, efeito e exigência. O escritor histórico de `documento_referencia` [nao verificado]. `app/ponto/services/ausencia.py:492–493,1015–1019,1298–1309,1761–1774`, `app/ponto/models.py:777–781,801–805`, `app/ponto/services/dia_decidido.py:518–555,645–651,674–684`, `app/ponto/views_tipos_ausencia.py:67–94`, `app/ponto/catalogo/ausencias.py:240–251,385–387,467`, `app/ponto/services/atestados_lote.py:25–29,156–164` |
+
+O lote usa datas de calendário com pontas inclusivas e mostra a duração **integral** do lançamento. O acumulado anual conta dias ocupados no recorte civil e limita a contagem a hoje. Para tipo indeterminado sem `data_fim`, o lote usa só a data inicial na seleção, enquanto o juiz de cobertura prolonga a vigência até o fim da janela. Assim, um afastamento aberto iniciado antes da competência pode sumir do lote. `Todos` inclui os dois estados de espera e rejeitadas. `Com documento` conta referências gravadas, e um arquivo indisponível pode virar `.FALTANDO.txt` no ZIP. `app/ponto/services/atestados_lote.py:54–84,156–164`, `app/ponto/services/dia_decidido.py:674–684`, `app/relatorios/views.py:277–296,377–381`, `app/ponto/turnos.py:2855–2886`, `app/ponto/models.py:690–705`
+
+### 2. Autoridades e derivações
+
+A view usa `empresas_visiveis`, `tem_acao`, `TIPOS_MEDICOS` e o serviço existente para janela, linhas e prévia. A competência **explícita** chega a `janela_fechamento`. A composição das três ações e o tratamento do catálogo médico vazio ficam na view. A divergência está no padrão herdado para competência **omitida**. Em memória, com 25/09/2026 e corte 12, o lote devolveu **12/08–11/09**, enquanto o juiz registrado `janela_atual` devolveu **12/09–11/10**. `app/relatorios/views.py:344–395`, `app/docs/JUIZES.md:35,51`, `app/core/juizes.py:352`, `app/ponto/services/atestados_lote.py:32–43,60–63`, `app/ponto/janelas.py:24–33,54–63`
+
+O período livre valida o formato e exige as duas datas, mas aceita `de > ate`. Em memória, a janela **12/09 a 10/09** selecionou um lançamento de **09/09 a 13/09**. A view usa essas mesmas linhas nos dois downloads. `app/relatorios/views.py:337–341,369–392`, `app/ponto/services/atestados_lote.py:39–40,54–65`
+
+### 3. Acesso e isolamento
+
+Prévia, CSV e ZIP passam pela mesma sessão e pelas três ações `ver_relatorios`, `ver_folha` e `ver_ausencias`. As ações vêm das permissões Django, concedidas pela semeadura dos grupos ou pelo quadro de setores. O juiz admite superusuário e usuário com as ações mesmo sem `is_staff`. O link no acumulado aparece também para quem tem apenas `ver_relatorios` e será redirecionado ao clicar. `app/relatorios/views.py:19–22,252–255,344–349,383–396`, `app/colaboradores/mixins.py:322–331,363–398`, `app/core/views_quadro.py:39–46`, `app/templates/relatorios/atestados.html:12`
+
+A empresa pedida precisa pertencer a `empresas_visiveis()`, que exclui inativas e CNPJs de diagnóstico. As linhas ficam restritas à empresa **atual** do colaborador. Uma transferência entre CNPJs leva o histórico ao lote da empresa de destino, pois o recorte usa o cadastro atual e a ausência aponta para o colaborador. As consultas SaaS rodam no schema do tenant, mas o cache do catálogo dura 60 s e é global ao processo. Um worker compartilhado pode reaproveitar classificação médica, rótulo e exigência de outro tenant. O ZIP usa a referência persistida em storage sem prefixo de schema. Vazamento de colaboradores ou de bytes em produção [nao verificado]. `app/relatorios/views.py:351–381`, `app/colaboradores/queries.py:78–87`, `app/colaboradores/views.py:1413–1428`, `app/ponto/models.py:743–753,777–781`, `app/ponto/services/dia_decidido.py:645–651`, `app/ponto/catalogo/ausencias.py:240–281`, `app/config/settings/saas.py:34–50,67–112`, `app/ponto/services/atestados_lote.py:156–168`
+
+### 4. Escrita, exceções e relógio
+
+A view monta contexto e resposta. CSV e ZIP escrevem em memória, e o caminho de negócio não grava cadastro, ausência ou anexo. Até a prévia e o CSV abrem anexos em `rb` antes do filtro, pela detecção de tipo da linha do tempo. O diff acrescenta chamadas a `except` existentes, incluindo o marcador de arquivo faltante e o `debug` de falha ao fechar o ZIP. A infraestrutura já registra o acesso HTTP. As escritas de banco e arquivos temporários do diff pertencem às fixtures. `app/relatorios/views.py:344–396`, `app/ponto/services/atestados_lote.py:54–63,114–172`, `app/ponto/services/dia_decidido.py:645–667`, `app/ponto/models.py:855–864`, `app/gunicorn.conf.py:42–49,97–104`, `app/relatorios/tests/test_atestados_lote_tela.py:23–69,108–112,154–156,172–179`
+
+Há relógio fora da borda. `janela()` lê `date.today()` mesmo com mês e ano explícitos. Só o período livre desvia dessa leitura. A view chama o serviço sem injetar a data. `app/relatorios/views.py:376`, `app/ponto/services/atestados_lote.py:32–43`, `app/docs/GLOSSARIO.md:20`
+
+### 5. Mordida dos testes [nao verificado]
+
+Por inspeção, os testes cobram cada ação na prévia, o bloqueio da empresa inativa, o tipo cadastrado e o desligado, o filtro de rejeitadas, os bytes do CSV e o link da rota. A mordida é parcial. O `assertIn` do catálogo e o `len(esperados)` validam a fixture. O ZIP compara nomes, então uma alteração que preserve os nomes e troque os bytes passa pela asserção. Os downloads são chamados diretamente, então seus links podem estar errados sem falha nesses casos. `app/relatorios/tests/test_atestados_lote_tela.py:76–123,145–193`, `app/templates/relatorios/atestados_lote.html:43–47`
+
+Faltam casos para período invertido, competência omitida após o corte, empresa visível sem colaboradores, ZIP vazio e negação por permissão em CSV e ZIP. Em memória, `zip_bytes([])` devolveu um ZIP válido com zero entradas. Execução da suíte Django e mutação linha a linha [nao verificado]. `app/relatorios/tests/test_atestados_lote_tela.py:76–106,125–186`, `app/ponto/services/atestados_lote.py:135–173`
+
+### 6. Contratos
+
+**Vermelho confirmado em memória.** A catraca de `core/tests` espera as linhas **486 e 593** de `extrato_parcial`, mas mediu **552 e 659** na cópia. Foi **1 teste executado, 1 falha**, pelo modo sem Django e sem banco documentado no próprio teste. `app/core/tests/test_medida_turno_do_par.py:28–36,346,562–566`, `app/relatorios/views.py:552,659`
+
+A sonda dinâmica de sessão alcança a rota nova, que tem `@login_required`. O censo estático contou **13 cards** no índice, e os verificadores estáticos de HTML e botão PDF encontraram zero ocorrências nos dois templates tocados. O selo de compilação enumera o template novo pelo `os.walk`. Resultado da sonda de sessão e compilação Django em execução [nao verificado]. `app/config/urls.py:30`, `app/relatorios/urls.py:15`, `app/relatorios/views.py:344`, `app/core/tests/test_rota_pede_sessao.py:121–147,235–265`, `app/relatorios/tests/test_index_enxuto.py:80–82,113–125,165–183`, `app/core/tests/test_contract_template_bem_formado.py:76–101,130–147`, `app/core/tests/test_contract_btn_pdf.py:63–82`, `app/core/tests/test_todo_template_compila.py:34–60`
+
+Confirmação independente do hash Git, execução em produção e conteúdo dos registros reais [nao verificado].
+
+## 26/11 21:37 · sessao 6dbf3b4e235c · - · - · origem=Ronald (tmux)
+
+- **Testes com cobertura direta.** A retirada de uma ação exigida altera os redirecionamentos esperados. A retirada do filtro médico, da inclusão de desligados, da delegação da prévia, do período livre, do filtro de status, dos cabeçalhos ou do link altera as respectivas asserções. A igualdade dos bytes cobre o CSV. A verificação do ZIP cobre os nomes, e uma alteração que preserve os nomes e esvazie o conteúdo passa nesse teste. `app/relatorios/tests/test_atestados_lote_tela.py:85–93,108–152,162–193`
+- **Asserções que não prendem a saída correspondente.** A presença de `acompanhante_lote` em `CAT.TIPOS_MEDICOS` e a contagem de `esperados` verificam a massa de teste. O nome do desligado pode continuar visível na lista de documentos faltando após a remoção da célula na tabela. Os testes chamam os downloads diretamente, sem clicar nos links ou conferir os controles de mês, ano e status. `app/relatorios/tests/test_atestados_lote_tela.py:76–77,110–123,145–152,162–186` `app/templates/relatorios/atestados_lote.html:19–29,46–47,75,90–95`
+- **Lacunas.** Faltam período invertido, empresa visível sem colaboradores, ZIP vazio, autorização negada nos dois downloads, bytes dos anexos e competência padrão após o corte. O período invertido atravessa a validação e pode conter lançamentos. Verifiquei em memória que 20/09–10/09 inclui um lançamento sintético de 01/09–30/09 e que `zip_bytes([])` gera ZIP válido sem entradas. `app/relatorios/tests/test_atestados_lote_tela.py:25–47,76–106,125–186` `app/relatorios/views.py:369–395` `app/ponto/services/atestados_lote.py:39–43,54–64,135–173`
+- **Contratos.** A sonda de sessão encontra a rota pelo include compartilhado entre UI e CI e a guarda segue o requisito por inspeção. A compilação enumera todo `.html`. Executei apenas os verificadores puros de HTML e botões PDF em memória, com zero ocorrências nos dois templates, e contei 13 cards usando a função do próprio contrato. O atalho novo fica em Atestados acumulados. Compilação, renderização Django e suíte verde [nao verificado]. `app/config/urls.py:30` `app/config/urls_ci.py:11` `app/relatorios/urls.py:15` `app/relatorios/views.py:344–349` `app/core/tests/test_rota_pede_sessao.py:121–147,235–265` `app/core/tests/test_todo_template_compila.py:34–60` `app/core/tests/test_contract_template_bem_formado.py:76–101,130–147` `app/core/tests/test_contract_btn_pdf.py:63–82` `app/relatorios/tests/test_index_enxuto.py:55–58,80–82,113–125,165–183` `app/templates/relatorios/atestados.html:12`
+
+## 26/11 21:36 · sessao c17fe6845773 · - · - · origem=Ronald (tmux)
+
+**REPROVO.** A tela promete competência “Atual”, mas `LOTE.janela` usa o mês civil para escolher a competência padrão. Em 25/09 com corte 12, retorna 12/08–11/09. O juiz retorna 12/09–11/10. O helper dos testes informa mês e ano em todas as consultas válidas. `app/templates/relatorios/atestados_lote.html:27`, `app/relatorios/views.py:355`, `app/ponto/services/atestados_lote.py:39`, `app/ponto/janelas.py:24`, `app/core/juizes.py:352`, `app/relatorios/tests/test_atestados_lote_tela.py:76`.
+
+**Período invertido.** A view checa formato e presença das duas datas. Um intervalo invertido passa ao serviço, e um lançamento abrangendo as duas pontas passa ao filtro e pode ser exportado. A prova nova cobre data impossível e par incompleto. `app/relatorios/views.py:369`, `app/ponto/services/atestados_lote.py:39`, `app/ponto/services/atestados_lote.py:58`, `app/relatorios/views.py:383`, `app/relatorios/tests/test_atestados_lote_tela.py:136`.
+
+**Semântica.** A janela e a duração de um lançamento fechado são inclusivas. “Dias” imprime a duração integral do lançamento. A seleção inclui lançamentos sobrepostos, mas trata `data_fim=NULL` como dia inicial. O juiz de cobertura estende tipos indeterminados até o fim da janela, inclusive `afastamento_inss`, médico no catálogo congelado. O acumulado anual usa dias ocupados, recortados até hoje. “Todos” retira o filtro de status, incluindo rejeitadas e ambos os estados de espera. A regra de cobertura da folha usa aprovadas. `app/ponto/services/ausencia.py:198`, `app/ponto/services/atestados_lote.py:58`, `app/ponto/services/dia_decidido.py:674`, `app/ponto/catalogo/ausencias.py:92`, `app/ponto/turnos.py:2548`, `app/ponto/turnos.py:2871`, `app/relatorios/views.py:277`, `app/relatorios/views.py:295`, `app/relatorios/views.py:378`, `app/ponto/models.py:701`.
+
+**Linhagem.**
+
+- Cadastro de empresa escreve PK e campos via formulário e portas. `empresas_visiveis` lê ativa/CNPJ, ordena razão e fornece o conjunto da view. Dropdown usa fantasia ou razão, CSV usa razão e o juiz lê o corte. `app/colaboradores/views.py:509`, `app/colaboradores/views.py:539`, `app/colaboradores/services/estrutura.py:13`, `app/colaboradores/queries.py:78`, `app/colaboradores/models.py:164`, `app/ponto/services/atestados_lote.py:125`, `app/ponto/janelas.py:36`.
+- Admissão/edição gravam nome e empresa. `Colaborador.save` gera matrícula. A transferência troca a empresa atual. O lote seleciona pela empresa atual e carrega o histórico pelo colaborador, então uma transferência cross-CNPJ desloca a atribuição histórica no relatório. HTML e CSV leem matrícula/nome. O ZIP usa matrícula ou PK. `app/colaboradores/views.py:1203`, `app/colaboradores/views.py:1333`, `app/colaboradores/views.py:1362`, `app/colaboradores/views.py:1413`, `app/colaboradores/services/colaborador.py:152`, `app/colaboradores/models.py:427`, `app/relatorios/views.py:379`, `app/ponto/services/dia_decidido.py:645`, `app/templates/relatorios/atestados_lote.html:74`, `app/ponto/services/atestados_lote.py:95`, `app/ponto/services/atestados_lote.py:123`.
+- `criar_ausencia` grava colaborador, tipo, datas, dias, minutos, status, registrador, descrição e anexo. `editar_ausencia_registro` grava tipo, datas, dias, minutos e descrição. `Ausencia.save` valida/deriva a duração, minutos de falta e o carimbo. `mudar_estado` e `decidir` gravam status e carimbos, e `anexar_documento`/`_reabrir` gravam anexo. `app/ponto/services/ausencia.py:473`, `app/ponto/services/ausencia.py:562`, `app/ponto/services/ausencia.py:648`, `app/ponto/services/ausencia.py:975`, `app/ponto/services/ausencia.py:1015`, `app/ponto/services/ausencia.py:1087`, `app/ponto/services/ausencia.py:1298`, `app/ponto/models.py:878`.
+- `linha_do_tempo` exclui filhas por `documento_referencia`, gera um lançamento com dados, rótulo, status, anexo e duração, e alimenta o Histórico e o lote. `quem_quando` faz fallback do decisor para registrador/sistema e da aprovação para criação. HTML lê status exibido e CSV lê código bruto. “Documento” indica referência gravada. O ZIP lê o arquivo e produz `.FALTANDO.txt` se falhar. `app/ponto/views.py:2042`, `app/ponto/views.py:2701`, `app/ponto/services/dia_decidido.py:564`, `app/ponto/services/dia_decidido.py:570`, `app/ponto/services/dia_decidido.py:645`, `app/ponto/services/dia_decidido.py:674`, `app/templates/relatorios/atestados_lote.html:76`, `app/ponto/services/atestados_lote.py:126`, `app/ponto/services/atestados_lote.py:147`.
+- UI/porta gravam `TipoAusencia`, o catálogo lê ativos, `TIPOS_MEDICOS` lê a flag e `LOTE._exige_documento` lê a flag bruta. A propriedade `Ausencia.exige_documento` consulta o dever perante o fluxo, com exceções distintas. `app/ponto/views_tipos_ausencia.py:67`, `app/ponto/services/ausencia.py:1761`, `app/ponto/catalogo/ausencias.py:240`, `app/ponto/catalogo/ausencias.py:385`, `app/ponto/catalogo/ausencias.py:467`, `app/ponto/services/atestados_lote.py:25`, `app/ponto/models.py:723`, `app/ponto/services/ausencia.py:937`.
+
+**Isolamento de cadastro e arquivos.** Em SaaS os modelos `ponto`/`colaboradores` são do schema do tenant e o middleware seleciona o schema. O cache de catálogo é global por 60 s, sem chave de schema. Em processo compartilhado, flags e rótulos do outro tenant podem afetar o lote de linhas locais. A mídia usa `FileSystemStorage` e o ZIP segue a referência gravada do lançamento local. Exposição efetiva de colaborador/arquivo de outro tenant [nao verificado]. `app/config/settings/saas.py:34`, `app/config/settings/saas.py:67`, `app/ponto/catalogo/ausencias.py:240`, `app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:274`, `app/config/settings/saas.py:109`, `app/config/settings/base.py:101`, `app/ponto/models.py:777`, `app/ponto/services/atestados_lote.py:157`.
+
+## 26/11 21:35 · sessao cf1910455dee · - · - · origem=Ronald (tmux)
+
+**Acesso.** Prévia, CSV e ZIP passam pela mesma guarda de sessão e pelas ações `ver_relatorios`, `ver_folha` e `ver_ausencias`. O juiz aceita superusuário ou as permissões concedidas, sem condição literal sobre `is_staff`. O link da tela anterior aparece também para quem só tem `ver_relatorios`, mas a nova rota recusa esse acesso. (`app/relatorios/views.py:19-22`, `:252-255`, `:344-349`, `:383-396`, `app/colaboradores/mixins.py:322-331`, `app/templates/relatorios/atestados.html:12`)
+
+**Escopo.** Todas as saídas resolvem a empresa dentro de `empresas_visiveis()`, que exclui inativas e CNPJ de diagnóstico. O queryset seleciona colaboradores da empresa por FK, e a linha do tempo seleciona ausências pelo colaborador. Em SaaS, middleware e backend por schema isolam essas tabelas. O cache do catálogo, porém, é global por processo e não usa schema na chave. Um worker compartilhado pode aplicar classificação médica, rótulo e exigência documental de outro tenant sobre registros locais. O ZIP abre o `FieldFile` persistido e o storage configurado usa raiz comum, sem prefixo por schema. Nenhuma chave de arquivo vem do GET. Vazamento de bytes ou de colaboradores em produção [nao verificado]. (`app/relatorios/views.py:351-381`, `app/colaboradores/queries.py:78-87`, `app/ponto/services/dia_decidido.py:645-651`, `app/config/settings/saas.py:34-50`, `:67-95`, `:109-112`, `app/config/settings/base.py:101-102`, `app/ponto/catalogo/ausencias.py:240-281`, `app/ponto/models.py:777-781`, `app/ponto/services/atestados_lote.py:156-168`, `Caddyfile:7-29`)
+
+**Efeitos.** A view monta contexto e resposta. CSV e ZIP são montados em memória. Prévia e CSV também abrem anexos em `rb` para identificar o tipo real antes de filtrar janela, tipo e status. A rota acrescenta chamadas a caminhos existentes com `except`, sem acrescentar handlers de exceção. Falha de leitura no ZIP vira entrada `.FALTANDO.txt` em memória. Falha de fechamento chama `debug`, abaixo do nível INFO configurado no SaaS. O Gunicorn já registra o acesso em arquivo e stdout. As criações no banco e os uploads do diff estão nas fixtures dos testes. (`app/relatorios/views.py:351-396`, `app/ponto/services/atestados_lote.py:56-63`, `:114-172`, `app/ponto/services/dia_decidido.py:645-667`, `app/ponto/models.py:855-864`, `app/config/settings/saas.py:160-181`, `app/gunicorn.conf.py:42-49`, `:85-104`, `app/relatorios/tests/test_atestados_lote_tela.py:23-69`, `:108-112`, `:172-179`)
+
+**Relógio e período.** A nova rota aciona `date.today()` dentro do serviço, mesmo com mês e ano explícitos, salvo no período livre. Com valores omitidos, o serviço resolve pelo mês civil de hoje, que depois do corte pode divergir da competência vigente anunciada como “Atual”. Datas invertidas passam e podem retornar até um lançamento que abarque as duas pontas. (`app/relatorios/views.py:369-389`, `app/ponto/services/atestados_lote.py:32-43`, `:57-63`, `app/ponto/janelas.py:24-33`, `:60-63`, `app/templates/relatorios/atestados_lote.html:29-30`, `app/docs/PLANO-PADROES.md:97-103`)
+
+## 26/11 21:33 · sessao b5bb64b6f605 · CUSTO-DE-COORDENACAO · leitura · origem=Code
+
+# CUSTO-DE-COORDENAÇÃO F2 — mapa e censo
+
+Árvore de referência `6941dba240f47f4170bae0292a097c15dd81d0b6` (V6-LISTA-ORFAS c2). O aval, o brief F1, os hooks instalados e os logs foram consultados na árvore viva. Os predicados dos selos foram lidos no código. Resultado de execução dos selos [nao verificado]. `logs/CUSTO-DE-COORDENACAO/DOSSIE/wrapper.out:1` · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:1` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1`
+
+## 1. Onde a inteira pré-opus é exigida hoje
+
+| Lugar | Predicado e recusa | Selo |
+|---|---|---|
+| **Conduta `SUITE-ANTES-DO-OPUS`** | O opus **final** vem depois da suite inteira verde da árvore da obra. O registro histórico diz que, sem esse verde, a leitura final “nao conta”. `CLAUDE.md:421–431` · `app/docs/PISTA.md:101–114` | O selo de documentação cobra o comando canônico, os nomes e o bloco histórico. `bin/tests/test_suite_sh.sh:22–53` · `bin/tests/test_claude_md_regras_preservadas.sh:55–77` · `bin/tests/pista_blocos.ref:10` |
+| **`bin/suite.sh`** | `_suite_inteira` julga a seleção **efetiva**, já preenchida por `--volta`. É inteira se a seleção está vazia ou cobre todos os módulos `test*.py` descobertos nas `LABELS`. Classe ou método conta como cobertura do módulo. Busca que falha ou árvore sem módulos também pede motivo. Se inteira, exige `^(pre-opus\|pouso) [A-Za-z0-9][A-Za-z0-9_.-]*$`. Recusa rc 2: `suite INTEIRA so com --motivo "pre-opus <OBRA>" ou "pouso <OBRA>"`. A guarda roda na chamada da suite. `bin/suite.sh:252–298` | `bin/tests/test_suite_motivo.sh:60–78`, `:109–116`, `:135–152`. A rota da inteira pré-opus tem selo próprio em `bin/tests/test_suite_rota_pista.sh:173–186`, `:442–443`. |
+| **Disjuntor e hook Claude** | `PreToolUse` chama `_pretool`. Para `Agent` do tipo `verificador` em leitura final, cobra ID legível e varre o B3, seguindo depois pelas regras de papel, modelo e B4. O ramo não lê resultado de suite. A recusa específica é `DISJUNTOR B3-SEM-OBRA: verificador final sem ID de obra legivel`. O perfil do agente pede ID, diff e log do RED e atribui a execução da suite ao Code. `.claude/settings.json:62–68` · `bin/disjuntor.py:1821–1822`, `:2253–2274` · `.claude/agents/verificador.md:3–7` | O selo cobra a recusa por **ID**, em `bin/tests/test_disjuntor.sh:1588–1597`. Selo de recusa de Agent sem suite [nao verificado]. |
+| **`commit_msg.sh` e hooks Git** | Com `MERGE_HEAD`, `commit_msg.sh` chama `--merge-obra` e imprime `commit_msg: MERGE RECUSADO pelo B3 (rc $rcb)` se o juiz falhar. Depois cobra a forma da `LEI-AKITA`. Esses predicados leem mensagem e estado do B3. Os wrappers delegam, e `hooks.sh check` cobra a delegação e `merge.ff=false`, com recusa própria quando faltam. `bin/commit_msg.sh:29–42` · `bin/hooks.sh:18–53`, `:65–83` | `bin/tests/test_disjuntor.sh:1249–1258`, `:1306–1321` · `bin/tests/test_hook_mensagem_em_toda_copia.sh:46–55`, `:90–101` · `bin/tests/test_hook_nao_e_copia.sh:25–43` |
+| **Pre-push e pouso** | O pre-push executa todas as `LABELS` no commit empurrado, com reaproveitamento da régua verde nas condições de identidade da árvore e do commit. Propaga o rc da suite e imprime `FAIL`/`ERROR`/`FAILED` quando presentes. Sem veredito, emite `NAO RODOU` ou `a suite NAO CHEGOU A RODAR`. No pouso, `pista_certifica.sh` exige SHA e camadas correspondentes, rótulos exatos, `Found - podados == Ran`, rc 0 e `oom=0`. Um recorte falha com `run nao e a suite inteira` sob `NAO CERTIFICA`. São portas de push e pouso. `bin/pre-push.sh:43–76`, `:141–157`, `:184–200` · `bin/pista_certifica.sh:41–100` | `bin/tests/test_prepush_veredito_e_o_rc.sh:58–69` · `bin/tests/test_prepush_testa_o_commit.sh:59–105` · `bin/tests/test_suite_uma_vez_por_arvore.sh:77–84` · `bin/tests/test_pista_certifica.sh:90–105` |
+| **`verobras`** | O alias chama `~/verobras.py`. O quadro atribui estados a `ver`, `opus` e `pou` por nomes de arquivos, conteúdo e `git log`. Nesse fluxo não há coluna, contador ou recusa para suite inteira pré-opus. `/home/ronald/.bashrc:144` · `/home/ronald/verobras.py:11`, `:41–71`, `:73–91` | Selo correspondente [nao verificado]. | [nao verificado]
+
+## 2. Onde a reprovação bloqueia hoje
+
+- **Conduta, nova volta e escalonamento.** O item 5(b) manda conferir o achado e, se procedente, corrigir e chamar o Codex de novo. O 5(c) manda voltar a 5(a) após reprovação do **opus final**. O 5(d) manda escalar **com mais de 3 voltas Codex**, quando o PRINCÍPIO exige opus, e identifica essa leitura como escalonada. A chamada automática do escalonado e a abertura automática de nova volta [nao verificado]. `CLAUDE.md:421–431` · `app/docs/PISTA.md:102–114`
+- **Código, entrada Codex no B3.** O wrapper grava `<resposta>.id` quando a chamada produziu aquela resposta com rc 0. `triagem()` valida o papel `verificador` e o SHA da resposta e grava a decisão em `logs/codex/triagem.log`. A última decisão por chamada vence. Uma chamada com vários achados vale uma volta, e só `procedente` entra na contagem. A **3ª procedente** da mesma obra arma o B3. `bin/codex_pergunta.sh:853–862` · `bin/disjuntor.py:135–138`, `:874–962`, `:994–1019` · `bin/tests/test_disjuntor.sh:1205–1216`
+- **Código, entrada Opus no B3.** `_reprovacoes_finais()` lê transcripts de `agentType=verificador`. `_veredito_e_obra()` exige ID, prompt reconhecido como final e primeira linha do `SubagentHandback` começando com `REPROVADO`. A **1ª** reprovação assim reconhecida arma o B3. O código decide pelo prompt, com exclusão de leitura de desenho e da frase `nao e a leitura final`. Há um precedente em que o RELATO diz “opus escalonado” e a trilha registra “LEITURA FINAL”, com merge recusado. O prompt original desse caso [nao verificado]. `bin/disjuntor.py:135–136`, `:180–184`, `:602–604`, `:649–671`, `:839–853` · `bin/tests/test_disjuntor.sh:342–349`, `:413–421` · `app/docs/RELATO.md:602` · `logs/sessao/disjuntor.log:872`
+- **Estado e leitores.** `decide_b3()` lê transcripts, triagem e topo do RELATO. Sob trava, grava em `logs/sessao/disjuntor_estado.json` o `b3[obra]` com `reprovados`, `codex`, `disparado` e a fotografia do topo. Reconhece `DESENHO` ou `ERRO-BOBO` para liberar e há rearme explícito. `PreToolUse` atualiza o estado antes de `git commit`, da chamada Codex verificador com obra e do Agent final com obra. O Stop atualiza e emite **AVISO**. As novas chamadas seguem mesmo com a obra armada, embora a mensagem histórica de disparo ainda diga que seriam negadas. `bin/disjuntor.py:124`, `:340–377`, `:729–757`, `:965–1059`, `:1103–1128`, `:2231–2262` · `bin/hook_stop_fila1.py:1305–1323`, `:1518–1526`
+- **Bloqueio efetivo, merge.** `commit_msg.sh` chama `merge_obra()` com a mensagem do commit. `estado_b3()` devolve `PARADA`, `LIVRE` ou `NAO_SEI`. O juiz retorna rc 1 sem `OBRA:` legível, 3 para obra parada e 4 para `NAO_SEI`. O `PreToolUse` também recusa pedido explícito de fast-forward, que escaparia do commit-msg. Esse é o bloqueio executável por reprovação. `bin/commit_msg.sh:29–38` · `bin/disjuntor.py:1086–1100`, `:1282–1315`, `:2222–2224` · `bin/tests/test_disjuntor.sh:1249–1258`
+
+## 3. Classificador de mão única e mão dupla
+
+O PRINCÍPIO da §7b dá a regra por efeito e a classificação padrão por caminho: `ponto/`, `folha/`, fechamento, célula, export e holerite. A PARADA trata separadamente o motor v2 e **apagar ou voltar ao HEAD** arquivo usado em produção. Na árvore examinada, o disparo do B3 usa contadores por obra, e a suite usa seleção e motivo. Nenhum dos dois lê uma classe comum. `CLAUDE.md:255–264`, `:274–277` · `bin/disjuntor.py:991–1019` · `bin/suite.sh:272–298`, `:500–506`
+
+| Fonte existente | Classificação que já faz |
+|---|---|
+| `PROIBIDOS` do `_INVENTARIO_PY` e `OPUS_CONSTROI_TAGS` | O wrapper tem regras por caminho para motor, porta da célula, schema, `bin/` e outras zonas. O disjuntor lê seis tags dessa lista para decidir **quem pode construir**, aplicadas aos caminhos declarados no brief. `bin/codex_pergunta.sh:162–177` · `bin/disjuntor.py:1958–1961`, `:2023–2039`, `:2102–2113` |
+| `VIZINHANCA_DO_DINHEIRO` | Lista por substring do fabricante. Cobre motor, folha, holerite, porta da célula e alguns módulos vizinhos. Tem cobertura parcial da §7b. `bin/fabricante_alvo.py:29–37`, `:287–301` |
+| `PROPORCAO-POR-RISCO` | Já existe um juiz de **classe A/B** por diff, `selo_proporcao.py`. Lê a lista e as exceções de `CORTES.md` na base. Classe B exige todos os caminhos em templates, estáticos, testes ou módulos de leitura admitidos. `bin/` cai em A por padrão, embora o aval `POUSA-COM-LISTA` trate instrumento de `bin/` como mão dupla. `bin/selo_proporcao.py:11–35`, `:84–126`, `:130–174` · `app/docs/CORTES.md:510–512` · `logs/AVAIS-1515/POUSA-COM-LISTA-2611-1825.txt:1` |
+| `LABELS` | Universo de apps da suite e validação do primeiro segmento do rótulo. `bin/regua.sh:23` · `bin/suite.sh:195–226` |
+
+**Fonte comum registrada para F1/F2.** O RELATO vivo registra a decisão de usar `bin/mao_unica.py` sobre o diff do merge. O brief F1 nomeia `mao_unica(caminhos)` e o consumidor `merge_obra`, preservando a contagem em `decide_b3`. Na F2, os pontos de decisão a confrontar com essa mesma fonte são a triagem e o escalonamento de CODEX 5(b)–(d) e a escolha da seleção pré-opus antes da guarda e da rota de `suite.sh`. O brief descreve um arquivo novo e o despacho põe F2 depois de F1 na mesma cópia. `app/docs/RELATO.md:13658–13659` (vivo) · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:2`, `:8` · `CLAUDE.md:425–431` · `bin/suite.sh:198–226`, `:272–298`, `:500–506`
+
+## 4. Diff, labels e ROTA PISTA
+
+- **Mapeamento já existente.** `volta_intermediaria.sh` enumera `.py` tocados para Ruff, roda o selo do disjuntor e delega a seleção a `suite.sh --volta <base>`. A suite chama `vizinhos_da_volta.py` e filtra a saída pelas `LABELS`. O helper lê o diff `<base>..HEAD` sob `app/`, exclui `app/docs/`, converte teste tocado em label pontuado, inclui o app inteiro de migration tocada, busca vizinhos por AST/regex e junta selos globais. Isso seleciona **obra + vizinhos + globais**. Função que devolva os apps donos de **todos** os caminhos tocados [nao verificado]. `bin/volta_intermediaria.sh:19–35` · `bin/suite.sh:195–226` · `bin/vizinhos_da_volta.py:4–18`, `:25–45`, `:92–132`
+- **Árvore efetivamente testada.** `arvore_do_push.sh` materializa, compara e monta `app/` do commit. Na ROTA PISTA, quem faz a foto é `suite.sh`: HEAD com `app/` limpo, foto Git de `app/` quando sujo. A seleção de `--volta` já foi calculada até HEAD. `bin/arvore_do_push.sh:6–17`, `:85–103` · `bin/suite.sh:198–216`, `:417–440`
+- **`--only` na pista.** Com `--dir` e recorte efetivo, a rota envia `pede <sha> [--parallel N] --only <labels>`. A inteira com motivo pré-opus também vai, com todas as `LABELS` quando não há seleção explícita. Antes do aceite pode cair na VM. Depois dele usa o rc e o log do mesmo job, ou rc 71 de infraestrutura, com retorno à VM na recusa comprovada sem execução. O selo exige `appA` no recorte, `appA appB` na inteira e `appA.tests` no `--volta` simulado, com espera e log do mesmo ID e sem trava de VM no caso aceito. Para certificar **pouso**, o juiz confere a seleção executada no `AMBIENTE argv=`, inclusive quando o transporte usou `--only`. `bin/suite.sh:319–342`, `:440–506` · `bin/tests/test_suite_rota_pista.sh:152–186`, `:198–240`, `:442–446` · `bin/pista_certifica.sh:61–92`
+
+## 5. Medida do Pronto
+
+**Suites inteiras por obra.** O `verobras.py` atual não faz a contagem pedida pelo aval. A coluna `pou` decorre de `POUSO` no Git ou de arquivo `pouso.(certifica|pista|espera)` nos logs. O registro que distingue tecnicamente a inteira de um recorte está no log do run (`AMBIENTE argv=`), cruzado pelo certificador com SHA, job, rótulos e contagens. `/home/ronald/verobras.py:41–71`, `:73–91` · `app/core/tests/test_ambiente_do_run.py:52–56` · `bin/pista_certifica.sh:47–92` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1`
+
+**Tokens por papel.** `chamadas.log` grava o papel no `ini` e o `thread_id`, rc e duração no `fim`. Reproduzi a métrica do ESTADO: casar por `(obra, hash12, pid)`, selecionar chamadas iniciadas em **26/11/2026**, localizar a sessão `.jsonl` pelo `thread_id` e somar o último `payload.info.total_token_usage.total_tokens` por papel. Entram apenas sessões pareadas com total registrado. `bin/codex_pergunta.sh:561–571`, `:608–609` · `bin/codex_limite_estado.py:49–68`, `:127–128`, `:185–213` · `bin/disjuntor.py:2434–2441`, `:2645–2649`
+
+| Papel | Até 20:38:04 (`chamadas.log:6878`) | Até 21:29:38 (`chamadas.log:6904`) |
+|---|---:|---:|
+| Censo | 33.760.841 | 33.760.841 |
+| Construtor | 140.054.611 | 151.328.056 |
+| Leitura | 98.103.363 | 101.856.461 |
+| Sonda | 870.360 | 870.360 |
+| **Verificador** | **157.754.998 (58 chamadas)** | **168.862.787 (64 chamadas)** |
+| **Total** | **430.544.173** | **456.678.505** |
+| **Fatia do verificador** | **36,64%** | **36,98%** |
+
+A referência de **157,8 M** do aval é reproduzível pelo subtotal de `verificador` às 20:38:04. A metade da referência publicada é **78,9 M**. O horário em que o aval colheu o número [nao verificado]. [`chamadas.log:6878`](/home/ronald/saas-hasner/logs/codex/chamadas.log:6878) · [`chamadas.log:6904`](/home/ronald/saas-hasner/logs/codex/chamadas.log:6904) · `bin/codex_limite_estado.py:185–213` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1`
+
+## 6. Trechos do CLAUDE.md e selos sensíveis
+
+- **§3, `CLAUDE.md:95–110`.** Comando canônico, rota do recorte e da inteira pré-opus, e regra `INTEIRA SO COM MOTIVO`. `test_suite_sh.sh` recorta a partir do título até a primeira linha sem `\`. Se o comando canônico passar a ser só `--only` ou `--volta`, falha a exigência de `bin/suite.sh --motivo "(pre-opus|pouso) <OBRA>"` com um único `--motivo` no bloco. `bin/tests/test_suite_sh.sh:22–53`
+- **§7b, `CLAUDE.md:256–265`, `:284–287`, `:370–374`, `:421–439`.** O PRINCÍPIO define classe e proporcionalidade. PARADA 4 liga reprovação final ao B3. CODEX 5(b) disciplina nova volta, 5(c) exige inteira verde antes do final e volta a (a) na reprovação, e 5(d) disciplina o escalonamento. O item 6 mede voltas, triagem e reprovação. `bin/tests/test_claude_md_regras_preservadas.sh` exige os nomes `CODEX-PRE-VERIFICADOR` e `SUITE-ANTES-DO-OPUS` e o ponteiro no CLAUDE. Cobra hash literal do bloco **do `PISTA.md`**. Uma mudança só na prosa de 5(b)–(d) preserva esses predicados se os nomes e o ponteiro seguirem presentes. Uma mudança no bloco histórico altera o hash. `bin/tests/test_claude_md_regras_preservadas.sh:47–77` · `bin/tests/pista_blocos.ref:10` · `app/docs/PISTA.md:101–117`
+- **Recorte vizinho.** `test_agente_no_modelo.sh` lê RAIAS 3 e CODEX 2 entre cabeçalhos fixos e cobra papel, espera e as seis tags de autoria. Esse recorte termina antes de CODEX 5. Já `test_suite_motivo.sh` e `test_suite_rota_pista.sh` cobram o comportamento executável da inteira pré-opus. `bin/tests/test_agente_no_modelo.sh:255–292` · `bin/tests/test_suite_motivo.sh:60–78`, `:109–116` · `bin/tests/test_suite_rota_pista.sh:173–186`, `:442–443`
+
+## 7. Perguntas de lei abertas — 6 (0 = abre)
+
+1. Para escritor fora da lei em **mão dupla**, o aval mantém o opus **final**. Se ele reprovar, ainda vale a volta de 5(c), ou o achado segue com a lista? O que acontece com a revisão obrigatória de concorrência, schema e multi-tenant quando a obra for classificada como mão dupla? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `CLAUDE.md:257–263`, `:427–431`
+2. Qual é o universo comum de mão única? O F1 enumera motor, dinheiro, exportada e apagar arquivo de prod. O F2 diz “arquivo de prod”. A §7b traz uma lista de caminhos mais ampla e o brief F1 inclui migrations. “Arquivo de prod” vale para qualquer edição ou para as operações nomeadas na PARADA? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F1-2611-2125.txt:1` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:8` · `CLAUDE.md:257–262`, `:274–277`
+3. Em mão dupla, “B3 só dispara em mão única” veda armar `b3[obra].disparado` ou só veda recusar o merge? E, onde permanecer o escalonamento, 5(d) conserva **mais de três voltas totais**, com o B3 na **terceira procedente**? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F1-2611-2125.txt:1` · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:8` · `CLAUDE.md:428–429` · `bin/disjuntor.py:1008–1019`
+4. “Apps tocados” significa donos diretos dos caminhos ou inclui vizinhos e selos globais de `--volta`? Qual base e qual árvore valem se a foto executada inclui mudanças ainda fora de HEAD? Qual é a exigência para um diff só de `bin/`, `CLAUDE.md`, docs ou caminhos sem label? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `bin/vizinhos_da_volta.py:4–18`, `:25–30` · `bin/suite.sh:198–216`, `:417–440`
+5. A exceção de inteira pré-opus vale só para **motor ou dinheiro**, como diz o item 2, ou também para os outros casos classificados como mão única, como exportada e arquivo de prod? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `CLAUDE.md:257–264`, `:427–431`
+6. Para o Pronto de **uma inteira por obra**, a unidade é execução, árvore certificada ou pouso? Como a contagem atribui uma suite compartilhada em comboio e uma inteira de pre-push que de fato rodou? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `CLAUDE.md:347–352` · `bin/pre-push.sh:43–75`, `:184–189` · `/home/ronald/verobras.py:41–71`
+
+## 26/11 21:32 · sessao 1fb8d8156ddb · O30-LOTE-MINIMA · construtor · origem=Code
+
+Implementei a rota `relatorios:atestados_lote`, com prévia, CSV e ZIP. A view exige sessão, as três permissões e uma empresa visível. O recorte inclui colaboradores de qualquer situação e usa o catálogo de tipos médicos. [relatorios/urls.py:15](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/urls.py:15) [relatorios/views.py:344](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:344)
+
+**Pendência para o opus.** A view delega a abertura dos originais ao ZIP. A chamada existente a `linhas()` também abre anexos indiretamente para identificar o formato, inclusive na prévia e no CSV. A exigência literal de abertura exclusiva em `zip_bytes()` fica pendente. [ponto/services/atestados_lote.py:54](/home/ronald/wt-codex-o30-lote-minima-212251/app/ponto/services/atestados_lote.py:54) [ponto/services/dia_decidido.py:667](/home/ronald/wt-codex-o30-lote-minima-212251/app/ponto/services/dia_decidido.py:667) [ponto/models.py:855](/home/ronald/wt-codex-o30-lote-minima-212251/app/ponto/models.py:855)
+
+### Arquivos alterados
+
+- [relatorios/views.py:337](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:337)
+- [relatorios/urls.py:15](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/urls.py:15)
+- [templates/relatorios/atestados_lote.html:1](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:1)
+- [templates/relatorios/atestados.html:12](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados.html:12)
+- [relatorios/tests/test_atestados_lote_tela.py:19](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/tests/test_atestados_lote_tela.py:19)
+
+Conferi **0 ocorrências de `except` nas adições**, incluindo os dois arquivos novos, e a sintaxe Python dos três arquivos alterados. Renderização, suíte, RED e mutantes ficam para o Code. [nao verificado em execução] [nao verificado]
+
+### Censo dos parâmetros GET
+
+| Parâmetro | Quem escreve | Quem lê |
+|---|---|---|
+| `empresa` | Seletor do formulário | `int_ou` e busca na lista de `empresas_visiveis()`. Sem empresa válida, a view retorna o formulário antes de consultar os lançamentos. [template:11](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:11) [view:351](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:351) |
+| `mes`, `ano` | Campos de competência | `mes_ou`, `ano_ou` e `janela()` com a empresa selecionada. [template:26](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:26) [view:355](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:355) [view:376](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:376) |
+| `de`, `ate` | Campos de período livre | `DateField` do Django valida o par ISO antes de enviá-lo a `janela()`. Usei `DateField` porque `core.sanitiza` oferece conversão de inteiros, mês e ano. [template:31](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:31) [view:337](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:337) [core/sanitiza.py:11](/home/ronald/wt-codex-o30-lote-minima-212251/app/core/sanitiza.py:11) |
+| `status` | Seletor «Aprovadas» ou «Todos» | A view passa `['aprovada']` por padrão e `None` para `todos`. [template:19](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:19) [view:378](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:378) |
+| `formato` | Links da prévia, preservando os filtros | A view chama `csv_bytes()` ou `zip_bytes()` e responde com `attachment`. A chave ausente leva à prévia. [template:43](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:43) [view:383](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:383) |
+
+### RED e mutantes para o Code
+
+O RED exige que o tipo médico cadastrado `acompanhante_lote` apareça para um colaborador desligado. O mutante com `['atestado']` exercita a rota e deve falhar nessa asserção. [teste:108](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/tests/test_atestados_lote_tela.py:108) [nao verificado] [nao verificado]
+
+Execute a partir de `app/`, no ambiente de testes do Code. O auxiliar restaura o arquivo após cada mutante. A primeira chamada remove a rota para reproduzir o RED da base. Rode as chamadas uma por vez e confira a falha no teste indicado. [config/settings/ci.py:6](/home/ronald/wt-codex-o30-lote-minima-212251/app/config/settings/ci.py:6) [nao verificado] [nao verificado]
+
+```bash
+mutante() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$@" <<'PY'
+from pathlib import Path
+from subprocess import run
+import sys
+
+nome, antes, depois, teste = sys.argv[1:] [nao verificado]
+arquivo = Path(nome)
+original = arquivo.read_bytes()
+alvo = antes.encode()
+assert original.count(alvo) == 1, (nome, antes)
+prefixo = 'relatorios.tests.test_atestados_lote_tela.AtestadosLoteTelaTest.'
+try:
+    arquivo.write_bytes(original.replace(alvo, depois.encode(), 1))
+    resultado = run([sys.executable, '-B', 'manage.py', 'test',
+                     '--settings=config.settings.ci', prefixo + teste]) [nao verificado]
+finally:
+    arquivo.write_bytes(original)
+raise SystemExit(resultado.returncode)
+PY
+}
+
+view=relatorios/views.py
+red=test_MORDE_tipo_medico_do_cadastro_e_desligado_entram_na_previa
+acesso=test_acesso_exige_sessao_e_as_tres_acoes
+status=test_status_padrao_aprovada_e_todos_inclui_rejeitada
+
+mutante relatorios/urls.py "path('atestados/lote/', views.atestados_lote, name='atestados_lote')," "" "$red"
+mutante "$view" 'tipos = sorted(_CATV.TIPOS_MEDICOS)' "tipos = ['atestado']" "$red"
+mutante "$view" 'empresa=empresa, de=de, ate=ate)' 'de=de, ate=ate)' "$red"
+mutante "$view" 'previa=_LOTE.previa(linhas)' 'previa=_LOTE.previa([])' "$red"
+mutante "$view" "or not tem_acao(request.user, 'ver_folha')" 'or False' "$acesso"
+mutante "$view" "or not tem_acao(request.user, 'ver_ausencias')" 'or False' "$acesso"
+mutante "$view" 'e for e in empresas if e.pk == empresa_id' \
+  'e for e in Empresa.objects.all() if e.pk == empresa_id' \
+  test_sem_empresa_ou_com_empresa_oculta_mostra_so_o_formulario
+mutante "$view" 'empresa=empresa, de=de, ate=ate)' 'empresa=empresa)' \
+  test_periodo_livre_prevalece_sobre_competencia
+mutante "$view" "status = None if todos_status else ['aprovada']" 'status = None' "$status"
+mutante "$view" 'status = None if todos_status else' 'status =' "$status"
+mutante "$view" 'if tipos else []' '' test_catalogo_sem_tipos_medicos_mostra_previa_vazia
+mutante "$view" '_LOTE.csv_bytes(linhas)' "b''" test_csv_entrega_os_bytes_do_servico
+mutante "$view" '_LOTE.zip_bytes(linhas)' '_LOTE.zip_bytes([])' \
+  test_zip_contem_os_documentos_com_os_nomes_do_servico
+mutante templates/relatorios/atestados.html 'Lote de atestados (CSV/ZIP)' '' \
+  test_atestados_acumulados_renderiza_o_link_para_o_lote
+```
+
+**Módulos vizinhos para a sessão.** [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
+  relatorios \
+  core.tests.test_rota_pede_sessao \
+  core.tests.test_int_cru_gate \
+  core.tests.test_contract_excecoes_engolidas \
+  core.tests.test_todo_template_compila \
+  ponto.tests.test_atestados_lote
+```
 
 ## 26/11 21:30 · sessao 8edc8bb29381 · - · - · origem=Ronald (tmux)
 
@@ -590,317 +846,4 @@ O diff implementa a medição por instante e liga A/B ao alarme, mas ainda permi
 2. **D:** há órfão reproduzido em memória quando o atomic externo desfaz a linha depois do retorno, e a exclusão tem uma janela entre verificar a referência e apagar. `app/ponto/services/ausencia.py:667`, `app/ponto/services/ausencia.py:690`, `app/ponto/services/ausencia.py:263`
 3. **Prova de pouso:** rodei 47 contratos sem banco. Houve 46 passes e um erro de ambiente por falta de `PIL`. A execução dos REDs antes da cura, os testes HTTP com banco e a suíte integral verde ficam [nao verificado]. `app/ponto/tests/test_atestado_f3_contrato.py:1243`, `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_atestado_f3.py:284`, `CLAUDE.md:398`
 
-## 26/11 20:51 · sessao 404fd9d1ab17 · O30-F3-CONSTRUIR · construtor · origem=Code
-
-**C15 aplicada aos quatro achados.** Os sete alvos sem banco falharam na base pelos motivos abaixo e passaram após a cura. Os oito mutantes acrescentados e os oito já presentes falharam por asserção, todos com `rc=1`. [Contratos do lote](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:896) · [Contratos do INSERT](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:630) · [Mutantes](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3_c14.py:19) [nao verificado]
-
-### O que mudou e quem consome
-
-- **A · Período.** O lote usa `_q_cobertura` uma vez, no SQL. Entra o tipo em aberto iniciado antes da janela com `data_fim` nula. Fica fora o tipo avulso nas mesmas datas. A borda `data_fim == de_data` entra. O mesmo predicado é lido por `cobertura_ausencia_periodo` e `CargaDaJanela.cobertura`. Prévia, CSV, PDF e ZIP recebem o mesmo recorte. `ponto/services/atestados_lote.py:36`, `ponto/turnos.py:2817`, `ponto/turnos.py:3142`, `ponto/views_atestado.py:110`, `ponto/views_atestado.py:124`
-- **B · Busca e limite.** `q` usa `filtro.aplicar`, como no Holerite e no Retrato, e o campo diz **Nome ou CPF**. O limite é aplicado ao resultado dos filtros de pessoa, empresa, período e tipo médico. A Busca de Âncoras continua consumindo `qs_colaborador` na sua própria porta. `ponto/views_atestado.py:57`, `ponto/views_atestado.py:68`, `ponto/views_atestado.py:116`, `core/filtro.py:200`, `holerite/views.py:407`, `folha/views_retrato.py:226`, `core/busca.py:151`
-- **C · Painel.** Retirei o GET que recebia uma resposta HTTP e devolvi o POST de metadados ao teste de permissão. O POST de arquivo pós-aprovação e o GET do formulário da pendente usam um DP comum, vinculado ao grupo semeado pelo `Setor`. O formulário posta em `relatorios:anexar_atestado`. `ponto/tests/test_atestado_f3.py:85`, `ponto/tests/test_atestado_f3.py:243`, `ponto/tests/test_atestado_f3.py:255`, `ponto/tests/test_atestado_f3.py:274`, `colaboradores/signals.py:10`, `templates/ponto/partials/painel_ausencia.html:90`
-- **D · INSERT.** Com upload pendente sob `atomic` externo, um savepoint cobre o INSERT, o evento e a projeção. Depois da saída do savepoint, o `finally` compensa o upload efetivamente gravado. A falha no INSERT e a falha antes do retorno usam a mesma consulta de referência, no alias da escrita. O `except` existente mantém a tradução da constraint. Além do lançamento INSS, chamam a criação o PWA, a API, a materialização de chamados, o veredito de célula, a checagem de ausência e o espelho de férias. `ponto/services/ausencia.py:637`, `ponto/services/ausencia.py:668`, `ponto/services/ausencia.py:263`, `ponto/views.py:2550`, `ponto/views.py:2683`, `api/views.py:1824`, `chamados/services/materializacao.py:998`, `chamados/services/materializacao.py:1037`, `ponto/services/veredito_celula.py:342`, `ponto/services/checar_ausencia.py:46`, `ponto/services/ausencia.py:1524`
-
-### REDs e comandos
-
-Os comandos abaixo usam `L=AtestadoF3LoteSemBancoTest` e `P=AtestadoF3PortaSemBancoTest`. O executor aplica os mutantes em memória. `ponto/tests/test_atestado_f3_contrato.py:349`, `ponto/tests/test_atestado_f3_contrato.py:862`, `ponto/tests/mutantes_atestado_f3_c14.py:105`
-
-```bash
-L=AtestadoF3LoteSemBancoTest
-P=AtestadoF3PortaSemBancoTest
-red() { PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v "ponto.tests.test_atestado_f3_contrato.$1"; }
-mut() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.mutantes_atestado_f3_c14 "$1"; }
-```
-
-| Falha observada antes da cura | Comando do RED | Comando do mutante |
-|---|---|---|
-| **A** · Sumiu a ausência em aberto. `ponto/tests/test_atestado_f3_contrato.py:990` | `red "$L.test_RED_periodo_usa_cobertura_com_nulos_e_borda_inclusiva"` | `mut periodo_sem_aberto` |
-| **A** · A view reaplicou as datas. `ponto/tests/test_atestado_f3_contrato.py:1072` | `red "$L.test_rota_pdf_recebe_os_filtros_do_formulario"` | `mut periodo` |
-| **B** · `COL27` selecionou pelo PK em vez do texto no nome. `ponto/tests/test_atestado_f3_contrato.py:896` | `red "$L.test_RED_busca_q_tem_o_mesmo_resultado_do_filtro_universal"` | `mut busca_por_ancora` |
-| **B** · O lote respondeu 400 por limite quando o filtro universal deixava um registro. `ponto/tests/test_atestado_f3_contrato.py:931` | `red "$L.test_RED_limite_conta_depois_da_busca_q"` | `mut limite_antes_q` |
-| **C** · A checagem estrutural encontrou dois GETs na aprovada e nenhum teste da pendente. Os mutantes também cobrem a troca do DP pelo superusuário. `ponto/tests/test_atestado_f3_contrato.py:1053` | `red "$L.test_RED_migracao_do_formulario_do_painel_preserva_a_cobertura"` | `mut painel_bloco_morto` · `mut painel_sem_pendente` · `mut painel_com_superusuario` |
-| **D** · A linha sofreu rollback e o arquivo sobrou nas falhas injetadas no evento, na leitura do insumo e no despertar da projeção. `ponto/tests/test_atestado_f3_contrato.py:630` | `red "$P.test_RED_inss_remove_anexo_se_insert_falha_antes_de_retornar"` | `mut insert_sem_savepoint_do_ato` |
-| **D** · O arquivo foi apagado apesar da referência após o commit simulado. `ponto/tests/test_atestado_f3_contrato.py:685` | `red "$P.test_RED_insert_preserva_anexo_referenciado_quando_on_commit_levanta"` | `mut insert_apaga_referenciado` |
-
-A execução dos contratos sem banco teve **46 testes aprovados e um erro por falta de `PIL`** no PDF real. A checagem de tratadores passou sem `except` novo. A execução Django com ORM, storage e RBAC reais fica **[nao verificado]**, assim como a ocorrência em produção. A certificação fica com o Code e o opus final. `ponto/tests/test_atestado_f3_contrato.py:1244`, `ponto/tests/test_atestado_f3_contrato.py:222`, `ponto/tests/test_atestado_f3.py:255`, `ponto/tests/test_atestado_f3.py:284`
-
-## 26/11 20:49 · sessao cda0fb238f36 · ABONO-X-SAIDA-ANTECIPADA · construtor · origem=Code
-
-O RED novo passou sem mutação e falhou por `AssertionError` com `ps[-1:]` e `ps[:1]`. A única edição foi no arquivo de testes. [ponto/tests/test_abono_c1f_lista_da_jornada.py:30](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:30) [nao verificado]
-
-### Por que o M1b sobreviveu
-
-- O 12x36 obtém os períodos do pareador. O pareador ordena as batidas por timestamp, o adaptador mantém a ordem dos turnos, e `calcular_mes` acrescenta os períodos a `resultado.periodos` nessa sequência. No teto, `ps` é o grupo de períodos da jornada `dia`, montado de `resultado.periodos` com `dia_por_periodo[id(p)]` e `append`, preservando a ordem recebida. [ponto/motor_calculo_v2.py:2917](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:2917) [ponto/turnos.py:1232](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:1232) [ponto/adaptador_motor.py:29](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/adaptador_motor.py:29) [ponto/motor_calculo_v2.py:2672](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:2672) [ponto/motor_calculo_v2.py:1132](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1132)
-- Na fixture antiga, `22:00–22:30` é absorvido como intrajornada. O turno físico aparece **uma vez** em `ps`, de `D 19:30` a `D+1 01:00`. Conferi o pareamento e o teto em memória. `ps[-1]` carrega as duas pontas brutas, saída antecipada `D+1 01:00–07:00` e atraso `D 19:00–19:30`. Assim, `ps[-1:]` conserva a ponta que a parcial já cobre e a lista fica vazia. [RED antigo:92](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:92) [ponto/turnos.py:468](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:468) [ponto/motor_calculo_v2.py:1245](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1245) [ponto/motor_calculo_v2.py:1297](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1297)
-- A fixture antiga tem uma segunda barreira. Redatada para D+1, a parcial `06:30–19:30` termina depois do envelope da jornada de D, que fecha às `11:00` de D+1. O juiz a atribui a D+1, e o motor descarta a candidata. [ponto/turnos.py:78](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:78) [ponto/turnos.py:316](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/turnos.py:316) [ponto/motor_calculo_v2.py:1300](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1300)
-
-### RED novo e os três runs
-
-O teste entrega dois períodos fechados sintéticos ao teto, com o mesmo dia de jornada. A parcial `D 06:30–10:00` cobre 30 minutos de atraso como datada e cobriria 30 minutos de saída se redatada. Cada subteste monta períodos novos e muda a posição da ponta coberta. A asserção exige lista vazia nas duas ordens. [RED novo:32](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:32) [asserção:58](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:58) [nao verificado]
-
-| Run | Saída observada |
-|---|---|
-| Sem mutação | `Ran 1 test in 0.032s` · `OK` · `rc=0` |
-| `ps[-1:]` | `periodo_coberto='primeiro'` · `AssertionError` · `FAILED (failures=1)` · `rc=1` |
-| `ps[:1]` | `periodo_coberto='ultimo'` · `AssertionError` · `FAILED (failures=1)` · `rc=1` |
-
-Os dois vermelhos falharam na asserção da lista, com uma linha indevida de `saida antecipada`, `cobre_como_datada_min=0` e `cobriria_datada_no_dia_seguinte_min=30`. [asserção:58](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/tests/test_abono_c1f_lista_da_jornada.py:58) [ponto/motor_calculo_v2.py:1314](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/ponto/motor_calculo_v2.py:1314)
-
-O comando abaixo rodou o teste com `unittest` e adaptadores em memória para Django e `freezegun`, que faltam no Python local. O teto, o juiz de datas e os mutantes rodaram com o código da árvore. A execução na suíte Django fica com o Code. [requirements.txt:13](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/requirements.txt:13) [requirements.txt:43](/home/ronald/wt-codex-abono-x-saida-antecipada-184735/app/requirements.txt:43) [nao verificado na suíte Django] [nao verificado]
-
-```bash
-for fatia in '' '[-1:]' '[:1]'; do
-  printf '\nfatia=%s\n' "${fatia:-controle}"
-  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$fatia" <<'PY'
-import sys
-import unittest
-from datetime import datetime
-from pathlib import Path
-from types import ModuleType, SimpleNamespace
-from unittest.mock import patch
-from zoneinfo import ZoneInfo
-
-def modulo(nome, **atributos):
-    m = ModuleType(nome)
-    vars(m).update(atributos)
-    sys.modules[nome] = m
-    return m
-
-fuso = ZoneInfo('America/Sao_Paulo')
-tz = modulo('django.utils.timezone',
-            make_aware=lambda dt: dt.replace(tzinfo=fuso),
-            localtime=lambda dt: dt.astimezone(fuso),
-            localdate=lambda dt: dt.astimezone(fuso).date(),
-            is_naive=lambda dt: dt.utcoffset() is None)
-modulo('django')
-modulo('django.utils', timezone=tz)
-modulo('django.conf', settings=SimpleNamespace(TIME_ZONE=fuso.key))
-modulo('django.core')
-modulo('django.core.management')
-modulo('django.core.management.base', BaseCommand=object)
-modulo('django.test', TestCase=unittest.TestCase, SimpleTestCase=unittest.TestCase)
-
-def freeze_time(texto):
-    instante = datetime.fromisoformat(texto).replace(tzinfo=ZoneInfo('UTC'))
-    class Relogio(datetime):
-        @classmethod
-        def now(cls, tz=None):
-            return instante.replace(tzinfo=None) if tz is None else instante.astimezone(tz)
-    return patch('datetime.datetime', Relogio)
-
-modulo('freezegun', freeze_time=freeze_time)
-from ponto import motor_calculo_v2 as motor
-
-fatia = sys.argv[1]
-if fatia:
-    arquivo = Path(motor.__file__)
-    fonte = arquivo.read_text(encoding='utf-8')
-    alvo = "for p in ps for _q in (getattr(p, '_pontas_brutas_parcial'"
-    assert fonte.count(alvo) == 1
-    mutado = fonte.replace(alvo, alvo.replace('ps for', f'ps{fatia} for'), 1)
-    exec(compile(mutado, str(arquivo), 'exec'), vars(motor))
-
-label = ('ponto.tests.test_abono_c1f_lista_da_jornada.ListaDaJornadaNoTetoTest.'
-         'test_RED_a_lista_considera_a_ponta_coberta_em_qualquer_periodo')
-unittest.main(module=None, argv=['unittest', '-v', label])
-PY
-  printf 'rc=%s\n' "$?"
-done
-```
-
-## 26/11 20:38 · sessao 5c6e8d4a6356 · O30-F3-CONSTRUIR · verificador · origem=Code
-
-# O30-F3-CONSTRUIR · volta 8 · REPROVADO
-
-Quatro achados seguram a volta. O filtro usa componentes da casa, mas o período ainda tem duas derivações e a busca `q` diverge das telas do filtro universal. A rota antiga saiu, mas a migração quebrou um teste do painel. O savepoint corrige a falha de UPDATE na reabertura, mas o lançamento INSS ainda pode deixar órfão quando o INSERT já gravou o arquivo e o serviço falha antes de devolver a instância. A suíte verde exigida para o pouso segue [nao verificado]. `app/ponto/views_atestado.py:68`, `app/ponto/views_atestado.py:107`, `app/ponto/tests/test_atestado_f3.py:257`, `app/ponto/services/ausencia.py:654`, `app/ponto/services/ausencia.py:691`, `app/ponto/views.py:2571`, `CLAUDE.md:398`
-
-Usei o delta anexo e a cópia em leitura. O diretório não contém metadados Git. A confirmação independente do hash, o histórico dos commits, os REDs executados antes da cura e a ocorrência dos cenários em produção ficam [nao verificado]. [nao verificado]
-
-## 1. Bloqueios da c13 — PROCEDE
-
-| Bloqueio | Estado na origem | Evidência |
-|---|---|---|
-| **2. Filtro universal** | **NAO CURADO** | O dropdown usa `empresas_visiveis` e a busca caseira saiu. O lote usa `qs_colaborador` para `q`, enquanto o drawer do Holerite e o Retrato passam `q` para `filtro.aplicar`, com outra semântica. Para datas, o lote já decide a inclusão pelo SQL e volta a aplicá-la em Python com `max(a.data, ini)`. `app/ponto/views_atestado.py:58`, `app/ponto/views_atestado.py:68`, `app/ponto/views_atestado.py:107`, `app/ponto/services/atestados_lote.py:41`, `app/core/filtro.py:193`, `app/holerite/views.py:407`, `app/folha/views_retrato.py:216` |
-| **3. Porta antiga** | **CURADO** na view, na rota e no registro | Os três sítios têm lápide. A migração da cobertura de teste ficou quebrada, conforme o item 3. A autoria da retirada do pendente, reservada à sessão pelo brief, fica [nao verificado]. `app/ponto/views.py:2165`, `app/ponto/urls.py:72`, `app/core/juizes.py:1097`, `app/ponto/tests/test_atestado_f3.py:238` |
-| **4. Órfão sob atomic externo** | **NAO CURADO** como garantia do ato | A falha de UPDATE da reabertura ganhou savepoint na origem e a asserção voltou a exigir zero órfão. O lançamento INSS ainda perde o arquivo de vista se `criar_ausencia` falhar entre a saída do savepoint do INSERT e o `return`. `app/ponto/services/ausencia.py:1429`, `app/ponto/services/ausencia.py:1456`, `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:165`, `app/ponto/services/ausencia.py:654`, `app/ponto/services/ausencia.py:691`, `app/ponto/views.py:2542`, `app/ponto/views.py:2571` |
-
-## 2. Censo e semântica do recorte — PROCEDE
-
-| Campo ou parâmetro | Quem escreve e quem lê na cópia |
-|---|---|
-| **`q` do lote** | O formulário GET envia o campo declarado pela view. `filtro.ler` tira espaços e converte para maiúsculas, a view reescreve a cópia de `GET`, o formulário valida e `_colaboradores_filtrados` consulta `qs_colaborador`. O buscador lê PK por `colNN`, CPF exato cru ou mascarado, palavras de nome e matrícula. A outra porta web que delega ao mesmo buscador é **Busca de Âncoras**, via `buscar('colab', ...)` e `_colab`. Ela ainda tem tamanho mínimo e teto próprios da porta. `app/templates/relatorios/atestados_lote.html:6`, `app/ponto/views_atestado.py:57`, `app/ponto/views_atestado.py:92`, `app/ponto/views_atestado.py:68`, `app/core/filtro.py:76`, `app/core/busca.py:115`, `app/core/busca.py:151`, `app/core/busca.py:202`, `app/core/views.py:89` |
-| **`de_data` / `ate_data`** | Escrevem o formulário do lote e o partial de calendário da casa. `filtro.ler` valida, omite ponta inválida e inverte pontas trocadas. Leem o lote, `filtro.aplicar`, os chips, o drawer do Holerite e sua ação, e o Retrato. O `ate_data` do Extrato Parcial é uma chave de contexto calculada de `fim_real`. `app/ponto/views_atestado.py:62`, `app/ponto/views_atestado.py:92`, `app/ponto/views_atestado.py:107`, `app/templates/core/_filtro_campos.html:43`, `app/templates/core/_filtro_campos.html:48`, `app/core/filtro.py:78`, `app/core/filtro.py:98`, `app/core/filtro.py:193`, `app/core/filtro.py:266`, `app/holerite/views.py:407`, `app/holerite/views.py:433`, `app/holerite/views.py:565`, `app/folha/views_retrato.py:230`, `app/relatorios/views.py:593`, `app/templates/relatorios/extrato_parcial.html:10` |
-| **Empresa do lote** | O formulário envia a seleção. `ModelChoiceField` valida por `empresas_visiveis`, que lê ativa, CNPJ e razão social. A busca lê a empresa explícita para filtrar pessoas. A janela usa a selecionada, a empresa do colaborador na falta dela ou o corte padrão na falta das duas. O dropdown tem a mesma fonte da Lista de Ausências. Um colaborador de empresa oculta ainda pode entrar pelo seletor de colaboradores, por `q` ou pelo recorte geral. O RED de empresas só cobre o dropdown. `app/templates/relatorios/atestados_lote.html:6`, `app/ponto/views_atestado.py:58`, `app/ponto/views_atestado.py:71`, `app/ponto/views_atestado.py:103`, `app/colaboradores/queries.py:78`, `app/ponto/janelas.py:42`, `app/ponto/views.py:1775`, `app/ponto/tests/test_atestado_f3.py:321` |
-| **`Ausencia.documento` — escritores** | `criar_ausencia` passa o arquivo ao INSERT. `anexar_documento` e `_reabrir` gravam a coluna com `update_fields`. Edição e rederivação fazem `save()` integral e podem regravar o nome de uma instância antiga. O admin é de leitura. O storage grava antes do SQL. `app/ponto/services/ausencia.py:585`, `app/ponto/services/ausencia.py:655`, `app/ponto/services/ausencia.py:1136`, `app/ponto/services/ausencia.py:1434`, `app/ponto/services/ausencia.py:762`, `app/ponto/services/ausencia.py:1890`, `app/ponto/admin.py:38`, `app/ponto/models.py:777`, `app/ponto/services/ausencia.py:245` |
-| **`Ausencia.documento` — leitores** | API de reenvio e oferta do anexo, download da raiz, lista e painel, detector no modelo, guardas e trilha do serviço, linha do tempo, exportações do lote, vigia, porta da célula e comando de rejulgamento. A compensação lê o nome e procura referências. `app/api/views.py:1061`, `app/api/views.py:1855`, `app/ponto/views.py:2147`, `app/templates/ponto/ausencias.html:168`, `app/templates/ponto/partials/painel_ausencia.html:71`, `app/templates/ponto/partials/painel_ausencia.html:93`, `app/templates/ponto/partials/painel_ausencia.html:134`, `app/templates/ponto/partials/painel_ausencia.html:244`, `app/ponto/models.py:871`, `app/ponto/services/ausencia.py:251`, `app/ponto/services/ausencia.py:263`, `app/ponto/services/ausencia.py:652`, `app/ponto/services/ausencia.py:792`, `app/ponto/services/ausencia.py:857`, `app/ponto/services/ausencia.py:877`, `app/ponto/services/ausencia.py:899`, `app/ponto/services/ausencia.py:916`, `app/ponto/services/ausencia.py:925`, `app/ponto/services/ausencia.py:1127`, `app/ponto/services/ausencia.py:1146`, `app/ponto/services/ausencia.py:1422`, `app/ponto/views.py:2571`, `app/ponto/services/dia_decidido.py:477`, `app/ponto/services/dia_decidido.py:555`, `app/ponto/services/dia_decidido.py:671`, `app/ponto/services/dia_decidido.py:685`, `app/ponto/services/atestados_lote.py:73`, `app/ponto/services/atestados_lote.py:93`, `app/ponto/services/atestados_lote.py:135`, `app/ponto/services/atestados_lote.py:168`, `app/ponto/services/atestados_lote.py:252`, `app/ponto/services/vigia_ausencia.py:117`, `app/ponto/services/vigia_ausencia.py:217`, `app/ponto/portas/celula.py:726`, `app/ponto/portas/celula.py:746`, `app/ponto/management/commands/rejulgar_status_por_tipo.py:28`, `app/ponto/management/commands/rejulgar_status_por_tipo.py:37` |
-| **`documento_referencia`** | A FK legada usa `SET_NULL`. No código de produção inspecionado, os lançamentos atuais gravam um range e os saves integrais podem regravar a FK. Atribuição explícita atual a uma raiz, só nas fixtures localizadas. Leem a guarda e o refresh dos dados de atestado, o painel, o download, aprovação e rejeição de irmãos, a lista e o seletor de raízes da linha do tempo. `app/ponto/models.py:815`, `app/ponto/services/ausencia.py:762`, `app/ponto/services/ausencia.py:1890`, `app/ponto/views.py:2677`, `app/ponto/tests/test_atestado_f3.py:127`, `app/ponto/tests/test_atestado_f3.py:151`, `app/ponto/services/ausencia.py:303`, `app/ponto/services/ausencia.py:318`, `app/ponto/views.py:2102`, `app/ponto/views.py:2147`, `app/ponto/views.py:2762`, `app/ponto/views.py:2838`, `app/templates/ponto/ausencias.html:170`, `app/templates/ponto/partials/painel_ausencia.html:95`, `app/templates/ponto/partials/painel_ausencia.html:120`, `app/templates/ponto/partials/painel_ausencia.html:166`, `app/ponto/services/dia_decidido.py:628` |
-| **Upload na reabertura e no INSS** | Escrevem o multipart os formulários de lançamento, submissão PWA e painel, além dos clientes das duas portas da API. Leem `FILES` a tela DP, o PWA, a API e a porta do painel. Lançamento, submissão PWA e criação API passam o arquivo a `criar_ausencia` → `_reabrir`. O reversor explícito do painel chama `reverter_rejeicao` sem arquivo, embora o serviço o aceite. `_reabrir` captura o `storage/name` pela mudança de `_committed`. A compensação da tela lê `ausencia.documento` da instância devolvida. `app/templates/ponto/lancar_ausencia.html:85`, `app/templates/ponto/submeter_ausencia.html:52`, `app/templates/ponto/partials/painel_ausencia.html:94`, `app/api/urls.py:82`, `app/ponto/views.py:2504`, `app/ponto/views.py:2550`, `app/ponto/views.py:2627`, `app/ponto/views.py:2683`, `app/api/views.py:1779`, `app/api/views.py:1824`, `app/api/views.py:3115`, `app/ponto/views_atestado.py:48`, `app/ponto/services/ausencia.py:525`, `app/ponto/views.py:2731`, `app/ponto/services/ausencia.py:1402`, `app/ponto/services/ausencia.py:1435`, `app/ponto/views.py:2574` |
-
-Há outros leitores da chave literal `q`, em rotas próprias. Gestões de HE e Ausências, Colaboradores, Escala, Relatórios, Férias, Chamados, Rubricas e busca de Holerite têm consumidores próprios. Por exemplo, Rubricas busca código ou descrição e o Painel de Chamados oferece colaborador ou assunto. `app/ponto/views.py:613`, `app/ponto/views.py:686`, `app/ponto/views.py:825`, `app/ponto/views.py:953`, `app/ponto/views.py:1730`, `app/colaboradores/views.py:31`, `app/colaboradores/views.py:637`, `app/colaboradores/views.py:1053`, `app/colaboradores/views.py:1715`, `app/colaboradores/views.py:2624`, `app/colaboradores/views.py:2818`, `app/escala/views.py:213`, `app/escala/views.py:241`, `app/relatorios/views.py:791`, `app/relatorios/views.py:838`, `app/ferias/views.py:44`, `app/ferias/views.py:596`, `app/ferias/views.py:661`, `app/chamados/views.py:731`, `app/chamados/views.py:816`, `app/chamados/views_arquivar.py:117`, `app/chamados/views_arquivar.py:167`, `app/chamados/views_cobrar.py:72`, `app/folha/views.py:69`, `app/templates/folha/rubricas_quadro.html:63`, `app/templates/chamados/painel_gestao.html:127`, `app/holerite/views.py:98`, `app/holerite/views.py:1117`
-
-- **Mesmo universo nos quatro formatos.** A view monta `linhas` uma vez por requisição. Prévia, CSV, ZIP e PDF recebem essa lista. O ZIP seleciona os arquivos das linhas com documento e o PDF deriva a seção “Sem documento” pela mesma `previa`. `app/ponto/views_atestado.py:113`, `app/ponto/views_atestado.py:123`, `app/ponto/services/atestados_lote.py:73`, `app/ponto/services/atestados_lote.py:126`, `app/ponto/services/atestados_lote.py:220`, `app/ponto/services/atestados_lote.py:249`
-- **As bordas são inclusivas, com significados diferentes.** O lote inclui intervalos fechados que intersectam a janela, inclusive quando `data_fim == de_data`. O Holerite filtra a data civil de `avisado_em` ou `publicado_em`. O Retrato conta datas gravadas dentro das bordas e conserva as pessoas na lista. O juiz de cobertura inclui tipos em aberto com `data_fim=NULL` iniciados antes da janela. O lote trata todo `NULL` como dia de lançamento e perde esse caso. Links antigos com `de`/`ate` também deixam de recortar o lote e caem na competência se não houver as novas chaves. `app/ponto/services/atestados_lote.py:41`, `app/ponto/views_atestado.py:94`, `app/ponto/views_atestado.py:107`, `app/holerite/views.py:409`, `app/core/filtro.py:118`, `app/folha/retrato_folha.py:1327`, `app/folha/retrato_folha.py:1343`, `app/ponto/turnos.py:2822`
-
-## 3. Chamadores e migração da porta — PROCEDE no teste [nao verificado]
-
-A busca por `anexar-documento` e `anexar_documento_ausencia` na cópia encontrou lápides, documentação histórica, testes e o ID do formulário. No HTML de produção, esse ID posta para `relatorios:anexar_atestado`. A API e o cartão de atendimento usam `/api/ausencias/<id>/documento/`. Nenhum chamador da rota removida apareceu em templates, static/PWA, API, `reverse` Python ou código de comunicados. APK externo, comunicados gravados no banco e tráfego real [nao verificado]. `app/ponto/urls.py:72`, `app/ponto/views.py:2165`, `app/core/juizes.py:1097`, `app/templates/ponto/partials/painel_ausencia.html:90`, `app/relatorios/urls.py:18`, `app/api/urls.py:83`, `app/templates/chamados/partials/_card_atendimento.html:70`, `app/docs/RELATO.md:7112`
-
-O teste apagado fazia POST pós-aprovação com um usuário DP de RBAC real e fazia GET do painel para uma pendente. O substituto exercita upload e conteúdo pós-aprovação com **superusuário**. O caso de painel pendente e o caminho positivo com DP comum ficaram sem a prova equivalente nesse substituto. Além disso, o bloco positivo do teste de permissão foi parar dentro do novo método. Ali `painel` já é uma resposta HTTP, mas é passado a `client.get`, e `url` não existe no método. Se o bloco chegar à última asserção, ainda exige `documento` vazio depois de verificar o arquivo. A recusa de férias migrou para a porta nova e exige HTTP 400. `app/ponto/tests/test_anexar_documento.py:10` e `:37` na base do delta, `app/ponto/tests/test_atestado_f3.py:221`, `app/ponto/tests/test_atestado_f3.py:238`, `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_hj091_ferias_derivadas.py:472`
-
-## 4. Rollback, arquivos e resposta — PROCEDE
-
-- **Ordem do caminho normal.** Os settings da cópia não habilitam `ATOMIC_REQUESTS` e o middleware local não envolve a view em `atomic`. O atomic externo relevante é o do próprio lançamento INSS. Se o UPDATE falha em `_reabrir`, sai primeiro o savepoint, depois o `finally` consulta as referências e, com conexão utilizável, pode apagar o upload. Se `_reabrir` retorna e `_gravar_colab` falha com `Exception`, sai primeiro o atomic da tela e depois vem a consulta da compensação. `app/config/settings/base.py:53`, `app/config/settings/saas.py:67`, `app/config/settings/saas.py:83`, `app/config/settings/prod.py:9`, `app/ponto/views.py:2547`, `app/ponto/views.py:2567`, `app/ponto/services/ausencia.py:1431`, `app/ponto/services/ausencia.py:1456`
-- **Órfão por `Exception` comum, no caminho real de INSERT INSS.** Se `_insumo_da_folha` falha depois do INSERT e antes do retorno, a limpeza do savepoint do INSERT já ficou para trás. A view sofre rollback, mas sua variável `ausencia` continua `None`; a compensação pula o arquivo. Também há órfão possível se a conexão continuar marcada para rollback ou se a consulta/delete falhar. Um `BaseException` posterior ao retorno do serviço atravessa o `except Exception` da tela e deixa o upload fora da compensação. Ocorrência em produção [nao verificado]. `app/ponto/services/ausencia.py:140`, `app/ponto/services/ausencia.py:654`, `app/ponto/services/ausencia.py:691`, `app/ponto/views.py:2542`, `app/ponto/views.py:2550`, `app/ponto/views.py:2568`, `app/ponto/services/ausencia.py:1458`, `app/ponto/services/ausencia.py:267`
-- **Arquivo de linha que nasceu.** Nos dois ramos com `anexo_gravado`, uma referência visível à consulta impede o delete, inclusive se uma exceção sobe depois do commit. A garantia tem o alcance da consulta. `exists()` e `delete()` são separados, e o alias do banco não amplia a busca para outros schemas do SaaS, cujo storage configurado é de filesystem. Além disso, o ramo legado do INSERT ainda apaga por diferença de nome sem consultar referências. Se um callback do commit do INSERT levantar depois de gravada a linha e o storage tiver alterado o nome, esse ramo pode apagar o arquivo já referenciado. Os callbacks de produção encontrados usam `engolir`; ocorrência dessa falha ou referência compartilhada em produção [nao verificado]. `app/ponto/services/ausencia.py:257`, `app/ponto/services/ausencia.py:263`, `app/ponto/services/ausencia.py:652`, `app/ponto/services/ausencia.py:658`, `app/ponto/signals.py:254`, `app/ponto/signals.py:272`, `app/config/settings/saas.py:83`, `app/config/settings/saas.py:109`
-- **Exceção e resposta.** O `finally` não tem `return` ou tratamento que suprima a exceção original. O helper captura falha de consulta ou delete, registra e devolve `False`. A view mantém o `raise` e a renderização de erro com `HX-Trigger` e HTTP 200 nesse caminho. O RED HTTP cobre falha no UPDATE da reabertura. O teste sem banco da compensação só recebe um `criar_ausencia` simulado que já retornou. Ambos deixam aberta a falha do INSERT antes do retorno. `app/ponto/services/ausencia.py:1456`, `app/ponto/services/ausencia.py:267`, `app/ponto/views.py:2577`, `app/ponto/views.py:2605`, `app/core/respostas.py:74`, `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:182`, `app/ponto/tests/test_atestado_f3_contrato.py:627`
-
-## 5. Classes já reprovadas — PROCEDE
-
-| Classe | Veredito |
-|---|---|
-| **Segundo juiz e derivação paralela** | **PROCEDE** para o período. O SQL do lote decide a interseção e o leitor do `aplicar` a decide outra vez sobre a data ajustada. A fórmula SQL já existia na c13 e diverge da autoridade registrada para ausência em aberto. A busca local saiu e a janela de competência continua no juiz registrado. `app/ponto/services/atestados_lote.py:21`, `app/ponto/services/atestados_lote.py:41`, `app/ponto/views_atestado.py:117`, `app/core/juizes.py:261`, `app/ponto/turnos.py:2822`, `app/ponto/views_atestado.py:68` |
-| **Segundo escritor fora da porta** | **NAO PROCEDE** como escritor novo. As gravações continuam no serviço. Os saves integrais de edição e rederivação são escritores indiretos herdados, inclusive de documento e metadados. `app/ponto/services/ausencia.py:329`, `app/ponto/services/ausencia.py:762`, `app/ponto/services/ausencia.py:1438`, `app/ponto/services/ausencia.py:1890` |
-| **Relógio fora da borda** | **NAO PROCEDE** no delta. O lote resolve mês e ano com um `localdate()` na borda. O relógio de `prazo_documento` dentro de `_reabrir` é anterior ao delta. `app/ponto/views_atestado.py:91`, `app/ponto/services/ausencia.py:1452` |
-| **Ordem de trava** | **NAO PROCEDE** como inversão introduzida. INSS trava Colaborador antes de chamar a escrita da Ausência. O savepoint novo entra dentro dessa ordem e a consulta de referências é uma leitura `exists()`. `app/ponto/views.py:2547`, `app/colaboradores/services/colaborador.py:87`, `app/ponto/services/ausencia.py:1431`, `app/ponto/services/ausencia.py:263` |
-| **Campo com dois significados** | **PROCEDE** para a semântica de `q` entre telas que adotam o filtro, e para o período sobre registros em aberto. `atestado_medico` continua sendo um campo de nome do médico e também o rótulo de um código de tipo legado, já apontado na c13. `app/core/filtro.py:200`, `app/core/busca.py:128`, `app/ponto/views_atestado.py:70`, `app/ponto/services/atestados_lote.py:43`, `app/ponto/turnos.py:2827`, `app/ponto/models.py:787`, `app/ponto/services/ausencia.py:602` |
-| **Pouso antes do pré-requisito** | **PROCEDE** como impedimento ao pouso. Os oito alvos passam, mas o teste de painel tem o erro descrito no item 3. A suíte sem banco rodou 42 casos e teve um erro local por falta de `PIL`. A suíte inteira verde, o pouso efetivo e a ordem histórica ficam [nao verificado]. O aval V2 registrado prevê HEIC como link de abertura. `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_atestado_f3_contrato.py:1015`, `CLAUDE.md:398`, `app/docs/BACKLOG.md:2352` |
-
-**Mordida dos oito mutantes.** Execu
-
-[truncado em 20000 de 23868 caracteres]
-
-## 26/11 20:10 · sessao 527c32aa7cfc · SUITE-ROTEIA-F2 · verificador · origem=Code
-
-**SUITE-ROTEIA-F2 — a chamada contratada entra na rota da Pista 2. Há duas divergências na revisão.** A condição também admite `--only` ou `--volta` quando a guarda classifica a seleção como inteira. E um job `pre-opus` pode satisfazer o certificador de pouso, porque o certificador julga o que rodou e o SHA, sem ler `MOTIVO`. `bin/suite.sh:200–216`, `bin/suite.sh:272–289`, `bin/suite.sh:441–445`, `bin/suite.sh:502–506`, `bin/pista_certifica.sh:41–96`
-
-Revisei a cópia em leitura e conferi em memória o ramo da rota, a âncora do mutante novo e as condições do certificador. A associação da cópia ao objeto Git `1f4b92cff`, a execução integral do selo e a próxima pré-opus na coluna **PISTA 2** do vercodex, com a VM livre, ficam **[não verificado]**. O código registra job e SHA ao aceitar e registra o rc ao terminar. O desligamento documentado é o revert do pouso próprio. `bin/suite.sh:341–342`, `bin/suite.sh:452–453`, `bin/suite.sh:496–506`, `bin/tests/test_suite_rota_pista.sh:21–22`
-
-### 1. Quem escreve e quem lê
-
-| Valor | Escritor, leitores e significado |
-|---|---|
-| `MOTIVO` | O chamador passa `--motivo` e o parser grava o texto. A guarda exige a forma completa `pre-opus <OBRA>` ou `pouso <OBRA>` para inteira. A rota usa a mesma regex para inteira `pre-opus`, mas aplica o prefixo `pouso*` ao recorte elegível. Assim, um recorte efetivo com `pousoXYZ` vai para a VM, embora esse texto seja inválido para inteira. O `--seco` exibe o valor e o `pede` omite o campo. `CLAUDE.md:96`, `bin/suite.sh:179`, `bin/suite.sh:272–298`, `bin/suite.sh:301–306`, `bin/suite.sh:441–445`, `bin/suite.sh:502–505` |
-| `ONLY` | O parser recebe `--only`. Pela entrada alternativa, `vizinhos_da_volta.py` emite os rótulos e a suíte filtra e grava `ONLY`. A validação e `_suite_inteira` leem essa lista, e os dois executores usam `${ONLY:-$LABELS}`. Uma lista preenchida é uma seleção explícita e pode cobrir a inteira. `bin/suite.sh:172`, `bin/suite.sh:200–226`, `bin/suite.sh:273–289`, `bin/suite.sh:444`, `bin/suite.sh:568`, `bin/vizinhos_da_volta.py:126–130` |
-| `LABELS` | `regua.sh` escreve a lista canônica. A suíte lê a régua da raiz da porta para validar, classificar e preencher a seleção padrão na VM e na Pista. O certificador também lê a régua e exige cada rótulo uma vez. O diff conserva a fonte única de L-075. `bin/regua.sh:23`, `bin/suite.sh:195–196`, `bin/suite.sh:212–226`, `bin/suite.sh:277`, `bin/suite.sh:444`, `bin/suite.sh:568`, `bin/pista_certifica.sh:67`, `bin/pista_certifica.sh:85–87`, `app/docs/LEIS.md:102` |
-| `DIR` | O chamador fornece o caminho. A suíte usa-o para a descoberta, a validação da cópia e a montagem na VM. A rota exige ainda raiz Git com HEAD e repositório comum com a porta, lê ou fotografa `app/` e publica a ref. O `pede` recebe o SHA resultante. `bin/suite.sh:170–171`, `bin/suite.sh:274`, `bin/suite.sh:313–316`, `bin/suite.sh:359–367`, `bin/suite.sh:417–445`, `bin/suite.sh:519–528` |
-| argv do `pede` | A suíte escreve `pede <sha> [--parallel N] --only <rótulos...>`. O `ssh` falso anota a chamada e verifica a ref pelo SHA. O certificador lê outro argv, o de `manage.py test` gravado em `AMBIENTE argv=`. A tradução feita pelo lançador real, seu paralelismo padrão e a montagem remota ficam **[não verificado]**. `bin/suite.sh:441–445`, `bin/tests/test_suite_rota_pista.sh:40–59`, `app/core/tests/test_ambiente_do_run.py:30–40`, `app/core/tests/test_ambiente_do_run.py:55–56`, `bin/pista_certifica.sh:70–87` |
-| rc final | Na Pista, a suíte confere o rc do `espera` com o recibo do mesmo ID e SHA, valida o log e devolve o rc do job, traduzindo `3` e `75` remotos para `1`. `71` pode sair com `ERRO-INFRA PISTA` ou ser o rc de um job com recibo e log válidos. Na VM, `flock` pode devolver `75` e a suíte propaga o rc do processo pela trava. A sessão recebe o rc de `suite.sh` e `volta_intermediaria.sh` o lê explicitamente. Isso preserva o rc de processo como veredito, conforme L-074. `bin/suite.sh:345–346`, `bin/suite.sh:458–506`, `bin/suite.sh:561–569`, `bin/suite.sh:580–616`, `bin/trava_teste.sh:35–42`, `bin/volta_intermediaria.sh:33–46`, `app/docs/LEIS.md:101` |
-
-### 2. Guardas, recusas e fallback
-
-- **Inteira sem `--only` ou `--volta`.** Sem `--dir` ou com `pouso <OBRA>` válido, segue pelo fluxo local. Com `REGUA_DB` não vazio no ambiente ou flag permitida após `--`, imprime `ROTA VM` antes de qualquer SSH. Flag proibida ou motivo inválido dá rc `2` antes da rota. Um `--` sozinho deixa `EXTRA` vazio. `bin/suite.sh:179–186`, `bin/suite.sh:233–249`, `bin/suite.sh:272–307`, `bin/suite.sh:351–355`, `bin/suite.sh:502–523`, `bin/suite.sh:561–569`
-- **Seleção explícita ou derivada, em cópia mutável.** A guarda e a rota consultam a cobertura em momentos diferentes. Se a primeira consulta vê um módulo de fora e admite um recorte com motivo inválido, e esse módulo some antes da consulta da rota, a seleção passa a ser inteira pelo mesmo critério. A condição barra a Pista nesse ponto, mas o fluxo segue à VM sem renovar a recusa `2`. Se o módulo some após a decisão de rotear e antes da foto, a Pista pode receber a seleção sobre a árvore já alterada. É um caminho por inspeção do código, sem ocorrência observada **[não verificado]**. `bin/suite.sh:273–298`, `bin/suite.sh:417–445`, `bin/suite.sh:502–523`
-- **Falhas da rota.** Pista indisponível, estimativa acima de `1800 s` ou do limite menor de `--espera`, falha de foto/ref e `pede` sem ID válido seguem para a VM. Com ID aceito, a sessão acompanha um único job, com até três tentativas de `espera` e três de `log`. Falha de transporte ou prova inválida dá `ERRO-INFRA PISTA` rc `71`. O fallback pós-aceite é reservado ao `71` classificado como recusa sem execução. `bin/suite.sh:378–449`, `bin/suite.sh:452–506`
-
-### 3. Pode certificar como pouso? [nao verificado]
-
-**Sim, como evidência para o certificador.** Para uma cópia limpa em `app/`, o pedido usa o HEAD e envia todas as `LABELS`. Se o lançador entregar esses rótulos ao Django, sem `--only` literal no `AMBIENTE argv=`, o job pode certificar o mesmo SHA com camadas iguais, recibo do mesmo job, `rc=0`, `oom=0` e `Ran = Found − podados`. Conferi as condições em memória com todos os rótulos e obtive rc `0`. Com `--only` literal no argv do Django, obtive rc `1`. A rota em si termina com o resultado da suíte. A certificação de um job F2 real fica **[não verificado]**. `bin/suite.sh:417–445`, `bin/suite.sh:494–506`, `app/core/tests/test_ambiente_do_run.py:55–56`, `bin/pista_certifica.sh:41–100`
-
-### 4. O selo e o mutante mordem?
-
-**A âncora nova ocorre uma vez**, em `bin/suite.sh:503`. A substituição por `false` mantém a sintaxe e muda o ramo da chamada testada para a VM. O caso reprova ao observar a trava, mesmo com o rc `0` do dublê. O executor exige tanto o rc não zero do caso quanto a mensagem específica `a trava da VM foi chamada`. A execução integral fica **[não verificado]**. `bin/tests/test_suite_rota_pista.sh:33–35`, `bin/tests/test_suite_rota_pista.sh:173–187`, `bin/tests/test_suite_rota_pista.sh:381–389`, `bin/tests/test_suite_rota_pista.sh:442–443`
-
-O caso F2 cobra um único `pede`, os rótulos esperados, espera e log do ID, ausência de trava e `Ran/OK`. A contagem `>= 1` permite chamadas adicionais de `espera` ou `log`. O `ssh` falso registra `$*`, então o selo confere a linha textual, sem distinguir as fronteiras dos argumentos. O vermelho remoto, os fallbacks e o `71` de transporte são exercitados com recorte. `bin/tests/test_suite_rota_pista.sh:40–43`, `bin/tests/test_suite_rota_pista.sh:173–213`, `bin/tests/test_suite_rota_pista.sh:295–335`
-
-### 5. Classes de reprovação
-
-- **Segundo juiz e segundo escritor.** A rota reaproveita `_suite_inteira`, a regex de motivo e a lista da régua. O certificador continua decidindo outra operação, com provas próprias. `bin/suite.sh:195–196`, `bin/suite.sh:272–298`, `bin/suite.sh:502–506`, `bin/pista_certifica.sh:41–96`, `app/docs/LEIS.md:102`
-- **Derivação paralela.** Os dois executores usam a mesma expressão para escolher os rótulos. A cobertura, porém, é lida novamente da árvore mutável, com até três consultas no caminho `pre-opus` com seleção explícita. Essa é a divergência entre decisões apontada acima. `bin/suite.sh:273–298`, `bin/suite.sh:444`, `bin/suite.sh:502–503`, `bin/suite.sh:568`
-- **Selo sem mordida e campo com dois significados.** O mutante novo atinge a asserção de ida à trava. A ambiguidade concreta está em ler `--only` do protocolo como prova de recorte. Com F2, esse campo também transporta todas as `LABELS`. O rc `71` também requer a mensagem ou o recibo para distinguir erro de infraestrutura de rc do job. `bin/tests/test_suite_rota_pista.sh:178–187`, `bin/tests/test_suite_rota_pista.sh:442–443`, `bin/suite.sh:441–445`, `bin/suite.sh:468–498`, `CLAUDE.md:129`
-
-### 6. `CLAUDE.md` §3 confere?
-
-**Em parte.** A seção acerta a entrada nova e as exclusões por `pouso`, ausência de `--dir`, `REGUA_DB` e flags extras. Faltam a restrição ao repositório comum, que deixa o `git archive` comum na VM, e a exceção pós-aceite da recusa sem execução. `--seco` imprime e sai antes da VM. `--espera` limita a estimativa de admissão e segue para a trava no caminho local. A montagem na VM está demonstrada pela chamada a `arvore_do_push.sh`. A montagem efetiva na Pista fica **[não verificado]**. `CLAUDE.md:99–105`, `CLAUDE.md:138–143`, `bin/suite.sh:301–307`, `bin/suite.sh:354–367`, `bin/suite.sh:391–415`, `bin/suite.sh:458–476`, `bin/suite.sh:519–526`, `bin/suite.sh:561–566`
-
-A frase **“um `pede --only` NAO certifica”** ficou ampla demais. O certificador recusa seleção incompleta ou opção de recorte no argv real do Django. O `--only` do pedido F2 pode carregar a lista inteira. `CLAUDE.md:129`, `bin/suite.sh:441–445`, `bin/pista_certifica.sh:61–92`, `bin/tests/test_pista_certifica.sh:92–97`
-
-## 26/11 19:45 · sessao 6861eb64dfb0 · SUITE-ROTEIA-F2 · censo · origem=Code
-
-A inteira pré-opus com `--dir` fica na VM por causa da condição em `bin/suite.sh:497`. Os dois pontos funcionais da mudança são a entrada da rota, em `bin/suite.sh:497–501`, e a lista enviada ao `pede`, em `bin/suite.sh:440–442`. Fiz o censo só por leitura. A confirmação do hash pelo Git, a execução dos selos e o estado real da pista 2 estão [nao verificado].
-
-### 1. Entrada da rota e leitura do motivo
-
-- Hoje a rota exige `DIR` preenchido, `ONLY` preenchido e `! _suite_inteira`. Uma chamada sem seleção falha nos dois últimos critérios e segue direto para a VM, sem imprimir `ROTA VM`. Mesmo com `ONLY` preenchido, a guarda pode classificar a seleção como inteira quando ela cobre todos os módulos de teste que a função reconhece. (`bin/suite.sh:273–289`, `bin/suite.sh:497–506`, `bin/suite.sh:554–563`)
-- `--motivo` é lido em `bin/suite.sh:179`. A inteira exige `pre-opus <OBRA>` ou `pouso <OBRA>`, com exatamente um espaço e ID no formato `[A-Za-z0-9][A-Za-z0-9_.-]*`. O discriminador confiável é a primeira palavra **do motivo já validado**. O `pouso*` atual só é alcançado pelos recortes que passaram pela condição externa e também segura grafias mais amplas nesse caminho. (`bin/suite.sh:167–182`, `bin/suite.sh:272`, `bin/suite.sh:291–299`, `bin/suite.sh:497–500`)
-- O ramo novo entra em `497–501`, com `DIR` e inteira de motivo válido `pre-opus`, e chama a mesma `_rota_pista`. Para a inteira sem seleção, o `pede` recebe `LABELS` em `440–442`, assim como o executor VM já usa `${ONLY:-$LABELS}`. Uma seleção explícita merece preservar o argv que a VM receberia, porque `_suite_inteira` também pode classificar uma lista de classes ou métodos como inteira. O `--seco` sai antes da rota, e a conferência de `--dir` também vem antes. (`bin/suite.sh:251–289`, `bin/suite.sh:301–317`, `bin/suite.sh:440–442`, `bin/suite.sh:497–501`, `bin/suite.sh:562–563`)
-
-### 2. Labels, foto e prova de pouso [nao verificado]
-
-- A rota lê `LABELS` da régua, mas hoje envia as palavras de `ONLY`, que vêm de `--only` ou do filtro de `--volta`. O pedido é `pede <sha> [--parallel N] --only <labels>`, com `--only` por último. Para a inteira sem seleção, a fonte dos 13 rótulos é `bin/regua.sh:23`. A foto usa o `HEAD` se `app/` estiver limpo, ou enxerta `app/` da cópia sobre o `HEAD` com índice temporário, e publica `refs/pista/<sha>`. O argv efetivamente montado pelo lançador remoto para um pedido com as 13 labels está [nao verificado]. (`bin/suite.sh:172–176`, `bin/suite.sh:192–226`, `bin/suite.sh:416–449`, `bin/regua.sh:23`)
-- **Um pedido com todas as labels e a prova 3 são coisas distintas.** O certificador lê o que o `manage.py test` recebeu no `AMBIENTE argv=` e exige cada label da régua uma vez, sem extras e sem opções de recorte ou desconhecidas. Também exige `Ran = Found − QUARENTENA-PODADO`, recibo do mesmo job e SHA, `rc=0` e `oom=0`. As provas 1 e 2 comparam as camadas com a VM e o SHA do run com o do pouso. O caso chamado `pede --only` no selo fornece **dois rótulos** no argv. O certificador recebe log e recibo, sem acesso à linha de comando do `pede`. (`app/core/tests/test_ambiente_do_run.py:30–40`, `app/core/tests/test_ambiente_do_run.py:50–56`, `bin/pista_certifica.sh:13–24`, `bin/pista_certifica.sh:41–92`, `bin/tests/test_pista_certifica.sh:89–97`)
-- A rota valida o recibo pelo id, SHA, status e `oom=0`. Para rc 0, exige `Ran` positivo e `OK` no log. Publica o log cru e prefixa o recibo com `RECIBO PISTA:`. Divergência ou falha de transporte após aceite dá `ERRO-INFRA PISTA` e rc 71. A recusa 71 sem evidência de execução é a exceção que volta à VM. Rc remoto 3 ou 75 vira 1. (`bin/suite.sh:345`, `bin/suite.sh:449–500`)
-
-### 3. Chamadores e leitores
-
-No censo estático de `bin/` e dos hooks versionados, encontrei chamadas diretas com `--dir` e motivo de inteira nos **selos**. O selo da rota usa `pre-opus SELO` e o de montagem usa `pouso RMDIR-COM-GUARDA`. Fora dos selos, a chamada executável encontrada com `--dir` é a volta intermediária, com `--volta` e sem motivo. A forma inteira com cópia aparece documentada no help, e o comando canônico do `CLAUDE.md` usa a árvore viva. Chamadas manuais reais e hooks instalados estão [nao verificado]. (`bin/tests/test_suite_rota_pista.sh:206–213`, `bin/tests/test_rm_com_guarda.sh:151–184`, `bin/volta_intermediaria.sh:29–34`, `bin/suite.sh:22–30`, `CLAUDE.md:95–99`, `bin/hooks.sh:19–33`)
-
-| Leitor | O que lê ou pressupõe |
-|---|---|
-| `volta_intermediaria.sh` | Grava a saída da suite em `<saida>.log` e decide pelo rc do filho. Com ruff e disjuntor verdes, `75` vira `VOLTA_SEM_VEZ`, `3` vira `VOLTA_NAO_RODOU`, `0` vira `VOLTA_VERDE` e `71` entra no ramo de `VOLTA_VERMELHA`, rc 1. Os marcadores de rota, `Ran` e `OK/FAILED` ficam no log. (`bin/volta_intermediaria.sh:29–53`) |
-| Régua | Roda os selos de host e executa o próprio `manage.py test` pela trava. Lê `Ran` e o último `OK/FAILED` do **próprio log** e grava `.regua_stamp` para sua árvore. (`bin/regua.sh:15–16`, `bin/regua.sh:130–145`, `bin/regua.sh:159–181`, `bin/regua.sh:191–206`) |
-| Pre-push | O wrapper versionado delega a `bin/pre-push.sh`. O script consome o carimbo da régua quando a impressão e a árvore conferem, ou executa o próprio arsenal. `_teste_irmao` filtra `Ran` e `OK/FAILED` da própria saída, explica o 75 da trava e devolve o rc do processo. A variante em `app/core/hooks/` também chama seu próprio Docker. (`bin/hooks.sh:63–71`, `bin/pre-push.sh:65–74`, `bin/pre-push.sh:124–157`, `bin/pre-push.sh:184–200`, `app/core/hooks/pre-push.sh:54–59`, `app/core/hooks/pre-push.sh:80–89`) |
-| `gerar_codex_estado.py` | `respostas()` lê mensagens `final_answer` de JSONL, e `montar()` publica o texto com origem e marcação de atos sem prova. Esses caminhos podem reproduzir texto citado numa resposta, mas não interpretam a saída da suite como veredito. A leitura pelo `vercodex` está [nao verificado]. (`bin/gerar_codex_estado.py:77–104`, `bin/gerar_codex_estado.py:117–159`, `bin/gerar_codex_estado.py:162–178`, `app/docs/PROMPTS.md:3070`) |
-| `hook_stop_fila1.py` | É o leitor com dependência local. `_tem_trabalho_em_curso()` procura `manage.py test` ou `git push` no `ps` local. Um job remoto sozinho é invisível a esse predicado, que participa do adiamento do CLEAR. O handoff também observa recursos locais, pelo `flock` da VM e pelo lock da sombra. (`bin/hook_stop_fila1.py:382–405`, `bin/hook_stop_fila1.py:1148–1158`, `bin/hook_stop_fila1.py:1239–1256`, `bin/handoff_sessao.sh:258–273`) |
-| `disjuntor.py` | O B3 extrai `APROVADO` ou `REPROVADO` do `SubagentHandback` no transcript. O PreToolUse trata comandos e o leitor do ESTADO agrega a própria trilha. A observação de suite em voo está no hook de Stop, nos pontos acima. (`bin/disjuntor.py:649–671`, `bin/disjuntor.py:1954–1985`, `bin/disjuntor.py:2108–2155`, `bin/hook_stop_fila1.py:1239–1247`) |
-
-### 4. Coluna `PISTA 2` no `vercodex`
-
-O arquivo e a função que preenchem a coluna, assim como o que ela efetivamente conta, estão **[nao verificado]**. A referência na cópia aponta para `~/vercodex.py` ao falar de **RC SEM COLHER**. O contrato anterior da rota pede medir **IDs únicos admitidos por dia** via `ssh pista estado`, e `_rota_pista` conta **rodando** e **na fila** para estimar a vaga. Essas referências documentam duas medidas e deixam a implementação da coluna em aberto. (`app/docs/PROMPTS.md:3070`, `app/docs/RELATO.md:128`, `bin/suite.sh:381–414`)
-
-### 5. Selo e mutante
-
-- O selo roda `suite.sh` real numa árvore temporária, com Git e worktree reais, régua de duas labels (`appA appB`) e dublês de SSH, Docker, montagem e trava. `_caso_ok` já cobra um `pede` exato, `espera` e `log` do mesmo id, veredito no stdout e zero chamadas à trava. `_julga` reúne os casos de rota, fila, recusa, recibo e foto. (`bin/tests/test_suite_rota_pista.sh:20–59`, `bin/tests/test_suite_rota_pista.sh:128–170`, `bin/tests/test_suite_rota_pista.sh:268–312`)
-- `rota_pista_so_carimba` imprime `ROTA PISTA` e força a VM, e `_caso_ok` o acusa pela chamada à trava. `fallback_apos_aceite` deixa um rc remoto não zero cair na VM, e `_caso_cai` cobra rc 71 sem trava. A variante `fallback_apos_aceite_vermelho` faz a mesma mutação e usa o caso de vermelho remoto. `_mutante` exige que a âncora exista e que a falha venha pela asserção indicada. (`bin/tests/test_suite_rota_pista.sh:181–196`, `bin/tests/test_suite_rota_pista.sh:353–369`)
-- A chamada `--dir "$c" --motivo "pre-opus SELO"` já está em `_caso_nao_roteia`, com a expectativa antiga de VM. Ela entra no caso positivo **inteira-pre-opus-com-dir**, chamado em `_julga`, cobrando `pede <sha> --only appA appB`, `espera` e `log` do mesmo id, `Ran/OK`, rc do job e zero chamadas à trava. Os controles de `--seco` e sem `--dir` já têm suas próprias asserções. Na seção de mutantes, a mutação da condição em `suite.sh:497–501` deve devolver **só a inteira pré-opus** à VM e morrer no caso novo pela chamada à trava. (`bin/tests/test_suite_rota_pista.sh:151–170`, `bin/tests/test_suite_rota_pista.sh:206–214`, `bin/tests/test_suite_rota_pista.sh:268–273`, `bin/tests/test_suite_rota_pista.sh:308–312`, `bin/tests/test_suite_rota_pista.sh:353–369`, `bin/suite.sh:497–501`)
-
-### 6. Leis, cortes e documentação no mesmo commit [nao verificado]
-
-- **L-074** protege um run por vez no banco de teste da VM e o veredito pelo rc do processo. **L-075** fixa `regua.sh::LABELS` como fonte única. **L-105/L-106** tratam do pouso próprio do instrumento e da documentação no commit do marco. O motor figura nas zonas invioláveis. (`app/docs/LEIS.md:101–102`, `app/docs/LEIS.md:131–133`, `CLAUDE.md:145–146`, `CLAUDE.md:346–348`)
-- O corte `PISTA-2-EM-USO-1611` registra a divisão anterior entre espinha e lateral. `SIMPLIFICA-V3` mantém suite verde antes de pousar, e o cabeçalho do certificador registra o aval posterior que redefine as três provas. A exigência de inteira verde antes do opus está em `CLAUDE.md:406–407`. O registro da rota anterior põe o limite de 30 min e as exceções no RELATO, com implementação em `suite.sh`. (`app/docs/CORTES.md:567`, `app/docs/CORTES.md:630`, `bin/pista_certifica.sh:2–11`, `CLAUDE.md:406–407`, `app/docs/RELATO.md:124–129`, `bin/suite.sh:390–414`)
-- No mesmo commit, a seção 3 precisa ajustar `CLAUDE.md:97–103` para descrever a trava no ramo VM e incluir a inteira pré-opus com `--dir` na rota. Ajustar também `CLAUDE.md:138–142`, onde `--dir` é descrito como pedido de montagem local, e o help, o comentário da rota e o resumo do selo. `--seco` é descrito com precisão como saída sem execução. A prova de pouso está no parágrafo próprio em `CLAUDE.md:129`. (`CLAUDE.md:95–110`, `CLAUDE.md:129`, `CLAUDE.md:138–142`, `bin/suite.sh:22–34`, `bin/suite.sh:301–308`, `bin/suite.sh:319–341`, `bin/tests/test_suite_rota_pista.sh:5–14`, `bin/tests/test_suite_rota_pista.sh:416`)
-- `test_suite_sh.sh` lê a seção 3, mas o recorte vai do título até a primeira linha sem `\`. Hoje termina na linha 96 e cobra `bin/suite.sh --motivo …` com um motivo válido. A frase da rota na linha 102 fica fora. Um exemplo com `--dir` antes de `--motivo` no comando canônico exigiria adaptar a regex do selo, que hoje pede `--motivo` logo após o nome do script. (`CLAUDE.md:95–103`, `bin/tests/test_suite_sh.sh:22–54`)
-
-### 7. Contraexemplo
-
-**`REGUA_DB=test_raia bash bin/suite.sh --dir "$COPIA" --motivo "pre-opus SUITE-ROTEIA-F2"`** deve continuar na VM. Hoje a inteira vai direto ao executor local, que repassa `REGUA_DB` ao Django. Com a entrada nova, a mesma chamada deve chegar à guarda de incompatibilidade da rota, emitir `ROTA VM` e seguir pela trava, preservando o banco próprio. Outro caso concreto é a mesma chamada com `-- --tag lento`: a CLI local aceita a flag, e a rota remota recusa qualquer `EXTRA`. Uma cópia extraída por `git archive` sem HEAD próprio também fica na VM. E, mesmo para uma worktree elegível, estimativa acima de 1.800 s continua impedindo o `pede`. (`bin/suite.sh:233–249`, `bin/suite.sh:353–366`, `bin/suite.sh:390–414`, `bin/suite.sh:497–501`, `bin/suite.sh:525–530`, `bin/suite.sh:554–563`, `app/config/settings/ci.py:12–17`)
-
-## 26/11 19:42 · sessao 7f12eaf2ecd3 · O30-F3-CONSTRUIR · construtor · origem=Code
-
-## O30-F3-CONSTRUIR · c14
-
-- **B2 — Filtro universal.** O lote usa `q`, `de_data` e `ate_data` pelo filtro da casa, como o drawer de Holerite. A busca própria saiu e o `q` passou a usar `qs_colaborador`, a mesma busca da consulta de férias. O seletor usa `empresas_visiveis`. Prévia, CSV, ZIP e PDF partem do mesmo recorte, que inclui os lançamentos que cruzam o início do período. [ponto/views_atestado.py:56](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views_atestado.py:56) · [ponto/views_atestado.py:93](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views_atestado.py:93) · [holerite/views.py:407](/home/ronald/wt-codex-o30-f3-construir-010143/app/holerite/views.py:407) · [api/views_mensageria.py:799](/home/ronald/wt-codex-o30-f3-construir-010143/app/api/views_mensageria.py:799) · [colaboradores/queries.py:78](/home/ronald/wt-codex-o30-f3-construir-010143/app/colaboradores/queries.py:78) [nao verificado]
-- **B3 — Porta órfã.** View e rota retiradas, com lápide de uma linha em cada local. O grep abaixo encontrou zero chamadores de produção na cópia. O painel posta em `relatorios:anexar_atestado`. Os testes de anexo após aprovação e de recusa em férias derivadas passaram a exercitar essa porta. A referência de inventário está em `core/juizes.py:1097`, atrelada à retirada pela sessão. [ponto/views.py:2165](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2165) · [ponto/urls.py:72](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/urls.py:72) · [templates/ponto/partials/painel_ausencia.html:91](/home/ronald/wt-codex-o30-f3-construir-010143/app/templates/ponto/partials/painel_ausencia.html:91) · [ponto/tests/test_atestado_f3.py:238](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3.py:238) · [ponto/tests/test_hj091_ferias_derivadas.py:472](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_hj091_ferias_derivadas.py:472) · [core/juizes.py:1097](/home/ronald/wt-codex-o30-f3-construir-010143/app/core/juizes.py:1097)
-- **B4 — Anexo sob `atomic` externo.** A reabertura com upload usa um savepoint para desfazer o `UPDATE` antes de consultar as referências e remover o órfão. A compensação da tela INSS usa a mesma consulta se a falha ocorre depois que a reabertura retorna. Se a conexão ainda exige rollback, a reabertura preserva o arquivo e registra o aviso. A asserção de zero órfão foi restaurada. A reversão manual também chama `_reabrir`. A cura usa `finally`, sem `except` novo. [ponto/services/ausencia.py:242](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:242) · [ponto/services/ausencia.py:1429](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1429) · [ponto/services/ausencia.py:1456](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/services/ausencia.py:1456) · [ponto/views.py:2568](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2568) · [ponto/views.py:2731](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/views.py:2731) · [ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:179](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:179)
-
-## RED e mutantes
-
-Antes das respectivas curas, os RED sem banco falharam porque o dropdown incluía duas empresas excluídas pela fonte de UI, `COL27` não encontrava a pessoa, a porta antiga ainda existia, a reabertura deixava o upload após a falha e a compensação INSS apagava um arquivo referenciado por outra linha. Depois da cura, os 24 testes focados passaram. Os oito mutantes retornaram `rc=1` por falha de asserção. [ponto/tests/test_atestado_f3_contrato.py:552](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:552) · [ponto/tests/test_atestado_f3_contrato.py:601](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:601) · [ponto/tests/test_atestado_f3_contrato.py:778](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:778) · [ponto/tests/mutantes_atestado_f3_c14.py:16](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/mutantes_atestado_f3_c14.py:16) [nao verificado]
-
-```bash
-rg -n 'anexar_documento_ausencia|anexar-documento/' templates static api
-rg -n 'anexar_documento_ausencia|anexar-documento/' . -g '!**/tests/**' -g '!**/migrations/**'
-
-export PYTHONDONTWRITEBYTECODE=1
-T=ponto.tests.test_atestado_f3_contrato
-python3 -m unittest \
-  "$T.AtestadoF3LoteSemBancoTest.test_RED_dropdown_usa_o_universo_de_empresas_visiveis" \
-  "$T.AtestadoF3LoteSemBancoTest.test_RED_busca_q_tem_o_mesmo_resultado_da_busca_da_casa" \
-  "$T.AtestadoF3LoteSemBancoTest.test_RED_porta_http_antiga_foi_retirada" \
-  "$T.AtestadoF3PortaSemBancoTest.test_RED_reabrir_compensa_apos_falha_em_atomic_externo" \
-  "$T.AtestadoF3PortaSemBancoTest.test_RED_reabertura_com_upload_sem_metadados_usa_savepoint_externo" \
-  "$T.AtestadoF3PortaSemBancoTest.test_RED_inss_preserva_anexo_referenciado_apos_falha_no_atomic_da_tela"
-
-mutante() { python3 -m ponto.tests.mutantes_atestado_f3_c14 "$1"; }
-mutante empresas
-mutante busca
-mutante periodo
-mutante porta_antiga
-mutante sem_savepoint
-mutante so_avisa
-mutante ignora_referencia
-mutante inss_apaga_referenciado
-```
-
-A rodada completa do módulo sem banco teve 41 testes concluídos e um erro de importação por falta de Pillow. O RED com Django no lançamento INSS, a suíte do Code e o parecer final do Opus estão **[nao verificado]**. [ponto/tests/test_atestado_f3_contrato.py:1015](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_atestado_f3_contrato.py:1015) · [ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:182](/home/ronald/wt-codex-o30-f3-construir-010143/app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:182) [nao verificado]
-
-_8487 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8493 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

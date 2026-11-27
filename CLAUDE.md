@@ -331,12 +331,16 @@ RAIAS E POUSO (PISTA, 31/10; funde FILA-2-EM-RAIA-PROPRIA, POUSO-EM-COMBOIO e SU
      sonda e espera em subagente sao recusadas: use bin/codex_pergunta.sh (excecao: CODEX item 2). Entrega dependente de
      suite = comando + caminho do log. Agente ocioso ou relendo log de obra fechada e encerrado no ato. ESPERA DA SESSAO =
      UMA so, que acorda no PRIMEIRO rc novo de QUALQUER obra viva (`logs/*/**/*.rc` mais novo que o inicio da espera) ou
-     em 5 min, o que vier antes; ao acordar, colhe tudo o que chegou e despacha vaga livre (Codex e pista 2) antes de
+     em 5 min, o que vier antes, e que AO COMECAR conta como novo todo rc de obra viva que ninguem colheu (juiz unico
+     `bin/rc_sem_colher.py`, o criterio do RC SEM COLHER do vercodex: o .rc mais novo da obra sem arquivo dela escrito
+     depois e sem marca `colhido|superado <OBRA> <rc> (HH:MM` do mtime do rc numa linha `- HH:MM` do RELATO; a marca vale
+     por rc, rc de obra encerrada ganha UMA linha `superado`; V6-LISTA-ORFAS-2611-2055); ao acordar, colhe tudo o que chegou e despacha vaga livre (Codex e pista 2) antes de
      esperar de novo. Espera por alvo unico proibida (laco sobre um resultado de obra -- `.rc`, `.r`, `.log`, vercodex,
      `pista estado` --, `ssh pista espera` sem `> arquivo`; o recibo `ssh pista espera <id> > arquivo` do
      `bin/pista_certifica.sh` e coleta, e o arquivo de sinal de cron das secoes 2 e 6 nao e obra): a forma, num so comando
-     da raiz do repo, e `bin/disjuntor.py::ESPERA_UNICA` (`M=$(mktemp); timeout 300 bash -c "until find logs -mindepth 2
-     -name '*.rc' -newer $M | grep -q .; do /usr/bin/sleep 5; done"; find logs -mindepth 2 -name '*.rc' -newer $M`),
+     da raiz do repo, e `bin/disjuntor.py::ESPERA_UNICA` (`M=$(mktemp); python3 bin/rc_sem_colher.py; r=$?; [ $r = 0 ] && timeout 300 bash -c "until find logs
+     -mindepth 2 -name '*.rc' -cnewer $M | grep -q .; do /usr/bin/sleep 5; done"; find logs -mindepth 2 -name '*.rc'
+     -cnewer $M; [ $r = 0 -o $r = 3 ]`),
      com teto de 5 min por espera, recusa em `espera_nega`. Nunca polling por turno: o 3o comando de consulta de estado do
      mesmo alvo em 10 min e recusado com "faca uma espera bloqueante" (`bin/disjuntor.py::polling_nega`; contam
      tail/cat/ls/grep de `.rc`/`.log`, vercodex e `ssh pista estado`).
