@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 13:45** · publicado em **27/11/2026 13:51** (UTC-3)
+> Ultima resposta processada: **27/11/2026 13:58** · publicado em **27/11/2026 14:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 13:58 · sessao 678126566b8c · PAR-PELO-TURNO · construtor · origem=Code
+
+## Recibo PAR-PELO-TURNO c1v11
+
+A cura está na cópia, com HEAD em `d39a4bbdf650e91cc5448120a46f17bae1435388`. O log registra **6 falhas por asserção antes da cura, 9 testes verdes depois e 10 reversões que falharam por asserção**. A varredura do diff, incluindo arquivos novos, contou **0** linhas para `^\+.*except`. O recibo fica nesta resposta pelo limite de escrita em `app/`. [Log da execução](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:1) · [L-126](/home/ronald/wt-codex-par-pelo-turno-111717/app/docs/LEIS.md:147)
+
+| Item | Antes → cura → reversão |
+|---|---|
+| **1. Universo** | Com `batidas_apuraveis` vazia, a folha apurava 8 h e o espelho recebia `[1, 2]`. Agora ambos respeitam a porta e retornam 0 h e `[]`. `universo` restaura os valores da base. [turnos.py::_carregar_turnos_do_colab](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:1900) · [Reversão](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:140) |
+| **2. Fatia** | No caso do DNA `23:59–22:45`, o motor recebia `[1]`, apurava 0 h e deixava 1 aberto. Agora recebe `[1, 2]`, fecha 26 h e deixa 0 abertos. O pad civil admite `ini−1..fim+1`, com admissão adicional pelo dia julgado do PK. `fatia_pk` restaura a perda da saída. `fatia_pad` readmite os PKs externos. [fechamento.py::apurar_por_fatia](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:264) · [Reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:164) |
+| **3. Resumo do PDF** | PDF 16 h e espelho 8 h → ambos 8 h. O papel lê as horas, os abertos e as inconsistências do resumo do espelho. `pdf_resumo` restaura 16 h e `pdf_espuria` volta a contar a entrada espúria como aberta. O campo `turnos` do PDF segue a geometria, conforme a triagem do caso 2 × 1. [pdf_espelho.py::_coletar_dados_espelho](/home/ronald/wt-codex-par-pelo-turno-111717/app/relatorios/pdf_espelho.py:222) · [espelho.py::montar_dias e espelho_do_colab](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/espelho.py:1274) · [Reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:218) |
+| **4. PDF de hoje** | Zero linhas com 8 h → zero linhas com 0 h. O teto de ontem vale para as linhas e o total. A aplicação de folha no papel usa a competência pedida quando ela cabe inteira nesse teto. `pdf_hoje` restaura a divergência. [pdf_espelho.py::_coletar_dados_espelho](/home/ronald/wt-codex-par-pelo-turno-111717/app/relatorios/pdf_espelho.py:183) · [Reversão](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:244) |
+| **5. GET de justificativas** | Às 15:00, `[]` → entrada **14:57** oferecida. Às 22:30, a saída entra no julgamento e encerra a oferta. `api_ate` restaura o `[]` às 15:00. O RED existente do eco continua oferecendo 14:57. [api/views.py::api_justificativas](/home/ronald/wt-codex-par-pelo-turno-111717/app/api/views.py:2024) · [turnos.py::_julgar_batidas_da_janela e dia_das_batidas](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:3047) · [Reversão](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:296) |
+| **6. Reversores** | Reancorei `folha_so_uma_virada` e `espelho_so_uma_virada`. Ambos saíram de zero ocorrências de âncora para falhar na asserção do leitor correspondente, com `[1]` onde se exige `[1, 2]`. Reancorei também `fatia_so_uma_virada`, que perde o PK 21. [test_par_pelo_turno.py::_mutacao](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_pelo_turno.py:869) · [Reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:320) |
+| **7. Custo por colaborador** | Na carga chamada pelo laço da frota, **5 → 5** avaliações de `QuerySet` com par fechado e **3 → 3** sem marcas. A contagem usa os carregadores reais com avaliação em memória. SQL executado em banco **[nao verificado]**. [Chamada no laço](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:636) · [Medição](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:96) |
+
+### Reprodução a partir de `app/`
+
+```bash
+v() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v11_verificacao "$@"; }
+
+v todos --base
+v todos
+
+v universo --mutante
+v fatia_pk --mutante
+v fatia_pad --mutante
+v pdf_resumo --mutante
+v pdf_hoje --mutante
+v pdf_espuria --mutante
+v api_ate --mutante
+v folha_so_uma_virada
+v espelho_so_uma_virada
+v fatia_so_uma_virada
+
+v custo --base
+v custo
+```
+
+Também passaram 7 direcionados c1v10, 22 selos e 207 testes vizinhos em memória. Suíte Django com ORM e produção **[nao verificado]**. A certificação cabe ao Code e ao Opus final. [Direcionados e selos](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:394) · [Runner dos vizinhos](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v9_verificacao.py:154) · [L-126](/home/ronald/wt-codex-par-pelo-turno-111717/app/docs/LEIS.md:147) [nao verificado]
 
 ## 27/11 13:45 · sessao de8d2d4045a1 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
 
@@ -825,22 +866,4 @@ Valores mensais em horas. Os IDs **727** e **788** já têm `he100fer` positivo 
 | 3 | 911 | 180,50 | 0,00 | 0,00 | 0,00 | `extrato:119` |
 | 3 | 1024 | 103,97 | 0,00 | 0,00 | 0,00 | `extrato:120` |
 
-## 27/11 12:08 · sessao 4f65f40651ed · FERIADO-BOTAO-CORTADO · leitura · origem=Code
-
-**a. As quatro falhas têm a mesma causa:** o JS mede o gatilho na viewport, mas aplica `left/top` em um painel `fixed` cujo ancestral muda a referência dessas coordenadas. (`popover-acao.js:38,44,75`)
-
-- **Página, nas duas cascas:** gatilho em `(788,97; 580)`, painel em `(802; 445)`. O painel cabe inteiro e **sobrepõe** o gatilho. A distância registrada é **0 px** e a sonda rejeita a sobreposição. O `backdrop-filter` de `.hx-shell` muda a referência do painel. (`smoke_falhas.txt:41,97`, `test_smoke_clique_feriado_vira_trabalho.py:119`, `base.html:335`, `base_app.html:93`, `hasner-ponto.css:283`)
-- **Drawer, nas duas cascas:** gatilho em `(890,28; 576)`, painel em `(1156; 243)`. A distância é **197,82 px** e a direita do painel ultrapassa a viewport em **20 px**, o que também derruba o teste de recorte. O `translateX(0)` mantém o drawer como referência do painel mesmo depois de aberto. (`smoke_falhas.txt:74,130`, `_drawer_generico.html:3,15,16`) [nao verificado]
-
-**b. O defeito de posicionamento antecede o c1.** O c1 mudou a posição e a quebra de linha do gatilho e separou a rolagem das marcações. A geometria pré-c1 em execução é [não verificado]. Os outros usos são **Resolver dia** e **Inverter tipo/Retratar batida**, na grade do perfil, no Espelho do drawer e na fita do diagnóstico. Eles têm o mesmo risco sob esses ancestrais. Ocorrência em produção [não verificado]. (`diff_c1.patch`, `_feriado_vira_trabalho.html:5`, `_calendario_grade.html:127,135`, `detalhe.html:215`, `_drawer_generico.html:140`, `_drawer_diagnostico.html:35`)
-
-O smoke de **Excluir feriado** passa pelo `hxConfirm` do cadastro e verifica POST, exclusão e auditoria. Ele não mede proximidade. (`feriado_form.html:52`, `test_smoke_clique_excluir_feriado.py:54,110`)
-
-**c. Cabem duas curas, com o mesmo predicado.**
-
-- **Template/CSS, só no feriado:** botão `popovertarget` e formulário `popover` na camada superior, com âncora CSS e inversão de posição. Preserva os outros popovers. Exige adaptar a sonda do `summary`. Compatibilidade nos navegadores usados [não verificado]. (`_calendario_grade.html:131`, `_feriado_vira_trabalho.html:5`, `test_smoke_clique_feriado_vira_trabalho.py:228`)
-- **JS:** compensar a origem do painel medida em `left:0; top:0`. É a menor mudança para os deslocamentos observados. O painel continua sujeito ao recorte do ancestral, e uma mudança compartilhada alcança os demais popovers. (`popover-acao.js:44,53,75`, `_drawer_generico.html:3`)
-
-**d. Sim, 16 px é razoável para a abertura normal.** O JS prevê **2 px** abaixo ou acima do gatilho, com ajuste horizontal. O fallback que cola o painel no topo pode fugir desse limite. (`popover-acao.js:55,64,70`)
-
-_8670 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8671 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
