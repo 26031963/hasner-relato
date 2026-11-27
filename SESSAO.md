@@ -6,10 +6,12 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 04:39:47.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (143.7 MB). Acoes na janela: **2252**.
+**Medido em 27/11/2026 04:46:32.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (143.7 MB). Acoes na janela: **2249**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 04:43:00 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 04:42:55 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bf69oxu3n.output` |
 | 04:37:49 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 04:37:45 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b7q4ag92m.output` |
 | 04:32:39 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -2257,8 +2259,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 16:47:29 | Bash | Lê o resto do laudo da E1a | `cd ~/saas-hasner; tail -c +6000 logs/E1-PREVISAO-24H/e1a/verif1/r.md \| head -c 7000` |
 | 16:47:26 | Bash | Lê o laudo do verificador da E1a | `cd ~/saas-hasner; head -c 6000 logs/E1-PREVISAO-24H/e1a/verif1/r.md` |
 | 16:47:19 | Bash | Lê qual resultado chegou e o estado das filas do portão | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b32jtbvhk.output; cd ~/saas-hasner; for f in logs/DIA-DA-BATIDA-JUIZ-UNICO/F4c/wrapper.out logs/O30-F3-CONSTRUIR/wrapper_c9.out; do echo "$f: $(tail -1 $f)"; done` |
-| 16:40:44 | Bash | Espera por arquivo o próximo resultado | `cd ~/saas-hasner; until [ -e logs/PORTA-CONFERE-TRAVA/pouso/certifica.rc ] \|\| [ -e logs/E1-PREVISAO-24H/e1a/verif1/r.rc ] \|\| [ -e logs/RAMO2-CRUZA/c2f/c2g/r.rc ] \|\| [ -e logs/AGENTE-NO-MODELO/viz/FIM ] \|\| [ -e logs/DIA-DA-BATIDA-JUIZ-UNICO/F4c/r.rc ] \|\| [ -e logs/O30-F3-CONSTRUIR/c9.rc ]; do /usr/bin/sleep 30; done; date +%H:%M; for f in logs/PORTA-CONFERE-TRAVA/pouso/certifica.rc logs/E ...` |
-| 16:40:38 | Bash | Registra a E1a e a linha de censo do PAR no RELATO | `cd ~/saas-hasner; git update-ref -d refs/codex/tmp-e1a; h=$(date +%H:%M); python3 - <<EOF p='app/docs/RELATO.md'; t=open(p).read().split('\n') t[0:0]=["E1a ($h): commit 8d81e64c5 na copia /home/ronald/wt-codex-e1-previsao-24h-083708 -- motor restaurado a 558de6bd4 pela sessao (git diff 558de6bd4 -- motor vazio), 4 REDs sem banco 4a9862378 FAIL->verde, 6 mutantes, except novo 0 (o unico + no diff e ...` |
-| 16:40:16 | Bash | Lança o verificador Codex volta 1 da E1a | `cd ~/saas-hasner; D=logs/E1-PREVISAO-24H/e1a/verif1; cat > $D/q.md <<'EOF' Obra E1-PREVISAO-24H, fatia E1a, papel verificador, VOLTA 1. Arvore = copia em 8d81e64c5 (a obra inteira sobre 558de6bd4; esta volta: delta 4a9862378..8d81e64c5 anexo por ultimo). Intencao declarada (PERGUNTA, nao dado): a E1a deixa ponto/motor_calculo_v2.py igual a 558de6bd4; celula valida sem dna.marcos da previsto 635; p ...` |
-| 16:40:02 | Bash | Prepara o delta da E1a para o verificador | `cd ~/saas-hasner; D=logs/E1-PREVISAO-24H/e1a/verif1; mkdir -p $D; W=/home/ronald/wt-codex-e1-previsao-24h-083708; git -C $W diff 4a9862378 8d81e64c5 > $D/delta.patch; git -C $W diff --stat 558de6bd4 8d81e64c5 \| tail -1; wc -c $D/delta.patch; grep -n "E1-PREVISAO\\|previsao_do_dia_valida" app/docs/CORTES.md \| head -3 \| cut -c1-120; ls app/docs/LEIS.md app/docs/JUIZES.md` |
-| 16:39:53 | Bash | Commita a E1a na cópia com o motor restaurado | `cd /home/ronald/wt-codex-e1-previsao-24h-083708 && git add app/escala/services/cadastro_realidade.py app/escala/tests/test_e1_v4_juiz_unico.py app/escala/utils.py app/folha/export.py app/ponto/services/fechamento.py app/ponto/tests/test_comercial_he_marcos.py app/ponto/tests/test_motor.py app/ponto/tests/test_motor_comercial_dia_do_turno.py app/ponto/tests/test_turno_meia_noite_comercial.py app/te ...` |
