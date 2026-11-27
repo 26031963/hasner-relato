@@ -1,7 +1,11 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 03:57** · publicado em **27/11/2026 04:00** (UTC-3)
+> Ultima resposta processada: **27/11/2026 05:08** · publicado em **27/11/2026 05:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 05:08 · sessao 96e803870767 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
 ## 27/11 03:57 · sessao 0684ef753980 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
 
@@ -834,93 +838,4 @@ Nos casos de recusa pós-executor, exigir `PROIBIDO` com arquivo exato em `.recu
 
 - **lei:** O aval c11 manda corrigir D e voltar a cerca de schema e seus REDs para fora do alcance do Codex. A cobertura do restante das testemunhas consumidas por produção, se elas pertencem ao app dos testes autorizados, e o despacho dos demais caminhos agora recusados pela lista positiva não aparecem no texto do aval nem na lista de Opus existente. Não há nomes dos `models.py` nem do app do brief no material dado [nao verificado]. `app/docs/LEIS.md:147`, `CLAUDE.md:398–405`, `bin/disjuntor.py:1961` e anexo `CCM-C11-LISTA-POSITIVA-v2-2711-0250.txt`, item 2 [nao verificado na cópia].
 
-## 27/11 02:50 · sessao 5a9c1213012a · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-A fix2 altera apenas os dois arquivos de teste autorizados. A checagem estática encontrou **45 casos numerados**, com o 33 fora do recorte, **53 mutantes nomeados** e **zero cláusulas `except`**. Conferi também os seletores SQL com `VALUES`, `UNNEST`, PK direto e `IN`. Execução Django, resultado individual e mordida dos mutantes ficam **[nao verificado]**. [T — matriz](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1) · [M — mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:1) [nao verificado]
-
-O selo de escrita associa o `INSERT` ao par **pergunta e ato** e confere a origem de cada atualização da mesma pergunta. Assim, antecipar o ato e conservar uma escrita direta ainda é uma falha esperada. As guardas 21 e 23 usam a fixture de assinatura com trava real. O 27 faz o juiz distinguir a instância antiga da relida. [Selo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:219) · [Fixture com trava](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/_ato_da_fixture.py:47) · [Caso 27](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:861)
-
-### Matriz
-
-`T` e `M` são os arquivos acima. `C4` referencia a cópia `c154a8d4e`. A coluna “Hoje” é uma previsão por leitura. **Guarda** indica o comportamento que se espera preservar. [C4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1) · [C1 da c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_instante_c1.py:234)
-
-| Caso | Regra e teste | Hoje | Mutante | [nao verificado]
-|---|---|---|---|
-| 01 | Apply grava R sem evento. `T:261`, `docs/PROMPTS.md:2873`, `C4:401,495` | O comando enumera R e aplica apenas colisões e silêncios. `backfill_decisoes_pergunta.py:489,631` | `01_backfill_emite_evento` |
-| 02 | Aplica V histórico, preserva R por inteiro e não infere ABSORÇÃO. `T:275`, `docs/PROMPTS.md:2806`, `C4:336,401` | V fica só na projeção. `backfill_decisoes_pergunta.py:489,631` | `02_reescreve_resposta_antiga` |
-| 03 | ABSORÇÃO vigente dispensa V retroativa. A compensada tem controle próprio. `T:294`, `docs/PROMPTS.md:2806` | O seletor oferece V na absorvida. `chamados/models.py:4437` | `03_foto_sem_respeitar_absorcao` |
-| 04 | Aplica R/V em duas competências e preserva atos anteriores. `T:325`, `docs/PROMPTS.md:2950` | O comando lista as duas competências e não insere os atos. `backfill_decisoes_pergunta.py:489,631` | `04_descarta_segunda_competencia` |
-| 05 | V e ABSORÇÃO físicas precedem V/M da mesma pergunta no mesmo bloco. `T:1110`, `docs/PROMPTS.md:2873` | Há carimbo e ABSORÇÃO, mas falta V física. `materializacao.py:1107` | `05_segundo_escritor_m` |
-| 06 | Absolvição da célula escreve uma vez os três campos M e deixa zero atos. `T:651`, `docs/RELATO.md:292` | Guarda. `reconciliador.py:695` | `06_carimbo_reescrito` |
-| 07 | Apply preserva `celula_absolveu`, com zero atos, eventos e reescritas de R/V/M. `T:359`, `docs/RELATO.md:292` | Guarda. `backfill_decisoes_pergunta.py:121,631` | `07_fabrica_conclusao` |
-| 08 | Via comum preserva pergunta, TXT e gravado da exportada. `T:372`, `C4:419` | Guarda da via comum. `backfill_decisoes_pergunta.py:505` | `08_regrava_exportada` |
-| 09 | V física precede a coluna. A via de M segue a testemunha do dia. `T:669`, `docs/RELATO.md:292` | O resolvedor carimba V sem linha física. `disputa_emissao.py:2112` | `09_segundo_escritor_v` |
-| 10 | O resolvedor grava R física para texto em escolha e hora. Muda recebe só M. `T:698`, `docs/RELATO.md:292` | O ramo carimba R sem ato. `disputa_emissao.py:2189` | `10_segundo_escritor_r` |
-| 11 | Reabertura vazia deixa um ato por pergunta, com projeção e eventos preservados. `T:399`, `docs/PROMPTS.md:2873` | O filtro exclui a pergunta vazia do lote de atos. `disputa_emissao.py:1695,1703` | `11_descarta_reabertura_vazia` |
-| 12 | Cada uma das quatro referências de autoria protege seu próprio usuário. `T:415`, `docs/PROMPTS.md:2873` | As FKs admitem a exclusão com `SET_NULL`. `chamados/models.py:3804,3824,4347,4352` | `12_autor_da_foto_set_null` |
-| 13 | Autor inativo conserva a foto integral dos atos e perde o refresh. `T:721`, `api/views.py:76` | Guarda. `api/views.py:96` | `13_refresh_inativo` |
-| 14 | L-130 conserva o histórico e aceita nova resposta após a REABERTURA. `T:435`, `docs/LEIS.md:151`, `C1:234` | A porta atual limpa o par sem gravar REABERTURA. `validacao.py:444,475` | `14_apaga_resposta_antiga` |
-| 15 | Competência aberta saneia. Entrega durante a espera impede o saneamento. `T:746`, `docs/LEIS.md:151` | Guarda. `validacao.py:417,465` | `15_k6_antigo` |
-| 16 | A porta recusa R futura antes de inserir ato ou evento. `T:454`, `docs/PROMPTS.md:2873` | `registrar` aceita a linha futura. `chamados/models.py:4598` | `16_recusa_depois_do_insert` |
-| 17 | `save` sem PK recusa a inserção e o censo cobra um escritor mesmo com alias. `T:469`, `docs/PROMPTS.md:2873` | `save` delega ao Django quando o PK está vazio. `chamados/models.py:4405` | `17_atalho_com_alias` |
-| 18 | Tarefa, C6 e modal respeitam o horizonte. I23 exclui o caso de restore e mantém controle positivo. `T:492`, `docs/PROMPTS.md:2950`, `C4:297` | C6 reduz a sequência inteira, o modal lê o par atual e I23 conta a compensação adiantada. `chamados/juizes.py:1499`, `modal_fio.html:217`, `auditar_invariantes_chamados.py:1122` | `18_c6_julga_compensacao_cedo`, `18_i23_zero_fixo` |
-| 19 | A humana vence no empate e a automática ainda escreve quando elegível. `T:774`, `docs/PROMPTS.md:2873` | Guarda. `disputa_emissao.py:1741` | `19_automatica_sobrescreve` |
-| 20 | RECUSA no empate ou posterior interrompe só Q. As irmãs anterior e seguinte conservam os efeitos da passagem. `T:1140`, `docs/PROMPTS.md:2950` | A passagem não veta Q pela RECUSA relida. `materializacao.py:1089` | `20_ignora_recusa_no_empate` |
-| 21 | RECUSA relê a validação sob trava e continua possível para uma elegível. `T:796`, `validacao.py:974` | Guarda. `validacao.py:989` | `21_recusa_sem_reler` |
-| 22 | Validação observa a reabertura concorrente. O controle elegível valida e planta. `T:813`, `validacao.py:742` | Guarda. `validacao.py:752` | `22_valida_foto_antiga` |
-| 23 | Correção relê V e uma elegível chega à validação com R corrigida. `T:839`, `acoes_disputa.py:418` | Guarda. `acoes_disputa.py:429` | `23_corrige_sem_reler` |
-| 24 | Sem grupo recuperável, Q fica intacta e E conserva a nova resposta. `T:1187`, `materializacao.py:1119` | Guarda. `materializacao.py:1136` | `24_sem_veto_de_grupo` |
-| 25 | Rejeição devolve irmã pela ABSORÇÃO vigente e preserva a compensada. `T:1216`, `docs/PROMPTS.md:2873` | O seletor por coluna exige âncora de hora e omite Q. `materializacao.py:1195` | `25_absorcao_so_por_coluna` |
-| 26 | Sem ABSORÇÃO, preserva o legado e a vizinha de outra passagem. `T:1250`, `docs/PROMPTS.md:2873` | O agrupamento por coluna devolve o legado. `materializacao.py:1195,1267` | `26_devolve_sem_vinculo` |
-| 27 | O fantasma só recebe M depois da trava, releitura e julgamento do valor fresco. `T:861`, `reconciliador.py:1265` | Guarda. `reconciliador.py:1268` | `27_julga_instancia_antiga` |
-| 28 | O espelho relê sob trava e compensa H4 vigente antes de trocar a via. `T:898`, `docs/PROMPTS.md:2873` | O legado de controle entra no comando. A declaração com ABSORÇÃO fica fora do seletor. `encerrar_perguntas_com_fato.py:31,66` | `28_via_sem_compensacao` |
-| 29 | Perda de lastro grava REABERTURA antes de limpar M. `T:941`, `docs/PROMPTS.md:2873` | O descarimbo direto não grava REABERTURA. `relavra_via.py:230` | `29_segundo_descarimbo` |
-| 30 | Fila SQL, API, modal e raio-x observam a mesma resposta. `T:1272`, `docs/PROMPTS.md:2873` | Fila e raio-x classificam pelo par cru, que ainda aparece na API e no modal. `chamados/juizes.py:1863`, `api/views.py:1161`, `modal_fio.html:217`, `raiox.py:135` | `30_fila_pelo_carimbo_cru`, `30_api_pelo_par_cru`, `30_modal_pelo_par_cru`, `30_raiox_pelo_carimbo_cru` |
-| 31 | Emissão automática e manual nascem com raiz, pai e filha coerentes. `T:1320`, `docs/PROMPTS.md:2873` | Guarda dos efeitos do nascimento. `disputa_emissao.py:582,1351` | `31_raiz_nasce_fechada` |
-| 32 | `PerguntaDisputa.abrir` nasce com identidade, R/V/M vazios e zero DP. `T:1349`, `docs/PROMPTS.md:2950` | Guarda do nascimento sem assinatura. `chamados/models.py:3088,3330` | `32_filha_nasce_com_v` |
-| 34 | SILÊNCIO físico precede M e o fecho chega ao pai. `T:1360`, `docs/PROMPTS.md:2873` | M é carimbado antes de SILÊNCIO. `chamados/models.py:2184` | `34_segundo_escritor_m` |
-| 35 | Reabre a mais recente do chamado, com maior PK no empate. `T:1379`, `docs/CORTES.md:618` | A emissão abre outra disputa. `disputa_emissao.py:582` | `35_elege_de_outro_chamado` |
-| 36 | Tranca retira por leitura e preserva a irmã viva de outra competência e o pai. `T:1416`, `chamados/juizes.py:1505` | Guarda. `competencia_trancada.py:162` | `36_ignora_tranca` |
-| 37 | Destranca libera M, preserva R e poupa a via vizinha. `T:1449`, `chamados/models.py:3703` | Guarda dos efeitos. `competencia_trancada.py:279` | `37_regrava_r_no_destranque` |
-| 38 | Desligamento grava SILÊNCIO antes de M e a cascata fecha o pai da muda. `T:1472`, `chamados/signals.py:20` | M é carimbado antes de SILÊNCIO. `chamados/models.py:2184` | `38_perde_cascata_do_pai` |
-| 39 | VALIDACÃO precede V/M e sustenta a batida e a via. `T:962`, `docs/PROMPTS.md:2873` | V é escrita antes da linha física. `validacao.py:164` | `39_segundo_escritor_v` |
-| 40 | RECUSA precede motivo e limpeza da resposta. `T:984`, `docs/PROMPTS.md:2873` | `recusa_motivo` é salvo antes da RECUSA. `validacao.py:995` | `40_segundo_escritor_motivo` |
-| 41 | Correção sobrevive à recusa do plantio e deixa RESULTADO nos dois retornos. `T:1003`, `docs/PROMPTS.md:2950` | R precede o ato e os caminhos de recusa ainda carecem da linha RESULTADO. `disputa_emissao.py:1562`, `acoes_disputa.py:452` | `41_segundo_escritor_r` |
-| 42 | Resposta retrodatada muda a projeção presente e preserva marco e lavra históricos. `T:541`, `docs/CORTES.md:609`, `C4:914` | O `Max(respondida_em)` cru move o marco passado. `veredito_lavrado.py:205` | `42_marco_pelo_par_cru` |
-| 43 | Retry de fecho em T2 conserva PKs, trilha e eventos, com zero UPDATE. `T:1503`, `chamados/models.py:2094` | Guarda. `chamados/models.py:2100` | `43_retry_regrava_fecho` |
-| 44 | Segundo apply preserva o ato inteiro. Nova pergunta elegível ainda entra. `T:562`, `docs/PROMPTS.md:2805`, `C4:419` | Falta a primeira inserção de R na via pública do apply. `backfill_decisoes_pergunta.py:631` | `44_duplica_retry` |
-| 45 | Compara autor, texto e lastro por classe A/B e por novo/estoque. `T:585`, `docs/PROMPTS.md:2950`, `C4:574` | O vigia atual compara presença de V e perde essas diferenças. `vigia_ato_x_coluna.py:8` | `45_vigia_so_instante`, `45_ignora_fk_nula`, `45_estoque_vira_novo`, `45_conta_absorcao_legada` |
-| 46 | Plantio atualiza a ata de `480/0` para `480/480` e prontidão de 0 para 100. `T:1525`, `folha/export.py:1104` | Guarda proposta com cartório real e sinal da batida. Execução [nao verificado]. `ponto/signals.py:137` | `46_denominador_realizado`, `46_omite_relavra` |
-
-O caso 20 nomeia a caracterização que a cura inverte, `test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa`. Ela cobra `recusadas == []` e bloqueio H4 da próxima resposta. [Caso antigo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364) · [Caso novo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1140)
-
-### Lei e desenho
-
-- **lei: 14.** A E4D pede SANEAMENTO próprio e alvo seletivo. A c4 manda REABERTURA marcada pela L-130. O teste segue a c4 e cobre a resposta escrita depois do saneamento. Falta decidir o que vale para uma resposta que já estava gravada no empate ou depois da histórica. `docs/PROMPTS.md:2950` · `docs/LEIS.md:151` · `C1:234` · `T:435`
-- **lei: 30.** A E4D diz que o ato manda no par. A c4 manda que `composta` entregue o texto da projeção. A fix2 segue a c4 para `composta` e cobra o efeito do par nos quatro leitores públicos do caso. `docs/PROMPTS.md:2873` · `chamados/models.py@c154a8d4e:4635` · `T:1272`
-- **lei: 18.** O zero foi aplicado à compensação do restore. Se o zero for universal, conflita com o I23, cuja caracterização conta uma compensação futura normal. `docs/PROMPTS.md:2950` · `auditar_invariantes_chamados.py:1122` · `test_e4c_f5_4c1_instante_unico.py:319`
-- **lei/desenho: 04, 08 e 44.** Qual porta reverte apenas as linhas do lote de uma competência? Qual entrada transporta o `!` da exportada e publica os hashes reais? O retry do 44 mede reaplicação pública do comando. Qual entrada permite reenviar exatamente o mesmo lote, preservando a distinção da c4 para duplicata dentro de um payload? `backfill_decisoes_pergunta.py:455,514,631` · `ponto/portas/regen_exportada.py:62` · `C4:419`
-- **lei/desenho: 11, 12, 20 e 26.** Qual entrada transporta a identidade do pedido de reabertura e de passagem? Qual leitura distingue autoria histórica desconhecida de autor nulo de sistema? Qual leitor público expõe o encaminhamento ao admin por pergunta e ausência? `disputa_emissao.py:1628` · `materializacao.py:1010,1215` · `chamados/models.py:4347` · `T:1250`
-- **lei/desenho: lápides.** Onde fica a lista nominal de escritores, campos e lápides que o selo deve ler? Os testes medem os efeitos e os campos das vias exercitadas. A declaração de produção ainda não tem superfície definida nos arquivos consultados. `docs/PROMPTS.md:2873,2950` · `docs/RELATO.md:292` · `core/portas.py:396` · `T:229`
-- **lei/desenho: 42.** Qual testemunha preserva o marco histórico quando a projeção muda? O F3 sela o leitor com zero consultas à tabela DP. A marca, a fronteira e a reexecução do estoque ficam na migração real coberta pela c4. `docs/CORTES.md:609,610` · `test_f3_lavra_foto_sem_decisao.py:312` · `0058_decisao_entrada_do_ato.py@c154a8d4e:9` · `C4:914`
-
-### Comandos para o Code
-
-Recorte da matriz e comando de cada mutante pelo nome da tabela. O prefixo do nome seleciona o caso correspondente. [Matriz](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:260) · [Runner](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:393)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4d_matriz_reds --verbosity 2
-
-mutante_e4d() {
-  E4D_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    chamados.tests.test_e4d_matriz_reds \
-    --testrunner=chamados.tests.e4d_matriz_mutantes.RunnerMutanteE4D \
-    -k "test_caso_${1%%_*}_" --verbosity 2
-}
-
-mutante_e4d 05_segundo_escritor_m
-mutante_e4d 27_julga_instancia_antiga
-```
-
-_8569 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8570 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
