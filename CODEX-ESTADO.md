@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 13:58** · publicado em **27/11/2026 14:00** (UTC-3)
+> Ultima resposta processada: **27/11/2026 14:07** · publicado em **27/11/2026 14:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 14:07 · sessao 8d021657fa55 · PAR-PELO-TURNO · verificador · origem=Code
+
+# REPROVADO — PAR-PELO-TURNO c1v11
+
+Os sete casos dirigidos da triagem têm correção demonstrada. O PDF ainda antecipa horas que o `main` excluía, muda qual janela decide a fonte da folha e pode misturar duas leituras da mesma competência. Dois selos existentes também ficaram vermelhos. `app/ponto/tests/test_par_pelo_turno_c1v11.py:56–203` · `app/relatorios/pdf_espelho.py:184–269` · `59600163c:app/relatorios/pdf_espelho.py:264–272,596–628` · `app/relatorios/tests/test_cartao_pela_celula.py:170–183` · `app/relatorios/tests/test_chave_sem_leitor_nao_volta.py:96–102`
+
+Comparei as fontes locais de `59600163c`, `d39a4bbdf` e `a8c63c457`. Os ensaios rodaram em memória, com dublês nas portas de dados. Na cura, **9 testes verdes**. Repondo as funções da base, **6 falhas de asserção e 3 verdes**. Em processos separados, **7 mutantes individuais e 3 reversores antigos** falharam nas asserções esperadas. A suíte com ORM, a produção e o DIFF de frota ficam **[nao verificado]**. `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:12–93,146–168` · `app/ponto/tests/test_par_c1v8_reds.py:19–64,67–108` · `app/docs/LEIS.md:112`
+
+## Procedentes contra o main
+
+| Achado | Prova e RED |
+|---|---|
+| **1. O teto por instante do PDF piorou.** | Em `[D,D]`, emissão às **02:00 de D+1**, com `D 22:00 E → D+1 14:00 S` já armazenada, o main devolveu **0 h e 1 aberto** e a cura **16 h e 0 abertos**, em Comercial e 12x36. Ambos desenharam as duas marcas. O main cortava a carga do motor ao meio-dia de D+1. A carga nova alcança a tarde e recebe a data, sem o instante do ato. **RED:** exigir 0 h e 1 aberto antes das 14:00, 16 h e 0 abertos a partir das 14:00, e o mesmo teto por instante para as marcas desenhadas. `59600163c:app/relatorios/pdf_espelho.py:264–272,596–602` · `app/relatorios/pdf_espelho.py:184–187,222–224,249–258` · `app/ponto/services/espelho.py:1031,1234–1238` · `app/ponto/turnos.py:3031–3044` · `app/docs/LEIS.md:100` |
+| **2. A janela efetiva passou a decidir a fonte da folha.** | Em competência pedida `[D,D+3]`, emitida em D+1, com D previsto sem batidas e folha disponível com **zero faltas decididas**, o main devolveu **0 faltas e D em aberto**. A cura devolveu **1 falta e D em aberto**. O papel imprime os dois indicadores. A chamada interna usa `[D,D]`, que é livre, e a externa só aplica a pedida quando o fim ficou inteiro. O inverso também foi reproduzido contra `d39a4bbdf`: um pedido **livre** cujo recorte coincide com uma competência passou a receber valores e o rótulo da folha dessa competência. **RED:** testar os dois sentidos do corte, preservar a fonte da janela pedida e exigir que o furo do primeiro caso apareça só como dia em aberto. O teste existente de paridade de rubricas já pede competência inteira antes do fim. `59600163c:app/relatorios/pdf_espelho.py:596–601,624–628` · `app/relatorios/pdf_espelho.py:238–240,255–258,405–411` · `app/ponto/services/espelho.py:1300–1301` · `app/relatorios/cartao_pela_celula.py:27–34` · `app/core/tests/test_espelho_tela_le_a_folha.py:32–39,64–105` |
+| **3. O resumo mistura duas leituras da competência inteira.** | Com `folha_manda` real, simulei a primeira leitura com **8 h trabalhadas e previsto `None`** e a segunda com **10 h trabalhadas e 9 h previstas**. O main terminou em **10 h / 9 h / saldo +1 h**. A cura terminou em **8 h / 9 h / saldo −1 h**, com fonte `folha`. A atualização com o resumo do espelho recoloca os campos da primeira leitura e deixa os campos exclusivos da segunda. **RED:** devolver respostas sucessivas distintas, exigir uma única leitura da folha e verificar que trabalhadas, previstas, saldo e faltas vêm da mesma resposta. Os REDs atuais substituem as duas chamadas a `folha_manda`. `59600163c:app/relatorios/pdf_espelho.py:596–602,624–628` · `app/ponto/services/espelho.py:1300–1301` · `app/relatorios/pdf_espelho.py:255–260` · `app/relatorios/cartao_pela_celula.py:201–212,320–346` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:44–47` |
+| **4. Dois selos existentes ficaram vermelhos.** | Executei os métodos com a fonte de cada versão: **main verde, base verde, cura vermelha** nos dois. Um procura `grade_espelho_janela` no arquivo do PDF e a chamada migrou para o espelho. O outro exige a presença do comentário que serve de controle para o filtro das chaves mortas, e o delta removeu esse comentário. **REDs:** fazer a grade real atravessar o espelho e comprovar no papel a espúria e a isenção; alimentar a catraca com as chaves proibidas em comentário e depois em código, exigindo que só o segundo caso falhe. `app/relatorios/tests/test_cartao_pela_celula.py:170–183` · `app/relatorios/tests/test_chave_sem_leitor_nao_volta.py:96–102` · `59600163c:app/relatorios/pdf_espelho.py:193,521` · `app/ponto/services/espelho.py:1273–1278,1314–1316` · `app/relatorios/pdf_espelho.py:244–253,495–509` |
+
+## Os sete itens da triagem
+
+| Item | Base → cura → reversão |
+|---|---|
+| **1. Universo** | A porta devolve vazio: **8 h e `[1,2]` → 0 h e `[]` → 8 h e `[1,2]`**. Curado na origem da carga principal. `app/ponto/turnos.py:1907–1909,2985–3012` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:61–77` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:56–62` |
+| **2. DNA e fatia por PK** | A carga publica `[1,2]`, ambos julgados em D. O motor recebe **`[1]`, 0 h, 1 aberto → `[1,2]`, 26 h, 0 abertos → `[1]`, 0 h, 1 aberto**. Curado no recorte da fatia. `app/ponto/services/fechamento.py:264–275` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:79–94` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:63–67` |
+| **3. PDF 16 h × espelho 8 h** | **16/8 → 8/8 → 16/8**. O main também deu **8/8**. Comercial e TurnoPartido deram os mesmos resultados. O PDF passou a ler a soma do espelho, recortada pelo dia da jornada publicado pelo motor. `59600163c:app/relatorios/pdf_espelho.py:264–272,501–503` · `app/ponto/services/espelho.py:452–456` · `app/relatorios/pdf_espelho.py:258` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:111–130` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:72–78` |
+| **4. Fim do desenho × fim da apuração** | Pedido só para hoje, com par de 8 h: **`([], 8 h, 1)` → `([], 0 h, 0)` → `([], 8 h, 1)`**. O retorno vazio cura esse caso na origem. Para janela efetiva não vazia, o teto compartilhado é **por data**. O achado 1 reproduz a falha por instante. `app/relatorios/pdf_espelho.py:184–222` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:132–146` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:79–86` |
+| **5. GET sem teto** | Antes da saída: **`[]` → entrada 14:57 → `[]`**. Na cura, o aberto desaparece no instante exato da saída. O GET lê `now()` uma vez e `ate=agora` limita tanto a carga quanto o `Max` da pausa sem volta. O eco continua verde em **14:57**, e a reversão à paridade de c1v9 volta a **20:04**. O RED publicado cobre o par simples. Para morder também o `Max`, usar `08:00 E / 12:30 S` com pausa 12–13 e acrescentar uma E em D+10. Às 14:00 de D, exigir que o turno permaneça aberto. `app/api/views.py:2024–2042` · `app/ponto/turnos.py:1181–1198,1907–1909,1941–1945,3005–3009` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:184–203` · `app/ponto/tests/test_par_pelo_turno_c1v10.py:81–105` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:178–182` |
+| **6. Reversores sem âncora** | Folha e espelho já recebiam `[1,2]` na base. Na cura, os dois passam e cada reversão isolada derruba só seu leitor para `[1]`. A terceira reversão derruba a fatia de `[20,21]` para `[20]`. Os três chegaram à asserção de comportamento. `app/ponto/tests/test_par_pelo_turno.py:225–245,869–891` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:166–182` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:38–54` |
+| **7. Pad civil da fatia** | **`[0,1,2,3,4]` → `[1,2,3]` → `[0,1,2,3,4]`**. `para_motor=True` restaura `ini−1..fim+1` do main. O `or` admite a marca pelo dia julgado, e o filtro seguinte usa o vínculo dono no trecho sobreposto. `59600163c:app/ponto/services/fechamento.py:264–281` · `app/ponto/turnos.py:1864–1882` · `app/ponto/services/fechamento.py:264–275` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:96–109` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:68–71` |
+
+## Universo, chamadores e dívidas comparadas
+
+- **Carga entregue ao motor:** folha, passada órfã e espelho passam pela porta. O PDF usa a carga do espelho, e o GET usa a porta antes do pareamento. Os dois chamadores produtivos de `apurar_por_fatia` passam o mapa da própria carga. As chamadas diretas sem mapa encontradas são de testes. O fallback cru de `papel_por_minuto_da_ata` fica fora desse caminho porque ambos os chamadores fornecem as marcas. `app/ponto/services/fechamento.py:636,756–757,811–824` · `app/ponto/services/espelho.py:1031,1168–1187` · `app/relatorios/pdf_espelho.py:222–233` · `app/ponto/turnos.py:1629–1633,1985–1989,3023–3055` · `app/ponto/motor_calculo_v2.py:519–533` · `app/ponto/tests/test_composicao_de_fatias_e_total.py:86,104,127,165,197,295`
+- **Consulta crua auxiliar:** espelho e PDF podem alcançar `Batida.objects.filter` em `_turno_aberto_calc`, via `folha_manda`, quando existe candidato em `datas_turno_aberto`. Essa leitura decide `datas_em_aberto`. A mesma cadeia existe no main, fora da lista entregue a `calcular_mes`. `app/ponto/turnos.py:2295–2305,2364–2373` · `app/relatorios/cartao_pela_celula.py:395–422` · `59600163c:app/ponto/turnos.py:2251–2261,2320–2329`
+- **Herança e passada órfã:** as seis marcas do laudo deram os mesmos PKs `[2,3,4,5,6]` e **0 h** no main e na cura. No caso órfão, ambos deram **4 h** com leituras estáveis e **2 h** ao retirar a saída na releitura. O extremo exato de D+2 às 00:00 mudou de critério. Efeito adicional nesse extremo **[nao verificado]**. `59600163c:app/ponto/services/fechamento.py:264–281,642–653,812–849` · `app/ponto/services/fechamento.py:794–838,897–898` · `app/ponto/motor_calculo_v2.py:2516–2545` · `app/ponto/turnos.py:3015–3044`
+- **Contagem de turnos e relógio da folha:** o PDF ainda escreve `turnos` pelo comprimento da geometria, e o espelho conta períodos. Essa diferença e a omissão de `agora` em `folha_manda` já existiam no main. Piora adicional na contagem **[nao verificado]**. A mistura entre as duas aplicações da folha foi demonstrada no achado 3. `59600163c:app/relatorios/pdf_espelho.py:441–451,624–628` · `app/relatorios/pdf_espelho.py:255–260` · `app/ponto/services/espelho.py:438–450,1300–1301` · `app/relatorios/cartao_pela_celula.py:69–76,395–420` · `app/ponto/services/fechamento.py:626–628,1758–1760`
+
+## Quem escreve e quem lê
+
+| Campo ou função | Escritor → leitores |
+|---|---|
+| **`Batida.pk`, `timestamp`, `tipo`, `retratada_em`** | `registrar_batida` cria. `anotar`, retratação e restauração atualizam. A porta lê a retratação e o instante. Pareador e motor leem as marcas. GET usa PK e instante da entrada, e PDF imprime tipo e instante. `app/ponto/registro_batida.py:170–180,255–274,287–320` · `app/ponto/turnos.py:1985–1989,3004–3012` · `app/api/views.py:2030–2041` · `app/relatorios/pdf_espelho.py:492–505` |
+| **`ate`, limites, `Turno` e `dias_por_pk`** | A borda do GET produz `agora`. `_carregar_turnos_do_colab` aplica o teto, `_mk` monta entrada, saída, aberto e dia, e `_dia_das_batidas_puro` publica o dia por PK. Carga, fatia, espelho e GET leem essa projeção. O motor ainda publica o próprio `dia_da_jornada`, consumido pela soma do espelho. `app/api/views.py:2025–2037` · `app/ponto/turnos.py:305–334,1900–1909,1941–1964,3015–3055,3090–3095,3123–3143` · `app/ponto/services/fechamento.py:264–275,657–659,756–757` · `app/ponto/services/espelho.py:438–474` · `app/ponto/motor_calculo_v2.py:2512–2545,2830–2834` |
+| **`Autoridade`, `dias`, `resumo`, `grade`, `orfas_hhmm`, `batida.orfa`** | `autoridade_do_periodo` publica resultado, batidas, vínculo, escala e régua. A grade da escala publica órfãs; no modo exato, o espelho reduz a grade a HH:MM para a guarda dos abertos. `montar_dias` escreve linhas e resumo. Admin e app leem o espelho padrão. O PDF lê o modo exato, escreve `batida.orfa` em memória com recorte por linha e o render usa essa marca. `janela_exata` passou a controlar também a guarda de espúrias, além da janela. `app/escala/utils.py:1848–1891,2377–2393` · `app/ponto/services/espelho.py:438–484,1198–1199,1234–1238,1273–1283,1310–1317` · `app/ponto/views.py:161–162` · `app/api/views.py:1354–1366,1429–1434` · `app/relatorios/pdf_espelho.py:244–253,492–509` |
+| **Rubricas, falta, abono, previstos, saldo e carimbo** | `somar_periodos` escreve as rubricas do resumo do espelho. `folha_manda` aplica fechamento online ou lavratura e deriva os dias em aberto. O PDF ainda soma **previstos**, adiciona **abono parcial** e calcula **saldo**. Também lê faltas e banco do resultado, reaplica a folha no ramo de janela inteira e recalcula o carimbo sobre as datas pedidas. `datas_saida_orfa` é preenchida no espelho e de novo no PDF, onde participa de `folha_manda` antes de ser sobrescrita pelo resumo do espelho. O render lê as rubricas e o carimbo. O gerador auditável lê `turnos`. `app/ponto/services/espelho.py:76–108,452–456,622–628,1072–1077,1198–1199,1260–1263,1287–1308` · `app/folha/export.py:169–184` · `app/ponto/motor_calculo_v2.py:2713–2734` · `app/relatorios/cartao_pela_celula.py:320–354,395–422` · `app/ponto/services/dia_decidido.py:354–359` · `app/relatorios/pdf_espelho.py:225–269,338–362,385–411,718–732` |
+
+O **segundo julgamento do dia** permanece na herança do motor, com o mesmo código do main. A **derivação paralela e o segundo preenchimento em memória** aparecem na aplicação da folha, nos campos próprios do PDF e em `datas_saida_orfa`. A escrita persistente de dinheiro está no fechamento e na lavratura de `DiaPago`. O **relógio fora da borda** permanece no PDF via `folha_manda`, enquanto o GET corrigiu o seu. O **campo com dois significados** é `dias_falta`/`datas_falta`: o motor escreve furo e a folha escreve falta decidida. O achado 2 prova a ampliação dessa ambiguidade. `app/ponto/motor_calculo_v2.py:2512–2545,2713–2724` · `app/ponto/services/fechamento.py:626–628,1143,1200–1215,1758–1760` · `app/ponto/services/dia_pago.py:345–360` · `app/relatorios/cartao_pela_celula.py:92–105,320–346` · `app/relatorios/pdf_espelho.py:229–261`
+
+## Asserções alteradas
+
+- **Arquivos já presentes no main.** `test_composicao_de_fatias_e_total.py` restaura os instantes e as asserções substantivas de ±1 do main. Muda o dublê e deixa mensagens de falha com as datas antigas. `test_medida_turno_do_par.py` muda o registro esperado de **81 para 77** derivações e de **78 para 74** em B1. Conserva as asserções da catraca e mantém o coletor explicitamente em B2−B1. `59600163c:app/ponto/tests/test_composicao_de_fatias_e_total.py:284–334` · `app/ponto/tests/test_composicao_de_fatias_e_total.py:285–345` · `59600163c:app/core/tests/test_medida_turno_do_par.py:108–109` · `app/core/tests/test_medida_turno_do_par.py:108–109,154–160,333–344,473–475,550–588`
+- **Demais arquivos Python de teste do delta, ausentes no main.** Contra `d39a4bbdf`, `test_par_pelo_turno.py` passa o mapa explicitamente e troca os alvos dos reversores, preservando as asserções do teste original. `test_par_pelo_turno_bordas.py` e `test_par_pelo_turno_c1v6.py` mudam dublês ou insumos. O verificador c1v10 passa a usar `montar_dias` real no ensaio do PDF. Os dois arquivos c1v11 são novos. O RED da espúria já era verde na base e morde a remoção da guarda, com grade simulada. `app/ponto/tests/test_par_pelo_turno.py:225–245,869–891` · `app/ponto/tests/test_par_pelo_turno_bordas.py:34–54` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:38–48,168–192` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:62–110,185–191` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:14–26,87–90` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:148–164`
+- **Artefato de evidência.** O delta local também inclui `par_pelo_turno_c1v11_red.txt`. O `diff --check` atual acusa espaços finais nas linhas 321 e 346, apesar do `rc=0` registrado no artefato. `app/ponto/tests/par_pelo_turno_c1v11_red.txt:321,346,405–406`
+
+## 27/11 14:04 · sessao 8da084d353a0 · - · - · origem=Ronald (tmux)
+
+- **Universo principal corrigido.** Folha, espelho, PDF e GET carregam pela `batidas_apuraveis`. A passada órfã também chega à porta. O motor recebe as marcas do chamador, inclusive ao consultar o papel da ata. A consulta crua remanescente em `_turno_aberto_calc` alimenta a decisão auxiliar `datas_em_aberto` do espelho e PDF. Essa consulta já existia no main. `app/ponto/turnos.py:1885–1909,1941–1945,2295–2305,2364–2373,2985–3055` · `app/ponto/services/fechamento.py:636,756–757,811–824` · `app/ponto/services/espelho.py:1031,1168–1187,1300–1301` · `app/relatorios/pdf_espelho.py:222–233,255–257` · `app/api/views.py:2024–2037` · `app/ponto/motor_calculo_v2.py:519–533` · `app/relatorios/cartao_pela_celula.py:395–422` · `59600163c:app/ponto/turnos.py:2251–2261`
+- **Fatia corrigida.** Retorna ao pad civil ±1 do main e admite pelo dia julgado no mapa por PK. Os dois chamadores de produção passam o mapa da própria carga. As chamadas diretas sem mapa encontradas são testes. `app/ponto/services/fechamento.py:152,223–225,264–275,636,756–757` · `app/ponto/services/espelho.py:1031,1168–1171` · `app/ponto/tests/test_composicao_de_fatias_e_total.py:86,104,127,165,197,295` · `59600163c:app/ponto/services/fechamento.py:264–281`
+- **Herança e passada órfã comparadas em memória.** As seis marcas do laudo dão 0 h e os mesmos PKs 2–6 nos dois lados. O caso órfão dá 4 h estáveis e 2 h quando a saída some na releitura, também nos dois lados. A janela da segunda consulta mudou no extremo exato de D+2 às 00:00. Efeito adicional desse extremo em dinheiro [nao verificado]. `app/ponto/services/fechamento.py:264–275,794–838,897–898` · `app/ponto/motor_calculo_v2.py:2516–2545` · `app/ponto/turnos.py:3015–3044` · `59600163c:app/ponto/services/fechamento.py:264–281,642–653,812–849`
+- **GET com um relógio.** `ate=agora` limita a query principal e o `Max` usado para a pausa sem volta. Ensaio complementar com DNA 08–17, pausa 12–13, D 08:00 E/D 12:30 S e D+10 08:00 E conserva o aberto às 14:00. Tirar o teto do `Max` fecha às 12:30 com a marca D+10, mesmo fora do pad da query principal. Asserção desse ramo no RED publicado [nao verificado]. `app/api/views.py:2024–2037` · `app/ponto/turnos.py:1181–1198,1907–1909,1941–1945,3005–3009` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:187–203`
+- **Selo do PDF vermelho.** Executei o método existente em memória lendo cada arquivo real. Main e c1v10 verdes, c1v11 falha em `grade_espelho_janela`, porque a chamada foi movida para o espelho. O RED comportamental deve exigir que a informação da grade atravesse o espelho e marque a batida no papel. `app/relatorios/tests/test_cartao_pela_celula.py:170–183` · `59600163c:app/relatorios/pdf_espelho.py:193` · `d39a4bbdf:app/relatorios/pdf_espelho.py:189` · `app/ponto/services/espelho.py:1273–1277,1314–1316` · `app/relatorios/pdf_espelho.py:244–253`
+- **Persistem dois cálculos de `datas_saida_orfa` em memória.** O PDF escreve sua leitura, aplica `folha_manda` e depois sobrescreve a chave com a leitura do espelho. A chave entra na decisão de dias em aberto. `app/ponto/services/espelho.py:622–628` · `app/relatorios/pdf_espelho.py:229–233,255–261` · `app/relatorios/cartao_pela_celula.py:419–422` · `app/ponto/services/dia_decidido.py:357`
+
+## 27/11 14:04 · sessao 15ce9c8d1d41 · - · - · origem=Ronald (tmux)
+
+**PDF — REPROVADO.** A soma compartilhada cura 16 h × 8 h e o retorno vazio alinha linhas e total quando a janela se encerra antes do início. Os REDs ficaram vermelhos na base, verdes na cura e voltaram a falhar com os mutantes. No caso de 16 h × 8 h, Comercial e TurnoPartido deram 8 h × 8 h no main, 16 h × 8 h na base e 8 h × 8 h na cura. `app/ponto/tests/test_par_pelo_turno_c1v11.py:111–146` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:79–90` · `app/relatorios/pdf_espelho.py:184–222,249–260` · `app/ponto/services/espelho.py:452–456`
+
+- **Teto por instante piorou.** Em `[D,D]`, `D 22:00 E → D+1 14:00 S`, emitido às 02:00, main dá 0 h e um aberto, c1v11 dá 16 h e nenhum aberto, nos motores Comercial e 12x36. Ambos desenham as duas marcas. O main exclui a saída do cálculo pelo corte de D+1 ao meio-dia, e a cura amplia a carga sem passar o instante. RED deve exigir 0 h e um aberto antes das 14:00, e 16 h e nenhum aberto a partir das 14:00. `main:app/relatorios/pdf_espelho.py:264–272` · `app/relatorios/pdf_espelho.py:184–187,222–224,258` · `app/ponto/services/espelho.py:1031,1168–1171,1234–1238` · `app/ponto/turnos.py:3031–3044`
+- **A falta com dois significados passou a atingir competência aberta com folha.** Em competência pedida `[D,D+3]`, emissão `D+1 02:00`, D previsto sem marcas e folha disponível com zero falta decidida, main dá `dias_falta=0` e `datas_em_aberto=[D]`. A cura dá `dias_falta=1` e `datas_em_aberto=[D]`, que o papel imprime nos dois indicadores. O espelho aplica a janela efetiva `[D,D]`, e o PDF só aplica a pedida quando ela coincide com a efetiva. RED deve cobrar o dia em aberto e zero faltas com a competência pedida ainda em curso. `main:app/relatorios/pdf_espelho.py:624–628` · `app/relatorios/pdf_espelho.py:238–240,255–258,405–411` · `app/ponto/services/espelho.py:1300–1301` · `app/relatorios/cartao_pela_celula.py:27–34`
+- **A sobreposição mistura duas leituras da mesma folha.** Com `folha_manda` real, primeira resposta de 8 h trabalhadas e previsto `None`, segunda de 10 h trabalhadas e 9 h previstas, main dá 10 h, 9 h e saldo +1 h. A cura dá 8 h, 9 h e saldo −1 h, com a fonte rotulada `folha`. RED deve cobrar uma leitura e as duas parcelas da mesma foto. `main:app/relatorios/pdf_espelho.py:596–602,624–628` · `app/ponto/services/espelho.py:1300–1301` · `app/relatorios/pdf_espelho.py:255–260` · `app/relatorios/cartao_pela_celula.py:201–212,320–346`
+
+Os resultados foram reproduzidos em memória com as fontes das cópias, motores reais e portas externas simuladas. ORM e produção [nao verificado]. `app/ponto/tests/test_par_c1v8_reds.py:19–64,103–108` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:24–52`
 
 ## 27/11 13:58 · sessao 678126566b8c · PAR-PELO-TURNO · construtor · origem=Code
 
@@ -705,165 +777,4 @@ git --no-optional-locks diff --no-index -- /dev/null core/tests/red_painel_popov
 
 Conferi a sintaxe Python e JavaScript, o padrão de descoberta e os caminhos de falha com DOM simulado. A execução do smoke, do RED e dos mutantes em Chromium, assim como o calendário de produção, fica [nao verificado].
 
-## 27/11 12:15 · sessao b30fa6c0a058 · FERIADO-UM-JUIZ · censo · origem=Code
-
-# FERIADO-UM-JUIZ · Dossiê antes do construtor
-
-Leitura estática da cópia. Hash Git, execução dos testes, impacto de frota e situação da competência 11 em produção [nao verificado]. [nao verificado]
-
-## 1. Mapa
-
-- **Hoje.** O fechamento monta o motor por fatia de vínculo com o calendário do colaborador. `eh_dia_trabalho(...) is False` manda o período para `periodos_ft`, com o dia da jornada no mapa. O fechamento filtra `_ft_certa`, procura `_ft_feriado` **dentro** desse grupo via `feriado_vira_folga` e põe o restante sem escala certa em `horas_trabalhadas` sem 100%. A partição é por identidade do período. `app/ponto/services/fechamento.py:668`, `:744`, `:953`, `:970`, `:1004` · `app/ponto/motor_calculo_v2.py:2560`, `:2573`, `:2605`.
-- **Juiz.** `_feriado_dobra_no_dia` lê `feriado_em_dobra` e `eh_feriado` no dia de início da jornada. `get_motor` resolve o padrão por `tipo_ciclo`, com `12x36` em `CICLOS_FERIADO_SIMPLES`. Os quatro ramos de dobra usam o mesmo método. `app/ponto/motor_calculo_v2.py:941`, `:1000`, `:2925`, `:3208`, `:3385`, `:3467`, `:3740`, `:3810`.
-- **Como perguntar.** Usar o dia de `dia_pago._dia_de(p, resultado.dia_da_jornada)`, os minutos apurados e o contexto **do motor da fatia daquele período**. `dobra_de_feriado_do_dia` já delega ao método do motor e devolve minutos. Hoje seu contexto permite fallback nacional, enquanto o calendário injetado no motor responde sozinho. A adaptação precisa preservar essa diferença ou consultar o próprio motor da fatia. `feriado_em_dobra_do_ciclo` expõe o padrão do ciclo, e `cct_do_motor` lê a configuração efetiva. O composto expõe o mapa de dias e só o último motor. Os totais de HE do resultado leem `periodos`, e o campo bruto do FT pode vir preenchido no comercial e vazio no partido. `app/ponto/calculador/regras.py:297`, `:312`, `:323`, `:358` · `app/ponto/calculador/nucleo.py:319` · `app/ponto/services/dia_pago.py:109` · `app/ponto/services/fechamento.py:331` · `app/ponto/motor_calculo_v2.py:328`, `:1000`, `:2993` · `app/ponto/tests/test_o280_bateria_da_lei.py:1810`.
-
-## 2. Censo
-
-- **Mensal.** `recalcular_fechamento_mes` deriva os seis campos. A promoção soma a HE a `horas_extras_100_feriado`, `horas_extras_100` e `horas_extras`, leva o subconjunto a `horas_extras_100_noturna` e retira o período de `horas_folga_trabalhada` ou `horas_trabalhadas`, conforme a origem. A porta persiste por `save` ou `update` do aprovado. `restaurar_fechamento` grava valores fornecidos para ajuste ou reversão. `app/ponto/services/fechamento.py:922`, `:939`, `:978`, `:1004`, `:1168`, `:1184`, `:1382`.
-- **Lavra.** `DiaPago.motor` recebe as três listas prontas. `lavrar` soma as rubricas e grava `detalhe.folga_feriado_min` ou `detalhe.folga_sem_escala_min`. **O derivador paralelo é o oráculo:** `rubricas_por_dia` consulta a escala certa, `do_dia` decide com `folga_e_feriado and _certa`, e `lavrar(rubricas=...)` pode sobrescrever os valores. Mensal e oráculo precisam consumir o mesmo juízo de dobra e a mesma classificação. `app/ponto/services/fechamento.py:1225`, `:1289` · `app/ponto/services/dia_pago.py:234`, `:244`, `:259`, `:322`, `:359` · `app/ponto/calculador/alimentacao.py:520` · `app/ponto/calculador/regras.py:674`, `:694` · `CLAUDE.md:20`.
-- **Leitores.** TXT e homologação leem os eventos do mensal. `_suprime_feriado` zera a parcela de 12x36 sem cláusula CCT. `hora_extra_feriado_diurna` usa o código cadastrado, separado de `folga_trabalhada_diurna`. HE100 noturna é subconjunto, sem linha própria. Conferir também o crivo `conta_vazia` quando o mês só tem horas promovidas. Outros leitores são ranking HE, cartão/resumo, telas mensais, Inteligência e a comparação de soma do dia com o mensal. `app/folha/export.py:420`, `:439`, `:739`, `:840`, `:911`, `:993`, `:1011` · `app/folha/services/ranking_he.py:33`, `:139`, `:224` · `app/relatorios/cartao_pela_celula.py:174` · `app/templates/ponto/_fech_linha.html:30` · `app/relatorios/views.py:98` · `app/inteligencia/views.py:118` · `app/folha/porta_export.py:457`.
-- **Dia na tela, PDF e app.** `pago_do_dia` soma trabalhadas, folga e `folga_feriado_min`. O PDF usa `pago_h` para realizado. A faixa de rubricas da tela usa `rubricas_do_dia`, cujo `trabalhadas` lê só o campo homônimo e cujo `extras_100` lê o total. App e testemunha de export também leem a lavra. `app/ponto/services/dia_pago.py:897`, `:914` · `app/ponto/services/espelho.py:829` · `app/templates/ponto/espelho.html:275` · `app/relatorios/pdf_espelho.py:901`, `:984` · `app/api/views.py:1537` · `app/folha/porta_export.py:120`.
-
-## 3. Leis e textos a atualizar
-
-- **L-086:** corrigir o enunciado ainda abrangente. O rodapé já registra a revogação da cláusula de feriado em 27/09 03:xx. Domingo previsto segue a regra própria. Nos cortes, registrar o alcance novo sobre FT e remeter o CLASSE3 de 19/09 e o piso de 27/09 05:xx à **folga comum**. BO-B(3) mantém a rubrica de feriado no caso que nomeia. ESCALA-CERTA-DETERMINISTICA mantém a fonte por competência. BUG-FERIADO-DOIS-ESCRITORES mantém a partição disjunta. `app/docs/LEIS.md:118` · `app/docs/TICKETS.md:1134` · `app/ponto/services/fechamento.py:991` · `app/docs/PROMPTS.md:1370`, `:1418`, `:1424`.
-- **Guardas herdadas:** L-085 fixa o início da jornada. O corte de 17/11 exclui o intermitente. A janela L-097 já pode zerar um par de folga antes do fechamento, com tratamento próprio de escala certa e autorização. A promoção recebe os minutos que sobreviveram a essa etapa. `app/docs/LEIS.md:117` · `app/docs/PROMPTS.md:2536` · `app/ponto/motor_calculo_v2.py:1562`, `:1569`, `:1585`, `:3694`.
-
-## 4. Contrato e matriz RED
-
-Unidade **colaborador × período FT**, com minutos pagáveis apurados, dia da jornada, motor da fatia, calendário daquele vínculo e resposta de escala certa para a rubrica. Validar mensal, `DiaPago.motor`, `DiaPago.oraculo` e evento TXT. `app/ponto/services/fechamento.py:299`, `:953`, `:1225`, `:1295` · `app/core/feriados.py:135` · `app/folha/export.py:439`.
-
-| Caso | Esperado |
-|---|---|
-| 6x1, escala certa, vínculo folga por causa do feriado | Já promove toda a duração a HE100 feriado. Manter uma única rubrica. `app/ponto/services/fechamento.py:958`, `:970`, `:978` |
-| 6x1, LIMBO / A2 / A8, feriado | Hora comum hoje. RED exige HE100 feriado pela duração positiva, sem repetir o período em trabalhadas ou FT. `app/escala/services/escala_certa.py:19` · `app/ponto/services/fechamento.py:958`, `:1004` |
-| 12x36 de piso, certa e sem escala certa | HE100 **feriado** zero nas duas. A folga real certa tem 100% **de folga** hoje. A sem escala certa fica em trabalhadas. Há exceção CCT explícita no código, fora da mudança. `app/ponto/tests/test_o280_bateria_da_lei.py:1385` · `app/ponto/services/fechamento.py:989`, `:1004` · `app/core/regua_cct.py:473` |
-| Intermitente em feriado | Trabalho convocado segue pelo caminho comum, fora de FT e da dobra automática. `app/ponto/motor_calculo_v2.py:2474`, `:2560`, `:3694` |
-| Folga comum sem escala certa | Hora em trabalhadas, zero HE100, com noturno e intra quando devidos. `app/ponto/tests/test_dia_pago_soma.py:245` |
-| FT noturno promovido | HE100 noturna acompanha a promoção. Cobrir também o partido, cujo FT não traz o split pronto, usando `he_noturna` com a régua e os intervalos do motor. `app/ponto/motor_calculo_v2.py:409`, `:1051`, `:2993`, `:3208` · `app/ponto/tests/test_o280_bateria_da_lei.py:1720` |
-| Véspera cruza para feriado | Zero dobra de feriado, inclusive no segundo par da mesma jornada. `app/docs/LEIS.md:117` · `app/ponto/tests/test_o280_bateria_da_lei.py:1564`, `:1580` |
-
-## 5. Testes existentes [nao verificado]
-
-O teste de FT em feriado sem escala certa que já passa pela porta usa **12x36** e só exige pagamento e paridade entre lavras. Preservar esse controle e criar o gêmeo **6x1** com valores exatos. A asserção a inverter na porta do dinheiro é `HE100 feriado = 0; trabalhadas = duração` para `HE100 feriado = duração; trabalhadas = 0`, isolando o período. F3b fixa zero **no agregado do motor** e 480 no campo cru do FT. Esse selo fica válido com a promoção no fechamento. A bateria L-114 deve reunir F3/F4, F10/F10e, F11c/F11d, BO-B de contagem única e S6 intermitente. `app/ponto/tests/test_he100_dia_sem_previsto.py:40`, `:227` · `app/ponto/services/fechamento.py:958`, `:1004` · `app/ponto/tests/test_o280_bateria_da_lei.py:1385`, `:1479`, `:1580`, `:1720`, `:1775`, `:1810` · `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:127` · `app/ponto/tests/test_s6_intermitente_feriado.py:133` · `app/docs/LEIS.md:154`.
-
-## 6. Padrão
-
-`padrao=single source of truth` / **um juiz por pergunta**. A partição alimenta as projeções mensal e diária. A lavra principal já tem uma porta de escrita compartilhada. `app/docs/GLOSSARIO.md:11` · `app/docs/PLANO-PADROES.md:53`, `:61` · `app/ponto/services/fechamento.py:1225` · `app/ponto/services/dia_pago.py:359`.
-
-## 7. Arquivos e pouso [nao verificado]
-
-Superfície proposta: `fechamento.py`, `calculador/regras.py`, `calculador/alimentacao.py`, testes e textos do item 3. `dia_pago.py` já aceita a partição. `folha/export.py` entra como leitor a certificar, evitando a interseção informada com E4C. PAR-PELO-TURNO cruza pelo contrato de período e dia da jornada em `ponto/turnos.py`. Interseção exata entre árvores em voo [nao verificado]. `app/ponto/services/fechamento.py:1225`, `:1295` · `app/ponto/services/dia_pago.py:135` · `app/docs/RELATO.md:1057`, `:13678`.
-
-Para o pouso, bateria verde e DIFF antes do apply de 11, com reversão e recorte por empresa pelo K6. O recálculo genérico pode gravar exportada fora da guarda cadastrada, inclusive por evento. A exclusão de exportadas exigida neste aval precisa valer também nesse caminho. `app/docs/LEIS.md:125`, `:142`, `:154`, `:156` · `app/folha/export.py:565` · `app/ponto/services/fechamento.py:559`, `:580`, `:1834`.
-
-## 8. Pergunta de lei
-
-1. **6x1 com escala certa, folga semanal que coincide com feriado e `feriado_vira_folga=False`** — o juiz confirma a dobra. A rubrica continua `folga_trabalhada_diurna` ou passa a `hora_extra_feriado_diurna`? O BO-B(3) nomeia expressamente o vínculo que folga por causa do feriado, e a partição atual conserva FT quando esse predicado é falso. `app/docs/PROMPTS.md:1370` · `app/escala/models.py:1384`, `:1400` · `app/ponto/services/fechamento.py:970`, `:989`.
-
-## 27/11 12:14 · sessao bf3f4123005e · FERIADO-BOTAO-CORTADO · verificador · origem=Code
-
-**FERIADO-BOTAO-CORTADO — PRONTO não demonstrado.** O predicado foi preservado. O teste novo tem mordida estrutural, mas a visibilidade com quatro batidas no navegador, a regressão visual da rolagem e o smoke do Ronald no calendário seguem [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/colaboradores/tests/test_feriado_botao_cortado.py:71`
-
-**1. Predicado — descartada alteração.** Antes, `_calendario_grade.html:131` no blob `896fad490` do anexo. Depois, `app/templates/colaboradores/partials/_calendario_grade.html:96` no blob `019b86999` da cópia. A expressão é literalmente `pode_editar_dia and dia.feriado_vira_trabalho_oferecido` nos dois. Os três blobs novos conferem com o anexo, que contém dois templates e o teste. A oferta continua vindo de feriado do colaborador com célula existente e `trabalha is False`. O POST consulta o mesmo campo. `app/colaboradores/services/calendario.py:791` `app/ponto/views.py:3607` `app/ponto/views.py:3624`
-
-**2. Botão com 0..N batidas — descartado bloqueio no HTML por quantidade. Procedente a lacuna de prova visual.**
-
-- A ação é renderizada antes do bloco de batidas e retratadas. Vale para zero ou qualquer quantidade, dada a oferta. O rótulo efetivo é **“Tornar dia de trabalho”**. O perfil usa `mes` em `base.html` e o diagnóstico usa `fita`. As duas cascas incluem o drawer genérico, que injeta o parcial por `fetch`. Isso comprova o caminho compartilhado do drawer, com visibilidade nas duas cascas [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:95` `app/templates/colaboradores/partials/_calendario_grade.html:130` `app/templates/ponto/partials/_feriado_vira_trabalho.html:6` `app/templates/colaboradores/detalhe.html:1` `app/templates/colaboradores/detalhe.html:215` `app/templates/colaboradores/calendario_partial.html:67` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/base.html:399` `app/templates/base_app.html:154` `app/templates/core/_drawer_generico.html:19`
-- **Mutante que morde.** Voltar a ação para depois das marcações, mantendo o resto, derruba o `assertLess` nos dois layouts. Retirar `overflow-y:auto` derruba a asserção de `mes`. **Mutante que escapa.** Acrescentar `display:none` ao `<summary>` preserva todas as asserções do teste e esconde o gatilho. O teste injeta 0 e 4 batidas e renderiza o include isolado nos dois layouts. A execução do RED e do verde ficou [nao verificado], pois a importação local parou em `django.template`. `app/colaboradores/tests/test_feriado_botao_cortado.py:4` `app/colaboradores/tests/test_feriado_botao_cortado.py:35` `app/colaboradores/tests/test_feriado_botao_cortado.py:92` `app/colaboradores/tests/test_feriado_botao_cortado.py:109`
-
-**3. Escritores e leitores — descartada mudança de contrato.**
-
-| Variável | Quem escreve ou passa | Quem lê |
-|---|---|---|
-| `layout`, `dias`, `dia`, `cal_offset`, `resumo` | `contexto_calendario` entrega os dados. Perfil passa `mes`, drawer passa `fita` e `cal.dias`/`cal.resumo`, Furos passa só `dias`/`resumo`. | A grade escolhe o layout, itera `dias` como `dia` e usa o offset e os totais. `app/colaboradores/services/calendario.py:838` `app/templates/colaboradores/calendario_partial.html:67` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/relatorios/furos.html:42` `app/templates/colaboradores/partials/_calendario_grade.html:65` `app/templates/colaboradores/partials/_calendario_grade.html:155` |
-| `pode_editar_dia`, `dia.feriado_vira_trabalho_oferecido` | View do perfil e `contexto_drawer` consultam `tem_acao(..., 'editar_escalas')`. `contexto_calendario` escreve a oferta do dia. | A grade lê ambos para o gatilho e o CSS. O POST consulta a mesma permissão e lê a oferta no contexto do dia. `app/colaboradores/views.py:2007` `app/colaboradores/services/drawer.py:159` `app/colaboradores/services/calendario.py:791` `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/ponto/views.py:3607` `app/ponto/views.py:3624` |
-| `colaborador.pk`, `dia.data`, `volta_url` → `colab_pk`, `data`, `volta` | O serviço publica colaborador e data. O drawer passa `colab` como `colaborador`. Perfil e drawer montam a URL de volta. A grade passa os três aliases. | A grade usa a data também no `aria-label`. O parcial escreve `colab`, `dia` e `volta` no formulário, e a view os lê. `app/colaboradores/services/calendario.py:755` `app/colaboradores/services/calendario.py:839` `app/colaboradores/views.py:2009` `app/colaboradores/services/drawer.py:162` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/colaboradores/partials/_calendario_grade.html:97` `app/templates/ponto/partials/_feriado_vira_trabalho.html:9` `app/ponto/views.py:3614` |
-| Campos da célula envolvidos pelo novo `<div>` | `contexto_calendario` publica status, palavra, ausência, feriado, batidas, retratadas, badges e `resolver_dia_oferecido`. Perfil e drawer fornecem `pode_veredito` via `regularizar_batida`. | A grade lê esses valores nos ícones, horários, ações de veredito e badges, agora dentro do mesmo bloco. `app/colaboradores/services/calendario.py:754` `app/colaboradores/services/calendario.py:811` `app/colaboradores/views.py:1992` `app/colaboradores/services/drawer.py:133` `app/colaboradores/services/drawer.py:157` `app/templates/colaboradores/partials/_calendario_grade.html:101` `app/templates/colaboradores/partials/_calendario_grade.html:130` `app/templates/colaboradores/partials/_calendario_grade.html:137` |
-
-**4. Classes de reprovação — descartados derivação paralela, duplo sentido e juiz duplicado.** As três leituras da condição controlam o gatilho e dois estilos. A oferta continua sendo um fato do dia, e a permissão continua sendo do usuário. O juiz registrado `_TT11` segue respondendo só por “Resolver dia”. O cadastro da oferta de feriado no registro de juízes já está apontado em fila. **Selo sem mordida estrutural descartado. Lacuna de mordida visual procedente**, como mostra o mutante `display:none`. `app/docs/LEIS-UI.md:23` `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/core/juizes.py:745` `app/core/juizes.py:759` `app/docs/BACKLOG.md:2038` `app/colaboradores/tests/test_feriado_botao_cortado.py:95`
-
-**5. Outros includes — descartada abertura da ação em Furos.** O `only` passa `dias` e `resumo`. Sem `pode_editar_dia` e `layout`, Furos usa a grade padrão e recebe o `<div>` extra sem os estilos de rolagem. O drawer recebe a ação antes das batidas e o rótulo com quebra de linha. A fita continua com rolagem horizontal. O efeito visual nos dois consumidores segue [nao verificado]. `app/templates/relatorios/furos.html:42` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/colaboradores/partials/_calendario_grade.html:65` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/templates/ponto/partials/_feriado_vira_trabalho.html:5`
-
-**6. Rolagem separada — procedente a lacuna de verificação.** No mensal elegível, o botão fica fora da região rolável de uma célula de `132px`. A região tem `tabindex="0"` e engloba também ícones, chamado, “Resolver dia” e badges. O selo confere declarações de CSS e a estrutura do HTML. Alcance da última marcação, permanência do gatilho visível enquanto se rola e smoke do Ronald no calendário [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:95` `app/templates/colaboradores/partials/_calendario_grade.html:101` `app/templates/colaboradores/partials/_calendario_grade.html:137` `app/colaboradores/tests/test_feriado_botao_cortado.py:99`
-
-## 27/11 12:12 · sessao d4acb9eb4d2e · FERIADO-UM-JUIZ · sonda · origem=Code
-
-## FERIADO-UM-JUIZ — competência 11/2026
-
-**Confere: 75 dias de 42 colaboradores. Todos os 75 saíram como hora comum. Pela regra proposta, 67 dias de 35 colaboradores passariam a HE100 feriado, somando 449,74 h.** `extrato:3–78`
-
-As referências `extrato:N` apontam para o dado raspado da mensagem, contando `sonda_leitura` como linha 1. A apuração usa a saída fornecida. Reexecução na sombra e conferência independente com a lista do admin [nao verificado].
-
-### (a) e (b) — Universo e classificação atual
-
-| Empresa | Dias | Colaboradores | Dias com `he100fer=0` e `sem_escala_h > 0` | Horas comuns | Fonte |
-|---|---:|---:|---:|---:|---|
-| 2 | 65 | 37 | 65 | 459,75 h | `extrato:3–67` |
-| 3 | 10 | 5 | 10 | 74,20 h | `extrato:68–77` |
-| **Total** | **75** | **42** | **75** | **533,95 h** | `extrato:3–78` |
-
-**Nenhum dia foge do padrão.** Em todas as linhas `DIA`, `ht = sem_escala_h`, `he100 = he100fer = folga = 0` e `folga_feriado_min = None`. No código atual, a seleção para HE100 feriado parte de `_ft_certa`. Os períodos sem escala certa entram em `horas_trabalhadas` tanto no fechamento quanto na lavra diária. `extrato:3–77` · [fechamento.py:958](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:958) · [fechamento.py:970](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:970) · [fechamento.py:1004](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1004) · [dia_pago.py:259](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/dia_pago.py:259)
-
-### (c) — Impacto da regra proposta
-
-| Empresa | Dias que mudariam | Colaboradores afetados | Horas que passariam a HE100 feriado | Dias que ficam | `12x36` | `intermitente` | Ciclo `None` | Fonte |
-|---|---:|---:|---:|---:|---:|---:|---:|---|
-| 2 | 57 | 30 | 375,54 h | 8 | 5 | 3 | 0 | `extrato:3–67` |
-| 3 | 10 | 5 | 74,20 h | 0 | 0 | 0 | 0 | `extrato:68–77` |
-| **Total** | **67** | **35** | **449,74 h** | **8** | **5** | **3** | **0** | `extrato:3–77` |
-
-A projeção aplica `dobra_do_ciclo=True` e `ciclo != intermitente` e soma o `sem_escala_h` exibido, já arredondado por dia. Os 67 dias elegíveis são todos `6x1`. O total calculado a partir dos minutos originais e o novo fechamento mensal ficam [nao verificado]. `extrato:3–77` · [regras.py:312](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/calculador/regras.py:312) · [motor_calculo_v2.py:3740](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/motor_calculo_v2.py:3740)
-
-Os únicos IDs sem dias que mudariam são da empresa 2. Em `12x36`, ficam **366, 415, 788, 1031 e 1035**, com um dia cada. Em `intermitente`, ficam **830** com dois dias e **975** com um dia, embora o extrato traga `dobra_do_ciclo=True` para os três dias. `extrato:14,20,29,36–37,52,64–65`
-
-### (d) — FECH atual por colaborador
-
-Valores mensais em horas. Os IDs **727** e **788** já têm `he100fer` positivo no mês, e os dias sondados desses dois IDs têm `he100fer=0`. `extrato:24,29,90,93`
-
-| Empresa | ID | `ht` | `he100` | `he100fer` | `folga` | Fonte |
-|---|---:|---:|---:|---:|---:|---|
-| 2 | 43 | 184,06 | 0,00 | 0,00 | 0,00 | `extrato:79` |
-| 2 | 203 | 182,34 | 0,00 | 0,00 | 0,00 | `extrato:80` |
-| 2 | 206 | 170,16 | 0,00 | 0,00 | 0,00 | `extrato:81` |
-| 2 | 207 | 169,23 | 0,00 | 0,00 | 0,00 | `extrato:82` |
-| 2 | 278 | 178,12 | 0,00 | 0,00 | 0,00 | `extrato:83` |
-| 2 | 366 | 65,85 | 0,00 | 0,00 | 0,00 | `extrato:84` |
-| 2 | 369 | 179,55 | 0,00 | 0,00 | 0,00 | `extrato:85` |
-| 2 | 384 | 192,04 | 0,00 | 0,00 | 0,00 | `extrato:86` |
-| 2 | 415 | 179,90 | 0,00 | 0,00 | 0,00 | `extrato:87` |
-| 2 | 583 | 153,08 | 0,00 | 0,00 | 0,00 | `extrato:88` |
-| 2 | 622 | 143,48 | 0,00 | 0,00 | 0,00 | `extrato:89` |
-| 2 | 727 | 167,77 | 7,05 | 7,05 | 0,00 | `extrato:90` |
-| 2 | 735 | 164,36 | 0,00 | 0,00 | 0,00 | `extrato:91` |
-| 2 | 784 | 173,02 | 0,00 | 0,00 | 0,00 | `extrato:92` |
-| 2 | 788 | 153,65 | 14,23 | 14,23 | 0,00 | `extrato:93` |
-| 2 | 789 | 161,32 | 0,00 | 0,00 | 0,00 | `extrato:94` |
-| 2 | 822 | 170,30 | 0,00 | 0,00 | 0,00 | `extrato:95` |
-| 2 | 830 | 117,08 | 0,00 | 0,00 | 0,00 | `extrato:96` |
-| 2 | 899 | 169,79 | 0,00 | 0,00 | 0,00 | `extrato:97` |
-| 2 | 903 | 184,17 | 0,00 | 0,00 | 0,00 | `extrato:98` |
-| 2 | 924 | 120,57 | 0,00 | 0,00 | 0,00 | `extrato:99` |
-| 2 | 944 | 158,02 | 0,00 | 0,00 | 0,00 | `extrato:100` |
-| 2 | 961 | 184,11 | 0,00 | 0,00 | 0,00 | `extrato:101` |
-| 2 | 962 | 179,47 | 0,00 | 0,00 | 0,00 | `extrato:102` |
-| 2 | 967 | 81,98 | 0,00 | 0,00 | 0,00 | `extrato:103` |
-| 2 | 968 | 172,80 | 0,00 | 0,00 | 0,00 | `extrato:104` |
-| 2 | 975 | 32,87 | 0,00 | 0,00 | 0,00 | `extrato:105` |
-| 2 | 988 | 213,94 | 3,04 | 0,00 | 0,00 | `extrato:106` |
-| 2 | 990 | 179,52 | 0,00 | 0,00 | 0,00 | `extrato:107` |
-| 2 | 991 | 167,69 | 0,00 | 0,00 | 0,00 | `extrato:108` |
-| 2 | 1000 | 145,13 | 0,00 | 0,00 | 0,00 | `extrato:109` |
-| 2 | 1023 | 62,94 | 0,00 | 0,00 | 0,00 | `extrato:110` |
-| 2 | 1026 | 95,85 | 0,00 | 0,00 | 0,00 | `extrato:111` |
-| 2 | 1031 | 71,52 | 0,00 | 0,00 | 0,00 | `extrato:112` |
-| 2 | 1035 | 67,94 | 0,00 | 0,00 | 0,00 | `extrato:113` |
-| 2 | 1036 | 73,09 | 0,00 | 0,00 | 0,00 | `extrato:114` |
-| 2 | 1050 | 8,32 | 0,00 | 0,00 | 0,00 | `extrato:115` |
-| 3 | 82 | 196,97 | 0,00 | 0,00 | 0,00 | `extrato:116` |
-| 3 | 114 | 163,38 | 0,00 | 0,00 | 0,00 | `extrato:117` |
-| 3 | 749 | 141,63 | 0,00 | 0,00 | 0,00 | `extrato:118` |
-| 3 | 911 | 180,50 | 0,00 | 0,00 | 0,00 | `extrato:119` |
-| 3 | 1024 | 103,97 | 0,00 | 0,00 | 0,00 | `extrato:120` |
-
-_8671 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8674 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
