@@ -10944,6 +10944,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 01:10:00 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:0697ecdbe0 (251 car., na trilha privada)
+
 **27/11 00:03:12 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:3e6ab38f09 (496 car., na trilha privada)
 
 **26/11 23:57:17 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:85a6cdc807 (244 car., na trilha privada)
@@ -13754,3 +13756,7 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 01:00 DESPACHO PARALELAS-JA-2711-0100: RAMO2-B c2j -> Codex construtor (itens em testes + regras.py::do_dia, motor/models fora do alcance, linha ALCANCE no brief) | O30-F3 smoke -> trava (atras da suite CCM) | V6-FURO-OUTPUT, E4C-F5 c4, PAR c1v5 (itens 2/4), ABONO c1k, E1a c3 -> brief/RED quando houver vaga
 - 01:00 PUXADA RAMO2-B-EM-TURNO-QUE-CRUZA -> vaga 1 (c2j, base 3b594ce1f, logs/RAMO2-CRUZA/c2j/, pid 3680719)
 - 01:00 vagas 2-3 travada por: portao (load5 8.45 > nproc-2=6 com a vaga 1 viva; a suite CCM roda na VM). Por obra: V6-FURO-OUTPUT travada por CCM (bin/disjuntor.py no diff do CCM = 2 escritores); E4C-F5 c4 travada por CCM (curas em chamados/models.py); PAR c1v5 travada por CCM (itens 2/4 no motor) e RAMO2 c2j (item 3); ABONO c1k travada por CCM (motor :2148-2188); E1a c3 travada por portao; E4d travada por E4C-F5; O30-F3 travada por smoke (trava)
+- 01:07 colhido RAMO2-B-EM-TURNO-QUE-CRUZA RAMO2-CRUZA/c2j/r.rc (01:06 rc=0): construtor Codex entregou catraca (2 registros 558), parcial x cauda pela regra (610 base, 20 atraso), bateria 12x36/Comercial + 2 controles Partido, 10 mutantes mordem; 0 except; motor = merge; RESTA catraca integral 3 falhas (identidade medir/CLASSIFICAR). Commit 03bc04e5b na copia; recorte de vizinhos em voo (logs/RAMO2-CRUZA/c2j/viz.log)
+- 01:09 PUXADA PAR-PELO-TURNO -> vaga 1 (c1v5a = itens 1 e 5 da c1v5, fora do motor/models e dos arquivos da c2j; base 794ab3332 = main + c1v4, wt-codex-par-pelo-turno-010806, pid 3700070). Itens 2-4 = c1v5b depois do CCM. E1a c3 corrige a linha das 01:00: travada por CCM (brief c3 escreve no motor :3504-3526), nao por portao.
+- 01:09 N4-VOLTA-2711-0110 registrado: N-PELA-MEDIDA entra depois do pouso do CCM; conferencia de arquivos x V6-FURO-OUTPUT (bin/disjuntor.py + selo) e x CUSTO-F1 por git diff --name-only no ato; test_codex_n_vagas re-roda com log desde o 1o minuto quando nenhuma vaga estiver viva (o selo mexe na admissao).
+- 01:10 colhido RAMO2-B-EM-TURNO-QUE-CRUZA RAMO2-CRUZA/c2j/viz.rc (01:09 rc=1): recorte de vizinhos na pista 2 (job 1127010722_03bc04e5) Ran 335 FAILED failures=3, todas da catraca core.tests.test_medida_turno_do_par (linhas reais, numeros exatos, CLASSIFICAR); brief c2k pronto (logs/RAMO2-CRUZA/c2k/), vaga 2 recusada pelo portao (load5 6.83), entra quando a vaga 1 (PAR c1v5a) devolver

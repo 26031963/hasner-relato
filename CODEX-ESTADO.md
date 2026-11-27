@@ -1,7 +1,106 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 00:12** · publicado em **27/11/2026 00:12** (UTC-3)
+> Ultima resposta processada: **27/11/2026 01:06** · publicado em **27/11/2026 01:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 01:06 · sessao 42b6cdad486f · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+Na base `3b594ce1f`, `do_dia` já devolve o número esperado para parcial com cauda pendente. O caso mede **610 min de base da HE, 630 min trabalhados, 20 min de atraso e zero de saída antecipada, intra indenizada e HE em dia comum**. Com feriado em dobra, são **610 min de HE100**. O cálculo de produção ficou como veio no merge. [Regra escrita](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/docs/LEIS.md:79) · [L-097 emendada](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/docs/LEIS.md:115) · [Teste](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:133)
+
+`rubricas_por_dia` carrega as parciais pagas com período declarado e passa a lista do dia a `do_dia`. A base e a HE são apuradas primeiro. O abatimento é posterior, em `pontualidade_do_dia`, pelo teto emprestado do motor. A parcial cobre 30 dos 50 min de atraso bruto. Os 20 restantes passam pelo teto da L-093, de `660 − 630 = 30 min`. [Chamador](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/alimentacao.py:535) · [Base e dobra](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/regras.py:797) · [Leitor de `parciais`](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/regras.py:879) · [Abatimento](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1270) · [Teto](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1304)
+
+| Item | RED | GREEN local |
+|---|---|---|
+| 1. Catraca | Os dois registros `[530]` divergiam do AST `[558]`. | Os dois registros pedidos conferem. Na catraca integral, **3 de 35 testes falham**. Restam 2 divergências em `pareadores` e 13 em `derivacoes_de_dia`, incluindo a troca de identidade de `medir` para `he_acima_do_teto_por_dia`. A troca também afeta `CLASSIFICAR`. [Registros](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:251) · [Asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:547) · [Exportação](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:344) | [nao verificado]
+| 2. Parcial com cauda | `ignora_parciais` dá **30 min de atraso** onde a regra pede **20**. | Os três cenários passam na base do merge. [Teste](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:133) · [Mutação](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2h_mutantes.py:12) | [nao verificado]
+| 3. Bateria de saída | Com a alimentação de `deed2fe72`, 8 subcasos falham por asserção. No cruzamento, o gozo é **0** em vez de **20 min**. | Oito casos em cada motor, 12x36 e Comercial, mais os dois controles do Partido previstos em `RAMO2-PARTIDO-2611-1812 (a)`. Com os três cenários do item 2, são **21 subcasos verdes em memória**. [Grade](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:32) · [Execução e controles](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:115) |
+| 4. Vizinhos | As três falhas da catraca persistem após o ajuste restrito aos dois registros. [Asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:547) | Os selos do escritor e do contrato da batida passaram em memória, **22 testes**. Suíte Django do Code e Opus final [nao verificado]. [Escritor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:622) · [Contrato](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_contract_juiz_batida.py:159) | [nao verificado]
+
+### Comandos
+
+Medição da catraca a partir de `app/`. Resultado `pareadores [558]` e `derivacoes_de_dia [558]`. [Censo](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/medida_turno_do_par.py:448) · [Chamada medida](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:558)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
+from core.medida_turno_do_par import censo
+
+medida = censo('.')
+for grupo in ('pareadores', 'derivacoes_de_dia'):
+    print(grupo, next(i['linhas'] for i in medida[grupo]['itens']
+                      if i['chave'] == 'ponto/motor_calculo_v2.py::turnos_via_autoridade'
+                      and i.get('sitio') == 'porta_parear_turnos'))
+PY
+```
+
+Para a sessão rodar o recorte Django a partir da raiz da cópia. [Rota de suite da cópia](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/bin/suite.sh:26) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh \
+  --dir /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 \
+  --only "ponto.tests.test_ramo2b_c2_base_da_he ponto.tests.test_ramo2b_c2h_saida ponto.tests.test_ramo2b_turno_que_cruza ponto.tests.test_contract_juiz_batida ponto.tests.test_janela_he_saida ponto.tests.test_o146_extra_declarada_da_escala ponto.tests.test_o280_bateria_da_lei core.tests.test_medida_turno_do_par folha.tests.test_porta_do_export"
+```
+
+Para reproduzir os mutantes a partir de `app/` no ambiente Django da sessão, defina a função abaixo. As saídas da tabela foram medidas pelo mesmo executor em `unittest`, com dublês de infraestrutura em memória e zero erros de execução. [Executor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2h_mutantes.py:82)
+
+```bash
+ramo2() { PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.ramo2b_c2h_mutantes "$1"; }
+```
+
+| Comando | Saída local |
+|---|---|
+| `ramo2 green` | rc 0, 3 testes, 21 subcasos | [nao verificado]
+| `ramo2 ignora_parciais` | rc 1, 2 falhas, atraso 30 em vez de 20 |
+| `ramo2 teto_le_base_da_he` | rc 1, 1 falha, atraso do controle 50 em vez de 30 |
+| `ramo2 abono_compoe_base_da_he` | rc 1, 1 falha, HE100 de 640 em vez de 610 |
+| `ramo2 dobra_inclui_cauda` | rc 1, 1 falha, HE100 de 630 em vez de 610 |
+| `ramo2 red_deed2fe72` | rc 1, 8 falhas, gozo 0 em vez de 20 no cruzamento |
+| `ramo2 sem_ponta` | rc 1, 8 falhas, gozo 0 em vez de 20 no cruzamento |
+| `ramo2 copy_setattr` | rc 1, 8 falhas, base 1 em vez de 700 no cruzamento |
+| `ramo2 teto_max` | rc 1, 16 falhas, trabalhado 800 em vez de 760 no cruzamento |
+| `ramo2 inclui_cauda` | rc 1, 5 falhas, base 760 em vez de 680 na pausa antes do marco |
+| `ramo2 perde_fim_no_marco` | rc 1, 2 falhas, gozo 0 em vez de 20 na pausa que termina no marco |
+
+### Hand-back
+
+A contagem AST deu **0 `except` novos** nos três arquivos alterados. O diff do motor contra `138b516f2` tem **97 inserções em três blocos** e é idêntico ao diff do merge `3b594ce1f` contra a mesma referência. [Catraca](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:251) · [Bateria](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:123) · [Mutantes](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2h_mutantes.py:12) · [Motor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:481)
+
+```bash
+GIT_OPTIONAL_LOCKS=0 git diff 138b516f2 -- ponto/motor_calculo_v2.py
+GIT_OPTIONAL_LOCKS=0 git diff --exit-code 3b594ce1f -- ponto/motor_calculo_v2.py
+```
+
+Corpo proposto para o commit. [nao verificado]
+
+```text
+RAMO2-B c2j: cobre parcial com cauda e registra linha da catraca
+
+OBRA: RAMO2-B-EM-TURNO-QUE-CRUZA
+BASE: 3b594ce1f4bd2bfa4a2049c149ecb254643ff526
+
+Registra porta_parear_turnos em 558 nos dois contadores.
+Fixa pela regra 610 min de base, 630 trabalhados e 20 de atraso
+com parcial. A grade cobre 12x36 e Comercial, com os dois controles
+do Partido pelo aval RAMO2-PARTIDO-2611-1812 (a).
+
+LEI-AKITA:
+origem=docs/LEIS.md:79-80,111,115; docs/PROMPTS.md:3031,3071,3087
+escrita=ponto/motor_calculo_v2.py:1926-1963
+testemunha=ponto/calculador/nucleo.py:146-153, segmentos e batidas
+RED=ponto/tests/test_ramo2b_c2h_saida.py:133, mutante ignora_parciais
+RED da grade=ponto/tests/test_ramo2b_c2h_saida.py:115, alimentacao de deed2fe72
+quem-mais-le=ponto/calculador/alimentacao.py:106-117,168-178,469-475,535-566
+  (rubricas_por_dia -> ponto/calculador/regras.py:614-626,775-807,879-888);
+  ponto/services/fechamento.py:1291-1300;
+  ponto/management/commands/diff_calculador.py:414-424;
+  ponto/calculador/periodo.py:745-759; folha/porta_export.py:339-358
+padrao=juiz unico
+juizes novos=0
+
+fora do marco: PAUSA-NA-BORDA-DO-PAR, PAUSA-INTERNA-NO-PARTIDO
+
+Catraca integral: tres falhas medidas em memoria fora dos dois
+registros ajustados (linhas, identidade e CLASSIFICAR).
+```
 
 ## 27/11 00:12 · sessao b7c6fd3c7578 · V6-FURO-OUTPUT · leitura · origem=Code
 
@@ -869,50 +968,4 @@ Há ainda uma perda reproduzível de **C9 já publicada em memória**. O primeir
 
 **Bloqueadores do veredito:** dia por PK dependente da janela e carga incompatível com todo o envelope de 26 h, divergência entre os julgamentos da L-084, HE sem decisão em caminhos alcançados pelo novo fecho, perda de C9 por reutilização de instância, testes financeiros que não chegam às asserções e prova incompleta do laudo e da exportada. `app/ponto/turnos.py:170`, `:1306`, `:1847`, `:3044` · `app/ponto/motor_calculo_v2.py:1673`, `:1847`, `:2963` · `app/ponto/tests/test_par_pelo_turno.py:49`, `:422`, `:507` · `app/docs/BACKLOG.md:2027`
 
-## 26/11 22:20 · sessao fcf753f1b41c · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-**REPROVADO.** O diff libera o motor e os models, mas o wrapper aceita alterações de schema sem arquivo de migration. A lista também deixa editável a porta `_C19` identificada no `JUIZES.md`. O DIFF obrigatório antes do pouso e o teto de um construtor Opus ficaram escritos como conduta. [bin/codex_pergunta.sh:162-175,223-232] [app/core/juizes.py:311] [CLAUDE.md:397,404-406] [nao verificado]
-
-Os cinco arquivos da cópia conferem com os hashes de blob do lado novo de `diff.patch`. O hash do commit da cópia fica **[nao verificado]**. As referências abaixo usam a numeração da cópia. [nao verificado]
-
-### 1. Aval versus diff
-
-| Cláusula do aval | Cobertura |
-|---|---|
-| Aval `CODEX-CONSTROI-MOTOR-2611-2210` e pré-mortem `DEFAULT DENY` | O ID entrou no cabeçalho e no despacho. Pré-mortem cumprido **[nao verificado]**. [bin/codex_pergunta.sh:644] [CLAUDE.md:404-405] |
-| Codex escreve `ponto/motor_calculo_v2.py` e `models.py` **sem migration** | A permissão entrou. A condição aparece no cabeçalho, mas **não coberto** o veto a mudanças de schema que exigiriam migration. A remoção de `p_models` libera também a antiga categoria `models/`. [bin/codex_pergunta.sh:162-175,223-232,644] |
-| Continuam proibidos migrations, `bin/`, `crons.py` e `core/juizes.py` | As quatro guardas de caminho continuam, e são as quatro tags usadas para admitirem construção Opus. [bin/codex_pergunta.sh:164-167] [bin/disjuntor.py:1958-1961,2102-2113] |
-| Codex → um Opus que só confere e carimba → DIFF da competência na sombra → pista → pouso → HOM | A sequência entrou no texto. **Não coberto** pelo diff o responsável pela HOM, citado no aval como `[nome]`, nem a exigência mecânica da sequência. O perfil preexistente do verificador manda só ler. [CLAUDE.md:404-406,429-433] [.claude/agents/verificador.md:2-7] | [nao verificado]
-| Teto de um construtor Opus vivo, só para os proibidos | O teto entrou como conduta. O hook verifica o modelo e se **algum** caminho declarado bate com a lista, sem contar construtores vivos nem limitar os demais caminhos do mesmo brief. [CLAUDE.md:397,406] [bin/disjuntor.py:2094-2113,2271-2289] |
-| Vale já para ABONO c1h, ABONO-PARCIAL-TETO e E4C-F5 c2 | **Não coberto** nominalmente. O `CLAUDE.md` dá vigência geral desde o aval. Despacho e execução das três obras **[nao verificado]**. [CLAUDE.md:404-406] |
-| Proibido pousar motor sem DIFF na sombra | Está na ordem escrita. **Não coberto** como trava de pouso. O hook de merge julga o B3, a pista certifica a suite, e o deploy consulta o carimbo de ensaio do dia. Esses controles não conferem o DIFF da competência daquela obra. [CLAUDE.md:405] [bin/disjuntor.py:1289-1305] [bin/pista_certifica.sh:2-8] [bin/deploy.sh:151-167] | [nao verificado]
-| Proibido tocar competência exportada | **Não coberto** por mudança no diff. O cabeçalho já proíbe banco e árvore viva. O `CLAUDE.md` trata o gravado de exportada na regra de `!` e exige prova de que ficou intacto no apply de competência aberta. Estado em produção **[nao verificado]**. [bin/codex_pergunta.sh:642-645] [CLAUDE.md:274-276,455-465] |
-| Pronto com `chamadas.log` nas obras de motor e no máximo um Opus construtor vivo | O escritor preexistente registra `ini` e `fim` com obra e papel. Linhas das obras e contagem de Opus vivos **[nao verificado]**. [bin/codex_pergunta.sh:559-569,606-607] [CLAUDE.md:397] |
-| Segue a fila. `PAREI` só em lei ou `!` | **Não coberto** por mudança no diff. A conduta preexistente distingue a parada por `!` da pergunta de lei, que sobe ao RELATO enquanto a fila segue. [CLAUDE.md:272-282,307] |
-
-### 2. O que a cerca aceita
-
-- **Caminhos canônicos.** Migration em qualquer componente literal `migrations/`, `app/core/juizes.py`, `app/config/crons.py`, `bin/` da raiz e `app/ponto/portas/celula.py` são recusados se a mudança persistir no inventário. `./` desaparece do caminho inventariado. Arquivos novos entram pelo status e pela varredura. Renames são vistos pelos dois lados, com `--no-renames` e a comparação com a base. Symlink novo ou alterado recebe motivo próprio. [bin/codex_pergunta.sh:162-175,186-232]
-- **O inventário é posterior.** Dentro de `app/`, o executor recebe `workspace-write`. O wrapper examina o estado final, descarta a volta com `rc 3` quando encontra a infração e sai antes do `.id`. Uma gravação desfeita antes da conferência pode ficar fora desse retrato. `bin/` da raiz fica fora do diretório de escrita configurado e também é barrado pelo inventário. [bin/codex_pergunta.sh:167,173,186-232,774-805,814-829,854-857]
-- **Maiúsculas e outros nomes.** As regex distinguem maiúsculas de minúsculas. Uma entrada nova com outra grafia pode passar como caminho distinto dentro de `app/`. Se um rename tira o nome canônico da base, a remoção continua visível. O carregamento de nomes alternativos em produção fica **[nao verificado]**. [bin/codex_pergunta.sh:162-175,193-223]
-- **Migration sem arquivo.** Uma mudança em campo ou constraint de `models.py` pode passar sem arquivo em `migrations/`. O inventário compara arquivos, modos e caminhos. A própria migration de escala documenta que uma divergência entre o estado da migration e o model gera mudança no próximo `makemigrations`. [bin/codex_pergunta.sh:193-232] [app/folha/models.py:46-68] [app/escala/migrations/0041_ec_vigencia_not_valid.py:7-12]
-- **Há duas referências a “porta da célula”.** A guarda protege `app/ponto/portas/celula.py`. A porta que o anexo chama de `_C19` mora em `app/chamados/services/tarefa_do_dia.py` e uma edição regular ali pode sair `TOCADO`. Essa diferença já existia na lista. [bin/codex_pergunta.sh:163,223-232] [app/docs/JUIZES.md:81-90] [app/core/juizes.py:152-158,311]
-
-### 3. Leitores
-
-- **Wrapper:** executa `PROIBIDOS` como lista de regex e motivos no pré-check, na revalidação e no fim. Os comentários `#G:` são tags para outros leitores. [bin/codex_pergunta.sh:162-175,222-232,540,760,805]
-- **Disjuntor:** lê o bloco em `proibidos_do_wrapper()`, seleciona `p_migr`, `p_juizes`, `p_crons` e `p_bin`, e usa as regex em `agente_nega()`. Lista ou tag ausente resulta em recusa. `p_celula` continua no wrapper, fora da seleção Opus. [bin/disjuntor.py:1958-1961,2023-2039,2102-2113,2271]
-- **Selos e documentação:** `test_codex_pergunta` lê `#G:` para aplicar `MUTANTES`. `test_agente_no_modelo` lê a seleção pelo disjuntor e compara a descrição de `CLAUDE.md`. O `CLAUDE.md` aponta para a lista, mas a referência `:646` ficou duas linhas abaixo do `echo` real, e o selo aceita a referência literal. Nenhum leitor ativo ficou com `p_motor` ou `p_models`. O comentário histórico usa esses nomes, e a **L-126 ainda traz a proibição antiga do motor**. [bin/tests/test_codex_pergunta.sh:409,703-719] [bin/tests/test_agente_no_modelo.sh:138-157,286-294] [CLAUDE.md:403-406] [bin/codex_pergunta.sh:644-646] [app/docs/LEIS.md:147]
-
-### 4. Mordida dos selos
-
-- **`c_motor_livre` e `c_models_livre` passariam pelo caminho nominal.** O classificador da cópia, exercitado em memória, devolveu `rc 0` e `TOCADO` para os dois. Recolocar as regex retiradas deu `rc 3` nos dois. O selo também exige `.id` e ausência de `.recusa`. O caso de models cria conteúdo fictício em arquivo novo, então a regressão de schema continua sem teste. [bin/tests/test_codex_pergunta.sh:94-98,164-169,410-411] [bin/codex_pergunta.sh:829,854-857] [nao verificado]
-- **O laço novo passou em memória** pelo `pretool` e pelo leitor real do wrapper, com os demais portões isolados. `construtor-livre` fez cair as duas negativas novas. `tag-crons-some` fez cair o caso de crons e a contagem, e `claude-lista-opus` fez cair a comparação com o texto. [bin/disjuntor.py:2023-2057,2102-2113,2271] [bin/tests/test_agente_no_modelo.sh:127-143,286-288,341,355-356] [nao verificado]
-- **Sem órfãos na tabela.** A conferência estática encontrou 83 entradas em `MUTANTES` para 67 tags, todas com guarda, âncora e caso. As 26 âncoras declaradas do selo de agentes aparecem uma vez cada. A execução integral dos dois selos fica **[nao verificado]**, pois ambos criam e removem arquivos temporários. [bin/tests/test_codex_pergunta.sh:18-19,620-726] [bin/tests/test_agente_no_modelo.sh:31-32,316-364]
-
-### 5. `except`, relógio e segundo escritor
-
-- **Nenhum `except` novo, leitura nova de relógio ou escritor novo de domínio no diff.** O `except` do inventário já existia. `chamadas.log` continua com o wrapper como escritor, nos dois pontos de append. A porta `_C19` recebe `agora` pela borda. [bin/codex_pergunta.sh:216-218,559-569,606-607,641-645] [bin/disjuntor.py:1958-1961,2105-2113] [app/chamados/services/tarefa_do_dia.py:830-840]
-- **A sobreposição de construtores é possível pelo despacho.** O próprio selo exige que um brief Opus misto, com um arquivo permitido ao Codex e outro reservado a Opus, passe. O hook admite pelo `any(...)`, e a exclusão por worktree do wrapper vale entre chamadas Codex. Sobreposição efetiva de escrita em produção **[nao verificado]**. [bin/tests/test_agente_no_modelo.sh:134-136] [bin/disjuntor.py:2102-2113] [bin/codex_pergunta.sh:63-66]
-
-_8523 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8524 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
