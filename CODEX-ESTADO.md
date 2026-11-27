@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 23:24** · publicado em **26/11/2026 23:26** (UTC-3)
+> Ultima resposta processada: **26/11/2026 23:39** · publicado em **26/11/2026 23:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 23:39 · sessao 6cccd208fc28 · O30-F3-CONSTRUIR · construtor · origem=Code
+
+**Causa (b)**
+
+1. `_dados_para_exportacao` preserva o `0`, e `pdf_bytes` exclui apenas `''` e `None`. [atestados_lote.py:102](/home/ronald/wt-codex-o30-f3-construir-225036/app/ponto/services/atestados_lote.py:102) · [atestados_lote.py:205](/home/ronald/wt-codex-o30-f3-construir-225036/app/ponto/services/atestados_lote.py:205)
+2. O PDF põe os seis campos no mesmo parágrafo. O texto extraído em `green_c18_falha.txt` contém `Dias do\natestado: 0`. [atestados_lote.py:207](/home/ronald/wt-codex-o30-f3-construir-225036/app/ponto/services/atestados_lote.py:207)
+3. `_texto` conserva a quebra, e o `assertIn` da c18 exige a sequência literal com espaço. [test_atestados_lote_tela.py:37](/home/ronald/wt-codex-o30-f3-construir-225036/app/relatorios/tests/test_atestados_lote_tela.py:37) · [test_atestados_lote_tela.py:233](/home/ronald/wt-codex-o30-f3-construir-225036/app/relatorios/tests/test_atestados_lote_tela.py:233)
+
+**Diff** em [test_atestados_lote_tela.py:232](/home/ronald/wt-codex-o30-f3-construir-225036/app/relatorios/tests/test_atestados_lote_tela.py:232)
+
+```diff
+         texto = _texto(PdfReader(BytesIO(resposta_pdf.content)))
++        texto = ' '.join(texto.split())
+         for trecho in ('Médico: Dra. Exemplo', 'CRM: 765', 'UF do CRM: PR', 'CID: Z99.8',
+```
+
+O teste ainda exige os seis pares de rótulo e valor no texto extraído. A normalização só altera espaços em branco. Suprimir o campo inteiro ou só o `0` faz a asserção de `Dias do atestado: 0` falhar. [test_atestados_lote_tela.py:231](/home/ronald/wt-codex-o30-f3-construir-225036/app/relatorios/tests/test_atestados_lote_tela.py:231) [nao verificado]
+
+**RED e mutantes** em memória, com o trecho extraído do anexo e a asserção do arquivo. A execução integrada pelo Code fica [nao verificado]. [test_atestados_lote_tela.py:232](/home/ronald/wt-codex-o30-f3-construir-225036/app/relatorios/tests/test_atestados_lote_tela.py:232)
+
+```bash
+sonda() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$1" <<'PY'
+import sys
+from pathlib import Path
+from textwrap import dedent
+from unittest import TestCase
+
+modo = sys.argv[1]
+fonte = Path('relatorios/tests/test_atestados_lote_tela.py').read_text()
+inicio = fonte.index("        texto = ' '.join(texto.split())")
+fim = fonte.index('\n\n', inicio)
+checagem = dedent(fonte[inicio:fim])
+texto = ('Médico: Dra. Exemplo · CRM: 765 · UF do CRM: PR · CID: Z99.8 · '
+         'Emissão: 12/08/2026 · Dias do\natestado: 0\n')
+if modo == 'red':
+    checagem = checagem.split('\n', 1)[1]
+elif modo == 'junta_sem_espaco':
+    checagem = checagem.replace("' '.join", "''.join", 1)
+elif modo == 'sem_campo':
+    texto = texto.replace(' · Dias do\natestado: 0', '')
+elif modo == 'sem_zero':
+    texto = texto.replace('atestado: 0', 'atestado:')
+exec(checagem, {'self': TestCase(), 'texto': texto})
+PY
+}
+
+sonda red                # rc=1, reproduz a falha da c18
+sonda corrigido          # rc=0
+sonda junta_sem_espaco   # rc=1
+sonda sem_campo          # rc=1
+sonda sem_zero           # rc=1
+```
 
 ## 26/11 23:24 · sessao 3ac36de352b7 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
 
@@ -833,21 +887,4 @@ O hook e o B3 leem a janela de duas linhas do **RELATO**. O medidor põe `DISCO-
 
 1. **O novo aval autoriza descartar o `scratchpad` inteiro de uma sessão comprovadamente morta e antiga quando ele contém material único da esteira, mesmo fora dos nomes protegidos?** O V2 autorizava saída de tarefa encerrada. O novo aval amplia o alvo para `/tmp/claude-*` e fixa a meta abaixo de 5 GiB, sem nomear o material único. O RELATO registrou **18 GiB em um scratchpad** fora do aval anterior, e o selo da esteira ainda lê scripts nesses diretórios. `logs/AVAIS-1515/VIGIA-DISCO-V2-2611.txt:1` · `logs/AVAIS-1515/VIGIA-LISTA-ESPACO-2611-2135.txt:1` · `app/docs/RELATO.md:105` · `bin/selo_espera_por_processo.sh:50–64`
 
-## 26/11 21:42 · sessao d144ad250052 · - · - · origem=Ronald (tmux)
-
-### 3. `du` parcial e espaço sem atribuição
-
-- A fotografia confirma 68,5 GiB em `codex_ws`, 34,4 GiB no temporário do Code e 24,4 GiB sem atribuição. O carimbo registra `epoch`, bit `1` de parcial e todos os grupos medidos. Os cinco maiores saem de `itens[:5]`, enquanto o residual usa a soma de **todos** os itens. [linha.md](/home/ronald/saas-hasner/logs/disco/linha.md:5) · [consumidores.tsv](/home/ronald/saas-hasner/logs/disco/consumidores.tsv:1) · `bin/disco_estado.py:324–332`.
-- `medir_consumidores()` faz **uma** chamada `timeout 600 taskset -c 4-7 nice -n 19 ionice -c3 du -sxk`, com `sombra`, `logs`, `.esteira`, diretórios imediatos de `~/` que não sejam symlinks e `/tmp/claude-<uid>`. A ordem separa as fatias e deduplica inodes na mesma chamada. RC diferente de zero, linha do `du` malformada ou falha do `docker system df` acionam o mesmo bit e `_run` descarta `stderr`. As quatro categorias Docker foram publicadas, o que comprova sucesso do parser Docker naquele carimbo. `bin/disco_estado.py:45–60,130–144,160–187` · [consumidores.tsv](/home/ronald/saas-hasner/logs/disco/consumidores.tsv:6).
-- O timeout de 600 s fica descartado para essa rodada. O epoch do carimbo é 21:08:17 e a seção Disco já constava do ESTADO gerado às 21:10:49, em `hasner-relato/ESTADO.md@267631d0f:6,19,22`. Nesse instante `220.685.272 − 195.468.688 KiB = 24,05 GiB`; os 24,4 GiB vieram de `df` mais novo com o carimbo fixo. O alvo e o motivo histórico da falha permanecem [nao verificado]. Permissão pode falhar dentro dos alvos, mas `/root`, `/usr` e a árvore de volumes Docker ficam fora do `du` original. A retenção do timer terminou antes da medição e as duas fases usam a mesma trava. [df.tsv](/home/ronald/saas-hasner/logs/disco/df.tsv:17) · [retencao.tsv](/home/ronald/saas-hasner/logs/disco/retencao.tsv:19) · `bin/relato.sh:37–46` · `bin/disco_estado.py:160–187,324–332,475–481`.
-- A sonda somente leitura por `lstat` atribuiu aproximadamente 16,9 GiB a dois grupos omitidos. Arquivos regulares imediatos de `~/` somaram 8,91 GiB, com 8,83 GiB em `~/rescaldo_raias_1211.tar.zst` e todos com um link [nao verificado em arquivo de trilha]. A raiz tem `/swapfile` de aproximadamente 8 GiB. Outra sonda fora dos alvos originais encontrou 4,24 GiB em `/usr`, `/boot` e diretórios de pacotes, com `Permission denied` em duas subpastas do APT [nao verificado em arquivo de trilha]. Este último é erro do censo adicional, pelos alvos que o código usa. `bin/disco_estado.py:163–171` · [/proc/swaps](/proc/swaps:2).
-- Para completar, preservar RC, `stderr` e alvo em diagnóstico privado, distinguir acesso, desaparecimento, timeout e parse, medir em leitura com a mesma deduplicação e anotar arquivos regulares de topo, swap e demais diretórios autorizados. Usar `df` do mesmo carimbo reduz o descompasso. A montagem de produção, o volume do Postgres e qualquer residual não coberto ficam explicitamente fora do censo. `bin/disco_estado.py:54–60,160–187,236–255,324–332` · [aval](/home/ronald/saas-hasner/logs/AVAIS-1515/VIGIA-LISTA-ESPACO-2611-2135.txt:1).
-
-### 4. Escritores, leitores e disparo
-
-- `consumidores.tsv` é lido e regravado atomicamente por `disco_estado.ler()` quando `--gravar` encontra carimbo ausente ou com idade ≥ 1 h. O mesmo medidor lê e apenda `df.tsv` quando tem medida de `/`. `retencao_disco --aplicar` apenda `retencao.tsv`, inclusive no `finally`, e `resumo()` é leitor para `--carimbo` e para a foto e o topo do RELATO via medidor. `bin/disco_estado.py:190–255,268–270,284–294,381–407` · `bin/retencao_disco.py:486–491,584–610,628–642`.
-- `disco_estado --gravar` troca `linha.md` atomicamente. `gerar_estado.py` lê a fotografia e publica a seção Disco pelo `relato.sh`, que raspa e publica o ESTADO. Foto ausente, malformada ou com mais de 2 h vira `NAO MEDIDO`. O Stop e o B3 leem as duas primeiras linhas úteis do **RELATO**, e o medidor insere `DISCO-VIGIA` logo depois. O handoff exibe a linha do disco separadamente e o alarme de ociosidade a ignora como parada de sessão. `bin/disco_estado.py:341–375,413–453,475–481` · `bin/gerar_estado.py:320–321,336,394` · `bin/relato.sh:125–130,147–158` · `bin/hook_stop_fila1.py:446–481` · `bin/handoff_sessao.sh:85–121` · `bin/alarme_sessao_ociosa.py:134–144`.
-- O disparo confirmado é o **timer systemd de usuário** `hasner-relato.timer`, com `OnBootSec=2min`, `OnUnitActiveSec=5min` e `AccuracySec=30s`. O service `oneshot` fixa CPU 4–7 e executa `bin/relato.sh`, primeiro `nice -n 19 ionice -c3 python3 .../retencao_disco.py --aplicar --carimbo --quieto` e depois `python3 .../disco_estado.py "$RAIZ" --gravar`. Ambos usam `disco.lock` com RC 75 se ocupada. `--carimbo` espaça a retenção em uma hora. Cron pessoal [nao verificado] por permissão no `crontab -l`. `bin/hasner-relato.timer:4–8` · [service instalado](/home/ronald/.config/systemd/user/hasner-relato.service:12) · `bin/relato.sh:27,37–49` · `bin/retencao_disco.py:65–73,613–642`.
-- O selo roda em raiz temporária e cobre caminhos decisórios, fotos e TSV malformados, trava comum, topo e handoff, df antes/depois e mutantes. A régua executa os selos `test_*.sh` antes da suíte. `bin/tests/test_disco_estado.sh:6–27,87–130,485–605` · `bin/regua.sh:134–145`.
-
-_8516 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8517 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
