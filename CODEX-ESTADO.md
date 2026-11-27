@@ -1,7 +1,410 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 20:06** · publicado em **27/11/2026 20:07** (UTC-3)
+> Ultima resposta processada: **27/11/2026 20:17** · publicado em **27/11/2026 20:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 20:17 · sessao aff0ee44922f · INVENTARIO-PELA-REGRA · leitura · origem=Code
+
+## Bloco 1 — `causas_diff_comp10.py`
+
+A sonda fica no corpo da resposta. Validei a sintaxe em memória e conferi os **57 colaboradores, 60 pares e 1.800 linhas `CZ|DIA`** esperadas. Execução com Django e PostgreSQL, conteúdo de `Sindicato.obs` e hash Git da cópia [nao verificado]. (`amostra.txt:1–60`, anexo)
+
+`CZ|RUB` mostra o FM gravado, o cálculo em memória e a projeção com as regras de evento do exportador. `CZ|BASE` abre as parcelas que ajudam a localizar a diferença. `CZ|8792` mostra quantas vezes a data entra na lista real, inclusive quando há mais de um registro. A captura diária depende do ponto em que esta cópia publica o fechamento em memória e interrompe a execução se esse ponto mudar. (`app/folha/export.py:159–185`, `app/folha/export.py:402–452`, `app/ponto/services/fechamento.py:1139–1159`)
+
+```python
+# causas_diff_comp10.py
+# Executar a partir de app/, no ambiente Django da sombra:
+# python3 -B - < /caminho/causas_diff_comp10.py
+
+import logging
+import os
+import re
+import sys
+from collections import Counter, defaultdict
+from datetime import date, datetime, time, timedelta
+from linecache import getline
+from types import SimpleNamespace
+from unittest.mock import patch
+
+MES, ANO = 10, 2026
+INI, FIM = date(2026, 9, 21), date(2026, 10, 20)
+EMPRESAS = (2, 3, 4)
+
+# amostra.txt:1-60 (anexo)
+AMOSTRA = {
+    "0025": (300, 128, 146, 788, 980, 865, 348, 85, 612, 76),
+    "0150": (263, 155, 129, 297, 923, 988, 879, 899, 915, 82),
+    "0200": (953, 949, 696, 608, 521, 490, 302, 274, 272, 226),
+    "0243": (186, 263, 60, 922, 835, 300, 82, 252, 960, 736),
+    "8069": (87, 820, 42, 735, 368, 634, 821, 926, 924, 655),
+    "8792": (674, 717, 650, 607, 534, 391, 271, 210, 646, 942),
+}
+PARES = tuple((rub, pk) for rub, pks in AMOSTRA.items() for pk in pks)
+DIAS = tuple(INI + timedelta(days=i) for i in range((FIM - INI).days + 1))
+OBS = re.compile(r"feriad|12\s*[x×]\s*36|\b38\b|dobr|s[uú]mula\s+444|hora\s+noturna", re.I)
+
+
+def cz(tipo, *posicionais, **campos):
+    return "|".join(("CZ", tipo, *map(str, posicionais),
+                     *(f"{chave}={valor}" for chave, valor in campos.items())))
+
+
+def leitura_diaria(fc, emp, ids):
+    # app/ponto/services/fechamento.py:468-491, 1139-1159, 1215.
+    alvo = fc.recalcular_fechamento_mes.__code__
+    linha = 1159
+    if not getline(alvo.co_filename, linha).lstrip().startswith("leitura[colab.pk] ="):
+        raise SystemExit("PAREI: ponto de coleta mudou")
+    apurados = {}
+    furos = {}
+
+    def observar(frame, evento, argumento):
+        if evento == "exception" and not isinstance(argumento[1], fc._GradeSemCelula):
+            raise SystemExit(f"PAREI: fechamento emp={emp} linha={frame.f_lineno}")
+        if evento == "line" and frame.f_lineno == linha:
+            v = frame.f_locals
+            pk = v["colab"].pk
+            apurados[pk] = (
+                v["_ap"], v["_g"], v["feriados"], v["batidas"],
+                v["_ft_feriado"], v["_ft_certa"], v["_ft_sem_escala"],
+                v["_atrasos_dia"], v["_creditos_dia"],
+            )
+        return observar
+
+    def selecionar(frame, evento, argumento):
+        return observar if frame.f_code is alvo else None
+
+    anterior = sys.gettrace()
+    sys.settrace(selecionar)
+    try:
+        fechamentos = fc.recalcular_fechamento_mes(
+            MES, ANO, empresa_id=emp, colaborador_ids=ids,
+            somente_leitura=True, lavrar_dias_pagos=False,
+            retornar_objeto=True, coletar_furos=furos,
+        )
+    finally:
+        sys.settrace(anterior)
+    if set(fechamentos) != set(apurados) or set(fechamentos) != set(furos):
+        raise SystemExit(f"PAREI: coleta inconsistente emp={emp}")
+    return fechamentos, apurados, furos
+
+
+def dias_do_motor(dados, abater, dia_de):
+    ap, _, _, _, ft_feriado, ft_certa, ft_sem_escala, atrasos, creditos = dados
+    res = ap.resultado
+    mapa_dia = getattr(res, "dia_da_jornada", None)
+    campos = defaultdict(Counter)
+    periodos = defaultdict(list)
+
+    for p in (*res.periodos, *res.periodos_ft):
+        d = dia_de(p, mapa_dia)
+        a = campos[d]
+        # app/ponto/motor_calculo_v2.py:208-252, 303-321, 363-370.
+        a["noturno"] += p.minutos_noturnos_legais or 0
+        a["noturno_relogio"] += p.minutos_noturnos_relogio or 0
+        a["intra"] += p.minutos_intrajornada_indenizada or 0
+        a["pausa"] += p.intra_descontada or 0
+        a["trabalhado"] += p.minutos_trabalhados or 0
+        a["fora_janela"] += p.minutos_fora_janela or 0
+        periodos[d].append(p)
+
+    for p in res.periodos:
+        d = dia_de(p, mapa_dia)
+        # app/ponto/services/dia_pago.py:173-186.
+        campos[d]["he50"] += p.minutos_extra_50 or 0
+        campos[d]["he100"] += p.minutos_extra_100 or 0
+        campos[d]["he100_feriado"] += p.minutos_extra_100_feriado or 0
+        campos[d]["saida_ant"] += p.minutos_saida_antecipada or 0
+
+    for p in ft_feriado:
+        d = dia_de(p, mapa_dia)
+        # app/ponto/services/fechamento.py:968-981.
+        campos[d]["he100"] += p.minutos_trabalhados
+        campos[d]["he100_feriado"] += p.minutos_trabalhados
+    for p in ft_certa:
+        # app/ponto/services/fechamento.py:989-990.
+        campos[dia_de(p, mapa_dia)]["folga100"] += p.minutos_trabalhados
+    for p in ft_sem_escala:
+        # app/ponto/services/fechamento.py:1004-1009.
+        campos[dia_de(p, mapa_dia)]["folga_sem_escala"] += p.minutos_trabalhados
+
+    for d, bruto in atrasos.items():
+        # app/ponto/services/fechamento.py:1018-1026.
+        liquido, usado = abater({d: bruto}, creditos)
+        campos[d]["atraso"] = liquido
+        campos[d]["credito"] = usado
+    return campos, periodos
+
+
+def previsto(grade):
+    # app/escala/services/leitor_celula.py:114-149, 418-424.
+    marcos = grade.get("marcos") or ()
+    if not marcos or marcos[0]["tipo"] != "E" or marcos[-1]["tipo"] != "S":
+        return "-"
+    inicio, fim = marcos[0]["hora"], marcos[-1]["hora"]
+    return f"{inicio[:5]}-{fim[:5]}" if inicio and fim else "-"
+
+
+def total_rubrica(ex, mapa, rub, fm, **regra):
+    if fm is None:
+        return "-"
+    # app/folha/export.py:402-452, 739-748, 993-1000.
+    return round(sum(valor for ev, valor in ex.eventos_do_fechamento(fm, **regra)
+                     if ev in mapa and mapa[ev].codigo_fopag.zfill(4) == rub), 2)
+
+
+def cru(fm, modelo):
+    # Projeção usada no anexo sonda.py::evento_fm.
+    if fm is None:
+        return None
+    return SimpleNamespace(**{f.attname: getattr(fm, f.attname)
+                              for f in modelo._meta.concrete_fields})
+
+
+def dados_da_sombra():
+    from django.conf import settings
+    from django.db import connection, transaction
+    from django.utils.timezone import localtime, make_aware
+    from django_tenants.utils import schema_context
+
+    db = connection.settings_dict
+    if (getattr(settings, "HASNER_SOMBRA", False) is not True
+            or (db["NAME"], db["HOST"]) != ("sombra", "sombra_db")):
+        raise SystemExit("PAREI: configuração fora da sombra")
+    if connection.in_atomic_block or not connection.get_autocommit():
+        raise SystemExit("PAREI: a sonda exige transação própria")
+
+    from colaboradores.models import Colaborador, Empresa
+    from core.feriados import feriados_do_colab
+    from core.models import Sindicato
+    from core.regua_cct import get_motor_cct, regua_para
+    from escala.alimentacao import vinculo_do_dia_carregado
+    from escala.servico_jornada import escala_vigente
+    from escala.services.leitor_celula import grade_da_celula
+    from folha import export as ex
+    from ponto.catalogo.ausencias import descontam_vigentes
+    from ponto.models import Ausencia, FechamentoMensal
+    from ponto.services import fechamento as fc
+    from ponto.services.credito_parcial import abater_no_proprio_dia
+    from ponto.services.dia_pago import _dia_de
+    from ponto.turnos import batidas_apuraveis, dia_das_batidas
+
+    def hora_local(instante):
+        return localtime(instante).strftime("%H:%M") if instante is not None else "-"
+
+    linhas = []
+    dias_emitidos = 0
+    ids = {pk for _, pk in PARES}
+    # app/config/settings/sombra.py:13-14, 47-60.
+    with schema_context("juliani"), transaction.atomic():
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            cursor.execute("SELECT current_schema(), current_setting('transaction_read_only')")
+            if cursor.fetchone() != ("juliani", "on"):
+                raise SystemExit("PAREI: schema ou proteção inválida")
+
+        empresas = Empresa.objects.in_bulk(EMPRESAS)
+        if set(empresas) != set(EMPRESAS) or any(
+            ex.janela_competencia(e, MES, ANO) != (INI, FIM) for e in empresas.values()
+        ):
+            raise SystemExit("PAREI: empresas ou janelas diferentes do anexo")
+        colabs = Colaborador.objects.select_related("empresa").in_bulk(ids)
+        if set(colabs) != ids or any(c.empresa_id not in empresas for c in colabs.values()):
+            raise SystemExit("PAREI: amostra indisponível nas empresas da sonda")
+
+        mapas = {emp: ex._rubricas_map(e) for emp, e in empresas.items()}
+        gravados = {f.colaborador_id: f for f in FechamentoMensal.objects.filter(
+            colaborador_id__in=ids, mes=MES, ano=ANO)}
+        ausencias = defaultdict(list)
+        # app/ponto/models.py:690-705 e app/folha/export.py:63-70.
+        for a in Ausencia.objects.filter(colaborador_id__in=ids, data__lte=FIM).only(
+            "colaborador_id", "data", "data_fim", "tipo", "status"
+        ).order_by("pk"):
+            for d in ex.datas_no_periodo(a, INI, FIM):
+                ausencias[a.colaborador_id, d].append((a.tipo, a.status))
+        tipos_falta = descontam_vigentes()
+
+        lidos, apurados, furos = {}, {}, {}
+        for emp in EMPRESAS:
+            grupo = {pk for pk, c in colabs.items() if c.empresa_id == emp}
+            esperado = set(fc.universo_da_competencia(MES, ANO, emp)
+                           .filter(pk__in=grupo).values_list("pk", flat=True))
+            f, a, u = leitura_diaria(fc, emp, sorted(grupo))
+            if set(f) != esperado:
+                raise SystemExit(f"PAREI: leitura incompleta emp={emp}")
+            lidos.update(f)
+            apurados.update(a)
+            furos.update(u)
+
+        for pk, c in sorted(colabs.items()):
+            col = f"col{pk}"
+            emp = c.empresa_id  # app/ponto/services/fechamento.py:639-641.
+            ciclo = ex._ciclo_do_colab(c, MES, ANO)  # app/folha/export.py:341-360.
+            dobra = ex.feriado_12x36_em_dobra(c, MES, ANO)  # app/folha/export.py:363-380.
+            regua = regua_para(c, FIM)  # app/core/regua_cct.py:297-380.
+            ec = vinculo_do_dia_carregado(c, FIM)
+            motor = get_motor_cct(c, FIM, tipo_escala=ec.tipo_escala if ec else None)
+            linhas.append(cz(
+                "COLAB", col=col, emp=emp, ciclo=ciclo or "-",
+                regime=c.empresa.regime_trabalhista or "-",  # app/colaboradores/models.py:146-156.
+                fonte_regua=regua["fonte"],  # app/core/regua_cct.py:352-380.
+                hora_reduzida_afastada=int(motor.hora_reduzida_afastada),  # app/core/regua_cct.py:441-472.
+                feriado_12x36_em_dobra=int(dobra),
+                # Valores cadastrados. Efeito em app/core/regua_cct.py:72-79.
+                tolerancia_marcacao=regua["tolerancia_marcacao_min"],
+                tolerancia_dia=regua["tolerancia_dia_min"],
+                intrajornada_min=regua["intrajornada_minima_min"],
+            ))
+
+            dados = apurados.get(pk)
+            if dados is None:
+                grade = grade_da_celula(c, INI, FIM)
+                feriados = feriados_do_colab(c, INI, FIM)
+                comeco = make_aware(datetime.combine(INI - timedelta(days=1), time.min))
+                termino = make_aware(datetime.combine(FIM + timedelta(days=1), time.max))
+                batidas = list(batidas_apuraveis(c, comeco, termino))
+                campos, periodos, cobertos = {}, {}, set()
+            else:
+                ap, grade, feriados, batidas, *_ = dados
+                campos, periodos = dias_do_motor(dados, abater_no_proprio_dia, _dia_de)
+                cobertos = ap.dias_cobertos
+            grade_dia = {g["data"]: g for g in grade["dias"]}
+            # app/ponto/services/fechamento.py:652-653 e app/ponto/turnos.py:2971-3004.
+            dia_batida = dia_das_batidas(c, INI, FIM)
+            n_batidas = Counter(dia_batida[b.pk] for b in batidas if b.pk in dia_batida)
+            # app/folha/export.py:87-92, 159-185, 749-753.
+            faltas = Counter(ex.datas_falta(c, empresas[emp], MES, ANO))
+            furo = set(furos.get(pk, ())) if dados is not None else None
+            gravado_cru = cru(gravados.get(pk), FechamentoMensal)
+            lido_cru = cru(lidos.get(pk), FechamentoMensal)
+
+            for rub, amostrado in PARES:
+                if amostrado != pk:
+                    continue
+                if rub != "8792":
+                    linhas.append(cz(
+                        "RUB", rub=rub, col=col,
+                        fm=total_rubrica(ex, mapas[emp], rub, gravado_cru),
+                        lido=total_rubrica(ex, mapas[emp], rub, lido_cru),
+                        lido_com_regra_export=total_rubrica(
+                            ex, mapas[emp], rub, lidos.get(pk),
+                            tipo_ciclo=ciclo, feriado_12x36_em_dobra=dobra),
+                        eventos=",".join(ev for ev, r in sorted(mapas[emp].items())
+                                         if r.codigo_fopag.zfill(4) == rub) or "-",
+                    ))
+                for d in DIAS:
+                    g = grade_dia[d]
+                    tipo = g["tipo_dia"]  # app/escala/services/leitor_celula.py:390-424.
+                    aus = ausencias[pk, d]  # app/folha/export.py:63-70.
+                    m = campos.get(d, Counter())
+                    tem_motor = d in cobertos or d in campos
+
+                    def minutos(campo):
+                        return round(m[campo], 4) if tem_motor else "-"
+
+                    # app/folha/export.py:169-185: sim = data na lista real.
+                    decidida = ("sim" if faltas[d] else "nao"
+                                if tipo in ("trabalho", "ausencia") or aus or (furo and d in furo)
+                                else "-")
+                    linhas.append(cz(
+                        "DIA", rub=rub, col=col, dia=d,
+                        celula=tipo,
+                        previsto=previsto(g),
+                        n_batidas_apuraveis=n_batidas[d],  # app/ponto/turnos.py:2941-2968, 3034-3045.
+                        feriado=int(d in feriados),  # app/core/feriados.py:135-167.
+                        ausencia=",".join(f"{t}/{s}" for t, s in aus) or "-",
+                        noturno_min=minutos("noturno"),  # app/ponto/motor_calculo_v2.py:303-321.
+                        intra_min=minutos("intra"),  # app/ponto/motor_calculo_v2.py:363-370.
+                        he100_min=minutos("he100"),  # app/ponto/services/fechamento.py:942-943, 978-980.
+                        atraso_min=minutos("atraso"),  # app/ponto/services/fechamento.py:1018-1025.
+                        saida_ant_min=minutos("saida_ant"),  # app/ponto/services/fechamento.py:1026.
+                        falta_decidida=decidida,
+                    ))
+                    dias_emitidos += 1
+                    if rub == "8792":
+                        # app/ponto/services/fechamento.py:1139-1151 e app/folha/export.py:87-92, 169-185.
+                        linhas.append(cz(
+                            "8792", col=col, dia=d, conta=faltas[d],
+                            furo_motor="-" if furo is None else int(d in furo),
+                            trabalho_sem_batida=int(tipo == "trabalho" and not n_batidas[d]),
+                            ausencia_sem_aprovacao=int(any(s != "aprovada" for _, s in aus)),
+                            aprovada_sem_desconto=int(any(
+                                s == "aprovada" and t not in tipos_falta for t, s in aus)),
+                        ))
+                    else:
+                        ec_fer = (escala_vigente(c, d)
+                                  if rub == "0200" and d in feriados and m["folga_sem_escala"]
+                                  else None)
+                        # app/ponto/services/fechamento.py:300-305, 938-1009, 1018-1026.
+                        linhas.append(cz(
+                            "BASE", rub=rub, col=col, dia=d,
+                            he50_min=minutos("he50"), he100_feriado_min=minutos("he100_feriado"),
+                            folga100_min=minutos("folga100"), noturno_relogio_min=minutos("noturno_relogio"),
+                            folga_sem_escala_min=minutos("folga_sem_escala"),
+                            feriado_vira_folga=int(ec_fer.feriado_vira_folga(d)) if ec_fer else "-",
+                            previsto_min=g["minutos_previstos"],
+                            pausa_descontada_min=minutos("pausa"), credito_atraso_min=minutos("credito"),
+                            trabalhado_min=minutos("trabalhado"), fora_janela_min=minutos("fora_janela"),
+                            pares_motor=",".join(
+                                f"{hora_local(p.entrada)}-{hora_local(p.saida)}"
+                                for p in periodos.get(d, ())) or "-",
+                            regua_dia=ap.regua_por_dia.get(d, "-").replace("|", ",") if dados else "-",
+                        ))
+
+        # app/core/models.py:34-64, 143-156 e app/core/regua_cct.py:253-263.
+        sindicatos = Sindicato.objects.filter(
+            aplicacoes__empresa_id__in=EMPRESAS, aplicacoes__ativo=True,
+            cct_vigencia_inicio__lte=FIM, cct_vigencia_fim__gte=FIM,
+        ).distinct().order_by("pk")
+        for s in sindicatos:
+            # Rótulo de exibição: Sindicato.nome (app/core/models.py:34-40).
+            linhas.append(cz(
+                "CCT", f"sind={s.pk}", s.nome,
+                feriado_12x36_em_dobra=int(s.feriado_12x36_em_dobra),
+                hora_reduzida_afastada_12x36=int(s.hora_reduzida_afastada_12x36),
+            ))
+            for paragrafo in re.split(r"\r?\n[ \t]*\r?\n(?:[ \t]*\r?\n)*", s.obs):
+                if OBS.search(paragrafo):
+                    linhas.append(cz("OBS", f"sind={s.pk}", paragrafo))
+
+        linhas.append(cz("UNIVERSO", colabs=len(colabs), pares=len(PARES), dias=dias_emitidos))
+        linhas.append(cz("FIM"))
+        transaction.set_rollback(True)
+    return linhas
+
+
+def main():
+    sys.dont_write_bytecode = True
+    # app/ponto/services/fechamento.py:1327-1331.
+    logging.disable(logging.CRITICAL)
+    sys.excepthook = lambda *_: print("PAREI: falha da sonda", file=sys.stderr)
+    if os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.sombra") != "config.settings.sombra":
+        raise SystemExit("PAREI: settings fora da sombra")
+
+    import django
+    from django.conf import settings
+
+    def sem_mkdir(caminho, *, exist_ok=False):
+        if caminho != "/app/logs" or not exist_ok:
+            raise SystemExit("PAREI: inicialização pediu diretório inesperado")
+
+    # Sombra herda o mkdir e os handlers de arquivo de app/config/settings/saas.py:117-183.
+    with patch.object(os, "makedirs", sem_mkdir):
+        settings.LOGGING_CONFIG = None
+        django.setup()
+    for linha in dados_da_sombra():
+        print(linha)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+## Bloco 2 — Leitura da regra e classificação
+
+**Feriado no 12x36 dos vigilantes de Londrina.** A leitura registrada na cópia é que **não há cláusula de dobra**. O comentário do campo é explícito sobre as convenções da casa: “nenhuma das nossas diz isso hoje, e por isso o default e False.” A cláusula 38-d transcrita trata da duração da hora noturna e do adicional. `CLAUDE.md` remete a fundamentação integral para `Sindicato.obs` e registra que o PDF da CCT está fora do sistema. O conteúdo cadastrado de `ob
+
+[truncado em 20000 de 30325 caracteres]
 
 ## 27/11 20:06 · sessao 0144c70af86d · FIM-DE-SEMANA-JA · leitura · origem=Code
 
@@ -1906,42 +2309,4 @@ Os **9 testes** ficaram vermelhos contra `597fdc40d` e passaram com a cura. Os *
 
 Também alinhei o teste ORM c5 da própria obra. Execução ORM, suíte integral e produção **[nao verificado]**. A certificação fica com Code e Opus. [teste ORM:462](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz_porta.py:462) [nao verificado]
 
-## 27/11 19:02 · sessao d36c9265c821 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
-
-# REPROVADO
-
-1. **L-111 — a restauração do Partido deixou um segundo juiz sem chamador de produção.** Em `570e13f24`, o cálculo mensal do Partido chamava `_ganho_noturno_da_base_da_he`. No c2x, voltou a somar `legais - relógio` diretamente. A função antiga ficou na árvore e só o teste a chama. O motor ainda calcula e grava `ganho_noturno_da_base_da_he`, cujo valor perdeu o leitor de negócio. A L-111 exige tratar o sítio órfão no mesmo commit. `570e13f24:app/ponto/motor_calculo_v2.py:3383` · [motor_calculo_v2.py:293](/home/ronald/codex_ws/d63a32aec0ff01e4909cef1801f4490723736aca/app/ponto/motor_calculo_v2.py:293) · [motor_calculo_v2.py:1978](/home/ronald/codex_ws/d63a32aec0ff01e4909cef1801f4490723736aca/app/ponto/motor_calculo_v2.py:1978) · [motor_calculo_v2.py:3382](/home/ronald/codex_ws/d63a32aec0ff01e4909cef1801f4490723736aca/app/ponto/motor_calculo_v2.py:3382) · [test_ramo2b_c2_base_da_he.py:402](/home/ronald/codex_ws/d63a32aec0ff01e4909cef1801f4490723736aca/app/ponto/tests/test_ramo2b_c2_base_da_he.py:402) · [LEIS.md:137](/home/ronald/codex_ws/d63a32aec0ff01e4909cef1801f4490723736aca/app/docs/LEIS.md:137)
-
-## Chamadores e escopo
-
-| Chamador ou referência | Contrato conferido | Sítio |
-|---|---|---|
-| `Motor12x36.calcular_periodo` | Pede e desempacota **5** | `app/ponto/motor_calculo_v2.py:2987` |
-| `MotorComercial.calcular_periodo` | Pede e desempacota **5** | `app/ponto/motor_calculo_v2.py:3470` |
-| `MotorTurnoPartido.calcular_periodo` e `MotorTurnoPartidoNoturno` por herança | Usam o padrão e desempacotam **4** | `app/ponto/motor_calculo_v2.py:3132`, `:3823` |
-| `Motor12x36ComEscala` | Delega ao pai e usa a chamada de **5** | `app/ponto/motor_calculo_v2.py:3810` |
-| `MotorPlantao` e `MotorIntermitente` | Pedem **5** pelo cálculo do 12x36, por delegação e por herança, respectivamente | `app/ponto/motor_calculo_v2.py:3798`, `:3832` |
-| `MotorBase._janela_do_par` | Único chamador de `MotorBase._saida_efetiva`. Encaminha a opção e desempacota **3** | `app/ponto/motor_calculo_v2.py:1941` |
-| Teste c2x | Compara a tupla inteira de **4** sem opção e de **5** com opção | `app/ponto/tests/test_ramo2b_c2x_janela.py:31`, `:41` |
-| Mock e selo de teste | O mock retorna **5** para 12x36 e Comercial. O selo usa `getattr` para inspecionar a fonte | `app/ponto/tests/test_ramo2b_c2_base_da_he.py:493`, `:513`, `:528`, `:541` · `app/ponto/tests/test_janela_he_regra.py:154` |
-
-**Corpos do Partido.** O AST completo das duas classes, sem posições, coincide com a cópia de `59600163c`. O SHA-256 do texto de cada classe também bate com o selo. `59600163c:app/ponto/motor_calculo_v2.py:2975`, `:3677` · `app/ponto/motor_calculo_v2.py:3105`, `:3823` · `app/ponto/tests/test_ramo2b_c2u_escopo.py:72`
-
-**Flag.** `MotorBase` define `True`. Plantão e Intermitente sobrescrevem com `False`. A única leitura está em `_saida_efetiva`, que exige a opção, a flag e o juiz de cruzamento. Assim, Plantão e Intermitente pedem a opção por reúso e continuam parando no marco. `app/ponto/motor_calculo_v2.py:796`, `:1919`, `:3775`, `:3798`, `:3832`, `:3841` · `app/escala/servico_jornada.py:104`
-
-## Catracas e contraprovas
-
-- **`LINHAS_REGISTRADAS`** — as 11 entradas de registro remapeiam 26 ocorrências, contando as repetidas. Cada entrada manteve a identidade `(função, critério/sítio)` e apontou para o mesmo código. O censo deu **9 → 9** pareadores e **80 → 80** derivações de dia, com a mesma composição e classificação. Os 35 testes do módulo passaram em memória. `app/core/tests/test_medida_turno_do_par.py:253`, `:304`, `:351`, `:512`, `:550`, `:566`
-- **RED contra `570e13f24`** — reconstruí o motor anterior em memória pelo diff e conferi o hash do blob `003eeac28`. Os três testes passaram no c2x. No anterior, a asserção sem opção falhou nos cinco motores porque voltavam cinco valores. Os três subcasos com opção deram `TypeError` pela assinatura antiga. O teste comportamental do Partido passou no anterior. `570e13f24:app/ponto/motor_calculo_v2.py:1923` · `app/ponto/tests/test_ramo2b_c2x_janela.py:28`, `:34`, `:44`
-- **Mutante “opção ignorada”** — retirei a opção só da condição que libera a cauda, preservando a aridade. O teste do Partido falhou nas duas classes. O trio `(trabalhado, noturno de relógio, fora)` foi de `(720, 540, 30)` para `(750, 570, 0)`. Ao forçar o sentido inverso, com a cauda sempre desativada, o teste do 12x36 com opção falhou. `app/ponto/motor_calculo_v2.py:1919`, `:1942` · `app/ponto/tests/test_ramo2b_c2x_janela.py:34`, `:44`
-
-## Demais classes
-
-- **Segundo juiz e derivação paralela** — o sítio órfão do bloqueio 1 é o achado. A janela consulta o dia uma vez, delega o recorte à regra da L-097 e consulta a autoridade de cruzamento. `app/ponto/motor_calculo_v2.py:1909`, `:1918`, `:1939` · `app/ponto/janela_he.py:150` · `app/escala/servico_jornada.py:104`
-- **Segundo escritor** — os campos da base da HE passam pela mesma porta. O selo de escritor único passou nos oito testes em memória. `app/ponto/motor_calculo_v2.py:267`, `:1950`, `:1968` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:661`
-- **Aridade variável** — é um contrato de forma com um prefixo de significado fixo. `(e, s, fe, fs)` mantém as quatro posições, e `s_he` acrescenta o limite da base da HE. A opção também habilita a cauda sob a flag, efeito explícito no contrato. Nenhum chamador auditado interpreta a mesma posição com dois significados. `app/ponto/motor_calculo_v2.py:1919`, `:1924`, `:1941`
-- **Relógio, ordem de trava e `except`** — zero leituras novas do relógio, zero mudanças de aquisição de trava e **0 `except` adicionados, 0 removidos**. A contagem AST foi motor **18 → 18**, teste da catraca **1 → 1**, teste novo **0**. `app/ponto/motor_calculo_v2.py:1874`, `:1924`, `:2987`, `:3105`, `:3470` · `app/core/tests/test_medida_turno_do_par.py:253` · `app/ponto/tests/test_ramo2b_c2x_janela.py:27`
-
-As execuções usaram o código da cópia em memória, com substitutos mínimos para as dependências de teste do Django. Suíte Django inteira, efeitos em produção e integridade das competências exportadas **[nao verificado]**. [nao verificado]
-
-_8777 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8778 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
