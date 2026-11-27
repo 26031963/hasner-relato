@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 17:10** · publicado em **27/11/2026 17:14** (UTC-3)
+> Ultima resposta processada: **27/11/2026 17:16** · publicado em **27/11/2026 17:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 17:16 · sessao 4a982055c4f3 · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
+
+Adicionei **15 REDs** em um único módulo novo. Verifiquei a sintaxe sem gerar bytecode. A execução no HEAD e a execução dos mutantes ficam com o Code na VM. [test_desligado_porta_do_chamado.py](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/tests/test_desligado_porta_do_chamado.py:1) [nao verificado]
+
+**Comando na VM**, a partir de `app/`. `red` roda o módulo inteiro. Os seletores da tabela rodam o teste de cada mutante. [manage.py](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/manage.py:7) [ci.py](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/config/settings/ci.py:6) [nao verificado]
+
+```bash
+red() {
+  PYTHONDONTWRITEBYTECODE=1 python manage.py test \
+    chamados.tests.test_desligado_porta_do_chamado \
+    --settings=config.settings.ci --parallel 1 "$@"
+}
+red
+```
+
+| RED | Asserção que deve falhar no HEAD | Mutação proposta e comando |
+|---|---|---|
+| R1 `criar` | Aparece uma linha extra e falta a trilha de recusa. [models.py:1160](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1160) | Retirar a guarda de `criar`. `red -k recusa_nascimento_com_trilha` |
+| R2 `abrir`, lookup vazio | O lookup encontra a linha inserida e falta a trilha. [models.py:1037](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1037) | Retirar a guarda do ramo de inserção. `red -k lookup_vazio` |
+| R2 `abrir`, lookup encerrado | O chamado fica encerrado. A contagem de trilhas de recusa dá zero. [models.py:1071](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1071) | Suprimir a trilha do renascimento recusado. `red -k lookup_encerrado` |
+| R3 sistema | `reabrir()` devolve `True`, muda o estado e ressuscita a pergunta. [models.py:1505](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1505) | Retirar a guarda de `reabrir()` automático. `red -k reabertura_automatica` |
+| R4 motivo próprio no detalhe | O chamado reabre e o motivo enviado fica ausente da trilha atribuída ao autor. [acoes_chamado.py:292](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/services/acoes_chamado.py:292) | Descartar o motivo ao gravar a reabertura. `red -k motivo_do_chamado_reabre` |
+| R4 motivo próprio em `desarquivar` | A ressuscitação altera o fechamento da pergunta e da disputa. O motivo enviado também fica ausente da trilha. [views_arquivar.py:70](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/views_arquivar.py:70) [models.py:1747](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1747) | Ressuscitar perguntas após desarquivar. `red -k desarquivar_com_motivo` |
+| R4 motivo e outra recusa | A troca manual leva o filho agrupado a `em_analise`, embora o pai esteja vivo. [models.py:211](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:211) [models.py:1417](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1417) | Deixar o motivo contornar a recusa por agrupamento. `red -k motivo_proprio_nao_vence` |
+| R5 `humano=True` isolado | A porta devolve `True`, muda o estado e deixa a recusa sem trilha. [models.py:1403](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1403) [models.py:1505](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1505) | Tratar `humano=True` como autorização suficiente. `red -k humano_true_isolado` |
+| R5 motivo branco ou de outro chamado | Os dois POSTs levam o alvo a `em_analise`. [acoes_chamado.py:322](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/services/acoes_chamado.py:322) | Aceitar espaços ou buscar motivo em outro chamado do colaborador. `red -k troca_de_status_recusa` |
+| R6 S89 e histórico | Nasce um S89 em `registrado` e falta o informativo substituto no histórico. [desligamento.py:195](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/colaboradores/services/desligamento.py:195) [desligamento.py:227](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/colaboradores/services/desligamento.py:227) | Restaurar a emissão S89 ou omitir o informativo. `red -k s89_nao_nasce` |
+| R6 respondida | A pergunta fica sem a via própria e a disputa continua aberta. [desligamento.py:164](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/colaboradores/services/desligamento.py:164) | Pular a respondida ou apagar a resposta ao encerrar. `red -k respondida_sem_veredito_fecha` |
+| R6 muda | A via gravada é `admin_decidiu`. [models.py:2184](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:2184) | Repor `admin_decidiu` ou tratar o carimbo de `escolha` como lastro. `red -k muda_fecha` |
+| Concorrência | Cada porta insere um chamado com sua própria instância carregada antes da efetivação. [models.py:1037](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1037) [models.py:1160](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/models.py:1160) | Usar a instância antiga em `criar` ou em `abrir`, um mutante por vez. `red -k portas_releem` |
+| Vigia, recusas | O contador está ausente nas duas leituras, que esperam `0` e `2`. [auditar_invariantes_chamados.py:670](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/management/commands/auditar_invariantes_chamados.py:670) | Fixar o contador em zero ou incluir o veto do dia. `red -k vigia_conta_duas` |
+| Vigia, estoque | Faltam os contadores que esperam sistema `1 → 0` e humano `1 → 1`. O I5a atual conta `COBRANCA`. [auditar_invariantes_chamados.py:659](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/management/commands/auditar_invariantes_chamados.py:659) | Medir só `COBRANCA` ou somar a reabertura humana no estoque do sistema. `red -k vigia_conta_registrado` |
+
+Os testes usam o campo POST `motivo_reabertura` nas duas entradas humanas, os verbos de trilha `nascimento_recusado` e `reabertura_recusada`, e os rótulos de estoque `vivos_de_desligado` e `vivos_de_desligado_humano`. O teste do histórico aceita `LogAuditoria` ou `HistoricoVinculo` com data, motivo, autor, instante e identificação do informativo. [POST](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/tests/test_desligado_porta_do_chamado.py:238) [Trilha](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/tests/test_desligado_porta_do_chamado.py:109) [Histórico](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/tests/test_desligado_porta_do_chamado.py:312) [Estoque](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/chamados/tests/test_desligado_porta_do_chamado.py:436) [nao verificado]
+
+A suíte existente ainda tem asserções que exigem o nascimento do S89 e a permanência da disputa respondida em aberto. [test_desligar_guards.py:73](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/colaboradores/tests/test_desligar_guards.py:73) [test_desligar_guards.py:93](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/colaboradores/tests/test_desligar_guards.py:93) [nao verificado]
 
 ## 27/11 17:10 · sessao 85d4f254d751 · RAMO2-HERANCA-VAO · censo · origem=Code
 
@@ -727,38 +764,4 @@ bash ../bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
 
 Medição dos 75 dias e 42 colaboradores, DIFF do TXT 11 de frota, reversão e apply L-092 [nao verificado].
 
-## 27/11 16:04 · sessao ab2be411f222 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-**B1 — Histórico HTMX.** O componente instala os listeners uma vez por documento e devolve o painel ao `details` antes do snapshot. O RED `core/tests/test_smoke_clique_feriado_vira_trabalho.py::test_historico_htmx_do_feriado_e_de_inverter_retratar` exercita Feriado e Inverter/Retratar, conta as inscrições após a segunda execução do script e verifica os snapshots e o DOM ao Voltar e Avançar. [popover-acao.js:28](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:28) [popover-acao.js:177](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:177) [teste:546](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:546)
-
-**Prova antes da cura.** Li o blob de `c44771b4a` com `git show` e executei o JS duas vezes no Duktape, com DOM simulado. O base registrou **2 inscrições por evento e 1 órfão** no ponto do snapshot. A cura registrou **1 inscrição por evento e 0 órfãos**. Retirar a guarda voltou a duplicar as inscrições. Retirar o fechamento voltou a deixar o órfão. A reprodução em Chromium fica [nao verificado]. [popover-acao.js:160](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:160) [mutantes:77](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:77)
-
-**B2 — Ficha real a 1366 px.** `core/tests/test_smoke_clique_feriado_vira_trabalho.py::test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas` agora abre a rota da ficha, exige `colaboradores/detalhe.html` e espera o swap HTMX. A sonda verifica a coluna de 420 px e o `overflow:hidden` antes de medir viewport, recorte, ancoragem e submit. O MORDE `core/tests/test_smoke_clique_feriado_vira_trabalho.py::test_MORDE_painel_recortado_na_ficha_real` injeta recorte e exige que a sonda o acuse mesmo com o painel dentro da viewport. A leitura do hash-base confirmou a lacuna do cenário sintético. A mordida e a geometria da ficha real ficam [nao verificado], portanto a cura geométrica condicional segue em aberto. [ficha:87](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:87) [ficha:215](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:215) [sonda:235](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:235) [MORDE:549](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:549) [rota:676](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:676)
-
-A tentativa do RED por `manage.py` parou no import de `django.core`, antes de iniciar a suíte. O clique na tela de produção e a certificação pelo Code e pelo opus ficam [nao verificado]. `360 px` e `base_app` ficam na lista do pouso conforme o aval fornecido. [manage.py:11](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/manage.py:11) [cenários:641](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:641) [nao verificado]
-
-**Inclusões e diff.** `base.html` e `base_app.html` são as duas inclusões diretas. Os consumidores são Feriado, Inverter/Retratar e Resolver dia. O diff tem **0 `except` e 0 `catch` adicionados ou removidos**. [base.html:440](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/base.html:440) [base_app.html:194](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/base_app.html:194) [grade:96](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:96) [grade:133](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:133) [grade:138](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:138)
-
-**Comandos dos mutantes para o Code**, a partir de `app/`, no ambiente de teste. Cada invocação abaixo deve falhar. [mutantes:72](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:72) [seleção:543](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:543) [nao verificado]
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1
-smoke=core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest
-b1="$smoke.test_historico_htmx_do_feriado_e_de_inverter_retratar"
-b2="$smoke.test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas"
-
-SMOKE_FERIADO_MUTANTE=historico-sem-guarda python3 manage.py test --settings=config.settings.ci "$b1"
-SMOKE_FERIADO_MUTANTE=historico-sem-fechar-painel python3 manage.py test --settings=config.settings.ci "$b1"
-SMOKE_FERIADO_MUTANTE=pagina-sem-ficha python3 manage.py test --settings=config.settings.ci "$b2"
-SMOKE_FERIADO_MUTANTE=painel-recortado python3 manage.py test --settings=config.settings.ci "$b2"
-```
-
-**Recorte `--only` para o Code.** [suite.sh:26](/home/ronald/wt-codex-feriado-botao-cortado-112417/bin/suite.sh:26) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 ../bin/suite.sh \
-  --dir /home/ronald/wt-codex-feriado-botao-cortado-112417 \
-  --only "core.tests.test_smoke_clique_feriado_vira_trabalho core.tests.test_selo_popover_acao core.tests.test_smoke_retratar_1366"
-```
-
-_8742 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8743 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

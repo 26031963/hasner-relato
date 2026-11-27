@@ -6,10 +6,28 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 17:14:00.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (228.9 MB). Acoes na janela: **1993**.
+**Medido em 27/11/2026 17:20:48.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (230.3 MB). Acoes na janela: **2009**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:20:06 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 17:19:43 | Bash | Lança o construtor c1 do DESLIGADO e registra a puxada | `cd ~/saas-hasner; chmod +x logs/DESLIGADO-PORTA-DO-CHAMADO/c1/lanca.sh; setsid logs/DESLIGADO-PORTA-DO-CHAMADO/c1/lanca.sh >/dev/null 2>&1 </dev/null & sleep 20; tail -3 logs/DESLIGADO-PORTA-DO-CHAMADO/c1/wrapper.out; H=$(date +%H:%M); echo "- $H PUXADA DESLIGADO-PORTA-DO-CHAMADO c1 -> vaga Codex (construtor fora de models; parte de chamados/models.py espera a vaga opus depois da RAMO2-B c2x)" >>  ...` |
+| 17:19:38 | Bash | Procura pastas de root deixadas pela suíte na cópia | `W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; find $W -maxdepth 3 -type d -empty -user root 2>/dev/null; find $W -maxdepth 3 -user root 2>/dev/null \| head` |
+| 17:19:34 | Bash | Escreve brief e pergunta do construtor c1 do DESLIGADO | `cd ~/saas-hasner; D=logs/DESLIGADO-PORTA-DO-CHAMADO; W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; mkdir -p $D/c1; { sed -n '1,2p' $D/brief_reds1.md \| sed 's/volta reds1 (so testes RED; nenhum arquivo de producao)/volta c1 (cura fora de models: desligamento, acoes, views, vigia)/'; sed -n '/^## CENSO/,$p' $D/brief_reds1.md; } > $D/brief_c1.md; head -2 $D/brief_c1.md; python3 bin/disj ...` |
+| 17:19:12 | Bash | Lê o lançador e o brief dos REDs | `cd ~/saas-hasner; D=logs/DESLIGADO-PORTA-DO-CHAMADO; cat $D/reds1/lanca.sh; sed -n 1,80p $D/brief_reds1.md \| cut -c1-300` |
+| 17:19:07 | Bash | Registra a colheita do RED no RELATO | `cd ~/saas-hasner; H=$(date +%H:%M); printf -- "- %s colhido DESLIGADO-PORTA-DO-CHAMADO reds1/vm/red.rc (17:18 rc 1): RED confirmado, Ran 15 FAILED (failures=30) 0 ERROR, todas AssertionError; commit 89d7d1dea na wt-170518; pendente da cura: test_desligar_guards.py:73/:93\n- %s colhido DESLIGADO-PORTA-DO-CHAMADO reds1/r.rc (17:16 rc 0): 15 REDs em chamados/tests/test_desligado_porta_do_chamado.py,  ...` |
+| 17:18:58 | Bash | Commita o RED do DESLIGADO na cópia | `cd /home/ronald/wt-codex-desligado-porta-do-chamado-170518; /bin/grep -c '^ERROR:' ~/saas-hasner/logs/DESLIGADO-PORTA-DO-CHAMADO/reds1/vm/red.log; git add app/chamados/tests/test_desligado_porta_do_chamado.py; git commit -q -F - <<'EOF' DESLIGADO-PORTA-DO-CHAMADO reds1: 15 REDs das portas de nascimento, reabertura, S89 e vigia OBRA: DESLIGADO-PORTA-DO-CHAMADO Aval DESLIGADO-PORTA-DO-CHAMADO-2711-1 ...` |
+| 17:18:46 | Bash | Lê o veredito do RED | `cd ~/saas-hasner; L=logs/DESLIGADO-PORTA-DO-CHAMADO/reds1/vm/red.log; head -3 $L; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep -E '^Ran ' $L \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' $L \| sort \| uniq -c \| head -40; /bin/grep -E '^[A-Za-z]*Error' $L \| sort \| uniq -c \| head` |
+| 17:18:42 | Bash | Lê o que acordou a espera | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bwr5g0y9c.output; date +%H:%M` |
+| 17:16:52 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 17:16:47 | Bash | Lê a memória sobre relógio solto em teste | `cd ~/saas-hasner; cat ~/.claude/projects/-home-ronald-saas-hasner/memory/teste-novo-sem-relogio-solto.md \| head -20` |
+| 17:16:43 | Bash | Lê o cabeçalho e os usos de timezone.now | `W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; F=$W/app/chamados/tests/test_desligado_porta_do_chamado.py; sed -n 1,60p $F; sed -n 176,186p $F; sed -n 305,320p $F` |
+| 17:16:39 | Bash | Confere proibições e estrutura do módulo de RED | `W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; F=$W/app/chamados/tests/test_desligado_porta_do_chamado.py; wc -l $F; /bin/grep -n 'except\\|timezone.now\\|datetime.now\\|11222333\\|MagicMock\\|def test_\\|class ' $F \| head -50` |
+| 17:16:35 | Bash | Roda o RED do DESLIGADO na VM contra a cópia | `cd ~/saas-hasner; W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; find $W -name __pycache__ -type d -prune -exec rm -rf {} + ; V=logs/DESLIGADO-PORTA-DO-CHAMADO/reds1/vm; mkdir -p $V; cat > $V/lanca.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner bash bin/suite.sh --dir $W --only chamados.tests.test_desligado_porta_do_chamado --parallel 1 -- --timing > $V/red.log 2>&1 < /dev/null echo  ...` |
+| 17:16:28 | Bash | Lê a forma do recorte no suite.sh | `cd ~/saas-hasner; head -5 logs/RAZAO-DA-SOBRA/reds1/vm/red.log; /bin/grep -n 'only\\|^ *--' bin/suite.sh \| head -40` |
+| 17:16:24 | Bash | Vê como um RED anterior foi rodado na VM | `cd ~/saas-hasner; ls logs/RAZAO-DA-SOBRA/reds1/vm/; cat logs/RAZAO-DA-SOBRA/reds1/vm/*.sh 2>/dev/null \| head -20` |
+| 17:16:19 | Bash | Lê a entrega dos REDs e o estado da cópia | `cd ~/saas-hasner; W=/home/ronald/wt-codex-desligado-porta-do-chamado-170518; cut -c1-500 logs/DESLIGADO-PORTA-DO-CHAMADO/reds1/r.md \| head -60; git -C $W status --porcelain` |
+| 17:16:14 | Bash | Lê o que acordou a espera | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b3nala2cp.output; date +%H:%M` |
 | 17:11:10 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 17:11:06 | Bash | Escreve o brief da HERANCA e colhe o dossiê no RELATO | `cd ~/saas-hasner; B=logs/RAMO2-HERANCA-VAO/brief_c1.md; cat > $B <<'EOF' # Brief RAMO2-HERANCA-VAO c1 (opus construtor, motor; DEPOIS do CCM e da RAMO2-B c2x -- arquivo comum motor_calculo_v2.py) Dossie: logs/RAMO2-HERANCA-VAO/dossie/r.md (17:10 rc 0), matriz A-H na sec.5, universo do DIFF na sec.8. Aval logs/AVAIS-1515/RAMO2-HERANCA-VAO-2711-1610.txt. ## CENSO escritores: - app/ponto/motor_calcul ...` |
 | 17:10:51 | Bash | Lê o dossiê da RAMO2-HERANCA-VAO | `cd ~/saas-hasner; wc -l logs/RAMO2-HERANCA-VAO/dossie/r.md; cat logs/RAMO2-HERANCA-VAO/dossie/r.md \| cut -c1-600` |
@@ -2001,5 +2019,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:28:24 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b3upy8gph.output` |
 | 05:23:18 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 05:23:15 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b8hdp461d.output` |
-| 05:18:10 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 05:18:06 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b7nozqko9.output` |
