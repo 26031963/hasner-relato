@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 12:25** · publicado em **27/11/2026 12:27** (UTC-3)
+> Ultima resposta processada: **27/11/2026 12:33** · publicado em **27/11/2026 12:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 12:33 · sessao f4c8c5fec76b · FERIADO-UM-JUIZ · construtor · origem=Code
+
+A cura do **FERIADO-UM-JUIZ c1** está na cópia. O HEAD segue em `59600163ccc9cffb8f3ae148beede7cd7866ae86`. A proibição explícita de `git commit` prevaleceu sobre o item (iv). [Diff completo](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz.patch:1) · [Log:411](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:411)
+
+### Cura
+
+| Arquivo e funções | Mudança |
+|---|---|
+| `fechamento.py::apurar_por_fatia`, `_particionar_ft`, `recalcular_fechamento_mes` | Cada período usa o motor do próprio vínculo e o dia de início da jornada. A partição soma a HE100 de feriado uma vez, com o subconjunto noturno, e alimenta as duas lavras. [fechamento.py:312](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/services/fechamento.py:312) · [fechamento.py:349](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/services/fechamento.py:349) · [fechamento.py:988](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/services/fechamento.py:988) |
+| `regras.py::_ContextoFeriado.__init__`, `dobra_de_feriado_do_dia`, `intermitente_do_tipo`, `rubrica_da_folga`, `do_dia` | A regra compartilhada exclui o intermitente e usa a escala certa para escolher a rubrica. A ampliação preserva o 12x36 e o tratamento BO-B(3) da escala certa. [regras.py:297](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/regras.py:297) · [regras.py:366](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/regras.py:366) · [regras.py:690](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/regras.py:690) |
+| `alimentacao.py::_rubricas_da_particao_ft`, `rubricas_por_dia` | O oráculo projeta a partição do fechamento por dia e conserva a parcela dos períodos normais em dias com FT. [alimentacao.py:353](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/alimentacao.py:353) · [alimentacao.py:557](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/alimentacao.py:557) |
+
+### REDs e mutantes
+
+Na base, o 6x1 sem escala certa entregou **0 h de HE100 feriado** em vez de 4 h. O noturno entregou **0 h** em vez de 3 h. O intermitente recebeu **4 h de HE100 feriado** em vez de zero. Na cura, **16 testes em memória passaram**. O diff tem **0 cláusulas `except` adicionadas e 0 removidas**. [Log:19](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:19) · [Log:27](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:27) · [Log:37](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:37) · [Log:66](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:66) · [Log:410](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:410) [nao verificado]
+
+Os **12 mutantes** falharam por asserção. Cada link abre o comando completo e o resultado correspondente. [Arquivo de mutantes](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_mutantes.py:29)
+
+| O que o teste pega | Comandos e resultados | [nao verificado]
+|---|---|
+| Escala certa volta a impedir a dobra do 6x1 | [`exige_escala_certa`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:72) |
+| Intermitente ganha HE100 feriado | [`intermitente_em_ft`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:99) · [`intermitente_no_oraculo`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:130) |
+| Calendário nacional ou motor da última fatia toma o lugar do contexto do período | [`calendario_nacional`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:157) · [`aplica_motor_da_ultima_fatia`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:184) · [`perde_contexto_da_primeira_fatia`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:220) |
+| Segundo par da véspera dobra pela data civil | [`aplica_dia_civil`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:246) |
+| FT do 12x36 ganha HE100 feriado | [`promove_12x36`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:277) · [`promove_12x36_no_oraculo_avulso`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:308) |
+| A promoção perde o noturno ou o oráculo perde uma parcela do pagamento | [`perde_noturno`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:333) · [`oraculo_copia_so_folga`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:358) · [`oraculo_perde_periodo_normal`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:383) |
+
+### Fora desta volta
+
+Os testes de persistência para LIMBO, A2, A8, noturno partido e véspera ficaram para o Code. Eles comparam o mensal com a soma das duas lavras e conferem o evento de folha e os leitores do dia. O teste legado manteve o controle 12x36 e ganhou o 6x1 com o aval citado. A execução desses testes com banco e a certificação Code/Opus ficam **[nao verificado]**. [Teste da porta:58](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/test_feriado_um_juiz_porta.py:58) · [Teste legado:227](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/test_he100_dia_sem_previsto.py:227) [nao verificado]
+
+O anexo registra **75 dias de 42 colaboradores** como hora comum e projeta **67 dias de 35 colaboradores**, somando **449,74 h**, para HE100 feriado. O apply da 11, a reversão, o antes × depois por colaborador e o diff do TXT ficam **[nao verificado]**. `antes_m1.md:3`
+
+## 27/11 12:32 · sessao 19ca023221ab · FERIADO-BOTAO-CORTADO · construtor · origem=Code
+
+**FERIADO-BOTAO-CORTADO c4.** A correção está na cópia. `posiciona()` mede o painel em `left/top = 0` e após um deslocamento de 64 px. Com essas leituras, converte a posição desejada na viewport para a origem e a escala reais do `fixed`, tanto sob o `backdrop-filter` da página quanto sob o `transform` do drawer. [Popover](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:81) · [`.hx-shell`](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/css/hasner-ponto.css:275) · [Drawer](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:3)
+
+O encaixe usa a interseção da viewport, com 8 px de margem, com a área útil dos ancestrais que recortam o painel. Se faltar altura, o painel fica no lado com mais espaço e rola por dentro. O formulário permanece no `details`. A mudança de produto está no JS compartilhado. [Área visível](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:48) · [Encaixe](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:109) · [Rolagem](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:169)
+
+### Diff e smoke
+
+- `red_painel_popover_feriado.py` foi removido após a incorporação das asserções ao smoke coletado. Ele mede margem, recorte por hit-test e distância de até 16 px sem sobreposição nos quatro cenários do feriado. O quinto cenário abre **Inverter tipo/Retratar** no drawer de `base_app.html`, limitado a 260 px no ensaio, e verifica também que a rolagem interna mantém o painel aberto. [Asserções](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:143) · [Cenários](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:302)
+- O selo existente ficou como está. Ele exige posicionamento por medida e testa a geometria na última coluna em duas larguras. [Selo](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_selo_popover_acao.py:104) · [Geometria](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_selo_popover_acao.py:166)
+
+```bash
+git --no-optional-locks diff a2414b6605ff01965417728ccb271aa82a294f04 -- \
+  static/js/popover-acao.js \
+  core/tests/test_smoke_clique_feriado_vira_trabalho.py \
+  core/tests/red_painel_popover_feriado.py
+```
+
+### Comandos para a sessão de Chromium
+
+Na pista isolada, com `STATIC_ROOT` atualizado. Os mutantes de JS alteram somente a cópia do script carregada pela página temporária. [Carregamento de estáticos](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_chromium.py:80) · [Injeção](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:260)
+
+```bash
+smoke() {
+  PYTHONDONTWRITEBYTECODE=1 python manage.py test \
+    core.tests.test_smoke_clique_feriado_vira_trabalho "$@" \
+    --settings=config.settings.ci --noinput
+}
+
+SMOKE_FERIADO_MUTANTE= smoke core.tests.test_selo_popover_acao
+SMOKE_FERIADO_MUTANTE=gatilho-cortado smoke
+SMOKE_FERIADO_MUTANTE=summary-display-none smoke
+SMOKE_FERIADO_MUTANTE=porta-trocada smoke
+SMOKE_FERIADO_MUTANTE=painel-recortado smoke
+SMOKE_FERIADO_MUTANTE=painel-distante smoke
+SMOKE_FERIADO_MUTANTE=painel-sem-compensacao smoke
+SMOKE_FERIADO_MUTANTE=painel-sem-limite-drawer smoke
+```
+
+| Mutante | Asserção esperada no RED |
+|---|---|
+| `gatilho-cortado`, `summary-display-none` | `gatilhoVisivel`. [Sonda](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:115) |
+| `porta-trocada` | `action`. [Troca da porta](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:291) |
+| `painel-recortado` | `painelSemRecorte`. [Hit-test](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:148) |
+| `painel-distante`, `painel-sem-compensacao` | `painelEncostado`. [Posição sem compensação](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:46) · [Distância](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:143) |
+| `painel-sem-limite-drawer` | `painelSemRecorte` e `painelRolavel` no cenário da marcação. [Mutante](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:53) · [Sonda](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:174) |
+
+Validei a sintaxe Python e JS e executei isoladamente as quatro verificações estruturais do selo. Em DOM simulado, o mutante de compensação perdeu a ancoragem na página e no drawer, e o mutante do limite voltou a recortar o painel no drawer curto. [Selo estrutural](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_selo_popover_acao.py:74) · [Compensação](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:95) [nao verificado]
+
+**[nao verificado]** Smoke e mutantes no Chromium, casos geométricos do selo, `bin/node_check.sh`, suite do Code, revisão final do Opus e smoke de tela do Ronald.
 
 ## 27/11 12:25 · sessao 85323386be77 · E4C-F5-INSTANTE · verificador · origem=Code
 
@@ -1130,78 +1214,4 @@ O grep também localiza **FERIADO-DIA-CHAVE**, registrado para a atribuição do
 
 O aval relata para **1036 em 20/11** feriado do colaborador, célula `False`, batidas, **7,29 h trabalhadas, 1,16 h noturnas e 0,0 h de HE100**. O ciclo, a régua aplicável, a chave `trabalha_em_feriado` do vínculo e o resultado do crivo de escala certa para esse dia estão **[nao verificado]**. Esses insumos são necessários para atribuir o zero ao ramo exato. `aval.txt:1` `app/ponto/motor_calculo_v2.py:961` `app/ponto/services/fechamento.py:953` `app/ponto/services/fechamento.py:973`
 
-## 27/11 11:37 · sessao 318029dd4fa3 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-**FERIADO-BOTAO-CORTADO** — O botão fica logo abaixo da data sempre que a célula o oferece. No mês, a altura continua em 132 px e o conteúdo abaixo do botão rola com mouse, toque ou teclado. Na fita, a ação vem antes dos horários e o rótulo quebra linha. Esse arranjo usa a mesma ordem nos dois layouts e mantém disponíveis as marcações originais, inclusive as retratadas. [Grade](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:68) · [Ação e rolagem](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:95) · [Marcações](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:133)
-
-### Diff e RED
-
-- A grade move o include acima das marcações, reserva espaço para a ação no mês e torna o restante da célula rolável. A condição do include continua `pode_editar_dia and dia.feriado_vira_trabalho_oferecido`. [Grade](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:95)
-- O partial limita a largura do controle à célula e permite a quebra do rótulo. [Controle do feriado](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/ponto/partials/_feriado_vira_trabalho.html:5)
-- O teste renderiza o include real com uma fixture fixa no formato do contexto do calendário. Em `mes` e `fita`, confere o formulário na célula de 20/11, as quatro marcações e a ação em um bloco irmão anterior às marcações. Também confere o botão em 15/11 sem batidas e sua ausência no dia comum. Na fonte pré-cura, a ação vinha depois dos horários, invertendo a ordem exigida pelo `assertLess`. Execução RED [nao verificado]. [Fixture](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/colaboradores/tests/test_feriado_botao_cortado.py:32) · [Asserção RED](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/colaboradores/tests/test_feriado_botao_cortado.py:92) · [Controles](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/colaboradores/tests/test_feriado_botao_cortado.py:109) [nao verificado]
-
-### Execução e mutantes
-
-O vizinho `test_relogio_riscado_tamanho` rodou **8 testes, todos passaram**, com `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v core.tests.test_relogio_riscado_tamanho`. RED, cura, M1–M3 e a rodada dos vizinhos com [nome] pararam na importação de `django.core`. O resultado dessas asserções permanece [nao verificado]. [Vizinho](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_relogio_riscado_tamanho.py:61) · [Entrada da suíte](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/manage.py:11) [nao verificado]
-
-Comandos da suíte Code, a partir de `app/`. Cada mutante restaura o template ao sair. M1 retira o layout em coluna, M2 corta a rolagem e M3 volta a impedir a quebra do rótulo. [Asserções correspondentes](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/colaboradores/tests/test_feriado_botao_cortado.py:95) [nao verificado]
-
-```bash
-teste() { [nao verificado]
-  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
-    colaboradores.tests.test_feriado_botao_cortado
-}
-mutar() (
-  alvo=$1
-  original=$(<"$alvo")
-  trap 'printf "%s\n" "$original" > "$alvo"' EXIT
-  alterado=$(sed "$2" <<<"$original")
-  [[ "$alterado" != "$original" ]] || exit 2
-  printf '%s\n' "$alterado" > "$alvo"
-  teste [nao verificado]
-)
-
-grade=templates/colaboradores/partials/_calendario_grade.html
-acao=templates/ponto/partials/_feriado_vira_trabalho.html
-
-teste [nao verificado]
-mutar "$grade" 's/display:flex;flex-direction:column;{% endif %}/display:block;{% endif %}/'
-mutar "$grade" 's/min-height:0;overflow-y:auto;/min-height:0;overflow-y:hidden;/'
-mutar "$acao" 's/white-space:normal;overflow-wrap:anywhere;/white-space:nowrap;/'
-
-mapfile -t vizinhos < <(rg -l '_calendario_grade' -g 'test_*.py' */tests |
-  sort | sed 's|/|.|g; s|\.py$||')
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test --settings=config.settings.ci \
-  "${vizinhos[@]}" core.tests.test_smoke_retratar_1366 ponto.tests.test_kaua_feriado_pela_tela
-```
-
-### Smoke do Ronald
-
-1. No perfil do colaborador do anexo, abrir **Calendário de Ponto → Mês → novembro → 20/11**. Conferir o rótulo inteiro, abrir o formulário sem enviar e percorrer as quatro marcações dentro da célula. Em **15/11**, conferir o botão sem batidas. O identificador `colNN` é [nao verificado]. [Tela do perfil](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:204) · Anexo `FERIADO-BOTAO-CORTADO-2711-1120.txt:1`.
-2. No drawer de diagnóstico do mesmo colaborador, abrir **Escala x batidas**, deslizar até **20/11** e conferir o rótulo inteiro, a abertura do formulário e os quatro horários. Smoke em navegador [nao verificado]. [Fita do diagnóstico](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_drawer_diagnostico.html:33)
-
-## 27/11 11:31 · sessao 307a837071f5 · CASO-LITERAL-14 · sonda · origem=Code
-
-A sonda fecha **163 em 18/11 como (a)**. A resposta de volta às `05:07`, a batida `158099` às `05:06` e a pausa reconhecida pelo pareador identificam a marca que ficou sem casar na ata. `app/chamados/services/materializacao.py:595` · `app/ponto/turnos.py:502`
-
-| Dia | Classe | Prova na saída da sonda | Porta |
-|---|---|---|---|
-| **163 · 18/11** | **(a)** | `ERROR pergunta_id=59341 motivo=intervalo_volta resposta=05:07`, com `marcos_faltantes=E x ata=S`. `PAUSAS 1` liga `158092` às `04:07:13` a `158099` às `05:06:08`, e `TURNO 17/11` fecha em `158201`. `LUZ 140478 3` mostra `03:00` apagada e `PAPEL_X` lista `158099`. A volta declarada ficou sem casar na ata. `app/chamados/services/materializacao.py:595` · `app/ponto/turnos.py:502` | **obra que cura** |
-| **163 · 20/11** | **(d)** | `PAUSAS 1` liga `160127` a `160135`, `TURNO 19/11` fecha em `160202` e `LUZ 140480 3` está apagada. `PERG 60094` mostra o slot `03:00/E`, que pode vir do marco fixo. `PERG 60098` liga `160135` à pergunta e `ATO 6391` indica texto presente. Falta a declaração que confirme `160135` como volta da pausa [nao verificado]. `app/chamados/services/materializacao.py:702` · `app/ponto/turnos.py:1316` | não sei |
-| **334 · 10/11** | **(d)** | `LUZ 132554 2` atribui `02:02` ao fechamento previsto às `08:00`, mas `TURNO 09/11` fecha em `150563` e outro abre em `150585`, com `saida=None`. `PERG 55996` está sem resposta e tem `via_celula_absolveu=1`. Falta confirmar qual marca fechou o plantão ou localizar uma saída posterior a `150585` [nao verificado]. `app/ponto/juiz_batida.py:263` · `app/chamados/models.py:2847` | não sei |
-| **334 · 16/11** | **(d)** | `TURNO 15/11` fecha `155980 → 156062`, mas `LUZ 132560 2` mostra o fechamento apagado. `TRILHA 1012709`, `1012700` e `1012703` registram retratação humana de `156083`, `157001` e `157080`. Falta confirmar o papel de `156062` e esclarecer se houve trabalho na sequência iniciada por `157001` e como terminou [nao verificado]. `app/ponto/juiz_batida.py:263` · `app/ponto/services/retratar_humano.py:89` | não sei |
-| **334 · 17/11** | **(d)** | `BAT 157080` tem `retratada_em=27/11 11:08:35`. `TURNO 17/11` deixa `157102` e `157339` em registros separados, ambos com `entrada=None`. `PERG 58935` tem `via_celula_absolveu=1`. Falta atribuir as saídas ao trabalho efetivamente realizado [nao verificado]. `app/ponto/turnos.py:312` · `app/chamados/models.py:2847` | não sei |
-| **446 · 01/11** | **(d)** | `TURNO 01/11` abre em `143320`, contém `143451` e `143543` e tem `saida=None`. `LUZ 136277 4` mostra `23:00` apagada. Falta a saída verdadeira após `143543` [nao verificado]. `app/ponto/turnos.py:321` · `app/ponto/juiz_batida.py:263` | não sei |
-| **219 · 14/11** | **(d)** | `BAT 159534` tem `pergunta_origem_id=57759`, e `ATO 6118` confirma a validação. `TURNO 13/11` fecha em `154644` e `TURNO 14/11` separa `154790 → 154793`. `PERG 57827/57828` têm `via_celula_absolveu=1`. Falta comprovar se o par de `07:03–07:04` foi trabalho ou toque excedente [nao verificado]. `app/chamados/models.py:2847` · `app/chamados/juizes.py:771` | não sei |
-| **446 · 25/10** | **(d)** | `TURNO 25/10` deixa `136793` aberto e usa `136990` como entrada do período que fecha em `144667`. `BAT 144666/144667` apontam para `PERG 52823/52825`, com slots `18:00/S` e `23:00/S`. Falta confirmar se `136793 → 136990` foi trabalho e a qual jornada pertencem as duas saídas plantadas [nao verificado]. `app/ponto/turnos.py:312` · `app/chamados/juizes.py:771` | não sei |
-| **446 · 27/10** | **(d)** | `TURNO 27/10` deixa `138687` aberto e fecha `138784 → 145038`, com `144664` no meio. `BAT 144664/145038` apontam para `PERG 52820/53401`; `PERG 52821` tem slot `19:00/E` e `validada_em=None`. Falta a declaração do `CHAMADO 36462` que identifique o trabalho e as saídas de cada sequência [nao verificado]. `app/chamados/juizes.py:360` · `app/chamados/juizes.py:771` | não sei |
-| **465 · 12/11** | **(d)** | `TURNO 12/11` separa `152760 → 152798` de `152988 → 153457`, com pausa `152993 → 153079`. `LUZ 130759 1–4` acende às `07:33`, `12:31`, `13:34` e `19:32`. Falta confirmar o trabalho antes de `152798` e o papel de `152988` frente à pausa [nao verificado]. `app/ponto/juiz_batida.py:230` · `app/ponto/turnos.py:502` | não sei |
-| **707 · 27/10** | **(d)** | `DNA 130929` mostra bordas anteriores `11:00–23:00` e atuais `07:00–19:00`. `CEL 130929` registra `regenerada_em=27/11 10:11:06`. O marco anterior de `16:00` coincide com `BAT 152915`, retratada na `TRILHA 1012218`. O turno atual fecha `152914 → 151794` e inclui `152916`, cujo flip consta na `TRILHA 1012246`. A troca de régua está provada. Falta o lastro que atribua as marcas concorrentes ao trabalho ou à escala anterior [nao verificado]. `app/ponto/portas/celula.py:297` · `app/ponto/services/flip_batida.py:89` | não sei |
-| **1010 · 04/11** | **(d)** | `TRILHA 932956` confirma a retratação humana de `146307`, com `motivo_retratacao.id=1` e observação presente. `CEL 143296` tem `trabalha=0`. O `TURNO` vigente deixa `146083` aberto. `TURNO 146307` fecha `146083 → 146380` só na reapresentação. Faltam o conteúdo do motivo e a confirmação de trabalho iniciado em `146083` [nao verificado]. `app/ponto/services/retratar_humano.py:95` · `app/ponto/turnos.py:1920` | não sei |
-| **1010 · 05/11** | **(d)** | `TURNO` vigente atribui `146321 → 146380` a `05/11`, separado de `147009 → 147338`. `TURNO 146307` desloca as duas primeiras marcas para o plantão de `04/11` ao reapresentar a batida retratada. Falta confirmar se eram volta e saída da véspera ou um período próprio [nao verificado]. `app/ponto/turnos.py:285` · `app/ponto/turnos.py:1920` | não sei |
-| **1010 · 07/11** | **(d)** | `BAT 151808` tem `pergunta_origem_id=54816`. `PERG 54816` declara `data_evento=06/11` e slot `07/11 05:54/S`, com validação no `ATO 1137`. `CEL 143298` tem `trabalha=0` e o `TURNO 07/11` mostra `151808` com `entrada=None`. Falta provar o trabalho de `06/11` e se `151808` completou ou duplicou a saída [nao verificado]. `app/chamados/juizes.py:771` · `app/ponto/turnos.py:312` | não sei |
-| **989 · 25/10** | **(d) nesta volta** | A saída traz `DIA 2 446 2026-10-25`. Para **989**, os campos de `BAT 137193`, o modo de intervalo, a ata anterior e o consumo das marcas pelos dias vizinhos seguem [nao verificado]. A classe histórica (a) vem de `r.md`; o predicado exato segue sem prova nesta rodada. `app/escala/models.py:243` · `app/escala/utils.py:1686` | não sei |
-
-**Totais da tabela, 15 dias** — **(a) 1 · (b) 0 · (c) 0 · (d) 14**.
-
-_8656 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8658 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

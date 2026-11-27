@@ -1,4 +1,6 @@
 
+PAREI: censo-PAR-PELO-TURNO | espera Codex
+
 RESPONDIDA por FERIADO-BOTAO-CORTADO-PAINEL-2711-1220 (12:20; painel ancorado entra no pronto, cura na mesma obra) -- PERGUNTA DE DESENHO FERIADO-BOTAO-CORTADO (12:11): o botao do c1 (9a2ea74a2) APARECE e abre nos 4 cenarios (pagina/drawer x base.html/base_app.html), que e o pronto do aval; o PAINEL que ele abre sai fora do lugar -- pagina: sobrepoe o botao (0 px); drawer: 197,82 px longe e 20 px fora da tela. Causa (Codex l2, conferida em popover-acao.js:38,44,75 + hasner-ponto.css:283 backdrop-filter + _drawer_generico.html:16 translateX): position:fixed por coordenada da viewport sob ancestral que muda a referencia. E ANTERIOR ao c1 e alcanca os outros popovers do mesmo JS (Resolver dia, Inverter tipo/Retratar batida). Cura na origem = popover-acao.js (static/js, fora do aval 'so template e CSS'; FRONT SEM SMOKE pede o seu clique nas duas cascas); alternativa so-feriado em CSS anchor positioning (compat nos navegadores da casa nao verificada). Recomendo: pousar o c1 (botao) com o seu smoke no dia 20, e a cura do painel como obra propria em popover-acao.js. Ate a resposta, o c1 segue verificador sem o smoke de proximidade.
 
 
@@ -10971,6 +10973,12 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 **PERGUNTA DE LEI -- O DIA DA DEMISSAO E APURAVEL COMO FURO? A LEI ESCRITA NAO RESPONDE (10:0x).** Antes de abrir fatia nova fui atras do bug, que pela LEI-AKITA 6 vem primeiro. **NAO HA bug de universo no codigo de HOJE**, e duas leituras dizem isso: (a) `ponto/services/dia_pago.py:259-263` (O140) da linha a TODO dia de furo ainda que sem uma hora -- `_linha(d)` dentro de `for d in (_furos or ())` --, entao furo SEM linha nao existe no codigo de hoje; (b) o gravado da 09 tem **10.759 das 10.893 linhas com `furo_apurado` NULL**, que no idioma declarado na docstring de `lavrar` e `furos_do_motor=None`, *"nao perguntei"*: a 09 foi lavrada por chamador que ainda nao passava furo. E o CLAMP da borda (defeito 2 do `9632cdbd`) explica no maximo **1 dos 28**, porque 27 dos 28 dias TEM celula (`celula_trabalho_true=28`, `sem_celula=1`). Logo criar a linha que falta e **RELAVRAR a 09**, o PROIBIDO da L-092 -- nao e cura de universo, e por isso nao jumpa a fila como bug provado. O QUE SOBRA E PERGUNTA DE LEI, e eu nao a proponho (L-117): **19 dos 28 dias sao exatamente o dia da demissao, e a celula desse dia diz trabalho=True**. O seu corte de 19/10 `DESLIGADO-FORA-DA-JANELA-APOSENTA-A-LINHA` **nao responde**: ele e literal sobre `data_demissao` **ANTERIOR** a janela (*"sai do universo de derivacao"*), e aqui a demissao cai DENTRO da competencia. Se o dia da demissao e previsto, o furo e real e o dono e CADASTRO/BATIDA; se nao e, o motor chama furo **19 dias que nao existem** -- e ai o furo mente para todo desligado da frota, nao so na 09. A fila SEGUE (PAREI-DE-LEI-NAO-DEVOLVE-TURNO): a linha esta no BACKLOG (`MOTOR-CHAMA-FURO-DIA-QUE-A-LAVRATURA-DA-09-NAO-COBRE`) e **nada se aplica na 09**.
 
 ## ALARMES DA ESTEIRA
+
+**27/11 12:33:15 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:de6ab7a400 (40 car., na trilha privada)
+
+**27/11 12:32:50 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:de6ab7a400 (40 car., na trilha privada)
+
+**27/11 12:31:51 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:f34f350c5a (282 car., na trilha privada)
 
 **27/11 12:26:33 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:5eaca4bd57 (40 car., na trilha privada)
 
