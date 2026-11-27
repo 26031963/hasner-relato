@@ -1,7 +1,290 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 08:45** · publicado em **27/11/2026 08:50** (UTC-3)
+> Ultima resposta processada: **27/11/2026 08:54** · publicado em **27/11/2026 08:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 08:54 · sessao 0d97a1b1fe83 · CODEX-CONSTROI-MOTOR · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 27/11 08:53 · sessao e9a63f948616 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
+
+**REPROVADO — `1f9541e71`.** A c2t fecha a herança da cauda no Plantão e retira a cauda da soma direta do banco semanal. O recorte ainda produz duas respostas para o mesmo período, `_lim_dia` muda dinheiro em jornada sem cauda e a catraca de linhas falha. `app/ponto/motor_calculo_v2.py:3784`, `:3593`, `:3709–3724`, `:3650–3678`; `app/ponto/calculador/alimentacao.py:135–150`; `app/ponto/calculador/periodo.py:753–770`; `app/core/tests/test_medida_turno_do_par.py:309`, `:564–568`.
+
+1. **Plantão — curado no motor. O escopo ainda vaza para o Intermitente.** O Plantão continua chamando `Motor12x36.calcular_periodo`, com a flag desligada. No ensaio isolado, main e c2t deram os mesmos **1.440 min trabalhados, 540 min noturnos de relógio e 40 min fora da janela**. O Intermitente herda a flag ligada. Com marcos 19h–07h e saída às 07h30, o mesmo ensaio deu **720 trabalhados, 540 noturnos e 30 fora** no main, contra **750 trabalhados, 570 noturnos e zero fora** na c2t. O cadastro aceita os marcos e a fábrica seleciona a classe Intermitente. `app/ponto/motor_calculo_v2.py:795`, `:1917–1920`, `:3780–3807`, `:3841–3853`, `:3919–3922`; `app/escala/services/cadastro_tipo.py:205–227`; `app/ponto/tests/test_ramo2b_c2t_motor.py:14–36`; main `app/ponto/motor_calculo_v2.py:1863`. Incidência em produção [nao verificado].
+
+2. **Igualdade na borda da pausa — cura parcial.** Sem cauda no dia mapeado, os dois caminhos voltam ao `<` do main. Com cauda, há dois recortes. A alimentação respeita `intra_descontada > 0`. A releitura recorta pelos intervalos carimbados e reescreve o desconto. No ensaio com o motor real, marcos 19h–00h, batidas 18h40–00h20 e pausa 18h50–19h20, motor e alimentação deram **320 min trabalhados**. A releitura deu **300 min trabalhados e 20 min de pausa**. O carimbo do intervalo antecede o gatilho que decide se o motor o desconta. `app/ponto/motor_calculo_v2.py:2985–3015`; `app/ponto/calculador/alimentacao.py:78–89`, `:135–151`; `app/ponto/calculador/periodo.py:304–312`, `:603–625`, `:753–770`; main `app/ponto/calculador/alimentacao.py:134` e `app/ponto/calculador/periodo.py:306`.
+
+   O **dia** vem do juiz registrado `turnos_do_colab`. O motor projeta `Turno.data_turno` e publica `resultado.dia_da_jornada`, que ambos os leitores consultam. A duplicação introduzida é do predicado **“dia com cauda”** e do recorte da pausa. A alimentação ainda usa dois universos para esse predicado. Um portador aberto pode habilitar `<=` para outro par do dia, mas fica fora do `dias_com_cauda` entregue a `rubricas_por_dia`. O próprio motor já tem uma divergência de dia anterior à c2t, pela herança de até seis horas e pelo mapa que o Comercial reaplica. `app/docs/JUIZES.md:20–25`; `app/core/juizes.py:215–216`; `app/ponto/motor_calculo_v2.py:932–960`, `:1160–1162`, `:2613–2623`, `:2777–2786`, `:3585–3587`, `:3777`; `app/ponto/calculador/alimentacao.py:82–95`, `:120–124`, `:173–183`, `:474–479`, `:550–553`; `app/ponto/calculador/periodo.py:615–625`.
+
+3. **Banco semanal do Comercial — curada a inclusão direta da cauda.** `trab_semana` soma a base da HE. O teste novo fixa **2.430 min trabalhados, 2.400 min de base, HE zero e saldo de −4 h**. A paridade do saldo com o main continua quebrada pelo item 4. Também permanece a mistura preexistente de datas na mesma conta semanal. O trabalho usa o dia da jornada e a dedução de HE usa a data civil da entrada. O teste novo, com HE zero, não exercita essa dedução. `app/ponto/motor_calculo_v2.py:3585–3593`, `:3709–3724`; `app/ponto/tests/test_ramo2b_c2t_motor.py:39–54`; main `app/ponto/motor_calculo_v2.py:3557–3572`; `app/docs/LEIS.md:117`, `:178`.
+
+4. **`_lim_dia` — não curado.** O ramo ainda troca os **480 min** do main pelo previsto da jornada em qualquer cruzamento com os dois marcos, inclusive com saída no marco. Em ensaio isolado do mensal, com **610 min trabalhados**, previsto de **660** e saída às 07h no marco, a HE passou de **130 para zero** e o saldo de **−36,00 h para −33,83 h**. `_jornada_do_dia` consulta a fonte prevista na L-024. O aval localizado limita o efeito a turno que cruza **com saída depois do marco**. Aval para mudar o limite em jornada sem cauda [nao verificado]. A pontualidade também tem mudança fora desse recorte, com teste Comercial que sai no próprio marco e exige 5 ou 12 min de atraso. `app/ponto/motor_calculo_v2.py:1419–1434`, `:3650–3692`, `:3709–3724`, `:2257–2267`, `:2305–2308`, `:2329–2333`; main `app/ponto/motor_calculo_v2.py:3504–3526`; `app/docs/LEIS.md:75`; `app/docs/PROMPTS.md:3052`, `:3078`, `:3087`; `app/ponto/tests/test_ramo2b_c2l_red_motor.py:102–133`, `:145–156`.
+
+5. **Partido — o corte da cauda foi preservado, e o corpo do motor foi alterado.** A flag `False` conserva a saída efetiva no marco. Na comparação com o main, `MotorTurnoPartido` passou a gravar pela porta da tripla e a chamar leitores novos no total diário, na intrajornada, na dobra e no ganho noturno. Isso descumpre a leitura literal de **“motor do Partido intocado”**. O teste de 490 min cobre um cenário de paridade. `app/docs/PROMPTS.md:3087`; `app/ponto/motor_calculo_v2.py:1917–1920`, `:3103–3106`, `:3131–3143`, `:3193–3195`, `:3241–3244`, `:3348–3352`, `:3387–3390`; main `app/ponto/motor_calculo_v2.py:2999–3014`, `:3058–3061`, `:3107–3112`, `:3211–3219`, `:3250–3259`; `app/ponto/tests/test_ramo2b_c2l_red_motor.py:51–61`.
+
+6. **Esmeril dos quatro campos.** As conversões para horas são explícitas. A granularidade, a fonte do valor e o dia divergem nos pontos abaixo.
+
+   | Campo | Quem escreve e quem lê |
+   |---|---|
+   | `saida_da_base_da_he` | `_escrever_base_da_he` grava o **instante**. Em par fechado é a ponta da base, limitada ao par. No portador aberto é o marco do último par creditado com cauda. O split noturno da HE, a alimentação e a releitura consultam o marcador. `app/ponto/motor_calculo_v2.py:1093–1105`, `:1933–1939`, `:1942–1971`, `:2763–2786`; `app/ponto/calculador/alimentacao.py:82–83`, `:113–117`, `:173–183`; `app/ponto/calculador/periodo.py:625`, `:758–762`. |
+   | `minutos_base_da_he` | A mesma porta grava **minutos líquidos do par** ou **a soma dos pares creditados** no aberto. `_trabalhado_da_base_da_he` lê o valor para HE, banco, releitura e teto do export. O oráculo calcula outra medida, **por dia**, pelos segmentos recortados, e a entrega a `regras.do_dia` e à lavratura `oraculo`. O caso do portador aberto no item 2 mostra onde esses universos se separam. `app/ponto/motor_calculo_v2.py:286–290`, `:1942–1971`, `:2763–2786`, `:3593`, `:3618–3622`; `app/ponto/calculador/periodo.py:768`; `app/ponto/calculador/alimentacao.py:474–479`, `:550–553`; `app/ponto/calculador/regras.py:614–626`; `app/ponto/services/fechamento.py:1289–1320`; `app/folha/porta_export.py:342–365`. |
+   | `minutos_trabalhados` | Os motores escrevem **minutos líquidos** no par, o crédito do aberto acumula minutos no portador, o bloqueio zera e `reler` pode reescrever. O mensal e o `DiaPago` convertem por `/60`. A promoção de folga em feriado também lê o integral, e a janela é desativada em par marcado como folga. A lavratura usa o mapa com queda para a data civil, enquanto o teto do export exige a chave no mapa. `app/ponto/motor_calculo_v2.py:329–334`, `:1628–1636`, `:1682–1687`, `:2777`, `:3025`, `:3141`, `:3514`; `app/ponto/calculador/periodo.py:748–749`, `:763`; `app/ponto/services/fechamento.py:922–923`, `:958–990`, `:1224–1241`; `app/ponto/services/dia_pago.py:126–132`, `:173–179`, `:234–267`; `app/folha/porta_export.py:106–122`, `:347–354`. |
+   | `saldo_banco_horas` | O Comercial soma minutos semanais e publica **horas mensais**. O fechamento soma as fatias, grava o saldo e o passa à linha de ajuste sem data do `DiaPago`, também na versão oráculo. O retrato de exportada lê o saldo do fechamento. Cartão, PDF e conferência do export leem horas. A lista de eventos do TXT não emite saldo. `app/ponto/motor_calculo_v2.py:3709–3724`; `app/ponto/services/fechamento.py:118`, `:318–320`, `:1128`, `:1204`, `:1232`, `:1308`; `app/ponto/services/dia_pago.py:348–360`, `:504–520`, `:542`, `:550–563`; `app/relatorios/cartao_pela_celula.py:114`, `:191`; `app/relatorios/pdf_espelho.py:531`, `:815–818`; `app/folha/porta_export.py:507–518`; `app/folha/export.py:439–461`. |
+
+7. **Export — falha de leitura para resultado composto vazio.** `medir` acessa `.dia_da_jornada` antes de o helper poder devolver uma lista vazia. `ResultadoMes` nasce sem esse atributo e a composição só o publica quando existe mapa de fatia não vazio. Um resultado composto vazio recebido nesse ponto levanta `AttributeError`. Para período sem chave, o helper levanta `KeyError`, enquanto `DiaPago` usa a data civil. O teto testemunha HE **junto com** intra positiva. A pendência de HE tem outra leitura, pelo espelho. `app/folha/porta_export.py:347`, `:356–362`, `:525–534`, `:551`, `:590–594`; `app/ponto/motor_calculo_v2.py:302–326`; `app/ponto/services/fechamento.py:200–202`, `:331–336`; `app/ponto/services/espelho.py:1263–1265`, `:1330–1331`; `app/ponto/services/dia_pago.py:126–132`. Ocorrência de ponta a ponta [nao verificado].
+
+8. **Catraca, RED e regressão de testes.** O censo AST real achou **`[3586, 3716, 3734, 3759, 3763, 3764]`** para o Comercial. A catraca exige **`[3586, 3717, 3735, 3760, 3764, 3765]`** e compara as listas exatamente. Os dois REDs novos passaram em memória e cada mutante caiu por uma asserção, com zero erros, usando adaptações mínimas para importar sem Django. O fixture fabrica 20 min de desconto num par de duas horas, fora dos gatilhos dos motores, e deixa escapar o caso do item 2. Executei também o censo da tripla. Ele encontrou apenas a porta declarada. Os limites documentados com `vars()` e `copy` seguido de `setattr` continuaram escapando nos ensaios. `app/core/tests/test_medida_turno_do_par.py:309`, `:564–568`; `app/ponto/tests/test_ramo2b_c2t_escopo.py:14–51`; `app/ponto/tests/ramo2b_c2t_mutantes.py:17–28`; `app/ponto/tests/test_ramo2b_c2_base_da_he.py:661–727`; `app/ponto/motor_calculo_v2.py:1954–1958`, `:2999–3015`, `:3492–3503`.
+
+   A comparação com a cópia do `59600163c` confirmou que **`test_saldo_semanal_comercial_usa_trabalhado` nasceu na obra**, em arquivo ausente no main. A c2t o substitui pelo teste de saldo sobre a base. Já no acumulado desde o main, há asserções preexistentes alteradas em janela de HE, noturno, extra declarada e B-I28. O delta c2t acrescenta guardas, aritmética e testes, sem novos `except` ou leituras do relógio nos trechos alterados. `app/ponto/tests/test_ramo2b_c2l_red_motor.py:96–97`; `app/ponto/tests/test_ramo2b_c2t_motor.py:39–54`; `app/ponto/tests/test_janela_he_saida.py:82–98`, `:112–118`, `:148–154`; `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:61–79`, `:98–109`; `app/ponto/tests/test_o146_extra_declarada_da_escala.py:539–544`; `app/ponto/tests/test_o280_bateria_da_lei.py:5133–5139`, `:5173–5181`; `app/ponto/calculador/alimentacao.py:78–83`, `:138–150`; `app/ponto/calculador/periodo.py:304–312`, `:623–625`, `:753–762`; `app/ponto/motor_calculo_v2.py:3588–3593`, `:3709–3724`, `:3780–3785`.
+
+Suíte Django completa, DIFF de frota, efeito nas competências exportadas e histórico Git de `eb2019f99` [nao verificado].
+
+## 27/11 08:52 · sessao 65f100357ca0 · - · - · origem=Ronald (tmux)
+
+**REPROVADO.**
+
+1. **Item 2. Cura parcial.** O `<=` ficou restrito aos dias com ao menos um período marcado. Os dois leitores usam `resultado.dia_da_jornada`, portanto consomem a data publicada pelo motor. A autoridade registrada é `turnos_do_colab`, com `parear_turnos` e `_data_do_turno` na geometria. A c2t duplica a pergunta «o dia tem cauda?» e a lógica de recorte. `alimentacao` ainda calcula dois conjuntos de dias com cauda, com critérios diferentes. Um portador aberto recebe legitimamente a tripla no motor, habilita o `<=` e pode ficar fora do conjunto que chega às rubricas. [app/core/juizes.py:215] [app/ponto/turnos.py:312] [app/ponto/motor_calculo_v2.py:949] [app/ponto/motor_calculo_v2.py:1160] [app/ponto/motor_calculo_v2.py:2777] [app/ponto/calculador/alimentacao.py:78] [app/ponto/calculador/alimentacao.py:90] [app/ponto/calculador/alimentacao.py:138] [app/ponto/calculador/alimentacao.py:173] [app/ponto/calculador/periodo.py:291] [app/ponto/calculador/periodo.py:625] [nao verificado]
+
+2. **Contraexemplo do recorte.** Ene­saiando em memória as funções reais com uma janela sintética, marcos 19:00–00:00, batidas 18:40–00:20, pausa 18:50–19:20 e piso zero, o 12x36 devolveu 320 trabalhados, base 300 e pausa descontada zero. A alimentação também deu 320. A releitura passou a 300 trabalhados e 20 de pausa. Ela usa a tripla para ativar o recorte sem consultar se o motor descontou a pausa. Ocorrência em produção [nao verificado]. [app/ponto/motor_calculo_v2.py:2985] [app/ponto/motor_calculo_v2.py:3000] [app/ponto/calculador/alimentacao.py:138] [app/ponto/calculador/periodo.py:307] [app/ponto/calculador/periodo.py:753] [nao verificado]
+
+3. **Catraca vermelha.** Executei o censo AST puro. As linhas reais B1 do Comercial são `[3586,3716,3734,3759,3763,3764]`. A catraca congelada exige `[3586,3717,3735,3760,3764,3765]` e compara por igualdade. Os dois controles sintéticos da c2t passam em memória e suas duas mutações falham por asserção, sem erro. Suite com Django [nao verificado]. [app/core/medida_turno_do_par.py:448] [app/core/tests/test_medida_turno_do_par.py:309] [app/core/tests/test_medida_turno_do_par.py:564] [app/ponto/tests/test_ramo2b_c2t_escopo.py:43] [app/ponto/tests/test_ramo2b_c2t_escopo.py:51] [app/ponto/tests/ramo2b_c2t_mutantes.py:21] [nao verificado]
+
+4. **Escopo adicional.** O `MotorIntermitente` herda a flag do 12x36 e a fábrica o seleciona explicitamente. O mesmo ensaio gerou 320 trabalhados, base 300 e cauda no Intermitente. O cadastro fornece marcos ao motor, inclusive por fallback no template. A pontualidade também muda sem saída além do marco. O teste da virada termina às 07:50, o próprio marco, e espera atraso de 5 ou 12 min. [app/ponto/motor_calculo_v2.py:795] [app/ponto/motor_calculo_v2.py:1917] [app/ponto/motor_calculo_v2.py:2265] [app/ponto/motor_calculo_v2.py:3841] [app/ponto/motor_calculo_v2.py:3921] [app/escala/models.py:1144] [app/ponto/tests/test_ramo2b_c2l_red_motor.py:102] [app/ponto/tests/test_ramo2b_c2l_red_motor.py:119] [app/docs/PROMPTS.md:3052] [nao verificado]
+
+5. **Export.** A nova testemunha usa acesso direto ao mapa e à chave do período. O dataclass permite resultado vazio sem o atributo e o resultado composto só materializa o mapa quando recebe um mapa não vazio. Assim o acesso pode levantar antes de a testemunha examinar a lista vazia, além de poder levantar `KeyError` para período sem chave. A lavratura e a outra testemunha ainda usam o fallback de `_dia_de`. Ocorrência em produção [nao verificado]. [app/folha/porta_export.py:106] [app/folha/porta_export.py:347] [app/folha/porta_export.py:590] [app/ponto/motor_calculo_v2.py:302] [app/ponto/services/fechamento.py:202] [app/ponto/services/fechamento.py:331] [app/ponto/services/espelho.py:1198] [app/ponto/services/dia_pago.py:126]
+
+## 27/11 08:52 · sessao 6a0fa390890d · - · - · origem=Ronald (tmux)
+
+1. **Escopo do item 2 parcialmente curado.** Os calculadores leem `resultado.dia_da_jornada` e não refazem a data civil, mas implementam separadamente o predicado que habilita o recorte. Num ensaio em memória com o mapa fornecido, o motor e a alimentação somaram 150 min em dois pares da mesma jornada. A releitura somou 130 min porque descontou do primeiro par uma pausa que o motor apenas carimbou. O teste positivo fabrica `intra_descontada=20` para um par de 120 min, abaixo dos gatilhos dos dois motores. Os dois mutantes c2t falharam por asserção e os dois testes originais passaram em memória. Integração Django e produção [nao verificado]. `app/core/juizes.py:215-224`, `app/ponto/motor_calculo_v2.py:932-960,2993-3000,3489-3501`, `app/ponto/calculador/alimentacao.py:78-88,135-150`, `app/ponto/calculador/periodo.py:603,615-625,753-770`, `app/ponto/tests/test_ramo2b_c2t_escopo.py:20-24,36-51`, `app/ponto/tests/ramo2b_c2t_mutantes.py:21-28`.
+
+2. **Intermitente fora do aval.** O `MotorIntermitente` recebe a política verdadeira por herança e o cadastro aceita marcos. Em memória, com janela 19–07 e saída às 07:30, ele devolveu saída efetiva 07:30, fora 0 e base às 07:00. O Plantão devolveu 07:00, fora 30 e base às 07:00. Ocorrência na frota [nao verificado]. `app/ponto/motor_calculo_v2.py:795,1917-1920,3780-3784,3841-3853,3919-3922`, `app/escala/services/cadastro_tipo.py:205-227`, `app/escala/models.py:326-345,347-368`, `app/ponto/tests/test_s6_intermitente_feriado.py:76-80`.
+
+3. **Base da HE.** A tripla tem uma porta de escrita, mas a saída tem duas interpretações. No par fechado é o fim efetivo da sua base, que pode inclusive ser a entrada. No portador aberto conserva o fim do último par que teve cauda, enquanto os minutos acumulam várias bases. Os leitores da guarda incluem o portador, mas o oráculo geométrico só publica `dias_com_cauda` depois de descartar abertos. O motor e a testemunha do export leem os minutos gravados. A lavra `oraculo` recompõe os minutos da base do dia pela geometria, através de `rubricas_por_dia`, e escreve pela mesma porta `lavrar`. Caso real com cauda no portador aberto [nao verificado]. `app/ponto/motor_calculo_v2.py:286-290,1922-1939,1942-1971,2763-2786`, `app/ponto/calculador/alimentacao.py:78-95,120-124,173-183,474-479,550-553`, `app/ponto/calculador/regras.py:614-626`, `app/ponto/calculador/periodo.py:625,653-659,758-768`, `app/ponto/services/fechamento.py:1289-1320`, `app/folha/porta_export.py:342-364`.
+
+4. **Trabalhado e banco.** O trabalhado é escrito em minutos pelos motores, no bloqueio e no crédito de aberto. A releitura também altera o objeto em memória. Os leitores persistidos convertem para horas, com a lavra do dia consumindo o mapa e usando data civil na falta da chave, como a testemunha correspondente do export. O saldo é mensal, em horas, gravado no Fechamento e copiado para ajuste sem dia no DiaPago. O TXT emite HE, intra e noturno do Fechamento. O saldo chega ao painel, cartão, PDF e comparação do export via soma de DiaPago. A soma semanal Comercial usa dia da jornada para o trabalhado e dia civil da entrada para o abatimento de HE, o que pode divergir na borda domingo–segunda. `app/ponto/motor_calculo_v2.py:329-334,1628-1636,2777,3025,3141,3514,3593,3709-3724`, `app/ponto/calculador/periodo.py:748-749,763`, `app/ponto/services/fechamento.py:318-320,922-923,978-990,1007-1009,1128,1204,1224-1241,1308`, `app/ponto/services/dia_pago.py:126-132,173-179,234-267,348-360,504-520,542,550-563`, `app/folha/porta_export.py:106-122,507-518`, `app/folha/export.py:439-461,739-747`, `app/relatorios/cartao_pela_celula.py:114,191`, `app/relatorios/pdf_espelho.py:531,815-818`, `app/templates/ponto/partials/painel_fechamento.html:37-38`.
+
+5. **Leitor do teto no export.** O consumidor acessa `resultado.dia_da_jornada` diretamente, inclusive quando o resultado composto tem zero períodos. O resultado nasce sem o mapa e a composição só o cria para mapa de fatia não vazio. Um colaborador com fechamento, escala e zero batidas que passe a classificação pode levantar `AttributeError` antes de o teto avaliar a lista vazia. O selo apresenta sempre mapa preenchido e intra positiva. Produção e antiguidade do defeito no main [nao verificado]. `app/folha/porta_export.py:525-532,590-594`, `app/ponto/services/fechamento.py:200-202,331-336`, `app/ponto/services/espelho.py:1198-1202,1265,1330-1331`, `app/ponto/motor_calculo_v2.py:303-325`, `app/folha/export.py:840-857,911-977,1214-1222`, `app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43-62`.
+
+## 27/11 08:51 · sessao fcc0da312b07 · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
+
+**DIFF de impacto L-110.** O escritor real é `ponto.services.dia_pago.lavrar`. `recalcular_fechamento_mes(..., somente_leitura=True, lavrar_dias_pagos=True)` devolve o `FechamentoMensal` em memória e chama `lavrar` com os períodos e mapas da mesma apuração, na versão `motor`. A partir de 10/2026, `rubricas_por_dia` monta o mapa que alimenta uma segunda chamada ao mesmo escritor, na versão `oraculo`. [app/docs/LEIS.md:136] [app/ponto/services/fechamento.py:1152-1168,1215-1265,1289-1325] [app/ponto/calculador/alimentacao.py:353-370]
+
+`lavrar` apaga e recria as linhas por colaborador, competência e versão. Grava as rubricas, os minutos de grade, o furo apurado, os detalhes e os carimbos de origem. A data segue o mapa do dia da jornada quando disponível. A linha de ajuste tem data nula e leva o reflexo de DSR e o saldo do banco. [app/ponto/services/dia_pago.py:34-47,126-141,335-361] [app/ponto/models.py:315-387]
+
+O `fm` usa os mesmos 26 campos do anexo, mais `empresa`. O `dp` usa as linhas datadas de `motor`, com as rubricas convertidas de horas para minutos e os três campos de grade na unidade original. Os hashes cobrem as duas tabelas inteiras no schema `juliani`, com ambas as versões e os ajustes. A sonda exige ajustes recém-lavrados para toda a frota e só grava o JSON depois de conferir os hashes e o estado da sequência após o rollback. [app/ponto/management/commands/aplicar_09_corte_b.py:67-74] [app/ponto/services/fechamento.py:1152-1160,1289-1320] [app/ponto/services/dia_pago.py:335-361] [app/ponto/models.py:325-351] [anexo espurias_txt11_s3.py:189-231]
+
+Para as duas árvores, use a mesma sombra já preparada, a trava da sombra e o mesmo `AGORA`. Execute no `tenant_command shell --schema=juliani` com o mount `/sombra`, que corresponde a `logs/sombra`. O atalho `bin/sombra.sh --rodar` consulta a lavra em produção e a importa antes de executar a sonda. [bin/sombra_trava.sh:4-7] [bin/sombra.sh:136-167,182-191,483-492] [app/ponto/services/fechamento.py:634-636,1134-1141]
+
+**Estimativa:** 4–8 minutos por competência em cada árvore, ou 8–16 minutos para o par, fora a espera pela trava. Conferi a sintaxe em memória. A execução no PostgreSQL, os hashes resultantes, o tempo real e a identificação da cópia como `1f9541e71` estão [nao verificado].
+
+### SCRIPT
+
+```python
+ROT = "main"
+MES = 11
+ANO = 2026
+AGORA = None  # Opcional: o mesmo ISO 8601 com offset nas duas arvores.
+
+import hashlib
+import json
+import logging
+import re
+import sys
+from contextlib import redirect_stderr, redirect_stdout
+from datetime import datetime
+from io import StringIO
+from pathlib import Path
+from time import monotonic
+from traceback import extract_tb
+from unittest.mock import patch
+
+from django.conf import settings
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Empresa
+from ponto import motor_calculo_v2
+from ponto.models import DiaPago, FechamentoMensal
+from ponto.services import dia_pago, fechamento
+
+EMPRESAS = (2, 3, 4)
+BANCO, SCHEMA = "sombra", "juliani"
+QUOTE = connection.ops.quote_name
+
+
+class FalhaSonda(RuntimeError):
+    pass
+
+
+def erro_sem_dados(tipo, erro, tb):
+    if tipo is FalhaSonda:
+        print(str(erro), file=sys.stderr)
+    else:
+        origem = extract_tb(tb)[-1]
+        print(f"{origem.filename}:{origem.lineno} {tipo.__name__}", file=sys.stderr)
+
+
+def tabela(modelo):
+    return f"{QUOTE(SCHEMA)}.{QUOTE(modelo._meta.db_table)}"
+
+
+def estado_das_linhas():
+    estado = {}
+    with connection.cursor() as cursor:
+        for modelo in (FechamentoMensal, DiaPago):
+            pk = QUOTE(modelo._meta.pk.column)
+            cursor.execute(f"""
+                SELECT count(*),
+                       md5(coalesce(string_agg(md5(to_jsonb(t)::text), ''
+                                                ORDER BY t.{pk}), ''))
+                FROM {tabela(modelo)} AS t
+            """)
+            n, md5 = cursor.fetchone()
+            estado[modelo.__name__] = {"n": n, "md5": md5}
+    return estado
+
+
+def estado_da_sequencia(cursor, sequencia):
+    cursor.execute(f"SELECT last_value, is_called FROM {sequencia}")
+    return cursor.fetchone()
+
+
+def ler_dp(primeiro_pk, fm):
+    campos = dia_pago.CAMPOS_DIA
+    grade = set(dia_pago.CAMPOS_GRADE)
+    versoes = ("motor", "oraculo") if (ANO, MES) >= (2026, 10) else ("motor",)
+    dp = {cid: {} for cid in fm}
+    ajustes = set()
+    linhas = DiaPago.objects.filter(
+        pk__gte=primeiro_pk, mes=MES, ano=ANO,
+        colaborador__empresa_id__in=EMPRESAS, versao__in=versoes,
+    ).order_by().values_list("colaborador_id", "data", "tipo", "versao", *campos)
+
+    for cid, data, tipo, versao, *valores in linhas.iterator(chunk_size=2000):
+        cid = str(cid)
+        if cid not in dp:
+            raise FalhaSonda(f"DiaPago fora do universo colab_id={cid}")
+        if tipo == DiaPago.TIPO_AJUSTE and data is None:
+            chave = (cid, versao)
+            if chave in ajustes:
+                raise FalhaSonda(f"Ajuste duplicado colab_id={cid} versao={versao}")
+            ajustes.add(chave)
+        elif tipo == DiaPago.TIPO_DIA and data is not None:
+            if versao == "motor":
+                dp[cid][data.isoformat()] = {
+                    campo: valor if campo in grade else valor * 60
+                    for campo, valor in zip(campos, valores, strict=True)
+                }
+        else:
+            raise FalhaSonda(f"Tipo/data de DiaPago inconsistente colab_id={cid}")
+
+    faltam = {(cid, versao) for cid in fm for versao in versoes} - ajustes
+    if faltam:
+        cid, versao = min(faltam)
+        raise FalhaSonda(f"Ajustes ausentes={len(faltam)} primeiro_colab_id={cid} versao={versao}")
+    return dp
+
+
+def main():
+    inicio = monotonic()
+    if (
+        not getattr(settings, "HASNER_SOMBRA", False)
+        or connection.settings_dict.get("HOST") != "sombra_db"
+        or connection.settings_dict.get("NAME") != BANCO
+        or connection.schema_name != SCHEMA
+        or connection.in_atomic_block
+        or not connection.get_autocommit()
+    ):
+        raise FalhaSonda("Requer sessao sombra_db/sombra/juliani em autocommit.")
+    if not re.fullmatch(r"[A-Za-z0-9_-]+", ROT) or not 1 <= MES <= 12:
+        raise FalhaSonda("ROT ou MES invalido.")
+
+    agora = datetime.fromisoformat(AGORA) if AGORA is not None else timezone.now()
+    if timezone.is_naive(agora):
+        raise FalhaSonda("AGORA requer offset.")
+    motor_md5 = hashlib.md5(Path(motor_calculo_v2.__file__).read_bytes()).hexdigest()
+    fm = {}
+
+    with transaction.atomic(durable=True):
+        with connection.cursor() as cursor:
+            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ WRITE")
+            cursor.execute("SELECT current_database(), current_schema()")
+            if cursor.fetchone() != (BANCO, SCHEMA):
+                raise FalhaSonda("Banco ou schema efetivo fora da sombra.")
+
+        empresas = set(Empresa.objects.filter(pk__in=EMPRESAS).values_list("pk", flat=True))
+        if empresas != set(EMPRESAS):
+            raise FalhaSonda("Escopo incompleto de empresas.")
+        if (MES, ANO) in fechamento.GUARDA_COMPETENCIA and any(
+            fechamento.empresas_exportadas_no_escopo(MES, ANO, empresa_id=eid)
+            for eid in EMPRESAS
+        ):
+            raise FalhaSonda("A guarda da competencia impede medir toda a frota.")
+
+        antes = estado_das_linhas()
+        coluna = DiaPago._meta.pk.column
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT pg_get_serial_sequence(%s, %s)", [tabela(DiaPago), coluna])
+            sequencia = cursor.fetchone()[0]
+            if sequencia is None:
+                raise FalhaSonda("Sequencia de DiaPago ausente.")
+            seq_antes = estado_da_sequencia(cursor, sequencia)
+            cursor.execute(f"SELECT coalesce(max({QUOTE(coluna)}), 0) + 1 FROM {tabela(DiaPago)}")
+            primeiro_pk = int(cursor.fetchone()[0])
+            # RESTART dentro de atomic protege a sequencia e identifica as linhas frescas.
+            cursor.execute(f"ALTER SEQUENCE {sequencia} RESTART WITH {primeiro_pk}")
+
+        with (
+            patch.object(timezone, "now", new=lambda: agora),
+            patch.object(logging.Logger, "handle", new=lambda _logger, _registro: None),
+            redirect_stdout(StringIO()),
+            redirect_stderr(StringIO()),
+        ):
+            for eid in EMPRESAS:
+                universo = set(fechamento.universo_da_competencia(
+                    MES, ANO, empresa_id=eid,
+                ).values_list("pk", flat=True))
+                apurado = fechamento.recalcular_fechamento_mes(
+                    MES, ANO, empresa_id=eid, somente_leitura=True, lavrar_dias_pagos=True,
+                )
+                if apurado.keys() != universo:
+                    raise FalhaSonda(
+                        f"FM incompleto empresa={eid} apurados={len(apurado)} universo={len(universo)}"
+                    )
+                fm.update({
+                    str(cid): {
+                        "empresa": eid,
+                        **{
+                            campo: None if valor is None else float(valor)
+                            for campo, valor in campos.items()
+                        },
+                    }
+                    for cid, campos in apurado.items()
+                })
+            dp = ler_dp(primeiro_pk, fm)
+        transaction.set_rollback(True)
+
+    depois = estado_das_linhas()
+    with connection.cursor() as cursor:
+        seq_depois = estado_da_sequencia(cursor, sequencia)
+    if antes != depois or seq_antes != seq_depois:
+        raise FalhaSonda("Divergencia de linhas ou sequencia apos rollback.")
+
+    saida = Path(f"/sombra/ramo2diff_diapago_{ROT}_{ANO}_{MES:02d}.json")
+    conteudo = json.dumps({
+        "fm": fm, "dp": dp, "fm_antes": antes, "fm_depois": depois, "motor_md5": motor_md5,
+    }, sort_keys=True, allow_nan=False)
+    with saida.open("x", encoding="utf-8") as arquivo:
+        arquivo.write(conteudo + "\n")
+    print(f"{saida.name} colabs={len(fm)} agora={agora.isoformat()} segundos={monotonic() - inicio:.1f}")
+
+
+sys.excepthook = erro_sem_dados
+main()
+```
+
+### FIM
 
 ## 27/11 08:45 · sessao c12b28a112d8 · CODEX-CONSTROI-MOTOR · leitura · origem=Code
 
@@ -1405,294 +1688,4 @@ m fixture_omite_entrada_congelada FixtureMatrizTest.test_fato_explica_entrada_qu
 2. **Caso 18.** O zero para compensadores de restore deve sair no próprio I23 ou em um contador separado? O RED usa I23 e preserva o controle da `REABERTURA` legítima que fica adiantada após recuo do relógio. [I23 atual](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/auditar_invariantes_chamados.py:1122) [Caracterização F5](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:319)
 3. **Caso 28.** A presença de H4 vigente e de fato novo confirmado sob trava torna elegível uma pergunta com via `declaracao`? O RED preserva o cenário original e também exercita `legado_sem_lastro`, que já entra no seletor. [Seletor:36](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/encerrar_perguntas_com_fato.py:36) [RED:1167](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1167)
 
-## 27/11 03:46 · sessao d6cd1e928312 · E4C-F5-INSTANTE · construtor · origem=Code
-
-Apliquei o diff nos dois arquivos autorizados. A compilação estática passou, e a comparação com o conteúdo inicial preservou os REDs nomeados e os skips. A suíte e as mordidas em PostgreSQL ficam para o Code. [test_e4c_f5_c4_red.py:492](chamados/tests/test_e4c_f5_c4_red.py:492), [e4c_f5_c4red2_mutantes.py:490](chamados/tests/e4c_f5_c4red2_mutantes.py:490). Execução em PostgreSQL [nao verificado].
-
-1. **Escritores.** O campo declara `db_default=Now()`. O controle lê `statement_timestamp()` antes e depois de cada escritor, exige que `entrada_em` caia no intervalo inclusivo e mantém `entrada_em != MARCO`. M33 grava no marco e M34 grava um instante fixo anterior. A fonte instalada de `django/db/models/functions/datetime.py::Now.as_postgresql` estava indisponível nesta cópia, então a emissão SQL dessa instalação fica [nao verificado]. O comando abaixo imprime a fonte e a linha no ambiente do Code. [chamados/models.py:4406](chamados/models.py:4406), [requirements.txt:13](requirements.txt:13), [test_e4c_f5_c4_red.py:499](chamados/tests/test_e4c_f5_c4_red.py:499), [e4c_f5_c4red2_mutantes.py:623](chamados/tests/e4c_f5_c4red2_mutantes.py:623).
-2. **Item 13.** `competencia_fechada` barra `aprovado` e `exportado`. A testemunha da F6 mostra `bloqueada_competencia`. A porta `validar_pergunta` devolve `(False, 'nao_gravou')`, conforme o teste já existente da F6, que também exige a trilha de devolução. O controle mantém o sucesso em FM aberto. Em FM exportado, exige a tupla exata, o motivo `COMPETENCIA_APROVADA` e a preservação das respostas, validações e carimbos do par, das batidas e do TXT. M32 injeta o retorno K6 `bloqueada_competencia_entregue`, com mordida esperada só em `fm='exportado'`. [ponto/janelas.py:87](ponto/janelas.py:87), [materializacao.py:943](chamados/services/materializacao.py:943), [validacao.py:869](chamados/services/validacao.py:869), [validacao.py:243](chamados/services/validacao.py:243), [test_bug_par_volta.py:240](chamados/tests/test_bug_par_volta.py:240), [test_e4c_f5_c4_red.py:902](chamados/tests/test_e4c_f5_c4_red.py:902), [e4c_f5_c4red2_mutantes.py:603](chamados/tests/e4c_f5_c4red2_mutantes.py:603).
-3. **M21.** O anexo mostra as duas rodadas no conjunto observado e só o teste-pai no esperado. A cópia confirma que `vistos` é comparado dentro de `subTest`. Essa é a asserção certa, pois trocar `<=` por `<` deixa a linha empatada como `ato` nas duas rodadas. O conjunto esperado agora contém exatamente `rodada=1` e `rodada=2`. [0058_decisao_entrada_do_ato_historico.py:20](chamados/migrations/0058_decisao_entrada_do_ato_historico.py:20), [test_e4c_f5_c4_red.py:1062](chamados/tests/test_e4c_f5_c4_red.py:1062), [e4c_f5_c4red2_mutantes.py:490](chamados/tests/e4c_f5_c4red2_mutantes.py:490).
-
-### Comandos para o Code
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python -c 'import inspect; from django.db.models.functions.datetime import Now; f = Now.as_postgresql; print(inspect.getsourcefile(f), inspect.getsourcelines(f)[1]); print(inspect.getsource(f))'
-
-PYTHONDONTWRITEBYTECODE=1 python manage.py test chamados.tests.test_e4c_f5_c4_red
-
-mut=chamados.tests.e4c_f5_c4red2_mutantes
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$mut.M21Empate0058.test_mordida"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$mut.M32FMExportadoBarra.test_mordida"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$mut.M33EntradaNoMarco.test_mordida"
-PYTHONDONTWRITEBYTECODE=1 python manage.py test "$mut.M34EntradaFixa.test_mordida"
-```
-
-### Diff
-
-```diff
---- a/chamados/tests/test_e4c_f5_c4_red.py
-+++ b/chamados/tests/test_e4c_f5_c4_red.py
-@@ -500,7 +500,9 @@
-                 p = self._historica(respondida_em=RESPOSTA_EM, resposta_colab='07:13')
-                 with connection.cursor() as cursor:
--                    cursor.execute('SELECT transaction_timestamp()')
--                    instante_db, = cursor.fetchone()
--                self._escrever(p, escritor)
-+                    cursor.execute('SELECT statement_timestamp()')
-+                    antes_db, = cursor.fetchone()
-+                    self._escrever(p, escritor)
-+                    cursor.execute('SELECT statement_timestamp()')
-+                    depois_db, = cursor.fetchone()
-                 p.refresh_from_db()
-                 atos = list(p.decisoes.order_by('ato_em', 'pk'))
-@@ -517,5 +519,6 @@
-                 self.assertEqual(D.divergencia_ato_x_coluna(p, MARCO), [])
-                 self.assertNotEqual(novo.entrada_em, MARCO, 'ato novo entra fora do marco')
--                self.assertEqual(novo.entrada_em, instante_db, 'ato novo entra no instante da transação')
-+                self.assertGreaterEqual(novo.entrada_em, antes_db, 'entrada do ato respeita o limite anterior à escrita')
-+                self.assertLessEqual(novo.entrada_em, depois_db, 'entrada do ato respeita o limite posterior à escrita')
-                 transaction.set_rollback(True)
- 
-@@ -898,20 +901,36 @@
- 
-     def test_item13_validacao_livre_com_txt_invalidado(self):
--        """O TXT invalidado sem substituto libera o par em FM aberto e exportado."""
-+        """Sem TXT vigente, FM aberto libera o par e FM exportado aciona a F6."""
-+        from chamados.catalogo.recusa import traduzir_recusa
-+
-         txt = self._entregar()
-         with freeze_time(ITEM13 + HORA):
-             txt.invalidar(motivo='Entrega cancelada na fixture', por=self.admin)
-         self.assertFalse(competencia_entregue(self.empresa.pk, self.mes, self.ano))
--        batidas, arquivo_anterior, _ = self._gravado()
-+        perguntas = (self.saida, self.volta)
-+        campos_do_par = PAR + CARIMBO
-+        par_antes = [valores(p, campos_do_par) for p in perguntas]
-         for status in ('aberto', 'exportado'):
-             with self.subTest(fm=status), transaction.atomic():
-                 FechamentoMensal.objects.filter(pk=self.fm.pk).update(status=status)
-+                gravado = self._gravado()
-                 with freeze_time(ITEM13 + 2 * HORA):
-                     r = validacao.validar_pergunta(self.saida.pk, self.admin, confirmar_implausivel=True)
--                self.assertTrue(r['ok'], 'TXT invalidado libera a validação')
--                self._assert_par_gravado()
--                self.assertEqual(self._gravado()[1], arquivo_anterior)
--                self.assertEqual(list(Batida.objects.filter(pk__in=self.chao).order_by('pk').values()), batidas)
--                for p in (self.saida, self.volta):
-+                if status == 'aberto':
-+                    batidas, arquivo_anterior, _ = gravado
-+                    self.assertTrue(r['ok'], 'TXT invalidado libera a validação')
-+                    self._assert_par_gravado()
-+                    self.assertEqual(self._gravado()[1], arquivo_anterior)
-+                    self.assertEqual(list(Batida.objects.filter(pk__in=self.chao).order_by('pk').values()), batidas)
-+                else:
-+                    self.assertEqual((r['ok'], r['estado']), (False, 'nao_gravou'),
-+                                     'FM exportado sem TXT vigente recusa pela F6')
-+                    for p in perguntas:
-+                        p.refresh_from_db()
-+                    self.assertEqual(traduzir_recusa(self.saida.recusa_motivo)[0], 'COMPETENCIA_APROVADA')
-+                    self.assertEqual([valores(p, campos_do_par) for p in perguntas], par_antes,
-+                                     'F6 preserva respostas, validações e carimbos do par')
-+                    self.assertEqual(self._gravado(), gravado, 'F6 preserva batidas e TXT')
-+                for p in perguntas:
-                     self.assertEqual(D.divergencia_ato_x_coluna(p, None), [])
-                 transaction.set_rollback(True)
---- a/chamados/tests/e4c_f5_c4red2_mutantes.py
-+++ b/chamados/tests/e4c_f5_c4red2_mutantes.py
-@@ -490,5 +490,6 @@
- M21Empate0058 = contraprova(
-     'M21Empate0058', red.MarcoDa0058Test, 'test_0058_empate_e_reexecucao_sobre_update_ja_aplicado',
--    '0058 inclui a entrada no instante do marco', recorte_0058_estrito)
-+    '0058 inclui a entrada no instante do marco', recorte_0058_estrito,
-+    subcasos=(dict(rodada=1), dict(rodada=2)))
- 
- M22SoValidacaoNaIrma = contraprova(
-@@ -616,3 +617,27 @@
- M32FMExportadoBarra = contraprova(
-     'M32FMExportadoBarra', red.Item13PorPKTest, 'test_item13_validacao_livre_com_txt_invalidado',
--    'TXT invalidado libera a validação', fm_exportado_barra_validacao, subcasos=(dict(fm='exportado'),))
-+    'FM exportado sem TXT vigente recusa pela F6', fm_exportado_barra_validacao,
-+    subcasos=(dict(fm='exportado'),))
-+
-+
-+def entrada_em_fixa(instante):
-+    bulk_create = D.objects.bulk_create
-+
-+    def gravar(linhas, *args, **kwargs):
-+        linhas = list(linhas)
-+        for linha in linhas:
-+            if linha.entrada_origem == D.ATO_NOVO:
-+                linha.entrada_em = instante
-+        return bulk_create(linhas, *args, **kwargs)
-+
-+    return patch.object(D.objects, 'bulk_create', new=gravar)
-+
-+
-+M33EntradaNoMarco = contraprova(
-+    'M33EntradaNoMarco', red.EstoqueDoParTest, 'test_escritores_gravam_o_novo_ato_e_a_coluna_no_mesmo_instante',
-+    'ato novo entra fora do marco', lambda: entrada_em_fixa(red.MARCO),
-+    subcasos=tuple(dict(escritor=e) for e in ('carimbar', 'validar', 'responder')))
-+M34EntradaFixa = contraprova(
-+    'M34EntradaFixa', red.EstoqueDoParTest, 'test_escritores_gravam_o_novo_ato_e_a_coluna_no_mesmo_instante',
-+    'entrada do ato respeita o limite anterior à escrita', lambda: entrada_em_fixa(red.MARCO - red.HORA),
-+    subcasos=tuple(dict(escritor=e) for e in ('carimbar', 'validar', 'responder')))
-```
-
-## 27/11 03:44 · sessao aacf2bb78d5c · - · - · origem=Ronald (tmux)
-
-```text
-/bin/bash: line 4: /home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/INTRUSO_COPIA.txt: Read-only file system
-/bin/bash: line 4: /home/ronald/saas-hasner/INTRUSO_VIVA.txt: Read-only file system
-/bin/bash: line 4: /tmp/INTRUSO_TMP.txt: Read-only file system
-```
-
-## 27/11 03:44 · sessao 9dfe567edf08 · - · - · origem=Ronald (tmux)
-
-ok
-
-## 27/11 03:37 · sessao 55eda9ce28c0 · E4C-F5-INSTANTE · construtor · origem=Code
-
-Apliquei a c4red5 nos dois arquivos de teste. O diff passa em `git diff --check`, os dois módulos compilam em memória e as asserções do item 10 são idênticas às do HEAD. O ensaio isolado do arnês aceitou o conjunto exato e rejeitou a falta de um subcaso. [REDs](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:301) · [Arnês](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:26) [nao verificado]
-
-**PRONTO 9(a–c) [nao verificado].** Com a restrição de acesso ao banco, ficam pendentes o log dos REDs no HEAD, o verde da c1 e os ciclos verde → mordida → verde na pista do Code. [Configuração da pista](/home/ronald/wt-codex-e4c-f5-instante-012038/app/config/settings/ci.py:6) [nao verificado]
-
-| Item | Teste | Mutante | Morde? | [nao verificado]
-|---|---|---|---|
-| 1 | Foto da recusa dentro das transações do [estoque](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:338) e do [worker](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:801) | [M30 × 2, M27](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:569) | [nao verificado] |
-| 2 | PK e ato nos REDs de [fronteira, reprojeção e conversa](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:355). Mensagens integrais na [elegibilidade](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:434). | [M07, M09, M11](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:440) | [nao verificado] |
-| 3 | Três escritores sem trava prévia da Empresa. O ato novo confere autor, motivo e instante da transação. [Controle vivo e skips A/B](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:464) | [M26](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:503) | Estacionado pela lei A |
-| 4 | Dois PKs com B novo, um PK de estoque e skip da lei 1. [Comparador e leitores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:613) | [M12a, M12b, M13](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:460) | [nao verificado] |
-| 5 | Alarme e placar em subcasos próprios. [Asserções](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:673) | [M12a no contador, M12b nas duas saídas](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:460) | [nao verificado] |
-| 6 | Identidade da candidata e instante futuro na coluna em memória. [Horizonte](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:233) | [M31](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:597) | [nao verificado] |
-| 7 | [TXT invalidado com FM aberto e exportado](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:899) e [devolução via `validar_pergunta` após recusa por paridade](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:986) | [M32](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:616), [M29](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:535) | [nao verificado] |
-| 8 | [Conjunto exato por `str(teste)`](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:51). A ordem das travas fica como [pré-condição da fixture](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:790). | [M07 exige dois subcasos, M11 exige sete](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:440). M14 e M25 removidos. | Conjunto exato conferido no ensaio isolado. Mordidas [nao verificado]. | [nao verificado]
-| 9 | REDs, c1 e controles antes e depois de cada mutação. [Ciclo do arnês](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:46) | Comandos abaixo | [nao verificado] |
-| 10 | Validação futura semeada como estoque restaurado. [Asserções da tarefa](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:301) | [M28](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:517) | [nao verificado] |
-
-**Diff e comandos para a pista do Code**
-
-```bash
-git --no-optional-locks --no-pager diff -- \
-  chamados/tests/test_e4c_f5_c4_red.py \
-  chamados/tests/e4c_f5_c4red2_mutantes.py
-
-export PYTHONDONTWRITEBYTECODE=1
-python3 manage.py test --settings=config.settings.ci -v 2 \
-  chamados.tests.test_e4c_f5_c4_red
-python3 manage.py test --settings=config.settings.ci -v 2 \
-  chamados.tests.test_e4c_f5_instante_c1
-
-mordida() {
-  python3 manage.py test --settings=config.settings.ci -v 2 \
-    "chamados.tests.e4c_f5_c4red2_mutantes.$1.test_mordida"
-}
-
-# PRONTO 9(c), mais M32 no controle de TXT invalidado
-for mutante in \
-  M08QualquerResposta M11Elegibilidade M12aVigia M12bAlarme \
-  M13Dry M21Empate0058 M24RelogioAposEspera M27K6LidoAntesDaTrava \
-  M28CompensadorCru M29DevolucaoApagaResposta \
-  M30EstoqueSemAtomic M30WorkerSemAtomic M31FotoRelida M32FMExportadoBarra
-do
-  mordida "$mutante"
-done
-```
-
-Na cura, a mesma função recebe `M01DuasValidacoes`, `M02IgnoraResposta`, `M03FotoDaLavra`, `M04ValidacaoFutura`, `M07ValidacaoNoMarco`, `M09Conversa`, `M10Proveniencia`, `M15SoFM`, `M16TrilhaVazia`, `M17AlteraTXT`, `M18AlteraBatida`, `M19RecusaFutura`, `M20EmissaoDupla`, `M22SoValidacaoNaIrma` e `M23SoCandidata`. `mordida M26FotoViraAto` fica para depois da decisão da lei A. [Labels das contraprovas](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:425)
-
-## 27/11 03:16 · sessao 196363bf4456 · E4D-CONTRATO-ROTA-B · verificador · origem=Code
-
-A volta 2 ainda deixa passar uma implementação sem reversão por competência, sem a via autorizada da exportada e sem lista de exceções com lápides. Também aceita `REABERTURA` onde a regra exige `SANEAMENTO`. `app/chamados/tests/test_e4d_matriz_reds.py:328–400,438–455,655–671,1324–1362,1453–1474` · `app/docs/PROMPTS.md:2873,2950`
-
-**Referências.** `T` = `app/chamados/tests/test_e4d_matriz_reds.py`. `M` = `app/chamados/tests/e4d_matriz_mutantes.py`. `C4` = `app/chamados/tests/test_e4c_f5_c4_red.py@48b24c39c`. `J` = `app/docs/JUIZES.md`. O cotejo das cópias mostrou diferenças somente em `T` e `M`. A cópia E4D é uma exportação sem `.git`, portanto a identidade do HEAD via Git fica [nao verificado]. Reexecução da pista, execução dos mutantes e dados de produção [nao verificado].
-
-## 1. Procedentes da volta 1
-
-### Os 14 motivos errados, um por um
-
-| Caso | Situação e contraexemplo |
-|---|---|
-| **04** | **Curado mudando o que o caso pede.** Saiu o símbolo inventado e entrou o comando real, mas agora só se testa aplicação. Um apply que agrupe a prévia por competência e grave tudo sem foto, hash ou reversão por competência passa. `T:328–360` · `app/docs/PROMPTS.md:2873,2950` |
-| **06** | **Curado mudando o que o caso pede.** Cobra M e zero ato. Uma escrita direta de M, uma vez por campo, sem entrada na lista e sem lápide passa. `T:655–671,232–236` · `app/docs/PROMPTS.md:2873` |
-| **07** | **Curado mudando o que o caso pede.** Agora chama o comando efetivo e observa a ausência de ato, escrita e evento. O comando pode simplesmente ignorar a via e passar com a exceção ainda sem lápide. `T:362–373` · `app/docs/PROMPTS.md:2873` |
-| **08** | **Curado mudando o que o caso pede.** A foto e os hashes vêm dos registros reais, mas o teste exige zero DP pela via comum. Uma implementação sem via autorizada passa, embora o caso peça deixar R/V/M, TXT e gravado intactos **e inserir a trilha** sob a autorização específica. `T:185–190,375–400` · `app/docs/PROMPTS.md:2873,2950` |
-| **18 · contador** | **Curado quanto ao medidor.** A leitura agora é do I23 real, com controle positivo. Ainda passa uma implementação que isenta toda `REABERTURA` futura e conta `RECUSA` futura. A caracterização F5 exige contar uma `REABERTURA` futura após recuo do relógio. `T:499–503,536–543` · `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1134` · `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:319–325` |
-| **21** | **Curado quanto à fixture.** O carimbo interposto passa pela trava real. O controle de sucesso ainda muda o motivo para `intervalo_volta`. Uma recusa que devolve sempre `ja_validada` para `orfao_14h`, após adquirir a trava, passa. `T:123,650–653,800–815` · `app/chamados/tests/_ato_da_fixture.py:16–27,47–51` |
-| **23** | **Curado quanto à fixture e ao alvo do patch.** O alvo agora é o módulo usado pelo import local. Uma correção que recusa sempre `orfao_14h` depois da trava e aceita `orfao_22h` passa. A validação do controle positivo é simulada. `T:123,843–863` · `app/chamados/services/acoes_disputa.py:373–376` |
-| **28** | **Não curado.** O controle `legado_sem_lastro` entra. A pergunta principal em `declaracao` segue excluída pelo seletor, antes da releitura e da compensação. Corrigir trava e releitura para todo item admitido ainda deixa o RED cair em `fato_materializado`. Alargar o seletor pode deixar passar uma decisão tomada pelo primeiro espelho, pois o mock responde `True` antes e depois da trava. `T:902–943` · `app/chamados/management/commands/encerrar_perguntas_com_fato.py:31–44,66–77` |
-| **30 · SQL** | **Curado mudando o que o caso pede.** Foi retirada a consulta artificial, mas a fila real só é conferida por PK. Usar o ato para admitir P e devolver ou ordenar pelas colunas cruas passa. A fixture também mudou de dois pares completos divergentes para `NULL/08:00` contra `10:05/09:00`. `T:1288–1300` · `app/chamados/juizes.py:1863–1868` |
-| **30 · modal** | **Curado quanto à fixture.** O modal real chega ao par cru. Ainda passa um leitor que usa a DP somente quando a coluna de instante está nula. Ele falharia no par completo divergente pedido pelo caso. `T:208–220,1288–1293,1310–1311` · `app/templates/chamados/partials/modal_fio.html:217–220` · `app/docs/PROMPTS.md:2873` |
-| **31** | **Curado mudando o que o caso pede.** Cobre os nascimentos automático e manual, mas perdeu o selo. Um segundo escritor de D ou do chamado que grave os mesmos valores, fora da lista, passa. `T:1324–1351` · `app/docs/PROMPTS.md:2873,2950` |
-| **32** | **Curado mudando o que o caso pede.** A cobrança indevida de `tipo_resposta` na lista saiu. A abertura direta prova R/V/M vazios e zero DP nessa porta. A emissão pode contornar `P.abrir` e nascer com V sem derrubar o 32. O selo dos escritores de D e chamado também saiu do 31. `T:1324–1362` · `app/docs/PROMPTS.md:2873,2950` |
-| **37** | **Curado mudando o que o caso pede.** Preserva R, observa M e protege a vizinha. Um descarimbo que faça as mesmas alterações fora da exceção listada passa. `T:1453–1474` · `app/docs/PROMPTS.md:2873,2950` |
-| **42** | **Curado mudando o que o caso pede.** Saiu `marcar_estoque` e entrou uma resposta real que muda a projeção. Ficaram de fora a migração, a marca, a hora real da entrada nova e a reconstrução do que se sabia em T1. Congelar o marco no valor da primeira resposta passa sem guardar instante de entrada algum. `T:545–564` · `C4:948–979` · `app/docs/PROMPTS.md:2974` |
-
-### Mordida, guardas e caso 20
-
-- **Escritor único e lápides — não curado.** O vínculo entre `INSERT`, ato e PK melhorou. O 05 também compara o savepoint de V/M com o dos atos. A presença de `registrar` na pilha ainda aceita dois escritores chamados por ele, e o observador perde um `UPDATE` que alcance P por outro predicado que não `id =/IN`. No sentido inverso, um projetor único chamado depois de `registrar`, dentro do mesmo atomic, falha pela forma da pilha. O censo estático devolveu um `bulk_create` atribuído a DP, mas descarta os achados sem entidade. Por exemplo, a chamada genérica `Model.save(pergunta.decisoes.model(...))` escapa desse filtro. Nenhum desses mecanismos recupera as lápides retiradas. `T:72–109,222–236,488–493,1123–1134` · `app/core/censo_escritas.py:364–430,469–491` · `app/chamados/models.py:4609`
-- **Mutantes — não curado.** No 05, `M` troca o atributo de `materializacao`, enquanto a resposta chama o alias já importado em `disputa_emissao`. No 30/modal, `M` instala uma função de dois parâmetros e `T` chama com `request=req`. O primeiro pode deixar a escrita extra de fora. O segundo produz `TypeError` antes de comparar o par. No 31, fechar D após nascer prova a asserção de estado, mas nada diz sobre um escritor fora da lista que preserve esse estado. Mordida em execução [nao verificado]. `M:89–99,124–143,303–315,328–332` · `app/chamados/services/disputa_emissao.py:12,1596` · `T:215,1075–1078,1119–1120,1327–1334`
-- **20 — curado quanto à referência e ao empate.** A docstring nomeia a caracterização invertida, o teste antigo permanece e a nova matriz verifica empate e posterioridade. A identidade do pedido saiu. Reusar uma chave fixa por ausência passa mesmo que dois pedidos distintos devam ser separados. `T:1144–1189` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364–380` · `app/docs/PROMPTS.md:2950`
-
-| Guarda | Situação da lacuna da volta 1 |
-|---|---|
-| **13** | **Curada.** O snapshot integral de DP pega a alteração de texto ou motivo que escapava ao teste por tipo e autor. `T:181–183,731–748` | [nao verificado]
-| **15** | **Parcial.** O controle aberto elimina a recusa incondicional. A entrega é interposta antes da aquisição da trava, então uma releitura feita após a interposição e ainda fora da trava pode passar. `T:239–252,750–776` |
-| **19** | **Curada para o contraexemplo anterior.** A automática que sempre recusa agora falha no controle em branco. Uma guarda especializada no motivo do caso principal ainda passa, pois o controle usa outro motivo. `T:123,778–798` |
-| **21, 23** | **Parciais.** Fixtures reparadas e caminhos positivos adicionados, com os escapes por motivo descritos acima. `T:650–653,800–815,843–863` |
-| **22** | **Curada para o contraexemplo anterior.** O controle do mesmo motivo precisa validar e plantar. Como ele usa outro dia, uma recusa fixa para o dia inicial ainda passa. `T:123,817–841` |
-| **24** | **Curada quanto à ordem e ao carimbo de E.** A ordem literal saiu e a foto de E passou a ser exigida. Ainda se exige exatamente o conjunto `{E,Q}`. Uma passagem que preserve E e produza os mesmos efeitos sobre Q, mas reporte só Q na lista, falha. `T:1191–1218` | [nao verificado]
-| **27** | **Curada para a instância antiga.** A FK muda antes da trava, o juiz simulado decide por essa FK e o novo mutante conserva a releitura real, mas entrega a instância antiga ao juiz. Ainda se pode usar uma releitura atualizada só da FK e julgar outros campos obsoletos. A lápide de `fantasma` segue sem selo. `T:865–900` · `M:65–69` · `app/chamados/reconciliador.py:1265–1298` |
-| **36** | **Parcial.** A irmã viva em outra competência e o pai aberto entraram. A asserção que cai reutiliza a instância e o mesmo `agora`. A chave de `_pv_memo` não contém a tranca. Uma consulta fresca pode dar `False` enquanto a instância anterior devolve `True`. A causa dinâmica exata da ocorrência [nao verificado]. `T:1424–1451` · `app/chamados/juizes.py:889–908,931–952` · `app/ponto/services/fechamento.py:1431–1453` |
-| **43** | **Curada para a reescrita anterior.** O retry avança o relógio e acusa `UPDATE` de P, DP ou D mesmo com os mesmos valores. A contagem de eventos ainda deixa passar a troca de um evento por outro com o mesmo total. `T:173–174,1507–1527` |
-| **46** | **Curada para a ata de fixture.** Depois do plantio, a ata recarregada precisa trazer 480 realizados. Plantar sem relavrar deixa a ata inicial em zero e falha. A mordida do mutante que corta o signal [nao verificado]. `T:1545–1570` · `M:79–85` · `app/ponto/signals.py:85–93,136–140` |
-
-## 2. As 51 ocorrências da pista de 03:06
-
-A lista anexa contém **51 falhas em 29 métodos**, com `errors=0` no placar fornecido. `T` declara 45 métodos numerados. Resultado individual dos 16 métodos sem ocorrência e placar dos mutantes [nao verificado]. A tabela classifica a primeira asserção que caiu, inclusive quando ela só cobre uma parte do caso.
-
-| Caso · ocorrências | A asserção caiu pelo motivo certo? |
-|---|---|
-| **05 · 1** | **Sim.** Falta `VALIDACAO` física de Q. O caminho carimba V/M e registra `ABSORCAO`. `T:1123–1124` · `app/chamados/services/materializacao.py:1107–1132` |
-| **20 · 2** | **Sim.** Tanto no empate quanto em T2, a recusa humana foi aceita, mas Q ficou fora de `recusadas`. Identidade do pedido segue sem teste. `T:1150–1153,1162–1189` | [nao verificado]
-| **25 · 1** | **Sim.** M fica de pé apesar da `ABSORCAO` vigente. O seletor atual exige a âncora que essa entrada dispensa. `T:1223–1247` · `app/chamados/services/materializacao.py:1195–1212` |
-| **26 · 1** | **Sim, para preservar o legado.** A rejeição muda R/V/M. Uma correção que deixe tudo intacto e nunca encaminhe Q ao admin passa. `T:1254–1272` · `app/chamados/services/materializacao.py:1235–1279` · `app/docs/PROMPTS.md:2873` |
-| **01, 02 · 2** | **Sim, pela falta do ato.** O comando calcula a prévia de R/V, mas seu apply chama a porta de colisões e silêncio. As ocorrências ainda não chegam ao zero evento, e ambas aceitam ato novo com proveniência errada. `T:264–295` · `app/chamados/management/commands/backfill_decisoes_pergunta.py:486–516,628–631` |
-| **03 · 2** | **Sim.** No vigente, a foto oferece retroativamente uma validação. No controle compensado, falta a validação nova de `09:00` após o apply. A segunda ocorrência prova a ausência do apply nesse controle. `T:311–326` · `app/chamados/models.py:4437–4447` |
-| **04 · 1** | **Não para a reversão.** Falta `VALIDACAO` no apply. Uma aplicação irreversível pode ficar verde. `T:328–360` | [nao verificado]
-| **11 · 1** | **Sim, pelo ato vazio ausente.** A assinatura atual aceita a chamada e a porta não gera linha. Uma porta que insira outra linha a cada repetição passa, pois há uma única chamada. `T:402–416` · `app/chamados/services/disputa_emissao.py:1695–1715` |
-| **12 · 4** | **Sim, uma por FK.** `validada_por`, `materializada_por`, `ato_por` e `validada_original_por` estão isoladas e cada exclusão deveria ser protegida. Manter autoria histórica nula sem marca ainda passa. `T:418–436` · `app/chamados/models.py:3804–3829,4347–4353` |
-| **14 · 1** | **Não.** Faltou a `REABERTURA` que o teste passou a exigir. A implementação correta com `SANEAMENTO`, lei em campo próprio e referência à resposta antiga também falha nessa asserção. A resposta mais nova da fixture só é criada depois do saneamento. `T:438–455` · `app/chamados/services/validacao.py:450–455,472–489` · `app/docs/PROMPTS.md:2873,2950` |
-| **16 · 1** | **Sim.** A porta aceita a resposta futura. Se a exceção viesse depois de um `INSERT` bem-sucedido e revertido, o observador ainda o registraria. A ordem da projeção durante uma tentativa revertida fica sem verificação equivalente. `T:53–65,457–470` · `app/chamados/models.py:4598–4623` |
-| **17 · 3** | **Sim.** `save` aceita DP futura com e sem `force_insert`, e a terceira falha mostra os dois `INSERT`s. O selo AST vem depois e essa pista não o alcança. `T:472–493` · `app/chamados/models.py:4405–4408` |
-| **18 · C6 e modal · 2** | **Sim.** O C6 dá `False` em T1 e o modal não apresenta o par que ainda deveria valer. A tarefa, que devolve uma razão, não é a asserção `False != True`. `T:522–534` · `app/chamados/juizes.py:1499–1521` · `app/chamados/services/tarefa_do_dia.py:389–429` |
-| **18 · I23 · 1** | **Depende da identidade do contador.** A pista mede a inclusão do compensador futuro pelo I23 real. O I23 vigente foi definido para incluí-lo. O brief exige `ato_futuro=0` no restore, mas atribuir esse contrato novo ao I23 [nao verificado]. Isentar toda `REABERTURA` passa no novo teste e quebra a caracterização F5. `T:536–543` · `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1134` · `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:319–325` |
-| **42 · 1** | **Sim, pelo marco.** O leitor troca `10:00` por `10:30` depois da resposta retrodatada. A asserção de lavra vem depois e a ocorrência não prova entrada ou migração. `T:545–564` · `app/chamados/veredito_lavrado.py:197–209` |
-| **44 · 1** | **Não pelo retry.** A primeira aplicação já deixou zero DP. A segunda nem foi alcançada. O teste repete o comando que recalcula o acervo e pode passar com uma porta que duplique o mesmo payload quando o recebe novamente. `T:199–200,566–587` | [nao verificado]
-| **45 · autor, lastro, texto novo e FK nula · 4** | **Sim.** Erros de contagem A/B, coerentes com o vigia atual de presença. Um vigia que só compare diferenças observadas de autor e texto ainda passa sem detectar uma diferença exclusivamente de instante. `T:593–632` · `app/chamados/services/vigia_ato_x_coluna.py:8–25` |
-| **45 · texto de estoque, absorvida histórica e quatro reconciliadas · 6** | **Interface C4.** As seis comparam `None` à chave `estoque` exigida. Elas não demonstram o valor histórico medido. Devolver zeros fixos na chave elimina cinco ocorrências e ainda perde a divergência do texto histórico. Alimentar um PK de cada vez também deixa escapar erros de precedência em acervo misto. `T:613–640` · `app/chamados/services/vigia_ato_x_coluna.py:21–25` · `C4:559–572,603–607` |
-| **09, 10, 29 · 3** | **Sim.** Faltam `VALIDACAO`, `RESPOSTA` e `REABERTURA` físicas, respectivamente. As asserções posteriores de autoria, via e ordem ainda ficam atrás desses REDs. `T:683–700,712–723,957–964` · `app/chamados/services/disputa_emissao.py:2112–2122,2189–2202` · `app/chamados/services/relavra_via.py:230–261` |
-| **28 · 1** | **Não para a trava ou compensação.** A pergunta ficou em `declaracao` porque nem entrou no seletor. A exigência de elegibilidade pode justificar um RED próprio. `T:906–943` · `app/chamados/management/commands/encerrar_perguntas_com_fato.py:31–44` |
-| **39, 40, 41 · 4** | **Sim.** Caem pela ordem física de V, `recusa_motivo` e R, esta última nos dois retornos de plantio recusado. Um segundo escritor de `validada_por` ou `resposta_colab` em ramo não observado ainda escapa, e `RESULTADO` fica depois do RED do 41. `T:974–1035` · `app/chamados/services/validacao.py:164–178,995–1000` · `app/chamados/services/disputa_emissao.py:1559–1567` |
-| **30 · SQL, API, modal, raio-x · 4** | **Sim para os observáveis exercitados.** SQL perde o PK, API e modal expõem a coluna e raio-x põe o chamado no grupo pendente. Só API e modal comparam o par exibido. SQL pode conservar a ordenação crua, e raio-x pode creditar por qualquer resposta histórica, inclusive uma já compensada. `T:1298–1314` · `app/chamados/juizes.py:1863–1868` · `app/api/views.py:1161–1165` · `app/templates/chamados/partials/modal_fio.html:217–220` · `app/chamados/services/raiox.py:135–158` |
-| **34, 38 · 2** | **Sim.** `SILENCIO` entra depois de M. A verificação da cascata do pai está depois da primeira asserção. Um pai fechado por `UPDATE` direto ainda satisfaria a checagem de status. `T:1364–1381,1476–1505` · `app/chamados/models.py:2184–2207` · `app/chamados/signals.py:20–46` |
-| **35 · 1** | **Sim.** O PK eleito difere do esperado. A vizinha de outro chamado e o empate já estão no cenário. Como o primeiro assert cai, as preservações posteriores ficam [nao verificado]. `T:1383–1418` · `app/chamados/services/disputa_emissao.py:539–542,582–605` |
-| **36 · 1** | **Inconclusiva como RED da regra.** A ocorrência é no C6 após trancar, mas o teste admite o contraexemplo do memo descrito acima. A pista não mostra o resultado em P recarregada em nova instância. `T:1434–1447` · `app/chamados/juizes.py:889–908,931–952` |
-
-## 3. Fix4 e o cartão
-
-O **fix4 em si** preserva o que 18 e 30 pedem. O 18 passou a ligar a disputa e a pergunta ao cartão que o montador real usa. O 30 já tinha esses vínculos. `contexto_parcial_fio` monta chamados, disputa e permissões que o template consulta. A mudança de regra do 30 veio no recorte do teste, que injeta `NULL/08:00` e tira a asserção C6. `T:208–220,505–515,1283–1314` · `app/chamados/services/fio.py:251–254,305–362,573–603` · `app/templates/chamados/partials/modal_fio.html:123,157–160`
-
-**Cartão ausente não passa em nenhum dos dois casos.** O `partition` produz `''`, mas a pergunta tem texto e `assertIn` falha antes que o helper devolva `(None, None)`. A lacuna é **dentro do cartão**. Uma irmã usa o mesmo texto, o helper pega a primeira `Resposta:` e não identifica a pergunta pelo PK. Em T2 do 18, a pergunta alvo pode sumir e uma irmã muda de mesmo título satisfazer o teste. Em T1 ou no 30, a resposta esperada pode vir da irmã errada. `T:123–127,216–220,532–534,1310–1311` · `app/templates/chamados/partials/modal_fio.html:157–160,217–220`
-
-O 18 também perdeu a prova de que os três leitores enxergam o **mesmo par**. O C6 compara só um booleano e a tarefa só a razão. Trocar `08:00` por `09:00` ainda diverge da luz `19:00` e pode conservar o booleano, enquanto a tarefa pode manter `aguarda_validacao` com ação ou dono errado. `T:507–509,522–534` · `app/chamados/juizes.py:1428–1454,1521–1533` · `app/chamados/services/tarefa_do_dia.py:165–170` · `J:81–95`
-
-## 4. Conflitos com c4red4
-
-| Recorte da volta 1 | Situação na volta 2 |
-|---|---|
-| **01/02/44 · entrada e evento** | **Curado mudando o que os casos cobrem.** O backfill pelo comando não se opõe ao evento da resposta pública. As asserções de origem e entrada inicial sumiram. Gravar `entrada_em=ato_em` no primeiro apply e conservá-lo no retry passa em E4D. C4 exige `ESTOQUE/MARCO` na foto histórica e `ATO_NOVO` com um evento para a resposta pública. `T:264–295,566–587` · `C4:478–504` |
-| **02/04/08/44 · admissibilidade** | **Curado mudando o que os casos cobrem.** 02 ficou antes do marco. 04 usa resposta vigente correspondente, sem a divergência que C4 manda reprojetar. 08 te
-
-[truncado em 20000 de 31735 caracteres]
-
-_8582 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8587 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
