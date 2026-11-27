@@ -1,7 +1,157 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 10:03** · publicado em **27/11/2026 10:07** (UTC-3)
+> Ultima resposta processada: **27/11/2026 10:10** · publicado em **27/11/2026 10:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 10:10 · sessao 88a168481d71 · CASO-LITERAL-14 · sonda · origem=Code
+
+# CASO-LITERAL-14 — Fase 1
+
+O trecho colado contém **83 batidas em `DIA.sobras_ids`, em 32 dias de 10 colaboradores**. A saída termina no bloco de 14/11 do colab 986, antes da célula. Em relação ao universo informado de 99 batidas e 14 colaboradores, faltam 16 batidas no recorte. A distribuição delas por dia, colaborador e classe está [nao verificado]. Usei os blocos `DIA`, `BAT`, `CEL`, `VINCULO`, `PERGUNTA` e `CHAMADO` colados como fonte dos fatos abaixo. A numeração original da saída, o topo de `sonda_f1.py`, `compara.out` item 4 e o hash Git da cópia estão [nao verificado].
+
+## 1. Classificação por dia
+
+A data e as sobras de cada linha vêm de `DIA.sobras_ids`. Uma `BAT` marcada `SOBRA` na janela de um dia vizinho entra na linha da sua própria lista `sobras_ids`. `Não` em `validada_por_admin` significa `aprovada_por_id=null` nas sobras da linha. O modelo distingue esse campo de `aprovada`, cujo valor padrão é `True`. [app/ponto/models.py:62](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/models.py:62)
+
+Nas linhas **(c)**, a divergência observável vai para conferência de escala/cadastro pelo admin. Onde a célula marca folga, o código também prevê folga trabalhada. A necessidade de editar a célula, ajustar o vínculo ou manter a folga e tratar o trabalho depende da escala efetivamente autorizada [nao verificado]. [app/escala/models.py:1080](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/escala/models.py:1080) · [app/ponto/motor_calculo_v2.py:2576](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/motor_calculo_v2.py:2576)
+
+| empresa | colab_id | data | batidas SOBRA (id hora tipo) | célula (estado, marcos) | classe | prova | validada_por_admin | dúvida |
+|---:|---:|---|---|---|:---:|---|---|---|
+| 3 | 163 | 2026-11-18 | `158099 05:06:08 S` | `140479` folga, `null` | **d** | `157833 18:53:02 E` de 17/11 precede `158092 04:07:13 S`, a sobra e `158201 06:59:03 E`. A pergunta `59348` liga a sobra à célula `140478` de 17/11 e ao chamado `35571`, aberto. A L-085 permite atribuir a madrugada à véspera. `app/ponto/turnos.py:285` | Não | Faltam os marcos e os papéis julgados da véspera, além do teor da resposta `59348`. A sequência tem duas `S` consecutivas. [nao verificado] |
+| 3 | 163 | 2026-11-20 | `160135 05:12:54 S` | `140481` folga, `null` | **d** | `159878 18:53:11 E` de 19/11 precede `160127 04:13:41 S`, a sobra e `160202 06:56:06 E`. A pergunta `60098` liga a sobra à célula `140480` de 19/11 e ao chamado aberto `35571`. `app/ponto/turnos.py:285` | Não | Faltam os marcos e os papéis julgados da véspera e o teor da resposta `60098`. [nao verificado] |
+| 2 | 219 | 2026-11-14 | `154790 07:03:07 E` · `154793 07:04:17 S` | `138398` folga, `null` | **d** | O par dura **70 s**, acima do piso de 60 s que impede formar turno. A véspera tem `154453 19:07:37 E` e três `S` na madrugada, incluindo `159534 02:00:00 S` aprovada por `657`. As perguntas `57827` e `57828` ligam as duas sobras ao chamado-pai `16611`, aberto. `app/ponto/turnos.py:130`, `app/ponto/turnos.py:1487` | Não, ambas | Faltam o fechamento e a ata da jornada de 13/11 ou confirmação de que a dupla foi um toque indevido. [nao verificado] |
+| 2 | 301 | 2026-10-22 | `134361 14:45:11 E` · `134720 20:00:23 S` · `134740 21:00:21 E` · `134778 22:50:11 S` | `123197` folga, `null` | **c** | Dois períodos completos no próprio dia, com pausa de cerca de 1 h. O padrão se repete em 21/10 e 23/10. O vínculo `265`, template `397`, omite quinta-feira. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 301 | 2026-10-29 | `140896 14:45:26 E` · `141196 20:00:05 S` · `141220 21:00:15 E` · `141257 22:50:02 S` | `123204` folga, `null` | **c** | Dois períodos no dia, com horários equivalentes aos de 28/10 e 30/10. O vínculo `265` omite quinta-feira. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 301 | 2026-11-05 | `146858 14:45:34 E` · `147164 20:00:12 S` · `147191 21:02:44 E` · `147218 22:50:03 S` | `123211` folga, `null` | **c** | Dois períodos no dia. A série aprovada `152818`–`152821` é de **04/11**, na célula `123210`. A sequência de 05/11 tem IDs e instantes próprios. `app/escala/orfa_classe.py:62`, `app/docs/LEIS.md:117` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 301 | 2026-11-12 | `153134 14:45:13 E` · `153464 20:00:05 S` · `153492 21:00:04 E` · `153529 22:50:04 S` | `123218` folga, `null` | **c** | Dois períodos no dia, repetidos em 11/11 e 13/11. As perguntas `57176`, `57302`, `57325` e `57342` apontam para a própria célula e para o chamado aberto `22355`. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 301 | 2026-11-19 | `159659 14:45:03 E` · `159996 20:04:10 S` · `160018 21:04:15 E` · `160039 22:50:05 S` | `123225` folga, `null` | **c** | Dois períodos no dia, repetidos em 18/11 e 20/11. As perguntas `59897`, `60018`, `60024` e `60038` apontam para a própria célula e para o chamado aberto `22355`. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 334 | 2026-11-02 | `143656 01:40:09 S` · `143671 02:34:17 E` | `132547` folga, `null` | **c** | `143583 20:21:17 E` de 01/11 → pausa das duas sobras → `143844 07:52:44 S` de 02/11. O ensaio com as quatro batidas cruas formou um turno de **01/11**, com as sobras internas. As duas pontas estão mais de 3 h distantes de `10:00–22:00` do vínculo `1499`. A divergência é com o horário da jornada iniciada em 01/11. `app/ponto/turnos.py:385`, `app/ponto/turnos.py:407`, `app/ponto/turnos.py:312`, `app/ponto/motor_calculo_v2.py:2044` | Não | Marcos efetivos da célula `132546` de 01/11 e horário autorizado [nao verificado]. |
+| 2 | 334 | 2026-11-10 | `150563 01:00:52 S` | `132555` folga, `null` | **d** | `150460 19:51:14 E` de 09/11 → sobra → `150585 02:02:38 E`. A pergunta `55996` liga `150585` à célula `132554` de 09/11. O ramo sem marcos exige uma `S` posterior para demonstrar continuidade após a volta. `app/ponto/turnos.py:393` | Não | Faltam a saída após `150585`, os marcos da véspera e a confirmação do papel de `150563`. [nao verificado] |
+| 2 | 334 | 2026-11-16 | `156062 01:38:42 S` · `157001 20:34:22 E` | `132561` folga, `null` | **d** | `156062` fica entre `155980 20:12:08 E` de 15/11 e `156083 02:31:57 E`. Já `157001` pode formar jornada própria com `157080 00:03:27 S` de 17/11. As perguntas `58903` e `58935` ligam esse segundo trecho a 16/11 e ao chamado aberto `17636`. `app/ponto/turnos.py:312`, `app/ponto/turnos.py:1491` | Não | Falta o fechamento da jornada de 15/11 e a confirmação de qual `S` encerrou a de 16/11. As duas sobras da linha podem pertencer a jornadas diferentes. [nao verificado] |
+| 2 | 334 | 2026-11-17 | `157080 00:03:27 S` · `157102 01:34:42 S` · `157339 07:57:06 S` | `132562` trabalho, `E10:00/S15:00/E16:00/S22:00` | **d** | As três `S` vêm depois de `157001 20:34:22 E` de 16/11 e antes de `163470 10:00:00 E`, plantada e aprovada por `657`. A pergunta `58935` liga `157080` a 16/11. Chamados `17636` e `39479` abertos. `app/ponto/turnos.py:293`, `app/ponto/turnos.py:1491` | Não | Faltam a saída efetiva de 16/11 e o papel das outras `S`. [nao verificado] |
+| 2 | 446 | 2026-10-25 | `136793 08:00:46 E` | `136270` trabalho, `E14:40/S18:00/E19:00/S23:00` | **d** | `136990 15:57:29 S` permite um período diurno. `144666 18:00:00 S` e `144667 23:00:00 S` foram plantadas e aprovadas por `657` para a mesma célula. A L-084 exige identificar as duas bordas reais antes de comparar com os marcos. `app/ponto/motor_calculo_v2.py:2046` | Não | Falta confirmar se `136990` encerrou o trabalho e como os registros diurnos se relacionam às declarações validadas. [nao verificado] |
+| 2 | 446 | 2026-10-27 | `138687 12:30:18 E` | `136272` trabalho, `E14:40/S18:00/E19:00/S23:00` | **d** | `138784 13:31:02 S` é candidata a fechar um período de 1 h. Também há `144664 18:00:00 S` e `145038 23:00:00 S`, plantadas e aprovadas por `657`. O chamado `36462` está `em_analise`. `app/ponto/turnos.py:1192` | Não | Faltam os papéis julgados e o teor da declaração para distinguir o período diurno da jornada declarada. [nao verificado] |
+| 2 | 446 | 2026-11-01 | `143320 13:04:48 E` | `136277` trabalho, `E14:40/S18:00/E19:00/S23:00` | **d** | A entrada é 95 min 12 s anterior ao `hi`. Seguem `143451 18:01:12 S` e `143543 19:01:11 E`. A primeira `S` e a `E` seguinte estão junto dos marcos da pausa. `app/ponto/turnos.py:1356` | Não | Falta a saída após `143543` ou a ata que confirme a borda de encerramento. [nao verificado] |
+| 2 | 446 | 2026-11-20 | `160414 13:00:43 E` | `136296` trabalho, `E14:40/S18:00/E19:00/S23:00` | **a** | A sonda lista `160414` como sobra. O ensaio de `parear_turnos` com as quatro batidas do dia e os marcos da célula fechou `160414 → 160528 15:52:59 S` e `160559 16:54:13 E → 160790 21:20:55 S`, ambos em 20/11. As bordas externas estão a menos de 3 h dos respectivos marcos. Sem ação sobre a batida. `app/ponto/turnos.py:1402`, `app/ponto/turnos.py:1430`, `app/ponto/turnos.py:1491`, `app/ponto/motor_calculo_v2.py:2044` | Não | O ramo exato que deixou a sobra e a obra que o corrige estão [nao verificado]. O ensaio usou as batidas do dia e os marcos exibidos, sem os papéis da ata. `app/ponto/turnos.py:1201`, `app/ponto/turnos.py:2005` |
+| 2 | 465 | 2026-11-12 | `152798 09:00:29 S` · `152993 12:38:07 S` | `130759` trabalho, `E07:30/S12:30/E13:30/S19:30` | **d** | `152993` fica a 8 min 07 s de `hii` e tem `153079 13:34:14 E` como volta compatível. No ensaio com os marcos, `152798` fechou o período de `152760 07:33:15 E` e `152988 12:31:42 E` abriu o segundo período. `app/ponto/turnos.py:1356`, `app/ponto/turnos.py:1491` | Não | Falta confirmar o papel real de `152798` e `152988` para classificar o dia inteiro. [nao verificado] |
+| 2 | 707 | 2026-10-27 | `152914 06:55:00 E` | `130929` trabalho, `E11:00/S16:00/E17:00/S23:00` | **d** | `152914` foi plantada pela pergunta validada `50832`. `152916 12:10:00 E` também foi plantada. `152915 16:00:00 S` já foi retratada, e `151794 19:00:00 S` tem trilha de retratação, desfazer e inversão. A célula foi regenerada. Chamados `30747` aberto e `35226` em análise. `app/ponto/models.py:62`, `app/ponto/turnos.py:2941` | **Sim, `657`** | Faltam os marcos anteriores à regeneração e a decisão sobre qual entrada correspondeu à jornada. `152914.retratada_em=null` no recorte. [nao verificado] para a jornada real. |
+| 2 | 917 | 2026-10-24 | `136272 15:00:39 E` · `136465 19:00:26 S` · `136519 20:01:27 E` · `136570 22:58:12 S` | `123158` folga, `null` | **c** | Dois períodos no sábado, com horários equivalentes aos de 23/10. O vínculo `1134`, template `282`, omite sábado. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para o sábado [nao verificado]. |
+| 2 | 917 | 2026-10-31 | `142679 15:00:20 E` · `142887 19:02:25 S` · `142930 20:00:34 E` · `142989 22:53:43 S` | `123165` folga, `null` | **c** | Dois períodos no sábado, com horários equivalentes aos de 30/10 e 01/11. O vínculo `1134` omite sábado. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para o sábado [nao verificado]. |
+| 2 | 917 | 2026-11-14 | `155033 15:00:59 E` · `155258 19:00:45 S` · `155296 20:00:18 E` · `155357 22:57:03 S` | `123179` folga, `null` | **c** | Dois períodos no sábado, com horários equivalentes aos de 13/11. As perguntas `57974`, `58082`, `58106` e `58134` apontam para essa célula e para o chamado aberto `20366`. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para o sábado [nao verificado]. |
+| 2 | 968 | 2026-10-22 | `134368 14:49:09 E` · `134573 18:02:02 S` · `134668 19:00:22 E` · `134777 22:50:06 S` | `122828` folga, `null` | **c** | Dois períodos na quinta, com horários equivalentes aos de 21/10. O vínculo `1358`, template `397`, omite quinta-feira. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 968 | 2026-10-29 | `140898 14:50:08 E` · `141045 18:00:11 S` · `141137 19:00:15 E` · `141258 22:50:07 S` | `122835` folga, `null` | **c** | Dois períodos na quinta, com horários equivalentes aos de 28/10. O vínculo `1358` omite quinta-feira. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 968 | 2026-11-02 | `144020 14:50:08 E` · `144120 18:00:05 S` · `144221 19:00:17 E` · `144323 22:50:05 S` | `122839` folga, `null` | **c** | Dois períodos no dia, com horários equivalentes aos de 01/11 e 03/11. A etiqueta do template `397` inclui segunda-feira, e a célula está em folga. `app/escala/models.py:1080`, `app/escala/models.py:1384` | Não | Causa da folga e escala autorizada [nao verificado]. |
+| 2 | 968 | 2026-11-05 | `146860 14:49:19 E` · `147014 18:00:08 S` · `147112 19:00:08 E` · `147219 22:50:23 S` | `122842` folga, `null` | **c** | Dois períodos na quinta, com horários equivalentes aos de 04/11. O vínculo `1358` omite quinta-feira. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 968 | 2026-11-12 | `153136 14:50:08 E` · `153317 18:00:06 S` · `153416 19:00:25 E` · `153531 22:50:14 S` | `122849` folga, `null` | **c** | Dois períodos na quinta, com horários equivalentes aos de 11/11. As perguntas `57177`, `57256`, `57276` e `57343` apontam para essa célula. O chamado `37385` consta como resolvido pelo sistema. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 968 | 2026-11-15 | `155745 14:49:57 E` · `155836 18:00:14 S` · `155922 19:00:05 E` · `156007 22:50:16 S` | `122852` folga, `null` | **c** | Dois períodos no dia, com horários equivalentes aos de 16/11. A etiqueta do template `397` inclui domingo. A série aprovada `158537`–`158540` pertence a **14/11**, célula `122851`. `app/escala/models.py:1080`, `app/docs/LEIS.md:117` | Não | Causa da folga e escala autorizada [nao verificado]. |
+| 2 | 968 | 2026-11-19 | `159662 14:49:14 E` · `159831 18:00:16 S` · `159931 19:00:15 E` · `160040 22:50:06 S` | `122856` folga, `null` | **c** | Dois períodos na quinta, com horários equivalentes aos de 18/11. As perguntas `59898`, `59966`, `59987` e `60039` apontam para a célula `122856`, com quatro chamados resolvidos pelo sistema. `app/escala/orfa_classe.py:62` | Não | Escala autorizada para a quinta [nao verificado]. |
+| 2 | 986 | 2026-10-29 | `140694 12:01:23 S` | `127346` trabalho, `E10:00/S16:00/E17:00/S22:00` | **c** | `140600 10:00:39 E` → sobra → `140772 13:00:41 E` → `141243 22:00:18 S`. As bordas conferem e a pausa de 59 min 18 s fica cerca de 4 h antes dos marcos da pausa. Célula regenerada em 13/11. Pergunta `57451` pendente e chamado `38767` aberto. `app/escala/utils.py:477`, `app/ponto/motor_calculo_v2.py:2046` | Não | Motivo do horário da pausa e marcos anteriores à regeneração [nao verificado]. |
+| 2 | 986 | 2026-11-06 | `147648 12:03:33 S` | `127354` trabalho, `E10:00/S16:00/E17:00/S22:00` | **c** | `147551 09:53:34 E` → sobra → `147741 13:09:54 E` → `148171 22:03:20 S`. As bordas conferem e a pausa de 1 h 06 min 21 s volta a ocorrer perto de 12h–13h. Célula regenerada em 13/11. Pergunta `57452` pendente e chamado `38769` aberto. `app/escala/utils.py:477`, `app/ponto/motor_calculo_v2.py:2046` | Não | Motivo do horário da pausa e marcos anteriores à regeneração [nao verificado]. |
+| 2 | 986 | 2026-11-10 | `150969 12:50:48 S` | `127358` trabalho, `E10:00/S16:00/E17:00/S22:00` | **c** | `150825 09:51:19 E` → sobra → `151040 13:50:21 E` → `151438 22:03:41 S`. As bordas conferem e a pausa de 59 min 33 s fica mais de 3 h antes de ambos os marcos internos. Pergunta `56242` aponta diretamente para a sobra e está pendente. Chamados `31901` e `38770` abertos. `app/escala/utils.py:477`, `app/ponto/motor_calculo_v2.py:2046` | Não | Motivo do horário da pausa e marcos anteriores à regeneração [nao verificado]. |
+| 2 | 986 | 2026-11-14 | `154900 11:59:38 S` | [nao verificado] | **d** | `154840 10:01:39 E` → sobra → `154953 13:02:58 E`. A pausa candidata dura 1 h 03 min 20 s. A saída colada termina durante a auditoria de `154953`. `app/ponto/turnos.py:407` | Não | Faltam célula, marcos, saída final e eventual pergunta ou chamado desse dia. [nao verificado] |
+
+## 2. Contagem por classe e por colab
+
+Cada célula mostra **dias / batidas**. Fonte da contagem: os `DIA.sobras_ids` transcritos na tabela acima. A contagem da competência completa está [nao verificado].
+
+| colab_id | (a) | (b) | (c) | (d) | total |
+|---:|---:|---:|---:|---:|---:|
+| 163 | 0 / 0 | 0 / 0 | 0 / 0 | 2 / 2 | 2 / 2 |
+| 219 | 0 / 0 | 0 / 0 | 0 / 0 | 1 / 2 | 1 / 2 |
+| 301 | 0 / 0 | 0 / 0 | 5 / 20 | 0 / 0 | 5 / 20 |
+| 334 | 0 / 0 | 0 / 0 | 1 / 2 | 3 / 6 | 4 / 8 |
+| 446 | 1 / 1 | 0 / 0 | 0 / 0 | 3 / 3 | 4 / 4 |
+| 465 | 0 / 0 | 0 / 0 | 0 / 0 | 1 / 2 | 1 / 2 |
+| 707 | 0 / 0 | 0 / 0 | 0 / 0 | 1 / 1 | 1 / 1 |
+| 917 | 0 / 0 | 0 / 0 | 3 / 12 | 0 / 0 | 3 / 12 |
+| 968 | 0 / 0 | 0 / 0 | 7 / 28 | 0 / 0 | 7 / 28 |
+| 986 | 0 / 0 | 0 / 0 | 3 / 3 | 1 / 1 | 4 / 4 |
+| **Total** | **1 / 1** | **0 / 0** | **19 / 65** | **12 / 17** | **32 / 83** |
+
+## 3. Batidas (b) sem dúvida e sem validação admin
+
+**Lista vazia no recorte.** Nenhuma linha `B batida_id=...` é sustentada pelos blocos da tabela. A classificação das sobras ausentes está [nao verificado].
+
+## 4. Batidas (b) com validação admin ou dúvida
+
+**Lista vazia no recorte.** Os casos duvidosos estão em **(d)**. Em particular, `154790` e `154793` têm `aprovada_por_id=null` e `retratada_em=null`, perguntas `57827` e `57828` materializadas via `celula_absolveu` e chamado-pai `16611` aberto. O chamado `39246` também está aberto na célula `138398`, com `batidas_contexto_ids=[]`. O código descreve `celula_absolveu` como resultado do julgamento da célula. A causa da dupla de 70 s está [nao verificado]. [app/chamados/models.py:2847](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/models.py:2847)
+
+## 5. Botão de retratar e desfazer
+
+- **Retratar.** O botão **Não foi trabalho (retratar)** envia `POST` à rota `ponto:retratar_batida`. A view exige `regularizar_batida` e chama `retratar_humano.retratar`. O serviço reconfere a permissão, exige motivo ativo e chama `registro_batida.retratar_batida`. A porta grava `aprovada=False` e `retratada_em`, registra a trilha e aciona a atualização do fechamento. O filtro de apuração usa `retratada_em__isnull=True`. [app/templates/colaboradores/partials/_calendario_grade.html:127](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/templates/colaboradores/partials/_calendario_grade.html:127) · [app/ponto/urls.py:62](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/urls.py:62) · [app/ponto/views.py:3453](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/views.py:3453) · [app/ponto/services/retratar_humano.py:158](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/retratar_humano.py:158) · [app/ponto/services/retratar_humano.py:175](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/retratar_humano.py:175) · [app/ponto/registro_batida.py:287](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/registro_batida.py:287) · [app/ponto/turnos.py:2961](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/turnos.py:2961)
+- **Desfazer.** O botão envia `POST` à rota `ponto:desfazer_retratacao`. A view chama `retratar_humano.desfazer`. A porta exige a mesma permissão, `retratada_em` preenchido, última trilha `retratar_batida_admin` e prazo de **7 dias** a partir da retratação. Usa `registro_batida.anotar` para gravar `aprovada=True`, limpar `retratada_em` e registrar `desfazer_retratacao_batida`. [app/templates/colaboradores/partials/_calendario_grade.html:127](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/templates/colaboradores/partials/_calendario_grade.html:127) · [app/ponto/urls.py:64](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7
+
+[truncado em 20000 de 20597 caracteres]
+
+## 27/11 10:08 · sessao 5706d8bf958d · RAZAO-DA-SOBRA · construtor · origem=Code
+
+**reds1 entregue na cópia.** São 37 testes de comportamento e controle, mais 15 mutantes em memória. A checagem estática confirmou sintaxe válida, 10 âncoras presentes uma vez e 5 ausentes. O diff consiste nos seis módulos de teste abaixo. [Fonte](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:1) · [Lavra](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:1) · [Leitores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_leitores.py:1) · [Repasse](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:1) · [E2 e fábrica](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_e2_fabrica.py:1) · [Mutantes](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:1) [nao verificado]
+
+**Veredito da suite e linhas de `red.log` [nao verificado].** A rota da Pista 2 usa SSH, cria um commit de foto para a cópia suja e grava `refs/pista`. Essas operações esbarram nas restrições da volta. A rota alternativa também escreve um env-file. O comando autorizado para quem puder executar está no fim. [suite.sh](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:324) · [SSH](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:378) · [Foto e ref](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:420) · [Rota alternativa](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:509) [nao verificado]
+
+### REDs e controles
+
+Os motivos abaixo vêm da leitura da base. O resultado de cada asserção em execução segue **[nao verificado]**.
+
+| Resposta ou volta | Caso e motivo esperado na base |
+|---|---|
+| R1 | Oposta a 8 s, borda inclusiva de 10 s e residual a 11 s. Falha explícita `autoridade escala.orfa_classe.razao_da_sobra ausente na base`. A classe legada opera por minuto. [RED](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:74) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/orfa_classe.py:53) |
+| R2 | Duas sobras no mesmo minuto em foto antiga. Falhas independentes `autoridade escala.services.leitor_celula.sobras_da_ata ausente na base` e `autoridade ponto.services.cartorio.medir_razoes_sobras ausente na base`. O leitor atual entrega horas. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:140) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/services/leitor_celula.py:180) |
+| R3 | O callback autônomo de isenção segue executando com TXT vigente. O mutante estende `_K6` ao callback e cobra a perda do silêncio. [Controle](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:190) · [Mutante](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:174) |
+| R4 | Um admitido e um vetado. O teste exige agregado com um item e trilha da recusa por item. A base grava os dois IDs antes de processar as perguntas. [RED](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:130) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/services/disputa_emissao.py:1117) | [nao verificado]
+| R5 / A emissor | Origem aberta e alvo efetivo entregue. O teste observa a resolução do dia dentro de `_nascer`, os `INSERT`s, os emitidos e a releitura do chamador. A base executa `save(force_insert=True)` e a guarda B2 do `save` incide em alterações. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:72) · [Nascimento](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/models.py:3333) · [Guarda](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/models.py:3847) | [nao verificado]
+| R6 | O residual é provocado depois do `carimbar` real. O teste exige rollback ao `SAVEPOINT`, contagens iguais em todas as tabelas detectadas na escrita e vizinha intacta. A base chama o corpo e a precedência sem a cerca desse ato. [RED](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:271) · [Base](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:2112) | [nao verificado]
+| V1 | Identidades distintas no mesmo instante, segundos no mesmo minuto, duas linhas na meia-noite e CxR com par adicional. A fonte atual reduz o insumo a instante, tipo e marca de intervalo e entrega sobras em `HH:MM`. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:166) · [Entrada](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/utils.py:1367) · [Saída](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/utils.py:1883) |
+| V2 | Primeira ata para o supra, persistência, retirada da ocorrência na reconciliação, duas relavras e contadores. A base lavra horas e contagem, retira por minuto e omite os contadores de razão. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:60) · [Ata](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:749) · [Reconciliação](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/utils.py:2093) · [Contadores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:2021) |
+| V3 | Mesma ocorrência e razão na tela, PDF, supra e insumos de chamados e folha. O selo cobra leituras pela porta. A base ainda leva a hora crua ao template e compara por hora no PDF. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_leitores.py:74) · [Template](/home/ronald/wt-codex-razao-da-sobra-094857/app/templates/ponto/espelho.html:242) · [PDF](/home/ronald/wt-codex-razao-da-sobra-094857/app/relatorios/pdf_espelho.py:607) |
+| A cartório | Margem de meia-noite, 10:00 com ambiente 10:02, C6 no gate e no tripwire, primeira lavra C6 `0→1` sem subir emitidos e veto antes da escrita. A base consulta o relógio ambiente no avulso e chama C6 sem `agora` no caminho compartilhado. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:28) · [Avulso](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/services/cartorio.py:2083) · [C6](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/models.py:368) |
+| A E2 e fábrica | Duas candidatas, TXT em um dia, carimbo do admitido, fecho adiado da vetada e veto antes do descarimbo. A base percorre as candidatas do E2 por colaborador e chama o descarimbo antes da guarda de limbo. [REDs](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_e2_fabrica.py:65) · [E2](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/reconciliador.py:681) · [Fábrica](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/services/fabrica_da_celula.py:206) |
+
+Os controles escritos cobrem saída residual a 11 s, pausa L-032, foto histórica, ordem C → D → Ch → P, callback autônomo, dia sem ata, lista vazia, leitor alimentado com zero consultas e efeito zero em dinheiro, causa e retenção. **Verde em suite [nao verificado].** [Fonte](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:106) · [Repasse](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_repasse.py:143) · [Fábrica](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_e2_fabrica.py:128) · [Lavra](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:135) · [Leitores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_leitores.py:170) [nao verificado]
+
+Os testes assumem `batida_id`, `instante` e `razao` no registro de ocorrência, além das chaves `minutos_ambiguos` e `sobras_por_razao` nos contadores. A forma final dessas interfaces, a cobertura da borda 36, o toque em viewport real, o teto total de consultas da lavra e a publicação no placar e no HAIKU seguem **[nao verificado]**. O brief transcrito foi a referência disponível. A leitura integral do dossiê §6/§8 na cópia segue **[nao verificado]**. [Ocorrência e conferência](/home/ronald/wt-codex-razao-da-sobra-094857/app/escala/tests/test_razao_sobra_fonte.py:153) · [Contadores](/home/ronald/wt-codex-razao-da-sobra-094857/app/ponto/tests/test_razao_sobra_lavra.py:101) [nao verificado]
+
+### Mutantes
+
+Cada rótulo abaixo é argumento de `rodar_mutante`. **Presente** indica âncora única conferida estaticamente, com mordida **[nao verificado]**. **Skip** indica âncora ausente na base e mensagem `espera a cura RAZAO-DA-SOBRA`. [Executor](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:28)
+
+| Rótulo | Âncora | RED | Estado |
+|---|---|---|---|
+| `CatracaMutantesRazaoSobraTest.test_leitor_cru` | `_marcos_faltantes`, chamada a `grade_da_celula` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:62) | V3 catraca | Presente | [nao verificado]
+| `CatracaMutantesRazaoSobraTest.test_relogio_solto_no_gate_avulso` | `julgar_celula`, `agora < _fim` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:73) | A1 10:00/10:02 | Skip | [nao verificado]
+| `LavraMutantesRazaoSobraTest.test_falta_de_razao_aparece_no_contador` | `julgar_celula`, `return out` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:89) | V2 `sobras_sem_razao=0` | Presente | [nao verificado]
+| `LavraMutantesRazaoSobraTest.test_soma_por_razao_perde_uma_sobra` | `julgar_celula`, `return out` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:96) | V2 soma igual a `n_orfas` | Presente | [nao verificado]
+| `LavraMutantesRazaoSobraTest.test_correcao_so_no_cron` | `julgar_celula`, guarda `competencia_do_dia_entregue` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:106) | A1 veto no avulso | Skip | [nao verificado]
+| `LavraMutantesRazaoSobraTest.test_relogio_so_no_gate` | `_gravar_estado`, `_vivas_entre(..., agora=agora)` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:113) | A1 C6 no tripwire | Skip | [nao verificado]
+| `LavraMutantesRazaoSobraTest.test_relogio_perdido_na_escrita` | `_julgar_colab_corpo`, `carimbar(..., agora=agora)` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:122) | A1 instante persistido | Presente | [nao verificado]
+| `LavraMutantesRazaoSobraTest.test_parei_residual_libera_savepoint` | `executar_sob_cerca`, `raise` após veto anotado [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:129) | R6 escrita parcial | Presente | [nao verificado]
+| `E2MutantesRazaoSobraTest.test_veta_colaborador_inteiro` | `retratar_perguntas_absolvidas_por_celula`, `if not frescas` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:146) | A2 carimbo da admitida | Presente | [nao verificado]
+| `E2MutantesRazaoSobraTest.test_guarda_so_depois_do_descarimbo` | `perguntar_pela_celula`, guarda de entrega antes do descarimbo [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:156) | A2 veto antes da escrita | Skip | [nao verificado]
+| `E2MutantesRazaoSobraTest.test_inventa_zero_de_lista_vazia` | `julgar_colab`, registro `[PERGUNTA]` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:164) | A2 preserva emissão confirmada | Presente | [nao verificado]
+| `RepasseMutantesRazaoSobraTest.test_k6_estendido_a_signal_on_commit_autonomo` | `_isentos_post_save_chamado`, `silenciar_do_colab(colab_id)` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:174) | R3 alcance | Presente | [nao verificado]
+| `RepasseMutantesRazaoSobraTest.test_filtra_o_dia_antes_de_nascer` | `criar_disputa_a_partir_de_chamados_orfaos`, import de `_dtc_i` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:185) | R5 duas candidatas chegam a `_nascer` | Presente | [nao verificado]
+| `RepasseMutantesRazaoSobraTest.test_insere_antes_do_veto` | `_nascer`, `vigiar_escrita_de_perguntas([p])` antes do `save` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:195) | R5 `INSERT` só para admitido | Skip | [nao verificado]
+| `RepasseMutantesRazaoSobraTest.test_veta_o_lote_inteiro` | `criar_disputa_a_partir_de_chamados_orfaos`, seleção `_intervalo` [teste](/home/ronald/wt-codex-razao-da-sobra-094857/app/chamados/tests/test_razao_sobra_mutantes.py:203) | R5 retorno de sucesso | Presente | [nao verificado]
+
+### Comandos
+
+A partir da raiz da cópia, com autorização para a rota da Pista 2 e com o diretório de log disponível. Destino `logs/RAZAO-DA-SOBRA/reds1/red.log`. [Contrato da suite](/home/ronald/wt-codex-razao-da-sobra-094857/bin/suite.sh:22)
+
+```bash
+copia=/home/ronald/wt-codex-razao-da-sobra-094857
+cd "$copia"
+
+PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --dir "$copia" \
+  --only "escala.tests.test_razao_sobra_fonte ponto.tests.test_razao_sobra_lavra ponto.tests.test_razao_sobra_leitores chamados.tests.test_razao_sobra_e2_fabrica chamados.tests.test_razao_sobra_repasse chamados.tests.test_razao_sobra_mutantes" \
+  --parallel 1 > logs/RAZAO-DA-SOBRA/reds1/red.log
+
+rodar_mutante() {
+  PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --dir "$copia" \
+    --only "chamados.tests.test_razao_sobra_mutantes.$1" --parallel 1
+}
+```
+
+A certificação continua com Code e opus final. **`red.log` e veredito [nao verificado].**
 
 ## 27/11 10:03 · sessao 123515df12cb · CASO-LITERAL-14 · leitura · origem=Code
 
@@ -1267,122 +1417,4 @@ Na verificação isolada do selo, os quatro recortes falharam na base, passaram 
 - Em **3a**, `test_MORDE_a_divida_so_ENCOLHE_e_nao_apodrece` falha porque o inventário ainda exige a chamada direta a `batidas_apuraveis`. O PDF passou a usar `batidas_apuraveis_na_janela`. A asserção existente segue como estava. [Selo do PDF](/home/ronald/wt-codex-par-pelo-turno-010806/app/relatorios/tests/test_pdf_nao_calcula.py:107) · [Carga do PDF](/home/ronald/wt-codex-par-pelo-turno-010806/app/relatorios/pdf_espelho.py:280) [nao verificado]
 - **3c e 4b** ficaram fora da volta conforme o recorte. Em **6**, o ensaio sintético deu um par de **782 min**, teto de **732 min** e uma C9. O laudo nominal do col155 em 08/11 e o impacto de frota por rubrica ficam **[nao verificado]**. [Itens em aberto](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:137)
 
-## 27/11 09:12 · sessao bd73245393ec · CODEX-CONSTROI-MOTOR · construtor · origem=Code
-
-Implementei a guarda do CCM no vigia. O juiz é chamado antes dos dois comandos Docker. Qualquer `rc != 0` grava stdout, stderr e a linha de recusa em `saida`, e retorna `None`. O diff acrescenta **0 `except`**. [core/esteira_vigia.py:748](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:748)
-
-- O isolamento retorna `None` antes de classificar ou gravar o cache. [core/esteira_vigia.py:740](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:740)
-- O auto-revert mantém o revert aplicado sem prova, registra a recusa na Pauta e no RELATO e retorna `revert aplicado, reteste recusado (CCM)`. [core/esteira_vigia.py:1322](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:1322) [nao verificado]
-- O congelado e a autocura já exigiam verde para abrir quarentena e criar fatia. Acrescentei ao congelado um retorno específico para a recusa, antes do alarme de vermelho. [core/esteira_vigia.py:1377](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:1377) [core/esteira_vigia.py:1467](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:1467) [nao verificado]
-
-**Evidência da volta**
-
-Os seis casos foram escritos com o vigia ainda no HEAD `59600163ccc9cffb8f3ae148beede7cd7866ae86`. A leitura desse HEAD mostrou que `_rodar_testes` começava pelo Docker, que o isolamento classificava `None` como `'arvore'` e que o auto-revert desfazia o revert com `None`. A sintaxe dos dois arquivos e dos sete mutantes foi conferida. O RED, o GREEN e os mutantes seguem **[nao verificado]** em execução. A pista 2 documentada exige SSH e uma cópia commitada, operações vedadas nesta volta. [HEAD core/esteira_vigia.py:747, :741, :1315] [core/tests/test_vigia_ccm.py:38](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_vigia_ccm.py:38) [docs/BACKLOG.md:2375](/home/ronald/wt-codex-codex-constroi-motor-090747/app/docs/BACKLOG.md:2375)
-
-Os vizinhos retornaram `rc 1` após a cura, com `FAILED (errors=2)` na importação. Os erros foram `No module named 'django.contrib'` e `No module named 'django.test'`. Nenhum caso dos dois módulos chegou a executar. [core/tests/test_esteira_sem_humano.py:10](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_esteira_sem_humano.py:10) [core/tests/test_esteira_status_verdade.py:13](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_esteira_status_verdade.py:13)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
-  core.tests.test_esteira_sem_humano core.tests.test_esteira_status_verdade
-
-git --no-optional-locks diff -- core/esteira_vigia.py
-git --no-optional-locks diff --no-index /dev/null core/tests/test_vigia_ccm.py
-```
-
-**Comandos do RED, GREEN e mutantes na pista 2**
-
-Com o checkout Git e o Django disponíveis, a função abaixo roda o teste novo com a versão escolhida do vigia em memória. Saídas de execução **[nao verificado]**. [core/tests/test_vigia_ccm.py:18](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_vigia_ccm.py:18) [nao verificado]
-
-```bash
-ccm() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
-import ast
-import subprocess
-import sys
-import unittest
-from pathlib import Path
-
-import django
-from django.conf import settings
-
-settings.configure(SECRET_KEY="ccm-teste-isolado") [nao verificado]
-django.setup()
-from core import esteira_vigia as vigia
-
-modo, *args = sys.argv[1:]
-p = Path(vigia.__file__)
-fonte = p.read_text(encoding="utf-8")
-if modo == "head":
-    fonte = subprocess.check_output([
-        "git", "show",
-        "59600163ccc9cffb8f3ae148beede7cd7866ae86:app/core/esteira_vigia.py",
-    ], text=True)
-elif modo == "mutante":
-    nome, antes, depois = args
-    no = next(n for n in ast.parse(fonte).body if isinstance(n, ast.FunctionDef) and n.name == nome)
-    linhas = fonte.splitlines(keepends=True)
-    trecho = "".join(linhas[no.lineno - 1:no.end_lineno])
-    assert trecho.count(antes) == 1, (nome, antes)
-    linhas[no.lineno - 1:no.end_lineno] = [trecho.replace(antes, depois, 1)]
-    fonte = "".join(linhas)
-else:
-    assert modo == "cura", modo
-
-exec(compile(fonte, str(p), "exec"), vars(vigia))
-unittest.main(module="core.tests.test_vigia_ccm", argv=["ccm", "-v"])
-PY
-}
-
-ccm head
-ccm cura
-ccm mutante _rodar_testes 'juiz.returncode != 0' 'juiz.returncode == 1'
-ccm mutante _rodar_testes 'juiz.stdout + juiz.stderr' 'juiz.stdout'
-ccm mutante _rodar_testes 'CCM-REDUZ-2711-0845' 'CCM'
-ccm mutante _rodar_testes $'return None\n    pw =' $'return False\n    pw ='
-ccm mutante _isolar 'if ok is None:' 'if ok is False:'
-ccm mutante auto_revert 'if verde is None:' 'if verde is False:' [nao verificado]
-ccm mutante curar_por_relogio 'if verde is None:' 'if verde is False:' [nao verificado]
-```
-
-## 27/11 09:05 · sessao e6e68478a2db · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-**C2u parcial.** Apliquei os itens 2, 5 e 6. Os itens 1, 3 e 4 dependem de autorização explícita para editar `motor_calculo_v2.py`, que a ordem também proíbe sob pena de descarte. [Intermitente:3841](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3841) · [Comercial:3671](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3671) · [Partido:3103](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3103) [nao verificado]
-
-| Item | RED antes da cura e resultado observado |
-|---|---|
-| 1. Intermitente | RED em `(750, 570, 0)` para trabalhado, noturno e fora. O teste exige `(720, 540, 30)` e segue RED. [Teste:31](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:31) | [nao verificado]
-| 2. Pausa | A releitura dava `(300, 20)` para trabalhado e pausa, contra `(320, 0)` do motor e da alimentação. Com o gatilho compartilhado, os três dão `(320, 0)`. Duas fixtures existentes passaram a informar o desconto do motor, com as asserções originais preservadas. [RED:38](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:38) · [Cura:755](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:755) · [Fixtures:203](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:203) |
-| 3. Comercial | RED em **HE 0 e saldo −33,83 h**, com 610 trabalhados e previsto de 660. Em memória, condicionar o previsto a `saida_da_base_da_he` deu **HE 130 e saldo −36,00 h** sem cauda. O controle com saída às 07h20 continuou com HE zero. [RED:60](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:60) · [Controle:145](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:145) |
-| 4. Partido | O teste de igualdade literal deu RED para `MotorTurnoPartido`. `MotorTurnoPartidoNoturno` já coincide com `59600163c`. [Teste:72](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:72) |
-| 5. Export | `AttributeError` no resultado composto vazio e `KeyError` no período sem chave. Ambos passaram com a leitura por `dia_pago._dia_de`. [REDs:15](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_export.py:15) · [Cura:346](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:346) |
-| 6. Catraca | O censo acusou a lista antiga. Registrei `[3586, 3716, 3734, 3759, 3763, 3764]`. A catraca passou **35/35** e a restauração da lista antiga em memória voltou a falhar. [Registro:309](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:309) · [Asserção:564](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:564) | [nao verificado]
-
-**Conflitos medidos nos itens 3 e 4**
-
-- **Pontualidade sem cauda.** Com os marcos do `main` em memória, o caso `test_entrada_depois_da_meia_noite_com_d1_de_folga_tem_atraso_abatido_pela_parcial` deu atraso **0** e exige **5**. `test_sem_parcial_o_atraso_e_o_bruto` deu **0** e exige **12**. Nos dois, a saída é às 07h50, no marco. [Com parcial:119](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:119) · [Sem parcial:129](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:129)
-- **Partido.** Na cópia literal em memória, `test_partido_com_intervalo_entre_dois_periodos` e `test_partido_preserva_os_490_minutos_do_main` deram `ValueError`. O Partido do `main` desempacota quatro valores e a janela atual retorna cinco. O teste do construtor da tripla passou nessa simulação. Os oito casos de `EscritorUnicoDaBaseDaHeTest` passaram na cópia de trabalho. [Janela:1939](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1939) · [Intervalo:147](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:147) · [490 minutos e tripla:51](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:51) · [Escritor:661](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:661) [nao verificado]
-
-**Execução.** Os 11 casos focados de pausa e export passaram em `unittest` em memória, com as fronteiras externas substituídas. A chamada conjunta de `ponto.tests.test_ramo2b_*`, `ponto.tests.test_o280_bateria_da_lei`, `core.tests.test_medida_turno_do_par` e `folha.tests` parou no import de `django.core`. O veredito da suíte Django e a certificação do Code e do Opus final estão pendentes. O arquivo `verif_c2t.md` ficou [nao verificado]. [Entrada da suíte:11](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/manage.py:11) [nao verificado]
-
-Os quatro mutantes em memória produziram os REDs esperados. Os dois primeiros saíram com `rc 1`, e os do export com `rc 2`, respectivamente `AttributeError` e `KeyError`. Comandos para reproduzir com Django disponível. [Mutantes:14](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2u_mutantes.py:14)
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
-python3 -B -m ponto.tests.ramo2b_c2u_mutantes releitura_ignora_desconto
-python3 -B -m ponto.tests.ramo2b_c2u_mutantes alimentacao_ignora_desconto
-python3 -B -m ponto.tests.ramo2b_c2u_mutantes export_exige_mapa
-python3 -B -m ponto.tests.ramo2b_c2u_mutantes export_exige_chave
-```
-
-Para reproduzir o mutante da catraca sem Django, execute o trecho `unittest` documentado no teste com a lista do Comercial restaurada em memória para `[3586, 3717, 3735, 3760, 3764, 3765]`. [Comando da catraca:30](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:30) · [Entrada mutada:309](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:309) [nao verificado]
-
-**Diff da cópia.** `git diff --check` passou. A contagem de `except` adicionados foi zero, incluindo os arquivos novos. [Pausa:35](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/alimentacao.py:35) · [Export:589](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:589) [nao verificado]
-
-```bash
-git diff HEAD -- .
-for arquivo in ponto/tests/*c2u*.py; do
-  git diff --no-index -- /dev/null "$arquivo"
-done
-```
-
-_8608 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8610 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
