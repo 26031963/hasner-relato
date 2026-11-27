@@ -1,7 +1,75 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 18:04** · publicado em **27/11/2026 18:08** (UTC-3)
+> Ultima resposta processada: **27/11/2026 18:13** · publicado em **27/11/2026 18:19** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 18:13 · sessao ba609a2fce97 · FERIADO-UM-JUIZ · construtor · origem=Code
+
+## FERIADO-UM-JUIZ c8
+
+A revisão volta a restaurar a batida e registrar a trilha quando o colaborador está fora do universo da competência. As duas lavras registram a exceção capturada e marcam o rollback. Após sair do `atomic` do colaborador, `propagar_falha=True` faz a revisão receber um `RuntimeError` com a causa original. A revisão é o único chamador que ativa essa opção. A contagem continua disponível para a tela e o comando. `ponto/tests/test_feriado_um_juiz.py:57` · `ponto/services/fechamento.py:513,1277,1334,1342,1350,1892`
+
+| Sítio | RED | Mutante |
+|---|---|---|
+| Revisão fora do universo · `ponto/services/fechamento.py:619,1892` | Na c7 `a8eec39b3`, a restauração aborta com `RuntimeError`. Na c8, a batida e a trilha são registradas, sem escrita de mensal ou lavra. `ponto/tests/test_feriado_um_juiz.py:57` | `c8_revisao_usa_zero` recoloca `== 0` e reproduz o aborto. `ponto/tests/feriado_um_juiz_mutantes.py:87` |
+| Falha real na lavra do motor ou do oráculo · `ponto/services/fechamento.py:1277,1334` | As duas injeções exigem rollback do mensal, das lavras, da restauração e da trilha. `ponto/tests/test_feriado_um_juiz.py:49,224` | `c8_falha_lavra_nao_propaga`, `c8_falha_colab_nao_propaga` e `c7_revisao_ignora_contagem` fazem os dois subcasos perderem o `RuntimeError`. `ponto/tests/feriado_um_juiz_mutantes.py:94,97,106` |
+| Contagem e rollback nos demais chamadores · `ponto/services/fechamento.py:1276,1333,1335` | Cada lavra injetada mantém o estado anterior e devolve `0` na chamada comum. `ponto/tests/test_feriado_um_juiz.py:43,46,224` | `c7_motor_conta_falha` e `c7_oraculo_conta_falha` voltam a contar `1`. `c5_motor_sem_sinal_de_rollback` e `c5_oraculo_sem_sinal_de_rollback` deixam gravações parciais na simulação. `ponto/tests/feriado_um_juiz_mutantes.py:100,103,128,132` |
+
+## Censo dos chamadores
+
+As 22 chamadas do aplicativo, incluindo as importações com alias, estão abaixo. Os endereços são relativos a `app/`.
+
+| Chamador | Uso do retorno |
+|---|---|
+| `ponto/services/fechamento.py:1892` | Revisão. Descarta a contagem e ativa a propagação de falha. |
+| `ponto/services/fechamento.py:1849` | Evento após commit. Descarta a contagem e registra o evento. |
+| `ponto/services/fechamento.py:1798` | `fechamento_lido`. Devolve o objeto destacado do colaborador via `.get()`. |
+| `ponto/views.py:1280` | Exibe a contagem na resposta da tela. |
+| `ponto/management/commands/recalcular_fechamento.py:130` | Imprime a contagem e inclui o valor no JSON. |
+| `folha/views.py:215` | Usa os objetos destacados para classificar e montar o TXT. |
+| `folha/management/commands/simular_folha.py:123,130` | `--recalcular` descarta a contagem. `--lido` usa os objetos destacados para classificar e montar o TXT. |
+| `pautas/management/commands/pauta_pago_x_devido_exportada.py:135` | Busca o devido por colaborador e recusa o ato se faltar alguma apuração pedida. |
+| `ponto/services/diff_frota.py:84,87` | Incorpora os dicionários de leitura às fotos `hoje` e `novo`. |
+| `ponto/management/commands/apurar_furo_da_exportada.py:111` | Imprime `len(proc)` e usa o dicionário de saída `coletar_furos` para a apuração. |
+| `ponto/management/commands/lavrar_dias_pagos.py:106` | Soma e imprime a quantidade de entradas no dicionário de leitura. |
+| `ponto/management/commands/diff_calculador.py:131` | Descarta o dicionário e usa as lavras da captura. |
+| `ponto/portas/regen_exportada.py:184` | Descarta a contagem. |
+| `ponto/management/commands/aplicar_09_corte_b.py:212`, `ponto/management/commands/celula_veredito_velho.py:149`, `ponto/management/commands/desvio_o68b.py:94`, `ponto/management/commands/diff_reclassificar_partido.py:161,206`, `ponto/management/commands/folga_que_sumiu.py:70`, `ponto/management/commands/plano_b_no_dinheiro.py:110` | Descartam a contagem. |
+
+**Efeito da c7 em outros chamadores.** A tela e o comando passaram a publicar uma contagem que exclui o colaborador cuja lavra falhou. Os chamadores que descartam a contagem não tomam decisão sobre esse valor. No modo leitura com lavra, o dicionário é preenchido antes da tentativa de escrita, de modo que a entrada ainda pode compor o total de **lidos**. A c7 também passou a recusar a lavra do oráculo quando há minutos em rubricas de dinheiro sem a declaração de procedência exigida. Ocorrência desses casos na frota **[nao verificado]**. `7706835c4:app/ponto/services/fechamento.py:1276,1340,1341` · `a8eec39b3:app/ponto/services/fechamento.py:1276,1340,1341` · `ponto/views.py:1281` · `ponto/management/commands/recalcular_fechamento.py:134,144` · `ponto/services/fechamento.py:1171,1227,1349` · `ponto/management/commands/lavrar_dias_pagos.py:108` · `ponto/services/dia_pago.py:259,316`
+
+### Chamadas nos testes [nao verificado]
+
+- **Contagem verificada** em `ponto/tests/test_fechamento_escopo_colabs.py:52`, `ponto/tests/test_feriado_um_juiz.py:222` e `ponto/tests/test_o80_selo_l092.py:103,113`.
+- **Dicionário de leitura inspecionado** em `pautas/tests/test_pauta_pago_x_devido_exportada.py:113`, `ponto/tests/test_bob_b2_abono_feriado_guarda.py:208`, `ponto/tests/test_feriado_um_juiz_porta.py:167,262` e `ponto/tests/test_o80_selo_l092.py:162`.
+- **Contagem repassada por helper e descartada pelos testes** em `ponto/tests/test_ferias_dia21.py:124,212`. A chamada real instrumentada por `wraps` em `ponto/tests/test_guarda_10_b.py:126` verifica os argumentos e deixa o comando consumir a contagem em `ponto/management/commands/recalcular_fechamento.py:130`.
+- **Retorno descartado** em `chamados/tests/test_o317_passivo_pela_porta.py:629,684`, `colaboradores/tests/test_calendario_badge_minutos.py:68`, `colaboradores/tests/test_calendario_carimbo_intra.py:90`, `colaboradores/tests/test_calendario_le_dia_pago.py:159`, `escala/tests/test_escala_certa_deterministica.py:85`, `pautas/tests/test_pauta_pago_x_devido_exportada.py:61,336`, `relatorios/tests/test_o197_futuro_nao_e_em_aberto.py:408`, `relatorios/tests/test_pdf_linha_do_dia_e_o_pago.py:69`, `relatorios/tests/test_pdf_realizado_do_dia.py:104,133` e `relatorios/tests/test_s3_cartao_le_dia_pago.py:87,424`.
+- **Retorno descartado nos testes de ponto** em `ponto/tests/test_abono_dia_inteiro_zera_pontualidade.py:72`, `ponto/tests/test_abono_parcial_abate_a_ponta.py:87`, `ponto/tests/test_bateria_bo0611_05_ferias_desligado.py:604`, `ponto/tests/test_bob_b2_abono_feriado_guarda.py:111`, `ponto/tests/test_credito_no_proprio_dia.py:63`, `ponto/tests/test_dia_pago_soma.py:66`, `ponto/tests/test_dupla_contagem_dia20.py:39,40`, `ponto/tests/test_fechamento_ausencia.py:190`, `ponto/tests/test_fechamento_escopo_competencia.py:30,47,59,69,80`, `ponto/tests/test_feriado_um_juiz_porta.py:65,270,494,525`, `ponto/tests/test_h12h06b_parcial_pelo_juiz.py:138`, `ponto/tests/test_he100_dia_sem_previsto.py:189`, `ponto/tests/test_o140_furo_lavrado.py:363`, `ponto/tests/test_o280_bateria_da_lei.py:1751`, `ponto/tests/test_o48_fechamento_lido.py:120`, `ponto/tests/test_o48p6_projecao_carimbada.py:83`, `ponto/tests/test_o80_selo_l092.py:122,136,147,179,193`, `ponto/tests/test_o85_buraco_de_vinculo.py:78,155`, `ponto/tests/test_recalculo_ignora_carimbo.py:32,38`, `ponto/tests/test_revisar_par_relampago.py:217` e `ponto/tests/test_semselo5_causa_espelho_pelo_vinculo_da_janela.py:60`.
+
+## Arquivos e comandos
+
+- Cura com os handlers existentes. Condensei o comentário da S5b para preservar os endereços congelados pela catraca. [ponto/services/fechamento.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/fechamento.py:1277) · `core/tests/test_medida_turno_do_par.py:565`
+- RED da restauração fora do universo, com instante fixo. [ponto/tests/test_feriado_um_juiz.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:57)
+- Reprodução na base e mutantes em memória. [ponto/tests/feriado_um_juiz_mutantes.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/feriado_um_juiz_mutantes.py:87)
+
+Comandos executados a partir de `app/`. `base_c8` carrega em memória o fechamento da c7 e exige o erro exato. `controle` rodou 44 testes com uma falha esperada. Os 41 estruturais passaram e cada mutante abaixo produziu a falha prevista. `ponto/tests/feriado_um_juiz_mutantes.py:367,459,515,518`
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+python3 -m ponto.tests.feriado_um_juiz_mutantes base_c8
+python3 -m ponto.tests.feriado_um_juiz_mutantes controle
+python3 -m ponto.tests.feriado_um_juiz_mutantes estruturais
+python3 -m ponto.tests.feriado_um_juiz_mutantes c8_revisao_usa_zero
+python3 -m ponto.tests.feriado_um_juiz_mutantes c8_falha_lavra_nao_propaga
+python3 -m ponto.tests.feriado_um_juiz_mutantes c8_falha_colab_nao_propaga
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_revisao_ignora_contagem
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_motor_conta_falha
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_oraculo_conta_falha
+python3 -m ponto.tests.feriado_um_juiz_mutantes c5_motor_sem_sinal_de_rollback
+python3 -m ponto.tests.feriado_um_juiz_mutantes c5_oraculo_sem_sinal_de_rollback
+```
+
+Suíte completa, execução ORM e certificação pelo Code e pelo Opus final **[nao verificado]**. [nao verificado]
 
 ## 27/11 18:04 · sessao b3655e2c03f2 · FERIADO-UM-JUIZ · construtor · origem=Code
 
@@ -682,67 +750,4 @@ bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
   --only "ponto core folha relatorios"
 ```
 
-## 27/11 16:57 · sessao f92e1d4a9b06 · - · - · origem=Ronald (tmux)
-
-**Mapa.** Censo estático confirmou 20 chamadas a `criar`, incluindo um smoke manual, e 18 a `abrir`. O selo de escritores percorreu 774 arquivos em memória, com quatro verificações aprovadas e nenhum escritor de `status_local` em runtime fora das portas declaradas. O selo exclui testes e migrações. [test_selo_status_so_pelas_portas.py](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/tests/test_selo_status_so_pelas_portas.py:340)
-
-- `criar(cls, *, colaborador, status='aberto', **campos)` insere sempre que passa motor, absolvição pela célula, veto e urgência. Quando `status='aberto'`, o motor pode escolher `registrado`. Sem dedup nem reabertura. Recusas preexistentes devolvem `None`. `app/chamados/models.py:1120-1166`.
-- `abrir(cls, *, colaborador, defaults=None, **lookup)` serializa pelo colaborador, procura correspondente, tenta renascer se encerrado e devolve `(existente, False)` mesmo quando recusou renascer. Procura filho agrupado sob pai vivo. Se chegar ao nascimento passa motor, célula e veto, grava via `get_or_create` e devolve `(ch, criado)`. Recusas preexistentes de nascimento devolvem `(None, False)`. `app/chamados/models.py:899,968-1047`.
-- Fora dos dois `INSERT`s (`app/chamados/models.py:1037,1161`), `_gravar_estado` é o escritor runtime da coluna (`:213,240,304-308`), chamado por `_aplicar` (`:469`), `reconciliar` (`:674`), `cancelar` (`:854`), `analisar` (`:872`), `reabrir` (`:1508`), `encerrar` (`:1793`) e `encerrar_por_competencia_trancada` (`:1813`). `:375,390` são simulação em memória. Migrações históricas alteram estado em `app/chamados/migrations/0038_a3_registrado_backfill.py:10,15` e `0039_a3_via_backfill.py:24,33`.
-- Reabertura fora de nascer/renascer existe por `reabrir`, que leva `fechado`/`resolvido` a `em_analise`, e pelo POST humano → `transicionar_com_pauta` → `transicionar` → `_aplicar`. No segundo, o motor permite ao `admin_ti` sair de `fechado` inclusive para `aberto`, `em_analise` ou `registrado`, todos `VIVOS`. As telas do detalhe, fio e modal ocultam a troca usual de status em `fechado`, mas a aceitação no backend está no motor. `app/chamados/models.py:140,211,466-469,1428,1505-1518`; `app/chamados/services/fecho_runtime.py:175,181`; `app/chamados/catalogo/motor.py:24,98-106,113,139-156`; `app/templates/chamados/detalhe_local.html:375`, `fio_colaborador.html:254`, `partials/modal_fio.html:682`.
-
-**Chamadores de `criar`.**
-
-| Sítio | Módulo e origem |
-|---|---|
-| `app/api/views.py:2189` | `app_colaborador`, solicitação humana |
-| `app/chamados/services/abertura.py:47` | `modulo`, humano, GET com default `chamados` e catálogo pode sobrescrever (`app/chamados/views.py:150,197`, `abertura.py:34`) |
-| `app/chamados/services/abertura.py:172` | `modulo`, humano DP, `tipo` do formulário ou `mensagem_dp` default do helper (`app/chamados/views.py:136-140`, `abertura.py:124`) |
-| `app/colaboradores/views.py:2026,2412` | `beneficio`, `agenda_dia`, ações humanas |
-| `app/chamados/services/regularizacao_ext.py:247` | `regularizacao_externa`, ação humana (`app/colaboradores/views.py:3032`, `app/chamados/views_regularizacao.py:54` via `regularizacao_ext.py:319`) |
-| `app/colaboradores/services/vinculo.py:412` | `escala_colaborador`, oferta de aceite em ação humana (`:388`) |
-| `app/ponto/utils.py:40,103` | `colaborador_sem_posto`, `colaborador_em_ferias`, automatismos de ponto |
-| `app/ponto/views.py:310` | `entrada_bloqueada_turno_aberto`, automatismo da batida |
-| `app/api/views.py:720`, `app/api/views_core.py:714` | `batida_fora_escala_leve`, automatismo da batida |
-| `app/ponto/services/triagem_batida.py:107,336,459` | `acesso_bloqueado`, `batida_fora_horario` nos dois últimos, automatismos da batida |
-| `app/ponto/services/geofence.py:361` | `gps_ausente` ou `gps_fora_geofence` (`:344`), automatismo da batida |
-| `app/ponto/services/justificativa.py:411` | `justificativa`, efeito de rejeição humana DP (`app/ponto/views.py:1956`) |
-| `app/ponto/management/commands/processar_alertas_avancados.py:121` | `turno_aberto_24h`, cron (`app/config/crons.py:363`) |
-| `app/colaboradores/services/desligamento.py:195` | `desligamento_revisao`, efeito de UI ou cron |
-| `app/chamados/management/commands/smoke_chamados.py:124` | `smoke`, diagnóstico manual (`app/config/crons.py:1460`) |
-
-**Chamadores de `abrir`.**
-
-| Sítio | Módulo e origem |
-|---|---|
-| `app/chamados/views.py:974` | `mensagem_dp`, humano |
-| `app/api/views.py:1985` | `justificativa_colab`, wrapper da solicitação humana |
-| `app/ponto/services/ausencia.py:805` | `ausencia_colab`, efeito da solicitação humana (`app/api/views.py:1861`, `app/ponto/views.py:2718`) |
-| `app/chamados/services/disputa_emissao.py:582` | `disputa_supervisao`, misto. Declaração humana `:620,641` e sistema `:648,676`, chamado por APIs de batida, fábrica e crons (`app/api/views.py:768`, `app/api/views_core.py:762`, `app/chamados/services/fabrica_da_celula.py:172`, `app/ponto/management/commands/reconciliar_grade.py:424`) |
-| `app/chamados/services/disputa_emissao.py:1118,1353` | `disputa_supervisao_manual`. Órfãos misto (`app/chamados/services/acoes_disputa.py:261`, `app/chamados/services/cobrar_dia.py:49`, `app/chamados/services/pergunta_no_app.py:263`, crons `processar_alertas_turno.py:385`, `processar_alertas_avancados.py:159`, `detectar_ausencias.py:803`); âncora humana (`acoes_disputa.py:228`) |
-| `app/chamados/services/adesao.py:75` | `sem_previsao_escala`, sistema (`app/escala/management/commands/apurar_furos_diarios.py:17`, `app/config/crons.py:1536`) |
-| `app/ponto/views.py:3191` | `ping_geo_fora`, automatismo do ping |
-| `app/escala/regua_defesa.py:51` | `regua_degenerada`, crons `app/ponto/management/commands/detectar_ausencias.py:601`, `reconciliar_grade.py:495` |
-| `app/ponto/services/cluster_espurio.py:196` | `cluster_batida_espuria` (`:11`), cron `app/config/crons.py:598` |
-| `app/ponto/management/commands/detectar_ausencias.py:191,511,272,694` | `sem_previsao_escala` nos dois primeiros, `ancora_limbo`, `batida_ausente` (`:29`), cron `app/config/crons.py:364` |
-| `app/ponto/management/commands/reconciliar_grade.py:507` | `batida_ausente` (`:54`), cron `app/config/crons.py:462` |
-| `app/ponto/management/commands/processar_alertas_turno.py:335` | `turno_aberto`, cron `app/config/crons.py:362` |
-| `app/ponto/management/commands/emitir_turno_aberto_retroativo.py:151` | `turno_aberto_24h`, comando retroativo |
-| `app/chamados/reconciliador.py:1032` | `batida_ausente` (`:957`), reatar órfã automático (`:925,1776`) |
-
-**Juiz e predicados.** `esta_desligado(colaborador)` compara somente `getattr(colaborador, 'situacao', None) == 'desligado'`. Situação do objeto, sem relógio, data ou vínculo. Agendamento muda data e motivo, efetivação grava situação, reativação muda para ativo e limpa a data. `app/colaboradores/services/desligamento.py:23-32,107-133,235-247`; `app/core/juizes.py:283`.
-
-- `_renascer_por_premissa_viva` barra `situacao != 'ativo'`, incluindo afastado e férias, e barra `via_encerramento == VIA_CASCADE`, um fato do chamado que pode sobreviver à readmissão. Adesão compara a situação exata em `:67`, mas `:91` testa via de encerramento. `app/chamados/models.py:1070-1085`; `app/chamados/services/adesao.py:67,91-93`. Reemissão do reconciliador usa a versão mais ampla `!= 'ativo'`. `app/chamados/reconciliador.py:942`.
-- `recusa_da_reabertura` testa veto de dia, admin sem fato novo, premissa regularizada, agrupamento, irmão e motor, sem predicado de desligado ou teste direto de `VIA_CASCADE`. O veto testa módulo, dia e vínculo do emissor. `app/chamados/models.py:1192-1211,1384-1426`.
-- Estado exato, com filtros locais adicionais, aparece no Cartório `app/ponto/services/cartorio.py:1803,1868`, furos vetados `app/ponto/services/furos_vetados.py:62` e I5a `app/chamados/management/commands/auditar_invariantes_chamados.py:659-670`. O I5a conta `COBRANCA`, que exclui `registrado`, e roda pelo auditor agendado às 07:18. `app/chamados/catalogo/motor.py:24-32`; `app/config/crons.py:542`.
-- Cron agendado usa data preenchida `<= hoje` mais situação diferente. Cadastro do dia no Supra Juiz usa `dia > data_demissao` quando `vinculo_do_dia` retornou `None`. Elegibilidade de turno usa data nula ou posterior ao fim. Rescisão do TXT usa data `<= fim_janela` e retenção/informativo leem o juiz canônico. São decisões com universos distintos. `app/colaboradores/management/commands/efetivar_desligamentos_agendados.py:38-40`; `app/ponto/supra_juiz.py:170-175,184-210`; `app/ponto/utils.py:177-180`; `app/folha/export.py:54-60,1215-1237`.
-
-**Reabertura humana e trilha.**
-
-- S93 admin sai do fio e valida POST `motivo_reabertura` e `justificativa_admin` de pelo menos 20 caracteres. Reabre a disputa, cria pergunta de conversa e então chama `ch.reabrir(humano=True)` sem entregar autor ou motivo e sem conferir o retorno. A nota recebe `request.user` e o log da disputa usa `registrar_log(request, ...)`. `app/chamados/views.py:675,955`; `app/chamados/services/fio.py:717-719`; `app/chamados/services/acoes_disputa.py:274-315,338`; `app/core/auditoria.py:8-25`.
-- Desarquivar usa `reabrir(humano=True)` quando a via é tranca e registra o ator em resgate/ocorrência, sem campo de motivo. Reabrir período exige POST `motivo`, grava `PeriodoFechado.reaberto_motivo` e autor, mas o chamado recebe só `humano=True` e a trilha do lote passa o ator. `app/chamados/views_arquivar.py:52-88`; `app/ponto/views.py:1548-1575`; `app/ponto/services/fechamento.py:1456-1472`; `app/chamados/services/competencia_trancada.py:264,275,294-300`.
-- O detalhe despacha `novo_status` mesmo sem `conteudo`. No fio, o `conteudo` é nota de resposta, exigida neste ramo. O `transicionar` grava `respondido_por` e o evento `estado_chamado` com o usuário. A própria `reabrir` não recebe motivo nem usuário e `_gravar_estado` é chamado sem `user`; em request o escritor do log capta `request.user`. `app/chamados/views.py:548`; `app/chamados/services/acoes_chamado.py:292-301,322-331`; `app/chamados/services/fio.py:862-876`; `app/chamados/models.py:242-244,304-308,469,1428,1508`; `app/core/observ.py:94-138`.
-- Recusa cabe no `LogAuditoria`, JSON com porta, colaborador e módulo, por `core.observ.evento`. Já há ações de recusa de nascer/reabrir para outros motivos, com trio equivalente e dedup de ciclo, no veto de dia. `FollowupChamado` exige um chamado e serve apenas quando já existe objeto. `app/core/models.py:285-307`; `app/core/observ.py:94-138`; `app/chamados/models.py:1221-1254,1842`; `app/chamados/services/nota.py:75-89`.
-- O retorno de recusa precisa ser consumido pelos chamadores. A abertura humana e criadores de disputa já desreferenciam ou registram followup sobre o resultado sem testar `None`. `app/chamados/views.py:141-143,196-210`; `app/chamados/services/abertura.py:194-202`; `app/chamados/services/disputa_emissao.py:598-606,1134-1142,1369-1376`; `app/chamados/services/nota.py:87-107`.
-
-_8753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8754 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

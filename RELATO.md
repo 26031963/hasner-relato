@@ -10987,6 +10987,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 18:11:51 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:35446fdf68 (191 car., na trilha privada)
+
 **27/11 17:51:11 disjuntor (NEGOU B1)** -- agente a6de55753e4240466 -- Bash -- alvo sha1:bbc2cceb2d (308 car., na trilha privada)
 
 **27/11 17:05:32 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:b76e68dc63 (52 car., na trilha privada)
@@ -14595,3 +14597,5 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 18:05 colhido FERIADO-UM-JUIZ c7/r.rc (18:04 rc 0): c7 entregue sem commit (5 arquivos, 0 except +/-): 2 curado por retorno 0 -> RuntimeError na revisao; 3 curado (rubricas={} com periodo -> ValueError); 4a/4b/4c PRE-EXISTENTES no 59600163c; 1 expectedFailure PAREI ! FERIADO-L097-MOTOR; outubro ponta a ponta reposto. ACHADO da sessao: retorno 0 tem dois significados (falha x colab fora de universo_da_competencia fechamento.py:617) -> revisao legitima abortaria
 - 18:05 PUXADA FERIADO-UM-JUIZ c8 -> vaga Codex (sinal proprio de falha + censo dos chamadores) -> logs/FERIADO-UM-JUIZ/c8/r.rc
 - 18:06 colhido FERIADO-UM-JUIZ c8/r.rc (18:05 rc 2): PRE_CHECK, wt suja com a c7; c7 commitada na copia a8eec39b3 (LEI-AKITA padrao=Policy Enforcement Point) e c8 relancada 18:06 pid=3725407
+- 18:14 colhido FERIADO-UM-JUIZ c8/r.rc (18:13 rc 0): c8 commitada na copia 8639de6ca (propagar_falha so na revisao; retorno 0 = so contagem; censo 22 chamadores; 0 except +/-). Proximo: ver6 Codex verificador -> logs/FERIADO-UM-JUIZ/ver6/r.rc; depois suite inteira e opus final
+- 18:14 FERIADO-UM-JUIZ suite inteira c8 (8639de6ca, --motivo pre-opus) lancada em paralelo ao ver6: ROTA VM (pista fora, estado rc=124) -> logs/FERIADO-UM-JUIZ/c8/s/s.rc; ver6 reprovando = cancelar
