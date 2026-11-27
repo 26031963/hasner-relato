@@ -1,7 +1,42 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 12:47** · publicado em **27/11/2026 12:47** (UTC-3)
+> Ultima resposta processada: **27/11/2026 12:56** · publicado em **27/11/2026 12:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 12:56 · sessao f324b31a115f · PAR-PELO-TURNO · construtor · origem=Code
+
+**PAR-PELO-TURNO c1v9 — recibo do construtor sobre `730c115e5`.** Em memória, `base` saiu com código 1 por falhas de asserção, `cura` passou 11 testes e `vizinhos` passou 206. As 15 reversões de produção saíram com código 1 por falha de asserção. [Executor e base](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v9_verificacao.py:12)
+
+**Decisão técnica** — Fechamento, PDF e autoridade do espelho entregam ao motor a carga de dias locais `ini−1..fim+1`. O contexto ampliado serve ao julgamento por PK. O RED pela folha mediu **0,00 h → 8,00 h** em 21/10 e voltou a 0,00 h na reversão. [Fechamento](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:632) · [PDF](/home/ronald/wt-codex-par-pelo-turno-111717/app/relatorios/pdf_espelho.py:281) · [Espelho](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/espelho.py:1026) · [RED](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:238)
+
+| Cura | Antes → depois | Reversões vermelhas |
+|---|---|---|
+| `apurar_por_fatia` e `recalcular_fechamento_mes` leem `dia_das_batidas`. A O95 usa o fato posterior, inclusive quando ele está fora da carga do mapa. | Saldo **−193,60 h → 0,00 h** pela face pública da folha. [Leitura](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:657) · [RED](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:160) | `folha`, `o95_provedor` |
+| `_data_do_turno`, `_turnos_do_colab_puro` e `dia_das_batidas` resolvem o dia e a disputa pelo PK entre segmentos. | A entrada de **23/10 às 01:30** fica em **22/10** nos leitores e nas janelas do RED. Na troca de vínculo, a saída isolada das 20:00 fica em **22/10**. [Pareador](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:2025) · [RED](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:115) | `pk_dna`, `pk_contexto`, `pk_segmentos`, `pk_turnos` |
+| `_marca_intra_duracao` usa a mesma guarda de saída degenerada nos dois laços e volta a considerar o eco como evidência de retorno da pausa. | Dois trechos sem pausa → um par com **60 min de pausa**. O cenário de flush volta a manter o turno aberto. [Separador](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:396) · [RED da pausa](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:147) · [RED do flush](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:308) | `pausa`, `separador` |
+| `_mk` publica o dia da saída. `_turno_noturno_completo` e `classificar_falta` leem o par antes do cadastro. | A segunda virada passa com vínculo noturno, diurno ou ausente na saída. [Leitor](/home/ronald/wt-codex-par-pelo-turno-111717/app/escala/servico_jornada.py:214) · [REDs](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:200) | `noturno`, `noturno_ordem` |
+| `dias_fora_do_dia_pago` pede o fim exato. `somar_periodos` e `montar_dias` usam `_dia_de`. | A testemunha perde o `fim+1` extra, o período sem mapa conserva **8 h** e o resumo publica **8 h, 2 turnos, 1 aberto** no recorte do RED. [Testemunha](/home/ronald/wt-codex-par-pelo-turno-111717/app/folha/porta_export.py:71) · [Soma](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/espelho.py:85) · [REDs](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:252) | `testemunha`, `soma`, `contagem` |
+
+O controle do último dia já passava na base e ficou vermelho ao trocar `<=` por `<`. O censo registrou **9 pareadores, 78 derivações, A1=6, B1=75, composição=56 e B2−B1=113**. Ruff saiu com código 0 e a contagem de `^\+.*except` no diff deu **0**. [Controle](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:188) · [Catracas](/home/ronald/wt-codex-par-pelo-turno-111717/app/core/tests/test_medida_turno_do_par.py:108) · [Selo Ruff](/home/ronald/wt-codex-par-pelo-turno-111717/app/core/tests/test_contract_esmeril.py:22)
+
+**Comandos de reprodução**, a partir de `app/`. [Modos e reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v9_verificacao.py:55)
+
+```bash
+for modo in base cura vizinhos folha o95_provedor pk_dna pk_contexto \
+  pk_segmentos pk_turnos pausa separador noturno noturno_ordem \
+  testemunha soma contagem janela ultimo_dia; do
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v9_verificacao "$modo"
+  printf '%s rc=%s\n' "$modo" "$?"
+done
+```
+
+**Suíte para o Code na pista.** A tentativa local parou no import de `django.core`. A suíte integrada, inclusive a fixture original da ponta pequena e os ensaios de API e PDF com ORM, fica **[nao verificado]**. [Entrada Django](/home/ronald/wt-codex-par-pelo-turno-111717/app/manage.py:11) · [Fixture da ponta pequena](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_ponta_pequena_prazo_evento.py:388) · [Configuração da pista](/home/ronald/wt-codex-par-pelo-turno-111717/app/config/settings/ci.py:6) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test ponto core chamados escala folha relatorios api --settings=config.settings.ci
+```
+
+Ficaram na fila do opus a herança do motor condicionada à RAMO2-B, os dois sentidos de `dias_inconsistentes`, a apuração paralela e o teto temporal do PDF, e o smoke de pauta. Os 29 casos reais, a Gestão de HE dos quatro casos do aval e o DIFF, hash, reversão e contador da frota da competência 11 ficam **[nao verificado]**. [Herança do motor](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/motor_calculo_v2.py:2521) · [PDF](/home/ronald/wt-codex-par-pelo-turno-111717/app/relatorios/pdf_espelho.py:278) · [Escopo dos casos reais](/home/ronald/wt-codex-par-pelo-turno-111717/app/docs/BACKLOG.md:2027)
 
 ## 27/11 12:47 · sessao 5fe4148eac5b · FERIADO-BOTAO-CORTADO · construtor · origem=Code
 
@@ -852,34 +887,4 @@ O diff preserva o predicado e dá ao botão um espaço próprio na célula mensa
 
 - **LEIS-UI.** L2 e L4 são preservadas pelo predicado compartilhado e pela renderização condicional. O diff não introduz diálogo nativo, botão PDF ou mudanças nos ícones e tamanhos de estado, conforme L8–L11. O novo `aria-label` nomeia a região. Pela L7, a ajuda explicativa literal do formulário continua sendo uma pendência anterior ao diff. Pela L5, o formulário não tem o componente de espera e a duração da ação em produção segue [não verificado]. [app/docs/LEIS-UI.md:23, :39, :56, :77, :87, :95, :120 e :174] [app/templates/ponto/partials/_feriado_vira_trabalho.html:7–12] [app/templates/colaboradores/partials/_calendario_grade.html:95–103, no diff]
 
-## 27/11 11:48 · sessao 30285ce09825 · FERIADO-NAO-PREVISTO-L086 · sonda · origem=Code
-
-## FERIADO-NAO-PREVISTO-L086 — sonda na sombra
-
-Apenas dias-colab com `horas_trabalhadas > 0`. As referências a `saida-sonda.tsv` seguem a numeração do anexo, com `sonda_leitura` na linha 1. `saida-sonda.tsv:1–4,87–90`
-
-| Empresa | Dias no recorte | (a) `folga_sem_escala_min > 0` | (a) Soma dos minutos em horas | (b) Dias com rubrica alternativa positiva | (b) Soma das duas rubricas | (c) Dias no ramo não explicado | Fonte |
-|---:|---:|---:|---:|---:|---:|---:|---|
-| 2 | 69 | 65 | 459.7395 h (27584.37 min) | 0 | 0.0 h | 4 | `saida-sonda.tsv:5–73,88` |
-| 3 | 13 | 10 | 74.201 h (4452.06 min) | 0 | 0.0 h | 3 | `saida-sonda.tsv:74–86,89` |
-| 4 | 0 | 0 | 0 h (0 min) | 0 | 0.0 h | 0 | `saida-sonda.tsv:87–90` |
-
-Na cópia, os períodos barrados pelo filtro de escala certa entram em `horas_trabalhadas`, com os minutos registrados em `detalhe.folga_sem_escala_min`. O item (b) soma `horas_folga_trabalhada` e `horas_extras_100_feriado` registradas na sonda. Pagamento efetivo [nao verificado]. [fechamento.py:959](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:959) · [fechamento.py:1004](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:1004) · [dia_pago.py:259](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/dia_pago.py:259) · `saida-sonda.tsv:4–86`
-
-### (c) Ramo não explicado
-
-| Empresa | Colab ID | Data | Horas trabalhadas | Fonte |
-|---:|---:|---|---:|---|
-| 2 | 365 | 2026-11-02 | 12.0 | `saida-sonda.tsv:16` |
-| 2 | 365 | 2026-11-15 | 11.036849166666666 | `saida-sonda.tsv:17` |
-| 2 | 365 | 2026-11-20 | 11.008139166666666 | `saida-sonda.tsv:18` |
-| 2 | 830 | 2026-11-15 | 11.885994444444444 | `saida-sonda.tsv:42` |
-| 3 | 85 | 2026-11-02 | 11.897632222222223 | `saida-sonda.tsv:76` |
-| 3 | 85 | 2026-11-20 | 11.545001388888888 | `saida-sonda.tsv:77` |
-| 3 | 146 | 2026-11-02 | 13.50255722222222 | `saida-sonda.tsv:81` |
-
-### (d) Colab 1036 em 20/11
-
-**Confere.** Na empresa 2, em 2026-11-20, constam **437.1 min** de `folga_sem_escala_min` (**7.285 h** pela conversão) e **7.28502 h** trabalhadas. As duas rubricas de (b) estão em `0.0 h` e `folga_feriado_min` está como `None`. O dia entra em (a). `saida-sonda.tsv:72`
-
-_8663 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8664 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
