@@ -14014,3 +14014,223 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 09:55 colhido PAR-PELO-TURNO c1v8/rec.rc (09:52 rc 0): recorte Ran 356 OK. Proxima em paralelo: verificador Codex do delta c1v6..c1v8 (logs/PAR-PELO-TURNO/c1v8/verif, pid 1899646) + suite inteira pre-opus na pista (logs/PAR-PELO-TURNO/c1v8/suite).
 - 09:55 colhido SONDA-ESPURIAS-RAMO2 s2/sombra_main.rc (09:50 rc 0; veredito pela saida: FIM lados=A0A1B empresas=2,3,4 colabs=963); lado R rodando, depois compara -> s2/sombra.rc.
 - 09:55 CASO-LITERAL-14-v2-2711-0955 registrado (PROMPTS, BACKLOG linha CASO-LITERAL-14, aval em logs/CASO-LITERAL-14/aval.txt); fase 1 travada por: s2 item 4 (sobras dia a dia dos 14) -- Codex leitura sai na hora do compara.out.
+- 10:00 SO-DOIS-ALIVIOS-2711-1000: CONGELADAS ate CCM e RC-SEM-PROXIMA pousarem -- V6-FURO-OUTPUT, N4, CUSTO-DE-COORDENACAO F1-F4, RAZAO-REDS-JA. A RAZAO reds1 (Codex construtor vaga 1, so teste novo, lancada 09:48 antes do aval) termina a chamada em curso e o resultado fica GUARDADO na wt sem commit nem etapa seguinte (DECISAO TECNICA: matar o construtor no meio arrisca a lease; congelar = nenhuma etapa nova | contestavel). Ordem da vaga opus: CCM cura14 na PRIMEIRA vaga que liberar (hoje E4C cura2 + RC-SEM-PROXIMA c1 em voo; nao se tira vaga de obra em voo), depois RAMO2-B motor e PAR 4b. Seguem: CASO-LITERAL-14 f1 (Codex leitura), verificador PAR c1v8, sonda s2.
+- 09:58 colhido SONDA-ESPURIAS-RAMO2 s2/sombra.rc (09:55 rc 0) -- aval SONDA-ESPURIAS-RAMO2-v2-2711-0920 PRONTO: lados A0 A1 B (main) e R (RAMO2-B) com FIM nas 3 empresas, 963 colabs. (1) A0xA1: 4 linhas DEFASAGEM (colab 879 emp2 gravado com 0025/0200/0243 e recalculado 0; colab 50 emp4 8069 +79,8). (2) A1xB: TETO_COLABS n=14 (os 11 da s3 mais 1036, 1039 e 163/emp3). (3) A1xR: RAMO2 muda 0 dos 14; muda 4 fora do teto (0025: 474 +3,0, 634 +37,8, 898 +97,2, 85/emp3 +21,0). (4) 99 sobras dia a dia dos 14. Nada em prod; nenhuma sobra chamada de espuria aqui. .out inteiro (logs/SONDA-ESPURIAS-RAMO2/s2/compara.out, 215 linhas) abaixo:
+```
+DEFASAGEM colab_id=879 empresa=2 rubrica=0025 a0=10077.6 a1=0 delta=-10077.6
+DEFASAGEM colab_id=879 empresa=2 rubrica=0200 a0=959.4 a1=0 delta=-959.4
+DEFASAGEM colab_id=879 empresa=2 rubrica=0243 a0=300.0 a1=0 delta=-300.0
+DEFASAGEM colab_id=50 empresa=4 rubrica=8069 a0=31.8 a1=111.6 delta=79.8
+TETO colab_id=219 empresa=2 rubrica=8069 a1=14.4 b=123.0 delta=108.6
+TETO colab_id=301 empresa=2 rubrica=0025 a1=1671.6 b=1248.6 delta=-423.0
+TETO colab_id=334 empresa=2 rubrica=0025 a1=0 b=2779.2 delta=2779.2
+TETO colab_id=334 empresa=2 rubrica=0243 a1=0 b=513.0 delta=513.0
+TETO colab_id=334 empresa=2 rubrica=8069 a1=0 b=750.6 delta=750.6
+TETO colab_id=446 empresa=2 rubrica=0025 a1=1644.6 b=0 delta=-1644.6
+TETO colab_id=446 empresa=2 rubrica=0200 a1=1205.4 b=0 delta=-1205.4
+TETO colab_id=446 empresa=2 rubrica=0243 a1=300.0 b=0 delta=-300.0
+TETO colab_id=446 empresa=2 rubrica=8069 a1=292.8 b=0 delta=-292.8
+TETO colab_id=465 empresa=2 rubrica=8069 a1=331.8 b=124.2 delta=-207.6
+TETO colab_id=707 empresa=2 rubrica=0025 a1=0 b=120.0 delta=120.0
+TETO colab_id=707 empresa=2 rubrica=0243 a1=0 b=60.0 delta=60.0
+TETO colab_id=707 empresa=2 rubrica=8069 a1=0 b=675.0 delta=675.0
+TETO colab_id=707 empresa=2 rubrica=8792 a1=0 b=420.0 delta=420.0
+TETO colab_id=917 empresa=2 rubrica=0025 a1=1309.8 b=1117.2 delta=-192.6
+TETO colab_id=968 empresa=2 rubrica=0025 a1=1444.8 b=1043.4 delta=-401.4
+TETO colab_id=986 empresa=2 rubrica=0243 a1=0 b=300.0 delta=300.0
+TETO colab_id=989 empresa=2 rubrica=0025 a1=5981.4 b=5970.6 delta=-10.8
+TETO colab_id=989 empresa=2 rubrica=0243 a1=660.0 b=720.0 delta=60.0
+TETO colab_id=1010 empresa=2 rubrica=0025 a1=3835.8 b=3600.6 delta=-235.2
+TETO colab_id=1036 empresa=2 rubrica=0025 a1=687.0 b=617.4 delta=-69.6
+TETO colab_id=1039 empresa=2 rubrica=0243 a1=120.0 b=180.0 delta=60.0
+TETO colab_id=163 empresa=3 rubrica=0025 a1=6206.4 b=6319.8 delta=113.4
+TETO colab_id=163 empresa=3 rubrica=0243 a1=0 b=120.0 delta=120.0
+TETO_COLABS n=14
+RAMO2 colab_id=474 empresa=2 rubrica=0025 a1=5343.0 r=5346.0 delta=3.0 no_teto=nao
+RAMO2 colab_id=634 empresa=2 rubrica=0025 a1=3753.6 r=3791.4 delta=37.8 no_teto=nao
+RAMO2 colab_id=898 empresa=2 rubrica=0025 a1=2400.0 r=2497.2 delta=97.2 no_teto=nao
+RAMO2 colab_id=85 empresa=3 rubrica=0025 a1=4886.4 r=4907.4 delta=21.0 no_teto=nao
+RAMO2_TETO colab_id=219 rubrica=8069 a1=14.4 b=123.0 r=14.4 r_menos_b=-108.6
+RAMO2_TETO colab_id=301 rubrica=0025 a1=1671.6 b=1248.6 r=1671.6 r_menos_b=423.0
+RAMO2_TETO colab_id=334 rubrica=0025 a1=0 b=2779.2 r=0 r_menos_b=-2779.2
+RAMO2_TETO colab_id=334 rubrica=0243 a1=0 b=513.0 r=0 r_menos_b=-513.0
+RAMO2_TETO colab_id=334 rubrica=8069 a1=0 b=750.6 r=0 r_menos_b=-750.6
+RAMO2_TETO colab_id=446 rubrica=0025 a1=1644.6 b=0 r=1644.6 r_menos_b=1644.6
+RAMO2_TETO colab_id=446 rubrica=0200 a1=1205.4 b=0 r=1205.4 r_menos_b=1205.4
+RAMO2_TETO colab_id=446 rubrica=0243 a1=300.0 b=0 r=300.0 r_menos_b=300.0
+RAMO2_TETO colab_id=446 rubrica=8069 a1=292.8 b=0 r=292.8 r_menos_b=292.8
+RAMO2_TETO colab_id=465 rubrica=8069 a1=331.8 b=124.2 r=331.8 r_menos_b=207.6
+RAMO2_TETO colab_id=707 rubrica=0025 a1=0 b=120.0 r=0 r_menos_b=-120.0
+RAMO2_TETO colab_id=707 rubrica=0243 a1=0 b=60.0 r=0 r_menos_b=-60.0
+RAMO2_TETO colab_id=707 rubrica=8069 a1=0 b=675.0 r=0 r_menos_b=-675.0
+RAMO2_TETO colab_id=707 rubrica=8792 a1=0 b=420.0 r=0 r_menos_b=-420.0
+RAMO2_TETO colab_id=917 rubrica=0025 a1=1309.8 b=1117.2 r=1309.8 r_menos_b=192.6
+RAMO2_TETO colab_id=968 rubrica=0025 a1=1444.8 b=1043.4 r=1444.8 r_menos_b=401.4
+RAMO2_TETO colab_id=986 rubrica=0243 a1=0 b=300.0 r=0 r_menos_b=-300.0
+RAMO2_TETO colab_id=989 rubrica=0025 a1=5981.4 b=5970.6 r=5981.4 r_menos_b=10.8
+RAMO2_TETO colab_id=989 rubrica=0243 a1=660.0 b=720.0 r=660.0 r_menos_b=-60.0
+RAMO2_TETO colab_id=1010 rubrica=0025 a1=3835.8 b=3600.6 r=3835.8 r_menos_b=235.2
+RAMO2_TETO colab_id=1036 rubrica=0025 a1=687.0 b=617.4 r=687.0 r_menos_b=69.6
+RAMO2_TETO colab_id=1039 rubrica=0243 a1=120.0 b=180.0 r=120.0 r_menos_b=-60.0
+RAMO2_TETO colab_id=163 rubrica=0025 a1=6206.4 b=6319.8 r=6206.4 r_menos_b=-113.4
+RAMO2_TETO colab_id=163 rubrica=0243 a1=0 b=120.0 r=0 r_menos_b=-120.0
+RAMO2 muda 0 dos 14
+SOBRAS colab_id=163
+SOBRA empresa=3 colab_id=163 data=2026-11-18 hora=05:06:08 tipo=S batida_id=158099
+SOBRA empresa=3 colab_id=163 data=2026-11-20 hora=05:12:54 tipo=S batida_id=160135
+SOBRAS colab_id=219
+SOBRA empresa=2 colab_id=219 data=2026-11-14 hora=07:03:07 tipo=E batida_id=154790
+SOBRA empresa=2 colab_id=219 data=2026-11-14 hora=07:04:17 tipo=S batida_id=154793
+SOBRAS colab_id=301
+SOBRA empresa=2 colab_id=301 data=2026-10-22 hora=14:45:11 tipo=E batida_id=134361
+SOBRA empresa=2 colab_id=301 data=2026-10-22 hora=20:00:23 tipo=S batida_id=134720
+SOBRA empresa=2 colab_id=301 data=2026-10-22 hora=21:00:21 tipo=E batida_id=134740
+SOBRA empresa=2 colab_id=301 data=2026-10-22 hora=22:50:11 tipo=S batida_id=134778
+SOBRA empresa=2 colab_id=301 data=2026-10-29 hora=14:45:26 tipo=E batida_id=140896
+SOBRA empresa=2 colab_id=301 data=2026-10-29 hora=20:00:05 tipo=S batida_id=141196
+SOBRA empresa=2 colab_id=301 data=2026-10-29 hora=21:00:15 tipo=E batida_id=141220
+SOBRA empresa=2 colab_id=301 data=2026-10-29 hora=22:50:02 tipo=S batida_id=141257
+SOBRA empresa=2 colab_id=301 data=2026-11-05 hora=14:45:34 tipo=E batida_id=146858
+SOBRA empresa=2 colab_id=301 data=2026-11-05 hora=20:00:12 tipo=S batida_id=147164
+SOBRA empresa=2 colab_id=301 data=2026-11-05 hora=21:02:44 tipo=E batida_id=147191
+SOBRA empresa=2 colab_id=301 data=2026-11-05 hora=22:50:03 tipo=S batida_id=147218
+SOBRA empresa=2 colab_id=301 data=2026-11-12 hora=14:45:13 tipo=E batida_id=153134
+SOBRA empresa=2 colab_id=301 data=2026-11-12 hora=20:00:05 tipo=S batida_id=153464
+SOBRA empresa=2 colab_id=301 data=2026-11-12 hora=21:00:04 tipo=E batida_id=153492
+SOBRA empresa=2 colab_id=301 data=2026-11-12 hora=22:50:04 tipo=S batida_id=153529
+SOBRA empresa=2 colab_id=301 data=2026-11-19 hora=14:45:03 tipo=E batida_id=159659
+SOBRA empresa=2 colab_id=301 data=2026-11-19 hora=20:04:10 tipo=S batida_id=159996
+SOBRA empresa=2 colab_id=301 data=2026-11-19 hora=21:04:15 tipo=E batida_id=160018
+SOBRA empresa=2 colab_id=301 data=2026-11-19 hora=22:50:05 tipo=S batida_id=160039
+SOBRAS colab_id=334
+SOBRA empresa=2 colab_id=334 data=2026-11-02 hora=01:40:09 tipo=S batida_id=143656
+SOBRA empresa=2 colab_id=334 data=2026-11-02 hora=02:34:17 tipo=E batida_id=143671
+SOBRA empresa=2 colab_id=334 data=2026-11-10 hora=01:00:52 tipo=S batida_id=150563
+SOBRA empresa=2 colab_id=334 data=2026-11-16 hora=01:38:42 tipo=S batida_id=156062
+SOBRA empresa=2 colab_id=334 data=2026-11-16 hora=20:34:22 tipo=E batida_id=157001
+SOBRA empresa=2 colab_id=334 data=2026-11-17 hora=00:03:27 tipo=S batida_id=157080
+SOBRA empresa=2 colab_id=334 data=2026-11-17 hora=01:34:42 tipo=S batida_id=157102
+SOBRA empresa=2 colab_id=334 data=2026-11-17 hora=07:57:06 tipo=S batida_id=157339
+SOBRAS colab_id=446
+SOBRA empresa=2 colab_id=446 data=2026-10-25 hora=08:00:46 tipo=E batida_id=136793
+SOBRA empresa=2 colab_id=446 data=2026-10-27 hora=12:30:18 tipo=E batida_id=138687
+SOBRA empresa=2 colab_id=446 data=2026-11-01 hora=13:04:48 tipo=E batida_id=143320
+SOBRA empresa=2 colab_id=446 data=2026-11-20 hora=13:00:43 tipo=E batida_id=160414
+SOBRAS colab_id=465
+SOBRA empresa=2 colab_id=465 data=2026-11-12 hora=09:00:29 tipo=S batida_id=152798
+SOBRA empresa=2 colab_id=465 data=2026-11-12 hora=12:38:07 tipo=S batida_id=152993
+SOBRAS colab_id=707
+SOBRA empresa=2 colab_id=707 data=2026-10-27 hora=06:55:00 tipo=E batida_id=152914
+SOBRAS colab_id=917
+SOBRA empresa=2 colab_id=917 data=2026-10-24 hora=15:00:39 tipo=E batida_id=136272
+SOBRA empresa=2 colab_id=917 data=2026-10-24 hora=19:00:26 tipo=S batida_id=136465
+SOBRA empresa=2 colab_id=917 data=2026-10-24 hora=20:01:27 tipo=E batida_id=136519
+SOBRA empresa=2 colab_id=917 data=2026-10-24 hora=22:58:12 tipo=S batida_id=136570
+SOBRA empresa=2 colab_id=917 data=2026-10-31 hora=15:00:20 tipo=E batida_id=142679
+SOBRA empresa=2 colab_id=917 data=2026-10-31 hora=19:02:25 tipo=S batida_id=142887
+SOBRA empresa=2 colab_id=917 data=2026-10-31 hora=20:00:34 tipo=E batida_id=142930
+SOBRA empresa=2 colab_id=917 data=2026-10-31 hora=22:53:43 tipo=S batida_id=142989
+SOBRA empresa=2 colab_id=917 data=2026-11-14 hora=15:00:59 tipo=E batida_id=155033
+SOBRA empresa=2 colab_id=917 data=2026-11-14 hora=19:00:45 tipo=S batida_id=155258
+SOBRA empresa=2 colab_id=917 data=2026-11-14 hora=20:00:18 tipo=E batida_id=155296
+SOBRA empresa=2 colab_id=917 data=2026-11-14 hora=22:57:03 tipo=S batida_id=155357
+SOBRAS colab_id=968
+SOBRA empresa=2 colab_id=968 data=2026-10-22 hora=14:49:09 tipo=E batida_id=134368
+SOBRA empresa=2 colab_id=968 data=2026-10-22 hora=18:02:02 tipo=S batida_id=134573
+SOBRA empresa=2 colab_id=968 data=2026-10-22 hora=19:00:22 tipo=E batida_id=134668
+SOBRA empresa=2 colab_id=968 data=2026-10-22 hora=22:50:06 tipo=S batida_id=134777
+SOBRA empresa=2 colab_id=968 data=2026-10-29 hora=14:50:08 tipo=E batida_id=140898
+SOBRA empresa=2 colab_id=968 data=2026-10-29 hora=18:00:11 tipo=S batida_id=141045
+SOBRA empresa=2 colab_id=968 data=2026-10-29 hora=19:00:15 tipo=E batida_id=141137
+SOBRA empresa=2 colab_id=968 data=2026-10-29 hora=22:50:07 tipo=S batida_id=141258
+SOBRA empresa=2 colab_id=968 data=2026-11-02 hora=14:50:08 tipo=E batida_id=144020
+SOBRA empresa=2 colab_id=968 data=2026-11-02 hora=18:00:05 tipo=S batida_id=144120
+SOBRA empresa=2 colab_id=968 data=2026-11-02 hora=19:00:17 tipo=E batida_id=144221
+SOBRA empresa=2 colab_id=968 data=2026-11-02 hora=22:50:05 tipo=S batida_id=144323
+SOBRA empresa=2 colab_id=968 data=2026-11-05 hora=14:49:19 tipo=E batida_id=146860
+SOBRA empresa=2 colab_id=968 data=2026-11-05 hora=18:00:08 tipo=S batida_id=147014
+SOBRA empresa=2 colab_id=968 data=2026-11-05 hora=19:00:08 tipo=E batida_id=147112
+SOBRA empresa=2 colab_id=968 data=2026-11-05 hora=22:50:23 tipo=S batida_id=147219
+SOBRA empresa=2 colab_id=968 data=2026-11-12 hora=14:50:08 tipo=E batida_id=153136
+SOBRA empresa=2 colab_id=968 data=2026-11-12 hora=18:00:06 tipo=S batida_id=153317
+SOBRA empresa=2 colab_id=968 data=2026-11-12 hora=19:00:25 tipo=E batida_id=153416
+SOBRA empresa=2 colab_id=968 data=2026-11-12 hora=22:50:14 tipo=S batida_id=153531
+SOBRA empresa=2 colab_id=968 data=2026-11-15 hora=14:49:57 tipo=E batida_id=155745
+SOBRA empresa=2 colab_id=968 data=2026-11-15 hora=18:00:14 tipo=S batida_id=155836
+SOBRA empresa=2 colab_id=968 data=2026-11-15 hora=19:00:05 tipo=E batida_id=155922
+SOBRA empresa=2 colab_id=968 data=2026-11-15 hora=22:50:16 tipo=S batida_id=156007
+SOBRA empresa=2 colab_id=968 data=2026-11-19 hora=14:49:14 tipo=E batida_id=159662
+SOBRA empresa=2 colab_id=968 data=2026-11-19 hora=18:00:16 tipo=S batida_id=159831
+SOBRA empresa=2 colab_id=968 data=2026-11-19 hora=19:00:15 tipo=E batida_id=159931
+SOBRA empresa=2 colab_id=968 data=2026-11-19 hora=22:50:06 tipo=S batida_id=160040
+SOBRAS colab_id=986
+SOBRA empresa=2 colab_id=986 data=2026-10-29 hora=12:01:23 tipo=S batida_id=140694
+SOBRA empresa=2 colab_id=986 data=2026-11-06 hora=12:03:33 tipo=S batida_id=147648
+SOBRA empresa=2 colab_id=986 data=2026-11-10 hora=12:50:48 tipo=S batida_id=150969
+SOBRA empresa=2 colab_id=986 data=2026-11-14 hora=11:59:38 tipo=S batida_id=154900
+SOBRA empresa=2 colab_id=986 data=2026-11-20 hora=12:08:00 tipo=S batida_id=160434
+SOBRAS colab_id=989
+SOBRA empresa=2 colab_id=989 data=2026-10-22 hora=17:08:58 tipo=E batida_id=134543
+SOBRA empresa=2 colab_id=989 data=2026-10-23 hora=08:32:05 tipo=S batida_id=135077
+SOBRA empresa=2 colab_id=989 data=2026-10-25 hora=22:11:08 tipo=S batida_id=137193
+SOBRAS colab_id=1010
+SOBRA empresa=2 colab_id=1010 data=2026-11-04 hora=17:56:08 tipo=E batida_id=146083
+SOBRA empresa=2 colab_id=1010 data=2026-11-05 hora=01:04:44 tipo=E batida_id=146321
+SOBRA empresa=2 colab_id=1010 data=2026-11-05 hora=05:59:33 tipo=S batida_id=146380
+SOBRA empresa=2 colab_id=1010 data=2026-11-07 hora=05:54:00 tipo=S batida_id=151808
+SOBRAS colab_id=1036
+SOBRA empresa=2 colab_id=1036 data=2026-11-14 hora=12:00:48 tipo=E batida_id=154907
+SOBRA empresa=2 colab_id=1036 data=2026-11-19 hora=18:04:22 tipo=S batida_id=159844
+SOBRA empresa=2 colab_id=1036 data=2026-11-20 hora=14:43:43 tipo=E batida_id=160483
+SOBRA empresa=2 colab_id=1036 data=2026-11-20 hora=18:18:19 tipo=S batida_id=160622
+SOBRA empresa=2 colab_id=1036 data=2026-11-20 hora=19:18:33 tipo=E batida_id=160742
+SOBRA empresa=2 colab_id=1036 data=2026-11-20 hora=23:01:03 tipo=S batida_id=160829
+SOBRAS colab_id=1039
+SOBRA empresa=2 colab_id=1039 data=2026-11-19 hora=12:02:11 tipo=S batida_id=159385
+SOBRA empresa=2 colab_id=1039 data=2026-11-19 hora=12:59:59 tipo=E batida_id=159454
+FROTA lado=A0 empresa=2 rubrica=0025 soma_min=419283.6
+FROTA lado=A0 empresa=2 rubrica=0200 soma_min=13918.8
+FROTA lado=A0 empresa=2 rubrica=0243 soma_min=59326.2
+FROTA lado=A0 empresa=2 rubrica=8069 soma_min=5247.6
+FROTA lado=A0 empresa=2 rubrica=8792 soma_min=25450.0
+FROTA lado=A0 empresa=3 rubrica=0025 soma_min=133813.8
+FROTA lado=A0 empresa=3 rubrica=0243 soma_min=19920.0
+FROTA lado=A0 empresa=3 rubrica=8069 soma_min=119.4
+FROTA lado=A0 empresa=4 rubrica=0025 soma_min=32934.6
+FROTA lado=A0 empresa=4 rubrica=0243 soma_min=2155.8
+FROTA lado=A0 empresa=4 rubrica=8069 soma_min=168.0
+FROTA lado=A1 empresa=2 rubrica=0025 soma_min=409206.0
+FROTA lado=A1 empresa=2 rubrica=0200 soma_min=12959.4
+FROTA lado=A1 empresa=2 rubrica=0243 soma_min=59026.2
+FROTA lado=A1 empresa=2 rubrica=8069 soma_min=5247.6
+FROTA lado=A1 empresa=2 rubrica=8792 soma_min=25450.0
+FROTA lado=A1 empresa=3 rubrica=0025 soma_min=133813.8
+FROTA lado=A1 empresa=3 rubrica=0243 soma_min=19920.0
+FROTA lado=A1 empresa=3 rubrica=8069 soma_min=119.4
+FROTA lado=A1 empresa=4 rubrica=0025 soma_min=32934.6
+FROTA lado=A1 empresa=4 rubrica=0243 soma_min=2155.8
+FROTA lado=A1 empresa=4 rubrica=8069 soma_min=247.8
+FROTA lado=B empresa=2 rubrica=0025 soma_min=409128.0
+FROTA lado=B empresa=2 rubrica=0200 soma_min=11754.0
+FROTA lado=B empresa=2 rubrica=0243 soma_min=59719.2
+FROTA lado=B empresa=2 rubrica=8069 soma_min=6281.4
+FROTA lado=B empresa=2 rubrica=8792 soma_min=25870.0
+FROTA lado=B empresa=3 rubrica=0025 soma_min=133927.2
+FROTA lado=B empresa=3 rubrica=0243 soma_min=20040.0
+FROTA lado=B empresa=3 rubrica=8069 soma_min=119.4
+FROTA lado=B empresa=4 rubrica=0025 soma_min=32934.6
+FROTA lado=B empresa=4 rubrica=0243 soma_min=2155.8
+FROTA lado=B empresa=4 rubrica=8069 soma_min=247.8
+FROTA lado=R empresa=2 rubrica=0025 soma_min=409344.0
+FROTA lado=R empresa=2 rubrica=0200 soma_min=12959.4
+FROTA lado=R empresa=2 rubrica=0243 soma_min=59026.2
+FROTA lado=R empresa=2 rubrica=8069 soma_min=5247.6
+FROTA lado=R empresa=2 rubrica=8792 soma_min=25450.0
+FROTA lado=R empresa=3 rubrica=0025 soma_min=133834.8
+FROTA lado=R empresa=3 rubrica=0243 soma_min=19920.0
+FROTA lado=R empresa=3 rubrica=8069 soma_min=119.4
+FROTA lado=R empresa=4 rubrica=0025 soma_min=32934.6
+FROTA lado=R empresa=4 rubrica=0243 soma_min=2155.8
+FROTA lado=R empresa=4 rubrica=8069 soma_min=247.8
+```
+- 09:59 marca: colhido SONDA-ESPURIAS-RAMO2 s2/sombra.rc (09:55 rc 0) | sobras dos 14 em logs/CASO-LITERAL-14/sobras_14.txt (99) para a sonda da fase 1 | RAMO2-CRUZA proxima (c2u: construir com a s2 em mao) travada por: vaga opus (SO-DOIS-ALIVIOS, depois de CCM e RC)
