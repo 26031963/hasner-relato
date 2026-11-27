@@ -1,3 +1,4 @@
+AVISO: CLEAR devido desde 17:57
 - RESPONDIDA por brief_reds1 (CENSO fechado 17:0x): PAREI: censo-DESLIGADO-PORTA-DO-CHAMADO | espera Codex
 
 lei: REGISTRA-ACHADOS-2711-1720 achado (5) -- resposta do colab que COINCIDE com batida valida ja gravada (caso col824, disputa 5271) segue pedindo veredito humano; a coincidencia basta para fechar a pergunta sem veredito? (registro, nao construir; espera Ronald, a fila segue)
@@ -14589,3 +14590,5 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 17:50 colhido FERIADO-UM-JUIZ c6/s/s.rc (17:49 rc 0): recorte ponto core folha relatorios VERDE, Ran 8455 OK (skipped=29, expected failures=26), arvore 7706835c4
 - 17:50 FERIADO-UM-JUIZ ver5: Codex verificador sobre o delta c5+c6 contra o ver4 -> logs/FERIADO-UM-JUIZ/ver5/r.rc; depois suite inteira e opus final; pouso segue sob PAREI ! FERIADO-L097-MOTOR
 - 17:53 colhido RAMO2-B-EM-TURNO-QUE-CRUZA c2x (agente opus, entrega INCOMPLETA por B1 de tokens): cura na wt sem commit (_janela_do_par com_base_da_he opcional, 4 valores sem a opcao como no main; Partido e PartidoNoturno = corpo do main por splice AST; catraca de linhas remapeada; 0 except); RED c2x/red.log Ran 7 FAILED (failures=6, errors=3); GREEN1 Ran 996 1 falha (catraca, remapeada); GREEN2 na pista job 1127171915_fa236b21 (pid espera 3626944 vivo) -> veredito em c2x/green2.log; commit so com GREEN2 verde
+- 17:57 colhido FERIADO-UM-JUIZ ver5/r.rc (17:56 rc 0): REPROVADO, 5 bloqueios. Triagem (conferido fechamento.py:1272-1277,1335-1343 e registro_batida.py:305-321): 2 PROCEDENTE (falha de lavra conta como processado e a revisao nao desfaz); 3 vai a RED primeiro (rubricas={} com periodo); 4 classificar obra x pre-existente; 1 depende do motor -> PAREI ! FERIADO-L097-MOTOR; 5 = portao da sessao. Achados 4/5/6 do ver4: 5 e 6 curados, 4 nao curado (motor)
+- 17:57 PUXADA FERIADO-UM-JUIZ c7 -> vaga Codex (cura 2, RED 3, classifica 4, cobertura outubro ponta a ponta) -> logs/FERIADO-UM-JUIZ/c7/r.rc
