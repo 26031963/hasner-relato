@@ -1,7 +1,89 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 12:12** · publicado em **27/11/2026 12:13** (UTC-3)
+> Ultima resposta processada: **27/11/2026 12:15** · publicado em **27/11/2026 12:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 12:15 · sessao b30fa6c0a058 · FERIADO-UM-JUIZ · censo · origem=Code
+
+# FERIADO-UM-JUIZ · Dossiê antes do construtor
+
+Leitura estática da cópia. Hash Git, execução dos testes, impacto de frota e situação da competência 11 em produção [nao verificado]. [nao verificado]
+
+## 1. Mapa
+
+- **Hoje.** O fechamento monta o motor por fatia de vínculo com o calendário do colaborador. `eh_dia_trabalho(...) is False` manda o período para `periodos_ft`, com o dia da jornada no mapa. O fechamento filtra `_ft_certa`, procura `_ft_feriado` **dentro** desse grupo via `feriado_vira_folga` e põe o restante sem escala certa em `horas_trabalhadas` sem 100%. A partição é por identidade do período. `app/ponto/services/fechamento.py:668`, `:744`, `:953`, `:970`, `:1004` · `app/ponto/motor_calculo_v2.py:2560`, `:2573`, `:2605`.
+- **Juiz.** `_feriado_dobra_no_dia` lê `feriado_em_dobra` e `eh_feriado` no dia de início da jornada. `get_motor` resolve o padrão por `tipo_ciclo`, com `12x36` em `CICLOS_FERIADO_SIMPLES`. Os quatro ramos de dobra usam o mesmo método. `app/ponto/motor_calculo_v2.py:941`, `:1000`, `:2925`, `:3208`, `:3385`, `:3467`, `:3740`, `:3810`.
+- **Como perguntar.** Usar o dia de `dia_pago._dia_de(p, resultado.dia_da_jornada)`, os minutos apurados e o contexto **do motor da fatia daquele período**. `dobra_de_feriado_do_dia` já delega ao método do motor e devolve minutos. Hoje seu contexto permite fallback nacional, enquanto o calendário injetado no motor responde sozinho. A adaptação precisa preservar essa diferença ou consultar o próprio motor da fatia. `feriado_em_dobra_do_ciclo` expõe o padrão do ciclo, e `cct_do_motor` lê a configuração efetiva. O composto expõe o mapa de dias e só o último motor. Os totais de HE do resultado leem `periodos`, e o campo bruto do FT pode vir preenchido no comercial e vazio no partido. `app/ponto/calculador/regras.py:297`, `:312`, `:323`, `:358` · `app/ponto/calculador/nucleo.py:319` · `app/ponto/services/dia_pago.py:109` · `app/ponto/services/fechamento.py:331` · `app/ponto/motor_calculo_v2.py:328`, `:1000`, `:2993` · `app/ponto/tests/test_o280_bateria_da_lei.py:1810`.
+
+## 2. Censo
+
+- **Mensal.** `recalcular_fechamento_mes` deriva os seis campos. A promoção soma a HE a `horas_extras_100_feriado`, `horas_extras_100` e `horas_extras`, leva o subconjunto a `horas_extras_100_noturna` e retira o período de `horas_folga_trabalhada` ou `horas_trabalhadas`, conforme a origem. A porta persiste por `save` ou `update` do aprovado. `restaurar_fechamento` grava valores fornecidos para ajuste ou reversão. `app/ponto/services/fechamento.py:922`, `:939`, `:978`, `:1004`, `:1168`, `:1184`, `:1382`.
+- **Lavra.** `DiaPago.motor` recebe as três listas prontas. `lavrar` soma as rubricas e grava `detalhe.folga_feriado_min` ou `detalhe.folga_sem_escala_min`. **O derivador paralelo é o oráculo:** `rubricas_por_dia` consulta a escala certa, `do_dia` decide com `folga_e_feriado and _certa`, e `lavrar(rubricas=...)` pode sobrescrever os valores. Mensal e oráculo precisam consumir o mesmo juízo de dobra e a mesma classificação. `app/ponto/services/fechamento.py:1225`, `:1289` · `app/ponto/services/dia_pago.py:234`, `:244`, `:259`, `:322`, `:359` · `app/ponto/calculador/alimentacao.py:520` · `app/ponto/calculador/regras.py:674`, `:694` · `CLAUDE.md:20`.
+- **Leitores.** TXT e homologação leem os eventos do mensal. `_suprime_feriado` zera a parcela de 12x36 sem cláusula CCT. `hora_extra_feriado_diurna` usa o código cadastrado, separado de `folga_trabalhada_diurna`. HE100 noturna é subconjunto, sem linha própria. Conferir também o crivo `conta_vazia` quando o mês só tem horas promovidas. Outros leitores são ranking HE, cartão/resumo, telas mensais, Inteligência e a comparação de soma do dia com o mensal. `app/folha/export.py:420`, `:439`, `:739`, `:840`, `:911`, `:993`, `:1011` · `app/folha/services/ranking_he.py:33`, `:139`, `:224` · `app/relatorios/cartao_pela_celula.py:174` · `app/templates/ponto/_fech_linha.html:30` · `app/relatorios/views.py:98` · `app/inteligencia/views.py:118` · `app/folha/porta_export.py:457`.
+- **Dia na tela, PDF e app.** `pago_do_dia` soma trabalhadas, folga e `folga_feriado_min`. O PDF usa `pago_h` para realizado. A faixa de rubricas da tela usa `rubricas_do_dia`, cujo `trabalhadas` lê só o campo homônimo e cujo `extras_100` lê o total. App e testemunha de export também leem a lavra. `app/ponto/services/dia_pago.py:897`, `:914` · `app/ponto/services/espelho.py:829` · `app/templates/ponto/espelho.html:275` · `app/relatorios/pdf_espelho.py:901`, `:984` · `app/api/views.py:1537` · `app/folha/porta_export.py:120`.
+
+## 3. Leis e textos a atualizar
+
+- **L-086:** corrigir o enunciado ainda abrangente. O rodapé já registra a revogação da cláusula de feriado em 27/09 03:xx. Domingo previsto segue a regra própria. Nos cortes, registrar o alcance novo sobre FT e remeter o CLASSE3 de 19/09 e o piso de 27/09 05:xx à **folga comum**. BO-B(3) mantém a rubrica de feriado no caso que nomeia. ESCALA-CERTA-DETERMINISTICA mantém a fonte por competência. BUG-FERIADO-DOIS-ESCRITORES mantém a partição disjunta. `app/docs/LEIS.md:118` · `app/docs/TICKETS.md:1134` · `app/ponto/services/fechamento.py:991` · `app/docs/PROMPTS.md:1370`, `:1418`, `:1424`.
+- **Guardas herdadas:** L-085 fixa o início da jornada. O corte de 17/11 exclui o intermitente. A janela L-097 já pode zerar um par de folga antes do fechamento, com tratamento próprio de escala certa e autorização. A promoção recebe os minutos que sobreviveram a essa etapa. `app/docs/LEIS.md:117` · `app/docs/PROMPTS.md:2536` · `app/ponto/motor_calculo_v2.py:1562`, `:1569`, `:1585`, `:3694`.
+
+## 4. Contrato e matriz RED
+
+Unidade **colaborador × período FT**, com minutos pagáveis apurados, dia da jornada, motor da fatia, calendário daquele vínculo e resposta de escala certa para a rubrica. Validar mensal, `DiaPago.motor`, `DiaPago.oraculo` e evento TXT. `app/ponto/services/fechamento.py:299`, `:953`, `:1225`, `:1295` · `app/core/feriados.py:135` · `app/folha/export.py:439`.
+
+| Caso | Esperado |
+|---|---|
+| 6x1, escala certa, vínculo folga por causa do feriado | Já promove toda a duração a HE100 feriado. Manter uma única rubrica. `app/ponto/services/fechamento.py:958`, `:970`, `:978` |
+| 6x1, LIMBO / A2 / A8, feriado | Hora comum hoje. RED exige HE100 feriado pela duração positiva, sem repetir o período em trabalhadas ou FT. `app/escala/services/escala_certa.py:19` · `app/ponto/services/fechamento.py:958`, `:1004` |
+| 12x36 de piso, certa e sem escala certa | HE100 **feriado** zero nas duas. A folga real certa tem 100% **de folga** hoje. A sem escala certa fica em trabalhadas. Há exceção CCT explícita no código, fora da mudança. `app/ponto/tests/test_o280_bateria_da_lei.py:1385` · `app/ponto/services/fechamento.py:989`, `:1004` · `app/core/regua_cct.py:473` |
+| Intermitente em feriado | Trabalho convocado segue pelo caminho comum, fora de FT e da dobra automática. `app/ponto/motor_calculo_v2.py:2474`, `:2560`, `:3694` |
+| Folga comum sem escala certa | Hora em trabalhadas, zero HE100, com noturno e intra quando devidos. `app/ponto/tests/test_dia_pago_soma.py:245` |
+| FT noturno promovido | HE100 noturna acompanha a promoção. Cobrir também o partido, cujo FT não traz o split pronto, usando `he_noturna` com a régua e os intervalos do motor. `app/ponto/motor_calculo_v2.py:409`, `:1051`, `:2993`, `:3208` · `app/ponto/tests/test_o280_bateria_da_lei.py:1720` |
+| Véspera cruza para feriado | Zero dobra de feriado, inclusive no segundo par da mesma jornada. `app/docs/LEIS.md:117` · `app/ponto/tests/test_o280_bateria_da_lei.py:1564`, `:1580` |
+
+## 5. Testes existentes [nao verificado]
+
+O teste de FT em feriado sem escala certa que já passa pela porta usa **12x36** e só exige pagamento e paridade entre lavras. Preservar esse controle e criar o gêmeo **6x1** com valores exatos. A asserção a inverter na porta do dinheiro é `HE100 feriado = 0; trabalhadas = duração` para `HE100 feriado = duração; trabalhadas = 0`, isolando o período. F3b fixa zero **no agregado do motor** e 480 no campo cru do FT. Esse selo fica válido com a promoção no fechamento. A bateria L-114 deve reunir F3/F4, F10/F10e, F11c/F11d, BO-B de contagem única e S6 intermitente. `app/ponto/tests/test_he100_dia_sem_previsto.py:40`, `:227` · `app/ponto/services/fechamento.py:958`, `:1004` · `app/ponto/tests/test_o280_bateria_da_lei.py:1385`, `:1479`, `:1580`, `:1720`, `:1775`, `:1810` · `app/ponto/tests/test_bob_b2_abono_feriado_guarda.py:127` · `app/ponto/tests/test_s6_intermitente_feriado.py:133` · `app/docs/LEIS.md:154`.
+
+## 6. Padrão
+
+`padrao=single source of truth` / **um juiz por pergunta**. A partição alimenta as projeções mensal e diária. A lavra principal já tem uma porta de escrita compartilhada. `app/docs/GLOSSARIO.md:11` · `app/docs/PLANO-PADROES.md:53`, `:61` · `app/ponto/services/fechamento.py:1225` · `app/ponto/services/dia_pago.py:359`.
+
+## 7. Arquivos e pouso [nao verificado]
+
+Superfície proposta: `fechamento.py`, `calculador/regras.py`, `calculador/alimentacao.py`, testes e textos do item 3. `dia_pago.py` já aceita a partição. `folha/export.py` entra como leitor a certificar, evitando a interseção informada com E4C. PAR-PELO-TURNO cruza pelo contrato de período e dia da jornada em `ponto/turnos.py`. Interseção exata entre árvores em voo [nao verificado]. `app/ponto/services/fechamento.py:1225`, `:1295` · `app/ponto/services/dia_pago.py:135` · `app/docs/RELATO.md:1057`, `:13678`.
+
+Para o pouso, bateria verde e DIFF antes do apply de 11, com reversão e recorte por empresa pelo K6. O recálculo genérico pode gravar exportada fora da guarda cadastrada, inclusive por evento. A exclusão de exportadas exigida neste aval precisa valer também nesse caminho. `app/docs/LEIS.md:125`, `:142`, `:154`, `:156` · `app/folha/export.py:565` · `app/ponto/services/fechamento.py:559`, `:580`, `:1834`.
+
+## 8. Pergunta de lei
+
+1. **6x1 com escala certa, folga semanal que coincide com feriado e `feriado_vira_folga=False`** — o juiz confirma a dobra. A rubrica continua `folga_trabalhada_diurna` ou passa a `hora_extra_feriado_diurna`? O BO-B(3) nomeia expressamente o vínculo que folga por causa do feriado, e a partição atual conserva FT quando esse predicado é falso. `app/docs/PROMPTS.md:1370` · `app/escala/models.py:1384`, `:1400` · `app/ponto/services/fechamento.py:970`, `:989`.
+
+## 27/11 12:14 · sessao bf3f4123005e · FERIADO-BOTAO-CORTADO · verificador · origem=Code
+
+**FERIADO-BOTAO-CORTADO — PRONTO não demonstrado.** O predicado foi preservado. O teste novo tem mordida estrutural, mas a visibilidade com quatro batidas no navegador, a regressão visual da rolagem e o smoke do Ronald no calendário seguem [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/colaboradores/tests/test_feriado_botao_cortado.py:71`
+
+**1. Predicado — descartada alteração.** Antes, `_calendario_grade.html:131` no blob `896fad490` do anexo. Depois, `app/templates/colaboradores/partials/_calendario_grade.html:96` no blob `019b86999` da cópia. A expressão é literalmente `pode_editar_dia and dia.feriado_vira_trabalho_oferecido` nos dois. Os três blobs novos conferem com o anexo, que contém dois templates e o teste. A oferta continua vindo de feriado do colaborador com célula existente e `trabalha is False`. O POST consulta o mesmo campo. `app/colaboradores/services/calendario.py:791` `app/ponto/views.py:3607` `app/ponto/views.py:3624`
+
+**2. Botão com 0..N batidas — descartado bloqueio no HTML por quantidade. Procedente a lacuna de prova visual.**
+
+- A ação é renderizada antes do bloco de batidas e retratadas. Vale para zero ou qualquer quantidade, dada a oferta. O rótulo efetivo é **“Tornar dia de trabalho”**. O perfil usa `mes` em `base.html` e o diagnóstico usa `fita`. As duas cascas incluem o drawer genérico, que injeta o parcial por `fetch`. Isso comprova o caminho compartilhado do drawer, com visibilidade nas duas cascas [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:95` `app/templates/colaboradores/partials/_calendario_grade.html:130` `app/templates/ponto/partials/_feriado_vira_trabalho.html:6` `app/templates/colaboradores/detalhe.html:1` `app/templates/colaboradores/detalhe.html:215` `app/templates/colaboradores/calendario_partial.html:67` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/base.html:399` `app/templates/base_app.html:154` `app/templates/core/_drawer_generico.html:19`
+- **Mutante que morde.** Voltar a ação para depois das marcações, mantendo o resto, derruba o `assertLess` nos dois layouts. Retirar `overflow-y:auto` derruba a asserção de `mes`. **Mutante que escapa.** Acrescentar `display:none` ao `<summary>` preserva todas as asserções do teste e esconde o gatilho. O teste injeta 0 e 4 batidas e renderiza o include isolado nos dois layouts. A execução do RED e do verde ficou [nao verificado], pois a importação local parou em `django.template`. `app/colaboradores/tests/test_feriado_botao_cortado.py:4` `app/colaboradores/tests/test_feriado_botao_cortado.py:35` `app/colaboradores/tests/test_feriado_botao_cortado.py:92` `app/colaboradores/tests/test_feriado_botao_cortado.py:109`
+
+**3. Escritores e leitores — descartada mudança de contrato.**
+
+| Variável | Quem escreve ou passa | Quem lê |
+|---|---|---|
+| `layout`, `dias`, `dia`, `cal_offset`, `resumo` | `contexto_calendario` entrega os dados. Perfil passa `mes`, drawer passa `fita` e `cal.dias`/`cal.resumo`, Furos passa só `dias`/`resumo`. | A grade escolhe o layout, itera `dias` como `dia` e usa o offset e os totais. `app/colaboradores/services/calendario.py:838` `app/templates/colaboradores/calendario_partial.html:67` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/relatorios/furos.html:42` `app/templates/colaboradores/partials/_calendario_grade.html:65` `app/templates/colaboradores/partials/_calendario_grade.html:155` |
+| `pode_editar_dia`, `dia.feriado_vira_trabalho_oferecido` | View do perfil e `contexto_drawer` consultam `tem_acao(..., 'editar_escalas')`. `contexto_calendario` escreve a oferta do dia. | A grade lê ambos para o gatilho e o CSS. O POST consulta a mesma permissão e lê a oferta no contexto do dia. `app/colaboradores/views.py:2007` `app/colaboradores/services/drawer.py:159` `app/colaboradores/services/calendario.py:791` `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/ponto/views.py:3607` `app/ponto/views.py:3624` |
+| `colaborador.pk`, `dia.data`, `volta_url` → `colab_pk`, `data`, `volta` | O serviço publica colaborador e data. O drawer passa `colab` como `colaborador`. Perfil e drawer montam a URL de volta. A grade passa os três aliases. | A grade usa a data também no `aria-label`. O parcial escreve `colab`, `dia` e `volta` no formulário, e a view os lê. `app/colaboradores/services/calendario.py:755` `app/colaboradores/services/calendario.py:839` `app/colaboradores/views.py:2009` `app/colaboradores/services/drawer.py:162` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/colaboradores/partials/_calendario_grade.html:97` `app/templates/ponto/partials/_feriado_vira_trabalho.html:9` `app/ponto/views.py:3614` |
+| Campos da célula envolvidos pelo novo `<div>` | `contexto_calendario` publica status, palavra, ausência, feriado, batidas, retratadas, badges e `resolver_dia_oferecido`. Perfil e drawer fornecem `pode_veredito` via `regularizar_batida`. | A grade lê esses valores nos ícones, horários, ações de veredito e badges, agora dentro do mesmo bloco. `app/colaboradores/services/calendario.py:754` `app/colaboradores/services/calendario.py:811` `app/colaboradores/views.py:1992` `app/colaboradores/services/drawer.py:133` `app/colaboradores/services/drawer.py:157` `app/templates/colaboradores/partials/_calendario_grade.html:101` `app/templates/colaboradores/partials/_calendario_grade.html:130` `app/templates/colaboradores/partials/_calendario_grade.html:137` |
+
+**4. Classes de reprovação — descartados derivação paralela, duplo sentido e juiz duplicado.** As três leituras da condição controlam o gatilho e dois estilos. A oferta continua sendo um fato do dia, e a permissão continua sendo do usuário. O juiz registrado `_TT11` segue respondendo só por “Resolver dia”. O cadastro da oferta de feriado no registro de juízes já está apontado em fila. **Selo sem mordida estrutural descartado. Lacuna de mordida visual procedente**, como mostra o mutante `display:none`. `app/docs/LEIS-UI.md:23` `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/core/juizes.py:745` `app/core/juizes.py:759` `app/docs/BACKLOG.md:2038` `app/colaboradores/tests/test_feriado_botao_cortado.py:95`
+
+**5. Outros includes — descartada abertura da ação em Furos.** O `only` passa `dias` e `resumo`. Sem `pode_editar_dia` e `layout`, Furos usa a grade padrão e recebe o `<div>` extra sem os estilos de rolagem. O drawer recebe a ação antes das batidas e o rótulo com quebra de linha. A fita continua com rolagem horizontal. O efeito visual nos dois consumidores segue [nao verificado]. `app/templates/relatorios/furos.html:42` `app/templates/colaboradores/partials/_drawer_diagnostico.html:35` `app/templates/colaboradores/partials/_calendario_grade.html:65` `app/templates/colaboradores/partials/_calendario_grade.html:96` `app/templates/ponto/partials/_feriado_vira_trabalho.html:5`
+
+**6. Rolagem separada — procedente a lacuna de verificação.** No mensal elegível, o botão fica fora da região rolável de uma célula de `132px`. A região tem `tabindex="0"` e engloba também ícones, chamado, “Resolver dia” e badges. O selo confere declarações de CSS e a estrutura do HTML. Alcance da última marcação, permanência do gatilho visível enquanto se rola e smoke do Ronald no calendário [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:68` `app/templates/colaboradores/partials/_calendario_grade.html:95` `app/templates/colaboradores/partials/_calendario_grade.html:101` `app/templates/colaboradores/partials/_calendario_grade.html:137` `app/colaboradores/tests/test_feriado_botao_cortado.py:99`
 
 ## 27/11 12:12 · sessao d4acb9eb4d2e · FERIADO-UM-JUIZ · sonda · origem=Code
 
@@ -1241,126 +1323,4 @@ def inspecionar(grupo, cid, md, alvos, qids, hids, agora):
 
 [truncado em 20000 de 28989 caracteres]
 
-## 27/11 11:24 · sessao 9158a4607d0c · PAR-PELO-TURNO · construtor · origem=Code
-
-Adicionei os cinco REDs em um único arquivo. No HEAD `4ba908393`, os cinco falharam em asserções na execução em memória, com dez falhas de subteste. O runner Django parou no import de `django.core`. Suíte integrada e certificação [nao verificado]. [test_par_c1v8_reds.py](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:77) · [manage.py:11](/home/ronald/wt-codex-par-pelo-turno-111717/app/manage.py:11)
-
-| Item | O que o teste afirma | Por que dá RED no HEAD | [nao verificado]
-|---|---|---|
-| 1 | A entrada de 23/10 fica em **23/10** e, no cenário da troca de vínculo, a última saída fica em **22/10** em todos os leitores. | A janela de 21/10 deixa a primeira entrada sem a saída e ela herda 22/10. Na troca, `turnos=` muda a ordem dos turnos e a última atribuição grava 21/10 para a saída. [Teste](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:81) · [turnos.py:287](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:287) · [turnos.py:3040](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:3040) · [turnos.py:3085](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:3085) | [nao verificado]
-| 2 | Com e sem bordas, o par é **19:00→07:00**, com **60 min** de pausa. | Com bordas, a saída de 30 s zera `limite` na pré-passagem. O resultado são dois pares, ambos sem pausa. [Teste](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:111) · [turnos.py:508](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:508) | [nao verificado]
-| 3 | A casca e a folha datam as duas marcas em **21/10** e o saldo fica em **0,00 h** com ou sem elas. | A projeção da folha passa `ultima_batida=None`, perde o fato posterior da O95 e data as marcas em 20/10. Isso conta como movimento e o saldo cai para **−193,60 h**. [Teste](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:124) · [fechamento.py:165](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:165) · [fechamento.py:679](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:679) · [fechamento.py:1123](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:1123) | [nao verificado]
-| 4 | O par fechado de 26 h é reconhecido com vínculo noturno, diurno ou ausente em 22/10. | A guarda retorna `False` nos braços diurno e sem vínculo antes de consultar o par. [Teste](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:178) · [servico_jornada.py:232](/home/ronald/wt-codex-par-pelo-turno-111717/app/escala/servico_jornada.py:232) · [servico_jornada.py:236](/home/ronald/wt-codex-par-pelo-turno-111717/app/escala/servico_jornada.py:236) | [nao verificado]
-| 5 | A janela de 21/10 soma **8,00 h** com a borda antiga do PDF e com `ini−4`. | Com a carga ampla, o vão de 5 h faz o motor sobrescrever o dia do juiz com o da jornada anterior. O recorte exclui o segundo par e soma **0,00 h**. [Teste](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:200) · [motor_calculo_v2.py:2521](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/motor_calculo_v2.py:2521) · [motor_calculo_v2.py:2542](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/motor_calculo_v2.py:2542) | [nao verificado]
-
-Na fixture, usei `08:00–17:48` para o cadastro diurno e representei a marca posterior de 23/10 às 08:00 como `E`. O item 3 executa os trechos reais de projeção, movimento e saldo em memória. [test_par_c1v8_reds.py:26](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:26) · [test_par_c1v8_reds.py:135](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:135) · [test_par_c1v8_reds.py:140](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:140)
-
-### Comandos em `app/`
-
-Cada `red` retornou `1`. Cada `mutante` retirou em memória a condição que dispara o RED e retornou `0`. O executor reutiliza os dublês da sonda vizinha. [par_pelo_turno_c1v6_verificacao.py:59](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:59) · [test_par_c1v8_reds.py:77](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_c1v8_reds.py:77)
-
-```bash
-rodar() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
-import importlib
-import sys
-import unittest
-from pathlib import Path
-
-from ponto.tests.par_pelo_turno_c1v6_verificacao import _instalar_dubles_de_infraestrutura
-
-_instalar_dubles_de_infraestrutura()
-mod = importlib.import_module('ponto.tests.test_par_c1v8_reds')
-modo, item = sys.argv[1:]
-mutantes = {
-    '1': [('for dia in dias:', 'for dia in dias[1:]:')],
-    '2': [('in (None, (dt.time(19), dt.time(7))):', 'in (None,):')],
-    '3': [('for marcas in ([], [e, s]):', 'for marcas in ([],):'),
-          ('self.assertEqual(saldos, [0.0, 0.0])', 'self.assertEqual(saldos, [0.0])')],
-    '4': [("in ('noturno', 'diurno', 'sem vínculo'):", "in ('noturno',):")],
-    '5': [("            ('ini−4', meia_noite - 4 * UM_DIA),\n", '')],
-}
-if modo == 'mutante':
-    fonte = Path(mod.__file__).read_text()
-    for antes, depois in mutantes[item]:
-        assert fonte.count(antes) == 1
-        fonte = fonte.replace(antes, depois, 1)
-    exec(compile(fonte, mod.__file__, 'exec'), vars(mod))
-testes = unittest.defaultTestLoader.loadTestsFromTestCase(mod.ParPeloTurnoC1v8RedsTest) [nao verificado]
-suite = unittest.TestSuite(t for t in testes if t.id().split('.')[-1].startswith(f'test_{item}_')) [nao verificado]
-assert suite.countTestCases() == 1 [nao verificado]
-raise SystemExit(not unittest.TextTestRunner().run(suite).wasSuccessful()) [nao verificado]
-PY
-}
-
-rodar red 1
-rodar red 2
-rodar red 3
-rodar red 4
-rodar red 5
-
-rodar mutante 1
-rodar mutante 2
-rodar mutante 3
-rodar mutante 4
-rodar mutante 5
-```
-
-## 27/11 11:23 · sessao 80619ebac554 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-Adicionei somente [test_ramo2b_motor_reds.py](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:1). No ensaio isolado, o HEAD `1f9541e71` deu **2 REDs por asserção e 2 testes de paridade verdes**. Com o motor do main `59600163c` carregado em memória, os quatro passaram. O ensaio usou adaptações mínimas para carregar o motor sem Django completo. A execução na suíte do Code fica [nao verificado]. [Bateria de testes](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:68)
-
-| Item e teste | Valor afirmado e derivação | Resultado no HEAD | [nao verificado]
-|---|---|---|
-| 1 · Intermitente | **720 trabalhados, 540 noturnos de relógio, 30 fora**. O main corta às 07h. São 12h desde 19h e 9h noturnas desde 22h, com prorrogação. Main `app/ponto/motor_calculo_v2.py:1863`, `:2898`. [Asserção](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:69) | **RED.** A classe herda a cauda e devolve **750, 570, 0**. [Herança](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/motor_calculo_v2.py:3841) · [Recorte](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/motor_calculo_v2.py:1917) |
-| 2 · Comercial mensal | **610 trabalhados, 130 min de HE, saldo −36,00 h**. O previsto é `720 − 60 = 660`. Com saída às 07h, o main aplica `610 − 480` para a HE e `(610 − 130 − 2640) / 60` para o saldo. Main `app/ponto/motor_calculo_v2.py:3504`, `:3526`, `:3570`. [Asserção](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:82) | **RED.** O limite sobe para 660 mesmo com saída no marco. O resultado é **0 min de HE e −33,83 h**. [Limite](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/motor_calculo_v2.py:3676) · [Saldo](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/motor_calculo_v2.py:3709) |
-| 3 · Partido e Partido Noturno, caso de 490 | **490 trabalhados** (`250 + 240`), **360 noturnos de relógio** (`120 + 240`), **HE, intra e dobra zero**. O vão de 180 min foi gozado, e `490 < 540`. O abono reduz o atraso de 50 para 20 min. As saídas às 07h e 07h20 deixam 0 e 20 min fora, respectivamente. Main `app/ponto/motor_calculo_v2.py:3002`, `:3103`, `:3244`. [Asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:106) | **Verde em ambos os motores.** Com a cauda reintroduzida em memória, a saída às 07h20 sobe para **510 trabalhados** e quebra a asserção. [Recorte do Partido](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/motor_calculo_v2.py:3103) |
-| 3 · Partido e Partido Noturno, HE legal e dobra | **560 trabalhados** (`320 + 240`), **380 noturnos de relógio** (`140 + 240`), **20 min de intra** (`180 − 160`). Em dia comum, a HE50 é `560 + 380/7 − (480 + 20) = 800/7` min e a dobra é zero. No feriado, a HE100 de dobra é **320 + 240 min** e a HE50 é zero. As saídas às 07h e 07h30 preservam essas rubricas. Main `app/ponto/motor_calculo_v2.py:3103`, `:3213`, `:3248`. [Asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:120) | **Verde em ambos os motores.** Os mutantes de cauda, intra, ganho noturno da HE e dobra quebram as respectivas asserções. [Campos conferidos](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:93) |
-
-Os dois primeiros mutantes já estão presentes no HEAD. Os quatro do Partido foram aplicados em memória. Cada variante saiu com `rc 1` por asserção, com zero erros. Os comandos abaixo usam o Django do ambiente do Code, cuja execução aqui fica [nao verificado]. [Alvos](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-111717/app/ponto/tests/test_ramo2b_motor_reds.py:68) [nao verificado]
-
-```bash
-ensaio_motor() {
-  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.base python3 - "$1" <<'PY'
-from contextlib import nullcontext
-import sys
-import unittest
-from unittest.mock import patch
-
-import django
-django.setup()
-from ponto import motor_calculo_v2 as motor
-
-classe = "ponto.tests.test_ramo2b_motor_reds.Ramo2bMotorRedsTest"
-intermitente = ".test_intermitente_mantem_o_recorte_no_marco"
-comercial = ".test_comercial_mensal_com_saida_no_marco_mantem_limite_de_480"
-partido_490 = ".test_partidos_preservam_os_490_minutos_com_abono"
-partido = ".test_partidos_preservam_intra_he_legal_e_dobra"
-variantes = {
-    "head": (nullcontext(), [""]),
-    "intermitente_cauda": (nullcontext(), [intermitente]),
-    "comercial_previsto_sem_cauda": (nullcontext(), [comercial]),
-    "partido_cauda": (patch.object(motor.MotorTurnoPartido, "CAUDA_DO_TURNO_QUE_CRUZA_NO_TRABALHADO", True),
-                      [partido_490, partido]),
-    "partido_intra": (patch.object(motor, "TOLERANCIA_INTRA_MIN", 20), [partido]),
-    "partido_he": (patch.object(motor, "_ganho_noturno_da_base_da_he", return_value=0), [partido]),
-    "partido_dobra": (patch.object(motor.MotorTurnoPartido, "_feriado_dobra_no_dia", return_value=False), [partido]),
-}
-mutacao, alvos = variantes[sys.argv[1]]
-with mutacao:
-    suite = unittest.defaultTestLoader.loadTestsFromNames([classe + alvo for alvo in alvos]) [nao verificado]
-    resultado = unittest.TextTestRunner(verbosity=2).run(suite) [nao verificado]
-raise SystemExit(2 if resultado.errors else int(bool(resultado.failures)))
-PY
-}
-
-ensaio_motor head
-ensaio_motor intermitente_cauda
-ensaio_motor comercial_previsto_sem_cauda
-ensaio_motor partido_cauda
-ensaio_motor partido_intra
-ensaio_motor partido_he
-ensaio_motor partido_dobra
-```
-
-_8652 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8654 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
