@@ -6,10 +6,23 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 19:07:45.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (237.3 MB). Acoes na janela: **1989**.
+**Medido em 27/11/2026 19:14:48.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (237.5 MB). Acoes na janela: **1998**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 19:11:29 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 19:11:25 | Bash | Registra c10, cancelamento e g13 | `cd ~/saas-hasner; H=$(date +%H:%M); printf -- "- %s colhido FERIADO-UM-JUIZ escalonamento opus (somente leitura): CURA-C10, DECIDIDO PELA LEI L-095 (LEIS.md:113) + L-110 \| contestavel -- origem fechamento.py:1329-1334 (c5 pos set_rollback da lavra oraculo no atomic do mensal+motor; base 59600163c so logava; conferido pela sessao nos dois); guarda por dia em dia_pago.py:322; literal de pontualidad ...` |
+| 19:10:52 | Bash | Relança a suíte inteira do BOTÃO | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-botao-cortado-112417; git -C $W status --porcelain --ignored \| head -5; git -C $W log --oneline -1; G=logs/FERIADO-BOTAO-CORTADO/g13; mkdir -p $G; sed 's#g12#g13#g' logs/FERIADO-BOTAO-CORTADO/g12/lanca.sh > $G/lanca.sh; setsid bash $G/lanca.sh </dev/null >/dev/null 2>&1 & sleep 25; head -c 600 $G/g.log` |
+| 19:10:48 | Bash | Lê o lançador da suíte do BOTÃO | `cd ~/saas-hasner; ls logs/FERIADO-BOTAO-CORTADO/g12/; cat logs/FERIADO-BOTAO-CORTADO/g12/*.sh 2>/dev/null \| head -20` |
+| 19:10:23 | Bash | Escreve o brief c10 e lança o Codex construtor | `cd ~/saas-hasner; Q=logs/FERIADO-UM-JUIZ/c10; mkdir -p $Q; cp logs/FERIADO-UM-JUIZ/c9/FERIADO-UM-JUIZ-2711-1210.txt logs/FERIADO-UM-JUIZ/c9/LEIS-2711-1610.txt $Q/; cp logs/FERIADO-UM-JUIZ/ver7/r.md $Q/ver7_r.md; cat > $Q/q.md <<'EOF' PAPEL: construtor. OBRA FERIADO-UM-JUIZ, volta c10 sobre 597fdc40d (c9). Laudo REPROVADO anexo ver7_r.md. Decisao (escalonamento opus, conferida pela sessao): DECIDID ...` |
+| 19:10:03 | Bash | Limpa a cópia e lê a espera | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-um-juiz-152427; for d in app/staticfiles app/.ruff_cache app/.hypothesis app/.mypy_cache app/logs app/media; do rmdir "${W:?}/$d"; done; git -C $W status --porcelain --ignored \| head -5; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/banqib4ko.output; ls logs/FERIADO-UM-JUIZ/c9/s/` |
+| 19:09:53 | Bash | Cancela a suíte superada da c9 | `cd ~/saas-hasner; docker kill loving_mendel >/dev/null; kill 3835648 3836122 3836124 3838684 2>/dev/null; sleep 3; pgrep -af 'wt-codex-feriado-um-juiz-152427' \| grep -v pgrep \| cut -c1-120; bash bin/trava_teste.sh --quem; W=/home/ronald/wt-codex-feriado-um-juiz-152427; for d in app/staticfiles app/.ruff_cache app/.hypothesis app/.mypy_cache app/logs app/media; do [ -d "${W:?}/$d" ] && ls -ld "${ ...` |
+| 19:09:48 | Bash | Confirma que o container é da suíte c9 | `cd ~/saas-hasner; docker inspect loving_mendel --format '{{range .Mounts}}{{.Source}} {{end}}' \| tr ' ' '\n' \| /bin/grep -c wt-codex-feriado-um-juiz-152427` |
+| 19:09:43 | Bash | Localiza a suíte da c9 | `cd ~/saas-hasner; tail -c 300 logs/FERIADO-UM-JUIZ/c9/s/s.log; echo; ls logs/FERIADO-UM-JUIZ/c9/s/; pgrep -af 'wt-codex-feriado-um-juiz-152427' \| grep -v pgrep \| cut -c1-200; docker ps --format '{{.Names}} {{.Status}}' \| head` |
+| 19:09:38 | Bash | Confere a cópia e o lançador da c9 | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-um-juiz-152427; git -C $W status --porcelain \| head; cat logs/FERIADO-UM-JUIZ/c9/lanca.sh; ls logs/FERIADO-UM-JUIZ/c9/` |
+| 19:09:33 | Bash | Confere o acoplamento da sombra ao pago | `cd /home/ronald/wt-codex-feriado-um-juiz-152427; sed -n 1318,1340p app/ponto/services/fechamento.py; echo ----; git show 59600163c:app/ponto/services/fechamento.py \| sed -n 1314,1328p; /bin/grep -n 'L-095' ~/saas-hasner/app/docs/LEIS.md \| head -3 \| cut -c1-300` |
+| 19:08:09 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 19:08:05 | Bash | Lê o que acordou a espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bi21lwf5t.output; date +%H:%M` |
 | 19:03:01 | Bash | Rearma a espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 19:02:58 | Bash | Registra o laudo da c2x | `cd ~/saas-hasner; H=$(date +%H:%M); printf -- "- %s colhido RAMO2-B-EM-TURNO-QUE-CRUZA c2x/ver/r.rc (19:02 rc 0): REPROVADO 1 bloqueio -- L-111: com o Partido de volta ao main, motor:293 _ganho_noturno_da_base_da_he ficou sem chamador de producao (so test_ramo2b_c2_base_da_he.py:387/:402) e o campo ganho_noturno_da_base_da_he (motor:246, escrito em :1966) sem leitor de negocio; conferido por git g ...` |
 | 19:02:45 | Bash | Censo do sítio órfão na cópia | `cd /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946; git grep -n '_ganho_noturno_da_base_da_he\\|ganho_noturno_da_base_da_he' -- app \| cut -c1-220; git -C . show 570e13f24:app/ponto/motor_calculo_v2.py \| sed -n 3375,3392p` |
@@ -1995,7 +2008,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 07:24:42 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bxgcfvvbl.output` |
 | 07:19:34 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
 | 07:19:31 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b13kgh4j9.output` |
-| 07:14:24 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 07:14:20 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/be9lp92y8.output` |
-| 07:09:14 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM DESENHO \| RAMO2-B c2r suite inteira pista \| E1 DESENHO B3 \| ABONO c1k travada por motor \| E4C/E4D/PAR travadas"; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 07:09:09 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bbvzmvnbz.output` |
