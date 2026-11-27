@@ -1,7 +1,48 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 09:03** · publicado em **27/11/2026 09:03** (UTC-3)
+> Ultima resposta processada: **27/11/2026 09:05** · publicado em **27/11/2026 09:10** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 09:05 · sessao e6e68478a2db · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+**C2u parcial.** Apliquei os itens 2, 5 e 6. Os itens 1, 3 e 4 dependem de autorização explícita para editar `motor_calculo_v2.py`, que a ordem também proíbe sob pena de descarte. [Intermitente:3841](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3841) · [Comercial:3671](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3671) · [Partido:3103](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3103) [nao verificado]
+
+| Item | RED antes da cura e resultado observado |
+|---|---|
+| 1. Intermitente | RED em `(750, 570, 0)` para trabalhado, noturno e fora. O teste exige `(720, 540, 30)` e segue RED. [Teste:31](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:31) | [nao verificado]
+| 2. Pausa | A releitura dava `(300, 20)` para trabalhado e pausa, contra `(320, 0)` do motor e da alimentação. Com o gatilho compartilhado, os três dão `(320, 0)`. Duas fixtures existentes passaram a informar o desconto do motor, com as asserções originais preservadas. [RED:38](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:38) · [Cura:755](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:755) · [Fixtures:203](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:203) |
+| 3. Comercial | RED em **HE 0 e saldo −33,83 h**, com 610 trabalhados e previsto de 660. Em memória, condicionar o previsto a `saida_da_base_da_he` deu **HE 130 e saldo −36,00 h** sem cauda. O controle com saída às 07h20 continuou com HE zero. [RED:60](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:60) · [Controle:145](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:145) |
+| 4. Partido | O teste de igualdade literal deu RED para `MotorTurnoPartido`. `MotorTurnoPartidoNoturno` já coincide com `59600163c`. [Teste:72](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_escopo.py:72) |
+| 5. Export | `AttributeError` no resultado composto vazio e `KeyError` no período sem chave. Ambos passaram com a leitura por `dia_pago._dia_de`. [REDs:15](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2u_export.py:15) · [Cura:346](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:346) |
+| 6. Catraca | O censo acusou a lista antiga. Registrei `[3586, 3716, 3734, 3759, 3763, 3764]`. A catraca passou **35/35** e a restauração da lista antiga em memória voltou a falhar. [Registro:309](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:309) · [Asserção:564](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:564) | [nao verificado]
+
+**Conflitos medidos nos itens 3 e 4**
+
+- **Pontualidade sem cauda.** Com os marcos do `main` em memória, o caso `test_entrada_depois_da_meia_noite_com_d1_de_folga_tem_atraso_abatido_pela_parcial` deu atraso **0** e exige **5**. `test_sem_parcial_o_atraso_e_o_bruto` deu **0** e exige **12**. Nos dois, a saída é às 07h50, no marco. [Com parcial:119](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:119) · [Sem parcial:129](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:129)
+- **Partido.** Na cópia literal em memória, `test_partido_com_intervalo_entre_dois_periodos` e `test_partido_preserva_os_490_minutos_do_main` deram `ValueError`. O Partido do `main` desempacota quatro valores e a janela atual retorna cinco. O teste do construtor da tripla passou nessa simulação. Os oito casos de `EscritorUnicoDaBaseDaHeTest` passaram na cópia de trabalho. [Janela:1939](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1939) · [Intervalo:147](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:147) · [490 minutos e tripla:51](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:51) · [Escritor:661](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:661) [nao verificado]
+
+**Execução.** Os 11 casos focados de pausa e export passaram em `unittest` em memória, com as fronteiras externas substituídas. A chamada conjunta de `ponto.tests.test_ramo2b_*`, `ponto.tests.test_o280_bateria_da_lei`, `core.tests.test_medida_turno_do_par` e `folha.tests` parou no import de `django.core`. O veredito da suíte Django e a certificação do Code e do Opus final estão pendentes. O arquivo `verif_c2t.md` ficou [nao verificado]. [Entrada da suíte:11](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/manage.py:11) [nao verificado]
+
+Os quatro mutantes em memória produziram os REDs esperados. Os dois primeiros saíram com `rc 1`, e os do export com `rc 2`, respectivamente `AttributeError` e `KeyError`. Comandos para reproduzir com Django disponível. [Mutantes:14](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2u_mutantes.py:14)
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
+python3 -B -m ponto.tests.ramo2b_c2u_mutantes releitura_ignora_desconto
+python3 -B -m ponto.tests.ramo2b_c2u_mutantes alimentacao_ignora_desconto
+python3 -B -m ponto.tests.ramo2b_c2u_mutantes export_exige_mapa
+python3 -B -m ponto.tests.ramo2b_c2u_mutantes export_exige_chave
+```
+
+Para reproduzir o mutante da catraca sem Django, execute o trecho `unittest` documentado no teste com a lista do Comercial restaurada em memória para `[3586, 3717, 3735, 3760, 3764, 3765]`. [Comando da catraca:30](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:30) · [Entrada mutada:309](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:309) [nao verificado]
+
+**Diff da cópia.** `git diff --check` passou. A contagem de `except` adicionados foi zero, incluindo os arquivos novos. [Pausa:35](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/alimentacao.py:35) · [Export:589](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:589) [nao verificado]
+
+```bash
+git diff HEAD -- .
+for arquivo in ponto/tests/*c2u*.py; do
+  git diff --no-index -- /dev/null "$arquivo"
+done
+```
 
 ## 27/11 09:03 · sessao 3569bcc00a47 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
 
@@ -1553,51 +1594,4 @@ A c12 substitui a lista manual por uma regra geral que protege os testes **exist
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 27/11 03:57 · sessao 0684ef753980 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-# construtor.r
-
-**Caso 30.** O cartão recente usa `DIA - timedelta(days=1)`, o que distingue a chave `pergunta_unica_por_marco` e preserva o motivo do alvo. [Fixture](chamados/tests/test_e4d_matriz_reds.py:1640) [Restrição](chamados/models.py:3944)  
-A resposta recente continua um minuto depois da resposta do alvo. As asserções de SQL, API, modal e raio-x são as mesmas. [Asserções](chamados/tests/test_e4d_matriz_reds.py:1642)
-
-Na base, a fila SQL exige `respondida_em` preenchido. A asserção esperada compara a fila que perde o alvo com `[p.pk, recente.pk]`. A falha após a correção fica **[nao verificado]** na suíte do Code. [Filtro SQL](chamados/juizes.py:1676) [Fila](chamados/juizes.py:1863) [Asserção](chamados/tests/test_e4d_matriz_reds.py:1647)
-
-## Diff
-
-| Arquivo | Inserções | Remoções |
-|---|---:|---:|
-| [e4d_matriz_mutantes.py](chamados/tests/e4d_matriz_mutantes.py:551) | 148 | 18 |
-| [test_e4d_matriz_reds.py](chamados/tests/test_e4d_matriz_reds.py:1640) | 2 | 1 |
-| **Total** | **150** | **19** |
-
-`git diff --check` e a compilação em memória passaram. O diff acrescenta **0 `except`**. A comparação com a base confirmou que a única mudança nos REDs é a chamada da fixture do caso 30. [Fixture](chamados/tests/test_e4d_matriz_reds.py:1640) [Arnês](chamados/tests/e4d_matriz_mutantes.py:551)
-
-## Seletores para o Code
-
-O arnês expõe as **39 variantes da lista da fix5**, incluindo a da fixture. As outras 31 definições preexistentes ficaram fora do seletor desta volta. Cada classe roda controle, mutação com restauração registrada em `addCleanup` e novo controle. O conjunto de falhas é comparado por método e, no caso 30, por subteste de leitor. O ensaio sintético conferiu essa comparação e a restauração. As mordidas na suíte ficam **[nao verificado]**. [Arnês](chamados/tests/e4d_matriz_mutantes.py:551) [Classes](chamados/tests/e4d_matriz_mutantes.py:607) [Leitores](chamados/tests/e4d_matriz_mutantes.py:662)
-
-RED do caso 30. [Teste](chamados/tests/test_e4d_matriz_reds.py:1617)
-
-```bash
-bin/suite.sh --only "chamados.tests.test_e4d_matriz_reds.MatrizRaizELeitoresTest.test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta"
-```
-
-Linha dos mutantes para `bin/suite.sh`. [Classes](chamados/tests/e4d_matriz_mutantes.py:607)
-
-```bash
---only "chamados.tests.e4d_matriz_mutantes.M04ReverteOutraCompetencia chamados.tests.e4d_matriz_mutantes.M05SegundoEscritorM chamados.tests.e4d_matriz_mutantes.M06CarimboReescrito chamados.tests.e4d_matriz_mutantes.M07EscritorAstForaDaPorta chamados.tests.e4d_matriz_mutantes.M07FabricaConclusao chamados.tests.e4d_matriz_mutantes.M08RegravaExportada chamados.tests.e4d_matriz_mutantes.M09SegundoEscritorV chamados.tests.e4d_matriz_mutantes.M09MaterializaForaDaPorta chamados.tests.e4d_matriz_mutantes.M10SegundoEscritorR chamados.tests.e4d_matriz_mutantes.M10MaterializaForaDaPorta chamados.tests.e4d_matriz_mutantes.M11DescartaReaberturaVazia chamados.tests.e4d_matriz_mutantes.M11RetryGanhaNovoPedido chamados.tests.e4d_matriz_mutantes.M12AutorDaFotoSetNull chamados.tests.e4d_matriz_mutantes.M12OcultaAutoriaDesconhecida chamados.tests.e4d_matriz_mutantes.M18C6JulgaCompensacaoCedo chamados.tests.e4d_matriz_mutantes.M18I23ZeroFixo chamados.tests.e4d_matriz_mutantes.M18RegistrarAceitaCompensadorFuturo chamados.tests.e4d_matriz_mutantes.M20IgnoraRecusaNoEmpate chamados.tests.e4d_matriz_mutantes.M20ReusaPedidoDaAusencia chamados.tests.e4d_matriz_mutantes.M26DevolveSemVinculo chamados.tests.e4d_matriz_mutantes.M26PreservaSemEncaminhar chamados.tests.e4d_matriz_mutantes.M27JulgaInstanciaAntiga chamados.tests.e4d_matriz_mutantes.M27ReleSoACelula chamados.tests.e4d_matriz_mutantes.M27FantasmaForaDaPorta chamados.tests.e4d_matriz_mutantes.M28ViaSemCompensacao chamados.tests.e4d_matriz_mutantes.M28UsaPrimeiroEspelho chamados.tests.e4d_matriz_mutantes.M28ViaForaDaPorta chamados.tests.e4d_matriz_mutantes.M30FilaPeloCarimboCru chamados.tests.e4d_matriz_mutantes.M30ApiPeloParCru chamados.tests.e4d_matriz_mutantes.M30ModalPeloParCru chamados.tests.e4d_matriz_mutantes.M30RaioxPeloCarimboCru chamados.tests.e4d_matriz_mutantes.M31RaizForaDaPorta chamados.tests.e4d_matriz_mutantes.M31ChamadoForaDaPorta chamados.tests.e4d_matriz_mutantes.M32RaizForaDaPorta chamados.tests.e4d_matriz_mutantes.M32FilhaNasceComV chamados.tests.e4d_matriz_mutantes.M36IgnoraTranca chamados.tests.e4d_matriz_mutantes.M37DestranqueForaDaPorta chamados.tests.e4d_matriz_mutantes.M37RegravaRNoDestranque chamados.tests.e4d_matriz_mutantes.MFixtureOmiteEntradaCongelada"
-```
-
-## Censo de relógio
-
-| Ocorrência | Cobertura |
-|---|---|
-| [`timezone.now()` nos REDs](chamados/tests/test_e4d_matriz_reds.py:185) | `freeze_time(T1)` no `setUp`. O teste isolado da fixture usa `freeze_time(T2)`. [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) [Fixture](chamados/tests/test_e4d_matriz_reds.py:385) |
-| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:130) | String de mutação que aponta para a leitura da fixture. [Fixture](chamados/tests/test_e4d_matriz_reds.py:185) |
-| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:302) | Variante fora do seletor da fix5. Seu alvo, caso 16, herda `freeze_time(T1)`. [Caso 16](chamados/tests/test_e4d_matriz_reds.py:663) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
-| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:334) | Caso 18 sob `freeze_time(T1)`, com `freeze_time(T2)` no controle que aceita o ato. [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) [Controle T2](chamados/tests/test_e4d_matriz_reds.py:783) |
-| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:475) | Variante fora do seletor da fix5. Seu alvo, caso 31, herda `freeze_time(T1)`. [Caso 31](chamados/tests/test_e4d_matriz_reds.py:1684) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
-| [`timezone.now()` nos mutantes](chamados/tests/e4d_matriz_mutantes.py:496) | Caso 32 sob `freeze_time(T1)` do `setUp`. [Caso 32](chamados/tests/test_e4d_matriz_reds.py:1718) [SetUp](chamados/tests/test_e4d_matriz_reds.py:159) |
-| `localdate()` e `date.today()` | Zero ocorrências nos dois arquivos. [REDs](chamados/tests/test_e4d_matriz_reds.py:1) [Mutantes](chamados/tests/e4d_matriz_mutantes.py:1) |
-
-_8588 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8589 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
