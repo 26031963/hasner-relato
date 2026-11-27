@@ -1,7 +1,220 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 06:51** · publicado em **27/11/2026 06:56** (UTC-3)
+> Ultima resposta processada: **27/11/2026 06:59** · publicado em **27/11/2026 07:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 06:59 · sessao 684d56ff6bd6 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+Movi `_medir_com_espelho` e `TestemunhaDaHeNaPortaTest` para `ponto/tests`. Conferi que o helper, os patches e as asserções foram preservados byte a byte. A mudança ficou restrita a dois arquivos.
+
+- [app/folha/tests/test_porta_do_export.py:15](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/tests/test_porta_do_export.py:15) — removi o bloco e os imports de módulo que ficaram sem uso. O trecho de `he_acima_do_teto_por_dia` foi preservado. [Trecho preservado](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/tests/test_porta_do_export.py:133)
+- [app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:1](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:1) — adicionei a docstring de duas linhas e o bloco movido. [Helper](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:11) · [Testemunha](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43)
+
+### RED e mutantes
+
+O RED falhou na base `c57f01232` com o achado `('folha/tests/test_porta_do_export.py', 'MotorBase')`. Após a mudança, os quatro testes do selo passaram. [Asserção do selo](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_selo_bolha_nao_importa.py:27)
+
+```bash
+# RED na base
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest core.tests.test_selo_bolha_nao_importa.SeloBolhaNaoImportaTest.test_MORDE_a_bolha_da_folha_nao_importa_o_motor
+
+# Selo completo após a cura
+PYTHONDONTWRITEBYTECODE=1 python3 -W ignore::ResourceWarning -m unittest core.tests.test_selo_bolha_nao_importa
+```
+
+**Mutante 1.** Reintroduzi o import em `folha/` na AST em memória. O selo voltou a falhar pelo achado esperado. [Varredura de imports](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/mapa/contrato.py:128)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -W ignore::ResourceWarning - <<'PY'
+import ast
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+from core.mapa import contrato
+
+folha = 'folha/tests/test_porta_do_export.py'
+arvore = contrato._arvore
+mutante = ast.parse(Path(folha).read_text() + '\nfrom ponto.motor_calculo_v2 import MotorBase\n')
+alvo = ('core.tests.test_selo_bolha_nao_importa.SeloBolhaNaoImportaTest.'
+        'test_MORDE_a_bolha_da_folha_nao_importa_o_motor')
+with patch.object(contrato, '_arvore', side_effect=lambda rel: mutante if rel == folha else arvore(rel)):
+    resultado = unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromName(alvo))
+assert resultado.testsRun == 1 and not resultado.errors
+assert len(resultado.failures) == 1 and repr((folha, 'MotorBase')) in resultado.failures[0][1]
+PY
+```
+
+**Mutante 2.** Omiti a classe no texto em memória. A conferência estrutural detectou a perda da testemunha. [Classe e método](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
+import ast
+from pathlib import Path
+
+p = Path('ponto/tests/test_ramo2b_porta_7a_testemunha.py')
+fonte = p.read_text()
+classe = 'TestemunhaDaHeNaPortaTest'
+metodo = 'test_he_da_cauda_entra_na_lista_e_nas_falhas_da_porta'
+
+def contem_testemunha(texto):
+    return any(
+        isinstance(n, ast.ClassDef) and n.name == classe
+        and any(isinstance(m, ast.FunctionDef) and m.name == metodo for m in n.body)
+        for n in ast.parse(texto).body
+    )
+
+assert contem_testemunha(fonte)
+mutante = fonte.split(f'\nclass {classe}(', 1)[0]
+assert not contem_testemunha(mutante)
+PY
+```
+
+A execução local da testemunha parou no import porque o Python disponível não tem `django.test`. A execução da testemunha e da suíte completa fica para a certificação do Code e do Opus final [nao verificado]. [Import da testemunha](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:8) [nao verificado]
+
+### Diff
+
+```diff
+diff --git a/app/folha/tests/test_porta_do_export.py b/app/folha/tests/test_porta_do_export.py
+--- a/app/folha/tests/test_porta_do_export.py
++++ b/app/folha/tests/test_porta_do_export.py
+@@ -14,68 +14,11 @@ seriam duas contas para a mesma pergunta -- a doenca que esta serie inteira pers
+ """
+ import datetime
+ import inspect
+-from types import SimpleNamespace
+-from unittest.mock import MagicMock, Mock, patch
+-from zoneinfo import ZoneInfo
+ 
+-from django.test import SimpleTestCase, TestCase
++from django.test import TestCase
+ from freezegun import freeze_time
+ 
+ 
+-def _medir_com_espelho(resultado, *, previsto, declarado):
+-    """Mede o espelho fornecido pelo caminho da porta, com as fronteiras de I/O em memória."""
+-    from colaboradores.models import Colaborador
+-    from escala.models import CelulaDia
+-    from folha.porta_export import medir
+-    from ponto.models import DiaPago, FechamentoMensal
+-
+-    empresa = SimpleNamespace(pk=1, dia_inicio_competencia=21)
+-    colab = SimpleNamespace(pk=125)
+-    sem_linhas = Mock(first=Mock(return_value=None), values_list=Mock(return_value=[]))
+-    agora = datetime.datetime(2026, 11, 23, 12, tzinfo=ZoneInfo('America/Sao_Paulo'))
+-
+-    def cartao_x_txt(*_args, stdout, **_kwargs):
+-        stdout.write('cartao_x_txt_divergentes=0\n')
+-
+-    with (patch('folha.porta_export._tz_ato.now', return_value=agora),
+-          patch('folha.export.classificar_export', return_value=[{'status': 'entra', 'colaborador_id': colab.pk}]),
+-          patch.object(Colaborador.objects, 'filter', return_value=Mock(first=Mock(return_value=colab))),
+-          patch.object(CelulaDia.objects, 'filter', return_value=[]),
+-          patch.object(DiaPago.objects, 'filter', return_value=MagicMock(values_list=Mock(return_value=[]))),
+-          patch.object(FechamentoMensal.objects, 'filter', return_value=sem_linhas),
+-          patch('ponto.services.espelho.espelho_do_colab', return_value={'resultado': resultado}),
+-          patch('ponto.services.espelho.autoridade_do_periodo', return_value=SimpleNamespace(resultado=resultado)),
+-          patch('relatorios.pdf_espelho._coletar_dados_espelho_mes', return_value={}),
+-          patch('ponto.services.fechamento.empresas_exportadas_no_escopo', return_value=[]),
+-          patch('ponto.services.dia_pago.soma_da_competencia', return_value=None),
+-          patch('escala.utils.minutos_previstos_do_dia', return_value=previsto),
+-          patch('escala.utils.intervalo_declarado_do_dia', return_value=declarado),
+-          patch('django.core.management.call_command', side_effect=cartao_x_txt)):
+-        return medir(empresa, 11, 2026)
+-
+-
+-class TestemunhaDaHeNaPortaTest(SimpleTestCase):
+-    def test_he_da_cauda_entra_na_lista_e_nas_falhas_da_porta(self):
+-        # L-097(b), L-031: trabalhado 800, base e previsto 720, intra 60,
+-        # declarado 0. HE 80 passa do teto 0 e aciona a sétima testemunha.
+-        from ponto.motor_calculo_v2 import MotorBase, PeriodoCalculo
+-
+-        entrada = datetime.datetime(2026, 11, 5, 19, tzinfo=ZoneInfo('America/Sao_Paulo'))
+-        p = PeriodoCalculo(entrada, entrada + datetime.timedelta(minutes=800),
+-                           minutos_trabalhados=800, minutos_intrajornada_indenizada=60, minutos_extra=80)
+-        MotorBase._escrever_base_da_he(p, 720, entrada + datetime.timedelta(minutes=720), 0)
+-        resultado = SimpleNamespace(periodos=[p], periodos_ft=[], dia_da_jornada={id(p): entrada.date()})
+-
+-        medicao = _medir_com_espelho(resultado, previsto=720, declarado=0)
+-
+-        self.assertEqual(medicao['universo'], 1)
+-        self.assertEqual(medicao['minuto_em_duas_rubricas'], [
+-            {'colab': 125, 'dia': '2026-11-05', 'he_min': 80, 'intra_min': 60,
+-             'trab_min': 800, 'previsto_min': 720, 'teto_he': 0},
+-        ])
+-        self.assertEqual((medicao['falhas_proprias'], medicao['falhas']), (1, 1))
+-
+-
+ # RELOGIO CONGELADO: este arquivo fala de "carimbo de HOJE" e "carimbo de ONTEM", entao ele LE o relogio por
+ # construcao -- e o selo `test_selo_teste_sem_relogio::test_MORDE_teste_novo_com_relogio_solto_e_vermelho` me
+ # cobrou na hora, com razao. Congelado, as duas datas sao deterministicas e a lei do carimbo continua medida.
+diff --git a/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py b/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py
+new file mode 100644
+--- /dev/null
++++ b/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py
+@@ -0,0 +1,62 @@
++"""Este caso mora em ponto/ porque constrói o PeriodoCalculo pelo motor.
++A bolha da folha não importa o motor (selo test_selo_bolha_nao_importa)."""
++import datetime
++from types import SimpleNamespace
++from unittest.mock import MagicMock, Mock, patch
++from zoneinfo import ZoneInfo
++
++from django.test import SimpleTestCase
++
++
++def _medir_com_espelho(resultado, *, previsto, declarado):
++    """Mede o espelho fornecido pelo caminho da porta, com as fronteiras de I/O em memória."""
++    from colaboradores.models import Colaborador
++    from escala.models import CelulaDia
++    from folha.porta_export import medir
++    from ponto.models import DiaPago, FechamentoMensal
++
++    empresa = SimpleNamespace(pk=1, dia_inicio_competencia=21)
++    colab = SimpleNamespace(pk=125)
++    sem_linhas = Mock(first=Mock(return_value=None), values_list=Mock(return_value=[]))
++    agora = datetime.datetime(2026, 11, 23, 12, tzinfo=ZoneInfo('America/Sao_Paulo'))
++
++    def cartao_x_txt(*_args, stdout, **_kwargs):
++        stdout.write('cartao_x_txt_divergentes=0\n')
++
++    with (patch('folha.porta_export._tz_ato.now', return_value=agora),
++          patch('folha.export.classificar_export', return_value=[{'status': 'entra', 'colaborador_id': colab.pk}]),
++          patch.object(Colaborador.objects, 'filter', return_value=Mock(first=Mock(return_value=colab))),
++          patch.object(CelulaDia.objects, 'filter', return_value=[]),
++          patch.object(DiaPago.objects, 'filter', return_value=MagicMock(values_list=Mock(return_value=[]))),
++          patch.object(FechamentoMensal.objects, 'filter', return_value=sem_linhas),
++          patch('ponto.services.espelho.espelho_do_colab', return_value={'resultado': resultado}),
++          patch('ponto.services.espelho.autoridade_do_periodo', return_value=SimpleNamespace(resultado=resultado)),
++          patch('relatorios.pdf_espelho._coletar_dados_espelho_mes', return_value={}),
++          patch('ponto.services.fechamento.empresas_exportadas_no_escopo', return_value=[]),
++          patch('ponto.services.dia_pago.soma_da_competencia', return_value=None),
++          patch('escala.utils.minutos_previstos_do_dia', return_value=previsto),
++          patch('escala.utils.intervalo_declarado_do_dia', return_value=declarado),
++          patch('django.core.management.call_command', side_effect=cartao_x_txt)):
++        return medir(empresa, 11, 2026)
++
++
++class TestemunhaDaHeNaPortaTest(SimpleTestCase):
++    def test_he_da_cauda_entra_na_lista_e_nas_falhas_da_porta(self):
++        # L-097(b), L-031: trabalhado 800, base e previsto 720, intra 60,
++        # declarado 0. HE 80 passa do teto 0 e aciona a sétima testemunha.
++        from ponto.motor_calculo_v2 import MotorBase, PeriodoCalculo
++
++        entrada = datetime.datetime(2026, 11, 5, 19, tzinfo=ZoneInfo('America/Sao_Paulo'))
++        p = PeriodoCalculo(entrada, entrada + datetime.timedelta(minutes=800),
++                           minutos_trabalhados=800, minutos_intrajornada_indenizada=60, minutos_extra=80)
++        MotorBase._escrever_base_da_he(p, 720, entrada + datetime.timedelta(minutes=720), 0)
++        resultado = SimpleNamespace(periodos=[p], periodos_ft=[], dia_da_jornada={id(p): entrada.date()})
++
++        medicao = _medir_com_espelho(resultado, previsto=720, declarado=0)
++
++        self.assertEqual(medicao['universo'], 1)
++        self.assertEqual(medicao['minuto_em_duas_rubricas'], [
++            {'colab': 125, 'dia': '2026-11-05', 'he_min': 80, 'intra_min': 60,
++             'trab_min': 800, 'previsto_min': 720, 'teto_he': 0},
++        ])
++        self.assertEqual((medicao['falhas_proprias'], medicao['falhas']), (1, 1))
+```
 
 ## 27/11 06:51 · sessao 6c7f3f7c903e · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
 
@@ -1001,33 +1214,4 @@ sed -i '216,217d' "$f"
 sed -i '510s/chamado=ch, //' "$f"
 ```
 
-## 27/11 03:02 · sessao 6aa002de3fc5 · E4C-F5-INSTANTE · construtor · origem=Code
-
-Apliquei o BRIEF c4red4 nos dois arquivos de teste. A conferência estática encontrou 15 REDs ativos, um skip e 27 seletores de mutantes. O diff passou em `git diff --check`, tem zero `except` e zero `suppress` adicionados e deixa o c1 intocado. As falhas no HEAD, o verde do c1 e as mordidas com PostgreSQL seguem **[nao verificado]**. [RED](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1) · [Arnés](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:26) · [c1](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_instante_c1.py:83) [nao verificado]
-
-1. Estacionei o falso zero com o skip `lei: registro da escrita da coluna -- E4C c4red3 opus5d item 3`. Os casos históricos e a precedência de ato novo no vigia e no DRY ficaram em controles próprios. [Controles e skip](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:551)
-2. Removi `b_nascida` e retirei M06 da bateria ativa pela mesma dependência da lei. [Acervo estacionado](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:575) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:421)
-3. A concorrência ficou como controle do chamador, na ordem `travar_entrega → trava_na_ordem → registrar`. A fixture observa a espera com `Event` e `pg_locks`, sob prazo monotônico. M27 injeta a leitura de K6 antes da trava. [Fixture](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:650) · [M27](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:402)
-4. A resposta futura virou controle da razão e da ação públicas da tarefa. M05 saiu. [Face pública](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:276) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:430)
-5. Os escritores exigem uma foto `ESTOQUE` com `entrada_em=MARCO` e um ato novo. O carimbo em competência entregue exige `ValueError` com `ENTREGUE`, foto integral preservada, `validada_em` anterior e zero linhas gravadas. [Carimbo e escritores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:444)
-6. A foto após resposta compensada é aplicada diretamente. Para o motivo adulterado, usei a mensagem integral de `_conferir_estoque` para linha que não reproduz a coluna. O HEAD ainda exclui `ato_motivo` da chave comparada. [Testes](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:379) · [Chave e mensagem](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/models.py:4784) [nao verificado]
-7. O arnés roda controle, mutação e controle após restaurar, com fixtures independentes. Só conta a falha na asserção nomeada. Os patches são locais ao caso, M23 restaura em `finally` e os cenários de inserção ficam em transações isoladas. Exercitei o arnés com `unittest` sintético, incluindo sobrevivente, asserção errada e restauração. [Arnés](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:26) · [M23](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:326) · [Isolamento por subteste](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:420)
-
-**Comandos para o Code**, a partir de `app/`. O laço roda cada mutante por seu seletor, sobre a cura, com os dois controles. [Configuração de CI](/home/ronald/wt-codex-e4c-f5-instante-012038/app/config/settings/ci.py:6) · [Seletores](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:421)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4c_f5_c4_red --settings=config.settings.ci --verbosity=2
-
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4c_f5_instante_c1 --settings=config.settings.ci --verbosity=2
-
-for classe in $(sed -nE 's/^(M[0-9]+[[:alnum:]]+) = contraprova\($/\1/p' \
-  chamados/tests/e4c_f5_c4red2_mutantes.py); do
-  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    "chamados.tests.e4c_f5_c4red2_mutantes.${classe}.test_mordida" \
-    --settings=config.settings.ci --verbosity=2
-done
-```
-
-_8576 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8577 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
