@@ -1,7 +1,55 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 11:59** · publicado em **27/11/2026 12:00** (UTC-3)
+> Ultima resposta processada: **27/11/2026 12:07** · publicado em **27/11/2026 12:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 12:07 · sessao 914f194adfe1 · ORFAS-VOLTOU · sonda · origem=Code
+
+- **Defeito.** A sonda mostrou dois `reg10`, das rubricas `0025` e `0243`, com `00000VIGIA` no campo `matric`. O layout exige que os dez caracteres desse campo passem em `isdigit()`. As letras explicam os dois erros `reg10 campo matric nao-numerico`. [app/folha/export.py:272](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:272)
+- **Escritor e fonte.** `montar_linhas_export` lê `fech.colaborador.codigo_dominio` na linha 737. O `strip().zfill(10)` preenche com zeros e preserva as letras. No mapa exemplificado na cópia, `0025` é adicional noturno e `0243` é intrajornada, ambos emitidos pela chamada a `montar_linha_10` na linha 747. O serializador grava a matrícula na linha 45. O mapa ativo da empresa 2 na sondagem é [nao verificado]. [app/folha/export.py:737](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:737) [app/folha/export.py:747](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:747) [app/folha/export.py:45](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:45) [app/folha/tests/test_sm1_monster_export.py:75](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/tests/test_sm1_monster_export.py:75)
+- **Dono pela L-099: CADASTRO.** O valor inválido vem do campo cadastral `Colaborador.codigo_dominio`. `classificar_export` só verifica se esse campo está vazio, então a exigência de matrícula numérica é aplicada na validação do TXT. `dono_da_divergencia` julga divergências de dia por colaborador e fica fora desse caminho. Quem gravou o valor é [nao verificado]. [CLAUDE.md:183](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/CLAUDE.md:183) [app/colaboradores/models.py:311](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/colaboradores/models.py:311) [app/folha/export.py:881](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:881) [app/ponto/management/commands/e6_oraculo.py:53](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/management/commands/e6_oraculo.py:53)
+- **TXT real de 11/2026, empresa 2.** Com o `sem_medicao` visto na sombra, o clique solicita a conferência e a porta segura a geração até ficar `pronta`. Mesmo com a porta pronta, basta que a montagem real reproduza uma dessas linhas para `gerar_dominio_txt` recusar por falha de layout, antes de entregar ou registrar o arquivo. A porta recalcula os fechamentos antes de montar. O estado da porta real hoje, as linhas que esse recálculo produziria e o resultado efetivo da tentativa ficam [nao verificado]. [app/folha/porta_export.py:817](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:817) [app/folha/porta_export.py:1423](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:1423) [app/folha/views.py:135](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:135) [app/folha/views.py:214](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:214) [app/folha/views.py:275](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:275) [app/folha/views.py:282](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/views.py:282)
+
+## 27/11 12:03 · sessao 22ad6ec9cbe8 · ORFAS-VOLTOU · sonda · origem=Code
+
+Na montagem em memória do TXT de **11/2026**, a sonda identificou **87 células com o colaborador fora**, **5 com o colaborador dentro e a data sem `reg11`** e **337 que acionaram `furo_espelho`**. A presença no TXT ficou **[nao verificado]** para as 561 células da empresa 2. `sonda.py`, saída fornecida, linhas 4–7.
+
+| Empresa | Células | Colab. fora do TXT | Colab. dentro, data sem `reg11` na janela | Células que retêm | Efeito direto em rubrica/horas | Fonte |
+|---|---:|---:|---:|---:|---:|---|
+| 2 | 561 | [nao verificado] | [nao verificado] | 286 | 0 | `sonda.py`, saída linha 4 |
+| 3 | 91 | 87 | 4 | 51 | 0 | `sonda.py`, saída linha 5 |
+| 4 | 1 | 0 | 1 | 0 | 0 | `sonda.py`, saída linha 6 |
+| **Total** | **653** | **87 verificados** | **5 verificados** | **337** | **0** | `sonda.py`, saída linha 7 |
+
+**As somas fecham nas 653 células**, com zero fora das empresas 2–4. Por colaborador, são 5 dentro + 87 fora + 561 com presença indeterminada. Por data, são 137 fora da janela + 0 com `reg11` verificado + 5 sem `reg11` com colaborador dentro + 68 sem `reg11` com colaborador fora + 443 datas indeterminadas na janela. As 337 retenções se sobrepõem a essas contagens. A sonda encontrou 1.895 perguntas, 189 colaboradores no filtro, 179 com célula e 12 perguntas sem FK de célula. A referência do anexo traz 184 colaboradores e 658 células. A identidade entre os dois conjuntos de células é **[nao verificado]**. `sonda.py`, saída linhas 1–8. [app/folha/export.py:977](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:977)
+
+A saída trouxe `layout_invalido` na empresa 2 e `sem_medicao` nas três empresas. A retenção vem da classificação, que exclui o colaborador inteiro da montagem quando o motivo é `furo_espelho`. O erro específico de layout da empresa 2 e a emissão efetiva do TXT são **[nao verificado]**. `sonda.py`, saída linhas 4–6. [app/folha/export.py:266](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:266) [app/folha/export.py:725](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:725) [app/folha/export.py:977](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:977) [app/folha/porta_export.py:1368](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/porta_export.py:1368)
+
+O **zero direto** vale para fechar apenas a pergunta, mantendo os insumos da folha. O `reg11` registra data de falta. A contribuição de um dia sem `reg11` às rubricas mensais e o efeito de materializar uma resposta ou decidir o dia são **[nao verificado]**. [app/folha/export.py:215](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:215) [app/folha/export.py:734](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/folha/export.py:734) [app/chamados/services/validacao.py:777](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/chamados/services/validacao.py:777)
+
+## 27/11 12:02 · sessao aac47beae035 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
+
+Adicionei um único arquivo, [test_smoke_clique_feriado_vira_trabalho.py](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:1). A fixture usa datas fixas e confere que a função real oferece a ação em 20/11/2026, com a célula em folga e quatro batidas. [Fixture e conferência](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:144)
+
+- **Página × `base.html` e `base_app.html`** — renderiza o calendário mensal real no conteúdo de cada casca. [Renderização](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:209)
+- **Drawer × `base.html` e `base_app.html`** — abre o drawer genérico e clica em Espelho, com as respostas das duas views fornecidas em memória. [Abertura do drawer](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:60)
+
+Nos quatro cenários, o Chromium confere o `summary` dentro da célula e da viewport, clica no elemento atingido no centro do botão e verifica abertura, painel inteiro na viewport, distância de até 16 px e `action` do formulário igual à porta real. A rolagem só registra deslocamento, evento e fechamento. [Medições](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:89)
+
+O **RED esperado no drawer** vem de `popover-acao.js:44` e `:75–76`. O script aplica `position:fixed` e grava coordenadas da viewport, mas o `transform` do drawer muda a referência do `fixed`. O `backdrop-filter` de `.hx-shell` também merece leitura nas duas páginas. O efeito geométrico em ambos os casos segue [nao verificado]. [Posicionador](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:38) [Drawer](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:16) [CSS da casca](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/css/hasner-ponto.css:283)
+
+**Comandos para o Code**, a partir de `app/`. Os mutantes alteram o HTML do ensaio. [Mutantes CSS](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:38) [Mutante da porta](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:192)
+
+```bash
+alvo=core.tests.test_smoke_clique_feriado_vira_trabalho
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$alvo" --settings=config.settings.ci
+SMOKE_FERIADO_MUTANTE=gatilho-cortado PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$alvo" --settings=config.settings.ci
+SMOKE_FERIADO_MUTANTE=painel-recortado PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$alvo" --settings=config.settings.ci
+SMOKE_FERIADO_MUTANTE=painel-distante PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$alvo" --settings=config.settings.ci
+SMOKE_FERIADO_MUTANTE=porta-trocada PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$alvo" --settings=config.settings.ci
+```
+
+A sintaxe Python passou. A execução na cópia parou no import de `django.core`, antes do banco de teste e do Chromium. Resultado dos quatro cenários, rolagem, mutantes, envio do POST e comportamento em produção seguem [nao verificado]. [Import do Django](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/manage.py:11) [nao verificado]
 
 ## 27/11 11:59 · sessao ba05ad29f6be · ORFAS-VOLTOU · leitura · origem=Code
 
@@ -1306,295 +1354,4 @@ A volta cura P3 na origem e fecha a lacuna de trava na auditoria pós-rollback. 
 
 O veredito é técnico, sobre o delta fornecido. A alteração em `core/observ.py` extrapola a lista dos briefs 3 e 3b anexados. O aval específico da 3c, a reprodução independente dos números da pista e a ocorrência em produção ficam **[nao verificado]**. [observ.py:94](/home/ronald/codex_ws/8ea46953ecf2787e1db084b82bba42ba76876648/app/core/observ.py:94)
 
-## 27/11 11:09 · sessao ccb1176605bd · ORFAS-VOLTOU · sonda · origem=Code
-
-## B1 — Universo
-
-A sonda terminou com `FIM 1895 1895`, sem erro de execução na saída fornecida. O `confere False` é a divergência com o aval. `sonda_leitura:3,137`
-
-| Medida | Sonda | Aval | Diferença |
-|---|---:|---:|---:|
-| Perguntas | 1.895 | 1.890 | +5 |
-| Colabs | 184 | 183 | +1 |
-| Células | 658 | 657 | +1 |
-| Células com chamado | 481 | 480 | +1 |
-| Células sem chamado | 177 | 177 | 0 |
-| `indefinida` | 347 | 347 | 0 |
-| `furo` | 175 | 174 | +1 |
-| `nunca_bateu` | 51 | 50 | +1 |
-| Outros | 85 | 86 | −1 |
-
-Os totais com e sem chamado coincidem pelos dois critérios da sonda, FK da célula e `dia_do_fato`. Há 12 perguntas sem FK de célula. Os 85 outros vereditos são `concorde` 61, nulo 3, `cobrado` 8, `cobranca_indevida` 4, `discordante` 8 e `fato_em_ausencia` 1. `sonda_leitura:3–6` `aval_v2.txt:1` `app/chamados/juizes.py:89–130`
-
-O corte declarado é 21/10 nos dois anexos. A sonda usa `data_evento >= 2026-10-21`, destino, validação e materialização nulos e via vazia, sem exigir disputa aberta. A consulta original, o instante da leitura do aval e os PKs da diferença estão [nao verificado]. A saída permite medir a diferença, mas sua causa — mudança de estoque, diferença de filtro ou de data — está [nao verificado]. `aval_v2.txt:1` `sonda_leitura:3–6`
-
-## B2 — Classes e portas
-
-As **103 classes somam 1.895**. Cada ID da saída aparece uma vez abaixo. Uso **(a)** para histórico e, se vazio, c1/c2, e **(b)** para destino vivo, conforme a nomenclatura da sonda. `sonda_leitura:7–109,137` `app/chamados/reconciliador.py:1711–1779,1800–1826`
-
-| Classes da sonda | Perguntas | Porta existente e condição de fecho |
-|---|---:|---|
-| 1–2 | 5 | Disputa já fechada, pergunta ainda viva. **Nenhuma porta automática para esse resíduo no estado medido.** O reate e o S128 exigem disputa aberta. A decisão explícita do admin sobre o fato do dia tem porta própria, cuja aplicação a essas linhas está [nao verificado]. `app/chamados/reconciliador.py:1654–1661` `app/chamados/services/disputa_emissao.py:2038–2042,2155–2170` `app/ponto/services/veredito_celula.py:178–202` |
-| 26–27 | 2 | C6 dá a pergunta por morta e a célula está `concorde`. **Lavra da célula → `retratar_perguntas_absolvidas_por_celula`**, que carimba `celula_absolveu` se a tranca permitir. O **S128 sem credor** também pode alcançar as duas numa execução para o colab, se passar pelas guardas da disputa. `app/chamados/reconciliador.py:695–707,747–789,1513–1515` `app/chamados/services/disputa_emissao.py:2155–2193` |
-| 13, 28 | 11 | Fora do reate, vivas e sem FK de célula. A leitura da lâmpada fica sem prova. O `sem_chamado` dessas linhas vem da falta da FK na sonda. **Nenhuma porta automática de fecho demonstrada**. O ato humano por colab e data existe para pergunta datada e fora de conversa, se houver decisão sobre o fato. `sonda_leitura:19,34` `app/chamados/reconciliador.py:1654–1661` `app/chamados/juizes.py:979–995` `app/ponto/services/veredito_celula.py:178–202` |
-| 3–12, 14–25, 29–34 | 212 | Vivas e fora do reate. **Cartório → retratação pela célula** quando a lavra absolver e o C6 confirmar. **Lista do admin** quando o juiz apontar CADASTRO ou BATIDA. Com o C6 vivo, o S128 sem credor pula a pergunta. A porta que se aplica a cada caso deste grupo está [nao verificado]. `app/chamados/reconciliador.py:747–789,1513–1515,1654–1661` `app/chamados/services/disputa_emissao.py:2171–2181` `app/escala/services/cadastro_realidade.py:821–835` |
-| 51, 67, 85, 103 | 8 | **Reate (b)**. A derivação encontrou destino vivo e `resolvedora_valida` aceitou. A porta é `reapontar_resolvedora`. A costura sob trava e o fecho posterior estão [nao verificado]. `app/chamados/reconciliador.py:1711–1714,1821–1826` `app/chamados/services/fio.py:1040–1073` |
-| 35, 41–42, 52, 58–59, 69, 75–76, 87, 94–95 | 149 | **Reate (a)**, histórico vazio ou descartado pelo C6, com veto `NUNCA_BATEU` à reemissão. A lista do admin tem a entrada **C5** para `nunca_bateu`, sujeita à janela e à situação do colab. O C5 lê o dono do dia. Presença na lista e dono por linha estão [nao verificado]. `app/chamados/reconciliador.py:1748–1779,1008–1012` `app/ponto/marcos.py:119–163` `app/escala/services/cadastro_realidade.py:165–175,205–244,757–759` |
-| 68, 86 | 2 | **Reate (a)** com histórico descartado e veto `FOLGA` à reemissão. A porta de fecho pelo cartório é o evento da lavra, se o marco da própria pergunta estiver comprovado, o dia encerrado e as demais guardas passarem. Esses insumos estão [nao verificado]. `app/chamados/reconciliador.py:1008–1012,1182–1228,1275–1291,1523–1525` `app/ponto/marcos.py:155–163` |
-| 40, 48, 57, 64, 73–74, 82, 89, 92–93, 101 | 1.176 | **Reate (a)** com célula `indefinida`. A porta para o veredito é a **lavra do cartório**. Quando o problema é de dado, a rota é a **lista do admin**, com a ação do dono pela L-099. O C11 tem predicado próprio para folga indefinida. Fora das quatro células do BO, o protesto e o dono por linha estão [nao verificado]. `app/chamados/reconciliador.py:1748–1779` `app/ponto/services/cartorio.py:1905–1913` `app/escala/services/cadastro_realidade.py:535–559,579–599,793–798,821–835` |
-| 36–39, 53–56, 70–72, 88, 90–91 | 140 | **Reate (a)**. O C6 esvazia o histórico. c1 recusa a viva e c2 pode costurar no chamado da sua chave se estiver vivo, ou reemitir se passar pelas guardas. Para `orfao_14h` e `saida_sem_entrada`, também existe o fecho pela lâmpada do cartório. A sonda deixou essas guardas [nao verificado]. `app/chamados/reconciliador.py:362–402,956–1032,1156–1173,1204–1216,1748–1779` |
-| 43–47, 49–50, 60–63, 65–66, 77–78, 80–81, 83–84, 96–100, 102 | 189 | **Reate (a)** com histórico vazio. c1 recusa pelo motivo ou pelo C6. A porta é c2, sujeito à chave, aos protestos e aos demais vetos. O fecho pela lâmpada continua disponível para os dois motivos que o seletor aceita. Resultado dessas portas [nao verificado]. `app/chamados/reconciliador.py:333,362–402,956–1032,1156–1173,1204–1216,1766–1779` |
-| 79 | 1 | **Reate (a)** com histórico vazio e sem FK de célula. c1 recusa a viva. O fecho pela lâmpada fica sem prova. c2 consulta a célula por colab e data, então a FK nula da pergunta, sozinha, deixa a elegibilidade ao c2 [nao verificado]. `sonda_leitura:85` `app/chamados/juizes.py:979–995` `app/chamados/reconciliador.py:400–402,956–992,1766–1779` |
-| **Total** | **1.895** | **`FIM 1895 1895`**. `sonda_leitura:137` |
-
-Na L-099, o juiz `dono_da_divergencia` decide. **CADASTRO** recebe a ação da assinatura, **BATIDA** recebe a regularização da batida do dia e, para **ESTRUTURA**, a lista devolve **nenhuma porta**. A sonda deixou o resultado desse juiz por linha [nao verificado]. A falta de fecho automático observada, por si só, deixa o dono [nao verificado]. `app/ponto/management/commands/e6_oraculo.py:53–70,98–110` `app/escala/services/cadastro_realidade.py:821–835`
-
-## B3 — As quatro células do colab PK 502
-
-Em cada linha, as quatro auditorias `pergunta_emitida` são **posteriores** ao `resolvido_em` do chamado correspondente. O horário exato do `INSERT` e sua ordem em relação à resolução estão [nao verificado] para cada pergunta, porque a auditoria é gravada depois do `INSERT`. `sonda_leitura:110–136` `app/chamados/models.py:254–261,3330–3347`
-
-| Célula e data | Chamado e `resolvido_em` | `saida_sem_entrada` | `intervalo_saida` | `intervalo_volta` | `orfao_14h` |
-|---|---|---|---|---|---|
-| 123535 · 01/11 | 36329 · 10:30:07.660433 | 52488 · 10:30:08.348888 | 52574 · 14:30:11.426806 | 52600 · 15:30:12.604666 | 52684 · 18:50:06.563843 |
-| 123541 · 07/11 | 37532 · 10:30:13.380408 | 54887 · 10:30:13.624269 | 54965 · 14:30:10.807721 | 54984 · 15:30:10.999976 | 55065 · 18:50:07.243566 |
-| 123547 · 13/11 | 38788 · 10:30:11.853324 | 57477 · 10:30:12.101662 | 57580 · 14:30:27.963646 | 57599 · 15:30:19.322599 | 57681 · 18:50:09.607853 |
-| 123553 · 19/11 | 39854 · 10:30:14.733435 | 59786 · 10:30:15.144317 | 59891 · 14:30:23.025397 | 59917 · 15:30:18.774954 | 59984 · 18:50:08.329437 |
-
-Horários locais `−03:00`. As colunas de pergunta mostram PK e horário da auditoria. `sonda_leitura:110–133`
-
-- **Reate.** Para as 16, a seleção medida dá **(a), histórico esvaziado pelo C6**. A derivação ficou sem destino vivo e o histórico de encerrados foi descartado porque a pergunta estava viva no alcance do O261(C). No c1, as oito de intervalo são recusadas pelo motivo. As oito de `saida_sem_entrada` e `orfao_14h` são recusadas enquanto o C6 as der por vivas. No c2, o único protesto impresso nas quatro células é `PREVISTO_COM_DIA_INDEFINIDO`, que fica fora de `PROTESTOS_QUE_COBRAM`. Sem um chamado vivo na chave `batida_ausente` do c2, a reemissão cai nessa guarda, se tiver passado pelas anteriores. Com c1 e c2 recusados, o reate devolve `False` na linha 1779. O resultado da consulta exata à chave do c2 e a primeira guarda que barrou cada execução em produção estão [nao verificado]. `sonda_leitura:46,63,79,98,110–133` `app/chamados/reconciliador.py:333,362–402,956–992,1711–1779` `app/ponto/services/furos_sem_cobranca.py:35`
-- **S128.** Na fotografia da sonda, as 16 estão sem `chamado_destino`, então ficam fora do carimbo por destino. O fecho sem credor admite FK nula, mas pula pergunta viva pelo C6. A passagem por `_ancoradas()` poderia tentar reabrir o credor se o chamado fosse o pai da disputa e as demais guardas passassem. A sonda não mostrou essa âncora. O `post_save` do encerramento é síncrono e só lê as perguntas que já consegue consultar naquele ato. Quais linhas estavam visíveis naquele instante, se houve outra chamada do S128 e o resultado dessas chamadas estão [nao verificado]. `sonda_leitura:110–133` `app/chamados/signals.py:91–119` `app/chamados/models.py:349–366` `app/chamados/services/disputa_emissao.py:1924–1948,2038–2042,2071–2084,2155–2193`
-- **Célula.** As quatro têm lavra do cartório com `PREVISTO_COM_DIA_INDEFINIDO`, que deriva `indefinida`. O suprajuiz pode emitir esse protesto por falta de vínculo que sustente o dia ou por falta de âncora, como folga sem cadastro. Encerrar o chamado não resolve essa premissa de **CADASTRO**. O S128, quando carimba com `lavrar_veredito=True`, grava o veredito da pergunta. O cartório grava o da célula, e `indefinida` ainda conta como veredito que acusa no C6. A causa cadastral exata e a presença no C11 estão [nao verificado]. `sonda_leitura:110,116,122,128` `app/ponto/supra_juiz.py:346–372,464–469` `app/escala/models.py:1622–1642,1780–1782` `app/chamados/models.py:3502–3514` `app/chamados/juizes.py:1551–1555` `app/ponto/services/cartorio.py:1905–1913`
-
-## B4 — Vigia
-
-**38 órfãs reatáveis para o colab PK 502**, pela função real `perguntas_orfas_reatavies(502).count()`. O total da frota e os totais I8/I8o estão [nao verificado]. `sonda_leitura:134–137` `app/chamados/reconciliador.py:1640–1661` `app/chamados/management/commands/reconciliar_chamados.py:57–58,97–98`
-
-O cron publica essa contagem como medida em `logs/reconciliador.log` a cada 15 minutos. A soma que dispara o `ALARME` com RC 2 usa outros contadores. I8/I8o saem em `logs/invariantes.log` e em `/app/media/invariantes_chamados.html`. O silêncio dos logs desde 29/09 está [nao verificado]. `app/config/crons.py:395,542–543,1913–1917` `app/chamados/management/commands/reconciliar_chamados.py:115–124` `app/chamados/management/commands/auditar_invariantes_chamados.py:1866–1889`
-
-## 27/11 11:04 · sessao 8f2663b90aab · ORFAS-VOLTOU · leitura · origem=Code
-
-## A1. Ramo e recusas do reate
-
-**Um chamado `resolvido` na célula fica fora da derivação de destino vivo.** Se `_derivar_chamado_destino` encontrar outro destino vivo elegível, a pergunta segue pelo **(b)**. Se devolver `None`, segue pelo **(a)**. A derivação procura chamados vivos do colaborador da disputa, exclui `disputa_supervisao`, exige que o chamado atenda o motivo, descarta chamado já ocupado por pergunta do mesmo motivo com `materializada_em IS NULL` e compara os dias quando ambos são conhecidos. Havendo vários candidatos, tenta desempatar pela entrada do turno aberto e pelo estágio do chamado. Com zero ou mais de um candidato ao final, devolve `None`. `app/chamados/services/disputa_emissao.py:97–163,191–245` `app/chamados/reconciliador.py:1711–1714,1821–1826`
-
-| Motivo | Histórico no alcance O261(C), com C6 morta | Histórico fora do alcance O261(C) | Histórico vazio |
-|---|---|---|---|
-| `orfao_14h` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | O mapa legado precisa devolver `orfao_14h`. | Tenta c1 e, se recusar, c2. |
-| `saida_sem_entrada` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | A categoria precisa mapear para `saida_sem_entrada`, sem uma subcategoria mapeada que prevaleça. | Tenta c1 e, se recusar, c2. |
-| `intervalo_saida` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | Os mapas legados não têm esse valor. | c1 recusa pelo motivo. c2 exige alcance O261(C) e C6 viva. |
-| `intervalo_volta` | Aceita categoria ou subcategoria reconhecida por `motivos_atendidos`. | Os mapas legados não têm esse valor. | c1 recusa pelo motivo. c2 exige alcance O261(C) e C6 viva. |
-
-Fontes da tabela. `app/chamados/juizes.py:2331–2342` `app/chamados/models.py:4133–4170` `app/chamados/reconciliador.py:333,362–375,838–880,918–932,1028–1031,1748–1779`
-
-- **(a), seleção do histórico.** Sem data na pergunta e sem data no contexto do motivo, sai `False` na linha 1725. O histórico exige o mesmo colaborador, status `resolvido` ou `fechado`, `contexto_json.data_turno` igual ao dia e categoria diferente de `disputa_supervisao`. Uma FK para a célula, sozinha, não satisfaz essa consulta. No alcance O261(C), C6 viva esvazia o histórico. Dia inválido ou ausente, competência entregue ou dia trancado levam à seleção legada. Com mais de um candidato, sai `False` na linha 1779. Com zero, sai pela mesma linha se c1 e c2 recusarem. `app/chamados/reconciliador.py:857–871,1711–1779`
-- **(a), c1.** `lavrar_sem_turno_aberto` recusa motivo fora dos dois permitidos, resposta presente pelo juiz, materialização já preenchida, turno aberto no núcleo ou C6 viva. Também recusa se `carimbar` falhar pelo estado fora do fato, C6 viva após aplicar o carimbo em memória, par ato/coluna inválido `(False, True)` ou retenção ativa. O sucesso do c1 pode deixar a FK nula. `app/chamados/reconciliador.py:333,362–417,1774–1775` `app/chamados/models.py:3460–3519` `app/chamados/services/fio.py:1620–1632`
-- **(a), c2.** `reemitir_chamado_do_dia` recusa motivo fora dos quatro, dia ausente ou inválido, colaborador fora de `ativo`, isenção aplicável, ausência que cobre, veto de `celula_veta_cobranca` ou veto de `EMITIR` pelo motor. Sem um `batida_ausente` vivo na chave do c2, também pode recusar por horizonte, ausência de protesto que cobra, `parcial_so_lista` ou veto da régua. Os dois intervalos ainda exigem `_viva_em_competencia_aberta`. Depois disso, sai `False` se `abrir` devolver `None`, se devolver chamado fora de `VIVOS` ou se a costura recusar. `app/chamados/reconciliador.py:874–880,930–1080`
-- **(a), recusas dentro de `abrir`.** Um nascimento pode devolver `None` por absolvição pela célula ou veto da régua. Na reutilização de encerrado, `abrir` devolve o objeto mesmo se o renascimento recusar. Esse renascimento verifica situação ativa, via `cascade`, tranca e régua, depois passa por `reabrir`, que também verifica fechamento administrativo sem fato novo, premissa regularizada, agrupamento, irmão vivo e transição permitida. Se o objeto continuar encerrado, o c2 recusa na linha 1062. `app/chamados/models.py:972–998,1025–1037,1068–1090,1403–1426` `app/chamados/reconciliador.py:1055–1062`
-- **Costura, nos dois ramos.** `reapontar_resolvedora` recusa destino de outro colaborador. `resolvedora_valida` pode recusar quando o juiz não reconhece o episódio como fato do turno, a ponte A2 alcança mais de um dia ou há divergência comprovada entre o dia do fato e o do chamado. Para dias adjacentes, aceita a travessia de meia-noite confirmada ou indeterminada. A guarda seguinte relê o destino e recusa se ele estiver terminal, a competência estiver comprovadamente aberta e a pergunta permanecer viva com o destino aplicado em memória. Se a costura também estiver datando uma pergunta, há recusas adicionais para conversa, dia do fato inválido e colisão que a porta não pode resolver. Esse último grupo fica fora do universo datado do aval. `app/chamados/services/fio.py:916–947,1017–1073,1098–1133,1911–1924,1946–2005` `app/chamados/juizes.py:2440–2498`
-- **Saídas da costura.** Com histórico único, a recusa da costura sai `False` na linha 1804. Se a cerca vetar alguma escrita atingida pela costura ou pelo S128, desfaz o ato e sai `False` na linha 1815. Se a costura passar e o S128 retornar normalmente, o reate pode devolver `True` com zero perguntas carimbadas. No **(b)**, a recusa da mesma costura sai `False` na linha 1825. `app/chamados/reconciliador.py:1800–1826` `app/chamados/services/fio.py:1470–1480,1536–1561,1564–1592`
-
-**Por que pode nascer solta.** A emissão pode gravar a pergunta sem destino quando a derivação devolve `None`. A tentativa imediata de reate exige pergunta recém-criada, FK ainda nula e motivo do grupo do dia. A fábrica deduplica pelo fato já representado, inclusive se a linha estiver solta. O estoque elegível volta ao reate pelo laço do colaborador, acionado por batida ou pela saída de `VIVOS` de um filho listado por pai vivo. Para as 16 perguntas do aval, a condição de nascimento, o ramo efetivamente executado e a recusa concreta estão [nao verificado]. `app/chamados/services/disputa_emissao.py:402–478` `app/chamados/services/fabrica_da_celula.py:138–157` `app/chamados/reconciliador.py:1674–1685` `app/ponto/signals.py:211–223` `app/chamados/signals.py:351–371`
-
-## A2. O que o S128 alcança
-
-**O S128 pode alcançar uma pergunta com FK nula pelo fecho sem credor.** O filtro por FK vale para o primeiro laço. Há três leituras relevantes em `resolver_perguntas_por_chamado_resolvido`. `app/chamados/services/disputa_emissao.py:2038–2042,2071–2084,2155–2193`
-
-1. **Carimbo pelo destino.** O ORM exige exatamente `chamado_destino=chamado`, `materializada_em__isnull=True` e `disputa__fechada_em__isnull=True`. O laço pula pergunta em voo, viva pelo C6, de dia trancado ou respondida pelo juiz sem materialização de fato. As restantes só contam se `carimbar(...)` aceitar. Não há filtro inicial por data de criação nem por `validada_em`. Se o chamado tiver via `competencia_trancada`, o S128 retorna zero antes dos laços. `app/chamados/services/disputa_emissao.py:2030–2042,2087–2122`
-2. **Âncora para reabertura.** `_ancoradas()` pode incluir FK nula se `disputa.chamado_id == chamado.pk` e a pergunta estiver sem validação pelo ato. Esse laço tenta devolver um credor à pergunta viva sem resposta. `app/chamados/models.py:349–366` `app/chamados/services/disputa_emissao.py:1924–1948,2071–2084`
-3. **Fecho sem credor.** A varredura inclui todas as disputas abertas do colaborador do chamado. Pula a disputa se o pai estiver em `VIVOS` ou se qualquer pergunta tiver destino em `VIVOS`. Entre as restantes, examina perguntas com `materializada_em is None` e `DecisaoPergunta.composta(q).validada_em is None`, inclusive com FK nula. Pula as em voo e as vivas pelo C6, depois tenta `carimbar`. A disputa só fecha se não houver pergunta em voo e `pode_fechar()` aceitar. `app/chamados/services/disputa_emissao.py:2155–2193,2213–2226` `app/chamados/models.py:2047–2053`
-
-**Gatilho principal.** `resolve_perguntas_ao_resolver` é `post_save` síncrono de `ChamadoColaborador`, com savepoint próprio. Exige status resultante em `ENCERRADOS` e save que escreveu status. Isso inclui criação, `update_fields` contendo `status_local` mesmo com valor igual, ou save integral em que o valor difere do `pre_save`. Um `QuerySet.update()` não emite esse sinal. Também há chamadas diretas na retratação e no reate histórico, no fecho de beco acionado após commit de `PerguntaDisputa`, e nos caminhos de aplicação manual de `fechar_becos_disputa` e `reconciliar_fantasmas`. Os agendamentos desses dois comandos usam `--alarme`. `app/chamados/signals.py:76–119,180–186,229–240` `app/chamados/reconciliador.py:602–616,1800–1807` `app/chamados/services/becos.py:38–61,80–94` `app/chamados/management/commands/fechar_becos_disputa.py:22–30,52–57` `app/ponto/management/commands/reconciliar_fantasmas.py:144–153,264–288` `app/config/crons.py:392,663`
-
-Uma pergunta criada depois do save de encerramento estava ausente daquela execução. Uma pergunta com FK nula fica fora do laço por destino enquanto permanecer assim, mesmo se já existia no fechamento. O fecho sem credor ainda pode alcançá-la em outra chamada, sujeito aos predicados acima. Para as quatro células, a ordem dos eventos e o motivo específico de o S128 não ter carimbado as perguntas estão [nao verificado]. `app/chamados/signals.py:91–119` `app/chamados/services/disputa_emissao.py:2038–2042,2155–2193`
-
-## A3. Por que a célula pode continuar `indefinida`
-
-O escritor operacional do par é `ponto.portas.celula.lavrar_veredito`. `CelulaDia.lavrar_veredito` delega a essa porta. O cartório e a decisão do admin chegam por ela, com precedência para o admin. A mesma porta de célula também contém a operação que apaga a lavra do cartório ao regenerar uma célula futura. O `lavrar_veredito=True` passado por S128 a `PerguntaDisputa.carimbar` grava o veredito **da pergunta**. `app/escala/models.py:1832–1841` `app/ponto/portas/celula.py:1007–1024,1069–1142,1145–1150,1161–1204` `app/ponto/services/veredito_celula.py:357` `app/chamados/models.py:3502–3514`
-
-A lavra da célula pode ocorrer com perguntas abertas ou sem lavra própria. O cartório classifica os insumos do dia, entre eles a quantidade de cobranças vivas com fio, e passa os códigos à lavra. `indefinida` vem de `PREVISTO_COM_DIA_INDEFINIDO`, `FASE_NAO_DECLARADA_COM_PREVISTO` ou `PARCIAL_SEM_PERIODO` quando nenhum código de maior precedência vence. Resolver o chamado pode mudar o insumo de cobrança e ainda deixar presente o motivo de cadastro ou de cobertura que produz `indefinida`. A própria `indefinida` integra `VEREDITOS_ACUSAM` e pode manter a pergunta viva quando o C6 chega à leitura da célula. `app/ponto/services/cartorio.py:1418–1423,1498–1516,1905–1913` `app/escala/models.py:1622–1643,1780–1782` `app/ponto/supra_juiz.py:346–372,392–402,450–469` `app/chamados/juizes.py:1499–1518,1551–1567`
-
-**O gatilho de rejulgamento existe.** Na criação ou mudança de status, `_cartorio_post_save_chamado` tenta `julgar_celula` quando consegue o dia por `dia_do_fato(..., fortes=True)` e o cartório não está em julgamento. O lote `processar_cartorio` também chama o juiz para células passadas. Uma impressão igual pode pular a lavra. A impressão inclui PK e status dos chamados que o cartório lê, recortados pelos módulos de furo e pela chave de data do catálogo. Qual gatilho faltou nas quatro células, ou se houve rejulgamento que manteve o mesmo veredito, está [nao verificado]. `app/chamados/signals.py:180–218` `app/ponto/services/cartorio.py:131–157,490–503,1432–1448,2078–2115` `app/ponto/management/commands/processar_cartorio.py:45–65` `app/config/crons.py:616`
-
-## A4. O que os vigias publicam
-
-| Vigia | Universo e destino |
-|---|---|
-| `reconciliar_chamados --alarme` | A linha **`orfas reataveis`** soma `perguntas_orfas_reatavies(c).count()` pelos colaboradores do tenant. O seletor exige destino e materialização nulos, disputa aberta e um dos quatro motivos. Inclui colaboradores com evento pendente e dispensa C6, corte de data, via vazia e validação nula. Sai em stdout a cada 15 minutos em `logs/reconciliador.log`. O estoque fica fora da soma de alarme. Quando os outros contadores da soma disparam, o comando escreve em stderr e sai com RC 2. `app/chamados/reconciliador.py:1637–1661` `app/chamados/management/commands/reconciliar_chamados.py:57–62,89–124` `app/config/crons.py:395,1913–1917` |
-| `auditar_invariantes_chamados --html` | **I8/I8o** partem de FK nula, colaborador ativo, motivo na união de `MOTIVOS_QUE_PRECISAM_CHAMADO_DESTINO_SET` com os quatro do dia, e C6 viva. A consulta base não exige disputa aberta, data mínima, via vazia, validação ou materialização nulas. `_piso_i8_sem_entrada_no_contexto` põe em I8o quem tem dois ou mais candidatos e nenhum com `entrada_timestamp`. Os candidatos casam por `contexto_json.data_turno` ou `celula.data`, mesmo colaborador e motivo atendido, com exclusão de `disputa_supervisao` e sem filtro de status. O restante é I8. O cron das 07:18 publica em stdout para `logs/invariantes.log` e escreve `/app/media/invariantes_chamados.html`. I8o tem o tamanho do piso na descrição e `0` na coluna de violações. A contraprova pode acrescentar texto à descrição. RC 2 depende de F1/F2, sem contribuição de I8 ou I8o. `app/chamados/models.py:4126,4169–4170` `app/chamados/management/commands/auditar_invariantes_chamados.py:51–110,818–831,860–872,1866–1889` `app/config/crons.py:542–543,1913–1917` |
-
-`cron_run.sh` redireciona a execução pelo cron e grava duração e RC em `app/logs/placar.jsonl`. `pipeline_placar.medidos` lê esse RC e contabiliza o `2` como alarme de negócio. A pauta para TI do próprio runner trata RC diferente de `0` e `2`. Leitor automático das linhas de estoque ou de I8/I8o, leitor humano efetivo, silêncio dos logs desde 29/09 e números atuais dos vigias estão [nao verificado]. `app/config/crons.py:747,1515–1518,1913–1917` `bin/cron_run.sh:2–13,19–38` `app/core/management/commands/pipeline_placar.py:61–82,110–137`
-
-## B. Sonda de leitura
-
-O aval informa **1.890 perguntas, 183 colaboradores e 657 células**, com quatro perguntas soltas por célula nos quatro casos. As contagens por classe e os dados individuais ainda estão [nao verificado]. `aval_v2.txt:1`
-
-A sonda cruza os dois seletores reais, o C6, o ramo que a seleção atual indica, o estado dos chamados do dia e o veredito da célula. Para mostrar chamados do dia, usa `dia_do_fato(..., fortes=True)`. Para diagnosticar o histórico do reate, usa a chave `contexto_json.data_turno` exigida por aquele ramo. `juiz_aceitou` mede apenas `resolvedora_valida`. A execução da costura, do c1, do c2 e da cerca fica [nao verificado]. `app/chamados/juizes.py:89–130,2414–2498` `app/chamados/reconciliador.py:1166–1176,1640–1661,1711–1826`
-
-`PerguntaDisputa` não tem `criada_em`. A sonda lê apenas PK e instante da auditoria `pergunta_emitida`, gravada depois da inserção e em regime best-effort. `emissao_antes` e `emissao_depois` comparam esse registro com `resolvido_em`. Um registro posterior deixa o instante exato da inserção [nao verificado]. `ChamadoColaborador` usa `resolvido_em`, preservado na passagem de `resolvido` para `fechado`. Quando disponível, a sonda mostra também o carimbo da transição auditada para `fechado`. `app/chamados/migrations/0014_perguntadisputa.py:16–29` `app/chamados/models.py:62–80,254–261,304–308,3330–3348` `app/core/models.py:295–307` `app/core/observ.py:94–105`
-
-Em B4, os totais de frota ficam dentro dos respectivos `handle`. A sonda imprime essa indisponibilidade e chama o seletor real para o número no recorte `--colab` das células-alvo. O Python usa transação `REPEATABLE READ, READ ONLY`. O envelope já seleciona `juliani` e tem escritas administrativas próprias, incluindo credencial, permissões quando aplicáveis, arquivo temporário e trilha. A sintaxe Python foi conferida em memória. A execução com o ORM da aplicação e em produção está [nao verificado]. `app/chamados/management/commands/reconciliar_chamados.py:57–58,97–98` `app/chamados/management/commands/auditar_invariantes_chamados.py:860–872` `app/chamados/tests/cef_c3_sonda.py:16–22` `bin/sonda_leitura.sh:115–143,153–181,216–240,245–251`
-
-```python
-from collections import Counter, defaultdict
-from datetime import date
-import logging
-
-from django.db import connection, transaction
-from django.db.models import BooleanField, Case, Exists, OuterRef, Q, Value, When
-from django.utils import timezone
-
-from chamados.catalogo.motor import ENCERRADOS, VIVOS
-from chamados.juizes import dia_do_fato, motivos_atendidos, pergunta_viva, resolvedora_valida
-from chamados.models import (
-    MAPA_CATEGORIA_PARA_MOTIVO_DISPUTA,
-    MAPA_SUBCATEGORIA_PARA_MOTIVO_DISPUTA,
-    ChamadoColaborador,
-    PerguntaDisputa,
-)
-from chamados.reconciliador import (
-    _dia_fora_do_alcance_c,
-    _orfas_abertas,
-    perguntas_orfas_reatavies,
-)
-from chamados.services.disputa_emissao import _derivar_chamado_destino
-from core.models import LogAuditoria
-from core.observ import engolidos
-from escala.models import CelulaDia
-from ponto.marcos import celula_veta_cobranca
-
-INICIO = date(2026, 10, 21)
-CASOS = (123535, 123541, 123547, 123553)
-AVAL = (1890, 183, 657)
-NV = "[nao verificado]"
-
-
-def local(instante):
-    return timezone.localtime(instante).isoformat() if instante is not None else None
-
-
-def cronologia(emissao, chamado):
-    if chamado.resolvido_em is None:
-        return "sem_resolvido_em"
-    if emissao is None:
-        return "sem_trilha_de_emissao"
-    if emissao < chamado.resolvido_em:
-        return "emissao_antes"
-    if emissao > chamado.resolvido_em:
-        return "emissao_depois"
-    return "mesmo_instante"
-
-
-def ramo_de_hoje(p, viva, historicos):
-    # Seleção inline de reatar_pergunta_orfa para data_evento preenchida.
-    # app/chamados/reconciliador.py:1711–1779,1821–1826
-    if not p.no_reate:
-        return "fora_do_laco", None
-    colab = p.disputa.colaborador
-    vivo, _ = _derivar_chamado_destino(p.disputa, p.motivo, data_pergunta=p.data_evento)
-    if vivo is not None:
-        ok, _ = resolvedora_valida(vivo, p)
-        return "b_derivou_vivo", "juiz_aceitou" if ok else "juiz_recusou"
-
-    encerrados = historicos.get((colab.pk, p.data_evento.isoformat()), ())
-    if encerrados and not _dia_fora_do_alcance_c(p, colab, p.data_evento):
-        if viva:
-            veto = celula_veta_cobranca(colab.pk, p.data_evento)
-            return "a_historico_esvaziado_pelo_C6", veto
-        candidatos = [
-            c for c in encerrados
-            if p.motivo in motivos_atendidos(c.categoria, c.subcategoria)
-        ]
-    else:
-        candidatos = []
-        for c in encerrados:
-            sub = (c.subcategoria or "").lower().strip()
-            cat = (c.categoria or "").lower().strip()
-            motivo = (
-                MAPA_SUBCATEGORIA_PARA_MOTIVO_DISPUTA.get(sub)
-                or MAPA_CATEGORIA_PARA_MOTIVO_DISPUTA.get(cat)
-            )
-            if motivo == p.motivo:
-                candidatos.append(c)
-
-    if len(candidatos) > 1:
-        return "a_historico_multiplo", None
-    if len(candidatos) == 1:
-        ok, _ = resolvedora_valida(candidatos[0], p)
-        return "a_historico_unico", "juiz_aceitou" if ok else "juiz_recusou"
-    return "a_historico_vazio", celula_veta_cobranca(colab.pk, p.data_evento)
-
-
-def estado_do_dia(chamados):
-    estados = set()
-    for chamado in chamados:
-        if chamado.status_local in VIVOS:
-            estados.add("vivo")
-        elif chamado.status_local in ENCERRADOS:
-            estados.add("resolvido_fechado")
-        else:
-            estados.add("outro_status")
-    return "+".join(sorted(estados)) or "sem_chamado"
-
-
-def sondar():
-    filtro = Q(
-        data_evento__gte=INICIO,
-        chamado_destino__isnull=True,
-        via_resolucao="",
-        validada_em__isnull=True,
-        materializada_em__isnull=True,
-    )
-    perguntas = list(
-        PerguntaDisputa.objects.filter(filtro 
-
-[truncado em 20000 de 28111 caracteres]
-
-## 27/11 10:55 · sessao 77187f8251ee · RC-SEM-PROXIMA · verificador · origem=Code
-
-## 1. P1–P4 na origem
-
-| Achado | Cura e mordida |
-|---|---|
-| **P1 — parcial.** | `main` lê `agora` uma vez, materializa `vivas` uma vez e calcula as duas listas antes de imprimir. Na mesma passagem, a chave que exclui um `.rc` de `SEM COLHER` é a que permite sua entrada em `SEM PROXIMA`. Em memória, a c1 falhou nos três cenários e a c2 passou. `dois-walks` voltou a listar a mesma obra duas vezes, `dois-walks-ilegivel` voltou a dar rc `1`, e `dois-relogios` voltou a listar cedo. `caso_misto` confirma uma linha de cada classe para obras distintas. `bin/rc_sem_colher.py:94–106,121–138,157–169` · `bin/tests/test_rc_sem_colher.sh:165–180,287–289` |
-| **P2 — corrigido na proposta, sem selo do leitor.** | O diff chama o juiz com `--min-idade 900`, conta cada prefixo separadamente e mostra diagnóstico para rc fora de `0`/`3`. Em memória, uma saída só de `SEM PROXIMA` passou de uma falsa contagem de órfãos para `0` órfãos e `1` parada. O teto global de 15 linhas pode ocultar todos os detalhes de `SEM PROXIMA` e de `OUTRAS LINHAS`, embora as contagens apareçam. `caso_min_idade` e `sem-min-idade` exercitam a CLI do juiz. Restaurar a contagem antiga ou remover o argumento **só do vercodex** deixa o selo intacto. `vercodex.py:165–176` (anexo `vercodex.diff`) · `bin/tests/test_rc_sem_colher.sh:58,202,243–248,271` |
-| **P3 — corrigido para o minuto inferido.** | O juiz soma `60` s ao início do minuto e exige **mais de** `900` s desse limite. Em memória, `899/900/901` deram rc `0/0/3` na c2 e `3/3/3` na c1. `prazo-do-inicio-do-minuto` voltou a listar em `899` e `900`. A data inferida ainda pode estar errada. `bin/rc_sem_colher.py:37–38,110–118,135–138` · `bin/tests/test_rc_sem_colher.sh:182–186,286` |
-| **P4 — corrigido no caso da próxima etapa.** | `caso_proxima_espera` exige rc `0` do Bash, linha `SEM PROXIMA` e ausência da testemunha de entrada no corpo do laço. Na sonda do Bash com árvore simulada, `proxima-desligada-espera` preservou a linha, mas entrou no laço. `proxima-vazia-espera` entrou no laço e perdeu a linha. A medição deixou de usar `date +%s`, embora a montagem da fixture ainda use horas relativas. O comportamento positivo já passa com o juiz da c1. A mordida específica vem dos mutantes. `bin/tests/test_rc_sem_colher.sh:60–76,107–113,221–222,290–291` · `c1:bin/tests/test_rc_sem_colher.sh:104–108` |
-
-**Regressão de P1 reproduzida em memória.** Ao começar a varrer `OBRA-B`, removi o `r.rc` já visitado de `OBRA-A`. A c1 já tinha lido seu conteúdo e retornou rc `3`. A c2 guardou apenas caminho e mtime, abriu o caminho depois de varrer `OBRA-B` e terminou com `FileNotFoundError`, rc `1` e stdout vazio. Na variante com substituição do arquivo, a c2 imprimiu `10:00 rc=7`, juntando o mtime do arquivo antigo ao conteúdo do novo. A publicação por `mv` existe no produtor. Os dois casos de walk do selo disparam somente numa **segunda visita** à mesma obra, por isso deixam passar a troca durante a primeira passagem. `c1:bin/rc_sem_colher.py:89–102,153–163` · `bin/rc_sem_colher.py:57–61,77–91,99–106,160–169` · `bin/codex_pergunta.sh:572–574` · `bin/tests/test_rc_sem_colher.sh:151–171`
-
-Nenhum dos seis mutantes novos passou nas sondas em memória. `caso_proxima_vazia` sozinho passa com a funcionalidade desligada, como controle negativo. `caso_misto` também passa na c1 com árvore estável. RED anterior à cura, GREEN integral, `test_disjuntor.sh` e instalação do `vercodex.diff` ficam [nao verificado]. `bin/tests/test_rc_sem_colher.sh:87–90,176–180,243–260,286–291`
-
-## 2. Quem escreve e quem lê
-
-| Valor | Escritor e leitores |
-|---|---|
-| **`agora`** | `main` captura `time.time()`. `_obras_vivas` usa o valor para o corte de 24 h, `sem_colher` para a idade mínima e `sem_proxima` para o prazo da marca. `bin/rc_sem_colher.py:68–85,94–100,121–136,160–163` |
-| **`vivas`, mtime e conteúdo do `.rc`** | O wrapper publica o `.rc` com `rc=` e `fim=`. `_obras_vivas` lê o mtime, escolhe o caminho e registra o maior mtime de outro arquivo. `main` materializa as tuplas. Ambas as listas leem as tuplas e `sem_colher` abre o `.rc` para extrair `rc=`. `bin/codex_pergunta.sh:565–574` · `bin/rc_sem_colher.py:57–61,68–91,99–106,126–131,160–163` |
-| **Marcas do RELATO** | A sessão colhe e registra `colhido` ou `superado` no formato documentado. O comando exato de escrita fica [nao verificado]. `main` lê o texto uma vez. `marcas_datadas` extrai os campos, `sem_colher` consulta a existência da chave e `sem_proxima` consulta tipo e hora da linha. `CLAUDE.md:332–337` · `app/docs/RELATO.md:13639–13646` · `bin/rc_sem_colher.py:34–54,97–105,124–136,157–159` |
-| **rc `3` e as duas linhas** | `main` escreve os dois formatos em stdout e retorna `3` se houver alguma linha. `ESPERA_UNICA` deixa passar stdout, lê `$?`, pula o laço com `3` e fecha o Bash com `0` para rc `0` ou `3` do juiz. O `find` final ainda pode imprimir caminhos. O rc da linha `rc=<n>` vem do `.rc`. O vercodex captura stdout e código de saída. `bin/rc_sem_colher.py:32,57–61,164–173` · `bin/disjuntor.py:1963–1969` · `vercodex.py:165–176` (anexo) |
-
-- **`disjuntor.py` e PreToolUse.** A espera chama a CLI, cujas opções continuam aceitas. `espera_nega` lê o texto do Bash e confere `find` e teto. Durante o laço, a espera observa ctime de `.rc`; uma marca atingir 15 minutos enquanto o laço roda não acorda a espera por si só. `bin/rc_sem_colher.py:142–156` · `bin/disjuntor.py:1967–1969,2157–2174,2217–2228`
-- **`logs/espera_unica.sh`.** O RELATO cita o script e `logs/` é ignorado. Conteúdo, leitores e compatibilidade do script ficam [nao verificado]. `app/docs/RELATO.md:13598` · `.gitignore:53–54`
-- **`vercodex` e `hook_stop`.** O vercodex antigo soma as duas classes sob `SEM COLHER`; o diff proposto corrige a contagem. O Stop lê o topo do RELATO para `PAREI`/`ESPERANDO`, o rc do checador de prova e as decisões B1/B3/B4 do disjuntor. Esses caminhos não consomem as listas nem o rc deste instrumento. Os chamadores Python encontrados das duas assinaturas alteradas estão no próprio `main`. `/home/ronald/vercodex.py:163–171` (anexo `ver1_r.md`) · `vercodex.py:165–176` (anexo `vercodex.diff`) · `bin/hook_stop_fila1.py:462–481,783–831,1305–1329,1434–1446,1489–1501` · `bin/rc_sem_colher.py:94,121,162–163`
-
-## 3. Esmeril de semântica e classes
-
-- **Relógio e unidades.** `agora` é um instante em segundos Unix lido na borda da chamada. A janela admite mtime exatamente no corte de 24 h. `--min-idade 900` só admite órfãos com idade **maior que** `900` s. A docstring sustenta o argumento; a frase “menos de 15 min” do RELATO contradiz o predicado. A espera usa ctime contra o arquivo de referência para detectar publicação por `mv`. `bin/rc_sem_colher.py:3–4,68–85,94–103,160–163` · `app/docs/RELATO.md:13640–13643` · `bin/disjuntor.py:1963–1969`
-- **Dois `HH:MM`.** O de dentro dos parênteses identifica o minuto local do mtime do `.rc`. O prefixo informa o minuto local da colheita. A gramática distingue os campos, mas o prefixo não traz dia, offset ou segundos. `_instante_da_marca` infere o dia a partir do minuto do `.rc`, arredonda o piso sem perder o mesmo minuto por fração e soma `86400` para a virada. Meia-noite comum funciona. Em sondas com mudança de offset, a inferência deslocou a hora válida em uma hora. `bin/rc_sem_colher.py:34–48,99–104,110–118,130–136` · `bin/tests/test_rc_sem_colher.sh:91–105`
-- **Juiz e derivação paralela.** O vercodex lê a classificação emitida e conta linhas. A regra de elegibilidade continua no instrumento. A dupla observação de relógio e árvore da c1 saiu. Ainda há duas chamadas ao mesmo parser puro sobre o mesmo texto e duas cópias do predicado de folga. Isso deixa duplicação interna, com o risco de divergência demonstrado acima concentrado na leitura tardia do conteúdo do `.rc`. `CLAUDE.md:17–22,35–36` · `app/core/juizes.py:3–14` · `bin/rc_sem_colher.py:2–4,41–54,97–106,124–136,157–163` · `vercodex.py:165–174` (anexo)
-- **`except` adicionado, contando `^\+.*except`.** `diff.patch`: **0**. `vercodex.diff`: **0**. O `except Exception` do leitor é contexto do hunk. `bin/rc_sem_colher.py:94–169` · `bin/tests/test_rc_sem_colher.sh:107–186,243–296` · `vercodex.py:175–178` (anexo)
-
-## 4. Descartados da c1
-
-- **Mesmo caminho e minuto, chave sem dia, `touch` e marca sem prefixo** já existiam na c1. A chave pode reaproveitar a marca de outro `.rc`, um `touch` elegível mais de 5 s depois conta como escrita e uma marca sem prefixo fica fora da gramática. Eu manteria esses critérios fora do bloqueio desta volta, salvo a garantia de prazo abaixo. `c1:bin/rc_sem_colher.py:30–49,72–85,94–101,122–132` · `CLAUDE.md:334–337`
-- **Hora anterior ao `.rc` e DST** já eram assim na c1. Eu bloquearia a garantia incondicional de 15 minutos reais. Em ambas as versões, um `.rc` de ontem às `23:50:59,9` e uma marca de hoje às `23:50:10` podem listar às `23:50:20`, com **10 s reais** de espera. O `.rc` ainda cabe na janela de 24 h e a data inferida para a marca é ontem. A c2 mudou a margem em segundos, preservando a ambiguidade de data. `c1:bin/rc_sem_colher.py:105–113,125–134` · `bin/rc_sem_colher.py:13–17,68–85,110–118,130–138`
-- **`TMPDIR` e `caso_espera` com `date +%s`** também preexistem. `ESPERA_UNICA` chama `mktemp` sem fixar `/tmp`. Se a referência for parar dentro de uma obra elegível, pode entrar na conta de outro arquivo. A configuração efetiva fica [nao verificado]. A medição antiga permanece em `caso_espera` de órfão, fora do caso P4 corrigido. Eu não bloquearia a c2 por esses dois itens. `bin/disjuntor.py:1967–1969` · `bin/rc_sem_colher.py:77–91,99–101,126–128` · `c1:bin/tests/test_rc_sem_colher.sh:134–142` · `bin/tests/test_rc_sem_colher.sh:107–113,212–222`
-
-## Veredito: REPROVADO
-
-1. **P1 introduz uma regressão de leitura.** A c2 pode combinar mtime antigo com conteúdo novo ou perder toda a resposta por remoção do `.rc` durante a primeira passagem. O selo atual não exercita essa janela. `bin/rc_sem_colher.py:57–61,77–91,99–106,160–169` · `bin/tests/test_rc_sem_colher.sh:151–171`
-2. **P2 tem correção proposta sem RED no leitor.** O selo fica verde se a contagem antiga ou a chamada sem `--min-idade 900` voltar no vercodex. `CLAUDE.md:28–29` · `bin/tests/test_rc_sem_colher.sh:202,243–248,271` · `vercodex.py:165–174` (anexo)
-3. **A promessa de 15 minutos reais excede o que a marca prova.** A borda `899/900/901` morde para a data inferida. A colisão de dia ainda permite listar após 10 segundos reais. `bin/rc_sem_colher.py:13–17,110–118,130–138` · `bin/tests/test_rc_sem_colher.sh:182–186,286`
-
-_8647 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8650 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
