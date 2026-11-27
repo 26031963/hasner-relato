@@ -1,7 +1,414 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 09:52** · publicado em **27/11/2026 09:53** (UTC-3)
+> Ultima resposta processada: **27/11/2026 10:03** · publicado em **27/11/2026 10:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 10:03 · sessao 123515df12cb · CASO-LITERAL-14 · leitura · origem=Code
+
+```python
+SOBRAS = [
+    # Preencha com (empresa, colab_id, "AAAA-MM-DD", batida_id).
+    # Exemplos da amostra_sobra.txt:1-2
+    # (2, 43, "2026-11-02", 143768),
+    # (2, 43, "2026-11-02", 143890),
+]
+
+# O envelope recebe um .py do chamador e o executa com
+# tenant_command shell --schema=juliani e exec(open(...).read()).
+# O código e a sonda são montados em leitura e o ORM usa a role leitor.
+# bin/sonda_leitura.sh:63-91,153-181,235-243
+#
+# PORTA DA FASE 2
+# O botão "Não foi trabalho (retratar)" faz POST com motivo_id e observacao.
+# app/templates/colaboradores/partials/_calendario_grade.html:127
+# ponto:retratar_batida -> retratar_batida_view -> retratar_humano.retratar
+# -> registro_batida.retratar_batida -> registro_batida.anotar.
+# O serviço humano exige a permissão regularizar_batida e motivo cadastrado
+# ativo. O escritor preserva a linha, grava aprovada=False e retratada_em,
+# registra o motivo na auditoria e dispara o evento de fechamento.
+# app/ponto/urls.py:62; app/ponto/views.py:3453-3462
+# app/ponto/services/retratar_humano.py:118-183
+# app/ponto/registro_batida.py:255-302
+#
+# O botão "desfazer" usa desfazer_retratacao_view -> retratar_humano.desfazer
+# -> anotar. A mesma permissão é exigida. A última linha de auditoria da
+# batida deve ser retratar_batida_admin e o prazo é de sete dias a partir
+# de retratada_em. O ato grava retratada_em=None e aprovada=True.
+# app/templates/colaboradores/partials/_calendario_grade.html:127
+# app/ponto/urls.py:64; app/ponto/views.py:3465-3473
+# app/ponto/services/retratar_humano.py:26-49,186-206
+#
+# Campos de aprovação/admin em Batida: aprovada, aprovada_por (lido via
+# aprovada_por_id), aprovada_em e retratada_em. O sinal de aprovação
+# atribuída a um usuário é aprovada_por_id preenchido. aprovada tem
+# default True. Edições de tipo e de horário têm autoria e data na trilha.
+# app/ponto/models.py:22-95; app/ponto/views.py:490-494
+# app/ponto/services/flip_auto.py:285-298; app/ponto/services/flip_batida.py:41-49
+# app/chamados/services/regularizacao_ext.py:150-162; app/core/models.py:285-307
+#
+# Lista completa dos 14, dados de produção e execução com o ORM no
+# envelope [nao verificado]. Sintaxe e funções puras conferidas em memória.
+
+import json
+from collections import defaultdict
+from datetime import date, datetime, time, timedelta
+from functools import lru_cache
+from zoneinfo import ZoneInfo
+
+from django.db import connection
+from django.db.models import Q
+from django.utils import timezone
+
+from chamados.catalogo.modulos import data_do_chamado
+from chamados.models import (
+    ChamadoColaborador,
+    DecisaoPergunta,
+    FollowupChamado,
+    PerguntaDisputa,
+    RegularizacaoItemBatida,
+)
+from colaboradores.models import Colaborador
+from core.models import LogAuditoria
+from escala.models import CelulaDia
+from escala.servico_jornada import escala_vigente
+from ferias.models import AgendamentoFerias
+from ponto.catalogo.ausencias import CATALOGO, INDETERMINADO
+from ponto.models import Ausencia, Batida, Justificativa, TipoAusencia
+
+TZ = ZoneInfo("America/Sao_Paulo")  # app/config/settings/base.py:93-95
+UM_DIA = timedelta(days=1)
+NV = "[nao verificado]"
+
+
+def formatar(valor):
+    if isinstance(valor, datetime):
+        return timezone.localtime(valor, TZ).isoformat()
+    if isinstance(valor, (date, time)):
+        return valor.isoformat()
+    if isinstance(valor, str) and valor and "W004" not in valor and all(
+        c.isalnum() or c in "_-+.:/" for c in valor
+    ):
+        return valor
+    # Escapes JSON preservam o valor ao passar pelo filtro do envelope.
+    # bin/sonda_leitura.sh:239-243
+    return json.dumps(valor, ensure_ascii=False).replace(
+        "W004", r"\u0057004"
+    ).replace("objects imported", r"objects\u0020imported")
+
+
+def linha(rotulo, *, marca="", **campos):
+    valores = " ".join(f"{k}={formatar(v)}" for k, v in campos.items())
+    print(f"{rotulo} {valores}" + (f" {marca}" if marca else ""))
+
+
+def meia_noite(dia):
+    return timezone.make_aware(datetime.combine(dia, time.min), TZ)
+
+
+def agrupar():
+    dias = {}
+    todas = set()
+    for empresa, cid, data_iso, bid in SOBRAS:
+        if any(type(pk) is not int or pk <= 0 for pk in (empresa, cid, bid)):
+            raise ValueError("SOBRAS exige IDs inteiros positivos")
+        dia = date.fromisoformat(data_iso)
+        if dia.isoformat() != data_iso or not date(2026, 10, 21) <= dia <= date(2026, 11, 20):
+            raise ValueError(f"Data fora do formato ou da comp 11 de 2026 (colab_id={cid})")
+        empresa_dia, ids = dias.setdefault((cid, dia), (empresa, set()))
+        if empresa != empresa_dia:
+            raise ValueError(f"Empresas divergentes no mesmo dia (colab_id={cid} data={dia})")
+        ids.add(bid)
+        todas.add(bid)
+    if not dias:
+        raise ValueError("Preencha SOBRAS antes da execucao")
+    return dias, todas
+
+
+def batidas_do_recorte(cid, dia, sobras_dia):
+    # Janela semiaberta entre as meias-noites locais de D-1 e D+2.
+    # Leitura da linha bruta, incluindo retratadas e pendentes.
+    # app/ponto/models.py:22-29,40-73; app/ponto/registro_batida.py:99-109
+    batidas = list(Batida.objects.filter(
+        colaborador_id=cid, timestamp__gte=meia_noite(dia - UM_DIA),
+        timestamp__lt=meia_noite(dia + 2 * UM_DIA),
+    ).order_by("timestamp", "pk").values(
+        "id", "timestamp", "tipo", "origem", "canal", "tipo_registro",
+        "is_intervalo", "escala_id", "pergunta_origem_id",
+        "aprovada", "aprovada_por_id", "aprovada_em", "retratada_em",
+    ))
+    faltam = sobras_dia - {b["id"] for b in batidas}
+    if faltam:
+        raise ValueError(
+            f"SOBRA fora da janela ou do colaborador "
+            f"(colab_id={cid} data={dia} ids={sorted(faltam)})"
+        )
+    return batidas
+
+
+def trilhas_de(batida_ids):
+    # A ação csrf_batida usa o ID do colaborador no lugar do ID da batida.
+    # app/core/views.py:1224-1242; app/core/models.py:285-307
+    saida = defaultdict(list)
+    for ato in (LogAuditoria.objects.filter(modelo="Batida", objeto_id__in=batida_ids)
+                .exclude(acao="csrf_batida").order_by("criado_em", "pk")
+                .values("id", "objeto_id", "acao", "usuario_id", "criado_em", "valor_depois")):
+        saida[ato["objeto_id"]].append(ato)
+    return saida
+
+
+def retratacao_vigente(instante, atos):
+    # Casa o carimbo vigente com a trilha. Motivo humano sai como ID.
+    # Quando a justificativa só existe em texto livre, a trilha identifica
+    # o ato e motivo_retratacao sai como [nao verificado].
+    # app/ponto/registro_batida.py:231-239,270-296
+    # app/ponto/services/retratar_humano.py:172-181
+    # app/chamados/services/acoes_chamado.py:261-279
+    # app/ponto/management/commands/passivo_disputa_retro.py:164-171
+    if instante is None:
+        return None, None
+    for ato in reversed(atos):
+        depois = ato["valor_depois"]
+        if isinstance(depois, dict) and depois.get("retratada_em"):
+            if datetime.fromisoformat(depois["retratada_em"]) == instante:
+                motivo = depois.get("motivo_retratacao") or {}
+                motivo_id = motivo.get("id")
+                if type(motivo_id) is int:
+                    return ato, motivo_id
+                if depois.get("motivo_classe") == "passivo_s84_folga":
+                    return ato, "passivo_s84_folga"
+                return ato, NV
+    return None, NV
+
+
+def imprimir_batida(batida, atos, todas_as_sobras):
+    bid = batida["id"]
+    local = timezone.localtime(batida["timestamp"], TZ)
+    retratacao, motivo = retratacao_vigente(batida["retratada_em"], atos)
+    linha(
+        "BAT", id=bid, data=local.date(), hora=local.strftime("%H:%M:%S"),
+        marca="SOBRA" if bid in todas_as_sobras else "",
+        **{k: v for k, v in batida.items() if k not in ("id", "timestamp")},
+        motivo_retratacao=motivo,
+        retratacao_trilha_id=retratacao["id"] if retratacao else None,
+        retratada_por_id=retratacao["usuario_id"] if retratacao else None,
+        retratacao_acao=retratacao["acao"] if retratacao else None,
+    )
+    for ato in atos:
+        linha("BAT_AUD", batida_id=bid, trilha_id=ato["id"], acao=ato["acao"],
+              usuario_id=ato["usuario_id"], quando=ato["criado_em"])
+
+
+def imprimir_escala(cid, dia):
+    # hi/hf são entrada/saída. hii/hfi e hii2/hfi2 são saída/volta das pausas.
+    # Os instantes previstos já gravados permitem ler a virada de meia-noite.
+    # app/escala/models.py:1656-1747,1843-1847
+    # app/ponto/management/commands/gerar_celulas.py:36-70,88-113
+    celula = (CelulaDia.objects.filter(colaborador_id=cid, data=dia)
+              .select_related("escala_geradora__tipo_escala").first())
+    celulas = {(cid, dia): celula} if celula is not None else {}
+    if celula is None:
+        linha("CEL", id=None, estado=NV)
+    else:
+        dna = celula.dna or {}
+        linha(
+            "CEL", id=celula.pk, origem=celula.origem, trabalha=celula.trabalha,
+            estado={True: "trabalho", False: "folga", None: "indeterminado"}[celula.trabalha],
+            marcos=dna.get("marcos"), instantes_previstos=dna.get("lampadas"),
+            escala_geradora_id=celula.escala_geradora_id, tipo_escala_dna_id=dna.get("tipo_escala_id"),
+            regime_dna=dna.get("tipo_ciclo"), gerada_em=celula.gerada_em,
+            regenerada_em=celula.regenerada_em, regeneracoes=celula.regeneracoes,
+            editada_em=celula.editada_em, editada_por_id=celula.editada_por_id,
+        )
+    # Leitor do vínculo do dia, com a precedência e a vigência da geradora.
+    # app/escala/servico_jornada.py:15-66; app/escala/alimentacao.py:269-286
+    # app/escala/models.py:117-121,801-804,871-877
+    escala = escala_vigente(cid, dia, celulas=celulas)
+    if escala is None:
+        linha("VINCULO", id=None)
+    else:
+        template = escala.tipo_escala
+        linha("VINCULO", id=escala.pk, posto_id=escala.posto_id, template_id=template.pk,
+              template=str(template), regime=template.tipo_ciclo, inicio=escala.data_inicio,
+              fim=escala.data_fim, ativa=escala.ativa)
+
+
+def imprimir_ausencias(cid, dia, tipos):
+    # Mostra cada lançamento e seu estado, inclusive rejeitados e cancelados.
+    # efeito_tipo=abona é a regra do tipo. O estado do lançamento sai em status.
+    # app/ponto/models.py:571-590,660-705,743-820
+    # app/ponto/turnos.py:2548-2579; app/ferias/models.py:119-121,291-319
+    em_aberto = [codigo for codigo, dados in tipos.items() if dados[1] == INDETERMINADO]
+    ausencias = list(Ausencia.objects.filter(colaborador_id=cid, data__lte=dia).filter(
+        Q(data=dia) | Q(data_fim__gte=dia) | Q(data_fim__isnull=True, tipo__in=em_aberto)
+    ).order_by("data", "pk").values(
+        "id", "tipo", "status", "data", "data_fim", "minutos", "hora_ini", "hora_fim",
+        "aprovado_por_id", "aprovada_em", "agendamento_ferias_id", "chamado_origem_id",
+    ))
+    ferias = list(AgendamentoFerias.objects.filter(
+        periodo_aquisitivo__colaborador_id=cid, data_inicio__lte=dia, data_fim__gte=dia,
+    ).order_by("data_inicio", "pk").values("id", "status", "data_inicio", "data_fim"))
+    linha("AUSENCIAS", ids=[a["id"] for a in ausencias], ferias_ids=[f["id"] for f in ferias])
+    for ausencia in ausencias:
+        efeito, _, medico = tipos.get(ausencia["tipo"], (NV, None, NV))
+        linha("AUS", **ausencia, efeito_tipo=efeito, tipo_medico=medico)
+    for agendamento in ferias:
+        linha("FERIAS", **agendamento)
+    return {a["chamado_origem_id"] for a in ausencias if a["chamado_origem_id"] is not None}
+
+
+@lru_cache(maxsize=None)
+def chamados_de(cid):
+    return list(ChamadoColaborador.objects.filter(colaborador_id=cid).order_by("pk").values(
+        "id", "status_local", "modulo_origem", "contexto_json", "celula_id", "celula__data",
+        "justificativa_relacionada_id", "via_encerramento", "respondido_por_id", "resolvido_em",
+    ))
+
+
+def imprimir_chamados(cid, dia, batidas, chamados_ids):
+    # Vínculos explícitos da pergunta: dia/célula, batida de origem e batida
+    # plantada. Estado resume os atos lidos e os carimbos armazenados.
+    # Visibilidade atual na fila [nao verificado].
+    # app/chamados/models.py:2724-2760,3351-3370,3811-3838,4472-4515
+    # app/chamados/juizes.py:1626-1628,1644-1653; app/ponto/models.py:40-44
+    ids = {b["id"] for b in batidas}
+    ids_texto = {str(pk) for pk in ids}
+    origens = {b["pergunta_origem_id"] for b in batidas if b["pergunta_origem_id"] is not None}
+    perguntas = (PerguntaDisputa.objects.filter(colaborador_id=cid).filter(
+        Q(celula__data=dia) | Q(data_evento=dia, conversa=False)
+        | Q(batida_origem_id__in=ids) | Q(pk__in=origens)
+    ).select_related("disputa").prefetch_related("decisoes").order_by("pk"))
+    for p in perguntas:
+        lido = DecisaoPergunta.composta(p)
+        respondida = lido.respondida_em is not None and bool((lido.resposta_colab or "").strip())
+        estado = "respondida" if respondida else "pendente"
+        if lido.materializada_em is not None:
+            estado = "materializada"
+        elif lido.validada_em is not None:
+            estado = "validada"
+        linha(
+            "PERGUNTA", id=p.pk, estado=estado, motivo=p.motivo, data_evento=p.data_evento,
+            celula_id=p.celula_id, batida_origem_id=p.batida_origem_id,
+            batidas_plantadas_ids=[b["id"] for b in batidas if b["pergunta_origem_id"] == p.pk],
+            disputa_id=p.disputa_id, disputa_fechada_em=p.disputa.fechada_em,
+            chamado_pai_id=p.disputa.chamado_id, chamado_destino_id=p.chamado_destino_id,
+            respondida=respondida, respondida_em=lido.respondida_em, validada_em=lido.validada_em,
+            materializada_em=lido.materializada_em, via=lido.via_resolucao,
+        )
+        chamados_ids |= set(map(int, p.chamados_relacionados_ids or ()))
+        chamados_ids |= {p.disputa.chamado_id, p.chamado_destino_id}
+
+    # Ligações formais por justificativa, regularização ou ausência.
+    # app/ponto/models.py:139-144,167-177,786-790
+    # app/chamados/models.py:81-85,1923-1931,4658-4662,4687-4715
+    justificativas = Justificativa.objects.filter(colaborador_id=cid).filter(
+        Q(data_turno=dia) | Q(batida_entrada_id__in=ids) | Q(batida_gerada_id__in=ids)
+    ).order_by("pk").values_list("pk", "chamado_origem_id")
+    justificativas_ids = set()
+    for jid, chamado_id in justificativas:
+        justificativas_ids.add(jid)
+        chamados_ids.add(chamado_id)
+    itens = RegularizacaoItemBatida.objects.filter(regularizacao__colaborador_id=cid).filter(
+        Q(data=dia) | Q(batida_entrada_id__in=ids)
+        | Q(batida_saida_id__in=ids) | Q(batida_alvo_id__in=ids)
+    )
+    chamados_ids |= set(itens.order_by().values_list("regularizacao__chamado_id", flat=True))
+
+    # Chamado por célula, data declarada ou batida no contexto. Seguimentos
+    # mostram autoria e instante sem expor o conteúdo da conversa.
+    # app/chamados/models.py:39-72,1835-1848
+    # app/chamados/juizes.py:89-129; app/chamados/catalogo/modulos.py:219-225
+    # app/chamados/services/acoes_chamado.py:244-248
+    relacionados = []
+    for ch in chamados_de(cid):
+        ctx = ch["contexto_json"] or {}
+        data_ctx = data_do_chamado(ch["modulo_origem"], ctx) or ctx.get("data_turno")
+        batidas_ctx = {str(ctx.get("batida_id"))}
+        batidas_ctx |= {str((o or {}).get("batida_id")) for o in ctx.get("ocorrencias") or []}
+        if not (
+            ch["id"] in chamados_ids or ch["justificativa_relacionada_id"] in justificativas_ids
+            or ch["celula__data"] == dia or batidas_ctx & ids_texto
+            or (ch["celula_id"] is None and str(data_ctx)[:10] == dia.isoformat())
+        ):
+            continue
+        relacionados.append(ch["id"])
+        linha("CHAMADO", id=ch["id"], estado=ch["status_local"], celula_id=ch["celula_id"],
+              batidas_contexto_ids=sorted(map(int, batidas_ctx & ids_texto)),
+              via_encerramento=ch["via_encerramento"], respondido_por_id=ch["respondido_por_id"],
+              resolvido_em=ch["resolvido_em"])
+    for resposta in (FollowupChamado.objects.filter(chamado_id__in=relacionados)
+                     .order_by("criado_em", "pk")
+                     .values("id", "chamado_id", "autor_tipo", "autor_user_id", "criado_em")):
+        linha("CHAMADO_SEGUIMENTO", **resposta)
+
+
+def main():
+    if connection.schema_name != "juliani":
+        raise RuntimeError("A sonda exige o schema juliani")
+    dias, sobras = agrupar()
+
+    # Leitura direta do catálogo para propagar falhas de consulta. O catálogo
+    # da cópia é usado quando a consulta retorna zero tipos ativos.
+    # app/ponto/catalogo/ausencias.py:86-105,240-281,430-435
+    tipos = {codigo: (efeito, fim, medico) for codigo, efeito, fim, medico in
+             TipoAusencia.objects.filter(ativo=True).order_by().values_list("codigo", "efeito", "fim", "medico")}
+    if not tipos:
+        tipos = {codigo: (dados[0], dados[5], dados[6]) for codigo, dados in CATALOGO.items()}
+    empresas_cadastradas = dict(Colaborador.objects.filter(
+        pk__in={cid for cid, _ in dias},
+    ).order_by().values_list("pk", "empresa_id"))  # app/colaboradores/models.py:319-322
+
+    total_batidas = 0
+    for (cid, dia), (empresa, sobras_dia) in sorted(dias.items()):
+        batidas = batidas_do_recorte(cid, dia, sobras_dia)
+        trilha = trilhas_de([b["id"] for b in batidas])
+        linha("DIA", colab_id=cid, data=dia, empresa=empresa,
+              empresa_cadastro_id=empresas_cadastradas[cid], sobras_ids=sorted(sobras_dia))
+        for batida in batidas:
+            imprimir_batida(batida, trilha[batida["id"]], sobras)
+        imprimir_escala(cid, dia)
+        chamados_ids = imprimir_ausencias(cid, dia, tipos)
+        imprimir_chamados(cid, dia, batidas, chamados_ids)
+        total_batidas += len(batidas)
+
+    # batidas conta linhas BAT emitidas, inclusive em janelas sobrepostas.
+    print(f"FIM dias={len(dias)} batidas={total_batidas}")
+
+
+main()
+```
+
+## 27/11 10:02 · sessao b89a8e9ccbee · PAR-PELO-TURNO · verificador · origem=Code
+
+## Procedentes
+
+1. **O mesmo PK ainda muda de dia.** Com DNA `21:30–05:42`, `E 23/10 01:30` e `S 24/10 00:00`, a casca e o lote publicam a entrada em **22/10** na consulta de 21/10 e em **23/10** na consulta de 22/10. A segunda consulta alcança a saída e reclassifica a entrada. Há divergência mesmo com todas as marcas carregadas. Com A noturno até 21/10, B diurno a partir de 22/10 e `E 21/10 21:30`, `S 22/10 08:00`, `S 22/10 20:00`, a última saída recebe **22/10** na casca e na consulta individual, mas **21/10** na mesma janela com `turnos=`. Dois segmentos reclamam o PK e a última atribuição vence. O RED de `r.txt` passou na geometria original de um vínculo, assim como o controle sintético de col297. A invariância exigida pela L-085 segue aberta. `app/docs/LEIS.md:117` · `app/ponto/turnos.py:287` · `app/ponto/turnos.py:1998` · `app/ponto/turnos.py:3037` · `app/ponto/turnos.py:3060` · `app/ponto/turnos.py:3082` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:57` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:73`
+
+2. **A pré-passagem da pausa ainda perde o relógio da entrada.** O caso anterior da `E` interna passou com flag gravada e com `Xi`. O novo contraexemplo usa marcos de borda `19:00–07:00`, `E 20/10 19:00`, `S 19:00:30`, `S 21/10 01:00`, `E 02:00`, `S 07:00`. Sem marcos de borda, a sonda fecha `19:00→07:00` com 60 min de pausa. Com os marcos, ela produz `19:00→01:00` e `02:00→07:00`, sem pausa. A pré-passagem com bordas zera `limite` pela saída de 30 s, enquanto o laço principal conserva a entrada. O RED da saída degenerada só chama o ramo sem bordas. `app/ponto/turnos.py:435` · `app/ponto/turnos.py:447` · `app/ponto/turnos.py:508` · `app/ponto/turnos.py:1501` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:82` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:116`
+
+3. **O item 2 do aval ainda falha por regra.** A sonda original com só `E 22/10 12:00` deu **0,00 h** nos dois braços. Em `21/09–20/10`, com previsão comercial e sem ausência, usei `E 21/10 01:30`, `S 22/10 00:00` com papel `Xi` e uma batida posterior em `23/10 08:00`. A casca dispõe do fato posterior da O95, fecha o par e data ambas as marcas em **21/10**. A projeção nova da folha passa `ultima_batida=None`, mantém o turno aberto e atribui ambas a **20/10**. Com zero períodos no motor, os trechos reais do fechamento deram **0,00 h** sem as marcas e **−193,60 h** com elas. Esse saldo alimenta o `FechamentoMensal` e o banco do `DiaPago`. `app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:204` · `app/ponto/turnos.py:1172` · `app/ponto/turnos.py:1186` · `app/ponto/turnos.py:1931` · `app/ponto/services/fechamento.py:165` · `app/ponto/services/fechamento.py:679` · `app/ponto/services/fechamento.py:1123` · `app/ponto/services/fechamento.py:1199` · `app/ponto/services/fechamento.py:1227`
+
+4. **A segunda virada continua dependente do cadastro do dia da saída.** Para `E 20/10 23:30 → S 22/10 01:30`, o juiz devolve um par fechado de 26 h. A sonda de `_turno_noturno_completo` devolveu `True` com o vínculo noturno e `False` com vínculo diurno ou sem vínculo em 22/10. A guarda rejeita o caso antes de consultar o par. O teste usa o mesmo vínculo nas duas datas e simula o lote com a própria casca. A transferência das duas pontas para a fatia de A passou no caso anterior de 26 h, mas o teste usa dois vínculos sem `tipo_escala`, o mesmo DNA e ata vazia. A fatia continua consumindo o mapa sujeito à dupla atribuição do item 1. `app/escala/servico_jornada.py:230` · `app/escala/servico_jornada.py:245` · `app/escala/servico_jornada.py:354` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:125` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:149` · `app/ponto/services/fechamento.py:284`
+
+5. **O item 1 do aval, 4b, continua reservado e produz diferença de dinheiro.** Com `E 19/10 22:00 → S 20/10 22:00` e `E 21/10 03:00 → S 21/10 11:00`, o juiz data o segundo par em **21/10**. No mesmo `Motor12x36`, variar só a carga da antiga borda do PDF para `ini−4` fez **8,00 h virarem 0,00 h** na janela iniciada em 21/10. A primeira jornada inteira passa a chegar ao motor, que aplica a herança pelo vão de 5 h e exclui o segundo par como dia 20. A folha já recebe a carga ampliada. O PDF livre passou a recebê-la nesta volta e soma a saída desse motor. A outra pendência reservada, 3c, também permanece. Para fim em 20/10, a testemunha da folha pede julgamento até 21/10, carrega até 23/10 inclusive e só recorta a comparação depois. Uma marca em `23/10 00:00` entra nessa apuração e fica fora da carga da competência. `app/docs/par_pelo_turno_c1v6_evidencia.txt:137` · `app/core/juizes.py:216` · `app/ponto/motor_calculo_v2.py:2516` · `app/ponto/motor_calculo_v2.py:2542` · `app/ponto/services/fechamento.py:655` · `app/relatorios/pdf_espelho.py:281` · `app/relatorios/pdf_espelho.py:495` · `app/folha/porta_export.py:77` · `app/folha/porta_export.py:106` · `app/folha/porta_export.py:114`
+
+## Escritores e leitores
+
+| Valor | Onde nasce e onde o contrato diverge |
+|---|---|
+| `janela_com_pad` e `batidas_apuraveis_na_janela` | `turnos.py` escreve `ini−4..fim+2`, por dias locais completos, do primeiro ao último microssegundo inclusive. Casca e lote usam filtros de data local. Grade, carga de perguntas, fechamento, autoridade do espelho e PDF leem a janela. O fechamento usa o helper também na passada de órfãos. A carga de perguntas escreve a borda equivalente como `< 00:00` do dia seguinte, mas recorta de um lote já carregado. A divergência demonstrada está no período pedido pela testemunha da folha e no provedor da O95. `app/ponto/turnos.py:1869` · `app/ponto/turnos.py:1895` · `app/ponto/turnos.py:2990` · `app/ponto/turnos.py:3001` · `app/ponto/turnos.py:3149` · `app/escala/utils.py:1352` · `app/chamados/services/carga_pergunta_viva.py:174` · `app/ponto/services/fechamento.py:831` · `app/ponto/services/espelho.py:1031` · `app/relatorios/pdf_espelho.py:281` |
+| Dia por PK e dia do período | `_dia_das_batidas_puro` escreve o dia do turno reclamante e completa as demais marcas pelo dia civil. Espelho e app filtram por PK, painel, férias e vigia consultam PKs específicos, e disputa e fio chegam pela consulta individual. Na tela, a soma de horas passou a ler o dia publicado pelo motor, mas `turnos` e `turnos_abertos` ainda filtram pela entrada civil. No próprio caso 3d, `E 21/09 00:00 → S 07:50` atribuído a 20/09 soma **7 h 50 min** no recorte até dia 20 e acrescenta **zero** a `turnos`. `app/ponto/turnos.py:3070` · `app/ponto/services/espelho.py:435` · `app/ponto/services/espelho.py:451` · `app/ponto/services/espelho.py:588` · `app/api/views.py:1444` · `app/api/views.py:1461` · `app/core/services/painel_op.py:330` · `app/ferias/management/commands/listar_ferias_com_batida.py:54` · `app/ponto/management/commands/vigia_plantio_overnight.py:87` · `app/chamados/services/disputa_emissao.py:283` · `app/chamados/services/fio.py:1827` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:103` |
+| `dias_inconsistentes` | A tela incrementa uma vez por dia inconsistente. O PDF reconta as linhas. `folha_manda` pode sobrescrever ambos com `FechamentoMensal.inconsistencias`, que conta anomalias e acrescenta 1 por `sem_movimento`. Com zero anomalias e nenhuma linha inconsistente, o contador de dias vale **0** e o fechamento sem movimento publica **1**. O badge, o app e a comparação da porta leem a mesma chave com esses dois significados. `app/ponto/services/espelho.py:670` · `app/ponto/services/espelho.py:685` · `app/relatorios/pdf_espelho.py:604` · `app/ponto/services/fechamento.py:1119` · `app/relatorios/cartao_pela_celula.py:113` · `app/relatorios/cartao_pela_celula.py:346` · `app/templates/ponto/espelho.html:67` · `app/api/views.py:1434` · `app/folha/porta_export.py:502` |
+| `pdf_espelho` | O coletor lê as linhas de `espelho_do_colab`, mas monta insumos e roda `apurar_por_fatia` ou `calcular_mes` em paralelo. Em período livre, publica o próprio saldo do motor. O mesmo coletor alimenta a geração do PDF, a testemunha de exportação e a pauta de dias em aberto. Com `agora=25/11` e pedido `26–27/11`, o `max` faz a apuração começar e terminar em **26/11**, enquanto a tela consultada para as linhas termina em **24/11**. É uma divergência de teto usando o mesmo `agora`. O delta fornecido tem **+0** cláusulas `except`. `app/relatorios/pdf_espelho.py:277` · `app/relatorios/pdf_espelho.py:410` · `app/relatorios/pdf_espelho.py:426` · `app/relatorios/pdf_espelho.py:524` · `app/relatorios/pdf_espelho.py:589` · `app/relatorios/pdf_espelho.py:647` · `app/relatorios/pdf_espelho.py:1041` · `app/folha/porta_export.py:502` · `app/ponto/services/dias_em_aberto.py:112` · `app/docs/par_pelo_turno_c1v6_evidencia.txt:149` |
+
+## O que os testes deixam passar [nao verificado]
+
+- **c1v6.** Ata vazia derrubou o teste novo, fechando aquele mutante de `r.txt`. Encurtar a carga do PDF, restaurar o recorte civil da soma e usar `not batidas` também derrubaram as respectivas sondas. Em contrapartida, mudei só `dia <= _data_fim` para `dia < _data_fim` no `sem_movimento`. Os **95 testes e sondas em memória** passaram. Uma única marca apurável atribuída ao dia 20, sem ausência, passaria a ser tratada como mês sem movimento. Os dois braços do 4c exercitam apenas o caso sem fato na competência. `app/ponto/tests/test_par_pelo_turno_c1v6.py:182` · `app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:266` · `app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:319` · `app/ponto/services/fechamento.py:679` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:120`
+- **c1v7.** O AST distingue os dois nomes por igualdade e contou uma chamada do embrulho na linha 281. Os cinco testes estruturais passaram em memória. Uma segunda chamada via `carregar = batidas_apuraveis_na_janela; carregar(...)` deixou o censo idêntico. A chamada real a `apurar_por_fatia` também está fora de `AUTORIDADES`. O verde do selo permite a derivação paralela do coletor. `app/relatorios/tests/test_pdf_nao_calcula.py:34` · `app/relatorios/tests/test_pdf_nao_calcula.py:63` · `app/relatorios/tests/test_pdf_nao_calcula.py:96` · `app/relatorios/pdf_espelho.py:281` · `app/relatorios/pdf_espelho.py:412`
+- **c1v8.** Comparei os literais via AST. A fixture copia as nove chaves e valores de `espelho.py`, incluindo `dias_inconsistentes`. Ela corrige o `KeyError` da montagem manual e preserva a asserção de horas. Como injeta o próprio resumo e chama `montar_dias`, o 3d deixa passar a remoção de `dias_inconsistentes` do inicializador de produção e a remoção do incremento. A comparação da fixture com o contrato atual é exata, mas o teste não protege esse contrato contra mudança futura. `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:100` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:113` · `app/ponto/services/espelho.py:685` · `app/ponto/services/espelho.py:1236`
+
+A execução Django parou no import de `django.core`. O `Ran 356 OK`, a identidade Git de HEAD e das bases, o efeito no gravado e no TXT, e o laudo dos 29 casos por rubrica ficam **[nao verificado]**. Para col155/08-11, a cópia só oferece o ensaio sintético de **782 min**, teto de **732 min** e uma C9. `app/manage.py:11` · `app/docs/BACKLOG.md:2027` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:195`
+
+**REPROVADO — PK muda de dia e de dono (`app/ponto/turnos.py:3085`), pausa perde a entrada (`app/ponto/turnos.py:508`), 4c perde a prova da O95 e muda o saldo (`app/ponto/services/fechamento.py:165`), guarda noturna rejeita par fechado (`app/escala/servico_jornada.py:230`), 3c amplia a janela (`app/folha/porta_export.py:77`), 4b perde 8 h (`app/ponto/motor_calculo_v2.py:2521`), PDF recalcula e usa outro recorte (`app/relatorios/pdf_espelho.py:412`), resumo mistura dias e ocorrências (`app/relatorios/cartao_pela_celula.py:113`) e os testes deixam passar borda exclusiva, chamada indireta e perda da chave de produção (`app/ponto/services/fechamento.py:679` · `app/relatorios/tests/test_pdf_nao_calcula.py:77` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:113`).**
 
 ## 27/11 09:52 · sessao ca7d3c808b96 · - · - · origem=Ronald (tmux)
 
@@ -978,39 +1385,4 @@ for arquivo in ponto/tests/*c2u*.py; do
 done
 ```
 
-## 27/11 09:03 · sessao 3569bcc00a47 · E4D-CONTRATO-ROTA-B · leitura · origem=Code
-
-## 1. Caso 14
-
-O RED é `MatrizHistoricoTest.test_caso_14_l130_preserva_historico_e_a_nova_resposta`. A fixture começa com `respondida_em=T0`, texto vazio e duas linhas `RESPOSTA`, uma antiga com `07:00` e outra vazia. Depois de chamar a porta L-130, o teste exige `[RESPOSTA, RESPOSTA, REABERTURA]`, preserva a foto das duas linhas antigas, confere a projeção vazia e verifica que uma nova resposta `09:00` fica vigente. [test_e4d_matriz_reds.py:644](/home/ronald/codex_ws/4e9ae2ddd8125dba58277ceb719022587d6036da/app/chamados/tests/test_e4d_matriz_reds.py:644)
-
-**A asserção da linha 654 diverge da opção (A).** Ela deve exigir que a terceira linha seja um ato próprio `SANEAMENTO` e que seu campo próprio de lei contenha `L-130`. As verificações de preservação do histórico, limpeza e nova resposta continuam valendo. A cópia registra a decisão de usar campo próprio, mas o modelo ainda carece desse ato e desse campo. O nome do campo é **[nao verificado]**. `ato_motivo` é texto da trilha e `da_ressuscitacao` é a marca de `REABERTURA` da ressuscitação. `app/chamados/tests/test_e4d_matriz_reds.py:654–661` · `app/docs/PROMPTS.md:2950` · `app/docs/BACKLOG.md:2163` · `app/chamados/models.py:4326–4365`
-
-## 2. Colisão com o c1 RED4
-
-**Sim, no contrato descrito pela E4D.** A docstring remete a `C1:234–254` para uma `REABERTURA` marcada e seu efeito na tarefa. O aval transcrito exige `SANEAMENTO` para a mesma devolução L-130. O ponto comum é `devolver_instante_sem_texto_l130`, em `app/chamados/services/validacao.py`. A colisão é sobre o valor de **`DecisaoPergunta.ato`**, definido em `app/chamados/models.py`. A projeção que a porta limpa é **`PerguntaDisputa.respondida_em`**, junto com `resposta_colab`. Hoje a porta registra a foto `RESPOSTA` se faltar, limpa o par e grava auditoria. As asserções literais do c1 RED4 e o nome do campo da marca da E4C são **[nao verificado]**. `app/chamados/tests/test_e4d_matriz_reds.py:644–656` · `app/docs/RELATO.md:172` · `app/docs/RELATO.md:2346` · `app/chamados/services/validacao.py:444–490` · `app/chamados/models.py:4344–4349,3658–3660`
-
-## 3. Arquivos em comum e casos independentes
-
-| Arquivo no pedido da E4C | Dependência da E4D |
-|---|---|
-| `app/chamados/models.py` | **Precisa mudar.** Aloja o tipo e os campos de `DecisaoPergunta`, seu redutor e a porta `registrar`. O caso 14 requer o ato próprio. Os casos 16 e 17 também exercitam diretamente `registrar` e `save`. `app/chamados/models.py:4326–4365,4405–4408,4493–4504,4590–4623` · `app/chamados/tests/test_e4d_matriz_reds.py:663–699` |
-| `0057` e `0058` de `app/chamados/migrations/` | **Dependência de esquema, sem edição dessas duas demonstrada.** A cópia usa o nome da `0057` na fixture e reconhece `entrada_em` e `entrada_origem`. O caso 42 depende dessa distinção temporal e o 45 da partição novo/estoque. O conteúdo das duas migrações é **[nao verificado]**. `app/chamados/tests/test_e4d_matriz_reds.py:181–194,238–243,788–807,832–869` · `app/docs/PROMPTS.md:2974` |
-| `app/ponto/validacao.py` | **O caminho correspondente na E4D é `app/chamados/services/validacao.py`.** Precisa mudar na devolução L-130 e nas portas que hoje salvam validação ou motivo da recusa diretamente. `app/chamados/services/validacao.py:164–178,444–490,992–1000` · `app/core/portas.py:396–403` |
-| `app/chamados/disputa_emissao.py` | **O caminho correspondente é `app/chamados/services/disputa_emissao.py`.** Precisa mudar na rota completa. Hoje a resposta humana salva a projeção antes de registrar o ato, e a reabertura vazia do caso 11 exige alterar a seleção e a identidade do pedido nessa porta. `app/chamados/services/disputa_emissao.py:1529–1567,1695–1715` · `app/chamados/tests/test_e4d_matriz_reds.py:570–606` |
-
-**Casos com caminho de construção fora desses arquivos**, pelo predicado dos REDs da cópia:
-
-- **06, 07, 27 e 37** — asserções de exceção e selo em `app/core/portas.py`, usando as portas atuais de carimbo, retroativo e descarimbo. Os testes exigem zero ato novo nesses recortes. `app/chamados/tests/test_e4d_matriz_reds.py:305–349,526–538,898–916,1126–1165,1830–1853`
-- **25 e 26** — seleção pela absorção e encaminhamento do legado em `materializacao.py`. O 25 já tem a porta de reabertura e a trilha da raiz disponíveis. `app/chamados/services/materializacao.py:1179–1212,1230–1285` · `app/chamados/tests/test_e4d_matriz_reds.py:1545–1613`
-- **28** — trava, releitura e compensação no comando do espelho. A gravação da via já tem porta própria e a `REABERTURA` já é um tipo registrado. `app/chamados/management/commands/encerrar_perguntas_com_fato.py:64–77` · `app/chamados/models.py:3662–3671,4326–4337` · `app/chamados/tests/test_e4d_matriz_reds.py:1167–1224`
-
-**Guardas que já podem ser preservadas sem editar esses arquivos** — **13, 15, 19, 21, 22, 23, 24, 36, 43 e 46**. Para o **30**, API, modal e raio-x podem ser trabalhados à parte, mas o fechamento da face SQL pelo mesmo ato é **[nao verificado]** sem mexer na autoridade compartilhada. O **33** está fora da E4D no brief registrado. `app/chamados/tests/e4d_matriz_mutantes.py:48–97` · `app/chamados/tests/test_e4d_matriz_reds.py:1647–1663` · `app/chamados/juizes.py:1676–1681,1863–1868` · `app/chamados/models.py:4506–4515` · `app/docs/RELATO.md:292`
-
-A lista indica independência técnica por leitura. A ordem de pouso registrada continua E4C-F5-INSTANTE → E4D. Identidade Git do hash, execução dos testes e estado de produção **[nao verificado]**. `app/docs/RELATO.md:67`
-
-## 27/11 08:54 · sessao 0d97a1b1fe83 · CODEX-CONSTROI-MOTOR · leitura · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_8606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8608 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
