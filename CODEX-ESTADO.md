@@ -1,7 +1,139 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 02:27** · publicado em **27/11/2026 02:26** (UTC-3)
+> Ultima resposta processada: **27/11/2026 02:33** · publicado em **27/11/2026 02:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 02:33 · sessao cf389dff1207 · - · - · origem=Ronald (tmux)
+
+- **18** Use o restore para o fato futuro e congele cada horizonte. O C6 hoje reduz a sequência completa antes do recorte e perde o carimbo anterior. O I23 deve medir o caso no auditor real, com um controle que conte uma compensação futura de ato normal. A c4 já cobre o efeito temporal da `RECUSA` na tarefa. [C6](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/juizes.py:1476) · [I23](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/management/commands/auditar_invariantes_chamados.py:1122) · [Controle anterior](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:319) · [c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:297)
+- **30** Grave a resposta pelo escritor público e introduza a divergência depois. Com carimbo cru nulo, a fila real omite a pergunta, a API envia carimbo nulo e o raio-x credita o chamado ao grupo sem resposta. O modal exige `disputa_obj`, lista de perguntas e `pode_agir_map`. A composta conserva o texto da projeção sob o contrato c4. [Fila](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/juizes.py:1863) · [API](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/api/views.py:1161) · [Raio-x](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/raiox.py:135) · [Modal](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/templates/chamados/partials/modal_fio.html:123) · [Composta c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/models.py:4635)
+- **42** O carimbo público pela trilha permite registrar depois da lavra, com `ato_em` anterior ao corte, e mudar de fato a projeção. O marco passado atualmente sobe porque o leitor toma o máximo de `respondida_em` na coluna. A referência à migração e ao caso de empate/reexecução é da c4. [Porta](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/disputa_emissao.py:1767) · [Marco](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/veredito_lavrado.py:206) · [c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:914)
+- **45** Afirme classes exatas. Divergência de texto ou autor com linha vigente entra em A, passivo sem linha entra em B, e estoque ocupa seu próprio quadro. Exercite autor nulo e exceção histórica com ABSORÇÃO vigente. A c4 já cobre instante, classificação e contagem por PK. [Comparador c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/models.py:4589) · [Teste c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:574) · [Exceção histórica](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/docs/PROMPTS.md:2806) [nao verificado]
+- **46** Vincule a escala de 480 minutos e deixe o sinal da batida relavrar a ata depois da validação. Afirme `480/0 → 480/480`, com prontidão `0 → 100`. Os mutantes são o denominador realizado e a omissão da relavratura. [Sinal](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/ponto/signals.py:136) · [Ata](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/ponto/services/cartorio.py:749) · [Prontidão](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/folha/export.py:1104)
+
+Execução dos testes e mordida dos mutantes [nao verificado]. [nao verificado]
+
+## 27/11 02:32 · sessao 43c32c8f4f58 · - · - · origem=Ronald (tmux)
+
+Leitura concluída. Execução dos testes e dos mutantes [nao verificado]. [nao verificado]
+
+- **01/02/04/07/44** têm entrada existente em `call_command('backfill_decisoes_pergunta', aplicar=True)`. Hoje o comando só publica a projeção sem linha no DRY e aplica colisões e silêncios. Isso permite cobrar o efeito ausente de R/V em 01/02/04/44 e observar a preservação de `celula_absolveu` em 07. As datas históricas devem preceder o `applied` da 0057. Na c4, a fixture comum fixa esse marco em 2026-01-01. `chamados/management/commands/backfill_decisoes_pergunta.py:459,489,631` · `chamados/tests/cortes_f2_f9_apoio.py@c154a8d4e:36,61`
+- **01** deve verificar silêncio no caminho do estoque. A c4 já verifica proveniência e o evento único da resposta normal. `chamados/tests/test_e4c_f5_c4_red.py@c154a8d4e:401,495` · `chamados/models.py@c154a8d4e:4755`
+- **02/03** devem preservar a foto completa dos atos anteriores. O controle do 03 restaura R após REABERTURA compensadora e exige V apenas nesse cartão. `chamados/models.py:4437,4533` · `docs/PROMPTS.md:2806`
+- **11** dá RED pela ausência de REABERTURA na pergunta vazia usando a assinatura atual. **12** pede usuários independentes para as quatro FKs. `chamados/services/disputa_emissao.py:1628,1703` · `chamados/models.py:3804,3824,4347,4352`
+- **14 — lei:** a sessão prioriza `REABERTURA` marcada da c4. A exigência E4D de `SANEAMENTO` em campo próprio e preservação de outra resposta no empate ou posterior pede decisão explícita sobre seleção do ato atingido. `docs/PROMPTS.md:2950` · `docs/LEIS.md:151` · `chamados/tests/test_e4c_f5_instante_c1.py@c154a8d4e:234` · `chamados/services/validacao.py@c154a8d4e:476`
+- **42** usa a referência da migração real e testa o resíduo pela porta pública de resposta, com lavra em T1 e nova resposta efetivamente projetada com tempo de negócio anterior a T1. Hoje `marcos_do_lote` lê o `respondida_em` sobrescrito. O selo F3 veda consultar DP diretamente nesse leitor. `chamados/tests/test_e4c_f5_c4_red.py@c154a8d4e:914` · `chamados/services/disputa_emissao.py:1529,1562` · `chamados/veredito_lavrado.py:205` · `chamados/tests/test_f3_lavra_foto_sem_decisao.py:312` · `docs/CORTES.md:609,610`
+- **Lei/desenho:** por qual entrada se reverte exatamente um lote de uma competência em 04, transporta-se o `!` e comprova-se hash real do gravado em 08, identifica-se o pedido em 11 e lê-se autoria explicitamente desconhecida em 12? A via comum de 08 segue a recusa da c4. `chamados/management/commands/backfill_decisoes_pergunta.py:459,514` · `ponto/portas/regen_exportada.py:62` · `chamados/tests/test_e4c_f5_c4_red.py@c154a8d4e:419` · `chamados/services/disputa_emissao.py:1628` · `chamados/models.py:4347`
+
+## 27/11 02:29 · sessao 45fdf9242303 · E4C-F5-INSTANTE · construtor · origem=Code
+
+**c4red3 — 29 testes coletados**, todos `test_mordida`, em coleta isolada do `unittest` com dependências substituídas em memória. A coleta no runner Django e a mordida dos REDs ficam para o Code [não verificado]. [Fábrica das contraprovas](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:27) [nao verificado]
+
+1. **M12, M13 e M21.** Os mutantes substituem as referências com `patch.object(..., new=...)`, e o `ExitStack` restaura os alvos. M12 cobre também os aliases usados pelo RED e pelo comando de alarme. M21 usa uma cópia da operação em memória. [M12](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:194), [M13](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:208), [M21](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:300)
+2. **M14, M25 e M27.** As três contraprovas herdam diretamente da classe RED de concorrência, que é `TransactionTestCase`. A edição no RED foi necessária para aplicar `freeze_time` ao ciclo de vida da subclasse executada, incluindo `setUpClass` e `tearDownClass`. [Hooks do relógio](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:66), [classe de concorrência](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:617)
+3. **Coleta.** A fábrica mascara os métodos de teste herdados na classe gerada e executa o método RED visado por `test_mordida`. [Filtro de coleta](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:27) [nao verificado]
+
+**Recorte para o Code**, a partir de `app/`. [Entrada do runner](/home/ronald/wt-codex-e4c-f5-instante-012038/app/manage.py:7)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4c_f5_instante_c1 \
+  chamados.tests.test_e4c_f5_c4_red
+
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.e4c_f5_c4red2_mutantes
+
+for classe in M12Vigia M13Dry M14OrdemDaTrava M21Empate0058 M25ConflitoErrado M27EntregaPrimeiro; do
+  PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    "chamados.tests.e4c_f5_c4red2_mutantes.${classe}.test_mordida"
+done
+```
+
+## 27/11 02:27 · sessao efdf484bf0a2 · E4D-CONTRATO-ROTA-B · verificador · origem=Code
+
+A pista tem **43 ocorrências em 36 métodos**. São 12 erros e 31 falhas, das quais sete são ocorrências adicionais de subtestes: 18 tem duas, 30 tem cinco e 45 tem três. Há **nove métodos sem ocorrência listada**. O resultado individual desses nove na pista fica [nao verificado]. `T:438–462,513–534,1076–1117`
+
+**Escopo.** Os dois commits da E4D, `145fccbe8` e `d43b0dfe0`, acrescentam somente `T` e `M`, com zero `except`. O delta solicitado `de65d64f4..d43b0dfe0` tem 68 arquivos, inclui código de produção e testes existentes herdados do merge `eb76e7be7`, e contém uma ocorrência textual de `except`, numa docstring. Cláusulas `except` acrescentadas nesse delta: zero. O teste antigo do caso 20 está intacto. A verificação foi somente leitura. Reexecução, mordida em execução e dados de produção [nao verificado]. `T:1` · `M:1` · `app/chamados/models.py:4598–4607` · `app/chamados/tests/_ato_da_fixture.py:9` · `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364–380`
+
+**Referências.** [T, testes da matriz](/home/ronald/codex_ws/d43b0dfe014ee97a3a400a8fed5eb6eea6eaec0e/app/chamados/tests/test_e4d_matriz_reds.py:1) · [M, runner de mutantes](/home/ronald/codex_ws/d43b0dfe014ee97a3a400a8fed5eb6eea6eaec0e/app/chamados/tests/e4d_matriz_mutantes.py:1) · [C4, REDs da c4red2 em `c154a8d4e`](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1). `A` indica asserção do contrato e `I` indica interface nomeada no brief. As regras foram cotejadas com o brief do construtor e as decisões registradas. `app/docs/PROMPTS.md:2873,2950,2974`
+
+### As 43 ocorrências
+
+**29 certas, sendo 27 A e 2 I. 14 erradas.** Cada linha abaixo corresponde a uma ocorrência da pista. As curas erradas são contraexemplos por leitura estática. `T:167–200,213–534,547–857,936–1269`
+
+| Caso | Classificação e motivo | Cura errada que ficaria verde | [nao verificado]
+|---|---|---|
+| 01 | **Certo A.** O backfill grava a resposta e emite um evento. `T:220–228` · `app/chamados/models.py:4608–4623` | Suprimir o despertar de toda `RESPOSTA`, inclusive a normal. `T:220–228` · `C4:479–491` |
+| 02 | **Certo A.** Sai a `VALIDACAO` esperada, sem `ABSORCAO`, mas com um evento. `T:230–243` · `app/chamados/models.py:4622` | Alterar a `RESPOSTA` preexistente mantendo seu tipo. Só os valores da validação nova são conferidos. `T:238–243` |
+| 03 | **Certo A.** Entra `VALIDACAO` retroativa na absorvida. `T:245–260` · `app/chamados/models.py:4437–4447` | Suprimir validação para qualquer histórico com `ABSORCAO`, inclusive depois de uma compensação. `T:253–260` |
+| 04 | **Errado.** Para no símbolo inventado `aplicar_backfill`, antes de testar a reversão. O `aplicar` existente atende grupos de colisão e silêncio, com outro contrato. `T:280–300` · `app/chamados/management/commands/backfill_decisoes_pergunta.py:193–219` | Devolver dois SHA-256 fixos e fotos com os PKs certos e valores falsos. O teste confere formato, diferença e chaves. `T:281–286` |
+| 05 | **Certo A.** Falta `VALIDACAO` física. O absorvedor grava `ABSORCAO` após carimbar. `T:943–957` · `app/chamados/services/materializacao.py:1107–1132` | Inserir os dois atos juntos e gravar V/M diretamente em outro bloco. Só os `INSERT`s têm seus savepoints comparados. `T:944–957` |
+| 06 | **Errado.** O brief exige exceção com lápide. O erro cobra sua exposição como `DP.lista_de_excecoes`, com shape escolhido pelo teste. `T:167–178,560–565` | Cadastrar o escritor observado com lápide genérica e manter outro escritor de M fora da lista. `T:173–178,562–565` | [nao verificado]
+| 07 | **Errado.** A foto, a ausência de ato e o zero evento já foram verificados quando cai no atributo inventado. `T:302–311` | Preencher a lista e deixar o comando efetivo fabricar `CONCLUSAO`. O teste passa uma lista vazia do helper a `registrar`. `T:304–311` · `app/chamados/models.py:4437–4448` |
+| 08 | **Errado.** Tropeça em `aplicar_backfill` antes de demonstrar o veto da exportada. O teste exige 64 hex no gravado, enquanto a função existente de hash do gravado retorna 12. `T:327–345` · `app/chamados/management/commands/backfill_decisoes_pergunta.py:505–516` · `app/ponto/portas/regen_exportada.py:62–74` | Retornar o mesmo hash falso do gravado em ambas as chaves. A foto da tabela é comparada à parte e o hash reportado do gravado nunca é comparado a ela. `T:148–152,330–340` |
+| 09 | **Certo A.** O ramo grava V sem `VALIDACAO` física. `T:567–585` · `app/chamados/services/disputa_emissao.py:2112–2122` | Inserir a linha e manter V no escritor direto. Para M, um juiz que sempre devolvesse a mesma via também poderia passar, pois o esperado vem desse juiz. `T:578–585` |
+| 10 | **Certo A.** O texto legado ganha carimbo sem `RESPOSTA` física. `T:587–606` · `app/chamados/services/disputa_emissao.py:2189–2202` | Corrigir só perguntas de `escolha`. A fixture com texto usa esse tipo e deixa de fora uma `hora` com o mesmo meio-par. `T:590–605` |
+| 11 | **Certo I.** O identificador do pedido está na regra. A assinatura atual rejeita o argumento `id_do_pedido`. `T:347–368` · `app/chamados/services/disputa_emissao.py:1628,1695–1715` | Deduplicar para sempre pela pergunta, recusando também um pedido novo. O teste repete um único UUID. `T:354–368` |
+| 12 | **Certo A.** A exclusão não levanta `ProtectedError`. A marca de autoria desconhecida fica atrás dessa primeira asserção. `T:370–388` · `app/chamados/models.py:3804–3829,4347–4353` | Proteger só `validada_por`. O mesmo U ocupa todas as referências e uma única FK protegida impede sua exclusão. `T:370–382` |
+| 14 | **Certo I.** `SANEAMENTO` é o choice literalmente pedido. O erro ocorre antes das variantes de empate e posterioridade. `T:390–413` · `app/chamados/models.py:4326–4337` | Sanear sempre a `RESPOSTA` de menor PK. A resposta histórica que deve ser atingida sempre ocupa essa posição nas fixtures. `T:393–406` |
+| 16 | **Certo A.** A porta com o dono travado aceita a resposta futura. `T:415–424` · `app/chamados/models.py:4598–4609` | Fazer o `INSERT` e só então levantar `ValueError`. O rollback externo esconde a violação da ordem. `T:420–424` |
+| 17 | **Certo A.** `save(force_insert=True)` com PK vazio entra. `T:426–436` · `app/chamados/models.py:4405–4408` | Vetar só `force_insert` e criar por `Model.save` com alias `DP`. O selo AST reaproveitado não rastreia esse caminho. `T:429–436` · `app/chamados/tests/test_e1_entradas.py:190–214` |
+| 18 · horizonte | **Certo A.** Em T1, a tarefa ainda vê a resposta de T0 e o C6 perde o par após reduzir a sequência inteira. O modal tem um defeito adicional de fixture. `T:449–459,160–165` · `app/chamados/services/tarefa_do_dia.py:389–429` · `app/templates/chamados/partials/modal_fio.html:123` | Especializar os leitores para o cenário de `REABERTURA` testado e deixar outros compensadores com horizontes diferentes. `T:445–459` |
+| 18 · contador | **Errado.** Procura `ato_futuro` no contador A/B. O I23 existente, no relógio T1, contaria a compensação T2. A regra exige reconciliar esse recorte com o zero esperado. `T:438–462` · `app/chamados/services/vigia_ato_x_coluna.py:8–25` · `app/chamados/management/commands/auditar_invariantes_chamados.py:1122–1134` | Acrescentar `ato_futuro=0` fixo ao retorno de A/B. `T:460–462` |
+| 20 | **Certo A.** A recusa humana acontece, mas a passagem retorna `[]` em vez de recusar Q. O teste também pede que a irmã anterior fique e a seguinte prossiga. `T:959–995` · `app/chamados/services/materializacao.py:1089–1132` | Usar só `RECUSA.ato_em > T1` e um ID constante por ausência. Passa com T2 e uma passagem, perde empate e pedidos distintos. `T:966–990` |
+| 21 | **Errado.** A fixture chama `_carimbar_validacao` antes da trava real. `registrar` exige o dono travado. O traceback do erro da pista foi cortado [nao verificado]. `T:187–200,544–545,674–683` · `app/chamados/services/validacao.py:164–178` · `app/chamados/models.py:4606–4607` | Com a fixture travada, recusar toda pergunta daquele motivo com `ja_validada`, sem reler a elegibilidade. `T:674–683` |
+| 23 | **Errado.** O `patch` aponta para `acoes_disputa.validar_pergunta`, mas o import é local. Corrigido o alvo, sobra a mesma fixture sem trava do 21. `T:544–545,700–713` · `app/chamados/services/acoes_disputa.py:373–376` | Com a fixture corrigida, recusar toda correção depois da trava com o mesmo texto. Falta um controle de correção elegível nesse teste. `T:700–713` |
+| 25 | **Certo A.** O seletor exige âncora de hora e deixa Q carimbada apesar da `ABSORCAO` vigente. `T:1024–1050` · `app/chamados/services/materializacao.py:1195–1212,1235–1243` | Aceitar qualquer `ABSORCAO` física, inclusive uma já vencida por `RECUSA`, ou continuar exigindo o texto de E que esta fixture conserva. `T:1027–1043` |
+| 26 | **Certo A.** A coincidência de colunas devolve o legado e quebra a preservação. O leitor admin fica por verificar em execução. `T:1052–1072` · `app/chamados/services/materializacao.py:1195–1212,1267–1279` | Encaminhar todas as perguntas sem vínculo daquele dia, mesmo de outra passagem. Só a entrada de Q no único grupo é cobrada. `T:1052–1072` |
+| 28 | **Errado como RED de trava e compensação.** A fixture de `declaracao` segue a matriz, mas o seletor a exclui antes de consultar o espelho. Trocar para `legado_sem_lastro` alcançaria o comando e tiraria H4 da entrada. `T:749–777` · `app/chamados/management/commands/encerrar_perguntas_com_fato.py:31–44,66–77` · `app/chamados/models.py:4533–4541` | Alargar o seletor para toda declaração e sempre registrar `REABERTURA`, inclusive com H4 já compensado. `T:753–771` |
+| 29 | **Certo A.** M é limpo sem `REABERTURA` física. `T:779–797` · `app/chamados/services/relavra_via.py:230–261` | Inserir a reabertura e continuar descarimbando diretamente, ou reler a elegibilidade antes da trava. `T:790–797` |
+| 30 · SQL | **Errado.** A fixture injeta a divergência sem projetor e a própria consulta de teste seleciona as colunas cruas. `q_respondida_com_texto` é um filtro. Migrar o leitor SQL real ainda deixaria essa consulta vermelha. `T:117–121,1087–1095` · `app/chamados/juizes.py:1676–1681` | Fazer só essa leitura de coluna devolver o par do ato, mantendo o leitor SQL de produção no par cru. `T:1093–1095` |
+| 30 · C6 | **Certo A.** Entrega 10:05 com o texto cru `08:00`. `T:1096–1097` · `app/chamados/models.py:4507–4515` | Corrigir só a resposta desse recorte temporal, deixando as demais chamadas da composta divergirem. `T:1096–1097` |
+| 30 · API | **Certo A.** O payload serializa R cru e o display já mostra `09:00`. `T:1098–1107` · `app/api/views.py:1161–1165` | Corrigir a serialização com a lista fornecida pelo mock e deixar a seleção real buscar perguntas erradas. `T:1101–1107` |
+| 30 · modal | **Errado.** Faltam `disputa_obj` e `pode_agir_map`. Mesmo com o par correto, o bloco fica oculto e o helper devolve `(None, None)`. `T:160–165,1108–1109` · `app/templates/chamados/partials/modal_fio.html:123,157–158,217–220` | Renderizar a resposta também para quem está fora do portão de autorização. A fixture passaria. `T:160–165` · `app/templates/chamados/partials/modal_fio.html:123` |
+| 30 · raio-x | **Certo A.** A tupla entregue ao juiz contém o par cru. `T:1110–1117` · `app/chamados/services/raiox.py:135–158` | Corrigir a tupla passada ao juiz e deixar a seleção real de `q_vivas` errada, pois o teste a substitui. `T:1110–1117` |
+| 31 | **Errado.** Cai no atributo inventado da lista. O selo vê apenas os campos da D escritos pela emissão exercitada. `T:167–178,1127–1141` | Cadastrar esse escritor e deixar nascimento manual ou campos do chamado fora do selo. `T:1127–1141` |
+| 32 | **Errado.** Mesmo atributo inventado. Também exige `tipo_resposta` da P sob a chave `raiz`, embora a exceção do brief cubra D/chamado e a regra da filha exija R/V/M vazios e zero DP. `T:167–178,1143–1157` · `app/docs/PROMPTS.md:2950` | Cadastrar só `tipo_resposta` e deixar outros campos de identidade fora da lista. `T:1152–1157` |
+| 34 | **Certo A.** M é escrito antes de `SILENCIO`. `T:1159–1172` · `app/chamados/models.py:2184–2207` | Antecipar o ato e continuar gravando M diretamente. A fixture sem chamado-pai também deixa escapar uma cascata quebrada. `T:1160–1172` · `app/chamados/signals.py:20–46` |
+| 35 | **Certo A.** A emissão retorna outra D. A fixture distingue `fechada_em` de PK e cobre o empate. `T:1177–1204` · `app/chamados/services/disputa_emissao.py:539–542,582–605` · `app/docs/CORTES.md:618` | Eleger a mais recente de todo o colaborador, inclusive a de outro chamado. A fixture cria um único chamado. `T:1177–1189` |
+| 37 | **Errado.** O comportamento de reabrir preservando R passa até o atributo inventado da lista. `T:1225–1242` | Listar só `materializada_em` e deixar a alteração de autoria e via fora do selo. `T:1239–1242` |
+| 38 | **Certo A.** O desligamento grava M antes de `SILENCIO`. O recorte usa a pergunta muda prevista. `T:1244–1269` · `app/chamados/models.py:2184–2207` | Inserir o ato primeiro e manter o carimbo direto, ou perder a cascata do pai, que a fixture não cria. `T:1250–1269` |
+| 39 | **Certo A.** V precede a `VALIDACAO` física. `T:799–818` · `app/chamados/services/validacao.py:164–178` | Antecipar a DP e conservar dois escritores diretos de V/M. Uma via M errada também passa pelo recorte `[:6]`. `T:807–818` |
+| 40 | **Certo A.** `recusa_motivo` precede a `RECUSA` física. `T:820–836` · `app/chamados/services/validacao.py:995–1000` | Mover a linha antes do `save` legado e manter a limpeza em outro escritor. `T:826–836` |
+| 41 | **Certo A.** A hora corrigida é escrita antes da `RESPOSTA`. A asserção de `RESULTADO` ainda fica atrás desse RED. `T:838–858` · `app/chamados/services/disputa_emissao.py:1562–1567` | Gravar `RESULTADO` só no caminho da exceção injetada. A recusa normal por `ok=False` poderia perder a trilha. `T:843–857` · `app/chamados/services/acoes_disputa.py:452–465` |
+| 42 | **Errado.** `DP.marcar_estoque` é uma API inventada. Recebe a hora pronta e contorna a operação de migração pedida. O trecho que exige projeção alterada e lavra preservada está depois do erro. `T:464–494` · `app/docs/PROMPTS.md:2974` · `C4:900–931` | Fazer o helper funcionar só quando chamado à mão, enquanto a migração deixa o estoque sem marca ou remarca linhas novas. `T:468–473` |
+| 44 | **Certo A.** A segunda entrega insere outra linha com o mesmo fato. A diferença é a duplicata, não a representação de `FakeDatetime`. `T:499–511` · `app/chamados/models.py:4608–4609` | Deduplicar pela identidade da lista em memória ou regravar o instante no retry. A lista e o relógio são os mesmos. `T:500–511` |
+| 45 · autoria | **Certo A.** O mesmo instante com autor diferente retorna zero. `T:514–516,523–528` · `app/chamados/services/vigia_ato_x_coluna.py:8–25` | Contar autoria só quando os dois lados têm autor, deixando passar `NULL` indevido. `T:514–516` |
+| 45 · lastro | **Certo A.** V sem `VALIDACAO` física retorna zero. `T:517,523–528` · `app/chamados/models.py:4473–4483` | Contar toda ausência física como nova, inclusive a exceção histórica do 03. A fixture não traz essa exceção. `T:517,523–534` |
+| 45 · texto | **Certo A.** Texto diferente com o mesmo instante retorna zero. `T:518–528` · `app/chamados/services/vigia_ato_x_coluna.py:8–25` | Comparar só texto e autoria e esquecer diferenças exclusivas de instante. A soma também aceita jogar tudo na mesma classe. `T:514–534` |
+
+Há uma falha comum nos testes de ordem. `insercoes` procura o literal do ato em qualquer parâmetro SQL e `primeira_escrita` identifica a coluna sem vincular as duas operações ao mesmo PK. Antecipar a DP e manter o escritor direto satisfaz as asserções de ordem. A lista de exceções tem limitação semelhante: o helper verifica os escritores observados naquela execução e aceita campos adicionais na lista. `T:52–90,167–185,944–957,1163–1172` [nao verificado]
+
+O teste antigo que cai com a cura do 20 é `test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa`. Ele exige `recusadas == []`, a `ABSORCAO` posterior por PK e o bloqueio H4 da nova resposta. A inversão é deliberada no brief, mas o teste novo omite o nome da caracterização que ficará vermelha. `app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364–380` · `T:959–995`
+
+### Cobertura e guardas
+
+Existem **45 métodos numerados distintos**, cobrindo **01–46 com 33 excluído**. A cobertura dos números existe. A cobertura da regra fica incompleta nos erros acima e nas mordidas abaixo. Das 11 guardas pedidas, 21 e 23 aparecem como `ERROR`. As nove restantes têm observáveis de negócio, com os limites indicados. `T:213–534,547–857,936–1321` · `M:17–57`
+
+| Guarda sem ocorrência na pista | O que observa e o que ainda escaparia |
+|---|---|
+| 13 | Refresh funciona antes da desativação e depois devolve `401` por inatividade, com autoria preservada. Alterar texto ou motivo da DP mantendo tipo e autor escaparia. `T:608–631` · `app/api/views.py:76–100` |
+| 15 | A entrega entra na espera pela trava e bloqueia o saneamento. Uma porta que sempre recuse após travar também passaria. `T:633–655` |
+| 19 | A resposta humana realmente entra no empate e fica. Uma automática que sempre retorne `False` após travar também passaria. `T:657–672` |
+| 22 | A reabertura realmente entra durante a espera e o teste exige zero validação e zero batida. Retornar sempre `sem_resposta` para esse motivo passaria. `T:685–698` | [nao verificado]
+| 24 | Exige Q intacta, ocorrência auditada e ausência de cobrança. Aceita carimbar E indevidamente se Q e a tarefa preservarem os resultados verificados. A ordem literal `[E,Q]` também excede a regra sobre Q. `T:997–1022` |
+| 27 | Observa trava, SELECT, chamada ao juiz e escrita, com veredito forçado. Reler para cumprir o SELECT e julgar a instância antiga do mesmo PK passaria. O mutante fornecido move a trava para depois de uma releitura da empresa que já exige essa trava, podendo cair por `ColaboradorNaoTravado` antes da asserção. `T:715–743` · `M:40–43` · `app/chamados/reconciliador.py:1268–1279` · `app/chamados/services/trava_do_colaborador.py:87–113` |
+| 36 | C6 muda de vivo para fora da fila com R e DP preservados. Um encerrador que feche o pai indevidamente com outra filha viva passaria nesta fixture de uma filha. `T:1206–1223` |
+| 43 | Compara os PKs de ato e trilha, o estado e os eventos. Uma segunda chamada que regrave os mesmos valores de M/F passa com o relógio congelado. `T:1271–1286` |
+| 46 | Exercita o denominador de `prontidao` com 480 minutos previstos e mudança no realizado. O realizado da segunda ata é escrito pela fixture. Plantar a batida sem atualizar o realizado passaria. `T:1288–1321` · `app/folha/export.py:1104–1116` |
+
+### Conflitos com E4C-F5-INSTANTE
+
+- **01/02/44 e 42, mesma entrada com dois contratos de teste.** A c4 usa `entrada_origem` (`ato` ou `estoque`) e `entrada_em`. Para a entrada normal, o relógio é `Now()` do banco. O estoque usa o `applied` da 0057. Os REDs 01/02/44 passam payload sem marca de estoque e esperam `origem='backfill'` e `instante_de_entrada=T1` pelo relógio Python. A c4 interpreta esse payload como ato normal e acorda a célula. A c4red2 também exige um evento na resposta normal, então silenciar todas as respostas conflita diretamente. `T:96,220–243,499–511` · `app/chamados/models.py@c154a8d4e:4392–4406,4728–4777` · `C4:399–417,479–491`
+- **42, o marco do estoque coincide com a opção B para as linhas existentes.** A c4red2 roda a operação real da 0058, cobre empate, preserva a linha um microssegundo depois e repete a migração. A E4D inventa outro ponto de escrita e não cobre a fronteira. A parte nova da E4D é provar a lavra mesmo quando a projeção muda. Uma implementação que consulte DP diretamente em `marcos_do_lote` também derruba o selo F3 existente, que proíbe essa tabela no SQL do leitor. `C4:900–931` · `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py@c154a8d4e:9–20` · `T:464–494` · `app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:312–326`
+- **02/04/08/44, separar a autorização e a identidade da operação.** Na c4, o estoque comum recusa linha nova 
+
+[truncado em 20000 de 21948 caracteres]
 
 ## 27/11 02:27 · sessao 9d8478fd954a · PAR-PELO-TURNO · verificador · origem=Code
 
@@ -927,249 +1059,4 @@ done
   --only "ponto.tests.test_par_pelo_turno ponto.tests.test_composicao_de_fatias_e_total ponto.tests.test_janela_da_autoridade_e_a_da_folha ponto.tests.test_dupla_contagem_dia20 ponto.tests.test_col129_par_separado_pelo_teto ponto.tests.test_col129_teto_vira_lista ponto.tests.test_contract_no_batida_date ponto.tests.test_contract_folha_le_a_autoridade ponto.tests.test_tripwire_b5j_universo_de_apuracao ponto.tests.test_fechamento_escritor_guardas"
 ```
 
-## 27/11 01:19 · sessao e5b196ca57e5 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-Ajustei os três registros da catraca em `core/tests/test_medida_turno_do_par.py`. **GREEN local: 35 de 35 testes em memória**, usando `unittest.TestCase` no lugar de `django.test.SimpleTestCase`. A suíte do Code e o Opus final estão [nao verificado]. `core/tests/test_medida_turno_do_par.py:28`, `:194`, `:251`, `:425`
-
-As três divergências vieram da obra no merge `3b594ce1f`. No main `59600163c`, os três registros coincidiam com o censo da própria revisão. `core/medida_turno_do_par.py:336`, `:448`
-
-| Falha | Causa | Cura | GREEN local |
-|---|---|---|---|
-| `test_CATRACA_linhas_reais_congeladas_exigem_registro_no_mesmo_commit` | O merge deslocou ocorrências do motor, incluindo `909 → 937` e `2521 → 2601`, e moveu a ocorrência da folha de `medir:544` no main para `he_acima_do_teto_por_dia:344`. `ponto/motor_calculo_v2.py:937`, `:2601`; `folha/porta_export.py:344` | Atualizei as linhas medidas nas duas listas e registrei a obra em um comentário de uma linha. `core/tests/test_medida_turno_do_par.py:251`, `:288`, `:304`, `:348` | Passou. `core/tests/test_medida_turno_do_par.py:565` |
-| `test_CATRACA_numeros_exatos_e_registro_no_mesmo_commit` | A chamada `_p.entrada.date()` passou de `medir` para `he_acima_do_teto_por_dia`, trocando a identidade B1. `folha/porta_export.py:344`, `:587`; `core/medida_turno_do_par.py:217` | Registrei a troca de identidade. Os contadores conferem em **9 pareadores e 81 derivações de dia**. `core/tests/test_medida_turno_do_par.py:108`, `:194` | Passou. `core/tests/test_medida_turno_do_par.py:558` |
-| `test_a_classificar_publicado_sem_entrar_como_criterio_amplo` | Em `medir`, a data do ato ainda é medida como B2. Com a saída da ocorrência B1, `medir` aparece em `B2_menos_B1`. `folha/porta_export.py:391`; `core/medida_turno_do_par.py:223`, `:432` | Registrei `medir` em `CLASSIFICAR['B2_menos_B1']`. `core/tests/test_medida_turno_do_par.py:425` | Passou. `core/tests/test_medida_turno_do_par.py:571` |
-
-**`except` novos: 0.** A comparação AST encontrou o mesmo `except` antes e depois. O diff ficou restrito aos três registros e ao comentário no arquivo de teste. `core/tests/test_medida_turno_do_par.py:194`, `:251`, `:425`, `:668`
-
-### RED e mutantes
-
-A partir de `app/`, a função abaixo restaura em memória os valores da base `03bc04e5b`. O RED reproduz as três falhas. Cada mutante restaura um único registro e derruba somente a asserção correspondente. `core/tests/test_medida_turno_do_par.py:558`, `:565`, `:571`
-
-```bash
-catraca() {
-  GIT_OPTIONAL_LOCKS=0 PYTHONDONTWRITEBYTECODE=1 python3 -B - "$1" <<'PY'
-import ast
-import pathlib
-import subprocess
-import sys
-import types
-import unittest
-
-path = pathlib.Path('core/tests/test_medida_turno_do_par.py')
-suite = types.ModuleType('suite_turno') [nao verificado]
-suite.__file__ = str(path.resolve()) [nao verificado]
-source = path.read_text().replace('from django.test import SimpleTestCase',
-                                  'from unittest import TestCase as SimpleTestCase')
-exec(compile(source, str(path), 'exec'), suite.__dict__) [nao verificado]
-mode = sys.argv[1]
-records = ('LINHAS_REGISTRADAS', 'REGISTRO', 'CLASSIFICAR')
-assert mode in ('green', 'red', *records)
-if mode != 'green':
-    baseline = subprocess.check_output(
-        ['git', 'show', f'03bc04e5b:app/{path}'], text=True)
-    selected = records if mode == 'red' else (mode,)
-    for node in ast.parse(baseline).body:
-        if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name):
-            name = node.targets[0].id
-            if name in selected:
-                setattr(suite, name, ast.literal_eval(node.value)) [nao verificado]
-result = unittest.TextTestRunner(verbosity=1).run(
-    unittest.defaultTestLoader.loadTestsFromModule(suite)) [nao verificado]
-raise SystemExit(not result.wasSuccessful())
-PY
-}
-```
-
-| Comando | Resultado local |
-|---|---|
-| `catraca green` | rc 0, 35 testes passaram. `core/tests/test_medida_turno_do_par.py:503` |
-| `catraca red` | rc 1, três falhas de asserção. `core/tests/test_medida_turno_do_par.py:558`, `:565`, `:571` |
-| `catraca LINHAS_REGISTRADAS` | rc 1, somente a asserção de linhas. `core/tests/test_medida_turno_do_par.py:565` |
-| `catraca REGISTRO` | rc 1, somente a asserção de identidade. `core/tests/test_medida_turno_do_par.py:558` |
-| `catraca CLASSIFICAR` | rc 1, somente a asserção de publicação. `core/tests/test_medida_turno_do_par.py:571` |
-
-### Recorte do Code
-
-Comando do anexo c2j, a partir da raiz da cópia. Execução [nao verificado].
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bin/suite.sh \
-  --dir /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 \
-  --only "ponto.tests.test_ramo2b_c2_base_da_he ponto.tests.test_ramo2b_c2h_saida ponto.tests.test_ramo2b_turno_que_cruza ponto.tests.test_contract_juiz_batida ponto.tests.test_janela_he_saida ponto.tests.test_o146_extra_declarada_da_escala ponto.tests.test_o280_bateria_da_lei core.tests.test_medida_turno_do_par folha.tests.test_porta_do_export"
-```
-
-**LEI-AKITA** `padrao=juiz unico` · `juizes novos=0` · `docs/LEIS.md:60` · `core/tests/test_medida_turno_do_par.py:251`
-
-## 27/11 01:06 · sessao 42b6cdad486f · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-Na base `3b594ce1f`, `do_dia` já devolve o número esperado para parcial com cauda pendente. O caso mede **610 min de base da HE, 630 min trabalhados, 20 min de atraso e zero de saída antecipada, intra indenizada e HE em dia comum**. Com feriado em dobra, são **610 min de HE100**. O cálculo de produção ficou como veio no merge. [Regra escrita](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/docs/LEIS.md:79) · [L-097 emendada](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/docs/LEIS.md:115) · [Teste](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:133)
-
-`rubricas_por_dia` carrega as parciais pagas com período declarado e passa a lista do dia a `do_dia`. A base e a HE são apuradas primeiro. O abatimento é posterior, em `pontualidade_do_dia`, pelo teto emprestado do motor. A parcial cobre 30 dos 50 min de atraso bruto. Os 20 restantes passam pelo teto da L-093, de `660 − 630 = 30 min`. [Chamador](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/alimentacao.py:535) · [Base e dobra](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/regras.py:797) · [Leitor de `parciais`](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/regras.py:879) · [Abatimento](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1270) · [Teto](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1304)
-
-| Item | RED | GREEN local |
-|---|---|---|
-| 1. Catraca | Os dois registros `[530]` divergiam do AST `[558]`. | Os dois registros pedidos conferem. Na catraca integral, **3 de 35 testes falham**. Restam 2 divergências em `pareadores` e 13 em `derivacoes_de_dia`, incluindo a troca de identidade de `medir` para `he_acima_do_teto_por_dia`. A troca também afeta `CLASSIFICAR`. [Registros](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:251) · [Asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:547) · [Exportação](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:344) | [nao verificado]
-| 2. Parcial com cauda | `ignora_parciais` dá **30 min de atraso** onde a regra pede **20**. | Os três cenários passam na base do merge. [Teste](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:133) · [Mutação](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2h_mutantes.py:12) | [nao verificado]
-| 3. Bateria de saída | Com a alimentação de `deed2fe72`, 8 subcasos falham por asserção. No cruzamento, o gozo é **0** em vez de **20 min**. | Oito casos em cada motor, 12x36 e Comercial, mais os dois controles do Partido previstos em `RAMO2-PARTIDO-2611-1812 (a)`. Com os três cenários do item 2, são **21 subcasos verdes em memória**. [Grade](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:32) · [Execução e controles](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:115) |
-| 4. Vizinhos | As três falhas da catraca persistem após o ajuste restrito aos dois registros. [Asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:547) | Os selos do escritor e do contrato da batida passaram em memória, **22 testes**. Suíte Django do Code e Opus final [nao verificado]. [Escritor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:622) · [Contrato](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_contract_juiz_batida.py:159) | [nao verificado]
-
-### Comandos
-
-Medição da catraca a partir de `app/`. Resultado `pareadores [558]` e `derivacoes_de_dia [558]`. [Censo](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/medida_turno_do_par.py:448) · [Chamada medida](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:558)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B - <<'PY'
-from core.medida_turno_do_par import censo
-
-medida = censo('.')
-for grupo in ('pareadores', 'derivacoes_de_dia'):
-    print(grupo, next(i['linhas'] for i in medida[grupo]['itens']
-                      if i['chave'] == 'ponto/motor_calculo_v2.py::turnos_via_autoridade'
-                      and i.get('sitio') == 'porta_parear_turnos'))
-PY
-```
-
-Para a sessão rodar o recorte Django a partir da raiz da cópia. [Rota de suite da cópia](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/bin/suite.sh:26) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bin/suite.sh \
-  --dir /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 \
-  --only "ponto.tests.test_ramo2b_c2_base_da_he ponto.tests.test_ramo2b_c2h_saida ponto.tests.test_ramo2b_turno_que_cruza ponto.tests.test_contract_juiz_batida ponto.tests.test_janela_he_saida ponto.tests.test_o146_extra_declarada_da_escala ponto.tests.test_o280_bateria_da_lei core.tests.test_medida_turno_do_par folha.tests.test_porta_do_export"
-```
-
-Para reproduzir os mutantes a partir de `app/` no ambiente Django da sessão, defina a função abaixo. As saídas da tabela foram medidas pelo mesmo executor em `unittest`, com dublês de infraestrutura em memória e zero erros de execução. [Executor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2h_mutantes.py:82)
-
-```bash
-ramo2() { PYTHONDONTWRITEBYTECODE=1 python3 -B -m ponto.tests.ramo2b_c2h_mutantes "$1"; }
-```
-
-| Comando | Saída local |
-|---|---|
-| `ramo2 green` | rc 0, 3 testes, 21 subcasos | [nao verificado]
-| `ramo2 ignora_parciais` | rc 1, 2 falhas, atraso 30 em vez de 20 |
-| `ramo2 teto_le_base_da_he` | rc 1, 1 falha, atraso do controle 50 em vez de 30 |
-| `ramo2 abono_compoe_base_da_he` | rc 1, 1 falha, HE100 de 640 em vez de 610 |
-| `ramo2 dobra_inclui_cauda` | rc 1, 1 falha, HE100 de 630 em vez de 610 |
-| `ramo2 red_deed2fe72` | rc 1, 8 falhas, gozo 0 em vez de 20 no cruzamento |
-| `ramo2 sem_ponta` | rc 1, 8 falhas, gozo 0 em vez de 20 no cruzamento |
-| `ramo2 copy_setattr` | rc 1, 8 falhas, base 1 em vez de 700 no cruzamento |
-| `ramo2 teto_max` | rc 1, 16 falhas, trabalhado 800 em vez de 760 no cruzamento |
-| `ramo2 inclui_cauda` | rc 1, 5 falhas, base 760 em vez de 680 na pausa antes do marco |
-| `ramo2 perde_fim_no_marco` | rc 1, 2 falhas, gozo 0 em vez de 20 na pausa que termina no marco |
-
-### Hand-back
-
-A contagem AST deu **0 `except` novos** nos três arquivos alterados. O diff do motor contra `138b516f2` tem **97 inserções em três blocos** e é idêntico ao diff do merge `3b594ce1f` contra a mesma referência. [Catraca](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_medida_turno_do_par.py:251) · [Bateria](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:123) · [Mutantes](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2h_mutantes.py:12) · [Motor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:481)
-
-```bash
-GIT_OPTIONAL_LOCKS=0 git diff 138b516f2 -- ponto/motor_calculo_v2.py
-GIT_OPTIONAL_LOCKS=0 git diff --exit-code 3b594ce1f -- ponto/motor_calculo_v2.py
-```
-
-Corpo proposto para o commit. [nao verificado]
-
-```text
-RAMO2-B c2j: cobre parcial com cauda e registra linha da catraca
-
-OBRA: RAMO2-B-EM-TURNO-QUE-CRUZA
-BASE: 3b594ce1f4bd2bfa4a2049c149ecb254643ff526
-
-Registra porta_parear_turnos em 558 nos dois contadores.
-Fixa pela regra 610 min de base, 630 trabalhados e 20 de atraso
-com parcial. A grade cobre 12x36 e Comercial, com os dois controles
-do Partido pelo aval RAMO2-PARTIDO-2611-1812 (a).
-
-LEI-AKITA:
-origem=docs/LEIS.md:79-80,111,115; docs/PROMPTS.md:3031,3071,3087
-escrita=ponto/motor_calculo_v2.py:1926-1963
-testemunha=ponto/calculador/nucleo.py:146-153, segmentos e batidas
-RED=ponto/tests/test_ramo2b_c2h_saida.py:133, mutante ignora_parciais
-RED da grade=ponto/tests/test_ramo2b_c2h_saida.py:115, alimentacao de deed2fe72
-quem-mais-le=ponto/calculador/alimentacao.py:106-117,168-178,469-475,535-566
-  (rubricas_por_dia -> ponto/calculador/regras.py:614-626,775-807,879-888);
-  ponto/services/fechamento.py:1291-1300;
-  ponto/management/commands/diff_calculador.py:414-424;
-  ponto/calculador/periodo.py:745-759; folha/porta_export.py:339-358
-padrao=juiz unico
-juizes novos=0
-
-fora do marco: PAUSA-NA-BORDA-DO-PAR, PAUSA-INTERNA-NO-PARTIDO
-
-Catraca integral: tres falhas medidas em memoria fora dos dois
-registros ajustados (linhas, identidade e CLASSIFICAR).
-```
-
-## 27/11 00:12 · sessao b7c6fd3c7578 · V6-FURO-OUTPUT · leitura · origem=Code
-
-# V6-FURO-OUTPUT
-
-HEAD conferido em `59600163ccc9cffb8f3ae148beede7cd7866ae86`. A leitura Bash do `.output` registrado no RELATO hoje retorna zero alvos. Confirmei em memória que três chamadas `cat` desse mesmo caminho deixam o contador vazio. [.git/refs/heads/main:1](/home/ronald/saas-hasner/.git/refs/heads/main:1) · [app/docs/RELATO.md:3041](/home/ronald/saas-hasner/app/docs/RELATO.md:3041) · [bin/disjuntor.py:2142](/home/ronald/saas-hasner/bin/disjuntor.py:2142)
-
-## 1. Mapa do reconhecimento
-
-| Entrada | O que conta hoje |
-|---|---|
-| `tail`, `cat`, `grep`, `ls` | Argumentos terminados em `.rc` ou `.log`, em qualquer diretório. Para `ls`, também conta um argumento com `logs` como componente do caminho. A análise usa o basename do comando, descarta opções e pula os redirecionamentos que reconhece. [bin/disjuntor.py:1985](/home/ronald/saas-hasner/bin/disjuntor.py:1985) · [bin/disjuntor.py:2131](/home/ronald/saas-hasner/bin/disjuntor.py:2131) · [bin/disjuntor.py:2142](/home/ronald/saas-hasner/bin/disjuntor.py:2142) |
-| `head`, `wc` | Ficam fora da lista de comandos de consulta. [bin/disjuntor.py:1985](/home/ronald/saas-hasner/bin/disjuntor.py:1985) · [bin/disjuntor.py:2142](/home/ronald/saas-hasner/bin/disjuntor.py:2142) |
-| `vercod`, `vercode`, `vercodex`, `python* …/vercodex.py` | Geram a chave textual `vercodex ` seguida dos argumentos, excluído `vercodex.py`. [bin/disjuntor.py:1986](/home/ronald/saas-hasner/bin/disjuntor.py:1986) · [bin/disjuntor.py:2139](/home/ronald/saas-hasner/bin/disjuntor.py:2139) |
-| `ssh pista estado …` | Gera a chave textual `ssh pista estado ` seguida dos argumentos após `estado`. `ssh pista espera` e os laços de espera reconhecidos retornam lista vazia. [bin/disjuntor.py:2120](/home/ronald/saas-hasner/bin/disjuntor.py:2120) · [bin/disjuntor.py:2132](/home/ronald/saas-hasner/bin/disjuntor.py:2132) |
-
-O **PreToolUse recebe `Read`** pelo `matcher` vazio, e a guarda geral lê `tool_input.file_path`. O **polling** roda só para `Bash` sem `agent_id`, usando `tool_input.command`. Uma mudança apenas em `_alvos_de_consulta` alcança esse ramo Bash. [.claude/settings.json:62](/home/ronald/saas-hasner/.claude/settings.json:62) · [bin/disjuntor.py:222](/home/ronald/saas-hasner/bin/disjuntor.py:222) · [bin/disjuntor.py:2217](/home/ronald/saas-hasner/bin/disjuntor.py:2217)
-
-## 2. Chamadores, memória e identidade
-
-- **Chamada única em produção:** `main_pretool` → `pretool` → `_pretool` → `espera_nega(cmd) or polling_nega(...)` → `_alvos_de_consulta(cmd, cwd)`. Uma negativa de `espera_nega` encerra a avaliação antes do polling. [bin/disjuntor.py:2303](/home/ronald/saas-hasner/bin/disjuntor.py:2303) · [bin/disjuntor.py:2207](/home/ronald/saas-hasner/bin/disjuntor.py:2207) · [bin/disjuntor.py:2225](/home/ronald/saas-hasner/bin/disjuntor.py:2225) · [bin/disjuntor.py:2177](/home/ronald/saas-hasner/bin/disjuntor.py:2177)
-- **Memória:** `logs/sessao/disjuntor_estado.json`, sob `HOOK_STOP_RAIZ` ou a raiz derivada do script. `_com_estado` usa `flock` e grava por `os.replace`. `poll` guarda listas de timestamps por `sessão + "\t" + alvo`. A sessão vem de `session_id`, depois `transcript_path`, depois `"-"`. Com duas consultas aceitas há **menos de 600 s**, a terceira é recusada. A tentativa recusada não acrescenta timestamp. O teto da espera é **300 s**. [bin/disjuntor.py:122](/home/ronald/saas-hasner/bin/disjuntor.py:122) · [bin/disjuntor.py:340](/home/ronald/saas-hasner/bin/disjuntor.py:340) · [bin/disjuntor.py:374](/home/ronald/saas-hasner/bin/disjuntor.py:374) · [bin/disjuntor.py:1953](/home/ronald/saas-hasner/bin/disjuntor.py:1953) · [bin/disjuntor.py:1962](/home/ronald/saas-hasner/bin/disjuntor.py:1962) · [bin/disjuntor.py:2183](/home/ronald/saas-hasner/bin/disjuntor.py:2183)
-- **Caminho:** usa `normpath` sobre o caminho absoluto ou sobre `join(cwd, relativo)`. Sem `cwd`, o relativo continua relativo. A função usa o `cwd` do payload, sem aplicar `cd` do comando nem resolver symlinks. Cada alvo normalizado conta uma vez por chamada. [bin/disjuntor.py:2116](/home/ronald/saas-hasner/bin/disjuntor.py:2116) · [bin/disjuntor.py:2151](/home/ronald/saas-hasner/bin/disjuntor.py:2151) · [bin/disjuntor.py:2180](/home/ronald/saas-hasner/bin/disjuntor.py:2180)
-
-## 3. Forma do `.output`
-
-O recorte para o aval é casar **o caminho normalizado inteiro** com `/tmp/claude-[0-9]+/[^/]+/[^/]+/tasks/[^/]+\.output` usando `fullmatch`. Isso exige UID decimal, um componente de projeto, um de sessão e o arquivo diretamente em `tasks/`. A árvore documenta um caminho real nessa forma e usa `/tmp/claude-%d` para o diretório do Code. `esteira.out`, `wrapper.out` e um `*.output` comum do repo ficam fora desse recorte. [bin/disjuntor.py:2153](/home/ronald/saas-hasner/bin/disjuntor.py:2153) · [app/docs/RELATO.md:3041](/home/ronald/saas-hasner/app/docs/RELATO.md:3041) · [bin/retencao_disco.py:638](/home/ronald/saas-hasner/bin/retencao_disco.py:638) · [fatias_agendadas/o135-teto20/esteira.sh:26](/home/ronald/saas-hasner/fatias_agendadas/o135-teto20/esteira.sh:26) · [bin/tests/prova_codex_pergunta_real.sh:85](/home/ronald/saas-hasner/bin/tests/prova_codex_pergunta_real.sh:85)
-
-## 4. Onde nasce o RED
-
-`bin/tests/test_disjuntor.sh` tem o helper `_pre`, mas nenhum caso de `polling_nega`. O vizinho do RED é **`polling()` em `bin/tests/test_agente_no_modelo.sh:213`**. Ele cobre primeira e segunda aceitas, terceira negada, relativo e absoluto como o mesmo alvo, bordas de 599 e 600 s, alvos e sessões distintos, `ssh pista estado`, `vercodex`, `ls logs/`, subagente e espera única. `divergencia()` também verifica o limiar e a janela, e o mutante `polling-desligado` exercita a ligação ao hook. [bin/tests/test_disjuntor.sh:103](/home/ronald/saas-hasner/bin/tests/test_disjuntor.sh:103) · [bin/tests/test_disjuntor.sh:1621](/home/ronald/saas-hasner/bin/tests/test_disjuntor.sh:1621) · [bin/tests/test_agente_no_modelo.sh:213](/home/ronald/saas-hasner/bin/tests/test_agente_no_modelo.sh:213) · [bin/tests/test_agente_no_modelo.sh:297](/home/ronald/saas-hasner/bin/tests/test_agente_no_modelo.sh:297) · [bin/tests/test_agente_no_modelo.sh:345](/home/ronald/saas-hasner/bin/tests/test_agente_no_modelo.sh:345)
-
-## 5. Espera única
-
-**A inclusão desse alvo no reconhecedor não recusa a espera única.** `ESPERA_UNICA` chama `rc_sem_colher.py`, que lê o RELATO e o conteúdo dos `.rc` selecionados, e usa `find` sobre `*.rc`. Seu laço já retorna zero alvos no extrator. Conferi também `logs/espera_unica.sh` em disco, fora do HEAD e ignorado pelo Git. Ele chama o mesmo juiz e usa `head` apenas nos arquivos `*.rc` devolvidos pelo `find`. Nenhuma das duas formas abre arquivo de tarefa `.output`. [bin/disjuntor.py:1967](/home/ronald/saas-hasner/bin/disjuntor.py:1967) · [bin/disjuntor.py:2120](/home/ronald/saas-hasner/bin/disjuntor.py:2120) · [bin/rc_sem_colher.py:71](/home/ronald/saas-hasner/bin/rc_sem_colher.py:71) · [bin/rc_sem_colher.py:101](/home/ronald/saas-hasner/bin/rc_sem_colher.py:101) · [.gitignore:53](/home/ronald/saas-hasner/.gitignore:53) · [logs/espera_unica.sh:5](/home/ronald/saas-hasner/logs/espera_unica.sh:5) · [logs/espera_unica.sh:9](/home/ronald/saas-hasner/logs/espera_unica.sh:9)
-
-## 27/11 00:08 · sessao 99ce13081ea2 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-**APROVADO na revisão de código da volta 10.** O achado 1 foi curado na origem. O descarte do achado 4 procede para a admissão do construtor Opus prevista em RAIAS item 3. `app/core/tests/test_model_sem_migration_pendente.py:65–70` · `app/tenants/test_model_sem_migration_pendente.py:25–39` · `bin/deploy.sh:194–196` · `CLAUDE.md:325–330`
-
-### 1. Mordida dos REDs
-
-O RED de campo, usado para `folha` e `tenants`, e o RED de model novo em `api` agora invocam `pergunta_sem_migration_pendente`, a mesma função do deploy. Ambos exigem `SystemExit(1)` e a operação específica na saída. `app/core/tests/test_model_sem_migration_pendente.py:56–80` · `app/tenants/test_model_sem_migration_pendente.py:25–42` · `bin/deploy.sh:194–196`
-
-| Mutante na pergunta | REDs de campo (`folha` e `tenants`) | RED de `api` |
-|---|---|---|
-| Retirar só `api` das labels enviadas ao Django | Passam. Cada um cobra uma alteração no próprio app. | Reprova. O Django deixa de receber a label necessária para detectar a migration inicial de `CercaMordeApi`. `app/core/tests/test_model_sem_migration_pendente.py:24–31,40–48,79–80` · `app/tenants/test_model_sem_migration_pendente.py:25–42` |
-| Retirar `--check`, mantendo `--dry-run` | Reprovam por ausência de `SystemExit`. | Reprova pela mesma asserção. `app/core/tests/test_model_sem_migration_pendente.py:48,65–70` · `app/tenants/test_model_sem_migration_pendente.py:33–39` |
-| Engolir o `SystemExit` do Django | Reprovam por ausência de `SystemExit`. | Reprova pela mesma asserção. `app/core/tests/test_model_sem_migration_pendente.py:48,65–70` · `app/tenants/test_model_sem_migration_pendente.py:33–39` |
-
-A execução em memória com dublê do Django deu esses resultados. Execução com Django real nesta cópia [nao verificado].
-
-### 2. Achado 4 da volta 9
-
-**Descarte procedente para a admissão.** A redação da c10 exige `wt-*` e que `ARQUIVOS:` toque pelo menos um caminho de `migrations`, `core/juizes.py`, `crons.py` ou `bin/`. A lista vigente já exclui motor e `models.py`. O `any(...)` implementa essa condição, e o selo espera admissão de `views.py` junto com um caminho da lista. `CLAUDE.md:325–330` · `bin/disjuntor.py:1961,2102–2113` · `bin/tests/test_agente_no_modelo.sh:127–143`
-
-O escopo de escrita continua regido por CODEX item 2 e L-126. Motor e `models.py` sem migration cabem ao Codex construtor, com Opus na verificação. Escrita efetiva pelo Opus fora desse escopo [nao verificado]. `CLAUDE.md:402–406` · `app/docs/LEIS.md:147` · `aval.txt:1`
-
-### 3. Quem escreve e quem lê
-
-| Sítio | Escritor e leitores |
-|---|---|
-| **Pergunta** | `labels_locais()` produz a lista a partir do registro Django. A pergunta a entrega a `call_command`, que produz o resultado do check. Leem a pergunta `checa_sem_migration_pendente`, os REDs de campo e de `api`, e o deploy nas chamadas de decisão e diagnóstico. O Bash grava `DRIFT` pelo status e o lê na guarda. `app/core/tests/test_model_sem_migration_pendente.py:24–53,65–66` · `app/tenants/test_model_sem_migration_pendente.py:33–34` · `bin/deploy.sh:194–206` |
-| **RED de campo** | `morde_campo_sem_migration` altera e restaura `max_length` em memória. O Django lê o model alterado pela pergunta comum. O teste lê o código de saída e a operação `Alter field`. Os casos são `RubricaDominio.evento` e `Cliente.nome`. `app/core/tests/test_model_sem_migration_pendente.py:56–80` · `app/tenants/test_model_sem_migration_pendente.py:41–42` |
-| **RED de `api`** | O teste registra `CercaMordeApi` e o remove em `finally`, limpando o cache. O Django lê o model registrado pela pergunta comum. O teste lê o código de saída e `Create model CercaMordeApi`. `app/tenants/test_model_sem_migration_pendente.py:25–39` |
-
-Na cópia, a única chamada Python a `call_command('makemigrations', …, '--check')` está dentro da própria pergunta. O ramo `*makemigrations*--check*` é um padrão do Docker falso. `app/core/tests/test_model_sem_migration_pendente.py:48` · `bin/tests/test_deploy_portoes_antes_do_migrate.sh:85–103`
-
-### 4. Classes do delta
-
-**Selo sem mordida:** curado para os três mutantes pedidos pelo conjunto dos REDs Python. O selo Bash simula o status pelo texto do comando. **Derivação paralela:** as duas invocações avulsas foram substituídas pela pergunta comum. **`except` novo e campo com dois significados:** o delta troca as chamadas e o import, preservando os `finally` e o significado dos valores testados. `delta.patch:1–34` · `app/core/tests/test_model_sem_migration_pendente.py:34–70` · `app/tenants/test_model_sem_migration_pendente.py:25–42` · `bin/tests/test_deploy_portoes_antes_do_migrate.sh:90–97`
-
-Selos de host no hash, Opus final e prova das 03:30 são evidências da sessão [nao verificado]. `aval.txt:2`
-
-_8541 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8545 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
