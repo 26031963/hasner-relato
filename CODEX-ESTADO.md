@@ -1,7 +1,50 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 01:19** · publicado em **27/11/2026 01:20** (UTC-3)
+> Ultima resposta processada: **27/11/2026 01:24** · publicado em **27/11/2026 01:27** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 01:24 · sessao e1354a6c81d9 · PAR-PELO-TURNO · construtor · origem=Code
+
+## Item 1 — Dia por PK e carga
+
+- **RED na base `794ab3332`.** Nos ensaios em memória, `Ran 5 tests`, `FAILED (failures=5)`, `rc 1`. Os PKs 20 e 21 recebiam dia **17/10** em `[17,21]` e **20/10** em `[20,20]`. A folha, o espelho e a fatia entregavam só `[20]` para o par de borda, que exigia `[20, 21]`. `app/ponto/tests/test_par_pelo_turno.py:195,225,636`
+- **Cura na origem.** `_marca_intra_duracao` e `parear_turnos` aplicam as 26 h também à absorção de marcas. `_turnos_do_colab_puro` julga a véspera que uma entrada pode ter herdado. Folha, fatia e espelho passam a carregar pelo alcance de `janela_com_pad`. `app/ponto/turnos.py:390,1381,1844,1989,2989` · `app/ponto/services/fechamento.py:262,638,811` · `app/ponto/services/espelho.py:1032`
+- **GREEN local.** O par dos PKs 21 e 22 fica em **20/10** nas três janelas do selo. O PK 20 fica no dia julgado para a órfã, **20/10** ou **19/10** conforme o DNA da véspera, com a mesma resposta nas janelas que contêm a marca. O `Motor12x36` recebeu `[20, 21]` e fechou `20/10 23:30 → 22/10 01:30`, **26 h**, no dia **20/10**. `Ran 57 tests`, `OK`, em memória. Reposicionei as marcas de dois testes de fuso nas novas bordas da janela. `app/ponto/tests/test_par_pelo_turno.py:195,225,253` · `app/ponto/tests/test_composicao_de_fatias_e_total.py:306,316`
+- **Mutantes.** Os cinco mutantes unitários do item deram `rc 1` por asserção. Nos dois mutantes de carga, a sonda das funções voltou de `[20, 21]` para `[20]` em cada leitor. A integração Django está **[nao verificado]**. A chamada local parou no import com `ModuleNotFoundError: No module named 'django.test'`. **`except` novos: 0**, por comparação AST dos cinco arquivos alterados. `app/ponto/tests/test_par_pelo_turno.py:7,636,808,868,920`
+
+## Item 5 — Laudo `col155/08-11`
+
+Cabe **pela regra da série HJ-026**. O ensaio sintético de `17:29 → 06:31` fecha no dia **08/11**, com C9 de **782 min** contra teto de **732 min**. O selo passou na base e na cópia. O mutante `laudo_hj026_sem_c9` deu `rc 1`, com `[]` onde o selo exigia a C9. Pontas e PKs reais, papéis intermediários, matriz dos 29 casos e sombra por rubrica **[nao verificado]**. `app/docs/BACKLOG.md:745,2027` · `app/ponto/tests/test_par_pelo_turno.py:80,825`
+
+**LEI-AKITA — padrao=Single Source of Truth.** O pareador julga turno e dia, e `janela_com_pad` fornece o alcance das cargas. `app/core/juizes.py:216` · `app/ponto/turnos.py:300,1844,3055`
+
+| Campo ou valor | Quem escreve ou fornece | Quem lê |
+|---|---|---|
+| `_intra_dur`, `Turno.batidas`, `Turno.data_turno`, dia por PK | A pré-passagem carimba, `parear_turnos` compõe, `_mk` publica e `_dia_das_batidas_puro` projeta. `app/ponto/turnos.py:300,419,1381,3055` | Pós-fecho, consulta individual e espelho. `app/ponto/turnos.py:1109,3036` · `app/ponto/services/espelho.py:465` |
+| Limites e lista de batidas apuráveis | `janela_com_pad` fornece as datas e `batidas_apuraveis_na_janela` consulta pelo universo de apuração. `app/ponto/turnos.py:1844,2959,2989` | Casca, lote, folha, fatia e espelho. `app/ponto/turnos.py:1882,3094` · `app/ponto/services/fechamento.py:262,638,811` · `app/ponto/services/espelho.py:1032` |
+| Células e feriados da borda | Cargas de folha e espelho usam o alcance do pareador. `app/ponto/services/fechamento.py:609,619` · `app/ponto/services/espelho.py:1036,1056` | Motor da folha e do espelho. `app/ponto/services/fechamento.py:744,752` · `app/ponto/services/espelho.py:1121,1139` |
+
+### Comandos para o Code
+
+A partir de `app/`. O modo `base_c1v5a` monta as fontes da base em memória. A suite com `--dir` usa a pista remota, cuja execução fica **[nao verificado]**. `app/ponto/tests/test_par_pelo_turno.py:946,980` · `bin/suite.sh:319,326`
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
+
+python -m ponto.tests.test_par_pelo_turno base_c1v5a
+
+for mutante in \
+  pausa_inferida_fora_do_envelope miolo_carimbado_fora_do_envelope \
+  contexto_sem_vespera_da_entrada carga_so_uma_virada \
+  fatia_so_uma_virada folha_so_uma_virada espelho_so_uma_virada \
+  laudo_hj026_sem_c9
+do
+  python -m ponto.tests.test_par_pelo_turno "$mutante"
+done
+
+../bin/suite.sh --dir /home/ronald/wt-codex-par-pelo-turno-010806 \
+  --only "ponto.tests.test_par_pelo_turno ponto.tests.test_composicao_de_fatias_e_total ponto.tests.test_janela_da_autoridade_e_a_da_folha ponto.tests.test_dupla_contagem_dia20 ponto.tests.test_col129_par_separado_pelo_teto ponto.tests.test_col129_teto_vira_lista ponto.tests.test_contract_no_batida_date ponto.tests.test_contract_folha_le_a_autoridade ponto.tests.test_tripwire_b5j_universo_de_apuracao ponto.tests.test_fechamento_escritor_guardas"
+```
 
 ## 27/11 01:19 · sessao e5b196ca57e5 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -931,55 +974,4 @@ Os 27 mutantes puros caíram. `guarda_09` e `batida_no_teto_da_pausa` têm contr
 
 **Procede para a regra de admissão v6.** `ARQUIVOS` precisa tocar pelo menos um caminho da lista, o juiz usa `any()` e o selo exige a admissão de um misto. Em memória, `agente_nega()` recusou `models.py` e motor isolados e aceitou os pares `models.py + migration` e `motor + bin/`, com o modelo da sessão simulado. A aceitação julga o nascimento do Agent. A distribuição da escrita por arquivo continua expressa em **CODEX 2**. Escrita efetiva de motor/models por Opus **[nao verificado]**. [CLAUDE.md:325] [CLAUDE.md:402] [bin/disjuntor.py:2102] [bin/tests/test_agente_no_modelo.sh:134]
 
-## 26/11 22:34 · sessao 5b1862239457 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-**REPROVADO** — (1) o selo deixa `tenants.Cliente` fora da checagem da régua, (2) o caso que morde aceita qualquer `SystemExit`, (3) sobraram cinco referências abreviadas a `:646` e (5) o brief misto ainda admite Opus para arquivos liberados ao Codex. [app/config/settings/base.py:8](/home/ronald/codex_ws/db669fd82371120a07b0732debecd838d0be1ea5/app/config/settings/base.py:8) [app/core/tests/test_model_sem_migration_pendente.py:24](/home/ronald/codex_ws/db669fd82371120a07b0732debecd838d0be1ea5/app/core/tests/test_model_sem_migration_pendente.py:24) [bin/disjuntor.py:2025](/home/ronald/codex_ws/db669fd82371120a07b0732debecd838d0be1ea5/bin/disjuntor.py:2025) [bin/tests/test_agente_no_modelo.sh:140](/home/ronald/codex_ws/db669fd82371120a07b0732debecd838d0be1ea5/bin/tests/test_agente_no_modelo.sh:140) [bin/disjuntor.py:2109](/home/ronald/codex_ws/db669fd82371120a07b0732debecd838d0be1ea5/bin/disjuntor.py:2109)
-
-### 1. Alcance de `SEM migration`
-
-O wrapper julga os caminhos tocados. A cura acrescenta uma checagem posterior ao rodar o teste de `core` com o registro de apps do settings ativo. A régua usa `config.settings.ci`. [bin/codex_pergunta.sh:223] [bin/codex_pergunta.sh:804] [app/core/tests/test_model_sem_migration_pendente.py:20] [bin/regua.sh:23] [bin/regua.sh:165] [nao verificado]
-
-| Caso | O que a cura alcança |
-|---|---|
-| **App fora de `INSTALLED_APPS` em CI** | **Contraexemplo concreto.** Alterar `tenants.Cliente.nome.max_length` de `120` para `121` diverge do `CharField(max_length=120)` da migration inicial. `saas` instala `tenants` entre os apps compartilhados. `ci` herda a lista de `base`, que omite `tenants`, e o teste usa o settings ativo. O pre-push roda `tenants` separadamente com `teste_motor`, selecionando só os testes de `tenants`, enquanto o selo está em `core`. [app/tenants/models.py:14] [app/tenants/migrations/0001_initial.py:16] [app/config/settings/saas.py:22] [app/config/settings/saas.py:53] [app/config/settings/ci.py:1] [app/config/settings/base.py:8] [bin/pre-push.sh:184] [bin/pre-push.sh:198] [app/core/tests/test_model_sem_migration_pendente.py:18] | [nao verificado]
-| **Tenant × shared** | `folha`, `ponto` e `escala` estão instalados tanto no CI quanto no SaaS, onde são apps de tenant. `auth` e `contenttypes` aparecem nas duas listas do SaaS e também no CI. A lacuna comprovada é `tenants`, exclusivo do lado compartilhado no SaaS. O CI usa PostgreSQL plano e o SaaS usa `TenantSyncRouter`. O teste compara estado de migrations e deixa sem prova a aplicação em `public` e em cada schema de cliente. [app/config/settings/base.py:8] [app/config/settings/ci.py:6] [app/config/settings/saas.py:22] [app/config/settings/saas.py:34] [app/config/settings/saas.py:83] [app/core/tests/test_model_sem_migration_pendente.py:22] | [nao verificado]
-| **`managed=False`** | O caso relevante é alterar um campo de um modelo que já era unmanaged e continua assim. Uma discrepância com a tabela externa pode ficar invisível para essa checagem, que só chama o autodetector e não inspeciona a tabela. Criação do modelo e troca de `managed` são casos distintos de estado de migration. Exemplo existente na cópia e operações exatas emitidas pelo Django fixado **[nao verificado]**. [app/core/tests/test_model_sem_migration_pendente.py:20] [app/requirements.txt:13] |
-| **`Meta.indexes` e `Meta.constraints`** | Em modelos gerenciados e instalados, são mudanças de estado cobertas pelo autodetector. A cópia tem o índice `batida_timestamp_idx` no modelo e em `AddIndex`. Para a constraint de vigência, a migration declara que retirar a constraint do `Meta` geraria `RemoveConstraint`, e separa o estado do SQL físico com `SeparateDatabaseAndState`. [app/ponto/models.py:102] [app/ponto/migrations/0029_batida_batida_timestamp_idx.py:12] [app/escala/models.py:1048] [app/escala/migrations/0041_ec_vigencia_not_valid.py:7] [app/escala/migrations/0041_ec_vigencia_not_valid.py:31] |
-| **`Meta.ordering` e `Meta.db_table`** | `ordering` entra no estado por `AlterModelOptions`, inclusive quando a mudança só altera a ordenação padrão. Em modelo gerenciado e instalado, a troca de `db_table` é o caso de `AlterModelTable`. O `Meta` de `RubricaDominio` é um ponto concreto para testar as duas mudanças. A execução desse mutante de `db_table` **[nao verificado]**. [app/folha/models.py:64] [app/folha/migrations/0001_initial.py:26] [app/escala/migrations/0002_alter_tipoescala_options_and_more.py:12] [app/core/tests/test_model_sem_migration_pendente.py:22] |
-
-O deploy verifica migrations existentes ainda por aplicar com `migrate_schemas --tenant --check`. O certificado da pista exige os rótulos da régua e `rc 0`, sem validar qual settings foi usado. Esses dois controles deixam aberto o caso de `tenants.Cliente`. [bin/deploy.sh:171] [bin/deploy.sh:182] [bin/pista_certifica.sh:2] [bin/pista_certifica.sh:61] [bin/regua.sh:23] [nao verificado]
-
-### 2. Mordida, restauração e infraestrutura
-
-- **A mutação é real.** O teste pega o `Field` do modelo registrado, altera `max_length` de `50` para `57` em memória e chama o comando com esse estado ativo. A migration histórica conserva `50`. O comentário relata um `AlterField evento` obtido com um mutante em outra cópia do main. A execução Django dos dois testes deste c2 **[nao verificado]**. [app/folha/models.py:46] [app/folha/migrations/0009_evento_he100_rubrica_200.py:23] [app/core/tests/test_model_sem_migration_pendente.py:10] [app/core/tests/test_model_sem_migration_pendente.py:24] [nao verificado]
-- **O teste isolado pode passar pelo motivo errado.** Ele aceita qualquer `SystemExit`, sem conferir código, modelo ou operação. Em memória, com `call_command` simulado, `SystemExit(42)` passou e o campo voltou a `50`. O teste de controle, quando executado no mesmo estado limpo, acusa uma divergência preexistente que também afete as duas chamadas. [app/core/tests/test_model_sem_migration_pendente.py:20] [nao verificado]
-- **O `finally` restaura nas saídas que desenrolam o bloco `try`.** Isso inclui retorno normal do comando, `SystemExit`, erro inesperado e falha da asserção. A atribuição fica imediatamente antes do `try`, portanto a garantia começa depois dela. Encerramento abrupto do processo fica fora dessa garantia. [app/core/tests/test_model_sem_migration_pendente.py:25]
-- **A execução normal depende do PostgreSQL de teste e da rede interna até ele.** A classe é `TestCase` e a régua sobe o runner numa rede Docker com PostgreSQL em `juliani_db_test` por padrão. Banco indisponível pode derrubar a suíte antes da comparação. O relato de comando avulso sem rede não demonstra independência da suíte. A chamada interna também omite `--noinput`; o comportamento diante de prompts e de falhas na consulta ao histórico pelo Django fixado **[nao verificado]**. [app/core/tests/test_model_sem_migration_pendente.py:10] [app/core/tests/test_model_sem_migration_pendente.py:15] [app/core/tests/test_model_sem_migration_pendente.py:22] [app/config/settings/ci.py:6] [bin/regua.sh:165] [nao verificado]
-
-### 3. Referências a `64x`
-
-Os sete sítios com referência completa agora apontam para o `echo` correto, em `:644`. Sobraram cinco referências abreviadas ao mesmo trecho: a docstring e o comentário em `bin/disjuntor.py:2025` e `:2038`, e o comentário e as duas mensagens de falha em `bin/tests/test_agente_no_modelo.sh:140`, `:141` e `:143`. A linha `646` hoje é `else`. [CLAUDE.md:403] [bin/disjuntor.py:1959] [bin/disjuntor.py:2025] [bin/disjuntor.py:2038] [bin/disjuntor.py:2111] [bin/tests/test_agente_no_modelo.sh:13] [bin/tests/test_agente_no_modelo.sh:140] [bin/tests/test_agente_no_modelo.sh:141] [bin/tests/test_agente_no_modelo.sh:143] [bin/tests/test_agente_no_modelo.sh:287] [bin/tests/test_agente_no_modelo.sh:355] [bin/tests/test_censo_antes_da_vaga.sh:203] [bin/codex_pergunta.sh:644] [bin/codex_pergunta.sh:646]
-
-Nenhum desses leitores usa o número como posição no wrapper. O disjuntor procura `PROIBIDOS = [` e extrai as tags. O selo do wrapper procura `#G:`. O selo de agentes compara o **literal** `codex_pergunta.sh:644` no `CLAUDE.md`, e seu mutante substitui texto literal numa cópia. Mover o `echo` duas linhas em memória preservou as quatro regex e as decisões do disjuntor que exercitei. [bin/disjuntor.py:2023] [bin/tests/test_codex_pergunta.sh:703] [bin/tests/test_agente_no_modelo.sh:257] [bin/tests/test_agente_no_modelo.sh:286] [bin/tests/test_agente_no_modelo.sh:317] [bin/tests/test_agente_no_modelo.sh:355]
-
-### 4. Quem escreve e quem lê
-
-| Campo ou valor | Escritor → leitor |
-|---|---|
-| `folha.RubricaDominio.evento.max_length` | O model declara `50`. A migration inicial e a `0009` declaram `50` no estado histórico. O teste lê o atributo pelo registro, guarda `antes`, escreve `antes + 7` e restaura `antes`. O Django é o leitor do estado corrente e do histórico para o comando. [app/folha/models.py:47] [app/folha/migrations/0001_initial.py:16] [app/folha/migrations/0009_evento_he100_rubrica_200.py:23] [app/core/tests/test_model_sem_migration_pendente.py:24] | [nao verificado]
-| Dados de `RubricaDominio.evento` | `vincular_evento` cria o vínculo e `desvincular_evento` o remove. A migration `0009` também cria e remove a rubrica global prevista nela. Quadro de rubricas, exportação e PDF leem o valor. O delta atua no metadado do campo em memória. [app/folha/rubricas.py:17] [app/folha/rubricas.py:35] [app/folha/migrations/0009_evento_he100_rubrica_200.py:7] [app/folha/views.py:57] [app/folha/export.py:993] [app/folha/pdf_export.py:96] [app/core/tests/test_model_sem_migration_pendente.py:25] |
-| `--check`, `--dry-run`, `verbosity=0` e `SystemExit` | O teste fornece as opções ao comando Django. A chamada de controle deixa a exceção subir. O caso mutante consome `SystemExit` pela asserção. O certificador lê o `rc` agregado da suíte. [app/core/tests/test_model_sem_migration_pendente.py:20] [bin/pista_certifica.sh:51] | [nao verificado]
-| `PROIBIDOS`, regex e `#G:p_*` | O wrapper declara as guardas e o inventário lê as regex e motivos. `OPUS_CONSTROI_TAGS` declara os quatro nomes que `proibidos_do_wrapper()` lê. O selo do wrapper lê as tags e o selo de agentes lê as constantes e chama o juiz. [bin/codex_pergunta.sh:162] [bin/codex_pergunta.sh:223] [bin/disjuntor.py:1958] [bin/disjuntor.py:2023] [bin/tests/test_codex_pergunta.sh:703] [bin/tests/test_agente_no_modelo.sh:58] |
-| `PAPEL`, `ARQUIVOS`, `model`, `transcript_path` e motivo da recusa | O chamador do Agent fornece o pedido. Os selos montam esses valores nas fixtures. `agente_nega()` lê papel, modelo e caminhos. O `pretool` encaminha a recusa e o hook escreve `permissionDecisionReason`. O selo de agentes procura o fragmento `nao toca nenhum`. [bin/tests/test_agente_no_modelo.sh:71] [bin/tests/test_agente_no_modelo.sh:127] [bin/tests/test_censo_antes_da_vaga.sh:204] [bin/disjuntor.py:2042] [bin/disjuntor.py:2075] [bin/disjuntor.py:2094] [bin/disjuntor.py:2202] [bin/disjuntor.py:2271] |
-| `:644`, sequência e teto | O wrapper escreve o aviso no cabeçalho que vai ao Codex. `CLAUDE.md` dá o endereço e a instrução de despacho ao Code. O disjuntor escreve o endereço na negativa. O selo de agentes lê a referência e a lista em `CLAUDE.md`; o mutante regrava o texto na cópia de teste. No selo de censo, o endereço é comentário. [bin/codex_pergunta.sh:639] [bin/codex_pergunta.sh:778] [CLAUDE.md:398] [bin/disjuntor.py:2109] [bin/tests/test_agente_no_modelo.sh:257] [bin/tests/test_agente_no_modelo.sh:317] [bin/tests/test_agente_no_modelo.sh:355] [bin/tests/test_censo_antes_da_vaga.sh:201] | [nao verificado]
-
-### 5. Descartes
-
-- **`_C19`: procede para o c2.** A guarda já protegia `app/ponto/portas/celula.py`, enquanto `_C19` aponta para `app/chamados/services/tarefa_do_dia.py`. O delta não mudou nenhum dos dois endereços. [bin/codex_pergunta.sh:162] [app/core/juizes.py:152] [app/core/juizes.py:311]
-- **Brief misto: o descarte por causa do selo é improcedente.** O `any()` já estava no c1 e o selo exige que um brief misto passe. A abertura do **c1** criou uma sobreposição concreta com os arquivos recém-liberados: na prova em memória, `models.py` sozinho ou motor sozinho foram recusados para Opus, mas passaram quando acompanhados de uma migration ou de `bin/disjuntor.py`. O **c2** preservou esse comportamento. Escrita efetiva pelos dois construtores **[nao verificado]**. [CLAUDE.md:402] [bin/disjuntor.py:2102] [bin/tests/test_agente_no_modelo.sh:131]
-- **Teto e DIFF: procede como descrição da implementação, não como prova de cumprimento.** `CLAUDE.md` chama explicitamente o teto de conduta e inclui o DIFF da competência na sequência. O hook de Agent julga papel, caminhos e cota. O merge julga B3, a pista certifica a suíte e o deploy confere o ensaio do dia. Esses controles deixam a contagem de Opus vivos e o DIFF daquela obra a cargo da operação. Chamadas de ABONO c1h, ABONO-PARCIAL-TETO e E4C-F5 c2, teto real, DIFF, competência exportada intacta e HOM **[nao verificado]**. [CLAUDE.md:397] [CLAUDE.md:405] [bin/disjuntor.py:1426] [bin/disjuntor.py:2271] [bin/disjuntor.py:1289] [bin/pista_certifica.sh:2] [bin/deploy.sh:151] [nao verificado]
-- **L-126: o descarte não fecha a divergência.** A lei da cópia ainda proíbe o motor e conserva o ciclo antigo. O registro gerado de `CORTES.json` pede entrada no turno em que o aval foi lido, e o selo do índice exige que todo ID registrado apareça em `LEIS.md` como lei ou ato. Inserir só o JSON no pouso deixaria a redação antiga e exigiria também o mapeamento. A divergência vem do c1. Registro futuro **[nao verificado]**. [app/docs/LEIS.md:147] [app/docs/CORTES.md:3] [bin/tests/test_leis_indice.sh:25] [CLAUDE.md:403] [nao verificado]
-
-Os cinco blobs da cópia conferem com o lado novo de `delta.patch`. Nos quatro arquivos já existentes, reverter em memória as trocas de referência reproduziu também os blobs do lado antigo. A identidade do commit completo e a execução integral da suíte **[nao verificado]**. [nao verificado]
-
-_8525 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8526 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
