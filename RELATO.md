@@ -10945,6 +10945,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 02:01:19 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:b098dfc336 (246 car., na trilha privada)
+
 **27/11 01:10:00 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:0697ecdbe0 (251 car., na trilha privada)
 
 **27/11 00:03:12 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:3e6ab38f09 (496 car., na trilha privada)
@@ -13799,3 +13801,7 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 01:52 colhido PAR-PELO-TURNO c1v5a2/viz.rc (01:51 rc=0): ponto folha relatorios na pista (job 1127014342_5b5d5f97) Ran 6935 OK (skipped=7, expected failures=23) -- as 2 regressoes da c1v5a curadas; itens 2-4 na c1v5b depois do CCM (travada por: CCM motor). Vagas 2 e 3 livres: toda obra da ordem travada por CCM (motor/models/bin) ou E4C-F5 (E4d)
 - 01:54 colhido RAMO2-B-EM-TURNO-QUE-CRUZA c2l/verif1/r.rc (01:53 rc=0): verificador REPROVADO -- procedentes: A1 pausa perdida na borda da entrada (periodo.py:747-759, 12x36 E18h40 S18h50 E19h20 S08h20: regra base 700/pausa 20, reler 720/0) e RED sem mordida na base zerada (test_ramo2b_c2h_saida.py:196-209); A2 costuras de ensaio sem parciais (test_o280_bateria_da_lei.py:3967,4638,5477) e motor diverge na virada (motor:2241-2260); A3 controle do Partido soma trabalhado+fora (test_ramo2b_c2h_saida.py:147-163); A4 export no dia civil na borda (porta_export.py:340-362); B1-B4 e 3 herdados mordem. [nome] ao opus (CODEX 5(d), >3 voltas Codex): volta c2m UNICA do opus com motor (B1-B4, herdados) + A1-A4, depois do pouso do CCM (PARALELAS-JA: motor espera o CCM). travada por: CCM
 - 01:54 colhido RAMO2-CRUZA c2l/verif1/r.rc (01:53 rc=0): mesma colheita da linha acima (token da pasta)
+- 01:59 DESPACHO PARALELAS-JA-v2-2711-0200: RAMO2 c2m (motor + A1-A4 + B1-B4) -> opus construtor (vaga opus, teto 1, brief logs/RAMO2-CRUZA/c2m/brief.md, copia wt-codex-ramo2-b-em-turno-que-cruza-221946) | E4C-F5 c4red verificador dos REDs -> Codex vaga 1 | E4d REDs fix1 nova rodada -> pista 2 (job 1127015913_d43b0dfe) | smoke O30-F3 -> JA PRONTO (tabela 01:44) | PAR c1v5b travada por: pouso da RAMO2 (arquivo em comum com a c2j/c2m) | E1a c3 e ABONO c1k travada por: CCM (construtor Codex de motor) e vaga opus ocupada pela RAMO2 | V6/N4 travada por: CCM (bin/ comum)
+- 01:59 PUXADA RAMO2-B-EM-TURNO-QUE-CRUZA c2m -> vaga opus construtor; PUXADA E4C-F5-INSTANTE c4red/verif -> vaga 1
+- 02:00 colhido E4D-MATRIZ reds/fix2run/run.rc (02:00 rc=1): pista job 1127015913_d43b0dfe, Ran 45 FAILED (failures=31, errors=12) = identico ao fix1 de 18:46; toda queda por API ausente (DecisaoPergunta.lista_de_excecoes, SANEAMENTO, backfill, reabrir_para_correcao id_do_pedido) ou assercao do contrato, 0 de fixture -> REDs estaveis. Cura E4d travada por: E4C-F5-INSTANTE c4 (models.py comum) e CCM (construtor Codex de models.py)
+- 02:01 colhido CODEX-CONSTROI-MOTOR c10/selos.rc (02:01 rc=0): selos de host na copia 1fc9ab682 = 101 rc0, 16 rc!=0, 1 timeout (test_codex_n_vagas 124); varios com cara de copia (handoff aponta wt, placar_grade le GRADE viva). Base: os 17 no main 59600163c (logs/CODEX-CONSTROI-MOTOR/c10/base_main) para separar o que o CCM trouxe do pre-existente
