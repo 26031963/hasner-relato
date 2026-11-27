@@ -10939,6 +10939,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**26/11 22:32:16 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:e7c7bfc9fe (317 car., na trilha privada)
+
+**26/11 22:30:07 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:cb453b8418 (5992 car., na trilha privada)
+
 **26/11 21:38:10 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:0e0f3faeff (354 car., na trilha privada)
 
 **26/11 21:22:52 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:062653ada2 (41 car., na trilha privada)
@@ -13683,3 +13687,9 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 22:14 colhido O30-LOTE-MINIMA c2/suite/suite.rc (22:13 rc 0): pista job 1126214103_5365ba35 Ran 18090 OK (skipped=42, expected failures=39), pista_certifica rc 0 (Found 18093, podados 3, oom 0); POUSO mao dupla (relatorios/ + templates/, leitura) merge --no-ff + deploy --sem-migrate no mesmo ato; app/ do merge = app/ certificado (main andou so em bin/ desde a6e4ed534). LISTA: smoke pela tela do admin da folha.
 - 22:14 colhido PAR-PELO-TURNO c1v3/construtor.rc (22:11 rc 0): entrega no construtor.r; verificador a despachar.
 - 22:14 colhido E4C-F5-INSTANTE c3/verif2/r.rc (22:12 rc 0): Codex REPROVADO, parciais (comparador par_ato_coluna, estoque retrodatado, ESMERIL-SEMANTICA ato_em, item 13 por PK); proxima volta c4 por construtor Codex (COMP11 v2 item 4), migration 0058 segue com o opus.
+- 22:27 colhido CODEX-CONSTROI-MOTOR 0 (22:20 verif1 Codex REPROVADO: schema sem migration passava; c2 = teste makemigrations --check que morde + :644; descartes _C19/any()/conduta em 1 linha no commit)
+- 22:27 superado CODEX-CONSTROI-MOTOR 22 (22:22 suite c1 cancelada antes do container, pids da propria sessao; a c2 roda de novo)
+- 22:31 colhido PAR-PELO-TURNO 1 (22:23 volta c1v3: Ran 3310, 2 FAIL -- contract_no_batida_date em turnos.py, col129 dono BATIDA [] -- vao ao brief c1v4)
+- 22:31 colhido PAR-PELO-TURNO 0 (22:24 verif1 c1v3 Codex REPROVADO: dia por PK pela janela, C9 por reuso de instancia, C9 x L-084, testes financeiros sem mordida (CICLO_12X36), exportada 10 fora da guarda; HE so com janela desligada no cadastro)
+- 22:31 PUXADA PAR-PELO-TURNO -> vaga 2 (c1v4, base 3ccd18cfa = main + c1v3, brief logs/PAR-PELO-TURNO/c1v4/brief.md)
+- 22:31 DESPACHO CODEX-CONSTROI-MOTOR c2: verif2 Codex (delta) -> vaga 1 | suite c2 -> pista job 1126222811_22c28ce8 (sha 22c28ce8e = c2 + main)
