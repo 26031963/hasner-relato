@@ -1,7 +1,79 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 10:10** · publicado em **27/11/2026 10:14** (UTC-3)
+> Ultima resposta processada: **27/11/2026 10:17** · publicado em **27/11/2026 10:20** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 10:17 · sessao 60ded10607a8 · CASO-LITERAL-14 · sonda · origem=Code
+
+# CASO-LITERAL-14 — Fase 1
+
+A segunda volta cobre **17 sobras, em 12 dias de 5 colaboradores**. `154900` já estava nas 83 da primeira volta. O bloco completo de 14/11 muda sua classe de **(d)** para **(c)**. O consolidado fica em **99 batidas únicas, 43 dias e 14 colaboradores**. `compara.out:59–171` · `r_f1.md:44` · `r_f1.md:62` · `saída da sonda:3–23`
+
+As referências à `saída da sonda` contam as linhas do texto colado a partir de `sonda_leitura`, incluindo a linha em branco. O ensaio local usou `parear_turnos` com as batidas e os marcos do envelope. Os papéis da ata e o ramo exato que gerou as sobras em produção estão [nao verificado]. `app/ponto/turnos.py:1192` · `app/ponto/turnos.py:1948` · `app/ponto/turnos.py:2005`
+
+## 1. Classificação por dia
+
+Cada ID entra no dia de seu `DIA.sobras_ids`. **Não** em `validada_por_admin` significa `aprovada_por_id=null`. O modelo distingue esse campo de `aprovada`, que tem valor padrão `True`. Nas linhas **(c)**, cabe ao admin conferir a escala na tela. O código também prevê folga trabalhada. `saída da sonda:3–445` · `app/ponto/models.py:62` · `app/escala/models.py:1080` · `app/ponto/motor_calculo_v2.py:2576`
+
+| empresa | colab_id | data | batidas SOBRA (id hora tipo) | célula (estado, marcos) | classe | prova | validada_por_admin | dúvida |
+|---:|---:|---|---|---|:---:|---|---|---|
+| 2 | 986 | 2026-11-14 | `154900 11:59:38 S` | `127362` trabalho, `E10:00/S16:00/E17:00/S22:00` | **c** | `154840 10:01:39 E` → sobra → `154953 13:02:58 E` → `155336 22:00:59 S`. As bordas conferem. O ensaio reconheceu a pausa de **1 h 03 min 20 s**, cerca de 4 h antes dos marcos internos. A pergunta `58126` está pendente na célula, com chamados `31901` e `39082` abertos. `saída da sonda:3–23` · `app/ponto/turnos.py:1466` · `app/escala/utils.py:477` | Não | Horário de pausa autorizado e marcos anteriores à regeneração [nao verificado]. |
+| 2 | 986 | 2026-11-20 | `160434 12:08:00 S` | `127368` trabalho, `E10:00/S16:00/E17:00/S22:00` | **c** | `160310 10:02:41 E` → sobra → `160436 13:10:07 E` → `160805 22:01:34 S`. As bordas conferem e o ensaio reconheceu pausa de **1 h 02 min 07 s** perto de 12h–13h. A pergunta `60335` aponta para `160434`. `60335` e `60540` estão pendentes, com chamados `31901` e `40124` abertos. `saída da sonda:26–41` · `app/ponto/turnos.py:1466` · `app/escala/utils.py:477` | Não | Horário autorizado, marcos anteriores à regeneração e resolução da pergunta de liveness [nao verificado]. |
+| 2 | 989 | 2026-10-22 | `134543 17:08:58 E` | `127432` folga, `null` | **c** | No ensaio, `134543` fechou com `135077 08:32:05 S` de 23/10, **15 h 23 min 07 s** depois. A jornada começa em 22/10, em folga na célula, com vínculo `1423` de `18:00–06:00`. O chamado `33904` está aberto e inclui o par. `saída da sonda:50–64` · `app/docs/LEIS.md:117` · `app/ponto/turnos.py:312` · `app/ponto/turnos.py:1430` | Não | Escala autorizada e teor do chamado `33904` [nao verificado]. |
+| 2 | 989 | 2026-10-23 | `135077 08:32:05 S` | `127433` trabalho, `E18:00/S06:00 (+1)` | **c** | No ensaio, a sobra fechou a jornada de **22/10** iniciada por `134543 17:08:58 E`, cuja célula `127432` está em folga. A jornada de 23/10 tem outro par, `135589 17:59:28 E` → `135908 06:00:14 S` de 24/10. A conferência de escala recai sobre 22/10. `saída da sonda:50–57` · `saída da sonda:84–100` · `app/docs/LEIS.md:117` · `app/ponto/turnos.py:312` | Não | Escala autorizada em 22/10 e teor do chamado aberto `33904` [nao verificado]. |
+| 2 | 989 | 2026-10-25 | `137193 22:11:08 S` | `127435` trabalho, `E18:00/S06:00 (+1)`, pausa `null` | **a** | O ensaio fechou `136992 15:57:34 E` → `137291 05:58:14 S` de 26/10 no dia **25/10**, com pausa `137193` → `137210 23:02:41 E` de **51 min 33 s**. As duas bordas externas ficam a menos de 3 h dos marcos. O chamado `33904` está aberto e inclui a sobra. Sem ação na batida. `saída da sonda:122–136` · `app/ponto/turnos.py:429` · `app/ponto/turnos.py:453` · `app/docs/LEIS.md:116–117` | Não | Teor do chamado, papéis da ata e causa exata da sobra [nao verificado]. |
+| 2 | 1010 | 2026-11-04 | `146083 17:56:08 E` | `143296` folga, `null` | **d** | `145446 06:00:53 S` fecha a jornada iniciada em 03/11 no ensaio. A sobra da tarde fica aberta com as batidas apuráveis. O ensaio só a liga a `146380 05:59:33 S` de 05/11 quando inclui `146307 00:05:03 S`, já retratada por `657`. O chamado `36783` está aberto e inclui essas batidas. `saída da sonda:157–180` · `app/ponto/turnos.py:1417` · `app/ponto/turnos.py:2961` | Não | Faltam a decisão sobre `146307` e a confirmação do papel de `146083` na jornada de 04/11 [nao verificado]. |
+| 2 | 1010 | 2026-11-05 | `146321 01:04:44 E` · `146380 05:59:33 S` | `143297` trabalho, `E18:00/S06:00 (+1)`, pausa `null` | **d** | Com as batidas apuráveis, o ensaio fecha as duas sobras como um par na madrugada de 05/11. Ao incluir `146307 00:05:03 S` só no ensaio, elas passam a compor a jornada iniciada por `146083` em 04/11. O plantão cadastrado de 05/11 tem `147009 17:58:49 E` e `147338 06:26:13 S` de 06/11. `saída da sonda:199–224` · `app/ponto/turnos.py:285` · `app/ponto/turnos.py:1491` · `app/ponto/turnos.py:2961` | Não, ambas | Faltam a confirmação da jornada efetiva de 04/11, a decisão sobre `146307` e o teor do chamado aberto `36783` [nao verificado]. |
+| 2 | 1010 | 2026-11-07 | `151808 05:54:00 S` | `143299` trabalho, `E18:00/S06:00 (+1)`, pausa `null` | **d** | A pergunta validada `54816` materializou `151808` para `data_evento=06/11`, célula `143298`. A célula de 07/11 tem a própria saída `149056 05:53:56 S` em **08/11**, após `148746 17:59:35 E` de 07/11. `151808.retratada_em=null`. Chamado-pai `36652` aberto e destino `37414` resolvido. `saída da sonda:243–267` · `app/chamados/models.py:3095` · `app/docs/LEIS.md:117` | **Sim, `657`** | Faltam os marcos de `143298` e o teor da declaração validada para identificar a jornada que `151808` deveria fechar [nao verificado]. |
+| 2 | 1036 | 2026-11-14 | `154907 12:00:48 E` | `143957` trabalho, `E14:40/S18:00/E19:00/S23:00` | **a** | O ensaio fechou `154907` → `155066 15:50:47 S` e `155091 16:50:34 E` → `155363 23:00:24 S` no próprio dia, com pausa de **59 min 47 s**. A entrada está a **2 h 39 min 12 s** de `hi` e a saída a **24 s** de `hf`. Sem ação na batida. `saída da sonda:317–336` · `app/ponto/turnos.py:1491` · `app/ponto/motor_calculo_v2.py:2044` | Não | Papéis da ata e causa exata da sobra [nao verificado]. |
+| 2 | 1036 | 2026-11-19 | `159844 18:04:22 S` | `143962` trabalho, `E14:40/S18:00/E19:00/S23:00` | **b** | A sobra veio **1 s** depois de `159843 18:04:21 E`. O par `159785 17:04:57 S` → `159843` já fecha a pausa de **59 min 24 s**, entre `159655 14:40:28 E` e `160048 23:00:07 S`. No ensaio, omitir apenas `159844` preservou as bordas e a pausa. Omitir `159843` desfez o par da pausa. A `S` de 1 s é o toque excedente. `saída da sonda:337–364` · `app/docs/RELATO.md:259` · `app/docs/LEIS.md:80` · `app/ponto/turnos.py:880` · `app/ponto/turnos.py:1487` | **Não**, `aprovada_por_id=null` | `retratada_em=null`. Sem pergunta ou chamado aberto sobre `159844` no recorte. As quatro perguntas e os chamados resolvidos exibidos são de 20/11 e apontam para outros IDs. `saída da sonda:352–374` |
+| 2 | 1036 | 2026-11-20 | `160483 14:43:43 E` · `160622 18:18:19 S` · `160742 19:18:33 E` · `160829 23:01:03 S` | `143963` folga, `null` | **c** | Dois períodos de trabalho no próprio dia, com pausa de **1 h 00 min 14 s**, compatíveis com `14:40–23:00` do vínculo `1552`. As quatro perguntas apontam para a célula e para os quatro IDs. Os chamados foram resolvidos pelo sistema via julgamento da célula. `saída da sonda:380–409` · `app/escala/orfa_classe.py:62` · `app/chamados/models.py:2847` | Não, as quatro | Escala autorizada e causa da folga [nao verificado]. |
+| 2 | 1039 | 2026-11-19 | `159385 12:02:11 S` · `159454 12:59:59 E` | `144160` trabalho, `E10:00/S16:00/E17:00/S22:00` | **c** | `159304 09:56:22 E` → duas sobras → `160033 22:05:39 S`. O ensaio reconheceu a pausa de **57 min 48 s**, cerca de 4 h antes dos marcos internos. `59844` aponta para `159454`. As três perguntas estão respondidas e sem validação, com chamados `38937` e `39967` abertos. `saída da sonda:415–431` · `app/ponto/turnos.py:1466` · `app/escala/utils.py:477` | Não, ambas | Horário de pausa autorizado e teor das respostas [nao verificado]. |
+
+## 2. Contagem desta volta
+
+Cada célula mostra **dias / batidas**. A lista de IDs confere com `compara.out:151–171`. As classes vêm da tabela acima, com base nos `DIA.sobras_ids` da saída. `saída da sonda:3–445`
+
+| colab_id | (a) | (b) | (c) | (d) | total |
+|---:|---:|---:|---:|---:|---:|
+| 986 | 0 / 0 | 0 / 0 | 2 / 2 | 0 / 0 | 2 / 2 |
+| 989 | 1 / 1 | 0 / 0 | 2 / 2 | 0 / 0 | 3 / 3 |
+| 1010 | 0 / 0 | 0 / 0 | 0 / 0 | 3 / 4 | 3 / 4 |
+| 1036 | 1 / 1 | 1 / 1 | 1 / 4 | 0 / 0 | 3 / 6 |
+| 1039 | 0 / 0 | 0 / 0 | 1 / 2 | 0 / 0 | 1 / 2 |
+| **Total** | **2 / 2** | **1 / 1** | **6 / 10** | **3 / 4** | **12 / 17** |
+
+## 3. Batidas (b) sem dúvida e sem validação admin
+
+`159844` é a única batida que atende aos critérios no envelope. `compara.out:164` · `saída da sonda:350–364` · `app/docs/RELATO.md:259`
+
+```text
+B batida_id=159844 colab_id=1036 data=2026-11-19 hora=18:04:22 tipo=S
+```
+
+## 4. Batidas (b) com validação admin ou dúvida
+
+**Lista vazia.** A sobra com `aprovada_por_id` preenchido, `151808`, ficou em **(d)** pela falta de prova sobre a jornada a que pertence. `saída da sonda:243–267` · `app/ponto/models.py:62`
+
+## 5. Porta do botão e desfazer
+
+- **Retratar.** O botão **Não foi trabalho (retratar)** envia `POST` para `ponto:retratar_batida`. A view exige `regularizar_batida` e chama `retratar_humano.retratar`. O serviço reconfere a permissão, exige motivo ativo e chama `registro_batida.retratar_batida`. A porta preserva o registro, grava `aprovada=False` e `retratada_em`, registra a trilha e aciona a atualização do fechamento. A apuração seleciona `retratada_em__isnull=True`. `app/templates/colaboradores/partials/_calendario_grade.html:127` · `app/ponto/urls.py:62` · `app/ponto/views.py:3453` · `app/ponto/services/retratar_humano.py:158` · `app/ponto/services/retratar_humano.py:175` · `app/ponto/registro_batida.py:287` · `app/ponto/turnos.py:2961`
+- **Desfazer.** O botão envia `POST` para `ponto:desfazer_retratacao`. A view exige a mesma permissão e chama `retratar_humano.desfazer`. A porta exige `retratada_em` preenchido, última trilha `retratar_batida_admin` e prazo de **7 dias** a partir da retratação. Usa `registro_batida.anotar` para gravar `aprovada=True`, limpar `retratada_em` e registrar `desfazer_retratacao_batida`. `app/templates/colaboradores/partials/_calendario_grade.html:127` · `app/ponto/urls.py:64` · `app/ponto/views.py:3465` · `app/ponto/services/retratar_humano.py:26` · `app/ponto/services/retratar_humano.py:38` · `app/ponto/services/retratar_humano.py:186` · `app/ponto/services/retratar_humano.py:203`
+- A cadeia dos botões foi conferida nos arquivos da cópia. O topo de `sonda_f1.py`, seu hash e o `HEAD` Git da cópia estão [nao verificado].
+
+## Consolidado das duas voltas
+
+O ajuste retira a linha parcial de `154900` da classe **(d)** da primeira volta e conserva a linha completa em **(c)**. O colab `986` fica com **5 dias / 5 batidas**, todos em **(c)**. `r_f1.md:41–44` · `r_f1.md:61–62` · `saída da sonda:3–41` · `compara.out:147–152`
+
+| classe | primeira volta | segunda volta | ajuste por sobreposição | total único |
+|:---:|---:|---:|---:|---:|
+| (a) | 1 / 1 | 2 / 2 | 0 / 0 | **3 / 3** |
+| (b) | 0 / 0 | 1 / 1 | 0 / 0 | **1 / 1** |
+| (c) | 19 / 65 | 6 / 10 | 0 / 0 | **25 / 75** |
+| (d) | 12 / 17 | 3 / 4 | −1 / −1 | **14 / 20** |
+| **Total** | **32 / 83** | **12 / 17** | **−1 / −1** | **43 / 99** |
+
+**14 colaboradores e 99 batidas únicas.** `compara.out:59–171` · `r_f1.md:62` · `saída da sonda:3–445`
 
 ## 27/11 10:10 · sessao 88a168481d71 · CASO-LITERAL-14 · sonda · origem=Code
 
@@ -1404,17 +1476,4 @@ Registrei as portas de `celula_absolveu`, `fantasma` e `competencia_trancada` pa
 
 Na verificação isolada do selo, os quatro recortes falharam na base, passaram com as declarações e voltaram a falhar sob os mutantes. A execução completa em Django/PostgreSQL fica com o Code **[nao verificado]**. O recibo contém o diagnóstico dos sete REDs, a linha `--only` e o comando de cada mutante. [construtor.r](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:5) · [Comandos](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/construtor.r:48)
 
-## 27/11 09:21 · sessao 217e2dcf82a3 · PAR-PELO-TURNO · construtor · origem=Code
-
-**PAR-PELO-TURNO c1v6 aplicada na cópia indicada.** O recorte em memória passou **95 testes**, incluindo composição de fatias e vizinhos. O diff passou em `git diff --check` e acrescentou **zero `except`**. [Comandos e vereditos](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:29) · [Auditoria e diff](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:146) [nao verificado]
-
-- **Na base**, 1a, 2, 3a, 3b, 3d, 4a e 4c falharam pelos motivos esperados. Em 4c, a marca de `fim+2` derrubava `sem_movimento` e mudava o saldo de `0,00 h` para `−193,60 h`. Com a cura, os dois braços deram `0,00 h` e `sem_movimento=True`. [Evidência da base e da cura](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:6)
-- **1b, 5 e 6** passaram na base. Os mutantes os fizeram falhar ao trazer as marcas de col297 para a janela errada, esvaziar a ata e retirar a C9. No total, **15 mutantes falharam por asserção** e o alias que preserva a ata passou. A evidência traz o comando de cada um. [Comandos dos mutantes](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:43) [nao verificado]
-
-**Pendências para a certificação**
-
-- A suíte Django da obra, composição e vizinhos parou na importação de `django.core`. Os testes completos de PDF e fechamento ficam **[nao verificado]**. [Comando e erro](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:123) [nao verificado]
-- Em **3a**, `test_MORDE_a_divida_so_ENCOLHE_e_nao_apodrece` falha porque o inventário ainda exige a chamada direta a `batidas_apuraveis`. O PDF passou a usar `batidas_apuraveis_na_janela`. A asserção existente segue como estava. [Selo do PDF](/home/ronald/wt-codex-par-pelo-turno-010806/app/relatorios/tests/test_pdf_nao_calcula.py:107) · [Carga do PDF](/home/ronald/wt-codex-par-pelo-turno-010806/app/relatorios/pdf_espelho.py:280) [nao verificado]
-- **3c e 4b** ficaram fora da volta conforme o recorte. Em **6**, o ensaio sintético deu um par de **782 min**, teto de **732 min** e uma C9. O laudo nominal do col155 em 08/11 e o impacto de frota por rubrica ficam **[nao verificado]**. [Itens em aberto](/home/ronald/wt-codex-par-pelo-turno-010806/app/docs/par_pelo_turno_c1v6_evidencia.txt:137)
-
-_8610 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8611 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
