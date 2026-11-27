@@ -1,3 +1,9 @@
+PAREI: censo-TIPO-NA-FONTE | espera Codex
+
+PAREI: censo-RAZAO-DA-SOBRA | espera Codex
+
+PAREI: censo-RC-SEM-PROXIMA | espera Codex
+
 ESPERANDO: Codex leitura SONDA-ESPURIAS-RAMO2 s2 (script dos 4 lados) + Codex construtor E4D cura1 (vaga 1) + PAR c1v7 (vaga 2); sessao constroi RC-SEM-PROXIMA | pid=1826767 | arquivo=logs/E4D-MATRIZ/cura1/r.rc
 PERGUNTA DE DESENHO E4C-F5-INSTANTE (09:16, cura1 d5b417695 na wt-codex-e4c-f5-instante-012038; leis A/B/4/6 verdes, g4 pista 413 OK, g3 550 FAILED 1): uma resposta publica acorda a celula 2x -- post_save chamados/signals.py:253-259 E DecisaoPergunta.registrar chamados/models.py:4785-4787 (conferido). RED test_e4c_f5_c4_red::EstoqueDoParTest::test_RED_uma_resposta_publica_emite_uma_vez_para_a_celula "2 != 1"; mutante M20 nao morde (34/35). (a) tirar a emissao do registrar derruba as 2 metades de test_e4_expand::test_H2 (ato e evento no mesmo atomic, f78b9a84f) e deixa _nascer (models 3327) sem acordar; (b) estreitar CAMPOS_QUE_ACORDAM pede censo de 37 escritores. Censo dos 16 chamadores em logs/E4C-F5-INSTANTE/cura1. A obra nao pousa sem o corte (B3 segura o merge).
 FATO 08:45 (CCM-REDUZ-2711-0845, "Proibido: abrir teste do Codex na VM antes do opus"): os mutantes RAMO2-B c2t rodaram em ROTA VM (causa: `mkdir app/logs app/media` na copia descartavel, que a foto nao leva) e levaram test_ramo2b_c2t_motor/escopo, testes criados pelo Codex construtor, sem opus aprovado. Log guardado em logs/RAMO2-CRUZA/c2t/mut_VM_0845.log; pastas removidas, relancado na pista; daqui em diante todo run da obra confere `ROTA PISTA` no log. E o 4o caminho do mapa c13 (§4: `--dir --only` caindo no executor local) -- entra no desenho da CCM c13.
@@ -10959,6 +10965,14 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 09:47:34 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:efad1bf53b (39 car., na trilha privada)
+
+**27/11 09:46:18 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:114c6663fa (40 car., na trilha privada)
+
+**27/11 09:45:23 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:05f027752b (4470 car., na trilha privada)
+
+**27/11 09:41:44 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:645d545598 (47 car., na trilha privada)
+
 **27/11 08:50:51 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:0d18cdc2cb (286 car., na trilha privada)
 
 **27/11 08:48:43 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:fa738561fa (1340 car., na trilha privada)
@@ -13987,3 +14001,8 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 09:27 colhido PAR-PELO-TURNO c1v7/r.rc (09:25 rc 0): selo pdf_nao_calcula conta batidas_apuraveis_na_janela, divida 1->1; commit ae96f99af na wt; recorte na pista job 1127092640_ae96f99a (logs/PAR-PELO-TURNO/c1v7/rec.log)
 - 09:35 CONTRATO RC-SEM-PROXIMA (instrumento, bin/rc_sem_colher.py, wt-rc-sem-proxima-092448): (1) quem chama: a espera unica (ESPERA_UNICA, forma intocada) e quem roda o juiz a mao; (2) quem espera: a sessao -- rc 3 acorda na hora com `RC SEM PROXIMA <OBRA> <rc> <HH:MM> colhido=<HH:MM>`; (3) falha/limite: leitura que nao fecha = traceback rc 1 (a espera sai != 0); obra cuja etapa seguinte mora fora de logs/<OBRA> (wt, pista) lista ate a pasta ganhar a linha da etapa; (4) medida: 1a rodada na arvore viva 09:28 = 8 obras colhidas e paradas, nenhuma com produtor vivo; (5) quem desliga: o fato -- a etapa seguinte escreve na pasta da obra depois do rc, ou marca `superado` (encerrada). Sem palavra nova de marca. LEI-AKITA: origem=bin/rc_sem_colher.py::sem_proxima, testemunha=_obras_vivas (o mesmo rc do sem_colher) + marcas do RELATO, RED=bin/tests/test_rc_sem_colher.sh::caso_proxima, quem-mais-le=bin/disjuntor.py::ESPERA_UNICA, juizes novos=0, padrao=n/a (instrumento)
 - 09:38 colhido SONDA-ESPURIAS-RAMO2 s2/r.rc (09:32 rc 0): scripts dos 4 lados + compara conferidos (guarda de sombra/schema, atomic duravel com rollback, sequencias iguais, erro sai sem FIM; sem [:N]); faltantes da s3 = corte detalhes[:20]; A0 = gravado por fechamentos=None. R alinhado a wt RAMO2-B atual (1f9541e71 + c2u nao commitada, sha1 do diff abc20afb). Lancado lanca_sombra.sh (main A0A1B -> ramo2 R -> compara, em sequencia)
+- 09:41 aval SESSAO-DESPACHA-2711-0940 recebido: a sessao nao constroi no proprio turno; RC-SEM-PROXIMA -> subagente opus construtor (selo RED/VERDE da sessao b25sg2e0z parado antes do veredito, sem efeito na wt).
+- 09:41 colhido E4D-MATRIZ cura1/rec.rc (09:28 rc=1): recorte pista job 1127092640_ae7959b4 FAILED failures=80 Ran 55; casos 06/07/27/37 VERDES, 0 falha em test_contract_portas e smoke; as 80 sao REDs da matriz de outras voltas (01-05, 08-12, 14, 16-18, 20, 25, 26, 28-32, 34, 35, 38-42, 44, 45). Proxima: cura2 Codex construtor dos casos fora de models.py/disputa_emissao.py/materializacao.py.
+- 09:41 colhido PAR-PELO-TURNO c1v7/rec.rc (09:29 rc=1): recorte pista job 1127092640_ae96f99a FAILED errors=1 Ran 356; unica falha = fixture relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:112 sem 'dias_inconsistentes' (espelho.py:685 faz += 1; dict canonico espelho.py:1237, ponto/views.py:138). Proxima: c1v8 Codex construtor so a fixture.
+- 09:41 colhido E4C-F5-INSTANTE ver1/r.rc (09:30 rc=0): verificador 5a, triagem 5(b) conferida em amostra (models.py:4500-4518 composta sintetiza ato_em = coluna; :4676-4685 guarda le composta; except no diff +0/-2 -- o "ampliado" e o bloco unico que restaura e relanca, sem except novo): PROCEDENTES P1 guarda de instante do par (ALTA), P2 DRY x porta, P3 trilha K6 sem idempotencia, P4 RED dos pendentes injeta candidata, P5 ordem de trava -> cura2 opus construtor (models.py), pedido logs/E4C-F5-INSTANTE/cura2/pedido.md. Item 6 = PERGUNTA DE DESENHO no topo (fora). data_evento/entrada_em -> anexo ao opus final.
+- 09:41 colhido SONDA-ESPURIAS-RAMO2 s2/try1/sombra.rc (09:38 rc=3): CAUSA -- as duas copias (sonda-er-main-091452, sonda-er-ramo2-091452) nasceram sem app/logs e app/media; o docker run da sombra monta tmpfs em /app/logs e o runc recusa (read-only file system), "sombra: FALHOU -- nao consegui gravar a lavra"; nada rodou, compara.out "FIM ausente em main". Cura: mkdir app/logs app/media nas duas copias; saidas da 1a tentativa em s2/try1/; RELANCADO 09:40 lanca_sombra.sh pid 1870342.
