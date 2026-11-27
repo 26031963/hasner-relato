@@ -1,3 +1,5 @@
+PAREI: censo-FERIADO-BOTAO-CORTADO | espera Codex
+
 RESPONDIDA por censo 09:52 (tentativa errada de token; a obra e RAZAO-DA-SOBRA, censo brief_reds1 verde) -- PAREI: censo-TIPO-NA-FONTE
 
 RESPONDIDA por censo 09:52 (logs/RAZAO-DA-SOBRA/brief_reds1.md, juiz verde) -- PAREI: censo-RAZAO-DA-SOBRA
@@ -10966,6 +10968,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 11:24:34 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:1ebb641565 (47 car., na trilha privada)
+
+**27/11 11:24:18 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:1ebb641565 (47 car., na trilha privada)
+
 **27/11 11:16:20 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:f478694354 (158 car., na trilha privada)
 
 **27/11 11:11:50 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:fb685dcfc7 (211 car., na trilha privada)
@@ -14305,3 +14311,4 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 11:12 colhido E4C-F5-INSTANTE ver3/r.rc (11:11 rc 0): Codex verificador APROVADO o delta cura3b+cura3c (P3 dedupe na origem core/observ.py::evento(unica=True), trava pos-rollback pela porta trava_na_ordem; amostra conferida: observ.py:138-150, unico chamador unica=True materializacao.py:859). BAIXAs: (5) semantica herdada ator/data_evento/entrada_em -> anexo do opus; (6) nenhum RED varia o usuario do filtro -> anexo do opus; except 0. Proxima etapa: suite inteira + opus final SO depois da resposta ao item 6 (PERGUNTA DE DESENHO): a cura dele muda a arvore e a suite e uma vez por arvore.
 - 11:16 colhido RC-SEM-PROXIMA ver3/r.rc (11:15 rc 0): Codex REPROVADO -- (3) ALTA DST: dois dias civis com <24 h reais e hora repetida listam em 10 s ou somem a parada; (1) MEDIA .rc vencido ilegivel derruba a chamada; (2) MEDIA leitor vercodex sem selo; (4) BAIXA relogio de parede no selo do resumo. Amostra conferida: rc_sem_colher.py:119-129 (k in (0,1), mktime isdst=-1). 3 voltas na obra; DESPACHO c4 -> opus construtor (bin/), logs/RC-SEM-PROXIMA/c4/pedido.md.
 - 11:18 DESPACHO CODEX-ENCHE-2711-1115: (1) ORFAS autopsia -> Codex (colhida 11:09) | (2) CASO-LITERAL-14 f3 dono dos 3 (a) + prova dos 14 (d) -> Codex leitura logs/CASO-LITERAL-14/f3/ (vaga 1) | (3a) REDs dos 5 procedentes PAR c1v8 -> Codex construtor so teste, wt-codex-par-pelo-turno-111717 @4ba908393 (vaga 2) | (3b) REDs de motor RAMO2-B (Intermitente, _lim_dia, Partido) -> Codex construtor so teste, wt-codex-ramo2-b-em-turno-que-cruza-111717 @1f9541e71 (vaga 3) | RC c4 -> opus construtor (bin/). PUXADA CASO-LITERAL-14 -> vaga 1; PUXADA PAR-PELO-TURNO -> vaga 2; PUXADA RAMO2-B -> vaga 3. 1a tentativa dos REDs rc 2 PRE_CHECK (nome da wt fora do padrao wt-codex-<obra>-NNNNNN): wt movida, relancada.
+- 11:20 DESPACHO FERIADO-BOTAO-CORTADO: construtor template/CSS -> Codex (espera 1a vaga livre: 3 ocupadas por CODEX-ENCHE); mapa: _calendario_grade.html:68 height 132px+overflow hidden corta o include :131 com 4 batidas; brief logs/FERIADO-BOTAO-CORTADO/q.md; MAO DUPLA, smoke do Ronald na tela antes do pouso (FRONT SEM SMOKE NAO SOBE)
