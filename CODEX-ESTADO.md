@@ -1,7 +1,168 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 15:54** · publicado em **27/11/2026 15:59** (UTC-3)
+> Ultima resposta processada: **27/11/2026 16:05** · publicado em **27/11/2026 16:09** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 16:05 · sessao 1a2ab4657839 · FERIADO-UM-JUIZ · construtor · origem=Code
+
+A c4 está na cópia sobre `29488e3bb`. Em memória, os **9 REDs falharam na c3**, com 12 falhas de asserção contando os subcasos. Na c4, passaram **35 testes e 33 mutantes**. O diff acrescenta **0 `except`**. Os testes de porta com banco e a certificação pelo Code e pelo opus final ficam [nao verificado]. (`ponto/tests/feriado_um_juiz_mutantes.py:261`, `ponto/tests/feriado_um_juiz_mutantes.py:279`)
+
+| Item | RED e prova na c3 | Cura e leitores |
+|---|---|---|
+| **A** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_cartao_le_a_rubrica_emitida` e `::test_RED_c4_cartao_x_txt_acusa_feriado_ausente_com_he100_igual`. O TXT emitiu `400`, o cartão mostrou `0 h` e o contador devolveu `{}` ao perder a rubrica com HE100 bruta igual. (`ponto/tests/test_feriado_um_juiz.py:56`, `:72`) | Cartão, montagem do TXT e homologação leem os mesmos eventos do mensal. O PDF discrimina HE100 feriado e o contador confere a rubrica e o total. App e ficha leem o total. (`folha/export.py:388`, `:753`, `:1026`, `relatorios/cartao_pela_celula.py:89`, `:266`, `relatorios/pdf_espelho.py:773`, `api/views.py:1663`, `colaboradores/services/ficha.py:205`) |
+| **B** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_vigencia_conserva_ft_incerta_em_trabalhadas_ate_outubro`. Na c3, outubro classificou os 240 min como HE100 feriado. O teste de porta `ponto/tests/test_feriado_um_juiz_porta.py::test_RED_c4_evento_na_10_entregue_conserva_a_vigencia_e_a_11_aberta_promove` cobre mensal, duas lavras, TXT vigente e controle na 11 aberta. Execução da porta [nao verificado]. (`ponto/tests/test_feriado_um_juiz.py:300`, `ponto/tests/test_feriado_um_juiz_porta.py:239`) | Partição, lavras e DIFF usam a vigência do TXT. Até outubro, a partição segue a seleção por escala certa e a cláusula histórica da base. O recálculo genérico L-113 segue disponível nas competências entregues a partir da 11. A reemissão nessas competências está [nao verificado]. (`folha/export.py:385`, `ponto/calculador/regras.py:395`, `ponto/services/fechamento.py:989`, `:1305`, `:1829`, `ponto/management/commands/diff_calculador.py:152`, `59600163c:app/ponto/services/fechamento.py:958`) |
+| **C** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_alimentacao_le_a_dobra_normal_da_primeira_fatia` e `::test_RED_c4_periodo_normal_respeita_calendario_injetado_vazio`. Na c3, o oráculo respondeu `0`, `4` e `4 h` nos casos que pediam `4`, `0` e `0 h`. A releitura também inventou 240 min com calendário vazio. (`ponto/tests/test_feriado_um_juiz.py:216`, `:232`) | A alimentação da lavra `oraculo`, o DIFF e a releitura por período leem os minutos decididos pelo motor que apurou o turno. A prova integrada de mensal, lavras e TXT está [nao verificado]. (`ponto/calculador/alimentacao.py:519`, `:584`, `ponto/calculador/periodo.py:768`, `ponto/management/commands/diff_calculador.py:411`, `ponto/tests/test_feriado_um_juiz_porta.py:298`) |
+| **D** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_par_de_21h_a_23h_conta_a_uniao_do_noturno`. A c3 deu **1.560 min** de split. A c4 deu **1.500 min** e adicional legal de **1.500 ÷ 0,875 min**. (`ponto/tests/test_feriado_um_juiz.py:353`) | A promoção mede a união da janela com o medidor existente, desconta os intervalos e entrega split e adicional ao mensal, às duas lavras e ao DIFF. A prova integrada está [nao verificado]. (`ponto/calculador/regras.py:433`, `ponto/services/fechamento.py:998`, `ponto/services/dia_pago.py:244`, `ponto/calculador/alimentacao.py:353`, `ponto/tests/test_feriado_um_juiz_porta.py:572`) |
+| **E** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_data_e_certeza_seguem_o_turno_de_cada_par` e `::test_RED_c4_turnos_distintos_na_borda_20_21_entram_cada_um_na_sua_competencia`. A c3 pôs ambas as parcelas na véspera. Na borda, deixou os dois pares na 11 e nenhum na 12. (`ponto/tests/test_feriado_um_juiz.py:367`, `:391`) | A partição resolve vínculo, certeza, cláusula e data da lavra pelo turno. Entre competências já na vigência, a entrada do motor usa o pareador existente para retirar da janela ampliada o turno fechado e distinto que pertence à competência vizinha. As duas lavras e o DIFF leem o resultado. Os casos de porta com troca de praça estão [nao verificado]. (`ponto/calculador/regras.py:412`, `ponto/services/fechamento.py:154`, `:226`, `ponto/services/dia_pago.py:244`, `ponto/calculador/alimentacao.py:361`, `ponto/tests/test_feriado_um_juiz_porta.py:455`) |
+| **F** | `ponto/tests/test_feriado_um_juiz_porta.py::test_RED_c4_competencia_sem_feriado_conserva_arredondamento_da_base`. Executadas as atribuições dos dois hashes com 241 + 241 min, a base deu **8,04 h** e a c3 **8,03 h**. `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_delete_e_bulk_create_usam_a_mesma_transacao` mostrou a perda da linha anterior na c3. (`59600163c:app/ponto/services/fechamento.py:922`, `:1008`, `29488e3bb:app/ponto/services/fechamento.py:964`, `ponto/tests/test_feriado_um_juiz.py:13`) | Sem promoção, o mensal volta a **8,04 h**. Com promoção positiva, arredonda uma vez. O RED existente conserva as asserções e agora injeta uma promoção fracionária na fixture. As duas versões de `lavrar` executam `delete` e `bulk_create` na mesma transação. Rollback no banco [nao verificado]. (`ponto/services/fechamento.py:1008`, `ponto/tests/test_feriado_um_juiz_porta.py:396`, `:435`, `ponto/services/dia_pago.py:360`) |
+| **G** | `ponto/tests/test_feriado_um_juiz_porta.py::test_RED_c4_l097_certeza_so_decide_rubrica_com_ou_sem_autorizacao` está com o `skip` literal. A chamada isolada ao motor deu **240/0 min** para incerta/certa sem autorização e **240/240 min** com autorização. (`ponto/tests/test_feriado_um_juiz_porta.py:499`, `ponto/motor_calculo_v2.py:1562`, `:1585`) | G fica pendente da decisão de lei. K1 conserva o `expectedFailure` e as asserções da c3. (`ponto/tests/test_feriado_um_juiz_porta.py:381`, `:499`) |
+
+**Comandos a partir de `app/`**. `base_c3` carrega os fontes do hash em memória e exige falhas de asserção. Os cinco comandos com `--settings` dependem da pista com banco e ficam [nao verificado]. (`ponto/tests/feriado_um_juiz_mutantes.py:43`, `:169`, `:279`)
+
+```bash
+m() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.feriado_um_juiz_mutantes "$@"; }
+
+m base_c3
+m controle
+m c4_cartao_rejulga_ciclo
+m c4_contador_ignora_feriado
+m c4_ignora_vigencia
+m c4_alimentacao_rejulga_dobra
+m c4_periodo_rejulga_dobra
+m c4_split_bruto_do_noturno_longo
+m c4_adicional_bruto_do_noturno_longo
+m c4_lavra_na_data_herdada
+m c4_certeza_no_dia_herdado
+m c4_pad_conserva_turnos_externos
+m c4_lavra_sem_atomic
+
+m c4_fechamento_ignora_competencia --settings=config.settings.ci
+m c4_mensal_le_noturno_bruto --settings=config.settings.ci
+m c4_lavra_le_noturno_bruto --settings=config.settings.ci
+m c4_troca_de_praca_le_vinculo_herdado --settings=config.settings.ci
+m c4_arredonda_fora_da_promocao --settings=config.settings.ci
+```
+
+**Recorte para o Code** (`bin/suite.sh:295`)
+
+```bash
+bash ../bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
+  --only "ponto folha relatorios escala core colaboradores api"
+```
+
+Medição dos 75 dias e 42 colaboradores, DIFF do TXT 11 de frota, reversão e apply L-092 [nao verificado].
+
+## 27/11 16:04 · sessao ab2be411f222 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
+
+**B1 — Histórico HTMX.** O componente instala os listeners uma vez por documento e devolve o painel ao `details` antes do snapshot. O RED `core/tests/test_smoke_clique_feriado_vira_trabalho.py::test_historico_htmx_do_feriado_e_de_inverter_retratar` exercita Feriado e Inverter/Retratar, conta as inscrições após a segunda execução do script e verifica os snapshots e o DOM ao Voltar e Avançar. [popover-acao.js:28](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:28) [popover-acao.js:177](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:177) [teste:546](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:546)
+
+**Prova antes da cura.** Li o blob de `c44771b4a` com `git show` e executei o JS duas vezes no Duktape, com DOM simulado. O base registrou **2 inscrições por evento e 1 órfão** no ponto do snapshot. A cura registrou **1 inscrição por evento e 0 órfãos**. Retirar a guarda voltou a duplicar as inscrições. Retirar o fechamento voltou a deixar o órfão. A reprodução em Chromium fica [nao verificado]. [popover-acao.js:160](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:160) [mutantes:77](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:77)
+
+**B2 — Ficha real a 1366 px.** `core/tests/test_smoke_clique_feriado_vira_trabalho.py::test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas` agora abre a rota da ficha, exige `colaboradores/detalhe.html` e espera o swap HTMX. A sonda verifica a coluna de 420 px e o `overflow:hidden` antes de medir viewport, recorte, ancoragem e submit. O MORDE `core/tests/test_smoke_clique_feriado_vira_trabalho.py::test_MORDE_painel_recortado_na_ficha_real` injeta recorte e exige que a sonda o acuse mesmo com o painel dentro da viewport. A leitura do hash-base confirmou a lacuna do cenário sintético. A mordida e a geometria da ficha real ficam [nao verificado], portanto a cura geométrica condicional segue em aberto. [ficha:87](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:87) [ficha:215](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:215) [sonda:235](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:235) [MORDE:549](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:549) [rota:676](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:676)
+
+A tentativa do RED por `manage.py` parou no import de `django.core`, antes de iniciar a suíte. O clique na tela de produção e a certificação pelo Code e pelo opus ficam [nao verificado]. `360 px` e `base_app` ficam na lista do pouso conforme o aval fornecido. [manage.py:11](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/manage.py:11) [cenários:641](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:641) [nao verificado]
+
+**Inclusões e diff.** `base.html` e `base_app.html` são as duas inclusões diretas. Os consumidores são Feriado, Inverter/Retratar e Resolver dia. O diff tem **0 `except` e 0 `catch` adicionados ou removidos**. [base.html:440](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/base.html:440) [base_app.html:194](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/base_app.html:194) [grade:96](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:96) [grade:133](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:133) [grade:138](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:138)
+
+**Comandos dos mutantes para o Code**, a partir de `app/`, no ambiente de teste. Cada invocação abaixo deve falhar. [mutantes:72](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:72) [seleção:543](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:543) [nao verificado]
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+smoke=core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest
+b1="$smoke.test_historico_htmx_do_feriado_e_de_inverter_retratar"
+b2="$smoke.test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas"
+
+SMOKE_FERIADO_MUTANTE=historico-sem-guarda python3 manage.py test --settings=config.settings.ci "$b1"
+SMOKE_FERIADO_MUTANTE=historico-sem-fechar-painel python3 manage.py test --settings=config.settings.ci "$b1"
+SMOKE_FERIADO_MUTANTE=pagina-sem-ficha python3 manage.py test --settings=config.settings.ci "$b2"
+SMOKE_FERIADO_MUTANTE=painel-recortado python3 manage.py test --settings=config.settings.ci "$b2"
+```
+
+**Recorte `--only` para o Code.** [suite.sh:26](/home/ronald/wt-codex-feriado-botao-cortado-112417/bin/suite.sh:26) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 ../bin/suite.sh \
+  --dir /home/ronald/wt-codex-feriado-botao-cortado-112417 \
+  --only "core.tests.test_smoke_clique_feriado_vira_trabalho core.tests.test_selo_popover_acao core.tests.test_smoke_retratar_1366"
+```
+
+## 27/11 16:04 · sessao 5e1b420eecd8 · PAR-PELO-TURNO · construtor · origem=Code
+
+A c1v14 está na cópia. O recorte em memória passou **65 testes**, e os vizinhos de `core` e `chamados` passaram **63 testes**. A execução canônica dos 18 registros e a medição dos tetos de **254/318** ficam **[nao verificado]**. O `--only` da cópia usa rede e a rota local usa Docker, ambos fora do escopo autorizado. `app/ponto/tests/par_pelo_turno_c1v14_verificacao.py:53`, `bin/suite.sh:320`, `bin/suite.sh:551`
+
+### Grupos 1–4
+
+| Grupo | Cura e prova |
+|---|---|
+| 1. Fixture dos REDs | Os cenários de fechamento usam um `Colaborador` real, sem salvar. Os nove casos chegaram às asserções originais e passaram em memória. Comparei por AST as 42 asserções dos três arquivos. O mutante `fixture` reproduziu `KeyError: 7` com o dublê que exige a FK. `app/ponto/tests/test_par_c1v8_reds.py:20`, `app/ponto/tests/test_par_pelo_turno_c1v10.py:30`, `app/ponto/tests/test_par_pelo_turno_c1v11.py:63`, `app/ponto/tests/par_pelo_turno_c1v14_verificacao.py:154` |
+| 2. Data civil | `_data_do_turno` usa `data_local(saida.timestamp)` e preserva a condição da segunda virada. O selo intacto passou e rejeitou o mutante `data`, que repõe a conversão da c1v13. Folha e espelho também leem a geometria do pareador. `app/ponto/turnos.py:289`, `app/ponto/tests/test_contract_no_batida_date.py:232`, `app/ponto/services/fechamento.py:636`, `app/ponto/services/espelho.py:1035` |
+| 3. Custo da escrita | A carga reutiliza o DNA da `CelulaDia`. Os três pontos de economia identificados no código são a recomposição do núcleo, a grade do cartório e a carga de `dias_encerrados`. Os REDs `dna` e `dna-grade` pegam a releitura e a perda do repasse. A atribuição das **+3 queries históricas** e os totais pós-cura são **[nao verificado]**. Os tetos seguem intactos. `app/ponto/nucleo.py:40`, `app/ponto/services/cartorio.py:1182`, `app/ponto/services/cartorio.py:1205`, `app/escala/utils.py:1957`, `app/ponto/turnos.py:1958`, `app/ponto/tests/test_par_pelo_turno_c1v14.py:19`, `app/ponto/tests/test_selo_chokepoint_escrita.py:491` |
+| 4. Sem vínculo | O guarda usa o vínculo do dia julgado, já resolvido na segmentação. O selo legado devolveu `('S', 'orfao_14h', 'SAIU')` com persistência em memória. O RED com vínculo só na entrada passou. `cadastro` e `dono` derrubaram os respectivos testes. O juiz de chamados também lê `classificar_falta`. `app/ponto/turnos.py:2055`, `app/escala/servico_jornada.py:214`, `app/escala/tests/test_selo_b5c_universo_da_jornada.py:108`, `app/ponto/tests/test_par_c1v8_reds.py:202`, `app/chamados/juizes.py:746` |
+
+### Grupo 5. Selos estruturais
+
+| Selo | Caminho exigido pelo AST | Mutante |
+|---|---|---|
+| `falta_um_significado` | As duas emissões chegam à única aplicação da folha. A chamada preserva `agora` e `ate`, que faltavam no literal antigo. `app/relatorios/tests/test_falta_um_significado.py:144`, `app/relatorios/pdf_espelho.py:255` | `folha` aplica a contagem no PDF. |
+| `pdf_le_o_juiz_do_dia` | PDF → espelho → marcas da janela → projeção por PK do dia julgado. A volta do agrupamento local continua vedada. `app/relatorios/tests/test_pdf_le_o_juiz_do_dia.py:74`, `app/ponto/turnos.py:3049` | `dia` reintroduz `_dj` por data civil. |
+| `f1c_contrato` | O PDF consome a grade retornada pelo espelho, que chama `grade_espelho_janela`. `app/escala/tests/test_f1c_contrato.py:42`, `app/ponto/services/espelho.py:1286` | `grade` monta uma grade própria. |
+| `regua_do_periodo_vem_da_janela` | O PDF recebe `escala` e `tipo_escala` de `autoridade_do_periodo`, que consulta `vinculo_do_dia`. `app/ponto/tests/test_regua_do_periodo_vem_da_janela.py:274`, `app/ponto/services/espelho.py:1076` | `vinculo` escolhe a escala no PDF. |
+| `turno_cruza_meia_noite` | O chamado continua consultando a regra do previsto. A completude lê `cross_meianoite` do par efetivo, inclusive na segunda virada. `app/escala/tests/test_turno_cruza_meia_noite.py:43`, `app/chamados/juizes.py:2324`, `app/ponto/turnos.py:332` | `noturno` compara horas no guarda e `chamado` repete `hf <= hi`. |
+
+Cada selo passou na fonte correspondente e rejeitou seu mutante com `rc 1`, tanto antes da obra (`59600163c`) como na c1v14. Na catraca vizinha, atualizei exclusivamente as coordenadas de quatro registros. Três já divergiam na c1v13. O mutante `catraca` voltou a derrubar a igualdade de linhas. **`except` adicionados no diff e nos arquivos novos: 0.** `app/ponto/tests/par_pelo_turno_c1v14_verificacao.py:76`, `app/core/tests/test_medida_turno_do_par.py:292`, `app/core/tests/test_medida_turno_do_par.py:342`, `app/core/tests/test_medida_turno_do_par.py:554`
+
+### Comandos
+
+Em `app/`, recorte em memória e mutantes. O mutante `fixture` termina no erro de FK simulado. Os demais falham por asserção. `app/ponto/tests/par_pelo_turno_c1v14_verificacao.py:179`
+
+```bash
+prova() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v14_verificacao "$@"
+}
+prova
+for alvo in fixture data dna dna-grade cadastro dono catraca; do
+  prova --alvo "$alvo" --mutante
+done
+for alvo in folha dia grade vinculo noturno chamado; do
+  prova --alvo "$alvo" --antes
+  prova --alvo "$alvo" --antes --mutante
+  prova --alvo "$alvo"
+  prova --alvo "$alvo" --mutante
+done
+```
+
+Recorte canônico dos 18 registros e vizinhos para o Code **[nao verificado]**. `bin/suite.sh:26`
+
+```bash
+labels=(
+  ponto.tests.test_par_c1v8_reds
+  ponto.tests.test_par_pelo_turno_c1v10
+  ponto.tests.test_par_pelo_turno_c1v11
+  ponto.tests.test_par_pelo_turno_c1v12
+  ponto.tests.test_par_pelo_turno_c1v13
+  ponto.tests.test_par_pelo_turno_c1v14
+  ponto.tests.test_par_pelo_turno_c1v6
+  ponto.tests.test_contract_no_batida_date
+  ponto.tests.test_selo_chokepoint_escrita
+  ponto.tests.test_c1_dias_encerrados
+  ponto.tests.test_regua_do_periodo_vem_da_janela
+  escala.tests.test_selo_b5c_universo_da_jornada
+  escala.tests.test_noturno_completo_intervalo
+  escala.tests.test_sobra_na_borda_nao_vira_intervalo
+  escala.tests.test_f1c_contrato
+  escala.tests.test_turno_cruza_meia_noite
+  relatorios.tests.test_falta_um_significado
+  relatorios.tests.test_pdf_le_o_juiz_do_dia
+  relatorios.tests.test_pdf_sem_regra_propria
+  relatorios.tests.test_pdf_nao_calcula
+  relatorios.tests.test_par_pelo_turno_c1v6_pdf
+  chamados.tests.test_e3_c8b_sem_banco
+  core.tests.test_medida_turno_do_par
+)
+PYTHONDONTWRITEBYTECODE=1 bash ../bin/suite.sh \
+  --dir /home/ronald/wt-codex-par-pelo-turno-111717 \
+  --only "${labels[*]}"
+```
 
 ## 27/11 15:54 · sessao aff965f9ab2a · FERIADO-BOTAO-CORTADO · verificador · origem=Code
 
@@ -762,149 +923,4 @@ A extração inicial exibiu comentários técnicos junto dos jurídicos em `app/
 7. **INT-05.** Qual é a base, o divisor e o arredondamento do DSR proporcional em minutos por período de prestação? [CLT, art. 452-A § 6º IV, del5452compilado.htm:2132](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm#art452a) · [Lei 605/49, art. 7º b, l0605.htm:55](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm#art7)
 8. **INT-01 a INT-05.** Qual é o texto do corte de 17/11 sobre intermitentes e quais destes casos ele alcança? [nao verificado]
 
-## 27/11 15:08 · sessao b24bb17059ed · - · - · origem=Ronald (tmux)
-
-Auditei as 54 obras entre `FERIADO-ESCALA` e `O-JANELA-HE` e encaminhei as linhas ao agente principal, com sítios de código, estado no recorte e contrato aplicável. [GRADE-MESTRA.md](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/docs/GRADE-MESTRA.md:140)
-
-No agregado, `GRADE-FOLGA-C5` e `GRADE-FOLGA-GERADOR` compartilham a leitura de folga fora do juiz. `PROPOSITOR-JANELA-LONGA` e `FILA-POR-CAUSA-AS-OF` compartilham o uso da última lavra onde a consulta precisa da decisão por dia. `TROCA-DE-POSTO-SEM-VINCULO` e o item 01 de `BO2910-ESTRUTURA` compartilham a troca de posto sem uma porta única para o ato. `app/ponto/precedencia.py:212`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1561`, `app/escala/models.py:1321`, `app/escala/services/propositor.py:493`, `app/chamados/services/fila_por_causa.py:184`, `app/colaboradores/views.py:337` e `app/colaboradores/views.py:1415`.
-
-## 27/11 15:08 · sessao 903d81c0f68d · INVENTARIO-PELA-REGRA · leitura · origem=Code
-
-# INVENTARIO-PELA-REGRA
-
-As competências usadas são **11/2026** de 21/10 a 20/11, **12/2026** de 21/11 a 20/12, **01/2027** de 21/12 a 20/01 e **02/2027** de 21/01 a 20/02. Os 15 casos são gabaritos de leitura, com asserções limitadas aos dias informados. A execução na pista e o HEAD estão [nao verificado]. [app/docs/LEIS.md:77](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/docs/LEIS.md:77) · [app/docs/LEIS.md:136](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/docs/LEIS.md:136)
-
-**Dados comuns.** Cadastro e batidas são entradas sintéticas, independentes por caso. Onde constar 6×1 comercial, usei 08:00–17:00 com pausa 12:00–13:00 de segunda a sexta, sábado 08:00–12:00 e DSR domingo. Usei essa escala nos recortes anteriores à transição de dezembro da EC 141/2026. Nos plantões de dezembro e janeiro, o acordo coletivo de jornada e repouso regular é dado do teste. Os feriados locais são entradas de cadastro da praça Londrina/PR, cuja situação real está [nao verificado]. [app/docs/LEIS.md:64](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/docs/LEIS.md:64) · [EC 141/2026, arts. 6º e 10, linhas 34–52](https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc141.htm)
-
-**CMP-01**  
-**Família** escala  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo, mensalista. Feriado nacional de 20/11/2026 cadastrado. Sexta seria dia de trabalho e o posto dispensa o expediente no feriado.  
-**BATIDAS (UTC−3)** 19/11 08:00 E, 12:00 S, 13:00 E, 17:00 S. 20/11 sem batidas. 21/11 08:00 E, 12:00 S.  
-**RESPOSTA DA REGRA** 20/11 é feriado nacional e fecha a comp. **11/2026**. No dia, 0 min de presença exigida, 0 trabalhados, 0 de HE de feriado e 0 de falta. Remuneração do feriado preservada. O sábado 21/11 tem 240 min normais na comp. **12/2026**.  
-**FONTE** `app/docs/LEIS.md:77` · [Lei 14.759/2023, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14759.htm) · [Lei 605/1949, art. 8º, linha 64](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm)
-
-**CMP-02**  
-**Família** escala  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo. Cadastro dado de feriado municipal em 10/12/2026, praça Londrina/PR. Trabalho autorizado em dia ordinariamente útil, sem folga compensatória. DSR em 13/12.  
-**BATIDAS (UTC−3)** 10/12 08:00 E, 12:00 S, 13:00 E, 17:00 S. 11/12 08:00 E, 12:00 S, 13:00 E, 17:00 S. 12/12 08:00 E, 12:00 S. 13/12 sem batidas.  
-**RESPOSTA DA REGRA** Comp. **12/2026**. Em 10/12, 480 min trabalhados na base da rubrica **feriado em dobro**, remunerada a 200%. Em 11/12, 480 min normais. Em 12/12, 240 min normais. DSR de 13/12 preservado.  
-**FONTE** `app/docs/LEIS.md:64` · `app/docs/LEIS.md:77` · `app/docs/LEIS.md:113` · [Lei 605/1949, art. 9º, linha 67](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm) · [Súmula 146 do TST, linhas 1498–1502](https://www.tst.jus.br/documents/10157/cc23ec94-9e08-47e3-8ed6-2e662cee7690)
-
-**CMP-03**  
-**Família** escala  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo. Mesmo feriado municipal dado de 10/12/2026. Trabalho autorizado, com folga compensatória integral formalizada e gozada em 11/12. DSR em 13/12.  
-**BATIDAS (UTC−3)** 10/12 08:00 E, 12:00 S, 13:00 E, 17:00 S. 11/12 sem batidas. 12/12 08:00 E, 12:00 S. 13/12 sem batidas.  
-**RESPOSTA DA REGRA** Comp. **12/2026**. Em 10/12, 480 min trabalhados e 0 min de dobra de feriado. Em 11/12, folga compensatória com 0 min trabalhados e 0 de falta. Em 12/12, 240 min normais. DSR de 13/12 preservado.  
-**FONTE** `app/docs/LEIS.md:77` · [Lei 605/1949, arts. 6º e 9º, linhas 28 e 67](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm) · [Súmula 146 do TST, linhas 1498–1502](https://www.tst.jus.br/documents/10157/cc23ec94-9e08-47e3-8ed6-2e662cee7690)
-
-**CMP-04**  
-**Família** escala  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo, mensalista. Cadastro dado de feriado estadual em 13/12/2026, aplicável à praça Londrina/PR. A data coincide com o DSR da escala. Semana cumprida.  
-**BATIDAS (UTC−3)** 07, 08, 09, 10 e 11/12, cada dia 08:00 E, 12:00 S, 13:00 E, 17:00 S. 12/12 08:00 E, 12:00 S. 13/12 sem batidas.  
-**RESPOSTA DA REGRA** Comp. **12/2026**. Em 13/12, 0 min previstos de presença, 0 trabalhados, 0 de HE de feriado e 0 de falta. Um DSR preservado no salário mensal, com 0 min de dobra pelo encontro das duas datas.  
-**FONTE** `app/docs/LEIS.md:64` · `app/docs/LEIS.md:74` · `app/docs/LEIS.md:77` · [Lei 605/1949, arts. 1º e 6º–9º, linhas 15–67](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm)
-
-**CMP-05**  
-**Família** escala  
-**Escala** 12×36 diurno, 07:00–19:00  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo. Feriado nacional de 25/12/2026 cadastrado. Foto escala 25/12 como plantão. Acordo coletivo válido e sem cláusula de dobra. Pausa 12:00–13:00 e limites de jornada cumpridos.  
-**BATIDAS (UTC−3)** 24/12 sem batidas. 25/12 07:00 E, 12:00 S, 13:00 E, 19:00 S. 26/12 sem batidas.  
-**RESPOSTA DA REGRA** Comp. **01/2027**. Em 25/12, 660 min previstos e normais trabalhados, 0 de HE50, 0 de dobra de feriado, 0 de adicional noturno, 0 de intrajornada indenizada. DSR e feriado abrangidos pela remuneração mensal pactuada. A Resolução TST 225/2025 cancelou a Súmula 444 por perda de eficácia a partir de 11/11/2017.  
-**FONTE** `app/docs/LEIS.md:73` · `app/docs/LEIS.md:77` · `app/docs/LEIS.md:118` · [Lei 662/1949, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/leis/l0662.htm) · [CLT, art. 59-A, linhas 333–334](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) · [Resolução TST 225/2025, art. 1º, XXIV, p. 3](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/92286/Resolu%C3%A7%C3%A3o%20n.%20225%2C%20de%2030%20de%20junho%20de%202025.pdf?sequence=3#page=3)
-
-**CMP-06**  
-**Família** escala  
-**Escala** 12×36 noturno, 19:00–07:00, CCT Vigilantes Londrina  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo e aplicação da CCT cadastrada. Feriado nacional de 01/01/2027 cadastrado. Foto escala plantão iniciado em 01/01. Pausa 21:00–22:00.  
-**BATIDAS (UTC−3)** 31/12 sem batidas. 01/01 19:00 E, 21:00 S, 22:00 E. 02/01 07:00 S.  
-**RESPOSTA DA REGRA** `lei: cláusula vigente que conceda dobra ao 12×36 dos vigilantes e defina sua base`. Na comp. **01/2027**, são certos 660 min trabalhados e 420 min na rubrica 0025 a 20%, com hora de 60 min. São 240 min trabalhados na data civil do feriado. Para atribuição da jornada, a L-085 usa 01/01, dia de início.  
-**FONTE** `app/docs/LEIS.md:84` · `app/docs/LEIS.md:117` · `app/docs/LEIS.md:118` · `CLAUDE.md:227` · `CLAUDE.md:236` · `app/core/regua_cct.py:473` · [Lei 662/1949, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/leis/l0662.htm) · [CLT, art. 59-A, linhas 333–334](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
-
-**CMP-07**  
-**Família** escala  
-**Escala** 12×36 noturno, 19:00–07:00, CCT Vigilantes Londrina  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo e aplicação da CCT cadastrada. Natal de 25/12/2026 cadastrado. Foto escala plantão iniciado em 24/12. Pausa 21:00–22:00.  
-**BATIDAS (UTC−3)** 24/12 19:00 E, 21:00 S, 22:00 E. 25/12 07:00 S.  
-**RESPOSTA DA REGRA** `lei: cláusula de dobra e corte de incidência por data civil que resolva a divergência com a L-085`. Na comp. **01/2027**, são certos 660 min trabalhados e 420 min na rubrica 0025 a 20%. O Natal toca fisicamente 25/12 das 00:00 às 07:00, 420 min, dos quais 300 dentro da janela noturna. A L-085 atribui o plantão a 24/12.  
-**FONTE** `app/docs/LEIS.md:84` · `app/docs/LEIS.md:117` · `app/docs/LEIS.md:118` · `CLAUDE.md:236` · `app/core/regua_cct.py:473` · [Lei 662/1949, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/leis/l0662.htm)
-
-**CMP-08**  
-**Família** escala  
-**Escala** 12×36 noturno, 19:00–07:00, CCT Vigilantes Londrina  
-**CADASTRO** Admissão 01/10/2026, vínculo ativo e aplicação da CCT cadastrada. Feriado de 01/01/2027 cadastrado. Foto escala plantão iniciado em 31/12. Pausa 21:00–22:00.  
-**BATIDAS (UTC−3)** 31/12 19:00 E, 21:00 S, 22:00 E. 01/01 07:00 S.  
-**RESPOSTA DA REGRA** `lei: cláusula de dobra e corte de incidência por data civil que resolva a divergência com a L-085`. Na comp. **01/2027**, são certos 660 min trabalhados e 420 min na rubrica 0025 a 20%. O Ano-Novo toca fisicamente 01/01 das 00:00 às 07:00, 420 min, dos quais 300 dentro da janela noturna. A L-085 atribui o plantão a 31/12. A virada do ano civil permanece na mesma competência.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:84` · `app/docs/LEIS.md:117` · `app/docs/LEIS.md:118` · `CLAUDE.md:236` · `app/core/regua_cct.py:473` · [Lei 662/1949, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/leis/l0662.htm)
-
-**CMP-09**  
-**Família** escala  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão e início de vínculo em 05/12/2026. Horista. DSR em 06/12. Sem feriado cadastrado no recorte.  
-**BATIDAS (UTC−3)** 04/12 sem batidas. 05/12 08:00 E, 12:00 S. 06/12 sem batidas.  
-**RESPOSTA DA REGRA** `lei: fórmula e arredondamento do DSR proporcional da primeira semana do horista admitido no sábado`. Na comp. **12/2026**, antes de 05/12 são 0 min previstos, 0 de falta e 0 de DSR creditável. Em 05/12 são 240 min previstos e normais trabalhados. O primeiro DSR a apurar é 06/12, na mesma competência.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:157` · [Lei 605/1949, arts. 6º e 7º, linhas 28–61](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm)
-
-**CMP-10**  
-**Família** escala  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão e início de vínculo em 21/11/2026. Horista. Feriado nacional de 20/11 cadastrado. DSR em 22/11.  
-**BATIDAS (UTC−3)** 20/11 sem batidas. 21/11 08:00 E, 12:00 S. 22/11 sem batidas.  
-**RESPOSTA DA REGRA** `lei: fórmula e arredondamento do DSR proporcional do horista admitido no primeiro dia da competência`. Em **11/2026**, 0 min previstos, trabalhados, de falta ou de DSR e nenhum crédito do feriado de 20/11 para este vínculo. Em **12/2026**, 240 min previstos e normais trabalhados em 21/11. O primeiro DSR a apurar é 22/11.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:157` · [Lei 14.759/2023, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14759.htm) · [Lei 605/1949, arts. 6º–8º, linhas 28–64](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm)
-
-**CMP-11**  
-**Família** escala  
-**Escala** personalizada sem intervalo, 08:00–12:00 de segunda a sexta  
-**CADASTRO** Admissão e início de vínculo em 20/01/2027. Horista. Repousos remunerados em 23 e 24/01. Sem feriado cadastrado no recorte.  
-**BATIDAS (UTC−3)** 19/01 sem batidas. 20, 21 e 22/01, cada dia 08:00 E, 12:00 S. 23 e 24/01 sem batidas.  
-**RESPOSTA DA REGRA** `lei: fórmula e arredondamento dos dois DSR proporcionais quando a primeira semana atravessa o corte`. São 0 min previstos e de falta antes da admissão, 240 min previstos e normais em **01/2027** no dia 20, e 480 min previstos e normais em **02/2027** nos dias 21 e 22. Os dois repousos a apurar caem em **02/2027**.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:157` · [CLT, art. 71, § 1º](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) · [Lei 605/1949, arts. 6º–7º, linhas 28–61](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm) · [EC 141/2026, arts. 1º e 10, linhas 9–26 e 49–52](https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc141.htm)
-
-**CMP-12**  
-**Família** folha/export  
-**Escala** personalizada sem intervalo, 08:00–12:00 de segunda a sexta  
-**CADASTRO** Admissão 01/10/2026. Desligamento efetivado em 20/01/2027, último dia do vínculo. Sem feriado no recorte. Há pendência de célula que normalmente reteria o TXT. Os demais requisitos da emissão estão satisfeitos.  
-**BATIDAS (UTC−3)** 18, 19 e 20/01, cada dia 08:00 E, 12:00 S. 21/01 sem batidas.  
-**RESPOSTA DA REGRA** **01/2027** inclui o dia 20. São 720 min previstos e normais no recorte de 18 a 20, dos quais 240 no último dia. O movimento entra no TXT de **01/2027** e a pendência do desligado gera zero motivos de retenção. Em 21/01, já em **02/2027**, são 0 min previstos, 0 de falta e nenhum movimento para este vínculo.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:113` · `app/docs/CORTES.md:517`. A inclusão no TXT é asserção do aval informado. Seu literal nos documentos consultados está [nao verificado].
-
-**CMP-13**  
-**Família** folha/export  
-**Escala** personalizada sem intervalo, 08:00–12:00 de segunda a sexta  
-**CADASTRO** Admissão 01/10/2026. Desligamento efetivado em 21/12/2026, último dia do vínculo. Descansos em 19 e 20/12. Sem feriado no recorte. Demais requisitos de emissão satisfeitos.  
-**BATIDAS (UTC−3)** 18/12 08:00 E, 12:00 S. 19 e 20/12 sem batidas. 21/12 08:00 E, 12:00 S. 22/12 sem batidas.  
-**RESPOSTA DA REGRA** 240 min normais de 18/12 no TXT de **12/2026** e 240 min normais de 21/12 no TXT de **01/2027**. Zero motivos de retenção do desligado em ambas. A partir de 22/12, 0 min previstos e 0 de falta.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:113` · `app/docs/CORTES.md:517`. A inclusão no TXT é asserção do aval informado. Seu literal nos documentos consultados está [nao verificado].
-
-**CMP-14**  
-**Família** folha/export  
-**Escala** 6×1 comercial  
-**CADASTRO** Admissão 01/10/2026. Desligamento efetivado em 10/12/2026, último dia do vínculo. Sem feriado cadastrado neste recorte. Demais requisitos de emissão satisfeitos.  
-**BATIDAS (UTC−3)** 07, 08, 09 e 10/12, cada dia 08:00 E, 12:00 S, 13:00 E, 17:00 S. 11, 12 e 13/12 sem batidas.  
-**RESPOSTA DA REGRA** Comp. **12/2026**. São 1.920 min previstos e normais no recorte de 07 a 10/12, dos quais 480 no último dia. O movimento entra no TXT, com zero motivos de retenção do desligado. Em 11, 12 e 13/12, 0 min previstos, 0 de falta e nenhum DSR por data posterior ao fim do vínculo.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:113` · `app/docs/CORTES.md:517` · `app/docs/DOSSIES.md:135`. A inclusão no TXT é asserção do aval informado. Seu literal nos documentos consultados está [nao verificado].
-
-**CMP-15**  
-**Família** ausência/férias  
-**Escala** 6×1 comercial nos dias do recorte  
-**CADASTRO** Admissão 01/10/2025, vínculo ativo, mensalista. Férias já concedidas de 15/11 a 14/12/2026, inclusive. Feriados nacionais de 15 e 20/11 cadastrados.  
-**BATIDAS (UTC−3)** Cada dia de 15/11 a 14/12, sem batidas. 15/12 08:00 E, 12:00 S, 13:00 E, 17:00 S.  
-**RESPOSTA DA REGRA** **11/2026** recebe 6 dias corridos de gozo, de 15 a 20/11. **12/2026** recebe 24, de 21/11 a 14/12. O dia 21/11 está em férias. Os DSR de 15, 22 e 29/11 e de 06 e 13/12 estão dentro do gozo. Durante o gozo são 0 min de trabalho, falta, HE ou DSR pago à parte. O retorno em 15/12 dá 480 min normais em **12/2026**. O terço mínimo incide sobre a remuneração dos 30 dias e é pago com ela até 13/11, data que cai em **11/2026**. `lei: competência e formato da rubrica de férias e terço no TXT`.  
-**FONTE** `app/docs/LEIS.md:77` · `app/docs/LEIS.md:113` · [CLT, arts. 130, 142 e 145](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) · [Constituição, art. 7º, XVII, linha 295](https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm) · [Lei 662/1949, art. 1º, linha 10](https://www.planalto.gov.br/ccivil_03/leis/l0662.htm)
-
-## Perguntas de lei
-
-1. **Dobra do 12×36, CMP-05 a CMP-08.** Qual cláusula ou corte vigente concede dobra ao plantão previsto? Para o cadastro sem cláusula favorável, o aval confirma o piso do art. 59-A? `app/docs/LEIS.md:118` · `app/core/regua_cct.py:473` · [CLT, art. 59-A, linhas 333–334](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm) · [Resolução TST 225/2025, art. 1º, XXIV, p. 3](https://as1.trt3.jus.br/bd-trt3/bitstream/handle/11103/92286/Resolu%C3%A7%C3%A3o%20n.%20225%2C%20de%2030%20de%20junho%20de%202025.pdf?sequence=3#page=3)
-2. **Virada do feriado, CMP-06 a CMP-08.** Havendo dobra, qual corte autoriza calcular a rubrica pelas horas da data civil, inclusive a sobreposição com a 0025, diante da atribuição pelo início na L-085? `app/docs/LEIS.md:84` · `app/docs/LEIS.md:117` · `CLAUDE.md:236`
-3. **DSR da primeira semana, CMP-09 a CMP-11.** Qual base, divisor e arredondamento convertem o DSR proporcional do horista em minutos? Como aplicar a fórmula aos dois repousos quando a semana cruza o dia 20/21? `app/docs/LEIS.md:77` · [Lei 605/1949, arts. 6º–7º, linhas 28–61](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm) · [EC 141/2026, arts. 1º e 10, linhas 9–26 e 49–52](https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc141.htm)
-4. **Férias e terço no TXT, CMP-15.** Qual regra atribui o pagamento no TXT quando o gozo atravessa o corte? Qual unidade a rubrica deve carregar? `app/docs/LEIS.md:77` · `app/docs/LEIS.md:113` · [CLT, arts. 142 e 145](https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm)
-
-## 27/11 15:08 · sessao 9139767f560b · - · - · origem=Ronald (tmux)
-
-Auditei as 50 obras de `PERGUNTA-VIVA-COM-CELULA-ABSOLVEU` a `F-346-FILA-OPUS` e enviei a tabela em três blocos para consolidação. Os endereços do anexo divergem da cópia em várias obras. Por exemplo, a primeira consta em `app/docs/BACKLOG.md:2451` e a última em `app/docs/BACKLOG.md:2508`. Estado de produção e confirmação do hash Git ficam como [nao verificado].
-
-_8721 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8724 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
