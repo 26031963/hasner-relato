@@ -1,7 +1,122 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 17:16** · publicado em **27/11/2026 17:20** (UTC-3)
+> Ultima resposta processada: **27/11/2026 17:34** · publicado em **27/11/2026 17:34** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 17:34 · sessao 723ef8477e8c · FERIADO-UM-JUIZ · construtor · origem=Code
+
+A c6 está no diff da cópia sobre `5792a7bfe`, sem commit pela regra explícita da volta. Corrigi cinco falhas nos testes, com as asserções originais. A origem das 79 queries segue **[nao verificado]**. O teto continua em 55. `core/tests/test_selo_performance.py:257`
+
+| Falha | Causa | O que fiz |
+|---|---|---|
+| 1. Ruff `B023` | **Obra.** A c4 introduziu as capturas de `linhas` e `decisoes`. A c5 introduziu a de `ordem`. `ponto/tests/test_feriado_um_juiz_porta.py:447,484,549` | Liguei cada variável por argumento padrão no callback. `ponto/tests/test_feriado_um_juiz_porta.py:446,482,549` |
+| 2. Selo E5 | **Obra c5.** O `with transacao` levou o `else` de 12 para 16 espaços. O ramo de leitura faz `filter().first()` e constrói uma instância excluindo a chave primária. O `get_or_create` fica no ramo de escrita. `ponto/services/fechamento.py:928–929,946–968` | Reancorei só o fim do recorte. `ponto/tests/test_e5_fechamento_como_leitura.py:41–48` |
+| 3. Calendário, 79/55 | **Sem nexo com c1–c5 no caminho do selo.** A fixture abre setembro civil em 12x36 e chama a autoridade sem competência. O ramo novo de feriado na borda fica inativo. O motor já recebe o calendário da janela em lote. `core/tests/test_selo_performance.py:281,291–295,409–413`, `colaboradores/services/calendario.py:194–197,239–241,602`, `ponto/services/fechamento.py:227–231,337–343`, `ponto/services/espelho.py:1067,1149–1153` | Sem alteração na rota. O agregado do anexo deixa o SQL responsável e a contagem na base **[nao verificado]**. |
+| 4. 6x1, 5,5 h de feriado | **Obra c4.** O RED da c1 rodava em outubro. O corte da c4 preserva a rubrica histórica de horas comuns até outubro. A escala incerta retorna antes do zero da L-097. `ponto/calculador/regras.py:393–409`, `folha/export.py:385`, `ponto/motor_calculo_v2.py:1579–1590` | Levei célula, feriado e batidas do RED à competência 11, com relógio congelado. O teste continua exigindo 5,5 h de feriado, 0 h comuns e igualdade entre as duas lavras. `ponto/tests/test_he100_dia_sem_previsto.py:234–252` |
+| 5. C3b, guarda de vacuidade | **Obra c4.** O modo classificado usa a dobra já apurada pelo primeiro motor. A fixture altera a flag no segundo motor, que o leitor consulta. `ponto/calculador/alimentacao.py:519–523,584`, `ponto/tests/test_o280_bateria_da_lei.py:3103–3119` | Fiz a fixture de setembro pedir o modo histórico. O teste continua exigindo dobra com `True`, zero com a flag real do 12x36 e rubricas declaradas quando a flag está ausente. `ponto/tests/test_o280_bateria_da_lei.py:3119,3143–3157` |
+| 6. Selo do export 59-A | **Obra c4.** Montagem e homologação passaram a usar o mesmo leitor da cláusula histórica. O selo que contava duas chamadas diretas passou a contar uma. `folha/export.py:388–394,753,1026` | Reancorei a fonte do selo nas duas portas, seguindo a delegação de cada uma. As duas contagens originais continuam valendo. `folha/tests/test_export_59a.py:58–68` |
+| 7. Smoke de tipo de ausência | **Infraestrutura.** O diff c1–c5 não altera as rotas, views ou templates do fluxo. O anexo registra timeout de 120 s no Chromium antes da asserção do POST. A causa interna do timeout é **[nao verificado]**. `ponto/views_tipos_ausencia.py:37–48`, `ponto/tests/test_smoke_clique_tipo_ausencia.py:97–101,150–154` | Sem edição no smoke. |
+
+Reproduzi em memória o `ValueError` e o `1 != 2` da c5. Na c6, passaram os controles de 40 e 41 testes sem banco, e os quatro mutantes estruturais falharam nas asserções esperadas. Ruff, os testes com banco e a contagem do calendário ficam **[nao verificado]** nesta cópia. A certificação fica com Code e Opus. `ponto/tests/feriado_um_juiz_mutantes.py:54–67,325–364,453–480`
+
+**Recorte para o Code** (`manage.py:7–18`, `config/settings/ci.py:40`)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 RUFF_NO_CACHE=1 python3 manage.py test ponto core folha relatorios --settings=config.settings.ci
+```
+
+**Mutantes da c6** (`ponto/tests/feriado_um_juiz_mutantes.py:54–72,232–247`)
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_laco_sem_linhas
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_laco_sem_ordem
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_laco_sem_decisoes
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_leitura_faz_get_or_create
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_txt_pula_clausula_na_montagem
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_txt_pula_clausula_na_homologacao
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_txt_perde_clausula_no_historico
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_escala_incerta_fica_no_historico_em_novembro
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_cct_classifica_o_feriado_de_setembro
+python3 -m ponto.tests.feriado_um_juiz_mutantes c6_cct_ausente_vira_true
+```
+
+## 27/11 17:32 · sessao a479b64b62da · - · - · origem=Ronald (tmux)
+
+A falha 3 registra 79 consultas contra o teto de 55 no anexo. A origem dessas consultas fica [nao verificado].
+
+A fixture usa 12x36, corte de competência 21 e uma requisição pelo mês civil de setembro. Nessa rota, a chamada à autoridade omite `competencia`, o conjunto de bordas fica vazio e o juiz da borda introduzido na c4 fica fora do caminho. As mudanças alcançadas em `apurar_por_fatia` preenchem dicionários em memória. O calendário do motor já chega em lote, com as duas bordas. [test_selo_performance.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/core/tests/test_selo_performance.py:281) [models.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/colaboradores/models.py:46) [calendario.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/colaboradores/services/calendario.py:602) [fechamento.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/fechamento.py:227) [fechamento.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/fechamento.py:337) [espelho.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/services/espelho.py:1057)
+
+A janela civil também fica fora da leitura dos totais mensais em `folha_manda`, que exige coincidência com a janela da competência. O SQL agregado do anexo não sustenta editar essa rota ou criar mutante de performance por hipótese. [cartao_pela_celula.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/relatorios/cartao_pela_celula.py:27) [cartao_pela_celula.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/relatorios/cartao_pela_celula.py:324)
+
+## 27/11 17:30 · sessao 7bd752f6e54c · - · - · origem=Ronald (tmux)
+
+- **Falha 4, da c4.** A partição histórica envia folga com escala incerta para horas comuns, e a fixture c1 chama a competência 10. A promoção vale desde a 11. O motor retorna antes do zeramento para folga com escala incerta. A cura é exercitar a competência 11 com célula, feriado e batidas sob relógio congelado, mantendo as três asserções. `ponto/calculador/regras.py:393`, `ponto/tests/test_he100_dia_sem_previsto.py:189`, `folha/export.py:385`, `ponto/motor_calculo_v2.py:1579`.
+- **Falha 5, da c4.** O resultado do primeiro motor já traz zero de dobra do 12x36. O novo modo classificado dá precedência a esse resultado, enquanto C3b altera a flag apenas na segunda instância. A fixture de setembro deve pedir `feriado_classificado=False`, assim o teste continua exercitando os três valores da flag no leitor histórico, com as asserções originais. `ponto/calculador/alimentacao.py:519`, `ponto/calculador/alimentacao.py:584`, `ponto/tests/test_o280_bateria_da_lei.py:1230`, `ponto/tests/test_o280_bateria_da_lei.py:3113`.
+- **Perf, observação adicional.** A rota do selo abre o mês civil de setembro. A chamada à autoridade usa `competencia=None` e a borda c5 fica inativa. A janela é livre para `folha_manda`, que por isso pula os totais do fechamento. O carregador de feriados anterior à obra já usa lote. Atribuir as 79 queries a um trecho específico depende de uma medição com SQL ou de uma comparação com a base [nao verificado]. `core/tests/test_selo_performance.py:281`, `core/tests/test_selo_performance.py:409`, `colaboradores/services/calendario.py:194`, `colaboradores/services/calendario.py:602`, `ponto/services/fechamento.py:228`, `relatorios/cartao_pela_celula.py:325`, `core/feriados.py:150`.
+
+## 27/11 17:28 · sessao 6115f41195e9 · - · - · origem=Ronald (tmux)
+
+| Falha | Classificação e evidência |
+|---|---|
+| 6. Export 59-A | **Obra c4 (`6d568d221`).** A montagem e a homologação passaram a chamar `eventos_do_fechamento_da_competencia`, que lê a cláusula uma vez por chamada histórica. O selo conta ocorrências textuais no módulo e agora encontra uma. Reancorar `src` nos dois chamadores, seguindo a delegação, preserva as duas asserções e a leitura da cláusula. `folha/export.py:388–394,753,1026`, `folha/tests/test_export_59a.py:58–63`. |
+| 7. Smoke Chromium | **Infraestrutura.** O diff c1–c5 deixa intactos o smoke, as rotas, as views e os templates que renderizam lista e painel. O anexo registra o timeout de 120 s antes da asserção sobre o POST. `ponto/views_tipos_ausencia.py:37–48`, `ponto/tests/test_smoke_clique_tipo_ausencia.py:97–101,150–154`. A causa específica do timeout fica [nao verificado]. |
+
+## 27/11 17:28 · sessao 864f9e07d63c · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
+
+A volta c1 está aplicada na cópia. Os 15 REDs originais estão intactos. As fontes alteradas e os 11 mutantes compilaram em memória. Execução com banco, falha por asserção dos mutantes e certificação pelo Code e pelo Opus final seguem [nao verificado]. [RED original](chamados/tests/test_desligado_porta_do_chamado.py:123) · [Executor dos mutantes](chamados/tests/desligado_porta_do_chamado_mutantes.py:100)
+
+### Arquivos alterados
+
+- `colaboradores/services/desligamento.py` grava S89 no `LogAuditoria` com data, motivo, autor e instante. A cascata envia todas as disputas abertas à porta `desligamento` antes de encerrar os chamados. [Cascata e auditoria](colaboradores/services/desligamento.py:150)
+- `chamados/services/acoes_chamado.py` e `chamados/views_arquivar.py` passam às portas o `motivo_reabertura` do próprio POST e o autor. `chamados/views.py` e `templates/chamados/detalhe_local.html` oferecem o campo ao gestor autorizado e mostram ao DP a resposta preservada. [Troca de status](chamados/services/acoes_chamado.py:322) · [Desarquivar](chamados/views_arquivar.py:63) · [View](chamados/views.py:550) · [Template](templates/chamados/detalhe_local.html:374)
+- `auditar_invariantes_chamados.py` mede todo o universo `VIVOS`. A última entrada em estado vivo com motivo e autor identifica o estoque humano. O contador de recusas soma as trilhas dos dois verbos com `motivo='desligado'` e exclui o veto do dia. [Vigia](chamados/management/commands/auditar_invariantes_chamados.py:659)
+- `test_desligar_guards.py` atualiza as duas expectativas indicadas com referência ao aval. Os dois arquivos novos exercitam as bordas e aplicam os mutantes no import. [Guardas](colaboradores/tests/test_desligar_guards.py:73) · [REDs adicionais](chamados/tests/test_desligado_porta_do_chamado_bordas.py:11) · [Mutantes](chamados/tests/desligado_porta_do_chamado_mutantes.py:18)
+
+### Expectativa para os 15 REDs
+
+| Quantidade | Dependência |
+|---:|---|
+| 1 | **c1**. S89 vira histórico e o chamado antigo é preservado. [R6 S89](chamados/tests/test_desligado_porta_do_chamado.py:300) |
+| 8 | **c1 + integração**. Os três R4, o R5 de troca de status, as duas perguntas do R6 e os dois testes do vigia. [R4](chamados/tests/test_desligado_porta_do_chamado.py:206) · [R5](chamados/tests/test_desligado_porta_do_chamado.py:284) · [R6](chamados/tests/test_desligado_porta_do_chamado.py:353) · [Vigia](chamados/tests/test_desligado_porta_do_chamado.py:409) |
+| 6 | **`models.py`**. R1, os dois R2, R3, R5 com `humano=True` isolado e a releitura concorrente. [R1 a R3](chamados/tests/test_desligado_porta_do_chamado.py:123) · [R5 direto](chamados/tests/test_desligado_porta_do_chamado.py:270) · [Concorrência](chamados/tests/test_desligado_porta_do_chamado.py:391) |
+
+### Contrato para o outro construtor
+
+- **`PerguntaDisputa`** precisa de `VIA_DESLIGAMENTO: str = 'desligamento'`, em `VIAS` e `VIAS_QUE_VENCEM_A_RESPOSTA`, fora de `VIAS_FORA_DO_FATO`. A porta existente `DisputaSupervisao.fechar(..., motivo=FECHOU_DESLIGAMENTO)` deve carimbar mudas e respondidas sem veredito antes de gravar o fecho, preservando a resposta e a trilha de atos. O juiz existente `_pergunta_materializada_de_fato` precisa devolver `False` para essa via, inclusive em `escolha`. [Choices](chamados/models.py:2821) · [Porta](chamados/models.py:2055) · [Juiz](chamados/juizes.py:712)
+- **`ChamadoColaborador`** precisa de `transicionar(self, novo_status, user, *, motivo_reabertura: str = '')` e `reabrir(self, *, marcos=None, humano=False, motivo_reabertura: str = '', autor: User | None = None) -> bool`. A transição manual sinaliza recusa via `ValueError`, e `reabrir` devolve `False`. O motivo próprio e o autor identificado habilitam a exceção humana, sujeita às demais recusas, inclusive agrupamento. Em `estado_chamado`, gravar `valor_depois.motivo_reabertura` e atribuir `usuario` ao autor da reabertura. A proteção em `ressuscitar_perguntas()` precisa cobrir também a segunda chamada de desarquivar. [Transição](chamados/models.py:140) · [Trilha](chamados/models.py:304) · [Recusas](chamados/models.py:1384) · [Desarquivar](chamados/views_arquivar.py:81)
+- **Guardas das portas**. `criar`, `abrir` e a reabertura devem consultar `esta_desligado` com o cadastro relido sob trava. As trilhas `nascimento_recusado` e `reabertura_recusada` precisam de `valor_depois` com `motivo='desligado'`, `porta`, `colaborador` e `modulo_origem`, em JSON. [Abrir](chamados/models.py:899) · [Criar](chamados/models.py:1113) · [Reabrir](chamados/models.py:1428) · [Leitura do vigia](chamados/management/commands/auditar_invariantes_chamados.py:691)
+
+Há expectativas antigas fora das duas asserções autorizadas que entram em conflito com o aval. [C7](chamados/tests/test_c7_red_minimos.py:230) · [F1](chamados/tests/test_o261e_f1_porta_encerramento.py:346) · [E4B C12](chamados/tests/test_e4b_c12_orm.py:175)
+
+### Comandos para o Code
+
+[Settings de CI](config/settings/ci.py:6) · [Seleção do RED por mutante](chamados/tests/desligado_porta_do_chamado_mutantes.py:18)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
+  chamados.tests.test_desligado_porta_do_chamado \
+  chamados.tests.test_desligado_porta_do_chamado_bordas \
+  colaboradores.tests.test_desligar_guards \
+  --settings=config.settings.ci --noinput
+
+mutante() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -B -m \
+    chamados.tests.desligado_porta_do_chamado_mutantes "$1"
+}
+
+mutante s89_sem_historico
+mutante s89_tenta_nascer
+mutante pula_respondida
+mutante detalhe_sem_motivo
+mutante arquivo_sem_motivo
+mutante detalhe_oculta_motivo
+mutante detalhe_oculta_resposta
+mutante vigia_so_cobranca
+mutante vigia_soma_humano
+mutante vigia_conta_veto
+mutante vigia_so_nascimento
+```
 
 ## 27/11 17:16 · sessao 4a982055c4f3 · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
 
@@ -598,170 +713,4 @@ A compensação agora precede a persistência, e o sucesso exige retorno zero de
 
 A gravação do estado ainda precede os avisos. Se ela lançar `OSError`, a compensação terá sido tentada, mas Pauta e RELATO podem ficar sem registro. [core/esteira_vigia.py:823] [core/esteira_vigia.py:1347]
 
-## 27/11 16:42 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
-
-O pré-verificador confirmou por AST 25 `ExceptHandler` na base e na cura, um único argv do CCM e a leitura de relógio já existente. A guarda prévia retorna antes de Git, deploy e gravação. [core/esteira_vigia.py:749] [core/esteira_vigia.py:1304] [core/esteira_vigia.py:1322] [nao verificado]
-
-`deve_reverter` lê `ultimo_revert` para aplicar o teto. A recusa prévia preserva o valor carregado. Quando a tentativa chega ao reteste, `passada` pode sobrescrever o carimbo novo ao regravar o estado lido antes de chamar `auto_revert`. [core/esteira_vigia.py:1076] [core/esteira_vigia.py:1338] [core/esteira_vigia.py:1542] [core/esteira_vigia.py:1630] [core/esteira_vigia.py:1651]
-
-Na recusa tardia, uma falha na gravação do estado pode impedir o rollback. Os retornos do Git e do deploy compensatórios ficam sem conferência, permitindo anunciar `revert desfeito` se um dos comandos falhar. [core/esteira_vigia.py:823] [core/esteira_vigia.py:1339] [core/esteira_vigia.py:1341] [nao verificado]
-
-O diff cobre os efeitos pedidos nos três selos. A execução na Pista e a mordida dinâmica seguem [nao verificado]. [core/tests/test_vigia_ccm.py:144] [core/tests/test_vigia_ccm.py:160] [core/tests/test_vigia_ccm.py:170]
-
-## 27/11 16:23 · sessao df030164fcae · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-A c11 põe o gatilho do feriado acima da região rolável na ordem de pintura da célula. O template isola o empilhamento da célula mensal e usa `z-index:1` na ação e `z-index:0` na região. A célula segue com 132 px, e as marcações continuam no fim da região rolável, como na c10. A guarda B1 do histórico permanece no JS. [_calendario_grade.html:68](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:68) · [Ação e região:95](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:95) · [Ordem das marcações:132](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:132) · [Guarda B1:27](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:27)
-
-Os **104 px** vêm da sonda. Ela posiciona a ação sobre o conteúdo da célula para deixar pouco espaço vertical no drawer de 128 px. No s11, o retângulo cabe na célula e na viewport, mas a sonda também exige que o centro receba o clique. A correção trata a sobreposição com a grade rolável da c10. Qual elemento recebeu o clique no s11 é **[não verificado]**. [Posicionamento:277](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:277) · [Medição:291](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:291)
-
-O **RED** é o próprio teste que acusou as quatro falhas do s11. O mutante novo `drawer-sem-empilhamento-da-acao` volta `isolation` e `z-index` a `auto` só no drawer, repondo o empilhamento da c10. A revisão estática confirmou que a sonda, as asserções, os esperados e os mutantes anteriores são idênticos aos da c10. Contagem no diff **0 `except`, 0 `catch`**. [Mutante:78](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:78) · [Teste RED:550](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:550) [nao verificado]
-
-**Recorte para a sessão na VM**, com o smoke de clique e histórico, a renderização da grade e os selos do popover. [Uso de `--only`:13275](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/docs/RELATO.md:13275)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh --only "core.tests.test_smoke_clique_feriado_vira_trabalho colaboradores.tests.test_feriado_botao_cortado core.tests.test_selo_popover_acao"
-```
-
-**Comando do mutante** no ambiente de testes da VM. [Seleção do mutante:550](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:550) [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 SMOKE_FERIADO_MUTANTE=drawer-sem-empilhamento-da-acao \
-  python manage.py test --settings=config.settings.ci --noinput \
-  core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest.test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas
-```
-
-Resultado da c11 em Chromium e falha do mutante pelo motivo esperado **[não verificado]**. A certificação fica com a suite e o opus final. [nao verificado]
-
-## 27/11 16:16 · sessao b845a7dd5be1 · FERIADO-UM-JUIZ · verificador · origem=Code
-
-# REPROVADO
-
-1. **K1 continua aberto.** O turno partido de `10:00–14:00 + 14:30–18:20` leva **470 min à HE100 feriado** na promoção. O corte do K1 exige **440 min de HE100 feriado e 30 min de intra indenizada**. O laço do motor que apura a supressão percorre `periodos`, e a promoção soma os minutos de `periodos_ft`. O teste continua como `expectedFailure`. (`app/ponto/motor_calculo_v2.py:3078–3118`, `app/ponto/services/fechamento.py:993–997`, `app/ponto/tests/test_feriado_um_juiz_porta.py:380–394`, `app/docs/RELATO.md:255`)
-2. **A certeza da escala ainda pode decidir quantos minutos chegam à partição.** Com previsto zero, empresa sujeita à janela e sem autorização, a L-097 conserva o par de folga com escala incerta e zera o par com escala certa. O teste que cobra a mesma quantidade nas duas rubricas está em `skip`. A precedência entre esse bloqueio e o aval literal continua pendente. (`FERIADO-UM-JUIZ-2711-1210.txt:1`, `app/docs/LEIS.md:115`, `app/ponto/motor_calculo_v2.py:1562–1597`, `app/ponto/tests/test_feriado_um_juiz_porta.py:499–515`)
-3. **A vigência protege a classificação antiga da 10, mas o aval também veda tocar exportada.** A guarda específica cobre a 09. Nas demais, o evento pode regravar o mensal e as duas lavras. Na 11 e seguintes, isso já usa a regra nova mesmo se houver TXT entregue. O POST pode gerar outra fotografia a partir do cálculo online. (`FERIADO-UM-JUIZ-2711-1210.txt:1`, `app/ponto/services/fechamento.py:36–50,600–639,1189–1223,1294–1328,1829–1855`, `app/folha/views.py:214–219,269–275,302–307`)
-4. **A data e o vínculo ainda podem divergir.** Reproduzi em memória o turno do dia 21 cair na competência anterior quando o feriado é no dia 20. Também reproduzi na partição 4 h de HE100 feriado para um par cujo dia do turno pertence a 12x36, usando o contexto 6x1 que trouxe o par e a data herdada da véspera. (`app/ponto/services/fechamento.py:154–172,223–230`, `app/ponto/motor_calculo_v2.py:2513–2522,2537–2545`, `app/ponto/calculador/regras.py:410–431`)
-5. **As três gravações ainda podem divergir.** O `atomic` protege o `delete` e o `bulk_create` de uma versão de `DiaPago`. O mensal é salvo antes, e as falhas das duas lavras são capturadas separadamente. Uma falha pode deixar o mensal novo com uma ou ambas as lavras antigas. (`app/ponto/services/dia_pago.py:355–363`, `app/ponto/services/fechamento.py:1166–1223,1267–1270,1328–1332`)
-6. **Três testes estruturais falham na própria cópia.** Executei os testes de AST em memória. A catraca de endereços registra cinco sítios divergentes, incluindo `folha/export.py:505` onde o censo encontra `:514`. Os dois testes do dia da lavra rejeitam a atribuição `dia_jornada = dia_turno`, embora a linha seguinte atualize o mapa. (`app/core/tests/test_medida_turno_do_par.py:286–289,326–336,565–569`, `app/folha/export.py:514`, `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:46–71`, `app/ponto/calculador/regras.py:420–430`)
-7. **Pouso e apply [nao verificado].** O aval exige medir antes os 75 dias de 42 colaboradores como hora comum, excluir os intermitentes e entregar reversão, antes × depois por colaborador e DIFF do TXT 11. A prova desses itens, a suíte inteira neste hash e o pouso de E1 antes do K1 estão [nao verificado]. O K1 tem aval separado e condicionado ao DIFF de frota por rubrica antes do pouso. (`FERIADO-UM-JUIZ-2711-1210.txt:1`, `app/docs/RELATO.md:252,255`, `app/docs/PROMPTS.md:3016`, `CLAUDE.md:448–467`)
-
-## Ver3, achado por achado
-
-| Achado do ver3 | Situação na c4 |
-|---|---|
-| **1. TXT perde a primeira fatia, `cadastro_zero` ou resumo perde a rubrica** | **Curado no caso reproduzido.** Emissão, homologação e resumo do cartão usam `eventos_do_fechamento_da_competencia`. A 11 admite FT promovida com `horas_trabalhadas=0` quando a rubrica está cadastrada e o colaborador está sujeito ao ponto. O comparador acusa a rubrica ausente com HE100 bruta igual. O PDF discrimina a parcela no resumo. (`app/folha/export.py:388–394,750–760,924–926,1023–1032`, `app/relatorios/cartao_pela_celula.py:89–101,250–277`, `app/relatorios/pdf_espelho.py:771–779`, `app/ponto/tests/test_feriado_um_juiz.py:56–99`) |
-| **2. Exportada fora da guarda pode mudar** | **Curado para a promoção retroativa da FT incerta até a 10. Aberto para a proteção do gravado.** A fixture da 10 força `entra`, cadastra apenas a rubrica de feriado e chama `registrar` diretamente. Nesse caso, a fotografia anterior tem zero linhas de eventos. O teste compara seis campos do mensal, campos escolhidos das lavras e o registro anterior. A reemissão pelo POST e a 11 já entregue ficam sem essa cobertura. (`app/ponto/calculador/regras.py:393–409`, `app/ponto/tests/test_feriado_um_juiz_porta.py:151–160,239–296`, `app/folha/export.py:539–548,750–765`, `app/folha/views.py:214–219,269–275,302–307`) |
-| **3. Oráculo e DIFF redecidem a dobra** | **Curado para a HE100 feriado normal alimentada a partir da 11.** O oráculo recebe os minutos dos períodos da fatia, inclusive zero com calendário injetado vazio. `periodo.reler` também passa a carregar os minutos do período. O DIFF usa a mesma projeção FT nos dois lados, então `4,00 = 4,00` prova a ligação da partição com o comando. O caminho do oráculo ainda calcula intra e, fora da projeção promovida, noturno e splits com a régua do recorte. (`app/ponto/calculador/alimentacao.py:429–446,518–523,571–597`, `app/ponto/calculador/periodo.py:764–769,824–843`, `app/ponto/calculador/regras.py:793–817,909–932`, `app/ponto/management/commands/diff_calculador.py:244–257,403–415`) |
-| **4. Split bruto sobrescrito ou acima do total** | **Curado no recorte da FT promovida.** A c4 preserva o campo bruto, limita o split aos minutos trabalhados e usa a união da janela no plantão longo com prorrogação. O controle em memória de 21h a 23h do dia seguinte deu **1.500 min de split**, com adicional legal de **1.500 ÷ 0,875 min**. A correção do bruto em outros caminhos fica fora desse ramo. (`app/ponto/calculador/regras.py:432–447`, `app/ponto/motor_calculo_v2.py:82–118,151–161`, `app/ponto/tests/test_feriado_um_juiz.py:331–365`, `app/ponto/tests/test_feriado_um_juiz_porta.py:572–581`) |
-| **5. K1 e dia do turno** | **K1 aberto. Data parcialmente curada.** Há asserções de data e rubrica nas duas lavras para dois turnos e troca de praça. A correção do mapa é condicional ao ciclo, ao feriado e à presença do dia na fatia. O corte de data e a classificação original do período já aconteceram quando ela roda. (`app/ponto/tests/test_feriado_um_juiz_porta.py:380–394,455–497`, `app/ponto/calculador/regras.py:410–431`, `app/ponto/motor_calculo_v2.py:2537–2574`) |
-| **6. Soma, idempotência e falha da relavra** | **Curado o rollback de uma versão. Paridade parcial.** O teste sem promoção exige **8,04 h** no mensal para `241 + 241 min`. A soma diária desses minutos arredonda para **8,03 h**. Com uma FT promovida de 10 segundos, mesmo aparecendo como `0,00 h` de feriado no teste, o mensal passa para **8,03 h** nas horas comuns. Duas execuções bem-sucedidas podem repetir os valores, mas recriam linhas e carimbos. A prova de concorrência e de atomicidade entre mensal e versões está [nao verificado]. (`app/ponto/services/fechamento.py:1005–1013`, `app/ponto/services/dia_pago.py:344–363,552–565`, `app/ponto/models.py:373–387`, `app/ponto/tests/test_feriado_um_juiz_porta.py:396–453`) |
-
-## Aval, vigência e alcance
-
-- **A regra principal entrou.** Em 6x1, a FT já apurada consulta `_feriado_dobra_no_dia` pelo dia do turno. Com dobra devida, a FT incerta vira HE100 feriado. Com escala certa, `feriado_vira_folga` separa HE100 feriado de folga trabalhada a 100%. O diff fornecido preserva `motor_calculo_v2.py` e `CICLOS_FERIADO_SIMPLES`. O intermitente é excluído por base ou ciclo e seu motor injeta calendário vazio. Um período da própria fatia 12x36 fica fora da promoção. A emissão e a troca de vínculo ainda admitem os casos dos bloqueios 3 e 4. A cláusula cadastrada da CCT no caminho regular 12x36 continua no código. (`diff.txt:1`, `app/ponto/calculador/regras.py:314–322,367–377,410–431`, `app/ponto/motor_calculo_v2.py:941–978,3686–3698,3740`, `app/core/regua_cct.py:466–479`)
-- **A partir da competência 11/2026**, mudam a promoção, o consumo da HE100 feriado no TXT e no cartão, a projeção nova para o oráculo, o ajuste noturno da FT promovida e o arredondamento em mensal com promoção positiva. Até a 10, a partição e a emissão históricas conservam o critério anterior. A borda final muda já na 11 e a inicial só na 12. O `atomic` da lavra, a comparação do cartão e a exibição no PDF valem para todas as chamadas. `periodo.reler` também mudou sem parâmetro de competência. (`app/folha/export.py:385–394,924–926`, `app/ponto/calculador/regras.py:386–447`, `app/ponto/services/fechamento.py:223–230,989–1013,1294–1305`, `app/ponto/services/dia_pago.py:358–362`, `app/ponto/calculador/periodo.py:539,764–769`, `app/relatorios/cartao_pela_celula.py:266–273`, `app/relatorios/pdf_espelho.py:771–779`)
-- **Transportar a rubrica da fatia para o TXT cabe no aval.** Corrigir a data da rubrica preserva o objetivo enquanto usa o turno que já foi julgado. O filtro de batidas da borda atua **antes** do motor e pode alterar a apuração de um turno comum. A união altera também `horas_noturnas`, que sai como adicional no TXT. O arredondamento condicionado à promoção altera horas comuns de outros dias do mesmo mensal. Esses efeitos vão além da redistribuição entre HE100 feriado e folga trabalhada. A faixa de impacto na frota está [nao verificado]. (`FERIADO-UM-JUIZ-2711-1210.txt:1`, `app/ponto/services/fechamento.py:154–172,339–348,998–1013`, `app/folha/export.py:453–462`, `CLAUDE.md:274–277`)
-- **A 10 fica igual ao gravado?** O corte preserva a regra para os mesmos insumos. Igualdade com o gravado real, com ambas as lavras e com o TXT vigente [nao verificado]. A própria cópia registra que a 10 foi paga à mão, sem TXT, e saiu da guarda. A condição “10 exportada” está na fixture e na pergunta. A L-113 permite recálculo genérico fora da guarda, enquanto o aval da obra exige preservar exportadas. (`app/ponto/services/fechamento.py:36–50,600–639`, `app/ponto/tests/test_feriado_um_juiz_porta.py:239–289`, `app/docs/LEIS.md:125,155`, `CLAUDE.md:458–470`)
-
-## Escritores, leitores e invariantes
-
-| Valor | Quem escreve e quem lê |
-|---|---|
-| **HE100 feriado, HE100 total e folga trabalhada** | O v2 escreve os minutos dos períodos normais. `particionar_ft` produz as três listas em memória. O fechamento soma e grava o mensal, e `lavrar` grava as linhas diárias. TXT e cartão leem o mensal passado a eles. A emissão calcula HE100 comum como HE100 total menos a parte de feriado. `horas_extras_100_feriado` agrega feriado normal e FT promovida, sem guardar a origem no mensal. No dia, `folga_feriado_min` identifica só a FT promovida. (`app/ponto/motor_calculo_v2.py:328–344`, `app/ponto/calculador/regras.py:392–452`, `app/ponto/services/fechamento.py:984–1006,1193–1199`, `app/ponto/services/dia_pago.py:173–186,235–257`, `app/folha/export.py:434–460`, `app/relatorios/cartao_pela_celula.py:90–101`) |
-| **`horas_trabalhadas` e previsto** | O mensal e a lavra somam períodos normais, órfãos e FT comum. O campo exclui FT com rubrica própria. `pago_do_dia` acrescenta folga trabalhada e o detalhe da FT promovida, portanto responde a uma pergunta diferente. O export lê `horas_trabalhadas` para classificação e prontidão. O previsto do fechamento vem da grade da célula e o realizado limita o abono, sem entrar na soma do previsto. Há uma exceção preexistente na grade por turno do intermitente convocado, que copia o realizado para o previsto. (`app/ponto/services/fechamento.py:1005–1013,1075–1093`, `app/ponto/services/dia_pago.py:258–271,388–402,892–900`, `app/folha/export.py:329–338,853–858,924–926,1058–1074`, `app/escala/services/leitor_celula.py:399–423`, `app/escala/utils.py:2099–2124`) |
-| **Split noturno e adicional** | O v2 escreve o split bruto e os minutos noturnos legais. A partição escreve `FolgaEmFeriado` com o split de relógio e o adicional legal da promoção. Mensal, lavra e projeção leem esses valores. O TXT emite o adicional legal em evento próprio. O split de HE100 é subconjunto da HE100. (`app/ponto/motor_calculo_v2.py:1013–1049`, `app/ponto/calculador/regras.py:380–383,432–447`, `app/ponto/services/fechamento.py:998–1004`, `app/ponto/services/dia_pago.py:244–252`, `app/ponto/calculador/alimentacao.py:369–388`, `app/folha/export.py:438–461`) |
-| **Rubricas do oráculo e `lavrar(rubricas=...)`** | `alimentacao` projeta a partição e lê os valores da primeira fatia para a dobra normal. `do_dia` devolve `valores` e `nao_decide`. Desde a 10 existe a versão `oraculo`; da 11 em diante ela recebe a partição nova. A mesma `lavrar` valida donos declarados, monta a base com os períodos e substitui os campos decididos. A soma lê por versão. (`app/ponto/calculador/alimentacao.py:353–389,518–523,571–597`, `app/ponto/calculador/regras.py:787–817,954–961`, `app/ponto/services/fechamento.py:1294–1328`, `app/ponto/services/dia_pago.py:50–76,311–346,552–565`) |
-| **Data, contexto da fatia e `_FERIADO_CLASSIFICADO_NO_MENSAL`** | O motor escreve o dia do turno por entrada crua e o mapa da jornada por período. A composição guarda `(motor, vínculo)` por identidade e por dia. A partição lê os dois e também escreve no mapa da jornada. Lavra, oráculo e DIFF leem esse mapa. A data civil é a resposta de contingência quando falta mapeamento. O literal `(2026, 11)` mora no export e é lido por emissão, classificação, partição, fechamento e DIFF. Competência é o rótulo da janela da empresa, vigência do vínculo é quem cobre cada data, e o corte da regra é um terceiro valor. Chamadas avulsas sem competência têm comportamento próprio. (`app/ponto/motor_calculo_v2.py:911–922,963–978,2513–2522`, `app/ponto/services/fechamento.py:223–243,335–350,377–382`, `app/ponto/calculador/regras.py:386–431,679–686`, `app/ponto/services/dia_pago.py:109–132`, `app/folha/export.py:385–394,924–926`, `app/ponto/management/commands/diff_calculador.py:112–152,203–215`, `app/ponto/janelas.py:10–21,54–63`, `app/escala/alimentacao.py:205–264`) |
-
-**Juízes, portas e leitores.** F3 continua no motor, e o auxiliar do oráculo empresta seu método. O segundo escritor introduzido é **em memória**, no mapa `dia_da_jornada`. A borda chama o juiz de turnos para retirar batidas e depois entrega ao motor um conjunto diferente para novo pareamento. A partição é disjunta por ocorrência, e suas três listas somam a FT que chegou até ela. Isso não garante que todos os minutos tenham chegado à competência certa nem que mensal, dia e TXT usem a mesma fotografia. O cartão exige a existência do mensal gravado e então recalcula online. O PDF usa o mesmo resumo na janela de competência. O POST do TXT também calcula online, e o comparador `cartao_x_txt` usa o **mensal gravado** como referência. Já `diff_calculador` recalcula ou intercepta a apuração em memória. O DIFF entre arquivos entregues lê os conteúdos armazenados. (`app/core/juizes.py:318–320`, `app/ponto/calculador/regras.py:301–322,392–452`, `app/ponto/services/fechamento.py:339–348,1766–1792`, `app/relatorios/cartao_pela_celula.py:69–76,250–273,324–350`, `app/relatorios/pdf_espelho.py:628`, `app/folha/views.py:214–219,269–275`, `app/ponto/management/commands/diff_calculador.py:114–152`, `app/folha/haiku_export.py:79–107`)
-
-**Relógio e travas.** O diff não adiciona leitura de relógio de parede. O corte usa `(ano, mes)` e o fechamento já captura `_agora_da_passada` uma vez. Não identifiquei inversão explícita nova. A entrega trava Empresa, e a revisão específica segue Empresa → Colaborador → Batida. O evento genérico roda em `on_commit` sem essas travas. A transação local da lavra não serializa entrega, mensal e as duas versões. (`diff.txt:1`, `app/ponto/services/fechamento.py:600–604,678–680,1829–1855`, `app/folha/views.py:102–104,132–135`, `app/folha/export.py:570–576`, `app/ponto/services/par_relampago_na_lista.py:172–187`, `app/ponto/services/dia_pago.py:358–362`)
-
-## Contraexemplos e controles adicionais
-
-- **20/21.** Em memória, com dois turnos `20/11 18–22h` e `21/11 03–07h` e feriado **no dia 20**, a 11 recebeu **4 h de feriado e 4 h comuns no dia 20**, e a 12 recebeu zero. Com feriado em **21/10**, a 10 recebeu as 8 h comuns e a 11 recebeu zero. A fixture de borda cobre feriado em **21/11**, quando os dois lados do filtro já atuam. Um único turno `20/11 22h → 21/11 07h` com feriado só no dia 21 ficou inteiro na 11, como hora comum. (`app/ponto/services/fechamento.py:154–172,223–230`, `app/ponto/motor_calculo_v2.py:2513–2545`, `app/ponto/tests/test_feriado_um_juiz.py:391–425`)
-- **Municipal × estadual e troca no meio do mês.** Londrina e Cambé compartilham um feriado estadual do PR. Um municipal de Cambé alcança só o vínculo de Cambé. O carregador resolve a praça pelo vínculo de cada dia. Na troca **6x1 → 12x36**, a partição pode impedir a troca de contexto pelo ciclo de destino e conservar a dobra já decidida pelo 6x1 de origem. Reproduzi esse ramo com 240 min e confirmação de que a data lavrada ficou na véspera. Ocorrência na frota [nao verificado]. (`app/core/feriados.py:57–67,135–167`, `app/ponto/calculador/regras.py:410–431`, `app/ponto/tests/test_feriado_um_juiz_porta.py:470–497,595–615`)
-- **Intermitente e desligado no dia 20.** Um FT intermitente por base ou ciclo fica em trabalhadas na partição. Para desligamento em 20/11 com corte 21, o colaborador ainda entra no universo de apuração da 11. A grade considera o fato lavrado no dia da demissão, e o classificador manda as verbas para a rescisão antes de avaliar o feriado emitível. Assim, 4 h no mensal podem coexistir com zero linha no TXT mensal por rescisão. O valor no módulo de rescisão está [nao verificado]. (`app/ponto/calculador/regras.py:367–377`, `app/ponto/services/fechamento.py:489–506`, `app/ponto/janelas.py:10–21`, `app/escala/services/leitor_celula.py:379–398`, `app/folha/export.py:54–60,878–893,924–926`)
-
-## Selos e `except`
-
-- **35 controles sem banco passaram. Os 33 mutantes sem banco mordem código de produção:** todos passaram no controle e provocaram falha de asserção no alvo mutado. Há ainda **11 mutantes de porta**, dez com alvo em produção e um de fixture que exige erro de unicidade. A execução dos 11 e os REDs contra os commits-base estão [nao verificado]. O mutante `endereco-c2` altera o registro do teste, e o controle correspondente já falha nesta cópia. (`app/ponto/tests/feriado_um_juiz_mutantes.py:42–219,273–318`, `app/core/tests/test_medida_turno_do_par.py:47–48,565–569`)
-- **`except` no diff fornecido: 0 adicionados e 0 removidos, inclusive em testes.** Os `except` do comando de DIFF, da alimentação e das duas lavras já estão no contexto do diff. `assertRaisesRegex` e `finally` nos testes não são cláusulas `except`. (`diff.txt:1`, `app/ponto/management/commands/diff_calculador.py:130–140`, `app/ponto/calculador/alimentacao.py:429–455,552–560`, `app/ponto/services/fechamento.py:1267–1270,1328–1332`, `app/ponto/tests/test_feriado_um_juiz.py:20–40`)
-
-## 27/11 16:15 · sessao 080e3483b92e · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-A c10 coloca as marcações no fim da área rolável dos feriados com ação oferecida no modo mês. A célula mantém os **132 px**, e o botão fica acima da região rolável. [Grade:68](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:68) · [Grade:95](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:95) · [Grade:132](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:132)
-
-**Causa provável.** Na ficha `420px 1fr`, o anexo mede uma célula de **102 × 132 px** e deixa **no máximo 70,41 px** abaixo do botão, descontados os 3 px de margem e os 6 px de padding e borda inferiores. A região da c9 podia ter ações e faixas depois de `17:00`. Chegar ao máximo (**145 de 145 px**) alinhava o fim de todo esse conteúdo, e `17:00` continuava invisível. O anexo traz o resultado agregado da sonda. A caixa de `17:00` e o ponto exato do recorte ficam **[nao verificado]**. `s10_falha.txt:4` · [Ficha:87](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:87) · [Grade:138](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_calendario_grade.html:138) · [Sonda:428](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:428)
-
-**RED e mutantes.** O RED é o smoke existente na c9. O s10 registrou **19 testes, 1 falha**, em `ultimaVisivelNoFim`. O diff de teste acrescenta duas entradas CSS e **0 `except`/`catch`**. A sonda, a asserção, os valores esperados e o teste B1 de histórico ficaram idênticos byte a byte. A execução da c10 e dos mutantes fica com o Code **[nao verificado]**. `s10_falha.txt:3–9` · [Mutantes:76](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:76) · [Smoke e B1:545](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:545) [nao verificado]
-
-```bash
-# RED na c9. Na c10, o mesmo comando exercita a cura.
-alvo=core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest.test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas
-PYTHONDONTWRITEBYTECODE=1 python manage.py test --settings=config.settings.ci "$alvo"
-
-# M1 — restaura o fluxo em bloco da c9
-PYTHONDONTWRITEBYTECODE=1 SMOKE_FERIADO_MUTANTE=rolagem-em-bloco python manage.py test --settings=config.settings.ci "$alvo"
-
-# M2 — mantém o grid e devolve as marcações à ordem anterior
-PYTHONDONTWRITEBYTECODE=1 SMOKE_FERIADO_MUTANTE=marcacoes-antes-dos-detalhes python manage.py test --settings=config.settings.ci "$alvo"
-```
-
-**Leitores.** A ficha e a aba Espelho do drawer carregam o calendário mensal. A fita de diagnóstico usa `layout='fita'`, `relatorios/furos.html` inclui a grade sem `layout`, e o Espelho de Ponto avulso tem grade semanal própria. A mudança de CSS vale somente para `layout='mes'` com a ação de feriado oferecida ao usuário. [Ficha:215](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:215) · [Aba Espelho:134](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:134) · [Calendário:67](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/calendario_partial.html:67) · [Fita:35](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/partials/_drawer_diagnostico.html:35) · [Furos:42](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/relatorios/furos.html:42) · [Espelho avulso:97](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/ponto/espelho.html:97)
-
-**Recorte.** O `--only` literal do s10 está **[nao verificado]**. O anexo traz a contagem, e este recorte foi reconstruído para 19 testes. `s10_falha.txt:7` [nao verificado]
-
-```bash
---only "colaboradores.tests.test_feriado_botao_cortado colaboradores.tests.test_ui_pilulas_quebram_linha core.tests.test_selo_popover_acao core.tests.test_smoke_clique_feriado_vira_trabalho core.tests.test_smoke_retratar_1366"
-```
-
-## 27/11 16:05 · sessao 1a2ab4657839 · FERIADO-UM-JUIZ · construtor · origem=Code
-
-A c4 está na cópia sobre `29488e3bb`. Em memória, os **9 REDs falharam na c3**, com 12 falhas de asserção contando os subcasos. Na c4, passaram **35 testes e 33 mutantes**. O diff acrescenta **0 `except`**. Os testes de porta com banco e a certificação pelo Code e pelo opus final ficam [nao verificado]. (`ponto/tests/feriado_um_juiz_mutantes.py:261`, `ponto/tests/feriado_um_juiz_mutantes.py:279`)
-
-| Item | RED e prova na c3 | Cura e leitores |
-|---|---|---|
-| **A** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_cartao_le_a_rubrica_emitida` e `::test_RED_c4_cartao_x_txt_acusa_feriado_ausente_com_he100_igual`. O TXT emitiu `400`, o cartão mostrou `0 h` e o contador devolveu `{}` ao perder a rubrica com HE100 bruta igual. (`ponto/tests/test_feriado_um_juiz.py:56`, `:72`) | Cartão, montagem do TXT e homologação leem os mesmos eventos do mensal. O PDF discrimina HE100 feriado e o contador confere a rubrica e o total. App e ficha leem o total. (`folha/export.py:388`, `:753`, `:1026`, `relatorios/cartao_pela_celula.py:89`, `:266`, `relatorios/pdf_espelho.py:773`, `api/views.py:1663`, `colaboradores/services/ficha.py:205`) |
-| **B** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_vigencia_conserva_ft_incerta_em_trabalhadas_ate_outubro`. Na c3, outubro classificou os 240 min como HE100 feriado. O teste de porta `ponto/tests/test_feriado_um_juiz_porta.py::test_RED_c4_evento_na_10_entregue_conserva_a_vigencia_e_a_11_aberta_promove` cobre mensal, duas lavras, TXT vigente e controle na 11 aberta. Execução da porta [nao verificado]. (`ponto/tests/test_feriado_um_juiz.py:300`, `ponto/tests/test_feriado_um_juiz_porta.py:239`) | Partição, lavras e DIFF usam a vigência do TXT. Até outubro, a partição segue a seleção por escala certa e a cláusula histórica da base. O recálculo genérico L-113 segue disponível nas competências entregues a partir da 11. A reemissão nessas competências está [nao verificado]. (`folha/export.py:385`, `ponto/calculador/regras.py:395`, `ponto/services/fechamento.py:989`, `:1305`, `:1829`, `ponto/management/commands/diff_calculador.py:152`, `59600163c:app/ponto/services/fechamento.py:958`) |
-| **C** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_alimentacao_le_a_dobra_normal_da_primeira_fatia` e `::test_RED_c4_periodo_normal_respeita_calendario_injetado_vazio`. Na c3, o oráculo respondeu `0`, `4` e `4 h` nos casos que pediam `4`, `0` e `0 h`. A releitura também inventou 240 min com calendário vazio. (`ponto/tests/test_feriado_um_juiz.py:216`, `:232`) | A alimentação da lavra `oraculo`, o DIFF e a releitura por período leem os minutos decididos pelo motor que apurou o turno. A prova integrada de mensal, lavras e TXT está [nao verificado]. (`ponto/calculador/alimentacao.py:519`, `:584`, `ponto/calculador/periodo.py:768`, `ponto/management/commands/diff_calculador.py:411`, `ponto/tests/test_feriado_um_juiz_porta.py:298`) |
-| **D** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_par_de_21h_a_23h_conta_a_uniao_do_noturno`. A c3 deu **1.560 min** de split. A c4 deu **1.500 min** e adicional legal de **1.500 ÷ 0,875 min**. (`ponto/tests/test_feriado_um_juiz.py:353`) | A promoção mede a união da janela com o medidor existente, desconta os intervalos e entrega split e adicional ao mensal, às duas lavras e ao DIFF. A prova integrada está [nao verificado]. (`ponto/calculador/regras.py:433`, `ponto/services/fechamento.py:998`, `ponto/services/dia_pago.py:244`, `ponto/calculador/alimentacao.py:353`, `ponto/tests/test_feriado_um_juiz_porta.py:572`) |
-| **E** | `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_data_e_certeza_seguem_o_turno_de_cada_par` e `::test_RED_c4_turnos_distintos_na_borda_20_21_entram_cada_um_na_sua_competencia`. A c3 pôs ambas as parcelas na véspera. Na borda, deixou os dois pares na 11 e nenhum na 12. (`ponto/tests/test_feriado_um_juiz.py:367`, `:391`) | A partição resolve vínculo, certeza, cláusula e data da lavra pelo turno. Entre competências já na vigência, a entrada do motor usa o pareador existente para retirar da janela ampliada o turno fechado e distinto que pertence à competência vizinha. As duas lavras e o DIFF leem o resultado. Os casos de porta com troca de praça estão [nao verificado]. (`ponto/calculador/regras.py:412`, `ponto/services/fechamento.py:154`, `:226`, `ponto/services/dia_pago.py:244`, `ponto/calculador/alimentacao.py:361`, `ponto/tests/test_feriado_um_juiz_porta.py:455`) |
-| **F** | `ponto/tests/test_feriado_um_juiz_porta.py::test_RED_c4_competencia_sem_feriado_conserva_arredondamento_da_base`. Executadas as atribuições dos dois hashes com 241 + 241 min, a base deu **8,04 h** e a c3 **8,03 h**. `ponto/tests/test_feriado_um_juiz.py::test_RED_c4_delete_e_bulk_create_usam_a_mesma_transacao` mostrou a perda da linha anterior na c3. (`59600163c:app/ponto/services/fechamento.py:922`, `:1008`, `29488e3bb:app/ponto/services/fechamento.py:964`, `ponto/tests/test_feriado_um_juiz.py:13`) | Sem promoção, o mensal volta a **8,04 h**. Com promoção positiva, arredonda uma vez. O RED existente conserva as asserções e agora injeta uma promoção fracionária na fixture. As duas versões de `lavrar` executam `delete` e `bulk_create` na mesma transação. Rollback no banco [nao verificado]. (`ponto/services/fechamento.py:1008`, `ponto/tests/test_feriado_um_juiz_porta.py:396`, `:435`, `ponto/services/dia_pago.py:360`) |
-| **G** | `ponto/tests/test_feriado_um_juiz_porta.py::test_RED_c4_l097_certeza_so_decide_rubrica_com_ou_sem_autorizacao` está com o `skip` literal. A chamada isolada ao motor deu **240/0 min** para incerta/certa sem autorização e **240/240 min** com autorização. (`ponto/tests/test_feriado_um_juiz_porta.py:499`, `ponto/motor_calculo_v2.py:1562`, `:1585`) | G fica pendente da decisão de lei. K1 conserva o `expectedFailure` e as asserções da c3. (`ponto/tests/test_feriado_um_juiz_porta.py:381`, `:499`) |
-
-**Comandos a partir de `app/`**. `base_c3` carrega os fontes do hash em memória e exige falhas de asserção. Os cinco comandos com `--settings` dependem da pista com banco e ficam [nao verificado]. (`ponto/tests/feriado_um_juiz_mutantes.py:43`, `:169`, `:279`)
-
-```bash
-m() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.feriado_um_juiz_mutantes "$@"; }
-
-m base_c3
-m controle
-m c4_cartao_rejulga_ciclo
-m c4_contador_ignora_feriado
-m c4_ignora_vigencia
-m c4_alimentacao_rejulga_dobra
-m c4_periodo_rejulga_dobra
-m c4_split_bruto_do_noturno_longo
-m c4_adicional_bruto_do_noturno_longo
-m c4_lavra_na_data_herdada
-m c4_certeza_no_dia_herdado
-m c4_pad_conserva_turnos_externos
-m c4_lavra_sem_atomic
-
-m c4_fechamento_ignora_competencia --settings=config.settings.ci
-m c4_mensal_le_noturno_bruto --settings=config.settings.ci
-m c4_lavra_le_noturno_bruto --settings=config.settings.ci
-m c4_troca_de_praca_le_vinculo_herdado --settings=config.settings.ci
-m c4_arredonda_fora_da_promocao --settings=config.settings.ci
-```
-
-**Recorte para o Code** (`bin/suite.sh:295`)
-
-```bash
-bash ../bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
-  --only "ponto folha relatorios escala core colaboradores api"
-```
-
-Medição dos 75 dias e 42 colaboradores, DIFF do TXT 11 de frota, reversão e apply L-092 [nao verificado].
-
-_8743 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8748 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
