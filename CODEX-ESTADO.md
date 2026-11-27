@@ -1,7 +1,61 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 06:17** · publicado em **27/11/2026 06:18** (UTC-3)
+> Ultima resposta processada: **27/11/2026 06:25** · publicado em **27/11/2026 06:25** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 06:25 · sessao 0496a3491b21 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
+
+## Volta 2
+
+1. **`P_CRUZA_PARTIDO_SEM_DECISAO` — fechado.** O P2 bate saída às 07:30, conta até 07:00 e dá **240 min trabalhados, 30 fora, 240 noturnos de relógio, HE50 = 0 e HE100 = 0**. Com P1, são `300 + 240 = 540` min para uma jornada de 540. O controle `Autorizado` mantém 07:30, 270 trabalhados e 30 de HE50. O recibo do hash `c57f0123` registra **17/17 OK** no módulo. `app/ponto/tests/test_ramo2b_turno_que_cruza.py:141–154,203–241,279–283` · `app/ponto/motor_calculo_v2.py:1900–1920,3106,3131–3146` · `tqc.log:2–17`
+
+2. **Split da HE noturna — divergência confirmada na cópia, origem em relação ao main pendente.** No Partido, o recorte devolve `s_he == s`, então a tripla fica `None`. O motor usa `periodo.saida` **bruta** nesse caso. O oráculo passa `efetivo_saida` à mesma função de split. Em memória, com saída batida às 05:30, efetiva às 04:00, prorrogação desligada e HE50 de `180/7` min fornecida ao período, obtive **0 min de HE50 noturna no motor e 25,7142857 min pela ponta que o oráculo usa**. O teste `PARTIDO_LEGAIS` exige HE zero, e os dois `P_CRUZA_PARTIDO_*` conferem HE50/100 sem conferir seus subconjuntos noturnos. `app/ponto/motor_calculo_v2.py:464–485,1094–1109,1900–1920,1967–1971,3106` · `app/ponto/calculador/alimentacao.py:88–115` · `app/ponto/calculador/regras.py:845–865` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:392–403` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:227–230`
+
+   A leitura de `periodo.saida` em `59600163c:app/ponto/motor_calculo_v2.py:1059` é **[nao verificado]**. A cópia veio sem metadados Git e o diff solicitado falhou **[nao verificado]**. Se o main já passa a saída bruta com os mesmos insumos, o defeito do **motor** é preexistente e cabe na fila. A antiguidade da divergência no **oráculo** exige conferir também a ponta que ele passava no main. A linha `PARTIDO-HE-NOTURNA-SAIDA-BRUTA` fica **[nao verificado]**. O registro visível `PAUSA-INTERNA-NO-PARTIDO` trata da pausa dentro do período. `app/ponto/motor_calculo_v2.py:1094–1109` · `app/ponto/calculador/alimentacao.py:106–115` · `app/docs/BACKLOG.md:2159–2161` · `CLAUDE.md:425–426`
+
+3. **Equivalência com o main — fechada para as asserções dos dois controles, pendente para o restante.** O recibo registra uma foto de trabalho `d72222b3` sobre `59600163c`, com dois testes passando e dois `ImportError`. Os dois `P_CRUZA_PARTIDO_*` dão evidência pelo `calcular_mes` para o par-alvo, o dia atribuído pelo juiz, a saída efetiva, os minutos arredondados, a acusação de cadastro e a conservação do bruto. Os dois testes c2p param no import antes de rodar `SEMANA_FLOAT` ou `PARTIDO_LEGAIS`. Portanto, o recibo comprova a ausência dos dois helpers naquela foto. Os valores dessas duas fixtures no main, o split, a equivalência bit a bit e as saídas dos demais leitores ficam **[nao verificado]**. `main.log:2–30` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:203–241` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:160–176,222–236,378–403`
+
+## Alcance do motor e dos leitores
+
+O anexo `delta.patch` traz os dois arquivos de teste. A lista **exata** de hunks de `59600163c..HEAD` fica **[nao verificado]**. Estes são os trechos da cópia que consegui rastrear até o Partido e o Partido Noturno, que herda o mesmo cálculo. `delta.patch:1` · `app/ponto/motor_calculo_v2.py:3103–3147,3830–3837`
+
+| Trecho alcançado | Efeito verificável na cópia |
+|---|---|
+| `PeriodoCalculo`, helpers e porta da tripla | O construtor passa pela porta. Com a tripla vazia, os helpers leem o trabalhado e `noturno legal − noturno de relógio`. `app/ponto/motor_calculo_v2.py:235–299,1941–1971` |
+| Flag, janela e `MotorTurnoPartido.calcular_periodo` | O `False` do Partido mantém `s_he == s`. Com recorte, ambos ficam no marco e a sobra vai para `minutos_fora_janela`. Com autorização, ambos ficam na batida. `app/ponto/motor_calculo_v2.py:792–795,1898–1939,3103–3146` |
+| `MotorBase.calcular_mes` herdado | O bloqueio de folga/feriado sem previsto zera a tripla com as rubricas. O crédito de turno aberto acumula trabalhado, fora e base. Para os pares produzidos pelo Partido, o crédito lê a base pelo trabalhado e mantém a tripla vazia. `app/ponto/motor_calculo_v2.py:1628–1643,2671–2675,2763–2786,3155–3158` |
+| `MotorTurnoPartido.calcular_mes` | A soma diária que alimenta também `semanal_44`, o piso de intra e a dobra de feriado leem o helper de trabalhado. A régua `legais` lê o helper de ganho. Com a tripla vazia, essas leituras devolvem os números do próprio par. O split compartilhado é chamado na dobra, na HE diária e na semanal. `app/ponto/motor_calculo_v2.py:286–299,3193–3195,3237–3252,3342–3354,3375–3440` |
+
+O trecho da virada em `_julgar_pontualidade` é chamado pelo Comercial e pelo `Motor12x36ComEscala`. O Partido usa a própria Zona 5, com marcos do dia da jornada. `app/ponto/motor_calculo_v2.py:2260–2267,3257–3330,3566,3827`
+
+- **`reler`.** É caminho de ensaio. Mede e reescreve o trabalhado pelo segmento efetivo e, com a tripla vazia, o helper lê esse mesmo valor para excesso e dobra. Também reescreve intra, HE e, quando recebe CCT, noturno. Um delta numérico contra o main por esse caminho fica **[nao verificado]**. `app/ponto/calculador/periodo.py:547–575,753–785,843–875`
+- **`porta_export`.** O teto agrupa pelo mapa estrito de dia da jornada e usa o helper. Para o Partido, a base cai no trabalhado. A conferência só entra com **HE e intra positivas** e usa base de relógio e previsto líquido. A régua `legais` do motor tem ainda ganho noturno e limite de 480. Mudança no resultado da porta contra o main ou no TXT fica **[nao verificado]**. O split noturno, isoladamente, não altera as linhas de HE emitidas pelo TXT, que usa os totais e o adicional noturno. `app/folha/porta_export.py:342–366,588–595` · `app/ponto/motor_calculo_v2.py:3382–3409` · `app/folha/export.py:420–448`
+- **Oráculo do fechamento.** Para o Partido com tripla vazia, a base segue os segmentos efetivos sem marcar `dias_com_cauda`. A divergência demonstrada na cópia está na **ponta do split**. O fechamento grava o split do motor e também lavra a versão `oraculo` com rubricas próprias. O valor dessa rubrica no main e o impacto em produção ficam **[nao verificado]**. `app/ponto/calculador/alimentacao.py:106–115,166–178,469–474,545–548` · `app/ponto/services/fechamento.py:938–944,1289–1318`
+
+## Quem escreve e quem lê
+
+| Campo conferido | Escrita e leitura |
+|---|---|
+| `entrada`, `saida`, `efetivo_entrada`, `efetivo_saida` | `calcular_periodo` inicializa as batidas cruas. `_carimbar_segmento` grava as efetivas e o bloqueio integral pode colapsar a saída efetiva. O split do motor lê as cruas no fallback. `reler` e o oráculo leem o segmento efetivo. `app/ponto/motor_calculo_v2.py:1094–1105,1642–1643,2042–2050,3122–3140` · `app/ponto/calculador/periodo.py:753–761` · `app/ponto/calculador/alimentacao.py:88–115` |
+| `minutos_trabalhados`, `minutos_fora_janela`, `intra_descontada` | Os calculadores por par gravam trabalhado e fora. O Partido deixa o desconto interno no default. Bloqueio integral, crédito de aberto e `reler` têm reescritas próprias. O teto de pontualidade lê trabalhado + fora, `DiaPago` soma trabalhado, e o oráculo lê fora e o desconto para montar seus segmentos. `app/ponto/motor_calculo_v2.py:264,1319–1321,1628–1636,2777–2778,3015–3028,3139–3146,3501–3517` · `app/ponto/calculador/periodo.py:182–187,743–769` · `app/ponto/services/dia_pago.py:173–186` · `app/ponto/calculador/alimentacao.py:98–99,133–147` |
+| `minutos_base_da_he`, `saida_da_base_da_he`, `ganho_noturno_da_base_da_he` | `_escrever_base_da_he` grava os três juntos. Motor, `reler` e porta leem a base pelo helper. O mensal `legais` lê o ganho pelo outro helper. Split, `reler` e oráculo leem a ponta. `app/ponto/motor_calculo_v2.py:286–299,1100–1105,1942–1971,3193–3195,3386–3390` · `app/ponto/calculador/periodo.py:758–767` · `app/folha/porta_export.py:342–354` · `app/ponto/calculador/alimentacao.py:114–115,168–178` |
+| Noturno de relógio/legal, HE total/50/100, intra indenizada | `_escrever_noturnas` grava o par de noturnas. O mensal do Partido grava HE e o suprimido do vão. O bloqueio integral zera esses campos e `reler` os reescreve no ensaio. Ganho, split e limite leem os campos correspondentes. `DiaPago` soma as rubricas e a porta usa HE total e intra no teto. `app/ponto/motor_calculo_v2.py:293–299,1085–1109,1632–1636,1973–2011,3244–3252,3347–3354,3402–3409,3435–3440` · `app/ponto/calculador/periodo.py:769–785,866–875` · `app/ponto/services/dia_pago.py:178–186` · `app/folha/porta_export.py:350–361` |
+| Dia do turno e acusação de cadastro | O mensal guarda o mapa do juiz e expõe o dia por período. `_acusa_cadastro_x_realidade` acrescenta a acusação de janela. O teste lê os dois, o oráculo e a porta usam o mapa por período e o espelho consome o relato. `app/ponto/motor_calculo_v2.py:1812–1829,2609–2617,2945,3190–3209` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:224–233` · `app/ponto/calculador/alimentacao.py:78–88` · `app/folha/porta_export.py:342–348` · `app/ponto/services/espelho.py:748–755` |
+
+## Checklist
+
+- **2º juiz:** o delta apresentado altera testes. Os casos mensais passam pela escolha de motor e pelo juiz de turno. O novo caso direto injeta a janela pronta, então a montagem real da janela fica coberta apenas pelos casos que passam pelo mensal. `delta.patch:1` · `app/core/juizes.py:222–224` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:203–226` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:437–458`
+- **2º escritor:** executei a varredura AST do próprio selo em leitura. Para a tripla, ela encontrou apenas `_escrever_base_da_he`. Para as demais rubricas, `reler` é um escritor de ensaio e o motor tem os ajustes indicados acima. A varredura declara suas limitações para atributos dinâmicos. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:644–677` · `app/ponto/motor_calculo_v2.py:1954–1958` · `app/ponto/calculador/periodo.py:547–552,743–785`
+- **Relógio solto:** os casos mensais congelam o tempo. O teste direto usa instantes fixos, feriados vazios e janela injetada. `app/ponto/tests/test_ramo2b_turno_que_cruza.py:168` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:124,443–458`
+- **Derivação paralela:** `reler` mede o trabalhado pelo carimbo e o oráculo mede os segmentos. O split tem uma função compartilhada, com **pontas diferentes** no caso demonstrado. `app/ponto/calculador/periodo.py:753–769` · `app/ponto/calculador/alimentacao.py:106–115,469–474` · `app/ponto/calculador/regras.py:845–865`
+- **Selo com mordida:** o novo teste direto distingue `42761/60` de `44960/60 − 2199/60`, que diferem em ponto flutuante. Os selos do Partido cobram o recorte, mas deixam descoberto o split com HE positiva e cauda excluída. A suíte integral desta volta fica **[nao verificado]**. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:222–236,392–403,443–463` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:227–230` · `tqc.log:3–17`
+- **Campo com dois significados:** `minutos_trabalhados` é o contado, e a presença para o teto soma trabalhado e fora. A tripla `None` significa que a base numérica coincide com o trabalhado. O comentário “par sem cauda” também é usado para um Partido com cauda física já recortada, e o fallback do split trata esse caso como se pudesse usar a batida bruta. `app/ponto/motor_calculo_v2.py:228–246,1096–1105,1319–1321,1917–1920,1963–1969`
+
+## Veredito — REPROVADO
+
+1. **Item 1 fechado.** A asserção corrigida bate com a conta e o módulo registra 17/17 OK. `app/ponto/tests/test_ramo2b_turno_que_cruza.py:141–154` · `tqc.log:3–17`
+2. **Item 2 pendente.** A diferença de split entre motor e oráculo está demonstrada na cópia. Para baixar o achado como fila preexistente, falta conferir as duas pontas no main e localizar o registro alegado **[nao verificado]**. `app/ponto/motor_calculo_v2.py:1094–1109` · `app/ponto/calculador/alimentacao.py:106–115` · `CLAUDE.md:425–426`
+3. **Item 3 parcialmente fechado.** Os dois controles mensais sustentam equivalência para o que conferem. Os dois imports interrompem as outras comparações, e a lista exata de hunks e a equivalência dos demais caminhos seguem **[nao verificado]**. `main.log:2–30` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:217–241` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:222–236,387–403`
 
 ## 27/11 06:17 · sessao 25a38f481b30 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -1002,35 +1056,4 @@ $ GIT_OPTIONAL_LOCKS=0 git -C /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-2
 ?? app/ponto/tests/ramo2b_c2n_mutantes.py
 ```
 
-## 27/11 02:56 · sessao 96e5d25defc9 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-A fix3 troca de `orfao_14h` para `intervalo_volta` apenas o motivo de `vizinha` no caso 26 e de `outra` no caso 30. As datas foram preservadas. O motivo distingue as chaves no índice `pergunta_unica_por_marco`. Comparei a AST com `774860a13` e confirmei que as asserções e o restante do módulo são idênticos. [Caso 26](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1261) · [Caso 30](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1292) · [Índice](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/migrations/0053_pergunta_unica_por_familia.py:59)
-
-- **26.** A preservação dos campos e a ausência de novos atos independem do motivo trocado. O mesmo dia mantém `vizinha` no recorte da rejeição. Pela leitura da base, espero `FAIL` na comparação dos campos, pois a rejeição ainda seleciona `e` e `q` pelo grupo legado de disputa e carimbo. Execução [nao verificado]. [Asserções](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1267) · [Seleção legada](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/services/materializacao.py:1199)
-- **30.** As asserções independem do motivo trocado. `outra` continua pendente no chamado vizinho, e o cartão cuja resposta os leitores comparam mantém o motivo e o dia originais. Pela leitura da base, espero `FAIL` já no subteste SQL, pois o filtro exige `respondida_em` preenchido e a fixture o deixa nulo. Execução [nao verificado]. [Fixture e asserções](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1285) · [Filtro SQL](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/juizes.py:1676)
-
-**Recorte para o Code** [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --dir /home/ronald/wt-codex-e4d-contrato-rota-b-174640 --only "chamados.tests.test_e4d_matriz_reds"
-```
-
-**Mutantes existentes**, para o ambiente de testes do Code. A mordida de cada um fica [nao verificado]. [Mutante do 26](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:275) · [Mutantes do 30](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:288) · [Runner](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:393) [nao verificado]
-
-```bash
-mutante() {
-  E4D_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test "$2" \
-    --settings=config.settings_test \
-    --testrunner=chamados.tests.e4d_matriz_mutantes.RunnerMutanteE4D
-}
-caso26=chamados.tests.test_e4d_matriz_reds.MatrizAusenciaTest.test_caso_26_sem_absorcao_preserva_legado
-caso30=chamados.tests.test_e4d_matriz_reds.MatrizRaizELeitoresTest.test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta
-
-mutante 26_devolve_sem_vinculo "$caso26"
-mutante 30_fila_pelo_carimbo_cru "$caso30"
-mutante 30_api_pelo_par_cru "$caso30"
-mutante 30_modal_pelo_par_cru "$caso30"
-mutante 30_raiox_pelo_carimbo_cru "$caso30"
-```
-
-_8574 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8575 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
