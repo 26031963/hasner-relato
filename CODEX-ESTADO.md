@@ -1,7 +1,517 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 20:00** · publicado em **27/11/2026 20:00** (UTC-3)
+> Ultima resposta processada: **27/11/2026 20:06** · publicado em **27/11/2026 20:07** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 20:06 · sessao 0144c70af86d · FIM-DE-SEMANA-JA · leitura · origem=Code
+
+Segue a S1 em texto. A sonda mantém os recortes da S0, publica os denominadores antes dos subtotais e conta C2 por PK exato da pergunta. Para C2 e C4, `S1_GESTOR_PK` identifica a conta de gestão a medir. `S1_DP_PK` pode indicar outra conta para C5 e, se omitido, usa a mesma conta. A sonda confere as permissões dessas contas no código da aplicação. A execução, os subtotais e a correspondência do snapshot com o hash informado ficam [nao verificado]. `sonda_S0.py:61–267` `app/chamados/views.py:35–38` `app/chamados/utils.py:47–83`
+
+```python
+import logging
+from collections import defaultdict
+from dataclasses import dataclass
+from datetime import timedelta
+from functools import lru_cache
+from html.parser import HTMLParser
+from os import environ
+from types import SimpleNamespace
+
+from django.conf import settings
+from django.db import connection
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+# Mesmas guardas de topo da S0.
+if getattr(settings, "HASNER_SOMBRA", False) is not True:
+    raise SystemExit("PAREI: HASNER_SOMBRA ausente")
+db = connection.settings_dict
+if (db["NAME"], db["HOST"]) != ("sombra", "sombra_db"):
+    raise SystemExit("PAREI: conexao fora da Sombra")
+if connection.in_atomic_block or not connection.get_autocommit():
+    raise SystemExit("PAREI: a sonda exige transacao propria")
+
+from django.contrib.auth.models import User
+from django.template import Context, engines
+from django.utils.dateparse import parse_datetime
+
+from api.login_helpers import is_admin_user
+from chamados.catalogo.motor import COBRANCA, NAO_FECHADOS, VIVOS, decidir
+from chamados.juizes import (
+    FIO_SEM_PORTA,
+    _dia_de_turno_da_pergunta,
+    competencia_do_chamado,
+    dia_do_fato,
+    pergunta_viva,
+    perguntas_vivas_de,
+)
+from chamados.models import (
+    ChamadoColaborador,
+    DecisaoPergunta,
+    DisputaSupervisao,
+    PerguntaDisputa,
+    motivo_implausivel_validacao,
+)
+from chamados.reconciliador import (
+    _absolvido_pela_celula,
+    _chamados_de_turno_vivos,
+    _veredito_premissa,
+    eventos_pendentes,
+    filtro_evento_morto,
+    retencao_da_retratacao,
+)
+from chamados.services.acoes_chamado import montar_contexto_detalhe
+from chamados.services.fio import (
+    chamado_que_lista,
+    contexto_parcial_fio,
+    disputas_do_chamado_em_lote,
+    espera_o_texto_do_colaborador,
+    montar_chamados_fio,
+)
+from chamados.services.materializacao import (
+    _data_em_disputa,
+    estado_aplicacao_pergunta,
+    espera_declarado_x_gravado,
+)
+from chamados.services.painel import qs_na_fila
+from chamados.services.pergunta_no_app import consulta_do_app
+from chamados.services.tarefa_do_dia import (
+    aguarda_admin_pela_tarefa,
+    exigencia_das_perguntas,
+    porta_da_tarefa,
+    tarefa_do_dia,
+)
+from chamados.services.validacao import (
+    _e_aceite_de_folga,
+    _resposta_de_hora,
+    entrega_que_barra_a_validacao,
+    fila_validar_classificada,
+)
+from chamados.services.verbos import particionar_verbos
+from chamados.services.vigia_fio import ListaDoAdmin, dono_fora_do_fio
+from chamados.utils import pode_agir_chamado, pode_agir_departamento
+from chamados.views import _is_gestor
+from chamados.views_cobrar import _pode_validar_lote
+from colaboradores.mixins import tem_acao
+from colaboradores.models import Empresa, HistoricoVinculo
+from colaboradores.services.calendario import resolver_dia_oferecido_nas_datas
+from colaboradores.services.desligamento import esta_desligado
+from escala.models import CelulaDia, EventoCelula
+from folha.fora_da_folha import _carga, _fio_da_porta, dias_que_seguram
+from folha.retrato_folha import PORTA_DO_TIPO, _balde, tipo_da_linha
+from ponto.janelas import janela_fechamento
+from ponto.services.declarar_dia import checar_declaracao, o_dia_ja_e_folga
+from ponto.services.lastro import julgar as julgar_lastro, marcos_acesos_do_dia
+from ponto.supra_juiz import perguntas_que_seguram_csf
+
+EMPRESA_ID = 2
+MES, ANO = 11, 2026
+AGORA = timezone.now()
+HOJE = timezone.localdate(AGORA)
+NV = "[nao verificado]"
+S89 = "desligamento_revisao"
+AVISOS = defaultdict(int)
+
+VERBOS_DA_PERGUNTA = {
+    "validar_pergunta", "recusar_pergunta", "corrigir_resposta",
+}
+
+
+@dataclass
+class Linha:
+    sub: str
+    colab: int
+    chamado: int = None
+    disputa: int = None
+    pergunta: int = None
+    dia: object = None
+    det: str = ""
+
+
+def valor(x):
+    if x is None:
+        return "-"
+    return x.isoformat() if hasattr(x, "isoformat") else str(x)
+
+
+def ids(pks, limite=8):
+    pks = sorted({pk for pk in pks if pk is not None})
+    texto = ",".join(map(str, pks[:limite])) or "-"
+    return texto if len(pks) <= limite else f"{texto},+{len(pks) - limite}"
+
+
+def dia_da_pergunta(p):
+    # Mesmo fallback da S0. app/chamados/juizes.py:58,339
+    dia = _dia_de_turno_da_pergunta(p)
+    if dia is None and not p.conversa and p.celula_id:
+        return p.celula.data
+    return dia
+
+
+def c1(empresa, inicio, fim):
+    # app/folha/fora_da_folha.py:61–91,125–174
+    # app/folha/export.py:1268–1305
+    u = dias_que_seguram(empresa, MES, ANO, hoje=HOJE)
+    itens = sorted(
+        (i for i in u["itens"] if _balde(i) == "bloqueado"),
+        key=lambda i: i["colaborador_id"],
+    )
+    datas = {
+        cid: [r["data"] for r in dias if inicio <= r["data"] <= fim]
+        for cid, (_, dias) in u["dias"].items() if dias
+    }
+    carga = _carga([u["colabs"][cid] for cid in datas], inicio, fim, AGORA) if datas else None
+    cel_ids = {
+        r["celula_id"] for _, dias in u["dias"].values() for r in dias
+        if inicio <= r["data"] <= fim and r["celula_id"] is not None
+    }
+    cels = CelulaDia.objects.only("protestos", "veredito_via").in_bulk(cel_ids)
+    perguntas = defaultdict(list)
+    for p in PerguntaDisputa.objects.filter(celula_id__in=cel_ids).select_related(
+        "disputa__colaborador__empresa", "celula"
+    ).prefetch_related("decisoes"):
+        perguntas[p.celula_id].append(p)
+    lista = ListaDoAdmin(HOJE, [empresa], agora=AGORA)
+    marcadas, resto = [], defaultdict(list)
+
+    for item in itens:
+        cid, motivo = item["colaborador_id"], item["motivo"]
+        if motivo != "furo_espelho":
+            tipo = tipo_da_linha(item)
+            porta_tipo = PORTA_DO_TIPO.get(tipo)
+            sub = f"producao_com_porta:{tipo}" if porta_tipo else "hasner_sem_saida"
+            for dia in item.get("dias_ferias_com_batida") or (None,):
+                if dia is None or inicio <= dia <= fim:
+                    resto[motivo].append(Linha(sub, cid, dia=dia))
+            continue
+
+        colab = u["colabs"][cid]
+        _, dias = u["dias"][cid]
+        if not dias:
+            resto["furo_espelho_sem_dia"].append(Linha("hasner_sem_saida", cid))
+        calendario = resolver_dia_oferecido_nas_datas(
+            colab, datas.get(cid, ()), agora=AGORA
+        )
+        for r in dias:
+            dia, cel_id = r["data"], r["celula_id"]
+            if not inicio <= dia <= fim:
+                continue
+            tarefa = tarefa_do_dia(colab, dia, AGORA, carga=carga)
+            porta = porta_da_tarefa(tarefa)
+            fio = _fio_da_porta(porta)
+            porta = porta or {}
+            rota = porta.get("rota")
+            acao = porta.get("acao")
+            fila = porta.get("fila") or ()
+            fora, _ = dono_fora_do_fio(
+                colab, dia, perguntas[cel_id], lista, com_papel=True
+            )
+            na_lista = lista.dia_na_lista(cid, dia.isoformat())
+            mesa = lista.dia_do_admin(cid, dia.isoformat())
+            pauta = bool(lista.destino_fora_da_mesa(cid, dia.isoformat()))
+            cal = calendario[dia]
+
+            # Prioridade de apresentação da S1. As saídas concorrentes vão em det.
+            publicadas = [] [nao verificado]
+            if rota and fio in ("admin", "colab"):
+                publicadas.append(acao or rota) [nao verificado]
+            if cal is True:
+                publicadas.append("calendario") [nao verificado]
+            if fora:
+                publicadas.append(fora) [nao verificado]
+            if mesa:
+                publicadas.append("cadastro_x_realidade") [nao verificado]
+            if pauta:
+                publicadas.append("pauta_dp") [nao verificado]
+            sub = f"producao_com_porta:{publicadas[0]}" if publicadas else "hasner_sem_saida" [nao verificado]
+
+            peso = []
+            if fio in (FIO_SEM_PORTA, "nao_sei"):
+                peso.append("fio_ninguem_nao_sei")
+            if r["veredito"] in ("discordante", "cobranca_indevida"):
+                peso.append(r["veredito"])
+
+            cel = cels.get(cel_id)
+            protestos = ",".join(sorted(cel.protestos or ())) if cel else ""
+            razoes = sorted({tarefa["razao"], *(i.get("razao") for i in tarefa["instancias"])}
+                            - {None, ""})
+            incerto = (
+                fio == "nao_sei" or cal is None or na_lista is None
+                or (rota and fio not in ("admin", "colab"))
+            )
+            linha = Linha(
+                sub, cid, next(iter(fila), None), dia=dia,
+                det=(
+                    f"aval={','.join(peso) or '-'} motivo={r['motivo']} "
+                    f"protestos={protestos or '-'} via={valor(cel.veredito_via if cel else None)} "
+                    f"fio={'ninguem' if fio == FIO_SEM_PORTA else fio} "
+                    f"razao={','.join(razoes) or '-'} rota={valor(rota)} acao={valor(acao)} "
+                    f"calendario={NV if cal is None else int(cal)} "
+                    f"lista_admin={int(mesa)} cadastro_x_realidade="
+                    f"{NV if na_lista is None else int(na_lista[0])} "
+                    f"fora_fio={valor(fora)} pauta_dp={int(pauta)} "
+                    f"saidas={','.join(dict.fromkeys(publicadas)) or '-'}" [nao verificado]
+                    + (f" alcance={NV}" if incerto else "")
+                ),
+            )
+            if peso:
+                marcadas.append((linha, peso))
+            else:
+                resto[r["motivo"]].append(linha)
+    return marcadas, resto
+
+
+class CartoesHTML(HTMLParser):
+    """Extrai somente IDs e verbos de formulários. O HTML fica em memória."""
+
+    def __init__(self, html):
+        super().__init__()
+        self.fio = defaultdict(set)
+        self.gaveta = defaultdict(set)
+        self.locais = set()
+        self.forms = []
+        self.form = None
+        self.feed(html)
+        self.close()
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if "data-s1-fio" in a:
+            self.fio[int(a["data-s1-fio"])].add(int(a["data-s1-ch"]))
+        if "data-s1-gaveta" in a:
+            self.gaveta[int(a["data-s1-gaveta"])].add(int(a["data-s1-ch"]))
+        prefixo, _, ref = (a.get("id") or "").partition("-")
+        if prefixo == "pergunta" and ref.isdecimal():
+            self.locais.add(int(ref))
+        if tag == "form":
+            self.form = {}
+        elif tag == "input" and self.form is not None and a.get("type") == "hidden":
+            if a.get("name") in {"acao", "chamado_id", "pergunta_id", "confirmar_implausivel"}:
+                self.form[a["name"]] = a.get("value", "")
+
+    def handle_endtag(self, tag):
+        if tag == "form" and self.form is not None:
+            if self.form.get("acao") in VERBOS_DA_PERGUNTA:
+                self.forms.append(self.form)
+            self.form = None
+
+
+@lru_cache(maxsize=1)
+def templates():
+    e = engines["django"].engine
+    fonte = e.get_template("chamados/partials/modal_fio.html").source
+    # Marcadores dentro das ramificações reais. app/templates/chamados/partials/modal_fio.html:157–160,468–476
+    for alvo, marcador in (
+        ("{{ perg.pergunta }}</div>",
+         '<span data-s1-fio="{{ perg.pk }}" data-s1-ch="{{ chamado.pk }}"></span>'),
+        ("{{ it.dia }}</span>",
+         '<span data-s1-gaveta="{{ it.pergunta_id }}" data-s1-ch="{{ chamado.pk }}"></span>'),
+    ):
+        if fonte.count(alvo) != 1:
+            raise SystemExit("PAREI: marcador de template mudou")
+        fonte = fonte.replace(alvo, marcador + alvo, 1)
+    return e.from_string(fonte), e.get_template("chamados/partials/_pergunta_card.html")
+
+
+@lru_cache(maxsize=None)
+def chamado_de(pk):
+    return ChamadoColaborador.objects.select_related("colaborador__empresa").filter(pk=pk).first()
+
+
+def validar_em_leitura(p, confirma):
+    # Testemunhas da porta. app/chamados/services/validacao.py:218–234,755–784
+    if not p.respondida or DecisaoPergunta.composta(p).validada_em is not None:
+        return False
+    if not confirma and motivo_implausivel_validacao(p):
+        return False
+    if _e_aceite_de_folga(p):
+        dia, colab = p.data_evento, p.disputa.colaborador
+        return bool(dia and (
+            o_dia_ja_e_folga(colab, dia)
+            or checar_declaracao(colaborador=colab, dias=[dia], tipo="folga")["aceitos"]
+        ))
+    if entrega_que_barra_a_validacao(p):
+        return False
+    if _resposta_de_hora(p):
+        if espera_declarado_x_gravado(p):
+            return False
+        aplicacao = estado_aplicacao_pergunta(p.disputa, p) or {}
+        return aplicacao.get("estado") in ("aplicavel", "ja_satisfeita", "aplicada") [nao verificado]
+    if p.tipo_resposta == "data_hora" and _data_em_disputa(p):
+        return False
+    return True
+
+
+class PortasGestor:
+    def __init__(self, user, verbos):
+        self.user = user
+        self.req = SimpleNamespace(user=user, GET={})
+        self.pode_inline = tem_acao(user, "gerir_chamados")
+        self.verbos = verbos
+        self.lote = (
+            set(fila_validar_classificada()["refs_lote"])
+            if _pode_validar_lote(self.req) is None else set()
+        )
+
+    @lru_cache(maxsize=None)
+    def modal(self, colab):
+        # GET real marca lidas. Usar o construtor de leitura.
+        # app/chamados/views.py:870–890,928–949
+        ctx = contexto_parcial_fio(self.req, colab)
+        ctx.pop("pode_conferir_data", None)
+        ctx["cor_disputas_map"] = DisputaSupervisao.cor_map_por_colaborador(colab)
+        tela = CartoesHTML(templates()[0].render(Context(ctx, use_l10n=False)))
+        cards = {ch.pk: ch for ch in ctx["chamados"]}
+        eleitas = disputas_do_chamado_em_lote(cards)
+        forms = defaultdict(list)
+        for f in tela.forms:
+            pid, cid = int(f["pergunta_id"]), int(f["chamado_id"])
+            forms[pid].append((cards[cid], eleitas.get(cid), f))
+        return tela, forms
+
+    @lru_cache(maxsize=None)
+    def local(self, pk):
+        # app/chamados/views.py:359–372,550–552
+        ch = chamado_de(pk)
+        if ch is None or ch.ticket_id_glpi is not None:
+            return set(), defaultdict(list)
+        ctx = montar_contexto_detalhe(self.req, ch, True, ())
+        visiveis, forms = set(), defaultdict(list)
+        for p in ctx["perguntas_disputa"]:
+            html = templates()[1].render(Context({**ctx, "perg": p}, use_l10n=False))
+            tela = CartoesHTML(html)
+            visiveis.update(tela.locais)
+            for f in tela.forms:
+                forms[int(f["pergunta_id"])].append(f)
+        return visiveis, forms
+
+    @lru_cache(maxsize=None)
+    def inline(self, pk):
+        ch = chamado_de(pk)
+        if not (self.pode_inline and self.verbos.get(pk) == "validar"
+                and pode_agir_chamado(self.user, ch)):
+            return set()
+        d = disputas_do_chamado_em_lote([pk]).get(pk)
+        if d is None or d.colaborador_id != ch.colaborador_id:
+            return set()
+        return {p.pk for p in perguntas_vivas_de(d) if p.respondida}
+
+    def consultar(self, p, ch=None):
+        pid, d = p.pk, p.disputa
+        ancora = chamado_que_lista(p)
+        card_ids = {d.chamado_id, ancora, ch.pk if ch else None} - {None}
+        cards = [chamado_de(pk) for pk in sorted(card_ids)]
+        colabs = {d.colaborador_id: d.colaborador}
+        for card in cards:
+            colabs[card.colaborador_id] = card.colaborador
+
+        local, fio, gaveta, glpi_local, acoes = set(), set(), set(), set(), set()
+        glpi_remoto = False
+        for card in cards:
+            if card.ticket_id_glpi is not None:
+                # O roteador primeiro testa colisão com PK local. app/chamados/views.py:219–222
+                alvo = chamado_de(card.ticket_id_glpi)
+                if alvo is not None and alvo.ticket_id_glpi is None:
+                    if pid in self.local(alvo.pk)[0]:
+                        glpi_local.add(alvo.pk)
+                    card_ids.add(alvo.pk)
+                else:
+                    glpi_remoto = True
+
+        def acao_do_form(f, card, canal, eleita=None):
+            acao = f["acao"]
+            if card.pk != ancora or not pode_agir_chamado(self.user, card):
+                return
+            if canal == "local" and not d.aberta:
+                return
+            if acao == "validar_pergunta":
+                if canal == "fio" and (
+                    card.colaborador_id != d.colaborador_id
+                    or (not d.aberta and not pergunta_viva(p, hoje=HOJE))
+                ):
+                    return
+                aceito = validar_em_leitura(p, f.get("confirmar_implausivel") == "1")
+            else:
+                if not d.aberta or (canal == "fio" and eleita is None):
+                    return
+                leitura = DecisaoPergunta.composta(p)
+                aceito = leitura.validada_em is None
+                if acao == "recusar_pergunta":
+                    aceito = aceito and p.respondida and not p.fora_do_fato()
+                else:
+                    # A hora corrigida é entrada humana. A validação dela fica em aberto.
+                    aceito = aceito and p.tipo_resposta == "hora"
+            if aceito:
+                acoes.add(f"{canal}:{acao}:{card.pk}")
+
+        for pk in sorted(card_ids):
+            visiveis, forms = self.local(pk)
+            if pid in visiveis:
+                local.add(pk)
+            for f in forms.get(pid, ()):
+                acao_do_form(f, chamado_de(pk), "local")
+            if pid in self.inline(pk) and validar_em_leitura(p, False):
+                acoes.add(f"inline:validar_pergunta:{pk}")
+
+        for colab in colabs.values():
+            tela, forms = self.modal(colab)
+            fio.update(tela.fio.get(pid, ()))
+            gaveta.update(tela.gaveta.get(pid, ()))
+            for card, eleita, f in forms.get(pid, ()):
+                acao_do_form(f, card, "fio", eleita)
+        lote = pid in self.lote
+        if lote and validar_em_leitura(p, False):
+            acoes.add("lote:validar_pergunta")
+        return local, fio, gaveta, glpi_local, glpi_remoto, lote, acoes
+
+
+@lru_cache(maxsize=None)
+def portas_colab(colab):
+    # app/chamados/services/pergunta_no_app.py:68–92
+    # app/api/views.py:2553–2574
+    pendentes = consulta_do_app(colab, agora=AGORA)["pendentes"]
+    exigencias = exigencia_das_perguntas(pendentes, AGORA)
+    app = set()
+    for p in pendentes:
+        razao, acoes = exigencias[p.pk]
+        if not aguarda_admin_pela_tarefa(razao, acoes, conservado=p.estado == p.RESPONDIDA):
+            app.add(p.pk)
+    web = {
+        p.pk for card in montar_chamados_fio(colab, so_janela=True)
+        for p in card.perguntas_disputa if p.viva
+    }
+    user = colab.usuario
+    conta_ativa = bool(user and user.is_active)
+    # Elegibilidade de login novo, sem autenticar nem testar sessão.
+    app_login = bool(
+        conta_ativa and colab.situacao == "ativo"
+        and colab.empresa.ativa and not is_admin_user(user)
+    )
+    return app, web, app_login, conta_ativa
+
+
+def c2(chamados, inicio, fim, gestor):
+    linhas, sem_gestor, sem_ator = [], [], []
+    for ch, dia_ch in chamados.values():
+        candidatas = {p.pk: (p, {"ancora"}) for p in ch._vivas_ancoradas("fechado")}
+        if not ch._gate_conversa_do_pai(registrar=False):
+            extras = PerguntaDisputa.objects.filter(
+                pk__in=perguntas_que_seguram_csf(ch)
+            ).select_related(
+                "disputa__colaborador__empresa", "disputa__chamado", "chamado_destino", "celula"
+    
+
+[truncado em 20000 de 47222 caracteres]
+
+## 27/11 20:01 · sessao 70043781f402 · - · - · origem=Ronald (tmux)
+
+C2 pode cruzar o PK pela projeção real do detalhe local, pelos cartões e itens da gaveta do fio e pelas referências da classe A na prévia. O modal HTTP marca notas como lidas no GET. A sonda deve usar `montar_chamados_fio` ou seu construtor de contexto e renderizar os fragmentos somente em memória. O formulário renderizado identifica a ação oferecida, e as guardas de leitura identificam recusas previsíveis. O resultado da escrita fica [nao verificado]. `app/chamados/services/acoes_chamado.py:337–358`, `app/chamados/views.py:870–890`, `app/chamados/services/fio.py:573–618,694–760,776–790`, `app/chamados/views_cobrar.py:352–399`.
+
+O detalhe GLPI pode redirecionar para um cartão local por colisão do ID do ticket com um PK local. O ramo GLPI só apresenta descrição e followups sem vínculo estruturado por PK de pergunta. Menções em texto remoto ficam [nao verificado]. `app/chamados/views.py:219–269`, `app/templates/chamados/detalhe.html:65–143`.
+
+C4 usa a união por PK do C6 com `respostas_sem_veredito` sobre a disputa inteira. O app expõe os PKs pendentes em `consulta_do_app`. Meu Atendimento usa `montar_chamados_fio(so_janela=True)` e o predicado `p.viva`. O acesso do colaborador também depende da conta e da situação cadastral. `app/chamados/models.py:2000–2053`, `app/chamados/services/pergunta_no_app.py:68–92`, `app/chamados/views.py:560–570,1229–1247`, `app/templates/chamados/partials/_card_atendimento.html:73–78`, `app/api/login_helpers.py:121–148`.
+
+C5 deve ler `_plano_pergunta_viva('fechado')` para distinguir uma guarda de um caso que seria reatado. O S89 registra a execução em `contexto_json['executado_em']`, antes dos dois laços da cascata. Abertos hoje e anteriores a esse instante são candidatos. A relação causal com aquela execução fica [nao verificado] sem trilha histórica. `app/chamados/models.py:393–464,1779–1794`, `app/colaboradores/services/desligamento.py:150–214`.
 
 ## 27/11 20:00 · sessao c7d29a82460e · - · - · origem=Ronald (tmux)
 
@@ -1434,44 +1944,4 @@ Também alinhei o teste ORM c5 da própria obra. Execução ORM, suíte integral
 
 As execuções usaram o código da cópia em memória, com substitutos mínimos para as dependências de teste do Django. Suíte Django inteira, efeitos em produção e integridade das competências exportadas **[nao verificado]**. [nao verificado]
 
-## 27/11 19:01 · sessao c3b509094378 · FERIADO-UM-JUIZ · verificador · origem=Code
-
-# REPROVADO
-
-1. **O c9 ainda reverte um fechamento válido.** Reproduzi em memória um dia 6x1 com batidas `07:02 E`, `12:59 S`, `13:53 E`. O motor reconheceu **357 min** do par fechado e manteve o turno aberto. O oráculo devolveu `{}` porque o segmento aberto fica sem saída e o núcleo só soma segmentos fechados. No c9 e na base imediata `8639de6ca`, o fechamento retornou `0` e reverteu o mensal e a lavra `motor`. Com a lavra de `7706835c4` carregada em memória, retornou `1` e gravou **5,95 h** nas duas versões. Acrescentei um dia fechado à mesma competência. O oráculo descreveu apenas esse segundo dia, e o c9 gravou as **5,95 h** do primeiro sem declaração do oráculo para ele. A decisão sobre o primeiro dia depende, portanto, de haver outra data no mapa da competência. `app/ponto/tests/test_bob_dia_pago_se_contradiz.py:131` `app/ponto/motor_calculo_v2.py:2662` `app/ponto/calculador/alimentacao.py:83` `app/ponto/calculador/nucleo.py:142` `app/ponto/services/dia_pago.py:258` `app/ponto/services/dia_pago.py:322` `app/ponto/services/fechamento.py:1329` `7706835c4:app/ponto/services/dia_pago.py:311`
-2. **A exceção literal de pontualidade pode divergir do catálogo e os REDs atuais deixam essa divergência passar.** Na cópia, a exclusão concorda com os dois nomes emitidos por `do_dia`. A política para `{}` está escrita separadamente em `lavrar`. `SEM_ENTRADA` declara ausência de insumo numa chamada de `do_dia`, e `motivo_nao_julga_pontualidade` responde sobre famílias de motor. Nenhum dos dois define os campos dispensados quando o mapa inteiro vem vazio. `horas_atraso` só é preenchido *depois* da guarda, então hoje o literal tem efeito apenas para `horas_saida_antecipada`. Troquei a seleção em memória por apenas `horas_trabalhadas`. Os **46 testes** do controle mais a asserção de B2 conservaram o mesmo resultado, inclusive a falha esperada na borda. O mutante retirou oito campos da guarda sem ser detectado pelos REDs. `app/ponto/services/dia_pago.py:184` `app/ponto/services/dia_pago.py:258` `app/ponto/services/dia_pago.py:270` `app/ponto/calculador/regras.py:527` `app/ponto/calculador/regras.py:608` `app/ponto/calculador/regras.py:627` `app/ponto/calculador/regras.py:939` `app/ponto/tests/test_feriado_um_juiz.py:248` `app/ponto/tests/test_feriado_um_juiz.py:292` `CLAUDE.md:28`
-
-## B1 e B2 do ver6
-
-- **B1 curado no caso original.** Com escala `07h–15h` e batidas `06h–06h30`, o resultado foi `{}`, zero trabalhado e **420 min de saída antecipada** nas duas lavras. O fechamento retornou `1`. A base imediata e o mutante que recoloca saída antecipada na guarda retornaram `0`. `app/ponto/tests/test_feriado_um_juiz.py:248` `app/ponto/tests/test_feriado_um_juiz.py:284` `app/ponto/tests/feriado_um_juiz_mutantes.py:121` `8639de6ca:app/ponto/services/dia_pago.py:259`
-- **B2 curado na asserção.** Executei a própria asserção do teste sobre as chamadas do serviço real. Julho e agosto de 2026 receberam `propagar_falha=True`. A asserção antiga falhou com o argumento a mais, e o mutante que retira o argumento falhou com o argumento faltando. O teste ORM completo está [nao verificado]. `app/ponto/tests/test_revisar_par_relampago.py:153` `app/ponto/tests/test_revisar_par_relampago.py:163` `app/ponto/services/fechamento.py:1892` `app/ponto/tests/feriado_um_juiz_mutantes.py:97` `app/ponto/tests/feriado_um_juiz_mutantes.py:124`
-- **Provas executadas.** Dois REDs c9 verdes e duas falhas de asserção esperadas com as fontes da base imediata carregadas em memória. Na base c7, os quatro REDs deram cinco falhas esperadas. Os 13 mutantes reexecutados morderam. O controle teve 45 testes, com uma falha esperada na borda 20/21, e os 41 estruturais passaram. Usei os arquivos das cópias locais para repor as bases em memória. A identidade delas pelo Git está [nao verificado]. `app/ponto/tests/feriado_um_juiz_mutantes.py:120` `app/ponto/tests/feriado_um_juiz_mutantes.py:165` `app/ponto/tests/feriado_um_juiz_mutantes.py:407` `app/ponto/tests/feriado_um_juiz_mutantes.py:500` `app/ponto/tests/feriado_um_juiz_mutantes.py:520` `app/ponto/tests/feriado_um_juiz_mutantes.py:568` `app/ponto/tests/test_feriado_um_juiz.py:786`
-
-## Campos e procedência
-
-| Nome | Quem declara, quem lê e com qual significado |
-|---|---|
-| `regras.RUBRICAS` | `regras.py` declara o catálogo, que inclui campos mensais e rubricas condicionais. `do_dia` usa o catálogo para iniciar `valores`, o `diff_calculador` monta seu universo de comparação e `lavrar` deriva os campos que exigem procedência quando recebe `{}`. Catálogo e procedência efetiva têm alcances diferentes, como demonstra o bloqueio 1. `app/ponto/calculador/regras.py:506` `app/ponto/calculador/regras.py:748` `app/ponto/management/commands/diff_calculador.py:79` `app/ponto/services/dia_pago.py:263` |
-| `regras.NAO_DECIDE` | `regras.py` declara falta, DSR e banco como rubricas de outra fonte. `do_dia` copia a declaração e acrescenta causas da chamada. O DIFF exclui as declarações do módulo e registra as por dia. A guarda vazia lê a constante. Com mapa preenchido, `_DONOS_DECLARADOS` aceita `Rubricas.nao_decide` como declaração de dono. Confirmei em chamada direta que `horas_falta` passa e grava zero sem `faltas_por_dia`, embora o contrato da função exija o mapa. O fechamento passa esse mapa explicitamente. `app/ponto/calculador/regras.py:532` `app/ponto/calculador/regras.py:709` `app/ponto/management/commands/diff_calculador.py:79` `app/ponto/management/commands/diff_calculador.py:508` `app/ponto/management/commands/diff_calculador.py:599` `app/ponto/services/dia_pago.py:50` `app/ponto/services/fechamento.py:1313` |
-| `do_motor` | O chamador pode declarar campos cujos valores vêm dos períodos. As duas chamadas de produção usam o padrão `()`. `_DONOS_DECLARADOS` aceita os campos, a guarda vazia os exclui e a sobreposição de `valores` os preserva. O significado é consistente nesses três usos. `app/ponto/services/dia_pago.py:69` `app/ponto/services/dia_pago.py:140` `app/ponto/services/dia_pago.py:263` `app/ponto/services/dia_pago.py:339` `app/ponto/services/fechamento.py:1235` `app/ponto/services/fechamento.py:1309` |
-| `CAMPOS_DIA` | `dia_pago.py` declara o esquema de 15 campos de dia. A lavra usa o esquema para inicializar linhas, validar procedência e limitar a sobreposição. `soma_do_periodo` usa os campos para somar o gravado, e o relatório usa o mesmo esquema para montar o objeto de exibição. As unidades conferem com o modelo, em horas para `horas_*` e minutos para `minutos_*`. `app/ponto/services/dia_pago.py:34` `app/ponto/services/dia_pago.py:166` `app/ponto/services/dia_pago.py:323` `app/ponto/services/dia_pago.py:339` `app/ponto/services/dia_pago.py:797` `app/relatorios/views.py:547` `app/relatorios/views.py:586` `app/ponto/models.py:325` `app/ponto/models.py:345` |
-
-**Perda silenciosa com `{}`.** Nenhuma demonstrada nas exclusões atuais. Conferi que a saída antecipada fica na linha e que atraso líquido, órfãos, falta, grade, DSR e banco entram pelas fontes do chamador. Com `{}`, nenhum `valores` é aplicado sobre esses números. O caso positivo demonstrado é o inverso, com rollback de horas já reconhecidas. Ocorrência na frota e perda em produção estão [nao verificado]. `app/ponto/services/dia_pago.py:184` `app/ponto/services/dia_pago.py:270` `app/ponto/services/dia_pago.py:296` `app/ponto/services/dia_pago.py:332` `app/ponto/services/dia_pago.py:355` `app/ponto/services/fechamento.py:1332`
-
-## Outras classes de reprovação
-
-- **Juiz, escritor, relógio e travas.** O c9 acrescenta uma decisão de procedência. O juiz de feriado registrado e a porta de gravação por versão são os mesmos. A guarda nova não lê relógio, e o relógio do teste em memória é fixado pela fixture. A revisão mantém Empresa por PK → Colaborador → Batida por PK, dentro do `atomic`. `app/core/juizes.py:318` `app/ponto/services/dia_pago.py:258` `app/ponto/services/dia_pago.py:369` `app/ponto/tests/test_feriado_um_juiz.py:237` `app/ponto/services/par_relampago_na_lista.py:172` `app/ponto/services/par_relampago_na_lista.py:479`
-- **Import e `except`.** Há dependência recíproca entre `lavrar` e `regras.particionar_ft`, com imports locais. Forcei a lavra com `{}` em processos novos nas duas ordens de importação e ambas passaram. O diff tem **0 `except` adicionados e 0 removidos**, por comparação textual e AST nos quatro arquivos. O selo estrutural antigo do oráculo verifica o `try/except` separado. A prova de rollback vem dos REDs de comportamento. `app/ponto/services/dia_pago.py:260` `app/ponto/calculador/regras.py:386` `diff.txt:1` `app/ponto/tests/test_s5b_troca_ligada.py:98` `app/ponto/tests/test_feriado_um_juiz.py:43`
-
-Suíte inteira, banco, logs, medição da frota, apply, reversão em produção e DIFF do TXT 11 [nao verificado]. [nao verificado]
-
-## 27/11 18:54 · sessao 10767bc89811 · FERIADO-UM-JUIZ · construtor · origem=Code
-
-Entreguei as duas correções da c9. O diff, o censo dos campos-fonte do oráculo, os chamadores da guarda e os comandos com seus códigos de retorno estão em [r.md](/home/ronald/wt-codex-feriado-um-juiz-152427/app/r.md:3).
-
-- **B1.** O recálculo com `{}` e 420 minutos de saída antecipada retorna `1` e conserva o valor nas duas lavras em memória. O RED de 4 h trabalhadas com `{}` continua exigindo `ValueError`. [test_feriado_um_juiz.py:248](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:248), [test_feriado_um_juiz.py:292](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:292)
-- **B2.** A asserção da revisão exige `propagar_falha=True` em julho e agosto de 2026. [test_revisar_par_relampago.py:163](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_revisar_par_relampago.py:163)
-
-Os dois REDs falharam contra o c8 e passaram após a cura. Os dois mutantes novos produziram as falhas esperadas. Teste ORM completo, suíte inteira e ocorrência na frota [nao verificado]. [r.md:27](/home/ronald/wt-codex-feriado-um-juiz-152427/app/r.md:27) [nao verificado]
-
-_8775 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8777 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
