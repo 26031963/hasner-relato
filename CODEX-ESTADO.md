@@ -1,7 +1,58 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 21:11** · publicado em **26/11/2026 21:10** (UTC-3)
+> Ultima resposta processada: **26/11/2026 21:12** · publicado em **26/11/2026 21:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 21:12 · sessao fba5a37d7a2f · O30-F3-CONSTRUIR · verificador · origem=Code
+
+**REPROVADO — O30-F3-CONSTRUIR, c16.** O caso de C apontado pelo verif9 foi corrigido e os três mutantes novos mordem. A proteção continua restrita a dois testes do painel, e a suíte integral verde segue [nao verificado]. D permanece como desenho pendente. A c16 reproduz os dois defeitos em memória e não agrava o caminho de produção mostrado no diff. `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_atestado_f3.py:274`, `app/ponto/tests/test_atestado_f3_contrato.py:1064`, `app/ponto/tests/mutantes_atestado_f3_c14.py:124`, `CLAUDE.md:398`
+
+Conferi os hunks do anexo na cópia e rodei os testes sem banco em modo somente leitura. A identidade do hash pelo Git e a ocorrência dos cenários em produção ficam [nao verificado]. [nao verificado]
+
+## 1. Achado C
+
+- **O caso pontual foi curado.** A fixture grava `aguardando_documento`, relê a linha e verifica o estado e a ausência de arquivo antes do GET. O caso aprovado faz POST para o `action` extraído do HTML e verifica `aprovada` e os bytes persistidos. Os dois estados constam em `Ausencia.STATUS_CHOICES`. `app/ponto/tests/test_atestado_f3.py:255`, `app/ponto/tests/test_atestado_f3.py:274`, `app/ponto/models.py:690`
+- **Nas fixtures normais do núcleo O30 F3 que conferi, os estados são válidos.** Isso inclui os demais casos de integração, os registros simulados dos contratos, o teste do lote e o de compensação de anexo. O `pendente` acrescentado pela c16 está na substituição deliberada do mutante. Os valores `x` encontrados no teste HJ-091 estão em strings de código usadas para testar o fiscal de escritas. `app/ponto/tests/test_atestado_f3.py:112`, `app/ponto/tests/test_atestado_f3.py:455`, `app/ponto/tests/test_atestado_f3_contrato.py:361`, `app/ponto/tests/test_atestado_f3_contrato.py:781`, `app/ponto/tests/test_atestados_lote.py:44`, `app/ponto/tests/test_anexo_nao_sobrevive_a_linha_que_nao_nasceu.py:183`, `app/ponto/tests/mutantes_atestado_f3_c14.py:106`, `app/ponto/tests/test_hj091_ferias_derivadas.py:395`, `app/ponto/tests/test_hj091_ferias_derivadas.py:537`
+- **A garantia de classe ficou aberta.** O selo carrega as escolhas do modelo, mas só passa pelos dois métodos do painel que enumera. Em memória, troquei para `pendente` a fixture de férias no teste do limite O30 e o selo passou. Também passou quando mantive o POST e retirei as verificações do redirecionamento, do estado e dos bytes. Fora dos hunks, há fixtures reais com `pendente` nos testes vizinhos da UI de anexo do colaborador e da guarda de aprovação. `app/ponto/tests/test_atestado_f3_contrato.py:1059`, `app/ponto/tests/test_atestado_f3_contrato.py:1064`, `app/ponto/tests/test_atestado_f3_contrato.py:1083`, `app/ponto/tests/test_atestado_f3.py:267`, `app/ponto/tests/test_atestado_f3.py:455`, `app/ponto/tests/test_anexar_ui_colab.py:32`, `app/ponto/tests/test_gate_anexo_desconta.py:19`
+
+## 2. Achado D
+
+| RED | Resultado na cópia |
+|---|---|
+| Rollback do chamador após o retorno | **Falhou na asserção certa, na linha 155.** Passaram as verificações de que a porta retornou uma linha criada, que a referência existia antes do rollback simulado e que sumiu depois. O arquivo novo sobrou. A fixture simula INSERT e storage, enquanto a porta executada é `criar_ausencia`. `app/ponto/tests/mutantes_atestado_f3_c14.py:127`, `app/ponto/tests/mutantes_atestado_f3_c14.py:145`, `app/ponto/tests/mutantes_atestado_f3_c14.py:155`, `app/ponto/tests/test_atestado_f3_contrato.py:619` |
+| Referência entre consulta e exclusão | **Falhou na asserção certa, na linha 174.** O `exists()` simulado captura a ausência da referência, insere a referência e devolve o resultado anterior. O helper apaga o arquivo e a nova referência fica sem ele. `app/ponto/tests/mutantes_atestado_f3_c14.py:157`, `app/ponto/tests/mutantes_atestado_f3_c14.py:162`, `app/ponto/tests/mutantes_atestado_f3_c14.py:174`, `app/ponto/services/ausencia.py:263` |
+
+**Descoberta da suíte.** Os dois deram `FAIL`, com zero `ERROR`. O módulo `mutantes_atestado_f3_c14.py` fica fora da descoberta normal `test*.py`, e o runner da régua herda a descoberta do Django. O CLI do módulo seleciona apenas chaves de `MUTANTES`. Por seleção explícita do módulo, rodei 22 testes, incluindo os herdados, com exatamente esses dois `FAIL` e zero `ERROR`. Logo, os dois deixam a seleção explícita vermelha. A suíte normal inteira fica [nao verificado]. `app/config/settings/ci.py:40`, `app/core/runner_quarentena.py:72`, `app/ponto/tests/mutantes_atestado_f3_c14.py:121`, `app/ponto/tests/mutantes_atestado_f3_c14.py:124`, `app/ponto/tests/mutantes_atestado_f3_c14.py:177`, `app/ponto/tests/mutantes_atestado_f3_c14.py:223`
+
+**Efeito da c16 sobre D.** O primeiro RED expõe o limite de `concluiu=True` antes do retorno ao chamador. O segundo expõe a janela já existente entre `exists()` e `storage.delete()`. Ambos acrescentam reproduções no módulo de testes. O UPDATE legado de `anexar_documento` também conserva seu ramo de compensação por nome. `app/ponto/tests/mutantes_atestado_f3_c14.py:124`, `app/ponto/services/ausencia.py:259`, `app/ponto/services/ausencia.py:668`, `app/ponto/services/ausencia.py:690`, `app/ponto/services/ausencia.py:1147`
+
+## 3. Checklist do pré-verificador
+
+| Item | A c16 viola? |
+|---|---|
+| Segundo juiz registrado | **Não.** O selo lê `STATUS_CHOICES` do modelo. O lote continua usando o predicado de cobertura, e a exigência de documento continua delegada a `estado_inicial`. `app/ponto/tests/test_atestado_f3_contrato.py:1059`, `app/docs/JUIZES.md:58`, `app/core/juizes.py:261`, `app/ponto/services/atestados_lote.py:15`, `app/ponto/services/atestados_lote.py:36` |
+| Segundo escritor fora da porta | **Não.** O `objects.create` do hunk é a fixture existente com o valor corrigido. O INSERT e o UPDATE de anexo continuam no serviço. `app/ponto/tests/test_atestado_f3.py:275`, `app/ponto/services/ausencia.py:650`, `app/ponto/services/ausencia.py:1133` |
+| Relógio fora da borda | **Não introduz.** O lote obtém a data na view. A leitura de relógio da projeção continua no código anterior. A simulação de rollback altera apenas o estado da conexão de teste. `app/ponto/views_atestado.py:94`, `app/ponto/services/ausencia.py:193`, `app/ponto/tests/mutantes_atestado_f3_c14.py:132` |
+| Derivação paralela de fonte única | **Não.** A validade do estado vem das escolhas do modelo. Os estados esperados identificam os cenários do selo. `q` continua passando pelo filtro universal antes do limite do lote. `app/ponto/tests/test_atestado_f3_contrato.py:1059`, `app/ponto/tests/test_atestado_f3_contrato.py:1081`, `app/ponto/views_atestado.py:74`, `app/ponto/views_atestado.py:116` |
+| Selo ou RED sem mordida | **Os três mutantes novos mordem.** Cada um teve uma ocorrência da âncora e controle sem mutação verde. Sem POST caiu em `:1085`, estado extinto em `:1081`, aprovada no lugar de espera em `:1082`. Os dois REDs de D também mordem. A lacuna de C é a abrangência do selo, demonstrada pelas duas alterações em memória que passaram. `app/ponto/tests/mutantes_atestado_f3_c14.py:97`, `app/ponto/tests/mutantes_atestado_f3_c14.py:155`, `app/ponto/tests/mutantes_atestado_f3_c14.py:174`, `app/ponto/tests/mutantes_atestado_f3_c14.py:184`, `app/ponto/tests/test_atestado_f3_contrato.py:1064`, `app/ponto/tests/test_atestado_f3_contrato.py:1081` |
+| Ordem de trava | **Não introduz inversão.** No INSS, a guarda trava o colaborador antes da escrita de `Ausencia`. O `atomic` novo da c16 é um simulador. `app/ponto/views.py:2547`, `app/colaboradores/services/colaborador.py:84`, `app/ponto/services/ausencia.py:648`, `app/ponto/tests/mutantes_atestado_f3_c14.py:132` |
+| Campo com dois significados | **Não introduz.** `status` na linha tem as quatro escolhas. `pendente` na URL continua como filtro dos dois estados abertos. `form.action` é a URL do POST extraída do HTML. Há uma divergência herdada nas filhas legadas: o painel exibe e rotula o documento da raiz, mas o formulário aponta para a filha e o serviço grava nela. `app/ponto/models.py:690`, `app/ponto/views.py:2248`, `app/ponto/tests/test_atestado_f3.py:56`, `app/templates/ponto/partials/painel_ausencia.html:71`, `app/templates/ponto/partials/painel_ausencia.html:89`, `app/ponto/tests/test_atestado_f3.py:169`, `app/ponto/views_atestado.py:30`, `app/ponto/services/ausencia.py:1133` |
+| `except` novo | **Não.** O RED usa `try/finally` para restaurar a conexão simulada. O `except` do INSERT e o do UPDATE são anteriores à c16. `app/ponto/tests/mutantes_atestado_f3_c14.py:137`, `app/ponto/services/ausencia.py:674`, `app/ponto/services/ausencia.py:1147` |
+
+## 4. Quem escreve e quem lê
+
+| Campo ou valor | Escritores e leitores na cópia |
+|---|---|
+| **`aguardando_documento` — escrita** | O backfill **0057** lê `bool(a.documento)` e o tipo. Para um `pendente` sem anexo cujo tipo exige documento, grava `aguardando_documento` e prazo. Na reversão, lê os dois estados abertos e grava `pendente`. Em execução normal, `estado_inicial` devolve a decisão a `criar_ausencia`, que persiste o estado no INSERT. Reabertura e rejulgamento também consultam `estado_inicial` e persistem pela porta `mudar_estado`. `app/ponto/migrations/0057_a4_backfill_pendente.py:30`, `app/ponto/migrations/0057_a4_backfill_pendente.py:35`, `app/ponto/migrations/0057_a4_backfill_pendente.py:58`, `app/ponto/services/ausencia.py:567`, `app/ponto/services/ausencia.py:650`, `app/ponto/services/ausencia.py:789`, `app/ponto/services/ausencia.py:1042`, `app/ponto/services/ausencia.py:1076`, `app/ponto/services/ausencia.py:1088`, `app/ponto/services/ausencia.py:1418`, `app/ponto/services/ausencia.py:1444` |
+| **`aguardando_documento` — leitura e saída** | `anexar_documento` lê o estado e, ao receber upload, move a linha para `aguardando_decisao`. O escalonador lê a fila e faz a mesma transição no vencimento. Contadores, rejulgamento, mensagens de submissão e reversão, histórico e tarefa do dia leem o estado. Lista, painel e API também o leem pela associação a `ABERTAS`. O formulário do painel depende de permissão de edição e da origem de férias. `app/ponto/services/ausencia.py:1144`, `app/ponto/services/ausencia.py:1259`, `app/ponto/services/ausencia.py:1286`, `app/ponto/services/ausencia.py:1298`, `app/ponto/management/commands/rejulgar_status_por_tipo.py:25`, `app/ponto/views.py:2248`, `app/ponto/views.py:2702`, `app/ponto/views.py:2738`, `app/ponto/services/dia_decidido.py:677`, `app/chamados/services/tarefa_do_dia.py:318`, `app/ponto/models.py:719`, `app/templates/ponto/partials/painel_ausencia.html:89`, `app/templates/ponto/partials/painel_ausencia.html:359`, `app/api/views.py:3110` |
+| **`documento` — escrita** | DP/INSS, PWA e API recebem o upload e o passam a `criar_ausencia`, que grava no INSERT ou encaminha à reabertura. O painel envia `FILES['documento']` a **`anexar_atestado`**, que normaliza o nome e chama **`anexar_documento`**. O endpoint do colaborador e o reenvio da API também chegam a essa porta de UPDATE. O `FileField` grava os bytes no storage antes do SQL e a coluna guarda a chave. `app/ponto/views.py:2504`, `app/ponto/views.py:2550`, `app/ponto/views.py:2627`, `app/ponto/views.py:2683`, `app/api/views.py:1779`, `app/api/views.py:1824`, `app/ponto/services/ausencia.py:525`, `app/ponto/services/ausencia.py:585`, `app/ponto/services/ausencia.py:1431`, `app/relatorios/urls.py:18`, `app/ponto/views_atestado.py:48`, `app/ponto/services/ausencia.py:1133`, `app/api/views.py:1855`, `app/api/views.py:3142`, `app/ponto/models.py:777`, `app/ponto/services/ausencia.py:245` |
+| **`documento` — leitura** | O backfill, a criação, o rejulgamento e a reabertura usam presença para decidir estado. `painel_ausencia` e download resolvem a raiz pela FK legada. Lista e histórico leem presença, PDF e ZIP abrem o arquivo, API e porta da célula leem presença ou chave, e o vigia conta falta de documento. A compensação lê `_committed`, chave e referências antes de apagar no ramo com storage explícito. `app/ponto/migrations/0057_a4_backfill_pendente.py:36`, `app/ponto/services/ausencia.py:567`, `app/ponto/services/ausencia.py:789`, `app/ponto/services/ausencia.py:1418`, `app/ponto/views.py:2102`, `app/ponto/views.py:2147`, `app/templates/ponto/ausencias.html:168`, `app/ponto/services/dia_decidido.py:685`, `app/ponto/services/atestados_lote.py:167`, `app/ponto/services/atestados_lote.py:249`, `app/api/views.py:1061`, `app/ponto/portas/celula.py:726`, `app/ponto/services/vigia_ausencia.py:117`, `app/ponto/services/ausencia.py:263`, `app/ponto/services/ausencia.py:671` |
+
+**Achados que sustentam o veredito**
+
+1. **C — proteção parcial.** A fixture do painel foi corrigida e os três mutantes novos falham pelo motivo previsto. O selo aceita estado extinto em outra fixture O30 e aceita a perda da prova de persistência no caso aprovado. `app/ponto/tests/test_atestado_f3.py:274`, `app/ponto/tests/test_atestado_f3.py:455`, `app/ponto/tests/test_atestado_f3_contrato.py:1064`, `app/ponto/tests/test_atestado_f3_contrato.py:1083`
+2. **Prova de pouso pendente.** Dos 47 contratos sem banco, 46 passaram e um deu erro de ambiente por falta de `PIL`. Integração HTTP com banco e suíte integral verde [nao verificado]. `app/ponto/tests/test_atestado_f3_contrato.py:1260`, `app/ponto/tests/test_atestado_f3.py:255`, `CLAUDE.md:398`
+3. **D — desenho pendente, sem peso autônomo na reprovação.** Os dois cenários falham nas asserções esperadas, fora da descoberta normal. A c16 acrescenta as reproduções sem alterar os dois caminhos de produção que elas exercitam. `app/ponto/tests/mutantes_atestado_f3_c14.py:124`, `app/ponto/tests/mutantes_atestado_f3_c14.py:155`, `app/ponto/tests/mutantes_atestado_f3_c14.py:174`, `app/ponto/services/ausencia.py:263`, `app/ponto/services/ausencia.py:668`
 
 ## 26/11 21:11 · sessao 9820ab762b28 · V6-LISTA-ORFAS · verificador · origem=Code
 
@@ -1975,79 +2026,4 @@ main()
 ### FIM
 ```
 
-## 26/11 18:09 · sessao 56e47cebcda0 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
-
-Entreguei 45 testes novos, um por caso de 01 a 46, com a exclusão do 33. A leitura estática indica **24 REDs de asserção, 10 REDs de interface e 11 guardas**. Os dois arquivos compilaram em memória, as 11 mutações encontraram âncoras únicas e a contagem literal de `except` nos arquivos novos foi **0**. Execução no main, estado da produção e certificação pelo Code e pelo opus final: [nao verificado]. [Matriz de testes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:213) · [Runner de mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:10) [nao verificado]
-
-Usei os nomes de negócio do brief em `snake_case` onde a assinatura ainda precisa ser definida. Os encaixes de apply e reversão, do selo com lápide e da carga do estoque na migração são propostas de teste. A integração com as interfaces finais está [nao verificado]. [Selo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:167) · [Reversão](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:261) · [Estoque](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:461) [nao verificado]
-
-### Matriz por leitura estática
-
-**A** é falha esperada por asserção. **I** é falha esperada por interface ausente. **Guarda** indica passagem esperada na base e falha esperada com o mutante da docstring. A coluna de teste indica a linha de `chamados/tests/test_e4d_matriz_reds.py`. Execução dos casos [nao verificado].
-
-| Caso | Teste | Classe | Motivo na cópia | [nao verificado]
-|---|---|---|---|
-| 01 | `test_caso_01_backfill_resposta_sem_evento` :213 | A | `registrar` acorda a célula após inserir a resposta histórica. `chamados/models.py:4562` · `chamados/models.py:4575` |
-| 02 | `test_caso_02_backfill_legado_sem_inferir_absorcao` :230 | A | A validação histórica entra pela porta que acorda a célula. `chamados/models.py:4404` · `chamados/models.py:4575` |
-| 03 | `test_caso_03_absorcao_historica_sem_validacao_retroativa` :245 | A | O seletor oferece `VALIDACAO` ao encontrar V sem linha correspondente, inclusive com `ABSORCAO` física. `chamados/models.py:4393` · `chamados/models.py:4404` |
-| 04 | `test_caso_04_reversao_separavel_por_competencia` :261 | I | Falta a operação de apply de R/V com manifesto e reversão por competência. `chamados/management/commands/backfill_decisoes_pergunta.py:193` · `chamados/models.py:4262` |
-| 05 | `test_caso_05_absorcao_e_validacao_antes_de_v_m_no_mesmo_atomic` :931 | A | O carimbo vem primeiro e o ramo grava somente `ABSORCAO`. `chamados/services/materializacao.py:1104` · `chamados/services/materializacao.py:1125` |
-| 06 | `test_caso_06_celula_absolve_pela_via_listada` :544 | I | A via carimba M e falta a lista que declara seu escritor e sua lápide. `chamados/reconciliador.py:699` · `chamados/tests/test_e4d_matriz_reds.py:167` |
-| 07 | `test_caso_07_backfill_celula_absolveu_fica_como_estava` :301 | I | O caso cobra o selo para o M histórico preservado. `chamados/models.py:4390` · `chamados/tests/test_e4d_matriz_reds.py:167` |
-| 08 | `test_caso_08_exportada_so_trilha_txt_e_gravado_iguais` :312 | I | Falta o apply autorizado de trilha com prova dos dois hashes. O comando atual registra a parada. `chamados/management/commands/backfill_decisoes_pergunta.py:459` · `chamados/management/commands/backfill_decisoes_pergunta.py:514` |
-| 09 | `test_caso_09_resolvedor_validar_registra_antes_de_v` :564 | A | O resolvedor carimba V sem `VALIDACAO` física. `chamados/services/disputa_emissao.py:2118` |
-| 10 | `test_caso_10_resolvedor_responder_registra_so_com_texto` :584 | A | O ramo carimba R e grava auditoria lateral sem `RESPOSTA` física. `chamados/services/disputa_emissao.py:2192` |
-| 11 | `test_caso_11_reabertura_vazia_com_retry_do_mesmo_pedido` :346 | I | A porta carece de `id_do_pedido` e o filtro atual pula a pendente vazia. `chamados/services/disputa_emissao.py:1628` · `chamados/services/disputa_emissao.py:1709` |
-| 12 | `test_caso_12_proteger_autoria_e_marcar_autoria_historica_nula` :369 | A | As FKs de V, M e das autorias da DP usam `SET_NULL`. `chamados/models.py:3765` · `chamados/models.py:3785` · `chamados/models.py:4307` |
-| 13 | `test_caso_13_autor_inativo_preserva_validacao_e_refresh_recusa` :605 | Guarda | A porta desativa o acesso e o refresh verifica `is_active`. `core/credenciais.py:110` · `api/views.py:96` |
-| 14 | `test_caso_14_saneamento_alveja_so_resposta_historica` :389 | I | `SANEAMENTO` está ausente dos choices. A porta guarda a resposta legada e limpa pelo lote. `chamados/models.py:4289` · `chamados/services/validacao.py:470` |
-| 15 | `test_caso_15_saneamento_rele_competencia_entregue_sob_trava` :630 | Guarda | A porta relê a elegibilidade sob trava e a entrega barra a escrita. `chamados/services/validacao.py:436` · `chamados/services/validacao.py:464` |
-| 16 | `test_caso_16_registrar_recusa_resposta_futura_sem_efeito` :414 | A | `registrar` insere a resposta sem comparar `ato_em` com o relógio atual. `chamados/models.py:4522` · `chamados/models.py:4562` |
-| 17 | `test_caso_17_save_sem_pk_recusa_futuro_e_preserva_selo_ast` :425 | A | `save` veta PK preenchida e permite a inserção direta da instância nova. `chamados/models.py:4366` |
-| 18 | `test_caso_18_estoque_futuro_compensa_no_horizonte_comum` :437 | A | A tarefa corta a sequência no horizonte, enquanto a composta reduz a compensação futura. `chamados/services/tarefa_do_dia.py:389` · `chamados/models.py:4447` |
-| 19 | `test_caso_19_resposta_humana_vence_automatica_no_empate` :654 | Guarda | O automático relê o texto sob a trava e preserva a resposta humana. `chamados/services/disputa_emissao.py:1741` |
-| 20 | `test_caso_20_recusa_para_so_q_e_preserva_irma_ja_absorvida` :954 | A | A passagem pode absorver Q depois que a recusa humana já limpou sua resposta. `chamados/services/materializacao.py:1087` · `chamados/services/materializacao.py:1125` |
-| 21 | `test_caso_21_recusa_rele_validacao_sob_trava` :671 | Guarda | A segunda guarda retorna `ja_validada` antes do motivo e da recusa. `chamados/services/validacao.py:951` · `chamados/services/validacao.py:974` |
-| 22 | `test_caso_22_validacao_rele_reabertura_sob_trava` :682 | Guarda | A releitura depois da trava detecta a falta da resposta. `chamados/services/validacao.py:742` · `chamados/services/validacao.py:755` |
-| 23 | `test_caso_23_correcao_rele_validacao_sob_trava` :697 | Guarda | A validação fresca barra a correção antes da nota. `chamados/services/acoes_disputa.py:418` · `chamados/services/acoes_disputa.py:428` |
-| 24 | `test_caso_24_ancora_fora_deixa_dependente_sem_cobranca` :992 | Guarda | O veto `sem_grupo_recuperavel` desfaz o carimbo tentado e a passagem grava a ocorrência. `chamados/services/materializacao.py:1115` · `chamados/services/materializacao.py:1139` |
-| 25 | `test_caso_25_ausencia_rejeitada_acha_irma_pelo_ato` :1019 | A | O seletor exige âncora `hora` pela projeção e perde o vínculo físico com o escape `escolha`. `chamados/services/materializacao.py:1195` |
-| 26 | `test_caso_26_sem_absorcao_preserva_legado_e_encaminha_admin` :1046 | A | A coincidência de colunas inclui Q na devolução. O leitor da lista do admin também está pendente. `chamados/services/materializacao.py:1195` · `chamados/services/materializacao.py:1263` · `chamados/tests/test_e4d_matriz_reds.py:1062` |
-| 27 | `test_caso_27_fantasma_trava_rele_julga_e_escreve` :712 | Guarda | A trava do dono precede a releitura, o juízo e o carimbo. `chamados/reconciliador.py:1264` |
-| 28 | `test_caso_28_espelho_trava_rele_e_reabre_ato_que_perde_h4` :742 | A | A seleção atual exclui `declaracao`. O ramo admitido abre `atomic` e grava a via sem a trava do dono e sem `REABERTURA`. `chamados/management/commands/encerrar_perguntas_com_fato.py:41` · `chamados/management/commands/encerrar_perguntas_com_fato.py:64` |
-| 29 | `test_caso_29_perda_de_lastro_reabre_por_ato` :775 | A | A porta descarimba e grava auditoria lateral sem `REABERTURA`. `chamados/services/relavra_via.py:244` |
-| 30 | `test_caso_30_sql_api_modal_e_raiox_leem_a_mesma_resposta` :1069 | A | SQL, API, modal e raio-x ainda leem o par cru em seus sítios de consumo. `chamados/juizes.py:1671` · `api/views.py:1163` · `templates/chamados/partials/modal_fio.html:219` · `chamados/services/raiox.py:135` |
-| 31 | `test_caso_31_nascimento_da_raiz_listado_com_lapide` :1120 | I | A raiz é criada diretamente e falta o selo dos escritores declarados. `chamados/services/disputa_emissao.py:601` · `chamados/tests/test_e4d_matriz_reds.py:167` |
-| 32 | `test_caso_32_nascimento_da_filha_listado_com_rvm_vazios` :1136 | I | A filha nasce pela porta existente e falta a declaração dos campos de identidade e do escritor. `chamados/services/disputa_emissao.py:851` · `chamados/models.py:3291` |
-| 34 | `test_caso_34_silencio_antes_de_m_e_fecho_pela_raiz` :1152 | A | M é gravado antes de `SILENCIO`. `chamados/models.py:2148` |
-| 35 | `test_caso_35_reabre_a_mais_recente_e_desempata_por_pk` :1167 | A | A seleção procura disputa aberta e cria outra quando a busca fica vazia. `chamados/services/disputa_emissao.py:539` · `chamados/services/disputa_emissao.py:601` |
-| 36 | `test_caso_36_tranca_retirada_da_fila_por_leitura` :1199 | Guarda | C6 lê a tranca e o encerrador retira o caso da fila sem carimbar a filha. `chamados/juizes.py:1494` · `chamados/services/competencia_trancada.py:202` |
-| 37 | `test_caso_37_destranca_passivo_preserva_resposta_pela_via_listada` :1218 | I | O descarimbo preserva R e falta a declaração do escritor e da lápide. `chamados/models.py:3664` · `chamados/tests/test_e4d_matriz_reds.py:167` |
-| 38 | `test_caso_38_desligamento_registra_silencio_antes_de_m` :1237 | A | A cascata usa o fecho que grava M antes de `SILENCIO`. `colaboradores/services/desligamento.py:167` · `chamados/models.py:2148` |
-| 39 | `test_caso_39_validacao_antes_da_coluna_e_sustenta_plantio` :794 | A | A porta salva V antes da `VALIDACAO` física. `chamados/services/validacao.py:170` |
-| 40 | `test_caso_40_recusa_antes_do_motivo_e_da_limpeza` :815 | A | `recusa_motivo` é salvo antes da `RECUSA` física. `chamados/services/validacao.py:995` |
-| 41 | `test_caso_41_correcao_subsiste_apos_recusa_do_plantio` :833 | A | A correção salva R antes da `RESPOSTA`. O caso também cobra `RESULTADO` com o motivo do plantio. `chamados/services/disputa_emissao.py:1562` · `chamados/services/acoes_disputa.py:454` |
-| 42 | `test_caso_42_entrada_historica_preserva_lavra_e_marcos` :461 | I | Faltam o instante de entrada e a carga do estoque. Os marcos atuais agregam R/M pelas colunas. `chamados/models.py:4305` · `chamados/veredito_lavrado.py:201` |
-| 43 | `test_caso_43_fecho_repetido_mantem_ato_e_trilha_unicos` :1264 | Guarda | O mesmo fecho retorna antes de repetir o ato ou a trilha. `chamados/models.py:2081` |
-| 44 | `test_caso_44_retry_do_mesmo_payload_de_backfill` :493 | A | Reapresentar a lista preparada passa novamente pelo `bulk_create`. `chamados/models.py:4551` · `chamados/models.py:4562` |
-| 45 | `test_caso_45_vigia_compara_valor_e_sustentacao_fisica` :510 | A | O vigia compara presença e a leitura pode sintetizar uma validação da coluna. `chamados/services/vigia_ato_x_coluna.py:8` · `chamados/models.py:4404` |
-| 46 | `test_caso_46_prontidao_mantem_480_previstos_com_novo_realizado` :1281 | Guarda | A prontidão soma os previstos da grade e usa o realizado no numerador. `folha/export.py:1095` · `folha/export.py:1111` |
-
-**Caso 20.** A caracterização que cai com a cura é `RespostaAposAbsorcaoTest.test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa`. Ela exige absorção física de Q após a recusa e nova resposta barrada pelo H4. O novo teste exige Q pendente, preserva a irmã já absorvida e verifica que a passagem alcança a irmã seguinte. [Teste antigo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364) · [Teste novo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:954) [nao verificado]
-
-### Comandos para a sessão no main
-
-O primeiro comando roda a matriz. Para isolar um caso, acrescente `-k test_caso_NN_`. O laço executa uma invocação por mutante e seleciona sua guarda correspondente. Resultado dessas execuções [nao verificado]. [Entrada do Django](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/manage.py:7) · [Seleção dos mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:61)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-  chamados.tests.test_e4d_matriz_reds --parallel 1
-
-for caso in 13 15 19 21 22 23 24 27 36 43 46; do
-  E4D_MUTANTE="$caso" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
-    chamados.tests.test_e4d_matriz_reds --parallel 1 -k "test_caso_${caso}_" \
-    --testrunner=chamados.tests.e4d_matriz_mutantes.RunnerMutanteE4D
-done
-```
-
-_8477 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8478 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
