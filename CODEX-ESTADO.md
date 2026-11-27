@@ -1,7 +1,178 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 14:48** · publicado em **27/11/2026 14:48** (UTC-3)
+> Ultima resposta processada: **27/11/2026 15:05** · publicado em **27/11/2026 15:04** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 15:05 · sessao 3acafa1bd4ec · INVENTARIO-PELA-REGRA · leitura · origem=Code
+
+## Vermelhos
+
+Os valores observados vêm do `bateria.log` fornecido. As linhas abaixo identificam as asserções e os caminhos de produção na cópia. Usei a L-099 para atribuir o dono ao dado, ao código de produção ou, quando a asserção mede outra coisa, ao instrumento. [app/docs/LEIS.md:122] [app/docs/LEIS.md:136]
+
+| Caso | Regra | Sistema | Dono | Sítio | Nota |
+|---|---|---|---|---|---|
+| **ESC-11** · `campo='horas_extra_50'` | CLT art. 59 e L-097/L-115. Os **150 min autorizados** contam integralmente após a saída posicional. O teste pede **150 em HE50**. O corte HE100-RUBRICA do projeto destina o excedente diário acima de 120 min à HE100 de dia normal. [app/docs/LEIS.md:115] [app/docs/LEIS.md:153] [app/docs/DOSSIES.md:189] [app/docs/RELATO-ARQUIVO.md:16815] [app/ponto/tests/test_inventario_escala.py:327] | **120 min em HE50**, conforme o log. A divisão do motor destina os outros **30 min à HE100**. Essa segunda parcela é inferida do código. [app/ponto/tests/test_inventario_escala.py:171] [app/ponto/motor_calculo_v2.py:3526–3540] | **INSTRUMENTO** | `MotorComercial.calcular_mes` divide a extra diária entre HE50 e HE100. [app/ponto/motor_calculo_v2.py:3533–3540] | Medir 630 trabalhados, 150 de extra total, 120 em HE50 e 30 em HE100 de dia normal. Assim a asserção cobra o reconhecimento integral da autorização e a rubrica definida pelo corte. [app/ponto/tests/test_inventario_escala.py:321–327] [app/docs/RELATO-ARQUIVO.md:16815] | [nao verificado]
+| **ESC-11** · asserção do excedente | O trabalho autorizado excede o limite ordinário de 120 min em **30 min**. O teste procura esse excedente em `HE50 − teto`. [app/core/regua_cct.py:50] [app/ponto/tests/test_inventario_escala.py:328–330] | **0 min** na expressão testada, pois ela subtrai 120 dos 120 classificados como HE50. [app/ponto/tests/test_inventario_escala.py:330] [app/ponto/motor_calculo_v2.py:3533–3539] | **INSTRUMENTO** | `MotorComercial.calcular_mes` e os agregadores de HE50 e HE100. [app/ponto/motor_calculo_v2.py:323–336] [app/ponto/motor_calculo_v2.py:3533–3539] | Comparar **HE total − teto = 30** e conferir os 30 na HE100 de dia normal. [app/docs/RELATO-ARQUIVO.md:16815] [app/ponto/motor_calculo_v2.py:323–336] | [nao verificado]
+| **ESC-12** | CLT art. 67, Lei 605/49, Súmula 146 e L-086. No domingo de DSR trabalhado e sem compensação, **0 previsto, 240 trabalhados como base da dobra, 0 normais e 0 HE50**. [app/docs/LEIS.md:118] [app/ponto/tests/test_inventario_escala.py:332–349] | O previsto **0** passou. A soma `horas_trabalhadas + horas_ft` deu **0 min**. A rubrica na lavra ficou [nao verificado], pois a falha ocorre antes de `fechar()`. [app/ponto/tests/test_inventario_escala.py:344–349] | **ESTRUTURA** | `parear_turnos` usa a pausa do template quando o domingo vem sem marcos no DNA. O ramo de absorção toma `12:00 S` como pausa e o fecho posterior exige uma batida depois dela. [app/ponto/management/commands/gerar_celulas.py:73–93] [app/ponto/turnos.py:1224–1244] [app/ponto/turnos.py:1356–1376] [app/ponto/turnos.py:1166–1175] | A leitura do código explica o zero no recorte. Há um par `08:00 E / 12:00 S` na massa e o motor comercial devolve zero trabalhado para o período que recebe sem saída. **Single Source of Truth / Aggregate Root**. O pareamento usa marcos do template para uma folga que a célula declara sem marcos. [app/ponto/tests/test_inventario_escala.py:123–135] [app/ponto/tests/test_inventario_escala.py:334–346] [app/ponto/motor_calculo_v2.py:3331–3336] [app/docs/GLOSSARIO.md:11] | [nao verificado]
+| **AUS-03** | L-022/L-089. O atestado cobre só o dia de folga do 12×36. O dia mantém **`folga`, 0 previsto, 0 abono, 0 falta e 0 consumo de saldo**. [app/docs/LEIS.md:73] [app/docs/LEIS.md:121] [app/ponto/tests/test_inventario_ausencia.py:61–75] | **`('ausencia', 0)`**. Abono, falta e saldo nesta rodada [nao verificado]. A asserção de classificação interrompe as duas conferências seguintes, e a de saldo é um skip. [app/ponto/tests/test_inventario_ausencia.py:70–75] | **ESTRUTURA** | `_marcar_ausencias` preserva a folga para `falta`, mas aplica o rótulo `ausencia` ao atestado. O cartório copia esse tipo para a ata, e `grade_da_celula` o lê. [app/escala/utils.py:1248–1265] [app/ponto/services/cartorio.py:749–759] [app/escala/services/leitor_celula.py:397–422] | É um erro de precedência na escrita da projeção da grade, documentado na dívida da L-089. Quebra adicional de padrão arquitetural [nao verificado]. [app/docs/LEIS.md:180] [app/docs/GLOSSARIO.md:25] |
+| **AUS-05** · `ERROR` | L-039/L-088. Uma entrada às 08:00 com pergunta em aberto preserva **480 previstos** e o **furo em aberto**, sem falta decidida nem desconto de DSR por esse evento. [app/docs/LEIS.md:87] [app/docs/LEIS.md:120] [app/ponto/tests/test_inventario_ausencia.py:90–118] | A criação da pergunta levantou `ValueError`: a fixture passou `instancia_marco='fim'`, e `batida_ausente` deriva `''`. Resultado da apuração [nao verificado]. [app/ponto/tests/test_inventario_ausencia.py:103–111] [app/chamados/models.py:3898–3909] | **INSTRUMENTO** | `PerguntaDisputa.save` valida a identidade no nascimento. `instancia_do_motivo` deriva a posição pela tabela de motivos. [app/chamados/models.py:3852–3856] [app/chamados/services/declaracao_texto.py:43–58] | Para a pergunta genérica `batida_ausente`, omitir `instancia_marco` e deixar o modelo derivá-la. Para uma pergunta específica sobre a saída, usar o motivo de marco `orfao_14h`, que deriva `fim`. Manter a pergunta aberta e as asserções de previsto, furo e falta. [app/chamados/models.py:3898–3909] [app/chamados/services/declaracao_texto.py:43–58] [app/ponto/tests/test_inventario_ausencia.py:113–118] | [nao verificado]
+| **FOL-03** · `rubrica='9902'` | Lei 605/49, Súmula 146 e L-086/L-095. O DSR trabalhado deve contribuir **240 min à base da dobra**, com **0 HE50** e **0 HE100 de feriado** no delta. `9902` é o código escolhido pela fixture para observar essa parcela. [app/docs/LEIS.md:113] [app/docs/LEIS.md:118] [app/folha/tests/test_inventario_folha.py:33–39] [app/folha/tests/test_inventario_folha.py:155–165] | O delta lido em **`9902` foi 0**. O valor efetivamente apurado em `horas_folga_trabalhada` nessa rodada fica [nao verificado]. [app/folha/tests/test_inventario_folha.py:95–104] [app/folha/tests/test_inventario_folha.py:164–165] | **INSTRUMENTO** | A fixture vincula `9902` a `dsr_trabalhado_diurno`, uma opção do catálogo. O emissor lê `horas_folga_trabalhada` e emite **`folga_trabalhada_diurna`**. [app/folha/tests/test_inventario_folha.py:52–68] [app/folha/models.py:32–34] [app/folha/export.py:439–447] [app/folha/export.py:739–748] | Mapear e homologar `9902` para o evento efetivamente emitido. Conferir também os 240 min de folga trabalhada no fechamento antes de comparar cenário e controle no TXT. Isso verifica se a apuração entregou a base ao emissor. [app/ponto/services/fechamento.py:953–990] [app/folha/export.py:993–1000] [app/folha/tests/test_inventario_folha.py:160–165] |
+| **FOL-13** | L-099/L-114. Duas gerações com as mesmas entradas devem produzir **os mesmos bytes e totais por rubrica**. [app/docs/LEIS.md:122] [app/docs/LEIS.md:154] [app/folha/tests/test_inventario_folha.py:307–321] | O primeiro download esperado deu **204**. O log registra duas recusas por falta de eventos. A comparação de bytes e totais ficou [nao verificado]. [app/folha/tests/test_inventario_folha.py:117–128] [app/folha/tests/test_inventario_folha.py:314–321] [app/folha/views.py:275–280] | **INSTRUMENTO** | O POST chama a rota de geração. A massa de jornada ordinária depende de um evento de normais que o emissor não oferece. Sem linhas, a resposta HTMX é `204` com mensagem de erro. [app/folha/urls.py:14] [app/folha/export.py:439–461] [app/folha/export.py:739–755] [app/core/respostas.py:63–66] | Incluir na massa um evento não zero que a rota emita, por exemplo **60 min de HE autorizada e homologada**. Manter as duas chamadas idênticas, exigir dois downloads e comparar bytes e agregados. [app/folha/tests/test_inventario_folha.py:52–68] [app/folha/tests/test_inventario_folha.py:144–153] [app/folha/tests/test_inventario_folha.py:314–321] |
+| **FOL-14** · `etapa='reemissão'` | L-093/L-113. Fora da guarda, a correção leva o recorte de **450 para 480 min trabalhados** e de **30 para 0 de atraso**. A emissão corrigida deve substituir a anterior. [app/docs/LEIS.md:111] [app/docs/LEIS.md:155–156] [app/ponto/services/fechamento.py:36–50] [app/folha/tests/test_inventario_folha.py:343–373] | A primeira emissão levou **30 min de atraso**. A lavra corrigida passou com **480 trabalhados e 0 atraso**, mas o segundo POST devolveu **204, “Nenhum evento a exportar”**. [app/folha/tests/test_inventario_folha.py:343–348] [app/folha/tests/test_inventario_folha.py:368–373] [app/folha/views.py:275–280] | **ESTRUTURA** | O emissor não oferece evento de normais, descarta eventos de valor zero e recusa a geração sem linhas antes de registrar o TXT. [app/folha/export.py:439–461] [app/folha/export.py:739–755] [app/folha/views.py:275–307] | Neste recorte, corrigir o atraso remove a única linha exportável da massa. **CQRS com projeções reconstruíveis**. A lavra incorpora a correção, mas a emissão fica sem uma versão que a represente. O leiaute para esse resultado fica [nao verificado]. [app/folha/tests/test_inventario_folha.py:325–326] [app/folha/tests/test_inventario_folha.py:341–373] [app/docs/GLOSSARIO.md:25] | [nao verificado]
+| **FOL-14** · `etapa='vigência'` | L-113. Um TXT vigente para a empresa e competência corrigidas, com a versão anterior intacta no histórico e preservação dos dois controles. [app/docs/LEIS.md:155–156] [app/folha/tests/test_inventario_folha.py:331–339] [app/folha/tests/test_inventario_folha.py:375–384] | **`vigente.pk == antigo.pk == 3`**. As conferências posteriores de conteúdo e hash do antigo e dos controles passaram até a asserção do aviso. [app/folha/tests/test_inventario_folha.py:375–385] | **ESTRUTURA** | A recusa ocorre antes de `ExportacaoDominio.registrar`. A vigência lê o registro mais recente da mesma empresa, mês e ano. [app/folha/views.py:277–280] [app/folha/views.py:302–307] [app/folha/models.py:174–188] [app/folha/export.py:589–603] | Mesmo desvio da reemissão, observado na vigência. **CQRS com projeções reconstruíveis**. O leitor de vigência devolve o único resultado que o fluxo deixou disponível para a tripla. [app/docs/GLOSSARIO.md:25] [app/folha/export.py:589–603] |
+| **FOL-14** · aviso ao DP | L-113 × DINHEIRO 2. Uma exportada que muda fora da guarda gera **aviso ao DP com os dois números**. [app/docs/LEIS.md:156] [app/folha/tests/test_inventario_folha.py:350–369] | A consulta de novas pautas para o DP devolveu **`False`**. O recálculo produziu o aviso de log sobre a competência exportada. [app/folha/tests/test_inventario_folha.py:350–355] [app/folha/tests/test_inventario_folha.py:385] [app/ponto/services/fechamento.py:559–567] | **ESTRUTURA** | O caminho genérico agenda e executa o recálculo e registra logs. O ramo da exportada registra o `warning` sem entregar os dois valores ao escritor de Pauta. A âncora de competência buscada pelo teste coincide com a forma do modelo. [app/ponto/services/fechamento.py:1822–1848] [app/ponto/services/fechamento.py:559–567] [app/pautas/models.py:74–89] | **Event-driven architecture**. O evento chega ao recálculo, e o aviso ao DP exigido para a alteração fica ausente nesse caminho. [app/docs/GLOSSARIO.md:16] [app/docs/LEIS.md:156] [app/ponto/services/fechamento.py:559–567] | [nao verificado]
+
+## 38 skips
+
+A cópia declara **39** chamadas a `sem_campo`. A de **AUS-05** fica depois do `ValueError`, o que deixa **38 skips executados**: 13 de escala, 9 de ausência e 16 de folha. O texto completo tem a forma `sem campo: <campo>. <motivo>`. A tabela agrupa pelo `<motivo>` e identifica cada ocorrência pela chamada. [app/ponto/tests/test_inventario_escala.py:173–175] [app/ponto/tests/test_inventario_ausencia.py:103–110]
+
+As referências **ESC**, **AUS** e **FOL** na tabela apontam, respectivamente, para `app/ponto/tests/test_inventario_escala.py`, `app/ponto/tests/test_inventario_ausencia.py` e `app/folha/tests/test_inventario_folha.py`. [app/ponto/tests/test_inventario_escala.py:178–180] [app/ponto/tests/test_inventario_ausencia.py:31] [app/folha/tests/test_inventario_folha.py:47–48]
+
+| Motivo literal do skip | Ocorrências | Classe |
+|---|---|---|
+| A apuração não tem parcela exclusiva de normais. | **9** · ESC-01:190, ESC-02:207, ESC-04:244, ESC-06:283, ESC-07:297, ESC-10:311, ESC-11:324, ESC-15:375, AUS-08:162 | ESTRUTURA-sem-campo |
+| DiaPago não tem parcela exclusiva de normais. | **4** · ESC-03:226, ESC-13:360, AUS-04:84, AUS-10:187 | ESTRUTURA-sem-campo |
+| O emissor não tem evento de normais. | **8** · FOL-01:136, FOL-02:151, FOL-04:175, FOL-05:186, FOL-09:242, FOL-11:281, FOL-12:298, FOL-14:341 | ESTRUTURA-sem-campo |
+| O vínculo de quatro horas não declara regime de remuneração. | **4** · AUS-01:40, FOL-06:196, FOL-07:210, FOL-08:227 | ESTRUTURA-sem-campo |
+| A lavra diária não contém desconto de DSR. | **2** · AUS-02:55, AUS-10:186 | ESTRUTURA-sem-campo |
+| A grade classifica o domingo como folga. | **1** · ESC-01:189 | ESTRUTURA-sem-campo |
+| O período expõe trabalhado total e noturno de relógio. | **1** · ESC-05:262 | ESTRUTURA-sem-campo |
+| DiaPago não distingue essas parcelas. | **1** · ESC-12:343, para normais e HE100 específica de DSR | ESTRUTURA-sem-campo |
+| A apuração expõe semanas com DSR e reflexo, sem essas duas bases. | **1** · AUS-01:41 | ESTRUTURA-sem-campo |
+| O atestado não expõe consumo de saldo. | **1** · AUS-03:70 | ESTRUTURA-sem-campo |
+| O agendamento expõe gozo e dias. A apuração de ponto não expõe verbas nem pagamento de férias. | **1** · AUS-06:131–132 | ESTRUTURA-sem-campo |
+| O emissor não publica normais nem as duas bases de DSR. | **1** · FOL-06:197–198 | ESTRUTURA-sem-campo |
+| O TXT registra faltas em dias, com as datas em registros 11. | **1** · FOL-07:211. Os minutos são consultados separadamente. [app/folha/tests/test_inventario_folha.py:213–215] [app/folha/export.py:215–221] | ESTRUTURA-sem-campo |
+| O emissor não publica essas duas bases em minutos. | **1** · FOL-08:228, para DSR devido e descontado | ESTRUTURA-sem-campo |
+| O emissor não tem evento de normais e a lavra não tem essa parcela exclusiva. | **1** · FOL-10:260–261 | ESTRUTURA-sem-campo |
+| Pauta expõe texto livre, sem campos de valores por rubrica. | **1** · FOL-14:342. É o skip do **formato estruturado**. A existência do aviso foi testada e falhou. [app/pautas/models.py:83–89] [app/folha/tests/test_inventario_folha.py:385] | ESTRUTURA-sem-campo |
+
+As sete **perguntas de lei** estão no `bateria.md` fornecido e ficaram fora dos 35 métodos e dos 38 skips. São **ESC-08/Q1** rubrica e percentual da folga comum trabalhada, **ESC-09/Q2** tratamento dos 60 min de interjornada, **ESC-14/Q3** vigência e rubrica da dobra histórica, **AUS-09/Q4** efeitos do afastamento previdenciário, **AUS-11/Q5** remuneração e DSR na licença particular, **AUS-12/Q6** férias e terço atravessando o corte, e **FOL-15/Q7** contrato de leiaute do TXT. [app/ponto/tests/test_inventario_escala.py:297–305] [app/ponto/tests/test_inventario_escala.py:351–369] [app/ponto/tests/test_inventario_ausencia.py:153–172] [app/ponto/tests/test_inventario_ausencia.py:194] [app/folha/tests/test_inventario_folha.py:385]
+
+## 27/11 14:57 · sessao 1ba509958f06 · INVENTARIO-PELA-REGRA · construtor · origem=Code
+
+Implementei os **35 casos de medida** em três arquivos novos sobre o HEAD `59600163ccc9cffb8f3ae148beede7cd7866ae86`. Conferi a sintaxe, os IDs e as docstrings de fonte. O SHA é o da base. A proibição de escrita em `.git` impediu gerar um SHA de commit para a entrega. [Escala](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:180) · [Ausência](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:31) · [Folha](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:130)
+
+**Placar Django [nao verificado].** O Python local não dispõe de `django.test` nem de `freezegun`, e o recorte da suíte usa SSH e referências Git. O candidato a RED é **FOL-03**. Ele cobra 240 minutos no evento cadastrado `dsr_trabalhado_diurno`. A lista do emissor passa diretamente de feriado para folga trabalhada. [FOL-03](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:155) · [Emissor](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/export.py:439) · [Rota da suíte](/home/ronald/wt-codex-inventario-pela-regra-143921/bin/suite.sh:320) [nao verificado]
+
+### Recibo por caso
+
+**Grade** é `grade_da_celula`, **motor** é `autoridade_do_periodo`, **fechamento** é `recalcular_fechamento_mes`, **TXT** é `montar_linhas_export` sobre `fechamento_lido`, e **POST** é `gerar_dominio_txt`. Os números abaixo são gabaritos em minutos, salvo a unidade indicada. [Grade](/home/ronald/wt-codex-inventario-pela-regra-143921/app/escala/services/leitor_celula.py:350) · [Motor](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/services/espelho.py:1007) · [Fechamento](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/services/fechamento.py:468) · [TXT](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:86) · [POST](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/views.py:104)
+
+| Caso | Porta | Campo lido e gabarito |
+|---|---|---|
+| [ESC-01](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:180) | Grade, motor | Previsto `480 × 5 / 240 / 0`, total previsto e trabalhado `2.640`, domingo `folga`, HE50 e HE100 `0` |
+| [ESC-02](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:199) | Grade, motor | Previsto `660 / 0 / 660`, trabalhado nos dois plantões `660 / 660`, descanso entre saída e entrada `2.160` |
+| [ESC-03](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:215) | Grade, fechamento | Previsto `480 / 660 / 0`, vínculo gerador anterior em 03/11 e atual em 04–05/11, trabalhado `480 / 660`, 05/11 `folga` |
+| [ESC-04](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:237) | Grade, motor, `regua_para` | Previsto `660 / 0`, um turno de `10/11 19:00` a `11/11 07:00`, trabalhado `660`, base noturna `420` a `20%` |
+| [ESC-05](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:255) | Grade, motor, `regua_para` | Previsto e trabalhado `660`, noturno de relógio `420`, base legal `480` a `20%`, adicional após 05:00 `0` |
+| [ESC-06](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:275) | Grade, motor | Previsto e trabalhado `660`, HE100 feriado `0` |
+| [ESC-07](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:288) | Grade, motor | 20/11 `folga`, previsto, trabalhado, falta e HE100 feriado `0` |
+| [ESC-10](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:303) | Grade, motor | Previsto `480`, trabalhado `540`, HE50 `60`, HE100 `0` |
+| [ESC-11](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:316) | Grade, motor, `regua_para` | Previsto `480`, trabalhado `630`, HE50 `150`, limite ordinário `120`, excesso `30` |
+| [ESC-12](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:332) | Grade, motor, fechamento | Previsto `0`, trabalhado `240`, HE50 `0`, HE100 total `240` |
+| [ESC-13](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:351) | Grade, motor, fechamento | Previsto `0`, trabalhado `480`, HE50 `0`, HE100 feriado `480` |
+| [ESC-15](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:367) | Grade, motor, `piso_intervalo_art71` | Previsto `240 / 240`, trabalhado `240 / 210`, antecipada `0 / 30`, HE e piso de intervalo `0` |
+| [AUS-01](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:31) | Fechamento, motor | Falta decidida `240` em 29/10, semanas com DSR `0` |
+| [AUS-02](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:48) | Fechamento | Previsto e abono `480`, trabalhado e falta `0` |
+| [AUS-03](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:61) | Grade, fechamento | 10/11 `folga`, previsto, abono e falta `0` |
+| [AUS-04](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:77) | Fechamento | Previsto `480`, trabalhado `450`, atraso `30`, antecipada e falta integral `0` |
+| [AUS-05](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:90) | Fechamento, pergunta persistida | Previsto `480`, `furo_apurado=True`, pergunta sem resposta ou validação, falta `0` |
+| [AUS-06](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:120) | `registrar_gozo_historico`, motor | Agendamento de `30 dias`, falta e atraso `0` |
+| [AUS-07](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:137) | `registrar_gozo_historico`, `ausencias_na_janela`, fechamento | Um agendamento de `30 dias`, `12 / 18 dias` de gozo nos recortes, falta `0 / 0` |
+| [AUS-08](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:153) | `em_gozo_hoje`, motor | `30 dias`, 12/10 dentro do gozo, 28/10 fora, trabalhado no retorno `480`, HE100 feriado no gozo `0` |
+| [AUS-10](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:171) | Fechamento | Abono `480 / 480 / 480`, total `1.440`, falta `0`, trabalhado no retorno `480` |
+| [FOL-01](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:130) | TXT, fechamento | Trabalhado `480`; HE50, HE100, noturno, falta e atraso `0` |
+| [FOL-02](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:144) | TXT | HE50 `60`, HE100 `0` |
+| [FOL-03](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:155) | TXT | HE100 de DSR `240`, HE50 e HE100 feriado `0` |
+| [FOL-04](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:167) | TXT | HE100 feriado `480`, HE100 de DSR e HE50 `0` |
+| [FOL-05](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:179) | TXT, fechamento, `regua_para` | Trabalhado `660`, `0025` com base `420`, alíquota `20%` no cadastro |
+| [FOL-06](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:192) | TXT, motor | Trabalhado na semana `1.440`, uma semana com direito a DSR |
+| [FOL-07](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:204) | TXT, `minutos_de_falta_por_dia` | Falta `240` na fonte, `1 dia` em `8792` com data `20261029`, atraso `0` |
+| [FOL-08](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:223) | TXT, motor, `minutos_de_falta_por_dia` | Falta `240` na fonte e `1 dia` na rubrica de 29/10, semanas com direito a DSR `0` |
+| [FOL-09](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:236) | TXT, fechamento | Atraso `30`, trabalhado `450`, falta integral e antecipada `0` |
+| [FOL-10](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:248) | TXT, fechamento, `pago_do_dia` | HE50 `60`, HE100 feriado `480`, atraso `30`; trabalhado `480 + 540 + 450 + 480 = 1.950` |
+| [FOL-11](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:270) | TXT, `janela_competencia`, fechamento | Janela `21/10–20/11`, HE100 feriado `480` em novembro, 20/10 e 21/11 nas competências vizinhas |
+| [FOL-12](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:291) | TXT, fechamento | Outubro recebe trabalhado `660` e `0025` de `420`. Novembro recebe `0` desse plantão |
+| [FOL-13](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:307) | POST, `agregar_export_dominio` | Dois downloads com bytes e totais por rubrica iguais |
+| [FOL-14](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:323) | POST, fechamento, `competencia_entregue` | Trabalhado `450 → 480`, atraso `30 → 0`, um TXT vigente, bytes e hash anteriores preservados, dois controles estáveis e nova pauta ao DP |
+
+### `lei:` pendentes
+
+`ESC-08` Q1, folga comum trabalhada. `ESC-09` Q2, interjornada. `ESC-14` Q3, feriado histórico. `AUS-09` Q4, afastamento previdenciário. `AUS-11` Q5, licença particular. `AUS-12` Q6, apropriação de férias no corte. `FOL-15` Q7, contrato do leiaute. [Bateria anexa, seção «Perguntas de lei», Q1–Q7]
+
+### Sem campo
+
+Os skips são explícitos por subteste. As demais verificações do caso continuam executáveis. Os códigos `9901` e `9902` são exclusivos da fixture para distinguir feriado de DSR trabalhado. [Skip](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:173) · [Códigos da fixture](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:32)
+
+- **sem campo: normais como parcela exclusiva** em ESC-01–04, 06–07, 10–13 e 15, AUS-04, 08 e 10, e FOL-01, 02, 04–06, 09–12 e 14. [Campos da lavra](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/models.py:324) · [Eventos do TXT](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/export.py:439)
+- **sem campo: classificação DSR** em ESC-01, **HE100 diária específica de DSR** em ESC-12 e **240 minutos diurnos de relógio** em ESC-05. [Grade](/home/ronald/wt-codex-inventario-pela-regra-143921/app/escala/services/leitor_celula.py:397) · [Lavra](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/models.py:324) · [Resultado do período](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/motor_calculo_v2.py:205)
+- **sem campo: remuneração horista em vínculo 6×1** em AUS-01 e FOL-06–08. **sem campo: DSR devido e descontado em minutos** em AUS-01, 02, 05 e 10 e FOL-06 e 08. [Cadastro da escala](/home/ronald/wt-codex-inventario-pela-regra-143921/app/escala/models.py:816) · [Resultado mensal](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/motor_calculo_v2.py:270) · [Emissor](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/export.py:453)
+- **sem campo: consumo de saldo por atestado**, AUS-03. **sem campo: férias brutas R$ 3.000, terço R$ 1.000, total R$ 4.000 e pagamento até 28/02**, AUS-06. [AUS-03](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:70) · [AUS-06](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:131)
+- **sem campo: 240 minutos na linha TXT de falta**, FOL-07. A fonte informa minutos e o TXT informa dias e datas. **sem campo: valores estruturados de antes/depois no aviso ao DP**, FOL-14. A pauta tem texto livre. [Falta no TXT](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/export.py:215) · [Pauta](/home/ronald/wt-codex-inventario-pela-regra-143921/app/pautas/models.py:86)
+
+O instrumento escrito do 12×36 CLT ficou como premissa da massa [nao verificado]. A fixture cadastra a fase e o horário. A empresa B também tem aplicação de CCT vinculada à praça. [Fixtures](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:47)
+
+### Comandos para o Code
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bash bin/suite.sh \
+  --dir /home/ronald/wt-codex-inventario-pela-regra-143921 \
+  --only "ponto.tests.test_inventario_escala ponto.tests.test_inventario_ausencia folha.tests.test_inventario_folha" \
+  --parallel 1
+```
+
+Os três comandos de mutação abaixo partem de `app/` no ambiente de teste. Cada um altera uma resposta em memória e executa só o caso correspondente. Resultado dos mutantes [nao verificado]. [ESC-15](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:367) · [AUS-07](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:137) · [FOL-02](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:144) [nao verificado]
+
+```bash
+mutante_inventario() {
+  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci python - "$1" <<'PY'
+import sys
+from datetime import date
+from importlib import import_module
+from unittest.mock import patch
+
+import django
+from django.core.management import call_command
+
+django.setup()
+
+modo = sys.argv[1]
+alvos = {
+    'intervalo': (
+        'ponto.tests.test_inventario_escala.piso_intervalo_art71',
+        'ponto.tests.test_inventario_escala.InventarioEscalaTest.test_ESC_15_quatro_horas_e_saida_antecipada',
+    ),
+    'gozo': (
+        'ponto.tests.test_inventario_ausencia.ausencias_na_janela',
+        'ponto.tests.test_inventario_ausencia.InventarioAusenciaTest.test_AUS_07_gozo_continuo_no_corte_do_dia_21',
+    ),
+    'he50': (
+        'folha.export.eventos_do_fechamento',
+        'folha.tests.test_inventario_folha.InventarioFolhaTest.test_FOL_02_extra_autorizada_no_txt',
+    ),
+}
+alvo, teste = alvos[modo] [nao verificado]
+modulo, nome = alvo.rsplit('.', 1)
+original = getattr(import_module(modulo), nome)
+
+def mutado(*args, **kwargs):
+    if modo == 'intervalo':
+        return 15
+    resultado = original(*args, **kwargs)
+    if modo == 'gozo':
+        return resultado.exclude(data=date(2026, 11, 20))
+    return [(evento, valor) for evento, valor in resultado if evento != 'hora_extra_diurna']
+
+with patch(alvo, side_effect=mutado):
+    call_command('test', teste, interactive=False, parallel=1) [nao verificado]
+PY
+}
+
+mutante_inventario intervalo
+mutante_inventario gozo
+mutante_inventario he50
+```
 
 ## 27/11 14:48 · sessao 7b6055d82c76 · PAR-PELO-TURNO · construtor · origem=Code
 
@@ -888,32 +1059,4 @@ Em memória, o `_Varredor` acusou `D.registrar([], projecao=(p, ['resposta_colab
 - **RED e mocks.** A asserção original de ato e contagem da resposta pública ficou intacta. O `(1, 1)` do lote continua, com verificação adicional de persistência, mas o arranjo mudou de save avulso seguido de `registrar` para projeção pareada. Portanto deixou de exigir dedupe entre chamadas separadas. O mock de limbo preserva as asserções de campos, instante, linha, trava e auditoria. Ele simula o save e não exercita a transação nem o outbox. H2 conserva o rollback instrumentado de ato e outbox no caminho **sem projeção**. O RED de `on_commit` executa callbacks capturados em `TestCase`, sem commit real. O MORDE do censo cobre a tupla literal e deixa escapar a variável do item 5. `app/chamados/tests/test_e4c_f5_c4_red.py:636–648,737–768,1564–1591`, `app/chamados/tests/cortes_f2_f9_apoio.py:58`, `app/chamados/tests/test_curar_perguntas_em_limbo.py:29–58`, `app/chamados/tests/test_e4_expand.py:396–431`.
 - **Âncoras.** As quatro âncoras alteradas das voltas 3 e E aplicam e produzem a violação esperada nos selos AST em memória. Na cópia, `M-H2-evento`, `M-C11-reversao`, `absorcao_sem_comparador`, `tirar_guarda` e `contador_ignora_b` têm **zero ocorrências** de suas âncoras e abortam antes da asserção de negócio se selecionados. A inclusão deles nas rodadas do recibo fica [nao verificado]. `app/chamados/tests/e4c_f5_volta3_mutantes.py:29–32,53–68,95–109`, `app/chamados/tests/e4c_f5_voltaE_mutantes.py:10–42,84–95`, `app/chamados/tests/test_e4c_f5_volta3_selos.py:12–29,41–59`, `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:560–602`, `app/chamados/tests/e4_verificar.py:21–24,33–37,58–64`.
 
-## 27/11 14:15 · sessao 62d7a3df1317 · - · - · origem=Ronald (tmux)
-
-**Item 7 — PROCEDENTE para lacunas nos selos e nas âncoras antigas. NAO PROCEDE para afrouxamento do RED de resposta pública.** A asserção de uma linha `RESPOSTA` e um evento ficou intacta. O teste de lote preserva `(1, 1)`, acrescenta a persistência da projeção e troca o arranjo de duas chamadas por `registrar(..., projecao=...)`. O teste anterior deixou de exigir dedupe entre chamadas separadas. `app/chamados/tests/test_e4c_f5_c4_red.py:636–648,756–768,833–855`
-
-- M53 e M54 trocam a autoria de um único evento. M55 retira o `finally`. M56 e M57 forçam silêncio indevido e emissão dupla, respectivamente. A espia distingue `post_save` pela pilha e atribui ao `registrar` qualquer outra emissão sob esse frame. O RED separado conta os inserts. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:793–804,818–842`, `app/chamados/tests/test_e4c_f5_c4_red.py:636–672,711–735,770–777,821–825`
-- M58 remove a guarda e intercepta `bulk_create` no mutante. A falha esperada é a ausência de `ValueError`, com a mesma asserção de recusa. O teste usa instância falsa e para no primeiro campo quando a recusa desaparece, enquanto o controle verifica os cinco campos e que o save jamais rodou. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:27–62,807–815,843–846`, `app/chamados/tests/test_e4c_f5_c4_red.py:1533–1548`
-- Confirmei em memória uma ocorrência por âncora alterada e a compilação das versões mutadas. A sonda AST de volta3 acusou `v_ato_sem_coluna` e `d_devolucao_mantem_coluna`. Para voltaE, `preenche_e_desfaz` acusou ato que pode desfazer a validação e `d_paridade_devolucao_sem_coluna` acusou a devolução no selo inverso. As âncoras antigas `M-H2-evento` e `M-C11-reversao` continuam com zero ocorrências na cópia e falham antes do teste. Execução ORM e rodadas do recibo [nao verificado]. `app/chamados/tests/e4c_f5_volta3_mutantes.py:53–64,106–125`, `app/chamados/tests/test_e4c_f5_volta3_selos.py:12–29,41–59`, `app/chamados/tests/e4c_f5_voltaE_mutantes.py:10–18,28–42,84–95`, `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:560–572,585–637`, `app/chamados/tests/e4_verificar.py:21–24,33–37,58–64`
-- O mock do limbo conserva a prova do contrato do chamador, incluindo campos, instante, linha, trava e trilha. Ele simula o save e intercepta o atomic. H2 ainda verifica rollback de ato e outbox instrumentados no ramo sem projeção. O teste de `on_commit` executa captura dentro de `TestCase`, enquanto o teste de savepoint faz um save avulso antes de chamar a porta. Concorrência e reentrância na mesma instância ficam fora desses casos. `app/chamados/tests/test_curar_perguntas_em_limbo.py:29–58`, `app/chamados/tests/test_e4_expand.py:396–431`, `app/chamados/tests/test_e4c_f5_c4_red.py:737–753,848–855`, `app/chamados/tests/cortes_f2_f9_apoio.py:58`
-- O MORDE do censo trava o reconhecimento da tupla literal e os dois saves internos visíveis. Rodei o censo puro, que encontrou oito chamadores atribuídos a `PerguntaDisputa`, todos em arquivos declarados, e os dois saves internos com `entidade=None`. O caso de teste não cobre alias do payload ou expansão por `**kwargs`. `app/chamados/tests/test_e4c_f5_c4_red.py:1551–1591`, `app/core/censo_escritas.py:406–423`, `app/core/portas.py:396–403`, `app/chamados/models.py:3523,3575,4784,4802`, `app/chamados/services/disputa_emissao.py:1565,1762,1797`, `app/chamados/services/validacao.py:176,315,393`
-
-**Achado adicional para item 1.** Uma resposta pública `ATESTADO` pode absorver a própria pergunta de hora. Para a mesma célula, com validação nula e absorção aceita, há três emissões de pergunta por três chamadas de `registrar`, uma da `RESPOSTA`, uma da `VALIDACAO` feita no carimbo e uma da `ABSORCAO`. Uma irmã muda recebe carimbo com lote vazio pelo `post_save`, mais a emissão da `ABSORCAO`. A fixture pública afirma a absorção da própria pergunta e da irmã, sem contar eventos. Portanto o ato de resposta isolado atende à autoria, e a leitura do aval sobre a operação pública completa encontra contraexemplo. Ocorrência em produção [nao verificado]. `app/chamados/services/disputa_emissao.py:1565–1568,1592–1597`, `app/chamados/services/materializacao.py:1065–1071,1096–1153`, `app/chamados/models.py:3478–3496,3522–3524,4797–4803,4841–4844`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:47–58,87–92`
-
-## 27/11 14:14 · sessao 31a3277cc8d2 · - · - · origem=Ronald (tmux)
-
-**4. PROCEDENTE em parte.** `_salvar_a_projecao` põe e remove `True` no `__dict__` da instância. `salva_pelo_registrar` lê a chave e o receiver usa o resultado para calar a emissão. O valor identifica a instância durante o intervalo e é usado como prova de que aquele `save` pertence ao `registrar`. Um save concorrente ou reentrante no mesmo objeto desmonta essa equivalência. `app/chamados/models.py:4769–4786`, `app/chamados/signals.py:254–263`.
-
-- `projecao` é o par instância/campos fornecido pelos oito pontos atuais. `registrar` lê o PK e os campos para validar e faz `save(update_fields=...)` com ou sem silenciamento conforme o lote. `_CAMPOS_QUE_MOVEM_O_EVENTO` enumera as chaves da destinação, cuja leitura vem de `linhas_do_evento`. `app/chamados/models.py:3523,3575,3610–3633,4771,4797–4828`, `app/chamados/services/disputa_emissao.py:1565–1568,1762–1765,1797–1800`, `app/chamados/services/validacao.py:176–179,315–319,393–398`.
-- `ESCRITA_POR_PROJECAO` é declarado pelo censo e lido em `visit_Call`. `_projecao` constrói um `save` sintético que `_variavel` tenta atribuir a um modelo. A saída registra sítio e entidade, sem inventário de campos. `app/core/censo_escritas.py:65–70,407–465`.
-- `PerguntaDisputa.CAMPOS_QUE_ACORDAM` é definido pelo modelo e testado pelo receiver contra os nomes em `update_fields`. A constante homônima da porta de célula é independente e sua lista contém `veredito` e `ata`. `app/chamados/models.py:3600–3607`, `app/chamados/signals.py:255–259`, `app/ponto/portas/celula.py:975–1002`.
-- Os callbacks de `decisao` montam a linha de SILÊNCIO depois de atribuir o carimbo em memória. O fechamento da disputa lê `ato_texto` da sequência, enquanto o fio do dia usa a coluna. As duas fontes já constavam nos lados removidos do diff. O texto é foto da decisão, e a redução só usa `ato_texto` como resposta se o ato é `RESPOSTA`. `app/chamados/models.py:2182–2185,3363–3378,3566–3575,4582–4595`, `app/ponto/services/veredito_celula.py:200–202`, `diff.patch` (anexo).
-- O novo contrato aceita a instância de projeção por PK, inclusive quando o lote usa `pergunta_id`. A invalidação do prefetched `decisoes` e `_pv_memo` visita apenas `ln['pergunta']`. Uma projeção com prefetch pode ficar lendo uma validação anterior depois de registrar `DEVOLUCAO` por ID. Nos chamadores atuais o lote inclui a própria instância projetada. `app/chamados/models.py:4558–4565,4642–4649,4804–4808,4834–4840`, `app/chamados/juizes.py:939–951`. Ocorrência em produção [nao verificado].
-
-**5. PROCEDENTE para o sítio lógico, NAO PROCEDE para desaparecimento de `save()` físico.** Os oito chamadores atuais são reconhecidos e os dois `.save` da porta permanecem em `não atribuíveis`. A varredura em memória confirmou que `D.registrar([], projecao=(p, ['resposta_colab']))` aparece como escrita, mas `proj = (p, ['resposta_colab']); D.registrar([], projecao=proj)` devolve zero achados. A escrita do segundo trecho funciona pelo ramo vazio. A lista literal também escapou. O censo só desce no `ast.Tuple` literal, e seu próprio contrato atribui a escrita ao chamador. As regras de `save` direto continuam as mesmas. `app/core/censo_escritas.py:65–70,404–465,531–547`, `app/chamados/models.py:4797–4803`, `app/core/management/commands/censo_escritas.py:37–50`. Caso equivalente em produção [nao verificado].
-
-**7. PROCEDENTE para lacunas nos MORDE.** Os dois casos de `_dicts_da_trilha` passaram em execução isolada dos métodos AST. Também reproduzi `[]` nos dois selos ao analisar `from core.observ import evento`, seguido de uma função que faz `from functools import partial as evento` e `evento(qs.update, **dict(materializada_em=None, respondida_em=None, resposta_colab=''))()`. Remover só o import de `core.observ` faz os selos voltarem a acusar os mesmos campos. É escrita real via `partial` e uma regressão da catraca. O coletor junta imports de todo o arquivo, mas ignora reimport conflitante e parâmetro homônimo. As provas existentes exercitam troca de import, definição homônima e cópia em variável. A variante posicional de carimbo também usa uma forma que o `evento` verdadeiro rejeita, pois o quarto parâmetro é keyword-only. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,222–232,309–331`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–164,289–299`, `app/core/observ.py:94–95`. Os cinco dicts atualmente dispensados na árvore produtiva pertencem a trilhas genuínas. `app/chamados/services/materializacao.py:846–859`, `app/ponto/services/par_relampago_na_lista.py:459–472,507–520`.
-
-O M58 remove a recusa e substitui `bulk_create` para deixar o `assertRaisesRegex` falhar por ausência do `ValueError`. O RED examina cinco nomes, mas a asserção `salvos == []` fica fora do laço e só verifica a última iteração, `data_evento`. `app/chamados/tests/test_e4c_f5_c4_red.py:1541–1548`, `app/chamados/tests/e4c_f5_c4red2_mutantes.py:807–816`. Rodada com ORM e logs do recibo [nao verificado].
-
-_8695 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8697 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
