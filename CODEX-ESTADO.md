@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 09:22** · publicado em **27/11/2026 09:23** (UTC-3)
+> Ultima resposta processada: **27/11/2026 09:30** · publicado em **27/11/2026 09:30** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 09:30 · sessao c5fc6340d46c · E4C-F5-INSTANTE · verificador · origem=Code
+
+## 1. Quem escreve e quem lê
+
+Conferi os 13 arquivos tocados pelos identificadores de conteúdo do diff fornecido. Fiz a inspeção em modo somente leitura e reproduzi em memória o caso do par descrito no item 5. A ancestralidade Git, a execução da suíte e os efeitos em produção ficam [nao verificado]. [nao verificado]
+
+| Campo ou valor | Quem escreve | Quem lê |
+|---|---|---|
+| `resposta_colab`, `respondida_em` | Resposta humana e automática gravam o par. A cura pela nota e `carimbar` preenchem o instante sobre texto existente. Nascimento assinado pode receber o par. Reabertura, ressuscitação e devolução L-130 limpam pela porta de lote. `app/chamados/services/disputa_emissao.py:1529–1567,1661–1714,1757–1763,1793–1797`, `app/chamados/models.py:1728–1731,3322–3327,3478–3485`, `app/chamados/services/validacao.py:480–488` | Foto do passivo, comparação ato × coluna, C6/C21, histórico, API, prévia de folha, vigia de texto e foto do veto. `app/chamados/models.py:4509–4518,4620–4633`, `app/chamados/juizes.py:1499–1521`, `app/chamados/services/historico.py:96–114`, `app/api/views.py:2587–2601`, `app/folha/previa.py:143`, `app/chamados/services/vigia_texto_resposta.py:23`, `app/chamados/services/materializacao.py:855–858` |
+| `validada_em`, `validada_por[_id]` | `_carimbar_validacao` assina a validação humana e `carimbar` pode assinar no mesmo instante do carimbo. Nova resposta, devoluções e reaberturas limpam a assinatura. `app/chamados/services/validacao.py:164–178,309–318,384–396`, `app/chamados/models.py:3486–3492`, `app/chamados/services/disputa_emissao.py:1542–1544,1661–1714` | A foto do passivo usa os dois campos. As guardas, C6, seleção de plantio e trilha K6 usam o instante. A procedência da batida também lê o autor. `app/chamados/models.py:4514–4518,4664–4684`, `app/chamados/juizes.py:1499–1504`, `app/chamados/services/materializacao.py:855–858,2246–2255,2315–2318`, `app/ponto/services/procedencia_batida.py:72` |
+| `materializada_em`, `materializada_por[_id]`, `via_resolucao`, `recusa_do_carimbo` | `_escrever_carimbo` atende ao carimbo normal, de identidade e ao descarimbo individual. O lote zera o trio e o encerramento por fato no espelho pode trocar só a via. A recusa do carimbo é escrita na instância. `app/chamados/models.py:3419–3423,3452–3457,3495–3513,3520–3539,3562–3592,3668–3681` | C6, materialização, fecho S144, histórico, procedência da batida e trilha K6. `app/chamados/juizes.py:1484–1496,1514–1515,1541–1549`, `app/chamados/services/materializacao.py:855–858,1124,2117,2312–2315,2375–2383`, `app/chamados/services/historico.py:104–106`, `app/ponto/services/procedencia_batida.py:72` |
+| `veredito_lavrado`, `julgado_em`, `janela_expira_em`, `_atos_do_carimbo`, `_pv_memo` | A porta da lavra escreve os três primeiros. O carimbo monta os atos pendentes e os descarta no save ou no desfazimento. C6 escreve o memo e o desfazimento e `registrar` o invalidam. `app/chamados/veredito_lavrado.py:237–289`, `app/chamados/models.py:3477–3495,3520–3539,4778–4784`, `app/chamados/juizes.py:939–949` | A foto e a restauração leem a lavra. A tarefa verifica sua vigência e filtra os pendentes por `ato_em <= agora` antes de chamar `leitura`. `composta` passa os pendentes ao C6 e à guarda do par. `app/chamados/models.py:3507,3524–3528,4557–4569,4653–4684`, `app/chamados/services/tarefa_do_dia.py:393–443`, `app/chamados/juizes.py:1499–1502` |
+| `DecisaoPergunta.pergunta[_id]`, `ato`, `ato_em`, `ato_por[_id]`, `ato_texto`, `ato_motivo`, `resposta_mantem_validacao` | As portas de resposta, validação e compensação montam os valores. `linhas_da_projecao_sem_linha` monta a foto histórica e `registrar` insere a sequência, ajustando o instante de atos compensadores. `app/chamados/models.py:3480–3492,4462–4466,4487–4518,4740–4746,4750–4772`, `app/chamados/services/disputa_emissao.py:1562–1567`, `app/chamados/services/validacao.py:173–178,309–318` | A chave de estoque compara todos esses valores, agora também o motivo. A redução lê tipo, instante, texto e preservação de validação. A foto de ressuscitação lê o autor e o rótulo BUG-PAR-103 lê o prefixo do motivo. `app/chamados/models.py:4457–4466,4530–4541,4557–4591,4815–4850`, `app/chamados/services/materializacao.py:279–292` |
+| `entrada_origem`, `entrada_em`, `marco`, classes `a`/`b`, `True`/`INDETERMINADO` | Os defaults gravam `ato` e a hora do banco. A 0058 marca as linhas históricas com `estoque` e o marco. O lote explícito fornece esses valores sob conferência. O marco vem de `django_migrations.applied` da 0057. O comparador produz as classes e o terceiro valor. `app/chamados/models.py:4412–4420,4594–4633,4791–4808`, `app/chamados/migrations/0057_decisao_entrada_do_ato.py:15–32`, `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:9–20` | A porta do estoque lê por campo. Vigia e DRY agregam por PK e classe, com precedência de `True`. O DRY também lê a coluna e o instante do ato real para imprimir a reprojeção. O VFM publica A/B no censo e no alarme e `ato_x_coluna_indeterminado` no carimbo, cuja comparação no painel usa `censo` e `esperado`. Consumidores externos dos rótulos antigos [nao verificado]. `app/chamados/models.py:4645–4650,4851–4867`, `app/chamados/services/vigia_ato_x_coluna.py:12–35`, `app/chamados/management/commands/estoque_ato_x_coluna.py:23–61`, `app/chamados/management/commands/vigiar_fio_morto.py:213–216,238–242,288–307`, `bin/fio_estado.py:98–126` |
+| `pk`, `disputa`, `colaborador_id`, `empresa_id`, `data_evento`, `conversa`, `motivo`, competência, trava e trilha | A identidade vem do nascimento da pergunta. `gravar_dia_do_fato` atribui `data_evento`. A janela usa o corte da Empresa, gravado pelo cadastro. `ExportacaoDominio.registrar` grava a entrega e `invalidar` registra a invalidação. `travar_entrega` grava o marcador em memória. O helper do veto entrega ação, PK, motivo, autor e fotos ao escritor `evento`. `app/chamados/models.py:3090–3105,3322–3327`, `app/chamados/services/fio.py:950–961`, `app/colaboradores/views.py:515–557`, `app/folha/models.py:156–187`, `app/folha/export.py:573–594`, `app/chamados/services/materializacao.py:846–858`, `app/core/observ.py:94–138` | K6 lê a exportação vigente. Suas guardas leem motivo, dia, empresa e janela. Estoque lê também `conversa` e a trava. DRY usa PK, colaborador e competência nas listas. A consulta genérica de auditoria lê a linha e a sonda de fotos lê o JSON. `app/folha/export.py:602–648`, `app/chamados/services/passivo_validado.py:91–100`, `app/chamados/services/materializacao.py:803–842`, `app/chamados/models.py:4836–4873`, `app/chamados/management/commands/estoque_ato_x_coluna.py:31–60`, `app/core/views.py:705–738`, `app/chamados/services/foto_e4b.py:310–323` |
+
+## 2. TXT e dinheiro
+
+**Informativo — a alteração em `export.py` acrescenta um registro da trava na transação.** O `SELECT FOR NO KEY UPDATE` continua vindo primeiro. `travar_entrega` lê o registro para evitar outro marcador e `exigir_entrega_travada` o lê para conferir o lote de estoque. Os outros chamadores da trava são a tela de exportação, o regerador em modo `--aplicar` e a revisão de batidas. `app/folha/export.py:556–607`, `app/chamados/models.py:4767–4772,4836–4839`, `app/folha/views.py:134`, `app/folha/management/commands/regerar_txt_dominio.py:64–67`, `app/ponto/services/par_relampago_na_lista.py:172–186`.
+
+**Nenhum byte, rubrica ou valor do TXT já entregue muda por esse caminho.** A montagem, a serialização e o hash estão fora do trecho alterado. O download histórico serve `ExportacaoDominio.conteudo`. O lote de estoque recusa competência entregue antes do `INSERT` e, quando aceito, só insere decisões e pula a emissão para células. Valores e hashes de produção [nao verificado]. `app/folha/export.py:525–554,744–776`, `app/folha/models.py:174–187`, `app/folha/views.py:574–589`, `app/chamados/models.py:4769–4787,4868–4873`.
+
+## 3. Trilha do veto K6
+
+**Média — duas tentativas idênticas que chegam ao veto e persistem deixam duas linhas.** Cada chamada faz um `create`, sem consulta de existência nem unicidade. A foto antes/depois repete `resposta_colab`, `respondida_em`, `validada_em` e `materializada_em`. A validação tardia desfaz o `atomic` local, relê a pergunta e grava a trilha depois. A escrita é *best effort* e depende do commit externo, quando houver. O contrato estrutural pede uma linha para duas chamadas iguais. `app/chamados/services/materializacao.py:846–858,1999–2004`, `app/chamados/services/validacao.py:237–245,795–797,833–845`, `app/core/observ.py:105–139`, `app/core/models.py:295–316`, `app/docs/ESTRUTURAL.md:22–25`.
+
+**Média — cobertura parcial da trilha.** O RED aceita qualquer evento com foto compatível e descrição esperada, inclusive se houver duplicatas. O teste sem banco injeta um `Mock` da trilha sem verificar a chamada. A devolução BUG-PAR-103 também pode sair por K6 sem gravar essa ação. `app/chamados/tests/test_e4c_f5_c4_red.py:884–895,973–991`, `app/chamados/tests/test_bug_par_sem_banco.py:153–169`, `app/chamados/services/validacao.py:369–378`.
+
+## 4. Asserções que trocaram `False` por `INDETERMINADO`
+
+| Local | Expectativas alteradas |
+|---|---|
+| `app/chamados/tests/test_e4c_f5_c4_red.py:386,399` | `a/respondida` no encaminhamento à reprojeção e `b/respondida` na resposta compensada. |
+| `app/chamados/tests/test_e4c_f5_c4_red.py:607–609` | `a_mista1 a/validada`, `a_mista2 a/respondida`, `estoque b/respondida`. |
+| `app/chamados/tests/test_e4c_f5_c4_red.py:620–624` | `a_mista1 a/validada`, `a_mista2 a/respondida`, `pk_misto b/respondida`, `estoque b/respondida`. |
+| `app/chamados/tests/test_e4c_f5_c4_red.py:653–658` | `a_mista1 a/validada`, `a_mista2 a/respondida`, `pk_misto b/respondida`, `estoque b/respondida`. |
+
+**As 13 trocas diretas preservam a mordida sobre classe e campo.** Também passam a rejeitar `False` como saída. M35 cobre os três casos históricos de 607–609. Em um teste que estava pulado houve cinco trocas adicionais de `True` para `INDETERMINADO`. Limpeza e retroação sem registro continuam exigidas na listagem, mas o cenário passa a esperar A=0 e B=2 no alarme, antes A=4 e B=3. O teste de carimbo em entregue, também antes pulado, agora admite carimbo e linha `ATO_NOVO`, pois só exige ausência de `ESTOQUE` e de entrada no marco. `app/chamados/tests/test_e4c_f5_c4_red.py:463–475,597–602,648–692`, `app/chamados/tests/e4c_f5_c4red2_mutantes.py:674–681`, anexo `diff.patch`.
+
+## 5. Classes de reprovação
+
+| Classe | Achado |
+|---|---|
+| Segundo juiz que duplica juiz registrado | **Ausente para C6, C21 e K6.** O código continua chamando as autoridades registradas. A divergência nova está na guarda do **par**, abaixo. `app/core/juizes.py:298–320,350`, `app/chamados/models.py:3496–3503`, `app/chamados/juizes.py:1499–1521`, `app/chamados/services/materializacao.py:803–816` |
+| Segundo escritor fora da porta | **Ausente nas escritas novas.** A trilha entra por `evento`, as decisões por `registrar` e o registro da trava por `travar_entrega`. Há dois chamadores do emissor da célula no mesmo ato, conforme o item 6. `app/chamados/services/materializacao.py:851–858`, `app/core/observ.py:94–138`, `app/chamados/models.py:3520–3523,4750–4772`, `app/folha/export.py:573–585` |
+| Relógio lido fora da borda | **Ausente no filtro novo.** Ele usa `agora` recebido. O caminho preexistente do carimbo ainda chama C6 sem repassar `quando`, e o degrau da janela pode ler `timezone.localdate()` quando chega sem `hoje`. `app/chamados/services/tarefa_do_dia.py:408–425`, `app/chamados/models.py:3460,3496`, `app/chamados/juizes.py:633–643,932–943,1568–1569` |
+| Derivação paralela de fonte única | **Alta — presente na guarda do par.** Reproduzi em memória: ato real em T1 e coluna em T2 posterior, sem linha T2. A leitura composta sintetiza T2 como passivo, a guarda retorna `False` para divergência e o comparador de linhas reais acusa `a`. Vale para resposta e validação. A reconferência após o save usa a mesma guarda. **Média — DRY e porta também divergem:** conversa com dia civil pode entrar na lista aberta, e um `b` novo pode ocultar na lista um `b` indeterminado de outro campo do mesmo PK. A porta recusa conversa e confere cada campo do payload. `app/chamados/models.py:4508–4518,4557–4589,4620–4642,4682–4684,4851–4873`, `app/chamados/services/materializacao.py:1132–1136`, `app/chamados/models.py:3097–3105`, `app/chamados/management/commands/estoque_ato_x_coluna.py:33–55` |
+| Selo ou RED sem mordida | **Presente.** O RED do carimbo põe o ato real depois da coluna e perde o caso inverso acima. O RED do veto não exige unicidade. O RED dos pendentes injeta a candidata na carga, enquanto os dois chamadores reais recarregam do ORM. Ele prova o filtro com a candidata injetada. Alcance desse ramo pela face pública sem a injeção [nao verificado]. `app/chamados/tests/test_e4c_f5_c4_red.py:98–119,225–248,884–895`, `app/chamados/services/tarefa_do_dia.py:465–478,536–549` |
+| Ordem de trava | **Média — conferência incompleta.** Os chamadores mostrados tomam Empresa antes do dono. A porta só confirma que ambas estão registradas. Uma chamada que já detenha ambas em ordem inversa passa nessa conferência. Chamador de produção do `--aplicar` desse estoque [nao verificado]. `app/folha/export.py:581–607`, `app/chamados/models.py:4767–4770,4838–4839`, `app/chamados/tests/test_e4c_f5_c4_red.py:713–717,795–821`, `app/chamados/management/commands/estoque_ato_x_coluna.py:16–25` |
+| Pouso antes do pré-requisito | **[nao verificado] para cura1.** A cópia documenta o pouso de PORTA-CONFERE-TRAVA antes do início da obra. A 0058 depende da 0057 e exige seu registro de aplicação. `app/docs/RELATO.md:28,34–35`, `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:9–14,23–30` |
+| Campo com dois significados | **Presente.** `data_evento` guarda dia de turno e dia civil de conversa. `entrada_em` guarda hora efetiva para `ato` e marco convencional para `estoque`. Além disso, o rótulo `ato` também cobre a foto de passivo gravada posteriormente, embora o comparador use essa origem como evidência de novidade. A cura acrescenta `ato_motivo` à conferência de proveniência, além de seu uso na trilha. `app/chamados/models.py:3090–3105,4402–4420,4509–4518,4627–4632,4815–4850`, `app/chamados/tests/test_e4c_f5_c4_red.py:522–538` |
+| `except` novo | **Presente como ampliação de cobertura.** O `except Exception` unificado agora cobre também as fotos da projeção e da lavra, restaura os campos e relança. `_pv_memo` e `_atos_do_carimbo` são descartados, portanto a restauração literal desses marcadores não faz parte do comportamento. `app/chamados/models.py:3462–3479,3507,3524–3539` |
+
+## 6. Emissão dupla
+
+**Alta — já existia em `8d160dbd9`, pelo diff fornecido. A cura não cria nem agrava a duplicidade nesse fluxo.** A resposta pública faz `save` com campos que acordam a célula e chama `DecisaoPergunta.registrar` no mesmo ato. O `post_save` e `registrar` chamam `acordar_celulas` separadamente. O conjunto `vistos` vale por chamada e o emissor faz um `INSERT` a cada chamada. Com uma célula resolvida, são duas linhas pelo mesmo ato. O RED inalterado exige uma, então a falha é esperada já no controle, antes do mutante M20. A execução desse RED fica [nao verificado]. `app/chamados/services/disputa_emissao.py:1529–1532,1562–1567`, `app/chamados/signals.py:253–259`, `app/chamados/models.py:3600–3629,4785–4787`, `app/ponto/portas/celula.py:981–991`, `app/chamados/tests/test_e4c_f5_c4_red.py:541–553`, `app/chamados/tests/e4c_f5_c4red2_mutantes.py:37–59,291–298,488–490`, anexo `diff.patch`.
+
+## 27/11 09:30 · sessao b189a5326482 · - · - · origem=Ronald (tmux)
+
+**Alta — a guarda de instante pode aceitar uma divergência que o vigia encontra.** A nova guarda compara a coluna com `composta`, cuja sequência sintetiza a própria coluna e pode colocá-la depois do ato real. Reproduzi os métodos em memória com ato real às 10h e coluna às 11h. A guarda respondeu `False` para divergência e o comparador respondeu `a/ respondida / INDETERMINADO`. A absorção repete a guarda após reler o banco. O RED direto cobre ato posterior à coluna. `app/chamados/models.py:3502,4509,4566,4580,4620,4682`; `app/chamados/services/materializacao.py:1132`; `app/chamados/tests/test_e4c_f5_c4_red.py:99`.
+
+**Alta — emissão dupla herdada e RED vermelho pela leitura.** A resposta humana salva os campos que acionam o `post_save` e chama `registrar`. Os dois emitem para a mesma célula. A deduplicação de `acordar_celulas` vale dentro de cada chamada e a porta faz um `create` por chamada. O RED exige 1, mas a leitura prevê 2 já no controle inicial do M20. Execução Django [nao verificado]. `app/chamados/services/disputa_emissao.py:1562,1565`; `app/chamados/signals.py:253`; `app/chamados/models.py:3600,3618,4785`; `app/ponto/portas/celula.py:981`; `app/chamados/tests/test_e4c_f5_c4_red.py:545`; `app/chamados/tests/e4c_f5_c4red2_mutantes.py:37,488`.
+
+**Média — DRY e porta de estoque discordam.** A lista anunciada como universo do estoque pode incluir conversa usando sua data civil de abertura, que a porta rejeita. Também omite um campo `b` indeterminado se o outro campo da mesma pergunta for `b` novo, embora a porta julgue o campo submetido. `app/chamados/management/commands/estoque_ato_x_coluna.py:33,45,55`; `app/chamados/models.py:3097,4853,4865`; `app/chamados/tests/test_e4c_f5_c4_red.py:588,623`.
+
+**13 expectativas False → INDETERMINADO.** Em `app/chamados/tests/test_e4c_f5_c4_red.py` são `:386` A/resposta, `:399` B/resposta, `:607–609` A/validação, A/resposta e B/resposta, `:620–624` A/validação, A/resposta e duas B/resposta, `:653–654` A/validação e A/resposta, `:657–658` duas B/resposta. Preservam classe e campo e reforçam a distinção de `False`. Separadamente, as cinco expectativas True→INDETERMINADO de `:651–655` rebaixam alarmes A de 4 para 0 e B de 3 para 2 no teste antes pulado. Agora ele exige a listagem em `:660–662`. O teste entregue antes pulado também deixou de exigir rollback integral e aceita atos `ATO_NOVO` em `:463–475`. M35 cobre os três casos históricos de `:607–609`. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:674`.
+
+**Demais classes.** Juiz registrado duplicado e segundo escritor operacional novo ausentes nos fluxos vistos. A nova trilha chama a porta canônica `evento`, e o comparador novo é uma derivação paralela da paridade, como demonstrado acima. O relógio novo da tarefa é recebido pela borda. A lavra mantém a leitura própria de `timezone.now()`. A nova trava verifica presença e permite ao futuro chamador passar tendo adquirido Colaborador antes de Empresa. As fixtures adquirem Empresa primeiro. `[nao verificado]` para ordem de deploy da cura. A dependência da 0057 e a anotação do pouso anterior da PORTA constam da cópia. `entrada_em` guarda ora hora da inserção, ora marco convencional. `data_evento` da conversa guarda data civil. `ato_em` de compensador pode ser deslocado para a última data da sequência. O `except Exception` unificado amplia escopo, restaura e relança. `app/core/juizes.py:165,185`; `app/chamados/services/materializacao.py:846`; `app/core/observ.py:94`; `app/chamados/services/tarefa_do_dia.py:408`; `app/chamados/veredito_lavrado.py:271`; `app/folha/export.py:581,602`; `app/chamados/tests/test_e4c_f5_c4_red.py:713`; `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:25`; `app/docs/RELATO.md:28,34`; `app/chamados/models.py:3097,3524,4402,4740`.
+
+## 27/11 09:29 · sessao 38de0429b039 · - · - · origem=Ronald (tmux)
+
+- **Alta. A guarda de instante pode aceitar coluna mais recente sem ato correspondente.** Em `composta`, a coluna T2 sem linha gera passivo sintético e vence a linha real T1 quando T2 > T1. O novo comparador vê T2 dos dois lados, inclusive após reler do banco. O vigia vê T1 na sequência real e classifica como A. O RED cobre a direção inversa, com instante do ato maior que o da coluna. `app/chamados/models.py:4508–4518,4563–4585,4622–4642,4682–4684` · `app/chamados/services/materializacao.py:1132–1136` · `app/chamados/tests/test_e4c_f5_c4_red.py:98–115`.
+- **Média. DRY e porta discordam sobre elegibilidade.** Conversa tem data civil preenchida. O DRY usa essa data para K6 e pode mostrar conversa em `b_indeterminado_aberta`, mas a porta recusa conversa. Um PK misto B novo/B indeterminado também some da lista, embora o campo indeterminado seja julgado individualmente pela porta. `app/chamados/models.py:3097–3105,4853–4869` · `app/chamados/services/materializacao.py:811–816` · `app/chamados/management/commands/estoque_ato_x_coluna.py:31–56` · `app/chamados/tests/test_e4c_f5_c4_red.py:620–630`.
+- **Média. Trilha K6 sem dedupe.** Cada veto chama `evento`, que insere em `LogAuditoria`. Duas tentativas efetivamente vetadas e confirmadas produzem duas linhas. Os REDs verificam existência e fotos compatíveis, sem fixar cardinalidade. O teste sem banco usa mock sem exigir chamada. `app/chamados/services/materializacao.py:846–858,2000–2004` · `app/chamados/services/validacao.py:237–245,794–797,834–845` · `app/core/observ.py:105,133–138` · `app/chamados/tests/test_e4c_f5_c4_red.py:884–895,908–923,961–991` · `app/chamados/tests/test_bug_par_sem_banco.py:153–169`.
+- **Média. Ramo temporal sem entrada normal demonstrada.** Ambos os chamadores de `_fatos_das_perguntas` carregam novas instâncias do ORM, sem `_atos_do_carimbo`. O RED faz a substituição pela instância em trânsito via patch. O RED testa a regra local, mas o caminho público sem patch não chega a ela. `app/chamados/services/tarefa_do_dia.py:419–433,465–478,536–549` · `app/chamados/tests/test_e4c_f5_c4_red.py:225–248`.
+- **Média. Ordem contratual apenas conferida por presença.** O sentinela da Empresa registra só seu PK. A conferência aceita as duas travas presentes mesmo se tomadas em ordem invertida. O concorrente verifica a ordem do chamador correto e a recusa sem Empresa. `app/folha/export.py:563–606` · `app/chamados/models.py:4767–4770,4838–4839` · `app/chamados/tests/test_e4c_f5_c4_red.py:771–821`.
+- **Baixa. `ato_motivo` ganhou uso na igualdade da foto de estoque.** O gerador escreve o motivo da foto. Além de texto de histórico, o campo já identificava devolução BUG-PAR-103 pelo prefixo. `entrada_em` já era instante real para ato e marco convencional para estoque. `app/chamados/models.py:4404–4420,4511–4518,4818–4819,4840–4850` · `app/chamados/services/materializacao.py:279–292` · `app/chamados/services/validacao.py:392–396` · `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:20`.
+
+**Escritores e leitores fora do diff**
+
+- Resposta/texto e instante saem da porta humana, automática, cura por nota, nascimento assinado e `carimbar`. Validada e autor saem de `_carimbar_validacao` e `carimbar`. A resposta humana, reabertura, ressuscitação e devolução apagam os respectivos pares. C6, API, fila de validação e placar leem a projeção diretamente ou via composta. `app/chamados/services/disputa_emissao.py:1529–1567,1661,1714,1757–1763,1793–1797` · `app/chamados/models.py:1728–1731,3322–3327,3478–3492` · `app/chamados/services/validacao.py:164–178,309–318,384–396,483–488,768–776` · `app/chamados/juizes.py:1499–1521` · `app/api/views.py:2587,2601,2646` · `app/chamados/services/verbos.py:263–271`.
+- Carimbo materializado, autor e via passam pelas portas do modelo. As escritas só da via incluem encerramento por fato e relavra. A lâmpada e seus dois instantes são escritos por `lavrar` ou gravação em lote, lidos pela tarefa e fotografados/restaurados na borda do carimbo. `app/chamados/models.py:3419–3423,3507,3520–3526,3562–3570,3668–3682` · `app/chamados/services/relavra_via.py:123–128` · `app/chamados/veredito_lavrado.py:240–250,254–289` · `app/chamados/services/tarefa_do_dia.py:439–443` · `app/chamados/reconciliador.py:1287–1298`.
+- A sequência recebe `pergunta`, `ato`, `ato_em`, `ato_por`, `ato_texto`, `ato_motivo`, `resposta_mantem_validacao` pela porta `registrar`. Consomem-na composição, comparador, SQL de validação, tarefa, histórico e modal. `ato_por_id` integra a foto da ressuscitação. `app/chamados/models.py:3723–3742,3978–4000,4460–4466,4530–4568,4637–4642,4750–4787` · `app/chamados/services/tarefa_do_dia.py:158–168,387–433` · `app/templates/chamados/partials/modal_fio.html:210–212`.
+- Marco é `django_migrations.applied` da 0057. A origem é default `ato`, estoque é payload conferido ou backfill 0058, e `entrada_em` é default de banco ou marco conferido. Comparador lê origem da linha efetiva. O terceiro valor é lido por conferência de estoque, vigia e DRY. VFM publica A/B no censo e indeterminados no topo do carimbo. `fio_estado` compara `censo` e `esperado`, enquanto o cadastro do comando ainda descreve “NOVO x ESTOQUE”. Leitor externo das chaves renomeadas [nao verificado]. `app/chamados/models.py:4419–4420,4594–4600,4629,4791–4806,4853–4864` · `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:20` · `app/chamados/services/vigia_ato_x_coluna.py:26–35` · `app/chamados/management/commands/estoque_ato_x_coluna.py:33–56` · `app/chamados/management/commands/vigiar_fio_morto.py:213–216,238–242,288–302` · `bin/fio_estado.py:104–105,121–126` · `app/config/crons.py:802–805`.
+- K6 lê dia, motivo e vínculo disputa/dono/empresa, deriva mês/ano pela janela e delega ao juiz de exportação vigente. A data é escrita por `gravar_dia_do_fato`. O registro TXT é escrito por `registrar` e seu estado de invalidação por `invalidar`. A trilha é escrita por `evento`, com `criado_em` automático, e lida na tela genérica de auditoria. `app/chamados/services/materializacao.py:803–840` · `app/chamados/services/fio.py:950–961` · `app/chamados/services/passivo_validado.py:91–100` · `app/folha/export.py:634–648` · `app/folha/models.py:156–162,174–187` · `app/core/observ.py:133–138` · `app/core/models.py:295–307` · `app/core/views.py:705–733`.
+
+## 27/11 09:28 · sessao 254352022df7 · - · - · origem=Ronald (tmux)
+
+- **Média — trilha K6 duplica em nova tentativa.** Cada chamada aceita pelo banco faz um `LogAuditoria.objects.create`. Duas tentativas idênticas que chegam ao veto e persistem deixam duas linhas. O contrato pede uma, e o teste exige apenas que exista trilha completa. O veto tardio desfaz primeiro o carimbo e a trilha interna, relê a pergunta e registra depois do `atomic` local. [materializacao.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/services/materializacao.py:846) · [observ.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/core/observ.py:133) · [ESTRUTURAL.md](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/docs/ESTRUTURAL.md:22) · [test_e4c_f5_c4_red.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/tests/test_e4c_f5_c4_red.py:887) · [validacao.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/services/validacao.py:833)
+
+- **Informativo — o hunk de exportação registra a trava existente.** O marcador em memória é escrito depois do `SELECT FOR NO KEY UPDATE` por `travar_entrega` e lido para evitar novo marcador e conferir a precondição do lote de estoque. Os chamadores antigos são a tela de exportação, o `regerar_txt_dominio --aplicar` e a revisão de batidas. O hunk preserva montagem, formatação e hash. O arquivo entregue é baixado de `ExportacaoDominio.conteudo`, e o estoque recusa competências entregues antes de inserir. Nenhum valor muda por esse caminho. Valores em produção [nao verificado]. [export.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/folha/export.py:573) · [views.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/folha/views.py:134) · [regerar_txt_dominio.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/folha/management/commands/regerar_txt_dominio.py:64) · [par_relampago_na_lista.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/ponto/services/par_relampago_na_lista.py:172) · [views.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/folha/views.py:574) · [models.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/models.py:4868)
+
+- **Baixa — a checagem de trava confere presença.** O registro de `Empresa` é um conjunto, sem ordem de aquisição. As fixtures tomam `Empresa` antes do `Colaborador`. A porta passaria pela mesma conferência se um chamador futuro invertesse a ordem e já detivesse ambas. [export.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/folha/export.py:588) · [models.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/models.py:4767) · [test_e4c_f5_c4_red.py](/home/ronald/codex_ws/d5b417695b2ead837b70847d1e2b515c7decbd45/app/chamados/tests/test_e4c_f5_c4_red.py:713)
+
+## 27/11 09:25 · sessao 9c24fac33fc6 · PAR-PELO-TURNO · construtor · origem=Code
+
+A c1v7 registra `batidas_apuraveis_na_janela` como autoridade e mantém a dívida em **1 chamada**. O censo compara nomes exatos nos imports e nas chamadas. A checagem com e sem alias confirmou que os dois nomes não casam por prefixo em nenhum sentido. (`relatorios/tests/test_pdf_nao_calcula.py:38,49,70,77`, `relatorios/pdf_espelho.py:281`)
+
+```diff
+diff --git a/app/relatorios/tests/test_pdf_nao_calcula.py b/app/relatorios/tests/test_pdf_nao_calcula.py
+--- a/app/relatorios/tests/test_pdf_nao_calcula.py
++++ b/app/relatorios/tests/test_pdf_nao_calcula.py
+@@ -37,0 +38 @@ AUTORIDADES = frozenset({
++    'batidas_apuraveis_na_janela',
+@@ -48 +49 @@ DIVIDA = {
+-    ('pdf_espelho.py', 'batidas_apuraveis'): 1,
++    ('pdf_espelho.py', 'batidas_apuraveis_na_janela'): 1,
+```
+
+**Contagem de `except` no diff** `+0 -0`. (`relatorios/tests/test_pdf_nao_calcula.py:38,49`)
+
+**Prova local**. A execução direta parou com `ModuleNotFoundError: No module named 'django.test'`. Execução com Django [nao verificado]. Com `unittest.TestCase` em memória, o RED original acusou a entrada antiga como podre e os cinco testes passaram após a cura. (`relatorios/tests/test_pdf_nao_calcula.py:28,94,114`)
+
+**Censo AST de `pdf_espelho.py`**, com as linhas das chamadas. (`relatorios/tests/test_pdf_nao_calcula.py:63`, `relatorios/pdf_espelho.py:213,281,347,358,427,444,450`)
+
+```text
+Antes   celulas_do_periodo [347], folgas_do_periodo [358], turnos_do_colab [213, 444],
+        calcular_mes [427], minutos_previstos_do_dia [450]
+Depois  celulas_do_periodo [347], folgas_do_periodo [358], turnos_do_colab [213, 444],
+        batidas_apuraveis_na_janela [281], calcular_mes [427], minutos_previstos_do_dia [450]
+```
+
+| Comando de prova | Resultado |
+|---|---|
+| `rodar_selo antes` | RED, entrada antiga podre. `relatorios/tests/test_pdf_nao_calcula.py:114` |
+| `rodar_selo depois` | Cinco testes passaram com `unittest.TestCase`. `relatorios/tests/test_pdf_nao_calcula.py:94` |
+| `rodar_selo sem_autoridade` | RED, a chamada some do censo e a entrada do embrulho fica podre. `relatorios/tests/test_pdf_nao_calcula.py:77,114` |
+| `rodar_selo chave_antiga` | RED, a chave antiga fica podre e o embrulho aparece como cálculo novo. `relatorios/tests/test_pdf_nao_calcula.py:101,114` |
+| `rodar_selo chamada_duplicada` | RED, duas chamadas para uma declarada. `relatorios/tests/test_pdf_nao_calcula.py:106` |
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v relatorios.tests.test_pdf_nao_calcula
+
+rodar_selo() {
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$1" <<'PY'
+import ast
+from pathlib import Path
+import sys
+import unittest
+
+selo = Path("relatorios/tests/test_pdf_nao_calcula.py")
+pdf = Path("relatorios/pdf_espelho.py").read_text(encoding="utf-8")
+arvore = ast.parse(selo.read_text(encoding="utf-8"))
+arvore.body = [
+    no for no in arvore.body
+    if not (isinstance(no, ast.ImportFrom) and no.module == "django.test")
+]
+ns = {"__file__": str(selo), "SimpleTestCase": unittest.TestCase}
+exec(compile(arvore, str(selo), "exec"), ns)
+
+modo = sys.argv[1]
+antiga = "batidas_apuraveis"
+nova = "batidas_apuraveis_na_janela"
+chave = ("pdf_espelho.py", nova)
+if modo in ("antes", "sem_autoridade"):
+    ns["AUTORIDADES"] -= {nova}
+if modo in ("antes", "chave_antiga"):
+    ns["DIVIDA"][("pdf_espelho.py", antiga)] = ns["DIVIDA"].pop(chave)
+if modo == "chamada_duplicada":
+    linha = next(l for l in pdf.splitlines(keepends=True) if "list(" + nova + "(" in l)
+    censo = ns["censo"]
+    ns["censo"] = lambda fonte: censo(
+        fonte.replace(linha, linha * 2, 1) if fonte == pdf else fonte
+    )
+
+print("Censo PDF:", ns["censo"](pdf), flush=True)
+suite = unittest.defaultTestLoader.loadTestsFromTestCase(ns["PdfNaoCalculaTest"]) [nao verificado]
+raise SystemExit(not unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful()) [nao verificado]
+PY
+}
+```
 
 ## 27/11 09:22 · sessao e0dac6bc0611 · E4D-CONTRATO-ROTA-B · construtor · origem=Code
 
@@ -1112,429 +1284,4 @@ diff --git a/app/ponto/tests/test_ramo2b_c2l_red_motor.py b/app/ponto/tests/test
 
 O `rg` encontrou uma referência indireta ao caminho antigo em `app/ponto/tests/ramo2b_c2l_mutantes.py:57`. O script passa esse caminho ao carregador de testes em `app/ponto/tests/ramo2b_c2l_mutantes.py:77`, e a classe está em `app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43`. O diff se limita ao import solicitado.
 
-## 27/11 06:59 · sessao 684d56ff6bd6 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-Movi `_medir_com_espelho` e `TestemunhaDaHeNaPortaTest` para `ponto/tests`. Conferi que o helper, os patches e as asserções foram preservados byte a byte. A mudança ficou restrita a dois arquivos.
-
-- [app/folha/tests/test_porta_do_export.py:15](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/tests/test_porta_do_export.py:15) — removi o bloco e os imports de módulo que ficaram sem uso. O trecho de `he_acima_do_teto_por_dia` foi preservado. [Trecho preservado](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/tests/test_porta_do_export.py:133)
-- [app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:1](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:1) — adicionei a docstring de duas linhas e o bloco movido. [Helper](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:11) · [Testemunha](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43)
-
-### RED e mutantes
-
-O RED falhou na base `c57f01232` com o achado `('folha/tests/test_porta_do_export.py', 'MotorBase')`. Após a mudança, os quatro testes do selo passaram. [Asserção do selo](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/tests/test_selo_bolha_nao_importa.py:27)
-
-```bash
-# RED na base
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest core.tests.test_selo_bolha_nao_importa.SeloBolhaNaoImportaTest.test_MORDE_a_bolha_da_folha_nao_importa_o_motor
-
-# Selo completo após a cura
-PYTHONDONTWRITEBYTECODE=1 python3 -W ignore::ResourceWarning -m unittest core.tests.test_selo_bolha_nao_importa
-```
-
-**Mutante 1.** Reintroduzi o import em `folha/` na AST em memória. O selo voltou a falhar pelo achado esperado. [Varredura de imports](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/core/mapa/contrato.py:128)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -W ignore::ResourceWarning - <<'PY'
-import ast
-import unittest
-from pathlib import Path
-from unittest.mock import patch
-from core.mapa import contrato
-
-folha = 'folha/tests/test_porta_do_export.py'
-arvore = contrato._arvore
-mutante = ast.parse(Path(folha).read_text() + '\nfrom ponto.motor_calculo_v2 import MotorBase\n')
-alvo = ('core.tests.test_selo_bolha_nao_importa.SeloBolhaNaoImportaTest.'
-        'test_MORDE_a_bolha_da_folha_nao_importa_o_motor')
-with patch.object(contrato, '_arvore', side_effect=lambda rel: mutante if rel == folha else arvore(rel)):
-    resultado = unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromName(alvo))
-assert resultado.testsRun == 1 and not resultado.errors
-assert len(resultado.failures) == 1 and repr((folha, 'MotorBase')) in resultado.failures[0][1]
-PY
-```
-
-**Mutante 2.** Omiti a classe no texto em memória. A conferência estrutural detectou a perda da testemunha. [Classe e método](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
-import ast
-from pathlib import Path
-
-p = Path('ponto/tests/test_ramo2b_porta_7a_testemunha.py')
-fonte = p.read_text()
-classe = 'TestemunhaDaHeNaPortaTest'
-metodo = 'test_he_da_cauda_entra_na_lista_e_nas_falhas_da_porta'
-
-def contem_testemunha(texto):
-    return any(
-        isinstance(n, ast.ClassDef) and n.name == classe
-        and any(isinstance(m, ast.FunctionDef) and m.name == metodo for m in n.body)
-        for n in ast.parse(texto).body
-    )
-
-assert contem_testemunha(fonte)
-mutante = fonte.split(f'\nclass {classe}(', 1)[0]
-assert not contem_testemunha(mutante)
-PY
-```
-
-A execução local da testemunha parou no import porque o Python disponível não tem `django.test`. A execução da testemunha e da suíte completa fica para a certificação do Code e do Opus final [nao verificado]. [Import da testemunha](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:8) [nao verificado]
-
-### Diff
-
-```diff
-diff --git a/app/folha/tests/test_porta_do_export.py b/app/folha/tests/test_porta_do_export.py
---- a/app/folha/tests/test_porta_do_export.py
-+++ b/app/folha/tests/test_porta_do_export.py
-@@ -14,68 +14,11 @@ seriam duas contas para a mesma pergunta -- a doenca que esta serie inteira pers
- """
- import datetime
- import inspect
--from types import SimpleNamespace
--from unittest.mock import MagicMock, Mock, patch
--from zoneinfo import ZoneInfo
- 
--from django.test import SimpleTestCase, TestCase
-+from django.test import TestCase
- from freezegun import freeze_time
- 
- 
--def _medir_com_espelho(resultado, *, previsto, declarado):
--    """Mede o espelho fornecido pelo caminho da porta, com as fronteiras de I/O em memória."""
--    from colaboradores.models import Colaborador
--    from escala.models import CelulaDia
--    from folha.porta_export import medir
--    from ponto.models import DiaPago, FechamentoMensal
--
--    empresa = SimpleNamespace(pk=1, dia_inicio_competencia=21)
--    colab = SimpleNamespace(pk=125)
--    sem_linhas = Mock(first=Mock(return_value=None), values_list=Mock(return_value=[]))
--    agora = datetime.datetime(2026, 11, 23, 12, tzinfo=ZoneInfo('America/Sao_Paulo'))
--
--    def cartao_x_txt(*_args, stdout, **_kwargs):
--        stdout.write('cartao_x_txt_divergentes=0\n')
--
--    with (patch('folha.porta_export._tz_ato.now', return_value=agora),
--          patch('folha.export.classificar_export', return_value=[{'status': 'entra', 'colaborador_id': colab.pk}]),
--          patch.object(Colaborador.objects, 'filter', return_value=Mock(first=Mock(return_value=colab))),
--          patch.object(CelulaDia.objects, 'filter', return_value=[]),
--          patch.object(DiaPago.objects, 'filter', return_value=MagicMock(values_list=Mock(return_value=[]))),
--          patch.object(FechamentoMensal.objects, 'filter', return_value=sem_linhas),
--          patch('ponto.services.espelho.espelho_do_colab', return_value={'resultado': resultado}),
--          patch('ponto.services.espelho.autoridade_do_periodo', return_value=SimpleNamespace(resultado=resultado)),
--          patch('relatorios.pdf_espelho._coletar_dados_espelho_mes', return_value={}),
--          patch('ponto.services.fechamento.empresas_exportadas_no_escopo', return_value=[]),
--          patch('ponto.services.dia_pago.soma_da_competencia', return_value=None),
--          patch('escala.utils.minutos_previstos_do_dia', return_value=previsto),
--          patch('escala.utils.intervalo_declarado_do_dia', return_value=declarado),
--          patch('django.core.management.call_command', side_effect=cartao_x_txt)):
--        return medir(empresa, 11, 2026)
--
--
--class TestemunhaDaHeNaPortaTest(SimpleTestCase):
--    def test_he_da_cauda_entra_na_lista_e_nas_falhas_da_porta(self):
--        # L-097(b), L-031: trabalhado 800, base e previsto 720, intra 60,
--        # declarado 0. HE 80 passa do teto 0 e aciona a sétima testemunha.
--        from ponto.motor_calculo_v2 import MotorBase, PeriodoCalculo
--
--        entrada = datetime.datetime(2026, 11, 5, 19, tzinfo=ZoneInfo('America/Sao_Paulo'))
--        p = PeriodoCalculo(entrada, entrada + datetime.timedelta(minutes=800),
--                           minutos_trabalhados=800, minutos_intrajornada_indenizada=60, minutos_extra=80)
--        MotorBase._escrever_base_da_he(p, 720, entrada + datetime.timedelta(minutes=720), 0)
--        resultado = SimpleNamespace(periodos=[p], periodos_ft=[], dia_da_jornada={id(p): entrada.date()})
--
--        medicao = _medir_com_espelho(resultado, previsto=720, declarado=0)
--
--        self.assertEqual(medicao['universo'], 1)
--        self.assertEqual(medicao['minuto_em_duas_rubricas'], [
--            {'colab': 125, 'dia': '2026-11-05', 'he_min': 80, 'intra_min': 60,
--             'trab_min': 800, 'previsto_min': 720, 'teto_he': 0},
--        ])
--        self.assertEqual((medicao['falhas_proprias'], medicao['falhas']), (1, 1))
--
--
- # RELOGIO CONGELADO: este arquivo fala de "carimbo de HOJE" e "carimbo de ONTEM", entao ele LE o relogio por
- # construcao -- e o selo `test_selo_teste_sem_relogio::test_MORDE_teste_novo_com_relogio_solto_e_vermelho` me
- # cobrou na hora, com razao. Congelado, as duas datas sao deterministicas e a lei do carimbo continua medida.
-diff --git a/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py b/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py
-new file mode 100644
---- /dev/null
-+++ b/app/ponto/tests/test_ramo2b_porta_7a_testemunha.py
-@@ -0,0 +1,62 @@
-+"""Este caso mora em ponto/ porque constrói o PeriodoCalculo pelo motor.
-+A bolha da folha não importa o motor (selo test_selo_bolha_nao_importa)."""
-+import datetime
-+from types import SimpleNamespace
-+from unittest.mock import MagicMock, Mock, patch
-+from zoneinfo import ZoneInfo
-+
-+from django.test import SimpleTestCase
-+
-+
-+def _medir_com_espelho(resultado, *, previsto, declarado):
-+    """Mede o espelho fornecido pelo caminho da porta, com as fronteiras de I/O em memória."""
-+    from colaboradores.models import Colaborador
-+    from escala.models import CelulaDia
-+    from folha.porta_export import medir
-+    from ponto.models import DiaPago, FechamentoMensal
-+
-+    empresa = SimpleNamespace(pk=1, dia_inicio_competencia=21)
-+    colab = SimpleNamespace(pk=125)
-+    sem_linhas = Mock(first=Mock(return_value=None), values_list=Mock(return_value=[]))
-+    agora = datetime.datetime(2026, 11, 23, 12, tzinfo=ZoneInfo('America/Sao_Paulo'))
-+
-+    def cartao_x_txt(*_args, stdout, **_kwargs):
-+        stdout.write('cartao_x_txt_divergentes=0\n')
-+
-+    with (patch('folha.porta_export._tz_ato.now', return_value=agora),
-+          patch('folha.export.classificar_export', return_value=[{'status': 'entra', 'colaborador_id': colab.pk}]),
-+          patch.object(Colaborador.objects, 'filter', return_value=Mock(first=Mock(return_value=colab))),
-+          patch.object(CelulaDia.objects, 'filter', return_value=[]),
-+          patch.object(DiaPago.objects, 'filter', return_value=MagicMock(values_list=Mock(return_value=[]))),
-+          patch.object(FechamentoMensal.objects, 'filter', return_value=sem_linhas),
-+          patch('ponto.services.espelho.espelho_do_colab', return_value={'resultado': resultado}),
-+          patch('ponto.services.espelho.autoridade_do_periodo', return_value=SimpleNamespace(resultado=resultado)),
-+          patch('relatorios.pdf_espelho._coletar_dados_espelho_mes', return_value={}),
-+          patch('ponto.services.fechamento.empresas_exportadas_no_escopo', return_value=[]),
-+          patch('ponto.services.dia_pago.soma_da_competencia', return_value=None),
-+          patch('escala.utils.minutos_previstos_do_dia', return_value=previsto),
-+          patch('escala.utils.intervalo_declarado_do_dia', return_value=declarado),
-+          patch('django.core.management.call_command', side_effect=cartao_x_txt)):
-+        return medir(empresa, 11, 2026)
-+
-+
-+class TestemunhaDaHeNaPortaTest(SimpleTestCase):
-+    def test_he_da_cauda_entra_na_lista_e_nas_falhas_da_porta(self):
-+        # L-097(b), L-031: trabalhado 800, base e previsto 720, intra 60,
-+        # declarado 0. HE 80 passa do teto 0 e aciona a sétima testemunha.
-+        from ponto.motor_calculo_v2 import MotorBase, PeriodoCalculo
-+
-+        entrada = datetime.datetime(2026, 11, 5, 19, tzinfo=ZoneInfo('America/Sao_Paulo'))
-+        p = PeriodoCalculo(entrada, entrada + datetime.timedelta(minutes=800),
-+                           minutos_trabalhados=800, minutos_intrajornada_indenizada=60, minutos_extra=80)
-+        MotorBase._escrever_base_da_he(p, 720, entrada + datetime.timedelta(minutes=720), 0)
-+        resultado = SimpleNamespace(periodos=[p], periodos_ft=[], dia_da_jornada={id(p): entrada.date()})
-+
-+        medicao = _medir_com_espelho(resultado, previsto=720, declarado=0)
-+
-+        self.assertEqual(medicao['universo'], 1)
-+        self.assertEqual(medicao['minuto_em_duas_rubricas'], [
-+            {'colab': 125, 'dia': '2026-11-05', 'he_min': 80, 'intra_min': 60,
-+             'trab_min': 800, 'previsto_min': 720, 'teto_he': 0},
-+        ])
-+        self.assertEqual((medicao['falhas_proprias'], medicao['falhas']), (1, 1))
-```
-
-## 27/11 06:51 · sessao 6c7f3f7c903e · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
-
-**O atraso aparece porque a obra muda o dia usado para buscar o marco de entrada.** A mudança de `efetivo_saida` explica a passagem da cauda de `fora` para `trabalhado`. O cálculo da pontualidade recebe a **saída bruta** nas duas versões. `app/ponto/motor_calculo_v2.py:2166,2206,2330` no main → `app/ponto/motor_calculo_v2.py:2265–2267,2307,2431` na obra. As linhas do main abaixo foram reconstituídas pelo `diff.txt`.
-
-### 1. Onde o main deixava o atraso em zero
-
-No main, `Motor12x36ComEscala` chama `_julgar_pontualidade`, que consulta `marcos_do_dia(e.date())` e ancora a entrada prevista em `combine(e.date(), hora_prev)`. Se `hora_prev` for falsy, retorna com o atraso inicial em zero. Se houver marco, a condição para lançar atraso é `_de is not None and _de > 10`, com `_de = entrada_bruta − prevista_entrada`. Assim, se o main encontrou os horários informados para o 218 de 15/11 e o 200 de 03/11 na própria data civil, comparou `03:17:11` com `21:00` e `02:00:33` com `22:00` **do mesmo dia**. Os dois deltas são negativos. Os marcos que a consulta civil retornou de fato, inclusive para o 218 de 22/11, 296, 601 e 841, estão **[nao verificado]**. `dias.txt:3–10`; `app/ponto/motor_calculo_v2.py:60,226,2087,2119,2166,2179–2180,2206,3674` no main → `app/ponto/motor_calculo_v2.py:60,226,2182,2214,2265–2267,2280–2281,2307,3827` na obra.
-
-Os hunks `@@ -2162,8 +2257,14`, `@@ -2203,7 +2304,7` e `@@ -2228,7 +2329,7` passam `_dia_j`, obtido de `_dia_do_turno_do_par(entrada)`, à consulta dos marcos, à data do marco de entrada e ao teste de volta do intervalo. A L-084 só devolve `(0, 0)` se **ambas** as distâncias aos marcos existirem e tiverem módulo **maior que 180 min**. Com o `hf` correto e as saídas próximas dele no anexo, a ponta de saída fica abaixo desse limiar. A igualdade `efetivo_saida == marco` é um resultado do recorte da janela. O hunk `@@ -1842,28 +1896,34` troca o retorno `(marco, fora)` por `(saida, 0.0, marco)` quando há bloqueio e o turno cruza, preservando o marco para a base da HE. `app/ponto/motor_calculo_v2.py:1863,2059–2062,2101–2118,2166,2206,2231–2232,2330` no main → `app/ponto/motor_calculo_v2.py:1908–1920,2154–2157,2196–2213,2265–2267,2307,2331–2333,2431` na obra.
-
-### 2. Colab 218, em 15/11
-
-**Sim. `420 − 102,87 = 317,13 min`**, exatamente o atraso exibido. Com o marco informado de `21:00–05:00`, o bruto reconstruído é **377,18 min**, de **14/11 às 21:00 (D−1)** até **15/11 às 03:17:11 (D)**. O marco previsto pode existir em 14/11 mesmo sem um par batido naquela noite. O resultado é compatível com a L-093 reduzindo o bruto a `317,13`. O valor imediatamente antes do rateio, após eventual abono parcial, está **[nao verificado]**. `dias.txt:3–5`; `app/ponto/motor_calculo_v2.py:1225–1247,1276–1286,2087,2206` no main → `app/ponto/motor_calculo_v2.py:1268–1290,1319–1329,2182,2265–2267,2307` na obra.
-
-### 3. Colab 841
-
-O rateio fica em `_aplicar_teto_pontualidade`. Se `soma > teto`, ele multiplica cada atraso e cada antecipada do dia por `teto / soma` e arredonda cada campo a duas casas. Os valores exibidos somam **38,25 min** nas duas versões (`38,25 + 0` e `5,42 + 32,83`). A mudança de data do marco permite que o segundo par entre na soma com atraso positivo e passe a receber parte do teto. A cauda do segundo par já entrava no cálculo do teto no main como `fora` e entra na obra como `trabalhado`. Para esse par, os valores publicados são `6,47 + 5,90` e `12,38`, respectivamente. O rateio observado é compatível com os dois pares no mesmo grupo diário. O mapa do grupo e os valores anteriores ao rateio estão **[nao verificado]**. `dias.txt:10`; `app/ponto/motor_calculo_v2.py:1125–1128,1263–1286,2166,2206,2831` no main → `app/ponto/motor_calculo_v2.py:1168–1171,1306–1329,2265–2267,2307,2944` na obra.
-
-### 4. Dia da jornada pela L-085
-
-A diferença mostrada pelo diff é **qual dia a pontualidade consulta**. O main já usava o mapa do juiz na janela e no agrupamento mensal. O agrupamento usa a entrada bruta e pode herdar o dia do par anterior quando o intervalo entre eles é de até seis horas, medido pela **saída bruta**. No 841, os dois pares estão separados por `1h51min14s`, o que satisfaz essa condição se forem consecutivos no laço. Uma mudança de `dia_da_jornada` entre as versões para qualquer par do anexo está **[nao verificado]**. `dias.txt:10`; `app/ponto/motor_calculo_v2.py:972–973,1646,2510–2521,2536,2573` no main → `app/ponto/motor_calculo_v2.py:1015–1016,1692,2611–2622,2637,2674` na obra.
-
-## 27/11 06:25 · sessao 0496a3491b21 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
-
-## Volta 2
-
-1. **`P_CRUZA_PARTIDO_SEM_DECISAO` — fechado.** O P2 bate saída às 07:30, conta até 07:00 e dá **240 min trabalhados, 30 fora, 240 noturnos de relógio, HE50 = 0 e HE100 = 0**. Com P1, são `300 + 240 = 540` min para uma jornada de 540. O controle `Autorizado` mantém 07:30, 270 trabalhados e 30 de HE50. O recibo do hash `c57f0123` registra **17/17 OK** no módulo. `app/ponto/tests/test_ramo2b_turno_que_cruza.py:141–154,203–241,279–283` · `app/ponto/motor_calculo_v2.py:1900–1920,3106,3131–3146` · `tqc.log:2–17`
-
-2. **Split da HE noturna — divergência confirmada na cópia, origem em relação ao main pendente.** No Partido, o recorte devolve `s_he == s`, então a tripla fica `None`. O motor usa `periodo.saida` **bruta** nesse caso. O oráculo passa `efetivo_saida` à mesma função de split. Em memória, com saída batida às 05:30, efetiva às 04:00, prorrogação desligada e HE50 de `180/7` min fornecida ao período, obtive **0 min de HE50 noturna no motor e 25,7142857 min pela ponta que o oráculo usa**. O teste `PARTIDO_LEGAIS` exige HE zero, e os dois `P_CRUZA_PARTIDO_*` conferem HE50/100 sem conferir seus subconjuntos noturnos. `app/ponto/motor_calculo_v2.py:464–485,1094–1109,1900–1920,1967–1971,3106` · `app/ponto/calculador/alimentacao.py:88–115` · `app/ponto/calculador/regras.py:845–865` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:392–403` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:227–230`
-
-   A leitura de `periodo.saida` em `59600163c:app/ponto/motor_calculo_v2.py:1059` é **[nao verificado]**. A cópia veio sem metadados Git e o diff solicitado falhou **[nao verificado]**. Se o main já passa a saída bruta com os mesmos insumos, o defeito do **motor** é preexistente e cabe na fila. A antiguidade da divergência no **oráculo** exige conferir também a ponta que ele passava no main. A linha `PARTIDO-HE-NOTURNA-SAIDA-BRUTA` fica **[nao verificado]**. O registro visível `PAUSA-INTERNA-NO-PARTIDO` trata da pausa dentro do período. `app/ponto/motor_calculo_v2.py:1094–1109` · `app/ponto/calculador/alimentacao.py:106–115` · `app/docs/BACKLOG.md:2159–2161` · `CLAUDE.md:425–426`
-
-3. **Equivalência com o main — fechada para as asserções dos dois controles, pendente para o restante.** O recibo registra uma foto de trabalho `d72222b3` sobre `59600163c`, com dois testes passando e dois `ImportError`. Os dois `P_CRUZA_PARTIDO_*` dão evidência pelo `calcular_mes` para o par-alvo, o dia atribuído pelo juiz, a saída efetiva, os minutos arredondados, a acusação de cadastro e a conservação do bruto. Os dois testes c2p param no import antes de rodar `SEMANA_FLOAT` ou `PARTIDO_LEGAIS`. Portanto, o recibo comprova a ausência dos dois helpers naquela foto. Os valores dessas duas fixtures no main, o split, a equivalência bit a bit e as saídas dos demais leitores ficam **[nao verificado]**. `main.log:2–30` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:203–241` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:160–176,222–236,378–403`
-
-## Alcance do motor e dos leitores
-
-O anexo `delta.patch` traz os dois arquivos de teste. A lista **exata** de hunks de `59600163c..HEAD` fica **[nao verificado]**. Estes são os trechos da cópia que consegui rastrear até o Partido e o Partido Noturno, que herda o mesmo cálculo. `delta.patch:1` · `app/ponto/motor_calculo_v2.py:3103–3147,3830–3837`
-
-| Trecho alcançado | Efeito verificável na cópia |
-|---|---|
-| `PeriodoCalculo`, helpers e porta da tripla | O construtor passa pela porta. Com a tripla vazia, os helpers leem o trabalhado e `noturno legal − noturno de relógio`. `app/ponto/motor_calculo_v2.py:235–299,1941–1971` |
-| Flag, janela e `MotorTurnoPartido.calcular_periodo` | O `False` do Partido mantém `s_he == s`. Com recorte, ambos ficam no marco e a sobra vai para `minutos_fora_janela`. Com autorização, ambos ficam na batida. `app/ponto/motor_calculo_v2.py:792–795,1898–1939,3103–3146` |
-| `MotorBase.calcular_mes` herdado | O bloqueio de folga/feriado sem previsto zera a tripla com as rubricas. O crédito de turno aberto acumula trabalhado, fora e base. Para os pares produzidos pelo Partido, o crédito lê a base pelo trabalhado e mantém a tripla vazia. `app/ponto/motor_calculo_v2.py:1628–1643,2671–2675,2763–2786,3155–3158` |
-| `MotorTurnoPartido.calcular_mes` | A soma diária que alimenta também `semanal_44`, o piso de intra e a dobra de feriado leem o helper de trabalhado. A régua `legais` lê o helper de ganho. Com a tripla vazia, essas leituras devolvem os números do próprio par. O split compartilhado é chamado na dobra, na HE diária e na semanal. `app/ponto/motor_calculo_v2.py:286–299,3193–3195,3237–3252,3342–3354,3375–3440` |
-
-O trecho da virada em `_julgar_pontualidade` é chamado pelo Comercial e pelo `Motor12x36ComEscala`. O Partido usa a própria Zona 5, com marcos do dia da jornada. `app/ponto/motor_calculo_v2.py:2260–2267,3257–3330,3566,3827`
-
-- **`reler`.** É caminho de ensaio. Mede e reescreve o trabalhado pelo segmento efetivo e, com a tripla vazia, o helper lê esse mesmo valor para excesso e dobra. Também reescreve intra, HE e, quando recebe CCT, noturno. Um delta numérico contra o main por esse caminho fica **[nao verificado]**. `app/ponto/calculador/periodo.py:547–575,753–785,843–875`
-- **`porta_export`.** O teto agrupa pelo mapa estrito de dia da jornada e usa o helper. Para o Partido, a base cai no trabalhado. A conferência só entra com **HE e intra positivas** e usa base de relógio e previsto líquido. A régua `legais` do motor tem ainda ganho noturno e limite de 480. Mudança no resultado da porta contra o main ou no TXT fica **[nao verificado]**. O split noturno, isoladamente, não altera as linhas de HE emitidas pelo TXT, que usa os totais e o adicional noturno. `app/folha/porta_export.py:342–366,588–595` · `app/ponto/motor_calculo_v2.py:3382–3409` · `app/folha/export.py:420–448`
-- **Oráculo do fechamento.** Para o Partido com tripla vazia, a base segue os segmentos efetivos sem marcar `dias_com_cauda`. A divergência demonstrada na cópia está na **ponta do split**. O fechamento grava o split do motor e também lavra a versão `oraculo` com rubricas próprias. O valor dessa rubrica no main e o impacto em produção ficam **[nao verificado]**. `app/ponto/calculador/alimentacao.py:106–115,166–178,469–474,545–548` · `app/ponto/services/fechamento.py:938–944,1289–1318`
-
-## Quem escreve e quem lê
-
-| Campo conferido | Escrita e leitura |
-|---|---|
-| `entrada`, `saida`, `efetivo_entrada`, `efetivo_saida` | `calcular_periodo` inicializa as batidas cruas. `_carimbar_segmento` grava as efetivas e o bloqueio integral pode colapsar a saída efetiva. O split do motor lê as cruas no fallback. `reler` e o oráculo leem o segmento efetivo. `app/ponto/motor_calculo_v2.py:1094–1105,1642–1643,2042–2050,3122–3140` · `app/ponto/calculador/periodo.py:753–761` · `app/ponto/calculador/alimentacao.py:88–115` |
-| `minutos_trabalhados`, `minutos_fora_janela`, `intra_descontada` | Os calculadores por par gravam trabalhado e fora. O Partido deixa o desconto interno no default. Bloqueio integral, crédito de aberto e `reler` têm reescritas próprias. O teto de pontualidade lê trabalhado + fora, `DiaPago` soma trabalhado, e o oráculo lê fora e o desconto para montar seus segmentos. `app/ponto/motor_calculo_v2.py:264,1319–1321,1628–1636,2777–2778,3015–3028,3139–3146,3501–3517` · `app/ponto/calculador/periodo.py:182–187,743–769` · `app/ponto/services/dia_pago.py:173–186` · `app/ponto/calculador/alimentacao.py:98–99,133–147` |
-| `minutos_base_da_he`, `saida_da_base_da_he`, `ganho_noturno_da_base_da_he` | `_escrever_base_da_he` grava os três juntos. Motor, `reler` e porta leem a base pelo helper. O mensal `legais` lê o ganho pelo outro helper. Split, `reler` e oráculo leem a ponta. `app/ponto/motor_calculo_v2.py:286–299,1100–1105,1942–1971,3193–3195,3386–3390` · `app/ponto/calculador/periodo.py:758–767` · `app/folha/porta_export.py:342–354` · `app/ponto/calculador/alimentacao.py:114–115,168–178` |
-| Noturno de relógio/legal, HE total/50/100, intra indenizada | `_escrever_noturnas` grava o par de noturnas. O mensal do Partido grava HE e o suprimido do vão. O bloqueio integral zera esses campos e `reler` os reescreve no ensaio. Ganho, split e limite leem os campos correspondentes. `DiaPago` soma as rubricas e a porta usa HE total e intra no teto. `app/ponto/motor_calculo_v2.py:293–299,1085–1109,1632–1636,1973–2011,3244–3252,3347–3354,3402–3409,3435–3440` · `app/ponto/calculador/periodo.py:769–785,866–875` · `app/ponto/services/dia_pago.py:178–186` · `app/folha/porta_export.py:350–361` |
-| Dia do turno e acusação de cadastro | O mensal guarda o mapa do juiz e expõe o dia por período. `_acusa_cadastro_x_realidade` acrescenta a acusação de janela. O teste lê os dois, o oráculo e a porta usam o mapa por período e o espelho consome o relato. `app/ponto/motor_calculo_v2.py:1812–1829,2609–2617,2945,3190–3209` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:224–233` · `app/ponto/calculador/alimentacao.py:78–88` · `app/folha/porta_export.py:342–348` · `app/ponto/services/espelho.py:748–755` |
-
-## Checklist
-
-- **2º juiz:** o delta apresentado altera testes. Os casos mensais passam pela escolha de motor e pelo juiz de turno. O novo caso direto injeta a janela pronta, então a montagem real da janela fica coberta apenas pelos casos que passam pelo mensal. `delta.patch:1` · `app/core/juizes.py:222–224` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:203–226` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:437–458`
-- **2º escritor:** executei a varredura AST do próprio selo em leitura. Para a tripla, ela encontrou apenas `_escrever_base_da_he`. Para as demais rubricas, `reler` é um escritor de ensaio e o motor tem os ajustes indicados acima. A varredura declara suas limitações para atributos dinâmicos. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:644–677` · `app/ponto/motor_calculo_v2.py:1954–1958` · `app/ponto/calculador/periodo.py:547–552,743–785`
-- **Relógio solto:** os casos mensais congelam o tempo. O teste direto usa instantes fixos, feriados vazios e janela injetada. `app/ponto/tests/test_ramo2b_turno_que_cruza.py:168` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:124,443–458`
-- **Derivação paralela:** `reler` mede o trabalhado pelo carimbo e o oráculo mede os segmentos. O split tem uma função compartilhada, com **pontas diferentes** no caso demonstrado. `app/ponto/calculador/periodo.py:753–769` · `app/ponto/calculador/alimentacao.py:106–115,469–474` · `app/ponto/calculador/regras.py:845–865`
-- **Selo com mordida:** o novo teste direto distingue `42761/60` de `44960/60 − 2199/60`, que diferem em ponto flutuante. Os selos do Partido cobram o recorte, mas deixam descoberto o split com HE positiva e cauda excluída. A suíte integral desta volta fica **[nao verificado]**. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:222–236,392–403,443–463` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:227–230` · `tqc.log:3–17`
-- **Campo com dois significados:** `minutos_trabalhados` é o contado, e a presença para o teto soma trabalhado e fora. A tripla `None` significa que a base numérica coincide com o trabalhado. O comentário “par sem cauda” também é usado para um Partido com cauda física já recortada, e o fallback do split trata esse caso como se pudesse usar a batida bruta. `app/ponto/motor_calculo_v2.py:228–246,1096–1105,1319–1321,1917–1920,1963–1969`
-
-## Veredito — REPROVADO
-
-1. **Item 1 fechado.** A asserção corrigida bate com a conta e o módulo registra 17/17 OK. `app/ponto/tests/test_ramo2b_turno_que_cruza.py:141–154` · `tqc.log:3–17`
-2. **Item 2 pendente.** A diferença de split entre motor e oráculo está demonstrada na cópia. Para baixar o achado como fila preexistente, falta conferir as duas pontas no main e localizar o registro alegado **[nao verificado]**. `app/ponto/motor_calculo_v2.py:1094–1109` · `app/ponto/calculador/alimentacao.py:106–115` · `CLAUDE.md:425–426`
-3. **Item 3 parcialmente fechado.** Os dois controles mensais sustentam equivalência para o que conferem. Os dois imports interrompem as outras comparações, e a lista exata de hunks e a equivalência dos demais caminhos seguem **[nao verificado]**. `main.log:2–30` · `app/ponto/tests/test_ramo2b_turno_que_cruza.py:217–241` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:222–236,387–403`
-
-## 27/11 06:17 · sessao 25a38f481b30 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-1. **Sem decisão.** Pela RAMO2-PARTIDO-2611-1812 (a) e pela L-097(b), o Partido 19:00–07:00 tem vão de 00:00 a 03:00 e o segundo par termina efetivamente no marco de 07:00. São **240 min trabalhados**, **30 min fora da janela** e **240 min noturnos** de 03:00 a 07:00 com a prorrogação da fixture. A HE do dia é `300 + 240 − 540 = 0`. A conta coincide com a saída registrada no anexo `tqc.log`. `docs/LEIS.md:115`, `ponto/motor_calculo_v2.py:3106`, [ponto/tests/test_ramo2b_turno_que_cruza.py:141](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_turno_que_cruza.py:141)
-
-2. **Autorizado.** A conta concorda com o teste. A janela mantém a saída às 07:30, com 270 min trabalhados, 270 noturnos e zero fora da janela. `300 + 270 − 540 = 30` min de HE50 no último par, com HE100 zero. `ponto/motor_calculo_v2.py:1906`, `ponto/motor_calculo_v2.py:3402`, [ponto/tests/test_ramo2b_turno_que_cruza.py:154](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_turno_que_cruza.py:154)
-
-3. **`acusa=False`.** `_TPART` fixa o marco em 07:00 na linha 60. O cadastro da empresa da fixture fixa `teto_saida` em 60 min na linha 179. A regra acusa acima do teto. Como `30 < 60`, a saída fica abaixo dele. `ponto/tests/test_ramo2b_turno_que_cruza.py:60`, `ponto/tests/test_ramo2b_turno_que_cruza.py:179`, `ponto/janela_he.py:200`
-
-### Diff
-
-```diff
---- a/app/ponto/tests/test_ramo2b_turno_que_cruza.py
-+++ b/app/ponto/tests/test_ramo2b_turno_que_cruza.py
-@@ -141,8 +141,8 @@
--    # TURNO PARTIDO que cruza (19-07, vao 00-03 > 2 h = partido de verdade): par 03:00 -> 07:30 de D+1, 30 min depois
--    # do marco 07:00. Conta 270; noturno com prorrogacao (jornada comum, Sumula 60 II): 03:00 -> 07:30 = 270. HE do
--    # DIA pela base recortada: 300 + 240 = 540 contra 540 -> 0.
-+    # RAMO2-PARTIDO-2611-1812 (a) e L-097(b): no Partido 19-07 (vao 00-03), sem decisao, o par 03:00 -> 07:30
-+    # de D+1 recorta no marco 07:00: 240 trabalhados, 30 fora da janela e 240 noturnos (03:00 -> 07:00 com
-+    # prorrogacao). HE do dia: 300 + 240 = 540 contra a jornada de 540 -> 0.
-     'P_CRUZA_PARTIDO_SEM_DECISAO': (
-         _TPART, _cels(_TPART, _D),
-         [(_D, '19:00:00', 'E'), (_D1, '00:00:00', 'S'), (_D1, '03:00:00', 'E'), (_D1, '07:30:00', 'S')], _D, None,
-         '2026-11-06 03:00',
--        ('2026-11-06 03:00', '2026-11-06 07:30', 270.0, 0.0, 270.0, 0.0, 0.0), False),
-+        ('2026-11-06 03:00', '2026-11-06 07:00', 240.0, 30.0, 240.0, 0.0, 0.0), False),
-```
-
-### RED e mutantes
-
-Reproduzi em memória a tupla do anexo pelo `test_RED_partido_cruza_sem_decisao`, substituindo `_roda` pela observação registrada. A expectativa corrigida passou. A tupla antiga e os quatro mutantes individuais falharam na comparação da tupla. Suite Django após o diff e certificação do Code e do Opus final [nao verificado]. `ponto/tests/test_ramo2b_turno_que_cruza.py:230`, `ponto/tests/test_ramo2b_turno_que_cruza.py:279`
-
-```bash
-tqc_replay() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -S - "$1" <<'PY'
-import ast
-import sys
-import unittest
-from datetime import datetime
-from pathlib import Path
-from types import SimpleNamespace
-
-nome = 'P_CRUZA_PARTIDO_SEM_DECISAO'
-modo = sys.argv[1]
-arquivo = Path('ponto/tests/test_ramo2b_turno_que_cruza.py')
-arvore = ast.parse(arquivo.read_text())
-arvore.body = [n for n in arvore.body if not isinstance(n, ast.ImportFrom)]
-arvore.body[-1].decorator_list = []
-escopo = dict(TestCase=unittest.TestCase, timezone=SimpleNamespace(localtime=lambda dt: dt))
-exec(compile(arvore, str(arquivo), 'exec'), escopo)
-
-casos = escopo['CASOS']
-caso = casos[nome]
-esperado = list(caso[-2])
-antigos = {1: '2026-11-06 07:30', 2: 270.0, 3: 0.0, 4: 270.0}
-for i in antigos if modo == 'red' else [] if modo == 'controle' else [int(modo)]:
-    esperado[i] = antigos[i]
-casos[nome] = (*caso[:-2], tuple(esperado), caso[-1])
-
-e, s, batida = map(datetime.fromisoformat,
-                   ('2026-11-06 03:00', '2026-11-06 07:00', '2026-11-06 07:30'))
-par = SimpleNamespace(entrada=e, saida=batida, efetivo_entrada=e, efetivo_saida=s,
-                      minutos_trabalhados=240, minutos_fora_janela=30, minutos_noturnos_relogio=240,
-                      minutos_extra_50=0, minutos_extra_100=0)
-motor = SimpleNamespace(_dia_turno_juiz_calc={e: '2026-11-05'}, _cadastro_x_realidade=[])
-teste = escopo['Ramo2bTurnoQueCruzaTest']('test_RED_partido_cruza_sem_decisao') [nao verificado]
-teste._roda = lambda nome: (motor, None, [par]) [nao verificado]
-resultado = teste.run() [nao verificado]
-assert not resultado.errors, resultado.errors
-assert resultado.wasSuccessful() == (modo == 'controle'), resultado.failures
-for _, falha in resultado.failures:
-    assert 'Tuples differ' in falha and nome in falha, falha
-print(modo, 'PASSOU' if resultado.wasSuccessful() else 'REJEITADO na comparação da tupla') [nao verificado]
-PY
-}
-
-tqc_replay controle  # expectativa corrigida
-tqc_replay red       # tupla antiga
-tqc_replay 1         # saída efetiva 07:30
-tqc_replay 2         # trabalhado 270
-tqc_replay 3         # fora da janela 0
-tqc_replay 4         # noturno 270
-```
-
-## 27/11 06:11 · sessao 4f8a76333721 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
-
-## Aval e main
-
-**A leitura da c2p é defensável, mas o texto permite outra leitura.** A opção (a) responde a uma parada sobre **pausa interna**. A expressão “motor do Partido intocado”, junto do recorte de pouso para 12x36 e Comercial, sustenta preservar também o tratamento anterior da cauda. A leitura mais estreita adia apenas a grade de pausa interna e mantém a emenda geral da L-097(b), que diz que “nenhum par perde trabalhado”. A opção (a) delimita o pouso, mas deixa implícita a consequência para `minutos_fora_janela` no Partido. [`PROMPTS.md:3087`](/home/ronald/codex_ws/c19bf0db27a334753ab8fe9cf17fad0b5c9b585e/app/docs/PROMPTS.md:3087) · [`LEIS.md:115`](/home/ronald/codex_ws/c19bf0db27a334753ab8fe9cf17fad0b5c9b585e/app/docs/LEIS.md:115)
-
-**Na cópia, o Partido põe a cauda não autorizada em `minutos_fora_janela` quando a janela se aplica.** O `False` da classe leva ao retorno `(marco, fora, marco)`, e o calculador grava `fora`. `Autorizado` passa antes desse ramo e mantém a saída batida. O comentário e dois controles descrevem o recorte como comportamento do main. Para **`59600163c` especificamente**, a cópia veio sem histórico Git e o anexo traz apenas o delta de testes. A confirmação direta desse commit fica **[nao verificado]**. `motor_calculo_v2.py:1900–1920,3106,3131–3146` · `test_ramo2b_c2h_saida.py:147–166` · `test_ramo2b_c2l_red_motor.py:51–61`
-
-## 1. Contas
-
-| Caso | Conta refeita |
-|---|---|
-| **Partido `SEMANA_FLOAT`** | Segunda, 20:07:19 → 05:00:00 = `31961/60 = 532,683333… min`. Até a batida de 05:36:39 são `34160/60 = 569,333333… min`. Cauda = `2199/60 = 36,65 min`. Na cópia, **trabalhado = base = 532,683333…**, com **36,65 fora**. As bases de segunda a sexta são `31961`, `32277`, `31873`, `32374` e `32915` segundos. Somam `2690 min`, exatamente `2640 + 5 × 10`. **HE semanal zero**, sem alerta. `test_ramo2b_c2_base_da_he.py:79–97,213–236` · `motor_calculo_v2.py:3193–3195,3410–3439` |
-| **Partido 6x1 `legais`** | P1 = `221 min`. P2 até 04:00 = `180 min`, todos noturnos. De 04:00 a 05:00 ficam `60 min` fora. Base de relógio = `401`. Hora reduzida = `180 × 8/7 = 1440/7`, com ganho de `180/7`. Previsto = `600 − 180 = 420`. Vão gozado = `180`, suprimido = `0`, limite = `min(420, 480) + 0 = 420`. Excedente = `47/7 = 6,714285… min`, dentro dos 10. **HE zero**. Incluir apenas o ganho noturno da cauda elevaria o excedente a `107/7 = 15,285714… min`, integralmente em HE50. A exceção da cl. 38-d é do 12x36. `test_ramo2b_c2_base_da_he.py:64–65,100–104,378–403` · `motor_calculo_v2.py:44–51,1993–2011,3237–3252,3375–3404` · `LEIS.md:84` · `regua_cct.py:467–472` |
-| **12x36 e Comercial** | 19:07:19 → 07:36:39 = `44960/60 = 749,3333333333334 min` trabalhados. Até 07:00 são `42761/60 = 712,6833333333333 min` de base. Os `36,65 min` da cauda entram no trabalhado e **fora = 0**. Subtrair em ponto flutuante dá `712,6833333333334`, um ULP acima da medição direta. O teste acerta ao exigir igualdade exata. `test_ramo2b_c2_base_da_he.py:437–463` · `motor_calculo_v2.py:1918–1920,2985–3028,3473–3517` |
-
-## 2. Caminho do novo teste [nao verificado]
-
-O teste chama os `calcular_periodo` reais e percorre o recorte, a medição e a gravação da base. O patch entrega pronta a parte que o mensal precisa resolver: pareamento e intervalos, dia do turno, marcos do vínculo, folga, vigência, L-084, extra declarada e decisão do admin. Um marco de D+1 errado na janela real ficaria invisível nesse teste. `test_ramo2b_c2_base_da_he.py:443–463` · `fechamento.py:297–311` · `motor_calculo_v2.py:1682–1722,1742–1810,2500–2511,2560–2568,2661–2675` · `janela_he.py:41–61` [nao verificado]
-
-Há duas diferenças relevantes. O 12x36 com horário cadastrado usa `Motor12x36ComEscala`, que chama o mesmo cálculo e depois relê a entrada efetiva para pontualidade. O Comercial mensal zera a HE feita por par e a apura de novo por dia, usando o previsto do dia da jornada quando cruza. O teste também injeta `660` sem fornecer o intervalo descontado do previsto. Ele prova os três números da asserção. A mesma igualdade bit a bit pelo mensal fica **[nao verificado]**. Os dois testes reescritos do Partido já chamam `calcular_mes`. `motor_calculo_v2.py:1464–1492,3580–3602,3672–3685,3810–3827,3927–3928` · `test_ramo2b_c2_base_da_he.py:160–176,455–463` [nao verificado]
-
-## 3. Escritores e leitores
-
-| Sítio | O que faz |
-|---|---|
-| **Motor** | Os três `calcular_periodo` gravam trabalhado e fora. A tripla da base é gravada por `_escrever_base_da_he`. No Partido recortado, a saída efetiva já é o marco, a tripla fica vazia e `_trabalhado_da_base_da_he` devolve o trabalhado. No 12x36 e Comercial com cauda incorporada, o leitor devolve a base explícita. O Comercial mensal usa a base para HE e o trabalhado integral para banco. O crédito do **dia aberto** e o bloqueio de HE100 também ajustam os campos pela regra do motor. `motor_calculo_v2.py:286–299,1628–1635,1941–1971,2768–2786,3025–3028,3141–3146,3193–3195,3382–3393,3514–3519,3591–3594` |
-| **`dia_pago.py`** | Soma trabalhado, noturno e HE já calculados, pelo dia do mapa quando fornecido. A cauda excluída do trabalhado do Partido fica fora dessa soma. `dia_pago.py:126–132,173–186` |
-| **`periodo.py::reler`** | Mede e **reescreve** trabalhado pela geometria efetiva. Lê a tripla para HE e dobra, e soma trabalhado com fora para o teto de pontualidade. No caminho de par duplicado, zera também `minutos_fora_janela`. A geometria efetiva do Partido já chega cortada. `periodo.py:182–187,344–366,743–769,807–813,843–859` |
-| **`folha/porta_export.py`** | Compara o trabalhado com a lavratura e lê a base pela mesma função do motor. A pendência vem do espelho. O teto de conferência quando há HE **e** intra usa base de relógio e previsto líquido. Ele não reproduz o ganho noturno nem `min(previsto, 480)` do Partido `legais`. `porta_export.py:106–122,181–201,342–365` · `motor_calculo_v2.py:3382–3404` |
-| **`credito_parcial.py`** | Fornece ausências parciais e créditos. Dos períodos, lê atraso e agrupa pela data civil da entrada, que pode divergir do dia da jornada. O teto do motor usa `trabalhado + fora`, então a cauda do Partido continua contando como presença para a L-093. `credito_parcial.py:35–50,62–102` · `motor_calculo_v2.py:1319–1321,1356–1357` |
-
-**Há um leitor que usa a ponta errada no Partido.** Quando a tripla está vazia, `_aplicar_he_noturna` usa a saída **bruta**. Rodei essa função em memória com 01:00 → 05:30, saída efetiva às 04:00, HE50 de `180/7` e prorrogação desligada. Com a tripla vazia, saiu **0 min de HE50 noturna**. Com o fim da base às 04:00, saiu **25,7142857 min**. O teste `PARTIDO_LEGAIS` espera HE zero, então não alcança essa divergência. Impacto em produção **[nao verificado]**. `motor_calculo_v2.py:464–485,1094–1109,1967–1971,3131–3146` · `test_ramo2b_c2_base_da_he.py:396–399`
-
-## 4. Teste que contradiz [nao verificado]
-
-**`test_RED_partido_cruza_sem_decisao` ainda exige a cauda dentro.** Para P2 de 03:00 a 07:30, com marco às 07:00, exige saída efetiva **07:30**, **270 trabalhados**, **0 fora** e **270 noturnos**. Pelo ramo da cópia, a expectativa é **07:00**, **240 trabalhados**, **30 fora** e **240 noturnos** com a prorrogação dessa fixture. O vizinho `Autorizado` continua coerente ao exigir os 270. O caso dos 11 minutos também é controle distinto, pois o juiz põe o par em D+1, fora da janela do turno anterior. A execução da suíte fica **[nao verificado]**. [`test_ramo2b_turno_que_cruza.py:141`](/home/ronald/codex_ws/c19bf0db27a334753ab8fe9cf17fad0b5c9b585e/app/ponto/tests/test_ramo2b_turno_que_cruza.py:141) · `test_ramo2b_turno_que_cruza.py:227–230,279–283` · `test_ramo2b_c2_base_da_he.py:425–434` · `motor_calculo_v2.py:1900–1920,3106,3141–3146`
-
-## 5. Checklist
-
-- **Segundo juiz e derivação paralela.** O delta só muda testes. Na cópia, `reler` rederiva o trabalhado e a versão oráculo do fechamento mede a base novamente pelos segmentos efetivos. O patch do novo teste fornece a resposta da janela. `test_ramo2b_c2_base_da_he.py:437–463` · `periodo.py:753–769` · `alimentacao.py:168–178,469–474,545–548` · `fechamento.py:1289–1305` [nao verificado]
-- **Segundo escritor.** A varredura AST executada em leitura encontrou só `_escrever_base_da_he` para a tripla. Para trabalhado e fora há as reescritas do motor e de `reler` descritas acima. `test_ramo2b_c2_base_da_he.py:644–677` · `motor_calculo_v2.py:1954–1958` · `periodo.py:743–767`
-- **Relógio solto.** Os testes mensais do Partido têm `freeze_time`. O teste direto usa instantes fixos, janela injetada e feriados vazios. `test_ramo2b_c2_base_da_he.py:124–125,437–458` [nao verificado]
-- **Selo com mordida.** O anexo mostra **5/5 mutantes mortos**, com oito falhas de asserção. O resultado da suíte limpa e o efeito nas competências 11/12 e no TXT ficam **[nao verificado]**. `mut4.log:6,29,51,61,75,84,93,104` [nao verificado]
-- **Campo com dois significados.** `minutos_trabalhados` é o contado após a janela. A presença para o teto soma trabalhado e fora. Uma tripla `None` significa que a base numérica coincide com o trabalhado, inclusive quando houve cauda física recortada. O comentário “par sem cauda” é impreciso nesse caso e a leitura da saída bruta no split noturno mostra a consequência. `motor_calculo_v2.py:228–246,286–290,1096–1105,1319–1321,1963–1969`
-
-## Veredito — REPROVADO
-
-1. O selo mensal legado do Partido sem decisão exige o oposto da c2p para a mesma regra de saída. `test_ramo2b_turno_que_cruza.py:144–148,279–280` · `test_ramo2b_c2_base_da_he.py:222–236`
-2. O split de HE noturna do Partido pode usar a cauda excluída para posicionar HE devida antes do marco. A c2p cobre o ganho na base, mas o caso com HE positiva segue sem selo nessa volta. `motor_calculo_v2.py:1094–1109,1967–1971` · `test_ramo2b_c2_base_da_he.py:378–403`
-3. A c2p apresenta o destino da cauda como conclusão direta do aval. O texto sustenta preservar o Partido, mas a equivalência com o comportamento de `59600163c` permanece **[nao verificado]**. `PROMPTS.md:3087` · `LEIS.md:115` · `test_ramo2b_c2_base_da_he.py:4–6`
-
-_8592 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8597 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
