@@ -10981,6 +10981,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 15:48:11 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:5cc8c13fa1 (170 car., na trilha privada)
+
 **27/11 15:24:20 disjuntor (NEGOU B1)** -- agente add21ff1f56e1e0ac -- Write -- alvo sha1:5dd4f7e97a (67 car., na trilha privada)
 
 **27/11 15:24:14 disjuntor (NEGOU B1)** -- agente add21ff1f56e1e0ac -- Bash -- alvo sha1:f65649f8cf (365 car., na trilha privada)
@@ -14513,3 +14515,7 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 15:46 colhido PAR-PELO-TURNO c1v13/tri/r.rc (15:44 rc 0, Codex leitura): 9 ERROR = fixture dos REDs da obra (SimpleNamespace na FK do FechamentoMensal) antes das assercoes; 2 FAIL chokepoint +3 consultas (custo do caminho de escrita); 1 no_batida_date (turnos.py:290 .date() de localtime -- conferido); 1 b5c sem vinculo (veredito mudou); 5 selos estruturais deslocados pela delegacao do PDF/chamado ao espelho. Conferido por amostra turnos.py:285-302 e a fixture. c1v14 brief logs/PAR-PELO-TURNO/c1v14/q.md (selo estrutural so se ajusta pela via delegada, com mutante que morde; teto intocado). PUXADA FERIADO-UM-JUIZ c4 -> vaga 1 (15:45, pid 3205804). PAR c1v14 rc 2 PORTAO (load5 7,35) -- relanca quando cair.
 - 15:46 colhido PAR-PELO-TURNO c1v14/r.rc (15:45 rc 2): PORTAO load5 7,35 -- Codex nao chamado; relanca quando cair (linha acima).
 - 15:47 colhido FERIADO-UM-JUIZ c3/inteira/suite.rc (15:47 rc 0, VM): OK (skipped=42, expected failures=40), Ran 18140 -- c3 verde na inteira mas REPROVADA pelo ver3; nao pousa; c4 em curso. VM livre: BOTAO s9 e INVENTARIO C3 entram.
+- 15:48 colhido FERIADO-BOTAO-CORTADO s9/s.rc (15:47 rc 0, VM): OK, Ran 9 -- smoke+MORDE a 1366 (base.html pagina e drawer) verdes na c8 c44771b4a.
+- 15:49 DESPACHO FERIADO-BOTAO-CORTADO pouso: verificador final -> Codex (logs/FERIADO-BOTAO-CORTADO/ver2, slot 2) | suite inteira -> pista (job 1127154909_c44771b4, logs/FERIADO-BOTAO-CORTADO/g9) | smoke de clique nas duas cascas -> Ronald (FRONT SEM SMOKE NAO SOBE; roteiro sai com o veredito) | opus final: a criterio (mao dupla, so templates/static/testes).
+- 15:49 PUXADA PAR-PELO-TURNO c1v14 -> vaga 3 (pid 3217762; load5 4,99 abriu o portao).
+- 15:50 colhido INVENTARIO C3/suite/s.rc (15:48 rc 1, VM, 4 modulos sobre 39cac5b51): FAILED (failures=17, skipped=46), Ran 50 -- 10 casos vermelhos = classes (AUS-03, AUS-05 agora julga [stub curado], CMP-02/03/04/12/13/14, ESC-12, FOL-14), 46 skip de lei; lista em logs/INVENTARIO/C3/suite/vermelhos.txt. Vai a lista.md com a etiqueta (nascente) de cada caso.
