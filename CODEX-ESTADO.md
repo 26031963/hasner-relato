@@ -1,7 +1,37 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 14:07** · publicado em **27/11/2026 14:07** (UTC-3)
+> Ultima resposta processada: **27/11/2026 14:14** · publicado em **27/11/2026 14:14** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 14:14 · sessao 31a3277cc8d2 · - · - · origem=Ronald (tmux)
+
+**4. PROCEDENTE em parte.** `_salvar_a_projecao` põe e remove `True` no `__dict__` da instância. `salva_pelo_registrar` lê a chave e o receiver usa o resultado para calar a emissão. O valor identifica a instância durante o intervalo e é usado como prova de que aquele `save` pertence ao `registrar`. Um save concorrente ou reentrante no mesmo objeto desmonta essa equivalência. `app/chamados/models.py:4769–4786`, `app/chamados/signals.py:254–263`.
+
+- `projecao` é o par instância/campos fornecido pelos oito pontos atuais. `registrar` lê o PK e os campos para validar e faz `save(update_fields=...)` com ou sem silenciamento conforme o lote. `_CAMPOS_QUE_MOVEM_O_EVENTO` enumera as chaves da destinação, cuja leitura vem de `linhas_do_evento`. `app/chamados/models.py:3523,3575,3610–3633,4771,4797–4828`, `app/chamados/services/disputa_emissao.py:1565–1568,1762–1765,1797–1800`, `app/chamados/services/validacao.py:176–179,315–319,393–398`.
+- `ESCRITA_POR_PROJECAO` é declarado pelo censo e lido em `visit_Call`. `_projecao` constrói um `save` sintético que `_variavel` tenta atribuir a um modelo. A saída registra sítio e entidade, sem inventário de campos. `app/core/censo_escritas.py:65–70,407–465`.
+- `PerguntaDisputa.CAMPOS_QUE_ACORDAM` é definido pelo modelo e testado pelo receiver contra os nomes em `update_fields`. A constante homônima da porta de célula é independente e sua lista contém `veredito` e `ata`. `app/chamados/models.py:3600–3607`, `app/chamados/signals.py:255–259`, `app/ponto/portas/celula.py:975–1002`.
+- Os callbacks de `decisao` montam a linha de SILÊNCIO depois de atribuir o carimbo em memória. O fechamento da disputa lê `ato_texto` da sequência, enquanto o fio do dia usa a coluna. As duas fontes já constavam nos lados removidos do diff. O texto é foto da decisão, e a redução só usa `ato_texto` como resposta se o ato é `RESPOSTA`. `app/chamados/models.py:2182–2185,3363–3378,3566–3575,4582–4595`, `app/ponto/services/veredito_celula.py:200–202`, `diff.patch` (anexo).
+- O novo contrato aceita a instância de projeção por PK, inclusive quando o lote usa `pergunta_id`. A invalidação do prefetched `decisoes` e `_pv_memo` visita apenas `ln['pergunta']`. Uma projeção com prefetch pode ficar lendo uma validação anterior depois de registrar `DEVOLUCAO` por ID. Nos chamadores atuais o lote inclui a própria instância projetada. `app/chamados/models.py:4558–4565,4642–4649,4804–4808,4834–4840`, `app/chamados/juizes.py:939–951`. Ocorrência em produção [nao verificado].
+
+**5. PROCEDENTE para o sítio lógico, NAO PROCEDE para desaparecimento de `save()` físico.** Os oito chamadores atuais são reconhecidos e os dois `.save` da porta permanecem em `não atribuíveis`. A varredura em memória confirmou que `D.registrar([], projecao=(p, ['resposta_colab']))` aparece como escrita, mas `proj = (p, ['resposta_colab']); D.registrar([], projecao=proj)` devolve zero achados. A escrita do segundo trecho funciona pelo ramo vazio. A lista literal também escapou. O censo só desce no `ast.Tuple` literal, e seu próprio contrato atribui a escrita ao chamador. As regras de `save` direto continuam as mesmas. `app/core/censo_escritas.py:65–70,404–465,531–547`, `app/chamados/models.py:4797–4803`, `app/core/management/commands/censo_escritas.py:37–50`. Caso equivalente em produção [nao verificado].
+
+**7. PROCEDENTE para lacunas nos MORDE.** Os dois casos de `_dicts_da_trilha` passaram em execução isolada dos métodos AST. Também reproduzi `[]` nos dois selos ao analisar `from core.observ import evento`, seguido de uma função que faz `from functools import partial as evento` e `evento(qs.update, **dict(materializada_em=None, respondida_em=None, resposta_colab=''))()`. Remover só o import de `core.observ` faz os selos voltarem a acusar os mesmos campos. É escrita real via `partial` e uma regressão da catraca. O coletor junta imports de todo o arquivo, mas ignora reimport conflitante e parâmetro homônimo. As provas existentes exercitam troca de import, definição homônima e cópia em variável. A variante posicional de carimbo também usa uma forma que o `evento` verdadeiro rejeita, pois o quarto parâmetro é keyword-only. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:78–112,222–232,309–331`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:144–164,289–299`, `app/core/observ.py:94–95`. Os cinco dicts atualmente dispensados na árvore produtiva pertencem a trilhas genuínas. `app/chamados/services/materializacao.py:846–859`, `app/ponto/services/par_relampago_na_lista.py:459–472,507–520`.
+
+O M58 remove a recusa e substitui `bulk_create` para deixar o `assertRaisesRegex` falhar por ausência do `ValueError`. O RED examina cinco nomes, mas a asserção `salvos == []` fica fora do laço e só verifica a última iteração, `data_evento`. `app/chamados/tests/test_e4c_f5_c4_red.py:1541–1548`, `app/chamados/tests/e4c_f5_c4red2_mutantes.py:807–816`. Rodada com ORM e logs do recibo [nao verificado].
+
+## 27/11 14:13 · sessao 02723e33b00d · - · - · origem=Ronald (tmux)
+
+1. **PROCEDENTE para duplicatas remanescentes.** A resposta humana, automática ou pela trilha emite uma vez pelo `registrar`, por célula encontrada. Save avulso elegível emite pelo `post_save`. Quando seguido de `registrar` avulso, há dois eventos, inclusive no mesmo atomic. `registrar` comum sem save gera um. Nascimento pelo `_nascer` gera zero pelo receiver e um pelo `registrar` somente se houver assinatura sem linha. Estoque gera zero pelo `registrar`. Lote vazio gera um pelo receiver se houver save elegível e zero sem save. `app/chamados/services/disputa_emissao.py:1565–1568,1758–1765,1793–1800`, `app/chamados/models.py:3322–3328,3605–3634,4505–4524,4796–4803,4821–4843`, `app/chamados/signals.py:254–263`.
+
+   - `reabrir_para_correcao` gera dois onde o lote de atos e a captura antes do `update` cobrem a mesma célula, um onde só a captura cobre. `ressuscitar` gera dois no sucesso, mais um se o primeiro lote de passivo cobrir a mesma célula. L-130 gera dois no sucesso e desfaz os inserts se o lote não escrever. `app/chamados/services/disputa_emissao.py:1680–1683,1696–1716`, `app/chamados/models.py:1681–1682,1723–1733`, `app/chamados/services/validacao.py:479–496`.
+   - Os dois fechamentos com `SILENCIO` geram um pelo `registrar` por pergunta carimbada. Retratação gera dois quando carimba, primeiro pelo `registrar`, depois pelo receiver. `app/chamados/models.py:2175–2185,2316–2324,3364–3378,3561–3576`, `app/ponto/services/veredito_celula.py:192–203`.
+   - `FALTA_DIA` e `ATESTADO` passam pela resposta pública e podem absorver até a própria pergunta. O ato `RESPOSTA` emite uma vez pelo `registrar`, mas o carimbo e a `ABSORCAO` acrescentam dois por pergunta absorvida com célula, sendo o primeiro do receiver se o carimbo não gerar ato, e do `registrar` se gerar. A mesma célula pode receber três eventos no fluxo. Há teste que exige `ABSORCAO` da própria âncora após `FALTA_DIA`, sem contagem de eventos. Ocorrência em produção [nao verificado]. `app/chamados/services/disputa_emissao.py:1592–1597`, `app/chamados/services/materializacao.py:1065–1073,1091–1106,1123–1153,1190–1196`, `app/chamados/models.py:3494–3495,3522–3523,4797–4803,4841–4843`, `app/chamados/tests/test_e4c_f5_volta3_ausencia.py:62–76`, `app/chamados/tests/test_e4c_f5_a1c_passagem_da_ausencia.py:81–84`.
+
+3. **NAO PROCEDE para `ValueError` novo nos chamadores da cópia.** Os oito sítios passam só campos de resposta, validação, carimbo, motivo ou lavra. `reabrir_por_resposta` e `descarimbar(salvar=False)` fornecem somente os três campos de carimbo. O bloqueio de mudança de destino vale para lote não vazio. O lote vazio sai antes da guarda e faz save comum. `app/chamados/services/disputa_emissao.py:1530–1568,1758–1765,1793–1800`, `app/chamados/services/validacao.py:171–179,309–319,384–398`, `app/chamados/models.py:3462–3493,3515–3523,3566–3575,3588–3598,3703–3717,4770–4771,4796–4813`.
+
+5. **PROCEDENTE para lacuna da atribuição ao chamador.** Sonda em memória do `_Varredor` com os modelos da cópia achou a tupla literal e retornou `[]` para a mesma projeção em variável, em lista, expandida por `**kwargs` ou passada a alias do método. Chamador direto de `_salvar_a_projecao` também retorna `[]`, e o helper grava com o receiver calado sem emitir sozinho. Chamador externo real [nao verificado]. `app/core/censo_escritas.py:371–423,425–465`, `app/chamados/models.py:4780–4786,4796–4803`.
+
+7. **PROCEDENTE para uma asserção de exclusividade enfraquecida.** Sonda em memória dos dois selos confirmou que, em `dict = PerguntaDisputa.objects.filter(pk=pk).update` seguido de `evento(..., depois=dict(materializada_em=None, respondida_em=None, resposta_colab=''))`, ambos os selos da cura5 retornam `[]`. Retirada somente a condição de dispensa, o selo do carimbo acusa um campo e o selo do par acusa os dois campos. O braço dispensado testa somente o nome `dict`; a atualização acontece ao avaliar o argumento, antes da trilha. Nenhum escritor assim foi encontrado na cópia. `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,213–232,309–331`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:135–154,289–299`, `app/core/observ.py:108–110,138–153`.
 
 ## 27/11 14:07 · sessao 8d021657fa55 · PAR-PELO-TURNO · verificador · origem=Code
 
@@ -658,123 +688,4 @@ Validei a sintaxe Python e JS e executei isoladamente as quatro verificações e
 
 **[nao verificado]** Smoke e mutantes no Chromium, casos geométricos do selo, `bin/node_check.sh`, suite do Code, revisão final do Opus e smoke de tela do Ronald.
 
-## 27/11 12:25 · sessao 85323386be77 · E4C-F5-INSTANTE · verificador · origem=Code
-
-**Cura4 reprovada pelo aval literal.** Na resposta comum, o `post_save` emite e `DecisaoPergunta.registrar` suprime a própria emissão. A contagem fica em um, mas o aval atribui a emissão ao `registrar`. Há ainda um contraexemplo em que uma decisão nova pode gravar **zero eventos** ao consumir um recibo da transação anterior. `aval_item6.txt:1` (anexo), `app/chamados/services/disputa_emissao.py:1562–1567`, `app/chamados/signals.py:261–265`, `app/chamados/models.py:3653–3669,4833–4839`.
-
-### 1. PROCEDENTE — o emissor do par está invertido
-
-A tabela conta os inserts do outbox da pergunta por célula encontrada, em caminhos concluídos com sucesso. Todos passam pelo mesmo escritor físico, `emitir_evento_celula`. Sem célula pela FK ou pelo par colaborador/dia, são zero inserts. `app/chamados/models.py:3605–3636`, `app/ponto/portas/celula.py:981–991`.
-
-| Caminho | Quem aciona o insert |
-|---|---|
-| `save` + `registrar`, mesma instância e mesmo atomic | **1, `post_save`**. O `registrar` consome o recibo pendente. Vale para a resposta humana, a automática, a resposta pela trilha e os pares de carimbo e validação. `app/chamados/signals.py:255–265`, `app/chamados/models.py:3520–3523,4832–4839`, `app/chamados/services/disputa_emissao.py:1562–1567,1760–1763,1794–1797`, `app/chamados/services/validacao.py:174–178,312–318,389–395`. |
-| `save` sem `registrar` | **1, `post_save`**, se o save for inteiro ou nomear algum campo do conjunto. Save parcial fora do conjunto ou `raw` dá **0**. `app/chamados/signals.py:255–265`. |
-| `registrar` sem `save` e sem recibo | **1, `registrar`**, para lote comum não vazio. Lote vazio dá **0**. `app/chamados/models.py:4796–4805,4824–4839`. |
-| `created` | **0 pelo `post_save`**. `_nascer` chama `registrar` e dá **1** se houver assinatura para registrar, **0** se o lote vier vazio. `app/chamados/signals.py:255–257`, `app/chamados/models.py:3322–3327,4540–4559,4799–4803,4835–4839`. |
-| `reabrir_para_correcao` | **2** na célula que entra tanto no lote de atos quanto nas linhas capturadas. O `registrar(pergunta_id=...)` emite primeiro e a porta emite de novo depois do `update`. Se só a captura contém a célula, **1**, pela porta. O recibo erra ao contar sempre um. A ressuscitação e a devolução L-130 também têm emissão explícita além do `registrar`. `app/chamados/services/disputa_emissao.py:1680–1682,1695–1716`, `app/chamados/models.py:1728–1733,3709–3711`, `app/chamados/services/validacao.py:481–494`. |
-| `fechar_por_admin` | **1, `post_save`**. `carimbar_identidade` faz um save e retorna. Nos chamadores que registram `SILENCIO` logo depois com a mesma instância, esse `registrar` consome o recibo daquele save. O caminho com `SILENCIO` cai de **2 para 1**, não de 3 para 2. `app/chamados/models.py:2177–2184,3363–3377,3562–3571,4832–4839`, `app/ponto/services/veredito_celula.py:194–202`. |
-| Retratação de motivo | **2** quando o carimbo grava. Primeiro emite `registrar(RETRATACAO)`, depois o `post_save` do carimbo de identidade. A ordem é inversa à do `SILENCIO`, e já eram dois inserts na base. `app/chamados/models.py:2315–2323,3562–3571`, `app/chamados/signals.py:255–265`. |
-| Estoque (`entrada_origem=ESTOQUE`) | **0 pelo `registrar`**. A porta consome eventual recibo e pula a emissão. Um save anterior pode já ter emitido pelo signal. Os backfills antigos citados usam atos comuns e seguem o ramo emissor quando o lote contém atos. `app/chamados/models.py:4833–4860`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:357–361`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:161–164`. |
-
-**Dá para cumprir o aval pela porta existente.** Uma opção é `registrar` receber a operação de salvar a projeção, executá-la sob a trava e no mesmo atomic, e sinalizar ao receiver de outbox, durante aquele save, que a emissão pertence ao `registrar`. O escopo da sinalização acaba em `finally`. Saves avulsos continuam pelo receiver e o receiver do beco continua recebendo o `post_save`. O custo é alterar a assinatura e migrar os pares de chamadas, preservar a ordem das travas, tratar explicitamente lotes vazios e cobrir rollback e falha de emissão. Se a porta também assumir as reaberturas, precisa receber as células capturadas antes do `update`, pois o filtro pode perder as perguntas depois. A intenção fica conhecida antes do save. `app/chamados/models.py:3605–3608,3891–3907,4796–4839`, `app/chamados/signals.py:229–240,254–265`, `app/chamados/services/disputa_emissao.py:1680–1682,1713–1716`.
-
-### 2. PROCEDENTE — a marca mistura recibo de emissão com identidade da escrita
-
-| Valor | Quem escreve e quem lê |
-|---|---|
-| `recibo` e `ja_acordadas` | O signal abre `{}`. `acordar_celulas` põe `celula.pk → evento.pk` após o insert. `guardar_recibo_da_escrita` copia o mapa para a instância. `ja_acordadas_na_escrita` produz o conjunto de células e o `registrar` o devolve a `acordar_celulas`, que o usa para iniciar `vistos`. `app/chamados/signals.py:261–265`, `app/chamados/models.py:3621–3636,3650–3669,4835–4839`. |
-| `_acordou_na_escrita` | `guardar_recibo_da_escrita` mescla os IDs no `__dict__`. Outro save da mesma célula sobrescreve o ID anterior. `ja_acordadas_na_escrita` tira a marca inteira com `pop`, inclusive no caminho de estoque. O callback também faz `pop` da chave inteira. A marca registra **qual evento um save anterior emitiu** e depois serve de prova de **que o ato atual faz parte da mesma escrita**. Falta identidade do ato, da conexão ou do savepoint nessa prova. `app/chamados/models.py:3647–3669,4824–4839`. |
-| `EventoCelula.processado_em` | O insert nasce com o campo nulo. O consumidor grava a baixa quando conclui e a retenção apaga linhas antigas. A cura lê `pk` e `processado_em IS NULL`. A fila viva lê também `tentativas < MAX_TENTATIVAS_EVENTO`. Assim, **sem baixa** e **apto a ser consumido** são condições distintas. A cura usa a primeira para decidir a supressão. `app/ponto/portas/celula.py:990–991`, `app/escala/models.py:1871–1877`, `app/chamados/reconciliador.py:1389–1404,1546–1563`, `app/chamados/models.py:3667–3669`. |
-| `PerguntaDisputa.CAMPOS_QUE_ACORDAM` | O modelo declara o conjunto imutável. O receiver lê sua interseção com `update_fields`. A lista cobre resposta, validação, carimbo, dia e vínculos, com nomes de FK e seus `_id`. O receiver testa **campos nomeados pelo save**. A outra constante homônima pertence à porta da célula e cobre `veredito` e `ata`. `app/chamados/models.py:3595–3608`, `app/chamados/signals.py:255–260`, `app/ponto/portas/celula.py:975–1002`. |
-
-### 3. PROCEDENTE para vazamento de estado, semântica e lacuna do RED
-
-- **PROCEDENTE — estado em instância.** O rollback descarta callbacks da transação ou do savepoint, mas a marca foi escrita diretamente no objeto. O `pop` do `registrar` também ocorre antes do fim do atomic e sobrevive se esse `registrar` for desfeito. Se duas threads compartilham o objeto, leem e alteram a mesma marca, sem uma chave de conexão. Compartilhamento em produção [nao verificado]. `app/chamados/services/trava_do_colaborador.py:16–23`, `app/chamados/models.py:3650–3669,4807,4824–4839`.
-- **PROCEDENTE — dois acionadores e uma derivação frágil.** Signal e `registrar` podem encomendar o mesmo evento. A cura usa a presença de uma linha sem baixa para inferir que ela pertence à escrita atual. Já `evento(unica=True)` procura o registro pelos atributos do próprio ato sob a serialização do chamador. `app/chamados/signals.py:261–265`, `app/chamados/models.py:3662–3669,4835–4839`, `app/core/observ.py:104–106,138–153`.
-- **NAO PROCEDE — segundo juiz registrado, segundo insert fora da porta, relógio novo ou inversão de trava introduzida pelo diff.** C6 e C21 continuam nas autoridades registradas. O insert segue em `emitir_evento_celula`, e a sequência segue no `bulk_create` do `registrar`, depois da conferência do dono. A operação nova é um `SELECT` simples do recibo depois do insert, sem tomada explícita de trava nem leitura de relógio. `app/core/juizes.py:298,313`, `app/chamados/models.py:3632–3635,3667–3669,4807–4818`, `app/ponto/portas/celula.py:981–991`.
-- **PROCEDENTE — lacuna do RED.** A resposta pública testa o ato e a quantidade de eventos. A autoria do evento exigida pelo aval fica sem asserção. `app/chamados/tests/test_e4c_f5_c4_red.py:634–646`.
-
-### 4. PROCEDENTE — há duplicatas e há um caminho para zero
-
-Contagem para a mesma célula, com os atos comuns aceitos e as travas exigidas satisfeitas. `app/chamados/models.py:3623–3636,4796–4818,4835–4839`.
-
-| Contraexemplo | Resultado |
-|---|---|
-| Save desfeito por savepoint antes do `registrar` | **1 sobrevivente**, do `registrar`. O ID do evento revertido fica na memória, mas a consulta deixa de encontrá-lo. Se o save antecede o savepoint e sobrevive, fica **1**, o original. O caso testado desfaz o save. `app/chamados/models.py:3662–3669`, `app/chamados/tests/test_e4c_f5_c4_red.py:696–703`. |
-| Dois `registrar` na mesma instância | Após um save elegível, **2 no total**. O signal emite, o primeiro `registrar` consome a marca e o segundo emite. Se o primeiro `registrar` for desfeito e repetido, a marca consumida continua ausente. A repetição também deixa **2** eventos, embora só um `registrar` sobreviva. `app/chamados/signals.py:261–265`, `app/chamados/models.py:3662–3669,4807,4824–4839`. |
-| Instância recém-carregada do banco | **2**, mesmo no mesmo atomic. O recibo está no objeto salvo. Passar só `pergunta_id` também deixa o `registrar` sem acesso à marca. `app/chamados/models.py:3653–3656,4804,4824–4839`. |
-| Save chamado fora de atomic externo | **1** do save avulso. O próprio `PerguntaDisputa.save` abre atomic e o commit executa a limpeza. Um `registrar` válido posterior dá **2 no total**. Se o helper for chamado genuinamente fora de atomic, retorna antes de agendar callback. `app/chamados/models.py:3650–3656,3891–3907,4813–4814`. |
-| `on_commit` anterior à limpeza, reutilizando a mesma instância | **0 eventos novos para a decisão nova**, se o evento anterior ainda estiver sem baixa. Agende antes do save avulso um callback que, após o commit, abra outra transação, pegue a trava e chame `registrar` com o mesmo objeto. Esse callback pode consumir o recibo antes da limpeza agendada pelo save. A consulta encontra o evento da transação anterior e silencia a nova emissão. É um contraexemplo de código. Ocorrência em produção [nao verificado]. `app/chamados/models.py:3653–3669,4807–4818,4824–4839`, `app/chamados/services/trava_do_colaborador.py:58–68,76–84`. |
-| Evento do recibo já processado | **2 inserts no total**, com **1 novo pendente**. A baixa invalida o recibo para fins de supressão. `app/chamados/models.py:3667–3669`, `app/chamados/tests/test_e4c_f5_c4_red.py:713–719`. |
-| `bulk`/`update` sem `post_save` | **0** se a escrita vier sozinha, inclusive se ela alterar um campo que deveria acordar. Com `registrar` comum, **1** pela porta. Com `registrar` e emissão explícita, **2** na interseção, como na reabertura. `app/chamados/signals.py:254–265`, `app/chamados/models.py:3709–3711,4835–4839`, `app/chamados/services/disputa_emissao.py:1680–1682,1695–1716`. |
-
-### 5. NAO PROCEDE para mutante vazio. PROCEDENTE para cobertura insuficiente do aval
-
-O harness exige um caso executado, sem skip ou erro, com a falha na asserção de negócio nomeada, e controle verde antes e depois. Conferi as quatro reescritas dos seis mutantes na fonte. Cada âncora ocorre uma vez e a fonte resultante é sintaticamente válida. Resultado em execução e logs do recibo [nao verificado]. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:27–67,230–238,787–831`.
-
-| Mutante | O que deve fazer falhar |
-|---|---|
-| M47 | Reemite na resposta pública. O teste espera **1**, o mutante produz **2**. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:787–789,809–811`, `app/chamados/tests/test_e4c_f5_c4_red.py:634–646`. |
-| M48 | Reemite na célula já coberta do lote. **(1, 1) → (2, 1)**. O teste salva só `p1`. Duas perguntas salvas na mesma célula antes do lote já produziriam dois inserts pelo signal. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:812–815`, `app/chamados/tests/test_e4c_f5_c4_red.py:686–694`, `app/chamados/signals.py:261–265`. |
-| M49 | Aceita o ID revertido como prova. **1 → 0** sobreviventes. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:792–794,816–819`, `app/chamados/tests/test_e4c_f5_c4_red.py:696–703`. |
-| M50 | Aceita o ID já processado. **2 → 1** inserts. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:792–794,820–823`, `app/chamados/tests/test_e4c_f5_c4_red.py:713–719`. |
-| M51 | Retira o callback de limpeza. **2 → 1**. O teste executa os callbacks capturados dentro de `TestCase`, simulando a limpeza. Um commit real e a ordem entre callbacks ficam sem cobertura. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:797–800,824–827`, `app/chamados/tests/test_e4c_f5_c4_red.py:705–711`, `app/chamados/tests/cortes_f2_f9_apoio.py:58`. |
-| M52 | Cala **todo** `post_save` que passa `recibo`. O save avulso cai de **1 → 0**. Isso testa o silêncio indiscriminado. A coordenação prevista no aval, em que só o save já assumido pelo `registrar` fica calado, permanece sem teste de autoria. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:803–806,828–831`, `app/chamados/tests/test_e4c_f5_c4_red.py:674–684`. |
-
-### 6. NAO PROCEDE — os fakes preservam a prova existente de H2
-
-O `save` falso já só anotava gravações. O fake novo devolve um conjunto vazio de recibos, e os dois emissores falsos passam a aceitar kwargs. H2 continua verificando a gravação e a chamada do outbox instrumentado, a propagação de `outbox indisponivel` e o rollback simulado da gravação. Sua cobertura é o caminho do `registrar` sem recibo. `app/chamados/tests/test_e4_expand.py:34–50,69–89,396–431`.
-
-O selo antigo **M-H2-evento**, por sua vez, falha na âncora antes de executar o teste. Conferi **zero ocorrências** da âncora em `8ea46953e`, `8529b6003` e `59600163c`. O mesmo vale para **M-C11-reversao**. `app/chamados/tests/e4_verificar.py:21–24,33–37,58–64`.
-
-## 27/11 12:21 · sessao 936455fd919d · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-A c3 atualiza o smoke de clique e guarda o RED de geometria do painel em um módulo fora da descoberta padrão do runner. [Smoke](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:217) · [RED do painel](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/red_painel_popover_feriado.py:1)
-
-### Asserções por cenário
-
-Os quatro cenários — página em `base.html`, página em `base_app.html`, drawer em `base.html` e drawer em `base_app.html` — executam as mesmas checagens no feriado de 20/11. [Fixture](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:217) · [Matriz de cenários](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:252)
-
-- O `summary` nasce fechado, tem área positiva dentro da célula e da viewport, e o hit no centro retorna o próprio `summary` ou um filho. O clique no alvo abre o formulário. [Sonda de abertura](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:90)
-- O centro do submit atinge o próprio botão, que está habilitado e pertence ao formulário. O `action` bate com `reverse('ponto:feriado_vira_trabalho')` e o método é `POST`. [Submit](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:121) · [Contrato do formulário](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:234)
-- A região mensal contém `08:00`, `12:00`, `13:00` e `17:00`, nessa ordem. A sonda acrescenta espaço sob as três primeiras marcações após medir o submit, para exigir deslocamento. No fim da rolagem, a marcação de `17:00` fica visível e o `summary` continua visível e atingível pelo centro. [Rolagem](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:136)
-
-### Mutantes e comandos para o Code
-
-| `SMOKE_FERIADO_MUTANTE` | Asserção que deve cair |
-|---|---|
-| `gatilho-cortado` | `gatilhoVisivel`, pelo deslocamento para fora da célula. [Smoke](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:39) |
-| `summary-display-none` | `gatilhoVisivel`, pela caixa sem área. [Smoke](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:41) |
-| `porta-trocada` | `action`, pelo caminho `/porta-mutante/`. [Smoke](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:238) |
-| `painel-recortado` | `painelSemRecorte`, no RED guardado. [RED](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/red_painel_popover_feriado.py:10) |
-| `painel-distante` | `painelEncostado`, no RED guardado. [RED](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/red_painel_popover_feriado.py:22) |
-
-```bash
-rodar() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test \
-    --settings=config.settings.ci --noinput "$1"
-}
-smoke=core.tests.test_smoke_clique_feriado_vira_trabalho
-red=core.tests.red_painel_popover_feriado
-
-SMOKE_FERIADO_MUTANTE='' rodar "$smoke"
-SMOKE_FERIADO_MUTANTE=gatilho-cortado rodar "$smoke"
-SMOKE_FERIADO_MUTANTE=summary-display-none rodar "$smoke"
-SMOKE_FERIADO_MUTANTE=porta-trocada rodar "$smoke"
-
-SMOKE_FERIADO_MUTANTE='' rodar "$red"
-SMOKE_FERIADO_MUTANTE=painel-recortado rodar "$red"
-SMOKE_FERIADO_MUTANTE=painel-distante rodar "$red"
-```
-
-### Diff
-
-```bash
-git --no-optional-locks diff 9bcb7447e -- core/tests/test_smoke_clique_feriado_vira_trabalho.py
-git --no-optional-locks diff --no-index -- /dev/null core/tests/red_painel_popover_feriado.py
-```
-
-Conferi a sintaxe Python e JavaScript, o padrão de descoberta e os caminhos de falha com DOM simulado. A execução do smoke, do RED e dos mutantes em Chromium, assim como o calendário de produção, fica [nao verificado].
-
-_8674 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8676 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
