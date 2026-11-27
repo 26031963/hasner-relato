@@ -1,7 +1,225 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **26/11/2026 22:44** · publicado em **26/11/2026 22:45** (UTC-3)
+> Ultima resposta processada: **26/11/2026 22:52** · publicado em **26/11/2026 22:52** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 26/11 22:52 · sessao a535fb3809bc · CODEX-CONSTROI-MOTOR · verificador · origem=Code
+
+### 1. Cobertura e caminhos de publicação
+
+O portão cobre o Django do `saas_core`, inclusive `tenants`, quando a casca usa `config.settings.saas`. O comando roda sem rótulo de app e sem `--settings`. O `manage.py` usa `saas` por padrão, preservando um `DJANGO_SETTINGS_MODULE` já definido. Nesse perfil, `INSTALLED_APPS` reúne os apps compartilhados e os de tenant, com `tenants` entre os compartilhados. O ambiente efetivo do container em produção é **[nao verificado]**. [bin/deploy.sh:189] [app/manage.py:9] [app/config/settings/saas.py:22] [app/config/settings/saas.py:53] [nao verificado]
+
+Se “TODO app em prod” inclui `mensageria`, a cobertura é parcial. Seu Django separado instala `nucleo` e o deploy só lhe pergunta `migrate --check`, que cobre migrations ainda por aplicar. Um drift apenas nos models de `nucleo` fica fora do novo portão, inclusive no HUP conjunto. O boot de `mensageria` também tem seu próprio `migrate` no Compose. [mensageria/manage.py:4] [mensageria/config/settings.py:6] [bin/deploy.sh:189] [bin/deploy.sh:206] [bin/deploy.sh:375] [docker-compose.mensageria.yml:20] [nao verificado]
+
+| Caminho | Efeito do portão |
+|---|---|
+| Normal, `--sem-migrate`, `--sem-sombra`, `--reload-copia`, `--reload-agendado` | Todos precisam passar pela mesma guarda antes do HUP. As flags afetam outros ramos do deploy. [bin/deploy.sh:56] [bin/deploy.sh:82] [bin/deploy.sh:195] [bin/deploy.sh:224] [bin/deploy.sh:375] | [nao verificado]
+| `--restart` | A mesma guarda vem antes do restart e, portanto, antes do migrate de boot de `mensageria` disparado por ele. [bin/deploy.sh:195] [bin/deploy.sh:358] [docker-compose.mensageria.yml:20] | [nao verificado]
+| `--conferir` | Executa a checagem, imprime `DRIFT` e pode sair `0` com `DRIFT=1`. Sai antes de apply, restart ou HUP. [bin/deploy.sh:189] [bin/deploy.sh:195] [bin/deploy.sh:253] | [nao verificado]
+| Cron das 03:30 | A declaração chama `deploy.sh --reload-agendado`, passando pela mesma guarda. O crontab instalado é **[nao verificado]**. [app/config/crons.py:326] [bin/deploy.sh:195] [bin/selo_reciclagem.sh:70] | [nao verificado]
+
+A pista ainda pode certificar sem `tenants`. O certificador cobra as labels da régua, que omitem `tenants`. O pre-push roda o teste separado e o c4 acrescenta a recusa no deploy. Recriação via Compose é um caminho de infraestrutura externo ao script. Seu uso em produção é **[nao verificado]**. [bin/pista_certifica.sh:67] [bin/pista_certifica.sh:85] [bin/regua.sh:23] [bin/pre-push.sh:198] [bin/deploy.sh:20] [bin/deploy.sh:189] [nao verificado]
+
+### 2. Ordem e falha operacional
+
+Dentro do `deploy.sh`, o portão vem antes dos `migrate --check` e `--plan`, do apply do core, do restart e do HUP. Guardas anteriores podem encerrar o script mais cedo. Qualquer retorno diferente de zero do primeiro `docker exec` vira `DRIFT=1`. Nos modos de publicação, o segundo `exec` só produz diagnóstico e `falhou` encerra com `1`, mesmo se essa segunda chamada voltar verde. A mensagem atribui a recusa a migration faltante também em caso de falha operacional. [bin/deploy.sh:101] [bin/deploy.sh:146] [bin/deploy.sh:189] [bin/deploy.sh:200] [bin/deploy.sh:210] [bin/deploy.sh:221] [bin/deploy.sh:331] [bin/deploy.sh:358] [bin/deploy.sh:375] [bin/deploy.sh:92] [nao verificado]
+
+Uma casca fora ou um timeout que devolva código de erro aciona a recusa. As duas chamadas do portão estão sem limite de tempo próprio. Se uma ficar pendurada, o script fica esperando antes do apply e do reload. Em memória, retornos fictícios `125` e `124` deram `rc=1`, zero apply e zero HUP. Casca fora e timeout reais são **[nao verificado]**. [bin/deploy.sh:189] [bin/deploy.sh:196] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:88] [nao verificado]
+
+### 3. Mordida do selo
+
+O fake registra a chamada e casa `*makemigrations*--check*` primeiro no ramo `exec`, antes dos padrões de migrate e do `*) exit 0`. O caso 25 exige recusa com motivo, zero apply e zero HUP. O 26 exige recusa, zero apply e zero HUP em `--sem-migrate`. [bin/tests/test_deploy_portoes_antes_do_migrate.sh:83] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:88] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235]
+
+**Os dois casos passam com o portão deslocado para depois do apply e antes do HUP.** Reproduzi em memória os trechos do deploy e o despacho do fake. Ambos continuaram com `rc=1`, zero apply e zero HUP. O caso 25 deixa `FAKE_PEND_CORE` no default `0` e o 26 usa um modo que recusa pendência sem aplicar. Com `FAKE_DRIFT=1` **e** `FAKE_PEND_CORE=1` no modo normal, a ordem atual fez zero apply e a deslocada fez um apply antes de recusar. O caso 3 também deixa essa lacuna, pois sua ordem só compara auth, sombra e prova de casca com o apply. [bin/tests/test_deploy_portoes_antes_do_migrate.sh:88] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:116] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:131] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:147] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [bin/deploy.sh:220] [bin/deploy.sh:331] [nao verificado]
+
+### 4. Emenda da L-126
+
+| Cláusula do aval | Onde aparece na L-126 |
+|---|---|
+| Identificação do aval e pre-mortem com `DEFAULT DENY` cumprido | ID e data abrem a emenda. Pre-mortem e `DEFAULT DENY` constam do registro literal do aval. A emenda omite ambos. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
+| Wrapper libera motor e `models.py` sem migration. Permanecem proibidos migrations, `bin/`, crons e `core/juizes.py` | Na abertura da emenda e nos quatro caminhos enumerados na restrição ao construtor Opus. O inventário do wrapper contém os quatro. [app/docs/LEIS.md:147] [bin/codex_pergunta.sh:162] |
+| Toda obra segue Codex → Opus único, só confere e carimba → DIFF da competência na sombra → pista → pouso → HOM do [nome] | A sequência está inteira na emenda, com “nenhum passo sai”. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] | [nao verificado]
+| Teto de um construtor Opus, só para o que segue proibido ao Codex | A emenda traz “teto 1 vivo” e a restrição. “NAO herda obra de motor/models por reprovacao” explicita a consequência dessas duas cláusulas diante do repasse geral na segunda reprovação. **O alcance da autorização é o mesmo.** [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
+| Vale já para ABONO c1h, ABONO-PARCIAL-TETO e E4C-F5 c2 | As três obras estão nomeadas na emenda. [app/docs/LEIS.md:147] |
+| Proibido pousar motor sem DIFF, tocar competência exportada e Codex gerar migration | Pouso sem DIFF e geração de migration estão no fim da emenda. Competência exportada já está no `PROIBIDO ao construtor` da mesma linha. [app/docs/LEIS.md:147] | [nao verificado]
+| Pronto com construtor Codex em `chamadas.log` nas obras de motor e no máximo um subagente Opus de construção vivo | A emenda traz o teto, mas omite o registro exigido em `chamadas.log` como critério de pronto. Seu cumprimento efetivo é **[nao verificado]**. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
+| Segue a fila. `PAREI` só em lei ou `!` | A regra geral da L-126 preserva a ordem da fila. A condição de `PAREI` fica fora da emenda. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] |
+
+Os dois testes Django e o portão do deploy são detalhes de implementação acrescentados à emenda. A referência `:646` fica no aval literal, conforme o descarte informado. [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] [app/docs/CORTES.md:651] [nao verificado]
+
+### 5. Quem escreve e quem lê
+
+| Campo ou valor | Escritor → leitor |
+|---|---|
+| `MODO`, `SO_CONFERIR` | O chamador fornece `$1`. O deploy grava `MODO` e inicializa `SO_CONFERIR=0`, passando a `1` só com `--conferir`. Leitores de `SO_CONFERIR` são as guardas de auth/sombra, drift e mensageria, o ramo de pendência e a saída de conferência. [bin/deploy.sh:56] [bin/deploy.sh:126] [bin/deploy.sh:195] [bin/deploy.sh:216] [bin/deploy.sh:222] [bin/deploy.sh:253] | [nao verificado]
+| Settings, flags, retorno e `DRIFT` | `manage.py` fornece o default de settings e o deploy fornece `--check --dry-run --noinput`. O primeiro `docker exec` entrega o status à condição. Só o deploy atribui `DRIFT=0/1`. O `echo` e a guarda leem esse valor. [app/manage.py:9] [bin/deploy.sh:189] [bin/deploy.sh:194] | [nao verificado]
+| Diagnóstico e `falhou` | O segundo `exec` fornece a saída a `tail` e `sed`. O próprio script define `falhou`, que lê o motivo, imprime e sai `1`. Também o chamam as guardas de árvore, cron, auth, sombra, pendências, prova de casca, reciclagem, apply, reload e provas finais. O selo captura saída e status. A cadeia de fatia usa ambos no reload da cópia. [bin/deploy.sh:92] [bin/deploy.sh:101] [bin/deploy.sh:112] [bin/deploy.sh:147] [bin/deploy.sh:164] [bin/deploy.sh:196] [bin/deploy.sh:216] [bin/deploy.sh:313] [bin/deploy.sh:321] [bin/deploy.sh:332] [bin/deploy.sh:358] [bin/deploy.sh:375] [bin/deploy.sh:388] [bin/deploy.sh:398] [bin/deploy.sh:434] [bin/deploy.sh:441] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:114] [bin/molde_fatia/cadeia.sh:48] | [nao verificado]
+| `FAKE_DRIFT`, `RC`, `SAIDA`, `N_MIG`, `N_HUP`, `FALHAS` | Os casos 25/26 põem `FAKE_DRIFT=1` no ambiente de `roda`. O fake lê o valor, usa `0` por padrão e grava os argumentos em `docker.log`. `roda` captura status e saída e lê o log para contar apply e HUP. Os dois casos leem status e contagens. Só o 25 lê `SAIDA`. `_erro` incrementa `FALHAS` e o final do selo lê o total. [bin/tests/test_deploy_portoes_antes_do_migrate.sh:59] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:83] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:114] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:243] |
+| `max_length`, `antes`, `saida`, `SystemExit` e operação | Models e migrations declaram `evento=50` e `nome=120`. Os dois testes fornecem app, model, campo e operação esperada. O helper lê o valor original, cria `StringIO` **antes** da mutação, soma `7` e restaura no `finally`. `makemigrations` lê os metadados e fornece saída e código. O helper exige código `1` e o texto esperado no buffer. [app/folha/models.py:47] [app/folha/migrations/0009_evento_he100_rubrica_200.py:27] [app/tenants/models.py:16] [app/tenants/migrations/0001_initial.py:21] [app/core/tests/test_model_sem_migration_pendente.py:26] [app/core/tests/test_model_sem_migration_pendente.py:45] [app/tenants/test_model_sem_migration_pendente.py:19] | [nao verificado]
+| L-126 e trilha de pronto | A emenda grava a regra em `LEIS.md`. O selo do índice lê o mapeamento do ID e a estrutura da linha. O wrapper grava `ini` e `fim` em `chamadas.log`. O leitor de estado extrai obra, papel e resultado e conta os inícios por papel. O teto Opus é conduta declarada. [app/docs/LEIS.md:147] [app/docs/LEIS.md:423] [bin/tests/test_leis_indice.sh:25] [bin/tests/test_leis_indice.sh:43] [bin/codex_pergunta.sh:568] [bin/codex_pergunta.sh:606] [bin/codex_limite_estado.py:49] [bin/codex_limite_estado.py:71] [CLAUDE.md:397] |
+
+Os quatro blobs da cópia conferem com o lado novo do patch fornecido. A identidade do commit completo, os logs relatados e a execução integral dos selos são **[nao verificado]**. [bin/deploy.sh:189] [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [app/core/tests/test_model_sem_migration_pendente.py:28] [app/docs/LEIS.md:147] [nao verificado]
+
+**REPROVADO — (3) os casos 25/26 passam com o portão depois do apply. (4) A L-126 omite o critério de pronto em `chamadas.log` e a condição de `PAREI`.** [bin/tests/test_deploy_portoes_antes_do_migrate.sh:235] [bin/deploy.sh:331] [app/docs/LEIS.md:147] [app/docs/CORTES.json:2475] [nao verificado]
+
+## 26/11 22:50 · sessao b7895b7918f1 · ABONO-X-SAIDA-ANTECIPADA · leitura · origem=Code
+
+**A regra da base dá `(0, 240)` para D, em minutos de `(atraso, saída antecipada)`.** Os **480** são o tempo sem trabalho dentro do previsto e o teto da L-093. A O73 só julga a saída do último bloco, às 03:00, contra o fim previsto às 07:00. O `(0, 0)` do motor vem de uma aplicação indevida da L-084 ao segundo par. Pela L-099, o defeito em **D** é **ESTRUTURA**. `app/docs/LEIS.md:111,116,122` · `app/ponto/motor_calculo_v2.py:2148–2188,2842–2896` · `app/ponto/management/commands/e6_oraculo.py:98–110`
+
+### 1. Previsto e número da regra
+
+Em D, a célula tem `trabalha=True` e congela no DNA `hi=19:00`, `hf=07:00`, `hii=hfi=None`, iguais aos marcos do template 12x36. O vínculo lê o DNA. O intervalo declarado é **0**, e o previsto líquido é **720 min**, de **D 19:00 a D+1 07:00**. O campo `minutos_jornada=660` do template fica fora dessa conta. O envelope técnico de fechamento, quando calculado com essas bordas, é de **16 h**, até **D+1 11:00**. `test_abono_c1i_volta.py:34–38` · `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:33–63` · `app/escala/models.py:1098–1107,1128–1144` · `app/escala/utils.py:2310–2328,2345–2374` · `app/ponto/turnos.py:66–82,229–231`
+
+As pontas de **D** são a entrada às 19:00, com desvio **0**, e a saída final às 03:00, **240 min** antes do marco. A L-084 exige **ambas** a mais de 180 min. A tolerância também fica abaixo do desvio, tanto nos 5 min por marcação que o código atribui ao art. 58, §1º, quanto nos 10 min que o motor usa. Pela O73, a saída das 22:00 e a volta das 02:00 são pontas intermediárias. Logo, são **240 min de saída antecipada**. Os 240 min do vão intermediário completam o déficit aritmético de 480, e a L-093 apenas limita a rubrica a esse teto. `app/docs/LEIS.md:111,116` · `app/ponto/motor_calculo_v2.py:51–61,2108–2127,2184–2188,2842–2854` · `app/ponto/tests/test_o73_volta_do_intervalo.py:109–117`
+
+O teste lê `horas_atraso` e `horas_saida_antecipada`. `horas_falta` é outra rubrica, alimentada pelas ausências de tipos que descontam. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:79–97` · `app/ponto/services/fechamento.py:889–895,1022–1027` · `app/folha/export.py:125–143`
+
+### 2. Onde o motor chega a zero
+
+| Etapa | Valor para a fixture |
+|---|---|
+| Pareamento e dia | O vão de **240 min** excede os **180 min** do modo duração. Saem dois pares fechados. O juiz de turno dá **D** ao primeiro e **D+1** ao segundo, pois o primeiro fechou ainda em D. O laço do motor herda o dia do par anterior para um vão de até 6 h, então `dia_da_jornada` fica **`[D, D]`**. `app/ponto/turnos.py:468–474,1309–1314,1503–1514` · `app/ponto/motor_calculo_v2.py:762–765,2574–2587,2635–2639` |
+| L-097 e trabalho | A empresa da fixture usa a janela de HE desligada por padrão. As quatro pontas passam intactas, com **0 min fora da janela**. Os pares têm **180 + 60 = 240 min trabalhados**, sem intervalo descontado. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:43–47` · `app/colaboradores/models.py:58–61` · `app/ponto/motor_calculo_v2.py:1568–1574,1711–1714,1865–1869,1909–1913,2937–2953,2963–2965` |
+| Primeiro par | `Motor12x36ComEscala` chama `_julgar_pontualidade`. Contra **D 19:00 / D+1 07:00**, os deltas são **`(0, +540)`**. A L-084 deixa passar e o período recebe **`(0, 540)`**. `app/ponto/motor_calculo_v2.py:3839–3840,3728–3739,2269–2275,2366–2404` |
+| Segundo par | `_julgar_pontualidade` consulta os marcos pela data civil da entrada e monta a entrada prevista em **D+1 19:00**. O ramo noturno monta a saída prevista em **D+1 07:00**. Os deltas ficam **`(-1020, +240)`**. Como o teste da L-084 usa valor absoluto nas duas pontas, `aplicar_tolerancia` retorna **`(0, 0)` na linha 2183**. O ramo `HORARIO_DESLOCADO` exige `diff >= 180` e aqui `diff = -1020`. `app/ponto/motor_calculo_v2.py:2226–2245,2269–2275,2295–2321,2366–2395,2124–2127,2150–2183` · `app/escala/regua_defesa.py:384,501–503` |
+| O73 e teto | A O73 zera os **540** do primeiro par na **linha 2892**. O último já chega com **0**. No teto, os pares estão fechados, duram mais de 360 s e `_parc=[]`. O previsto é **720**, mas `soma=0` faz o `continue` na **linha 1331**. A expressão que daria `720 − 240 = 480` nem é avaliada. `app/ponto/motor_calculo_v2.py:2884–2897,1183–1221,1233–1235,1325–1346` · `app/ponto/management/commands/detectar_par_relampago.py:15` |
+
+O FM lê a soma do motor, e o `DiaPago motor` soma os campos dos períodos. Já a função de pontualidade do calculador, isolada com os mesmos dois pares e os marcos ancorados em D, devolveu **`(0, 480)`**: o T8 retira o marco de entrada do segundo par e o teto corta `540 + 240` para `480`. A origem do zero informado para o **`DiaPago oraculo` gravado** fica **[nao verificado]** sem os insumos efetivos daquela lavratura. `app/ponto/services/fechamento.py:1022–1027,1293–1318` · `app/ponto/services/dia_pago.py:173–185,322–330` · `app/ponto/calculador/alimentacao.py:287–302` · `app/ponto/calculador/regras.py:262–286`
+
+### 3. Controle e parciais
+
+O zero em D contraria a regra. Para um **controle positivo no motor da base**, mantenha as quatro batidas e troque `HF` para **06:00** no template e no DNA. Na checagem em memória dos trechos da base, os dois períodos continuam em D. A saída final fica **exatamente 180 min** antes de `hf`, passa pelo `> 180` estrito da L-084 e o motor termina em **`(0, 180)`** sem parcial. A paridade dessa variante no fechamento completo fica **[nao verificado]**. `app/ponto/motor_calculo_v2.py:2124–2127,2184–2188,2581–2587,2884–2896`
+
+Pela O73 e pelo abatimento da ponta coberta, os resultados são os seguintes. O caso 00:00–01:00 fica no vão intermediário nas duas variantes e serve como controle de **abatimento zero**. `app/ponto/motor_calculo_v2.py:453–485,1222–1258,2842–2854`
+
+| Parcial aprovada | Regra com `hf=07:00` | Controle com `hf=06:00` |
+|---|---:|---:|
+| Sem parcial | `(0, 240)` | `(0, 180)` |
+| D+1 03:00–04:00 | `(0, 180)` | `(0, 120)` |
+| D+1 00:00–01:00 | `(0, 240)` | `(0, 180)` |
+| D+1 03:00–07:00 | `(0, 0)` | `(0, 0)` |
+| D 23:00–D+1 02:00 e D+1 05:00–07:00 | `(0, 120)` | `(0, 120)` |
+| D+1 02:00–03:00, só trabalho | `(0, 240)` | `(0, 180)` |
+
+### 4. Dono pela L-099
+
+**ESTRUTURA em D.** São quatro batidas e dois pares fechados, com vínculo vigente e célula de trabalho. A falsa acusação de Cadastro × Realidade é escrita em **D+1**, porque `aplicar_tolerancia` usa `_dia_turno_juiz_calc` para a chave da linha, enquanto o agrupamento de pontualidade já pôs o período em **D**. O E6 consulta a lista pela data exata. Com os insumos da fixture, `em_cadastro_x_realidade=False` em D e o juiz retorna `ESTRUTURA`. `app/ponto/tests/test_abono_parcial_abate_a_ponta.py:52–63` · `app/ponto/turnos.py:1309–1314,1503–1506` · `app/ponto/motor_calculo_v2.py:2170–2182,2574–2587` · `app/ponto/calculador/nucleo.py:214–245` · `app/ponto/management/commands/e6_oraculo.py:98–110,162–171,182–212`
+
+A checagem em memória usou trechos dos arquivos da cópia, sem banco. Os quatro blobs citados no diff conferem com os prefixos do lado base do anexo. A identidade do commit completo `90b161ba3`, sem metadados Git na cópia, fica **[nao verificado]**.
+
+## 26/11 22:48 · sessao b75a48d93fd2 · O30-F3-CONSTRUIR · leitura · origem=Code
+
+**Eu manteria `relatorios.views.atestados_lote` como a única view pública de leitura do lote.** É o caminho de menor mudança para a tela entregue pelo main. O PDF, os filtros da F3 e a exportação autorizada dos seis campos cabem nessa mesma view, usando o serviço de lote e a linha do tempo que a F3 já usa. Manter a rota do PDF apontada para `views_atestado.lote_atestados` deixaria dois caminhos com universos e permissões diferentes. (`lote_minima.patch` → `app/relatorios/urls.py:15–16`, `app/relatorios/views.py:344–396`; `app/relatorios/urls.py:16–18`; `app/ponto/views_atestado.py:83–139`; `app/ponto/services/atestados_lote.py:36–62`.)
+
+As referências do main abaixo usam as linhas de destino do patch. A seleção que descrevo em `ponto/services/atestados_lote.py` é a da cópia c17. O patch chama esse serviço e deixa seu corpo fora do diff. O corpo exato do serviço em `59600163c`, os resultados em produção e o uso por clientes externos estão **[nao verificado]**. (`lote_minima.patch` → `app/relatorios/views.py:376–395`; `app/ponto/services/atestados_lote.py:21–62`.)
+
+## 1. O contrato de cada view
+
+| Pergunta | Main — `views.atestados_lote` | F3 — `views_atestado.lote_atestados` |
+|---|---|---|
+| **Empresa e pessoas** | Exige uma empresa aceita por `empresas_visiveis()`. Sem empresa ou com empresa indisponível, renderiza só o formulário. Consulta todos os colaboradores da empresa, inclusive desligados. Ignora `q` e `colaborador`. (`lote_minima.patch` → `app/relatorios/views.py:351–381`.) | Empresa e colaborador são opcionais. `empresas_visiveis()` valida a **empresa explícita**. Sem ela, a consulta parte de todos os colaboradores, inclusive de empresas ocultas. Se só informar o colaborador, a empresa dele dá o corte da janela. Sem ambos, usa uma janela única de corte padrão 21. (`app/ponto/views_atestado.py:56–78,106–118`; `app/ponto/janelas.py:36–57`.) |
+| **Tipos e status** | Tipos médicos do catálogo. Sem tipos médicos, passa direto para uma lista vazia. O padrão é `aprovada`. `status=todos` desliga a restrição. (`lote_minima.patch` → `app/relatorios/views.py:357–358,376–381`.) | Mesma fonte de tipos médicos, via `medicos_vigentes()`. Sem filtro por status, entram também os rejeitados e os que aguardam documento ou decisão. O teto é 20 registros depois dos filtros, antes de montar as linhas ou abrir anexos. Acima disso, prévia com erro em HTTP 200 e download em HTTP 400. (`app/ponto/views_atestado.py:116–124`; `app/ponto/services/atestados_lote.py:7,36–48`; `app/ponto/catalogo/ausencias.py:385–387,467`.) |
+| **Competência, período e busca** | Delega a janela a `_LOTE.janela()`. As datas livres se chamam `de` e `ate`, precisam vir juntas e prevalecem sobre a competência. Data inválida ou par incompleto volta ao formulário, inclusive em pedido de exportação. (`lote_minima.patch` → `app/relatorios/views.py:337–341,355–381`.) | Usa `core.filtro.ler` para `q`, `de_data` e `ate_data`. A busca é por trecho do nome em maiúsculas ou do CPF como armazenado. Preserva acentos e pontuação. O filtro troca datas invertidas, descarta datas inválidas e admite só uma ponta. Mês e ano vazios recebem o mês e o ano civis de `timezone.localdate()`. (`app/ponto/views_atestado.py:56–78,94–118`; `app/core/filtro.py:68–115,146–149,200–205`.) |
+| **Quem abre** | Sessão autenticada **e** `ver_relatorios` **e** `ver_folha` **e** `ver_ausencias`, para qualquer formato. Sem sessão vai ao login. Sem ação vai ao dashboard. `_requer_staff` verifica a ação, sem teste de `is_staff`. (`lote_minima.patch` → `app/relatorios/views.py:344–349`, `app/relatorios/tests/test_atestados_lote_tela.py:1–193`; `app/relatorios/views.py:15–18`.) | GET sem cache. `ver_ausencias` **ou** `ver_relatorios` abre prévia, CSV e PDF. ZIP exige `ver_ausencias`. Sem as ações, a view lança `PermissionDenied`. `tem_acao` exige autenticação e dá passagem ao superusuário. (`app/ponto/views_atestado.py:81–92`; `app/colaboradores/mixins.py:322–331`.) |
+| **Formatos e seis campos** | Prévia com tabela, contadores e faltantes. CSV e ZIP com empresa e janela no nome do arquivo. `formato=pdf` cai na prévia. O patch chama `csv_bytes(linhas)` sem habilitar os seis campos. Com o serviço c17, esse CSV mantém as seis colunas fora do cabeçalho e das linhas. (`lote_minima.patch` → `app/relatorios/views.py:383–396`, `app/templates/relatorios/atestados_lote.html:44–98`; `app/ponto/services/atestados_lote.py:110–138`.) | Prévia com contadores e lista dos que exigem documento e estão sem ele. CSV, PDF e ZIP com nome `atestados-lote.<formato>`. Com `ver_ausencias`, CSV e PDF leem `atestado_medico`, `atestado_crm`, `atestado_crm_uf`, `atestado_cid`, `atestado_emissao` e `atestado_dias`. O PDF imprime os valores preenchidos, embute JPEG/PNG e usa link protegido para os demais anexos, como PDF e HEIC. A prévia usa a presença do documento e o ZIP carrega os arquivos. (`app/ponto/views_atestado.py:124–139`; `app/templates/relatorios/atestados_lote.html:29–43`; `app/ponto/services/atestados_lote.py:9–12,103–138,160–222,236–266`; `app/ponto/views.py:2138–2155`.) |
+
+**O juiz na cópia.** `janela()` delega a `janela_fechamento()`, que usa o corte da empresa. `registros_na_janela()` parte dos lançamentos da linha do tempo, exclui filhos com `documento_referencia` e aplica `_q_cobertura`. Entra o lançamento que começa na janela, termina nela ou depois dela tendo começado antes, ou segue aberto em tipo que admite fim indeterminado. Sai uma linha por lançamento, na ordem de data e PK decrescentes. `dias` vem do lançamento inteiro, sem recorte em dias da competência. O drawer lê a mesma `linha_do_tempo()`. `empresas_visiveis()` aceita empresas ativas e exclui CNPJ com prefixo `11222333`. (`app/ponto/services/atestados_lote.py:21–62`; `app/ponto/janelas.py:10–21,36–57`; `app/ponto/turnos.py:2822–2827`; `app/ponto/services/dia_decidido.py:624–655,678–688`; `app/ponto/views.py:2035–2043`; `app/colaboradores/queries.py:78–87`.)
+
+**Escrita.** As duas views do lote só consultam e geram respostas. O POST separado `anexar_atestado` exige `editar_ausencias` e `ver_ausencias`, valida os campos enviados e chama `ausencia.anexar_documento`. A porta grava os campos alterados e a trilha, pode salvar ou substituir `documento` e, se o estado era `aguardando_documento`, passa para `aguardando_decisao`. Os campos omitidos são preservados. Uma linha com referência recusa os seis campos e ainda pode receber só o arquivo. (`lote_minima.patch` → `app/relatorios/views.py:344–396`; `app/ponto/views_atestado.py:25–53,81–140`; `app/ponto/services/ausencia.py:288–345,1105–1146`; `app/ponto/tests/test_atestado_f3.py:130–185`.)
+
+## 2. Contraexemplos concretos
+
+A fixture do patch permite comparar a mesma empresa de corte 12, competência `09/2026`, com janela `12/08–11/09`. Os exemplos abaixo são resultados deduzidos do código e da fixture. A ocorrência em produção é **[nao verificado]**. (`lote_minima.patch` → `app/relatorios/tests/test_atestados_lote_tela.py:19–85`; `app/ponto/janelas.py:10–21,54–57`.)
+
+| Entrada | Main | F3 |
+|---|---|---|
+| Mesma empresa e competência, `q` vazio, status omitido | Exclui o atestado rejeitado de `11/09`. | Inclui esse lançamento. (`lote_minima.patch` → `app/relatorios/tests/test_atestados_lote_tela.py:62–85`, `app/relatorios/views.py:376–381`; `app/ponto/views_atestado.py:116–124`.) |
+| Mesma empresa e competência, `q=desligada`, status omitido | Continua incluindo os lançamentos aprovados da pessoa ativa. | Seleciona só a pessoa desligada, com a declaração médica de `10/09` na fixture. (`lote_minima.patch` → `app/relatorios/tests/test_atestados_lote_tela.py:22–72`, `app/relatorios/views.py:376–381`; `app/ponto/views_atestado.py:68–78,116–118`; `app/core/filtro.py:200–205`.) |
+| Mesma empresa e competência, `q` vazio, 21 registros médicos aprovados no recorte | Monta a prévia e segue para CSV ou ZIP quando solicitado. | A prévia mostra o erro de limite e o download retorna 400. (`lote_minima.patch` → `app/relatorios/views.py:376–396`; `app/ponto/views_atestado.py:116–124`; `app/ponto/services/atestados_lote.py:7`.) |
+| Mesma competência, empresa omitida, `q` vazio | Só formulário. Com o ID explícito da empresa inativa, também fica no formulário. | Sem empresa explícita, pode incluir o atestado de `10/09` da empresa inativa da fixture, com a janela padrão `21/08–20/09`. Com o ID inativo explícito, o formulário é inválido e retorna 400. (`lote_minima.patch` → `app/relatorios/tests/test_atestados_lote_tela.py:22–72`, `app/relatorios/views.py:351–367`; `app/ponto/views_atestado.py:56–78,101–118`; `app/ponto/janelas.py:10–21,36–57`.) |
+| Mesma empresa e competência, GET com `de=2026-09-12&ate=2026-09-12` | Usa o período livre e encontra o aprovado de `12/09`. | Usa a competência e deixa o dia `12/09` fora. A F3 espera `de_data` e `ate_data`. (`lote_minima.patch` → `app/relatorios/views.py:337–341,369–381`, `app/relatorios/tests/test_atestados_lote_tela.py:62–72`; `app/ponto/views_atestado.py:62–65,94–118`; `app/ponto/turnos.py:2822–2827`.) |
+| Mesma empresa e competência, usuário só com `ver_relatorios` | Redireciona ao dashboard. | Pode abrir prévia, CSV e PDF, com os seis campos e os anexos fora da exportação. ZIP retorna 403. (`lote_minima.patch` → `app/relatorios/views.py:344–349`; `app/ponto/views_atestado.py:81–92,124–139`; `app/ponto/tests/test_atestado_f3.py:311–328`.) |
+
+Um intervalo fechado que termina exatamente no primeiro dia da competência, e um INSS em aberto iniciado antes, entram pelo predicado da c17. Esses casos **não distinguem** as duas views quando ambas usam o serviço da cópia e os registros passam pelos demais filtros. O resultado dessas bordas com o serviço efetivamente implantado está **[nao verificado]**. (`app/ponto/services/atestados_lote.py:36–62`; `app/ponto/turnos.py:2822–2827`; `app/ponto/tests/test_atestado_f3_contrato.py:990–1040`; `lote_minima.patch` → `app/relatorios/views.py:376–381`.)
+
+## 3. Censo de chamadores
+
+- **Main — um registro direto de URL.** `/relatorios/atestados/lote/` aponta para `views.atestados_lote`. A entrada de navegação é **Relatórios → Atestados acumulados → Lote de atestados (CSV/ZIP)**. O template do lote chama a própria rota no formulário e nos links de download. O menu aponta para a Central, e o card aponta para o acumulado anual. (`app/config/urls.py:29–30`; `app/templates/base.html:181–188`; `app/templates/relatorios/index.html:173–181`; `lote_minima.patch` → `app/relatorios/urls.py:15–16`, `app/templates/relatorios/atestados.html:10–13`, `app/templates/relatorios/atestados_lote.html:10,44–49`.)
+- **F3 — dois registros diretos de URL.** `/relatorios/atestados/lote/` e `/relatorios/atestados/lote/pdf/` chamam `lote_atestados`. A entrada de navegação é **Gestão → Ausências → Atestados em lote**. O formulário usa a primeira rota e o botão PDF envia os mesmos filtros para a segunda via `formaction`. No `atestados.html` da cópia, o botão é o CSV do acumulado anual. (`app/relatorios/urls.py:15–18`; `app/templates/base.html:234–246`; `app/templates/ponto/ausencias.html:35–43`; `app/templates/relatorios/atestados_lote.html:6–25`; `app/templates/core/_btn_pdf.html:38–42`; `app/templates/relatorios/atestados.html:5–14`.)
+- **Testes e API.** O teste de tela do main resolve `relatorios:atestados_lote` e cobre acesso, filtros, exportações e link do acumulado. Na F3, `test_atestado_f3.py` bate nas duas rotas e `test_atestado_f3_contrato.py` exercita a view e o serviço. O censo estático encontrou os registros e links acima como chamadores do lote, sem chamada direta da API. O reenvio de ausência pela API chama `ausencia.anexar_documento`, que é a porta de escrita. (`lote_minima.patch` → `app/relatorios/tests/test_atestados_lote_tela.py:1–193`; `app/ponto/tests/test_atestado_f3.py:106–108,311–475`; `app/ponto/tests/test_atestado_f3_contrato.py:931–988,1089–1118`; `app/api/views.py:1852–1858`.)
+
+## 4. Consolidação e L-111
+
+- **Com a view do main**, retirar os dois apontamentos para `lote_atestados`, seu corpo, `FiltrosLoteAtestado`, `_colaboradores_filtrados` e a versão F3 do template de lote. A URL `/pdf/`, se mantida, deve chamar a mesma view do main com o formato fixado. Migrar os testes de comportamento do lote e retirar os selos e mutantes que prendem a estrutura removida. Preservar o POST de anexo, o formulário do painel e seus testes, pois o painel tem chamada de produção própria. (`app/docs/CONDUTAS.md:15–18`; `app/relatorios/urls.py:16–18`; `app/ponto/views_atestado.py:25–140`; `app/templates/ponto/partials/painel_ausencia.html:89–123`; `app/ponto/tests/test_atestado_f3.py:208–285,311–475`; `app/ponto/tests/mutantes_atestado_f3.py:79–97,214–225`; `app/ponto/tests/mutantes_atestado_f3_c14.py:21–44,59–78`.)
+- **O que precisa chegar à porta mantida.** O aval registrado pede PDF com foto, HEIC via abertura do anexo, filtro universal com período, colaborador e empresa, e os seis campos no formulário e nas exportações PDF/CSV. A F3 também traz teto de 20, período com uma ponta e acesso mais amplo. Incorporar o comportamento pedido pelo aval e preservar a seleção obrigatória de empresa, o padrão de aprovadas e a guarda do main é a escolha de menor mudança que proponho. Tornar a empresa opcional, ampliar a guarda ou aplicar o teto a todo o lote muda resultados já demonstrados acima. (`app/docs/PROMPTS.md:3000–3001`; `app/docs/BACKLOG.md:1441,2351–2352`; `app/ponto/models.py:782–795`; `app/ponto/views_atestado.py:81–124`; `lote_minima.patch` → `app/relatorios/views.py:344–381`.)
+- **Se a F3 substituísse a view do main**, `views.atestados_lote` e `_PeriodoLivreAtestados` ficariam com zero chamador. Saem também os imports exclusivos dessa view, a versão main do template e os testes que sustentam o contrato abandonado. O serviço de lote continua com chamador. A tela perde a tabela detalhada, a volta ao acumulado, o seletor de status, o padrão de aprovadas, a exigência de empresa visível e os nomes de download com empresa e datas. O link do acumulado pode continuar e passaria a abrir a F3. (`app/docs/CONDUTAS.md:15–18`; `lote_minima.patch` → `app/relatorios/views.py:1–16,337–396`, `app/templates/relatorios/atestados_lote.html:5–98`, `app/templates/relatorios/atestados.html:10–13`, `app/relatorios/tests/test_atestados_lote_tela.py:1–193`; `app/ponto/views_atestado.py:106–139`; `app/templates/relatorios/atestados_lote.html:4–43`.)
+
+## 5. Conflitos silenciosos
+
+- **Na junção do lote, há uma quebra de contrato sem conflito textual.** A view do main chama `mes_ou()` e `ano_ou()` sem defaults. Com empresa válida, datas livres vazias e mês ou ano omitido ou inválido, entrega `None` a `janela()`. O serviço c17 levanta `ValueError`, e a view do patch segue sem tratamento nesse ponto. Conferi essa combinação em memória com as funções da cópia. O resultado dessa entrada no main implantado é **[nao verificado]**. A outra junção silenciosa é o CSV do main continuar omitindo os seis campos depois que a F3 os adiciona, porque a chamada mantém `pode_ver_anexo=False` pelo default. (`lote_minima.patch` → `app/relatorios/views.py:355–376,383–387`; `app/core/sanitiza.py:11–35`; `app/ponto/services/atestados_lote.py:21–33,110–127`.)
+- **Fora do lote, nenhum conflito funcional aparece no delta fornecido.** A mudança em `atestados.html` acrescenta o atalho ao lado do CSV anual. O POST da F3 tem rota e formulário próprios, e os seis campos entram pelo modelo e pela migração da F3. O outro ponto compartilhado é a catraca de linhas de `extrato_parcial`. O patch desloca as referências de `[486, 593]` para `[552, 659]` pela inserção da view. A asserção exige as posições reais da árvore resultante, sem mudança demonstrada na regra do extrato. (`lote_minima.patch` → `app/templates/relatorios/atestados.html:7–15`, `app/relatorios/views.py:334–401`, `app/core/tests/test_medida_turno_do_par.py:343–349`; `app/relatorios/urls.py:18`; `app/templates/ponto/partials/painel_ausencia.html:89–115`; `app/ponto/migrations/0079_ausencia_atestado_dados.py:12–24`; `app/core/tests/test_medida_turno_do_par.py:562–566`.)
+
+## 26/11 22:46 · sessao 687d75f4c004 · PAR-PELO-TURNO · construtor · origem=Code
+
+Implementei a cura de PAR-PELO-TURNO sobre `3ccd18cfa`. A execução em memória passou **90 testes** e derrubou **27 mutantes por asserção**. A execução Django parou na importação de `django.core`. Os testes com persistência e a certificação ficam com Code e Opus. `ponto/tests/test_par_pelo_turno.py:633`, `:776`, `:816`, `manage.py:11`, `docs/LEIS.md:154`
+
+### RED, cura e GREEN
+
+| Item | Resultado |
+|---|---|
+| **1. Dia por PK** | Na base, o PK da saída passou de **20 para 21** conforme a janela. O par de **25 h** ficou aberto quando a janela terminou no dia 20. A carga passou a cobrir as duas viradas possíveis no envelope, e o mapa passou a receber os turnos antes do recorte por competência. GREEN em memória. Casca, lote e consulta individual devolveram os dois PKs no dia 20, com a mesma geometria. O período entrou apenas na competência do dia 20. `ponto/turnos.py:1837`, `:1940`, `:3039`, `ponto/tests/test_par_pelo_turno.py:132` |
+| **2. C9 e reuso** | Na base, o segundo pareamento devolveu `[]` ao reler a C9 do primeiro. `_mk` passou a guardar a C9 no `Turno`, ligada ao dia e à identidade das duas pontas. GREEN em memória, incluindo cópia por PK, ponta trocada e deduplicação. `ponto/turnos.py:170`, `:187`, `:299`, `ponto/tests/test_par_pelo_turno.py:248`, `:263` |
+| **3. C9 e L-084** | Na base, `00:30 → 20:00` com DNA `21:30–05:42` deu C9 onde a janela aplicou L-084. A C9 passou a chamar as mesmas funções de ancoragem e o mesmo predicado do motor. GREEN em memória para esse caso e para o controle `17:30 → 06:30`, que conserva C9. `ponto/turnos.py:170`, `ponto/janela_he.py:41`, `:64`, `ponto/motor_calculo_v2.py:1664`, `:2046`, `ponto/tests/test_par_pelo_turno.py:274` |
+| **4. HE sem decisão** | O motor real, alimentado em memória, apurou **492 min trabalhados, 288 min fora da janela e 0 min de HE** com as duas janelas ativas. Os controles deram **288 min de HE** com a janela desativada e **48 min** com apenas a janela de saída desativada. Controle verde na base e na candidata. `ponto/tests/test_par_pelo_turno.py:422`, `:455`, `ponto/motor_calculo_v2.py:2872`, `:2951` |
+| **5. Selos** | `CICLO_12x36` já estava correto na base entregue. O selo da **09/2026** agora exercita o escritor antes e depois de registrar o TXT de ensaio, compara os hashes e exige zero escritas nas três tabelas após a exportação. A sonda da guarda deixou `[]` para o cálculo e `[129]` com o veto removido. Hashes e RED persistido **[nao verificado]**. O selo de classe cobre **3 h 30** e também **2 h**, que derruba `partido_3h` com `1 != 2`. `escala/models.py:26`, `ponto/tests/test_par_pelo_turno.py:360`, `:532`, `:581`, `ponto/services/fechamento.py:581` |
+| **6. Vermelhos da volta** | A catraca acusou `ponto/turnos.py` na base e passou após a cura, com a allowlist intacta. No selo BATIDA, a entrada das **20h00** era absorvida no limite de 3 h e desfazia o par que geraria C9. Às **20h01**, a sonda retornou um par fechado com C9 e uma entrada aberta. O selo preserva `['BATIDA']` e consulta o e6 antes de verificar a porta de regularização. Lavra e tela **[nao verificado]**. `ponto/tests/test_contract_no_batida_date.py:232`, `ponto/turnos.py:293`, `:441`, `ponto/management/commands/e6_oraculo.py:104`, `ponto/tests/test_col129_teto_vira_lista.py:226` |
+| **7. col155 em 08/11** | Acrescentei um caso sintético da série HJ-026, com DNA `21:30–05:42`, pontas `17:29 → 06:31`, par fechado em **08/11** e C9 de **782 × 732 min**. A série dá a faixa **781–783 min**. PKs, pontas exatas, sequência intermediária e rubricas desse dia em produção **[nao verificado]**. `docs/BACKLOG.md:745`, `ponto/tests/test_par_pelo_turno.py:79` |
+
+### Comandos para Code
+
+O modo `base` carrega `turnos.py` de `3ccd18cfa` em memória. Os três testes de regressão produziram **8 falhas de asserção** na base. Os mutantes abaixo também são carregados em memória. `ponto/tests/test_par_pelo_turno.py:633`, `:776`, `:810`
+
+```sh
+export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings_test
+
+python3 -m ponto.tests.test_par_pelo_turno base
+
+python3 manage.py test \
+  ponto.tests.test_par_pelo_turno \
+  ponto.tests.test_contract_no_batida_date \
+  ponto.tests.test_col129_teto_vira_lista \
+  ponto.tests.test_e4_carga_paridade \
+  ponto.tests.test_tripwire_b5j_universo_de_apuracao \
+  ponto.tests.test_adaptador_motor \
+  ponto.tests.test_o195_dia_do_turno_por_envelope \
+  ponto.tests.test_col129_par_separado_pelo_teto \
+  ponto.tests.test_h_portao_teto_do_dia \
+  ponto.tests.test_saida_pela_posicao_entre_turnos
+
+for m in \
+  pad_fim_um_dia pad_segmento_um_dia mapa_sem_vespera casca_sem_contexto lote_sem_contexto \
+  c9_compartilhada c9_perdida c9_duplicada c9_ponta_trocada c9_recusado l084_circular \
+  partido_3h date_keying \
+  corte_principal corte_o68b corte_o95 igualdade teto_maior_que_26h pos_fecho_sem_26h \
+  hora_civil dna_civil vespera_indiscriminada troca_classes perda_xi degenerado \
+  absorcao_sem_veto recredito_noite guarda_09 batida_no_teto_da_pausa
+do
+  python3 -m ponto.tests.test_par_pelo_turno "$m"
+done
+```
+
+Os 27 mutantes puros caíram. `guarda_09` e `batida_no_teto_da_pausa` têm contraprova em memória. A execução Django dos dois **[nao verificado]**. `ponto/tests/test_par_pelo_turno.py:633`, `:754`, `ponto/services/fechamento.py:581`, `ponto/tests/test_col129_teto_vira_lista.py:233`
+
+### Escritores e leitores
+
+**LEI-AKITA 2 · padrão=Single Source of Truth.** O pareador escreve o dia e a geometria do turno. Casca, lote e consulta individual projetam o mesmo resultado por PK. Espelho e API consultam esse mapa diretamente, e disputa consulta um PK pela mesma função. A paridade foi exercitada nas duas bordas em memória. Execução ponta a ponta de espelho, API e disputa **[nao verificado]**. `docs/LEIS.md:60`, `ponto/turnos.py:299`, `:2981`, `:3020`, `:3152`, `ponto/services/espelho.py:465`, `:589`, `api/views.py:1444`, `:1461`, `:2042`, `chamados/services/disputa_emissao.py:76`, `:283`
+
+| Campos | Quem escreve ou fornece → quem lê |
+|---|---|
+| `Batida.pk`, `timestamp`, `tipo`, `is_intervalo`, `retratada_em` | Registro, anotação e retratação → carga da casca e do lote, pareador e projeção por PK. `ponto/registro_batida.py:118`, `:255`, `:287`, `ponto/turnos.py:1868`, `:3111`, `:3039` |
+| Vínculo, DNA, marcos, intervalos, papéis da ata e janela | Alimentação de escala e corte da empresa → julgamento dos segmentos, `_mk` e projeção. `escala/alimentacao.py:228`, `escala/utils.py:84`, `ponto/janelas.py:54`, `ponto/turnos.py:1568`, `:1940`, `:299` |
+| Dia, pontas, batidas, estado aberto, virada e C9 do `Turno` | `_mk` → adaptador, materialização, mapa, leitor de C9 e lavra. `ponto/turnos.py:299`, `:187`, `:3039`, `ponto/adaptador_motor.py:29`, `ponto/nucleo.py:40`, `ponto/services/teto_na_lista.py:51`, `:91` |
+| Cadastro de HE, decisão vigente e gravado financeiro | Cadastro da empresa e porta de HE → motor. Fechamento, `DiaPago.lavrar` e `ExportacaoDominio.registrar` → selo da 09. `colaboradores/models.py:58`, `:101`, `:117`, `ponto/portas/he.py:44`, `ponto/motor_calculo_v2.py:1486`, `:1517`, `ponto/services/fechamento.py:1184`, `ponto/services/dia_pago.py:135`, `folha/models.py:174`, `ponto/tests/test_par_pelo_turno.py:581` |
 
 ## 26/11 22:44 · sessao dab3a2c4ccb8 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
 
@@ -584,202 +802,4 @@ Confirmação independente do hash Git, execução em produção e conteúdo dos
 - **Lacunas.** Faltam período invertido, empresa visível sem colaboradores, ZIP vazio, autorização negada nos dois downloads, bytes dos anexos e competência padrão após o corte. O período invertido atravessa a validação e pode conter lançamentos. Verifiquei em memória que 20/09–10/09 inclui um lançamento sintético de 01/09–30/09 e que `zip_bytes([])` gera ZIP válido sem entradas. `app/relatorios/tests/test_atestados_lote_tela.py:25–47,76–106,125–186` `app/relatorios/views.py:369–395` `app/ponto/services/atestados_lote.py:39–43,54–64,135–173`
 - **Contratos.** A sonda de sessão encontra a rota pelo include compartilhado entre UI e CI e a guarda segue o requisito por inspeção. A compilação enumera todo `.html`. Executei apenas os verificadores puros de HTML e botões PDF em memória, com zero ocorrências nos dois templates, e contei 13 cards usando a função do próprio contrato. O atalho novo fica em Atestados acumulados. Compilação, renderização Django e suíte verde [nao verificado]. `app/config/urls.py:30` `app/config/urls_ci.py:11` `app/relatorios/urls.py:15` `app/relatorios/views.py:344–349` `app/core/tests/test_rota_pede_sessao.py:121–147,235–265` `app/core/tests/test_todo_template_compila.py:34–60` `app/core/tests/test_contract_template_bem_formado.py:76–101,130–147` `app/core/tests/test_contract_btn_pdf.py:63–82` `app/relatorios/tests/test_index_enxuto.py:55–58,80–82,113–125,165–183` `app/templates/relatorios/atestados.html:12`
 
-## 26/11 21:36 · sessao c17fe6845773 · - · - · origem=Ronald (tmux)
-
-**REPROVO.** A tela promete competência “Atual”, mas `LOTE.janela` usa o mês civil para escolher a competência padrão. Em 25/09 com corte 12, retorna 12/08–11/09. O juiz retorna 12/09–11/10. O helper dos testes informa mês e ano em todas as consultas válidas. `app/templates/relatorios/atestados_lote.html:27`, `app/relatorios/views.py:355`, `app/ponto/services/atestados_lote.py:39`, `app/ponto/janelas.py:24`, `app/core/juizes.py:352`, `app/relatorios/tests/test_atestados_lote_tela.py:76`.
-
-**Período invertido.** A view checa formato e presença das duas datas. Um intervalo invertido passa ao serviço, e um lançamento abrangendo as duas pontas passa ao filtro e pode ser exportado. A prova nova cobre data impossível e par incompleto. `app/relatorios/views.py:369`, `app/ponto/services/atestados_lote.py:39`, `app/ponto/services/atestados_lote.py:58`, `app/relatorios/views.py:383`, `app/relatorios/tests/test_atestados_lote_tela.py:136`.
-
-**Semântica.** A janela e a duração de um lançamento fechado são inclusivas. “Dias” imprime a duração integral do lançamento. A seleção inclui lançamentos sobrepostos, mas trata `data_fim=NULL` como dia inicial. O juiz de cobertura estende tipos indeterminados até o fim da janela, inclusive `afastamento_inss`, médico no catálogo congelado. O acumulado anual usa dias ocupados, recortados até hoje. “Todos” retira o filtro de status, incluindo rejeitadas e ambos os estados de espera. A regra de cobertura da folha usa aprovadas. `app/ponto/services/ausencia.py:198`, `app/ponto/services/atestados_lote.py:58`, `app/ponto/services/dia_decidido.py:674`, `app/ponto/catalogo/ausencias.py:92`, `app/ponto/turnos.py:2548`, `app/ponto/turnos.py:2871`, `app/relatorios/views.py:277`, `app/relatorios/views.py:295`, `app/relatorios/views.py:378`, `app/ponto/models.py:701`.
-
-**Linhagem.**
-
-- Cadastro de empresa escreve PK e campos via formulário e portas. `empresas_visiveis` lê ativa/CNPJ, ordena razão e fornece o conjunto da view. Dropdown usa fantasia ou razão, CSV usa razão e o juiz lê o corte. `app/colaboradores/views.py:509`, `app/colaboradores/views.py:539`, `app/colaboradores/services/estrutura.py:13`, `app/colaboradores/queries.py:78`, `app/colaboradores/models.py:164`, `app/ponto/services/atestados_lote.py:125`, `app/ponto/janelas.py:36`.
-- Admissão/edição gravam nome e empresa. `Colaborador.save` gera matrícula. A transferência troca a empresa atual. O lote seleciona pela empresa atual e carrega o histórico pelo colaborador, então uma transferência cross-CNPJ desloca a atribuição histórica no relatório. HTML e CSV leem matrícula/nome. O ZIP usa matrícula ou PK. `app/colaboradores/views.py:1203`, `app/colaboradores/views.py:1333`, `app/colaboradores/views.py:1362`, `app/colaboradores/views.py:1413`, `app/colaboradores/services/colaborador.py:152`, `app/colaboradores/models.py:427`, `app/relatorios/views.py:379`, `app/ponto/services/dia_decidido.py:645`, `app/templates/relatorios/atestados_lote.html:74`, `app/ponto/services/atestados_lote.py:95`, `app/ponto/services/atestados_lote.py:123`.
-- `criar_ausencia` grava colaborador, tipo, datas, dias, minutos, status, registrador, descrição e anexo. `editar_ausencia_registro` grava tipo, datas, dias, minutos e descrição. `Ausencia.save` valida/deriva a duração, minutos de falta e o carimbo. `mudar_estado` e `decidir` gravam status e carimbos, e `anexar_documento`/`_reabrir` gravam anexo. `app/ponto/services/ausencia.py:473`, `app/ponto/services/ausencia.py:562`, `app/ponto/services/ausencia.py:648`, `app/ponto/services/ausencia.py:975`, `app/ponto/services/ausencia.py:1015`, `app/ponto/services/ausencia.py:1087`, `app/ponto/services/ausencia.py:1298`, `app/ponto/models.py:878`.
-- `linha_do_tempo` exclui filhas por `documento_referencia`, gera um lançamento com dados, rótulo, status, anexo e duração, e alimenta o Histórico e o lote. `quem_quando` faz fallback do decisor para registrador/sistema e da aprovação para criação. HTML lê status exibido e CSV lê código bruto. “Documento” indica referência gravada. O ZIP lê o arquivo e produz `.FALTANDO.txt` se falhar. `app/ponto/views.py:2042`, `app/ponto/views.py:2701`, `app/ponto/services/dia_decidido.py:564`, `app/ponto/services/dia_decidido.py:570`, `app/ponto/services/dia_decidido.py:645`, `app/ponto/services/dia_decidido.py:674`, `app/templates/relatorios/atestados_lote.html:76`, `app/ponto/services/atestados_lote.py:126`, `app/ponto/services/atestados_lote.py:147`.
-- UI/porta gravam `TipoAusencia`, o catálogo lê ativos, `TIPOS_MEDICOS` lê a flag e `LOTE._exige_documento` lê a flag bruta. A propriedade `Ausencia.exige_documento` consulta o dever perante o fluxo, com exceções distintas. `app/ponto/views_tipos_ausencia.py:67`, `app/ponto/services/ausencia.py:1761`, `app/ponto/catalogo/ausencias.py:240`, `app/ponto/catalogo/ausencias.py:385`, `app/ponto/catalogo/ausencias.py:467`, `app/ponto/services/atestados_lote.py:25`, `app/ponto/models.py:723`, `app/ponto/services/ausencia.py:937`.
-
-**Isolamento de cadastro e arquivos.** Em SaaS os modelos `ponto`/`colaboradores` são do schema do tenant e o middleware seleciona o schema. O cache de catálogo é global por 60 s, sem chave de schema. Em processo compartilhado, flags e rótulos do outro tenant podem afetar o lote de linhas locais. A mídia usa `FileSystemStorage` e o ZIP segue a referência gravada do lançamento local. Exposição efetiva de colaborador/arquivo de outro tenant [nao verificado]. `app/config/settings/saas.py:34`, `app/config/settings/saas.py:67`, `app/ponto/catalogo/ausencias.py:240`, `app/ponto/catalogo/ausencias.py:257`, `app/ponto/catalogo/ausencias.py:274`, `app/config/settings/saas.py:109`, `app/config/settings/base.py:101`, `app/ponto/models.py:777`, `app/ponto/services/atestados_lote.py:157`.
-
-## 26/11 21:35 · sessao cf1910455dee · - · - · origem=Ronald (tmux)
-
-**Acesso.** Prévia, CSV e ZIP passam pela mesma guarda de sessão e pelas ações `ver_relatorios`, `ver_folha` e `ver_ausencias`. O juiz aceita superusuário ou as permissões concedidas, sem condição literal sobre `is_staff`. O link da tela anterior aparece também para quem só tem `ver_relatorios`, mas a nova rota recusa esse acesso. (`app/relatorios/views.py:19-22`, `:252-255`, `:344-349`, `:383-396`, `app/colaboradores/mixins.py:322-331`, `app/templates/relatorios/atestados.html:12`)
-
-**Escopo.** Todas as saídas resolvem a empresa dentro de `empresas_visiveis()`, que exclui inativas e CNPJ de diagnóstico. O queryset seleciona colaboradores da empresa por FK, e a linha do tempo seleciona ausências pelo colaborador. Em SaaS, middleware e backend por schema isolam essas tabelas. O cache do catálogo, porém, é global por processo e não usa schema na chave. Um worker compartilhado pode aplicar classificação médica, rótulo e exigência documental de outro tenant sobre registros locais. O ZIP abre o `FieldFile` persistido e o storage configurado usa raiz comum, sem prefixo por schema. Nenhuma chave de arquivo vem do GET. Vazamento de bytes ou de colaboradores em produção [nao verificado]. (`app/relatorios/views.py:351-381`, `app/colaboradores/queries.py:78-87`, `app/ponto/services/dia_decidido.py:645-651`, `app/config/settings/saas.py:34-50`, `:67-95`, `:109-112`, `app/config/settings/base.py:101-102`, `app/ponto/catalogo/ausencias.py:240-281`, `app/ponto/models.py:777-781`, `app/ponto/services/atestados_lote.py:156-168`, `Caddyfile:7-29`)
-
-**Efeitos.** A view monta contexto e resposta. CSV e ZIP são montados em memória. Prévia e CSV também abrem anexos em `rb` para identificar o tipo real antes de filtrar janela, tipo e status. A rota acrescenta chamadas a caminhos existentes com `except`, sem acrescentar handlers de exceção. Falha de leitura no ZIP vira entrada `.FALTANDO.txt` em memória. Falha de fechamento chama `debug`, abaixo do nível INFO configurado no SaaS. O Gunicorn já registra o acesso em arquivo e stdout. As criações no banco e os uploads do diff estão nas fixtures dos testes. (`app/relatorios/views.py:351-396`, `app/ponto/services/atestados_lote.py:56-63`, `:114-172`, `app/ponto/services/dia_decidido.py:645-667`, `app/ponto/models.py:855-864`, `app/config/settings/saas.py:160-181`, `app/gunicorn.conf.py:42-49`, `:85-104`, `app/relatorios/tests/test_atestados_lote_tela.py:23-69`, `:108-112`, `:172-179`)
-
-**Relógio e período.** A nova rota aciona `date.today()` dentro do serviço, mesmo com mês e ano explícitos, salvo no período livre. Com valores omitidos, o serviço resolve pelo mês civil de hoje, que depois do corte pode divergir da competência vigente anunciada como “Atual”. Datas invertidas passam e podem retornar até um lançamento que abarque as duas pontas. (`app/relatorios/views.py:369-389`, `app/ponto/services/atestados_lote.py:32-43`, `:57-63`, `app/ponto/janelas.py:24-33`, `:60-63`, `app/templates/relatorios/atestados_lote.html:29-30`, `app/docs/PLANO-PADROES.md:97-103`)
-
-## 26/11 21:33 · sessao b5bb64b6f605 · CUSTO-DE-COORDENACAO · leitura · origem=Code
-
-# CUSTO-DE-COORDENAÇÃO F2 — mapa e censo
-
-Árvore de referência `6941dba240f47f4170bae0292a097c15dd81d0b6` (V6-LISTA-ORFAS c2). O aval, o brief F1, os hooks instalados e os logs foram consultados na árvore viva. Os predicados dos selos foram lidos no código. Resultado de execução dos selos [nao verificado]. `logs/CUSTO-DE-COORDENACAO/DOSSIE/wrapper.out:1` · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:1` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1`
-
-## 1. Onde a inteira pré-opus é exigida hoje
-
-| Lugar | Predicado e recusa | Selo |
-|---|---|---|
-| **Conduta `SUITE-ANTES-DO-OPUS`** | O opus **final** vem depois da suite inteira verde da árvore da obra. O registro histórico diz que, sem esse verde, a leitura final “nao conta”. `CLAUDE.md:421–431` · `app/docs/PISTA.md:101–114` | O selo de documentação cobra o comando canônico, os nomes e o bloco histórico. `bin/tests/test_suite_sh.sh:22–53` · `bin/tests/test_claude_md_regras_preservadas.sh:55–77` · `bin/tests/pista_blocos.ref:10` |
-| **`bin/suite.sh`** | `_suite_inteira` julga a seleção **efetiva**, já preenchida por `--volta`. É inteira se a seleção está vazia ou cobre todos os módulos `test*.py` descobertos nas `LABELS`. Classe ou método conta como cobertura do módulo. Busca que falha ou árvore sem módulos também pede motivo. Se inteira, exige `^(pre-opus\|pouso) [A-Za-z0-9][A-Za-z0-9_.-]*$`. Recusa rc 2: `suite INTEIRA so com --motivo "pre-opus <OBRA>" ou "pouso <OBRA>"`. A guarda roda na chamada da suite. `bin/suite.sh:252–298` | `bin/tests/test_suite_motivo.sh:60–78`, `:109–116`, `:135–152`. A rota da inteira pré-opus tem selo próprio em `bin/tests/test_suite_rota_pista.sh:173–186`, `:442–443`. |
-| **Disjuntor e hook Claude** | `PreToolUse` chama `_pretool`. Para `Agent` do tipo `verificador` em leitura final, cobra ID legível e varre o B3, seguindo depois pelas regras de papel, modelo e B4. O ramo não lê resultado de suite. A recusa específica é `DISJUNTOR B3-SEM-OBRA: verificador final sem ID de obra legivel`. O perfil do agente pede ID, diff e log do RED e atribui a execução da suite ao Code. `.claude/settings.json:62–68` · `bin/disjuntor.py:1821–1822`, `:2253–2274` · `.claude/agents/verificador.md:3–7` | O selo cobra a recusa por **ID**, em `bin/tests/test_disjuntor.sh:1588–1597`. Selo de recusa de Agent sem suite [nao verificado]. |
-| **`commit_msg.sh` e hooks Git** | Com `MERGE_HEAD`, `commit_msg.sh` chama `--merge-obra` e imprime `commit_msg: MERGE RECUSADO pelo B3 (rc $rcb)` se o juiz falhar. Depois cobra a forma da `LEI-AKITA`. Esses predicados leem mensagem e estado do B3. Os wrappers delegam, e `hooks.sh check` cobra a delegação e `merge.ff=false`, com recusa própria quando faltam. `bin/commit_msg.sh:29–42` · `bin/hooks.sh:18–53`, `:65–83` | `bin/tests/test_disjuntor.sh:1249–1258`, `:1306–1321` · `bin/tests/test_hook_mensagem_em_toda_copia.sh:46–55`, `:90–101` · `bin/tests/test_hook_nao_e_copia.sh:25–43` |
-| **Pre-push e pouso** | O pre-push executa todas as `LABELS` no commit empurrado, com reaproveitamento da régua verde nas condições de identidade da árvore e do commit. Propaga o rc da suite e imprime `FAIL`/`ERROR`/`FAILED` quando presentes. Sem veredito, emite `NAO RODOU` ou `a suite NAO CHEGOU A RODAR`. No pouso, `pista_certifica.sh` exige SHA e camadas correspondentes, rótulos exatos, `Found - podados == Ran`, rc 0 e `oom=0`. Um recorte falha com `run nao e a suite inteira` sob `NAO CERTIFICA`. São portas de push e pouso. `bin/pre-push.sh:43–76`, `:141–157`, `:184–200` · `bin/pista_certifica.sh:41–100` | `bin/tests/test_prepush_veredito_e_o_rc.sh:58–69` · `bin/tests/test_prepush_testa_o_commit.sh:59–105` · `bin/tests/test_suite_uma_vez_por_arvore.sh:77–84` · `bin/tests/test_pista_certifica.sh:90–105` |
-| **`verobras`** | O alias chama `~/verobras.py`. O quadro atribui estados a `ver`, `opus` e `pou` por nomes de arquivos, conteúdo e `git log`. Nesse fluxo não há coluna, contador ou recusa para suite inteira pré-opus. `/home/ronald/.bashrc:144` · `/home/ronald/verobras.py:11`, `:41–71`, `:73–91` | Selo correspondente [nao verificado]. | [nao verificado]
-
-## 2. Onde a reprovação bloqueia hoje
-
-- **Conduta, nova volta e escalonamento.** O item 5(b) manda conferir o achado e, se procedente, corrigir e chamar o Codex de novo. O 5(c) manda voltar a 5(a) após reprovação do **opus final**. O 5(d) manda escalar **com mais de 3 voltas Codex**, quando o PRINCÍPIO exige opus, e identifica essa leitura como escalonada. A chamada automática do escalonado e a abertura automática de nova volta [nao verificado]. `CLAUDE.md:421–431` · `app/docs/PISTA.md:102–114`
-- **Código, entrada Codex no B3.** O wrapper grava `<resposta>.id` quando a chamada produziu aquela resposta com rc 0. `triagem()` valida o papel `verificador` e o SHA da resposta e grava a decisão em `logs/codex/triagem.log`. A última decisão por chamada vence. Uma chamada com vários achados vale uma volta, e só `procedente` entra na contagem. A **3ª procedente** da mesma obra arma o B3. `bin/codex_pergunta.sh:853–862` · `bin/disjuntor.py:135–138`, `:874–962`, `:994–1019` · `bin/tests/test_disjuntor.sh:1205–1216`
-- **Código, entrada Opus no B3.** `_reprovacoes_finais()` lê transcripts de `agentType=verificador`. `_veredito_e_obra()` exige ID, prompt reconhecido como final e primeira linha do `SubagentHandback` começando com `REPROVADO`. A **1ª** reprovação assim reconhecida arma o B3. O código decide pelo prompt, com exclusão de leitura de desenho e da frase `nao e a leitura final`. Há um precedente em que o RELATO diz “opus escalonado” e a trilha registra “LEITURA FINAL”, com merge recusado. O prompt original desse caso [nao verificado]. `bin/disjuntor.py:135–136`, `:180–184`, `:602–604`, `:649–671`, `:839–853` · `bin/tests/test_disjuntor.sh:342–349`, `:413–421` · `app/docs/RELATO.md:602` · `logs/sessao/disjuntor.log:872`
-- **Estado e leitores.** `decide_b3()` lê transcripts, triagem e topo do RELATO. Sob trava, grava em `logs/sessao/disjuntor_estado.json` o `b3[obra]` com `reprovados`, `codex`, `disparado` e a fotografia do topo. Reconhece `DESENHO` ou `ERRO-BOBO` para liberar e há rearme explícito. `PreToolUse` atualiza o estado antes de `git commit`, da chamada Codex verificador com obra e do Agent final com obra. O Stop atualiza e emite **AVISO**. As novas chamadas seguem mesmo com a obra armada, embora a mensagem histórica de disparo ainda diga que seriam negadas. `bin/disjuntor.py:124`, `:340–377`, `:729–757`, `:965–1059`, `:1103–1128`, `:2231–2262` · `bin/hook_stop_fila1.py:1305–1323`, `:1518–1526`
-- **Bloqueio efetivo, merge.** `commit_msg.sh` chama `merge_obra()` com a mensagem do commit. `estado_b3()` devolve `PARADA`, `LIVRE` ou `NAO_SEI`. O juiz retorna rc 1 sem `OBRA:` legível, 3 para obra parada e 4 para `NAO_SEI`. O `PreToolUse` também recusa pedido explícito de fast-forward, que escaparia do commit-msg. Esse é o bloqueio executável por reprovação. `bin/commit_msg.sh:29–38` · `bin/disjuntor.py:1086–1100`, `:1282–1315`, `:2222–2224` · `bin/tests/test_disjuntor.sh:1249–1258`
-
-## 3. Classificador de mão única e mão dupla
-
-O PRINCÍPIO da §7b dá a regra por efeito e a classificação padrão por caminho: `ponto/`, `folha/`, fechamento, célula, export e holerite. A PARADA trata separadamente o motor v2 e **apagar ou voltar ao HEAD** arquivo usado em produção. Na árvore examinada, o disparo do B3 usa contadores por obra, e a suite usa seleção e motivo. Nenhum dos dois lê uma classe comum. `CLAUDE.md:255–264`, `:274–277` · `bin/disjuntor.py:991–1019` · `bin/suite.sh:272–298`, `:500–506`
-
-| Fonte existente | Classificação que já faz |
-|---|---|
-| `PROIBIDOS` do `_INVENTARIO_PY` e `OPUS_CONSTROI_TAGS` | O wrapper tem regras por caminho para motor, porta da célula, schema, `bin/` e outras zonas. O disjuntor lê seis tags dessa lista para decidir **quem pode construir**, aplicadas aos caminhos declarados no brief. `bin/codex_pergunta.sh:162–177` · `bin/disjuntor.py:1958–1961`, `:2023–2039`, `:2102–2113` |
-| `VIZINHANCA_DO_DINHEIRO` | Lista por substring do fabricante. Cobre motor, folha, holerite, porta da célula e alguns módulos vizinhos. Tem cobertura parcial da §7b. `bin/fabricante_alvo.py:29–37`, `:287–301` |
-| `PROPORCAO-POR-RISCO` | Já existe um juiz de **classe A/B** por diff, `selo_proporcao.py`. Lê a lista e as exceções de `CORTES.md` na base. Classe B exige todos os caminhos em templates, estáticos, testes ou módulos de leitura admitidos. `bin/` cai em A por padrão, embora o aval `POUSA-COM-LISTA` trate instrumento de `bin/` como mão dupla. `bin/selo_proporcao.py:11–35`, `:84–126`, `:130–174` · `app/docs/CORTES.md:510–512` · `logs/AVAIS-1515/POUSA-COM-LISTA-2611-1825.txt:1` |
-| `LABELS` | Universo de apps da suite e validação do primeiro segmento do rótulo. `bin/regua.sh:23` · `bin/suite.sh:195–226` |
-
-**Fonte comum registrada para F1/F2.** O RELATO vivo registra a decisão de usar `bin/mao_unica.py` sobre o diff do merge. O brief F1 nomeia `mao_unica(caminhos)` e o consumidor `merge_obra`, preservando a contagem em `decide_b3`. Na F2, os pontos de decisão a confrontar com essa mesma fonte são a triagem e o escalonamento de CODEX 5(b)–(d) e a escolha da seleção pré-opus antes da guarda e da rota de `suite.sh`. O brief descreve um arquivo novo e o despacho põe F2 depois de F1 na mesma cópia. `app/docs/RELATO.md:13658–13659` (vivo) · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:2`, `:8` · `CLAUDE.md:425–431` · `bin/suite.sh:198–226`, `:272–298`, `:500–506`
-
-## 4. Diff, labels e ROTA PISTA
-
-- **Mapeamento já existente.** `volta_intermediaria.sh` enumera `.py` tocados para Ruff, roda o selo do disjuntor e delega a seleção a `suite.sh --volta <base>`. A suite chama `vizinhos_da_volta.py` e filtra a saída pelas `LABELS`. O helper lê o diff `<base>..HEAD` sob `app/`, exclui `app/docs/`, converte teste tocado em label pontuado, inclui o app inteiro de migration tocada, busca vizinhos por AST/regex e junta selos globais. Isso seleciona **obra + vizinhos + globais**. Função que devolva os apps donos de **todos** os caminhos tocados [nao verificado]. `bin/volta_intermediaria.sh:19–35` · `bin/suite.sh:195–226` · `bin/vizinhos_da_volta.py:4–18`, `:25–45`, `:92–132`
-- **Árvore efetivamente testada.** `arvore_do_push.sh` materializa, compara e monta `app/` do commit. Na ROTA PISTA, quem faz a foto é `suite.sh`: HEAD com `app/` limpo, foto Git de `app/` quando sujo. A seleção de `--volta` já foi calculada até HEAD. `bin/arvore_do_push.sh:6–17`, `:85–103` · `bin/suite.sh:198–216`, `:417–440`
-- **`--only` na pista.** Com `--dir` e recorte efetivo, a rota envia `pede <sha> [--parallel N] --only <labels>`. A inteira com motivo pré-opus também vai, com todas as `LABELS` quando não há seleção explícita. Antes do aceite pode cair na VM. Depois dele usa o rc e o log do mesmo job, ou rc 71 de infraestrutura, com retorno à VM na recusa comprovada sem execução. O selo exige `appA` no recorte, `appA appB` na inteira e `appA.tests` no `--volta` simulado, com espera e log do mesmo ID e sem trava de VM no caso aceito. Para certificar **pouso**, o juiz confere a seleção executada no `AMBIENTE argv=`, inclusive quando o transporte usou `--only`. `bin/suite.sh:319–342`, `:440–506` · `bin/tests/test_suite_rota_pista.sh:152–186`, `:198–240`, `:442–446` · `bin/pista_certifica.sh:61–92`
-
-## 5. Medida do Pronto
-
-**Suites inteiras por obra.** O `verobras.py` atual não faz a contagem pedida pelo aval. A coluna `pou` decorre de `POUSO` no Git ou de arquivo `pouso.(certifica|pista|espera)` nos logs. O registro que distingue tecnicamente a inteira de um recorte está no log do run (`AMBIENTE argv=`), cruzado pelo certificador com SHA, job, rótulos e contagens. `/home/ronald/verobras.py:41–71`, `:73–91` · `app/core/tests/test_ambiente_do_run.py:52–56` · `bin/pista_certifica.sh:47–92` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1`
-
-**Tokens por papel.** `chamadas.log` grava o papel no `ini` e o `thread_id`, rc e duração no `fim`. Reproduzi a métrica do ESTADO: casar por `(obra, hash12, pid)`, selecionar chamadas iniciadas em **26/11/2026**, localizar a sessão `.jsonl` pelo `thread_id` e somar o último `payload.info.total_token_usage.total_tokens` por papel. Entram apenas sessões pareadas com total registrado. `bin/codex_pergunta.sh:561–571`, `:608–609` · `bin/codex_limite_estado.py:49–68`, `:127–128`, `:185–213` · `bin/disjuntor.py:2434–2441`, `:2645–2649`
-
-| Papel | Até 20:38:04 (`chamadas.log:6878`) | Até 21:29:38 (`chamadas.log:6904`) |
-|---|---:|---:|
-| Censo | 33.760.841 | 33.760.841 |
-| Construtor | 140.054.611 | 151.328.056 |
-| Leitura | 98.103.363 | 101.856.461 |
-| Sonda | 870.360 | 870.360 |
-| **Verificador** | **157.754.998 (58 chamadas)** | **168.862.787 (64 chamadas)** |
-| **Total** | **430.544.173** | **456.678.505** |
-| **Fatia do verificador** | **36,64%** | **36,98%** |
-
-A referência de **157,8 M** do aval é reproduzível pelo subtotal de `verificador` às 20:38:04. A metade da referência publicada é **78,9 M**. O horário em que o aval colheu o número [nao verificado]. [`chamadas.log:6878`](/home/ronald/saas-hasner/logs/codex/chamadas.log:6878) · [`chamadas.log:6904`](/home/ronald/saas-hasner/logs/codex/chamadas.log:6904) · `bin/codex_limite_estado.py:185–213` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1`
-
-## 6. Trechos do CLAUDE.md e selos sensíveis
-
-- **§3, `CLAUDE.md:95–110`.** Comando canônico, rota do recorte e da inteira pré-opus, e regra `INTEIRA SO COM MOTIVO`. `test_suite_sh.sh` recorta a partir do título até a primeira linha sem `\`. Se o comando canônico passar a ser só `--only` ou `--volta`, falha a exigência de `bin/suite.sh --motivo "(pre-opus|pouso) <OBRA>"` com um único `--motivo` no bloco. `bin/tests/test_suite_sh.sh:22–53`
-- **§7b, `CLAUDE.md:256–265`, `:284–287`, `:370–374`, `:421–439`.** O PRINCÍPIO define classe e proporcionalidade. PARADA 4 liga reprovação final ao B3. CODEX 5(b) disciplina nova volta, 5(c) exige inteira verde antes do final e volta a (a) na reprovação, e 5(d) disciplina o escalonamento. O item 6 mede voltas, triagem e reprovação. `bin/tests/test_claude_md_regras_preservadas.sh` exige os nomes `CODEX-PRE-VERIFICADOR` e `SUITE-ANTES-DO-OPUS` e o ponteiro no CLAUDE. Cobra hash literal do bloco **do `PISTA.md`**. Uma mudança só na prosa de 5(b)–(d) preserva esses predicados se os nomes e o ponteiro seguirem presentes. Uma mudança no bloco histórico altera o hash. `bin/tests/test_claude_md_regras_preservadas.sh:47–77` · `bin/tests/pista_blocos.ref:10` · `app/docs/PISTA.md:101–117`
-- **Recorte vizinho.** `test_agente_no_modelo.sh` lê RAIAS 3 e CODEX 2 entre cabeçalhos fixos e cobra papel, espera e as seis tags de autoria. Esse recorte termina antes de CODEX 5. Já `test_suite_motivo.sh` e `test_suite_rota_pista.sh` cobram o comportamento executável da inteira pré-opus. `bin/tests/test_agente_no_modelo.sh:255–292` · `bin/tests/test_suite_motivo.sh:60–78`, `:109–116` · `bin/tests/test_suite_rota_pista.sh:173–186`, `:442–443`
-
-## 7. Perguntas de lei abertas — 6 (0 = abre)
-
-1. Para escritor fora da lei em **mão dupla**, o aval mantém o opus **final**. Se ele reprovar, ainda vale a volta de 5(c), ou o achado segue com a lista? O que acontece com a revisão obrigatória de concorrência, schema e multi-tenant quando a obra for classificada como mão dupla? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `CLAUDE.md:257–263`, `:427–431`
-2. Qual é o universo comum de mão única? O F1 enumera motor, dinheiro, exportada e apagar arquivo de prod. O F2 diz “arquivo de prod”. A §7b traz uma lista de caminhos mais ampla e o brief F1 inclui migrations. “Arquivo de prod” vale para qualquer edição ou para as operações nomeadas na PARADA? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F1-2611-2125.txt:1` · `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:8` · `CLAUDE.md:257–262`, `:274–277`
-3. Em mão dupla, “B3 só dispara em mão única” veda armar `b3[obra].disparado` ou só veda recusar o merge? E, onde permanecer o escalonamento, 5(d) conserva **mais de três voltas totais**, com o B3 na **terceira procedente**? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F1-2611-2125.txt:1` · `logs/CUSTO-DE-COORDENACAO/brief_f1.md:8` · `CLAUDE.md:428–429` · `bin/disjuntor.py:1008–1019`
-4. “Apps tocados” significa donos diretos dos caminhos ou inclui vizinhos e selos globais de `--volta`? Qual base e qual árvore valem se a foto executada inclui mudanças ainda fora de HEAD? Qual é a exigência para um diff só de `bin/`, `CLAUDE.md`, docs ou caminhos sem label? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `bin/vizinhos_da_volta.py:4–18`, `:25–30` · `bin/suite.sh:198–216`, `:417–440`
-5. A exceção de inteira pré-opus vale só para **motor ou dinheiro**, como diz o item 2, ou também para os outros casos classificados como mão única, como exportada e arquivo de prod? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `CLAUDE.md:257–264`, `:427–431`
-6. Para o Pronto de **uma inteira por obra**, a unidade é execução, árvore certificada ou pouso? Como a contagem atribui uma suite compartilhada em comboio e uma inteira de pre-push que de fato rodou? `logs/AVAIS-1515/CUSTO-DE-COORDENACAO-F2-2611-2128.txt:1` · `CLAUDE.md:347–352` · `bin/pre-push.sh:43–75`, `:184–189` · `/home/ronald/verobras.py:41–71`
-
-## 26/11 21:32 · sessao 1fb8d8156ddb · O30-LOTE-MINIMA · construtor · origem=Code
-
-Implementei a rota `relatorios:atestados_lote`, com prévia, CSV e ZIP. A view exige sessão, as três permissões e uma empresa visível. O recorte inclui colaboradores de qualquer situação e usa o catálogo de tipos médicos. [relatorios/urls.py:15](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/urls.py:15) [relatorios/views.py:344](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:344)
-
-**Pendência para o opus.** A view delega a abertura dos originais ao ZIP. A chamada existente a `linhas()` também abre anexos indiretamente para identificar o formato, inclusive na prévia e no CSV. A exigência literal de abertura exclusiva em `zip_bytes()` fica pendente. [ponto/services/atestados_lote.py:54](/home/ronald/wt-codex-o30-lote-minima-212251/app/ponto/services/atestados_lote.py:54) [ponto/services/dia_decidido.py:667](/home/ronald/wt-codex-o30-lote-minima-212251/app/ponto/services/dia_decidido.py:667) [ponto/models.py:855](/home/ronald/wt-codex-o30-lote-minima-212251/app/ponto/models.py:855)
-
-### Arquivos alterados
-
-- [relatorios/views.py:337](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:337)
-- [relatorios/urls.py:15](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/urls.py:15)
-- [templates/relatorios/atestados_lote.html:1](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:1)
-- [templates/relatorios/atestados.html:12](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados.html:12)
-- [relatorios/tests/test_atestados_lote_tela.py:19](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/tests/test_atestados_lote_tela.py:19)
-
-Conferi **0 ocorrências de `except` nas adições**, incluindo os dois arquivos novos, e a sintaxe Python dos três arquivos alterados. Renderização, suíte, RED e mutantes ficam para o Code. [nao verificado em execução] [nao verificado]
-
-### Censo dos parâmetros GET
-
-| Parâmetro | Quem escreve | Quem lê |
-|---|---|---|
-| `empresa` | Seletor do formulário | `int_ou` e busca na lista de `empresas_visiveis()`. Sem empresa válida, a view retorna o formulário antes de consultar os lançamentos. [template:11](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:11) [view:351](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:351) |
-| `mes`, `ano` | Campos de competência | `mes_ou`, `ano_ou` e `janela()` com a empresa selecionada. [template:26](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:26) [view:355](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:355) [view:376](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:376) |
-| `de`, `ate` | Campos de período livre | `DateField` do Django valida o par ISO antes de enviá-lo a `janela()`. Usei `DateField` porque `core.sanitiza` oferece conversão de inteiros, mês e ano. [template:31](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:31) [view:337](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:337) [core/sanitiza.py:11](/home/ronald/wt-codex-o30-lote-minima-212251/app/core/sanitiza.py:11) |
-| `status` | Seletor «Aprovadas» ou «Todos» | A view passa `['aprovada']` por padrão e `None` para `todos`. [template:19](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:19) [view:378](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:378) |
-| `formato` | Links da prévia, preservando os filtros | A view chama `csv_bytes()` ou `zip_bytes()` e responde com `attachment`. A chave ausente leva à prévia. [template:43](/home/ronald/wt-codex-o30-lote-minima-212251/app/templates/relatorios/atestados_lote.html:43) [view:383](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/views.py:383) |
-
-### RED e mutantes para o Code
-
-O RED exige que o tipo médico cadastrado `acompanhante_lote` apareça para um colaborador desligado. O mutante com `['atestado']` exercita a rota e deve falhar nessa asserção. [teste:108](/home/ronald/wt-codex-o30-lote-minima-212251/app/relatorios/tests/test_atestados_lote_tela.py:108) [nao verificado] [nao verificado]
-
-Execute a partir de `app/`, no ambiente de testes do Code. O auxiliar restaura o arquivo após cada mutante. A primeira chamada remove a rota para reproduzir o RED da base. Rode as chamadas uma por vez e confira a falha no teste indicado. [config/settings/ci.py:6](/home/ronald/wt-codex-o30-lote-minima-212251/app/config/settings/ci.py:6) [nao verificado] [nao verificado]
-
-```bash
-mutante() {
-  PYTHONDONTWRITEBYTECODE=1 python3 -B - "$@" <<'PY'
-from pathlib import Path
-from subprocess import run
-import sys
-
-nome, antes, depois, teste = sys.argv[1:] [nao verificado]
-arquivo = Path(nome)
-original = arquivo.read_bytes()
-alvo = antes.encode()
-assert original.count(alvo) == 1, (nome, antes)
-prefixo = 'relatorios.tests.test_atestados_lote_tela.AtestadosLoteTelaTest.'
-try:
-    arquivo.write_bytes(original.replace(alvo, depois.encode(), 1))
-    resultado = run([sys.executable, '-B', 'manage.py', 'test',
-                     '--settings=config.settings.ci', prefixo + teste]) [nao verificado]
-finally:
-    arquivo.write_bytes(original)
-raise SystemExit(resultado.returncode)
-PY
-}
-
-view=relatorios/views.py
-red=test_MORDE_tipo_medico_do_cadastro_e_desligado_entram_na_previa
-acesso=test_acesso_exige_sessao_e_as_tres_acoes
-status=test_status_padrao_aprovada_e_todos_inclui_rejeitada
-
-mutante relatorios/urls.py "path('atestados/lote/', views.atestados_lote, name='atestados_lote')," "" "$red"
-mutante "$view" 'tipos = sorted(_CATV.TIPOS_MEDICOS)' "tipos = ['atestado']" "$red"
-mutante "$view" 'empresa=empresa, de=de, ate=ate)' 'de=de, ate=ate)' "$red"
-mutante "$view" 'previa=_LOTE.previa(linhas)' 'previa=_LOTE.previa([])' "$red"
-mutante "$view" "or not tem_acao(request.user, 'ver_folha')" 'or False' "$acesso"
-mutante "$view" "or not tem_acao(request.user, 'ver_ausencias')" 'or False' "$acesso"
-mutante "$view" 'e for e in empresas if e.pk == empresa_id' \
-  'e for e in Empresa.objects.all() if e.pk == empresa_id' \
-  test_sem_empresa_ou_com_empresa_oculta_mostra_so_o_formulario
-mutante "$view" 'empresa=empresa, de=de, ate=ate)' 'empresa=empresa)' \
-  test_periodo_livre_prevalece_sobre_competencia
-mutante "$view" "status = None if todos_status else ['aprovada']" 'status = None' "$status"
-mutante "$view" 'status = None if todos_status else' 'status =' "$status"
-mutante "$view" 'if tipos else []' '' test_catalogo_sem_tipos_medicos_mostra_previa_vazia
-mutante "$view" '_LOTE.csv_bytes(linhas)' "b''" test_csv_entrega_os_bytes_do_servico
-mutante "$view" '_LOTE.zip_bytes(linhas)' '_LOTE.zip_bytes([])' \
-  test_zip_contem_os_documentos_com_os_nomes_do_servico
-mutante templates/relatorios/atestados.html 'Lote de atestados (CSV/ZIP)' '' \
-  test_atestados_acumulados_renderiza_o_link_para_o_lote
-```
-
-**Módulos vizinhos para a sessão.** [nao verificado]
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci \
-  relatorios \
-  core.tests.test_rota_pede_sessao \
-  core.tests.test_int_cru_gate \
-  core.tests.test_contract_excecoes_engolidas \
-  core.tests.test_todo_template_compila \
-  ponto.tests.test_atestados_lote
-```
-
-_8507 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8511 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
