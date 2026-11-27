@@ -1,7 +1,68 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 17:56** · publicado em **27/11/2026 18:02** (UTC-3)
+> Ultima resposta processada: **27/11/2026 18:04** · publicado em **27/11/2026 18:08** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 18:04 · sessao b3655e2c03f2 · FERIADO-UM-JUIZ · construtor · origem=Code
+
+## FERIADO-UM-JUIZ c7
+
+| Bloqueio | Sítio da cura ou classificação | RED e mutante |
+|---|---|---|
+| **1. Borda 20/21 com troca 6x1 → 12x36** | Registrei o `expectedFailure` com `PAREI ! FERIADO-L097-MOTOR`. Ao executar a asserção sem o marcador, a competência 12 ficou vazia nos dois cenários. `ponto/tests/test_feriado_um_juiz.py:683` | RED em `ponto/tests/test_feriado_um_juiz.py:699`, executado por `controle`. |
+| **2. Falha de lavra** | Os dois handlers marcam rollback e pulam a contagem. O retorno `0` faz `recalcular_na_revisao` levantar `RuntimeError`. O erro sai pelo caminho existente de `restaurar_batida` e desfaz o `atomic` da revisão. `ponto/services/fechamento.py:1272`, `:1335`, `:1892`, `ponto/registro_batida.py:319`, `ponto/services/par_relampago_na_lista.py:479` | Na c6, as duas injeções devolveram `1` e a restauração seguiu sem erro. Os três mutantes c7 de contagem e revisão reproduziram essas falhas. `ponto/tests/test_feriado_um_juiz.py:43`, `:49`, `:187`, `ponto/tests/feriado_um_juiz_mutantes.py:78` |
+| **3. Oráculo com `rubricas={}`** | Períodos com minutos acionam a validação de procedência mesmo com mapa vazio. Sem pares, o ajuste continua sendo lavrado. `ponto/services/dia_pago.py:259`, `:316`, `ponto/tests/test_feriado_um_juiz.py:205` | Na c6, o `bulk_create` simulado recebeu uma linha diária de 4 h e o ajuste. O RED agora exige `ValueError` antes de qualquer escrita. O mutante que restaura `if rubricas:` reproduziu a falha. `ponto/tests/test_feriado_um_juiz.py:189`, `ponto/tests/feriado_um_juiz_mutantes.py:91` |
+| **4a. Mensal 8,04 h × lavra 8,03 h** | **Pré-existente em `59600163c`.** O mensal arredondava as horas regulares antes de somar a FT sem escala certa. A lavra acumulava os minutos dos dois períodos sem arredondar por dia. `59600163c:app/ponto/services/fechamento.py:922`, `:1007`, `59600163c:app/ponto/services/dia_pago.py:178`, `:264`, `:550` | Controle de 8,04 h preservado em `ponto/tests/test_feriado_um_juiz_porta.py:421`. |
+| **4b. Relavra recria linhas e carimbos** | **Pré-existente em `59600163c`.** A lavra já usava `delete` e `bulk_create`, o `DiaPago` já tinha `lavrado_em` automático e o mensal já carimbava `derivado_em`. `59600163c:app/ponto/services/dia_pago.py:359`, `59600163c:app/ponto/models.py:380`, `59600163c:app/ponto/services/fechamento.py:1167`, `:1213` | Origem conferida no código da base. |
+| **4c. POST do TXT lê apuração mais nova** | **Pré-existente em `59600163c`.** O POST já recalculava em modo leitura e passava os objetos recém-apurados à montagem. `59600163c:app/folha/views.py:214`, `:275` | Origem conferida no código da base. |
+| **5. Portão da sessão** | Medição de frota, pouso, apply, reversão e DIFF do TXT **[nao verificado]**. | — | [nao verificado]
+
+**Cobertura de outubro.** O teste adicionado leva 330 min de FT em feriado 6x1 com escala incerta, sob L-097, das batidas ao mensal e às duas lavras. Exige 5,5 h comuns. A fixture de novembro foi preservada. A execução ORM de outubro e seu mutante ficam **[nao verificado]**. `ponto/tests/test_he100_dia_sem_previsto.py:179`, `:234`, `:251`, `ponto/tests/feriado_um_juiz_mutantes.py:250`
+
+**Execução local.** A base c6 apresentou cinco falhas de asserção em quatro testes. Na cópia, o controle rodou 43 testes com uma falha esperada e os 41 estruturais passaram. Os quatro mutantes c7 sem banco e os três c5 reancorados deram o resultado previsto. `ponto/tests/feriado_um_juiz_mutantes.py:77`, `:110`, `:349`, `:441`, `:489`
+
+### Comandos recortados
+
+RED na base, controle e estruturais. `ponto/tests/feriado_um_juiz_mutantes.py:349`, `:441`, `:489`
+
+```bash
+export PYTHONDONTWRITEBYTECODE=1
+python3 -m ponto.tests.feriado_um_juiz_mutantes base_c7
+python3 -m ponto.tests.feriado_um_juiz_mutantes controle
+python3 -m ponto.tests.feriado_um_juiz_mutantes estruturais
+```
+
+Mutantes sem banco. `ponto/tests/feriado_um_juiz_mutantes.py:77`, `:110`
+
+```bash
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_motor_conta_falha
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_oraculo_conta_falha
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_revisao_ignora_contagem
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_rubricas_vazias_dispensam_procedencia
+python3 -m ponto.tests.feriado_um_juiz_mutantes c5_motor_sem_sinal_de_rollback
+python3 -m ponto.tests.feriado_um_juiz_mutantes c5_oraculo_sem_sinal_de_rollback
+python3 -m ponto.tests.feriado_um_juiz_mutantes c5_recusa_lavra_sem_rubricas
+```
+
+Recorte ORM para o Code. `ponto/tests/test_he100_dia_sem_previsto.py:234`, `ponto/tests/test_feriado_um_juiz_porta.py:462`, `ponto/tests/feriado_um_juiz_mutantes.py:250`
+
+```bash
+python3 manage.py test --settings=config.settings.ci \
+  ponto.tests.test_he100_dia_sem_previsto.DiaSemPrevistoNoOraculoTest \
+  ponto.tests.test_feriado_um_juiz_porta.FeriadoUmJuizPortaTest.test_RED_c5_falha_no_bulk_create_do_oraculo_preserva_as_tres_gravacoes
+python3 -m ponto.tests.feriado_um_juiz_mutantes c7_classifica_feriado_em_outubro --settings=config.settings.ci
+```
+
+### Arquivos alterados
+
+- `ponto/services/fechamento.py:1272`
+- `ponto/services/dia_pago.py:259`
+- `ponto/tests/test_feriado_um_juiz.py:43`
+- `ponto/tests/test_he100_dia_sem_previsto.py:234`
+- `ponto/tests/feriado_um_juiz_mutantes.py:77`
+
+**`except` no diff:** 0 adicionados, 0 removidos. `ponto/services/fechamento.py:1272`, `:1335`  
+**Suíte completa e certificação Code/Opus:** **[nao verificado]**. [nao verificado]
 
 ## 27/11 17:56 · sessao 92429ba11e11 · FERIADO-UM-JUIZ · verificador · origem=Code
 
@@ -684,31 +745,4 @@ bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
 - Recusa cabe no `LogAuditoria`, JSON com porta, colaborador e módulo, por `core.observ.evento`. Já há ações de recusa de nascer/reabrir para outros motivos, com trio equivalente e dedup de ciclo, no veto de dia. `FollowupChamado` exige um chamado e serve apenas quando já existe objeto. `app/core/models.py:285-307`; `app/core/observ.py:94-138`; `app/chamados/models.py:1221-1254,1842`; `app/chamados/services/nota.py:75-89`.
 - O retorno de recusa precisa ser consumido pelos chamadores. A abertura humana e criadores de disputa já desreferenciam ou registram followup sobre o resultado sem testar `None`. `app/chamados/views.py:141-143,196-210`; `app/chamados/services/abertura.py:194-202`; `app/chamados/services/disputa_emissao.py:598-606,1134-1142,1369-1376`; `app/chamados/services/nota.py:87-107`.
 
-## 27/11 16:55 · sessao e83cdc28581f · - · - · origem=Ronald (tmux)
-
-## Item 4 — pergunta respondida sem veredito
-
-- O desligamento efetivo percorre apenas disputas abertas, pula as que têm resposta sem veredito, fecha as restantes pela porta `FECHOU_DESLIGAMENTO` e depois tenta `encerrar` cada chamado em `NAO_FECHADOS`. A disputa recusa resposta sem veredito antes de julgar as vivas, inclusive sob trava. Para as vivas que passam, a porta de desligamento compartilha com `admin_encerra` o carimbo `admin_decidiu`, a linha `DecisaoPergunta.SILENCIO` e a trilha. O signal tenta reconciliar o pai. `encerrar` ainda pode recusar pela pergunta viva ancorada. `app/colaboradores/services/desligamento.py:164`, `:182`; `app/chamados/models.py:2123`, `:2175`, `:2184`, `:2199`, `:1779`, `:429`; `app/chamados/signals.py:29`, `:43`.
-- O censo de 13/11 ficou velho quanto à definição. A lista usa `DecisaoPergunta.composta`, exige **instante e texto** pelo juiz L-130, sem validação nem materialização, e exclui dia trancado salvo `ignorar_tranca=True`. A guarda do chamado busca perguntas ancoradas também em disputas fechadas, universo que o vigia conhece e que o laço atual do desligamento pula. `app/chamados/models.py:2000`, `:2020`, `:2041`, `:361`; `app/chamados/juizes.py:1644`; `app/chamados/services/vigia_fio.py:746`; `app/colaboradores/services/desligamento.py:164`.
-- A via própria de desligamento precisa encerrar **respondidas e mudas**, sem validação de mérito. O registro de 13/11 já substitui expressamente o corte de 28/10 que mandava manter a respondida viva. LU-11 confirma as mudas, LU-12 diz que só o chamado reabre. O valor literal da nova via ainda não está na lista de choices, que ocupa campo de 24 caracteres. `app/docs/BACKLOG.md:732`, `:1211`; `app/docs/PROMPTS.md:2222`; `app/docs/CORTES.md:485`, `:545`, `:546`; `app/chamados/models.py:2836`, `:2872`.
-- O molde é **o ramo legado** `VIA_COMPETENCIA_TRANCADA` com carimbo no degrau anterior à resposta do C6 e seu espelho SQL. A tranca atual mata por leitura e grava Pauta informativa ao DP. A via antiga continua legível e tem sua reabertura própria. `app/chamados/models.py:2835`, `:3774`, `:3388`, `:3703`; `app/chamados/juizes.py:1507`, `:1514`; `app/chamados/services/competencia_trancada.py:126`, `:133`, `:137`, `:202`, `:236`, `:241`, `:280`.
-- A lista `VIAS_QUE_VENCEM_A_RESPOSTA` afeta C6 e SQL. Acrescentar apenas às identidades não vence o retorno antecipado da resposta. `carimbar` aplica o carimbo com `resposta=None` e `lavrar_veredito=False` por padrão e pode usar o C6 para uma via terminal fora de `vias_que_encerram_por_identidade`. `carimbar_identidade` exige pertinência à sua lista. O juízo de lastro é independente e, sem ramo explícito, entende escolha carimbada como fato, hora/data-hora exige prova, texto exige completude/retratação. Não confundir terminalidade com `VIAS_FORA_DO_FATO`, que rege identidade, dedup e índices. `app/chamados/juizes.py:729`, `:756`, `:758`, `:864`, `:1514`, `:1521`, `:1541`; `app/chamados/models.py:2821`, `:2835`, `:3414`, `:3434`, `:3462`, `:3484`, `:3511`, `:3544`, `:3036`, `:3067`, `:3947`, `:3953`; `app/chamados/veredito_lavrado.py:262`.
-- A reabertura permitida de chamado hoje dispara `ressuscitar_perguntas`. Seu universo inclui perguntas mudas carimbadas, simula descarimbar, limpa os campos e pode chamar `DisputaSupervisao.reabrir_sistema`. Isso deve ser coberto para LU-12. `reabrir_admin` hoje pode abrir diretamente a disputa e plantar conversa antes de tentar o chamado. `app/chamados/models.py:1517`, `:1549`, `:1582`, `:1599`, `:1739`, `:1749`, `:2396`, `:2433`; `app/chamados/services/acoes_disputa.py:296`; `app/docs/CORTES.md:546`.
-- Mostrar como informativa precisa contemplar `estado` (`RESOLVIDA` para morta carimbada), `estado_aplicacao_pergunta` (hora respondida carimbada cai em `aplicada` fora das duas vias da tabela atual), o card com fallback do choice e o explicador, que lê lastro e estados de recusa. A fila normal já lê C6 e SQL. `app/chamados/models.py:3361`; `app/chamados/services/materializacao.py:868`, `:890`, `:904`; `app/chamados/services/fio.py:466`; `app/templates/chamados/partials/modal_fio.html:230`; `app/templates/chamados/partials/_card_atendimento.html:195`; `app/chamados/services/explicador.py:123`, `:131`; `app/chamados/juizes.py:1863`.
-- Validar e recusar têm guardas de resposta/validação e de disputa fechada quando há cartão esperado. Há validação sem cartão em API foto e comando. Aceitar folga ocorre antes do teste de `materializada_em`. Conferir que a via nova não vire decisão na rota direta. O `post_save` da disputa também agenda retomar regularizações já confirmadas, cujo materializador pode chamar `registrar_batida`. Incidência em produção [nao verificado]. `app/chamados/services/validacao.py:747`, `:756`, `:777`, `:813`, `:948`, `:980`, `:999`; `app/api/foto_recebida.py:93`; `app/chamados/management/commands/validar_classe_a.py:132`; `app/chamados/signals.py:122`, `:149`, `:252`; `app/chamados/services/regularizacao_ext.py:78`, `:219`.
-
-## Demais ramos que leem a via
-
-| Ramo atual | Efeito de uma via nova |
-|---|---|
-| Projeção e chave do memo | Memo incorpora o valor, projeção anterior ao carimbo limpa a via salvo `fora_do_fato`. `app/chamados/juizes.py:901`, `:1486`. |
-| Ressuscitação, descarimbos e re-lavra | Portas gerais poupam `fora_do_fato`; uma via nova selecionada pode ser removida. Re-lavra só troca `declaracao`/`completude_turno`. `desfazer_carimbo_sem_lastro` admite candidata fora de identidades e só limpa se C6 der viva. `app/chamados/models.py:1554`, `:1678`, `:1723`, `:3570`, `:3653`, `:3659`; `app/chamados/services/disputa_emissao.py:1689`, `:1710`; `app/chamados/services/relavra_via.py:118`, `:155`, `:181`, `:242`. |
-| Rótulos/escritores particulares | Admin e fato-espelho podem trocar uma via diferente. Fantasma tenta pelo C6. Nova resposta reabre apenas `VIAS_SEM_LASTRO`, competência reabre somente a via de tranca. A antiga inversa de fantasma saiu. `app/chamados/models.py:2325`, `:3377`, `:3667`, `:3678`, `:3683`, `:3699`, `:3706`. |
-| Absorção, inversão e seleção por duplicata | Nova fica fora de absorção e fila de paridade, dentro da seleção que só exclui duplicata. O ramo do cartório exige que todas sejam duplicata. `app/chamados/models.py:4540`; `app/chamados/services/materializacao.py:275`, `:1202`; `app/chamados/services/fabrica_da_celula.py:149`; `app/ponto/services/flip_auto.py:129`; `app/ponto/services/cartorio.py:1705`. |
-| Mérito, retratação, dedup e identidade | Proteção de mérito é só admin, no-op de retratação só duplicata. Se ficar fora de `VIAS_FORA_DO_FATO`, nova permanece nos filtros de identidade e dedup. `app/chamados/services/fio.py:1260`, `:1327`, `:1407`, `:1684`, `:1767`, `:2208`, `:2244`, `:2266`, `:2312`; `app/chamados/services/disputa_emissao.py:337`, `:409`, `:428`, `:446`; `app/chamados/services/tarefa_do_dia.py:262`; `app/api/foto_recebida.py:45`; `app/chamados/models.py:3036`, `:3067`, `:3947`, `:3953`. |
-| Comandos | I6 acusa desconhecida se atingir `_i6_pares` e faltar no piso; F1t pode classificar como `carimbo/celula`; I9 só acusa via vazia. Relavra avulsa chama toda não derivada de “via de DECISAO”. Backfill só apanha `admin_decidiu` em seu filtro de decisão. Fecho-espelho só toca `SEM_HISTORIA`. `app/chamados/management/commands/auditar_invariantes_chamados.py:47`, `:204`, `:435`, `:462`, `:474`, `:546`, `:961`, `:1740`; `app/chamados/management/commands/relavrar_via_i6.py:58`, `:88`; `app/chamados/management/commands/backfill_decisoes_pergunta.py:129`, `:364`, `:432`, `:540`; `app/chamados/management/commands/encerrar_perguntas_com_fato.py:34`, `:43`, `:67`; `app/chamados/management/commands/migrar_data_evento_dia_do_turno.py:70`. |
-| Transporte e trilha | Composta, snapshots, refresh, histórico e contagens abertas aceitam o valor, sem branch próprio. `app/chamados/models.py:2186`, `:3589`, `:4507`; `app/chamados/reconciliador.py:1287`; `app/chamados/services/disputa_emissao.py:2182`; `app/chamados/services/materializacao.py:307`, `:1245`, `:1786`; `app/chamados/services/passivo_validado.py:69`, `:148`, `:578`; `app/chamados/services/relavra_via.py:123`, `:245`; `app/chamados/services/validacao.py:377`, `:471`; `app/chamados/management/commands/bug_par_103.py:67`; `app/chamados/management/commands/estoque_l130_instante_sem_texto.py:59`. |
-
-`I5a` é o contador mais próximo de vivos de desligado. Percorre `VIVOS` e só conta `COBRANCA` com `situacao` crua, portanto `registrado` fica fora. O vigia roda às 07:18 e o placar depende dele. O contador literal `vivos_de_desligado` está no backlog. `app/chamados/management/commands/auditar_invariantes_chamados.py:643`, `:659`, `:670`; `app/chamados/catalogo/motor.py:24`, `:29`; `app/config/crons.py:542`, `:747`, `:2194`; `app/docs/BACKLOG.md:732`, `:733`.
-
-_8752 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8753 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
