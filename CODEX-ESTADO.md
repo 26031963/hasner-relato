@@ -1,7 +1,179 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 07:41** · publicado em **27/11/2026 07:41** (UTC-3)
+> Ultima resposta processada: **27/11/2026 08:29** · publicado em **27/11/2026 08:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 08:29 · sessao 1814e0d2b981 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+**c2t parcial.** Apliquei a cura do item 2. Os REDs do Plantão e do banco Comercial ficaram reproduzidos e continuam falhando. As duas curas exigem edição do motor, que a ordem também põe na lista proibida. O teste existente do banco exige −3,5 h para o mesmo caso em que o item 3 pede −4 h. [ponto/motor_calculo_v2.py:3712] [ponto/motor_calculo_v2.py:3781] [ponto/tests/test_ramo2b_c2l_red_motor.py:96] [nao verificado]
+
+### Item 2 · A igualdade é necessária
+
+Reverter os dois `<=` em memória fez falhar `test_pausa_colada_na_entrada_efetiva_e_a_mesma_do_motor` e `test_segmentos_descontam_a_pausa_colada_na_entrada_efetiva`, no 12x36 e no Comercial. A janela recorta a pausa de 18:50–19:20 para 19:00–19:20, colada à entrada efetiva. Com `<`, os dois leitores descartam os 20 min de pausa e devolvem 800 min trabalhados onde o motor devolve 780. [ponto/tests/test_ramo2b_c2h_saida.py:230] [ponto/tests/test_ramo2b_c2h_saida.py:247] [ponto/tests/test_ramo2b_c2h_saida.py:266]
+
+O diff restringe a igualdade ao **dia da jornada** em que algum par tem `saida_da_base_da_he` preenchida. Os dois REDs novos falharam antes da cura porque o dia sem cauda devolvia 100 min em vez de 120. Ambos passaram depois, inclusive com a cauda registrada em outro par do mesmo dia. [ponto/calculador/alimentacao.py:82] [ponto/calculador/alimentacao.py:146] [ponto/calculador/periodo.py:307] [ponto/calculador/periodo.py:625] [ponto/tests/test_ramo2b_c2t_escopo.py:27]
+
+### Plantão e banco Comercial
+
+| Verificação | Resultado |
+|---|---|
+| Plantão 07:00–07:00(+1), batida às 07:40 | Saída efetiva às 07:40, 1.480 min trabalhados e 580 noturnos. O `main` deu 07:00, 1.440 e 540. A base da HE ficou em 1.440 min no caso testado. [ponto/tests/test_ramo2b_c2t_motor.py:14] |
+| Pontualidade do Plantão | O cálculo por par delega ao `Motor12x36.calcular_periodo`, que termina sem chamar `_julgar_pontualidade`. O mensal herdado passa pelo teto L-093. O motor também compartilha o recorte da HE noturna e o crédito de pares fechados em dia aberto. [ponto/motor_calculo_v2.py:3804] [ponto/motor_calculo_v2.py:3099] [ponto/motor_calculo_v2.py:2944] [ponto/motor_calculo_v2.py:1100] [ponto/motor_calculo_v2.py:2763] |
+| Limite diário e banco do Plantão | O cálculo delegado usa `_jornada_do_dia`. O `_lim_dia` da c2m e a gravação do saldo semanal pertencem ao override do Comercial. [ponto/motor_calculo_v2.py:3079] [ponto/motor_calculo_v2.py:3672] [ponto/motor_calculo_v2.py:3725] |
+| Comercial com cauda de 30 min | O saldo atual deu −3,5 h e o `main` deu −4 h. No cálculo atual, o RED confirmou 2.430 min trabalhados, 2.400 min na base e HE zero antes de falhar no saldo. [ponto/tests/test_ramo2b_c2t_motor.py:39] |
+
+### Execução e diff
+
+Em memória, com as dependências do Django substituídas apenas no ensaio, **11 testes passaram**. Foram os dois REDs do item 2 após a cura, os cinco de `ReleituraDaBaseDaHeTest`, o da pausa com base curta e os três de virada da pontualidade. Os quatro mutantes abaixo deram **rc 1 por asserção** no mesmo ensaio. A execução normal de `test_ramo2b_*` e `test_o280_bateria_da_lei` parou na importação de `django.core`, antes de rodar testes. [ponto/tests/test_ramo2b_c2t_escopo.py:36] [ponto/tests/test_ramo2b_c2h_saida.py:199] [ponto/tests/test_ramo2b_c2l_red_motor.py:63] [ponto/tests/test_ramo2b_c2l_red_motor.py:113] [ponto/tests/ramo2b_c2t_mutantes.py:17] [manage.py:11] [nao verificado]
+
+Comandos para a suíte e os mutantes com Django disponível. [manage.py:18] [ponto/tests/ramo2b_c2t_mutantes.py:31] [ponto/tests/ramo2b_c2l_mutantes.py:68] [ponto/tests/ramo2b_c2n_mutantes.py:51] [nao verificado]
+
+```sh
+export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
+
+python3 manage.py test \
+  $(for f in ponto/tests/test_ramo2b_*.py; do printf 'ponto.tests.%s\n' "$(basename "$f" .py)"; done) \
+  ponto.tests.test_o280_bateria_da_lei
+
+python3 -m ponto.tests.ramo2b_c2t_mutantes segmentos_aceitam_pausa_sem_cauda
+python3 -m ponto.tests.ramo2b_c2t_mutantes releitura_aceita_pausa_sem_cauda
+python3 -m ponto.tests.ramo2b_c2n_mutantes ignora_pausa_na_entrada
+python3 -m ponto.tests.ramo2b_c2l_mutantes pausa_na_ponta_descartada
+```
+
+O diff tem cinco arquivos e **zero `except` novos**, incluindo os arquivos novos. [ponto/calculador/alimentacao.py:82] [ponto/calculador/periodo.py:291] [ponto/tests/test_ramo2b_c2t_escopo.py:1] [ponto/tests/test_ramo2b_c2t_motor.py:1] [ponto/tests/ramo2b_c2t_mutantes.py:1]
+
+```sh
+git --no-optional-locks diff --relative HEAD
+for f in ponto/tests/ramo2b_c2t_mutantes.py ponto/tests/test_ramo2b_c2t_*.py; do
+  git --no-optional-locks diff --no-index -- /dev/null "$f"
+done
+```
+
+## 27/11 08:28 · sessao 92b2ddb05e4c · RAIA-ESPURIAS-1811-1410 · leitura · origem=Code
+
+**O efeito das espúrias no TXT da competência 11 está [nao verificado]** para as empresas 2, 3 e 4. A sonda abaixo mede os dias com sobras vivas na grade. A execução na sombra e a correspondência da cópia com o hash informado estão [nao verificado].
+
+**1. Autoridade e contagem.** O próprio `JUIZES.md` aponta para o registro vivo. Nele, a pergunta «a batida é espúria (cluster)?» está em `SEM_JUIZ['batida']`. As duas candidatas que o registro nomeia são `detectar_cluster_espurio`, que delega a `dias_com_cluster` e à assinatura da ata em `_leitura_da_celula` (duas ou mais órfãs com consecutivas a até 15 minutos e ao menos uma lâmpada apagada, em dia de trabalho), e a guarda de `_match_marcos`, que marca como órfã a batida que perde o marco pela disputa de proximidade, ressalvada a exceção da guarda. O propositor também tem um rótulo `ESPURIA` próprio para sobras próximas de um slot ocupado. [app/docs/JUIZES.md:10] [app/core/juizes.py:1231] [app/ponto/management/commands/detectar_cluster_espurio.py:26] [app/ponto/services/cluster_espurio.py:15] [app/ponto/services/cluster_espurio.py:40] [app/escala/utils.py:595] [app/escala/utils.py:654] [app/ponto/propositor.py:169]
+
+Para o passo 3a, usei **espúria no sentido de órfã da grade**, como no cartão. `classificar_orfas` é a função nomeada no aval da razão da sobra e devolve as classes das órfãs que a grade já encontrou. O script conta um dia-colab quando esse retorno tem alguma classe, inclusive `indefinida`. A grade é refeita com `batidas_apuraveis`, cujo predicado de vida é `retratada_em__isnull=True`. Assim, a contagem mede sobras da grade alimentada por batidas vivas. A ata do cluster guarda horas `HH:MM`, o que limita a identificação individual de uma batida. [app/relatorios/pdf_espelho.py:1027] [app/docs/BACKLOG.md:2087] [app/escala/orfa_classe.py:53] [app/ponto/turnos.py:2941] [app/ponto/turnos.py:2961] [app/ponto/services/cartorio.py:761]
+
+**2. Lei e lado B.** A **L-038**, pelo corte `PDF-SEM-REGRA-PROPRIA`, manda mostrar a batida que nenhum turno reclama no dia em que aconteceu. `dia_das_batidas` aplica isso para a apresentação, e a grade põe a sobra sem turno na sua data civil. A **L-025** define o universo da apuração pelo filtro de retratação. O fechamento já usa essa entrada. O motor também já lê papéis da ata, com cobertura parcial. O papel `X` inclui casos de pausa e por isso é insuficiente como seleção de espúrias. [app/docs/LEIS.md:86] [app/docs/CORTES.md:328] [app/ponto/turnos.py:2971] [app/ponto/turnos.py:3034] [app/escala/utils.py:1864] [app/docs/LEIS.md:76] [app/ponto/services/fechamento.py:652] [app/ponto/motor_calculo_v2.py:521] [app/ponto/turnos.py:1768]
+
+O lado A da view usa `recalcular_fechamento_mes` em leitura, `classificar_export`, `montar_linhas_export`, validação do layout e `conteudo_do_txt`. Para o lado B, essa mesma sequência precisaria receber, na entrada do fechamento, as batidas já julgadas pela regra para toda a janela. Não encontrei essa porta na cópia. `dia_das_batidas` devolve datas para apresentação e `classificar_orfas` devolve classes por `HH:MM`. A troca de entrada exigiria decidir quais batidas correspondem às sobras e o que fazer com elas na apuração. Aplico o fallback pedido, só com o passo 3a. O juiz de dono disponível para o passo 3c é `dono_da_divergencia`, chamado por `InsumosDoDono.dono`. [app/folha/views.py:214] [app/folha/views.py:272] [app/folha/views.py:282] [app/ponto/services/fechamento.py:652] [app/ponto/turnos.py:2971] [app/escala/orfa_classe.py:53] [app/ponto/management/commands/e6_oraculo.py:53] [app/ponto/management/commands/e6_oraculo.py:182]
+
+### SCRIPT
+
+```python
+import logging
+import sys
+from datetime import date, datetime, time, timedelta
+from traceback import extract_tb
+from unittest.mock import patch
+
+from django.db import connection, transaction
+from django.utils import timezone
+
+from colaboradores.models import Colaborador, Empresa
+from escala import utils as grade
+from escala.orfa_classe import classificar_orfas
+from folha.export import janela_competencia
+from ponto import turnos
+
+MES, ANO = 11, 2026
+EMPRESAS = (2, 3, 4)
+JANELA_DO_AVAL = (date(2026, 10, 21), date(2026, 11, 20))
+
+# Passo 3a. A razão da sobra vem por HH:MM e a entrada da folha usa Batida.
+# [app/escala/orfa_classe.py:53] [app/ponto/services/fechamento.py:652]
+
+
+class ReverterSonda(Exception):
+    pass
+
+
+class FalhaSonda(RuntimeError):
+    pass
+
+
+def log_sem_dados(_logger, registro):
+    if registro.levelno >= logging.ERROR:
+        erro = registro.exc_info[1] if registro.exc_info else sys.exception()
+        tipo = type(erro).__name__ if erro is not None else "ERROR"
+        raise FalhaSonda(f"{registro.pathname}:{registro.lineno} {tipo}") from None
+
+
+def contar(empresa, agora):
+    ini, fim = janela_competencia(empresa, MES, ANO)
+    if (ini, fim) != JANELA_DO_AVAL:
+        raise FalhaSonda(
+            f"Empresa {empresa.pk}: janela {ini}/{fim} fora do aval "
+            "[app/folha/export.py:47] [app/ponto/janelas.py:54]"
+        )
+
+    # Entrada e bordas da grade do cartório. [app/ponto/services/cartorio.py:1187-1209]
+    primeiro = timezone.make_aware(datetime.combine(ini - timedelta(days=1), time.min))
+    depois_do_ultimo = timezone.make_aware(datetime.combine(fim + timedelta(days=3), time.min))
+    ultimo = depois_do_ultimo - timedelta(microseconds=1)
+    ref = fim + timedelta(days=1)
+    dias = (ref - ini).days + 1
+
+    colabs = dias_colab = 0
+    pessoas = Colaborador.objects.filter(empresa=empresa).order_by("pk")
+    for colab in pessoas.iterator(chunk_size=200):
+        batidas = list(turnos.batidas_apuraveis(colab, primeiro, ultimo))
+        if not batidas:
+            continue
+        linhas = grade.montar_grade_prevista_periodo(
+            colab, batidas, dias=dias, ref=ref, agora=agora,
+        )["dias"]
+        if len(linhas) != dias:
+            raise FalhaSonda(
+                f"Empresa {empresa.pk} colab={colab.pk}: grade fora da janela "
+                "[app/escala/utils.py:972] [app/ponto/services/cartorio.py:1203]"
+            )
+        # linhas[0] é o dia de contexto após o fim. [app/escala/utils.py:972-979]
+        n = sum(bool(classificar_orfas(linha)) for linha in linhas[1:])
+        colabs += int(n > 0)
+        dias_colab += n
+    return colabs, dias_colab
+
+
+def main():
+    try:
+        with patch.object(logging.Logger, "handle", log_sem_dados), transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+            if connection.schema_name != "juliani":
+                raise FalhaSonda("Schema esperado juliani [bin/sombra.sh:490]")
+
+            agora = timezone.now()
+            # Deixa subir falhas capturadas nesses leitores.
+            # [app/escala/utils.py:192,927,1242] [app/ponto/turnos.py:1634]
+            with (
+                patch.object(timezone, "now", new=lambda: agora),
+                patch.object(grade, "Exception", (), create=True),
+                patch.object(turnos, "Exception", (), create=True),
+            ):
+                empresas = list(Empresa.objects.filter(pk__in=EMPRESAS).order_by("pk"))
+                if tuple(e.pk for e in empresas) != EMPRESAS:
+                    raise FalhaSonda("Escopo incompleto de empresas [app/colaboradores/models.py:40]")
+                medidas = [(e.pk, *contar(e, agora)) for e in empresas]
+            raise ReverterSonda()
+    except ReverterSonda:
+        for empresa_id, colabs, dias_colab in medidas:
+            print(f"ESPURIAS empresa={empresa_id} colabs={colabs} dias_colab={dias_colab}", flush=True)
+    except FalhaSonda:
+        raise
+    except Exception as erro:
+        origem = extract_tb(erro.__traceback__)[-1]
+        raise FalhaSonda(f"{origem.filename}:{origem.lineno} {type(erro).__name__}") from None
+
+
+main()
+```
+
+### FIM
 
 ## 27/11 07:41 · sessao 2b9617406233 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -1141,21 +1313,4 @@ As 51 falhas anexadas correspondem a 29 métodos. Classifiquei 39 como asserçõ
 - **Modal.** O cartão ausente produz `''`, mas o teste exige o texto não vazio da pergunta antes de aceitar ausência de resposta. O recorte é do cartão inteiro e a busca pega a primeira resposta. Uma pergunta homônima no mesmo cartão pode satisfazer a presença e esconder a falta da pergunta observada em T2. No 30, a pista mostra o bloco real exibindo `08:00` sem data, consistente com a leitura crua. O mutante do modal recebe `request=req` e tem assinatura de dois argumentos, portanto pode morrer com `TypeError` antes da asserção. `app/chamados/tests/test_e4d_matriz_reds.py:123–127,208–220,522–534,1288–1314` · `app/templates/chamados/partials/modal_fio.html:157–160,217–220` · `app/chamados/tests/e4d_matriz_mutantes.py:303–315`
 - **Mordida.** Em análise AST pura e sem escrita, o censo atribuiu o `bulk_create` com alias `DP` e deixou `Model.save(pergunta.decisoes.model(...))` sem entidade. O teste filtra fora essa segunda forma. O observador SQL só reconhece o PK em predicados específicos de `id`; uma regravação pelos campos de disputa ou célula pode escapar. A pilha contendo `registrar` também admite dois escritores executados sob a mesma chamada. `app/core/censo_escritas.py:364–430,469–484` · `app/chamados/tests/test_e4d_matriz_reds.py:92–109,222–236,488–493,1129–1137`
 
-## 27/11 03:14 · sessao a22e65db9a41 · - · - · origem=Ronald (tmux)
-
-Censo estático entregue ao agente principal. O registro vivo identifica C6, C7, C19, C20, C21, K3, K6 e K7. A tabela de consulta explicita que validação e coluna `validada_em` têm atribuições diferentes. O código atual grava V diretamente tanto na validação quanto no carimbo chamado pelo resolvedor. A porta `registrar` grava DP e acorda a célula. `app/docs/JUIZES.md:7–15,38–43,81–109` · `app/core/juizes.py:293–313,336–352` · `app/chamados/services/validacao.py:164–178` · `app/chamados/services/disputa_emissao.py:2112–2122` · `app/chamados/models.py:3473–3514,4590–4623`
-
-O selo AST aponta uma escrita de DP em `models.py:4609` e deixa escapar chamadas sem modelo atribuído. A própria fixture demonstra outro caminho físico, `Model.save(instancia, force_insert=True)`. O selo SQL depende do formato do filtro por PK e da presença de `registrar` na pilha. Uma atualização da mesma linha selecionada por outra chave, ou dois escritores chamados por `registrar`, pode escapar. `app/core/censo_escritas.py:364–430,469–491` · `app/chamados/tests/test_e4d_matriz_reds.py:92–109,137–141,222–236,488–493`
-
-Dois mutantes têm defeito verificável por leitura. O do 05 troca um atributo de `materializacao` que a emissão já importou por nome. O do modal 30 recebe dois argumentos, enquanto o teste passou a mandar `request=req`. A mordida em execução fica [nao verificado]. `app/chamados/services/disputa_emissao.py:12,1596` · `app/chamados/tests/e4d_matriz_mutantes.py:125–126,141–143,303–315` · `app/chamados/tests/test_e4d_matriz_reds.py:208–215,1075–1078,1114–1120`
-
-## 27/11 03:12 · sessao d01a7dafcf06 · - · - · origem=Ronald (tmux)
-
-- **Fix4 e modal.** O contexto real restaura seleção, vínculo com a disputa e permissão. O caso 18 passa a usar uma disputa com container, como o 30 já usava. A mudança monta a fixture necessária para ler o modal nos dois casos. O cartão ausente produz `''`, mas a pergunta tem texto e o `assertIn` falha antes da comparação. Ainda há seleção ambígua dentro do cartão. Duas perguntas usam `A que horas?` e o regex pega a primeira resposta, sem conferir o PK. Em T2, a pergunta alvo pode sumir e uma irmã muda com o mesmo título fazer o teste passar. `app/chamados/tests/test_e4d_matriz_reds.py:123–127,208–220,505–515,1286–1289` · `app/chamados/services/fio.py:251–254,305–323,334–362,573–603` · `app/templates/chamados/partials/modal_fio.html:76,123,157–160,217–220`.
-- **Mutante do modal.** O fix4 passou `request=req` e o mutante substitui a função por `renderizar(template, contexto)`. Ele quebra com `TypeError` antes de testar o par. Execução do mutante [nao verificado]. `app/chamados/tests/test_e4d_matriz_reds.py:215` · `app/chamados/tests/e4d_matriz_mutantes.py:303–315`.
-- **Caso 18.** As três falhas apontam para contrato após o fix4. C6 decide `False` cedo, o modal perde a resposta em T1 e I23 inclui o compensador adiantado por estoque. A cobertura ainda aceita C6 usando texto incorreto, pois 08:00 e 09:00 discordam da luz 19:00 e produzem o mesmo booleano. A tarefa pode devolver a razão certa com a ação errada. I23 pode excluir toda `REABERTURA` e passar, pois o controle positivo é `RECUSA`. Essa cura derruba a caracterização F5 que exige contar `REABERTURA` por recuo do relógio após uma validação nova. A distinção por proveniência permite coexistência. `app/chamados/tests/test_e4d_matriz_reds.py:505–543` · `app/chamados/juizes.py:1428–1454,1521–1533` · `app/chamados/services/tarefa_do_dia.py:165–170` · `app/chamados/management/commands/auditar_invariantes_chamados.py:1123–1134` · `app/chamados/tests/test_e4c_f5_4c1_instante_unico.py:319–325`.
-- **Caso 30.** API e modal caem ao exibir valores crus na face real. SQL e raio-x agora exercitam consumidores reais, mas cobram somente elegibilidade e classificação. O SQL pode retornar o PK certo ainda ordenando e entregando o par da coluna. O raio-x pode creditar por qualquer `RESPOSTA` histórica, mesmo superada. O cenário substituiu o par cru válido 10:00/08:00 por `NULL`/08:00 e tirou a asserção C6. Um leitor que só usa o ato quando a coluna de instante é nula passaria. `app/chamados/tests/test_e4d_matriz_reds.py:1288–1314` · `app/chamados/juizes.py:1863–1868` · `app/api/views.py:1163–1165` · `app/templates/chamados/partials/modal_fio.html:217–220` · `app/chamados/services/raiox.py:135–158` · `diff.txt` [nao verificado quanto à numeração absoluta do anexo].
-- **Conflitos e lacunas C4.** O C4 anexado concorda com o horizonte da tarefa do 18, mas grava `VALIDACAO` futura como ato novo pelo helper no relógio anterior. A lei A7 recusa fato futuro e o RED16 só exercita `RESPOSTA`. No 14, o RED atual exige `REABERTURA` como a caracterização C1 da mesma revisão, em contradição com a lei de `SANEAMENTO` em choice próprio. No 30, retirar C6 removeu o conflito direto entre asserções com a caracterização da composta. Uma troca global da fonte do texto ainda derruba essa caracterização. `app/chamados/tests/test_e4c_f5_c4_red.py@48b24c39c:297–314` · `app/chamados/tests/test_e4d_matriz_reds.py:438–470,1298–1314` · `app/chamados/tests/test_e4c_f5_instante_c1.py@48b24c39c:234–248` · `app/chamados/tests/test_e4c_f5_opus_models.py:59–69,77–90` · `app/docs/PROMPTS.md:2873,2950`.
-- **Estoque C4.** Os 01/02/04/44 atuais não exigem o instante de entrada e a marca do backfill. Antecipar os carimbos ao marco elimina a oposição à recusa do estoque novo, e retentar o comando é operação distinta de ter duplicata no mesmo payload. O 08 coincide com o veto comum C4 depois de suprimir a via autorizada. O 42 compara marcos e lavra, deixando migração e entrada sem prova, embora C4 prove a fronteira inclusiva e preserve `marco+1µs`. Se “hora da migração” for a execução da 0058, C4 guarda a hora da 0057 e preserva uma linha que já existia quando a 0058 executou. A identidade dessas duas horas [nao verificado]. Acrescentar SELECT direto em DP a `marcos_do_lote` quebra o selo F3. `app/chamados/tests/test_e4d_matriz_reds.py:264–295,328–359,375–399,545–587` · `app/chamados/tests/test_e4c_f5_c4_red.py@48b24c39c:345–376,436–442,478–504,953–978` · `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py@48b24c39c:9–20` · `app/chamados/tests/test_f3_lavra_foto_sem_decisao.py:312–322` · `app/docs/PROMPTS.md:2974`.
-
-_8578 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8580 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
