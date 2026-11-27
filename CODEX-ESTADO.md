@@ -1,7 +1,107 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 09:47** · publicado em **27/11/2026 09:47** (UTC-3)
+> Ultima resposta processada: **27/11/2026 09:52** · publicado em **27/11/2026 09:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 09:52 · sessao ca7d3c808b96 · - · - · origem=Ronald (tmux)
+
+- **R4 e R5.** O cenário de intervalo permite exercitar origem aberta e marco efetivo entregue na virada do corte. Na base, o repasse grava os IDs de ambos os itens no agregado antes de tentar as perguntas. O nascimento distingue alteração de inserção e só aplica a guarda B2 à alteração. O teste pode observar `_nascer`, o dia efetivo e a tentativa de `INSERT`, além da releitura pública de `cobrar_dia`. `chamados/tests/test_fio_intervalo.py:45`, `ponto/janelas.py:60`, `folha/tests/test_export_vigente.py:33`, `chamados/services/disputa_emissao.py:1117`, `chamados/models.py:3192`, `chamados/models.py:3333`, `chamados/models.py:3847`, `chamados/services/cobrar_dia.py:45`.
+- **R3.** O callback autônomo de silêncio de isentos já tem fixture com callback real. Adicionar TXT vigente e cobrar o registro do silêncio detecta uma extensão indevida de `_K6`. O beco tem cerca B2 própria e é outro cenário. `chamados/signals.py:285`, `chamados/tests/test_varredura_isentos_evento.py:43`, `chamados/services/silencio_isentos.py:34`, `chamados/services/becos.py:63`.
+- **Volta 3.** O template imprime só a hora, o PDF consulta HH:MM e o supra só imprime a lista de horas. Os pontos observáveis de transporte são a ata em curso no emissor, `grade_da_celula` durante `_marcos_faltantes` e `grade_do_fechamento` na folha. `templates/ponto/espelho.html:242`, `relatorios/pdf_espelho.py:472`, `relatorios/pdf_espelho.py:607`, `ponto/supra_juiz.py:527`, `ponto/services/cartorio.py:1505`, `chamados/services/declaracao_texto.py:101`, `folha/export.py:329`.
+
+Execução dos cenários [nao verificado].
+
+## 27/11 09:51 · sessao 74ba2bb386d4 · - · - · origem=Ronald (tmux)
+
+- R3 tem um caminho autônomo observável. O `on_commit` de `retoma_regularizacoes_ao_fechar_disputa` chama a retomada fora do cartório. Um mutante que condicione essa chamada à ausência de TXT vigente deve fazer falhar o teste que observa a retomada com TXT. O caminho de beco já tem cerca própria. `chamados/signals.py:122–146`, `chamados/services/becos.py:63–71`
+- R4 tem um ponto de asserção concreto. O repasse grava os IDs de todos os candidatos no contexto da disputa e do pai antes de processar as perguntas. O cenário misto deve exigir `[admitido.pk]` nos dois contextos e a trilha individual da vetada. `chamados/services/disputa_emissao.py:1100–1142`, `chamados/tests/test_e4a2_nunca_bateu.py:81–114`
+- R6 pode interpor um residual depois do primeiro `carimbar` real. `vigiar_escrita_de_perguntas` é inerte fora da cerca e sinaliza o veto dentro dela. `executar_sob_cerca` desfaz o savepoint mesmo quando a exceção interna foi capturada. O cartório atual chama `julgar_colab` e aplica a precedência sem usar essa cerca. `ponto/services/cartorio.py:1905–1932`, `ponto/services/cartorio.py:2078–2134`, `chamados/services/fio.py:1536–1592`
+- Desenho A. `julgar_celula` usa a data e a hora ambientes na margem do turno. Gate e tripwire convergem em `_vivas_entre`, que chama o C6 sem o instante explícito já aceito pelo juiz. O RELATO descreve o cenário C6 `0→1` após a primeira lavra. O percurso Django integral desse cenário segue [nao verificado]. `ponto/services/cartorio.py:2083–2115`, `chamados/models.py:236`, `chamados/models.py:368–402`, `chamados/juizes.py:911–943`, `docs/RELATO.md:1123`
+- E2 e fábrica. Há uma fixture de pergunta absolvida e uma de carimbo sem lastro para montar dois dias do mesmo colaborador com TXT vigente em apenas um. A asserção deve observar tentativas de escrita, além da foto final, para distinguir o mutante que guarda depois do carimbo. `chamados/tests/test_e4c_f5_guarda_reconciliador.py:141–174`, `chamados/tests/test_o261_julgamento_desfaz_carimbo.py:49–104`, `folha/tests/test_k6_fechada_para_celula.py:32–44`, `chamados/reconciliador.py:695–707`, `chamados/services/fabrica_da_celula.py:206–219`
+
+Resultados de execução [nao verificado].
+
+## 27/11 09:50 · sessao e5a6d7e4fdc0 · - · - · origem=Ronald (tmux)
+
+- R1 pode pedir a autoridade `escala.orfa_classe.razao_da_sobra`. A base tem `classificar_orfas`, que opera por minuto. O sítio futuro consta em `docs/RELATO.md:361,2639` e `docs/BACKLOG.md:2087`. O controle de 11 s confere a sobra e o carimbo de recusa no pareador. A pausa de 8 s pode usar as bordas 08:00–17:00 e o intervalo cadastrado 12:00–13:00, com marcas 12:30:00 S e 12:30:08 E, e verificar um turno de 480 minutos com 60 minutos de janela descontada. `escala/orfa_classe.py:53`, `ponto/turnos.py:130–162,707–771,932–940,1356–1376,1482–1490`.
+- R2 pode pedir a autoridade pública `sobras_da_ata` e usar `grade_da_celula` como controle independente da foto. A base usa `_orfas_da_ata`, que entrega duas entradas `12:00` quando a ata contém duas sobras no mesmo minuto. `escala/services/leitor_celula.py:180–190,350–428`.
+- V1 pode alimentar a porta pública da grade com marcas sintéticas distintas no mesmo minuto, no mesmo instante e em duas datas civis. A tupla de entrada perde a identidade e a saída conserva apenas `HH:MM`. O RED de conservação pode exigir identidade, instante, linha dona e razão. `escala/utils.py:1367–1368,1483–1484,1863–1891,2138`.
+- A reconciliação da grade remove uma entrada pelo minuto, o que fornece o sítio para cobrar a remoção da ocorrência exata. `escala/utils.py:2047–2060,2093`.
+
+Execução dos casos e arquivos integrais dos anexos [nao verificado].
+
+## 27/11 09:48 · sessao c472a9d1c2c0 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
+
+Conferi os cinco arquivos alterados contra o diff anexo e a cópia da base `59600163c`. Os hashes dos cinco blobs conferem com o anexo. A cópia veio sem `.git`, como prevê `CLAUDE.md:375-379`. O objeto do commit, sua relação de parentesco e o estado da VM estão [nao verificado]. Fiz a conferência em modo somente leitura.
+
+## 1. Pronto do aval
+
+| Item | O que a cópia demonstra | O que falta |
+|---|---|---|
+| Régua | Consulta o juiz antes do atalho `JA VERDE`. Uma recusa grava `FALHOU` e encerra antes do Docker. A consulta ocorre antes das travas e a montagem posterior usa a árvore viva. [bin/regua.sh:57](/home/ronald/codex_ws/2c2f212fca4b8b2af80aa979ddeb0934f18e0201/bin/regua.sh:57), `bin/regua.sh:102-122,183-187`. | RED da régua com teste novo inventariado, antes do opus [nao verificado]. |
+| Vigia | `_rodar_testes` ganhou a guarda. O vigia horário ainda faz a suíte do retrato, o reteste dos vermelhos e a confirmação na árvore viva sem consultar o juiz. O próprio vigia Python pode relançar esse shell. [bin/vigia_arvore.sh:77](/home/ronald/codex_ws/2c2f212fca4b8b2af80aa979ddeb0934f18e0201/bin/vigia_arvore.sh:77), `bin/vigia_arvore.sh:38-40,83-88,105-106,131-135`, `app/config/crons.py:296`, `app/core/esteira_vigia.py:750-756,1187-1195`. | A cobertura operacional do vigia falha. RED de ponta a ponta na VM [nao verificado]. |
+| Vizinhos da volta | `vizinhos_da_volta.py` seleciona labels, inclusive do teste tocado no diff. `suite.sh --volta` consome essas labels e tenta a pista. Se cair na VM, consulta o juiz antes da fila e novamente na vez. [bin/vizinhos_da_volta.py:92](/home/ronald/codex_ws/2c2f212fca4b8b2af80aa979ddeb0934f18e0201/bin/vizinhos_da_volta.py:92), `bin/vizinhos_da_volta.py:25-30,128-132`, `bin/volta_intermediaria.sh:32-46`, `bin/suite.sh:139-160,214-229,514-544`. | RED do caminho `--volta` na VM [nao verificado]. |
+| Mesmo teste na pista | A rota envia SHA e labels e confere recibo e log. O selo de rota usa SSH falso e imprime `Ran` simulado. `bin/suite.sh:433-459,474-509`, `bin/tests/test_suite_rota_pista.sh:27-44,61-64`. | Recibo e log identificando o mesmo teste dos três REDs, na árvore enviada à pista [nao verificado]. |
+| Opus final e LIBERA-B3 | A regra da cópia exige a suíte inteira verde antes do opus final. `CLAUDE.md:421-431`. | Suíte inteira verde, opus final `APROVADO` para este diff e cumprimento do restante do LIBERA-B3 [nao verificado]. | [nao verificado]
+
+A lista positiva preservada pelo aval também diverge da cópia. O wrapper disponível proíbe `motor_calculo_v2.py` e `models.py` e aplica uma lista de proibições aos arquivos tocados. `bin/codex_pergunta.sh:159-176,224-234,643-647`.
+
+## 2. Quem escreve, quem lê e o que cada valor significa
+
+| Valor | Escritor, leitores e semântica |
+|---|---|
+| `.inventario` | O wrapper compara a worktree com o hash-base e publica o inventário **depois** de o construtor sair. `TOCADO` cobre arquivo novo, modificação, remoção e mudança de modo ou tipo. O wrapper relê o inventário para montar `.recusa`. O juiz lê apenas `TOCADO` e caminho, e escolhe a ocorrência de maior `mtime`. Portanto, `TOCADO` prova diferença contra a base daquela chamada. A ocorrência mais recente por caminho, sozinha, não identifica quem produziu os bytes da árvore montada. `bin/codex_pergunta.sh:143-149,195-234,781-807,811-824`, `bin/codex_teste_fora.py:68-94,152-164`. |
+| `.id` | O wrapper escreve `obra,papel,hash,pid,fim,sha` após `rc=0` com resposta nova. O SHA é **da resposta**. O disjuntor valida os campos e o SHA sob a trava de resposta. O juiz CCM lê `obra` e `papel` sem essa trava. `obra` vem de `CODEX_OBRA`, enquanto `id_chamada` identifica uma execução. No transcript, `obra` vem da primeira identificação reconhecida no prompt, por outra gramática. `bin/codex_pergunta.sh:117-121,421,549,725-744,797-798,854-860`, `bin/disjuntor.py:159-175,607-632,856-863,880-905`, `bin/codex_teste_fora.py:85-94`. |
+| `refs/heads/main` e bytes | Git grava a ref local quando o pouso avança `main`. `git revert` também a avança se `HEAD` estiver nessa branch. O juiz lê a ponta e o histórico em dois comandos, sem fixar um SHA comum, e compara os blobs aos bytes do arquivo montado. A busca histórica pode aceitar um blob de commit lateral alcançável após um merge, mesmo que esse blob jamais tenha estado na ponta de `main`. A ref real na VM está [nao verificado]. `CLAUDE.md:347-354`, `app/core/esteira_vigia.py:1316,1332`, `bin/codex_teste_fora.py:98-129,152-166`. |
+| Transcript final | O harness é identificado como escritor do JSONL. O agente entrega o texto via `SubagentHandback`. O B3 lê o diretório da sessão e exige `agentType=verificador`. O CCM reutiliza o parser, varre todas as sessões do caminho fixo, dispensa metadado de tipo e modelo e escolhe o maior timestamp **entre os transcripts com veredito**. Uma verificação posterior sem veredito deixa a anterior em vigor. Nenhum SHA do diff é conferido nessa decisão. `bin/disjuntor.py:438-442,649-671,839-853`, `bin/codex_teste_fora.py:44-45,132-149,167-173`. O escritor físico e o transcript desta volta estão [nao verificado]. |
+| Instante, `mtime` e fuso | O juiz compara o timestamp da **primeira linha** do transcript com o `mtime` do inventário e o do arquivo montado. `Z` ou offset explícito vira epoch. Timestamp sem offset é interpretado no fuso local do processo. O `fim` do `.id` é hora civil sem offset e fica fora da comparação. Início do agente, entrega do veredito e modificação no filesystem são eventos distintos. O fuso e os valores reais estão [nao verificado]. `bin/codex_pergunta.sh:854-859`, `bin/codex_teste_fora.py:91-94,132-148,169-173`. |
+| RC do juiz e `None` | `main` emite `0` sem pendências detectadas, `1` com pendência e `3` para argv inválido. `NaoSei` sobe como exceção sem tratamento, com traceback e rc não zero. Régua traduz qualquer rc não zero em `1`, suite local em `3` e `_rodar_testes` grava stdout/stderr e devolve `None`. `_isolar` pula o cache, mas `classificar` pode devolver `CAIU_FATIA` com “não isolado”. O congelado devolve recusa explícita, o auto-revert conserva o revert, e a autocura descarta `None` pelo mesmo filtro que descarta `False`. `bin/codex_teste_fora.py:39-49,177-188`, `bin/regua.sh:57-68`, `bin/suite.sh:139-149`, `app/core/esteira_vigia.py:140-144,740-756,1324-1334,1377-1382,1467-1475`. |
+| Carimbo, estado e avisos | A régua escreve `.regua_stamp` com impressões da árvore, status, epoch, hora civil e resumo. Leem a própria régua, o pre-push, as cadeias e o rodapé. O vigia escreve `ultimo_revert`, lido pelo limitador de uma hora. O aviso passa pelas portas existentes de Pauta e RELATO. A Pauta deduplica pela chave `auto_revert`, então uma Pauta já viva pode conservar o texto anterior. `bin/regua.sh:38-45,60-67,102-109,214-221`, `bin/pre-push.sh:52-70`, `bin/molde_fatia/cadeia.sh:72,82`, `bin/tickets_rodape.sh:29-33`, `app/core/esteira_vigia.py:852-853,946-948,1072-1074,1324-1329`, `app/core/management/commands/alarme_esteira.py:34-41,54-57`. |
+
+## 3. Classes de reprovação
+
+| Classe | Resultado |
+|---|---|
+| Segundo juiz registrado | **Ausente como cópia do parser**. O CCM chama `_veredito_e_obra`. **Presente como decisão paralela de quem pode aprovar**. O B3 exige metadado de verificador, enquanto o CCM pode aceitar um agente de outro tipo pelo prompt e pelo `Handback`. A L-011 trata da entrada no registro vivo, que este diff não altera. `bin/codex_teste_fora.py:52-56,138-149`, `bin/disjuntor.py:649-671,839-853`, `app/core/juizes.py:190`, `app/docs/LEIS.md:69`. |
+| Segundo escritor fora da porta | **Ausente para inventário, recibo e transcript no delta. Presente como novo ponto de gravação fora da trava da régua**, no próprio script, inclusive com `--only`. Há ainda uma sobrescrita preexistente no vigia. `passada` lê o estado antes do auto-revert e pode gravar essa cópia depois, apagando `ultimo_revert`. `bin/codex_teste_fora.py:68-174`, `bin/regua.sh:47-68,115-122,198-221`, `app/core/esteira_vigia.py:1324-1325,1523-1525,1613,1632-1634`. |
+| Relógio fora da borda | **Presente.** O ramo novo da régua lê `date` duas vezes no mesmo carimbo. Epoch e hora impressa podem cair em minutos diferentes. O novo relato do auto-revert formata o `agora` recebido. `bin/regua.sh:64-65`, `app/core/esteira_vigia.py:1294-1301,1329`. |
+| Derivação paralela | **Presente.** CCM repete a conversão ISO para epoch e introduz outro leitor de início de transcript. Repete também a fórmula do blob. As `LABELS` continuam vindo da régua, conforme L-075. `bin/codex_teste_fora.py:126-135`, `bin/disjuntor.py:434-435`, `bin/orcamento_contexto.py:161-174`, `bin/codex_pergunta.sh:180-182`, `bin/regua.sh:23`, `bin/suite.sh:209`, `app/docs/LEIS.md:102`. |
+| Selo ou RED sem mordida | **Mordida unitária presente.** `test_vigia_ccm.py` simula rc `1`, `2` e `-15` e exige uma única chamada de subprocesso, o juiz. Tirar a guarda quebra essa asserção. Os demais casos simulam o retorno ou o Docker. O teste deixa de fora o juiz real, o cron do vigia e o percurso VM/pista. RED executado no HEAD pelo motivo certo [nao verificado]. `app/core/tests/test_vigia_ccm.py:22-57,61-137`, `.claude/agents/verificador.md:9-10`. |
+| Ordem de trava | **Presente.** Régua julga e carimba antes da trava própria e julga antes da espera pela trava de testes. A suite local normal reconsulta sob a trava, mas entre a consulta e a montagem ainda usa uma árvore mutável. O vigia Python tem a trava da passada quando chamado pelo wrapper e seu reteste direto não passa pela trava compartilhada da suíte. `bin/regua.sh:57-68,115-122,183-187`, `bin/suite.sh:149-160,544,575-584`, `bin/trava_teste.sh:35-42`, `bin/vigia_esteira.sh:8-11`, `app/core/esteira_vigia.py:748-772`. |
+| Pouso antes do pré-requisito | **Presente no auto-revert.** Reverte e chama deploy antes de consultar o juiz no reteste. A recusa conserva a mudança. Um pouso efetivo desta volta está [nao verificado]. `app/core/esteira_vigia.py:1316-1333`. |
+| Campo com dois significados | **Presente.** `.regua_stamp` é descrito como testemunha de que a régua rodou. O ramo CCM escreve `FALHOU` e horário por recusa pré-execução. Na autocura, `None` também cai no filtro de vermelho e `passada` registra `autocura_de`, o que pode impedir nova tentativa após a liberação enquanto a lista de falhas continuar igual. `bin/artefatos_de_estado.txt:28`, `bin/regua.sh:57-68,193-221`, `app/core/esteira_vigia.py:1467-1475,1560-1563,1632-1634`. |
+| `except` novo | **Ausente. Zero no diff inteiro**, inclusive `bin/`. A conferência por AST encontrou 25 → 25 handlers no vigia e zero nos dois Python novos. O parser herdado do disjuntor já descarta linhas JSON inválidas, portanto a promessa de traceback para toda leitura que falha é mais ampla que o comportamento. `app/core/esteira_vigia.py:748-772`, `app/core/tests/test_vigia_ccm.py:22-57`, `bin/codex_teste_fora.py:36-65,132-149`, `bin/disjuntor.py:445-453`. |
+
+## 4. O executor recusa todo rc não zero?
+
+**Sim, quando o juiz é chamado para a árvore efetivamente montada e retorna rc não zero**, inclusive traceback. A régua sai `1`, a suite local sai `3` e `_rodar_testes` volta antes de `docker exec` e `docker run`. Se a chamada ou a gravação do motivo levantar no próprio vigia, o teste também fica sem iniciar, mas o chamador recebe exceção em vez de `None`. `bin/regua.sh:57-68`, `bin/suite.sh:139-160`, `app/core/esteira_vigia.py:750-770`.
+
+**Há caminhos locais que escapam.** O vigia horário e o relançamento via Python executam pelo shell sem juiz. Na régua e na suite normal, o bind-mount pode ver alterações posteriores à consulta. Além disso, `--na-vez` julga o app indicado em `_NV_DIR` e executa `"$@"` sem conferir se o comando monta aquele app. O chamador normal fornece o app correspondente e passa pela trava. `app/core/esteira_vigia.py:1187-1195`, `bin/vigia_arvore.sh:83-88,105-106,131-135`, `bin/regua.sh:57,183-187`, `bin/suite.sh:146-160,575-584`.
+
+**Também há liberações com rc 0 indevido pela regra do aval.** Um teste já escrito durante uma chamada ativa ainda pode estar sem inventário, que só nasce no fim. Um teste novo na raiz de `ferias`, como `app/ferias/test_ccm.py`, pode entrar na seleção e ficar fora da guarda, que exige uma pasta `tests/`. O mesmo descompasso existe na cópia para testes na raiz, como `app/ferias/tests_disponibilidade.py`. `bin/codex_pergunta.sh:738-745,781-807`, `bin/codex_teste_fora.py:59-61,78-81,152-157`, `bin/vizinhos_da_volta.py:33-45,92-94`, `app/ferias/tests_disponibilidade.py:30-31`.
+
+**Sim, o auto-revert faz `git revert` primeiro.** Depois invoca `deploy.sh --sem-sombra`, sem usar o rc do deploy, e só então pergunta ao juiz pelo reteste. A recusa grava o estado e chama Pauta/RELATO, deixando o revert aplicado. `app/core/esteira_vigia.py:1316-1333`.
+
+**Há uma regressão adicional nos selos da régua.** As fixtures de `test_suite_rota_pista.sh` e `test_suite_motivo.sh` copiam `suite.sh` sem instalar o juiz. Nos casos locais que exigem chegada à trava, o novo código tenta abrir o script ausente e sai `3` antes dela. A régua roda esses selos antes do Django. É uma falha derivada do código, com execução [nao verificado]. `bin/tests/test_suite_rota_pista.sh:27-37,239-240,377-379`, `bin/tests/test_suite_motivo.sh:23-47,73-78`, `bin/suite.sh:139-145,544`, `bin/regua.sh:152-163`.
+
+## 5. Recusa indefinida de árvore legítima
+
+- **Inventário sem recibo.** Se o inventário mais recente lista `app/folha/tests/test_ccm.py`, o recibo está ausente e a cópia tem bytes inéditos em `main`, a obra vira `None`. Nem um transcript aprovado da obra real pode liberar esse registro. O juiz não aplica prazo de expiração. `bin/codex_teste_fora.py:82-94,158-174`.
+- **Merge com bytes diferentes.** Se a cópia legítima tem versão A e o merge levou só a versão B, A continua pendente quando seus bytes nunca apareceram no histórico consultado e não há aprovação reconhecida para a cópia. Uma árvore montada com B passa pela igualdade com `main`. `bin/codex_teste_fora.py:98-129,158-173`.
+- **Transcript ausente ou cópia recriada.** Com recibo válido e bytes inéditos em `main`, um transcript ausente do caminho pesquisado mantém a recusa por tempo indeterminado. Mesmo com transcript `APROVADO`, recriar a cópia com os mesmos bytes e `mtime` posterior ao início do agente bloqueia de novo. A condição compara datas e dispensa uma identidade dos bytes aprovados. `bin/codex_teste_fora.py:44-45,132-149,167-174`. Ocorrências desses casos na VM [nao verificado].
+
+**REPROVADO** — Críticos: vigia executa sem juiz, cobertura incompleta do inventário e aprovação sem vínculo ao opus e ao diff (`bin/vigia_arvore.sh:83-88`, `bin/codex_teste_fora.py:59-61,138-173`). Altos: REDs, mesmo teste na pista e opus final [nao verificado], regressão dos selos locais, auto-revert antes do reteste e recusas indefinidas (`bin/tests/test_suite_motivo.sh:23-47,73-78`, `app/core/esteira_vigia.py:1316-1330`, `bin/codex_teste_fora.py:82-94,158-174`). Médios: carimbo fora da trava, relógio duplicado e recusa absorvida por consumidores (`bin/regua.sh:57-68,115-122`, `app/core/esteira_vigia.py:140-144,1467-1475,1560-1563`).
+
+## 27/11 09:48 · sessao dda30177af91 · - · - · origem=Ronald (tmux)
+
+**REPROVADO.** O caminho periódico de `vigia_arvore.sh` continua rodando na VM sem consultar o juiz. O cron está declarado em `app/config/crons.py:296`. O vigia fotografa a árvore viva por `rsync` em `bin/vigia_arvore.sh:38-40`, roda a suíte em `:83-88`, repete os vermelhos em `:105-106` e pode confirmar direto na árvore viva em `:131-135`. Atividade em produção [nao verificado].
+
+- **Régua.** Todo rc não zero encerra antes do atalho e do Docker, com carimbo global `FALHOU`. A checagem antecede ambas as travas e o bind da árvore continua mutável. O novo ramo carimba inclusive no `--only`, cujo caminho normal promete não carimbar. `bin/regua.sh:47-68`, `:102-122`, `:183-199`. RED [nao verificado].
+- **Vigia da esteira.** Todo rc não zero encerra `_rodar_testes` antes do Docker, grava o diagnóstico e devolve `None`. `_isolar` evita o cache, mas `classificar` ainda pode declarar `CAIU_FATIA` com motivo `GREEN vermelho (nao isolado)`. O congelado trata `None` separadamente e a autocura o descarta pela mesma verdade booleana de `False`. `app/core/esteira_vigia.py:140-144`, `:740-756`, `:1377-1381`, `:1467-1475`. O teste novo morde a integração local sob simulação de subprocesso e falharia contra a versão anterior, mas não executa o juiz real. `app/core/tests/test_vigia_ccm.py:22-57`, `:61-72`. RED executado [nao verificado].
+- **Vizinhos.** Seleciona labels do diff `<base>..HEAD`, inclusive teste novo já presente no diff, sem lançar processo de teste. `bin/vizinhos_da_volta.py:25-30`, `:92-94`, `:116-130`. `bin/volta_intermediaria.sh:33` delega a `suite.sh`, que envia SHA e labels à pista antes do ramo local, e no fallback recusa qualquer não zero antes da fila e novamente sob a trava. `bin/suite.sh:139-160`, `:220-230`, `:454-459`, `:516-520`, `:544`, `:576-583`. RED e mesmo teste na pista [nao verificado].
+- **Ordem.** O auto-revert executa `git revert` e invoca deploy antes do reteste que consulta o juiz. Recusa grava `ultimo_revert`, deixa o revert aplicado e avisa; o rc do deploy não é consultado. `app/core/esteira_vigia.py:1316-1333`. Na suíte, `--na-vez` aceita chamada direta e executa o argv recebido sem verificar que seu bind corresponda ao app julgado, embora a chamada normal passe a árvore correta pela trava. `bin/suite.sh:146-160`, `:576-583`.
+- **Regressão dos selos de host.** A régua roda os scripts `test_*.sh`. Pelo código, os cenários locais de três selos agora recebem rc 3 antes do resultado esperado porque suas raízes falsas têm `suite.sh` e os dublês antigos, mas não `codex_teste_fora.py`. `bin/regua.sh:156-162`, `bin/suite.sh:139-145`, `:544`, `bin/tests/test_suite_rota_pista.sh:27-37`, `:223-240`, `bin/tests/test_suite_motivo.sh:23-45`, `:240-249`, `bin/tests/test_rm_com_guarda.sh:113-122`, `:346-347`. Execução dos selos [nao verificado].
+- **Teste sem inventário.** O wrapper remove o inventário velho antes da chamada e produz o novo só ao fim. A ausência de entrada é interpretada como ausência de pendência. A forma reconhecida pelo juiz também exclui teste Django na raiz de app, que `vizinhos` reconhece. `bin/codex_pergunta.sh:738-745`, `:776-789`, `:800-807`, `bin/codex_teste_fora.py:59-61`, `:152-157`, `bin/vizinhos_da_volta.py:33-45`.
 
 ## 27/11 09:47 · sessao 21ebe8cdcd3c · - · - · origem=Ronald (tmux)
 
@@ -913,332 +1013,4 @@ A lista indica independência técnica por leitura. A ordem de pouso registrada 
 
 [resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
 
-## 27/11 08:53 · sessao e9a63f948616 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
-
-**REPROVADO — `1f9541e71`.** A c2t fecha a herança da cauda no Plantão e retira a cauda da soma direta do banco semanal. O recorte ainda produz duas respostas para o mesmo período, `_lim_dia` muda dinheiro em jornada sem cauda e a catraca de linhas falha. `app/ponto/motor_calculo_v2.py:3784`, `:3593`, `:3709–3724`, `:3650–3678`; `app/ponto/calculador/alimentacao.py:135–150`; `app/ponto/calculador/periodo.py:753–770`; `app/core/tests/test_medida_turno_do_par.py:309`, `:564–568`.
-
-1. **Plantão — curado no motor. O escopo ainda vaza para o Intermitente.** O Plantão continua chamando `Motor12x36.calcular_periodo`, com a flag desligada. No ensaio isolado, main e c2t deram os mesmos **1.440 min trabalhados, 540 min noturnos de relógio e 40 min fora da janela**. O Intermitente herda a flag ligada. Com marcos 19h–07h e saída às 07h30, o mesmo ensaio deu **720 trabalhados, 540 noturnos e 30 fora** no main, contra **750 trabalhados, 570 noturnos e zero fora** na c2t. O cadastro aceita os marcos e a fábrica seleciona a classe Intermitente. `app/ponto/motor_calculo_v2.py:795`, `:1917–1920`, `:3780–3807`, `:3841–3853`, `:3919–3922`; `app/escala/services/cadastro_tipo.py:205–227`; `app/ponto/tests/test_ramo2b_c2t_motor.py:14–36`; main `app/ponto/motor_calculo_v2.py:1863`. Incidência em produção [nao verificado].
-
-2. **Igualdade na borda da pausa — cura parcial.** Sem cauda no dia mapeado, os dois caminhos voltam ao `<` do main. Com cauda, há dois recortes. A alimentação respeita `intra_descontada > 0`. A releitura recorta pelos intervalos carimbados e reescreve o desconto. No ensaio com o motor real, marcos 19h–00h, batidas 18h40–00h20 e pausa 18h50–19h20, motor e alimentação deram **320 min trabalhados**. A releitura deu **300 min trabalhados e 20 min de pausa**. O carimbo do intervalo antecede o gatilho que decide se o motor o desconta. `app/ponto/motor_calculo_v2.py:2985–3015`; `app/ponto/calculador/alimentacao.py:78–89`, `:135–151`; `app/ponto/calculador/periodo.py:304–312`, `:603–625`, `:753–770`; main `app/ponto/calculador/alimentacao.py:134` e `app/ponto/calculador/periodo.py:306`.
-
-   O **dia** vem do juiz registrado `turnos_do_colab`. O motor projeta `Turno.data_turno` e publica `resultado.dia_da_jornada`, que ambos os leitores consultam. A duplicação introduzida é do predicado **“dia com cauda”** e do recorte da pausa. A alimentação ainda usa dois universos para esse predicado. Um portador aberto pode habilitar `<=` para outro par do dia, mas fica fora do `dias_com_cauda` entregue a `rubricas_por_dia`. O próprio motor já tem uma divergência de dia anterior à c2t, pela herança de até seis horas e pelo mapa que o Comercial reaplica. `app/docs/JUIZES.md:20–25`; `app/core/juizes.py:215–216`; `app/ponto/motor_calculo_v2.py:932–960`, `:1160–1162`, `:2613–2623`, `:2777–2786`, `:3585–3587`, `:3777`; `app/ponto/calculador/alimentacao.py:82–95`, `:120–124`, `:173–183`, `:474–479`, `:550–553`; `app/ponto/calculador/periodo.py:615–625`.
-
-3. **Banco semanal do Comercial — curada a inclusão direta da cauda.** `trab_semana` soma a base da HE. O teste novo fixa **2.430 min trabalhados, 2.400 min de base, HE zero e saldo de −4 h**. A paridade do saldo com o main continua quebrada pelo item 4. Também permanece a mistura preexistente de datas na mesma conta semanal. O trabalho usa o dia da jornada e a dedução de HE usa a data civil da entrada. O teste novo, com HE zero, não exercita essa dedução. `app/ponto/motor_calculo_v2.py:3585–3593`, `:3709–3724`; `app/ponto/tests/test_ramo2b_c2t_motor.py:39–54`; main `app/ponto/motor_calculo_v2.py:3557–3572`; `app/docs/LEIS.md:117`, `:178`.
-
-4. **`_lim_dia` — não curado.** O ramo ainda troca os **480 min** do main pelo previsto da jornada em qualquer cruzamento com os dois marcos, inclusive com saída no marco. Em ensaio isolado do mensal, com **610 min trabalhados**, previsto de **660** e saída às 07h no marco, a HE passou de **130 para zero** e o saldo de **−36,00 h para −33,83 h**. `_jornada_do_dia` consulta a fonte prevista na L-024. O aval localizado limita o efeito a turno que cruza **com saída depois do marco**. Aval para mudar o limite em jornada sem cauda [nao verificado]. A pontualidade também tem mudança fora desse recorte, com teste Comercial que sai no próprio marco e exige 5 ou 12 min de atraso. `app/ponto/motor_calculo_v2.py:1419–1434`, `:3650–3692`, `:3709–3724`, `:2257–2267`, `:2305–2308`, `:2329–2333`; main `app/ponto/motor_calculo_v2.py:3504–3526`; `app/docs/LEIS.md:75`; `app/docs/PROMPTS.md:3052`, `:3078`, `:3087`; `app/ponto/tests/test_ramo2b_c2l_red_motor.py:102–133`, `:145–156`.
-
-5. **Partido — o corte da cauda foi preservado, e o corpo do motor foi alterado.** A flag `False` conserva a saída efetiva no marco. Na comparação com o main, `MotorTurnoPartido` passou a gravar pela porta da tripla e a chamar leitores novos no total diário, na intrajornada, na dobra e no ganho noturno. Isso descumpre a leitura literal de **“motor do Partido intocado”**. O teste de 490 min cobre um cenário de paridade. `app/docs/PROMPTS.md:3087`; `app/ponto/motor_calculo_v2.py:1917–1920`, `:3103–3106`, `:3131–3143`, `:3193–3195`, `:3241–3244`, `:3348–3352`, `:3387–3390`; main `app/ponto/motor_calculo_v2.py:2999–3014`, `:3058–3061`, `:3107–3112`, `:3211–3219`, `:3250–3259`; `app/ponto/tests/test_ramo2b_c2l_red_motor.py:51–61`.
-
-6. **Esmeril dos quatro campos.** As conversões para horas são explícitas. A granularidade, a fonte do valor e o dia divergem nos pontos abaixo.
-
-   | Campo | Quem escreve e quem lê |
-   |---|---|
-   | `saida_da_base_da_he` | `_escrever_base_da_he` grava o **instante**. Em par fechado é a ponta da base, limitada ao par. No portador aberto é o marco do último par creditado com cauda. O split noturno da HE, a alimentação e a releitura consultam o marcador. `app/ponto/motor_calculo_v2.py:1093–1105`, `:1933–1939`, `:1942–1971`, `:2763–2786`; `app/ponto/calculador/alimentacao.py:82–83`, `:113–117`, `:173–183`; `app/ponto/calculador/periodo.py:625`, `:758–762`. |
-   | `minutos_base_da_he` | A mesma porta grava **minutos líquidos do par** ou **a soma dos pares creditados** no aberto. `_trabalhado_da_base_da_he` lê o valor para HE, banco, releitura e teto do export. O oráculo calcula outra medida, **por dia**, pelos segmentos recortados, e a entrega a `regras.do_dia` e à lavratura `oraculo`. O caso do portador aberto no item 2 mostra onde esses universos se separam. `app/ponto/motor_calculo_v2.py:286–290`, `:1942–1971`, `:2763–2786`, `:3593`, `:3618–3622`; `app/ponto/calculador/periodo.py:768`; `app/ponto/calculador/alimentacao.py:474–479`, `:550–553`; `app/ponto/calculador/regras.py:614–626`; `app/ponto/services/fechamento.py:1289–1320`; `app/folha/porta_export.py:342–365`. |
-   | `minutos_trabalhados` | Os motores escrevem **minutos líquidos** no par, o crédito do aberto acumula minutos no portador, o bloqueio zera e `reler` pode reescrever. O mensal e o `DiaPago` convertem por `/60`. A promoção de folga em feriado também lê o integral, e a janela é desativada em par marcado como folga. A lavratura usa o mapa com queda para a data civil, enquanto o teto do export exige a chave no mapa. `app/ponto/motor_calculo_v2.py:329–334`, `:1628–1636`, `:1682–1687`, `:2777`, `:3025`, `:3141`, `:3514`; `app/ponto/calculador/periodo.py:748–749`, `:763`; `app/ponto/services/fechamento.py:922–923`, `:958–990`, `:1224–1241`; `app/ponto/services/dia_pago.py:126–132`, `:173–179`, `:234–267`; `app/folha/porta_export.py:106–122`, `:347–354`. |
-   | `saldo_banco_horas` | O Comercial soma minutos semanais e publica **horas mensais**. O fechamento soma as fatias, grava o saldo e o passa à linha de ajuste sem data do `DiaPago`, também na versão oráculo. O retrato de exportada lê o saldo do fechamento. Cartão, PDF e conferência do export leem horas. A lista de eventos do TXT não emite saldo. `app/ponto/motor_calculo_v2.py:3709–3724`; `app/ponto/services/fechamento.py:118`, `:318–320`, `:1128`, `:1204`, `:1232`, `:1308`; `app/ponto/services/dia_pago.py:348–360`, `:504–520`, `:542`, `:550–563`; `app/relatorios/cartao_pela_celula.py:114`, `:191`; `app/relatorios/pdf_espelho.py:531`, `:815–818`; `app/folha/porta_export.py:507–518`; `app/folha/export.py:439–461`. |
-
-7. **Export — falha de leitura para resultado composto vazio.** `medir` acessa `.dia_da_jornada` antes de o helper poder devolver uma lista vazia. `ResultadoMes` nasce sem esse atributo e a composição só o publica quando existe mapa de fatia não vazio. Um resultado composto vazio recebido nesse ponto levanta `AttributeError`. Para período sem chave, o helper levanta `KeyError`, enquanto `DiaPago` usa a data civil. O teto testemunha HE **junto com** intra positiva. A pendência de HE tem outra leitura, pelo espelho. `app/folha/porta_export.py:347`, `:356–362`, `:525–534`, `:551`, `:590–594`; `app/ponto/motor_calculo_v2.py:302–326`; `app/ponto/services/fechamento.py:200–202`, `:331–336`; `app/ponto/services/espelho.py:1263–1265`, `:1330–1331`; `app/ponto/services/dia_pago.py:126–132`. Ocorrência de ponta a ponta [nao verificado].
-
-8. **Catraca, RED e regressão de testes.** O censo AST real achou **`[3586, 3716, 3734, 3759, 3763, 3764]`** para o Comercial. A catraca exige **`[3586, 3717, 3735, 3760, 3764, 3765]`** e compara as listas exatamente. Os dois REDs novos passaram em memória e cada mutante caiu por uma asserção, com zero erros, usando adaptações mínimas para importar sem Django. O fixture fabrica 20 min de desconto num par de duas horas, fora dos gatilhos dos motores, e deixa escapar o caso do item 2. Executei também o censo da tripla. Ele encontrou apenas a porta declarada. Os limites documentados com `vars()` e `copy` seguido de `setattr` continuaram escapando nos ensaios. `app/core/tests/test_medida_turno_do_par.py:309`, `:564–568`; `app/ponto/tests/test_ramo2b_c2t_escopo.py:14–51`; `app/ponto/tests/ramo2b_c2t_mutantes.py:17–28`; `app/ponto/tests/test_ramo2b_c2_base_da_he.py:661–727`; `app/ponto/motor_calculo_v2.py:1954–1958`, `:2999–3015`, `:3492–3503`.
-
-   A comparação com a cópia do `59600163c` confirmou que **`test_saldo_semanal_comercial_usa_trabalhado` nasceu na obra**, em arquivo ausente no main. A c2t o substitui pelo teste de saldo sobre a base. Já no acumulado desde o main, há asserções preexistentes alteradas em janela de HE, noturno, extra declarada e B-I28. O delta c2t acrescenta guardas, aritmética e testes, sem novos `except` ou leituras do relógio nos trechos alterados. `app/ponto/tests/test_ramo2b_c2l_red_motor.py:96–97`; `app/ponto/tests/test_ramo2b_c2t_motor.py:39–54`; `app/ponto/tests/test_janela_he_saida.py:82–98`, `:112–118`, `:148–154`; `app/ponto/tests/test_noturno_v4_janela_dia_do_turno.py:61–79`, `:98–109`; `app/ponto/tests/test_o146_extra_declarada_da_escala.py:539–544`; `app/ponto/tests/test_o280_bateria_da_lei.py:5133–5139`, `:5173–5181`; `app/ponto/calculador/alimentacao.py:78–83`, `:138–150`; `app/ponto/calculador/periodo.py:304–312`, `:623–625`, `:753–762`; `app/ponto/motor_calculo_v2.py:3588–3593`, `:3709–3724`, `:3780–3785`.
-
-Suíte Django completa, DIFF de frota, efeito nas competências exportadas e histórico Git de `eb2019f99` [nao verificado].
-
-## 27/11 08:52 · sessao 65f100357ca0 · - · - · origem=Ronald (tmux)
-
-**REPROVADO.**
-
-1. **Item 2. Cura parcial.** O `<=` ficou restrito aos dias com ao menos um período marcado. Os dois leitores usam `resultado.dia_da_jornada`, portanto consomem a data publicada pelo motor. A autoridade registrada é `turnos_do_colab`, com `parear_turnos` e `_data_do_turno` na geometria. A c2t duplica a pergunta «o dia tem cauda?» e a lógica de recorte. `alimentacao` ainda calcula dois conjuntos de dias com cauda, com critérios diferentes. Um portador aberto recebe legitimamente a tripla no motor, habilita o `<=` e pode ficar fora do conjunto que chega às rubricas. [app/core/juizes.py:215] [app/ponto/turnos.py:312] [app/ponto/motor_calculo_v2.py:949] [app/ponto/motor_calculo_v2.py:1160] [app/ponto/motor_calculo_v2.py:2777] [app/ponto/calculador/alimentacao.py:78] [app/ponto/calculador/alimentacao.py:90] [app/ponto/calculador/alimentacao.py:138] [app/ponto/calculador/alimentacao.py:173] [app/ponto/calculador/periodo.py:291] [app/ponto/calculador/periodo.py:625] [nao verificado]
-
-2. **Contraexemplo do recorte.** Ene­saiando em memória as funções reais com uma janela sintética, marcos 19:00–00:00, batidas 18:40–00:20, pausa 18:50–19:20 e piso zero, o 12x36 devolveu 320 trabalhados, base 300 e pausa descontada zero. A alimentação também deu 320. A releitura passou a 300 trabalhados e 20 de pausa. Ela usa a tripla para ativar o recorte sem consultar se o motor descontou a pausa. Ocorrência em produção [nao verificado]. [app/ponto/motor_calculo_v2.py:2985] [app/ponto/motor_calculo_v2.py:3000] [app/ponto/calculador/alimentacao.py:138] [app/ponto/calculador/periodo.py:307] [app/ponto/calculador/periodo.py:753] [nao verificado]
-
-3. **Catraca vermelha.** Executei o censo AST puro. As linhas reais B1 do Comercial são `[3586,3716,3734,3759,3763,3764]`. A catraca congelada exige `[3586,3717,3735,3760,3764,3765]` e compara por igualdade. Os dois controles sintéticos da c2t passam em memória e suas duas mutações falham por asserção, sem erro. Suite com Django [nao verificado]. [app/core/medida_turno_do_par.py:448] [app/core/tests/test_medida_turno_do_par.py:309] [app/core/tests/test_medida_turno_do_par.py:564] [app/ponto/tests/test_ramo2b_c2t_escopo.py:43] [app/ponto/tests/test_ramo2b_c2t_escopo.py:51] [app/ponto/tests/ramo2b_c2t_mutantes.py:21] [nao verificado]
-
-4. **Escopo adicional.** O `MotorIntermitente` herda a flag do 12x36 e a fábrica o seleciona explicitamente. O mesmo ensaio gerou 320 trabalhados, base 300 e cauda no Intermitente. O cadastro fornece marcos ao motor, inclusive por fallback no template. A pontualidade também muda sem saída além do marco. O teste da virada termina às 07:50, o próprio marco, e espera atraso de 5 ou 12 min. [app/ponto/motor_calculo_v2.py:795] [app/ponto/motor_calculo_v2.py:1917] [app/ponto/motor_calculo_v2.py:2265] [app/ponto/motor_calculo_v2.py:3841] [app/ponto/motor_calculo_v2.py:3921] [app/escala/models.py:1144] [app/ponto/tests/test_ramo2b_c2l_red_motor.py:102] [app/ponto/tests/test_ramo2b_c2l_red_motor.py:119] [app/docs/PROMPTS.md:3052] [nao verificado]
-
-5. **Export.** A nova testemunha usa acesso direto ao mapa e à chave do período. O dataclass permite resultado vazio sem o atributo e o resultado composto só materializa o mapa quando recebe um mapa não vazio. Assim o acesso pode levantar antes de a testemunha examinar a lista vazia, além de poder levantar `KeyError` para período sem chave. A lavratura e a outra testemunha ainda usam o fallback de `_dia_de`. Ocorrência em produção [nao verificado]. [app/folha/porta_export.py:106] [app/folha/porta_export.py:347] [app/folha/porta_export.py:590] [app/ponto/motor_calculo_v2.py:302] [app/ponto/services/fechamento.py:202] [app/ponto/services/fechamento.py:331] [app/ponto/services/espelho.py:1198] [app/ponto/services/dia_pago.py:126]
-
-## 27/11 08:52 · sessao 6a0fa390890d · - · - · origem=Ronald (tmux)
-
-1. **Escopo do item 2 parcialmente curado.** Os calculadores leem `resultado.dia_da_jornada` e não refazem a data civil, mas implementam separadamente o predicado que habilita o recorte. Num ensaio em memória com o mapa fornecido, o motor e a alimentação somaram 150 min em dois pares da mesma jornada. A releitura somou 130 min porque descontou do primeiro par uma pausa que o motor apenas carimbou. O teste positivo fabrica `intra_descontada=20` para um par de 120 min, abaixo dos gatilhos dos dois motores. Os dois mutantes c2t falharam por asserção e os dois testes originais passaram em memória. Integração Django e produção [nao verificado]. `app/core/juizes.py:215-224`, `app/ponto/motor_calculo_v2.py:932-960,2993-3000,3489-3501`, `app/ponto/calculador/alimentacao.py:78-88,135-150`, `app/ponto/calculador/periodo.py:603,615-625,753-770`, `app/ponto/tests/test_ramo2b_c2t_escopo.py:20-24,36-51`, `app/ponto/tests/ramo2b_c2t_mutantes.py:21-28`.
-
-2. **Intermitente fora do aval.** O `MotorIntermitente` recebe a política verdadeira por herança e o cadastro aceita marcos. Em memória, com janela 19–07 e saída às 07:30, ele devolveu saída efetiva 07:30, fora 0 e base às 07:00. O Plantão devolveu 07:00, fora 30 e base às 07:00. Ocorrência na frota [nao verificado]. `app/ponto/motor_calculo_v2.py:795,1917-1920,3780-3784,3841-3853,3919-3922`, `app/escala/services/cadastro_tipo.py:205-227`, `app/escala/models.py:326-345,347-368`, `app/ponto/tests/test_s6_intermitente_feriado.py:76-80`.
-
-3. **Base da HE.** A tripla tem uma porta de escrita, mas a saída tem duas interpretações. No par fechado é o fim efetivo da sua base, que pode inclusive ser a entrada. No portador aberto conserva o fim do último par que teve cauda, enquanto os minutos acumulam várias bases. Os leitores da guarda incluem o portador, mas o oráculo geométrico só publica `dias_com_cauda` depois de descartar abertos. O motor e a testemunha do export leem os minutos gravados. A lavra `oraculo` recompõe os minutos da base do dia pela geometria, através de `rubricas_por_dia`, e escreve pela mesma porta `lavrar`. Caso real com cauda no portador aberto [nao verificado]. `app/ponto/motor_calculo_v2.py:286-290,1922-1939,1942-1971,2763-2786`, `app/ponto/calculador/alimentacao.py:78-95,120-124,173-183,474-479,550-553`, `app/ponto/calculador/regras.py:614-626`, `app/ponto/calculador/periodo.py:625,653-659,758-768`, `app/ponto/services/fechamento.py:1289-1320`, `app/folha/porta_export.py:342-364`.
-
-4. **Trabalhado e banco.** O trabalhado é escrito em minutos pelos motores, no bloqueio e no crédito de aberto. A releitura também altera o objeto em memória. Os leitores persistidos convertem para horas, com a lavra do dia consumindo o mapa e usando data civil na falta da chave, como a testemunha correspondente do export. O saldo é mensal, em horas, gravado no Fechamento e copiado para ajuste sem dia no DiaPago. O TXT emite HE, intra e noturno do Fechamento. O saldo chega ao painel, cartão, PDF e comparação do export via soma de DiaPago. A soma semanal Comercial usa dia da jornada para o trabalhado e dia civil da entrada para o abatimento de HE, o que pode divergir na borda domingo–segunda. `app/ponto/motor_calculo_v2.py:329-334,1628-1636,2777,3025,3141,3514,3593,3709-3724`, `app/ponto/calculador/periodo.py:748-749,763`, `app/ponto/services/fechamento.py:318-320,922-923,978-990,1007-1009,1128,1204,1224-1241,1308`, `app/ponto/services/dia_pago.py:126-132,173-179,234-267,348-360,504-520,542,550-563`, `app/folha/porta_export.py:106-122,507-518`, `app/folha/export.py:439-461,739-747`, `app/relatorios/cartao_pela_celula.py:114,191`, `app/relatorios/pdf_espelho.py:531,815-818`, `app/templates/ponto/partials/painel_fechamento.html:37-38`.
-
-5. **Leitor do teto no export.** O consumidor acessa `resultado.dia_da_jornada` diretamente, inclusive quando o resultado composto tem zero períodos. O resultado nasce sem o mapa e a composição só o cria para mapa de fatia não vazio. Um colaborador com fechamento, escala e zero batidas que passe a classificação pode levantar `AttributeError` antes de o teto avaliar a lista vazia. O selo apresenta sempre mapa preenchido e intra positiva. Produção e antiguidade do defeito no main [nao verificado]. `app/folha/porta_export.py:525-532,590-594`, `app/ponto/services/fechamento.py:200-202,331-336`, `app/ponto/services/espelho.py:1198-1202,1265,1330-1331`, `app/ponto/motor_calculo_v2.py:303-325`, `app/folha/export.py:840-857,911-977,1214-1222`, `app/ponto/tests/test_ramo2b_porta_7a_testemunha.py:43-62`.
-
-## 27/11 08:51 · sessao fcc0da312b07 · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
-
-**DIFF de impacto L-110.** O escritor real é `ponto.services.dia_pago.lavrar`. `recalcular_fechamento_mes(..., somente_leitura=True, lavrar_dias_pagos=True)` devolve o `FechamentoMensal` em memória e chama `lavrar` com os períodos e mapas da mesma apuração, na versão `motor`. A partir de 10/2026, `rubricas_por_dia` monta o mapa que alimenta uma segunda chamada ao mesmo escritor, na versão `oraculo`. [app/docs/LEIS.md:136] [app/ponto/services/fechamento.py:1152-1168,1215-1265,1289-1325] [app/ponto/calculador/alimentacao.py:353-370]
-
-`lavrar` apaga e recria as linhas por colaborador, competência e versão. Grava as rubricas, os minutos de grade, o furo apurado, os detalhes e os carimbos de origem. A data segue o mapa do dia da jornada quando disponível. A linha de ajuste tem data nula e leva o reflexo de DSR e o saldo do banco. [app/ponto/services/dia_pago.py:34-47,126-141,335-361] [app/ponto/models.py:315-387]
-
-O `fm` usa os mesmos 26 campos do anexo, mais `empresa`. O `dp` usa as linhas datadas de `motor`, com as rubricas convertidas de horas para minutos e os três campos de grade na unidade original. Os hashes cobrem as duas tabelas inteiras no schema `juliani`, com ambas as versões e os ajustes. A sonda exige ajustes recém-lavrados para toda a frota e só grava o JSON depois de conferir os hashes e o estado da sequência após o rollback. [app/ponto/management/commands/aplicar_09_corte_b.py:67-74] [app/ponto/services/fechamento.py:1152-1160,1289-1320] [app/ponto/services/dia_pago.py:335-361] [app/ponto/models.py:325-351] [anexo espurias_txt11_s3.py:189-231]
-
-Para as duas árvores, use a mesma sombra já preparada, a trava da sombra e o mesmo `AGORA`. Execute no `tenant_command shell --schema=juliani` com o mount `/sombra`, que corresponde a `logs/sombra`. O atalho `bin/sombra.sh --rodar` consulta a lavra em produção e a importa antes de executar a sonda. [bin/sombra_trava.sh:4-7] [bin/sombra.sh:136-167,182-191,483-492] [app/ponto/services/fechamento.py:634-636,1134-1141]
-
-**Estimativa:** 4–8 minutos por competência em cada árvore, ou 8–16 minutos para o par, fora a espera pela trava. Conferi a sintaxe em memória. A execução no PostgreSQL, os hashes resultantes, o tempo real e a identificação da cópia como `1f9541e71` estão [nao verificado].
-
-### SCRIPT
-
-```python
-ROT = "main"
-MES = 11
-ANO = 2026
-AGORA = None  # Opcional: o mesmo ISO 8601 com offset nas duas arvores.
-
-import hashlib
-import json
-import logging
-import re
-import sys
-from contextlib import redirect_stderr, redirect_stdout
-from datetime import datetime
-from io import StringIO
-from pathlib import Path
-from time import monotonic
-from traceback import extract_tb
-from unittest.mock import patch
-
-from django.conf import settings
-from django.db import connection, transaction
-from django.utils import timezone
-
-from colaboradores.models import Empresa
-from ponto import motor_calculo_v2
-from ponto.models import DiaPago, FechamentoMensal
-from ponto.services import dia_pago, fechamento
-
-EMPRESAS = (2, 3, 4)
-BANCO, SCHEMA = "sombra", "juliani"
-QUOTE = connection.ops.quote_name
-
-
-class FalhaSonda(RuntimeError):
-    pass
-
-
-def erro_sem_dados(tipo, erro, tb):
-    if tipo is FalhaSonda:
-        print(str(erro), file=sys.stderr)
-    else:
-        origem = extract_tb(tb)[-1]
-        print(f"{origem.filename}:{origem.lineno} {tipo.__name__}", file=sys.stderr)
-
-
-def tabela(modelo):
-    return f"{QUOTE(SCHEMA)}.{QUOTE(modelo._meta.db_table)}"
-
-
-def estado_das_linhas():
-    estado = {}
-    with connection.cursor() as cursor:
-        for modelo in (FechamentoMensal, DiaPago):
-            pk = QUOTE(modelo._meta.pk.column)
-            cursor.execute(f"""
-                SELECT count(*),
-                       md5(coalesce(string_agg(md5(to_jsonb(t)::text), ''
-                                                ORDER BY t.{pk}), ''))
-                FROM {tabela(modelo)} AS t
-            """)
-            n, md5 = cursor.fetchone()
-            estado[modelo.__name__] = {"n": n, "md5": md5}
-    return estado
-
-
-def estado_da_sequencia(cursor, sequencia):
-    cursor.execute(f"SELECT last_value, is_called FROM {sequencia}")
-    return cursor.fetchone()
-
-
-def ler_dp(primeiro_pk, fm):
-    campos = dia_pago.CAMPOS_DIA
-    grade = set(dia_pago.CAMPOS_GRADE)
-    versoes = ("motor", "oraculo") if (ANO, MES) >= (2026, 10) else ("motor",)
-    dp = {cid: {} for cid in fm}
-    ajustes = set()
-    linhas = DiaPago.objects.filter(
-        pk__gte=primeiro_pk, mes=MES, ano=ANO,
-        colaborador__empresa_id__in=EMPRESAS, versao__in=versoes,
-    ).order_by().values_list("colaborador_id", "data", "tipo", "versao", *campos)
-
-    for cid, data, tipo, versao, *valores in linhas.iterator(chunk_size=2000):
-        cid = str(cid)
-        if cid not in dp:
-            raise FalhaSonda(f"DiaPago fora do universo colab_id={cid}")
-        if tipo == DiaPago.TIPO_AJUSTE and data is None:
-            chave = (cid, versao)
-            if chave in ajustes:
-                raise FalhaSonda(f"Ajuste duplicado colab_id={cid} versao={versao}")
-            ajustes.add(chave)
-        elif tipo == DiaPago.TIPO_DIA and data is not None:
-            if versao == "motor":
-                dp[cid][data.isoformat()] = {
-                    campo: valor if campo in grade else valor * 60
-                    for campo, valor in zip(campos, valores, strict=True)
-                }
-        else:
-            raise FalhaSonda(f"Tipo/data de DiaPago inconsistente colab_id={cid}")
-
-    faltam = {(cid, versao) for cid in fm for versao in versoes} - ajustes
-    if faltam:
-        cid, versao = min(faltam)
-        raise FalhaSonda(f"Ajustes ausentes={len(faltam)} primeiro_colab_id={cid} versao={versao}")
-    return dp
-
-
-def main():
-    inicio = monotonic()
-    if (
-        not getattr(settings, "HASNER_SOMBRA", False)
-        or connection.settings_dict.get("HOST") != "sombra_db"
-        or connection.settings_dict.get("NAME") != BANCO
-        or connection.schema_name != SCHEMA
-        or connection.in_atomic_block
-        or not connection.get_autocommit()
-    ):
-        raise FalhaSonda("Requer sessao sombra_db/sombra/juliani em autocommit.")
-    if not re.fullmatch(r"[A-Za-z0-9_-]+", ROT) or not 1 <= MES <= 12:
-        raise FalhaSonda("ROT ou MES invalido.")
-
-    agora = datetime.fromisoformat(AGORA) if AGORA is not None else timezone.now()
-    if timezone.is_naive(agora):
-        raise FalhaSonda("AGORA requer offset.")
-    motor_md5 = hashlib.md5(Path(motor_calculo_v2.__file__).read_bytes()).hexdigest()
-    fm = {}
-
-    with transaction.atomic(durable=True):
-        with connection.cursor() as cursor:
-            cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ WRITE")
-            cursor.execute("SELECT current_database(), current_schema()")
-            if cursor.fetchone() != (BANCO, SCHEMA):
-                raise FalhaSonda("Banco ou schema efetivo fora da sombra.")
-
-        empresas = set(Empresa.objects.filter(pk__in=EMPRESAS).values_list("pk", flat=True))
-        if empresas != set(EMPRESAS):
-            raise FalhaSonda("Escopo incompleto de empresas.")
-        if (MES, ANO) in fechamento.GUARDA_COMPETENCIA and any(
-            fechamento.empresas_exportadas_no_escopo(MES, ANO, empresa_id=eid)
-            for eid in EMPRESAS
-        ):
-            raise FalhaSonda("A guarda da competencia impede medir toda a frota.")
-
-        antes = estado_das_linhas()
-        coluna = DiaPago._meta.pk.column
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT pg_get_serial_sequence(%s, %s)", [tabela(DiaPago), coluna])
-            sequencia = cursor.fetchone()[0]
-            if sequencia is None:
-                raise FalhaSonda("Sequencia de DiaPago ausente.")
-            seq_antes = estado_da_sequencia(cursor, sequencia)
-            cursor.execute(f"SELECT coalesce(max({QUOTE(coluna)}), 0) + 1 FROM {tabela(DiaPago)}")
-            primeiro_pk = int(cursor.fetchone()[0])
-            # RESTART dentro de atomic protege a sequencia e identifica as linhas frescas.
-            cursor.execute(f"ALTER SEQUENCE {sequencia} RESTART WITH {primeiro_pk}")
-
-        with (
-            patch.object(timezone, "now", new=lambda: agora),
-            patch.object(logging.Logger, "handle", new=lambda _logger, _registro: None),
-            redirect_stdout(StringIO()),
-            redirect_stderr(StringIO()),
-        ):
-            for eid in EMPRESAS:
-                universo = set(fechamento.universo_da_competencia(
-                    MES, ANO, empresa_id=eid,
-                ).values_list("pk", flat=True))
-                apurado = fechamento.recalcular_fechamento_mes(
-                    MES, ANO, empresa_id=eid, somente_leitura=True, lavrar_dias_pagos=True,
-                )
-                if apurado.keys() != universo:
-                    raise FalhaSonda(
-                        f"FM incompleto empresa={eid} apurados={len(apurado)} universo={len(universo)}"
-                    )
-                fm.update({
-                    str(cid): {
-                        "empresa": eid,
-                        **{
-                            campo: None if valor is None else float(valor)
-                            for campo, valor in campos.items()
-                        },
-                    }
-                    for cid, campos in apurado.items()
-                })
-            dp = ler_dp(primeiro_pk, fm)
-        transaction.set_rollback(True)
-
-    depois = estado_das_linhas()
-    with connection.cursor() as cursor:
-        seq_depois = estado_da_sequencia(cursor, sequencia)
-    if antes != depois or seq_antes != seq_depois:
-        raise FalhaSonda("Divergencia de linhas ou sequencia apos rollback.")
-
-    saida = Path(f"/sombra/ramo2diff_diapago_{ROT}_{ANO}_{MES:02d}.json")
-    conteudo = json.dumps({
-        "fm": fm, "dp": dp, "fm_antes": antes, "fm_depois": depois, "motor_md5": motor_md5,
-    }, sort_keys=True, allow_nan=False)
-    with saida.open("x", encoding="utf-8") as arquivo:
-        arquivo.write(conteudo + "\n")
-    print(f"{saida.name} colabs={len(fm)} agora={agora.isoformat()} segundos={monotonic() - inicio:.1f}")
-
-
-sys.excepthook = erro_sem_dados
-main()
-```
-
-### FIM
-
-## 27/11 08:45 · sessao c12b28a112d8 · CODEX-CONSTROI-MOTOR · leitura · origem=Code
-
-## 1. Fonte de autoria do teste [nao verificado]
-
-**Não existe na c12 um manifesto persistido que marque um caminho como `CRIADO` pelo Codex construtor. Existe o `<resposta>.inventario`, que persiste os caminhos tocados pela chamada.** O inventário emite `TOCADO`, `PROIBIDO` ou `FALHA`. `TOCADO` agrupa criação, edição e outras diferenças. A resposta é escolhida pelo chamador e fica sob `logs/`. O wrapper não exige `logs/<OBRA>/` e não grava o inventário na `wt`. `bin/codex_pergunta.sh:89–100,145–151,229–250,457–467,835–837`
-
-- **Onde já se sabe que é criação.** `_INVENTARIO_PY` monta `arvore` com `git ls-tree` do `HASH`, compara o FS e o status Git com essa base e, no modo positivo, reconhece o teste do app autorizado, recusa se o caminho já está em `arvore` e exige que exista no FS final. A chamada exige inventário vazio na entrada e na revalidação. Assim, para aquela chamada em modo positivo, um `TOCADO` da classe de teste aceita permite derivar a criação. O escritor único dessa informação seria o próprio wrapper, na saída desse mesmo inventário final. O arquivo bruto é escrito antes da prova de vida da lease, que ainda pode invalidar sua atribuição à chamada. `bin/codex_pergunta.sh:164–166,196–250,555–570,791–797,835–853`
-- **O que os recibos provam.** `CODEX_RESULTADO` e `.rc` dão o desfecho da chamada. `.r` é a resposta do Codex, e `.id` liga uma resposta bem-sucedida à obra, papel, hash de entrada, PID e SHA da resposta. O JSONL é a saída do executor e o registro da vaga guarda obra, `wt`, base, `HEAD`, `main` e desfecho. Nenhum desses recibos publica a lista de criações. `rc_sem_colher.py` procura o `.rc` em `logs/<OBRA>/`. O inventário e os recibos da chamada real desta obra ficam [nao verificado]. `bin/codex_pergunta.sh:306–325,353–359,587–605,765–775,809–827,856–890` · `bin/rc_sem_colher.py:50–82`
-
-## 2. Fonte da aprovação pelo Opus final
-
-**Não existe na c12 uma fonte executável que ateste `Opus final APROVOU este diff`. Existe um leitor executável do texto `APROVADO` no transcript do verificador final.** `_veredito_e_obra` lê a obra do prompt e o veredito da primeira linha de `SubagentHandback`. `_reprovacoes_finais` procura `agent-*.jsonl` com `agentType=verificador` e entrega ao B3 somente os `REPROVADO`. O leitor não vincula a aprovação a um hash do diff nem verifica que o modelo era Opus. O Stop e o PreToolUse acionam essa leitura para o B3. `bin/disjuntor.py:438–466,649–671,839–853,981–1001,2233–2235,2255–2264` · `bin/hook_stop_fila1.py:1305–1321` · `.claude/agents/verificador.md:2–7,18`
-
-- **RELATO e merge.** `linhas_libera_b3` reconhece `DESENHO` ou `ERRO-BOBO` no topo e `decide_b3` usa a linha para liberar um B3 disparado. `commit_msg.sh`, quando há `MERGE_HEAD`, passa `OBRA: <id>` a `--merge-obra`. O juiz consulta `estado_b3` sem transcript e aceita `LIVRE`, inclusive quando a obra nunca disparou. `LIBERA-B3` e `B3-MERGE livre` são estados desse portão. `bin/disjuntor.py:729–757,1025–1043,1086–1094,1289–1305` · `bin/commit_msg.sh:23–38`
-- **`opus.md` ou linha de aprovação no RELATO.** Leitor que use qualquer dos dois como aprovação do diff nos três sítios [nao verificado]. O parecer fornecido abre com `REPROVADO`. Aprovação final, hash aprovado e execução em produção [nao verificado]. `r.txt:1`
-
-## 3. Seleção dos três sítios na VM
-
-| Sítio | Seleção, árvore e ponto do filtro |
-|---|---|
-| **Régua** | O shell escolhe `${ONLY:-$LABELS}`. `LABELS` contém apps e `--only` fornece labels explícitas. A régua monta sempre `~/saas-hasner/app`, mesmo quando o script é chamado de uma `wt`, e chama `manage.py test` direto pelo `trava_teste.sh`. O ponto de despacho é `:165–169`. Com label de app ou pacote, a lista de casos se forma na descoberta do Django, na chamada `super().build_suite()` do runner de CI. A poda de quarentena vem depois da descoberta. Para impedir também a carga do módulo na VM, a exclusão precisa valer antes de o Django importar o candidato. O glob de selos de host é outro fluxo e o selo do RELATO abre o fonte por glob. `bin/regua.sh:13–23,46–51,138–145,165–169` · `app/config/settings/ci.py:40` · `app/core/runner_quarentena.py:72–96` · `bin/tests/test_relato_guarda_pedido_de_patch.sh:143–148` |
-| **Vigia da esteira** | A lista do isolamento nasce em `_isolar`, na extração e deduplicação dos IDs de `FAIL`/`ERROR` de `green.out`. O reteste monta `d/orig/app`, fotografia da viva feita **antes** da cura, e usa Docker direto pela `_rodar_testes`. O ponto comum aos retestes é a lista `ids` imediatamente antes de montar o argv nessa função. Reversão e relógio alimentam o mesmo ponto com IDs de `logs/vigia_arvore.falhas` para `R/app`. A autocura usa uma cópia temporária da viva. `app/core/esteira_vigia.py:725–762,1301–1317,1352–1363,1429–1448` · `bin/molde_fatia/rodar.sh:9–14,43–51` |
-| **Vizinhos da volta** | Lê `base..HEAD` Git da árvore recebida e enumera `test*.py` no FS de `app/`. `poe()` é o único ponto que acumula as labels de teste tocado presente, vizinho por AST ou texto, app de migration e selo global. `suite.sh --volta` chama o seletor e retém apps de `LABELS`. O seletor entrega candidatos antes de a rota ser conhecida. A exclusão **da execução na VM** cabe no ramo local de `suite.sh`, depois da decisão de rota e antes do `manage.py test`. Uma label de app ou pacote pode redescobrir o módulo mesmo se sua label pontual sumir. `bin/vizinhos_da_volta.py:25–51,92–132` · `bin/suite.sh:198–216,260–285,502–529,560–569` |
-
-## 4. Como o mesmo teste chega à pista 2 [nao verificado]
-
-- **`--dir <wt> --volta <base>`** passa por Vizinhos antes da rota. **`--dir <wt> --only <label>`** recebe a label do chamador e pula Vizinhos. A inteira **`--dir <wt> --motivo "pre-opus <OBRA>"`** usa os apps de `LABELS`. Nenhum desses pedidos executa `regua.sh` ou `esteira_vigia.py`. `suite.sh` lê a linha `LABELS=` da régua, usa o `HEAD` da cópia ou fotografa alterações de `app/` num commit, publica `refs/pista/<sha>` e envia `ssh pista pede <sha> --only ...`. O contrato do atendente remoto está documentado fora dos executores da VM. O job real desta obra fica [nao verificado]. `bin/suite.sh:195–216,417–452,502–507` · `app/docs/BACKLOG.md:2375`
-- **O mesmo argv hoje pode cair na VM.** Indisponibilidade ou incompatibilidade antes do aceite, e recusa remota sem execução, levam a `ROTA VM`. Depois do aceite, falha de transporte vira erro de infraestrutura. A inteira de pouso e a chamada sem `--dir` seguem na VM. Filtrar a saída única de Vizinhos antes dessa bifurcação também tiraria o teste da pista. A inteira pré-Opus e o recorte explícito também precisam respeitar a restrição se chegarem ao executor local. `bin/suite.sh:319–342,351–381,444–449,468–479,502–529,560–569`
-
-## 5. O que distingue antes e depois do merge
-
-- **Régua.** A distinção atual é só a presença do arquivo no `app/` vivo. Se o teste está apenas na `wt`, a régua canônica não o vê. Se os bytes chegam ao disco vivo antes do commit de merge, o bind já os vê. Impressão digital e carimbo medem a árvore, sem julgar se a entrega entrou em `main`. `bin/regua.sh:14–15,25–45,165–169,185–203` · `CLAUDE.md:352–354`
-- **Vigia.** `orig/app` fixa os bytes da viva na abertura daquela fatia. Um `orig` posterior pode conter o teste pousado. Os retestes de reversão e relógio usam a viva diretamente. A decisão do isolamento usa o `mtime` de `green.out` e pode reutilizar um resultado sem reler os IDs. Nenhum desses pontos consulta `main` para saber se aquela entrega pousou. `bin/molde_fatia/rodar.sh:9–14` · `app/core/esteira_vigia.py:725–743,1301–1317,1352–1363`
-- **Vizinhos.** A entrada é `<árvore> <base>` e o delta termina no `HEAD` daquela árvore. A mesma `wt` pode fornecer o mesmo delta após o merge em outra árvore. Sem `--dir`, `suite.sh --volta` usa sua própria raiz. O desligamento automático exigido pelo aval depende de saber que a entrega foi integrada a `main`. A ref viva já é lida pelo wrapper na admissão, mas nenhum dos três seletores usa esse dado como prova de pouso. `bin/vizinhos_da_volta.py:25–30` · `bin/suite.sh:200–206` · `bin/codex_pergunta.sh:306–310,575–576` · `aval.txt:1`
-
-## 6. REDs e impacto nos chamadores
-
-Use o mesmo módulo da sonda, `app/core/tests/test_model_sem_migration_pendente.py`, e um teste existente como controle. O anexo relata `rc 0` e ausência na base para a criação da fixture. Os resultados abaixo são os esperados pela leitura. Execução dos três REDs e do controle na pista [nao verificado]. `matriz_sem_flag.txt:7–10` · `bin/codex_pergunta.sh:232–250` · `aval.txt:1`
-
-| RED | Entrada e estado | Hoje | Esperado pelo aval |
-|---|---|---|---|
-| **Régua** | O `app/` montado pela régua de teste contém os dois módulos. O novo tem origem na chamada do construtor, está pendente e é descobrível por `core`. | A descoberta inclui os dois. | Na VM roda o existente. O novo roda na pista com a cópia que o contém. Uma fixture só na `wt` não exercita a régua canônica. `bin/regua.sh:14,23,165–169` · `app/core/runner_quarentena.py:72–96` · `bin/suite.sh:417–445` · `aval.txt:1` |
-| **Vigia** | `green.out` nomeia os dois IDs, cache frio, `orig/app` da fixture com os módulos disponíveis. O novo está pendente. | `_isolar` entrega os dois IDs ao Docker. Na fotografia anterior à criação, o módulo novo estaria ausente, mas seu ID ainda seria passado e a tentativa influenciaria a classificação. | Retesta só o existente. Se todos os IDs forem excluídos, o isolamento fica sem reteste e sem veredito derivado dele. A pista pode rodar o novo na cópia que o contém. `app/core/esteira_vigia.py:125–144,725–762` · `bin/molde_fatia/rodar.sh:9–14` · `bin/suite.sh:417–445` · `aval.txt:1` |
-| **Vizinhos** | Teste novo já commitado na `wt`, ausente de `<base>`, com um vizinho existente. Mesmo recorte `--dir … --volta …`, pendente, uma vez em `ROTA VM` e outra com pista aceita. | O novo sai como `obra` e chega aos dois executores. Antes do commit o diff não o nomeia, embora o glob ainda possa achá-lo como vizinho. | Na VM roda o existente, inclusive se uma label de pacote cobrir o novo. Na pista o mesmo novo continua na seleção. `bin/vizinhos_da_volta.py:25–45,92–95,116–132` · `bin/suite.sh:441–445,502–507,560–569` · `aval.txt:1` |
-
-- **Pre-push e carimbo.** `bin/hooks.sh` instala wrappers para o `pre-push` da árvore chamadora e para o `commit-msg` da principal. `bin/pre-push.sh` testa o SHA empurrado em um `git archive`, lê `LABELS` da régua e pode pular o arsenal se o carimbo `OK` corresponder à árvore e ao commit. Um carimbo de corrida com exclusões pode, portanto, fazer o push pular testes que nunca rodaram. A variante em `app/core/hooks/pre-push.sh` lê a mesma linha, monta a viva e usa o carimbo por impressão digital. Qual hook está instalado [nao verificado]. `bin/hooks.sh:63–83` · `bin/pre-push.sh:27–45,50–74,142–145,184–199` · `app/core/hooks/pre-push.sh:18–25,54–55,80–88`
-- **Outros leitores de `LABELS`.** `suite.sh`, vigia da árvore, réguas de relógio e calendário, molde de autocura e certificador da pista leem a declaração literal. Trocar seu formato quebra esses leitores e o selo da fonte única. Mudar a seleção dentro da régua deixa independentes as chamadas Docker do vigia da árvore e dos hooks. O certificador também exige que o argv corresponda a `LABELS` e que `Found − QUARENTENA-PODADO = Ran`. `bin/suite.sh:195–196` · `bin/vigia_arvore.sh:75–88,101–149` · `bin/regua_relogio.sh:27–29,51–55` · `bin/regua_calendario.sh:22–26` · `bin/molde_autocura/rodar.sh:22–26` · `bin/pista_certifica.sh:67–69,83–92` · `bin/tests/test_labels_fonte_unica.sh:20–35,80–95`
-- **Volta intermediária e vigia.** `volta_intermediaria.sh` faz Ruff e o selo do disjuntor na VM, chama `suite.sh --dir … --volta …`, conta labels em `.porque` e agrega o rc. Se a seleção esvaziar antes da guarda, a volta já trata isso como vermelho. Se esvaziar depois e cair em `${ONLY:-$LABELS}`, reabre a suíte padrão. No vigia, reutilizar o cache por `mtime` após mudar aprovação ou pouso pode manter a classificação antiga. Passar uma lista vazia ao Docker ou tratá-la como reprovação também altera a classificação. `bin/volta_intermediaria.sh:18–46` · `bin/suite.sh:206–216,560–569` · `app/core/esteira_vigia.py:125–144,725–762`
-
-_8601 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8606 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
