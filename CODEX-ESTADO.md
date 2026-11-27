@@ -1,7 +1,58 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 15:35** · publicado em **27/11/2026 15:39** (UTC-3)
+> Ultima resposta processada: **27/11/2026 15:44** · publicado em **27/11/2026 15:46** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 15:44 · sessao 4c95a5211276 · PAR-PELO-TURNO · leitura · origem=Code
+
+Comparei a cópia `84f8a88d4` com a cópia local da base `59600163c`, arquivo a arquivo. As linhas abaixo são do HEAD, salvo quando marco `base`. Os 18 registros do anexo correspondem a **17 métodos**, porque `test_3_o_fato_posterior_mantem_as_marcas_fora_da_competencia` falhou em dois subtestes. A execução da suíte na base é [nao verificado]. `app/ponto/tests/test_par_c1v8_reds.py:175–186`
+
+### 9 ERROR — fixture compartilhada da obra
+
+Os três arquivos de teste foram adicionados pela obra e usam `_ler_fechamento`. A fixture fornece um `SimpleNamespace(pk=7, id=7)` e força a busca do fechamento gravado a retornar `None`. O serviço então tenta construir `FechamentoMensal(colaborador=colab, ...)`, cuja FK exige uma instância de `Colaborador`. Essa incompatibilidade está na fixture nova. A construção já existia na base. `app/ponto/tests/test_par_c1v8_reds.py:24,67–100` · `app/ponto/models.py:398–407` · `app/ponto/services/fechamento.py:885–890` · `base:app/ponto/services/fechamento.py:910–915` · `app/ponto/tests/test_par_pelo_turno_c1v10.py:10` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:11`
+
+O `KeyError: 7` do anexo sai do `[colab.pk]` aplicado ao dicionário retornado. O serviço captura exceções por colaborador e pode devolver o dicionário sem preencher essa chave. O anexo mostra essa consequência em todos os nove registros. A primeira exceção capturada na pista é [nao verificado]. **Classificação dos nove: erro de fixture antes das asserções listadas.** A cura demonstrável é alimentar a FK com um `Colaborador` compatível, preservando os REDs. `app/ponto/tests/test_par_c1v8_reds.py:95–100` · `app/ponto/services/fechamento.py:1133–1135,1302–1309`
+
+| Teste | Ponto do erro e expectativa que ficou sem julgamento | [nao verificado]
+|---|---|
+| `test_3_o_fato_posterior_mantem_as_marcas_fora_da_competencia` — 23/10 | Chamada na linha 183. A competência deve ter `0,0 h` e saldo `0,0` com e sem o par posterior. `app/ponto/tests/test_par_c1v8_reds.py:175–186` |
+| `test_3_o_fato_posterior_mantem_as_marcas_fora_da_competencia` — 25/10 | Mesma chamada e mesmos valores, com o fato posterior além do contexto do mapa. `app/ponto/tests/test_par_c1v8_reds.py:173–186` |
+| `test_3b_o_ultimo_dia_com_marca_e_movimento_da_competencia` | Chamada na linha 196. Espera **1 turno aberto** e saldo **menor que zero**. `app/ponto/tests/test_par_c1v8_reds.py:194–198` |
+| `test_5_a_folha_preserva_as_oito_horas_em_21_de_outubro` | Chamada na linha 249. Espera **8,0 h** em 21/10. `app/ponto/tests/test_par_c1v8_reds.py:241–250` |
+| `test_a_folha_fecha_o_par_na_segunda_virada_sem_levar_as_marcas_vizinhas` | Chamada na linha 41. Espera **26,0 h**, **0 abertos**, só os PKs `[1, 2]` e ambos atribuídos a `DIA`. `app/ponto/tests/test_par_pelo_turno_c1v10.py:30–46` |
+| `test_retratacao_apos_a_leitura_conserva_o_mesmo_conjunto_na_folha` | Chamada na linha 75. Espera uma leitura `[[1, 2]]`, **2,0 h** e **0 abertos**. `app/ponto/tests/test_par_pelo_turno_c1v10.py:48–78` |
+| `test_a_segunda_virada_chega_separadamente_a_cada_leitor` | Chamada na linha 177. Espera `[1, 2]` na fatia da folha e também na leitura independente do espelho. `app/ponto/tests/test_par_pelo_turno_c1v11.py:166–182` |
+| `test_fatia_recebe_os_dois_pks_de_um_par_julgado_em_d` | A asserção da carga inicial vem antes da chamada que falha na linha 91. No fechamento, espera `[1, 2]` no motor, **26,0 h** e **0 abertos**. `app/ponto/tests/test_par_pelo_turno_c1v11.py:79–94` |
+| `test_universo_da_porta_na_folha_e_no_espelho` | Chamada na linha 72. Com a porta vazia, espera **0,0 h**, nenhuma marca no espelho e duas chamadas à porta com os mesmos limites. `app/ponto/tests/test_par_pelo_turno_c1v11.py:63–77` |
+
+### 2 FAIL — teto de consultas no fechamento de chamados pela batida
+
+| Teste | Falha observada | [nao verificado]
+|---|---|
+| `test_registrar_batida_com_1_furo_vivo_que_ela_fecha` | O chamado fechou. **257 consultas**, teto **254**. `app/ponto/tests/test_selo_chokepoint_escrita.py:218,343–354,491–494` |
+| `test_registrar_batida_com_3_furos_vivos_que_ela_fecha` | Os três chamados fecharam. **321 consultas**, teto **318**. `app/ponto/tests/test_selo_chokepoint_escrita.py:254,343–354,496–499` |
+
+**Testes e tetos idênticos na base. A obra alterou o caminho medido.** O `post_save` da batida recompõe turnos via `turnos_do_colab`. O cartório também chega a essa função por `dias_encerrados`. No HEAD, a carga lê as batidas por limites de instante e usa a janela de contexto alterada. O anexo comprova `+3` nos dois cenários. A origem de cada consulta extra e o total da base sob o mesmo ambiente são [nao verificado]. **Os selos estão certos. A correção é no custo do caminho de escrita**, com os tetos atuais como referência. `app/ponto/tests/test_selo_chokepoint_escrita.py:480–499` · `app/ponto/signals.py:19–36,85–93,137–140` · `app/ponto/nucleo.py:40–47` · `app/ponto/services/cartorio.py:1182–1186` · `app/ponto/turnos.py:1885–1909,2213–2215` · `base:app/ponto/turnos.py:1850–1876` · `PLANO_PISCADA.md:8–15`
+
+### 4 FAIL — selos estruturais do PDF
+
+Os quatro testes já existiam na base e estão idênticos no HEAD. A obra mudou o coletor do PDF para chamar `espelho_do_colab(..., janela_exata=True)`. As falhas abaixo são de expectativas sobre a forma do código. Cada contrato continua rastreável no caminho delegado. `base:app/relatorios/pdf_espelho.py:187–194,307,543,628` · `app/relatorios/pdf_espelho.py:178–182,221–245,255`
+
+| Teste | Causa no HEAD e contrato | [nao verificado]
+|---|---|
+| `test_MORDE_ha_UM_sitio_que_aplica_a_folha_e_os_dois_caminhos_passam_por_ele` | O `assertIn` procura a chamada literal com quatro argumentos. A chamada única agora passa também `agora=agora, ate=agora`. Os dois modos de emissão chegam ao mesmo coletor, e `folha_manda` continua com **um** ponto de aplicação dos totais. A expectativa textual ficou desatualizada. `app/relatorios/tests/test_falta_um_significado.py:157–178` · `app/relatorios/pdf_espelho.py:255,277,663,710` · `app/relatorios/cartao_pela_celula.py:346` |
+| `test_MORDE_o_pdf_consome_o_juiz_e_nao_regra_propria` | O `assertIn('dia_das_batidas', fonte)` perdeu as menções que já eram comentários na base. No HEAD, o PDF recebe as linhas do espelho. O espelho agrupa as marcas pelo mapa de PKs de `marcas_da_janela_para_exibicao`, produzido pelo pareador. A regra continua sendo **imprimir no dia julgado para o PK**. `app/relatorios/tests/test_pdf_le_o_juiz_do_dia.py:84–96` · `base:app/relatorios/pdf_espelho.py:484,535,613` · `app/relatorios/pdf_espelho.py:221–245` · `app/ponto/services/espelho.py:586–591,1243–1245` · `app/ponto/turnos.py:3044–3061` |
+| `test_renders_usam_o_contrato` | O contador da string `grade_espelho_janela` no PDF caiu de **1 para 0**, ante mínimo **1**. A chamada está no ramo `janela_exata` do espelho e o PDF consome a grade retornada. A exigência de usar a grade compartilhada continua satisfeita pelo caminho delegado. `app/escala/tests/test_f1c_contrato.py:42–44,68–70` · `base:app/relatorios/pdf_espelho.py:193,543` · `app/ponto/services/espelho.py:1283–1287,1322–1325` · `app/relatorios/pdf_espelho.py:221–222,240–244` |
+| `test_RED_os_oito_pedem_o_vinculo_ao_juiz_da_casa` | A busca AST aceita duas chamadas diretas no corpo do coletor. A base tinha `vinculo_do_dia_carregado`. No HEAD, `_espelho` chama `autoridade_do_periodo`, que chama `vinculo_do_dia`, e o coletor usa `autoridade.esc` e `autoridade.tipo_escala`. O PDF aparece em `calados` pelo alcance da busca. O contrato do RED continua sendo **todos os leitores consultarem a autoridade do vínculo**. `app/ponto/tests/test_regua_do_periodo_vem_da_janela.py:197–221,260–272,300–309` · `base:app/relatorios/pdf_espelho.py:307` · `app/ponto/services/espelho.py:1076–1077,1242` · `app/relatorios/pdf_espelho.py:221–224,261–262` |
+
+### 2 FAIL — par noturno completo e cadastro
+
+- **`test_SEM_escala_o_veredito_NAO_muda`** — Teste idêntico na base. A fixture cria **E 18:52 e S 06:52 do dia seguinte**, sem criar vínculo. Na base, o guarda retornava `False` sem escala e a classificação seguia para o fallback que espera `('S', 'orfao_14h', 'SAIU')`. A obra antecipou o guarda e passou a silenciar pelo par fechado que cruza o dia. A pista recebeu `(None, None, None)`. **Mudança de domínio causada pela obra. Pelo contrato disponível, a cura é no código para o caso inteiramente sem vínculo.** O RED da obra que aceita ausência de vínculo **na saída** cria vínculo para a entrada. Revogação do contrato legado para o caso inteiramente sem escala é [nao verificado]. `app/escala/tests/test_selo_b5c_universo_da_jornada.py:108–117` · `base:app/escala/servico_jornada.py:232–239,361–366,490–492` · `app/escala/servico_jornada.py:214–220,318–322` · `app/ponto/tests/test_par_c1v8_reds.py:200–221`
+- **`test_o_juiz_do_chamado_e_o_noturno_completo_perguntam_a_regra`** — Teste idêntico na base. Falha a segunda busca literal por `turno_cruza_meia_noite(hi, hf)`. A primeira, no juiz do chamado, passou. A obra substituiu a checagem do horário previsto em `_turno_noturno_completo` pela leitura de `Turno.cross_meianoite` e pelo intervalo inclusivo `data_turno <= data_evento <= data_saida`. **A segunda expectativa estrutural ficou desatualizada.** O RED da obra exige `True` para o par fechado na segunda virada com vínculo noturno, diurno ou ausente na saída. `app/escala/tests/test_turno_cruza_meia_noite.py:43–48` · `app/chamados/juizes.py:2316–2324` · `base:app/escala/servico_jornada.py:234–239` · `app/escala/servico_jornada.py:214–220` · `app/ponto/turnos.py:318–334` · `app/ponto/tests/test_par_c1v8_reds.py:200–221`
+
+### 1 FAIL — conversão de data dentro do pareador
+
+- **`test_nenhum_ofensor_novo`** — Teste idêntico na base. A obra adicionou `fim = timezone.localtime(saida.timestamp)` seguido de `fim.date() > d` em `_data_do_turno`. O visitante AST rastreia variáveis atribuídas a partir de `.timestamp` e marca o `.date()`. Aplicado aos dois arquivos, o detector aponta essa linha apenas no HEAD. **O selo está certo para a forma que protege. A cura é no código**, usando `data_local` para a data civil da saída e preservando a condição da segunda virada. O valor esperado de `novos` continua `set()`. `app/ponto/tests/test_contract_no_batida_date.py:184–216,232–235` · `base:app/ponto/turnos.py:248–322` · `app/ponto/turnos.py:44–47,287–301`
 
 ## 27/11 15:35 · sessao 0c713d148d50 · INVENTARIO-PELA-REGRA · construtor · origem=Code
 
@@ -821,8 +872,4 @@ O cenário de teste identifica **10/12/2026, Aniversário de Londrina/PR**. A pr
 
 **Envelope.** O adaptador existente encaminha a `--sombra`. Configure-o via `CODEX_SONDA_ENVELOPE` e a árvore fixada via `SONDA_ARVORE`. Capture exclusivamente a exceção sentinela após o `atomic` reverter, pois o wrapper descarta toda a saída quando o envelope termina com código diferente de zero. [Adaptador da Sombra](/home/ronald/saas-hasner/logs/FILA-CODEX-1811/sondas/envelope_sombra.sh:3) [bin/sonda_leitura.sh:226](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:226) [bin/codex_pergunta.sh:628](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/codex_pergunta.sh:628)
 
-## 27/11 15:07 · sessao d1951f170791 · - · - · origem=Ronald (tmux)
-
-Auditei os 40 IDs atribuídos e encaminhei as linhas e os cruzamentos com o placar. Os sítios, a classificação e as ressalvas de cada obra foram enviados nos três blocos. A confirmação do hash da cópia e a incidência atual em produção permanecem [nao verificado].
-
-_8719 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8720 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
