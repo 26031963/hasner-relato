@@ -1,7 +1,90 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 05:43** · publicado em **27/11/2026 05:45** (UTC-3)
+> Ultima resposta processada: **27/11/2026 05:56** · publicado em **27/11/2026 05:58** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 05:56 · sessao 527ddadb4b26 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+Corrigi as expectativas dos dois casos do Partido e acrescentei um RED com segundos para o 12x36 e o Comercial. O `diff --stat` registra apenas o arquivo de testes autorizado. [Testes revisados](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:222) [nao verificado]
+
+| Caso | Antes | Depois |
+|---|---|---|
+| `SEMANA_FLOAT`, Partido | Trabalhava `34160/60 = 569,333…` min, com base de `31961/60 = 532,683…` min. | Trabalhado e base medem `05:00:00 − 20:07:19 = 31961/60` min. Fora da janela ficam `(34160 − 31961)/60 = 36,65` min, medidos de `05:00:00` a `05:36:39`. [Asserção](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:222) |
+| `PARTIDO_LEGAIS`, 6x1 | Esperava `(221, 240)` trabalhados, 240 noturnos de relógio no P2 e HE zero. | Trabalhado `(221, 180)`, com 60 min fora no P2. A cl. 38-d é do 12x36. No Partido, 180 min noturnos dão `180 × 60/52,5 = 1440/7` min legais, com ganho de `180/7`. O vão gozado de 180 min dá suprimido zero. O excedente é `221 + 180 + 180/7 − min(420, 480) = 47/7` min, dentro da tolerância de 10, portanto **HE zero**. [Conta e asserções](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:378) · [Cl. 38-d](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/docs/LEIS.md:84) |
+| 12x36 e Comercial que cruzam | A asserção de trabalhado bruto estava no caso do Partido. | O novo RED usa os marcos da fixture de 19h–07h e injeta a janela. A batida `19:07:19 → 07:36:39` dá `44960/60` min trabalhados, zero fora e base de `42761/60` min. Reconstruir a base por `44960/60 − 2199/60` dá um float diferente nos dois motores. [RED](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:438) |
+
+A sonda Python sem banco reproduziu as duas falhas antigas. Com cadastro e fuso fornecidos em memória, os três casos revisados passaram e os cinco mutantes abaixo falharam por asserção. Execução com as fixtures Django e certificação pelo Code e pelo Opus final [nao verificado]. [Partido semanal](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:222) · [Partido legais](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:378) · [12x36 e Comercial](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2_base_da_he.py:438)
+
+```text
+$ git -C /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 diff --stat
+ app/ponto/tests/test_ramo2b_c2_base_da_he.py | 87 ++++++++++++++++++++--------
+ 1 file changed, 63 insertions(+), 24 deletions(-)
+```
+
+**Recorte para a sessão**, a partir de `app` e com `DJANGO_SETTINGS_MODULE` apontando para as configurações de teste. [Entrada do Django](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/manage.py:7) [nao verificado]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  --settings="${DJANGO_SETTINGS_MODULE:?defina o settings de teste da sessao}" \ [nao verificado]
+  ponto.tests.test_ramo2b_c2_base_da_he \
+  ponto.tests.test_ramo2b_c2l_red_motor \
+  ponto.tests.test_ramo2b_c2h_saida
+```
+
+**Comandos dos mutantes**, na mesma sessão. As substituições usam o executor em memória da cópia. [Executor](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2l_mutantes.py:12)
+
+```bash
+muta_c2p() {
+  DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE:?defina o settings de teste da sessao}" \ [nao verificado]
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$1" <<'PY'
+import sys
+from unittest.mock import patch
+
+import django
+from django.conf import settings
+from django.test.utils import get_runner
+
+django.setup()
+
+from ponto import motor_calculo_v2 as m
+from ponto.tests.ramo2b_c2l_mutantes import _mutar
+
+raiz = 'ponto.tests.test_ramo2b_c2_base_da_he.'
+partido = raiz + 'Ramo2bC2BaseDaHeTest.'
+semana = partido + 'test_RED_partido_semana_float_trabalha_ate_o_marco_e_classifica_a_cauda_fora'
+legais = partido + 'test_RED_partido_legais_ganho_noturno_da_cauda_fora_da_base'
+cruza = raiz + 'BaseDaHeMedidaNoMarcoTest.test_RED_12x36_e_comercial_trabalham_o_bruto_e_medem_a_base_no_marco'
+campo = 'CAUDA_DO_TURNO_QUE_CRUZA_NO_TRABALHADO'
+ganho = m._ganho_noturno_da_base_da_he
+
+variantes = {
+    'partido_inclui_cauda': (patch.object(m.MotorTurnoPartido, campo, True), [semana, legais]),
+    'cruza_corta_cauda': (patch.object(m.MotorBase, campo, False), [cruza]),
+    'base_por_subtracao': (patch.object(m.MotorBase, '_gravar_base_da_he', _mutar(
+        m.MotorBase._gravar_base_da_he, 'periodo, base_min, s_he, float(_leg)',
+        'periodo, periodo.minutos_trabalhados - (s - s_he).total_seconds() / 60, s_he, float(_leg)',
+        metodo=True)), [cruza]),
+    'partido_noturno_bruto': (patch.object(m.MotorTurnoPartido, 'calcular_periodo', _mutar(
+        m.MotorTurnoPartido.calcular_periodo, 'self._escrever_noturnas(periodo, e, s, intervalos)',
+        'self._escrever_noturnas(periodo, e, periodo.saida, intervalos)', metodo=True)), [legais]),
+    'partido_he_inclui_ganho_da_cauda': (patch.object(
+        m, '_ganho_noturno_da_base_da_he',
+        side_effect=lambda p: ganho(p) + p.minutos_fora_janela / 7), [legais]),
+}
+
+mutacao, alvos = variantes[sys.argv[1]]
+with mutacao:
+    falhas = get_runner(settings)(verbosity=2).run_tests(alvos)
+raise SystemExit(int(bool(falhas)))
+PY
+}
+
+muta_c2p partido_inclui_cauda
+muta_c2p cruza_corta_cauda
+muta_c2p base_por_subtracao
+muta_c2p partido_noturno_bruto
+muta_c2p partido_he_inclui_ganho_da_cauda
+```
 
 ## 27/11 05:43 · sessao 68521b7293d6 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
 
@@ -846,38 +929,4 @@ O motor aceito é lido pelo cron `vigiar_motor_autoridade` e pode alterar seu re
 
 C inclui ainda `bin/disjuntor.py:2025` além dos sítios do anexo, pois o docstring também referencia `:644`. D exige revisar as asserções de cardinalidade fixa em `bin/tests/test_agente_no_modelo.sh:142,287`, além de `OPUS_CONSTROI_TAGS` e do texto de despacho. Locais atuais `bin/codex_pergunta.sh:644–645,166`, `bin/disjuntor.py:1959–1961,2024–2039,2111`, `CLAUDE.md:403–405`, `bin/tests/test_agente_no_modelo.sh:13,142,287,355`, `bin/tests/test_censo_antes_da_vaga.sh:203`.
 
-## 27/11 02:50 · sessao a7b4cf266d17 · - · - · origem=Ronald (tmux)
-
-**Mapa de schema e portões do deploy** [nao verificado]
-
-| Caminho | Leitor e efeito | Wrapper c10 e RED de c11 |
-|---|---|---|
-| `app/config/settings/{saas,base}.py` e inicializadores dos pacotes | `app/manage.py:9-12`, `app/config/wsgi.py:14-15`, `app/config/settings/saas.py:10,22-53,83-95`. Escolhe apps shared/tenant, router, backend e os modelos de tenant. `BASE_DIR` também determina que labels a cerca pergunta. `app/core/tests/test_model_sem_migration_pendente.py:24-48`. | NENHUM. Um caso por arquivo de settings e por `__init__.py`; exigir recusa do caminho exato. `bin/codex_pergunta.sh:162-176,223-233`. |
-| `app/config/settings/saas.py` + pacote de migrations com outro nome | Anexo `opus.md`, B; `app/core/tests/test_model_sem_migration_pendente.py:24-48` e `bin/deploy.sh:194-207,256,338-340`. Altera a origem do grafo que a cerca e o apply leem. | NENHUM para settings e pacote alternativo. Testar cada arquivo isolado, além da combinação B. Usar mudança inerte de fixture. `bin/codex_pergunta.sh:165,162-176`. |
-| `app/<app>/migrations/**`, inclusive `__init__.py` | A mesma cerca, `migrate_schemas --tenant --check` e apply; `bin/deploy.sh:194-207,338-340`. Exemplo de DDL real em `app/colaboradores/migrations/0025_onboarding_db_defaults.py:12-17`. | `#G:p_migr`, `bin/codex_pergunta.sh:165`; REDs existentes `bin/tests/test_codex_pergunta.sh:415-416`. Acrescentar caso isolado de `migrations/__init__.py`. |
-| `app/<app>/models.py` existentes e novos, inclusive `api` e `tenants`; pacote `models/` | Registro SaaS e cerca consultam classes, campos e labels. Alteração declarativa sem migration deve produzir drift e impedir publicação, sem DDL no gate. `app/config/settings/saas.py:22-53`; `app/core/tests/test_model_sem_migration_pendente.py:24-48`; `app/tenants/test_model_sem_migration_pendente.py:25-42`; `bin/deploy.sh:194-205`. | `models.py`: NENHUM, inclusive fora do brief e novos; exigir recusa de ambos. `models/`: `#G:p_models_pkg`, `bin/codex_pergunta.sh:166`; RED `bin/tests/test_codex_pergunta.sh:412`. |
-| Dependências Python de migration já versionada | `app/colaboradores/models.py` é importado pela migration `app/colaboradores/migrations/0004_colaborador_data_demissao_alter_colaborador_cpf_and_more.py:3,25` e fornece o validador. `app/core/crypto_fields.py` fornece o campo usado pela migration `app/colaboradores/migrations/0032_alter_contabancaria_agencia_and_more.py:3,14-17` e pelo model atual `app/colaboradores/models.py:2`. Mudar a implementação alcança o carregamento de migrations sem editar a migration; efeito de um mutante específico no DDL [nao verificado]. | NENHUM. Recusar `crypto_fields.py`; se o model for nominalmente permitido, preservar esta linha como caminho residual e exigir teste de efeito independente do wrapper. `bin/codex_pergunta.sh:162-176`. |
-| `app/tenants/{models,services}.py`, view e command de provisionamento | `app/tenants/management/commands/criar_cliente.py:3,23` e `app/tenants/views.py:19,52` chamam o serviço, que grava `Cliente` em `app/tenants/services.py:1,5-13`. O model habilita criação automática de schema em `app/tenants/models.py:14-21`. Está catalogado como setup de tenant em `app/config/crons.py:1450`. | NENHUM. Casos isolados por arquivo; se o model estiver no brief, o caminho de provisionamento subsiste. `bin/codex_pergunta.sh:162-176`. |
-| `app/*/{__init__,apps,signals}.py`, dependências de `ready()` | Inicialização do Django usada pela cerca, migrate e prova; `app/manage.py:9-12`, `bin/prova_de_casca.py:9-16`, `bin/deploy.sh:196,207,339`. Exemplos de imports efetivos em `app/core/apps.py:8-10`, `app/ponto/apps.py:7-8`, `app/escala/apps.py:8-9`, `app/chamados/apps.py:8-10`, `app/colaboradores/apps.py:7-9` e `app/inteligencia/apps.py:7-10`. Sinais atuais exemplificados por `post_save/post_delete` em `app/ponto/signals.py:34,48`; receptor de migrate atual [nao verificado]. | NENHUM. Um caso de `apps.py`, `signals.py`, inicializador e helper direto de `ready()`; exigir recusa por arquivo. `bin/codex_pergunta.sh:162-176`. |
-| Arquivos que mudam o resolvedor/commands `shell`, `makemigrations`, `migrate_schemas`, `collectstatic` | `app/manage.py:9-12`; `app/core/tests/test_model_sem_migration_pendente.py:48`; `bin/deploy.sh:194-207,296-300,338-340`. Alteram a pergunta, o apply ou um insumo da prova de casca. A troca via registro de comando Django depende da precedência dos apps e [nao verificado] em execução. | NENHUM para `manage.py`, `management/__init__.py`, `management/commands/__init__.py` e arquivos regulares dos comandos em app instalado. Testar cada slot como escrita fora da lista. `bin/codex_pergunta.sh:162-176`. |
-| `app/core/tests/test_model_sem_migration_pendente.py`, seus REDs e `app/tenants/test_model_sem_migration_pendente.py` | O deploy importa a pergunta de dentro do teste. Cerca usa labels locais e `--check`; REDs cobrem campo folha, app sem pacote de migrations e campo tenants. `bin/deploy.sh:194-205`; `app/core/tests/test_model_sem_migration_pendente.py:24-48,56-80`; `app/tenants/test_model_sem_migration_pendente.py:14-42`. `app/core/tests/__init__.py` também integra essa cadeia de import. | NENHUM. RED por arquivo de pergunta e RED, mais inicializador e pacote homônimo candidato. Mudança c11 deve bloquear todas as origens da pergunta e dos REDs. Host test protegido `#G:p_bin`/`#G:p_fora` cobre respostas falsas em `bin/tests/test_deploy_portoes_antes_do_migrate.sh:91-100,245-259`, sem testar o conteúdo carregado no container. |
-| Settings de CI, runner, quarentena e testes de ambiente | `app/config/settings/ci.py:40`; `app/core/quarentena_lista.py:9,25-28`; `app/core/runner_quarentena.py:75-96`; `bin/suite.sh:568`; `bin/pre-push.sh:184-199`. A lista elimina casos do run com trilha. `app/core/tests/test_ambiente_do_run.py:43-56` escreve testemunho que `bin/pista_certifica.sh:41-70,85-99` usa para certificação do pouso. | NENHUM. Exigir recusa dos settings, runner, lista e selo de ambiente quando fora da lista positiva. Caso especial para o selo se uma regra ampla de testes o incluir. `bin/codex_pergunta.sh:162-176`. |
-| `app/**.py` e `app/**.html`; sítios de auth | `bin/arvore_sem_conflito.sh:19,29-35` verifica índice e marcadores. `bin/auth_sitios.txt:13-22` inclui `app/core/models.py` e `app/config/settings/base.py`, consultados no diff e no relógio por `bin/janela_auth.sh:56-61,85-115`. Ambos podem impedir o apply. `bin/deploy.sh:101,126-149`. | NENHUM para os caminhos normais de app. RED de recusa para caminho fora da lista. Para arquivo permitido, é RED de efeito do portão no fixture, pois wrapper deve aceitar o arquivo. |
-| `app/templates/**`, `app/static/**`, `app/<app>/static/**`, `templatetags`, `app/config/urls*.py` e views alcançadas | `bin/deploy.sh:296-320` detecta arquivos mais novos e chama coleta/prova. `bin/prova_de_casca.sh:30-34,42-47`; `bin/prova_de_casca.py:30-53,68-98` abre HTML para referências estáticas, compila cinco páginas e importa os urlconfs/rotas. `app/config/settings/base.py:70-87,97-100`. Um erro pode impedir migrate. A prova de rota muda o resultado depois do HUP em `bin/deploy.sh:417-448`. | NENHUM para fontes comuns. `app/staticfiles/staticfiles.json` normalmente `#G:p_ignorado`, `.gitignore:13` e wrapper `:225`. Testar uma fonte de cada leitor e o manifest. |
-| `app/gunicorn.conf.py`, `app/gunicorn.core.conf.py`, testes e helper do selo | `bin/selo_reciclagem.sh:34-49` lê config de disco via Gunicorn, `bin/deploy.sh:328,448` usa rc antes do apply e após HUP. `app/core/tests/test_contract_reciclagem.py:23-26,45-80` lê config via `core/censo_fonte.py` e cobra exatamente `30 3` no catálogo. O host procura somente a substring de reload no instalado em `bin/selo_reciclagem.sh:70-76`. | NENHUM para `.conf.py`, teste e helper. Um RED para cada configuração e para o teste se fora da lista. Selo de host `#G:p_bin`/`#G:p_fora`. |
-| `app/requirements.txt`, `app/Dockerfile`, `app/.dockerignore` e compose | Pins Django/django-tenants em `app/requirements.txt:13,16`; build instala e copia em `app/Dockerfile:37-44`; `app/.dockerignore:8-13` distingue camada e bind-mount. Rebuild/recreate é ato separado do deploy, `bin/deploy.sh:20-22`. Mensageria tem compose próprio, mount separado e migrate no boot `docker-compose.mensageria.yml:13-20`. Compose SaaS ignorado em `.gitignore:40-41`, conteúdo atual [nao verificado]. | NENHUM nos três arquivos de app. Compose `#G:p_compose`, `#G:p_fora` para raiz, e `#G:p_ignorado` quando aplicável. `bin/codex_pergunta.sh:172,174,225`; RED compose `bin/tests/test_codex_pergunta.sh:422`. |
-| Config, renderer e commands do cron como insumo da sombra | Render do app em `bin/sombra.sh:346-349`; roda a lista e agrega rc em `:351-391`; carimbo em `:400-406`, gate hoje/OK e DB de ensaio com migrations em `:410-433`; invocação antes de migrate em `bin/deploy.sh:151-167`. Alteração de app pode mudar o veredito do próximo ensaio. | `config/crons.py`: `#G:p_crons`, wrapper `:167`, RED `bin/tests/test_codex_pergunta.sh:417`. NENHUM para renderer `app/core/management/commands/crons.py:23,36-60`, helpers/commands e pacote homônimo candidato `config/crons/__init__.py`. Carimbo de host fora do app `#G:p_fora`. |
-
-Nos casos de recusa pós-executor, exigir `PROIBIDO` com arquivo exato em `.recusa`, `rc=3`, `motivo=INVENTARIO` e `.id` ausente. O helper atual confirma motivo/rc/sidecar; para cada caminho deve confirmar também a coluna do arquivo. `bin/codex_pergunta.sh:223-233,799-823`; `bin/tests/test_codex_pergunta.sh:153-169`.
-
-**Positivos com leitor ativo**
-
-- `app/ponto/motor_calculo_v2.py` consta nominalmente em `CLAUDE.md:146` e no positivo `bin/tests/test_codex_pergunta.sh:410`. O cron de `app/config/crons.py:596` chama `app/ponto/management/commands/vigiar_motor_autoridade.py:34-38,57-65,102-108`. Também passa pelo elo `app/config/crons.py:1808,1818`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:17,32,40-43`, `app/ponto/services/cxr_na_lista.py:58,78`, `app/ponto/services/espelho.py:1029,1147,1262` e `app/core/regua_cct.py:434`. O resultado/rc pode afetar carimbo de conclusão e dependente, pois `bin/cron_run.sh:11-26` só carimba 0/2.
-- `models.py` regulares já existentes, exatos e nomeados no brief. O brief nominal está [nao verificado]. `app/folha/models.py` no positivo `bin/tests/test_codex_pergunta.sh:411` e `app/ponto/models.py` em `bin/tests/test_agente_no_modelo.sh:138` são fixtures, não prova do brief. Se nomeados, os caminhos de import e drift são inerentes; `colaboradores/models.py` já integra uma migration histórica; `tenants/models.py` já governa auto-criação; `core/models.py` já está no gate de auth. Referências na matriz.
-- Testes do próprio app. A cerca de `core` é importada em produção pelo deploy, os REDs tenants são consumidos pelo pre-push e o teste de ambiente produz a prova do pouso. Todos os testes `.py` entram também na varredura de conflitos. O aval anexo item 2 manda retirar pergunta/REDs da cerca do alcance; não fornece regra para os demais selos consumidos por portão. `bin/deploy.sh:194-205`; `bin/pre-push.sh:198-199`; `bin/pista_certifica.sh:9,41-70,85-99`; `bin/arvore_sem_conflito.sh:29-35`.
-
-**C e D.** Linha do cabeçalho é realmente `bin/codex_pergunta.sh:645`, após `REGRAS` em `:644`. Sítios anotados pelo opus: `CLAUDE.md:403`, `bin/disjuntor.py:1959,2111`, `bin/tests/test_agente_no_modelo.sh:13,287,355`, `bin/tests/test_censo_antes_da_vaga.sh:203`. A documentação interna do leitor também repete `:644` em `bin/disjuntor.py:2025,2038`. D: `#G:p_models_pkg` está em wrapper `:166`; falta em `bin/disjuntor.py:1961`; leitor seleciona somente aquelas tags em `:2036-2039`, negativa no caso de brief só com `models/` em `:2105-2112`; `CLAUDE.md:403` também omite.
-
-**lei:** A L-126 veta gerar migration, e o anexo manda tirar a cerca e seus REDs do alcance. Falta resposta escrita encontrada para o predicado sobre efeitos de Python ainda permitido em `models.py`, motor e testes quando os leitores de produção ou portões já executam esses arquivos, e para a autoridade sobre outros selos de suite consumidos por portões. O detalhe dos nomes por brief e o estado efetivo da produção estão [nao verificado]. `app/docs/LEIS.md:147`; `app/docs/CORTES.md:651`; anexo CCM item 2; leitores na matriz.
-
-_8571 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8572 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
