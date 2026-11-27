@@ -1,4 +1,4 @@
-AVISO: CLEAR devido desde 23:43
+AVISO: CLEAR devido desde 00:06
 
 PERGUNTA DE DESENHO CODEX-CONSTROI-MOTOR (23:39, opus final REPROVADO depois do verif7 Codex APROVADO; B3 segura o MERGE, nao o turno): (1) a cerca de schema chama makemigrations --check sem label e o app api (instalado em config/settings/saas.py:47, sem pacote migrations) fica de fora -- liberar models.py ao Codex abre model sem migration invisivel as 3 cercas (bin/codex_pergunta.sh:163, bin/deploy.sh:189); (2) selos de host sem log verde no HEAD (green_agente/green_codex de 22:13, antes da c2); (3) portao novo nunca rodou contra prod (vale no reload das 03:30, app/config/crons.py:326); (4) L-126 ainda proibe 'item que pede !' e CLAUDE.md:276/:146 seguem exigindo ! no motor (dois significados); (5) a regex solta tambem pacotes models/. Curas (1)-(5) em c8 na copia; merge so depois do 'libera B3' do Ronald. -- RESPONDIDA por LIBERA-B3-CCM-2611-2355 (23:55, condicional: RED da cerca no api [c8/red.log FAILED 1], selos de host verdes no HEAD, opus final APROVADO; HEAD da obra = c9 = c8 + cura do verif8, contestavel)
 
@@ -10943,6 +10943,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 00:03:12 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:3e6ab38f09 (496 car., na trilha privada)
+
 **26/11 23:57:17 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:85a6cdc807 (244 car., na trilha privada)
 
 **26/11 23:57:06 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:a9182d802f (320 car., na trilha privada)
@@ -13736,3 +13738,10 @@ O30-F3-CONSTRUIR c14 (Codex rc 0 19:42; B2 filtro da casa, B3 porta antiga apaga
 - 23:55 colhido CODEX-CONSTROI-MOTOR c8/selo_codex.rc (23:46 rc 0, 84 mutantes, p_models_pkg MORTO) -> c8 a32fe226f na copia; verificador Codex v8 em voo | colhido O30-F3-CONSTRUIR c19/green.rc (23:48 Ran 433 OK) -> diagrama regerado na copia ac4ad27ce; verificador Codex v11 em voo (diff inteiro sobre o main)
 - 23:57 colhido CODEX-CONSTROI-MOTOR c9/green.rc (23:55 rc=0: tenants OK, core OK, pergunta_sem_migration_pendente rc 0 nos 14 apps do saas, SystemExit(1) -> rc 1; c9 = 148372677, selos de host e verif9 em voo)
 - 23:57 colhido O30-F3-CONSTRUIR verif11/r.rc (23:56 REPROVADO: (a) editar_ausencia ausencia.py:757 save() integral repoe os 6 campos de instancia velha -- conferido; (b) anexar_documento :1144 decide estado na instancia velha -- conferido, PRE-EXISTENTE no main :1033; (c) filtros universal/selecao de colaborador do aval O30-F3-CONSTRUIR-2511 ausentes na rota reunificada; volta 11 > 3 -> [nome] ao opus, CLAUDE.md 7b CODEX 5(d))
+- 00:04 colhido CODEX-CONSTROI-MOTOR verif9/r.rc (00:02 REPROVADO: (1) PROCEDENTE -- os REDs da cerca chamavam call_command direto e nao a pergunta_sem_migration_pendente do deploy; cura c10 em voo com mutantes sem-api e sem-check; (4) admissao do opus com motor+migration no mesmo ARQUIVOS DESCARTADO: CLAUDE.md 7b RAIAS 3 diz "que toque" (qualquer), restringir e corte dele; vai anexo ao opus; (2)(3) sao as provas do aval LIBERA-B3, abertas)
+- 00:04 colhido CODEX-CONSTROI-MOTOR c9/selos.rc (117/118 verdes no HEAD 148372677; test_atomicidade_da_porta VERMELHO e IDENTICO no main 59600163c: 16 VIOLA select_for_update fora de transacao + divida 14>5; o CCM nao toca nenhum dos 16 sitios; linha ATOMICIDADE-PORTA-NO-MAIN no BACKLOG)
+- 00:04 superado O30-F3-CONSTRUIR verif11/r.rc (opus escalonado: PRONTO-PARA-SUITE, (a)(b) pre-existentes e proibidos pelo aval 2201 -> LOST-UPDATE-AUSENCIA no BACKLOG, (c) filtros prometidos -> LISTA na linha O30-F3; suite inteira na pista job 1127000213_ac4ad27c)
+- 00:06 colhido CODEX-CONSTROI-MOTOR c10/c10.rc (00:05: green tenants+core OK; mut_sem_api tenants FAILED 1, mut_sem_check tenants FAILED 2 + core FAILED 1; commit c10 1fc9ab682; verif10, selos de host e suite inteira em voo)
+- 00:08 colhido CODEX-CONSTROI-MOTOR verif10/r.rc (00:08 APROVADO: achado 1 curado na origem, mutantes sem-api/sem-check/engole-SystemExit mordem; descarte do achado 4 procedente pela letra de 7b RAIAS 3; faltam selos c10, suite inteira, opus final)
+- 00:13 DESPACHO V6-FURO-OUTPUT: dossie -> Codex leitura | construtor -> opus (bin/, CODEX item 2) depois do pouso do CCM
+- 00:13 colhido V6-FURO-OUTPUT DOSSIE/r.rc (00:12 rc=0: hoje 0 alvos para cat de tasks/*.output -- conferido bin/disjuntor.py:2151 so .rc/.log; recorte = fullmatch do caminho normalizado em /tmp/claude-<uid>/<proj>/<sessao>/tasks/<id>.output; RED nasce em bin/tests/test_disjuntor.sh pelo helper _pre (o vizinho polling() mora em test_agente_no_modelo.sh, fora do escopo literal do aval); espera unica nao le .output; Read tool fica fora do ramo de polling, aval fala de cat)
