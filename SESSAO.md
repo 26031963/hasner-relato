@@ -6,10 +6,14 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 16:30:09.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (223.4 MB). Acoes na janela: **1904**.
+**Medido em 27/11/2026 16:37:02.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (223.5 MB). Acoes na janela: **1906**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 16:36:57 | Bash | Confere se o brief do P4 pede arquivo proibido ao Codex | `cd ~/saas-hasner; /bin/grep -nE 'models\|migrations\|motor_calculo\|juizes.py\|crons.py\|bin/' logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md \| head; head -15 logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md` |
+| 16:36:52 | Bash | Confere vagas Codex, o brief do P4 e a wt do CCM | `cd ~/saas-hasner; python3 bin/codex_vagas_estado.py 2>&1 \| tail -5; ls logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md; wc -l logs/CODEX-CONSTROI-MOTOR/cura14/brief_p4_codex.md; git -C /home/ronald/wt-ccm-recusa-090424 log --oneline -2; git -C /home/ronald/wt-ccm-recusa-090424 status --porcelain \| head` |
+| 16:35:14 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 16:35:10 | Bash | Lê a espera e os resultados dos mutantes | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bch8wqk3f.output; cd ~/saas-hasner/logs/FERIADO-BOTAO-CORTADO/m12/; for f in *.r; do echo "$f $(cat $f)"; done` |
 | 16:30:05 | Bash | Espera única pelo próximo rc de obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 16:30:01 | Bash | Lê o resultado do primeiro mutante | `cat ~/saas-hasner/logs/FERIADO-BOTAO-CORTADO/m12/historico-sem-guarda.r` |
 | 16:29:58 | Bash | Lê o fim da espera e o estado dos mutantes | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bcqr6lr7q.output; ls ~/saas-hasner/logs/FERIADO-BOTAO-CORTADO/m12/` |
@@ -1912,5 +1916,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 04:42:55 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bf69oxu3n.output` |
 | 04:37:49 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 04:37:45 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b7q4ag92m.output` |
-| 04:32:39 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 04:32:35 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/blw1ttgyu.output` |
