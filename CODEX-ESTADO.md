@@ -1,7 +1,113 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 15:22** · publicado em **27/11/2026 15:25** (UTC-3)
+> Ultima resposta processada: **27/11/2026 15:35** · publicado em **27/11/2026 15:39** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 15:35 · sessao 0c713d148d50 · INVENTARIO-PELA-REGRA · construtor · origem=Code
+
+Corrigi o instrumento do AUS-05. `_EmissorMudo._espelhar_marcos` tem a assinatura do emissor real e retorna `False`, o valor do caminho sem escrita. A comparação com o HEAD confirmou que os 35 casos C2 receberam somente mudanças de docstring, preservando as asserções de ESC-12, AUS-03 e FOL-14. [app/folha/tests/_celulas.py:11] [app/ponto/management/commands/detectar_ausencias.py:544] [app/ponto/management/commands/detectar_ausencias.py:558]
+
+A bateria ficou com **50 casos etiquetados**. CMP-06 a CMP-11 e CMP-15 têm `@unittest.skip("lei: ...")` e duas respostas candidatas. As frentes da tabela são escolhas técnicas de leitura, sujeitas à revisão do Code. A menção a intermitente não veio acompanhada de cadastro, batidas e gabarito entre os 15 casos do L4. [app/folha/tests/_inventario_c3_mutantes.py:74] [app/folha/tests/test_inventario_competencia.py:247] [app/folha/tests/test_inventario_competencia.py:408] [nao verificado]
+
+O RED isolado do AUS-05 reproduziu o `AttributeError` ao retirar o método em memória. O RED do predicado de rescisão apontou CMP-12 em 01/2027, CMP-13 em 01/2027 e CMP-14 em 12/2026. Para o movimento normal, os testes cobram matrícula, competência e valor em centésimos de hora. O L4 não informa o código dessa rubrica, e o escritor atual não oferece o evento de horas normais. A execução Django do recorte fica com Code e opus final. [app/folha/tests/_inventario_c3_mutantes.py:45] [app/folha/tests/_inventario_c3_mutantes.py:146] [app/folha/tests/test_inventario_competencia.py:132] [app/folha/export.py:439] [nao verificado] [nao verificado]
+
+### Diff por arquivo
+
+| Arquivo | Linhas `+/-` | Mudança |
+|---|---:|---|
+| [folha/tests/_celulas.py](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/_celulas.py:11) | +3/−0 | Método mudo |
+| [ponto/tests/test_inventario_escala.py](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_escala.py:180) | +36/−12 | 12 docstrings |
+| [ponto/tests/test_inventario_ausencia.py](/home/ronald/wt-codex-inventario-pela-regra-143921/app/ponto/tests/test_inventario_ausencia.py:31) | +27/−9 | 9 docstrings |
+| [folha/tests/test_inventario_folha.py](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_folha.py:130) | +42/−14 | 14 docstrings |
+| [folha/tests/test_inventario_competencia.py](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/test_inventario_competencia.py:1) | +444/−0 | 15 casos CMP |
+| [folha/tests/_inventario_c3_mutantes.py](/home/ronald/wt-codex-inventario-pela-regra-143921/app/folha/tests/_inventario_c3_mutantes.py:1) | +185/−0 | Ensaios em memória |
+
+**`except` no diff: 0**, contando inclusões e remoções nos seis arquivos acima.
+
+### RED e mutantes
+
+Na pasta `app`, esta função invoca os ensaios sem ORM. [app/folha/tests/_inventario_c3_mutantes.py:159]
+
+```bash
+c3() { PYTHONDONTWRITEBYTECODE=1 python3 folha/tests/_inventario_c3_mutantes.py "$1"; }
+```
+
+| Comando | Resultado observado | Referência |
+|---|---|---|
+| `c3 controle` | rc 0 | `app/folha/tests/_inventario_c3_mutantes.py:174` |
+| `c3 red-emissor` | rc 1, método ausente na chamada do cartório | `app/folha/tests/_inventario_c3_mutantes.py:49` |
+| `c3 sem-palavra-chave` | rc 1, rejeita `reaberto=` | `app/folha/tests/_inventario_c3_mutantes.py:51` |
+| `c3 retorno-true` | rc 1, sinaliza escrita indevida | `app/folha/tests/_inventario_c3_mutantes.py:54` |
+| `c3 sem-etiqueta` | rc 1, acusa a etiqueta ausente em CMP-06 | `app/folha/tests/_inventario_c3_mutantes.py:84` |
+| `c3 sem-skip` | rc 1, acusa o `skip` ausente em CMP-06 | `app/folha/tests/_inventario_c3_mutantes.py:96` |
+| `c3 corte-trocado` | rc 1, acusa 20/11 atribuído a dezembro | `app/folha/tests/_inventario_c3_mutantes.py:118` |
+| `c3 movimento-outra-competencia` | rc 1, acusa movimento na competência errada | `app/folha/tests/_inventario_c3_mutantes.py:139` |
+| `c3 movimento-minutos-a-menos` | rc 1, encontra 1100 centésimos onde espera 1200 | `app/folha/tests/_inventario_c3_mutantes.py:140` |
+| `c3 movimento-em-feriado` | rc 1, rejeita o valor na rubrica de feriado | `app/folha/tests/_inventario_c3_mutantes.py:141` |
+| `c3 red-rescisao` | rc 1, acusa as três exclusões pelo predicado real | `app/folha/tests/_inventario_c3_mutantes.py:146` |
+
+### Recorte para o Code
+
+Na raiz da cópia, com os quatro módulos dentro de `--only`. Execução neste turno [nao verificado]. [app/docs/RELATO.md:10801]
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bin/suite.sh --only "ponto.tests.test_inventario_escala ponto.tests.test_inventario_ausencia folha.tests.test_inventario_folha folha.tests.test_inventario_competencia"
+```
+
+### Etiquetas
+
+| Classe | Família | Frente | Nascente |
+|---|---|---|---|
+| ESC-01 | escala | espelho | `app/escala/utils.py:2284` |
+| ESC-02 | escala | espelho | `app/escala/utils.py:2284` |
+| ESC-03 | escala | espelho | `app/escala/alimentacao.py:228` |
+| ESC-04 | escala | espelho | `app/ponto/turnos.py:2971` |
+| ESC-05 | escala | espelho | `app/ponto/motor_calculo_v2.py:1049` |
+| ESC-06 | escala | espelho | `app/ponto/motor_calculo_v2.py:961` |
+| ESC-07 | escala | espelho | `app/ponto/precedencia.py:259` |
+| ESC-10 | escala | espelho | `app/ponto/motor_calculo_v2.py:3535` |
+| ESC-11 | escala | espelho | `app/ponto/motor_calculo_v2.py:3538` |
+| ESC-12 | escala | espelho | `app/ponto/services/dia_pago.py:239` |
+| ESC-13 | escala | espelho | `app/ponto/services/dia_pago.py:250` |
+| ESC-15 | escala | espelho | `app/ponto/services/espelho.py:1200` |
+| AUS-01 | ausencia_ferias | espelho | `app/ponto/motor_calculo_v2.py:3596` |
+| AUS-02 | ausencia_ferias | espelho | `app/ponto/services/dia_pago.py:396` |
+| AUS-03 | ausencia_ferias | espelho | `app/escala/utils.py:1262` |
+| AUS-04 | ausencia_ferias | espelho | `app/ponto/services/dia_pago.py:193` |
+| AUS-05 | ausencia_ferias | espelho | `app/ponto/services/dia_pago.py:346` |
+| AUS-06 | ausencia_ferias | ferias | `app/ferias/services.py:504` |
+| AUS-07 | ausencia_ferias | ferias | `app/folha/export.py:90` |
+| AUS-08 | ausencia_ferias | ferias | `app/ferias/services.py:49` |
+| AUS-10 | ausencia_ferias | espelho | `app/ponto/services/dia_pago.py:396` |
+| FOL-01 | folha_export | txt | `app/folha/export.py:439` |
+| FOL-02 | folha_export | txt | `app/folha/export.py:441` |
+| FOL-03 | folha_export | txt | `app/folha/export.py:446` |
+| FOL-04 | folha_export | txt | `app/folha/export.py:443` |
+| FOL-05 | folha_export | txt | `app/folha/export.py:447` |
+| FOL-06 | folha_export | espelho | `app/ponto/motor_calculo_v2.py:3603` |
+| FOL-07 | folha_export | txt | `app/folha/export.py:215` |
+| FOL-08 | folha_export | txt | `app/folha/export.py:752` |
+| FOL-09 | folha_export | txt | `app/folha/export.py:399` |
+| FOL-10 | folha_export | txt | `app/folha/export.py:739` |
+| FOL-11 | folha_export | txt | `app/ponto/janelas.py:15` |
+| FOL-12 | folha_export | txt | `app/ponto/services/dia_pago.py:109` |
+| FOL-13 | folha_export | txt | `app/folha/export.py:525` |
+| FOL-14 | folha_export | txt | `app/folha/views.py:277` |
+| CMP-01 | escala | espelho | `app/ponto/janelas.py:15` |
+| CMP-02 | escala | txt | `app/folha/export.py:443` |
+| CMP-03 | escala | txt | `app/ponto/services/fechamento.py:979` |
+| CMP-04 | escala | espelho | `app/ponto/motor_calculo_v2.py:3603` |
+| CMP-05 | escala | espelho | `app/ponto/motor_calculo_v2.py:3811` |
+| CMP-06 | escala | txt | `app/core/regua_cct.py:477` |
+| CMP-07 | escala | txt | `app/ponto/motor_calculo_v2.py:961` |
+| CMP-08 | escala | txt | `app/ponto/motor_calculo_v2.py:961` |
+| CMP-09 | escala | espelho | `app/ponto/motor_calculo_v2.py:3593` |
+| CMP-10 | escala | espelho | `app/ponto/motor_calculo_v2.py:3593` |
+| CMP-11 | escala | espelho | `app/ponto/motor_calculo_v2.py:3593` |
+| CMP-12 | folha_export | txt | `app/folha/export.py:875` |
+| CMP-13 | folha_export | txt | `app/folha/export.py:875` |
+| CMP-14 | folha_export | txt | `app/folha/export.py:875` |
+| CMP-15 | ausencia_ferias | ferias | `app/folha/export.py:90` |
 
 ## 27/11 15:22 · sessao 92a042f4758d · FERIADO-UM-JUIZ · verificador · origem=Code
 
@@ -719,8 +825,4 @@ O cenário de teste identifica **10/12/2026, Aniversário de Londrina/PR**. A pr
 
 Auditei os 40 IDs atribuídos e encaminhei as linhas e os cruzamentos com o placar. Os sítios, a classificação e as ressalvas de cada obra foram enviados nos três blocos. A confirmação do hash da cópia e a incidência atual em produção permanecem [nao verificado].
 
-## 27/11 15:07 · sessao db709b7df738 · - · - · origem=Ronald (tmux)
-
-Auditei os 48 IDs atribuídos e enviei as linhas ao agente principal em cinco blocos. A atualização final inclui o exemplo vivo de carimbo desatualizado em `app/ponto/models.py:180` e `app/ponto/services/justificativa.py:351–353`. A prevalência em produção ficou `[nao verificado]`.
-
-_8718 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8719 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._

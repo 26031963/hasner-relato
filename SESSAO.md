@@ -6,10 +6,15 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 15:32:35.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (217.0 MB). Acoes na janela: **1844**.
+**Medido em 27/11/2026 15:39:33.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (218.2 MB). Acoes na janela: **1838**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 15:35:56 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 15:35:48 | Bash | Confere que o recorte está na fila | `cd ~/saas-hasner; sleep 5; tail -2 logs/INVENTARIO/C3/suite/s.log; ls logs/INVENTARIO/C3/suite/` |
+| 15:35:41 | Bash | Commita C3 na wt e enfileira o recorte na VM | `cd ~/saas-hasner; W=/home/ronald/wt-codex-inventario-pela-regra-143921; find $W/app -name __pycache__ -type d -prune -exec rm -rf {} + ; git -C $W add app/folha/tests/_celulas.py app/folha/tests/test_inventario_folha.py app/ponto/tests/test_inventario_ausencia.py app/ponto/tests/test_inventario_escala.py app/folha/tests/_inventario_c3_mutantes.py app/folha/tests/test_inventario_competencia.py && g ...` |
+| 15:35:25 | Bash | Entrega do C3 e higiene do diff | `cd ~/saas-hasner; tail -c 4000 logs/INVENTARIO/C3/r.md; W=/home/ronald/wt-codex-inventario-pela-regra-143921; git -C $W status --porcelain; git -C $W diff \| /bin/grep -cE "^\+.*except"; git -C $W diff \| /bin/grep -cE "^\+.*(timezone\.now\|datetime\.now)"` |
+| 15:35:21 | Bash | Lê o que acordou a espera e a carga | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bxs6z62ja.output; cat /proc/loadavg` |
 | 15:31:06 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 15:31:02 | Bash | Lê o que acordou a espera e a carga | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bx2lcruqf.output; cat /proc/loadavg` |
 | 15:25:57 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -1843,14 +1848,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 03:39:58 | Bash | Lê juiz competencia_entregue e o teste | `cd /home/ronald/wt-codex-e4c-f5-instante-012038/app; sed -n 555,600p folha/export.py; grep -n "competencia_entregue\\|status.*exportad" chamados/services/validacao.py \| head; sed -n 880,915p chamados/tests/test_e4c_f5_c4_red.py` |
 | 03:39:44 | Bash | Procura escritor de entrada_em | `cd /home/ronald/wt-codex-e4c-f5-instante-012038/app; grep -n "entrada_em" chamados/models.py \| head -30; sed -n 500,520p chamados/tests/test_e4c_f5_c4_red.py` |
 | 03:39:35 | Bash | Lê falhas dos controles vivos | `cd ~/saas-hasner; L=logs/E4C-F5-INSTANTE/c4red5/red.log; for k in "escritor='carimbar'" "fm='exportado'"; do awk -v k="$k" 'index($0,k)&&/^FAIL:/{f=1} f{print} f&&/^-{20}\|^={20}/&&++n>2{exit}' $L \| head -30; echo =====; done` |
-| 03:39:26 | Bash | Lê veredito do RED base | `cd ~/saas-hasner; L=logs/E4C-F5-INSTANTE/c4red5/red.log; grep -E '^Ran \|^(OK\|FAILED)($\| \()' $L \| tail -2; grep -E '^(FAIL\|ERROR):' $L \| sed 's/(chamados.tests.//' \| sort \| uniq -c \| head -50; grep -cE '^ERROR:' $L` |
-| 03:39:21 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bfbtq7s21.output` |
-| 03:38:07 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 03:38:06 | Bash | Lança RED e mutantes da c4red5 | `cd ~/saas-hasner; D=logs/E4C-F5-INSTANTE/c4red5; M=chamados.tests.e4c_f5_c4red2_mutantes; L=""; for m in M08QualquerResposta M11Elegibilidade M12aVigia M12bAlarme M13Dry M21Empate0058 M24RelogioAposEspera M27K6LidoAntesDaTrava M28CompensadorCru M29DevolucaoApagaResposta M30EstoqueSemAtomic M30WorkerSemAtomic M31FotoRelida M32FMExportadoBarra; do L="$L $M.$m"; done cat > $D/lanca_red.sh <<EOF #!/bi ...` |
-| 03:37:58 | Bash | Commita c4red5 na cópia | `cd /home/ronald/wt-codex-e4c-f5-instante-012038 && git add app/chamados/tests/test_e4c_f5_c4_red.py app/chamados/tests/e4c_f5_c4red2_mutantes.py && git commit -q -F - <<'EOF' E4C-F5 c4red5: REDs pelo brief FINAL do opus (triagem 5(d) da c4red4) OBRA: E4C-F5-INSTANTE Brief logs/E4C-F5-INSTANTE/c4red4/opus_triagem/opus.md, itens 1-9, mais o item 10 (fixture da validacao futura por restore/estoque, l ...` |
-| 03:37:50 | Bash | Lê mensagem do commit anterior | `cd /home/ronald/wt-codex-e4c-f5-instante-012038; git log -1 --format=%B 48b24c39c` |
-| 03:37:45 | Bash | Varre diff e lê lançador RED anterior | `cd ~/saas-hasner; W=/home/ronald/wt-codex-e4c-f5-instante-012038; git -C $W diff \| grep -nE '^\+.*(except\|suppress\|timezone\.now\|Now\(\)\|skip)' ; cat logs/E4C-F5-INSTANTE/c4red4/lanca_red.sh; ls logs/E4C-F5-INSTANTE/c4red4/` |
-| 03:37:39 | Bash | Colhe c4red5 E4C | `cd ~/saas-hasner; D=logs/E4C-F5-INSTANTE/c4red5; tail -5 $D/wrapper.out; wc -c $D/construtor.r; tail -60 $D/construtor.r; W=/home/ronald/wt-codex-e4c-f5-instante-012038; git -C $W status --porcelain; git -C $W diff --stat` |
-| 03:37:34 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bs17xzcp3.output` |
-| 03:37:13 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 03:37:07 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bor1fy0xb.output` |
