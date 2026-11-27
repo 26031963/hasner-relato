@@ -1,7 +1,188 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 02:37** · publicado em **27/11/2026 02:40** (UTC-3)
+> Ultima resposta processada: **27/11/2026 02:52** · publicado em **27/11/2026 02:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 02:52 · sessao 6e9234b9033d · CODEX-CONSTROI-MOTOR · leitura · origem=Code
+
+[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
+
+## 27/11 02:50 · sessao da26229ad312 · - · - · origem=Ronald (tmux)
+
+Achados do mapa de agendamento e dos portões de deploy. `NENHUM` abaixo significa `TOCADO` pelo inventário atual para um arquivo regular, com lease válida e sem outros motivos de recusa. A resposta de recusa esperada é `PROIBIDO` para o caminho, seguida de `RECUSA rc 3 (inventario rc 3): wt DESCARTADA`. REDs descritos são casos propostos, execução [nao verificado]. `bin/codex_pergunta.sh:162–175,220–233,805–823,830`.
+
+| Caminho | Leitor e efeito | Wrapper hoje | Caso de RED de recusa |
+|---|---|---|---|
+| `app/config/crons.py` | Define a grade, empresas, argumentos e dependências. `bin/crons.sh:23–40` renderiza e instala o crontab do host. Elos existentes são resolvidos a cada execução em `bin/encadeado.sh:40–67`, sem reinstalar. A mesma fonte fornece o bloco do ensaio em `bin/sombra.sh:346–351`. `app/config/crons.py:281,326–327,1847–1890,1900–1981`. | `#G:p_crons`, `bin/codex_pergunta.sh:167`. | Alterar entrada da grade. RED atual `bin/tests/test_codex_pergunta.sh:417`, `PROIBIDO`, motivo `crons`, rc 3. |
+| `app/config/crons_duracao.json` | Define durações de `sombra.sh` e `noturno.py`, podendo mover o minuto derivado ou recusar render. `app/config/crons.py:146–160,245–278,350–352,594–595`. O medidor também lê o JSON anterior e conserva valores sem medição nova. `bin/crons_duracao.py:77–99`. | NENHUM. | Alterar uma duração. Hoje `TOCADO`; c11 deve recusar rc 3. |
+| `app/logs/placar.jsonl` | `check --medir` chama o leitor que calcula p95 em sete dias, fator 1,5 e piso de 30 s, regravando o JSON da grade. `bin/crons.sh:19–21`, `bin/crons_duracao.py:25–31,54–76,93–99`, `bin/cron_run.sh:6–13`. | `#G:p_ignorado`, `app/.gitignore:3`, `.gitignore:53–54`, `bin/codex_pergunta.sh:225`. | Acrescentar linha a fixture ignorada. `PROIBIDO`, motivo `ignorado (fora do diff que pousa)`, rc 3. |
+| `app/core/management/commands/crons.py` | `render` governa texto instalado, `corrente` governa execução dos elos e `sombra` governa cobertura do ensaio. `app/core/management/commands/crons.py:23,36–60`, `bin/crons.sh:23–40`, `bin/encadeado.sh:40–67`, `bin/sombra.sh:341–386,400–433`, `bin/deploy.sh:151–167`. | NENHUM. | Alterar o arquivo em cada um dos três verbos, em três casos. Hoje `TOCADO`; c11 deve recusar rc 3 em cada caso. |
+| `app/core/tests/marca_cron15.py` e `app/core/tests/__init__.py` | Importados pelo render de install. A marca governa se a recusa `CronNaoCabe` da sombra pode conservar a linha que já está no host e também marca exatamente 15 testes na suite. `app/core/management/commands/crons.py:91–119`, `app/core/tests/marca_cron15.py:27,32–65`, `app/chamados/tests/test_contract_crons.py:16`, `bin/crons.sh:23–27,35–40`. | NENHUM. | Alterar prazo ou inicializador, separadamente. Hoje `TOCADO`. Uma regra que aceite toda a pasta de testes de `core` aceita também esses arquivos e precisa de um caso de portão independente. |
+| `app/manage.py`, settings SaaS e módulos transitivos, comandos dos jobs e dependências | `manage.py` escolhe settings e despacha os comandos de cerca, migração, `collectstatic`, `crons` e `tenant_command`. O código executado pelos jobs pode mudar o rc e o carimbo que libera a execução do elo seguinte. `app/manage.py:7–18`, `bin/deploy.sh:194–217,296–303,338–339`, `bin/crons.sh:23–27`, `app/config/crons.py:21,1908–1928`, `bin/cron_run.sh:11–25,29–38`, `bin/encadeado.sh:71–104`. | NENHUM para módulos `.py` regulares comuns. Formas de autoload têm `#G:p_autoload`, `bin/codex_pergunta.sh:175`. | Alterar entrypoint, configuração ou command agendado, um por vez. Hoje `TOCADO`; c11 deve recusar rc 3 para os caminhos fora do brief. Os REDs atuais de autoload estão em `bin/tests/test_codex_pergunta.sh:469–472`. |
+| `app/gunicorn.conf.py`, `app/gunicorn.core.conf.py` | O selo executa as configurações do disco e julga `max_requests`. Deploy exige verde antes de migrar e o repete após o reload. `bin/selo_reciclagem.sh:34–49`, `bin/deploy.sh:324–339,443–448`. O teste de suite também lê as mesmas configurações e a declaração das 03:30. `app/core/tests/test_contract_reciclagem.py:26–68,70–80`. | NENHUM. | Alterar cada arquivo separadamente. Hoje `TOCADO`; c11 deve recusar rc 3. O mutante de valor já está no teste em `:57–62`. |
+| `app/templates/**`, estático, configuração de storage, urlconfs, views, templatetags e dependências | O deploy decide `collectstatic` lendo a existência/mtime do manifest e arquivos fonte. A prova seguinte carrega Django, resolve estáticos, compila cinco templates e importa os dois urlconfs e includes. Falha antes do apply. `bin/deploy.sh:296–303,315–339`, `bin/prova_de_casca.sh:30–47`, `bin/prova_de_casca.py:9–16,28–53,64–99`, `app/config/settings/saas.py:109–112`. | NENHUM para fontes. Manifest `app/staticfiles/staticfiles.json` tem `#G:p_ignorado`, `.gitignore:13`, `bin/codex_pergunta.sh:225`. | Alterar um arquivo de cada fonte e incluir manifest sintético como caso separado. Fontes abrem hoje como `TOCADO`; c11 deve recusar rc 3. Manifest ignorado já deve recusar rc 3. |
+| `app/**/*.py` e `app/**/*.html`; arquivos de auth declarados | Marcador de conflito muda a guarda antes de migrar. Alteração em caminho listado de auth afeta a janela, inclusive no reload agendado, pelo diff contra `logs/deploy.stamp`. `bin/arvore_sem_conflito.sh:19–33`, `bin/auth_sitios.txt:13–22`, `bin/janela_auth.sh:39–45,85–115`, `bin/deploy.sh:101,126–149`. `app/core/models.py` consta na lista de auth. `bin/auth_sitios.txt:17`. | NENHUM nos arquivos App, `#G:p_bin/p_fora` na lista host e `#G:p_fora/p_ignorado` no carimbo. `bin/codex_pergunta.sh:168,174,225`; `.gitignore:53`. | Para caminho fora da lista positiva, rc 3. Caso de modelo aceito tem teste de portão com relógio da janela, porque o nome permitido ainda participa da decisão. |
+| `app/config/settings/ci.py`, `app/core/runner_quarentena.py`, `app/core/quarentena_lista.py`, `app/core/testes_em_quarentena.txt` e selos Django dos apps | Settings selecionam runner, que poda testes pela lista. Régua e hook de push executam a suite, e a régua deriva `.regua_stamp` da saída. `app/config/settings/ci.py:38–40`, `app/core/runner_quarentena.py:36–37,49–69,72–96`, `app/core/quarentena_lista.py:9,25–29`, `bin/regua.sh:165–179,196–203`, `bin/pre-push.sh:45–73,184–199`. Selos crons em `app/chamados/tests/test_contract_crons.py:13–16,250–282`, `app/core/tests/test_contract_crons_duracao_horario.py:9–24,43–56`. | NENHUM nos arquivos App. `.regua_stamp` tem `#G:p_fora/p_ignorado`, `.gitignore:60`, `bin/codex_pergunta.sh:174,225`. | Alterar runner/lista/setting, um por vez. Hoje `TOCADO`; c11 deve recusar rc 3. Selo de autoridade dentro de pasta elegível requer teste de independência em vez de prometer recusa pelo nome. |
+| `app/core/tests/test_ambiente_do_run.py`, runner e entrada da suite | As linhas de ambiente e poda são dados para certificação de pouso, junto com retorno do processo, OOM e contagens. `app/core/tests/test_ambiente_do_run.py:43–60`, `app/core/runner_quarentena.py:86–96`, `bin/suite.sh:547–569`, `bin/pista_certifica.sh:41–60,67–100`. | NENHUM. | Alterar escritor do ambiente ou runner. Rc 3 pela c11 se forem fora do brief. Caso o teste seja elegível, testar a autoridade do certificado separadamente. |
+| `app/core/integrador_lote.py`, `app/core/esteira_vigia.py`, `app/core/management/commands/gerar_diagrama.py` | Python da árvore é executado no host pelo integrador e vigia, governa lote e chama deploy/auto-revert. O gerador e o selo textual entram no portão do molde antes de recarregar. `bin/hasner-integrador.timer:5–7`, `bin/hasner-integrador.service:11–13`, `bin/integrador.sh:18–24,51–52`, `app/core/integrador_lote.py:194–200,369–381,638–639,704–753`, `bin/hasner-esteira.timer:6–8`, `bin/hasner-esteira.service:13–17`, `bin/vigia_esteira.sh:11`, `app/core/esteira_vigia.py:1297–1317`, `bin/molde_fatia/cadeia.sh:36–55`, `bin/gerar_diagrama.py:15`. | NENHUM. | Alterar cada arquivo. Hoje `TOCADO`; c11 deve recusar rc 3. |
+| `app/docs/LEIS.md`, `app/docs/CORTES.json`, `app/docs/CORTES.md` | Leitores de índice de leis e juiz novo na régua, e de sítios protegidos no push. `bin/regua.sh:138–144`, `bin/pre-push.sh:12–16`, `bin/tests/test_leis_indice.sh:17–39`, `bin/tests/test_juiz_novo_tem_corte.sh:24–44`, `bin/tests/test_lei_protege_sitio.sh:26,52–92,165–203`. | NENHUM. | Alterar cada fonte versionada. Hoje `TOCADO`; c11 deve recusar rc 3. |
+| `app/requirements.txt`, `app/Dockerfile`, `app/.dockerignore`; compose e ambiente de host | Build resolve Django, django-tenants e Gunicorn e copia contexto. Efeito por imagem nova depende de rebuild/recreate. O deploy informa que HUP e restart não reconstroem a imagem. O compose do mensageria determina `migrate` de boot e é lido pelo selo. `app/requirements.txt:12–21`, `app/Dockerfile:8,37–44`, `app/.dockerignore:3–13`, `bin/deploy.sh:20–22,213–224`, `docker-compose.mensageria.yml:3,13–20`, `bin/selo_reciclagem.sh:52–75`. Compose SaaS vivo [nao verificado]. | NENHUM nos três arquivos de `app`. `#G:p_compose/p_fora` e `#G:p_env/p_fora` nos nomes do host. `bin/codex_pergunta.sh:172–174`. | Alterar cada insumo do build e cada insumo host separadamente. Os três do `app` aparecem como `TOCADO` hoje, c11 deve recusar rc 3. Host deve recusar hoje. |
+| Scripts e artefatos de host `bin/deploy.sh`, `bin/crons.sh`, selos, `/etc/cron.d`, timers, `.sombra_stamp`, `logs/fim/**` | Fronteira física da cópia. `bin/deploy_agendado.sh:49–60,63–81` programa cron de um disparo com diretórios recebidos por argv. Carimbo da sombra lido pelo deploy e pela raia dinheiro. O carimbo de fim é lido pela cadeia. `bin/sombra.sh:82,410–433`, `bin/deploy.sh:163–167`, `bin/trava.sh:40–52`, `bin/encadeado.sh:81–96`. | `#G:p_bin/p_fora` para scripts versionados, `#G:p_fora/p_ignorado` nos carimbos conforme `.gitignore:53,60–61`; `/etc/cron.d` está fora do universo inventariado `bin/codex_pergunta.sh:143–149,202–205`. | Usar equivalentes sintéticos relativos dentro da fixture para os caminhos de host no repo. Arquivos reais externos [nao verificado]. |
+
+`bin/crons.sh:40` devolve `0` depois da pipeline de `crontab -` até quando esta falha, pela sequência `&& echo …; exit 0`. A igualdade do check e a presença da linha no selo são perguntas distintas. O selo de reciclagem confere só o texto `deploy.sh --reload-agendado`, e os minutos 03:30 vêm da declaração e do teste de suite. `bin/crons.sh:24–40`, `bin/selo_reciclagem.sh:70–78`, `app/config/crons.py:326–327`, `app/core/tests/test_contract_reciclagem.py:70–80`. Resultado em host [nao verificado].
+
+O motor aceito é lido pelo cron `vigiar_motor_autoridade` e pode alterar seu resultado de alarme. O comando o importa e calcula o mês, acusa pelo rc 2, e o envelope carimba tanto rc 0 como rc 2. `app/config/crons.py:596`, `app/ponto/management/commands/vigiar_motor_autoridade.py:34–39,54–65,97–108`, `bin/cron_run.sh:19–25`. A alteração de comportamento do motor pode também influenciar duração observada de código que o executa, via `bin/cron_run.sh:11–13` e `bin/crons_duracao.py:54–76`; mudança real de horário por esse caminho [nao verificado].
+
+C inclui ainda `bin/disjuntor.py:2025` além dos sítios do anexo, pois o docstring também referencia `:644`. D exige revisar as asserções de cardinalidade fixa em `bin/tests/test_agente_no_modelo.sh:142,287`, além de `OPUS_CONSTROI_TAGS` e do texto de despacho. Locais atuais `bin/codex_pergunta.sh:644–645,166`, `bin/disjuntor.py:1959–1961,2024–2039,2111`, `CLAUDE.md:403–405`, `bin/tests/test_agente_no_modelo.sh:13,142,287,355`, `bin/tests/test_censo_antes_da_vaga.sh:203`.
+
+## 27/11 02:50 · sessao a7b4cf266d17 · - · - · origem=Ronald (tmux)
+
+**Mapa de schema e portões do deploy** [nao verificado]
+
+| Caminho | Leitor e efeito | Wrapper c10 e RED de c11 |
+|---|---|---|
+| `app/config/settings/{saas,base}.py` e inicializadores dos pacotes | `app/manage.py:9-12`, `app/config/wsgi.py:14-15`, `app/config/settings/saas.py:10,22-53,83-95`. Escolhe apps shared/tenant, router, backend e os modelos de tenant. `BASE_DIR` também determina que labels a cerca pergunta. `app/core/tests/test_model_sem_migration_pendente.py:24-48`. | NENHUM. Um caso por arquivo de settings e por `__init__.py`; exigir recusa do caminho exato. `bin/codex_pergunta.sh:162-176,223-233`. |
+| `app/config/settings/saas.py` + pacote de migrations com outro nome | Anexo `opus.md`, B; `app/core/tests/test_model_sem_migration_pendente.py:24-48` e `bin/deploy.sh:194-207,256,338-340`. Altera a origem do grafo que a cerca e o apply leem. | NENHUM para settings e pacote alternativo. Testar cada arquivo isolado, além da combinação B. Usar mudança inerte de fixture. `bin/codex_pergunta.sh:165,162-176`. |
+| `app/<app>/migrations/**`, inclusive `__init__.py` | A mesma cerca, `migrate_schemas --tenant --check` e apply; `bin/deploy.sh:194-207,338-340`. Exemplo de DDL real em `app/colaboradores/migrations/0025_onboarding_db_defaults.py:12-17`. | `#G:p_migr`, `bin/codex_pergunta.sh:165`; REDs existentes `bin/tests/test_codex_pergunta.sh:415-416`. Acrescentar caso isolado de `migrations/__init__.py`. |
+| `app/<app>/models.py` existentes e novos, inclusive `api` e `tenants`; pacote `models/` | Registro SaaS e cerca consultam classes, campos e labels. Alteração declarativa sem migration deve produzir drift e impedir publicação, sem DDL no gate. `app/config/settings/saas.py:22-53`; `app/core/tests/test_model_sem_migration_pendente.py:24-48`; `app/tenants/test_model_sem_migration_pendente.py:25-42`; `bin/deploy.sh:194-205`. | `models.py`: NENHUM, inclusive fora do brief e novos; exigir recusa de ambos. `models/`: `#G:p_models_pkg`, `bin/codex_pergunta.sh:166`; RED `bin/tests/test_codex_pergunta.sh:412`. |
+| Dependências Python de migration já versionada | `app/colaboradores/models.py` é importado pela migration `app/colaboradores/migrations/0004_colaborador_data_demissao_alter_colaborador_cpf_and_more.py:3,25` e fornece o validador. `app/core/crypto_fields.py` fornece o campo usado pela migration `app/colaboradores/migrations/0032_alter_contabancaria_agencia_and_more.py:3,14-17` e pelo model atual `app/colaboradores/models.py:2`. Mudar a implementação alcança o carregamento de migrations sem editar a migration; efeito de um mutante específico no DDL [nao verificado]. | NENHUM. Recusar `crypto_fields.py`; se o model for nominalmente permitido, preservar esta linha como caminho residual e exigir teste de efeito independente do wrapper. `bin/codex_pergunta.sh:162-176`. |
+| `app/tenants/{models,services}.py`, view e command de provisionamento | `app/tenants/management/commands/criar_cliente.py:3,23` e `app/tenants/views.py:19,52` chamam o serviço, que grava `Cliente` em `app/tenants/services.py:1,5-13`. O model habilita criação automática de schema em `app/tenants/models.py:14-21`. Está catalogado como setup de tenant em `app/config/crons.py:1450`. | NENHUM. Casos isolados por arquivo; se o model estiver no brief, o caminho de provisionamento subsiste. `bin/codex_pergunta.sh:162-176`. |
+| `app/*/{__init__,apps,signals}.py`, dependências de `ready()` | Inicialização do Django usada pela cerca, migrate e prova; `app/manage.py:9-12`, `bin/prova_de_casca.py:9-16`, `bin/deploy.sh:196,207,339`. Exemplos de imports efetivos em `app/core/apps.py:8-10`, `app/ponto/apps.py:7-8`, `app/escala/apps.py:8-9`, `app/chamados/apps.py:8-10`, `app/colaboradores/apps.py:7-9` e `app/inteligencia/apps.py:7-10`. Sinais atuais exemplificados por `post_save/post_delete` em `app/ponto/signals.py:34,48`; receptor de migrate atual [nao verificado]. | NENHUM. Um caso de `apps.py`, `signals.py`, inicializador e helper direto de `ready()`; exigir recusa por arquivo. `bin/codex_pergunta.sh:162-176`. |
+| Arquivos que mudam o resolvedor/commands `shell`, `makemigrations`, `migrate_schemas`, `collectstatic` | `app/manage.py:9-12`; `app/core/tests/test_model_sem_migration_pendente.py:48`; `bin/deploy.sh:194-207,296-300,338-340`. Alteram a pergunta, o apply ou um insumo da prova de casca. A troca via registro de comando Django depende da precedência dos apps e [nao verificado] em execução. | NENHUM para `manage.py`, `management/__init__.py`, `management/commands/__init__.py` e arquivos regulares dos comandos em app instalado. Testar cada slot como escrita fora da lista. `bin/codex_pergunta.sh:162-176`. |
+| `app/core/tests/test_model_sem_migration_pendente.py`, seus REDs e `app/tenants/test_model_sem_migration_pendente.py` | O deploy importa a pergunta de dentro do teste. Cerca usa labels locais e `--check`; REDs cobrem campo folha, app sem pacote de migrations e campo tenants. `bin/deploy.sh:194-205`; `app/core/tests/test_model_sem_migration_pendente.py:24-48,56-80`; `app/tenants/test_model_sem_migration_pendente.py:14-42`. `app/core/tests/__init__.py` também integra essa cadeia de import. | NENHUM. RED por arquivo de pergunta e RED, mais inicializador e pacote homônimo candidato. Mudança c11 deve bloquear todas as origens da pergunta e dos REDs. Host test protegido `#G:p_bin`/`#G:p_fora` cobre respostas falsas em `bin/tests/test_deploy_portoes_antes_do_migrate.sh:91-100,245-259`, sem testar o conteúdo carregado no container. |
+| Settings de CI, runner, quarentena e testes de ambiente | `app/config/settings/ci.py:40`; `app/core/quarentena_lista.py:9,25-28`; `app/core/runner_quarentena.py:75-96`; `bin/suite.sh:568`; `bin/pre-push.sh:184-199`. A lista elimina casos do run com trilha. `app/core/tests/test_ambiente_do_run.py:43-56` escreve testemunho que `bin/pista_certifica.sh:41-70,85-99` usa para certificação do pouso. | NENHUM. Exigir recusa dos settings, runner, lista e selo de ambiente quando fora da lista positiva. Caso especial para o selo se uma regra ampla de testes o incluir. `bin/codex_pergunta.sh:162-176`. |
+| `app/**.py` e `app/**.html`; sítios de auth | `bin/arvore_sem_conflito.sh:19,29-35` verifica índice e marcadores. `bin/auth_sitios.txt:13-22` inclui `app/core/models.py` e `app/config/settings/base.py`, consultados no diff e no relógio por `bin/janela_auth.sh:56-61,85-115`. Ambos podem impedir o apply. `bin/deploy.sh:101,126-149`. | NENHUM para os caminhos normais de app. RED de recusa para caminho fora da lista. Para arquivo permitido, é RED de efeito do portão no fixture, pois wrapper deve aceitar o arquivo. |
+| `app/templates/**`, `app/static/**`, `app/<app>/static/**`, `templatetags`, `app/config/urls*.py` e views alcançadas | `bin/deploy.sh:296-320` detecta arquivos mais novos e chama coleta/prova. `bin/prova_de_casca.sh:30-34,42-47`; `bin/prova_de_casca.py:30-53,68-98` abre HTML para referências estáticas, compila cinco páginas e importa os urlconfs/rotas. `app/config/settings/base.py:70-87,97-100`. Um erro pode impedir migrate. A prova de rota muda o resultado depois do HUP em `bin/deploy.sh:417-448`. | NENHUM para fontes comuns. `app/staticfiles/staticfiles.json` normalmente `#G:p_ignorado`, `.gitignore:13` e wrapper `:225`. Testar uma fonte de cada leitor e o manifest. |
+| `app/gunicorn.conf.py`, `app/gunicorn.core.conf.py`, testes e helper do selo | `bin/selo_reciclagem.sh:34-49` lê config de disco via Gunicorn, `bin/deploy.sh:328,448` usa rc antes do apply e após HUP. `app/core/tests/test_contract_reciclagem.py:23-26,45-80` lê config via `core/censo_fonte.py` e cobra exatamente `30 3` no catálogo. O host procura somente a substring de reload no instalado em `bin/selo_reciclagem.sh:70-76`. | NENHUM para `.conf.py`, teste e helper. Um RED para cada configuração e para o teste se fora da lista. Selo de host `#G:p_bin`/`#G:p_fora`. |
+| `app/requirements.txt`, `app/Dockerfile`, `app/.dockerignore` e compose | Pins Django/django-tenants em `app/requirements.txt:13,16`; build instala e copia em `app/Dockerfile:37-44`; `app/.dockerignore:8-13` distingue camada e bind-mount. Rebuild/recreate é ato separado do deploy, `bin/deploy.sh:20-22`. Mensageria tem compose próprio, mount separado e migrate no boot `docker-compose.mensageria.yml:13-20`. Compose SaaS ignorado em `.gitignore:40-41`, conteúdo atual [nao verificado]. | NENHUM nos três arquivos de app. Compose `#G:p_compose`, `#G:p_fora` para raiz, e `#G:p_ignorado` quando aplicável. `bin/codex_pergunta.sh:172,174,225`; RED compose `bin/tests/test_codex_pergunta.sh:422`. |
+| Config, renderer e commands do cron como insumo da sombra | Render do app em `bin/sombra.sh:346-349`; roda a lista e agrega rc em `:351-391`; carimbo em `:400-406`, gate hoje/OK e DB de ensaio com migrations em `:410-433`; invocação antes de migrate em `bin/deploy.sh:151-167`. Alteração de app pode mudar o veredito do próximo ensaio. | `config/crons.py`: `#G:p_crons`, wrapper `:167`, RED `bin/tests/test_codex_pergunta.sh:417`. NENHUM para renderer `app/core/management/commands/crons.py:23,36-60`, helpers/commands e pacote homônimo candidato `config/crons/__init__.py`. Carimbo de host fora do app `#G:p_fora`. |
+
+Nos casos de recusa pós-executor, exigir `PROIBIDO` com arquivo exato em `.recusa`, `rc=3`, `motivo=INVENTARIO` e `.id` ausente. O helper atual confirma motivo/rc/sidecar; para cada caminho deve confirmar também a coluna do arquivo. `bin/codex_pergunta.sh:223-233,799-823`; `bin/tests/test_codex_pergunta.sh:153-169`.
+
+**Positivos com leitor ativo**
+
+- `app/ponto/motor_calculo_v2.py` consta nominalmente em `CLAUDE.md:146` e no positivo `bin/tests/test_codex_pergunta.sh:410`. O cron de `app/config/crons.py:596` chama `app/ponto/management/commands/vigiar_motor_autoridade.py:34-38,57-65,102-108`. Também passa pelo elo `app/config/crons.py:1808,1818`, `app/ponto/management/commands/lavrar_cxr_do_motor.py:17,32,40-43`, `app/ponto/services/cxr_na_lista.py:58,78`, `app/ponto/services/espelho.py:1029,1147,1262` e `app/core/regua_cct.py:434`. O resultado/rc pode afetar carimbo de conclusão e dependente, pois `bin/cron_run.sh:11-26` só carimba 0/2.
+- `models.py` regulares já existentes, exatos e nomeados no brief. O brief nominal está [nao verificado]. `app/folha/models.py` no positivo `bin/tests/test_codex_pergunta.sh:411` e `app/ponto/models.py` em `bin/tests/test_agente_no_modelo.sh:138` são fixtures, não prova do brief. Se nomeados, os caminhos de import e drift são inerentes; `colaboradores/models.py` já integra uma migration histórica; `tenants/models.py` já governa auto-criação; `core/models.py` já está no gate de auth. Referências na matriz.
+- Testes do próprio app. A cerca de `core` é importada em produção pelo deploy, os REDs tenants são consumidos pelo pre-push e o teste de ambiente produz a prova do pouso. Todos os testes `.py` entram também na varredura de conflitos. O aval anexo item 2 manda retirar pergunta/REDs da cerca do alcance; não fornece regra para os demais selos consumidos por portão. `bin/deploy.sh:194-205`; `bin/pre-push.sh:198-199`; `bin/pista_certifica.sh:9,41-70,85-99`; `bin/arvore_sem_conflito.sh:29-35`.
+
+**C e D.** Linha do cabeçalho é realmente `bin/codex_pergunta.sh:645`, após `REGRAS` em `:644`. Sítios anotados pelo opus: `CLAUDE.md:403`, `bin/disjuntor.py:1959,2111`, `bin/tests/test_agente_no_modelo.sh:13,287,355`, `bin/tests/test_censo_antes_da_vaga.sh:203`. A documentação interna do leitor também repete `:644` em `bin/disjuntor.py:2025,2038`. D: `#G:p_models_pkg` está em wrapper `:166`; falta em `bin/disjuntor.py:1961`; leitor seleciona somente aquelas tags em `:2036-2039`, negativa no caso de brief só com `models/` em `:2105-2112`; `CLAUDE.md:403` também omite.
+
+**lei:** A L-126 veta gerar migration, e o anexo manda tirar a cerca e seus REDs do alcance. Falta resposta escrita encontrada para o predicado sobre efeitos de Python ainda permitido em `models.py`, motor e testes quando os leitores de produção ou portões já executam esses arquivos, e para a autoridade sobre outros selos de suite consumidos por portões. O detalhe dos nomes por brief e o estado efetivo da produção estão [nao verificado]. `app/docs/LEIS.md:147`; `app/docs/CORTES.md:651`; anexo CCM item 2; leitores na matriz.
+
+## 27/11 02:50 · sessao 6262cbfd9789 · - · - · origem=Ronald (tmux)
+
+- O wrapper inventaria alterações de conteúdo, modo, tipo, criação e remoção contra a árvore-base. O RED de recusa após a chamada deve exigir `rc=3`, caminho e motivo na linha `PROIBIDO`, ausência de `.id` e `.rc` com `rc=3`. O controle para uma alteração permitida exige `TOCADO`, `rc=0`, `.id` e ausência de `.recusa`. `bin/codex_pergunta.sh:187–233,805–830` e `bin/tests/test_codex_pergunta.sh:148–170`.
+
+- A prova de casca é pré-migrate. Entram `app/templates/**/*.html`, os cinco templates compilados, estáticos e manifest, settings, storage, templatetags e o grafo transitivo de imports dos dois URLconfs. Qualquer falha impede o migrate e reload. **NENHUM** para arquivos regulares, com `p_ignorado` para um manifest que o Git reporte como ignorado. `bin/deploy.sh:285–339`, `bin/prova_de_casca.sh:30–47`, `bin/prova_de_casca.py:9–53,68–99`, `.gitignore:13` e `bin/codex_pergunta.sh:162–175,223–231`.
+
+- Marcadores de conflito em qualquer `.py`/`.html`, inclusive arquivos permitidos, fecham o deploy antes de migrar. Uma mudança em qualquer sítio de auth, que inclui `app/core/models.py`, pode fechar tanto o deploy normal como o reload agendado entre 23:20 e 06:00. **NENHUM** por nome no wrapper. `bin/arvore_sem_conflito.sh:19–33`, `bin/deploy.sh:101,127–149`, `bin/auth_sitios.txt:13–22`, `bin/janela_auth.sh:85–115` e `bin/codex_pergunta.sh:162–175`.
+
+- O selo de reciclagem pré-migrate lê a configuração em disco `app/gunicorn.conf.py` e `app/gunicorn.core.conf.py` via `gunicorn --print-config`. **NENHUM** para as duas. O compose de mensageria é `p_compose` e `p_fora`. O selo lê também o PID 1 e o crontab instalado, procurado por presença de `deploy.sh --reload-agendado`, sem validação de hora naquela leitura. O selo da suite exige exatamente um reload declarado às 03:30 e `max_requests=0`. `bin/selo_reciclagem.sh:34–79`, `bin/deploy.sh:324–339,448`, `app/core/tests/test_contract_reciclagem.py:48–62,70–80` e `bin/codex_pergunta.sh:162–175`.
+
+- `app/core/tests/marca_cron15.py` afeta tanto a suite quanto o install. O command consulta seu prazo quando a sombra não cabe, para manter a linha elegível já instalada do host ou recusar. `check` não passa a linha do host. **NENHUM** para marca, command e REDs da suite. `app/core/management/commands/crons.py:49–60,91–119`, `app/core/tests/marca_cron15.py:27,32–65`, `bin/crons.sh:23–40`, `app/core/tests/test_crons_marca_cobre_install.py:94–147` e `bin/codex_pergunta.sh:162–175`.
+
+- `app/config/settings/ci.py`, `app/core/runner_quarentena.py`, `app/core/quarentena_lista.py` e `app/core/testes_em_quarentena.txt` influenciam seleção e resultado da suite. `app/core/tests/test_ambiente_do_run.py` escreve SHA, camadas, job e argv que a certificação lê. Os testes descobertos e o `tests/__init__.py` importado também integram a execução. **NENHUM** por nome. A régua também lê selos em `bin/tests/` (`p_bin` e `p_fora`), analisa JS do app e grava `.regua_stamp` na raiz (`p_fora`). `app/config/settings/ci.py:40`, `app/core/runner_quarentena.py:75–105`, `app/core/quarentena_lista.py:9,27`, `app/core/tests/test_ambiente_do_run.py:44–57`, `bin/pista_certifica.sh:41–100`, `bin/suite.sh:198–216,568,611–616`, `bin/regua.sh:138–148,165–202`, `bin/node_check.sh:30–47`, `bin/pre-push.sh:45–69,186–199` e `bin/codex_pergunta.sh:162–175`.
+
+- O carimbo `.sombra_stamp` está fora de `app/` (`p_fora`). `crons sombra` e os comandos do bloco determinam o status que o deploy lê junto com a confirmação das migrations no banco de ensaio. **NENHUM** para o command de render e os comandos do bloco pelo nome, `p_crons` para a fonte declarativa. `bin/sombra.sh:81–83,182–189,346–406,410–433`, `bin/deploy.sh:151–168`, `app/core/management/commands/crons.py:23,43–48` e `bin/codex_pergunta.sh:162–175`.
+
+- `app/core/integrador_lote.py` e `app/core/esteira_vigia.py` são executados no host por unidades versionadas. O primeiro copia lotes, chama reload antes da suite e publica depois do push. O segundo relança unidades e pode chamar deploy de auto-revert,-testando o resultado. **NENHUM**. Timer ativo em produção [nao verificado]. `bin/integrador.sh:24,52`, `bin/hasner-integrador.service:13`, `bin/hasner-integrador.timer:6`, `app/core/integrador_lote.py:367–381,614–640,739–761`, `bin/vigia_esteira.sh:11`, `bin/hasner-esteira.service:15`, `bin/hasner-esteira.timer:7` e `app/core/esteira_vigia.py:951–961,1284–1317,1591–1594`.
+
+- A versão **viva** de `app/docs/RELATO.md` e os arquivos citados no reconhecimento de `arquivo:linha` integram a decisão B3 que barra merge. A leitura da própria cópia diretamente por B3 [nao verificado]. `app/docs/LEIS.md` e `app/docs/CORTES.json` são dados do selo de índice, e `LEIS.md` inclui a coluna que determina os sítios cobrados no pre-push. **NENHUM**. `bin/hook_stop_fila1.py:32`, `bin/disjuntor.py:679–750,765–792,1030–1043,1289–1305`, `bin/commit_msg.sh:29–39`, `bin/tests/test_leis_indice.sh:16–36`, `bin/tests/test_lei_protege_sitio.sh:26–49,170–208` e `bin/pre-push.sh:12–16`.
+
+- **C.** `bin/codex_pergunta.sh:644` é `REGRAS`, `:645` é `PROIBIDO`, `:646` é `ENTREGA`. Sítios do opus `CLAUDE.md:403`, `bin/disjuntor.py:1959,2111`, `bin/tests/test_agente_no_modelo.sh:13,287,355`, `bin/tests/test_censo_antes_da_vaga.sh:203`. Referências abreviadas adicionais `bin/disjuntor.py:2025,2038`, `bin/tests/test_agente_no_modelo.sh:140–143`; `app/docs/LEIS.md:147` e `app/docs/CORTES.md:651` citam `:646`. O selo verifica a string, a regex e a contagem, sem resolver a linha de destino. `bin/tests/test_agente_no_modelo.sh:286–288`.
+
+- **D.** `p_models_pkg` recusa ao Codex e tem RED em `bin/tests/test_codex_pergunta.sh:412`. `OPUS_CONSTROI_TAGS` omite esse tag, logo um brief só com `models/` não passa no disjuntor. Omissões textuais em `CLAUDE.md:329,403` e `bin/disjuntor.py:2110–2112`. RED proposto do lado Opus é brief sintético só com `models/` admitido após a correção D, com mutante que omite o tag voltando a recusar. `bin/codex_pergunta.sh:166`, `bin/disjuntor.py:1961,2023–2039,2102–2112` e `bin/tests/test_agente_no_modelo.sh:134–143,286–288,355–356`.
+
+- **lei:** O aval c11 manda corrigir D e voltar a cerca de schema e seus REDs para fora do alcance do Codex. A cobertura do restante das testemunhas consumidas por produção, se elas pertencem ao app dos testes autorizados, e o despacho dos demais caminhos agora recusados pela lista positiva não aparecem no texto do aval nem na lista de Opus existente. Não há nomes dos `models.py` nem do app do brief no material dado [nao verificado]. `app/docs/LEIS.md:147`, `CLAUDE.md:398–405`, `bin/disjuntor.py:1961` e anexo `CCM-C11-LISTA-POSITIVA-v2-2711-0250.txt`, item 2 [nao verificado na cópia].
+
+## 27/11 02:50 · sessao 5a9c1213012a · E4D-CONTRATO-ROTA-B · construtor · origem=Code
+
+A fix2 altera apenas os dois arquivos de teste autorizados. A checagem estática encontrou **45 casos numerados**, com o 33 fora do recorte, **53 mutantes nomeados** e **zero cláusulas `except`**. Conferi também os seletores SQL com `VALUES`, `UNNEST`, PK direto e `IN`. Execução Django, resultado individual e mordida dos mutantes ficam **[nao verificado]**. [T — matriz](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1) · [M — mutantes](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:1) [nao verificado]
+
+O selo de escrita associa o `INSERT` ao par **pergunta e ato** e confere a origem de cada atualização da mesma pergunta. Assim, antecipar o ato e conservar uma escrita direta ainda é uma falha esperada. As guardas 21 e 23 usam a fixture de assinatura com trava real. O 27 faz o juiz distinguir a instância antiga da relida. [Selo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:219) · [Fixture com trava](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/_ato_da_fixture.py:47) · [Caso 27](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:861)
+
+### Matriz
+
+`T` e `M` são os arquivos acima. `C4` referencia a cópia `c154a8d4e`. A coluna “Hoje” é uma previsão por leitura. **Guarda** indica o comportamento que se espera preservar. [C4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1) · [C1 da c4](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_instante_c1.py:234)
+
+| Caso | Regra e teste | Hoje | Mutante | [nao verificado]
+|---|---|---|---|
+| 01 | Apply grava R sem evento. `T:261`, `docs/PROMPTS.md:2873`, `C4:401,495` | O comando enumera R e aplica apenas colisões e silêncios. `backfill_decisoes_pergunta.py:489,631` | `01_backfill_emite_evento` |
+| 02 | Aplica V histórico, preserva R por inteiro e não infere ABSORÇÃO. `T:275`, `docs/PROMPTS.md:2806`, `C4:336,401` | V fica só na projeção. `backfill_decisoes_pergunta.py:489,631` | `02_reescreve_resposta_antiga` |
+| 03 | ABSORÇÃO vigente dispensa V retroativa. A compensada tem controle próprio. `T:294`, `docs/PROMPTS.md:2806` | O seletor oferece V na absorvida. `chamados/models.py:4437` | `03_foto_sem_respeitar_absorcao` |
+| 04 | Aplica R/V em duas competências e preserva atos anteriores. `T:325`, `docs/PROMPTS.md:2950` | O comando lista as duas competências e não insere os atos. `backfill_decisoes_pergunta.py:489,631` | `04_descarta_segunda_competencia` |
+| 05 | V e ABSORÇÃO físicas precedem V/M da mesma pergunta no mesmo bloco. `T:1110`, `docs/PROMPTS.md:2873` | Há carimbo e ABSORÇÃO, mas falta V física. `materializacao.py:1107` | `05_segundo_escritor_m` |
+| 06 | Absolvição da célula escreve uma vez os três campos M e deixa zero atos. `T:651`, `docs/RELATO.md:292` | Guarda. `reconciliador.py:695` | `06_carimbo_reescrito` |
+| 07 | Apply preserva `celula_absolveu`, com zero atos, eventos e reescritas de R/V/M. `T:359`, `docs/RELATO.md:292` | Guarda. `backfill_decisoes_pergunta.py:121,631` | `07_fabrica_conclusao` |
+| 08 | Via comum preserva pergunta, TXT e gravado da exportada. `T:372`, `C4:419` | Guarda da via comum. `backfill_decisoes_pergunta.py:505` | `08_regrava_exportada` |
+| 09 | V física precede a coluna. A via de M segue a testemunha do dia. `T:669`, `docs/RELATO.md:292` | O resolvedor carimba V sem linha física. `disputa_emissao.py:2112` | `09_segundo_escritor_v` |
+| 10 | O resolvedor grava R física para texto em escolha e hora. Muda recebe só M. `T:698`, `docs/RELATO.md:292` | O ramo carimba R sem ato. `disputa_emissao.py:2189` | `10_segundo_escritor_r` |
+| 11 | Reabertura vazia deixa um ato por pergunta, com projeção e eventos preservados. `T:399`, `docs/PROMPTS.md:2873` | O filtro exclui a pergunta vazia do lote de atos. `disputa_emissao.py:1695,1703` | `11_descarta_reabertura_vazia` |
+| 12 | Cada uma das quatro referências de autoria protege seu próprio usuário. `T:415`, `docs/PROMPTS.md:2873` | As FKs admitem a exclusão com `SET_NULL`. `chamados/models.py:3804,3824,4347,4352` | `12_autor_da_foto_set_null` |
+| 13 | Autor inativo conserva a foto integral dos atos e perde o refresh. `T:721`, `api/views.py:76` | Guarda. `api/views.py:96` | `13_refresh_inativo` |
+| 14 | L-130 conserva o histórico e aceita nova resposta após a REABERTURA. `T:435`, `docs/LEIS.md:151`, `C1:234` | A porta atual limpa o par sem gravar REABERTURA. `validacao.py:444,475` | `14_apaga_resposta_antiga` |
+| 15 | Competência aberta saneia. Entrega durante a espera impede o saneamento. `T:746`, `docs/LEIS.md:151` | Guarda. `validacao.py:417,465` | `15_k6_antigo` |
+| 16 | A porta recusa R futura antes de inserir ato ou evento. `T:454`, `docs/PROMPTS.md:2873` | `registrar` aceita a linha futura. `chamados/models.py:4598` | `16_recusa_depois_do_insert` |
+| 17 | `save` sem PK recusa a inserção e o censo cobra um escritor mesmo com alias. `T:469`, `docs/PROMPTS.md:2873` | `save` delega ao Django quando o PK está vazio. `chamados/models.py:4405` | `17_atalho_com_alias` |
+| 18 | Tarefa, C6 e modal respeitam o horizonte. I23 exclui o caso de restore e mantém controle positivo. `T:492`, `docs/PROMPTS.md:2950`, `C4:297` | C6 reduz a sequência inteira, o modal lê o par atual e I23 conta a compensação adiantada. `chamados/juizes.py:1499`, `modal_fio.html:217`, `auditar_invariantes_chamados.py:1122` | `18_c6_julga_compensacao_cedo`, `18_i23_zero_fixo` |
+| 19 | A humana vence no empate e a automática ainda escreve quando elegível. `T:774`, `docs/PROMPTS.md:2873` | Guarda. `disputa_emissao.py:1741` | `19_automatica_sobrescreve` |
+| 20 | RECUSA no empate ou posterior interrompe só Q. As irmãs anterior e seguinte conservam os efeitos da passagem. `T:1140`, `docs/PROMPTS.md:2950` | A passagem não veta Q pela RECUSA relida. `materializacao.py:1089` | `20_ignora_recusa_no_empate` |
+| 21 | RECUSA relê a validação sob trava e continua possível para uma elegível. `T:796`, `validacao.py:974` | Guarda. `validacao.py:989` | `21_recusa_sem_reler` |
+| 22 | Validação observa a reabertura concorrente. O controle elegível valida e planta. `T:813`, `validacao.py:742` | Guarda. `validacao.py:752` | `22_valida_foto_antiga` |
+| 23 | Correção relê V e uma elegível chega à validação com R corrigida. `T:839`, `acoes_disputa.py:418` | Guarda. `acoes_disputa.py:429` | `23_corrige_sem_reler` |
+| 24 | Sem grupo recuperável, Q fica intacta e E conserva a nova resposta. `T:1187`, `materializacao.py:1119` | Guarda. `materializacao.py:1136` | `24_sem_veto_de_grupo` |
+| 25 | Rejeição devolve irmã pela ABSORÇÃO vigente e preserva a compensada. `T:1216`, `docs/PROMPTS.md:2873` | O seletor por coluna exige âncora de hora e omite Q. `materializacao.py:1195` | `25_absorcao_so_por_coluna` |
+| 26 | Sem ABSORÇÃO, preserva o legado e a vizinha de outra passagem. `T:1250`, `docs/PROMPTS.md:2873` | O agrupamento por coluna devolve o legado. `materializacao.py:1195,1267` | `26_devolve_sem_vinculo` |
+| 27 | O fantasma só recebe M depois da trava, releitura e julgamento do valor fresco. `T:861`, `reconciliador.py:1265` | Guarda. `reconciliador.py:1268` | `27_julga_instancia_antiga` |
+| 28 | O espelho relê sob trava e compensa H4 vigente antes de trocar a via. `T:898`, `docs/PROMPTS.md:2873` | O legado de controle entra no comando. A declaração com ABSORÇÃO fica fora do seletor. `encerrar_perguntas_com_fato.py:31,66` | `28_via_sem_compensacao` |
+| 29 | Perda de lastro grava REABERTURA antes de limpar M. `T:941`, `docs/PROMPTS.md:2873` | O descarimbo direto não grava REABERTURA. `relavra_via.py:230` | `29_segundo_descarimbo` |
+| 30 | Fila SQL, API, modal e raio-x observam a mesma resposta. `T:1272`, `docs/PROMPTS.md:2873` | Fila e raio-x classificam pelo par cru, que ainda aparece na API e no modal. `chamados/juizes.py:1863`, `api/views.py:1161`, `modal_fio.html:217`, `raiox.py:135` | `30_fila_pelo_carimbo_cru`, `30_api_pelo_par_cru`, `30_modal_pelo_par_cru`, `30_raiox_pelo_carimbo_cru` |
+| 31 | Emissão automática e manual nascem com raiz, pai e filha coerentes. `T:1320`, `docs/PROMPTS.md:2873` | Guarda dos efeitos do nascimento. `disputa_emissao.py:582,1351` | `31_raiz_nasce_fechada` |
+| 32 | `PerguntaDisputa.abrir` nasce com identidade, R/V/M vazios e zero DP. `T:1349`, `docs/PROMPTS.md:2950` | Guarda do nascimento sem assinatura. `chamados/models.py:3088,3330` | `32_filha_nasce_com_v` |
+| 34 | SILÊNCIO físico precede M e o fecho chega ao pai. `T:1360`, `docs/PROMPTS.md:2873` | M é carimbado antes de SILÊNCIO. `chamados/models.py:2184` | `34_segundo_escritor_m` |
+| 35 | Reabre a mais recente do chamado, com maior PK no empate. `T:1379`, `docs/CORTES.md:618` | A emissão abre outra disputa. `disputa_emissao.py:582` | `35_elege_de_outro_chamado` |
+| 36 | Tranca retira por leitura e preserva a irmã viva de outra competência e o pai. `T:1416`, `chamados/juizes.py:1505` | Guarda. `competencia_trancada.py:162` | `36_ignora_tranca` |
+| 37 | Destranca libera M, preserva R e poupa a via vizinha. `T:1449`, `chamados/models.py:3703` | Guarda dos efeitos. `competencia_trancada.py:279` | `37_regrava_r_no_destranque` |
+| 38 | Desligamento grava SILÊNCIO antes de M e a cascata fecha o pai da muda. `T:1472`, `chamados/signals.py:20` | M é carimbado antes de SILÊNCIO. `chamados/models.py:2184` | `38_perde_cascata_do_pai` |
+| 39 | VALIDACÃO precede V/M e sustenta a batida e a via. `T:962`, `docs/PROMPTS.md:2873` | V é escrita antes da linha física. `validacao.py:164` | `39_segundo_escritor_v` |
+| 40 | RECUSA precede motivo e limpeza da resposta. `T:984`, `docs/PROMPTS.md:2873` | `recusa_motivo` é salvo antes da RECUSA. `validacao.py:995` | `40_segundo_escritor_motivo` |
+| 41 | Correção sobrevive à recusa do plantio e deixa RESULTADO nos dois retornos. `T:1003`, `docs/PROMPTS.md:2950` | R precede o ato e os caminhos de recusa ainda carecem da linha RESULTADO. `disputa_emissao.py:1562`, `acoes_disputa.py:452` | `41_segundo_escritor_r` |
+| 42 | Resposta retrodatada muda a projeção presente e preserva marco e lavra históricos. `T:541`, `docs/CORTES.md:609`, `C4:914` | O `Max(respondida_em)` cru move o marco passado. `veredito_lavrado.py:205` | `42_marco_pelo_par_cru` |
+| 43 | Retry de fecho em T2 conserva PKs, trilha e eventos, com zero UPDATE. `T:1503`, `chamados/models.py:2094` | Guarda. `chamados/models.py:2100` | `43_retry_regrava_fecho` |
+| 44 | Segundo apply preserva o ato inteiro. Nova pergunta elegível ainda entra. `T:562`, `docs/PROMPTS.md:2805`, `C4:419` | Falta a primeira inserção de R na via pública do apply. `backfill_decisoes_pergunta.py:631` | `44_duplica_retry` |
+| 45 | Compara autor, texto e lastro por classe A/B e por novo/estoque. `T:585`, `docs/PROMPTS.md:2950`, `C4:574` | O vigia atual compara presença de V e perde essas diferenças. `vigia_ato_x_coluna.py:8` | `45_vigia_so_instante`, `45_ignora_fk_nula`, `45_estoque_vira_novo`, `45_conta_absorcao_legada` |
+| 46 | Plantio atualiza a ata de `480/0` para `480/480` e prontidão de 0 para 100. `T:1525`, `folha/export.py:1104` | Guarda proposta com cartório real e sinal da batida. Execução [nao verificado]. `ponto/signals.py:137` | `46_denominador_realizado`, `46_omite_relavra` |
+
+O caso 20 nomeia a caracterização que a cura inverte, `test_RED_recusa_datada_depois_mas_inserida_antes_da_absorcao_recusa`. Ela cobra `recusadas == []` e bloqueio H4 da próxima resposta. [Caso antigo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4c_f5_h4_resposta_apos_absorcao.py:364) · [Caso novo](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:1140)
+
+### Lei e desenho
+
+- **lei: 14.** A E4D pede SANEAMENTO próprio e alvo seletivo. A c4 manda REABERTURA marcada pela L-130. O teste segue a c4 e cobre a resposta escrita depois do saneamento. Falta decidir o que vale para uma resposta que já estava gravada no empate ou depois da histórica. `docs/PROMPTS.md:2950` · `docs/LEIS.md:151` · `C1:234` · `T:435`
+- **lei: 30.** A E4D diz que o ato manda no par. A c4 manda que `composta` entregue o texto da projeção. A fix2 segue a c4 para `composta` e cobra o efeito do par nos quatro leitores públicos do caso. `docs/PROMPTS.md:2873` · `chamados/models.py@c154a8d4e:4635` · `T:1272`
+- **lei: 18.** O zero foi aplicado à compensação do restore. Se o zero for universal, conflita com o I23, cuja caracterização conta uma compensação futura normal. `docs/PROMPTS.md:2950` · `auditar_invariantes_chamados.py:1122` · `test_e4c_f5_4c1_instante_unico.py:319`
+- **lei/desenho: 04, 08 e 44.** Qual porta reverte apenas as linhas do lote de uma competência? Qual entrada transporta o `!` da exportada e publica os hashes reais? O retry do 44 mede reaplicação pública do comando. Qual entrada permite reenviar exatamente o mesmo lote, preservando a distinção da c4 para duplicata dentro de um payload? `backfill_decisoes_pergunta.py:455,514,631` · `ponto/portas/regen_exportada.py:62` · `C4:419`
+- **lei/desenho: 11, 12, 20 e 26.** Qual entrada transporta a identidade do pedido de reabertura e de passagem? Qual leitura distingue autoria histórica desconhecida de autor nulo de sistema? Qual leitor público expõe o encaminhamento ao admin por pergunta e ausência? `disputa_emissao.py:1628` · `materializacao.py:1010,1215` · `chamados/models.py:4347` · `T:1250`
+- **lei/desenho: lápides.** Onde fica a lista nominal de escritores, campos e lápides que o selo deve ler? Os testes medem os efeitos e os campos das vias exercitadas. A declaração de produção ainda não tem superfície definida nos arquivos consultados. `docs/PROMPTS.md:2873,2950` · `docs/RELATO.md:292` · `core/portas.py:396` · `T:229`
+- **lei/desenho: 42.** Qual testemunha preserva o marco histórico quando a projeção muda? O F3 sela o leitor com zero consultas à tabela DP. A marca, a fronteira e a reexecução do estoque ficam na migração real coberta pela c4. `docs/CORTES.md:609,610` · `test_f3_lavra_foto_sem_decisao.py:312` · `0058_decisao_entrada_do_ato.py@c154a8d4e:9` · `C4:914`
+
+### Comandos para o Code
+
+Recorte da matriz e comando de cada mutante pelo nome da tabela. O prefixo do nome seleciona o caso correspondente. [Matriz](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/test_e4d_matriz_reds.py:260) · [Runner](/home/ronald/wt-codex-e4d-contrato-rota-b-174640/app/chamados/tests/e4d_matriz_mutantes.py:393)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+  chamados.tests.test_e4d_matriz_reds --verbosity 2
+
+mutante_e4d() {
+  E4D_MUTANTE="$1" PYTHONDONTWRITEBYTECODE=1 python3 manage.py test \
+    chamados.tests.test_e4d_matriz_reds \
+    --testrunner=chamados.tests.e4d_matriz_mutantes.RunnerMutanteE4D \
+    -k "test_caso_${1%%_*}_" --verbosity 2
+}
+
+mutante_e4d 05_segundo_escritor_m
+mutante_e4d 27_julga_instancia_antiga
+```
 
 ## 27/11 02:37 · sessao a1bc05e461b2 · CODEX-CONSTROI-MOTOR · censo · origem=Code
 
@@ -529,568 +710,4 @@ Valores em minutos, em dia comum. Nos casos com pausa entregue ao par, a compara
 
 **REPROVADO** — A1 perde pausa na borda e deixa o teste verde com base zerada, A2 deixa chamadores sem a parcial e diverge do motor na virada, A3 aceita o Partido fora do aval, B1–B4 seguem procedentes, e os três herdados mordem os defeitos de limite Comercial, ponta da HE noturna e dia civil no export. [nao verificado]
 
-## 27/11 01:43 · sessao 5872738329b7 · O30-F3-CONSTRUIR · leitura · origem=Code
-
-O saldo informado é de **+11 registros e +1 documento**. A empresa 2 teve +7 registros e +1 documento, a 3 teve +2 e a 4 teve +2. Os totais e o ZIP × CSV 1 a 1 dentro de cada execução deixam em aberto quais PKs entraram, se algum saiu e qual explica o saldo de documentos. [nao verificado]
-
-### O que faz uma raiz entrar na F3
-
-- A F3 seleciona raízes com `documento_referencia_id IS NULL`. Para a requisição da sonda, a view restringe o lote à empresa pedida, aos tipos médicos do catálogo e ao status `aprovada`. A linha do tempo devolve o próprio registro raiz e informa a presença de documento com `bool(a.documento)`. [app/ponto/services/dia_decidido.py:624](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:624) [app/relatorios/views.py:382](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:382) [app/ponto/services/dia_decidido.py:679](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:679)
-- A F3 aplica `data <= fim` e aceita qualquer uma destas condições: `data >= ini`, `data_fim >= ini` ou `data_fim IS NULL` com `tipo in Ausencia.TIPOS_EM_ABERTO`. O filtro sem a terceira condição está reproduzido no mutante local, que aceita `data_fim >= ini` ou, com fim nulo, `data >= ini`. **O caso que distingue os dois é a raiz com `data < 2026-10-21`, `data_fim = null` e `tipo_em_aberto = true`**, satisfeitos os demais filtros. O teste da F3 exige essa inclusão para um `afastamento_inss` e também testa o fim fechado exatamente na borda inicial. [app/ponto/services/atestados_lote.py:35](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:35) [app/ponto/turnos.py:2842](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/turnos.py:2842) [app/ponto/tests/mutantes_atestado_f3_c14.py:45](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/tests/mutantes_atestado_f3_c14.py:45) [app/ponto/tests/test_atestado_f3.py:294](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/tests/test_atestado_f3.py:294)
-- O código literal do MAIN nos pontos indicados (`atestados_lote.py:46`, `dia_decidido.py:645` e `:675`) fica **[nao verificado]**. A comparação acima usa o predicado reproduzido no mutante da cópia. [app/ponto/tests/mutantes_atestado_f3_c14.py:45](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/tests/mutantes_atestado_f3_c14.py:45)
-
-**Regra aplicável.** O registro do aval `O30-F3-CONSTRUIR-V2-2511` diz que o V2 altera a vez da obra. O corte `AUSENCIAS-DRAWER-E-LOTE` veda montagem própria da janela, e a **L-002** exige que os leitores usem a mesma autoridade. O relato da c15 registra a adoção de `_q_cobertura`, cujo conjunto de tipos em aberto vem do cadastro de fins indeterminados. Para uma raiz com a assinatura acima, a inclusão é comportamento deliberado e testado da F3. O enquadramento de cada PK adicional e do documento adicional fica **[nao verificado]**. [app/docs/PROMPTS.md:3001](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/docs/PROMPTS.md:3001) [app/docs/CORTES.md:349](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/docs/CORTES.md:349) [app/docs/LEIS.md:60](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/docs/LEIS.md:60) [app/docs/RELATO.md:13620](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/docs/RELATO.md:13620) [app/ponto/catalogo/ausencias.py:430](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/catalogo/ausencias.py:430) [app/ponto/tests/test_atestado_f3.py:294](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/tests/test_atestado_f3.py:294)
-
-### Script
-
-O script usa as linhas da view real, ordena por `(empresa, pk)` e imprime o JSONL após sair do `atomic` por rollback. Mantém as guardas do anexo, a 0079 condicional e o storage em memória. `dias_corridos` fica disponível para conferir a apresentação da linha, que usa esse campo quando `data_fim` é nulo. Validei a sintaxe e exercitei os dois caminhos da 0079 com objetos simulados. Execução com Django e PostgreSQL nas duas árvores **[nao verificado]**. [app/relatorios/views.py:404](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:404) [app/ponto/services/dia_decidido.py:679](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:679) [app/ponto/migrations/0079_ausencia_atestado_dados.py:4](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/migrations/0079_ausencia_atestado_dados.py:4)
-
-```python
-import json
-from datetime import date
-from unittest.mock import patch
-
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.core.files.base import ContentFile
-from django.core.files.storage import Storage
-from django.db import connection, transaction
-from django.db.migrations.executor import MigrationExecutor
-from django.template.response import TemplateResponse
-from django.test import RequestFactory
-
-from ponto.catalogo import ausencias as catalogo
-from ponto.models import Ausencia
-from relatorios import views
-
-
-USUARIO_PK = None
-EMPRESAS = (2, 3, 4)
-JANELA_ESPERADA = (date(2026, 10, 21), date(2026, 11, 20))
-MIGRACAO = ("ponto", "0079_ausencia_atestado_dados")
-
-
-class DesfazerEnsaio(Exception):
-    pass
-
-
-class MidiaEmMemoria(Storage):
-    def _open(self, name, mode="rb"):
-        if not name or mode != "rb":
-            raise FileNotFoundError("Caminho vazio ou modo de abertura inválido.")
-        return ContentFile(b"sonda de atestados em lote\n", name=name)
-
-
-def preparar_0079():
-    campos = {
-        campo.column
-        for campo in Ausencia._meta.local_fields
-        if campo.name.startswith("atestado_")
-    }
-    if not campos:
-        return
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """
-            SELECT column_name
-            FROM information_schema.columns
-            WHERE table_schema = current_schema() AND table_name = %s
-            """,
-            [Ausencia._meta.db_table],
-        )
-        presentes = {nome for (nome,) in cursor.fetchall()}
-
-    faltam = campos - presentes
-    if not faltam:
-        return
-    if faltam != campos:
-        raise RuntimeError("As colunas da 0079 estão parcialmente presentes.")
-
-    executor = MigrationExecutor(connection)
-    migration = executor.loader.graph.nodes[MIGRACAO]
-    if executor.migration_plan([MIGRACAO]) != [(migration, False)]:
-        raise RuntimeError("O plano pendente precisa conter apenas a aplicação da 0079.")
-
-    estado_anterior = executor.loader.project_state([MIGRACAO], at_end=False)
-    with connection.schema_editor(atomic=False) as editor:
-        migration.apply(estado_anterior, editor)
-
-
-def usuario_da_view():
-    usuarios = get_user_model().objects.filter(is_active=True)
-    if USUARIO_PK is None:
-        usuario = usuarios.filter(is_superuser=True).order_by("pk").first()
-    else:
-        usuario = usuarios.filter(pk=USUARIO_PK).first()
-    if usuario is None:
-        raise RuntimeError("Usuário ativo da contraprova indisponível.")
-    return usuario
-
-
-def medir_empresa(empresa, usuario):
-    request = RequestFactory().get(
-        "/relatorios/atestados/lote/",
-        {"empresa": empresa, "mes": 11, "ano": 2026},
-    )
-    request.user = usuario
-
-    with patch.object(views, "render", new=TemplateResponse):
-        resposta = views.atestados_lote(request)
-
-    if not isinstance(resposta, TemplateResponse) or resposta.status_code != 200:
-        raise RuntimeError("A view não autorizou a consulta do lote.")
-
-    contexto = resposta.context_data
-    if "previa" not in contexto:
-        raise RuntimeError("Empresa indisponível no filtro da view.")
-    if (contexto["ini"], contexto["fim"]) != JANELA_ESPERADA:
-        raise RuntimeError("A janela da empresa diverge da competência da contraprova.")
-
-    tipos_em_aberto = set(Ausencia.TIPOS_EM_ABERTO)
-    tipos_medicos = set(catalogo.TIPOS_MEDICOS)
-
-    for linha in sorted(contexto["linhas"], key=lambda item: item["ausencia"].pk):
-        a = linha["ausencia"]
-        yield {
-            "empresa": empresa,
-            "pk": a.pk,
-            "data": a.data.isoformat(),
-            "data_fim": a.data_fim.isoformat() if a.data_fim is not None else None,
-            "tipo": a.tipo,
-            "status": a.status,
-            "tem_documento": bool(linha["documento"]),
-            "empresa_do_colaborador": a.colaborador.empresa_id,
-            "documento_referencia_id": a.documento_referencia_id,
-            "tipo_medico": a.tipo in tipos_medicos,
-            "tipo_em_aberto": a.tipo in tipos_em_aberto,
-            "dias_corridos": a.dias_corridos,
-        }
-
-
-def medir():
-    if (
-        settings.SETTINGS_MODULE != "config.settings.sombra"
-        or connection.vendor != "postgresql"
-        or connection.settings_dict["HOST"] != "sombra_db"
-        or not connection.features.can_rollback_ddl
-    ):
-        raise RuntimeError("A medição exige PostgreSQL da sombra com DDL reversível.")
-
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT current_database(), current_schema()")
-        if cursor.fetchone() != ("sombra", "juliani"):
-            raise RuntimeError("Banco ou schema diferente do alvo da contraprova.")
-
-    preparar_0079()
-    usuario = usuario_da_view()
-
-    campo_documento = Ausencia._meta.get_field("documento")
-    with patch.object(campo_documento, "storage", new=MidiaEmMemoria()):
-        return [linha for empresa in EMPRESAS for linha in medir_empresa(empresa, usuario)]
-
-
-try:
-    with transaction.atomic(durable=True):
-        resultados = medir()
-        raise DesfazerEnsaio
-except DesfazerEnsaio:
-    for resultado in resultados:
-        print(json.dumps(resultado, sort_keys=True))
-```
-
-## 27/11 01:43 · sessao ba76a83b5eee · PAR-PELO-TURNO · construtor · origem=Code
-
-Corrigi as duas regressões em `ponto/turnos.py`. A conferência por AST deu **`except no diff = 0`**. `ponto/turnos.py:1871` · `ponto/turnos.py:3066` · `ponto/tests/test_par_pelo_turno_bordas.py:13`
-
-- **Col297. O teste guarda a regra correta.** A L-084 e a O73 regem pontualidade. No mapa por PK, a marca reclamada recebe o dia do turno e a marca sem turno recebe o dia local. Na base, o recorte descartava as marcas posteriores a `fim` antes dessa atribuição. A cura devolve **21/09** para as duas marcas da madrugada. O espelho filtra pelo dia atribuído, então elas ficam fora do cartão encerrado em **20/09**. `docs/LEIS.md:116` · `docs/TICKETS.md:308` · `relatorios/tests/test_pdf_sem_regra_propria.py:111` · `f822620f2:app/ponto/turnos.py:3061` · `ponto/turnos.py:3066` · `ponto/turnos.py:3077` · `ponto/services/espelho.py:588`
-- **Ata.** Na base, o carregador intermediário chamava o corpo no lugar de `turnos_do_colab`, que é a chamada direta exigida pelo selo. Agora a casca carrega os insumos e chama `_turnos_do_colab_puro` diretamente. O corpo lê a ata e passa `papel_por_minuto` a `parear_turnos`. `f822620f2:app/ponto/turnos.py:1871` · `ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:187` · `ponto/turnos.py:1871` · `ponto/turnos.py:1969` · `ponto/turnos.py:2023`
-
-### RED e mutantes
-
-Ensaios em memória, com cargas simuladas. Cada modo executou o RED do mapa e o selo existente da ata. `ponto/tests/test_par_pelo_turno_bordas.py:34` · `ponto/tests/test_par_pelo_turno_bordas.py:79`
-
-| Modo | Saída |
-|---|---|
-| `base` | `Ran 2 tests`, `FAILED (failures=3)`, rc 1. Faltaram os dois PKs de 21/09 na casca e no lote, e o selo da ata falhou. `ponto/tests/test_par_pelo_turno_bordas.py:45` · `ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:187` |
-| `cura` | `Ran 2 tests`, `OK`, rc 0. `ponto/tests/test_par_pelo_turno_bordas.py:90` |
-| `mapa_sem_borda_direita` | `FAILED (failures=2)`, rc 1. Falharam as duas asserções do mapa. `ponto/tests/test_par_pelo_turno_bordas.py:45` |
-| `ata_por_chamada_indireta` | `FAILED (failures=1)`, rc 1. O selo acusou a perda da chamada direta. `ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:187` |
-
-Comandos para o Code em `app/`. O executor monta as fontes em memória. `ponto/tests/test_par_pelo_turno_bordas.py:54` · `ponto/tests/test_par_pelo_turno_bordas.py:97`
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
-python3 -m ponto.tests.test_par_pelo_turno_bordas base
-python3 -m ponto.tests.test_par_pelo_turno_bordas cura
-python3 -m ponto.tests.test_par_pelo_turno_bordas mapa_sem_borda_direita
-python3 -m ponto.tests.test_par_pelo_turno_bordas ata_por_chamada_indireta
-```
-
-### Recorte solicitado
-
-O runner Django parou na importação com `ModuleNotFoundError: No module named 'django.core'`. Em memória, o módulo do selo deu `Ran 8 tests / OK`. No módulo do PDF passaram os três selos e os dois casos do juiz, col297 e col788. Passaram também os quatro alvos unitários da c1v5a e o controle de paridade entre janelas, `Ran 5 tests / OK`. `manage.py:11` · `ponto/tests/test_selo_motor_nao_pareia_pelo_tipo_gravado.py:63` · `relatorios/tests/test_pdf_sem_regra_propria.py:92` · `relatorios/tests/test_pdf_sem_regra_propria.py:127` · `relatorios/tests/test_pdf_sem_regra_propria.py:147` · `ponto/tests/test_par_pelo_turno.py:133` · `ponto/tests/test_par_pelo_turno.py:984`
-
-Os dois casos integrados do cartão e o quinto alvo da c1v5a, de folha e espelho, ficam **[nao verificado]**. `relatorios/tests/test_pdf_sem_regra_propria.py:100` · `relatorios/tests/test_pdf_sem_regra_propria.py:135` · `ponto/tests/test_par_pelo_turno.py:636`
-
-## 27/11 01:42 · sessao 46266bc6bb7d · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-**RAMO2-B c2l entregue na base `7f954d921`.** A mudança de produção está na releitura v3. Em memória, A passou em 6 testes, os quatro mutantes retornaram `rc=1` por asserção, e B registrou 7 testes com 8 falhas de asserção porque B2 verifica dois motores. O diff, incluindo os arquivos novos, tem **0 `except` adicionados**. A execução usou `unittest` com dependências de Django substituídas em memória. Suíte Code e certificação pelo opus final [nao verificado]. [periodo.py:747](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:747) · [ramo2b_c2l_mutantes.py:60](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2l_mutantes.py:60) · [test_ramo2b_c2l_red_motor.py:50](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:50)
-
-| Achado | Arquivo e linha | RED observado | GREEN de A |
-|---|---|---|---|
-| A1 · `DECL_60` | [periodo.py:747](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:747) · [teste:197](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:197) | Trabalhado 780, base 720, intra 40, HE50 20 | Trabalhado 780, base 720, intra 60, HE 0 | [nao verificado]
-| A2 · Parcial no 12x36 | [periodo.py:798](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:798) · [teste:211](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:211) | Com parcial, atraso 30 | Com parcial, atraso 20. Sem parcial, 30 | [nao verificado]
-| A3 · Partido mensal | [motor_calculo_v2.py:3216](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:3216) · [teste:147](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2h_saida.py:147) | Os controles anteriores passavam com o mutante. Os novos falham nos dois casos com intra 0 | Intra 20 para saídas às 07h30 e 07h00 | [nao verificado]
-| A4 · Testemunha da porta | [porta_export.py:587](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/porta_export.py:587) · [teste:58](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/folha/tests/test_porta_do_export.py:58) | Com a chamada sob `if False`, `medir` devolve `[]` | HE 80 gera 1 diagnóstico, com teto 0 e `falhas=1` | [nao verificado]
-| B1 · Partido intocado | [teste:51](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:51) | 510 trabalhados e 0 fora. Esperado 490 trabalhados e 20 fora. `main` deu 490 e 20 | | [nao verificado]
-| B2 · Pausa julgada com base curta | [teste:63](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:63) | 12x36 deu 430 trabalhados e pausa 0, esperado 410 e 20. Comercial deu 310 e 0, esperado 290 e 20 | | [nao verificado]
-| B3 · Tripla parcial | [teste:87](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:87) | `AssertionError: ValueError not raised` no construtor | | [nao verificado]
-| B4 · Saldo do Comercial | [teste:96](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:96) | Trabalhado 2.430, HE 0, saldo −240. Esperado −210 | | [nao verificado]
-| Herdado · Limite do Comercial | [teste:116](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:116) | Grade 660, mensal paga HE50 120 e HE100 10. Esperado 0 e 0 | | [nao verificado]
-| Herdado · HE noturna | [teste:129](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:129) | Dos 40 min de HE50, 10 saem noturnos. Esperado 40 | | [nao verificado]
-| Herdado · Dia civil no export | [teste:146](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_c2l_red_motor.py:146) | 0 diagnósticos. Esperado 1 para 20/11, com teto 0 | | [nao verificado]
-
-**Herdados no `main`** — a execução das funções de `59600163c` via `git show` devolveu os mesmos números nos três casos, respectivamente `120/10`, `10` e `0` diagnósticos. `59600163c:app/ponto/motor_calculo_v2.py:3504` · `59600163c:app/ponto/motor_calculo_v2.py:1051` · `59600163c:app/folha/porta_export.py:544`
-
-**Escritores e leitores**
-
-- **Base, intra e HE.** O motor grava o marco em `saida_da_base_da_he`. `reler` lê o marco e mede base e intra indenizada no mesmo trecho. O excesso lê os dois valores e `reler` escreve HE total, HE50 e HE100. `ResultadoMes` soma as faixas e a intra indenizada. [motor_calculo_v2.py:1927](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:1927) · [periodo.py:752](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:752) · [periodo.py:835](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:835) · [periodo.py:863](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:863) · [motor_calculo_v2.py:352](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:352) · [motor_calculo_v2.py:391](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:391)
-- **Parciais e pontualidade.** `credito_parcial` fornece o mapa por dia. O chamador de `reler` o entrega pelo argumento opcional `parciais_por_dia`. O juiz existente recebe as parciais, `reler` grava atraso e saída antecipada, e `ResultadoMes` soma ambos. [credito_parcial.py:62](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/services/credito_parcial.py:62) · [periodo.py:543](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:543) · [periodo.py:474](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:474) · [periodo.py:825](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/calculador/periodo.py:825) · [motor_calculo_v2.py:375](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/motor_calculo_v2.py:375)
-
-**Mutantes** — comandos a partir de `app`, no ambiente Django da suíte. Todos retornaram `rc=1` em memória. `zera_intra_partido` derrubou os dois controles de A3. [ramo2b_c2l_mutantes.py:33](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/ramo2b_c2l_mutantes.py:33) [nao verificado]
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
-python3 -m ponto.tests.ramo2b_c2l_mutantes intra_integral
-python3 -m ponto.tests.ramo2b_c2l_mutantes descarta_parcial
-python3 -m ponto.tests.ramo2b_c2l_mutantes zera_intra_partido
-python3 -m ponto.tests.ramo2b_c2l_mutantes testemunha_morta
-```
-
-**Recortes para a sessão** — A com vizinhos e B com os REDs intencionais. [bin/suite.sh:25](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/bin/suite.sh:25) [nao verificado]
-
-```bash
-RAMO2_WT=/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946
-PYTHONDONTWRITEBYTECODE=1 "$RAMO2_WT/bin/suite.sh" --dir "$RAMO2_WT" --only \ [nao verificado]
-  "ponto.tests.test_ramo2b_c2h_saida ponto.tests.test_ramo2b_c2_base_da_he folha.tests.test_porta_do_export core.tests.test_medida_turno_do_par"
-
-PYTHONDONTWRITEBYTECODE=1 "$RAMO2_WT/bin/suite.sh" --dir "$RAMO2_WT" --only \ [nao verificado]
-  "ponto.tests.test_ramo2b_c2l_red_motor"
-```
-
-## 27/11 01:38 · sessao 9e97b3f580bf · O30-F3-CONSTRUIR · leitura · origem=Code
-
-**O `--rodar` grava na sombra antes de chamar o script.** Ele repõe dois `MetricaSnapshot` e grava logs no host. O rollback do Python cobre a 0079 e a execução do relatório. Para cumprir zero escrita persistente na execução inteira, a sessão precisa chamar diretamente o mesmo container e `tenant_command`, com a saída em stdout. [`bin/sombra.sh:136`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:136), [`bin/sombra.sh:151`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:151), [`bin/sombra.sh:182`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:182), [`bin/sombra.sh:483`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/bin/sombra.sh:483)
-
-1. **Chamadas reais.** A view é `relatorios.views.atestados_lote`, na linha 346 da F3 e 345 do main `59600163c`. Ambas exigem usuário autenticado com `ver_relatorios`, `ver_folha` e `ver_ausencias`. A view seleciona uma empresa visível, usa `janela()` e `linhas()` com os tipos médicos do catálogo e, por padrão, só `aprovada`. O script invoca a view real para obter as linhas e a prévia, passa competência 11/2026 e verifica as duas datas. A view usa `request.user`. O PK do usuário histórico ficou [nao verificado]. `USUARIO_PK` permite fixá-lo nas duas execuções. O padrão do script é o superusuário ativo de menor PK. [F3 `app/relatorios/views.py:20`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:20), [F3 `app/relatorios/views.py:345`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:345), [F3 `app/relatorios/views.py:382`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/relatorios/views.py:382), [main `app/relatorios/views.py:344`](/home/ronald/saas-hasner/app/relatorios/views.py:344), [main `app/relatorios/views.py:376`](/home/ronald/saas-hasner/app/relatorios/views.py:376)
-
-   | | F3 | Main |
-   |---|---|---|
-   | Prévia | `previa(linhas)` — `app/ponto/services/atestados_lote.py:64`, `app/relatorios/views.py:404` | `previa(linhas)` — `app/ponto/services/atestados_lote.py:69`, `app/relatorios/views.py:395` |
-   | CSV | `csv_bytes(linhas, pode_ver_anexo=True)` — `app/ponto/services/atestados_lote.py:109`, `app/relatorios/views.py:392` | `csv_bytes(linhas)` — `app/ponto/services/atestados_lote.py:107`, `app/relatorios/views.py:386` |
-   | ZIP | `zip_bytes(linhas)` — `app/ponto/services/atestados_lote.py:235`, `app/relatorios/views.py:398` | `zip_bytes(linhas)` — `app/ponto/services/atestados_lote.py:135`, `app/relatorios/views.py:389` |
-
-2. **Registro e documento.** Nas duas versões, um registro é um lançamento raiz selecionado, contado uma vez na prévia e exportado como uma linha de dados do CSV. `com_documento` conta essas linhas quando `bool(ausencia.documento)` é verdadeiro. O inteiro devolvido pelo ZIP conta entradas gravadas após a leitura do anexo. Uma falha de leitura acrescenta uma entrada `.FALTANDO.txt` sem incrementar esse inteiro. A F3 aplica `_q_cobertura` antes de montar a linha do tempo, incluindo o caso de tipos de intervalo aberto. O main monta a linha do tempo por colaborador e usa `data_fim or data` no filtro posterior. [F3 `app/ponto/services/dia_decidido.py:624`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:624), [F3 `app/ponto/services/dia_decidido.py:679`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/dia_decidido.py:679), [F3 `app/ponto/services/atestados_lote.py:35`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:35), [F3 `app/ponto/turnos.py:2842`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/turnos.py:2842), [main `app/ponto/services/atestados_lote.py:46`](/home/ronald/saas-hasner/app/ponto/services/atestados_lote.py:46), [main `app/ponto/services/dia_decidido.py:645`](/home/ronald/saas-hasner/app/ponto/services/dia_decidido.py:645), [main `app/ponto/services/dia_decidido.py:675`](/home/ronald/saas-hasner/app/ponto/services/dia_decidido.py:675)
-
-3. **Mídia vazia.** O ZIP precisa abrir e ler o arquivo. O nome vem da matrícula, data inicial, tipo e extensão de `documento.name`. Com matrícula ausente, o ZIP usa o PK do colaborador e o CSV deixa a matrícula em branco. O script troca apenas o storage do `FileField` durante a medição. Cada caminho não vazio carregado do banco recebe bytes fixos em memória. Isso mede quantas entradas o ZIP real produz com leitura bem-sucedida e quais nomes ele emite. A disponibilidade dos arquivos originais em produção ficou [nao verificado]. [F3 `app/ponto/services/atestados_lote.py:83`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:83), [F3 `app/ponto/services/atestados_lote.py:124`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:124), [F3 `app/ponto/services/atestados_lote.py:247`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:247), [main `app/ponto/services/atestados_lote.py:88`](/home/ronald/saas-hasner/app/ponto/services/atestados_lote.py:88), [main `app/ponto/services/atestados_lote.py:147`](/home/ronald/saas-hasner/app/ponto/services/atestados_lote.py:147)
-
-4. **0079.** Na F3, o queryset carrega instâncias completas de `Ausencia`, então o `SELECT` já precisa das seis colunas. O CSV autorizado também lê os seis atributos. Se faltarem todas as colunas, o script exige que o plano pendente seja apenas a 0079 e executa as operações dessa migration pelo `schema_editor`, sem inserir no histórico de migrations. A única captura é a sentinela fora do `atomic()`. O main segue pelo mesmo script sem aplicar a 0079. [F3 `app/ponto/services/atestados_lote.py:35`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:35), [F3 `app/ponto/services/atestados_lote.py:102`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:102), [F3 `app/ponto/models.py:787`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/models.py:787), [F3 `app/ponto/migrations/0079_ausencia_atestado_dados.py:8`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/migrations/0079_ausencia_atestado_dados.py:8)
-
-5. **Saída.** O casamento usa apenas as linhas `tem_documento=sim` do CSV e remove só a extensão final do nome do ZIP. Uma chave ambígua ou um sufixo de colisão aparece na conferência. O SHA-256 usa todas as chaves do CSV em ordem lexicográfica, incluindo repetições. `contagens_prod_conferem` compara com os números informados. A execução do script ficou [nao verificado]. [F3 `app/ponto/services/atestados_lote.py:121`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:121), [F3 `app/ponto/services/atestados_lote.py:251`](/home/ronald/codex_ws/ac4ad27cea9defd9ab744d97dc6db899cd6835b6/app/ponto/services/atestados_lote.py:251), [`logs/O30-F3-CONSTRUIR/smoke_sombra/q.txt:10`](/home/ronald/saas-hasner/logs/O30-F3-CONSTRUIR/smoke_sombra/q.txt:10)
-
-```python
-import csv
-import hashlib
-import json
-import warnings
-from collections import Counter
-from datetime import date, datetime
-from inspect import signature
-from io import BytesIO, StringIO
-from os.path import splitext
-from unittest.mock import patch
-from zipfile import ZipFile
-
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.core.files.base import ContentFile
-from django.core.files.storage import Storage
-from django.db import connection, transaction
-from django.db.migrations.executor import MigrationExecutor
-from django.template.response import TemplateResponse
-from django.test import RequestFactory
-
-from ponto.models import Ausencia
-from ponto.services import atestados_lote as lote
-from relatorios import views
-
-
-USUARIO_PK = None
-ESPERADO_PROD = {2: (119, 116), 3: (7, 7), 4: (4, 4)}
-JANELA_ESPERADA = (date(2026, 10, 21), date(2026, 11, 20))
-MIGRACAO = ("ponto", "0079_ausencia_atestado_dados")
-
-CSV_COM_PERMISSAO = "pode_ver_anexo" in signature(lote.csv_bytes).parameters
-
-
-class DesfazerEnsaio(Exception):
-    pass
-
-
-class MidiaEmMemoria(Storage):
-    def _open(self, name, mode="rb"):
-        if not name or mode != "rb":
-            raise FileNotFoundError("Caminho vazio ou modo de abertura inválido.")
-        return ContentFile(b"sonda de atestados em lote\n", name=name)
-
-
-def preparar_0079():
-    campos = {
-        campo.column
-        for campo in Ausencia._meta.local_fields
-        if campo.name.startswith("atestado_")
-    }
-    if not campos:
-        return
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            """
-            SELECT column_name
-            FROM information_schema.columns
-            WHERE table_schema = current_schema() AND table_name = %s
-            """,
-            [Ausencia._meta.db_table],
-        )
-        presentes = {nome for (nome,) in cursor.fetchall()}
-
-    faltam = campos - presentes
-    if not faltam:
-        return
-    if faltam != campos:
-        raise RuntimeError("As colunas da 0079 estão parcialmente presentes.")
-
-    executor = MigrationExecutor(connection)
-    migration = executor.loader.graph.nodes[MIGRACAO]
-    if executor.migration_plan([MIGRACAO]) != [(migration, False)]:
-        raise RuntimeError("O plano pendente precisa conter apenas a aplicação da 0079.")
-
-    estado_anterior = executor.loader.project_state([MIGRACAO], at_end=False)
-    with connection.schema_editor(atomic=False) as editor:
-        migration.apply(estado_anterior, editor)
-
-
-def usuario_da_view():
-    usuarios = get_user_model().objects.filter(is_active=True)
-    if USUARIO_PK is None:
-        usuario = usuarios.filter(is_superuser=True).order_by("pk").first()
-    else:
-        usuario = usuarios.filter(pk=USUARIO_PK).first()
-    if usuario is None:
-        raise RuntimeError("Usuário ativo da contraprova indisponível.")
-    return usuario
-
-
-def contar_repeticoes(contador):
-    return sum(quantidade - 1 for quantidade in contador.values())
-
-
-def medir_empresa(empresa, usuario):
-    request = RequestFactory().get(
-        "/relatorios/atestados/lote/",
-        {"empresa": empresa, "mes": 11, "ano": 2026},
-    )
-    request.user = usuario
-
-    # Captura o contexto da view real sem renderizar o HTML.
-    with patch.object(views, "render", new=TemplateResponse):
-        resposta = views.atestados_lote(request)
-
-    if not isinstance(resposta, TemplateResponse) or resposta.status_code != 200:
-        raise RuntimeError("A view não autorizou a consulta do lote.")
-
-    contexto = resposta.context_data
-    if "previa" not in contexto:
-        raise RuntimeError("Empresa indisponível no filtro da view.")
-    if (contexto["ini"], contexto["fim"]) != JANELA_ESPERADA:
-        raise RuntimeError("A janela da empresa diverge da competência da contraprova.")
-
-    linhas = contexto["linhas"]
-    previa = contexto["previa"]
-    if CSV_COM_PERMISSAO:
-        csv_real = lote.csv_bytes(linhas, pode_ver_anexo=True)
-    else:
-        csv_real = lote.csv_bytes(linhas)
-
-    # O aviso da biblioteca inclui o nome. A duplicata é contada abaixo.
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", message=r"^Duplicate name:", category=UserWarning)
-        zip_real, documentos_zip = lote.zip_bytes(linhas)
-
-    leitor = csv.DictReader(StringIO(csv_real.decode("utf-8-sig"), newline=""), delimiter=";")
-    chaves_csv = []
-    chaves_docs_csv = Counter()
-    chaves_vazias_csv = 0
-    chaves_vazias_docs_csv = 0
-
-    for linha in leitor:
-        matricula, data_csv, tipo = linha["matricula"], linha["data"], linha["tipo"]
-        data_iso = (
-            datetime.strptime(data_csv, "%d/%m/%Y").date().isoformat()
-            if data_csv.strip() else ""
-        )
-        chave = f"{matricula}_{data_iso}_{tipo}"
-        vazia = not all(parte.strip() for parte in (matricula, data_iso, tipo))
-        chaves_csv.append(chave)
-        chaves_vazias_csv += vazia
-
-        if linha["tem_documento"] == "sim":
-            chaves_docs_csv[chave] += 1
-            chaves_vazias_docs_csv += vazia
-
-    with ZipFile(BytesIO(zip_real)) as arquivo_zip:
-        nomes = arquivo_zip.namelist()
-
-    nomes_vazios = sum(not nome.strip() for nome in nomes)
-    nomes_duplicados = contar_repeticoes(Counter(nomes))
-    chaves_zip = Counter(splitext(nome)[0] for nome in nomes)
-    chaves_duplicadas_zip = contar_repeticoes(chaves_zip)
-    chaves_duplicadas_docs_csv = contar_repeticoes(chaves_docs_csv)
-    marcadores_faltando = sum(nome.endswith(".FALTANDO.txt") for nome in nomes)
-    documentos_csv = sum(chaves_docs_csv.values())
-
-    registros_conferem = previa["total"] == len(chaves_csv)
-    documentos_conferem = (
-        previa["com_documento"] == documentos_csv == documentos_zip == len(nomes)
-        and marcadores_faltando == 0
-    )
-    zip_csv_1_a_1 = (
-        registros_conferem
-        and documentos_conferem
-        and chaves_docs_csv == chaves_zip
-        and chaves_vazias_docs_csv == chaves_duplicadas_docs_csv == 0
-        and nomes_vazios == nomes_duplicados == chaves_duplicadas_zip == 0
-    )
-    chaves_serializadas = json.dumps(
-        sorted(chaves_csv), ensure_ascii=False, separators=(",", ":")
-    ).encode("utf-8")
-
-    return {
-        "empresa": empresa,
-        "registros_previa": previa["total"],
-        "registros_csv": len(chaves_csv),
-        "documentos_previa": previa["com_documento"],
-        "documentos_csv": documentos_csv,
-        "documentos_zip": documentos_zip,
-        "entradas_zip": len(nomes),
-        "marcadores_faltando_zip": marcadores_faltando,
-        "nomes_vazios_zip": nomes_vazios,
-        "nomes_duplicados_zip": nomes_duplicados,
-        "chaves_duplicadas_zip": chaves_duplicadas_zip,
-        "chaves_vazias_csv": chaves_vazias_csv,
-        "chaves_duplicadas_csv": contar_repeticoes(Counter(chaves_csv)),
-        "chaves_vazias_csv_com_documento": chaves_vazias_docs_csv,
-        "chaves_duplicadas_csv_com_documento": chaves_duplicadas_docs_csv,
-        "registros_previa_csv_conferem": registros_conferem,
-        "documentos_previa_csv_zip_conferem": documentos_conferem,
-        "zip_csv_1_a_1": zip_csv_1_a_1,
-        "contagens_prod_conferem": (
-            registros_conferem
-            and documentos_conferem
-            and (previa["total"], documentos_zip) == ESPERADO_PROD[empresa]
-        ),
-        "sha256_chaves_csv": hashlib.sha256(chaves_serializadas).hexdigest(),
-    }
-
-
-def medir():
-    if (
-        settings.SETTINGS_MODULE != "config.settings.sombra"
-        or connection.vendor != "postgresql"
-        or connection.settings_dict["HOST"] != "sombra_db"
-        or not connection.features.can_rollback_ddl
-    ):
-        raise RuntimeError("A medição exige PostgreSQL da sombra com DDL reversível.")
-
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT current_database(), current_schema()")
-        if cursor.fetchone() != ("sombra", "juliani"):
-            raise RuntimeError("Banco ou schema diferente do alvo da contraprova.")
-
-    preparar_0079()
-    usuario = usuario_da_view()
-
-    campo_documento = Ausencia._meta.get_field("documento")
-    with patch.object(campo_documento, "storage", new=MidiaEmMemoria()):
-        return [medir_empresa(empresa, usuario) for empresa in ESPERADO_PROD]
-
-
-try:
-    with transaction.atomic(durable=True):
-        resultados = medir()
-        raise DesfazerEnsaio
-except DesfazerEnsaio:
-    for resultado in resultados:
-        print(json.dumps(resultado, sort_keys=True))
-```
-
-## 27/11 01:31 · sessao d67b8bc0162f · E4C-F5-INSTANTE · construtor · origem=Code
-
-Escrevi 12 testes em [test_e4c_f5_c4_red.py](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1). Cada caso começa pela regra, pelo cadastro e pelo resultado esperado. A alteração ficou no arquivo novo, com zero `except` novos. [nao verificado]
-
-A execução do módulo parou no import, antes das fixtures. O Python local devolveu `ModuleNotFoundError: No module named 'django.contrib'`, rc 1. A suíte da cópia usa PostgreSQL. Em memória, executei dois métodos do arquivo novo e oito recortes das funções reais da cópia. A saída foi `Ran 10 tests`, `FAILED (failures=10)`, rc 1, todas por `AssertionError`. As três provas de integração indicadas na tabela seguem **[nao verificado]**. `app/chamados/tests/test_e4c_f5_c4_red.py:9`, `app/config/settings/ci.py:6`
-
-| Achado | Teste em `test_e4c_f5_c4_red.py` | Saída RED | Cura esperada | [nao verificado]
-|---|---:|---|---|
-| Carimbo aceita validação vigente em T2 com coluna em T1 | `:36` | `(True, None) != (False, 'par_ato_coluna')` | `chamados/models.py::DecisaoPergunta.par_ato_coluna` e `PerguntaDisputa.carimbar` devem conferir o instante vigente. `models.py:3499`, `models.py:4646` |
-| Absorção aceita o mesmo par divergente | `:93` | **[nao verificado]**. O teste exige recusa por PK, trilha e ausência de `ABSORCAO`. | `chamados/services/materializacao.py::_materializar_ausencia_de_resposta` deve usar a mesma comparação por instante. `materializacao.py:1108`, `materializacao.py:1115` |
-| Falha ao ler a foto vaza o carimbo em memória | `:59` | Instante, autor `7` e via `juiz_aprovou` ficaram na instância. | `chamados/models.py::PerguntaDisputa.carimbar` deve ler a foto antes de alterar a instância ou incluir essa leitura na proteção existente. `models.py:3465`, `models.py:3473`, `models.py:3490` |
-| `ato_em` pendente escapa ao horizonte da tarefa | `:117` | O horizonte de 12h viu a validação pendente de 13h. | `chamados/models.py::DecisaoPergunta.leitura` e `chamados/services/tarefa_do_dia.py::_fatos_das_perguntas` devem limitar o candidato ao contexto do carimbo e respeitar o horizonte da tarefa. `models.py:4549`, `tarefa_do_dia.py:416` |
-| Coluna retrodatada em disputa nova conta como estoque | `:160` | `[('b', 'respondida', False)] != [('b', 'respondida', True)]` | `chamados/models.py::DecisaoPergunta.divergencia_ato_x_coluna` deve usar a abertura posterior da disputa como prova de que a pergunta nasceu depois do marco. `models.py:1921`, `models.py:4615` |
-| Porta aceita estoque no marco e depois | `:173` | `ValueError not raised` nos dois instantes. | `chamados/models.py::DecisaoPergunta._conferir_estoque` deve admitir somente o campo classificado como `b` de estoque. `models.py:4615`, `models.py:4800` |
-| Porta aceita foto de campo `a` com ato vigente | `:183` | `ValueError not raised`. | `chamados/models.py::DecisaoPergunta._conferir_estoque` deve recusar a foto e preservar a autoridade do ato vigente para a reprojeção. `models.py:4611`, `models.py:4801` |
-| Porta aceita dia civil de conversa como dia do fato | `:196` | `ValueError not raised`. | `chamados/models.py::DecisaoPergunta._conferir_estoque` deve excluir conversa sem competência de fato e consultar o K6 existente para as elegíveis. `models.py:3191`, `models.py:4813`, `backfill_decisoes_pergunta.py:74` |
-| Payload de estoque atribui a foto ao carimbo | `:205` | `ValueError not raised`. | `chamados/models.py::DecisaoPergunta._conferir_estoque` deve recusar o motivo adulterado. `models.py:4469`, `models.py:4781`, `models.py:4785` |
-| Foto histórica ganha origem de ato novo | `:215` | `'ato' != 'estoque'` no payload com o default do modelo. | `chamados/models.py::PerguntaDisputa.carimbar` e `DecisaoPergunta.registrar` devem preservar a proveniência da foto e a entrada própria da validação nova. `models.py:3473`, `models.py:3526`, `models.py:4392` |
-| Entrega pode intercalar a leitura do K6 e o `INSERT` | `:234` | **[nao verificado]**. A prova usa duas conexões e a trava real de entrega. | A entrada do estoque em `chamados/models.py::DecisaoPergunta.registrar` deve serializar com `folha/export.py::travar_entrega`, respeitando Empresa antes de Colaborador. `models.py:4737`, `models.py:4742`, `folha/export.py:556` |
-| Item 13 por PK com entrega real pelo K6 | `:298` | **[nao verificado]**. O teste verifica as três portas, atos, colunas, trilha e hash do mês do fato. | `chamados/services/validacao.py::validar_pergunta` e `chamados/services/materializacao.py::_materializar_uma` devem registrar o bloqueio com autor e PK. A recusa serve de controle com a trilha já emitida pela porta. `validacao.py:792`, `materializacao.py:1981`, `validacao.py:1017` |
-
-**Achados sem RED adicional**
-
-- Regravação retrodatada ou limpeza em pergunta já existente no marco pode produzir a mesma foto persistida que um passivo legítimo. O teste usa a abertura da disputa como evidência apenas no caso em que ela resolve a ambiguidade. As fixtures antigas que pretendem simular estoque também precisam representar uma disputa anterior ao marco se a cura usar essa evidência. `app/chamados/models.py:4600`, `app/chamados/tests/test_e4c_f5_instante_c1.py:83`
-- A 0058 já recorta `entrada_em <= marco`, com teste na função real. Ordenação dos relógios no deploy e recuperação de timestamps sobrescritos seguem **[nao verificado]**. `app/chamados/migrations/0058_decisao_entrada_do_ato_historico.py:16`, `app/chamados/tests/test_e4c_f5_instante_c1.py:370`
-- O censo de `RESPOSTA`, a devolução L-130, a colisão Q0.2 e a saída DRY já têm casos próprios. A contagem e a lista de PKs reais, o efeito monetário e o DIFF de frota seguem **[nao verificado]**. `app/chamados/tests/test_f2_resposta_mantem_validacao.py:20`, `app/chamados/tests/test_e4c_f5_instante_c1.py:234`, `app/chamados/tests/test_e4c_f5_instante_c1.py:340`, `app/chamados/tests/test_e4c_f5_instante_c1.py:142`, `app/docs/LEIS.md:155`
-- O relógio da passagem da ausência tem um contrato próprio de horizonte, e o `max` dos atos compensadores está previsto no contrato V2. A janela de candidato foi testada. Uma mudança na data de `ABSORCAO`, o contrato geral de ato futuro e a escolha do escritor semântico da validação automática requerem conciliar os contratos citados. `app/chamados/services/materializacao.py:1047`, `app/chamados/services/materializacao.py:1100`, `app/chamados/models.py:4691`, `app/docs/BACKLOG.md:2171`, `app/docs/JUIZES.md:38`, `app/chamados/models.py:3484`
-- Vigia e DRY duplicam a consolidação por PK, com a mesma regra observável no código atual. Extrair a consolidação por si só não dá um RED de comportamento. `app/chamados/services/vigia_ato_x_coluna.py:24`, `app/chamados/management/commands/estoque_ato_x_coluna.py:44`
-
-**Comando para a sessão**
-
-```bash
-bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-instante-012038 \
-  --only "chamados.tests.test_e4c_f5_c4_red"
-```
-
-Para os mutantes, após o verde, reintroduzir o comportamento da primeira coluna uma vez por caso e rodar o seletor correspondente. A aplicação e a execução dos mutantes seguem **[nao verificado]**. A certificação fica com o Code e o opus final. `app/docs/LEIS.md:147`
-
-```bash
-red() {
-  bin/suite.sh --dir /home/ronald/wt-codex-e4c-f5-instante-012038 \
-    --only "chamados.tests.test_e4c_f5_c4_red.$1"
-}
-
-red PortaDoCarimboTest.test_RED_carimbo_recusa_validacao_vigente_em_outro_instante
-red AbsorcaoDoParTest.test_RED_absorcao_preserva_irma_com_validacao_em_instante_divergente
-red PortaDoCarimboTest.test_RED_falha_da_foto_preserva_o_carimbo_em_memoria
-red HorizonteDoCarimboTest.test_RED_candidato_futuro_nao_existe_no_horizonte_da_tarefa
-red EstoqueDoParTest.test_RED_coluna_retrodatada_em_disputa_nova_conta_como_b_novo
-red EstoqueDoParTest.test_RED_porta_estoque_recusa_instante_no_marco_ou_depois
-red EstoqueDoParTest.test_RED_porta_estoque_recusa_a_com_ato_vigente
-red EstoqueDoParTest.test_RED_porta_estoque_recusa_dia_civil_de_conversa
-red EstoqueDoParTest.test_RED_porta_estoque_nao_grava_motivo_de_ato_do_carimbo
-red EstoqueDoParTest.test_RED_foto_anterior_carimbada_hoje_conserva_origem_historica
-red EstoqueConcorrenteComEntregaTest.test_RED_entrega_nao_intercala_k6_e_insert_do_estoque
-red Item13PorPKTest.test_RED_item13_portas_publicas_em_entrega_vigente_com_trilha_por_pk
-```
-
-_8549 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8554 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
