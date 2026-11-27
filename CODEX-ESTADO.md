@@ -1,7 +1,91 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 06:11** · publicado em **27/11/2026 06:12** (UTC-3)
+> Ultima resposta processada: **27/11/2026 06:17** · publicado em **27/11/2026 06:18** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 06:17 · sessao 25a38f481b30 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
+
+1. **Sem decisão.** Pela RAMO2-PARTIDO-2611-1812 (a) e pela L-097(b), o Partido 19:00–07:00 tem vão de 00:00 a 03:00 e o segundo par termina efetivamente no marco de 07:00. São **240 min trabalhados**, **30 min fora da janela** e **240 min noturnos** de 03:00 a 07:00 com a prorrogação da fixture. A HE do dia é `300 + 240 − 540 = 0`. A conta coincide com a saída registrada no anexo `tqc.log`. `docs/LEIS.md:115`, `ponto/motor_calculo_v2.py:3106`, [ponto/tests/test_ramo2b_turno_que_cruza.py:141](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_turno_que_cruza.py:141)
+
+2. **Autorizado.** A conta concorda com o teste. A janela mantém a saída às 07:30, com 270 min trabalhados, 270 noturnos e zero fora da janela. `300 + 270 − 540 = 30` min de HE50 no último par, com HE100 zero. `ponto/motor_calculo_v2.py:1906`, `ponto/motor_calculo_v2.py:3402`, [ponto/tests/test_ramo2b_turno_que_cruza.py:154](/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946/app/ponto/tests/test_ramo2b_turno_que_cruza.py:154)
+
+3. **`acusa=False`.** `_TPART` fixa o marco em 07:00 na linha 60. O cadastro da empresa da fixture fixa `teto_saida` em 60 min na linha 179. A regra acusa acima do teto. Como `30 < 60`, a saída fica abaixo dele. `ponto/tests/test_ramo2b_turno_que_cruza.py:60`, `ponto/tests/test_ramo2b_turno_que_cruza.py:179`, `ponto/janela_he.py:200`
+
+### Diff
+
+```diff
+--- a/app/ponto/tests/test_ramo2b_turno_que_cruza.py
++++ b/app/ponto/tests/test_ramo2b_turno_que_cruza.py
+@@ -141,8 +141,8 @@
+-    # TURNO PARTIDO que cruza (19-07, vao 00-03 > 2 h = partido de verdade): par 03:00 -> 07:30 de D+1, 30 min depois
+-    # do marco 07:00. Conta 270; noturno com prorrogacao (jornada comum, Sumula 60 II): 03:00 -> 07:30 = 270. HE do
+-    # DIA pela base recortada: 300 + 240 = 540 contra 540 -> 0.
++    # RAMO2-PARTIDO-2611-1812 (a) e L-097(b): no Partido 19-07 (vao 00-03), sem decisao, o par 03:00 -> 07:30
++    # de D+1 recorta no marco 07:00: 240 trabalhados, 30 fora da janela e 240 noturnos (03:00 -> 07:00 com
++    # prorrogacao). HE do dia: 300 + 240 = 540 contra a jornada de 540 -> 0.
+     'P_CRUZA_PARTIDO_SEM_DECISAO': (
+         _TPART, _cels(_TPART, _D),
+         [(_D, '19:00:00', 'E'), (_D1, '00:00:00', 'S'), (_D1, '03:00:00', 'E'), (_D1, '07:30:00', 'S')], _D, None,
+         '2026-11-06 03:00',
+-        ('2026-11-06 03:00', '2026-11-06 07:30', 270.0, 0.0, 270.0, 0.0, 0.0), False),
++        ('2026-11-06 03:00', '2026-11-06 07:00', 240.0, 30.0, 240.0, 0.0, 0.0), False),
+```
+
+### RED e mutantes
+
+Reproduzi em memória a tupla do anexo pelo `test_RED_partido_cruza_sem_decisao`, substituindo `_roda` pela observação registrada. A expectativa corrigida passou. A tupla antiga e os quatro mutantes individuais falharam na comparação da tupla. Suite Django após o diff e certificação do Code e do Opus final [nao verificado]. `ponto/tests/test_ramo2b_turno_que_cruza.py:230`, `ponto/tests/test_ramo2b_turno_que_cruza.py:279`
+
+```bash
+tqc_replay() {
+  PYTHONDONTWRITEBYTECODE=1 python3 -S - "$1" <<'PY'
+import ast
+import sys
+import unittest
+from datetime import datetime
+from pathlib import Path
+from types import SimpleNamespace
+
+nome = 'P_CRUZA_PARTIDO_SEM_DECISAO'
+modo = sys.argv[1]
+arquivo = Path('ponto/tests/test_ramo2b_turno_que_cruza.py')
+arvore = ast.parse(arquivo.read_text())
+arvore.body = [n for n in arvore.body if not isinstance(n, ast.ImportFrom)]
+arvore.body[-1].decorator_list = []
+escopo = dict(TestCase=unittest.TestCase, timezone=SimpleNamespace(localtime=lambda dt: dt))
+exec(compile(arvore, str(arquivo), 'exec'), escopo)
+
+casos = escopo['CASOS']
+caso = casos[nome]
+esperado = list(caso[-2])
+antigos = {1: '2026-11-06 07:30', 2: 270.0, 3: 0.0, 4: 270.0}
+for i in antigos if modo == 'red' else [] if modo == 'controle' else [int(modo)]:
+    esperado[i] = antigos[i]
+casos[nome] = (*caso[:-2], tuple(esperado), caso[-1])
+
+e, s, batida = map(datetime.fromisoformat,
+                   ('2026-11-06 03:00', '2026-11-06 07:00', '2026-11-06 07:30'))
+par = SimpleNamespace(entrada=e, saida=batida, efetivo_entrada=e, efetivo_saida=s,
+                      minutos_trabalhados=240, minutos_fora_janela=30, minutos_noturnos_relogio=240,
+                      minutos_extra_50=0, minutos_extra_100=0)
+motor = SimpleNamespace(_dia_turno_juiz_calc={e: '2026-11-05'}, _cadastro_x_realidade=[])
+teste = escopo['Ramo2bTurnoQueCruzaTest']('test_RED_partido_cruza_sem_decisao') [nao verificado]
+teste._roda = lambda nome: (motor, None, [par]) [nao verificado]
+resultado = teste.run() [nao verificado]
+assert not resultado.errors, resultado.errors
+assert resultado.wasSuccessful() == (modo == 'controle'), resultado.failures
+for _, falha in resultado.failures:
+    assert 'Tuples differ' in falha and nome in falha, falha
+print(modo, 'PASSOU' if resultado.wasSuccessful() else 'REJEITADO na comparação da tupla') [nao verificado]
+PY
+}
+
+tqc_replay controle  # expectativa corrigida
+tqc_replay red       # tupla antiga
+tqc_replay 1         # saída efetiva 07:30
+tqc_replay 2         # trabalhado 270
+tqc_replay 3         # fora da janela 0
+tqc_replay 4         # noturno 270
+```
 
 ## 27/11 06:11 · sessao 4f8a76333721 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
 
@@ -949,8 +1033,4 @@ mutante 30_modal_pelo_par_cru "$caso30"
 mutante 30_raiox_pelo_carimbo_cru "$caso30"
 ```
 
-## 27/11 02:52 · sessao 6e9234b9033d · CODEX-CONSTROI-MOTOR · leitura · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_8573 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8574 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
