@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 07:03:19.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (151.8 MB). Acoes na janela: **1847**.
+**Medido em 27/11/2026 07:09:57.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (151.9 MB). Acoes na janela: **1846**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 07:09:14 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM DESENHO \| RAMO2-B c2r suite inteira pista \| E1 DESENHO B3 \| ABONO c1k travada por motor \| E4C/E4D/PAR travadas"; bash ~/saas-hasner/logs/espera_unica.sh` |
+| 07:09:09 | Bash | Resultado da espera | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bbvzmvnbz.output` |
+| 07:04:03 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM DESENHO \| RAMO2-B c2r suite inteira pista (opus final pronto em c2r/opus/pedido.md) \| E1 DESENHO B3 \| ABONO c1k travada por motor \| E4C/E4D/PAR travadas"; bash ~/saas-hasner/logs/espera_unica.sh` |
+| 07:03:59 | Bash | Prepara pedido do opus final | `cd ~/saas-hasner; D=logs/RAMO2-CRUZA/c2r/opus; mkdir -p $D; git diff 59600163c..b13f83a9a > $D/diff_obra.patch; wc -l $D/diff_obra.patch; cat > $D/pedido.md <<'EOF' PAPEL: verificar (LEITURA FINAL / opus final). OBRA: RAMO2-B-EM-TURNO-QUE-CRUZA. MAO UNICA (ponto/ motor). Arvore certificada: copia /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946, HEAD b13f83a9a, base main 59600163c. Diff int ...` |
+| 07:03:38 | Bash | Diff do MotorTurnoPartido | `cd /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad; sed -n 2975,3312p main.py > pm.py; sed -n 3103,3445p obra.py > po.py; diff pm.py po.py` |
+| 07:03:33 | Bash | Localiza o MotorTurnoPartido nas duas versões | `cd ~/saas-hasner; git show b13f83a9a:app/ponto/motor_calculo_v2.py > /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/obra.py; git show 59600163c:app/ponto/motor_calculo_v2.py > /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/main.py; cd /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/ ...` |
+| 07:03:23 | Bash | Triagem do verificador | `cd ~/saas-hasner; sed -n 13901p app/docs/RELATO.md; sed -n 13905p app/docs/RELATO.md` |
 | 07:03:19 | Bash | Materiais para o opus final | `cd ~/saas-hasner; ls logs/RAMO2-CRUZA/; ls logs/RAMO2-CRUZA/c2q logs/RAMO2-CRUZA/c2p/verif; grep -n "RAMO2-B" app/docs/RELATO.md \| tail -15 \| cut -c1-300` |
 | 07:03:13 | Bash | Estado do ABONO c1i | `cd ~/saas-hasner; sed -n 2151p app/docs/BACKLOG.md \| cut -c600-2000; ls -t logs/ABONO-X-SAIDA-ANTECIPADA \| head; grep -n "c1i" app/docs/RELATO.md \| tail -4 \| cut -c1-400` |
 | 07:03:09 | Bash | Linhas ABONO no BACKLOG | `cd ~/saas-hasner; grep -n "^\| ABONO" app/docs/BACKLOG.md \| cut -c1-600; ls -t logs/ \| grep -i abono \| head` |
@@ -1849,11 +1856,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 19:14:20 | Bash | Lê o NameError e o estado da pista | `cd ~/saas-hasner; L=logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.log; wc -l $L; grep -nE '^(ERROR\|FAIL):\|^Ran\|^OK\|^FAILED\|NameError' $L \| head; grep -B8 'NameError' $L \| grep 'File "/app' \| tail -3; ssh -n pista estado 2>&1 \| tail -5` |
 | 19:14:15 | Bash | Colhe o estado das vagas, da pista e das suítes | `cd ~/saas-hasner; python3 bin/codex_vagas_estado.py 2>&1 \| tail -6; ssh -n pista rodando 2>&1 \| tail -3; tail -c 300 logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.log; echo; tail -c 200 logs/O30-F3-CONSTRUIR/suite_c13/suite.log` |
 | 19:14:10 | Bash | Lê o que acordou a espera | `cat /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bnwn6ifrj.output` |
-| 19:09:16 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
-| 19:09:13 | Bash | Confere os rc pendentes | `cd ~/saas-hasner; for f in logs/ABONO-X-SAIDA-ANTECIPADA/c1g/red.rc logs/O30-F3-CONSTRUIR/suite_c13/suite.rc logs/SUITE-ROTEIA-PARA-PISTA/pouso_1900/certifica.rc; do echo "$f: $(cat $f 2>/dev/null)"; done; date +%H:%M` |
-| 19:09:01 | Bash | Registra o candidato e a espera única no RELATO | `cd ~/saas-hasner; echo "- $(date +%H:%M) SUITE-ROTEIA candidato 76354334e (merge --no-ff de e44ffdd74 sobre 2bdf699ce, wt-suite-roteia-cand) na pista 2: job 1126190836_76354334, certificacao em logs/SUITE-ROTEIA-PARA-PISTA/pouso_1900/. Selos de host no candidato: test_suite_rota_pista rc 0, test_suite_sh rc 0, test_disjuntor timeout 300 s (roda no pre-push). v6 recebido e repassado ao construtor d ...` |
-| 19:08:56 | Bash | Espera única: primeiro rc novo ou 5 min | `cd ~/saas-hasner; bash logs/espera_unica.sh` |
-| 19:08:55 | TaskStop |  | `-` |
-| 19:08:53 | Bash | Lança a certificação e cria a espera única da v6 | `cd ~/saas-hasner; D=logs/SUITE-ROTEIA-PARA-PISTA/pouso_1900; mkdir -p $D; S=76354334e7641924f0733a63e5a4f56a4094738e; J=1126190836_76354334; cat > $D/certifica.sh <<EOF #!/bin/bash cd /home/ronald/saas-hasner ssh -n pista espera $J > $D/espera.out 2>&1 ssh -n pista log $J 1000000 > $D/suite.log 2>&1 bin/pista_certifica.sh $S $D/suite.log $D/espera.out > $D/certifica.out 2>&1 echo "rc=\$? \$(date + ...` |
-| 19:08:44 | SendMessage |  | `-` |
-| 19:08:35 | Bash | Registra o aval v6 e pede a pista do candidato | `cd ~/saas-hasner; cat > logs/AVAIS-1515/AGENTE-NO-MODELO-NA-FONTE-2611-v6.txt <<'EOF' aval Ronald: AGENTE-NO-MODELO-NA-FONTE v6, substitui a v5 inteiro (construtor em voo segue na mesma copia com este contrato). (1) Codex construtor e o PADRAO para todo app/ que o wrapper permite (REDs, briefs, censos, leituras sempre Codex); opus constroi SO o que o wrapper proibe (codex_pergunta.sh:646: models,  ...` |
