@@ -1,7 +1,84 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 09:05** · publicado em **27/11/2026 09:10** (UTC-3)
+> Ultima resposta processada: **27/11/2026 09:12** · publicado em **27/11/2026 09:17** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 09:12 · sessao bd73245393ec · CODEX-CONSTROI-MOTOR · construtor · origem=Code
+
+Implementei a guarda do CCM no vigia. O juiz é chamado antes dos dois comandos Docker. Qualquer `rc != 0` grava stdout, stderr e a linha de recusa em `saida`, e retorna `None`. O diff acrescenta **0 `except`**. [core/esteira_vigia.py:748](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:748)
+
+- O isolamento retorna `None` antes de classificar ou gravar o cache. [core/esteira_vigia.py:740](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:740)
+- O auto-revert mantém o revert aplicado sem prova, registra a recusa na Pauta e no RELATO e retorna `revert aplicado, reteste recusado (CCM)`. [core/esteira_vigia.py:1322](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:1322) [nao verificado]
+- O congelado e a autocura já exigiam verde para abrir quarentena e criar fatia. Acrescentei ao congelado um retorno específico para a recusa, antes do alarme de vermelho. [core/esteira_vigia.py:1377](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:1377) [core/esteira_vigia.py:1467](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/esteira_vigia.py:1467) [nao verificado]
+
+**Evidência da volta**
+
+Os seis casos foram escritos com o vigia ainda no HEAD `59600163ccc9cffb8f3ae148beede7cd7866ae86`. A leitura desse HEAD mostrou que `_rodar_testes` começava pelo Docker, que o isolamento classificava `None` como `'arvore'` e que o auto-revert desfazia o revert com `None`. A sintaxe dos dois arquivos e dos sete mutantes foi conferida. O RED, o GREEN e os mutantes seguem **[nao verificado]** em execução. A pista 2 documentada exige SSH e uma cópia commitada, operações vedadas nesta volta. [HEAD core/esteira_vigia.py:747, :741, :1315] [core/tests/test_vigia_ccm.py:38](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_vigia_ccm.py:38) [docs/BACKLOG.md:2375](/home/ronald/wt-codex-codex-constroi-motor-090747/app/docs/BACKLOG.md:2375)
+
+Os vizinhos retornaram `rc 1` após a cura, com `FAILED (errors=2)` na importação. Os erros foram `No module named 'django.contrib'` e `No module named 'django.test'`. Nenhum caso dos dois módulos chegou a executar. [core/tests/test_esteira_sem_humano.py:10](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_esteira_sem_humano.py:10) [core/tests/test_esteira_status_verdade.py:13](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_esteira_status_verdade.py:13)
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -v \
+  core.tests.test_esteira_sem_humano core.tests.test_esteira_status_verdade
+
+git --no-optional-locks diff -- core/esteira_vigia.py
+git --no-optional-locks diff --no-index /dev/null core/tests/test_vigia_ccm.py
+```
+
+**Comandos do RED, GREEN e mutantes na pista 2**
+
+Com o checkout Git e o Django disponíveis, a função abaixo roda o teste novo com a versão escolhida do vigia em memória. Saídas de execução **[nao verificado]**. [core/tests/test_vigia_ccm.py:18](/home/ronald/wt-codex-codex-constroi-motor-090747/app/core/tests/test_vigia_ccm.py:18) [nao verificado]
+
+```bash
+ccm() {
+  PYTHONDONTWRITEBYTECODE=1 python3 - "$@" <<'PY'
+import ast
+import subprocess
+import sys
+import unittest
+from pathlib import Path
+
+import django
+from django.conf import settings
+
+settings.configure(SECRET_KEY="ccm-teste-isolado") [nao verificado]
+django.setup()
+from core import esteira_vigia as vigia
+
+modo, *args = sys.argv[1:]
+p = Path(vigia.__file__)
+fonte = p.read_text(encoding="utf-8")
+if modo == "head":
+    fonte = subprocess.check_output([
+        "git", "show",
+        "59600163ccc9cffb8f3ae148beede7cd7866ae86:app/core/esteira_vigia.py",
+    ], text=True)
+elif modo == "mutante":
+    nome, antes, depois = args
+    no = next(n for n in ast.parse(fonte).body if isinstance(n, ast.FunctionDef) and n.name == nome)
+    linhas = fonte.splitlines(keepends=True)
+    trecho = "".join(linhas[no.lineno - 1:no.end_lineno])
+    assert trecho.count(antes) == 1, (nome, antes)
+    linhas[no.lineno - 1:no.end_lineno] = [trecho.replace(antes, depois, 1)]
+    fonte = "".join(linhas)
+else:
+    assert modo == "cura", modo
+
+exec(compile(fonte, str(p), "exec"), vars(vigia))
+unittest.main(module="core.tests.test_vigia_ccm", argv=["ccm", "-v"])
+PY
+}
+
+ccm head
+ccm cura
+ccm mutante _rodar_testes 'juiz.returncode != 0' 'juiz.returncode == 1'
+ccm mutante _rodar_testes 'juiz.stdout + juiz.stderr' 'juiz.stdout'
+ccm mutante _rodar_testes 'CCM-REDUZ-2711-0845' 'CCM'
+ccm mutante _rodar_testes $'return None\n    pw =' $'return False\n    pw ='
+ccm mutante _isolar 'if ok is None:' 'if ok is False:'
+ccm mutante auto_revert 'if verde is None:' 'if verde is False:' [nao verificado]
+ccm mutante curar_por_relogio 'if verde is None:' 'if verde is False:' [nao verificado]
+```
 
 ## 27/11 09:05 · sessao e6e68478a2db · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
 
@@ -1590,8 +1667,4 @@ A c12 substitui a lista manual por uma regra geral que protege os testes **exist
 
 **Procedente o alcance do JSON sobre a agenda.** `bin/crons_duracao.py` grava `dur_s`, `config/crons.py` incorpora os valores, e os horários de `sombra.sh` e `noturno.py` os consomem por `inicio_derivado`. A sonda comprova aceitação da fixture pelo wrapper. Pouso dessa alteração, crontab instalado e efeito operacional ficam [nao verificado]. `bin/crons_duracao.py:77–99` · `app/config/crons.py:146–160,245–278,350–352,594–595` · `bin/crons.sh:17–40` · `matriz_sem_flag.txt:7–10`
 
-## 27/11 05:08 · sessao 96e803870767 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-[resposta retida: caminho_de_segredo -- nao se publica credencial nem caminho de segredo]
-
-_8589 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8590 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
