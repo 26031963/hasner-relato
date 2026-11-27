@@ -6,10 +6,17 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 17:34:30.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (230.7 MB). Acoes na janela: **2030**.
+**Medido em 27/11/2026 17:41:26.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (232.0 MB). Acoes na janela: **2032**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:40:23 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 17:40:19 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bjxwkbeb4.output; date +%H:%M` |
+| 17:35:13 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 17:34:55 | Bash | Lança o recorte c6 e registra a colheita | `cd ~/saas-hasner; D=logs/FERIADO-UM-JUIZ/c6/s; mkdir -p $D; sed 's#/c5/s/#/c6/s/#g' logs/FERIADO-UM-JUIZ/c5/s/lanca.sh > $D/lanca.sh; setsid bash $D/lanca.sh </dev/null >/dev/null 2>&1 & sleep 15; head -5 $D/s.log; H=$(date +%H:%M); printf -- "- %s colhido FERIADO-UM-JUIZ c6/r.rc (17:34 rc 0): 7706835c4, 5 curas so em teste (B023, ancora E5, fixtures he100/C3b na comp 11 e setembro historico, selo ...` |
+| 17:34:49 | Bash | Vê como a suíte c5 foi lançada | `cd ~/saas-hasner; W=/home/ronald/wt-codex-feriado-um-juiz-152427; ls logs/FERIADO-UM-JUIZ/c5/s/; cat logs/FERIADO-UM-JUIZ/c5/s/*.sh 2>/dev/null \| head -20` |
+| 17:34:44 | Bash | Commita c6 do FERIADO e lê a entrega do opus RAMO2-B | `cd /home/ronald/wt-codex-feriado-um-juiz-152427; git add app/folha/tests/test_export_59a.py app/ponto/tests/feriado_um_juiz_mutantes.py app/ponto/tests/test_e5_fechamento_como_leitura.py app/ponto/tests/test_feriado_um_juiz_porta.py app/ponto/tests/test_he100_dia_sem_previsto.py app/ponto/tests/test_o280_bateria_da_lei.py; git commit -q -F - <<'EOF' FERIADO-UM-JUIZ c6: triagem das 7 falhas da suit ...` |
+| 17:34:33 | Bash | Confere except e asserções mexidas na c6 | `cd /home/ronald/wt-codex-feriado-um-juiz-152427; git diff \| /bin/grep -c '^+.*except'; git diff \| /bin/grep '^[-+].*self.assert' \| head -20` |
 | 17:34:25 | Bash | Lê a entrega da volta c6 do FERIADO | `cd ~/saas-hasner; D=logs/FERIADO-UM-JUIZ/c6; cat $D/r.rc; tail -1 $D/wrapper.out; cut -c1-500 $D/r.md \| head -50; W=/home/ronald/wt-codex-feriado-um-juiz-152427; git -C $W status --porcelain; git -C $W log --oneline -2` |
 | 17:34:21 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/boy37ftc8.output; date +%H:%M` |
 | 17:29:19 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -2035,8 +2042,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:43:45 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/by3zrq1gk.output` |
 | 05:43:02 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 05:42:57 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqu3pomg9.output` |
-| 05:38:41 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/be0v146ox.output` |
-| 05:37:52 | Bash | Espera única | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 05:37:48 | Bash | Registra colheita c12 | `cd ~/saas-hasner; P=$(pgrep -f "suite.sh --dir /home/ronald/wt-codex-motor-c12-051148" \| head -1); echo $P sed -i "1s#.*#ESPERANDO: bin/suite.sh (suite8 CCM c12 na pista 2, job 1127053718_eea12c76) \| pid=$P \| arquivo=logs/CODEX-CONSTROI-MOTOR/suite8/suite.rc#" app/docs/RELATO.md cat >> app/docs/RELATO.md <<EOF - $(date +%H:%M) colhido CODEX-CONSTROI-MOTOR c12 (agente opus, 24 min): commit eea12 ...` |
-| 05:37:13 | Bash | Lança verif12 e suite8 | `cd ~/saas-hasner; V=logs/CODEX-CONSTROI-MOTOR/verif12; mkdir -p $V; W=/home/ronald/wt-codex-motor-c12-051148; H=$(git -C $W rev-parse HEAD); C=logs/CODEX-CONSTROI-MOTOR/c12 cp logs/CODEX-CONSTROI-MOTOR/verif11/{aval.txt,JUIZES.md,mapa.md} $V/; cp logs/CODEX-CONSTROI-MOTOR/verif11/r.txt $V/verif11_r.txt; cp $C/mapa.md $V/mapa_delta_c12.md; cp $C/matriz.eea12c760.txt $V/matriz.txt; cp $C/matriz_sem_ ...` |
-| 05:36:53 | Bash | Confere entrega c12 | `W=/home/ronald/wt-codex-motor-c12-051148; cd $W; git log --oneline -2; git status --porcelain --ignored \| head; git diff 1fc9ab682..HEAD \| grep -c '^+.*except'; git diff --stat 0b3939987..HEAD \| tail -1; grep -c "rc=0" ~/saas-hasner/logs/CODEX-CONSTROI-MOTOR/c12/matriz_sem_flag.txt; grep -n crons_duracao ~/saas-hasner/logs/CODEX-CONSTROI-MOTOR/c12/matriz_sem_flag.txt \| head -2; grep -n "p_test ...` |
