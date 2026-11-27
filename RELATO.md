@@ -10986,6 +10986,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 17:51:11 disjuntor (NEGOU B1)** -- agente a6de55753e4240466 -- Bash -- alvo sha1:bbc2cceb2d (308 car., na trilha privada)
+
 **27/11 17:05:32 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:b76e68dc63 (52 car., na trilha privada)
 
 **27/11 17:05:19 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:b76e68dc63 (52 car., na trilha privada)
@@ -14584,3 +14586,6 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 17:29 PUXA DESLIGADO-PORTA-DO-CHAMADO -> volta m1 (opus, chamados/models.py): travada por vaga opus (RAMO2-B c2x)
 - 17:35 colhido FERIADO-UM-JUIZ c6/r.rc (17:34 rc 0): 7706835c4, 5 curas so em teste (B023, ancora E5, fixtures he100/C3b na comp 11 e setembro historico, selo 59-A pelas 2 portas), 0 assercao mudada, 0 except; calendario 79/55 sem nexo com a obra [nao verificado], smoke = timeout de infra
 - 17:35 FERIADO-UM-JUIZ c6/s: recorte ponto core folha relatorios -> logs/FERIADO-UM-JUIZ/c6/s/s.rc
+- 17:50 colhido FERIADO-UM-JUIZ c6/s/s.rc (17:49 rc 0): recorte ponto core folha relatorios VERDE, Ran 8455 OK (skipped=29, expected failures=26), arvore 7706835c4
+- 17:50 FERIADO-UM-JUIZ ver5: Codex verificador sobre o delta c5+c6 contra o ver4 -> logs/FERIADO-UM-JUIZ/ver5/r.rc; depois suite inteira e opus final; pouso segue sob PAREI ! FERIADO-L097-MOTOR
+- 17:53 colhido RAMO2-B-EM-TURNO-QUE-CRUZA c2x (agente opus, entrega INCOMPLETA por B1 de tokens): cura na wt sem commit (_janela_do_par com_base_da_he opcional, 4 valores sem a opcao como no main; Partido e PartidoNoturno = corpo do main por splice AST; catraca de linhas remapeada; 0 except); RED c2x/red.log Ran 7 FAILED (failures=6, errors=3); GREEN1 Ran 996 1 falha (catraca, remapeada); GREEN2 na pista job 1127171915_fa236b21 (pid espera 3626944 vivo) -> veredito em c2x/green2.log; commit so com GREEN2 verde

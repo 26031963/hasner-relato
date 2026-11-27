@@ -6,10 +6,24 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 27/11/2026 17:48:21.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (232.1 MB). Acoes na janela: **2015**.
+**Medido em 27/11/2026 17:55:08.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (232.3 MB). Acoes na janela: **2023**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 17:54:01 | TaskStop |  | `-` |
+| 17:53:57 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 17:53:55 | Bash | Registra a entrega incompleta da RAMO2-B c2x | `cd ~/saas-hasner; H=$(date +%H:%M); printf -- "- %s colhido RAMO2-B-EM-TURNO-QUE-CRUZA c2x (agente opus, entrega INCOMPLETA por B1 de tokens): cura na wt sem commit (_janela_do_par com_base_da_he opcional, 4 valores sem a opcao como no main; Partido e PartidoNoturno = corpo do main por splice AST; catraca de linhas remapeada; 0 except); RED c2x/red.log Ran 7 FAILED (failures=6, errors=3); GREEN1 R ...` |
+| 17:53:50 | TaskStop |  | `-` |
+| 17:51:45 | Bash | Vê se o GREEN2 segue vivo e o estado na pista | `pgrep -af 'green2\|1127171915_fa236b21' \| /bin/grep -v pgrep \| cut -c1-200; ssh pista estado 1127171915_fa236b21 2>&1 \| tail -3` |
+| 17:51:40 | Bash | Confere o veredito do GREEN2 da RAMO2-B | `cd ~/saas-hasner; L=logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x/green2.log; tail -3 $L \| cut -c1-200; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran ' $L \| tail -1; ls logs/RAMO2-B-EM-TURNO-QUE-CRUZA/c2x/` |
+| 17:51:00 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
+| 17:50:37 | Bash | Lança o verificador ver5 e registra | `cd ~/saas-hasner; D=logs/FERIADO-UM-JUIZ/ver5; cat > $D/q.md <<'EOF' VERIFICADOR -- OBRA FERIADO-UM-JUIZ c5+c6 (MAO UNICA: dinheiro, ponto/folha). Diff 6d568d221..7706835c4 (so o delta c5+c6, anexo por ultimo). O laudo ver4 vai anexo (ver4_r.md) com a triagem da sessao (triagem_ver4.txt). Anexos: aval literal FERIADO-UM-JUIZ-2711-1210, leis dos sitios tocados (leis.txt), app/docs/JUIZES.md. Respon ...` |
+| 17:50:23 | Bash | Prepara anexos do verificador ver5 | `cd ~/saas-hasner; D=logs/FERIADO-UM-JUIZ/ver5; mkdir -p $D; W=/home/ronald/wt-codex-feriado-um-juiz-152427; git -C $W diff 6d568d221 7706835c4 > $D/diff.txt; wc -c $D/diff.txt; cp logs/FERIADO-UM-JUIZ/ver4/r.md $D/ver4_r.md; cp logs/FERIADO-UM-JUIZ/ver4/leis.txt $D/; sed -n 14557p app/docs/RELATO.md > $D/triagem_ver4.txt; git -C $W rev-parse 7706835c4` |
+| 17:50:17 | Bash | Lê a pergunta e a resposta do ver4 | `cd ~/saas-hasner; cat logs/FERIADO-UM-JUIZ/ver4/q.md; echo ----; head -c 3000 logs/FERIADO-UM-JUIZ/ver4/r.md` |
+| 17:50:14 | Bash | Vê como foi lançado o verificador ver4 | `cd ~/saas-hasner; ls logs/FERIADO-UM-JUIZ/ver4/; cat logs/FERIADO-UM-JUIZ/ver4/lanca*.sh 2>/dev/null \| head -30; wc -c logs/FERIADO-UM-JUIZ/ver4/q.md` |
+| 17:50:10 | Bash | Vê as etapas já feitas do FERIADO | `cd ~/saas-hasner; ls logs/FERIADO-UM-JUIZ/; /bin/grep -n 'FERIADO-UM-JUIZ' app/docs/RELATO.md \| tail -8 \| cut -c1-300` |
+| 17:50:06 | Bash | Lê o veredito da suíte c6 | `cd ~/saas-hasner; L=logs/FERIADO-UM-JUIZ/c6/s/s.log; cat logs/FERIADO-UM-JUIZ/c6/s/s.rc; /bin/grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; /bin/grep '^Ran ' $L \| tail -1; /bin/grep -E '^(FAIL\|ERROR):' $L \| head` |
+| 17:50:01 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bqz3vwln7.output; date +%H:%M` |
 | 17:45:31 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
 | 17:45:28 | Bash | Lê o que acordou a espera | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bdmufeyeu.output; date +%H:%M` |
 | 17:40:23 | Bash | Espera única pelo próximo rc de qualquer obra viva | `bash ~/saas-hasner/logs/espera_unica.sh` |
@@ -2019,9 +2033,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 05:56:49 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/biiv0q4ph.output` |
 | 05:56:22 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM PERGUNTA DE DESENHO + suite8 pista \| RAMO2-B c2p Codex vaga 1 \| E4C/E4D/PAR travadas por lei/!"; bash ~/saas-hasner/logs/espera_unica.sh` |
 | 05:56:18 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bs596lfnu.output` |
-| 05:51:12 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; echo "OBRAS VIVAS: CCM PERGUNTA DE DESENHO + suite8 pista \| RAMO2-B c2p Codex vaga 1 \| E4C/E4D/PAR travadas por lei/!"; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 05:51:07 | Read |  | `/tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bc38sq32b.output` |
-| 05:48:36 | TaskStop |  | `-` |
-| 05:48:32 | Bash | Espera única pelas obras vivas | `cd ~/saas-hasner; bash ~/saas-hasner/logs/espera_unica.sh` |
-| 05:48:27 | Bash | Confere arranque do c2p | `cd ~/saas-hasner; cat logs/RAMO2-CRUZA/c2p/r.rc 2>/dev/null; tail -3 logs/RAMO2-CRUZA/c2p/wrapper.out 2>/dev/null` |
-| 05:48:22 | Bash | Decide pela lei e lança c2p Codex | `cd ~/saas-hasner; D=logs/RAMO2-CRUZA/c2p; mkdir -p $D; W=/home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946; HASH=$(git -C $W rev-parse HEAD); echo $HASH; ls $W/app \| head -3; find $W -maxdepth 3 -type d -empty -user root 2>/dev/null \| head cat > $D/brief.md <<'EOF' # RAMO2-B c2p -- construtor Codex, so TESTES (app/ponto/tests/test_ramo2b_c2_base_da_he.py) Copia: /home/ronald/wt-codex-ramo2 ...` |

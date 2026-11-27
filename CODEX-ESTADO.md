@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 17:34** · publicado em **27/11/2026 17:34** (UTC-3)
+> Ultima resposta processada: **27/11/2026 17:54** · publicado em **27/11/2026 17:55** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 17:54 · sessao 1e2a2a759d32 · - · - · origem=Ronald (tmux)
+
+**Achado 5 curado quanto às três gravações do recálculo.** A transação começa antes de `get_or_create`, cobre `save` e `update` do mensal e envolve as lavras `motor` e `oraculo`. A falha em qualquer lavra marca rollback. O oráculo só roda da competência 10 em diante e após sucesso da primeira lavra. O backfill também usa a transação, gravando só as lavras. (`app/ponto/services/fechamento.py:925–929,967–971,1172–1228,1272–1277,1301–1340`)
+
+- Rodei os controles e cinco mutantes em memória. Remover a transação comum ou qualquer sinal de rollback gerou uma falha de asserção por mutante. Exigir mapa em resultado sem pares ou recusar `rubricas={}` gerou o erro-alvo esperado. O teste ORM injeta falha na segunda lavra, comprova que as 5 h já chegaram ao mensal e à lavra `motor` no momento da falha, e exige fotos completas originais para mensal `aberto` e `aprovado`. Execução ORM [nao verificado]. (`app/ponto/tests/feriado_um_juiz_mutantes.py:89–106,456–481`, `app/ponto/tests/test_feriado_um_juiz.py:43–169`, `app/ponto/tests/test_feriado_um_juiz_porta.py:462–499`)
+
+- **Bloqueio novo no retorno.** Instrumentei os dois testes sem banco e, em ambos, o recálculo preservou o estado antigo e retornou `1`. A tela comunica sucesso e o evento registra conclusão. A revisão administrativa segue com a batida restaurada mesmo se o savepoint inteiro do recálculo voltar, embora a própria porta prometa desfazer toda a revisão quando o recálculo falha. (`app/ponto/tests/test_feriado_um_juiz.py:43–47,138–145`, `app/ponto/services/fechamento.py:1272–1277,1335–1350,1846–1852,1869–1891`, `app/ponto/views.py:1280–1281`, `app/ponto/registro_batida.py:305–321`)
+
+- **`rubricas={}` amplia a porta além do ajuste isolado.** `lavrar` agrega períodos, órfãos, faltas, furos e grade antes da guarda dos donos. Com o dicionário vazio, publica as linhas-base e o ajuste com o rótulo solicitado. O fluxo de produção pode retornar dicionário vazio quando o calculador não tem par válido ou dia bloqueado no recorte, mesmo havendo entradas próprias da grade ou órfãos. O teste introduzido usa somente a linha de ajuste. (`app/ponto/services/dia_pago.py:164–173,267–321,334–362`, `app/ponto/calculador/alimentacao.py:494–526,571–598`, `app/ponto/tests/test_feriado_um_juiz.py:147–169`)
+
+- **Idempotência literal falha.** As duas rodadas testadas exigem igualdade de valores. Cada relavra faz `delete` e `bulk_create`, com novo carimbo, e o mensal também recarimba. O caso sem promoção espera 8,04 h para dois pares de 241 min, contra 8,03 h na soma diária, por arredondamento em etapas. A promoção de 10 s muda o mensal comum para 8,03 h, mesmo aparecendo como 0,00 h de feriado. (`app/ponto/tests/test_feriado_um_juiz_porta.py:396–433`, `app/ponto/services/fechamento.py:1011–1019,1121,1178–1179,1195–1196,1224`, `app/ponto/services/dia_pago.py:177,262,334–362,552–565`, `app/ponto/models.py:373–387`)
+
+- **Ordem e fontes.** A revisão toma Empresa → Colaborador → Batida e o TXT toma Empresa. O recálculo genérico por evento usa `on_commit` e apura antes do novo `atomic`. Não observei inversão explícita no delta. A serialização das leituras com o TXT e teste concorrente de frescor [nao verificado]. O previsto comum sai da grade, enquanto o realizado limita realizado/abono. A exceção preexistente do intermitente convocado copia o realizado para o previsto. (`app/ponto/services/par_relampago_na_lista.py:172–187`, `app/folha/views.py:102–104,132–135`, `app/ponto/services/fechamento.py:819–830,925–929,1078–1099,1846–1863`, `app/ponto/services/dia_pago.py:388–404`, `app/escala/utils.py:2099–2124`)
+
+- **Contagem de `except`.** O diff literal tem 3 cláusulas adicionadas e 3 removidas por reindentação, 0 em testes. No código há os mesmos handlers, com rollback acrescentado nos dois das lavras. Incluindo menções em comentário/docstring, 4 linhas adicionadas e 5 removidas. (`diff.txt`, `app/ponto/services/fechamento.py:1113–1134,1272–1277,1335–1342`, `app/ponto/services/dia_pago.py:144–148`)
+
+## 27/11 17:53 · sessao fed243fe2afc · - · - · origem=Ronald (tmux)
+
+**Achado 4 não curado no caso combinado.** Executei em memória o helper de c5 com dois turnos fechados de 4 h, corte 21 e troca 6x1 → 12x36 em 21/11. Com feriado apenas no dia 20, a competência 11 recebeu 4 h de HE100 feriado e a 12 ficou vazia. Com feriado apenas no dia 21, a 11 recebeu 4 h comuns e a 12 ficou vazia. Em ambos os casos, perderam-se as 4 h do segundo turno. A fatia 6x1 retira o turno externo. A fatia 12x36 pula o filtro e o motor herda a jornada da véspera, descartando o par antes da partição. Depende do motor. Ocorrência em produção [nao verificado]. (`app/ponto/tests/test_feriado_um_juiz.py:560–623`, `app/ponto/services/fechamento.py:155–173,337–351`, `app/ponto/motor_calculo_v2.py:2513–2522,2537–2545`)
+
+Os REDs isolados cobrem feriado só no dia 20 sem troca e troca de ciclo dentro da mesma competência. O primeiro verifica as duas janelas. O segundo verifica rubrica e data após a composição. A partição troca o motor do julgamento da dobra pelo motor do dia do turno quando há contexto disponível, mas ainda reescreve `dia_da_jornada` depois do corte. A janela já foi decidida pela jornada herdada. A dupla chamada a `_turnos_do_juiz` usa a mesma autoridade com conjuntos distintos de batidas. (`app/ponto/tests/test_feriado_um_juiz.py:607–623`, `app/ponto/calculador/regras.py:410–432`, `app/ponto/services/fechamento.py:167–173,340–349`, `app/ponto/motor_calculo_v2.py:2459–2467,2537–2545`)
+
+Outubro conserva FT 6x1 incerta como hora comum no RED em memória e no teste de fechamento e duas lavras. A fotografia histórica dessa fixture e seu registro anterior são comparados diretamente. O POST do TXT segue sem prova nessa fixture. Na borda de outubro, reproduzi 8 h comuns no dia 20 na competência 10 e nenhuma na 11 com feriado em qualquer um dos dois dias. O filtro da borda inicial só começa na 12. (`app/ponto/tests/test_feriado_um_juiz.py:428–435,560–605`, `app/ponto/tests/test_feriado_um_juiz_porta.py:247–296`, `app/ponto/services/fechamento.py:227–231`)
+
+O `atomic` resolve o rollback das três gravações no caminho normal, mas ambas as falhas seguem para `processados += 1`. O comando imprime e anota esse total mesmo quando o colaborador teve as gravações revertidas. A guarda `if rubricas:` também aceita `{}` junto com períodos remunerados e permite montar uma lavra `oraculo` com valores do motor sem declaração de dono. O RED cobre a ausência de períodos e a preservação do ajuste. Ocorrência de rubricas vazias com períodos remunerados em produção [nao verificado]. (`app/ponto/services/fechamento.py:1272–1277,1335–1350`, `app/ponto/management/commands/recalcular_fechamento.py:130–146`, `app/ponto/services/dia_pago.py:172–185,310–346`, `app/ponto/tests/test_feriado_um_juiz.py:146–169`)
+
+## 27/11 17:53 · sessao 50bfc707e9a0 · - · - · origem=Ronald (tmux)
+
+Os 40 controles sem banco e os 41 testes estruturais passaram. Os oito mutantes c5 que executam funções de produção falharam como previsto. Os dois mutantes estruturais c5 e os quatro mutantes textuais c6 também falharam como previsto. A execução contra a base c4, os mutantes de porta e o B023 ficam [nao verificado]. (`app/ponto/tests/feriado_um_juiz_mutantes.py:53-107,231-247,325-427,453-481`)
+
+- **HE100.** A fixture de novembro continua exercitando fechamento e as duas lavras, com 5,5 h em feriado. A regra histórica de outubro para 6x1 e escala incerta tem RED na partição e prova de porta para outra fixture. O caso exato de 330 min sob a L-097 continua em outubro em 12x36. (`app/ponto/tests/test_he100_dia_sem_previsto.py:27-48,179-193,208-252`, `app/ponto/tests/test_feriado_um_juiz.py:396-435`, `app/ponto/tests/test_feriado_um_juiz_porta.py:239-296`)
+- **C3b.** A fixture conserva setembro e testa três resultados distintos, inclusive a ausência do atributo de CCT. O modo histórico explícito corresponde ao corte. O teste chama a alimentação diretamente e a seleção de modo pelo fechamento tem sítio próprio. O mutante de modo altera a fixture. O mutante do default `True` altera produção. (`app/ponto/tests/test_o280_bateria_da_lei.py:1230,3100-3158`, `app/ponto/services/fechamento.py:601-603,1299-1312`, `app/ponto/tests/feriado_um_juiz_mutantes.py:231-247`)
+- **59-A e E5.** A âncora 59-A segue as duas entradas do TXT. Exercitei as duas entradas em memória para outubro/12x36 e confirmei que ambas respeitam a cláusula, ligada e desligada. E5 conserva as guardas do ramo de criação e do ramo de persistência. Os quatro mutantes c6 exercitam os selos por fonte simulada. (`app/folha/tests/test_export_59a.py:19-78`, `app/folha/export.py:388-394,748-760,1018-1034`, `app/ponto/tests/test_e5_fechamento_como_leitura.py:35-60`, `app/ponto/tests/feriado_um_juiz_mutantes.py:53-67,349-364`)
+- **Achado 6 curado.** A catraca atualiza cinco entradas de endereço. Os dois selos AST voltaram ao verde com a atualização do mapa seguida da leitura por `_dia_de`. Voltar ao endereço antigo falha uma asserção. Trocar a consulta ao mapa por `dia_jornada = dia_turno` falha duas. (`app/core/tests/test_medida_turno_do_par.py:289,329-334,565-569`, `app/ponto/calculador/regras.py:424-429`, `app/ponto/tests/test_noturno_v8_ft_no_dia_da_lavra.py:33-71`, `app/ponto/tests/feriado_um_juiz_mutantes.py:325-346`)
+- **Falha da lavra e confirmação ao chamador.** A reversão agora alcança o mensal, e o colaborador revertido segue contado em `processados`. O comando publica essa contagem. O backfill conta objetos de leitura publicados antes da reversão. A revisão ignora o retorno do recálculo, embora prometa desfazer o ato em caso de falha. (`app/ponto/services/fechamento.py:1138-1148,1272-1276,1335-1350,1869-1891`, `app/ponto/management/commands/recalcular_fechamento.py:130-145`, `app/ponto/management/commands/lavrar_dias_pagos.py:104-109`)
+- **`except`.** Quatro linhas de cláusula entram e quatro saem por recuo, com zero cláusula nova ou suprimida e zero em teste. Na contagem literal da palavra, entram cinco e saem seis, incluindo comentário recuado e menção retirada da docstring. (`diff.txt:1`, `app/ponto/services/fechamento.py:1116,1122,1243,1272,1335`, `app/ponto/services/dia_pago.py:144-148`)
 
 ## 27/11 17:34 · sessao 723ef8477e8c · FERIADO-UM-JUIZ · construtor · origem=Code
 
@@ -648,69 +685,4 @@ bin/suite.sh --dir /home/ronald/wt-codex-feriado-um-juiz-152427 \
 - O outro contador da família, `desligados_retidos`, conta colaborador × competência retido pelo export e passa ao `vigiar_fio_morto`/carimbo. É universo distinto do estoque de chamados e da trilha. Se o contador novo precisar de publicação no ESTADO, há o molde de `vigiar_fio_morto` com carimbo e leitor `fio_estado`, e o placar operacional já tem leitor do carimbo para duas chaves. `app/folha/fora_da_folha.py:166`, `app/chamados/services/vigia_fio.py:565`, `:580`, `app/chamados/management/commands/vigiar_fio_morto.py:243`, `:275`, `:289`, `bin/fio_estado.py:122`, `:192`, `app/core/management/commands/pipeline_placar.py:85`, `:135`. O vigia de esteira trabalha com arquivos de fila e estado de fatias. Os juízes por varredura são dívida que só encolhe. `app/core/esteira_vigia.py:1`, `app/config/crons.py:1985`.
 - Lei a esclarecer para o selo de zero: uma reabertura humana autorizada entra em `em_analise`, logo conta como vivo de desligado. O aval fornece simultaneamente a exceção humana e o selo zero. Unidade, eventual exclusão e momento desse selo em relação à reabertura [nao verificado]. `aval.txt:1` (anexo), `app/chamados/models.py:1428`, `app/chamados/catalogo/motor.py:24`.
 
-## 27/11 16:45 · sessao d019348cce5d · CODEX-CONSTROI-MOTOR · construtor · origem=Code
-
-Implementei a cura14/P4 em `core/esteira_vigia.py` e `core/tests/test_vigia_ccm.py`. O mesmo juiz CCM atende a guarda prévia e o reteste. Se a guarda recusa, o vigia avisa Pauta e RELATO com a primeira linha do juiz e retorna antes de Git, deploy e gravação de `ultimo_revert`. [esteira_vigia.py:748](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:748) [esteira_vigia.py:1320](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1320)
-
-Na recusa tardia, o vigia tenta desfazer o revert. O deploy compensatório só roda se o Git retornar zero, e `revert desfeito` exige sucesso dos dois comandos. Uma falha em qualquer etapa aparece na Pauta e no RELATO, com teste para cada caso. A guarda depende de `_rodar_testes` devolver `None`, o que ocorre depois de escrever o log de recusa. [esteira_vigia.py:1339](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1339) [test_vigia_ccm.py:189](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:189) [esteira_vigia.py:753](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:753) [nao verificado]
-
-**Pré-verificação.** O diff passou em `git diff --check`. A base, a cura e os três mutantes compilam, com 25 `ExceptHandler` e um único `argv` do CCM. A guarda usa o `agora` já recebido. `deve_reverter` lê `ultimo_revert` para aplicar o teto. `passada` regrava o estado que leu antes de chamar `auto_revert`, então preserva o valor carregado na recusa prévia e pode sobrescrever um carimbo novo se a tentativa chegou ao reteste. [esteira_vigia.py:749](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:749) [esteira_vigia.py:1076](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1076) [esteira_vigia.py:1319](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1319) [esteira_vigia.py:1548](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1548) [esteira_vigia.py:1657](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/esteira_vigia.py:1657) [LEIS.md:97](/home/ronald/wt-codex-codex-constroi-motor-163727/app/docs/LEIS.md:97) [nao verificado]
-
-**Pista pendente.** O ambiente disponível é a VM. A Pista exige rede e `logs/CODEX-CONSTROI-MOTOR/cura14/red_p4.log` está em caminho ignorado. O log ficou pendente. O RED na base, o verde na cura e a mordida dos mutantes seguem [nao verificado]. A certificação cabe ao Code e ao opus final. [/etc/hostname:1](/etc/hostname:1) [CLAUDE.md:129](/home/ronald/wt-codex-codex-constroi-motor-163727/CLAUDE.md:129) [.gitignore:53](/home/ronald/wt-codex-codex-constroi-motor-163727/.gitignore:53) [LEIS.md:147](/home/ronald/wt-codex-codex-constroi-motor-163727/app/docs/LEIS.md:147)
-
-### Comandos para o Code na Pista
-
-Rodar a partir de `app/`, no ambiente de teste da Pista. A função carrega a variante em memória e usa os testes da cópia. Os alvos dos mutantes correspondem às três asserções pedidas. [manage.py:7](/home/ronald/wt-codex-codex-constroi-motor-163727/app/manage.py:7) [test_vigia_ccm.py:146](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:146) [test_vigia_ccm.py:162](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:162) [test_vigia_ccm.py:172](/home/ronald/wt-codex-codex-constroi-motor-163727/app/core/tests/test_vigia_ccm.py:172) [nao verificado]
-
-```bash
-set -o pipefail
-vigia=core/esteira_vigia.py
-classe=core.tests.test_vigia_ccm.AutoRevertCCMTest
-recusa="$classe.test_auto_revert_juiz_recusa_antes_do_revert"
-ordem="$classe.test_auto_revert_ordem_juiz_antes_do_git"
-desfaz="$classe.test_auto_revert_reteste_recusado_desfaz"
-
-p4() {
-    PYTHONDONTWRITEBYTECODE=1 python3 -c '
-import sys
-from core import esteira_vigia as vigia
-from manage import main
-
-exec(compile(sys.stdin.read(), vigia.__file__, "exec"), vars(vigia))
-sys.argv[0] = "manage.py"
-main()
-' test --settings=config.settings.ci --noinput -v 2 "$@"
-}
-
-# RED na base. Capturar esta saída em logs/CODEX-CONSTROI-MOTOR/cura14/red_p4.log.
-git show 0e0497a1ce54c3de18be24660cf8a35ec9de6680:app/core/esteira_vigia.py \
-    | p4 "$recusa" "$ordem" "$desfaz"
-
-# Cura.
-p4 core.tests.test_vigia_ccm < "$vigia"
-
-# juiz_depois_do_revert
-sed -e '/^    # O revert restaura/,/^        return .sem revert: reteste seria recusado/{H;d;}' \
-    -e '/^        return .revert nao aplicou./G' "$vigia" \
-    | p4 "$recusa" "$ordem"
-
-# recusa_segue
-sed '/^def auto_revert(/,/^def explicar_vermelho(/s/^    if juiz.returncode != 0:$/    if False:/' \
-    "$vigia" | p4 "$recusa"
-
-# none_mantem_revert
-sed "/^    desfecho_recusa = None$/,/^    memoria\[/s/^        if subprocess.run(.*'HEAD'.*returncode != 0:$/        if False:/" \
-    "$vigia" | p4 "$desfaz"
-```
-
-## 27/11 16:44 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
-
-A recusa tardia apura o resultado da compensação, emite Pauta e RELATO e então grava `ultimo_revert`. [core/esteira_vigia.py:1339] [core/esteira_vigia.py:1347] [core/esteira_vigia.py:1350]
-
-## 27/11 16:43 · sessao a99d2197ef19 · - · - · origem=Ronald (tmux)
-
-A compensação agora precede a persistência, e o sucesso exige retorno zero de Git e deploy. O teste cobre separadamente os dois códigos de falha e os respectivos avisos. [core/esteira_vigia.py:1339] [core/tests/test_vigia_ccm.py:189] [nao verificado]
-
-A gravação do estado ainda precede os avisos. Se ela lançar `OSError`, a compensação terá sido tentada, mas Pauta e RELATO podem ficar sem registro. [core/esteira_vigia.py:823] [core/esteira_vigia.py:1347]
-
-_8748 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8751 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
