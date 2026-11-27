@@ -1,7 +1,350 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 14:34** · publicado em **27/11/2026 14:34** (UTC-3)
+> Ultima resposta processada: **27/11/2026 14:37** · publicado em **27/11/2026 14:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 14:37 · sessao 61335083ba97 · E1C-LIMITE-COMERCIAL · sonda · origem=Code
+
+**SOMBRA · competência 11/2026.** Consolidei a saída raspada fornecida. Nova execução na SOMBRA nesta sessão [nao verificado]. As referências à saída contam `sonda_leitura` como linha 1. `r.md:§6`
+
+```text
+dias_sem_marcos_trabalhados=102 colabs=38
+dias_HE_diferente=0 colabs_com_diff_mensal=0 dias_sem_resposta=0
+```
+
+A contagem confere com 102 pares distintos de `colab_id` e dia, distribuídos entre 38 `colab_id`. `saída raspada:2` `saída raspada:4–105` `saída raspada:106`
+
+| Empresa | Dias | Colabs | Σ HE atual (h) | Σ HE literal-zero (h) |
+|---|---:|---:|---:|---:|
+| 2 | [nao verificado] | [nao verificado] | 0 | 0 |
+| 3 | [nao verificado] | [nao verificado] | 0 | 0 |
+| 4 | [nao verificado] | [nao verificado] | 0 | 0 |
+| **Total** | **102** | **38** | **0** | **0** |
+
+O raspado omite a associação de `colab_id` com `empresa_id`. As somas de HE por empresa são dedutíveis porque cada linha tem `(0, 0, 0, 0)` nas duas passadas, na ordem HE50, HE100, HE50 noturna e HE100 noturna. `saída raspada:3–105` `app/ponto/services/fechamento.py:639` `app/ponto/motor_calculo_v2.py:324`
+
+**DIFF_MENSAL — soma de `literal-zero − atual` por campo.** A saída registra zero colaboradores com diferença e nenhuma linha `DIFF_MENSAL`. `r.md:§6` `saída raspada:4–106`
+
+| Campo | Σ diferença (h) |
+|---|---:|
+| `horas_extras_50` | 0 |
+| `horas_extras_100` | 0 |
+| `horas_extras_100_feriado` | 0 |
+| `horas_extras_50_noturna` | 0 |
+| `horas_extras_100_noturna` | 0 |
+| `horas_folga_trabalhada` | 0 |
+| `horas_reflexo_dsr` | 0 |
+| `saldo_banco_horas` | 0 |
+
+Todos os 102 dias têm `FT_h > 0` e `limites_min_atual_grade=[]`. O ponto de troca do limite diário ficou sem chamadas nesses dias. O contador `dias_sem_resposta` só aumenta quando há uma chamada registrada com retorno `None`. `saída raspada:4–106` `r.md:§6` `app/ponto/motor_calculo_v2.py:3349` `app/ponto/motor_calculo_v2.py:3429`
+
+## 27/11 14:37 · sessao be5d5a6ad6e4 · INVENTARIO-PELA-REGRA · sonda · origem=Code
+
+**Sombra · INVENTARIO-PELA-REGRA**  
+`MEDIDO_EM|2026-11-27T14:36:36.953833-03:00` (`saída fornecida:50`)
+
+A tabela transcreve o bloco `DADO RASPADO`. As referências à saída contam a partir da linha `sonda_leitura`. Nova execução nesta sessão [nao verificado].
+
+| Empresa | Competência | Lotes | Detalhe por lote (`id`, `publicado`, `primeiro_job_em`) | Colabs com `Holerite` | Pautas DP (n, IDs) | Nossos TXT (n, IDs) | `no_storage` | Fonte | [nao verificado]
+|---|---|---:|---|---:|---|---|---|---|
+| 2 | 10/2026 | 1 | `19`, `1`, `2026-11-11T19:22:58.227461+00:00` | 418 | `0, []` | `0, []` | nao medivel aqui | `saída fornecida:3–9` |
+| 3 | 10/2026 | 2 | `20`, `0`, `2026-11-11T19:34:08.870092+00:00`<br>`21`, `1`, `2026-11-16T15:28:40.863399+00:00` | 111 | `0, []` | `0, []` | nao medivel aqui | `saída fornecida:10–17` |
+| 4 | 10/2026 | 0 | — | 0 | `0, []` | `0, []` | nao medivel aqui | `saída fornecida:18–23` |
+| `sem_empresa_no_recorte` | 10/2026 | 0 | — | 0 | [nao verificado] | [nao verificado] | nao medivel aqui | `saída fornecida:24–27` |
+| 2 | 11/2026 | 0 | — | 0 | `0, []` | `0, []` | nao medivel aqui | `saída fornecida:28–33` |
+| 3 | 11/2026 | 0 | — | 0 | `0, []` | `0, []` | nao medivel aqui | `saída fornecida:34–39` |
+| 4 | 11/2026 | 0 | — | 0 | `0, []` | `0, []` | nao medivel aqui | `saída fornecida:40–45` |
+| `sem_empresa_no_recorte` | 11/2026 | 0 | — | 0 | [nao verificado] | [nao verificado] | nao medivel aqui | `saída fornecida:46–49` |
+
+Nos três lotes, `upload_em=nao_registrado`. `primeiro_job_em` é o horário do primeiro disparo registrado na auditoria. `saída fornecida:4,11–12` · [app/holerite/models.py:28](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/holerite/models.py:28) · [app/holerite/views.py:1712](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/holerite/views.py:1712)
+
+`Holerite` conta colaboradores distintos com registro, incluindo versões substituídas. O runner monta `/app/media` em `tmpfs`, por isso `Holerite_vigente_no_storage` e `Holerite_storage_indeterminado` também ficam como **nao medivel aqui**. Presença de PDFs em produção [nao verificado]. `r.md:seção 3` · [bin/sombra.sh:189](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sombra.sh:189)
+
+## 27/11 14:36 · sessao f06680829370 · INVENTARIO-PELA-REGRA · leitura · origem=Code
+
+# INVENTARIO-PELA-REGRA
+
+**Bateria escrita: 42 casos** — 15 de escala, 12 de ausência/férias e 15 de folha/export. Sete casos ficam com `lei:`. Os gabaritos partem do cadastro, das batidas e da regra, conforme L-110. [app/docs/LEIS.md:136]
+
+**Placar no HEAD `59600163ccc9cffb8f3ae148beede7cd7866ae86`: [nao verificado].** O workspace veio sem metadados Git. A bateria ficou no formato de casos, sem execução na pista e sem classificação de vermelhos. Nenhum arquivo foi criado, editado ou apagado. A primeira extração de `regua_cct.py` exibiu linhas de configuração junto de comentários. A extração seguinte isolou os comentários jurídicos usados no gabarito. [nao verificado]
+
+## Cadastro e leitura das batidas
+
+- **A** é empresa fictícia, regime `clt`, sem aplicação de CCT, praça Londrina/PR. **B** é empresa fictícia, regime `cct`, com aplicação vigente da CCT Vigilantes Londrina, PR000251/2026, para Londrina/PR. A praça integra o cadastro da aplicação. [CLAUDE.md:213–228]
+- **Comercial** é 6×1, seg–sex `08:00/12:00/13:00/17:00`, sáb `08:00/12:00`, domingo DSR. **Diurno** é 12×36 `07:00/12:00/13:00/19:00`. **Noturno** é 12×36 `19:00/21:00/22:00/07:00 D+1`, com pausa `21:00–22:00`. Nas escalas 12×36, a foto da grade declara a fase e o cadastro contém o instrumento válido do regime. As empresas, vínculos, calendários e horários são entradas fictícias dos casos. [app/docs/LEIS.md:71–75] [nao verificado]
+- Datas são de 2026, salvo indicação, e horários são locais UTC−3. `∅` significa nenhuma batida. Um intervalo de datas com um único padrão aplica esse padrão a cada dia indicado. Nos casos FOL por rubrica, completar os dias fora do recorte com as batidas da grade, mantendo os demais dados iguais no cenário e no controle. O gabarito dá a contribuição do recorte em minutos, exceto onde explicita dias, reais ou bytes. [app/docs/LEIS.md:107] [app/docs/LEIS.md:136]
+
+Fontes externas dos artigos e verbetes citados nas linhas. A Súmula 444 entra como referência histórica. O TST a cancelou em 2025. [CLT compilada](https://planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm), [Lei 605/49](https://www.planalto.gov.br/ccivil_03/leis/l0605.htm), [Súmulas do TST](https://www.tst.jus.br/documents/d/guest/livrointernet-12-pdf), [Resolução TST 225/2025](https://juslaboris.tst.jus.br/handle/20.500.12178/251919).
+
+## Escala
+
+| ID | Família | Escala | CADASTRO | BATIDAS | RESPOSTA DA REGRA | FONTE |
+|---|---|---|---|---|---|---|
+| ESC-01 | Escala | 6×1 comercial | A, vínculo comercial vigente de 26/10 a 01/11, domingo DSR | 26–30/10 `08:00/12:00/13:00/17:00`, 31/10 `08:00/12:00`, 01/11 `∅` | Previsto 480 por dia de 26 a 30, 240 no sábado, 0 no domingo. Total previsto e normais 2.640 cada. Domingo classificado como DSR. | L-024 `app/docs/LEIS.md:75`, CLT arts. 67 e 71 |
+| ESC-02 | Escala | 12×36 diurno | A, vínculo vigente em 09–11/11, foto com plantões em 09 e 11 e folga em 10 | 09 e 11/11 `07:00/12:00/13:00/19:00`, 10/11 `∅` | Previsto e normais por dia 660 / 0 / 660. Entre a saída de 09 e a entrada de 11, 2.160 min de descanso. | L-022/L-024 `app/docs/LEIS.md:73–75`, CLT art. 59-A |
+| ESC-03 | Escala | 6×1 → 12×36 diurno | A, competência 21/10–20/11, vínculo comercial até 03/11, diurno desde 04/11, foto com folga em 05/11 | 03/11 `08:00/12:00/13:00/17:00`, 04/11 `07:00/12:00/13:00/19:00`, 05/11 `∅` | Previsto e normais 480 / 660 / 0. O primeiro dia mantém a grade do vínculo que cobria 03/11. | L-020/L-021/L-024 `app/docs/LEIS.md:71–75`, `app/docs/DOSSIES.md:77–80` |
+| ESC-04 | Escala | 12×36 noturno CCT | B, vínculo vigente em 10–11/11, foto com início de plantão em 10 e folga em 11 | 10/11 `19:00/21:00/22:00`, 11/11 `07:00` | Em 10/11, previsto e normais 660, dos quais 420 de base para adicional noturno de 20%. Em 11/11, previsto 0 e nenhum novo turno. A saída às 07:00 pertence ao plantão de 10/11. | L-036/L-085 `app/docs/LEIS.md:84` e `app/docs/LEIS.md:117`, cl. 38-d `app/core/regua_cct.py:129–139`, cl. 10 `CLAUDE.md:236–237` |
+| ESC-05 | Escala | 12×36 noturno CLT | A, vínculo vigente e mesma fase e marcos de ESC-04 | 10/11 `19:00/21:00/22:00`, 11/11 `07:00` | Previsto pela grade e trabalhado de relógio 660 em 10/11. Diurno 240 de relógio. Noturno 420 de relógio = 480 legais na base de 20%. Das 05:00 às 07:00, adicional noturno 0. | L-035/L-085 `app/docs/LEIS.md:83` e `app/docs/LEIS.md:117`, CLT arts. 59-A, par. único, e 73, §§ 1º–2º |
+| ESC-06 | Escala | 12×36 diurno | A, vínculo mensalista, foto com plantão em 20/11 e feriado cadastrado nessa data, sem cláusula de dobra aplicável | 20/11 `07:00/12:00/13:00/19:00` | Previsto 660, normais 660, HE100 feriado 0. | L-086 `app/docs/LEIS.md:118`, CLT art. 59-A, par. único, `app/core/regua_cct.py:473–476` |
+| ESC-07 | Escala | 12×36 diurno | A, vínculo mensalista, feriado em 20/11, foto com 19/11 plantão, 20/11 folga e 21/11 plantão | 19 e 21/11 `07:00/12:00/13:00/19:00`, 20/11 `∅` | Em 20/11, folga, previsto 0, normais 0, falta 0 e HE100 feriado 0. | L-022/L-024 `app/docs/LEIS.md:73–75`, L-088 `app/docs/LEIS.md:120` |
+| ESC-08 | Escala | Personalizado sem intervalo | A, vínculo vigente em 09–13/11, grade `08:00–12:00` em 09, 10, 12 e 13, folga comum em 11, DSR no domingo, trabalho de 11 autorizado, sem compensação | 09–13/11 `08:00/12:00` em cada dia | `lei: Q1, rubrica e percentual para os minutos trabalhados em folga comum.` | L-024/L-086/L-095 `app/docs/LEIS.md:75`, `app/docs/LEIS.md:118` e `app/docs/LEIS.md:113`, CLT art. 59, Lei 605/49 art. 9º, Súmula 146 |
+| ESC-09 | Escala | Personalizado sem intervalo | A, vínculo vigente em 09–10/11, grade `18:00–22:00` em 09 e `08:00–12:00` em 10 | 09/11 `18:00/22:00`, 10/11 `08:00/12:00` | `lei: Q2, tratamento em rubrica do déficit de 60 min de interjornada.` Descanso observado 600 min, mínimo legal 660 min. | CLT art. 66, L-095 `app/docs/LEIS.md:113` |
+| ESC-10 | Escala | 6×1 comercial | A, vínculo vigente em 10/11, HE de saída autorizada no dia, sem compensação e sem HE fixa na grade | 10/11 `08:00/12:00/13:00/18:00` | Previsto 480, normais 480, trabalhado 540, HE50 60, HE100 0. | CLT art. 59, § 1º, L-024/L-097 `app/docs/LEIS.md:75` e `app/docs/LEIS.md:115` |
+| ESC-11 | Escala | 6×1 comercial | A, vínculo vigente em 10/11, pausa fechada, trecho extra integral reconhecido por decisão do admin, sem compensação | 10/11 `08:00/12:00/13:00/19:30` | Previsto 480, normais 480, trabalhado 630, HE50 150. Excesso de 30 sobre o limite de 120 min do art. 59 para a prorrogação ordinária. | CLT art. 59 e § 1º, L-097/L-115 `app/docs/LEIS.md:115` e `app/docs/LEIS.md:153`, `app/docs/DOSSIES.md:189` |
+| ESC-12 | Escala | 6×1 comercial | A, vínculo vigente de 26/10 a 01/11, domingo 01/11 é DSR e dia comum no calendário da massa, trabalho autorizado, sem folga compensatória | 26–30/10 `08:00/12:00/13:00/17:00`, 31/10 `08:00/12:00`, 01/11 `08:00/12:00` | Em 01/11, previsto 0, trabalhado 240, normais 0, HE50 0 e HE100 de DSR 240 como base da dobra. | CLT art. 67, Lei 605/49 arts. 1º e 9º, Súmula 146, L-086 `app/docs/LEIS.md:118` |
+| ESC-13 | Escala | 6×1 comercial | A, vínculo vigente em 20/11, feriado cadastrado, grade do dia com dispensa de trabalho, trabalho autorizado sem compensação | 20/11 `08:00/12:00/13:00/17:00` | Previsto 0, trabalhado 480, normais 0, HE50 0 e HE100 feriado 480 como base da dobra. | CLT art. 70, Lei 605/49 art. 9º, Súmula 146, L-086/L-095 `app/docs/LEIS.md:118` e `app/docs/LEIS.md:113` |
+| ESC-14 | Escala | 12×36 diurno histórico | A, praça Londrina/PR, vínculo histórico com ACT válido para 12×36 em 15/11/2016, foto com plantão previsto nesse feriado | 15/11/2016 `07:00/12:00/13:00/19:00` | `lei: Q3, regra temporal e rubrica da dobra histórica em plantão previsto diante da L-086.` | Súmula 444 histórica, Res. TST 225/2025, CLT art. 59-A, L-086 `app/docs/LEIS.md:118` |
+| ESC-15 | Escala | Personalizado sem intervalo | A, vínculo vigente em 09–10/11, grade `08:00–12:00` nos dois dias | 09/11 `08:00/12:00`, 10/11 `08:00/11:30` | Previsto 240 em cada dia. Normais 240 / 210, saída antecipada 0 / 30, HE 0 nos dois dias. Intervalo obrigatório 0 para a jornada de quatro horas. | CLT art. 71, § 1º, L-024/L-093 `app/docs/LEIS.md:75` e `app/docs/LEIS.md:111` |
+
+## Ausência e férias
+
+| ID | Família | Escala | CADASTRO | BATIDAS | RESPOSTA DA REGRA | FONTE |
+|---|---|---|---|---|---|---|
+| AUS-01 | Ausência/férias | Personalizado 6×1 sem intervalo | A, vínculo horista `08:00–12:00` de seg a sáb, DSR 01/11, sem HE habitual, falta de 29/10 decidida e descontável | 26–28 e 30–31/10 `08:00/12:00`, 29/10 e 01/11 `∅` | Falta 240 em 29/10, DSR descontado 240 em 01/11, DSR devido 0 nessa semana. | Lei 605/49 arts. 6º e 7º, alínea b, L-039/L-088 `app/docs/LEIS.md:87` e `app/docs/LEIS.md:120` |
+| AUS-02 | Ausência/férias | 6×1 comercial | A, vínculo vigente em 27/10, atestado válido aprovado para todo o dia previsto | 27/10 `∅` | Previsto 480, trabalhado 0, abono 480, falta descontada 0 e DSR descontado por esse evento 0. | Lei 605/49 art. 6º, §§ 1º–2º, L-088/L-089 `app/docs/LEIS.md:120–121` |
+| AUS-03 | Ausência/férias | 12×36 diurno | A, vínculo vigente em 09–11/11, plantões em 09 e 11, atestado válido cobre somente a folga de 10 | 09 e 11/11 `07:00/12:00/13:00/19:00`, 10/11 `∅` | Em 10/11, mantém folga. Previsto 0, abono 0, falta 0 e consumo de saldo 0. | L-022/L-089 `app/docs/LEIS.md:73` e `app/docs/LEIS.md:121` |
+| AUS-04 | Ausência/férias | 6×1 comercial | A, vínculo vigente em 28/10, atraso injustificado de entrada, nenhuma compensação, apuração do dia | 28/10 `08:30/12:00/13:00/17:00` | Previsto 480, normais 450, atraso 30, saída antecipada 0, falta integral 0. | L-039/L-088/L-093 `app/docs/LEIS.md:87`, `app/docs/LEIS.md:120` e `app/docs/LEIS.md:111` |
+| AUS-05 | Ausência/férias | 6×1 comercial | A, vínculo vigente em 28/10, pergunta de batida incompleta em aberto, sem ausência decidida | 28/10 `08:00` | Previsto 480, furo em aberto, nenhuma falta descontável lançada e nenhum DSR descontado por falta decidida nesse evento. | L-039/L-088 `app/docs/LEIS.md:87` e `app/docs/LEIS.md:120` |
+| AUS-06 | Ausência/férias | 6×1 comercial | A, vínculo mensalista desde 01/02/2025, período aquisitivo completo, zero faltas, férias concedidas 02–31/03, remuneração fixa de R$ 3.000, sem variáveis ou venda de dias | 02–31/03 `∅` em cada dia | 30 dias corridos. Férias brutas R$ 3.000, terço R$ 1.000, total R$ 4.000. Falta e atraso 0 no período. Pagamento até 28/02. | CLT arts. 129–130, 142 e 145, terço dado no enunciado, L-088 `app/docs/LEIS.md:120` |
+| AUS-07 | Ausência/férias | 6×1 comercial | A, vínculo vigente e direito adquirido, férias contínuas de 09/11 a 08/12, corte cadastrado no dia 21 | 09/11–08/12 `∅` em cada dia | Um período de 30 dias. No recorte 21/10–20/11, 12 dias de gozo. No recorte 21/11–20/12, 18 dias. Falta 0 nos dois recortes. | CLT arts. 130 e 134, L-026/L-088/L-090 `app/docs/LEIS.md:77`, `app/docs/LEIS.md:120` e `app/docs/LEIS.md:123` |
+| AUS-08 | Ausência/férias | 6×1 comercial | A, vínculo vigente e direito adquirido, férias de 28/09 a 27/10, feriado em 12/10 no calendário da massa | 28/09–27/10 `∅` em cada dia, 28/10 `08:00/12:00/13:00/17:00` | Gozo de 30 dias corridos, com 12/10 incluído. Retorno em 28/10, normais 480 no retorno, HE100 feriado 0 durante o gozo. | CLT arts. 130, I, 134 e 142, Lei 605/49 art. 9º |
+| AUS-09 | Ausência/férias | 6×1 comercial | A, vínculo vigente, afastamento previdenciário registrado de 26 a 30/10, intervalo de vigência explícito | 26–30/10 `∅`, 31/10 `08:00/12:00` | `lei: Q4, rubricas e efeitos do tipo previdenciário sobre remuneração e DSR.` Vigência do registro cobre 26–30/10 e termina antes do retorno. | `app/docs/DOSSIES.md:75`, L-039/L-104 `app/docs/LEIS.md:87` e `app/docs/LEIS.md:130` |
+| AUS-10 | Ausência/férias | 6×1 comercial | A, vínculo vigente, casamento em 16/11 comprovado, licença de 16 a 18/11 aprovada | 16–18/11 `∅`, 19/11 `08:00/12:00/13:00/17:00` | 480 abonados por dia de 16 a 18, total 1.440. Falta descontada 0 e DSR descontado por esse evento 0. Em 19/11, normais 480. | CLT art. 473, II, Lei 605/49 art. 6º, § 1º, alínea a, L-089 `app/docs/LEIS.md:121` |
+| AUS-11 | Ausência/férias | 6×1 comercial | A, vínculo vigente, licença particular aprovada de 27 a 28/10, cadastro sem natureza remuneratória declarada | 27–28/10 `∅`, 29/10 `08:00/12:00/13:00/17:00` | `lei: Q5, natureza remuneratória e efeito no DSR da licença particular aprovada.` | CLT art. 473, Lei 605/49 art. 6º, L-006/L-039 `app/docs/LEIS.md:64` e `app/docs/LEIS.md:87` |
+| AUS-12 | Ausência/férias | 6×1 comercial | A, vínculo mensalista, mesmas férias de AUS-07, base fixa R$ 3.000, corte no dia 21 | 09/11–08/12 `∅` em cada dia | `lei: Q6, apropriação no TXT do valor das férias e do terço quando o gozo atravessa o corte.` | CLT arts. 142 e 145, L-026/L-090/L-104 `app/docs/LEIS.md:77`, `app/docs/LEIS.md:123` e `app/docs/LEIS.md:130` |
+
+## Folha e export
+
+| ID | Família | Escala | CADASTRO | BATIDAS | RESPOSTA DA REGRA | FONTE |
+|---|---|---|---|---|---|---|
+| FOL-01 | Folha/export | 6×1 comercial | A, vínculo elegível em 27/10, dia comum, competência 21/10–20/11 | 27/10 `08:00/12:00/13:00/17:00` | Contribuição para horas normais 480. HE50, HE100, noturno, falta e atraso 0 no dia. | CLT art. 71, L-024/L-095 `app/docs/LEIS.md:75` e `app/docs/LEIS.md:113` |
+| FOL-02 | Folha/export | 6×1 comercial | A, vínculo elegível em 28/10, HE de saída autorizada, sem compensação | 28/10 `08:00/12:00/13:00/18:00` | Normais 480, HE50 60, HE100 0. | CLT art. 59, § 1º, L-095/L-097 `app/docs/LEIS.md:113` e `app/docs/LEIS.md:115` |
+| FOL-03 | Folha/export | 6×1 comercial | A, vínculo elegível de 26/10 a 01/11, 01/11 é DSR em dia comum, trabalho autorizado e sem compensação | 26–30/10 `08:00/12:00/13:00/17:00`, 31/10 `08:00/12:00`, 01/11 `08:00/12:00` | Em 01/11, HE100 de DSR 240, HE50 0, HE100 feriado 0. A dobra usa 240 min de base. | Súmula 146, Lei 605/49 arts. 1º e 9º, L-086/L-095 `app/docs/LEIS.md:118` e `app/docs/LEIS.md:113` |
+| FOL-04 | Folha/export | 6×1 comercial | A, vínculo elegível em 20/11, feriado cadastrado sem jornada prevista, trabalho autorizado e sem compensação | 20/11 `08:00/12:00/13:00/17:00` | HE100 feriado 480. HE100 de DSR, HE50 e normais 0 no recorte. | CLT art. 70, Lei 605/49 art. 9º, Súmula 146, L-086/L-095 `app/docs/LEIS.md:118` e `app/docs/LEIS.md:113` |
+| FOL-05 | Folha/export | 12×36 noturno CCT | B, vínculo elegível, plantão previsto com início em 10/11 | 10/11 `19:00/21:00/22:00`, 11/11 `07:00` | Normais 660. Rubrica `0025` com base de 420 min a 20%, já contidos nos 660 trabalhados. | L-036/L-085 `app/docs/LEIS.md:84` e `app/docs/LEIS.md:117`, cl. 38-d `app/core/regua_cct.py:129–139`, cl. 10 `CLAUDE.md:236–237` |
+| FOL-06 | Folha/export | Personalizado 6×1 sem intervalo | A, vínculo horista `08:00–12:00` seg–sáb, DSR em 01/11, semana integral cumprida, sem HE habitual | 26–31/10 `08:00/12:00` em cada dia, 01/11 `∅` | Normais trabalhadas na semana 1.440, DSR devido 240, DSR descontado 0. | Lei 605/49 arts. 6º e 7º, alínea b, L-095 `app/docs/LEIS.md:113` |
+| FOL-07 | Folha/export | Personalizado 6×1 sem intervalo | A, vínculo horista `08:00–12:00` seg–sáb, falta de 29/10 decidida e descontável | 26–28 e 30–31/10 `08:00/12:00`, 29/10 e 01/11 `∅` | Rubrica faltas com 240 min de desconto referentes a 29/10. Atraso 0. | L-039/L-088/L-095 `app/docs/LEIS.md:87`, `app/docs/LEIS.md:120` e `app/docs/LEIS.md:113` |
+| FOL-08 | Folha/export | Personalizado 6×1 sem intervalo | A, mesmo vínculo e falta decidida de FOL-07, DSR em 01/11, sem HE habitual | 26–28 e 30–31/10 `08:00/12:00`, 29/10 e 01/11 `∅` | Rubrica DSR descontado com 240 min referentes a 01/11. DSR devido 0 nessa semana. Desconto de falta de 29/10 permanece em sua rubrica. | Lei 605/49 arts. 6º e 7º, alínea b, L-039/L-095 `app/docs/LEIS.md:87` e `app/docs/LEIS.md:113` |
+| FOL-09 | Folha/export | 6×1 comercial | A, vínculo elegível em 29/10, atraso injustificado de entrada, sem compensação | 29/10 `08:30/12:00/13:00/17:00` | Atraso 30, normais 450, falta integral 0, saída antecipada 0. | L-039/L-093/L-095 `app/docs/LEIS.md:87`, `app/docs/LEIS.md:111` e `app/docs/LEIS.md:113` |
+| FOL-10 | Folha/export | 6×1 comercial | A, vínculo elegível de 17 a 20/11, HE autorizada em 18, atraso injustificado em 19, feriado fora da grade trabalhado em 20 sem compensação | 17/11 `08:00/12:00/13:00/17:00`, 18/11 `08:00/12:00/13:00/18:00`, 19/11 `08:30/12:00/13:00/17:00`, 20/11 `08:00/12:00/13:00/17:00` | Partes do trabalhado no recorte: 1.410 normais + 60 HE50 + 480 HE100 feriado = 1.950. Soma diária: 480 + 540 + 450 + 480 = 1.950. Atraso 30 na rubrica de desconto. | CLT arts. 59 e 70, Lei 605/49 art. 9º, L-093/L-095/L-114 `app/docs/LEIS.md:111`, `app/docs/LEIS.md:113` e `app/docs/LEIS.md:154` |
+| FOL-11 | Folha/export | 6×1 comercial | A, vínculo contínuo nos quatro dias de borda, competência 21/10–20/11, corte no dia 21, feriado de 20/11 fora da grade e trabalhado sem compensação | 20/10, 21/10 e 20/11 `08:00/12:00/13:00/17:00`, 21/11 `08:00/12:00` | Dos quatro dias, entram 21/10 com 480 normais e 20/11 com 480 HE100 feriado. 20/10 e 21/11 ficam nas respectivas competências vizinhas. | L-026/L-086/L-090 `app/docs/LEIS.md:77`, `app/docs/LEIS.md:118` e `app/docs/LEIS.md:123`, Lei 605/49 art. 9º |
+| FOL-12 | Folha/export | 12×36 noturno CCT | B, corte no dia 21, vínculo elegível, plantão na foto em 20/10 | 20/10 `19:00/21:00/22:00`, 21/10 `07:00` | A janela que termina em 20/10 recebe 660 normais e 420 de base na `0025`. A janela iniciada em 21/10 recebe contribuição 0 desse plantão. | L-026/L-036/L-085 `app/docs/LEIS.md:77`, `app/docs/LEIS.md:84` e `app/docs/LEIS.md:117`, cl. 10 `CLAUDE.md:236–237` |
+| FOL-13 | Folha/export | 6×1 comercial | A, vínculo elegível em 27/10, competência 21/10–20/11, mesma seleção, cadastro, lavra e opções nas duas gerações | 27/10 `08:00/12:00/13:00/17:00` nas duas leituras | Gerar duas vezes produz TXT com os mesmos bytes e os mesmos totais por rubrica. | L-099/L-114 `app/docs/LEIS.md:122` e `app/docs/LEIS.md:154` |
+| FOL-14 | Folha/export | 6×1 comercial | A, vínculo elegível em 29/10, competência 21/10–20/11 fora da guarda na massa, TXT já emitido. Controle com TXT de outra empresa na mesma competência e de A na competência anterior | No primeiro export, 29/10 `08:30/12:00/13:00/17:00`. Após correção válida, 29/10 `08:00/12:00/13:00/17:00` | Um TXT vigente para A nessa competência, com normais passando de 450 para 480 e atraso de 30 para 0 no recorte. Versão anterior intacta no histórico, aviso ao DP com antes/depois e controles com os mesmos vigentes. | L-093/L-113 `app/docs/LEIS.md:111` e `app/docs/LEIS.md:155–156`, `app/docs/DOSSIES.md:118–122` |
+| FOL-15 | Folha/export | 6×1 comercial e 12×36 noturno CCT | A e B, vínculos elegíveis e competência 21/10–20/11, entradas completas de FOL-01 a FOL-09 | Por vínculo, batidas dia a dia de FOL-01 a FOL-09 | `lei: Q7, contrato do leiaute TXT para serializar as rubricas, unidades, arredondamento, zeros e descontos.` | L-036/L-095 `app/docs/LEIS.md:84` e `app/docs/LEIS.md:113`, `app/docs/DOSSIES.md:118–122` |
+
+## Propriedades fixas
+
+1. **As partes somam o total.** Conferir a soma na mesma unidade e janela. As parcelas exclusivas de trabalho somam o trabalhado. Adicional noturno incide sobre minutos já trabalhados. DSR remunerado e descontos têm seus próprios totais. [app/docs/LEIS.md:95] [app/docs/LEIS.md:113] [app/docs/LEIS.md:154]
+2. **Idempotência.** Repetir a operação com os mesmos dados, competência, seleção e opções dá o mesmo resultado. No export, FOL-13 compara os bytes. [app/docs/LEIS.md:122] [app/docs/LEIS.md:154]
+3. **O previsto vem da grade e do vínculo que cobre o dia.** Mantida a grade, mudar as batidas preserva o previsto. A comparação de ESC-15 exerce essa propriedade. [app/docs/LEIS.md:71–75] [app/docs/DOSSIES.md:77–80]
+4. **Todo leitor lê o mesmo número.** Espelho, PDF, cartão, fechamento, TXT, calendário e app leem a mesma lavra para a mesma rubrica, versão e janela. [app/docs/LEIS.md:60] [app/docs/LEI
+
+[truncado em 20000 de 22182 caracteres]
+
+## 27/11 14:36 · sessao 307b9e46f7f3 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
+
+Corrigi o **instrumento do smoke**. O Chromium mede o documento principal a 360 ou 1366 px e entrega o resultado por pipes locais. A sonda exige uma medição concluída e informa o motivo quando falha. O teste continua cobrando painel inteiro na viewport, sem recorte, ancorado e sem interseção com o gatilho. Defeito adicional no painel ou no gatilho do produto **[nao verificado]**. [smoke_feriado_chromium.js:59](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/smoke_feriado_chromium.js:59) · [test_smoke_clique_feriado_vira_trabalho.py:265](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:265) [nao verificado]
+
+| Cenário da c6 | Causa sustentada pelo código e pelo anexo |
+|---|---|
+| `base.html`, página, 360 | O leitor procurava o veredito na janela externa, que só o criava ao receber `postMessage` do iframe. O anexo mostra que nem o primeiro registro chegou ao leitor. Se o `load` interno rodou ou se a mensagem ficou pendente **[nao verificado]**. `c6 app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:53, :123, :503` |
+| `base.html`, drawer, 360 | Mesmo caminho de leitura. O primeiro registro era emitido antes da chamada que abre o drawer. Estado do drawer e presença do gatilho **[nao verificado]**. `c6 app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:123, :136, :503` |
+| `base_app.html`, página, 360 | Mesmo caminho de leitura, antes da busca pelo gatilho. Presença e geometria do gatilho **[nao verificado]**. `c6 app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:123, :159, :503` |
+| `base_app.html`, drawer, 360 | Mesmo caminho de leitura. O resultado não distingue falha no `load` interno de falha na entrega da mensagem. Estado do drawer **[nao verificado]**. `c6 app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:53, :123, :136` |
+| `base_app.html`, drawer, 1366, lateral | O campo, o formulário e o `summary` estavam no DOM. A leitura pegou o registro anterior à geometria, e o `.get()` do Python fez as chaves ausentes aparecerem como `None`. O `requestAnimationFrame` sob tempo virtual é o ponto suspeito da espera **[nao verificado]**. A abertura física do drawer também ficou **[nao verificado]**. `c6 app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:150, :170, :185, :511` · [test_smoke_chromium.py:115](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_chromium.py:115) |
+
+A grade `420px 1fr` põe a coluna de calendário da ficha real além dos 360 px. O caso de página do smoke já monta o fragmento real do calendário diretamente em cada casca. Esse é o recorte para cobrar o aval do componente a 360 px. A ficha inteira requer uma verificação separada. [detalhe.html:87](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:87) · [detalhe.html:202](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/colaboradores/detalhe.html:202) · [smoke:32](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:32)
+
+**Alterações** em `test_smoke_clique_feriado_vira_trabalho.py::medeFeriado`, `_mede`, `_confere_medidas` e `_testa_cenarios`, além do novo `smoke_feriado_chromium.js::comando` e `mede`. O diff contém **0 `try/catch` novos** e **0 linhas `^\+.*except`**. Conferi a sintaxe Python e JS via V8 para o JavaScript. `node --check` retornou 127 porque `node` está ausente neste ambiente. Suite e mutantes no Chromium **[nao verificado]**. [smoke:423](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:423) · [driver:51](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/smoke_feriado_chromium.js:51) [nao verificado]
+
+**Comandos para o Code.** O comando do módulo reproduz o RED na c6. Na cópia corrigida, cada `test_MORDE_*` exige que o mutante provoque a falha específica. [smoke:446](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:446) · [smoke:449](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:449)
+
+```bash
+wt=/home/ronald/wt-codex-feriado-botao-cortado-112417
+classe=core.tests.test_smoke_clique_feriado_vira_trabalho.SmokeCliqueFeriadoViraTrabalhoTest
+
+bash bin/suite.sh --dir "$wt" --only "core.tests.test_smoke_clique_feriado_vira_trabalho" --parallel 1
+bash bin/suite.sh --dir "$wt" --only "$classe.test_MORDE_viewport_do_host" --parallel 1
+bash bin/suite.sh --dir "$wt" --only "$classe.test_MORDE_gatilho_ausente" --parallel 1
+bash bin/suite.sh --dir "$wt" --only "$classe.test_MORDE_drawer_fechado" --parallel 1
+bash bin/suite.sh --dir "$wt" --only "$classe.test_MORDE_excecao_na_medicao" --parallel 1
+bash bin/suite.sh --dir "$wt" --only "$classe.test_MORDE_painel_fora_da_viewport" --parallel 1
+bash bin/suite.sh --dir "$wt" --only "$classe.test_MORDE_painel_sobre_o_gatilho" --parallel 1
+node --check "$wt/app/core/tests/smoke_feriado_chromium.js"
+```
+
+## 27/11 14:35 · sessao 191e31ef61cc · INVENTARIO-PELA-REGRA · leitura · origem=Code
+
+**PAREI no DIFF.** Disponibilize os holerites finais ou o relatório de fechamento do Domínio, por colaborador e rubrica, das empresas 2, 3 e 4 para **10/2026 e 11/2026**. No código inspecionado, o PDF é a única fonte documental do DP que encontrei. O acesso ao banco e ao storage da Sombra ficou indisponível nesta sessão. Cobertura dos PDFs nas seis combinações [nao verificado]. `app/holerite/models.py:6–24,103–125` `app/folha/catalogo_rubricas.py:1–14` `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:63–67`
+
+**Outubro tem também um bloqueio no lado do TXT.** O corte registra pagamento fora do sistema para as três empresas. Em 25/11, o relato registrou zero `ExportacaoDominio` para 10/2026 e marco `paga` nas empresas 2 e 3. Esse marco comprova que a consulta encontrou registro de holerite de lote publicado, sem medir cobertura, presença do PDF no storage ou valores por rubrica. A lista autorizada naquele dia compara o cálculo local antes e depois. Para o DIFF solicitado, falta também o TXT histórico de outubro, caso tenha sido entregue por outro meio. `app/docs/CORTES.md:573` `app/docs/RELATO.md:317,330` `app/ponto/services/fechamento.py:1542–1564`
+
+## 1. Onde mora o fechamento do DP
+
+| Candidato | O que guarda e como identifica a competência |
+|---|---|
+| `LoteHolerite` | `arquivo_original` aponta para o PDF integral recebido. A competência vem do mês e ano do formulário, gravados em `competencia_mes` e `competencia_ano`. A empresa pode ser nula e o PDF pode abranger várias empresas. `detalhe.itens` guarda o placar por página com identificação, status e `colaborador_id` quando houve casamento. Rubricas, horas e valores ficam no PDF, sem campos estruturados no placar. `app/holerite/models.py:6–30` `app/holerite/views.py:1728–1733,1764–1779` `app/holerite/motor.py:347–369,398–409` |
+| `Holerite` | `arquivo` aponta para o PDF individual, com `colaborador_id`, `competencia_mes`, `competencia_ano`, sequência, versão e vínculo opcional com o lote. No lote PDF, `empresa_folha` vem do CNPJ impresso. O upload avulso usa a empresa do cadastro no ato. O ZIP legado grava os PDFs individuais e deixa os campos de lote e empresa da folha vazios. Os números do recibo ficam no PDF. `app/holerite/models.py:103–125,152–182` `app/holerite/motor.py:465–483` `app/holerite/views.py:1193–1203,1240–1266` |
+| Import do Domínio e tabela de rubricas | O import encontrado lê a **listagem de eventos** em TSV e grava `RubricaCatalogo` com código, descrição, natureza, unidade, percentual e grupo. Descarta empresa e filial e devolve contagens de criadas e ignoradas. `CatalogoDominio` guarda homologação por empresa e código. `RubricaDominio` configura o código e a unidade do nosso TXT por evento e empresa, com cadastro global possível. Esses registros não têm colaborador, competência ou valor fechado. Não encontrei tabela de rubricas extraídas do holerite nem import de retorno com valores fechados. `app/folha/catalogo_rubricas.py:1–46` `app/folha/models.py:46–68,248–278` `app/holerite/motor.py:347–369,479–483` |
+| Pauta DP com “pago” | Em `[PAGO X DEVIDO - EXPORTADA]`, “pago” são os campos do `FechamentoMensal` local e “devido” é o recálculo local. A pauta pede conferência no Domínio. `[PASSIVO-VALIDADO]` também usa o antes e o depois do gravado local. A âncora é `empresa:AAAA-MM`, o ID do colaborador aparece no texto e os campos e valores vão nas mensagens filhas. `feito_em` registra que o destinatário resolveu a pauta. `app/pautas/management/commands/pauta_pago_x_devido_exportada.py:5–14,53–67,130–140,169–177` `app/chamados/services/passivo_validado.py:157–179,198–215` `app/pautas/models.py:82–102` |
+
+## 2. Parsers e rubricas
+
+`parser_dominio` e `parser_config` devolvem páginas com identificador, CNPJ e bytes do PDF. O parser Domínio também identifica nome, tipo de página e, quando aplicável, dados de identificação do comunicado. A competência é passada ao motor a partir do lote. A rota `POST /holerite/lote/` dispara `processar_lote_holerite` na prévia e na publicação, e o comando chama `motor.processar`. O histórico de produção registra seis POSTs nessa rota e 14 lotes no formato Domínio, zero no configurável. Os parsers de PDF não devolvem código de rubrica, referência de horas ou valor. `app/holerite/motor.py:23–43,84–165,295–304` `app/holerite/urls.py:37` `app/holerite/views.py:1702–1716,1750–1783` `app/holerite/management/commands/processar_lote_holerite.py:85–93` `app/docs/RELATO.md:5360–5362`
+
+O leitor de TXT `partes_da_linha` devolve matrícula, competência `AAAAMM`, código de rubrica e valor bruto no registro `10`, e data no registro `11`. `agregar_export_dominio` soma o registro `10` por matrícula e rubrica. O DIFF que o chama recebe duas `ExportacaoDominio`, ambas do nosso lado. O emissor usa o cadastro ativo da empresa com precedência sobre o global e grava quatro posições para o código, horas em centésimos e dias inteiros. `app/folha/export.py:34–45,224–255,310–321,732–753,993–1000` `app/folha/haiku_export.py:79–107`
+
+| Nosso TXT, códigos demonstrados no código ou nos testes | Rubrica no fechamento DP de 10/2026 e 11/2026 | [nao verificado]
+|---|---|
+| `0150` HE 50%. `app/folha/tests/test_sm1_monster_export.py:158–164` | [nao verificado] |
+| `0200` HE 100% normal e feriado, também folga trabalhada no cadastro global da migração. `app/folha/tests/test_sm1_monster_export.py:162–164` `app/folha/migrations/0008_folga_trabalhada_rubrica_200.py:1–11` | [nao verificado] |
+| `0025` adicional noturno. `app/folha/tests/test_sm1_monster_export.py:165` | [nao verificado] |
+| `0243` e `0270` intrajornada, exemplos no teste de cadastro global e configuração por empresa. `app/folha/tests/test_sm1_monster_export.py:72–83,166` | [nao verificado] |
+| `8069` atraso + saída antecipada. `app/folha/export.py:383–399,449–452` | [nao verificado] |
+| `8792` falta em dias, com registros `11` para as datas. `app/folha/export.py:233–236` `app/folha/tests/test_sm1_monster_export.py:168–170` | [nao verificado] |
+| DSR e reflexo ficam a cargo do Domínio. A evidência histórica de junho cita `237` e `854` com referência em dias. `app/folha/export.py:453–459` | [nao verificado] |
+
+## 3. Sonda de leitura para a Sombra
+
+O modelo não registra a data exata do upload. A sonda mostra `upload_em=nao_registrado` e o horário do primeiro disparo encontrado na auditoria. A trilha é de melhor esforço e esse primeiro registro pode ser de publicação. `iniciado_em` é sobrescrito, `publicado_em` carimba a publicação e a descrição que distingue os disparos é mascarada na Sombra. `app/holerite/models.py:28–30,53–60` `app/holerite/views.py:1712–1716,1759–1761,1773–1783` `app/holerite/management/commands/processar_lote_holerite.py:62–69,126–130` `app/core/models.py:295–307` `app/core/observ.py:94–105` `bin/sombra_regras_pessoais.py:93`
+
+A sonda associa lotes pela empresa registrada, pelo vínculo com recibos ou pelo CNPJ do placar. Um lote multiempresa pode aparecer em mais de uma empresa. `Holerite` conta colaboradores distintos com registro, inclusive histórico, e `Holerite_vigente_no_storage` conta quem tem pelo menos um recibo vigente presente no storage visível. A atribuição usa a empresa do documento, com o CNPJ armazenado como alternativa quando a FK está vazia. As pautas marcadas e os IDs dos nossos TXT servem como trilha local. A máscara da Sombra preserva os marcadores das pautas e mascara o conteúdo dos TXT. `app/holerite/models.py:13–24,115–125,153–175` `app/holerite/motor.py:349–352,398–409,479–483` `bin/sombra_regras_pessoais.py:22–33,83–85,102–106`
+
+**`no_storage=0` vale para o storage visível ao processo.** O runner padrão monta `/app/media` em `tmpfs`, e o backend é `FileSystemStorage`. A checagem nesse runner não estabelece se o PDF existe no acervo de produção. O bloco é para um shell Django da Sombra já inicializado. Sintaxe conferida em memória, execução no banco e no storage [nao verificado]. `bin/sombra.sh:182–191` `app/config/settings/base.py:101–102` `app/config/settings/saas.py:109–112` `app/config/settings/sombra.py:27,47–60` `app/chamados/tests/cef_c3_sonda.py:16–22`
+
+```python
+from django.conf import settings
+from django.core.exceptions import SuspiciousFileOperation
+from django.db import connection, transaction
+from django.db.models import Min, Q
+from django.utils import timezone
+from django_tenants.utils import schema_context
+
+from colaboradores.models import Empresa
+from core.models import LogAuditoria
+from folha.models import ExportacaoDominio
+from holerite.models import Holerite, LoteHolerite
+from pautas.models import ANCORA_COMPETENCIA, Pauta
+
+if getattr(settings, "HASNER_SOMBRA", False) is not True:
+    raise SystemExit("PAREI: HASNER_SOMBRA ausente")
+db = connection.settings_dict
+if (db["NAME"], db["HOST"]) != ("sombra", "sombra_db"):
+    raise SystemExit("PAREI: conexao fora da Sombra")
+if connection.in_atomic_block or not connection.get_autocommit():
+    raise SystemExit("PAREI: a sonda exige transacao propria")
+
+
+def linha(emp, comp, fonte, n, **dados):
+    sufixo = "".join(f"|{k}={v}" for k, v in dados.items())
+    print(f"DP|emp={emp}|comp={comp}|fonte={fonte}|n={n}{sufixo}")
+
+
+def ids(qs):
+    return list(qs.order_by("pk").values_list("pk", flat=True))
+
+
+def no_storage(arquivo):
+    if not arquivo.name:
+        return 0
+    try:
+        return int(arquivo.storage.exists(arquivo.name))
+    except (OSError, SuspiciousFileOperation):
+        return "indeterminado"
+
+
+def listar_lotes(emp, comp, lotes, primeiro_job):
+    linha(emp, comp, "LoteHolerite", len(lotes))
+    for lote in lotes:
+        disparo = primeiro_job.get(lote.pk)
+        linha(emp, comp, "LoteHolerite_arquivo", 1, id=lote.pk,
+              upload_em="nao_registrado", publicado=int(lote.publicado_em is not None), [nao verificado]
+              primeiro_job_em=disparo.isoformat() if disparo else "-",
+              no_storage=no_storage(lote.arquivo_original))
+
+
+def contar_holerites(emp, comp, recibos):
+    colabs, com_pdf, indeterminados = set(), set(), set()
+    docs = recibos.order_by("pk").only(
+        "pk", "colaborador_id", "arquivo", "substituido_em"
+    )
+    for doc in docs.iterator(chunk_size=500):
+        colabs.add(doc.colaborador_id)
+        if doc.substituido_em is None:
+            existe = no_storage(doc.arquivo)
+            if existe == 1:
+                com_pdf.add(doc.colaborador_id)
+            elif existe == "indeterminado":
+                indeterminados.add(doc.colaborador_id)
+    linha(emp, comp, "Holerite", len(colabs))
+    linha(emp, comp, "Holerite_vigente_no_storage", len(com_pdf))
+    linha(emp, comp, "Holerite_storage_indeterminado",
+          len(indeterminados - com_pdf))
+
+
+empresas = (2, 3, 4)
+ano = 2026
+with schema_context("juliani"), transaction.atomic():
+    with connection.cursor() as cursor:
+        cursor.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
+    medido_em = timezone.localtime(timezone.now()).isoformat()
+    cnpjs = dict(Empresa.objects.filter(pk__in=empresas).values_list("pk", "cnpj"))
+
+    for mes in (10, 11):
+        comp = f"{mes:02d}/{ano}"
+        periodo = dict(competencia_mes=mes, competencia_ano=ano)
+        lotes = LoteHolerite.objects.filter(**periodo).only(
+            "pk", "arquivo_original", "publicado_em" [nao verificado]
+        ).order_by("pk")
+        recibos = Holerite.objects.filter(**periodo)
+        primeiro_job = dict(
+            LogAuditoria.objects.filter(
+                modelo="LoteHolerite", acao="lote_holerite_job",
+                objeto_id__in=lotes.values("pk").order_by(),
+            ).order_by().values("objeto_id").annotate(
+                primeiro=Min("criado_em")
+            ).values_list("objeto_id", "primeiro")
+        )
+        lotes_atribuidos = set()
+        for emp in empresas:
+            pertence = Q(empresa_folha_id=emp)
+            cnpj = cnpjs.get(emp)
+            if cnpj:
+                pertence |= Q(empresa_folha_id__isnull=True, cnpj_folha=cnpj)
+            docs = recibos.filter(pertence)
+            lotes_da_empresa = (
+                Q(empresa_id=emp)
+                | Q(pk__in=docs.filter(lote_id__isnull=False).order_by().values("lote_id"))
+            )
+            if cnpj:
+                lotes_da_empresa |= Q(detalhe__itens__contains=[{"cnpj": cnpj}])
+            lotes_emp = list(lotes.filter(lotes_da_empresa))
+            lotes_atribuidos.update(lote.pk for lote in lotes_emp)
+            listar_lotes(emp, comp, lotes_emp, primeiro_job)
+            contar_holerites(emp, comp, docs)
+
+            pautas = ids(Pauta.objects.nao_canceladas().filter(
+                ancora_tipo=ANCORA_COMPETENCIA, ancora_id=f"{emp}:{ano}-{mes:02d}",
+                destinatario_departamento="dp", pai__isnull=True,
+            ).filter(
+                Q(texto__startswith="[PAGO X DEVIDO - EXPORTADA]")
+                | Q(texto__startswith="[PASSIVO-VALIDADO]")
+            ))
+            linha(emp, comp, "PautaDP_trilha_local", len(pautas), ids=pautas)
+            txts = ids(ExportacaoDominio.objects.filter(empresa_id=emp, mes=mes, ano=ano))
+            linha(emp, comp, "ExportacaoDominio_nosso_TXT", len(txts), ids=txts)
+
+        listar_lotes("sem_empresa_no_recorte", comp, list(
+            lotes.filter(empresa_id__isnull=True).exclude(pk__in=lotes_atribuidos)
+        ), primeiro_job)
+        sem_empresa = recibos.filter(empresa_folha_id__isnull=True).exclude(
+            cnpj_folha__in=[cnpj for cnpj in cnpjs.values() if cnpj]
+        )
+        contar_holerites("sem_empresa_no_recorte", comp, sem_empresa)
+
+print(f"MEDIDO_EM|{medido_em}")
+```
 
 ## 27/11 14:34 · sessao 9705108b3e90 · PAR-PELO-TURNO · verificador · origem=Code
 
@@ -504,221 +847,4 @@ O **segundo julgamento do dia** permanece na herança do motor, com o mesmo cód
 - **Selo do PDF vermelho.** Executei o método existente em memória lendo cada arquivo real. Main e c1v10 verdes, c1v11 falha em `grade_espelho_janela`, porque a chamada foi movida para o espelho. O RED comportamental deve exigir que a informação da grade atravesse o espelho e marque a batida no papel. `app/relatorios/tests/test_cartao_pela_celula.py:170–183` · `59600163c:app/relatorios/pdf_espelho.py:193` · `d39a4bbdf:app/relatorios/pdf_espelho.py:189` · `app/ponto/services/espelho.py:1273–1277,1314–1316` · `app/relatorios/pdf_espelho.py:244–253`
 - **Persistem dois cálculos de `datas_saida_orfa` em memória.** O PDF escreve sua leitura, aplica `folha_manda` e depois sobrescreve a chave com a leitura do espelho. A chave entra na decisão de dias em aberto. `app/ponto/services/espelho.py:622–628` · `app/relatorios/pdf_espelho.py:229–233,255–261` · `app/relatorios/cartao_pela_celula.py:419–422` · `app/ponto/services/dia_decidido.py:357`
 
-## 27/11 14:04 · sessao 15ce9c8d1d41 · - · - · origem=Ronald (tmux)
-
-**PDF — REPROVADO.** A soma compartilhada cura 16 h × 8 h e o retorno vazio alinha linhas e total quando a janela se encerra antes do início. Os REDs ficaram vermelhos na base, verdes na cura e voltaram a falhar com os mutantes. No caso de 16 h × 8 h, Comercial e TurnoPartido deram 8 h × 8 h no main, 16 h × 8 h na base e 8 h × 8 h na cura. `app/ponto/tests/test_par_pelo_turno_c1v11.py:111–146` · `app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:79–90` · `app/relatorios/pdf_espelho.py:184–222,249–260` · `app/ponto/services/espelho.py:452–456`
-
-- **Teto por instante piorou.** Em `[D,D]`, `D 22:00 E → D+1 14:00 S`, emitido às 02:00, main dá 0 h e um aberto, c1v11 dá 16 h e nenhum aberto, nos motores Comercial e 12x36. Ambos desenham as duas marcas. O main exclui a saída do cálculo pelo corte de D+1 ao meio-dia, e a cura amplia a carga sem passar o instante. RED deve exigir 0 h e um aberto antes das 14:00, e 16 h e nenhum aberto a partir das 14:00. `main:app/relatorios/pdf_espelho.py:264–272` · `app/relatorios/pdf_espelho.py:184–187,222–224,258` · `app/ponto/services/espelho.py:1031,1168–1171,1234–1238` · `app/ponto/turnos.py:3031–3044`
-- **A falta com dois significados passou a atingir competência aberta com folha.** Em competência pedida `[D,D+3]`, emissão `D+1 02:00`, D previsto sem marcas e folha disponível com zero falta decidida, main dá `dias_falta=0` e `datas_em_aberto=[D]`. A cura dá `dias_falta=1` e `datas_em_aberto=[D]`, que o papel imprime nos dois indicadores. O espelho aplica a janela efetiva `[D,D]`, e o PDF só aplica a pedida quando ela coincide com a efetiva. RED deve cobrar o dia em aberto e zero faltas com a competência pedida ainda em curso. `main:app/relatorios/pdf_espelho.py:624–628` · `app/relatorios/pdf_espelho.py:238–240,255–258,405–411` · `app/ponto/services/espelho.py:1300–1301` · `app/relatorios/cartao_pela_celula.py:27–34`
-- **A sobreposição mistura duas leituras da mesma folha.** Com `folha_manda` real, primeira resposta de 8 h trabalhadas e previsto `None`, segunda de 10 h trabalhadas e 9 h previstas, main dá 10 h, 9 h e saldo +1 h. A cura dá 8 h, 9 h e saldo −1 h, com a fonte rotulada `folha`. RED deve cobrar uma leitura e as duas parcelas da mesma foto. `main:app/relatorios/pdf_espelho.py:596–602,624–628` · `app/ponto/services/espelho.py:1300–1301` · `app/relatorios/pdf_espelho.py:255–260` · `app/relatorios/cartao_pela_celula.py:201–212,320–346`
-
-Os resultados foram reproduzidos em memória com as fontes das cópias, motores reais e portas externas simuladas. ORM e produção [nao verificado]. `app/ponto/tests/test_par_c1v8_reds.py:19–64,103–108` · `app/ponto/tests/test_par_pelo_turno_c1v11.py:24–52`
-
-## 27/11 13:58 · sessao 678126566b8c · PAR-PELO-TURNO · construtor · origem=Code
-
-## Recibo PAR-PELO-TURNO c1v11
-
-A cura está na cópia, com HEAD em `d39a4bbdf650e91cc5448120a46f17bae1435388`. O log registra **6 falhas por asserção antes da cura, 9 testes verdes depois e 10 reversões que falharam por asserção**. A varredura do diff, incluindo arquivos novos, contou **0** linhas para `^\+.*except`. O recibo fica nesta resposta pelo limite de escrita em `app/`. [Log da execução](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:1) · [L-126](/home/ronald/wt-codex-par-pelo-turno-111717/app/docs/LEIS.md:147)
-
-| Item | Antes → cura → reversão |
-|---|---|
-| **1. Universo** | Com `batidas_apuraveis` vazia, a folha apurava 8 h e o espelho recebia `[1, 2]`. Agora ambos respeitam a porta e retornam 0 h e `[]`. `universo` restaura os valores da base. [turnos.py::_carregar_turnos_do_colab](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:1900) · [Reversão](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:140) |
-| **2. Fatia** | No caso do DNA `23:59–22:45`, o motor recebia `[1]`, apurava 0 h e deixava 1 aberto. Agora recebe `[1, 2]`, fecha 26 h e deixa 0 abertos. O pad civil admite `ini−1..fim+1`, com admissão adicional pelo dia julgado do PK. `fatia_pk` restaura a perda da saída. `fatia_pad` readmite os PKs externos. [fechamento.py::apurar_por_fatia](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:264) · [Reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:164) |
-| **3. Resumo do PDF** | PDF 16 h e espelho 8 h → ambos 8 h. O papel lê as horas, os abertos e as inconsistências do resumo do espelho. `pdf_resumo` restaura 16 h e `pdf_espuria` volta a contar a entrada espúria como aberta. O campo `turnos` do PDF segue a geometria, conforme a triagem do caso 2 × 1. [pdf_espelho.py::_coletar_dados_espelho](/home/ronald/wt-codex-par-pelo-turno-111717/app/relatorios/pdf_espelho.py:222) · [espelho.py::montar_dias e espelho_do_colab](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/espelho.py:1274) · [Reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:218) |
-| **4. PDF de hoje** | Zero linhas com 8 h → zero linhas com 0 h. O teto de ontem vale para as linhas e o total. A aplicação de folha no papel usa a competência pedida quando ela cabe inteira nesse teto. `pdf_hoje` restaura a divergência. [pdf_espelho.py::_coletar_dados_espelho](/home/ronald/wt-codex-par-pelo-turno-111717/app/relatorios/pdf_espelho.py:183) · [Reversão](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:244) |
-| **5. GET de justificativas** | Às 15:00, `[]` → entrada **14:57** oferecida. Às 22:30, a saída entra no julgamento e encerra a oferta. `api_ate` restaura o `[]` às 15:00. O RED existente do eco continua oferecendo 14:57. [api/views.py::api_justificativas](/home/ronald/wt-codex-par-pelo-turno-111717/app/api/views.py:2024) · [turnos.py::_julgar_batidas_da_janela e dia_das_batidas](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/turnos.py:3047) · [Reversão](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:296) |
-| **6. Reversores** | Reancorei `folha_so_uma_virada` e `espelho_so_uma_virada`. Ambos saíram de zero ocorrências de âncora para falhar na asserção do leitor correspondente, com `[1]` onde se exige `[1, 2]`. Reancorei também `fatia_so_uma_virada`, que perde o PK 21. [test_par_pelo_turno.py::_mutacao](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/test_par_pelo_turno.py:869) · [Reversões](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:320) |
-| **7. Custo por colaborador** | Na carga chamada pelo laço da frota, **5 → 5** avaliações de `QuerySet` com par fechado e **3 → 3** sem marcas. A contagem usa os carregadores reais com avaliação em memória. SQL executado em banco **[nao verificado]**. [Chamada no laço](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/services/fechamento.py:636) · [Medição](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_verificacao.py:96) |
-
-### Reprodução a partir de `app/`
-
-```bash
-v() { PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v11_verificacao "$@"; }
-
-v todos --base
-v todos
-
-v universo --mutante
-v fatia_pk --mutante
-v fatia_pad --mutante
-v pdf_resumo --mutante
-v pdf_hoje --mutante
-v pdf_espuria --mutante
-v api_ate --mutante
-v folha_so_uma_virada
-v espelho_so_uma_virada
-v fatia_so_uma_virada
-
-v custo --base
-v custo
-```
-
-Também passaram 7 direcionados c1v10, 22 selos e 207 testes vizinhos em memória. Suíte Django com ORM e produção **[nao verificado]**. A certificação cabe ao Code e ao Opus final. [Direcionados e selos](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v11_red.txt:394) · [Runner dos vizinhos](/home/ronald/wt-codex-par-pelo-turno-111717/app/ponto/tests/par_pelo_turno_c1v9_verificacao.py:154) · [L-126](/home/ronald/wt-codex-par-pelo-turno-111717/app/docs/LEIS.md:147) [nao verificado]
-
-## 27/11 13:45 · sessao de8d2d4045a1 · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-**FERIADO-BOTAO-CORTADO c6 implementada na cópia.** A certificação fica com Code e opus. O smoke completo no Chromium e o ensaio do dia 20 em produção ficam [nao verificado].
-
-| Item | Cura e resultado local |
-|---|---|
-| **P1 · Fechamento direto** | `fecharDrawer()` emite `drawer:fechou`. O popover recebe o evento e reutiliza `fecha()` para recolocar o painel no pai original e deixar o foco fora do drawer. Na simulação V8, a c5 deixou o painel no `body`. A c6 fechou e devolveu o nó. Os dois mutantes reproduziram, respectivamente, o painel solto e o foco no gatilho do drawer fechado. `app/templates/core/_drawer_generico.html:71`, `app/static/js/popover-acao.js:140`, `app/static/js/popover-acao.js:168`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:343` |
-| **P2 · Altura curta** | `posiciona()` tenta a lateral quando o espaço vertical livre só comporta a borda e o padding. Se a lateral comporta a largura calculada, o painel abre com rolagem interna. Se também falta espaço lateral, o componente recolhe o painel. Na simulação, a c5 sobrepôs o gatilho em 10 px. A c6 abriu ao lado, com 2 px de separação, e recolheu o painel no caso sem espaço. Um mutante restaurou os 10 px de sobreposição e o outro abriu até `x=1676` numa área útil que terminava em `x=1358`. `app/static/js/popover-acao.js:45`, `app/static/js/popover-acao.js:106`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:230` |
-| **P3 · 360 px** | O smoke exige viewport interna de 360 px, painel inteiro, ancorado e submit atingível na página e no drawer das duas cascas. Na simulação, c5 e c6 mantiveram a borda direita em `x=328`. O mutante levou a borda a `x=524`. Os quatro cenários no Chromium ficam [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:53`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:457`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:472` |
-| **P4 · Console** | Com a medição válida e um erro injetado, as asserções extraídas da c5 passaram indevidamente. As da c6 passaram com console limpo e falharam com `Erro de console durante o smoke` após a injeção. O ensaio usa os estáticos da cópia e desativa o bootstrap PWA somente no HTML de teste em `file://`. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:39`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:354`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:407`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:485`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:513` |
-
-Os pontos de teste alterados são `_serve_popover_js()` por meio da tabela de mutantes e `test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas()` com a sonda ampliada. O predicado de oferta e os `132px` foram preservados. A checagem do diff contou **0 `try/catch` novos e 0 `except` novos**. A sintaxe do JS passou no V8. `node --check` retornou rc 127 por falta do executável, e o `manage.py` parou no import de `django.core`. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:72`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:391`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:408`, `app/colaboradores/services/calendario.py:791`, `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/colaboradores/partials/_calendario_grade.html:96`, `app/manage.py:11`
-
-**Reprodução na régua do Code**, a partir de `app/`. Rodadas completas [nao verificado]. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:408`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:426`
-
-```bash
-smoke() {
-  PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
-    SMOKE_FERIADO_MUTANTE="${1:-}" \
-    python3 manage.py test core.tests.test_smoke_clique_feriado_vira_trabalho
-}
-
-smoke
-smoke drawer-sem-fechar-popover
-smoke drawer-devolve-foco
-smoke painel-sem-lateral
-smoke painel-abre-sem-espaco
-smoke painel-fora-360
-smoke erro-console
-node --check static/js/popover-acao.js
-```
-
-**Fila P3.** Tornar a ficha real utilizável a 360 px. A grade `420px 1fr` com vão de `12px` põe o calendário na segunda coluna. A linha de fila deve medir o gatilho do dia 20 após o carregamento HTMX da ficha. O selo textual de inclusão do script também segue na fila. `app/templates/colaboradores/detalhe.html:87`, `app/templates/colaboradores/detalhe.html:201`, `app/templates/colaboradores/detalhe.html:213`, `app/core/tests/test_selo_popover_acao.py:97`
-
-## 27/11 13:35 · sessao 0b290d3bc790 · FERIADO-BOTAO-CORTADO · verificador · origem=Code
-
-**REPROVADO — FERIADO-BOTAO-CORTADO.** O predicado de oferta e os `132px` foram preservados. O bloqueio funcional é o fechamento direto do drawer, que pode deixar o painel aberto no `body`. A ficha real também tem uma barreira de layout a 360 px que o smoke não exercita. A execução dos quatro cenários, os oito REDs de m5 e o smoke do Ronald ficam **[nao verificado]**. `app/colaboradores/services/calendario.py:791`, `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/core/_drawer_generico.html:71`, `app/static/js/popover-acao.js:84`, `app/templates/colaboradores/detalhe.html:87`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:341`, `leis.txt:3145`.
-
-## 1. Predicado e altura
-
-- **Oferta preservada.** `contexto_calendario` produz `feriado_vira_trabalho_oferecido` quando a data é feriado daquele colaborador, existe célula e `trabalha is False`. A view da ficha e o contexto do drawer de diagnóstico fornecem `pode_editar_dia` pela permissão `editar_escalas`. O POST consulta o mesmo campo antes de chamar `editar_dia`. Esses arquivos estão fora do diff anexado. `app/colaboradores/services/calendario.py:343`, `app/colaboradores/services/calendario.py:791`, `app/colaboradores/views.py:2005`, `app/colaboradores/services/drawer.py:158`, `app/ponto/views.py:3607`, `app/ponto/views.py:3624`.
-- **Antes e depois.** O diff move o mesmo `if pode_editar_dia and dia.feriado_vira_trabalho_oferecido` da linha 131 da base para a linha 96 da cópia. A linha 68 muda, mas conserva literalmente `height:132px;min-height:132px;overflow:hidden;`. O acréscimo aplica flex à célula que oferece a ação e cria uma região rolável abaixo do gatilho. O JS localiza os controles já renderizados. `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/colaboradores/partials/_calendario_grade.html:95`, `app/static/js/popover-acao.js:88`.
-
-## 2. Fechamento, foco e demais consumidores
-
-`abre()` move o mesmo nó para o `body` e guarda pai, próximo irmão, estilo e `tabindex`. `fecha()` recoloca o nó e restaura os atributos. O foco só volta se ainda estiver dentro do painel no momento do fechamento **e** o gatilho continuar conectado. `app/static/js/popover-acao.js:94`, `app/static/js/popover-acao.js:110`, `app/static/js/popover-acao.js:119`.
-
-| Caminho | O que o código faz |
-|---|---|
-| **Esc** | Fecha e devolve o foco quando ele está no painel. Esc originado dentro do painel ou do `details` é interceptado antes do listener do drawer. O smoke mede o fechamento e o foco com Esc sintético. `app/static/js/popover-acao.js:123`, `app/static/js/popover-acao.js:147`, `app/templates/core/_drawer_generico.html:75`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:188`. |
-| **Clique fora ou no próprio gatilho** | Clique fora que chega ao `document` fecha. Se o alvo externo já recebeu foco, a restauração ao gatilho é omitida. Recolher o próprio `details` fecha pelo `toggle`. `app/static/js/popover-acao.js:123`, `app/static/js/popover-acao.js:132`, `app/static/js/popover-acao.js:135`. |
-| **Submit** | O módulo não escuta `submit` e ignora o clique interno. O POST nativo válido leva ao redirecionamento da view. Se o envio for impedido e o documento continuar, o próprio submit não fecha o painel nem restaura o foco. O smoke só mede se o botão pode receber o clique. `app/static/js/popover-acao.js:135`, `app/templates/ponto/partials/_feriado_vira_trabalho.html:7`, `app/ponto/views.py:3634`, `app/core/respostas.py:63`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:177`. |
-| **Troca de célula** | Outro popover fecha o anterior antes de abrir e toma o foco. Um clique comum em outra célula cai no fechamento externo. A sequência de troca não está no smoke novo. `app/static/js/popover-acao.js:88`, `app/static/js/popover-acao.js:113`, `app/static/js/popover-acao.js:143`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:188`. |
-| **Fechar drawer** | X e backdrop podem fechar também pelo clique externo. **Chamar `fecharDrawer()` diretamente deixa o painel no `body`**: a função muda estilos, o gatilho continua conectado e o observador só acompanha mudanças de filhos. **RED:** abrir o popover, chamar `fecharDrawer()` sem clique e exigir `details.open === false` e painel de volta ao pai original. `app/templates/core/_drawer_generico.html:2`, `app/templates/core/_drawer_generico.html:6`, `app/templates/core/_drawer_generico.html:71`, `app/static/js/popover-acao.js:84`, `app/static/js/popover-acao.js:110`. |
-| **Navegação HTMX** | Clicar num link externo ao painel pode fechá-lo antes do swap. Um `outerHTML` iniciado sem clique fecha quando o observador detecta a origem desconectada. Nesse caso o nó volta à árvore antiga, já destacada, e o foco não volta ao gatilho removido. Um swap que mantém a origem conectada não aciona esse fechamento. **RED de foco:** trocar o mês via HTMX sem clique prévio e verificar a remoção do painel portado e o foco num controle sobrevivente. `app/templates/colaboradores/calendario_partial.html:39`, `app/static/js/popover-acao.js:84`, `app/static/js/popover-acao.js:126`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:78`. |
-
-Os consumidores de produção encontrados na cópia são estes. Todos passam pelo mesmo transporte ao `body`, foco inicial no painel e regras de fechamento. `app/static/js/popover-acao.js:88`, `app/static/js/popover-acao.js:135`.
-
-| Consumidor | Cobertura encontrada |
-|---|---|
-| **Tornar dia de trabalho** — `app/templates/ponto/partials/_feriado_vira_trabalho.html:5`, incluído em `app/templates/colaboradores/partials/_calendario_grade.html:97`. | Quatro cenários do mensal no smoke novo. A fita do drawer de diagnóstico tem teste de HTML, sem clique nesse drawer. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:341`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`, `app/colaboradores/tests/test_feriado_botao_cortado.py:71`. |
-| **Marcação — Inverter tipo / Retratar** — `app/templates/colaboradores/partials/_calendario_grade.html:133`. | O smoke novo abre a primeira batida em `base_app.html` no drawer e verifica o primeiro formulário, de flip, e a rolagem. O smoke antigo mede o painel que contém `/retratar/`. O clique de confirmação do flip e o envio de retratação ficam fora dessas medições. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:108`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:177`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:336`, `app/core/tests/test_smoke_retratar_1366.py:167`. |
-| **Resolver dia / Cobrar este dia** — `app/templates/ponto/partials/_veredito_dia.html:5`, `app/templates/ponto/partials/_veredito_dia.html:17`, `app/templates/ponto/partials/_veredito_dia.html:25`, incluído em `app/templates/colaboradores/partials/_calendario_grade.html:138`. | O selo de geometria renderiza o partial numa grade própria a 1366 e 1024. O smoke novo não seleciona essa ação. `app/core/tests/test_selo_popover_acao.py:116`, `app/core/tests/test_selo_popover_acao.py:124`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:341`. |
-
-**Listeners.** `resize`, `orientationchange` e `scroll` são registrados uma vez por avaliação do script, fora de `abre()`. Permanecem durante a vida do documento e não se acumulam a cada abertura. O único `MutationObserver` é desconectado em `fecha()`. As duas cascas incluem o script uma vez cada. `app/static/js/popover-acao.js:84`, `app/static/js/popover-acao.js:110`, `app/static/js/popover-acao.js:125`, `app/static/js/popover-acao.js:156`, `app/templates/base.html:440`, `app/templates/base_app.html:194`.
-
-## 3. Geometria e REDs
-
-- **Origem do `fixed`.** `posiciona()` mede os retângulos do gatilho e do painel. A solução para a origem é mover o painel ao `body` antes de posicionar, saindo do `.hx-shell` com `backdrop-filter` e do drawer com `transform`. O cálculo usa a viewport de layout e limita verticalmente pelo retângulo do `#drawer-geral`. As bordas horizontais do drawer, o cabeçalho sticky e o recorte da aba Espelho ficam fora desse cálculo. `app/static/js/popover-acao.js:31`, `app/static/js/popover-acao.js:44`, `app/static/js/popover-acao.js:102`, `app/static/css/hasner-ponto.css:275`, `app/templates/core/_drawer_generico.html:3`, `app/templates/colaboradores/partials/painel_colaborador.html:182`.
-- **Sobreposição possível pelo próprio cálculo.** Com área vertical de `8` a `120` e gatilho de `14` a `114`, sobram `4px` de cada lado. O painel do feriado tem `18px` só de padding e borda. Ao limitar `maxHeight` e depois prender o topo ao limite inferior, o algoritmo pode puxar o painel por cima do gatilho. Se a própria área útil tiver menos de `18px`, o painel também pode ultrapassar essa área. **RED:** abrir com menos de `18px` livres em ambos os lados e exigir que o painel visível fique inteiro, sem interseção com o gatilho. `app/static/js/popover-acao.js:62`, `app/static/js/popover-acao.js:74`, `app/static/js/popover-acao.js:103`, `app/templates/ponto/partials/_feriado_vira_trabalho.html:7`.
-- **360 px na ficha real.** O painel aberto tem teto de `320px`, mas o calendário da ficha começa na segunda coluna de uma grade cuja primeira coluna tem `420px`, mais `12px` de vão. O smoke substitui essa ficha por um `div`. **RED:** carregar `colaboradores/detalhe.html` a 360 px, usar o carregamento HTMX da ficha e exigir que o gatilho do dia 20 seja atingível sem rolagem horizontal. Resultado no navegador **[nao verificado]**. `app/static/js/popover-acao.js:27`, `app/static/js/popover-acao.js:55`, `app/templates/colaboradores/detalhe.html:87`, `app/templates/colaboradores/detalhe.html:201`, `app/templates/colaboradores/detalhe.html:213`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:32`.
-- **Drawer e mensal rolados.** Rolar fora do painel fecha. Rolar dentro dele mantém aberto. O smoke rola até a célula antes de abrir e só rola a região mensal de marcações depois de fechar com Esc. O quinto cenário rola o interior do painel da batida. **RED de cobertura:** abrir, rolar a aba Espelho ou o mensal e conferir devolução do painel. Reabrir junto ao limite da área visível e medir recorte, distância e sobreposição. `app/static/js/popover-acao.js:159`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:119`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:194`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:208`.
-
-## 4. Smoke e oito mutantes
-
-Há quatro subcasos de feriado, página e drawer em cada casca, mais a batida no drawer de `base_app.html`. O teste usa Chromium, as cascas e respostas reais do Django para a fixture com quatro batidas. O JavaScript do popover é real. O `fetch` do drawer recebe respostas preparadas pelo Django Client, a página injeta o fragmento por `innerHTML`, e a sonda chama `.click()` no alvo encontrado por hit-test. O ensaio mede abertura e alvo do submit a 1366×768. Ele não envia o POST. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:78`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:144`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:177`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:297`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:341`, `app/core/tests/test_smoke_chromium.py:104`.
-
-**O smoke novo serve o JS da cópia.** Exige uma inclusão no HTML renderizado, lê o arquivo relativo a `__file__` e redireciona o `src` para uma cópia ao lado do HTML de ensaio. Os outros estáticos continuam ligados a `STATIC_ROOT`. O smoke antigo de retratar também resolve seu popover por esse `STATIC_ROOT`. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:33`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:281`, `app/core/tests/test_smoke_chromium.py:93`, `app/core/tests/test_smoke_retratar_1366.py:154`.
-
-| Mutante | Sinal que deve acusá-lo |
-|---|---|
-| `gatilho-cortado`, `summary-display-none` | `gatilhoVisivel` falso ou etapa incompleta. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:41`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:125`. |
-| `painel-recortado` | `painelSemRecorte` falso, com possível perda do alvo do submit. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:44`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:165`. |
-| `painel-sem-compensacao` | `painelNoBody` falso por construção. Um RED desse mutante, sozinho, não prova que a geometria também falhou. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:47`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:148`. |
-| `painel-sem-limite-drawer` | Perda esperada de `painelRolavel` ou `rolagemMantemPainel` no drawer de `260px`. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:51`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:194`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:349`. |
-| `painel-sem-devolver-foco` | `focoVoltou` falso. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:55`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:188`. |
-| `porta-trocada`, `painel-distante` | Divergência em `action` e em `painelEncostado`, respectivamente. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:158`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:172`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:318`. |
-
-Conferi que cada um dos três mutantes de JS encontra exatamente um trecho na cópia e altera o texto. O smoke compara todas as chaves esperadas, incluindo as ausentes, mas os oito mutantes não demonstram uma mordida independente para cada asserção. Por exemplo, não há mutante dedicado ao método, às quatro marcações ou à restauração exata do estilo e do `tabindex`. O hit-test do recorte usa cinco pontos, deixando os cantos sem amostragem. Os logs m5 não constam no material fornecido e eu não executei Chromium porque o ensaio escreve arquivos temporários. Os oito REDs, os quatro resultados verdes e o smoke posterior do Ronald no dia 20 ficam **[nao verificado]**. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:165`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:188`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:281`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:326`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:359`, `leis.txt:3145`.
-
-## 5. Asserções antigas
-
-| Teste | Antes → depois no diff anexado | [nao verificado]
-|---|---|
-| **`test_selo_popover_acao.py`** | A sonda antes pré-abriu o `details`, voltou a alternar `open` e procurou o painel depois. Agora guarda o painel antes, abre uma vez e aguarda `toggle`. `Math.round(right)` e `innerWidth` viraram `right` fracionário e `clientWidth`. Continuam `assertEqual(ruins, [])` e o RED de controle `assertGreater(dir, vw)` sem componente. Foi acrescentado `assertTrue(visivel)` aos dois. `app/core/tests/test_selo_popover_acao.py:124`, `app/core/tests/test_selo_popover_acao.py:137`, `app/core/tests/test_selo_popover_acao.py:173`, `app/core/tests/test_selo_popover_acao.py:185`. |
-| **`test_smoke_retratar_1366.py`** | Antes procurava o painel dentro do `details` após abrir. Agora guarda a referência antes de abrir. Continuam as mesmas condições de painel medido, presença de `/retratar/`, lista de extravasamentos vazia e ausência de scroll horizontal. Nenhuma asserção existente foi trocada para aceitar esses defeitos. `app/core/tests/test_smoke_retratar_1366.py:54`, `app/core/tests/test_smoke_retratar_1366.py:167`, `app/core/tests/test_smoke_retratar_1366.py:180`. |
-
-## 6. Quem escreve e quem lê
-
-| Campo ou atributo | Escritor → leitor |
-|---|---|
-| `dias`, `data`, `weekday`, `status`, `batidas`, `retratadas`, `badges`, `feriado`, `cal_offset`, `colaborador` | `contexto_calendario` publica. A grade usa cabeçalho, estado, marcações e badges. O teste de HTML injeta contexto próprio. `app/colaboradores/services/calendario.py:754`, `app/colaboradores/services/calendario.py:783`, `app/colaboradores/services/calendario.py:838`, `app/templates/colaboradores/partials/_calendario_grade.html:66`, `app/templates/colaboradores/partials/_calendario_grade.html:81`, `app/templates/colaboradores/partials/_calendario_grade.html:130`, `app/templates/colaboradores/partials/_calendario_grade.html:141`, `app/colaboradores/tests/test_feriado_botao_cortado.py:33`. |
-| `feriado_vira_trabalho_oferecido`, `pode_editar_dia`, `pode_veredito`, `resolver_dia_oferecido`, `volta_url`, `layout` | Calendário e contextos de view publicam dados e permissões. Os includes escolhem `mes` ou `fita`. A grade lê oferta e permissão para o botão e seu layout, e lê o veredito para as ações de Resolver dia. O endpoint do feriado relê a oferta. `app/colaboradores/services/calendario.py:791`, `app/colaboradores/services/calendario.py:811`, `app/colaboradores/views.py:1992`, `app/colaboradores/services/drawer.py:156`, `app/templates/colaboradores/calendario_partial.html:67`, `app/templates/colaboradores/partials/_drawer_diagnostico.html:35`, `app/templates/colaboradores/partials/_calendario_grade.html:95`, `app/templates/colaboradores/partials/_calendario_grade.html:137`, `app/ponto/views.py:3624`. |
-| `data-popover-acao`, `data-popover-painel`, `summary`, `open`, `style`, `tabindex` | Os três consumidores escrevem os marcadores e o HTML inicial. O navegador alterna `open` pelo `summary`. O componente lê os marcadores e o estado, escreve `open=false`, altera estilo e `tabindex` no painel e restaura os valores. As sondas também leem esses marcadores. `app/templates/ponto/partials/_feriado_vira_trabalho.html:5`, `app/templates/ponto/partials/_veredito_dia.html:5`, `app/templates/ponto/partials/_veredito_dia.html:17`, `app/templates/colaboradores/partials/_calendario_grade.html:133`, `app/static/js/popover-acao.js:88`, `app/static/js/popover-acao.js:119`, `app/core/tests/test_selo_popover_acao.py:138`, `app/core/tests/test_smoke_retratar_1366.py:46`. |
-| `data-celula-dia`, `data-mes`, `.fita-dias`, `.fita-mes`, `role="region"`, `aria-label`, `tabindex="0"` | A grade escreve. Os testes localizam célula e região. `fita-mes.js` lê as classes e `data-mes` e atualiza o rótulo. `aria-label` e `tabindex` da região são consumidos pelo navegador. `app/templates/colaboradores/partials/_calendario_grade.html:63`, `app/templates/colaboradores/partials/_calendario_grade.html:68`, `app/templates/colaboradores/partials/_calendario_grade.html:99`, `app/static/js/fita-mes.js:5`, `app/static/js/fita-mes.js:21`, `app/colaboradores/tests/test_feriado_botao_cortado.py:51`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:105`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:209`. |
-| `data-feriado-vira-trabalho`, `value`, `action`, `method`, `type="submit"`, `colab`, `dia`, `volta`, `motivo`, CSRF | O partial escreve a marca no input `dia`, os valores e o formulário. Testes e mutantes leem a marca e a rota. O navegador envia pelos `name`; a view lê e valida os campos, e a configuração registra o middleware CSRF. `app/templates/ponto/partials/_feriado_vira_trabalho.html:7`, `app/colaboradores/tests/test_feriado_botao_cortado.py:55`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:105`, `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:150`, `app/ponto/views.py:3584`, `app/ponto/views.py:3605`, `app/config/settings/base.py:58`. |
-| `#drawer-geral`, `#aba-espelho`, `#aba-espelho-btn`, `#calendario-container`, `data-cid`, `data-loaded`, `data-calendario-raiz` | Os templates escrevem os elementos iniciais. O drawer lê os IDs e `data-cid` e escreve `data-loaded` após inserir o calendário. O popover lê `#drawer-geral`, a sonda lê drawer, aba, botão e raiz, e os links HTMX usam a raiz como alvo. `app/templates/core/_drawer_generico.html:3`, `app/templates/core/_drawer_generico.html:118`, `app/templates/colaboradores/partials/painel_colaborador.html:33`, `app/templates/colaboradores/partials/painel_colaborador.html:182`, `app/temp
-
-[truncado em 20000 de 23156 caracteres]
-
-## 27/11 13:32 · sessao 31ae8f524195 · PAR-PELO-TURNO · verificador · origem=Code
-
-# REPROVADO — PAR-PELO-TURNO c1v10
-
-A volta recupera o par de 26 h do laudo, elimina o `KeyError` na passada principal e corrige o horário de justificativas no caso do eco. Ainda há divergência de dinheiro entre PDF e espelho para a mesma janela, uma segunda leitura que muda o total da folha na passada órfã e um vazamento de marcas posteriores ao `agora`. Reproduzi os três em memória. `app/ponto/tests/test_par_pelo_turno_c1v10.py:32–105` · `app/relatorios/pdf_espelho.py:272–280,338–355` · `app/ponto/services/espelho.py:437–453` · `app/ponto/services/fechamento.py:793–837,896–897` · `app/api/views.py:2024–2042`
-
-## 1. Procedentes 2–5 da c1v9
-
-Rodei, em somente leitura, **7 REDs dirigidos, 22 testes de selos e 207 testes do recorte vizinhos**, todos verdes na cura. Nos ensaios de base, repus em memória o código da cópia local `b87d3d77e` correspondente aos blobs do diff. Os oito modos de reversão voltaram a falhar pelos motivos abaixo. Suíte Django com ORM, produção, DIFF de frota e identidade das refs Git **[nao verificado]**. `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:20–47,93–129,173–238` · `app/ponto/tests/par_pelo_turno_c1v9_verificacao.py:153–168` · `app/docs/LEIS.md:112`
-
-| Item | Base → cura → reversão |
-|---|---|
-| **2. Segunda virada** | **Curado na origem para o caso do laudo.** Em `[D,D]`, com `D 23:30 → D+2 01:30`, a folha passa de **0 h e 1 aberto** para **26 h e 0 abertos**. O PDF passa de receber só o PK da entrada a receber os dois PKs. `margem` reproduz as duas falhas. `pad_largo` leva a folha a **28 h** com o par vizinho. `pdf_janela_visual` perde o recorte `[D,D]`. Há um limite adicional da fatia, demonstrado abaixo. `app/ponto/turnos.py:3035–3048` · `app/ponto/tests/test_par_pelo_turno_c1v10.py:32–46` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:72–98` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:174–194` |
-| **3. Duas leituras** | **Curado na passada principal.** A base lança `KeyError: 2` após a retratação simulada. A cura usa uma leitura `[1,2]`, fecha **2 h** e entrega o mapa da mesma carga à fatia. `duas_leituras` restaura o `KeyError`. O RED exercita um vínculo que cobre a janela e deixa a passada órfã fora do ensaio. `app/ponto/services/fechamento.py:635,657–659,755–757,793–823` · `app/ponto/tests/test_par_pelo_turno_c1v10.py:48–78` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:181–185` |
-| **4. Selo da tela** | **Curado na origem.** A base e `ascii` falham na importação com `SyntaxError`. A cura importa e executa as mesmas asserções sobre `_dia_de`, `.date()` e `piso_visual`. Mudou apenas a prosa incompatível com o cabeçalho ASCII. `app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py:1,144–148,233–245` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:144–150,186–187` |
-| **5a. PDF e censo** | **Curada a chamada local de apuração.** Com o censo corrigido e a dívida antiga, repor o coletor da base acusa especificamente `apurar_por_fatia` **1×**. A cura passa. `apelido` volta a devolver `{}` para `_apurar_por_fatia`. `pdf_calcula` volta a acusar chamadas diretas. O selo mede chamadas enumeradas por nome. `app/relatorios/tests/test_pdf_nao_calcula.py:34–50,59–110` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:153–171,188–192,204–211` |
-| **5b. Justificativas** | **Curada a paridade no caso do eco.** Com `14:57 E / 19:01 S / 20:04 E`, a base mostra **20:04**. A cura mostra **14:57**, a entrada do turno aberto. `paridade` restaura **20:04**. O RED fixa `agora=20:10`, com todas as marcas já ocorridas. `app/api/views.py:2024–2042` · `app/ponto/tests/test_par_pelo_turno_c1v10.py:81–105` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:195–196,212–213` |
-
-## 2. Carga, comparação com `main` e passada órfã
-
-**2a. A extensão lê o juiz do dia.** A carga e `dia_das_batidas` compartilham `_julgar_batidas_da_janela` e `_dia_das_batidas_puro`. A regra nova é de admissão de marcas: mantém `ini−1..fim+1`, admite à direita as marcas de pares fechados com `data_turno` dentro da janela e mantém o piso esquerdo. Há uma derivação paralela no **universo**: a carga da folha passou de `batidas_apuraveis` para a consulta direta de `_carregar_turnos_do_colab`. Num ensaio com `batidas_apuraveis` devolvendo vazio, a carga ainda entregou `[1,2]`, sem chamar a porta da L-025. O B5j ficou verde, pois sua varredura não alcança essa cadeia de funções. `app/docs/LEIS.md:76` · `app/ponto/turnos.py:1900–1912,2989–3016,3035–3059,3091–3096,3125–3145` · `app/ponto/tests/test_tripwire_b5j_universo_de_apuracao.py:26–35,112–131`
-
-**2b. A extensão só resgata pares julgados dentro. A carga curta ainda pode fazer o motor formar um par de fora e disparar a herança.** Reproduzi pela folha com janela `[20/10,20/10]` e `18/10 15:00 E / 19/10 15:00 S / 19/10 16:00 E / 20/10 06:00 S / 20/10 10:00 E / 20/10 19:00 S`. Com o pad largo atribuído ao `730c115e5` no laudo anexo, o período anterior fica aberto e o par das 10:00 rende **9 h**. Com a carga curta, cai o primeiro `E`, o motor fecha `19/10 16:00 → 20/10 06:00` e o vão de **4 h** faz o par das 10:00 herdar 19/10. A folha de 20/10 fica com **0 h**. O contraexemplo mede o recorte acumulado desde c1v9, com o mesmo motor da cópia. A execução do `main` exato fica **[nao verificado]**. **RED:** fixar essas seis marcas, exigir **9 h** na folha de 20/10 e capturar os períodos entregues à herança. `app/ponto/turnos.py:1864–1882,3035–3048` · `app/ponto/services/fechamento.py:264–275,299–304` · `app/ponto/motor_calculo_v2.py:2459–2467,2512–2545` · `app/ponto/tests/test_par_c1v8_reds.py:67–108`
-
-**A seleção ainda pode perder um par já julgado antes de chegar ao motor.** Com DNA de `D` **23:59–22:45**, sem DNA no dia civil da entrada, `D+1 22:15 → D+3 00:15` dura 26 h e é julgado em `D`. A carga entrega os dois PKs com dia `D`, mas a fatia recorta pelo dia civil até `D+2`. Reproduzi **0 h e 1 aberto** na folha. **RED:** exigir os dois PKs na chamada a `calcular_mes` e o fechamento do par em `[D,D]`. `app/ponto/turnos.py:287–334,3035–3058` · `app/ponto/services/fechamento.py:264–275,299–304`
-
-**2c. A passada órfã faz outra consulta e usa outro critério de dia.** O fechamento elege os dias sem vínculo por **data civil das marcas**, relê uma janela própria pela carga nova, descarta o mapa e soma os períodos por **data civil da entrada**. `_min_orfaos` entra em `FechamentoMensal.horas_trabalhadas`. `_orfaos_por_dia` entra em `DiaPago.horas_trabalhadas` e no detalhe `o85_dia_sem_vinculo_min`. Com 2 h em `D` sem vínculo e 2 h em `D+1` coberto, reproduzi **4 h** com leituras estáveis e **2 h** quando a saída de `D` some entre as leituras. **RED:** repetir a retratação nessa troca de vínculo e exigir uma apuração coerente com uma única foto, inclusive nos minutos de `D` entregues à lavratura. `app/ponto/turnos.py:3027–3032` · `app/ponto/services/fechamento.py:793–837,896–897,1198–1205,1275–1285` · `app/ponto/services/dia_pago.py:269–272`
-
-## 3. PDF e espelho
-
-**O total trabalhado pode divergir na mesma janela efetiva.** Em `[D,D]`, com `D 22:00 → D+1 06:00` e outro par `D+1 11:00–19:00`, rodei o coletor e o espelho com os motores reais `MotorComercial` e `MotorTurnoPartido` injetados no ensaio. Em ambos, o PDF deu **16 h** e o espelho **8 h**. O motor-base admite o segundo período pela herança. Os motores especializados voltam a publicar o dia desse período como `D+1`. O PDF soma todos os períodos do resultado e o espelho recorta pelo mapa publicado. Separadamente, com uma saída órfã e um par normal, o PDF retornou **2 turnos** e o espelho **1**. **RED:** comparar `total_trabalhadas` e os contadores dos dois leitores na mesma janela livre, com a montagem real dos dias. `app/ponto/motor_calculo_v2.py:2516–2545,3037–3075,3425–3447` · `app/ponto/services/espelho.py:76–99,437–453` · `app/relatorios/pdf_espelho.py:277–291,338–355,566`
-
-**O desenho para em ontem. O teto por instante falha na apuração.** O coletor calcula `fim_de_desenho` a partir do `agora` recebido e filtra as linhas por esse limite, inclusive quando o piso interno `max(data_ini, fim_de_desenho)` mantém uma data posterior na apuração. Em memória, o PDF de `D`, emitido às **02:00 de D+1**, já somou **8 h** usando a saída das **06:00 de D+1**. Além disso, as duas chamadas a `folha_manda` omitem `agora`. Em competência, elas podem chegar a `fechamento_lido`, que roda a apuração em leitura com relógio próprio. O PDF aplica a folha sobre a **janela pedida** e o espelho chamado por ele usa a **janela efetiva**. **RED:** emitir o cartão antes e depois das 06:00, exigir que as 8 h só apareçam depois, e congelar um relógio ambiente diferente do instante do ato para verificar o teto do resumo. `app/docs/LEIS.md:100` · `app/relatorios/pdf_espelho.py:270–280,398–402,424–438` · `app/ponto/services/espelho.py:1231–1235,1291–1292` · `app/relatorios/cartao_pela_celula.py:69–76,395–420` · `app/ponto/services/fechamento.py:625–627,1757–1759`
-
-## 4. Justificativas, app e calendário
-
-No caso do eco, o app do espelho entrega **14:57 e 20:04 como marcações** e o estado `turno_aberto` como booleano da geometria. O calendário também desenha as duas marcas do turno e usa a primeira entrada para o detalhe geográfico. A única legenda de entrada a justificar encontrada nesses caminhos é a do GET, **14:57**. A renderização do cliente móvel fica **[nao verificado]**. `app/ponto/tests/test_par_c1v8_reds.py:308–317` · `app/api/views.py:1443–1473,1500–1516,1541–1563,2030–2042` · `app/colaboradores/services/calendario.py:249–253,643–654,691–692,725–732,765–776` · `app/templates/colaboradores/partials/_calendario_grade.html:127`
-
-**O GET perdeu o teto das marcas antes do julgamento.** Com `agora=15:00`, `14:57 E` e uma `S` registrada para **22:30** do mesmo dia, a base oferece **14:57** e a cura devolve `[]`. O filtro novo verifica o instante da entrada depois que a saída futura já fechou o turno. **RED:** conservar o turno aberto às 15:00 e retirá-lo após a saída, rodando o GET com as duas marcas no armazenamento. `app/api/views.py:2024–2042` · `app/ponto/turnos.py:1908–1912,3051–3059,3091–3096`
-
-## 5. Escritores e leitores
-
-| Campo ou função | Quem produz e quem lê |
-|---|---|
-| **`Batida.pk`, `timestamp`, `tipo`, `retratada_em`** | `registrar_batida` cria a marca. `anotar` e as portas de retratação/restauração atualizam o registro. O carregador individual e `batidas_apuraveis` filtram retratação. A carga usa PK e instante, o motor lê as marcas e app/calendário exibem instante e tipo. O papel da ata chega ao pareador por `papel_por_minuto_da_ata`. `app/ponto/registro_batida.py:118–137,168–180,255–315` · `app/ponto/turnos.py:1908–1912,1989–1993,3008–3016,3035–3048` · `app/api/views.py:1459–1473` · `app/colaboradores/services/calendario.py:643–669,691–692` |
-| **`Turno.entrada`, `.saida`, `.aberto`, `.batidas`, `.data_turno` e mapa por PK** | `_mk` monta o turno e `_data_do_turno` atribui o dia. `_dia_das_batidas_puro` projeta o dia por PK e usa o civil para marca sem turno. A casca, a consulta individual e o lote publicam essa projeção. Leem-na a folha/fatia, o espelho, o app, o GET de justificativas, o painel e os comandos de férias e vigia. A resposta `com_turnos=True` é consumida pelo GET, que monta `turnos_abertos[].data` e `.label`. `app/ponto/turnos.py:235,305–334,3062–3096,3106–3116,3125–3145,3241–3245` · `app/ponto/services/fechamento.py:223–225,267–274,635–659` · `app/ponto/services/espelho.py:462–472` · `app/api/views.py:1443–1466,2030–2059` · `app/core/services/painel_op.py:330` · `app/ferias/management/commands/listar_ferias_com_batida.py:54` · `app/ponto/management/commands/vigia_plantio_overnight.py:87` |
-| **`carga_de_batidas_para_motor`, `limites_da_carga`, `dias_por_pk`** | `turnos.py` produz a lista e o mapa da carga. Fechamento e autoridade do espelho leem ambos. A passada órfã usa `batidas_apuraveis_na_janela(para_motor=True)` e recebe só a lista. O mapa decide `sem_movimento` e alimenta o recorte da fatia. `app/ponto/turnos.py:3019–3059` · `app/ponto/services/fechamento.py:264–275,635–659,755–757,810–823` · `app/ponto/services/espelho.py:1024–1033,1165–1186` |
-| **`Autoridade` e `janela_exata`** | `autoridade_do_periodo` publica `batidas`, `resultado`, `esc`, `tipo_escala`, `feriados`, `motor` e `regua_por_fatia`. Vínculo vem de `vinculo_do_dia`, resultado e régua da fatia ou do motor único. `previstas_do_periodo` produz `datas_previstas` e `efeitos_da_ausencia` produz `min_parcial_pagos`. O espelho e o PDF leem a autoridade. O PDF é o chamador de `janela_exata=True` e o leitor dos dois campos novos, para previsto e abono. Admin e app chamam o espelho no modo padrão. `app/ponto/services/espelho.py:946–964,1024–1074,1165–1196,1231–1237,1300–1307` · `app/escala/alimentacao.py:361–399` · `app/ponto/services/efeito_ausencia.py:46–65` · `app/relatorios/pdf_espelho.py:276–297,318–319,443–449` · `app/ponto/views.py:161–162` · `app/api/views.py:1354–1366` |
-| **`dia_da_jornada`, resumo e linhas do PDF** | O motor publica o dia por período e a fatia mescla o mapa. Espelho, testemunha da folha e lavratura o leem. O espelho escreve `dias` e `resumo`. O PDF lê as linhas e duas parcelas do noturno, monta outro resumo, marca órfãs pela grade, lê `anomalias` do resultado e reaplica `folha_manda`. `_build_story` lê os totais e o gerador auditável lê a contagem. `app/ponto/motor_calculo_v2.py:2512–2545,2571–2573,2830–2834` · `app/ponto/services/fechamento.py:307–334,1198–1215` · `app/folha/porta_export.py:100–105` · `app/ponto/services/espelho.py:437–453,1270–1307` · `app/relatorios/pdf_espelho.py:297–355,383–449,566–587,895–913` |
-
-## 6. Classes e selos
-
-- **Segundo juiz e derivação paralela.** A carga lê a geometria existente. O segundo julgamento do dia continua no motor. Os bloqueios desta volta incluem a consulta paralela do universo, o recorte civil da passada órfã e o resumo paralelo do PDF. **RED adicional da L-025:** mudar a seleção pela porta canônica e exigir a mesma exclusão na carga das duas entradas do motor. `app/ponto/turnos.py:1908–1912,3008–3016,3035–3059` · `app/ponto/motor_calculo_v2.py:2459–2467,2512–2545` · `app/ponto/services/fechamento.py:793–837` · `app/relatorios/pdf_espelho.py:291–355`
-- **Segundo escritor e campo com dois significados.** A escrita persistente continua no fechamento e em `dia_pago.lavrar`. Há duas escritas de **resumo em memória**, com contagens diferentes. `dias_falta` e `datas_falta` ainda significam **furo do motor** no PDF livre ou sem substituição e **falta decidida** quando entra a folha. O papel imprime o primeiro como “Faltas”. **RED:** um dia previsto, sem marcas e sem falta decidida, deve gerar a indicação de furo sem imprimir falta decidida no PDF livre. `app/ponto/services/fechamento.py:1141–1142,1198–1215` · `app/ponto/services/dia_pago.py:345–360` · `app/relatorios/pdf_espelho.py:301–303,428,586–587` · `app/relatorios/cartao_pela_celula.py:92–105,201–212,320–346` · `app/docs/LEIS.md:87,170`
-- **Asserções alteradas e mordida.** Conferi os quatro arquivos de testes existentes no delta. `test_3a` troca a chamada **e a asserção** de `[D,D+1]` por `[D,D]`, preservando as outras exigências e mordendo as reversões. O selo da tela muda prosa. O selo do PDF amplia `AUTORIDADES`, encolhe `DIVIDA` e acrescenta a asserção do apelido. A catraca atualiza registros e linhas. Medi **B1 75→74**, **B2 188→188**, com o coletor passando para `B2−B1`. O verificador novo prova a carga do PDF, mas substitui `montar_dias` e `folha_manda` no ensaio dirigido. Os reversores antigos `folha_so_uma_virada` e `espelho_so_uma_virada` perderam suas âncoras textuais. Ambos encontram **zero** ocorrências e param antes do teste. **RED do selo:** aplicar cada mutante e exigir falha na asserção de comportamento, depois de entrar no teste. `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:72–98` · `app/ponto/tests/test_espelho_tela_le_o_juiz_do_dia.py:144–148,233–245` · `app/relatorios/tests/test_pdf_nao_calcula.py:34–50,92–120` · `app/core/tests/test_medida_turno_do_par.py:108–109,328–346,473,548–577` · `app/ponto/tests/par_pelo_turno_c1v10_verificacao.py:109–124` · `app/ponto/tests/test_par_pelo_turno.py:874–889,920–943`
-
-_8687 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8692 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
