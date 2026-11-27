@@ -1,7 +1,16 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 18:20** · publicado em **27/11/2026 18:26** (UTC-3)
+> Ultima resposta processada: **27/11/2026 18:54** · publicado em **27/11/2026 19:00** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 18:54 · sessao 10767bc89811 · FERIADO-UM-JUIZ · construtor · origem=Code
+
+Entreguei as duas correções da c9. O diff, o censo dos campos-fonte do oráculo, os chamadores da guarda e os comandos com seus códigos de retorno estão em [r.md](/home/ronald/wt-codex-feriado-um-juiz-152427/app/r.md:3).
+
+- **B1.** O recálculo com `{}` e 420 minutos de saída antecipada retorna `1` e conserva o valor nas duas lavras em memória. O RED de 4 h trabalhadas com `{}` continua exigindo `ValueError`. [test_feriado_um_juiz.py:248](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:248), [test_feriado_um_juiz.py:292](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:292)
+- **B2.** A asserção da revisão exige `propagar_falha=True` em julho e agosto de 2026. [test_revisar_par_relampago.py:163](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_revisar_par_relampago.py:163)
+
+Os dois REDs falharam contra o c8 e passaram após a cura. Os dois mutantes novos produziram as falhas esperadas. Teste ORM completo, suíte inteira e ocorrência na frota [nao verificado]. [r.md:27](/home/ronald/wt-codex-feriado-um-juiz-152427/app/r.md:27) [nao verificado]
 
 ## 27/11 18:20 · sessao 07e6fd3fdca8 · FERIADO-UM-JUIZ · verificador · origem=Code
 
@@ -697,53 +706,4 @@ Há outras leituras cruas da mesma situação em cadastro, recortes de listas, v
 
 [truncado em 20000 de 46253 caracteres]
 
-## 27/11 16:58 · sessao e6c6f651b62f · PAR-PELO-TURNO · construtor · origem=Code
-
-Apliquei a cura da c1v15 na cópia. As asserções e fixtures existentes foram preservadas. A contagem AST de `ExceptHandler` ficou em **1.394 → 1.394** no app e **2 → 2** nos arquivos do diff. `ponto/turnos.py:1930`, `relatorios/cartao_pela_celula.py:395`, `ponto/tests/test_par_pelo_turno_c1v15.py:13`.
-
-### Causas e correções
-
-- **C9.** A c1v14 passou a chamar `marcos_dna_periodo(..., celulas=...)`, mas `_mpd` da fixture aceita três argumentos. O `TypeError` acontece antes do juiz do dono. `medir` contabiliza o erro e descarta o colaborador inteiro. Isso explica o `SystemExit(2)`, a ausência da linha que gera o `KeyError` e as zero chamadas ao cadastro no teste que esperava falhar no segundo dia. O carregador voltou à chamada de três argumentos quando a carga implícita vem vazia e reaproveita o DNA quando a carga traz células. Na janela vazia, o provedor pode fazer uma consulta sob demanda. `a7174ec14:ponto/turnos.py:1958`, `ponto/tests/test_col129_teto_vira_lista.py:33`, `ponto/tests/test_col129_teto_vira_lista.py:135`, `ponto/tests/test_col129_teto_vira_lista.py:147`, `ponto/services/teto_na_lista.py:51`, `ponto/services/teto_na_lista.py:71`, `ponto/management/commands/lavrar_teto_do_dia.py:32`, `ponto/turnos.py:1934`, `ponto/turnos.py:1956`, `escala/utils.py:100`.
-- **M8.** A c1v13 passou `ate=None` ao consultar turno vivo, embora o calendário só forneça `agora`. O dublê rejeita `ate`, o calendário publica oferta `None` e a tarefa devolve `nao_sei`. `folha_manda` agora encaminha `ate` apenas quando recebe um corte explícito. O PDF e o espelho continuam passando `ate=agora`. `a7174ec14:relatorios/cartao_pela_celula.py:398`, `colaboradores/services/calendario.py:615`, `colaboradores/services/calendario.py:812`, `chamados/tests/e3_lu3_apoio.py:72`, `chamados/services/tarefa_do_dia.py:732`, `relatorios/cartao_pela_celula.py:398`, `relatorios/pdf_espelho.py:255`, `ponto/services/espelho.py:1315`.
-- **F401.** Removi o import sem uso de `MagicMock`. `ponto/tests/par_pelo_turno_c1v10_verificacao.py:14`.
-
-### RED e mutantes
-
-O RED novo reproduziu `erros=1` por `celulas=` na base. Com a cura, obteve `erros=0` e a linha C9 de 780 minutos com teto de 732. Em memória, os controles `dna`, `presenca` e `corte` deram `rc=0`. Cada mutante correspondente deu `rc=1` por asserção. `ponto/tests/test_par_pelo_turno_c1v15.py:50`, `ponto/tests/par_pelo_turno_c1v15_verificacao.py:40`, `ponto/tests/par_pelo_turno_c1v15_verificacao.py:73`.
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v15_verificacao dna --mutante
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v15_verificacao presenca --mutante
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v15_verificacao corte --mutante
-PYTHONDONTWRITEBYTECODE=1 python3 -m ponto.tests.par_pelo_turno_c1v15_verificacao import --mutante
-```
-
-O mutante do import ficou **[não verificado]**. O executável Ruff estava ausente no `PATH`. A certificação da suíte na pista fica com o Code e o Opus final. `ponto/tests/par_pelo_turno_c1v15_verificacao.py:65`.
-
-### Comando para o Code
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci \
-  python3 manage.py test --noinput \
-  ponto.tests.test_col129_teto_vira_lista \
-  chamados.tests.test_e3_degrau_dono_e_porta \
-  core.tests.test_contract_esmeril.ContratoEsmerilTest.test_ruff_zero \
-  ponto.tests.test_par_c1v8_reds \
-  ponto.tests.test_par_pelo_turno_c1v10 \
-  ponto.tests.test_par_pelo_turno_c1v11 \
-  ponto.tests.test_par_pelo_turno_c1v12 \
-  ponto.tests.test_par_pelo_turno_c1v13 \
-  ponto.tests.test_par_pelo_turno_c1v14 \
-  ponto.tests.test_par_pelo_turno_c1v15
-```
-
-### Diff na cópia
-
-```bash
-git diff -- ponto/turnos.py relatorios/cartao_pela_celula.py \
-  ponto/tests/par_pelo_turno_c1v10_verificacao.py
-git diff --no-index /dev/null ponto/tests/test_par_pelo_turno_c1v15.py
-git diff --no-index /dev/null ponto/tests/par_pelo_turno_c1v15_verificacao.py
-```
-
-_8755 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8756 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
