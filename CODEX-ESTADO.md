@@ -1,7 +1,29 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 06:25** · publicado em **27/11/2026 06:25** (UTC-3)
+> Ultima resposta processada: **27/11/2026 06:51** · publicado em **27/11/2026 06:56** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 06:51 · sessao 6c7f3f7c903e · RAMO2-B-EM-TURNO-QUE-CRUZA · leitura · origem=Code
+
+**O atraso aparece porque a obra muda o dia usado para buscar o marco de entrada.** A mudança de `efetivo_saida` explica a passagem da cauda de `fora` para `trabalhado`. O cálculo da pontualidade recebe a **saída bruta** nas duas versões. `app/ponto/motor_calculo_v2.py:2166,2206,2330` no main → `app/ponto/motor_calculo_v2.py:2265–2267,2307,2431` na obra. As linhas do main abaixo foram reconstituídas pelo `diff.txt`.
+
+### 1. Onde o main deixava o atraso em zero
+
+No main, `Motor12x36ComEscala` chama `_julgar_pontualidade`, que consulta `marcos_do_dia(e.date())` e ancora a entrada prevista em `combine(e.date(), hora_prev)`. Se `hora_prev` for falsy, retorna com o atraso inicial em zero. Se houver marco, a condição para lançar atraso é `_de is not None and _de > 10`, com `_de = entrada_bruta − prevista_entrada`. Assim, se o main encontrou os horários informados para o 218 de 15/11 e o 200 de 03/11 na própria data civil, comparou `03:17:11` com `21:00` e `02:00:33` com `22:00` **do mesmo dia**. Os dois deltas são negativos. Os marcos que a consulta civil retornou de fato, inclusive para o 218 de 22/11, 296, 601 e 841, estão **[nao verificado]**. `dias.txt:3–10`; `app/ponto/motor_calculo_v2.py:60,226,2087,2119,2166,2179–2180,2206,3674` no main → `app/ponto/motor_calculo_v2.py:60,226,2182,2214,2265–2267,2280–2281,2307,3827` na obra.
+
+Os hunks `@@ -2162,8 +2257,14`, `@@ -2203,7 +2304,7` e `@@ -2228,7 +2329,7` passam `_dia_j`, obtido de `_dia_do_turno_do_par(entrada)`, à consulta dos marcos, à data do marco de entrada e ao teste de volta do intervalo. A L-084 só devolve `(0, 0)` se **ambas** as distâncias aos marcos existirem e tiverem módulo **maior que 180 min**. Com o `hf` correto e as saídas próximas dele no anexo, a ponta de saída fica abaixo desse limiar. A igualdade `efetivo_saida == marco` é um resultado do recorte da janela. O hunk `@@ -1842,28 +1896,34` troca o retorno `(marco, fora)` por `(saida, 0.0, marco)` quando há bloqueio e o turno cruza, preservando o marco para a base da HE. `app/ponto/motor_calculo_v2.py:1863,2059–2062,2101–2118,2166,2206,2231–2232,2330` no main → `app/ponto/motor_calculo_v2.py:1908–1920,2154–2157,2196–2213,2265–2267,2307,2331–2333,2431` na obra.
+
+### 2. Colab 218, em 15/11
+
+**Sim. `420 − 102,87 = 317,13 min`**, exatamente o atraso exibido. Com o marco informado de `21:00–05:00`, o bruto reconstruído é **377,18 min**, de **14/11 às 21:00 (D−1)** até **15/11 às 03:17:11 (D)**. O marco previsto pode existir em 14/11 mesmo sem um par batido naquela noite. O resultado é compatível com a L-093 reduzindo o bruto a `317,13`. O valor imediatamente antes do rateio, após eventual abono parcial, está **[nao verificado]**. `dias.txt:3–5`; `app/ponto/motor_calculo_v2.py:1225–1247,1276–1286,2087,2206` no main → `app/ponto/motor_calculo_v2.py:1268–1290,1319–1329,2182,2265–2267,2307` na obra.
+
+### 3. Colab 841
+
+O rateio fica em `_aplicar_teto_pontualidade`. Se `soma > teto`, ele multiplica cada atraso e cada antecipada do dia por `teto / soma` e arredonda cada campo a duas casas. Os valores exibidos somam **38,25 min** nas duas versões (`38,25 + 0` e `5,42 + 32,83`). A mudança de data do marco permite que o segundo par entre na soma com atraso positivo e passe a receber parte do teto. A cauda do segundo par já entrava no cálculo do teto no main como `fora` e entra na obra como `trabalhado`. Para esse par, os valores publicados são `6,47 + 5,90` e `12,38`, respectivamente. O rateio observado é compatível com os dois pares no mesmo grupo diário. O mapa do grupo e os valores anteriores ao rateio estão **[nao verificado]**. `dias.txt:10`; `app/ponto/motor_calculo_v2.py:1125–1128,1263–1286,2166,2206,2831` no main → `app/ponto/motor_calculo_v2.py:1168–1171,1306–1329,2265–2267,2307,2944` na obra.
+
+### 4. Dia da jornada pela L-085
+
+A diferença mostrada pelo diff é **qual dia a pontualidade consulta**. O main já usava o mapa do juiz na janela e no agrupamento mensal. O agrupamento usa a entrada bruta e pode herdar o dia do par anterior quando o intervalo entre eles é de até seis horas, medido pela **saída bruta**. No 841, os dois pares estão separados por `1h51min14s`, o que satisfaz essa condição se forem consecutivos no laço. Uma mudança de `dia_da_jornada` entre as versões para qualquer par do anexo está **[nao verificado]**. `dias.txt:10`; `app/ponto/motor_calculo_v2.py:972–973,1646,2510–2521,2536,2573` no main → `app/ponto/motor_calculo_v2.py:1015–1016,1692,2611–2622,2637,2674` na obra.
 
 ## 27/11 06:25 · sessao 0496a3491b21 · RAMO2-B-EM-TURNO-QUE-CRUZA · verificador · origem=Code
 
@@ -1008,52 +1030,4 @@ for classe in $(sed -nE 's/^(M[0-9]+[[:alnum:]]+) = contraprova\($/\1/p' \
 done
 ```
 
-## 27/11 02:58 · sessao 99acdd48db17 · RAMO2-B-EM-TURNO-QUE-CRUZA · construtor · origem=Code
-
-**RAMO2-B c2n — três ajustes na cópia**
-
-1. **Pausa na entrada efetiva.** `segmentos_do_motor` agora usa `_ini <= _a <= s`, como `segmentos_do_par`. No RED sobre `045d308c0`, 12x36 e Comercial deram 800 min trabalhados, 720 min de base, pausa 0 e divergência 1. Após a cura, os dois deram **800 − 20 = 780 min trabalhados**, **720 − 20 = 700 min de base**, pausa de 20 min e divergência 0. O teste também morde se o segmento de duração zero for removido, pois o núcleo usa sua ponta para medir a pausa. `app/ponto/calculador/alimentacao.py:143` · `app/ponto/calculador/periodo.py:310` · `app/ponto/calculador/nucleo.py:145–153` · `app/ponto/tests/test_ramo2b_c2h_saida.py:266–284`
-2. **Porta da HE.** `_acusa` passa `{id(p): date(2026, 11, 5)}` para o próprio período da fixture. As três asserções existentes passaram no ensaio local. O mutante que omite o mapa reproduziu os três `TypeError`. `app/ponto/tests/test_ramo2b_c2_base_da_he.py:723–750` · `app/folha/porta_export.py:319,347`
-3. **Catraca.** O censo de `045d308c0` mediu **9 pareadores, 80 derivações de dia, A1=6, A2=15, B1=77, B2=191 e 3 sítios nomeados**. Registrei a saída de `he_acima_do_teto_por_dia` do B1 e as linhas medidas do motor. Em `unittest` local, o registro anterior teve 5 falhas em 35 testes e o atualizado passou os 35. `test_MORDE_dia_novo_sobe` continua exigindo `SUBIU` para a derivação nova. `app/core/medida_turno_do_par.py:392–452` · `app/core/tests/test_medida_turno_do_par.py:110–111,161,253–350,847–853`
-
-**Escritores e leitores.** O motor grava as pontas e a pausa em `_carimbar_segmento`, o desconto nos dois `calcular_periodo` e o marco da base em `_escrever_base_da_he`. A alimentação publica os pares e o contador. O núcleo usa a ponta de duração zero para medir o vão, o cálculo noturno ignora esse segmento e o DIFF soma o contador. O mapa da jornada da fixture é escrito em `_acusa` e lido pela porta via `id(p)`. `app/ponto/motor_calculo_v2.py:1957,2048–2050,3015,3501` · `app/ponto/calculador/alimentacao.py:143–178,469–475,545–560` · `app/ponto/calculador/nucleo.py:145–153` · `app/ponto/calculador/regras.py:82–86` · `app/ponto/management/commands/diff_calculador.py:323–324` · `app/ponto/tests/test_ramo2b_c2_base_da_he.py:735–737` · `app/folha/porta_export.py:347`
-
-**Quem mais chama `segmentos_do_motor`.** Em produção, `app/ponto/calculador/alimentacao.py:334`, via DIFF em `app/ponto/management/commands/diff_calculador.py:312` e lavratura em `app/ponto/services/fechamento.py:1293–1312`. Nos testes, `app/ponto/tests/test_ramo2b_c2h_saida.py:91,277`, `app/ponto/tests/test_ramo2b_c2_base_da_he.py:462,767` e `app/ponto/tests/test_v3_dobra_split_noturno_porta.py:172`.
-
-`LEI-AKITA origem=app/ponto/motor_calculo_v2.py:2048 testemunha=app/ponto/calculador/alimentacao.py:143 RED=app/ponto/tests/test_ramo2b_c2h_saida.py:266 quem-mais-le=app/ponto/calculador/alimentacao.py:334 juizes novos=0 padrao=fonte unica (app/docs/GLOSSARIO.md:11)`
-
-**Mutantes** — resultados observados em memória com `unittest`. Os primeiros dois falharam em ambos os motores, a omissão do mapa gerou três erros e os dois registros antigos foram rejeitados. `app/ponto/tests/ramo2b_c2n_mutantes.py:14–60`
-
-```bash
-export PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=config.settings.ci
-python3 -B -m ponto.tests.ramo2b_c2n_mutantes ignora_pausa_na_entrada  # rc 1
-python3 -B -m ponto.tests.ramo2b_c2n_mutantes apaga_segmento_vazio     # rc 1
-python3 -B -m ponto.tests.ramo2b_c2n_mutantes omite_dia_da_jornada    # rc 2
-python3 -B -m ponto.tests.ramo2b_c2n_mutantes contagem_anterior      # rc 1
-python3 -B -m ponto.tests.ramo2b_c2n_mutantes linha_anterior         # rc 1
-```
-
-**Recorte para o Code.** Os ensaios locais usaram `unittest` com dependências Django substituídas em memória. Recorte Django e impacto em produção [nao verificado].
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 python3 -B manage.py test --settings=config.settings.ci --noinput \
-  ponto.tests.test_o280_bateria_da_lei \
-  ponto.tests.test_ramo2b_c2l_red_motor \
-  ponto.tests.test_ramo2b_c2h_saida \
-  ponto.tests.test_ramo2b_c2_base_da_he \
-  folha.tests.test_porta_do_export \
-  core.tests.test_medida_turno_do_par \
-  ponto.tests.test_s5b_split_noturno_tem_um_dono \
-  ponto.tests.test_calculador_regras
-```
-
-```text
-$ GIT_OPTIONAL_LOCKS=0 git -C /home/ronald/wt-codex-ramo2-b-em-turno-que-cruza-221946 status --porcelain
- M app/core/tests/test_medida_turno_do_par.py
- M app/ponto/calculador/alimentacao.py
- M app/ponto/tests/test_ramo2b_c2_base_da_he.py
- M app/ponto/tests/test_ramo2b_c2h_saida.py
-?? app/ponto/tests/ramo2b_c2n_mutantes.py
-```
-
-_8575 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8576 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
