@@ -1,7 +1,148 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 14:14** · publicado em **27/11/2026 14:14** (UTC-3)
+> Ultima resposta processada: **27/11/2026 14:21** · publicado em **27/11/2026 14:21** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 14:21 · sessao 789c6c28db25 · FERIADO-UM-JUIZ · sonda · origem=Code
+
+**Reexecução bloqueada.** A checagem local retornou `stat: cannot statx 'sonda.py': No such file or directory`. O executor exige o arquivo da sonda e, ao prosseguir, cria uma cópia temporária. A análise abaixo usa o trecho raspado fornecido. [bin/sonda_leitura.sh:71](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:71) [bin/sonda_leitura.sh:216](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:216) [nao verificado]
+
+**Linhas literais do dado fornecido** [nao verificado]
+
+```text
+EXPORTADAS_VIGENTES 7 [(2, 2026, 8), (2, 2026, 9), (3, 2026, 7), (3, 2026, 9), (4, 2026, 6), (4, 2026, 7), (4, 2026, 9)]
+UNIV|emp=2|08/2026|janela=2026-07-21..2026-08-20|celulas=12691|folgas=4582|colabs_com_folga=363|feriados_cadastrados=0|diapago_motor=334|diapago_motor_ht>0_em_folga=207
+COMP|emp=2|08/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+UNIV|emp=3|07/2026|janela=2026-06-21..2026-07-20|celulas=57|folgas=28|colabs_com_folga=2|feriados_cadastrados=0|diapago_motor=12|diapago_motor_ht>0_em_folga=8
+COMP|emp=3|07/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+UNIV|emp=4|06/2026|janela=2026-05-21..2026-06-20|celulas=0|folgas=0|colabs_com_folga=0|feriados_cadastrados=3|diapago_motor=0|diapago_motor_ht>0_em_folga=0
+COMP|emp=4|06/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+UNIV|emp=4|07/2026|janela=2026-06-21..2026-07-20|celulas=0|folgas=0|colabs_com_folga=0|feriados_cadastrados=0|diapago_motor=0|diapago_motor_ht>0_em_folga=0
+COMP|emp=4|07/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+TOTAL_DIAS 0 SOMA_COLABS_POR_COMP 0
+```
+
+| Empresa / competência | Células | Folgas | Feriados cadastrados | Lavras DiaPago motor | O que explica o zero no recorte fornecido |
+|---|---:|---:|---:|---:|---|
+| 2 / 08/2026 | 12691 | 4582 | 0 | 334 | Faltou feriado cadastrado para o cruzamento. [nao verificado] |
+| 3 / 07/2026 | 57 | 28 | 0 | 12 | Faltou feriado cadastrado para o cruzamento. [nao verificado] |
+| 4 / 06/2026 | 0 | 0 | 3 | 0 | Havia feriados cadastrados, mas faltaram células, folgas e lavras na janela. [nao verificado] |
+| 4 / 07/2026 | 0 | 0 | 0 | 0 | Universo inteiramente vazio nos quatro contadores. [nao verificado] |
+| 2, 3 e 4 / 09/2026 | — | — | — | — | Setembro ficou fora da medição (`GUARDADA_FORA` nas três empresas). [nao verificado] |
+
+Em cada janela medida, pelo menos um dos conjuntos necessários ao cruzamento estava vazio. [nao verificado]
+
+## 27/11 14:18 · sessao b2f61ead570b · FERIADO-UM-JUIZ · sonda · origem=Code
+
+Conferi a saída raspada de `2026-11-27T14:17:00-03:00`. Não localizei `sonda.py` na cópia e não tive acesso à sombra. A reexecução e a aplicação do critério da m1 ficam [nao verificado]. O executor local reescreve o arquivo de credenciais, o que contraria a regra de somente leitura. [bin/sonda_leitura.sh:126](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/bin/sonda_leitura.sh:126)
+
+**(a) Exportadas vigentes por empresa**
+
+A saída `EXPORTADAS_VIGENTES` lista 7 pares empresa–competência. [nao verificado]
+
+- Empresa 2 — 08/2026 e 09/2026. [nao verificado]
+- Empresa 3 — 07/2026 e 09/2026. [nao verificado]
+- Empresa 4 — 06/2026, 07/2026 e 09/2026. [nao verificado]
+
+A guarda da cópia inclui 09/2026. [app/ponto/services/fechamento.py:37](/home/ronald/codex_ws/59600163ccc9cffb8f3ae148beede7cd7866ae86/app/ponto/services/fechamento.py:37)
+
+**(b) Competências fora da guarda e (c) total**
+
+Linhas `COMP` e `TOTAL_DIAS` copiadas literalmente da saída fornecida. [nao verificado]
+
+```text
+COMP|emp=2|08/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+COMP|emp=3|07/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+COMP|emp=4|06/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+COMP|emp=4|07/2026|alvos=0|dias_trab=0|colabs=0|ht=0.00|sem_escala_h=0.00|he100fer=0.00|sem_lavra=0
+TOTAL_DIAS 0 SOMA_COLABS_POR_COMP 0
+```
+
+A soma das quatro linhas `COMP` dá 0,00 h trabalhadas, 0,00 h sem escala e 0,00 h de `he100fer`. [nao verificado]
+
+## 27/11 14:15 · sessao 3b3105e3494e · E4C-F5-INSTANTE · verificador · origem=Code
+
+**Cura5 reprovada na verificação.** A resposta comum agora emite uma vez pelo `registrar`, como exige o aval. O escopo de silêncio ainda pode suprimir um save independente da mesma instância, e os selos deixam passar formas concretas de escrita fora do sítio autorizado. O fluxo público de falta ou atestado também pode acordar a mesma célula mais de uma vez. `aval_item6.txt:1`, `app/chamados/services/disputa_emissao.py:1565–1568,1593–1597`, `app/chamados/models.py:4774–4786`, `app/core/censo_escritas.py:407–423`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112`.
+
+Conferi a cópia e o delta fornecido, com sondas de Python e AST em memória. A identidade Git do hash, as rodadas do recibo e a ocorrência dos contraexemplos em produção ficam [nao verificado].
+
+### 1. PROCEDENTE — a autoria da resposta comum foi corrigida, e há duplicatas remanescentes
+
+A tabela conta inserts do outbox da pergunta por célula resolvida, em caminhos concluídos. O insert físico passa por `emitir_evento_celula`. Se a FK e a busca por colaborador/dia falham, há **0**. `app/chamados/models.py:3609–3634`, `app/ponto/portas/celula.py:981–991`.
+
+| Caminho do ver4 | Quem aciona o insert e quantos |
+|---|---|
+| `save` + `registrar` | **1, `registrar`**, quando o save vai em `projecao`. Vale para a resposta humana, automática, pela trilha, carimbo com ato, validação e as duas devoluções migradas. Se o save elegível e o registro forem chamados separadamente, são **2, `post_save` + `registrar`**, mesmo na mesma instância e no mesmo atomic. `app/chamados/services/disputa_emissao.py:1565–1568,1762–1765,1797–1800`, `app/chamados/services/validacao.py:176–179,315–319,393–398`, `app/chamados/models.py:3522–3524,4821–4843`, `app/chamados/signals.py:255–263`. |
+| `save` sem `registrar` | **1, `post_save`**, para save inteiro ou parcial que nomeie campo elegível. **0** para `raw`, `created` ou parcial sem campo elegível. `app/chamados/signals.py:255–263`. |
+| `registrar` sem `save` | **1, `registrar`**, por célula de lote comum não vazio. `app/chamados/models.py:4797–4805,4821–4843`. |
+| `created` / `_nascer` | **0, `post_save`**. **1, `registrar`** se o nascimento trouxer assinatura a registrar, **0** com lote vazio. No ramo de **reuso** de `_nascer`, um save de vínculo pode acordar a célula atual pelo receiver e a porta acordar a anterior. São **2 na mesma célula** se mudou só o destino do chamado. `app/chamados/signals.py:255–263`, `app/chamados/models.py:3271–3276,3288–3328,4505–4524`. |
+| `reabrir_para_correcao` | **2** na interseção entre o lote de atos e as células capturadas, pelo `registrar` e pela chamada explícita da própria porta após o `update`. **1** quando só a captura cobre a célula. A recusa administrativa também usa esse caminho, com ato `RECUSA`. `app/chamados/services/disputa_emissao.py:1680–1683,1696–1717`, `app/chamados/services/validacao.py:1013–1021`. |
+| `ressuscitar` | **2** por célula afetada no sucesso, pelo `registrar` da compensação e pela emissão explícita após o `update`. **3** se o lote anterior de passivo também cobrir a célula. **0** se não houver alvos. `app/chamados/models.py:1635–1642,1681–1682,1723–1733`. |
+| L-130 | **2**, pelo `registrar` do lote de passivo mais reabertura e pela emissão explícita após o `update`. Se o update não escrever, a exceção desfaz o lote e seu evento. `app/chamados/services/validacao.py:471–496`. |
+| `fechar_por_admin` + `SILENCIO` | **1, `registrar`**, por pergunta carimbada em `DisputaSupervisao.fechar` e em `fechar_o_fio_do_dia`. São chamadas por pergunta, então várias perguntas da mesma célula podem gerar vários eventos. `fechar_por_admin` sem `decisao` usa save comum e emite pelo receiver se carimbar. `app/chamados/models.py:2175–2189,3364–3378,3561–3576,4797–4803`, `app/ponto/services/veredito_celula.py:192–203`. |
+| Retratação de motivo | **2** quando o carimbo grava, primeiro pelo `registrar(RETRATACAO)` e depois pelo `post_save` do carimbo. **1** se só o registro ocorrer. `app/chamados/models.py:2316–2324,3561–3576,4797–4803`, `app/chamados/signals.py:255–263`. |
+| `entrada_origem=ESTOQUE` | **0, `registrar`**. Um save avulso anterior conta por si. Os backfills antigos citados passam atos comuns e emitem quando o lote tem linhas. `app/chamados/models.py:4841–4865`, `app/chamados/management/commands/backfill_decisoes_pergunta.py:357–361`, `app/chamados/management/commands/backfill_fio_morto_e4b.py:161–164`. |
+| Lote vazio | **0** sem projeção. Com projeção e save elegível, **1, `post_save`**. O `registrar` retorna antes de abrir seu atomic e antes de conferir o lote. `app/chamados/models.py:4796–4815`, `app/chamados/signals.py:255–263`. |
+
+**Alcance literal.** A gravação do ato `RESPOSTA` cumpre o aval. Reabertura, ressuscitação, L-130 e retratação são outros atos. **Absorção é o caminho omitido que também integra uma resposta pública.** `FALTA_DIA` e `ATESTADO` passam pelo mesmo núcleo e podem absorver a própria pergunta de hora. Em uma absorção bem-sucedida, há dois eventos adicionais na célula da absorvida. O primeiro vem do carimbo, pelo `registrar` se houver ato ou pelo `post_save` se o lote for vazio. O segundo vem do `registrar(ABSORCAO)`. Quando é a própria pergunta que respondeu, são **3 na mesma célula**. Há teste que exige a absorção da própria âncora após `FALTA_DIA`, sem contar o outbox. A frequência em produção fica [nao verificado]. `aval_item6.txt:1`, `app/chamados/services/disputa_emissao.py:1565–1568,1593–1597`, `app/chamados/services/materializacao.py:1065–1073,1123–1153,1190–1196`, `app/chamados/models.py:3478–3496,3522–3524,4797–4803`, `app/chamados/tests/test_e4c_f5_volta3_ausencia.py:62–76`.
+
+### 2. PROCEDENTE — o escopo é da instância, com caso de zero eventos
+
+- **Outra pergunta ou outra instância do mesmo PK:** o receiver consulta o `__dict__` do objeto recebido. Um save aninhado de outro objeto mantém sua emissão normal. Para a **mesma instância**, um save avulso aninhado fica calado. Se houver duas projeções reentrantes no mesmo objeto, o `finally` da interna apaga o `True` da externa. Confirmei essa perda da marca em memória. Os dois receivers da pergunta na cópia não fazem outro save síncrono da pergunta. `app/chamados/models.py:4774–4786`, `app/chamados/signals.py:229–240,254–263`.
+- **Pior caso com zero sobrevivente:** A marca `p` e pausa antes do SQL. B, em outra thread/conexão, salva a mesma instância `p` por um save avulso elegível e confirma a coluna. O receiver de B vê a marca de A e se cala. A falha antes de emitir, limpa a marca e desfaz sua própria transação. B fica gravado com **0 eventos**. O save avulso em si não exige a trava do colaborador, e a marca não consulta thread, conexão ou savepoint. Compartilhamento da instância em produção [nao verificado]. `app/chamados/models.py:3856–3872,4774–4786,4815–4843`, `app/chamados/signals.py:255–263`.
+- **Exceção e savepoint:** no fluxo pareado normal, o `finally` limpa a marca se o save levantar. Se o insert do ato ou do evento levantar depois, o atomic externo desfaz a projeção junto com o ato. Entre o retorno do save e a emissão da porta não há saída desse atomic. O RED de savepoint desfaz um **save avulso** antes de chamar o `registrar` e espera um evento sobrevivente do registro. O cenário de callback anterior à limpeza da cura4 perde a causa, pois a cura5 limpa a marca antes do commit. `app/chamados/models.py:4780–4786,4815–4844`, `app/chamados/tests/test_e4c_f5_c4_red.py:737–753,848–855`.
+
+### 3. NAO PROCEDE — a guarda nova não atinge os chamadores atuais
+
+| Chamador | Campos que passa |
+|---|---|
+| Resposta humana, automática e pela trilha | Par resposta/instante, com validação, motivo e descarimbo opcionais na humana. A automática passa o par, e a trilha passa só `respondida_em`. `app/chamados/services/disputa_emissao.py:1529–1568,1758–1765,1793–1800`, `app/chamados/models.py:3588–3598,3703–3717`. |
+| `carimbar` e `carimbar_identidade` | Via, instante e autor do carimbo, mais os campos de resposta, validação, lavra ou motivo conforme o ramo. `app/chamados/models.py:3462–3496,3515–3524,3566–3575`. |
+| Validação, devolução de recusa e BUG-PAR-103 | `validada_em` e `validada_por`. BUG-PAR acrescenta os três campos do descarimbo. `app/chamados/services/validacao.py:170–179,309–319,384–398`, `app/chamados/models.py:3588–3598`. |
+
+Os oito sítios usam coleções sem `celula`, `celula_id`, `disputa`, `disputa_id` ou `data_evento`. A recusa ocorre antes da escrita para lote **não vazio**. O lote vazio aceita esses campos e faz save comum, cujo receiver lê o endereço depois do save. Outra fragilidade da assinatura é consumir um iterador de campos em `set(projecao[1])` e repassá-lo esgotado ao save. Os oito sítios acima passam listas. `app/chamados/models.py:4770–4771,4796–4828`, `app/chamados/signals.py:259–263`.
+
+### 4. PROCEDENTE — a marca mistura o save autorizado com a identidade do objeto
+
+| Campo ou valor | Quem escreve, quem lê e o significado |
+|---|---|
+| `_ESCOPO_DA_PROJECAO` / `_salva_pelo_registrar` | `_salvar_a_projecao` põe `True` e remove a chave. `salva_pelo_registrar` lê `is True`, e o receiver usa o resultado para se calar. A intenção é identificar **aquele save**. O valor identifica **qualquer save do mesmo objeto durante o intervalo**. `app/chamados/models.py:4769–4786`, `app/chamados/signals.py:261–263`. |
+| `projecao=(instância, campos)` e `decisao` | Os oito sítios do item 3 montam a projeção. `registrar` lê PK e campos e delega o save. As duas portas de `SILENCIO` fornecem a função `decisao`, que `fechar_por_admin` repassa e `carimbar_identidade` executa após preparar o carimbo em memória. O texto do `SILENCIO` vem de `DecisaoPergunta.leitura` no fecho da disputa e da coluna crua no fecho do dia. Essa diferença já existia no delta fornecido. `app/chamados/models.py:2182–2185,3364–3378,3566–3575,4796–4828`, `app/ponto/services/veredito_celula.py:194–203`. |
+| Campos projetados e campos do ato | Os sítios do item 3 preparam os valores. `_escrever_carimbo` atribui via, instante e autor do carimbo, e `lavrar` prepara veredito, julgamento e expiração. `registrar` persiste a coluna e faz o `bulk_create` dos atos. `leitura` reduz os atos, `composta` combina essa leitura com as colunas e o C6 a consulta. A resposta humana grava `resposta_mantem_validacao=False`. Automática e trilha gravam `True`. O redutor lê esse booleano para decidir o efeito sobre a validação. `app/chamados/models.py:3420–3424,4534–4595,4660–4669,4821–4828`, `app/chamados/veredito_lavrado.py:254–275`, `app/chamados/juizes.py:1499–1521`, `app/chamados/services/disputa_emissao.py:1565–1568,1762–1765,1797–1800`. |
+| Endereço do evento e `_CAMPOS_QUE_MOVEM_O_EVENTO` | Nascimento fornece disputa e célula. Reuso e rechaveamento podem mudar a célula. `gravar_dia_do_fato` atribui o dia. `linhas_do_evento` lê FK, dono pela disputa e dia. O `registrar` lê essa foto antes do save e compara os campos pretendidos com a lista de bloqueio. `data_evento` já guarda dia do turno no fato e dia civil na conversa, discriminados por `conversa`. A busca do outbox usa o valor de `data_evento` nos dois casos. `app/chamados/models.py:3098–3118,3271–3276,3322–3326,3609–3633,4770–4771,4809–4824`, `app/chamados/services/fio.py:950–961,1194–1205`. |
+| `CAMPOS_QUE_ACORDAM` | O modelo declara resposta, validação, carimbo, dia e vínculos de célula, disputa e chamado-destino. O receiver verifica **campos nomeados** em `update_fields`, sem comparar valor antigo com novo. A constante homônima da porta da célula é distinta e cobre `veredito` e `ata`. `app/chamados/models.py:3600–3607`, `app/chamados/signals.py:255–263`, `app/ponto/portas/celula.py:975–1002`. |
+| `ESCRITA_POR_PROJECAO` e `classes_do_modulo` | O módulo declara o mapa `(DecisaoPergunta, registrar) → projecao`. `varrer_fonte` preenche as classes conhecidas do módulo. `visit_Call` lê ambos e `_projecao` sintetiza um save atribuído ao chamador. A marca `[projecao]` existe no resultado do censo. `app/core/censo_escritas.py:65–70,215–218,407–423,475–491`. |
+
+### 5. PROCEDENTE — o censo deixa passar um chamador e uma escrita física
+
+O `_Varredor` adiciona a atribuição da projeção literal. Os oito sítios atuais aparecem no censo e pertencem aos arquivos autorizados. Os dois saves físicos da porta continuam no balde sem entidade. O censo de escritas fora da porta pula esse balde. `app/core/censo_escritas.py:407–454,529–547`, `app/core/portas.py:396–403`, `app/chamados/tests/test_e4c_f5_c4_red.py:1564–1591`, `app/chamados/tests/test_chokepoint_chamado_gate.py:316–327`.
+
+Em memória, o `_Varredor` acusou `D.registrar([], projecao=(p, ['resposta_colab']))` e retornou `[]` quando a mesma tupla foi passada por uma variável. O ramo vazio executaria o save real a partir desse sítio externo. A chamada direta de `D._salvar_a_projecao(p, ['resposta_colab'])` também retornou `[]`. Esse helper pode executar o save com o receiver calado, sem conferir lote, sem registrar ato e sem emitir evento. A chamada produtiva que encontrei para o helper é a interna ao `registrar`. Ocorrência externa [nao verificado]. `app/core/censo_escritas.py:371–423`, `app/chamados/models.py:4780–4786,4797–4803,4821–4828`, `app/chamados/signals.py:259–263`.
+
+### 6. PROCEDENTE — estado em instância, lacunas nos selos e risco de fontes divergentes
+
+- **PROCEDENTE — estado em instância, significado da marca e escrita sem cobertura.** O caso de zero do item 2 e a chamada direta do item 5 decorrem do código. A nova assinatura também aceita projeção de outra instância com o mesmo PK, mas só invalida `decisoes` e `_pv_memo` nos objetos em `ln['pergunta']`. Um lote por `pergunta_id` pode deixar a instância projetada com prefetch velho. Os chamadores migrados passam a própria instância no ato novo. `app/chamados/models.py:4558–4574,4780–4808,4834–4840`, `app/chamados/services/disputa_emissao.py:1565–1568,1762–1765,1797–1800`, `app/chamados/services/validacao.py:176–179,315–319,393–398`.
+- **PROCEDENTE — lista paralela e selos incompletos.** A guarda de movimento repete em nomes de campo o endereço que `linhas_do_evento` lê, sem vínculo mecânico entre as duas definições. Os campos atuais conferem. Os selos de trilha e projeção têm os contraexemplos dos itens 5 e 7. `app/chamados/models.py:3609–3613,4770–4771,4809–4824`, `app/core/censo_escritas.py:407–423`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112`.
+- **NAO PROCEDE — segundo juiz, segundo escritor físico em uso, relógio fora da borda ou inversão nova de trava.** C6 e C21 continuam registrados nas mesmas autoridades. O insert do outbox permanece na porta da célula, e o da sequência permanece no `registrar`. Nas devoluções, a leitura de `timezone.now()` passou para antes do save projetado, ainda sob a trava do chamador. A porta confere os donos antes de salvar e não adquire nova trava explícita. `app/core/juizes.py:298,313`, `app/ponto/portas/celula.py:981–991`, `app/chamados/models.py:4815–4843`, `app/chamados/services/validacao.py:283–319,370–398`.
+
+### 7. PROCEDENTE — os mutantes novos têm alvos reais, e há selos enfraquecidos
+
+- **M53–M58.** M53/M54 trocam a autoria para o receiver e preservam a contagem. M55 deixa a marca após uma exceção e faz o save seguinte perder o evento. M56 cala o save avulso. M57 duplica o evento da resposta pública. M58 remove só a guarda e simula o `bulk_create` para que a primeira iteração falhe por falta do `ValueError`. Sem mutação, o RED verifica a recusa e a ausência de save para os cinco nomes. O mutante prova a recusa, sem exercitar uma troca real de célula. O harness exige falha na asserção indicada e controles verdes antes e depois. Âncoras conferidas em memória. Execução ORM [nao verificado]. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:27–67,230–238,790–846`, `app/chamados/tests/test_e4c_f5_c4_red.py:711–735,770–777,1541–1548`.
+- **`_dicts_da_trilha` enfraquece os dois selos.** O K6 real lê a pergunta e grava `LogAuditoria`. Os MORDE passam nas formas escritas, mas a dispensa só olha o nome `dict` e agrega imports sem resolver a ligação no ponto da chamada. Na sonda, ligar `dict` a `PerguntaDisputa.objects.filter(pk=pk).update` e passar `depois=dict(materializada_em=None, respondida_em=None, resposta_colab='')` fez ambos retornarem `[]`. Removida só a dispensa, os dois acusaram os campos. O `update` ocorre ao avaliar o argumento, antes de entrar na trilha. Um import local homônimo também escapa. `app/chamados/services/materializacao.py:846–859`, `app/core/observ.py:94–106,138–153`, `app/chamados/tests/test_o261e_f2_porta_carimbo.py:85–112,213–232,309–331`, `app/chamados/tests/test_e3_porta_A_escritor_do_par.py:135–154,289–299`.
+- **RED e mocks.** A asserção original de ato e contagem da resposta pública ficou intacta. O `(1, 1)` do lote continua, com verificação adicional de persistência, mas o arranjo mudou de save avulso seguido de `registrar` para projeção pareada. Portanto deixou de exigir dedupe entre chamadas separadas. O mock de limbo preserva as asserções de campos, instante, linha, trava e auditoria. Ele simula o save e não exercita a transação nem o outbox. H2 conserva o rollback instrumentado de ato e outbox no caminho **sem projeção**. O RED de `on_commit` executa callbacks capturados em `TestCase`, sem commit real. O MORDE do censo cobre a tupla literal e deixa escapar a variável do item 5. `app/chamados/tests/test_e4c_f5_c4_red.py:636–648,737–768,1564–1591`, `app/chamados/tests/cortes_f2_f9_apoio.py:58`, `app/chamados/tests/test_curar_perguntas_em_limbo.py:29–58`, `app/chamados/tests/test_e4_expand.py:396–431`.
+- **Âncoras.** As quatro âncoras alteradas das voltas 3 e E aplicam e produzem a violação esperada nos selos AST em memória. Na cópia, `M-H2-evento`, `M-C11-reversao`, `absorcao_sem_comparador`, `tirar_guarda` e `contador_ignora_b` têm **zero ocorrências** de suas âncoras e abortam antes da asserção de negócio se selecionados. A inclusão deles nas rodadas do recibo fica [nao verificado]. `app/chamados/tests/e4c_f5_volta3_mutantes.py:29–32,53–68,95–109`, `app/chamados/tests/e4c_f5_voltaE_mutantes.py:10–42,84–95`, `app/chamados/tests/test_e4c_f5_volta3_selos.py:12–29,41–59`, `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:560–602`, `app/chamados/tests/e4_verificar.py:21–24,33–37,58–64`.
+
+## 27/11 14:15 · sessao 62d7a3df1317 · - · - · origem=Ronald (tmux)
+
+**Item 7 — PROCEDENTE para lacunas nos selos e nas âncoras antigas. NAO PROCEDE para afrouxamento do RED de resposta pública.** A asserção de uma linha `RESPOSTA` e um evento ficou intacta. O teste de lote preserva `(1, 1)`, acrescenta a persistência da projeção e troca o arranjo de duas chamadas por `registrar(..., projecao=...)`. O teste anterior deixou de exigir dedupe entre chamadas separadas. `app/chamados/tests/test_e4c_f5_c4_red.py:636–648,756–768,833–855`
+
+- M53 e M54 trocam a autoria de um único evento. M55 retira o `finally`. M56 e M57 forçam silêncio indevido e emissão dupla, respectivamente. A espia distingue `post_save` pela pilha e atribui ao `registrar` qualquer outra emissão sob esse frame. O RED separado conta os inserts. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:793–804,818–842`, `app/chamados/tests/test_e4c_f5_c4_red.py:636–672,711–735,770–777,821–825`
+- M58 remove a guarda e intercepta `bulk_create` no mutante. A falha esperada é a ausência de `ValueError`, com a mesma asserção de recusa. O teste usa instância falsa e para no primeiro campo quando a recusa desaparece, enquanto o controle verifica os cinco campos e que o save jamais rodou. `app/chamados/tests/e4c_f5_c4red2_mutantes.py:27–62,807–815,843–846`, `app/chamados/tests/test_e4c_f5_c4_red.py:1533–1548`
+- Confirmei em memória uma ocorrência por âncora alterada e a compilação das versões mutadas. A sonda AST de volta3 acusou `v_ato_sem_coluna` e `d_devolucao_mantem_coluna`. Para voltaE, `preenche_e_desfaz` acusou ato que pode desfazer a validação e `d_paridade_devolucao_sem_coluna` acusou a devolução no selo inverso. As âncoras antigas `M-H2-evento` e `M-C11-reversao` continuam com zero ocorrências na cópia e falham antes do teste. Execução ORM e rodadas do recibo [nao verificado]. `app/chamados/tests/e4c_f5_volta3_mutantes.py:53–64,106–125`, `app/chamados/tests/test_e4c_f5_volta3_selos.py:12–29,41–59`, `app/chamados/tests/e4c_f5_voltaE_mutantes.py:10–18,28–42,84–95`, `app/chamados/tests/test_e4c_f5_selo_par_ato_coluna.py:560–572,585–637`, `app/chamados/tests/e4_verificar.py:21–24,33–37,58–64`
+- O mock do limbo conserva a prova do contrato do chamador, incluindo campos, instante, linha, trava e trilha. Ele simula o save e intercepta o atomic. H2 ainda verifica rollback de ato e outbox instrumentados no ramo sem projeção. O teste de `on_commit` executa captura dentro de `TestCase`, enquanto o teste de savepoint faz um save avulso antes de chamar a porta. Concorrência e reentrância na mesma instância ficam fora desses casos. `app/chamados/tests/test_curar_perguntas_em_limbo.py:29–58`, `app/chamados/tests/test_e4_expand.py:396–431`, `app/chamados/tests/test_e4c_f5_c4_red.py:737–753,848–855`, `app/chamados/tests/cortes_f2_f9_apoio.py:58`
+- O MORDE do censo trava o reconhecimento da tupla literal e os dois saves internos visíveis. Rodei o censo puro, que encontrou oito chamadores atribuídos a `PerguntaDisputa`, todos em arquivos declarados, e os dois saves internos com `entidade=None`. O caso de teste não cobre alias do payload ou expansão por `**kwargs`. `app/chamados/tests/test_e4c_f5_c4_red.py:1551–1591`, `app/core/censo_escritas.py:406–423`, `app/core/portas.py:396–403`, `app/chamados/models.py:3523,3575,4784,4802`, `app/chamados/services/disputa_emissao.py:1565,1762,1797`, `app/chamados/services/validacao.py:176,315,393`
+
+**Achado adicional para item 1.** Uma resposta pública `ATESTADO` pode absorver a própria pergunta de hora. Para a mesma célula, com validação nula e absorção aceita, há três emissões de pergunta por três chamadas de `registrar`, uma da `RESPOSTA`, uma da `VALIDACAO` feita no carimbo e uma da `ABSORCAO`. Uma irmã muda recebe carimbo com lote vazio pelo `post_save`, mais a emissão da `ABSORCAO`. A fixture pública afirma a absorção da própria pergunta e da irmã, sem contar eventos. Portanto o ato de resposta isolado atende à autoria, e a leitura do aval sobre a operação pública completa encontra contraexemplo. Ocorrência em produção [nao verificado]. `app/chamados/services/disputa_emissao.py:1565–1568,1592–1597`, `app/chamados/services/materializacao.py:1065–1071,1096–1153`, `app/chamados/models.py:3478–3496,3522–3524,4797–4803,4841–4844`, `app/chamados/tests/test_o261_e1_ausencia_rejeitada_devolve.py:47–58,87–92`
 
 ## 27/11 14:14 · sessao 31a3277cc8d2 · - · - · origem=Ronald (tmux)
 
@@ -580,112 +721,4 @@ Para um período de folga **com minutos já apurados**, a matriz é esta. Em par
 
 **Prova local.** Rodei sem escrita o controle com 16 testes verdes e os 12 mutantes. Cada mutante fez seu teste falhar por asserção com controle verde. O mutante da exigência de escala certa chama `do_dia` diretamente; o runner não verifica o TXT nem as escritas da porta. [feriado_um_juiz_mutantes.py:29](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/tests/feriado_um_juiz_mutantes.py:29) [feriado_um_juiz_mutantes.py:112](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/tests/feriado_um_juiz_mutantes.py:112)
 
-## 27/11 12:42 · sessao d8d413482ec1 · - · - · origem=Ronald (tmux)
-
-**REPROVADO.** A nova partição promove as horas da fatia 6x1, mas o TXT pode perder toda a promoção quando o vínculo no último dia da competência é 12x36 simples. Reproduzi sem banco 4 h de HE100 feriado apuradas e 0 h emitidas tanto em HE100 feriado como em HE100 normal. A montagem do TXT obtém ciclo e cláusula no fim da janela, depois usa esse ciclo para suprimir o subtotal mensal inteiro. **RED:** 6x1 com 4 h de folga em feriado e escala não certa, migração para 12x36 simples no mesmo mês, TXT real conserva as 4 h da primeira fatia. O teste atual chama o emissor diretamente com ciclo único. `app/ponto/services/fechamento.py:363-372,990-997`; `app/folha/export.py:341-370,420-423,739-748`; `app/ponto/tests/test_feriado_um_juiz_porta.py:63-71`.
-
-- **Segunda derivação no DIFF.** A lavra do oráculo recebe a partição do fechamento e a usa em dia FT. O comando `diff_calculador` omite a partição e, mesmo com os períodos do fechamento, chama o ramo avulso que recompõe a decisão com a flag CCT de um único motor e o ciclo do vínculo do dia. O lado chamado “motor” do mesmo DIFF ainda classifica todo FT como folga trabalhada. **RED:** 6x1 FT em feriado, sem escala certa, exige 4 h HE100 feriado no fechamento, lavra e lado motor do DIFF. Repetir com troca 6x1 → 12x36 prova o erro de alimentação do lado calculador. `app/ponto/services/fechamento.py:1283-1313`; `app/ponto/calculador/regras.py:689-710,780-783,876-879`; `app/ponto/calculador/alimentacao.py:419-436,521-530,551-568`; `app/ponto/management/commands/diff_calculador.py:151-163,263-268,417-424,527-542`.
-- **Escrita em memória duplicada.** `fechamento` escreve `PeriodoCalculo.minutos_extra_100_noturna`, que o motor escreve e zera. O helper é o mesmo, com argumentos distintos. A partição usa pontas efetivas e só faz isso se o período bruto não veio marcado como feriado em toda a duração. O resultado em memória pode carregar split promovido sem carregar o respectivo total no próprio período. **RED:** promoção FT de turno partido conserva o período bruto e entrega 180 min noturnos pelo registro explícito da partição; selar a ausência de nova atribuição externa ao campo bruto. `app/ponto/services/fechamento.py:374-381`; `app/ponto/motor_calculo_v2.py:1051-1065,3052-3054,3452-3454`.
-- **Mensal versus lavras.** O mensal arredonda `horas_trabalhadas` antes de somar FT comum e depois arredonda novamente. Um minuto comum e um minuto de FT comum rendem 0,04 h no mensal e 0,03 h na soma das lavras. A fórmula é preexistente. Em FT, o oráculo ainda recompõe adicional noturno legal e intra e pode usar a régua da última escala em toda a janela, enquanto o motor usa a CCT da fatia. **REDs:** comparar mensal e lavras para dois minutos distribuídos entre as duas parcelas e, em fixture 6x1 → 12x36, comparar adicional legal, split, intra e abono dia a dia. `app/ponto/services/fechamento.py:964-965,1000-1003,786-803`; `app/ponto/services/dia_pago.py:178,223-225,264,559-563`; `app/ponto/calculador/regras.py:716-736`; `app/ponto/calculador/alimentacao.py:419-436,568`; `app/core/regua_cct.py:153-166`.
-- **Porta, idempotência e trava.** O diff não acrescenta escritor persistente nem inversão de travas. As duas versões entram pelo `lavrar`, que substitui por chave de versão depois de validar donos declarados no conjunto de dias. Repetição bem-sucedida substitui as linhas. A porta não garante consistência após falha no caminho direto ou por `on_commit`, pois o mensal grava antes, as exceções diárias são absorvidas e a substituição faz `delete` seguido de `bulk_create`. **RED:** `TransactionTestCase`, falha injetada na criação das linhas depois da exclusão, exigindo mensal e duas lavras anteriores intactos. O risco é preexistente. `app/ponto/services/fechamento.py:1155-1188,1217-1259,1296-1320,1826-1844`; `app/ponto/services/dia_pago.py:312-334,359-360`.
-- **Data e relógio.** A chave da partição, projeção e lavras vem de `dia_da_jornada[id(p)]`; `_dia_de` cai no dia civil da entrada quando o id não tem mapeamento. Os mutantes provam que trocar o caso mapeado para civil muda o resultado. Nenhuma nova leitura corrente de relógio nesses ramos. **RED complementar:** o par da madrugada tem dia mapeado e todos os leitores mantêm a data da véspera, e ausência de mapeamento de FT é detectada. `app/ponto/motor_calculo_v2.py:911-922,1112-1119,2571-2573`; `app/ponto/services/fechamento.py:362-375,1235,1306`; `app/ponto/calculador/alimentacao.py:360-374`; `app/ponto/services/dia_pago.py:109-132,234-267`; `app/ponto/tests/feriado_um_juiz_mutantes.py:53-55`.
-- **Linhagem dos leitores.** Mensal parte dos `ResultadoMes.periodos`, que excluem FT nos totais de HE e trabalho, e soma a lista exclusiva correspondente. Lavra motor lê as mesmas três listas, e lavra oráculo recebe `Rubricas.valores` para substituir os campos declarados pela mesma porta. `pago_do_dia` lê trabalhadas + folga + minutos de folga-feriado, enquanto `rubricas_do_dia` lê HE100 total sem somar subconjuntos. Leitores diretos incluem espelho, calendário, testemunha do export e app pela casca do espelho. `app/ponto/motor_calculo_v2.py:294-344`; `app/ponto/services/fechamento.py:964-1003,1217-1245,1283-1313`; `app/ponto/services/dia_pago.py:173-186,234-267,312-334,867-928`; `app/ponto/services/espelho.py:132-136,823-831`; `app/colaboradores/services/calendario.py:688-698`; `app/folha/porta_export.py:106-124`; `app/api/views.py:1453,1537-1538`.
-- **Provas.** Controle sem banco executado, 16 verdes. Os 12 mutantes executados separadamente, cada um com controle verde e uma falha de asserção sem erro após alterar a função produtiva em memória. `exige_escala_certa` verifica só `do_dia` avulso. Nenhum desses mutantes executa a ponta persistente/TXT. O runner `base` depende de `git show`; execução do RED histórico, da suíte com banco e evidências de pré-medição, apply, reversão, TXT de produção e ordem de pouso são [nao verificado]. `app/ponto/tests/feriado_um_juiz_mutantes.py:30-72,104-126`; `CLAUDE.md:421-431,453-466`.
-
-## 27/11 12:42 · sessao 956c8f679aa0 · - · - · origem=Ronald (tmux)
-
-**REPROVADO.** O caso simples de FT 6x1 sem escala certa é promovido pelo juiz v2. A escala certa conserva o BO-B, com HE100 feriado quando `feriado_vira_folga=True` e folga trabalhada quando é `False`. A lista de ciclos simples e a exceção CCT do 12x36 permanecem no motor e na régua. [fechamento.py:350](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:350), [regras.py:370](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/calculador/regras.py:370), [motor_calculo_v2.py:3740](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/motor_calculo_v2.py:3740), [regua_cct.py:473](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/core/regua_cct.py:473)
-
-- **K1 é pré-requisito material.** O cenário 10:00–14:00 e 14:30–18:20 tem 470 minutos trabalhados e 30 de intra suprimida. O partido só apura o suprimido em `resultado.periodos`, e esta promoção soma os 470 brutos. O RED deve exigir 440 de HE100 feriado e 30 de intra no mensal e nas duas lavras. K1 tem aval separado, com uso do juiz de intra nos dois caminhos. [PROMPTS.md:3016](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/docs/PROMPTS.md:3016), [RELATO.md:255](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/docs/RELATO.md:255), [motor_calculo_v2.py:3078](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/motor_calculo_v2.py:3078), [fechamento.py:990](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:990)
-- **Troca de vínculo perde verba no TXT.** O contexto novo por identidade apenas conserva o motor da fatia que já rodava e fica dentro do escopo para FT. O exportador lê o ciclo no último dia. Se a primeira fatia foi 6x1 e a última 12x36 sem CCT, o exportador retira as 4 h da HE100 comum e zera o evento feriado. RED pela geração real de TXT com a troca, feriado municipal da primeira praça, controle nacional e 4 h emitidas na rubrica feriado. [fechamento.py:299](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:299), [core/feriados.py:159](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/core/feriados.py:159), [folha/export.py:341](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/folha/export.py:341), [folha/export.py:420](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/folha/export.py:420), [folha/export.py:739](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/folha/export.py:739)
-- **FT promovida pode virar conta vazia e sair do TXT.** Com único par promovido e zero previsto na janela, `horas_trabalhadas==0` passa pelo gate e vira `cadastro_zero`, embora haja HE100 feriado gravada. RED com esse único par, vínculo curto de folga, rubrica e código válidos, exigindo `entra` e a linha no TXT real. O teste atual chama `eventos_do_fechamento` diretamente. [folha/export.py:839](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/folha/export.py:839), [folha/export.py:911](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/folha/export.py:911), [folha/export.py:955](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/folha/export.py:955), [test_feriado_um_juiz_porta.py:63](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/tests/test_feriado_um_juiz_porta.py:63)
-- **Intermitente e oráculo.** A regra inteira sem FT do oráculo muda para excluir intermitentes, fatia antes registrada separadamente. Reproduzi em memória outro desvio com `tipo_base=intermitente`, `tipo_ciclo=6x1`, feriado e 4 h em dia previsto. O v2 escolhe `MotorIntermitente` e responde `False`, e o oráculo afirma 4 h de HE100 feriado porque seu detector lê só ciclo. RED de integração com esses dois atributos independentes, exigindo 4 h normais e zero HE100 feriado em ambas as versões. [BACKLOG.md:2247](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/docs/BACKLOG.md:2247), [motor_calculo_v2.py:3694](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/motor_calculo_v2.py:3694), [motor_calculo_v2.py:3764](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/motor_calculo_v2.py:3764), [regras.py:366](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/calculador/regras.py:366), [regras.py:779](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/calculador/regras.py:779)
-- **Exportada.** A regra passa pelo recálculo por evento retroativo. Só a 09/2026 está protegida pela guarda do gravado. RED com exportada fora da guarda exigindo mensal, DiaPago e hash estáveis depois do evento, com controle positivo na 11 aberta. Medição prévia nominal, pouso dessa fatia, apply, reversão, lista antes/depois e DIFF TXT 11 [nao verificado]. [fechamento.py:36](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:36), [fechamento.py:620](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:620), [fechamento.py:1817](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:1817), [CLAUDE.md:453](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/CLAUDE.md:453)
-- **Dia do turno.** O golden cobre uma cauda já mapeada. O motor ainda pode sobrepor a resposta do juiz com herança de 0–6 h, divergência em fila. A promoção agora consome o mapa para decidir dinheiro. RED de dois turnos distintos separados por menos de seis horas na virada do feriado, exigindo que cada um siga a data do juiz, em contraste com a cauda verdadeira. [motor_calculo_v2.py:2516](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/motor_calculo_v2.py:2516), [BACKLOG.md:1998](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/docs/BACKLOG.md:1998), [fechamento.py:362](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/services/fechamento.py:362)
-- **Mutantes.** Rodei os 16 controles sem banco e os 12 mutantes. Todos os mutantes fizeram o teste nomeado falhar por asserção após controle verde. Eles compilam funções de produção, mas a promoção central tem como alvo o caminho avulso. Execução dos testes Django e comparação contra a base [nao verificado]. [feriado_um_juiz_mutantes.py:30](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/tests/feriado_um_juiz_mutantes.py:30), [feriado_um_juiz_mutantes.py:104](/home/ronald/codex_ws/4a18bdfedb20550713008c180d844c8e95222a0a/app/ponto/tests/feriado_um_juiz_mutantes.py:104)
-
-## 27/11 12:33 · sessao f4c8c5fec76b · FERIADO-UM-JUIZ · construtor · origem=Code
-
-A cura do **FERIADO-UM-JUIZ c1** está na cópia. O HEAD segue em `59600163ccc9cffb8f3ae148beede7cd7866ae86`. A proibição explícita de `git commit` prevaleceu sobre o item (iv). [Diff completo](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz.patch:1) · [Log:411](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:411)
-
-### Cura
-
-| Arquivo e funções | Mudança |
-|---|---|
-| `fechamento.py::apurar_por_fatia`, `_particionar_ft`, `recalcular_fechamento_mes` | Cada período usa o motor do próprio vínculo e o dia de início da jornada. A partição soma a HE100 de feriado uma vez, com o subconjunto noturno, e alimenta as duas lavras. [fechamento.py:312](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/services/fechamento.py:312) · [fechamento.py:349](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/services/fechamento.py:349) · [fechamento.py:988](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/services/fechamento.py:988) |
-| `regras.py::_ContextoFeriado.__init__`, `dobra_de_feriado_do_dia`, `intermitente_do_tipo`, `rubrica_da_folga`, `do_dia` | A regra compartilhada exclui o intermitente e usa a escala certa para escolher a rubrica. A ampliação preserva o 12x36 e o tratamento BO-B(3) da escala certa. [regras.py:297](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/regras.py:297) · [regras.py:366](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/regras.py:366) · [regras.py:690](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/regras.py:690) |
-| `alimentacao.py::_rubricas_da_particao_ft`, `rubricas_por_dia` | O oráculo projeta a partição do fechamento por dia e conserva a parcela dos períodos normais em dias com FT. [alimentacao.py:353](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/alimentacao.py:353) · [alimentacao.py:557](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/calculador/alimentacao.py:557) |
-
-### REDs e mutantes
-
-Na base, o 6x1 sem escala certa entregou **0 h de HE100 feriado** em vez de 4 h. O noturno entregou **0 h** em vez de 3 h. O intermitente recebeu **4 h de HE100 feriado** em vez de zero. Na cura, **16 testes em memória passaram**. O diff tem **0 cláusulas `except` adicionadas e 0 removidas**. [Log:19](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:19) · [Log:27](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:27) · [Log:37](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:37) · [Log:66](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:66) · [Log:410](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:410) [nao verificado]
-
-Os **12 mutantes** falharam por asserção. Cada link abre o comando completo e o resultado correspondente. [Arquivo de mutantes](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_mutantes.py:29)
-
-| O que o teste pega | Comandos e resultados | [nao verificado]
-|---|---|
-| Escala certa volta a impedir a dobra do 6x1 | [`exige_escala_certa`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:72) |
-| Intermitente ganha HE100 feriado | [`intermitente_em_ft`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:99) · [`intermitente_no_oraculo`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:130) |
-| Calendário nacional ou motor da última fatia toma o lugar do contexto do período | [`calendario_nacional`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:157) · [`aplica_motor_da_ultima_fatia`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:184) · [`perde_contexto_da_primeira_fatia`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:220) |
-| Segundo par da véspera dobra pela data civil | [`aplica_dia_civil`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:246) |
-| FT do 12x36 ganha HE100 feriado | [`promove_12x36`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:277) · [`promove_12x36_no_oraculo_avulso`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:308) |
-| A promoção perde o noturno ou o oráculo perde uma parcela do pagamento | [`perde_noturno`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:333) · [`oraculo_copia_so_folga`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:358) · [`oraculo_perde_periodo_normal`](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/feriado_um_juiz_red.txt:383) |
-
-### Fora desta volta
-
-Os testes de persistência para LIMBO, A2, A8, noturno partido e véspera ficaram para o Code. Eles comparam o mensal com a soma das duas lavras e conferem o evento de folha e os leitores do dia. O teste legado manteve o controle 12x36 e ganhou o 6x1 com o aval citado. A execução desses testes com banco e a certificação Code/Opus ficam **[nao verificado]**. [Teste da porta:58](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/test_feriado_um_juiz_porta.py:58) · [Teste legado:227](/home/ronald/wt-codex-feriado-um-juiz-121621/app/ponto/tests/test_he100_dia_sem_previsto.py:227) [nao verificado]
-
-O anexo registra **75 dias de 42 colaboradores** como hora comum e projeta **67 dias de 35 colaboradores**, somando **449,74 h**, para HE100 feriado. O apply da 11, a reversão, o antes × depois por colaborador e o diff do TXT ficam **[nao verificado]**. `antes_m1.md:3`
-
-## 27/11 12:32 · sessao 19ca023221ab · FERIADO-BOTAO-CORTADO · construtor · origem=Code
-
-**FERIADO-BOTAO-CORTADO c4.** A correção está na cópia. `posiciona()` mede o painel em `left/top = 0` e após um deslocamento de 64 px. Com essas leituras, converte a posição desejada na viewport para a origem e a escala reais do `fixed`, tanto sob o `backdrop-filter` da página quanto sob o `transform` do drawer. [Popover](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:81) · [`.hx-shell`](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/css/hasner-ponto.css:275) · [Drawer](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/templates/core/_drawer_generico.html:3)
-
-O encaixe usa a interseção da viewport, com 8 px de margem, com a área útil dos ancestrais que recortam o painel. Se faltar altura, o painel fica no lado com mais espaço e rola por dentro. O formulário permanece no `details`. A mudança de produto está no JS compartilhado. [Área visível](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:48) · [Encaixe](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:109) · [Rolagem](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:169)
-
-### Diff e smoke
-
-- `red_painel_popover_feriado.py` foi removido após a incorporação das asserções ao smoke coletado. Ele mede margem, recorte por hit-test e distância de até 16 px sem sobreposição nos quatro cenários do feriado. O quinto cenário abre **Inverter tipo/Retratar** no drawer de `base_app.html`, limitado a 260 px no ensaio, e verifica também que a rolagem interna mantém o painel aberto. [Asserções](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:143) · [Cenários](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:302)
-- O selo existente ficou como está. Ele exige posicionamento por medida e testa a geometria na última coluna em duas larguras. [Selo](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_selo_popover_acao.py:104) · [Geometria](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_selo_popover_acao.py:166)
-
-```bash
-git --no-optional-locks diff a2414b6605ff01965417728ccb271aa82a294f04 -- \
-  static/js/popover-acao.js \
-  core/tests/test_smoke_clique_feriado_vira_trabalho.py \
-  core/tests/red_painel_popover_feriado.py
-```
-
-### Comandos para a sessão de Chromium
-
-Na pista isolada, com `STATIC_ROOT` atualizado. Os mutantes de JS alteram somente a cópia do script carregada pela página temporária. [Carregamento de estáticos](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_chromium.py:80) · [Injeção](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:260)
-
-```bash
-smoke() {
-  PYTHONDONTWRITEBYTECODE=1 python manage.py test \
-    core.tests.test_smoke_clique_feriado_vira_trabalho "$@" \
-    --settings=config.settings.ci --noinput
-}
-
-SMOKE_FERIADO_MUTANTE= smoke core.tests.test_selo_popover_acao
-SMOKE_FERIADO_MUTANTE=gatilho-cortado smoke
-SMOKE_FERIADO_MUTANTE=summary-display-none smoke
-SMOKE_FERIADO_MUTANTE=porta-trocada smoke
-SMOKE_FERIADO_MUTANTE=painel-recortado smoke
-SMOKE_FERIADO_MUTANTE=painel-distante smoke
-SMOKE_FERIADO_MUTANTE=painel-sem-compensacao smoke
-SMOKE_FERIADO_MUTANTE=painel-sem-limite-drawer smoke
-```
-
-| Mutante | Asserção esperada no RED |
-|---|---|
-| `gatilho-cortado`, `summary-display-none` | `gatilhoVisivel`. [Sonda](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:115) |
-| `porta-trocada` | `action`. [Troca da porta](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:291) |
-| `painel-recortado` | `painelSemRecorte`. [Hit-test](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:148) |
-| `painel-distante`, `painel-sem-compensacao` | `painelEncostado`. [Posição sem compensação](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:46) · [Distância](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:143) |
-| `painel-sem-limite-drawer` | `painelSemRecorte` e `painelRolavel` no cenário da marcação. [Mutante](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:53) · [Sonda](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:174) |
-
-Validei a sintaxe Python e JS e executei isoladamente as quatro verificações estruturais do selo. Em DOM simulado, o mutante de compensação perdeu a ancoragem na página e no drawer, e o mutante do limite voltou a recortar o painel no drawer curto. [Selo estrutural](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/core/tests/test_selo_popover_acao.py:74) · [Compensação](/home/ronald/wt-codex-feriado-botao-cortado-112417/app/static/js/popover-acao.js:95) [nao verificado]
-
-**[nao verificado]** Smoke e mutantes no Chromium, casos geométricos do selo, `bin/node_check.sh`, suite do Code, revisão final do Opus e smoke de tela do Ronald.
-
-_8676 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8680 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
