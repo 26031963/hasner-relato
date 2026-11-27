@@ -1,7 +1,98 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **27/11/2026 10:50** · publicado em **27/11/2026 10:50** (UTC-3)
+> Ultima resposta processada: **27/11/2026 10:55** · publicado em **27/11/2026 10:57** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 27/11 10:55 · sessao 77187f8251ee · RC-SEM-PROXIMA · verificador · origem=Code
+
+## 1. P1–P4 na origem
+
+| Achado | Cura e mordida |
+|---|---|
+| **P1 — parcial.** | `main` lê `agora` uma vez, materializa `vivas` uma vez e calcula as duas listas antes de imprimir. Na mesma passagem, a chave que exclui um `.rc` de `SEM COLHER` é a que permite sua entrada em `SEM PROXIMA`. Em memória, a c1 falhou nos três cenários e a c2 passou. `dois-walks` voltou a listar a mesma obra duas vezes, `dois-walks-ilegivel` voltou a dar rc `1`, e `dois-relogios` voltou a listar cedo. `caso_misto` confirma uma linha de cada classe para obras distintas. `bin/rc_sem_colher.py:94–106,121–138,157–169` · `bin/tests/test_rc_sem_colher.sh:165–180,287–289` |
+| **P2 — corrigido na proposta, sem selo do leitor.** | O diff chama o juiz com `--min-idade 900`, conta cada prefixo separadamente e mostra diagnóstico para rc fora de `0`/`3`. Em memória, uma saída só de `SEM PROXIMA` passou de uma falsa contagem de órfãos para `0` órfãos e `1` parada. O teto global de 15 linhas pode ocultar todos os detalhes de `SEM PROXIMA` e de `OUTRAS LINHAS`, embora as contagens apareçam. `caso_min_idade` e `sem-min-idade` exercitam a CLI do juiz. Restaurar a contagem antiga ou remover o argumento **só do vercodex** deixa o selo intacto. `vercodex.py:165–176` (anexo `vercodex.diff`) · `bin/tests/test_rc_sem_colher.sh:58,202,243–248,271` |
+| **P3 — corrigido para o minuto inferido.** | O juiz soma `60` s ao início do minuto e exige **mais de** `900` s desse limite. Em memória, `899/900/901` deram rc `0/0/3` na c2 e `3/3/3` na c1. `prazo-do-inicio-do-minuto` voltou a listar em `899` e `900`. A data inferida ainda pode estar errada. `bin/rc_sem_colher.py:37–38,110–118,135–138` · `bin/tests/test_rc_sem_colher.sh:182–186,286` |
+| **P4 — corrigido no caso da próxima etapa.** | `caso_proxima_espera` exige rc `0` do Bash, linha `SEM PROXIMA` e ausência da testemunha de entrada no corpo do laço. Na sonda do Bash com árvore simulada, `proxima-desligada-espera` preservou a linha, mas entrou no laço. `proxima-vazia-espera` entrou no laço e perdeu a linha. A medição deixou de usar `date +%s`, embora a montagem da fixture ainda use horas relativas. O comportamento positivo já passa com o juiz da c1. A mordida específica vem dos mutantes. `bin/tests/test_rc_sem_colher.sh:60–76,107–113,221–222,290–291` · `c1:bin/tests/test_rc_sem_colher.sh:104–108` |
+
+**Regressão de P1 reproduzida em memória.** Ao começar a varrer `OBRA-B`, removi o `r.rc` já visitado de `OBRA-A`. A c1 já tinha lido seu conteúdo e retornou rc `3`. A c2 guardou apenas caminho e mtime, abriu o caminho depois de varrer `OBRA-B` e terminou com `FileNotFoundError`, rc `1` e stdout vazio. Na variante com substituição do arquivo, a c2 imprimiu `10:00 rc=7`, juntando o mtime do arquivo antigo ao conteúdo do novo. A publicação por `mv` existe no produtor. Os dois casos de walk do selo disparam somente numa **segunda visita** à mesma obra, por isso deixam passar a troca durante a primeira passagem. `c1:bin/rc_sem_colher.py:89–102,153–163` · `bin/rc_sem_colher.py:57–61,77–91,99–106,160–169` · `bin/codex_pergunta.sh:572–574` · `bin/tests/test_rc_sem_colher.sh:151–171`
+
+Nenhum dos seis mutantes novos passou nas sondas em memória. `caso_proxima_vazia` sozinho passa com a funcionalidade desligada, como controle negativo. `caso_misto` também passa na c1 com árvore estável. RED anterior à cura, GREEN integral, `test_disjuntor.sh` e instalação do `vercodex.diff` ficam [nao verificado]. `bin/tests/test_rc_sem_colher.sh:87–90,176–180,243–260,286–291`
+
+## 2. Quem escreve e quem lê
+
+| Valor | Escritor e leitores |
+|---|---|
+| **`agora`** | `main` captura `time.time()`. `_obras_vivas` usa o valor para o corte de 24 h, `sem_colher` para a idade mínima e `sem_proxima` para o prazo da marca. `bin/rc_sem_colher.py:68–85,94–100,121–136,160–163` |
+| **`vivas`, mtime e conteúdo do `.rc`** | O wrapper publica o `.rc` com `rc=` e `fim=`. `_obras_vivas` lê o mtime, escolhe o caminho e registra o maior mtime de outro arquivo. `main` materializa as tuplas. Ambas as listas leem as tuplas e `sem_colher` abre o `.rc` para extrair `rc=`. `bin/codex_pergunta.sh:565–574` · `bin/rc_sem_colher.py:57–61,68–91,99–106,126–131,160–163` |
+| **Marcas do RELATO** | A sessão colhe e registra `colhido` ou `superado` no formato documentado. O comando exato de escrita fica [nao verificado]. `main` lê o texto uma vez. `marcas_datadas` extrai os campos, `sem_colher` consulta a existência da chave e `sem_proxima` consulta tipo e hora da linha. `CLAUDE.md:332–337` · `app/docs/RELATO.md:13639–13646` · `bin/rc_sem_colher.py:34–54,97–105,124–136,157–159` |
+| **rc `3` e as duas linhas** | `main` escreve os dois formatos em stdout e retorna `3` se houver alguma linha. `ESPERA_UNICA` deixa passar stdout, lê `$?`, pula o laço com `3` e fecha o Bash com `0` para rc `0` ou `3` do juiz. O `find` final ainda pode imprimir caminhos. O rc da linha `rc=<n>` vem do `.rc`. O vercodex captura stdout e código de saída. `bin/rc_sem_colher.py:32,57–61,164–173` · `bin/disjuntor.py:1963–1969` · `vercodex.py:165–176` (anexo) |
+
+- **`disjuntor.py` e PreToolUse.** A espera chama a CLI, cujas opções continuam aceitas. `espera_nega` lê o texto do Bash e confere `find` e teto. Durante o laço, a espera observa ctime de `.rc`; uma marca atingir 15 minutos enquanto o laço roda não acorda a espera por si só. `bin/rc_sem_colher.py:142–156` · `bin/disjuntor.py:1967–1969,2157–2174,2217–2228`
+- **`logs/espera_unica.sh`.** O RELATO cita o script e `logs/` é ignorado. Conteúdo, leitores e compatibilidade do script ficam [nao verificado]. `app/docs/RELATO.md:13598` · `.gitignore:53–54`
+- **`vercodex` e `hook_stop`.** O vercodex antigo soma as duas classes sob `SEM COLHER`; o diff proposto corrige a contagem. O Stop lê o topo do RELATO para `PAREI`/`ESPERANDO`, o rc do checador de prova e as decisões B1/B3/B4 do disjuntor. Esses caminhos não consomem as listas nem o rc deste instrumento. Os chamadores Python encontrados das duas assinaturas alteradas estão no próprio `main`. `/home/ronald/vercodex.py:163–171` (anexo `ver1_r.md`) · `vercodex.py:165–176` (anexo `vercodex.diff`) · `bin/hook_stop_fila1.py:462–481,783–831,1305–1329,1434–1446,1489–1501` · `bin/rc_sem_colher.py:94,121,162–163`
+
+## 3. Esmeril de semântica e classes
+
+- **Relógio e unidades.** `agora` é um instante em segundos Unix lido na borda da chamada. A janela admite mtime exatamente no corte de 24 h. `--min-idade 900` só admite órfãos com idade **maior que** `900` s. A docstring sustenta o argumento; a frase “menos de 15 min” do RELATO contradiz o predicado. A espera usa ctime contra o arquivo de referência para detectar publicação por `mv`. `bin/rc_sem_colher.py:3–4,68–85,94–103,160–163` · `app/docs/RELATO.md:13640–13643` · `bin/disjuntor.py:1963–1969`
+- **Dois `HH:MM`.** O de dentro dos parênteses identifica o minuto local do mtime do `.rc`. O prefixo informa o minuto local da colheita. A gramática distingue os campos, mas o prefixo não traz dia, offset ou segundos. `_instante_da_marca` infere o dia a partir do minuto do `.rc`, arredonda o piso sem perder o mesmo minuto por fração e soma `86400` para a virada. Meia-noite comum funciona. Em sondas com mudança de offset, a inferência deslocou a hora válida em uma hora. `bin/rc_sem_colher.py:34–48,99–104,110–118,130–136` · `bin/tests/test_rc_sem_colher.sh:91–105`
+- **Juiz e derivação paralela.** O vercodex lê a classificação emitida e conta linhas. A regra de elegibilidade continua no instrumento. A dupla observação de relógio e árvore da c1 saiu. Ainda há duas chamadas ao mesmo parser puro sobre o mesmo texto e duas cópias do predicado de folga. Isso deixa duplicação interna, com o risco de divergência demonstrado acima concentrado na leitura tardia do conteúdo do `.rc`. `CLAUDE.md:17–22,35–36` · `app/core/juizes.py:3–14` · `bin/rc_sem_colher.py:2–4,41–54,97–106,124–136,157–163` · `vercodex.py:165–174` (anexo)
+- **`except` adicionado, contando `^\+.*except`.** `diff.patch`: **0**. `vercodex.diff`: **0**. O `except Exception` do leitor é contexto do hunk. `bin/rc_sem_colher.py:94–169` · `bin/tests/test_rc_sem_colher.sh:107–186,243–296` · `vercodex.py:175–178` (anexo)
+
+## 4. Descartados da c1
+
+- **Mesmo caminho e minuto, chave sem dia, `touch` e marca sem prefixo** já existiam na c1. A chave pode reaproveitar a marca de outro `.rc`, um `touch` elegível mais de 5 s depois conta como escrita e uma marca sem prefixo fica fora da gramática. Eu manteria esses critérios fora do bloqueio desta volta, salvo a garantia de prazo abaixo. `c1:bin/rc_sem_colher.py:30–49,72–85,94–101,122–132` · `CLAUDE.md:334–337`
+- **Hora anterior ao `.rc` e DST** já eram assim na c1. Eu bloquearia a garantia incondicional de 15 minutos reais. Em ambas as versões, um `.rc` de ontem às `23:50:59,9` e uma marca de hoje às `23:50:10` podem listar às `23:50:20`, com **10 s reais** de espera. O `.rc` ainda cabe na janela de 24 h e a data inferida para a marca é ontem. A c2 mudou a margem em segundos, preservando a ambiguidade de data. `c1:bin/rc_sem_colher.py:105–113,125–134` · `bin/rc_sem_colher.py:13–17,68–85,110–118,130–138`
+- **`TMPDIR` e `caso_espera` com `date +%s`** também preexistem. `ESPERA_UNICA` chama `mktemp` sem fixar `/tmp`. Se a referência for parar dentro de uma obra elegível, pode entrar na conta de outro arquivo. A configuração efetiva fica [nao verificado]. A medição antiga permanece em `caso_espera` de órfão, fora do caso P4 corrigido. Eu não bloquearia a c2 por esses dois itens. `bin/disjuntor.py:1967–1969` · `bin/rc_sem_colher.py:77–91,99–101,126–128` · `c1:bin/tests/test_rc_sem_colher.sh:134–142` · `bin/tests/test_rc_sem_colher.sh:107–113,212–222`
+
+## Veredito: REPROVADO
+
+1. **P1 introduz uma regressão de leitura.** A c2 pode combinar mtime antigo com conteúdo novo ou perder toda a resposta por remoção do `.rc` durante a primeira passagem. O selo atual não exercita essa janela. `bin/rc_sem_colher.py:57–61,77–91,99–106,160–169` · `bin/tests/test_rc_sem_colher.sh:151–171`
+2. **P2 tem correção proposta sem RED no leitor.** O selo fica verde se a contagem antiga ou a chamada sem `--min-idade 900` voltar no vercodex. `CLAUDE.md:28–29` · `bin/tests/test_rc_sem_colher.sh:202,243–248,271` · `vercodex.py:165–174` (anexo)
+3. **A promessa de 15 minutos reais excede o que a marca prova.** A borda `899/900/901` morde para a data inferida. A colisão de dia ainda permite listar após 10 segundos reais. `bin/rc_sem_colher.py:13–17,110–118,130–138` · `bin/tests/test_rc_sem_colher.sh:182–186,286`
+
+## 27/11 10:55 · sessao 6d8bb13e8944 · E4C-F5-INSTANTE · construtor · origem=Code
+
+Implementei a cura3c na cópia. A deduplicação do veto K6 agora usa a autoria resolvida pelo próprio escritor da trilha. [observ.py:113](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:113) · [materializacao.py:858](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:858)
+
+- `core/observ.py::evento` ganhou `unica=False`. Quando ativado, retorna a linha existente com a mesma ação, modelo, objeto, descrição, fotos, usuário e ator, quando o campo está disponível. A consulta e a criação usam o mesmo `engolir` e o mesmo savepoint. A docstring atribui a serialização ao chamador, pela trava do dono. [observ.py:94](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:94) · [observ.py:127](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:127) · [observ.py:138](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:138)
+- `chamados/services/materializacao.py::trilha_do_veto_k6` monta a foto e chama `evento(..., unica=True)`. A busca na cópia confirmou que esse é o único chamador de `evento` que passa `unica`. [materializacao.py:846](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:846)
+- `chamados/tests/test_e4c_f5_c4_red.py::Item13PorPKTest.test_RED_item13_veto_repetido_fora_de_request_deduplica_por_usuario_e_ator` usa relógio congelado e autor explícito. Exige uma linha para o comando que já havia vetado e uma única linha para o comando que veta duas vezes. Pela leitura do código, a cura3b produziria zero linhas para o segundo comando, e cada mutante produziria duas. A execução está **[nao verificado]**. [test_e4c_f5_c4_red.py:983](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:983) · [test_e4c_f5_c4_red.py:1068](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1068)
+- `chamados/tests/e4c_f5_c4red2_mutantes.py::veto_sem_deduplicacao` faz o M44 trocar `unica=True` por `unica=False` na trilha. `evento_ignora_unica` faz o M46 pular a consulta no escritor. Ambos apontam para a mesma asserção do RED novo. [e4c_f5_c4red2_mutantes.py:757](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:757) · [e4c_f5_c4red2_mutantes.py:768](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:768)
+
+O diff inteiro da cópia contra `0ba8b22b7b486543caaced318666c264a03b1e81` teve **0** linhas em `^\+.*except`. A sintaxe dos quatro arquivos e o ponto único de aplicação de cada mutante foram verificados estaticamente. A suite e as mordidas ficam **[nao verificado]**.
+
+**Comandos para o Code**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_c4_red.Item13PorPKTest.test_RED_item13_veto_repetido_fora_de_request_deduplica_por_usuario_e_ator
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M44VetoSemDeduplicacao.test_mordida
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M46EventoIgnoraUnica.test_mordida
+```
+
+## 27/11 10:51 · sessao 2f6e479709bf · E4C-F5-INSTANTE · construtor · origem=Code
+
+Implementei a cura3b na cópia. Após o rollback da validação, `validar_pergunta` abre um `atomic` próprio, toma a trava existente do dono, relê a pergunta e registra o veto com a foto restaurada. A execução dos testes e a mordida dos mutantes ficam **[nao verificado]**. [validacao.py:834](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/validacao.py:834) [nao verificado]
+
+- **Trava.** O rollback remove o registro adquirido no savepoint desfeito. O novo bloco usa `PerguntaDisputa.trava_na_ordem` só com o dono, como já faz `validar_lote_classe_a` antes da releitura. A trilha consulta e grava `LogAuditoria`, sem adquirir trava de Empresa, preservando a ordem Empresa → dono. [trava_do_colaborador.py:16](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/trava_do_colaborador.py:16) · [validacao.py:1171](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/validacao.py:1171) · [materializacao.py:871](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:871) · [observ.py:133](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:133)
+- **Deduplicação.** `trilha_do_veto_k6` procura uma linha com a mesma pergunta, autoria, ação, motivo e fotos completas. A autoria usa o usuário efetivo quando presente e a identificação de sistema registrada nos demais casos. A criação segue por `core.observ.evento`. A validação inicial, o laço de materialização e a entrada do passivo já tomam a trava do dono antes de chegar à trilha. [materializacao.py:846](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:846) · [observ.py:108](/home/ronald/wt-codex-e4c-f5-instante-012038/app/core/observ.py:108) · [validacao.py:755](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/validacao.py:755) · [validacao.py:795](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/validacao.py:795) · [materializacao.py:2317](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:2317) · [passivo_validado.py:393](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/passivo_validado.py:393) · [passivo_validado.py:585](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/passivo_validado.py:585)
+- **RED e mutantes.** M44 desliga a deduplicação, de modo que o RED existente deve voltar à contagem de duas linhas. O RED pós-rollback exige uma única linha com as fotos restauradas e observa o registro real da trava nas duas recusas finais. M45 retira a aquisição do bloco final e deve falhar nessa última asserção em uma thread. A fixture usa o auxiliar existente para remover os registros das travas da preparação. Contenção entre transações **[nao verificado]**. [test_e4c_f5_c4_red.py:1055](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1055) · [test_e4c_f5_c4_red.py:1068](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1068) · [test_f5_v3_guarda_sob_trava.py:28](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_f5_v3_guarda_sob_trava.py:28) · [e4c_f5_c4red2_mutantes.py:756](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:756)
+- **Isolamento e M16.** Cada porta do teste do item 13 agora roda em um savepoint revertido, com as asserções originais. M16 continua apontado para a asserção que exige fotos completas nas duas metades de cada porta. O dublê sem banco já substitui `trilha_do_veto_k6` inteira e dispensa ajuste. [test_e4c_f5_c4_red.py:1151](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1151) · [test_e4c_f5_c4_red.py:1024](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:1024) · [e4c_f5_c4red2_mutantes.py:253](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:253) · [e4c_f5_c4red2_mutantes.py:474](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:474) · [test_bug_par_sem_banco.py:153](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_bug_par_sem_banco.py:153) [nao verificado]
+- **Multiempresa — CONTROLE por leitura estática.** A Empresa B é travada depois do primeiro dono e antes do próprio dono. A porta já passa todas as Empresas do lote à guarda, que deve levantar `EntregaNaoTravada` para B. [test_e4c_f5_c4_red.py:932](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:932) · [models.py:4867](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/models.py:4867) · [export.py:613](/home/ronald/wt-codex-e4c-f5-instante-012038/app/folha/export.py:613)
+
+A checagem estática confirmou que os quatro arquivos compilam, que M44 e M45 têm um ponto de aplicação cada e que o patch adiciona **0** linhas em `^\+.*except`. As asserções existentes do item 13 e o RED do item 6 foram preservados. [validacao.py:841](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/validacao.py:841) · [materializacao.py:846](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/services/materializacao.py:846) · [test_e4c_f5_c4_red.py:634](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/test_e4c_f5_c4_red.py:634) · [e4c_f5_c4red2_mutantes.py:756](/home/ronald/wt-codex-e4c-f5-instante-012038/app/chamados/tests/e4c_f5_c4red2_mutantes.py:756)
+
+**Comandos para o Code**
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_c4_red.Item13PorPKTest.test_RED_item13_veto_repetido_deixa_uma_linha_de_trilha
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_c4_red.Item13PorPKTest.test_RED_item13_veto_pos_rollback_repetido_audita_uma_vez_sob_trava
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_c4_red.Item13PorPKTest.test_RED_item13_materializacao_e_passivo_preservam_e_auditam_por_pk
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_e4c_f5_c4_red.EstoqueConcorrenteComEntregaTest.test_porta_do_estoque_exige_todas_as_empresas_antes_do_primeiro_dono
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.test_bug_par_sem_banco.BugParSemBancoTest.test_unidade_entregue_sai_antes_de_recusa_e_carimbo
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M16TrilhaVazia.test_mordida
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M44VetoSemDeduplicacao.test_mordida
+PYTHONDONTWRITEBYTECODE=1 python3 manage.py test chamados.tests.e4c_f5_c4red2_mutantes.M45TrilhaPosRollbackSemTrava.test_mordida
+```
 
 ## 27/11 10:50 · sessao d0ab90c9cfc0 · E4C-F5-INSTANTE · sonda · origem=Code
 
@@ -1179,419 +1270,4 @@ rodar_mutante() {
 
 A certificação continua com Code e opus final. **`red.log` e veredito [nao verificado].**
 
-## 27/11 10:03 · sessao 123515df12cb · CASO-LITERAL-14 · leitura · origem=Code
-
-```python
-SOBRAS = [
-    # Preencha com (empresa, colab_id, "AAAA-MM-DD", batida_id).
-    # Exemplos da amostra_sobra.txt:1-2
-    # (2, 43, "2026-11-02", 143768),
-    # (2, 43, "2026-11-02", 143890),
-]
-
-# O envelope recebe um .py do chamador e o executa com
-# tenant_command shell --schema=juliani e exec(open(...).read()).
-# O código e a sonda são montados em leitura e o ORM usa a role leitor.
-# bin/sonda_leitura.sh:63-91,153-181,235-243
-#
-# PORTA DA FASE 2
-# O botão "Não foi trabalho (retratar)" faz POST com motivo_id e observacao.
-# app/templates/colaboradores/partials/_calendario_grade.html:127
-# ponto:retratar_batida -> retratar_batida_view -> retratar_humano.retratar
-# -> registro_batida.retratar_batida -> registro_batida.anotar.
-# O serviço humano exige a permissão regularizar_batida e motivo cadastrado
-# ativo. O escritor preserva a linha, grava aprovada=False e retratada_em,
-# registra o motivo na auditoria e dispara o evento de fechamento.
-# app/ponto/urls.py:62; app/ponto/views.py:3453-3462
-# app/ponto/services/retratar_humano.py:118-183
-# app/ponto/registro_batida.py:255-302
-#
-# O botão "desfazer" usa desfazer_retratacao_view -> retratar_humano.desfazer
-# -> anotar. A mesma permissão é exigida. A última linha de auditoria da
-# batida deve ser retratar_batida_admin e o prazo é de sete dias a partir
-# de retratada_em. O ato grava retratada_em=None e aprovada=True.
-# app/templates/colaboradores/partials/_calendario_grade.html:127
-# app/ponto/urls.py:64; app/ponto/views.py:3465-3473
-# app/ponto/services/retratar_humano.py:26-49,186-206
-#
-# Campos de aprovação/admin em Batida: aprovada, aprovada_por (lido via
-# aprovada_por_id), aprovada_em e retratada_em. O sinal de aprovação
-# atribuída a um usuário é aprovada_por_id preenchido. aprovada tem
-# default True. Edições de tipo e de horário têm autoria e data na trilha.
-# app/ponto/models.py:22-95; app/ponto/views.py:490-494
-# app/ponto/services/flip_auto.py:285-298; app/ponto/services/flip_batida.py:41-49
-# app/chamados/services/regularizacao_ext.py:150-162; app/core/models.py:285-307
-#
-# Lista completa dos 14, dados de produção e execução com o ORM no
-# envelope [nao verificado]. Sintaxe e funções puras conferidas em memória.
-
-import json
-from collections import defaultdict
-from datetime import date, datetime, time, timedelta
-from functools import lru_cache
-from zoneinfo import ZoneInfo
-
-from django.db import connection
-from django.db.models import Q
-from django.utils import timezone
-
-from chamados.catalogo.modulos import data_do_chamado
-from chamados.models import (
-    ChamadoColaborador,
-    DecisaoPergunta,
-    FollowupChamado,
-    PerguntaDisputa,
-    RegularizacaoItemBatida,
-)
-from colaboradores.models import Colaborador
-from core.models import LogAuditoria
-from escala.models import CelulaDia
-from escala.servico_jornada import escala_vigente
-from ferias.models import AgendamentoFerias
-from ponto.catalogo.ausencias import CATALOGO, INDETERMINADO
-from ponto.models import Ausencia, Batida, Justificativa, TipoAusencia
-
-TZ = ZoneInfo("America/Sao_Paulo")  # app/config/settings/base.py:93-95
-UM_DIA = timedelta(days=1)
-NV = "[nao verificado]"
-
-
-def formatar(valor):
-    if isinstance(valor, datetime):
-        return timezone.localtime(valor, TZ).isoformat()
-    if isinstance(valor, (date, time)):
-        return valor.isoformat()
-    if isinstance(valor, str) and valor and "W004" not in valor and all(
-        c.isalnum() or c in "_-+.:/" for c in valor
-    ):
-        return valor
-    # Escapes JSON preservam o valor ao passar pelo filtro do envelope.
-    # bin/sonda_leitura.sh:239-243
-    return json.dumps(valor, ensure_ascii=False).replace(
-        "W004", r"\u0057004"
-    ).replace("objects imported", r"objects\u0020imported")
-
-
-def linha(rotulo, *, marca="", **campos):
-    valores = " ".join(f"{k}={formatar(v)}" for k, v in campos.items())
-    print(f"{rotulo} {valores}" + (f" {marca}" if marca else ""))
-
-
-def meia_noite(dia):
-    return timezone.make_aware(datetime.combine(dia, time.min), TZ)
-
-
-def agrupar():
-    dias = {}
-    todas = set()
-    for empresa, cid, data_iso, bid in SOBRAS:
-        if any(type(pk) is not int or pk <= 0 for pk in (empresa, cid, bid)):
-            raise ValueError("SOBRAS exige IDs inteiros positivos")
-        dia = date.fromisoformat(data_iso)
-        if dia.isoformat() != data_iso or not date(2026, 10, 21) <= dia <= date(2026, 11, 20):
-            raise ValueError(f"Data fora do formato ou da comp 11 de 2026 (colab_id={cid})")
-        empresa_dia, ids = dias.setdefault((cid, dia), (empresa, set()))
-        if empresa != empresa_dia:
-            raise ValueError(f"Empresas divergentes no mesmo dia (colab_id={cid} data={dia})")
-        ids.add(bid)
-        todas.add(bid)
-    if not dias:
-        raise ValueError("Preencha SOBRAS antes da execucao")
-    return dias, todas
-
-
-def batidas_do_recorte(cid, dia, sobras_dia):
-    # Janela semiaberta entre as meias-noites locais de D-1 e D+2.
-    # Leitura da linha bruta, incluindo retratadas e pendentes.
-    # app/ponto/models.py:22-29,40-73; app/ponto/registro_batida.py:99-109
-    batidas = list(Batida.objects.filter(
-        colaborador_id=cid, timestamp__gte=meia_noite(dia - UM_DIA),
-        timestamp__lt=meia_noite(dia + 2 * UM_DIA),
-    ).order_by("timestamp", "pk").values(
-        "id", "timestamp", "tipo", "origem", "canal", "tipo_registro",
-        "is_intervalo", "escala_id", "pergunta_origem_id",
-        "aprovada", "aprovada_por_id", "aprovada_em", "retratada_em",
-    ))
-    faltam = sobras_dia - {b["id"] for b in batidas}
-    if faltam:
-        raise ValueError(
-            f"SOBRA fora da janela ou do colaborador "
-            f"(colab_id={cid} data={dia} ids={sorted(faltam)})"
-        )
-    return batidas
-
-
-def trilhas_de(batida_ids):
-    # A ação csrf_batida usa o ID do colaborador no lugar do ID da batida.
-    # app/core/views.py:1224-1242; app/core/models.py:285-307
-    saida = defaultdict(list)
-    for ato in (LogAuditoria.objects.filter(modelo="Batida", objeto_id__in=batida_ids)
-                .exclude(acao="csrf_batida").order_by("criado_em", "pk")
-                .values("id", "objeto_id", "acao", "usuario_id", "criado_em", "valor_depois")):
-        saida[ato["objeto_id"]].append(ato)
-    return saida
-
-
-def retratacao_vigente(instante, atos):
-    # Casa o carimbo vigente com a trilha. Motivo humano sai como ID.
-    # Quando a justificativa só existe em texto livre, a trilha identifica
-    # o ato e motivo_retratacao sai como [nao verificado].
-    # app/ponto/registro_batida.py:231-239,270-296
-    # app/ponto/services/retratar_humano.py:172-181
-    # app/chamados/services/acoes_chamado.py:261-279
-    # app/ponto/management/commands/passivo_disputa_retro.py:164-171
-    if instante is None:
-        return None, None
-    for ato in reversed(atos):
-        depois = ato["valor_depois"]
-        if isinstance(depois, dict) and depois.get("retratada_em"):
-            if datetime.fromisoformat(depois["retratada_em"]) == instante:
-                motivo = depois.get("motivo_retratacao") or {}
-                motivo_id = motivo.get("id")
-                if type(motivo_id) is int:
-                    return ato, motivo_id
-                if depois.get("motivo_classe") == "passivo_s84_folga":
-                    return ato, "passivo_s84_folga"
-                return ato, NV
-    return None, NV
-
-
-def imprimir_batida(batida, atos, todas_as_sobras):
-    bid = batida["id"]
-    local = timezone.localtime(batida["timestamp"], TZ)
-    retratacao, motivo = retratacao_vigente(batida["retratada_em"], atos)
-    linha(
-        "BAT", id=bid, data=local.date(), hora=local.strftime("%H:%M:%S"),
-        marca="SOBRA" if bid in todas_as_sobras else "",
-        **{k: v for k, v in batida.items() if k not in ("id", "timestamp")},
-        motivo_retratacao=motivo,
-        retratacao_trilha_id=retratacao["id"] if retratacao else None,
-        retratada_por_id=retratacao["usuario_id"] if retratacao else None,
-        retratacao_acao=retratacao["acao"] if retratacao else None,
-    )
-    for ato in atos:
-        linha("BAT_AUD", batida_id=bid, trilha_id=ato["id"], acao=ato["acao"],
-              usuario_id=ato["usuario_id"], quando=ato["criado_em"])
-
-
-def imprimir_escala(cid, dia):
-    # hi/hf são entrada/saída. hii/hfi e hii2/hfi2 são saída/volta das pausas.
-    # Os instantes previstos já gravados permitem ler a virada de meia-noite.
-    # app/escala/models.py:1656-1747,1843-1847
-    # app/ponto/management/commands/gerar_celulas.py:36-70,88-113
-    celula = (CelulaDia.objects.filter(colaborador_id=cid, data=dia)
-              .select_related("escala_geradora__tipo_escala").first())
-    celulas = {(cid, dia): celula} if celula is not None else {}
-    if celula is None:
-        linha("CEL", id=None, estado=NV)
-    else:
-        dna = celula.dna or {}
-        linha(
-            "CEL", id=celula.pk, origem=celula.origem, trabalha=celula.trabalha,
-            estado={True: "trabalho", False: "folga", None: "indeterminado"}[celula.trabalha],
-            marcos=dna.get("marcos"), instantes_previstos=dna.get("lampadas"),
-            escala_geradora_id=celula.escala_geradora_id, tipo_escala_dna_id=dna.get("tipo_escala_id"),
-            regime_dna=dna.get("tipo_ciclo"), gerada_em=celula.gerada_em,
-            regenerada_em=celula.regenerada_em, regeneracoes=celula.regeneracoes,
-            editada_em=celula.editada_em, editada_por_id=celula.editada_por_id,
-        )
-    # Leitor do vínculo do dia, com a precedência e a vigência da geradora.
-    # app/escala/servico_jornada.py:15-66; app/escala/alimentacao.py:269-286
-    # app/escala/models.py:117-121,801-804,871-877
-    escala = escala_vigente(cid, dia, celulas=celulas)
-    if escala is None:
-        linha("VINCULO", id=None)
-    else:
-        template = escala.tipo_escala
-        linha("VINCULO", id=escala.pk, posto_id=escala.posto_id, template_id=template.pk,
-              template=str(template), regime=template.tipo_ciclo, inicio=escala.data_inicio,
-              fim=escala.data_fim, ativa=escala.ativa)
-
-
-def imprimir_ausencias(cid, dia, tipos):
-    # Mostra cada lançamento e seu estado, inclusive rejeitados e cancelados.
-    # efeito_tipo=abona é a regra do tipo. O estado do lançamento sai em status.
-    # app/ponto/models.py:571-590,660-705,743-820
-    # app/ponto/turnos.py:2548-2579; app/ferias/models.py:119-121,291-319
-    em_aberto = [codigo for codigo, dados in tipos.items() if dados[1] == INDETERMINADO]
-    ausencias = list(Ausencia.objects.filter(colaborador_id=cid, data__lte=dia).filter(
-        Q(data=dia) | Q(data_fim__gte=dia) | Q(data_fim__isnull=True, tipo__in=em_aberto)
-    ).order_by("data", "pk").values(
-        "id", "tipo", "status", "data", "data_fim", "minutos", "hora_ini", "hora_fim",
-        "aprovado_por_id", "aprovada_em", "agendamento_ferias_id", "chamado_origem_id",
-    ))
-    ferias = list(AgendamentoFerias.objects.filter(
-        periodo_aquisitivo__colaborador_id=cid, data_inicio__lte=dia, data_fim__gte=dia,
-    ).order_by("data_inicio", "pk").values("id", "status", "data_inicio", "data_fim"))
-    linha("AUSENCIAS", ids=[a["id"] for a in ausencias], ferias_ids=[f["id"] for f in ferias])
-    for ausencia in ausencias:
-        efeito, _, medico = tipos.get(ausencia["tipo"], (NV, None, NV))
-        linha("AUS", **ausencia, efeito_tipo=efeito, tipo_medico=medico)
-    for agendamento in ferias:
-        linha("FERIAS", **agendamento)
-    return {a["chamado_origem_id"] for a in ausencias if a["chamado_origem_id"] is not None}
-
-
-@lru_cache(maxsize=None)
-def chamados_de(cid):
-    return list(ChamadoColaborador.objects.filter(colaborador_id=cid).order_by("pk").values(
-        "id", "status_local", "modulo_origem", "contexto_json", "celula_id", "celula__data",
-        "justificativa_relacionada_id", "via_encerramento", "respondido_por_id", "resolvido_em",
-    ))
-
-
-def imprimir_chamados(cid, dia, batidas, chamados_ids):
-    # Vínculos explícitos da pergunta: dia/célula, batida de origem e batida
-    # plantada. Estado resume os atos lidos e os carimbos armazenados.
-    # Visibilidade atual na fila [nao verificado].
-    # app/chamados/models.py:2724-2760,3351-3370,3811-3838,4472-4515
-    # app/chamados/juizes.py:1626-1628,1644-1653; app/ponto/models.py:40-44
-    ids = {b["id"] for b in batidas}
-    ids_texto = {str(pk) for pk in ids}
-    origens = {b["pergunta_origem_id"] for b in batidas if b["pergunta_origem_id"] is not None}
-    perguntas = (PerguntaDisputa.objects.filter(colaborador_id=cid).filter(
-        Q(celula__data=dia) | Q(data_evento=dia, conversa=False)
-        | Q(batida_origem_id__in=ids) | Q(pk__in=origens)
-    ).select_related("disputa").prefetch_related("decisoes").order_by("pk"))
-    for p in perguntas:
-        lido = DecisaoPergunta.composta(p)
-        respondida = lido.respondida_em is not None and bool((lido.resposta_colab or "").strip())
-        estado = "respondida" if respondida else "pendente"
-        if lido.materializada_em is not None:
-            estado = "materializada"
-        elif lido.validada_em is not None:
-            estado = "validada"
-        linha(
-            "PERGUNTA", id=p.pk, estado=estado, motivo=p.motivo, data_evento=p.data_evento,
-            celula_id=p.celula_id, batida_origem_id=p.batida_origem_id,
-            batidas_plantadas_ids=[b["id"] for b in batidas if b["pergunta_origem_id"] == p.pk],
-            disputa_id=p.disputa_id, disputa_fechada_em=p.disputa.fechada_em,
-            chamado_pai_id=p.disputa.chamado_id, chamado_destino_id=p.chamado_destino_id,
-            respondida=respondida, respondida_em=lido.respondida_em, validada_em=lido.validada_em,
-            materializada_em=lido.materializada_em, via=lido.via_resolucao,
-        )
-        chamados_ids |= set(map(int, p.chamados_relacionados_ids or ()))
-        chamados_ids |= {p.disputa.chamado_id, p.chamado_destino_id}
-
-    # Ligações formais por justificativa, regularização ou ausência.
-    # app/ponto/models.py:139-144,167-177,786-790
-    # app/chamados/models.py:81-85,1923-1931,4658-4662,4687-4715
-    justificativas = Justificativa.objects.filter(colaborador_id=cid).filter(
-        Q(data_turno=dia) | Q(batida_entrada_id__in=ids) | Q(batida_gerada_id__in=ids)
-    ).order_by("pk").values_list("pk", "chamado_origem_id")
-    justificativas_ids = set()
-    for jid, chamado_id in justificativas:
-        justificativas_ids.add(jid)
-        chamados_ids.add(chamado_id)
-    itens = RegularizacaoItemBatida.objects.filter(regularizacao__colaborador_id=cid).filter(
-        Q(data=dia) | Q(batida_entrada_id__in=ids)
-        | Q(batida_saida_id__in=ids) | Q(batida_alvo_id__in=ids)
-    )
-    chamados_ids |= set(itens.order_by().values_list("regularizacao__chamado_id", flat=True))
-
-    # Chamado por célula, data declarada ou batida no contexto. Seguimentos
-    # mostram autoria e instante sem expor o conteúdo da conversa.
-    # app/chamados/models.py:39-72,1835-1848
-    # app/chamados/juizes.py:89-129; app/chamados/catalogo/modulos.py:219-225
-    # app/chamados/services/acoes_chamado.py:244-248
-    relacionados = []
-    for ch in chamados_de(cid):
-        ctx = ch["contexto_json"] or {}
-        data_ctx = data_do_chamado(ch["modulo_origem"], ctx) or ctx.get("data_turno")
-        batidas_ctx = {str(ctx.get("batida_id"))}
-        batidas_ctx |= {str((o or {}).get("batida_id")) for o in ctx.get("ocorrencias") or []}
-        if not (
-            ch["id"] in chamados_ids or ch["justificativa_relacionada_id"] in justificativas_ids
-            or ch["celula__data"] == dia or batidas_ctx & ids_texto
-            or (ch["celula_id"] is None and str(data_ctx)[:10] == dia.isoformat())
-        ):
-            continue
-        relacionados.append(ch["id"])
-        linha("CHAMADO", id=ch["id"], estado=ch["status_local"], celula_id=ch["celula_id"],
-              batidas_contexto_ids=sorted(map(int, batidas_ctx & ids_texto)),
-              via_encerramento=ch["via_encerramento"], respondido_por_id=ch["respondido_por_id"],
-              resolvido_em=ch["resolvido_em"])
-    for resposta in (FollowupChamado.objects.filter(chamado_id__in=relacionados)
-                     .order_by("criado_em", "pk")
-                     .values("id", "chamado_id", "autor_tipo", "autor_user_id", "criado_em")):
-        linha("CHAMADO_SEGUIMENTO", **resposta)
-
-
-def main():
-    if connection.schema_name != "juliani":
-        raise RuntimeError("A sonda exige o schema juliani")
-    dias, sobras = agrupar()
-
-    # Leitura direta do catálogo para propagar falhas de consulta. O catálogo
-    # da cópia é usado quando a consulta retorna zero tipos ativos.
-    # app/ponto/catalogo/ausencias.py:86-105,240-281,430-435
-    tipos = {codigo: (efeito, fim, medico) for codigo, efeito, fim, medico in
-             TipoAusencia.objects.filter(ativo=True).order_by().values_list("codigo", "efeito", "fim", "medico")}
-    if not tipos:
-        tipos = {codigo: (dados[0], dados[5], dados[6]) for codigo, dados in CATALOGO.items()}
-    empresas_cadastradas = dict(Colaborador.objects.filter(
-        pk__in={cid for cid, _ in dias},
-    ).order_by().values_list("pk", "empresa_id"))  # app/colaboradores/models.py:319-322
-
-    total_batidas = 0
-    for (cid, dia), (empresa, sobras_dia) in sorted(dias.items()):
-        batidas = batidas_do_recorte(cid, dia, sobras_dia)
-        trilha = trilhas_de([b["id"] for b in batidas])
-        linha("DIA", colab_id=cid, data=dia, empresa=empresa,
-              empresa_cadastro_id=empresas_cadastradas[cid], sobras_ids=sorted(sobras_dia))
-        for batida in batidas:
-            imprimir_batida(batida, trilha[batida["id"]], sobras)
-        imprimir_escala(cid, dia)
-        chamados_ids = imprimir_ausencias(cid, dia, tipos)
-        imprimir_chamados(cid, dia, batidas, chamados_ids)
-        total_batidas += len(batidas)
-
-    # batidas conta linhas BAT emitidas, inclusive em janelas sobrepostas.
-    print(f"FIM dias={len(dias)} batidas={total_batidas}")
-
-
-main()
-```
-
-## 27/11 10:02 · sessao b89a8e9ccbee · PAR-PELO-TURNO · verificador · origem=Code
-
-## Procedentes
-
-1. **O mesmo PK ainda muda de dia.** Com DNA `21:30–05:42`, `E 23/10 01:30` e `S 24/10 00:00`, a casca e o lote publicam a entrada em **22/10** na consulta de 21/10 e em **23/10** na consulta de 22/10. A segunda consulta alcança a saída e reclassifica a entrada. Há divergência mesmo com todas as marcas carregadas. Com A noturno até 21/10, B diurno a partir de 22/10 e `E 21/10 21:30`, `S 22/10 08:00`, `S 22/10 20:00`, a última saída recebe **22/10** na casca e na consulta individual, mas **21/10** na mesma janela com `turnos=`. Dois segmentos reclamam o PK e a última atribuição vence. O RED de `r.txt` passou na geometria original de um vínculo, assim como o controle sintético de col297. A invariância exigida pela L-085 segue aberta. `app/docs/LEIS.md:117` · `app/ponto/turnos.py:287` · `app/ponto/turnos.py:1998` · `app/ponto/turnos.py:3037` · `app/ponto/turnos.py:3060` · `app/ponto/turnos.py:3082` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:57` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:73`
-
-2. **A pré-passagem da pausa ainda perde o relógio da entrada.** O caso anterior da `E` interna passou com flag gravada e com `Xi`. O novo contraexemplo usa marcos de borda `19:00–07:00`, `E 20/10 19:00`, `S 19:00:30`, `S 21/10 01:00`, `E 02:00`, `S 07:00`. Sem marcos de borda, a sonda fecha `19:00→07:00` com 60 min de pausa. Com os marcos, ela produz `19:00→01:00` e `02:00→07:00`, sem pausa. A pré-passagem com bordas zera `limite` pela saída de 30 s, enquanto o laço principal conserva a entrada. O RED da saída degenerada só chama o ramo sem bordas. `app/ponto/turnos.py:435` · `app/ponto/turnos.py:447` · `app/ponto/turnos.py:508` · `app/ponto/turnos.py:1501` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:82` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:116`
-
-3. **O item 2 do aval ainda falha por regra.** A sonda original com só `E 22/10 12:00` deu **0,00 h** nos dois braços. Em `21/09–20/10`, com previsão comercial e sem ausência, usei `E 21/10 01:30`, `S 22/10 00:00` com papel `Xi` e uma batida posterior em `23/10 08:00`. A casca dispõe do fato posterior da O95, fecha o par e data ambas as marcas em **21/10**. A projeção nova da folha passa `ultima_batida=None`, mantém o turno aberto e atribui ambas a **20/10**. Com zero períodos no motor, os trechos reais do fechamento deram **0,00 h** sem as marcas e **−193,60 h** com elas. Esse saldo alimenta o `FechamentoMensal` e o banco do `DiaPago`. `app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:204` · `app/ponto/turnos.py:1172` · `app/ponto/turnos.py:1186` · `app/ponto/turnos.py:1931` · `app/ponto/services/fechamento.py:165` · `app/ponto/services/fechamento.py:679` · `app/ponto/services/fechamento.py:1123` · `app/ponto/services/fechamento.py:1199` · `app/ponto/services/fechamento.py:1227`
-
-4. **A segunda virada continua dependente do cadastro do dia da saída.** Para `E 20/10 23:30 → S 22/10 01:30`, o juiz devolve um par fechado de 26 h. A sonda de `_turno_noturno_completo` devolveu `True` com o vínculo noturno e `False` com vínculo diurno ou sem vínculo em 22/10. A guarda rejeita o caso antes de consultar o par. O teste usa o mesmo vínculo nas duas datas e simula o lote com a própria casca. A transferência das duas pontas para a fatia de A passou no caso anterior de 26 h, mas o teste usa dois vínculos sem `tipo_escala`, o mesmo DNA e ata vazia. A fatia continua consumindo o mapa sujeito à dupla atribuição do item 1. `app/escala/servico_jornada.py:230` · `app/escala/servico_jornada.py:245` · `app/escala/servico_jornada.py:354` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:125` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:149` · `app/ponto/services/fechamento.py:284`
-
-5. **O item 1 do aval, 4b, continua reservado e produz diferença de dinheiro.** Com `E 19/10 22:00 → S 20/10 22:00` e `E 21/10 03:00 → S 21/10 11:00`, o juiz data o segundo par em **21/10**. No mesmo `Motor12x36`, variar só a carga da antiga borda do PDF para `ini−4` fez **8,00 h virarem 0,00 h** na janela iniciada em 21/10. A primeira jornada inteira passa a chegar ao motor, que aplica a herança pelo vão de 5 h e exclui o segundo par como dia 20. A folha já recebe a carga ampliada. O PDF livre passou a recebê-la nesta volta e soma a saída desse motor. A outra pendência reservada, 3c, também permanece. Para fim em 20/10, a testemunha da folha pede julgamento até 21/10, carrega até 23/10 inclusive e só recorta a comparação depois. Uma marca em `23/10 00:00` entra nessa apuração e fica fora da carga da competência. `app/docs/par_pelo_turno_c1v6_evidencia.txt:137` · `app/core/juizes.py:216` · `app/ponto/motor_calculo_v2.py:2516` · `app/ponto/motor_calculo_v2.py:2542` · `app/ponto/services/fechamento.py:655` · `app/relatorios/pdf_espelho.py:281` · `app/relatorios/pdf_espelho.py:495` · `app/folha/porta_export.py:77` · `app/folha/porta_export.py:106` · `app/folha/porta_export.py:114`
-
-## Escritores e leitores
-
-| Valor | Onde nasce e onde o contrato diverge |
-|---|---|
-| `janela_com_pad` e `batidas_apuraveis_na_janela` | `turnos.py` escreve `ini−4..fim+2`, por dias locais completos, do primeiro ao último microssegundo inclusive. Casca e lote usam filtros de data local. Grade, carga de perguntas, fechamento, autoridade do espelho e PDF leem a janela. O fechamento usa o helper também na passada de órfãos. A carga de perguntas escreve a borda equivalente como `< 00:00` do dia seguinte, mas recorta de um lote já carregado. A divergência demonstrada está no período pedido pela testemunha da folha e no provedor da O95. `app/ponto/turnos.py:1869` · `app/ponto/turnos.py:1895` · `app/ponto/turnos.py:2990` · `app/ponto/turnos.py:3001` · `app/ponto/turnos.py:3149` · `app/escala/utils.py:1352` · `app/chamados/services/carga_pergunta_viva.py:174` · `app/ponto/services/fechamento.py:831` · `app/ponto/services/espelho.py:1031` · `app/relatorios/pdf_espelho.py:281` |
-| Dia por PK e dia do período | `_dia_das_batidas_puro` escreve o dia do turno reclamante e completa as demais marcas pelo dia civil. Espelho e app filtram por PK, painel, férias e vigia consultam PKs específicos, e disputa e fio chegam pela consulta individual. Na tela, a soma de horas passou a ler o dia publicado pelo motor, mas `turnos` e `turnos_abertos` ainda filtram pela entrada civil. No próprio caso 3d, `E 21/09 00:00 → S 07:50` atribuído a 20/09 soma **7 h 50 min** no recorte até dia 20 e acrescenta **zero** a `turnos`. `app/ponto/turnos.py:3070` · `app/ponto/services/espelho.py:435` · `app/ponto/services/espelho.py:451` · `app/ponto/services/espelho.py:588` · `app/api/views.py:1444` · `app/api/views.py:1461` · `app/core/services/painel_op.py:330` · `app/ferias/management/commands/listar_ferias_com_batida.py:54` · `app/ponto/management/commands/vigia_plantio_overnight.py:87` · `app/chamados/services/disputa_emissao.py:283` · `app/chamados/services/fio.py:1827` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:103` |
-| `dias_inconsistentes` | A tela incrementa uma vez por dia inconsistente. O PDF reconta as linhas. `folha_manda` pode sobrescrever ambos com `FechamentoMensal.inconsistencias`, que conta anomalias e acrescenta 1 por `sem_movimento`. Com zero anomalias e nenhuma linha inconsistente, o contador de dias vale **0** e o fechamento sem movimento publica **1**. O badge, o app e a comparação da porta leem a mesma chave com esses dois significados. `app/ponto/services/espelho.py:670` · `app/ponto/services/espelho.py:685` · `app/relatorios/pdf_espelho.py:604` · `app/ponto/services/fechamento.py:1119` · `app/relatorios/cartao_pela_celula.py:113` · `app/relatorios/cartao_pela_celula.py:346` · `app/templates/ponto/espelho.html:67` · `app/api/views.py:1434` · `app/folha/porta_export.py:502` |
-| `pdf_espelho` | O coletor lê as linhas de `espelho_do_colab`, mas monta insumos e roda `apurar_por_fatia` ou `calcular_mes` em paralelo. Em período livre, publica o próprio saldo do motor. O mesmo coletor alimenta a geração do PDF, a testemunha de exportação e a pauta de dias em aberto. Com `agora=25/11` e pedido `26–27/11`, o `max` faz a apuração começar e terminar em **26/11**, enquanto a tela consultada para as linhas termina em **24/11**. É uma divergência de teto usando o mesmo `agora`. O delta fornecido tem **+0** cláusulas `except`. `app/relatorios/pdf_espelho.py:277` · `app/relatorios/pdf_espelho.py:410` · `app/relatorios/pdf_espelho.py:426` · `app/relatorios/pdf_espelho.py:524` · `app/relatorios/pdf_espelho.py:589` · `app/relatorios/pdf_espelho.py:647` · `app/relatorios/pdf_espelho.py:1041` · `app/folha/porta_export.py:502` · `app/ponto/services/dias_em_aberto.py:112` · `app/docs/par_pelo_turno_c1v6_evidencia.txt:149` |
-
-## O que os testes deixam passar [nao verificado]
-
-- **c1v6.** Ata vazia derrubou o teste novo, fechando aquele mutante de `r.txt`. Encurtar a carga do PDF, restaurar o recorte civil da soma e usar `not batidas` também derrubaram as respectivas sondas. Em contrapartida, mudei só `dia <= _data_fim` para `dia < _data_fim` no `sem_movimento`. Os **95 testes e sondas em memória** passaram. Uma única marca apurável atribuída ao dia 20, sem ausência, passaria a ser tratada como mês sem movimento. Os dois braços do 4c exercitam apenas o caso sem fato na competência. `app/ponto/tests/test_par_pelo_turno_c1v6.py:182` · `app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:266` · `app/ponto/tests/par_pelo_turno_c1v6_verificacao.py:319` · `app/ponto/services/fechamento.py:679` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:120`
-- **c1v7.** O AST distingue os dois nomes por igualdade e contou uma chamada do embrulho na linha 281. Os cinco testes estruturais passaram em memória. Uma segunda chamada via `carregar = batidas_apuraveis_na_janela; carregar(...)` deixou o censo idêntico. A chamada real a `apurar_por_fatia` também está fora de `AUTORIDADES`. O verde do selo permite a derivação paralela do coletor. `app/relatorios/tests/test_pdf_nao_calcula.py:34` · `app/relatorios/tests/test_pdf_nao_calcula.py:63` · `app/relatorios/tests/test_pdf_nao_calcula.py:96` · `app/relatorios/pdf_espelho.py:281` · `app/relatorios/pdf_espelho.py:412`
-- **c1v8.** Comparei os literais via AST. A fixture copia as nove chaves e valores de `espelho.py`, incluindo `dias_inconsistentes`. Ela corrige o `KeyError` da montagem manual e preserva a asserção de horas. Como injeta o próprio resumo e chama `montar_dias`, o 3d deixa passar a remoção de `dias_inconsistentes` do inicializador de produção e a remoção do incremento. A comparação da fixture com o contrato atual é exata, mas o teste não protege esse contrato contra mudança futura. `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:100` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:113` · `app/ponto/services/espelho.py:685` · `app/ponto/services/espelho.py:1236`
-
-A execução Django parou no import de `django.core`. O `Ran 356 OK`, a identidade Git de HEAD e das bases, o efeito no gravado e no TXT, e o laudo dos 29 casos por rubrica ficam **[nao verificado]**. Para col155/08-11, a cópia só oferece o ensaio sintético de **782 min**, teto de **732 min** e uma C9. `app/manage.py:11` · `app/docs/BACKLOG.md:2027` · `app/ponto/tests/test_par_pelo_turno_c1v6.py:195`
-
-**REPROVADO — PK muda de dia e de dono (`app/ponto/turnos.py:3085`), pausa perde a entrada (`app/ponto/turnos.py:508`), 4c perde a prova da O95 e muda o saldo (`app/ponto/services/fechamento.py:165`), guarda noturna rejeita par fechado (`app/escala/servico_jornada.py:230`), 3c amplia a janela (`app/folha/porta_export.py:77`), 4b perde 8 h (`app/ponto/motor_calculo_v2.py:2521`), PDF recalcula e usa outro recorte (`app/relatorios/pdf_espelho.py:412`), resumo mistura dias e ocorrências (`app/relatorios/cartao_pela_celula.py:113`) e os testes deixam passar borda exclusiva, chamada indireta e perda da chave de produção (`app/ponto/services/fechamento.py:679` · `app/relatorios/tests/test_pdf_nao_calcula.py:77` · `app/relatorios/tests/test_par_pelo_turno_c1v6_pdf.py:113`).**
-
-## 27/11 09:52 · sessao ca7d3c808b96 · - · - · origem=Ronald (tmux)
-
-- **R4 e R5.** O cenário de intervalo permite exercitar origem aberta e marco efetivo entregue na virada do corte. Na base, o repasse grava os IDs de ambos os itens no agregado antes de tentar as perguntas. O nascimento distingue alteração de inserção e só aplica a guarda B2 à alteração. O teste pode observar `_nascer`, o dia efetivo e a tentativa de `INSERT`, além da releitura pública de `cobrar_dia`. `chamados/tests/test_fio_intervalo.py:45`, `ponto/janelas.py:60`, `folha/tests/test_export_vigente.py:33`, `chamados/services/disputa_emissao.py:1117`, `chamados/models.py:3192`, `chamados/models.py:3333`, `chamados/models.py:3847`, `chamados/services/cobrar_dia.py:45`.
-- **R3.** O callback autônomo de silêncio de isentos já tem fixture com callback real. Adicionar TXT vigente e cobrar o registro do silêncio detecta uma extensão indevida de `_K6`. O beco tem cerca B2 própria e é outro cenário. `chamados/signals.py:285`, `chamados/tests/test_varredura_isentos_evento.py:43`, `chamados/services/silencio_isentos.py:34`, `chamados/services/becos.py:63`.
-- **Volta 3.** O template imprime só a hora, o PDF consulta HH:MM e o supra só imprime a lista de horas. Os pontos observáveis de transporte são a ata em curso no emissor, `grade_da_celula` durante `_marcos_faltantes` e `grade_do_fechamento` na folha. `templates/ponto/espelho.html:242`, `relatorios/pdf_espelho.py:472`, `relatorios/pdf_espelho.py:607`, `ponto/supra_juiz.py:527`, `ponto/services/cartorio.py:1505`, `chamados/services/declaracao_texto.py:101`, `folha/export.py:329`.
-
-Execução dos cenários [nao verificado].
-
-_8625 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8628 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
