@@ -10976,6 +10976,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 13:21:03 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:ed8edefa18 (228 car., na trilha privada)
+
 **27/11 12:33:15 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:de6ab7a400 (40 car., na trilha privada)
 
 **27/11 12:32:50 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:de6ab7a400 (40 car., na trilha privada)
@@ -14402,3 +14404,5 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 12:57 colhido PAR-PELO-TURNO c1v9/r.rc (12:56 rc 0): itens 2-7 do opus curados (O95 -193,60 -> 0,00 h pela folha; entrada 23/10 01:30 em 22/10 nos leitores; testemunha sem fim+1 extra), carga do motor ini-1..fim+1, 15 reversoes vermelhas, 0 except; suite nao rodada pelo Codex. Commit na wt b87d3d77e. Recorte ponto core chamados escala folha relatorios api na pista job 1127125708_b87d3d77 -> c1v9/g/g.rc; verificador Codex vaga 1 -> c1v9/ver/r.rc (pergunta 2: a janela ini-1..fim+1 amplia a do main?).
 - 13:07 colhido PAR-PELO-TURNO c1v9/ver/r.rc (13:05 rc 0): REPROVADO. Procedentes conferidos: (1) heranca do vao de 6 h ainda move dinheiro com ini-1..fim+1 (motor_calculo_v2.py:2516-2545) -> item 7 no pedido da RAMO2-B c2v (pre-requisito do pouso, ja declarado); (2) c1v9 mudou assercao de RED existente (test_par_pelo_turno_c1v6_pdf.py:87-92, [D,D]->[D,D+1]) -- proibido, volta; (3) duas leituras no fechamento.py:635/657 (KeyError); (4) coding ascii + UTF-8 no test_espelho_tela_le_o_juiz_do_dia.py:1/147 (SyntaxError); (5) resolvedor do test_pdf_nao_calcula sem apurar_por_fatia, api_justificativas paridade E>S. Volta c1v10 (itens 2-5) no Codex construtor vaga 1 -> c1v10/r.rc.
 - 13:08 colhido FERIADO-UM-JUIZ c2/r.rc (13:07 rc 0): itens 1,3,4,6 curados (TXT mensal sem perder os 400 cent., particionar_ft unico, dobra pelo dia do juiz, 8,04->8,03 h), 25 sem banco verdes, 21 mutantes mordem, 0 except; K1 PAROU (exige motor) -> linha lei: FERIADO-K1-MOTOR-x-UM-JUIZ no topo. Commit wt a1377afb4; recorte na pista -> c2/g/g.rc; depois c3 com g1/falhas.txt + o que o recorte der.
+- 13:22 colhido PAR-PELO-TURNO c1v10/r.rc (13:20 rc 0): procedentes 2-5 curados (segunda virada 0 h -> 26 h/0 abertos com [D,D] restaurado; KeyError -> 2 h; selo ASCII; PDF le espelho_do_colab; justificativas pela geometria), 7 REDs, 8 reversoes, 0 except. Commit wt d39a4bbdf650e91cc5448120a46f17bae1435388. Recorte pista -> c1v10/g/g.rc; verificador Codex -> c1v10/ver/r.rc. O recorte c1v9/g segue na pista (superado; sem porta de cancelar).
+- 13:25 colhido E4C-F5-INSTANTE cura5/larga.rc (13:25 rc 1): FAILED 11 falhas; rodada do proprio opus construtor (agente vivo, ja preparou labels_larga2/lanca_larga2) -- ele cura e entrega cura5.rc.
