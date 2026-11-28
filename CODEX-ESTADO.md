@@ -1,7 +1,31 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 07:25** · publicado em **28/11/2026 07:24** (UTC-3)
+> Ultima resposta processada: **28/11/2026 08:00** · publicado em **28/11/2026 08:05** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 08:00 · sessao 2d6793142ced · CUSTO-DE-COORDENACAO · verificador · origem=Code
+
+**REPROVA.** Os itens #2, #3, #5, #8 e #9 corrigem os casos exatos do ver3, mas ainda têm formas vizinhas que passam. O selo de vagas também aceita qualquer resposta do falso para a nova guarda de nome. `bin/disjuntor.py:1846`, `bin/backlog_estado.py:65`, `bin/mao_unica.py:98`, `bin/hook_stop_fila1.py:196`, `bin/hook_stop_fila1.py:1023`, `bin/tests/test_codex_n_vagas.sh:44`
+
+1. **#2 — A regex Codex é compartilhada, mas a entrada ainda diverge.** `nome-volta-a-lower` e `gramatica-ignora-caixa` mordem os casos de caixa em memória. `wrapper-sem-gramatica` morde pela ausência da chamada no texto. Na variante `/home/ronald/wt-codex-obra-x-000001é`, confirmei que o Agent devolve `OBRA-X` e o juiz chamado pelo wrapper devolve `False`. `COPIA_RE` corta o basename antes do `é`, então o `fullmatch` do Agent recebe só o prefixo válido. `bin/disjuntor.py:152`, `bin/disjuntor.py:157`, `bin/disjuntor.py:163`, `bin/disjuntor.py:1846`, `bin/codex_pergunta.sh:463`, `bin/tests/test_censo_antes_da_vaga.sh:813`, `bin/tests/test_censo_antes_da_vaga.sh:901`
+
+2. **#3 — Topo, andáveis e CENSO usam o mesmo juiz.** Os cinco mutantes de estado ficaram vermelhos em memória. `SUPERADA por ITEM-B` sai dos andáveis e `**ABERTA** (a anterior foi **FECHADA**)` anda. A fronteira ainda aceita `FECHADA_extra` como estado terminal. Na cópia, o marcador continua apontando `ORDEM-VIVA-1511-NOITE` e o hook devolve `ok`, embora a linha de 18/11 declare a substituição. O marcador e a célula antiga seguem como estavam. `bin/hook_stop_fila1.py:64`, `bin/hook_stop_fila1.py:174`, `bin/hook_stop_fila1.py:268`, `bin/hook_stop_fila1.py:293`, `bin/disjuntor.py:1805`, `bin/tests/test_hook_stop_borda.sh:468`, `bin/tests/test_hook_stop_borda.sh:509`, `app/docs/BACKLOG.md:8`, `app/docs/BACKLOG.md:1926`, `app/docs/BACKLOG.md:2649`
+
+   **`_FECHADO` é um diagnóstico legado que o delta deixou para trás.** O uso em `backlog_estado.py:65` é preexistente e imprime `FECHADO=`. A comparação antes/depois usa o juiz do hook. O delta amplia a divergência ao trocar a regra de fechamento do hook e conservar a regex no diagnóstico. Nas 1.917 linhas aceitas pelo hook no bloco OBRAS, contei 84 divergências de `_FECHADO` contra `_item_fechado`, ante 7 com o predicado anterior reconstruído do delta. Para a pergunta «está parado?», `_FECHADO` ou `_NAO_ANDA` diverge de `_item_parado` em 80 linhas. O denominador 1.927 fica **[nao verificado]**. `bin/backlog_estado.py:56`, `bin/backlog_estado.py:65`, `bin/hook_stop_fila1.py:58`, `bin/hook_stop_fila1.py:126`, `bin/hook_stop_fila1.py:174`, `bin/hook_stop_fila1.py:186`, `app/docs/BACKLOG.md:713`, `app/docs/BACKLOG.md:2658`
+
+3. **#5 — A execução do registro candidato saiu da porta de merge.** O parser aceita o registro da cópia, e os cinco mutantes de `casos_juiz` caíram em memória pelos casos esperados, inclusive `café.py`. A recusa de toda forma não canônica segue incompleta. Confirmei que o parser aceita uma chave `_Q` cuja atribuição literal vem **depois** do `JUIZES` que a usa. Também aceita `_Q` após `del _Q`. A coleta de constantes ignora a ordem de uso e conta apenas `Store`, então a projeção pode devolver um registro onde o módulo falharia. `bin/mao_unica.py:84`, `bin/mao_unica.py:98`, `bin/mao_unica.py:109`, `bin/mao_unica.py:133`, `bin/mao_unica.py:179`, `bin/disjuntor.py:1316`, `bin/tests/test_mao_unica.sh:65`, `bin/tests/test_mao_unica.sh:258`
+
+4. **#8 — A releitura com obra nomeada foi curada. O erro de leitura pelo SO ainda libera.** A sonda de exceção depois da porta fez uma leitura em duas chamadas ao CENSO. O mutante fez duas. No Stop, `B4 siga` volta a bloquear com zero aberturas do BACKLOG, e UTF-8 inválido bloqueia quando B4 e orçamento não decidem. Já `PermissionError` vira `(b'', None)`. Com essas portas neutras, confirmei `ALLOW fila 1 vazia`, pelo mesmo caminho que zera a borda. Esse tratamento de `OSError` é preexistente e o delta o preserva. `bin/disjuntor.py:1918`, `bin/disjuntor.py:1989`, `bin/tests/test_censo_antes_da_vaga.sh:787`, `bin/tests/test_censo_antes_da_vaga.sh:907`, `bin/hook_stop_fila1.py:189`, `bin/hook_stop_fila1.py:218`, `bin/hook_stop_fila1.py:1650`, `bin/hook_stop_fila1.py:1669`, `bin/hook_stop_fila1.py:1695`, `bin/hook_stop_fila1.py:1021`
+
+5. **#9 — A confirmação pela trilha foi curada. A coleta ainda pode ficar velha.** Na sonda de três Stops, após a falha de gravação no primeiro, o controle acumulou `0, 1, 1` avisos. Os dois mutantes de confirmação indevida deram `0, 0, 0`. A conferência da foto protege a transição normal quando o BACKLOG mudou, mas `_libera_zerando` passa sem foto. Um Stop que já leu fila vazia pode zerar o TSV **depois** de outro Stop gravar o estado da fila nova. Recados B3 também são coletados antes da trava e podem envelhecer com o BACKLOG intacto. O mutante `foto-fora-da-trava` elimina a conferência inteira. Mover a mesma conferência para antes da trava preservou as três asserções de `casos_foto` na sonda em memória. `bin/hook_stop_fila1.py:987`, `bin/hook_stop_fila1.py:1008`, `bin/hook_stop_fila1.py:1021`, `bin/hook_stop_fila1.py:1695`, `bin/hook_stop_fila1.py:1708`, `bin/hook_stop_fila1.py:1738`, `bin/tests/test_hook_stop_borda.sh:386`, `bin/tests/test_hook_stop_borda.sh:410`, `bin/tests/test_hook_stop_borda.sh:525`, `bin/tests/test_hook_stop_borda.sh:532`
+
+6. **Selos com falso.** `test_codex_pergunta` encaminha `--copia-codex` ao disjuntor real. O vizinho `test_codex_n_vagas` usa o módulo real no import, mas a execução como CLI sai com `0` para a nova opção. Confirmei em memória que um nome alheio recebe `0` do falso e `False` do juiz. Em `casos_ilegivel`, os falsos de B4 e orçamento servem para testar a ordem do `main`. O caso `orc-libera` só exige `ABERTURAS=0`. Troquei a liberação por um bloqueio com zero leituras e a asserção seguiu verde. `bin/tests/test_codex_pergunta.sh:83`, `bin/tests/test_codex_n_vagas.sh:38`, `bin/tests/test_codex_n_vagas.sh:44`, `bin/disjuntor.py:163`, `bin/tests/test_hook_stop_borda.sh:359`, `bin/tests/test_hook_stop_borda.sh:378`, `bin/hook_stop_fila1.py:1662`
+
+7. **Escritor, relógio, exceções e travas.** O TSV continua com um escritor pela transição da borda. O delta usa `mtime_ns` e `ctime_ns` como metadados da foto e acrescenta zero chamadas ao relógio e zero cláusulas `except` executáveis. A leitura preguiçosa agora pode ocorrer **sob** a trava do orçamento, que solta antes da borda. Na borda, a nova sequência `exists` → `stat` abre outra via para o `except` externo se o arquivo sumir entre as duas chamadas. `foto=None` também tem dois usos: leitura indisponível e transição deliberadamente sem conferência. `bin/hook_stop_fila1.py:189`, `bin/hook_stop_fila1.py:200`, `bin/hook_stop_fila1.py:972`, `bin/hook_stop_fila1.py:994`, `bin/hook_stop_fila1.py:1023`, `bin/hook_stop_fila1.py:1152`, `bin/hook_stop_fila1.py:1368`, `bin/hook_stop_fila1.py:1399`, `bin/hook_stop_fila1.py:1740`
+
+8. **Demais itens do ver3.** #1, #4, #11, #12 e #13 conservam as lacunas triadas: ênfase `__`, troca de voltas com o mesmo par de contagens, contraprova com saída própria, caminho montado com `+` e modo de abertura computado. #10 conserva a cura por inode e a lacuna do selo que ignora o resultado do subprocesso. #6 e #7 ficam na fila e #14 segue descartado pela triagem. `bin/disjuntor.py:1651`, `bin/disjuntor.py:1018`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:311`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:326`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:211`, `bin/tests/test_relato_guarda_pedido_de_patch.sh:101`, `bin/hook_stop_fila1.py:972`, `bin/tests/test_hook_stop_borda.sh:295`, `triagem.md:5`
+
+Identidade Git do hash, suíte integral, execução dos selos que escrevem fixtures, pré-requisito de pouso e comportamento em produção: **[nao verificado]**. [nao verificado]
 
 ## 28/11 07:25 · sessao 1c4996401ae6 · RETRATO-PDF-CORTA-POR-QUE · verificador · origem=Code
 
@@ -1037,239 +1061,4 @@ Confirmei em memória as cinco mutações simples dos mapas e do template de Pon
 
 A lógica do selo do relógio, executada isoladamente em memória, encontrou os mesmos 452 arquivos da lista, com zero novos e zero curados. O controle com `datetime.date.today()` acusou uma leitura. O detector conta chamadas diretas sem argumento, aceita `freeze_time` por texto no arquivo inteiro e não acompanha comandos ou requisições chamados pelo teste. O RED da lavratura congela o relógio explicitamente. `app/core/tests/test_selo_teste_sem_relogio.py:23-45,48-84`, `app/folha/tests/test_codigo_dominio_invalido.py:215-229,249-250`.
 
-## 28/11 01:43 · sessao db69fbcafc44 · FERIADO-UM-JUIZ · leitura · origem=Code
-
-**O DIFF deve rodar duas vezes sobre a mesma sombra**. Monte o `app/` da árvore viva para o **ANTES** e o `app/` de `d765154a3` para o **DEPOIS**, via `SONDA_ARVORE`. O gravado da sombra é a terceira coluna, usada para estimar o que o apply escreveria. Deltas reais, lista do TXT e hashes de hoje seguem [não verificado]. `bin/sonda_leitura.sh:226-240` `bin/diff_o124_frota.py:4-14` `app/ponto/services/diff_frota.py:7-12`
-
-### 1. Instrumento e universo
-
-- **`bin/diff_o124_frota.py` é o precedente para comparar duas árvores.** Ele roda o escritor real em modo leitura em cada montagem e compara as duas fotos por colaborador e campo. O script original fixa uma competência por rodada e chama o recalculador sem filtro de empresa. **`diff_frota.medir`** é o serviço da casa para gravado, hoje e novo quando a mudança é uma mutação dentro de uma única árvore. Ele parte de quem já tem mensal gravado. `bin/diff_o124_frota.py:10-14` `bin/diff_o124_frota.py:20-42` `bin/diff_o124_frota.py:47-69` `app/ponto/services/diff_frota.py:45-89`
-- **`diff_calculador` compara motor e calculador por dia e rubrica dentro do código carregado.** Recebe um par `--mes/--ano` por chamada, percorre todas as empresas ativas e parte dos IDs com mensal gravado. `--contra-gravado` acrescenta a comparação do calculador com o mensal. `--periodos-do-fechamento` captura os períodos da mesma árvore e intercepta a lavratura. `app/ponto/management/commands/diff_calculador.py:25-56` `app/ponto/management/commands/diff_calculador.py:98-135` `app/ponto/management/commands/diff_calculador.py:541-588`
-- **`sombra.sh --cobre INI FIM` consulta o carimbo de cobertura.** Use a janela de cada empresa, incluindo o dia adicional em cada ponta que o fechamento consulta. A vigência começa em 11/2026 e alcança 12/2026. Com corte 21, 20/11 é a véspera da janela da 12 e entra na busca de batidas. O corte efetivo das três empresas e a cobertura de hoje seguem [não verificado]. `bin/sombra.sh:219-233` `app/core/sombra_cobertura.py:32-49` `app/ponto/janelas.py:10-21` `app/ponto/janelas.py:54-57` `app/ponto/services/fechamento.py:155-173` `app/ponto/services/fechamento.py:601-604` `app/ponto/services/fechamento.py:685-699` `app/folha/export.py:383-391`
-
-### 2. Sonda de impacto
-
-`--sombra` seleciona `sombra_db/sombra`. Por padrão, a sonda monta `$RAIZ/app:/app:ro`, onde `$RAIZ` é a raiz do **wrapper chamado**. A opção de árvore é `SONDA_ARVORE=<cópia>/app`. O `--dir` é da suíte. O HEAD vivo `93e305860` e a disponibilidade dessa opção no wrapper instalado seguem [não verificado]. `bin/sonda_leitura.sh:31` `bin/sonda_leitura.sh:38-45` `bin/sonda_leitura.sh:66-71` `bin/sonda_leitura.sh:93-97` `bin/sonda_leitura.sh:226-240` `bin/suite.sh:170`
-
-A sonda usa o universo integral do recalculador para as empresas 2, 3 e 4 nas competências 11 e 12, inclusive quem ainda está sem mensal. Os totais incluem diferenças de **0,01 h** e mostram quantos valores preenchidos entraram em cada soma. No TXT 11, segue a chamada do gerador a `classificar_export` sobre os mensais em memória. A marca `ITEM_8` mostra quando zerar só a HE100 feriado numa cópia em memória devolve o motivo `cadastro_zero`. `SEM_CELULA` distingue esse caso de cadastro sem previsto com célula. A coluna `TXT` preserva o veredito real, inclusive quando uma retenção posterior ainda barra o colaborador. `app/ponto/services/fechamento.py:490-507` `app/ponto/services/fechamento.py:619-622` `app/ponto/services/fechamento.py:962-973` `app/ponto/services/fechamento.py:1016-1021` `app/ponto/management/commands/recalcular_fechamento.py:54-55` `app/folha/views.py:214-222` `app/folha/export.py:924-926` `app/folha/export.py:948-1005`
-
-Conteúdo de `impacto_feriado.py` para a sessão. Sintaxe, comparador e projeção do item 8 conferidos com dados sintéticos. Execução com Django e a sombra real [não verificado].
-
-```python
-import json
-import sys
-from copy import copy
-from decimal import Decimal
-
-ANO, MESES, EMPRESAS = 2026, (11, 12), (2, 3, 4)
-
-
-def projetar(registros, campos):
-    saida = {}
-    for f in registros:
-        valores = (getattr(f, campo) for campo in campos)
-        saida[str(f.colaborador_id)] = [None if v is None else str(v) for v in valores]
-    return saida
-
-
-def vereditos(empresa, fechamentos):
-    from folha.export import classificar_export
-
-    itens = classificar_export(empresa, 11, ANO, fechamentos=fechamentos)
-    candidatos = []
-    for f in fechamentos:
-        if f.horas_trabalhadas == 0 and f.horas_extras_100_feriado > 0:
-            copia = copy(f)
-            copia.horas_extras_100_feriado = 0
-            candidatos.append(copia)
-    retidos_sem_he = {
-        i["colaborador_id"]: (
-            "SEM_CELULA" if i["detalhe"].startswith("Sem NENHUMA celula") else "SEM_PREVISTO"
-        )
-        for i in classificar_export(empresa, 11, ANO, fechamentos=candidatos)
-        if i["motivo"] == "cadastro_zero"
-    }
-    return {
-        str(i["colaborador_id"]): [
-            i["status"], i["motivo"],
-            retidos_sem_he.get(i["colaborador_id"]) if i["motivo"] != "cadastro_zero" else None,
-        ]
-        for i in itens
-    }
-
-
-def coletar():
-    from django.db import connection, transaction
-
-    with transaction.atomic():
-        with connection.cursor() as cur:
-            cur.execute("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY")
-            cur.execute("SELECT current_database(), current_schema(), current_user, "
-                        "current_setting('transaction_read_only')")
-            if cur.fetchone() != ("sombra", "juliani", "leitor", "on"):
-                raise RuntimeError("Sonda exige sombra/juliani com leitor em READ ONLY")
-
-        from colaboradores.models import Empresa
-        from ponto.janelas import janela_fechamento
-        from ponto.management.commands.recalcular_fechamento import RUBRICAS
-        from ponto.models import FechamentoMensal
-        from ponto.services.fechamento import recalcular_fechamento_mes, universo_da_competencia
-
-        dados = {}
-        for mes in MESES:
-            for eid in EMPRESAS:
-                empresa = Empresa.objects.get(pk=eid)
-                janela = janela_fechamento(mes, ANO, empresa)
-                gravado = FechamentoMensal.objects.filter(
-                    mes=mes, ano=ANO, colaborador__empresa_id=eid
-                )
-                lidos = recalcular_fechamento_mes(
-                    mes, ANO, empresa_id=eid, somente_leitura=True,
-                    retornar_objeto=True, lavrar_dias_pagos=False, propagar_falha=True,
-                )
-                esperados = set(universo_da_competencia(mes, ANO, eid).values_list("pk", flat=True))
-                if lidos.keys() != esperados:
-                    raise RuntimeError(f"Leitura incompleta emp{eid} {mes:02d}/{ANO}")
-                dados[f"{mes:02d}/{ANO} emp{eid}"] = {
-                    "janela": [d.isoformat() for d in janela],
-                    "gravado": projetar(gravado, RUBRICAS),
-                    "lido": projetar(lidos.values(), RUBRICAS),
-                    "txt": vereditos(empresa, list(lidos.values())) if mes == 11 else {},
-                }
-        transaction.set_rollback(True)
-
-    print("IMPACTO_JSON", json.dumps({"campos": RUBRICAS, "dados": dados}, sort_keys=True))
-
-
-def delta(antes, depois):
-    return None if antes is None or depois is None else Decimal(depois) - Decimal(antes)
-
-
-def linha(*valores):
-    print(*(v if v is not None else "-" for v in valores), sep="\t")
-
-
-def comparar(antes, depois):
-    campos = antes["campos"]
-    a, b = antes["dados"], depois["dados"]
-    if campos != depois["campos"] or a.keys() != b.keys():
-        raise SystemExit("Escopos ou rubricas de comparação diferentes")
-    if any(a[k]["gravado"] != b[k]["gravado"] or a[k]["janela"] != b[k]["janela"] for k in a):
-        raise SystemExit("O gravado ou a janela mudou entre as leituras")
-
-    linha("FOLHA", "comp empresa", "colaborador", "rubrica",
-          "gravado", "antes", "depois", "efeito", "delta_apply")
-    for grupo in sorted(a):
-        linha("JANELA", grupo, *a[grupo]["janela"])
-        gravado, velho, novo = a[grupo]["gravado"], a[grupo]["lido"], b[grupo]["lido"]
-        fotos = (gravado, velho, novo)
-        vazio = [None] * len(campos)
-        for cid in sorted(gravado.keys() | velho.keys() | novo.keys(), key=int):
-            col = f"col{int(cid):03d}"
-            if not all(cid in foto for foto in fotos):
-                linha("UNIVERSO", grupo, col, *(cid in foto for foto in fotos))
-            for pos, campo in enumerate(campos):
-                g, v, n = (foto.get(cid, vazio)[pos] for foto in fotos)
-                linha("FOLHA", grupo, col, campo, g, v, n, delta(v, n), delta(g, n))
-
-        for pos, campo in enumerate(campos):
-            colunas = [[Decimal(v[pos]) for v in foto.values() if v[pos] is not None] for foto in fotos]
-            g, v, n = (sum(valores, Decimal(0)) for valores in colunas)
-            linha("TOTAL", grupo, "frota", campo, g, v, n, n - v, n - g,
-                  *(len(valores) for valores in colunas))
-
-        ta, tb = a[grupo]["txt"], b[grupo]["txt"]
-        for cid in sorted(ta.keys() | tb.keys(), key=int):
-            va = ta.get(cid, ["sem_fechamento", None, None])
-            vb = tb.get(cid, ["sem_fechamento", None, None])
-            movimento = "ENTROU" if vb[0] == "entra" and va[0] != "entra" else (
-                "SAIU" if va[0] == "entra" and vb[0] != "entra" else "-"
-            )
-            linha("TXT", grupo, f"col{int(cid):03d}", movimento, *va[:2], *vb[:2])
-            if va[2] or vb[2]:
-                linha("ITEM_8", grupo, f"col{int(cid):03d}", movimento, va[2], vb[2])
-
-
-if sys.argv[1:] == ["--comparar"]:
-    comparar(json.loads(next(sys.stdin)), json.loads(next(sys.stdin)))
-else:
-    coletar()
-```
-
-As duas rodadas devem usar a mesma foto da sombra, sem refresh ou outro escritor no intervalo. A igualdade do gravado e das janelas detecta parte das mudanças de entrada. Cada rodada tem seu próprio snapshot e o fechamento usa o relógio para o teto de furos, relevante na 12 em curso. `app/ponto/services/fechamento.py:679-680` `app/ponto/services/fechamento.py:1147-1154` `bin/diff_o124_frota.py:10-14`
-
-**Há uma diferença operacional importante.** O Python acima abre `READ ONLY` e termina com rollback. O wrapper provisiona role e GRANTs, reescreve `logs/.env_leitor`, copia a sonda para um temporário e grava trilha. Se a proibição de escrita inclui esses atos administrativos, use a montagem direta abaixo com leitor e rede **já provisionados**. Ela também evita depender de `app/logs` e `app/media` na cópia, usados como pontos de montagem pelo wrapper. A disponibilidade desses pontos e do leitor provisionado na sessão segue [não verificado]. `bin/sonda_leitura.sh:115-181` `bin/sonda_leitura.sh:184-203` `bin/sonda_leitura.sh:216-219` `bin/sonda_leitura.sh:245-250` `bin/sombra.sh:180-191`
-
-```bash
-(
-  set -euo pipefail
-  viva=/home/ronald/saas-hasner
-  obra=/home/ronald/codex_ws/d765154a302318df66e6fd7c1a8ab01dab660004
-  sonda=/caminho/da/sessao/impacto_feriado.py
-
-  test "$(git -C "$viva" rev-parse --short=9 HEAD)" = 93e305860
-
-  rodar() {
-    SONDA_ARVORE="$1" bash "$viva/bin/sonda_leitura.sh" --sombra "$sonda"
-  }
-
-  medir() {
-    rodar "$1" 2>&1 | awk '
-      /^IMPACTO_JSON / { sub(/^IMPACTO_JSON /, ""); print; n++ }
-      END { if (n != 1) exit 1 }
-    '
-  }
-
-  antes=$(medir "$viva/app") || { echo "Falhou a leitura ANTES" >&2; exit 1; }
-  depois=$(medir "$obra/app") || { echo "Falhou a leitura DEPOIS" >&2; exit 1; }
-  printf '%s\n%s\n' "$antes" "$depois" | python3 -B "$sonda" --comparar
-)
-```
-
-Para a montagem direta, substitua `rodar` no bloco acima pela função a seguir. Ela usa a imagem, a rede e a credencial de leitor da sonda, com a árvore em `/codigo:ro` e logs em tmpfs. Execução desse comando na sessão [não verificado]. `bin/sonda_leitura.sh:42-51` `bin/sonda_leitura.sh:232-240` `bin/recursos.sh:81` `app/config/settings/sombra.py:47-51` `app/config/settings/saas.py:118-143`
-
-```bash
-rodar() {
-  (
-    source "$viva/bin/recursos.sh"
-    docker run --rm --read-only $TESTE_DOCKER \
-      --network sonda_leitura --env-file "$viva/logs/.env_leitor" \
-      -e POSTGRES_DB=sombra -e TZ=America/Sao_Paulo -e PYTHONDONTWRITEBYTECODE=1 \
-      --mount "type=bind,src=$1,dst=/codigo,readonly" \
-      --mount "type=bind,src=$sonda,dst=/sonda.py,readonly" \
-      --tmpfs /app/logs --tmpfs /app/media --workdir /codigo \
-      saas-hasner-core:latest \
-      python /codigo/manage.py tenant_command shell --schema=juliani \
-      --settings=config.settings.sombra \
-      --command "exec(open('/sonda.py').read())"
-  )
-}
-```
-
-### 3. Reversão e apply da 11
-
-- **Escritor genérico da foto pré-apply.** `carimbo_gravado --empresa ID --mes 11 --ano 2026` usa `foto()` e grava valores por colaborador e campo em `logs/carimbo_gravado/`. A obra da janela de HE é um precedente explícito. Seu apply grava as fotos `antes` em `logs/janela_he/` antes de alterar cadastro e chamar o recalculador. `recalcular_fechamento --apply` só grava seu próprio JSON **depois** do recálculo. `app/ponto/management/commands/carimbo_gravado.py:29-56` `app/ponto/management/commands/carimbo_gravado.py:101-113` `app/ponto/management/commands/carimbo_gravado.py:145-155` `app/ponto/management/commands/aplicar_janela_he_total.py:75-90` `app/ponto/management/commands/aplicar_janela_he_total.py:116-146` `app/ponto/management/commands/recalcular_fechamento.py:130-151`
-- **Precedentes de reversão em `logs/`.** `bin/snapshot_relavratura_10_2026.py` escreve `/app/logs/reversao_relavratura_10_2026.json` e `bin/snapshot_o263_comp10.py` escreve `/app/logs/reversao_o263_comp10.json`. Ambos guardam mensal, `DiaPago.motor` e IDs sem mensal anterior. Para esta obra, a foto precisa cobrir também `DiaPago.oraculo`, pois a porta relavra as duas versões. `restaurar_fechamento` repõe campos de linhas mensais existentes. A existência de um arquivo de reversão específico da 11 em `logs/*/reversao*` segue [não verificado]. `bin/snapshot_relavratura_10_2026.py:25-64` `bin/snapshot_o263_comp10.py:53-84` `app/ponto/services/fechamento.py:1235-1239` `app/ponto/services/fechamento.py:1262-1266` `app/ponto/services/fechamento.py:1300-1319` `app/ponto/services/dia_pago.py:368-373` `app/ponto/services/fechamento.py:1398-1437`
-- **Porta do apply.** É `tenant_command recalcular_fechamento --schema=juliani --mes 11 --ano 2026 --empresa ID --apply`, uma chamada por empresa do escopo. A chamada encaminha apenas `(11, 2026, ID)` e grava mensal e lavra nessa chave. A 12 pode mudar por uma chamada independente após o deploy, por exemplo, pelo recálculo por evento que resolve a competência da data do fato. Os contadores `recusas_oraculo` e `falhas_tecnicas_oraculo` saem no resumo da lavra. Seus valores e a prova pós-apply seguem [não verificado]. `app/ponto/management/commands/recalcular_fechamento.py:77-81` `app/ponto/management/commands/recalcular_fechamento.py:110-133` `app/ponto/services/fechamento.py:962-973` `app/ponto/services/fechamento.py:1235-1239` `app/ponto/services/fechamento.py:1320-1351` `app/ponto/services/fechamento.py:1836-1853`
-
-### 4. Hash do FechamentoMensal de 06, 07, 08 e 09
-
-A função da casa é **`ponto.portas.regen_exportada.hash_do_gravado(colaborador, mes, ano)`**. Ela consulta o mensal gravado e retorna 12 caracteres do MD5. O conjunto exclui chaves e carimbos como `previsto_em`, `derivado_em` e `atualizado_em`. Para um digest por empresa e competência, use SHA-256 do JSON ordenado de `carimbo_gravado.foto(eid, mes, 2026)` e publique também a contagem de linhas. Repita nos quatro meses, no mesmo banco antes e depois do apply, incluindo todas as empresas para a prova histórica. `app/ponto/portas/regen_exportada.py:35-38` `app/ponto/portas/regen_exportada.py:56-74` `app/ponto/portas/regen_exportada.py:121-122` `app/ponto/portas/regen_exportada.py:194-195` `app/ponto/management/commands/carimbo_gravado.py:29-56`
-
-```python
-from hashlib import sha256
-import json
-
-from colaboradores.models import Empresa
-from ponto.management.commands.carimbo_gravado import foto
-
-for mes in (6, 7, 8, 9):
-    for eid in Empresa.objects.order_by("pk").values_list("pk", flat=True):
-        mensal = foto(eid, mes, 2026)
-        dados = json.dumps(mensal, sort_keys=True, separators=(",", ":")).encode()
-        print(f"{mes:02d}/2026 emp{eid} linhas={len(mensal)} sha256={sha256(dados).hexdigest()}")
-```
-
-`ExportacaoDominio.hash_sha256` é o campo do **TXT**. Os hashes do mensal antes e depois do apply seguem [não verificado]. `app/folha/models.py:75-84` `app/ponto/portas/regen_exportada.py:62-74`
-
-_8849 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8850 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
