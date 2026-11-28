@@ -11004,6 +11004,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 06:12:03 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:26da7393f9 (521 car., na trilha privada)
+
 **28/11 05:55:52 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:f19c8408b4 (41 car., na trilha privada)
 
 **28/11 05:55:35 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:f19c8408b4 (41 car., na trilha privada)
@@ -14966,6 +14968,10 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 06:09 colhido RETRATO-PDF-CORTA-POR-QUE item2/red/suite.rc (06:09 rc 1): RED do opus em curso -- Ran 212, FAILED failures=13 errors=1; os 13 FAIL sao test_RED_* (chave nova, janela, mapa em export.py, drawer); o ERROR e test_linha_LEGADA_sem_a_chave_e_igual_a_hoje_no_PAPEL (caso que devia passar HOJE: erro de teste a conferir na entrega do opus)
 - 06:10 colhido CRON-15-SOMBRA-CABE d1/r.rc (06:09 rc 0): dossie de desenho (caminho critico de dados 2511 s; 4 trilhas 2532/3997 s; quota 1 CPU; fidelidade quebra no paralelo; perguntas de lei 0) -> PERGUNTA DE DESENHO no topo; obra nao constroi ate a resposta
 - 06:10 colhido RETRATO-PDF-CORTA-POR-QUE item2/red/suite_c2.rc (06:10 rc 1): Ran 212, FAILED failures=13 errors=0 -- o ERROR do caso LEGADA sumiu; as 13 falhas sao todas test_RED_* (o vermelho pedido); espera a entrega do opus
+- 06:12 colhido RETRATO-PDF-CORTA-POR-QUE item2/red/mutante.rc (06:11 rc 1): rodada de mutante do proprio opus de RED (em curso); o veredito vem na entrega dele
+- 06:14 colhido CUSTO-DE-COORDENACAO f1v2/base1/r.rc (06:14 rc 0): #1 #4 #11 #12 #13 = IGUAL a base 3bf4b6858 (amostra conferida disjuntor.py:1635 base, teste :95-101 HEAD) -> lista do que falta; bloqueiam a volta 4 so #2 #3 #5 #8 #9; volta 4 = opus construtor quando a vaga opus do RETRATO liberar
+- 06:15 CUSTO-DE-COORDENACAO v4: brief pronto logs/CUSTO-DE-COORDENACAO/f1v2/v4/brief.md (forma RECUSA-O-NAO-CANONICO, so #2 #3 #5 #8 #9); opus construtor abre quando o opus de RED do RETRATO entregar (teto 1 opus construtor)
+- 06:11 DESPACHO CUSTO-DE-COORDENACAO base1: conferir #1 #4 #11 #12 #13 do ver3 contra a base 3bf4b6858 -> Codex leitura logs/CUSTO-DE-COORDENACAO/f1v2/base1/r.rc
 - 06:03 CUSTO-DE-COORDENACAO F1 v2 triagem ver3 (logs/CUSTO-DE-COORDENACAO/f1v2/ver3/triagem.md): corrige a linha anterior -- #5 e #8 sao REGRESSAO conferida (exec do juizes.py da arvore candidata no commit_msg antes do B3; leitura do BACKLOG antes do B4 libera em UTF-8 invalido), #9 guarda nova que cala aviso: bloqueiam. Variantes 1,4,11,12,13 a conferir contra a base; 2 e 3 bloqueiam (gramatica/veredito duplicado). Volta 4 = opus com forma RECUSA-O-NAO-CANONICO, depois da vaga do RETRATO. F1 nao pousa; ORDEM-VIVA-1511-NOITE NAO se marca SUPERADA ate o #3 curar.
 - 05:56 DESPACHO RETRATO-PDF item 2 REDs -> opus construtor (wt-red-retrato-item2-055540 = main 3545ebc07 + merge c1 44e03c9a4; conflito views_retrato.py::retrato_pdf resolvido pela sessao pela uniao: _estilo_motivo+detalhe_do_motivo do main, _st_escala+Paragraph escape da c1). DECIDIDO PELA LEI (LEI-AKITA 7, nada em branco): janela com zero pares -> Por que com os rotulos sem datas | contestavel. Brief logs/RETRATO-PDF-CORTA-POR-QUE/item2/red/brief.md
 - 05:54 entrega opus a9bcda6b F1 v2 volta 3: 5 commits dcb07151d..7ce2048c4, 11 procedentes curados com RED/GREEN/mutante; #6 #7 fila, #14 nao procede; test_handoff_sessao e test_hook_nao_e_copia rc 1 = mesmas linhas na base 3bf4b6858 (conferido: so o caminho difere; wt sem .claude/settings.json nem .git/hooks); test_disjuntor.sh fora do ARQUIVOS (so ancora de mutante) -> Codex verificador ver3 (logs/CUSTO-DE-COORDENACAO/f1v2/ver3/r.rc)
