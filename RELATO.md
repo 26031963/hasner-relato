@@ -11009,6 +11009,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 09:58:07 disjuntor (NEGOU ESPERA)** -- agente principal -- Bash -- alvo sha1:dd8e06aa14 (227 car., na trilha privada)
+
 **28/11 09:36:56 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:42594cf36d (216 car., na trilha privada)
 
 **28/11 09:34:17 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:85fbb22d66 (109 car., na trilha privada)
@@ -15112,6 +15114,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 09:42 colhido RETRATO-PDF-CORTA-POR-QUE item2/int/g.rc (09:42 rc 0): inteira pista3 1e935acde OK Ran 18229, cert rc 0 (Found 18232, podados 3, oom 0); o smoke do feriado PASSOU aqui (a falha do F4 tende a ruido); opus final (verificador) -> logs/RETRATO-PDF-CORTA-POR-QUE/item2/final/opus.rc
 - 09:47 colhido RETRATO-PDF-CORTA-POR-QUE item2/final/opus.rc (09:46 rc 0): opus final APROVADO (final/opus.md) -- (A) fechado por assercao :363, nenhum leitor deriva; fila: _ordem_dono views_retrato.py:403-406 2a lista das chaves de LED_DA_LINHA; nome do teste com 3 pares (higiene). POUSO agora
 - 09:48 NOTA POUSO RETRATO-PDF-CORTA-POR-QUE item 2 NO AR: merge b82a5ef08 (--no-ff de 1e935acde, app/ igual a certificada), bin/deploy.sh --sem-migrate rc 0 (3 cascas HUP, 3 rotas, importerror_500=0) -- logs/RETRATO-PDF-CORTA-POR-QUE/item2/final/deploy.out; reversao: git revert -m 1 b82a5ef08 + deploy; proximo: FDS-FERIAS (empilhada sobre 1e935acde) espera RED do opus
+- 09:58 colhido CUSTO-DE-COORDENACAO f4pouso/g.rc (09:57 rc 1): inteira pista 2 df24302c5 FAILED so por 1, core.tests.test_smoke_clique_feriado_vira_trabalho::test_MORDE_gatilho_ausente -- 'Chromium encerrou (0)' (smoke_feriado_chromium.js:39), nao assercao; o diff da F4 nao toca nada do feriado (bin/tests, pautas/tests/test_contract_vocabulario.py). Mesmo teste falhou na v1 (pista 2) e na FERIADO-BOTAO g14p, e passou na pista3 (RETRATO int, BOTAO g14p3). DECISAO TECNICA: mesma sha na pista3 -> logs/CUSTO-DE-COORDENACAO/f4pouso/p3/g.rc; fila: Chromium do smoke do feriado morre na pista 2 (instrumento)
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
