@@ -14991,6 +14991,9 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 07:40 colhido CUSTO-DE-COORDENACAO f1v2/v5/green.rc (07:40 rc 0): green intermediario do opus v5 (linha test_censo_antes_da_vaga=2 ainda vermelha no log), veredito na entrega
 - 07:45 colhido CUSTO-DE-COORDENACAO f1v2/v5/green_censo_r2.rc (07:45 rc 2): passo do opus v5 (linha diz test_censo_antes_da_vaga(r2)=0, rc do arquivo 2: conferir na entrega)
 - 07:46 colhido CUSTO-DE-COORDENACAO f1v2/v5/green.rc (07:46 rc 0): passo intermediario do opus v5 (test_disjuntor em curso), veredito na entrega
+- 07:48 colhido CUSTO-DE-COORDENACAO f1v2/v5/green.rc (07:48 rc 0): passo intermediario do opus v5, veredito na entrega
+- 07:49 colhido CUSTO-DE-COORDENACAO f1v2/v5/green.rc (07:49 rc 0): passo intermediario do opus v5, veredito na entrega
+- 07:50 colhido CUSTO-DE-COORDENACAO f1v2/v5/green.rc (07:50 rc 0): passos intermediarios do opus v5 (base test_codex_pergunta HEAD=0), veredito na entrega
 - 07:21 DESPACHO CUSTO-DE-COORDENACAO f1v2/v5: opus construtor (bin/ + selos, instrumento) na wt-custo-de-coordenacao-f1-013201, brief logs/CUSTO-DE-COORDENACAO/f1v2/v5/brief.md, escrevendo direto na wt (licao do B1 da v4)
 - 06:59 DESPACHO RETRATO-PDF-CORTA-POR-QUE t4: testes (2)(3)(5)+mutantes dos rotulos -> opus construtor (so testes, CCM-OPCAO-A) na wt-codex-retrato-pdf-corta-por-que-062609, log logs/RETRATO-PDF-CORTA-POR-QUE/item2/t4/folha.rc; F1 v5 depois (vaga opus = 1)
 - 06:40 DESPACHO RETRATO-PDF-CORTA-POR-QUE ver1: (4) rotulo -> Codex construtor c3 logs/RETRATO-PDF-CORTA-POR-QUE/item2/c3/r.rc | (2)(3-mock)(5) testes -> opus quando a vaga opus (F1 v4) liberar
