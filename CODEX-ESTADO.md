@@ -1,7 +1,159 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 08:53** · publicado em **28/11/2026 08:56** (UTC-3)
+> Ultima resposta processada: **28/11/2026 09:02** · publicado em **28/11/2026 09:03** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 09:02 · sessao ad73d48ac104 · E4D-CONTRATO-ROTA-B · verificador · origem=Code
+
+**REPROVADO.** A troca para `DecisaoPergunta.composta` está correta nos três pontos de leitura alterados. A cura é parcial antes desses pontos: a pré-seleção de vivas ainda pode descartar uma resposta vigente. A fila SQL continua vermelha por desenho do sublote, e esse vermelho impede o controle dos quatro mutantes. `app/api/views.py:1131–1151` · `app/templates/chamados/partials/modal_fio.html:217–223` · `app/chamados/services/raiox.py:58–68,116–130` · `app/chamados/models.py:3770–3789` · `app/chamados/tests/e4d_matriz_mutantes.py:598–612`
+
+Os quatro blobs locais conferem com os quatro lados novos de `cura2.diff`. A identidade do commit e do pai, a suíte Django, a contagem medida de queries e os efeitos em produção ficam **[nao verificado]**. [nao verificado]
+
+### Achados procedentes
+
+1. **`q_vivas()` ainda deixa o cru decidir quem chega aos leitores migrados.** O degrau da resposta usa `respondida_em IS NOT NULL` e texto após o trim. Com `RESPOSTA` vigente, texto projetado preenchido, carimbo cru nulo e célula `concorde` do cartório sem marco provisório, o C6 mantém viva uma pergunta de texto em dia destrancado. A resposta satisfaz o C21, e a checagem de concordância com a luz retorna `None` para esse tipo. Já no SQL, o ramo de resposta é falso e o ramo da célula também é falso. Conferi o C6 desse contraexemplo com objetos em memória. O filtro roda **antes** da composta no raio-X e na consulta do app, também participa da seleção de chamados fora da janela e filtra o modal quando a disputa já fechou. A fixture do caso 30 cria o alvo sem célula absolvente e com disputa aberta, por isso passa por esse pré-filtro. `app/chamados/juizes.py:1440–1443,1499–1533,1676–1681` · `app/escala/models.py:1764–1784` · `app/chamados/models.py:3770–3789` · `app/chamados/services/raiox.py:58–68` · `app/chamados/services/pergunta_no_app.py:51–65` · `app/chamados/services/janela_colab.py:61–74` · `app/chamados/services/fio.py:305–317` · `app/chamados/tests/test_e4d_matriz_reds.py:163–171,1627–1636`
+2. **A fila SQL e seus consumidores ainda dependem do carimbo cru.** A fila elimina o alvo nulo antes do C6 e ordena pela coluna. `perguntas_corrigiveis` também usa essa face SQL. A mensageria serializa `p.respondida_em.isoformat()` sem guarda e calcula `dias_esperando` pela mesma coluna. Se a fila passar a entregar o alvo da própria matriz, esse consumidor quebra no `.isoformat()`. A fila classificada usa a coluna para idade e devolve `None` nesse caso. `app/chamados/juizes.py:1676–1681,1855–1868` · `app/api/views_mensageria.py:539–547,555–575` · `app/chamados/services/validacao.py:1336–1352` · `app/chamados/tests/test_e4d_matriz_reds.py:1634–1636,1647–1649`
+3. **Ainda há apresentação pelo cru.** No POST `api_disputa_responder`, a guarda usa a composta e a confirmação devolve o carimbo recém-gravado da instância. A porta humana usa o mesmo `_agora` no carimbo e no ato, portanto o código confirma a leitura crua, sem demonstrar divergência nesse retorno de sucesso. No detalhe do admin e em Meu Atendimento, a presença da resposta já vem do juiz ou da composta, mas a hora exibida ainda vem da coluna. No próprio modal alterado, o selo “Validada” ainda testa `perg.validada_em`, enquanto `estado` já usa a validação vigente da composta. `app/api/views.py:2646–2665` · `app/chamados/services/disputa_emissao.py:1529–1567` · `app/templates/chamados/partials/_pergunta_card.html:23–32` · `app/templates/chamados/partials/_card_atendimento.html:94–106,141–144` · `app/chamados/services/fio.py:217–225,441–445` · `app/templates/chamados/partials/modal_fio.html:217–231` · `app/chamados/models.py:3358–3367`
+4. **O teste distingue a origem do instante e deixa passar a troca da origem do texto.** A fixture usa `09:00` tanto no ato quanto na projeção. API e modal passariam usando `ato_texto` no lugar do texto projetado. Também falta nesse caso uma compensação com carimbo cru residual. Além disso, cada mutante roda o teste inteiro como controle inicial e exige zero falhas. A falha SQL barra os quatro antes da mutação. `app/chamados/tests/test_e4d_matriz_reds.py:1629–1663` · `app/chamados/tests/e4d_matriz_mutantes.py:598–612,687–694`
+
+### Quem escreve e quem lê
+
+| Campo ou valor | Escrita e leitura conferidas |
+|---|---|
+| `respondida_em`, `resposta_colab` | A porta humana e a automática gravam o par e registram `RESPOSTA`. A porta pela trilha carimba o texto existente. O nascimento aceita o par recebido e registra a projeção sem linha. `carimbar` pode preencher o instante quando há texto. Reabertura, recusa, ressurreição e saneamento L‑130 limpam o par pela porta de lote. O redutor lê o cru para incorporar legado sem ato correspondente. A composta entrega o instante reduzido e o texto da coluna. C21, API v2, modal e crédito usam esse contrato. `app/chamados/services/disputa_emissao.py:1529–1567,1661,1695–1714,1757–1763,1785–1797` · `app/chamados/services/validacao.py:472–476,989–1000` · `app/chamados/models.py:1731–1740,3330–3336,3473–3482,4429–4448,4506–4515` · `app/chamados/juizes.py:1644–1653` |
+| `DecisaoPergunta`, `ato_em`, `ato_texto`, `resposta_mantem_validacao` | As portas fornecem os valores e `registrar` confere a trava e insere as linhas. `leitura` reduz por instante e PK, incorporando o legado sem linha depois dos atos reais do mesmo instante. `RECUSA` e `REABERTURA` limpam a resposta vigente. `resposta_display` formata o texto reduzido da sequência. O histórico do modal mostra o texto e os instantes da linha histórica. A API v2 mantém, portanto, dois valores com origem definida: `resposta_colab` da projeção e `resposta_display` da sequência formatada. `app/chamados/models.py:3967–4012,4344–4373,4429–4515,4590–4622` · `app/api/views.py:1148–1150,2579–2582` · `app/templates/chamados/partials/modal_fio.html:205–212` |
+| `validada_em`, `validada_por` | `_carimbar_validacao` grava o par e registra `VALIDACAO`. `carimbar(..., resposta='validar')` também pode preencher as colunas. Devolução, resposta humana, reabertura e ressurreição podem limpá-las. No raio-X, `q_vivas` usa a face SQL da validação por ato com a regra do passivo. `validada_em` e `validada_por_id` são necessários na carga Python para o redutor montar a entrada legada. O C21 consome instante de resposta e texto. `app/chamados/services/validacao.py:164–178,304–316,381–394` · `app/chamados/services/disputa_emissao.py:1533–1544,1661,1714` · `app/chamados/models.py:1737–1740,3475–3482,3711–3739,3785–3789,4443–4447` · `app/chamados/juizes.py:1653` |
+| `materializada_em`, `via_resolucao`, `veredito_lavrado` | `carimbar` e `carimbar_identidade` gravam o carimbo e a via. `descarimbar` e a variante em lote limpam ambos. `encerrar_por_fato_no_espelho` e `relavrar` também gravam a via. `lavrar` produz `veredito_lavrado` pelo juiz do lastro. O raio-X lê carimbo e via em `q_vivas`, exclui `materializada_em` preenchido com `VL_SIM` e carrega os dois valores físicos para a composta. `app/chamados/models.py:3428–3432,3473–3514,3530–3559,3572–3582,3658–3671,3770–3789,4513–4515` · `app/chamados/services/relavra_via.py:106–128` · `app/chamados/veredito_lavrado.py:254–275` · `app/chamados/services/raiox.py:116–128` |
+| Identidade, enunciado e destino | A emissão fornece `motivo`, `pergunta`, `tipo_resposta`, `opcoes` e destino. O nascimento grava a pergunta e seu PK, e `gravar_dia_do_fato` atribui `data_evento`. A emissão da raiz grava o chamado pai. O nascimento, o reúso e a costura gravam ou reapontam o destino. A API lê esses campos e produz `motivo_label` pelo mapa existente. No raio-X, o destino que pertence ao conjunto vivo vence o pai. Os dois conjuntos produzidos alimentam `particionar_verbos`, usado no painel e na lente. `app/chamados/services/disputa_emissao.py:318–350,448–461,601–606` · `app/chamados/models.py:3296–3336` · `app/chamados/services/fio.py:950–961,1084–1088` · `app/api/views.py:59–60,1030–1040,1134–1150` · `app/chamados/services/raiox.py:58–60,123–130` · `app/chamados/services/verbos.py:30–47,188–201` · `app/chamados/services/painel.py:227–231` |
+
+### Classes de reprovação, custo e cascas
+
+- **Juiz, escritor, relógio e trava.** O diff chama o C21 registrado e delega ao redutor existente. Contagem do diff: **0** juiz duplicado, **0** escritor persistente, **0** leitura nova de relógio, **0** operação nova de trava. A ordem vigente exige as travas dos donos antes do insert. A ordem de pouso registrada é `PORTA-CONFERE-TRAVA → E4C-F5-INSTANTE → E4d`; pouso efetivo dos pré-requisitos **[nao verificado]**. Fora da mudança de leitura, a validação ainda salva a coluna antes do ato, e a absorção ainda carimba antes de registrar `ABSORCAO`. `app/core/juizes.py:298,313` · `app/api/views.py:1131–1151` · `app/chamados/templatetags/chamados_tags.py:144–147` · `app/chamados/services/raiox.py:51–130` · `app/chamados/models.py:4598–4609` · `app/docs/RELATO.md:161,190` · `app/chamados/services/validacao.py:170–178` · `app/chamados/services/materializacao.py:1107–1132`
+- **Semântica e fontes.** `data_evento` é dia do turno na pergunta de fato e dia civil de emissão na conversa. A API já serializava ambos como data. `respondida_em` da composta é um instante, emitido em ISO na API e formatado em `d/m H:i` no modal, com fuso configurado `America/Sao_Paulo` e UTC explícito na fixture. O texto `09:00` é o conteúdo da resposta. O instante `10:05` é quando o ato foi registrado. Há outro derivado dependente das colunas: o marcador do placar agrega os máximos crus e pode devolver `304` antes de recalcular os créditos, dentro do mesmo intervalo de 120 s. Ele não incorpora a sequência que o crédito passou a ler. `app/chamados/models.py:3088–3115,4506–4515` · `app/api/views.py:1143–1150` · `app/templates/chamados/partials/modal_fio.html:217–222` · `app/config/settings/base.py:93–95` · `app/chamados/tests/test_e4d_matriz_reds.py:260–269,1629–1636` · `app/chamados/services/painel.py:45–92` · `app/chamados/views.py:821–827,841–862`
+- **Queries.** Pelo código, o crédito passa de **2 para até 3 consultas**: IDs vivos, perguntas com a disputa no join e decisões em lote quando há perguntas. `.only()` inclui os campos acessados, inclusive `validada_por_id` pela FK e `disputa.chamado_id` pelo join. A composta lê `decisoes.all()` do prefetch e passa `ja` ao redutor. Na API v2, a carga já traz as decisões em lote. Os acessos a destino e as buscas de `resposta_display` para os dois dropdowns são anteriores. No modal, guarda e filtro reduzem a mesma sequência duas vezes em memória, usando o prefetch existente. O custo novo do raio-X inclui instanciar as perguntas e carregar e ordenar o histórico. O selo cobra **12** no crédito, **12** na navbar sem lavra, **3** na navbar lavrada, **54** no painel, **36** no placar e **92** no modal. O selo de 1 contra 5 perguntas cobre `/api/disputa/perguntas/`. Medição na v2 e execução dos tetos **[nao verificado]**. `app/chamados/services/raiox.py:58–60,116–130` · `app/chamados/models.py:3985–4012,4429–4448,4486–4515` · `app/chamados/services/pergunta_no_app.py:51–57` · `app/api/views.py:1033–1039,1131–1150` · `app/chamados/services/fio.py:296–304` · `app/core/tests/test_selo_performance.py:115,142–150,275–277,349–357,463–490` · `app/api/tests/test_f2_teto_consultas_app.py:48–61`
+- **Duas cascas.** Na `base.html`, Central e fila VA/VT buscam o mesmo parcial, servido pela rota de gestor. A `base_app.html` usa Meu Atendimento com seu próprio cartão. Executei em memória o teste do grafo de templates, que confirma que o parcial do fio admin fica fora da árvore da `base_app.html`. A matriz renderiza diretamente o parcial, com UTC fixado. Renderização Django da rota e smoke no navegador **[nao verificado]**. `app/templates/chamados/painel_gestao.html:1,528–533` · `app/templates/colaboradores/fila_solicitacoes_beneficio.html:1,118–125` · `app/chamados/views.py:869–890,928–936` · `app/templates/chamados/meu_atendimento.html:1,126–128,143–145` · `app/core/context_processors.py:194–210` · `app/core/tests/test_smoke_chromium_fio_geofence.py:202–280` · `app/chamados/tests/test_e4d_matriz_reds.py:260–277`
+
+### REDs do caso 30
+
+Pela leitura da fixture, **API, modal e raio-X têm o valor esperado com a cura**, e o **SQL falha**. A tabela localiza a asserção que distingue cada mutante quando seu controle pode rodar. Execução completa **[nao verificado]**. `app/chamados/tests/test_e4d_matriz_reds.py:1629–1663` · `app/chamados/tests/e4d_matriz_mutantes.py:598–612`
+
+| Leitor | Asserção que morde |
+|---|---|
+| SQL | A lista exige `[alvo, recente]`. Hoje o filtro perde o alvo. Com a seleção curada, o mutante de ordenação crua colocaria o recente antes do alvo nulo. `app/chamados/tests/test_e4d_matriz_reds.py:1647–1649` · `app/chamados/tests/e4d_matriz_mutantes.py:445–453` |
+| API | A tupla exige `vigente.isoformat()` no campo do instante. O mutante devolve `None`. O `200` sozinho sobrevive. `app/chamados/tests/test_e4d_matriz_reds.py:1654–1658` · `app/chamados/tests/e4d_matriz_mutantes.py:455–462` |
+| Modal | O par exige `('09:00', '· 20/10 10:05')`. O mutante conserva o texto e omite a data e a hora. `app/chamados/tests/cortes_f2_f9_apoio.py:31` · `app/chamados/tests/test_e4d_matriz_reds.py:265–277,1659–1660` · `app/chamados/tests/e4d_matriz_mutantes.py:464–479` |
+| Raio-X | A igualdade exige `({alvo}, {vizinho})`. O mutante tira o alvo das respondidas e põe seu chamado nas pendentes. `app/chamados/tests/test_e4d_matriz_reds.py:1661–1663` · `app/chamados/tests/e4d_matriz_mutantes.py:481–490` |
+
+**Contagem final do diff:** **0 `except` novo, 0 fallback novo para leitura crua, 0 “por enquanto” novo**. O legado sem linha continua no redutor comum. O uso do pai quando o destino está fora dos vivos e a saída `None` para instante ausente já faziam parte dos respectivos caminhos. `app/chamados/models.py:4429–4448,4486–4492` · `app/chamados/services/raiox.py:123–130` · `app/api/views.py:1143–1150` [pré-imagem em `cura2.diff`, `raiox.py:117` e `views.py:1145`]
+
+## 28/11 09:01 · sessao 9e9158f938c3 · E4C-F5-INSTANTE · leitura · origem=Code
+
+# E4C-F5-INSTANTE — dossiê de leitura do item (c)
+
+**A classe observada é dia retido pelo export e sem rota publicada pela tarefa.** O export pergunta pelo veredito e pelos protestos da célula. «Resolver dia» pergunta pelo status D4, pela janela e pela existência de pergunta viva. A lei vigente dá destinos diferentes a uma cobrança indevida, a um cadastro incoerente e a uma pergunta órfã. A ausência de rota na tarefa pode coexistir com um destino administrativo fora do fio. `app/folha/export.py:1289–1310` · `app/colaboradores/services/calendario.py:94–122` · `app/docs/RELATO.md:14855–14866` · `app/chamados/services/vigia_fio.py:252–274`
+
+Base de produção limitada ao OS6 fornecido, correspondente ao relato do Retrato pk 10. A identidade Git do conteúdo da cópia é [nao verificado]. `app/docs/RELATO.md:14849–14855`
+
+## 1. Quem decide
+
+| Pergunta | Autoridade e caminho conferido |
+|---|---|
+| **Este dia segura o export?** | `motivos_retencao_celula` aplica as guardas de isenção e desligamento. `_dias_sem_decisao` lê `CelulaDia.veredito`. Se está em `VEREDITOS_ACUSAM`, retém como `espelho_<veredito>`, salvo quando todos os protestos são não cobr​​áveis ou incide a regra da pausa. O mesmo laço decide `sem_celula` para os casos cegos previstos. `classificar_export` lê o resultado e põe o item `fora/furo_espelho`. `app/folha/export.py:984–989,1221–1229,1283–1323` · `app/escala/models.py:1780–1781` |
+| **Quem entra no TXT e o que trava aprovação?** | O registro vivo aponta `_K2` e `_TT6` para `classificar_export`. `_K1` também aponta para ele, pela saída `travas_aprovacao`. O lookup de `JUIZES.md` identifica a autoridade do TXT e ainda diz «SEM juiz» para o bloqueio de aprovação. Para `_K1` vale o registro vivo. A decisão por célula é implementada no retentor chamado por esse juiz. `app/core/juizes.py:327–337,740–759` · `app/docs/JUIZES.md:10–14,119–122` · `app/folha/export.py:984–989,1192–1200` |
+| **Este dia oferece «Resolver dia»?** | `_TT11` registra `resolver_dia_oferecido`. Ele exige data passada, `pode_ultimo_recurso` e status em `falta`, `irregular`, `aberto`, `sem_certidao`. Último recurso exige data anterior ao início da competência corrente e ausência de pergunta viva. O status vem do juiz D4, `status_do_dia_lavrado`, pela forma em lote. A grade lê a oferta publicada e aplica `pode_veredito`. `app/core/juizes.py:203–207,745–759` · `app/docs/JUIZES.md:133–134` · `app/colaboradores/services/calendario.py:94–122,639–640,696–697,774,812` · `app/templates/colaboradores/partials/_calendario_grade.html:138` |
+| **Qual ação é exigível, por quem e em qual porta?** | `_C19` registra `tarefa_do_dia`. A carga consulta a oferta do calendário em lote para dias elegíveis que ficaram sem rota. `_portas_da_tarefa` só publica a ação `resolver_dia/admin` se essa oferta vier positiva. `fora_da_folha` lê `porta_da_tarefa`, grava o resultado por dia e agrega o fio por pessoa. No Retrato, `dono_da_linha` lê o fio gravado e o tempo do recorte. `portas_da_linha` traduz ações, fio e tipo em links. `app/core/juizes.py:158,311` · `app/docs/JUIZES.md:81–96` · `app/chamados/services/tarefa_do_dia.py:702–719,748–790,809–821` · `app/folha/fora_da_folha.py:70–112,214–247` · `app/folha/retrato_folha.py:447–460,479–504,1055–1086,1259–1265` |
+
+**AKITA 2/4.** Calendário já lê D4, tarefa já lê `_TT11`, e Retrato já lê `_C19` por `fora_da_folha`. A última migração relevante à classe é a **leitura da causa e do destino administrativo do dia na superfície que mostra a retenção**. O «Resolver dia» usa a lista de palavras do D4 para a sua ação específica, `fora_da_folha` usa a rota da tarefa para marcar `dias_sem_porta`, e o Retrato consegue acrescentar link por um único tipo gravado por pessoa. A cópia já mostra outro consumidor, `dono_fora_do_fio`, lendo ausência aberta e a lista do admin para dias sem rota. Esse é o precedente de leitura de um destino existente. A lei registrada mantém perguntas distintas e não dá equivalência entre `retém` e `oferece Resolver dia`. `CLAUDE.md:20–27,173–177` · `app/colaboradores/services/calendario.py:89–104` · `app/chamados/services/vigia_fio.py:252–278,639–658` · `app/folha/fora_da_folha.py:217–247` · `app/folha/retrato_folha.py:1077–1086,1259–1265`
+
+## 2. Os quatro casos
+
+O ponto que produz **«retido»** nos quatro é `export.py:1310`. O ponto que recusa **«Resolver dia»** pelos dois status é `calendario.py:104`. A tarefa chega a `rota=None` quando o fio sai `nada` ou `nao_sei`, e só o ramo de oferta positiva pode publicar `resolver_dia` a partir daí. No Retrato, `PORTA_DO_FIO` devolve `None` para `ninguem` e `nao_sei`. Um link por tipo ainda pode existir. `app/folha/export.py:1289–1310` · `app/colaboradores/services/calendario.py:94–104` · `app/chamados/services/tarefa_do_dia.py:766–790` · `app/folha/retrato_folha.py:1000–1023,1077–1086`
+
+| Caso do OS6 | Por que o código segura e fica sem rota | Destino pela regra existente |
+|---|---|---|
+| **col246 · 01/11** | `cobranca_indevida` acusa para o export. A regra da lavra pode produzir `ok` com esse veredito em dia trabalhado. `ok` fica fora da oferta e o residual `cobrar` do chamado 36424 fica fora da atribuição de dono por decisão expressa do corte E3. `app/docs/RELATO.md:14860` · `app/escala/models.py:1780` · `app/ponto/status_dia.py:157–162` · `app/chamados/services/tarefa_do_dia.py:747–774` · `app/docs/CORTES.md:534` | **Abrir o chamado 36424 pela tela existente**, conforme o OS6. O link de inspeção do chamado tem rota própria por ID. A correção do chamado que sobrevive à lâmpada acesa está registrada em **E4B-SCA-25**, com o próprio col246. O cartório já tem caminho de reconciliação para cobrança sem furo. A guarda concreta que manteve este chamado vivo é [nao verificado]. `app/docs/RELATO.md:14860,14866` · `app/chamados/urls.py:14–15` · `app/docs/BACKLOG.md:2379` · `app/ponto/services/cartorio.py:1618–1629` |
+| **col327 · 10/11** | `indefinida` acusa e pode lavrar `escala_suspeita`. Esse status fica fora da oferta. A tarefa consome primeiro a lâmpada acesa, antes do ramo de ausência pendente por marco. O OS6 informa atestado 5515 e quatro batidas. O estado administrativo da ausência é [nao verificado]. `app/docs/RELATO.md:14861` · `app/ponto/status_dia.py:139–146` · `app/chamados/services/tarefa_do_dia.py:294–323` | **Painel da ausência 5515**, para o admin conferir o cadastro do atestado no dia trabalhado. A rota recebe o ID da ausência e tem edição conforme permissão. A ação `decidir_ausencia` da tarefa tem condições próprias. `app/docs/RELATO.md:14861,14866` · `app/docs/LEIS.md:122` · `app/ponto/urls.py:72–78` · `app/ponto/views.py:2095–2116` · `app/chamados/services/tarefa_do_dia.py:315–323` |
+| **col476 · 25/10** | `indefinida` retém e `escala_suspeita` falha na lista. A pergunta viva também derruba o último recurso. `aguarda_resposta` produz a ação de responder, mas a rota do colaborador exige que o ID esteja em `pendentes_app`. O OS6 dá as quatro perguntas fora dessa partição. O motivo individual da exclusão é [nao verificado]. `app/docs/RELATO.md:14862` · `app/ponto/status_dia.py:139–146` · `app/colaboradores/services/calendario.py:94–122,774` · `app/chamados/services/tarefa_do_dia.py:156–157,625–637,748–750` | **Painel do vínculo para conferir a escala do dia.** A ação sobre a escala é de cadastro. A restauração de uma porta para as perguntas órfãs pertence à **RAIZ-DA-DISPUTA-17-SEM-PORTA**, como registra o OS6. A partição do app exige pergunta sem resposta em disputa aberta dentro do universo vivo. `app/docs/RELATO.md:14862,14866` · `app/docs/BACKLOG.md:2047` · `app/colaboradores/urls.py:12` · `app/chamados/services/pergunta_no_app.py:68–92` |
+| **col97 · ímpares de 01 a 19/11** | `indefinida` retém. A lavra diferencia folga humana da folga da escala com cadastro duvidoso, que pode sair `escala_suspeita`. Esse status recusa a oferta. A sonda dá `tipo_dia=folga`, lâmpadas vazias e os pares iniciados em 02 e 18. O resultado de rejulgar cada uma das dez células é [nao verificado]. `app/docs/RELATO.md:14863` · `app/ponto/status_dia.py:128–146` · `app/colaboradores/services/calendario.py:94–104` | **Painel do vínculo para corrigir a fase 12×36.** O juiz L-099 lê fase deslocada lavrada e classifica CADASTRO depois das guardas de BATIDA. O painel tem o campo e o controle de fase. O Retrato já traduz tipo gravado `escala`, `folga` ou `sem_escala` em link para o vínculo. O tipo gravado de cada linha do pk 10 é [nao verificado]. `app/docs/RELATO.md:14863,14866` · `app/ponto/management/commands/e6_oraculo.py:90–110` · `app/templates/colaboradores/partials/painel_vinculo.html:156–164` · `app/folha/retrato_folha.py:1014–1017` |
+
+**Sim, CADASTRO pode coexistir com «retido sem porta» por dia.** O OS6 indica col327, col476 e col97 para ação de cadastro. `dias_sem_porta` vem da rota diária, o dono do Retrato vem do grupo agregado por pessoa, e L-099 responde quem corrige a divergência. É possível haver um dia sem rota numa linha cujo grupo é Admin, assim como haver um link de cadastro pelo tipo. O anexo não discrimina os campos `dono`, `tipo` e `acoes` gravados por linha para os três casos. [nao verificado] `app/docs/RELATO.md:14861–14866` · `app/docs/LEIS.md:122` · `app/folha/fora_da_folha.py:94–112,214–247` · `app/folha/retrato_folha.py:204–205,1077–1086,1259–1265`
+
+## 3. Censo do par e cruzamento com as obras
+
+| Superfície | Escritores e leitores conferidos |
+|---|---|
+| **Escrita do par `CelulaDia.veredito/status_dia`** | P13, `lavrar_veredito`, grava o par pelo mesmo ato. O cartório chama a porta na lavra normal e em `nunca_bateu`. O serviço de decisão humana chama a mesma porta, com precedência de admin. D5 completa só status/rótulo quando a impressão vigente permite. `desfazer_julgamento_da_futura` limpa os dois como parte da invalidação do julgamento. `app/docs/ADR/0002-celula-e-o-dia.md:12,44` · `app/ponto/portas/celula.py:1048–1066,1097–1135,1149,1202–1204` · `app/ponto/services/cartorio.py:939–955,1323,1908–1913` · `app/ponto/services/veredito_celula.py:357` |
+| **Retenção, chamadas diretas** | `classificar_export` e a materialização de `FechamentoMensal.motivos_espelho` passam por `motivos_retencao_espelho`. `fora_da_folha._dias_que_retem`, `previa._cobre_a_retencao` e `vigia_pausa` consultam `motivos_retencao_celula` diretamente. `vigia_pausa` também lê o veredito para contar a população isenta da pausa. `informativo_rescisao` usa o mesmo laço para informar o DP. `app/folha/export.py:984,1221–1249,1317–1323` · `app/ponto/services/fechamento.py:1090–1092` · `app/folha/fora_da_folha.py:115–122` · `app/folha/previa.py:150–174` · `app/folha/services/vigia_pausa.py:125–131,149–157` |
+| **Retenção e rota, projeções** | TXT e telas de export leem `classificar_export`. Retrato e `o_que_segura` leem as datas do retentor e a porta da tarefa. O vigia de alcance lê o mesmo universo e a mesma projeção de rota. Pauta dos discordantes, beco de cadastro e furo sem canal também consomem o fio ou a porta. `app/folha/export.py:723` · `app/folha/views.py:220,268,357,425,616,885` · `app/folha/retrato_folha.py:1227–1235` · `app/folha/fora_da_folha.py:273–301` · `app/chamados/services/vigia_fio.py:577–583,633–648` · `app/ponto/services/pautas_dos_discordantes.py:78–97` · `app/escala/services/cadastro_realidade.py:537–558` · `app/chamados/services/furo_sem_canal.py:98` |
+| **Demais consumidores do par** | D4 é a leitura da coluna de status para calendário, espelho, relatório de furos, Painel OP e app. O veredito também alimenta a grade da célula e a vida/reconciliação/emissão da disputa. Alterar `VEREDITOS_ACUSAM` atingiria esses consumidores além do TXT. `app/ponto/status_dia.py:218,287–289` · `app/colaboradores/services/calendario.py:639` · `app/ponto/services/espelho.py:170–174` · `app/relatorios/furos.py:127` · `app/core/services/painel_op.py:336` · `app/api/views.py:1496,1513–1514` · `app/escala/services/leitor_celula.py:424` · `app/chamados/juizes.py:1552–1554` · `app/chamados/models.py:3782–3784` · `app/chamados/reconciliador.py:1149` · `app/chamados/services/disputa_emissao.py:786` |
+| **E4C cura6** | `core/censo_escritas.py:382–423` é o varredor AST de operações de escrita. O registro da cura6 cita projeção por variável, chamada direta, dispensa e âncoras de mutantes. `DecisaoPergunta.registrar` escreve a sequência e acorda células, chegando a montante da lavra. O último estado da cura6 fora desta árvore é [nao verificado]. `app/core/censo_escritas.py:382–423,433–440` · `app/chamados/models.py:4590–4609,4618–4623` · `app/docs/RELATO.md:14548–14556` |
+| **E4D cura2** | `api/views.py` tem dois pontos de contato distintos. O espelho do app lê D4, e a lista de perguntas lê a tarefa e `DecisaoPergunta.composta`. `raiox.py` credita respostas lendo o juiz L-130 sobre o par de colunas selecionado. `chamados_tags.py` lê texto e classifica resposta. `modal_fio.html` usa `perg.respondida` e exibe a resposta. São superfícies a preservar no cruzamento com o instante do ato e a partição do app. O diff efetivo da cura2 é [nao verificado]. `app/api/views.py:1493–1514,2550–2603` · `app/chamados/services/raiox.py:135–147` · `app/chamados/templatetags/chamados_tags.py:145,161–176` · `app/templates/chamados/partials/modal_fio.html:217–222,274` · `app/chamados/models.py:3958–3965,4507–4515` · `app/docs/RELATO.md:14149,14157` |
+| **DESLIGADO c3** | O retentor consulta `esta_desligado`. O serviço de desligamento fecha disputas pela porta e depois tenta encerrar chamados, preservando as guardas de resposta sem veredito e pergunta viva. O cruzamento está na vida do fio e na dispensa de retenção. `informativo_rescisao` preserva o destino de DP. `app/core/juizes.py:280–283` · `app/colaboradores/services/desligamento.py:23–32,157–190` · `app/chamados/models.py:429,1779,2055` · `app/folha/export.py:1221–1244` · `app/docs/RELATO.md:14779–14784` |
+| **RETRATO-PDF item 2** | O retentor entrega `data/motivo/veredito/celula_id`. `fora_da_folha` conserva as datas planas, o Retrato grava um `tipo` por pessoa e o PDF lê as linhas lavradas, imprimindo hoje o motivo geral. Cruzamento de arquivo em `fora_da_folha.py` e `retrato_folha.py` se a cura transportar motivo e destino por dia. O item 2 já tem despacho próprio para chave, mapa, janela e leitores legados. `app/folha/export.py:1275–1278` · `app/folha/fora_da_folha.py:234–247` · `app/folha/retrato_folha.py:1252–1270` · `app/folha/views_retrato.py:194–205,391–393,421–434` · `app/docs/RELATO.md:14900–14903` |
+
+## 4. Padrão e matriz de REDs descritos
+
+**`padrao=Single Source of Truth / Aggregate Root`**, com a célula soberana e a lâmpada como insumos, os juízes existentes como autoridades e a linha do Retrato como projeção. O selo deve conferir a resposta obtida pelas portas reais. O instante vem da borda. Para pouso que altere juiz, L-121 manda reconstruir a projeção da competência aberta pela porta, com DIFF e reversão. `app/docs/GLOSSARIO.md:11–15,20,25` · `app/docs/PLANO-PADROES.md:28–34,53–67,97–103` · `CLAUDE.md:28–29,45–51`
+
+| RED descrito | Cadastro, batidas e transição a conferir pela regra | Mutante que deve morder |
+|---|---|---|
+| **col246** | Escala 09–15–16–21, batidas 10:04/15:04/16:06/22:08, chamado da célula com verbo residual `cobrar`. Enquanto a lavra acusar cobrança indevida, o dia segue retido e o destino é o chamado existente. A rota genérica de resolver continua fechada pelo `ok`. No caso da cura E4B, exercer a reconciliação pela porta com os requisitos satisfeitos e conferir a nova lavra antes de esperar liberação. `app/docs/RELATO.md:14860` · `app/docs/CORTES.md:534` · `app/docs/BACKLOG.md:2379` · `app/ponto/services/cartorio.py:1618–1629` · `app/folha/export.py:1289–1310` | Usar `ok` para liberar a retenção, converter residual `cobrar` em dono da tarefa ou perder o endereço do chamado ao publicar o destino de inspeção. `app/ponto/status_dia.py:161–162` · `app/folha/export.py:1309–1310` · `app/chamados/services/tarefa_do_dia.py:762` · `app/chamados/urls.py:14–15` |
+| **col327** | Atestado sobre o dia e quatro batidas que acendem os marcos. Mostrar a ausência identificada para o admin enquanto `indefinida` retiver. Após correção válida pela porta de ausência, com jornada completa e sem outro protesto na fixture, conferir `concorde/ok` na nova lavra e a saída desse dia da retenção. Horários exatos das quatro batidas em produção [nao verificado]. `app/docs/RELATO.md:14861` · `app/ponto/views.py:2930–2938` · `app/escala/models.py:1635–1642,1780–1781` · `app/ponto/status_dia.py:161–162` | Usar «marcos acesos» para apagar o destino do atestado ou usar `escala_suspeita` para publicar decisão genérica, perdendo o ID da ausência. `app/chamados/services/tarefa_do_dia.py:294–323` · `app/ponto/views.py:2095–2116` · `app/colaboradores/services/calendario.py:94–104` |
+| **col476** | Escala de 25/10 a conferir, batidas só em 24/10, quatro perguntas vivas fora das pendentes do app. Publicar o destino de cadastro do vínculo para o dia retido. Usar como controle uma pergunta genuinamente pendente e alcançável no app, que deve publicar `porta_app`. A reparação das quatro órfãs tem RED próprio na respectiva obra. `app/docs/RELATO.md:14862` · `app/docs/BACKLOG.md:2047` · `app/chamados/services/pergunta_no_app.py:68–92` · `app/chamados/services/tarefa_do_dia.py:748–776` · `app/folha/retrato_folha.py:1014–1017` | Tratar `aguarda_resposta` como suficiente para `porta_app`, ou desligar a guarda de pergunta viva para abrir «Resolver dia». `app/chamados/services/tarefa_do_dia.py:156–157,748–750` · `app/colaboradores/services/calendario.py:117–122` |
+| **col97** | Cadastro 12×36 com fase invertida, folgas nos ímpares segundo a ata, pares iniciados em 02 às 17:56 e 18 às 17:56, fechados em 03 às 06:00 e 19 às 05:58. Conferir retenção com destino de correção de fase. Exercitar a correção pela porta de vínculo em fixture autorizada e verificar pela nova lavra a atribuição ao dia do turno e a retenção de cada dia. As dez saídas pós-correção em produção são [nao verificado]. `app/docs/RELATO.md:14863` · `app/ponto/management/commands/e6_oraculo.py:90–110` · `app/templates/colaboradores/partials/painel_vinculo.html:156–164` · `app/folha/export.py:1275–1314` | Tratar `ata.tipo_dia=folga` ou lâmpadas vazias como liberação automática, atribuir a saída noturna ao dia civil seguinte ou perder o destino do vínculo porque o fio do dia está vazio. `app/ponto/status_dia.py:128–146` · `app/folha/export.py:1193–1200,1289–1310` · `app/folha/retrato_folha.py:1014–1017,1077–1086` |
+
+## 5. Perguntas de lei e brief
+
+**0 — Abre, pela lei existente, a leitura dos destinos já autorizados.** O item pode começar pelo caminho `retentor → dia/motivo → destino existente`, com a tarefa preservando a autoridade sobre o fio. CADASTRO vai à tela do fato, col246 tem a tela do chamado, e col476 tem o vínculo para cadastro e a obra da raiz para a órfã. `CLAUDE.md:20–27,173–183,278–283` · `app/docs/RELATO.md:14860–14866` · `app/docs/CORTES.md:534–538`
+
+**1 — Só exige resposta de lei se a entrega pretendida for ampliar «Resolver dia».** Deve a ação de veredito humano ser oferecida também para `ok + cobranca_indevida` ou `escala_suspeita + indefinida`? O corte vigente define a oferta pelo status, e a porta executa um ato humano sobre a célula. O item de leitura e a existência da retenção sustentam mostrar o destino já autorizado. Um corte ampliando essa ação para os quatro casos é [nao verificado]. `app/colaboradores/services/calendario.py:89–104` · `app/ponto/views.py:3517–3546` · `app/folha/retrato_folha.py:1027–1031`
+
+**Brief do construtor.** Trabalhar na cópia em `app/`. Para a projeção comprovada, os pontos são `app/folha/fora_da_folha.py` e `app/folha/retrato_folha.py`, coordenados com RETRATO-PDF item 2. Transportar apenas o dia, a causa e o destino publicados pela autoridade que já os conhece, e consumir as rotas existentes na superfície administrativa. Usar `app/chamados/services/tarefa_do_dia.py` apenas se a ação já autorizada pertencer à própria tarefa. Manter `agora`/`hoje` da borda. `ap
+
+[truncado em 20000 de 20809 caracteres]
+
+## 28/11 08:58 · sessao 5bc9ab2fd3cc · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
+
+**Q1 segue pendente.** O passivo lista I5f como `INCOMPLETO` e exclui do apply o chamado assinado e o fio ligado a ele. A anterioridade usa `executado_em` do S89. Quando esse instante falta, a saída declara a lacuna. `chamados/management/commands/reparar_passivo_desligamento.py:74` · `chamados/management/commands/reparar_passivo_desligamento.py:109` · `chamados/management/commands/reparar_passivo_desligamento.py:181`
+
+A efetivação e o passivo compartilham a cascata. Ela relê as respostas sem veredito com `ignorar_tranca=True`, carimba pela via `desligamento` e preserva o fecho anterior de disputas já fechadas. A porta `reparar_passivo_desligamento` oferece `--dry`, `--apply` e `--reverter JSON`. O apply grava a pré-imagem em `logs/passivo_desligamento/` antes da cascata. A reversão confere a pós-imagem, restaura os campos alterados e acrescenta trilha compensatória. Os atos já registrados permanecem no histórico. `colaboradores/services/desligamento.py:192` · `colaboradores/services/desligamento.py:241` · `chamados/management/commands/reparar_passivo_desligamento.py:155` · `chamados/management/commands/reparar_passivo_desligamento.py:195` · `chamados/management/commands/reparar_passivo_desligamento.py:206` · `chamados/models.py:4535`
+
+### Arquivos e funções alterados
+
+| Área | Arquivo e função |
+|---|---|
+| Cascata e relógio | `colaboradores/services/desligamento.py:40` `julgar_desligamento`, `:88` `executar_desligamento`, `:174` `em_cascata_desligamento`, `:178` `universo_da_cascata`, `:192` `encerrar_pendencias_desligamento`, `:241` `perguntas_residuais_desligamento`. `colaboradores/views.py:1464` `desligar_colaborador`. |
+| Sinais da cascata e acervo | `chamados/signals.py:20` `disputa_fechada_fecha_chamado_pai`, `:95` `resolve_perguntas_ao_resolver`, `:129` `retoma_regularizacoes_ao_fechar_disputa`, `:158` `materializa_perguntas_ao_fechar_disputa`, `:240` `_becos_post_save_pergunta`, `:266` `_outbox_post_save_pergunta`. `chamados/veredito_lavrado.py:254` `lavrar`. |
+| Passivo e I5 | `chamados/management/commands/reparar_passivo_desligamento.py:45` `_gravar_reversao`, `:60` `_foto`, `:109` `_plano`, `:162` `Command.handle`, `:206` `Command._reverter`. `chamados/services/trilha_reabertura.py:5` `ultimas_reaberturas`, `:14` `reabertura_assinada`. `core/observ.py:94` `evento`. `chamados/management/commands/auditar_invariantes_chamados.py:673` `Command.handle`. |
+| Abertura e resgate | `chamados/services/abertura.py:19` `abrir_chamado_local`, `:124` `abrir_chamado_para_colaborador`. `chamados/views.py:77` `_abrir_para_colaborador`, `:155` `abrir_chamado`, `:986` `abrir_chamado_rapido`. `api/views.py:1948` `api_justificativas`, `:2142` `api_abrir_chamado`. `templates/chamados/partials/_lista_chamados.html:117` `arquivarChamado`. |
+| Disputa, emissão e adesão | `chamados/services/acoes_disputa.py:274` `acao_reabrir_disputa_admin`. `chamados/services/disputa_emissao.py:483` `_abrir_ou_agregar_disputa`, `:650` `criar_ou_atualizar_disputa`, `:1011` `_trava_do_repasse`, `:1046` `criar_disputa_a_partir_de_chamados_orfaos`, `:1330` `criar_disputa_ancora_de_chamado`. `chamados/services/declaracao_texto.py:308` `declarar_hora_colab`, `:671` `aplicar_declaracao`. `chamados/services/adesao.py:45` `sincronizar_adesao`. `chamados/services/materializacao.py:868` `_VIAS_DE_RECUSA`. |
+| Benefício, agenda, regularização e aceite | `colaboradores/views.py:2014` `solicitar_beneficio`, `:2394` `agenda_enviar_aceite`, `:3004` `colab_regularizar`. `chamados/services/regularizacao_ext.py:231` `criar_regularizacao_externa`. `chamados/views_regularizacao.py:42` `regularizacao_criar`. `colaboradores/services/vinculo.py:170` `executar_vinculo`, `:392` `_executar_aceite`. |
+| Ponto e smoke | `ponto/management/commands/detectar_ausencias.py:61` `Command.handle`, `:503` `_chamado_dia_sem_grade`. `ponto/services/triagem_batida.py:314` `ramo_solicitar_anuencia`, `:393` `_bloqueio_horario_clt`, `:622` `ramo_registrar_es`. `ponto/utils.py:9` `bloquear_se_sem_posto`, `:74` `bloquear_se_em_ferias`. `ponto/views.py:261` `bater_ponto`, `:3098` `ping_geo`. `chamados/management/commands/smoke_chamados.py:120` `_bloco_b_transicoes`. |
+
+### Quem escreve e quem lê
+
+| Campos | Escrita → leitura |
+|---|---|
+| `situacao`, `data_demissao`, `motivo_desligamento`, dia `hoje` | A view captura `hoje` e o passa ao juiz e ao executor. O executor grava cadastro e intenção. `esta_desligado` lê a situação gravada. O cron lê data e motivo, e o passivo usa o mesmo juiz. `colaboradores/views.py:1472` · `colaboradores/services/desligamento.py:28` · `colaboradores/services/desligamento.py:111` · `colaboradores/services/desligamento.py:133` · `colaboradores/management/commands/efetivar_desligamentos_agendados.py:37` · `chamados/management/commands/reparar_passivo_desligamento.py:172` |
+| Chamado `status_local`, `via_encerramento`, `resolvido_em`, `atualizado_em`, `urgencia`, `urgencia_original` | `_gravar_estado` persiste pelas portas de fecho e reabertura. A cascata lê estado e via. O passivo lê a pré/pós-imagem e restaura o delta. `chamados/models.py:253` · `chamados/models.py:499` · `chamados/models.py:1593` · `chamados/models.py:1882` · `colaboradores/services/desligamento.py:186` · `chamados/management/commands/reparar_passivo_desligamento.py:29` · `chamados/management/commands/reparar_passivo_desligamento.py:244` |
+| Disputa `fechada_em`, `fechada_por_id`, `resolucao`, `motivo_fechamento`, `motivos`, `reaberturas_admin` | `fechar` grava o fecho. `reabrir_admin` limpa o fecho, acrescenta motivo e consome quota após a autorização de `ch.reabrir` quando o chamado precisa voltar a vivo. Cascata, sinais, formulário e passivo leem esses campos. `chamados/models.py:2305` · `chamados/models.py:2525` · `chamados/services/acoes_disputa.py:309` · `chamados/services/fio.py:377` · `chamados/signals.py:136` · `chamados/management/commands/reparar_passivo_desligamento.py:31` |
+| Pergunta `materializada_em`, `materializada_por_id`, `via_resolucao`, campos de lavra e de vínculo | `fechar_por_desligamento` chama o escritor do carimbo. A lavra e a costura têm as portas existentes. C6, a testemunha de aplicação e a pré/pós-imagem leem os campos. A resposta, o instante e a validação são lidos pela sequência composta, e `SILENCIO` é gravado para a pergunta muda. `chamados/models.py:3490` · `chamados/models.py:3557` · `chamados/veredito_lavrado.py:254` · `chamados/services/fio.py:964` · `chamados/juizes.py:1505` · `chamados/services/materializacao.py:893` · `chamados/models.py:4636` · `colaboradores/services/desligamento.py:222` · `chamados/management/commands/reparar_passivo_desligamento.py:32` |
+| Trilha `motivo_reabertura`, `autor_reabertura_id`, `usuario_id`, estados antes/depois, `criado_em`, `executado_em` | O template envia o motivo do resgate e a view o entrega a `reabrir` com o autor. `_gravar_estado` entrega a transição a `evento`, que registra a assinatura explícita antes de recorrer ao usuário da requisição. I5 e o passivo leem a última travessia. O executor escreve o instante S89, que o passivo lê. `templates/chamados/partials/_lista_chamados.html:125` · `chamados/views_arquivar.py:66` · `chamados/models.py:317` · `core/observ.py:105` · `chamados/services/trilha_reabertura.py:5` · `chamados/management/commands/auditar_invariantes_chamados.py:673` · `colaboradores/services/desligamento.py:169` · `chamados/management/commands/reparar_passivo_desligamento.py:79` |
+| Vínculos e efeitos da abertura | `criar` e `abrir` escrevem o chamado. A justificativa grava `chamado_origem` e a porta de vínculos grava `justificativa_relacionada`. Benefício, agenda e regularização só chegam às respectivas escritas após obter chamado. Os leitores estão na justificativa, na fila de benefícios, na resposta de agenda e na edição do lote. `chamados/models.py:919` · `chamados/models.py:1153` · `api/views.py:2000` · `chamados/services/vinculos.py:81` · `colaboradores/services/beneficios.py:20` · `colaboradores/views.py:2070` · `escala/services/agenda.py:30` · `escala/services/agenda.py:39` · `chamados/services/regularizacao_ext.py:248` · `chamados/views_regularizacao.py:63` |
+
+### REDs e mutantes para o Opus
+
+| Caso | Asserção e mutante |
+|---|---|
+| 1. Cascata | Resposta trancada nas duas situações de disputa mantém texto, instante e ato da resposta, ganha carimbo e preserva o fecho anterior da disputa já fechada. Exigir zero validação, `SILENCIO` ou batida para a respondida. Mutantes: filtrar só abertas, reaplicar a tranca ou retomar materialização pelo sinal. `colaboradores/services/desligamento.py:178` · `colaboradores/services/desligamento.py:217` · `colaboradores/services/desligamento.py:247` · `chamados/signals.py:129` |
+| 1. Passivo | Dry lista IDs sem escrita. Apply tem pré-imagem antes da primeira escrita e reverte integralmente se o arquivo falhar. Reversão repõe os campos e recusa pós-imagem divergente. Controle histórico já carimbado pela tranca permanece intacto. I5f anterior à efetivação sai `INCOMPLETO`, mesmo com outro caso elegível no lote. Mutantes: mover o arquivo para depois do apply, ignorar divergência, incluir o acervo carimbado ou I5f, omitir `INCOMPLETO`, comparar com `data_demissao`. `chamados/management/commands/reparar_passivo_desligamento.py:74` · `chamados/management/commands/reparar_passivo_desligamento.py:162` · `chamados/management/commands/reparar_passivo_desligamento.py:195` · `chamados/management/commands/reparar_passivo_desligamento.py:233` · `chamados/veredito_lavrado.py:262` |
+| 2 e 4. Sessão | Com duas conexões, testar `criar` nas duas ordens do bloqueio, `transicionar` com instância velha e fecho admin sem fato novo. Mutantes: decidir fora da trava, liberar a trava antes do INSERT, usar o estado da instância velha ou pular `admin_sem_fato_novo`. Essas mudanças de produção ficam com a sessão em `models.py`. `chamados/models.py:140` · `chamados/models.py:305` · `chamados/models.py:1153` · `chamados/models.py:1197` · `chamados/models.py:1487` |
+| 3. Aberturas e resgate | POST próprio e DP, inclusive com igual legado, devem recusar sem efeitos de sucesso. Exercitar `None` nos outros consumidores com seus vínculos e notificações. No repasse, incluir um filho alterado antes da recusa do pai e exigir rollback. No resgate, verificar o POST com motivo e a recusa de branco. Mutantes: devolver o dedup antes da guarda, prosseguir após `None`, deixar a alteração do filho ou remover o corpo do POST. `chamados/services/abertura.py:66` · `chamados/services/abertura.py:174` · `chamados/services/disputa_emissao.py:1144` · `templates/chamados/partials/_lista_chamados.html:125` |
+| 4. Disputa | No caso autorizado, observar chamado assinado quando `reabrir_admin` começa. No agrupado recusado, manter fecho e quota, com zero pergunta, nota, push e log de sucesso. Mutantes: inverter a ordem, omitir justificativa ou autor, tratar `False` ou `'desligado'` como sucesso. `chamados/services/acoes_disputa.py:309` · `chamados/services/acoes_disputa.py:325` |
+| 5a e 5b | Carimbo de desligamento deve retornar `recusada_desligamento`. Após `SET_NULL`, a assinatura explícita continua I5f. Controles de sistema e motivo sem autor permanecem I5e e, quando em cobrança, I5a. Mutantes: tirar a via do mapa, exigir FK viva ou aceitar motivo sozinho. `chamados/services/materializacao.py:868` · `core/models.py:295` · `chamados/services/trilha_reabertura.py:14` · `chamados/management/commands/auditar_invariantes_chamados.py:673` |
+| 6 e 7. Virada e selo | Às `01:30Z`, omissão usa 27/11 em São Paulo e 28/11 explícito aguarda a virada local. Mutar separadamente o fallback e a comparação para `date.today()`. No C12, deslocar linhas em memória, manter os três escritores nominais válidos e detectar um quarto escritor indevido. Mutante: voltar a usar `lineno` como identidade. Os REDs, a suíte e o ajuste do selo ficam com o Opus e o Code, conforme os papéis definidos. `colaboradores/services/desligamento.py:46` · `colaboradores/services/desligamento.py:67` · `colaboradores/management/commands/efetivar_desligamentos_agendados.py:37` · `chamados/tests/e4b_c12_ast.py:27` · `chamados/tests/e4b_c12_ast.py:223` |
+
+Verificação feita em memória: sintaxe Python e JavaScript, `git diff --check` e comparação dos `except` com a base. Execução Django, banco, navegador, fila de eventos e efeitos em produção **[nao verificado]**.
 
 ## 28/11 08:53 · sessao a8172405d25b · FERIADO-BOTAO-CORTADO · leitura · origem=Code
 
@@ -650,243 +802,4 @@ Verifiquei a cópia fornecida em modo somente leitura. Rodei `bash -n` nos seis 
 
 **REPROVA — bloqueantes nº 1, 2, 3, 4, 5, 8, 9, 11, 12 e 13. Fila nº 6 e 7.** `CLAUDE.md:428`, `triagem.md:4`
 
-## 28/11 05:59 · sessao 6c06e82e37fb · CRON-15-SOMBRA-CABE · leitura · origem=Code
-
-# CRON-15-SOMBRA-CABE · Passo 1 · Medida por etapa
-
-**Só a soma dos comandos já excede o corredor com a folga do aval.** Na janela de 15 a 28/11, o p95 do bloco medido é **5.095 s (84min55s)**. Aplicando ×1,5, dá **127min22,5s**, **72min22,5s acima dos 55 min**. O p95 de ponta a ponta é **nao medido [nao verificado]**. O cronômetro do histórico começa depois da reposição da lavra de cada comando e cobre apenas a execução e a classificação do retorno. `hist.tsv:1445–2507`, `bin/crons_duracao.py:46–51`, `bin/sombra.sh:378–398`.
-
-## 1. Duração diária do bloco
-
-Somei a coluna `segundos`, incluindo os retornos de alarme. A linha `pulado` entra na contagem de linhas e soma 0 s. As referências dos anexos contam a primeira linha de dados como linha 1. O histórico guarda um arquivo por data, que pode ser sobrescrito por outra corrida no mesmo dia. `hist.tsv:1–2507`, `bin/sombra.sh:355–357,380–398`.
-
-| Dia | Linhas | Soma (s) | min:s | Fonte |
-|---|---:|---:|---:|---|
-| 28/10 | 79 | 2865 | 47:45 | `hist.tsv:1–79` |
-| 29/10 | 79 | 3022 | 50:22 | `hist.tsv:80–158` |
-| 30/10 | 80 | 3055 | 50:55 | `hist.tsv:159–238` |
-| 31/10 | 80 | 3260 | 54:20 | `hist.tsv:239–318` |
-| 01/11 | 80 | 3245 | 54:05 | `hist.tsv:319–398` |
-| 02/11 | 80 | 3424 | 57:04 | `hist.tsv:399–478` |
-| 03/11 | 80 | 3212 | 53:32 | `hist.tsv:479–558` |
-| 04/11 | 80 | 3239 | 53:59 | `hist.tsv:559–638` |
-| 05/11 | 80 | 2902 | 48:22 | `hist.tsv:639–718` |
-| 06/11 | 80 | 2720 | 45:20 | `hist.tsv:719–798` |
-| 07/11 | 80 | 2699 | 44:59 | `hist.tsv:799–878` |
-| 08/11 | 80 | 2728 | 45:28 | `hist.tsv:879–958` |
-| **09/11** | 81 | **3441** | **57:21** | `hist.tsv:959–1039` |
-| 10/11 | 81 | 3217 | 53:37 | `hist.tsv:1040–1120` |
-| 11/11 | 81 | 3388 | 56:28 | `hist.tsv:1121–1201` |
-| 12/11 | 81 | 3281 | 54:41 | `hist.tsv:1202–1282` |
-| 13/11 | 81 | 3268 | 54:28 | `hist.tsv:1283–1363` |
-| 14/11 | 81 | 3211 | 53:31 | `hist.tsv:1364–1444` |
-| 15/11 | 81 | 3360 | 56:00 | `hist.tsv:1445–1525` |
-| 16/11 | 81 | 3293 | 54:53 | `hist.tsv:1526–1606` |
-| 17/11 | 81 | 3504 | 58:24 | `hist.tsv:1607–1687` |
-| **18/11** | 82 | **4161** | **69:21** | `hist.tsv:1688–1769` |
-| 19/11 | 82 | 4244 | 70:44 | `hist.tsv:1770–1851` |
-| 20/11 | — | nao medido | — | `[nao verificado]` |
-| 21/11 | 82 | 3632 | 60:32 | `hist.tsv:1852–1933` |
-| **22/11** | 82 | **4515** | **75:15** | `hist.tsv:1934–2015` |
-| 23/11 | 82 | 4546 | 75:46 | `hist.tsv:2016–2097` |
-| 24/11 | 82 | 4815 | 80:15 | `hist.tsv:2098–2179` |
-| 25/11 | 82 | 4882 | 81:22 | `hist.tsv:2180–2261` |
-| 26/11 | 82 | 4797 | 79:57 | `hist.tsv:2262–2343` |
-| 27/11 | 82 | 5145 | 85:45 | `hist.tsv:2344–2425` |
-| 28/11 | 82 | 5095 | 84:55 | `hist.tsv:2426–2507` |
-
-O primeiro salto sustentado de novembro começa **09/11**, com **+713 s** sobre 08/11. `lavrar_cxr_do_motor --apply` aparece nesse dia com **549 s**. Em **18/11**, o bloco sobe mais **657 s** sobre 17/11, com a entrada de `selo_leitores_no_mesmo_numero` a **830 s**. Em **22/11**, sobe **883 s** sobre 21/11, dos quais **646 s** vêm do aumento do selo e **175 s** do CXR. `hist.tsv:879–1039,995,1607–1769,1726,1852–2015`.
-
-Em 28/11, os dois comandos que entraram depois de 01/11 somam **1.808 s** dos **1.850 s** de aumento do bloco entre as duas datas. O saldo das demais entradas é **+42 s**, incluindo mudanças de argumentos. `hist.tsv:319–398,2426–2507,2462,2464`.
-
-## 2. Medida por comando
-
-Usei o **comando completo, com argumentos**, como unidade. Os sete valores de cada linha correspondem a **22, 23, 24, 25, 26, 27 e 28/11**. Para os percentis, usei **15–28/11**, com 13 datas observadas devido à lacuna de 20/11. O p50 é a mediana e o p95 segue a função da cópia, que seleciona o índice `round(0.95 × (n−1))` da série ordenada, começando em zero. `n` conta execuções medidas. `Δ` é 28/11 menos 01/11 para os mesmos argumentos. `—` indica **nao medido [nao verificado]**. Os zeros de `pipeline_placar` são registros de `pulado`. `hist.tsv:319–398,1445–2507`, `bin/crons_duracao.py:46–51`, `bin/sombra.sh:355–357`.
-
-### Top 10 por p95 e por crescimento
-
-Valores em segundos. O ranking de crescimento usa as variantes com medida nas duas pontas. As fontes de cada comando estão na tabela detalhada. `hist.tsv:319–398,1445–2507`.
-
-| Posição | Por p95 | p95 | Por crescimento | Δ |
-|---:|---|---:|---|---:|
-| 1 | `selo_leitores_no_mesmo_numero --rollout --origem cron` | 1222 | `esmeril_espelho --apply` | +151 |
-| 2 | `lavrar_he_pendente --apply` | 670 | `processar_cartorio --empresa 2 --apply` | +102 |
-| 3 | `lavrar_cxr_do_motor --apply` | 634 | `auditar_invariantes_chamados --html` | +55 |
-| 4 | `processar_cartorio --empresa 2 --apply` | 497 | `pre_fechamento --apply` | +45 |
-| 5 | `auditar_invariantes_chamados --html` | 334 | `gerar_celulas` | +19 |
-| 6 | `esmeril_espelho --apply` | 333 | `processar_cartorio --empresa 3 --apply` | +14 |
-| 7 | `vigiar_fio_morto --alarme --alarme-passivo` | 168 | `reconciliar_grade --empresa 2,3,4` | +14 |
-| 8 | `calcular_scores` | 147 | `censo_fase_12x36 --min-plantoes 6 --lavrar` | +9 |
-| 9 | `processar_cartorio --empresa 3 --apply` | 95 | `fechar_becos_disputa --alarme` | +6 |
-| 10 | `reconciliar_grade --empresa 2,3,4` | 90 | `supra_juiz --empresa 2 --encerrada --alarme` | +6 |
-
-Da primeira observação à última, o custo do CXR passa de **549 para 634 s (+85 s)** e o selo de leitores de **830 para 1.174 s (+344 s)**. A base de 01/11 para ambos é **nao medido [nao verificado]**. `hist.tsv:319–398,995,1726,2462,2464`.
-
-### Série por comando em segundos
-
-A última coluna indica a última ocorrência da variante em `hist.tsv`. Os percentis e a base usam as janelas indicadas acima. `hist.tsv:1–2507`.
-
-| Comando | 22–28/11 | n | p50 | p95 | 01/11 | Δ | Linha |
-|---|---|---:|---:|---:|---:|---:|---:|
-| `calcular_metricas` | 17 17 18 18 17 18 17 | 13 | 18 | 18 | 18 | −1 | 2426 |
-| `calcular_scores` | 111 130 147 149 141 147 141 | 13 | 114 | 147 | 190 | −49 | 2427 |
-| `pre_fechamento --apply` | 68 66 70 72 66 72 70 | 13 | 66 | 72 | 25 | +45 | 2428 |
-| `health_crawl` | 3 2 2 2 2 3 2 | 13 | 2 | 3 | 2 | 0 | 2429 |
-| `lavrar_foto_folgas --apply` | 3 3 3 3 3 3 2 | 13 | 3 | 3 | 3 | −1 | 2430 |
-| `gerar_celulas` | 37 36 37 37 34 35 36 | 13 | 34 | 37 | 17 | +19 | 2431 |
-| `termometro_regua --avaliar --lavrar` | 79 78 79 81 78 83 80 | 13 | 79 | 82 | 75 | +5 | 2432 |
-| `tripwire_celulas` | 19 19 19 18 18 18 16 | 13 | 18 | 19 | 16 | 0 | 2433 |
-| `efetivar_desligamentos_agendados --apply` | 1 1 1 2 1 1 2 | 13 | 1 | 2 | 2 | 0 | 2434 |
-| `tripwire_vinculo_orfao --alarme` | 2 2 2 1 2 2 1 | 13 | 2 | 2 | 1 | 0 | 2435 |
-| `sincronizar_status_ferias --apply` | 2 1 2 2 1 2 2 | 13 | 2 | 2 | 1 | +1 | 2436 |
-| `reverter_situacao_afastado --apply` | 1 2 1 1 2 2 1 | 13 | 1 | 2 | 2 | −1 | 2437 |
-| `tripwire_status_ferias --alarme` | 2 2 2 2 1 2 2 | 13 | 2 | 2 | 1 | +1 | 2438 |
-| `tripwire_situacao_afastado --alarme` | 2 1 2 2 2 2 2 | 13 | 2 | 2 | 2 | 0 | 2439 |
-| `reconciliar_grade --empresa 2,3,4` | 87 86 90 88 82 91 84 | 13 | 83 | 90 | 70 | +14 | 2440 |
-| `detectar_cluster_espurio --alarme` | 4 3 4 5 4 4 4 | 13 | 4 | 4 | 4 | 0 | 2441 |
-| `detectar_par_relampago --dias 2 --apply --retratar` | 19 20 21 21 20 — — | 11 | 20 | 21 | 17 | — | 2278 |
-| `detectar_par_relampago --dias 2 --apply` | — — — — — 15 15 | 2 | 15 | 15 | — | — | 2442 |
-| `processar_cartorio --empresa 2 --apply` | 473 482 497 488 481 487 508 | 13 | 481 | 497 | 406 | +102 | 2443 |
-| `processar_cartorio --empresa 3 --apply` | 89 91 95 92 92 96 95 | 13 | 92 | 95 | 81 | +14 | 2444 |
-| `processar_cartorio --empresa 4 --apply` | 19 19 20 20 19 19 20 | 13 | 19 | 20 | 16 | +4 | 2445 |
-| `apurar_furos_diarios` | 22 22 21 22 23 24 23 | 13 | 23 | 30 | 31 | −8 | 2446 |
-| `disparar_perguntas_competencia --comp-corrente --apply` | — — — — — — — | 0 | — | — | 37 | — | 1061 |
-| `disparar_perguntas_competencia --comp-corrente --alarme` | 6 6 8 14 15 17 17 | 13 | 17 | 38 | — | — | 2447 |
-| `reconciliar_perguntas_orfas --apply` | — — — — — — — | 0 | — | — | — | — | 102 |
-| `reconciliar_perguntas_orfas --alarme` | 2 3 4 3 4 3 4 | 13 | 3 | 4 | 2 | +2 | 2448 |
-| `lavrar_deslogados --apply` | 7 7 6 6 6 7 7 | 13 | 6 | 7 | 5 | +2 | 2449 |
-| `lavrar_he_pendente --apply` | 565 570 594 604 586 676 670 | 13 | 565 | 670 | 846 | −176 | 2450 |
-| `recusar_ponta_pequena --apply` | 3 3 4 — — — — | 9 | 5 | 8 | 4 | — | 2123 |
-| `recusar_ponta_pequena --alarme` | — — — 27 23 24 14 | 4 | 23,5 | 27 | — | — | 2451 |
-| `vigiar_txt_dominio --alarme` | 15 16 15 15 15 15 15 | 13 | 15 | 16 | 12 | +3 | 2452 |
-| `lavrar_retrato_folha --apply` | 43 42 45 45 45 47 46 | 13 | 45 | 47 | 87 | −41 | 2453 |
-| `vigiar_pausa_export --alarme` | 9 10 10 11 11 10 10 | 13 | 11 | 11 | 11 | −1 | 2454 |
-| `vigiar_retido_calado --alarme` | 2 1 2 1 1 2 2 | 13 | 2 | 2 | 2 | 0 | 2455 |
-| `vigiar_fio_morto --alarme --alarme-passivo` | 129 130 156 160 161 170 168 | 13 | 151 | 168 | 261 | −93 | 2456 |
-| `reconciliar_geofence --empresa 2 --alarme` | 2 1 1 1 2 1 2 | 13 | 1 | 2 | 1 | +1 | 2457 |
-| `vigiar_carimbo_sem_registro --alarme` | 42 42 45 44 45 46 45 | 13 | 45 | 47 | 42 | +3 | 2458 |
-| `vigiar_ausencia_x_veredito --alarme` | 7 7 7 8 7 7 7 | 13 | 7 | 7 | 6 | +1 | 2459 |
-| `reconciliar_geofence --empresa 3 --alarme` | 2 2 1 1 2 2 2 | 13 | 2 | 2 | 1 | +1 | 2460 |
-| `vigia_pareador_celula --alarme` | 2 3 3 3 3 3 3 | 13 | 3 | 5 | 3 | 0 | 2461 |
-| `lavrar_cxr_do_motor --apply` | 470 508 548 562 553 634 634 | 13 | 516 | 634 | — | — | 2462 |
-| `reconciliar_geofence --empresa 4 --alarme` | 2 2 1 2 2 2 2 | 13 | 2 | 2 | 2 | 0 | 2463 |
-| `selo_leitores_no_mesmo_numero --rollout --origem cron` | 1129 1114 1160 1157 1135 1222 1174 | 10 | 1132 | 1222 | — | — | 2464 |
-| `reconciliar_vinculo --alarme` | 2 2 1 2 2 2 2 | 13 | 2 | 2 | 1 | +1 | 2465 |
-| `detectar_intervalo_ausente --alarme` | 4 3 4 4 4 4 4 | 13 | 4 | 4 | 4 | 0 | 2466 |
-| `verificar_nucleo` | 15 15 16 16 15 15 15 | 13 | 15 | 16 | 14 | +1 | 2467 |
-| `supra_juiz --empresa 2 --executar` | 26 27 32 32 33 35 35 | 13 | 35 | 42 | 48 | −13 | 2468 |
-| `supra_juiz --empresa 3 --executar` | 7 8 8 9 9 9 9 | 13 | 9 | 11 | 13 | −4 | 2469 |
-| `supra_juiz --empresa 4 --executar` | 3 2 3 3 3 4 3 | 13 | 3 | 4 | 4 | −1 | 2470 |
-| `reavaliar_ausencias_feriado --empresa 2 --apply` | — — — — — — — | 0 | — | — | 18 | — | 682 |
-| `reavaliar_ausencias_feriado --empresa 2 --alarme` | 22 23 23 23 23 23 24 | 13 | 23 | 24 | — | — | 2471 |
-| `reavaliar_ausencias_feriado --empresa 3 --apply` | — — — — — — — | 0 | — | — | 5 | — | 683 |
-| `reavaliar_ausencias_feriado --empresa 3 --alarme` | 7 6 7 7 6 7 6 | 13 | 6 | 7 | — | — | 2472 |
-| `reavaliar_ausencias_feriado --empresa 4 --apply` | — — — — — — — | 0 | — | — | 3 | — | 684 |
-| `reavaliar_ausencias_feriado --empresa 4 --alarme` | 2 3 2 2 3 2 3 | 13 | 3 | 3 | — | — | 2473 |
-| `silenciar_chamados_isentos --alarme` | 2 1 1 1 1 1 1 | 13 | 1 | 1 | 1 | 0 | 2474 |
-| `mapa_divergencia --mes=$(date +\%-m) --ano=$(date +\%Y)` | 70 69 72 70 69 73 72 | 13 | 70 | 73 | 74 | −2 | 2475 |
-| `fechar_becos_disputa --alarme` | 17 18 20 20 20 21 20 | 13 | 18 | 20 | 14 | +6 | 2476 |
-| `flip_automatico --competencia --apply` | 3 3 3 10 6 6 7 | 13 | 7 | 12 | 9 | −2 | 2477 |
-| `lavrar_fase_conflitante --apply` | 2 1 2 2 2 2 2 | 13 | 2 | 2 | 1 | +1 | 2478 |
-| `lavrar_vigencia_sem_trilha --apply` | 1 2 1 1 1 2 2 | 13 | 2 | 2 | 2 | 0 | 2479 |
-| `lavrar_vigencia_impossivel --apply` | 2 2 2 2 2 2 1 | 13 | 2 | 2 | 1 | 0 | 2480 |
-| `auditar_invariantes_chamados --html` | 295 291 317 313 316 330 326 | 13 | 313 | 334 | 271 | +55 | 2481 |
-| `vigia_b5_ausencia` | 17 17 17 18 18 18 18 | 13 | 17 | 18 | 14 | +4 | 2482 |
-| `supra_juiz --empresa 2 --encerrada --alarme` | 42 42 44 45 43 43 43 | 13 | 42 | 45 | 37 | +6 | 2483 |
-| `tripwire_tipo_batida --dias 60 --limiar 60` | 16 15 17 16 15 16 16 | 13 | 16 | 17 | 16 | 0 | 2484 |
-| `marcar_foto_ausente_retro --apply` | 2 2 3 2 3 3 3 | 13 | 3 | 3 | 2 | +1 | 2485 |
-| `supra_juiz --empresa 3 --encerrada --alarme` | 12 11 12 12 12 12 12 | 13 | 12 | 12 | 11 | +1 | 2486 |
-| `vigia_plantio_overnight --dias=45` | 53 49 50 54 58 55 58 | 13 | 55 | 58 | 62 | −4 | 2487 |
-| `supra_juiz --empresa 4 --encerrada --alarme` | 3 4 4 4 4 4 3 | 13 | 3 | 4 | 3 | 0 | 2488 |
-| `lavrar_jornada_lixo --apply` | 3 3 3 3 3 3 3 | 13 | 3 | 3 | 3 | 0 | 2489 |
-| `lavrar_previsto_cego --apply` | 3 4 4 4 4 4 5 | 13 | 4 | 6 | 4 | +1 | 2490 |
-| `supra_juiz --empresa 2 --alarme` | 27 27 32 33 33 34 36 | 13 | 34 | 41 | 47 | −11 | 2491 |
-| `supra_juiz --empresa 3 --alarme` | 7 7 8 8 9 9 9 | 13 | 9 | 11 | 13 | −4 | 2492 |
-| `lavrar_furo_sem_canal --apply` | 3 3 4 4 3 4 4 | 13 | 4 | 9 | 1 | +3 | 2493 |
-| `supra_juiz --empresa 4 --alarme` | 3 3 3 3 3 3 3 | 13 | 3 | 4 | 4 | −1 | 2494 |
-| `censo_fase_12x36 --min-plantoes 6 --lavrar` | 24 18 18 25 25 18 26 | 13 | 20 | 25 | 17 | +9 | 2495 |
-| `pipeline_placar --alarme` | 0 0 0 0 0 0 0 | 0 | — | — | — | — | 2496 |
-| `lavrar_teto_do_dia --apply` | 15 15 15 16 16 16 16 | 13 | 16 | 19 | 15 | +1 | 2497 |
-| `alertar_justificativas_sla` | 1 1 2 2 1 1 2 | 13 | 1 | 2 | 2 | 0 | 2498 |
-| `alertar_retornos` | 3 2 3 2 2 3 2 | 13 | 2 | 3 | 2 | 0 | 2499 |
-| `alertar_ferias_vencendo` | 2 2 2 3 3 3 3 | 13 | 3 | 3 | 2 | +1 | 2500 |
-| `pautas_de_ferias --apply` | 2 2 2 1 1 1 2 | 13 | 2 | 2 | 2 | 0 | 2501 |
-| `vigia_entrada_faltante` | 2 2 2 3 2 2 2 | 13 | 2 | 3 | 2 | 0 | 2502 |
-| `escalonar_documentos_ausencia --apply` | 2 2 1 1 2 2 1 | 13 | 2 | 2 | 1 | +1 | 2503 |
-| `alertar_disputas_pendentes` | 2 2 3 3 3 3 2 | 13 | 3 | 4 | 3 | −1 | 2504 |
-| `suporte_hasner --fila` | 2 1 2 2 1 2 2 | 13 | 2 | 2 | 1 | +1 | 2505 |
-| `esmeril_espelho --apply` | 291 285 306 309 311 333 345 | 13 | 296 | 333 | 194 | +151 | 2506 |
-| `pautas_do_esmeril` | 1 1 1 2 2 1 2 | 13 | 2 | 2 | 2 | 0 | 2507 |
-
-## 3. Fases fora dos comandos cronometrados
-
-A cópia agenda o **backup das 04:00** em uma entrada própria. A entrada da sombra chama **`--refazer && --bloco`**. No caminho diário, `--refazer` garante o banco da sombra, escolhe o dump mais recente por mtime de cada schema, recria o banco, restaura `public` e depois `juliani`, roda máscara 1, máscara 2 e selo pessoal. Em seguida, compara colunas e migrations, verifica a completude e carimba a sombra refeita. `app/config/crons.py:282,350–352`, `bin/sombra.sh:236–305,311–325`.
-
-| Fase | O que o código faz | Medida e ponto de coleta |
-|---|---|---|
-| Dump | O backup percorre schemas em série. Cada `pg_dump` grava `.part`, o script renomeia o arquivo e valida o catálogo. O caminho opcional `--dump-agora` faz `juliani` e depois `public` em primeiro plano, em arquivos separados. `scripts/backup_all.sh:5–8`, `scripts/backup_tenant.sh:9–18`, `bin/sombra.sh:239–253` | **nao medido [nao verificado]**. O nome é criado antes do `pg_dump`. Mediria início e fim por schema, mais a validação se a fronteira for o dump pronto para restore. `sombra_tail.log:5,19,33,47`, `scripts/backup_tenant.sh:9–16`, `bin/sombra.sh:244–245` |
-| Restore | `dropdb` → `createdb` → `pg_restore public` → `pg_restore juliani`, no mesmo banco, em primeiro plano e sem `-j`. Depois conta erros de restore fora da exceção de schema `public` já existente. `bin/sombra.sh:255–264` | **nao medido [nao verificado]**. O tail registra `public rc=1`, `juliani rc=0` e **0** erros não aceitos nos quatro dias. Mediria antes e depois de cada restore e também o trecho `dropdb`/`createdb`. `sombra_tail.log:6,20,34,48`, `bin/sombra.sh:255–260` |
-| Máscara 1 | Em uma transação, usa valores temporários antes de gravar CPF e login sintéticos, anonimiza nomes e e-mails, neutraliza push e mascara o nome nos registros de PDF. Confere unicidade e os temporários ao final. `bin/sombra_mascara.py:38–39,51–103` | **nao medido [nao verificado]**. O tail registra contagens e `MASCARA1 ok`. Mediria a chamada completa do container. `sombra_tail.log:7–8,21–22,35–36,49–50`, `bin/sombra.sh:266–268` |
-| Máscara 2 | Em outra transação, aplica regras de vazio, nulo, marcador, cifrado, zero, ano de nascimento e mascaramento de texto e JSON. O timer interno começa após os imports e termina após a transação. `bin/sombra_mascara_pessoal.py:6–66`, `bin/sombra_regras_pessoais.py:29–157` | **25/11 267 s · 26/11 259 s · 27/11 268 s · 28/11 261 s**. A duração de parede da chamada completa é **nao medido [nao verificado]**. Mediria em volta do `container` para incluir a inicialização. `sombra_tail.log:9,23,37,51`, `bin/sombra.sh:272–274` |
-| Selo pessoal | Consulta o catálogo e confronta colunas e conteúdo com as regras do inventário. Se encontra pendência, sai com código 3 e `--refazer` falha. `bin/sombra_selo_pessoal.py:23–97`, `bin/sombra.sh:275–277` | **nao medido [nao verificado]**. Nos quatro dias, o tail registra **154/154** colunas inventariadas, **66** isentas e `OK`. Mediria em volta da chamada completa. `sombra_tail.log:10–11,24–25,38–39,52–53`, `bin/sombra.sh:275–277` |
-
-**Serialização e independência pelo código.** A sequência do `--refazer` é síncrona. Os dois dumps opcionais leem a origem e escrevem arquivos distintos, sem consumir a saída um do outro. Os restores usam o mesmo banco e a independência entre os objetos dos dois arquivos fica **[nao verificado]**. As máscaras escrevem em tabelas comuns, como `Colaborador` e `RegistroPDFAuditavel`, e o selo de conteúdo lê o estado mascarado. Depois dos commits, as consultas de catálogo, migrations e contagens em prod e sombra fornecem resultados independentes até a comparação. As verificações de conteúdo do selo também são leituras independentes entre si até a consolidação. Todas rodam em série na cópia. `bin/sombra.sh:239–305,313–325`, `bin/sombra_mascara.py:64–88`, `bin/sombra_regras_pessoais.py:29–91`, `bin/sombra_selo_pessoal.py:23–96`.
-
-O `ts` de `espera.jsonl` é emitido após adquirir a trava ou atingir o timeout. Nos pares diários abaixo, ambas as esperas são **0 s**. A diferença entre os `ts` mede o intervalo **entre as duas travas**. Esse intervalo inclui o `--refazer`, suas verificações e a transição até `--bloco`. `bin/sombra_trava.sh:21–35`, `bin/sombra.sh:437–451`.
-
-| Dia | Trava `--refazer` | Trava `--bloco` | Intervalo (s) | Fonte |
-|---|---|---|---:|---|
-| 21/11 | 04:11:01 | 04:18:14 | 433 | `espera.jsonl:69–70` |
-| 22/11 | 04:11:01 | 04:17:00 | 359 | `espera.jsonl:96–97` |
-| 23/11 | 04:11:01 | 04:16:46 | 345 | `espera.jsonl:117–118` |
-| 24/11 | 04:11:01 | 04:16:55 | 354 | `espera.jsonl:146–147` |
-| 25/11 | 04:11:01 | 04:17:00 | 359 | `espera.jsonl:282–283` |
-| 26/11 | 04:11:01 | 04:16:58 | 357 | `espera.jsonl:458–459` |
-| 27/11 | 04:11:01 | 04:17:08 | 367 | `espera.jsonl:492–493` |
-| 28/11 | 04:11:01 | 04:16:58 | 357 | `espera.jsonl:521–522` |
-
-Em 25–28/11, descontando o timer interno da máscara 2, sobram **92, 98, 99 e 96 s** no intervalo entre travas para **todas** as demais tarefas e a transição. Em 20/11, o `--refazer` adquiriu a trava após **1.650 s** e a tentativa registrada de `--bloco` atingiu o timeout de **1.800 s** com `ok=0`. `espera.jsonl:16,19,282–283,458–459,492–493,521–522`, `sombra_tail.log:9,23,37,51`, `bin/sombra_trava.sh:26–35`.
-
-## 4. Ordem do bloco e dependências de dado
-
-**São 82 entradas e 81 invocações ensaiadas em série.** `--bloco` pega a trava da sombra, importa a lavra de prod e chama `manage.py crons sombra` no container do ensaio. O renderer filtra comandos diários de horário fixo, expande os que rodam por empresa, insere cada encadeado no último minuto do seu `gatilho` mais um e ordena por minuto, preservando a ordem de inserção nos empates. O `while` usa essa lista em primeiro plano, sem esperar os horários exibidos. Registra `pipeline_placar` como `pulado` porque o comando usa o placar do host. Cada uma das 81 invocações tem uma reposição da lavra antes de `t0`, além da importação inicial. `sombra_tail.log:44–46,58–60`, `bin/sombra.sh:120–125,328–386,451`, `bin/sombra_trava.sh:21–38`, `app/core/management/commands/crons.py:43–48`, `app/config/crons.py:17,1946–1977`.
-
-No crontab que a cópia renderiza, `encadeado.sh --corrente` percorre a corrente em primeiro plano. Cada elo usa `flock` e aguarda os carimbos do gatilho p
-
-[truncado em 20000 de 27319 caracteres]
-
-## 28/11 05:57 · sessao d84a35fe1893 · - · - · origem=Ronald (tmux)
-
-O `--refazer` diário consome os dumps prontos das 04:00. O backup percorre os schemas em série, grava cada dump em `.part`, renomeia e valida o arquivo. O horário no nome vem antes do `pg_dump`. O ramo opcional `--dump-agora` exporta `juliani` e depois `public` em chamadas bloqueantes, com saídas independentes no shell. Duração dos dumps não medida. O ponto de medição é cada `pg_dump`. `app/config/crons.py:282,350-352`, `scripts/backup_all.sh:5-8`, `scripts/backup_tenant.sh:9-18`, `bin/sombra.sh:236-253`.
-
-| Ordem após selecionar os dumps | Implementação | Tempo |
-|---|---|---|
-| Restore | Recria o banco da sombra e restaura `public` antes de `juliani`. Valida os erros dos dois logs. | Não medido. Medir antes e depois de `dropdb`, `createdb` e cada `pg_restore`. `bin/sombra.sh:255-264`. |
-| Máscara 1 | Em uma transação, troca CPF e login para temporários antes dos definitivos, mascara nomes e e-mails, neutraliza push e trata nomes de PDFs. Verifica unicidade e temporários restantes. | Não medido. Medir o contêiner. `bin/sombra.sh:266-268`, `bin/sombra_mascara.py:51-103`. |
-| Máscara 2 | Em outra transação aplica inventário de campos pessoais, incluindo caminhos, cifrados, ano de nascimento, texto e JSON. Usa lotes para atualizações. | 25 a 28/11, **267, 259, 268 e 261 s** internos, sem o arranque do contêiner e do Django. `bin/sombra.sh:272-274`, `bin/sombra_mascara_pessoal.py:14-66`, `sombra_tail.log:9,23,37,51`. |
-| Selo pessoal | Consulta catálogo e valores conforme o inventário. Campo pessoal fora dele ou conteúdo cru provoca saída 3 e falha do `--refazer`. | Não medido. Medir o contêiner. `bin/sombra.sh:275-277`, `bin/sombra_selo_pessoal.py:23-97`. |
-| Divergência e carimbo | Compara colunas e migrations, verifica completude e grava o estado. | Não medido. Medir o conjunto e as consultas. `bin/sombra.sh:286-305,311-325`. |
-
-Os restores escrevem o mesmo banco. A independência entre seus objetos é [nao verificado]. As duas máscaras escrevem nas mesmas tabelas, incluindo `Colaborador` e `RegistroPDFAuditavel`. O selo verifica os dados após a máscara 2 e isenta campos tratados pela máscara 1. As leituras de colunas, migrations e contagens não consomem a saída umas das outras, mas sua consolidação e o carimbo precisam dos resultados. `bin/sombra.sh:255-277,292-305,311-325`, `bin/sombra_mascara.py:66-73,86-88`, `bin/sombra_regras_pessoais.py:50-52,73,80,165-171`.
-
-Intervalo da aquisição da trava de `--refazer` até a aquisição de `--bloco` em 21–28/11, **433, 359, 345, 354, 359, 357, 367 e 357 s**, com **0 s** em ambas as esperas. As sobras após a duração interna da máscara 2 em 25–28/11 foram **92, 98, 99 e 96 s** para o restante do intervalo inteiro. Em 20/11 a trava do `--refazer` veio após **1.650 s**. O `--bloco` registrou timeout após **1.800 s**. `bin/sombra_trava.sh:26-35`, `espera.jsonl:16,19,69-70,96-97,117-118,146-147,282-283,458-459,492-493,521-522`.
-
-Na janela 15–28/11 com 13 dias observados, o p95 das somas do bloco é **5.095 s**, pelo critério de arredondamento do índice da cópia. Com margem dá **7.642,5 s**, **4.342,5 s acima de 55 min**. Somar o intervalo entre travas nos oito dias em que existe dá limite parcial conservador para a janela, **5.452 s** de p95 parcial e **8.178 s** após a margem, **4.878 s acima de 55 min**. O alvo equivale a p95 bruto **≤ 2.200 s**. O p95 recente de ponta a ponta é **não medido** no anexo. O cron registra início, fim e duração no envelope de `placar.jsonl`. `hist.tsv:1445-2507`, `espera.jsonl:69-70,96-97,117-118,146-147,282-283,458-459,492-493,521-522`, `bin/crons_duracao.py:46-51`, `bin/cron_run.sh:5-13`, `app/config/crons.py:350-352`.
-
-A cópia guarda **5.188 s já com margem**, carimbados em **31/10**, para janela declarada de sete dias. Equivalem a **86m28s**, **31m28s acima de 55 min**. O medidor preserva um valor anterior quando não tem amostra nova. `app/config/crons_duracao.json:78,106-110`, `bin/crons_duracao.py:55-76,83-96`.
-
-## 28/11 05:55 · sessao a867fa742add · - · - · origem=Ronald (tmux)
-
-A cópia gera **82 entradas**. O bloco percorre a lista em série, executa **81 comandos** em primeiro plano e registra `pipeline_placar` como pulado. Cada execução é precedida de uma reposição da lavra, que fica fora do cronômetro dos comandos. O render ordena pelo minuto, expande por empresa e usa `gatilho` para inserir encadeados. O campo `depende` é verificado nos contratos de agenda. `bin/sombra.sh:339–386,451`, `app/core/management/commands/crons.py:43–48`, `app/config/crons.py:1946–1977`, `app/chamados/tests/test_contract_crons.py:269–298`.
-
-As dependências funcionais verificadas incluem:
-
-- `lavrar_foto_folgas` grava `FolgaDia`, que o cálculo usado por `gerar_celulas` lê. `tripwire_celulas`, `reconciliar_grade` e `processar_cartorio` consultam as células. `reconciliar_grade` também lê o veto da régua gravada por `termometro_regua --avaliar`. `app/escala/folgas.py:194`, `app/escala/models.py:1297–1321`, `app/ponto/portas/celula.py:947–953`, `app/ponto/management/commands/tripwire_celulas.py:49`, `app/ponto/management/commands/reconciliar_grade.py:125–126,498–502`, `app/ponto/management/commands/processar_cartorio.py:49–65`, `app/escala/management/commands/termometro_regua.py:41–44`, `app/escala/regua_defesa.py:557–565,769`.
-- O cartório grava ata e veredito. `apurar_furos_diarios` lê a ata e grava `FuroDiario`, consumido por `lavrar_deslogados` e `auditar_invariantes_chamados`. O cartório também alimenta os leitores de veredito, como `supra_juiz --executar` e o retrato da folha. `app/ponto/services/cartorio.py:1905–1931`, `app/escala/services/furos_diarios.py:38–43,96–109`, `app/ponto/services/deslogados.py:94–103`, `app/chamados/management/commands/auditar_invariantes_chamados.py:1332,1405`, `app/ponto/management/commands/supra_juiz.py:161–166,245–258`, `app/config/crons.py:1628–1636`.
-- `lavrar_he_pendente` grava o retrato que `recusar_ponta_pequena --alarme` consulta. `lavrar_retrato_folha` grava `RetratoFolha`, lido por `vigiar_retido_calado`. O vigia da pausa roda após o retrato e consulta a porta sobre células vivas. `app/ponto/services/he_pendente_lavrado.py:183–210`, `app/ponto/management/commands/recusar_ponta_pequena.py:66–77,99–100`, `app/folha/management/commands/lavrar_retrato_folha.py:77–79`, `app/folha/vigia_retido_calado.py:52–59`, `app/folha/services/vigia_pausa.py:116–133`.
-- `vigiar_fio_morto` lê o snapshot CXR mais recente já existente. A lavra CXR do bloco vem depois dele. O selo de leitores é disparado após essa lavra e faz sua própria medição pela porta do export. `app/chamados/management/commands/vigiar_fio_morto.py:184–191`, `app/chamados/services/vigia_fio.py:192–198`, `app/escala/services/cadastro_realidade.py:1225–1230`, `app/ponto/services/cxr_na_lista.py:142–156`, `app/config/crons.py:1746–1748,1805–1820`, `app/relatorios/management/commands/selo_leitores_no_mesmo_numero.py:70–72`.
-- `pautas_do_esmeril` lê a chave que `esmeril_espelho` grava. Na sombra, recebe a versão reposta de produção antes da sua execução. `app/ponto/services/esmeril_espelho.py:350,371`, `app/ponto/services/pautas_do_esmeril.py:57–58`, `bin/sombra.sh:364–379`.
-
-Conferência independente das somas de 09/11, 18/11, 19/11 e 28/11 resultou em **3.441, 4.161, 4.244 e 5.095 s**. O primeiro salto de fim de patamar ocorre em 09/11 ante 08/11, **+720 s**, dos quais **549 s** do CXR que aparece naquele dia. `hist.tsv:879–1039,1688–1851,2426–2507`.
-
-_8859 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8862 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
