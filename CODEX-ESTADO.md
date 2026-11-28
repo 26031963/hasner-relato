@@ -1,7 +1,92 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 00:31** · publicado em **28/11/2026 00:34** (UTC-3)
+> Ultima resposta processada: **28/11/2026 01:10** · publicado em **28/11/2026 01:13** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 01:10 · sessao d4649f8dfc9b · RETRATO-PDF-CORTA-POR-QUE · leitura · origem=Code
+
+## RETRATO-PDF-CORTA-POR-QUE
+
+A linha lavrada tem **um `tipo` por pessoa e uma lista plana de `datas`**. O vínculo entre motivo e data existe na fonte anterior à lavra, mas fica de fora do JSON. O anexo `JUIZES.md` localiza a autoridade de entrada no TXT. Linhas reais, contadores de produção, PDF renderizado em produção e ambiente da casca estão `[nao verificado]`. `app/folha/export.py:1202` · `app/folha/fora_da_folha.py:234` · `app/folha/retrato_folha.py:1237` · `app/docs/JUIZES.md:119`
+
+### A. Mapa das colunas e do vocabulário
+
+Tela e PDF passam por `_recorte_da_barra`. Ele lê `RetratoFolha.linhas` via `linhas_do_retrato`, junta o cadastro, aplica o filtro universal, passa por `no_periodo` e entrega `ordenar(recortar(...))`. A tela projeta `_tabela` e usa `_retrato_lista.html`, tanto na página cheia quanto no parcial. O PDF monta a tabela em `_story`, dentro de `retrato_pdf`. `app/folha/retrato_folha.py:98` · `app/folha/views_retrato.py:194` · `app/folha/views_retrato.py:225` · `app/folha/views_retrato.py:278` · `app/folha/views_retrato.py:345` · `app/templates/folha/retrato_folha.html:53` · `app/templates/folha/_retrato_parcial.html:7` · `app/folha/views_retrato.py:406`
+
+| Coluna | Origem e saída |
+|---|---|
+| LED na tela / **Depende de** no PDF | `desenho_do_led` lê `led_da_linha`, que usa `dono_da_linha` para bloqueados e o próprio balde para `Entram` e `Rescisão`. A tela desenha o ponto com cor, rótulo e link de filtro. O PDF imprime o rótulo na cor do LED. `app/folha/retrato_folha.py:308` · `app/folha/retrato_folha.py:531` · `app/folha/retrato_folha.py:559` · `app/templates/folha/_retrato_lista.html:47` · `app/folha/views_retrato.py:418` |
+| **Colaborador** | `_cadastro` junta `Colaborador.nome` pelo ID `colab`. As duas saídas usam `(cadastro ausente)` se o nome estiver vazio. Na tela, o nome abre o drawer com mês e ano. `app/folha/views_retrato.py:99` · `app/folha/views_retrato.py:118` · `app/folha/views_retrato.py:287` · `app/folha/views_retrato.py:421` · `app/templates/folha/_retrato_lista.html:60` |
+| **Posto** | `_cadastro` prefere o posto do vínculo ativo mais recente e, na falta dele, usa o posto do colaborador. As duas saídas exibem `posto.nome`. `app/folha/views_retrato.py:107` · `app/folha/views_retrato.py:115` · `app/templates/folha/_retrato_lista.html:63` · `app/folha/views_retrato.py:422` |
+| **Escala** | `_cadastro` pega `tipo_escala` daquele vínculo ativo. As duas saídas exibem `descricao`. `app/folha/views_retrato.py:107` · `app/folha/views_retrato.py:122` · `app/templates/folha/_retrato_lista.html:64` · `app/folha/views_retrato.py:423` |
+| **Por quê** | Ambas aplicam `rotulo_do_motivo(linha['motivo'])`. O HTML imprime `l.motivo`. O rótulo visível **“Espelho com pendencia”** vem de `MOTIVO_RH['furo_espelho']`. O export também monta um `detalhe` com esse prefixo e os códigos, mas essa chave fica fora da linha lavrada. `app/folha/views_retrato.py:291` · `app/folha/views_retrato.py:424` · `app/templates/folha/_retrato_lista.html:65` · `app/folha/retrato_folha.py:76` · `app/folha/views.py:18` · `app/folha/export.py:977` · `app/folha/retrato_folha.py:1237` |
+| **Dias que seguram** | `dias` vem da lavra. Com janela, `no_periodo` conta as datas no intervalo inclusivo e recalcula a faixa `saldo`. `None` sai em branco nas duas saídas. `app/folha/retrato_folha.py:1227` · `app/folha/retrato_folha.py:1334` · `app/templates/folha/_retrato_lista.html:66` · `app/folha/views_retrato.py:425` |
+
+- **Pílulas e Tipo.** `ROTULO_DO_DONO` alimenta o quadro `Depende de` e os LEDs. `ROTULO_DO_TIPO` contém `Escala`, `Folga`, `Sem escala`, `Não bate`, `Falta`, `Cadastro`, `Férias` e `Sem causa`. O eixo `tipo` continua no recorte, no Raio-X e no drawer. A barra atual desenha `dono` e, com Bloqueados ativo, `saldo`. O **Por quê** consulta o mapa `MOTIVO_RH`. As expressões do exemplo “Batida faltando” e “pergunta aberta” não são entradas desses mapas. `app/folha/retrato_folha.py:200` · `app/folha/retrato_folha.py:308` · `app/folha/retrato_folha.py:587` · `app/folha/retrato_folha.py:906` · `app/folha/retrato_folha.py:1118` · `app/folha/views_retrato.py:500` · `app/folha/views.py:15`
+- **Forma exata da linha construída.** As chaves são `colab`, `codigo`, `status`, `motivo`, `dias`, `datas`, `dias_sem_leitura`, `dias_sem_porta`, `dono`, `acoes`, `tipo`, `saldo` e `informativo`. `datas` é lista plana ISO `AAAA-MM-DD` ou `None` quando a fonte não dá datas, com possibilidade de a chave faltar em retratos legados. As duas listas `dias_sem_*` registram sem leitura e sem porta. `acoes` guarda as portas publicadas, algumas com `dia_do_turno`. `informativo` é uma lista ISO separada para rescisão. Nenhuma dessas chaves guarda a associação geral `data → motivo/tipo de retenção`. `app/folha/retrato_folha.py:1227` · `app/folha/retrato_folha.py:1237` · `app/folha/retrato_folha.py:1288` · `app/folha/fora_da_folha.py:215` · `app/folha/models.py:334`
+- **Onde havia o par.** `motivos_retencao_celula(com_dias=True)` devolve motivos agregados e registros `{data, motivo, veredito, celula_id}`. `fora_da_folha` tem esses registros em `_dias`, mas publica no resumo por pessoa `motivos` agregados e `datas` planas. O lavrador leva as datas ao retrato e usa `dias_ferias_com_batida` como segunda fonte. A função avulsa `o_que_segura` expõe `data`, `motivo`, `veredito` e `fio` por dia e consulta o export em sua própria execução. `app/folha/export.py:1195` · `app/folha/export.py:1268` · `app/folha/fora_da_folha.py:214` · `app/folha/fora_da_folha.py:234` · `app/folha/fora_da_folha.py:257` · `app/folha/fora_da_folha.py:273` · `app/folha/fora_da_folha.py:292` · `app/folha/retrato_folha.py:1231`
+
+### B. Censo de escritores e leitores
+
+| Campo | Escrita e leitura na cópia |
+|---|---|
+| `motivo` | `classificar_export` produz a chave no item. `montar_linhas` copia o valor para a linha. `_balde` usa o motivo para reconhecer rescisão. `fio_da_linha`, `tipo_da_linha`, `saldo_da_linha` e `no_periodo` também o consultam. Tela, PDF, Raio-X e drawer passam o valor a `rotulo_do_motivo`. `app/folha/fora_da_folha.py:147` · `app/folha/export.py:977` · `app/folha/retrato_folha.py:1225` · `app/folha/retrato_folha.py:89` · `app/folha/retrato_folha.py:444` · `app/folha/retrato_folha.py:496` · `app/folha/retrato_folha.py:1338` · `app/folha/views_retrato.py:291` · `app/folha/views_retrato.py:424` · `app/folha/views_retrato.py:503` · `app/folha/retrato_folha.py:1116` |
+| `dono` | `_fio_cru` grava o **fio** (`admin`, `colab`, `chamado`, `ninguem`, `nao_sei` ou vazio). `fio_da_linha` lê a chave, com tratamento de legado. `dono_da_linha` traduz o fio para o balde da UI e trata `Hoje` usando `datas`. Esses leitores alimentam o recorte, os contadores, o LED, o drawer e o vigia. `app/folha/retrato_folha.py:178` · `app/folha/retrato_folha.py:351` · `app/folha/retrato_folha.py:436` · `app/folha/retrato_folha.py:486` · `app/folha/retrato_folha.py:588` · `app/folha/retrato_folha.py:1112` · `app/folha/retrato_folha.py:1248` · `app/folha/vigia_retido_calado.py:77` |
+| `tipo` | `_tipo_cru` grava um tipo por pessoa a partir do motivo ou de `FechamentoMensal.causa_espelho['causa']`. `_causas_gravadas` lê essa causa. `tipo_da_linha` é o leitor do recorte, do agrupamento do Raio-X e dos rótulos e portas do drawer. `app/folha/retrato_folha.py:379` · `app/folha/retrato_folha.py:496` · `app/folha/retrato_folha.py:588` · `app/folha/retrato_folha.py:1066` · `app/folha/retrato_folha.py:1124` · `app/folha/retrato_folha.py:1167` · `app/folha/retrato_folha.py:1250` · `app/folha/views_retrato.py:506` |
+| `datas` | `montar_linhas` guarda a lista. `no_periodo` lê a lista e devolve cópias com `dias` e `saldo` ajustados, mantendo `datas` integral. `dono_da_linha` lê a lista para `Hoje`. O drawer localiza a linha via `linha_do_colab` e imprime as datas em ISO. `app/folha/retrato_folha.py:1231` · `app/folha/retrato_folha.py:489` · `app/folha/retrato_folha.py:1334` · `app/colaboradores/views.py:1001` · `app/templates/folha/_retrato_o_que_fazer.html:42` |
+| `motivos_espelho` | Chave do **item do export**, fora do JSON do retrato. `classificar_export` a preenche com a lista de códigos agregados de `motivos_retencao_espelho`, que delega ao retentor. Leitores diretos do item incluem a prévia da folha, o PDF legado de retidos e `fechamento_lista._folha_do_juiz`. Há um campo homônimo em `FechamentoMensal`, preenchido por `recalcular_fechamento_mes` a partir do mesmo juiz. Tela e PDF do retrato leem `motivo` para a coluna. `app/folha/export.py:977` · `app/folha/export.py:1310` · `app/folha/views.py:267` · `app/folha/views.py:424` · `app/folha/retidos_pdf.py:90` · `app/ponto/services/fechamento_lista.py:28` · `app/ponto/models.py:451` · `app/ponto/services/fechamento.py:1091` · `app/ponto/services/fechamento.py:1210` · `app/folha/retrato_folha.py:1237` · `app/folha/views_retrato.py:291` · `app/folha/views_retrato.py:424` |
+
+O escritor persistente do retrato é `lavrar_retrato_folha --apply`, com `update_or_create` por empresa, mês e ano. `montar_linhas` constrói o JSON. O cron chama a mesma porta. O selo AST exige um único chamador de produção de `montar_linhas`. `app/folha/management/commands/lavrar_retrato_folha.py:65` · `app/folha/management/commands/lavrar_retrato_folha.py:72` · `app/config/crons.py:1659` · `app/folha/tests/test_retrato_folha_um_derivador.py:68`
+
+**Contadores de dono.** A tela chama `quadros_barra_retrato`, e `_pilula` calcula `numero = len(recortar(...))` sobre o universo após filtro universal e janela. A pílula ativa conta o recorte atual. Cada pílula inativa conta o recorte que seu clique abriria, substituindo o dono e mantendo os outros eixos. O PDF chama a mesma função, com o mesmo universo e grupos, mas consome apenas título e rótulo dos filtros ativos. Hoje imprime `n de total`, sem os `numero` por dono. `contadores(retrato)` é outra função e conta os baldes gerais `entram`, `bloqueado`, `modulo_proprio` e `total`. `app/folha/views_retrato.py:324` · `app/folha/retrato_folha.py:808` · `app/folha/retrato_folha.py:838` · `app/templates/core/_barra_gestao.html:67` · `app/folha/views_retrato.py:399` · `app/folha/views_retrato.py:409` · `app/folha/retrato_folha.py:114`
+
+### C. Como abre e precedente de `attachment`
+
+O botão da barra é `<a href="{{ pdf_href }}">` do partial `core/_btn_pdf.html`, sem `target="_blank"`, sem `download` e sem `onclick` nesse ramo. A view monta o `href` da rota `/folha/exportar/retrato.pdf` com `qs_do_recorte`; o mesmo botão volta no parcial. A resposta atual é `application/pdf` com `Content-Disposition: inline; filename="retrato-folha-emp…-MM-AAAA.pdf"`. Resultado do clique no navegador de produção `[nao verificado]`. `app/templates/folha/_retrato_barra.html:50` · `app/templates/core/_btn_pdf.html:34` · `app/templates/folha/_retrato_parcial.html:8` · `app/folha/views_retrato.py:337` · `app/config/urls.py:34` · `app/folha/urls.py:25` · `app/folha/views_retrato.py:450`
+
+Na mesma casa, o PDF do histórico do TXT, `retidos_pdf` e `validar_export_pdf` usam `application/pdf` com `Content-Disposition: attachment; filename="…"`. O `retidos_pdf` legado chama `classificar_export` ao vivo. O precedente para este item é o cabeçalho HTTP. `app/folha/views.py:860` · `app/folha/views.py:884` · `app/folha/views.py:911`
+
+### D. Rodapé e fontes de commit [nao verificado]
+
+`gerar_pdf_auditavel` lê `get_commit_git()` uma vez, passa o resultado aos rodapés das duas passagens e grava `RegistroPDFAuditavel.commit_git`. `RodapeAuditavel.__call__` imprime os oito primeiros caracteres ou `n/d` quando recebe vazio. O helper prioriza `COMMIT_GIT` e, na falta dela, tenta `git -C /app rev-parse HEAD` se `/app/.git` existir. Se nenhum caminho entregar valor, retorna `''`. `app/relatorios/pdf_base.py:72` · `app/relatorios/pdf_base.py:133` · `app/relatorios/pdf_base.py:152` · `app/relatorios/pdf_base.py:170` · `app/relatorios/utils_audit.py:7`
+
+A montagem documentada leva `app/` a `/app`, enquanto o repositório fica no diretório pai no host. O Dockerfile usa `python:3.13-slim`, copia o contexto e não declara `COMMIT_GIT` nem instala `git` explicitamente. Isso explica o caminho de `n/d` quando o ambiente efetivo também não fornece a variável. O compose de produção é excluído da cópia versionada. A variável, o executável, `/app/.git` e o SHA efetivo da casca de produção estão `[nao verificado]`. `CLAUDE.md:88` · `app/.dockerignore:8` · `app/Dockerfile:1` · `app/Dockerfile:30` · `app/Dockerfile:40` · `.gitignore:40` · `app/relatorios/utils_audit.py:12`
+
+| Fonte existente | O que identifica |
+|---|---|
+| `AMBIENTE sha=` | `HASNER_SHA` injetado pela suite para a árvore de teste medida. O teste imprime a variável e `pista_certifica.sh` compara o valor com o SHA do pouso. A disponibilidade na casca web de produção está `[nao verificado]`. `bin/suite.sh:109` · `bin/suite.sh:566` · `app/core/tests/test_ambiente_do_run.py:52` · `bin/pista_certifica.sh:48` |
+| Carimbo de deploy | `bin/deploy.sh` escreve o `COMMIT` lido do Git do **host** em `logs/deploy.stamp`. O vigia já lê esse carimbo. A correspondência com o código carregado pelo worker que gera um PDF está `[nao verificado]`. `bin/deploy.sh:430` · `app/core/esteira_vigia.py:1032` · `app/core/esteira_vigia.py:1202` |
+| `/health/` e versão do app | O health do core devolve `ok`, `schema` e `host`. O de mensageria devolve `ok` e `servico`. A versão da API é a versão do aplicativo Android/iOS. Esses retornos não incluem SHA do servidor. `app/config/urls_core.py:5` · `app/core/views.py:1306` · `mensageria/config/urls.py:7` · `app/api/views.py:3068` |
+
+### E. Escala no PDF
+
+A célula recebe `getattr(_l.get('_escala'), 'descricao', '') or ''` como **string crua**. As larguras são `26 / 68 / 48 / 38 / 60 / 24 mm`, com **38 mm para Escala** e **60 mm para Por quê**. A tabela repete o cabeçalho, usa fonte 7 e alinhamento vertical no topo. Os `Paragraph` dessa função estão no título e no resumo, fora da tabela. O PDF legado de retidos mostra o uso de `Paragraph(escape(...))` dentro de célula. O vazamento em um PDF real está `[nao verificado]`. `app/folha/views_retrato.py:406` · `app/folha/views_retrato.py:423` · `app/folha/views_retrato.py:431` · `app/folha/retidos_pdf.py:91`
+
+### F. Ordem atual
+
+- **Linhas da tela e do PDF.** Ambos iteram o mesmo `_vis`, ordenado por **Bloqueados → Entram → Rescisão**, depois pelas faixas **1 → 2 a 5 → 6 ou mais → Cadastro → sem faixa**, depois pelo ID do colaborador. Dois bloqueados na mesma faixa são ordenados pelo ID, mesmo com quantidades de dias diferentes. `app/folha/views_retrato.py:232` · `app/folha/views_retrato.py:293` · `app/templates/folha/_retrato_lista.html:35` · `app/folha/views_retrato.py:417` · `app/folha/retrato_folha.py:754`
+- **Donos na barra.** **Admin → Colab → Hoje → Sem ação disponível → Sem leitura (sistema)**. A ordem vem de `DONOS` via `VALORES_DO_GRUPO` e `quadros_barra_retrato`. `Entram` e `Rescisão` são baldes sem dono, com rótulos próprios no PDF. `app/folha/retrato_folha.py:191` · `app/folha/retrato_folha.py:200` · `app/folha/retrato_folha.py:308` · `app/folha/retrato_folha.py:590` · `app/folha/retrato_folha.py:908`
+
+### G. Leis e cortes
+
+- **L-002, L-007 e L-011.** “TESTEMUNHA LE, NAO RECALCULA” exige uma autoridade comum para tela, PDF, TXT, badge e contador. L-007 exige um escritor canônico por estado. L-011 exige a frase de corte para registrar um juiz novo. `classificar_export` está registrado em K1 e K2. O corte `O256-LEGENDA-E-PDF-ANTES-DO-RAIO-X` manda o PDF respeitar os filtros da barra e fixa “Juizes novos = 0”. `app/docs/LEIS.md:60` · `app/docs/LEIS.md:65` · `app/docs/LEIS.md:69` · `app/core/juizes.py:336` · `app/docs/CORTES.md:407`
+- **L-026/L-090 e L-038.** As duas primeiras protegem a janela da empresa em `ponto/janelas.py`, usada na entrada do recorte. L-038 diz “o PDF nao tem regra de dia; le o MESMO juiz do espelho” e nomeia `relatorios/pdf_espelho.py::_coletar_dados_espelho`. A paridade específica do PDF do retrato está em L-002 e no corte O256 acima. `app/docs/LEIS.md:77` · `app/docs/LEIS.md:86` · `app/docs/LEIS.md:123` · `app/folha/views_retrato.py:177` · `app/docs/CORTES.md:407`
+- **Leis de UI L1, L2, L6, L7 e L9.** Contador e lista vêm da mesma fonte, tela e ação consultam a mesma função, o filtro é cumulativo e único, a ajuda sai do mesmo mapa, e o botão PDF usa um partial único com rótulo `PDF` e ajuda no `title`. `RETRATO-DONO-SAO-TRES` registrou a soma dos donos com os bloqueados, e LU-05 deu balde próprio ao dia sem porta. A cópia também declara o balde `Sem leitura (sistema)`. `app/docs/LEIS-UI.md:12` · `app/docs/LEIS-UI.md:23` · `app/docs/LEIS-UI.md:68` · `app/docs/LEIS-UI.md:77` · `app/docs/LEIS-UI.md:95` · `app/docs/CORTES.md:408` · `app/docs/CORTES.md:539` · `app/folha/retrato_folha.py:191`
+- **“NENHUM TEXTO SE GERA”.** O literal de `O256-ORDEM-DRAWER-PRIMEIRO` se refere ao bloco **O que fazer** do drawer, “montado SO das chaves gravadas na linha do retrato (motivo, dono, tipo, datas), sem texto gerado”. A docstring diz “os valores sao ROTULOS de mapa [...] nunca frase montada”. O selo do drawer exige que o valor inteiro pertença literalmente a um mapa existente. O exemplo do item 2 tem a forma de **rótulos concatenados com datas**. A permissão para essa composição na coluna da tela e no PDF, e sua eventual extensão ao drawer, fica em aberto. `app/docs/CORTES.md:405` · `app/folha/retrato_folha.py:1089` · `app/folha/tests/test_retrato_folha_drawer.py:213`
+
+### H. Testes atuais e o que fica vermelho [nao verificado]
+
+- **PDF.** `test_retrato_pdf.py` cobre bytes `%PDF`, tipo, nome canônico no header, hash e registro, igualdade de tamanho do recorte com a tela, filtros na trilha, zero chamada à fonte, papel vazio, permissão, link no parcial e recorte comum por AST. O teste de header procura o **nome** e aceita `attachment` com o mesmo nome. O teste de clique segue o `href` com `client.get`. Ele não mede abas ou navegação de navegador. `app/folha/tests/test_retrato_pdf.py:93` · `app/folha/tests/test_retrato_pdf.py:99` · `app/folha/tests/test_retrato_pdf.py:108` · `app/folha/tests/test_retrato_pdf.py:127` · `app/folha/tests/test_retrato_pdf.py:138` · `app/folha/tests/test_retrato_pdf.py:152` · `app/folha/tests/test_retrato_pdf.py:163` · `app/folha/tests/test_retrato_pdf.py:221` · `app/folha/tests/test_retrato_pdf.py:252` · `app/folha/tests/test_retrato_pdf.py:330`
+- **Por quê.** Há assert do cabeçalho e do vínculo com `MOTIVO_RH`. O teste da listagem verifica a presença do rótulo de cadastro, sem exigir igualdade da célula inteira. Se a composição for aplicada ao valor do **drawer**, o selo de literal de mapa fica vermelho. Se a janela passar a mudar o texto de **Por quê** na linha comparada pelo teste de período, o assert que preserva todas as colunas salvo Dias fica vermelho. `app/folha/tests/test_retrato_folha_tela2.py:253` · `app/folha/tests/test_retrato_folha_contador.py:190` · `app/folha/tests/test_retrato_folha_drawer.py:181` · `app/folha/tests/test_retrato_folha_drawer.py:213` · `app/folha/tests/test_retrato_folha_periodo.py:371`
+- **Ordem, contagem e botão.** Alterar `DONOS` para obter a ordem do PDF quebra o assert da ordem da barra. Mudar a ordem compartilhada de forma que a tela deixe de seguir as faixas quebra as expectativas de ordenação e período. Escrever um botão PDF fora do partial quebra L9. Os REDs abaixo são previsões por leitura. Execução da suíte `[nao verificado]`. `app/folha/tests/test_retrato_folha_dono_sao_tres.py:47` · `app/folha/tests/test_retrato_folha_dono_sao_tres.py:105` · `app/folha/tests/test_retrato_folha_quadros.py:569` · `app/folha/tests/test_retrato_folha_periodo.py:354` · `app/core/tests/test_contract_btn_pdf.py:87`
+
+### I. Matriz de REDs descritos
+
+| Item | Entrada de teste | Saída esperada | [nao verificado]
+|---|---|---|
+| **1. Download** | Admin com empresa, competência e pílula ativos. Clicar no PDF após atualizar o filtro. | Mesmo `href` do recorte vigente, PDF válido, `attachment` com o nome canônico, mesma URL da tela e mesma quant
+
+[truncado em 20000 de 24044 caracteres]
 
 ## 28/11 00:31 · sessao 48b9f6bb0a8f · FERIADO-BOTAO-CORTADO · verificador · origem=Code
 
@@ -774,163 +859,4 @@ O diff realiza parte do aval. O passivo ficou sem reparo e reversão, há corrid
 
 **Classes de reprovação.** O diff reutiliza o calendário do motor, o juiz de escala certa, a fonte de previsto e a constante de ciclo registrada. As adições têm zero novo escritor persistente, zero leitura nova de relógio e zero `except` novo. A derivação paralela relevante já existia na atribuição do dia pela regra das seis horas. A exceção nova dá consequência financeira a essa diferença e deixa o mesmo par com uma data para bloqueio e outra para pagamento. Os blobs dos dois arquivos conferem com o anexo nos dois sentidos, revertendo o diff em memória. O pai `1d2eb496c`, a ancestralidade de `05ec19a6f` e a ordem efetiva de pouso ficam [nao verificado]. `obra.diff:1–23` · `app/core/juizes.py:318–323` · `app/ponto/motor_calculo_v2.py:1317–1354,1579–1594,2523–2532` · `app/ponto/calculador/regras.py:410–432`
 
-## 27/11 21:43 · sessao 4b6e1be2ce2a · DESLIGADO-PORTA-DO-CHAMADO · construtor · origem=Code
-
-- O APPLY agora consulta `recusa_da_reabertura()` sob a trava, depois de reconferir o universo. Só `desligado` recebe o novo `parado` e pula a porta de renascimento. [cluster_espurio.py:276](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/services/cluster_espurio.py:276)
-- A busca do autor ocorre após o renascimento. O APPLY só guarda o autor para reutilização depois que a transação da linha termina com sucesso. [cluster_espurio.py:290](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/services/cluster_espurio.py:290)
-- Em memória, o RED mordeu pela trilha simulada, o controle passou e os seis mutantes foram mordidos. O comando serializou o novo `parado` com `aplicadas=0`. O RED existente ainda exige o texto antigo na linha 175. Suite Django [nao verificado]. [detectar_cluster_espurio.py:55](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/management/commands/detectar_cluster_espurio.py:55) · [test_o169_legado_encerrado_por_idade.py:175](/home/ronald/wt-codex-desligado-porta-do-chamado-170518/app/ponto/tests/test_o169_legado_encerrado_por_idade.py:175) [nao verificado]
-
-```diff
---- a/app/ponto/services/cluster_espurio.py
-+++ b/app/ponto/services/cluster_espurio.py
-@@ -271,8 +271,6 @@
-     for linha in r['linhas']:
-         if linha['acao'] != REABRIR:
-             continue
--        if autor is None:
--            autor = get_user_sistema()
-         cid = ChamadoColaborador.objects.filter(pk=linha['pk']).values_list('colaborador_id', flat=True).get()
-         try:
-             with transaction.atomic():
-@@ -283,21 +281,28 @@
-                 if ch.pk not in contador_cluster_encerrado_sem_lastro(colaborador_id=cid)['pks']:
-                     linha['parado'] = 'saiu do universo antes do apply'
-                     continue
-+                # DESLIGADO-PORTA-DO-CHAMADO c2: o APPLY legado nao escreve trilha de recusa do desligado.
-+                # A trilha cabe as portas criar/abrir, que I5g conta.
-+                if ch.recusa_da_reabertura()[0] == 'desligado':
-+                    linha['parado'] = 'colaborador desligado: a porta recusaria'
-+                    continue
-                 antes = {'status_local': ch.status_local, 'via_encerramento': ch.via_encerramento}
-                 if not ch._renascer_por_premissa_viva():
-                     linha['parado'] = 'a porta de renascimento recusou'
-                     continue
-                 ch.refresh_from_db(fields=['status_local', 'via_encerramento'])
-+                ator = get_user_sistema() if autor is None else autor
-                 if evento(ACAO_LEGADO_REABRIR, 'ChamadoColaborador', ch.pk,
-                           descricao='O169 legado: encerrado por RECONCILIAR com a assinatura viva no dia %s (universo '
-                                     'do contador cluster_encerrado_sem_lastro); reaberto pela porta de renascimento '
-                                     '(aval TRES-ITENS (2) 10/11).' % linha['dia'],
-                           antes=antes, depois={'status_local': ch.status_local, 'via_encerramento': ch.via_encerramento},
--                          ator=autor) is None:
-+                          ator=ator) is None:
-                     raise _SemTrilha
-         except _SemTrilha:
-             linha['parado'] = SEM_TRILHA
-             continue
-+        autor = ator
-         linha['aplicado'] = True [nao verificado]
-         r['aplicadas'] += 1 [nao verificado]
-     return r
-```
-
-<details>
-<summary>Comandos do RED e dos mutantes em memória</summary>
-
-```bash
-prova() {
-  PYTHONDONTWRITEBYTECODE=1 python3 - "$1" <<'PY'
-import sys
-from contextlib import nullcontext
-from pathlib import Path
-from types import SimpleNamespace as NS
-from unittest.mock import Mock, patch
-
-mode = sys.argv[1]
-path = Path('ponto/services/cluster_espurio.py')
-source = path.read_text()
-guard = "ch.recusa_da_reabertura()[0] == 'desligado'"
-lookup = 'ator = get_user_sistema() if autor is None else autor'
-mutants = {
-    'sem-guarda': (guard, 'False'),
-    'recusa-antiga': (guard, "linha['recusa'] == 'desligado'"),
-    'toda-recusa': (guard, 'ch.recusa_da_reabertura()[0] is not None'),
-    'autor-cedo': ('        cid = ChamadoColaborador',
-                   '        if autor is None:\n            autor = get_user_sistema()\n        cid = ChamadoColaborador'),
-    'sem-memo': (lookup, 'ator = get_user_sistema()'),
-    'memo-rollback': (lookup, 'autor = ' + lookup),
-}
-mutation = mutants.get('sem-guarda' if mode == 'red' else mode)
-if mutation:
-    old, new = mutation
-    assert source.count(old) == 1, 'alvo de mutacao'
-    source = source.replace(old, new, 1)
-scope = {}
-exec(compile(source, str(path), 'exec'), scope)
-
-def apply(reasons, event_results=()):
-    trace, audit = [], []
-    pks = list(range(1, len(reasons) + 1))
-
-    def ticket(pk, reason):
-        def renascer():
-            trace.append('porta')
-            if reason == 'desligado':
-                audit.append('reabertura_recusada')
-            return reason is None
-        return Mock(pk=pk, colaborador=NS(situacao='ativo'), status_local='fechado',
-                    via_encerramento='sistema', _dia_em_competencia_trancada=Mock(return_value=False),
-                    recusa_da_reabertura=Mock(return_value=(reason, None)),
-                    _renascer_por_premissa_viva=renascer)
-
-    query = Mock()
-    query.filter.return_value = query.values_list.return_value = query.select_related.return_value = query
-    query.order_by.return_value = [ticket(pk, None) for pk in pks]
-    current = {pk: ticket(pk, reason) for pk, reason in zip(pks, reasons)}
-    query.get.side_effect = lambda **kw: current[kw['pk']] if kw else 7
-    results = iter(event_results)
-    modules = {
-        'django.db': NS(transaction=NS(atomic=nullcontext)),
-        'chamados.juizes': NS(dia_do_fato=Mock()),
-        'chamados.models': NS(ChamadoColaborador=NS(objects=query), PerguntaDisputa=NS(trava_na_ordem=Mock())),
-        'core.utils': NS(get_user_sistema=lambda: trace.append('autor') or object()),
-        'core.observ': NS(evento=lambda *a, **kw: trace.append('evento') or next(results, True)),
-    }
-    scope['contador_cluster_encerrado_sem_lastro'] = lambda **kw: {'pks': pks}
-    with patch.dict(sys.modules, modules):
-        report = scope['tratar_legado_encerrado_sem_lastro'](aplicar=True, esperados=pks)
-    return report, trace, audit
-
-def check():
-    report, trace, audit = apply(['desligado'])
-    assert not audit, 'APPLY gravou reabertura_recusada'
-    assert not trace, 'APPLY buscou autor sem reabrir'
-    assert report['linhas'][0]['parado'] == 'colaborador desligado: a porta recusaria'
-    assert report['aplicadas'] == 0 [nao verificado]
-    for reason in ('veto_do_dia', 'admin_sem_fato_novo'):
-        report, trace, _ = apply([reason])
-        assert trace == ['porta'], 'outra recusa deixou de passar pela porta'
-        assert report['linhas'][0]['parado'] == 'a porta de renascimento recusou'
-    report, trace, _ = apply([None, None])
-    assert trace == ['porta', 'autor', 'evento', 'porta', 'evento'], 'ordem ou memoizacao do autor'
-    assert report['aplicadas'] == 2 [nao verificado]
-    report, trace, _ = apply([None, None], (None, True))
-    assert trace == ['porta', 'autor', 'evento', 'porta', 'autor', 'evento'], 'autor reutilizado apos rollback'
-    assert report['aplicadas'] == 1 and not report['linhas'][0]['aplicado'] [nao verificado]
-
-if mode in mutants:
-    try:
-        check()
-    except AssertionError as err:
-        print(f'{mode}: mordido ({err})')
-    else:
-        raise AssertionError(f'mutante sobreviveu: {mode}')
-else:
-    check()
-    print(f'{mode}: passou') [nao verificado]
-PY
-}
-
-prova red             # rc 1 esperado
-prova controle
-prova sem-guarda
-prova recusa-antiga
-prova toda-recusa
-prova autor-cedo
-prova sem-memo
-prova memo-rollback
-```
-
-</details>
-
-_8818 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8819 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
