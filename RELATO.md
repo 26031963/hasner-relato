@@ -10997,6 +10997,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 00:31:09 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:cf27eed4d5 (344 car., na trilha privada)
+
 **28/11 00:25:25 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:cb882f0f91 (366 car., na trilha privada)
 
 **28/11 00:23:31 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:effadf5181 (603 car., na trilha privada)
@@ -14814,3 +14816,5 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 00:25 colhido CODEX-CONSTROI-MOTOR pouso/deploy2.rc (00:24 rc 0): ver linha do POUSO acima
 - 00:25 superado FERIADO-UM-JUIZ c14/int/g.rc (00:23 rc 71): cancelada por mim (ssh pista cancela 1128000816) -- cairia nos 15 do CRON-15 vencido; relanca depois do pouso do CRON-15, sobre o main novo
 - 00:26 FERIADO-BOTAO-CORTADO ver4: Codex verificador da c12 fbce3e494 (cura do BLOQ 1 da ver3) -> logs/FERIADO-BOTAO-CORTADO/ver4/r.rc; inteira da c12 (int2) ja deu so os 15 do CRON-15, relanca sobre o main novo depois do pouso do CRON-15
+- 00:30 aval CRON-15-SOMBRA-CABE-VEZ recebido: obra ganha vez logo apos os pousos de BOTAO e FUJ (antes de obra nova); 1o passo medida por etapa do sombra.sh no RELATO; BACKLOG e PROMPTS atualizados
+- 00:31 colhido FERIADO-BOTAO-CORTADO ver4/r.rc (00:31 rc 0): APROVADO c12 fbce3e494 no recorte base.html 1366 pagina+drawer, 0 bloqueante; amostra conferida _drawer_generico.html:4 (cabecalho sticky z-index:1); lacunas a lista do pouso: percurso integrado pelo Retrato com rolagem e clique no x, Tab, POST com motivo pelo Chromium, paginacao real, snapshot antigo; proximo: inteira sobre o main novo depois do pouso do CRON-15, depois opus final
