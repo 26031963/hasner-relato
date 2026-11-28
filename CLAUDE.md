@@ -395,7 +395,7 @@ CODEX (PISTA, 31/10; funde GPT6-CODEX-SO-LEITURA, CODE-CHAMA-CODEX, CODEX-PADRAO
      `CODEX_RESULTADO rc=<rc> motivo=<MOTIVO>`; com outra vaga viva so entra quem passa o PORTAO lido na abertura (load5 < nproc-2, fora de 06:00-07:30, media do
      dia do ldavg-5 <= 7, /health/ do saas_core 200 em 5 s); UMA chamada por wt (o titular segura tambem flock no diretorio da wt; presa = 2 MESMA_WT); arquivo em comum entre wts diferentes e conduta do Code (RAIAS item 1) e o merge acusa no pouso (L-107); trilha
      `logs/codex/vagas.log`, leitor `bin/codex_vagas_estado.py`, selo `bin/tests/test_codex_n_vagas.sh`; o opus
-     final (PROPORCIONAL, PRINCIPIO) e o teto MODO-PADRAO-POS-RESET sao CONDUTA: o wrapper nao os guarda. Teto: 1 opus construtor;
+     final (PROPORCIONAL, PRINCIPIO) e o teto MODO-PADRAO-POS-RESET sao CONDUTA: o wrapper nao os guarda. Teto: 2 opus construtores, um por RAIA sem arquivo em comum (corte ORDEM-VIVA-2811-1355, supera o teto 1);
      verificador sem teto (opus final/verificador abre em paralelo, sem esperar vaga -- aval OPUS-VERIFICA-EM-PARALELO-2711-1223).
   2. DESPACHO. Todo aval, laudo ou BO e DECOMPOSTO antes de qualquer trabalho, 1 linha no RELATO:
      `DESPACHO <id>: a,b -> Codex | c -> sonnet | d -> opus`. CODEX (primeiro, sempre) = leitura de codigo, rastrear classe,
