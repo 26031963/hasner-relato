@@ -10995,6 +10995,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 23:31:21 disjuntor (NEGOU MODELO)** -- agente principal -- Agent general-purpose -- alvo sha1:eac4185676 (46 car., na trilha privada)
+
 **27/11 23:05:17 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:34a2e807d6 (426 car., na trilha privada)
 
 **27/11 22:51:02 disjuntor (NEGOU B1)** -- agente aeb16e27637b0e741 -- Bash -- alvo sha1:28b9901223 (444 car., na trilha privada)
@@ -14770,3 +14772,7 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 23:28 CODEX-4-VAGAS recebido -> BACKLOG (travada por: pouso da CCM; PUXA CODEX-4-VAGAS -> test_codex_n_vagas: o veredito da base c2/nvagas/base.rc decide se a cura do selo e desta obra)
 - 23:29 colhido FERIADO-L097-MOTOR c2/mut_ii.rc (23:29 rc 1): 2o mutante do agente opus, morto pelo RED; agente segue
 - 23:29 colhido FERIADO-L097-MOTOR agente opus c2 (ad1ecc2292ec3a4f1, entregue): commit dc876f5d1 na wt-feriado-l097-211734 -- guarda pergunta MotorBase._dia_do_turno_do_par(entrada)[0]==dia (mesma funcao do particionar_ft), so motor :1593-1600 (1 hunk) + test_feriado_um_juiz_porta.py; red 05ec19a6f rc 1 (3 FAIL), green2 rc 0 (133 OK, 4 xfail), mut_i rc 1 (9 FAIL), mut_ii rc 1 (2 FAIL); except +0. D+1 herdado = PAREI ! no topo. Falta: medida da comp 10 exportada, verificador, inteira, opus final; pouso depois da FERIADO-UM-JUIZ com apply L-092 e reversao. Vaga opus LIVRE -> FERIADO-UM-JUIZ c13 REDs (ordem VM)
+- 23:31 DESPACHO FERIADO-UM-JUIZ c13: REDs -> Codex construtor (o hook recusou opus para so teste: DISJUNTOR MODELO) na wt-codex-feriado-um-juiz-152427 -> logs/FERIADO-UM-JUIZ/c13/r_reds.rc; depois RED na VM, depois cura -> Codex | L097 c2 verificador -> Codex logs/FERIADO-L097-MOTOR/ver2/r.rc (1a tentativa abortada por mim: anexo de 324 KB > 300 KB; refeita so com o delta 1d2eb496c..dc876f5d1, 18 KB)
+- 23:34 colhido CODEX-CONSTROI-MOTOR verif14/r.rc (23:33 rc 0): REPROVADO -- bloq = inteira da c2 (em curso c2/g); altos (comentario de p_teste afirma 'o runner descobre'; core/runner_quarentena.py fora de p_teste) e medios conferidos arquivo:linha -> triagem logs/CODEX-CONSTROI-MOTOR/verif14/triagem.md, anexa ao opus final depois de g.rc 0 (volta 14 > 3: CODEX 5(d))
+- 23:34 colhido CODEX-CONSTROI-MOTOR c2/nvagas/wt.rc (23:34 rc 0): test_codex_n_vagas SEM teto na c2 = OK (55 casos + 84 mutantes) -- o rc 124 das 22:50 era o timeout do lote, nao vermelho; nao vai a SELOS-VERMELHOS-DA-BASE; base (base.log) segue so como medida de custo; PUXA CODEX-4-VAGAS -> n_vagas: pre-requisito 'verde no cenario de N vagas' a reconferir com N=4 na obra dela
+- 23:36 colhido FERIADO-UM-JUIZ c13/r_reds.rc (23:36 rc 0): Codex construtor entregou REDs R-a (reescrito :460), R-a2 ValueError generico, R-b propaga, R-c BUG-144 nao propaga, R6 invertido (oraculo tambem propaga); diff 1 arquivo +43/-20, except 0, relogio 0; mutante ValueError morde R-a2 (sem banco); pendente p/ cura: REDS_C10 em feriado_um_juiz_mutantes.py:106 com nome velho do R6 -> RED na pista logs/FERIADO-UM-JUIZ/c13/red/red.rc
