@@ -11012,6 +11012,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 11:57:31 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:e73ad0acd5 (285 car., na trilha privada)
+
 **28/11 11:46:39 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:58ee70a294 (347 car., na trilha privada)
 
 **28/11 11:46:03 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:77387ae047 (267 car., na trilha privada)
@@ -15233,6 +15235,10 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 11:41 colhido E4C-F5-INSTANTE canario/a3/r.rc (11:32 rc 0): 21 blocos (item 1 selo core.observ, item 2 ligacoes str, item 3 censo com tabela de ligacoes, item 4 dois saves); aceite RED-CERTO em montagem no molde aceiteA2
 - 11:46 superado FERIADO-UM-JUIZ d3/diff/diff.rc (11:44 rc 9): lado antes sem ponto de montagem /app/staticfiles na copia b82a5ef08; mkdir e relancado lanca2.sh (rc anterior guardado em diff.rc.lanca2a)
 - 11:50 colhido E4D-MATRIZ canario/v4/r.rc (11:46 rc 0): B = contexto HTMX sem folha_julga_pontualidade (views.py:404-405, cura de 1 bloco); C11 propoe campo DecisaoPergunta.pedido_id + migracao 0057 + registrar(acordar=); C44 propoe modo --aplicar-respostas-da-projecao no backfill. SCHEMA = mao unica, construtor opus; entra na vaga opus depois da FUJ-FECHA e do CUSTO F1v2 (CUSTO-SOBE-2811-1022). Aceite RED-CERTO v4 a montar sobre o apv3.py
+- 11:59 colhido FERIADO-UM-JUIZ d3/diff/diff.rc (11:50 rc 0): d3 == d2 em FOLHA/TOTAL (diff 0 linhas); DIFF de impacto publicado ANTES do apply (secao 11:53).
+- 11:59 colhido FERIADO-UM-JUIZ apply11/apply11.rc (11:55 rc 0): 4/4 empresas rc 0, hash exportadas IGUAL; prova de frota na secao 11:59.
+- 11:59 NOTA ORDEM-VIVA-2811-1200 (C): vaga.1/2/3.json de pid morto (1022287, 151668, 3228814; rc 0 fechados) arquivados em logs/vagas/historico/ e removidos; leases vaga.1..4 e meta.lock intactos.
+- 11:59 NOTA ROTA VM E4C-F5-INSTANTE aceite a3 (container compassionate_wu, cpuset 4-7): aceite RED-CERTO com mutantes roda copia NAO publicada; pista3 so roda sha publicado (refs/pista) -- ROTA VM: aceite de canario sobre wt local.
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
@@ -15250,7 +15256,16 @@ LEI-AKITA: origem=ponto/feriado (FUJ 349adabd3 no ar), testemunha=FechamentoMens
 - emp2 (475 gravado x 474 recalc): he100_feriado 917,95 -> 1293,49 (+375,54 h, efeito todo FUJ); trabalhadas 57819,83 -> 57458,28 (-361,55; FUJ -375,55, deriva +14,00); he100_noturna +6,99; noturnas +1,91 (deriva); falta +22,00 h (DERIVA gravado->antes); sai_antecipada -4,67; banco +58,66; turnos_abertos +1.
 - emp3 (117 x 114): he100_feriado 98,91 -> 166,01 (+67,10, FUJ); trabalhadas -74,20 (FUJ); o resto 0 em horas; abonados +13439 min (deriva).
 - emp4 (23 x 22): FUJ efeito 0 em toda rubrica; DERIVA: trabalhadas -32,45, falta +18,00, sai_antecipada -7,11, banco +169,95, turnos_abertos -3.
-- TXT 11 emp2: 358 -> 362 linhas (1 sai, 5 entram, todas rubrica 0110 do dia 02/11); emp3 62 = 62, emp4 16 = 16, sem linha mudada.
-- universo: os colabs fora do recalc (emp2 col929/939/951/997; emp3 col746/946/963; emp4 col510) saem do FM por nao estarem mais no universo de apuracao -- mesma regra da GUARDA-10-B.
+- TXT 11 emp2: 358 -> 362 linhas (1 sai, 5 entram); emp3 62 = 62, emp4 16 = 16, sem linha mudada.
+- universo: os colabs fora do recalc (emp2 col929/939/951/997; emp3 col746/946/963; emp4 col510) NAO sao apagados pelo apply: ficam no FM com o gravado (corrigido 12:0x pela prova de frota; o d3 os contava como saida).
 - comp 12 so medida (corrente, nao entra no apply deste aval).
 - apply: logs/FERIADO-UM-JUIZ/apply11/apply11.sh (recalcular_fechamento --apply, emp 1-4, mes 11); reversao snap 09:08 + reversao_antes_deploy_1135.out; hash das exportadas (FM 06-10 + ExportacaoDominio) antes/depois no mesmo script. TXT 11 NAO gerado entre deploy e apply.
+
+## 11:59 FUJ-FECHA (1)(2) -- APPLY DA 11 EM PROD + PROVA DE FROTA + PACOTE DO [nome]
+LEI-AKITA: origem=recalcular_fechamento (porta unica do FM), testemunha=FechamentoMensal 11 (carimbo_gravado.foto), RED=n/a (medida), quem-mais-le=espelho/previa/TXT 11, juizes novos=0, padrao=n/a (medida)
+- ato: logs/FERIADO-UM-JUIZ/apply11/apply11.sh, 11:51:35-11:55:33, recalcular_fechamento --apply mes 11 emp 1-4 -> **4/4 rc 0**.
+- (a) reversao ANTES: logs/FERIADO-UM-JUIZ/pouso/rev/reversao_antes_deploy_1135.out (foto FM 11/12 emp 2-4 por colab x campo, 11:35) + snap 09:08.
+- (b) exportadas INTACTAS: hash.PRE x hash.POS = **IGUAL** (FM 06-10 das emp 1-4; 26 ExportacaoDominio, sha 6f1c0b90deed; FM 09 emp2 05769b32ff31). Comp 11 sem ExportacaoDominio (0); o TXT 11 NAO foi gerado.
+- (c) PROVA DE FROTA (frota inteira, logs/FERIADO-UM-JUIZ/apply11/prova_frota11.out): emp2 he100_feriado +375,54 (30 colabs), trabalhadas -361,55, he100_noturna +6,99, falta +22,00, banco +58,66 = delta_apply do d3; emp3 +67,10 / -74,20 (5 colabs) = d3; emp4 falta +18,00 = d3 e he100_feriado 0. FM emp2 475 -> 478 (col1067/1068/1069 NOVOS); os 8 fora do universo FICAM com o gravado (o d3 os dava como saida: corrigido acima). Comp 12 moveu 7+1 colabs entre 11:35 e 11:55 sem estar no apply (competencia corrente; causa [nao verificado]).
+- (2) PACOTE logs/FERIADO-UM-JUIZ/aviso_fernando.md: os 10 colabs 6x1 dos 13 dias **NAO mudaram** (antes = depois em he100_feriado/trabalhadas/noturnas): a cura deles e a FERIADO-L097-MOTOR c1 05ec19a6f, FORA do HEAD (git merge-base), e vai na c2 (vaga opus, 3a). O pacote leva tambem os 35 que a FUJ moveu e o roteiro do smoke (espelho 02/11 e 20/11, previa do TXT emp2 362 linhas). Envio e do Ronald.
+- **aplicado, revise** (DINHEIRO, L-113): reversao = restaurar os campos da foto 11:35 pela porta, so com aval; ou `git revert a497c0cce` + `bin/deploy.sh` + recalcular_fechamento --mes 11. Aviso ao DP com os dois numeros = o pacote acima.
