@@ -11003,6 +11003,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 02:12:10 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:a8b4e95e66 (242 car., na trilha privada)
+
 **28/11 01:52:17 disjuntor (NEGOU CHAVE)** -- agente acd12f2e6b1212ae1 -- Bash -- alvo sha1:1c23d9cc7f (18486 car., na trilha privada)
 
 **28/11 01:16:40 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:235c153533 (149 car., na trilha privada)
@@ -14898,5 +14900,7 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 01:51 colhido CODIGO-DOMINIO-VALIDO c1/green/g.rc (01:50 rc 0): GREEN pista job 1128013939_f0d213df sha f0d213df9 -- OK (skipped=7, expected failures=24), Ran 7853. -> verificador Codex ver1 (5a) lancado, logs/CODIGO-DOMINIO-VALIDO/c1/ver1/r.rc; depois inteira e opus final (mao unica).
 - 01:55 colhido FERIADO-UM-JUIZ d1/diff/diff.rc (01:53 rc 0): DIFF de impacto na sombra, comps 11 e 12, emps 2/3/4, frota. Efeito (depois-antes): 11 emp2 trabalhadas -361.55 -> extras_100_feriado +361.54 (extras e extras_100 idem), noturna +5.32, saida_antecipada -1.05, turnos_abertos +1, inconsistencias +4; 11 emp3 trabalhadas -74.20 -> extras_100_feriado +67.10, inconsistencias +2; emp4 zero; comp 12 so inconsistencias emp2 -1. TXT 11: 0 ENTROU e 0 SAIU (emp2 220/254, emp3 57/57, emp4 16/6 entra/fora), 0 linha ITEM_8. DERIVA gravado->antes, de fora da obra (nenhum cron recalcula, crons.py:1155) e movida pelo apply: 11 emp2 falta +22.00, previstos -49300 min, abonados +7537, dias_previstos -92, saldo_bh +58.66; o universo emp2 tem 475 gravados x 474 lidos, e o DIFF publicado tem de dizer isso. Proximo: reversao + hashes 06-09 + DIFF publicado antes do apply da 11.
 - 01:56 colhido CODIGO-DOMINIO-VALIDO c1/ver1/r.rc (01:56 rc 0): ver1 Codex, triagem em logs/CODIGO-DOMINIO-VALIDO/c1/ver1/triagem.md: 2 procedentes (P1 Quem Cobrar e P2 Raio-X sem mordida: so teste, volta 2 pelo opus quando a vaga de construtor liberar), 4 descartados p/ fila (previa projeta cadastro, EM_PORTUGUES da mensageria, save integral, travam_a_folha), 2 nao procedem. Inteira 1128015101 segue.
+- 02:07 colhido CUSTO-DE-COORDENACAO f1v2/disjuntor_item1.rc (02:07 rc 0): passo intermediario do opus construtor acd12f2e (test_disjuntor.sh do item 1 verde); entrega dele ainda por vir.
+- 02:11 colhido CUSTO-DE-COORDENACAO f1v2/mao_unica.rc (02:11 rc 2): passo intermediario do opus construtor acd12f2e (RED do item mao unica); entrega dele ainda por vir.
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
