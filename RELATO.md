@@ -1,7 +1,7 @@
-PAREI: censo-FERIADO-L097-MOTOR | espera Codex
 
 AVISO: CLEAR devido desde 17:57
 - RESPONDIDA por brief_reds1 (CENSO fechado 17:0x): PAREI: censo-DESLIGADO-PORTA-DO-CHAMADO | espera Codex
+- RESPONDIDA por brief_c2 (CENSO fechado 22:1x, bin/disjuntor.py::censo_do_brief = "" reconferido 22:5x; aval FERIADO-L097-CENSO-SEM-CHAMADA): PAREI: censo-FERIADO-L097-MOTOR | espera Codex -- censo nao e mais devido: a negativa do construtor foi fechada pelo ## CENSO de logs/FERIADO-L097-MOTOR/brief_c2.md, sem chamada Codex; a c2 espera so a vaga opus (CCM c2 em voo)
 
 RESPONDIDA por LEIS-2711-1920 (19:19) -- lei: REGISTRA-ACHADOS-2711-1720 achado (5) -- resposta do colab que COINCIDE com batida valida ja gravada (caso col824, disputa 5271) segue pedindo veredito humano; a coincidencia basta para fechar a pergunta sem veredito? (registro, nao construir; espera Ronald, a fila segue)
 RESPONDIDA por LEIS-2711-1920 (19:19) -- lei: DESLIGADO-PORTA-DO-CHAMADO dossie (17:0x, logs/DESLIGADO-PORTA-DO-CHAMADO/dossie/r.md sec.10; medido 27/11: 437 abertos de 259 desligados, 301 pos-demissao) -- (1) DECIDIDO PELA LEI LEI-AKITA 7 (excecao = PORTA separada com trilha): o contador 'esperado 0' conta chamado vivo de desligado aberto/reaberto por sistema; reabertura humana com motivo sai contada a parte, nominal | contestavel; (2) DECIDIDO PELA LEI LEI-AKITA 7 (acao critica grava usuario e motivo do PROPRIO ato): motivo tem de ser do proprio chamado (o lote da competencia nao vale por chamado) e nao vence as outras recusas (premissa regularizada, fechamento adm sem fato novo) | contestavel; (3) DECIDIDO PELA LEI LEI-AKITA 9 (escopo literal): readmitido nao e desligado, a guarda nao o alcanca; veto VIA_CASCADE fica no item de BACKLOG dele | contestavel; (4) ABERTA, so trava o APPLY do passivo, nao a construcao: pergunta viva de disputa ja FECHADA que impede fechar chamado-alvo -- a via de desligamento encerra tambem essa pergunta? A sonda do passivo mede o tamanho antes.
@@ -10993,6 +10993,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**27/11 22:51:02 disjuntor (NEGOU B1)** -- agente aeb16e27637b0e741 -- Bash -- alvo sha1:28b9901223 (444 car., na trilha privada)
+
+**27/11 22:50:56 disjuntor (NEGOU B1)** -- agente aeb16e27637b0e741 -- Bash -- alvo sha1:5c61654db8 (608 car., na trilha privada)
+
 **27/11 22:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 00:00.
 
 **27/11 22:14:50 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:f3d921f246 (45 car., na trilha privada)
@@ -14730,3 +14734,10 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 22:40 lancado logs/FERIADO-UM-JUIZ/c12/g/lanca.sh: recorte DESLIGADO c2/rec2 e depois inteira FERIADO-UM-JUIZ c12/g (VM, pista fora)
 - 22:41 colhido DESLIGADO-PORTA-DO-CHAMADO c2/rec2/rec.rc (22:41 rc 0): recorte OK Ran 70 contra 71616345a; proximo: Codex verificador
 - 22:42 DESPACHO DESLIGADO-PORTA-DO-CHAMADO ver1: verificador -> Codex (diff inteiro 59600163c..71616345a, 111 KB, leis+JUIZES anexos) -> logs/DESLIGADO-PORTA-DO-CHAMADO/ver1/r.rc
+- 22:50 colhido CODEX-CONSTROI-MOTOR c2/codex_n_vagas.rc (22:50 rc 124): timeout do selo test_codex_n_vagas na c2 -- construtor ve no lote
+- 22:50 colhido CODEX-CONSTROI-MOTOR c2/lei_akita.rc (22:50 rc 0): selo LEI-AKITA verde na c2
+- 22:51 aval FERIADO-L097-CENSO-SEM-CHAMADA: linha PAREI censo-FERIADO-L097-MOTOR desceu como RESPONDIDA (censo fechado pelo brief_c2, juiz censo_do_brief = ''); L097 c2 travada por: vaga opus
+- 22:53 colhido DESLIGADO-PORTA-DO-CHAMADO ver1/r.rc (22:51 rc 0): verificador Codex REPROVA 7 itens (passivo sem porta, decisao antes da trava, chamadores de criar()=None, reabertura divergente, materializada_em 2 sentidos, date.today() 2x, selo C12 vermelho); triagem logs/DESLIGADO-PORTA-DO-CHAMADO/triagem1/triagem.md (amostra conferida 3/7, 0 descartados)
+- 22:53 DESPACHO DESLIGADO-PORTA-DO-CHAMADO c3: censo -> Codex (logs/DESLIGADO-PORTA-DO-CHAMADO/censo3/r.rc) | REDs -> opus (travada por: vaga opus, L097 c2) | codigo -> Codex construtor depois dos REDs
+- 22:53 CODEX-CONSTROI-MOTOR c2 commitado na copia 73464f2fd (agente cortado pelo B1 antes do commit; diff 10 paths conferido, except novo 0); medida test_codex_n_vagas sem teto wt x base 59600163c -> logs/CODEX-CONSTROI-MOTOR/c2/nvagas/{wt,base}.rc
+- 22:53 PUXADA FERIADO-L097-MOTOR c2 -> vaga opus (construtor, wt-feriado-l097-211734, logs/FERIADO-L097-MOTOR/c2/)
