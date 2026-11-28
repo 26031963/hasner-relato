@@ -1,3 +1,4 @@
+
 ERRO-BOBO O30-F3-CONSTRUIR: aval Ronald RESPOSTAS-2811-1335 item (5) (13:35, liberacao explicita dele, transcrita; logs/AVAIS-1515/respostas_2811_1335.txt) -- achado D e mao dupla (anexo, dinheiro 0); pousa com o C curado e o D vira linha de fila; sem varredor novo agora (CONTRATO-DE-INSTRUMENTO).
 
 
@@ -11017,6 +11018,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 14:48:22 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:03cb5e7e4a (45 car., na trilha privada)
+
 **28/11 13:14:25 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:30362ca5d5 (209 car., na trilha privada)
 
 **28/11 12:55:58 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:9e2944f799 (102 car., na trilha privada)
@@ -15345,6 +15348,16 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 14:45 NOTA FERIADO-L097-MOTOR opus final c3 APROVADO o codigo (fe8f70a42), NAO o apply; pouso SEGURA ate a sonda na sombra sobre fe8f70a42: comp 10 e 11 por rubrica/empresa + linhas proprias do 6x1 trabalha_em_feriado (rubrica de folga) e dos dias com recusa nao registrada (LEI-AKITA 3: risco visto se mede antes)
 - 14:45 NOTA LAUDO-[nome]-RETRATO-2811-1445 registrado: 01/11 -> E4C-F5-INSTANTE e 31/10 -> RAIZ-DA-DISPUTA-17 como caso literal homologado; condicoes (a)(b) na linha FIM-DE-SEMANA-JA do BACKLOG
 - 14:45 NOTA O30-F3-CONSTRUIR opus final REPROVADO (G1: divergencia 126/9/6 x 119/7/4 sem dono); laudo logs/O30-F3-CONSTRUIR/opus/laudo_final_2811.md; proximo sonda de atribuicao na sombra
+- 14:50 colhido FERIADO-SEM-LIMITE-DO-SUPRIMIDO c6/porta.rc (14:45 rc 0): rodada de diagnostico com o oraculo fixado no teste -- SUPERADA (edicao revertida: fixar 26/10 no oraculo contraria a regra); RED c6 10d52d7ab na raia
+- 14:50 DECIDIDO PELA LEI L-110 (propriedade fixa: todo leitor le o mesmo numero) + corte FERIADO-C1-LEIS-2511: o oraculo intocado e ponto/calculador/regras.py; a projecao alimentacao.py::_rubricas_da_particao_ft pergunta a dobra_da_folga_feriado (porta da promocao) | contestavel; reversao = git revert da c6
+- 14:50 colhido FERIADO-SEM-LIMITE-DO-SUPRIMIDO c6/r.rc (14:49 rc 0): Codex construtor, 1 arquivo (alimentacao.py:353), 0 except; aplicada na raia, modulos feriado em c6/mods.rc; alerta: test_RED_par_26h_split_nao_supera_he100 pode passar 26 -> 25
+- 14:50 PUXADA FERIADO-BOTAO-FAIXA -> vaga 3 (Codex construtor c1, brief logs/FERIADO-BOTAO-FAIXA/brief_c1.md com CENSO; 1a abertura recusou rc 2 sem CENSO, PAREI censo do topo retirado)
+- 14:50 NOTA E4C-F5-INSTANTE a4 commitada 5d183096b na wt-e4c-a4; inteira pista3 job 1128144954_5d183096 (logs/E4C-F5-INSTANTE/canario/a4/inteira)
+- 14:50 NOTA ORDEM-VIVA-2811-1450 conferencia de vagas: FERIADO-SEM-LIMITE travada por: nada (c6 modulos rodando) | L097 c3 travada por: sonda de impacto (Codex leitura impacto_c3/r.rc) | RAMO2-B c2t + RAMO2-HERANCA-VAO travada por: pre-requisito (motor em comum com FERIADO e L097, em serie) -- raia opus 2 reservada | C7 c2 travada por: nada (opus construtor em voo) | DESLIGADO c4/c5 travada por: vaga opus da raia (atras da C7) | E4D schema travada por: fila da raia | FERIADO-BOTAO-FAIXA travada por: nada (vaga 3) | E4C a4 travada por: nada (inteira pista3) | O30-F3 travada por: B3 + sonda de atribuicao | CUSTO F1 v8 travada por: verificador
+- 14:51 NOTA CUSTO-DE-COORDENACAO F1 v8: opus construtor encerrou com entrega.md (veredito da pasta a preencher); pasta2 base x copia segue (roda.sh); rodada pasta_copia duplicada encerrada (lancada pelo mesmo agente, superada pela pasta2). Proximo: veredito da pasta2 -> verificador final
+- 14:52 colhido C7-TELA-ADMIN-ENCERRA c2/red.rc (14:52 rc 1): RED do opus construtor (vermelho esperado antes da cura); construtor segue em voo
+- 14:53 colhido FERIADO-BOTAO-FAIXA c1/r.rc (14:52 rc 0): Codex construtor, 1 template (_calendario_grade.html: faixa do feriado acima da regiao rolavel no layout mes, com e sem acao; le dia.badges.0 = badge Feriado, mesma condicao de dia.feriado em calendario.py:713/785, conferido); raia wt-feriado-botao-faixa (logs/FERIADO-BOTAO-FAIXA/raia.txt), aceite dos testes de tela em logs/FERIADO-BOTAO-FAIXA/aceite/aceite.rc; RED de geometria = opus, travada por: vaga opus (C7 e CUSTO nas 2 raias)
+- 14:54 colhido FERIADO-SEM-LIMITE-DO-SUPRIMIDO c6/mods.rc (14:53 rc 1): 97 testes, 1 FAIL = test_RED_par_26h_split_nao_supera_he100 (26 cravado); pela regra (26 h - 1 h suprimido indenizado = 25 h, o mesmo teste ja crava 1500 min na noturna) a expectativa passa a 25 na raia; reroda c6/mods2.rc; RED-CERTO pai/mutante-bruto em c6/redcerto/redcerto.rc
 - 13:4x NOTA O30-F3-CONSTRUIR: raia wt-o30f3-pouso2-133746 = main 2ec537701 + merge --no-ff ac4ad27ce (fe5335be7, merge limpo; delecao declarada test_anexar_documento.py, c14 L-111); ERRO-BOBO levado as 2 linhas uteis do topo (o B3 so le la); inteira pre-opus lancada (logs/O30-F3-CONSTRUIR/pouso2/suite.rc); depois opus final (mao unica).
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).

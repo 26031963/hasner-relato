@@ -1,7 +1,83 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 14:41** · publicado em **28/11/2026 14:46** (UTC-3)
+> Ultima resposta processada: **28/11/2026 14:52** · publicado em **28/11/2026 14:53** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 14:52 · sessao 2f786fab1487 · FERIADO-BOTAO-FAIXA · construtor · origem=Code
+
+**Resumo**  
+Apliquei o diff em um único template. No layout `mes`, a faixa fica acima da rolagem, com ou sem botão. [_calendario_grade.html:99](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:99)   [nao verificado]
+`git diff --check` passou. Geometria no navegador, suíte e RED [nao verificado].   [nao verificado]
+Próximo passo da obra é o Opus escrever o RED de geometria e o Code rodar a suíte. [Smoke existente:588](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:588) [nao verificado]
+
+### Alcance nas duas cascas
+
+- `calendario_partial.html` inclui a grade com `layout='mes'`. A ficha inteira estende `base.html` e carrega esse calendário por HTMX. A aba **Espelho** do drawer carrega o mesmo calendário em `base.html` e `base_app.html`. [calendario_partial.html:67](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/calendario_partial.html:67) · [detalhe.html:1](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/detalhe.html:1) · [detalhe.html:215](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/detalhe.html:215) · [base.html:399](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/base.html:399) · [base_app.html:154](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/base_app.html:154) · [_drawer_generico.html:134](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/core/_drawer_generico.html:134)
+- Os outros includes diretos usam `layout='fita'` no diagnóstico e o layout padrão na auditoria. Ambos renderizam a lista completa de badges no lugar original. [_drawer_diagnostico.html:35](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_drawer_diagnostico.html:35) · [furos.html:42](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/relatorios/furos.html:42) · [_calendario_grade.html:148](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:148)
+
+Nas duas cascas, a faixa fica logo abaixo do botão quando ele aparece e logo abaixo do cabeçalho do dia nos demais feriados. Batidas, detalhes e outros badges ficam acessíveis pela rolagem da célula. Meses de cinco e seis semanas mantêm sete colunas e células de 132 px em todas as semanas. A seleção usa `dia.feriado` e a posição do primeiro badge, conforme a ordem do serviço. O texto e a cor vêm desse badge. [_calendario_grade.html:65](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:65) · [_calendario_grade.html:96](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:96) · [_calendario_grade.html:136](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:136) · [_calendario_grade.html:148](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:148) · [calendario.py:711](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/colaboradores/services/calendario.py:711)
+
+### RED para o Opus
+
+O smoke `test_clica_no_feriado_na_pagina_e_no_drawer_das_duas_cascas` é o teste de tela afetado. A faixa passa a ocupar espaço acima da região cujo tamanho o smoke exercita ao clicar no botão, abrir o popover e rolar até a última batida. [Smoke:588](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:588) · [Rolagem:469](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:469) [nao verificado]
+
+Reusar o feriado de 20/11/2026 com quatro batidas e acrescentar um segundo badge. Rodar na ficha real e no Espelho das duas cascas, com e sem botão, em meses de cinco e seis semanas. Forçar o transbordamento com conteúdo antes da posição antiga da faixa, por exemplo aumentando o bloco de ícone e detalhes. Localizar a faixa pelo texto na célula e exigir exatamente uma ocorrência, com os quatro lados visíveis em `scrollTop=0` e após rolar até a última batida. Conferir também que o outro badge é alcançável, que o botão abre o popover quando oferecido e que as células continuam com 132 px. [Fixture:26](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:26) · [Sonda de geometria:329](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:329) · [_calendario_grade.html:68](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:68)
+
+**Mutantes propostos**
+
+- Devolver a faixa à posição antiga dentro do conteúdo rolável, mantendo texto e cor. A checagem dos quatro lados deve acusar o recorte. [_calendario_grade.html:105](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:105) · [_calendario_grade.html:148](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:148)
+- Condicionar a rolagem à presença do botão. O feriado sem ação e com conteúdo extra deve perder acesso à última batida ou ao outro badge. [_calendario_grade.html:96](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:96) · [_calendario_grade.html:105](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:105)
+- Manter a faixa acima da rolagem e também renderizar o primeiro badge no laço. A checagem de ocorrência única deve falhar. [_calendario_grade.html:100](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:100) · [_calendario_grade.html:149](/home/ronald/wt-codex-feriado-botao-faixa-144822/app/templates/colaboradores/partials/_calendario_grade.html:149)
+
+## 28/11 14:49 · sessao a40e931c5c8a · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · construtor · origem=Code
+
+**Resumo**  
+Cura aplicada em [alimentacao.py](/home/ronald/wt-codex-feriado-sem-limite-do-suprimido-144715/app/ponto/calculador/alimentacao.py:365). A projeção do `oraculo` usa a mesma porta da promoção.   [nao verificado]
+Veredito estático: sintaxe válida, `git diff --check` limpo e 0 ocorrências de `except` no diff. Único arquivo alterado: `ponto/calculador/alimentacao.py:353`.  
+Próximo: Opus relê a expectativa adicional de 26 h e escreve os RED e mutantes. Certificação pelo Code e pelo Opus [não verificado].
+
+### Leitores e unidades
+
+- A projeção usa `resultado.dia_da_jornada` com `_dia_de`, como o mensal e a lavra `motor`. A porta devolve minutos de dobra e do subconjunto noturno. Os três sítios convertem para horas em `horas_extras_100`, `horas_extras_100_feriado` e `horas_extras_100_noturna`. `horas_noturnas` continua vindo dos minutos noturnos legais. `ponto/calculador/alimentacao.py:360–384`, `ponto/services/dia_pago.py:139–156,261–269`, `ponto/services/fechamento.py:1003–1015`.
+- `rubricas_por_dia` passa as rubricas em horas, pela chave do dia da jornada, a `regras.do_dia`. A regra incorpora os valores e a lavra `oraculo` os grava na linha desse dia. `soma_da_competencia` soma os mesmos campos em horas para a versão solicitada. `ponto/calculador/alimentacao.py:525,578–596`, `ponto/calculador/regras.py:788,818,958`, `ponto/services/fechamento.py:1295–1320`, `ponto/services/dia_pago.py:354–379,585–598`.
+- O vigia usa a mesma conta para o teto em **minutos** e agrupa pela data de `entrada`. A diferença de chave pode aparecer na virada da meia-noite. `folha/porta_export.py:542–576`, `ponto/services/dia_pago.py:126–132,149–155`.
+
+### Outros usos encontrados pelo grep
+
+- `diff_calculador` aplica a projeção diretamente no lado `MOTOR`. O lado calculador também a recebe via `rubricas_por_dia` quando usa os pares da autoridade e a partição classificada. A comparação usa horas por dia. No lado `MOTOR`, a chamada direta também alcança a partição histórica se ela contiver promoção. `ponto/management/commands/diff_calculador.py:70,255–257,406–415,518–546`, `ponto/calculador/regras.py:393–404`.
+- Os usos diretos nos testes estão em `ponto/tests/test_feriado_um_juiz.py:836,854,875,967,1074,1097`. Além dos três casos de porta, `test_RED_par_26h_split_nao_supera_he100` ainda exige **26 h** em `horas_extras_100`. Pela porta comum, a expectativa passa a **25 h**. A asserção de **1.500 min** no período do motor já está escrita. `ponto/tests/test_feriado_um_juiz.py:826–842`, `ponto/services/dia_pago.py:149–156`. Os alvos textuais do catálogo de mutantes continuam presentes. `ponto/tests/feriado_um_juiz_mutantes.py:294,404,408,484`, `ponto/calculador/alimentacao.py:360,378,386`, `ponto/management/commands/diff_calculador.py:255`.
+
+### RED e mutantes para o Opus
+
+- **Três RED existentes.** No 6x1 de 21h a 7h, a lavra deve dar **9 h** de HE100 feriado, **9 h** de HE100 noturna e **10,29 h** de noturno legal. No plantão de 26 h iniciado às 22h, as três rubricas de HE100 devem dar **25 h**. No plantão de 21h a 23h do dia seguinte, as três devem dar **25 h**, com **28,57 h** de noturno legal. `ponto/tests/test_feriado_um_juiz_porta.py:138–148,350–357,611–632`.
+- **RED de agrupamento.** Dois pares promovidos com entradas em datas civis distintas e o mesmo dia no mapa. O primeiro tem 120 min todos noturnos e 60 min suprimidos. O segundo tem 120 min todos diurnos e zero suprimido. Cobrar uma linha no dia do juiz com **3 h** de HE100 total e feriado, das quais **2 h** noturnas. `ponto/services/dia_pago.py:126–132,149–156`, `ponto/motor_calculo_v2.py:753–785`.
+- **Mutantes propostos.** Restaurar o trabalhado bruto nas duas HE100 totais deve cair nos três RED existentes. Restaurar só o split cheio deve cair no plantão iniciado às 22h, com **26 h** de HE100 noturna em vez de **25 h**. Chamar a porta par a par deve cair no RED de agrupamento, com **1 h** noturna em vez de **2 h**. Agrupar por data civil deve cair na chave da linha desse mesmo RED. Execução dos mutantes [não verificado]. `ponto/calculador/alimentacao.py:360–384`, `ponto/services/dia_pago.py:149–156`, `ponto/tests/test_feriado_um_juiz_porta.py:350–357,611–632`.
+
+## 28/11 14:49 · sessao 1b673b01adf2 · - · - · origem=Ronald (tmux)
+
+A partição efetivamente consumida pelo mensal está em `app/ponto/services/fechamento.py:995–1021`. Outubro escolhe o vínculo via `escala_vigente` e novembro usa o contexto do período ou do turno. Para g2, observe a rubrica comum retornada, `eh_feriado=True` e `feriado_vira_folga=False` no vínculo efetivo. A recusa vigente é um marcador adicional para g3, inclusive quando o dia já pertence a g1 ou g2. `app/ponto/calculador/regras.py:371–453`, `app/ponto/models.py:1265–1288`, `app/ponto/motor_calculo_v2.py:1511–1532`.
+
+O gancho `coletar_furos` recebe a apuração já derivada no caminho de leitura. O cálculo diário canônico pode ser reaproveitado em memória interceptando as duas operações finais de persistência de `DiaPago`. Comparar os deltas diários completos permite apontar movimentos adicionais dentro de um dia que também recebeu g1 ou g2. `app/ponto/services/fechamento.py:1152–1173`, `app/ponto/services/fechamento.py:1237–1273`, `app/ponto/services/dia_pago.py:344–373`.
+
+O método-base está em `app/ponto/motor_calculo_v2.py:1536–1602` e o acréscimo vai após a linha 1584. O prefixo do blob local é `891199180`, correspondente ao anexo. O launcher seleciona `juliani` e realiza manutenção de credencial e trilha próprias. A execução e os resultados na sombra estão [nao verificado]. `bin/sonda_leitura.sh:115–143`, `bin/sonda_leitura.sh:235–251`.
+
+## 28/11 14:49 · sessao 06e8e544ee84 · - · - · origem=Ronald (tmux)
+
+Os 24 campos numéricos persistidos estão em `app/ponto/services/fechamento.py:1199–1222`. O retorno de leitura contém os mesmos campos, mais mês e ano, em `app/ponto/services/fechamento.py:1165–1173` e `app/ponto/management/commands/aplicar_09_corte_b.py:67–74`. Cinco campos podem ser nulos por contrato da grade (`app/ponto/services/fechamento.py:1124–1136`).
+
+A execução em lote nativa já visita cada colaborador do universo. Duas passadas independentes por empresa e competência mantêm a seleção real e evitam reutilizar objetos de batida que o motor muta (`app/ponto/services/fechamento.py:490–507,619–622,685–699,865–874`).
+
+O método pré-hunk ocupa `app/ponto/motor_calculo_v2.py:1536–1602`. A inserção em memória após a linha 1584 reproduziu o hash pós-hunk `65f7046b2a1690e6673cc20e611fdaeb24abb00d` do anexo.
+
+O launcher monta `juliani` na sombra, porém mantém arquivos operacionais próprios. A transação e o Python da sonda podem ser estritamente de leitura (`bin/sonda_leitura.sh:93–96,126–135,216–218,235–250`).
+
+## 28/11 14:49 · sessao 62020b2ac988 · - · - · origem=Ronald (tmux)
+
+A batida criada e a retratação chamam `_fechamento_por_evento`, que delega a `recalcular_por_evento`. O ajuste retroativo que materializa saída passa pela mesma porta da batida. A aprovação simples de justificativa invalida o fechamento. `app/ponto/registro_batida.py:170–198,287–302`, `app/ponto/services/justificativa.py:187–216,478–488`.
+
+A edição ou regeneração de célula chama `_o_chao_do_dia_mudou`, que agenda um recálculo por competência afetada. A resposta validada usa `data_evento`, o aceite de folga usa o dia da folga, e `decidir_he` chama a porta pela data da decisão após gravá-la. `app/ponto/portas/celula.py:392,490–503,682`, `app/chamados/services/validacao.py:627–628,787–799`, `app/ponto/portas/he.py:206–230`.
+
+O `on_commit` resolve a competência pela janela da empresa e chama `recalcular_fechamento_mes` com um PK em modo de escrita. Se o fato cai na competência 10, o escritor usa `save` ou `update` conforme o status. A guarda da cópia lista apenas 09/2026. `app/ponto/services/fechamento.py:37–51,510–513,623–630,1174–1227,1634–1644,1847–1864`, `app/ponto/services/dia_pago.py:714–731`. Ocorrências e valores efetivos em produção [nao verificado].
 
 ## 28/11 14:41 · sessao e1f21a73d56d · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · leitura · origem=Code
 
@@ -1231,135 +1307,4 @@ A janela **L-097** ainda pode zerar o par antes da classificação. No apply reg
 
 **AUTO-AVALIAÇÃO** — resolvi. **ONDE TRAVOU** — o handoff registra `esteira.pausada` na árvore do host e indica que havia item executável na fila 1. O motivo da pausa e o estado ao vivo do tmux e dos timers ficaram [nao verificado]. `app/docs/HANDOFF-SESSAO.md:14` · `app/docs/HANDOFF-SESSAO.md:27` **TEMPO** — ~2 min [nao verificado].
 
-## 28/11 12:23 · sessao ff0ce7fa6409 · - · - · origem=Ronald (tmux)
-
-**T3 — RESPOSTA.** Desde a competência 11/2026, o fechamento lança todos os minutos apurados de feriado trabalhado em folga no 6x1 como HE 100% de feriado, uma vez. O TXT lê essa rubrica do fechamento mensal. O teste do 6x1 sem escala certa mostra 5h30 na rubrica de feriado e zero em horas comuns. `app/ponto/services/fechamento.py:997`, `app/ponto/services/fechamento.py:1002`, `app/folha/export.py:385`, `app/folha/export.py:457`, `app/ponto/tests/test_he100_dia_sem_previsto.py:250`.
-
-O juiz da dobra é `MotorBase._feriado_dobra_no_dia` em `app/ponto/motor_calculo_v2.py:941`. Ele consulta o calendário no dia de início do plantão e a regra do ciclo. `CICLOS_FERIADO_SIMPLES` contém apenas `12x36`. A escolha da rubrica passa por `rubrica_da_folga`, que consulta, quando há escala certa, se o feriado causou a folga do vínculo. `app/ponto/motor_calculo_v2.py:955`, `app/ponto/motor_calculo_v2.py:961`, `app/ponto/motor_calculo_v2.py:3740`, `app/ponto/calculador/regras.py:371`, `app/ponto/calculador/regras.py:428`, `app/escala/models.py:1384`.
-
-O relato registra o apply da competência 11 em produção e informa que 13 dias de 10 colaboradores 6x1 seguiram sem alteração. A correção da janela de autorização nesses casos ficou com `FERIADO-L097-MOTOR`, fora do HEAD registrado. `app/docs/RELATO.md:15264`, `app/docs/RELATO.md:15270`, `app/docs/PROMPTS.md:3176`.
-
-**AUTO-AVALIAÇÃO.** Resolvi. `app/ponto/motor_calculo_v2.py:941`, `app/ponto/tests/test_he100_dia_sem_previsto.py:250`.
-
-**ONDE TRAVOU.** A regra e a ressalva de produção aparecem no calculador, nos testes e no relato. O estado atual de produção está [nao verificado]. `app/ponto/calculador/regras.py:371`, `app/ponto/tests/test_he100_dia_sem_previsto.py:250`, `app/docs/RELATO.md:15270`.
-
-**TEMPO.** Cerca de 1 minuto [nao verificado].
-
-## 28/11 12:23 · sessao a92def7fa5f7 · - · - · origem=Ronald (tmux)
-
-### T4. Pousar uma obra com reversão
-
-1. Preparar na cópia do HEAD, com RED antes da cura, escopo literal e linha LEI-AKITA no commit. Classificar mão única ou mão dupla e conferir `!` e B3. Mão única, concorrência, schema e multi-tenant exigem censo, mutante, revisão Codex e Opus final após a suíte. Mão dupla pode pousar com as pendências registradas. (`CLAUDE.md:37–40`, `:62–69`, `:255–265`, `:274–287`, `:423–433`) [nao verificado]
-2. Antes do pouso, registrar a reversão no RELATO. Para um merge de código, preparar `git revert -m 1 <merge>` seguido de `bin/deploy.sh`. Se a obra aplicar dinheiro em competência não exportada, salvar em `logs/` o snapshot dos campos por colaborador, provar por hash que as exportadas ficaram intactas e publicar a prova de frota depois, no mesmo marco. Na competência guardada, exigir `!`, DIFF prévio e a porta staff. (`app/docs/PROMPTS.md:3202`, `app/docs/RELATO.md:351`, `CLAUDE.md:455–469`)
-3. Obter suíte inteira verde na árvore que vai pousar. Na pista, exigir `bin/pista_certifica.sh` com rc 0, senão rodar na VM. Manter os bytes certificados e registrar o `cmp` no commit. (`CLAUDE.md:104–107`, `:129`, `:347–351`)
-4. Pousar antes de abrir nova fatia. Na árvore principal, fazer `git merge --no-ff --no-commit`, resolver, commitar com `OBRA: <id>` e executar `bin/deploy.sh` no mesmo ato. `MERGE_HEAD` vazio após o merge indica fast-forward e deploy imediato. Instrumento segue em pouso próprio, depois do produto. (`CLAUDE.md:284–287`, `:352–356`, `app/docs/INFRA.md:65–78`)
-5. Conferir os portões do deploy, a migração quando aplicável, o HUP conjunto e as três provas de rota. Fazer o smoke em produção e registrar no RELATO. Se o smoke exigido reprovar, executar o revert previsto, repetir deploy e provas. Para front abrangido pela L-072, o push espera o clique nas duas cascas. (`bin/deploy.sh:120–125`, `:308–325`, `:416–419`, `CLAUDE.md:477–479`, `app/docs/LEIS.md:99`, `app/docs/RELATO.md:4575`, `:4938`)
-6. Se também houve escrita de dados, seguir a reversão específica. O exemplo da O211 primeiro reverte e republica o código, depois restaura apenas os campos-alvo pela porta `restaurar_fechamento`. (`app/docs/RELATO-ARQUIVO.md:32867–32874`)
-
-**Auto-avaliação** — resolvi. **Onde travou** — nenhuma etapa documental após consultar `CLAUDE.md:255`, `app/docs/INFRA.md:38`, `bin/deploy.sh:308` e `app/docs/RELATO.md:4575`. Execução em produção [nao verificado]. **Tempo** — cerca de 2 min [nao verificado].
-
-## 28/11 12:22 · sessao bd5d477b8c38 · - · - · origem=Ronald (tmux)
-
-**T2 — Resolvi.** As perguntas 61520 e 61521 do chamado 40588 cobravam 11h e 12h do dia 20/11. Elas foram emitidas em 23/11 às 12h36, quando esses marcos constavam no DNA da célula 122468. Às 12h42, a célula foi regenerada com jornada das 07h às 19h e sem intervalo previsto. As duas perguntas continuaram pendentes. [app/docs/PROMPTS.md:3223](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/PROMPTS.md:3223) · [app/docs/RELATO.md:15208](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/RELATO.md:15208)
-
-A causa é da classe `ORFA-DE-REGENERACAO`. A correção pertence à fatia `CHAMADO-PRESO-CLASSE` da obra `ESCRITOR-UNICO-DE-CHAMADO`, no E2, após o pouso da E4C. `INTERVALO-SEM-PREVISTO`, da `RAIA-INTERVALO`, foi a investigação. `C7-TELA-ADMIN-ENCERRA` é a via manual pelo admin. [app/docs/BACKLOG.md:835](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/BACKLOG.md:835) · [app/docs/BACKLOG.md:2654](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/BACKLOG.md:2654) · [app/docs/PROMPTS.md:3229](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/PROMPTS.md:3229)
-
-**Onde travou.** A busca por `40588` e pelos horários encontrou a conclusão em `PROMPTS.md`, `RELATO.md` e `BACKLOG.md`. O relato cita `logs/INTERVALO-SEM-PREVISTO/l1/sonda`, cujo conteúdo bruto está [não verificado]. [app/docs/RELATO.md:15208](/home/ronald/codex_ws/96e66c5f2be6f178128eab4fbd4434246ef71801/app/docs/RELATO.md:15208)
-
-**Tempo aproximado.** 1 min [não verificado].
-
-## 28/11 12:09 · sessao 15877447f162 · CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA · leitura · origem=Code
-
-**Resumo.** `ESPERA_UNICA` consulta `rc_sem_colher.py` na entrada. Um `.rc` sem colher já acorda a espera, com retorno `3` do leitor. O laço só detecta `.rc` novo. `bin/rc_sem_colher.py:86–107` `bin/disjuntor.py:1964–1971`  
-**ORDEM VIVA.** `_item_da_ordem_viva` julga o item em curso pelo marcador, hoje `ORDEM-VIVA-2811-1200`. Lista estruturada de membros e próximo passo por obra [nao verificado]. `app/docs/BACKLOG.md:8,1926` `bin/hook_stop_fila1.py:188–249`  
-**Job vivo e `PAREI`.** Há prova de PID e censo, lease via `flock`, estado da pista e leitura de agentes. Juiz unificado de job vivo por obra [nao verificado]. O Stop valida `PAREI` do item em curso. Validação para qualquer obra da ordem [nao verificado]. `bin/hook_stop_fila1.py:599–626,725–765,1358–1423` `bin/codex_admissao.py:188–193` `bin/suite.sh:383–391` `bin/disjuntor.py:469–485`  
-**Última atividade e lei.** O leitor mede `mtime` para julgar colheita. Juiz de última atividade por obra [nao verificado]. **0 perguntas de lei identificadas**. Semântica conjunta do limiar e do prazo de despertar, ano e desempate da recência [nao verificado]. `bin/rc_sem_colher.py:25–36,50–83` `app/docs/BACKLOG.md:1926–1927,2249` `aval_ordem.txt:1`  
-**Próximo passo do Opus.** Depois da F1 v7, conferir sobreposição (diff exato [nao verificado]), provar os REDs com relógio injetado e estender o leitor existente e o selo do marcador. `app/docs/BACKLOG.md:1926,2249` `app/docs/RELATO.md:15212` `app/docs/PROMPTS.md:3225,3233` `app/docs/PLANO-PADROES.md:97–103`
-
-- **Encaixe** `bin/rc_sem_colher.py:main/sem_colher`, `bin/tests/test_rc_sem_colher.sh:caso_espera` e `bin/tests/test_hook_nao_cobra_congelado.sh:_julga`. Reusar o juiz do hook e conferir `bin/disjuntor.py:ESPERA_UNICA` se mudar a forma da espera. `app/docs/BACKLOG.md:2249` `bin/tests/test_rc_sem_colher.sh:75–106` `bin/tests/test_hook_nao_cobra_congelado.sh:105–152` `bin/tests/test_agente_no_modelo.sh:291–297`
-- **9 min / 600 s / 11 min** `bin/rc_sem_colher.py:main/sem_colher`. Sem `.rc` que acorde a espera, silêncio aos 9 min e aos 600 s, aviso com ID e próximo passo aos 11 min. Mutantes `>= 600`, limite removido, só `.rc` novo e aviso sem próximo passo. `app/docs/BACKLOG.md:2249` `bin/disjuntor.py:1965–1971`
-- **Limiar durante a espera** `bin/disjuntor.py:ESPERA_UNICA`. Entrar aos 9 min e cruzar o limiar sem `.rc` novo. Mutante que consulta o leitor só na entrada. Prazo exato [nao verificado]. `app/docs/BACKLOG.md:2249` `bin/disjuntor.py:1964–1971`
-- **`PAREI`** `bin/hook_stop_fila1.py:_topo/_parei_do_em_curso`. Aos 11 min, `PAREI` válido da própria obra suprime o aviso e o de outra obra deixa o aviso sair. Mutantes sem guarda e guarda global. `app/docs/BACKLOG.md:2249` `bin/hook_stop_fila1.py:462–484,1358–1423`
-- **Job vivo** `bin/rc_sem_colher.py:main`. Aos 11 min, prova viva da própria obra suprime o aviso e produtor morto restaura o aviso. Mutantes sem prova e aceitação de PID declarado ou JSON residual. `app/docs/BACKLOG.md:2249` `bin/hook_stop_fila1.py:599–626` `bin/codex_admissao.py:188–193` `bin/codex_pergunta.sh:52–56`
-- **Fora da ORDEM VIVA** `bin/hook_stop_fila1.py:_item_da_ordem_viva`. Obra andável com pasta em `logs/`, ociosa há 11 min e fora da ordem declarada fica sem aviso. Mutantes que aceitam qualquer pasta viva ou qualquer item andável. `app/docs/BACKLOG.md:2249` `bin/rc_sem_colher.py:55–60` `bin/hook_stop_fila1.py:205–249`
-- **Marcador na mais nova** `bin/tests/test_hook_nao_cobra_congelado.sh:_julga`. Duas ordens abertas, marcador na mais nova, selo verde. Mutantes `>=` na comparação e reprovação sempre que há duas ordens. `aval_ordem.txt:1` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132`
-- **Marcador na mais velha** `bin/tests/test_hook_nao_cobra_congelado.sh:_julga`. Selo vermelho identifica o alvo e a ordem mais nova, inclusive quando a mais nova está fisicamente abaixo. Mutantes sem comparação de recência, só existência/estado e escolha pela posição da linha. `aval_ordem.txt:1` `app/docs/BACKLOG.md:1936,2666` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132`
-
-## 28/11 12:07 · sessao 0ce98f2df43e · CUSTO-DE-COORDENACAO-OBRA-PRONTA-ACORDA · censo · origem=Code
-
-## 1. Mapa de `rc_sem_colher.py`
-
-O leitor abre `app/docs/RELATO.md` e percorre `logs/<OBRA>`. Aceita `--raiz`, `--relato` e `--min-idade`. Considera pastas com ID em maiúsculas, dígitos e hífen e `mtime` de até 24 h. Dentro delas, percorre subpastas e arquivos na mesma janela, ignora arquivos que sejam links simbólicos e escolhe o `.rc` de maior `mtime`. Um arquivo de outro tipo mais de 5 s posterior ao `.rc`, ou uma marca correspondente no RELATO, tira o resultado da lista. O leitor atual só abre essas duas fontes. `bin/rc_sem_colher.py:21–36,50–83,86–107`
-
-| Saída do leitor | Significado |
-|---|---|
-| `0` | Nenhum resultado, saída vazia. `bin/rc_sem_colher.py:104–107` |
-| `3` | Um ou mais resultados. Imprime `RC SEM COLHER <OBRA> <caminho relativo> <HH:MM> rc=<valor>`, dos mais antigos aos mais novos. O `rc=<valor>` vem do conteúdo do arquivo, com `?` se não houver número. `bin/rc_sem_colher.py:23,39–43,78–83,104–107` |
-| `1` | Argumento desconhecido ou exceção de leitura que chega ao processo. Erro na caminhada de diretórios é propagado. `bin/rc_sem_colher.py:13–14,46–47,62,90–111` |
-
-- **`disjuntor.ESPERA_UNICA`** chama o leitor uma vez, antes do laço. Com `0`, espera até 300 s pelo primeiro `.rc` com `ctime` posterior à marca, consultando a cada 5 s. Com `3`, pula o laço e a lista já está na saída. Em ambos, faz o `find` final e sai `0`, inclusive se o `timeout` venceu. Com `1` ou outro código, pula o laço, ainda faz o `find` final e sai `1`. O `-cnewer` permite acordar com publicação por `rename` mesmo quando o `mtime` do temporário é anterior à espera. `bin/disjuntor.py:1964–1971`
-- **`logs/espera_unica.sh`** aparece no RELATO como forma da espera pelo primeiro `.rc` novo ou 5 min. O script, a chamada ao leitor e o tratamento de cada código estão **[nao verificado]**. `app/docs/RELATO.md:13865`
-- **Hooks**. O disjuntor usa `ESPERA_UNICA` como comando sugerido nas recusas de espera e polling. O `Stop` executa `hook_stop_fila1.py`, que decide pelo painel do RELATO e pelo BACKLOG. Na cópia, esses caminhos do hook não consomem `0`/`3`/`1` do leitor. `.claude/settings.json:3–9` `bin/disjuntor.py:2174–2209,2243` `bin/hook_stop_fila1.py:1489–1528`
-- **Vercodex** é citado como leitor com `--min-idade 900`. O filtro atual exige idade estritamente maior que 900 s quando recebe essa opção. O tratamento de cada código no executável está **[nao verificado]**. Há registro de que uma tentativa anterior fez o vercodex contar outra classe como `RC SEM COLHER`. `bin/rc_sem_colher.py:2–4,76,96–97` `app/docs/RELATO.md:13907,14450`
-
-## 2. Autoridades que já existem
-
-| Pergunta | Juiz e alcance |
-|---|---|
-| **Quais obras estão na ORDEM VIVA?** | `_item_da_ordem_viva(texto)` responde **qual é o item em curso**. Na cópia, o marcador aponta `ORDEM-VIVA-2811-1200`, cuja linha declara em prosa as sequências por vaga e pista. `_itens_andaveis` e `disjuntor._pertence_fila1` respondem perguntas sobre o bloco OBRAS e a fila 1 do censo. A lista estruturada dos membros e dos próximos passos da ORDEM VIVA está **[nao verificado]**. A tentativa anterior de arquivo de IDs está registrada como estacionada. `app/docs/BACKLOG.md:8,1926,3047–3049` `bin/hook_stop_fila1.py:188–249,272–283` `bin/disjuntor.py:1797–1808,1846–1869` |
-| **`pid=` e `ESPERANDO`** | `hook_stop_fila1._esperando_com_prova` lê o painel e valida os campos declarados. `_prova_pid` confere `/proc`, identidade do produtor, ausência de estado morto/zumbi e estabilidade do processo durante a leitura. `arquivo=` prova avanço de `mtime` entre avaliações e grava memória. A forma de `ESPERANDO` carrega produtor e prova, sem campo de obra. Para **censo**, `_prova_censo(obra)` já casa o wrapper vivo com `CODEX_OBRA` exato e papel `censo` ou `leitura`. `bin/hook_stop_fila1.py:599–626,639–647,725–765,783–833` |
-| **Lease de vaga** | O `flock` do kernel em `logs/vagas/vaga.k` decide ocupação de vaga Codex. `codex_admissao._ocupada` faz a sondagem. `vaga.k.json` contém a projeção da chamada, incluindo a obra. PID no JSON e trilha de abriu/fechou são diagnósticos. O executor pode continuar segurando a lease depois da morte do titular. `bin/codex_admissao.py:188–193` `bin/codex_pergunta.sh:52–70,507–510,552–555` `bin/codex_vagas_estado.py:4–9` |
-| **Pista e agentes** | Na pista, `suite.sh` lê `pista estado` e distingue `rodando`, `na fila` e `fim`; o estado traz ID de job, e o despacho registra ID e SHA. Para agentes de fundo, `disjuntor.agentes_sem_entrega` cruza lançamento e notificação de fim no transcript da sessão. Um juiz único de **job vivo por obra** cobrindo essas fontes e as leases está **[nao verificado]**. `bin/suite.sh:379–391,447–461` `bin/disjuntor.py:469–485` |
-| **`PAREI` no topo** | `hook_stop_fila1._topo` recorta a faixa do censo e a janela do painel. `_parei_do_em_curso` verifica `PAREI:`, `!` e ID inteiro do item em curso, com as exclusões do Stop. `_relato_parou` ainda exige que nenhum outro item ande para devolver o turno. O alarme de sessão tem um leitor próprio de 40 linhas, para a parada da sessão. Um juiz que devolva `PAREI` legítimo **por qualquer obra da ORDEM VIVA** está **[nao verificado]**. `bin/hook_stop_fila1.py:408–416,462–484,1342–1424` `bin/alarme_sessao_ociosa.py:119–145` |
-| **Última atividade** | `rc_sem_colher.sem_colher` já mede o maior `mtime` de `.rc` e o maior `mtime` de outro arquivo da obra para decidir **colheita**. `marcas()` casa `(obra, caminho relativo do rc, HH:MM do mtime do rc)` quando `colhido` ou `superado` é a primeira palavra depois de `- HH:MM `. Esse conjunto guarda a identidade do `.rc`, sem guardar o horário da ação de colheita. Um juiz de **última atividade da obra** que reúna esses sinais, jobs e `PAREI`, inclusive para obra sem `.rc`, está **[nao verificado]**. `bin/rc_sem_colher.py:25–36,50–83` |
-
-O `PROXIMO PASSO` do handoff já aponta o item do marcador e remete ao BACKLOG e ao RELATO. A fonte de um próximo passo executável para **cada** obra da lista está **[nao verificado]**. `bin/handoff_sessao.sh:313–326` `bin/hook_stop_fila1.py:272–283,308–318`
-
-## 3. Censo do marcador e das linhas
-
-- **Escrita da ordem.** O marcador e o bloco OBRAS são mantidos à mão. A linha `ORDEM-VIVA-2811-1200` registra que a inclusão da ordem e a troca do marcador ocorreram no mesmo commit. O item B exige esse mesmo ato para todo aval de ordem. `gerar_backlog.py` relê e repõe a janela inteira ao regenerar o arquivo, com uma guarda para impedir que o marcador desapareça. `backlog_estado.py` regrava a célula `c[3]` do ID solicitado e consulta o hook antes e depois. `app/docs/BACKLOG.md:8,1926` `aval_ordem.txt:1` `bin/gerar_backlog.py:102–140` `bin/backlog_estado.py:29–68`
-- **Leitura semântica.** O parser do marcador é `_item_da_ordem_viva`. O Stop e `_proximo_da_fila` o chamam. O handoff, `backlog_estado.py` e `interrompidas_estado.py` chegam ao mesmo juiz, diretamente ou por `_proximo_da_fila`. `gerar_estado.py` publica a projeção de interrompidas. O disjuntor lê linhas andáveis do bloco para o censo. `relato.sh` publica o BACKLOG inteiro, e `gerar_backlog_topo.py` seleciona IDs `O` seguidos de dígitos. Um leitor que enumere `ORDEM-VIVA-*` para julgar sua recência está **[nao verificado]**. `bin/hook_stop_fila1.py:188–224,308–318,1499–1512` `bin/handoff_sessao.sh:54–78` `bin/backlog_estado.py:56–63` `bin/interrompidas_estado.py:85–100` `bin/gerar_estado.py:231–243` `bin/disjuntor.py:1797–1808` `bin/relato.sh:135–147` `bin/gerar_backlog_topo.py:11–21`
-- **Selos de host.** `test_hook_nao_cobra_congelado.sh` já abre o BACKLOG da árvore, chama o juiz e fica vermelho para marcador ausente, alvo inexistente ou parado. `test_hook_le_o_marcador.sh` usa BACKLOGs de teste e passa pelo Stop para provar que o marcador escolhe o item e que fila vazia libera. `test_hook_estado_e_a_coluna.sh`, `test_hook_parei_com_andavel.sh`, `test_hook_parei_trava_o_item_em_curso.sh`, `test_handoff_sessao.sh` e `test_interrompidas_estado.sh` também exercitam esse caminho. `bin/tests/test_hook_nao_cobra_congelado.sh:105–152` `bin/tests/test_hook_le_o_marcador.sh:38–103` `bin/tests/test_hook_estado_e_a_coluna.sh:41–65` `bin/tests/test_hook_parei_com_andavel.sh:27–49` `bin/tests/test_hook_parei_trava_o_item_em_curso.sh:22–42` `bin/tests/test_handoff_sessao.sh:122–145` `bin/tests/test_interrompidas_estado.sh:37–44,60–65`
-- **Encaixe do item B.** A extensão cabe em `test_hook_nao_cobra_congelado.sh`, junto à checagem do BACKLOG da árvore. Usa o alvo devolvido pelo juiz atual e o reconhecedor de linha do hook. A comparação de recência é a asserção nova do selo. A régua já transforma falha desse selo em VERMELHO. `bin/tests/test_hook_nao_cobra_congelado.sh:78–83,105–152` `bin/hook_stop_fila1.py:116–129,205–224` `bin/regua.sh:134–145` `aval_ordem.txt:1`
-
-## 4. Esmeril de «mais nova»
-
-| ID na cópia | Data e hora disponíveis |
-|---|---|
-| `ORDEM-VIVA-2811-1200` | `DDMM-HHMM` no ID, `28/11 12:00` no texto do aval e `28/11` na última célula. `app/docs/BACKLOG.md:1926` |
-| `ORDEM-VIVA-1511-NOITE` | Dia no ID, `20:1x` no texto e `15/11` na última célula. `app/docs/BACKLOG.md:1927` |
-| `ORDEM-VIVA-0811` | Dia no ID, `08:5x` no texto e `08/11` na última célula. `app/docs/BACKLOG.md:1936` |
-| `ORDEM-VIVA-1811-MANHA` | Dia no ID, `18/11 08:55` na descrição e última célula com caminho de log. A linha de 18/11 aparece fisicamente depois da de 08/11. `app/docs/BACKLOG.md:1936,2666` |
-
-O hook percorre o bloco OBRAS e procura a primeira célula **igual ao alvo do marcador**. Não compara datas. A ordem física é usada por `_itens_andaveis` para devolver a lista da tabela. No caso dado, a comparação de 28/11 12:00 com 15/11 é inequívoca, e a cópia já aponta 28/11 12:00. Um contrato geral de ano, empate e precedência entre ID, coluna e prosa está **[nao verificado]**. `bin/hook_stop_fila1.py:205–249` `app/docs/BACKLOG.md:8,1926–1927` `backlog.txt:1926` `aval_ordem.txt:1`
-
-## 5. Casos RED descritos
-
-Para o primeiro grupo, usar relógio injetado e uma árvore sem `.rc` novo ou `RC SEM COLHER` capaz de acordar a espera pelo caminho antigo. O positivo precisa falhar na cópia pela ausência do novo aviso. Os negativos protegem as exclusões e precisam derrubar seus mutantes. `app/docs/PLANO-PADROES.md:97–103` `app/docs/PROMPTS.md:3225` `bin/tests/test_rc_sem_colher.sh:71–103,124–137`
-
-| Caso | Asserção e mutante que deve cair |
-|---|---|
-| **Ociosa há 9 min × 11 min** | Mesma obra da ordem, sem job e sem `PAREI`. Aos 9 min, nenhum aviso de ociosidade. Aos 11 min, a espera retorna com o ID da obra **e** o próximo passo declarado. Mata o mutante que elimina o limite, o que só espera `.rc` novo e o que omite o próximo passo. Um controle em 600 s distingue `> 600` de `>= 600`. `backlog.txt:2249` `bin/disjuntor.py:1965–1971` |
-| **Com `PAREI`** | Aos 11 min, `PAREI` válido no topo para a própria obra suprime o aviso. Uma trava de outra obra deixa passar o aviso da primeira. Mata a remoção da guarda e a guarda global por qualquer `PAREI`. `backlog.txt:2249` `bin/hook_stop_fila1.py:1358–1424` |
-| **Com job vivo** | Aos 11 min, prova do job da própria obra suprime o aviso. Com a mesma declaração e produtor morto, o aviso volta. Mata a remoção da prova e a aceitação de PID escrito ou JSON residual como prova suficiente. `backlog.txt:2249` `bin/hook_stop_fila1.py:599–626` `bin/codex_pergunta.sh:52–56` |
-| **Fora da ORDEM VIVA** | Obra andável no bloco OBRAS, com pasta em `logs/`, ociosa há 11 min e ausente da ordem declarada. Nenhum aviso. Mata a troca da pertinência à ORDEM VIVA por «qualquer pasta viva» ou «qualquer item andável». `backlog.txt:2249` `bin/rc_sem_colher.py:55–60` `bin/hook_stop_fila1.py:227–249` |
-| **Marcador igual à linha mais nova** | Duas ordens de teste abertas, marcador na mais nova. Selo verde. Mata `>=` no lugar de `>` e o selo que fica vermelho sempre que há duas ordens. `aval_ordem.txt:1` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132` |
-| **Marcador mais velho** | Mesmas ordens abertas, marcador na mais velha. Selo VERMELHO pela recência, indicando o alvo e a linha posterior. Repetir com a mais nova fisicamente abaixo da anterior. Mata a remoção da comparação, o selo que só valida existência/estado e a escolha pela posição da linha. `aval_ordem.txt:1` `app/docs/BACKLOG.md:1936,2666` `bin/tests/test_hook_nao_cobra_congelado.sh:105–132` |
-
-Há uma diferença entre o limiar e o prazo de despertar. Com a forma atual, uma obra com 9 min de ociosidade na entrada pode chegar a 14 min antes de o comando devolver o controle. O `find` dentro do laço só vê `.rc` novo. Assim, o par 9/11 cobre a decisão **na entrada**, e o requisito de acordar durante a mesma espera exige um caso com passagem do limiar e nenhum `.rc` novo. O BACKLOG registra tanto «mais de 10 min» quanto «acordando em até 10 min»; a semântica conjunta desse prazo está **[nao verificado]**. `bin/disjuntor.py:1964–1971` `backlog.txt:2249`
-
-## 6. Arquivos da cura e cruzamento com F1 v7
-
-| Arquivo | Toque previsto pelo encaixe |
-|---|---|
-| `bin/rc_sem_colher.py` e `bin/tests/test_rc_sem_colher.sh` | Leitor existente para o caso novo e selo da entrada normal da espera. O teste atual já exerce retorno imediato, timeout, publicação por `rename` e falha do leitor. `backlog.txt:2249` `bin/tests/test_rc_sem_colher.sh:75–106` |
-| `bin/tests/test_hook_nao_cobra_congelado.sh` | Selo de recência junto ao veredito do marcador. `aval_ordem.txt:1` `bin/tests/test_hook_nao_cobra_congelado.sh:105–152` |
-| `bin/hook_stop_fila1.py` | Dependência de leitura do marcador e do painel. O selo B pode usar as funções existentes. Uma edição para generalizar a prova de `PAREI` por obra cruzaria a F1. `bin/hook_stop_fila1.py:188–224,462–484,1358–1424` `app/docs/RELATO.md:15074,15160,15212` |
-| `bin/disjuntor.py` | Dependência da entrada `ESPERA_UNICA`. O `3` já acorda quando o caso é detectado ao entrar. Se a cura alterar a forma da espera para tratar a passagem do prazo durante o bloqueio, há cruzamento com F1 e com o selo da forma publicada em `CLAUDE.md`. `bin/disjuntor.py:1964–1971` `bin/tests/test_agente_no_modelo.sh:292–297` `app/docs/RELATO.md:15074,15155,15212` |
-| `bin/backlog_estado.py` | O selo B pode consultar o juiz sem editar esse escritor de célula. A v5 registrou o arquivo fora de `ARQUIVOS`; a entrega v7 registra seis arquivos sem enumerá-los. A presença dele no diff exato da v7 está **[nao verificado]**. `bin/backlog_estado.py:56–68` `app/docs/RELATO.md:15047,15212` |
-
-A fila das 12:00 põe **CUSTO F1 v7 → OBRA-PRONTA-ACORDA** na vaga de opus construtor. O RELATO registra commit da v7 **na cópia**. O hash informado e o diff exato da v7 estão **[nao verificado]**. `backlog.txt:1926,2249` `app/docs/RELATO.md:15212`
-
-**Padrão.** `Single Source of Truth` para as autoridades reaproveitadas, `Clock Injection` para o limiar e `Fitness Function` para o selo de recência. `app/docs/PLANO-PADROES.md:53–62,97–103`
-
-_8930 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8935 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
