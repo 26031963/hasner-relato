@@ -1,7 +1,44 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 06:14** · publicado em **28/11/2026 06:19** (UTC-3)
+> Ultima resposta processada: **28/11/2026 06:33** · publicado em **28/11/2026 06:33** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 06:33 · sessao ea74f467951f · RETRATO-PDF-CORTA-POR-QUE · construtor · origem=Code
+
+Implementei o item 2 c2. A lavra grava `motivos_por_dia` apenas quando a fonte entrega pares. O “Por quê” usa os rótulos de `folha/export.py` para mostrar cada data sob seu motivo. [folha/fora_da_folha.py:219](/home/ronald/wt-codex-retrato-pdf-corta-por-que-062609/app/folha/fora_da_folha.py:219) · [folha/retrato_folha.py:1301](/home/ronald/wt-codex-retrato-pdf-corta-por-que-062609/app/folha/retrato_folha.py:1301) · [folha/export.py:1247](/home/ronald/wt-codex-retrato-pdf-corta-por-que-062609/app/folha/export.py:1247)
+
+### Cura por sítio
+
+| Sítio | Mudança |
+|---|---|
+| `folha/fora_da_folha.py:219` e `folha/retrato_folha.py:1301` | A chamada existente com `com_dias=True` fornece os pares. O transporte copia só `data` em ISO e `motivo`, na mesma ordem de `datas`. Férias usa a lista plana em `folha/retrato_folha.py:1277`. |
+| `folha/export.py:1247` e `folha/retrato_folha.py:99` | O mapa tem os oito códigos emitidos. O leitor consulta o rótulo diretamente no mapa, sem fallback para código cru. O recorte compartilha os limites inclusivos de `folha/retrato_folha.py:1343`. |
+| `folha/views_retrato.py:294`, `:442` e `:537` | Tela, PDF e Raio-X usam o filtro de datas. Na janela parcial aparecem os motivos com datas dentro dela. Se o recorte elimina todos os pares, aparecem só os rótulos. |
+| `folha/retrato_folha.py:1154` e `templates/folha/_retrato_o_que_fazer.html:37` | O drawer do colaborador usa a competência inteira. A chave ausente ou vazia leva à apresentação legada. |
+
+### Chamadores e leitores de produção
+
+- `_dias_que_retem` tem dois chamadores diretos, `dias_que_seguram` e `o_que_segura`. O primeiro alimenta `fora_da_folha` e o censo do vigia de fio. A lavra reaproveita a chamada com `com_dias=True` por retido. A classificação do TXT tem seu caminho anterior, com `com_dias=False` por padrão. `folha/fora_da_folha.py:121`, `:165`, `:203`, `:283` · `chamados/services/vigia_fio.py:577` · `folha/export.py:984`, `:1335`
+- `montar_linhas` tem um chamador de produção, o comando `lavrar_retrato_folha`, que passa o resultado aos contadores e à gravação. `folha/management/commands/lavrar_retrato_folha.py:65`, `:68`, `:79`
+- `RetratoFolha.linhas` é lido diretamente por `linhas_do_retrato`. Por essa porta passam os contadores do comando, o recorte comum de tela/PDF/Raio-X, o drawer via `linha_do_colab` e o vigia de retidos calados. `folha/retrato_folha.py:143`, `:153`, `:984` · `folha/views_retrato.py:200`, `:260`, `:394`, `:520` · `colaboradores/views.py:1004` · `folha/vigia_retido_calado.py:77`
+
+### REDs e mutantes para o Opus
+
+| Caso RED | Mutante a derrubar |
+|---|---|
+| Lavra com 03 e 05/11 por furo e 12/11 por cobrado. Exigir pares exatos, ordem, JSON puro, uma chamada de transporte e férias sem pares. `folha/tests/test_retrato_por_que_por_dia.py:348` | Omitir a chave, inverter a ordem, trocar o motivo de 12/11, vazar `date` ou `celula_id`, chamar o retentor de novo ou inventar par de férias. |
+| Tela e PDF com janela inclusiva, uma ponta, janela sem pares e legado. Conferir também a linha gravada após a leitura. `folha/tests/test_retrato_por_que_por_dia.py:405`, `:481` | Ignorar uma ponta, excluir a borda, mostrar motivo sem data numa janela parcial, esvaziar a célula quando o recorte elimina tudo ou alterar o JSON gravado. |
+| Drawer com competência inteira. Trocar um rótulo na fonte e proibir chamadas ao retentor nos leitores. `folha/tests/test_retrato_por_que_por_dia.py:176`, `:505`, `:718` | Aplicar a janela ao drawer, copiar o mapa ou chamar a fonte durante a leitura. |
+| Selo AST com conjunto exato de códigos e rótulos válidos. `folha/tests/test_retrato_por_que_por_dia.py:602`, `:673` | Remover rótulo, acrescentar chave sem emissor, usar código cru ou vazio, mover o mapa para outro módulo, aceitar varredura vazia ou duplicar o mapa no leitor. |
+| Guardas c1 de ordem e escape no PDF. `folha/tests/test_retrato_pdf_pacote.py:386`, `:392` | Retirar a precedência de dias numéricos sobre `None` no mesmo dono ou retirar o `escape` da Escala. `folha/views_retrato.py:409`, `:454` |
+
+Por inspeção, os dois vizinhos exercitam linhas sem `motivos_por_dia`. O drawer segue pelo `valor` agregado e a comparação do restante da linha sob janela segue pelo caminho legado. Resultado na suíte [nao verificado]. `folha/tests/test_retrato_folha_drawer.py:35`, `:213` · `folha/tests/test_retrato_folha_periodo.py:52`, `:371`
+
+O diff tem **0 `except` adicionados e 0 removidos**. Conferi a sintaxe dos quatro módulos, os oito códigos por AST e a projeção em memória das janelas do caso. Certificação pelo Code e pelo Opus [nao verificado]. `folha/export.py:1247` · `folha/fora_da_folha.py:219` · `folha/retrato_folha.py:99` · `folha/views_retrato.py:442`
+
+```bash
+bash bin/suite.sh --dir /home/ronald/wt-codex-retrato-pdf-corta-por-que-062609 --only "folha"
+```
 
 ## 28/11 06:14 · sessao 5f713c5d3138 · CUSTO-DE-COORDENACAO · leitura · origem=Code
 
@@ -1299,16 +1336,4 @@ A cura está no diff da cópia. A revisão estática encontrou **13 arquivos de 
 bash bin/suite.sh --dir /home/ronald/wt-codex-codigo-dominio-valido-013223 --only "folha.tests.test_codigo_dominio_invalido colaboradores.tests.test_codigo_dominio_numerico folha.tests.test_export ponto relatorios core.tests.test_selo_teste_sem_relogio"
 ```
 
-## 28/11 01:37 · sessao 8ac04350367a · - · - · origem=Ronald (tmux)
-
-**Item 4. O RED deixa a posição de `dias=None` em aberto.** O teste de ordem exige a sequência por dono, dias decrescentes e desempate por ID. Na bancada, `None` só aparece em Entram e Rescisão, sem dias numéricos nesses estados. Retirar a chave `dias is None` preservaria a ordem esperada da bancada. Para distinguir a chave de `-(dias or 0)` em um teste, o mesmo estado precisa de `0` e `None` com o ID menor no `None`. O zero é possível em `furo_espelho` cujo relatório devolve `len([])` e chega à lavra como zero. `app/folha/tests/test_retrato_pdf_pacote.py:52–98`, `:228–243`, `app/folha/views_retrato.py:399–406`, `app/folha/fora_da_folha.py:210–246`, `app/folha/retrato_folha.py:1227–1236`.
-
-**Origens de `None`.** Na lavra, `montar_linhas` recebe a contagem de `furo_espelho` de `fora_da_folha` e usa a lista de férias quando essa contagem vem ausente. Sem as duas fontes, grava `None`. Isso abrange Entram, Rescisão, `sem_codigo_dominio`, `cadastro_zero` e `nao_homologado`. O leitor `no_periodo`, com pelo menos um limite temporal, cria uma cópia com `dias=None` quando `datas` está ausente/nula, vazia ou fora da janela. Isso se aplica a qualquer motivo. Sem janela, mantém os valores da lavra. Há testes para esses vazios, inclusive retrato legado, e para a faixa Cadastro permanecer. `app/folha/export.py:846–858`, `:875–893`, `:968–989`, `app/folha/fora_da_folha.py:146–165`, `:234–246`, `app/folha/retrato_folha.py:1222–1243`, `:1334–1347`, `app/folha/tests/test_retrato_folha_periodo.py:126–153`, `:172–183`, `app/folha/tests/test_retrato_folha_quadros.py:1394–1417`.
-
-**Ordem da tela.** `_recorte_da_barra` segue produzindo `ordenar(recortar(...))`, com ordem por balde, faixa de saldo e ID. A tela projeta `_vis` na mesma ordem e o template percorre `tabela`. O PDF cria outra lista com `sorted(_vis, ...)`. O teste da tela no pacote confere mesmas pessoas e ordem diferente do PDF. A ordem exata da função e seu comportamento com o recorte de datas estão em testes anteriores. `app/folha/views_retrato.py:225–232`, `:260–268`, `:278–293`, `:318–346`, `:391–406`, `:435`, `app/folha/retrato_folha.py:754–772`, `app/templates/folha/_retrato_lista.html:35`, `app/folha/tests/test_retrato_pdf_pacote.py:245–249`, `app/folha/tests/test_retrato_folha_quadros.py:566–590`, `app/folha/tests/test_retrato_folha_periodo.py:354–368`.
-
-**Juízes, campos e contadores.** O gravado `dono` é o fio escrito por `montar_linhas` e lido por `fio_da_linha`. O dono de UI é produzido por `dono_da_linha` e usado pela barra e pelo LED, com dois estados adicionais do LED para Entram e Rescisão. `hoje` vem da borda e é passado a todos os leitores. `_pilula` publica `numero` como quantidade de pessoas do recorte atual se acesa ou do recorte após ativação se apagada. Tela e PDF leem o número de `quadros_barra_retrato`. A ordem do PDF usa a chave e as linhas de suas fontes, com uma precedência local de apresentação distinta da sequência publicada no quadro. O RED de contadores compara resultados em dois recortes. O selo AST anterior guarda a fonte do universo, enquanto a dependência de `quadros_barra_retrato` é comprovada pelo código. `app/folha/management/commands/lavrar_retrato_folha.py:65–79`, `app/folha/retrato_folha.py:191–201`, `:436–493`, `:516–532`, `:588–597`, `:816–842`, `:904–915`, `:1246–1248`, `app/folha/views_retrato.py:177–182`, `:246–247`, `:324–325`, `:399–420`, `app/templates/core/_barra_gestao.html:67`, `app/folha/tests/test_retrato_pdf_pacote.py:251–267`, `app/folha/tests/test_retrato_pdf.py:301–350`.
-
-**Item 3.** O RED verifica `Paragraph` e preservação do texto, com um exemplo longo sem metacaracteres. A troca para `Paragraph(escape(descricao))` acontece no leitor PDF. A geometria da quebra nas páginas e um exemplo com `<`, `>` ou `&` não recebem asserção direta. `app/folha/tests/test_retrato_pdf_pacote.py:46–48`, `:164–173`, `:210–222`, `app/folha/views_retrato.py:424`, `:441`, `:449–450`. Execução da suíte e distribuição em produção [nao verificado].
-
-_8845 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8846 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
