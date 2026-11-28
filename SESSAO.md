@@ -6,10 +6,16 @@ _Gerado por `bin/relato.sh` (timer de 5 min). Hora em BRT. **Sem a saida dos com
 raspagem do RELATO, e o selo de publicacao sem nome mede este arquivo tambem -- necessario,
 porque comando do Code ja carregou nome real numa sonda._
 
-**Medido em 28/11/2026 03:30:45.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (304.7 MB). Acoes na janela: **1781**.
+**Medido em 28/11/2026 03:37:35.** Transcript: `5e51ee74-737b-48eb-a557-41f4a4f7861d.jsonl` (304.8 MB). Acoes na janela: **1780**.
 
 | hora | ferramenta | o que | comando |
 |---|---|---|---|
+| 03:37:33 | Bash | Registra e reabre a espera | `cd ~/saas-hasner; H=$(date +%H:%M); python3 - "$H" <<'EOF' import sys,re h=sys.argv[1];p='app/docs/RELATO.md';L=open(p).read().split('\n') i=max(i for i,l in enumerate(L) if re.match(r'^- \d\d:\d\d (colhido\|superado) ',l)) L.insert(i+1,f"- {h} colhido CUSTO-DE-COORDENACAO f1v2/pasta (FIM, 120 selos na copia da F1 v2): 18 nao-zero (test_codex_n_vagas 124 timeout); separo copia x regressao rodando  ...` |
+| 03:37:28 | Bash | Roda os selos vermelhos na cópia da base | `cd ~/saas-hasner; S=/tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad; D=logs/CUSTO-DE-COORDENACAO/f1v2/base; mkdir -p $D; cat > $D/lanca.sh <<EOF cd /home/ronald/wt-base-f1-033722 for s in \$(cat $S/reds.txt); do [ "\$s" = test_codex_n_vagas ] && continue; timeout 600 bash bin/tests/\$s.sh > /home/ronald/saas-hasner/$D/\$s.log 2>&1 < /dev/null; echo "\$s \$ ...` |
+| 03:37:22 | Bash | Lista os vermelhos e cria cópia da base para comparar | `cd ~/saas-hasner; R=logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; awk '$2!=0 && NF==2{print $1}' $R > /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/reds.txt; cat /tmp/claude-1001/-home-ronald-saas-hasner/5e51ee74-737b-48eb-a557-41f4a4f7861d/scratchpad/reds.txt \| wc -l; B=/home/ronald/wt-base-f1-$(date +%H%M%S); git worktree add --detach $B 93e305860  ...` |
+| 03:37:16 | Bash | Lê a espera e o andamento dos selos | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/ba26glb94.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; R=logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; wc -l < $R; tail -2 $R` |
+| 03:32:11 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
+| 03:32:08 | Bash | Lê a espera e o andamento dos selos | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bv7pux6x8.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; R=logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; wc -l < $R; tail -2 $R` |
 | 03:27:03 | Bash | Espera única pelo próximo rc | `cd ~/saas-hasner; bash logs/espera_unica.sh 2>&1 \| tail -3` |
 | 03:26:59 | Bash | Lê a espera e o andamento dos selos | `cd ~/saas-hasner; tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b94ckgw1x.output; date +%H:%M; python3 bin/rc_sem_colher.py; echo rc=$?; R=logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; wc -l < $R; tail -1 $R` |
 | 03:24:03 | ScheduleWakeup |  | `<<autonomous-loop-dynamic>>` |
@@ -1784,10 +1790,3 @@ porque comando do Code ja carregou nome real numa sonda._
 | 15:39:48 | Bash | Situa a c1v13 da PAR | `cd ~/saas-hasner; ls logs/PAR-PELO-TURNO/c1v13/; head -5 logs/PAR-PELO-TURNO/c1v13/g/g.log; git -C /home/ronald/wt-codex-par-pelo-turno-111717 log --oneline -3 \| cut -c1-90` |
 | 15:39:43 | Bash | Veredito da suíte PAR c1v13 | `cd ~/saas-hasner/logs/PAR-PELO-TURNO/c1v13/g; ls; L=$(ls -t *.log \| head -1); grep -E '^(OK\|FAILED)($\| \()' $L \| tail -1; grep '^Ran' $L \| tail -1; grep -E '^(FAIL\|ERROR):' $L \| sort \| uniq -c \| head -30` |
 | 15:39:38 | Bash | Lê o que acordou a espera e a carga | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/b524zc7wr.output; cat /proc/loadavg` |
-| 15:35:56 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 15:35:48 | Bash | Confere que o recorte está na fila | `cd ~/saas-hasner; sleep 5; tail -2 logs/INVENTARIO/C3/suite/s.log; ls logs/INVENTARIO/C3/suite/` |
-| 15:35:41 | Bash | Commita C3 na wt e enfileira o recorte na VM | `cd ~/saas-hasner; W=/home/ronald/wt-codex-inventario-pela-regra-143921; find $W/app -name __pycache__ -type d -prune -exec rm -rf {} + ; git -C $W add app/folha/tests/_celulas.py app/folha/tests/test_inventario_folha.py app/ponto/tests/test_inventario_ausencia.py app/ponto/tests/test_inventario_escala.py app/folha/tests/_inventario_c3_mutantes.py app/folha/tests/test_inventario_competencia.py && g ...` |
-| 15:35:25 | Bash | Entrega do C3 e higiene do diff | `cd ~/saas-hasner; tail -c 4000 logs/INVENTARIO/C3/r.md; W=/home/ronald/wt-codex-inventario-pela-regra-143921; git -C $W status --porcelain; git -C $W diff \| /bin/grep -cE "^\+.*except"; git -C $W diff \| /bin/grep -cE "^\+.*(timezone\.now\|datetime\.now)"` |
-| 15:35:21 | Bash | Lê o que acordou a espera e a carga | `tail -3 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bxs6z62ja.output; cat /proc/loadavg` |
-| 15:31:06 | Bash | Espera única pelo próximo rc | `bash ~/saas-hasner/logs/espera_unica.sh` |
-| 15:31:02 | Bash | Lê o que acordou a espera e a carga | `tail -4 /tmp/claude-1001/-home-ronald-saas-hasner/8adee201-fd93-4dd9-928f-111a0c57530f/tasks/bx2lcruqf.output; cat /proc/loadavg` |
