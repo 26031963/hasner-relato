@@ -1,7 +1,169 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 01:25** · publicado em **28/11/2026 01:26** (UTC-3)
+> Ultima resposta processada: **28/11/2026 01:39** · publicado em **28/11/2026 01:40** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 01:39 · sessao fb68df3fdb61 · RETRATO-PDF-CORTA-POR-QUE · verificador · origem=Code
+
+**Parecer de verificação — RETRATO-PDF-CORTA-POR-QUE. O item 5 volta.** No bind-mount documentado, o leitor novo procura em `app/logs/` no host e o deploy grava em `logs/` na raiz do repositório. O RED do item 5 substitui o caminho padrão e deixa essa ligação sem prova. No item 4, os contadores vêm da barra, mas a precedência das linhas é definida na view do PDF e o RED deixa a posição de `None` sem cobertura. `app/docs/INFRA.md:22–30`, `app/config/settings/base.py:4–5`, `bin/deploy.sh:432–436`, `app/folha/views_retrato.py:399–420`, `app/folha/tests/test_retrato_pdf_pacote.py:60–84,228–267,274–315`.
+
+Conferi a cópia e o diff anexo em leitura. A identidade Git da cópia, a execução do RED em `31ef2f199`, o GREEN informado de 358 testes e a configuração efetiva dos containers estão [nao verificado].
+
+## 1. Quem escreve e quem lê
+
+`JUIZES.md` é a tabela de consulta. O registro vivo mantém `classificar_export` como autoridade do fechamento e `tarefa_do_dia` como autoridade da porta diária. A permissão da tela é `tem_acao`, chamada tanto pela tela quanto pelo PDF. O PDF lê o retrato lavrado e delega a classificação visual a `led_da_linha`. Não encontrei uma segunda implementação desses juízes no diff. `app/docs/JUIZES.md:10–15,51,81–90,119–122`, `app/core/juizes.py:311,326–340`, `app/folha/views_retrato.py:257,377,391–405`, `app/folha/retrato_folha.py:516–532`.
+
+| Campo ou valor | Quem produz ou grava | Quem lê |
+|---|---|---|
+| `RetratoFolha.linhas`, `colab`, `status`, `motivo`, `dias`, `datas`, `tipo`, `saldo`, `dono` | `classificar_export` entrega ID, estado e motivo. `fora_da_folha` entrega dias, datas e grupo de fio para o furo. `montar_linhas` compõe o JSON e `lavrar_retrato_folha --apply` grava por empresa, mês e ano. `app/folha/export.py:846–858,875–893,968–990`, `app/folha/fora_da_folha.py:146–165,210–253`, `app/folha/retrato_folha.py:1222–1255`, `app/folha/management/commands/lavrar_retrato_folha.py:65–79` | `linhas_do_retrato` abre o JSON. `_recorte_da_barra` monta a lista que tela, PDF e Raio-X leem. O drawer do colaborador e o vigia também passam pelo leitor do retrato. `app/folha/retrato_folha.py:98–111,930–953`, `app/folha/views_retrato.py:194–232,260–268,391–397,507–524`, `app/colaboradores/views.py:998–1004`, `app/folha/vigia_retido_calado.py:76–79` |
+| `dono` gravado, dono de UI, cor e rótulo | `montar_linhas` grava o **fio** em `dono`. `fio_da_linha` o lê, com fallback para retrato legado. `dono_da_linha` projeta o balde da UI, incluindo `chamado → Admin` e `ninguem → Hoje` quando a primeira data é hoje ou posterior. `led_da_linha` acrescenta Entram e Rescisão como estados de linhas sem dono. `app/folha/retrato_folha.py:191–201,436–493,516–532,1246–1248` | Filtro, barra e drawer leem o dono de UI. Tela e PDF leem cor e rótulo via `desenho_do_led`. O PDF também lê a chave do LED para ordenar. O texto de `motivo` passa por `rotulo_do_motivo`, que lê `MOTIVO_RH`, também usado pela prévia e pelo PDF de retidos. `app/folha/retrato_folha.py:559–566,587–597,908–915,1112–1126,76–86`, `app/folha/views_retrato.py:286–292,399–405,435–446`, `app/folha/views.py:15–24,373,415,884–887` |
+| Empresa, competência, filtros, `vis`, `universo`, `hoje` | `_recorte_da_barra` lê GET e preferência, usa `janela_atual` para o default, lê um instante e monta o recorte com `core.filtro`, `no_periodo`, `ler_grupos` e `recortar`. Quando vem `empresa=`, a própria porta chama `PreferenciaUI.set_pref`, inclusive no acesso pelo PDF. `app/folha/views_retrato.py:149–184,216–247`, `app/colaboradores/models.py:204–216` | Tela, PDF e Raio-X leem o recorte. `qs_do_recorte` produz o endereço do botão e a querystring guardada na auditoria. `core.filtro.chips` produz os rótulos e textos dos filtros ativos usados pela tela e pelo PDF. `app/folha/views_retrato.py:260–269,295–300,337,391–417,461–467,507–509`, `app/folha/retrato_folha.py:775–782`, `app/core/filtro.py:232–275` |
+| `titulo`, `itens`, `ativo`, `rotulo`, `numero` da barra | `quadros_barra_retrato` monta o quadro. `_pilula` produz `numero` em **pessoas**. Para a pilula acesa, conta o recorte atual. Para a apagada, conta o recorte que sua ativação abriria. `app/folha/retrato_folha.py:785–813,838–845,879–915` | A barra e o PDF leem o mesmo `numero`. O PDF usa `ativo` para descrever o recorte e copia os pares rótulo/número de “Depende de”. O `n/total` do cabeçalho é outra medida, `len(vis)/len(linhas)`, tal como no filtro da tela. `app/templates/core/_barra_gestao.html:65–67`, `app/folha/views_retrato.py:315,324–325,411–430` |
+| Razão social, nome, posto e descrição da escala | As portas de cadastro gravam empresa e posto, colaborador, vínculo de escala e `TipoEscala.descricao`. `_cadastro` projeta nome, posto e tipo de escala em memória, escolhendo o vínculo ativo mais recente por `data_inicio` e usando o posto do colaborador como fallback. `app/colaboradores/services/estrutura.py:13–22,43–45,67–79`, `app/colaboradores/views.py:1331–1333,1362–1365`, `app/colaboradores/services/colaborador.py:152–160,204–206`, `app/colaboradores/services/vinculo.py:274–292`, `app/escala/services/cadastro_tipo.py:184–188,307,382–401,431–446`, `app/folha/views_retrato.py:99–123` | O PDF usa a razão social no título e lê nome, posto e descrição nas células. A tela lê a mesma projeção cadastral. O item 3 passa a descrição por `escape` e `Paragraph` na coluna de 38 mm. Seu RED exige `Paragraph` e texto longo integral. A quebra visual na página e o comportamento com `<`, `>` e `&` estão [nao verificado]. `app/folha/views_retrato.py:395,424–425,435–450`, `app/templates/folha/_retrato_lista.html:60–66`, `app/folha/tests/test_retrato_pdf_pacote.py:47–48,210–222` |
+| PDF, metadados e registro auditável | `retrato_pdf` fornece título, usuário, período, `tipo='outro'`, recorte e totais. `gerar_pdf_auditavel` escreve `RegistroPDFAuditavel`, incluindo `filtros_json`, `total_registros`, `commit_git` e o SHA-256 do PDF canônico. A view escreve `Content-Disposition` na resposta. `app/folha/views_retrato.py:461–475`, `app/relatorios/pdf_base.py:133–178` | O rodapé lê o commit e o SHA-256. A verificação pública busca pelo SHA-256 do PDF e exibe o commit armazenado, os filtros e o total. `app/relatorios/pdf_base.py:72–87`, `app/chamados/views.py:1202–1222`, `app/templates/chamados/verificar_pdf.html:37–50` |
+
+## 2. Item 4 — `dias=None`, ordem e RED
+
+- **O leitor que produz `None` é `no_periodo`.** Com pelo menos um limite, ele copia a linha e põe `dias=None` se `datas` estiver ausente, nula, vazia ou sem interseção com a janela inclusiva. Isso vale para qualquer motivo. Sem janela, conserva o valor lavrado. A cópia preserva `datas`, então uma linha pode continuar no dono Hoje com a coluna de dias vazia. `app/folha/retrato_folha.py:486–493,1334–1347`.
+- **A lavra também produz `None`.** Entram, Rescisão, `sem_codigo_dominio`, `cadastro_zero` e `nao_homologado` chegam sem lista de dias. Férias com batida entrega datas. Para `furo_espelho`, `fora_da_folha` pode entregar o número `0` se a lista estiver vazia, e a lavra preserva esse zero. Tela e PDF exibem `None` em branco e `0` como número. Quantas linhas caem em cada caso em produção [nao verificado]. `app/folha/export.py:846–858,875–893,968–990`, `app/folha/fora_da_folha.py:146–165,234–246`, `app/folha/retrato_folha.py:1227–1243`, `app/templates/folha/_retrato_lista.html:66`, `app/folha/views_retrato.py:443`.
+- **O RED de ordem deixa `None` sem cobertura.** A bancada tem `None` só em Entram e Rescisão, sem números nesses mesmos estados. Rodei em memória a chave extraída do código com a bancada, retirando apenas `dias is None`. A ordem esperada continuou igual. No controle sintético de mesmo dono, com ID 1 em `None` e ID 2 em `0`, a chave atual ordenou `[2, 1]` e a mutação ordenou `[1, 2]`. Os selos anteriores cobrem a produção de `None` na janela e na lavra. A decisão de posição no papel fica [nao verificado]. `app/folha/views_retrato.py:399–406`, `app/folha/tests/test_retrato_pdf_pacote.py:52–99,228–243`, `app/folha/tests/test_retrato_folha_periodo.py:126–153`, `app/folha/tests/test_retrato_folha_quadros.py:1409–1418`.
+- **A ordem da tela ficou intacta.** `_recorte_da_barra` continua a fazer `ordenar(recortar(...))`, por balde, faixa crescente de saldo e ID. A view projeta `_vis` na mesma sequência e o template percorre `tabela` na página cheia e no parcial. Só o PDF cria outra lista com `sorted`. A guarda do pacote exige as mesmas pessoas e uma ordem diferente da do papel. O teste anterior de `ordenar` fixa a sequência esperada. `app/folha/views_retrato.py:225–232,260–268,278–293,318–346,391–406,435`, `app/folha/retrato_folha.py:754–772`, `app/templates/folha/_retrato_lista.html:35`, `app/templates/folha/retrato_folha.html:53`, `app/templates/folha/_retrato_parcial.html:7`, `app/folha/tests/test_retrato_pdf_pacote.py:245–249`, `app/folha/tests/test_retrato_folha_quadros.py:566–591`.
+- **Fonte única.** O PDF lê o recorte existente e os números publicados pelo quadro. O RED compara esses números em dois recortes. O selo AST guarda a porta do universo, e a origem dos contadores é demonstrada pelo código. Para a ordem das linhas, a view lê `vis`, `dias`, `colab` e a chave do LED, mas escreve localmente a precedência `Sem ação → Sem leitura → Admin → Colab → Hoje → Entram → Rescisão`. O quadro publica os donos em outra sequência. Assim, a ordem reaproveita o julgamento de dono e tem regra de apresentação própria. Se o checklist exige que **a precedência** também venha publicada por `quadros_barra_retrato` ou `_recorte_da_barra`, essa exigência fica aberta. `app/folha/views_retrato.py:399–420`, `app/folha/retrato_folha.py:191–201,590–591,908–915`, `app/folha/tests/test_retrato_pdf_pacote.py:251–267`, `app/folha/tests/test_retrato_pdf.py:301–350`.
+
+## 3. Item 5 — carimbo, alcance e efeitos
+
+- **Caminho em produção.** A configuração SaaS herda `BASE_DIR / 'logs' / 'deploy.stamp'`, que no container vira `/app/logs/deploy.stamp`. O bind documentado o resolve para `/home/ronald/saas-hasner/app/logs/deploy.stamp`. `bin/deploy.sh` grava `/home/ronald/saas-hasner/logs/deploy.stamp`, via arquivo temporário e `mv`. Esse bind não expõe o arquivo escrito. Compose efetivo, montagem adicional, cópia manual e ambiente `COMMIT_GIT` do worker [nao verificado]. `app/config/settings/base.py:4–5`, `app/config/settings/saas.py:10,118`, `app/docs/INFRA.md:22–30`, `bin/deploy.sh:432–436`, `.gitignore:40–41`.
+- **Comparação com o ramo antigo.** No cenário dado, sem `COMMIT_GIT`, sem `/app/.git` e sem arquivo no novo caminho, ambos retornam `''`. O rodapé segue `n/d` e o registro segue vazio. Um `COMMIT_GIT` não vazio continua prioritário, com `strip()` e limite de 40 caracteres. Onde `/app/.git` existia e funcionava, perde-se o fallback antigo. Se o carimbo ficar acessível, falha de leitura ou UTF-8 e `QUANDO` não numérico podem agora interromper a geração. O parser devolve `{}` quando falta `QUANDO`. Falhas reais em produção [nao verificado]. `obra.diff` anexo, hunk de `app/relatorios/utils_audit.py:1`, `app/relatorios/utils_audit.py:11–20`, `app/core/esteira_vigia.py:1032–1042`, `app/relatorios/pdf_base.py:72–77,135,164`.
+- **Quem escreve e lê `COMMIT`.** O deploy escreve epoch em `QUANDO`, `git rev-parse HEAD` inteiro em `COMMIT` e o assunto em `TITULO`. O PDF reaproveita o parser do vigia e usa só `COMMIT`, limitado a 40 caracteres e sem validação de formato. O registro conserva esse valor e o rodapé exibe oito caracteres. O vigia lê no host e usa o SHA inteiro em `git revert`. A guarda de auth e o verificador de imports também leem o SHA do host, e o handoff o abrevia para exibição. Quem injeta `COMMIT_GIT` em produção [nao verificado]. `bin/deploy.sh:432–436`, `app/core/esteira_vigia.py:64,1032–1042,1202,1297–1309,1355`, `app/relatorios/utils_audit.py:13–20`, `app/relatorios/models.py:56`, `app/relatorios/pdf_base.py:72,164`, `bin/janela_auth.sh:39–45`, `bin/import_tardio_contra_o_ar.py:45–55`, `bin/handoff_sessao.sh:274–277`.
+- **Dois chamadores diretos.** `gerar_pdf_auditavel` usa o mesmo commit nas duas passagens e no registro. Alcança retrato, espelho mensal, histórico de chamados, gestão de férias e gestão de HE. Se o commit impresso mudar, muda também a entrada do SHA-256 canônico. O outro chamador é o espelho informacional, usado no avulso por datas e no lote. Ele usa o commit só no rodapé. Uma falha comum aos dois caminhos pode fazer o lote pular a pessoa. `app/relatorios/pdf_base.py:133–178`, `app/folha/views_retrato.py:461–467`, `app/relatorios/pdf_espelho.py:1066–1074,1106–1116`, `app/relatorios/pdf_chamados.py:158–176`, `app/relatorios/services.py:235–255,338–347`, `app/relatorios/views.py:1135–1164`, `app/ponto/views.py:886–894`.
+- **RED e ordem de publicação.** O RED prova leitor, persistência e passagem do SHA aos dois objetos de rodapé, com arquivo temporário e `override_settings`. O controle prova precedência da variável. O caminho padrão e os caracteres efetivamente impressos ficam fora das asserções. O deploy recarrega e prova as rotas **antes** de trocar o carimbo. Mesmo se o arquivo ficar visível, essa ordem permite código novo com carimbo anterior ou ausente. No fluxo `--reload-copia`, o reload ocorre antes do commit da cópia, e o carimbo lê o `HEAD` naquele momento. Ocorrência no ar [nao verificado]. `app/folha/tests/test_retrato_pdf_pacote.py:274–322`, `bin/deploy.sh:357–373,416–436`, `bin/molde_fatia/cadeia.sh:35–48,62–69`.
+
+## 4. Import, relógio e travas
+
+O import novo é `utils_audit → core.esteira_vigia`. O topo do vigia só importa biblioteca padrão, registra um logger, inicializa constantes e compila sete regex. A cadeia estática não volta a `relatorios`. O corpo do módulo não lê os arquivos operacionais nem resolve settings, e o CLI está protegido por `__main__`. Na chamada sem `COMMIT_GIT`, o helper resolve o setting, consulta o caminho e lê o arquivo se presente. Num processo local novo, `-X importtime` mediu cerca de **26 ms cumulativos** para importar o vigia e suas dependências, sem carregar Django. Custo incremental no worker e memória [nao verificado]. `app/relatorios/utils_audit.py:2–20`, `app/core/esteira_vigia.py:27–36,38–109,351–357,605,1202,1297,1355,1653–1654`.
+
+O `hoje` novo na ordenação vem do instante já capturado na borda de `_recorte_da_barra`. Esse mesmo dia chega à barra e ao LED. O timestamp da auditoria segue uma leitura própria, explicitamente fora do contrato do recorte. Os trechos novos não adquirem trava. O pipeline mantém bloqueios fornecidos pelo chamador antes da geração, com a gravação entre as duas passagens. O retrato não fornece callbacks de bloqueio. O selo de relógio verifica o congelamento em testes, e a bancada está sob `freeze_time`. `app/folha/views_retrato.py:146–147,177–184,244–247,399–446,461–467`, `app/folha/retrato_folha.py:452–465`, `app/relatorios/utils_audit.py:13–20`, `app/relatorios/pdf_base.py:127–178`, `app/core/tests/test_selo_teste_sem_relogio.py:67–84`, `app/folha/tests/test_retrato_pdf_pacote.py:121–123`.
+
+## 5. Item 1 — alcance do `attachment`
+
+**Nenhum outro consumidor do partial encontrado aponta para essa rota.** `retrato_pdf` escreve o novo header apenas na própria resposta. A barra já fornece `pdf_href`, que o partial renderiza como âncora comum, sem `target`. Os outros consumidores continuam usando seus próprios destinos e headers, como Gestão HE (`inline`) e Furos (`attachment`). O RED exige `attachment` com o nome canônico e verifica a âncora na página cheia e no parcial OOB. O download efetivo no navegador [nao verificado]. `app/folha/urls.py:25`, `app/folha/views_retrato.py:337,468–475`, `app/templates/folha/_retrato_barra.html:50`, `app/templates/core/_btn_pdf.html:34–46`, `app/ponto/views.py:899`, `app/relatorios/views.py:1632`, `app/folha/tests/test_retrato_pdf_pacote.py:187–204`.
+
+## 28/11 01:38 · sessao 39f9bf608e62 · CODIGO-DOMINIO-VALIDO · construtor · origem=Code
+
+A cura está no diff da cópia. A revisão estática encontrou **13 arquivos de produção alterados e 0 `except` adicionados**. Os dois módulos do contrato declaram **22 casos, dos quais 15 têm prefixo `test_RED_`**. Resultado da suíte e GREEN [nao verificado]. [REDs da Folha](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_codigo_dominio_invalido.py:90) [REDs do Cadastro](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/tests/test_codigo_dominio_numerico.py:76) [nao verificado]
+
+### Diff por item
+
+- **Juiz e TXT.** Um predicado compartilhado exige dígitos ASCII após `strip()`, sem impor comprimento. `classificar_export` preserva o valor no item e atribui o motivo literal `codigo_dominio_invalido` entre código ausente e férias com batida. O montador já seleciona os itens `entra`. [colaboradores/services/cadastro.py:53](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/services/cadastro.py:53) [folha/export.py:850](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/export.py:850) [folha/export.py:882](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/export.py:882) [folha/export.py:723](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/export.py:723)
+- **Cadastro.** Admissão e edição reexibem o formulário com a mensagem «Código Domínio deve conter apenas números.» antes dos respectivos pontos de gravação. O campo vazio segue aceito na admissão e preserva o anterior na edição. A validação fica nas duas portas de tela. [colaboradores/views.py:1135](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/views.py:1135) [colaboradores/views.py:1239](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/views.py:1239) [colaboradores/views.py:1296](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/views.py:1296) [colaboradores/views.py:1365](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/views.py:1365) [core/respostas.py:74](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/core/respostas.py:74)
+- **Retrato.** `MOTIVO_RH` dá o rótulo, `TIPO_POR_MOTIVO` dá `cadastro` e o fio existente dá `admin`. Um único leitor de `linha['codigo']` monta `codigo Dominio = <valor>` para lista, PDF, drawer e Raio-X. No drawer, `valor` continua sendo o rótulo literal do mapa. [folha/views.py:18](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/views.py:18) [folha/retrato_folha.py:223](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/retrato_folha.py:223) [folha/retrato_folha.py:382](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/retrato_folha.py:382) [folha/retrato_folha.py:89](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/retrato_folha.py:89) [templates/folha/_retrato_lista.html:65](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/templates/folha/_retrato_lista.html:65) [folha/views_retrato.py:423](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/views_retrato.py:423) [templates/folha/_retrato_o_que_fazer.html:37](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/templates/folha/_retrato_o_que_fazer.html:37) [templates/folha/_retrato_raiox.html:73](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/templates/folha/_retrato_raiox.html:73)
+- **Listas fechadas.** `_MOTIVO_NA_TELA` ganhou pílula própria, `_PORTAS_CADASTRO` ganhou a natureza correspondente e Quem Cobrar lê o rótulo de `MOTIVO_RH`. `MotivoExaustivo` já colhe a atribuição literal por AST e verifica seu destino no mapa. O Raio-X do export já conta a chave em **Outras pendências**. [ponto/services/fechamento_lista.py:28](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/ponto/services/fechamento_lista.py:28) [templates/ponto/_fech_linha.html:19](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/templates/ponto/_fech_linha.html:19) [relatorios/views_pend.py:50](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/relatorios/views_pend.py:50) [relatorios/views.py:1729](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/relatorios/views.py:1729) [folha/tests/test_retrato_folha_quadros.py:325](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_retrato_folha_quadros.py:325) [folha/views.py:625](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/views.py:625)
+
+### REDs e mutantes para o Opus
+
+| Caso RED | Mutante a derrubar |
+|---|---|
+| No lote misto, `VIGIA` e `１２３` ficam fora, `00123` gera `0000000123` e o layout retorna `[]`. Em colisão com férias com batida, vence o código inválido. Vazio e brancos mantêm `sem_codigo_dominio`. | Usar só `isdigit()`, remover a retenção, mover a checagem para depois de férias ou eliminar também o controle numérico. [TXT](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_codigo_dominio_invalido.py:90) [Precedência](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_codigo_dominio_invalido.py:152) |
+| Conferir rótulo, tipo, pílula, natureza e presença literal na fonte. Em Quem Cobrar, conferir o rótulo na linha retida. | Apagar uma entrada de mapa, apontar a pílula para espelho ou trocar a atribuição literal do motivo por uma referência indireta. [Mapas e AST](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_codigo_dominio_invalido.py:163) [Quem Cobrar](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/relatorios/views.py:1729) |
+| Lavrar `VIGIA` com tipo `cadastro` e dono `admin`, corrigir o cadastro para `00123` e conferir o valor histórico na lista, PDF e drawer. | Buscar o código atual, omitir o complemento em um leitor ou interpolá-lo em `valor` no drawer. [Retrato](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_codigo_dominio_invalido.py:241) |
+| Enviar `VIGIA` nas duas portas e exigir formulário HTTP 200 e mensagem visível. Na admissão, conferir as contagens de usuários e colaboradores. Na edição, conferir código e telefone anteriores. | Validar depois da gravação, redirecionar a recusa ou levar a regra ao modelo e impedir a criação do legado usado na fixture. [Admissão](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/tests/test_codigo_dominio_numerico.py:85) [Edição](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/colaboradores/tests/test_codigo_dominio_numerico.py:118) [Fixture legada](/home/ronald/wt-codex-codigo-dominio-valido-013223/app/folha/tests/test_codigo_dominio_invalido.py:64) |
+
+### Comando do GREEN
+
+```bash
+bash bin/suite.sh --dir /home/ronald/wt-codex-codigo-dominio-valido-013223 --only "folha.tests.test_codigo_dominio_invalido colaboradores.tests.test_codigo_dominio_numerico folha.tests.test_export ponto relatorios core.tests.test_selo_teste_sem_relogio"
+```
+
+## 28/11 01:37 · sessao 8ac04350367a · - · - · origem=Ronald (tmux)
+
+**Item 4. O RED deixa a posição de `dias=None` em aberto.** O teste de ordem exige a sequência por dono, dias decrescentes e desempate por ID. Na bancada, `None` só aparece em Entram e Rescisão, sem dias numéricos nesses estados. Retirar a chave `dias is None` preservaria a ordem esperada da bancada. Para distinguir a chave de `-(dias or 0)` em um teste, o mesmo estado precisa de `0` e `None` com o ID menor no `None`. O zero é possível em `furo_espelho` cujo relatório devolve `len([])` e chega à lavra como zero. `app/folha/tests/test_retrato_pdf_pacote.py:52–98`, `:228–243`, `app/folha/views_retrato.py:399–406`, `app/folha/fora_da_folha.py:210–246`, `app/folha/retrato_folha.py:1227–1236`.
+
+**Origens de `None`.** Na lavra, `montar_linhas` recebe a contagem de `furo_espelho` de `fora_da_folha` e usa a lista de férias quando essa contagem vem ausente. Sem as duas fontes, grava `None`. Isso abrange Entram, Rescisão, `sem_codigo_dominio`, `cadastro_zero` e `nao_homologado`. O leitor `no_periodo`, com pelo menos um limite temporal, cria uma cópia com `dias=None` quando `datas` está ausente/nula, vazia ou fora da janela. Isso se aplica a qualquer motivo. Sem janela, mantém os valores da lavra. Há testes para esses vazios, inclusive retrato legado, e para a faixa Cadastro permanecer. `app/folha/export.py:846–858`, `:875–893`, `:968–989`, `app/folha/fora_da_folha.py:146–165`, `:234–246`, `app/folha/retrato_folha.py:1222–1243`, `:1334–1347`, `app/folha/tests/test_retrato_folha_periodo.py:126–153`, `:172–183`, `app/folha/tests/test_retrato_folha_quadros.py:1394–1417`.
+
+**Ordem da tela.** `_recorte_da_barra` segue produzindo `ordenar(recortar(...))`, com ordem por balde, faixa de saldo e ID. A tela projeta `_vis` na mesma ordem e o template percorre `tabela`. O PDF cria outra lista com `sorted(_vis, ...)`. O teste da tela no pacote confere mesmas pessoas e ordem diferente do PDF. A ordem exata da função e seu comportamento com o recorte de datas estão em testes anteriores. `app/folha/views_retrato.py:225–232`, `:260–268`, `:278–293`, `:318–346`, `:391–406`, `:435`, `app/folha/retrato_folha.py:754–772`, `app/templates/folha/_retrato_lista.html:35`, `app/folha/tests/test_retrato_pdf_pacote.py:245–249`, `app/folha/tests/test_retrato_folha_quadros.py:566–590`, `app/folha/tests/test_retrato_folha_periodo.py:354–368`.
+
+**Juízes, campos e contadores.** O gravado `dono` é o fio escrito por `montar_linhas` e lido por `fio_da_linha`. O dono de UI é produzido por `dono_da_linha` e usado pela barra e pelo LED, com dois estados adicionais do LED para Entram e Rescisão. `hoje` vem da borda e é passado a todos os leitores. `_pilula` publica `numero` como quantidade de pessoas do recorte atual se acesa ou do recorte após ativação se apagada. Tela e PDF leem o número de `quadros_barra_retrato`. A ordem do PDF usa a chave e as linhas de suas fontes, com uma precedência local de apresentação distinta da sequência publicada no quadro. O RED de contadores compara resultados em dois recortes. O selo AST anterior guarda a fonte do universo, enquanto a dependência de `quadros_barra_retrato` é comprovada pelo código. `app/folha/management/commands/lavrar_retrato_folha.py:65–79`, `app/folha/retrato_folha.py:191–201`, `:436–493`, `:516–532`, `:588–597`, `:816–842`, `:904–915`, `:1246–1248`, `app/folha/views_retrato.py:177–182`, `:246–247`, `:324–325`, `:399–420`, `app/templates/core/_barra_gestao.html:67`, `app/folha/tests/test_retrato_pdf_pacote.py:251–267`, `app/folha/tests/test_retrato_pdf.py:301–350`.
+
+**Item 3.** O RED verifica `Paragraph` e preservação do texto, com um exemplo longo sem metacaracteres. A troca para `Paragraph(escape(descricao))` acontece no leitor PDF. A geometria da quebra nas páginas e um exemplo com `<`, `>` ou `&` não recebem asserção direta. `app/folha/tests/test_retrato_pdf_pacote.py:46–48`, `:164–173`, `:210–222`, `app/folha/views_retrato.py:424`, `:441`, `:449–450`. Execução da suíte e distribuição em produção [nao verificado].
+
+## 28/11 01:37 · sessao ca3696a25ee3 · - · - · origem=Ronald (tmux)
+
+- **Import.** `utils_audit` importa o vigia no nível do módulo. O vigia importa apenas biblioteca padrão na carga, inicializa logger, constantes e sete regexes. A leitura do carimbo e o acesso ao valor em `settings` acontecem na chamada de `get_commit_git()` sem `COMMIT_GIT`. A rotina CLI fica sob `__main__`. A cadeia estática desse import não tem volta a `relatorios`. Tempo e memória adicionais [nao verificado]. `app/relatorios/utils_audit.py:2-20`, `app/core/esteira_vigia.py:27-36,38-81,83,90,101,104-109,351-357,605,1202,1297,1355,1653-1654`.
+- **Attachment.** Só a resposta de `folha:retrato_pdf` recebe o novo `Content-Disposition`. A barra passa o URL dessa rota como `pdf_href`, que já era âncora direta sem `target`. Os modos submit e `hxAbrir` continuam definidos pelo mesmo partial e nenhum outro consumidor encontrado usa essa rota. Há exemplos independentes de inline em Cadastro × Realidade, HE e follow-up, e de attachment em Furos, Inteligência e histórico de exportações. `app/folha/urls.py:25`, `app/folha/views_retrato.py:337,461-475`, `app/templates/folha/_retrato_barra.html:50`, `app/templates/core/_btn_pdf.html:34-46`, `app/escala/views.py:528`, `app/ponto/views.py:899`, `app/relatorios/views.py:1110,1632`, `app/inteligencia/views.py:643`, `app/folha/views.py:861`.
+- **Mordida.** O RED do item 1 exige attachment com nome canônico. A verificação da âncora é guarda de markup da página cheia e do parcial OOB. Download efetivo no navegador [nao verificado]. O RED de Escala exige `Paragraph` e texto integral com um caso longo. Quebra visual e caracteres especiais [nao verificado]. `app/folha/tests/test_retrato_pdf_pacote.py:47-49,187-204,210-222`.
+- **Relógio e ordem do deploy.** O instante do recorte vem da borda, vira `hoje` e alimenta as novas chamadas. O timestamp da auditoria tem relógio próprio preexistente e exclusão explícita do contrato do recorte. Os trechos novos não adquirem locks. O reload e as sondas de rota vêm antes do `mv` do carimbo no host. Se esse carimbo passar a ser visível no container, há uma janela possível de código novo com stamp velho ou ausente. `app/folha/views_retrato.py:146-147,177-184,244-247,399-446`, `app/relatorios/pdf_base.py:129-135`, `app/relatorios/utils_audit.py:13-20`, `bin/deploy.sh:357-373,416-419,432-436`.
+
+## 28/11 01:36 · sessao 5e85d18b9370 · - · - · origem=Ronald (tmux)
+
+**Item 5 deve voltar.** A montagem documentada leva `/home/ronald/saas-hasner/app` a `/app`. O novo default aponta para `/app/logs/deploy.stamp`, equivalente a `app/logs/deploy.stamp` no host. `bin/deploy.sh` grava `logs/deploy.stamp` na raiz do repositório, por arquivo temporário e `mv`. Assim, o bind-mount documentado não expõe o carimbo ao PDF. O Compose efetivo, montagens extras e `COMMIT_GIT` do processo ficam [nao verificado]. `app/docs/INFRA.md:22–30`, `app/ponto/management/commands/apurar_furo_da_exportada.py:25–28`, `app/config/settings/base.py:4–5`, `app/config/settings/saas.py:10`, `bin/deploy.sh:432–436`, `.gitignore:40–41`.
+
+- **Efeito na produção descrita.** Com `COMMIT_GIT`, a precedência e o limite de 40 caracteres seguem iguais. Sem a variável, sem `/app/.git` e sem carimbo no caminho novo, os dois ramos devolvem `''`. O rodapé fica `n/d` e o registro guarda vazio. Ambientes com checkout em `/app/.git` perdem aquele fallback. Se o carimbo passar a ser acessível, `read_text` sem tratamento pode propagar falha de leitura ou UTF‑8. `ler_deploy_stamp` devolve `{}` sem `QUANDO` e pode levantar `ValueError` com `QUANDO` não numérico. [nao verificado] o estado real desses arquivos. `obra.diff` anexo, `app/relatorios/utils_audit.py:11–20`, `app/core/esteira_vigia.py:1032–1042`, `app/relatorios/pdf_base.py:72–77,135,164`.
+- **Consumidores.** `gerar_pdf_auditavel` lê uma vez e passa o valor às duas fases e a `RegistroPDFAuditavel.commit_git`. Isso alcança retrato, espelho mensal, histórico de chamados, gestão de férias e gestão de HE. O espelho informacional é o outro chamador direto e usa o valor só no rodapé. O lote usa os dois caminhos e pode pular o colaborador se ambos levantarem exceção. `app/relatorios/pdf_base.py:133–170`, `app/folha/views_retrato.py:461–467`, `app/relatorios/pdf_espelho.py:1041–1074,1106–1116`, `app/relatorios/pdf_chamados.py:158–176`, `app/relatorios/services.py:235–255,338–347`, `app/ponto/views.py:886–894`.
+- **Semântica.** O shell escreve `git rev-parse HEAD` no `COMMIT`. O helper retorna até 40 caracteres sem validar formato. O rodapé mostra oito, a verificação pública mostra o valor persistido inteiro e a consulta usa o SHA‑256 do PDF canônico. O vigia passa o `COMMIT` inteiro ao `git revert` e usa oito só nas mensagens. `bin/deploy.sh:432–436`, `app/relatorios/utils_audit.py:13–20`, `app/relatorios/models.py:56`, `app/relatorios/pdf_base.py:72,147–164`, `app/chamados/views.py:1202–1222`, `app/templates/chamados/verificar_pdf.html:37,49`, `app/core/esteira_vigia.py:1297–1309`.
+- **Alcance do RED.** Os testes criam carimbo temporário e substituem o setting. Checam o valor devolvido, o registro e o argumento recebido pelos dois objetos de rodapé. O controle cobre a precedência de `COMMIT_GIT`. O caminho padrão, a montagem e o texto efetivamente renderizado estão fora dessas asserções. `app/folha/tests/test_retrato_pdf_pacote.py:274–322`.
+- **Import.** O topo de `core.esteira_vigia` carrega biblioteca padrão, cria logger, constantes e compila sete regex. As leituras ficam dentro de funções e o `main` é protegido por `__name__`. A inspeção estática não mostra ciclo nem leitura de disco ou settings pelo corpo do módulo. `utils_audit` resolve o setting na chamada. Tempo de import [nao verificado]. `app/core/esteira_vigia.py:27–36,64,83–109,351–357,605,1653–1654`, `app/relatorios/utils_audit.py:6–20`.
+
+## 28/11 01:34 · sessao df0356fdefca · CODIGO-DOMINIO-VALIDO · leitura · origem=Code
+
+```python
+# Execução na sombra e contagens do recorte [nao verificado].
+import re
+from datetime import date
+
+from django.conf import settings
+from django.db import connection, transaction
+from django_tenants.utils import schema_context
+
+# Guarda da sombra (app/config/settings/sombra.py:29,49,60).
+if (
+    getattr(settings, "HASNER_SOMBRA", False) is not True
+    or connection.settings_dict["NAME"] != "sombra"
+):
+    raise SystemExit(1)
+
+from colaboradores.models import Empresa
+from folha.export import classificar_export, janela_competencia
+
+mes, ano = 11, 2026
+entra = 0
+maior_que_10 = []
+nao_ascii_digito = []
+
+# Schema do executor (bin/sonda_leitura.sh:239-240).
+with schema_context("juliani"), transaction.atomic(durable=True):
+    with connection.cursor() as cursor:
+        # Transação somente leitura (bin/gate_cobranca.sh:23-25).
+        cursor.execute("SET TRANSACTION READ ONLY")
+
+    empresa = Empresa.objects.get(pk=2)
+    # Janela pelo corte da empresa (app/folha/export.py:47-51 e app/ponto/janelas.py:36-57).
+    if janela_competencia(empresa, mes, ano) != (date(2026, 10, 21), date(2026, 11, 20)):
+        raise SystemExit(2)
+
+    # Fechamentos gravados e código já normalizado com strip (app/folha/export.py:774-797,846-850).
+    for item in classificar_export(empresa, mes, ano):
+        if item["status"] != "entra":
+            continue
+        entra += 1
+        codigo = item["codigo_dominio"]
+        pk = item["colaborador_id"]
+        if len(codigo) > 10:
+            maior_que_10.append(pk)
+        if re.fullmatch(r"[0-9]+", codigo) is None:
+            nao_ascii_digito.append(pk)
+
+    transaction.set_rollback(True)
+
+for pk in sorted(maior_que_10):
+    print(f"maior_que_10|col{pk:03d}")
+for pk in sorted(nao_ascii_digito):
+    print(f"nao_ascii_digito|col{pk:03d}")
+
+print(
+    f"S11|entra={entra}|maior_que_10={len(maior_que_10)}"
+    f"|nao_ascii_digito={len(nao_ascii_digito)}"
+)
+```
 
 ## 28/11 01:25 · sessao 5f422d0683f6 · RETRATO-PDF-CORTA-POR-QUE · construtor · origem=Code
 
@@ -1044,304 +1206,4 @@ LEI-AKITA: origem=app/templates/core/_drawer_generico.html:4, testemunha=hit-tes
 - **`base_app`.** Ficam a superfície real do WebView, a passagem pelo bootstrap e os cliques reais de página e drawer. A cobertura disponível é em Chromium desktop, a 1366, com a casca de ensaio e o bootstrap PWA desativado. `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:651` `app/core/tests/test_smoke_clique_feriado_vira_trabalho.py:690` `app/core/tests/smoke_feriado_chromium.js:92`
 - **Comparação com `main 59600163c` [nao verificado].** A cópia veio sem `.git`, e o delta fornecido começa em `c44771b4a`. Esse delta permite atribuir o novo empilhamento ao c11 e constatar que os 132 px já estavam no lado anterior do diff. A equivalência com `59600163c` e a identidade Git da cópia ficam [nao verificado]. `app/templates/colaboradores/partials/_calendario_grade.html:68`
 
-## 27/11 23:43 · sessao 0195b4b4a14c · FERIADO-UM-JUIZ · construtor · origem=Code
-
-Cura c13 aplicada nos três arquivos autorizados. Na base `9ed2051aa`, o controle sem banco reproduziu as quatro falhas de R-a, R-a2, R-b e R6 no subcaso `oraculo`. Com a cura, os quatro passaram, assim como R-c e R3. O controle final rodou **56 testes**, com uma falha esperada preexistente, e os **41 estruturais** passaram. [REDs](ponto/tests/test_feriado_um_juiz.py:460) · [R6](ponto/tests/test_feriado_um_juiz.py:49) · [R3](ponto/tests/test_feriado_um_juiz.py:383) · [Controle](ponto/tests/feriado_um_juiz_mutantes.py:753) · [Estruturais](ponto/tests/feriado_um_juiz_mutantes.py:582)
-
-### Diff por arquivo
-
-- **`dia_pago.py` (+7/−2)** — `RecusaDeProcedencia` herda de `ValueError`. Só a guarda BUG-144 passa a usar a classe nova, com a mesma mensagem. [Classe](ponto/services/dia_pago.py:135) · [Guarda](ponto/services/dia_pago.py:329)
-- **`fechamento.py` (+19/−19)** — A captura continua sendo `except Exception`, com zero cláusulas acrescentadas. A recusa declarada conserva o contador e o log originais. A falha técnica tem log próprio, entra no resumo e segue para o `raise` existente quando `propagar_falha=True` e `falha_lavra` está vazia. [Captura](ponto/services/fechamento.py:1320) · [Propagação](ponto/services/fechamento.py:1332) · [Resumo](ponto/services/fechamento.py:1347)
-- **`feriado_um_juiz_mutantes.py` (+62/−23)** — Atualizei o nome de R6, usei R-c para detectar M4 e alinhei a expectativa histórica de R5 à asserção vigente. Acrescentei ao harness uma verificação do contador técnico. As asserções dos REDs existentes foram preservadas. [Mapa e expectativas](ponto/tests/feriado_um_juiz_mutantes.py:100) · [Vigia](ponto/tests/feriado_um_juiz_mutantes.py:168)
-
-### Comandos e mutantes
-
-Executei em `app/`. `controle`, `estruturais`, `base_c10`, `reds_c10` e todos os comandos de mutação abaixo retornaram `rc=0`. Para mutação, `rc=0` indica que o controle passou e o teste detectou a alteração. [Mutantes c10](ponto/tests/feriado_um_juiz_mutantes.py:123) · [Mutantes c13](ponto/tests/feriado_um_juiz_mutantes.py:184) · [Executor](ponto/tests/feriado_um_juiz_mutantes.py:758)
-
-```bash
-fuj() {
-  PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/usr/lib/python3/dist-packages \
-    python3 -S -m ponto.tests.feriado_um_juiz_mutantes "$1"
-}
-
-fuj controle
-fuj estruturais
-fuj base_c10
-fuj reds_c10
-fuj M1
-fuj M2
-fuj M2_savepoint
-fuj M3
-fuj M3_literal
-fuj M4
-fuj M5
-fuj c13_value_error_e_recusa
-fuj c13_oraculo_nao_propaga
-fuj c13_guarda_levanta_value_error
-fuj c13_recusa_sem_heranca_value_error
-fuj c13_falha_tecnica_sem_log_proprio
-fuj c13_falha_tecnica_sem_contagem
-```
-
-`M2_savepoint` fez R-a falhar com `5.95 != 2`. Classificar por `ValueError` fez R-a2 acusar uma recusa indevida. Suprimir a propagação fez R6 falhar em `oraculo` com `RuntimeError not raised`. M4 fez a recusa real escapar em R-c. Os demais mutantes c13 foram detectados pela troca do tipo da guarda, pela perda da herança de `ValueError`, pela perda do log próprio ou pelo contador técnico zerado. [R-a e R-a2](ponto/tests/test_feriado_um_juiz.py:460) · [R6](ponto/tests/test_feriado_um_juiz.py:49) · [R-c](ponto/tests/test_feriado_um_juiz.py:493) · [Mutantes c13](ponto/tests/feriado_um_juiz_mutantes.py:184)
-
-### Censo de leitores e capturas
-
-- **`recusas_oraculo`** — O log individual lê o acumulado e o resumo publica o total. Os testes leem `total_recusas` e `recusas_oraculo`. O harness confere o resumo em M5 e localiza a mesma mensagem no teste do contador técnico. [Log individual](ponto/services/fechamento.py:1324) · [Resumo](ponto/services/fechamento.py:1347) · [Testes](ponto/tests/test_feriado_um_juiz.py:330) · [M5](ponto/tests/feriado_um_juiz_mutantes.py:130) · [Vigia](ponto/tests/feriado_um_juiz_mutantes.py:176)
-- **Quem pega o `ValueError` da guarda** — O grep encontrou um `except ValueError` direto, no teste O116. As asserções de R2 e c11 também capturam `ValueError`. Todos continuam compatíveis pela herança. No fechamento, a guarda chega ao `except Exception` existente. [O116](ponto/tests/test_o116_lavratura_le_o_dia_do_motor.py:246) · [R2](ponto/tests/test_feriado_um_juiz.py:380) · [c11 FT](ponto/tests/test_feriado_um_juiz.py:410) · [c11 `do_motor`](ponto/tests/test_feriado_um_juiz.py:431) · [Fechamento](ponto/services/fechamento.py:1320)
-
-Leitor automatizado em produção, execução com banco e certificação pelo Code e pelo opus final **[nao verificado]**.
-
-## 27/11 23:36 · sessao 68d9d2d80e89 · FERIADO-UM-JUIZ · construtor · origem=Code
-
-Passo 1 da c13 entregue em [app/ponto/tests/test_feriado_um_juiz.py](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:460). A execução local sem banco rodou 55 testes, com quatro falhas nos casos abaixo e uma falha esperada preexistente. R-c e R3 passaram. A certificação da cura fica para o Code e o opus final. [Executor sem banco](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/feriado_um_juiz_mutantes.py:440) · [R3](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:384) [nao verificado]
-
-| Caso | Teste | O que verifica | [nao verificado]
-|---|---|---|
-| R-a, reescrito | `test_RED_c10_falha_sql_da_alimentacao_reverte_o_savepoint` | Um `RuntimeError` na alimentação preserva o retorno `1`, o mensal `5.95`, o `motor` `[5.95]` e o oráculo anterior. O vigia exige zero recusas e um único log de erro que identifique a falha técnica. Na base, o resumo registra uma recusa. [app/ponto/tests/test_feriado_um_juiz.py:460](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:460) |
-| R-a2, novo | `test_RED_c13_value_error_generico_na_alimentacao_e_falha_tecnica` | Aplica as mesmas verificações a um `ValueError` genérico. Na base e no mutante que classifica por `ValueError`, o resumo registra uma recusa. [app/ponto/tests/test_feriado_um_juiz.py:463](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:463) |
-| R-b, novo | `test_RED_c13_falha_na_alimentacao_propaga_quando_solicitado` | Com `propagar_falha=True`, exige `RuntimeError` e confere a identidade do erro injetado na exceção ou na sua causa. Na base, a chamada retorna. [app/ponto/tests/test_feriado_um_juiz.py:486](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:486) |
-| R-c, novo | `test_RED_c13_recusa_de_procedencia_nao_propaga_na_revisao` | Com `propagar_falha=True`, a recusa real do BUG-144 devolve `1`, registra uma recusa e preserva o oráculo anterior. Passou na base e detectou o mutante que propaga a recusa. [app/ponto/tests/test_feriado_um_juiz.py:493](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:493) | [nao verificado]
-| R6, reescrito | `test_RED_c13_revisao_propaga_falha_de_escrita_nas_duas_lavras` | A revisão propaga falhas de escrita do `motor` e do oráculo e reverte a revisão e as gravações simuladas. Na base, o subcaso do oráculo falha por ausência de `RuntimeError`. O mapa histórico `REDS_C10` ainda referencia o nome anterior. [Teste](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:49) · [Mapa histórico](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/feriado_um_juiz_mutantes.py:106) | [nao verificado]
-
-### Comandos executados em `app/`
-
-O comando do RED saiu com `rc=1`. [Entrada `controle`](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/feriado_um_juiz_mutantes.py:716)
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/usr/lib/python3/dist-packages \
-  python3 -S -m ponto.tests.feriado_um_juiz_mutantes controle
-```
-
-Cada iteração abaixo executa um mutante em memória. `M2_savepoint` fez R-a falhar no mensal (`5.95 != 2`). `M4` fez R-b passar e R-c levantar a recusa. `ValueError` fez R-a passar e R-a2 falhar no contador. [Mutantes c10](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/feriado_um_juiz_mutantes.py:482) · [Asserções c13](/home/ronald/wt-codex-feriado-um-juiz-152427/app/ponto/tests/test_feriado_um_juiz.py:473)
-
-```bash
-for mutante in M2_savepoint M4 ValueError; do
-  PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/usr/lib/python3/dist-packages \
-    python3 -S - "$mutante" <<'PY' || exit $?
-import inspect
-import sys
-from textwrap import dedent, indent
-from unittest.mock import patch
-
-from ponto.tests.feriado_um_juiz_mutantes import (
-    TESTES, _fonte_mutada_c10, _preparar_sem_banco, _rodar, [nao verificado]
-)
-
-_preparar_sem_banco()
-from ponto.services import fechamento
-
-a = 'test_RED_c10_falha_sql_da_alimentacao_reverte_o_savepoint'
-a2 = 'test_RED_c13_value_error_generico_na_alimentacao_e_falha_tecnica'
-b = 'test_RED_c13_falha_na_alimentacao_propaga_quando_solicitado'
-c = 'test_RED_c13_recusa_de_procedencia_nao_propaga_na_revisao'
-caso = sys.argv[1]
-fonte = dedent(inspect.getsource(fechamento.recalcular_fechamento_mes))
-
-if caso == 'ValueError':
-    espaco = ' ' * 32
-    inicio = fonte.index(espaco + 'recusas_oraculo += 1\n')
-    fim = fonte.index('            if falha_lavra is None:', inicio)
-    bloco = fonte[inicio:fim]
-    fonte = (
-        fonte[:inicio] + espaco + 'if isinstance(_e_or, ValueError):\n'
-        + indent(bloco, '    ') + espaco + 'else:\n'
-        + espaco + "    logger.error('dia_pago oraculo: falha tecnica: %s', _e_or)\n"
-        + fonte[fim:]
-    )
-    nomes, trecho, tipo = (a, a2), 'recusas_oraculo=1', 'failures'
-else:
-    fonte = _fonte_mutada_c10(caso, fonte)
-    if caso == 'M2_savepoint':
-        nomes, trecho, tipo = (a,), '5.95 != 2', 'failures'
-    else:
-        nomes, trecho, tipo = (b, c), 'sem dono declarado', 'errors'
-
-funcoes = {}
-exec(compile(fonte, f'<mutante {caso}>', 'exec'), vars(fechamento), funcoes)
-classe = f'{TESTES}.FeriadoUmJuizLavraturaSemBancoTest' [nao verificado]
-with patch.object(fechamento, 'recalcular_fechamento_mes', funcoes['recalcular_fechamento_mes']):
-    resultado = _rodar(*(f'{classe}.{nome}' for nome in nomes))
-
-[(teste, trilha)] = getattr(resultado, tipo) [nao verificado]
-assert teste._testMethodName == nomes[-1] and trecho in trilha, trilha [nao verificado]
-assert not getattr(resultado, 'errors' if tipo == 'failures' else 'failures')
-PY
-done
-```
-
-## 27/11 23:36 · sessao cca906a30392 · FERIADO-L097-MOTOR · verificador · origem=Code
-
-## 1. Achados do ver1
-
-| Achado | Situação em `dc876f5d1` |
-|---|---|
-| **1. Guarda e partição julgam dias e vínculos diferentes** | **Parcial.** Com escala certa e sem decisão, c2 impede que o feriado em D libere os 240 min da folga comum de D+1. Ainda zera os 240 min do feriado em D+1 quando o par herda D. A pendência fica em D e o oráculo pode chamar o par colapsado de invertido. `app/ponto/motor_calculo_v2.py:1599–1619,2530–2539` · `app/ponto/calculador/regras.py:410–432` · `app/ponto/calculador/alimentacao.py:114–123` |
-| **2. Exportada intocada** | **Não curado.** O TXT registrado preserva conteúdo e hash. O recálculo por evento ainda pode regravar `FechamentoMensal` e `DiaPago` de uma competência entregue fora da guarda, que contém somente 09/2026. A exceção do motor também alcança a partição histórica. Em memória, um par de folga certa em feriado de 12/10, com janela ativa, passou de 0 para 240 min nessa partição. O teste de outubro entregue usa `LIMBO`, que já escapava do bloqueio. Efeito em exportada real, lista nominal da comp. 11 J.A. no RELATO e reversão [nao verificado]. `aval.txt:1` · `app/folha/models.py:174–186` · `app/ponto/services/fechamento.py:37–51,603–629,1197–1240,1847–1853` · `app/ponto/calculador/regras.py:393–409` · `app/ponto/tests/test_feriado_um_juiz_porta.py:239–289` |
-| **3. REDs deixam passar falhas da testemunha** | **Parcial.** Os novos testes exigem a pendência no motor e no espelho e conferem um segmento de 240 min, além do contador de bloqueio. Essas asserções usam feriado e folga comum separados por dois dias. Nos dois REDs da virada em D, a pendência é conferida por hora e minutos, sem conferir sua data. O rótulo do oráculo na virada continua sem asserção. O caso anterior 20/21 com troca continua `expectedFailure`. `app/ponto/tests/test_feriado_um_juiz_porta.py:837–862,895–936` · `app/ponto/tests/test_feriado_um_juiz.py:942–959` |
-
-## 2. Dia e vínculo do mesmo par
-
-**Sim, a guarda e a partição chamam `_dia_do_turno_do_par`.** O auxiliar lê o mapa do juiz pela entrada crua localizada e usa a data civil local se a chave faltar. A guarda usa a resposta só para exigir igualdade com o `dia` recebido. Antes disso, já consultou a janela, o previsto, a autorização e a certeza nesse `dia`. A partição pode trocar a data do par e usar motor e vínculo de outra fatia. Essa troca é condicional. Na partição histórica, o auxiliar sequer é chamado. `app/ponto/motor_calculo_v2.py:963–978,1554–1601` · `app/ponto/calculador/regras.py:393–432` · `app/ponto/services/fechamento.py:330–351`
-
-Reproduzi os casos abaixo em memória com o pareador, o motor, a composição por fatia, a partição e o leitor de segmentos da cópia. Cadastro, vigência da janela e decisões foram alimentados em memória. Execução da suíte Django e frequência em produção [nao verificado]. `app/ponto/turnos.py:1517–1535` · `app/ponto/services/fechamento.py:297–376` · `app/ponto/calculador/alimentacao.py:73–123`
-
-| Caso | Resultado em c2 |
-|---|---|
-| **Um par `D 22:00 → D+1 02:00`, 6x1** | Com feriado em D, preserva 240 min em D. Com feriado só em D+1, o par continua em D e fica pendente como folga comum. No teste `21:00–00:00 / 01:00–05:00`, a sonda obteve 420 min em D com **um período com pausa**. O teste exige o total, sem exigir dois períodos. `app/ponto/motor_calculo_v2.py:963–978,1599–1619,3370–3377` · `app/ponto/turnos.py:430–459` · `app/ponto/tests/test_feriado_um_juiz_porta.py:886–893` |
-| **Dois turnos `D 18:00–22:00` e `D+1 03:00–07:00`, feriado em D** | Em 6x1 → 6x1 e 6x1 → 12x36, D paga 240 min de HE100-feriado. A guarda bloqueia o segundo par e publica `(D, 03:00, 240)`. A partição põe esse par zerado em D+1, usando o vínculo de D+1 na troca. O oráculo conta `par_invertido_pela_janela`. `app/ponto/motor_calculo_v2.py:1599–1619,2533–2539` · `app/ponto/calculador/regras.py:410–432` · `app/ponto/calculador/alimentacao.py:114–123` |
-| **Mesmos turnos, feriado em D+1** | Em 6x1 → 6x1 e 12x36 → 6x1, ambos ficam em zero e pendentes em D. A partição move o segundo, já zerado, para o feriado de D+1. Em 6x1 → 12x36, o pagamento zero é o controle esperado, mas a pendência de `03:00` também fica em D. Com feriado em D e troca 12x36 → 6x1, a partição pode conservar os dois pares em D pela condição de remapeamento. `app/ponto/motor_calculo_v2.py:1599–1619,2533–2539` · `app/ponto/calculador/regras.py:410–432` · `app/ponto/tests/test_feriado_um_juiz_porta.py:843–884` |
-| **Limite de 6 h e autorização** | Com saída em D às `21:00`, entrada às `03:00` ainda herda D. Às `03:01`, a segunda entrada conserva D+1 e, sendo feriado 6x1, paga os 240 min. No caso de 5 h com feriado em D, autorizar somente D libera também a folga comum de D+1. Autorizar somente D+1 deixa o par bloqueado em D. Escala incerta só em D também pode liberar o par antes do novo `if`, mesmo com escala certa em D+1. `app/ponto/motor_calculo_v2.py:1565–1601,2533–2539` · `app/ponto/calculador/regras.py:410–432` |
-
-## 3. Alcance do diff
-
-| Arquivo | Hunks | Linhas no destino | Saldo |
-|---|---:|---|---:|
-| `app/ponto/motor_calculo_v2.py` | 1 | 1585–1601 | +17 / −0 |
-| `app/ponto/tests/test_feriado_um_juiz_porta.py` | 3 | 547–548, 566–650, 773–936 | +251 / −1 |
-| **Total** | **4** | | **+268 / −1** |
-
-O único hunk do motor insere após a linha-base 1584, dentro do bloco de escala certa autorizado. Pela leitura literal da numeração **no destino**, 11 linhas novas ficam após a 1590, incluindo o `if` e o `return` em 1599–1601. Nenhum outro bloco do motor aparece no diff. Os blobs dos dois arquivos conferiram antes e depois da reversão em memória. A cópia não tem metadados Git para comprovar ancestralidade ou ordem de pouso [nao verificado]. `aval.txt:1` · `obra.diff:1–28` · `app/ponto/motor_calculo_v2.py:1579–1602`
-
-## 4. Escritores, leitores e significado
-
-| Valor | Quem escreve, quem lê e qual dia usa |
-|---|---|
-| **Dia, vínculo, ciclo e feriado** | O motor monta o mapa do turno por instante de entrada e o laço atribui `data_jornada`, com herança de até 6 h. O fechamento alimenta a escala do motor e o calendário por dia e vínculo, e guarda os contextos por dia e por par. A guarda lê o ciclo da própria fatia e o feriado em `dia`. A partição lê esses contextos e pode reescrever `resultado.dia_da_jornada[id(p)]`. `app/ponto/motor_calculo_v2.py:815–819,894–922,1000–1011,1599–1600,2530–2539,2587–2591` · `app/core/feriados.py:159–167` · `app/ponto/services/fechamento.py:330–351,713–714,800–807` · `app/ponto/calculador/regras.py:410–432` |
-| **Folga, previsto, certeza e janela** | O laço carimba `_folga_do_par` pelo vínculo e pelo dia herdado. A célula responde `trabalha`; `minutos_previstos_do_dia` fornece o previsto; `escala_certa_no_dia` lê vínculo, `LIMBO` e assinaturas da competência do dia. A guarda consulta esses valores em D no caso herdado. A partição pode consultar certeza e `feriado_vira_folga` em D+1. A vigência da janela vem do cadastro da empresa. `app/escala/models.py:1098–1107,1400–1406` · `app/escala/utils.py:2310–2325` · `app/escala/services/escala_certa.py:19–51` · `app/ponto/motor_calculo_v2.py:1486–1509,1562–1584,2575–2587` · `app/ponto/calculador/regras.py:428–432` |
-| **Pendência e autorização** | O motor publica `{dia, hora, minutos}` com o **dia herdado**, a **hora local da entrada crua** e os minutos trabalhados arredondados. O espelho projeta `sentido='dia'`; retrato da Gestão de HE, PDF e portão do TXT leem a projeção. A view passa a data da tela, e `portas/he.py::_gravar` grava `DecisaoHE` por colaborador e data. O motor carrega `data → estado` das vigentes e libera pelo estado `autorizado`, sem usar os minutos da trilha como limite. `app/ponto/motor_calculo_v2.py:1511–1534,1569–1571,1602–1619,2850` · `app/ponto/services/espelho.py:757–763` · `app/ponto/services/he_pendente_lavrado.py:138–158,183–211` · `app/relatorios/pdf_espelho.py:934–935` · `app/folha/porta_export.py:183–201,687–697` · `app/ponto/views.py:542–550` · `app/ponto/portas/he.py:65–86,195–208` |
-| **Segmentos e horas pagas** | `calcular_periodo` e `_carimbar_segmento` escrevem minutos, pontas efetivas e intervalos. O bloqueio zera trabalhado, noturno, extras e intra indenizada, soma os minutos a `fora_janela` e colapsa a saída. `segmentos_do_motor` lê esse mesmo objeto e o mapa da jornada, que pode já estar remapeado, e compara dia e hora efetiva com a pendência. O fechamento soma a partição em `FechamentoMensal`; `dia_pago.lavrar` grava as duas versões pela mesma porta. O oráculo lê os segmentos e recebe as rubricas-base de FT da própria partição. O TXT lê o mensal; espelho, calendário e PDF leem a lavra diária. `app/ponto/motor_calculo_v2.py:1602–1619,1964–1972,3370–3405` · `app/ponto/calculador/alimentacao.py:73–138,353–377,494–518` · `app/ponto/services/fechamento.py:995–1021,1197–1207,1235–1240,1296–1328` · `app/ponto/services/dia_pago.py:224–247,344–367,904–905` · `app/folha/export.py:434–462,734–745` · `app/ponto/services/espelho.py:819–831` · `app/colaboradores/services/calendario.py:684–689` · `app/relatorios/pdf_espelho.py:904–913` |
-
-## 5. Classes de reprovação
-
-- **2º juiz e derivação paralela — presentes na atribuição do dia.** O mapa do juiz e a herança de 6 h podem divergir. A partição ainda remapeia condicionalmente. A guarda reutiliza o calendário, o juiz de certeza e a constante registrada de ciclo. `app/ponto/motor_calculo_v2.py:1562–1601,2530–2539` · `app/ponto/calculador/regras.py:314–322,410–432` · `app/core/juizes.py:318–323`
-- **2º escritor persistente, relógio fora da borda e `except` novo — ausentes nas adições de produção.** A única adição executável é o retorno condicional no motor. Mensal e lavras seguem pelas portas existentes. `app/ponto/motor_calculo_v2.py:1585–1601` · `app/ponto/services/fechamento.py:1197–1240,1296–1328`
-- **Campo com dois significados — presente.** Para o mesmo `id(p)`, `dia_da_jornada` pode começar como o dia herdado usado para bloquear e terminar como o dia do turno usado para lavrar. A pendência conserva a primeira data. `app/ponto/motor_calculo_v2.py:1618–1619,2587–2591` · `app/ponto/calculador/regras.py:421–428`
-- **RED sem mordida — parcial.** Repondo em memória a condição de c1 descrita no ver1, os dois REDs de feriado em D mordem: aparecem 240 min indevidos de FT e some a pendência de `03:00`, com ou sem troca 6x1 → 12x36. Os REDs do feriado isolado mordem a base sem a exceção, de 240 para 0 min, mas já passam nesse comportamento de c1. A cobertura do dia da pendência e do contador na virada continua aberta. Execução dos testes diretamente no commit c1 [nao verificado]. `ver1_r.md:1` · `app/ponto/tests/test_feriado_um_juiz_porta.py:549–605,837–862,903–936`
-
-## 6. Os dois `expectedFailure`
-
-**A expectativa de 4 h de HE100-feriado está correta pela regra fornecida.** Nos dois casos, o segundo turno começa em D+1, em feriado, com vínculo 6x1 que folga por causa do feriado. A falha de pagamento é real na sonda. Os testes só exigem totais mensais e o decorador também aceita uma falha anterior à asserção. Assim, podem encobrir a pendência lançada em D, o rótulo de par invertido e a falta de prova da lavra em D+1. `aval.txt:1` · `leis.txt:117` · `app/ponto/tests/test_feriado_um_juiz_porta.py:810–835,849–857,880–884` · `app/ponto/calculador/regras.py:410–432` · `app/ponto/calculador/alimentacao.py:114–123`
-
-**REPROVADO** — **Bloqueantes** · feriado 6x1 ainda perde 240 min na virada e o recálculo de exportada fora da guarda pode regravar o pago. **Altos** · pendência e oráculo divergem na data do mesmo par, a autorização pode liberar pelo dia errado e a lista J.A. com reversão segue [nao verificado]. `app/ponto/motor_calculo_v2.py:1565–1619,2533–2539` · `app/ponto/calculador/regras.py:410–432` · `app/ponto/calculador/alimentacao.py:114–123` · `app/ponto/services/fechamento.py:603–629,1847–1853` · `aval.txt:1`
-
-## 27/11 23:33 · sessao 2738f074ad57 · CODEX-CONSTROI-MOTOR · verificador · origem=Code
-
-Conferi a cadeia Git `73464f2fd` → `23c7758e4` → `59600163c` e comparei os dez arquivos do diff com os blobs da c2. Rodei o inventário e o disjuntor em memória, com entradas controladas. O resultado dos selos completos e da suite da VM para a c2 continua [nao verificado]. `diff.patch` `bin/codex_pergunta.sh:193–239` `bin/disjuntor.py:2082–2130`
-
-## 1. Achados do opus, item a item
-
-| Item | Situação na c2 |
-|---|---|
-| **1 · P4, inteira na pista** | **Parcial.** O aval aceita a inteira da VM com `cmp` entre a árvore testada e a que pousa. O anexo relata `Ran 18090`, `OK`, rc 0, mas a identidade de `opa/g` com a c2 é [nao verificado]. `aval.txt:3` `bin/suite.sh:118–144` |
-| **2 · P2, GREEN sem rc** | **Não curado na evidência.** O selo prevê rc 0 para GREEN e rc 2 para falha. Os casos focais passaram em memória na c2. O rc 0 do selo completo, vinculado à c2, é [nao verificado]. `opus_c1.md:3` `bin/tests/test_agente_no_modelo.sh:326–329` `bin/tests/test_agente_no_modelo.sh:386–391` |
-| **3 · Caminhos de teste e quarentena** | **Curado para os sete caminhos citados.** Os seis módulos e `app/core/testes_em_quarentena.txt` casam `p_teste`. Nos três casos novos do selo, o inventário mudou de rc 0 na c1 para rc 3 na c2. `bin/codex_pergunta.sh:176–180` `bin/tests/test_codex_pergunta.sh:423–425` |
-| **4 · Três predicados** | **Parcial.** Wrapper e disjuntor leem a mesma regex. A guarda da suite e a classe B conservam critérios próprios. O texto da c2 ainda descreve a regra do wrapper como aquilo que o runner descobre, apesar dos contraexemplos abaixo. `bin/codex_pergunta.sh:176–180` `bin/disjuntor.py:2025–2046` `bin/suite.sh:261–281` `bin/selo_proporcao.py:110–128` |
-| **5 · Um teste abre o opus para a linha inteira** | **Curado no caso do laudo.** `app/ponto/views.py` junto de teste passa na c1 e é recusado na c2. Se `bin/disjuntor.py` também estiver declarado, a outra tag continua abrindo a linha inteira, com teste explícito dessa conduta. Caminhos relativos a `app/`, como `ponto/views.py`, continuam sendo classificados como fora de `app/` se enviados assim no brief. `bin/disjuntor.py:2049–2064` `bin/disjuntor.py:2121–2130` `bin/codex_pergunta.sh:175` `bin/tests/test_agente_no_modelo.sh:140–150` |
-| **6 · Leitores da regra antiga** | **Parcial.** L-126, PISTA, cabeçalho e mensagem do disjuntor receberam a emenda. O BACKLOG ainda registra `CODEX-ESCREVE-RED-WRAPPER` como trabalho a fazer. RAIAS 3 ainda enumera as permissões do opus sem a entrada de teste, em conflito com CODEX 2. `app/docs/LEIS.md:147` `app/docs/PISTA.md:16–18` `bin/codex_pergunta.sh:30–31` `bin/codex_pergunta.sh:651–652` `bin/disjuntor.py:2116–2129` `app/docs/BACKLOG.md:1137` `CLAUDE.md:325–330` `CLAUDE.md:402–405` |
-| **7 · Referência numérica ao wrapper** | **Curado.** Os pontos citados passaram a usar `_INVENTARIO_PY` ou `PROIBIDOS`. A verificação textual acusa a troca da âncora para `:647`. `CLAUDE.md:404–405` `bin/disjuntor.py:1959–1963` `bin/tests/test_agente_no_modelo.sh:298–304` `bin/tests/test_agente_no_modelo.sh:371–373` `bin/tests/test_censo_antes_da_vaga.sh:201–203` |
-| **8 · Hunk estranho em `CLAUDE.md`** | **Curado.** A c1 traz a inserção `OPUS-VERIFICA-EM-PARALELO` em `CLAUDE.md:397–398` da c1. A c2 restaura o texto da base nesse ponto. `CLAUDE.md:395–399` |
-| **9 · Código operacional importa de `core.tests`** | **Não curado.** O comando `crons` continua lendo `marca_cron15`, e `tblib_ausente_na_imagem` continua importando `tblib_instalado` de um módulo de teste. Ambos os módulos importados continuam sob `p_teste`. O `crons.py:92` do laudo é o comando em `core/management/commands/`. `app/core/management/commands/crons.py:92–97` `app/chamados/management/commands/tblib_ausente_na_imagem.py:17–22` `bin/codex_pergunta.sh:168–180` |
-| **10 · `test_vigia_ccm.py` e item 6 de mão dupla** | **Não curado no commit.** A árvore da c2 segue sem `test_vigia_ccm.py`. O segundo `git revert HEAD` segue no vigia e a linha 2180 do BACKLOG da c2 é de `CLEAR-NAO-PARA-A-NOITE`. O registro externo de mão dupla é [nao verificado]. `opus_c1.md:11` `app/core/esteira_vigia.py:1311–1317` `app/docs/BACKLOG.md:2180` |
-
-## 2. `p_teste` e descoberta
-
-- **Wrapper.** Classifica pelo caminho: componente `tests`, basename `test*.py` ou o arquivo de quarentena. O inventário aplica a regra a caminhos novos, alterados e removidos. `bin/codex_pergunta.sh:180` `bin/codex_pergunta.sh:193–239`
-- **Guarda da suite.** `_suite_inteira` procura `test*.py` com `def test...` nos apps de `LABELS`, exclui quatro diretórios e usa o resultado para medir cobertura da seleção. Na c2 contei **2.463** basenames `test*.py` em `app/` e **2.456** arquivos pelo `grep` da guarda com as `LABELS` reais. **Zero** caminhos desses dois conjuntos escapam de `p_teste`. `bin/regua.sh:23` `bin/suite.sh:195` `bin/suite.sh:261–290` `bin/codex_pergunta.sh:180`
-- **Django.** A suite passa as labels ao `manage.py test`, e `RunnerComQuarentena` delega a descoberta ao `DiscoverRunner` antes de podar por ID de teste ou de classe. As labels explícitas aceitam módulos pontuados sem exigir prefixo `test`. Um módulo fora da convenção com casos selecionados por label pode ficar fora de `p_teste`. Um arquivo existente da c2 que o Django efetivamente descubra como teste e que passe pelo wrapper é [nao verificado]. `bin/suite.sh:219–234` `bin/suite.sh:569–570` `app/config/settings/ci.py:40` `app/core/runner_quarentena.py:36–38` `app/core/runner_quarentena.py:72–91`
-- **Falsos positivos concretos.** `app/ponto/management/commands/testar_pwa.py` é um comando de ensaio e fica fora do `grep` da suite. `app/config/settings/teste_motor.py` é configuração do ensaio do control-plane. Ambos recebem rc 3 pelo nome. Já `app/tenants/tests.py` contém casos reais e roda no pre-push do control-plane, fora das `LABELS` da suite principal. `app/ponto/management/commands/testar_pwa.py:31–40` `app/config/settings/teste_motor.py:1–18` `app/tenants/tests.py:5–8` `bin/pre-push.sh:198–199` `bin/codex_pergunta.sh:176–180`
-- **Controle de teste ainda editável.** O inventário permite `app/config/settings/ci.py`, `app/core/runner_quarentena.py` e `app/core/quarentena_lista.py`. Eles escolhem o runner, a poda e a interpretação da lista. A c2 protege o arquivo de dados da quarentena, enquanto esses três caminhos continuam podendo mudar quais casos rodam. `bin/codex_pergunta.sh:162–181` `app/config/settings/ci.py:38–40` `app/core/runner_quarentena.py:75–96` `app/core/quarentena_lista.py:9–28`
-
-## 3. Escritores, leitores e significado
-
-| Valor | Quem escreve, quem lê e significado |
-|---|---|
-| **Caminho, regex, tag e motivo de recusa** | O executor produz mudanças na cópia. O inventário deriva os caminhos do Git e do FS e aplica `PROIBIDOS`. O disjuntor extrai `{tag: regex}` do wrapper e escolhe as sete tags de admissão do opus. A regex é compartilhada, mas o inventário recebe caminhos reais relativos à raiz e o disjuntor recebe texto declarado, com normalização parcial. `bin/codex_pergunta.sh:162–239` `bin/codex_pergunta.sh:781–790` `bin/disjuntor.py:1963` `bin/disjuntor.py:2025–2064` |
-| **`PAPEL`, `model`, `ARQUIVOS:` e decisão** | Quem despacha declara o papel, o modelo e os arquivos. `agente_nega` lê a declaração, confere o modelo com a sessão e retorna motivo ou `None`. `PreToolUse` consome a decisão. O selo de agente e o de censo montam entradas sintéticas para a mesma porta. `CLAUDE.md:325–331` `bin/disjuntor.py:2004–2009` `bin/disjuntor.py:2082–2130` `bin/disjuntor.py:2280–2290` `bin/tests/test_agente_no_modelo.sh:59–76` `bin/tests/test_censo_antes_da_vaga.sh:201–210` |
-| **Cabeçalho, inventário e rc** | O wrapper escreve o cabeçalho lido pelo Codex. O inventário escreve `TOCADO`/`PROIBIDO` e o wrapper grava `.inventario`, publica `.recusa` e o rc final. O selo lê o motivo, `.rc` e a ausência de `.id`. Aqui rc 3 é recusa do construtor. Na suite, rc 3 é reservado a run que não nasceu. `bin/codex_pergunta.sh:644–652` `bin/codex_pergunta.sh:785–790` `bin/codex_pergunta.sh:573–585` `bin/codex_pergunta.sh:812–836` `bin/tests/test_codex_pergunta.sh:153–162` `bin/suite.sh:146–149` |
-| **IDs, `ate` e motivo da quarentena** | O vigia formata e grava entradas e retira as que voltam a verde. O integrador chama essas portas e lê a lista. O parser é compartilhado com o runner e o placar. Para a poda, vale a presença do ID ou da classe. `ate` é o prazo de cobrança do vigia, embora o docstring do escritor descreva o prazo como limite para o teste ficar fora. `app/core/esteira_vigia.py:1096–1103` `app/core/esteira_vigia.py:1234–1275` `app/core/integrador_lote.py:665–668` `app/core/integrador_lote.py:775–786` `app/core/quarentena_lista.py:9–28` `app/core/runner_quarentena.py:36–38` `app/core/runner_quarentena.py:75–95` `bin/esteira_status.sh:90–92` |
-| **Seleção e classe B** | `regua.sh` declara `LABELS`. A suite lê a lista, recebe `ONLY` do chamador ou de `vizinhos_da_volta.py` e usa a cobertura para exigir motivo de inteira. O selo de proporção lê o diff Git e as listas de `CORTES.md` da base. Sua categoria `teste` exige pasta `tests/` **e** basename `test_*.py`. Cada saída tem uma decisão própria e a c2 só comenta as duas regras. `bin/regua.sh:23` `bin/suite.sh:195–216` `bin/suite.sh:261–299` `bin/selo_proporcao.py:110–128` `bin/selo_proporcao.py:151–174` |
-
-## 4. Classes que já reprovaram obra
-
-- **Segundo juiz registrado e segundo escritor fora da porta — ausentes no diff.** A recusa continua no inventário, a admissão continua em `agente_nega` e os escritores da quarentena são preexistentes. `app/core/juizes.py:190` `bin/codex_pergunta.sh:229–239` `bin/disjuntor.py:2280–2290` `app/core/esteira_vigia.py:1234–1264`
-- **Relógio fora da borda e ordem de trava — ausentes no diff.** A suite ainda confere a árvore sob a trava antes de executar. O relógio lido no import de `marca_cron15.py` é preexistente. `bin/suite.sh:133–146` `bin/suite.sh:559–570` `bin/trava_teste.sh:35–42` `app/core/tests/marca_cron15.py:52–57`
-- **Derivação paralela e dois significados — presente na equivalência declarada.** A admissão lê a regex da fonte. Já a documentação chama de descoberta a regra de propriedade por caminho. `ARQUIVOS:` também assume caminhos da raiz, enquanto o inventário recebe essa forma por construção. `CLAUDE.md:380–382` `bin/disjuntor.py:2025–2064` `bin/codex_pergunta.sh:208–230` `bin/suite.sh:261–281`
-- **RED sem mordida — ausente nos casos focais, presente na checagem textual.** Em memória, c1 → c2 deu rc **0 → 3** para `ferias/tests.py`, `comunicados/tests_x.py` e a quarentena, e **aceita → recusa** para `views.py` junto de teste. As 11 linhas de mutação de `p_teste` inverteram o inventário de 3 para 0 nos casos correspondentes. Os dois mutantes da linha mista inverteram a decisão do disjuntor. Já retirar a menção a arquivos de teste de CODEX 2 deixou as asserções textuais verdes. Execução integral dos selos [nao verificado]. `bin/tests/test_codex_pergunta.sh:417–425` `bin/tests/test_codex_pergunta.sh:669–679` `bin/tests/test_agente_no_modelo.sh:298–310` `bin/tests/test_agente_no_modelo.sh:374–375`
-- **Pouso antes do pré-requisito — ausente no diff, ordem operacional [nao verificado].** O contrato exige inteira da árvore antes do opus final. O aval da VM exige identidade com o run. A exceção de selos da base depende de falha demonstrada na base e registro no BACKLOG. A comparação dos selos e o registro exigido para eventuais falhas, inclusive `n_vagas`, são [nao verificado]. `CLAUDE.md:422–432` `aval.txt:3` `aval.txt:8` `app/docs/BACKLOG.md:2156`
-- **`except` novo — 0** no diff inteiro, tanto base → c2 quanto c1 → c2. `diff.patch` `bin/codex_pergunta.sh:223–225` `bin/disjuntor.py:2025–2046`
-
-## 5. Sítios tocados
-
-O diff altera `CLAUDE.md`, `app/docs/LEIS.md`, `app/docs/PISTA.md`, `bin/codex_pergunta.sh`, `bin/disjuntor.py`, `bin/selo_proporcao.py`, `bin/suite.sh` e os três selos `test_agente_no_modelo.sh`, `test_censo_antes_da_vaga.sh` e `test_codex_pergunta.sh`. **Zero alterações** em `app/ponto`, folha, porta da célula, export ou `bin/gerar_estado.py`. `diff.patch` `CLAUDE.md:380` `app/docs/LEIS.md:147` `app/docs/PISTA.md:16` `bin/codex_pergunta.sh:180` `bin/disjuntor.py:2121` `bin/selo_proporcao.py:125` `bin/suite.sh:272` `bin/tests/test_agente_no_modelo.sh:138` `bin/tests/test_censo_antes_da_vaga.sh:203` `bin/tests/test_codex_pergunta.sh:417`
-
-**REPROVADO — bloqueantes** GREEN integral e identidade `opa/g` ↔ c2 [nao verificado] · **altos** equivalência com a descoberta não cumprida e controle do runner editável (`bin/codex_pergunta.sh:180`, `bin/suite.sh:280–281`, `app/core/runner_quarentena.py:75–91`) · **médios** leitores desatualizados, diferença de caminhos no brief e selo textual sem mordida para a cláusula nova (`CLAUDE.md:329`, `app/docs/BACKLOG.md:1137`, `bin/disjuntor.py:2049–2064`, `bin/tests/test_agente_no_modelo.sh:298–310`) · **baixos** dependências operacionais em `core.tests` e pendência do vigia (`app/core/management/commands/crons.py:92`, `app/chamados/management/commands/tblib_ausente_na_imagem.py:17`, `app/core/esteira_vigia.py:1316`).
-
-## 27/11 23:27 · sessao 739aeb1477ca · PISTA3-NA-ESTEIRA · leitura · origem=Code
-
-## (a) Onde o repo assume um host só
-
-| Sítio | Efeito com `pista` e `pista3` |
-|---|---|
-| **`bin/suite.sh` · sondagem e fila** | `ping`, `estado` e a coleta dos recibos históricos miram `pista`. Se esse host falha ou devolve estado ilegível, a rota vai direto à VM. O parser do `ping` também exige o prefixo literal `pista ok`. A admissão, a estimativa e a linha de diagnóstico fixam duas vagas. `bin/suite.sh:378,379,381,382,388,396,397,403,413,414,415` |
-| **`bin/suite.sh` · pedido e coleta** | `pede`, `espera` e `log` miram `pista`. Se só o envio mudar, a coleta consulta o host errado. A linha de aceite, a de fim e os erros identificam o job sem host. A rota tem chamadas de espera e log, e o cancelamento documentado é da sessão, via SSH. `bin/suite.sh:445,452,459,471,477,481,485,497` `app/docs/RELATO.md:306,3625` |
-| **`bin/disjuntor.py`** | Há três pontos que fixam `pista`: a regex de laço sobre `estado`, a regex de `espera` direto e a extração da chave de polling. A mensagem de recusa também imprime `ssh pista espera` literalmente. `bin/disjuntor.py:1974,1975,2132,2133,2134,2136,2137,2165,2166` |
-| **`bin/tests/test_suite_rota_pista.sh`** | O SSH falso procura o argumento `pista`, descarta o host ao registrar a chamada e usa um modo de falha único. Uma chamada a `pista3` cai no caso de comando desconhecido, e as asserções de `espera` e `log` conferem só o ID. Recorte, inteira pre-opus e foto suja também exigem o formato antigo da linha `ROTA PISTA`. `bin/tests/test_suite_rota_pista.sh:40,42,43,44,47,126,146,160,162,163,165,180,183,264,299,300,392` |
-| **`bin/pista_certifica.sh` e seu selo** | Os exemplos de coleta fixam `ssh pista`, e a mensagem de OOM nomeia `srv-glpi`. O certificador recebe dois arquivos locais e compara ID e SHA, sem conferir a origem por host. O selo fabrica os arquivos, sem SSH, e cobre ID diferente. Se o mesmo ID e SHA existirem nos dois hosts, misturar os arquivos pode passar pela checagem de procedência. `bin/pista_certifica.sh:13,14,15,16,22,29,48,54,55,60` `bin/tests/test_pista_certifica.sh:41,48,50,57,120` |
-
-A instrução operacional em `CLAUDE.md` descreve a rota e o formato antigos, nomeia `ssh pista` para certificar e limita as regras de espera e polling a esse alias. O contrato anterior no RELATO ainda mede IDs por um único `estado`. Seguir esses comandos para um job da `pista3` consulta o host errado ou deixa esse job fora da contagem. `CLAUDE.md:100,101,129,337,339,340,346` `app/docs/RELATO.md:197,199`
-
-As demais ocorrências literais de `ssh pista` estão nos registros e exemplos abaixo. Servem para os jobs ali registrados. Reusá-las como instruções para todo o pool consultaria apenas `pista`. `app/docs/BACKLOG.md:2375,2376` `app/docs/CORTES.md:567` `app/docs/CORTES.json:1823` `app/docs/PROMPTS.md:2308,2975,2988,3055,3057` `app/docs/RELATO.md:159,201,306,367,517,773,953,961,1190,1267,1754,1843,1929,2081,2269,2276,2531,2636,2872,3188,3545,3624,3697`
-
-## (b) O que falta fechar no contrato
-
-- **Queda após aceite com ID recebido:** o item 3 cobre o destino, `ERRO-INFRA` rc 71. O código atual já faz isso quando perde `espera` ou `log`, mas ainda cai na VM em duas variantes de rc 71 classificado como recusa sem execução, depois de imprimir o aceite. O “como hoje” deixa essa exceção ambígua. Também falta um prazo para o caso em que o SSH continua respondendo e o job fica preso. Os keepalives verificam a conexão, e `--espera` limita a estimativa anterior ao envio. `bin/suite.sh:391,415,452,458,459,468,470,471,476,481,485` `bin/tests/test_suite_rota_pista.sh:206,209,210,302,314,375`
-- **Queda no `pede` antes de o ID chegar:** hoje um ID válido já conta como aceite, mesmo com erro do SSH. Sem ID, a rota cai na VM. Se o servidor admitiu o job e a resposta se perdeu, o contrato deixa indefinido como distinguir esse caso de recusa certa antes de reenviar ao outro host ou à VM. `bin/suite.sh:445,446,447,449,450` `bin/tests/test_suite_rota_pista.sh:57,59,60,368,369,370`
-- **ID igual e cancelamento errado:** “usar esse host” cobre o caminho normal. Falta explicitar que **`(host, id)` identifica o job** também na retomada, na coleta para certificação, na contagem e no cancelamento. O ID aceito localmente tem dez dígitos e oito caracteres do SHA. Com o mesmo ID e SHA nos dois hosts, o certificador não distingue arquivos cruzados. O contrato histórico de `cancela` prevê rc 2 para ID inexistente. Se o ID existe no host errado, há risco de cancelar outro job. `bin/suite.sh:446,452,460,497` `bin/pista_certifica.sh:48,54,55` `app/docs/RELATO.md:199,3625`
-- **Fila por host:** falta definir o que ocorre quando nenhum host elegível tem vaga, inclusive com um fora e o outro cheio, ou quando duas chamadas enxergam a mesma última vaga entre `estado` e `pede`. A regra antiga ainda admite enfileirar abaixo do limite estimado. Se a estimativa continuar valendo, ela precisa ter relógio, recibos e capacidade do próprio host. Hoje esses dados vêm de `pista` e o divisor é fixo em dois. `bin/suite.sh:378,382,384,396,403,409,413,415,445`
-- **Prova de pronto:** falta atribuir quem pede a inteira de pouso na `pista3` e registra a origem dos dois arquivos. A rota atual exclui `pouso`, e `pista_certifica.sh` rc 0 prova o conteúdo dos arquivos sem provar o host que os produziu. `bin/suite.sh:500,502,504` `bin/pista_certifica.sh:22,48,54,55,94,95`
-
-## (c) O disjuntor reconhece `pista3`?
-
-**Não.** Na sessão principal, `polling_nega` não conta `ssh pista3 estado`, porque o extrator exige a palavra exata `pista`. `espera_nega` não classifica `ssh pista3 espera` como espera por alvo único, nem um laço com `sleep` que só consulta `ssh pista3 estado` como espera de obra. A coleta redirecionada da `pista3` passa por ausência de reconhecimento. Para `pista`, ela passa pela exceção explícita de recibo. `bin/disjuntor.py:1971,1974,1975,1977,2132,2137,2165,2167,2180,2182,2225,2226` `bin/tests/test_agente_no_modelo.sh:191,204,206,228,229`
-
-Hash Git da cópia, comportamento dos lançadores remotos e disponibilidade real dos dois hosts [nao verificado].
-
-## 27/11 23:19 · sessao 9b5089c5b761 · FERIADO-UM-JUIZ · verificador · origem=Code
-
-# REPROVADO
-
-1. **Uma falha técnica do oráculo vira recusa contada, inclusive na revisão com `propagar_falha=True`.** O mesmo `except Exception` recebe a falta de dono, um erro de alimentação e uma falha de escrita. Todos incrementam `recusas_oraculo`, ficam no log e deixam o colaborador contar como processado se a lavra `motor` passou. O teste de falha SQL injeta esse caminho e exige retorno `1` e contador `1`. `app/ponto/services/fechamento.py:1296` `app/ponto/services/fechamento.py:1329` `app/ponto/services/fechamento.py:1334` `app/ponto/tests/test_feriado_um_juiz.py:461`
-2. **A c10 passou a recusar a sombra no caso válido de saída antecipada do ver7.** Para `06:00 E / 06:30 S`, a escala `07:00–15:00` produz zero trabalhado e **420 min de saída antecipada**. A base esperava as duas lavras. O R3 atual exige recusa da sombra e preserva os 420 min no mensal e no `motor`. Reexecutei também o dia fechado de **7 h** isolado e junto ao BUG-144. Isolado, atualizou as duas versões. Junto ao dia aberto, atualizou o `motor`, e a sombra inteira ficou na versão anterior, inclusive para o dia fechado. `597fdc40d:app/ponto/tests/test_feriado_um_juiz.py:248` `app/ponto/tests/test_feriado_um_juiz.py:351` `app/ponto/tests/test_feriado_um_juiz.py:383` `app/ponto/tests/test_feriado_um_juiz.py:475` `app/ponto/services/dia_pago.py:317`
-
-## Ver7 e fila do Opus
-
-| Item | Resultado |
-|---|---|
-| **Ver7-1 — rollback do fechamento válido e dependência de outro dia** | **Curado para o mensal e o `motor`.** O R1 mantém **357 min / 5,95 h** e retorna `1`. O R2 mantém o mesmo valor com outro dia no mapa e acusa a falta de dono na data certa. O savepoint próprio começa antes da alimentação do oráculo. `app/ponto/services/fechamento.py:1296` `app/ponto/services/dia_pago.py:317` `app/ponto/tests/test_feriado_um_juiz.py:340` `app/ponto/tests/test_feriado_um_juiz.py:351` |
-| **Ver7-2 — literal de pontualidade e RED sem mordida** | **Curado na guarda e no RED.** A guarda deriva os campos preenchidos de `CAMPOS_DIA`. Reexecutei M3 e M3_literal. O R3 falhou tanto ao limitar a guarda a `horas_trabalhadas` quanto ao recolocar a exclusão literal. O caso funcional de saída antecipada é o bloqueio 2. `app/ponto/services/dia_pago.py:258` `app/ponto/tests/test_feriado_um_juiz.py:383` `app/ponto/tests/feriado_um_juiz_mutantes.py:506` |
-| **Opus (a) — default morto** | **Curado.** A presença da chave determina a exigência de todos os campos. Sem a chave, o laço já garante uma entrada em `campos_dos_periodos`, acessada diretamente. `app/ponto/services/dia_pago.py:318` |
-| **Opus (b) — `do_motor` nos dois ramos** | **Curado.** A mesma chamada recebe `do_motor` com ou sem entrada em `rubricas`. Reexecutei o mutante que o retira no segundo caso, e o RED falhou nesse subcaso. `app/ponto/services/dia_pago.py:321` `app/ponto/tests/test_feriado_um_juiz.py:418` `app/ponto/tests/feriado_um_juiz_mutantes.py:172` |
-| **Opus (c) — RED de dia só com FT** | **Curado.** A coleta ocorre depois dos três laços de FT. Reexecutei o mutante que deixa esses dias fora, e o RED falhou nos três subcasos, FT certa, FT feriado e FT sem escala. `app/ponto/services/dia_pago.py:224` `app/ponto/services/dia_pago.py:234` `app/ponto/services/dia_pago.py:248` `app/ponto/services/dia_pago.py:258` `app/ponto/tests/test_feriado_um_juiz.py:395` `app/ponto/tests/feriado_um_juiz_mutantes.py:167` |
-
-## Quem escreve e quem lê
-
-| Campo ou valor | Escritor, leitor e significado |
-|---|---|
-| `tentativas_oraculo`, `recusas_oraculo`, `processados` | `recalcular_fechamento_mes` inicializa os três por chamada. Conta uma tentativa por colaborador que chega à sombra, a partir de 10/2026, e uma recusa por exceção capturada nesse bloco. O log lê o acumulado no erro individual e publica o resumo se houve tentativa. Os testes conferem o resumo. O SaaS encaminha o logger para `/app/logs/ponto.log`. Leitor automatizado do contador em produção **[nao verificado]**. Tela e comando de recálculo leem `processados`, que mede o sucesso da lavra paga nesse caminho. `app/ponto/services/fechamento.py:680` `app/ponto/services/fechamento.py:1293` `app/ponto/services/fechamento.py:1329` `app/ponto/services/fechamento.py:1347` `app/ponto/tests/test_feriado_um_juiz.py:334` `app/config/settings/saas.py:160` `app/config/settings/saas.py:181` `app/ponto/views.py:1280` `app/ponto/management/commands/recalcular_fechamento.py:130` |
-| `propagar_falha` | O padrão é `False`. `recalcular_na_revisao` passa `True` para cada competência elegível. O serviço lê a flag na falha da lavra `motor` e no `except` externo. A falha da sombra segue o bloqueio 1. O teste da revisão confere a flag em julho e agosto. `app/ponto/services/fechamento.py:513` `app/ponto/services/fechamento.py:1274` `app/ponto/services/fechamento.py:1336` `app/ponto/services/fechamento.py:1888` `app/ponto/tests/test_revisar_par_relampago.py:163` |
-| Donos declarados por dia | `_DONOS_DECLARADOS` lê as chaves de `valores` e `nao_decide` da data e acrescenta os mapas fornecidos de falta e grade e os campos de `do_motor`. `lavrar` usa o conjunto antes de qualquer escrita. **Há uma diferença de contrato.** O DIFF lê `nao_decide` como rubrica sem afirmação do calculador. A guarda aceita a chave como declaração de dono. Em chamada direta em memória, confirmei que `horas_falta` em `NAO_DECIDE` passa e grava `0.0` mesmo sem `faltas_por_dia`. O fechamento fornece esse mapa explicitamente. `app/ponto/services/dia_pago.py:50` `app/ponto/services/dia_pago.py:166` `app/ponto/services/dia_pago.py:317` `app/ponto/calculador/regras.py:532` `app/ponto/management/commands/diff_calculador.py:508` `app/ponto/services/fechamento.py:946` `app/ponto/services/fechamento.py:1313` |
-| `do_motor` | O chamador nomeia os campos que devem conservar o valor já montado na linha. A guarda aceita esses campos e a sobreposição os preserva. As duas chamadas do fechamento usam o padrão `()`. O RED declara `horas_extras_100` explicitamente. `app/ponto/services/dia_pago.py:69` `app/ponto/services/dia_pago.py:140` `app/ponto/services/dia_pago.py:322` `app/ponto/services/dia_pago.py:328` `app/ponto/services/fechamento.py:1237` `app/ponto/services/fechamento.py:1309` `app/ponto/tests/test_feriado_um_juiz.py:424` |
-| `CAMPOS_DIA` e valores lavrados | `dia_pago.py` declara os 15 campos. `lavrar` monta horas de períodos e FT dividindo os minutos por 60, incorpora atraso líquido, órfãos e faltas por seus mapas e mantém a grade em minutos. DSR e banco vão no ajuste da competência. O agregador do intervalo, o relatório e os leitores do calendário e da folha consultam o gravado. A HE100 de feriado e os splits noturnos são parcelas dos totais correspondentes. `app/ponto/services/dia_pago.py:34` `app/ponto/services/dia_pago.py:172` `app/ponto/services/dia_pago.py:224` `app/ponto/services/dia_pago.py:266` `app/ponto/services/dia_pago.py:292` `app/ponto/services/dia_pago.py:354` `app/ponto/services/dia_pago.py:791` `app/relatorios/views.py:547` `app/colaboradores/services/calendario.py:319` `app/folha/porta_export.py:290` `app/folha/export.py:434` |
-| `rubricas` do dia | `rubricas_por_dia` monta `{date: Rubricas}` e `do_dia` produz `valores` em horas, `nao_decide` com causas e `detalhe` para o DIFF. O fechamento passa o mapa à lavra da sombra. `lavrar` substitui os campos decididos e grava as chaves de `nao_decide` no detalhe. `diff_calculador` usa a mesma alimentação e lê os valores e as causas para comparação. `app/ponto/calculador/alimentacao.py:571` `app/ponto/calculador/regras.py:663` `app/ponto/calculador/regras.py:962` `app/ponto/services/fechamento.py:1320` `app/ponto/services/dia_pago.py:326` `app/ponto/management/commands/diff_calculador.py:406` `app/ponto/management/commands/diff_calculador.py:460` `app/ponto/management/commands/diff_calculador.py:508` |
-
-Os períodos, a FT e as rubricas usam o dia da jornada do motor quando há mapa. **O atraso de ligação ainda agrupa pela data civil da entrada do período**, e o O85 também usa data civil. A pontualidade do calculador lê o mapa da jornada. Portanto as chaves podem divergir após a meia-noite. Efeito em produção **[nao verificado]**. As janelas de datas usadas pela alimentação e pela soma lavrada incluem as duas pontas. No corte 21, a competência vai de 21 do mês anterior a 20 do mês de referência. `app/ponto/services/dia_pago.py:109` `app/ponto/calculador/alimentacao.py:73` `app/ponto/calculador/alimentacao.py:259` `app/ponto/services/credito_parcial.py:73` `app/ponto/services/fechamento.py:905` `app/ponto/calculador/alimentacao.py:524` `app/ponto/services/dia_pago.py:791` `app/ponto/janelas.py:10`
-
-## Savepoint, catraca e classes de reprovação
-
-- **Atomicidade.** Mensal e `motor` ficam na transação externa. A guarda da sombra roda antes do `delete`, e `delete` e `bulk_create` são atômicos por versão. A recusa preserva o mensal e o `motor` completos e deixa a sombra anterior inteira, conforme o R7. O teste ORM cobre falha no `bulk_create`, depois do `delete`. O mutante que remove só o savepoint da alimentação é detectado pelo teste com transação simulada. A execução individual do teste ORM na VM está **[nao verificado]** pelo resumo agregado fornecido. `app/ponto/services/fechamento.py:927` `app/ponto/services/fechamento.py:1174` `app/ponto/services/fechamento.py:1197` `app/ponto/services/fechamento.py:1296` `app/ponto/services/dia_pago.py:317` `app/ponto/services/dia_pago.py:365` `app/ponto/tests/test_feriado_um_juiz.py:199` `app/ponto/tests/test_feriado_um_juiz.py:475` `app/ponto/tests/test_feriado_um_juiz_porta.py:486` `app/ponto/tests/feriado_um_juiz_mutantes.py:494`
-- **C12.** Conferi as chamadas reais por AST. O registro de `recalcular_fechamento_mes` bate em **721, 723, 729, 749, 820, 859, 905 e 917**. `_so_a_data` bate em **1609** e `apurar_por_fatia` em **257**. Um B1 em função nova faz subir o contador. Um B1 em linha nova de função já contada muda o registro de linhas. Há um limite concreto. Em memória, aumentei de duas para quatro as chamadas `.date()` na linha 723 e o registro B1 ficou idêntico, pois o detector deduplica por linha. A c12 acertou o registro e herdou esse ponto cego. `app/core/tests/test_medida_turno_do_par.py:332` `app/core/tests/test_medida_turno_do_par.py:565` `app/core/tests/test_medida_turno_do_par.py:848` `app/core/medida_turno_do_par.py:217` `app/core/medida_turno_do_par.py:228` `app/ponto/services/fechamento.py:257` `app/ponto/services/fechamento.py:723` `app/ponto/services/fechamento.py:1609`
-- **Juiz, escritor, relógio e travas.** O delta acrescenta a verificação de procedência. A classificação segue pela partição existente, e as duas versões escrevem pela mesma `lavrar`. O relógio do furo é lido uma vez na borda da passada, e as duas lavras recebem a mesma lista. A revisão mantém Empresa por PK → Colaborador → Batida por PK. O savepoint entra depois dessas travas. O degrau da sombra exige sucesso da lavra `motor` e competência a partir de 10/2026. A classificação de feriado do mensal tem seu degrau em 11/2026. `app/ponto/services/dia_pago.py:317` `app/ponto/services/dia_pago.py:365` `app/ponto/services/fechamento.py:680` `app/ponto/services/fechamento.py:997` `app/ponto/services/fechamento.py:1152` `app/ponto/services/fechamento.py:1262` `app/ponto/services/fechamento.py:1279` `app/ponto/services/fechamento.py:1293` `app/ponto/services/fechamento.py:1325` `app/ponto/services/par_relampago_na_lista.py:172` `app/ponto/services/par_relampago_na_lista.py:479` `app/folha/export.py:385`
-- **Contagem e prova.** O delta acrescenta **0 cláusulas `except`** e remove **0**. O `except` da sombra já existia e mudou de efeito. A ocorrência textual acrescentada no mutante é uma string. Rodei **52 testes de controle**, com uma falha esperada, **41 estruturais** e oito comandos de mutação, todos com o resultado previsto. Os seis arquivos alterados batem com os hashes de saída do diff fornecido. A identidade da árvore inteira pelo Git, a execução individual dos testes na VM, o DIFF de frota e os efeitos em produção ficam **[nao verificado]**. `app/ponto/services/fechamento.py:1329` `app/ponto/tests/feriado_um_juiz_mutantes.py:496` `app/ponto/tests/feriado_um_juiz_mutantes.py:545` `app/ponto/tests/feriado_um_juiz_mutantes.py:716` `app/ponto/tests/test_feriado_um_juiz.py:942`
-
-_8822 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8828 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
