@@ -11003,6 +11003,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 03:40 vigia da esteira** -- esteira em espera de janela: 8 fatias prontas, reabre 04:45.
+
 **28/11 02:59:03 disjuntor (NEGOU B1)** -- agente acd12f2e6b1212ae1 -- Bash -- alvo sha1:2e837b7a25 (261 car., na trilha privada)
 
 **28/11 02:12:10 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:a8b4e95e66 (242 car., na trilha privada)
@@ -14915,6 +14917,10 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 02:59 colhido CUSTO-DE-COORDENACAO opus acd12f2e (entrega, parado pelo DISJUNTOR B1 antes do commit): F4 commitada 9c1ed91ab (verde pista job 1128013608); F1 v2 itens 1-4 verdes na copia wt-custo-de-coordenacao-f1-013201, NAO commitada; pasta de selos de host em curso (16/120, 1 vermelho test_atomicidade_da_porta tambem vermelho na base 93e305860) -> logs/CUSTO-DE-COORDENACAO/f1v2/pasta/RESUMO.txt; commit pela sessao depois do FIM, depois Codex verificador. Vaga de opus construtor LIVRE -> CODIGO-DOMINIO-VALIDO volta 3 (so teste).
 - 03:12 colhido CODIGO-DOMINIO-VALIDO c3 (entrega opus a3de20bb): commit b8ed7674b so teste (+97 em folha/tests/test_codigo_dominio_invalido.py), 4 testes P1/P2/rescisao+VIGIA, mutantes m1-m4 rc 1 e base rc 0 (logs/CODIGO-DOMINIO-VALIDO/c3/mutantes.txt), --only folha relatorios OK Ran 1316 rc 0 (job 1128030917); conferi stat e veredito. -> inteira pre-opus lancada logs/CODIGO-DOMINIO-VALIDO/c3/inteira/i.rc
 - 03:37 colhido CUSTO-DE-COORDENACAO f1v2/pasta (FIM, 120 selos na copia da F1 v2): 18 nao-zero (test_codex_n_vagas 124 timeout); separo copia x regressao rodando os 17 restantes na base 93e305860 em worktree limpa wt-base-f1-033722 -> logs/CUSTO-DE-COORDENACAO/f1v2/base/base.rc; commit da F1 v2 so depois.
+- 03:40 colhido CODIGO-DOMINIO-VALIDO c3/inteira/i.rc (03:39 rc 0): inteira pre-opus VERDE na pista job 1128031211_b8ed7674, OK (skipped=42, expected failures=39), Ran 18116 (=18112+4 novos), arvore b8ed7674b -> pouso.
+- 03:41 colhido CODIGO-DOMINIO-VALIDO c3 pista_certifica rc 0 (Found=18119 podados=3 Ran=18116 oom=0, sha b8ed7674b); main andou 627303c71 depois da base 93e305860 (arquivos disjuntos, 0 em comum) -> merge do main na copia 9fe5de435 e inteira de POUSO nessa arvore -> logs/CODIGO-DOMINIO-VALIDO/c4/inteira/i.rc (SUITE UMA VEZ POR ARVORE, molde 3309c5dda).
+- 03:41 colhido CUSTO-DE-COORDENACAO f1v2/base/base.rc (03:40 rc 0): dos 17 nao-zero da copia F1, 16 falham IGUAL na base 93e305860 (falso de copia/divida); 1 REGRESSAO: test_relato_guarda_pedido_de_patch rc 0 na base, rc 1 na F1 (rerun confirmou) -- 'extrator cego' em app/pautas/tests/test_contract_vocabulario.py, arquivo que a F4 9c1ed91ab reescreveu. BUG NO CAMINHO (LEI-AKITA 6): cura antes do commit. test_codex_n_vagas na base com teto 2400 s -> f1v2/base/nvagas.rc. MOTIVO-AGENTE CUSTO-DE-COORDENACAO f1v2-fecho (bin/ e teste sao do opus; cura do selo + commit da F1 v2 na wt).
+- 03:45 colhido CUSTO-DE-COORDENACAO f1v2/cura_f4/selo_wt.rc (03:45 rc 1): passo intermediario do opus construtor aaf48022 (RED da regressao reproduzido antes da cura).
 - 02:59 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO c3 (arquivo de teste e so do opus, CCM-OPCAO-A; Codex nao escreve teste): PUXADA CODIGO-DOMINIO-VALIDO c3 -> vaga opus construtor (wt-codex-codigo-dominio-valido-013223), mordidas P1/P2/rescisao+VIGIA do opus final logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md item 2
 - 02:26 PUXADA CODIGO-DOMINIO-VALIDO c2 -> vaga Codex construtor: so docstrings (citacao O256 restaurada com a excecao do `codigo` gravado; docstring do codigo_dominio_e_numerico sem o 'apos strip') -> logs/CODIGO-DOMINIO-VALIDO/c2/r.rc
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
