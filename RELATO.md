@@ -11012,6 +11012,10 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 11:46:03 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:77387ae047 (267 car., na trilha privada)
+
+**28/11 11:40:57 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:7c876a3bd4 (350 car., na trilha privada)
+
 **28/11 11:31:52 disjuntor (NEGOU CENSO)** -- agente principal -- Bash -- alvo sha1:04dc5d8d5a (47 car., na trilha privada)
 
 **28/11 11:07:05 disjuntor (NEGOU B1)** -- agente aba405eb7fba4f7a8 -- Write -- alvo sha1:d461cf7bbe (69 car., na trilha privada)
@@ -15220,6 +15224,12 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 11:33 colhido C7-TELA-ADMIN-ENCERRA 0 (11:30) l1 dossie; PRE-APROVADO (b): PAREI censo-C7 RESPONDIDA por brief_c1.md (censo_do_brief vazio); PUXADA C7-TELA-ADMIN-ENCERRA -> vaga Codex construtor c1
 - 11:36 colhido FERIADO-UM-JUIZ pouso/int4/g.rc (11:31 rc 0): pista 2 job 1128110358_349adabd, Ran 18324 OK, pista_certifica rc 0 (Found 18327, podados 3, oom 0) -- 3a rodada verde, regra FUJ-SMOKE-OSCILA nao acionada. Reversao refeita 11:35 logs/FERIADO-UM-JUIZ/pouso/rev/reversao_antes_deploy_1135.out (hash 06-09 = 09:08; 11 igual; 12 andou). POUSO: merge --no-ff 349adabd3, git diff --cached 349adabd3 fora de app/docs vazio; deploy --sem-migrate (0 migration); apply da 11 SEGUE BLOQUEADO pelo opus2 item 4 (d1 refeito + DIFF linhas TXT 11 + aviso DP) e NAO gerar TXT 11 ate o apply
 - 11:36 colhido E4C-F5-INSTANTE 0 (11:32) canario/a3 e E4D-MATRIZ 1 (11:31) canario/v3/aceite/v3cura.p1: em colheita depois do pouso
+- 11:36 NOTA FERIADO-UM-JUIZ NO AR: commit a497c0cce, bin/deploy.sh --sem-migrate rc 0 (logs/FERIADO-UM-JUIZ/pouso/deploy.out): 3 cascas HUP, core /health/ 200, ui /colaboradores/ 302, mensageria 200, selo BUG 128 verde, importerror_500=0. Apply da comp 11 segue bloqueado (opus2 item 4: d1 refeito + DIFF linhas TXT 11 + aviso DP); proxima etapa da obra = essa medida na sombra
+- 11:40 NOTA FUJ-FECHA-2811-1140 item 3: CUSTO F4 e FDS-FERIAS NAO entraram no merge da FUJ (a497c0cce = merge de 349adabd3; git log b82a5ef08..349adabd3 so commits FERIADO-UM-JUIZ + merges do main). raia/custo-f4-pouso-090117 (df24302c5) segue 6 commits a frente do main, nao ancestral: e INSTRUMENTO (bin/), pouso proprio (7b RAIAS 5); raia/fds-ferias-porta-093334 2 a frente, FDS c2 REPROVADA pelo opus final 10:15, separada do comboio 10:23 (7b RAIAS 4); comboio c9df82666 superado
+- 11:40 DESPACHO FUJ-FECHA-2811-1140: d3 = DIFF comp 11 na sombra b82a5ef08 (antes) x arvore viva 349adabd3 (depois), logs/FERIADO-UM-JUIZ/d3/diff/ -> base do apply (L-113, exportada sem linha na GUARDA) e do pacote ao Fernando; apply pela porta recalcular_fechamento --mes 11 --apply por empresa (molde logs/GUARDA-10-B/apply10.sh) depois do d3; reversao 11:35 (pouso/rev) + 09:08
+- 11:41 colhido C7-TELA-ADMIN-ENCERRA c1/r.rc (11:37 rc 0): Codex construtor entregou 4 arquivos na wt-codex-c7-tela-admin-encerra-113127 (chamados/urls.py, chamados/views_disputa_admin.py, templates/chamados/disputa_admin.html, fio_colaborador.html link Disputas); 1 except ValueError em volta de disputa.admin_encerra (a conferir contra o PROIBIDO do brief); proximo: testes RED pelo opus (6 linhas da tabela do r.md), aceite RED-CERTO, verificador, smoke do Ronald nas DUAS cascas (front)
+- 11:41 colhido E4C-F5-INSTANTE canario/a3/r.rc (11:32 rc 0): 21 blocos (item 1 selo core.observ, item 2 ligacoes str, item 3 censo com tabela de ligacoes, item 4 dois saves); aceite RED-CERTO em montagem no molde aceiteA2
+- 11:46 superado FERIADO-UM-JUIZ d3/diff/diff.rc (11:44 rc 9): lado antes sem ponto de montagem /app/staticfiles na copia b82a5ef08; mkdir e relancado lanca2.sh (rc anterior guardado em diff.rc.lanca2a)
 - 02:18 MOTIVO-AGENTE CODIGO-DOMINIO-VALIDO opus-final (PAPEL verificar, leitura final da mao unica folha/: o opus final nao e papel do Codex, CODEX item 5c) -> logs/CODIGO-DOMINIO-VALIDO/c1/opus/opus.md
 - 01:51 CODIGO-DOMINIO-VALIDO inteira pre-opus na pista em paralelo ao ver1: job 1128015101_f0d213df sha f0d213df9 -> logs/CODIGO-DOMINIO-VALIDO/c1/inteira/i.rc (achado procedente do ver1 = volta nova e cancela este job).
 - 01:44 MAIS-CODEX-CUMPRE-2811-0145 recebido: em vigor. Censo dos agentes Claude vivos: 1 -- MOTIVO-AGENTE acd12f2e6b1212ae1 (opus, PAPEL construir, CUSTO-DE-COORDENACAO F1 v2 + F4): bin/disjuntor.py, bin/tests/test_disjuntor.sh e pautas/tests (bin/ + arquivo de teste = o wrapper proibe o Codex, _INVENTARIO_PY). Sessao: frentes abertas sem leitura inline; sondas da sessao so RODAM script escrito pelo Codex (BECOS sombra2, FUJ d1/diff).
