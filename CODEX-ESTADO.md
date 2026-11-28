@@ -1,7 +1,39 @@
 # CODEX-ESTADO
 
-> Ultima resposta processada: **28/11/2026 13:19** · publicado em **28/11/2026 13:20** (UTC-3)
+> Ultima resposta processada: **28/11/2026 13:37** · publicado em **28/11/2026 13:41** (UTC-3)
 > So as RESPOSTAS FINAIS do Codex (auxiliar de leitura; nunca escreve). Afirmacao de execucao sem hash ou caminho ao lado sai `[nao verificado]`.
+
+## 28/11 13:37 · sessao bfebdada828f · O30-F3-CONSTRUIR · leitura · origem=Code
+
+**Candidato:** `ac4ad27ce` (c19b), na cópia `/home/ronald/wt-codex-o30-f3-construir-225036`. A cura de C está no código. `wts.txt:5–8`, `ac4ad27ce:app/relatorios/tests/test_atestados_lote_tela.py:213–235`  
+**Veredito:** a obra é **mão única**. Aprovação, RC e horário da suíte inteira, da certificação da Pista e do verificador final **[nao verificado]**. `CLAUDE.md:256–264`, `ls.txt:1–9`   [nao verificado]
+**Próximo:** preparar a árvore de pouso sobre o main, conferir os dois caminhos em comum e certificar essa árvore antes do Opus final. `CLAUDE.md:347–354,423–433` [nao verificado]
+
+### 1. Candidato e provas
+
+`ac4ad27ce`, de **26/11 às 23:49:25 −03**, é o HEAD que inclui a leitura dos seis campos do atestado no CSV e no PDF. O pai `c1027999c` ajusta o teste do PDF para aceitar a quebra de linha em `Dias do atestado: 0`. As outras três cópias listadas param na c17, no merge de pouso da c17 ou no merge intermediário da c18. `wts.txt:1–16`, `ac4ad27ce:app/ponto/services/atestados_lote.py:102–136,201–207`, `ac4ad27ce:app/relatorios/tests/test_atestados_lote_tela.py:213–235`
+
+A listagem mostra `suite.rc`, `suite.log`, `espera.txt` e `certifica.txt` sob `suite_c19/`, e `diff.patch` sob `final/`. O vínculo desses artefatos com o SHA, os resultados e os horários estão **[nao verificado]**. O `rc=0` às **09:04 de 27/11** é da conta de smoke na sombra. `ls.txt:1–9`, `relato_o30.txt:14198,14203` [nao verificado]
+
+### 2. Caminhos alterados dos dois lados
+
+Comparei os diffs desde a base comum `59600163c` até `ac4ad27ce` e até o main arquivado `d97d10939f4ba861be231bc031dd856c22d8c803`. A interseção tem **dois caminhos**. `wts.txt:5–8,13–16`, referências abaixo.
+
+| Caminho | Mudanças a preservar no merge |
+|---|---|
+| `app/core/tests/test_medida_turno_do_par.py` | A F3 atualiza as linhas esperadas de `regularizar_retorno` e `extrato_parcial`. O main atualiza outras entradas do mesmo teste, incluindo exportação e fechamento. `ac4ad27ce:app/core/tests/test_medida_turno_do_par.py:341–346`, `d97d10939:app/core/tests/test_medida_turno_do_par.py:289,329–334` |
+| `app/relatorios/views.py` | A F3 altera `atestados_lote`. O main acrescenta o motivo `codigo_dominio_invalido` em `ranking_furos`. `ac4ad27ce:app/relatorios/views.py:373–401`, `d97d10939:app/relatorios/views.py:1722–1731` |
+
+### 3. Classificação pelo princípio 7b
+
+**Mão única para a obra.** O diff toca `ponto/`, inclui a migration `0079` e altera a exportação do lote. O aval classifica **o achado D** como mão dupla, com dinheiro zero, e o manda para a fila, sem varredor novo. A linha de D já consta no BACKLOG fornecido. `CLAUDE.md:256–264`, `ac4ad27ce:app/ponto/migrations/0079_ausencia_atestado_dados.py:4–24`, `ac4ad27ce:app/relatorios/views.py:389–401`, `respostas_2811_1335.txt:1 (5)`, `backlog.txt:2`
+
+### 4. Passos mínimos para pousar
+
+1. **Registrar a retomada.** Marcar a resposta como `RESPONDIDA` e escrever no topo do RELATO `ERRO-BOBO O30-F3-CONSTRUIR`, com motivo `D mão dupla, à fila`. Se a marca de pausa ainda existir **[nao verificado]**, soltá-la pela porta `bin/pausar.sh --soltar`, com trilha. `respostas_2811_1335.txt:1 (5)`, `relato_o30.txt:14627`, `CLAUDE.md:284–287,295–306`, `bin/pausar.sh:39–52`
+2. **Montar a árvore em cópia nova do main e integrar `ac4ad27ce`.** Conferir os dois caminhos acima. Tratar `bin/sombra_regras_pessoais.py` em pouso próprio pela L-105 e conferir a máscara dos campos da `0079` no ensaio. Na conferência do escopo, o lote ainda usa tipos fixos e consulta por empresa, sem receber `q`, colaborador ou tipo como filtros. Dispensa desses filtros **[nao verificado]**. `CLAUDE.md:37–40,347–355`, `ac4ad27ce:bin/sombra_regras_pessoais.py:55–56,80,112`, `ac4ad27ce:app/relatorios/views.py:352–387`, `backlog.txt:1`
+3. **Rodar a suíte inteira na árvore que vai pousar.** Na Pista 2, colher o log e o recibo de espera e obter `bin/pista_certifica.sh <sha> <log> <espera>` com **rc 0**. A prova exige camadas iguais às da VM, SHA exato, todas as labels, contagem reconciliada, rc 0 do run e `oom=0`. Se a Pista devolver rc 1 na certificação, a suíte de pouso roda na VM. Conferir revisão Codex, censo e mutantes e ter o **Opus final depois da inteira verde**. `CLAUDE.md:129,261–264,417–433`, `bin/pista_certifica.sh:4–17`
+4. **Pousar a árvore certificada em um ato.** Conferir a sombra verde do dia. Fazer `merge --no-ff --no-commit`, comparar arquivo a arquivo com `cmp` contra a cópia certificada, registrar a comparação e `OBRA: O30-F3-CONSTRUIR` no commit, com a linha `LEI-AKITA`, e chamar imediatamente `bin/deploy.sh` **com a migration `0079`**. Registrar o resultado e o smoke no RELATO. `CLAUDE.md:62–64,90–92,284–287,347–355,477–491`, `relato_o30.txt:14055`
 
 ## 28/11 13:19 · sessao bfd44151da34 · FERIADO-SEM-LIMITE-DO-SUPRIMIDO · censo · origem=Code
 
@@ -785,40 +817,4 @@ Enviei blocos para um modo público `--aplicar-respostas-da-projecao`, com escri
 
 A fixture escreve o par legado com `cartao`. Em produção, a porta de resposta grava o texto e o carimbo em `disputa_emissao`; a validação grava autor e instante em `validacao`; o modelo grava o trio de materialização. O backfill lê o par legado, `linhas_da_projecao_sem_linha` produz `RESPOSTA`, instante, texto, motivo e marca de conservação da validação, e `registrar` faz o `INSERT`. O teste lê o par e os demais RVM por `foto`, o ato por `values_list` e sua identidade integral por `foto_dos_atos`. `eventos()` conta as linhas de `EventoCelula`, cuja escrita passa por `emitir_evento_celula`. `app/chamados/tests/test_e4d_matriz_reds.py:52–53,166–176,208–229,809–830` · `app/chamados/services/disputa_emissao.py:1531–1569` · `app/chamados/services/validacao.py:164–179` · `app/chamados/models.py:3428–3432,4344–4373,4438–4442,4606–4623` · `app/ponto/portas/celula.py:981–991`
 
-## 28/11 11:41 · sessao 909eef8a3d48 · - · - · origem=Ronald (tmux)
-
-**B é uma falha no contexto de produção do POST HTMX.** O teste v3 já usa `self.client.get` e `self.client.post` com `HTTP_HX_REQUEST='true'` na URL `chamados:detalhe_local`. O GET chama `montar_contexto_detalhe`, que filtra as perguntas vivas, fornece `pode_agir` e passa `folha_julga_pontualidade` como `SimpleLazyObject`. O template da página inclui o cartão dentro do laço de perguntas. No POST, `_resp_card` carrega a pergunta e renderiza o mesmo cartão com apenas `perg` e `pode_agir`. A guarda do cartão está na linha 43 e o argumento obrigatório do filtro na 44. `app/chamados/urls.py:14` · `app/chamados/views.py:394–408,506–519,550–552` · `app/chamados/services/acoes_chamado.py:345–358,409–423` · `app/templates/chamados/detalhe_local.html:307–311` · `app/templates/chamados/partials/_pergunta_card.html:43–44` · `r_v3.md`, B[13].
-
-Em `app/chamados/views.py:404–405`, substitua as duas linhas de `_render_card` que contêm `{'perg': _p, 'pode_agir': True}`. A âncora literal e os seis alvos do template tiveram contagem 1 na cópia. `app/chamados/views.py:399–405` · `app/templates/chamados/partials/_pergunta_card.html:20–44`.
-
-```python
-            from django.utils.functional import SimpleLazyObject
-            from chamados.juizes import folha_julga_pontualidade
-
-            _r = _render_card(request, 'chamados/partials/_pergunta_card.html', {
-                'perg': _p,
-                'pode_agir': True,
-                'folha_julga_pontualidade': SimpleLazyObject(
-                    lambda: folha_julga_pontualidade(_p.disputa.colaborador),
-                ),
-            })
-```
-
-A falta do argumento aparece na HTMX posterior à `DEVOLUCAO` pela ordem do teste e pelas guardas do cartão. O teste primeiro afirma que a recusa com motivo reconhece `ja_validada`, depois confere a hora do selo da primeira HTMX. O GET posterior recebe a variável e o POST posterior entra no trecho de ações da pergunta respondida. O trecho do log confirma o contexto do fragmento, enquanto o ordinal do request no trace é [nao verificado]. A recusa sem motivo retorna antes de escrever e sua mensagem chega ao `HX-Trigger` por `acoes_disputa`. `r_v3.md`, B[13] · `app/templates/chamados/partials/_pergunta_card.html:20–44` · `app/chamados/services/validacao.py:934–954` · `app/chamados/services/acoes_disputa.py:94–102` · `app/chamados/views.py:404–408`.
-
-Os seis mutantes usam o mesmo teste no registro da v3. O executor roda o controle inicial e falha em `assertFalse(resultado.errors)` antes de instalar cada mutante. Os registros podem exigir `falha_em` e as respectivas asserções usar `msg_prefix` ou `msg`, conforme o método. `r_v3.md`, B[11–12,16] · `app/chamados/tests/e4d_matriz_mutantes.py:585–610,624` · `aceite_v3.txt`, B.
-
-| Mutante | Asserção a marcar após a cura |
-|---|---|
-| `MC1Opacidade` | `C1 opacidade` na ausência de `opacity:.55;` após devolver. `app/templates/chamados/partials/_pergunta_card.html:21` |
-| `MC1Selo` | `C1 selo residual` na ausência de `✓ validada ` após devolver. `app/templates/chamados/partials/_pergunta_card.html:24–26` |
-| `MC1HoraDoSelo` | `C1 hora do selo` em `validacao_vigente` antes de devolver. `app/templates/chamados/partials/_pergunta_card.html:24` |
-| `MC1HoraDaResposta` | `C1 hora da resposta` em `resposta_em` após devolver. `app/templates/chamados/partials/_pergunta_card.html:30–33` |
-| `MC1Acao` | `C1 acao` na presença do formulário de recusa após devolver. `app/templates/chamados/partials/_pergunta_card.html:43,118–127` |
-| `MX3RespondidaCrua` | `C1 resposta vigente` na presença de `⚠ aguardando validacao` após devolver. Verificar antes da hora e do formulário. `app/templates/chamados/partials/_pergunta_card.html:20,25–26,30` |
-
-A fixture grava as colunas cruas via `cartao` e os atos via a porta real da sequência. Na produção, a resposta e sua projeção vêm de `responder_pergunta_disputa_core`, a validação de `_carimbar_validacao` e a devolução da porta em `validacao.py`. `DP.leitura` lê a sequência e desfaz só a validação ao encontrar `DEVOLUCAO`. `composta` fornece os dois instantes pelos atos e o texto pela projeção. O cartão lê a composta pelo filtro, `respondida` pela propriedade que chama o juiz e o texto de apresentação por `resposta_display`, que consulta o ato. `app/chamados/tests/test_e4d_matriz_reds.py:166–175` · `app/chamados/tests/_ato_da_fixture.py:36–44` · `app/chamados/models.py:3958–3965,3985–3991,4450–4456,4486–4515,4590–4609` · `app/chamados/services/disputa_emissao.py:1531–1546,1564–1570` · `app/chamados/services/validacao.py:164–178,304–316` · `app/chamados/templatetags/chamados_tags.py:144–147` · `app/chamados/juizes.py:1644–1653`.
-
-Execução Django do bloco proposto [nao verificado].
-
-_8925 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
+_8926 resposta(s) mais antiga(s) fora deste arquivo (teto de 20)._
