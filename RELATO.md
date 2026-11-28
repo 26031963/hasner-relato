@@ -11002,6 +11002,8 @@ Tambem **nao** chamo `aguardando_documento` de defeito: ele e PROJETADO para `TI
 
 ## ALARMES DA ESTEIRA
 
+**28/11 01:16:40 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:235c153533 (149 car., na trilha privada)
+
 **28/11 01:12:14 disjuntor (NEGOU CENSO)** -- agente principal -- Agent general-purpose -- alvo sha1:b25246bb29 (43 car., na trilha privada)
 
 **28/11 00:31:09 disjuntor (NEGOU POLLING)** -- agente principal -- Bash -- alvo sha1:cf27eed4d5 (344 car., na trilha privada)
@@ -14856,3 +14858,6 @@ LEI-AKITA: origem=medida, testemunha=RF.dono_da_linha + EX.motivos_retencao_celu
 - 01:11 colhido FERIADO-BOTAO-CORTADO c12/int3/g.rc (01:0x rc 0): inteira pista3 da 3309c5dda VERDE, Ran 18102, OK (skipped=42, expected failures=39), pista_certifica rc 0 (Found 18105, podados 3, oom 0) -> opus final (verificador, PAPEL verificar) sobre logs/FERIADO-BOTAO-CORTADO/c12/opus/obra.diff; depois pouso --sem-sombra (janela 00-04) e smoke do Ronald nas duas cascas
 - 01:11 colhido RETRATO-PDF-CORTA-POR-QUE DOSSIE/r.rc (01:10 rc 0): dossie 89 linhas, amostra conferida (views_retrato.py:455 inline; :423 escala string crua em celula de 38 mm; pdf_base.py:72 get_commit_git -> n/d sem COMMIT_GIT nem /app/.git; ordem do PDF = a da tela por faixa e id, views_retrato.py:417). DESPACHO RETRATO-PDF-PACOTE: REDs (1) attachment, (3) escala em Paragraph, (4) ordem por dono e dias + contadores = pilulas, (5) commit real, (2) rotulo do tipo + datas DD/MM -> opus (teste) | codigo views_retrato.py + _btn_pdf -> Codex construtor | fonte do commit (deploy.sh escreve o sha onde a casca le) -> opus (bin/) | verificador Codex, suite, opus final. Pergunta de lei do item (2) no topo, decidida pela lei e contestavel.
 - 01:13 colhido opus final FERIADO-BOTAO-CORTADO c12: APROVADO o diff, condicao de ORDEM (smoke do Ronald antes do deploy) -> PAREI no topo; lista do pouso com os 5 itens do opus. Linha da obra: voltas Codex 4 (ver1-ver4), opus 1, opus reprovou depois do Codex aprovar: nao.
+- 01:16 DESPACHO INVENTARIO-BECOS-2811-0125: sonda (a)-(f) escrita -> Codex leitura (logs/INVENTARIO/BECOS/sonda), roda a sessao pelo envelope --sombra | sombra --refazer --dump-agora (dia 20261128) em curso logs/INVENTARIO/BECOS/sombra_refaz.rc | juntar em lista.md -> sessao. CENSO-DE-BECOS-2811-0120 nao chegou a sessao; a 0125 o substitui inteiro.
+- 01:20 colhido CODIGO-DOMINIO-VALIDO DOSSIE/r.rc (01:19 rc 0): dossie 75 linhas; Q1 (colisao) e Q2 (11+ digitos/ASCII) DECIDIDO PELO AVAL LITERAL: logo depois de sem_codigo_dominio; so digitos ASCII (mais restritiva); 11+ digitos fora, linha lateral | contestavel. brief com CENSO em logs/CODIGO-DOMINIO-VALIDO/brief.md. DESPACHO CODIGO-DOMINIO-VALIDO: REDs -> opus (espera o teto 1 opus construtor: REDs do RETRATO-PDF em voo) | codigo export/retrato_folha/views/cadastro -> Codex construtor | valor na tela/PDF -> complemento da RETRATO-PDF.
+- 01:20 colhido RETRATO-PDF-CORTA-POR-QUE red/red1.rc (01:3x rc 1): 6 REDs FAIL por AssertionError, 0 ERROR (pista job 1128011828_192a9342, Ran 11); guardas verdes; arquivo app/folha/tests/test_retrato_pdf_pacote.py na wt-red-retrato-pdf-011157
