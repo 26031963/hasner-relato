@@ -14728,3 +14728,5 @@ LEI-AKITA: origem=n/a (medida), testemunha=reatar_pergunta_orfa/perguntas_orfas_
 - 22:40 colhido FERIADO-UM-JUIZ c11/g/g.rc (22:38 rc 1): inteira Ran 18180 FAILED failures=1 -- so a catraca test_medida_turno_do_par (linhas do fechamento.py +1 pelo import da c11); c12 697aea4b2 registra 9 linhas, censo real = registro
 - 22:40 superado DESLIGADO-PORTA-DO-CHAMADO c2/rec/rec.rc (22:38 rc 3): copia mudou durante a espera (f35ecacff -> 71616345a), nao rodou; relancado em c2/rec2 contra 71616345a
 - 22:40 lancado logs/FERIADO-UM-JUIZ/c12/g/lanca.sh: recorte DESLIGADO c2/rec2 e depois inteira FERIADO-UM-JUIZ c12/g (VM, pista fora)
+- 22:41 colhido DESLIGADO-PORTA-DO-CHAMADO c2/rec2/rec.rc (22:41 rc 0): recorte OK Ran 70 contra 71616345a; proximo: Codex verificador
+- 22:42 DESPACHO DESLIGADO-PORTA-DO-CHAMADO ver1: verificador -> Codex (diff inteiro 59600163c..71616345a, 111 KB, leis+JUIZES anexos) -> logs/DESLIGADO-PORTA-DO-CHAMADO/ver1/r.rc
